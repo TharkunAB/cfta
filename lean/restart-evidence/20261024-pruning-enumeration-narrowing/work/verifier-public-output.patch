@@ -1,0 +1,12 @@
+--- verify-before-public-output.py
++++ verify.py
+@@ -155,7 +155,8 @@
+ assert 'Checked axiom dependencies of ' + str(checks['axiom_dependency_checks']) + ' MicroCFTA theorems.' in audit
+ assert 'Build completed successfully (' + str(checks['audit_jobs']) + ' jobs).' in audit
+ assert len(re.findall(r'^warning:', audit, re.M)) == 1 and 'InternedFreshOrdinaryClosedCompletion.lean:24:5' in audit
+-public = (here / 'work/public-1/raw.log').read_text()
++public = (here / 'work' / checks['public_attempt'] / 'raw.log').read_text()
++assert '⋯' not in public
+ decls = load('work/public-declarations.json')
+ assert re.findall(r'^@?(MicroCFTA\.[\w.]+)(?=\s)', public, re.M) == decls['declarations']
+ assert len(decls['declarations']) == 1

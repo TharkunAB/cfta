@@ -1,0 +1,19 @@
+data Node symbol
+    = -- | Interned node with one or more outgoing alternatives.
+      InternedNode {-# UNPACK #-} !(InternedNode symbol)
+    | -- | Empty language.
+      EmptyNode
+    | -- | Interned recursive node.
+      InternedMu {-# UNPACK #-} !(InternedMu symbol)
+    | -- | Alternatives joined without consuming a term constructor.
+      InternedUnion {-# UNPACK #-} !(InternedUnion symbol)
+    | -- | Recursive reference used inside a 'Mu'.
+      Rec !RecNodeId
+
+instance Eq (Node symbol) where
+    InternedNode l == InternedNode r = internedNodeId l == internedNodeId r
+    InternedMu l == InternedMu r = internedMuId l == internedMuId r
+    InternedUnion l == InternedUnion r = internedUnionId l == internedUnionId r
+    Rec l == Rec r = l == r
+    EmptyNode == EmptyNode = True
+    _ == _ = False

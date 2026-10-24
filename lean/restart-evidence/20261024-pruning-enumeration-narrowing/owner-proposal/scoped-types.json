@@ -1,0 +1,421 @@
+{
+  "status": "ALL_EXACT_SCOPED_TYPES_DECLARATION_ONLY",
+  "public_theorem": "narrow_pending_complete",
+  "private_helpers": [],
+  "new_definitions": [],
+  "new_types": [],
+  "global_instances": [],
+  "local_instances": [
+    {
+      "name": "narrowingMonadList",
+      "type": "Monad.{u, u} List",
+      "universe_parameters": [
+        "u"
+      ],
+      "scope": "namespace-local instance, as in the existing enumeration modules",
+      "fragment": "context.lean.txt",
+      "fields": [
+        {
+          "name": "pure",
+          "type": "{α : Type u} → α → List α",
+          "binders": [
+            {
+              "name": "value",
+              "type": "α"
+            }
+          ]
+        },
+        {
+          "name": "bind",
+          "type": "{α β : Type u} → List α → (α → List β) → List β",
+          "binders": [
+            {
+              "name": "values",
+              "type": "List α"
+            },
+            {
+              "name": "continuation",
+              "type": "α → List β"
+            }
+          ]
+        }
+      ],
+      "source_convention": "EnumerationState.lean:16–18 and EnumerationCorrectness.lean:15–17; singleton/flatMap fields identical."
+    }
+  ],
+  "haves": [
+    {
+      "name": "oldEncoded",
+      "type": "encodeNode oldValue = some oldHandle",
+      "fragment": "local-oldEncoded.lean.txt",
+      "activation": "After deriving the actual oldValue from realized at found.representative"
+    },
+    {
+      "name": "firstFrame",
+      "type": "Frame before readAfter",
+      "fragment": "local-firstFrame.lean.txt",
+      "activation": "After the actual first getValue success"
+    },
+    {
+      "name": "oldRetained",
+      "type": "lookupNode nextHeap oldHandle = some oldValue",
+      "fragment": "local-oldRetained.lean.txt",
+      "activation": "After the actual native Keeps and new readback"
+    },
+    {
+      "name": "entryRealized",
+      "type": "PendingRealized nextHeap entry",
+      "fragment": "local-entryRealized.lean.txt",
+      "activation": "After firstFrame, entered and actual Keeps"
+    },
+    {
+      "name": "survivingOld",
+      "type": "result ≠ .empty → oldValue ≠ .empty",
+      "fragment": "local-survivingOld.lean.txt",
+      "activation": "After the actual narrowed equation"
+    },
+    {
+      "name": "rereadRealized",
+      "type": "PendingRealized nextHeap rereadAfter",
+      "fragment": "local-rereadRealized.lean.txt",
+      "activation": "Changed surviving branch after actual pending_reread_complete"
+    },
+    {
+      "name": "writtenSame",
+      "type": "writtenHandle = newHandle",
+      "fragment": "local-writtenSame.lean.txt",
+      "activation": "Changed branch after actual write_available_realized"
+    }
+  ],
+  "obtains": [
+    {
+      "scope": "Common prefix",
+      "api": "(EnumerationCorrectness.getValue_success readFuel uv before readAfter (.unenumerated (some oldHandle) scs)).mp observed",
+      "binders": [
+        {
+          "name": "found",
+          "type": "UnionFind.Result"
+        },
+        {
+          "name": "_lookup",
+          "type": "UnionFind.findRoot readFuel before.representatives uv = some found"
+        },
+        {
+          "name": "stored",
+          "type": "before.values[found.representative]? = some (.unenumerated (some oldHandle) scs)"
+        },
+        {
+          "name": "_readState",
+          "type": "readAfter = {before with representatives := found.forest}"
+        }
+      ]
+    },
+    {
+      "scope": "Common prefix after actual stored lookup",
+      "api": "realized found.representative oldHandle scs stored",
+      "binders": [
+        {
+          "name": "oldValue",
+          "type": "InternedConstructorTemplates.Value Symbol NativeGuard"
+        },
+        {
+          "name": "oldDecoded",
+          "type": "lookupNode heap oldHandle = some oldValue"
+        },
+        {
+          "name": "oldAvailable",
+          "type": "Available heap oldValue"
+        },
+        {
+          "name": "oldClosed",
+          "type": "oldValue.free = []"
+        }
+      ]
+    },
+    {
+      "scope": "The one actual native narrowing run",
+      "api": "SourcePruningNativeView.narrowAt_complete fits admits key oldValue heap ready oldAvailable oldClosed",
+      "binders": [
+        {
+          "name": "nativeFuel",
+          "type": "Nat"
+        },
+        {
+          "name": "_rows",
+          "type": "List (InternedConstructorTemplates.EdgeValue Symbol NativeGuard)"
+        },
+        {
+          "name": "_middle",
+          "type": "InternedConstructorTemplates.State Symbol NativeGuard"
+        },
+        {
+          "name": "result",
+          "type": "InternedConstructorTemplates.Value Symbol NativeGuard"
+        },
+        {
+          "name": "nextHeap",
+          "type": "InternedConstructorTemplates.State Symbol NativeGuard"
+        },
+        {
+          "name": "_exposed",
+          "type": "MergedFreshOrdinaryExposure.nodeEdges nativeFuel oldValue heap = .done _rows _middle"
+        },
+        {
+          "name": "_built",
+          "type": "InternedConstructorTemplates.run (InternedConstructorTemplates.makeNode (_rows.filter (SourcePruningNativeView.keeps fits admits key))) _middle = (result, nextHeap)"
+        },
+        {
+          "name": "narrowed",
+          "type": "narrowAt fits admits nativeFuel key oldValue heap = .done result nextHeap"
+        },
+        {
+          "name": "kept",
+          "type": "SourceEqualityRequiredCache.Keeps heap nextHeap"
+        },
+        {
+          "name": "resultAvailable",
+          "type": "Available nextHeap result"
+        },
+        {
+          "name": "resultClosed",
+          "type": "result.free = []"
+        },
+        {
+          "name": "_ordinary",
+          "type": "SourceEqualityRequiredCache.Ordinary result"
+        },
+        {
+          "name": "_resultRows",
+          "type": "InternedEdgeResidency.nodeEdges result = InternedConstructorTemplates.canonicalEdges (InternedConstructorTemplates.surviving (_rows.filter (SourcePruningNativeView.keeps fits admits key)))"
+        },
+        {
+          "name": "_secondRead",
+          "type": "∀ readFuel, MergedFreshOrdinaryExposure.nodeEdges readFuel result nextHeap = .done (InternedEdgeResidency.nodeEdges result) nextHeap"
+        },
+        {
+          "name": "_emptyIff",
+          "type": "result = .empty ↔ ∀ edge ∈ _rows, SourcePruningNativeView.keeps fits admits key edge = false"
+        },
+        {
+          "name": "_rowsEmptyIff",
+          "type": "(InternedEdgeResidency.nodeEdges result).isEmpty = true ↔ ∀ edge ∈ _rows, SourcePruningNativeView.keeps fits admits key edge = false"
+        },
+        {
+          "name": "stable",
+          "type": "∀ extra, narrowAt fits admits (nativeFuel + extra) key oldValue heap = .done result nextHeap"
+        }
+      ]
+    },
+    {
+      "scope": "Common prefix after the actual native run",
+      "api": "SourcePruningEnumerationNodes.available_readback nextHeap result kept.ready.semantic.1.normal.facts.coherent resultAvailable resultClosed",
+      "binders": [
+        {
+          "name": "newHandle",
+          "type": "Nat"
+        },
+        {
+          "name": "newEncoded",
+          "type": "encodeNode result = some newHandle"
+        },
+        {
+          "name": "newDecoded",
+          "type": "lookupNode nextHeap newHandle = some result"
+        }
+      ]
+    },
+    {
+      "scope": "Changed surviving branch ONLY",
+      "api": "SourcePruningEnumerationReread.pending_reread_complete readFuel uv oldHandle scs before readAfter entry total observed entered",
+      "binders": [
+        {
+          "name": "root",
+          "type": "Nat"
+        },
+        {
+          "name": "size",
+          "type": "Nat"
+        },
+        {
+          "name": "rereadFuel",
+          "type": "Nat"
+        },
+        {
+          "name": "rereadAfter",
+          "type": "EnumerationState.State Symbol EnumGuard"
+        },
+        {
+          "name": "_repeatedFirstFrame",
+          "type": "Frame before readAfter"
+        },
+        {
+          "name": "path",
+          "type": "UnionFind.Reaches before.representatives uv root size"
+        },
+        {
+          "name": "reread",
+          "type": "Success (representative rereadFuel uv) entry root rereadAfter"
+        },
+        {
+          "name": "entryFrame",
+          "type": "Frame entry rereadAfter"
+        },
+        {
+          "name": "beforeFrame",
+          "type": "Frame before rereadAfter"
+        },
+        {
+          "name": "oldSlot",
+          "type": "rereadAfter.values[root]? = some (.unenumerated (some oldHandle) scs)"
+        },
+        {
+          "name": "inside",
+          "type": "root < rereadAfter.values.length"
+        }
+      ]
+    },
+    {
+      "scope": "Changed surviving branch ONLY, at its ACTUAL rereadAfter",
+      "api": "SourcePruningEnumerationWrites.write_available_realized nextHeap rereadAfter result root scs kept.ready.semantic.1.normal.facts.coherent resultAvailable resultClosed rereadRealized inside",
+      "binders": [
+        {
+          "name": "writtenHandle",
+          "type": "Nat"
+        },
+        {
+          "name": "final",
+          "type": "EnumerationState.State Symbol EnumGuard"
+        },
+        {
+          "name": "writtenEncoded",
+          "type": "encodeNode result = some writtenHandle"
+        },
+        {
+          "name": "write",
+          "type": "Success (setValue root (.unenumerated (some writtenHandle) scs)) rereadAfter () final"
+        },
+        {
+          "name": "exactFinal",
+          "type": "final = {rereadAfter with values := rereadAfter.values.set root (.unenumerated (some writtenHandle) scs)}"
+        },
+        {
+          "name": "newSlot",
+          "type": "final.values[root]? = some (.unenumerated (some writtenHandle) scs)"
+        },
+        {
+          "name": "finalRealized",
+          "type": "PendingRealized nextHeap final"
+        }
+      ]
+    }
+  ],
+  "intro_binders": [
+    {
+      "activation": "Proof of survivingOld",
+      "binders": [
+        {
+          "name": "survives",
+          "type": "result ≠ .empty"
+        },
+        {
+          "name": "wasEmpty",
+          "type": "oldValue = .empty"
+        }
+      ]
+    },
+    {
+      "activation": "Empty result implication",
+      "binders": [
+        {
+          "name": "_emptyResult",
+          "type": "result = .empty"
+        }
+      ]
+    },
+    {
+      "activation": "Equal surviving handles implication",
+      "binders": [
+        {
+          "name": "_nonempty",
+          "type": "result ≠ .empty"
+        },
+        {
+          "name": "sameHandle",
+          "type": "newHandle = oldHandle"
+        }
+      ]
+    },
+    {
+      "activation": "Changed surviving handles implication",
+      "binders": [
+        {
+          "name": "_nonempty",
+          "type": "result ≠ .empty"
+        },
+        {
+          "name": "_changed",
+          "type": "newHandle ≠ oldHandle"
+        }
+      ]
+    }
+  ],
+  "public_action_lambda": [
+    {
+      "activation": "Changed branch literal bind, both in conclusion and success_bind instantiation",
+      "name": "selected",
+      "type": "Nat",
+      "body_type": "EnumerateM Symbol EnumGuard Unit",
+      "body": "setValue selected (.unenumerated (some newHandle) scs)"
+    }
+  ],
+  "dependent_quantifier_binders": [
+    {
+      "name": "extra",
+      "type": "Nat",
+      "scope": "chosen native run larger-fuel retention"
+    },
+    {
+      "name": "final",
+      "type": "EnumerationState.State Symbol EnumGuard",
+      "scope": "Only quantified under the no-reject-success result; not a fabricated executed state"
+    }
+  ],
+  "inline_derived_types": [
+    {
+      "type": "InternedRecordCoherence.Coherent heap",
+      "term": "ready.semantic.1.normal.facts.coherent"
+    },
+    {
+      "type": "InternedRecordCoherence.Coherent nextHeap",
+      "term": "kept.ready.semantic.1.normal.facts.coherent"
+    },
+    {
+      "type": "Frame before entry",
+      "term": "firstFrame.trans entered"
+    },
+    {
+      "type": "result = oldValue",
+      "term": "Option.some.inj ((sameHandle ▸ newDecoded).symm.trans oldRetained)"
+    },
+    {
+      "type": "writtenHandle = newHandle",
+      "term": "Option.some.inj (writtenEncoded.symm.trans newEncoded)"
+    }
+  ],
+  "equality_rewrite": [
+    {
+      "scope": "Changed branch after writtenSame",
+      "activation": "subst writtenHandle",
+      "fact": "writtenSame : writtenHandle = newHandle",
+      "meaning": "Rewrite only the derived handle in the actual write packet; do not rerun or replace final."
+    }
+  ],
+  "lets": [],
+  "typed_shows": [],
+  "by_cases": [],
+  "case_equations": [],
+  "induction": null,
+  "recursive_calls": [],
+  "classical_activation": false,
+  "expected_final_bind_api": "(EnumerationCorrectness.success_bind (representative rereadFuel uv) (fun selected => setValue selected (.unenumerated (some newHandle) scs)) entry () final).mpr ⟨root, rereadAfter, reread, write⟩"
+}

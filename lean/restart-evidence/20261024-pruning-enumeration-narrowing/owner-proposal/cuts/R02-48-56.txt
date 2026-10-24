@@ -1,0 +1,9 @@
+/-- Narrowing Empty returns Empty and the same heap at every fuel. -/
+theorem narrowAt_empty {Key : Type}
+    [DecidableEq (InternedConstructorTemplates.EdgeKey Symbol Guard)]
+    (fits : Key → Symbol → Bool)
+    (admits : Key → InternedConstructorTemplates.Value Symbol Guard → Bool)
+    (fuel : Nat) (key : Key) (before : InternedConstructorTemplates.State Symbol Guard) :
+    SourcePruningNativeView.narrowAt fits admits fuel key .empty before = .done .empty before := by
+  simp [SourcePruningNativeView.narrowAt, MergedFreshOrdinaryExposure.nodeEdges,
+    makeNode, surviving, canonicalEdges, EnumerationBuilderCaches.canonicalIds, run]

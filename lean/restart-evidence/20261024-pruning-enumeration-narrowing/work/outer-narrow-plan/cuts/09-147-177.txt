@@ -1,0 +1,31 @@
+theorem emptyAt_complete [DecidableEq (EdgeKey Symbol Guard)]
+    (fits : Key → Symbol → Bool) (admits : Key → Value Symbol Guard → Bool)
+    (key : Key) (value : Value Symbol Guard) (before : State Symbol Guard)
+    (ready : SourceEqualityRequiredCache.Ready before)
+    (available : Available before value) (closed : value.free = [])
+    (notMu : ∀ entry body depthShape ordinaryShape, value ≠ .mu entry body depthShape ordinaryShape) :
+    ∃ fuel rows middle result after,
+      MergedFreshOrdinaryExposure.nodeEdges fuel value before = .done rows middle ∧
+      narrowAt fits admits fuel key value before = .done result after ∧
+      SourceEqualityRequiredCache.Keeps before after ∧
+      emptyAt fits admits fuel key value before = .done (InternedEdgeResidency.nodeEdges result).isEmpty after ∧
+      ((InternedEdgeResidency.nodeEdges result).isEmpty = true ↔
+        ∀ edge ∈ rows, keeps fits admits key edge = false) := by
+  obtain ⟨fuel, rows, middle, result, after, exposed, _built, narrowed, kept,
+      _available, _closed, _ordinary, _rows, secondRead, _empty, emptyLaw, _stable⟩ :=
+    narrowAt_complete fits admits key value before ready available closed
+  refine ⟨fuel, rows, middle, result, after, exposed, narrowed, kept, ?_, emptyLaw⟩
+  cases value with
+  | mu entry body depthShape ordinaryShape => exact False.elim (notMu entry body depthShape ordinaryShape rfl)
+  | empty | reference | node | union =>
+      simp only [emptyAt, narrowed, MergedSourceComparison.Result.bind, secondRead fuel]
+
+/-- The Mu-only exemption performs no read and retains the complete cache. -/
+theorem emptyAt_mu [DecidableEq (EdgeKey Symbol Guard)]
+    (fits : Key → Symbol → Bool) (admits : Key → Value Symbol Guard → Bool)
+    (fuel : Nat) (key : Key)
+    (entry : Cache.Interned InternedBinderProtocol.NodeKey)
+    (body depthShape ordinaryShape : Value Symbol Guard) (before : State Symbol Guard) :
+    emptyAt fits admits fuel key (.mu entry body depthShape ordinaryShape) before = .done false before := rfl
+
+end MicroCFTA.SourcePruningNativeView

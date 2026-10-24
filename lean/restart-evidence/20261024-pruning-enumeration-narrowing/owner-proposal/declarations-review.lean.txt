@@ -1,0 +1,53 @@
+import MicroCFTA.SourcePruningEnumerationIdentity
+import MicroCFTA.SourcePruningEnumerationWrites
+import MicroCFTA.SourcePruningEnumerationReread
+
+namespace MicroCFTA.SourcePruningEnumerationNarrowing
+open EnumerationState EnumerationCorrectness EnumerationCompressionFrame
+open InternedConstructorTemplates InternedProbeProvenance
+open SourcePruningEnumerationNodes SourcePruningEnumerationObservation SourcePruningNativeView
+local notation "Symbol" => SourcePruningTemplates.Symbol
+variable {EnumGuard NativeGuard Key : Type}
+
+local instance narrowingMonadList : Monad List where
+  pure value := [value]
+  bind values continuation := values.flatMap continuation
+
+theorem narrow_pending_complete
+    [DecidableEq (InternedConstructorTemplates.EdgeKey Symbol NativeGuard)]
+    (fits : Key → Symbol → Bool)
+    (admits : Key → InternedConstructorTemplates.Value Symbol NativeGuard → Bool) (key : Key)
+    (heap : InternedConstructorTemplates.State Symbol NativeGuard)
+    (before readAfter entry : EnumerationState.State Symbol EnumGuard)
+    (readFuel uv oldHandle : Nat) (scs : List EnumerationState.Suspended)
+    (ready : SourceEqualityRequiredCache.Ready heap) (realized : PendingRealized heap before)
+    (total : UnionFind.Total before.representatives)
+    (observed : Success (getValue readFuel uv) before (.unenumerated (some oldHandle) scs) readAfter)
+    (entered : Frame readAfter entry) :
+    ∃ (oldValue result : InternedConstructorTemplates.Value Symbol NativeGuard) (nativeFuel : Nat)
+      (nextHeap : InternedConstructorTemplates.State Symbol NativeGuard) (newHandle : Nat),
+      lookupNode heap oldHandle = some oldValue ∧ encodeNode oldValue = some oldHandle ∧
+      Available heap oldValue ∧ oldValue.free = [] ∧
+      narrowAt fits admits nativeFuel key oldValue heap = .done result nextHeap ∧
+      (∀ extra, narrowAt fits admits (nativeFuel + extra) key oldValue heap = .done result nextHeap) ∧
+      SourceEqualityRequiredCache.Keeps heap nextHeap ∧ Available nextHeap result ∧ result.free = [] ∧
+      encodeNode result = some newHandle ∧ lookupNode nextHeap newHandle = some result ∧
+      lookupNode nextHeap oldHandle = some oldValue ∧
+      Frame before readAfter ∧ PendingRealized nextHeap entry ∧
+      (result ≠ .empty → oldValue ≠ .empty) ∧
+      (result = .empty → ¬ ∃ final : EnumerationState.State Symbol EnumGuard,
+        Success (reject : EnumerateM Symbol EnumGuard Unit) entry () final) ∧
+      (result ≠ .empty → newHandle = oldHandle →
+        result = oldValue ∧ Success (pure () : EnumerateM Symbol EnumGuard Unit) entry () entry) ∧
+      (result ≠ .empty → newHandle ≠ oldHandle →
+        ∃ (root size rereadFuel : Nat) (rereadAfter final : EnumerationState.State Symbol EnumGuard),
+          UnionFind.Reaches before.representatives uv root size ∧
+          Success (representative rereadFuel uv) entry root rereadAfter ∧
+          Frame entry rereadAfter ∧ Frame before rereadAfter ∧
+          rereadAfter.values[root]? = some (.unenumerated (some oldHandle) scs) ∧
+          root < rereadAfter.values.length ∧ PendingRealized nextHeap rereadAfter ∧
+          Success (setValue root (.unenumerated (some newHandle) scs)) rereadAfter () final ∧
+          final = {rereadAfter with values := rereadAfter.values.set root (.unenumerated (some newHandle) scs)} ∧
+          final.values[root]? = some (.unenumerated (some newHandle) scs) ∧ PendingRealized nextHeap final ∧
+          Success (representative rereadFuel uv >>= fun selected =>
+            setValue selected (.unenumerated (some newHandle) scs)) entry () final)

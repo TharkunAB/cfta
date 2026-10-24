@@ -1,0 +1,3 @@
+# Import-map authoring diagnostic
+
+The first metadata generator stopped after source snapshots with AssertionError: [MicroCFTA.EnumerationUntil]. It had included that future-caller comparison file as an import target. The module is deliberately not imported by this consumer. The final import map excludes only that review-only boundary from dependency targets and records it explicitly. All actual used API targets resolve. No compiled fragment, header, proof, installed source or previous owner was changed. This is a metadata authoring diagnostic, not a Lean, compiler or Root metadata job failure.

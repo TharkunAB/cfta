@@ -1,0 +1,5 @@
+/-- State and errors are local to each nondeterministic alternative. -/
+abbrev EnumerateM (Symbol Guard : Type) := StateT (State Symbol Guard) (ExceptT Error List)
+
+/-- Reject one branch, as the list monad does. -/
+def reject : EnumerateM Symbol Guard α := fun _ => []

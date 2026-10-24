@@ -1,0 +1,6 @@
+nodeIdentity :: Node symbol -> NodeId
+nodeIdentity (InternedMu mu) = internedMuId mu
+nodeIdentity (InternedNode node) = internedNodeId node
+nodeIdentity (InternedUnion alternatives) = internedUnionId alternatives
+nodeIdentity (Rec (RecInt i)) = i
+nodeIdentity _ = error "nodeIdentity: unexpected empty or unresolved node"

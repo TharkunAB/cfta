@@ -1,0 +1,7 @@
+/-- Every input value and both decoded recursive heaps are valid at this source point. -/
+structure Context (state : State Symbol Guard) (environment : List (Value Symbol Guard)) : Prop where
+  normal : Normal state
+  inputs : Values state environment
+  profiles : InternedFreshOrdinaryProfileHeap.Heap state
+  freeNames : InternedFreshOrdinaryFreeHeap.Heap state
+

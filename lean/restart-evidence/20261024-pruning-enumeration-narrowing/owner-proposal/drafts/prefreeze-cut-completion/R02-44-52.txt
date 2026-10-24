@@ -1,0 +1,9 @@
+                    simp only [encodeNode, winner]
+              · simp only [lookupNode, issued, canonical, ite_eq_right winner] at found
+                cases found
+
+/-- Narrowing Empty returns Empty and the same heap at every fuel. -/
+theorem narrowAt_empty {Key : Type}
+    [DecidableEq (InternedConstructorTemplates.EdgeKey Symbol Guard)]
+    (fits : Key → Symbol → Bool)
+    (admits : Key → InternedConstructorTemplates.Value Symbol Guard → Bool)

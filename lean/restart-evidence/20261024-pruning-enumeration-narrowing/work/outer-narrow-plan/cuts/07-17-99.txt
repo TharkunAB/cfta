@@ -1,0 +1,83 @@
+/-- Insert raw holes at type positions with the source's nested right folds. -/
+def typePositions (isType : Bool) (fragment : Fragment Symbol) (types : List Nat) : List Nat :=
+  match fragment with
+  | .hole uv => if isType then canonicalIds (uv :: types) else types
+  | .node symbol children =>
+      if isType then children.foldr (fun child accumulated => typePositions true child accumulated) types
+      else match children with
+        | [annotation, marker, function, argument] =>
+            if symbol = ("app", FullSyntax.Formula.top) then
+              typePositions true annotation (typePositions true marker
+                (typePositions false function (typePositions false argument types)))
+            else typePositions true annotation (typePositions true marker
+              (typePositions true function (typePositions true argument types)))
+        | [annotation, term] =>
+            if symbol = ("filter", FullSyntax.Formula.top) then
+              typePositions true annotation (typePositions false term types)
+            else typePositions true annotation (typePositions true term types)
+        | children => children.foldr (fun child accumulated => typePositions true child accumulated) types
+termination_by sizeOf fragment
+
+/-- Read program holes in function-before-argument order without normalization. -/
+def programHoles (isType : Bool) (fragment : Fragment Symbol) : List Nat :=
+  match fragment with
+  | .hole uv => if isType then [] else [uv]
+  | .node symbol children =>
+      if isType then []
+      else match children with
+        | [_, _, function, argument] =>
+            if symbol = ("app", FullSyntax.Formula.top) then
+              programHoles false function ++ programHoles false argument
+            else []
+        | [_, term] =>
+            if symbol = ("filter", FullSyntax.Formula.top) then programHoles false term else []
+        | _ => []
+
+/-- Replace partial holes by the exact type, raw program-ID or recursion marker. -/
+def openProgram (isType : Bool) (term : SourcePruningTemplates.PartialTerm) : Term Symbol :=
+  match term with
+  | .node (.hole uv) _ =>
+      if isType then .node ("?", FullSyntax.Formula.top) []
+      else .node ("?program#" ++ toString uv, FullSyntax.Formula.top) []
+  | .node .truncated _ => .node ("Mu", FullSyntax.Formula.top) []
+  | .node (.concrete symbol) children =>
+      if isType then .node symbol (children.map (fun child => openProgram true child))
+      else match children with
+        | [annotation, marker, function, argument] =>
+            if symbol = ("app", FullSyntax.Formula.top) then
+              .node symbol [openProgram true annotation, openProgram true marker,
+                openProgram false function, openProgram false argument]
+            else .node symbol [openProgram true annotation, openProgram true marker,
+              openProgram true function, openProgram true argument]
+        | [annotation, term] =>
+            if symbol = ("filter", FullSyntax.Formula.top) then
+              .node symbol [openProgram true annotation, openProgram false term]
+            else .node symbol [openProgram true annotation, openProgram true term]
+        | children => .node symbol (children.map (fun child => openProgram true child))
+termination_by sizeOf term
+
+/-- A type-position hole inserts its own raw ID into the observable set. -/
+theorem typePositions_hole_true (uv : Nat) (types : List Nat) :
+    typePositions true (.hole uv) types = canonicalIds (uv :: types) := by
+  simp [typePositions]
+
+/-- A program-position hole leaves the type set unchanged. -/
+theorem typePositions_hole_false (uv : Nat) (types : List Nat) :
+    typePositions false (.hole uv) types = types := by
+  simp [typePositions]
+
+/-- Insertion adds exactly the raw hole ID and preserves each earlier member. -/
+theorem typePositions_hole_member (uv identity : Nat) (types : List Nat) :
+    identity ∈ typePositions true (.hole uv) types ↔ identity = uv ∨ identity ∈ types := by
+  rw [typePositions_hole_true, canonicalIds_member]
+  exact List.mem_cons
+
+/-- A type-hole insertion has no repeated ID. -/
+theorem typePositions_hole_nodup (uv : Nat) (types : List Nat) :
+    (typePositions true (.hole uv) types).Nodup := by
+  rw [typePositions_hole_true]
+  exact canonicalIds_nodup (uv :: types)
+
+/-- A type-hole insertion exposes IDs in ascending order. -/
+theorem typePositions_hole_sorted (uv : Nat) (types : List Nat) :
+    (typePositions true (.hole uv) types).Pairwise (· ≤ ·) := by

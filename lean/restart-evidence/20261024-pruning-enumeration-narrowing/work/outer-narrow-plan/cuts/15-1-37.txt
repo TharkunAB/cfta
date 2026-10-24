@@ -1,0 +1,37 @@
+import MicroCFTA.Language
+
+/-!
+# Source typing-rule rows and independent bounded derivations
+
+Constructor labels and fixed terms are supplied as resolved candidate data.
+Source name and field validation remain separate.
+The row model retains source alternative order and exact environment positions.
+It does not model validation errors, datatype codecs, the row-map traversal,
+or lazy automaton import. Fixed fields retain their complete literal trees.
+A separate fixed-value law is needed for the advertised typing domain.
+-/
+namespace MicroCFTA.SourceTypingRules
+open Language
+variable {Ty Symbol : Type}
+
+/-- A field is a typed subterm or one fixed encoded value. -/
+inductive Child (Ty Symbol : Type) where
+  | subterm (binds : List Ty) (typ : Ty)
+  | value (term : Term Symbol)
+
+/-- Source rules retain ordinary alternatives and position-indexed variable schemas. -/
+inductive Rule (Ty Symbol : Type) where
+  | ordinary (label : Symbol) (children : List (Child Ty Symbol)) (result : Ty)
+  | variable (label : Symbol) (fields : Nat → Ty → List (Child Ty Symbol))
+
+/-- Typed goals keep innermost-first environments and the signed source nesting bound. -/
+inductive Goal (Ty Symbol : Type) where
+  | root
+  | typed (env : List Ty) (typ : Ty) (remaining : Int)
+  | fixed (term : Term Symbol)
+
+/-- Only a Subterm field consumes typing nesting. -/
+def Child.isSubterm : Child Ty Symbol → Bool
+  | .subterm .. => true
+  | .value _ => false
+

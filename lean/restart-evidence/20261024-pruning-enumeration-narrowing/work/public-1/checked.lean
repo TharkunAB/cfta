@@ -1,0 +1,4 @@
+import MicroCFTA.SourcePruningEnumerationNarrowing
+
+#check @MicroCFTA.SourcePruningEnumerationNarrowing.narrow_pending_complete
+#print axioms MicroCFTA.SourcePruningEnumerationNarrowing.narrow_pending_complete

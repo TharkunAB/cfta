@@ -1,0 +1,6 @@
+
+/-- The numeric ancestor identity agrees with the source's `nodeIdentity` on its defined cases. -/
+def identity : Value Symbol Guard → Option Nat
+  | .node entry .. | .union entry .. | .mu entry .. => some entry.identity
+  | .reference (.interned identity) => some identity
+  | _ => none
