@@ -1,0 +1,184 @@
+--- drafts/SourcePruningOracle-string-pre-fidelity.lean.txt
++++ drafts/SourcePruningOracle-full-symbol-before-inr.lean.txt
+@@ -38,22 +38,22 @@
+ variable {Guard : Type}
+ 
+ /-- The concrete-root fast path applies only when no check is pending. -/
+-private def idle (pending : List (Pending String)) : Fragment String → Bool
++private def idle (pending : List (Pending Symbol)) : Fragment Symbol → Bool
+   | .node symbol children => pending.isEmpty &&
+-      !((symbol == "app" && children.length == 4) || (symbol == "filter" && children.length == 2))
++      !(isProgramRoot (.node symbol children))
+   | .hole _ => false
+ 
+ /-- Render the fragment, then read every group before combining match results. -/
+-private def observe (graph : Graph String Guard) (templates : List (Template.Pattern String))
+-    (fuel : Nat) (pending : List (Pending String)) (uv : Nat) (fragment : Fragment String) :
+-    EnumerateM String Guard (Bool × List (Pending String)) := do
++private def observe (graph : Graph Symbol Guard) (templates : List (Template.Pattern Symbol))
++    (fuel : Nat) (pending : List (Pending Symbol)) (uv : Nat) (fragment : Fragment Symbol) :
++    EnumerateM Symbol Guard (Bool × List (Pending Symbol)) := do
+   let term ← expandPartial graph fuel fragment
+   let resumed ← pending.mapM (SourcePruningResume.resume fuel uv term)
+   pure (finishChecks resumed (startMatches templates term))
+ 
+ /-- The source callback preserves its early-rejection and empty-check branches. -/
+-def oracle (graph : Graph String Guard) (templates : List (Template.Pattern String))
+-    (fuel : Nat) : Oracle String Guard (List (Pending String)) := fun pending uv input =>
++def oracle (graph : Graph Symbol Guard) (templates : List (Template.Pattern Symbol))
++    (fuel : Nat) : Oracle Symbol Guard (List (Pending Symbol)) := fun pending uv input =>
+   match input with
+   | .inr _ => pure (false, pending)
+   | .inl fragment =>
+@@ -62,8 +62,8 @@
+       else observe graph templates fuel pending uv fragment
+ 
+ private theorem groups_agree (leftFuel rightFuel current : Nat) (term : PartialTerm)
+-    (pending : List (Pending String)) (left right leftAfter rightAfter : State String Guard)
+-    (leftResults rightResults : List (Option (Pending String))) (frame : Frame left right)
++    (pending : List (Pending Symbol)) (left right leftAfter rightAfter : State Symbol Guard)
++    (leftResults rightResults : List (Option (Pending Symbol))) (frame : Frame left right)
+     (total : UnionFind.Total left.representatives)
+     (leftRead : Success (pending.mapM (SourcePruningResume.resume leftFuel current term)) left leftResults leftAfter)
+     (rightRead : Success (pending.mapM (SourcePruningResume.resume rightFuel current term)) right rightResults rightAfter) :
+@@ -91,8 +91,8 @@
+       · simpa only [leftSame, rightSame] using lastFrame
+ 
+ private theorem groups_transport (leftFuel current : Nat) (term : PartialTerm)
+-    (pending : List (Pending String)) (left right leftAfter : State String Guard)
+-    (results : List (Option (Pending String))) (frame : Frame left right)
++    (pending : List (Pending Symbol)) (left right leftAfter : State Symbol Guard)
++    (results : List (Option (Pending Symbol))) (frame : Frame left right)
+     (total : UnionFind.Total left.representatives)
+     (leftRead : Success (pending.mapM (SourcePruningResume.resume leftFuel current term)) left results leftAfter) :
+     ∃ rightFuel rightAfter,
+@@ -127,10 +127,10 @@
+         simpa only [Nat.add_comm] using raised
+       · simpa only [leftSame] using lastFrame
+ 
+-private theorem observe_frame (graph : Graph String Guard)
+-    (templates : List (Template.Pattern String)) (fuel : Nat) (pending : List (Pending String))
+-    (uv : Nat) (fragment : Fragment String) (before after : State String Guard)
+-    (result : Bool × List (Pending String)) (total : UnionFind.Total before.representatives)
++private theorem observe_frame (graph : Graph Symbol Guard)
++    (templates : List (Template.Pattern Symbol)) (fuel : Nat) (pending : List (Pending Symbol))
++    (uv : Nat) (fragment : Fragment Symbol) (before after : State Symbol Guard)
++    (result : Bool × List (Pending Symbol)) (total : UnionFind.Total before.representatives)
+     (success : Success (observe graph templates fuel pending uv fragment) before result after) :
+     Frame before after := by
+   unfold observe at success
+@@ -146,11 +146,11 @@
+     pending step middle last resumed (.refl middle) traversed
+   exact renderFrame.trans (groupFrame.trans (pure_frame _ result last after final))
+ 
+-private theorem observe_agrees (graph : Graph String Guard)
+-    (templates : List (Template.Pattern String)) (leftFuel rightFuel : Nat)
+-    (pending : List (Pending String)) (uv : Nat) (fragment : Fragment String)
+-    (left right leftAfter rightAfter : State String Guard)
+-    (leftResult rightResult : Bool × List (Pending String)) (frame : Frame left right)
++private theorem observe_agrees (graph : Graph Symbol Guard)
++    (templates : List (Template.Pattern Symbol)) (leftFuel rightFuel : Nat)
++    (pending : List (Pending Symbol)) (uv : Nat) (fragment : Fragment Symbol)
++    (left right leftAfter rightAfter : State Symbol Guard)
++    (leftResult rightResult : Bool × List (Pending Symbol)) (frame : Frame left right)
+     (total : UnionFind.Total left.representatives)
+     (leftRead : Success (observe graph templates leftFuel pending uv fragment) left leftResult leftAfter)
+     (rightRead : Success (observe graph templates rightFuel pending uv fragment) right rightResult rightAfter) :
+@@ -172,9 +172,9 @@
+   · rw [leftEq, rightEq, groupsSame]
+   · simpa only [leftSame, rightSame] using groupFrame
+ 
+-private theorem observe_moreFuel (graph : Graph String Guard)
+-    (templates : List (Template.Pattern String)) (fuel extra : Nat)
+-    (pending : List (Pending String)) (uv : Nat) (fragment : Fragment String) :
++private theorem observe_moreFuel (graph : Graph Symbol Guard)
++    (templates : List (Template.Pattern Symbol)) (fuel extra : Nat)
++    (pending : List (Pending Symbol)) (uv : Nat) (fragment : Fragment Symbol) :
+     Retains (observe graph templates fuel pending uv fragment)
+       (observe graph templates (fuel + extra) pending uv fragment) := by
+   unfold observe
+@@ -184,10 +184,10 @@
+     (retains_mapM _ _ (fun group => SourcePruningResume.resume_moreFuel fuel extra uv term group) pending)
+     (fun _ => retains_refl _)
+ 
+-private theorem observe_transport (graph : Graph String Guard)
+-    (templates : List (Template.Pattern String)) (leftFuel : Nat)
+-    (pending : List (Pending String)) (uv : Nat) (fragment : Fragment String)
+-    (left right leftAfter : State String Guard) (result : Bool × List (Pending String))
++private theorem observe_transport (graph : Graph Symbol Guard)
++    (templates : List (Template.Pattern Symbol)) (leftFuel : Nat)
++    (pending : List (Pending Symbol)) (uv : Nat) (fragment : Fragment Symbol)
++    (left right leftAfter : State Symbol Guard) (result : Bool × List (Pending Symbol))
+     (frame : Frame left right) (total : UnionFind.Total left.representatives)
+     (leftRead : Success (observe graph templates leftFuel pending uv fragment) left result leftAfter) :
+     ∃ rightFuel rightAfter,
+@@ -216,7 +216,7 @@
+   · simpa only [leftSame] using groupFrame
+ 
+ private theorem pure_agrees {α : Type} (value : α)
+-    (left right leftAfter rightAfter : State String Guard) (leftResult rightResult : α)
++    (left right leftAfter rightAfter : State Symbol Guard) (leftResult rightResult : α)
+     (frame : Frame left right) (leftRead : Success (pure value) left leftResult leftAfter)
+     (rightRead : Success (pure value) right rightResult rightAfter) :
+     leftResult = rightResult ∧ Frame leftAfter rightAfter := by
+@@ -225,7 +225,7 @@
+   exact ⟨leftEq.trans rightEq.symm, by simpa only [leftSame, rightSame] using frame⟩
+ 
+ private theorem pure_transport {α : Type} (value result : α)
+-    (left right leftAfter : State String Guard) (frame : Frame left right)
++    (left right leftAfter : State Symbol Guard) (frame : Frame left right)
+     (leftRead : Success (pure value) left result leftAfter) :
+     ∃ rightFuel : Nat, ∃ rightAfter,
+       Success (pure value) right result rightAfter ∧ Frame leftAfter rightAfter := by
+@@ -234,9 +234,9 @@
+     by simpa only [leftSame] using frame⟩
+ 
+ /-- Every actual successful callback preserves the full compression frame. -/
+-theorem oracle_frame (graph : Graph String Guard) (templates : List (Template.Pattern String))
+-    (fuel : Nat) (pending : List (Pending String)) (uv : Nat) (input : Sum (Fragment String) Nat)
+-    (before after : State String Guard) (result : Bool × List (Pending String))
++theorem oracle_frame (graph : Graph Symbol Guard) (templates : List (Template.Pattern Symbol))
++    (fuel : Nat) (pending : List (Pending Symbol)) (uv : Nat) (input : Sum (Fragment Symbol) Nat)
++    (before after : State Symbol Guard) (result : Bool × List (Pending Symbol))
+     (total : UnionFind.Total before.representatives)
+     (success : Success (oracle graph templates fuel pending uv input) before result after) : Frame before after := by
+   cases input with
+@@ -252,10 +252,10 @@
+           exact observe_frame graph templates fuel pending uv fragment before after result total success
+ 
+ /-- Independent successful callbacks return equal results and framed final states. -/
+-theorem oracle_agrees (graph : Graph String Guard) (templates : List (Template.Pattern String))
+-    (leftFuel rightFuel : Nat) (pending : List (Pending String)) (uv : Nat)
+-    (input : Sum (Fragment String) Nat) (left right leftAfter rightAfter : State String Guard)
+-    (leftResult rightResult : Bool × List (Pending String)) (frame : Frame left right)
++theorem oracle_agrees (graph : Graph Symbol Guard) (templates : List (Template.Pattern Symbol))
++    (leftFuel rightFuel : Nat) (pending : List (Pending Symbol)) (uv : Nat)
++    (input : Sum (Fragment Symbol) Nat) (left right leftAfter rightAfter : State Symbol Guard)
++    (leftResult rightResult : Bool × List (Pending Symbol)) (frame : Frame left right)
+     (total : UnionFind.Total left.representatives)
+     (leftRead : Success (oracle graph templates leftFuel pending uv input) left leftResult leftAfter)
+     (rightRead : Success (oracle graph templates rightFuel pending uv input) right rightResult rightAfter) :
+@@ -274,8 +274,8 @@
+             left right leftAfter rightAfter leftResult rightResult frame total leftRead rightRead
+ 
+ /-- Additional fuel retains the callback result and the exact complete final state. -/
+-theorem oracle_moreFuel (graph : Graph String Guard) (templates : List (Template.Pattern String))
+-    (fuel extra : Nat) (pending : List (Pending String)) (uv : Nat) (input : Sum (Fragment String) Nat) :
++theorem oracle_moreFuel (graph : Graph Symbol Guard) (templates : List (Template.Pattern Symbol))
++    (fuel extra : Nat) (pending : List (Pending Symbol)) (uv : Nat) (input : Sum (Fragment Symbol) Nat) :
+     Retains (oracle graph templates fuel pending uv input)
+       (oracle graph templates (fuel + extra) pending uv input) := by
+   cases input with
+@@ -291,9 +291,9 @@
+           exact observe_moreFuel graph templates fuel extra pending uv fragment
+ 
+ /-- One actual callback gives a finite matching callback from a framed input. -/
+-theorem oracle_transport (graph : Graph String Guard) (templates : List (Template.Pattern String))
+-    (leftFuel : Nat) (pending : List (Pending String)) (uv : Nat) (input : Sum (Fragment String) Nat)
+-    (left right leftAfter : State String Guard) (result : Bool × List (Pending String))
++theorem oracle_transport (graph : Graph Symbol Guard) (templates : List (Template.Pattern Symbol))
++    (leftFuel : Nat) (pending : List (Pending Symbol)) (uv : Nat) (input : Sum (Fragment Symbol) Nat)
++    (left right leftAfter : State Symbol Guard) (result : Bool × List (Pending Symbol))
+     (frame : Frame left right) (total : UnionFind.Total left.representatives)
+     (leftRead : Success (oracle graph templates leftFuel pending uv input) left result leftAfter) :
+     ∃ rightFuel rightAfter,

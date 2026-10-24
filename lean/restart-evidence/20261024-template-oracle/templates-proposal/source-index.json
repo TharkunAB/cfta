@@ -1,0 +1,153 @@
+{
+  "status": "SOURCE_ONLY_UNCOMPILED",
+  "sources": [
+    {
+      "path": "/home/tritlo/Code/mcfta/specftacular/src/Specftacular/Pruning.hs",
+      "bytes": 16989,
+      "sha256": "5970dd7d9e67bb925fbd079921768ac08dc91d1c34e9ecfbc3d59795f0287f61",
+      "lines": 350,
+      "cuts": [
+        {
+          "start": 41,
+          "end": 45,
+          "bytes": 247,
+          "sha256": "d9c533dbf47999f63e36560c4f0488afda321c1ef6ebb68f0f98f0302be4cda9",
+          "text": "-- | The remaining parts of one match, each waiting for an enumeration hole.\ntype Pending = [(Template Symbol, UVar)]\n\n-- | A partial term with explicit markers for unresolved holes and recursion.\ntype PartialTerm = CT.Term (PartialSymbol Symbol)\n"
+        },
+        {
+          "start": 215,
+          "end": 286,
+          "bytes": 3599,
+          "sha256": "c32b7a4d971b4c091301bbc6175e9118e2266050b2da9b590191b24c7c925670",
+          "text": "{- | The expansion order and the oracle of 'prunedTerms'. The order takes\nthe holes that a suspended check waits for first. The oracle rejects a\nbranch when a template matches one of its programs.\n-}\ntemplateOracle ::\n    [Template Symbol] ->\n    ( [Pending] -> [UVar] -> Maybe UVar\n    , [Pending] -> UVar -> Either (TermFragment Symbol) (Node Symbol) -> EnumerateM Symbol (Bool, [Pending])\n    )\ntemplateOracle templates = (order, oracle)\n  where\n    earlyTemplates = mapMaybe structuralTemplate templates\n    earlyCandidatesFor = indexTemplates earlyTemplates\n    rejectEarly fragment@(TermFragmentNode symbol children)\n        | (symbol, length children) `elem` [(\"app\", 4), (\"filter\", 2)] =\n            any redundant (programs (fragmentTerm fragment))\n      where\n        redundant term = any (\\template -> matchPartial template term == Just []) (earlyCandidatesFor term)\n    rejectEarly _ = False\n    candidatesFor = indexTemplates templates\n    order pending candidates =\n        let waiting = Set.fromList (map snd (concat pending))\n         in find (`Set.member` waiting) candidates\n    oracle :: [Pending] -> UVar -> Either (TermFragment Symbol) (Node Symbol) -> EnumerateM Symbol (Bool, [Pending])\n    oracle pending _ (Right _) = pure (False, pending)\n    oracle pending _ (Left fragment)\n        | rejectEarly fragment = pure (True, pending)\n    -- This concrete root starts no program match, and no check waits.\n    oracle [] _ (Left (TermFragmentNode symbol children))\n        | (symbol, length children) `notElem` [(\"app\", 4), (\"filter\", 2)] = pure (False, [])\n    oracle pending uv (Left fragment) = do\n        partial <- expandPartialTermFrag fragment\n        resumed <- traverse (resume uv partial) pending\n        let started = [matchPartial template term | term <- programs partial, template <- candidatesFor term]\n            checks = catMaybes (resumed ++ started)\n        pure (any null checks, filter (not . null) checks)\n\n-- | A fixed program head and the number of applications in its function spine.\ntype SpineKey = (Symbol, Int)\n\n{- | Cache compatible templates for each fixed head. Keep their input order.\nOnly exact application and constant nodes fix a template head. Prefixes,\nwildcards, and unrecognized spine nodes remain generic. Unknown program heads\nuse all templates. This index does not prove a match or inspect annotations.\n-}\nindexTemplates :: [Template Symbol] -> PartialTerm -> [Template Symbol]\nindexTemplates templates = select\n  where\n    tagged = zip [0 :: Int ..] templates\n    generic = IntMap.fromList [(i, t) | (i, t) <- tagged, Nothing <- [templateSpine t]]\n    fallback = IntMap.elems generic\n    fixed = Map.fromListWith IntMap.union [(key, IntMap.singleton i t) | (i, t) <- tagged, Just key <- [templateSpine t]]\n    buckets = Map.map (IntMap.elems . IntMap.union generic) fixed\n    select term = case partialSpine term of\n        Nothing -> templates\n        Just key -> Map.findWithDefault fallback key buckets\n\n-- | Read an exact raw template spine. Other template forms cannot fix a key.\ntemplateSpine :: Template Symbol -> Maybe SpineKey\ntemplateSpine = go 0\n  where\n    go count (TemplateNode \"app\" [_, _, f, _]) = go (count + 1) f\n    go count (TemplateNode symbol [_]) = Just (symbol, count)\n    go _ _ = Nothing\n\n-- | Read a known raw program spine. Holes and recursion cannot fix a key.\npartialSpine :: PartialTerm -> Maybe SpineKey\npartialSpine = go 0\n  where\n    go count (CT.Node (ConcreteSymbol \"app\") [_, _, f, _]) = go (count + 1) f\n    go count (CT.Node (ConcreteSymbol symbol) [_]) = Just (symbol, count)\n    go _ _ = Nothing\n"
+        },
+        {
+          "start": 299,
+          "end": 350,
+          "bytes": 2606,
+          "sha256": "2ff280dfcd4996129995cccdbc0760ca99ca5c470384b662a57e310de26a8dba",
+          "text": "{- | Match a partial term. Nothing rejects the match. An empty list proves\nthe match. A nonempty list records the parts that still need expansion.\n-}\nmatchPartial :: Template Symbol -> PartialTerm -> Maybe Pending\nmatchPartial Hole _ = Just []\nmatchPartial (AnyPrefix []) _ = Just []\nmatchPartial template (CT.Node (UVarHole uv) []) = Just [(template, uv)]\nmatchPartial _ (CT.Node TruncatedRecursion _) = Nothing\nmatchPartial template (CT.Node (ConcreteSymbol symbol) children) = case template of\n    AnyNode parts -> exact parts\n    TemplateNode expected parts | expected == symbol -> exact parts\n    AnyPrefix parts -> prefix parts\n    TemplatePrefix expected parts | expected == symbol -> prefix parts\n    _ -> Nothing\n  where\n    exact parts\n        | length parts == length children = concat <$> zipWithM matchPartial parts children\n        | otherwise = Nothing\n    prefix parts\n        | length parts <= length children = concat <$> zipWithM matchPartial parts children\n        | otherwise = Nothing\nmatchPartial _ _ = Nothing\n\n-- | Program applications in a fragment. Type children are not programs.\nprograms :: PartialTerm -> [PartialTerm]\nprograms (CT.Node (ConcreteSymbol \"filter\") [_, term]) = programs term\nprograms term@(CT.Node (ConcreteSymbol \"app\") [_, _, f, x]) = term : programs f ++ programs x\nprograms _ = []\n\n{- | Select application templates whose annotations are wildcards.\nSpecftacular applications always have the fixed singleton arrow marker.\nIts equality endpoint can still be an unresolved UVar during eager descent.\nIgnore that marker only under this encoding invariant. The signature guard\ndisables pruning when a type constructor also has the raw app/4 shape.\n-}\nstructuralTemplate :: Template Symbol -> Maybe (Template Symbol)\nstructuralTemplate template@(TemplateNode \"app\" [_, _, _, _]) = program template\n  where\n    program Hole = Just Hole\n    program (TemplateNode \"app\" [Hole, marker, function, argument])\n        | marker `elem` [Hole, TemplateNode \"(->)\" []] =\n            (\\f x -> TemplateNode \"app\" [Hole, Hole, f, x]) <$> program function <*> program argument\n    program (TemplateNode symbol [Hole]) = Just (TemplateNode symbol [Hole])\n    program _ = Nothing\nstructuralTemplate _ = Nothing\n\n{- | View the immutable fragment without reading or expanding any UVar.\nThe existing lazy term children leave wildcard positions unevaluated.\n-}\nfragmentTerm :: TermFragment Symbol -> PartialTerm\nfragmentTerm (TermFragmentNode symbol children) = CT.Node (ConcreteSymbol symbol) (map fragmentTerm children)\nfragmentTerm (TermFragmentUVar uv) = CT.Node (UVarHole uv) []\n"
+        }
+      ]
+    },
+    {
+      "path": "/home/tritlo/Code/mcfta/cfta/src/Data/CFTA/Symbol.hs",
+      "bytes": 5657,
+      "sha256": "31983078475d136d2e69f5d94461f56f7c2fa3b3822144be1eee324ba0637f02",
+      "lines": 148,
+      "cuts": [
+        {
+          "start": 51,
+          "end": 74,
+          "bytes": 927,
+          "sha256": "a0f6159101dff259881848dc94030277f25e593c556eaa62755d021a7a0c7021",
+          "text": "newtype SymbolId = SymbolId Int\n    deriving newtype (Eq)\n\n{- | An interned text and refinement, with the ordinary symbol of the text:\nthe symbol itself when it is ordinary. The ordinary symbol is found once, when\nit is first read, so that reading it again allocates nothing.\n-}\ndata Symbol = InternedSymbol !SymbolId !Int !Text !Formula Symbol\n\n{- | An ordinary symbol of a text. As a pattern, it matches every symbol and\ngives its text; the refinement is not part of the match.\n-}\npattern Symbol :: Text -> Symbol\npattern Symbol text <- InternedSymbol _ _ text _ _\n  where\n    Symbol text = internSymbol text Top\n\n{-# COMPLETE Symbol #-}\n\n{- | A refined symbol: an ordinary symbol and a refinement. As a pattern, it\nmatches every symbol and gives the ordinary symbol of its text and its\nrefinement. Building one uses only the text of the given symbol, so a\nrefinement that the given symbol has is replaced, not conjoined.\n-}\n"
+        },
+        {
+          "start": 94,
+          "end": 125,
+          "bytes": 1255,
+          "sha256": "3d4aeeb1416a6db0d2612af70a8e3efa9f48c5f099b40aedceb8fe24c980a63b",
+          "text": "-- | The ordinary symbol of the same text.\nunrefined :: Symbol -> Symbol\nunrefined (InternedSymbol _ _ _ _ ordinary) = ordinary\n\n-- | Remove the refinements of a term.\neraseRefinements :: Term Symbol -> Term Symbol\neraseRefinements = fmap unrefined\n\n-- | Intern one text and refinement.\ninternSymbol :: Text -> Formula -> Symbol\ninternSymbol text refinement = intern symbols identify (text, refinement)\n  where\n    identify identity key = symbol\n      where\n        symbol = InternedSymbol (SymbolId identity) (hash key) text refinement ordinary\n        ordinary\n            | refinement == Top = symbol\n            | otherwise = Symbol text\n\n-- | The process-global table of symbols.\nsymbols :: Cache (Text, Formula) Symbol\nsymbols = unsafePerformIO $ freshCacheWith =<< newIdSupply\n{-# NOINLINE symbols #-}\n\ninstance Eq Symbol where\n    InternedSymbol left _ _ _ _ == InternedSymbol right _ _ _ _ = left == right\n\n-- | Text order, then refinement order. Equal identities skip the comparison.\ninstance Ord Symbol where\n    compare (InternedSymbol left _ leftText leftRefinement _) (InternedSymbol right _ rightText rightRefinement _)\n        | left == right = EQ\n        | otherwise = compare leftText rightText <> compare leftRefinement rightRefinement\n"
+        },
+        {
+          "start": 145,
+          "end": 148,
+          "bytes": 95,
+          "sha256": "d26091d66ba221eb2c05202d687c62eb729554098ff17a47eb3e672239352679",
+          "text": "    {-# NOINLINE fromString #-}\n\ninstance Read Symbol where\n    readPrec = Symbol <$> readPrec\n"
+        }
+      ]
+    },
+    {
+      "path": "/home/tritlo/Code/mcfta/lean/MicroCFTA/SourceObservations.lean",
+      "bytes": 8738,
+      "sha256": "3f65467c7cc9e15921dc5ea9e6173ade0f431054844ca1250079440ed5410cc8",
+      "lines": 145,
+      "cuts": [
+        {
+          "start": 10,
+          "end": 15,
+          "bytes": 199,
+          "sha256": "d1a289a6bc5587c46826b31f40982dc50a4efd36f72e0237e28f2832f70ef9eb",
+          "text": "namespace MicroCFTA.SourceObservations\nopen SourceGuards\n\n/-- Constructor names and complete refinement annotations form the structural alphabet. -/\nabbrev Label (Formula : Type) := Name \u00d7 Formula\n\n"
+        }
+      ]
+    },
+    {
+      "path": "/home/tritlo/Code/mcfta/lean/MicroCFTA/FormulaExecutable.lean",
+      "bytes": 5638,
+      "sha256": "5d164443fe3dd60d9b1eff44a132aa97c649bd199e1930b5d1a64f14859a5af3",
+      "lines": 123,
+      "cuts": [
+        {
+          "start": 11,
+          "end": 25,
+          "bytes": 759,
+          "sha256": "2aaf513bc7ac0e61b22f1f48b52902e9eb36f9506d1861f36d749ead835ca985",
+          "text": "open FullSyntax\n\n/-- Source structural comparison decides full term equality. -/\ninstance termDecidableEq : DecidableEq Term := fun left right =>\n  if same : FormulaOrder.compareTerm left right = .eq then\n    .isTrue ((FormulaOrder.term_eq left right).mp same)\n  else .isFalse (fun equal => same ((FormulaOrder.term_eq left right).mpr equal))\n\n/-- Source structural comparison decides full formula equality. -/\ninstance formulaDecidableEq : DecidableEq Formula := fun left right =>\n  if same : FormulaOrder.compareFormula left right = .eq then\n    .isTrue ((FormulaOrder.formula_eq left right).mp same)\n  else .isFalse (fun equal => same ((FormulaOrder.formula_eq left right).mpr equal))\n\n/-- The source tautology test with executable structural equality. -/\n"
+        }
+      ]
+    },
+    {
+      "path": "/home/tritlo/Code/mcfta/lean/MicroCFTA/Template.lean",
+      "bytes": 11254,
+      "sha256": "67abebd52ddc3320afd88a142e46b92b357c9bb7947efd7e290976a1cd5530d8",
+      "lines": 228,
+      "cuts": [
+        {
+          "start": 13,
+          "end": 22,
+          "bytes": 350,
+          "sha256": "3df0e4e3441951a9d9255f7cb1e4700f945631153dae86ee97fccad03b43a880",
+          "text": "open Language\n\n/-- Complete-subtree, exact-node, and prefix-node patterns. -/\ninductive Pattern (Symbol : Type) where\n  | hole\n  | anyNode (children : List (Pattern Symbol))\n  | node (symbol : Symbol) (children : List (Pattern Symbol))\n  | anyPrefix (children : List (Pattern Symbol))\n  | prefix (symbol : Symbol) (children : List (Pattern Symbol))\n\n"
+        }
+      ]
+    },
+    {
+      "path": "/home/tritlo/Code/mcfta/lean/MicroCFTA/Fragments.lean",
+      "bytes": 14675,
+      "sha256": "a182ef3932d50a660878e33b201e415b22bf9c26eaacfb0f4bcbaad431ba9f07",
+      "lines": 288,
+      "cuts": [
+        {
+          "start": 18,
+          "end": 25,
+          "bytes": 246,
+          "sha256": "0c778b2b7f140c92f00b7af4044c677ca66fd422e0b749872400a2692306fbdc",
+          "text": "namespace MicroCFTA.Fragments\nopen Language\n\n/-- An ordered symbol fragment or a hole named by a union-find variable. -/\ninductive Fragment (Symbol : Type) where\n  | node (symbol : Symbol) (children : List (Fragment Symbol))\n  | hole (uv : Nat)\n\n"
+        }
+      ]
+    },
+    {
+      "path": "/home/tritlo/Code/mcfta/lean/MicroCFTA/EnumerationState.lean",
+      "bytes": 33489,
+      "sha256": "83a898b883ec7b52469bccd87e8afa4f7abb320e3c935bf48f3d80ad77003cc4",
+      "lines": 699,
+      "cuts": [
+        {
+          "start": 334,
+          "end": 341,
+          "bytes": 351,
+          "sha256": "8f9c0425e7da87fff7678f790956617f2da03aaf0182895aad92b16e3a8a0756",
+          "text": "/-- Keep real symbols, unresolved holes, and recursion truncation distinct. -/\ninductive PartialSymbol (Symbol : Type) where\n  | concrete : Symbol \u2192 PartialSymbol Symbol\n  | hole : Nat \u2192 PartialSymbol Symbol\n  | truncated\n  deriving DecidableEq, Repr\n\n/-- Diagnostic rendering distinguishes pending recursive constraints from final truncation. -/\n"
+        }
+      ]
+    },
+    {
+      "path": "/home/tritlo/Code/mcfta/lean/MicroCFTA/SourcePruningPartialMatch.lean",
+      "bytes": 3692,
+      "sha256": "08c3662ac9bc664eb809448522505834105fb173b05971a432f9741c2e275509",
+      "lines": 90,
+      "cuts": [
+        {
+          "start": 12,
+          "end": 47,
+          "bytes": 1760,
+          "sha256": "1afca499890e8d5b61cd905da544647bd79a346d18cb715fc5bab76d8fbe229e",
+          "text": "/-- The unresolved pieces of one template match. -/\nabbrev Pending (Symbol : Type) := List (Template.Pattern Symbol \u00d7 Nat)\n\nmutual\n  /-- Match a partial term and collect the unresolved pieces in order. -/\n  def matchPartial [DecidableEq Symbol] (pattern : Template.Pattern Symbol)\n      (term : Language.Term (EnumerationState.PartialSymbol Symbol)) : Option (Pending Symbol) :=\n    match pattern, term with\n    | .hole, _ => some []\n    | .anyPrefix [], _ => some []\n    | pattern, .node (.hole uv) [] => some [(pattern, uv)]\n    | _, .node .truncated _ => none\n    | .anyNode parts, .node (.concrete _) children =>\n        if parts.length = children.length then matchChildren parts children else none\n    | .node expected parts, .node (.concrete symbol) children =>\n        if expected = symbol then\n          if parts.length = children.length then matchChildren parts children else none\n        else none\n    | .anyPrefix parts, .node (.concrete _) children =>\n        if parts.length \u2264 children.length then matchChildren parts children else none\n    | .prefix expected parts, .node (.concrete symbol) children =>\n        if expected = symbol then\n          if parts.length \u2264 children.length then matchChildren parts children else none\n        else none\n    | _, _ => none\n\n  /-- Match the requested prefix and append each child's pending pieces. -/\n  private def matchChildren [DecidableEq Symbol] : List (Template.Pattern Symbol) \u2192\n      List (Language.Term (EnumerationState.PartialSymbol Symbol)) \u2192 Option (Pending Symbol)\n    | [], _ => some []\n    | pattern :: patterns, term :: terms => do\n        let first \u2190 matchPartial pattern term\n        let rest \u2190 matchChildren patterns terms\n        pure (first ++ rest)\n    | _, [] => none\nend\n"
+        }
+      ]
+    }
+  ]
+}

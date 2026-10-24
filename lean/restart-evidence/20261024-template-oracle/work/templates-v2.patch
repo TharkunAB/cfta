@@ -1,0 +1,11 @@
+--- frozen
++++ v2
+@@ -141,7 +141,7 @@
+ 
+ /-- A raw fragment hole keeps its original ID in the pure view. -/
+ theorem fragmentTerm_hole (uv : Nat) : fragmentTerm (.hole uv) = .node (.hole uv) [] := by
+-  rfl
++  simp only [fragmentTerm]
+ 
+ /-- A filter contributes only the programs of its program child. -/
+ theorem programs_filter (annotation term : PartialTerm) :

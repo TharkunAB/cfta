@@ -1,0 +1,75 @@
+--- frozen
++++ v2
+@@ -233,7 +233,7 @@
+ private theorem pure_transport {α : Type} (value result : α)
+     (left right leftAfter : State Symbol Guard) (frame : Frame left right)
+     (leftRead : Success (pure value) left result leftAfter) :
+-    ∃ rightFuel : Nat, ∃ rightAfter,
++    ∃ _rightFuel : Nat, ∃ rightAfter,
+       Success (pure value) right result rightAfter ∧ Frame leftAfter rightAfter := by
+   obtain ⟨resultEq, leftSame⟩ := (success_pure value result left leftAfter).mp leftRead
+   exact ⟨0, right, (success_pure value result right right).mpr ⟨resultEq, rfl⟩,
+@@ -249,12 +249,12 @@
+   | inr node => exact pure_frame _ result before after success
+   | inl fragment =>
+       by_cases rejected : rejectEarly templates fragment = true
+-      · simp only [oracle, if_pos rejected] at success
++      · simp only [oracle, ite_eq_left rejected] at success
+         exact pure_frame _ result before after success
+       · by_cases skipped : idle pending fragment = true
+-        · simp only [oracle, if_neg rejected, if_pos skipped] at success
++        · simp only [oracle, ite_eq_right rejected, ite_eq_left skipped] at success
+           exact pure_frame _ result before after success
+-        · simp only [oracle, if_neg rejected, if_neg skipped] at success
++        · simp only [oracle, ite_eq_right rejected, ite_eq_right skipped] at success
+           exact observe_frame graph templates fuel pending uv fragment before after result total success
+ 
+ /-- Independent successful callbacks return equal results and framed final states. -/
+@@ -270,12 +270,12 @@
+   | inr node => exact pure_agrees _ left right leftAfter rightAfter leftResult rightResult frame leftRead rightRead
+   | inl fragment =>
+       by_cases rejected : rejectEarly templates fragment = true
+-      · simp only [oracle, if_pos rejected] at leftRead rightRead
++      · simp only [oracle, ite_eq_left rejected] at leftRead rightRead
+         exact pure_agrees _ left right leftAfter rightAfter leftResult rightResult frame leftRead rightRead
+       · by_cases skipped : idle pending fragment = true
+-        · simp only [oracle, if_neg rejected, if_pos skipped] at leftRead rightRead
++        · simp only [oracle, ite_eq_right rejected, ite_eq_left skipped] at leftRead rightRead
+           exact pure_agrees _ left right leftAfter rightAfter leftResult rightResult frame leftRead rightRead
+-        · simp only [oracle, if_neg rejected, if_neg skipped] at leftRead rightRead
++        · simp only [oracle, ite_eq_right rejected, ite_eq_right skipped] at leftRead rightRead
+           exact observe_agrees graph templates leftFuel rightFuel pending uv fragment
+             left right leftAfter rightAfter leftResult rightResult frame total leftRead rightRead
+ 
+@@ -288,12 +288,12 @@
+   | inr node => exact retains_refl _
+   | inl fragment =>
+       by_cases rejected : rejectEarly templates fragment = true
+-      · simp only [oracle, if_pos rejected]
++      · simp only [oracle, ite_eq_left rejected]
+         exact retains_refl _
+       · by_cases skipped : idle pending fragment = true
+-        · simp only [oracle, if_neg rejected, if_pos skipped]
++        · simp only [oracle, ite_eq_right rejected, ite_eq_left skipped]
+           exact retains_refl _
+-        · simp only [oracle, if_neg rejected, if_neg skipped]
++        · simp only [oracle, ite_eq_right rejected, ite_eq_right skipped]
+           exact observe_moreFuel graph templates fuel extra pending uv fragment
+ 
+ /-- One actual callback gives a finite matching callback from a framed input. -/
+@@ -309,12 +309,12 @@
+   | inr node => exact pure_transport _ result left right leftAfter frame leftRead
+   | inl fragment =>
+       by_cases rejected : rejectEarly templates fragment = true
+-      · simp only [oracle, if_pos rejected] at leftRead ⊢
++      · simp only [oracle, ite_eq_left rejected] at leftRead ⊢
+         exact pure_transport _ result left right leftAfter frame leftRead
+       · by_cases skipped : idle pending fragment = true
+-        · simp only [oracle, if_neg rejected, if_pos skipped] at leftRead ⊢
++        · simp only [oracle, ite_eq_right rejected, ite_eq_left skipped] at leftRead ⊢
+           exact pure_transport _ result left right leftAfter frame leftRead
+-        · simp only [oracle, if_neg rejected, if_neg skipped] at leftRead ⊢
++        · simp only [oracle, ite_eq_right rejected, ite_eq_right skipped] at leftRead ⊢
+           exact observe_transport graph templates leftFuel pending uv fragment left right leftAfter result frame total leftRead
+ 
+ end MicroCFTA.SourcePruningOracle

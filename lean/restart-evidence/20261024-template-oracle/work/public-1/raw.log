@@ -1,0 +1,155 @@
+MicroCFTA.SourcePruningTemplates.Symbol : Type
+MicroCFTA.SourcePruningTemplates.PartialTerm : Type
+MicroCFTA.SourcePruningTemplates.fragmentTerm : MicroCFTA.Fragments.Fragment MicroCFTA.SourcePruningTemplates.Symbol →
+  MicroCFTA.SourcePruningTemplates.PartialTerm
+MicroCFTA.SourcePruningTemplates.programs : MicroCFTA.SourcePruningTemplates.PartialTerm →
+  List MicroCFTA.SourcePruningTemplates.PartialTerm
+MicroCFTA.SourcePruningTemplates.templateSpine : MicroCFTA.Template.Pattern MicroCFTA.SourcePruningTemplates.Symbol →
+  Option (MicroCFTA.SourcePruningTemplates.Symbol × Nat)
+MicroCFTA.SourcePruningTemplates.partialSpine : MicroCFTA.SourcePruningTemplates.PartialTerm →
+  Option (MicroCFTA.SourcePruningTemplates.Symbol × Nat)
+MicroCFTA.SourcePruningTemplates.indexTemplates : List
+    (MicroCFTA.Template.Pattern MicroCFTA.SourcePruningTemplates.Symbol) →
+  MicroCFTA.SourcePruningTemplates.PartialTerm →
+    List (MicroCFTA.Template.Pattern MicroCFTA.SourcePruningTemplates.Symbol)
+MicroCFTA.SourcePruningTemplates.structuralTemplate : MicroCFTA.Template.Pattern
+    MicroCFTA.SourcePruningTemplates.Symbol →
+  Option (MicroCFTA.Template.Pattern MicroCFTA.SourcePruningTemplates.Symbol)
+MicroCFTA.SourcePruningTemplates.isProgramRoot : MicroCFTA.Fragments.Fragment MicroCFTA.SourcePruningTemplates.Symbol →
+  Bool
+MicroCFTA.SourcePruningTemplates.rejectEarly : List
+    (MicroCFTA.Template.Pattern MicroCFTA.SourcePruningTemplates.Symbol) →
+  MicroCFTA.Fragments.Fragment MicroCFTA.SourcePruningTemplates.Symbol → Bool
+MicroCFTA.SourcePruningTemplates.startMatches : List
+    (MicroCFTA.Template.Pattern MicroCFTA.SourcePruningTemplates.Symbol) →
+  MicroCFTA.SourcePruningTemplates.PartialTerm →
+    List (Option (MicroCFTA.SourcePruningPartialMatch.Pending MicroCFTA.SourcePruningTemplates.Symbol))
+MicroCFTA.SourcePruningTemplates.finishChecks : List
+    (Option (MicroCFTA.SourcePruningPartialMatch.Pending MicroCFTA.SourcePruningTemplates.Symbol)) →
+  List (Option (MicroCFTA.SourcePruningPartialMatch.Pending MicroCFTA.SourcePruningTemplates.Symbol)) →
+    Bool × List (MicroCFTA.SourcePruningPartialMatch.Pending MicroCFTA.SourcePruningTemplates.Symbol)
+MicroCFTA.SourcePruningTemplates.order : List
+    (MicroCFTA.SourcePruningPartialMatch.Pending MicroCFTA.SourcePruningTemplates.Symbol) →
+  List Nat → Option Nat
+MicroCFTA.SourcePruningTemplates.indexTemplates_unknown : ∀
+  (templates : List (MicroCFTA.Template.Pattern MicroCFTA.SourcePruningTemplates.Symbol))
+  (term : MicroCFTA.SourcePruningTemplates.PartialTerm),
+  MicroCFTA.SourcePruningTemplates.partialSpine term = none →
+    MicroCFTA.SourcePruningTemplates.indexTemplates templates term = templates
+MicroCFTA.SourcePruningTemplates.indexTemplates_known : ∀
+  (templates : List (MicroCFTA.Template.Pattern MicroCFTA.SourcePruningTemplates.Symbol))
+  (term : MicroCFTA.SourcePruningTemplates.PartialTerm) (key : MicroCFTA.SourcePruningTemplates.Symbol × Nat),
+  MicroCFTA.SourcePruningTemplates.partialSpine term = some key →
+    MicroCFTA.SourcePruningTemplates.indexTemplates templates term =
+      have tagged := templates.zipIdx;
+      have generic :=
+        List.filter (fun entry => (MicroCFTA.SourcePruningTemplates.templateSpine entry.fst).isNone) tagged;
+      have fixed :=
+        List.filter (fun entry => decide (MicroCFTA.SourcePruningTemplates.templateSpine entry.fst = some key)) tagged;
+      List.filterMap
+        (fun position =>
+          (Option.map Prod.fst (List.find? (fun entry => entry.snd == position) generic)).orElse fun x =>
+            Option.map Prod.fst (List.find? (fun entry => entry.snd == position) fixed))
+        (List.range templates.length)
+MicroCFTA.SourcePruningTemplates.fragmentTerm_hole : ∀ (uv : Nat),
+  MicroCFTA.SourcePruningTemplates.fragmentTerm (MicroCFTA.Fragments.Fragment.hole uv) =
+    MicroCFTA.Language.Term.node (MicroCFTA.EnumerationState.PartialSymbol.hole uv) []
+MicroCFTA.SourcePruningTemplates.programs_filter : ∀ (annotation term : MicroCFTA.SourcePruningTemplates.PartialTerm),
+  MicroCFTA.SourcePruningTemplates.programs
+      (MicroCFTA.Language.Term.node
+        (MicroCFTA.EnumerationState.PartialSymbol.concrete ("filter", MicroCFTA.FullSyntax.Formula.top))
+        [annotation, term]) =
+    MicroCFTA.SourcePruningTemplates.programs term
+MicroCFTA.SourcePruningTemplates.programs_app : ∀
+  (annotation marker function argument : MicroCFTA.SourcePruningTemplates.PartialTerm),
+  MicroCFTA.SourcePruningTemplates.programs
+      (MicroCFTA.Language.Term.node
+        (MicroCFTA.EnumerationState.PartialSymbol.concrete ("app", MicroCFTA.FullSyntax.Formula.top))
+        [annotation, marker, function, argument]) =
+    MicroCFTA.Language.Term.node
+          (MicroCFTA.EnumerationState.PartialSymbol.concrete ("app", MicroCFTA.FullSyntax.Formula.top))
+          [annotation, marker, function, argument] ::
+        MicroCFTA.SourcePruningTemplates.programs function ++
+      MicroCFTA.SourcePruningTemplates.programs argument
+MicroCFTA.SourcePruningTemplates.rejectEarly_hole : ∀
+  (templates : List (MicroCFTA.Template.Pattern MicroCFTA.SourcePruningTemplates.Symbol)) (uv : Nat),
+  MicroCFTA.SourcePruningTemplates.rejectEarly templates (MicroCFTA.Fragments.Fragment.hole uv) = false
+MicroCFTA.SourcePruningTemplates.finishChecks_nil : MicroCFTA.SourcePruningTemplates.finishChecks [] [] = (false, [])
+MicroCFTA.SourcePruningTemplates.order_nil : ∀
+  (pending : List (MicroCFTA.SourcePruningPartialMatch.Pending MicroCFTA.SourcePruningTemplates.Symbol)),
+  MicroCFTA.SourcePruningTemplates.order pending [] = none
+@MicroCFTA.SourcePruningOracle.oracle : {Guard : Type} →
+  MicroCFTA.EnumerationState.Graph MicroCFTA.SourcePruningTemplates.Symbol Guard →
+    List (MicroCFTA.Template.Pattern MicroCFTA.SourcePruningTemplates.Symbol) →
+      Nat →
+        MicroCFTA.EnumerationState.Oracle MicroCFTA.SourcePruningTemplates.Symbol Guard
+          (List (MicroCFTA.SourcePruningPartialMatch.Pending MicroCFTA.SourcePruningTemplates.Symbol))
+@MicroCFTA.SourcePruningOracle.oracle_inr : ∀ {Guard : Type}
+  (graph : MicroCFTA.EnumerationState.Graph MicroCFTA.SourcePruningTemplates.Symbol Guard)
+  (templates : List (MicroCFTA.Template.Pattern MicroCFTA.SourcePruningTemplates.Symbol)) (fuel : Nat)
+  (pending : List (MicroCFTA.SourcePruningPartialMatch.Pending MicroCFTA.SourcePruningTemplates.Symbol))
+  (uv node : Nat),
+  MicroCFTA.SourcePruningOracle.oracle graph templates fuel pending uv (Sum.inr node) = pure (false, pending)
+@MicroCFTA.SourcePruningOracle.oracle_frame : ∀ {Guard : Type}
+  (graph : MicroCFTA.EnumerationState.Graph MicroCFTA.SourcePruningTemplates.Symbol Guard)
+  (templates : List (MicroCFTA.Template.Pattern MicroCFTA.SourcePruningTemplates.Symbol)) (fuel : Nat)
+  (pending : List (MicroCFTA.SourcePruningPartialMatch.Pending MicroCFTA.SourcePruningTemplates.Symbol)) (uv : Nat)
+  (input : MicroCFTA.Fragments.Fragment MicroCFTA.SourcePruningTemplates.Symbol ⊕ Nat)
+  (before after : MicroCFTA.EnumerationState.State MicroCFTA.SourcePruningTemplates.Symbol Guard)
+  (result : Bool × List (MicroCFTA.SourcePruningPartialMatch.Pending MicroCFTA.SourcePruningTemplates.Symbol)),
+  MicroCFTA.UnionFind.Total before.representatives →
+    MicroCFTA.EnumerationCorrectness.Success
+        (MicroCFTA.SourcePruningOracle.oracle graph templates fuel pending uv input) before result after →
+      MicroCFTA.EnumerationCompressionFrame.Frame before after
+@MicroCFTA.SourcePruningOracle.oracle_agrees : ∀ {Guard : Type}
+  (graph : MicroCFTA.EnumerationState.Graph MicroCFTA.SourcePruningTemplates.Symbol Guard)
+  (templates : List (MicroCFTA.Template.Pattern MicroCFTA.SourcePruningTemplates.Symbol)) (leftFuel rightFuel : Nat)
+  (pending : List (MicroCFTA.SourcePruningPartialMatch.Pending MicroCFTA.SourcePruningTemplates.Symbol)) (uv : Nat)
+  (input : MicroCFTA.Fragments.Fragment MicroCFTA.SourcePruningTemplates.Symbol ⊕ Nat)
+  (left right leftAfter rightAfter : MicroCFTA.EnumerationState.State MicroCFTA.SourcePruningTemplates.Symbol Guard)
+  (leftResult rightResult :
+    Bool × List (MicroCFTA.SourcePruningPartialMatch.Pending MicroCFTA.SourcePruningTemplates.Symbol)),
+  MicroCFTA.EnumerationCompressionFrame.Frame left right →
+    MicroCFTA.UnionFind.Total left.representatives →
+      MicroCFTA.EnumerationCorrectness.Success
+          (MicroCFTA.SourcePruningOracle.oracle graph templates leftFuel pending uv input) left leftResult leftAfter →
+        MicroCFTA.EnumerationCorrectness.Success
+            (MicroCFTA.SourcePruningOracle.oracle graph templates rightFuel pending uv input) right rightResult
+            rightAfter →
+          leftResult = rightResult ∧ MicroCFTA.EnumerationCompressionFrame.Frame leftAfter rightAfter
+@MicroCFTA.SourcePruningOracle.oracle_moreFuel : ∀ {Guard : Type}
+  (graph : MicroCFTA.EnumerationState.Graph MicroCFTA.SourcePruningTemplates.Symbol Guard)
+  (templates : List (MicroCFTA.Template.Pattern MicroCFTA.SourcePruningTemplates.Symbol)) (fuel extra : Nat)
+  (pending : List (MicroCFTA.SourcePruningPartialMatch.Pending MicroCFTA.SourcePruningTemplates.Symbol)) (uv : Nat)
+  (input : MicroCFTA.Fragments.Fragment MicroCFTA.SourcePruningTemplates.Symbol ⊕ Nat),
+  MicroCFTA.EnumerationExecution.Retains (MicroCFTA.SourcePruningOracle.oracle graph templates fuel pending uv input)
+    (MicroCFTA.SourcePruningOracle.oracle graph templates (fuel + extra) pending uv input)
+@MicroCFTA.SourcePruningOracle.oracle_transport : ∀ {Guard : Type}
+  (graph : MicroCFTA.EnumerationState.Graph MicroCFTA.SourcePruningTemplates.Symbol Guard)
+  (templates : List (MicroCFTA.Template.Pattern MicroCFTA.SourcePruningTemplates.Symbol)) (leftFuel : Nat)
+  (pending : List (MicroCFTA.SourcePruningPartialMatch.Pending MicroCFTA.SourcePruningTemplates.Symbol)) (uv : Nat)
+  (input : MicroCFTA.Fragments.Fragment MicroCFTA.SourcePruningTemplates.Symbol ⊕ Nat)
+  (left right leftAfter : MicroCFTA.EnumerationState.State MicroCFTA.SourcePruningTemplates.Symbol Guard)
+  (result : Bool × List (MicroCFTA.SourcePruningPartialMatch.Pending MicroCFTA.SourcePruningTemplates.Symbol)),
+  MicroCFTA.EnumerationCompressionFrame.Frame left right →
+    MicroCFTA.UnionFind.Total left.representatives →
+      MicroCFTA.EnumerationCorrectness.Success
+          (MicroCFTA.SourcePruningOracle.oracle graph templates leftFuel pending uv input) left result leftAfter →
+        ∃ rightFuel rightAfter,
+          MicroCFTA.EnumerationCorrectness.Success
+              (MicroCFTA.SourcePruningOracle.oracle graph templates rightFuel pending uv input) right result
+              rightAfter ∧
+            MicroCFTA.EnumerationCompressionFrame.Frame leftAfter rightAfter
+'MicroCFTA.SourcePruningTemplates.indexTemplates_unknown' depends on axioms: [propext, Classical.choice, Quot.sound]
+'MicroCFTA.SourcePruningTemplates.indexTemplates_known' depends on axioms: [propext, Classical.choice, Quot.sound]
+'MicroCFTA.SourcePruningTemplates.fragmentTerm_hole' depends on axioms: [propext, Quot.sound]
+'MicroCFTA.SourcePruningTemplates.programs_filter' depends on axioms: [propext, Classical.choice, Quot.sound]
+'MicroCFTA.SourcePruningTemplates.programs_app' depends on axioms: [propext, Classical.choice, Quot.sound]
+'MicroCFTA.SourcePruningTemplates.rejectEarly_hole' depends on axioms: [propext, Classical.choice, Quot.sound]
+'MicroCFTA.SourcePruningTemplates.finishChecks_nil' does not depend on any axioms
+'MicroCFTA.SourcePruningTemplates.order_nil' does not depend on any axioms
+'MicroCFTA.SourcePruningOracle.oracle_inr' depends on axioms: [propext, Classical.choice, Quot.sound]
+'MicroCFTA.SourcePruningOracle.oracle_frame' depends on axioms: [propext, Classical.choice, Quot.sound]
+'MicroCFTA.SourcePruningOracle.oracle_agrees' depends on axioms: [propext, Classical.choice, Quot.sound]
+'MicroCFTA.SourcePruningOracle.oracle_moreFuel' depends on axioms: [propext, Classical.choice, Quot.sound]
+'MicroCFTA.SourcePruningOracle.oracle_transport' depends on axioms: [propext, Classical.choice, Quot.sound]

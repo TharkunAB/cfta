@@ -1,0 +1,22 @@
+--- drafts/SourcePruningOracle-full-symbol-before-inr.lean.txt
++++ SourcePruningOracle.lean
+@@ -13,6 +13,7 @@
+ open Language Fragments EnumerationState EnumerationCorrectness EnumerationSchedule
+ open EnumerationCompressionFrame EnumerationObservations EnumerationExecution
+ open SourcePruningPartialMatch SourcePruningTemplates
++attribute [local instance] FormulaExecutable.formulaDecidableEq
+ 
+ local instance pruningOracleMonadList : Monad List where
+   pure value := [value]
+@@ -60,6 +61,11 @@
+       if rejectEarly templates fragment = true then pure (true, pending)
+       else if idle pending fragment = true then pure (false, [])
+       else observe graph templates fuel pending uv fragment
++
++/-- The pre-expansion callback returns the pending checks without a state read. -/
++theorem oracle_inr (graph : Graph Symbol Guard) (templates : List (Template.Pattern Symbol))
++    (fuel : Nat) (pending : List (Pending Symbol)) (uv node : Nat) :
++    oracle graph templates fuel pending uv (.inr node) = pure (false, pending) := rfl
+ 
+ private theorem groups_agree (leftFuel rightFuel current : Nat) (term : PartialTerm)
+     (pending : List (Pending Symbol)) (left right leftAfter rightAfter : State Symbol Guard)
