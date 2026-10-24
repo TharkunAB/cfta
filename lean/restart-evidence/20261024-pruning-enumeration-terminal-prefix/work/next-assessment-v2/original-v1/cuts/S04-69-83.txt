@@ -1,0 +1,15 @@
+theorem run_complete
+    [DecidableEq Symbol] [DecidableEq (InternedConstructorTemplates.EdgeKey Symbol Constraint)] [DecidableEq Node]
+    (formulas : SourceGuards.Formulas FullSyntax.Formula)
+    (solver : SourceGuards.Entailment FullSyntax.Formula)
+    (inventory : Inventory) (beforeCaller : Caller width)
+    (before : EnumerationState.State Symbol EnumGuard) (sources : List Nat)
+    (checkEmpty : Bool) (target : Nat) (memos : Memos)
+    (initial : Context formulas solver inventory beforeCaller memos)
+    (realized : PendingRealized beforeCaller.checked.native.machine.heap before)
+    (targetPending : ∃ (node : Option Nat) (scs : List EnumerationState.Suspended),
+      before.values[target]? = some (.unenumerated node scs))
+    (selected : ∀ source ∈ sources, before.values[source]? = some .eliminated ∨
+      ∃ (node : Option Nat) (scs : List EnumerationState.Suspended),
+        before.values[source]? = some (.unenumerated node scs))
+    (ranges : Ranges checkEmpty sources beforeCaller before target memos.query) :

@@ -1,0 +1,7 @@
+def representative (fuel uv : Nat) : EnumerateM Symbol Guard Nat := do
+  let state ← get
+  match UnionFind.findRoot fuel state.representatives uv with
+  | none => failure .representativeFuel
+  | some found =>
+      set {state with representatives := found.forest}
+      pure found.representative

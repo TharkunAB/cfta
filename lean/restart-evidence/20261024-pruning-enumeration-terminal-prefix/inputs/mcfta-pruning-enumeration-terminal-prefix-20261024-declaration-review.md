@@ -1,0 +1,15 @@
+# Terminal-prefix exact declaration review
+
+Reviewed: 2026-10-24 21:56:24 CEST. Verdict: CLEAR for the frozen V2 declaration scope only. Root owns bodies, instance fields, activation and compilation.
+
+Active owner: `/tmp/mcfta-pruning-enumeration-terminal-prefix-20261024-proposal-v2`. All 124 payloads and the complete 126-file set pass independent safe-relative-path, byte-count and SHA-256 checks. Pins: `3e6b2d4195a044a573e8e8e4da15d91f1a3278391550b07d1dd0dcf1c3e7ae47`; FROZEN: `2f1bb7962fa082bd5660cca2af7bee6a15fad13928cd69fc799c9017936a3171`.
+
+I read all 31 literal contracts (87 lines), insertion/attachment rules, 269 effective scoped entries, 20 obtain packets with 67 fields, both full local list IHs, cases, four typed let headers and their separately typed initializers, and both local Monad/LawfulMonad instance inventories. The only public heads are `run` and `run_complete`. There are 22 local haves, two local proof inductions, zero global instances, helpers, new types or carriers. Plain `:= do` and theorem `:= by` attachments are distinct. The 200–280-line target/hard 360 scope is realistic without padding.
+
+V1 was held for three expression-derived pseudo-binders (`first : : rest`) and one truncated pending type. V2 removes those rows, closes the pending type, updates the scope count from 272 to 269 and changes the insertion owner path. Exactly three existing payloads change. All 31 compiled contracts and all source/cut bytes remain identical. Four added provenance payloads retain the delta and exact V1 controls. V1 remains immutable. These were static metadata findings before any body/compiler gate.
+
+All 17 full source snapshots match their live files. All 40 cuts (890 lines) match exact source ranges, bytes and hashes; I read all cuts. All 12 project import routes and 17 defining-source identities match actual project imports (22 adjacent route occurrences). External Lean 4.34.1 APIs remain separate from project routes. Source-index: `f469ddc2306a902e51fe145eefc1151bda0d022a2465ef5c94941c4ab47c28a4`; contracts: `32db8baa19dcd912d657e6862a3df50d7d11b14c02cc49dad091638f61324758`.
+
+The source route preserves original scan order and duplicates, unions original variables, then reads the actual winner. Ascending distinct nonwinner keys drive the existing external waiting-map transfer. Genuine initial Roots/Correct/Safe/bounds/InputsPending and PendingRealized support the derived packet. Concrete finite primitives supply existence; two exact traversal inductions supply raw singleton results at common sufficient bounds. Stable/invariant APIs derive StorageValid after. Full nonforest record equality preserves all pending slots and the same native heap realization. No desired-success, callback, Graph or equality-oracle premise occurs.
+
+The union-only endpoint does not claim Safe, LiveRoots or compression Frame. Native count widths/container extraction, later assimilation/incoming-node merge, terminal caller integration and H6 remain outside this declaration. No compiler, parser, selected program, Git, network, board or repository mutation was performed.

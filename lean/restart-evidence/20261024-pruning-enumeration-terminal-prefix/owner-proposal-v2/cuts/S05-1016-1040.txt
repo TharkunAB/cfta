@@ -1,0 +1,25 @@
+/-- The terminal operations retain one fixed allocation domain. -/
+def Stable (limit : Nat) (state : State Symbol Guard) : Prop := StorageValid state ∧ state.counter = limit
+
+/-- An actual bounded representative lookup retains storage safety and returns an allocated root. -/
+theorem representative_stable (limit fuel uv root : Nat) (before after : State Symbol Guard)
+    (valid : Stable limit before) (inside : uv < limit)
+    (success : Success (representative fuel uv) before root after) : Stable limit after ∧ root < limit := by
+  obtain ⟨found, lookup, rfl, rfl⟩ := (representative_success fuel uv before after root).mp success
+  have uvBound : uv < before.counter := by simpa [valid.2] using inside
+  refine ⟨⟨representative_storage before valid.1 fuel uv uvBound found lookup, valid.2⟩, ?_⟩
+  simpa [valid.2] using (findRoot_bounded fuel before.representatives before.counter uv valid.1.forest uvBound found lookup).1
+
+/-- Actual terminal union retains the fixed allocation domain. -/
+theorem union_stable (limit fuel left right : Nat) (before after : State Symbol Guard)
+    (valid : Stable limit before) (leftInside : left < limit) (rightInside : right < limit)
+    (success : Success (unionVariables fuel left right) before () after) : Stable limit after := by
+  obtain ⟨forest, result, rfl⟩ := (unionVariables_success fuel left right before after).mp success
+  exact ⟨union_storage before valid.1 fuel left right (by simpa [valid.2] using leftInside)
+    (by simpa [valid.2] using rightInside) forest result, valid.2⟩
+
+/-- Actual assimilation retains all storage bounds without allocation. -/
+theorem assimilation_stable (graph : Graph Symbol Guard) (limit target source : Nat)
+    (before after : State Symbol Guard) (valid : Stable limit before)
+    (success : Success (EnumerationState.assimilate graph target source) before () after) : Stable limit after := by
+  have effect := assimilate_effect graph before after target source success

@@ -1,0 +1,29 @@
+class LawfulMonad (m : Type u → Type v) [Monad m] : Prop extends LawfulApplicative m where
+  /--
+  A `bind` followed by `pure` composed with a function is equivalent to a functorial map.
+
+  This means that `pure` really is pure after a `bind` and has no effects.
+  -/
+  bind_pure_comp (f : α → β) (x : m α) : x >>= (fun a => pure (f a)) = f <$> x
+  /--
+  A `bind` followed by a functorial map is equivalent to `Applicative` sequencing.
+
+  This means that the effect sequencing from `Monad` and `Applicative` are the same.
+  -/
+  bind_map       {α β : Type u} (f : m (α → β)) (x : m α) : f >>= (. <$> x) = f <*> x
+  /--
+  `pure` followed by `bind` is equivalent to function application.
+
+  This means that `pure` really is pure before a `bind` and has no effects.
+  -/
+  pure_bind      (x : α) (f : α → m β) : pure x >>= f = f x
+  /--
+  `bind` is associative.
+
+  Changing the nesting of `bind` calls while maintaining the order of computations results in an
+  equivalent computation. This means that `bind` is not doing more than data-dependent sequencing.
+  -/
+  bind_assoc     (x : m α) (f : α → m β) (g : β → m γ) : x >>= f >>= g = x >>= fun x => f x >>= g
+  map_pure g x    := (by rw [← bind_pure_comp, pure_bind])
+  seq_pure g x    := (by rw [← bind_map]; simp [map_pure, bind_pure_comp])
+  seq_assoc x g h := (by simp [← bind_pure_comp, ← bind_map, bind_assoc, pure_bind])

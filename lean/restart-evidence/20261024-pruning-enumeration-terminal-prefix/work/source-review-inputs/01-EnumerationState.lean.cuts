@@ -1,0 +1,27 @@
+/-- Mutable state copied separately for each nondeterministic branch. -/
+structure State (Symbol Guard : Type) where
+  counter : Nat
+  representatives : UnionFind.Forest
+  values : List (UVarValue Symbol)
+  obligations : List (Guard × Fragment Symbol)
+  recursionAncestry : Nat → List RecursionKey
+  expansionAncestry : List RecursionKey
+
+/-- The root starts in UVar zero. -/
+def initial (root : Nat) : State Symbol Guard :=
+  ⟨1, UnionFind.withInitialValues [0], [.unenumerated (some root) []], [], fun _ => [], []⟩
+
+/-- Source invariant failures and explicit finite execution bounds. -/
+inductive Error where
+def representative (fuel uv : Nat) : EnumerateM Symbol Guard Nat := do
+  let state ← get
+  match UnionFind.findRoot fuel state.representatives uv with
+  | none => failure .representativeFuel
+  | some found =>
+      set {state with representatives := found.forest}
+      pure found.representative
+def unionVariables (fuel left right : Nat) : EnumerateM Symbol Guard Unit := do
+  let state ← get
+  match UnionFind.union fuel fuel state.representatives left right with
+  | none => failure .representativeFuel
+  | some forest => set {state with representatives := forest}

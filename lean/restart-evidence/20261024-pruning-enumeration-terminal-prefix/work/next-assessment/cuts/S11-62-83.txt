@@ -1,0 +1,22 @@
+theorem initial (bits : Nat) (holds : Guard → Language.Term Symbol → Bool) (before : Checked (bits + 2))
+    (good : Good before) (semantic : SourceEqualityRequiredSemanticCache.SemanticReady before.native.machine.heap)
+    (idle : SourceRecursiveIntersectionNative.Idle before.native)
+    (left right : Value Symbol Guard) (leftOriginal : Original left) (rightOriginal : Original right)
+    (leftAvailable : Available before.native.machine.heap left) (rightAvailable : Available before.native.machine.heap right)
+    (leftClosed : left.free = []) (rightClosed : right.free = [])
+    (stored : Stored mass before.native.machine.heap)
+    (nodes : before.native.machine.heap.nodes.next < 2 ^ bits)
+    (edges : before.native.machine.heap.edges.next ≤ 2 ^ (bits + 2))
+    (room : before.native.machine.domains.next +
+      2 ^ (before.native.machine.heap.nodes.next + before.native.machine.heap.nodes.next * before.native.machine.heap.nodes.next) < 2 ^ (bits + 1)) :
+    let request : NodeRequest Symbol Guard := ⟨IntersectionEmptyDomain.emptyDomain, left, right⟩
+    let bound := instructionBound before.native.machine.heap.nodes.next before.native.machine.heap.edges.next mass
+    ∃ fuel value after,
+      Receipt fuel (.code (requestNode request.domain request.left request.right)) before value after
+        (fun final result => Available final.heap result) ∧
+      SourceRecursiveIntersectionNative.Idle after.native ∧ fuel ≤ bound ∧
+      execute (bound + 1) (.code (requestNode request.domain request.left request.right)) before = .done value after ∧
+      Stored (massAfter bound mass) after.native.machine.heap ∧ InternedValueMass.value value ≤ massAfter bound mass ∧
+      after.native.machine.heap.nodes.next ≤ before.native.machine.heap.nodes.next + credit bound mass ∧
+      after.native.machine.heap.edges.next ≤ before.native.machine.heap.edges.next + credit bound mass ∧
+      after.native.machine.domains.next ≤ before.native.machine.domains.next + bound := by

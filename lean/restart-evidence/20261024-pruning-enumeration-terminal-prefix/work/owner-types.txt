@@ -1,0 +1,551 @@
+TYPE T0
+InternedConstructorTemplates.State Symbol NativeGuard
+TYPE T1
+EnumerationState.State Symbol EnumGuard
+TYPE T2
+EnumerationState.Suspended
+TYPE T3
+List EnumerationState.Suspended
+TYPE T4
+EnumerationWaitingIndex.Waiting
+TYPE T5
+Nat → Nat
+TYPE T6
+Roots before.representatives roots
+TYPE T7
+EnumerationCanonicalWaiting.Correct roots before.values waiting
+TYPE T8
+Safe before
+TYPE T9
+∀ sc ∈ first :: rest, sc.var < before.counter
+TYPE T10
+InputsPending before (first :: rest
+TYPE T11
+PendingRealized heap before
+TYPE T12
+Nat
+TYPE T13
+List Nat
+TYPE T14
+: rest
+TYPE T15
+Type
+TYPE T16
+{α : Type u} → α → List α
+TYPE T17
+Type u
+TYPE T18
+α
+TYPE T19
+{α β : Type u} → List α → (α → List β) → List β
+TYPE T20
+List α
+TYPE T21
+α → List β
+TYPE T22
+{α β : Type u} → (Functor.mapConst : α → List β → List α) = Functor.map ∘ Function.const β
+TYPE T23
+{α : Type u} → (xs : List α) → id <$> xs = xs
+TYPE T24
+{α β : Type u} → (x : List α) → (y : List β) → x <* y = Function.const β <$> x <*> y
+TYPE T25
+List β
+TYPE T26
+{α β : Type u} → (x : List α) → (y : List β) → x *> y = Function.const α id <$> x <*> y
+TYPE T27
+{α β : Type u} → (g : α → β) → (x : List α) → pure g <*> x = g <$> x
+TYPE T28
+α → β
+TYPE T29
+{α β : Type u} → (f : α → β) → (x : List α) → x >>= (fun a => pure (f a)) = f <$> x
+TYPE T30
+{α β : Type u} → (f : List (α → β)) → (x : List α) → f >>= (. <$> x) = f <*> x
+TYPE T31
+List (α → β)
+TYPE T32
+{α β : Type u} → (x : α) → (f : α → List β) → pure x >>= f = f x
+TYPE T33
+{α β γ : Type u} → (x : List α) → (f : α → List β) → (g : β → List γ) → x >>= f >>= g = x >>= fun a => f a >>= g
+TYPE T34
+β → List γ
+TYPE T35
+Success ((first :: rest).mapM fun sc => representative scanFuel sc.var) before recorded scanned
+TYPE T36
+UnionFind.Total scanned.representatives
+TYPE T37
+ScanValid before.values roots scanned
+TYPE T38
+recorded = (first :: rest).map (fun sc => roots sc.var)
+TYPE T39
+Success (rest.forM fun sc => unionVariables unionFuel first.var sc.var) scanned () united
+TYPE T40
+UnionFind.Total united.representatives
+TYPE T41
+Success (representative rootFuel first.var) united winner after
+TYPE T42
+UnionFind.Total after.representatives
+TYPE T43
+Merging before.values roots selected after
+TYPE T44
+UnionFind.Reaches after.representatives first.var winner count
+TYPE T45
+UnionFind.Result
+TYPE T46
+UnionFind.findRoot scanFuel current.representatives sc.var = some found
+TYPE T47
+root = found.representative
+TYPE T48
+next = {current with representatives := found.forest}
+TYPE T49
+UnionFind.Forest
+TYPE T50
+UnionFind.union unionFuel unionFuel current.representatives first.var sc.var = some forest
+TYPE T51
+next = {current with representatives := forest}
+TYPE T52
+UnionFind.findRoot rootFuel united.representatives first.var = some found
+TYPE T53
+winner = found.representative
+TYPE T54
+after = {united with representatives := found.forest}
+TYPE T55
+sc ∈ first :: rest
+TYPE T56
+roots sc.var = source
+TYPE T57
+UnionFind.Reaches before.representatives sc.var (roots sc.var) size
+TYPE T58
+Option Nat
+TYPE T59
+before.values[roots sc.var]? = some (.unenumerated node scs)
+TYPE T60
+recorded = []
+TYPE T61
+exit = entry
+TYPE T62
+Success (representative fuel sc.var) entry root middle
+TYPE T63
+Success ((items.mapM fun sc => representative fuel sc.var) >>= fun tail => pure (root :: tail)) middle recorded exit
+TYPE T64
+Success (items.mapM fun sc => representative fuel sc.var) middle tail last
+TYPE T65
+Success (pure (root :: tail)) last recorded exit
+TYPE T66
+recorded = root :: tail
+TYPE T67
+exit = last
+TYPE T68
+UnionFind.findRoot fuel entry.representatives sc.var = some found
+TYPE T69
+middle = {entry with representatives := found.forest}
+TYPE T70
+(() : PUnit) = ()
+TYPE T71
+Unit
+TYPE T72
+Success (unionVariables fuel anchor sc.var) entry ignored middle
+TYPE T73
+Success (items.forM fun sc => unionVariables fuel anchor sc.var) middle () exit
+TYPE T74
+UnionFind.union fuel fuel entry.representatives anchor sc.var = some forest
+TYPE T75
+middle = {entry with representatives := forest}
+TYPE T76
+UnionFind.findRoot (fuel + extra) united.representatives first.var = some found
+TYPE T77
+Success (([] : List EnumerationState.Suspended).mapM fun sc => representative fuel sc.var) entry recorded exit
+TYPE T78
+Success ((sc :: items).mapM fun sc => representative fuel sc.var) entry recorded exit
+TYPE T79
+Success (([] : List EnumerationState.Suspended).forM fun sc => unionVariables fuel anchor sc.var) entry () exit
+TYPE T80
+Success ((sc :: items).forM fun sc => unionVariables fuel anchor sc.var) entry () exit
+TYPE T81
+current = {before with representatives := current.representatives}
+TYPE T82
+Success (representative scanFuel sc.var) current root next
+TYPE T83
+sc ∈ rest
+TYPE T84
+Success (unionVariables unionFuel first.var sc.var) current () next
+TYPE T85
+Stable before.counter current
+TYPE T86
+source ∈ recorded
+TYPE T87
+after.values[slot]? = some (.unenumerated (some node) scs)
+TYPE T88
+roots first.var = roots winner
+TYPE T89
+roots first.var ∈ selected ∧ roots winner ∈ selected
+TYPE T90
+UnionFind.Total state.representatives
+TYPE T91
+∀ (entry exit : EnumerationState.State Symbol EnumGuard) (recorded : List Nat),
+  Success (items.mapM fun sc => representative fuel sc.var) entry recorded exit →
+  ExceptT.run ((items.mapM fun sc => representative fuel sc.var) entry) = [.ok (recorded, exit)]
+TYPE T92
+∀ (entry exit : EnumerationState.State Symbol EnumGuard),
+  Success (items.forM fun sc => unionVariables fuel anchor sc.var) entry () exit →
+  ExceptT.run ((items.forM fun sc => unionVariables fuel anchor sc.var) entry) = [.ok ((), exit)]
+ALL SCOPED BINDINGS
+complete-header.lean.txt :: heap : T0 [literal binder]
+complete-header.lean.txt :: before : T1 [literal binder]
+complete-header.lean.txt :: first : T2 [literal binder]
+complete-header.lean.txt :: rest : T3 [literal binder]
+complete-header.lean.txt :: waiting : T4 [literal binder]
+complete-header.lean.txt :: roots : T5 [literal binder]
+complete-header.lean.txt :: paths : T6 [literal binder]
+complete-header.lean.txt :: counts : T7 [literal binder]
+complete-header.lean.txt :: safe : T8 [literal binder]
+complete-header.lean.txt :: bounded : T9 [literal binder]
+complete-header.lean.txt :: pending : T10 [literal binder]
+complete-header.lean.txt :: realized : T11 [literal binder]
+complete-header.lean.txt :: fuel : T12 [literal binder]
+complete-header.lean.txt :: recorded : T13 [literal binder]
+complete-header.lean.txt :: winner : T12 [literal binder]
+complete-header.lean.txt :: saved : T4 [literal binder]
+complete-header.lean.txt :: scanned : T1 [literal binder]
+complete-header.lean.txt :: united : T1 [literal binder]
+complete-header.lean.txt :: after : T1 [literal binder]
+complete-header.lean.txt :: extra : T12 [literal binder]
+complete-header.lean.txt :: extra : T12 [literal binder]
+complete-header.lean.txt :: first : T14 [literal binder]
+complete-header.lean.txt :: extra : T12 [literal binder]
+complete-header.lean.txt :: extra : T12 [literal binder]
+complete-header.lean.txt :: first : T14 [literal binder]
+complete-header.lean.txt :: source : T12 [literal binder]
+complete-header.lean.txt :: key : T12 [literal binder]
+context.lean.txt :: EnumGuard : T15 [literal binder]
+context.lean.txt :: NativeGuard : T15 [literal binder]
+local-key-members.lean.txt :: key : T12 [literal binder]
+local-recorded-pending.lean.txt :: source : T12 [literal binder]
+local-resolution-more.lean.txt :: extra : T12 [literal binder]
+local-same-selected.lean.txt :: key : T12 [literal binder]
+local-scan-exact.lean.txt :: fuel : T12 [literal binder]
+local-scan-exact.lean.txt :: items : T3 [literal binder]
+local-scan-exact.lean.txt :: entry : T1 [literal binder]
+local-scan-exact.lean.txt :: exit : T1 [literal binder]
+local-scan-exact.lean.txt :: recorded : T13 [literal binder]
+local-scan-more.lean.txt :: extra : T12 [literal binder]
+local-scan-more.lean.txt :: first : T14 [literal binder]
+local-unions-exact.lean.txt :: fuel : T12 [literal binder]
+local-unions-exact.lean.txt :: anchor : T12 [literal binder]
+local-unions-exact.lean.txt :: items : T3 [literal binder]
+local-unions-exact.lean.txt :: entry : T1 [literal binder]
+local-unions-exact.lean.txt :: exit : T1 [literal binder]
+local-unions-more.lean.txt :: extra : T12 [literal binder]
+run-header.lean.txt :: fuel : T12 [literal binder]
+run-header.lean.txt :: first : T2 [literal binder]
+run-header.lean.txt :: rest : T3 [literal binder]
+run-header.lean.txt :: waiting : T4 [literal binder]
+terminalPrefixMonadList :: pure : T16 [instance field]
+terminalPrefixMonadList.pure :: α : T17 [instance field binder]
+terminalPrefixMonadList.pure :: value : T18 [instance field binder]
+terminalPrefixMonadList :: bind : T19 [instance field]
+terminalPrefixMonadList.bind :: α : T17 [instance field binder]
+terminalPrefixMonadList.bind :: β : T17 [instance field binder]
+terminalPrefixMonadList.bind :: values : T20 [instance field binder]
+terminalPrefixMonadList.bind :: continuation : T21 [instance field binder]
+terminalPrefixLawfulMonadList :: map_const : T22 [instance field]
+terminalPrefixLawfulMonadList :: id_map : T23 [instance field]
+terminalPrefixLawfulMonadList.id_map :: α : T17 [instance field binder]
+terminalPrefixLawfulMonadList.id_map :: xs : T20 [instance field binder]
+terminalPrefixLawfulMonadList :: seqLeft_eq : T24 [instance field]
+terminalPrefixLawfulMonadList.seqLeft_eq :: α : T17 [instance field binder]
+terminalPrefixLawfulMonadList.seqLeft_eq :: β : T17 [instance field binder]
+terminalPrefixLawfulMonadList.seqLeft_eq :: x : T20 [instance field binder]
+terminalPrefixLawfulMonadList.seqLeft_eq :: y : T25 [instance field binder]
+terminalPrefixLawfulMonadList :: seqRight_eq : T26 [instance field]
+terminalPrefixLawfulMonadList.seqRight_eq :: α : T17 [instance field binder]
+terminalPrefixLawfulMonadList.seqRight_eq :: β : T17 [instance field binder]
+terminalPrefixLawfulMonadList.seqRight_eq :: x : T20 [instance field binder]
+terminalPrefixLawfulMonadList.seqRight_eq :: y : T25 [instance field binder]
+terminalPrefixLawfulMonadList :: pure_seq : T27 [instance field]
+terminalPrefixLawfulMonadList.pure_seq :: α : T17 [instance field binder]
+terminalPrefixLawfulMonadList.pure_seq :: β : T17 [instance field binder]
+terminalPrefixLawfulMonadList.pure_seq :: g : T28 [instance field binder]
+terminalPrefixLawfulMonadList.pure_seq :: x : T20 [instance field binder]
+terminalPrefixLawfulMonadList :: bind_pure_comp : T29 [instance field]
+terminalPrefixLawfulMonadList.bind_pure_comp :: α : T17 [instance field binder]
+terminalPrefixLawfulMonadList.bind_pure_comp :: β : T17 [instance field binder]
+terminalPrefixLawfulMonadList.bind_pure_comp :: f : T28 [instance field binder]
+terminalPrefixLawfulMonadList.bind_pure_comp :: x : T20 [instance field binder]
+terminalPrefixLawfulMonadList.bind_pure_comp :: a : T18 [instance field binder]
+terminalPrefixLawfulMonadList :: bind_map : T30 [instance field]
+terminalPrefixLawfulMonadList.bind_map :: α : T17 [instance field binder]
+terminalPrefixLawfulMonadList.bind_map :: β : T17 [instance field binder]
+terminalPrefixLawfulMonadList.bind_map :: f : T31 [instance field binder]
+terminalPrefixLawfulMonadList.bind_map :: x : T20 [instance field binder]
+terminalPrefixLawfulMonadList :: pure_bind : T32 [instance field]
+terminalPrefixLawfulMonadList.pure_bind :: α : T17 [instance field binder]
+terminalPrefixLawfulMonadList.pure_bind :: β : T17 [instance field binder]
+terminalPrefixLawfulMonadList.pure_bind :: x : T18 [instance field binder]
+terminalPrefixLawfulMonadList.pure_bind :: f : T21 [instance field binder]
+terminalPrefixLawfulMonadList :: bind_assoc : T33 [instance field]
+terminalPrefixLawfulMonadList.bind_assoc :: α : T17 [instance field binder]
+terminalPrefixLawfulMonadList.bind_assoc :: β : T17 [instance field binder]
+terminalPrefixLawfulMonadList.bind_assoc :: γ : T17 [instance field binder]
+terminalPrefixLawfulMonadList.bind_assoc :: x : T20 [instance field binder]
+terminalPrefixLawfulMonadList.bind_assoc :: f : T21 [instance field binder]
+terminalPrefixLawfulMonadList.bind_assoc :: g : T34 [instance field binder]
+terminalPrefixLawfulMonadList.bind_assoc :: a : T18 [instance field binder]
+main :: scanFuel : T12 [obtain field]
+main :: recorded : T13 [obtain field]
+main :: scanned : T1 [obtain field]
+main :: scan : T35 [obtain field]
+main :: scanTotal : T36 [obtain field]
+main :: scanValid : T37 [obtain field]
+main :: recordedSame : T38 [obtain field]
+main :: unionFuel : T12 [obtain field]
+main :: united : T1 [obtain field]
+main :: unions : T39 [obtain field]
+main :: unionTotal : T40 [obtain field]
+main :: rootFuel : T12 [obtain field]
+main :: winner : T12 [obtain field]
+main :: after : T1 [obtain field]
+main :: resolution : T41 [obtain field]
+main :: afterTotal : T42 [obtain field]
+main :: resolved : T43 [obtain field]
+main :: count : T12 [obtain field]
+main :: winnerPath : T44 [obtain field]
+scanFrame.step :: found : T45 [obtain field]
+scanFrame.step :: lookup : T46 [obtain field]
+scanFrame.step :: rootSame : T47 [obtain field]
+scanFrame.step :: nextSame : T48 [obtain field]
+unionFrame.step :: forest : T49 [obtain field]
+unionFrame.step :: lookup : T50 [obtain field]
+unionFrame.step :: nextSame : T51 [obtain field]
+afterFrame :: found : T45 [obtain field]
+afterFrame :: lookup : T52 [obtain field]
+afterFrame :: rootSame : T53 [obtain field]
+afterFrame :: finalSame : T54 [obtain field]
+recordedPending :: sc : T2 [obtain field]
+recordedPending :: present : T55 [obtain field]
+recordedPending :: sourceSame : T56 [obtain field]
+recordedPending :: size : T12 [obtain field]
+recordedPending :: path : T57 [obtain field]
+recordedPending :: node : T58 [obtain field]
+recordedPending :: scs : T3 [obtain field]
+recordedPending :: stored : T59 [obtain field]
+scanExact.nil :: valueSame : T60 [obtain field]
+scanExact.nil :: stateSame : T61 [obtain field]
+scanExact.cons :: root : T12 [obtain field]
+scanExact.cons :: middle : T1 [obtain field]
+scanExact.cons :: head : T62 [obtain field]
+scanExact.cons :: continued : T63 [obtain field]
+scanExact.cons :: tail : T13 [obtain field]
+scanExact.cons :: last : T1 [obtain field]
+scanExact.cons :: tailRun : T64 [obtain field]
+scanExact.cons :: finalPure : T65 [obtain field]
+scanExact.cons :: valueSame : T66 [obtain field]
+scanExact.cons :: stateSame : T67 [obtain field]
+scanExact.cons :: found : T45 [obtain field]
+scanExact.cons :: lookup : T68 [obtain field]
+scanExact.cons :: rootSame : T47 [obtain field]
+scanExact.cons :: middleSame : T69 [obtain field]
+unionsExact.nil :: valueSame : T70 [obtain field]
+unionsExact.nil :: stateSame : T61 [obtain field]
+unionsExact.cons :: ignored : T71 [obtain field]
+unionsExact.cons :: middle : T1 [obtain field]
+unionsExact.cons :: head : T72 [obtain field]
+unionsExact.cons :: continued : T73 [obtain field]
+unionsExact.cons :: forest : T49 [obtain field]
+unionsExact.cons :: lookup : T74 [obtain field]
+unionsExact.cons :: middleSame : T75 [obtain field]
+final.raw.winner :: found : T45 [obtain field]
+final.raw.winner :: lookup : T76 [obtain field]
+final.raw.winner :: rootSame : T53 [obtain field]
+final.raw.winner :: finalSame : T54 [obtain field]
+scanExact :: fuel : T12 [intro]
+scanExact :: items : T3 [intro]
+scanExact.nil :: entry : T1 [intro]
+scanExact.nil :: exit : T1 [intro]
+scanExact.nil :: recorded : T13 [intro]
+scanExact.nil :: observed : T77 [intro]
+scanExact.cons :: sc : T2 [intro]
+scanExact.cons :: items : T3 [intro]
+scanExact.cons :: entry : T1 [intro]
+scanExact.cons :: exit : T1 [intro]
+scanExact.cons :: recorded : T13 [intro]
+scanExact.cons :: observed : T78 [intro]
+unionsExact :: fuel : T12 [intro]
+unionsExact :: anchor : T12 [intro]
+unionsExact :: items : T3 [intro]
+unionsExact.nil :: entry : T1 [intro]
+unionsExact.nil :: exit : T1 [intro]
+unionsExact.nil :: observed : T79 [intro]
+unionsExact.cons :: sc : T2 [intro]
+unionsExact.cons :: items : T3 [intro]
+unionsExact.cons :: entry : T1 [intro]
+unionsExact.cons :: exit : T1 [intro]
+unionsExact.cons :: observed : T80 [intro]
+scanFrame.step :: sc : T2 [intro]
+scanFrame.step :: member : T55 [intro]
+scanFrame.step :: current : T1 [intro]
+scanFrame.step :: root : T12 [intro]
+scanFrame.step :: next : T1 [intro]
+scanFrame.step :: previous : T81 [intro]
+scanFrame.step :: success : T82 [intro]
+unionFrame.step :: sc : T2 [intro]
+unionFrame.step :: member : T83 [intro]
+unionFrame.step :: current : T1 [intro]
+unionFrame.step :: next : T1 [intro]
+unionFrame.step :: previous : T81 [intro]
+unionFrame.step :: success : T84 [intro]
+scanStable.step :: sc : T2 [intro]
+scanStable.step :: member : T55 [intro]
+scanStable.step :: current : T1 [intro]
+scanStable.step :: root : T12 [intro]
+scanStable.step :: next : T1 [intro]
+scanStable.step :: previous : T85 [intro]
+scanStable.step :: success : T82 [intro]
+unionStable.step :: sc : T2 [intro]
+unionStable.step :: member : T83 [intro]
+unionStable.step :: current : T1 [intro]
+unionStable.step :: next : T1 [intro]
+unionStable.step :: previous : T85 [intro]
+unionStable.step :: success : T84 [intro]
+sameSelected :: key : T12 [intro]
+keyMembers :: key : T12 [intro]
+recordedPending :: source : T12 [intro]
+recordedPending :: member : T86 [intro]
+actualRoots :: uv : T12 [intro]
+finalRealized :: slot : T12 [intro]
+finalRealized :: node : T12 [intro]
+finalRealized :: scs : T3 [intro]
+finalRealized :: stored : T87 [intro]
+scanMore :: extra : T12 [intro]
+unionsMore :: extra : T12 [intro]
+resolutionMore :: extra : T12 [intro]
+final.raw.run :: extra : T12 [intro]
+final.raw.scan :: extra : T12 [intro]
+final.raw.unions :: extra : T12 [intro]
+final.raw.winner :: extra : T12 [intro]
+winnerSelected.same :: same : T88 [case]
+winnerSelected.both :: both : T89 [case]
+run.scan :: sc : T2 [lambda]
+run.unions :: sc : T2 [lambda]
+run.scanResult :: recorded : T13 [lambda]
+run.winner :: winner : T12 [lambda]
+run.keys :: key : T12 [lambda]
+selected.fold :: selected : T13 [lambda]
+selected.fold :: sc : T2 [lambda]
+termination.scan.action :: fuel : T12 [lambda]
+termination.scan.action :: sc : T2 [lambda]
+termination.scan.invariant :: state : T1 [lambda]
+termination.scan.more :: fuel : T12 [lambda]
+termination.scan.more :: extra : T12 [lambda]
+termination.scan.more :: sc : T2 [lambda]
+termination.scan.step :: sc : T2 [lambda]
+termination.scan.step :: state : T1 [lambda]
+termination.scan.step :: valid : T90 [lambda]
+termination.union.action :: fuel : T12 [lambda]
+termination.union.action :: sc : T2 [lambda]
+termination.union.invariant :: state : T1 [lambda]
+termination.union.more :: fuel : T12 [lambda]
+termination.union.more :: extra : T12 [lambda]
+termination.union.more :: sc : T2 [lambda]
+termination.union.step :: sc : T2 [lambda]
+termination.union.step :: state : T1 [lambda]
+termination.union.step :: valid : T90 [lambda]
+scanMore.step :: sc : T2 [lambda]
+unionsMore.step :: sc : T2 [lambda]
+scanFrame.invariant :: current : T1 [lambda]
+unionFrame.invariant :: current : T1 [lambda]
+scanExact.map :: sc : T2 [lambda]
+scanExact.continuation :: tail : T13 [lambda]
+unionsExact.continuation :: ignored : T71 [lambda]
+keys.filter :: key : T12 [lambda]
+scanStable.invariant :: current : T1 [lambda]
+unionStable.invariant :: current : T1 [lambda]
+scanExact.cons :: ih : T91 [IH]
+unionsExact.cons :: ih : T92 [IH]
+OBTAIN PACKETS
+main scanFinite mapM_terminates
+ scanFuel : Nat
+ recorded : List Nat
+ scanned : EnumerationState.State Symbol EnumGuard
+ scan : Success ((first :: rest).mapM fun sc => representative scanFuel sc.var) before recorded scanned
+ scanTotal : UnionFind.Total scanned.representatives
+main scanModel representatives_scan
+ scanValid : ScanValid before.values roots scanned
+ recordedSame : recorded = (first :: rest).map (fun sc => roots sc.var)
+main unionsFinite forM_terminates
+ unionFuel : Nat
+ united : EnumerationState.State Symbol EnumGuard
+ unions : Success (rest.forM fun sc => unionVariables unionFuel first.var sc.var) scanned () united
+ unionTotal : UnionFind.Total united.representatives
+main winnerFinite representative_terminates
+ rootFuel : Nat
+ winner : Nat
+ after : EnumerationState.State Symbol EnumGuard
+ resolution : Success (representative rootFuel first.var) united winner after
+ afterTotal : UnionFind.Total after.representatives [unused]
+main actualMerge merging_representative
+ resolved : Merging before.values roots selected after
+ count : Nat
+ winnerPath : UnionFind.Reaches after.representatives first.var winner count
+scanFrame.step primitive representative_success
+ found : UnionFind.Result
+ lookup : UnionFind.findRoot scanFuel current.representatives sc.var = some found [unused]
+ rootSame : root = found.representative [unused]
+ nextSame : next = {current with representatives := found.forest}
+unionFrame.step primitive unionVariables_success
+ forest : UnionFind.Forest
+ lookup : UnionFind.union unionFuel unionFuel current.representatives first.var sc.var = some forest [unused]
+ nextSame : next = {current with representatives := forest}
+afterFrame primitive representative_success
+ found : UnionFind.Result
+ lookup : UnionFind.findRoot rootFuel united.representatives first.var = some found [unused]
+ rootSame : winner = found.representative [unused]
+ finalSame : after = {united with representatives := found.forest}
+recordedPending fromMap List.mem_map.mp after recordedSame
+ sc : EnumerationState.Suspended
+ present : sc ∈ first :: rest
+ sourceSame : roots sc.var = source
+recordedPending actualOldPath paths sc.var
+ size : Nat
+ path : UnionFind.Reaches before.representatives sc.var (roots sc.var) size
+recordedPending oldPending inputs_pendingAt before safe (first::rest) bounded pending sc present (roots sc.var) size path
+ node : Option Nat
+ scs : List EnumerationState.Suspended
+ stored : before.values[roots sc.var]? = some (.unenumerated node scs)
+scanExact.nil pureObserved success_pure
+ valueSame : recorded = []
+ stateSame : exit = entry
+scanExact.cons headBind success_bind
+ root : Nat
+ middle : EnumerationState.State Symbol EnumGuard
+ head : Success (representative fuel sc.var) entry root middle
+ continued : Success ((items.mapM fun sc => representative fuel sc.var) >>= fun tail => pure (root :: tail)) middle recorded exit
+scanExact.cons tailBind success_bind
+ tail : List Nat
+ last : EnumerationState.State Symbol EnumGuard
+ tailRun : Success (items.mapM fun sc => representative fuel sc.var) middle tail last
+ finalPure : Success (pure (root :: tail)) last recorded exit
+scanExact.cons pureObserved success_pure
+ valueSame : recorded = root :: tail
+ stateSame : exit = last
+scanExact.cons primitive representative_success
+ found : UnionFind.Result
+ lookup : UnionFind.findRoot fuel entry.representatives sc.var = some found
+ rootSame : root = found.representative
+ middleSame : middle = {entry with representatives := found.forest}
+unionsExact.nil pureObserved success_pure
+ valueSame : (() : PUnit) = () [unused]
+ stateSame : exit = entry
+unionsExact.cons headBind success_bind
+ ignored : Unit
+ middle : EnumerationState.State Symbol EnumGuard
+ head : Success (unionVariables fuel anchor sc.var) entry ignored middle
+ continued : Success (items.forM fun sc => unionVariables fuel anchor sc.var) middle () exit
+unionsExact.cons primitive unionVariables_success after cases ignored
+ forest : UnionFind.Forest
+ lookup : UnionFind.union fuel fuel entry.representatives anchor sc.var = some forest
+ middleSame : middle = {entry with representatives := forest}
+final.raw.winner largerBoundPrimitive representative_success applied to resolutionMore extra
+ found : UnionFind.Result
+ lookup : UnionFind.findRoot (fuel + extra) united.representatives first.var = some found
+ rootSame : winner = found.representative
+ finalSame : after = {united with representatives := found.forest}

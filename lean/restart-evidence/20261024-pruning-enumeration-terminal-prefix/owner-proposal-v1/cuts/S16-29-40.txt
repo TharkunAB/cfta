@@ -1,0 +1,12 @@
+class LawfulFunctor (f : Type u → Type v) [Functor f] : Prop where
+  /--
+  The `mapConst` implementation is equivalent to the default implementation.
+  -/
+  map_const          : (Functor.mapConst : α → f β → f α) = Functor.map ∘ const β
+  /--
+  The `map` implementation preserves identity.
+  -/
+  id_map   (x : f α) : id <$> x = x
+  /--
+  The `map` implementation preserves function composition.
+  -/

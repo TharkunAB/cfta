@@ -1,0 +1,131 @@
+{
+  "headers_only": true,
+  "local_count": 2,
+  "global_count": 0,
+  "LawfulMonad_count": 1,
+  "fields": [
+    {
+      "instance": "terminalPrefixMonadList",
+      "field": "pure",
+      "type": "{α : Type u} → α → List α",
+      "binders": {
+        "α": "Type u",
+        "value": "α"
+      }
+    },
+    {
+      "instance": "terminalPrefixMonadList",
+      "field": "bind",
+      "type": "{α β : Type u} → List α → (α → List β) → List β",
+      "binders": {
+        "α": "Type u",
+        "β": "Type u",
+        "values": "List α",
+        "continuation": "α → List β"
+      }
+    },
+    {
+      "instance": "terminalPrefixLawfulMonadList",
+      "field": "map_const",
+      "type": "{α β : Type u} → (Functor.mapConst : α → List β → List α) = Functor.map ∘ Function.const β",
+      "binders": {}
+    },
+    {
+      "instance": "terminalPrefixLawfulMonadList",
+      "field": "id_map",
+      "type": "{α : Type u} → (xs : List α) → id <$> xs = xs",
+      "binders": {
+        "α": "Type u",
+        "xs": "List α"
+      }
+    },
+    {
+      "instance": "terminalPrefixLawfulMonadList",
+      "field": "seqLeft_eq",
+      "type": "{α β : Type u} → (x : List α) → (y : List β) → x <* y = Function.const β <$> x <*> y",
+      "binders": {
+        "α": "Type u",
+        "β": "Type u",
+        "x": "List α",
+        "y": "List β"
+      }
+    },
+    {
+      "instance": "terminalPrefixLawfulMonadList",
+      "field": "seqRight_eq",
+      "type": "{α β : Type u} → (x : List α) → (y : List β) → x *> y = Function.const α id <$> x <*> y",
+      "binders": {
+        "α": "Type u",
+        "β": "Type u",
+        "x": "List α",
+        "y": "List β"
+      }
+    },
+    {
+      "instance": "terminalPrefixLawfulMonadList",
+      "field": "pure_seq",
+      "type": "{α β : Type u} → (g : α → β) → (x : List α) → pure g <*> x = g <$> x",
+      "binders": {
+        "α": "Type u",
+        "β": "Type u",
+        "g": "α → β",
+        "x": "List α"
+      }
+    },
+    {
+      "instance": "terminalPrefixLawfulMonadList",
+      "field": "bind_pure_comp",
+      "type": "{α β : Type u} → (f : α → β) → (x : List α) → x >>= (fun a => pure (f a)) = f <$> x",
+      "binders": {
+        "α": "Type u",
+        "β": "Type u",
+        "f": "α → β",
+        "x": "List α",
+        "a": "α"
+      }
+    },
+    {
+      "instance": "terminalPrefixLawfulMonadList",
+      "field": "bind_map",
+      "type": "{α β : Type u} → (f : List (α → β)) → (x : List α) → f >>= (. <$> x) = f <*> x",
+      "binders": {
+        "α": "Type u",
+        "β": "Type u",
+        "f": "List (α → β)",
+        "x": "List α"
+      }
+    },
+    {
+      "instance": "terminalPrefixLawfulMonadList",
+      "field": "pure_bind",
+      "type": "{α β : Type u} → (x : α) → (f : α → List β) → pure x >>= f = f x",
+      "binders": {
+        "α": "Type u",
+        "β": "Type u",
+        "x": "α",
+        "f": "α → List β"
+      }
+    },
+    {
+      "instance": "terminalPrefixLawfulMonadList",
+      "field": "bind_assoc",
+      "type": "{α β γ : Type u} → (x : List α) → (f : α → List β) → (g : β → List γ) → x >>= f >>= g = x >>= fun a => f a >>= g",
+      "binders": {
+        "α": "Type u",
+        "β": "Type u",
+        "γ": "Type u",
+        "x": "List α",
+        "f": "α → List β",
+        "g": "β → List γ",
+        "a": "α"
+      }
+    }
+  ],
+  "defaults": [
+    "Monad default map/seq/seqLeft/seqRight/pure sequence definitions",
+    "LawfulFunctor.comp_map default",
+    "LawfulMonad map_pure/seq_pure/seq_assoc defaults"
+  ],
+  "body_source_convention": "EnumerationExecution.lean:13–34; Root supplies all bodies after independent gate",
+  "universe": "u; List : Type u → Type u"
+}

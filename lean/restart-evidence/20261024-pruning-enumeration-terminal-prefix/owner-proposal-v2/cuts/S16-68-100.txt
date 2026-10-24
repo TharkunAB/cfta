@@ -1,0 +1,33 @@
+class LawfulApplicative (f : Type u → Type v) [Applicative f] : Prop extends LawfulFunctor f where
+  /-- `seqLeft` is equivalent to the default implementation. -/
+  seqLeft_eq  (x : f α) (y : f β)     : x <* y = const β <$> x <*> y
+  /-- `seqRight` is equivalent to the default implementation. -/
+  seqRight_eq (x : f α) (y : f β)     : x *> y = const α id <$> x <*> y
+  /--
+  `pure` before `seq` is equivalent to `Functor.map`.
+
+  This means that `pure` really is pure when occurring immediately prior to `seq`.
+   -/
+  pure_seq    (g : α → β) (x : f α)   : pure g <*> x = g <$> x
+
+  /--
+  Mapping a function over the result of `pure` is equivalent to applying the function under `pure`.
+
+  This means that `pure` really is pure with respect to `Functor.map`.
+  -/
+  map_pure    (g : α → β) (x : α)     : g <$> (pure x : f α) = pure (g x)
+
+  /--
+  `pure` after `seq` is equivalent to `Functor.map`.
+
+  This means that `pure` really is pure when occurring just after `seq`.
+  -/
+  seq_pure    {α β : Type u} (g : f (α → β)) (x : α) : g <*> pure x = (fun h => h x) <$> g
+
+  /--
+  `seq` is associative.
+
+  Changing the nesting of `seq` calls while maintaining the order of computations results in an
+  equivalent computation. This means that `seq` is not doing any more than sequencing.
+  -/
+  seq_assoc   {α β γ : Type u} (x : f α) (g : f (α → β)) (h : f (β → γ)) : h <*> (g <*> x) = ((@comp α β γ) <$> h) <*> g <*> x

@@ -1,0 +1,969 @@
+CUT S01 716-747
+enumerateNode _ EmptyNode = mzero
+enumerateNode scs n =
+    let (hereConstraints, descendantConstraints) = Sequence.partition (\(SuspendedConstraint pt _) -> isTerminalPathTrie pt) scs
+     in case hereConstraints of
+            Sequence.Empty -> case n of
+                Mu _ -> TermFragmentUVar <$> addUVarValue (Just n)
+                InternedUnion _ -> TermFragmentUVar <$> addUVarValue (Just n)
+                Node _ -> do
+                    edgesOf <- gets _edgesOf
+                    enumerateEdge scs =<< branches (edgesOf n)
+                Rec recId ->
+                    error $
+                        "enumerateNode: unexpected unresolved recursive reference "
+                            <> show recId
+                            <> " for symbol type "
+                            <> show (typeRep @symbol)
+            (x :<| xs) -> do
+                reps <- mapM (getUVarRepresentative . scGetUVar) hereConstraints
+                forM_ xs $ \sc ->
+                    modify' $ \s ->
+                        s{_uvarRepresentative = UnionFind.union (scGetUVar x) (scGetUVar sc) (_uvarRepresentative s)}
+                uv <- getUVarRepresentative (scGetUVar x)
+                -- The waiting counts of the old representatives go to the new one.
+                let merged = IntSet.delete (uvarToInt uv) (IntSet.fromList (map uvarToInt (Foldable.toList reps)))
+                    move waiting old = case IntMap.lookup old waiting of
+                        Just waits -> IntMap.insertWith (+) (uvarToInt uv) waits (IntMap.delete old waiting)
+                        Nothing -> waiting
+                modify' $ \s -> s{_waitingUVars = IntSet.foldl' move (_waitingUVars s) merged}
+                mapM_ (assimilateUvarVal uv) reps
+
+                mergeNodeIntoUVarVal uv n descendantConstraints
+                return $ TermFragmentUVar uv
+
+CUT S02 66-80
+/-- Mutable state copied separately for each nondeterministic branch. -/
+structure State (Symbol Guard : Type) where
+  counter : Nat
+  representatives : UnionFind.Forest
+  values : List (UVarValue Symbol)
+  obligations : List (Guard × Fragment Symbol)
+  recursionAncestry : Nat → List RecursionKey
+  expansionAncestry : List RecursionKey
+
+/-- The root starts in UVar zero. -/
+def initial (root : Nat) : State Symbol Guard :=
+  ⟨1, UnionFind.withInitialValues [0], [.unenumerated (some root) []], [], fun _ => [], []⟩
+
+/-- Source invariant failures and explicit finite execution bounds. -/
+inductive Error where
+
+CUT S02 113-119
+def representative (fuel uv : Nat) : EnumerateM Symbol Guard Nat := do
+  let state ← get
+  match UnionFind.findRoot fuel state.representatives uv with
+  | none => failure .representativeFuel
+  | some found =>
+      set {state with representatives := found.forest}
+      pure found.representative
+
+CUT S02 190-194
+def unionVariables (fuel left right : Nat) : EnumerateM Symbol Guard Unit := do
+  let state ← get
+  match UnionFind.union fuel fuel state.representatives left right with
+  | none => failure .representativeFuel
+  | some forest => set {state with representatives := forest}
+
+CUT S03 35-78
+
+/-- A successful branch of an actual state action. Errors remain separate list entries. -/
+def Success (action : EnumerateM Symbol Guard α) (before : State Symbol Guard)
+    (value : α) (after : State Symbol Guard) : Prop :=
+  Except.ok (value, after) ∈ ExceptT.run (action before)
+
+/-- Binding runs each successful branch in its own stored state and retains error branches. -/
+theorem run_bind (action : EnumerateM Symbol Guard α) (next : α → EnumerateM Symbol Guard β)
+    (state : State Symbol Guard) :
+    ExceptT.run ((action >>= next) state) = (ExceptT.run (action state)).flatMap
+      (fun result => match result with
+        | .error error => [.error error]
+        | .ok (value, after) => ExceptT.run (next value after)) := by
+  simp only [bind, StateT.bind, ExceptT.run, ExceptT.bind, ExceptT.mk]
+  congr 1
+  funext result
+  cases result with
+  | error error => rfl
+  | ok pair => cases pair; rfl
+
+/-- Successful sequential execution is exactly composition through one successful intermediate state. -/
+theorem success_bind (action : EnumerateM Symbol Guard α) (next : α → EnumerateM Symbol Guard β)
+    (before : State Symbol Guard) (value : β) (after : State Symbol Guard) :
+    Success (action >>= next) before value after ↔
+      ∃ middle intermediate, Success action before middle intermediate ∧ Success (next middle) intermediate value after := by
+  simp only [Success, run_bind, List.mem_flatMap]
+  constructor
+  · rintro ⟨result, member, continued⟩
+    cases result with
+    | error error => simp at continued
+    | ok pair => exact ⟨pair.1, pair.2, member, continued⟩
+  · rintro ⟨middle, intermediate, member, continued⟩
+    exact ⟨.ok (middle, intermediate), member, continued⟩
+
+/-- A deterministic first step supplies exactly its returned state to the next step. -/
+theorem bind_single (action : EnumerateM Symbol Guard α) (next : α → EnumerateM Symbol Guard β)
+    (before after : State Symbol Guard) (value : α)
+    (result : action before = [.ok (value, after)]) :
+    (action >>= next) before = next value after := by
+  change ExceptT.run ((action >>= next) before) = ExceptT.run (next value after)
+  rw [run_bind]
+  change (action before : List (Except Error (α × State Symbol Guard))).flatMap _ = _
+  rw [result]
+  simp
+
+CUT S03 157-178
+theorem representative_exact (fuel uv : Nat) (state : State Symbol Guard) (found : UnionFind.Result)
+    (result : UnionFind.findRoot fuel state.representatives uv = some found) :
+    representative fuel uv state = [.ok (found.representative, {state with representatives := found.forest})] := by
+  simp [representative, result, bind, get, getThe, MonadStateOf.get, set, pure,
+    StateT.bind, StateT.pure, StateT.get, StateT.set, ExceptT.bind, ExceptT.pure, ExceptT.bindCont, ExceptT.mk]
+
+/-- The actual representative action preserves exactly every complete assignment. -/
+theorem representative_semantics (language : NodeLanguage Symbol) (meaning : Guard → Term Symbol → Prop)
+    (assignment : Nat → Term Symbol) (fuel uv : Nat) (state : State Symbol Guard) (found : UnionFind.Result)
+    (valid : UnionFind.Total state.representatives)
+    (result : UnionFind.findRoot fuel state.representatives uv = some found) :
+    Satisfies language meaning assignment {state with representatives := found.forest} ↔
+      Satisfies language meaning assignment state := by
+  simp only [Satisfies, Fragments.stateSatisfies, UnionFind.findRoot_satisfies valid result]
+
+/-- The actual union action has exactly one successful branch after its primitive succeeds. -/
+theorem union_exact (fuel left right : Nat) (state : State Symbol Guard) (after : UnionFind.Forest)
+    (result : UnionFind.union fuel fuel state.representatives left right = some after) :
+    unionVariables fuel left right state = [.ok ((), {state with representatives := after})] := by
+  simp [unionVariables, result, bind, get, getThe, MonadStateOf.get, set, pure,
+    StateT.bind, StateT.get, StateT.set, ExceptT.bind, ExceptT.pure, ExceptT.bindCont, ExceptT.mk]
+
+
+CUT S03 644-649
+structure StorageValid (state : State Symbol Guard) : Prop where
+  aligned : SupplyAligned state
+  total : UnionFind.Total state.representatives
+  forest : ForestBound state.counter state.representatives
+  values : ∀ value ∈ state.values, SlotBound state.counter value
+  guards : ∀ obligation ∈ state.obligations, FragmentBound state.counter obligation.2
+
+CUT S03 1008-1010
+theorem success_pure (value result : α) (before after : State Symbol Guard) :
+    Success (pure value) before result after ↔ result = value ∧ after = before := by
+  simp [Success, pure, StateT.pure, ExceptT.pure, ExceptT.mk, ExceptT.run, eq_comm]
+
+CUT S04 13-34
+local instance : Monad List where
+  pure value := [value]
+  bind values continuation := values.flatMap continuation
+
+local instance : LawfulMonad List where
+  map_const := rfl
+  id_map := by intro α xs; simp [Functor.map]
+  seqLeft_eq := by
+    intros
+    simp [SeqLeft.seqLeft, Seq.seq, Functor.map, List.flatMap_map, ← List.map_eq_flatMap]
+    simp only [List.map_const']
+  seqRight_eq := by
+    intros
+    simp only [SeqRight.seqRight, Seq.seq, Functor.map, List.flatMap_map]
+    simp
+  pure_seq := by intros; simp [Seq.seq, Functor.map, pure]
+  bind_pure_comp := by intros; simp [bind, pure, Functor.map, ← List.map_eq_flatMap]
+  bind_map := by intros; rfl
+  pure_bind := by intros; simp [pure, bind]
+  bind_assoc := by intros; exact List.flatMap_assoc
+
+/-- One action retains every successful state transition of another action. -/
+
+CUT S04 35-81
+def Retains (first second : EnumerateM Symbol Guard α) : Prop :=
+  ∀ before value after, Success first before value after → Success second before value after
+
+/-- Sequential actions compose successful-branch inclusion. -/
+theorem retains_bind (first second : EnumerateM Symbol Guard α)
+    (left right : α → EnumerateM Symbol Guard β) (initial : Retains first second)
+    (continued : ∀ value, Retains (left value) (right value)) :
+    Retains (first >>= left) (second >>= right) := by
+  intro before result after success
+  obtain ⟨value, middle, step, rest⟩ := (success_bind _ _ _ _ _).mp success
+  exact (success_bind _ _ _ _ _).mpr ⟨value, middle, initial _ _ _ step, continued value _ _ _ rest⟩
+
+/-- An unchanged continuation retains successful branches. -/
+theorem retains_refl (action : EnumerateM Symbol Guard α) : Retains action action := fun _ _ _ success => success
+
+/-- List traversal retains each successful ordered result. -/
+theorem retains_mapM (left right : α → EnumerateM Symbol Guard β)
+    (step : ∀ input, Retains (left input) (right input)) (inputs : List α) :
+    Retains (inputs.mapM left) (inputs.mapM right) := by
+  induction inputs with
+  | nil => exact retains_refl _
+  | cons input rest ih =>
+      simp only [List.mapM_cons]
+      apply retains_bind _ _ _ _ (step input)
+      intro output
+      exact retains_bind _ _ _ _ ih (fun _ => retains_refl _)
+
+/-- A fold retains its successful accumulator and state. -/
+theorem retains_foldlM (left right : α → β → EnumerateM Symbol Guard α)
+    (step : ∀ accumulator input, Retains (left accumulator input) (right accumulator input))
+    (inputs : List β) (accumulator : α) :
+    Retains (inputs.foldlM left accumulator) (inputs.foldlM right accumulator) := by
+  induction inputs generalizing accumulator with
+  | nil => exact retains_refl _
+  | cons input rest ih =>
+      simp only [List.foldlM_cons]
+      exact retains_bind _ _ _ _ (step accumulator input) ih
+
+/-- A discarded-result traversal retains every successful state. -/
+theorem retains_forM (left right : α → EnumerateM Symbol Guard PUnit)
+    (step : ∀ input, Retains (left input) (right input)) (inputs : List α) :
+    Retains (inputs.forM left) (inputs.forM right) := by
+  induction inputs with
+  | nil => exact retains_refl _
+  | cons input rest ih =>
+      change Retains (left input >>= fun _ => rest.forM left) (right input >>= fun _ => rest.forM right)
+      exact retains_bind _ _ _ _ (step input) (fun _ => ih)
+
+CUT S04 99-119
+theorem representative_moreFuel (fuel extra uv : Nat) :
+    Retains (representative (Symbol := Symbol) (Guard := Guard) fuel uv) (representative (fuel + extra) uv) := by
+  intro before root after success
+  obtain ⟨found, lookup, rfl, rfl⟩ := (representative_success fuel uv before after root).mp success
+  exact (representative_success (fuel + extra) uv before _ _).mpr
+    ⟨found, UnionFind.findRoot_moreFuel fuel extra before.representatives uv found lookup, rfl, rfl⟩
+
+/-- Reading a representative value retains its successful slot result. -/
+theorem getValue_moreFuel (fuel extra uv : Nat) :
+    Retains (getValue (Symbol := Symbol) (Guard := Guard) fuel uv) (getValue (fuel + extra) uv) := by
+  unfold getValue
+  exact retains_bind _ _ _ _ (representative_moreFuel fuel extra uv) (fun _ => retains_refl _)
+
+/-- An equality-variable union retains its exact successful state. -/
+theorem unionVariables_moreFuel (fuel extra left right : Nat) :
+    Retains (unionVariables (Symbol := Symbol) (Guard := Guard) fuel left right)
+      (unionVariables (fuel + extra) left right) := by
+  intro before ignored after success
+  cases ignored
+  obtain ⟨forest, lookup, rfl⟩ := (unionVariables_success fuel left right before after).mp success
+  exact (unionVariables_success (fuel + extra) left right before _).mpr
+
+CUT S04 371-428
+theorem mapM_terminates (action : Nat → α → EnumerateM Symbol Guard β)
+    (invariant : State Symbol Guard → Prop)
+    (more : ∀ fuel extra input, Retains (action fuel input) (action (fuel + extra) input))
+    (step : ∀ input before, invariant before →
+      ∃ fuel value after, Success (action fuel input) before value after ∧ invariant after)
+    (inputs : List α) (before : State Symbol Guard) (valid : invariant before) :
+    ∃ fuel values after, Success (inputs.mapM (action fuel)) before values after ∧ invariant after := by
+  induction inputs generalizing before with
+  | nil => exact ⟨0, [], before, (success_pure _ _ _ _).mpr ⟨rfl, rfl⟩, valid⟩
+  | cons input rest ih =>
+      obtain ⟨firstFuel, value, middle, first, middleValid⟩ := step input before valid
+      obtain ⟨restFuel, values, after, continued, afterValid⟩ := ih middle middleValid
+      refine ⟨firstFuel + restFuel, value :: values, after, ?_, afterValid⟩
+      rw [List.mapM_cons]
+      apply (success_bind _ _ _ _ _).mpr
+      refine ⟨value, middle, more firstFuel restFuel input _ _ _ first, ?_⟩
+      apply (success_bind _ _ _ _ _).mpr
+      refine ⟨values, after, ?_, (success_pure _ _ _ _).mpr ⟨rfl, rfl⟩⟩
+      have extended := retains_mapM _ _ (more restFuel firstFuel) rest _ _ _ continued
+      simpa [Nat.add_comm] using extended
+
+/-- Discarded-result actions with finite bounds have one common sufficient bound. -/
+theorem forM_terminates (action : Nat → α → EnumerateM Symbol Guard PUnit)
+    (invariant : State Symbol Guard → Prop)
+    (more : ∀ fuel extra input, Retains (action fuel input) (action (fuel + extra) input))
+    (step : ∀ input before, invariant before →
+      ∃ fuel after, Success (action fuel input) before () after ∧ invariant after)
+    (inputs : List α) (before : State Symbol Guard) (valid : invariant before) :
+    ∃ fuel after, Success (inputs.forM (action fuel)) before () after ∧ invariant after := by
+  induction inputs generalizing before with
+  | nil => exact ⟨0, before, (success_pure _ _ _ _).mpr ⟨rfl, rfl⟩, valid⟩
+  | cons input rest ih =>
+      obtain ⟨firstFuel, middle, first, middleValid⟩ := step input before valid
+      obtain ⟨restFuel, after, continued, afterValid⟩ := ih middle middleValid
+      refine ⟨firstFuel + restFuel, after, ?_, afterValid⟩
+      change Success (action (firstFuel + restFuel) input >>= fun _ => rest.forM (action (firstFuel + restFuel))) before () after
+      apply (success_bind _ _ _ _ _).mpr
+      refine ⟨(), middle, more firstFuel restFuel input _ _ _ first, ?_⟩
+      have extended := retains_forM _ _ (more restFuel firstFuel) rest _ _ _ continued
+      simpa [Nat.add_comm] using extended
+
+/-- A total forest gives a successful actual representative action. -/
+theorem representative_terminates (before : State Symbol Guard) (total : UnionFind.Total before.representatives) (uv : Nat) :
+    ∃ fuel root after, Success (representative fuel uv) before root after ∧ UnionFind.Total after.representatives := by
+  obtain ⟨root, size, path⟩ := total uv
+  obtain ⟨fuel, found, lookup⟩ := UnionFind.findRoot_terminates path
+  exact ⟨fuel, found.representative, {before with representatives := found.forest},
+    (representative_success _ _ _ _ _).mpr ⟨found, lookup, rfl, rfl⟩, UnionFind.findRoot_total total lookup⟩
+
+/-- Actual union has one sufficient bound for both representative lookups. -/
+theorem unionVariables_terminates (before : State Symbol Guard) (total : UnionFind.Total before.representatives)
+    (left right : Nat) :
+    ∃ fuel after, Success (unionVariables fuel left right) before () after ∧ UnionFind.Total after.representatives := by
+  obtain ⟨leftFuel, rightFuel, forest, lookup⟩ := UnionFind.union_terminates total left right
+  have extended : UnionFind.union (leftFuel + rightFuel) (leftFuel + rightFuel) before.representatives left right = some forest := by
+    simpa [Nat.add_comm] using union_moreFuel leftFuel rightFuel rightFuel leftFuel before.representatives left right forest lookup
+  exact ⟨leftFuel + rightFuel, {before with representatives := forest},
+    (unionVariables_success _ _ _ _ _).mpr ⟨forest, extended, rfl⟩, (UnionFind.union_correct total extended).1⟩
+
+CUT S05 36-75
+def Roots (forest : UnionFind.Forest) (roots : Nat → Nat) : Prop :=
+  ∀ uv, ∃ size, UnionFind.Reaches forest uv (roots uv) size
+
+/-- A total forest supplies canonical representatives without a search-bound assumption. -/
+theorem roots_exist (forest : UnionFind.Forest) (valid : UnionFind.Total forest) :
+    ∃ roots, Roots forest roots := by
+  classical
+  refine ⟨fun uv => (valid uv).choose, ?_⟩
+  intro uv
+  exact (valid uv).choose_spec
+
+/-- The scan retains the value array and every chosen representative. -/
+structure ScanValid (values : List (UVarValue Symbol)) (roots : Nat → Nat)
+    (state : State Symbol Guard) : Prop where
+  values : state.values = values
+  roots : Roots state.representatives roots
+
+/-- Successful representative lookup exposes its actual forest update. -/
+theorem representative_success (fuel uv : Nat) (before after : State Symbol Guard) (root : Nat) :
+    Success (representative fuel uv) before root after ↔
+      ∃ found, UnionFind.findRoot fuel before.representatives uv = some found ∧
+        root = found.representative ∧ after = {before with representatives := found.forest} := by
+  cases lookup : UnionFind.findRoot fuel before.representatives uv with
+  | none =>
+      simp [Success, representative, lookup, EnumerationState.failure, bind, get, getThe, MonadStateOf.get,
+        pure, StateT.bind, StateT.get, ExceptT.bind, ExceptT.pure, ExceptT.bindCont, ExceptT.mk, ExceptT.run]
+  | some found =>
+      simp only [Success, representative_exact fuel uv before found lookup, ExceptT.run]
+      simp
+
+/-- Path compression leaves the scan's representative map unchanged. -/
+theorem representative_scan (values : List (UVarValue Symbol)) (roots : Nat → Nat)
+    (before after : State Symbol Guard) (fuel uv root : Nat)
+    (valid : ScanValid values roots before)
+    (success : Success (representative fuel uv) before root after) :
+    ScanValid values roots after ∧ root = roots uv := by
+  obtain ⟨found, lookup, rfl, rfl⟩ := (representative_success fuel uv before after root).mp success
+  obtain ⟨size, path⟩ := valid.roots uv
+  obtain ⟨actual, preserved⟩ := UnionFind.findRoot_correct fuel before.representatives uv found lookup
+  refine ⟨⟨valid.values, ?_⟩, (UnionFind.reaches_unique actual path).1⟩
+
+CUT S05 272-278
+/-- A live slot holds a value exactly when its index is a representative. -/
+def IsRoot (forest : UnionFind.Forest) (uv : Nat) : Prop :=
+  ∃ size, UnionFind.Reaches forest uv uv size
+
+/-- Every allocated nonrepresentative is eliminated; every allocated representative is live. -/
+def LiveRoots (state : State Symbol Guard) : Prop :=
+  ∀ uv value, state.values[uv]? = some value → (value ≠ .eliminated ↔ IsRoot state.representatives uv)
+
+CUT S05 476-547
+theorem representatives_scan (values : List (UVarValue Symbol)) (roots : Nat → Nat)
+    (fuel : Nat) (scs : List Suspended) (before after : State Symbol Guard) (recorded : List Nat)
+    (valid : ScanValid values roots before)
+    (success : Success (scs.mapM fun sc => representative fuel sc.var) before recorded after) :
+    ScanValid values roots after ∧ recorded = scs.map (fun sc => roots sc.var) := by
+  obtain ⟨preserved, related⟩ := mapM_sound (fun sc => representative fuel sc.var)
+    (ScanValid values roots) (fun sc root => root = roots sc.var)
+    (fun sc before root after valid success => representative_scan values roots before after fuel sc.var root valid success)
+    scs before after recorded valid success
+  exact ⟨preserved, all₂_map_eq _ _ _ related⟩
+
+/-- Successful concrete union exposes its exact forest update and retains all values. -/
+theorem unionVariables_success (fuel left right : Nat) (before after : State Symbol Guard) :
+    Success (unionVariables fuel left right) before () after ↔
+      ∃ forest, UnionFind.union fuel fuel before.representatives left right = some forest ∧
+        after = {before with representatives := forest} := by
+  cases result : UnionFind.union fuel fuel before.representatives left right with
+  | none =>
+      simp [Success, unionVariables, result, EnumerationState.failure, bind, get, getThe, MonadStateOf.get,
+        pure, StateT.bind, StateT.get, ExceptT.bind, ExceptT.pure, ExceptT.bindCont, ExceptT.mk, ExceptT.run]
+  | some forest =>
+      simp only [Success, union_exact fuel left right before forest result, ExceptT.run]
+      simp
+
+/-- The terminal union loop retains old slots while it joins the selected classes. -/
+structure Merging (values : List (UVarValue Symbol)) (roots : Nat → Nat) (selected : List Nat)
+    (state : State Symbol Guard) : Prop where
+  values : state.values = values
+  total : UnionFind.Total state.representatives
+  joined : Joined roots selected state.representatives
+  oldRoots : ∀ uv, IsRoot state.representatives uv → roots uv = uv
+
+/-- The pre-scan establishes the union-loop invariant for the first selected class. -/
+theorem merging_initial (values : List (UVarValue Symbol)) (roots : Nat → Nat)
+    (state : State Symbol Guard) (first : Nat) (valid : ScanValid values roots state) :
+    Merging values roots [roots first] state := by
+  refine ⟨valid.values, ?_, joined_single state.representatives roots valid.roots first, ?_⟩
+  · intro uv
+    obtain ⟨size, path⟩ := valid.roots uv
+    exact ⟨roots uv, size, path⟩
+  · intro uv root
+    exact (root_iff state.representatives roots valid.roots uv).mp root
+
+/-- The actual next union extends the selected group and creates no new root indices. -/
+theorem merging_step (values : List (UVarValue Symbol)) (roots : Nat → Nat) (selected : List Nat)
+    (fuel first next : Nat) (before after : State Symbol Guard)
+    (valid : Merging values roots selected before) (firstSelected : roots first ∈ selected)
+    (success : Success (unionVariables fuel first next) before () after) :
+    Merging values roots (roots next :: selected) after := by
+  obtain ⟨forest, unionResult, rfl⟩ := (unionVariables_success fuel first next before after).mp success
+  refine ⟨valid.values, (UnionFind.union_correct valid.total unionResult).1,
+    joined_union before.representatives valid.total roots selected valid.joined fuel first next firstSelected forest unionResult, ?_⟩
+  intro uv root
+  exact valid.oldRoots uv (union_no_new_root before.representatives valid.total fuel first next forest unionResult uv root)
+
+/-- The actual batched terminal unions join every selected class, including duplicates. -/
+theorem terminal_unions (values : List (UVarValue Symbol)) (roots : Nat → Nat)
+    (selected : List Nat) (fuel first : Nat) (rest : List Suspended) (before after : State Symbol Guard)
+    (valid : Merging values roots selected before) (firstSelected : roots first ∈ selected)
+    (success : Success (rest.forM fun sc => unionVariables fuel first sc.var) before () after) :
+    Merging values roots (rest.foldl (fun selected sc => roots sc.var :: selected) selected) after := by
+  induction rest generalizing selected before with
+  | nil =>
+      obtain ⟨_, same⟩ := (success_pure () () before after).mp success
+      subst after
+      exact valid
+  | cons sc rest ih =>
+      change Success (unionVariables fuel first sc.var >>= fun _ => rest.forM fun sc => unionVariables fuel first sc.var)
+        before () after at success
+      obtain ⟨ignored, middle, firstSuccess, continued⟩ := (success_bind _ _ _ _ _).mp success
+      cases ignored
+      have validMiddle := merging_step values roots selected fuel first sc.var before middle valid firstSelected firstSuccess
+
+CUT S05 550-578
+/-- Once all selected classes are joined, only the winning selected root remains a root. -/
+theorem joined_root_set (values : List (UVarValue Symbol)) (roots : Nat → Nat) (selected : List Nat)
+    (state : State Symbol Guard) (valid : Merging values roots selected state) (first target count : Nat)
+    (firstSelected : roots first ∈ selected)
+    (path : UnionFind.Reaches state.representatives first target count) (uv : Nat) :
+    IsRoot state.representatives uv ↔ roots uv = uv ∧ (uv ∉ selected ∨ uv = target) := by
+  have targetRoot : IsRoot state.representatives target := ⟨count, .root (UnionFind.reaches_terminal path)⟩
+  constructor
+  · intro root
+    have fixed := valid.oldRoots uv root
+    refine ⟨fixed, ?_⟩
+    by_cases member : uv ∈ selected
+    · have related := (valid.joined first uv).mpr (Or.inr ⟨firstSelected, by simpa [fixed] using member⟩)
+      obtain ⟨size, self⟩ := root
+      have rootEqual := (UnionFind.sameClass_iff_roots path self).mp related
+      exact Or.inr rootEqual.symm
+    · exact Or.inl member
+  · rintro ⟨fixed, unselected | rfl⟩
+    · obtain ⟨representative, size, reached⟩ := valid.total uv
+      have representativeRoot : IsRoot state.representatives representative :=
+        ⟨size, .root (UnionFind.reaches_terminal reached)⟩
+      have representativeFixed := valid.oldRoots representative representativeRoot
+      have related := UnionFind.sameClass_root reached
+      rcases (valid.joined uv representative).mp related with same | both
+      · have sameIndex : representative = uv := by simpa [fixed, representativeFixed] using same.symm
+        exact ⟨size, by simpa [sameIndex] using reached⟩
+      · exact (unselected (by simpa [fixed] using both.1)).elim
+    · exact targetRoot
+
+
+CUT S05 728-740
+theorem merging_representative (values : List (UVarValue Symbol)) (roots : Nat → Nat) (selected : List Nat)
+    (fuel uv target : Nat) (before after : State Symbol Guard) (valid : Merging values roots selected before)
+    (success : Success (representative fuel uv) before target after) :
+    Merging values roots selected after ∧ ∃ count, UnionFind.Reaches after.representatives uv target count := by
+  obtain ⟨found, lookup, rfl, rfl⟩ := (representative_success fuel uv before after target).mp success
+  refine ⟨⟨valid.values, UnionFind.findRoot_total valid.total lookup, ?_, ?_⟩, ?_⟩
+  · intro left right
+    exact (UnionFind.findRoot_classes valid.total lookup left right).trans (valid.joined left right)
+  · intro other root
+    exact valid.oldRoots other ((findRoot_isRoot before.representatives valid.total fuel uv found lookup other).mp root)
+  · exact ⟨found.size, (UnionFind.findRoot_correct fuel before.representatives uv found lookup).2
+      (UnionFind.findRoot_correct fuel before.representatives uv found lookup).1⟩
+
+
+CUT S05 1016-1040
+/-- The terminal operations retain one fixed allocation domain. -/
+def Stable (limit : Nat) (state : State Symbol Guard) : Prop := StorageValid state ∧ state.counter = limit
+
+/-- An actual bounded representative lookup retains storage safety and returns an allocated root. -/
+theorem representative_stable (limit fuel uv root : Nat) (before after : State Symbol Guard)
+    (valid : Stable limit before) (inside : uv < limit)
+    (success : Success (representative fuel uv) before root after) : Stable limit after ∧ root < limit := by
+  obtain ⟨found, lookup, rfl, rfl⟩ := (representative_success fuel uv before after root).mp success
+  have uvBound : uv < before.counter := by simpa [valid.2] using inside
+  refine ⟨⟨representative_storage before valid.1 fuel uv uvBound found lookup, valid.2⟩, ?_⟩
+  simpa [valid.2] using (findRoot_bounded fuel before.representatives before.counter uv valid.1.forest uvBound found lookup).1
+
+/-- Actual terminal union retains the fixed allocation domain. -/
+theorem union_stable (limit fuel left right : Nat) (before after : State Symbol Guard)
+    (valid : Stable limit before) (leftInside : left < limit) (rightInside : right < limit)
+    (success : Success (unionVariables fuel left right) before () after) : Stable limit after := by
+  obtain ⟨forest, result, rfl⟩ := (unionVariables_success fuel left right before after).mp success
+  exact ⟨union_storage before valid.1 fuel left right (by simpa [valid.2] using leftInside)
+    (by simpa [valid.2] using rightInside) forest result, valid.2⟩
+
+/-- Actual assimilation retains all storage bounds without allocation. -/
+theorem assimilation_stable (graph : Graph Symbol Guard) (limit target source : Nat)
+    (before after : State Symbol Guard) (valid : Stable limit before)
+    (success : Success (EnumerationState.assimilate graph target source) before () after) : Stable limit after := by
+  have effect := assimilate_effect graph before after target source success
+
+CUT S05 1044-1079
+theorem forM_invariant (action : α → EnumerateM Symbol Guard Unit) (invariant : State Symbol Guard → Prop)
+    (inputs : List α)
+    (step : ∀ input ∈ inputs, ∀ before after, invariant before → Success (action input) before () after → invariant after)
+    (before after : State Symbol Guard) (valid : invariant before)
+    (success : Success (inputs.forM action) before () after) : invariant after := by
+  induction inputs generalizing before with
+  | nil =>
+      obtain ⟨_, same⟩ := (success_pure () () before after).mp success
+      subst after
+      exact valid
+  | cons input rest ih =>
+      change Success (action input >>= fun _ => rest.forM action) before () after at success
+      obtain ⟨ignored, middle, first, continued⟩ := (success_bind _ _ _ _ _).mp success
+      cases ignored
+      have validMiddle := step input (by simp) before middle valid first
+      exact ih (fun input member => step input (List.mem_cons_of_mem _ member)) middle validMiddle continued
+
+/-- A source `mapM` loop composes an invariant with element membership available to each local proof. -/
+theorem mapM_invariant (action : α → EnumerateM Symbol Guard β) (invariant : State Symbol Guard → Prop)
+    (inputs : List α)
+    (step : ∀ input ∈ inputs, ∀ before output after, invariant before → Success (action input) before output after → invariant after)
+    (before after : State Symbol Guard) (outputs : List β) (valid : invariant before)
+    (success : Success (inputs.mapM action) before outputs after) : invariant after := by
+  induction inputs generalizing before outputs with
+  | nil =>
+      obtain ⟨rfl, rfl⟩ := (success_pure [] outputs before after).mp success
+      exact valid
+  | cons input rest ih =>
+      rw [List.mapM_cons] at success
+      obtain ⟨output, middle, first, continued⟩ := (success_bind _ _ _ _ _).mp success
+      have validMiddle := step input (by simp) before output middle valid first
+      obtain ⟨tail, last, remaining, final⟩ := (success_bind _ _ _ _ _).mp continued
+      obtain ⟨_, lastSame⟩ := (success_pure (output :: tail) outputs last after).mp final
+      subst after
+      exact ih (fun input member => step input (List.mem_cons_of_mem _ member)) middle tail validMiddle remaining
+
+
+CUT S05 1111-1112
+/-- Storage bounds and the live-representative invariant at a completed local action. -/
+def Safe (state : State Symbol Guard) : Prop := StorageValid state ∧ LiveRoots state
+
+CUT S06 18-20
+def PendingAt (state : State Symbol Guard) (uv : Nat) : Prop :=
+  ∃ node scs, state.values[uv]? = some (.unenumerated node scs)
+
+
+CUT S06 117-132
+/-- Bounded inputs that avoid expanded slots reach pending representatives. -/
+theorem inputs_pendingAt (state : State Symbol Guard) (safe : Safe state) (scs : List Suspended)
+    (bounded : ∀ sc ∈ scs, sc.var < state.counter) (pending : InputsPending state scs)
+    (sc : Suspended) (member : sc ∈ scs) (root size : Nat)
+    (path : UnionFind.Reaches state.representatives sc.var root size) : PendingAt state root := by
+  have inside := reaches_bounded state.representatives state.counter safe.1.forest path (bounded sc member)
+  have index : root < state.values.length := by rw [← safe.1.aligned]; exact inside
+  let value := state.values[root]
+  have stored : state.values[root]? = some value := List.getElem?_eq_getElem index
+  have live : value ≠ .eliminated := (safe.2 root value stored).mpr ⟨size, .root (UnionFind.reaches_terminal path)⟩
+  cases valueEq : value with
+  | eliminated => exact (live valueEq).elim
+  | unenumerated node scs => exact ⟨node, scs, by simpa [valueEq] using stored⟩
+  | enumerated fragment =>
+      have exactSlot : state.values[root]? = some (.enumerated fragment) := by simpa [valueEq] using stored
+      exact (pending root fragment exactSlot sc member (UnionFind.sameClass_symm (UnionFind.sameClass_root path))).elim
+
+CUT S06 176-215
+  obtain ⟨roots, paths⟩ := roots_exist before.representatives total
+  obtain ⟨scanFuel, recorded, scanned, scan, _⟩ := mapM_terminates
+    (fun fuel (sc : Suspended) => representative fuel sc.var)
+    (fun state : State Symbol Guard => UnionFind.Total state.representatives)
+    (fun fuel extra sc => representative_moreFuel fuel extra sc.var)
+    (fun sc state valid => representative_terminates state valid sc.var) (first :: rest) before total
+  obtain ⟨scanValid, recordedSame⟩ := representatives_scan before.values roots scanFuel (first :: rest) before scanned recorded ⟨rfl, paths⟩ scan
+  obtain ⟨scanTotal, scanExact⟩ := representatives_assignment (Accepted graph meaning) meaning assignment scanFuel (first :: rest) before scanned recorded total scan
+  have scanSatisfies := scanExact.mpr satisfies
+  obtain ⟨unionFuel, united, unions, _⟩ := forM_terminates
+    (fun fuel (sc : Suspended) => unionVariables fuel first.var sc.var)
+    (fun state : State Symbol Guard => UnionFind.Total state.representatives)
+    (fun fuel extra sc => unionVariables_moreFuel fuel extra first.var sc.var)
+    (fun sc state valid => unionVariables_terminates state valid first.var sc.var) rest scanned scanTotal
+  let selected := rest.foldl (fun selected sc => roots sc.var :: selected) [roots first.var]
+  have joined : Merging before.values roots selected united := terminal_unions before.values roots [roots first.var] unionFuel first.var rest
+    scanned united (merging_initial before.values roots scanned first.var scanValid) (by simp) unions
+  obtain ⟨unionTotal, unionExact⟩ := terminal_unions_assignment (Accepted graph meaning) meaning assignment unionFuel first.var rest scanned united scanTotal unions
+  have unionSatisfies := unionExact.mpr ⟨scanSatisfies, equal⟩
+  obtain ⟨rootFuel, winner, resolved, resolution, _⟩ := representative_terminates united unionTotal first.var
+  obtain ⟨resolvedValid, count, winnerPath⟩ := merging_representative before.values roots selected rootFuel first.var winner united resolved joined resolution
+  have resolvedSatisfies := (representative_assignment (Accepted graph meaning) meaning assignment rootFuel first.var winner united resolved unionTotal resolution).2.mpr unionSatisfies
+  have sameSelected (uv : Nat) : uv ∈ recorded ↔ uv ∈ selected := by
+    rw [recordedSame, resolve_members roots rest [roots first.var] uv]
+    simp [List.mem_map]
+  have firstSelected : roots first.var ∈ selected :=
+    (resolve_members roots rest [roots first.var] (roots first.var)).mpr (Or.inl (by simp))
+  have winnerRoot : IsRoot resolved.representatives winner := ⟨count, .root (UnionFind.reaches_terminal winnerPath)⟩
+  have winnerFixed := resolvedValid.oldRoots winner winnerRoot
+  have winnerSelected : winner ∈ selected := by
+    rcases (resolvedValid.joined first.var winner).mp (UnionFind.sameClass_root winnerPath) with same | both
+    · simpa [winnerFixed, same] using firstSelected
+    · simpa [winnerFixed] using both.2
+  have recordedPending : ∀ source ∈ recorded, PendingAt resolved source := by
+    intro source member
+    rw [recordedSame] at member
+    obtain ⟨sc, present, rfl⟩ := List.mem_map.mp member
+    obtain ⟨size, path⟩ := paths sc.var
+    obtain ⟨node, scs, stored⟩ := pending sc present (roots sc.var) size path
+    exact ⟨node, scs, by simpa [resolvedValid.values] using stored⟩
+
+CUT S06 231-245
+  let fuel := scanFuel + unionFuel + rootFuel
+  have scanMore : Success ((first :: rest).mapM fun sc => representative fuel sc.var) before recorded scanned := by
+    have extended := retains_mapM _ _ (fun (sc : Suspended) => representative_moreFuel scanFuel (unionFuel + rootFuel) sc.var) (first :: rest) _ _ _ scan
+    simpa [fuel, Nat.add_assoc] using extended
+  have unionsMore : Success (rest.forM fun sc => unionVariables fuel first.var sc.var) scanned () united := by
+    have extended := retains_forM _ _ (fun (sc : Suspended) => unionVariables_moreFuel unionFuel (scanFuel + rootFuel) first.var sc.var) rest _ _ _ unions
+    simpa [fuel, Nat.add_assoc, Nat.add_comm, Nat.add_left_comm] using extended
+  have resolutionMore : Success (representative fuel first.var) united winner resolved := by
+    have extended := representative_moreFuel rootFuel (scanFuel + unionFuel) first.var _ _ _ resolution
+    simpa [fuel, Nat.add_assoc, Nat.add_comm, Nat.add_left_comm] using extended
+  refine ⟨fuel, winner, after, ?_, afterSatisfies, afterPending⟩
+  unfold mergeTerminal
+  exact (success_bind _ _ _ _ _).mpr ⟨recorded, scanned, scanMore,
+    (success_bind _ _ _ _ _).mpr ⟨(), united, unionsMore,
+      (success_bind _ _ _ _ _).mpr ⟨winner, resolved, resolutionMore,
+
+CUT S07 20-84
+variable {Symbol Guard : Type}
+
+/-- Replace the selected old classes by the actual winning root. -/
+def mergedRoots (roots : Nat → Nat) (selected : List Nat) (target uv : Nat) : Nat :=
+  if roots uv ∈ selected then target else roots uv
+
+/-- An actual representative map fixes every representative it names. -/
+theorem roots_idempotent (forest : UnionFind.Forest) (roots : Nat → Nat) (paths : Roots forest roots) :
+    ∀ uv, roots (roots uv) = roots uv := by
+  intro uv
+  obtain ⟨size, path⟩ := paths uv
+  exact (root_iff forest roots paths (roots uv)).mp ⟨size, .root (UnionFind.reaches_terminal path)⟩
+
+/-- Actual joined classes determine the exact final root of every variable. -/
+theorem merging_roots (values : List (UVarValue Symbol)) (roots : Nat → Nat) (selected : List Nat)
+    (state : State Symbol Guard) (valid : Merging values roots selected state)
+    (first target count : Nat) (firstSelected : roots first ∈ selected)
+    (path : UnionFind.Reaches state.representatives first target count) :
+    Roots state.representatives (mergedRoots roots selected target) := by
+  have targetPath : UnionFind.Reaches state.representatives target target count :=
+    .root (UnionFind.reaches_terminal path)
+  have targetFixed : roots target = target := valid.oldRoots target ⟨count, targetPath⟩
+  have targetSelected : target ∈ selected := by
+    rcases (valid.joined first target).mp (UnionFind.sameClass_root path) with same | both
+    · have named : roots target ∈ selected := same ▸ firstSelected
+      simpa [targetFixed] using named
+    · simpa [targetFixed] using both.2
+  intro uv
+  obtain ⟨root, size, actual⟩ := valid.total uv
+  by_cases member : roots uv ∈ selected
+  · have related := (valid.joined uv target).mpr
+      (Or.inr ⟨member, by simpa [targetFixed] using targetSelected⟩)
+    have same := (UnionFind.sameClass_iff_roots actual targetPath).mp related
+    exact ⟨size, by simpa [mergedRoots, member, same] using actual⟩
+  · have fixed : roots root = root :=
+      valid.oldRoots root ⟨size, .root (UnionFind.reaches_terminal actual)⟩
+    rcases (valid.joined uv root).mp (UnionFind.sameClass_root actual) with same | both
+    · have sameRoot : root = roots uv := (same.trans fixed).symm
+      exact ⟨size, by simpa [mergedRoots, member, sameRoot] using actual⟩
+    · exact (member both.1).elim
+
+private theorem redirect_fold_apply (roots : Nat → Nat) (target : Nat) (sources : List Nat) (uv : Nat) :
+    (sources.foldl (fun previous source => EnumerationCanonicalWaiting.redirect target source previous) roots) uv =
+      if roots uv ∈ sources then target else roots uv := by
+  induction sources generalizing roots with
+  | nil => rfl
+  | cons source rest ih =>
+      rw [List.foldl_cons, ih]
+      by_cases same : roots uv = source <;> simp [EnumerationCanonicalWaiting.redirect, same]
+
+/-- The source's deleted-winner key set gives exactly the merged root map. -/
+theorem redirect_fold_eq (roots : Nat → Nat) (selected : List Nat) (target : Nat) (sources : List Nat)
+    (keys : ∀ key, key ∈ sources ↔ key ∈ selected ∧ key ≠ target) :
+    sources.foldl (fun previous source => EnumerationCanonicalWaiting.redirect target source previous) roots =
+      mergedRoots roots selected target := by
+  funext uv
+  rw [redirect_fold_apply]
+  unfold mergedRoots
+  by_cases member : roots uv ∈ selected
+  · by_cases atTarget : roots uv = target
+    · simp [atTarget]
+    · have present := (keys (roots uv)).mpr ⟨member, atTarget⟩
+      simp [member, present]
+  · have absent : roots uv ∉ sources := fun present => member ((keys (roots uv)).mp present).1
+    simp [member, absent]
+
+CUT S08 35-60
+def Correct (roots : Nat → Nat) (values : List (UVarValue Symbol))
+    (waiting : EnumerationWaitingIndex.Waiting) : Prop :=
+  EnumerationWaitingIndex.Correct (values.map (canonicalValue roots)) waiting
+
+/-- Redirect one old bucket to the selected target bucket. -/
+def redirect (target source : Nat) (roots : Nat → Nat) : Nat → Nat :=
+  fun uv => if roots uv = source then target else roots uv
+
+/-- Delete the old key and add its full count at the distinct target key. -/
+def move (target source : Nat) (waiting : EnumerationWaitingIndex.Waiting) :
+    EnumerationWaitingIndex.Waiting :=
+  if target = source then waiting else
+    match waiting source with
+    | none => waiting
+    | some waits => fun uv =>
+        if uv = source then none
+        else if uv = target then some (waits + (waiting target).getD 0)
+        else waiting uv
+
+/-- Transfer each supplied old bucket once in the supplied order. -/
+def moveMany (target : Nat) (sources : List Nat) (waiting : EnumerationWaitingIndex.Waiting) :
+    EnumerationWaitingIndex.Waiting :=
+  sources.foldl (fun previous source => move target source previous) waiting
+
+/-- Reference renaming preserves every trie and occurrence. -/
+@[simp] theorem references_canonicalValue (roots : Nat → Nat) (value : UVarValue Symbol) :
+
+CUT S08 230-241
+/-- A transfer fold maintains the count view under the matching ghost redirect fold. -/
+theorem moveMany_correct (target : Nat) (sources : List Nat) (roots : Nat → Nat)
+    (values : List (UVarValue Symbol)) (waiting : EnumerationWaitingIndex.Waiting)
+    (correct : Correct roots values waiting) :
+    Correct (sources.foldl (fun previous source => redirect target source previous) roots) values
+      (moveMany target sources waiting) := by
+  induction sources generalizing roots waiting with
+  | nil => exact correct
+  | cons source rest ih =>
+      simpa only [moveMany, List.foldl_cons] using
+        ih (redirect target source roots) (move target source waiting)
+          (move_correct target source roots values waiting correct)
+
+CUT S09 13-20
+/-- The integer-map interface keeps missing entries distinct from stored counts. -/
+abbrev Waiting := Nat → Option Int
+
+/-- A missing counter has value zero. -/
+def read (waiting : Waiting) (uv : Nat) : Int := (waiting uv).getD 0
+
+/-- The source removes a map entry exactly when its new count is zero. -/
+def encode (count : Int) : Option Int := if count = 0 then none else some count
+
+CUT S10 13-40
+/-- The source node key is the ascending set of its edge identities. -/
+def canonicalIds (identities : List Nat) : List Nat := identities.eraseDups.mergeSort (· ≤ ·)
+
+theorem canonicalIds_member (identities : List Nat) (identity : Nat) :
+    identity ∈ canonicalIds identities ↔ identity ∈ identities := by
+  simp [canonicalIds]
+
+theorem canonicalIds_nodup (identities : List Nat) : (canonicalIds identities).Nodup := by
+  exact (List.mergeSort_perm _ _).symm.nodup (EqualityTrie.eraseDups_nodup _)
+
+theorem canonicalIds_sorted (identities : List Nat) : (canonicalIds identities).Pairwise (· ≤ ·) := by
+  simpa [canonicalIds] using List.pairwise_mergeSort (le := fun a b : Nat => decide (a ≤ b))
+    (by intro a b c ab bc; simp only [decide_eq_true_eq] at *; omega)
+    (by intro a b; simp only [Bool.or_eq_true, decide_eq_true_eq]; omega) identities.eraseDups
+
+/-- Node keys are equal exactly when they contain the same edge identities. -/
+theorem canonicalIds_equal (left right : List Nat) :
+    canonicalIds left = canonicalIds right ↔ ∀ identity, identity ∈ left ↔ identity ∈ right := by
+  constructor
+  · intro same identity
+    rw [← canonicalIds_member left identity, same, canonicalIds_member]
+  · intro members
+    apply List.Perm.eq_of_pairwise (fun a b _ _ ab ba => Nat.le_antisymm ab ba)
+      (canonicalIds_sorted left) (canonicalIds_sorted right)
+    apply (List.perm_ext_iff_of_nodup (canonicalIds_nodup left) (canonicalIds_nodup right)).mpr
+    intro identity
+    simpa only [canonicalIds_member] using members identity
+
+
+CUT S11 392-393
+def InputsPending (state : State Symbol Guard) (scs : List Suspended) : Prop :=
+  ∀ held fragment, state.values[held]? = some (.enumerated fragment) → Avoids state.representatives held scs
+
+CUT S12 20-26
+    (state : EnumerationState.State Symbol EnumGuard) : Prop :=
+  ∀ (slot node : Nat) (scs : List EnumerationState.Suspended),
+    state.values[slot]? = some (.unenumerated (some node) scs) →
+      ∃ value : InternedConstructorTemplates.Value Symbol NativeGuard,
+        lookupNode heap node = some value ∧
+        InternedProbeProvenance.Available heap value ∧ value.free = []
+
+
+CUT S13 133-153
+def find (fuel : Nat) (forest : Forest) (uv : Nat) : Option (Nat × Forest) :=
+  (findRoot fuel forest uv).map fun found => (found.representative, found.forest)
+
+/-- The optimized public wrapper has the identical representative and final map. -/
+theorem find_eq (fuel : Nat) (forest : Forest) (uv : Nat) :
+    find fuel forest uv = (UnionFind.findRoot fuel forest uv).map
+      (fun found => (found.representative, found.forest)) := by rw [find, findRoot_eq]
+
+/-- The source union uses conditional-write lookup before its unchanged size-based link. -/
+def union (leftFuel rightFuel : Nat) (forest : Forest) (left right : Nat) : Option Forest := do
+  let first ← findRoot leftFuel forest left
+  let second ← findRoot rightFuel first.forest right
+  if first.representative = second.representative then some second.forest
+  else if first.size < second.size then
+    some (link second.forest first.representative second.representative first.size second.size)
+  else some (link second.forest second.representative first.representative second.size first.size)
+
+/-- Both compressed lookups preserve the complete existing union result. -/
+theorem union_eq (leftFuel rightFuel : Nat) (forest : Forest) (left right : Nat) :
+    union leftFuel rightFuel forest left right = UnionFind.union leftFuel rightFuel forest left right := by
+  simp only [union, UnionFind.union, findRoot_eq]
+
+CUT S14 107-117
+structure Result where
+  representative : Nat
+  size : Nat
+  forest : Forest
+
+/-- Execute the Haskell lookup with an explicit finite recursion bound. -/
+def findRoot : Nat → Forest → Nat → Option Result
+  | 0, _, _ => none
+  | fuel + 1, forest, uv =>
+    match forest uv with
+    | none => some ⟨uv, 1, put forest uv (.root 1)⟩
+
+CUT S15 42-70
+results.
+
+This is a non-tail-recursive variant of `List.mapM` that's easier to reason about. It cannot be used
+as the main definition and replaced by the tail-recursive version because they can only be proved
+equal when `m` is a `LawfulMonad`.
+-/
+@[expose]
+def mapM' [Monad m] (f : α → m β) : List α → m (List β)
+  | [] => pure []
+  | a :: l => return (← f a) :: (← l.mapM' f)
+
+@[simp] theorem mapM'_nil [Monad m] {f : α → m β} : mapM' f [] = pure [] := rfl
+@[simp] theorem mapM'_cons [Monad m] {f : α → m β} :
+    mapM' f (a :: l) = return ((← f a) :: (← l.mapM' f)) :=
+  rfl
+
+theorem mapM'_eq_mapM [Monad m] [LawfulMonad m] {f : α → m β} {l : List α} :
+    mapM' f l = mapM f l := by simp [go, mapM] where
+  go : ∀ l acc, mapM.loop f l acc = return acc.reverse ++ (← mapM' f l)
+    | [], acc => by simp [mapM.loop, mapM']
+    | a::l, acc => by simp [go l, mapM.loop, mapM']
+
+@[simp, grind =] theorem mapM_nil [Monad m] {f : α → m β} : [].mapM f = pure [] := rfl
+
+@[simp, grind =] theorem mapM_cons [Monad m] [LawfulMonad m] {f : α → m β} :
+    (a :: l).mapM f = (return (← f a) :: (← l.mapM f)) := by simp [← mapM'_eq_mapM, mapM']
+
+@[simp] theorem mapM_pure [Monad m] [LawfulMonad m] {l : List α} {f : α → β} :
+    l.mapM (m := m) (pure <| f ·) = pure (l.map f) := by
+
+CUT S16 29-40
+class LawfulFunctor (f : Type u → Type v) [Functor f] : Prop where
+  /--
+  The `mapConst` implementation is equivalent to the default implementation.
+  -/
+  map_const          : (Functor.mapConst : α → f β → f α) = Functor.map ∘ const β
+  /--
+  The `map` implementation preserves identity.
+  -/
+  id_map   (x : f α) : id <$> x = x
+  /--
+  The `map` implementation preserves function composition.
+  -/
+
+CUT S16 68-100
+class LawfulApplicative (f : Type u → Type v) [Applicative f] : Prop extends LawfulFunctor f where
+  /-- `seqLeft` is equivalent to the default implementation. -/
+  seqLeft_eq  (x : f α) (y : f β)     : x <* y = const β <$> x <*> y
+  /-- `seqRight` is equivalent to the default implementation. -/
+  seqRight_eq (x : f α) (y : f β)     : x *> y = const α id <$> x <*> y
+  /--
+  `pure` before `seq` is equivalent to `Functor.map`.
+
+  This means that `pure` really is pure when occurring immediately prior to `seq`.
+   -/
+  pure_seq    (g : α → β) (x : f α)   : pure g <*> x = g <$> x
+
+  /--
+  Mapping a function over the result of `pure` is equivalent to applying the function under `pure`.
+
+  This means that `pure` really is pure with respect to `Functor.map`.
+  -/
+  map_pure    (g : α → β) (x : α)     : g <$> (pure x : f α) = pure (g x)
+
+  /--
+  `pure` after `seq` is equivalent to `Functor.map`.
+
+  This means that `pure` really is pure when occurring just after `seq`.
+  -/
+  seq_pure    {α β : Type u} (g : f (α → β)) (x : α) : g <*> pure x = (fun h => h x) <$> g
+
+  /--
+  `seq` is associative.
+
+  Changing the nesting of `seq` calls while maintaining the order of computations results in an
+  equivalent computation. This means that `seq` is not doing any more than sequencing.
+  -/
+  seq_assoc   {α β γ : Type u} (x : f α) (g : f (α → β)) (h : f (β → γ)) : h <*> (g <*> x) = ((@comp α β γ) <$> h) <*> g <*> x
+
+CUT S16 131-159
+class LawfulMonad (m : Type u → Type v) [Monad m] : Prop extends LawfulApplicative m where
+  /--
+  A `bind` followed by `pure` composed with a function is equivalent to a functorial map.
+
+  This means that `pure` really is pure after a `bind` and has no effects.
+  -/
+  bind_pure_comp (f : α → β) (x : m α) : x >>= (fun a => pure (f a)) = f <$> x
+  /--
+  A `bind` followed by a functorial map is equivalent to `Applicative` sequencing.
+
+  This means that the effect sequencing from `Monad` and `Applicative` are the same.
+  -/
+  bind_map       {α β : Type u} (f : m (α → β)) (x : m α) : f >>= (. <$> x) = f <*> x
+  /--
+  `pure` followed by `bind` is equivalent to function application.
+
+  This means that `pure` really is pure before a `bind` and has no effects.
+  -/
+  pure_bind      (x : α) (f : α → m β) : pure x >>= f = f x
+  /--
+  `bind` is associative.
+
+  Changing the nesting of `bind` calls while maintaining the order of computations results in an
+  equivalent computation. This means that `bind` is not doing more than data-dependent sequencing.
+  -/
+  bind_assoc     (x : m α) (f : α → m β) (g : β → m γ) : x >>= f >>= g = x >>= fun x => f x >>= g
+  map_pure g x    := (by rw [← bind_pure_comp, pure_bind])
+  seq_pure g x    := (by rw [← bind_map]; simp [map_pure, bind_pure_comp])
+  seq_assoc x g h := (by simp [← bind_pure_comp, ← bind_map, bind_assoc, pure_bind])
+
+CUT S17 3733-3740
+class Bind (m : Type u → Type v) where
+  /--
+  Sequences two computations, allowing the second to depend on the value computed by the first.
+
+  If `x : m α` and `f : α → m β`, then `x >>= f : m β` represents the result of executing `x` to get
+  a value of type `α` and then passing it to `f`.
+  -/
+  bind : {α β : Type u} → m α → (α → m β) → m β
+
+CUT S17 3749-3760
+class Pure (f : Type u → Type v) where
+  /--
+  Given `a : α`, then `pure a : f α` represents an action that does nothing and returns `a`.
+
+  Examples:
+  * `(pure "hello" : Option String) = some "hello"`
+  * `(pure "hello" : Except (Array String) String) = Except.ok "hello"`
+  * `(pure "hello" : StateM Nat String).run 105 = ("hello", 105)`
+  -/
+  pure {α : Type u} : α → f α
+
+export Pure (pure)
+
+CUT S17 3893-3899
+class Monad (m : Type u → Type v) : Type (max (u+1) v) extends Applicative m, Bind m where
+  map      f x := bind x (Function.comp pure f)
+  seq      f x := bind f fun y => Functor.map y (x ())
+  seqLeft  x y := bind x fun a => bind (y ()) (fun _ => pure a)
+  seqRight x y := bind x fun _ => y ()
+
+instance {α : Type u} {m : Type u → Type v} [Monad m] : Inhabited (α → m α) where

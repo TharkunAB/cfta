@@ -1,0 +1,27 @@
+--- strict-2/MicroCFTA/SourcePruningEnumerationTerminalPrefix.lean
++++ strict-3/MicroCFTA/SourcePruningEnumerationTerminalPrefix.lean
+@@ -220,20 +220,18 @@
+   have scanMore : ∀ (extra : Nat), Success ((first :: rest).mapM fun sc =>
+       representative (fuel + extra) sc.var) before recorded scanned := by
+     intro extra
+-    have extended := retains_mapM _ _ (fun (sc : Suspended) =>
++    simpa [fuel, Nat.add_assoc] using retains_mapM _ _ (fun (sc : Suspended) =>
+       representative_moreFuel scanFuel (unionFuel + rootFuel + extra) sc.var) (first :: rest) _ _ _ scan
+-    simpa [fuel, Nat.add_assoc] using extended
+   have unionsMore : ∀ (extra : Nat), Success (rest.forM fun sc =>
+       unionVariables (fuel + extra) first.var sc.var) scanned () united := by
+     intro extra
+-    have extended := retains_forM _ _ (fun (sc : Suspended) =>
++    simpa [fuel, Nat.add_assoc, Nat.add_comm, Nat.add_left_comm] using retains_forM _ _ (fun (sc : Suspended) =>
+       unionVariables_moreFuel unionFuel (scanFuel + rootFuel + extra) first.var sc.var) rest _ _ _ unions
+-    simpa [fuel, Nat.add_assoc, Nat.add_comm, Nat.add_left_comm] using extended
+   have resolutionMore : ∀ (extra : Nat), Success (representative (fuel + extra) first.var)
+       united winner after := by
+     intro extra
+-    have extended := representative_moreFuel rootFuel (scanFuel + unionFuel + extra) first.var _ _ _ resolution
+-    simpa [fuel, Nat.add_assoc, Nat.add_comm, Nat.add_left_comm] using extended
++    simpa [fuel, Nat.add_assoc, Nat.add_comm, Nat.add_left_comm] using
++      representative_moreFuel rootFuel (scanFuel + unionFuel + extra) first.var _ _ _ resolution
+   refine ⟨fuel, recorded, winner, EnumerationCanonicalWaiting.moveMany winner keys waiting,
+     scanned, united, after, ?_, ?_, ?_, ?_, recordedSame, rfl,
+     (sameSelected winner).mpr winnerSelected, winnerFixed, actualRoots, finalCounts, afterFrame,

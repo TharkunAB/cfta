@@ -1,0 +1,13 @@
+[2026-10-24 21:52 CEST] FINAL — source-only script preparation ready for independent review.
+
+The five candidates retain the complete active Fold bases. All471 lines and exact forward/inverse replacements are retained. Both recipe directions reconstruct exact bytes. Changes are checkpoint literals, the new scope prose, the actual26-custody identities and current source-review binding. Only Fold-specific active-owner V1/V2 copy lines are removed: those complete histories remain baseline-protected. This checkpoint selects its original frozen owner once; no current correction or failure is invented.
+
+I checked all120 owner payloads and its exact file set,31 literal STRING contracts/87 lines,17 live full sources,40 flat cuts and17 project-relative import identities. The existing source-ID reader fits actual metadata, including separate external stdlib snapshots. The frozen interface is run:def and run_complete:theorem, two named local List instances (Monad/LawfulMonad), zero globals, two local proof inductions and hard360. No script reader algorithm changed.
+
+The prefix retains original scan order/duplicates, unions original variables and computes distinct nonwinner waiting transfer in its existing product. Initial Roots and canonical count correctness are explicit; Safe alone is insufficient. The strengthened producer derives StorageValid after with no new input premise. It does not derive Safe/LiveRoots or a compression Frame across unions. There are no Caller/memo parameters or native Caller/memo actions. Host index/Int extraction, later range admission, incoming-node merge and full terminal/driver/H6 remain separate.
+
+The471 source lines retain all baseline blobs/modes/refs/stashes/worktrees, nine document inverses, Audit prepend, exact source/public/allowed-axiom-subset checks including empty sets, actual failed inputs and six-artifact cap families,4GiB limits, full manifest-in-HEAD, index/files/modes and singleton ordinary-push guards. All26 copied prior inputs and the separately sealed assessment review match. Fold's58 whitespace diagnostics remain embedded in its summary, not an extra attempt or27th input.
+
+Both unrendered templates retain validation placeholders. The focused note ends in exactly one LF; the insertion's final blank paragraph is intentional. Runtime outcomes/metrics/axiom sets stay unbound. Earlier drafts are retained. I authored only source/prose proposals in /tmp; no prepared program, parser, compiler, Git/network/board command, repository edit or activation ran. Guard review and Root acceptance remain required.
+
+Exact candidate byte counts/SHA256 are in script-identities.json. Safe object pins exclude only top-level pins.json and FROZEN.json.

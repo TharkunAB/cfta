@@ -1,0 +1,13 @@
+theorem write_available_realized
+    (heap : InternedConstructorTemplates.State Symbol NativeGuard)
+    (before : EnumerationState.State Symbol EnumGuard)
+    (value : InternedConstructorTemplates.Value Symbol NativeGuard) (slot : Nat)
+    (scs : List EnumerationState.Suspended)
+    (coherent : InternedRecordCoherence.Coherent heap)
+    (available : InternedProbeProvenance.Available heap value) (closed : value.free = [])
+    (realized : PendingRealized heap before) (inside : slot < before.values.length) :
+    ∃ (node : Nat) (after : EnumerationState.State Symbol EnumGuard),
+      encodeNode value = some node ∧
+      Success (setValue slot (.unenumerated (some node) scs)) before () after ∧
+      after = {before with values := before.values.set slot (.unenumerated (some node) scs)} ∧
+      after.values[slot]? = some (.unenumerated (some node) scs) ∧ PendingRealized heap after := by

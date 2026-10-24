@@ -1,0 +1,40 @@
+  obtain ⟨roots, paths⟩ := roots_exist before.representatives total
+  obtain ⟨scanFuel, recorded, scanned, scan, _⟩ := mapM_terminates
+    (fun fuel (sc : Suspended) => representative fuel sc.var)
+    (fun state : State Symbol Guard => UnionFind.Total state.representatives)
+    (fun fuel extra sc => representative_moreFuel fuel extra sc.var)
+    (fun sc state valid => representative_terminates state valid sc.var) (first :: rest) before total
+  obtain ⟨scanValid, recordedSame⟩ := representatives_scan before.values roots scanFuel (first :: rest) before scanned recorded ⟨rfl, paths⟩ scan
+  obtain ⟨scanTotal, scanExact⟩ := representatives_assignment (Accepted graph meaning) meaning assignment scanFuel (first :: rest) before scanned recorded total scan
+  have scanSatisfies := scanExact.mpr satisfies
+  obtain ⟨unionFuel, united, unions, _⟩ := forM_terminates
+    (fun fuel (sc : Suspended) => unionVariables fuel first.var sc.var)
+    (fun state : State Symbol Guard => UnionFind.Total state.representatives)
+    (fun fuel extra sc => unionVariables_moreFuel fuel extra first.var sc.var)
+    (fun sc state valid => unionVariables_terminates state valid first.var sc.var) rest scanned scanTotal
+  let selected := rest.foldl (fun selected sc => roots sc.var :: selected) [roots first.var]
+  have joined : Merging before.values roots selected united := terminal_unions before.values roots [roots first.var] unionFuel first.var rest
+    scanned united (merging_initial before.values roots scanned first.var scanValid) (by simp) unions
+  obtain ⟨unionTotal, unionExact⟩ := terminal_unions_assignment (Accepted graph meaning) meaning assignment unionFuel first.var rest scanned united scanTotal unions
+  have unionSatisfies := unionExact.mpr ⟨scanSatisfies, equal⟩
+  obtain ⟨rootFuel, winner, resolved, resolution, _⟩ := representative_terminates united unionTotal first.var
+  obtain ⟨resolvedValid, count, winnerPath⟩ := merging_representative before.values roots selected rootFuel first.var winner united resolved joined resolution
+  have resolvedSatisfies := (representative_assignment (Accepted graph meaning) meaning assignment rootFuel first.var winner united resolved unionTotal resolution).2.mpr unionSatisfies
+  have sameSelected (uv : Nat) : uv ∈ recorded ↔ uv ∈ selected := by
+    rw [recordedSame, resolve_members roots rest [roots first.var] uv]
+    simp [List.mem_map]
+  have firstSelected : roots first.var ∈ selected :=
+    (resolve_members roots rest [roots first.var] (roots first.var)).mpr (Or.inl (by simp))
+  have winnerRoot : IsRoot resolved.representatives winner := ⟨count, .root (UnionFind.reaches_terminal winnerPath)⟩
+  have winnerFixed := resolvedValid.oldRoots winner winnerRoot
+  have winnerSelected : winner ∈ selected := by
+    rcases (resolvedValid.joined first.var winner).mp (UnionFind.sameClass_root winnerPath) with same | both
+    · simpa [winnerFixed, same] using firstSelected
+    · simpa [winnerFixed] using both.2
+  have recordedPending : ∀ source ∈ recorded, PendingAt resolved source := by
+    intro source member
+    rw [recordedSame] at member
+    obtain ⟨sc, present, rfl⟩ := List.mem_map.mp member
+    obtain ⟨size, path⟩ := paths sc.var
+    obtain ⟨node, scs, stored⟩ := pending sc present (roots sc.var) size path
+    exact ⟨node, scs, by simpa [resolvedValid.values] using stored⟩

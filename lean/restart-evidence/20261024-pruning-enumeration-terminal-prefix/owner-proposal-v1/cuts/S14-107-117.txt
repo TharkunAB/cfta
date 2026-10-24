@@ -1,0 +1,11 @@
+structure Result where
+  representative : Nat
+  size : Nat
+  forest : Forest
+
+/-- Execute the Haskell lookup with an explicit finite recursion bound. -/
+def findRoot : Nat → Forest → Nat → Option Result
+  | 0, _, _ => none
+  | fuel + 1, forest, uv =>
+    match forest uv with
+    | none => some ⟨uv, 1, put forest uv (.root 1)⟩

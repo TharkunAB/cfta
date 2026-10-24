@@ -1,0 +1,26 @@
+def Correct (roots : Nat → Nat) (values : List (UVarValue Symbol))
+    (waiting : EnumerationWaitingIndex.Waiting) : Prop :=
+  EnumerationWaitingIndex.Correct (values.map (canonicalValue roots)) waiting
+
+/-- Redirect one old bucket to the selected target bucket. -/
+def redirect (target source : Nat) (roots : Nat → Nat) : Nat → Nat :=
+  fun uv => if roots uv = source then target else roots uv
+
+/-- Delete the old key and add its full count at the distinct target key. -/
+def move (target source : Nat) (waiting : EnumerationWaitingIndex.Waiting) :
+    EnumerationWaitingIndex.Waiting :=
+  if target = source then waiting else
+    match waiting source with
+    | none => waiting
+    | some waits => fun uv =>
+        if uv = source then none
+        else if uv = target then some (waits + (waiting target).getD 0)
+        else waiting uv
+
+/-- Transfer each supplied old bucket once in the supplied order. -/
+def moveMany (target : Nat) (sources : List Nat) (waiting : EnumerationWaitingIndex.Waiting) :
+    EnumerationWaitingIndex.Waiting :=
+  sources.foldl (fun previous source => move target source previous) waiting
+
+/-- Reference renaming preserves every trie and occurrence. -/
+@[simp] theorem references_canonicalValue (roots : Nat → Nat) (value : UVarValue Symbol) :

@@ -1,0 +1,13 @@
+# Terminal-prefix prospective assessment review
+
+2026-10-24T21:31:16+02:00. FINAL — CLEAR for source-only prospective use, not a declaration/body gate.
+
+Read the complete assessment, 6434 bytes, SHA256 `cd4dfbab0c4c3ed5b4aca6d1b28623a0c501acfb7e1115e4262ee957491dab8e`. Independently checked all 11 whole/live snapshot identities, 21 inclusive cuts/607 lines, byte counts/SHA256 and the exact33-file input set. All cuts were read. Source-index SHA256 `8796df63be1ca92d0f2d4766b1a6b7e2a466d13f1de60b3356e74afa45bfee9b` pins every input. Its Fold row is the accepted V3 header, not a future proof-success claim.
+
+The proposed operation follows native Enumeration.hs716–747: scan ALL original suspended variables, union the first ORIGINAL variable with each remaining ORIGINAL variable, read the actual winner, transfer distinct old nonwinner buckets, then pass the ORIGINAL ordered recorded list—including duplicates—to assimilation. Incoming-node merge remains separate and has write-before-Empty effects at515–525.
+
+The finite route is feasible without supplied scan/union/winner Success. Existing representative/union termination and mapM/forM termination construct those observations from totality. Schedule's scan/union/winner theorems then identify their actual outputs. Completeness168–215 already constructs this prefix under its older whole-theorem premises; that is genuine prior art, not a substitute Graph intersector for checked execution.
+
+Initial Safe plus bounded inputs and InputsPending supplies pending old-root slots through inputs_pendingAt. Values stay unchanged across scan/unions/winner lookup, so these pending slots and PendingRealized transfer. Winner membership gives the pending target. Caller/native heap/Memos remain unchanged in this prefix. Canonical merging_roots, computed nonwinner-key membership, redirect_fold_eq and moveMany_correct give the count view at the SAME final forest. recorded_transfer_correct alone remains conditional on three observed successes and a key law; the new producer must derive these inputs.
+
+The assessment correctly excludes Safe/LiveRoots and compression Frame at the union-only endpoint. Losing roots still contain pending values. It retains the actual merged-root map and unchanged nonforest fields instead. Host IntSet/Int correspondence, range admission for the later checked fold, incoming-node merge and full terminal/driver/H6 remain open. The160–240-line estimate is prospective. Exact executable result shape and contracts still need Root selection. No new declaration, action/proof body, compiler/parser, selected program or repository change was made.

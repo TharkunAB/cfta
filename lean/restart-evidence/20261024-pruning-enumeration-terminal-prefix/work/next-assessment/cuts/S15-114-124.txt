@@ -1,0 +1,11 @@
+theorem complete (profile : Profile) (depth : Nat)
+    (formulas : SourceGuards.Formulas FullSyntax.Formula) (solver : SourceGuards.Entailment FullSyntax.Formula)
+    (inventory : Inventory) (before : Checked (bits + 2)) (frame : Frame formulas solver inventory before)
+    (fits : Fits profile before) (room : Room bits profile)
+    (left right : Value Symbol Guard)
+    (leftAvailable : Available before.native.machine.heap left) (rightAvailable : Available before.native.machine.heap right)
+    (leftClosed : left.free = []) (rightClosed : right.free = [])
+    (leftCap : SourceCurrentConstrainedCap.Cap Plain depth left)
+    (rightCap : SourceCurrentConstrainedCap.Cap Plain depth right)
+    (memos : Memos) (valid : Valid before.native.machine.heap memos) :
+    ∃ next fuel value after, Receipt profile depth formulas solver next fuel left right before value after memos := by

@@ -1,0 +1,4 @@
+have scanExact : ∀ (fuel : Nat) (items : List EnumerationState.Suspended)
+      (entry exit : EnumerationState.State Symbol EnumGuard) (recorded : List Nat),
+      Success (items.mapM fun sc => representative fuel sc.var) entry recorded exit →
+      ExceptT.run ((items.mapM fun sc => representative fuel sc.var) entry) = [.ok (recorded, exit)]

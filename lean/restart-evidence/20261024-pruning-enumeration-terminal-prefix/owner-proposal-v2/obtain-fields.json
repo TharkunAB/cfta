@@ -1,0 +1,534 @@
+{
+  "packets": [
+    {
+      "scope": "main",
+      "name": "scanFinite",
+      "api": "mapM_terminates",
+      "fields": [
+        {
+          "name": "scanFuel",
+          "type": "Nat",
+          "used": true
+        },
+        {
+          "name": "recorded",
+          "type": "List Nat",
+          "used": true
+        },
+        {
+          "name": "scanned",
+          "type": "EnumerationState.State Symbol EnumGuard",
+          "used": true
+        },
+        {
+          "name": "scan",
+          "type": "Success ((first :: rest).mapM fun sc => representative scanFuel sc.var) before recorded scanned",
+          "used": true
+        },
+        {
+          "name": "scanTotal",
+          "type": "UnionFind.Total scanned.representatives",
+          "used": true
+        }
+      ],
+      "skipped_fields": []
+    },
+    {
+      "scope": "main",
+      "name": "scanModel",
+      "api": "representatives_scan",
+      "fields": [
+        {
+          "name": "scanValid",
+          "type": "ScanValid before.values roots scanned",
+          "used": true
+        },
+        {
+          "name": "recordedSame",
+          "type": "recorded = (first :: rest).map (fun sc => roots sc.var)",
+          "used": true
+        }
+      ],
+      "skipped_fields": []
+    },
+    {
+      "scope": "main",
+      "name": "unionsFinite",
+      "api": "forM_terminates",
+      "fields": [
+        {
+          "name": "unionFuel",
+          "type": "Nat",
+          "used": true
+        },
+        {
+          "name": "united",
+          "type": "EnumerationState.State Symbol EnumGuard",
+          "used": true
+        },
+        {
+          "name": "unions",
+          "type": "Success (rest.forM fun sc => unionVariables unionFuel first.var sc.var) scanned () united",
+          "used": true
+        },
+        {
+          "name": "unionTotal",
+          "type": "UnionFind.Total united.representatives",
+          "used": true
+        }
+      ],
+      "skipped_fields": []
+    },
+    {
+      "scope": "main",
+      "name": "winnerFinite",
+      "api": "representative_terminates",
+      "fields": [
+        {
+          "name": "rootFuel",
+          "type": "Nat",
+          "used": true
+        },
+        {
+          "name": "winner",
+          "type": "Nat",
+          "used": true
+        },
+        {
+          "name": "after",
+          "type": "EnumerationState.State Symbol EnumGuard",
+          "used": true
+        },
+        {
+          "name": "resolution",
+          "type": "Success (representative rootFuel first.var) united winner after",
+          "used": true
+        },
+        {
+          "name": "afterTotal",
+          "type": "UnionFind.Total after.representatives",
+          "used": false,
+          "reason": "Explicitly obtained but not needed by this endpoint proof."
+        }
+      ],
+      "skipped_fields": [
+        "afterTotal"
+      ]
+    },
+    {
+      "scope": "main",
+      "name": "actualMerge",
+      "api": "merging_representative",
+      "fields": [
+        {
+          "name": "resolved",
+          "type": "Merging before.values roots selected after",
+          "used": true
+        },
+        {
+          "name": "count",
+          "type": "Nat",
+          "used": true
+        },
+        {
+          "name": "winnerPath",
+          "type": "UnionFind.Reaches after.representatives first.var winner count",
+          "used": true
+        }
+      ],
+      "skipped_fields": []
+    },
+    {
+      "scope": "scanFrame.step",
+      "name": "primitive",
+      "api": "representative_success",
+      "fields": [
+        {
+          "name": "found",
+          "type": "UnionFind.Result",
+          "used": true
+        },
+        {
+          "name": "lookup",
+          "type": "UnionFind.findRoot scanFuel current.representatives sc.var = some found",
+          "used": false,
+          "reason": "Explicitly obtained but not needed by this endpoint proof."
+        },
+        {
+          "name": "rootSame",
+          "type": "root = found.representative",
+          "used": false,
+          "reason": "Explicitly obtained but not needed by this endpoint proof."
+        },
+        {
+          "name": "nextSame",
+          "type": "next = {current with representatives := found.forest}",
+          "used": true
+        }
+      ],
+      "skipped_fields": [
+        "lookup",
+        "rootSame"
+      ]
+    },
+    {
+      "scope": "unionFrame.step",
+      "name": "primitive",
+      "api": "unionVariables_success",
+      "fields": [
+        {
+          "name": "forest",
+          "type": "UnionFind.Forest",
+          "used": true
+        },
+        {
+          "name": "lookup",
+          "type": "UnionFind.union unionFuel unionFuel current.representatives first.var sc.var = some forest",
+          "used": false,
+          "reason": "Explicitly obtained but not needed by this endpoint proof."
+        },
+        {
+          "name": "nextSame",
+          "type": "next = {current with representatives := forest}",
+          "used": true
+        }
+      ],
+      "skipped_fields": [
+        "lookup"
+      ]
+    },
+    {
+      "scope": "afterFrame",
+      "name": "primitive",
+      "api": "representative_success",
+      "fields": [
+        {
+          "name": "found",
+          "type": "UnionFind.Result",
+          "used": true
+        },
+        {
+          "name": "lookup",
+          "type": "UnionFind.findRoot rootFuel united.representatives first.var = some found",
+          "used": false,
+          "reason": "Explicitly obtained but not needed by this endpoint proof."
+        },
+        {
+          "name": "rootSame",
+          "type": "winner = found.representative",
+          "used": false,
+          "reason": "Explicitly obtained but not needed by this endpoint proof."
+        },
+        {
+          "name": "finalSame",
+          "type": "after = {united with representatives := found.forest}",
+          "used": true
+        }
+      ],
+      "skipped_fields": [
+        "lookup",
+        "rootSame"
+      ]
+    },
+    {
+      "scope": "recordedPending",
+      "name": "fromMap",
+      "api": "List.mem_map.mp after recordedSame",
+      "fields": [
+        {
+          "name": "sc",
+          "type": "EnumerationState.Suspended",
+          "used": true
+        },
+        {
+          "name": "present",
+          "type": "sc ∈ first :: rest",
+          "used": true
+        },
+        {
+          "name": "sourceSame",
+          "type": "roots sc.var = source",
+          "used": true
+        }
+      ],
+      "skipped_fields": []
+    },
+    {
+      "scope": "recordedPending",
+      "name": "actualOldPath",
+      "api": "paths sc.var",
+      "fields": [
+        {
+          "name": "size",
+          "type": "Nat",
+          "used": true
+        },
+        {
+          "name": "path",
+          "type": "UnionFind.Reaches before.representatives sc.var (roots sc.var) size",
+          "used": true
+        }
+      ],
+      "skipped_fields": []
+    },
+    {
+      "scope": "recordedPending",
+      "name": "oldPending",
+      "api": "inputs_pendingAt before safe (first::rest) bounded pending sc present (roots sc.var) size path",
+      "fields": [
+        {
+          "name": "node",
+          "type": "Option Nat",
+          "used": true
+        },
+        {
+          "name": "scs",
+          "type": "List EnumerationState.Suspended",
+          "used": true
+        },
+        {
+          "name": "stored",
+          "type": "before.values[roots sc.var]? = some (.unenumerated node scs)",
+          "used": true
+        }
+      ],
+      "skipped_fields": []
+    },
+    {
+      "scope": "scanExact.nil",
+      "name": "pureObserved",
+      "api": "success_pure",
+      "fields": [
+        {
+          "name": "valueSame",
+          "type": "recorded = []",
+          "used": true
+        },
+        {
+          "name": "stateSame",
+          "type": "exit = entry",
+          "used": true
+        }
+      ],
+      "skipped_fields": []
+    },
+    {
+      "scope": "scanExact.cons",
+      "name": "headBind",
+      "api": "success_bind",
+      "fields": [
+        {
+          "name": "root",
+          "type": "Nat",
+          "used": true
+        },
+        {
+          "name": "middle",
+          "type": "EnumerationState.State Symbol EnumGuard",
+          "used": true
+        },
+        {
+          "name": "head",
+          "type": "Success (representative fuel sc.var) entry root middle",
+          "used": true
+        },
+        {
+          "name": "continued",
+          "type": "Success ((items.mapM fun sc => representative fuel sc.var) >>= fun tail => pure (root :: tail)) middle recorded exit",
+          "used": true
+        }
+      ],
+      "skipped_fields": []
+    },
+    {
+      "scope": "scanExact.cons",
+      "name": "tailBind",
+      "api": "success_bind",
+      "fields": [
+        {
+          "name": "tail",
+          "type": "List Nat",
+          "used": true
+        },
+        {
+          "name": "last",
+          "type": "EnumerationState.State Symbol EnumGuard",
+          "used": true
+        },
+        {
+          "name": "tailRun",
+          "type": "Success (items.mapM fun sc => representative fuel sc.var) middle tail last",
+          "used": true
+        },
+        {
+          "name": "finalPure",
+          "type": "Success (pure (root :: tail)) last recorded exit",
+          "used": true
+        }
+      ],
+      "skipped_fields": []
+    },
+    {
+      "scope": "scanExact.cons",
+      "name": "pureObserved",
+      "api": "success_pure",
+      "fields": [
+        {
+          "name": "valueSame",
+          "type": "recorded = root :: tail",
+          "used": true
+        },
+        {
+          "name": "stateSame",
+          "type": "exit = last",
+          "used": true
+        }
+      ],
+      "skipped_fields": []
+    },
+    {
+      "scope": "scanExact.cons",
+      "name": "primitive",
+      "api": "representative_success",
+      "fields": [
+        {
+          "name": "found",
+          "type": "UnionFind.Result",
+          "used": true
+        },
+        {
+          "name": "lookup",
+          "type": "UnionFind.findRoot fuel entry.representatives sc.var = some found",
+          "used": true
+        },
+        {
+          "name": "rootSame",
+          "type": "root = found.representative",
+          "used": true
+        },
+        {
+          "name": "middleSame",
+          "type": "middle = {entry with representatives := found.forest}",
+          "used": true
+        }
+      ],
+      "skipped_fields": []
+    },
+    {
+      "scope": "unionsExact.nil",
+      "name": "pureObserved",
+      "api": "success_pure",
+      "fields": [
+        {
+          "name": "valueSame",
+          "type": "(() : PUnit) = ()",
+          "used": false,
+          "reason": "Explicitly obtained but not needed by this endpoint proof."
+        },
+        {
+          "name": "stateSame",
+          "type": "exit = entry",
+          "used": true
+        }
+      ],
+      "skipped_fields": [
+        "valueSame"
+      ]
+    },
+    {
+      "scope": "unionsExact.cons",
+      "name": "headBind",
+      "api": "success_bind",
+      "fields": [
+        {
+          "name": "ignored",
+          "type": "Unit",
+          "used": true
+        },
+        {
+          "name": "middle",
+          "type": "EnumerationState.State Symbol EnumGuard",
+          "used": true
+        },
+        {
+          "name": "head",
+          "type": "Success (unionVariables fuel anchor sc.var) entry ignored middle",
+          "used": true
+        },
+        {
+          "name": "continued",
+          "type": "Success (items.forM fun sc => unionVariables fuel anchor sc.var) middle () exit",
+          "used": true
+        }
+      ],
+      "skipped_fields": []
+    },
+    {
+      "scope": "unionsExact.cons",
+      "name": "primitive",
+      "api": "unionVariables_success after cases ignored",
+      "fields": [
+        {
+          "name": "forest",
+          "type": "UnionFind.Forest",
+          "used": true
+        },
+        {
+          "name": "lookup",
+          "type": "UnionFind.union fuel fuel entry.representatives anchor sc.var = some forest",
+          "used": true
+        },
+        {
+          "name": "middleSame",
+          "type": "middle = {entry with representatives := forest}",
+          "used": true
+        }
+      ],
+      "skipped_fields": []
+    },
+    {
+      "scope": "final.raw.winner",
+      "name": "largerBoundPrimitive",
+      "api": "representative_success applied to resolutionMore extra",
+      "fields": [
+        {
+          "name": "found",
+          "type": "UnionFind.Result",
+          "used": true
+        },
+        {
+          "name": "lookup",
+          "type": "UnionFind.findRoot (fuel + extra) united.representatives first.var = some found",
+          "used": true
+        },
+        {
+          "name": "rootSame",
+          "type": "winner = found.representative",
+          "used": true
+        },
+        {
+          "name": "finalSame",
+          "type": "after = {united with representatives := found.forest}",
+          "used": true
+        }
+      ],
+      "skipped_fields": []
+    }
+  ],
+  "count": 20,
+  "field_count": 67,
+  "producer_packets": [
+    "scanFinite",
+    "unionsFinite",
+    "winnerFinite"
+  ],
+  "unused_fields": [
+    "main.afterTotal",
+    "scanFrame.step.lookup",
+    "scanFrame.step.rootSame",
+    "unionFrame.step.lookup",
+    "afterFrame.lookup",
+    "afterFrame.rootSame",
+    "unionsExact.nil.valueSame"
+  ]
+}

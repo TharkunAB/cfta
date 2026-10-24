@@ -1,0 +1,15 @@
+/-- An observed pending slot derives a finite reread and its actual compressed state. -/
+theorem pending_reread_complete (readFuel uv oldHandle : Nat) (scs : List EnumerationState.Suspended)
+    (before readAfter entry : EnumerationState.State Symbol Guard)
+    (total : UnionFind.Total before.representatives)
+    (observed : Success (getValue readFuel uv) before (.unenumerated (some oldHandle) scs) readAfter)
+    (entered : Frame readAfter entry) :
+    ∃ (root size rereadFuel : Nat) (after : EnumerationState.State Symbol Guard),
+      Frame before readAfter ∧ UnionFind.Reaches before.representatives uv root size ∧
+      Success (representative rereadFuel uv) entry root after ∧
+      Frame entry after ∧ Frame before after ∧
+      after.values[root]? = some (.unenumerated (some oldHandle) scs) ∧ root < after.values.length := by
+  obtain ⟨found, lookup, initialStored, readState⟩ :=
+    (getValue_success readFuel uv before readAfter (.unenumerated (some oldHandle) scs)).mp observed
+  have firstRepresentative : Success (representative readFuel uv) before found.representative readAfter := by
+    exact (EnumerationSchedule.representative_success readFuel uv before readAfter found.representative).mpr

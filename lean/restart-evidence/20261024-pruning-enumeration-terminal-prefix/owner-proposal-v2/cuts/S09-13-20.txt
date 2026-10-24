@@ -1,0 +1,8 @@
+/-- The integer-map interface keeps missing entries distinct from stored counts. -/
+abbrev Waiting := Nat → Option Int
+
+/-- A missing counter has value zero. -/
+def read (waiting : Waiting) (uv : Nat) : Int := (waiting uv).getD 0
+
+/-- The source removes a map entry exactly when its new count is zero. -/
+def encode (count : Int) : Option Int := if count = 0 then none else some count

@@ -1,0 +1,9 @@
+The existing triple carries the original recorded list, actual winner and completed waiting transfer. No Caller or global memos enter this action. Native data therefore remain external unchanged values. The theorem uses a generic external native heap only for PendingRealized, with no coherence/Ready/output assumption.
+
+The initial roots/path/count views are genuine inputs. Safe supplies totality and storage/live-slot facts. Existing inputs_pendingAt derives every old root pending. The same actual primitive endpoints yield the merged root map. Existing canonicalIds supplies ascending distinct nonwinner keys; moveMany_correct plus redirect_fold_eq yields count correctness at that exact forest. No arbitrary key law or commutation law is assumed. Host IntSet extraction stays separate.
+
+Success alone is membership. Two source-specific local induction haves convert actual representative mapM and union forM Success into raw singleton equality. They accept no arbitrary action/determinism premise. Existing termination and moreFuel producers then construct the same three primitive endpoints at a common additive bound. The public result retains raw singleton equations for the prefix and every primitive stage, including larger-bound stability. Root authors all bodies.
+
+The local Monad List header is necessary for the literal existing mapM/forM notation. Its two standard fields are not authored here. No LawfulMonad instance is proposed. Initial target/source indices have explicit Nat types wherever the new public binder performs slot/key work. No identifier named prefix is introduced.
+
+The union-only endpoint promises exact nonforest fields and actual roots, not Safe, LiveRoots or a compression Frame. Suggested target160–240 and provisional hard360 need Root assessment against the two local inductions. No new carrier, helper theorem, Graph or duplicated checked receipt.

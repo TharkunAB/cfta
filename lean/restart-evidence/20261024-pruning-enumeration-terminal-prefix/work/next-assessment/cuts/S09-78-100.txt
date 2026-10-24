@@ -1,0 +1,23 @@
+theorem finite [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)]
+    (formulas : SourceGuards.Formulas FullSyntax.Formula) (solver : SourceGuards.Entailment FullSyntax.Formula)
+    (inventory : Inventory) (left right : Value Symbol Guard) (before : Checked width)
+    (ready : Ready before) (admitted : At formulas solver inventory before)
+    (leftAvailable : Available before.native.machine.heap left) (rightAvailable : Available before.native.machine.heap right)
+    (leftClosed : left.free = []) (rightClosed : right.free = [])
+    (ranges : WordRanges (.code (requestNode IntersectionEmptyDomain.emptyDomain left right)) before)
+    (memos : Memos) (valid : Valid before.native.machine.heap memos) :
+    ∃ next : Inventory, ∃ value after,
+      next.source = before.native.machine.heap ∧ next.roots = inventory.roots ++ [left, right] ∧
+      Receipt formulas solver next left right before value after memos := by
+  obtain ⟨next, fuel, value, after, source, roots, query, current⟩ :=
+    SourceCurrentAllocatedNativeInventoryState.query_complete inventory formulas solver before ready.good admitted
+      ready.scopedCache ready.semantic ready.idle left right leftAvailable rightAvailable leftClosed rightClosed ranges
+  have checked := SourceCurrentAllocatedNativeTraceEffects.effects query.trace ready.good ready.semantic ready.costs
+    (fun _ => trivial)
+  obtain ⟨events, runs, silent, finalValid⟩ := SourceCurrentAllocatedNativeGlobalMemos.trace_memos
+    query.trace ready.good ready.semantic ready.costs (fun _ => trivial) memos valid
+  exact ⟨next, value, after, source, roots, ⟨.run query.trace,
+    ⟨checked.1, checked.2.1.ready.semantic, checked.2.1.ready.costs, query.scopedCache, query.idle⟩,
+    current, checked.2.1, checked.2.2, query.result, query.closed, query.meaning,
+    finalValid, events, runs, silent⟩⟩
+

@@ -1,0 +1,19 @@
+/-- Initial query-entry counters admit every raw prefix with the same actual warm tables. -/
+theorem warm_initial_ranges (bits : Nat) (before : Checked (bits + 2))
+    (good : Good before) (semantic : SemanticReady before.native.machine.heap)
+    (left right : Value Symbol Guard) (leftOriginal : Original left) (rightOriginal : Original right)
+    (leftAvailable : Available before.native.machine.heap left)
+    (rightAvailable : Available before.native.machine.heap right)
+    (nodes : before.native.machine.heap.nodes.next < 2 ^ bits)
+    (edges : before.native.machine.heap.edges.next ≤ 2 ^ (bits + 2))
+    (room : before.native.machine.domains.next +
+      2 ^ (before.native.machine.heap.nodes.next +
+        before.native.machine.heap.nodes.next * before.native.machine.heap.nodes.next) < 2 ^ (bits + 1)) :
+    WordRanges (.code (requestNode IntersectionEmptyDomain.emptyDomain left right)) before ∧
+      SourceCurrentAllocatedNativeDomainTrace.Prefixes
+        (SourceRecursiveIntersectionSourceInventory.domains before.native.machine.heap)
+        (.code (requestNode IntersectionEmptyDomain.emptyDomain left right)) before := by
+  let source := before.native.machine.heap
+  let inventory := SourceRecursiveIntersectionSourceInventory.domains source
+  let request : NodeRequest Symbol Guard := ⟨IntersectionEmptyDomain.emptyDomain, left, right⟩
+  have resources : Resources bits source inventory before.native.machine.domains :=

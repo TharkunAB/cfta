@@ -1,0 +1,40 @@
+def Roots (forest : UnionFind.Forest) (roots : Nat → Nat) : Prop :=
+  ∀ uv, ∃ size, UnionFind.Reaches forest uv (roots uv) size
+
+/-- A total forest supplies canonical representatives without a search-bound assumption. -/
+theorem roots_exist (forest : UnionFind.Forest) (valid : UnionFind.Total forest) :
+    ∃ roots, Roots forest roots := by
+  classical
+  refine ⟨fun uv => (valid uv).choose, ?_⟩
+  intro uv
+  exact (valid uv).choose_spec
+
+/-- The scan retains the value array and every chosen representative. -/
+structure ScanValid (values : List (UVarValue Symbol)) (roots : Nat → Nat)
+    (state : State Symbol Guard) : Prop where
+  values : state.values = values
+  roots : Roots state.representatives roots
+
+/-- Successful representative lookup exposes its actual forest update. -/
+theorem representative_success (fuel uv : Nat) (before after : State Symbol Guard) (root : Nat) :
+    Success (representative fuel uv) before root after ↔
+      ∃ found, UnionFind.findRoot fuel before.representatives uv = some found ∧
+        root = found.representative ∧ after = {before with representatives := found.forest} := by
+  cases lookup : UnionFind.findRoot fuel before.representatives uv with
+  | none =>
+      simp [Success, representative, lookup, EnumerationState.failure, bind, get, getThe, MonadStateOf.get,
+        pure, StateT.bind, StateT.get, ExceptT.bind, ExceptT.pure, ExceptT.bindCont, ExceptT.mk, ExceptT.run]
+  | some found =>
+      simp only [Success, representative_exact fuel uv before found lookup, ExceptT.run]
+      simp
+
+/-- Path compression leaves the scan's representative map unchanged. -/
+theorem representative_scan (values : List (UVarValue Symbol)) (roots : Nat → Nat)
+    (before after : State Symbol Guard) (fuel uv root : Nat)
+    (valid : ScanValid values roots before)
+    (success : Success (representative fuel uv) before root after) :
+    ScanValid values roots after ∧ root = roots uv := by
+  obtain ⟨found, lookup, rfl, rfl⟩ := (representative_success fuel uv before after root).mp success
+  obtain ⟨size, path⟩ := valid.roots uv
+  obtain ⟨actual, preserved⟩ := UnionFind.findRoot_correct fuel before.representatives uv found lookup
+  refine ⟨⟨valid.values, ?_⟩, (UnionFind.reaches_unique actual path).1⟩

@@ -1,0 +1,9 @@
+# Terminal-prefix baseline and custody review
+
+2026-10-24T21:40:19+02:00. FINAL — CLEAR, source/data review only.
+
+Baseline proposal has exact7 payloads/9 files, pins SHA256 `3254ef3e5ab0aad8e46113beb6cb54d99a9841571bd896bd9aaaa1adeb26bcd6`, FROZEN `935f10ebfafbfc81d9d14a72c5b34d38d5f5a3ec54dc53aeb613b8e3ea6f3892`. Read all29 candidate lines and the complete patch against the actual retained Fold baseline. Candidate1517-byte SHA256 `f32c8e9370385a5e6227e991ea6e51145862dab4d705f0aa01ebbd6b8099617b`. Only area/head/two backup literals change. Both character recipes reconstruct exact bytes. Clean HEAD/main/backup checks and complete tree/refs/worktrees/stashes snapshots are preserved. Expected135765 files remains an expected Root comparison, not my execution result.
+
+Custody proposal has exact30 payloads/32 files, pins `5a35a68c49dcd6c54f9ca9c108cd38d44ebc92be6ebfa1dfa10a7c7dc503df58`, FROZEN `35ec23aabcc07113b3ec152264bff581e3f482ab6863c62c7ccbbe8edc3f0a3e`. Independently verified every copied byte against its actual source and object pin. The26 unique source/target paths exactly equal the prior post-publication summary list and exact previous-publication file set. Index SHA256 `334494aa557677ceaa146e3f35b8fbc453ba6a773429b8a6f47462611acea870`.
+
+The sealed prospective assessment/review remain context; the review is not a27th custody item. The previous summary retains all58 whitespace diagnostics and complete7706-byte raw text, SHA256 `285c95692bb0c6506a12dee52a0fc998cfbbfdf9e95ed9160d5771bd7a101db2`. This is preserved prior raw-data diagnostics, not a Lean/cap/seal failure. New schema, declarations and results remain unbound. Safe object pins and exact top-level exclusions pass for both packages. No script, Git/compiler/parser or repository mutation was executed. Root owns activation, backup creation and baseline execution.

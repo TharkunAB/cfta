@@ -1,0 +1,29 @@
+/-- Once all selected classes are joined, only the winning selected root remains a root. -/
+theorem joined_root_set (values : List (UVarValue Symbol)) (roots : Nat → Nat) (selected : List Nat)
+    (state : State Symbol Guard) (valid : Merging values roots selected state) (first target count : Nat)
+    (firstSelected : roots first ∈ selected)
+    (path : UnionFind.Reaches state.representatives first target count) (uv : Nat) :
+    IsRoot state.representatives uv ↔ roots uv = uv ∧ (uv ∉ selected ∨ uv = target) := by
+  have targetRoot : IsRoot state.representatives target := ⟨count, .root (UnionFind.reaches_terminal path)⟩
+  constructor
+  · intro root
+    have fixed := valid.oldRoots uv root
+    refine ⟨fixed, ?_⟩
+    by_cases member : uv ∈ selected
+    · have related := (valid.joined first uv).mpr (Or.inr ⟨firstSelected, by simpa [fixed] using member⟩)
+      obtain ⟨size, self⟩ := root
+      have rootEqual := (UnionFind.sameClass_iff_roots path self).mp related
+      exact Or.inr rootEqual.symm
+    · exact Or.inl member
+  · rintro ⟨fixed, unselected | rfl⟩
+    · obtain ⟨representative, size, reached⟩ := valid.total uv
+      have representativeRoot : IsRoot state.representatives representative :=
+        ⟨size, .root (UnionFind.reaches_terminal reached)⟩
+      have representativeFixed := valid.oldRoots representative representativeRoot
+      have related := UnionFind.sameClass_root reached
+      rcases (valid.joined uv representative).mp related with same | both
+      · have sameIndex : representative = uv := by simpa [fixed, representativeFixed] using same.symm
+        exact ⟨size, by simpa [sameIndex] using reached⟩
+      · exact (unselected (by simpa [fixed] using both.1)).elim
+    · exact targetRoot
+

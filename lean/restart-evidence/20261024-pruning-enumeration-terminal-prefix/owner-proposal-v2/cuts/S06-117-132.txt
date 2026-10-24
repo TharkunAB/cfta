@@ -1,0 +1,16 @@
+/-- Bounded inputs that avoid expanded slots reach pending representatives. -/
+theorem inputs_pendingAt (state : State Symbol Guard) (safe : Safe state) (scs : List Suspended)
+    (bounded : ∀ sc ∈ scs, sc.var < state.counter) (pending : InputsPending state scs)
+    (sc : Suspended) (member : sc ∈ scs) (root size : Nat)
+    (path : UnionFind.Reaches state.representatives sc.var root size) : PendingAt state root := by
+  have inside := reaches_bounded state.representatives state.counter safe.1.forest path (bounded sc member)
+  have index : root < state.values.length := by rw [← safe.1.aligned]; exact inside
+  let value := state.values[root]
+  have stored : state.values[root]? = some value := List.getElem?_eq_getElem index
+  have live : value ≠ .eliminated := (safe.2 root value stored).mpr ⟨size, .root (UnionFind.reaches_terminal path)⟩
+  cases valueEq : value with
+  | eliminated => exact (live valueEq).elim
+  | unenumerated node scs => exact ⟨node, scs, by simpa [valueEq] using stored⟩
+  | enumerated fragment =>
+      have exactSlot : state.values[root]? = some (.enumerated fragment) := by simpa [valueEq] using stored
+      exact (pending root fragment exactSlot sc member (UnionFind.sameClass_symm (UnionFind.sameClass_root path))).elim

@@ -1,0 +1,22 @@
+theorem representative_exact (fuel uv : Nat) (state : State Symbol Guard) (found : UnionFind.Result)
+    (result : UnionFind.findRoot fuel state.representatives uv = some found) :
+    representative fuel uv state = [.ok (found.representative, {state with representatives := found.forest})] := by
+  simp [representative, result, bind, get, getThe, MonadStateOf.get, set, pure,
+    StateT.bind, StateT.pure, StateT.get, StateT.set, ExceptT.bind, ExceptT.pure, ExceptT.bindCont, ExceptT.mk]
+
+/-- The actual representative action preserves exactly every complete assignment. -/
+theorem representative_semantics (language : NodeLanguage Symbol) (meaning : Guard → Term Symbol → Prop)
+    (assignment : Nat → Term Symbol) (fuel uv : Nat) (state : State Symbol Guard) (found : UnionFind.Result)
+    (valid : UnionFind.Total state.representatives)
+    (result : UnionFind.findRoot fuel state.representatives uv = some found) :
+    Satisfies language meaning assignment {state with representatives := found.forest} ↔
+      Satisfies language meaning assignment state := by
+  simp only [Satisfies, Fragments.stateSatisfies, UnionFind.findRoot_satisfies valid result]
+
+/-- The actual union action has exactly one successful branch after its primitive succeeds. -/
+theorem union_exact (fuel left right : Nat) (state : State Symbol Guard) (after : UnionFind.Forest)
+    (result : UnionFind.union fuel fuel state.representatives left right = some after) :
+    unionVariables fuel left right state = [.ok ((), {state with representatives := after})] := by
+  simp [unionVariables, result, bind, get, getThe, MonadStateOf.get, set, pure,
+    StateT.bind, StateT.get, StateT.set, ExceptT.bind, ExceptT.pure, ExceptT.bindCont, ExceptT.mk]
+

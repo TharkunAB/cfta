@@ -1,0 +1,10 @@
+theorem observation_complete (heap : InternedConstructorTemplates.State Symbol NativeGuard)
+    (before : EnumerationState.State Symbol EnumGuard) (uv : Nat)
+    (realized : PendingRealized heap before)
+    (storage : StorageValid before) (inside : uv < before.counter) :
+    ∃ fuel observed after,
+      Success (getUnexpandedNode fuel uv) before observed after ∧ Frame before after ∧
+      (∀ node, observed = some node →
+        ∃ value : InternedConstructorTemplates.Value Symbol NativeGuard,
+          lookupNode heap node = some value ∧
+          InternedProbeProvenance.Available heap value ∧ value.free = []) := by

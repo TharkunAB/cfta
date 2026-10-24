@@ -1,0 +1,73 @@
+{"command": ["/home/tritlo/.elan/toolchains/leanprover--lean4---v4.34.1/bin/lean", "-R", "/tmp/mcfta-pruning-enumeration-terminal-prefix-20261024/public-2", "-DwarningAsError=true", "-Dlinter.all=true", "/tmp/mcfta-pruning-enumeration-terminal-prefix-20261024/public-2/checked.lean"], "exit_code": 0, "raw_bytes": 5592, "raw_sha256": "4098657150f5a3630f01092b8e4bc54ec7dcec1a1a8dce3abd3e5c562af31fbf", "source_sha256": "cf47ae3773d8d5c922beb26271c353b5bd15babf2bd6c9f394e8e1c12ade9288"}
+@MicroCFTA.SourcePruningEnumerationTerminalPrefix.run : {EnumGuard : Type} →
+  Nat →
+    MicroCFTA.EnumerationState.Suspended →
+      List MicroCFTA.EnumerationState.Suspended →
+        MicroCFTA.EnumerationWaitingIndex.Waiting →
+          MicroCFTA.EnumerationState.EnumerateM MicroCFTA.SourcePruningTemplates.Symbol EnumGuard
+            (List Nat × Nat × MicroCFTA.EnumerationWaitingIndex.Waiting)
+@MicroCFTA.SourcePruningEnumerationTerminalPrefix.run_complete : ∀ {EnumGuard NativeGuard : Type}
+  (heap : MicroCFTA.InternedConstructorTemplates.State MicroCFTA.SourcePruningTemplates.Symbol NativeGuard)
+  (before : MicroCFTA.EnumerationState.State MicroCFTA.SourcePruningTemplates.Symbol EnumGuard)
+  (first : MicroCFTA.EnumerationState.Suspended) (rest : List MicroCFTA.EnumerationState.Suspended)
+  (waiting : MicroCFTA.EnumerationWaitingIndex.Waiting) (roots : Nat → Nat),
+  MicroCFTA.EnumerationSchedule.Roots before.representatives roots →
+    MicroCFTA.EnumerationCanonicalWaiting.Correct roots before.values waiting →
+      MicroCFTA.EnumerationSchedule.Safe before →
+        (∀ (sc : MicroCFTA.EnumerationState.Suspended), sc ∈ first :: rest → sc.var < before.counter) →
+          MicroCFTA.EnumerationDependencies.InputsPending before (first :: rest) →
+            MicroCFTA.SourcePruningEnumerationObservation.PendingRealized heap before →
+              ∃ fuel recorded winner saved scanned united after,
+                (∀ (extra : Nat),
+                    (MicroCFTA.SourcePruningEnumerationTerminalPrefix.run (fuel + extra) first rest waiting
+                          before).run =
+                      [Except.ok ((recorded, winner, saved), after)]) ∧
+                  (∀ (extra : Nat),
+                      (List.mapM (fun sc => MicroCFTA.EnumerationState.representative (fuel + extra) sc.var)
+                            (first :: rest) before).run =
+                        [Except.ok (recorded, scanned)]) ∧
+                    (∀ (extra : Nat),
+                        (rest.forM (fun sc => MicroCFTA.EnumerationState.unionVariables (fuel + extra) first.var sc.var)
+                              scanned).run =
+                          [Except.ok ((), united)]) ∧
+                      (∀ (extra : Nat),
+                          (MicroCFTA.EnumerationState.representative (fuel + extra) first.var united).run =
+                            [Except.ok (winner, after)]) ∧
+                        recorded = List.map (fun sc => roots sc.var) (first :: rest) ∧
+                          saved =
+                              MicroCFTA.EnumerationCanonicalWaiting.moveMany winner
+                                (MicroCFTA.EnumerationBuilderCaches.canonicalIds
+                                  (List.filter (fun key => key != winner) recorded))
+                                waiting ∧
+                            winner ∈ recorded ∧
+                              roots winner = winner ∧
+                                MicroCFTA.EnumerationSchedule.Roots after.representatives
+                                    (MicroCFTA.EnumerationCanonicalUnion.mergedRoots roots recorded winner) ∧
+                                  MicroCFTA.EnumerationCanonicalWaiting.Correct
+                                      (MicroCFTA.EnumerationCanonicalUnion.mergedRoots roots recorded winner)
+                                      after.values saved ∧
+                                    after =
+                                        { counter := before.counter, representatives := after.representatives,
+                                          values := before.values, obligations := before.obligations,
+                                          recursionAncestry := before.recursionAncestry,
+                                          expansionAncestry := before.expansionAncestry } ∧
+                                      MicroCFTA.EnumerationCorrectness.StorageValid after ∧
+                                        MicroCFTA.SourcePruningEnumerationObservation.PendingRealized heap after ∧
+                                          MicroCFTA.EnumerationCompleteness.PendingAt after winner ∧
+                                            (∀ (source : Nat),
+                                                source ∈ recorded →
+                                                  MicroCFTA.EnumerationCompleteness.PendingAt after source) ∧
+                                              (MicroCFTA.EnumerationBuilderCaches.canonicalIds
+                                                    (List.filter (fun key => key != winner) recorded)).Nodup ∧
+                                                List.Pairwise (fun x1 x2 => x1 ≤ x2)
+                                                    (MicroCFTA.EnumerationBuilderCaches.canonicalIds
+                                                      (List.filter (fun key => key != winner) recorded)) ∧
+                                                  ∀ (key : Nat),
+                                                    key ∈
+                                                        MicroCFTA.EnumerationBuilderCaches.canonicalIds
+                                                          (List.filter (fun key => key != winner) recorded) ↔
+                                                      key ∈ recorded ∧ key ≠ winner
+'MicroCFTA.SourcePruningEnumerationTerminalPrefix.run' depends on axioms: [propext, Quot.sound]
+'MicroCFTA.SourcePruningEnumerationTerminalPrefix.run_complete' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]

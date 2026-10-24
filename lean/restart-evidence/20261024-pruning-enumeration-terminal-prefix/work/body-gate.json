@@ -1,0 +1,83 @@
+{
+  "accepted_at": "2026-10-24T22:01:48.599841+02:00",
+  "status": "ROOT_BODY_GATE_ACCEPTED",
+  "owner": "/tmp/mcfta-pruning-enumeration-terminal-prefix-20261024-proposal-v3",
+  "frozen_sha256": "44cdf91976db406305e58ef84477792acd6f1455e0856bca1cefbb6a3f123dcb",
+  "contracts": {
+    "complete-header.lean.txt": "theorem run_complete\n    (heap : InternedConstructorTemplates.State Symbol NativeGuard)\n    (before : EnumerationState.State Symbol EnumGuard)\n    (first : EnumerationState.Suspended) (rest : List EnumerationState.Suspended)\n    (waiting : EnumerationWaitingIndex.Waiting) (roots : Nat \u2192 Nat)\n    (paths : Roots before.representatives roots)\n    (counts : EnumerationCanonicalWaiting.Correct roots before.values waiting)\n    (safe : Safe before)\n    (bounded : \u2200 sc \u2208 first :: rest, sc.var < before.counter)\n    (pending : InputsPending before (first :: rest))\n    (realized : PendingRealized heap before) :\n    \u2203 (fuel : Nat) (recorded : List Nat) (winner : Nat) (saved : EnumerationWaitingIndex.Waiting)\n      (scanned united after : EnumerationState.State Symbol EnumGuard),\n      (\u2200 (extra : Nat), ExceptT.run (run (fuel + extra) first rest waiting before) =\n        [.ok ((recorded, winner, saved), after)]) \u2227\n      (\u2200 (extra : Nat), ExceptT.run (((first :: rest).mapM fun sc =>\n        representative (fuel + extra) sc.var) before) = [.ok (recorded, scanned)]) \u2227\n      (\u2200 (extra : Nat), ExceptT.run ((rest.forM fun sc =>\n        unionVariables (fuel + extra) first.var sc.var) scanned) = [.ok ((), united)]) \u2227\n      (\u2200 (extra : Nat), ExceptT.run (representative (fuel + extra) first.var united) = [.ok (winner, after)]) \u2227\n      recorded = (first :: rest).map (fun sc => roots sc.var) \u2227\n      saved = EnumerationCanonicalWaiting.moveMany winner\n        (EnumerationBuilderCaches.canonicalIds (recorded.filter (fun key => key != winner))) waiting \u2227\n      winner \u2208 recorded \u2227 roots winner = winner \u2227\n      Roots after.representatives (EnumerationCanonicalUnion.mergedRoots roots recorded winner) \u2227\n      EnumerationCanonicalWaiting.Correct (EnumerationCanonicalUnion.mergedRoots roots recorded winner)\n        after.values saved \u2227\n      after = {before with representatives := after.representatives} \u2227\n      StorageValid after \u2227 PendingRealized heap after \u2227 PendingAt after winner \u2227\n      (\u2200 (source : Nat), source \u2208 recorded \u2192 PendingAt after source) \u2227\n      (EnumerationBuilderCaches.canonicalIds (recorded.filter (fun key => key != winner))).Nodup \u2227\n      (EnumerationBuilderCaches.canonicalIds (recorded.filter (fun key => key != winner))).Pairwise (\u00b7 \u2264 \u00b7) \u2227\n      (\u2200 (key : Nat), key \u2208 EnumerationBuilderCaches.canonicalIds (recorded.filter (fun key => key != winner)) \u2194\n        key \u2208 recorded \u2227 key \u2260 winner)\n",
+    "context.lean.txt": "import MicroCFTA.EnumerationCompleteness\nimport MicroCFTA.EnumerationCanonicalUnion\nimport MicroCFTA.EnumerationBuilderCaches\nimport MicroCFTA.SourcePruningEnumerationObservation\n\nnamespace MicroCFTA.SourcePruningEnumerationTerminalPrefix\nopen EnumerationState EnumerationCorrectness EnumerationSchedule EnumerationExecution\nopen EnumerationCompleteness EnumerationDependencies\nopen SourcePruningEnumerationObservation\nlocal notation \"Symbol\" => SourcePruningTemplates.Symbol\nvariable {EnumGuard NativeGuard : Type}\n",
+    "definition-keys.lean.txt": "let sources : List Nat\n",
+    "instance-header.lean.txt": "local instance terminalPrefixMonadList : Monad List\n",
+    "lawful-instance-header.lean.txt": "local instance terminalPrefixLawfulMonadList : LawfulMonad List\n",
+    "local-actual-roots.lean.txt": "have actualRoots : Roots after.representatives (EnumerationCanonicalUnion.mergedRoots roots recorded winner)\n",
+    "local-after-frame.lean.txt": "have afterFrame : after = {before with representatives := after.representatives}\n",
+    "local-after-stable.lean.txt": "have afterStable : Stable before.counter after\n",
+    "local-final-counts.lean.txt": "have finalCounts : EnumerationCanonicalWaiting.Correct\n      (EnumerationCanonicalUnion.mergedRoots roots recorded winner) after.values\n      (EnumerationCanonicalWaiting.moveMany winner keys waiting)\n",
+    "local-final-realized.lean.txt": "have finalRealized : PendingRealized heap after\n",
+    "local-first-selected.lean.txt": "have firstSelected : roots first.var \u2208 selected\n",
+    "local-fuel.lean.txt": "let fuel : Nat\n",
+    "local-joined.lean.txt": "have joined : Merging before.values roots selected united\n",
+    "local-key-members.lean.txt": "have keyMembers : \u2200 (key : Nat), key \u2208 keys \u2194 key \u2208 recorded \u2227 key \u2260 winner\n",
+    "local-keys.lean.txt": "let keys : List Nat\n",
+    "local-recorded-pending.lean.txt": "have recordedPending : \u2200 (source : Nat), source \u2208 recorded \u2192 PendingAt after source\n",
+    "local-resolution-more.lean.txt": "have resolutionMore : \u2200 (extra : Nat), Success (representative (fuel + extra) first.var)\n      united winner after\n",
+    "local-same-selected.lean.txt": "have sameSelected : \u2200 (key : Nat), key \u2208 recorded \u2194 key \u2208 selected\n",
+    "local-scan-exact.lean.txt": "have scanExact : \u2200 (fuel : Nat) (items : List EnumerationState.Suspended)\n      (entry exit : EnumerationState.State Symbol EnumGuard) (recorded : List Nat),\n      Success (items.mapM fun sc => representative fuel sc.var) entry recorded exit \u2192\n      ExceptT.run ((items.mapM fun sc => representative fuel sc.var) entry) = [.ok (recorded, exit)]\n",
+    "local-scan-frame.lean.txt": "have scanFrame : scanned = {before with representatives := scanned.representatives}\n",
+    "local-scan-more.lean.txt": "have scanMore : \u2200 (extra : Nat), Success ((first :: rest).mapM fun sc =>\n      representative (fuel + extra) sc.var) before recorded scanned\n",
+    "local-scan-stable.lean.txt": "have scanStable : Stable before.counter scanned\n",
+    "local-selected.lean.txt": "let selected : List Nat\n",
+    "local-union-frame.lean.txt": "have unionFrame : united = {before with representatives := united.representatives}\n",
+    "local-union-stable.lean.txt": "have unionStable : Stable before.counter united\n",
+    "local-unions-exact.lean.txt": "have unionsExact : \u2200 (fuel anchor : Nat) (items : List EnumerationState.Suspended)\n      (entry exit : EnumerationState.State Symbol EnumGuard),\n      Success (items.forM fun sc => unionVariables fuel anchor sc.var) entry () exit \u2192\n      ExceptT.run ((items.forM fun sc => unionVariables fuel anchor sc.var) entry) = [.ok ((), exit)]\n",
+    "local-unions-more.lean.txt": "have unionsMore : \u2200 (extra : Nat), Success (rest.forM fun sc =>\n      unionVariables (fuel + extra) first.var sc.var) scanned () united\n",
+    "local-winner-fixed.lean.txt": "have winnerFixed : roots winner = winner\n",
+    "local-winner-root.lean.txt": "have winnerRoot : IsRoot after.representatives winner\n",
+    "local-winner-selected.lean.txt": "have winnerSelected : winner \u2208 selected\n",
+    "run-header.lean.txt": "def run (fuel : Nat) (first : EnumerationState.Suspended) (rest : List EnumerationState.Suspended)\n    (waiting : EnumerationWaitingIndex.Waiting) :\n    EnumerateM Symbol EnumGuard (List Nat \u00d7 Nat \u00d7 EnumerationWaitingIndex.Waiting)\n"
+  },
+  "reviews": {
+    "source": {
+      "path": "/tmp/mcfta-pruning-enumeration-terminal-prefix-20261024-source-review.md",
+      "sha256": "d689ff5d2c184cd83ce3d54ff0372fdbd1f396a48a6d2d92d241c7d30b0371a6"
+    },
+    "declaration": {
+      "path": "/tmp/mcfta-pruning-enumeration-terminal-prefix-20261024-declaration-review.md",
+      "sha256": "1687d10f1d4a24a0a1abee9efbd4ee25db3d29a542205c0b699ae367acf7082a"
+    },
+    "declaration-v3": {
+      "path": "/tmp/mcfta-pruning-enumeration-terminal-prefix-20261024-declaration-v3-review.md",
+      "sha256": "6fffd1f12e57ca9a770cf0694260e56d282c413d73b83819e77f3971956994d0"
+    },
+    "seal-script": {
+      "path": "/tmp/mcfta-pruning-enumeration-terminal-prefix-20261024-seal-script-review.md",
+      "sha256": "6500d88dc301bf0117d7f2c755d44b695e82cbc72bb0e96939dcc5b8fd70dd65"
+    }
+  },
+  "script_frozen_sha256": "69d6ffd576c76b7237fa5982c18954e2e4517e4f5473323cbc3cd185662f988f",
+  "activated_scripts": {
+    "check": {
+      "path": "/tmp/mcfta-pruning-enumeration-terminal-prefix-20261024-check.py",
+      "sha256": "3186f9f3d6c373850cccff57abeb77814db03314085d406695383036e12e5ca2"
+    },
+    "documents": {
+      "path": "/tmp/mcfta-pruning-enumeration-terminal-prefix-20261024-documents.py",
+      "sha256": "25f78e904a931e52613f60d884a9f723f3ba5a521746e5775ff08be3719c7709"
+    },
+    "archive": {
+      "path": "/tmp/mcfta-pruning-enumeration-terminal-prefix-20261024-archive.py",
+      "sha256": "86a69d278d1094681a3ee0f602f5b23dba8891f814939bfa8925f52bcdda065d"
+    },
+    "verify": {
+      "path": "/tmp/mcfta-pruning-enumeration-terminal-prefix-20261024-verify.py",
+      "sha256": "9d51ec15c3d53b82ba48e60a6d0101dec086ed272b55b8e187b1b32e23d6e3b8"
+    },
+    "publication": {
+      "path": "/tmp/mcfta-pruning-enumeration-terminal-prefix-20261024-publication.py",
+      "sha256": "4ba4d9af58020a05969893ce87d119b37eea57f44e1a5d8403509cf73cf56c70"
+    }
+  },
+  "root_full_read": "All31literalcontracts87lines,all272originalscopedrows/20packets67fields/2fullIHs,all40cuts890lines (969formatted),full12routes17identities and insertion rules. ExactV2 metadata repairs and exactV3 duplicate inversion packet read and all120/124/128pins verified. All473 selected script lines and both templates read. All independent reports read. No body or selected compiler execution precedes this gate. Root alone authors every action/math/instance body.",
+  "hard_cap": 360,
+  "versions": "WholeV1/V2 preserved;V2 removes expression pseudo-binders and repairs pending type;V3 inventories separate raw-run inversion. No literal, premise, proof-limit or math change."
+}

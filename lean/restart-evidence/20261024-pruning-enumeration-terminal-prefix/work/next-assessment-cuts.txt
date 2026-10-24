@@ -1,0 +1,407 @@
+CUT S01 200-218
+-}
+intersectUVarValue ::
+    (Hashable symbol, Typeable symbol) =>
+    Bool -> UVarValue symbol -> UVarValue symbol -> UVarValue symbol
+intersectUVarValue checkEmpty (UVarUnenumerated mn1 scs1) (UVarUnenumerated mn2 scs2) =
+    let newContents = case (mn1, mn2) of
+            (Nothing, x) -> x
+            (x, Nothing) -> x
+            (Just n1, Just n2) -> Just (emptyIfProvably (n1 `intersect` n2))
+        newConstraints = scs1 <> scs2
+     in UVarUnenumerated newContents newConstraints
+  where
+    -- An intersection can unfold a recursive node with constraints into a
+    -- node that needs itself again with no base case. Enumeration of such a
+    -- node would not end, so the merge makes it 'EmptyNode', and the caller
+    -- ends the branch.
+    emptyIfProvably n
+        | checkEmpty, reachesConstrainedMu n, provablyEmpty n = EmptyNode
+        | otherwise = n
+
+CUT S01 512-525
+-- | Intersect a node and inherited constraints into the value for a UVar.
+mergeNodeIntoUVarVal ::
+    (Hashable symbol, Typeable symbol) =>
+    UVar -> Node symbol -> Seq SuspendedConstraint -> EnumerateM symbol ()
+mergeNodeIntoUVarVal uv n scs = do
+    uv' <- getUVarRepresentative uv
+    let idx = uvarToInt uv'
+    values <- gets _uvarValues
+    checkEmpty <- gets _constrainedRecursion
+    let new = intersectUVarValue checkEmpty (UVarUnenumerated (Just n) scs) (values IntMap.! idx)
+    -- The slot keeps its suspended constraints and gains these.
+    writeUVarValue scs Sequence.Empty uv' new
+    inheritAncestry idx
+    guard $ not $ hasEmptyContents new
+
+CUT S01 730-747
+                            <> " for symbol type "
+                            <> show (typeRep @symbol)
+            (x :<| xs) -> do
+                reps <- mapM (getUVarRepresentative . scGetUVar) hereConstraints
+                forM_ xs $ \sc ->
+                    modify' $ \s ->
+                        s{_uvarRepresentative = UnionFind.union (scGetUVar x) (scGetUVar sc) (_uvarRepresentative s)}
+                uv <- getUVarRepresentative (scGetUVar x)
+                -- The waiting counts of the old representatives go to the new one.
+                let merged = IntSet.delete (uvarToInt uv) (IntSet.fromList (map uvarToInt (Foldable.toList reps)))
+                    move waiting old = case IntMap.lookup old waiting of
+                        Just waits -> IntMap.insertWith (+) (uvarToInt uv) waits (IntMap.delete old waiting)
+                        Nothing -> waiting
+                modify' $ \s -> s{_waitingUVars = IntSet.foldl' move (_waitingUVars s) merged}
+                mapM_ (assimilateUvarVal uv) reps
+
+                mergeNodeIntoUVarVal uv n descendantConstraints
+                return $ TermFragmentUVar uv
+
+CUT S02 121-129
+/-- Read the current representative's slot. -/
+def getValue (fuel uv : Nat) : EnumerateM Symbol Guard (UVarValue Symbol) := do
+  rawValue (← representative fuel uv)
+
+/-- Give a variable the ancestry of the current expansion. -/
+def inheritAncestry (uv : Nat) : EnumerateM Symbol Guard Unit :=
+  modify fun state => {state with recursionAncestry := (fun other =>
+    if other = uv then (state.expansionAncestry ++ state.recursionAncestry uv).eraseDups
+    else state.recursionAncestry other)}
+
+CUT S02 177-188
+/-- Add a reached node and its inherited suspended constraints. -/
+def mergeNode (graph : Graph Symbol Guard) (fuel uv node : Nat) (scs : List Suspended) :
+    EnumerateM Symbol Guard Unit := do
+  let root ← representative fuel uv
+  let previous ← rawValue root
+  match intersectValues graph (.unenumerated (some node) scs) previous with
+  | none => failure .invalidIntersection
+  | some merged =>
+      setValue root merged
+      inheritAncestry root
+      require (!hasEmptyContents graph merged)
+
+
+CUT S03 46-79
+theorem run_complete
+    (heap : InternedConstructorTemplates.State Symbol NativeGuard)
+    (before : EnumerationState.State Symbol EnumGuard)
+    (first : EnumerationState.Suspended) (rest : List EnumerationState.Suspended)
+    (waiting : EnumerationWaitingIndex.Waiting) (roots : Nat → Nat)
+    (paths : Roots before.representatives roots)
+    (counts : EnumerationCanonicalWaiting.Correct roots before.values waiting)
+    (safe : Safe before)
+    (bounded : ∀ sc ∈ first :: rest, sc.var < before.counter)
+    (pending : InputsPending before (first :: rest))
+    (realized : PendingRealized heap before) :
+    ∃ (fuel : Nat) (recorded : List Nat) (winner : Nat) (saved : EnumerationWaitingIndex.Waiting)
+      (scanned united after : EnumerationState.State Symbol EnumGuard),
+      (∀ (extra : Nat), ExceptT.run (run (fuel + extra) first rest waiting before) =
+        [.ok ((recorded, winner, saved), after)]) ∧
+      (∀ (extra : Nat), ExceptT.run (((first :: rest).mapM fun sc =>
+        representative (fuel + extra) sc.var) before) = [.ok (recorded, scanned)]) ∧
+      (∀ (extra : Nat), ExceptT.run ((rest.forM fun sc =>
+        unionVariables (fuel + extra) first.var sc.var) scanned) = [.ok ((), united)]) ∧
+      (∀ (extra : Nat), ExceptT.run (representative (fuel + extra) first.var united) = [.ok (winner, after)]) ∧
+      recorded = (first :: rest).map (fun sc => roots sc.var) ∧
+      saved = EnumerationCanonicalWaiting.moveMany winner
+        (EnumerationBuilderCaches.canonicalIds (recorded.filter (fun key => key != winner))) waiting ∧
+      winner ∈ recorded ∧ roots winner = winner ∧
+      Roots after.representatives (EnumerationCanonicalUnion.mergedRoots roots recorded winner) ∧
+      EnumerationCanonicalWaiting.Correct (EnumerationCanonicalUnion.mergedRoots roots recorded winner)
+        after.values saved ∧
+      after = {before with representatives := after.representatives} ∧
+      StorageValid after ∧ PendingRealized heap after ∧ PendingAt after winner ∧
+      (∀ (source : Nat), source ∈ recorded → PendingAt after source) ∧
+      (EnumerationBuilderCaches.canonicalIds (recorded.filter (fun key => key != winner))).Nodup ∧
+      (EnumerationBuilderCaches.canonicalIds (recorded.filter (fun key => key != winner))).Pairwise (· ≤ ·) ∧
+      (∀ (key : Nat), key ∈ EnumerationBuilderCaches.canonicalIds (recorded.filter (fun key => key != winner)) ↔
+        key ∈ recorded ∧ key ≠ winner) := by
+
+CUT S04 44-66
+def Ranges
+    [DecidableEq Symbol] [DecidableEq (InternedConstructorTemplates.EdgeKey Symbol Constraint)] [DecidableEq Node]
+    (checkEmpty : Bool) (sources : List Nat)
+    (beforeCaller : Caller width) (before : EnumerationState.State Symbol EnumGuard)
+    (target : Nat) (queries : Queries) : Prop :=
+  match sources with
+  | [] => True
+  | source :: rest =>
+      (if source = target then True else
+        match before.values[source]?, before.values[target]? with
+        | some (.unenumerated (some left) _), some (.unenumerated (some right) _) =>
+            match lookupNode beforeCaller.checked.native.machine.heap left,
+                lookupNode beforeCaller.checked.native.machine.heap right with
+            | some first, some second => SourceCurrentAllocatedNativeRequestBounds.WordRanges
+                (.code (SourceRecursiveIntersectionCode.requestNode IntersectionEmptyDomain.emptyDomain first second))
+                beforeCaller.checked
+            | _, _ => True
+        | _, _ => True) ∧
+      ∀ nativeFuel p h action afterCaller saved after,
+        SourcePruningEnumerationDispatch.dispatch checkEmpty nativeFuel p h
+          beforeCaller before source target queries = (.ok (some action), afterCaller, saved) →
+        ExceptT.run (action before) = [.ok ((), after)] →
+        Ranges checkEmpty rest afterCaller after target saved
+
+CUT S04 69-83
+theorem run_complete
+    [DecidableEq Symbol] [DecidableEq (InternedConstructorTemplates.EdgeKey Symbol Constraint)] [DecidableEq Node]
+    (formulas : SourceGuards.Formulas FullSyntax.Formula)
+    (solver : SourceGuards.Entailment FullSyntax.Formula)
+    (inventory : Inventory) (beforeCaller : Caller width)
+    (before : EnumerationState.State Symbol EnumGuard) (sources : List Nat)
+    (checkEmpty : Bool) (target : Nat) (memos : Memos)
+    (initial : Context formulas solver inventory beforeCaller memos)
+    (realized : PendingRealized beforeCaller.checked.native.machine.heap before)
+    (targetPending : ∃ (node : Option Nat) (scs : List EnumerationState.Suspended),
+      before.values[target]? = some (.unenumerated node scs))
+    (selected : ∀ source ∈ sources, before.values[source]? = some .eliminated ∨
+      ∃ (node : Option Nat) (scs : List EnumerationState.Suspended),
+        before.values[source]? = some (.unenumerated node scs))
+    (ranges : Ranges checkEmpty sources beforeCaller before target memos.query) :
+
+CUT S05 19-25
+def PendingRealized (heap : InternedConstructorTemplates.State Symbol NativeGuard)
+    (state : EnumerationState.State Symbol EnumGuard) : Prop :=
+  ∀ (slot node : Nat) (scs : List EnumerationState.Suspended),
+    state.values[slot]? = some (.unenumerated (some node) scs) →
+      ∃ value : InternedConstructorTemplates.Value Symbol NativeGuard,
+        lookupNode heap node = some value ∧
+        InternedProbeProvenance.Available heap value ∧ value.free = []
+
+CUT S05 88-97
+theorem observation_complete (heap : InternedConstructorTemplates.State Symbol NativeGuard)
+    (before : EnumerationState.State Symbol EnumGuard) (uv : Nat)
+    (realized : PendingRealized heap before)
+    (storage : StorageValid before) (inside : uv < before.counter) :
+    ∃ fuel observed after,
+      Success (getUnexpandedNode fuel uv) before observed after ∧ Frame before after ∧
+      (∀ node, observed = some node →
+        ∃ value : InternedConstructorTemplates.Value Symbol NativeGuard,
+          lookupNode heap node = some value ∧
+          InternedProbeProvenance.Available heap value ∧ value.free = []) := by
+
+CUT S06 7-21
+/-- An observed pending slot derives a finite reread and its actual compressed state. -/
+theorem pending_reread_complete (readFuel uv oldHandle : Nat) (scs : List EnumerationState.Suspended)
+    (before readAfter entry : EnumerationState.State Symbol Guard)
+    (total : UnionFind.Total before.representatives)
+    (observed : Success (getValue readFuel uv) before (.unenumerated (some oldHandle) scs) readAfter)
+    (entered : Frame readAfter entry) :
+    ∃ (root size rereadFuel : Nat) (after : EnumerationState.State Symbol Guard),
+      Frame before readAfter ∧ UnionFind.Reaches before.representatives uv root size ∧
+      Success (representative rereadFuel uv) entry root after ∧
+      Frame entry after ∧ Frame before after ∧
+      after.values[root]? = some (.unenumerated (some oldHandle) scs) ∧ root < after.values.length := by
+  obtain ⟨found, lookup, initialStored, readState⟩ :=
+    (getValue_success readFuel uv before readAfter (.unenumerated (some oldHandle) scs)).mp observed
+  have firstRepresentative : Success (representative readFuel uv) before found.representative readAfter := by
+    exact (EnumerationSchedule.representative_success readFuel uv before readAfter found.representative).mpr
+
+CUT S07 42-54
+theorem write_available_realized
+    (heap : InternedConstructorTemplates.State Symbol NativeGuard)
+    (before : EnumerationState.State Symbol EnumGuard)
+    (value : InternedConstructorTemplates.Value Symbol NativeGuard) (slot : Nat)
+    (scs : List EnumerationState.Suspended)
+    (coherent : InternedRecordCoherence.Coherent heap)
+    (available : InternedProbeProvenance.Available heap value) (closed : value.free = [])
+    (realized : PendingRealized heap before) (inside : slot < before.values.length) :
+    ∃ (node : Nat) (after : EnumerationState.State Symbol EnumGuard),
+      encodeNode value = some node ∧
+      Success (setValue slot (.unenumerated (some node) scs)) before () after ∧
+      after = {before with values := before.values.set slot (.unenumerated (some node) scs)} ∧
+      after.values[slot]? = some (.unenumerated (some node) scs) ∧ PendingRealized heap after := by
+
+CUT S08 644-650
+structure StorageValid (state : State Symbol Guard) : Prop where
+  aligned : SupplyAligned state
+  total : UnionFind.Total state.representatives
+  forest : ForestBound state.counter state.representatives
+  values : ∀ value ∈ state.values, SlotBound state.counter value
+  guards : ∀ obligation ∈ state.obligations, FragmentBound state.counter obligation.2
+
+
+CUT S09 78-100
+theorem finite [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)]
+    (formulas : SourceGuards.Formulas FullSyntax.Formula) (solver : SourceGuards.Entailment FullSyntax.Formula)
+    (inventory : Inventory) (left right : Value Symbol Guard) (before : Checked width)
+    (ready : Ready before) (admitted : At formulas solver inventory before)
+    (leftAvailable : Available before.native.machine.heap left) (rightAvailable : Available before.native.machine.heap right)
+    (leftClosed : left.free = []) (rightClosed : right.free = [])
+    (ranges : WordRanges (.code (requestNode IntersectionEmptyDomain.emptyDomain left right)) before)
+    (memos : Memos) (valid : Valid before.native.machine.heap memos) :
+    ∃ next : Inventory, ∃ value after,
+      next.source = before.native.machine.heap ∧ next.roots = inventory.roots ++ [left, right] ∧
+      Receipt formulas solver next left right before value after memos := by
+  obtain ⟨next, fuel, value, after, source, roots, query, current⟩ :=
+    SourceCurrentAllocatedNativeInventoryState.query_complete inventory formulas solver before ready.good admitted
+      ready.scopedCache ready.semantic ready.idle left right leftAvailable rightAvailable leftClosed rightClosed ranges
+  have checked := SourceCurrentAllocatedNativeTraceEffects.effects query.trace ready.good ready.semantic ready.costs
+    (fun _ => trivial)
+  obtain ⟨events, runs, silent, finalValid⟩ := SourceCurrentAllocatedNativeGlobalMemos.trace_memos
+    query.trace ready.good ready.semantic ready.costs (fun _ => trivial) memos valid
+  exact ⟨next, value, after, source, roots, ⟨.run query.trace,
+    ⟨checked.1, checked.2.1.ready.semantic, checked.2.1.ready.costs, query.scopedCache, query.idle⟩,
+    current, checked.2.1, checked.2.2, query.result, query.closed, query.meaning,
+    finalValid, events, runs, silent⟩⟩
+
+
+CUT S10 26-44
+/-- Initial query-entry counters admit every raw prefix with the same actual warm tables. -/
+theorem warm_initial_ranges (bits : Nat) (before : Checked (bits + 2))
+    (good : Good before) (semantic : SemanticReady before.native.machine.heap)
+    (left right : Value Symbol Guard) (leftOriginal : Original left) (rightOriginal : Original right)
+    (leftAvailable : Available before.native.machine.heap left)
+    (rightAvailable : Available before.native.machine.heap right)
+    (nodes : before.native.machine.heap.nodes.next < 2 ^ bits)
+    (edges : before.native.machine.heap.edges.next ≤ 2 ^ (bits + 2))
+    (room : before.native.machine.domains.next +
+      2 ^ (before.native.machine.heap.nodes.next +
+        before.native.machine.heap.nodes.next * before.native.machine.heap.nodes.next) < 2 ^ (bits + 1)) :
+    WordRanges (.code (requestNode IntersectionEmptyDomain.emptyDomain left right)) before ∧
+      SourceCurrentAllocatedNativeDomainTrace.Prefixes
+        (SourceRecursiveIntersectionSourceInventory.domains before.native.machine.heap)
+        (.code (requestNode IntersectionEmptyDomain.emptyDomain left right)) before := by
+  let source := before.native.machine.heap
+  let inventory := SourceRecursiveIntersectionSourceInventory.domains source
+  let request : NodeRequest Symbol Guard := ⟨IntersectionEmptyDomain.emptyDomain, left, right⟩
+  have resources : Resources bits source inventory before.native.machine.domains :=
+
+CUT S11 62-83
+theorem initial (bits : Nat) (holds : Guard → Language.Term Symbol → Bool) (before : Checked (bits + 2))
+    (good : Good before) (semantic : SourceEqualityRequiredSemanticCache.SemanticReady before.native.machine.heap)
+    (idle : SourceRecursiveIntersectionNative.Idle before.native)
+    (left right : Value Symbol Guard) (leftOriginal : Original left) (rightOriginal : Original right)
+    (leftAvailable : Available before.native.machine.heap left) (rightAvailable : Available before.native.machine.heap right)
+    (leftClosed : left.free = []) (rightClosed : right.free = [])
+    (stored : Stored mass before.native.machine.heap)
+    (nodes : before.native.machine.heap.nodes.next < 2 ^ bits)
+    (edges : before.native.machine.heap.edges.next ≤ 2 ^ (bits + 2))
+    (room : before.native.machine.domains.next +
+      2 ^ (before.native.machine.heap.nodes.next + before.native.machine.heap.nodes.next * before.native.machine.heap.nodes.next) < 2 ^ (bits + 1)) :
+    let request : NodeRequest Symbol Guard := ⟨IntersectionEmptyDomain.emptyDomain, left, right⟩
+    let bound := instructionBound before.native.machine.heap.nodes.next before.native.machine.heap.edges.next mass
+    ∃ fuel value after,
+      Receipt fuel (.code (requestNode request.domain request.left request.right)) before value after
+        (fun final result => Available final.heap result) ∧
+      SourceRecursiveIntersectionNative.Idle after.native ∧ fuel ≤ bound ∧
+      execute (bound + 1) (.code (requestNode request.domain request.left request.right)) before = .done value after ∧
+      Stored (massAfter bound mass) after.native.machine.heap ∧ InternedValueMass.value value ≤ massAfter bound mass ∧
+      after.native.machine.heap.nodes.next ≤ before.native.machine.heap.nodes.next + credit bound mass ∧
+      after.native.machine.heap.edges.next ≤ before.native.machine.heap.edges.next + credit bound mass ∧
+      after.native.machine.domains.next ≤ before.native.machine.domains.next + bound := by
+
+CUT S12 104-116
+/-- Numeric entry conditions for the checked native query at this width. -/
+def Room (bits : Nat) (profile : Profile) : Prop :=
+  profile.nodes < 2 ^ bits ∧ profile.edges ≤ 2 ^ (bits + 2) ∧
+    profile.domains + 2 ^ (profile.nodes + profile.nodes * profile.nodes) < 2 ^ (bits + 1)
+
+/-- Entry room for a larger profile gives entry room for a smaller profile. -/
+theorem Room.mono {bits : Nat} {first last : Profile} (room : Room bits last)
+    (below : Le first last) : Room bits first := by
+  have exponent := Nat.add_le_add below.1 (Nat.mul_le_mul below.1 below.1)
+  have power := Nat.pow_le_pow_right (by decide : 1 ≤ 2) exponent
+  exact ⟨Nat.lt_of_le_of_lt below.1 room.1, Nat.le_trans below.2.1 room.2.1,
+    Nat.lt_of_le_of_lt (Nat.add_le_add below.2.2.1 power) room.2.2⟩
+
+
+CUT S12 153-164
+theorem Reserved.prefix {bits first last : Nat} {profile : Profile}
+    (reservation : Reserved bits profile last) (counts : first ≤ last) : Reserved bits profile first :=
+  fun index less => reservation index (Nat.lt_of_lt_of_le less counts)
+
+/-- One numeric test at the last query entry supplies the full finite reservation. -/
+theorem reserved_iff_last (bits : Nat) (profile : Profile) (count : Nat) :
+    Reserved bits profile (count + 1) ↔ Room bits (advance profile count) := by
+  constructor
+  · intro reservation
+    exact reservation count (by omega)
+  · intro room index less
+    exact room.mono (advance_count_mono profile (by omega))
+
+CUT S13 91-98
+theorem closed_original (value : Value Symbol Guard) (state : State Symbol Guard) (coherent : Coherent state)
+    (available : Available state value) (closed : value.free = []) : Original value := by
+  apply original_of_free value state coherent available
+  intro name member
+  rw [closed] at member
+  cases member
+
+end MicroCFTA.SourceRecursiveIntersectionOriginalOutput
+
+CUT S14 27-37
+noncomputable def check
+    [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Constraint)] [DecidableEq Node]
+    (p h : Nat) (query : Node) (before : Checked width) (memo : Fourth)
+    (queries : Queries) : SourceCurrentAllocatedConjunctionWorker.Outcome width × Queries :=
+  let guardResult : Bool × Queries := SourceEndpointMemo.run query queries
+  if guardResult.1 then
+    (SourceCurrentAllocatedConjunctionWorker.call p h 1000 query before memo, guardResult.2)
+  else (.done false before memo, guardResult.2)
+
+/-- Derive the enabled replacement from two actual pending slots and the full input caller. -/
+theorem pending_enabled_complete
+
+CUT S15 62-74
+structure Frame (formulas : SourceGuards.Formulas FullSyntax.Formula)
+    (solver : SourceGuards.Entailment FullSyntax.Formula) (inventory : Inventory) (state : Checked width) : Prop where
+  /-- The same state retains all physical query invariants. -/
+  ready : Ready state
+  /-- Populated native cells retain current inventory admission. -/
+  admitted : At formulas solver inventory state
+  /-- The current heap retains its semantic and guard observations. -/
+  context : Context Plain inventory.source state.native.machine
+  /-- Completed native cells retain both joint laws. -/
+  joint : SourceCurrentConstrainedCapCheckedJointCache.Stored Plain inventory.source state.native
+  /-- Every allocated native cell retains its captured source witnesses. -/
+  origins : SourceCurrentConstrainedCapCheckedJointOrigins.Stored inventory.source state.native
+
+
+CUT S15 114-124
+theorem complete (profile : Profile) (depth : Nat)
+    (formulas : SourceGuards.Formulas FullSyntax.Formula) (solver : SourceGuards.Entailment FullSyntax.Formula)
+    (inventory : Inventory) (before : Checked (bits + 2)) (frame : Frame formulas solver inventory before)
+    (fits : Fits profile before) (room : Room bits profile)
+    (left right : Value Symbol Guard)
+    (leftAvailable : Available before.native.machine.heap left) (rightAvailable : Available before.native.machine.heap right)
+    (leftClosed : left.free = []) (rightClosed : right.free = [])
+    (leftCap : SourceCurrentConstrainedCap.Cap Plain depth left)
+    (rightCap : SourceCurrentConstrainedCap.Cap Plain depth right)
+    (memos : Memos) (valid : Valid before.native.machine.heap memos) :
+    ∃ next fuel value after, Receipt profile depth formulas solver next fuel left right before value after memos := by
+
+CUT S16 25-36
+structure Context (formulas : SourceGuards.Formulas FullSyntax.Formula)
+    (solver : SourceGuards.Entailment FullSyntax.Formula) (inventory : Inventory)
+    (state : Caller width) (memos : Memos) : Prop where
+  ready : SourceCurrentConjunctionClassScan.Ready state.checked
+  admitted : At formulas solver inventory state.checked
+  sound : SourceCurrentAllocatedPartialMemoSound.Sound formulas solver state
+  stored : SourceCurrentMemoMergeEffects.Stored state.checked.native.machine.heap state.merge
+  covered : ∀ ambient, SourceCurrentMemoMergeLanguage.CacheCovers (SourceEqualityPCSGuard.holds formulas solver) ambient state.merge
+  correct : SourceCurrentEmptinessMemo.Correct formulas solver state.checked.native.machine.heap state.fourth
+  globals : EndpointMemoGateTrace.Valid state.checked.native.machine.heap memos
+  probes : InternedFreshOrdinaryProbeHeap.Heap state.checked.native.machine.heap
+
+
+CUT S17 22-35
+/-- Reject Empty before target replacement, source elimination and ancestry transfer. -/
+def finish (source target resultHandle : Nat)
+    (sourceScs targetScs : List EnumerationState.Suspended)
+    (result : InternedConstructorTemplates.Value Symbol Constraint) :
+    EnumerateM Symbol EnumGuard Unit :=
+  match result with
+  | .empty => reject
+  | _ => do
+      setValue target (.unenumerated (some resultHandle) (sourceScs ++ targetScs))
+      setValue source .eliminated
+      modify fun state => {state with recursionAncestry := (fun other =>
+        if other = target then
+          (state.recursionAncestry source ++ state.recursionAncestry target).eraseDups
+        else state.recursionAncestry other)}
+
+CUT S12 117-119
+/-- The original forecast has entry room for each query in a finite sequence. -/
+def Reserved (bits : Nat) (profile : Profile) (count : Nat) : Prop :=
+  ∀ index, index < count → Room bits (advance profile index)
+

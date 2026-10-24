@@ -1,0 +1,47 @@
+{
+  "count": 2,
+  "IH_count": 2,
+  "main_theorem_induction": false,
+  "inductions": [
+    {
+      "scope": "scanExact",
+      "literal": "induction items with",
+      "fixed": [
+        "fuel"
+      ],
+      "generalized_by_intros_after_induction": [
+        "entry",
+        "exit",
+        "recorded",
+        "observed"
+      ],
+      "constructors": [
+        "nil",
+        "cons sc items ih"
+      ],
+      "IH_name": "ih",
+      "IH_type": "∀ (entry exit : EnumerationState.State Symbol EnumGuard) (recorded : List Nat),\n  Success (items.mapM fun sc => representative fuel sc.var) entry recorded exit →\n  ExceptT.run ((items.mapM fun sc => representative fuel sc.var) entry) = [.ok (recorded, exit)]",
+      "IH_call": "ih middle last tail tailRun"
+    },
+    {
+      "scope": "unionsExact",
+      "literal": "induction items with",
+      "fixed": [
+        "fuel",
+        "anchor"
+      ],
+      "generalized_by_intros_after_induction": [
+        "entry",
+        "exit",
+        "observed"
+      ],
+      "constructors": [
+        "nil",
+        "cons sc items ih"
+      ],
+      "IH_name": "ih",
+      "IH_type": "∀ (entry exit : EnumerationState.State Symbol EnumGuard),\n  Success (items.forM fun sc => unionVariables fuel anchor sc.var) entry () exit →\n  ExceptT.run ((items.forM fun sc => unionVariables fuel anchor sc.var) entry) = [.ok ((), exit)]",
+      "IH_call": "ih middle exit continued"
+    }
+  ]
+}

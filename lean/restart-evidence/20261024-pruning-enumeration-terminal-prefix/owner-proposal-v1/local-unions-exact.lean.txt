@@ -1,0 +1,4 @@
+have unionsExact : ∀ (fuel anchor : Nat) (items : List EnumerationState.Suspended)
+      (entry exit : EnumerationState.State Symbol EnumGuard),
+      Success (items.forM fun sc => unionVariables fuel anchor sc.var) entry () exit →
+      ExceptT.run ((items.forM fun sc => unionVariables fuel anchor sc.var) entry) = [.ok ((), exit)]

@@ -1,0 +1,10 @@
+--- strict-1/MicroCFTA/SourcePruningEnumerationTerminalPrefix.lean
++++ strict-2/MicroCFTA/SourcePruningEnumerationTerminalPrefix.lean
+@@ -256,6 +256,6 @@
+   · intro extra
+     obtain ⟨found, lookup, rootSame, finalSame⟩ :=
+       (representative_success (fuel + extra) first.var united after winner).mp (resolutionMore extra)
+-    simpa only [← rootSame, ← finalSame] using representative_exact (fuel + extra) first.var united found lookup
++    simpa only [← rootSame, ← finalSame, ExceptT.run] using representative_exact (fuel + extra) first.var united found lookup
+ 
+ end MicroCFTA.SourcePruningEnumerationTerminalPrefix

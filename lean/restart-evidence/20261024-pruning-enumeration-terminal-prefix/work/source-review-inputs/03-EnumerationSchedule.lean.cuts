@@ -1,0 +1,172 @@
+def Roots (forest : UnionFind.Forest) (roots : Nat → Nat) : Prop :=
+  ∀ uv, ∃ size, UnionFind.Reaches forest uv (roots uv) size
+
+/-- A total forest supplies canonical representatives without a search-bound assumption. -/
+theorem roots_exist (forest : UnionFind.Forest) (valid : UnionFind.Total forest) :
+    ∃ roots, Roots forest roots := by
+  classical
+  refine ⟨fun uv => (valid uv).choose, ?_⟩
+  intro uv
+  exact (valid uv).choose_spec
+
+/-- The scan retains the value array and every chosen representative. -/
+structure ScanValid (values : List (UVarValue Symbol)) (roots : Nat → Nat)
+    (state : State Symbol Guard) : Prop where
+  values : state.values = values
+  roots : Roots state.representatives roots
+
+/-- Successful representative lookup exposes its actual forest update. -/
+theorem representative_success (fuel uv : Nat) (before after : State Symbol Guard) (root : Nat) :
+    Success (representative fuel uv) before root after ↔
+      ∃ found, UnionFind.findRoot fuel before.representatives uv = some found ∧
+        root = found.representative ∧ after = {before with representatives := found.forest} := by
+  cases lookup : UnionFind.findRoot fuel before.representatives uv with
+  | none =>
+      simp [Success, representative, lookup, EnumerationState.failure, bind, get, getThe, MonadStateOf.get,
+        pure, StateT.bind, StateT.get, ExceptT.bind, ExceptT.pure, ExceptT.bindCont, ExceptT.mk, ExceptT.run]
+  | some found =>
+      simp only [Success, representative_exact fuel uv before found lookup, ExceptT.run]
+      simp
+
+/-- Path compression leaves the scan's representative map unchanged. -/
+theorem representative_scan (values : List (UVarValue Symbol)) (roots : Nat → Nat)
+    (before after : State Symbol Guard) (fuel uv root : Nat)
+    (valid : ScanValid values roots before)
+    (success : Success (representative fuel uv) before root after) :
+    ScanValid values roots after ∧ root = roots uv := by
+  obtain ⟨found, lookup, rfl, rfl⟩ := (representative_success fuel uv before after root).mp success
+  obtain ⟨size, path⟩ := valid.roots uv
+  obtain ⟨actual, preserved⟩ := UnionFind.findRoot_correct fuel before.representatives uv found lookup
+  refine ⟨⟨valid.values, ?_⟩, (UnionFind.reaches_unique actual path).1⟩
+theorem resolve_members (roots : Nat → Nat) (scs : List Suspended) (blocked : List Nat) (uv : Nat) :
+    uv ∈ scs.foldl (fun previous sc => roots sc.var :: previous) blocked ↔
+      uv ∈ blocked ∨ ∃ sc ∈ scs, roots sc.var = uv := by
+  induction scs generalizing blocked with
+  | nil => simp
+  | cons first rest ih =>
+      simp only [List.foldl_cons, ih, List.mem_cons]
+      clear ih
+      grind only
+/-- A live slot holds a value exactly when its index is a representative. -/
+def IsRoot (forest : UnionFind.Forest) (uv : Nat) : Prop :=
+  ∃ size, UnionFind.Reaches forest uv uv size
+
+/-- Every allocated nonrepresentative is eliminated; every allocated representative is live. -/
+def LiveRoots (state : State Symbol Guard) : Prop :=
+  ∀ uv value, state.values[uv]? = some value → (value ≠ .eliminated ↔ IsRoot state.representatives uv)
+theorem representatives_scan (values : List (UVarValue Symbol)) (roots : Nat → Nat)
+    (fuel : Nat) (scs : List Suspended) (before after : State Symbol Guard) (recorded : List Nat)
+    (valid : ScanValid values roots before)
+    (success : Success (scs.mapM fun sc => representative fuel sc.var) before recorded after) :
+    ScanValid values roots after ∧ recorded = scs.map (fun sc => roots sc.var) := by
+  obtain ⟨preserved, related⟩ := mapM_sound (fun sc => representative fuel sc.var)
+    (ScanValid values roots) (fun sc root => root = roots sc.var)
+    (fun sc before root after valid success => representative_scan values roots before after fuel sc.var root valid success)
+    scs before after recorded valid success
+  exact ⟨preserved, all₂_map_eq _ _ _ related⟩
+
+/-- Successful concrete union exposes its exact forest update and retains all values. -/
+theorem unionVariables_success (fuel left right : Nat) (before after : State Symbol Guard) :
+    Success (unionVariables fuel left right) before () after ↔
+      ∃ forest, UnionFind.union fuel fuel before.representatives left right = some forest ∧
+        after = {before with representatives := forest} := by
+  cases result : UnionFind.union fuel fuel before.representatives left right with
+  | none =>
+      simp [Success, unionVariables, result, EnumerationState.failure, bind, get, getThe, MonadStateOf.get,
+        pure, StateT.bind, StateT.get, ExceptT.bind, ExceptT.pure, ExceptT.bindCont, ExceptT.mk, ExceptT.run]
+  | some forest =>
+      simp only [Success, union_exact fuel left right before forest result, ExceptT.run]
+      simp
+
+/-- The terminal union loop retains old slots while it joins the selected classes. -/
+structure Merging (values : List (UVarValue Symbol)) (roots : Nat → Nat) (selected : List Nat)
+    (state : State Symbol Guard) : Prop where
+  values : state.values = values
+  total : UnionFind.Total state.representatives
+  joined : Joined roots selected state.representatives
+  oldRoots : ∀ uv, IsRoot state.representatives uv → roots uv = uv
+
+/-- The pre-scan establishes the union-loop invariant for the first selected class. -/
+theorem merging_initial (values : List (UVarValue Symbol)) (roots : Nat → Nat)
+    (state : State Symbol Guard) (first : Nat) (valid : ScanValid values roots state) :
+    Merging values roots [roots first] state := by
+  refine ⟨valid.values, ?_, joined_single state.representatives roots valid.roots first, ?_⟩
+  · intro uv
+    obtain ⟨size, path⟩ := valid.roots uv
+    exact ⟨roots uv, size, path⟩
+  · intro uv root
+    exact (root_iff state.representatives roots valid.roots uv).mp root
+
+/-- The actual next union extends the selected group and creates no new root indices. -/
+theorem merging_step (values : List (UVarValue Symbol)) (roots : Nat → Nat) (selected : List Nat)
+    (fuel first next : Nat) (before after : State Symbol Guard)
+    (valid : Merging values roots selected before) (firstSelected : roots first ∈ selected)
+    (success : Success (unionVariables fuel first next) before () after) :
+    Merging values roots (roots next :: selected) after := by
+  obtain ⟨forest, unionResult, rfl⟩ := (unionVariables_success fuel first next before after).mp success
+  refine ⟨valid.values, (UnionFind.union_correct valid.total unionResult).1,
+    joined_union before.representatives valid.total roots selected valid.joined fuel first next firstSelected forest unionResult, ?_⟩
+  intro uv root
+  exact valid.oldRoots uv (union_no_new_root before.representatives valid.total fuel first next forest unionResult uv root)
+
+/-- The actual batched terminal unions join every selected class, including duplicates. -/
+theorem terminal_unions (values : List (UVarValue Symbol)) (roots : Nat → Nat)
+    (selected : List Nat) (fuel first : Nat) (rest : List Suspended) (before after : State Symbol Guard)
+    (valid : Merging values roots selected before) (firstSelected : roots first ∈ selected)
+    (success : Success (rest.forM fun sc => unionVariables fuel first sc.var) before () after) :
+    Merging values roots (rest.foldl (fun selected sc => roots sc.var :: selected) selected) after := by
+  induction rest generalizing selected before with
+  | nil =>
+      obtain ⟨_, same⟩ := (success_pure () () before after).mp success
+      subst after
+      exact valid
+  | cons sc rest ih =>
+      change Success (unionVariables fuel first sc.var >>= fun _ => rest.forM fun sc => unionVariables fuel first sc.var)
+        before () after at success
+      obtain ⟨ignored, middle, firstSuccess, continued⟩ := (success_bind _ _ _ _ _).mp success
+      cases ignored
+      have validMiddle := merging_step values roots selected fuel first sc.var before middle valid firstSelected firstSuccess
+/-- Once all selected classes are joined, only the winning selected root remains a root. -/
+theorem joined_root_set (values : List (UVarValue Symbol)) (roots : Nat → Nat) (selected : List Nat)
+    (state : State Symbol Guard) (valid : Merging values roots selected state) (first target count : Nat)
+    (firstSelected : roots first ∈ selected)
+    (path : UnionFind.Reaches state.representatives first target count) (uv : Nat) :
+    IsRoot state.representatives uv ↔ roots uv = uv ∧ (uv ∉ selected ∨ uv = target) := by
+  have targetRoot : IsRoot state.representatives target := ⟨count, .root (UnionFind.reaches_terminal path)⟩
+  constructor
+  · intro root
+    have fixed := valid.oldRoots uv root
+    refine ⟨fixed, ?_⟩
+    by_cases member : uv ∈ selected
+    · have related := (valid.joined first uv).mpr (Or.inr ⟨firstSelected, by simpa [fixed] using member⟩)
+      obtain ⟨size, self⟩ := root
+      have rootEqual := (UnionFind.sameClass_iff_roots path self).mp related
+      exact Or.inr rootEqual.symm
+    · exact Or.inl member
+  · rintro ⟨fixed, unselected | rfl⟩
+    · obtain ⟨representative, size, reached⟩ := valid.total uv
+      have representativeRoot : IsRoot state.representatives representative :=
+        ⟨size, .root (UnionFind.reaches_terminal reached)⟩
+      have representativeFixed := valid.oldRoots representative representativeRoot
+      have related := UnionFind.sameClass_root reached
+      rcases (valid.joined uv representative).mp related with same | both
+      · have sameIndex : representative = uv := by simpa [fixed, representativeFixed] using same.symm
+        exact ⟨size, by simpa [sameIndex] using reached⟩
+      · exact (unselected (by simpa [fixed] using both.1)).elim
+    · exact targetRoot
+
+theorem merging_representative (values : List (UVarValue Symbol)) (roots : Nat → Nat) (selected : List Nat)
+    (fuel uv target : Nat) (before after : State Symbol Guard) (valid : Merging values roots selected before)
+    (success : Success (representative fuel uv) before target after) :
+    Merging values roots selected after ∧ ∃ count, UnionFind.Reaches after.representatives uv target count := by
+  obtain ⟨found, lookup, rfl, rfl⟩ := (representative_success fuel uv before after target).mp success
+  refine ⟨⟨valid.values, UnionFind.findRoot_total valid.total lookup, ?_, ?_⟩, ?_⟩
+  · intro left right
+    exact (UnionFind.findRoot_classes valid.total lookup left right).trans (valid.joined left right)
+  · intro other root
+    exact valid.oldRoots other ((findRoot_isRoot before.representatives valid.total fuel uv found lookup other).mp root)
+  · exact ⟨found.size, (UnionFind.findRoot_correct fuel before.representatives uv found lookup).2
+      (UnionFind.findRoot_correct fuel before.representatives uv found lookup).1⟩
+
+/-- Storage bounds and the live-representative invariant at a completed local action. -/
+def Safe (state : State Symbol Guard) : Prop := StorageValid state ∧ LiveRoots state

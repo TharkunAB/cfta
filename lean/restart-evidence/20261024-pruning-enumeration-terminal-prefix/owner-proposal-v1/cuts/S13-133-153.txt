@@ -1,0 +1,21 @@
+def find (fuel : Nat) (forest : Forest) (uv : Nat) : Option (Nat × Forest) :=
+  (findRoot fuel forest uv).map fun found => (found.representative, found.forest)
+
+/-- The optimized public wrapper has the identical representative and final map. -/
+theorem find_eq (fuel : Nat) (forest : Forest) (uv : Nat) :
+    find fuel forest uv = (UnionFind.findRoot fuel forest uv).map
+      (fun found => (found.representative, found.forest)) := by rw [find, findRoot_eq]
+
+/-- The source union uses conditional-write lookup before its unchanged size-based link. -/
+def union (leftFuel rightFuel : Nat) (forest : Forest) (left right : Nat) : Option Forest := do
+  let first ← findRoot leftFuel forest left
+  let second ← findRoot rightFuel first.forest right
+  if first.representative = second.representative then some second.forest
+  else if first.size < second.size then
+    some (link second.forest first.representative second.representative first.size second.size)
+  else some (link second.forest second.representative first.representative second.size first.size)
+
+/-- Both compressed lookups preserve the complete existing union result. -/
+theorem union_eq (leftFuel rightFuel : Nat) (forest : Forest) (left right : Nat) :
+    union leftFuel rightFuel forest left right = UnionFind.union leftFuel rightFuel forest left right := by
+  simp only [union, UnionFind.union, findRoot_eq]

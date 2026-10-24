@@ -1,0 +1,79 @@
+theorem representative_moreFuel (fuel extra uv : Nat) :
+    Retains (representative (Symbol := Symbol) (Guard := Guard) fuel uv) (representative (fuel + extra) uv) := by
+  intro before root after success
+  obtain ⟨found, lookup, rfl, rfl⟩ := (representative_success fuel uv before after root).mp success
+  exact (representative_success (fuel + extra) uv before _ _).mpr
+    ⟨found, UnionFind.findRoot_moreFuel fuel extra before.representatives uv found lookup, rfl, rfl⟩
+
+/-- Reading a representative value retains its successful slot result. -/
+theorem getValue_moreFuel (fuel extra uv : Nat) :
+    Retains (getValue (Symbol := Symbol) (Guard := Guard) fuel uv) (getValue (fuel + extra) uv) := by
+  unfold getValue
+  exact retains_bind _ _ _ _ (representative_moreFuel fuel extra uv) (fun _ => retains_refl _)
+
+/-- An equality-variable union retains its exact successful state. -/
+theorem unionVariables_moreFuel (fuel extra left right : Nat) :
+    Retains (unionVariables (Symbol := Symbol) (Guard := Guard) fuel left right)
+      (unionVariables (fuel + extra) left right) := by
+  intro before ignored after success
+  cases ignored
+  obtain ⟨forest, lookup, rfl⟩ := (unionVariables_success fuel left right before after).mp success
+  exact (unionVariables_success (fuel + extra) left right before _).mpr
+theorem mapM_terminates (action : Nat → α → EnumerateM Symbol Guard β)
+    (invariant : State Symbol Guard → Prop)
+    (more : ∀ fuel extra input, Retains (action fuel input) (action (fuel + extra) input))
+    (step : ∀ input before, invariant before →
+      ∃ fuel value after, Success (action fuel input) before value after ∧ invariant after)
+    (inputs : List α) (before : State Symbol Guard) (valid : invariant before) :
+    ∃ fuel values after, Success (inputs.mapM (action fuel)) before values after ∧ invariant after := by
+  induction inputs generalizing before with
+  | nil => exact ⟨0, [], before, (success_pure _ _ _ _).mpr ⟨rfl, rfl⟩, valid⟩
+  | cons input rest ih =>
+      obtain ⟨firstFuel, value, middle, first, middleValid⟩ := step input before valid
+      obtain ⟨restFuel, values, after, continued, afterValid⟩ := ih middle middleValid
+      refine ⟨firstFuel + restFuel, value :: values, after, ?_, afterValid⟩
+      rw [List.mapM_cons]
+      apply (success_bind _ _ _ _ _).mpr
+      refine ⟨value, middle, more firstFuel restFuel input _ _ _ first, ?_⟩
+      apply (success_bind _ _ _ _ _).mpr
+      refine ⟨values, after, ?_, (success_pure _ _ _ _).mpr ⟨rfl, rfl⟩⟩
+      have extended := retains_mapM _ _ (more restFuel firstFuel) rest _ _ _ continued
+      simpa [Nat.add_comm] using extended
+
+/-- Discarded-result actions with finite bounds have one common sufficient bound. -/
+theorem forM_terminates (action : Nat → α → EnumerateM Symbol Guard PUnit)
+    (invariant : State Symbol Guard → Prop)
+    (more : ∀ fuel extra input, Retains (action fuel input) (action (fuel + extra) input))
+    (step : ∀ input before, invariant before →
+      ∃ fuel after, Success (action fuel input) before () after ∧ invariant after)
+    (inputs : List α) (before : State Symbol Guard) (valid : invariant before) :
+    ∃ fuel after, Success (inputs.forM (action fuel)) before () after ∧ invariant after := by
+  induction inputs generalizing before with
+  | nil => exact ⟨0, before, (success_pure _ _ _ _).mpr ⟨rfl, rfl⟩, valid⟩
+  | cons input rest ih =>
+      obtain ⟨firstFuel, middle, first, middleValid⟩ := step input before valid
+      obtain ⟨restFuel, after, continued, afterValid⟩ := ih middle middleValid
+      refine ⟨firstFuel + restFuel, after, ?_, afterValid⟩
+      change Success (action (firstFuel + restFuel) input >>= fun _ => rest.forM (action (firstFuel + restFuel))) before () after
+      apply (success_bind _ _ _ _ _).mpr
+      refine ⟨(), middle, more firstFuel restFuel input _ _ _ first, ?_⟩
+      have extended := retains_forM _ _ (more restFuel firstFuel) rest _ _ _ continued
+      simpa [Nat.add_comm] using extended
+
+/-- A total forest gives a successful actual representative action. -/
+theorem representative_terminates (before : State Symbol Guard) (total : UnionFind.Total before.representatives) (uv : Nat) :
+    ∃ fuel root after, Success (representative fuel uv) before root after ∧ UnionFind.Total after.representatives := by
+  obtain ⟨root, size, path⟩ := total uv
+  obtain ⟨fuel, found, lookup⟩ := UnionFind.findRoot_terminates path
+  exact ⟨fuel, found.representative, {before with representatives := found.forest},
+    (representative_success _ _ _ _ _).mpr ⟨found, lookup, rfl, rfl⟩, UnionFind.findRoot_total total lookup⟩
+
+/-- Actual union has one sufficient bound for both representative lookups. -/
+theorem unionVariables_terminates (before : State Symbol Guard) (total : UnionFind.Total before.representatives)
+    (left right : Nat) :
+    ∃ fuel after, Success (unionVariables fuel left right) before () after ∧ UnionFind.Total after.representatives := by
+  obtain ⟨leftFuel, rightFuel, forest, lookup⟩ := UnionFind.union_terminates total left right
+  have extended : UnionFind.union (leftFuel + rightFuel) (leftFuel + rightFuel) before.representatives left right = some forest := by
+    simpa [Nat.add_comm] using union_moreFuel leftFuel rightFuel rightFuel leftFuel before.representatives left right forest lookup
+  exact ⟨leftFuel + rightFuel, {before with representatives := forest},
+    (unionVariables_success _ _ _ _ _).mpr ⟨forest, extended, rfl⟩, (UnionFind.union_correct total extended).1⟩
