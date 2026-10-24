@@ -1,0 +1,22 @@
+import MicroCFTA.SourcePruningResume
+
+#check @MicroCFTA.SourcePruningPartialMatch.Pending
+#check @MicroCFTA.SourcePruningPartialMatch.matchPartial
+#check @MicroCFTA.SourcePruningPartialMatch.matchPartial_hole
+#check @MicroCFTA.SourcePruningPartialMatch.matchPartial_anyPrefix_nil
+#check @MicroCFTA.SourcePruningPartialMatch.matchPartial_rawHole
+#check @MicroCFTA.SourcePruningPartialMatch.matchPartial_truncated
+#check @MicroCFTA.SourcePruningResume.resume
+#check @MicroCFTA.SourcePruningResume.resume_frame
+#check @MicroCFTA.SourcePruningResume.resume_agrees
+#check @MicroCFTA.SourcePruningResume.resume_transport
+#check @MicroCFTA.SourcePruningResume.resume_moreFuel
+
+#print axioms MicroCFTA.SourcePruningPartialMatch.matchPartial_hole
+#print axioms MicroCFTA.SourcePruningPartialMatch.matchPartial_anyPrefix_nil
+#print axioms MicroCFTA.SourcePruningPartialMatch.matchPartial_rawHole
+#print axioms MicroCFTA.SourcePruningPartialMatch.matchPartial_truncated
+#print axioms MicroCFTA.SourcePruningResume.resume_frame
+#print axioms MicroCFTA.SourcePruningResume.resume_agrees
+#print axioms MicroCFTA.SourcePruningResume.resume_transport
+#print axioms MicroCFTA.SourcePruningResume.resume_moreFuel

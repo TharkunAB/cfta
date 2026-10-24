@@ -1,0 +1,94 @@
+{
+  "status": "SOURCE_ONLY_UNCOMPILED",
+  "sources": [
+    {
+      "path": "/home/tritlo/Code/mcfta/specftacular/src/Specftacular/Pruning.hs",
+      "bytes": 16989,
+      "sha256": "5970dd7d9e67bb925fbd079921768ac08dc91d1c34e9ecfbc3d59795f0287f61",
+      "lines": 350,
+      "cuts": [
+        {
+          "start": 41,
+          "end": 45,
+          "bytes": 247,
+          "sha256": "d9c533dbf47999f63e36560c4f0488afda321c1ef6ebb68f0f98f0302be4cda9",
+          "text": "-- | The remaining parts of one match, each waiting for an enumeration hole.\ntype Pending = [(Template Symbol, UVar)]\n\n-- | A partial term with explicit markers for unresolved holes and recursion.\ntype PartialTerm = CT.Term (PartialSymbol Symbol)\n"
+        },
+        {
+          "start": 287,
+          "end": 320,
+          "bytes": 1523,
+          "sha256": "d8b37a879199ddcfbf28f4e86a746a6db1a98dccf63143393914309896efd46f",
+          "text": "\n-- | Resume the parts whose holes now have the expanded representative.\nresume :: UVar -> PartialTerm -> Pending -> EnumerateM Symbol (Maybe Pending)\nresume current partial pending = fmap (fmap concat . sequence) (traverse part pending)\n  where\n    part (template, uv) = do\n        representative <- getUVarRepresentative uv\n        pure $\n            if representative == current\n                then matchPartial template partial\n                else Just [(template, representative)]\n\n{- | Match a partial term. Nothing rejects the match. An empty list proves\nthe match. A nonempty list records the parts that still need expansion.\n-}\nmatchPartial :: Template Symbol -> PartialTerm -> Maybe Pending\nmatchPartial Hole _ = Just []\nmatchPartial (AnyPrefix []) _ = Just []\nmatchPartial template (CT.Node (UVarHole uv) []) = Just [(template, uv)]\nmatchPartial _ (CT.Node TruncatedRecursion _) = Nothing\nmatchPartial template (CT.Node (ConcreteSymbol symbol) children) = case template of\n    AnyNode parts -> exact parts\n    TemplateNode expected parts | expected == symbol -> exact parts\n    AnyPrefix parts -> prefix parts\n    TemplatePrefix expected parts | expected == symbol -> prefix parts\n    _ -> Nothing\n  where\n    exact parts\n        | length parts == length children = concat <$> zipWithM matchPartial parts children\n        | otherwise = Nothing\n    prefix parts\n        | length parts <= length children = concat <$> zipWithM matchPartial parts children\n        | otherwise = Nothing\nmatchPartial _ _ = Nothing\n"
+        }
+      ]
+    },
+    {
+      "path": "/home/tritlo/Code/mcfta/cfta/src/Data/CFTA/Template.hs",
+      "bytes": 34297,
+      "sha256": "0acb6104d585454ee23c848b8e909b9e4f2f7f613a330b729c29af3681edc150",
+      "lines": 688,
+      "cuts": [
+        {
+          "start": 59,
+          "end": 72,
+          "bytes": 579,
+          "sha256": "b5942b0c18b2c31d09e6b54e165e07042695ad8b5a4281dc8976270ebb042b5f",
+          "text": "-- | Pattern over first-order terms.\ndata Template symbol\n    = -- | Match any complete subtree.\n      Hole\n    | -- | Match any root symbol with exactly these children.\n      AnyNode ![Template symbol]\n    | -- | Match this root symbol with exactly these children.\n      TemplateNode !symbol ![Template symbol]\n    | -- | Match any root symbol whose children begin with this prefix.\n      AnyPrefix ![Template symbol]\n    | -- | Match this root symbol when its children begin with this prefix.\n      TemplatePrefix !symbol ![Template symbol]\n    deriving (Eq, Ord, Read, Show)\n\n"
+        }
+      ]
+    },
+    {
+      "path": "/home/tritlo/Code/mcfta/lean/MicroCFTA/Template.lean",
+      "bytes": 11254,
+      "sha256": "67abebd52ddc3320afd88a142e46b92b357c9bb7947efd7e290976a1cd5530d8",
+      "lines": 228,
+      "cuts": [
+        {
+          "start": 13,
+          "end": 22,
+          "bytes": 350,
+          "sha256": "3df0e4e3441951a9d9255f7cb1e4700f945631153dae86ee97fccad03b43a880",
+          "text": "open Language\n\n/-- Complete-subtree, exact-node, and prefix-node patterns. -/\ninductive Pattern (Symbol : Type) where\n  | hole\n  | anyNode (children : List (Pattern Symbol))\n  | node (symbol : Symbol) (children : List (Pattern Symbol))\n  | anyPrefix (children : List (Pattern Symbol))\n  | prefix (symbol : Symbol) (children : List (Pattern Symbol))\n\n"
+        },
+        {
+          "start": 84,
+          "end": 98,
+          "bytes": 624,
+          "sha256": "ad633deb02189f6866890e967efff82da04fd21b579d1b33dce9154bb572da4d",
+          "text": "mutual\n  /-- Execute complete-term template matching. -/\n  def matchesTerm [DecidableEq Symbol] (pattern : Pattern Symbol) : Term Symbol \u2192 Bool\n    | .node symbol terms =>\n        match childTemplates pattern symbol terms.length with\n        | none => false\n        | some patterns => matchesChildren patterns terms\n\n  /-- Execute pointwise matching of aligned children. -/\n  def matchesChildren [DecidableEq Symbol] : List (Pattern Symbol) \u2192 List (Term Symbol) \u2192 Bool\n    | [], [] => true\n    | pattern :: patterns, term :: terms => matchesTerm pattern term && matchesChildren patterns terms\n    | _, _ => false\nend\n\n"
+        }
+      ]
+    },
+    {
+      "path": "/home/tritlo/Code/mcfta/lean/MicroCFTA/Language.lean",
+      "bytes": 24311,
+      "sha256": "fd78e01d01a4894a6580be076e3fdee877d171ca1d31525876cc2539386573fc",
+      "lines": 549,
+      "cuts": [
+        {
+          "start": 20,
+          "end": 24,
+          "bytes": 187,
+          "sha256": "16213179ffcc194c72575923bf17cae130c51422b3afc26a6485932fe4245abd",
+          "text": "namespace MicroCFTA.Language\n\n/-- A finite ordered tree. The symbol has no imposed arity. -/\ninductive Term (Symbol : Type) where\n  | node : Symbol \u2192 List (Term Symbol) \u2192 Term Symbol\n"
+        }
+      ]
+    },
+    {
+      "path": "/home/tritlo/Code/mcfta/lean/MicroCFTA/EnumerationState.lean",
+      "bytes": 33489,
+      "sha256": "83a898b883ec7b52469bccd87e8afa4f7abb320e3c935bf48f3d80ad77003cc4",
+      "lines": 699,
+      "cuts": [
+        {
+          "start": 334,
+          "end": 341,
+          "bytes": 351,
+          "sha256": "8f9c0425e7da87fff7678f790956617f2da03aaf0182895aad92b16e3a8a0756",
+          "text": "/-- Keep real symbols, unresolved holes, and recursion truncation distinct. -/\ninductive PartialSymbol (Symbol : Type) where\n  | concrete : Symbol \u2192 PartialSymbol Symbol\n  | hole : Nat \u2192 PartialSymbol Symbol\n  | truncated\n  deriving DecidableEq, Repr\n\n/-- Diagnostic rendering distinguishes pending recursive constraints from final truncation. -/\n"
+        }
+      ]
+    }
+  ]
+}

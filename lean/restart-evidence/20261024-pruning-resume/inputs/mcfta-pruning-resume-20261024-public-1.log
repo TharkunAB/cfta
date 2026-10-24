@@ -1,0 +1,85 @@
+{"command": ["/home/tritlo/.elan/toolchains/leanprover--lean4---v4.34.1/bin/lean", "-R", "/tmp/mcfta-pruning-resume-20261024/public-1", "-DwarningAsError=true", "-Dlinter.all=true", "/tmp/mcfta-pruning-resume-20261024/public-1/checked.lean"], "exit_code": 0, "raw_bytes": 6211, "raw_sha256": "134c4c02aee37a2c553c6d349562a543bb9f2a0eceb7fd5de50477dafd925d9f", "source_sha256": "63af8631e523198e27c4decd68abbdb9d664a6c2e30d11fb377e3d0bc74336a4"}
+MicroCFTA.SourcePruningPartialMatch.Pending : Type → Type
+@MicroCFTA.SourcePruningPartialMatch.matchPartial : {Symbol : Type} →
+  [DecidableEq Symbol] →
+    MicroCFTA.Template.Pattern Symbol →
+      MicroCFTA.Language.Term (MicroCFTA.EnumerationState.PartialSymbol Symbol) →
+        Option (MicroCFTA.SourcePruningPartialMatch.Pending Symbol)
+@MicroCFTA.SourcePruningPartialMatch.matchPartial_hole : ∀ {Symbol : Type} [inst : DecidableEq Symbol]
+  (term : MicroCFTA.Language.Term (MicroCFTA.EnumerationState.PartialSymbol Symbol)),
+  MicroCFTA.SourcePruningPartialMatch.matchPartial MicroCFTA.Template.Pattern.hole term = some []
+@MicroCFTA.SourcePruningPartialMatch.matchPartial_anyPrefix_nil : ∀ {Symbol : Type} [inst : DecidableEq Symbol]
+  (term : MicroCFTA.Language.Term (MicroCFTA.EnumerationState.PartialSymbol Symbol)),
+  MicroCFTA.SourcePruningPartialMatch.matchPartial (MicroCFTA.Template.Pattern.anyPrefix []) term = some []
+@MicroCFTA.SourcePruningPartialMatch.matchPartial_rawHole : ∀ {Symbol : Type} [inst : DecidableEq Symbol]
+  (pattern : MicroCFTA.Template.Pattern Symbol) (uv : Nat),
+  MicroCFTA.SourcePruningPartialMatch.matchPartial pattern
+      (MicroCFTA.Language.Term.node (MicroCFTA.EnumerationState.PartialSymbol.hole uv) []) =
+    match pattern with
+    | MicroCFTA.Template.Pattern.hole => some []
+    | MicroCFTA.Template.Pattern.anyPrefix [] => some []
+    | x => some [(pattern, uv)]
+@MicroCFTA.SourcePruningPartialMatch.matchPartial_truncated : ∀ {Symbol : Type} [inst : DecidableEq Symbol]
+  (pattern : MicroCFTA.Template.Pattern Symbol)
+  (children : List (MicroCFTA.Language.Term (MicroCFTA.EnumerationState.PartialSymbol Symbol))),
+  MicroCFTA.SourcePruningPartialMatch.matchPartial pattern
+      (MicroCFTA.Language.Term.node MicroCFTA.EnumerationState.PartialSymbol.truncated children) =
+    match pattern with
+    | MicroCFTA.Template.Pattern.hole => some []
+    | MicroCFTA.Template.Pattern.anyPrefix [] => some []
+    | x => none
+@MicroCFTA.SourcePruningResume.resume : {Symbol Guard : Type} →
+  [DecidableEq Symbol] →
+    Nat →
+      Nat →
+        MicroCFTA.Language.Term (MicroCFTA.EnumerationState.PartialSymbol Symbol) →
+          MicroCFTA.SourcePruningPartialMatch.Pending Symbol →
+            MicroCFTA.EnumerationState.EnumerateM Symbol Guard
+              (Option (MicroCFTA.SourcePruningPartialMatch.Pending Symbol))
+@MicroCFTA.SourcePruningResume.resume_frame : ∀ {Symbol Guard : Type} [inst : DecidableEq Symbol] (fuel current : Nat)
+  (term : MicroCFTA.Language.Term (MicroCFTA.EnumerationState.PartialSymbol Symbol))
+  (pending : MicroCFTA.SourcePruningPartialMatch.Pending Symbol)
+  (before after : MicroCFTA.EnumerationState.State Symbol Guard)
+  (result : Option (MicroCFTA.SourcePruningPartialMatch.Pending Symbol)),
+  MicroCFTA.UnionFind.Total before.representatives →
+    MicroCFTA.EnumerationCorrectness.Success (MicroCFTA.SourcePruningResume.resume fuel current term pending) before
+        result after →
+      MicroCFTA.EnumerationCompressionFrame.Frame before after
+@MicroCFTA.SourcePruningResume.resume_agrees : ∀ {Symbol Guard : Type} [inst : DecidableEq Symbol]
+  (leftFuel rightFuel current : Nat) (term : MicroCFTA.Language.Term (MicroCFTA.EnumerationState.PartialSymbol Symbol))
+  (pending : MicroCFTA.SourcePruningPartialMatch.Pending Symbol)
+  (left right leftAfter rightAfter : MicroCFTA.EnumerationState.State Symbol Guard)
+  (leftResult rightResult : Option (MicroCFTA.SourcePruningPartialMatch.Pending Symbol)),
+  MicroCFTA.EnumerationCompressionFrame.Frame left right →
+    MicroCFTA.UnionFind.Total left.representatives →
+      MicroCFTA.EnumerationCorrectness.Success (MicroCFTA.SourcePruningResume.resume leftFuel current term pending) left
+          leftResult leftAfter →
+        MicroCFTA.EnumerationCorrectness.Success (MicroCFTA.SourcePruningResume.resume rightFuel current term pending)
+            right rightResult rightAfter →
+          leftResult = rightResult ∧ MicroCFTA.EnumerationCompressionFrame.Frame leftAfter rightAfter
+@MicroCFTA.SourcePruningResume.resume_transport : ∀ {Symbol Guard : Type} [inst : DecidableEq Symbol]
+  (leftFuel current : Nat) (term : MicroCFTA.Language.Term (MicroCFTA.EnumerationState.PartialSymbol Symbol))
+  (pending : MicroCFTA.SourcePruningPartialMatch.Pending Symbol)
+  (left right leftAfter : MicroCFTA.EnumerationState.State Symbol Guard)
+  (result : Option (MicroCFTA.SourcePruningPartialMatch.Pending Symbol)),
+  MicroCFTA.EnumerationCompressionFrame.Frame left right →
+    MicroCFTA.UnionFind.Total left.representatives →
+      MicroCFTA.EnumerationCorrectness.Success (MicroCFTA.SourcePruningResume.resume leftFuel current term pending) left
+          result leftAfter →
+        ∃ rightFuel rightAfter,
+          MicroCFTA.EnumerationCorrectness.Success (MicroCFTA.SourcePruningResume.resume rightFuel current term pending)
+              right result rightAfter ∧
+            MicroCFTA.EnumerationCompressionFrame.Frame leftAfter rightAfter
+@MicroCFTA.SourcePruningResume.resume_moreFuel : ∀ {Symbol Guard : Type} [inst : DecidableEq Symbol]
+  (fuel extra current : Nat) (term : MicroCFTA.Language.Term (MicroCFTA.EnumerationState.PartialSymbol Symbol))
+  (pending : MicroCFTA.SourcePruningPartialMatch.Pending Symbol),
+  MicroCFTA.EnumerationExecution.Retains (MicroCFTA.SourcePruningResume.resume fuel current term pending)
+    (MicroCFTA.SourcePruningResume.resume (fuel + extra) current term pending)
+'MicroCFTA.SourcePruningPartialMatch.matchPartial_hole' depends on axioms: [propext]
+'MicroCFTA.SourcePruningPartialMatch.matchPartial_anyPrefix_nil' depends on axioms: [propext]
+'MicroCFTA.SourcePruningPartialMatch.matchPartial_rawHole' depends on axioms: [propext]
+'MicroCFTA.SourcePruningPartialMatch.matchPartial_truncated' depends on axioms: [propext]
+'MicroCFTA.SourcePruningResume.resume_frame' depends on axioms: [propext, Quot.sound]
+'MicroCFTA.SourcePruningResume.resume_agrees' depends on axioms: [propext, Quot.sound]
+'MicroCFTA.SourcePruningResume.resume_transport' depends on axioms: [propext, Quot.sound]
+'MicroCFTA.SourcePruningResume.resume_moreFuel' depends on axioms: [propext, Quot.sound]

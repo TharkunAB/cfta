@@ -1,0 +1,90 @@
+import MicroCFTA.Template
+import MicroCFTA.EnumerationState
+
+/-!
+# Pure matching of partial pruning terms
+
+The branch order follows Specftacular.Pruning.matchPartial.
+Pending entries retain their pattern and original hole ID in child order.
+-/
+namespace MicroCFTA.SourcePruningPartialMatch
+
+/-- The unresolved pieces of one template match. -/
+abbrev Pending (Symbol : Type) := List (Template.Pattern Symbol × Nat)
+
+mutual
+  /-- Match a partial term and collect the unresolved pieces in order. -/
+  def matchPartial [DecidableEq Symbol] (pattern : Template.Pattern Symbol)
+      (term : Language.Term (EnumerationState.PartialSymbol Symbol)) : Option (Pending Symbol) :=
+    match pattern, term with
+    | .hole, _ => some []
+    | .anyPrefix [], _ => some []
+    | pattern, .node (.hole uv) [] => some [(pattern, uv)]
+    | _, .node .truncated _ => none
+    | .anyNode parts, .node (.concrete _) children =>
+        if parts.length = children.length then matchChildren parts children else none
+    | .node expected parts, .node (.concrete symbol) children =>
+        if expected = symbol then
+          if parts.length = children.length then matchChildren parts children else none
+        else none
+    | .anyPrefix parts, .node (.concrete _) children =>
+        if parts.length ≤ children.length then matchChildren parts children else none
+    | .prefix expected parts, .node (.concrete symbol) children =>
+        if expected = symbol then
+          if parts.length ≤ children.length then matchChildren parts children else none
+        else none
+    | _, _ => none
+
+  /-- Match the requested prefix and append each child's pending pieces. -/
+  private def matchChildren [DecidableEq Symbol] : List (Template.Pattern Symbol) →
+      List (Language.Term (EnumerationState.PartialSymbol Symbol)) → Option (Pending Symbol)
+    | [], _ => some []
+    | pattern :: patterns, term :: terms => do
+        let first ← matchPartial pattern term
+        let rest ← matchChildren patterns terms
+        pure (first ++ rest)
+    | _, [] => none
+end
+
+/-- A hole pattern accepts every partial shape without a pending piece. -/
+theorem matchPartial_hole [DecidableEq Symbol]
+    (term : Language.Term (EnumerationState.PartialSymbol Symbol)) :
+    matchPartial .hole term = some [] := by
+  rfl
+
+/-- The empty unrestricted prefix accepts even holes and truncation. -/
+theorem matchPartial_anyPrefix_nil [DecidableEq Symbol]
+    (term : Language.Term (EnumerationState.PartialSymbol Symbol)) :
+    matchPartial (.anyPrefix []) term = some [] := by
+  rfl
+
+/-- A raw hole suspends the exact pattern unless a wildcard already accepts it. -/
+theorem matchPartial_rawHole [DecidableEq Symbol] (pattern : Template.Pattern Symbol) (uv : Nat) :
+    matchPartial pattern (.node (.hole uv) []) =
+      match pattern with
+      | .hole => some []
+      | .anyPrefix [] => some []
+      | _ => some [(pattern, uv)] := by
+  cases pattern with
+  | hole => rfl
+  | anyNode parts => rfl
+  | node symbol parts => rfl
+  | anyPrefix parts => cases parts <;> rfl
+  | prefix symbol parts => rfl
+
+/-- Truncation rejects every pattern except the two preceding wildcards. -/
+theorem matchPartial_truncated [DecidableEq Symbol] (pattern : Template.Pattern Symbol)
+    (children : List (Language.Term (EnumerationState.PartialSymbol Symbol))) :
+    matchPartial pattern (.node .truncated children) =
+      match pattern with
+      | .hole => some []
+      | .anyPrefix [] => some []
+      | _ => none := by
+  cases pattern with
+  | hole => rfl
+  | anyNode parts => rfl
+  | node symbol parts => rfl
+  | anyPrefix parts => cases parts <;> rfl
+  | prefix symbol parts => rfl
+
+end MicroCFTA.SourcePruningPartialMatch
