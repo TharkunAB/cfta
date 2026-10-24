@@ -1,0 +1,61 @@
+{
+  "obtain_count": 2,
+  "field_count": 8,
+  "obtains": [
+    {
+      "id": "builtTrie",
+      "scope": "readback have after paths/member intros",
+      "api": "EqualityTrie.toPathTrie_correct",
+      "arguments": [
+        "paths.eraseDups",
+        "EqualityNormalize.consistent_supported classes actual.2.1 paths member"
+      ],
+      "fields": [
+        {
+          "name": "trie",
+          "type": "EqualityTrie.Trie"
+        },
+        {
+          "name": "built",
+          "type": "EqualityTrie.toPathTrie paths.eraseDups = some trie"
+        },
+        {
+          "name": "valid",
+          "type": "EqualityTrie.Valid trie"
+        },
+        {
+          "name": "_",
+          "type": "EqualityTrie.Supported (EqualityTrie.fromPathTrie trie)",
+          "retained_as_named_local": false
+        },
+        {
+          "name": "same",
+          "type": "∀ path, path ∈ EqualityTrie.fromPathTrie trie ↔ path ∈ paths.eraseDups"
+        }
+      ],
+      "use": "Rewrite classTrie through built. Compose same with List.mem_eraseDups; do not assume trie output or omit eraseDups."
+    },
+    {
+      "id": "classOfTrie",
+      "scope": "all-trie validity after trie/member intros and unfolding readClasses",
+      "api": "List.mem_map.mp",
+      "fields": [
+        {
+          "name": "paths",
+          "type": "EqualityNormalize.Class"
+        },
+        {
+          "name": "present",
+          "type": "paths ∈ classes"
+        },
+        {
+          "name": "rfl",
+          "type": "EnumerationEquality.classTrie paths = trie",
+          "retained_as_named_local": false
+        }
+      ],
+      "use": "The equality substitution identifies the ACTUAL class of this returned trie."
+    }
+  ],
+  "no_normalizer_run_or_desired_trie_premise": true
+}

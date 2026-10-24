@@ -1,0 +1,17 @@
+# Source-only self-review
+
+Status: ready for independent exact declaration review. This is the author's review of declarations and source metadata. It is not compiler evidence or independent proof review.
+
+The active owner has seven exact STRING contracts with 36 lines: context7, project header3, public theorem header19, typed local haves1/2/3 and the unique by_cases condition1. The public definition is explicitly noncomputable. The header matching metadata retains both kind def and modifier noncomputable. There are no local/global instance declarations. The semantic theorem's anonymous scoped DecidableEq Formula binder is required by the existing holds API. Formula remains generic.
+
+The projection uses the actual source accessor once and the existing readClasses/classTrie. It adds no trie algorithm, normalizer or extracted execution claim. The residual is the complete original constraint. The statement matches the actual accessor result. It has no callback, Graph, desired-output or source-normalization-result premise. Cached supplies the actual class invariants.
+
+The none branch gives exact absence and excludes every holds=true term. The some branch gives the exact computed pair, all-trie validity, complete per-class path membership and the requested semantic iff for every formulas/solver/labeled term. Nontrivial derives from actual Active. The trie_pcs_exact API receives path membership before Nontrivial. Supported construction applies to eraseDups, and List.mem_eraseDups restores original membership. A reflexive Same remains a complete residual so path existence is retained. No arbitrary singleton PCS class is identified with an existential common-subtree condition.
+
+There are three typed local haves, two obtains with eight fields, one actual accessor equation family and one exact positive-syntax condition. All theorem/definition/formula/solver/term/class/path binders, both residual-lambda binders and the obtained trie/map packets are inventoried. There is no helper, induction, recursion, proof-local let/show or hidden additional local have. The two multiline local fragments have explicit continuation columns compatible with a six-space nested first line. The unique by_cases contract cannot accidentally match the three plain if occurrences in the definition/header.
+
+The active metadata uses the exact existing Path, Class and Constraints aliases. The earlier list-level metadata and local-layout drafts remain as historical prefreeze inputs. Literal public headers did not change during those metadata corrections. No parser or compiler was invoked.
+
+The thirteen complete defining snapshots, twenty-five exact cuts and eight actual import routes are pinned. The cuts have368lines. The route table retains forty-five live import identities. Static checks verify literal fragments, full snapshot/cut identities and each adjacent import edge without importing any module.
+
+The semantic theorem states equivalence with existing complete source guard decisions. It does not establish arbitrary solver soundness, discard residual obligations, execute native constraint allocation, realize native path containers, handle terminal merging, prove edge order or complete caller/driver language preservation. Runtime and convergence obligations remain open. Root owns every future definition/proof body and all execution after independent declaration review and a fresh exact gate.

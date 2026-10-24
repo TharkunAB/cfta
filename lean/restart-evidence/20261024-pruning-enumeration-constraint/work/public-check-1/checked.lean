@@ -1,0 +1,7 @@
+import MicroCFTA.SourcePruningEnumerationConstraint
+set_option pp.deepTerms true
+set_option pp.maxSteps 100000
+#check @MicroCFTA.SourcePruningEnumerationConstraint.project
+#check @MicroCFTA.SourcePruningEnumerationConstraint.project_complete
+#print axioms MicroCFTA.SourcePruningEnumerationConstraint.project
+#print axioms MicroCFTA.SourcePruningEnumerationConstraint.project_complete

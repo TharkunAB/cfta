@@ -1,0 +1,19 @@
+/-- Derive valid path tries and the exact complete-constraint meaning of the projection. -/
+theorem project_complete [DecidableEq Formula]
+    (constraint : SourceSymbolicIndex.Constraint Formula) (cached : Cached constraint.equalities) :
+    match sourceEqualities constraint with
+    | none => project constraint = none ∧
+        ∀ (formulas : Formulas Formula) (solver : Entailment Formula) (term : Term (Label Formula)),
+          SourceEqualityPCSGuard.holds formulas solver constraint term ≠ true
+    | some classes =>
+        project constraint = some (EnumerationEquality.readClasses classes,
+          if (positive constraint.guard).isSome then none else some constraint) ∧
+        (∀ trie ∈ EnumerationEquality.readClasses classes, EqualityTrie.Valid trie) ∧
+        (∀ paths ∈ classes, ∀ path,
+          path ∈ EqualityTrie.fromPathTrie (EnumerationEquality.classTrie paths) ↔ path ∈ paths) ∧
+        ∀ (formulas : Formulas Formula) (solver : Entailment Formula) (term : Term (Label Formula)),
+          SourceEqualityPCSGuard.holds formulas solver constraint term = true ↔
+            (∀ trie ∈ EnumerationEquality.readClasses classes, EqualityHolds term trie) ∧
+              ResidualHolds (fun complete candidate =>
+                SourceEqualityPCSGuard.holds formulas solver complete candidate = true)
+                (if (positive constraint.guard).isSome then none else some constraint) term

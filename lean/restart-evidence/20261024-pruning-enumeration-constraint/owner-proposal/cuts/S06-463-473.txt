@@ -1,0 +1,11 @@
+/-- The checked counterpart of `toPathTrie`. -/
+def toPathTrie (paths : List Path) : Option Trie := build (pathBudget paths) paths
+
+/-- Supported construction succeeds, and conversion back preserves exactly its paths. -/
+theorem toPathTrie_correct (paths : List Path) (supported : Supported paths) :
+    ∃ trie, toPathTrie paths = some trie ∧ Valid trie ∧ Supported (fromPathTrie trie) ∧
+      ∀ path, path ∈ fromPathTrie trie ↔ path ∈ paths := by
+  obtain ⟨trie, built, valid, same, _⟩ := build_supported (pathBudget paths) paths supported
+    (pathBudget_sufficient paths)
+  exact ⟨trie, built, valid, fromPathTrie_supported trie valid, same⟩
+

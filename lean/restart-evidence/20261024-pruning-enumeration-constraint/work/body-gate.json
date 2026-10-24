@@ -1,0 +1,48 @@
+{
+  "observed_at": "2026-10-24T08:05:37.255710+00:00",
+  "status": "ROOT_ACCEPTS_EXACT_DECLARATION_BODY_GATE",
+  "baseline": "0c65fc85e37a1f5c9523007937f27b31f8054ec6",
+  "main": "74250bd889685da436cdbfe32ac4b5a0878ffd09",
+  "owner": "/tmp/mcfta-pruning-enumeration-constraint-20261024-proposal",
+  "frozen_sha256": "7b08ff8c41eab116f1fbcf9cf55918aadb50bc0255086b13f8bccb3d34c2f95d",
+  "pins_sha256": "75deebbc942cd9e4301214a51bb9606bd4825306171b6bf32093a3fa39f0a6e6",
+  "independent_declaration_review_sha256": "ab7ef5c40784afec4036e4a8fb45f1cde0709d7ba0ba3697fb21a75d10f9fb12",
+  "contracts": {
+    "context.lean.txt": "import MicroCFTA.EnumerationEquality\nimport MicroCFTA.SourceEqualityPCSGuard\n\nnamespace MicroCFTA.SourcePruningEnumerationConstraint\nopen Language SourceObservations SourceGuards SourceSymbolicIndex\nopen SourceCompactGuards SourceEqualityGuardReadback EnumerationCorrectness\nvariable {Formula : Type}\n",
+    "project-header.lean.txt": "/-- Read the actual source equalities and retain the complete residual constraint. -/\nnoncomputable def project (constraint : SourceSymbolicIndex.Constraint Formula) :\n    Option (List EqualityTrie.Trie \u00d7 Option (SourceSymbolicIndex.Constraint Formula))\n",
+    "public-header.lean.txt": "/-- Derive valid path tries and the exact complete-constraint meaning of the projection. -/\ntheorem project_complete [DecidableEq Formula]\n    (constraint : SourceSymbolicIndex.Constraint Formula) (cached : Cached constraint.equalities) :\n    match sourceEqualities constraint with\n    | none => project constraint = none \u2227\n        \u2200 (formulas : Formulas Formula) (solver : Entailment Formula) (term : Term (Label Formula)),\n          SourceEqualityPCSGuard.holds formulas solver constraint term \u2260 true\n    | some classes =>\n        project constraint = some (EnumerationEquality.readClasses classes,\n          if (positive constraint.guard).isSome then none else some constraint) \u2227\n        (\u2200 trie \u2208 EnumerationEquality.readClasses classes, EqualityTrie.Valid trie) \u2227\n        (\u2200 paths \u2208 classes, \u2200 path,\n          path \u2208 EqualityTrie.fromPathTrie (EnumerationEquality.classTrie paths) \u2194 path \u2208 paths) \u2227\n        \u2200 (formulas : Formulas Formula) (solver : Entailment Formula) (term : Term (Label Formula)),\n          SourceEqualityPCSGuard.holds formulas solver constraint term = true \u2194\n            (\u2200 trie \u2208 EnumerationEquality.readClasses classes, EqualityHolds term trie) \u2227\n              ResidualHolds (fun complete candidate =>\n                SourceEqualityPCSGuard.holds formulas solver complete candidate = true)\n                (if (positive constraint.guard).isSome then none else some constraint) term\n",
+    "local-actual.lean.txt": "have actual : NormalClasses classes\n",
+    "local-readback.lean.txt": "have readback : \u2200 paths \u2208 classes, EqualityTrie.Valid (EnumerationEquality.classTrie paths) \u2227\n        \u2200 path, path \u2208 EqualityTrie.fromPathTrie (EnumerationEquality.classTrie paths) \u2194 path \u2208 paths\n",
+    "local-equalityExact.lean.txt": "have equalityExact : \u2200 term : Term (Label Formula),\n        (\u2200 trie \u2208 EnumerationEquality.readClasses classes, EqualityHolds term trie) \u2194\n          EqualityNormalize.Satisfies term classes\n",
+    "condition-positive.lean.txt": "by_cases positiveGuard : (positive constraint.guard).isSome = true\n"
+  },
+  "root_read": {
+    "contract_lines": 36,
+    "typed_haves": 3,
+    "obtains": 2,
+    "obtain_fields": 8,
+    "proof_intros": 19,
+    "sources": 13,
+    "cuts": 25,
+    "cut_lines": 368,
+    "import_identities": 45,
+    "routes": 8,
+    "checked_import_edges": 58
+  },
+  "local_instance_count": 0,
+  "global_instance_count": 0,
+  "helpers": 0,
+  "proof_let_show_count": 0,
+  "induction": false,
+  "budget": {
+    "target": [
+      90,
+      150
+    ],
+    "hard_cap": 220
+  },
+  "scope": "Concrete source equality/trie/residual projection with exact existing holds meaning. The inherited noncomputable accessor model is explicit; no extracted executable normalization, native path/container, ordered edge/terminal merge or whole-driver/runtime/solver/convergence claim.",
+  "preparation_history": "Retained pre-execution archive newline/description corrections and exact source-review hash pin delta. No compiler, candidate, Python parser, archive/verifier/publication execution before this gate.",
+  "prior_goal_turn": "PROGRESS: proved, sealed and remote-verified three commits through0c65fc85e; new source assessment changes next action.",
+  "goal": "ACTIVE_INCOMPLETE"
+}

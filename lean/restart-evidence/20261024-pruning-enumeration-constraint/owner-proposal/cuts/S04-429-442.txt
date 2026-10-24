@@ -1,0 +1,14 @@
+/-- Actual positiveEqualities performs normalization at every Same and every conjunction step. -/
+noncomputable def positiveNormalized : Guard Formula → Option (Option (List (List Path)))
+  | .top => some (some [])
+  | .same left right => if left ≠ right then some (normalize [[left, right]]) else none
+  | .and parts => positiveNormalizedList parts
+  | _ => none
+
+/-- The source right fold normalizes each pair of accumulated equality operands. -/
+noncomputable def positiveNormalizedList : List (Guard Formula) → Option (Option (List (List Path)))
+  | [] => some (some [])
+  | first :: rest => do
+      let initial ← positiveNormalized first
+      let remaining ← positiveNormalizedList rest
+      pure (combineEqualities initial remaining)

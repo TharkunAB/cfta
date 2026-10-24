@@ -1,0 +1,10 @@
+{- | The path equalities of a guard made only of 'Top', 'Same' between two
+distinct paths, and 'And'. A reflexive 'Same' requires its path to exist and
+is not an equality, so it stays a residual.
+-}
+positiveEqualities :: Guard -> Maybe EqConstraints
+positiveEqualities Top = Just EmptyConstraints
+positiveEqualities (Same left right)
+    | left /= right = Just $ mkEqConstraints [[left, right]]
+positiveEqualities (And guards) = foldr (\guard rest -> combineEqConstraints <$> positiveEqualities guard <*> rest) (Just EmptyConstraints) guards
+positiveEqualities _ = Nothing

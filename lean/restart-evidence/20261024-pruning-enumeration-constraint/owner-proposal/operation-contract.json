@@ -1,0 +1,33 @@
+{
+  "project": {
+    "modifier": "noncomputable",
+    "input": "complete existing Constraint Formula",
+    "output": "Option (List EqualityTrie.Trie × Option (SourceSymbolicIndex.Constraint Formula))",
+    "steps": [
+      "Inspect the ACTUAL sourceEqualities constraint.",
+      "None returns none.",
+      "Some classes returns some of the existing readClasses classes and the residual choice.",
+      "The residual is none precisely when the actual syntactic positive test has isSome true. Otherwise retain some of the complete original constraint."
+    ],
+    "no_new_trie_worker": true,
+    "no_choice_or_normalizer_added": "The noncomputable sourceEqualities accessor is imported unchanged.",
+    "no_callback_graph_output_law": true
+  },
+  "project_complete": {
+    "none": [
+      "project constraint = none",
+      "for every formulas, solver and complete term, independent holds is not true"
+    ],
+    "some": [
+      "project returns the exact readClasses/residual pair",
+      "every returned trie is valid",
+      "each class trie has precisely its original path membership",
+      "independent complete holds is equivalent to all returned EqualityHolds and actual ResidualHolds of the returned complete constraint"
+    ],
+    "premise": "genuine Cached constraint.equalities",
+    "semantic_dictionary": "only scoped DecidableEq Formula required by existing holds",
+    "reflexive_same": "positive returns none for Same p p. Preserve it as a residual so the actual existing-path check is retained.",
+    "empty_or_singleton_PCS": "Do not identify arbitrary trivial PCS classes with common-subtree EqualityHolds. Derived Active supplies Nontrivial for every actual returned class.",
+    "scope": "source accessor/trie/guard semantics only; no operational edge creation, terminal merging, edge ordering, caller or whole-driver result"
+  }
+}

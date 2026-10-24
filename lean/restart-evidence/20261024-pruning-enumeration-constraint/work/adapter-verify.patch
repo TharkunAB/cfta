@@ -1,0 +1,122 @@
+--- predecessor-verify.py
++++ constraint-verify.py
+@@ -1,4 +1,4 @@
+-"""Verify native shallow-child preparation and the complete preserved baseline."""
++"""Verify concrete source constraint projection and the complete preserved baseline."""
+ import argparse
+ import gzip
+ import hashlib
+@@ -10,8 +10,8 @@
+ parser = argparse.ArgumentParser(description=__doc__)
+ parser.add_argument('--root', type=Path, required=True)
+ root = parser.parse_args().root.resolve()
+-here = root / 'lean/restart-evidence/20261024-pruning-enumeration-shallow-child'
+-baseline = 'ba082e74bae4063fe845503022e21e131c0eb800'
++here = root / 'lean/restart-evidence/20261024-pruning-enumeration-constraint'
++baseline = '0c65fc85e37a1f5c9523007937f27b31f8054ec6'
+ main = '74250bd889685da436cdbfe32ac4b5a0878ffd09'
+ 
+ def sha(data):
+@@ -40,7 +40,7 @@
+     subprocess.run(['git', *args], cwd=root, check=True)
+ assert git('rev-list', '--parents', '-n', '1', proof).decode().split() == [proof, baseline]
+ assert set(git('diff-tree', '--no-commit-id', '--name-only', '-r', proof).decode().splitlines()) == {
+-    'lean/MicroCFTA/SourcePruningEnumerationShallowChild.lean', 'lean/MicroCFTA/Audit.lean'}
++    'lean/MicroCFTA/SourcePruningEnumerationConstraint.lean', 'lean/MicroCFTA/Audit.lean'}
+ tree = gzip.decompress((here / 'work/baseline-tree.txt.gz').read_bytes())
+ assert tree == git('ls-tree', '-r', '-z', baseline)
+ assert sha(tree) == load('work/baseline.json')['tree_sha256']
+@@ -70,14 +70,14 @@
+         changed.append(name)
+     elif name == 'lean/MicroCFTA/Audit.lean':
+         addition = audit_change['prefix'].encode()
+-        assert addition == b'import MicroCFTA.SourcePruningEnumerationShallowChild\n'
++        assert addition == b'import MicroCFTA.SourcePruningEnumerationConstraint\n'
+         assert sha(data) == audit_change['after_sha256'] and data.startswith(addition)
+         data = data[len(addition):]
+         assert sha(data) == audit_change['before_sha256']
+         changed.append(name)
+     assert hashlib.sha1(b'blob ' + str(len(data)).encode() + b'\0' + data).hexdigest() == blob, name
+     count += 1
+-assert count == 130410 and len(changed) == 10
++assert count == 130607 and len(changed) == 10
+ assert git('stash', 'list', '--format=%gd %H %s') == (here / 'work/baseline-stashes.txt').read_bytes()
+ worktrees = (here / 'work/baseline-worktrees.txt').read_bytes()
+ assert git('worktree', 'list', '--porcelain') == worktrees.replace(
+@@ -86,17 +86,17 @@
+     value, ref = line.split()
+     if ref not in ['refs/heads/formalize', 'refs/remotes/origin/formalize']:
+         assert git('rev-parse', ref).decode().strip() == value, ref
+-assert git('rev-parse', 'codex/backup-pruning-enumeration-shallow-child-20261024-0908').decode().strip() == baseline
++assert git('rev-parse', 'codex/backup-pruning-enumeration-constraint-20261024-0951').decode().strip() == baseline
+ 
+ checks = load('work/build-summary.json')
+-source = (root / 'lean/MicroCFTA/SourcePruningEnumerationShallowChild.lean').read_bytes()
+-assert source == (here / 'production-sources/SourcePruningEnumerationShallowChild.lean').read_bytes()
+-assert source == (here / 'work' / checks['successful_source_attempt'] / 'MicroCFTA/SourcePruningEnumerationShallowChild.lean').read_bytes()
++source = (root / 'lean/MicroCFTA/SourcePruningEnumerationConstraint.lean').read_bytes()
++assert source == (here / 'production-sources/SourcePruningEnumerationConstraint.lean').read_bytes()
++assert source == (here / 'work' / checks['successful_source_attempt'] / 'MicroCFTA/SourcePruningEnumerationConstraint.lean').read_bytes()
+ assert sha(source) == load('work/installation.json')['source_sha256']
+ assert len(source.splitlines()) == checks['source_lines']
+ assert not re.search(rb'\b(?:sorry|admit|axiom|unsafe|set_option)\b', source)
+-assert re.findall(rb'^(def|theorem) ', source, re.M) == [b'def', b'theorem']
+-assert len(re.findall(rb'^local instance ', source, re.M)) == 1
++assert re.findall(rb'^(?:noncomputable )?(def|theorem) ', source, re.M) == [b'def', b'theorem']
++assert len(re.findall(rb'^local instance ', source, re.M)) == 0
+ assert not re.search(rb'^(?:instance|structure|inductive|private) ', source, re.M)
+ text = source.decode()
+ 
+@@ -105,7 +105,7 @@
+ assert len(pins) == frozen['pins_count'] and frozen['compiler_evidence'] is False
+ assert len((here / 'owner-proposal/pins.json').read_bytes()) == frozen['pins']['bytes']
+ assert sha((here / 'owner-proposal/pins.json').read_bytes()) == frozen['pins']['sha256']
+-assert frozen['local_instance_count'] == 1 and frozen['global_instance_count'] == 0
++assert frozen['local_instance_count'] == 0 and frozen['global_instance_count'] == 0
+ assert len(source.splitlines()) <= frozen['proposed_hard_cap'] == 220
+ assert sha((here / 'owner-proposal/FROZEN.json').read_bytes()) == load('work/body-gate.json')['frozen_sha256']
+ assert {p.relative_to(here / 'owner-proposal').as_posix() for p in (here / 'owner-proposal').rglob('*') if p.is_file()} == set(pins) | {'pins.json', 'FROZEN.json'}
+@@ -172,14 +172,14 @@
+ assert axioms == decls['axioms']
+ assert len(decls['theorems']) == 1 and len(decls['definitions']) == 1
+ headers = load('owner-proposal/insertion-map.json')['public_heads']
+-namespace = 'MicroCFTA.SourcePruningEnumerationShallowChild.'
++namespace = 'MicroCFTA.SourcePruningEnumerationConstraint.'
+ assert decls['definitions'] == [namespace + item['name'] for item in headers if item['kind'] == 'def']
+ assert decls['theorems'] == [namespace + item['name'] for item in headers if item['kind'] == 'theorem']
+ assert set(decls['definitions'] + decls['theorems']) == set(decls['declarations'])
+ for names in axioms.values():
+     assert set(names) <= {'Classical.choice', 'Quot.sound', 'propext'}
+ receipt_stems = ['baseline-1'] + checks['attempts']
+-prefix = 'mcfta-pruning-enumeration-shallow-child-20261024-'
++prefix = 'mcfta-pruning-enumeration-constraint-20261024-'
+ expected_stems = {prefix + stem for stem in receipt_stems}
+ for suffix in ['limits.json', 'usage.json']:
+     paths = list((here / 'inputs').glob('*.' + suffix))
+@@ -194,21 +194,21 @@
+     usage = load('inputs/' + prefix + stem + '.usage.json')
+     assert 0 <= usage['age_seconds'] <= 600 and usage['remaining_percent'] > 1
+ for name in ['declaration', 'model', 'public', 'document', 'seal-script', 'root']:
+-    assert (here / 'inputs' / ('mcfta-pruning-enumeration-shallow-child-20261024-' + name + '-review.md')).is_file()
+-assert (root / 'lean/notes-current-pruning-enumeration-shallow-child.md').read_bytes() == (here / 'current-note.md').read_bytes()
+-findings = (root / 'FINDINGS.md').read_text().split('## Native shallow-child preparation', 1)[0]
++    assert (here / 'inputs' / ('mcfta-pruning-enumeration-constraint-20261024-' + name + '-review.md')).is_file()
++assert (root / 'lean/notes-current-pruning-enumeration-constraint.md').read_bytes() == (here / 'current-note.md').read_bytes()
++findings = (root / 'FINDINGS.md').read_text().split('## Concrete source constraint projection', 1)[0]
+ assert '## Haskell fix handoff for external work' in findings and findings.count('| Fixed by ') == 6
+ assert 'All six repairs are in the imported main history.' in findings
+ prior = load('previous-publication/remote-publication.json')
+ assert prior['status'] == 'PUSHED_AND_REMOTE_VERIFIED' and prior['remote_head'] == baseline
+ assert load('previous-publication/publication-spec.json')['head'] == baseline
+ assessment = (here / 'previous-publication/next-assessment.md').read_bytes()
+-assert sha(assessment) == 'a541676697b4e64a47fcef735e86cf940ccc6301128cb6c7a5cca203d8b649f3'
++assert sha(assessment) == '41fe79f79c383e3d572b00dabf8d445be67f5a003358f171d4050a76453bcc4b'
+ summary = load('previous-publication/post-publication-summary.json')
+ assert summary['head'] == baseline and summary['goal'] == 'ACTIVE_INCOMPLETE'
+ assert summary['component_status'] == 'PROVED_SEALED_PUSHED_REMOTE_VERIFIED'
+ assert summary['next_assessment_sha256'] == sha(assessment)
+-assert sha((here / 'inputs/mcfta-pruning-enumeration-shallow-child-20261024-descendant-review.md').read_bytes()) == 'dbe80d1c3bb14fdb72cc7035e9a937311f793683dcdc3a031b9ea39bcb1915d0'
++assert sha((here / 'inputs/mcfta-pruning-enumeration-constraint-20261024-source-review.md').read_bytes()) == '96f95e10e226c3f73d65ac99d2414484c7d45588d10e4bf10ee1be94a6be13c6'
+ 
+ print(json.dumps(dict(status='PASS', baseline=baseline, main=main, proof=proof,
+     baseline_files=count, unchanged_files=count - len(changed), exact_changed_files=changed,

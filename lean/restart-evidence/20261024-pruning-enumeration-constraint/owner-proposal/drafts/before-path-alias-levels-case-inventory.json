@@ -1,0 +1,66 @@
+{
+  "definition_match": {
+    "scrutinee": "sourceEqualities constraint",
+    "type": "Option (List (List Nat))",
+    "cases": [
+      {
+        "pattern": "none",
+        "fields": []
+      },
+      {
+        "pattern": "some classes",
+        "fields": [
+          {
+            "name": "classes",
+            "type": "List (List Nat)"
+          }
+        ]
+      }
+    ]
+  },
+  "definition_condition": {
+    "expression": "(positive constraint.guard).isSome",
+    "type": "Bool",
+    "true_output": "none residual",
+    "false_output": "some constraint residual",
+    "source_syntax_test": true,
+    "not_logical_positivity": true
+  },
+  "public_match": "Same accessor and cases as definition; no replacement accessor or desired result input.",
+  "proof_case_family": {
+    "command": "cases source : sourceEqualities constraint with",
+    "scrutinee_type": "Option (List (List Nat))",
+    "cases": [
+      {
+        "pattern": "none",
+        "fields": [],
+        "equation": {
+          "name": "source",
+          "type": "sourceEqualities constraint = none"
+        }
+      },
+      {
+        "pattern": "some classes",
+        "fields": [
+          {
+            "name": "classes",
+            "type": "List (List Nat)"
+          }
+        ],
+        "equation": {
+          "name": "source",
+          "type": "sourceEqualities constraint = some classes"
+        }
+      }
+    ]
+  },
+  "proof_condition": {
+    "file": "condition-positive.lean.txt",
+    "positive_fact": "(positive constraint.guard).isSome = true",
+    "negative_fact": "¬ ((positive constraint.guard).isSome = true)",
+    "scope": "only semantic iff inside some accessor branch"
+  },
+  "constructor_splits_on_constraint_or_guard": false,
+  "induction": null,
+  "recursive_calls": []
+}

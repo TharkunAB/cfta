@@ -1,0 +1,22 @@
+
+{- | A transition constraint: path equalities and a guard. The equalities are
+positive and in normal form, for the reduction and the enumerator.
+'constraintAsGuard' gives the two fields as one guard.
+-}
+data Constraint = Constraint
+    { constraintEqualities :: !EqConstraints
+    , constraintGuard :: !Guard
+    }
+    deriving (Eq, Show, Generic)
+
+instance Hashable Constraint
+
+{- | Whether a constraint is impossible. This recognizes contradictory
+equalities and the guard 'Bottom' without a solver; a constraint that only a
+solver can refute is not recognized.
+-}
+contradictory :: Constraint -> Bool
+contradictory Constraint{constraintEqualities, constraintGuard} =
+    constraintsAreContradictory constraintEqualities || constraintGuard == Bottom
+
+{- | The path equalities of a constraint: its cached equalities together with

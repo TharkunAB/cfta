@@ -1,0 +1,20 @@
+/-- A consistent class set is a supported terminal-or-branch trie input. -/
+theorem consistent_supported (classes : Constraints) (consistent : isContradicting classes = false)
+    (paths : Class) (member : paths ∈ classes) : EqualityTrie.Supported paths.eraseDups := by
+  apply (paths_eraseDups_nodup paths).imp_of_mem
+  intro left right leftMember rightMember different
+  have leftPresent : left ∈ paths := by simpa using leftMember
+  have rightPresent : right ∈ paths := by simpa using rightMember
+  refine ⟨?_, ?_⟩
+  · intro initial
+    have contradiction := (isContradicting_correct classes).mpr
+      ⟨paths, member, left, leftPresent, right, rightPresent, initial, different⟩
+    rw [consistent] at contradiction
+    contradiction
+  · intro initial
+    have contradiction := (isContradicting_correct classes).mpr
+      ⟨paths, member, right, rightPresent, left, leftPresent, initial, Ne.symm different⟩
+    rw [consistent] at contradiction
+    contradiction
+
+/-- Every normalized class has an exact valid, sorted, distinct trie representation. -/

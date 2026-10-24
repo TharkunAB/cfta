@@ -1,0 +1,22 @@
+abbrev Path := List Nat
+abbrev Class := List Path
+abbrev Constraints := List Class
+
+/-- A PCS class equates every pair of distinct paths. Trivial classes impose no condition. -/
+def ClassSat (term : Term Symbol) (paths : Class) : Prop :=
+  ∀ left ∈ paths, ∀ right ∈ paths, left ≠ right → PathsEqual term left right
+
+/-- All equality classes constrain the same complete term. -/
+def Satisfies (term : Term Symbol) (classes : Constraints) : Prop :=
+  ∀ paths ∈ classes, ClassSat term paths
+
+/-- A constraint-list head contributes one class condition. -/
+theorem satisfies_cons (term : Term Symbol) (paths : Class) (classes : Constraints) :
+    Satisfies term (paths :: classes) ↔ ClassSat term paths ∧ Satisfies term classes := by
+  simp [Satisfies]
+
+/-- A class has at least two distinct set members. -/
+def Nontrivial (paths : Class) : Prop := ∃ left ∈ paths, ∃ right ∈ paths, left ≠ right
+
+/-- Every class in the normalization state has at least two members. -/
+def Active (classes : Constraints) : Prop := ∀ paths ∈ classes, Nontrivial paths

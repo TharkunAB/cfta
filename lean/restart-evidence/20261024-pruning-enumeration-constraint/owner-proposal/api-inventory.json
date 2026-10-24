@@ -1,0 +1,65 @@
+{
+  "APIs": [
+    {
+      "name": "EnumerationEquality.classTrie/readClasses/trie_pcs_exact",
+      "source": "S01",
+      "cut": [
+        16,
+        57
+      ],
+      "exact_trie_pcs_argument_order": [
+        "term",
+        "trie",
+        "paths",
+        "same path membership",
+        "Nontrivial paths"
+      ]
+    },
+    {
+      "name": "SourceEqualityGuardReadback.Cached/NormalClasses/source_cached",
+      "source": "S02",
+      "use": "Cached actual source result derives actual.1 Active and actual.2.1 consistency; no normalization certificate is an input."
+    },
+    {
+      "name": "SourceEqualityPCSGuard.positive_source/own_sat",
+      "source": "S03",
+      "use": "positive_source is an iff; own_sat consumes actual holds=true for ANY source guard."
+    },
+    {
+      "name": "SourceCompactGuards.sourceEqualities/positive",
+      "source": "S04",
+      "use": "Exact accessor result and syntactic residual test. Reflexive Same is not positive."
+    },
+    {
+      "name": "EqualityNormalize.consistent_supported",
+      "source": "S05",
+      "cut": [
+        749,
+        768
+      ],
+      "type": "∀ (classes : EqualityNormalize.Constraints), EqualityNormalize.isContradicting classes = false → ∀ (paths : EqualityNormalize.Class), paths ∈ classes → EqualityTrie.Supported paths.eraseDups"
+    },
+    {
+      "name": "EqualityTrie.toPathTrie_correct",
+      "source": "S06",
+      "cut": [
+        463,
+        473
+      ],
+      "type": "∀ (paths : List (List Nat)), EqualityTrie.Supported paths → ∃ trie, EqualityTrie.toPathTrie paths = some trie ∧ EqualityTrie.Valid trie ∧ EqualityTrie.Supported (EqualityTrie.fromPathTrie trie) ∧ ∀ path, path ∈ EqualityTrie.fromPathTrie trie ↔ path ∈ paths"
+    },
+    {
+      "name": "EnumerationCorrectness.EqualityHolds/ResidualHolds",
+      "source": "S07",
+      "use": "Existing common-subtree and complete residual meanings, no replacement predicate."
+    },
+    {
+      "name": "List.mem_map/List.forall_mem_map/List.mem_eraseDups",
+      "source": "S13",
+      "use": "Actual returned-class membership and eraseDups readback."
+    }
+  ],
+  "new_helper_count": 0,
+  "local_typed_have_count": 3,
+  "source_semantic_boundary": "The accessor and holds are noncomputable models already installed; no extraction claim."
+}

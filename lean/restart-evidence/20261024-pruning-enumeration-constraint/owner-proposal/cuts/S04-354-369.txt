@@ -1,0 +1,16 @@
+  EqualityIndex.normalizeArray (EqualityTermination.normalizationBound paths)
+    (Classical.choose (EqualityIndex.normalizeArray_eventual (EqualityTermination.normalizationBound paths) paths)) paths
+
+/-- The proved finite source array execution returns the reference normal form. -/
+theorem arrayNormalize_eq (paths : List (List Path)) :
+    arrayNormalize paths = EqualityNormalize.mkEqConstraints (EqualityTermination.normalizationBound paths) paths :=
+  Classical.choose_spec (EqualityIndex.normalizeArray_eventual (EqualityTermination.normalizationBound paths) paths) _ (Nat.le_refl _)
+
+/-- The source array normalizer never reaches its proof-port timeout at this bound. -/
+theorem arrayNormalize_finished (paths : List (List Path)) : arrayNormalize paths ≠ .timeout := by
+  rw [arrayNormalize_eq]
+  exact EqualityTermination.mkEqConstraints_terminates paths
+
+/-- The source EqConstraints view of a completed array run. -/
+noncomputable def normalize (paths : List (List Path)) : Option (List (List Path)) :=
+  SymbolicEqualityBridge.resultClasses (arrayNormalize paths)

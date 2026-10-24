@@ -1,0 +1,28 @@
+/-- At positive source guards, the actual accessor has complete independent PCS constraint meaning. -/
+theorem positive_source [DecidableEq Formula] (formulas : Formulas Formula) (solver : Entailment Formula)
+    (constraint : Constraint Formula) (positiveGuard : (positive constraint.guard).isSome = true) (term : Term (Label Formula)) :
+    holds formulas solver constraint term = true ↔ Sat term (sourceEqualities constraint) := by
+  obtain ⟨raw, extracted⟩ := Option.isSome_iff_exists.mp positiveGuard
+  obtain ⟨added, found, exact⟩ := positive_sat formulas solver constraint.guard raw extracted
+  rw [holds_exact, ← exact term]
+  unfold sourceEqualities
+  rw [found]
+  cases added with
+  | none => simpa only [combine_sat, Sat, and_false] using (combine_sat constraint.equalities none term).symm
+  | some classes => cases classes with
+    | nil => simp [Sat, Satisfies]
+    | cons first rest => exact (combine_sat constraint.equalities (some (first :: rest)) term).symm
+
+/-- Complete independent guard acceptance implies the actual own payload for positive and residual guards. -/
+theorem own_sat [DecidableEq Formula] (formulas : Formulas Formula) (solver : Entailment Formula)
+    (constraint : Constraint Formula) (term : Term (Label Formula)) (accepted : holds formulas solver constraint term = true) :
+    Sat term (sourceEqualities constraint) := by
+  by_cases positiveGuard : (positive constraint.guard).isSome = true
+  · exact (positive_source formulas solver constraint positiveGuard term).mp accepted
+  · have missing : positiveNormalized constraint.guard = none := by
+      cases found : positiveNormalized constraint.guard with
+      | none => rfl
+      | some result =>
+          have support := positiveNormalized_support constraint.guard
+          rw [found] at support
+          exact False.elim (positiveGuard support.symm)

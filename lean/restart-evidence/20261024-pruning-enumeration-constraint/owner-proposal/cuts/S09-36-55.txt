@@ -1,0 +1,20 @@
+/-- Every source guard constructor, including list connectives and nested substitutions. -/
+inductive Guard (Formula : Type) where
+  | top | bottom
+  | same (left right : Path)
+  | entails (antecedent consequent : Path)
+  | satisfies (target : Path) (requirement : Formula)
+  | holds (targets : List Path) (formula : Formula)
+  | substitute (additions : List Substitution) (inner : Guard Formula)
+  | not (inner : Guard Formula)
+  | and (parts : List (Guard Formula))
+  | or (parts : List (Guard Formula))
+  deriving Repr
+
+/-- Formula and name operations used by the complete evaluator. -/
+structure Formulas (Formula : Type) where
+  substitute : List (Name × Name) → Formula → Formula
+  negate : Formula → Formula
+  conjunction : List Formula → Formula
+  equalNames : Name → Name → Formula
+  freeNames : Formula → List Name

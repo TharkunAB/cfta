@@ -1,0 +1,7 @@
+    simpa only [sourceEqualities, missing] using storedAccepted
+
+/-- The physical equality payload denotes independent existing-path equality classes. -/
+def Sat (term : Term Symbol) : Option Constraints → Prop
+  | none => False
+  | some classes => Satisfies term classes
+

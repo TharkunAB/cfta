@@ -1,0 +1,14 @@
+/-- Actual Constraint.equalities retains its EmptyConstraints fast path. -/
+noncomputable def sourceEqualities (constraint : Constraint Formula) : Option (List (List Path)) :=
+  match positiveNormalized constraint.guard with
+  | none | some (some []) => constraint.equalities
+  | some added => combineEqualities constraint.equalities added
+
+mutual
+/-- Intermediate array normalization does not change the source residual syntax test. -/
+theorem positiveNormalized_support (guard : Guard Formula) :
+    (positiveNormalized guard).isSome = (positive guard).isSome := by
+  cases guard with
+  | same left right => simp only [positiveNormalized, positive]; split <;> rfl
+  | and parts => exact positiveNormalizedList_support parts
+  | top | bottom | entails _ _ | satisfies _ _ | holds _ _ | substitute _ _ | not _ | or _ => rfl

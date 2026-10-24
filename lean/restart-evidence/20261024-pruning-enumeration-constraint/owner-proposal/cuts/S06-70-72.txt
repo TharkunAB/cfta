@@ -1,0 +1,3 @@
+/-- Two listed paths cannot be equal or extend each other. -/
+def Supported (paths : List Path) : Prop :=
+  paths.Pairwise (fun left right => ¬ left.IsPrefix right ∧ ¬ right.IsPrefix left)

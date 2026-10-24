@@ -1,0 +1,210 @@
+{
+  "header_binders": [
+    {
+      "name": "Formula",
+      "type": "Type",
+      "scope": "module implicit variable"
+    },
+    {
+      "name": "constraint",
+      "type": "SourceSymbolicIndex.Constraint Formula",
+      "scope": "both public declarations"
+    },
+    {
+      "name": "_inst",
+      "type": "DecidableEq Formula",
+      "scope": "project_complete scoped instance binder only"
+    },
+    {
+      "name": "cached",
+      "type": "Cached constraint.equalities",
+      "scope": "project_complete"
+    },
+    {
+      "name": "classes",
+      "type": "List (List Nat)",
+      "scope": "some branch of definition and public theorem match"
+    },
+    {
+      "name": "formulas",
+      "type": "Formulas Formula",
+      "scope": "both public semantic branches"
+    },
+    {
+      "name": "solver",
+      "type": "Entailment Formula",
+      "scope": "both public semantic branches"
+    },
+    {
+      "name": "term",
+      "type": "Term (Label Formula)",
+      "scope": "both public semantic branches"
+    },
+    {
+      "name": "trie",
+      "type": "EqualityTrie.Trie",
+      "scope": "public all-trie validity and semantics"
+    },
+    {
+      "name": "paths",
+      "type": "List Nat",
+      "scope": "public per-class readback"
+    },
+    {
+      "name": "path",
+      "type": "List Nat",
+      "scope": "public per-class path membership"
+    },
+    {
+      "name": "complete",
+      "type": "SourceSymbolicIndex.Constraint Formula",
+      "scope": "public ResidualHolds meaning lambda"
+    },
+    {
+      "name": "candidate",
+      "type": "Term (Label Formula)",
+      "scope": "same meaning lambda"
+    }
+  ],
+  "local_haves": [
+    {
+      "name": "actual",
+      "type": "NormalClasses classes",
+      "scope": "some accessor branch; derived by source_cached constraint cached classes source"
+    },
+    {
+      "name": "readback",
+      "type": "∀ paths ∈ classes, EqualityTrie.Valid (EnumerationEquality.classTrie paths) ∧ ∀ path, path ∈ EqualityTrie.fromPathTrie (EnumerationEquality.classTrie paths) ↔ path ∈ paths",
+      "scope": "same some branch"
+    },
+    {
+      "name": "equalityExact",
+      "type": "∀ term : Term (Label Formula), (∀ trie ∈ EnumerationEquality.readClasses classes, EqualityHolds term trie) ↔ EqualityNormalize.Satisfies term classes",
+      "scope": "same some branch"
+    }
+  ],
+  "proof_intros": [
+    {
+      "name": "formulas",
+      "type": "Formulas Formula",
+      "scope": "none branch"
+    },
+    {
+      "name": "solver",
+      "type": "Entailment Formula",
+      "scope": "none branch"
+    },
+    {
+      "name": "term",
+      "type": "Term (Label Formula)",
+      "scope": "none branch"
+    },
+    {
+      "name": "accepted",
+      "type": "SourceEqualityPCSGuard.holds formulas solver constraint term = true",
+      "scope": "none branch; contradiction via own_sat and actual source=none"
+    },
+    {
+      "name": "paths",
+      "type": "List Nat",
+      "scope": "readback proof"
+    },
+    {
+      "name": "member",
+      "type": "paths ∈ classes",
+      "scope": "readback proof"
+    },
+    {
+      "name": "path",
+      "type": "List Nat",
+      "scope": "readback membership proof"
+    },
+    {
+      "name": "term",
+      "type": "Term (Label Formula)",
+      "scope": "equalityExact proof"
+    },
+    {
+      "name": "paths",
+      "type": "List Nat",
+      "scope": "first forall_congr in equalityExact"
+    },
+    {
+      "name": "member",
+      "type": "paths ∈ classes",
+      "scope": "second forall_congr in equalityExact"
+    },
+    {
+      "name": "trie",
+      "type": "EqualityTrie.Trie",
+      "scope": "all-trie validity proof"
+    },
+    {
+      "name": "member",
+      "type": "trie ∈ EnumerationEquality.readClasses classes",
+      "scope": "all-trie validity proof"
+    },
+    {
+      "name": "paths",
+      "type": "List Nat",
+      "scope": "public per-class path readback proof"
+    },
+    {
+      "name": "member",
+      "type": "paths ∈ classes",
+      "scope": "same proof; return (readback paths member).2 without another path introduction"
+    },
+    {
+      "name": "formulas",
+      "type": "Formulas Formula",
+      "scope": "some branch semantic iff"
+    },
+    {
+      "name": "solver",
+      "type": "Entailment Formula",
+      "scope": "same"
+    },
+    {
+      "name": "term",
+      "type": "Term (Label Formula)",
+      "scope": "same"
+    },
+    {
+      "name": "accepted",
+      "type": "SourceEqualityPCSGuard.holds formulas solver constraint term = true",
+      "scope": "negative positiveGuard branch, forward implication after residual reduction"
+    },
+    {
+      "name": "satisfied",
+      "type": "(∀ trie ∈ EnumerationEquality.readClasses classes, EqualityHolds term trie) ∧ SourceEqualityPCSGuard.holds formulas solver constraint term = true",
+      "scope": "negative positiveGuard branch, reverse implication after residual reduction"
+    }
+  ],
+  "condition_facts": [
+    {
+      "name": "positiveGuard",
+      "type": "(positive constraint.guard).isSome = true",
+      "scope": "positive semantic branch"
+    },
+    {
+      "name": "positiveGuard",
+      "type": "¬ ((positive constraint.guard).isSome = true)",
+      "scope": "residual semantic branch"
+    }
+  ],
+  "lambda_binders": [
+    {
+      "name": "complete",
+      "type": "SourceSymbolicIndex.Constraint Formula",
+      "scope": "ResidualHolds lambda in public theorem"
+    },
+    {
+      "name": "candidate",
+      "type": "Term (Label Formula)",
+      "scope": "same lambda"
+    }
+  ],
+  "no_other_have_let_show_helper_or_instance_declaration_planned": true,
+  "case_equations": "case-inventory.json",
+  "obtained_fields": "obtain-inventory.json"
+}

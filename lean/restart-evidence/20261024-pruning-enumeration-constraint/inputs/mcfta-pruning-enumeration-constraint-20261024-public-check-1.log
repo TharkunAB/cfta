@@ -1,0 +1,42 @@
+{"command": ["/home/tritlo/.elan/toolchains/leanprover--lean4---v4.34.1/bin/lean", "-R", "/tmp/mcfta-pruning-enumeration-constraint-20261024/public-check-1", "-DwarningAsError=true", "-Dlinter.all=true", "/tmp/mcfta-pruning-enumeration-constraint-20261024/public-check-1/checked.lean"], "exit_code": 0, "raw_bytes": 2909, "raw_sha256": "eb390c219ec833151832b116e67ff36060e6c8dee888ff0e6cde118a80f717f7", "source_sha256": "dab2574aecb22c68cc95c236fc9592821911646d0799892821d49d094b74d2f3"}
+@MicroCFTA.SourcePruningEnumerationConstraint.project : {Formula : Type} →
+  MicroCFTA.SourceSymbolicIndex.Constraint Formula →
+    Option (List MicroCFTA.EqualityTrie.Trie × Option (MicroCFTA.SourceSymbolicIndex.Constraint Formula))
+@MicroCFTA.SourcePruningEnumerationConstraint.project_complete : ∀ {Formula : Type} [inst : DecidableEq Formula]
+  (constraint : MicroCFTA.SourceSymbolicIndex.Constraint Formula),
+  MicroCFTA.SourceEqualityGuardReadback.Cached constraint.equalities →
+    match MicroCFTA.SourceCompactGuards.sourceEqualities constraint with
+    | none =>
+      MicroCFTA.SourcePruningEnumerationConstraint.project constraint = none ∧
+        ∀ (formulas : MicroCFTA.SourceGuards.Formulas Formula) (solver : MicroCFTA.SourceGuards.Entailment Formula)
+          (term : MicroCFTA.Language.Term (MicroCFTA.SourceObservations.Label Formula)),
+          MicroCFTA.SourceEqualityPCSGuard.holds formulas solver constraint term ≠ true
+    | some classes =>
+      MicroCFTA.SourcePruningEnumerationConstraint.project constraint =
+          some
+            (MicroCFTA.EnumerationEquality.readClasses classes,
+              if (MicroCFTA.SourceCompactGuards.positive constraint.guard).isSome = true then none
+              else some constraint) ∧
+        (∀ (trie : MicroCFTA.EqualityTrie.Trie),
+            trie ∈ MicroCFTA.EnumerationEquality.readClasses classes → MicroCFTA.EqualityTrie.Valid trie) ∧
+          (∀ (paths : List MicroCFTA.SourceGuards.Path),
+              paths ∈ classes →
+                ∀ (path : MicroCFTA.EqualityTrie.Path),
+                  path ∈ MicroCFTA.EqualityTrie.fromPathTrie (MicroCFTA.EnumerationEquality.classTrie paths) ↔
+                    path ∈ paths) ∧
+            ∀ (formulas : MicroCFTA.SourceGuards.Formulas Formula) (solver : MicroCFTA.SourceGuards.Entailment Formula)
+              (term : MicroCFTA.Language.Term (MicroCFTA.SourceObservations.Label Formula)),
+              MicroCFTA.SourceEqualityPCSGuard.holds formulas solver constraint term = true ↔
+                (∀ (trie : MicroCFTA.EqualityTrie.Trie),
+                    trie ∈ MicroCFTA.EnumerationEquality.readClasses classes →
+                      MicroCFTA.EnumerationCorrectness.EqualityHolds term trie) ∧
+                  MicroCFTA.EnumerationCorrectness.ResidualHolds
+                    (fun complete candidate =>
+                      MicroCFTA.SourceEqualityPCSGuard.holds formulas solver complete candidate = true)
+                    (if (MicroCFTA.SourceCompactGuards.positive constraint.guard).isSome = true then none
+                    else some constraint)
+                    term
+'MicroCFTA.SourcePruningEnumerationConstraint.project' depends on axioms: [propext, Classical.choice, Quot.sound]
+'MicroCFTA.SourcePruningEnumerationConstraint.project_complete' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]

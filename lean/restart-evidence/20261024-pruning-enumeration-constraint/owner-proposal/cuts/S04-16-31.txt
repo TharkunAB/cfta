@@ -1,0 +1,16 @@
+mutual
+/-- The source positiveEqualities syntax test, before class normalization. -/
+def positive : Guard Formula → Option (List (List Path))
+  | .top => some []
+  | .same left right => if left ≠ right then some [[left, right]] else none
+  | .and parts => positiveList parts
+  | _ => none
+
+/-- Source right-fold extraction retains all positive operands. -/
+def positiveList : List (Guard Formula) → Option (List (List Path))
+  | [] => some []
+  | first :: rest => do
+      let initial ← positive first
+      let remaining ← positiveList rest
+      pure (initial ++ remaining)
+end

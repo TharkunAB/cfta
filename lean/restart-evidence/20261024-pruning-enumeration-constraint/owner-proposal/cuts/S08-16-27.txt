@@ -1,0 +1,12 @@
+/-- The two constraint fields read by the source indicator compiler. -/
+structure Constraint (Formula : Type) where
+  equalities : Option (List (List Path))
+  guard : Guard Formula
+
+/-- Complete acceptance checks stored equalities and the current public guard evaluator. -/
+noncomputable def acceptsConstraint [DecidableEq Formula] (formulas : Formulas Formula)
+    (solver : Entailment Formula) (constraint : Constraint Formula)
+    (term : Term (Label Formula)) : Bool :=
+  ConstraintIndicators.equalityValue (classTest term) constraint.equalities &&
+    decide (SourceBooleanEntry.evaluateGuard formulas solver constraint.guard term = .yes)
+
