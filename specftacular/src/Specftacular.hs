@@ -1603,9 +1603,9 @@ completionBudget = 256 * 1024 * 1024 * 1024
 allocation at HugeLists, so the fuel stops a completion at about 32 GiB,
 and the law keeps the rules that it has. At HugeLists 7-p4, 78 completions
 ran over the allocation budget and kept only the rules of their laws; they
-took 76 % of the time of the completion. With a fuel of 30000 pairs, 6-p4
-gave the same laws in 15 % less time, and 7-p4 ran in 41 % of the time
-(see the comparison with Spectacular).
+took 76 % of the time of the completion. With this fuel, 6-p4 gives the
+same laws in 16 % less time, and 7-p4 runs in 45 % of the time (see the
+comparison with Spectacular).
 -}
 completionFuelDefault :: Int
 completionFuelDefault = 15

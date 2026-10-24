@@ -25,18 +25,21 @@ stays as a second limit.
   laws with each optimization and each number of capabilities. The
   allocation budget does not.
 - A pair costs about 1 MiB at HugeLists, so the fuel stops a completion at
-  about 32 GiB. With a fuel of 30000 pairs, HugeLists 7-p4 ran in 5,800
-  seconds against 14,081, and allocated 26.9 TB against 61 TB. HugeLists
-  6-p4 gave the same output in 15 % less time.
+  about 32 GiB. HugeLists 6-p4 gives the same output in 486 seconds against
+  577. HugeLists 7-p4 runs in 6,381 seconds against 14,081 under the load of
+  other jobs (5,800 seconds on a quiet host with 30,000 pairs), and it
+  allocates 27.3 TB against 61 TB. Each one-core configuration of the
+  comparison with Spectacular gives the same output.
 
 ## Consequences
 
-- The laws change where a completion runs out of its fuel. At 7-p4, 569 laws
-  of the earlier run are not printed: the rules of the stopped completions
-  prove them. 52 other laws are printed: a stopped completion does not
-  derive them. Each printed law passes the tests and the rechecks.
-- Regex 7-p4 prints one more law: the completion of the AC law of `|` runs
-  out of its fuel.
+- The laws change where a completion runs out of its fuel. At 7-p4 with
+  `--enumerate-ahead`, 578 laws of the earlier run are not printed: the
+  rules of the stopped completions prove them. 45 other laws are printed: a
+  stopped completion does not derive them. At 7-p3, 11 laws are added. Each
+  printed law passes the tests and the rechecks.
+- A fuel of 30,000 pairs gave Regex 7-p4 one more law: the completion of
+  the AC law of `|` needs more pairs. 2^15 pairs are enough for it.
 - Some completions still run over the budget within the fuel: at 7-p4,
   three laws over `[[[A]]]` cost more than 8 MiB for each pair.
 
