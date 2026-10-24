@@ -1,0 +1,269 @@
+{"command": ["/home/tritlo/.elan/toolchains/leanprover--lean4---v4.34.1/bin/lean", "-R", "/tmp/mcfta-pruning-enumeration-selected-row-20261024/public-1", "-DwarningAsError=true", "-Dlinter.all=true", "/tmp/mcfta-pruning-enumeration-selected-row-20261024/public-1/checked.lean"], "exit_code": 0, "raw_bytes": 21081, "raw_sha256": "752c526ea05a1771a24972e664a91c890dde6d30cfc27fd792882e9d19ded93b", "source_sha256": "f0feec7f9c01dde795ac45cbe856e36e1e9a62bdfadeeb1f9bf6d8d24b4ab6e9"}
+@MicroCFTA.SourcePruningEnumerationSelectedRow.selected_projected_arity : ∀
+  [inst :
+    DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey MicroCFTA.SourcePruningTemplates.Symbol
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  (symbol : MicroCFTA.SourcePruningTemplates.Symbol)
+  (original : MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+  (stored : MicroCFTA.SourceEqualityConstraintAllocation.Value)
+  (children :
+    List
+      (MicroCFTA.InternedConstructorTemplates.Value MicroCFTA.SourcePruningTemplates.Symbol
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)))
+  (before : MicroCFTA.SourceEqualityConstraintMemoAllocation.State)
+  (heap current :
+    MicroCFTA.InternedConstructorTemplates.State MicroCFTA.SourcePruningTemplates.Symbol
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+  (rows :
+    List
+      (MicroCFTA.InternedConstructorTemplates.EdgeValue MicroCFTA.SourcePruningTemplates.Symbol
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))),
+  MicroCFTA.SourceEqualityGuardReadback.Cached original.equalities →
+    MicroCFTA.SourceEqualityPhysicalPayload.read original.equalities = Except.ok stored.payload →
+      MicroCFTA.SourceEqualityConstraintAllocation.Ready before.constraints stored →
+        MicroCFTA.SourceEqualityConstraintMemoAllocation.Valid before →
+          MicroCFTA.SourceEqualityRequiredCache.Ready heap →
+            (MicroCFTA.SourceEqualityMkEdgeAllocation.accepted original children.length = true →
+                MicroCFTA.InternedNestedProvenance.Values heap children) →
+              MicroCFTA.SourceEqualityRequiredCache.Keeps
+                  (MicroCFTA.InternedConstructorTemplates.run
+                      (MicroCFTA.SourceEqualityMkEdgeAllocation.work symbol original children
+                        (MicroCFTA.SourceEqualityMkEdgeAllocation.accepted original children.length))
+                      heap).snd
+                  current →
+                MicroCFTA.InternedNestedProvenance.Edges current rows →
+                  MicroCFTA.MergedColdReaderClosedInputs.ClosedEdges rows →
+                    (MicroCFTA.InternedConstructorTemplates.run
+                            (MicroCFTA.SourceEqualityMkEdgeAllocation.work symbol original children
+                              (MicroCFTA.SourceEqualityMkEdgeAllocation.accepted original children.length))
+                            heap).fst ∈
+                        MicroCFTA.InternedEdgeResidency.nodeEdges
+                          (MicroCFTA.InternedConstructorTemplates.run
+                              (MicroCFTA.InternedConstructorTemplates.makeNode rows) current).fst →
+                      have built :=
+                        MicroCFTA.InternedConstructorTemplates.run
+                          (MicroCFTA.SourceEqualityMkEdgeAllocation.work symbol original children
+                            (MicroCFTA.SourceEqualityMkEdgeAllocation.accepted original children.length))
+                          heap;
+                      have parent :=
+                        MicroCFTA.InternedConstructorTemplates.run
+                          (MicroCFTA.InternedConstructorTemplates.makeNode rows) current;
+                      have operations :=
+                        MicroCFTA.SourceEqualityMkEdgeAllocation.outputState
+                          (MicroCFTA.SourceEqualityMkEdgeAllocation.check stored original.guard children.length
+                              before).snd
+                          (MicroCFTA.SourceEqualityMkEdgeAllocation.accepted original children.length);
+                      MicroCFTA.SourceEqualityMkEdgeAllocation.accepted original children.length = true ∧
+                        (MicroCFTA.SourceEqualityMkEdgeAllocation.check stored original.guard children.length
+                                before).fst =
+                            Except.ok true ∧
+                          MicroCFTA.SourceEqualityMkEdgeAllocation.build symbol stored original.guard children before
+                                heap =
+                              (Except.ok built.fst, operations, built.snd) ∧
+                            MicroCFTA.SourceEqualityConstraintMemoAllocation.Valid operations ∧
+                              MicroCFTA.SourceEqualityConstraintMemoAllocation.Grows before operations ∧
+                                built.fst.entry.key.symbol = symbol ∧
+                                  built.fst.entry.key.constraint = original ∧
+                                    built.fst.children = children ∧
+                                      MicroCFTA.InternedEdgeResidency.nodeEdges parent.fst =
+                                          MicroCFTA.InternedConstructorTemplates.canonicalEdges
+                                            (MicroCFTA.InternedConstructorTemplates.surviving rows) ∧
+                                        built.fst ∈ rows ∧
+                                          MicroCFTA.EqualityLeafProjectionPhysical.dead built.fst = false ∧
+                                            MicroCFTA.SourceEqualityRequiredCache.Keeps current parent.snd ∧
+                                              MicroCFTA.SourceEqualityRequiredCache.Keeps heap parent.snd ∧
+                                                MicroCFTA.SourceEqualityRequiredCache.Ready parent.snd ∧
+                                                  MicroCFTA.InternedProbeProvenance.Available parent.snd parent.fst ∧
+                                                    parent.fst.free = [] ∧
+                                                      ∃ classes,
+                                                        MicroCFTA.SourceCompactGuards.sourceEqualities
+                                                              built.fst.entry.key.constraint =
+                                                            some classes ∧
+                                                          MicroCFTA.SourcePruningEnumerationConstraint.project
+                                                                built.fst.entry.key.constraint =
+                                                              some
+                                                                (MicroCFTA.EnumerationEquality.readClasses classes,
+                                                                  if
+                                                                      (MicroCFTA.SourceCompactGuards.positive
+                                                                            built.fst.entry.key.constraint.guard).isSome =
+                                                                        true then
+                                                                    none
+                                                                  else some built.fst.entry.key.constraint) ∧
+                                                            (∀ (trie : MicroCFTA.EqualityTrie.Trie),
+                                                                trie ∈
+                                                                    MicroCFTA.EnumerationEquality.readClasses classes →
+                                                                  MicroCFTA.EqualityTrie.Valid trie) ∧
+                                                              (∀ (paths : MicroCFTA.EqualityNormalize.Class),
+                                                                  paths ∈ classes →
+                                                                    ∀ (path : MicroCFTA.EqualityTrie.Path),
+                                                                      path ∈
+                                                                          MicroCFTA.EqualityTrie.fromPathTrie
+                                                                            (MicroCFTA.EnumerationEquality.classTrie
+                                                                              paths) ↔
+                                                                        path ∈ paths) ∧
+                                                                ∀ (start : Nat),
+                                                                  MicroCFTA.EnumerationState.arityAllows
+                                                                      built.fst.children.length
+                                                                      (MicroCFTA.EnumerationCorrectness.suspendedVars
+                                                                        start
+                                                                        (MicroCFTA.EnumerationEquality.readClasses
+                                                                          classes)) =
+                                                                    true
+@MicroCFTA.SourcePruningEnumerationSelectedRow.prepare_selected_complete : ∀
+  [inst :
+    DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey MicroCFTA.SourcePruningTemplates.Symbol
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  (symbol : MicroCFTA.SourcePruningTemplates.Symbol)
+  (original : MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+  (stored : MicroCFTA.SourceEqualityConstraintAllocation.Value)
+  (children :
+    List
+      (MicroCFTA.InternedConstructorTemplates.Value MicroCFTA.SourcePruningTemplates.Symbol
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)))
+  (before : MicroCFTA.SourceEqualityConstraintMemoAllocation.State)
+  (heap current :
+    MicroCFTA.InternedConstructorTemplates.State MicroCFTA.SourcePruningTemplates.Symbol
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+  (rows :
+    List
+      (MicroCFTA.InternedConstructorTemplates.EdgeValue MicroCFTA.SourcePruningTemplates.Symbol
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))),
+  MicroCFTA.SourceEqualityGuardReadback.Cached original.equalities →
+    MicroCFTA.SourceEqualityPhysicalPayload.read original.equalities = Except.ok stored.payload →
+      MicroCFTA.SourceEqualityConstraintAllocation.Ready before.constraints stored →
+        MicroCFTA.SourceEqualityConstraintMemoAllocation.Valid before →
+          MicroCFTA.SourceEqualityRequiredCache.Ready heap →
+            (MicroCFTA.SourceEqualityMkEdgeAllocation.accepted original children.length = true →
+                MicroCFTA.InternedNestedProvenance.Values heap children) →
+              MicroCFTA.SourceEqualityRequiredCache.Keeps
+                  (MicroCFTA.InternedConstructorTemplates.run
+                      (MicroCFTA.SourceEqualityMkEdgeAllocation.work symbol original children
+                        (MicroCFTA.SourceEqualityMkEdgeAllocation.accepted original children.length))
+                      heap).snd
+                  current →
+                MicroCFTA.InternedNestedProvenance.Edges current rows →
+                  MicroCFTA.MergedColdReaderClosedInputs.ClosedEdges rows →
+                    (MicroCFTA.InternedConstructorTemplates.run
+                            (MicroCFTA.SourceEqualityMkEdgeAllocation.work symbol original children
+                              (MicroCFTA.SourceEqualityMkEdgeAllocation.accepted original children.length))
+                            heap).fst ∈
+                        MicroCFTA.InternedEdgeResidency.nodeEdges
+                          (MicroCFTA.InternedConstructorTemplates.run
+                              (MicroCFTA.InternedConstructorTemplates.makeNode rows) current).fst →
+                      ∀ (scs : List MicroCFTA.EnumerationState.Suspended)
+                        (enumBefore entry :
+                          MicroCFTA.EnumerationState.State MicroCFTA.SourcePruningTemplates.Symbol
+                            (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)),
+                        MicroCFTA.SourcePruningEnumerationObservation.PendingRealized heap enumBefore →
+                          MicroCFTA.EnumerationCompressionFrame.Frame enumBefore entry →
+                            enumBefore.counter = enumBefore.values.length →
+                              MicroCFTA.EnumerationState.arityAllows
+                                    (MicroCFTA.InternedConstructorTemplates.run
+                                            (MicroCFTA.SourceEqualityMkEdgeAllocation.work symbol original children
+                                              (MicroCFTA.SourceEqualityMkEdgeAllocation.accepted original
+                                                children.length))
+                                            heap).fst.children.length
+                                    scs =
+                                  true →
+                                have built :=
+                                  MicroCFTA.InternedConstructorTemplates.run
+                                    (MicroCFTA.SourceEqualityMkEdgeAllocation.work symbol original children
+                                      (MicroCFTA.SourceEqualityMkEdgeAllocation.accepted original children.length))
+                                    heap;
+                                have parent :=
+                                  MicroCFTA.InternedConstructorTemplates.run
+                                    (MicroCFTA.InternedConstructorTemplates.makeNode rows) current;
+                                MicroCFTA.SourcePruningEnumerationObservation.PendingRealized parent.snd entry ∧
+                                  entry.counter = entry.values.length ∧
+                                    ∃ classes,
+                                      MicroCFTA.SourcePruningEnumerationConstraint.project
+                                            built.fst.entry.key.constraint =
+                                          some
+                                            (MicroCFTA.EnumerationEquality.readClasses classes,
+                                              if
+                                                  (MicroCFTA.SourceCompactGuards.positive
+                                                        built.fst.entry.key.constraint.guard).isSome =
+                                                    true then
+                                                none
+                                              else some built.fst.entry.key.constraint) ∧
+                                        have tries := MicroCFTA.EnumerationEquality.readClasses classes;
+                                        have residual :=
+                                          if
+                                              (MicroCFTA.SourceCompactGuards.positive
+                                                    built.fst.entry.key.constraint.guard).isSome =
+                                                true then
+                                            none
+                                          else some built.fst.entry.key.constraint;
+                                        have staged :=
+                                          List.map
+                                            (fun indexed =>
+                                              (indexed.fst,
+                                                MicroCFTA.EnumerationState.descendScs indexed.snd scs ++
+                                                  MicroCFTA.EnumerationState.descendScs indexed.snd
+                                                    (MicroCFTA.EnumerationCorrectness.suspendedVars entry.counter
+                                                      tries),
+                                                MicroCFTA.SourcePruningEnumerationShallowChild.prepareChild
+                                                  (MicroCFTA.EnumerationState.descendScs indexed.snd scs ++
+                                                    MicroCFTA.EnumerationState.descendScs indexed.snd
+                                                      (MicroCFTA.EnumerationCorrectness.suspendedVars entry.counter
+                                                        tries))
+                                                  indexed.fst))
+                                            built.fst.children.zipIdx;
+                                        have stop := List.findIdx (fun stage => stage.snd.snd.isNone) staged;
+                                        ∃ action childrenResult childrenAfter after,
+                                          MicroCFTA.SourcePruningEnumerationEdgeTraversal.prepare scs built.fst =
+                                              some action ∧
+                                            MicroCFTA.EnumerationCorrectness.Success
+                                                (MicroCFTA.SourcePruningEnumerationEdgeTraversal.runStaged staged)
+                                                (MicroCFTA.EnumerationCorrectness.suspendedState tries.length entry)
+                                                childrenResult childrenAfter ∧
+                                              MicroCFTA.EnumerationCorrectness.Success
+                                                  (MicroCFTA.SourcePruningEnumerationEdgeTraversal.runStaged
+                                                    (List.take stop staged))
+                                                  (MicroCFTA.EnumerationCorrectness.suspendedState tries.length entry)
+                                                  (some
+                                                    (List.map (fun uv => MicroCFTA.Fragments.Fragment.hole uv)
+                                                      (List.range' (entry.counter + tries.length) stop)))
+                                                  childrenAfter ∧
+                                                (childrenResult =
+                                                    if stop < staged.length then none
+                                                    else
+                                                      some
+                                                        (List.map (fun uv => MicroCFTA.Fragments.Fragment.hole uv)
+                                                          (List.range' (entry.counter + tries.length) staged.length))) ∧
+                                                  (after =
+                                                      match childrenResult with
+                                                      | none => childrenAfter
+                                                      | some fragments =>
+                                                        match residual with
+                                                        | none => childrenAfter
+                                                        | some guard =>
+                                                          { counter := childrenAfter.counter,
+                                                            representatives := childrenAfter.representatives,
+                                                            values := childrenAfter.values,
+                                                            obligations :=
+                                                              (guard,
+                                                                  MicroCFTA.Fragments.Fragment.node
+                                                                    built.fst.entry.key.symbol fragments) ::
+                                                                childrenAfter.obligations,
+                                                            recursionAncestry := childrenAfter.recursionAncestry,
+                                                            expansionAncestry := childrenAfter.expansionAncestry }) ∧
+                                                    MicroCFTA.EnumerationCorrectness.Success action entry
+                                                        (Option.map
+                                                          (fun fragments =>
+                                                            MicroCFTA.Fragments.Fragment.node built.fst.entry.key.symbol
+                                                              fragments)
+                                                          childrenResult)
+                                                        after ∧
+                                                      after.counter = entry.counter + tries.length + stop ∧
+                                                        after.counter = after.values.length ∧
+                                                          MicroCFTA.SourcePruningEnumerationObservation.PendingRealized
+                                                            parent.snd after
+'MicroCFTA.SourcePruningEnumerationSelectedRow.selected_projected_arity' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'MicroCFTA.SourcePruningEnumerationSelectedRow.prepare_selected_complete' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]

@@ -1,0 +1,52 @@
+/-- A selected actual normalized row retains its checked origin and supplies projected own bounds. -/
+theorem selected_projected_arity [DecidableEq (InternedConstructorTemplates.EdgeKey Symbol Constraint)]
+    (symbol : Symbol) (original : Constraint) (stored : SourceEqualityConstraintAllocation.Value)
+    (children : List (InternedConstructorTemplates.Value Symbol Constraint))
+    (before : SourceEqualityConstraintMemoAllocation.State)
+    (heap current : InternedConstructorTemplates.State Symbol Constraint)
+    (rows : List (InternedConstructorTemplates.EdgeValue Symbol Constraint))
+    (cached : SourceEqualityGuardReadback.Cached original.equalities)
+    (physical : SourceEqualityPhysicalPayload.read original.equalities = .ok stored.payload)
+    (storedReady : SourceEqualityConstraintAllocation.Ready before.constraints stored)
+    (valid : SourceEqualityConstraintMemoAllocation.Valid before)
+    (heapReady : SourceEqualityRequiredCache.Ready heap)
+    (available : SourceEqualityMkEdgeAllocation.accepted original children.length = true →
+      InternedNestedProvenance.Values heap children)
+    (advanced : SourceEqualityRequiredCache.Keeps
+      (InternedConstructorTemplates.run (SourceEqualityMkEdgeAllocation.work symbol original children
+        (SourceEqualityMkEdgeAllocation.accepted original children.length)) heap).2 current)
+    (resident : InternedNestedProvenance.Edges current rows)
+    (closedRows : MergedColdReaderClosedInputs.ClosedEdges rows)
+    (selected : (InternedConstructorTemplates.run (SourceEqualityMkEdgeAllocation.work symbol original children
+        (SourceEqualityMkEdgeAllocation.accepted original children.length)) heap).1 ∈
+      InternedEdgeResidency.nodeEdges (InternedConstructorTemplates.run (InternedConstructorTemplates.makeNode rows) current).1) :
+    let built := InternedConstructorTemplates.run (SourceEqualityMkEdgeAllocation.work symbol original children
+      (SourceEqualityMkEdgeAllocation.accepted original children.length)) heap
+    let parent := InternedConstructorTemplates.run (InternedConstructorTemplates.makeNode rows) current
+    let operations := SourceEqualityMkEdgeAllocation.outputState
+      (SourceEqualityMkEdgeAllocation.check stored original.guard children.length before).2
+      (SourceEqualityMkEdgeAllocation.accepted original children.length)
+    SourceEqualityMkEdgeAllocation.accepted original children.length = true ∧
+    (SourceEqualityMkEdgeAllocation.check stored original.guard children.length before).1 = .ok true ∧
+    SourceEqualityMkEdgeAllocation.build symbol stored original.guard children before heap =
+      (.ok built.1, operations, built.2) ∧
+    SourceEqualityConstraintMemoAllocation.Valid operations ∧
+    SourceEqualityConstraintMemoAllocation.Grows before operations ∧
+    built.1.entry.key.symbol = symbol ∧ built.1.entry.key.constraint = original ∧ built.1.children = children ∧
+    InternedEdgeResidency.nodeEdges parent.1 = InternedConstructorTemplates.canonicalEdges
+      (InternedConstructorTemplates.surviving rows) ∧
+    built.1 ∈ rows ∧ EqualityLeafProjectionPhysical.dead built.1 = false ∧
+    SourceEqualityRequiredCache.Keeps current parent.2 ∧ SourceEqualityRequiredCache.Keeps heap parent.2 ∧
+    SourceEqualityRequiredCache.Ready parent.2 ∧ InternedProbeProvenance.Available parent.2 parent.1 ∧
+    parent.1.free = [] ∧
+    ∃ classes : EqualityNormalize.Constraints,
+      SourceCompactGuards.sourceEqualities built.1.entry.key.constraint = some classes ∧
+      SourcePruningEnumerationConstraint.project built.1.entry.key.constraint =
+        some (EnumerationEquality.readClasses classes,
+          if (SourceCompactGuards.positive built.1.entry.key.constraint.guard).isSome
+            then none else some built.1.entry.key.constraint) ∧
+      (∀ trie ∈ EnumerationEquality.readClasses classes, EqualityTrie.Valid trie) ∧
+      (∀ paths ∈ classes, ∀ path,
+        path ∈ EqualityTrie.fromPathTrie (EnumerationEquality.classTrie paths) ↔ path ∈ paths) ∧
+      ∀ start : Nat, arityAllows built.1.children.length
+        (suspendedVars start (EnumerationEquality.readClasses classes)) = true

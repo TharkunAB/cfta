@@ -1,0 +1,10 @@
+/-- The consecutive variables assigned to one edge's equality classes. -/
+def suspendedVars (start : Nat) : List EqualityTrie.Trie → List Suspended
+  | [] => []
+  | trie :: rest => ⟨trie, start⟩ :: suspendedVars (start + 1) rest
+
+/-- Apply the actual pure-equality allocation update once per class. -/
+def suspendedState : Nat → State Symbol Guard → State Symbol Guard
+  | 0, state => state
+  | count + 1, state => suspendedState count (allocated none state)
+

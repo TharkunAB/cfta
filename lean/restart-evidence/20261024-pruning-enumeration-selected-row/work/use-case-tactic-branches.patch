@@ -1,0 +1,45 @@
+--- strict-1/SourcePruningEnumerationSelectedRow.lean
++++ strict-2/SourcePruningEnumerationSelectedRow.lean
+@@ -87,10 +87,10 @@
+         (normalized ▸ selected)
+   have accepted : SourceEqualityMkEdgeAllocation.accepted original children.length = true := by
+     cases keepEq : SourceEqualityMkEdgeAllocation.accepted original children.length
+-    | false =>
++    case false =>
+         simp only [keepEq, Bool.false_eq_true, ↓reduceIte] at rowChildren
+         simp [EqualityLeafProjectionPhysical.dead, rowChildren, Value.referenceOf] at live
+-    | true => rfl
++    case true => rfl
+   simp only [accepted, ↓reduceIte] at checkedExact rowGuard rowChildren
+   obtain ⟨parentKept, parentAvailable, parentClosed, _parentOrdinary⟩ :=
+     SourceEqualityRequiredCache.node rows current advanced.ready resident closedRows
+@@ -189,11 +189,11 @@
+     exact aligned
+   refine ⟨entryRealized, entryAligned, classes, projected, ?_⟩
+   cases parentEq : selectedParent.1
+-  | empty =>
+-      simp only [parentEq, InternedEdgeResidency.nodeEdges, List.not_mem_nil] at selected
+-  | reference name =>
+-      simp only [parentEq, InternedEdgeResidency.nodeEdges, List.not_mem_nil] at selected
+-  | node parentEntry parentRows depth free =>
++  case empty =>
++      simp only [parentEq, InternedEdgeResidency.nodeEdges, List.not_mem_nil] at selected
++  case reference name =>
++      simp only [parentEq, InternedEdgeResidency.nodeEdges, List.not_mem_nil] at selected
++  case node parentEntry parentRows depth free =>
+       simpa only [projected] using
+         SourcePruningEnumerationEdgeTraversal.prepare_complete scs selectedBuilt.1 selectedParent.2
+           parentEntry parentRows depth free parentReady
+@@ -201,9 +201,9 @@
+           (by simpa only [parentEq, Value.free] using parentClosed)
+           (by simpa only [parentEq, InternedEdgeResidency.nodeEdges] using selected)
+           entry entryRealized entryAligned allowed
+-  | union unionEntry members unionDepth unionFree =>
+-      simp only [parentEq, InternedEdgeResidency.nodeEdges, List.not_mem_nil] at selected
+-  | mu muEntry body depthShape ordinaryShape =>
++  case union unionEntry members unionDepth unionFree =>
++      simp only [parentEq, InternedEdgeResidency.nodeEdges, List.not_mem_nil] at selected
++  case mu muEntry body depthShape ordinaryShape =>
+       simp only [parentEq, InternedEdgeResidency.nodeEdges, List.not_mem_nil] at selected
+ 
+ end MicroCFTA.SourcePruningEnumerationSelectedRow

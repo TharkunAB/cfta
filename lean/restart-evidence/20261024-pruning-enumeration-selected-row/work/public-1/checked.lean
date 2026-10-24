@@ -1,0 +1,9 @@
+import MicroCFTA.SourcePruningEnumerationSelectedRow
+
+set_option pp.deepTerms true
+set_option pp.maxSteps 1000000
+
+#check @MicroCFTA.SourcePruningEnumerationSelectedRow.selected_projected_arity
+#check @MicroCFTA.SourcePruningEnumerationSelectedRow.prepare_selected_complete
+#print axioms MicroCFTA.SourcePruningEnumerationSelectedRow.selected_projected_arity
+#print axioms MicroCFTA.SourcePruningEnumerationSelectedRow.prepare_selected_complete

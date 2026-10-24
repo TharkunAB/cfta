@@ -1,0 +1,33 @@
+--- strict-2/SourcePruningEnumerationSelectedRow.lean
++++ strict-3/SourcePruningEnumerationSelectedRow.lean
+@@ -76,6 +76,11 @@
+     validTries, pathReadback, ownArity⟩ :=
+     SourcePruningEnumerationCheckedArity.checked_projected_arity symbol original stored children
+       before heap cached physical storedReady valid heapReady available
++  change actualBuilt.1.entry.key.constraint =
++    (if SourceEqualityMkEdgeAllocation.accepted original children.length then original
++      else SourceEqualityConstraintConstructors.top (Formula := FullSyntax.Formula)) at rowGuard
++  change actualBuilt.1.children =
++    (if SourceEqualityMkEdgeAllocation.accepted original children.length then children else [.empty]) at rowChildren
+   have normalized : InternedEdgeResidency.nodeEdges actualParent.1 =
+         InternedConstructorTemplates.canonicalEdges (InternedConstructorTemplates.surviving rows) := by
+     exact EqualityLeafProjectionPhysical.makeNode_edges rows current
+@@ -187,6 +192,9 @@
+   have entryAligned : entry.counter = entry.values.length := by
+     rw [frame.counter, frame.values]
+     exact aligned
++  change InternedProbeProvenance.Available selectedParent.2 selectedParent.1 at parentAvailable
++  change selectedParent.1.free = [] at parentClosed
++  change selectedBuilt.1 ∈ InternedEdgeResidency.nodeEdges selectedParent.1 at selected
+   refine ⟨entryRealized, entryAligned, classes, projected, ?_⟩
+   cases parentEq : selectedParent.1
+   case empty =>
+@@ -194,7 +202,7 @@
+   case reference name =>
+       simp only [parentEq, InternedEdgeResidency.nodeEdges, List.not_mem_nil] at selected
+   case node parentEntry parentRows depth free =>
+-      simpa only [projected] using
++      simpa only [selectedBuilt, projected] using
+         SourcePruningEnumerationEdgeTraversal.prepare_complete scs selectedBuilt.1 selectedParent.2
+           parentEntry parentRows depth free parentReady
+           (by simpa only [parentEq] using parentAvailable)

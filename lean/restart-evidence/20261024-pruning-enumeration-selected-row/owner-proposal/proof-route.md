@@ -1,0 +1,15 @@
+# Planned body operations, no proof body
+
+Head1 selected_projected_arity:
+1. Define the three frozen actualBuilt/actualParent/actualOperations aliases. Obtain CheckedArity's15 fields once for the SAME computed checked row.
+2. Prove frozen normalized with makeNode_edges using advanced.ready.semantic.1.normal.facts and current row residency. Apply normalized_member to actual selected output membership rewritten by normalized. Obtain inputMember and live. Do not add either as an input premise.
+3. Prove frozen accepted by cases on the actual accepted Bool. False specializes rowChildren to [Empty], whose literal deadness contradicts live=false. True is immediate. No rejected original bounds or Top-guard inference occurs. Rewrite checkedExact/rowGuard/rowChildren with accepted as needed; all exact rewritten types are inventoried.
+4. Obtain RequiredCache.node's4 fields at current. Assemble parentKept and checkedKept.trans(advanced.trans parentKept), actual returned Ready/Available/free=[], normalized rows, actual selected-row origin and its same classes/projection/validity/path/own bounds. No history is inferred from readiness.
+
+Head2 prepare_selected_complete:
+1. Define distinct selectedBuilt/selectedParent aliases. Obtain all22 fields of Head1, retaining even unused proof fields in the type inventory.
+2. Prove frozen entryRealized from realized_preserved heap selectedParent.2 enumBefore entry realized frame totalKept. Prove frozen entryAligned from aligned and the actual frame counter/values equalities.
+3. Split selectedParent.1 by the frozen parent case header. Every non-node constructor has nodeEdges=[] and contradicts actual selected membership. Only .node remains; its full typed fields and case equality are inventoried. Convert parentAvailable, parentClosed and selected to the exact inline .node API arguments. No replacement parent or assumed second outcome is supplied.
+4. Apply existing EdgeTraversal.prepare_complete at selectedParent.2 and entry, with parentReady, those exact .node arguments, entryRealized, entryAligned and the independent allowed input. Refine entryRealized, entryAligned, classes and projected, then directly reuse its complete conclusion after rewriting only the derived actual project Some equation. The existing own let is definitionally suspendedVars entry.counter tries. No traversal output field is extracted or reassembled. This retains the SAME actual action, completed-prefix/full child endpoint, residual update and counters. Public tries/residual/staged/stop are the exact existing traversal computations, not new proof-local definitions. Do not run an action twice or choose unrelated endpoints.
+
+Four obtains have43 fields total. Four haves and five proof lets are the only named local declarations. There are two actual case families: Bool2 and Value5. No child-result/residual proof split is needed because the existing full packet already retains its literal public matches. No additional helper, local instance, IH or recursive proof is planned.

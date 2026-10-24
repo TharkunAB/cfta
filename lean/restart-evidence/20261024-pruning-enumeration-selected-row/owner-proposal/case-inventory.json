@@ -1,0 +1,176 @@
+{
+  "cases": [
+    {
+      "owner": "selected_projected_arity",
+      "scope": "local accepted proof",
+      "fragment": "case-keep.lean.txt",
+      "scrutinee": "SourceEqualityMkEdgeAllocation.accepted original children.length",
+      "type": "Bool",
+      "equation_name": "keepEq",
+      "branches": [
+        {
+          "constructor": "false",
+          "binders": [],
+          "equation_type": "SourceEqualityMkEdgeAllocation.accepted original children.length = false"
+        },
+        {
+          "constructor": "true",
+          "binders": [],
+          "equation_type": "SourceEqualityMkEdgeAllocation.accepted original children.length = true"
+        }
+      ],
+      "false_specialized_facts": [
+        {
+          "name": "rowChildren",
+          "type": "actualBuilt.1.children = ([.empty] : List (InternedConstructorTemplates.Value Symbol Constraint))"
+        },
+        {
+          "name": "live",
+          "type": "EqualityLeafProjectionPhysical.dead actualBuilt.1 = false"
+        }
+      ],
+      "false_contradiction": "Returned singleton Empty has dead=true, which contradicts derived live; not a Top-guard test."
+    },
+    {
+      "owner": "prepare_selected_complete",
+      "scope": "actual parent shape",
+      "fragment": "case-parent.lean.txt",
+      "scrutinee": "selectedParent.1",
+      "type": "InternedConstructorTemplates.Value Symbol Constraint",
+      "equation_name": "parentEq",
+      "branches": [
+        {
+          "constructor": "empty",
+          "binders": [],
+          "equation_type": "selectedParent.1 = .empty"
+        },
+        {
+          "constructor": "reference",
+          "binders": [
+            {
+              "name": "name",
+              "type": "InternedBinderProtocol.Reference"
+            }
+          ],
+          "equation_type": "selectedParent.1 = .reference name"
+        },
+        {
+          "constructor": "node",
+          "binders": [
+            {
+              "name": "parentEntry",
+              "type": "Cache.Interned InternedBinderProtocol.NodeKey"
+            },
+            {
+              "name": "parentRows",
+              "type": "List (InternedConstructorTemplates.EdgeValue Symbol Constraint)"
+            },
+            {
+              "name": "depth",
+              "type": "Nat"
+            },
+            {
+              "name": "free",
+              "type": "List InternedBinderProtocol.Reference"
+            }
+          ],
+          "equation_type": "selectedParent.1 = .node parentEntry parentRows depth free"
+        },
+        {
+          "constructor": "union",
+          "binders": [
+            {
+              "name": "unionEntry",
+              "type": "Cache.Interned InternedBinderProtocol.NodeKey"
+            },
+            {
+              "name": "members",
+              "type": "List (InternedConstructorTemplates.Value Symbol Constraint)"
+            },
+            {
+              "name": "unionDepth",
+              "type": "Nat"
+            },
+            {
+              "name": "unionFree",
+              "type": "List InternedBinderProtocol.Reference"
+            }
+          ],
+          "equation_type": "selectedParent.1 = .union unionEntry members unionDepth unionFree"
+        },
+        {
+          "constructor": "mu",
+          "binders": [
+            {
+              "name": "muEntry",
+              "type": "Cache.Interned InternedBinderProtocol.NodeKey"
+            },
+            {
+              "name": "body",
+              "type": "InternedConstructorTemplates.Value Symbol Constraint"
+            },
+            {
+              "name": "depthShape",
+              "type": "InternedConstructorTemplates.Value Symbol Constraint"
+            },
+            {
+              "name": "ordinaryShape",
+              "type": "InternedConstructorTemplates.Value Symbol Constraint"
+            }
+          ],
+          "equation_type": "selectedParent.1 = .mu muEntry body depthShape ordinaryShape"
+        }
+      ],
+      "impossible_branches": [
+        "empty",
+        "reference",
+        "union",
+        "mu"
+      ],
+      "impossibility": "nodeEdges is[] outside .node; actual selected membership rules each out."
+    }
+  ],
+  "public_value_matches": [
+    {
+      "owner": "prepare_selected_complete",
+      "scrutinee": "childrenResult",
+      "constructors": [
+        {
+          "name": "none",
+          "binders": []
+        },
+        {
+          "name": "some",
+          "binders": [
+            {
+              "name": "fragments",
+              "type": "List (Fragments.Fragment Symbol)"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "owner": "prepare_selected_complete",
+      "scrutinee": "residual",
+      "constructors": [
+        {
+          "name": "none",
+          "binders": []
+        },
+        {
+          "name": "some",
+          "binders": [
+            {
+              "name": "guard",
+              "type": "Constraint"
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "conditions": [],
+  "equation_family_count": 2,
+  "equation_specialization_count": 7
+}

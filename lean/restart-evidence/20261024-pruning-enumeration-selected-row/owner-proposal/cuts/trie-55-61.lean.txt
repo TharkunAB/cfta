@@ -1,0 +1,7 @@
+
+/-- Child maps have distinct indices, no empty values, and valid descendants. -/
+def Valid : Trie → Prop
+  | .empty => True
+  | .terminal => True
+  | .branch children => children ≠ [] ∧ (children.map Prod.fst).Nodup ∧
+      ∀ index child, (index, child) ∈ children → child ≠ .empty ∧ Valid child

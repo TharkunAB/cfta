@@ -1,0 +1,70 @@
+/-- The same checked selected row runs its ordered edge preparation at the actual parent endpoint. -/
+theorem prepare_selected_complete [DecidableEq (InternedConstructorTemplates.EdgeKey Symbol Constraint)]
+    (symbol : Symbol) (original : Constraint) (stored : SourceEqualityConstraintAllocation.Value)
+    (children : List (InternedConstructorTemplates.Value Symbol Constraint))
+    (before : SourceEqualityConstraintMemoAllocation.State)
+    (heap current : InternedConstructorTemplates.State Symbol Constraint)
+    (rows : List (InternedConstructorTemplates.EdgeValue Symbol Constraint))
+    (cached : SourceEqualityGuardReadback.Cached original.equalities)
+    (physical : SourceEqualityPhysicalPayload.read original.equalities = .ok stored.payload)
+    (storedReady : SourceEqualityConstraintAllocation.Ready before.constraints stored)
+    (valid : SourceEqualityConstraintMemoAllocation.Valid before)
+    (heapReady : SourceEqualityRequiredCache.Ready heap)
+    (available : SourceEqualityMkEdgeAllocation.accepted original children.length = true →
+      InternedNestedProvenance.Values heap children)
+    (advanced : SourceEqualityRequiredCache.Keeps
+      (InternedConstructorTemplates.run (SourceEqualityMkEdgeAllocation.work symbol original children
+        (SourceEqualityMkEdgeAllocation.accepted original children.length)) heap).2 current)
+    (resident : InternedNestedProvenance.Edges current rows)
+    (closedRows : MergedColdReaderClosedInputs.ClosedEdges rows)
+    (selected : (InternedConstructorTemplates.run (SourceEqualityMkEdgeAllocation.work symbol original children
+        (SourceEqualityMkEdgeAllocation.accepted original children.length)) heap).1 ∈
+      InternedEdgeResidency.nodeEdges (InternedConstructorTemplates.run (InternedConstructorTemplates.makeNode rows) current).1)
+    (scs : List EnumerationState.Suspended)
+    (enumBefore entry : EnumerationState.State Symbol Constraint)
+    (realized : PendingRealized heap enumBefore)
+    (frame : EnumerationCompressionFrame.Frame enumBefore entry)
+    (aligned : enumBefore.counter = enumBefore.values.length)
+    (allowed : arityAllows
+      (InternedConstructorTemplates.run (SourceEqualityMkEdgeAllocation.work symbol original children
+        (SourceEqualityMkEdgeAllocation.accepted original children.length)) heap).1.children.length scs = true) :
+    let built := InternedConstructorTemplates.run (SourceEqualityMkEdgeAllocation.work symbol original children
+      (SourceEqualityMkEdgeAllocation.accepted original children.length)) heap
+    let parent := InternedConstructorTemplates.run (InternedConstructorTemplates.makeNode rows) current
+    PendingRealized parent.2 entry ∧ entry.counter = entry.values.length ∧
+    ∃ classes : EqualityNormalize.Constraints,
+      SourcePruningEnumerationConstraint.project built.1.entry.key.constraint =
+        some (EnumerationEquality.readClasses classes,
+          if (SourceCompactGuards.positive built.1.entry.key.constraint.guard).isSome
+            then none else some built.1.entry.key.constraint) ∧
+      let tries := EnumerationEquality.readClasses classes
+      let residual := if (SourceCompactGuards.positive built.1.entry.key.constraint.guard).isSome
+        then none else some built.1.entry.key.constraint
+      let staged := built.1.children.zipIdx.map (fun indexed =>
+        (indexed.1, descendScs indexed.2 scs ++ descendScs indexed.2 (suspendedVars entry.counter tries),
+          SourcePruningEnumerationShallowChild.prepareChild (EnumGuard := Constraint)
+            (descendScs indexed.2 scs ++ descendScs indexed.2 (suspendedVars entry.counter tries)) indexed.1))
+      let stop := staged.findIdx (fun stage => stage.2.2.isNone)
+      ∃ (action : EnumerateM Symbol Constraint (Option (Fragments.Fragment Symbol)))
+        (childrenResult : Option (List (Fragments.Fragment Symbol)))
+        (childrenAfter after : EnumerationState.State Symbol Constraint),
+        SourcePruningEnumerationEdgeTraversal.prepare scs built.1 = some action ∧
+        Success (SourcePruningEnumerationEdgeTraversal.runStaged staged)
+          (suspendedState tries.length entry) childrenResult childrenAfter ∧
+        Success (SourcePruningEnumerationEdgeTraversal.runStaged (staged.take stop))
+          (suspendedState tries.length entry)
+          (some ((List.range' (entry.counter + tries.length) stop).map
+            (fun uv => (Fragments.Fragment.hole uv : Fragments.Fragment Symbol)))) childrenAfter ∧
+        childrenResult = (if stop < staged.length then none else
+          some ((List.range' (entry.counter + tries.length) staged.length).map
+            (fun uv => (Fragments.Fragment.hole uv : Fragments.Fragment Symbol)))) ∧
+        after = (match childrenResult with
+          | none => childrenAfter
+          | some fragments => match residual with
+            | none => childrenAfter
+            | some guard => {childrenAfter with obligations :=
+                (guard, Fragments.Fragment.node built.1.entry.key.symbol fragments) :: childrenAfter.obligations}) ∧
+        Success action entry (childrenResult.map (fun fragments =>
+          Fragments.Fragment.node built.1.entry.key.symbol fragments)) after ∧
+        after.counter = entry.counter + tries.length + stop ∧ after.counter = after.values.length ∧
+        PendingRealized parent.2 after

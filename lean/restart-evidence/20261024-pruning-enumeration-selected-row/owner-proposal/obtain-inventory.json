@@ -1,0 +1,244 @@
+{
+  "packets": [
+    {
+      "owner": "selected_projected_arity",
+      "scope": "same actual checked constructor packet",
+      "api": "SourcePruningEnumerationCheckedArity.checked_projected_arity symbol original stored children before heap cached physical storedReady valid heapReady available",
+      "fields": [
+        {
+          "name": "checkedExact",
+          "type": "(SourceEqualityMkEdgeAllocation.check stored original.guard children.length before).1 = .ok (SourceEqualityMkEdgeAllocation.accepted original children.length)",
+          "after_accepted_rewrite_type": "(SourceEqualityMkEdgeAllocation.check stored original.guard children.length before).1 = .ok true"
+        },
+        {
+          "name": "receipt",
+          "type": "SourceEqualityMkEdgeAllocation.build symbol stored original.guard children before heap = (.ok actualBuilt.1, actualOperations, actualBuilt.2)"
+        },
+        {
+          "name": "operationsValid",
+          "type": "SourceEqualityConstraintMemoAllocation.Valid actualOperations"
+        },
+        {
+          "name": "operationsGrowth",
+          "type": "SourceEqualityConstraintMemoAllocation.Grows before actualOperations"
+        },
+        {
+          "name": "checkedKept",
+          "type": "SourceEqualityRequiredCache.Keeps heap actualBuilt.2"
+        },
+        {
+          "name": "_checkedResident",
+          "type": "InternedEdgeResidency.EdgeResident actualBuilt.2 actualBuilt.1"
+        },
+        {
+          "name": "rowSymbol",
+          "type": "actualBuilt.1.entry.key.symbol = symbol"
+        },
+        {
+          "name": "rowGuard",
+          "type": "actualBuilt.1.entry.key.constraint = (if SourceEqualityMkEdgeAllocation.accepted original children.length then original else SourceEqualityConstraintConstructors.top (Formula := FullSyntax.Formula))",
+          "after_accepted_rewrite_type": "actualBuilt.1.entry.key.constraint = original"
+        },
+        {
+          "name": "rowChildren",
+          "type": "actualBuilt.1.children = (if SourceEqualityMkEdgeAllocation.accepted original children.length then children else [.empty])",
+          "after_accepted_rewrite_type": "actualBuilt.1.children = children"
+        },
+        {
+          "name": "classes",
+          "type": "EqualityNormalize.Constraints"
+        },
+        {
+          "name": "source",
+          "type": "SourceCompactGuards.sourceEqualities actualBuilt.1.entry.key.constraint = some classes"
+        },
+        {
+          "name": "projected",
+          "type": "SourcePruningEnumerationConstraint.project actualBuilt.1.entry.key.constraint = some (EnumerationEquality.readClasses classes, if (SourceCompactGuards.positive actualBuilt.1.entry.key.constraint.guard).isSome then none else some actualBuilt.1.entry.key.constraint)"
+        },
+        {
+          "name": "validTries",
+          "type": "∀ trie ∈ EnumerationEquality.readClasses classes, EqualityTrie.Valid trie"
+        },
+        {
+          "name": "pathReadback",
+          "type": "∀ paths ∈ classes, ∀ path, path ∈ EqualityTrie.fromPathTrie (EnumerationEquality.classTrie paths) ↔ path ∈ paths"
+        },
+        {
+          "name": "ownArity",
+          "type": "∀ start : Nat, arityAllows actualBuilt.1.children.length (suspendedVars start (EnumerationEquality.readClasses classes)) = true"
+        }
+      ],
+      "normalization": "Unfold only the actual run and operation aliases; all15 fields come from the same checked receipt. No check-true input is used."
+    },
+    {
+      "owner": "selected_projected_arity",
+      "scope": "actual normalized selected-row membership",
+      "api": "(EqualityLeafProjectionPhysical.normalized_member current advanced.ready.semantic.1.normal.facts.coherent rows resident actualBuilt.1).mp (normalized ▸ selected)",
+      "fields": [
+        {
+          "name": "inputMember",
+          "type": "actualBuilt.1 ∈ rows"
+        },
+        {
+          "name": "live",
+          "type": "EqualityLeafProjectionPhysical.dead actualBuilt.1 = false"
+        }
+      ],
+      "normalization": "normalized rewrites actual output nodeEdges to canonicalEdges(surviving rows). No independent input-member or deadness premise."
+    },
+    {
+      "owner": "selected_projected_arity",
+      "scope": "actual native node-construction packet",
+      "api": "SourceEqualityRequiredCache.node rows current advanced.ready resident closedRows",
+      "fields": [
+        {
+          "name": "parentKept",
+          "type": "SourceEqualityRequiredCache.Keeps current actualParent.2"
+        },
+        {
+          "name": "parentAvailable",
+          "type": "InternedProbeProvenance.Available actualParent.2 actualParent.1"
+        },
+        {
+          "name": "parentClosed",
+          "type": "actualParent.1.free = []"
+        },
+        {
+          "name": "_parentOrdinary",
+          "type": "SourceEqualityRequiredCache.Ordinary actualParent.1"
+        }
+      ],
+      "normalization": "Keeps.ready supplies actual returned Ready. checkedKept.trans (advanced.trans parentKept) is the genuine original-to-final history."
+    },
+    {
+      "owner": "prepare_selected_complete",
+      "scope": "same origin/actual parent caller packet",
+      "api": "selected_projected_arity symbol original stored children before heap current rows cached physical storedReady valid heapReady available advanced resident closedRows selected",
+      "fields": [
+        {
+          "name": "_accepted",
+          "type": "SourceEqualityMkEdgeAllocation.accepted original children.length = true"
+        },
+        {
+          "name": "_checked",
+          "type": "(SourceEqualityMkEdgeAllocation.check stored original.guard children.length before).1 = .ok true"
+        },
+        {
+          "name": "_receipt",
+          "type": "SourceEqualityMkEdgeAllocation.build symbol stored original.guard children before heap = (.ok selectedBuilt.1, SourceEqualityMkEdgeAllocation.outputState (SourceEqualityMkEdgeAllocation.check stored original.guard children.length before).2 (SourceEqualityMkEdgeAllocation.accepted original children.length), selectedBuilt.2)"
+        },
+        {
+          "name": "_operationsValid",
+          "type": "SourceEqualityConstraintMemoAllocation.Valid (SourceEqualityMkEdgeAllocation.outputState (SourceEqualityMkEdgeAllocation.check stored original.guard children.length before).2 (SourceEqualityMkEdgeAllocation.accepted original children.length))"
+        },
+        {
+          "name": "_operationsGrowth",
+          "type": "SourceEqualityConstraintMemoAllocation.Grows before (SourceEqualityMkEdgeAllocation.outputState (SourceEqualityMkEdgeAllocation.check stored original.guard children.length before).2 (SourceEqualityMkEdgeAllocation.accepted original children.length))"
+        },
+        {
+          "name": "_rowSymbol",
+          "type": "selectedBuilt.1.entry.key.symbol = symbol"
+        },
+        {
+          "name": "_rowGuard",
+          "type": "selectedBuilt.1.entry.key.constraint = original"
+        },
+        {
+          "name": "_rowChildren",
+          "type": "selectedBuilt.1.children = children"
+        },
+        {
+          "name": "_normalized",
+          "type": "InternedEdgeResidency.nodeEdges selectedParent.1 = InternedConstructorTemplates.canonicalEdges (InternedConstructorTemplates.surviving rows)"
+        },
+        {
+          "name": "_inputMember",
+          "type": "selectedBuilt.1 ∈ rows"
+        },
+        {
+          "name": "_live",
+          "type": "EqualityLeafProjectionPhysical.dead selectedBuilt.1 = false"
+        },
+        {
+          "name": "_parentKept",
+          "type": "SourceEqualityRequiredCache.Keeps current selectedParent.2"
+        },
+        {
+          "name": "totalKept",
+          "type": "SourceEqualityRequiredCache.Keeps heap selectedParent.2"
+        },
+        {
+          "name": "parentReady",
+          "type": "SourceEqualityRequiredCache.Ready selectedParent.2"
+        },
+        {
+          "name": "parentAvailable",
+          "type": "InternedProbeProvenance.Available selectedParent.2 selectedParent.1"
+        },
+        {
+          "name": "parentClosed",
+          "type": "selectedParent.1.free = []"
+        },
+        {
+          "name": "classes",
+          "type": "EqualityNormalize.Constraints"
+        },
+        {
+          "name": "_source",
+          "type": "SourceCompactGuards.sourceEqualities selectedBuilt.1.entry.key.constraint = some classes"
+        },
+        {
+          "name": "projected",
+          "type": "SourcePruningEnumerationConstraint.project selectedBuilt.1.entry.key.constraint = some (EnumerationEquality.readClasses classes, if (SourceCompactGuards.positive selectedBuilt.1.entry.key.constraint.guard).isSome then none else some selectedBuilt.1.entry.key.constraint)"
+        },
+        {
+          "name": "_validTries",
+          "type": "∀ trie ∈ EnumerationEquality.readClasses classes, EqualityTrie.Valid trie"
+        },
+        {
+          "name": "_pathReadback",
+          "type": "∀ paths ∈ classes, ∀ path, path ∈ EqualityTrie.fromPathTrie (EnumerationEquality.classTrie paths) ↔ path ∈ paths"
+        },
+        {
+          "name": "_ownArity",
+          "type": "∀ start : Nat, arityAllows selectedBuilt.1.children.length (suspendedVars start (EnumerationEquality.readClasses classes)) = true"
+        }
+      ],
+      "normalization": "Only actual run aliases are unfolded. All22 fields are obtained; no stronger assumed parent or output is introduced."
+    }
+  ],
+  "packet_count": 4,
+  "field_count": 43,
+  "inline_api_argument_facts": [
+    {
+      "owner": "prepare_selected_complete",
+      "scope": "node case",
+      "type": "InternedProbeProvenance.Available selectedParent.2 (.node parentEntry parentRows depth free)",
+      "derived_from": "parentAvailable and parentEq"
+    },
+    {
+      "owner": "prepare_selected_complete",
+      "scope": "node case",
+      "type": "free = []",
+      "derived_from": "parentClosed and parentEq/Value.free"
+    },
+    {
+      "owner": "prepare_selected_complete",
+      "scope": "node case",
+      "type": "selectedBuilt.1 ∈ parentRows",
+      "derived_from": "selected and parentEq/nodeEdges"
+    }
+  ],
+  "direct_api_reuse": {
+    "owner": "prepare_selected_complete",
+    "scope": "node case",
+    "api": "SourcePruningEnumerationEdgeTraversal.prepare_complete scs selectedBuilt.1 selectedParent.2 parentEntry parentRows depth free parentReady [parentAvailable rewritten parentEq] [parentClosed rewritten parentEq] [selected rewritten parentEq/nodeEdges] entry entryRealized entryAligned allowed",
+    "operation": "Refine entryRealized, entryAligned, classes and projected once. Directly reuse the complete existing traversal conclusion after rewriting only projected. No output packet is extracted or reassembled.",
+    "exact_packet_identity": "The existing own let is suspendedVars entry.counter tries. The public staged/stop computations, all thirteen existential/conjunction fields, action, childrenAfter and after endpoints are definitionally the same after the derived actual project Some rewrite.",
+    "new_local_binders": [],
+    "obtain_count": 0,
+    "defining_source": "sources/traversal.lean",
+    "defining_cut": "cuts/traversal-119-162.lean.txt"
+  }
+}

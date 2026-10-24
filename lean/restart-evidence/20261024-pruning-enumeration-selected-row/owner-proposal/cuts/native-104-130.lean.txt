@@ -1,0 +1,27 @@
+  ((records key).getD (identify entry.1), {state with nodes := entry.2, nodeRecords := records})
+
+/-- Finite generated computations can alternate between the two independent caches. -/
+inductive Work (Symbol Guard : Type) : Type → Type 1 where
+  | pure (value : Result) : Work Symbol Guard Result
+  | edge (key : EdgeKey Symbol Guard) (identify : Interned (EdgeKey Symbol Guard) → EdgeValue Symbol Guard)
+      (next : EdgeValue Symbol Guard → Work Symbol Guard Result) : Work Symbol Guard Result
+  | node (key : NodeKey) (identify : Interned NodeKey → Value Symbol Guard)
+      (next : Value Symbol Guard → Work Symbol Guard Result) : Work Symbol Guard Result
+
+/-- Preserve both cache effects when sequencing generated templates. -/
+def Work.bind (work : Work Symbol Guard First) (next : First → Work Symbol Guard Result) : Work Symbol Guard Result :=
+  match work with
+  | .pure value => next value
+  | .edge key identify resume => .edge key identify (fun value => (resume value).bind next)
+  | .node key identify resume => .node key identify (fun value => (resume value).bind next)
+
+/-- Execute generated cache requests with separate state updates. -/
+def run [DecidableEq (EdgeKey Symbol Guard)] (work : Work Symbol Guard Result) (state : State Symbol Guard) :
+    Result × State Symbol Guard :=
+  match work with
+  | .pure value => (value, state)
+  | .edge key identify resume =>
+      let result := edgeStep key identify state
+      run (resume result.1) result.2
+  | .node key identify resume =>
+      let result := nodeStep key identify state

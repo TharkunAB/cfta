@@ -1,0 +1,553 @@
+{"command": ["/home/tritlo/.elan/toolchains/leanprover--lean4---v4.34.1/bin/lean", "-o", "/tmp/mcfta-pruning-enumeration-selected-row-20261024/strict-output/SourcePruningEnumerationSelectedRow.olean", "-R", "/tmp/mcfta-pruning-enumeration-selected-row-20261024/strict-8", "-DwarningAsError=true", "-Dlinter.all=true", "/tmp/mcfta-pruning-enumeration-selected-row-20261024/strict-8/MicroCFTA/SourcePruningEnumerationSelectedRow.lean"], "exit_code": 1, "raw_bytes": 31615, "raw_sha256": "8c177657d8f4a82e48be1e02ad9ba35a4a623c7e60c88ce0eed13979520cfc55", "source_sha256": "a535d507fc5d06078b43e1bc9311127ee4134a549cebe70e71e8931519ff8edf"}
+/tmp/mcfta-pruning-enumeration-selected-row-20261024/strict-8/MicroCFTA/SourcePruningEnumerationSelectedRow.lean:205:19: error: unsolved goals
+inst✝ : DecidableEq (EdgeKey Symbol Constraint)
+symbol : Symbol
+original : Constraint
+stored : SourceEqualityConstraintAllocation.Value
+children : List (Value Symbol Constraint)
+before : SourceEqualityConstraintMemoAllocation.State
+heap current : InternedConstructorTemplates.State Symbol Constraint
+rows : List (EdgeValue Symbol Constraint)
+cached : SourceEqualityGuardReadback.Cached original.equalities
+physical : SourceEqualityPhysicalPayload.read original.equalities = Except.ok stored.payload
+storedReady : SourceEqualityConstraintAllocation.Ready before.constraints stored
+valid : SourceEqualityConstraintMemoAllocation.Valid before
+heapReady : SourceEqualityRequiredCache.Ready heap
+available :
+  SourceEqualityMkEdgeAllocation.accepted original children.length = true →
+    InternedNestedProvenance.Values heap children
+advanced :
+  SourceEqualityRequiredCache.Keeps
+    (run
+        (SourceEqualityMkEdgeAllocation.work symbol original children
+          (SourceEqualityMkEdgeAllocation.accepted original children.length))
+        heap).snd
+    current
+resident : InternedNestedProvenance.Edges current rows
+closedRows : MergedColdReaderClosedInputs.ClosedEdges rows
+scs : List Suspended
+enumBefore entry : EnumerationState.State Symbol Constraint
+realized : PendingRealized heap enumBefore
+frame : EnumerationCompressionFrame.Frame enumBefore entry
+aligned : enumBefore.counter = enumBefore.values.length
+allowed :
+  arityAllows
+      (run
+              (SourceEqualityMkEdgeAllocation.work symbol original children
+                (SourceEqualityMkEdgeAllocation.accepted original children.length))
+              heap).fst.children.length
+      scs =
+    true
+selectedBuilt : EdgeValue Symbol Constraint × InternedConstructorTemplates.State Symbol Constraint :=
+  run
+    (SourceEqualityMkEdgeAllocation.work symbol original children
+      (SourceEqualityMkEdgeAllocation.accepted original children.length))
+    heap
+selectedParent : Value Symbol Constraint × InternedConstructorTemplates.State Symbol Constraint :=
+  run (makeNode rows) current
+_accepted : SourceEqualityMkEdgeAllocation.accepted original children.length = true
+_checked : (SourceEqualityMkEdgeAllocation.check stored original.guard children.length before).fst = Except.ok true
+_receipt :
+  SourceEqualityMkEdgeAllocation.build symbol stored original.guard children before heap =
+    (Except.ok
+        (run
+            (SourceEqualityMkEdgeAllocation.work symbol original children
+              (SourceEqualityMkEdgeAllocation.accepted original children.length))
+            heap).fst,
+      SourceEqualityMkEdgeAllocation.outputState
+        (SourceEqualityMkEdgeAllocation.check stored original.guard children.length before).snd
+        (SourceEqualityMkEdgeAllocation.accepted original children.length),
+      (run
+          (SourceEqualityMkEdgeAllocation.work symbol original children
+            (SourceEqualityMkEdgeAllocation.accepted original children.length))
+          heap).snd)
+_operationsValid :
+  SourceEqualityConstraintMemoAllocation.Valid
+    (SourceEqualityMkEdgeAllocation.outputState
+      (SourceEqualityMkEdgeAllocation.check stored original.guard children.length before).snd
+      (SourceEqualityMkEdgeAllocation.accepted original children.length))
+_operationsGrowth :
+  SourceEqualityConstraintMemoAllocation.Grows before
+    (SourceEqualityMkEdgeAllocation.outputState
+      (SourceEqualityMkEdgeAllocation.check stored original.guard children.length before).snd
+      (SourceEqualityMkEdgeAllocation.accepted original children.length))
+_rowSymbol :
+  (run
+              (SourceEqualityMkEdgeAllocation.work symbol original children
+                (SourceEqualityMkEdgeAllocation.accepted original children.length))
+              heap).fst.entry.key.symbol =
+    symbol
+_rowGuard :
+  (run
+              (SourceEqualityMkEdgeAllocation.work symbol original children
+                (SourceEqualityMkEdgeAllocation.accepted original children.length))
+              heap).fst.entry.key.constraint =
+    original
+_rowChildren :
+  (run
+          (SourceEqualityMkEdgeAllocation.work symbol original children
+            (SourceEqualityMkEdgeAllocation.accepted original children.length))
+          heap).fst.children =
+    children
+_normalized : InternedEdgeResidency.nodeEdges (run (makeNode rows) current).fst = canonicalEdges (surviving rows)
+_inputMember :
+  (run
+        (SourceEqualityMkEdgeAllocation.work symbol original children
+          (SourceEqualityMkEdgeAllocation.accepted original children.length))
+        heap).fst ∈
+    rows
+_live :
+  EqualityLeafProjectionPhysical.dead
+      (run
+          (SourceEqualityMkEdgeAllocation.work symbol original children
+            (SourceEqualityMkEdgeAllocation.accepted original children.length))
+          heap).fst =
+    false
+_parentKept : SourceEqualityRequiredCache.Keeps current (run (makeNode rows) current).snd
+totalKept : SourceEqualityRequiredCache.Keeps heap (run (makeNode rows) current).snd
+parentReady : SourceEqualityRequiredCache.Ready (run (makeNode rows) current).snd
+classes : EqualityNormalize.Constraints
+_source :
+  SourceCompactGuards.sourceEqualities
+      (run
+                (SourceEqualityMkEdgeAllocation.work symbol original children
+                  (SourceEqualityMkEdgeAllocation.accepted original children.length))
+                heap).fst.entry.key.constraint =
+    some classes
+projected :
+  SourcePruningEnumerationConstraint.project
+      (run
+                (SourceEqualityMkEdgeAllocation.work symbol original children
+                  (SourceEqualityMkEdgeAllocation.accepted original children.length))
+                heap).fst.entry.key.constraint =
+    some
+      (EnumerationEquality.readClasses classes,
+        if
+            (SourceCompactGuards.positive
+                  (run
+                              (SourceEqualityMkEdgeAllocation.work symbol original children
+                                (SourceEqualityMkEdgeAllocation.accepted original children.length))
+                              heap).fst.entry.key.constraint.guard).isSome =
+              true then
+          none
+        else
+          some
+            (run
+                      (SourceEqualityMkEdgeAllocation.work symbol original children
+                        (SourceEqualityMkEdgeAllocation.accepted original children.length))
+                      heap).fst.entry.key.constraint)
+_validTries : ∀ (trie : EqualityTrie.Trie), trie ∈ EnumerationEquality.readClasses classes → EqualityTrie.Valid trie
+_pathReadback :
+  ∀ (paths : EqualityNormalize.Class),
+    paths ∈ classes →
+      ∀ (path : EqualityTrie.Path),
+        path ∈ EqualityTrie.fromPathTrie (EnumerationEquality.classTrie paths) ↔ path ∈ paths
+_ownArity :
+  ∀ (start : Nat),
+    arityAllows
+        (run
+                (SourceEqualityMkEdgeAllocation.work symbol original children
+                  (SourceEqualityMkEdgeAllocation.accepted original children.length))
+                heap).fst.children.length
+        (suspendedVars start (EnumerationEquality.readClasses classes)) =
+      true
+entryRealized : PendingRealized selectedParent.snd entry
+entryAligned : entry.counter = entry.values.length
+parentAvailable : InternedProbeProvenance.Available selectedParent.snd selectedParent.fst
+parentClosed : selectedParent.fst.free = []
+selected : selectedBuilt.fst ∈ InternedEdgeResidency.nodeEdges selectedParent.fst
+parentEntry : Cache.Interned InternedBinderProtocol.NodeKey
+parentRows : List (EdgeValue Symbol Constraint)
+depth : Nat
+free : List InternedBinderProtocol.Reference
+parentEq : selectedParent.fst = Value.node parentEntry parentRows depth free
+⊢ (∃ action childrenResult childrenAfter after,
+      SourcePruningEnumerationEdgeTraversal.prepare scs
+            (run
+                (SourceEqualityMkEdgeAllocation.work symbol original children
+                  (SourceEqualityMkEdgeAllocation.accepted original children.length))
+                heap).fst =
+          some action ∧
+        Success
+            (SourcePruningEnumerationEdgeTraversal.runStaged
+              (List.map
+                (fun indexed =>
+                  (indexed.fst,
+                    descendScs indexed.snd scs ++
+                      descendScs indexed.snd (suspendedVars entry.counter (EnumerationEquality.readClasses classes)),
+                    SourcePruningEnumerationShallowChild.prepareChild
+                      (descendScs indexed.snd scs ++
+                        descendScs indexed.snd (suspendedVars entry.counter (EnumerationEquality.readClasses classes)))
+                      indexed.fst))
+                (run
+                        (SourceEqualityMkEdgeAllocation.work symbol original children
+                          (SourceEqualityMkEdgeAllocation.accepted original children.length))
+                        heap).fst.children.zipIdx))
+            (suspendedState (EnumerationEquality.readClasses classes).length entry) childrenResult childrenAfter ∧
+          Success
+              (SourcePruningEnumerationEdgeTraversal.runStaged
+                (List.take
+                  (List.findIdx (fun stage => stage.snd.snd.isNone)
+                    (List.map
+                      (fun indexed =>
+                        (indexed.fst,
+                          descendScs indexed.snd scs ++
+                            descendScs indexed.snd
+                              (suspendedVars entry.counter (EnumerationEquality.readClasses classes)),
+                          SourcePruningEnumerationShallowChild.prepareChild
+                            (descendScs indexed.snd scs ++
+                              descendScs indexed.snd
+                                (suspendedVars entry.counter (EnumerationEquality.readClasses classes)))
+                            indexed.fst))
+                      (run
+                              (SourceEqualityMkEdgeAllocation.work symbol original children
+                                (SourceEqualityMkEdgeAllocation.accepted original children.length))
+                              heap).fst.children.zipIdx))
+                  (List.map
+                    (fun indexed =>
+                      (indexed.fst,
+                        descendScs indexed.snd scs ++
+                          descendScs indexed.snd
+                            (suspendedVars entry.counter (EnumerationEquality.readClasses classes)),
+                        SourcePruningEnumerationShallowChild.prepareChild
+                          (descendScs indexed.snd scs ++
+                            descendScs indexed.snd
+                              (suspendedVars entry.counter (EnumerationEquality.readClasses classes)))
+                          indexed.fst))
+                    (run
+                            (SourceEqualityMkEdgeAllocation.work symbol original children
+                              (SourceEqualityMkEdgeAllocation.accepted original children.length))
+                            heap).fst.children.zipIdx)))
+              (suspendedState (EnumerationEquality.readClasses classes).length entry)
+              (some
+                (List.map (fun uv => Fragments.Fragment.hole uv)
+                  (List.range' (entry.counter + (EnumerationEquality.readClasses classes).length)
+                    (List.findIdx (fun stage => stage.snd.snd.isNone)
+                      (List.map
+                        (fun indexed =>
+                          (indexed.fst,
+                            descendScs indexed.snd scs ++
+                              descendScs indexed.snd
+                                (suspendedVars entry.counter (EnumerationEquality.readClasses classes)),
+                            SourcePruningEnumerationShallowChild.prepareChild
+                              (descendScs indexed.snd scs ++
+                                descendScs indexed.snd
+                                  (suspendedVars entry.counter (EnumerationEquality.readClasses classes)))
+                              indexed.fst))
+                        (run
+                                (SourceEqualityMkEdgeAllocation.work symbol original children
+                                  (SourceEqualityMkEdgeAllocation.accepted original children.length))
+                                heap).fst.children.zipIdx)))))
+              childrenAfter ∧
+            (childrenResult =
+                if
+                    List.findIdx (fun stage => stage.snd.snd.isNone)
+                        (List.map
+                          (fun indexed =>
+                            (indexed.fst,
+                              descendScs indexed.snd scs ++
+                                descendScs indexed.snd
+                                  (suspendedVars entry.counter (EnumerationEquality.readClasses classes)),
+                              SourcePruningEnumerationShallowChild.prepareChild
+                                (descendScs indexed.snd scs ++
+                                  descendScs indexed.snd
+                                    (suspendedVars entry.counter (EnumerationEquality.readClasses classes)))
+                                indexed.fst))
+                          (run
+                                  (SourceEqualityMkEdgeAllocation.work symbol original children
+                                    (SourceEqualityMkEdgeAllocation.accepted original children.length))
+                                  heap).fst.children.zipIdx) <
+                      (List.map
+                          (fun indexed =>
+                            (indexed.fst,
+                              descendScs indexed.snd scs ++
+                                descendScs indexed.snd
+                                  (suspendedVars entry.counter (EnumerationEquality.readClasses classes)),
+                              SourcePruningEnumerationShallowChild.prepareChild
+                                (descendScs indexed.snd scs ++
+                                  descendScs indexed.snd
+                                    (suspendedVars entry.counter (EnumerationEquality.readClasses classes)))
+                                indexed.fst))
+                          (run
+                                  (SourceEqualityMkEdgeAllocation.work symbol original children
+                                    (SourceEqualityMkEdgeAllocation.accepted original children.length))
+                                  heap).fst.children.zipIdx).length then
+                  none
+                else
+                  some
+                    (List.map (fun uv => Fragments.Fragment.hole uv)
+                      (List.range' (entry.counter + (EnumerationEquality.readClasses classes).length)
+                        (List.map
+                            (fun indexed =>
+                              (indexed.fst,
+                                descendScs indexed.snd scs ++
+                                  descendScs indexed.snd
+                                    (suspendedVars entry.counter (EnumerationEquality.readClasses classes)),
+                                SourcePruningEnumerationShallowChild.prepareChild
+                                  (descendScs indexed.snd scs ++
+                                    descendScs indexed.snd
+                                      (suspendedVars entry.counter (EnumerationEquality.readClasses classes)))
+                                  indexed.fst))
+                            (run
+                                    (SourceEqualityMkEdgeAllocation.work symbol original children
+                                      (SourceEqualityMkEdgeAllocation.accepted original children.length))
+                                    heap).fst.children.zipIdx).length))) ∧
+              (after =
+                  match childrenResult with
+                  | none => childrenAfter
+                  | some fragments =>
+                    match
+                      if
+                          (SourceCompactGuards.positive
+                                (run
+                                            (SourceEqualityMkEdgeAllocation.work symbol original children
+                                              (SourceEqualityMkEdgeAllocation.accepted original children.length))
+                                            heap).fst.entry.key.constraint.guard).isSome =
+                            true then
+                        none
+                      else
+                        some
+                          (run
+                                    (SourceEqualityMkEdgeAllocation.work symbol original children
+                                      (SourceEqualityMkEdgeAllocation.accepted original children.length))
+                                    heap).fst.entry.key.constraint with
+                    | none => childrenAfter
+                    | some guard =>
+                      { counter := childrenAfter.counter, representatives := childrenAfter.representatives,
+                        values := childrenAfter.values,
+                        obligations :=
+                          (guard,
+                              Fragments.Fragment.node
+                                (run
+                                          (SourceEqualityMkEdgeAllocation.work symbol original children
+                                            (SourceEqualityMkEdgeAllocation.accepted original children.length))
+                                          heap).fst.entry.key.symbol
+                                fragments) ::
+                            childrenAfter.obligations,
+                        recursionAncestry := childrenAfter.recursionAncestry,
+                        expansionAncestry := childrenAfter.expansionAncestry }) ∧
+                Success action entry
+                    (Option.map
+                      (fun fragments =>
+                        Fragments.Fragment.node
+                          (run
+                                    (SourceEqualityMkEdgeAllocation.work symbol original children
+                                      (SourceEqualityMkEdgeAllocation.accepted original children.length))
+                                    heap).fst.entry.key.symbol
+                          fragments)
+                      childrenResult)
+                    after ∧
+                  after.counter =
+                      entry.counter + (EnumerationEquality.readClasses classes).length +
+                        List.findIdx (fun stage => stage.snd.snd.isNone)
+                          (List.map
+                            (fun indexed =>
+                              (indexed.fst,
+                                descendScs indexed.snd scs ++
+                                  descendScs indexed.snd
+                                    (suspendedVars entry.counter (EnumerationEquality.readClasses classes)),
+                                SourcePruningEnumerationShallowChild.prepareChild
+                                  (descendScs indexed.snd scs ++
+                                    descendScs indexed.snd
+                                      (suspendedVars entry.counter (EnumerationEquality.readClasses classes)))
+                                  indexed.fst))
+                            (run
+                                    (SourceEqualityMkEdgeAllocation.work symbol original children
+                                      (SourceEqualityMkEdgeAllocation.accepted original children.length))
+                                    heap).fst.children.zipIdx) ∧
+                    after.counter = after.values.length ∧ PendingRealized (run (makeNode rows) current).snd after) =
+    ∃ action childrenResult childrenAfter after,
+      SourcePruningEnumerationEdgeTraversal.prepare scs
+            (run
+                (SourceEqualityMkEdgeAllocation.work symbol original children
+                  (SourceEqualityMkEdgeAllocation.accepted original children.length))
+                heap).fst =
+          some action ∧
+        Success
+            (SourcePruningEnumerationEdgeTraversal.runStaged
+              (List.map
+                (fun indexed =>
+                  (indexed.fst,
+                    descendScs indexed.snd scs ++
+                      descendScs indexed.snd (suspendedVars entry.counter (EnumerationEquality.readClasses classes)),
+                    SourcePruningEnumerationShallowChild.prepareChild
+                      (descendScs indexed.snd scs ++
+                        descendScs indexed.snd (suspendedVars entry.counter (EnumerationEquality.readClasses classes)))
+                      indexed.fst))
+                (run
+                        (SourceEqualityMkEdgeAllocation.work symbol original children
+                          (SourceEqualityMkEdgeAllocation.accepted original children.length))
+                        heap).fst.children.zipIdx))
+            (suspendedState (EnumerationEquality.readClasses classes).length entry) childrenResult childrenAfter ∧
+          Success
+              (SourcePruningEnumerationEdgeTraversal.runStaged
+                (List.take
+                  (List.findIdx (fun stage => stage.snd.snd.isNone)
+                    (List.map
+                      (fun indexed =>
+                        (indexed.fst,
+                          descendScs indexed.snd scs ++
+                            descendScs indexed.snd
+                              (suspendedVars entry.counter (EnumerationEquality.readClasses classes)),
+                          SourcePruningEnumerationShallowChild.prepareChild
+                            (descendScs indexed.snd scs ++
+                              descendScs indexed.snd
+                                (suspendedVars entry.counter (EnumerationEquality.readClasses classes)))
+                            indexed.fst))
+                      (run
+                              (SourceEqualityMkEdgeAllocation.work symbol original children
+                                (SourceEqualityMkEdgeAllocation.accepted original children.length))
+                              heap).fst.children.zipIdx))
+                  (List.map
+                    (fun indexed =>
+                      (indexed.fst,
+                        descendScs indexed.snd scs ++
+                          descendScs indexed.snd
+                            (suspendedVars entry.counter (EnumerationEquality.readClasses classes)),
+                        SourcePruningEnumerationShallowChild.prepareChild
+                          (descendScs indexed.snd scs ++
+                            descendScs indexed.snd
+                              (suspendedVars entry.counter (EnumerationEquality.readClasses classes)))
+                          indexed.fst))
+                    (run
+                            (SourceEqualityMkEdgeAllocation.work symbol original children
+                              (SourceEqualityMkEdgeAllocation.accepted original children.length))
+                            heap).fst.children.zipIdx)))
+              (suspendedState (EnumerationEquality.readClasses classes).length entry)
+              (some
+                (List.map (fun uv => Fragments.Fragment.hole uv)
+                  (List.range' (entry.counter + (EnumerationEquality.readClasses classes).length)
+                    (List.findIdx (fun stage => stage.snd.snd.isNone)
+                      (List.map
+                        (fun indexed =>
+                          (indexed.fst,
+                            descendScs indexed.snd scs ++
+                              descendScs indexed.snd
+                                (suspendedVars entry.counter (EnumerationEquality.readClasses classes)),
+                            SourcePruningEnumerationShallowChild.prepareChild
+                              (descendScs indexed.snd scs ++
+                                descendScs indexed.snd
+                                  (suspendedVars entry.counter (EnumerationEquality.readClasses classes)))
+                              indexed.fst))
+                        (run
+                                (SourceEqualityMkEdgeAllocation.work symbol original children
+                                  (SourceEqualityMkEdgeAllocation.accepted original children.length))
+                                heap).fst.children.zipIdx)))))
+              childrenAfter ∧
+            (childrenResult =
+                if
+                    List.findIdx (fun stage => stage.snd.snd.isNone)
+                        (List.map
+                          (fun indexed =>
+                            (indexed.fst,
+                              descendScs indexed.snd scs ++
+                                descendScs indexed.snd
+                                  (suspendedVars entry.counter (EnumerationEquality.readClasses classes)),
+                              SourcePruningEnumerationShallowChild.prepareChild
+                                (descendScs indexed.snd scs ++
+                                  descendScs indexed.snd
+                                    (suspendedVars entry.counter (EnumerationEquality.readClasses classes)))
+                                indexed.fst))
+                          (run
+                                  (SourceEqualityMkEdgeAllocation.work symbol original children
+                                    (SourceEqualityMkEdgeAllocation.accepted original children.length))
+                                  heap).fst.children.zipIdx) <
+                      (List.map
+                          (fun indexed =>
+                            (indexed.fst,
+                              descendScs indexed.snd scs ++
+                                descendScs indexed.snd
+                                  (suspendedVars entry.counter (EnumerationEquality.readClasses classes)),
+                              SourcePruningEnumerationShallowChild.prepareChild
+                                (descendScs indexed.snd scs ++
+                                  descendScs indexed.snd
+                                    (suspendedVars entry.counter (EnumerationEquality.readClasses classes)))
+                                indexed.fst))
+                          (run
+                                  (SourceEqualityMkEdgeAllocation.work symbol original children
+                                    (SourceEqualityMkEdgeAllocation.accepted original children.length))
+                                  heap).fst.children.zipIdx).length then
+                  none
+                else
+                  some
+                    (List.map (fun uv => Fragments.Fragment.hole uv)
+                      (List.range' (entry.counter + (EnumerationEquality.readClasses classes).length)
+                        (List.map
+                            (fun indexed =>
+                              (indexed.fst,
+                                descendScs indexed.snd scs ++
+                                  descendScs indexed.snd
+                                    (suspendedVars entry.counter (EnumerationEquality.readClasses classes)),
+                                SourcePruningEnumerationShallowChild.prepareChild
+                                  (descendScs indexed.snd scs ++
+                                    descendScs indexed.snd
+                                      (suspendedVars entry.counter (EnumerationEquality.readClasses classes)))
+                                  indexed.fst))
+                            (run
+                                    (SourceEqualityMkEdgeAllocation.work symbol original children
+                                      (SourceEqualityMkEdgeAllocation.accepted original children.length))
+                                    heap).fst.children.zipIdx).length))) ∧
+              (after =
+                  match childrenResult with
+                  | none => childrenAfter
+                  | some fragments =>
+                    match
+                      if
+                          (SourceCompactGuards.positive
+                                (run
+                                            (SourceEqualityMkEdgeAllocation.work symbol original children
+                                              (SourceEqualityMkEdgeAllocation.accepted original children.length))
+                                            heap).fst.entry.key.constraint.guard).isSome =
+                            true then
+                        none
+                      else
+                        some
+                          (run
+                                    (SourceEqualityMkEdgeAllocation.work symbol original children
+                                      (SourceEqualityMkEdgeAllocation.accepted original children.length))
+                                    heap).fst.entry.key.constraint with
+                    | none => childrenAfter
+                    | some guard =>
+                      { counter := childrenAfter.counter, representatives := childrenAfter.representatives,
+                        values := childrenAfter.values,
+                        obligations :=
+                          (guard,
+                              Fragments.Fragment.node
+                                (run
+                                          (SourceEqualityMkEdgeAllocation.work symbol original children
+                                            (SourceEqualityMkEdgeAllocation.accepted original children.length))
+                                          heap).fst.entry.key.symbol
+                                fragments) ::
+                            childrenAfter.obligations,
+                        recursionAncestry := childrenAfter.recursionAncestry,
+                        expansionAncestry := childrenAfter.expansionAncestry }) ∧
+                Success action entry
+                    (Option.map
+                      (fun fragments =>
+                        Fragments.Fragment.node
+                          (run
+                                    (SourceEqualityMkEdgeAllocation.work symbol original children
+                                      (SourceEqualityMkEdgeAllocation.accepted original children.length))
+                                    heap).fst.entry.key.symbol
+                          fragments)
+                      childrenResult)
+                    after ∧
+                  after.counter =
+                      entry.counter + (EnumerationEquality.readClasses classes).length +
+                        List.findIdx (fun stage => stage.snd.snd.isNone)
+                          (List.map
+                            (fun indexed =>
+                              (indexed.fst,
+                                descendScs indexed.snd scs ++
+                                  descendScs indexed.snd
+                                    (suspendedVars entry.counter (EnumerationEquality.readClasses classes)),
+                                SourcePruningEnumerationShallowChild.prepareChild
+                                  (descendScs indexed.snd scs ++
+                                    descendScs indexed.snd
+                                      (suspendedVars entry.counter (EnumerationEquality.readClasses classes)))
+                                  indexed.fst))
+                            (run
+                                    (SourceEqualityMkEdgeAllocation.work symbol original children
+                                      (SourceEqualityMkEdgeAllocation.accepted original children.length))
+                                    heap).fst.children.zipIdx) ∧
+                    after.counter = after.values.length ∧ PendingRealized (run (makeNode rows) current).snd after

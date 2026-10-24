@@ -1,0 +1,20 @@
+
+/-- Complete nonrecursive edge keys retain the symbol, ordered child references, and constraint. -/
+structure EdgeKey (Symbol Guard : Type) where
+  symbol : Symbol
+  children : List NodeRef
+  constraint : Guard
+  deriving DecidableEq
+
+mutual
+/-- Stored node records retain the source constructor data and cached free/depth fields. -/
+inductive Value (Symbol Guard : Type) where
+  | empty
+  | reference (name : Reference)
+  | node (entry : Interned NodeKey) (edges : List (EdgeValue Symbol Guard)) (depth : Nat) (free : List Reference)
+  | union (entry : Interned NodeKey) (members : List (Value Symbol Guard)) (depth : Nat) (free : List Reference)
+  | mu (entry : Interned NodeKey) (body depthShape ordinaryShape : Value Symbol Guard)
+
+/-- Stored edge records retain the canonical key and complete immutable child records. -/
+inductive EdgeValue (Symbol Guard : Type) where
+  | mk (entry : Interned (EdgeKey Symbol Guard)) (children : List (Value Symbol Guard))

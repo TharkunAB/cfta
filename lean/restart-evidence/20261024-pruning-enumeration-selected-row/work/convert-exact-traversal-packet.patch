@@ -1,0 +1,26 @@
+--- strict-6/SourcePruningEnumerationSelectedRow.lean
++++ strict-7/SourcePruningEnumerationSelectedRow.lean
+@@ -202,16 +202,13 @@
+   case reference name =>
+       simp only [parentEq, InternedEdgeResidency.nodeEdges, List.not_mem_nil] at selected
+   case node parentEntry parentRows depth free =>
+-      simpa only [selectedBuilt, selectedParent, projected,
+-        SourcePruningEnumerationEdgeTraversal.prepare.match_1,
+-        SourcePruningEnumerationEdgeTraversal.prepare_complete.match_1,
+-        prepare_selected_complete.match_3, prepare_selected_complete.match_1] using
+-        SourcePruningEnumerationEdgeTraversal.prepare_complete scs selectedBuilt.1 selectedParent.2
+-          parentEntry parentRows depth free parentReady
+-          (by simpa only [parentEq] using parentAvailable)
+-          (by simpa only [parentEq, Value.free] using parentClosed)
+-          (by simpa only [parentEq, InternedEdgeResidency.nodeEdges] using selected)
+-          entry entryRealized entryAligned allowed
++      convert (SourcePruningEnumerationEdgeTraversal.prepare_complete scs selectedBuilt.1 selectedParent.2
++        parentEntry parentRows depth free parentReady
++        (by simpa only [parentEq] using parentAvailable)
++        (by simpa only [parentEq, Value.free] using parentClosed)
++        (by simpa only [parentEq, InternedEdgeResidency.nodeEdges] using selected)
++        entry entryRealized entryAligned allowed) using 1 <;>
++        (simp only [selectedBuilt, selectedParent, projected] <;> rfl)
+   case union unionEntry members unionDepth unionFree =>
+       simp only [parentEq, InternedEdgeResidency.nodeEdges, List.not_mem_nil] at selected
+   case mu muEntry body depthShape ordinaryShape =>

@@ -1,0 +1,1744 @@
+/tmp/mcfta-pruning-enumeration-selected-row-20261024/strict-1/MicroCFTA/SourcePruningEnumerationSelectedRow.lean:88:93: error: unsolved goals
+case false
+inst✝ : DecidableEq (EdgeKey Symbol Constraint)
+symbol : Symbol
+original : Constraint
+stored : SourceEqualityConstraintAllocation.Value
+children : List (Value Symbol Constraint)
+before : SourceEqualityConstraintMemoAllocation.State
+heap current : InternedConstructorTemplates.State Symbol Constraint
+rows : List (EdgeValue Symbol Constraint)
+cached : SourceEqualityGuardReadback.Cached original.equalities
+physical : SourceEqualityPhysicalPayload.read original.equalities = Except.ok stored.payload
+storedReady : SourceEqualityConstraintAllocation.Ready before.constraints stored
+valid : SourceEqualityConstraintMemoAllocation.Valid before
+heapReady : SourceEqualityRequiredCache.Ready heap
+available :
+  SourceEqualityMkEdgeAllocation.accepted original children.length = true →
+    InternedNestedProvenance.Values heap children
+advanced :
+  SourceEqualityRequiredCache.Keeps
+    (run
+        (SourceEqualityMkEdgeAllocation.work symbol original children
+          (SourceEqualityMkEdgeAllocation.accepted original children.length))
+        heap).snd
+    current
+resident : InternedNestedProvenance.Edges current rows
+closedRows : MergedColdReaderClosedInputs.ClosedEdges rows
+selected :
+  (run
+        (SourceEqualityMkEdgeAllocation.work symbol original children
+          (SourceEqualityMkEdgeAllocation.accepted original children.length))
+        heap).fst ∈
+    InternedEdgeResidency.nodeEdges (run (makeNode rows) current).fst
+actualBuilt : EdgeValue Symbol Constraint × InternedConstructorTemplates.State Symbol Constraint :=
+  run
+    (SourceEqualityMkEdgeAllocation.work symbol original children
+      (SourceEqualityMkEdgeAllocation.accepted original children.length))
+    heap
+actualParent : Value Symbol Constraint × InternedConstructorTemplates.State Symbol Constraint :=
+  run (makeNode rows) current
+actualOperations : SourceEqualityConstraintMemoAllocation.State :=
+  SourceEqualityMkEdgeAllocation.outputState
+    (SourceEqualityMkEdgeAllocation.check stored original.guard children.length before).snd
+    (SourceEqualityMkEdgeAllocation.accepted original children.length)
+checkedExact :
+  (SourceEqualityMkEdgeAllocation.check stored original.guard children.length before).fst =
+    Except.ok (SourceEqualityMkEdgeAllocation.accepted original children.length)
+receipt :
+  SourceEqualityMkEdgeAllocation.build symbol stored original.guard children before heap =
+    (Except.ok
+        (run
+            (SourceEqualityMkEdgeAllocation.work symbol original children
+              (SourceEqualityMkEdgeAllocation.accepted original children.length))
+            heap).fst,
+      SourceEqualityMkEdgeAllocation.outputState
+        (SourceEqualityMkEdgeAllocation.check stored original.guard children.length before).snd
+        (SourceEqualityMkEdgeAllocation.accepted original children.length),
+      (run
+          (SourceEqualityMkEdgeAllocation.work symbol original children
+            (SourceEqualityMkEdgeAllocation.accepted original children.length))
+          heap).snd)
+operationsValid :
+  SourceEqualityConstraintMemoAllocation.Valid
+    (SourceEqualityMkEdgeAllocation.outputState
+      (SourceEqualityMkEdgeAllocation.check stored original.guard children.length before).snd
+      (SourceEqualityMkEdgeAllocation.accepted original children.length))
+operationsGrowth :
+  SourceEqualityConstraintMemoAllocation.Grows before
+    (SourceEqualityMkEdgeAllocation.outputState
+      (SourceEqualityMkEdgeAllocation.check stored original.guard children.length before).snd
+      (SourceEqualityMkEdgeAllocation.accepted original children.length))
+checkedKept :
+  SourceEqualityRequiredCache.Keeps heap
+    (run
+        (SourceEqualityMkEdgeAllocation.work symbol original children
+          (SourceEqualityMkEdgeAllocation.accepted original children.length))
+        heap).snd
+_checkedResident :
+  InternedEdgeResidency.EdgeResident
+    (run
+        (SourceEqualityMkEdgeAllocation.work symbol original children
+          (SourceEqualityMkEdgeAllocation.accepted original children.length))
+        heap).snd
+    (run
+        (SourceEqualityMkEdgeAllocation.work symbol original children
+          (SourceEqualityMkEdgeAllocation.accepted original children.length))
+        heap).fst
+rowSymbol :
+  (run
+              (SourceEqualityMkEdgeAllocation.work symbol original children
+                (SourceEqualityMkEdgeAllocation.accepted original children.length))
+              heap).fst.entry.key.symbol =
+    symbol
+rowGuard :
+  (run
+              (SourceEqualityMkEdgeAllocation.work symbol original children
+                (SourceEqualityMkEdgeAllocation.accepted original children.length))
+              heap).fst.entry.key.constraint =
+    if SourceEqualityMkEdgeAllocation.accepted original children.length = true then original
+    else SourceEqualityConstraintConstructors.top
+rowChildren :
+  (run
+          (SourceEqualityMkEdgeAllocation.work symbol original children
+            (SourceEqualityMkEdgeAllocation.accepted original children.length))
+          heap).fst.children =
+    if SourceEqualityMkEdgeAllocation.accepted original children.length = true then children else [Value.empty]
+classes : EqualityNormalize.Constraints
+source :
+  SourceCompactGuards.sourceEqualities
+      (run
+                (SourceEqualityMkEdgeAllocation.work symbol original children
+                  (SourceEqualityMkEdgeAllocation.accepted original children.length))
+                heap).fst.entry.key.constraint =
+    some classes
+projected :
+  SourcePruningEnumerationConstraint.project
+      (run
+                (SourceEqualityMkEdgeAllocation.work symbol original children
+                  (SourceEqualityMkEdgeAllocation.accepted original children.length))
+                heap).fst.entry.key.constraint =
+    some
+      (EnumerationEquality.readClasses classes,
+        if
+            (SourceCompactGuards.positive
+                  (run
+                              (SourceEqualityMkEdgeAllocation.work symbol original children
+                                (SourceEqualityMkEdgeAllocation.accepted original children.length))
+                              heap).fst.entry.key.constraint.guard).isSome =
+              true then
+          none
+        else
+          some
+            (run
+                      (SourceEqualityMkEdgeAllocation.work symbol original children
+                        (SourceEqualityMkEdgeAllocation.accepted original children.length))
+                      heap).fst.entry.key.constraint)
+validTries : ∀ (trie : EqualityTrie.Trie), trie ∈ EnumerationEquality.readClasses classes → EqualityTrie.Valid trie
+pathReadback :
+  ∀ (paths : EqualityNormalize.Class),
+    paths ∈ classes →
+      ∀ (path : EqualityTrie.Path),
+        path ∈ EqualityTrie.fromPathTrie (EnumerationEquality.classTrie paths) ↔ path ∈ paths
+ownArity :
+  ∀ (start : Nat),
+    arityAllows
+        (run
+                (SourceEqualityMkEdgeAllocation.work symbol original children
+                  (SourceEqualityMkEdgeAllocation.accepted original children.length))
+                heap).fst.children.length
+        (suspendedVars start (EnumerationEquality.readClasses classes)) =
+      true
+normalized : InternedEdgeResidency.nodeEdges actualParent.fst = canonicalEdges (surviving rows)
+inputMember : actualBuilt.fst ∈ rows
+live : EqualityLeafProjectionPhysical.dead actualBuilt.fst = false
+keepEq : SourceEqualityMkEdgeAllocation.accepted original children.length = false
+⊢ false = true
+
+case true
+inst✝ : DecidableEq (EdgeKey Symbol Constraint)
+symbol : Symbol
+original : Constraint
+stored : SourceEqualityConstraintAllocation.Value
+children : List (Value Symbol Constraint)
+before : SourceEqualityConstraintMemoAllocation.State
+heap current : InternedConstructorTemplates.State Symbol Constraint
+rows : List (EdgeValue Symbol Constraint)
+cached : SourceEqualityGuardReadback.Cached original.equalities
+physical : SourceEqualityPhysicalPayload.read original.equalities = Except.ok stored.payload
+storedReady : SourceEqualityConstraintAllocation.Ready before.constraints stored
+valid : SourceEqualityConstraintMemoAllocation.Valid before
+heapReady : SourceEqualityRequiredCache.Ready heap
+available :
+  SourceEqualityMkEdgeAllocation.accepted original children.length = true →
+    InternedNestedProvenance.Values heap children
+advanced :
+  SourceEqualityRequiredCache.Keeps
+    (run
+        (SourceEqualityMkEdgeAllocation.work symbol original children
+          (SourceEqualityMkEdgeAllocation.accepted original children.length))
+        heap).snd
+    current
+resident : InternedNestedProvenance.Edges current rows
+closedRows : MergedColdReaderClosedInputs.ClosedEdges rows
+selected :
+  (run
+        (SourceEqualityMkEdgeAllocation.work symbol original children
+          (SourceEqualityMkEdgeAllocation.accepted original children.length))
+        heap).fst ∈
+    InternedEdgeResidency.nodeEdges (run (makeNode rows) current).fst
+actualBuilt : EdgeValue Symbol Constraint × InternedConstructorTemplates.State Symbol Constraint :=
+  run
+    (SourceEqualityMkEdgeAllocation.work symbol original children
+      (SourceEqualityMkEdgeAllocation.accepted original children.length))
+    heap
+actualParent : Value Symbol Constraint × InternedConstructorTemplates.State Symbol Constraint :=
+  run (makeNode rows) current
+actualOperations : SourceEqualityConstraintMemoAllocation.State :=
+  SourceEqualityMkEdgeAllocation.outputState
+    (SourceEqualityMkEdgeAllocation.check stored original.guard children.length before).snd
+    (SourceEqualityMkEdgeAllocation.accepted original children.length)
+checkedExact :
+  (SourceEqualityMkEdgeAllocation.check stored original.guard children.length before).fst =
+    Except.ok (SourceEqualityMkEdgeAllocation.accepted original children.length)
+receipt :
+  SourceEqualityMkEdgeAllocation.build symbol stored original.guard children before heap =
+    (Except.ok
+        (run
+            (SourceEqualityMkEdgeAllocation.work symbol original children
+              (SourceEqualityMkEdgeAllocation.accepted original children.length))
+            heap).fst,
+      SourceEqualityMkEdgeAllocation.outputState
+        (SourceEqualityMkEdgeAllocation.check stored original.guard children.length before).snd
+        (SourceEqualityMkEdgeAllocation.accepted original children.length),
+      (run
+          (SourceEqualityMkEdgeAllocation.work symbol original children
+            (SourceEqualityMkEdgeAllocation.accepted original children.length))
+          heap).snd)
+operationsValid :
+  SourceEqualityConstraintMemoAllocation.Valid
+    (SourceEqualityMkEdgeAllocation.outputState
+      (SourceEqualityMkEdgeAllocation.check stored original.guard children.length before).snd
+      (SourceEqualityMkEdgeAllocation.accepted original children.length))
+operationsGrowth :
+  SourceEqualityConstraintMemoAllocation.Grows before
+    (SourceEqualityMkEdgeAllocation.outputState
+      (SourceEqualityMkEdgeAllocation.check stored original.guard children.length before).snd
+      (SourceEqualityMkEdgeAllocation.accepted original children.length))
+checkedKept :
+  SourceEqualityRequiredCache.Keeps heap
+    (run
+        (SourceEqualityMkEdgeAllocation.work symbol original children
+          (SourceEqualityMkEdgeAllocation.accepted original children.length))
+        heap).snd
+_checkedResident :
+  InternedEdgeResidency.EdgeResident
+    (run
+        (SourceEqualityMkEdgeAllocation.work symbol original children
+          (SourceEqualityMkEdgeAllocation.accepted original children.length))
+        heap).snd
+    (run
+        (SourceEqualityMkEdgeAllocation.work symbol original children
+          (SourceEqualityMkEdgeAllocation.accepted original children.length))
+        heap).fst
+rowSymbol :
+  (run
+              (SourceEqualityMkEdgeAllocation.work symbol original children
+                (SourceEqualityMkEdgeAllocation.accepted original children.length))
+              heap).fst.entry.key.symbol =
+    symbol
+rowGuard :
+  (run
+              (SourceEqualityMkEdgeAllocation.work symbol original children
+                (SourceEqualityMkEdgeAllocation.accepted original children.length))
+              heap).fst.entry.key.constraint =
+    if SourceEqualityMkEdgeAllocation.accepted original children.length = true then original
+    else SourceEqualityConstraintConstructors.top
+rowChildren :
+  (run
+          (SourceEqualityMkEdgeAllocation.work symbol original children
+            (SourceEqualityMkEdgeAllocation.accepted original children.length))
+          heap).fst.children =
+    if SourceEqualityMkEdgeAllocation.accepted original children.length = true then children else [Value.empty]
+classes : EqualityNormalize.Constraints
+source :
+  SourceCompactGuards.sourceEqualities
+      (run
+                (SourceEqualityMkEdgeAllocation.work symbol original children
+                  (SourceEqualityMkEdgeAllocation.accepted original children.length))
+                heap).fst.entry.key.constraint =
+    some classes
+projected :
+  SourcePruningEnumerationConstraint.project
+      (run
+                (SourceEqualityMkEdgeAllocation.work symbol original children
+                  (SourceEqualityMkEdgeAllocation.accepted original children.length))
+                heap).fst.entry.key.constraint =
+    some
+      (EnumerationEquality.readClasses classes,
+        if
+            (SourceCompactGuards.positive
+                  (run
+                              (SourceEqualityMkEdgeAllocation.work symbol original children
+                                (SourceEqualityMkEdgeAllocation.accepted original children.length))
+                              heap).fst.entry.key.constraint.guard).isSome =
+              true then
+          none
+        else
+          some
+            (run
+                      (SourceEqualityMkEdgeAllocation.work symbol original children
+                        (SourceEqualityMkEdgeAllocation.accepted original children.length))
+                      heap).fst.entry.key.constraint)
+validTries : ∀ (trie : EqualityTrie.Trie), trie ∈ EnumerationEquality.readClasses classes → EqualityTrie.Valid trie
+pathReadback :
+  ∀ (paths : EqualityNormalize.Class),
+    paths ∈ classes →
+      ∀ (path : EqualityTrie.Path),
+        path ∈ EqualityTrie.fromPathTrie (EnumerationEquality.classTrie paths) ↔ path ∈ paths
+ownArity :
+  ∀ (start : Nat),
+    arityAllows
+        (run
+                (SourceEqualityMkEdgeAllocation.work symbol original children
+                  (SourceEqualityMkEdgeAllocation.accepted original children.length))
+                heap).fst.children.length
+        (suspendedVars start (EnumerationEquality.readClasses classes)) =
+      true
+normalized : InternedEdgeResidency.nodeEdges actualParent.fst = canonicalEdges (surviving rows)
+inputMember : actualBuilt.fst ∈ rows
+live : EqualityLeafProjectionPhysical.dead actualBuilt.fst = false
+keepEq : SourceEqualityMkEdgeAllocation.accepted original children.length = true
+⊢ true = true
+/tmp/mcfta-pruning-enumeration-selected-row-20261024/strict-1/MicroCFTA/SourcePruningEnumerationSelectedRow.lean:62:82: error: unsolved goals
+inst✝ : DecidableEq (EdgeKey Symbol Constraint)
+symbol : Symbol
+original : Constraint
+stored : SourceEqualityConstraintAllocation.Value
+children : List (Value Symbol Constraint)
+before : SourceEqualityConstraintMemoAllocation.State
+heap current : InternedConstructorTemplates.State Symbol Constraint
+rows : List (EdgeValue Symbol Constraint)
+cached : SourceEqualityGuardReadback.Cached original.equalities
+physical : SourceEqualityPhysicalPayload.read original.equalities = Except.ok stored.payload
+storedReady : SourceEqualityConstraintAllocation.Ready before.constraints stored
+valid : SourceEqualityConstraintMemoAllocation.Valid before
+heapReady : SourceEqualityRequiredCache.Ready heap
+available :
+  SourceEqualityMkEdgeAllocation.accepted original children.length = true →
+    InternedNestedProvenance.Values heap children
+advanced :
+  SourceEqualityRequiredCache.Keeps
+    (run
+        (SourceEqualityMkEdgeAllocation.work symbol original children
+          (SourceEqualityMkEdgeAllocation.accepted original children.length))
+        heap).snd
+    current
+resident : InternedNestedProvenance.Edges current rows
+closedRows : MergedColdReaderClosedInputs.ClosedEdges rows
+selected :
+  (run
+        (SourceEqualityMkEdgeAllocation.work symbol original children
+          (SourceEqualityMkEdgeAllocation.accepted original children.length))
+        heap).fst ∈
+    InternedEdgeResidency.nodeEdges (run (makeNode rows) current).fst
+actualBuilt : EdgeValue Symbol Constraint × InternedConstructorTemplates.State Symbol Constraint :=
+  run
+    (SourceEqualityMkEdgeAllocation.work symbol original children
+      (SourceEqualityMkEdgeAllocation.accepted original children.length))
+    heap
+actualParent : Value Symbol Constraint × InternedConstructorTemplates.State Symbol Constraint :=
+  run (makeNode rows) current
+actualOperations : SourceEqualityConstraintMemoAllocation.State :=
+  SourceEqualityMkEdgeAllocation.outputState
+    (SourceEqualityMkEdgeAllocation.check stored original.guard children.length before).snd
+    (SourceEqualityMkEdgeAllocation.accepted original children.length)
+checkedExact :
+  (SourceEqualityMkEdgeAllocation.check stored original.guard children.length before).fst =
+    Except.ok (SourceEqualityMkEdgeAllocation.accepted original children.length)
+receipt :
+  SourceEqualityMkEdgeAllocation.build symbol stored original.guard children before heap =
+    (Except.ok
+        (run
+            (SourceEqualityMkEdgeAllocation.work symbol original children
+              (SourceEqualityMkEdgeAllocation.accepted original children.length))
+            heap).fst,
+      SourceEqualityMkEdgeAllocation.outputState
+        (SourceEqualityMkEdgeAllocation.check stored original.guard children.length before).snd
+        (SourceEqualityMkEdgeAllocation.accepted original children.length),
+      (run
+          (SourceEqualityMkEdgeAllocation.work symbol original children
+            (SourceEqualityMkEdgeAllocation.accepted original children.length))
+          heap).snd)
+operationsValid :
+  SourceEqualityConstraintMemoAllocation.Valid
+    (SourceEqualityMkEdgeAllocation.outputState
+      (SourceEqualityMkEdgeAllocation.check stored original.guard children.length before).snd
+      (SourceEqualityMkEdgeAllocation.accepted original children.length))
+operationsGrowth :
+  SourceEqualityConstraintMemoAllocation.Grows before
+    (SourceEqualityMkEdgeAllocation.outputState
+      (SourceEqualityMkEdgeAllocation.check stored original.guard children.length before).snd
+      (SourceEqualityMkEdgeAllocation.accepted original children.length))
+checkedKept :
+  SourceEqualityRequiredCache.Keeps heap
+    (run
+        (SourceEqualityMkEdgeAllocation.work symbol original children
+          (SourceEqualityMkEdgeAllocation.accepted original children.length))
+        heap).snd
+_checkedResident :
+  InternedEdgeResidency.EdgeResident
+    (run
+        (SourceEqualityMkEdgeAllocation.work symbol original children
+          (SourceEqualityMkEdgeAllocation.accepted original children.length))
+        heap).snd
+    (run
+        (SourceEqualityMkEdgeAllocation.work symbol original children
+          (SourceEqualityMkEdgeAllocation.accepted original children.length))
+        heap).fst
+rowSymbol :
+  (run
+              (SourceEqualityMkEdgeAllocation.work symbol original children
+                (SourceEqualityMkEdgeAllocation.accepted original children.length))
+              heap).fst.entry.key.symbol =
+    symbol
+rowGuard :
+  (run
+              (SourceEqualityMkEdgeAllocation.work symbol original children
+                (SourceEqualityMkEdgeAllocation.accepted original children.length))
+              heap).fst.entry.key.constraint =
+    if SourceEqualityMkEdgeAllocation.accepted original children.length = true then original
+    else SourceEqualityConstraintConstructors.top
+rowChildren :
+  (run
+          (SourceEqualityMkEdgeAllocation.work symbol original children
+            (SourceEqualityMkEdgeAllocation.accepted original children.length))
+          heap).fst.children =
+    if SourceEqualityMkEdgeAllocation.accepted original children.length = true then children else [Value.empty]
+classes : EqualityNormalize.Constraints
+source :
+  SourceCompactGuards.sourceEqualities
+      (run
+                (SourceEqualityMkEdgeAllocation.work symbol original children
+                  (SourceEqualityMkEdgeAllocation.accepted original children.length))
+                heap).fst.entry.key.constraint =
+    some classes
+projected :
+  SourcePruningEnumerationConstraint.project
+      (run
+                (SourceEqualityMkEdgeAllocation.work symbol original children
+                  (SourceEqualityMkEdgeAllocation.accepted original children.length))
+                heap).fst.entry.key.constraint =
+    some
+      (EnumerationEquality.readClasses classes,
+        if
+            (SourceCompactGuards.positive
+                  (run
+                              (SourceEqualityMkEdgeAllocation.work symbol original children
+                                (SourceEqualityMkEdgeAllocation.accepted original children.length))
+                              heap).fst.entry.key.constraint.guard).isSome =
+              true then
+          none
+        else
+          some
+            (run
+                      (SourceEqualityMkEdgeAllocation.work symbol original children
+                        (SourceEqualityMkEdgeAllocation.accepted original children.length))
+                      heap).fst.entry.key.constraint)
+validTries : ∀ (trie : EqualityTrie.Trie), trie ∈ EnumerationEquality.readClasses classes → EqualityTrie.Valid trie
+pathReadback :
+  ∀ (paths : EqualityNormalize.Class),
+    paths ∈ classes →
+      ∀ (path : EqualityTrie.Path),
+        path ∈ EqualityTrie.fromPathTrie (EnumerationEquality.classTrie paths) ↔ path ∈ paths
+ownArity :
+  ∀ (start : Nat),
+    arityAllows
+        (run
+                (SourceEqualityMkEdgeAllocation.work symbol original children
+                  (SourceEqualityMkEdgeAllocation.accepted original children.length))
+                heap).fst.children.length
+        (suspendedVars start (EnumerationEquality.readClasses classes)) =
+      true
+normalized : InternedEdgeResidency.nodeEdges actualParent.fst = canonicalEdges (surviving rows)
+inputMember : actualBuilt.fst ∈ rows
+live : EqualityLeafProjectionPhysical.dead actualBuilt.fst = false
+accepted : SourceEqualityMkEdgeAllocation.accepted original children.length = true
+⊢ let built :=
+    run
+      (SourceEqualityMkEdgeAllocation.work symbol original children
+        (SourceEqualityMkEdgeAllocation.accepted original children.length))
+      heap;
+  let parent := run (makeNode rows) current;
+  let operations :=
+    SourceEqualityMkEdgeAllocation.outputState
+      (SourceEqualityMkEdgeAllocation.check stored original.guard children.length before).snd
+      (SourceEqualityMkEdgeAllocation.accepted original children.length);
+  SourceEqualityMkEdgeAllocation.accepted original children.length = true ∧
+    (SourceEqualityMkEdgeAllocation.check stored original.guard children.length before).fst = Except.ok true ∧
+      SourceEqualityMkEdgeAllocation.build symbol stored original.guard children before heap =
+          (Except.ok built.fst, operations, built.snd) ∧
+        SourceEqualityConstraintMemoAllocation.Valid operations ∧
+          SourceEqualityConstraintMemoAllocation.Grows before operations ∧
+            built.fst.entry.key.symbol = symbol ∧
+              built.fst.entry.key.constraint = original ∧
+                built.fst.children = children ∧
+                  InternedEdgeResidency.nodeEdges parent.fst = canonicalEdges (surviving rows) ∧
+                    built.fst ∈ rows ∧
+                      EqualityLeafProjectionPhysical.dead built.fst = false ∧
+                        SourceEqualityRequiredCache.Keeps current parent.snd ∧
+                          SourceEqualityRequiredCache.Keeps heap parent.snd ∧
+                            SourceEqualityRequiredCache.Ready parent.snd ∧
+                              InternedProbeProvenance.Available parent.snd parent.fst ∧
+                                parent.fst.free = [] ∧
+                                  ∃ classes,
+                                    SourceCompactGuards.sourceEqualities built.fst.entry.key.constraint = some classes ∧
+                                      SourcePruningEnumerationConstraint.project built.fst.entry.key.constraint =
+                                          some
+                                            (EnumerationEquality.readClasses classes,
+                                              if
+                                                  (SourceCompactGuards.positive
+                                                        built.fst.entry.key.constraint.guard).isSome =
+                                                    true then
+                                                none
+                                              else some built.fst.entry.key.constraint) ∧
+                                        (∀ (trie : EqualityTrie.Trie),
+                                            trie ∈ EnumerationEquality.readClasses classes → EqualityTrie.Valid trie) ∧
+                                          (∀ (paths : EqualityNormalize.Class),
+                                              paths ∈ classes →
+                                                ∀ (path : EqualityTrie.Path),
+                                                  path ∈
+                                                      EqualityTrie.fromPathTrie (EnumerationEquality.classTrie paths) ↔
+                                                    path ∈ paths) ∧
+                                            ∀ (start : Nat),
+                                              arityAllows built.fst.children.length
+                                                  (suspendedVars start (EnumerationEquality.readClasses classes)) =
+                                                true
+/tmp/mcfta-pruning-enumeration-selected-row-20261024/strict-1/MicroCFTA/SourcePruningEnumerationSelectedRow.lean:90:4: error: unexpected token '|'; expected command
+/tmp/mcfta-pruning-enumeration-selected-row-20261024/strict-1/MicroCFTA/SourcePruningEnumerationSelectedRow.lean:171:42: error: unsolved goals
+case empty
+inst✝ : DecidableEq (EdgeKey Symbol Constraint)
+symbol : Symbol
+original : Constraint
+stored : SourceEqualityConstraintAllocation.Value
+children : List (Value Symbol Constraint)
+before : SourceEqualityConstraintMemoAllocation.State
+heap current : InternedConstructorTemplates.State Symbol Constraint
+rows : List (EdgeValue Symbol Constraint)
+cached : SourceEqualityGuardReadback.Cached original.equalities
+physical : SourceEqualityPhysicalPayload.read original.equalities = Except.ok stored.payload
+storedReady : SourceEqualityConstraintAllocation.Ready before.constraints stored
+valid : SourceEqualityConstraintMemoAllocation.Valid before
+heapReady : SourceEqualityRequiredCache.Ready heap
+available :
+  SourceEqualityMkEdgeAllocation.accepted original children.length = true →
+    InternedNestedProvenance.Values heap children
+advanced :
+  SourceEqualityRequiredCache.Keeps
+    (run
+        (SourceEqualityMkEdgeAllocation.work symbol original children
+          (SourceEqualityMkEdgeAllocation.accepted original children.length))
+        heap).snd
+    current
+resident : InternedNestedProvenance.Edges current rows
+closedRows : MergedColdReaderClosedInputs.ClosedEdges rows
+selected :
+  (run
+        (SourceEqualityMkEdgeAllocation.work symbol original children
+          (SourceEqualityMkEdgeAllocation.accepted original children.length))
+        heap).fst ∈
+    InternedEdgeResidency.nodeEdges (run (makeNode rows) current).fst
+scs : List Suspended
+enumBefore entry : EnumerationState.State Symbol Constraint
+realized : PendingRealized heap enumBefore
+frame : EnumerationCompressionFrame.Frame enumBefore entry
+aligned : enumBefore.counter = enumBefore.values.length
+allowed :
+  arityAllows
+      (run
+              (SourceEqualityMkEdgeAllocation.work symbol original children
+                (SourceEqualityMkEdgeAllocation.accepted original children.length))
+              heap).fst.children.length
+      scs =
+    true
+selectedBuilt : EdgeValue Symbol Constraint × InternedConstructorTemplates.State Symbol Constraint :=
+  run
+    (SourceEqualityMkEdgeAllocation.work symbol original children
+      (SourceEqualityMkEdgeAllocation.accepted original children.length))
+    heap
+selectedParent : Value Symbol Constraint × InternedConstructorTemplates.State Symbol Constraint :=
+  run (makeNode rows) current
+_accepted : SourceEqualityMkEdgeAllocation.accepted original children.length = true
+_checked : (SourceEqualityMkEdgeAllocation.check stored original.guard children.length before).fst = Except.ok true
+_receipt :
+  SourceEqualityMkEdgeAllocation.build symbol stored original.guard children before heap =
+    (Except.ok
+        (run
+            (SourceEqualityMkEdgeAllocation.work symbol original children
+              (SourceEqualityMkEdgeAllocation.accepted original children.length))
+            heap).fst,
+      SourceEqualityMkEdgeAllocation.outputState
+        (SourceEqualityMkEdgeAllocation.check stored original.guard children.length before).snd
+        (SourceEqualityMkEdgeAllocation.accepted original children.length),
+      (run
+          (SourceEqualityMkEdgeAllocation.work symbol original children
+            (SourceEqualityMkEdgeAllocation.accepted original children.length))
+          heap).snd)
+_operationsValid :
+  SourceEqualityConstraintMemoAllocation.Valid
+    (SourceEqualityMkEdgeAllocation.outputState
+      (SourceEqualityMkEdgeAllocation.check stored original.guard children.length before).snd
+      (SourceEqualityMkEdgeAllocation.accepted original children.length))
+_operationsGrowth :
+  SourceEqualityConstraintMemoAllocation.Grows before
+    (SourceEqualityMkEdgeAllocation.outputState
+      (SourceEqualityMkEdgeAllocation.check stored original.guard children.length before).snd
+      (SourceEqualityMkEdgeAllocation.accepted original children.length))
+_rowSymbol :
+  (run
+              (SourceEqualityMkEdgeAllocation.work symbol original children
+                (SourceEqualityMkEdgeAllocation.accepted original children.length))
+              heap).fst.entry.key.symbol =
+    symbol
+_rowGuard :
+  (run
+              (SourceEqualityMkEdgeAllocation.work symbol original children
+                (SourceEqualityMkEdgeAllocation.accepted original children.length))
+              heap).fst.entry.key.constraint =
+    original
+_rowChildren :
+  (run
+          (SourceEqualityMkEdgeAllocation.work symbol original children
+            (SourceEqualityMkEdgeAllocation.accepted original children.length))
+          heap).fst.children =
+    children
+_normalized : InternedEdgeResidency.nodeEdges (run (makeNode rows) current).fst = canonicalEdges (surviving rows)
+_inputMember :
+  (run
+        (SourceEqualityMkEdgeAllocation.work symbol original children
+          (SourceEqualityMkEdgeAllocation.accepted original children.length))
+        heap).fst ∈
+    rows
+_live :
+  EqualityLeafProjectionPhysical.dead
+      (run
+          (SourceEqualityMkEdgeAllocation.work symbol original children
+            (SourceEqualityMkEdgeAllocation.accepted original children.length))
+          heap).fst =
+    false
+_parentKept : SourceEqualityRequiredCache.Keeps current (run (makeNode rows) current).snd
+totalKept : SourceEqualityRequiredCache.Keeps heap (run (makeNode rows) current).snd
+parentReady : SourceEqualityRequiredCache.Ready (run (makeNode rows) current).snd
+parentAvailable : InternedProbeProvenance.Available (run (makeNode rows) current).snd (run (makeNode rows) current).fst
+parentClosed : (run (makeNode rows) current).fst.free = []
+classes : EqualityNormalize.Constraints
+_source :
+  SourceCompactGuards.sourceEqualities
+      (run
+                (SourceEqualityMkEdgeAllocation.work symbol original children
+                  (SourceEqualityMkEdgeAllocation.accepted original children.length))
+                heap).fst.entry.key.constraint =
+    some classes
+projected :
+  SourcePruningEnumerationConstraint.project
+      (run
+                (SourceEqualityMkEdgeAllocation.work symbol original children
+                  (SourceEqualityMkEdgeAllocation.accepted original children.length))
+                heap).fst.entry.key.constraint =
+    some
+      (EnumerationEquality.readClasses classes,
+        if
+            (SourceCompactGuards.positive
+                  (run
+                              (SourceEqualityMkEdgeAllocation.work symbol original children
+                                (SourceEqualityMkEdgeAllocation.accepted original children.length))
+                              heap).fst.entry.key.constraint.guard).isSome =
+              true then
+          none
+        else
+          some
+            (run
+                      (SourceEqualityMkEdgeAllocation.work symbol original children
+                        (SourceEqualityMkEdgeAllocation.accepted original children.length))
+                      heap).fst.entry.key.constraint)
+_validTries : ∀ (trie : EqualityTrie.Trie), trie ∈ EnumerationEquality.readClasses classes → EqualityTrie.Valid trie
+_pathReadback :
+  ∀ (paths : EqualityNormalize.Class),
+    paths ∈ classes →
+      ∀ (path : EqualityTrie.Path),
+        path ∈ EqualityTrie.fromPathTrie (EnumerationEquality.classTrie paths) ↔ path ∈ paths
+_ownArity :
+  ∀ (start : Nat),
+    arityAllows
+        (run
+                (SourceEqualityMkEdgeAllocation.work symbol original children
+                  (SourceEqualityMkEdgeAllocation.accepted original children.length))
+                heap).fst.children.length
+        (suspendedVars start (EnumerationEquality.readClasses classes)) =
+      true
+entryRealized : PendingRealized selectedParent.snd entry
+entryAligned : entry.counter = entry.values.length
+parentEq : selectedParent.fst = Value.empty
+⊢ let tries := EnumerationEquality.readClasses classes;
+  let residual :=
+    if
+        (SourceCompactGuards.positive
+              (run
+                          (SourceEqualityMkEdgeAllocation.work symbol original children
+                            (SourceEqualityMkEdgeAllocation.accepted original children.length))
+                          heap).fst.entry.key.constraint.guard).isSome =
+          true then
+      none
+    else
+      some
+        (run
+                  (SourceEqualityMkEdgeAllocation.work symbol original children
+                    (SourceEqualityMkEdgeAllocation.accepted original children.length))
+                  heap).fst.entry.key.constraint;
+  let staged :=
+    List.map
+      (fun indexed =>
+        (indexed.fst, descendScs indexed.snd scs ++ descendScs indexed.snd (suspendedVars entry.counter tries),
+          SourcePruningEnumerationShallowChild.prepareChild
+            (descendScs indexed.snd scs ++ descendScs indexed.snd (suspendedVars entry.counter tries)) indexed.fst))
+      (run
+              (SourceEqualityMkEdgeAllocation.work symbol original children
+                (SourceEqualityMkEdgeAllocation.accepted original children.length))
+              heap).fst.children.zipIdx;
+  let stop := List.findIdx (fun stage => stage.snd.snd.isNone) staged;
+  ∃ action childrenResult childrenAfter after,
+    SourcePruningEnumerationEdgeTraversal.prepare scs
+          (run
+              (SourceEqualityMkEdgeAllocation.work symbol original children
+                (SourceEqualityMkEdgeAllocation.accepted original children.length))
+              heap).fst =
+        some action ∧
+      Success (SourcePruningEnumerationEdgeTraversal.runStaged staged) (suspendedState tries.length entry)
+          childrenResult childrenAfter ∧
+        Success (SourcePruningEnumerationEdgeTraversal.runStaged (List.take stop staged))
+            (suspendedState tries.length entry)
+            (some (List.map (fun uv => Fragments.Fragment.hole uv) (List.range' (entry.counter + tries.length) stop)))
+            childrenAfter ∧
+          (childrenResult =
+              if stop < staged.length then none
+              else
+                some
+                  (List.map (fun uv => Fragments.Fragment.hole uv)
+                    (List.range' (entry.counter + tries.length) staged.length))) ∧
+            (after =
+                match childrenResult with
+                | none => childrenAfter
+                | some fragments =>
+                  match residual with
+                  | none => childrenAfter
+                  | some guard =>
+                    { counter := childrenAfter.counter, representatives := childrenAfter.representatives,
+                      values := childrenAfter.values,
+                      obligations :=
+                        (guard,
+                            Fragments.Fragment.node
+                              (run
+                                        (SourceEqualityMkEdgeAllocation.work symbol original children
+                                          (SourceEqualityMkEdgeAllocation.accepted original children.length))
+                                        heap).fst.entry.key.symbol
+                              fragments) ::
+                          childrenAfter.obligations,
+                      recursionAncestry := childrenAfter.recursionAncestry,
+                      expansionAncestry := childrenAfter.expansionAncestry }) ∧
+              Success action entry
+                  (Option.map
+                    (fun fragments =>
+                      Fragments.Fragment.node
+                        (run
+                                  (SourceEqualityMkEdgeAllocation.work symbol original children
+                                    (SourceEqualityMkEdgeAllocation.accepted original children.length))
+                                  heap).fst.entry.key.symbol
+                        fragments)
+                    childrenResult)
+                  after ∧
+                after.counter = entry.counter + tries.length + stop ∧
+                  after.counter = after.values.length ∧ PendingRealized (run (makeNode rows) current).snd after
+
+case reference
+inst✝ : DecidableEq (EdgeKey Symbol Constraint)
+symbol : Symbol
+original : Constraint
+stored : SourceEqualityConstraintAllocation.Value
+children : List (Value Symbol Constraint)
+before : SourceEqualityConstraintMemoAllocation.State
+heap current : InternedConstructorTemplates.State Symbol Constraint
+rows : List (EdgeValue Symbol Constraint)
+cached : SourceEqualityGuardReadback.Cached original.equalities
+physical : SourceEqualityPhysicalPayload.read original.equalities = Except.ok stored.payload
+storedReady : SourceEqualityConstraintAllocation.Ready before.constraints stored
+valid : SourceEqualityConstraintMemoAllocation.Valid before
+heapReady : SourceEqualityRequiredCache.Ready heap
+available :
+  SourceEqualityMkEdgeAllocation.accepted original children.length = true →
+    InternedNestedProvenance.Values heap children
+advanced :
+  SourceEqualityRequiredCache.Keeps
+    (run
+        (SourceEqualityMkEdgeAllocation.work symbol original children
+          (SourceEqualityMkEdgeAllocation.accepted original children.length))
+        heap).snd
+    current
+resident : InternedNestedProvenance.Edges current rows
+closedRows : MergedColdReaderClosedInputs.ClosedEdges rows
+selected :
+  (run
+        (SourceEqualityMkEdgeAllocation.work symbol original children
+          (SourceEqualityMkEdgeAllocation.accepted original children.length))
+        heap).fst ∈
+    InternedEdgeResidency.nodeEdges (run (makeNode rows) current).fst
+scs : List Suspended
+enumBefore entry : EnumerationState.State Symbol Constraint
+realized : PendingRealized heap enumBefore
+frame : EnumerationCompressionFrame.Frame enumBefore entry
+aligned : enumBefore.counter = enumBefore.values.length
+allowed :
+  arityAllows
+      (run
+              (SourceEqualityMkEdgeAllocation.work symbol original children
+                (SourceEqualityMkEdgeAllocation.accepted original children.length))
+              heap).fst.children.length
+      scs =
+    true
+selectedBuilt : EdgeValue Symbol Constraint × InternedConstructorTemplates.State Symbol Constraint :=
+  run
+    (SourceEqualityMkEdgeAllocation.work symbol original children
+      (SourceEqualityMkEdgeAllocation.accepted original children.length))
+    heap
+selectedParent : Value Symbol Constraint × InternedConstructorTemplates.State Symbol Constraint :=
+  run (makeNode rows) current
+_accepted : SourceEqualityMkEdgeAllocation.accepted original children.length = true
+_checked : (SourceEqualityMkEdgeAllocation.check stored original.guard children.length before).fst = Except.ok true
+_receipt :
+  SourceEqualityMkEdgeAllocation.build symbol stored original.guard children before heap =
+    (Except.ok
+        (run
+            (SourceEqualityMkEdgeAllocation.work symbol original children
+              (SourceEqualityMkEdgeAllocation.accepted original children.length))
+            heap).fst,
+      SourceEqualityMkEdgeAllocation.outputState
+        (SourceEqualityMkEdgeAllocation.check stored original.guard children.length before).snd
+        (SourceEqualityMkEdgeAllocation.accepted original children.length),
+      (run
+          (SourceEqualityMkEdgeAllocation.work symbol original children
+            (SourceEqualityMkEdgeAllocation.accepted original children.length))
+          heap).snd)
+_operationsValid :
+  SourceEqualityConstraintMemoAllocation.Valid
+    (SourceEqualityMkEdgeAllocation.outputState
+      (SourceEqualityMkEdgeAllocation.check stored original.guard children.length before).snd
+      (SourceEqualityMkEdgeAllocation.accepted original children.length))
+_operationsGrowth :
+  SourceEqualityConstraintMemoAllocation.Grows before
+    (SourceEqualityMkEdgeAllocation.outputState
+      (SourceEqualityMkEdgeAllocation.check stored original.guard children.length before).snd
+      (SourceEqualityMkEdgeAllocation.accepted original children.length))
+_rowSymbol :
+  (run
+              (SourceEqualityMkEdgeAllocation.work symbol original children
+                (SourceEqualityMkEdgeAllocation.accepted original children.length))
+              heap).fst.entry.key.symbol =
+    symbol
+_rowGuard :
+  (run
+              (SourceEqualityMkEdgeAllocation.work symbol original children
+                (SourceEqualityMkEdgeAllocation.accepted original children.length))
+              heap).fst.entry.key.constraint =
+    original
+_rowChildren :
+  (run
+          (SourceEqualityMkEdgeAllocation.work symbol original children
+            (SourceEqualityMkEdgeAllocation.accepted original children.length))
+          heap).fst.children =
+    children
+_normalized : InternedEdgeResidency.nodeEdges (run (makeNode rows) current).fst = canonicalEdges (surviving rows)
+_inputMember :
+  (run
+        (SourceEqualityMkEdgeAllocation.work symbol original children
+          (SourceEqualityMkEdgeAllocation.accepted original children.length))
+        heap).fst ∈
+    rows
+_live :
+  EqualityLeafProjectionPhysical.dead
+      (run
+          (SourceEqualityMkEdgeAllocation.work symbol original children
+            (SourceEqualityMkEdgeAllocation.accepted original children.length))
+          heap).fst =
+    false
+_parentKept : SourceEqualityRequiredCache.Keeps current (run (makeNode rows) current).snd
+totalKept : SourceEqualityRequiredCache.Keeps heap (run (makeNode rows) current).snd
+parentReady : SourceEqualityRequiredCache.Ready (run (makeNode rows) current).snd
+parentAvailable : InternedProbeProvenance.Available (run (makeNode rows) current).snd (run (makeNode rows) current).fst
+parentClosed : (run (makeNode rows) current).fst.free = []
+classes : EqualityNormalize.Constraints
+_source :
+  SourceCompactGuards.sourceEqualities
+      (run
+                (SourceEqualityMkEdgeAllocation.work symbol original children
+                  (SourceEqualityMkEdgeAllocation.accepted original children.length))
+                heap).fst.entry.key.constraint =
+    some classes
+projected :
+  SourcePruningEnumerationConstraint.project
+      (run
+                (SourceEqualityMkEdgeAllocation.work symbol original children
+                  (SourceEqualityMkEdgeAllocation.accepted original children.length))
+                heap).fst.entry.key.constraint =
+    some
+      (EnumerationEquality.readClasses classes,
+        if
+            (SourceCompactGuards.positive
+                  (run
+                              (SourceEqualityMkEdgeAllocation.work symbol original children
+                                (SourceEqualityMkEdgeAllocation.accepted original children.length))
+                              heap).fst.entry.key.constraint.guard).isSome =
+              true then
+          none
+        else
+          some
+            (run
+                      (SourceEqualityMkEdgeAllocation.work symbol original children
+                        (SourceEqualityMkEdgeAllocation.accepted original children.length))
+                      heap).fst.entry.key.constraint)
+_validTries : ∀ (trie : EqualityTrie.Trie), trie ∈ EnumerationEquality.readClasses classes → EqualityTrie.Valid trie
+_pathReadback :
+  ∀ (paths : EqualityNormalize.Class),
+    paths ∈ classes →
+      ∀ (path : EqualityTrie.Path),
+        path ∈ EqualityTrie.fromPathTrie (EnumerationEquality.classTrie paths) ↔ path ∈ paths
+_ownArity :
+  ∀ (start : Nat),
+    arityAllows
+        (run
+                (SourceEqualityMkEdgeAllocation.work symbol original children
+                  (SourceEqualityMkEdgeAllocation.accepted original children.length))
+                heap).fst.children.length
+        (suspendedVars start (EnumerationEquality.readClasses classes)) =
+      true
+entryRealized : PendingRealized selectedParent.snd entry
+entryAligned : entry.counter = entry.values.length
+name✝ : InternedBinderProtocol.Reference
+parentEq : selectedParent.fst = Value.reference name✝
+⊢ let tries := EnumerationEquality.readClasses classes;
+  let residual :=
+    if
+        (SourceCompactGuards.positive
+              (run
+                          (SourceEqualityMkEdgeAllocation.work symbol original children
+                            (SourceEqualityMkEdgeAllocation.accepted original children.length))
+                          heap).fst.entry.key.constraint.guard).isSome =
+          true then
+      none
+    else
+      some
+        (run
+                  (SourceEqualityMkEdgeAllocation.work symbol original children
+                    (SourceEqualityMkEdgeAllocation.accepted original children.length))
+                  heap).fst.entry.key.constraint;
+  let staged :=
+    List.map
+      (fun indexed =>
+        (indexed.fst, descendScs indexed.snd scs ++ descendScs indexed.snd (suspendedVars entry.counter tries),
+          SourcePruningEnumerationShallowChild.prepareChild
+            (descendScs indexed.snd scs ++ descendScs indexed.snd (suspendedVars entry.counter tries)) indexed.fst))
+      (run
+              (SourceEqualityMkEdgeAllocation.work symbol original children
+                (SourceEqualityMkEdgeAllocation.accepted original children.length))
+              heap).fst.children.zipIdx;
+  let stop := List.findIdx (fun stage => stage.snd.snd.isNone) staged;
+  ∃ action childrenResult childrenAfter after,
+    SourcePruningEnumerationEdgeTraversal.prepare scs
+          (run
+              (SourceEqualityMkEdgeAllocation.work symbol original children
+                (SourceEqualityMkEdgeAllocation.accepted original children.length))
+              heap).fst =
+        some action ∧
+      Success (SourcePruningEnumerationEdgeTraversal.runStaged staged) (suspendedState tries.length entry)
+          childrenResult childrenAfter ∧
+        Success (SourcePruningEnumerationEdgeTraversal.runStaged (List.take stop staged))
+            (suspendedState tries.length entry)
+            (some (List.map (fun uv => Fragments.Fragment.hole uv) (List.range' (entry.counter + tries.length) stop)))
+            childrenAfter ∧
+          (childrenResult =
+              if stop < staged.length then none
+              else
+                some
+                  (List.map (fun uv => Fragments.Fragment.hole uv)
+                    (List.range' (entry.counter + tries.length) staged.length))) ∧
+            (after =
+                match childrenResult with
+                | none => childrenAfter
+                | some fragments =>
+                  match residual with
+                  | none => childrenAfter
+                  | some guard =>
+                    { counter := childrenAfter.counter, representatives := childrenAfter.representatives,
+                      values := childrenAfter.values,
+                      obligations :=
+                        (guard,
+                            Fragments.Fragment.node
+                              (run
+                                        (SourceEqualityMkEdgeAllocation.work symbol original children
+                                          (SourceEqualityMkEdgeAllocation.accepted original children.length))
+                                        heap).fst.entry.key.symbol
+                              fragments) ::
+                          childrenAfter.obligations,
+                      recursionAncestry := childrenAfter.recursionAncestry,
+                      expansionAncestry := childrenAfter.expansionAncestry }) ∧
+              Success action entry
+                  (Option.map
+                    (fun fragments =>
+                      Fragments.Fragment.node
+                        (run
+                                  (SourceEqualityMkEdgeAllocation.work symbol original children
+                                    (SourceEqualityMkEdgeAllocation.accepted original children.length))
+                                  heap).fst.entry.key.symbol
+                        fragments)
+                    childrenResult)
+                  after ∧
+                after.counter = entry.counter + tries.length + stop ∧
+                  after.counter = after.values.length ∧ PendingRealized (run (makeNode rows) current).snd after
+
+case node
+inst✝ : DecidableEq (EdgeKey Symbol Constraint)
+symbol : Symbol
+original : Constraint
+stored : SourceEqualityConstraintAllocation.Value
+children : List (Value Symbol Constraint)
+before : SourceEqualityConstraintMemoAllocation.State
+heap current : InternedConstructorTemplates.State Symbol Constraint
+rows : List (EdgeValue Symbol Constraint)
+cached : SourceEqualityGuardReadback.Cached original.equalities
+physical : SourceEqualityPhysicalPayload.read original.equalities = Except.ok stored.payload
+storedReady : SourceEqualityConstraintAllocation.Ready before.constraints stored
+valid : SourceEqualityConstraintMemoAllocation.Valid before
+heapReady : SourceEqualityRequiredCache.Ready heap
+available :
+  SourceEqualityMkEdgeAllocation.accepted original children.length = true →
+    InternedNestedProvenance.Values heap children
+advanced :
+  SourceEqualityRequiredCache.Keeps
+    (run
+        (SourceEqualityMkEdgeAllocation.work symbol original children
+          (SourceEqualityMkEdgeAllocation.accepted original children.length))
+        heap).snd
+    current
+resident : InternedNestedProvenance.Edges current rows
+closedRows : MergedColdReaderClosedInputs.ClosedEdges rows
+selected :
+  (run
+        (SourceEqualityMkEdgeAllocation.work symbol original children
+          (SourceEqualityMkEdgeAllocation.accepted original children.length))
+        heap).fst ∈
+    InternedEdgeResidency.nodeEdges (run (makeNode rows) current).fst
+scs : List Suspended
+enumBefore entry : EnumerationState.State Symbol Constraint
+realized : PendingRealized heap enumBefore
+frame : EnumerationCompressionFrame.Frame enumBefore entry
+aligned : enumBefore.counter = enumBefore.values.length
+allowed :
+  arityAllows
+      (run
+              (SourceEqualityMkEdgeAllocation.work symbol original children
+                (SourceEqualityMkEdgeAllocation.accepted original children.length))
+              heap).fst.children.length
+      scs =
+    true
+selectedBuilt : EdgeValue Symbol Constraint × InternedConstructorTemplates.State Symbol Constraint :=
+  run
+    (SourceEqualityMkEdgeAllocation.work symbol original children
+      (SourceEqualityMkEdgeAllocation.accepted original children.length))
+    heap
+selectedParent : Value Symbol Constraint × InternedConstructorTemplates.State Symbol Constraint :=
+  run (makeNode rows) current
+_accepted : SourceEqualityMkEdgeAllocation.accepted original children.length = true
+_checked : (SourceEqualityMkEdgeAllocation.check stored original.guard children.length before).fst = Except.ok true
+_receipt :
+  SourceEqualityMkEdgeAllocation.build symbol stored original.guard children before heap =
+    (Except.ok
+        (run
+            (SourceEqualityMkEdgeAllocation.work symbol original children
+              (SourceEqualityMkEdgeAllocation.accepted original children.length))
+            heap).fst,
+      SourceEqualityMkEdgeAllocation.outputState
+        (SourceEqualityMkEdgeAllocation.check stored original.guard children.length before).snd
+        (SourceEqualityMkEdgeAllocation.accepted original children.length),
+      (run
+          (SourceEqualityMkEdgeAllocation.work symbol original children
+            (SourceEqualityMkEdgeAllocation.accepted original children.length))
+          heap).snd)
+_operationsValid :
+  SourceEqualityConstraintMemoAllocation.Valid
+    (SourceEqualityMkEdgeAllocation.outputState
+      (SourceEqualityMkEdgeAllocation.check stored original.guard children.length before).snd
+      (SourceEqualityMkEdgeAllocation.accepted original children.length))
+_operationsGrowth :
+  SourceEqualityConstraintMemoAllocation.Grows before
+    (SourceEqualityMkEdgeAllocation.outputState
+      (SourceEqualityMkEdgeAllocation.check stored original.guard children.length before).snd
+      (SourceEqualityMkEdgeAllocation.accepted original children.length))
+_rowSymbol :
+  (run
+              (SourceEqualityMkEdgeAllocation.work symbol original children
+                (SourceEqualityMkEdgeAllocation.accepted original children.length))
+              heap).fst.entry.key.symbol =
+    symbol
+_rowGuard :
+  (run
+              (SourceEqualityMkEdgeAllocation.work symbol original children
+                (SourceEqualityMkEdgeAllocation.accepted original children.length))
+              heap).fst.entry.key.constraint =
+    original
+_rowChildren :
+  (run
+          (SourceEqualityMkEdgeAllocation.work symbol original children
+            (SourceEqualityMkEdgeAllocation.accepted original children.length))
+          heap).fst.children =
+    children
+_normalized : InternedEdgeResidency.nodeEdges (run (makeNode rows) current).fst = canonicalEdges (surviving rows)
+_inputMember :
+  (run
+        (SourceEqualityMkEdgeAllocation.work symbol original children
+          (SourceEqualityMkEdgeAllocation.accepted original children.length))
+        heap).fst ∈
+    rows
+_live :
+  EqualityLeafProjectionPhysical.dead
+      (run
+          (SourceEqualityMkEdgeAllocation.work symbol original children
+            (SourceEqualityMkEdgeAllocation.accepted original children.length))
+          heap).fst =
+    false
+_parentKept : SourceEqualityRequiredCache.Keeps current (run (makeNode rows) current).snd
+totalKept : SourceEqualityRequiredCache.Keeps heap (run (makeNode rows) current).snd
+parentReady : SourceEqualityRequiredCache.Ready (run (makeNode rows) current).snd
+parentAvailable : InternedProbeProvenance.Available (run (makeNode rows) current).snd (run (makeNode rows) current).fst
+parentClosed : (run (makeNode rows) current).fst.free = []
+classes : EqualityNormalize.Constraints
+_source :
+  SourceCompactGuards.sourceEqualities
+      (run
+                (SourceEqualityMkEdgeAllocation.work symbol original children
+                  (SourceEqualityMkEdgeAllocation.accepted original children.length))
+                heap).fst.entry.key.constraint =
+    some classes
+projected :
+  SourcePruningEnumerationConstraint.project
+      (run
+                (SourceEqualityMkEdgeAllocation.work symbol original children
+                  (SourceEqualityMkEdgeAllocation.accepted original children.length))
+                heap).fst.entry.key.constraint =
+    some
+      (EnumerationEquality.readClasses classes,
+        if
+            (SourceCompactGuards.positive
+                  (run
+                              (SourceEqualityMkEdgeAllocation.work symbol original children
+                                (SourceEqualityMkEdgeAllocation.accepted original children.length))
+                              heap).fst.entry.key.constraint.guard).isSome =
+              true then
+          none
+        else
+          some
+            (run
+                      (SourceEqualityMkEdgeAllocation.work symbol original children
+                        (SourceEqualityMkEdgeAllocation.accepted original children.length))
+                      heap).fst.entry.key.constraint)
+_validTries : ∀ (trie : EqualityTrie.Trie), trie ∈ EnumerationEquality.readClasses classes → EqualityTrie.Valid trie
+_pathReadback :
+  ∀ (paths : EqualityNormalize.Class),
+    paths ∈ classes →
+      ∀ (path : EqualityTrie.Path),
+        path ∈ EqualityTrie.fromPathTrie (EnumerationEquality.classTrie paths) ↔ path ∈ paths
+_ownArity :
+  ∀ (start : Nat),
+    arityAllows
+        (run
+                (SourceEqualityMkEdgeAllocation.work symbol original children
+                  (SourceEqualityMkEdgeAllocation.accepted original children.length))
+                heap).fst.children.length
+        (suspendedVars start (EnumerationEquality.readClasses classes)) =
+      true
+entryRealized : PendingRealized selectedParent.snd entry
+entryAligned : entry.counter = entry.values.length
+entry✝ : Cache.Interned InternedBinderProtocol.NodeKey
+edges✝ : List (EdgeValue Symbol Constraint)
+depth✝ : Nat
+free✝ : List InternedBinderProtocol.Reference
+parentEq : selectedParent.fst = Value.node entry✝ edges✝ depth✝ free✝
+⊢ let tries := EnumerationEquality.readClasses classes;
+  let residual :=
+    if
+        (SourceCompactGuards.positive
+              (run
+                          (SourceEqualityMkEdgeAllocation.work symbol original children
+                            (SourceEqualityMkEdgeAllocation.accepted original children.length))
+                          heap).fst.entry.key.constraint.guard).isSome =
+          true then
+      none
+    else
+      some
+        (run
+                  (SourceEqualityMkEdgeAllocation.work symbol original children
+                    (SourceEqualityMkEdgeAllocation.accepted original children.length))
+                  heap).fst.entry.key.constraint;
+  let staged :=
+    List.map
+      (fun indexed =>
+        (indexed.fst, descendScs indexed.snd scs ++ descendScs indexed.snd (suspendedVars entry.counter tries),
+          SourcePruningEnumerationShallowChild.prepareChild
+            (descendScs indexed.snd scs ++ descendScs indexed.snd (suspendedVars entry.counter tries)) indexed.fst))
+      (run
+              (SourceEqualityMkEdgeAllocation.work symbol original children
+                (SourceEqualityMkEdgeAllocation.accepted original children.length))
+              heap).fst.children.zipIdx;
+  let stop := List.findIdx (fun stage => stage.snd.snd.isNone) staged;
+  ∃ action childrenResult childrenAfter after,
+    SourcePruningEnumerationEdgeTraversal.prepare scs
+          (run
+              (SourceEqualityMkEdgeAllocation.work symbol original children
+                (SourceEqualityMkEdgeAllocation.accepted original children.length))
+              heap).fst =
+        some action ∧
+      Success (SourcePruningEnumerationEdgeTraversal.runStaged staged) (suspendedState tries.length entry)
+          childrenResult childrenAfter ∧
+        Success (SourcePruningEnumerationEdgeTraversal.runStaged (List.take stop staged))
+            (suspendedState tries.length entry)
+            (some (List.map (fun uv => Fragments.Fragment.hole uv) (List.range' (entry.counter + tries.length) stop)))
+            childrenAfter ∧
+          (childrenResult =
+              if stop < staged.length then none
+              else
+                some
+                  (List.map (fun uv => Fragments.Fragment.hole uv)
+                    (List.range' (entry.counter + tries.length) staged.length))) ∧
+            (after =
+                match childrenResult with
+                | none => childrenAfter
+                | some fragments =>
+                  match residual with
+                  | none => childrenAfter
+                  | some guard =>
+                    { counter := childrenAfter.counter, representatives := childrenAfter.representatives,
+                      values := childrenAfter.values,
+                      obligations :=
+                        (guard,
+                            Fragments.Fragment.node
+                              (run
+                                        (SourceEqualityMkEdgeAllocation.work symbol original children
+                                          (SourceEqualityMkEdgeAllocation.accepted original children.length))
+                                        heap).fst.entry.key.symbol
+                              fragments) ::
+                          childrenAfter.obligations,
+                      recursionAncestry := childrenAfter.recursionAncestry,
+                      expansionAncestry := childrenAfter.expansionAncestry }) ∧
+              Success action entry
+                  (Option.map
+                    (fun fragments =>
+                      Fragments.Fragment.node
+                        (run
+                                  (SourceEqualityMkEdgeAllocation.work symbol original children
+                                    (SourceEqualityMkEdgeAllocation.accepted original children.length))
+                                  heap).fst.entry.key.symbol
+                        fragments)
+                    childrenResult)
+                  after ∧
+                after.counter = entry.counter + tries.length + stop ∧
+                  after.counter = after.values.length ∧ PendingRealized (run (makeNode rows) current).snd after
+
+case union
+inst✝ : DecidableEq (EdgeKey Symbol Constraint)
+symbol : Symbol
+original : Constraint
+stored : SourceEqualityConstraintAllocation.Value
+children : List (Value Symbol Constraint)
+before : SourceEqualityConstraintMemoAllocation.State
+heap current : InternedConstructorTemplates.State Symbol Constraint
+rows : List (EdgeValue Symbol Constraint)
+cached : SourceEqualityGuardReadback.Cached original.equalities
+physical : SourceEqualityPhysicalPayload.read original.equalities = Except.ok stored.payload
+storedReady : SourceEqualityConstraintAllocation.Ready before.constraints stored
+valid : SourceEqualityConstraintMemoAllocation.Valid before
+heapReady : SourceEqualityRequiredCache.Ready heap
+available :
+  SourceEqualityMkEdgeAllocation.accepted original children.length = true →
+    InternedNestedProvenance.Values heap children
+advanced :
+  SourceEqualityRequiredCache.Keeps
+    (run
+        (SourceEqualityMkEdgeAllocation.work symbol original children
+          (SourceEqualityMkEdgeAllocation.accepted original children.length))
+        heap).snd
+    current
+resident : InternedNestedProvenance.Edges current rows
+closedRows : MergedColdReaderClosedInputs.ClosedEdges rows
+selected :
+  (run
+        (SourceEqualityMkEdgeAllocation.work symbol original children
+          (SourceEqualityMkEdgeAllocation.accepted original children.length))
+        heap).fst ∈
+    InternedEdgeResidency.nodeEdges (run (makeNode rows) current).fst
+scs : List Suspended
+enumBefore entry : EnumerationState.State Symbol Constraint
+realized : PendingRealized heap enumBefore
+frame : EnumerationCompressionFrame.Frame enumBefore entry
+aligned : enumBefore.counter = enumBefore.values.length
+allowed :
+  arityAllows
+      (run
+              (SourceEqualityMkEdgeAllocation.work symbol original children
+                (SourceEqualityMkEdgeAllocation.accepted original children.length))
+              heap).fst.children.length
+      scs =
+    true
+selectedBuilt : EdgeValue Symbol Constraint × InternedConstructorTemplates.State Symbol Constraint :=
+  run
+    (SourceEqualityMkEdgeAllocation.work symbol original children
+      (SourceEqualityMkEdgeAllocation.accepted original children.length))
+    heap
+selectedParent : Value Symbol Constraint × InternedConstructorTemplates.State Symbol Constraint :=
+  run (makeNode rows) current
+_accepted : SourceEqualityMkEdgeAllocation.accepted original children.length = true
+_checked : (SourceEqualityMkEdgeAllocation.check stored original.guard children.length before).fst = Except.ok true
+_receipt :
+  SourceEqualityMkEdgeAllocation.build symbol stored original.guard children before heap =
+    (Except.ok
+        (run
+            (SourceEqualityMkEdgeAllocation.work symbol original children
+              (SourceEqualityMkEdgeAllocation.accepted original children.length))
+            heap).fst,
+      SourceEqualityMkEdgeAllocation.outputState
+        (SourceEqualityMkEdgeAllocation.check stored original.guard children.length before).snd
+        (SourceEqualityMkEdgeAllocation.accepted original children.length),
+      (run
+          (SourceEqualityMkEdgeAllocation.work symbol original children
+            (SourceEqualityMkEdgeAllocation.accepted original children.length))
+          heap).snd)
+_operationsValid :
+  SourceEqualityConstraintMemoAllocation.Valid
+    (SourceEqualityMkEdgeAllocation.outputState
+      (SourceEqualityMkEdgeAllocation.check stored original.guard children.length before).snd
+      (SourceEqualityMkEdgeAllocation.accepted original children.length))
+_operationsGrowth :
+  SourceEqualityConstraintMemoAllocation.Grows before
+    (SourceEqualityMkEdgeAllocation.outputState
+      (SourceEqualityMkEdgeAllocation.check stored original.guard children.length before).snd
+      (SourceEqualityMkEdgeAllocation.accepted original children.length))
+_rowSymbol :
+  (run
+              (SourceEqualityMkEdgeAllocation.work symbol original children
+                (SourceEqualityMkEdgeAllocation.accepted original children.length))
+              heap).fst.entry.key.symbol =
+    symbol
+_rowGuard :
+  (run
+              (SourceEqualityMkEdgeAllocation.work symbol original children
+                (SourceEqualityMkEdgeAllocation.accepted original children.length))
+              heap).fst.entry.key.constraint =
+    original
+_rowChildren :
+  (run
+          (SourceEqualityMkEdgeAllocation.work symbol original children
+            (SourceEqualityMkEdgeAllocation.accepted original children.length))
+          heap).fst.children =
+    children
+_normalized : InternedEdgeResidency.nodeEdges (run (makeNode rows) current).fst = canonicalEdges (surviving rows)
+_inputMember :
+  (run
+        (SourceEqualityMkEdgeAllocation.work symbol original children
+          (SourceEqualityMkEdgeAllocation.accepted original children.length))
+        heap).fst ∈
+    rows
+_live :
+  EqualityLeafProjectionPhysical.dead
+      (run
+          (SourceEqualityMkEdgeAllocation.work symbol original children
+            (SourceEqualityMkEdgeAllocation.accepted original children.length))
+          heap).fst =
+    false
+_parentKept : SourceEqualityRequiredCache.Keeps current (run (makeNode rows) current).snd
+totalKept : SourceEqualityRequiredCache.Keeps heap (run (makeNode rows) current).snd
+parentReady : SourceEqualityRequiredCache.Ready (run (makeNode rows) current).snd
+parentAvailable : InternedProbeProvenance.Available (run (makeNode rows) current).snd (run (makeNode rows) current).fst
+parentClosed : (run (makeNode rows) current).fst.free = []
+classes : EqualityNormalize.Constraints
+_source :
+  SourceCompactGuards.sourceEqualities
+      (run
+                (SourceEqualityMkEdgeAllocation.work symbol original children
+                  (SourceEqualityMkEdgeAllocation.accepted original children.length))
+                heap).fst.entry.key.constraint =
+    some classes
+projected :
+  SourcePruningEnumerationConstraint.project
+      (run
+                (SourceEqualityMkEdgeAllocation.work symbol original children
+                  (SourceEqualityMkEdgeAllocation.accepted original children.length))
+                heap).fst.entry.key.constraint =
+    some
+      (EnumerationEquality.readClasses classes,
+        if
+            (SourceCompactGuards.positive
+                  (run
+                              (SourceEqualityMkEdgeAllocation.work symbol original children
+                                (SourceEqualityMkEdgeAllocation.accepted original children.length))
+                              heap).fst.entry.key.constraint.guard).isSome =
+              true then
+          none
+        else
+          some
+            (run
+                      (SourceEqualityMkEdgeAllocation.work symbol original children
+                        (SourceEqualityMkEdgeAllocation.accepted original children.length))
+                      heap).fst.entry.key.constraint)
+_validTries : ∀ (trie : EqualityTrie.Trie), trie ∈ EnumerationEquality.readClasses classes → EqualityTrie.Valid trie
+_pathReadback :
+  ∀ (paths : EqualityNormalize.Class),
+    paths ∈ classes →
+      ∀ (path : EqualityTrie.Path),
+        path ∈ EqualityTrie.fromPathTrie (EnumerationEquality.classTrie paths) ↔ path ∈ paths
+_ownArity :
+  ∀ (start : Nat),
+    arityAllows
+        (run
+                (SourceEqualityMkEdgeAllocation.work symbol original children
+                  (SourceEqualityMkEdgeAllocation.accepted original children.length))
+                heap).fst.children.length
+        (suspendedVars start (EnumerationEquality.readClasses classes)) =
+      true
+entryRealized : PendingRealized selectedParent.snd entry
+entryAligned : entry.counter = entry.values.length
+entry✝ : Cache.Interned InternedBinderProtocol.NodeKey
+members✝ : List (Value Symbol Constraint)
+depth✝ : Nat
+free✝ : List InternedBinderProtocol.Reference
+parentEq : selectedParent.fst = Value.union entry✝ members✝ depth✝ free✝
+⊢ let tries := EnumerationEquality.readClasses classes;
+  let residual :=
+    if
+        (SourceCompactGuards.positive
+              (run
+                          (SourceEqualityMkEdgeAllocation.work symbol original children
+                            (SourceEqualityMkEdgeAllocation.accepted original children.length))
+                          heap).fst.entry.key.constraint.guard).isSome =
+          true then
+      none
+    else
+      some
+        (run
+                  (SourceEqualityMkEdgeAllocation.work symbol original children
+                    (SourceEqualityMkEdgeAllocation.accepted original children.length))
+                  heap).fst.entry.key.constraint;
+  let staged :=
+    List.map
+      (fun indexed =>
+        (indexed.fst, descendScs indexed.snd scs ++ descendScs indexed.snd (suspendedVars entry.counter tries),
+          SourcePruningEnumerationShallowChild.prepareChild
+            (descendScs indexed.snd scs ++ descendScs indexed.snd (suspendedVars entry.counter tries)) indexed.fst))
+      (run
+              (SourceEqualityMkEdgeAllocation.work symbol original children
+                (SourceEqualityMkEdgeAllocation.accepted original children.length))
+              heap).fst.children.zipIdx;
+  let stop := List.findIdx (fun stage => stage.snd.snd.isNone) staged;
+  ∃ action childrenResult childrenAfter after,
+    SourcePruningEnumerationEdgeTraversal.prepare scs
+          (run
+              (SourceEqualityMkEdgeAllocation.work symbol original children
+                (SourceEqualityMkEdgeAllocation.accepted original children.length))
+              heap).fst =
+        some action ∧
+      Success (SourcePruningEnumerationEdgeTraversal.runStaged staged) (suspendedState tries.length entry)
+          childrenResult childrenAfter ∧
+        Success (SourcePruningEnumerationEdgeTraversal.runStaged (List.take stop staged))
+            (suspendedState tries.length entry)
+            (some (List.map (fun uv => Fragments.Fragment.hole uv) (List.range' (entry.counter + tries.length) stop)))
+            childrenAfter ∧
+          (childrenResult =
+              if stop < staged.length then none
+              else
+                some
+                  (List.map (fun uv => Fragments.Fragment.hole uv)
+                    (List.range' (entry.counter + tries.length) staged.length))) ∧
+            (after =
+                match childrenResult with
+                | none => childrenAfter
+                | some fragments =>
+                  match residual with
+                  | none => childrenAfter
+                  | some guard =>
+                    { counter := childrenAfter.counter, representatives := childrenAfter.representatives,
+                      values := childrenAfter.values,
+                      obligations :=
+                        (guard,
+                            Fragments.Fragment.node
+                              (run
+                                        (SourceEqualityMkEdgeAllocation.work symbol original children
+                                          (SourceEqualityMkEdgeAllocation.accepted original children.length))
+                                        heap).fst.entry.key.symbol
+                              fragments) ::
+                          childrenAfter.obligations,
+                      recursionAncestry := childrenAfter.recursionAncestry,
+                      expansionAncestry := childrenAfter.expansionAncestry }) ∧
+              Success action entry
+                  (Option.map
+                    (fun fragments =>
+                      Fragments.Fragment.node
+                        (run
+                                  (SourceEqualityMkEdgeAllocation.work symbol original children
+                                    (SourceEqualityMkEdgeAllocation.accepted original children.length))
+                                  heap).fst.entry.key.symbol
+                        fragments)
+                    childrenResult)
+                  after ∧
+                after.counter = entry.counter + tries.length + stop ∧
+                  after.counter = after.values.length ∧ PendingRealized (run (makeNode rows) current).snd after
+
+case mu
+inst✝ : DecidableEq (EdgeKey Symbol Constraint)
+symbol : Symbol
+original : Constraint
+stored : SourceEqualityConstraintAllocation.Value
+children : List (Value Symbol Constraint)
+before : SourceEqualityConstraintMemoAllocation.State
+heap current : InternedConstructorTemplates.State Symbol Constraint
+rows : List (EdgeValue Symbol Constraint)
+cached : SourceEqualityGuardReadback.Cached original.equalities
+physical : SourceEqualityPhysicalPayload.read original.equalities = Except.ok stored.payload
+storedReady : SourceEqualityConstraintAllocation.Ready before.constraints stored
+valid : SourceEqualityConstraintMemoAllocation.Valid before
+heapReady : SourceEqualityRequiredCache.Ready heap
+available :
+  SourceEqualityMkEdgeAllocation.accepted original children.length = true →
+    InternedNestedProvenance.Values heap children
+advanced :
+  SourceEqualityRequiredCache.Keeps
+    (run
+        (SourceEqualityMkEdgeAllocation.work symbol original children
+          (SourceEqualityMkEdgeAllocation.accepted original children.length))
+        heap).snd
+    current
+resident : InternedNestedProvenance.Edges current rows
+closedRows : MergedColdReaderClosedInputs.ClosedEdges rows
+selected :
+  (run
+        (SourceEqualityMkEdgeAllocation.work symbol original children
+          (SourceEqualityMkEdgeAllocation.accepted original children.length))
+        heap).fst ∈
+    InternedEdgeResidency.nodeEdges (run (makeNode rows) current).fst
+scs : List Suspended
+enumBefore entry : EnumerationState.State Symbol Constraint
+realized : PendingRealized heap enumBefore
+frame : EnumerationCompressionFrame.Frame enumBefore entry
+aligned : enumBefore.counter = enumBefore.values.length
+allowed :
+  arityAllows
+      (run
+              (SourceEqualityMkEdgeAllocation.work symbol original children
+                (SourceEqualityMkEdgeAllocation.accepted original children.length))
+              heap).fst.children.length
+      scs =
+    true
+selectedBuilt : EdgeValue Symbol Constraint × InternedConstructorTemplates.State Symbol Constraint :=
+  run
+    (SourceEqualityMkEdgeAllocation.work symbol original children
+      (SourceEqualityMkEdgeAllocation.accepted original children.length))
+    heap
+selectedParent : Value Symbol Constraint × InternedConstructorTemplates.State Symbol Constraint :=
+  run (makeNode rows) current
+_accepted : SourceEqualityMkEdgeAllocation.accepted original children.length = true
+_checked : (SourceEqualityMkEdgeAllocation.check stored original.guard children.length before).fst = Except.ok true
+_receipt :
+  SourceEqualityMkEdgeAllocation.build symbol stored original.guard children before heap =
+    (Except.ok
+        (run
+            (SourceEqualityMkEdgeAllocation.work symbol original children
+              (SourceEqualityMkEdgeAllocation.accepted original children.length))
+            heap).fst,
+      SourceEqualityMkEdgeAllocation.outputState
+        (SourceEqualityMkEdgeAllocation.check stored original.guard children.length before).snd
+        (SourceEqualityMkEdgeAllocation.accepted original children.length),
+      (run
+          (SourceEqualityMkEdgeAllocation.work symbol original children
+            (SourceEqualityMkEdgeAllocation.accepted original children.length))
+          heap).snd)
+_operationsValid :
+  SourceEqualityConstraintMemoAllocation.Valid
+    (SourceEqualityMkEdgeAllocation.outputState
+      (SourceEqualityMkEdgeAllocation.check stored original.guard children.length before).snd
+      (SourceEqualityMkEdgeAllocation.accepted original children.length))
+_operationsGrowth :
+  SourceEqualityConstraintMemoAllocation.Grows before
+    (SourceEqualityMkEdgeAllocation.outputState
+      (SourceEqualityMkEdgeAllocation.check stored original.guard children.length before).snd
+      (SourceEqualityMkEdgeAllocation.accepted original children.length))
+_rowSymbol :
+  (run
+              (SourceEqualityMkEdgeAllocation.work symbol original children
+                (SourceEqualityMkEdgeAllocation.accepted original children.length))
+              heap).fst.entry.key.symbol =
+    symbol
+_rowGuard :
+  (run
+              (SourceEqualityMkEdgeAllocation.work symbol original children
+                (SourceEqualityMkEdgeAllocation.accepted original children.length))
+              heap).fst.entry.key.constraint =
+    original
+_rowChildren :
+  (run
+          (SourceEqualityMkEdgeAllocation.work symbol original children
+            (SourceEqualityMkEdgeAllocation.accepted original children.length))
+          heap).fst.children =
+    children
+_normalized : InternedEdgeResidency.nodeEdges (run (makeNode rows) current).fst = canonicalEdges (surviving rows)
+_inputMember :
+  (run
+        (SourceEqualityMkEdgeAllocation.work symbol original children
+          (SourceEqualityMkEdgeAllocation.accepted original children.length))
+        heap).fst ∈
+    rows
+_live :
+  EqualityLeafProjectionPhysical.dead
+      (run
+          (SourceEqualityMkEdgeAllocation.work symbol original children
+            (SourceEqualityMkEdgeAllocation.accepted original children.length))
+          heap).fst =
+    false
+_parentKept : SourceEqualityRequiredCache.Keeps current (run (makeNode rows) current).snd
+totalKept : SourceEqualityRequiredCache.Keeps heap (run (makeNode rows) current).snd
+parentReady : SourceEqualityRequiredCache.Ready (run (makeNode rows) current).snd
+parentAvailable : InternedProbeProvenance.Available (run (makeNode rows) current).snd (run (makeNode rows) current).fst
+parentClosed : (run (makeNode rows) current).fst.free = []
+classes : EqualityNormalize.Constraints
+_source :
+  SourceCompactGuards.sourceEqualities
+      (run
+                (SourceEqualityMkEdgeAllocation.work symbol original children
+                  (SourceEqualityMkEdgeAllocation.accepted original children.length))
+                heap).fst.entry.key.constraint =
+    some classes
+projected :
+  SourcePruningEnumerationConstraint.project
+      (run
+                (SourceEqualityMkEdgeAllocation.work symbol original children
+                  (SourceEqualityMkEdgeAllocation.accepted original children.length))
+                heap).fst.entry.key.constraint =
+    some
+      (EnumerationEquality.readClasses classes,
+        if
+            (SourceCompactGuards.positive
+                  (run
+                              (SourceEqualityMkEdgeAllocation.work symbol original children
+                                (SourceEqualityMkEdgeAllocation.accepted original children.length))
+                              heap).fst.entry.key.constraint.guard).isSome =
+              true then
+          none
+        else
+          some
+            (run
+                      (SourceEqualityMkEdgeAllocation.work symbol original children
+                        (SourceEqualityMkEdgeAllocation.accepted original children.length))
+                      heap).fst.entry.key.constraint)
+_validTries : ∀ (trie : EqualityTrie.Trie), trie ∈ EnumerationEquality.readClasses classes → EqualityTrie.Valid trie
+_pathReadback :
+  ∀ (paths : EqualityNormalize.Class),
+    paths ∈ classes →
+      ∀ (path : EqualityTrie.Path),
+        path ∈ EqualityTrie.fromPathTrie (EnumerationEquality.classTrie paths) ↔ path ∈ paths
+_ownArity :
+  ∀ (start : Nat),
+    arityAllows
+        (run
+                (SourceEqualityMkEdgeAllocation.work symbol original children
+                  (SourceEqualityMkEdgeAllocation.accepted original children.length))
+                heap).fst.children.length
+        (suspendedVars start (EnumerationEquality.readClasses classes)) =
+      true
+entryRealized : PendingRealized selectedParent.snd entry
+entryAligned : entry.counter = entry.values.length
+entry✝ : Cache.Interned InternedBinderProtocol.NodeKey
+body✝ depthShape✝ ordinaryShape✝ : Value Symbol Constraint
+parentEq : selectedParent.fst = Value.mu entry✝ body✝ depthShape✝ ordinaryShape✝
+⊢ let tries := EnumerationEquality.readClasses classes;
+  let residual :=
+    if
+        (SourceCompactGuards.positive
+              (run
+                          (SourceEqualityMkEdgeAllocation.work symbol original children
+                            (SourceEqualityMkEdgeAllocation.accepted original children.length))
+                          heap).fst.entry.key.constraint.guard).isSome =
+          true then
+      none
+    else
+      some
+        (run
+                  (SourceEqualityMkEdgeAllocation.work symbol original children
+                    (SourceEqualityMkEdgeAllocation.accepted original children.length))
+                  heap).fst.entry.key.constraint;
+  let staged :=
+    List.map
+      (fun indexed =>
+        (indexed.fst, descendScs indexed.snd scs ++ descendScs indexed.snd (suspendedVars entry.counter tries),
+          SourcePruningEnumerationShallowChild.prepareChild
+            (descendScs indexed.snd scs ++ descendScs indexed.snd (suspendedVars entry.counter tries)) indexed.fst))
+      (run
+              (SourceEqualityMkEdgeAllocation.work symbol original children
+                (SourceEqualityMkEdgeAllocation.accepted original children.length))
+              heap).fst.children.zipIdx;
+  let stop := List.findIdx (fun stage => stage.snd.snd.isNone) staged;
+  ∃ action childrenResult childrenAfter after,
+    SourcePruningEnumerationEdgeTraversal.prepare scs
+          (run
+              (SourceEqualityMkEdgeAllocation.work symbol original children
+                (SourceEqualityMkEdgeAllocation.accepted original children.length))
+              heap).fst =
+        some action ∧
+      Success (SourcePruningEnumerationEdgeTraversal.runStaged staged) (suspendedState tries.length entry)
+          childrenResult childrenAfter ∧
+        Success (SourcePruningEnumerationEdgeTraversal.runStaged (List.take stop staged))
+            (suspendedState tries.length entry)
+            (some (List.map (fun uv => Fragments.Fragment.hole uv) (List.range' (entry.counter + tries.length) stop)))
+            childrenAfter ∧
+          (childrenResult =
+              if stop < staged.length then none
+              else
+                some
+                  (List.map (fun uv => Fragments.Fragment.hole uv)
+                    (List.range' (entry.counter + tries.length) staged.length))) ∧
+            (after =
+                match childrenResult with
+                | none => childrenAfter
+                | some fragments =>
+                  match residual with
+                  | none => childrenAfter
+                  | some guard =>
+                    { counter := childrenAfter.counter, representatives := childrenAfter.representatives,
+                      values := childrenAfter.values,
+                      obligations :=
+                        (guard,
+                            Fragments.Fragment.node
+                              (run
+                                        (SourceEqualityMkEdgeAllocation.work symbol original children
+                                          (SourceEqualityMkEdgeAllocation.accepted original children.length))
+                                        heap).fst.entry.key.symbol
+                              fragments) ::
+                          childrenAfter.obligations,
+                      recursionAncestry := childrenAfter.recursionAncestry,
+                      expansionAncestry := childrenAfter.expansionAncestry }) ∧
+              Success action entry
+                  (Option.map
+                    (fun fragments =>
+                      Fragments.Fragment.node
+                        (run
+                                  (SourceEqualityMkEdgeAllocation.work symbol original children
+                                    (SourceEqualityMkEdgeAllocation.accepted original children.length))
+                                  heap).fst.entry.key.symbol
+                        fragments)
+                    childrenResult)
+                  after ∧
+                after.counter = entry.counter + tries.length + stop ∧
+                  after.counter = after.values.length ∧ PendingRealized (run (makeNode rows) current).snd after
+/tmp/mcfta-pruning-enumeration-selected-row-20261024/strict-1/MicroCFTA/SourcePruningEnumerationSelectedRow.lean:192:2: error: unexpected token '|'; expected command

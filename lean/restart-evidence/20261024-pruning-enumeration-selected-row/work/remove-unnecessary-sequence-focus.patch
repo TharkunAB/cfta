@@ -1,0 +1,11 @@
+--- strict-9/SourcePruningEnumerationSelectedRow.lean
++++ strict-10/SourcePruningEnumerationSelectedRow.lean
+@@ -202,7 +202,7 @@
+   case reference name =>
+       simp only [parentEq, InternedEdgeResidency.nodeEdges, List.not_mem_nil] at selected
+   case node parentEntry parentRows depth free =>
+-      exact Eq.mp (by simp only [selectedBuilt, selectedParent, projected] <;> rfl)
++      exact Eq.mp (by simp only [selectedBuilt, selectedParent, projected]; rfl)
+         (SourcePruningEnumerationEdgeTraversal.prepare_complete scs selectedBuilt.1 selectedParent.2
+         parentEntry parentRows depth free parentReady
+         (by simpa only [parentEq] using parentAvailable)

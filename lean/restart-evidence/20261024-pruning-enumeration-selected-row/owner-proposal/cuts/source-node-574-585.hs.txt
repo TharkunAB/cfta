@@ -1,0 +1,12 @@
+-- | Build or match a non-empty node from outgoing alternatives.
+pattern Node :: (Typeable symbol) => [Edge symbol] -> Node symbol
+pattern Node es <- (InternedNode (internedNodeEdges -> es))
+  where
+    Node = mkNode
+
+-- | Intern a set of alternatives and discard edges with empty children.
+{-# INLINEABLE mkNode #-}
+mkNode :: (Typeable symbol) => [Edge symbol] -> Node symbol
+mkNode es = case removeEmptyEdges es of
+    [] -> EmptyNode
+    es' -> internNode $ UninternedNode $ Set.toList $ Set.fromList es'
