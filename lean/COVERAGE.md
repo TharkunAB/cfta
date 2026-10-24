@@ -1,5 +1,37 @@
 # Full formalization coverage
 
+## Enumeration handle identity
+
+Updated: 2026-10-24. Main `74250bd88` is incorporated.
+Proof: `327d44f068ba11964b2b0b4619abf9eb29e4256a`.
+Read `lean/notes-current-pruning-enumeration-identity.md`.
+
+A coherent successful decoder lookup derives the same encoded handle for the
+complete stored Value. No availability or closedness premise is needed.
+All-fuel narrowing of Empty returns Empty and retains the same native heap.
+These results close two prerequisites for the actual narrowing action.
+
+Strict checking and the installed build pass. Audit passes 3683 jobs and
+76115 dependency checks, with one older warning and no new-source warning.
+Both actual signatures and axiom reports were read. lookup_encode uses propext and Quot.sound.
+narrowAt_empty also uses Classical.choice.
+The 58-line module adds two theorems. Original frozen identity and
+separately reviewed additive Empty declarations remain intact.
+
+Next compose actual narrowing with the incoming pending-slot realization and
+all final heap effects. Preserve Empty rejection and the unchanged-ID branch.
+The changed branch must use the actual second representative read and its
+compression frame before the write. Keep the original raw UVar in typing tests.
+Native cached indices, intersection/assimilation, open-hole bounds, ordered
+reads, lazy emptiness, typing, outer narrow, memo2 and typedTypes remain open.
+Global helper canonicality, mutation histories, selected-current protection,
+cached scheduling, semantic pruning, phase 4, resources, practical width,
+runtime/solver and convergence stay open. H6 remains strongest combined.
+H23 stays queued. No Haskell source changes. FINDINGS keeps its external repair
+index FIRST. All six recorded fixes are on main. The full goal is ACTIVE and
+incomplete. This record precedes evidence creation and the authorized push.
+
+
 ## Encoded enumeration-slot writes
 
 Updated: 2026-10-24. Main `74250bd88` is incorporated.
