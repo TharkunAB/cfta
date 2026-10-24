@@ -148,8 +148,8 @@ spec = do
             merged `shouldBe` must (L.update mergeBase $ leftChanges <> rightChanges)
 
         it "give each version from the base with a difference that is printed and read" $
-            forM_ [mergeLeft, mergeRight, merged] $ \other -> do
-                let printed = T.printUpdateWith strings $ must $ Merge.diff mergeBase other
+            forM_ [mergeLeft, mergeRight, merged, must $ L.update mergeBase $ L.start "atom"] $ \other -> do
+                let printed = T.printUpdateWith strings $ Merge.diff mergeBase other
                 L.update mergeBase (must $ T.parseUpdateWith strings printed) `shouldBe` Right other
 
     describe "ranks" $
@@ -217,6 +217,7 @@ everyOperation =
         <> L.editSource (D.DeleteRow "extra")
         <> L.without "pairs" (L.AtRoot $ TemplateNode "pair" [Hole, Hole])
         <> L.restore "0"
+        <> L.start "atom"
 
 -- | State labels as plain text.
 strings :: StateCodec String
