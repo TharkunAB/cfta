@@ -301,6 +301,8 @@ data Settings = Settings
     -- ^ Whether to write each law with the types of its subterms on stderr.
     , termOrder :: TermOrder
     -- ^ The order of the rewriting (see 'searchTermOrder').
+    , completionFuel :: Maybe Int
+    -- ^ The critical pairs that the completion of one law may take (see 'addLaw').
     , completionAllocLimit :: Word64
     {- ^ The bytes that the completion of one law may allocate.
     ^ The bytes by which a bucket may grow the live heap.
@@ -397,6 +399,11 @@ data SearchOptions = SearchOptions
     -- ^ The bytes by which the completion of one law may grow the live heap.
     , searchCompletionAllocLimit :: Word64
     -- ^ The bytes that the completion of one law may allocate.
+    , searchCompletionFuel :: Int
+    {- ^ The completion of one law may take 2^K critical pairs for this K
+    (0: no limit). Then the law keeps the rules that its completion has
+    (see 'addLaw').
+    -}
     , searchRecheck :: Int
     {- ^ The number of extra test cases of small sizes on which a new law is
     tested again (0: no test). The search drops a law that one of them
@@ -465,6 +472,7 @@ defaultOptions size phase =
         , searchCompletionTimeout = Nothing
         , searchCompletionMemLimit = completionMemoryLimit
         , searchCompletionAllocLimit = completionBudget
+        , searchCompletionFuel = completionFuelDefault
         , searchRecheck = 0
         , searchTests = 1000
         , searchChecked = False
@@ -502,6 +510,7 @@ parseOptions = O.execParser (O.info (options O.<**> O.helper) (O.fullDesc <> O.p
             <*> O.optional completionTimeoutOption
             <*> completionMemLimitOption
             <*> completionAllocLimitOption
+            <*> completionFuelOption
             <*> recheckOption
             <*> testsOption
             <*> O.switch (O.long "checked" <> O.help "Keep the types of the values, and test them at each application")
@@ -629,6 +638,19 @@ parseOptions = O.execParser (O.info (options O.<**> O.helper) (O.fullDesc <> O.p
                 <> O.value completionBudget
                 <> O.help "Keep only the rules of a law whose completion allocates more than SIZE (default 256G)"
             )
+    completionFuelOption =
+        O.option
+            ( O.eitherReader $ \text ->
+                case TR.readMaybe text of
+                    Just k | k >= 0 && k <= completionFuelMax -> Right k
+                    _ -> Left completionFuelMessage
+            )
+            ( O.long "completion-fuel"
+                <> O.metavar "K"
+                <> O.value completionFuelDefault
+                <> O.help
+                    "Stop the completion of a law after 2^K critical pairs, and keep the rules that it has (default 15, 32768 pairs; 0: no limit)"
+            )
     recheckOption =
         O.option
             O.auto
@@ -730,6 +752,7 @@ searchPhases
         , searchCompletionTimeout = completionTimeoutSetting
         , searchCompletionMemLimit = completionMemLimitSetting
         , searchCompletionAllocLimit = completionAllocLimitSetting
+        , searchCompletionFuel = completionFuelSetting
         , searchRecheck = recheckSetting
         , searchTests = numTests
         , searchChecked = checked
@@ -748,6 +771,8 @@ searchPhases
         do
             when (maybe False (< 0) typeDepthSetting) $
                 fail "type depth must be a nonnegative integer"
+            when (completionFuelSetting < 0 || completionFuelSetting > completionFuelMax) $
+                fail completionFuelMessage
             -- Threads write whole diagnostic lines.
             when parallelSetting $ hSetBuffering stderr LineBuffering
             sink <- newIORef []
@@ -806,6 +831,7 @@ searchPhases
                         , completionTimeout = completionTimeoutSetting
                         , completionMemLimit = completionMemLimitSetting
                         , completionAllocLimit = completionAllocLimitSetting
+                        , completionFuel = if completionFuelSetting > 0 then Just (2 ^ completionFuelSetting) else Nothing
                         , recheckCount = recheckSetting
                         , lawSink = sink
                         , stopAfter = stopSetting
@@ -1029,7 +1055,11 @@ runPhase env@Settings{..} size skeletons stecta@StEcta{..}
                 lawText = show n <> ". " <> ppNpTerm (canonicalLaw lawSig law)
             putStrLn lawText
             rules <-
-                boundedCompletion env lawText (addLaw maxSize lawSig law (rewrite_rules s)) (addLawRules lawSig law (rewrite_rules s))
+                boundedCompletion
+                    env
+                    lawText
+                    (addLaw completionFuel maxSize lawSig law (rewrite_rules s))
+                    (addLawRules lawSig law (rewrite_rules s))
             return (laws ++ [lawText], s{law_count = n, rewrite_rules = rules})
     -- With a skeleton grammar, the variable types are closed under carrier
     -- renaming (see 'mkStecta'). Then the schemas of a type are the
@@ -1531,7 +1561,11 @@ consider env@Settings{..} StEcta{..} lvl full_term s0
             let complete
                     | parallelBuckets = return (addLawRules lawSig law (rewrite_rules s))
                     | otherwise =
-                        boundedCompletion env law_str (addLaw maxSize lawSig law (rewrite_rules s)) (addLawRules lawSig law (rewrite_rules s))
+                        boundedCompletion
+                            env
+                            law_str
+                            (addLaw completionFuel maxSize lawSig law (rewrite_rules s))
+                            (addLawRules lawSig law (rewrite_rules s))
             rules <-
                 if detailedDiagnostics
                     then diagnose env lvl (show current_ty) "completion" s complete
@@ -1564,15 +1598,36 @@ completions that end.
 completionBudget :: Word64
 completionBudget = 256 * 1024 * 1024 * 1024
 
+{- | The default fuel of the completion of one law (@--completion-fuel@):
+2^15 = 32768 critical pairs (0: no limit). A pair costs about 1 MiB of
+allocation at HugeLists, so the fuel stops a completion at about 32 GiB,
+and the law keeps the rules that it has. At HugeLists 7-p4, 78 completions
+ran over the allocation budget and kept only the rules of their laws; they
+took 76 % of the time of the completion. With a fuel of 30000 pairs, 6-p4
+gave the same laws in 15 % less time, and 7-p4 ran in 41 % of the time
+(see the comparison with Spectacular).
+-}
+completionFuelDefault :: Int
+completionFuelDefault = 15
+
+-- | The largest exponent of the fuel of a completion: 2^62 pairs fit in an 'Int'.
+completionFuelMax :: Int
+completionFuelMax = 62
+
+-- | The error for an exponent of the fuel out of its range.
+completionFuelMessage :: String
+completionFuelMessage = "completion fuel must be an integer from 0 to " ++ show completionFuelMax
+
 {- | The completed rules of a law, if their computation stays within the
 limits of the completion (see 'completionTimeout', 'completionMemLimit',
 'completionAllocLimit'), and else the rules of the law alone, with a report
-on stderr. Completion only adds rules that follow from the laws, so fewer
+on stderr. A completion out of its fuel keeps the rules that it has
+(see 'completionFuel'), also with a report. Completion only adds rules that follow from the laws, so fewer
 rules prune less but stay sound. The allocation does not depend on the load.
 The time does, and the memory limit depends on the times of the collections.
 Without RTS statistics (@+RTS -T@) there is no memory limit.
 -}
-boundedCompletion :: Settings -> String -> Rules -> Rules -> IO Rules
+boundedCompletion :: Settings -> String -> (Rules, Bool, Int) -> Rules -> IO Rules
 boundedCompletion Settings{..} label completed alone = do
     statsEnabled <- getRTSStatsEnabled
     base <- if statsEnabled then Just <$> liveBytes else pure Nothing
@@ -1583,22 +1638,33 @@ boundedCompletion Settings{..} label completed alone = do
         try $
             withMemoryLimit ((\live -> (live, completionMemLimit)) <$> base) $
                 case completionTimeout of
-                    Nothing -> Just <$> evaluate completed
-                    Just seconds -> timeout (round (seconds * 1e6)) (evaluate completed)
+                    Nothing -> Just <$> evaluate (forced completed)
+                    Just seconds -> timeout (round (seconds * 1e6)) (evaluate (forced completed))
     disableAllocationLimit
     left <- getAllocationCounter
     end <- getMonotonicTimeNSec
     -- A completion that allocates more than 1 GiB prints its cost on stderr.
     let allocated = fromIntegral completionAllocLimit - fromIntegral left :: Double
+        pairs = case result of
+            Right (Right (Just (_, _, taken))) -> show taken
+            _ -> "-"
     when (allocated > 1024 ^ (3 :: Int)) $
         hPutStrLn
             stderr
             ( intercalate
                 "\t"
-                ["completioncost", show (fromIntegral (end - begin) / 1e9 :: Double), show (allocated / 1024 ^ (3 :: Int)), label]
+                [ "completioncost"
+                , show (fromIntegral (end - begin) / 1e9 :: Double)
+                , show (allocated / 1024 ^ (3 :: Int))
+                , label
+                , pairs
+                ]
             )
     case result of
-        Right (Right (Just rules)) -> return rules
+        Right (Right (Just (rules, False, _))) -> return rules
+        Right (Right (Just (rules, True, _))) -> do
+            hPutStrLn stderr ("completion out of its fuel, the rules so far: " ++ label)
+            return rules
         Right (Right Nothing) -> do
             hPutStrLn stderr ("completion over its time limit, the law alone: " ++ label)
             return alone
@@ -1614,6 +1680,8 @@ boundedCompletion Settings{..} label completed alone = do
         Left AllocationLimitExceeded -> do
             hPutStrLn stderr ("completion over its budget, the law alone: " ++ label)
             return alone
+  where
+    forced c@(rules, _, _) = rules `seq` c
 
 npTerm' :: Term -> Term
 npTerm' (Term "filter" [_, term]) = npTerm' term

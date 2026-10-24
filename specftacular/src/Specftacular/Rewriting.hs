@@ -995,10 +995,15 @@ annotation-depth budget bounds polymorphic completion. It can omit valid
 critical pairs. It is not a coverage bound for the search grammar. The rules of
 the critical pairs make the rewriting stronger, so that a law that
 follows from the earlier laws is not found again.
+
+With a fuel, the completion takes at most that many critical pairs from its
+queue. Then it keeps the rules that it has. They follow from the laws, so
+they are sound, but they can prune less than the complete rules. The result
+also says whether the fuel ran out, and the number of pairs taken.
 -}
-addLaw :: Int -> Sig -> Term -> Rules -> Rules
-addLaw maxSize gsig (Term "(==)" [_, l, r]) rules0 =
-    complete HashMap.empty rules1 (concatMap (criticalPairsWith rules1) new) []
+addLaw :: Maybe Int -> Int -> Sig -> Term -> Rules -> (Rules, Bool, Int)
+addLaw fuel maxSize gsig (Term "(==)" [_, l, r]) rules0 =
+    complete 0 HashMap.empty rules1 (concatMap (criticalPairsWith rules1) new) []
   where
     (new, rules1) = addEquation (toTemplate gsig l, toTemplate gsig r) rules0
     -- Program size does not bound type depth. This explicit budget depends
@@ -1015,19 +1020,20 @@ addLaw maxSize gsig (Term "(==)" [_, l, r]) rules0 =
     -- The queue is the current list of critical pairs, then the later lists,
     -- newest first. A new list goes on the front of the later lists, so the
     -- queue is not walked again. Each list stays lazy. The order is FIFO.
-    complete _ rules [] [] = rules
-    complete cache rules [] later = complete cache rules (concat (reverse later)) []
-    complete !cache rules ((s, t) : queue) later
+    complete taken _ rules [] [] = (rules, False, taken)
+    complete taken cache rules [] later = complete taken cache rules (concat (reverse later)) []
+    complete taken _ rules _ _ | Just taken == fuel = (rules, True, taken)
+    complete !taken !cache rules ((s, t) : queue) later
         -- The right normal form cannot change this rejection. Keep cache1
         -- because cache2 would force the right normal form.
-        | leaves s' > maxSize = complete cache1 rules queue later
+        | leaves s' > maxSize = complete (taken + 1) cache1 rules queue later
         | s' == t'
             || leaves t' > maxSize
             || not (withinDepth s' && withinDepth t')
             || subsumed rules (s', t')
             || groundJoinable rules (s', t') =
-            complete cache2 rules queue later
-        | otherwise = complete HashMap.empty rules' queue (concatMap (criticalPairsWith rules') new' : later)
+            complete (taken + 1) cache2 rules queue later
+        | otherwise = complete (taken + 1) HashMap.empty rules' queue (concatMap (criticalPairsWith rules') new' : later)
       where
         -- Normalize a critical pair only with decreases that hold for every
         -- type instance. Otherwise normalization can erase a general rule
@@ -1036,7 +1042,7 @@ addLaw maxSize gsig (Term "(==)" [_, l, r]) rules0 =
         (s', cache1) = cachedNormalForm nf cache s
         (t', cache2) = cachedNormalForm nf cache1 t
         (new', rules') = addEquation (canonical (s', t')) rules
-addLaw _ _ _ rules = rules
+addLaw _ _ _ _ rules = (rules, False, 0)
 
 -- | The rules of a law alone, without the rules of its critical pairs.
 addLawRules :: Sig -> Term -> Rules -> Rules
