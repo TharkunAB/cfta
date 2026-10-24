@@ -1,5 +1,45 @@
 # Full formalization coverage
 
+## Ordered native edge child traversal
+
+Updated: 2026-10-24. Main `74250bd88` is incorporated.
+Proof: `7f16f7fb2a9737419f129c06074d1c318ce99877`.
+Read `lean/notes-current-pruning-enumeration-edge-traversal.md`.
+
+The operation runs the same captured edge prefix once. It runs child actions
+in their original order. The theorem derives the actual completed-prefix
+endpoint, ordered fresh holes, counter increase, aligned supply and pending
+native readbacks. The first unsupported child retains that actual state.
+Earlier rejection and errors take precedence. The worker does not check
+support for all children before execution.
+
+The edge theorem assumes inherited arityAllows is true. The same closed
+ordinary parent supplies the child facts. Ready gives
+coherence and live-edge normalization. Availability and closed metadata give
+the child records and closure. No desired callback success or chosen output
+state is assumed. Only complete child traversal constructs the actual fragment
+and records a present complete residual. Unsupported traversal has no parent
+residual. The exact final obligations update retains supply and readbacks.
+
+Three strict inputs failed: broad simplification reached the default limit; an implicit action witness did not elaborate; a redundant final tactic had no remaining goal. The fourth input passes with a literal empty log under all linters and warnings as errors. All failed inputs, full logs and exact corrections remain. No proof limit changed. The complete public readback, installed build and Audit pass. All 168 public-output lines retain four complete signatures without display omissions.
+The installed build passes 622 jobs. Audit passes 3692 jobs and
+76173 dependency checks, with the unchanged older warning.
+runStaged reports no axioms. The other three declarations report exactly propext, Classical.choice and Quot.sound. No project axiom is added.
+Frozen declarations, scoped types, independent reviews and raw evidence remain.
+The preceding edge-prefix checkpoint's 26 actual post-seal inputs remain.
+
+Terminal merging and the native intersection/assimilation bridge remain.
+Own-arity is already checked; its constructor receipt still needs transport
+to the selected edge and projected tries. The default selector remains.
+Projection normalization remains noncomputable. Diagnostic recursive cutoffs
+have no complete-language claim. Native graph/ID/index/memo2, full enumeration,
+pruning/typing, lazy callbacks, driver, runtime/solver and convergence remain.
+H6 stays strongest combined. H23 and older constructor/equality work remain.
+No Haskell source changes. FINDINGS keeps the six imported repair handoffs
+first. All earlier work and the optimized core remain. The full goal stays
+ACTIVE and incomplete. This record precedes evidence and push.
+
+
 ## Ordered native edge preparation prefix
 
 Updated: 2026-10-24. Main `74250bd88` is incorporated.
