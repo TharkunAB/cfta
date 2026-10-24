@@ -1,0 +1,45 @@
+[
+  {
+    "command": [
+      "nix-shell",
+      "--run",
+      "export PATH=/usr/bin:$PATH; cabal test cfta-th:node-views -j1 --ghc-options=-Werror --test-show-details=direct --test-options=\"+RTS -N1 -M1G -RTS\""
+    ],
+    "exit_code": 0,
+    "raw_bytes": 1902,
+    "raw_sha256": "e88c806900ac74416efdf16b876f5e49929cc2aa4f3499d008490ac7bddec77f"
+  },
+  {
+    "command": [
+      "fourmolu",
+      "--mode",
+      "check",
+      "cfta-th/src/Data/CFTA/TH.hs",
+      "cfta-th/test/Spec.hs"
+    ],
+    "exit_code": 0,
+    "raw_bytes": 58,
+    "raw_sha256": "5e9ce55055974291cc141f348aff187d72f3871a1662a95af93deb2dd7341175"
+  },
+  {
+    "command": [
+      "cabal-gild",
+      "--mode",
+      "check",
+      "cfta-th/cfta-th.cabal"
+    ],
+    "exit_code": 0,
+    "raw_bytes": 0,
+    "raw_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "command": [
+      "nix-shell",
+      "--run",
+      "export PATH=/usr/bin:$PATH; cd cfta-th && cabal check"
+    ],
+    "exit_code": 0,
+    "raw_bytes": 53,
+    "raw_sha256": "a19b4064f1acadadad1e1f24beae3785b778a6c5baabde7f333e4dacb7191d30"
+  }
+]

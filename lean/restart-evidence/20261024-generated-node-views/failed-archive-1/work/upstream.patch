@@ -1,0 +1,523 @@
+diff --git a/.github/workflows/ci.yml b/.github/workflows/ci.yml
+index 86b073bc2..979d612af 100644
+--- a/.github/workflows/ci.yml
++++ b/.github/workflows/ci.yml
+@@ -29,6 +29,7 @@ jobs:
+             cfta/**/*.hs
+             cfta-generator/**/*.hs
+             cfta-ghc/**/*.hs
++            cfta-th/**/*.hs
+             decision-model/**/*.hs
+             specftacular/**/*.hs
+             specftacular-ghc/**/*.hs
+@@ -41,7 +42,7 @@ jobs:
+       - name: Run hlint
+         uses: haskell-actions/hlint-run@v2
+         with:
+-          path: '["cfta", "cfta-generator", "cfta-ghc", "decision-model", "specftacular", "specftacular-ghc"]'
++          path: '["cfta", "cfta-generator", "cfta-ghc", "cfta-th", "decision-model", "specftacular", "specftacular-ghc"]'
+           fail-on: warning
+ 
+   build-test-bench:
+@@ -94,6 +95,7 @@ jobs:
+           (cd cfta && cabal check)
+           (cd cfta-generator && cabal check)
+           (cd cfta-ghc && cabal check)
++          (cd cfta-th && cabal check)
+           (cd decision-model && cabal check)
+           (cd specftacular && cabal check)
+           (cd specftacular-ghc && cabal check)
+diff --git a/README.md b/README.md
+index f1cdaa8b2..11f101e68 100644
+--- a/README.md
++++ b/README.md
+@@ -1,6 +1,6 @@
+ # cfta
+ 
+-Constrained finite tree automata for Haskell, in two packages:
++Constrained finite tree automata for Haskell, with two core packages:
+ 
+ | Package | Purpose |
+ | --- | --- |
+@@ -17,6 +17,9 @@ holes with programs that Hectare's automaton proposes and GHC's typechecker
+ checks, also as a typed-hole plugin (`-fplugin=Data.CFTA.GHC.HoleFits`). It
+ depends on the `ghc` library.
+ 
++[`cfta-th`](cfta-th/README.md) generates node views for typing rules and
++refinement invariants. It keeps Template Haskell out of the core packages.
++
+ [`decision-model`](decision-model/README.md) asks a decision model on a
+ server, such as Nimble v3 on Ollama, for a score for each option of a
+ question. It does not depend on the other packages.
+diff --git a/cabal.project b/cabal.project
+index 6cd6b14d1..aae069b68 100644
+--- a/cabal.project
++++ b/cabal.project
+@@ -4,6 +4,7 @@ packages:
+   cfta
+   cfta-generator
+   cfta-ghc
++  cfta-th
+   decision-model
+   specftacular
+   specftacular-ghc
+diff --git a/cfta-th/CHANGELOG.md b/cfta-th/CHANGELOG.md
+new file mode 100644
+index 000000000..15949a9b4
+--- /dev/null
++++ b/cfta-th/CHANGELOG.md
+@@ -0,0 +1,5 @@
++# Changelog
++
++## 0.1.0.0
++
++- Add `deriveNode` to generate scalar node views for typing rules and refinements.
+diff --git a/cfta-th/LICENSE b/cfta-th/LICENSE
+new file mode 100644
+index 000000000..2cd67da8e
+--- /dev/null
++++ b/cfta-th/LICENSE
+@@ -0,0 +1,30 @@
++Copyright Tharkun AB (c) 2026
++
++All rights reserved.
++
++Redistribution and use in source and binary forms, with or without
++modification, are permitted provided that the following conditions are met:
++
++    * Redistributions of source code must retain the above copyright
++      notice, this list of conditions and the following disclaimer.
++
++    * Redistributions in binary form must reproduce the above
++      copyright notice, this list of conditions and the following
++      disclaimer in the documentation and/or other materials provided
++      with the distribution.
++
++    * Neither the name of the copyright holder nor the names of other
++      contributors may be used to endorse or promote products derived
++      from this software without specific prior written permission.
++
++THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
++"AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
++LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
++A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT
++OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
++SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
++LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
++DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
++THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
++(INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
++OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+diff --git a/cfta-th/README.md b/cfta-th/README.md
+new file mode 100644
+index 000000000..e4bce6c1b
+--- /dev/null
++++ b/cfta-th/README.md
+@@ -0,0 +1,58 @@
++# cfta-th
++
++Generate a scalar node view from a datatype. This removes the duplicate
++constructor and field declarations used by typing rules and refinement
++invariants. Template Haskell stays in this optional package.
++
++```haskell
++{-# LANGUAGE DeriveAnyClass #-}
++{-# LANGUAGE DeriveGeneric #-}
++{-# LANGUAGE DerivingStrategies #-}
++{-# LANGUAGE TemplateHaskell #-}
++
++module Arithmetic where
++
++import GHC.Generics (Generic)
++import Data.CFTA.Generic (HasFTA)
++import Data.CFTA.Gen.Typing
++import Data.CFTA.TH (deriveNode)
++
++data Expr = Lit Int | Add Expr Expr
++    deriving stock (Eq, Show, Generic)
++    deriving anyclass (HasFTA)
++
++$(deriveNode ''Expr)
++
++data Ty = TInt deriving (Eq, Ord, Show)
++
++rules :: [Rule ExprNode Ty]
++rules =
++    [ rule (LitNode (value (0 :: Int))) TInt
++    , rule (LitNode (value (1 :: Int))) TInt
++    , rule (AddNode (subterm [] TInt) (subterm [] TInt)) TInt
++    ]
++```
++
++The splice declares `ExprNode e = LitNode e | AddNode e e`, derives `Generic`,
++and declares a `NodeView` instance. Use `Typing (Nesting 2) [] [TInt] rules`
++with the existing generator API. In this example, the two literal values
++are the complete literal domain. The result has 38 terms.
++
++Append `Node` to the source type and constructor names. Keep constructor order
++and field count. Record fields become positional fields. Each field becomes
++`e`; source type parameters do not become parameters of the view. A newtype
++also gives a node datatype. Names already in scope are reported at the splice.
++
++Enable `TemplateHaskell` and `DeriveGeneric`. Put the splice after the source
++declaration and before the rules that use its view. The view is regenerated
++when the source declaration changes. The existing requirements on `HasFTA`
++and on recursive fields still apply. Empty datatypes also need
++`EmptyDataDeriving` for the generated instance.
++
++GADTs, existential or constrained constructors, datatype contexts, symbolic
++names, type synonyms, and data families need a manual view. A view with a
++record of measures also remains manual. This package generates scalar views;
++it does not change term types, constraints, counts, or ranks.
++
++See the [design note](../docs/generated-node-views.md) for the boundary and
++validation plan. Quasiquoters are separate authoring work.
+diff --git a/cfta-th/cfta-th.cabal b/cfta-th/cfta-th.cabal
+new file mode 100644
+index 000000000..7b9eb93aa
+--- /dev/null
++++ b/cfta-th/cfta-th.cabal
+@@ -0,0 +1,64 @@
++cabal-version: 3.0
++name: cfta-th
++version: 0.1.0.0
++synopsis: Generated node views for constrained tree automata
++description:
++  Template Haskell support for the typing and refinement APIs of
++  cfta-generator. Generate scalar node views from source datatypes.
++
++homepage: https://github.com/TharkunAB/cfta/tree/main/cfta-th#readme
++bug-reports: https://github.com/TharkunAB/cfta/issues
++category: Code Generation
++author: Matthias Pall Gissurarson
++maintainer: mpg@mpg.is
++copyright: 2026 Tharkun AB
++license: BSD-3-Clause
++license-file: LICENSE
++build-type: Simple
++tested-with: ghc ==9.14.1
++extra-doc-files:
++  CHANGELOG.md
++  README.md
++
++source-repository head
++  type: git
++  location: https://github.com/TharkunAB/cfta.git
++  subdir: cfta-th
++
++library
++  hs-source-dirs: src
++  exposed-modules: Data.CFTA.TH
++  default-language: Haskell2010
++  ghc-options:
++    -Wall
++    -Wcompat
++    -Widentities
++    -Wincomplete-record-updates
++    -Wincomplete-uni-patterns
++    -Wpartial-fields
++    -Wredundant-constraints
++    -Wno-pattern-namespace-specifier
++
++  build-depends:
++    base >=4.22 && <4.23,
++    cfta-generator >=0.1.0.0 && <0.2,
++    template-haskell >=2.24 && <2.25,
++
++test-suite node-views
++  type: exitcode-stdio-1.0
++  main-is: Spec.hs
++  hs-source-dirs: test
++  default-language: Haskell2010
++  ghc-options:
++    -Wall
++    -Wcompat
++    -threaded
++    -rtsopts
++
++  build-depends:
++    base >=4.22 && <4.23,
++    cfta >=0.1.0.0 && <0.2,
++    cfta-generator >=0.1.0.0 && <0.2,
++    cfta-th,
++    hspec >=2.11 && <2.12,
++    template-haskell >=2.24 && <2.25,
+diff --git a/cfta-th/src/Data/CFTA/TH.hs b/cfta-th/src/Data/CFTA/TH.hs
+new file mode 100644
+index 000000000..18d57769d
+--- /dev/null
++++ b/cfta-th/src/Data/CFTA/TH.hs
+@@ -0,0 +1,73 @@
++{-# LANGUAGE LambdaCase #-}
++{-# LANGUAGE TemplateHaskellQuotes #-}
++
++-- | Generate the scalar node views used by typing rules and refinements.
++module Data.CFTA.TH (deriveNode) where
++
++import Control.Monad (forM, unless, when)
++import Data.Char (isUpper)
++import Data.Maybe (isJust)
++import GHC.Generics (Generic)
++import Language.Haskell.TH
++
++import Data.CFTA.Gen.Refinement.Derive (NodeView)
++
++{- | Generate a node view after a source datatype declaration:
++
++@
++data Expr = Lit Int | Add Expr Expr
++    deriving (Generic)
++
++\$(deriveNode ''Expr)
++@
++
++This declares @ExprNode e = LitNode e | AddNode e e@, derives 'Generic',
++and declares its 'NodeView' instance. Enable @TemplateHaskell@ and
++@DeriveGeneric@ in the module that contains the splice.
++
++Constructor order and field count stay the same. Record fields become
++positional fields. Source type parameters and field types are replaced by
++the single parameter @e@. The source datatype still needs its usual
++@HasFTA@ instance when used with the generator APIs.
++
++This operation accepts ordinary data and newtype declarations. It rejects
++name collisions, symbolic names, datatype contexts, existential or
++constrained constructors, GADTs, type synonyms, and data families. Write a
++manual view for records of measures or for other supported source forms.
++-}
++deriveNode :: Name -> Q [Dec]
++deriveNode source = do
++    (context, constructors) <-
++        reify source >>= \case
++            TyConI (DataD context _ _ _ constructors _) -> pure (context, constructors)
++            TyConI (NewtypeD context _ _ _ constructor _) -> pure (context, [constructor])
++            _ -> unsupported "type synonyms and data families"
++    unless (null context) $ unsupported "datatype contexts"
++    view <- generatedName lookupTypeName source
++    child <- newName "e"
++    alternatives <- forM constructors $ \constructor -> do
++        (name, arity) <- case constructor of
++            NormalC name fields -> pure (name, length fields)
++            RecC name fields -> pure (name, length fields)
++            InfixC _ name _ -> pure (name, 2)
++            ForallC{} -> unsupported "existential or constrained constructors"
++            GadtC{} -> unsupported "GADT constructors"
++            RecGadtC{} -> unsupported "GADT constructors"
++        name' <- generatedName lookupValueName name
++        pure $ NormalC name' $ replicate arity (Bang NoSourceUnpackedness NoSourceStrictness, VarT child)
++    pure
++        [ DataD [] view [PlainTV child BndrReq] Nothing alternatives [DerivClause Nothing [ConT ''Generic]]
++        , InstanceD Nothing [] (AppT (ConT ''NodeView) (ConT view)) []
++        ]
++  where
++    unsupported feature =
++        fail $ "deriveNode " <> nameBase source <> ": " <> feature <> " need a manual node view"
++    generatedName lookupName name = case nameBase name of
++        first : _ | isUpper first -> do
++            let generated = nameBase name <> "Node"
++            existing <- lookupName generated
++            when (isJust existing)
++                $ fail
++                $ "deriveNode " <> nameBase source <> ": " <> generated <> " is already in scope; hide or rename the existing name"
++            pure $ mkName generated
++        _ -> unsupported "symbolic names"
+diff --git a/cfta-th/test/Spec.hs b/cfta-th/test/Spec.hs
+new file mode 100644
+index 000000000..cb20731e1
+--- /dev/null
++++ b/cfta-th/test/Spec.hs
+@@ -0,0 +1,127 @@
++{-# LANGUAGE DeriveAnyClass #-}
++{-# LANGUAGE DeriveGeneric #-}
++{-# LANGUAGE DerivingStrategies #-}
++{-# LANGUAGE EmptyDataDeriving #-}
++{-# LANGUAGE ExistentialQuantification #-}
++{-# LANGUAGE GADTs #-}
++{-# LANGUAGE TemplateHaskell #-}
++{-# LANGUAGE TypeApplications #-}
++{-# LANGUAGE TypeOperators #-}
++-- The declarations that only deriveNode reads are not used otherwise.
++{-# OPTIONS_GHC -Wno-unused-top-binds #-}
++
++-- | Generated node views: the same terms and ranks as hand-written views, and the rejected declarations.
++module Main (main) where
++
++import Data.Proxy (Proxy (Proxy))
++import GHC.Generics (Generic)
++import Language.Haskell.TH (recover)
++import Test.Hspec (Spec, describe, hspec, it, shouldBe)
++
++import qualified Data.CFTA.Gen as Gen
++import qualified Data.CFTA.Gen.Refinement as LTA
++import Data.CFTA.Gen.Refinement.Derive
++import Data.CFTA.Gen.Typing
++import Data.CFTA.Generic (HasFTA)
++import Data.CFTA.Symbol (Symbol)
++import Data.CFTA.TH (deriveNode)
++
++-- | The source datatype of the typed language.
++data Expr = Lit Int | Add Expr Expr
++    deriving stock (Eq, Show, Generic)
++    deriving anyclass (HasFTA)
++
++-- | The hand-written view of 'Expr'.
++data ExprManual e = LitManual e | AddManual e e
++    deriving stock (Generic)
++    deriving anyclass (NodeView)
++
++-- | The source datatype of the refined language.
++data Amount = Amount Integer
++    deriving stock (Eq, Show, Generic)
++    deriving anyclass (HasFTA)
++
++-- | The hand-written view of 'Amount'.
++newtype AmountManual e = AmountManual e
++    deriving stock (Generic)
++    deriving anyclass (NodeView)
++
++-- | A record with a type parameter.
++data Record a = Record {first :: a, rest :: Maybe a}
++
++-- | A newtype.
++newtype Wrap a = Wrap {unwrap :: a}
++
++-- | A named infix constructor.
++data Pair a = a `Together` a
++
++-- | A datatype with no constructors.
++data Empty
++
++-- | A GADT.
++data Gadt a where
++    Gadt :: Int -> Gadt Int
++
++-- | An existential constructor.
++data Existential = forall a. (Show a) => Existential a
++
++-- | A symbolic name.
++data a :+: b = a :+: b
++
++-- | A type synonym.
++type Synonym = Int
++
++-- | A datatype whose view name is in scope already.
++data Clash = Clash
++
++-- | The name that the view of 'Clash' would have.
++data ClashNode = ClashNode
++
++$(deriveNode ''Expr)
++$(deriveNode ''Amount)
++$(deriveNode ''Record)
++$(deriveNode ''Wrap)
++$(deriveNode ''Pair)
++$(deriveNode ''Empty)
++
++main :: IO ()
++main = hspec spec
++
++spec :: Spec
++spec = describe "deriveNode" $ do
++    it "gives the same typed terms and ranks as a hand-written view" $ do
++        let generated = typed $ [rule (LitNode (value n)) () | n <- [0, 1 :: Int]] <> [rule (AddNode (subterm [] ()) (subterm [] ())) ()]
++            manual = typed $ [rule (LitManual (value n)) () | n <- [0, 1 :: Int]] <> [rule (AddManual (subterm [] ()) (subterm [] ())) ()]
++        Gen.cardinality generated `shouldBe` Gen.cardinality manual
++        Gen.values generated `shouldBe` Gen.values manual
++        let terms = either (error . show) id $ Gen.values generated
++        length terms `shouldBe` 38
++        mapM_ (\term -> Gen.rankOfValue generated term `shouldBe` Gen.rankOfValue manual term) terms
++        mapM_ (\term -> (Gen.unrank generated =<< Gen.rankOfValue generated term) `shouldBe` Right term) terms
++
++    it "gives the same refined terms and ranks as a hand-written view" $ do
++        generated <- refined $ Measured (\(AmountNode x) -> x) (\(AmountNode x) -> 0 .<= x .&& x .<= 2)
++        manual <- refined $ Measured (\(AmountManual x) -> x) (\(AmountManual x) -> 0 .<= x .&& x .<= 2)
++        LTA.values generated `shouldBe` LTA.values manual
++        map (LTA.unrank generated) [0 .. 3] `shouldBe` map (LTA.unrank manual) [0 .. 3]
++
++    it "keeps the constructors in order with their field counts" $ do
++        fieldCounts (Proxy @RecordNode) `shouldBe` Just [("RecordNode", 2)]
++        fieldCounts (Proxy @WrapNode) `shouldBe` Just [("WrapNode", 1)]
++        fieldCounts (Proxy @PairNode) `shouldBe` Just [("TogetherNode", 2)]
++        fieldCounts (Proxy @ExprNode) `shouldBe` Just [("LitNode", 1), ("AddNode", 2)]
++        nodeShape (Proxy @EmptyNode) `shouldBe` Just []
++        nodeFields (RecordNode (3 :: Int) 4) `shouldBe` (0, [Just 3, Just 4])
++
++    it "rejects the declarations that need a hand-written view" $
++        [ $(recover [|True|] (deriveNode ''Gadt >> [|False|]))
++        , $(recover [|True|] (deriveNode ''Existential >> [|False|]))
++        , $(recover [|True|] (deriveNode ''(:+:) >> [|False|]))
++        , $(recover [|True|] (deriveNode ''Synonym >> [|False|]))
++        , $(recover [|True|] (deriveNode ''Clash >> [|False|]))
++        ]
++            `shouldBe` replicate 5 True
++  where
++    typed rules = either (error . show) id (fromTypingRules (Typing (Nesting 2) [] [()] rules)) :: Gen.Gen Symbol Expr
++    refined measured = LTA.compile $ either (error . show) id $ deriveLTAFrom @Amount 0 (atom @Integer LTA.every) measured
++    fieldCounts proxy = map (fmap length) <$> nodeShape proxy
+diff --git a/docs/generated-node-views.md b/docs/generated-node-views.md
+new file mode 100644
+index 000000000..2b13c4fbf
+--- /dev/null
++++ b/docs/generated-node-views.md
+@@ -0,0 +1,61 @@
++# Generated node views
++
++Typing rules and refinement invariants use a node view of the source datatype.
++The view repeats every constructor and field. A hand-written view can become
++stale when the source datatype changes. Generate the repeated structure from
++that datatype, then use the existing `NodeView` methods and shape checks.
++
++## Scope
++
++Add `deriveNode :: Name -> Q [Dec]` in `Data.CFTA.TH` in a new `cfta-th` package.
++Only this package depends on Template Haskell. The core and generator packages
++keep their current dependencies.
++
++For `data Expr = Lit Int | Add Expr Expr`, generate `ExprNode e` with
++`LitNode e` and `AddNode e e`, in that order. Derive `Generic` and declare the
++`NodeView ExprNode` instance. The user supplies `HasFTA Expr` as before.
++The splice replaces the manual node view; it does not change typing rules,
++refinement semantics, counting, or rank order.
++
++Append `Node` to type and constructor names. Check for names already in scope.
++Keep constructor order and field count. Make every field a plain `e`, including
++fields of a record and fields whose types contain source type parameters.
++Do not copy record selectors, strictness, or source type parameters to the view.
++The result has one parameter: the type of a child observation or premise.
++
++Accept ordinary `data` and `newtype` declarations with named constructors.
++Reject datatype contexts, existential or constrained constructors, GADTs,
++symbolic names, type synonyms, and data families with an explanation at the
++splice. Such types need a manual view where the existing APIs support them.
++Views with records of measures also remain manual; this operation generates
++the scalar views used by typing rules and single-measure invariants.
++
++## Use
++
++Enable `TemplateHaskell` and `DeriveGeneric`. Put `$(deriveNode ''Expr)` after
++the source datatype. The splice ends the declaration group, so subsequent
++rules can use the generated constructors. A source change regenerates the
++view in the same compilation. An empty datatype also needs
++`EmptyDataDeriving` for the generated instance.
++
++## Validation
++
++A standalone check compares generated and manual views through the existing
++APIs. All 38 arithmetic terms have the same ranks and decode correctly.
++Scalar refinement counts and rank order also agree. Two processes produce
++the same results. Records, source parameters, named infix constructors,
++newtypes, and empty datatypes have the expected shapes.
++
++Nine invalid declarations produce the expected diagnostics. The complete
++README module compiles with strict warnings. Editing a source datatype and
++recompiling the same module adds the new constructor to its generated view.
++A fresh `-O0 -Werror` build and all six existing suites pass. Formatting and
++lint pass. Validation runs serially through heavy-management with a 12 GiB
++process cap and a 4 GiB test RTS limit.
++
++## Authoring follow-ups
++
++Keep this operation independent of quasiquoters. The typing-rule and explicit
++LTA notations can use the generated view once their syntax is specified.
++The shared TODO tracks separate investigations for EBNF, richer object-language
++types, Lean interchange, file diagnostics, and complete authoring examples.
