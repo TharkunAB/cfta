@@ -298,8 +298,9 @@ term that several transitions accept at its first place.
 `Data.CFTA.Sized.Prefix` reads the terms of an automaton one node at a time,
 in preorder, as a decoder writes them. A token is a symbol with its number of
 children, and a prefix is a list of tokens. `prefixCompletions` takes a size
-bound and an automaton without constraints, and gives the completions of the
-empty prefix: the accepted terms with at most the bound of nodes.
+bound and an automaton without a guard beyond equality constraints, and
+gives the completions of the empty prefix: the accepted terms with at most the
+bound of nodes.
 `nextTokens` gives the tokens that can come next, each with the number of
 completions that start with the prefix and the token. `afterToken` adds one
 token, and it gives `Nothing` when no completion starts with the result, so a
@@ -308,7 +309,9 @@ accepted term. `completionCount`, `completionTerms`, `unrankCompletion`, and
 `sampleCompletion` count, list, unrank, and sample the completions uniformly.
 The completions are distinct terms, as in `Data.CFTA.Sized`, also when the
 automaton is ambiguous. For the empty prefix their order is the order of
-`sized`.
+`sized`. Without constraints, the queries count each stack of pending states
+from the size classes of its states. With equality constraints, they list the
+accepted terms up to the bound and keep those with the prefix.
 
 ## Equality-constrained generators
 

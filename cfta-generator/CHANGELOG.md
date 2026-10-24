@@ -140,13 +140,16 @@ tree automata of `cfta`, with QuickCheck integration.
   `sizedStates` gives the classes of each state, with one table for all the
   states.
 - `Data.CFTA.Sized.Prefix`: the completions of a prefix in preorder, within a
-  size bound, for an automaton without constraints. `nextTokens` gives the
-  tokens that can come next, each with its number of completions.
+  size bound, for an automaton without a guard beyond equality constraints.
+  `nextTokens` gives the tokens that can come next, each with its number of
+  completions.
   `afterToken` rejects a token that no completion continues with, and
   `isComplete` says whether the prefix is an accepted term. The completions
   are distinct terms: `completionCount`, `completionTerms`,
   `unrankCompletion`, and `sampleCompletion` count, list, unrank, and sample
-  them uniformly. A constrained automaton is `ConstrainedTransition`.
+  them uniformly. An automaton with equality constraints lists its terms up
+  to the bound and keeps those with the prefix. A guard beyond equality
+  constraints is `GuardedTransition`.
 - Terms are `Term symbol` from `Data.CFTA.Term` of `cfta`:
   `fromAutomaton`, `fromAutomatonUpToDepth`, `termAt`, `rankOf`, `ranksOf`,
   `rankOfTerm`, `surface`, and the refinement witnesses take and give `Term`

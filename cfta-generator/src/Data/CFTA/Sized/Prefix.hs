@@ -50,8 +50,17 @@ their 'Ord' instance. The rank of a completion is its place among the
 completions of this prefix. It is not the rank of the term in the whole
 language.
 
-The automaton must have no constraint: an equality constraint or a guard is
-not checked here, so 'prefixCompletions' rejects it.
+An automaton with equality constraints takes another route, because a
+constraint of a prefix node can relate the terms of two pending nodes. The
+queries list the accepted terms up to the bound, from the size classes of
+'Data.CFTA.Sized.sizedStates', which check the equality constraints, and keep
+the terms that start with the prefix. Each token keeps the completions that
+continue with it. This is exact, but the first query lists every accepted
+term up to the bound. The completions are in the order of
+'Data.CFTA.Sized.sized'.
+
+A guard beyond equality constraints is not checked here, so
+'prefixCompletions' rejects it.
 -}
 module Data.CFTA.Sized.Prefix (
     Completions,
@@ -79,7 +88,7 @@ import qualified Data.Set as Set
 import qualified Test.QuickCheck as QC
 
 import qualified Data.CFTA as FTA
-import Data.CFTA.Constraint (Constraint, noConstraint)
+import Data.CFTA.Constraint (Constraint, noConstraint, residual)
 import qualified Data.CFTA.Gen.Internal.Table as Ordinary
 import Data.CFTA.Index (Cardinality (..), ClassRank (..), Rank (..), Size (..))
 import Data.CFTA.Sized (Sized, countOfSize, sizedStates, termsOfSize, unrankOfSize)
@@ -88,14 +97,19 @@ import qualified Data.CFTA.Term as Term
 
 -- | The completions of a prefix within a size bound.
 data Completions symbol = Completions
-    { completionsTables :: Tables symbol
-    , completionsPrefix :: [(symbol, Int)]
+    { completionsPrefix :: [(symbol, Int)]
     -- ^ The prefix, the last token first.
     , completionsBudget :: !Integer
     -- ^ The number of nodes that the pending nodes can have together.
-    , completionsStacks :: !(Set.Set [Int])
-    -- ^ The stacks of pending states that have a completion within the budget.
+    , completionsRoute :: Route symbol
     }
+
+-- | How the queries find the completions of a prefix.
+data Route symbol
+    = -- | The stacks of pending states that have a completion within the budget, for an automaton without constraints.
+      Stacks !(Tables symbol) !(Set.Set [Int])
+    | -- | The completions in order, each with its tokens after the prefix, for an automaton with equality constraints.
+      Listed [(Term symbol, [(symbol, Int)])]
 
 -- | The automaton for the queries, with each state as its number.
 data Tables symbol = Tables
@@ -111,30 +125,29 @@ data Tables symbol = Tables
 
 -- | Why the completions of an automaton cannot be built.
 data CompletionsError
-    = -- | A transition that the initial state reaches has a constraint.
-      ConstrainedTransition
+    = -- | A transition that the initial state reaches has a guard beyond equality constraints.
+      GuardedTransition
     deriving (Eq, Show)
 
 {- | The completions of the empty prefix: the terms that the automaton accepts
 with at most the given number of nodes.
 
-The result is 'ConstrainedTransition' when a transition that the initial state
-reaches has a constraint other than 'noConstraint'.
+The result is 'GuardedTransition' when a transition that the initial state
+reaches has a guard beyond equality constraints.
 -}
 prefixCompletions ::
     (Ord state, Ord symbol) => Size -> FTA.FTA state symbol Constraint -> Either CompletionsError (Completions symbol)
 prefixCompletions (Size bound) automaton
-    | any (any ((/= noConstraint) . FTA.transitionConstraint)) (FTA.transitionTable $ FTA.trim automaton) =
-        Left ConstrainedTransition
+    | any (any (residual . FTA.transitionConstraint)) reached = Left GuardedTransition
+    | all (all ((== noConstraint) . FTA.transitionConstraint)) reached =
+        Right $ Completions [] bound $ Stacks tables $ Set.fromList $ filter (fits tables bound) [[number initial]]
     | otherwise =
         Right
-            Completions
-                { completionsTables = tables
-                , completionsPrefix = []
-                , completionsBudget = bound
-                , completionsStacks = Set.fromList $ filter (fits tables bound) [[number $ FTA.initialState automaton]]
-                }
+            $ Completions [] bound
+            $ Listed [(term, preorder term) | size <- [1 .. bound], term <- termsOfSize (stateClasses initial) (Size size)]
   where
+    reached = FTA.transitionTable $ FTA.trim automaton
+    initial = FTA.initialState automaton
     rows = FTA.transitionTable automaton
     numbers = Map.fromList $ zip (Map.keys rows) [0 ..]
     number state = numbers Map.! state
@@ -158,33 +171,30 @@ prefixCompletions (Size bound) automaton
             , tablesUnambiguous = Ordinary.unambiguousRows $ Map.map (map void) rows
             }
     stateClasses =
-        fromRight (error "prefixCompletions: an automaton without constraints has size classes") $
+        fromRight (error "prefixCompletions: an automaton without a guard has size classes") $
             sizedStates automaton
 
 {- | The completions after one more token. 'Nothing' when no completion
 starts with the prefix and the token.
 -}
 afterToken :: (Ord symbol) => Completions symbol -> (symbol, Int) -> Maybe (Completions symbol)
-afterToken completions token
-    | Set.null stacks = Nothing
-    | otherwise =
-        Just
-            completions
-                { completionsPrefix = token : completionsPrefix completions
-                , completionsBudget = budget
-                , completionsStacks = stacks
-                }
+afterToken completions token = case completionsRoute completions of
+    Stacks tables stacks ->
+        let kept =
+                Set.fromList
+                    [ stack
+                    | top : rest <- Set.toList stacks
+                    , children <- Map.findWithDefault [] token $ IntMap.findWithDefault Map.empty top $ tablesTokens tables
+                    , let stack = children <> rest
+                    , fits tables budget stack
+                    ]
+         in if Set.null kept then Nothing else Just $ after $ Stacks tables kept
+    Listed listed ->
+        let kept = [(term, rest) | (term, next : rest) <- listed, next == token]
+         in if null kept then Nothing else Just $ after $ Listed kept
   where
-    tables = completionsTables completions
     budget = completionsBudget completions - 1
-    stacks =
-        Set.fromList
-            [ stack
-            | top : rest <- Set.toList $ completionsStacks completions
-            , children <- Map.findWithDefault [] token $ IntMap.findWithDefault Map.empty top $ tablesTokens tables
-            , let stack = children <> rest
-            , fits tables budget stack
-            ]
+    after = Completions (token : completionsPrefix completions) budget
 
 {- | The completions after more tokens, the first token first. 'Nothing' when
 no completion starts with the prefix and the tokens.
@@ -201,46 +211,47 @@ completions that start with the prefix and the token. A token that is not in
 the list has no completion.
 -}
 nextTokens :: (Ord symbol) => Completions symbol -> [((symbol, Int), Cardinality)]
-nextTokens completions =
-    [ (token, completionCount after)
-    | token <- Set.toList candidates
-    , Just after <- [afterToken completions token]
-    ]
-  where
-    tokens = tablesTokens $ completionsTables completions
-    candidates =
-        Set.fromList
-            [ token
-            | top : _ <- Set.toList $ completionsStacks completions
-            , token <- Map.keys $ IntMap.findWithDefault Map.empty top tokens
-            ]
+nextTokens completions = case completionsRoute completions of
+    Stacks tables stacks ->
+        [ (token, completionCount after)
+        | token <-
+            Set.toList $
+                Set.fromList
+                    [ token
+                    | top : _ <- Set.toList stacks
+                    , token <- Map.keys $ IntMap.findWithDefault Map.empty top $ tablesTokens tables
+                    ]
+        , Just after <- [afterToken completions token]
+        ]
+    Listed listed -> Map.toList $ Map.fromListWith (+) [(next, 1) | (_, next : _) <- listed]
 
 -- | Whether the prefix is the preorder of an accepted term within the bound.
 isComplete :: Completions symbol -> Bool
-isComplete = Set.member [] . completionsStacks
+isComplete completions = case completionsRoute completions of
+    Stacks _ stacks -> Set.member [] stacks
+    Listed listed -> any (null . snd) listed
 
 -- | The number of completions.
 completionCount :: (Ord symbol) => Completions symbol -> Cardinality
-completionCount completions
-    | tablesUnambiguous tables =
-        Cardinality $ sum [sum $ stackCounts tables budget stack | stack <- Set.toList $ completionsStacks completions]
-    | otherwise = Cardinality $ genericLength $ completionTerms completions
-  where
-    tables = completionsTables completions
-    budget = completionsBudget completions
+completionCount completions = case completionsRoute completions of
+    Stacks tables stacks
+        | tablesUnambiguous tables ->
+            Cardinality $ sum [sum $ stackCounts tables (completionsBudget completions) stack | stack <- Set.toList stacks]
+    _ -> Cardinality $ genericLength $ completionTerms completions
 
 -- | The completions, each once, in order.
 completionTerms :: (Ord symbol) => Completions symbol -> [Term symbol]
-completionTerms completions
-    | tablesUnambiguous tables = listed
-    | otherwise = nubOrd listed
+completionTerms completions = case completionsRoute completions of
+    Stacks tables stacks
+        | tablesUnambiguous tables -> listed tables stacks
+        | otherwise -> nubOrd $ listed tables stacks
+    Listed terms -> map fst terms
   where
-    tables = completionsTables completions
     prefix = completionPrefix completions
-    listed =
+    listed tables stacks =
         [ fill prefix terms
         | size <- [0 .. completionsBudget completions]
-        , stack <- Set.toList $ completionsStacks completions
+        , stack <- Set.toList stacks
         , terms <- fillings tables stack size
         ]
 
@@ -251,18 +262,19 @@ completions of this prefix, not the rank of the term in the whole language.
 unrankCompletion :: (Ord symbol) => Completions symbol -> Rank -> Maybe (Term symbol)
 unrankCompletion completions (Rank rank)
     | rank < 0 = Nothing
-    | tablesUnambiguous tables =
-        fmap (fill $ completionPrefix completions) $
-            select rank [(stack, size, counts `genericIndex` size) | size <- [0 .. budget], (stack, counts) <- counted]
-    | otherwise = listToMaybe $ genericDrop rank $ completionTerms completions
+    | otherwise = case completionsRoute completions of
+        Stacks tables stacks
+            | tablesUnambiguous tables ->
+                let counted = [(stack, stackCounts tables budget stack) | stack <- Set.toList stacks]
+                    select _ [] = Nothing
+                    select remaining ((stack, size, count) : rest)
+                        | remaining < count = unrankFilling tables budget stack size remaining
+                        | otherwise = select (remaining - count) rest
+                 in fmap (fill $ completionPrefix completions) $
+                        select rank [(stack, size, counts `genericIndex` size) | size <- [0 .. budget], (stack, counts) <- counted]
+        _ -> listToMaybe $ genericDrop rank $ completionTerms completions
   where
-    tables = completionsTables completions
     budget = completionsBudget completions
-    counted = [(stack, stackCounts tables budget stack) | stack <- Set.toList $ completionsStacks completions]
-    select _ [] = Nothing
-    select remaining ((stack, size, count) : rest)
-        | remaining < count = unrankFilling tables budget stack size remaining
-        | otherwise = select (remaining - count) rest
 
 {- | A generator of the completions, each with the same probability. It draws
 a rank and unranks it. 'Nothing' when there is no completion.
@@ -329,6 +341,10 @@ unrankFilling tables budget (state : rest) size rank = go 1 rank
       where
         Cardinality count = countOfSize classes (Size first)
         inner = restCounts `genericIndex` (size - first)
+
+-- | The tokens of a term in preorder.
+preorder :: Term symbol -> [(symbol, Int)]
+preorder (Term.Node symbol children) = (symbol, length children) : concatMap preorder children
 
 {- | The term whose preorder starts with a prefix and whose pending nodes hold
 the given terms, in preorder.
