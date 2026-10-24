@@ -1,4 +1,58 @@
 # cfta formalization restart handoff
+## Raw pending-slot assimilation dispatch
+
+Updated: 2026-10-24. Main `74250bd88` is incorporated.
+Proof: `6c41869247822797f6c54f7f144029f9d415ade4`.
+Read `lean/notes-current-pruning-enumeration-dispatch.md`.
+
+Equal IDs bypass all lookups. An eliminated source bypasses target lookup.
+Absent raw slots differ from present optional-none slots. Optional branches
+run no query or guard; none/none succeeds. Source suspended parts precede
+target parts. A merged some zero rejects before writes. Other optional values
+select the exact existing assimilated action. Malformed present shapes have
+captured enumeration failure, with no native exception-string equivalence.
+
+Two present handles enter one actual checked intersection. Disabled checking
+skips guard/worker effects. Enabled checking reuses pending_enabled_complete
+and finish_complete at the actual returned heap. True emptiness selects Empty;
+false retains a query that can itself be Empty. The actual replacement is
+checked before either raw write. No checked query is repeated.
+
+Existing Except/sum/product/Option retain native or worker observations,
+full Caller and saved query memos even when no action can be returned.
+Native yielded, failed, constraintError and blocked remain distinct, including
+actual controls. Returning them is not whole-dispatch resume. Fourth-memo
+and guard histories remain explicit. Unfolding globals remain logical
+Post/CallReads evidence, not invented computational fields.
+
+Genuine input Context, PendingRealized, safe-entry slot equations and
+conditional decoded-pair WordRanges derive stable native/lower worker bounds.
+The theorem exposes the actual action, full Post, final.query equality,
+no-op singleton or raw rejection/assimilated singleton, both slot reads,
+all-slot realization and two-present intersection meaning. Enabled receipts
+remain branch-local. No successful query, worker, suffix or final state is
+assumed. The theorem does not cover an accessed absent or malformed slot.
+
+The first strict input failed at the PUnit universe, deprecated tactic aliases and three Id.run reductions. The second input fixes the universe and aliases; three pure reductions remain. The third input adds explicit reflexivity at those three goals and passes with a literal empty log under all linters and warnings as errors. Both failed sources, full raw outputs and exact patches remain. All public and local types stay unchanged. No proof limit changed. The source has 435 lines, above the soft estimate and below the hard cap of 520. The installed build, full public readback and Audit pass. All 262 public-output lines retain the four complete signatures without display omissions. No passing check was repeated. Separate source-only records retain the header delimiter and indentation corrections, V2/V3 scope metadata, script reader schema fixes and the prestrict Id.run layout correction. These records are not selected compiler or seal failures.
+The installed build passes 1292 jobs. Audit passes 3704 jobs and
+76244 dependency checks, with the unchanged older warning.
+finishOptional has no axiom dependencies. afterQuery, dispatch and dispatch_complete each report exactly propext, Classical.choice and Quot.sound. No project axiom is added.
+Frozen contracts, scoped inventories, reviews and complete raw attempts remain.
+All 26 prior publication-custody inputs and the separately sealed clarification
+remain. No Haskell changes. Six repair handoffs stay first in FINDINGS.
+
+Three definitions and one theorem add no instance, datatype or carrier.
+Native root flags, representative/union scheduling, indexes/containers,
+handle/signed extraction, lazy publication and whole-driver correspondence
+remain separate. No full compression Frame across edited values is claimed.
+H6 stays strongest combined. Covered construction with valid initial caches
+and allocation history supports any chosen finite number of modeled node
+reductions at derived mathematical width/fuels, with exact finite-tree language
+for the empty inherited payload. All-producer origins/edits, cutoff language
+and full typing/pruning/runtime/solver/resources/convergence remain open.
+H23, older proofs and the optimized core remain. The whole goal stays ACTIVE
+and incomplete. This record precedes evidence and push.
+
 
 ## Existing assimilation after the derived replacement
 
