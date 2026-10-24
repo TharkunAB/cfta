@@ -1,0 +1,110 @@
+{
+  "status": "ACCEPTED_BEFORE_ANY_BODY_OR_ACTIVATION",
+  "accepted_at": "2026-10-25T01:17:55.304157+02:00",
+  "owner": "/tmp/mcfta-pruning-enumeration-finalize-20261025-proposal",
+  "frozen_sha256": "77ef8c5fc7495c7f241026d061c552411e7f3a8869254fe9d7e5f848bec58f92",
+  "pins_sha256": "d01d57e1d37f172192b9d669d3218b1d8573593ad5530d697fca1e9ee735f7ab",
+  "contracts": {
+    "context.lean.txt": "import MicroCFTA.SourcePruningEnumerationNativeIndex\nimport MicroCFTA.SourcePruningEnumerationObservation\n\nnamespace MicroCFTA.SourcePruningEnumerationFinalize\nopen EnumerationState EnumerationSchedule EnumerationCorrectness\nopen SourcePruningEnumerationObservation\nlocal notation \"Symbol\" => SourcePruningTemplates.Symbol\nvariable {EnumGuard NativeGuard : Type}\n",
+    "instance-header.lean.txt": "local instance finalizeMonadList : Monad List\n",
+    "finish-header.lean.txt": "def finish (target : Nat) (fragment : Fragments.Fragment Symbol) :\n    EnumerateM Symbol EnumGuard (Fragments.Fragment Symbol)\n",
+    "run-header.lean.txt": "def run (heap : InternedConstructorTemplates.State Symbol NativeGuard)\n    (fuel target : Nat) (fragment : Fragments.Fragment Symbol)\n    (before : EnumerationExpandableIndex.Cached Symbol EnumGuard) :\n    Option (EnumerationExpandableIndex.Cached Symbol EnumGuard)\n",
+    "complete-header.lean.txt": "theorem complete\n    (heap : InternedConstructorTemplates.State Symbol NativeGuard)\n    (before : EnumerationExpandableIndex.Cached Symbol EnumGuard)\n    (target : Nat) (fragment : Fragments.Fragment Symbol)\n    (old : EnumerationState.UVarValue Symbol)\n    (stored : before.core.values[target]? = some old)\n    (roots : Nat \u2192 Nat) (paths : Roots before.core.representatives roots)\n    (counts : EnumerationCanonicalWaiting.Correct roots before.core.values before.waiting)\n    (flags : \u2200 (slot : Nat),\n      SourcePruningEnumerationNativeIndex.candidate heap\n        ((before.core.values[slot]?).getD .eliminated) = some (before.expandable slot))\n    (storage : StorageValid before.core)\n    (bounded : FragmentBound before.core.counter fragment)\n    (realized : PendingRealized heap before.core) :\n    \u2203 (fuel : Nat) (after : EnumerationExpandableIndex.Cached Symbol EnumGuard),\n      (\u2200 (extra : Nat), run heap (fuel + extra) target fragment before = some after) \u2227\n      ExceptT.run (finish (EnumGuard := EnumGuard) target fragment before.core) =\n        [.ok (fragment, after.core)] \u2227\n      after.core = {before.core with\n        values := before.core.values.set target (.enumerated fragment)\n        expansionAncestry := []} \u2227\n      after.core.values[target]? = some (.enumerated fragment) \u2227\n      after.expandable = (fun (slot : Nat) => if slot = target then false else before.expandable slot) \u2227\n      after.waiting = EnumerationCanonicalWaiting.count roots (-1) (references old) before.waiting \u2227\n      Roots after.core.representatives roots \u2227\n      EnumerationCanonicalWaiting.Correct roots after.core.values after.waiting \u2227\n      (\u2200 (slot : Nat),\n        SourcePruningEnumerationNativeIndex.candidate heap\n          ((after.core.values[slot]?).getD .eliminated) = some (after.expandable slot)) \u2227\n      StorageValid after.core \u2227 PendingRealized heap after.core\n",
+    "definition-reset-header.lean.txt": "let reset : EnumerationExpandableIndex.Cached Symbol EnumGuard\n",
+    "local-inside.lean.txt": "have inside : target < before.core.values.length\n",
+    "local-written-flags.lean.txt": "have writtenFlags : \u2200 (slot : Nat),\n    SourcePruningEnumerationNativeIndex.candidate heap\n      (((before.core.values.set target (.enumerated fragment))[slot]?).getD .eliminated) =\n      some (if slot = target then false else before.expandable slot)\n",
+    "local-written-storage.lean.txt": "have writtenStorage : StorageValid {before.core with\n    values := before.core.values.set target (.enumerated fragment)\n    expansionAncestry := []}\n",
+    "local-written-realized.lean.txt": "have writtenRealized : PendingRealized heap {before.core with\n    values := before.core.values.set target (.enumerated fragment)\n    expansionAncestry := []}\n"
+  },
+  "schema": {
+    "module": "MicroCFTA.SourcePruningEnumerationFinalize",
+    "public_heads": [
+      {
+        "name": "finish",
+        "kind": "def",
+        "file": "finish-header.lean.txt",
+        "attachment": " :=\n"
+      },
+      {
+        "name": "run",
+        "kind": "def",
+        "file": "run-header.lean.txt",
+        "attachment": " :=\n"
+      },
+      {
+        "name": "complete",
+        "kind": "theorem",
+        "file": "complete-header.lean.txt",
+        "attachment": " := by\n"
+      }
+    ],
+    "public_head_order": [
+      "finish",
+      "run",
+      "complete"
+    ],
+    "contract_count": 10,
+    "contract_lines": 57,
+    "context_lines": 8,
+    "public_header_lines": 36,
+    "definition_count": 2,
+    "theorem_count": 1,
+    "proof_local_have_count": 4,
+    "proof_local_let_count": 0,
+    "definition_local_let_count": 1,
+    "new_types": [],
+    "new_carriers": [],
+    "new_predicates": [],
+    "helpers": [],
+    "local_instance_count": 1,
+    "global_instance_count": 0,
+    "LawfulMonad_count": 0,
+    "obtain_count": 1,
+    "obtain_field_count": 2,
+    "scoped_type_count": 51,
+    "induction_count": 0,
+    "IH_count": 0,
+    "source_count": 13,
+    "cut_count": 24,
+    "cut_lines": 267,
+    "route_count": 11,
+    "route_source_count": 19,
+    "target_source_lines": [
+      140,
+      220
+    ],
+    "proposed_hard_cap": 320,
+    "compiler_evidence": false,
+    "bodies_present": false
+  },
+  "script_frozen_sha256": "5db3bf4c35a324c53d41a5a02637fc095184faf418db3e0795a5f2328e7f30f7",
+  "scope_overlay_frozen_sha256": "9c712a7f6bb4ae4a8919542672a982ccc31f5ec9548d7cdf2b3c43b1849b07cf",
+  "reviews": {
+    "setup": {
+      "path": "/tmp/mcfta-pruning-enumeration-finalize-20261025-setup-review.md",
+      "sha256": "4fe8eff43b06f4b30dd7a2f1b5853cde6dc02b0ed38f3ec46a3ea269758cb4f5"
+    },
+    "source": {
+      "path": "/tmp/mcfta-pruning-enumeration-finalize-20261025-source-review.md",
+      "sha256": "bf09736fe039ab5a3bb32d5ce82f1abd2615e286b2f087c08bef0f7e69e92573"
+    },
+    "declaration": {
+      "path": "/tmp/mcfta-pruning-enumeration-finalize-20261025-declaration-review.md",
+      "sha256": "371f4e38de7e6cec4d4aecac333ce48ceb9474613f933719966798feddec63bc"
+    },
+    "seal-script": {
+      "path": "/tmp/mcfta-pruning-enumeration-finalize-20261025-seal-script-review.md",
+      "sha256": "4b73ce0ed485f8c2734d03b19d0909fe5279c5db12b40f013956b54175436110"
+    }
+  },
+  "personal_review": "Root read all10 exact contracts57lines, all51 original scopes and separate52nd reset binder/display overlay, one2field packet, instance/case/let inventories,267cutlines. Verified95ownerpins/exact97files,13live sources,24cuts,19import identities/11routes. Read all471selected script lines and both templates; verified54pins/exact56files,5actualbases,414bidirectional Unicode spans,10exact patches. Full H6 statement read against live code. Setup refresh/baseline PASS actually observed. Root authors every body.",
+  "source_budget": [
+    140,
+    220
+  ],
+  "hard_cap": 320,
+  "resolved_stale_script_display": "proposal-status inherited hard_cap=PENDING_ROOT_SELECTION is historical display data; actual owner/schema/proposed_hard_cap and accepted gate are320.",
+  "limits": "Lean4.34.1 default limits/all linters/warningsAsError; serial4GiB max/high,swap0,five minutes; no new axiom.",
+  "activation": "not yet",
+  "bodies": "not yet"
+}

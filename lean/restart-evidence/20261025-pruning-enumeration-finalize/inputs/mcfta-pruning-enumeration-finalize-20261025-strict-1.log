@@ -1,0 +1,144 @@
+{"command": ["/home/tritlo/.elan/toolchains/leanprover--lean4---v4.34.1/bin/lean", "-o", "/tmp/mcfta-pruning-enumeration-finalize-20261025/compiled/MicroCFTA/SourcePruningEnumerationFinalize.olean", "-R", "/tmp/mcfta-pruning-enumeration-finalize-20261025/strict-1", "-DwarningAsError=true", "-Dlinter.all=true", "/tmp/mcfta-pruning-enumeration-finalize-20261025/strict-1/MicroCFTA/SourcePruningEnumerationFinalize.lean"], "exit_code": 1, "raw_bytes": 7606, "raw_sha256": "8b104368a7ab16a650b3c4e1c6e626a21d7c70d286a2036dbe5d8052ada9570e", "source_sha256": "fcb2143c106bf652c97d1fa4a9c181e2e26d344ed3da0f2a5e5ad56358ea9091"}
+/tmp/mcfta-pruning-enumeration-finalize-20261025/strict-1/MicroCFTA/SourcePruningEnumerationFinalize.lean:93:4: error: unsolved goals
+case pos
+EnumGuard NativeGuard : Type
+heap : InternedConstructorTemplates.State Symbol NativeGuard
+before : EnumerationExpandableIndex.Cached Symbol EnumGuard
+target : Nat
+fragment : Fragments.Fragment Symbol
+old : UVarValue Symbol
+stored✝ : before.core.values[target]? = some old
+roots : Nat → Nat
+paths : Roots before.core.representatives roots
+counts : EnumerationCanonicalWaiting.Correct roots before.core.values before.waiting
+flags :
+  ∀ (slot : Nat),
+    SourcePruningEnumerationNativeIndex.candidate heap (before.core.values[slot]?.getD UVarValue.eliminated) =
+      some (before.expandable slot)
+storage : StorageValid before.core
+bounded : FragmentBound before.core.counter fragment
+realized : PendingRealized heap before.core
+fuel : Nat
+countRun :
+  ∀ (extra : Nat) (change : Int) (waiting : EnumerationWaitingIndex.Waiting),
+    SourcePruningEnumerationNativeIndex.count (fuel + extra) before.core.representatives change (references old)
+        waiting =
+      some (EnumerationCanonicalWaiting.count roots change (references old) waiting)
+inside : target < before.core.values.length
+writtenFlags :
+  ∀ (slot : Nat),
+    SourcePruningEnumerationNativeIndex.candidate heap
+        ((before.core.values.set target (UVarValue.enumerated fragment))[slot]?.getD UVarValue.eliminated) =
+      some (if slot = target then false else before.expandable slot)
+writtenStorage :
+  StorageValid
+    (let __src := before.core;
+    { counter := __src.counter, representatives := __src.representatives,
+      values := before.core.values.set target (UVarValue.enumerated fragment), obligations := __src.obligations,
+      recursionAncestry := __src.recursionAncestry, expansionAncestry := [] })
+node : Nat
+scs : List Suspended
+stored : some (UVarValue.enumerated fragment) = some (UVarValue.unenumerated (some node) scs)
+⊢ ∃ value,
+    SourcePruningEnumerationNodes.lookupNode heap node = some value ∧
+      InternedProbeProvenance.Available heap value ∧ value.free = []
+/tmp/mcfta-pruning-enumeration-finalize-20261025/strict-1/MicroCFTA/SourcePruningEnumerationFinalize.lean:104:2: error: unsolved goals
+case refine_1
+EnumGuard NativeGuard : Type
+heap : InternedConstructorTemplates.State Symbol NativeGuard
+before : EnumerationExpandableIndex.Cached Symbol EnumGuard
+target : Nat
+fragment : Fragments.Fragment Symbol
+old : UVarValue Symbol
+stored : before.core.values[target]? = some old
+roots : Nat → Nat
+paths : Roots before.core.representatives roots
+counts : EnumerationCanonicalWaiting.Correct roots before.core.values before.waiting
+flags :
+  ∀ (slot : Nat),
+    SourcePruningEnumerationNativeIndex.candidate heap (before.core.values[slot]?.getD UVarValue.eliminated) =
+      some (before.expandable slot)
+storage : StorageValid before.core
+bounded : FragmentBound before.core.counter fragment
+realized : PendingRealized heap before.core
+fuel : Nat
+countRun :
+  ∀ (extra : Nat) (change : Int) (waiting : EnumerationWaitingIndex.Waiting),
+    SourcePruningEnumerationNativeIndex.count (fuel + extra) before.core.representatives change (references old)
+        waiting =
+      some (EnumerationCanonicalWaiting.count roots change (references old) waiting)
+inside : target < before.core.values.length
+writtenFlags :
+  ∀ (slot : Nat),
+    SourcePruningEnumerationNativeIndex.candidate heap
+        ((before.core.values.set target (UVarValue.enumerated fragment))[slot]?.getD UVarValue.eliminated) =
+      some (if slot = target then false else before.expandable slot)
+writtenStorage :
+  StorageValid
+    (let __src := before.core;
+    { counter := __src.counter, representatives := __src.representatives,
+      values := before.core.values.set target (UVarValue.enumerated fragment), obligations := __src.obligations,
+      recursionAncestry := __src.recursionAncestry, expansionAncestry := [] })
+writtenRealized :
+  PendingRealized heap
+    (let __src := before.core;
+    { counter := __src.counter, representatives := __src.representatives,
+      values := before.core.values.set target (UVarValue.enumerated fragment), obligations := __src.obligations,
+      recursionAncestry := __src.recursionAncestry, expansionAncestry := [] })
+extra : Nat
+⊢ ((SourcePruningEnumerationNativeIndex.count (fuel + extra) before.core.representatives 1 []
+          (EnumerationCanonicalWaiting.count roots (-1) (references old) before.waiting)).bind
+      fun saved =>
+      some
+        {
+          core :=
+            { counter := before.core.counter, representatives := before.core.representatives,
+              values := before.core.values.set target (UVarValue.enumerated fragment),
+              obligations := before.core.obligations, recursionAncestry := before.core.recursionAncestry,
+              expansionAncestry := [] },
+          expandable := fun other => if other = target then false else before.expandable other, waiting := saved }) =
+    some
+      {
+        core :=
+          { counter := before.core.counter, representatives := before.core.representatives,
+            values := before.core.values.set target (UVarValue.enumerated fragment),
+            obligations := before.core.obligations, recursionAncestry := before.core.recursionAncestry,
+            expansionAncestry := [] },
+        expandable := fun other => if other = target then false else before.expandable other,
+        waiting := EnumerationCanonicalWaiting.count roots (-1) (references old) before.waiting }
+/tmp/mcfta-pruning-enumeration-finalize-20261025/strict-1/MicroCFTA/SourcePruningEnumerationFinalize.lean:108:4: error: 'change' tactic failed, pattern
+  (match before.core.values[target]? with
+    | none => [Except.error Error.invalidSlot]
+    | some val =>
+      [Except.ok
+          (fragment,
+            let __src := before.core;
+            { counter := __src.counter, representatives := __src.representatives,
+              values := before.core.values.set target (UVarValue.enumerated fragment), obligations := __src.obligations,
+              recursionAncestry := __src.recursionAncestry, expansionAncestry := [] })]) =
+    [Except.ok
+        (fragment,
+          let __src := before.core;
+          { counter := __src.counter, representatives := __src.representatives,
+            values := before.core.values.set target (UVarValue.enumerated fragment), obligations := __src.obligations,
+            recursionAncestry := __src.recursionAncestry, expansionAncestry := [] })]
+is not definitionally equal to target
+  (finish target fragment before.core).run =
+    [Except.ok
+        (fragment,
+          {
+              core :=
+                let __src := before.core;
+                { counter := __src.counter, representatives := __src.representatives,
+                  values := before.core.values.set target (UVarValue.enumerated fragment),
+                  obligations := __src.obligations, recursionAncestry := __src.recursionAncestry,
+                  expansionAncestry := [] },
+              expandable := fun slot => if slot = target then false else before.expandable slot,
+              waiting := EnumerationCanonicalWaiting.count roots (-1) (references old) before.waiting }.core)]
+/tmp/mcfta-pruning-enumeration-finalize-20261025/strict-1/MicroCFTA/SourcePruningEnumerationFinalize.lean:94:48: error: This simp argument is unused:
+  reduceCtorEq
+
+Hint: Omit it from the simp argument list.
+  [apply] simp only [List.getElem?_set_self inside] at stored
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`

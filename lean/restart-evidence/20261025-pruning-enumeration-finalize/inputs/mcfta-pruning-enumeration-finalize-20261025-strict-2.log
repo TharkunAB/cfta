@@ -1,0 +1,105 @@
+{"command": ["/home/tritlo/.elan/toolchains/leanprover--lean4---v4.34.1/bin/lean", "-o", "/tmp/mcfta-pruning-enumeration-finalize-20261025/compiled/MicroCFTA/SourcePruningEnumerationFinalize.olean", "-R", "/tmp/mcfta-pruning-enumeration-finalize-20261025/strict-2", "-DwarningAsError=true", "-Dlinter.all=true", "/tmp/mcfta-pruning-enumeration-finalize-20261025/strict-2/MicroCFTA/SourcePruningEnumerationFinalize.lean"], "exit_code": 1, "raw_bytes": 5471, "raw_sha256": "82a4132482405ce0d5cffadb99dfe97bba6589ade32d4228641e1d4e622c8237", "source_sha256": "2b00d4537a4c3ac57baa3af7c773e2eef1620cd328d44815792886e0aea933fc"}
+/tmp/mcfta-pruning-enumeration-finalize-20261025/strict-2/MicroCFTA/SourcePruningEnumerationFinalize.lean:114:8: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  before.core.values[target]?
+in the target expression
+  List.flatMap
+      (ExceptT.bindCont fun __x =>
+        List.flatMap
+          (ExceptT.bindCont fun __x =>
+            List.flatMap (ExceptT.bindCont fun __x => [Except.ok (fragment, __x.snd)])
+              [Except.ok
+                  (PUnit.unit,
+                    { counter := __x.snd.counter, representatives := __x.snd.representatives,
+                      values := __x.snd.values.set target (UVarValue.enumerated fragment),
+                      obligations := __x.snd.obligations, recursionAncestry := __x.snd.recursionAncestry,
+                      expansionAncestry := __x.snd.expansionAncestry })])
+          (List.flatMap
+            (ExceptT.bindCont fun __x =>
+              (match __x.fst.values[target]? with
+                | none => EnumerationState.failure Error.invalidSlot
+                | some value => StateT.pure value)
+                __x.snd)
+            [Except.ok (__x.snd, __x.snd)]))
+      [Except.ok
+          (PUnit.unit,
+            { counter := before.core.counter, representatives := before.core.representatives,
+              values := before.core.values, obligations := before.core.obligations,
+              recursionAncestry := before.core.recursionAncestry, expansionAncestry := [] })] =
+    [Except.ok
+        (fragment,
+          { counter := before.core.counter, representatives := before.core.representatives,
+            values := before.core.values.set target (UVarValue.enumerated fragment),
+            obligations := before.core.obligations, recursionAncestry := before.core.recursionAncestry,
+            expansionAncestry := [] })]
+
+case refine_2
+EnumGuard NativeGuard : Type
+heap : InternedConstructorTemplates.State Symbol NativeGuard
+before : EnumerationExpandableIndex.Cached Symbol EnumGuard
+target : Nat
+fragment : Fragments.Fragment Symbol
+old : UVarValue Symbol
+stored : before.core.values[target]? = some old
+roots : Nat → Nat
+paths : Roots before.core.representatives roots
+counts : EnumerationCanonicalWaiting.Correct roots before.core.values before.waiting
+flags :
+  ∀ (slot : Nat),
+    SourcePruningEnumerationNativeIndex.candidate heap (before.core.values[slot]?.getD UVarValue.eliminated) =
+      some (before.expandable slot)
+storage : StorageValid before.core
+bounded : FragmentBound before.core.counter fragment
+realized : PendingRealized heap before.core
+fuel : Nat
+countRun :
+  ∀ (extra : Nat) (change : Int) (waiting : EnumerationWaitingIndex.Waiting),
+    SourcePruningEnumerationNativeIndex.count (fuel + extra) before.core.representatives change (references old)
+        waiting =
+      some (EnumerationCanonicalWaiting.count roots change (references old) waiting)
+inside : target < before.core.values.length
+writtenFlags :
+  ∀ (slot : Nat),
+    SourcePruningEnumerationNativeIndex.candidate heap
+        ((before.core.values.set target (UVarValue.enumerated fragment))[slot]?.getD UVarValue.eliminated) =
+      some (if slot = target then false else before.expandable slot)
+writtenStorage :
+  StorageValid
+    (let __src := before.core;
+    { counter := __src.counter, representatives := __src.representatives,
+      values := before.core.values.set target (UVarValue.enumerated fragment), obligations := __src.obligations,
+      recursionAncestry := __src.recursionAncestry, expansionAncestry := [] })
+writtenRealized :
+  PendingRealized heap
+    (let __src := before.core;
+    { counter := __src.counter, representatives := __src.representatives,
+      values := before.core.values.set target (UVarValue.enumerated fragment), obligations := __src.obligations,
+      recursionAncestry := __src.recursionAncestry, expansionAncestry := [] })
+⊢ List.flatMap
+      (ExceptT.bindCont fun __x =>
+        List.flatMap
+          (ExceptT.bindCont fun __x =>
+            List.flatMap (ExceptT.bindCont fun __x => [Except.ok (fragment, __x.snd)])
+              [Except.ok
+                  (PUnit.unit,
+                    { counter := __x.snd.counter, representatives := __x.snd.representatives,
+                      values := __x.snd.values.set target (UVarValue.enumerated fragment),
+                      obligations := __x.snd.obligations, recursionAncestry := __x.snd.recursionAncestry,
+                      expansionAncestry := __x.snd.expansionAncestry })])
+          (List.flatMap
+            (ExceptT.bindCont fun __x =>
+              (match __x.fst.values[target]? with
+                | none => EnumerationState.failure Error.invalidSlot
+                | some value => StateT.pure value)
+                __x.snd)
+            [Except.ok (__x.snd, __x.snd)]))
+      [Except.ok
+          (PUnit.unit,
+            { counter := before.core.counter, representatives := before.core.representatives,
+              values := before.core.values, obligations := before.core.obligations,
+              recursionAncestry := before.core.recursionAncestry, expansionAncestry := [] })] =
+    [Except.ok
+        (fragment,
+          { counter := before.core.counter, representatives := before.core.representatives,
+            values := before.core.values.set target (UVarValue.enumerated fragment),
+            obligations := before.core.obligations, recursionAncestry := before.core.recursionAncestry,
+            expansionAncestry := [] })]

@@ -1,0 +1,6 @@
+/-- An actual repaired unfolding of a closed available record remains closed without preparation. -/
+theorem unfold_closed [DecidableEq (EdgeKey Symbol Guard)] (value : Value Symbol Guard)
+    (state : State Symbol Guard) (context : Context state captures) (available : Available state value)
+    (closed : value.free = []) (result : Value Symbol Guard) (after : State Symbol Guard)
+    (done : unfold value state = .done result after) : result.free = [] := by
+  cases value with

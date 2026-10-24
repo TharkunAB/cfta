@@ -1,0 +1,34 @@
+theorem observation_complete (heap : InternedConstructorTemplates.State Symbol NativeGuard)
+    (before : EnumerationState.State Symbol EnumGuard) (uv : Nat)
+    (realized : PendingRealized heap before)
+    (storage : StorageValid before) (inside : uv < before.counter) :
+    ∃ fuel observed after,
+      Success (getUnexpandedNode fuel uv) before observed after ∧ Frame before after ∧
+      (∀ node, observed = some node →
+        ∃ value : InternedConstructorTemplates.Value Symbol NativeGuard,
+          lookupNode heap node = some value ∧
+          InternedProbeProvenance.Available heap value ∧ value.free = []) := by
+  obtain ⟨root, size, path⟩ := storage.total uv
+  obtain ⟨fuel, found, lookup⟩ := UnionFind.findRoot_terminates path
+  have rootInside : found.representative < before.counter :=
+    (findRoot_bounded fuel before.representatives before.counter uv storage.forest inside found lookup).1
+  have listInside : found.representative < before.values.length := by
+    rw [← storage.aligned]
+    exact rootInside
+  let storedValue : UVarValue Symbol := before.values[found.representative]'listInside
+  let after : EnumerationState.State Symbol EnumGuard := {before with representatives := found.forest}
+  let observed : Option Nat := match (generalizing := false) storedValue with
+    | .unenumerated pending _ => pending
+    | _ => none
+  have stored : before.values[found.representative]? = some storedValue := List.getElem?_eq_getElem listInside
+  have valueRead : Success (getValue fuel uv) before storedValue after :=
+    (getValue_success fuel uv before after storedValue).mpr ⟨found, lookup, stored, rfl⟩
+  have nodeRead : Success (getUnexpandedNode fuel uv) before observed after :=
+    (getUnexpandedNode_success fuel uv before after observed).mpr
+      ⟨storedValue, valueRead, by dsimp only [observed]; cases storedValue <;> rfl⟩
+  have frame : Frame before after := (getValue_frame fuel uv before after storedValue storage.total valueRead).1
+  refine ⟨fuel, observed, after, nodeRead, frame, ?_⟩
+  intro node same
+  rw [same] at nodeRead
+  exact (observed_realized heap fuel uv node before after realized storage.total nodeRead).2
+

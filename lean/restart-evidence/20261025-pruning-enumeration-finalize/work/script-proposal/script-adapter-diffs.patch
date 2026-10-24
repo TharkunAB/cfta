@@ -1,0 +1,254 @@
+--- basis/check.py
++++ candidate/check.py
+@@ -2,7 +2,7 @@
+ from pathlib import Path
+ 
+ root = Path('/home/tritlo/Code/mcfta')
+-area = Path('/tmp/mcfta-pruning-enumeration-native-index-20261025')
++area = Path('/tmp/mcfta-pruning-enumeration-finalize-20261025')
+ kind, attempt, *paths = sys.argv[1:]
+ target = area / attempt
+ target.mkdir()
+--- basis/documents.py
++++ candidate/documents.py
+@@ -4,8 +4,8 @@
+ from pathlib import Path
+ 
+ root = Path('/home/tritlo/Code/mcfta')
+-area = Path('/tmp/mcfta-pruning-enumeration-native-index-20261025')
+-baseline = 'ab0ba1287abe1ca172a1f35c510b711ed749001a'
++area = Path('/tmp/mcfta-pruning-enumeration-finalize-20261025')
++baseline = 'cc6e7a9fe032aead462ee2110f929ffa4784a52b'
+ proof = subprocess.check_output(['git', 'rev-parse', 'HEAD'], cwd=root).decode().strip()
+ assert subprocess.check_output(['git', 'rev-list', '--parents', '-n', '1', proof], cwd=root).decode().split() == [proof, baseline]
+ checks = json.loads((area / 'build-summary.json').read_text())
+@@ -25,7 +25,7 @@
+ note = expand((area / 'current-note.md').read_text())
+ note = note.replace('Main: `74250bd889685da436cdbfe32ac4b5a0878ffd09`, incorporated.',
+     'Main: `74250bd889685da436cdbfe32ac4b5a0878ffd09`, incorporated.\nProof: `' + proof + '`.')
+-destination = root / 'lean/notes-current-pruning-enumeration-native-index.md'
++destination = root / 'lean/notes-current-pruning-enumeration-finalize.md'
+ assert not destination.exists()
+ destination.write_text(note)
+ (area / 'current-note.md').write_text(note)
+@@ -39,7 +39,7 @@
+     path = root / name
+     before = path.read_text()
+     assert path.read_bytes() == subprocess.check_output(['git', 'show', baseline + ':' + name], cwd=root)
+-    position = before.index('## Checked terminal-arm composition') if name == 'FINDINGS.md' else before.index('\n') + 1
++    position = before.index('## Native terminal scheduling indexes') if name == 'FINDINGS.md' else before.index('\n') + 1
+     after = before[:position] + prefix + before[position:]
+     path.write_text(after)
+     changes[name] = dict(insertion_character=position, inserted=prefix,
+@@ -47,5 +47,5 @@
+         after_sha256=hashlib.sha256(after.encode()).hexdigest())
+ (area / 'document-changes.json').write_text(json.dumps(changes, indent=2) + '\n')
+ (area / 'proof-commit.json').write_text(json.dumps(dict(commit=proof, baseline=baseline,
+-    paths=['lean/MicroCFTA/SourcePruningEnumerationNativeIndex.lean', 'lean/MicroCFTA/Audit.lean']), indent=2) + '\n')
++    paths=['lean/MicroCFTA/SourcePruningEnumerationFinalize.lean', 'lean/MicroCFTA/Audit.lean']), indent=2) + '\n')
+ print(json.dumps(dict(documents=paths, note=str(destination), proof=proof)))
+--- basis/archive.py
++++ candidate/archive.py
+@@ -6,12 +6,12 @@
+ from pathlib import Path
+ 
+ root = Path('/home/tritlo/Code/mcfta')
+-area = Path('/tmp/mcfta-pruning-enumeration-native-index-20261025')
+-evidence = root / 'lean/restart-evidence/20261025-pruning-enumeration-native-index'
++area = Path('/tmp/mcfta-pruning-enumeration-finalize-20261025')
++evidence = root / 'lean/restart-evidence/20261025-pruning-enumeration-finalize'
+ assert not evidence.exists()
+ custody = json.loads((area / 'prior-custody-index.json').read_text())
+ assert len(custody) == 26 and len({pin['target'] for pin in custody}) == 26
+-assert hashlib.sha256((area / 'prior-custody-index.json').read_bytes()).hexdigest() == 'eaa51d5e2c495972ed633423b73ceeb2494e3f89deb4d08bfb0386af7fb00b72'
++assert hashlib.sha256((area / 'prior-custody-index.json').read_bytes()).hexdigest() == 'ccb37361daabfe631877723c315bbac2cc64de601941fbd53c44a2e49aef40e9'
+ summary = json.loads((area / 'previous-publication/post-publication-summary.json').read_text())
+ assert [pin['source'] for pin in custody] == summary['next_custody_inputs']
+ for pin in custody:
+@@ -19,11 +19,11 @@
+     data = (area / 'previous-publication' / pin['target']).read_bytes()
+     assert len(data) == pin['bytes'] and hashlib.sha256(data).hexdigest() == pin['sha256']
+ assert {p.name for p in (area / 'previous-publication').iterdir()} == {pin['target'] for pin in custody}
+-assert Path('/tmp/mcfta-pruning-enumeration-native-index-20261025-source-review.md').is_file()
++assert Path('/tmp/mcfta-pruning-enumeration-finalize-20261025-source-review.md').is_file()
+ for args in [('diff', '--quiet'), ('diff', '--cached', '--quiet')]:
+     subprocess.run(['git', *args], cwd=root, check=True)
+ for name in ['declaration', 'model', 'public', 'document', 'seal-script', 'root']:
+-    assert Path('/tmp/mcfta-pruning-enumeration-native-index-20261025-' + name + '-review.md').is_file()
++    assert Path('/tmp/mcfta-pruning-enumeration-finalize-20261025-' + name + '-review.md').is_file()
+ evidence.mkdir()
+ for path in sorted(area.rglob('*')):
+     if not path.is_file():
+@@ -36,21 +36,21 @@
+         target.write_bytes(path.read_bytes())
+ inputs = evidence / 'inputs'
+ inputs.mkdir()
+-for pattern in ['mcfta-pruning-enumeration-native-index-20261025-*']:
++for pattern in ['mcfta-pruning-enumeration-finalize-20261025-*']:
+     for path in sorted(Path('/tmp').glob(pattern)):
+-        if path.is_file() and not path.name.startswith('mcfta-pruning-enumeration-native-index-20261025-archive-1.'):
++        if path.is_file() and not path.name.startswith('mcfta-pruning-enumeration-finalize-20261025-archive-1.'):
+             shutil.copyfile(path, inputs / path.name)
+-shutil.copytree('/tmp/mcfta-pruning-enumeration-native-index-20261025-proposal', evidence / 'owner-proposal')
++shutil.copytree('/tmp/mcfta-pruning-enumeration-finalize-20261025-proposal', evidence / 'owner-proposal')
+ prior = evidence / 'previous-publication'
+ prior.mkdir()
+ for pin in custody:
+     shutil.copyfile(area / 'previous-publication' / pin['target'], prior / pin['target'])
+ production = evidence / 'production-sources'
+ production.mkdir()
+-shutil.copyfile(root / 'lean/MicroCFTA/SourcePruningEnumerationNativeIndex.lean', production / 'SourcePruningEnumerationNativeIndex.lean')
+-shutil.copyfile(root / 'lean/notes-current-pruning-enumeration-native-index.md', evidence / 'current-note.md')
+-shutil.copyfile('/tmp/mcfta-pruning-enumeration-native-index-20261025-verify.py', evidence / 'verify-checkpoint.py')
+-(evidence / 'INDEX.md').write_text('# Native terminal scheduling indexes\n\nThe selected interface is candidate, count, write, count_complete and gained_complete. It reuses existing Cached state and the native recursiveBoundary classifier, including both Mu and InternedUnion. There is no Graph parameter or new carrier. One local List Monad instance serves the actual enum prefix. The selected source budget is260–420 ordinary lines, hard560. Actual owner controls supply the complete literal contracts and local inventory.\n\nNative gained/lost updates already resolve references through current UnionFind roots. The count action follows those reads. gained_complete consumes the SAME actual Terminal write/inherit observation, old stored value, initial index alignment/native flags/counts/Roots, Keeps between the actual heaps and the actual new decoded value at the next heap. It derives finite cached-write execution, exact raw fields and returned flags/counts/Roots/alignment through Cached.frame. No desired successful final index is an input premise. The earlier moved waiting pair remains staging data.\n\nWork retains all138475 baseline files/modes/refs/stashes/worktrees, nine exact document inverses, one Audit prepend, all actual failed inputs/raw reports, complete public output/actual allowed axiom subsets and every six-artifact resource family. Exactly26 prior Terminal publication inputs and the separately sealed assessment/peer context remain protected. The current owner is copied once. Existing Terminal owner revisions, gates and failures remain baseline history. No current revision or failure is invented.\n\nRun verify-checkpoint.py only after Root selects the exact owner/source and actual receipts. Force-add every manifest path and SHA256SUMS, including ignored logs. Publication requires every sealed path in HEAD, exact filesystem/index/tree/modes and a singleton destination for ordinary formalize push. Root supplies actual public/build/axiom outcomes after execution. No check, seal or push success is asserted in advance.\n\nMachine bounds and native map/set extraction, original-root flags, terminal partitioning, later captured original-uv installation, initial-only range admission, Safe/LiveRoots and full driver correspondence remain open. H6 stays strongest. The whole goal is ACTIVE and incomplete. The optimized core, previous proofs and six imported Haskell repair handoffs remain protected. Those handoffs remain first in FINDINGS. No Haskell change is claimed.\n')
++shutil.copyfile(root / 'lean/MicroCFTA/SourcePruningEnumerationFinalize.lean', production / 'SourcePruningEnumerationFinalize.lean')
++shutil.copyfile(root / 'lean/notes-current-pruning-enumeration-finalize.md', evidence / 'current-note.md')
++shutil.copyfile('/tmp/mcfta-pruning-enumeration-finalize-20261025-verify.py', evidence / 'verify-checkpoint.py')
++(evidence / 'INDEX.md').write_text('# Captured-slot fragment finalization\n\nThe selected interface is finish, run and complete: two definitions, one finite producer and one named local List Monad instance. One typed reset-cache let is selected, with no proof let, Graph parameter, helper theorem or new carrier. Root selected 140–220 ordinary lines, hard limit 320. Actual owner controls record the exact contracts and local inventory.\n\nfinish clears expansion ancestry, reads the CURRENT raw slot at the captured original target, writes the enumerated fragment at that same slot and returns it. The cached run resets FIRST, then reads the current slot and calls existing NativeIndex.write with gained=[] and lost=references old. It does not substitute the later terminal winner or pre-expansion references. Every present old value is allowed, including eliminated. Missing storage is outside the producer. Its rawValue failure or cached Option.none describes model partiality, not a native Haskell error contract.\n\ncomplete starts from the actual current stored equation, Roots/counts/native flags, StorageValid, FragmentBound and PendingRealized. It derives one stable finite cached run and the actual enum singleton, literal reset/write core, target readback, false target flag, canonical old-reference removal and retained Roots/counts/flags/storage/realization. It assumes no successful prefix/callback execution. Earlier expansion and fragment production remain separate; no full compression Frame across the value write or final Safe/LiveRoots is claimed. Existing count/classifier/replacement APIs are reused without a duplicate count identity.\n\nWork retains all 138877 baseline files/modes/refs/stashes/worktrees, nine exact document inverses, one Audit prepend, every actual failed input/raw report, full public types/actual allowed axiom subsets and all six-artifact resource families. Exactly 26 prior NativeIndex publication inputs and separately sealed assessment/peer context remain protected. The fresh owner is copied once. All old owner/amendment/failure history remains baseline data. No current failure or revision is invented.\n\nForce-add every manifest path and SHA256SUMS, including ignored logs. Publication requires every sealed path in HEAD, exact filesystem/index/tree/modes and a singleton ordinary formalize destination. Root supplies actual public/build/axiom outcomes after execution. No future check, seal or push success is asserted.\n\nMachine arithmetic and native map/set extraction, flag/partition provenance, initial-only query admission, whole fragment production and full driver correspondence remain open. H6 remains strongest. The whole goal is ACTIVE and incomplete. The optimized core and earlier proofs remain protected. All six imported Haskell repair handoffs remain first in FINDINGS. No Haskell change is claimed.\n')
+ 
+ files = sorted(p for p in evidence.rglob('*') if p.is_file())
+ (evidence / 'SHA256SUMS').write_text(''.join(hashlib.sha256(p.read_bytes()).hexdigest() + '  ' + p.relative_to(evidence).as_posix() + '\n' for p in files))
+--- basis/verify.py
++++ candidate/verify.py
+@@ -1,4 +1,4 @@
+-"""Verify native terminal scheduling indexes and the preserved baseline."""
++"""Verify captured-slot fragment finalization and the preserved baseline."""
+ import argparse
+ import gzip
+ import hashlib
+@@ -10,8 +10,8 @@
+ parser = argparse.ArgumentParser(description=__doc__)
+ parser.add_argument('--root', type=Path, required=True)
+ root = parser.parse_args().root.resolve()
+-here = root / 'lean/restart-evidence/20261025-pruning-enumeration-native-index'
+-baseline = 'ab0ba1287abe1ca172a1f35c510b711ed749001a'
++here = root / 'lean/restart-evidence/20261025-pruning-enumeration-finalize'
++baseline = 'cc6e7a9fe032aead462ee2110f929ffa4784a52b'
+ main = '74250bd889685da436cdbfe32ac4b5a0878ffd09'
+ 
+ def sha(data):
+@@ -40,7 +40,7 @@
+     subprocess.run(['git', *args], cwd=root, check=True)
+ assert git('rev-list', '--parents', '-n', '1', proof).decode().split() == [proof, baseline]
+ assert set(git('diff-tree', '--no-commit-id', '--name-only', '-r', proof).decode().splitlines()) == {
+-    'lean/MicroCFTA/SourcePruningEnumerationNativeIndex.lean', 'lean/MicroCFTA/Audit.lean'}
++    'lean/MicroCFTA/SourcePruningEnumerationFinalize.lean', 'lean/MicroCFTA/Audit.lean'}
+ tree = gzip.decompress((here / 'work/baseline-tree.txt.gz').read_bytes())
+ assert tree == git('ls-tree', '-r', '-z', baseline)
+ assert sha(tree) == load('work/baseline.json')['tree_sha256']
+@@ -70,14 +70,14 @@
+         changed.append(name)
+     elif name == 'lean/MicroCFTA/Audit.lean':
+         addition = audit_change['prefix'].encode()
+-        assert addition == b'import MicroCFTA.SourcePruningEnumerationNativeIndex\n'
++        assert addition == b'import MicroCFTA.SourcePruningEnumerationFinalize\n'
+         assert sha(data) == audit_change['after_sha256'] and data.startswith(addition)
+         data = data[len(addition):]
+         assert sha(data) == audit_change['before_sha256']
+         changed.append(name)
+     assert hashlib.sha1(b'blob ' + str(len(data)).encode() + b'\0' + data).hexdigest() == blob, name
+     count += 1
+-assert count == 138475 and len(changed) == 10
++assert count == 138877 and len(changed) == 10
+ assert git('stash', 'list', '--format=%gd %H %s') == (here / 'work/baseline-stashes.txt').read_bytes()
+ worktrees = (here / 'work/baseline-worktrees.txt').read_bytes()
+ assert git('worktree', 'list', '--porcelain') == worktrees.replace(
+@@ -86,12 +86,12 @@
+     value, ref = line.split()
+     if ref not in ['refs/heads/formalize', 'refs/remotes/origin/formalize'] and not ref.startswith('refs/codex/turn-diffs/'):
+         assert git('rev-parse', ref).decode().strip() == value, ref
+-assert git('rev-parse', 'codex/backup-pruning-enumeration-native-index-20261025-0034').decode().strip() == baseline
++assert git('rev-parse', 'codex/backup-pruning-enumeration-finalize-20261025-0104').decode().strip() == baseline
+ 
+ checks = load('work/build-summary.json')
+-source = (root / 'lean/MicroCFTA/SourcePruningEnumerationNativeIndex.lean').read_bytes()
+-assert source == (here / 'production-sources/SourcePruningEnumerationNativeIndex.lean').read_bytes()
+-assert source == (here / 'work' / checks['successful_source_attempt'] / 'MicroCFTA/SourcePruningEnumerationNativeIndex.lean').read_bytes()
++source = (root / 'lean/MicroCFTA/SourcePruningEnumerationFinalize.lean').read_bytes()
++assert source == (here / 'production-sources/SourcePruningEnumerationFinalize.lean').read_bytes()
++assert source == (here / 'work' / checks['successful_source_attempt'] / 'MicroCFTA/SourcePruningEnumerationFinalize.lean').read_bytes()
+ assert sha(source) == load('work/installation.json')['source_sha256']
+ assert len(source.splitlines()) == checks['source_lines']
+ assert not re.search(rb'\b(?:sorry|admit|axiom|unsafe|set_option)\b', source)
+@@ -182,7 +182,7 @@
+ assert axioms == decls['axioms']
+ assert len(decls['theorems']) == sum(item['kind'] == 'theorem' for item in headers)
+ assert len(decls['definitions']) == sum(item['kind'] == 'def' for item in headers)
+-namespace = 'MicroCFTA.SourcePruningEnumerationNativeIndex.'
++namespace = 'MicroCFTA.SourcePruningEnumerationFinalize.'
+ assert decls['definitions'] == [namespace + item['name'] for item in headers if item['kind'] == 'def']
+ assert decls['theorems'] == [namespace + item['name'] for item in headers if item['kind'] == 'theorem']
+ assert set(decls['definitions'] + decls['theorems']) == set(decls['declarations'])
+@@ -190,7 +190,7 @@
+     assert set(names) <= {'Classical.choice', 'Quot.sound', 'propext'}
+ failed_seals = checks['failed_seal_attempts']
+ receipt_stems = ['refresh-1', 'baseline-1'] + checks['attempts'] + failed_seals
+-prefix = 'mcfta-pruning-enumeration-native-index-20261025-'
++prefix = 'mcfta-pruning-enumeration-finalize-20261025-'
+ expected_stems = {prefix + stem for stem in receipt_stems}
+ for suffix in ['limits.json', 'usage.json']:
+     paths = list((here / 'inputs').glob('*.' + suffix))
+@@ -205,16 +205,16 @@
+     usage = load('inputs/' + prefix + stem + '.usage.json')
+     assert 0 <= usage['age_seconds'] <= 600 and usage['remaining_percent'] > 1
+ for name in ['declaration', 'model', 'public', 'document', 'seal-script', 'root']:
+-    assert (here / 'inputs' / ('mcfta-pruning-enumeration-native-index-20261025-' + name + '-review.md')).is_file()
+-assert (root / 'lean/notes-current-pruning-enumeration-native-index.md').read_bytes() == (here / 'current-note.md').read_bytes()
+-findings = (root / 'FINDINGS.md').read_text().split('## Native terminal scheduling indexes', 1)[0]
++    assert (here / 'inputs' / ('mcfta-pruning-enumeration-finalize-20261025-' + name + '-review.md')).is_file()
++assert (root / 'lean/notes-current-pruning-enumeration-finalize.md').read_bytes() == (here / 'current-note.md').read_bytes()
++findings = (root / 'FINDINGS.md').read_text().split('## Captured-slot fragment finalization', 1)[0]
+ assert '## Haskell fix handoff for external work' in findings and findings.count('| Fixed by ') == 6
+ assert 'All six repairs are in the imported main history.' in findings
+ prior = load('previous-publication/remote-publication.json')
+ assert prior['status'] == 'PUSHED_AND_REMOTE_VERIFIED' and prior['remote_head'] == baseline
+ assert load('previous-publication/publication-spec.json')['head'] == baseline
+ custody = load('work/prior-custody-index.json')
+-assert sha((here / 'work/prior-custody-index.json').read_bytes()) == 'eaa51d5e2c495972ed633423b73ceeb2494e3f89deb4d08bfb0386af7fb00b72'
++assert sha((here / 'work/prior-custody-index.json').read_bytes()) == 'ccb37361daabfe631877723c315bbac2cc64de601941fbd53c44a2e49aef40e9'
+ assert len(custody) == 26 and len({pin['target'] for pin in custody}) == 26
+ assert len({pin['source'] for pin in custody}) == 26
+ assert {p.name for p in (here / 'previous-publication').iterdir()} == {pin['target'] for pin in custody}
+@@ -222,8 +222,8 @@
+     assert not Path(pin['target']).is_absolute() and '..' not in Path(pin['target']).parts
+     data = (here / 'previous-publication' / pin['target']).read_bytes()
+     assert len(data) == pin['bytes'] and sha(data) == pin['sha256']
+-assessment = (here / 'previous-publication/mcfta-pruning-enumeration-terminal-20261024-next-assessment.md').read_bytes()
+-assert sha(assessment) == '912f1eac9c7bb3f184c71ec33291a91711af2dd6ff1c376937a0e632766cf0eb'
++assessment = (here / 'previous-publication/mcfta-pruning-enumeration-native-index-20261025-next-assessment.md').read_bytes()
++assert sha(assessment) == '9f19ba486ca2ee8040291d8fe98967b445918300295bde5f4f1f87eba106b02e'
+ summary = load('previous-publication/post-publication-summary.json')
+ assert summary['head'] == baseline and summary['goal'] == 'ACTIVE_INCOMPLETE'
+ assert summary['component_status'] == 'PROVED_SEALED_PUSHED_REMOTE_VERIFIED'
+@@ -231,14 +231,14 @@
+ assert summary['next_assessment_is_currently_sealed'] is True
+ assert (root / summary['sealed_next_assessment_path']).read_bytes() == assessment
+ assessment_review = (here / 'work/script-proposal/context/prior-assessment-review.md').read_bytes()
+-assert sha(assessment_review) == '321453780d0750618f0dc1730ca6ad8078fee61ead670260d0c920b477b90b97'
++assert sha(assessment_review) == '181d8628922a5620532a98b2a3cab1a53837be1b6572a63fea0241afe9dc7227'
+ assert summary['next_assessment_review_is_currently_sealed'] is True
+ assert (root / summary['sealed_next_assessment_review_path']).read_bytes() == assessment_review
+ assert summary['seal_attempt'] == 'archive-1'
+ assert [pin['source'] for pin in custody] == summary['next_custody_inputs']
+ assert summary['final_local_publication_attempt'] == 'local-publication-1'
+ assert summary['all_manifest_files_committed'] is True
+-assert sha((here / 'inputs/mcfta-pruning-enumeration-native-index-20261025-source-review.md').read_bytes()) == 'b5a64e13e8d9f5e2c218a2df5329b03e0f80e892ad777483c97aaf75d82822b4'
++assert sha((here / 'inputs/mcfta-pruning-enumeration-finalize-20261025-source-review.md').read_bytes()) == 'bf09736fe039ab5a3bb32d5ce82f1abd2615e286b2f087c08bef0f7e69e92573'
+ 
+ print(json.dumps(dict(status='PASS', baseline=baseline, main=main, proof=proof,
+     baseline_files=count, unchanged_files=count - len(changed), exact_changed_files=changed,
+--- basis/publication.py
++++ candidate/publication.py
+@@ -5,9 +5,9 @@
+ from pathlib import Path
+ 
+ root = Path('/home/tritlo/Code/mcfta')
+-area = Path('/tmp/mcfta-pruning-enumeration-native-index-20261025')
+-evidence = root / 'lean/restart-evidence/20261025-pruning-enumeration-native-index'
+-previous = 'ab0ba1287abe1ca172a1f35c510b711ed749001a'
++area = Path('/tmp/mcfta-pruning-enumeration-finalize-20261025')
++evidence = root / 'lean/restart-evidence/20261025-pruning-enumeration-finalize'
++previous = 'cc6e7a9fe032aead462ee2110f929ffa4784a52b'
+ destination = 'git@github.com:TharkunAB/cfta.git'
+ 
+ def git(*args):

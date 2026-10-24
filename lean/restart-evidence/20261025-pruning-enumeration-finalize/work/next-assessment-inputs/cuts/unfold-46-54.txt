@@ -1,0 +1,9 @@
+/-- Every available record has a successful single repaired unfolding in a complete semantic cache. -/
+theorem unfold_complete_decoded [DecidableEq (EdgeKey Symbol Guard)] (value : Value Symbol Guard)
+    (state : State Symbol Guard) (context : Context state captures) (available : Available state value)
+    (heap : InternedFreshOrdinaryDepthHeap.Heap state) (covered : Covered [] state) :
+    ∃ result after, unfold value state = .done result after ∧ Context after captures ∧
+      InternedFreshOrdinaryDepthHeap.Heap after ∧ Covered [] after ∧ Available after result ∧
+      Grows state after ∧ Extends state.nodes.issued after.nodes.issued := by
+  cases value with
+  | empty | reference | node | union => exact ⟨_, state, rfl, context, heap, covered, available, grows_refl _, extends_refl _⟩

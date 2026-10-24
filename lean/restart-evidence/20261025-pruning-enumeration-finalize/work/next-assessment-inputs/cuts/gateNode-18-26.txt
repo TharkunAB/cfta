@@ -1,0 +1,9 @@
+/-- An available source record retains all invariants needed by later actual unfoldings. -/
+structure Node (Symbol Guard : Type) where
+  state : State Symbol Guard
+  value : Value Symbol Guard
+  context : Context state []
+  depth : InternedFreshOrdinaryDepthHeap.Heap state
+  covered : Covered [] state
+  costs : InternedFreshOrdinaryCostHeap.Heap state
+  available : Available state value

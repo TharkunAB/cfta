@@ -1,0 +1,24 @@
+--- baseline.py
++++ basis.py
+@@ -5,17 +5,17 @@
+ from pathlib import Path
+ 
+ root = Path('/home/tritlo/Code/mcfta')
+-area = Path('/tmp/mcfta-pruning-enumeration-finalize-20261025')
++area = Path('/tmp/mcfta-pruning-enumeration-native-index-20261025')
+ area.mkdir(exist_ok=True)
+ def git(*args):
+     return subprocess.check_output(['git', *args], cwd=root)
+ head = git('rev-parse', 'HEAD').decode().strip()
+ main = git('rev-parse', 'origin/main').decode().strip()
+-assert head == 'cc6e7a9fe032aead462ee2110f929ffa4784a52b'
++assert head == 'ab0ba1287abe1ca172a1f35c510b711ed749001a'
+ assert main == '74250bd889685da436cdbfe32ac4b5a0878ffd09'
+ assert not git('status', '--porcelain')
+-git('branch', 'codex/backup-pruning-enumeration-finalize-20261025-0104', head)
+-assert git('rev-parse', 'codex/backup-pruning-enumeration-finalize-20261025-0104').decode().strip() == head
++git('branch', 'codex/backup-pruning-enumeration-native-index-20261025-0034', head)
++assert git('rev-parse', 'codex/backup-pruning-enumeration-native-index-20261025-0034').decode().strip() == head
+ tree = git('ls-tree', '-r', '-z', head)
+ (area / 'baseline-tree.txt').write_bytes(tree)
+ for name, args in [('refs', ('for-each-ref', '--format=%(objectname) %(refname)')),

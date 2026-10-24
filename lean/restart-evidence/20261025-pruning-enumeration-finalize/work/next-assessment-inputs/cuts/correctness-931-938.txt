@@ -1,0 +1,8 @@
+theorem representative_storage (state : State Symbol Guard) (valid : StorageValid state) (fuel uv : Nat)
+    (inside : uv < state.counter) (found : UnionFind.Result)
+    (result : UnionFind.findRoot fuel state.representatives uv = some found) :
+    StorageValid {state with representatives := found.forest} :=
+  ⟨valid.aligned, UnionFind.findRoot_total valid.total result,
+    (findRoot_bounded fuel state.representatives state.counter uv valid.forest inside found result).2,
+    valid.values, valid.guards⟩
+

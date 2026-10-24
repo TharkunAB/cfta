@@ -1,0 +1,10 @@
+--- strict-2/MicroCFTA/SourcePruningEnumerationFinalize.lean
++++ strict-3/MicroCFTA/SourcePruningEnumerationFinalize.lean
+@@ -111,6 +111,7 @@
+       modify, modifyGet, MonadStateOf.modifyGet, StateT.bind, StateT.pure,
+       StateT.get, StateT.modifyGet, ExceptT.bind, ExceptT.pure, ExceptT.bindCont,
+       ExceptT.mk, ExceptT.run]
++    simp only [List.flatMap_singleton, ExceptT.bindCont]
+     rw [stored]
+     rfl
+   · exact EnumerationCanonicalWaiting.replace_correct roots before.core.values target old

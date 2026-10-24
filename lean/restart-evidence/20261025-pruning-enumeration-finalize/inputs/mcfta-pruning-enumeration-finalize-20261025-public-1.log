@@ -1,0 +1,60 @@
+{"command": ["/home/tritlo/.elan/toolchains/leanprover--lean4---v4.34.1/bin/lean", "-R", "/tmp/mcfta-pruning-enumeration-finalize-20261025/public-1", "-DwarningAsError=true", "-Dlinter.all=true", "/tmp/mcfta-pruning-enumeration-finalize-20261025/public-1/checked.lean"], "exit_code": 0, "raw_bytes": 4669, "raw_sha256": "caebedef70a14cb801ef5d70603dd1a917249a9f0c985083caa4254f69abab18", "source_sha256": "a1cc9ea1e48258e2c3e3dba61cc500991113f421c45c70bb9b11378bf23f7cb4"}
+@MicroCFTA.SourcePruningEnumerationFinalize.finish : {EnumGuard : Type} →
+  Nat →
+    MicroCFTA.Fragments.Fragment MicroCFTA.SourcePruningTemplates.Symbol →
+      MicroCFTA.EnumerationState.EnumerateM MicroCFTA.SourcePruningTemplates.Symbol EnumGuard
+        (MicroCFTA.Fragments.Fragment MicroCFTA.SourcePruningTemplates.Symbol)
+'MicroCFTA.SourcePruningEnumerationFinalize.finish' depends on axioms: [propext]
+@MicroCFTA.SourcePruningEnumerationFinalize.run : {EnumGuard NativeGuard : Type} →
+  MicroCFTA.InternedConstructorTemplates.State MicroCFTA.SourcePruningTemplates.Symbol NativeGuard →
+    Nat →
+      Nat →
+        MicroCFTA.Fragments.Fragment MicroCFTA.SourcePruningTemplates.Symbol →
+          MicroCFTA.EnumerationExpandableIndex.Cached MicroCFTA.SourcePruningTemplates.Symbol EnumGuard →
+            Option (MicroCFTA.EnumerationExpandableIndex.Cached MicroCFTA.SourcePruningTemplates.Symbol EnumGuard)
+'MicroCFTA.SourcePruningEnumerationFinalize.run' depends on axioms: [propext]
+@MicroCFTA.SourcePruningEnumerationFinalize.complete : ∀ {EnumGuard NativeGuard : Type}
+  (heap : MicroCFTA.InternedConstructorTemplates.State MicroCFTA.SourcePruningTemplates.Symbol NativeGuard)
+  (before : MicroCFTA.EnumerationExpandableIndex.Cached MicroCFTA.SourcePruningTemplates.Symbol EnumGuard)
+  (target : Nat) (fragment : MicroCFTA.Fragments.Fragment MicroCFTA.SourcePruningTemplates.Symbol)
+  (old : MicroCFTA.EnumerationState.UVarValue MicroCFTA.SourcePruningTemplates.Symbol),
+  before.core.values[target]? = some old →
+    ∀ (roots : Nat → Nat),
+      MicroCFTA.EnumerationSchedule.Roots before.core.representatives roots →
+        MicroCFTA.EnumerationCanonicalWaiting.Correct roots before.core.values before.waiting →
+          (∀ (slot : Nat),
+              MicroCFTA.SourcePruningEnumerationNativeIndex.candidate heap
+                  (before.core.values[slot]?.getD MicroCFTA.EnumerationState.UVarValue.eliminated) =
+                some (before.expandable slot)) →
+            MicroCFTA.EnumerationCorrectness.StorageValid before.core →
+              MicroCFTA.EnumerationCorrectness.FragmentBound before.core.counter fragment →
+                MicroCFTA.SourcePruningEnumerationObservation.PendingRealized heap before.core →
+                  ∃ fuel after,
+                    (∀ (extra : Nat),
+                        MicroCFTA.SourcePruningEnumerationFinalize.run heap (fuel + extra) target fragment before =
+                          some after) ∧
+                      (MicroCFTA.SourcePruningEnumerationFinalize.finish target fragment before.core).run =
+                          [Except.ok (fragment, after.core)] ∧
+                        (after.core =
+                            have __src := before.core;
+                            { counter := __src.counter, representatives := __src.representatives,
+                              values :=
+                                before.core.values.set target
+                                  (MicroCFTA.EnumerationState.UVarValue.enumerated fragment),
+                              obligations := __src.obligations, recursionAncestry := __src.recursionAncestry,
+                              expansionAncestry := [] }) ∧
+                          after.core.values[target]? = some (MicroCFTA.EnumerationState.UVarValue.enumerated fragment) ∧
+                            (after.expandable = fun slot => if slot = target then false else before.expandable slot) ∧
+                              after.waiting =
+                                  MicroCFTA.EnumerationCanonicalWaiting.count roots (-1)
+                                    (MicroCFTA.EnumerationSchedule.references old) before.waiting ∧
+                                MicroCFTA.EnumerationSchedule.Roots after.core.representatives roots ∧
+                                  MicroCFTA.EnumerationCanonicalWaiting.Correct roots after.core.values after.waiting ∧
+                                    (∀ (slot : Nat),
+                                        MicroCFTA.SourcePruningEnumerationNativeIndex.candidate heap
+                                            (after.core.values[slot]?.getD
+                                              MicroCFTA.EnumerationState.UVarValue.eliminated) =
+                                          some (after.expandable slot)) ∧
+                                      MicroCFTA.EnumerationCorrectness.StorageValid after.core ∧
+                                        MicroCFTA.SourcePruningEnumerationObservation.PendingRealized heap after.core
+'MicroCFTA.SourcePruningEnumerationFinalize.complete' depends on axioms: [propext, Quot.sound]

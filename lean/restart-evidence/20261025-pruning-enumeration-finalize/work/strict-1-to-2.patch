@@ -1,0 +1,36 @@
+--- strict-1/MicroCFTA/SourcePruningEnumerationFinalize.lean
++++ strict-2/MicroCFTA/SourcePruningEnumerationFinalize.lean
+@@ -91,7 +91,8 @@
+       some (.unenumerated (some node) scs) at stored
+     by_cases same : slot = target
+     · subst slot
+-      simp only [List.getElem?_set_self inside, reduceCtorEq] at stored
++      simp only [List.getElem?_set_self inside] at stored
++      cases stored
+     · rw [List.getElem?_set_ne (Ne.symm same)] at stored
+       exact realized slot node scs stored
+   refine ⟨fuel, ⟨{before.core with
+@@ -105,17 +106,13 @@
+     simp only [run, EnumerationExpandableIndex.frame, stored, Option.bind_some,
+       SourcePruningEnumerationNativeIndex.write, SourcePruningEnumerationNativeIndex.candidate,
+       countRun extra (-1) before.waiting]
+-  · change (match before.core.values[target]? with
+-      | none => [Except.error EnumerationState.Error.invalidSlot]
+-      | some _ => [Except.ok (fragment, {before.core with
+-          values := before.core.values.set target (.enumerated fragment)
+-          expansionAncestry := []})] :
+-        List (Except EnumerationState.Error
+-          (Fragments.Fragment Symbol × EnumerationState.State Symbol EnumGuard))) =
+-      [Except.ok (fragment, {before.core with
+-        values := before.core.values.set target (.enumerated fragment)
+-        expansionAncestry := []})]
++    rfl
++  · dsimp [finish, rawValue, setValue, bind, pure, get, getThe, MonadStateOf.get,
++      modify, modifyGet, MonadStateOf.modifyGet, StateT.bind, StateT.pure,
++      StateT.get, StateT.modifyGet, ExceptT.bind, ExceptT.pure, ExceptT.bindCont,
++      ExceptT.mk, ExceptT.run]
+     rw [stored]
++    rfl
+   · exact EnumerationCanonicalWaiting.replace_correct roots before.core.values target old
+       (.enumerated fragment) stored before.waiting counts
+ 

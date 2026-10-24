@@ -1,0 +1,373 @@
+{
+  "entries": [
+    {
+      "scope": "context",
+      "name": "EnumGuard",
+      "type": "Type",
+      "kind": "context binder",
+      "used": true
+    },
+    {
+      "scope": "context",
+      "name": "NativeGuard",
+      "type": "Type",
+      "kind": "context binder",
+      "used": true
+    },
+    {
+      "scope": "context",
+      "name": "Symbol",
+      "type": "SourcePruningTemplates.Symbol",
+      "kind": "notation",
+      "used": true
+    },
+    {
+      "scope": "finish",
+      "name": "target",
+      "type": "Nat",
+      "kind": "public binder",
+      "used": true
+    },
+    {
+      "scope": "finish",
+      "name": "fragment",
+      "type": "Fragments.Fragment Symbol",
+      "kind": "public binder",
+      "used": true
+    },
+    {
+      "scope": "run",
+      "name": "heap",
+      "type": "InternedConstructorTemplates.State Symbol NativeGuard",
+      "kind": "public binder",
+      "used": true
+    },
+    {
+      "scope": "run",
+      "name": "fuel",
+      "type": "Nat",
+      "kind": "public binder",
+      "used": true
+    },
+    {
+      "scope": "run",
+      "name": "target",
+      "type": "Nat",
+      "kind": "public binder",
+      "used": true
+    },
+    {
+      "scope": "run",
+      "name": "fragment",
+      "type": "Fragments.Fragment Symbol",
+      "kind": "public binder",
+      "used": true
+    },
+    {
+      "scope": "run",
+      "name": "before",
+      "type": "EnumerationExpandableIndex.Cached Symbol EnumGuard",
+      "kind": "public binder",
+      "used": true
+    },
+    {
+      "scope": "complete",
+      "name": "heap",
+      "type": "InternedConstructorTemplates.State Symbol NativeGuard",
+      "kind": "public binder",
+      "used": true
+    },
+    {
+      "scope": "complete",
+      "name": "before",
+      "type": "EnumerationExpandableIndex.Cached Symbol EnumGuard",
+      "kind": "public binder",
+      "used": true
+    },
+    {
+      "scope": "complete",
+      "name": "target",
+      "type": "Nat",
+      "kind": "public binder",
+      "used": true
+    },
+    {
+      "scope": "complete",
+      "name": "fragment",
+      "type": "Fragments.Fragment Symbol",
+      "kind": "public binder",
+      "used": true
+    },
+    {
+      "scope": "complete",
+      "name": "old",
+      "type": "EnumerationState.UVarValue Symbol",
+      "kind": "public binder",
+      "used": true
+    },
+    {
+      "scope": "complete",
+      "name": "stored",
+      "type": "before.core.values[target]? = some old",
+      "kind": "public binder",
+      "used": true
+    },
+    {
+      "scope": "complete",
+      "name": "roots",
+      "type": "Nat → Nat",
+      "kind": "public binder",
+      "used": true
+    },
+    {
+      "scope": "complete",
+      "name": "paths",
+      "type": "Roots before.core.representatives roots",
+      "kind": "public binder",
+      "used": true
+    },
+    {
+      "scope": "complete",
+      "name": "counts",
+      "type": "EnumerationCanonicalWaiting.Correct roots before.core.values before.waiting",
+      "kind": "public binder",
+      "used": true
+    },
+    {
+      "scope": "complete",
+      "name": "flags",
+      "type": "∀ (slot : Nat), SourcePruningEnumerationNativeIndex.candidate heap ((before.core.values[slot]?).getD .eliminated) = some (before.expandable slot)",
+      "kind": "public binder",
+      "used": true
+    },
+    {
+      "scope": "complete",
+      "name": "storage",
+      "type": "StorageValid before.core",
+      "kind": "public binder",
+      "used": true
+    },
+    {
+      "scope": "complete",
+      "name": "bounded",
+      "type": "FragmentBound before.core.counter fragment",
+      "kind": "public binder",
+      "used": true
+    },
+    {
+      "scope": "complete",
+      "name": "realized",
+      "type": "PendingRealized heap before.core",
+      "kind": "public binder",
+      "used": true
+    },
+    {
+      "scope": "run",
+      "name": "reset",
+      "type": "EnumerationExpandableIndex.Cached Symbol EnumGuard",
+      "kind": "definition local let",
+      "used": true
+    },
+    {
+      "scope": "finish.rawValue",
+      "name": "_old",
+      "type": "EnumerationState.UVarValue Symbol",
+      "kind": "monadic bind payload",
+      "used": false,
+      "reason": "The action forces the raw read but does not inspect its returned value."
+    },
+    {
+      "scope": "run.currentSlot.some",
+      "name": "old",
+      "type": "EnumerationState.UVarValue Symbol",
+      "kind": "Option.bind callback binder",
+      "used": true
+    },
+    {
+      "scope": "complete.finish.normalized.some",
+      "name": "_",
+      "type": "EnumerationState.UVarValue Symbol",
+      "kind": "anonymous match payload",
+      "used": false,
+      "reason": "The raw singleton proof rewrites the actual stored equation and ignores the read payload."
+    },
+    {
+      "scope": "complete",
+      "name": "inside",
+      "type": "target < before.core.values.length",
+      "kind": "typed have",
+      "used": true
+    },
+    {
+      "scope": "complete",
+      "name": "writtenFlags",
+      "type": "∀ (slot : Nat),\n    SourcePruningEnumerationNativeIndex.candidate heap\n      (((before.core.values.set target (.enumerated fragment))[slot]?).getD .eliminated) =\n      some (if slot = target then false else before.expandable slot)",
+      "kind": "typed have",
+      "used": true
+    },
+    {
+      "scope": "complete",
+      "name": "writtenStorage",
+      "type": "StorageValid {before.core with\n    values := before.core.values.set target (.enumerated fragment)\n    expansionAncestry := []}",
+      "kind": "typed have",
+      "used": true
+    },
+    {
+      "scope": "complete",
+      "name": "writtenRealized",
+      "type": "PendingRealized heap {before.core with\n    values := before.core.values.set target (.enumerated fragment)\n    expansionAncestry := []}",
+      "kind": "typed have",
+      "used": true
+    },
+    {
+      "scope": "complete",
+      "name": "fuel",
+      "type": "Nat",
+      "kind": "obtain field",
+      "used": true
+    },
+    {
+      "scope": "complete",
+      "name": "countRun",
+      "type": "∀ (extra : Nat) (change : Int) (waiting : EnumerationWaitingIndex.Waiting), SourcePruningEnumerationNativeIndex.count (fuel + extra) before.core.representatives change (references old) waiting = some (EnumerationCanonicalWaiting.count roots change (references old) waiting)",
+      "kind": "obtain field",
+      "used": true
+    },
+    {
+      "scope": "complete.inside",
+      "name": "bound",
+      "type": "target < before.core.values.length",
+      "kind": "Exists.elim binder",
+      "used": true
+    },
+    {
+      "scope": "complete.inside",
+      "name": "_elementEquality",
+      "type": "before.core.values[target]'bound = old",
+      "kind": "Exists.elim binder",
+      "used": false,
+      "reason": "Only the bound projection is used."
+    },
+    {
+      "scope": "complete.writtenFlags",
+      "name": "slot",
+      "type": "Nat",
+      "kind": "forall intro",
+      "used": true
+    },
+    {
+      "scope": "complete.writtenFlags.same",
+      "name": "same",
+      "type": "slot = target",
+      "kind": "condition",
+      "used": true
+    },
+    {
+      "scope": "complete.writtenFlags.other",
+      "name": "same",
+      "type": "slot ≠ target",
+      "kind": "condition",
+      "used": true
+    },
+    {
+      "scope": "complete.writtenRealized",
+      "name": "slot",
+      "type": "Nat",
+      "kind": "forall intro",
+      "used": true
+    },
+    {
+      "scope": "complete.writtenRealized.same",
+      "name": "same",
+      "type": "slot = target",
+      "kind": "condition",
+      "used": true
+    },
+    {
+      "scope": "complete.writtenRealized.other",
+      "name": "same",
+      "type": "slot ≠ target",
+      "kind": "condition",
+      "used": true
+    },
+    {
+      "scope": "complete.writtenRealized",
+      "name": "node",
+      "type": "Nat",
+      "kind": "forall intro",
+      "used": true
+    },
+    {
+      "scope": "complete.writtenRealized",
+      "name": "scs",
+      "type": "List EnumerationState.Suspended",
+      "kind": "forall intro",
+      "used": true
+    },
+    {
+      "scope": "complete.writtenRealized",
+      "name": "stored",
+      "type": "({before.core with values := before.core.values.set target (.enumerated fragment) expansionAncestry := []}).values[slot]? = some (.unenumerated (some node) scs)",
+      "kind": "specialized pending lookup premise",
+      "used": true
+    },
+    {
+      "scope": "complete.public.result",
+      "name": "fuel",
+      "type": "Nat",
+      "kind": "public existential binder",
+      "used": true
+    },
+    {
+      "scope": "complete.public.result",
+      "name": "after",
+      "type": "EnumerationExpandableIndex.Cached Symbol EnumGuard",
+      "kind": "public existential binder",
+      "used": true
+    },
+    {
+      "scope": "complete.public.run",
+      "name": "extra",
+      "type": "Nat",
+      "kind": "public forall binder",
+      "used": true
+    },
+    {
+      "scope": "complete.public.expandable",
+      "name": "slot",
+      "type": "Nat",
+      "kind": "public lambda binder",
+      "used": true
+    },
+    {
+      "scope": "complete.public.nativeFlags",
+      "name": "slot",
+      "type": "Nat",
+      "kind": "public forall binder",
+      "used": true
+    },
+    {
+      "scope": "complete.rawRun",
+      "name": "extra",
+      "type": "Nat",
+      "kind": "forall intro",
+      "used": true
+    },
+    {
+      "scope": "complete.construct.expandable",
+      "name": "slot",
+      "type": "Nat",
+      "kind": "record lambda binder",
+      "used": true
+    }
+  ],
+  "count": 51,
+  "explicit_manual_inventory": true,
+  "no_expression_binder_regex": true,
+  "all_public_quantifiers_inventoried": true,
+  "local_haves": 4,
+  "definition_local_lets": 1,
+  "proof_local_lets": 0,
+  "no_implicit_helper_haves": true,
+  "instance_field_types_in": "instances.json"
+}

@@ -1,0 +1,5 @@
+/-- Every finite parent path gives a successful bounded execution. -/
+theorem findRoot_terminates (path : Reaches forest uv representative size) :
+    ∃ fuel found, findRoot fuel forest uv = some found := by
+  induction path with
+  | @root uv size lookup =>

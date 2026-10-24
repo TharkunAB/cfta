@@ -1,0 +1,88 @@
+{
+  "groups": [
+    {
+      "scope": "finish.rawValue",
+      "scrutinee": "current reset-state raw slot",
+      "type": "Option (EnumerationState.UVarValue Symbol)",
+      "cases": [
+        {
+          "constructor": "none",
+          "binders": [],
+          "effect": "Existing rawValue invalidSlot failure; outside complete stored domain."
+        },
+        {
+          "constructor": "some",
+          "binders": [
+            {
+              "name": "_old",
+              "type": "EnumerationState.UVarValue Symbol",
+              "used": false
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "scope": "run.currentSlot",
+      "scrutinee": "reset.core.values[target]?",
+      "type": "Option (EnumerationState.UVarValue Symbol)",
+      "cases": [
+        {
+          "constructor": "none",
+          "binders": [],
+          "effect": "Option.none; no fabricated source rejection."
+        },
+        {
+          "constructor": "some",
+          "binders": [
+            {
+              "name": "old",
+              "type": "EnumerationState.UVarValue Symbol",
+              "used": true
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "scope": "complete.finish.normalized",
+      "scrutinee": "before.core.values[target]?",
+      "type": "Option (EnumerationState.UVarValue Symbol)",
+      "cases": [
+        {
+          "constructor": "none",
+          "binders": []
+        },
+        {
+          "constructor": "some",
+          "binders": [
+            {
+              "name": "_",
+              "type": "EnumerationState.UVarValue Symbol",
+              "used": false
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "conditions": [
+    {
+      "scope": "complete.writtenFlags",
+      "literal": "by_cases same : slot = target",
+      "positive": "slot = target",
+      "negative": "slot ≠ target",
+      "type": "Prop"
+    },
+    {
+      "scope": "complete.writtenRealized",
+      "literal": "by_cases same : slot = target",
+      "positive": "slot = target",
+      "negative": "slot ≠ target",
+      "type": "Prop"
+    }
+  ],
+  "no_old_value_constructor_cases": true,
+  "no_induction": true,
+  "fresh_pending_case": "An enumerated replacement cannot equal a pending constructor; no new binder."
+}

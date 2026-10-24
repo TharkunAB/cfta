@@ -1,0 +1,9 @@
+/-- Every actual hit or miss completes with exact constructor readback and a coherent returned memo. -/
+theorem run_complete [DecidableEq (EdgeKey Symbol Guard)] (node : Node Symbol Guard)
+    (memo : Memo Symbol Guard) (correct : Correct node.state memo) :
+    ∃ after : Node Symbol Guard, ∃ saved : Memo Symbol Guard,
+      run node.value memo node.state = .done (after.value, saved) after.state ∧
+      InternedFreshOrdinaryStoredSubstitution.unfold node.value node.state = .done after.value after.state ∧
+      Correct after.state saved ∧ Grows node.state after.state ∧
+      Extends node.state.nodes.issued after.state.nodes.issued := by
+  cases found : memo node.value.referenceOf with

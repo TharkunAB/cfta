@@ -1,0 +1,11 @@
+/-- General closed repaired reads have exact successful effects and stable values and caches at every larger bound. -/
+theorem read_closed [DecidableEq (EdgeKey Symbol Guard)] (value : Value Symbol Guard)
+    (state : State Symbol Guard) (semantic : SemanticHeap state) (covered : Covered [] state)
+    (heap : InternedOpenDepthReadback.Heap state) (available : Available state value) (closed : value.free = []) :
+    ∃ fuel edges after, nodeEdges fuel value state = .done edges after ∧
+      SemanticHeap after ∧ Covered [] after ∧ InternedOpenDepthReadback.Heap after ∧
+      Grows state after ∧ Extends state.nodes.issued after.nodes.issued ∧
+      InternedNestedProvenance.Edges after edges ∧ MergedColdReaderClosedInputs.ClosedEdges edges ∧
+      ∀ extra, nodeEdges (fuel + extra) value state = .done edges after := by
+  obtain ⟨fuel, edges, after, done, afterHeap⟩ := nodeEdges_complete value state semantic covered heap available closed
+  have checked := MergedFreshOrdinaryColdEffects.nodeEdges_verified fuel value state semantic covered available closed
