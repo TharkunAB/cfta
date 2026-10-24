@@ -179,17 +179,37 @@ independentGreater :: TermOrder -> Term -> Term -> Bool
 independentGreater KnuthBendix = annotationIndependentGreater
 independentGreater (PathOrder precedence) = lpoGreater precedence Map.empty
 
+{- | Whether the decrease of a template also holds when both sides take
+more arguments. The path order compares the uncurried terms, so the
+arguments join the spines: when @a@ is above @f@, @f a > a@ but
+@f a x < a x@. One fresh argument decides each number of arguments: the
+heads compare in the same way, and no subterm of the left side contains
+the fresh variable. A side whose type is not a function type or a type
+variable takes no argument. The Knuth-Bendix order is closed under
+contexts.
+-}
+appliedGreater :: TermOrder -> Map Symbol Int -> Term -> Term -> Bool
+appliedGreater KnuthBendix _ _ _ = True
+appliedGreater (PathOrder precedence) rank l r = case l of
+    Term _ (Term "->" [_, a, b] : _) -> applied a b
+    Term _ (Term v [] : _) | isTypeVar v -> applied (Term "<t>applied" []) (Term "<t>applied" [])
+    _ -> True
+  where
+    applied a b = lpoGreater precedence rank (apply a b l) (apply a b r)
+    apply a b t = Term "app" [b, t, Term "<v>applied" [a]]
+
 {- | Add the rules of an equation, and give the new rules too. Keep one
-orientation only when its decrease is independent of type annotations.
-Other equations retain both directions. Each rewrite still checks its
-instantiated order.
+orientation only when its decrease is independent of type annotations
+and holds when both sides take more arguments. Other equations retain
+both directions. Each rewrite still checks its instantiated order.
 -}
 addEquation :: (Term, Term) -> Rules -> ([(Term, Term)], Rules)
 addEquation (l, r) rules
-    | independentGreater (rulesOrder rules) l r = ([(l, r)], rules{oriented = insert (l, r) (oriented rules)})
-    | independentGreater (rulesOrder rules) r l = ([(r, l)], rules{oriented = insert (r, l) (oriented rules)})
+    | decreasing l r = ([(l, r)], rules{oriented = insert (l, r) (oriented rules)})
+    | decreasing r l = ([(r, l)], rules{oriented = insert (r, l) (oriented rules)})
     | otherwise = ([(l, r), (r, l)], foldr addUnoriented rules [(l, r), (r, l)])
   where
+    decreasing a b = independentGreater (rulesOrder rules) a b && appliedGreater (rulesOrder rules) Map.empty a b
     addUnoriented rule@(a, b) rs
         | all (`elem` templateVars a) (templateVars b) = rs{unoriented = insert rule (unoriented rs)}
         | otherwise = rs{nonRewriting = insert rule (nonRewriting rs)}
@@ -230,28 +250,37 @@ isTemplateVar (Symbol name) = "<v>" `T.isPrefixOf` name
 {- | Rewrite one subterm of a term, the outermost and leftmost first. A rule
 rewrites a subterm only if the order says that the subterm is greater
 than its rewritten form. The subterms are the term, and the function and
-the argument of an application; the types are not subterms.
+the argument of an application; the types are not subterms. The path
+order compares a function together with its arguments (see
+'appliedGreater'), so there the rewrite of a function must make the
+application that contains its arguments smaller.
 -}
 rewriteStep :: (Term -> Term -> Bool) -> Rules -> Term -> Maybe Term
-rewriteStep greater rules t =
-    case [ r'
-         | (l, r) <- candidates (oriented rules) t
-         , Just s <- [matchTyped l t Map.empty]
-         , Just r' <- [instantiate s r]
-         , greater t r'
-         ]
-        ++ [ r'
-           | (l, r) <- candidates (unoriented rules) t
-           , Just s <- [matchTyped l t Map.empty]
-           , Just r' <- [instantiate s r]
-           , greater t r'
-           ] of
-        r' : _ -> Just r'
-        [] -> case t of
-            Term "app" [ty, f, v] ->
-                (\f' -> Term "app" [ty, f', v]) <$> rewriteStep greater rules f
-                    <|> (\v' -> Term "app" [ty, f, v']) <$> rewriteStep greater rules v
-            _ -> Nothing
+rewriteStep greater rules = go id
+  where
+    -- The application of a function to its arguments, for the order check.
+    inFunction context ty v = case rulesOrder rules of
+        PathOrder _ -> context . (\f' -> Term "app" [ty, f', v])
+        KnuthBendix -> id
+    go context t =
+        case [ r'
+             | (l, r) <- candidates (oriented rules) t
+             , Just s <- [matchTyped l t Map.empty]
+             , Just r' <- [instantiate s r]
+             , greater (context t) (context r')
+             ]
+            ++ [ r'
+               | (l, r) <- candidates (unoriented rules) t
+               , Just s <- [matchTyped l t Map.empty]
+               , Just r' <- [instantiate s r]
+               , greater (context t) (context r')
+               ] of
+            r' : _ -> Just r'
+            [] -> case t of
+                Term "app" [ty, f, v] ->
+                    (\f' -> Term "app" [ty, f', v]) <$> go (inFunction context ty v) f
+                        <|> (\v' -> Term "app" [ty, f, v']) <$> go id v
+                _ -> Nothing
 
 {- | The normal form of a term: rewrite it until no rule rewrites it. Each
 step makes the term smaller in a well-founded order, so this ends.
@@ -270,6 +299,8 @@ reducible isVar rules = isJust . rewriteStep (orderGreater (rulesOrder rules) is
 
 {- | Templates of uniformly decreasing linear rules up to the given size.
 The enumeration oracle rejects partial terms that contain these patterns.
+A pattern also matches a function, so its rule must decrease also when
+both sides take more arguments (see 'appliedGreater').
 A pattern can omit type annotations when the original rule matches its
 principal type. Other patterns keep exact carrier annotations. Repeated
 term variables cannot become independent holes.
@@ -286,6 +317,7 @@ pruningTemplates sig size rules =
         , template <- case principalType sig l of
             Just principal
                 | independentGreater (rulesOrder rules) l r
+                , appliedGreater (rulesOrder rules) Map.empty l r
                 , rewrites l r principal ->
                     [rawTemplate (const Hole) l]
             _ ->
@@ -295,6 +327,7 @@ pruningTemplates sig size rules =
                 , Just bindings <- [matchTemplate l l' Map.empty]
                 , Just r' <- [instantiate bindings r]
                 , rankedGreater (rulesOrder rules) Map.empty l' r'
+                , appliedGreater (rulesOrder rules) Map.empty l' r'
                 ]
         ]
   where
@@ -1089,8 +1122,9 @@ lpoGreater precedence rank = greater
 
 {- | The lexicographic path order on ground terms, total: the generated
 variables are constants below all function symbols, in the order of their
-names. Two terms that differ only in their type annotations compare by the
-annotations.
+names. The path order compares the terms without their type annotations.
+Two terms that differ only in their type annotations compare by the
+annotations. Thus the order is transitive.
 -}
 lpoCompare :: [T.Text] -> (Symbol -> Bool) -> Term -> Term -> Ordering
 lpoCompare precedence isVar s t
@@ -1104,11 +1138,14 @@ lpoCompare precedence isVar s t
         | otherwise = precedenceKey precedence symbol arity
     greater a b = case (spine a, spine b) of
         ((Term f [_], as), (Term g [_], bs)) ->
-            any (\ai -> ai == b || greater ai b) as
+            any (\ai -> erasedEqual ai b || greater ai b) as
                 || (key f (length as) > key g (length bs) && all (greater a) bs)
                 || (f == g && length as == length bs && lexicographic as bs && all (greater a) bs)
         _ -> False
     lexicographic (a : as) (b : bs)
-        | a == b = lexicographic as bs
+        | erasedEqual a b = lexicographic as bs
         | otherwise = greater a b
     lexicographic _ _ = False
+    erasedEqual (Term "app" [_, f, x]) (Term "app" [_, g, y]) = erasedEqual f g && erasedEqual x y
+    erasedEqual (Term f [_]) (Term g [_]) = f == g
+    erasedEqual a b = a == b
