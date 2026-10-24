@@ -1,0 +1,52 @@
+MicroCFTA.SourcePruningEnumerationOrdinaryBranches.run : List MicroCFTA.EnumerationState.Suspended →
+  List
+      (MicroCFTA.InternedConstructorTemplates.EdgeValue MicroCFTA.SourcePruningTemplates.Symbol
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)) →
+    MicroCFTA.EnumerationState.EnumerateM MicroCFTA.SourcePruningTemplates.Symbol
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+      (Option (Option (MicroCFTA.Fragments.Fragment MicroCFTA.SourcePruningTemplates.Symbol)))
+'MicroCFTA.SourcePruningEnumerationOrdinaryBranches.run' depends on axioms: [propext, Classical.choice, Quot.sound]
+MicroCFTA.SourcePruningEnumerationOrdinaryBranches.run_complete : ∀ (scs : List MicroCFTA.EnumerationState.Suspended)
+  (heap :
+    MicroCFTA.InternedConstructorTemplates.State MicroCFTA.SourcePruningTemplates.Symbol
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+  (entry : MicroCFTA.Cache.Interned MicroCFTA.InternedBinderProtocol.NodeKey)
+  (storedEdges selectedEdges :
+    List
+      (MicroCFTA.InternedConstructorTemplates.EdgeValue MicroCFTA.SourcePruningTemplates.Symbol
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)))
+  (depth : Nat) (free : List MicroCFTA.InternedBinderProtocol.Reference),
+  MicroCFTA.SourceEqualityRequiredCache.Ready heap →
+    MicroCFTA.InternedProbeProvenance.Available heap
+        (MicroCFTA.InternedConstructorTemplates.Value.node entry storedEdges depth free) →
+      free = [] →
+        (∀
+            (edge :
+              MicroCFTA.InternedConstructorTemplates.EdgeValue MicroCFTA.SourcePruningTemplates.Symbol
+                (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)),
+            edge ∈ selectedEdges → edge ∈ storedEdges) →
+          ∀
+            (before :
+              MicroCFTA.EnumerationState.State MicroCFTA.SourcePruningTemplates.Symbol
+                (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)),
+            MicroCFTA.SourcePruningEnumerationObservation.PendingRealized heap before →
+              before.counter = before.values.length →
+                ∃ branchRows,
+                  MicroCFTA.Language.All₂
+                      (fun edge rows =>
+                        if MicroCFTA.EnumerationState.arityAllows edge.children.length scs = true then
+                          match MicroCFTA.SourcePruningEnumerationConstraint.project edge.entry.key.constraint with
+                          | none => rows = [Except.ok (none, before)]
+                          | some val =>
+                            ∃ action result after,
+                              MicroCFTA.SourcePruningEnumerationEdgeTraversal.prepare scs edge = some action ∧
+                                MicroCFTA.EnumerationCorrectness.Success action before result after ∧
+                                  rows = [Except.ok (some result, after)] ∧
+                                    after.counter = after.values.length ∧
+                                      MicroCFTA.SourcePruningEnumerationObservation.PendingRealized heap after
+                        else rows = [])
+                      selectedEdges branchRows ∧
+                    MicroCFTA.SourcePruningEnumerationOrdinaryBranches.run scs selectedEdges before = branchRows.flatten
+'MicroCFTA.SourcePruningEnumerationOrdinaryBranches.run_complete' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]

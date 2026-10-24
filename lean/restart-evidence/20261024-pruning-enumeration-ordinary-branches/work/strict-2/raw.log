@@ -1,0 +1,306 @@
+/tmp/mcfta-pruning-enumeration-ordinary-branches-20261024/strict-2/MicroCFTA/SourcePruningEnumerationOrdinaryBranches.lean:64:43: error: unsolved goals
+scs : List Suspended
+heap : InternedConstructorTemplates.State Symbol Constraint
+entry : Cache.Interned InternedBinderProtocol.NodeKey
+storedEdges : List (InternedConstructorTemplates.EdgeValue Symbol Constraint)
+depth : Nat
+free : List InternedBinderProtocol.Reference
+ready : SourceEqualityRequiredCache.Ready heap
+parentAvailable :
+  InternedProbeProvenance.Available heap (InternedConstructorTemplates.Value.node entry storedEdges depth free)
+parentClosed : free = []
+before : State Symbol Constraint
+realized : SourcePruningEnumerationObservation.PendingRealized heap before
+aligned : before.counter = before.values.length
+edge : InternedConstructorTemplates.EdgeValue Symbol Constraint
+rest : List (InternedConstructorTemplates.EdgeValue Symbol Constraint)
+ih :
+  (∀ (edge : InternedConstructorTemplates.EdgeValue Symbol Constraint), edge ∈ rest → edge ∈ storedEdges) →
+    ∃ branchRows,
+      Language.All₂
+          (fun edge rows =>
+            if arityAllows edge.children.length scs = true then
+              match SourcePruningEnumerationConstraint.project edge.entry.key.constraint with
+              | none => rows = [Except.ok (none, before)]
+              | some val =>
+                ∃ action result after,
+                  SourcePruningEnumerationEdgeTraversal.prepare scs edge = some action ∧
+                    Success action before result after ∧
+                      rows = [Except.ok (some result, after)] ∧
+                        after.counter = after.values.length ∧
+                          SourcePruningEnumerationObservation.PendingRealized heap after
+            else rows = [])
+          rest branchRows ∧
+        run scs rest before = branchRows.flatten
+selected :
+  ∀ (edge_1 : InternedConstructorTemplates.EdgeValue Symbol Constraint), edge_1 ∈ edge :: rest → edge_1 ∈ storedEdges
+selectedHead : edge ∈ storedEdges
+selectedTail : ∀ (edge : InternedConstructorTemplates.EdgeValue Symbol Constraint), edge ∈ rest → edge ∈ storedEdges
+tailRows : List (List (Except Error (Option (Option (Fragments.Fragment Symbol)) × State Symbol Constraint)))
+tailRelated :
+  Language.All₂
+    (fun edge rows =>
+      if arityAllows edge.children.length scs = true then
+        match SourcePruningEnumerationConstraint.project edge.entry.key.constraint with
+        | none => rows = [Except.ok (none, before)]
+        | some val =>
+          ∃ action result after,
+            SourcePruningEnumerationEdgeTraversal.prepare scs edge = some action ∧
+              Success action before result after ∧
+                rows = [Except.ok (some result, after)] ∧
+                  after.counter = after.values.length ∧ SourcePruningEnumerationObservation.PendingRealized heap after
+      else rows = [])
+    rest tailRows
+tailRaw : run scs rest before = tailRows.flatten
+⊢ (choose (edge :: rest) >>= fun edge =>
+        match SourcePruningEnumerationEdgeTraversal.prepare scs edge with
+        | none => pure none
+        | some action => do
+          let result ← action
+          pure (some result))
+      before =
+    (match SourcePruningEnumerationEdgeTraversal.prepare scs edge with
+        | none => pure none
+        | some action => do
+          let result ← action
+          pure (some result))
+        before ++
+      (choose rest >>= fun edge =>
+          match SourcePruningEnumerationEdgeTraversal.prepare scs edge with
+          | none => pure none
+          | some action => do
+            let result ← action
+            pure (some result))
+        before
+/tmp/mcfta-pruning-enumeration-ordinary-branches-20261024/strict-2/MicroCFTA/SourcePruningEnumerationOrdinaryBranches.lean:96:14: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  (action >>= ?m.506) before
+in the target expression
+  ((match some action with
+          | none => pure none
+          | some action => do
+            let result ← action
+            pure (some result))
+          before).run ++
+      (run scs rest before).run =
+    ([Except.ok
+            (some
+                (Option.map (fun fragments => Fragments.Fragment.node edge.entry.key.symbol fragments) childrenResult),
+              after)] ::
+        tailRows).flatten
+
+case pos.some.refine_2
+scs : List Suspended
+heap : InternedConstructorTemplates.State Symbol Constraint
+entry : Cache.Interned InternedBinderProtocol.NodeKey
+storedEdges : List (InternedConstructorTemplates.EdgeValue Symbol Constraint)
+depth : Nat
+free : List InternedBinderProtocol.Reference
+ready : SourceEqualityRequiredCache.Ready heap
+parentAvailable :
+  InternedProbeProvenance.Available heap (InternedConstructorTemplates.Value.node entry storedEdges depth free)
+parentClosed : free = []
+before : State Symbol Constraint
+realized : SourcePruningEnumerationObservation.PendingRealized heap before
+aligned : before.counter = before.values.length
+edge : InternedConstructorTemplates.EdgeValue Symbol Constraint
+rest : List (InternedConstructorTemplates.EdgeValue Symbol Constraint)
+ih :
+  (∀ (edge : InternedConstructorTemplates.EdgeValue Symbol Constraint), edge ∈ rest → edge ∈ storedEdges) →
+    ∃ branchRows,
+      Language.All₂
+          (fun edge rows =>
+            if arityAllows edge.children.length scs = true then
+              match SourcePruningEnumerationConstraint.project edge.entry.key.constraint with
+              | none => rows = [Except.ok (none, before)]
+              | some val =>
+                ∃ action result after,
+                  SourcePruningEnumerationEdgeTraversal.prepare scs edge = some action ∧
+                    Success action before result after ∧
+                      rows = [Except.ok (some result, after)] ∧
+                        after.counter = after.values.length ∧
+                          SourcePruningEnumerationObservation.PendingRealized heap after
+            else rows = [])
+          rest branchRows ∧
+        run scs rest before = branchRows.flatten
+selected :
+  ∀ (edge_1 : InternedConstructorTemplates.EdgeValue Symbol Constraint), edge_1 ∈ edge :: rest → edge_1 ∈ storedEdges
+selectedHead : edge ∈ storedEdges
+selectedTail : ∀ (edge : InternedConstructorTemplates.EdgeValue Symbol Constraint), edge ∈ rest → edge ∈ storedEdges
+tailRows : List (List (Except Error (Option (Option (Fragments.Fragment Symbol)) × State Symbol Constraint)))
+tailRelated :
+  Language.All₂
+    (fun edge rows =>
+      if arityAllows edge.children.length scs = true then
+        match SourcePruningEnumerationConstraint.project edge.entry.key.constraint with
+        | none => rows = [Except.ok (none, before)]
+        | some val =>
+          ∃ action result after,
+            SourcePruningEnumerationEdgeTraversal.prepare scs edge = some action ∧
+              Success action before result after ∧
+                rows = [Except.ok (some result, after)] ∧
+                  after.counter = after.values.length ∧ SourcePruningEnumerationObservation.PendingRealized heap after
+      else rows = [])
+    rest tailRows
+tailRaw : run scs rest before = tailRows.flatten
+consRaw :
+  (run scs (edge :: rest) before).run =
+    ((match SourcePruningEnumerationEdgeTraversal.prepare scs edge with
+          | none => pure none
+          | some action => do
+            let result ← action
+            pure (some result))
+          before).run ++
+      (run scs rest before).run
+allowed : arityAllows edge.children.length scs = true
+tries : List EqualityTrie.Trie
+residual : Option Constraint
+projected : SourcePruningEnumerationConstraint.project edge.entry.key.constraint = some (tries, residual)
+action : EnumerateM Symbol Constraint (Option (Fragments.Fragment Symbol))
+childrenResult : Option (List (Fragments.Fragment Symbol))
+childrenAfter after : State Symbol Constraint
+prepared : SourcePruningEnumerationEdgeTraversal.prepare scs edge = some action
+_childrenSuccess :
+  Success
+    (SourcePruningEnumerationEdgeTraversal.runStaged
+      (List.map
+        (fun indexed =>
+          (indexed.fst, descendScs indexed.snd scs ++ descendScs indexed.snd (suspendedVars before.counter tries),
+            SourcePruningEnumerationShallowChild.prepareChild
+              (descendScs indexed.snd scs ++ descendScs indexed.snd (suspendedVars before.counter tries)) indexed.fst))
+        edge.children.zipIdx))
+    (suspendedState tries.length before) childrenResult childrenAfter
+_completedPrefixSuccess :
+  Success
+    (SourcePruningEnumerationEdgeTraversal.runStaged
+      (List.take
+        (List.findIdx (fun stage => stage.snd.snd.isNone)
+          (List.map
+            (fun indexed =>
+              (indexed.fst, descendScs indexed.snd scs ++ descendScs indexed.snd (suspendedVars before.counter tries),
+                SourcePruningEnumerationShallowChild.prepareChild
+                  (descendScs indexed.snd scs ++ descendScs indexed.snd (suspendedVars before.counter tries))
+                  indexed.fst))
+            edge.children.zipIdx))
+        (List.map
+          (fun indexed =>
+            (indexed.fst, descendScs indexed.snd scs ++ descendScs indexed.snd (suspendedVars before.counter tries),
+              SourcePruningEnumerationShallowChild.prepareChild
+                (descendScs indexed.snd scs ++ descendScs indexed.snd (suspendedVars before.counter tries))
+                indexed.fst))
+          edge.children.zipIdx)))
+    (suspendedState tries.length before)
+    (some
+      (List.map (fun uv => Fragments.Fragment.hole uv)
+        (List.range' (before.counter + tries.length)
+          (List.findIdx (fun stage => stage.snd.snd.isNone)
+            (List.map
+              (fun indexed =>
+                (indexed.fst, descendScs indexed.snd scs ++ descendScs indexed.snd (suspendedVars before.counter tries),
+                  SourcePruningEnumerationShallowChild.prepareChild
+                    (descendScs indexed.snd scs ++ descendScs indexed.snd (suspendedVars before.counter tries))
+                    indexed.fst))
+              edge.children.zipIdx)))))
+    childrenAfter
+_childrenShape :
+  childrenResult =
+    if
+        List.findIdx (fun stage => stage.snd.snd.isNone)
+            (List.map
+              (fun indexed =>
+                (indexed.fst, descendScs indexed.snd scs ++ descendScs indexed.snd (suspendedVars before.counter tries),
+                  SourcePruningEnumerationShallowChild.prepareChild
+                    (descendScs indexed.snd scs ++ descendScs indexed.snd (suspendedVars before.counter tries))
+                    indexed.fst))
+              edge.children.zipIdx) <
+          (List.map
+              (fun indexed =>
+                (indexed.fst, descendScs indexed.snd scs ++ descendScs indexed.snd (suspendedVars before.counter tries),
+                  SourcePruningEnumerationShallowChild.prepareChild
+                    (descendScs indexed.snd scs ++ descendScs indexed.snd (suspendedVars before.counter tries))
+                    indexed.fst))
+              edge.children.zipIdx).length then
+      none
+    else
+      some
+        (List.map (fun uv => Fragments.Fragment.hole uv)
+          (List.range' (before.counter + tries.length)
+            (List.map
+                (fun indexed =>
+                  (indexed.fst,
+                    descendScs indexed.snd scs ++ descendScs indexed.snd (suspendedVars before.counter tries),
+                    SourcePruningEnumerationShallowChild.prepareChild
+                      (descendScs indexed.snd scs ++ descendScs indexed.snd (suspendedVars before.counter tries))
+                      indexed.fst))
+                edge.children.zipIdx).length))
+_afterShape :
+  after =
+    match childrenResult with
+    | none => childrenAfter
+    | some fragments =>
+      match residual with
+      | none => childrenAfter
+      | some guard =>
+        { counter := childrenAfter.counter, representatives := childrenAfter.representatives,
+          values := childrenAfter.values,
+          obligations := (guard, Fragments.Fragment.node edge.entry.key.symbol fragments) :: childrenAfter.obligations,
+          recursionAncestry := childrenAfter.recursionAncestry, expansionAncestry := childrenAfter.expansionAncestry }
+observed :
+  Success action before
+    (Option.map (fun fragments => Fragments.Fragment.node edge.entry.key.symbol fragments) childrenResult) after
+_afterCounter :
+  after.counter =
+    before.counter + tries.length +
+      List.findIdx (fun stage => stage.snd.snd.isNone)
+        (List.map
+          (fun indexed =>
+            (indexed.fst, descendScs indexed.snd scs ++ descendScs indexed.snd (suspendedVars before.counter tries),
+              SourcePruningEnumerationShallowChild.prepareChild
+                (descendScs indexed.snd scs ++ descendScs indexed.snd (suspendedVars before.counter tries))
+                indexed.fst))
+          edge.children.zipIdx)
+afterAligned : after.counter = after.values.length
+afterRealized : SourcePruningEnumerationObservation.PendingRealized heap after
+actionRaw :
+  action before =
+    [Except.ok
+        (Option.map (fun fragments => Fragments.Fragment.node edge.entry.key.symbol fragments) childrenResult, after)]
+⊢ ((match some action with
+          | none => pure none
+          | some action => do
+            let result ← action
+            pure (some result))
+          before).run ++
+      (run scs rest before).run =
+    ([Except.ok
+            (some
+                (Option.map (fun fragments => Fragments.Fragment.node edge.entry.key.symbol fragments) childrenResult),
+              after)] ::
+        tailRows).flatten
+/tmp/mcfta-pruning-enumeration-ordinary-branches-20261024/strict-2/MicroCFTA/SourcePruningEnumerationOrdinaryBranches.lean:65:22: error: This simp argument is unused:
+  run_bind
+
+Hint: Omit it from the simp argument list.
+  [apply] simp only [run, choose, ExceptT.run, List.map_cons, List.flatMap_cons]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/tmp/mcfta-pruning-enumeration-ordinary-branches-20261024/strict-2/MicroCFTA/SourcePruningEnumerationOrdinaryBranches.lean:65:32: error: This simp argument is unused:
+  choose
+
+Hint: Omit it from the simp argument list.
+  [apply] simp only [run, run_bind, ExceptT.run, List.map_cons, List.flatMap_cons]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/tmp/mcfta-pruning-enumeration-ordinary-branches-20261024/strict-2/MicroCFTA/SourcePruningEnumerationOrdinaryBranches.lean:65:53: error: This simp argument is unused:
+  List.map_cons
+
+Hint: Omit it from the simp argument list.
+  [apply] simp only [run, run_bind, choose, ExceptT.run, List.flatMap_cons]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/tmp/mcfta-pruning-enumeration-ordinary-branches-20261024/strict-2/MicroCFTA/SourcePruningEnumerationOrdinaryBranches.lean:65:68: error: This simp argument is unused:
+  List.flatMap_cons
+
+Hint: Omit it from the simp argument list.
+  [apply] simp only [run, run_bind, choose, ExceptT.run, List.map_cons]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
