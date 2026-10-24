@@ -1,0 +1,115 @@
+diff --git a/cfta-th/CHANGELOG.md b/cfta-th/CHANGELOG.md
+index 15949a9b4..bb84fe974 100644
+--- a/cfta-th/CHANGELOG.md
++++ b/cfta-th/CHANGELOG.md
+@@ -2,4 +2,5 @@
+ 
+ ## 0.1.0.0
+ 
++- Reject type and constructor names ending in `#` before generating invalid names.
+ - Add `deriveNode` to generate scalar node views for typing rules and refinements.
+diff --git a/cfta-th/README.md b/cfta-th/README.md
+index e4bce6c1b..69fe4a248 100644
+--- a/cfta-th/README.md
++++ b/cfta-th/README.md
+@@ -50,9 +50,10 @@ and on recursive fields still apply. Empty datatypes also need
+ `EmptyDataDeriving` for the generated instance.
+ 
+ GADTs, existential or constrained constructors, datatype contexts, symbolic
+-names, type synonyms, and data families need a manual view. A view with a
+-record of measures also remains manual. This package generates scalar views;
+-it does not change term types, constraints, counts, or ranks.
++names, names ending in `#`, type synonyms, and data families need a manual
++view. A view with a record of measures also remains manual. This package
++generates scalar views; it does not change term types, constraints, counts,
++or ranks.
+ 
+ See the [design note](../docs/generated-node-views.md) for the boundary and
+ validation plan. Quasiquoters are separate authoring work.
+diff --git a/cfta-th/src/Data/CFTA/TH.hs b/cfta-th/src/Data/CFTA/TH.hs
+index 18d57769d..dd846ea05 100644
+--- a/cfta-th/src/Data/CFTA/TH.hs
++++ b/cfta-th/src/Data/CFTA/TH.hs
+@@ -6,6 +6,7 @@ module Data.CFTA.TH (deriveNode) where
+ 
+ import Control.Monad (forM, unless, when)
+ import Data.Char (isUpper)
++import Data.List (isSuffixOf)
+ import Data.Maybe (isJust)
+ import GHC.Generics (Generic)
+ import Language.Haskell.TH
+@@ -31,9 +32,10 @@ the single parameter @e@. The source datatype still needs its usual
+ @HasFTA@ instance when used with the generator APIs.
+ 
+ This operation accepts ordinary data and newtype declarations. It rejects
+-name collisions, symbolic names, datatype contexts, existential or
+-constrained constructors, GADTs, type synonyms, and data families. Write a
+-manual view for records of measures or for other supported source forms.
++name collisions, symbolic names, names ending in @#@, datatype contexts,
++existential or constrained constructors, GADTs, type synonyms, and data
++families. Write a manual view for records of measures or for other supported
++source forms.
+ -}
+ deriveNode :: Name -> Q [Dec]
+ deriveNode source = do
+@@ -64,6 +66,7 @@ deriveNode source = do
+         fail $ "deriveNode " <> nameBase source <> ": " <> feature <> " need a manual node view"
+     generatedName lookupName name = case nameBase name of
+         first : _ | isUpper first -> do
++            when ("#" `isSuffixOf` nameBase name) $ unsupported "names ending in #"
+             let generated = nameBase name <> "Node"
+             existing <- lookupName generated
+             when (isJust existing)
+diff --git a/cfta-th/test/Spec.hs b/cfta-th/test/Spec.hs
+index cb20731e1..a2ef475c4 100644
+--- a/cfta-th/test/Spec.hs
++++ b/cfta-th/test/Spec.hs
+@@ -4,6 +4,7 @@
+ {-# LANGUAGE EmptyDataDeriving #-}
+ {-# LANGUAGE ExistentialQuantification #-}
+ {-# LANGUAGE GADTs #-}
++{-# LANGUAGE MagicHash #-}
+ {-# LANGUAGE TemplateHaskell #-}
+ {-# LANGUAGE TypeApplications #-}
+ {-# LANGUAGE TypeOperators #-}
+@@ -77,6 +78,12 @@ data Clash = Clash
+ -- | The name that the view of 'Clash' would have.
+ data ClashNode = ClashNode
+ 
++-- | A source type name that cannot take the Node suffix.
++data HashName# = HashName
++
++-- | A source constructor name that cannot take the Node suffix.
++data HashConstructor = HashConstructor#
++
+ $(deriveNode ''Expr)
+ $(deriveNode ''Amount)
+ $(deriveNode ''Record)
+@@ -119,8 +126,10 @@ spec = describe "deriveNode" $ do
+         , $(recover [|True|] (deriveNode ''(:+:) >> [|False|]))
+         , $(recover [|True|] (deriveNode ''Synonym >> [|False|]))
+         , $(recover [|True|] (deriveNode ''Clash >> [|False|]))
++        , $(recover [|True|] (deriveNode ''HashName# >> [|False|]))
++        , $(recover [|True|] (deriveNode ''HashConstructor >> [|False|]))
+         ]
+-            `shouldBe` replicate 5 True
++            `shouldBe` replicate 7 True
+   where
+     typed rules = either (error . show) id (fromTypingRules (Typing (Nesting 2) [] [()] rules)) :: Gen.Gen Symbol Expr
+     refined measured = LTA.compile $ either (error . show) id $ deriveLTAFrom @Amount 0 (atom @Integer LTA.every) measured
+diff --git a/docs/generated-node-views.md b/docs/generated-node-views.md
+index 2b13c4fbf..8c9279e38 100644
+--- a/docs/generated-node-views.md
++++ b/docs/generated-node-views.md
+@@ -25,8 +25,9 @@ The result has one parameter: the type of a child observation or premise.
+ 
+ Accept ordinary `data` and `newtype` declarations with named constructors.
+ Reject datatype contexts, existential or constrained constructors, GADTs,
+-symbolic names, type synonyms, and data families with an explanation at the
+-splice. Such types need a manual view where the existing APIs support them.
++symbolic names, names ending in `#`, type synonyms, and data families with an
++explanation at the splice. Such types need a manual view where the existing
++APIs support them.
+ Views with records of measures also remain manual; this operation generates
+ the scalar views used by typing rules and single-measure invariants.
+ 
