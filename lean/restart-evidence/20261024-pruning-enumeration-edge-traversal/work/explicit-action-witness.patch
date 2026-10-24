@@ -1,0 +1,17 @@
+--- strict-source-2
++++ strict-source-3
+@@ -222,7 +222,13 @@
+           exact childrenNonempty indexed.1 (List.fst_mem_of_mem_zipIdx indexedMember))
+     rw [stagedSame] at childrenSuccess completedPrefixSuccess resultShape afterCounter
+     rw [prefixCounter] at completedPrefixSuccess resultShape afterCounter
+-    refine ⟨_, childrenResult, childrenAfter, _, ?_, childrenSuccess, completedPrefixSuccess,
++    refine ⟨prefixAction >>= fun packet =>
++      runStaged packet.2.1 >>= fun childrenResult =>
++        match childrenResult with
++        | none => pure none
++        | some fragments => EnumerationSchedule.recordResidual packet.2.2 (.node packet.1 fragments)
++            >>= fun _ => pure (some (.node packet.1 fragments)),
++      childrenResult, childrenAfter, _, ?_, childrenSuccess, completedPrefixSuccess,
+       resultShape, rfl, ?_, ?_, ?_, ?_⟩
+     · simp only [prepare, prefixPrepared]
+       rfl

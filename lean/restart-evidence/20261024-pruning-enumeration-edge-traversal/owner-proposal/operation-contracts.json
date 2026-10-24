@@ -1,0 +1,29 @@
+{
+  "runStaged": {
+    "nil": "pure (some [])",
+    "absent_head": "pure none at current state; no tail action inspected or executed",
+    "present_head": "execute captured action, then recursive actual tail, then pure result.map(cons actual head fragment)",
+    "effect_order": "head reject/error occurs before later absence; no rollback, list preflight or action recomputation"
+  },
+  "prepare": {
+    "outer_none": "same prefix prepare none",
+    "outer_some": "capture prefixAction once; execute it once; run captured stages once; None returns pure none at actual children endpoint; Some constructs captured-symbol node, calls recordResidual once, returns Some node",
+    "prefix_action_runs": 1,
+    "child_preparations_recomputed": 0,
+    "residual_on_none": false,
+    "residual_on_reject_or_error": false
+  },
+  "runStaged_complete": {
+    "actual_stop": "staged.findIdx (fun stage => stage.2.2.isNone)",
+    "no_nonterminal_premise": true,
+    "none_endpoint": "same after as successful completed-prefix take stop; counter grows stop; all prefix holes ordered",
+    "some_endpoint": "stop equals full length and all holes are in input order",
+    "second_observation": "Prefix Success shares the same actual after. It is a derived certificate, not a second operation in prepare."
+  },
+  "prepare_complete": {
+    "domain": "genuine Ready heap, Available same ordinary parent with free=[], actual edge membership, realized aligned enum state, inherited arity true",
+    "projection_none": "outer None only",
+    "projection_some": "derive parent child facts; use SAME exact prefix action, concrete helper and SAME child endpoint; full record update only after Some",
+    "failure_domain": "Raw definitions preserve list reject/Except error; producer excludes Empty/reference/unencodable through genuine parent facts, not desired-success premises."
+  }
+}

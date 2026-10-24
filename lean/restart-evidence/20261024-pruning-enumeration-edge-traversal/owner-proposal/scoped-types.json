@@ -1,0 +1,815 @@
+{
+  "module": "MicroCFTA.SourcePruningEnumerationEdgeTraversal",
+  "entries": [
+    {
+      "owner": "context",
+      "scope": "local-instance",
+      "name": "α",
+      "type": "Type u",
+      "role": "implicit universe-polymorphic field binder"
+    },
+    {
+      "owner": "context",
+      "scope": "local-instance",
+      "name": "β",
+      "type": "Type u",
+      "role": "implicit universe-polymorphic field binder"
+    },
+    {
+      "owner": "context",
+      "scope": "local-instance.pure",
+      "name": "value",
+      "type": "α",
+      "role": "binder"
+    },
+    {
+      "owner": "context",
+      "scope": "local-instance.bind",
+      "name": "values",
+      "type": "List α",
+      "role": "binder"
+    },
+    {
+      "owner": "context",
+      "scope": "local-instance.bind",
+      "name": "continuation",
+      "type": "α → List β",
+      "role": "binder"
+    },
+    {
+      "owner": "context",
+      "scope": "local-instance",
+      "name": "pure",
+      "type": "{α : Type u} → α → List α",
+      "role": "field type"
+    },
+    {
+      "owner": "context",
+      "scope": "local-instance",
+      "name": "bind",
+      "type": "{α : Type u} → {β : Type u} → List α → (α → List β) → List β",
+      "role": "field type"
+    },
+    {
+      "owner": "runStaged",
+      "scope": "present-head",
+      "name": "rest",
+      "type": "List (InternedConstructorTemplates.Value Symbol Constraint × List EnumerationState.Suspended × Option (EnumerateM Symbol Constraint (Fragments.Fragment Symbol)))",
+      "role": "definition pattern or continuation binder"
+    },
+    {
+      "owner": "runStaged",
+      "scope": "present-head",
+      "name": "childAction",
+      "type": "EnumerateM Symbol Constraint (Fragments.Fragment Symbol)",
+      "role": "definition pattern or continuation binder"
+    },
+    {
+      "owner": "runStaged",
+      "scope": "present-head",
+      "name": "fragment",
+      "type": "Fragments.Fragment Symbol",
+      "role": "definition pattern or continuation binder"
+    },
+    {
+      "owner": "runStaged",
+      "scope": "present-head",
+      "name": "result",
+      "type": "Option (List (Fragments.Fragment Symbol))",
+      "role": "definition pattern or continuation binder"
+    },
+    {
+      "owner": "runStaged",
+      "scope": "present-head",
+      "name": "tail",
+      "type": "List (Fragments.Fragment Symbol)",
+      "role": "definition pattern or continuation binder"
+    },
+    {
+      "owner": "runStaged",
+      "scope": "none-head",
+      "name": "ignored value",
+      "type": "InternedConstructorTemplates.Value Symbol Constraint",
+      "role": "unnamed pattern field"
+    },
+    {
+      "owner": "runStaged",
+      "scope": "none-head",
+      "name": "ignored bucket",
+      "type": "List EnumerationState.Suspended",
+      "role": "unnamed pattern field"
+    },
+    {
+      "owner": "runStaged",
+      "scope": "none-head",
+      "name": "ignored tail",
+      "type": "List (InternedConstructorTemplates.Value Symbol Constraint × List EnumerationState.Suspended × Option (EnumerateM Symbol Constraint (Fragments.Fragment Symbol)))",
+      "role": "unnamed pattern field"
+    },
+    {
+      "owner": "runStaged",
+      "scope": "some-head",
+      "name": "ignored value",
+      "type": "InternedConstructorTemplates.Value Symbol Constraint",
+      "role": "unnamed pattern field"
+    },
+    {
+      "owner": "runStaged",
+      "scope": "some-head",
+      "name": "ignored bucket",
+      "type": "List EnumerationState.Suspended",
+      "role": "unnamed pattern field"
+    },
+    {
+      "owner": "runStaged_complete",
+      "scope": "public and intro",
+      "name": "inputs",
+      "type": "List (InternedConstructorTemplates.Value Symbol Constraint × List EnumerationState.Suspended)",
+      "role": "binder"
+    },
+    {
+      "owner": "runStaged_complete",
+      "scope": "public and intro",
+      "name": "heap",
+      "type": "InternedConstructorTemplates.State Symbol Constraint",
+      "role": "binder"
+    },
+    {
+      "owner": "runStaged_complete",
+      "scope": "public and intro",
+      "name": "coherent",
+      "type": "InternedRecordCoherence.Coherent heap",
+      "role": "binder"
+    },
+    {
+      "owner": "runStaged_complete",
+      "scope": "public and intro",
+      "name": "before",
+      "type": "EnumerationState.State Symbol Constraint",
+      "role": "binder"
+    },
+    {
+      "owner": "runStaged_complete",
+      "scope": "public and intro",
+      "name": "realized",
+      "type": "PendingRealized heap before",
+      "role": "binder"
+    },
+    {
+      "owner": "runStaged_complete",
+      "scope": "public and intro",
+      "name": "aligned",
+      "type": "before.counter = before.values.length",
+      "role": "binder"
+    },
+    {
+      "owner": "runStaged_complete",
+      "scope": "public and intro",
+      "name": "available",
+      "type": "∀ input ∈ inputs, InternedProbeProvenance.Available heap input.1",
+      "role": "binder"
+    },
+    {
+      "owner": "runStaged_complete",
+      "scope": "public and intro",
+      "name": "closed",
+      "type": "∀ input ∈ inputs, input.1.free = []",
+      "role": "binder"
+    },
+    {
+      "owner": "runStaged_complete",
+      "scope": "public and intro",
+      "name": "nonempty",
+      "type": "∀ input ∈ inputs, input.1 ≠ .empty",
+      "role": "binder"
+    },
+    {
+      "owner": "runStaged_complete",
+      "scope": "public-let/map/findIdx/range",
+      "name": "staged",
+      "type": "List (InternedConstructorTemplates.Value Symbol Constraint × List EnumerationState.Suspended × Option (EnumerateM Symbol Constraint (Fragments.Fragment Symbol)))",
+      "role": "binder"
+    },
+    {
+      "owner": "runStaged_complete",
+      "scope": "public-let/map/findIdx/range",
+      "name": "stop",
+      "type": "Nat",
+      "role": "binder"
+    },
+    {
+      "owner": "runStaged_complete",
+      "scope": "public-let/map/findIdx/range",
+      "name": "input",
+      "type": "InternedConstructorTemplates.Value Symbol Constraint × List EnumerationState.Suspended",
+      "role": "binder"
+    },
+    {
+      "owner": "runStaged_complete",
+      "scope": "public-let/map/findIdx/range",
+      "name": "stage",
+      "type": "InternedConstructorTemplates.Value Symbol Constraint × List EnumerationState.Suspended × Option (EnumerateM Symbol Constraint (Fragments.Fragment Symbol))",
+      "role": "binder"
+    },
+    {
+      "owner": "runStaged_complete",
+      "scope": "public-let/map/findIdx/range",
+      "name": "uv",
+      "type": "Nat",
+      "role": "binder"
+    },
+    {
+      "owner": "runStaged_complete",
+      "scope": "cons/prod decomposition",
+      "name": "input",
+      "type": "InternedConstructorTemplates.Value Symbol Constraint × List EnumerationState.Suspended",
+      "role": "binder"
+    },
+    {
+      "owner": "runStaged_complete",
+      "scope": "cons/prod decomposition",
+      "name": "rest",
+      "type": "List (InternedConstructorTemplates.Value Symbol Constraint × List EnumerationState.Suspended)",
+      "role": "binder"
+    },
+    {
+      "owner": "runStaged_complete",
+      "scope": "cons/prod decomposition",
+      "name": "value",
+      "type": "InternedConstructorTemplates.Value Symbol Constraint",
+      "role": "binder"
+    },
+    {
+      "owner": "runStaged_complete",
+      "scope": "cons/prod decomposition",
+      "name": "bucket",
+      "type": "List EnumerationState.Suspended",
+      "role": "binder"
+    },
+    {
+      "owner": "runStaged_complete",
+      "scope": "terminal split",
+      "name": "nonterminal",
+      "type": "bucket.any (fun sc => EqualityTrie.isTerminal sc.trie) = false",
+      "role": "positive case fact; negative branch has its negation",
+      "specializations": [
+        "bucket.any (fun sc => EqualityTrie.isTerminal sc.trie) = false",
+        "¬ bucket.any (fun sc => EqualityTrie.isTerminal sc.trie) = false"
+      ]
+    },
+    {
+      "owner": "runStaged_complete",
+      "scope": "terminal predicate",
+      "name": "sc",
+      "type": "EnumerationState.Suspended",
+      "role": "binder"
+    },
+    {
+      "owner": "runStaged_complete",
+      "scope": "unsupported value.reference",
+      "name": "name",
+      "type": "InternedBinderProtocol.Reference",
+      "role": "constructor case binder"
+    },
+    {
+      "owner": "runStaged_complete",
+      "scope": "unsupported value.node",
+      "name": "entry",
+      "type": "Cache.Interned InternedBinderProtocol.NodeKey",
+      "role": "constructor case binder"
+    },
+    {
+      "owner": "runStaged_complete",
+      "scope": "unsupported value.node",
+      "name": "edges",
+      "type": "List (InternedConstructorTemplates.EdgeValue Symbol Constraint)",
+      "role": "constructor case binder"
+    },
+    {
+      "owner": "runStaged_complete",
+      "scope": "unsupported value.node",
+      "name": "depth",
+      "type": "Nat",
+      "role": "constructor case binder"
+    },
+    {
+      "owner": "runStaged_complete",
+      "scope": "unsupported value.node",
+      "name": "free",
+      "type": "List InternedBinderProtocol.Reference",
+      "role": "constructor case binder"
+    },
+    {
+      "owner": "runStaged_complete",
+      "scope": "unsupported value.union",
+      "name": "entry",
+      "type": "Cache.Interned InternedBinderProtocol.NodeKey",
+      "role": "constructor case binder"
+    },
+    {
+      "owner": "runStaged_complete",
+      "scope": "unsupported value.union",
+      "name": "members",
+      "type": "List (InternedConstructorTemplates.Value Symbol Constraint)",
+      "role": "constructor case binder"
+    },
+    {
+      "owner": "runStaged_complete",
+      "scope": "unsupported value.union",
+      "name": "depth",
+      "type": "Nat",
+      "role": "constructor case binder"
+    },
+    {
+      "owner": "runStaged_complete",
+      "scope": "unsupported value.union",
+      "name": "free",
+      "type": "List InternedBinderProtocol.Reference",
+      "role": "constructor case binder"
+    },
+    {
+      "owner": "runStaged_complete",
+      "scope": "unsupported value.mu",
+      "name": "entry",
+      "type": "Cache.Interned InternedBinderProtocol.NodeKey",
+      "role": "constructor case binder"
+    },
+    {
+      "owner": "runStaged_complete",
+      "scope": "unsupported value.mu",
+      "name": "body",
+      "type": "InternedConstructorTemplates.Value Symbol Constraint",
+      "role": "constructor case binder"
+    },
+    {
+      "owner": "runStaged_complete",
+      "scope": "unsupported value.mu",
+      "name": "depthShape",
+      "type": "InternedConstructorTemplates.Value Symbol Constraint",
+      "role": "constructor case binder"
+    },
+    {
+      "owner": "runStaged_complete",
+      "scope": "unsupported value.mu",
+      "name": "ordinaryShape",
+      "type": "InternedConstructorTemplates.Value Symbol Constraint",
+      "role": "constructor case binder"
+    },
+    {
+      "owner": "prepare",
+      "scope": "public",
+      "name": "scs",
+      "type": "List EnumerationState.Suspended",
+      "role": "binder"
+    },
+    {
+      "owner": "prepare",
+      "scope": "public",
+      "name": "edge",
+      "type": "InternedConstructorTemplates.EdgeValue Symbol Constraint",
+      "role": "binder"
+    },
+    {
+      "owner": "prepare",
+      "scope": "actual prefix/children/residual continuations",
+      "name": "prefixAction",
+      "type": "EnumerateM Symbol Constraint (Symbol × List (InternedConstructorTemplates.Value Symbol Constraint × List EnumerationState.Suspended × Option (EnumerateM Symbol Constraint (Fragments.Fragment Symbol))) × Option Constraint)",
+      "role": "definition pattern, let or lambda binder"
+    },
+    {
+      "owner": "prepare",
+      "scope": "actual prefix/children/residual continuations",
+      "name": "packet",
+      "type": "Symbol × List (InternedConstructorTemplates.Value Symbol Constraint × List EnumerationState.Suspended × Option (EnumerateM Symbol Constraint (Fragments.Fragment Symbol))) × Option Constraint",
+      "role": "definition pattern, let or lambda binder"
+    },
+    {
+      "owner": "prepare",
+      "scope": "actual prefix/children/residual continuations",
+      "name": "childrenResult",
+      "type": "Option (List (Fragments.Fragment Symbol))",
+      "role": "definition pattern, let or lambda binder"
+    },
+    {
+      "owner": "prepare",
+      "scope": "actual prefix/children/residual continuations",
+      "name": "fragments",
+      "type": "List (Fragments.Fragment Symbol)",
+      "role": "definition pattern, let or lambda binder"
+    },
+    {
+      "owner": "prepare",
+      "scope": "actual prefix/children/residual continuations",
+      "name": "fragment",
+      "type": "Fragments.Fragment Symbol",
+      "role": "definition pattern, let or lambda binder"
+    },
+    {
+      "owner": "prepare",
+      "scope": "actual prefix/children/residual continuations",
+      "name": "ignored",
+      "type": "Unit",
+      "role": "definition pattern, let or lambda binder"
+    },
+    {
+      "owner": "prepare_complete",
+      "scope": "public",
+      "name": "scs",
+      "type": "List EnumerationState.Suspended",
+      "role": "binder"
+    },
+    {
+      "owner": "prepare_complete",
+      "scope": "public",
+      "name": "edge",
+      "type": "InternedConstructorTemplates.EdgeValue Symbol Constraint",
+      "role": "binder"
+    },
+    {
+      "owner": "prepare_complete",
+      "scope": "public",
+      "name": "heap",
+      "type": "InternedConstructorTemplates.State Symbol Constraint",
+      "role": "binder"
+    },
+    {
+      "owner": "prepare_complete",
+      "scope": "public",
+      "name": "parentEntry",
+      "type": "Cache.Interned InternedBinderProtocol.NodeKey",
+      "role": "binder"
+    },
+    {
+      "owner": "prepare_complete",
+      "scope": "public",
+      "name": "edges",
+      "type": "List (InternedConstructorTemplates.EdgeValue Symbol Constraint)",
+      "role": "binder"
+    },
+    {
+      "owner": "prepare_complete",
+      "scope": "public",
+      "name": "depth",
+      "type": "Nat",
+      "role": "binder"
+    },
+    {
+      "owner": "prepare_complete",
+      "scope": "public",
+      "name": "free",
+      "type": "List InternedBinderProtocol.Reference",
+      "role": "binder"
+    },
+    {
+      "owner": "prepare_complete",
+      "scope": "public",
+      "name": "ready",
+      "type": "SourceEqualityRequiredCache.Ready heap",
+      "role": "binder"
+    },
+    {
+      "owner": "prepare_complete",
+      "scope": "public",
+      "name": "parentAvailable",
+      "type": "InternedProbeProvenance.Available heap (.node parentEntry edges depth free)",
+      "role": "binder"
+    },
+    {
+      "owner": "prepare_complete",
+      "scope": "public",
+      "name": "parentClosed",
+      "type": "free = []",
+      "role": "binder"
+    },
+    {
+      "owner": "prepare_complete",
+      "scope": "public",
+      "name": "selected",
+      "type": "edge ∈ edges",
+      "role": "binder"
+    },
+    {
+      "owner": "prepare_complete",
+      "scope": "public",
+      "name": "before",
+      "type": "EnumerationState.State Symbol Constraint",
+      "role": "binder"
+    },
+    {
+      "owner": "prepare_complete",
+      "scope": "public",
+      "name": "realized",
+      "type": "PendingRealized heap before",
+      "role": "binder"
+    },
+    {
+      "owner": "prepare_complete",
+      "scope": "public",
+      "name": "aligned",
+      "type": "before.counter = before.values.length",
+      "role": "binder"
+    },
+    {
+      "owner": "prepare_complete",
+      "scope": "public",
+      "name": "allowed",
+      "type": "arityAllows edge.children.length scs = true",
+      "role": "binder"
+    },
+    {
+      "owner": "prepare_complete",
+      "scope": "project/public-let/map/match",
+      "name": "tries",
+      "type": "List EqualityTrie.Trie",
+      "role": "binder"
+    },
+    {
+      "owner": "prepare_complete",
+      "scope": "project/public-let/map/match",
+      "name": "residual",
+      "type": "Option Constraint",
+      "role": "binder"
+    },
+    {
+      "owner": "prepare_complete",
+      "scope": "project/public-let/map/match",
+      "name": "own",
+      "type": "List EnumerationState.Suspended",
+      "role": "binder"
+    },
+    {
+      "owner": "prepare_complete",
+      "scope": "project/public-let/map/match",
+      "name": "staged",
+      "type": "List (InternedConstructorTemplates.Value Symbol Constraint × List EnumerationState.Suspended × Option (EnumerateM Symbol Constraint (Fragments.Fragment Symbol)))",
+      "role": "binder"
+    },
+    {
+      "owner": "prepare_complete",
+      "scope": "project/public-let/map/match",
+      "name": "stop",
+      "type": "Nat",
+      "role": "binder"
+    },
+    {
+      "owner": "prepare_complete",
+      "scope": "project/public-let/map/match",
+      "name": "indexed",
+      "type": "InternedConstructorTemplates.Value Symbol Constraint × Nat",
+      "role": "binder"
+    },
+    {
+      "owner": "prepare_complete",
+      "scope": "project/public-let/map/match",
+      "name": "stage",
+      "type": "InternedConstructorTemplates.Value Symbol Constraint × List EnumerationState.Suspended × Option (EnumerateM Symbol Constraint (Fragments.Fragment Symbol))",
+      "role": "binder"
+    },
+    {
+      "owner": "prepare_complete",
+      "scope": "project/public-let/map/match",
+      "name": "uv",
+      "type": "Nat",
+      "role": "binder"
+    },
+    {
+      "owner": "prepare_complete",
+      "scope": "project/public-let/map/match",
+      "name": "fragments",
+      "type": "List (Fragments.Fragment Symbol)",
+      "role": "binder"
+    },
+    {
+      "owner": "prepare_complete",
+      "scope": "project/public-let/map/match",
+      "name": "guard",
+      "type": "Constraint",
+      "role": "binder"
+    },
+    {
+      "owner": "prepare_complete",
+      "scope": "childrenNonempty intro",
+      "name": "child",
+      "type": "InternedConstructorTemplates.Value Symbol Constraint",
+      "role": "binder"
+    },
+    {
+      "owner": "prepare_complete",
+      "scope": "childrenNonempty intro",
+      "name": "member",
+      "type": "child ∈ edge.children",
+      "role": "binder"
+    },
+    {
+      "owner": "prepare_complete",
+      "scope": "childrenNonempty intro",
+      "name": "emptyChild",
+      "type": "child = .empty",
+      "role": "binder"
+    },
+    {
+      "owner": "prepare_complete",
+      "scope": "childrenAvailable intro",
+      "name": "child",
+      "type": "InternedConstructorTemplates.Value Symbol Constraint",
+      "role": "binder"
+    },
+    {
+      "owner": "prepare_complete",
+      "scope": "childrenAvailable intro",
+      "name": "member",
+      "type": "child ∈ edge.children",
+      "role": "binder"
+    },
+    {
+      "owner": "prepare_complete",
+      "scope": "childrenClosed intro",
+      "name": "child",
+      "type": "InternedConstructorTemplates.Value Symbol Constraint",
+      "role": "binder"
+    },
+    {
+      "owner": "prepare_complete",
+      "scope": "childrenClosed intro",
+      "name": "member",
+      "type": "child ∈ edge.children",
+      "role": "binder"
+    },
+    {
+      "owner": "prepare_complete",
+      "scope": "worker availability",
+      "name": "input",
+      "type": "InternedConstructorTemplates.Value Symbol Constraint × List EnumerationState.Suspended",
+      "role": "binder"
+    },
+    {
+      "owner": "prepare_complete",
+      "scope": "worker availability",
+      "name": "member",
+      "type": "input ∈ inputs",
+      "role": "binder"
+    },
+    {
+      "owner": "prepare_complete",
+      "scope": "worker availability",
+      "name": "indexed",
+      "type": "InternedConstructorTemplates.Value Symbol Constraint × Nat",
+      "role": "binder"
+    },
+    {
+      "owner": "prepare_complete",
+      "scope": "worker availability",
+      "name": "indexedMember",
+      "type": "indexed ∈ edge.children.zipIdx",
+      "role": "binder"
+    },
+    {
+      "owner": "prepare_complete",
+      "scope": "worker availability",
+      "name": "inputSame",
+      "type": "(indexed.1, descendScs indexed.2 scs ++ descendScs indexed.2 (suspendedVars before.counter tries)) = input",
+      "role": "binder"
+    },
+    {
+      "owner": "prepare_complete",
+      "scope": "worker closedness",
+      "name": "input",
+      "type": "InternedConstructorTemplates.Value Symbol Constraint × List EnumerationState.Suspended",
+      "role": "binder"
+    },
+    {
+      "owner": "prepare_complete",
+      "scope": "worker closedness",
+      "name": "member",
+      "type": "input ∈ inputs",
+      "role": "binder"
+    },
+    {
+      "owner": "prepare_complete",
+      "scope": "worker closedness",
+      "name": "indexed",
+      "type": "InternedConstructorTemplates.Value Symbol Constraint × Nat",
+      "role": "binder"
+    },
+    {
+      "owner": "prepare_complete",
+      "scope": "worker closedness",
+      "name": "indexedMember",
+      "type": "indexed ∈ edge.children.zipIdx",
+      "role": "binder"
+    },
+    {
+      "owner": "prepare_complete",
+      "scope": "worker closedness",
+      "name": "inputSame",
+      "type": "(indexed.1, descendScs indexed.2 scs ++ descendScs indexed.2 (suspendedVars before.counter tries)) = input",
+      "role": "binder"
+    },
+    {
+      "owner": "prepare_complete",
+      "scope": "worker nonempty",
+      "name": "input",
+      "type": "InternedConstructorTemplates.Value Symbol Constraint × List EnumerationState.Suspended",
+      "role": "binder"
+    },
+    {
+      "owner": "prepare_complete",
+      "scope": "worker nonempty",
+      "name": "member",
+      "type": "input ∈ inputs",
+      "role": "binder"
+    },
+    {
+      "owner": "prepare_complete",
+      "scope": "worker nonempty",
+      "name": "indexed",
+      "type": "InternedConstructorTemplates.Value Symbol Constraint × Nat",
+      "role": "binder"
+    },
+    {
+      "owner": "prepare_complete",
+      "scope": "worker nonempty",
+      "name": "indexedMember",
+      "type": "indexed ∈ edge.children.zipIdx",
+      "role": "binder"
+    },
+    {
+      "owner": "prepare_complete",
+      "scope": "worker nonempty",
+      "name": "inputSame",
+      "type": "(indexed.1, descendScs indexed.2 scs ++ descendScs indexed.2 (suspendedVars before.counter tries)) = input",
+      "role": "binder"
+    },
+    {
+      "owner": "prepare_complete",
+      "scope": "residual realization intro",
+      "name": "slot",
+      "type": "Nat",
+      "role": "binder"
+    },
+    {
+      "owner": "prepare_complete",
+      "scope": "residual realization intro",
+      "name": "node",
+      "type": "Nat",
+      "role": "binder"
+    },
+    {
+      "owner": "prepare_complete",
+      "scope": "residual realization intro",
+      "name": "pending",
+      "type": "List EnumerationState.Suspended",
+      "role": "binder"
+    },
+    {
+      "owner": "prepare_complete",
+      "scope": "residual realization intro",
+      "name": "stored",
+      "type": "after.values[slot]? = some (.unenumerated (some node) pending)",
+      "role": "binder"
+    },
+    {
+      "owner": "prepare_complete",
+      "scope": "childrenResult/residual proof cases",
+      "name": "fragments",
+      "type": "List (Fragments.Fragment Symbol)",
+      "role": "constructor case binder"
+    },
+    {
+      "owner": "prepare_complete",
+      "scope": "childrenResult/residual proof cases",
+      "name": "guard",
+      "type": "Constraint",
+      "role": "constructor case binder"
+    },
+    {
+      "owner": "runStaged_complete",
+      "scope": "tail result shape if split true",
+      "name": "tailStopped",
+      "type": "((rest.map (fun input => (input.1, input.2, SourcePruningEnumerationShallowChild.prepareChild (EnumGuard := Constraint) input.2 input.1))).findIdx (fun stage => stage.2.2.isNone)) < (rest.map (fun input => (input.1, input.2, SourcePruningEnumerationShallowChild.prepareChild (EnumGuard := Constraint) input.2 input.1))).length",
+      "role": "generated case fact after the IH result-shape conditional is split"
+    },
+    {
+      "owner": "runStaged_complete",
+      "scope": "tail result shape if split false",
+      "name": "tailStopped",
+      "type": "¬ ((rest.map (fun input => (input.1, input.2, SourcePruningEnumerationShallowChild.prepareChild (EnumGuard := Constraint) input.2 input.1))).findIdx (fun stage => stage.2.2.isNone)) < (rest.map (fun input => (input.1, input.2, SourcePruningEnumerationShallowChild.prepareChild (EnumGuard := Constraint) input.2 input.1))).length",
+      "role": "generated case fact after the IH result-shape conditional is split"
+    },
+    {
+      "owner": "runStaged_complete",
+      "scope": "tailResult.some",
+      "name": "tailFragments",
+      "type": "List (Fragments.Fragment Symbol)",
+      "role": "constructor case binder"
+    },
+    {
+      "owner": "runStaged",
+      "scope": "definition argument lambda",
+      "name": "stages",
+      "type": "List (InternedConstructorTemplates.Value Symbol Constraint × List EnumerationState.Suspended × Option (EnumerateM Symbol Constraint (Fragments.Fragment Symbol)))",
+      "role": "lambda binder if Root uses plain := attachment"
+    }
+  ],
+  "note": "Each role denotes a planned source binder or explicit constructor field. Unnamed source patterns introduce no named locals. Local Monad List is the only instance; no LawfulMonad declaration or premise."
+}

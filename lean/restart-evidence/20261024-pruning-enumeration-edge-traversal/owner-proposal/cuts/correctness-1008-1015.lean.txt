@@ -1,0 +1,8 @@
+theorem success_pure (value result : α) (before after : State Symbol Guard) :
+    Success (pure value) before result after ↔ result = value ∧ after = before := by
+  simp [Success, pure, StateT.pure, ExceptT.pure, ExceptT.mk, ExceptT.run, eq_comm]
+
+/-- An explicit failure has no successful branch. -/
+theorem success_failure (error : Error) (before after : State Symbol Guard) (result : α) :
+    ¬Success (failure error) before result after := by
+  simp [Success, EnumerationState.failure, ExceptT.run]

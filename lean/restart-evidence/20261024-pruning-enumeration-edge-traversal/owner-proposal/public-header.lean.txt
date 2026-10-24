@@ -1,0 +1,43 @@
+/-- Derive the actual edge traversal and its exact residual update from the same ordinary parent. -/
+theorem prepare_complete (scs : List EnumerationState.Suspended)
+    (edge : InternedConstructorTemplates.EdgeValue Symbol Constraint)
+    (heap : InternedConstructorTemplates.State Symbol Constraint)
+    (parentEntry : Cache.Interned InternedBinderProtocol.NodeKey)
+    (edges : List (InternedConstructorTemplates.EdgeValue Symbol Constraint)) (depth : Nat)
+    (free : List InternedBinderProtocol.Reference)
+    (ready : SourceEqualityRequiredCache.Ready heap)
+    (parentAvailable : InternedProbeProvenance.Available heap (.node parentEntry edges depth free))
+    (parentClosed : free = []) (selected : edge ∈ edges)
+    (before : EnumerationState.State Symbol Constraint) (realized : PendingRealized heap before)
+    (aligned : before.counter = before.values.length)
+    (allowed : arityAllows edge.children.length scs = true) :
+    match SourcePruningEnumerationConstraint.project edge.entry.key.constraint with
+    | none => prepare scs edge = none
+    | some (tries, residual) =>
+        let own : List EnumerationState.Suspended := suspendedVars before.counter tries
+        let staged := edge.children.zipIdx.map (fun indexed =>
+          (indexed.1, descendScs indexed.2 scs ++ descendScs indexed.2 own,
+            SourcePruningEnumerationShallowChild.prepareChild (EnumGuard := Constraint)
+              (descendScs indexed.2 scs ++ descendScs indexed.2 own) indexed.1))
+        let stop := staged.findIdx (fun stage => stage.2.2.isNone)
+        ∃ (action : EnumerateM Symbol Constraint (Option (Fragments.Fragment Symbol)))
+          (childrenResult : Option (List (Fragments.Fragment Symbol)))
+          (childrenAfter after : EnumerationState.State Symbol Constraint),
+          prepare scs edge = some action ∧
+          Success (runStaged staged) (suspendedState tries.length before) childrenResult childrenAfter ∧
+          Success (runStaged (staged.take stop)) (suspendedState tries.length before)
+            (some ((List.range' (before.counter + tries.length) stop).map
+              (fun uv => (Fragments.Fragment.hole uv : Fragments.Fragment Symbol)))) childrenAfter ∧
+          childrenResult = (if stop < staged.length then none else
+            some ((List.range' (before.counter + tries.length) staged.length).map
+              (fun uv => (Fragments.Fragment.hole uv : Fragments.Fragment Symbol)))) ∧
+          after = (match childrenResult with
+            | none => childrenAfter
+            | some fragments => match residual with
+              | none => childrenAfter
+              | some guard => {childrenAfter with obligations :=
+                  (guard, Fragments.Fragment.node edge.entry.key.symbol fragments) :: childrenAfter.obligations}) ∧
+          Success action before (childrenResult.map (fun fragments =>
+            Fragments.Fragment.node edge.entry.key.symbol fragments)) after ∧
+          after.counter = before.counter + tries.length + stop ∧
+          after.counter = after.values.length ∧ PendingRealized heap after

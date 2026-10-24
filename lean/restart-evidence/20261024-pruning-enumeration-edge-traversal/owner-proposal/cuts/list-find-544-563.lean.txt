@@ -1,0 +1,20 @@
+
+@[grind =]
+theorem findIdx_cons {p : α → Bool} {b : α} {l : List α} :
+    (b :: l).findIdx p = if p b then 0 else (l.findIdx p) + 1 := by
+  cases H : p b with
+  | true => simp [H, findIdx, findIdx.go]
+  | false => simp [H, findIdx, findIdx.go, findIdx_go_succ]
+where
+  findIdx_go_succ (p : α → Bool) (l : List α) (n : Nat) :
+      List.findIdx.go p l (n + 1) = (findIdx.go p l n) + 1 := by
+    cases l with
+    | nil => unfold findIdx.go; exact Nat.succ_eq_add_one n
+    | cons hd tl =>
+      unfold findIdx.go
+      cases p hd <;> simp only [Bool.false_eq_true, ↓reduceIte]
+      exact findIdx_go_succ p tl (n + 1)
+
+@[simp] theorem findIdx_singleton {a : α} {p : α → Bool} : [a].findIdx p = if p a then 0 else 1 := by
+  simp [findIdx_cons, findIdx_nil]
+

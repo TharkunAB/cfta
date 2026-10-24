@@ -1,0 +1,8 @@
+open Cache InternedConstructorTemplates InternedRecordCoherence InternedProbeProvenance
+open InternedFreshProbeKeys
+open InternedBinderProtocol (NodeKey)
+
+/-- Read only the actual outgoing edge payloads of an ordinary node. -/
+def nodeEdges : Value Symbol Guard → List (EdgeValue Symbol Guard)
+  | .node _ edges _ _ => edges
+  | _ => []

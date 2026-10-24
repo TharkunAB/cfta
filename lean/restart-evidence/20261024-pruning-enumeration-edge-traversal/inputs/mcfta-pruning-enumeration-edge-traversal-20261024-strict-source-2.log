@@ -1,0 +1,3065 @@
+{"command": ["/home/tritlo/.elan/toolchains/leanprover--lean4---v4.34.1/bin/lean", "-o", "/tmp/mcfta-pruning-enumeration-edge-traversal-20261024/strict-lib/MicroCFTA/SourcePruningEnumerationEdgeTraversal.olean", "-R", "/tmp/mcfta-pruning-enumeration-edge-traversal-20261024/strict-source-2", "-DwarningAsError=true", "-Dlinter.all=true", "/tmp/mcfta-pruning-enumeration-edge-traversal-20261024/strict-source-2/MicroCFTA/SourcePruningEnumerationEdgeTraversal.lean"], "exit_code": 1, "raw_bytes": 165161, "raw_sha256": "554a188482b93a1c5321d4194d673d5809c8cf8a09d6aac5a04db06d2b6b5041", "source_sha256": "7a37c5dc044ab3c6796b25f7d34478c7ba1eefc037402a0b95bb21410d39e2c7"}
+/tmp/mcfta-pruning-enumeration-edge-traversal-20261024/strict-source-2/MicroCFTA/SourcePruningEnumerationEdgeTraversal.lean:225:11: error: don't know how to synthesize implicit argument `p`
+  @Exists.intro (Option (List (Fragment Symbol)))
+    (fun childrenResult =>
+      ∃ childrenAfter after,
+        prepare scs edge = some ?m.895 ∧
+          Success
+              (runStaged
+                (List.map
+                  (fun indexed =>
+                    (indexed.fst,
+                      descendScs indexed.snd scs ++ descendScs indexed.snd (suspendedVars before.counter tries),
+                      SourcePruningEnumerationShallowChild.prepareChild
+                        (descendScs indexed.snd scs ++ descendScs indexed.snd (suspendedVars before.counter tries))
+                        indexed.fst))
+                  edge.children.zipIdx))
+              (suspendedState tries.length before) childrenResult childrenAfter ∧
+            Success
+                (runStaged
+                  (List.take
+                    (List.findIdx (fun stage => stage.snd.snd.isNone)
+                      (List.map
+                        (fun indexed =>
+                          (indexed.fst,
+                            descendScs indexed.snd scs ++ descendScs indexed.snd (suspendedVars before.counter tries),
+                            SourcePruningEnumerationShallowChild.prepareChild
+                              (descendScs indexed.snd scs ++
+                                descendScs indexed.snd (suspendedVars before.counter tries))
+                              indexed.fst))
+                        edge.children.zipIdx))
+                    (List.map
+                      (fun indexed =>
+                        (indexed.fst,
+                          descendScs indexed.snd scs ++ descendScs indexed.snd (suspendedVars before.counter tries),
+                          SourcePruningEnumerationShallowChild.prepareChild
+                            (descendScs indexed.snd scs ++ descendScs indexed.snd (suspendedVars before.counter tries))
+                            indexed.fst))
+                      edge.children.zipIdx)))
+                (suspendedState tries.length before)
+                (some
+                  (List.map (fun uv => Fragment.hole uv)
+                    (List.range' (before.counter + tries.length)
+                      (List.findIdx (fun stage => stage.snd.snd.isNone)
+                        (List.map
+                          (fun indexed =>
+                            (indexed.fst,
+                              descendScs indexed.snd scs ++ descendScs indexed.snd (suspendedVars before.counter tries),
+                              SourcePruningEnumerationShallowChild.prepareChild
+                                (descendScs indexed.snd scs ++
+                                  descendScs indexed.snd (suspendedVars before.counter tries))
+                                indexed.fst))
+                          edge.children.zipIdx)))))
+                childrenAfter ∧
+              (childrenResult =
+                  if
+                      List.findIdx (fun stage => stage.snd.snd.isNone)
+                          (List.map
+                            (fun indexed =>
+                              (indexed.fst,
+                                descendScs indexed.snd scs ++
+                                  descendScs indexed.snd (suspendedVars before.counter tries),
+                                SourcePruningEnumerationShallowChild.prepareChild
+                                  (descendScs indexed.snd scs ++
+                                    descendScs indexed.snd (suspendedVars before.counter tries))
+                                  indexed.fst))
+                            edge.children.zipIdx) <
+                        (List.map
+                            (fun indexed =>
+                              (indexed.fst,
+                                descendScs indexed.snd scs ++
+                                  descendScs indexed.snd (suspendedVars before.counter tries),
+                                SourcePruningEnumerationShallowChild.prepareChild
+                                  (descendScs indexed.snd scs ++
+                                    descendScs indexed.snd (suspendedVars before.counter tries))
+                                  indexed.fst))
+                            edge.children.zipIdx).length then
+                    none
+                  else
+                    some
+                      (List.map (fun uv => Fragment.hole uv)
+                        (List.range' (before.counter + tries.length)
+                          (List.map
+                              (fun indexed =>
+                                (indexed.fst,
+                                  descendScs indexed.snd scs ++
+                                    descendScs indexed.snd (suspendedVars before.counter tries),
+                                  SourcePruningEnumerationShallowChild.prepareChild
+                                    (descendScs indexed.snd scs ++
+                                      descendScs indexed.snd (suspendedVars before.counter tries))
+                                    indexed.fst))
+                              edge.children.zipIdx).length))) ∧
+                (after =
+                    match childrenResult with
+                    | none => childrenAfter
+                    | some fragments =>
+                      match residual with
+                      | none => childrenAfter
+                      | some guard =>
+                        { counter := childrenAfter.counter, representatives := childrenAfter.representatives,
+                          values := childrenAfter.values,
+                          obligations :=
+                            (guard, Fragment.node edge.entry.key.symbol fragments) :: childrenAfter.obligations,
+                          recursionAncestry := childrenAfter.recursionAncestry,
+                          expansionAncestry := childrenAfter.expansionAncestry }) ∧
+                  Success ?m.895 before
+                      (Option.map (fun fragments => Fragment.node edge.entry.key.symbol fragments) childrenResult)
+                      after ∧
+                    after.counter =
+                        before.counter + tries.length +
+                          List.findIdx (fun stage => stage.snd.snd.isNone)
+                            (List.map
+                              (fun indexed =>
+                                (indexed.fst,
+                                  descendScs indexed.snd scs ++
+                                    descendScs indexed.snd (suspendedVars before.counter tries),
+                                  SourcePruningEnumerationShallowChild.prepareChild
+                                    (descendScs indexed.snd scs ++
+                                      descendScs indexed.snd (suspendedVars before.counter tries))
+                                    indexed.fst))
+                              edge.children.zipIdx) ∧
+                      after.counter = after.values.length ∧ PendingRealized heap after)
+    childrenResult
+    (Exists.intro childrenAfter
+      (Exists.intro
+        (match childrenResult with
+        | none => childrenAfter
+        | some fragments =>
+          match residual with
+          | none => childrenAfter
+          | some guard =>
+            { counter := childrenAfter.counter, representatives := childrenAfter.representatives,
+              values := childrenAfter.values,
+              obligations := (guard, Fragment.node edge.entry.key.symbol fragments) :: childrenAfter.obligations,
+              recursionAncestry := childrenAfter.recursionAncestry,
+              expansionAncestry := childrenAfter.expansionAncestry })
+        ⟨?m.905,
+          ⟨childrenSuccess, ⟨completedPrefixSuccess, ⟨resultShape, ⟨rfl, ⟨?m.918, ⟨?m.921, ⟨?m.924, ?m.925⟩⟩⟩⟩⟩⟩⟩⟩))
+context:
+scs : List Suspended
+edge : EdgeValue Symbol Constraint
+heap : InternedConstructorTemplates.State Symbol Constraint
+parentEntry : Cache.Interned InternedBinderProtocol.NodeKey
+edges : List (EdgeValue Symbol Constraint)
+depth : Nat
+free : List InternedBinderProtocol.Reference
+ready : SourceEqualityRequiredCache.Ready heap
+parentAvailable : Available heap (Value.node parentEntry edges depth free)
+parentClosed : free = []
+selected : edge ∈ edges
+before : EnumerationState.State Symbol Constraint
+realized : PendingRealized heap before
+aligned : before.counter = before.values.length
+allowed : arityAllows edge.children.length scs = true
+tries : List EqualityTrie.Trie
+residual : Option Constraint
+projected : SourcePruningEnumerationConstraint.project edge.entry.key.constraint = some (tries, residual)
+prefixAction :
+  EnumerateM Symbol Constraint
+    (Symbol ×
+      List (Value Symbol Constraint × List Suspended × Option (EnumerateM Symbol Constraint (Fragment Symbol))) ×
+        Option Constraint)
+prefixPrepared : SourcePruningEnumerationEdgePrefix.prepare scs edge = some prefixAction
+prefixExact :
+  prefixAction before =
+    [Except.ok
+        ((edge.entry.key.symbol,
+            List.map
+              (fun indexed =>
+                (indexed.fst, descendScs indexed.snd scs ++ descendScs indexed.snd (suspendedVars before.counter tries),
+                  SourcePruningEnumerationShallowChild.prepareChild
+                    (descendScs indexed.snd scs ++ descendScs indexed.snd (suspendedVars before.counter tries))
+                    indexed.fst))
+              edge.children.zipIdx,
+            residual),
+          suspendedState tries.length before)]
+prefixCounter : (suspendedState tries.length before).counter = before.counter + tries.length
+prefixAligned : (suspendedState tries.length before).counter = (suspendedState tries.length before).values.length
+prefixRealized : PendingRealized heap (suspendedState tries.length before)
+prefixSuccess :
+  Success prefixAction before
+    (edge.entry.key.symbol,
+      List.map
+        (fun indexed =>
+          (indexed.fst, descendScs indexed.snd scs ++ descendScs indexed.snd (suspendedVars before.counter tries),
+            SourcePruningEnumerationShallowChild.prepareChild
+              (descendScs indexed.snd scs ++ descendScs indexed.snd (suspendedVars before.counter tries)) indexed.fst))
+        edge.children.zipIdx,
+      residual)
+    (suspendedState tries.length before)
+childrenAvailable : ∀ (child : Value Symbol Constraint), child ∈ edge.children → Available heap child
+childrenClosed : ∀ (child : Value Symbol Constraint), child ∈ edge.children → child.free = []
+childrenNonempty : ∀ (child : Value Symbol Constraint), child ∈ edge.children → child ≠ Value.empty
+inputs : List (Value Symbol Constraint × List Suspended) := ⋯
+stagedSame :
+  List.map (fun input => (input.fst, input.snd, SourcePruningEnumerationShallowChild.prepareChild input.snd input.fst))
+      inputs =
+    List.map
+      (fun indexed =>
+        (indexed.fst, descendScs indexed.snd scs ++ descendScs indexed.snd (suspendedVars before.counter tries),
+          SourcePruningEnumerationShallowChild.prepareChild
+            (descendScs indexed.snd scs ++ descendScs indexed.snd (suspendedVars before.counter tries)) indexed.fst))
+      edge.children.zipIdx
+childrenResult : Option (List (Fragment Symbol))
+childrenAfter : EnumerationState.State Symbol Constraint
+childrenSuccess :
+  Success
+    (runStaged
+      (List.map
+        (fun indexed =>
+          (indexed.fst, descendScs indexed.snd scs ++ descendScs indexed.snd (suspendedVars before.counter tries),
+            SourcePruningEnumerationShallowChild.prepareChild
+              (descendScs indexed.snd scs ++ descendScs indexed.snd (suspendedVars before.counter tries)) indexed.fst))
+        edge.children.zipIdx))
+    (suspendedState tries.length before) childrenResult childrenAfter
+completedPrefixSuccess :
+  Success
+    (runStaged
+      (List.take
+        (List.findIdx (fun stage => stage.snd.snd.isNone)
+          (List.map
+            (fun indexed =>
+              (indexed.fst, descendScs indexed.snd scs ++ descendScs indexed.snd (suspendedVars before.counter tries),
+                SourcePruningEnumerationShallowChild.prepareChild
+                  (descendScs indexed.snd scs ++ descendScs indexed.snd (suspendedVars before.counter tries))
+                  indexed.fst))
+            edge.children.zipIdx))
+        (List.map
+          (fun indexed =>
+            (indexed.fst, descendScs indexed.snd scs ++ descendScs indexed.snd (suspendedVars before.counter tries),
+              SourcePruningEnumerationShallowChild.prepareChild
+                (descendScs indexed.snd scs ++ descendScs indexed.snd (suspendedVars before.counter tries))
+                indexed.fst))
+          edge.children.zipIdx)))
+    (suspendedState tries.length before)
+    (some
+      (List.map (fun uv => Fragment.hole uv)
+        (List.range' (before.counter + tries.length)
+          (List.findIdx (fun stage => stage.snd.snd.isNone)
+            (List.map
+              (fun indexed =>
+                (indexed.fst, descendScs indexed.snd scs ++ descendScs indexed.snd (suspendedVars before.counter tries),
+                  SourcePruningEnumerationShallowChild.prepareChild
+                    (descendScs indexed.snd scs ++ descendScs indexed.snd (suspendedVars before.counter tries))
+                    indexed.fst))
+              edge.children.zipIdx)))))
+    childrenAfter
+resultShape :
+  childrenResult =
+    if
+        List.findIdx (fun stage => stage.snd.snd.isNone)
+            (List.map
+              (fun indexed =>
+                (indexed.fst, descendScs indexed.snd scs ++ descendScs indexed.snd (suspendedVars before.counter tries),
+                  SourcePruningEnumerationShallowChild.prepareChild
+                    (descendScs indexed.snd scs ++ descendScs indexed.snd (suspendedVars before.counter tries))
+                    indexed.fst))
+              edge.children.zipIdx) <
+          (List.map
+              (fun indexed =>
+                (indexed.fst, descendScs indexed.snd scs ++ descendScs indexed.snd (suspendedVars before.counter tries),
+                  SourcePruningEnumerationShallowChild.prepareChild
+                    (descendScs indexed.snd scs ++ descendScs indexed.snd (suspendedVars before.counter tries))
+                    indexed.fst))
+              edge.children.zipIdx).length then
+      none
+    else
+      some
+        (List.map (fun uv => Fragment.hole uv)
+          (List.range' (before.counter + tries.length)
+            (List.map
+                (fun indexed =>
+                  (indexed.fst,
+                    descendScs indexed.snd scs ++ descendScs indexed.snd (suspendedVars before.counter tries),
+                    SourcePruningEnumerationShallowChild.prepareChild
+                      (descendScs indexed.snd scs ++ descendScs indexed.snd (suspendedVars before.counter tries))
+                      indexed.fst))
+                edge.children.zipIdx).length))
+afterCounter :
+  childrenAfter.counter =
+    before.counter + tries.length +
+      List.findIdx (fun stage => stage.snd.snd.isNone)
+        (List.map
+          (fun indexed =>
+            (indexed.fst, descendScs indexed.snd scs ++ descendScs indexed.snd (suspendedVars before.counter tries),
+              SourcePruningEnumerationShallowChild.prepareChild
+                (descendScs indexed.snd scs ++ descendScs indexed.snd (suspendedVars before.counter tries))
+                indexed.fst))
+          edge.children.zipIdx)
+afterAligned : childrenAfter.counter = childrenAfter.values.length
+afterRealized : PendingRealized heap childrenAfter
+⊢ Option (List (Fragment Symbol)) → Prop
+/tmp/mcfta-pruning-enumeration-edge-traversal-20261024/strict-source-2/MicroCFTA/SourcePruningEnumerationEdgeTraversal.lean:225:11: error: don't know how to synthesize implicit argument `p`
+  @Exists.intro (EnumerationState.State Symbol Constraint)
+    (fun childrenAfter =>
+      ∃ after,
+        prepare scs edge = some ?m.895 ∧
+          Success
+              (runStaged
+                (List.map
+                  (fun indexed =>
+                    (indexed.fst,
+                      descendScs indexed.snd scs ++ descendScs indexed.snd (suspendedVars before.counter tries),
+                      SourcePruningEnumerationShallowChild.prepareChild
+                        (descendScs indexed.snd scs ++ descendScs indexed.snd (suspendedVars before.counter tries))
+                        indexed.fst))
+                  edge.children.zipIdx))
+              (suspendedState tries.length before) childrenResult childrenAfter ∧
+            Success
+                (runStaged
+                  (List.take
+                    (List.findIdx (fun stage => stage.snd.snd.isNone)
+                      (List.map
+                        (fun indexed =>
+                          (indexed.fst,
+                            descendScs indexed.snd scs ++ descendScs indexed.snd (suspendedVars before.counter tries),
+                            SourcePruningEnumerationShallowChild.prepareChild
+                              (descendScs indexed.snd scs ++
+                                descendScs indexed.snd (suspendedVars before.counter tries))
+                              indexed.fst))
+                        edge.children.zipIdx))
+                    (List.map
+                      (fun indexed =>
+                        (indexed.fst,
+                          descendScs indexed.snd scs ++ descendScs indexed.snd (suspendedVars before.counter tries),
+                          SourcePruningEnumerationShallowChild.prepareChild
+                            (descendScs indexed.snd scs ++ descendScs indexed.snd (suspendedVars before.counter tries))
+                            indexed.fst))
+                      edge.children.zipIdx)))
+                (suspendedState tries.length before)
+                (some
+                  (List.map (fun uv => Fragment.hole uv)
+                    (List.range' (before.counter + tries.length)
+                      (List.findIdx (fun stage => stage.snd.snd.isNone)
+                        (List.map
+                          (fun indexed =>
+                            (indexed.fst,
+                              descendScs indexed.snd scs ++ descendScs indexed.snd (suspendedVars before.counter tries),
+                              SourcePruningEnumerationShallowChild.prepareChild
+                                (descendScs indexed.snd scs ++
+                                  descendScs indexed.snd (suspendedVars before.counter tries))
+                                indexed.fst))
+                          edge.children.zipIdx)))))
+                childrenAfter ∧
+              (childrenResult =
+                  if
+                      List.findIdx (fun stage => stage.snd.snd.isNone)
+                          (List.map
+                            (fun indexed =>
+                              (indexed.fst,
+                                descendScs indexed.snd scs ++
+                                  descendScs indexed.snd (suspendedVars before.counter tries),
+                                SourcePruningEnumerationShallowChild.prepareChild
+                                  (descendScs indexed.snd scs ++
+                                    descendScs indexed.snd (suspendedVars before.counter tries))
+                                  indexed.fst))
+                            edge.children.zipIdx) <
+                        (List.map
+                            (fun indexed =>
+                              (indexed.fst,
+                                descendScs indexed.snd scs ++
+                                  descendScs indexed.snd (suspendedVars before.counter tries),
+                                SourcePruningEnumerationShallowChild.prepareChild
+                                  (descendScs indexed.snd scs ++
+                                    descendScs indexed.snd (suspendedVars before.counter tries))
+                                  indexed.fst))
+                            edge.children.zipIdx).length then
+                    none
+                  else
+                    some
+                      (List.map (fun uv => Fragment.hole uv)
+                        (List.range' (before.counter + tries.length)
+                          (List.map
+                              (fun indexed =>
+                                (indexed.fst,
+                                  descendScs indexed.snd scs ++
+                                    descendScs indexed.snd (suspendedVars before.counter tries),
+                                  SourcePruningEnumerationShallowChild.prepareChild
+                                    (descendScs indexed.snd scs ++
+                                      descendScs indexed.snd (suspendedVars before.counter tries))
+                                    indexed.fst))
+                              edge.children.zipIdx).length))) ∧
+                (after =
+                    match childrenResult with
+                    | none => childrenAfter
+                    | some fragments =>
+                      match residual with
+                      | none => childrenAfter
+                      | some guard =>
+                        { counter := childrenAfter.counter, representatives := childrenAfter.representatives,
+                          values := childrenAfter.values,
+                          obligations :=
+                            (guard, Fragment.node edge.entry.key.symbol fragments) :: childrenAfter.obligations,
+                          recursionAncestry := childrenAfter.recursionAncestry,
+                          expansionAncestry := childrenAfter.expansionAncestry }) ∧
+                  Success ?m.895 before
+                      (Option.map (fun fragments => Fragment.node edge.entry.key.symbol fragments) childrenResult)
+                      after ∧
+                    after.counter =
+                        before.counter + tries.length +
+                          List.findIdx (fun stage => stage.snd.snd.isNone)
+                            (List.map
+                              (fun indexed =>
+                                (indexed.fst,
+                                  descendScs indexed.snd scs ++
+                                    descendScs indexed.snd (suspendedVars before.counter tries),
+                                  SourcePruningEnumerationShallowChild.prepareChild
+                                    (descendScs indexed.snd scs ++
+                                      descendScs indexed.snd (suspendedVars before.counter tries))
+                                    indexed.fst))
+                              edge.children.zipIdx) ∧
+                      after.counter = after.values.length ∧ PendingRealized heap after)
+    childrenAfter
+    (Exists.intro
+      (match childrenResult with
+      | none => childrenAfter
+      | some fragments =>
+        match residual with
+        | none => childrenAfter
+        | some guard =>
+          { counter := childrenAfter.counter, representatives := childrenAfter.representatives,
+            values := childrenAfter.values,
+            obligations := (guard, Fragment.node edge.entry.key.symbol fragments) :: childrenAfter.obligations,
+            recursionAncestry := childrenAfter.recursionAncestry,
+            expansionAncestry := childrenAfter.expansionAncestry })
+      ⟨?m.905, ⟨childrenSuccess, ⟨completedPrefixSuccess, ⟨resultShape, ⟨rfl, ⟨?m.918, ⟨?m.921, ⟨?m.924, ?m.925⟩⟩⟩⟩⟩⟩⟩⟩)
+context:
+scs : List Suspended
+edge : EdgeValue Symbol Constraint
+heap : InternedConstructorTemplates.State Symbol Constraint
+parentEntry : Cache.Interned InternedBinderProtocol.NodeKey
+edges : List (EdgeValue Symbol Constraint)
+depth : Nat
+free : List InternedBinderProtocol.Reference
+ready : SourceEqualityRequiredCache.Ready heap
+parentAvailable : Available heap (Value.node parentEntry edges depth free)
+parentClosed : free = []
+selected : edge ∈ edges
+before : EnumerationState.State Symbol Constraint
+realized : PendingRealized heap before
+aligned : before.counter = before.values.length
+allowed : arityAllows edge.children.length scs = true
+tries : List EqualityTrie.Trie
+residual : Option Constraint
+projected : SourcePruningEnumerationConstraint.project edge.entry.key.constraint = some (tries, residual)
+prefixAction :
+  EnumerateM Symbol Constraint
+    (Symbol ×
+      List (Value Symbol Constraint × List Suspended × Option (EnumerateM Symbol Constraint (Fragment Symbol))) ×
+        Option Constraint)
+prefixPrepared : SourcePruningEnumerationEdgePrefix.prepare scs edge = some prefixAction
+prefixExact :
+  prefixAction before =
+    [Except.ok
+        ((edge.entry.key.symbol,
+            List.map
+              (fun indexed =>
+                (indexed.fst, descendScs indexed.snd scs ++ descendScs indexed.snd (suspendedVars before.counter tries),
+                  SourcePruningEnumerationShallowChild.prepareChild
+                    (descendScs indexed.snd scs ++ descendScs indexed.snd (suspendedVars before.counter tries))
+                    indexed.fst))
+              edge.children.zipIdx,
+            residual),
+          suspendedState tries.length before)]
+prefixCounter : (suspendedState tries.length before).counter = before.counter + tries.length
+prefixAligned : (suspendedState tries.length before).counter = (suspendedState tries.length before).values.length
+prefixRealized : PendingRealized heap (suspendedState tries.length before)
+prefixSuccess :
+  Success prefixAction before
+    (edge.entry.key.symbol,
+      List.map
+        (fun indexed =>
+          (indexed.fst, descendScs indexed.snd scs ++ descendScs indexed.snd (suspendedVars before.counter tries),
+            SourcePruningEnumerationShallowChild.prepareChild
+              (descendScs indexed.snd scs ++ descendScs indexed.snd (suspendedVars before.counter tries)) indexed.fst))
+        edge.children.zipIdx,
+      residual)
+    (suspendedState tries.length before)
+childrenAvailable : ∀ (child : Value Symbol Constraint), child ∈ edge.children → Available heap child
+childrenClosed : ∀ (child : Value Symbol Constraint), child ∈ edge.children → child.free = []
+childrenNonempty : ∀ (child : Value Symbol Constraint), child ∈ edge.children → child ≠ Value.empty
+inputs : List (Value Symbol Constraint × List Suspended) := ⋯
+stagedSame :
+  List.map (fun input => (input.fst, input.snd, SourcePruningEnumerationShallowChild.prepareChild input.snd input.fst))
+      inputs =
+    List.map
+      (fun indexed =>
+        (indexed.fst, descendScs indexed.snd scs ++ descendScs indexed.snd (suspendedVars before.counter tries),
+          SourcePruningEnumerationShallowChild.prepareChild
+            (descendScs indexed.snd scs ++ descendScs indexed.snd (suspendedVars before.counter tries)) indexed.fst))
+      edge.children.zipIdx
+childrenResult : Option (List (Fragment Symbol))
+childrenAfter : EnumerationState.State Symbol Constraint
+childrenSuccess :
+  Success
+    (runStaged
+      (List.map
+        (fun indexed =>
+          (indexed.fst, descendScs indexed.snd scs ++ descendScs indexed.snd (suspendedVars before.counter tries),
+            SourcePruningEnumerationShallowChild.prepareChild
+              (descendScs indexed.snd scs ++ descendScs indexed.snd (suspendedVars before.counter tries)) indexed.fst))
+        edge.children.zipIdx))
+    (suspendedState tries.length before) childrenResult childrenAfter
+completedPrefixSuccess :
+  Success
+    (runStaged
+      (List.take
+        (List.findIdx (fun stage => stage.snd.snd.isNone)
+          (List.map
+            (fun indexed =>
+              (indexed.fst, descendScs indexed.snd scs ++ descendScs indexed.snd (suspendedVars before.counter tries),
+                SourcePruningEnumerationShallowChild.prepareChild
+                  (descendScs indexed.snd scs ++ descendScs indexed.snd (suspendedVars before.counter tries))
+                  indexed.fst))
+            edge.children.zipIdx))
+        (List.map
+          (fun indexed =>
+            (indexed.fst, descendScs indexed.snd scs ++ descendScs indexed.snd (suspendedVars before.counter tries),
+              SourcePruningEnumerationShallowChild.prepareChild
+                (descendScs indexed.snd scs ++ descendScs indexed.snd (suspendedVars before.counter tries))
+                indexed.fst))
+          edge.children.zipIdx)))
+    (suspendedState tries.length before)
+    (some
+      (List.map (fun uv => Fragment.hole uv)
+        (List.range' (before.counter + tries.length)
+          (List.findIdx (fun stage => stage.snd.snd.isNone)
+            (List.map
+              (fun indexed =>
+                (indexed.fst, descendScs indexed.snd scs ++ descendScs indexed.snd (suspendedVars before.counter tries),
+                  SourcePruningEnumerationShallowChild.prepareChild
+                    (descendScs indexed.snd scs ++ descendScs indexed.snd (suspendedVars before.counter tries))
+                    indexed.fst))
+              edge.children.zipIdx)))))
+    childrenAfter
+resultShape :
+  childrenResult =
+    if
+        List.findIdx (fun stage => stage.snd.snd.isNone)
+            (List.map
+              (fun indexed =>
+                (indexed.fst, descendScs indexed.snd scs ++ descendScs indexed.snd (suspendedVars before.counter tries),
+                  SourcePruningEnumerationShallowChild.prepareChild
+                    (descendScs indexed.snd scs ++ descendScs indexed.snd (suspendedVars before.counter tries))
+                    indexed.fst))
+              edge.children.zipIdx) <
+          (List.map
+              (fun indexed =>
+                (indexed.fst, descendScs indexed.snd scs ++ descendScs indexed.snd (suspendedVars before.counter tries),
+                  SourcePruningEnumerationShallowChild.prepareChild
+                    (descendScs indexed.snd scs ++ descendScs indexed.snd (suspendedVars before.counter tries))
+                    indexed.fst))
+              edge.children.zipIdx).length then
+      none
+    else
+      some
+        (List.map (fun uv => Fragment.hole uv)
+          (List.range' (before.counter + tries.length)
+            (List.map
+                (fun indexed =>
+                  (indexed.fst,
+                    descendScs indexed.snd scs ++ descendScs indexed.snd (suspendedVars before.counter tries),
+                    SourcePruningEnumerationShallowChild.prepareChild
+                      (descendScs indexed.snd scs ++ descendScs indexed.snd (suspendedVars before.counter tries))
+                      indexed.fst))
+                edge.children.zipIdx).length))
+afterCounter :
+  childrenAfter.counter =
+    before.counter + tries.length +
+      List.findIdx (fun stage => stage.snd.snd.isNone)
+        (List.map
+          (fun indexed =>
+            (indexed.fst, descendScs indexed.snd scs ++ descendScs indexed.snd (suspendedVars before.counter tries),
+              SourcePruningEnumerationShallowChild.prepareChild
+                (descendScs indexed.snd scs ++ descendScs indexed.snd (suspendedVars before.counter tries))
+                indexed.fst))
+          edge.children.zipIdx)
+afterAligned : childrenAfter.counter = childrenAfter.values.length
+afterRealized : PendingRealized heap childrenAfter
+⊢ EnumerationState.State Symbol Constraint → Prop
+/tmp/mcfta-pruning-enumeration-edge-traversal-20261024/strict-source-2/MicroCFTA/SourcePruningEnumerationEdgeTraversal.lean:225:11: error: don't know how to synthesize implicit argument `p`
+  @Exists.intro (EnumerationState.State Symbol Constraint)
+    (fun after =>
+      prepare scs edge = some ?m.895 ∧
+        Success
+            (runStaged
+              (List.map
+                (fun indexed =>
+                  (indexed.fst,
+                    descendScs indexed.snd scs ++ descendScs indexed.snd (suspendedVars before.counter tries),
+                    SourcePruningEnumerationShallowChild.prepareChild
+                      (descendScs indexed.snd scs ++ descendScs indexed.snd (suspendedVars before.counter tries))
+                      indexed.fst))
+                edge.children.zipIdx))
+            (suspendedState tries.length before) childrenResult childrenAfter ∧
+          Success
+              (runStaged
+                (List.take
+                  (List.findIdx (fun stage => stage.snd.snd.isNone)
+                    (List.map
+                      (fun indexed =>
+                        (indexed.fst,
+                          descendScs indexed.snd scs ++ descendScs indexed.snd (suspendedVars before.counter tries),
+                          SourcePruningEnumerationShallowChild.prepareChild
+                            (descendScs indexed.snd scs ++ descendScs indexed.snd (suspendedVars before.counter tries))
+                            indexed.fst))
+                      edge.children.zipIdx))
+                  (List.map
+                    (fun indexed =>
+                      (indexed.fst,
+                        descendScs indexed.snd scs ++ descendScs indexed.snd (suspendedVars before.counter tries),
+                        SourcePruningEnumerationShallowChild.prepareChild
+                          (descendScs indexed.snd scs ++ descendScs indexed.snd (suspendedVars before.counter tries))
+                          indexed.fst))
+                    edge.children.zipIdx)))
+              (suspendedState tries.length before)
+              (some
+                (List.map (fun uv => Fragment.hole uv)
+                  (List.range' (before.counter + tries.length)
+                    (List.findIdx (fun stage => stage.snd.snd.isNone)
+                      (List.map
+                        (fun indexed =>
+                          (indexed.fst,
+                            descendScs indexed.snd scs ++ descendScs indexed.snd (suspendedVars before.counter tries),
+                            SourcePruningEnumerationShallowChild.prepareChild
+                              (descendScs indexed.snd scs ++
+                                descendScs indexed.snd (suspendedVars before.counter tries))
+                              indexed.fst))
+                        edge.children.zipIdx)))))
+              childrenAfter ∧
+            (childrenResult =
+                if
+                    List.findIdx (fun stage => stage.snd.snd.isNone)
+                        (List.map
+                          (fun indexed =>
+                            (indexed.fst,
+                              descendScs indexed.snd scs ++ descendScs indexed.snd (suspendedVars before.counter tries),
+                              SourcePruningEnumerationShallowChild.prepareChild
+                                (descendScs indexed.snd scs ++
+                                  descendScs indexed.snd (suspendedVars before.counter tries))
+                                indexed.fst))
+                          edge.children.zipIdx) <
+                      (List.map
+                          (fun indexed =>
+                            (indexed.fst,
+                              descendScs indexed.snd scs ++ descendScs indexed.snd (suspendedVars before.counter tries),
+                              SourcePruningEnumerationShallowChild.prepareChild
+                                (descendScs indexed.snd scs ++
+                                  descendScs indexed.snd (suspendedVars before.counter tries))
+                                indexed.fst))
+                          edge.children.zipIdx).length then
+                  none
+                else
+                  some
+                    (List.map (fun uv => Fragment.hole uv)
+                      (List.range' (before.counter + tries.length)
+                        (List.map
+                            (fun indexed =>
+                              (indexed.fst,
+                                descendScs indexed.snd scs ++
+                                  descendScs indexed.snd (suspendedVars before.counter tries),
+                                SourcePruningEnumerationShallowChild.prepareChild
+                                  (descendScs indexed.snd scs ++
+                                    descendScs indexed.snd (suspendedVars before.counter tries))
+                                  indexed.fst))
+                            edge.children.zipIdx).length))) ∧
+              (after =
+                  match childrenResult with
+                  | none => childrenAfter
+                  | some fragments =>
+                    match residual with
+                    | none => childrenAfter
+                    | some guard =>
+                      { counter := childrenAfter.counter, representatives := childrenAfter.representatives,
+                        values := childrenAfter.values,
+                        obligations :=
+                          (guard, Fragment.node edge.entry.key.symbol fragments) :: childrenAfter.obligations,
+                        recursionAncestry := childrenAfter.recursionAncestry,
+                        expansionAncestry := childrenAfter.expansionAncestry }) ∧
+                Success ?m.895 before
+                    (Option.map (fun fragments => Fragment.node edge.entry.key.symbol fragments) childrenResult) after ∧
+                  after.counter =
+                      before.counter + tries.length +
+                        List.findIdx (fun stage => stage.snd.snd.isNone)
+                          (List.map
+                            (fun indexed =>
+                              (indexed.fst,
+                                descendScs indexed.snd scs ++
+                                  descendScs indexed.snd (suspendedVars before.counter tries),
+                                SourcePruningEnumerationShallowChild.prepareChild
+                                  (descendScs indexed.snd scs ++
+                                    descendScs indexed.snd (suspendedVars before.counter tries))
+                                  indexed.fst))
+                            edge.children.zipIdx) ∧
+                    after.counter = after.values.length ∧ PendingRealized heap after)
+    (match childrenResult with
+    | none => childrenAfter
+    | some fragments =>
+      match residual with
+      | none => childrenAfter
+      | some guard =>
+        { counter := childrenAfter.counter, representatives := childrenAfter.representatives,
+          values := childrenAfter.values,
+          obligations := (guard, Fragment.node edge.entry.key.symbol fragments) :: childrenAfter.obligations,
+          recursionAncestry := childrenAfter.recursionAncestry, expansionAncestry := childrenAfter.expansionAncestry })
+    ⟨?m.905, ⟨childrenSuccess, ⟨completedPrefixSuccess, ⟨resultShape, ⟨rfl, ⟨?m.918, ⟨?m.921, ⟨?m.924, ?m.925⟩⟩⟩⟩⟩⟩⟩⟩
+context:
+scs : List Suspended
+edge : EdgeValue Symbol Constraint
+heap : InternedConstructorTemplates.State Symbol Constraint
+parentEntry : Cache.Interned InternedBinderProtocol.NodeKey
+edges : List (EdgeValue Symbol Constraint)
+depth : Nat
+free : List InternedBinderProtocol.Reference
+ready : SourceEqualityRequiredCache.Ready heap
+parentAvailable : Available heap (Value.node parentEntry edges depth free)
+parentClosed : free = []
+selected : edge ∈ edges
+before : EnumerationState.State Symbol Constraint
+realized : PendingRealized heap before
+aligned : before.counter = before.values.length
+allowed : arityAllows edge.children.length scs = true
+tries : List EqualityTrie.Trie
+residual : Option Constraint
+projected : SourcePruningEnumerationConstraint.project edge.entry.key.constraint = some (tries, residual)
+prefixAction :
+  EnumerateM Symbol Constraint
+    (Symbol ×
+      List (Value Symbol Constraint × List Suspended × Option (EnumerateM Symbol Constraint (Fragment Symbol))) ×
+        Option Constraint)
+prefixPrepared : SourcePruningEnumerationEdgePrefix.prepare scs edge = some prefixAction
+prefixExact :
+  prefixAction before =
+    [Except.ok
+        ((edge.entry.key.symbol,
+            List.map
+              (fun indexed =>
+                (indexed.fst, descendScs indexed.snd scs ++ descendScs indexed.snd (suspendedVars before.counter tries),
+                  SourcePruningEnumerationShallowChild.prepareChild
+                    (descendScs indexed.snd scs ++ descendScs indexed.snd (suspendedVars before.counter tries))
+                    indexed.fst))
+              edge.children.zipIdx,
+            residual),
+          suspendedState tries.length before)]
+prefixCounter : (suspendedState tries.length before).counter = before.counter + tries.length
+prefixAligned : (suspendedState tries.length before).counter = (suspendedState tries.length before).values.length
+prefixRealized : PendingRealized heap (suspendedState tries.length before)
+prefixSuccess :
+  Success prefixAction before
+    (edge.entry.key.symbol,
+      List.map
+        (fun indexed =>
+          (indexed.fst, descendScs indexed.snd scs ++ descendScs indexed.snd (suspendedVars before.counter tries),
+            SourcePruningEnumerationShallowChild.prepareChild
+              (descendScs indexed.snd scs ++ descendScs indexed.snd (suspendedVars before.counter tries)) indexed.fst))
+        edge.children.zipIdx,
+      residual)
+    (suspendedState tries.length before)
+childrenAvailable : ∀ (child : Value Symbol Constraint), child ∈ edge.children → Available heap child
+childrenClosed : ∀ (child : Value Symbol Constraint), child ∈ edge.children → child.free = []
+childrenNonempty : ∀ (child : Value Symbol Constraint), child ∈ edge.children → child ≠ Value.empty
+inputs : List (Value Symbol Constraint × List Suspended) := ⋯
+stagedSame :
+  List.map (fun input => (input.fst, input.snd, SourcePruningEnumerationShallowChild.prepareChild input.snd input.fst))
+      inputs =
+    List.map
+      (fun indexed =>
+        (indexed.fst, descendScs indexed.snd scs ++ descendScs indexed.snd (suspendedVars before.counter tries),
+          SourcePruningEnumerationShallowChild.prepareChild
+            (descendScs indexed.snd scs ++ descendScs indexed.snd (suspendedVars before.counter tries)) indexed.fst))
+      edge.children.zipIdx
+childrenResult : Option (List (Fragment Symbol))
+childrenAfter : EnumerationState.State Symbol Constraint
+childrenSuccess :
+  Success
+    (runStaged
+      (List.map
+        (fun indexed =>
+          (indexed.fst, descendScs indexed.snd scs ++ descendScs indexed.snd (suspendedVars before.counter tries),
+            SourcePruningEnumerationShallowChild.prepareChild
+              (descendScs indexed.snd scs ++ descendScs indexed.snd (suspendedVars before.counter tries)) indexed.fst))
+        edge.children.zipIdx))
+    (suspendedState tries.length before) childrenResult childrenAfter
+completedPrefixSuccess :
+  Success
+    (runStaged
+      (List.take
+        (List.findIdx (fun stage => stage.snd.snd.isNone)
+          (List.map
+            (fun indexed =>
+              (indexed.fst, descendScs indexed.snd scs ++ descendScs indexed.snd (suspendedVars before.counter tries),
+                SourcePruningEnumerationShallowChild.prepareChild
+                  (descendScs indexed.snd scs ++ descendScs indexed.snd (suspendedVars before.counter tries))
+                  indexed.fst))
+            edge.children.zipIdx))
+        (List.map
+          (fun indexed =>
+            (indexed.fst, descendScs indexed.snd scs ++ descendScs indexed.snd (suspendedVars before.counter tries),
+              SourcePruningEnumerationShallowChild.prepareChild
+                (descendScs indexed.snd scs ++ descendScs indexed.snd (suspendedVars before.counter tries))
+                indexed.fst))
+          edge.children.zipIdx)))
+    (suspendedState tries.length before)
+    (some
+      (List.map (fun uv => Fragment.hole uv)
+        (List.range' (before.counter + tries.length)
+          (List.findIdx (fun stage => stage.snd.snd.isNone)
+            (List.map
+              (fun indexed =>
+                (indexed.fst, descendScs indexed.snd scs ++ descendScs indexed.snd (suspendedVars before.counter tries),
+                  SourcePruningEnumerationShallowChild.prepareChild
+                    (descendScs indexed.snd scs ++ descendScs indexed.snd (suspendedVars before.counter tries))
+                    indexed.fst))
+              edge.children.zipIdx)))))
+    childrenAfter
+resultShape :
+  childrenResult =
+    if
+        List.findIdx (fun stage => stage.snd.snd.isNone)
+            (List.map
+              (fun indexed =>
+                (indexed.fst, descendScs indexed.snd scs ++ descendScs indexed.snd (suspendedVars before.counter tries),
+                  SourcePruningEnumerationShallowChild.prepareChild
+                    (descendScs indexed.snd scs ++ descendScs indexed.snd (suspendedVars before.counter tries))
+                    indexed.fst))
+              edge.children.zipIdx) <
+          (List.map
+              (fun indexed =>
+                (indexed.fst, descendScs indexed.snd scs ++ descendScs indexed.snd (suspendedVars before.counter tries),
+                  SourcePruningEnumerationShallowChild.prepareChild
+                    (descendScs indexed.snd scs ++ descendScs indexed.snd (suspendedVars before.counter tries))
+                    indexed.fst))
+              edge.children.zipIdx).length then
+      none
+    else
+      some
+        (List.map (fun uv => Fragment.hole uv)
+          (List.range' (before.counter + tries.length)
+            (List.map
+                (fun indexed =>
+                  (indexed.fst,
+                    descendScs indexed.snd scs ++ descendScs indexed.snd (suspendedVars before.counter tries),
+                    SourcePruningEnumerationShallowChild.prepareChild
+                      (descendScs indexed.snd scs ++ descendScs indexed.snd (suspendedVars before.counter tries))
+                      indexed.fst))
+                edge.children.zipIdx).length))
+afterCounter :
+  childrenAfter.counter =
+    before.counter + tries.length +
+      List.findIdx (fun stage => stage.snd.snd.isNone)
+        (List.map
+          (fun indexed =>
+            (indexed.fst, descendScs indexed.snd scs ++ descendScs indexed.snd (suspendedVars before.counter tries),
+              SourcePruningEnumerationShallowChild.prepareChild
+                (descendScs indexed.snd scs ++ descendScs indexed.snd (suspendedVars before.counter tries))
+                indexed.fst))
+          edge.children.zipIdx)
+afterAligned : childrenAfter.counter = childrenAfter.values.length
+afterRealized : PendingRealized heap childrenAfter
+⊢ EnumerationState.State Symbol Constraint → Prop
+/tmp/mcfta-pruning-enumeration-edge-traversal-20261024/strict-source-2/MicroCFTA/SourcePruningEnumerationEdgeTraversal.lean:225:11: error: don't know how to synthesize implicit argument `b`
+  @And.intro (prepare scs edge = some ?m.895)
+    (Success
+        (runStaged
+          (List.map
+            (fun indexed =>
+              (indexed.fst, descendScs indexed.snd scs ++ descendScs indexed.snd (suspendedVars before.counter tries),
+                SourcePruningEnumerationShallowChild.prepareChild
+                  (descendScs indexed.snd scs ++ descendScs indexed.snd (suspendedVars before.counter tries))
+                  indexed.fst))
+            edge.children.zipIdx))
+        (suspendedState tries.length before) childrenResult childrenAfter ∧
+      Success
+          (runStaged
+            (List.take
+              (List.findIdx (fun stage => stage.snd.snd.isNone)
+                (List.map
+                  (fun indexed =>
+                    (indexed.fst,
+                      descendScs indexed.snd scs ++ descendScs indexed.snd (suspendedVars before.counter tries),
+                      SourcePruningEnumerationShallowChild.prepareChild
+                        (descendScs indexed.snd scs ++ descendScs indexed.snd (suspendedVars before.counter tries))
+                        indexed.fst))
+                  edge.children.zipIdx))
+              (List.map
+                (fun indexed =>
+                  (indexed.fst,
+                    descendScs indexed.snd scs ++ descendScs indexed.snd (suspendedVars before.counter tries),
+                    SourcePruningEnumerationShallowChild.prepareChild
+                      (descendScs indexed.snd scs ++ descendScs indexed.snd (suspendedVars before.counter tries))
+                      indexed.fst))
+                edge.children.zipIdx)))
+          (suspendedState tries.length before)
+          (some
+            (List.map (fun uv => Fragment.hole uv)
+              (List.range' (before.counter + tries.length)
+                (List.findIdx (fun stage => stage.snd.snd.isNone)
+                  (List.map
+                    (fun indexed =>
+                      (indexed.fst,
+                        descendScs indexed.snd scs ++ descendScs indexed.snd (suspendedVars before.counter tries),
+                        SourcePruningEnumerationShallowChild.prepareChild
+                          (descendScs indexed.snd scs ++ descendScs indexed.snd (suspendedVars before.counter tries))
+                          indexed.fst))
+                    edge.children.zipIdx)))))
+          childrenAfter ∧
+        (childrenResult =
+            if
+                List.findIdx (fun stage => stage.snd.snd.isNone)
+                    (List.map
+                      (fun indexed =>
+                        (indexed.fst,
+                          descendScs indexed.snd scs ++ descendScs indexed.snd (suspendedVars before.counter tries),
+                          SourcePruningEnumerationShallowChild.prepareChild
+                            (descendScs indexed.snd scs ++ descendScs indexed.snd (suspendedVars before.counter tries))
+                            indexed.fst))
+                      edge.children.zipIdx) <
+                  (List.map
+                      (fun indexed =>
+                        (indexed.fst,
+                          descendScs indexed.snd scs ++ descendScs indexed.snd (suspendedVars before.counter tries),
+                          SourcePruningEnumerationShallowChild.prepareChild
+                            (descendScs indexed.snd scs ++ descendScs indexed.snd (suspendedVars before.counter tries))
+                            indexed.fst))
+                      edge.children.zipIdx).length then
+              none
+            else
+              some
+                (List.map (fun uv => Fragment.hole uv)
+                  (List.range' (before.counter + tries.length)
+                    (List.map
+                        (fun indexed =>
+                          (indexed.fst,
+                            descendScs indexed.snd scs ++ descendScs indexed.snd (suspendedVars before.counter tries),
+                            SourcePruningEnumerationShallowChild.prepareChild
+                              (descendScs indexed.snd scs ++
+                                descendScs indexed.snd (suspendedVars before.counter tries))
+                              indexed.fst))
+                        edge.children.zipIdx).length))) ∧
+          ((match childrenResult with
+              | none => childrenAfter
+              | some fragments =>
+                match residual with
+                | none => childrenAfter
+                | some guard =>
+                  { counter := childrenAfter.counter, representatives := childrenAfter.representatives,
+                    values := childrenAfter.values,
+                    obligations := (guard, Fragment.node edge.entry.key.symbol fragments) :: childrenAfter.obligations,
+                    recursionAncestry := childrenAfter.recursionAncestry,
+                    expansionAncestry := childrenAfter.expansionAncestry }) =
+              match childrenResult with
+              | none => childrenAfter
+              | some fragments =>
+                match residual with
+                | none => childrenAfter
+                | some guard =>
+                  { counter := childrenAfter.counter, representatives := childrenAfter.representatives,
+                    values := childrenAfter.values,
+                    obligations := (guard, Fragment.node edge.entry.key.symbol fragments) :: childrenAfter.obligations,
+                    recursionAncestry := childrenAfter.recursionAncestry,
+                    expansionAncestry := childrenAfter.expansionAncestry }) ∧
+            Success ?m.895 before
+                (Option.map (fun fragments => Fragment.node edge.entry.key.symbol fragments) childrenResult)
+                (match childrenResult with
+                | none => childrenAfter
+                | some fragments =>
+                  match residual with
+                  | none => childrenAfter
+                  | some guard =>
+                    { counter := childrenAfter.counter, representatives := childrenAfter.representatives,
+                      values := childrenAfter.values,
+                      obligations :=
+                        (guard, Fragment.node edge.entry.key.symbol fragments) :: childrenAfter.obligations,
+                      recursionAncestry := childrenAfter.recursionAncestry,
+                      expansionAncestry := childrenAfter.expansionAncestry }) ∧
+              (match childrenResult with
+                    | none => childrenAfter
+                    | some fragments =>
+                      match residual with
+                      | none => childrenAfter
+                      | some guard =>
+                        { counter := childrenAfter.counter, representatives := childrenAfter.representatives,
+                          values := childrenAfter.values,
+                          obligations :=
+                            (guard, Fragment.node edge.entry.key.symbol fragments) :: childrenAfter.obligations,
+                          recursionAncestry := childrenAfter.recursionAncestry,
+                          expansionAncestry := childrenAfter.expansionAncestry }).counter =
+                  before.counter + tries.length +
+                    List.findIdx (fun stage => stage.snd.snd.isNone)
+                      (List.map
+                        (fun indexed =>
+                          (indexed.fst,
+                            descendScs indexed.snd scs ++ descendScs indexed.snd (suspendedVars before.counter tries),
+                            SourcePruningEnumerationShallowChild.prepareChild
+                              (descendScs indexed.snd scs ++
+                                descendScs indexed.snd (suspendedVars before.counter tries))
+                              indexed.fst))
+                        edge.children.zipIdx) ∧
+                (match childrenResult with
+                      | none => childrenAfter
+                      | some fragments =>
+                        match residual with
+                        | none => childrenAfter
+                        | some guard =>
+                          { counter := childrenAfter.counter, representatives := childrenAfter.representatives,
+                            values := childrenAfter.values,
+                            obligations :=
+                              (guard, Fragment.node edge.entry.key.symbol fragments) :: childrenAfter.obligations,
+                            recursionAncestry := childrenAfter.recursionAncestry,
+                            expansionAncestry := childrenAfter.expansionAncestry }).counter =
+                    (match childrenResult with
+                        | none => childrenAfter
+                        | some fragments =>
+                          match residual with
+                          | none => childrenAfter
+                          | some guard =>
+                            { counter := childrenAfter.counter, representatives := childrenAfter.representatives,
+                              values := childrenAfter.values,
+                              obligations :=
+                                (guard, Fragment.node edge.entry.key.symbol fragments) :: childrenAfter.obligations,
+                              recursionAncestry := childrenAfter.recursionAncestry,
+                              expansionAncestry := childrenAfter.expansionAncestry }).values.length ∧
+                  PendingRealized heap
+                    (match childrenResult with
+                    | none => childrenAfter
+                    | some fragments =>
+                      match residual with
+                      | none => childrenAfter
+                      | some guard =>
+                        { counter := childrenAfter.counter, representatives := childrenAfter.representatives,
+                          values := childrenAfter.values,
+                          obligations :=
+                            (guard, Fragment.node edge.entry.key.symbol fragments) :: childrenAfter.obligations,
+                          recursionAncestry := childrenAfter.recursionAncestry,
+                          expansionAncestry := childrenAfter.expansionAncestry }))
+    ?m.905 ⟨childrenSuccess, ⟨completedPrefixSuccess, ⟨resultShape, ⟨rfl, ⟨?m.918, ⟨?m.921, ⟨?m.924, ?m.925⟩⟩⟩⟩⟩⟩⟩
+context:
+scs : List Suspended
+edge : EdgeValue Symbol Constraint
+heap : InternedConstructorTemplates.State Symbol Constraint
+parentEntry : Cache.Interned InternedBinderProtocol.NodeKey
+edges : List (EdgeValue Symbol Constraint)
+depth : Nat
+free : List InternedBinderProtocol.Reference
+ready : SourceEqualityRequiredCache.Ready heap
+parentAvailable : Available heap (Value.node parentEntry edges depth free)
+parentClosed : free = []
+selected : edge ∈ edges
+before : EnumerationState.State Symbol Constraint
+realized : PendingRealized heap before
+aligned : before.counter = before.values.length
+allowed : arityAllows edge.children.length scs = true
+tries : List EqualityTrie.Trie
+residual : Option Constraint
+projected : SourcePruningEnumerationConstraint.project edge.entry.key.constraint = some (tries, residual)
+prefixAction :
+  EnumerateM Symbol Constraint
+    (Symbol ×
+      List (Value Symbol Constraint × List Suspended × Option (EnumerateM Symbol Constraint (Fragment Symbol))) ×
+        Option Constraint)
+prefixPrepared : SourcePruningEnumerationEdgePrefix.prepare scs edge = some prefixAction
+prefixExact :
+  prefixAction before =
+    [Except.ok
+        ((edge.entry.key.symbol,
+            List.map
+              (fun indexed =>
+                (indexed.fst, descendScs indexed.snd scs ++ descendScs indexed.snd (suspendedVars before.counter tries),
+                  SourcePruningEnumerationShallowChild.prepareChild
+                    (descendScs indexed.snd scs ++ descendScs indexed.snd (suspendedVars before.counter tries))
+                    indexed.fst))
+              edge.children.zipIdx,
+            residual),
+          suspendedState tries.length before)]
+prefixCounter : (suspendedState tries.length before).counter = before.counter + tries.length
+prefixAligned : (suspendedState tries.length before).counter = (suspendedState tries.length before).values.length
+prefixRealized : PendingRealized heap (suspendedState tries.length before)
+prefixSuccess :
+  Success prefixAction before
+    (edge.entry.key.symbol,
+      List.map
+        (fun indexed =>
+          (indexed.fst, descendScs indexed.snd scs ++ descendScs indexed.snd (suspendedVars before.counter tries),
+            SourcePruningEnumerationShallowChild.prepareChild
+              (descendScs indexed.snd scs ++ descendScs indexed.snd (suspendedVars before.counter tries)) indexed.fst))
+        edge.children.zipIdx,
+      residual)
+    (suspendedState tries.length before)
+childrenAvailable : ∀ (child : Value Symbol Constraint), child ∈ edge.children → Available heap child
+childrenClosed : ∀ (child : Value Symbol Constraint), child ∈ edge.children → child.free = []
+childrenNonempty : ∀ (child : Value Symbol Constraint), child ∈ edge.children → child ≠ Value.empty
+inputs : List (Value Symbol Constraint × List Suspended) := ⋯
+stagedSame :
+  List.map (fun input => (input.fst, input.snd, SourcePruningEnumerationShallowChild.prepareChild input.snd input.fst))
+      inputs =
+    List.map
+      (fun indexed =>
+        (indexed.fst, descendScs indexed.snd scs ++ descendScs indexed.snd (suspendedVars before.counter tries),
+          SourcePruningEnumerationShallowChild.prepareChild
+            (descendScs indexed.snd scs ++ descendScs indexed.snd (suspendedVars before.counter tries)) indexed.fst))
+      edge.children.zipIdx
+childrenResult : Option (List (Fragment Symbol))
+childrenAfter : EnumerationState.State Symbol Constraint
+childrenSuccess :
+  Success
+    (runStaged
+      (List.map
+        (fun indexed =>
+          (indexed.fst, descendScs indexed.snd scs ++ descendScs indexed.snd (suspendedVars before.counter tries),
+            SourcePruningEnumerationShallowChild.prepareChild
+              (descendScs indexed.snd scs ++ descendScs indexed.snd (suspendedVars before.counter tries)) indexed.fst))
+        edge.children.zipIdx))
+    (suspendedState tries.length before) childrenResult childrenAfter
+completedPrefixSuccess :
+  Success
+    (runStaged
+      (List.take
+        (List.findIdx (fun stage => stage.snd.snd.isNone)
+          (List.map
+            (fun indexed =>
+              (indexed.fst, descendScs indexed.snd scs ++ descendScs indexed.snd (suspendedVars before.counter tries),
+                SourcePruningEnumerationShallowChild.prepareChild
+                  (descendScs indexed.snd scs ++ descendScs indexed.snd (suspendedVars before.counter tries))
+                  indexed.fst))
+            edge.children.zipIdx))
+        (List.map
+          (fun indexed =>
+            (indexed.fst, descendScs indexed.snd scs ++ descendScs indexed.snd (suspendedVars before.counter tries),
+              SourcePruningEnumerationShallowChild.prepareChild
+                (descendScs indexed.snd scs ++ descendScs indexed.snd (suspendedVars before.counter tries))
+                indexed.fst))
+          edge.children.zipIdx)))
+    (suspendedState tries.length before)
+    (some
+      (List.map (fun uv => Fragment.hole uv)
+        (List.range' (before.counter + tries.length)
+          (List.findIdx (fun stage => stage.snd.snd.isNone)
+            (List.map
+              (fun indexed =>
+                (indexed.fst, descendScs indexed.snd scs ++ descendScs indexed.snd (suspendedVars before.counter tries),
+                  SourcePruningEnumerationShallowChild.prepareChild
+                    (descendScs indexed.snd scs ++ descendScs indexed.snd (suspendedVars before.counter tries))
+                    indexed.fst))
+              edge.children.zipIdx)))))
+    childrenAfter
+resultShape :
+  childrenResult =
+    if
+        List.findIdx (fun stage => stage.snd.snd.isNone)
+            (List.map
+              (fun indexed =>
+                (indexed.fst, descendScs indexed.snd scs ++ descendScs indexed.snd (suspendedVars before.counter tries),
+                  SourcePruningEnumerationShallowChild.prepareChild
+                    (descendScs indexed.snd scs ++ descendScs indexed.snd (suspendedVars before.counter tries))
+                    indexed.fst))
+              edge.children.zipIdx) <
+          (List.map
+              (fun indexed =>
+                (indexed.fst, descendScs indexed.snd scs ++ descendScs indexed.snd (suspendedVars before.counter tries),
+                  SourcePruningEnumerationShallowChild.prepareChild
+                    (descendScs indexed.snd scs ++ descendScs indexed.snd (suspendedVars before.counter tries))
+                    indexed.fst))
+              edge.children.zipIdx).length then
+      none
+    else
+      some
+        (List.map (fun uv => Fragment.hole uv)
+          (List.range' (before.counter + tries.length)
+            (List.map
+                (fun indexed =>
+                  (indexed.fst,
+                    descendScs indexed.snd scs ++ descendScs indexed.snd (suspendedVars before.counter tries),
+                    SourcePruningEnumerationShallowChild.prepareChild
+                      (descendScs indexed.snd scs ++ descendScs indexed.snd (suspendedVars before.counter tries))
+                      indexed.fst))
+                edge.children.zipIdx).length))
+afterCounter :
+  childrenAfter.counter =
+    before.counter + tries.length +
+      List.findIdx (fun stage => stage.snd.snd.isNone)
+        (List.map
+          (fun indexed =>
+            (indexed.fst, descendScs indexed.snd scs ++ descendScs indexed.snd (suspendedVars before.counter tries),
+              SourcePruningEnumerationShallowChild.prepareChild
+                (descendScs indexed.snd scs ++ descendScs indexed.snd (suspendedVars before.counter tries))
+                indexed.fst))
+          edge.children.zipIdx)
+afterAligned : childrenAfter.counter = childrenAfter.values.length
+afterRealized : PendingRealized heap childrenAfter
+⊢ Prop
+/tmp/mcfta-pruning-enumeration-edge-traversal-20261024/strict-source-2/MicroCFTA/SourcePruningEnumerationEdgeTraversal.lean:225:11: error: don't know how to synthesize implicit argument `a`
+  @And.intro (prepare scs edge = some ?m.895)
+    (Success
+        (runStaged
+          (List.map
+            (fun indexed =>
+              (indexed.fst, descendScs indexed.snd scs ++ descendScs indexed.snd (suspendedVars before.counter tries),
+                SourcePruningEnumerationShallowChild.prepareChild
+                  (descendScs indexed.snd scs ++ descendScs indexed.snd (suspendedVars before.counter tries))
+                  indexed.fst))
+            edge.children.zipIdx))
+        (suspendedState tries.length before) childrenResult childrenAfter ∧
+      Success
+          (runStaged
+            (List.take
+              (List.findIdx (fun stage => stage.snd.snd.isNone)
+                (List.map
+                  (fun indexed =>
+                    (indexed.fst,
+                      descendScs indexed.snd scs ++ descendScs indexed.snd (suspendedVars before.counter tries),
+                      SourcePruningEnumerationShallowChild.prepareChild
+                        (descendScs indexed.snd scs ++ descendScs indexed.snd (suspendedVars before.counter tries))
+                        indexed.fst))
+                  edge.children.zipIdx))
+              (List.map
+                (fun indexed =>
+                  (indexed.fst,
+                    descendScs indexed.snd scs ++ descendScs indexed.snd (suspendedVars before.counter tries),
+                    SourcePruningEnumerationShallowChild.prepareChild
+                      (descendScs indexed.snd scs ++ descendScs indexed.snd (suspendedVars before.counter tries))
+                      indexed.fst))
+                edge.children.zipIdx)))
+          (suspendedState tries.length before)
+          (some
+            (List.map (fun uv => Fragment.hole uv)
+              (List.range' (before.counter + tries.length)
+                (List.findIdx (fun stage => stage.snd.snd.isNone)
+                  (List.map
+                    (fun indexed =>
+                      (indexed.fst,
+                        descendScs indexed.snd scs ++ descendScs indexed.snd (suspendedVars before.counter tries),
+                        SourcePruningEnumerationShallowChild.prepareChild
+                          (descendScs indexed.snd scs ++ descendScs indexed.snd (suspendedVars before.counter tries))
+                          indexed.fst))
+                    edge.children.zipIdx)))))
+          childrenAfter ∧
+        (childrenResult =
+            if
+                List.findIdx (fun stage => stage.snd.snd.isNone)
+                    (List.map
+                      (fun indexed =>
+                        (indexed.fst,
+                          descendScs indexed.snd scs ++ descendScs indexed.snd (suspendedVars before.counter tries),
+                          SourcePruningEnumerationShallowChild.prepareChild
+                            (descendScs indexed.snd scs ++ descendScs indexed.snd (suspendedVars before.counter tries))
+                            indexed.fst))
+                      edge.children.zipIdx) <
+                  (List.map
+                      (fun indexed =>
+                        (indexed.fst,
+                          descendScs indexed.snd scs ++ descendScs indexed.snd (suspendedVars before.counter tries),
+                          SourcePruningEnumerationShallowChild.prepareChild
+                            (descendScs indexed.snd scs ++ descendScs indexed.snd (suspendedVars before.counter tries))
+                            indexed.fst))
+                      edge.children.zipIdx).length then
+              none
+            else
+              some
+                (List.map (fun uv => Fragment.hole uv)
+                  (List.range' (before.counter + tries.length)
+                    (List.map
+                        (fun indexed =>
+                          (indexed.fst,
+                            descendScs indexed.snd scs ++ descendScs indexed.snd (suspendedVars before.counter tries),
+                            SourcePruningEnumerationShallowChild.prepareChild
+                              (descendScs indexed.snd scs ++
+                                descendScs indexed.snd (suspendedVars before.counter tries))
+                              indexed.fst))
+                        edge.children.zipIdx).length))) ∧
+          ((match childrenResult with
+              | none => childrenAfter
+              | some fragments =>
+                match residual with
+                | none => childrenAfter
+                | some guard =>
+                  { counter := childrenAfter.counter, representatives := childrenAfter.representatives,
+                    values := childrenAfter.values,
+                    obligations := (guard, Fragment.node edge.entry.key.symbol fragments) :: childrenAfter.obligations,
+                    recursionAncestry := childrenAfter.recursionAncestry,
+                    expansionAncestry := childrenAfter.expansionAncestry }) =
+              match childrenResult with
+              | none => childrenAfter
+              | some fragments =>
+                match residual with
+                | none => childrenAfter
+                | some guard =>
+                  { counter := childrenAfter.counter, representatives := childrenAfter.representatives,
+                    values := childrenAfter.values,
+                    obligations := (guard, Fragment.node edge.entry.key.symbol fragments) :: childrenAfter.obligations,
+                    recursionAncestry := childrenAfter.recursionAncestry,
+                    expansionAncestry := childrenAfter.expansionAncestry }) ∧
+            Success ?m.895 before
+                (Option.map (fun fragments => Fragment.node edge.entry.key.symbol fragments) childrenResult)
+                (match childrenResult with
+                | none => childrenAfter
+                | some fragments =>
+                  match residual with
+                  | none => childrenAfter
+                  | some guard =>
+                    { counter := childrenAfter.counter, representatives := childrenAfter.representatives,
+                      values := childrenAfter.values,
+                      obligations :=
+                        (guard, Fragment.node edge.entry.key.symbol fragments) :: childrenAfter.obligations,
+                      recursionAncestry := childrenAfter.recursionAncestry,
+                      expansionAncestry := childrenAfter.expansionAncestry }) ∧
+              (match childrenResult with
+                    | none => childrenAfter
+                    | some fragments =>
+                      match residual with
+                      | none => childrenAfter
+                      | some guard =>
+                        { counter := childrenAfter.counter, representatives := childrenAfter.representatives,
+                          values := childrenAfter.values,
+                          obligations :=
+                            (guard, Fragment.node edge.entry.key.symbol fragments) :: childrenAfter.obligations,
+                          recursionAncestry := childrenAfter.recursionAncestry,
+                          expansionAncestry := childrenAfter.expansionAncestry }).counter =
+                  before.counter + tries.length +
+                    List.findIdx (fun stage => stage.snd.snd.isNone)
+                      (List.map
+                        (fun indexed =>
+                          (indexed.fst,
+                            descendScs indexed.snd scs ++ descendScs indexed.snd (suspendedVars before.counter tries),
+                            SourcePruningEnumerationShallowChild.prepareChild
+                              (descendScs indexed.snd scs ++
+                                descendScs indexed.snd (suspendedVars before.counter tries))
+                              indexed.fst))
+                        edge.children.zipIdx) ∧
+                (match childrenResult with
+                      | none => childrenAfter
+                      | some fragments =>
+                        match residual with
+                        | none => childrenAfter
+                        | some guard =>
+                          { counter := childrenAfter.counter, representatives := childrenAfter.representatives,
+                            values := childrenAfter.values,
+                            obligations :=
+                              (guard, Fragment.node edge.entry.key.symbol fragments) :: childrenAfter.obligations,
+                            recursionAncestry := childrenAfter.recursionAncestry,
+                            expansionAncestry := childrenAfter.expansionAncestry }).counter =
+                    (match childrenResult with
+                        | none => childrenAfter
+                        | some fragments =>
+                          match residual with
+                          | none => childrenAfter
+                          | some guard =>
+                            { counter := childrenAfter.counter, representatives := childrenAfter.representatives,
+                              values := childrenAfter.values,
+                              obligations :=
+                                (guard, Fragment.node edge.entry.key.symbol fragments) :: childrenAfter.obligations,
+                              recursionAncestry := childrenAfter.recursionAncestry,
+                              expansionAncestry := childrenAfter.expansionAncestry }).values.length ∧
+                  PendingRealized heap
+                    (match childrenResult with
+                    | none => childrenAfter
+                    | some fragments =>
+                      match residual with
+                      | none => childrenAfter
+                      | some guard =>
+                        { counter := childrenAfter.counter, representatives := childrenAfter.representatives,
+                          values := childrenAfter.values,
+                          obligations :=
+                            (guard, Fragment.node edge.entry.key.symbol fragments) :: childrenAfter.obligations,
+                          recursionAncestry := childrenAfter.recursionAncestry,
+                          expansionAncestry := childrenAfter.expansionAncestry }))
+    ?m.905 ⟨childrenSuccess, ⟨completedPrefixSuccess, ⟨resultShape, ⟨rfl, ⟨?m.918, ⟨?m.921, ⟨?m.924, ?m.925⟩⟩⟩⟩⟩⟩⟩
+context:
+scs : List Suspended
+edge : EdgeValue Symbol Constraint
+heap : InternedConstructorTemplates.State Symbol Constraint
+parentEntry : Cache.Interned InternedBinderProtocol.NodeKey
+edges : List (EdgeValue Symbol Constraint)
+depth : Nat
+free : List InternedBinderProtocol.Reference
+ready : SourceEqualityRequiredCache.Ready heap
+parentAvailable : Available heap (Value.node parentEntry edges depth free)
+parentClosed : free = []
+selected : edge ∈ edges
+before : EnumerationState.State Symbol Constraint
+realized : PendingRealized heap before
+aligned : before.counter = before.values.length
+allowed : arityAllows edge.children.length scs = true
+tries : List EqualityTrie.Trie
+residual : Option Constraint
+projected : SourcePruningEnumerationConstraint.project edge.entry.key.constraint = some (tries, residual)
+prefixAction :
+  EnumerateM Symbol Constraint
+    (Symbol ×
+      List (Value Symbol Constraint × List Suspended × Option (EnumerateM Symbol Constraint (Fragment Symbol))) ×
+        Option Constraint)
+prefixPrepared : SourcePruningEnumerationEdgePrefix.prepare scs edge = some prefixAction
+prefixExact :
+  prefixAction before =
+    [Except.ok
+        ((edge.entry.key.symbol,
+            List.map
+              (fun indexed =>
+                (indexed.fst, descendScs indexed.snd scs ++ descendScs indexed.snd (suspendedVars before.counter tries),
+                  SourcePruningEnumerationShallowChild.prepareChild
+                    (descendScs indexed.snd scs ++ descendScs indexed.snd (suspendedVars before.counter tries))
+                    indexed.fst))
+              edge.children.zipIdx,
+            residual),
+          suspendedState tries.length before)]
+prefixCounter : (suspendedState tries.length before).counter = before.counter + tries.length
+prefixAligned : (suspendedState tries.length before).counter = (suspendedState tries.length before).values.length
+prefixRealized : PendingRealized heap (suspendedState tries.length before)
+prefixSuccess :
+  Success prefixAction before
+    (edge.entry.key.symbol,
+      List.map
+        (fun indexed =>
+          (indexed.fst, descendScs indexed.snd scs ++ descendScs indexed.snd (suspendedVars before.counter tries),
+            SourcePruningEnumerationShallowChild.prepareChild
+              (descendScs indexed.snd scs ++ descendScs indexed.snd (suspendedVars before.counter tries)) indexed.fst))
+        edge.children.zipIdx,
+      residual)
+    (suspendedState tries.length before)
+childrenAvailable : ∀ (child : Value Symbol Constraint), child ∈ edge.children → Available heap child
+childrenClosed : ∀ (child : Value Symbol Constraint), child ∈ edge.children → child.free = []
+childrenNonempty : ∀ (child : Value Symbol Constraint), child ∈ edge.children → child ≠ Value.empty
+inputs : List (Value Symbol Constraint × List Suspended) := ⋯
+stagedSame :
+  List.map (fun input => (input.fst, input.snd, SourcePruningEnumerationShallowChild.prepareChild input.snd input.fst))
+      inputs =
+    List.map
+      (fun indexed =>
+        (indexed.fst, descendScs indexed.snd scs ++ descendScs indexed.snd (suspendedVars before.counter tries),
+          SourcePruningEnumerationShallowChild.prepareChild
+            (descendScs indexed.snd scs ++ descendScs indexed.snd (suspendedVars before.counter tries)) indexed.fst))
+      edge.children.zipIdx
+childrenResult : Option (List (Fragment Symbol))
+childrenAfter : EnumerationState.State Symbol Constraint
+childrenSuccess :
+  Success
+    (runStaged
+      (List.map
+        (fun indexed =>
+          (indexed.fst, descendScs indexed.snd scs ++ descendScs indexed.snd (suspendedVars before.counter tries),
+            SourcePruningEnumerationShallowChild.prepareChild
+              (descendScs indexed.snd scs ++ descendScs indexed.snd (suspendedVars before.counter tries)) indexed.fst))
+        edge.children.zipIdx))
+    (suspendedState tries.length before) childrenResult childrenAfter
+completedPrefixSuccess :
+  Success
+    (runStaged
+      (List.take
+        (List.findIdx (fun stage => stage.snd.snd.isNone)
+          (List.map
+            (fun indexed =>
+              (indexed.fst, descendScs indexed.snd scs ++ descendScs indexed.snd (suspendedVars before.counter tries),
+                SourcePruningEnumerationShallowChild.prepareChild
+                  (descendScs indexed.snd scs ++ descendScs indexed.snd (suspendedVars before.counter tries))
+                  indexed.fst))
+            edge.children.zipIdx))
+        (List.map
+          (fun indexed =>
+            (indexed.fst, descendScs indexed.snd scs ++ descendScs indexed.snd (suspendedVars before.counter tries),
+              SourcePruningEnumerationShallowChild.prepareChild
+                (descendScs indexed.snd scs ++ descendScs indexed.snd (suspendedVars before.counter tries))
+                indexed.fst))
+          edge.children.zipIdx)))
+    (suspendedState tries.length before)
+    (some
+      (List.map (fun uv => Fragment.hole uv)
+        (List.range' (before.counter + tries.length)
+          (List.findIdx (fun stage => stage.snd.snd.isNone)
+            (List.map
+              (fun indexed =>
+                (indexed.fst, descendScs indexed.snd scs ++ descendScs indexed.snd (suspendedVars before.counter tries),
+                  SourcePruningEnumerationShallowChild.prepareChild
+                    (descendScs indexed.snd scs ++ descendScs indexed.snd (suspendedVars before.counter tries))
+                    indexed.fst))
+              edge.children.zipIdx)))))
+    childrenAfter
+resultShape :
+  childrenResult =
+    if
+        List.findIdx (fun stage => stage.snd.snd.isNone)
+            (List.map
+              (fun indexed =>
+                (indexed.fst, descendScs indexed.snd scs ++ descendScs indexed.snd (suspendedVars before.counter tries),
+                  SourcePruningEnumerationShallowChild.prepareChild
+                    (descendScs indexed.snd scs ++ descendScs indexed.snd (suspendedVars before.counter tries))
+                    indexed.fst))
+              edge.children.zipIdx) <
+          (List.map
+              (fun indexed =>
+                (indexed.fst, descendScs indexed.snd scs ++ descendScs indexed.snd (suspendedVars before.counter tries),
+                  SourcePruningEnumerationShallowChild.prepareChild
+                    (descendScs indexed.snd scs ++ descendScs indexed.snd (suspendedVars before.counter tries))
+                    indexed.fst))
+              edge.children.zipIdx).length then
+      none
+    else
+      some
+        (List.map (fun uv => Fragment.hole uv)
+          (List.range' (before.counter + tries.length)
+            (List.map
+                (fun indexed =>
+                  (indexed.fst,
+                    descendScs indexed.snd scs ++ descendScs indexed.snd (suspendedVars before.counter tries),
+                    SourcePruningEnumerationShallowChild.prepareChild
+                      (descendScs indexed.snd scs ++ descendScs indexed.snd (suspendedVars before.counter tries))
+                      indexed.fst))
+                edge.children.zipIdx).length))
+afterCounter :
+  childrenAfter.counter =
+    before.counter + tries.length +
+      List.findIdx (fun stage => stage.snd.snd.isNone)
+        (List.map
+          (fun indexed =>
+            (indexed.fst, descendScs indexed.snd scs ++ descendScs indexed.snd (suspendedVars before.counter tries),
+              SourcePruningEnumerationShallowChild.prepareChild
+                (descendScs indexed.snd scs ++ descendScs indexed.snd (suspendedVars before.counter tries))
+                indexed.fst))
+          edge.children.zipIdx)
+afterAligned : childrenAfter.counter = childrenAfter.values.length
+afterRealized : PendingRealized heap childrenAfter
+⊢ Prop
+/tmp/mcfta-pruning-enumeration-edge-traversal-20261024/strict-source-2/MicroCFTA/SourcePruningEnumerationEdgeTraversal.lean:225:11: error: don't know how to synthesize implicit argument `b`
+  @And.intro
+    (Success
+      (runStaged
+        (List.map
+          (fun indexed =>
+            (indexed.fst, descendScs indexed.snd scs ++ descendScs indexed.snd (suspendedVars before.counter tries),
+              SourcePruningEnumerationShallowChild.prepareChild
+                (descendScs indexed.snd scs ++ descendScs indexed.snd (suspendedVars before.counter tries))
+                indexed.fst))
+          edge.children.zipIdx))
+      (suspendedState tries.length before) childrenResult childrenAfter)
+    (Success
+        (runStaged
+          (List.take
+            (List.findIdx (fun stage => stage.snd.snd.isNone)
+              (List.map
+                (fun indexed =>
+                  (indexed.fst,
+                    descendScs indexed.snd scs ++ descendScs indexed.snd (suspendedVars before.counter tries),
+                    SourcePruningEnumerationShallowChild.prepareChild
+                      (descendScs indexed.snd scs ++ descendScs indexed.snd (suspendedVars before.counter tries))
+                      indexed.fst))
+                edge.children.zipIdx))
+            (List.map
+              (fun indexed =>
+                (indexed.fst, descendScs indexed.snd scs ++ descendScs indexed.snd (suspendedVars before.counter tries),
+                  SourcePruningEnumerationShallowChild.prepareChild
+                    (descendScs indexed.snd scs ++ descendScs indexed.snd (suspendedVars before.counter tries))
+                    indexed.fst))
+              edge.children.zipIdx)))
+        (suspendedState tries.length before)
+        (some
+          (List.map (fun uv => Fragment.hole uv)
+            (List.range' (before.counter + tries.length)
+              (List.findIdx (fun stage => stage.snd.snd.isNone)
+                (List.map
+                  (fun indexed =>
+                    (indexed.fst,
+                      descendScs indexed.snd scs ++ descendScs indexed.snd (suspendedVars before.counter tries),
+                      SourcePruningEnumerationShallowChild.prepareChild
+                        (descendScs indexed.snd scs ++ descendScs indexed.snd (suspendedVars before.counter tries))
+                        indexed.fst))
+                  edge.children.zipIdx)))))
+        childrenAfter ∧
+      (childrenResult =
+          if
+              List.findIdx (fun stage => stage.snd.snd.isNone)
+                  (List.map
+                    (fun indexed =>
+                      (indexed.fst,
+                        descendScs indexed.snd scs ++ descendScs indexed.snd (suspendedVars before.counter tries),
+                        SourcePruningEnumerationShallowChild.prepareChild
+                          (descendScs indexed.snd scs ++ descendScs indexed.snd (suspendedVars before.counter tries))
+                          indexed.fst))
+                    edge.children.zipIdx) <
+                (List.map
+                    (fun indexed =>
+                      (indexed.fst,
+                        descendScs indexed.snd scs ++ descendScs indexed.snd (suspendedVars before.counter tries),
+                        SourcePruningEnumerationShallowChild.prepareChild
+                          (descendScs indexed.snd scs ++ descendScs indexed.snd (suspendedVars before.counter tries))
+                          indexed.fst))
+                    edge.children.zipIdx).length then
+            none
+          else
+            some
+              (List.map (fun uv => Fragment.hole uv)
+                (List.range' (before.counter + tries.length)
+                  (List.map
+                      (fun indexed =>
+                        (indexed.fst,
+                          descendScs indexed.snd scs ++ descendScs indexed.snd (suspendedVars before.counter tries),
+                          SourcePruningEnumerationShallowChild.prepareChild
+                            (descendScs indexed.snd scs ++ descendScs indexed.snd (suspendedVars before.counter tries))
+                            indexed.fst))
+                      edge.children.zipIdx).length))) ∧
+        ((match childrenResult with
+            | none => childrenAfter
+            | some fragments =>
+              match residual with
+              | none => childrenAfter
+              | some guard =>
+                { counter := childrenAfter.counter, representatives := childrenAfter.representatives,
+                  values := childrenAfter.values,
+                  obligations := (guard, Fragment.node edge.entry.key.symbol fragments) :: childrenAfter.obligations,
+                  recursionAncestry := childrenAfter.recursionAncestry,
+                  expansionAncestry := childrenAfter.expansionAncestry }) =
+            match childrenResult with
+            | none => childrenAfter
+            | some fragments =>
+              match residual with
+              | none => childrenAfter
+              | some guard =>
+                { counter := childrenAfter.counter, representatives := childrenAfter.representatives,
+                  values := childrenAfter.values,
+                  obligations := (guard, Fragment.node edge.entry.key.symbol fragments) :: childrenAfter.obligations,
+                  recursionAncestry := childrenAfter.recursionAncestry,
+                  expansionAncestry := childrenAfter.expansionAncestry }) ∧
+          Success ?m.895 before
+              (Option.map (fun fragments => Fragment.node edge.entry.key.symbol fragments) childrenResult)
+              (match childrenResult with
+              | none => childrenAfter
+              | some fragments =>
+                match residual with
+                | none => childrenAfter
+                | some guard =>
+                  { counter := childrenAfter.counter, representatives := childrenAfter.representatives,
+                    values := childrenAfter.values,
+                    obligations := (guard, Fragment.node edge.entry.key.symbol fragments) :: childrenAfter.obligations,
+                    recursionAncestry := childrenAfter.recursionAncestry,
+                    expansionAncestry := childrenAfter.expansionAncestry }) ∧
+            (match childrenResult with
+                  | none => childrenAfter
+                  | some fragments =>
+                    match residual with
+                    | none => childrenAfter
+                    | some guard =>
+                      { counter := childrenAfter.counter, representatives := childrenAfter.representatives,
+                        values := childrenAfter.values,
+                        obligations :=
+                          (guard, Fragment.node edge.entry.key.symbol fragments) :: childrenAfter.obligations,
+                        recursionAncestry := childrenAfter.recursionAncestry,
+                        expansionAncestry := childrenAfter.expansionAncestry }).counter =
+                before.counter + tries.length +
+                  List.findIdx (fun stage => stage.snd.snd.isNone)
+                    (List.map
+                      (fun indexed =>
+                        (indexed.fst,
+                          descendScs indexed.snd scs ++ descendScs indexed.snd (suspendedVars before.counter tries),
+                          SourcePruningEnumerationShallowChild.prepareChild
+                            (descendScs indexed.snd scs ++ descendScs indexed.snd (suspendedVars before.counter tries))
+                            indexed.fst))
+                      edge.children.zipIdx) ∧
+              (match childrenResult with
+                    | none => childrenAfter
+                    | some fragments =>
+                      match residual with
+                      | none => childrenAfter
+                      | some guard =>
+                        { counter := childrenAfter.counter, representatives := childrenAfter.representatives,
+                          values := childrenAfter.values,
+                          obligations :=
+                            (guard, Fragment.node edge.entry.key.symbol fragments) :: childrenAfter.obligations,
+                          recursionAncestry := childrenAfter.recursionAncestry,
+                          expansionAncestry := childrenAfter.expansionAncestry }).counter =
+                  (match childrenResult with
+                      | none => childrenAfter
+                      | some fragments =>
+                        match residual with
+                        | none => childrenAfter
+                        | some guard =>
+                          { counter := childrenAfter.counter, representatives := childrenAfter.representatives,
+                            values := childrenAfter.values,
+                            obligations :=
+                              (guard, Fragment.node edge.entry.key.symbol fragments) :: childrenAfter.obligations,
+                            recursionAncestry := childrenAfter.recursionAncestry,
+                            expansionAncestry := childrenAfter.expansionAncestry }).values.length ∧
+                PendingRealized heap
+                  (match childrenResult with
+                  | none => childrenAfter
+                  | some fragments =>
+                    match residual with
+                    | none => childrenAfter
+                    | some guard =>
+                      { counter := childrenAfter.counter, representatives := childrenAfter.representatives,
+                        values := childrenAfter.values,
+                        obligations :=
+                          (guard, Fragment.node edge.entry.key.symbol fragments) :: childrenAfter.obligations,
+                        recursionAncestry := childrenAfter.recursionAncestry,
+                        expansionAncestry := childrenAfter.expansionAncestry }))
+    childrenSuccess ⟨completedPrefixSuccess, ⟨resultShape, ⟨rfl, ⟨?m.918, ⟨?m.921, ⟨?m.924, ?m.925⟩⟩⟩⟩⟩⟩
+context:
+scs : List Suspended
+edge : EdgeValue Symbol Constraint
+heap : InternedConstructorTemplates.State Symbol Constraint
+parentEntry : Cache.Interned InternedBinderProtocol.NodeKey
+edges : List (EdgeValue Symbol Constraint)
+depth : Nat
+free : List InternedBinderProtocol.Reference
+ready : SourceEqualityRequiredCache.Ready heap
+parentAvailable : Available heap (Value.node parentEntry edges depth free)
+parentClosed : free = []
+selected : edge ∈ edges
+before : EnumerationState.State Symbol Constraint
+realized : PendingRealized heap before
+aligned : before.counter = before.values.length
+allowed : arityAllows edge.children.length scs = true
+tries : List EqualityTrie.Trie
+residual : Option Constraint
+projected : SourcePruningEnumerationConstraint.project edge.entry.key.constraint = some (tries, residual)
+prefixAction :
+  EnumerateM Symbol Constraint
+    (Symbol ×
+      List (Value Symbol Constraint × List Suspended × Option (EnumerateM Symbol Constraint (Fragment Symbol))) ×
+        Option Constraint)
+prefixPrepared : SourcePruningEnumerationEdgePrefix.prepare scs edge = some prefixAction
+prefixExact :
+  prefixAction before =
+    [Except.ok
+        ((edge.entry.key.symbol,
+            List.map
+              (fun indexed =>
+                (indexed.fst, descendScs indexed.snd scs ++ descendScs indexed.snd (suspendedVars before.counter tries),
+                  SourcePruningEnumerationShallowChild.prepareChild
+                    (descendScs indexed.snd scs ++ descendScs indexed.snd (suspendedVars before.counter tries))
+                    indexed.fst))
+              edge.children.zipIdx,
+            residual),
+          suspendedState tries.length before)]
+prefixCounter : (suspendedState tries.length before).counter = before.counter + tries.length
+prefixAligned : (suspendedState tries.length before).counter = (suspendedState tries.length before).values.length
+prefixRealized : PendingRealized heap (suspendedState tries.length before)
+prefixSuccess :
+  Success prefixAction before
+    (edge.entry.key.symbol,
+      List.map
+        (fun indexed =>
+          (indexed.fst, descendScs indexed.snd scs ++ descendScs indexed.snd (suspendedVars before.counter tries),
+            SourcePruningEnumerationShallowChild.prepareChild
+              (descendScs indexed.snd scs ++ descendScs indexed.snd (suspendedVars before.counter tries)) indexed.fst))
+        edge.children.zipIdx,
+      residual)
+    (suspendedState tries.length before)
+childrenAvailable : ∀ (child : Value Symbol Constraint), child ∈ edge.children → Available heap child
+childrenClosed : ∀ (child : Value Symbol Constraint), child ∈ edge.children → child.free = []
+childrenNonempty : ∀ (child : Value Symbol Constraint), child ∈ edge.children → child ≠ Value.empty
+inputs : List (Value Symbol Constraint × List Suspended) := ⋯
+stagedSame :
+  List.map (fun input => (input.fst, input.snd, SourcePruningEnumerationShallowChild.prepareChild input.snd input.fst))
+      inputs =
+    List.map
+      (fun indexed =>
+        (indexed.fst, descendScs indexed.snd scs ++ descendScs indexed.snd (suspendedVars before.counter tries),
+          SourcePruningEnumerationShallowChild.prepareChild
+            (descendScs indexed.snd scs ++ descendScs indexed.snd (suspendedVars before.counter tries)) indexed.fst))
+      edge.children.zipIdx
+childrenResult : Option (List (Fragment Symbol))
+childrenAfter : EnumerationState.State Symbol Constraint
+childrenSuccess :
+  Success
+    (runStaged
+      (List.map
+        (fun indexed =>
+          (indexed.fst, descendScs indexed.snd scs ++ descendScs indexed.snd (suspendedVars before.counter tries),
+            SourcePruningEnumerationShallowChild.prepareChild
+              (descendScs indexed.snd scs ++ descendScs indexed.snd (suspendedVars before.counter tries)) indexed.fst))
+        edge.children.zipIdx))
+    (suspendedState tries.length before) childrenResult childrenAfter
+completedPrefixSuccess :
+  Success
+    (runStaged
+      (List.take
+        (List.findIdx (fun stage => stage.snd.snd.isNone)
+          (List.map
+            (fun indexed =>
+              (indexed.fst, descendScs indexed.snd scs ++ descendScs indexed.snd (suspendedVars before.counter tries),
+                SourcePruningEnumerationShallowChild.prepareChild
+                  (descendScs indexed.snd scs ++ descendScs indexed.snd (suspendedVars before.counter tries))
+                  indexed.fst))
+            edge.children.zipIdx))
+        (List.map
+          (fun indexed =>
+            (indexed.fst, descendScs indexed.snd scs ++ descendScs indexed.snd (suspendedVars before.counter tries),
+              SourcePruningEnumerationShallowChild.prepareChild
+                (descendScs indexed.snd scs ++ descendScs indexed.snd (suspendedVars before.counter tries))
+                indexed.fst))
+          edge.children.zipIdx)))
+    (suspendedState tries.length before)
+    (some
+      (List.map (fun uv => Fragment.hole uv)
+        (List.range' (before.counter + tries.length)
+          (List.findIdx (fun stage => stage.snd.snd.isNone)
+            (List.map
+              (fun indexed =>
+                (indexed.fst, descendScs indexed.snd scs ++ descendScs indexed.snd (suspendedVars before.counter tries),
+                  SourcePruningEnumerationShallowChild.prepareChild
+                    (descendScs indexed.snd scs ++ descendScs indexed.snd (suspendedVars before.counter tries))
+                    indexed.fst))
+              edge.children.zipIdx)))))
+    childrenAfter
+resultShape :
+  childrenResult =
+    if
+        List.findIdx (fun stage => stage.snd.snd.isNone)
+            (List.map
+              (fun indexed =>
+                (indexed.fst, descendScs indexed.snd scs ++ descendScs indexed.snd (suspendedVars before.counter tries),
+                  SourcePruningEnumerationShallowChild.prepareChild
+                    (descendScs indexed.snd scs ++ descendScs indexed.snd (suspendedVars before.counter tries))
+                    indexed.fst))
+              edge.children.zipIdx) <
+          (List.map
+              (fun indexed =>
+                (indexed.fst, descendScs indexed.snd scs ++ descendScs indexed.snd (suspendedVars before.counter tries),
+                  SourcePruningEnumerationShallowChild.prepareChild
+                    (descendScs indexed.snd scs ++ descendScs indexed.snd (suspendedVars before.counter tries))
+                    indexed.fst))
+              edge.children.zipIdx).length then
+      none
+    else
+      some
+        (List.map (fun uv => Fragment.hole uv)
+          (List.range' (before.counter + tries.length)
+            (List.map
+                (fun indexed =>
+                  (indexed.fst,
+                    descendScs indexed.snd scs ++ descendScs indexed.snd (suspendedVars before.counter tries),
+                    SourcePruningEnumerationShallowChild.prepareChild
+                      (descendScs indexed.snd scs ++ descendScs indexed.snd (suspendedVars before.counter tries))
+                      indexed.fst))
+                edge.children.zipIdx).length))
+afterCounter :
+  childrenAfter.counter =
+    before.counter + tries.length +
+      List.findIdx (fun stage => stage.snd.snd.isNone)
+        (List.map
+          (fun indexed =>
+            (indexed.fst, descendScs indexed.snd scs ++ descendScs indexed.snd (suspendedVars before.counter tries),
+              SourcePruningEnumerationShallowChild.prepareChild
+                (descendScs indexed.snd scs ++ descendScs indexed.snd (suspendedVars before.counter tries))
+                indexed.fst))
+          edge.children.zipIdx)
+afterAligned : childrenAfter.counter = childrenAfter.values.length
+afterRealized : PendingRealized heap childrenAfter
+⊢ Prop
+/tmp/mcfta-pruning-enumeration-edge-traversal-20261024/strict-source-2/MicroCFTA/SourcePruningEnumerationEdgeTraversal.lean:225:11: error: don't know how to synthesize implicit argument `b`
+  @And.intro
+    (Success
+      (runStaged
+        (List.take
+          (List.findIdx (fun stage => stage.snd.snd.isNone)
+            (List.map
+              (fun indexed =>
+                (indexed.fst, descendScs indexed.snd scs ++ descendScs indexed.snd (suspendedVars before.counter tries),
+                  SourcePruningEnumerationShallowChild.prepareChild
+                    (descendScs indexed.snd scs ++ descendScs indexed.snd (suspendedVars before.counter tries))
+                    indexed.fst))
+              edge.children.zipIdx))
+          (List.map
+            (fun indexed =>
+              (indexed.fst, descendScs indexed.snd scs ++ descendScs indexed.snd (suspendedVars before.counter tries),
+                SourcePruningEnumerationShallowChild.prepareChild
+                  (descendScs indexed.snd scs ++ descendScs indexed.snd (suspendedVars before.counter tries))
+                  indexed.fst))
+            edge.children.zipIdx)))
+      (suspendedState tries.length before)
+      (some
+        (List.map (fun uv => Fragment.hole uv)
+          (List.range' (before.counter + tries.length)
+            (List.findIdx (fun stage => stage.snd.snd.isNone)
+              (List.map
+                (fun indexed =>
+                  (indexed.fst,
+                    descendScs indexed.snd scs ++ descendScs indexed.snd (suspendedVars before.counter tries),
+                    SourcePruningEnumerationShallowChild.prepareChild
+                      (descendScs indexed.snd scs ++ descendScs indexed.snd (suspendedVars before.counter tries))
+                      indexed.fst))
+                edge.children.zipIdx)))))
+      childrenAfter)
+    ((childrenResult =
+        if
+            List.findIdx (fun stage => stage.snd.snd.isNone)
+                (List.map
+                  (fun indexed =>
+                    (indexed.fst,
+                      descendScs indexed.snd scs ++ descendScs indexed.snd (suspendedVars before.counter tries),
+                      SourcePruningEnumerationShallowChild.prepareChild
+                        (descendScs indexed.snd scs ++ descendScs indexed.snd (suspendedVars before.counter tries))
+                        indexed.fst))
+                  edge.children.zipIdx) <
+              (List.map
+                  (fun indexed =>
+                    (indexed.fst,
+                      descendScs indexed.snd scs ++ descendScs indexed.snd (suspendedVars before.counter tries),
+                      SourcePruningEnumerationShallowChild.prepareChild
+                        (descendScs indexed.snd scs ++ descendScs indexed.snd (suspendedVars before.counter tries))
+                        indexed.fst))
+                  edge.children.zipIdx).length then
+          none
+        else
+          some
+            (List.map (fun uv => Fragment.hole uv)
+              (List.range' (before.counter + tries.length)
+                (List.map
+                    (fun indexed =>
+                      (indexed.fst,
+                        descendScs indexed.snd scs ++ descendScs indexed.snd (suspendedVars before.counter tries),
+                        SourcePruningEnumerationShallowChild.prepareChild
+                          (descendScs indexed.snd scs ++ descendScs indexed.snd (suspendedVars before.counter tries))
+                          indexed.fst))
+                    edge.children.zipIdx).length))) ∧
+      ((match childrenResult with
+          | none => childrenAfter
+          | some fragments =>
+            match residual with
+            | none => childrenAfter
+            | some guard =>
+              { counter := childrenAfter.counter, representatives := childrenAfter.representatives,
+                values := childrenAfter.values,
+                obligations := (guard, Fragment.node edge.entry.key.symbol fragments) :: childrenAfter.obligations,
+                recursionAncestry := childrenAfter.recursionAncestry,
+                expansionAncestry := childrenAfter.expansionAncestry }) =
+          match childrenResult with
+          | none => childrenAfter
+          | some fragments =>
+            match residual with
+            | none => childrenAfter
+            | some guard =>
+              { counter := childrenAfter.counter, representatives := childrenAfter.representatives,
+                values := childrenAfter.values,
+                obligations := (guard, Fragment.node edge.entry.key.symbol fragments) :: childrenAfter.obligations,
+                recursionAncestry := childrenAfter.recursionAncestry,
+                expansionAncestry := childrenAfter.expansionAncestry }) ∧
+        Success ?m.895 before
+            (Option.map (fun fragments => Fragment.node edge.entry.key.symbol fragments) childrenResult)
+            (match childrenResult with
+            | none => childrenAfter
+            | some fragments =>
+              match residual with
+              | none => childrenAfter
+              | some guard =>
+                { counter := childrenAfter.counter, representatives := childrenAfter.representatives,
+                  values := childrenAfter.values,
+                  obligations := (guard, Fragment.node edge.entry.key.symbol fragments) :: childrenAfter.obligations,
+                  recursionAncestry := childrenAfter.recursionAncestry,
+                  expansionAncestry := childrenAfter.expansionAncestry }) ∧
+          (match childrenResult with
+                | none => childrenAfter
+                | some fragments =>
+                  match residual with
+                  | none => childrenAfter
+                  | some guard =>
+                    { counter := childrenAfter.counter, representatives := childrenAfter.representatives,
+                      values := childrenAfter.values,
+                      obligations :=
+                        (guard, Fragment.node edge.entry.key.symbol fragments) :: childrenAfter.obligations,
+                      recursionAncestry := childrenAfter.recursionAncestry,
+                      expansionAncestry := childrenAfter.expansionAncestry }).counter =
+              before.counter + tries.length +
+                List.findIdx (fun stage => stage.snd.snd.isNone)
+                  (List.map
+                    (fun indexed =>
+                      (indexed.fst,
+                        descendScs indexed.snd scs ++ descendScs indexed.snd (suspendedVars before.counter tries),
+                        SourcePruningEnumerationShallowChild.prepareChild
+                          (descendScs indexed.snd scs ++ descendScs indexed.snd (suspendedVars before.counter tries))
+                          indexed.fst))
+                    edge.children.zipIdx) ∧
+            (match childrenResult with
+                  | none => childrenAfter
+                  | some fragments =>
+                    match residual with
+                    | none => childrenAfter
+                    | some guard =>
+                      { counter := childrenAfter.counter, representatives := childrenAfter.representatives,
+                        values := childrenAfter.values,
+                        obligations :=
+                          (guard, Fragment.node edge.entry.key.symbol fragments) :: childrenAfter.obligations,
+                        recursionAncestry := childrenAfter.recursionAncestry,
+                        expansionAncestry := childrenAfter.expansionAncestry }).counter =
+                (match childrenResult with
+                    | none => childrenAfter
+                    | some fragments =>
+                      match residual with
+                      | none => childrenAfter
+                      | some guard =>
+                        { counter := childrenAfter.counter, representatives := childrenAfter.representatives,
+                          values := childrenAfter.values,
+                          obligations :=
+                            (guard, Fragment.node edge.entry.key.symbol fragments) :: childrenAfter.obligations,
+                          recursionAncestry := childrenAfter.recursionAncestry,
+                          expansionAncestry := childrenAfter.expansionAncestry }).values.length ∧
+              PendingRealized heap
+                (match childrenResult with
+                | none => childrenAfter
+                | some fragments =>
+                  match residual with
+                  | none => childrenAfter
+                  | some guard =>
+                    { counter := childrenAfter.counter, representatives := childrenAfter.representatives,
+                      values := childrenAfter.values,
+                      obligations :=
+                        (guard, Fragment.node edge.entry.key.symbol fragments) :: childrenAfter.obligations,
+                      recursionAncestry := childrenAfter.recursionAncestry,
+                      expansionAncestry := childrenAfter.expansionAncestry }))
+    completedPrefixSuccess ⟨resultShape, ⟨rfl, ⟨?m.918, ⟨?m.921, ⟨?m.924, ?m.925⟩⟩⟩⟩⟩
+context:
+scs : List Suspended
+edge : EdgeValue Symbol Constraint
+heap : InternedConstructorTemplates.State Symbol Constraint
+parentEntry : Cache.Interned InternedBinderProtocol.NodeKey
+edges : List (EdgeValue Symbol Constraint)
+depth : Nat
+free : List InternedBinderProtocol.Reference
+ready : SourceEqualityRequiredCache.Ready heap
+parentAvailable : Available heap (Value.node parentEntry edges depth free)
+parentClosed : free = []
+selected : edge ∈ edges
+before : EnumerationState.State Symbol Constraint
+realized : PendingRealized heap before
+aligned : before.counter = before.values.length
+allowed : arityAllows edge.children.length scs = true
+tries : List EqualityTrie.Trie
+residual : Option Constraint
+projected : SourcePruningEnumerationConstraint.project edge.entry.key.constraint = some (tries, residual)
+prefixAction :
+  EnumerateM Symbol Constraint
+    (Symbol ×
+      List (Value Symbol Constraint × List Suspended × Option (EnumerateM Symbol Constraint (Fragment Symbol))) ×
+        Option Constraint)
+prefixPrepared : SourcePruningEnumerationEdgePrefix.prepare scs edge = some prefixAction
+prefixExact :
+  prefixAction before =
+    [Except.ok
+        ((edge.entry.key.symbol,
+            List.map
+              (fun indexed =>
+                (indexed.fst, descendScs indexed.snd scs ++ descendScs indexed.snd (suspendedVars before.counter tries),
+                  SourcePruningEnumerationShallowChild.prepareChild
+                    (descendScs indexed.snd scs ++ descendScs indexed.snd (suspendedVars before.counter tries))
+                    indexed.fst))
+              edge.children.zipIdx,
+            residual),
+          suspendedState tries.length before)]
+prefixCounter : (suspendedState tries.length before).counter = before.counter + tries.length
+prefixAligned : (suspendedState tries.length before).counter = (suspendedState tries.length before).values.length
+prefixRealized : PendingRealized heap (suspendedState tries.length before)
+prefixSuccess :
+  Success prefixAction before
+    (edge.entry.key.symbol,
+      List.map
+        (fun indexed =>
+          (indexed.fst, descendScs indexed.snd scs ++ descendScs indexed.snd (suspendedVars before.counter tries),
+            SourcePruningEnumerationShallowChild.prepareChild
+              (descendScs indexed.snd scs ++ descendScs indexed.snd (suspendedVars before.counter tries)) indexed.fst))
+        edge.children.zipIdx,
+      residual)
+    (suspendedState tries.length before)
+childrenAvailable : ∀ (child : Value Symbol Constraint), child ∈ edge.children → Available heap child
+childrenClosed : ∀ (child : Value Symbol Constraint), child ∈ edge.children → child.free = []
+childrenNonempty : ∀ (child : Value Symbol Constraint), child ∈ edge.children → child ≠ Value.empty
+inputs : List (Value Symbol Constraint × List Suspended) := ⋯
+stagedSame :
+  List.map (fun input => (input.fst, input.snd, SourcePruningEnumerationShallowChild.prepareChild input.snd input.fst))
+      inputs =
+    List.map
+      (fun indexed =>
+        (indexed.fst, descendScs indexed.snd scs ++ descendScs indexed.snd (suspendedVars before.counter tries),
+          SourcePruningEnumerationShallowChild.prepareChild
+            (descendScs indexed.snd scs ++ descendScs indexed.snd (suspendedVars before.counter tries)) indexed.fst))
+      edge.children.zipIdx
+childrenResult : Option (List (Fragment Symbol))
+childrenAfter : EnumerationState.State Symbol Constraint
+childrenSuccess :
+  Success
+    (runStaged
+      (List.map
+        (fun indexed =>
+          (indexed.fst, descendScs indexed.snd scs ++ descendScs indexed.snd (suspendedVars before.counter tries),
+            SourcePruningEnumerationShallowChild.prepareChild
+              (descendScs indexed.snd scs ++ descendScs indexed.snd (suspendedVars before.counter tries)) indexed.fst))
+        edge.children.zipIdx))
+    (suspendedState tries.length before) childrenResult childrenAfter
+completedPrefixSuccess :
+  Success
+    (runStaged
+      (List.take
+        (List.findIdx (fun stage => stage.snd.snd.isNone)
+          (List.map
+            (fun indexed =>
+              (indexed.fst, descendScs indexed.snd scs ++ descendScs indexed.snd (suspendedVars before.counter tries),
+                SourcePruningEnumerationShallowChild.prepareChild
+                  (descendScs indexed.snd scs ++ descendScs indexed.snd (suspendedVars before.counter tries))
+                  indexed.fst))
+            edge.children.zipIdx))
+        (List.map
+          (fun indexed =>
+            (indexed.fst, descendScs indexed.snd scs ++ descendScs indexed.snd (suspendedVars before.counter tries),
+              SourcePruningEnumerationShallowChild.prepareChild
+                (descendScs indexed.snd scs ++ descendScs indexed.snd (suspendedVars before.counter tries))
+                indexed.fst))
+          edge.children.zipIdx)))
+    (suspendedState tries.length before)
+    (some
+      (List.map (fun uv => Fragment.hole uv)
+        (List.range' (before.counter + tries.length)
+          (List.findIdx (fun stage => stage.snd.snd.isNone)
+            (List.map
+              (fun indexed =>
+                (indexed.fst, descendScs indexed.snd scs ++ descendScs indexed.snd (suspendedVars before.counter tries),
+                  SourcePruningEnumerationShallowChild.prepareChild
+                    (descendScs indexed.snd scs ++ descendScs indexed.snd (suspendedVars before.counter tries))
+                    indexed.fst))
+              edge.children.zipIdx)))))
+    childrenAfter
+resultShape :
+  childrenResult =
+    if
+        List.findIdx (fun stage => stage.snd.snd.isNone)
+            (List.map
+              (fun indexed =>
+                (indexed.fst, descendScs indexed.snd scs ++ descendScs indexed.snd (suspendedVars before.counter tries),
+                  SourcePruningEnumerationShallowChild.prepareChild
+                    (descendScs indexed.snd scs ++ descendScs indexed.snd (suspendedVars before.counter tries))
+                    indexed.fst))
+              edge.children.zipIdx) <
+          (List.map
+              (fun indexed =>
+                (indexed.fst, descendScs indexed.snd scs ++ descendScs indexed.snd (suspendedVars before.counter tries),
+                  SourcePruningEnumerationShallowChild.prepareChild
+                    (descendScs indexed.snd scs ++ descendScs indexed.snd (suspendedVars before.counter tries))
+                    indexed.fst))
+              edge.children.zipIdx).length then
+      none
+    else
+      some
+        (List.map (fun uv => Fragment.hole uv)
+          (List.range' (before.counter + tries.length)
+            (List.map
+                (fun indexed =>
+                  (indexed.fst,
+                    descendScs indexed.snd scs ++ descendScs indexed.snd (suspendedVars before.counter tries),
+                    SourcePruningEnumerationShallowChild.prepareChild
+                      (descendScs indexed.snd scs ++ descendScs indexed.snd (suspendedVars before.counter tries))
+                      indexed.fst))
+                edge.children.zipIdx).length))
+afterCounter :
+  childrenAfter.counter =
+    before.counter + tries.length +
+      List.findIdx (fun stage => stage.snd.snd.isNone)
+        (List.map
+          (fun indexed =>
+            (indexed.fst, descendScs indexed.snd scs ++ descendScs indexed.snd (suspendedVars before.counter tries),
+              SourcePruningEnumerationShallowChild.prepareChild
+                (descendScs indexed.snd scs ++ descendScs indexed.snd (suspendedVars before.counter tries))
+                indexed.fst))
+          edge.children.zipIdx)
+afterAligned : childrenAfter.counter = childrenAfter.values.length
+afterRealized : PendingRealized heap childrenAfter
+⊢ Prop
+/tmp/mcfta-pruning-enumeration-edge-traversal-20261024/strict-source-2/MicroCFTA/SourcePruningEnumerationEdgeTraversal.lean:225:11: error: don't know how to synthesize implicit argument `b`
+  @And.intro
+    (childrenResult =
+      if
+          List.findIdx (fun stage => stage.snd.snd.isNone)
+              (List.map
+                (fun indexed =>
+                  (indexed.fst,
+                    descendScs indexed.snd scs ++ descendScs indexed.snd (suspendedVars before.counter tries),
+                    SourcePruningEnumerationShallowChild.prepareChild
+                      (descendScs indexed.snd scs ++ descendScs indexed.snd (suspendedVars before.counter tries))
+                      indexed.fst))
+                edge.children.zipIdx) <
+            (List.map
+                (fun indexed =>
+                  (indexed.fst,
+                    descendScs indexed.snd scs ++ descendScs indexed.snd (suspendedVars before.counter tries),
+                    SourcePruningEnumerationShallowChild.prepareChild
+                      (descendScs indexed.snd scs ++ descendScs indexed.snd (suspendedVars before.counter tries))
+                      indexed.fst))
+                edge.children.zipIdx).length then
+        none
+      else
+        some
+          (List.map (fun uv => Fragment.hole uv)
+            (List.range' (before.counter + tries.length)
+              (List.map
+                  (fun indexed =>
+                    (indexed.fst,
+                      descendScs indexed.snd scs ++ descendScs indexed.snd (suspendedVars before.counter tries),
+                      SourcePruningEnumerationShallowChild.prepareChild
+                        (descendScs indexed.snd scs ++ descendScs indexed.snd (suspendedVars before.counter tries))
+                        indexed.fst))
+                  edge.children.zipIdx).length)))
+    (((match childrenResult with
+        | none => childrenAfter
+        | some fragments =>
+          match residual with
+          | none => childrenAfter
+          | some guard =>
+            { counter := childrenAfter.counter, representatives := childrenAfter.representatives,
+              values := childrenAfter.values,
+              obligations := (guard, Fragment.node edge.entry.key.symbol fragments) :: childrenAfter.obligations,
+              recursionAncestry := childrenAfter.recursionAncestry,
+              expansionAncestry := childrenAfter.expansionAncestry }) =
+        match childrenResult with
+        | none => childrenAfter
+        | some fragments =>
+          match residual with
+          | none => childrenAfter
+          | some guard =>
+            { counter := childrenAfter.counter, representatives := childrenAfter.representatives,
+              values := childrenAfter.values,
+              obligations := (guard, Fragment.node edge.entry.key.symbol fragments) :: childrenAfter.obligations,
+              recursionAncestry := childrenAfter.recursionAncestry,
+              expansionAncestry := childrenAfter.expansionAncestry }) ∧
+      Success ?m.895 before (Option.map (fun fragments => Fragment.node edge.entry.key.symbol fragments) childrenResult)
+          (match childrenResult with
+          | none => childrenAfter
+          | some fragments =>
+            match residual with
+            | none => childrenAfter
+            | some guard =>
+              { counter := childrenAfter.counter, representatives := childrenAfter.representatives,
+                values := childrenAfter.values,
+                obligations := (guard, Fragment.node edge.entry.key.symbol fragments) :: childrenAfter.obligations,
+                recursionAncestry := childrenAfter.recursionAncestry,
+                expansionAncestry := childrenAfter.expansionAncestry }) ∧
+        (match childrenResult with
+              | none => childrenAfter
+              | some fragments =>
+                match residual with
+                | none => childrenAfter
+                | some guard =>
+                  { counter := childrenAfter.counter, representatives := childrenAfter.representatives,
+                    values := childrenAfter.values,
+                    obligations := (guard, Fragment.node edge.entry.key.symbol fragments) :: childrenAfter.obligations,
+                    recursionAncestry := childrenAfter.recursionAncestry,
+                    expansionAncestry := childrenAfter.expansionAncestry }).counter =
+            before.counter + tries.length +
+              List.findIdx (fun stage => stage.snd.snd.isNone)
+                (List.map
+                  (fun indexed =>
+                    (indexed.fst,
+                      descendScs indexed.snd scs ++ descendScs indexed.snd (suspendedVars before.counter tries),
+                      SourcePruningEnumerationShallowChild.prepareChild
+                        (descendScs indexed.snd scs ++ descendScs indexed.snd (suspendedVars before.counter tries))
+                        indexed.fst))
+                  edge.children.zipIdx) ∧
+          (match childrenResult with
+                | none => childrenAfter
+                | some fragments =>
+                  match residual with
+                  | none => childrenAfter
+                  | some guard =>
+                    { counter := childrenAfter.counter, representatives := childrenAfter.representatives,
+                      values := childrenAfter.values,
+                      obligations :=
+                        (guard, Fragment.node edge.entry.key.symbol fragments) :: childrenAfter.obligations,
+                      recursionAncestry := childrenAfter.recursionAncestry,
+                      expansionAncestry := childrenAfter.expansionAncestry }).counter =
+              (match childrenResult with
+                  | none => childrenAfter
+                  | some fragments =>
+                    match residual with
+                    | none => childrenAfter
+                    | some guard =>
+                      { counter := childrenAfter.counter, representatives := childrenAfter.representatives,
+                        values := childrenAfter.values,
+                        obligations :=
+                          (guard, Fragment.node edge.entry.key.symbol fragments) :: childrenAfter.obligations,
+                        recursionAncestry := childrenAfter.recursionAncestry,
+                        expansionAncestry := childrenAfter.expansionAncestry }).values.length ∧
+            PendingRealized heap
+              (match childrenResult with
+              | none => childrenAfter
+              | some fragments =>
+                match residual with
+                | none => childrenAfter
+                | some guard =>
+                  { counter := childrenAfter.counter, representatives := childrenAfter.representatives,
+                    values := childrenAfter.values,
+                    obligations := (guard, Fragment.node edge.entry.key.symbol fragments) :: childrenAfter.obligations,
+                    recursionAncestry := childrenAfter.recursionAncestry,
+                    expansionAncestry := childrenAfter.expansionAncestry }))
+    resultShape ⟨rfl, ⟨?m.918, ⟨?m.921, ⟨?m.924, ?m.925⟩⟩⟩⟩
+context:
+scs : List Suspended
+edge : EdgeValue Symbol Constraint
+heap : InternedConstructorTemplates.State Symbol Constraint
+parentEntry : Cache.Interned InternedBinderProtocol.NodeKey
+edges : List (EdgeValue Symbol Constraint)
+depth : Nat
+free : List InternedBinderProtocol.Reference
+ready : SourceEqualityRequiredCache.Ready heap
+parentAvailable : Available heap (Value.node parentEntry edges depth free)
+parentClosed : free = []
+selected : edge ∈ edges
+before : EnumerationState.State Symbol Constraint
+realized : PendingRealized heap before
+aligned : before.counter = before.values.length
+allowed : arityAllows edge.children.length scs = true
+tries : List EqualityTrie.Trie
+residual : Option Constraint
+projected : SourcePruningEnumerationConstraint.project edge.entry.key.constraint = some (tries, residual)
+prefixAction :
+  EnumerateM Symbol Constraint
+    (Symbol ×
+      List (Value Symbol Constraint × List Suspended × Option (EnumerateM Symbol Constraint (Fragment Symbol))) ×
+        Option Constraint)
+prefixPrepared : SourcePruningEnumerationEdgePrefix.prepare scs edge = some prefixAction
+prefixExact :
+  prefixAction before =
+    [Except.ok
+        ((edge.entry.key.symbol,
+            List.map
+              (fun indexed =>
+                (indexed.fst, descendScs indexed.snd scs ++ descendScs indexed.snd (suspendedVars before.counter tries),
+                  SourcePruningEnumerationShallowChild.prepareChild
+                    (descendScs indexed.snd scs ++ descendScs indexed.snd (suspendedVars before.counter tries))
+                    indexed.fst))
+              edge.children.zipIdx,
+            residual),
+          suspendedState tries.length before)]
+prefixCounter : (suspendedState tries.length before).counter = before.counter + tries.length
+prefixAligned : (suspendedState tries.length before).counter = (suspendedState tries.length before).values.length
+prefixRealized : PendingRealized heap (suspendedState tries.length before)
+prefixSuccess :
+  Success prefixAction before
+    (edge.entry.key.symbol,
+      List.map
+        (fun indexed =>
+          (indexed.fst, descendScs indexed.snd scs ++ descendScs indexed.snd (suspendedVars before.counter tries),
+            SourcePruningEnumerationShallowChild.prepareChild
+              (descendScs indexed.snd scs ++ descendScs indexed.snd (suspendedVars before.counter tries)) indexed.fst))
+        edge.children.zipIdx,
+      residual)
+    (suspendedState tries.length before)
+childrenAvailable : ∀ (child : Value Symbol Constraint), child ∈ edge.children → Available heap child
+childrenClosed : ∀ (child : Value Symbol Constraint), child ∈ edge.children → child.free = []
+childrenNonempty : ∀ (child : Value Symbol Constraint), child ∈ edge.children → child ≠ Value.empty
+inputs : List (Value Symbol Constraint × List Suspended) := ⋯
+stagedSame :
+  List.map (fun input => (input.fst, input.snd, SourcePruningEnumerationShallowChild.prepareChild input.snd input.fst))
+      inputs =
+    List.map
+      (fun indexed =>
+        (indexed.fst, descendScs indexed.snd scs ++ descendScs indexed.snd (suspendedVars before.counter tries),
+          SourcePruningEnumerationShallowChild.prepareChild
+            (descendScs indexed.snd scs ++ descendScs indexed.snd (suspendedVars before.counter tries)) indexed.fst))
+      edge.children.zipIdx
+childrenResult : Option (List (Fragment Symbol))
+childrenAfter : EnumerationState.State Symbol Constraint
+childrenSuccess :
+  Success
+    (runStaged
+      (List.map
+        (fun indexed =>
+          (indexed.fst, descendScs indexed.snd scs ++ descendScs indexed.snd (suspendedVars before.counter tries),
+            SourcePruningEnumerationShallowChild.prepareChild
+              (descendScs indexed.snd scs ++ descendScs indexed.snd (suspendedVars before.counter tries)) indexed.fst))
+        edge.children.zipIdx))
+    (suspendedState tries.length before) childrenResult childrenAfter
+completedPrefixSuccess :
+  Success
+    (runStaged
+      (List.take
+        (List.findIdx (fun stage => stage.snd.snd.isNone)
+          (List.map
+            (fun indexed =>
+              (indexed.fst, descendScs indexed.snd scs ++ descendScs indexed.snd (suspendedVars before.counter tries),
+                SourcePruningEnumerationShallowChild.prepareChild
+                  (descendScs indexed.snd scs ++ descendScs indexed.snd (suspendedVars before.counter tries))
+                  indexed.fst))
+            edge.children.zipIdx))
+        (List.map
+          (fun indexed =>
+            (indexed.fst, descendScs indexed.snd scs ++ descendScs indexed.snd (suspendedVars before.counter tries),
+              SourcePruningEnumerationShallowChild.prepareChild
+                (descendScs indexed.snd scs ++ descendScs indexed.snd (suspendedVars before.counter tries))
+                indexed.fst))
+          edge.children.zipIdx)))
+    (suspendedState tries.length before)
+    (some
+      (List.map (fun uv => Fragment.hole uv)
+        (List.range' (before.counter + tries.length)
+          (List.findIdx (fun stage => stage.snd.snd.isNone)
+            (List.map
+              (fun indexed =>
+                (indexed.fst, descendScs indexed.snd scs ++ descendScs indexed.snd (suspendedVars before.counter tries),
+                  SourcePruningEnumerationShallowChild.prepareChild
+                    (descendScs indexed.snd scs ++ descendScs indexed.snd (suspendedVars before.counter tries))
+                    indexed.fst))
+              edge.children.zipIdx)))))
+    childrenAfter
+resultShape :
+  childrenResult =
+    if
+        List.findIdx (fun stage => stage.snd.snd.isNone)
+            (List.map
+              (fun indexed =>
+                (indexed.fst, descendScs indexed.snd scs ++ descendScs indexed.snd (suspendedVars before.counter tries),
+                  SourcePruningEnumerationShallowChild.prepareChild
+                    (descendScs indexed.snd scs ++ descendScs indexed.snd (suspendedVars before.counter tries))
+                    indexed.fst))
+              edge.children.zipIdx) <
+          (List.map
+              (fun indexed =>
+                (indexed.fst, descendScs indexed.snd scs ++ descendScs indexed.snd (suspendedVars before.counter tries),
+                  SourcePruningEnumerationShallowChild.prepareChild
+                    (descendScs indexed.snd scs ++ descendScs indexed.snd (suspendedVars before.counter tries))
+                    indexed.fst))
+              edge.children.zipIdx).length then
+      none
+    else
+      some
+        (List.map (fun uv => Fragment.hole uv)
+          (List.range' (before.counter + tries.length)
+            (List.map
+                (fun indexed =>
+                  (indexed.fst,
+                    descendScs indexed.snd scs ++ descendScs indexed.snd (suspendedVars before.counter tries),
+                    SourcePruningEnumerationShallowChild.prepareChild
+                      (descendScs indexed.snd scs ++ descendScs indexed.snd (suspendedVars before.counter tries))
+                      indexed.fst))
+                edge.children.zipIdx).length))
+afterCounter :
+  childrenAfter.counter =
+    before.counter + tries.length +
+      List.findIdx (fun stage => stage.snd.snd.isNone)
+        (List.map
+          (fun indexed =>
+            (indexed.fst, descendScs indexed.snd scs ++ descendScs indexed.snd (suspendedVars before.counter tries),
+              SourcePruningEnumerationShallowChild.prepareChild
+                (descendScs indexed.snd scs ++ descendScs indexed.snd (suspendedVars before.counter tries))
+                indexed.fst))
+          edge.children.zipIdx)
+afterAligned : childrenAfter.counter = childrenAfter.values.length
+afterRealized : PendingRealized heap childrenAfter
+⊢ Prop
+/tmp/mcfta-pruning-enumeration-edge-traversal-20261024/strict-source-2/MicroCFTA/SourcePruningEnumerationEdgeTraversal.lean:225:11: error: don't know how to synthesize implicit argument `b`
+  @And.intro
+    ((match childrenResult with
+      | none => childrenAfter
+      | some fragments =>
+        match residual with
+        | none => childrenAfter
+        | some guard =>
+          { counter := childrenAfter.counter, representatives := childrenAfter.representatives,
+            values := childrenAfter.values,
+            obligations := (guard, Fragment.node edge.entry.key.symbol fragments) :: childrenAfter.obligations,
+            recursionAncestry := childrenAfter.recursionAncestry,
+            expansionAncestry := childrenAfter.expansionAncestry }) =
+      match childrenResult with
+      | none => childrenAfter
+      | some fragments =>
+        match residual with
+        | none => childrenAfter
+        | some guard =>
+          { counter := childrenAfter.counter, representatives := childrenAfter.representatives,
+            values := childrenAfter.values,
+            obligations := (guard, Fragment.node edge.entry.key.symbol fragments) :: childrenAfter.obligations,
+            recursionAncestry := childrenAfter.recursionAncestry,
+            expansionAncestry := childrenAfter.expansionAncestry })
+    (Success ?m.895 before (Option.map (fun fragments => Fragment.node edge.entry.key.symbol fragments) childrenResult)
+        (match childrenResult with
+        | none => childrenAfter
+        | some fragments =>
+          match residual with
+          | none => childrenAfter
+          | some guard =>
+            { counter := childrenAfter.counter, representatives := childrenAfter.representatives,
+              values := childrenAfter.values,
+              obligations := (guard, Fragment.node edge.entry.key.symbol fragments) :: childrenAfter.obligations,
+              recursionAncestry := childrenAfter.recursionAncestry,
+              expansionAncestry := childrenAfter.expansionAncestry }) ∧
+      (match childrenResult with
+            | none => childrenAfter
+            | some fragments =>
+              match residual with
+              | none => childrenAfter
+              | some guard =>
+                { counter := childrenAfter.counter, representatives := childrenAfter.representatives,
+                  values := childrenAfter.values,
+                  obligations := (guard, Fragment.node edge.entry.key.symbol fragments) :: childrenAfter.obligations,
+                  recursionAncestry := childrenAfter.recursionAncestry,
+                  expansionAncestry := childrenAfter.expansionAncestry }).counter =
+          before.counter + tries.length +
+            List.findIdx (fun stage => stage.snd.snd.isNone)
+              (List.map
+                (fun indexed =>
+                  (indexed.fst,
+                    descendScs indexed.snd scs ++ descendScs indexed.snd (suspendedVars before.counter tries),
+                    SourcePruningEnumerationShallowChild.prepareChild
+                      (descendScs indexed.snd scs ++ descendScs indexed.snd (suspendedVars before.counter tries))
+                      indexed.fst))
+                edge.children.zipIdx) ∧
+        (match childrenResult with
+              | none => childrenAfter
+              | some fragments =>
+                match residual with
+                | none => childrenAfter
+                | some guard =>
+                  { counter := childrenAfter.counter, representatives := childrenAfter.representatives,
+                    values := childrenAfter.values,
+                    obligations := (guard, Fragment.node edge.entry.key.symbol fragments) :: childrenAfter.obligations,
+                    recursionAncestry := childrenAfter.recursionAncestry,
+                    expansionAncestry := childrenAfter.expansionAncestry }).counter =
+            (match childrenResult with
+                | none => childrenAfter
+                | some fragments =>
+                  match residual with
+                  | none => childrenAfter
+                  | some guard =>
+                    { counter := childrenAfter.counter, representatives := childrenAfter.representatives,
+                      values := childrenAfter.values,
+                      obligations :=
+                        (guard, Fragment.node edge.entry.key.symbol fragments) :: childrenAfter.obligations,
+                      recursionAncestry := childrenAfter.recursionAncestry,
+                      expansionAncestry := childrenAfter.expansionAncestry }).values.length ∧
+          PendingRealized heap
+            (match childrenResult with
+            | none => childrenAfter
+            | some fragments =>
+              match residual with
+              | none => childrenAfter
+              | some guard =>
+                { counter := childrenAfter.counter, representatives := childrenAfter.representatives,
+                  values := childrenAfter.values,
+                  obligations := (guard, Fragment.node edge.entry.key.symbol fragments) :: childrenAfter.obligations,
+                  recursionAncestry := childrenAfter.recursionAncestry,
+                  expansionAncestry := childrenAfter.expansionAncestry }))
+    rfl ⟨?m.918, ⟨?m.921, ⟨?m.924, ?m.925⟩⟩⟩
+context:
+scs : List Suspended
+edge : EdgeValue Symbol Constraint
+heap : InternedConstructorTemplates.State Symbol Constraint
+parentEntry : Cache.Interned InternedBinderProtocol.NodeKey
+edges : List (EdgeValue Symbol Constraint)
+depth : Nat
+free : List InternedBinderProtocol.Reference
+ready : SourceEqualityRequiredCache.Ready heap
+parentAvailable : Available heap (Value.node parentEntry edges depth free)
+parentClosed : free = []
+selected : edge ∈ edges
+before : EnumerationState.State Symbol Constraint
+realized : PendingRealized heap before
+aligned : before.counter = before.values.length
+allowed : arityAllows edge.children.length scs = true
+tries : List EqualityTrie.Trie
+residual : Option Constraint
+projected : SourcePruningEnumerationConstraint.project edge.entry.key.constraint = some (tries, residual)
+prefixAction :
+  EnumerateM Symbol Constraint
+    (Symbol ×
+      List (Value Symbol Constraint × List Suspended × Option (EnumerateM Symbol Constraint (Fragment Symbol))) ×
+        Option Constraint)
+prefixPrepared : SourcePruningEnumerationEdgePrefix.prepare scs edge = some prefixAction
+prefixExact :
+  prefixAction before =
+    [Except.ok
+        ((edge.entry.key.symbol,
+            List.map
+              (fun indexed =>
+                (indexed.fst, descendScs indexed.snd scs ++ descendScs indexed.snd (suspendedVars before.counter tries),
+                  SourcePruningEnumerationShallowChild.prepareChild
+                    (descendScs indexed.snd scs ++ descendScs indexed.snd (suspendedVars before.counter tries))
+                    indexed.fst))
+              edge.children.zipIdx,
+            residual),
+          suspendedState tries.length before)]
+prefixCounter : (suspendedState tries.length before).counter = before.counter + tries.length
+prefixAligned : (suspendedState tries.length before).counter = (suspendedState tries.length before).values.length
+prefixRealized : PendingRealized heap (suspendedState tries.length before)
+prefixSuccess :
+  Success prefixAction before
+    (edge.entry.key.symbol,
+      List.map
+        (fun indexed =>
+          (indexed.fst, descendScs indexed.snd scs ++ descendScs indexed.snd (suspendedVars before.counter tries),
+            SourcePruningEnumerationShallowChild.prepareChild
+              (descendScs indexed.snd scs ++ descendScs indexed.snd (suspendedVars before.counter tries)) indexed.fst))
+        edge.children.zipIdx,
+      residual)
+    (suspendedState tries.length before)
+childrenAvailable : ∀ (child : Value Symbol Constraint), child ∈ edge.children → Available heap child
+childrenClosed : ∀ (child : Value Symbol Constraint), child ∈ edge.children → child.free = []
+childrenNonempty : ∀ (child : Value Symbol Constraint), child ∈ edge.children → child ≠ Value.empty
+inputs : List (Value Symbol Constraint × List Suspended) := ⋯
+stagedSame :
+  List.map (fun input => (input.fst, input.snd, SourcePruningEnumerationShallowChild.prepareChild input.snd input.fst))
+      inputs =
+    List.map
+      (fun indexed =>
+        (indexed.fst, descendScs indexed.snd scs ++ descendScs indexed.snd (suspendedVars before.counter tries),
+          SourcePruningEnumerationShallowChild.prepareChild
+            (descendScs indexed.snd scs ++ descendScs indexed.snd (suspendedVars before.counter tries)) indexed.fst))
+      edge.children.zipIdx
+childrenResult : Option (List (Fragment Symbol))
+childrenAfter : EnumerationState.State Symbol Constraint
+childrenSuccess :
+  Success
+    (runStaged
+      (List.map
+        (fun indexed =>
+          (indexed.fst, descendScs indexed.snd scs ++ descendScs indexed.snd (suspendedVars before.counter tries),
+            SourcePruningEnumerationShallowChild.prepareChild
+              (descendScs indexed.snd scs ++ descendScs indexed.snd (suspendedVars before.counter tries)) indexed.fst))
+        edge.children.zipIdx))
+    (suspendedState tries.length before) childrenResult childrenAfter
+completedPrefixSuccess :
+  Success
+    (runStaged
+      (List.take
+        (List.findIdx (fun stage => stage.snd.snd.isNone)
+          (List.map
+            (fun indexed =>
+              (indexed.fst, descendScs indexed.snd scs ++ descendScs indexed.snd (suspendedVars before.counter tries),
+                SourcePruningEnumerationShallowChild.prepareChild
+                  (descendScs indexed.snd scs ++ descendScs indexed.snd (suspendedVars before.counter tries))
+                  indexed.fst))
+            edge.children.zipIdx))
+        (List.map
+          (fun indexed =>
+            (indexed.fst, descendScs indexed.snd scs ++ descendScs indexed.snd (suspendedVars before.counter tries),
+              SourcePruningEnumerationShallowChild.prepareChild
+                (descendScs indexed.snd scs ++ descendScs indexed.snd (suspendedVars before.counter tries))
+                indexed.fst))
+          edge.children.zipIdx)))
+    (suspendedState tries.length before)
+    (some
+      (List.map (fun uv => Fragment.hole uv)
+        (List.range' (before.counter + tries.length)
+          (List.findIdx (fun stage => stage.snd.snd.isNone)
+            (List.map
+              (fun indexed =>
+                (indexed.fst, descendScs indexed.snd scs ++ descendScs indexed.snd (suspendedVars before.counter tries),
+                  SourcePruningEnumerationShallowChild.prepareChild
+                    (descendScs indexed.snd scs ++ descendScs indexed.snd (suspendedVars before.counter tries))
+                    indexed.fst))
+              edge.children.zipIdx)))))
+    childrenAfter
+resultShape :
+  childrenResult =
+    if
+        List.findIdx (fun stage => stage.snd.snd.isNone)
+            (List.map
+              (fun indexed =>
+                (indexed.fst, descendScs indexed.snd scs ++ descendScs indexed.snd (suspendedVars before.counter tries),
+                  SourcePruningEnumerationShallowChild.prepareChild
+                    (descendScs indexed.snd scs ++ descendScs indexed.snd (suspendedVars before.counter tries))
+                    indexed.fst))
+              edge.children.zipIdx) <
+          (List.map
+              (fun indexed =>
+                (indexed.fst, descendScs indexed.snd scs ++ descendScs indexed.snd (suspendedVars before.counter tries),
+                  SourcePruningEnumerationShallowChild.prepareChild
+                    (descendScs indexed.snd scs ++ descendScs indexed.snd (suspendedVars before.counter tries))
+                    indexed.fst))
+              edge.children.zipIdx).length then
+      none
+    else
+      some
+        (List.map (fun uv => Fragment.hole uv)
+          (List.range' (before.counter + tries.length)
+            (List.map
+                (fun indexed =>
+                  (indexed.fst,
+                    descendScs indexed.snd scs ++ descendScs indexed.snd (suspendedVars before.counter tries),
+                    SourcePruningEnumerationShallowChild.prepareChild
+                      (descendScs indexed.snd scs ++ descendScs indexed.snd (suspendedVars before.counter tries))
+                      indexed.fst))
+                edge.children.zipIdx).length))
+afterCounter :
+  childrenAfter.counter =
+    before.counter + tries.length +
+      List.findIdx (fun stage => stage.snd.snd.isNone)
+        (List.map
+          (fun indexed =>
+            (indexed.fst, descendScs indexed.snd scs ++ descendScs indexed.snd (suspendedVars before.counter tries),
+              SourcePruningEnumerationShallowChild.prepareChild
+                (descendScs indexed.snd scs ++ descendScs indexed.snd (suspendedVars before.counter tries))
+                indexed.fst))
+          edge.children.zipIdx)
+afterAligned : childrenAfter.counter = childrenAfter.values.length
+afterRealized : PendingRealized heap childrenAfter
+⊢ Prop
+/tmp/mcfta-pruning-enumeration-edge-traversal-20261024/strict-source-2/MicroCFTA/SourcePruningEnumerationEdgeTraversal.lean:225:11: error: don't know how to synthesize implicit argument `a`
+  @And.intro
+    (Success ?m.895 before (Option.map (fun fragments => Fragment.node edge.entry.key.symbol fragments) childrenResult)
+      (match childrenResult with
+      | none => childrenAfter
+      | some fragments =>
+        match residual with
+        | none => childrenAfter
+        | some guard =>
+          { counter := childrenAfter.counter, representatives := childrenAfter.representatives,
+            values := childrenAfter.values,
+            obligations := (guard, Fragment.node edge.entry.key.symbol fragments) :: childrenAfter.obligations,
+            recursionAncestry := childrenAfter.recursionAncestry,
+            expansionAncestry := childrenAfter.expansionAncestry }))
+    ((match childrenResult with
+          | none => childrenAfter
+          | some fragments =>
+            match residual with
+            | none => childrenAfter
+            | some guard =>
+              { counter := childrenAfter.counter, representatives := childrenAfter.representatives,
+                values := childrenAfter.values,
+                obligations := (guard, Fragment.node edge.entry.key.symbol fragments) :: childrenAfter.obligations,
+                recursionAncestry := childrenAfter.recursionAncestry,
+                expansionAncestry := childrenAfter.expansionAncestry }).counter =
+        before.counter + tries.length +
+          List.findIdx (fun stage => stage.snd.snd.isNone)
+            (List.map
+              (fun indexed =>
+                (indexed.fst, descendScs indexed.snd scs ++ descendScs indexed.snd (suspendedVars before.counter tries),
+                  SourcePruningEnumerationShallowChild.prepareChild
+                    (descendScs indexed.snd scs ++ descendScs indexed.snd (suspendedVars before.counter tries))
+                    indexed.fst))
+              edge.children.zipIdx) ∧
+      (match childrenResult with
+            | none => childrenAfter
+            | some fragments =>
+              match residual with
+              | none => childrenAfter
+              | some guard =>
+                { counter := childrenAfter.counter, representatives := childrenAfter.representatives,
+                  values := childrenAfter.values,
+                  obligations := (guard, Fragment.node edge.entry.key.symbol fragments) :: childrenAfter.obligations,
+                  recursionAncestry := childrenAfter.recursionAncestry,
+                  expansionAncestry := childrenAfter.expansionAncestry }).counter =
+          (match childrenResult with
+              | none => childrenAfter
+              | some fragments =>
+                match residual with
+                | none => childrenAfter
+                | some guard =>
+                  { counter := childrenAfter.counter, representatives := childrenAfter.representatives,
+                    values := childrenAfter.values,
+                    obligations := (guard, Fragment.node edge.entry.key.symbol fragments) :: childrenAfter.obligations,
+                    recursionAncestry := childrenAfter.recursionAncestry,
+                    expansionAncestry := childrenAfter.expansionAncestry }).values.length ∧
+        PendingRealized heap
+          (match childrenResult with
+          | none => childrenAfter
+          | some fragments =>
+            match residual with
+            | none => childrenAfter
+            | some guard =>
+              { counter := childrenAfter.counter, representatives := childrenAfter.representatives,
+                values := childrenAfter.values,
+                obligations := (guard, Fragment.node edge.entry.key.symbol fragments) :: childrenAfter.obligations,
+                recursionAncestry := childrenAfter.recursionAncestry,
+                expansionAncestry := childrenAfter.expansionAncestry }))
+    ?m.918 ⟨?m.921, ⟨?m.924, ?m.925⟩⟩
+context:
+scs : List Suspended
+edge : EdgeValue Symbol Constraint
+heap : InternedConstructorTemplates.State Symbol Constraint
+parentEntry : Cache.Interned InternedBinderProtocol.NodeKey
+edges : List (EdgeValue Symbol Constraint)
+depth : Nat
+free : List InternedBinderProtocol.Reference
+ready : SourceEqualityRequiredCache.Ready heap
+parentAvailable : Available heap (Value.node parentEntry edges depth free)
+parentClosed : free = []
+selected : edge ∈ edges
+before : EnumerationState.State Symbol Constraint
+realized : PendingRealized heap before
+aligned : before.counter = before.values.length
+allowed : arityAllows edge.children.length scs = true
+tries : List EqualityTrie.Trie
+residual : Option Constraint
+projected : SourcePruningEnumerationConstraint.project edge.entry.key.constraint = some (tries, residual)
+prefixAction :
+  EnumerateM Symbol Constraint
+    (Symbol ×
+      List (Value Symbol Constraint × List Suspended × Option (EnumerateM Symbol Constraint (Fragment Symbol))) ×
+        Option Constraint)
+prefixPrepared : SourcePruningEnumerationEdgePrefix.prepare scs edge = some prefixAction
+prefixExact :
+  prefixAction before =
+    [Except.ok
+        ((edge.entry.key.symbol,
+            List.map
+              (fun indexed =>
+                (indexed.fst, descendScs indexed.snd scs ++ descendScs indexed.snd (suspendedVars before.counter tries),
+                  SourcePruningEnumerationShallowChild.prepareChild
+                    (descendScs indexed.snd scs ++ descendScs indexed.snd (suspendedVars before.counter tries))
+                    indexed.fst))
+              edge.children.zipIdx,
+            residual),
+          suspendedState tries.length before)]
+prefixCounter : (suspendedState tries.length before).counter = before.counter + tries.length
+prefixAligned : (suspendedState tries.length before).counter = (suspendedState tries.length before).values.length
+prefixRealized : PendingRealized heap (suspendedState tries.length before)
+prefixSuccess :
+  Success prefixAction before
+    (edge.entry.key.symbol,
+      List.map
+        (fun indexed =>
+          (indexed.fst, descendScs indexed.snd scs ++ descendScs indexed.snd (suspendedVars before.counter tries),
+            SourcePruningEnumerationShallowChild.prepareChild
+              (descendScs indexed.snd scs ++ descendScs indexed.snd (suspendedVars before.counter tries)) indexed.fst))
+        edge.children.zipIdx,
+      residual)
+    (suspendedState tries.length before)
+childrenAvailable : ∀ (child : Value Symbol Constraint), child ∈ edge.children → Available heap child
+childrenClosed : ∀ (child : Value Symbol Constraint), child ∈ edge.children → child.free = []
+childrenNonempty : ∀ (child : Value Symbol Constraint), child ∈ edge.children → child ≠ Value.empty
+inputs : List (Value Symbol Constraint × List Suspended) := ⋯
+stagedSame :
+  List.map (fun input => (input.fst, input.snd, SourcePruningEnumerationShallowChild.prepareChild input.snd input.fst))
+      inputs =
+    List.map
+      (fun indexed =>
+        (indexed.fst, descendScs indexed.snd scs ++ descendScs indexed.snd (suspendedVars before.counter tries),
+          SourcePruningEnumerationShallowChild.prepareChild
+            (descendScs indexed.snd scs ++ descendScs indexed.snd (suspendedVars before.counter tries)) indexed.fst))
+      edge.children.zipIdx
+childrenResult : Option (List (Fragment Symbol))
+childrenAfter : EnumerationState.State Symbol Constraint
+childrenSuccess :
+  Success
+    (runStaged
+      (List.map
+        (fun indexed =>
+          (indexed.fst, descendScs indexed.snd scs ++ descendScs indexed.snd (suspendedVars before.counter tries),
+            SourcePruningEnumerationShallowChild.prepareChild
+              (descendScs indexed.snd scs ++ descendScs indexed.snd (suspendedVars before.counter tries)) indexed.fst))
+        edge.children.zipIdx))
+    (suspendedState tries.length before) childrenResult childrenAfter
+completedPrefixSuccess :
+  Success
+    (runStaged
+      (List.take
+        (List.findIdx (fun stage => stage.snd.snd.isNone)
+          (List.map
+            (fun indexed =>
+              (indexed.fst, descendScs indexed.snd scs ++ descendScs indexed.snd (suspendedVars before.counter tries),
+                SourcePruningEnumerationShallowChild.prepareChild
+                  (descendScs indexed.snd scs ++ descendScs indexed.snd (suspendedVars before.counter tries))
+                  indexed.fst))
+            edge.children.zipIdx))
+        (List.map
+          (fun indexed =>
+            (indexed.fst, descendScs indexed.snd scs ++ descendScs indexed.snd (suspendedVars before.counter tries),
+              SourcePruningEnumerationShallowChild.prepareChild
+                (descendScs indexed.snd scs ++ descendScs indexed.snd (suspendedVars before.counter tries))
+                indexed.fst))
+          edge.children.zipIdx)))
+    (suspendedState tries.length before)
+    (some
+      (List.map (fun uv => Fragment.hole uv)
+        (List.range' (before.counter + tries.length)
+          (List.findIdx (fun stage => stage.snd.snd.isNone)
+            (List.map
+              (fun indexed =>
+                (indexed.fst, descendScs indexed.snd scs ++ descendScs indexed.snd (suspendedVars before.counter tries),
+                  SourcePruningEnumerationShallowChild.prepareChild
+                    (descendScs indexed.snd scs ++ descendScs indexed.snd (suspendedVars before.counter tries))
+                    indexed.fst))
+              edge.children.zipIdx)))))
+    childrenAfter
+resultShape :
+  childrenResult =
+    if
+        List.findIdx (fun stage => stage.snd.snd.isNone)
+            (List.map
+              (fun indexed =>
+                (indexed.fst, descendScs indexed.snd scs ++ descendScs indexed.snd (suspendedVars before.counter tries),
+                  SourcePruningEnumerationShallowChild.prepareChild
+                    (descendScs indexed.snd scs ++ descendScs indexed.snd (suspendedVars before.counter tries))
+                    indexed.fst))
+              edge.children.zipIdx) <
+          (List.map
+              (fun indexed =>
+                (indexed.fst, descendScs indexed.snd scs ++ descendScs indexed.snd (suspendedVars before.counter tries),
+                  SourcePruningEnumerationShallowChild.prepareChild
+                    (descendScs indexed.snd scs ++ descendScs indexed.snd (suspendedVars before.counter tries))
+                    indexed.fst))
+              edge.children.zipIdx).length then
+      none
+    else
+      some
+        (List.map (fun uv => Fragment.hole uv)
+          (List.range' (before.counter + tries.length)
+            (List.map
+                (fun indexed =>
+                  (indexed.fst,
+                    descendScs indexed.snd scs ++ descendScs indexed.snd (suspendedVars before.counter tries),
+                    SourcePruningEnumerationShallowChild.prepareChild
+                      (descendScs indexed.snd scs ++ descendScs indexed.snd (suspendedVars before.counter tries))
+                      indexed.fst))
+                edge.children.zipIdx).length))
+afterCounter :
+  childrenAfter.counter =
+    before.counter + tries.length +
+      List.findIdx (fun stage => stage.snd.snd.isNone)
+        (List.map
+          (fun indexed =>
+            (indexed.fst, descendScs indexed.snd scs ++ descendScs indexed.snd (suspendedVars before.counter tries),
+              SourcePruningEnumerationShallowChild.prepareChild
+                (descendScs indexed.snd scs ++ descendScs indexed.snd (suspendedVars before.counter tries))
+                indexed.fst))
+          edge.children.zipIdx)
+afterAligned : childrenAfter.counter = childrenAfter.values.length
+afterRealized : PendingRealized heap childrenAfter
+⊢ Prop
+/tmp/mcfta-pruning-enumeration-edge-traversal-20261024/strict-source-2/MicroCFTA/SourcePruningEnumerationEdgeTraversal.lean:225:12: error: don't know how to synthesize placeholder for argument `w`
+context:
+scs : List Suspended
+edge : EdgeValue Symbol Constraint
+heap : InternedConstructorTemplates.State Symbol Constraint
+parentEntry : Cache.Interned InternedBinderProtocol.NodeKey
+edges : List (EdgeValue Symbol Constraint)
+depth : Nat
+free : List InternedBinderProtocol.Reference
+ready : SourceEqualityRequiredCache.Ready heap
+parentAvailable : Available heap (Value.node parentEntry edges depth free)
+parentClosed : free = []
+selected : edge ∈ edges
+before : EnumerationState.State Symbol Constraint
+realized : PendingRealized heap before
+aligned : before.counter = before.values.length
+allowed : arityAllows edge.children.length scs = true
+tries : List EqualityTrie.Trie
+residual : Option Constraint
+projected : SourcePruningEnumerationConstraint.project edge.entry.key.constraint = some (tries, residual)
+prefixAction :
+  EnumerateM Symbol Constraint
+    (Symbol ×
+      List (Value Symbol Constraint × List Suspended × Option (EnumerateM Symbol Constraint (Fragment Symbol))) ×
+        Option Constraint)
+prefixPrepared : SourcePruningEnumerationEdgePrefix.prepare scs edge = some prefixAction
+prefixExact :
+  prefixAction before =
+    [Except.ok
+        ((edge.entry.key.symbol,
+            List.map
+              (fun indexed =>
+                (indexed.fst, descendScs indexed.snd scs ++ descendScs indexed.snd (suspendedVars before.counter tries),
+                  SourcePruningEnumerationShallowChild.prepareChild
+                    (descendScs indexed.snd scs ++ descendScs indexed.snd (suspendedVars before.counter tries))
+                    indexed.fst))
+              edge.children.zipIdx,
+            residual),
+          suspendedState tries.length before)]
+prefixCounter : (suspendedState tries.length before).counter = before.counter + tries.length
+prefixAligned : (suspendedState tries.length before).counter = (suspendedState tries.length before).values.length
+prefixRealized : PendingRealized heap (suspendedState tries.length before)
+prefixSuccess :
+  Success prefixAction before
+    (edge.entry.key.symbol,
+      List.map
+        (fun indexed =>
+          (indexed.fst, descendScs indexed.snd scs ++ descendScs indexed.snd (suspendedVars before.counter tries),
+            SourcePruningEnumerationShallowChild.prepareChild
+              (descendScs indexed.snd scs ++ descendScs indexed.snd (suspendedVars before.counter tries)) indexed.fst))
+        edge.children.zipIdx,
+      residual)
+    (suspendedState tries.length before)
+childrenAvailable : ∀ (child : Value Symbol Constraint), child ∈ edge.children → Available heap child
+childrenClosed : ∀ (child : Value Symbol Constraint), child ∈ edge.children → child.free = []
+childrenNonempty : ∀ (child : Value Symbol Constraint), child ∈ edge.children → child ≠ Value.empty
+inputs : List (Value Symbol Constraint × List Suspended) := ⋯
+stagedSame :
+  List.map (fun input => (input.fst, input.snd, SourcePruningEnumerationShallowChild.prepareChild input.snd input.fst))
+      inputs =
+    List.map
+      (fun indexed =>
+        (indexed.fst, descendScs indexed.snd scs ++ descendScs indexed.snd (suspendedVars before.counter tries),
+          SourcePruningEnumerationShallowChild.prepareChild
+            (descendScs indexed.snd scs ++ descendScs indexed.snd (suspendedVars before.counter tries)) indexed.fst))
+      edge.children.zipIdx
+childrenResult : Option (List (Fragment Symbol))
+childrenAfter : EnumerationState.State Symbol Constraint
+childrenSuccess :
+  Success
+    (runStaged
+      (List.map
+        (fun indexed =>
+          (indexed.fst, descendScs indexed.snd scs ++ descendScs indexed.snd (suspendedVars before.counter tries),
+            SourcePruningEnumerationShallowChild.prepareChild
+              (descendScs indexed.snd scs ++ descendScs indexed.snd (suspendedVars before.counter tries)) indexed.fst))
+        edge.children.zipIdx))
+    (suspendedState tries.length before) childrenResult childrenAfter
+completedPrefixSuccess :
+  Success
+    (runStaged
+      (List.take
+        (List.findIdx (fun stage => stage.snd.snd.isNone)
+          (List.map
+            (fun indexed =>
+              (indexed.fst, descendScs indexed.snd scs ++ descendScs indexed.snd (suspendedVars before.counter tries),
+                SourcePruningEnumerationShallowChild.prepareChild
+                  (descendScs indexed.snd scs ++ descendScs indexed.snd (suspendedVars before.counter tries))
+                  indexed.fst))
+            edge.children.zipIdx))
+        (List.map
+          (fun indexed =>
+            (indexed.fst, descendScs indexed.snd scs ++ descendScs indexed.snd (suspendedVars before.counter tries),
+              SourcePruningEnumerationShallowChild.prepareChild
+                (descendScs indexed.snd scs ++ descendScs indexed.snd (suspendedVars before.counter tries))
+                indexed.fst))
+          edge.children.zipIdx)))
+    (suspendedState tries.length before)
+    (some
+      (List.map (fun uv => Fragment.hole uv)
+        (List.range' (before.counter + tries.length)
+          (List.findIdx (fun stage => stage.snd.snd.isNone)
+            (List.map
+              (fun indexed =>
+                (indexed.fst, descendScs indexed.snd scs ++ descendScs indexed.snd (suspendedVars before.counter tries),
+                  SourcePruningEnumerationShallowChild.prepareChild
+                    (descendScs indexed.snd scs ++ descendScs indexed.snd (suspendedVars before.counter tries))
+                    indexed.fst))
+              edge.children.zipIdx)))))
+    childrenAfter
+resultShape :
+  childrenResult =
+    if
+        List.findIdx (fun stage => stage.snd.snd.isNone)
+            (List.map
+              (fun indexed =>
+                (indexed.fst, descendScs indexed.snd scs ++ descendScs indexed.snd (suspendedVars before.counter tries),
+                  SourcePruningEnumerationShallowChild.prepareChild
+                    (descendScs indexed.snd scs ++ descendScs indexed.snd (suspendedVars before.counter tries))
+                    indexed.fst))
+              edge.children.zipIdx) <
+          (List.map
+              (fun indexed =>
+                (indexed.fst, descendScs indexed.snd scs ++ descendScs indexed.snd (suspendedVars before.counter tries),
+                  SourcePruningEnumerationShallowChild.prepareChild
+                    (descendScs indexed.snd scs ++ descendScs indexed.snd (suspendedVars before.counter tries))
+                    indexed.fst))
+              edge.children.zipIdx).length then
+      none
+    else
+      some
+        (List.map (fun uv => Fragment.hole uv)
+          (List.range' (before.counter + tries.length)
+            (List.map
+                (fun indexed =>
+                  (indexed.fst,
+                    descendScs indexed.snd scs ++ descendScs indexed.snd (suspendedVars before.counter tries),
+                    SourcePruningEnumerationShallowChild.prepareChild
+                      (descendScs indexed.snd scs ++ descendScs indexed.snd (suspendedVars before.counter tries))
+                      indexed.fst))
+                edge.children.zipIdx).length))
+afterCounter :
+  childrenAfter.counter =
+    before.counter + tries.length +
+      List.findIdx (fun stage => stage.snd.snd.isNone)
+        (List.map
+          (fun indexed =>
+            (indexed.fst, descendScs indexed.snd scs ++ descendScs indexed.snd (suspendedVars before.counter tries),
+              SourcePruningEnumerationShallowChild.prepareChild
+                (descendScs indexed.snd scs ++ descendScs indexed.snd (suspendedVars before.counter tries))
+                indexed.fst))
+          edge.children.zipIdx)
+afterAligned : childrenAfter.counter = childrenAfter.values.length
+afterRealized : PendingRealized heap childrenAfter
+⊢ EnumerateM Symbol Constraint (Option (Fragment Symbol))

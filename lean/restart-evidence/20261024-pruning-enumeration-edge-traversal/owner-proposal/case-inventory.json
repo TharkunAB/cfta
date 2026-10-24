@@ -1,0 +1,236 @@
+{
+  "runStaged": {
+    "list_cases": [
+      "nil",
+      "cons"
+    ],
+    "head_option_cases": [
+      {
+        "case": "none",
+        "named_binders": [],
+        "unnamed": [
+          "value",
+          "bucket",
+          "rest"
+        ],
+        "result": "pure none at actual current state"
+      },
+      {
+        "case": "some",
+        "fields": [
+          {
+            "name": "childAction",
+            "type": "EnumerateM Symbol Constraint (Fragments.Fragment Symbol)"
+          },
+          {
+            "name": "rest",
+            "type": "List (InternedConstructorTemplates.Value Symbol Constraint × List EnumerationState.Suspended × Option (EnumerateM Symbol Constraint (Fragments.Fragment Symbol)))"
+          }
+        ],
+        "continuations": [
+          {
+            "name": "fragment",
+            "type": "Fragments.Fragment Symbol"
+          },
+          {
+            "name": "result",
+            "type": "Option (List (Fragments.Fragment Symbol))"
+          },
+          {
+            "name": "tail",
+            "type": "List (Fragments.Fragment Symbol)"
+          }
+        ]
+      }
+    ]
+  },
+  "runStaged_complete": {
+    "induction_cases": [
+      "nil",
+      "cons input rest ih"
+    ],
+    "pair_destructuring": {
+      "input": "InternedConstructorTemplates.Value Symbol Constraint × List EnumerationState.Suspended",
+      "fields": [
+        {
+          "name": "value",
+          "type": "InternedConstructorTemplates.Value Symbol Constraint"
+        },
+        {
+          "name": "bucket",
+          "type": "List EnumerationState.Suspended"
+        }
+      ]
+    },
+    "condition": {
+      "file": "condition-nonterminal.lean.txt",
+      "positive": "bucket.any (fun sc => EqualityTrie.isTerminal sc.trie) = false",
+      "negative": "¬ bucket.any (fun sc => EqualityTrie.isTerminal sc.trie) = false"
+    },
+    "unsupported_value_cases": {
+      "empty": [],
+      "reference": [
+        {
+          "name": "name",
+          "type": "InternedBinderProtocol.Reference"
+        }
+      ],
+      "node": [
+        {
+          "name": "entry",
+          "type": "Cache.Interned InternedBinderProtocol.NodeKey"
+        },
+        {
+          "name": "edges",
+          "type": "List (InternedConstructorTemplates.EdgeValue Symbol Constraint)"
+        },
+        {
+          "name": "depth",
+          "type": "Nat"
+        },
+        {
+          "name": "free",
+          "type": "List InternedBinderProtocol.Reference"
+        }
+      ],
+      "union": [
+        {
+          "name": "entry",
+          "type": "Cache.Interned InternedBinderProtocol.NodeKey"
+        },
+        {
+          "name": "members",
+          "type": "List (InternedConstructorTemplates.Value Symbol Constraint)"
+        },
+        {
+          "name": "depth",
+          "type": "Nat"
+        },
+        {
+          "name": "free",
+          "type": "List InternedBinderProtocol.Reference"
+        }
+      ],
+      "mu": [
+        {
+          "name": "entry",
+          "type": "Cache.Interned InternedBinderProtocol.NodeKey"
+        },
+        {
+          "name": "body",
+          "type": "InternedConstructorTemplates.Value Symbol Constraint"
+        },
+        {
+          "name": "depthShape",
+          "type": "InternedConstructorTemplates.Value Symbol Constraint"
+        },
+        {
+          "name": "ordinaryShape",
+          "type": "InternedConstructorTemplates.Value Symbol Constraint"
+        }
+      ]
+    },
+    "unsupported_case_facts": "empty contradicts input nonempty; reference contradicts input closedness; other tags reduce exact terminal predicate to None. No full Value DecidableEq needed.",
+    "tail_result_shape_split": {
+      "true": "((rest.map (fun input => (input.1, input.2, SourcePruningEnumerationShallowChild.prepareChild (EnumGuard := Constraint) input.2 input.1))).findIdx (fun stage => stage.2.2.isNone)) < (rest.map (fun input => (input.1, input.2, SourcePruningEnumerationShallowChild.prepareChild (EnumGuard := Constraint) input.2 input.1))).length",
+      "false": "¬ ((rest.map (fun input => (input.1, input.2, SourcePruningEnumerationShallowChild.prepareChild (EnumGuard := Constraint) input.2 input.1))).findIdx (fun stage => stage.2.2.isNone)) < (rest.map (fun input => (input.1, input.2, SourcePruningEnumerationShallowChild.prepareChild (EnumGuard := Constraint) input.2 input.1))).length"
+    },
+    "tail_result_option_cases": [
+      {
+        "tag": "none",
+        "binders": []
+      },
+      {
+        "tag": "some",
+        "binders": [
+          {
+            "name": "tailFragments",
+            "type": "List (Fragments.Fragment Symbol)"
+          }
+        ]
+      }
+    ]
+  },
+  "prepare": {
+    "prefix_option": [
+      {
+        "tag": "none",
+        "binders": []
+      },
+      {
+        "tag": "some",
+        "binders": [
+          {
+            "name": "prefixAction",
+            "type": "EnumerateM Symbol Constraint (Symbol × List (InternedConstructorTemplates.Value Symbol Constraint × List EnumerationState.Suspended × Option (EnumerateM Symbol Constraint (Fragments.Fragment Symbol))) × Option Constraint)"
+          }
+        ]
+      }
+    ],
+    "children_option": [
+      {
+        "tag": "none",
+        "binders": []
+      },
+      {
+        "tag": "some",
+        "binders": [
+          {
+            "name": "fragments",
+            "type": "List (Fragments.Fragment Symbol)"
+          }
+        ]
+      }
+    ],
+    "definition_let": [
+      {
+        "name": "fragment",
+        "type": "Fragments.Fragment Symbol",
+        "value": "Fragments.Fragment.node packet.1 fragments"
+      }
+    ]
+  },
+  "prepare_complete": {
+    "equation_family": {
+      "file": "case-project.lean.txt",
+      "name": "projected",
+      "actual_type": "Option (List EqualityTrie.Trie × Option Constraint)",
+      "none": "SourcePruningEnumerationConstraint.project edge.entry.key.constraint = none",
+      "some": "SourcePruningEnumerationConstraint.project edge.entry.key.constraint = some pair",
+      "pair": "List EqualityTrie.Trie × Option Constraint",
+      "destructured_some": "SourcePruningEnumerationConstraint.project edge.entry.key.constraint = some (tries, residual)"
+    },
+    "childrenResult": [
+      {
+        "tag": "none",
+        "binders": []
+      },
+      {
+        "tag": "some",
+        "binders": [
+          {
+            "name": "fragments",
+            "type": "List (Fragments.Fragment Symbol)"
+          }
+        ]
+      }
+    ],
+    "residual_some_only": [
+      {
+        "tag": "none",
+        "binders": []
+      },
+      {
+        "tag": "some",
+        "binders": [
+          {
+            "name": "guard",
+            "type": "Constraint"
+          }
+        ]
+      }
+    ]
+  },
+  "new_helpers_or_datatypes": [],
+  "no_other_induction": true
+}

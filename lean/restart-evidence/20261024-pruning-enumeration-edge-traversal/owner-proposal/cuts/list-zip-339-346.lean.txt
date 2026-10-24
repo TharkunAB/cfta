@@ -1,0 +1,8 @@
+theorem map_zipIdx {f : α → β} {l : List α} {k : Nat} :
+    map (Prod.map f id) (zipIdx l k) = zipIdx (l.map f) k := by
+  induction l generalizing k <;> simp_all
+
+theorem fst_mem_of_mem_zipIdx {x : α × Nat} {l : List α} {k : Nat} (h : x ∈ zipIdx l k) : x.1 ∈ l :=
+  zipIdx_map_fst k l ▸ mem_map_of_mem h
+
+theorem fst_eq_of_mem_zipIdx {x : α × Nat} {l : List α} {k : Nat} (h : x ∈ zipIdx l k) :

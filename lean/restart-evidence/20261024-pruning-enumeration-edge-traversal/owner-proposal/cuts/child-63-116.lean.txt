@@ -1,0 +1,54 @@
+  obtain ⟨node, encoded, decoded⟩ := available_readback heap value coherent available closed
+  refine ⟨node, encoded, decoded, ?_, ?_⟩
+  · intro emptyValue
+    subst value
+    exact ⟨rfl, by simp [Success, reject, ExceptT.run]⟩
+  · intro nonempty
+    obtain ⟨allocatedHandle, allocatedEncoded, allocation, allocatedSlot, allocatedRealized⟩ :=
+      SourcePruningEnumerationWrites.allocate_available_realized
+        heap before value coherent available closed realized aligned
+    have allocatedHandleSame : allocatedHandle = node := by
+      exact Option.some.inj (allocatedEncoded.symm.trans encoded)
+    subst allocatedHandle
+    have allocatedBound : before.counter < (allocated (some node) before).values.length := by
+      exact (List.getElem?_eq_some_iff.mp allocatedSlot).elim (fun bound _ => bound)
+    cases value with
+    | empty => exact False.elim (nonempty rfl)
+    | reference name => cases closed
+    | node entry edges depth free =>
+        obtain ⟨writtenHandle, after, writtenEncoded, written, afterShape, afterSlot, afterRealized⟩ :=
+          SourcePruningEnumerationWrites.write_available_realized
+            heap (allocated (some node) before) (.node entry edges depth free) before.counter scs
+            coherent available closed allocatedRealized allocatedBound
+        have writtenHandleSame : writtenHandle = node := by
+          exact Option.some.inj (writtenEncoded.symm.trans encoded)
+        subst writtenHandle
+        refine ⟨(allocate (some node) >>= fun uv =>
+          setValue uv (.unenumerated (some node) scs) >>= fun _ => pure (.hole uv)),
+          after, ?_, ?_, afterShape, afterSlot, ?_, ?_, afterRealized⟩
+        · simp [prepareChild, nonterminal, encoded]
+        · apply (success_bind _ _ _ _ _).mpr
+          refine ⟨before.counter, allocated (some node) before, allocation, ?_⟩
+          apply (success_bind _ _ _ _ _).mpr
+          exact ⟨(), after, written, (success_pure _ _ _ _).mpr ⟨rfl, rfl⟩⟩
+        · rw [afterShape]
+          rfl
+        · simpa only [afterShape, List.length_set] using allocated_supply (some node) before aligned
+    | union entry members depth free =>
+        refine ⟨(allocate (some node) >>= fun uv => pure (.hole uv)),
+          allocated (some node) before, ?_, ?_, rfl, allocatedSlot, rfl,
+          allocated_supply (some node) before aligned, allocatedRealized⟩
+        · simp [prepareChild, nonterminal, encoded]
+        · exact (success_bind _ _ _ _ _).mpr
+            ⟨before.counter, allocated (some node) before, allocation,
+              (success_pure _ _ _ _).mpr ⟨rfl, rfl⟩⟩
+    | mu entry body depthShape ordinaryShape =>
+        refine ⟨(allocate (some node) >>= fun uv => pure (.hole uv)),
+          allocated (some node) before, ?_, ?_, rfl, allocatedSlot, rfl,
+          allocated_supply (some node) before aligned, allocatedRealized⟩
+        · simp [prepareChild, nonterminal, encoded]
+        · exact (success_bind _ _ _ _ _).mpr
+            ⟨before.counter, allocated (some node) before, allocation,
+              (success_pure _ _ _ _).mpr ⟨rfl, rfl⟩⟩
+
+end MicroCFTA.SourcePruningEnumerationShallowChild

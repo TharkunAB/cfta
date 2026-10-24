@@ -1,0 +1,274 @@
+{
+  "packets": [
+    {
+      "owner": "runStaged_complete",
+      "scope": "cons pair",
+      "api": "Prod.cases",
+      "fields": [
+        {
+          "name": "value",
+          "type": "InternedConstructorTemplates.Value Symbol Constraint"
+        },
+        {
+          "name": "bucket",
+          "type": "List EnumerationState.Suspended"
+        }
+      ]
+    },
+    {
+      "owner": "runStaged_complete",
+      "scope": "nonterminal head",
+      "api": "SourcePruningEnumerationShallowChild.prepareChild_complete",
+      "fields": [
+        {
+          "name": "node",
+          "type": "Nat"
+        },
+        {
+          "name": "encoded",
+          "type": "SourcePruningEnumerationNodes.encodeNode value = some node"
+        },
+        {
+          "name": "decoded",
+          "type": "SourcePruningEnumerationNodes.lookupNode heap node = some value"
+        },
+        {
+          "name": "emptyCase",
+          "type": "value = .empty → SourcePruningEnumerationShallowChild.prepareChild bucket value = some (reject : EnumerateM Symbol Constraint (Fragments.Fragment Symbol)) ∧ ¬ ∃ (fragment : Fragments.Fragment Symbol) (after : EnumerationState.State Symbol Constraint), Success (reject : EnumerateM Symbol Constraint (Fragments.Fragment Symbol)) before fragment after"
+        },
+        {
+          "name": "nonemptyCase",
+          "type": "value ≠ .empty → ∃ (action : EnumerateM Symbol Constraint (Fragments.Fragment Symbol)) (middle : EnumerationState.State Symbol Constraint), SourcePruningEnumerationShallowChild.prepareChild bucket value = some action ∧ Success action before (.hole before.counter) middle ∧ middle = (match value with | .node _ _ _ _ => {allocated (some node) before with values := (allocated (some node) before).values.set before.counter (.unenumerated (some node) bucket)} | _ => allocated (some node) before) ∧ middle.values[before.counter]? = some (.unenumerated (some node) (match value with | .node _ _ _ _ => bucket | _ => [])) ∧ middle.counter = before.counter + 1 ∧ middle.counter = middle.values.length ∧ PendingRealized heap middle"
+        }
+      ]
+    },
+    {
+      "owner": "runStaged_complete",
+      "scope": "actual surviving head",
+      "api": "nonemptyCase (nonempty _ (List.mem_cons_self ..))",
+      "fields": [
+        {
+          "name": "childAction",
+          "type": "EnumerateM Symbol Constraint (Fragments.Fragment Symbol)"
+        },
+        {
+          "name": "middle",
+          "type": "EnumerationState.State Symbol Constraint"
+        },
+        {
+          "name": "prepared",
+          "type": "SourcePruningEnumerationShallowChild.prepareChild (EnumGuard := Constraint) bucket value = some childAction"
+        },
+        {
+          "name": "headSuccess",
+          "type": "Success childAction before (.hole before.counter) middle"
+        },
+        {
+          "name": "middleShape",
+          "type": "middle = (match value with | .node _ _ _ _ => {allocated (some node) before with values := (allocated (some node) before).values.set before.counter (.unenumerated (some node) bucket)} | _ => allocated (some node) before)"
+        },
+        {
+          "name": "middleSlot",
+          "type": "middle.values[before.counter]? = some (.unenumerated (some node) (match value with | .node _ _ _ _ => bucket | _ => []))"
+        },
+        {
+          "name": "middleCounter",
+          "type": "middle.counter = before.counter + 1"
+        },
+        {
+          "name": "middleAligned",
+          "type": "middle.counter = middle.values.length"
+        },
+        {
+          "name": "middleRealized",
+          "type": "PendingRealized heap middle"
+        }
+      ]
+    },
+    {
+      "owner": "runStaged_complete",
+      "scope": "actual proper tail IH",
+      "api": "ih at actual middle",
+      "fields": [
+        {
+          "name": "tailResult",
+          "type": "Option (List (Fragments.Fragment Symbol))"
+        },
+        {
+          "name": "after",
+          "type": "EnumerationState.State Symbol Constraint"
+        },
+        {
+          "name": "tailSuccess",
+          "type": "Success (runStaged (rest.map (fun input => (input.1, input.2, SourcePruningEnumerationShallowChild.prepareChild (EnumGuard := Constraint) input.2 input.1)))) (middle) tailResult after"
+        },
+        {
+          "name": "completedPrefixSuccess",
+          "type": "Success (runStaged ((rest.map (fun input => (input.1, input.2, SourcePruningEnumerationShallowChild.prepareChild (EnumGuard := Constraint) input.2 input.1))).take ((rest.map (fun input => (input.1, input.2, SourcePruningEnumerationShallowChild.prepareChild (EnumGuard := Constraint) input.2 input.1))).findIdx (fun stage => stage.2.2.isNone)))) (middle) (some ((List.range' (middle).counter ((rest.map (fun input => (input.1, input.2, SourcePruningEnumerationShallowChild.prepareChild (EnumGuard := Constraint) input.2 input.1))).findIdx (fun stage => stage.2.2.isNone))).map (fun uv => (Fragments.Fragment.hole uv : Fragments.Fragment Symbol)))) after"
+        },
+        {
+          "name": "resultShape",
+          "type": "tailResult = (if ((rest.map (fun input => (input.1, input.2, SourcePruningEnumerationShallowChild.prepareChild (EnumGuard := Constraint) input.2 input.1))).findIdx (fun stage => stage.2.2.isNone)) < (rest.map (fun input => (input.1, input.2, SourcePruningEnumerationShallowChild.prepareChild (EnumGuard := Constraint) input.2 input.1))).length then none else some ((List.range' (middle).counter (rest.map (fun input => (input.1, input.2, SourcePruningEnumerationShallowChild.prepareChild (EnumGuard := Constraint) input.2 input.1))).length).map (fun uv => (Fragments.Fragment.hole uv : Fragments.Fragment Symbol))))"
+        },
+        {
+          "name": "afterCounter",
+          "type": "after.counter = (middle).counter + ((rest.map (fun input => (input.1, input.2, SourcePruningEnumerationShallowChild.prepareChild (EnumGuard := Constraint) input.2 input.1))).findIdx (fun stage => stage.2.2.isNone))"
+        },
+        {
+          "name": "afterAligned",
+          "type": "after.counter = after.values.length"
+        },
+        {
+          "name": "afterRealized",
+          "type": "PendingRealized heap after"
+        }
+      ]
+    },
+    {
+      "owner": "prepare_complete",
+      "scope": "same captured list from prefix",
+      "api": "runStaged_complete inputs heap ready.semantic.1.normal.facts.coherent",
+      "fields": [
+        {
+          "name": "childrenResult",
+          "type": "Option (List (Fragments.Fragment Symbol))"
+        },
+        {
+          "name": "childrenAfter",
+          "type": "EnumerationState.State Symbol Constraint"
+        },
+        {
+          "name": "childrenSuccess",
+          "type": "Success (runStaged (inputs.map (fun input => (input.1, input.2, SourcePruningEnumerationShallowChild.prepareChild (EnumGuard := Constraint) input.2 input.1)))) (suspendedState tries.length before) childrenResult childrenAfter"
+        },
+        {
+          "name": "completedPrefixSuccess",
+          "type": "Success (runStaged ((inputs.map (fun input => (input.1, input.2, SourcePruningEnumerationShallowChild.prepareChild (EnumGuard := Constraint) input.2 input.1))).take ((inputs.map (fun input => (input.1, input.2, SourcePruningEnumerationShallowChild.prepareChild (EnumGuard := Constraint) input.2 input.1))).findIdx (fun stage => stage.2.2.isNone)))) (suspendedState tries.length before) (some ((List.range' (suspendedState tries.length before).counter ((inputs.map (fun input => (input.1, input.2, SourcePruningEnumerationShallowChild.prepareChild (EnumGuard := Constraint) input.2 input.1))).findIdx (fun stage => stage.2.2.isNone))).map (fun uv => (Fragments.Fragment.hole uv : Fragments.Fragment Symbol)))) childrenAfter"
+        },
+        {
+          "name": "resultShape",
+          "type": "childrenResult = (if ((inputs.map (fun input => (input.1, input.2, SourcePruningEnumerationShallowChild.prepareChild (EnumGuard := Constraint) input.2 input.1))).findIdx (fun stage => stage.2.2.isNone)) < (inputs.map (fun input => (input.1, input.2, SourcePruningEnumerationShallowChild.prepareChild (EnumGuard := Constraint) input.2 input.1))).length then none else some ((List.range' (suspendedState tries.length before).counter (inputs.map (fun input => (input.1, input.2, SourcePruningEnumerationShallowChild.prepareChild (EnumGuard := Constraint) input.2 input.1))).length).map (fun uv => (Fragments.Fragment.hole uv : Fragments.Fragment Symbol))))"
+        },
+        {
+          "name": "afterCounter",
+          "type": "childrenAfter.counter = (suspendedState tries.length before).counter + ((inputs.map (fun input => (input.1, input.2, SourcePruningEnumerationShallowChild.prepareChild (EnumGuard := Constraint) input.2 input.1))).findIdx (fun stage => stage.2.2.isNone))"
+        },
+        {
+          "name": "afterAligned",
+          "type": "childrenAfter.counter = childrenAfter.values.length"
+        },
+        {
+          "name": "afterRealized",
+          "type": "PendingRealized heap childrenAfter"
+        }
+      ]
+    },
+    {
+      "owner": "prepare_complete",
+      "scope": "project.some pair",
+      "api": "Prod.cases",
+      "fields": [
+        {
+          "name": "tries",
+          "type": "List EqualityTrie.Trie"
+        },
+        {
+          "name": "residual",
+          "type": "Option Constraint"
+        }
+      ]
+    },
+    {
+      "owner": "prepare_complete",
+      "scope": "same prefix producer",
+      "api": "SourcePruningEnumerationEdgePrefix.prepare_complete scs edge heap before realized aligned; reduce allowed and projected",
+      "fields": [
+        {
+          "name": "prefixAction",
+          "type": "EnumerateM Symbol Constraint (Symbol × List (InternedConstructorTemplates.Value Symbol Constraint × List EnumerationState.Suspended × Option (EnumerateM Symbol Constraint (Fragments.Fragment Symbol))) × Option Constraint)"
+        },
+        {
+          "name": "prefixPrepared",
+          "type": "SourcePruningEnumerationEdgePrefix.prepare scs edge = some prefixAction"
+        },
+        {
+          "name": "prefixExact",
+          "type": "prefixAction before = [.ok ((edge.entry.key.symbol, edge.children.zipIdx.map (fun indexed => (indexed.1, descendScs indexed.2 scs ++ descendScs indexed.2 (suspendedVars before.counter tries), SourcePruningEnumerationShallowChild.prepareChild (EnumGuard := Constraint) (descendScs indexed.2 scs ++ descendScs indexed.2 (suspendedVars before.counter tries)) indexed.1)), residual), suspendedState tries.length before)]"
+        },
+        {
+          "name": "prefixCounter",
+          "type": "(suspendedState tries.length before).counter = before.counter + tries.length"
+        },
+        {
+          "name": "prefixAligned",
+          "type": "(suspendedState tries.length before).counter = (suspendedState tries.length before).values.length"
+        },
+        {
+          "name": "prefixRealized",
+          "type": "PendingRealized heap (suspendedState tries.length before)"
+        }
+      ]
+    },
+    {
+      "owner": "prepare_complete",
+      "scope": "worker availability",
+      "api": "List.mem_map.mp member",
+      "fields": [
+        {
+          "name": "indexed",
+          "type": "InternedConstructorTemplates.Value Symbol Constraint × Nat"
+        },
+        {
+          "name": "indexedMember",
+          "type": "indexed ∈ edge.children.zipIdx"
+        },
+        {
+          "name": "inputSame",
+          "type": "(indexed.1, descendScs indexed.2 scs ++ descendScs indexed.2 (suspendedVars before.counter tries)) = input"
+        }
+      ]
+    },
+    {
+      "owner": "prepare_complete",
+      "scope": "worker closedness",
+      "api": "List.mem_map.mp member",
+      "fields": [
+        {
+          "name": "indexed",
+          "type": "InternedConstructorTemplates.Value Symbol Constraint × Nat"
+        },
+        {
+          "name": "indexedMember",
+          "type": "indexed ∈ edge.children.zipIdx"
+        },
+        {
+          "name": "inputSame",
+          "type": "(indexed.1, descendScs indexed.2 scs ++ descendScs indexed.2 (suspendedVars before.counter tries)) = input"
+        }
+      ]
+    },
+    {
+      "owner": "prepare_complete",
+      "scope": "worker nonempty",
+      "api": "List.mem_map.mp member",
+      "fields": [
+        {
+          "name": "indexed",
+          "type": "InternedConstructorTemplates.Value Symbol Constraint × Nat"
+        },
+        {
+          "name": "indexedMember",
+          "type": "indexed ∈ edge.children.zipIdx"
+        },
+        {
+          "name": "inputSame",
+          "type": "(indexed.1, descendScs indexed.2 scs ++ descendScs indexed.2 (suspendedVars before.counter tries)) = input"
+        }
+      ]
+    }
+  ],
+  "packet_count": 10,
+  "field_count": 49,
+  "all_fields_retained": true,
+  "note": "Fields can be destructured with anonymous proof names. Full exact types remain bound here even when not needed after a constructor split. No producer takes an actual-success input except existing primitive success_bind inversion/composition."
+}

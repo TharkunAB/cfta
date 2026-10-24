@@ -1,0 +1,29 @@
+{
+  "owner": "runStaged_complete",
+  "target": "inputs",
+  "tactic_shape": "induction inputs with | nil => ... | cons input rest ih => ...",
+  "before_intros": true,
+  "generalized_through_statement": [
+    "before",
+    "realized",
+    "aligned",
+    "available",
+    "closed",
+    "nonempty"
+  ],
+  "fixed": [
+    "heap",
+    "coherent"
+  ],
+  "full_IH_file": "run-staged-IH.lean.txt",
+  "allowed_call": "ih middle middleRealized middleAligned (fun input member => available input (List.mem_cons_of_mem _ member)) (fun input member => closed input (List.mem_cons_of_mem _ member)) (fun input member => nonempty input (List.mem_cons_of_mem _ member))",
+  "restriction": "Only rest, the actual tail of inputs. middle is the actual successful head endpoint; no arbitrary list recursion or available universal success oracle.",
+  "definition_recursion": {
+    "owner": "runStaged",
+    "argument": "tail of captured staged list",
+    "measure": "structural List tail",
+    "recursive_case": "some head action, after that actual action succeeds",
+    "recursive_call_count": 1
+  },
+  "other_induction": []
+}

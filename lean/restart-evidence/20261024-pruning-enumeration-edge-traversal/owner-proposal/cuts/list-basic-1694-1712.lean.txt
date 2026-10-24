@@ -1,0 +1,19 @@
+
+Examples:
+* `[7, 6, 5, 8, 1, 2, 6].findIdx (· < 5) = 4`
+* `[7, 6, 5, 8, 1, 2, 6].findIdx (· < 1) = 7`
+-/
+@[inline] def findIdx (p : α → Bool) (l : List α) : Nat := go l 0 where
+  /-- Auxiliary for `findIdx`: `findIdx.go p l n = findIdx p l + n` -/
+  @[specialize] go : List α → Nat → Nat
+  | [], n => n
+  | a :: l, n => if p a then n else go l (n + 1)
+
+@[simp, grind =] theorem findIdx_nil {p : α → Bool} : [].findIdx p = 0 := rfl
+
+/-! ### idxOf -/
+
+/--
+Returns the index of the first element equal to `a`, or the length of the list if no element is
+equal to `a`.
+

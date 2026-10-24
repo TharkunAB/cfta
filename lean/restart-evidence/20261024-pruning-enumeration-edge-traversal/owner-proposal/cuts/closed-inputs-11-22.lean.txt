@@ -1,0 +1,12 @@
+namespace MicroCFTA.MergedColdReaderClosedInputs
+open Cache InternedConstructorTemplates InternedRecordCoherence InternedProbeProvenance
+open InternedNestedConstruction InternedNestedFacts InternedNestedProvenance InternedFreshProbeKeys
+open InternedEdgeResidency InternedNormalizationFree InternedShallowValues
+open InternedStoredShallowCompletion
+
+/-- Every source value in a list has no cached free reference. -/
+def ClosedValues (values : List (Value Symbol Guard)) : Prop := ∀ value ∈ values, value.free = []
+
+/-- Every stored child in an edge list has no cached free reference. -/
+def ClosedEdges (edges : List (EdgeValue Symbol Guard)) : Prop :=
+  ∀ edge ∈ edges, ClosedValues edge.children

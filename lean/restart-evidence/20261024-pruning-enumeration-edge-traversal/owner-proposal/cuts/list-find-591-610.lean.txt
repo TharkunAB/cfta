@@ -1,0 +1,20 @@
+
+@[simp]
+theorem findIdx_eq_length {p : α → Bool} {xs : List α} :
+    xs.findIdx p = xs.length ↔ ∀ x ∈ xs, p x = false := by
+  induction xs with
+  | nil => simp_all
+  | cons x xs ih =>
+    rw [findIdx_cons, length_cons]
+    split <;> simp_all
+
+theorem findIdx_eq_length_of_false {p : α → Bool} {xs : List α} (h : ∀ x ∈ xs, p x = false) :
+    xs.findIdx p = xs.length := by
+  rw [findIdx_eq_length]
+  exact h
+
+theorem findIdx_le_length {p : α → Bool} {xs : List α} : xs.findIdx p ≤ xs.length := by
+  by_cases e : ∃ x ∈ xs, p x
+  · exact Nat.le_of_lt (findIdx_lt_length_of_exists e)
+  · simp at e
+    exact Nat.le_of_eq (findIdx_eq_length.mpr e)

@@ -1,0 +1,25 @@
+namespace MicroCFTA.InternedLiveEdges
+open Cache InternedConstructorTemplates InternedRecordCoherence InternedProbeProvenance
+open InternedFreshProbeKeys InternedEdgeResidency
+open InternedNestedConstruction InternedNestedRequestFacts
+open InternedBinderProtocol (NodeKey Reference)
+
+/-- The actual outgoing edges of one ordinary record have no empty child. -/
+def ValueLive (value : Value Symbol Guard) : Prop :=
+  ∀ edge ∈ nodeEdges value, edge.children.any (fun child => child.referenceOf == .empty) = false
+
+/-- Every stored ordinary record satisfies source empty-child normalization. -/
+def Live (state : State Symbol Guard) : Prop :=
+  ∀ key value, state.nodeRecords key = some value → ValueLive value
+
+/-- Initial tables have no outgoing-edge obligations. -/
+theorem empty_live : Live (empty (Symbol := Symbol) (Guard := Guard)) := by
+  intro key value impossible
+  cases impossible
+
+/-- Actual resident records inherit normalization from the source table. -/
+theorem resident_live (state : State Symbol Guard) (live : Live state)
+    (value : Value Symbol Guard) (resident : Resident state value) : ValueLive value := by
+  cases value with
+  | empty | reference | mu | union => simp [ValueLive, nodeEdges]
+  | node entry edges depth free => exact live entry.key _ (resident entry rfl)

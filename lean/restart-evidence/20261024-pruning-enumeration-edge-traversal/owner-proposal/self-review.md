@@ -1,0 +1,13 @@
+# Source-only declaration self-review
+
+I authored these declarations and scoped inventories. This is not an independent proof review. Root owns all future definition/proof bodies and executions. Guard owns the separate exact declaration review. No compiler, Lean parser, import, candidate/prepared program, native probe, Git, network, board or repository mutation was run. Ordinary bounded reads, JSON, copies and hashes produced this /tmp owner.
+
+The literal contracts are body-free context, four public headers and exact local/condition/case fragments. The only instance is module-local singleton/flatMap Monad List. No LawfulMonad/global instance or extra Eq premise appears. The direct worker is a structural expansion of OptionT sequencing, not an invented carrier. Its raw absent branch cannot preempt an earlier action's reject/error.
+
+The helper is concrete: its staged actions are computed by prepareChild from the same ordered values/buckets. It assumes Available/closed/nonempty native records, not action success. The main theorem derives those predicates from the same Ready ordinary parent. It runs the same captured prefix once and retains the real child endpoint. stop is the actual first absent captured Option. The full run and take-stop Success certificates share the SAME after; the production definition executes only the full run. Counter and ordered holes therefore describe the completed prefix, including actual None state.
+
+The exact final state on None is childrenAfter, with no residual. Only Some prepends the complete residual and actual symbol/children fragment. Values/counter invariance suffices for final realization/alignment. There is no false full Frame or native heap equality across a changed-heap operation. The fixed heap is a current nonterminal-child domain fact, not an arbitrary final certificate.
+
+The exact existing producer packets and all anonymous fields are retained, including child encoded/readback and actual middle shape, fresh slot, counter, alignment and realization. The proper-tail IH generalizes actual state/premises and is not an unrestricted success oracle. Existing List APIs are read from installed v4.34.1 sources; getElem? existence is not replaced by an invalid pair projection. No source-body experiment was used.
+
+Full defining snapshots and focused exact cuts are pinned separately. Actual import edges were read without evaluating imports. Prior prospective assessment/source review is retained as provenance with its original smaller positive estimate; this new explicit first-unsupported scope is the accepted refinement. Old owners/current production remain untouched.

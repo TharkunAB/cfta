@@ -1,0 +1,11 @@
+import MicroCFTA.SourcePruningEnumerationEdgeTraversal
+set_option pp.deepTerms true
+set_option pp.maxSteps 100000
+#check @MicroCFTA.SourcePruningEnumerationEdgeTraversal.runStaged
+#print axioms MicroCFTA.SourcePruningEnumerationEdgeTraversal.runStaged
+#check @MicroCFTA.SourcePruningEnumerationEdgeTraversal.runStaged_complete
+#print axioms MicroCFTA.SourcePruningEnumerationEdgeTraversal.runStaged_complete
+#check @MicroCFTA.SourcePruningEnumerationEdgeTraversal.prepare
+#print axioms MicroCFTA.SourcePruningEnumerationEdgeTraversal.prepare
+#check @MicroCFTA.SourcePruningEnumerationEdgeTraversal.prepare_complete
+#print axioms MicroCFTA.SourcePruningEnumerationEdgeTraversal.prepare_complete

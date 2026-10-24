@@ -1,0 +1,15 @@
+import MicroCFTA.SourcePruningEnumerationEdgePrefix
+import MicroCFTA.SourceEqualityRequiredCache
+import MicroCFTA.MergedColdReaderClosed
+import MicroCFTA.InternedLiveEdges
+
+namespace MicroCFTA.SourcePruningEnumerationEdgeTraversal
+open Fragments EnumerationState EnumerationCorrectness
+open InternedConstructorTemplates InternedProbeProvenance
+open SourcePruningEnumerationObservation
+local notation "Symbol" => SourcePruningTemplates.Symbol
+local notation "Constraint" => SourceSymbolicIndex.Constraint FullSyntax.Formula
+
+local instance traversalMonadList : Monad List where
+  pure value := [value]
+  bind values continuation := values.flatMap continuation

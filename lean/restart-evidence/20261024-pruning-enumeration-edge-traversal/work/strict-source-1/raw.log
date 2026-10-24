@@ -1,0 +1,88 @@
+/tmp/mcfta-pruning-enumeration-edge-traversal-20261024/strict-source-1/MicroCFTA/SourcePruningEnumerationEdgeTraversal.lean:93:24: error: `simp` failed: maximum number of steps exceeded
+/tmp/mcfta-pruning-enumeration-edge-traversal-20261024/strict-source-1/MicroCFTA/SourcePruningEnumerationEdgeTraversal.lean:93:24: error: Tactic `simp` failed with a nested error:
+(deterministic) timeout at `simp`, maximum number of heartbeats (200000) has been reached
+
+Note: Use `set_option maxHeartbeats <num>` to set the limit.
+
+Hint: Additional diagnostic information may be available using the `set_option diagnostics true` command.
+/tmp/mcfta-pruning-enumeration-edge-traversal-20261024/strict-source-1/MicroCFTA/SourcePruningEnumerationEdgeTraversal.lean:96:6: error: (deterministic) timeout at `«tactic execution»`, maximum number of heartbeats (200000) has been reached
+
+Note: Use `set_option maxHeartbeats <num>` to set the limit.
+
+Hint: Additional diagnostic information may be available using the `set_option diagnostics true` command.
+/tmp/mcfta-pruning-enumeration-edge-traversal-20261024/strict-source-1/MicroCFTA/SourcePruningEnumerationEdgeTraversal.lean:30:0: error: (deterministic) timeout at `isDefEq`, maximum number of heartbeats (200000) has been reached
+
+Note: Use `set_option maxHeartbeats <num>` to set the limit.
+
+Hint: Additional diagnostic information may be available using the `set_option diagnostics true` command.
+/tmp/mcfta-pruning-enumeration-edge-traversal-20261024/strict-source-1/MicroCFTA/SourcePruningEnumerationEdgeTraversal.lean:197:115: error: unsolved goals
+scs : List Suspended
+edge : EdgeValue Symbol Constraint
+heap : InternedConstructorTemplates.State Symbol Constraint
+parentEntry : Cache.Interned InternedBinderProtocol.NodeKey
+edges : List (EdgeValue Symbol Constraint)
+depth : Nat
+free : List InternedBinderProtocol.Reference
+ready : SourceEqualityRequiredCache.Ready heap
+parentAvailable : Available heap (Value.node parentEntry edges depth free)
+parentClosed : free = []
+selected : edge ∈ edges
+before : EnumerationState.State Symbol Constraint
+realized : PendingRealized heap before
+aligned : before.counter = before.values.length
+allowed : arityAllows edge.children.length scs = true
+tries : List EqualityTrie.Trie
+residual : Option Constraint
+projected : SourcePruningEnumerationConstraint.project edge.entry.key.constraint = some (tries, residual)
+prefixAction :
+  EnumerateM Symbol Constraint
+    (Symbol ×
+      List (Value Symbol Constraint × List Suspended × Option (EnumerateM Symbol Constraint (Fragment Symbol))) ×
+        Option Constraint)
+prefixPrepared : SourcePruningEnumerationEdgePrefix.prepare scs edge = some prefixAction
+prefixExact :
+  prefixAction before =
+    [Except.ok
+        ((edge.entry.key.symbol,
+            List.map
+              (fun indexed =>
+                (indexed.fst, descendScs indexed.snd scs ++ descendScs indexed.snd (suspendedVars before.counter tries),
+                  SourcePruningEnumerationShallowChild.prepareChild
+                    (descendScs indexed.snd scs ++ descendScs indexed.snd (suspendedVars before.counter tries))
+                    indexed.fst))
+              edge.children.zipIdx,
+            residual),
+          suspendedState tries.length before)]
+prefixCounter : (suspendedState tries.length before).counter = before.counter + tries.length
+prefixAligned : (suspendedState tries.length before).counter = (suspendedState tries.length before).values.length
+prefixRealized : PendingRealized heap (suspendedState tries.length before)
+prefixSuccess :
+  Success prefixAction before
+    (edge.entry.key.symbol,
+      List.map
+        (fun indexed =>
+          (indexed.fst, descendScs indexed.snd scs ++ descendScs indexed.snd (suspendedVars before.counter tries),
+            SourcePruningEnumerationShallowChild.prepareChild
+              (descendScs indexed.snd scs ++ descendScs indexed.snd (suspendedVars before.counter tries)) indexed.fst))
+        edge.children.zipIdx,
+      residual)
+    (suspendedState tries.length before)
+childrenAvailable : ∀ (child : Value Symbol Constraint), child ∈ edge.children → Available heap child
+childrenClosed : ∀ (child : Value Symbol Constraint), child ∈ edge.children → child.free = []
+childrenNonempty : ∀ (child : Value Symbol Constraint), child ∈ edge.children → child ≠ Value.empty
+inputs : List (Value Symbol Constraint × List Suspended) :=
+  List.map
+    (fun indexed =>
+      (indexed.fst, descendScs indexed.snd scs ++ descendScs indexed.snd (suspendedVars before.counter tries)))
+    edge.children.zipIdx
+⊢ List.map
+      ((fun input => (input.fst, input.snd, SourcePruningEnumerationShallowChild.prepareChild input.snd input.fst)) ∘
+        fun indexed =>
+        (indexed.fst, descendScs indexed.snd scs ++ descendScs indexed.snd (suspendedVars before.counter tries)))
+      edge.children.zipIdx =
+    List.map
+      (fun indexed =>
+        (indexed.fst, descendScs indexed.snd scs ++ descendScs indexed.snd (suspendedVars before.counter tries),
+          SourcePruningEnumerationShallowChild.prepareChild
+            (descendScs indexed.snd scs ++ descendScs indexed.snd (suspendedVars before.counter tries)) indexed.fst))
+      edge.children.zipIdx

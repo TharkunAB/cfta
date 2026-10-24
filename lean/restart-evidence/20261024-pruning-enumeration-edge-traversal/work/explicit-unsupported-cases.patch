@@ -1,0 +1,25 @@
+--- strict-source-1
++++ strict-source-2
+@@ -90,8 +90,12 @@
+     ·
+       have absent : SourcePruningEnumerationShallowChild.prepareChild
+         (EnumGuard := Constraint) bucket value = none := by
+-        cases value <;> simp_all [SourcePruningEnumerationShallowChild.prepareChild,
+-          Value.free, Bool.of_not_eq_false nonterminal]
++        cases value with
++        | empty => exact False.elim (nonempty _ (List.mem_cons_self ..) rfl)
++        | reference name => cases closed _ (List.mem_cons_self ..)
++        | node | union | mu =>
++          simp only [SourcePruningEnumerationShallowChild.prepareChild,
++            Bool.of_not_eq_false nonterminal, ↓reduceIte]
+       dsimp only
+       simp only [List.map_cons, absent, List.findIdx_cons, Option.isNone_none, ↓reduceIte]
+       refine ⟨none, before, ?_, ?_, ?_, ?_, aligned, realized⟩ <;>
+@@ -196,6 +200,7 @@
+           SourcePruningEnumerationShallowChild.prepareChild (EnumGuard := Constraint)
+             (descendScs indexed.2 scs ++ descendScs indexed.2 (suspendedVars before.counter tries)) indexed.1)) := by
+       simp only [inputs, List.map_map]
++      rfl
+     obtain ⟨childrenResult, childrenAfter, childrenSuccess, completedPrefixSuccess, resultShape,
+       afterCounter, afterAligned, afterRealized⟩ :=
+       runStaged_complete inputs heap ready.semantic.1.normal.facts.coherent
