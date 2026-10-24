@@ -1,3 +1,5 @@
+import MicroCFTA.EnumerationCanonicalUnion
+import MicroCFTA.SourceUnionFindRoot
 import MicroCFTA.EnumerationUntilBridge
 import MicroCFTA.SourceCurrentOriginalRowClusterScanNodeCounterGrowth
 import MicroCFTA.SourceCurrentSameSymbolEdgeControlNodeCounterGrowth
