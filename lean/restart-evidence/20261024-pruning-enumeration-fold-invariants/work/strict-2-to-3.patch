@@ -1,0 +1,41 @@
+--- strict-2
++++ strict-3
+@@ -114,6 +114,7 @@
+           | unenumerated targetNode targetScs =>
+             cases sourceNodeSame : sourceNode with
+             | none =>
++              subst sourceNode
+               simp only [SourcePruningEnumerationDispatch.dispatch, ite_eq_right same, sourceStored, targetStored,
+                 Id.run, pure, Prod.mk.injEq, Except.ok.injEq, Option.some.injEq] at selected
+               rcases selected with ⟨rfl, rfl, rfl⟩
+@@ -127,8 +128,10 @@
+                 exact assimilated_preserves before source target none targetNode targetNode sourceScs targetScs
+                   roots waiting storage counts sourceStored targetStored (Ne.symm same)
+             | some sourceHandle =>
++              subst sourceNode
+               cases targetNodeSame : targetNode with
+               | none =>
++                subst targetNode
+                 simp only [SourcePruningEnumerationDispatch.dispatch, ite_eq_right same, sourceStored, targetStored,
+                   Id.run, pure, Prod.mk.injEq, Except.ok.injEq, Option.some.injEq] at selected
+                 rcases selected with ⟨rfl, rfl, rfl⟩
+@@ -142,6 +145,7 @@
+                   exact assimilated_preserves before source target (some sourceHandle) none (some sourceHandle)
+                     sourceScs targetScs roots waiting storage counts sourceStored targetStored (Ne.symm same)
+               | some targetHandle =>
++                subst targetNode
+                 cases leftDecoded : SourcePruningEnumerationNodes.lookupNode beforeCaller.checked.native.machine.heap sourceHandle with
+                 | none => simp [SourcePruningEnumerationDispatch.dispatch, same, sourceStored, targetStored, leftDecoded] at selected
+                 | some left =>
+@@ -164,9 +168,11 @@
+                         else (.done false queried beforeCaller.fourth, queries)) with ⟨worker, workerQueries⟩
+                       cases workerSame : worker with
+                       | failed fault checkedAfter saved =>
++                        subst worker
+                         simp [SourcePruningEnumerationDispatch.dispatch, same, sourceStored, targetStored, leftDecoded,
+                           rightDecoded, native, SourcePruningEnumerationDispatch.afterQuery, phase, Except.mapError] at selected
+                       | done answer checkedAfter saved =>
++                        subst worker
+                         cases encoded : SourcePruningEnumerationNodes.encodeNode (if answer then (.empty : Node) else query) with
+                         | none =>
+                           simp [SourcePruningEnumerationDispatch.dispatch, same, sourceStored, targetStored, leftDecoded,

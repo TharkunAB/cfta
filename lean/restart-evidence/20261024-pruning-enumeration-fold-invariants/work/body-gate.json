@@ -1,0 +1,106 @@
+{
+  "status": "ACCEPTED_BEFORE_ANY_BODY_OR_ACTIVATION",
+  "accepted_at": "2026-10-24T21:33:45.029838+00:00",
+  "owner": "/tmp/mcfta-pruning-enumeration-fold-invariants-20261024-proposal",
+  "frozen_sha256": "3b2de386d76e0cd256ea800af90a72d5c4853bce5fe1bdda8e4317e2422071e3",
+  "pins_sha256": "120dbe3ccfad57b5f9c7a095f28efed9e6a1082ed6dbf95e838ee3ef0184e9c2",
+  "contracts": {
+    "assimilated-header.lean.txt": "theorem assimilated_preserves\n    (before : EnumerationState.State Symbol EnumGuard) (source target : Nat)\n    (sourceNode targetNode merged : Option Nat)\n    (sourceScs targetScs : List EnumerationState.Suspended)\n    (roots : Nat \u2192 Nat) (waiting : EnumerationWaitingIndex.Waiting)\n    (storage : StorageValid before)\n    (counts : EnumerationCanonicalWaiting.Correct roots before.values waiting)\n    (sourceStored : before.values[source]? = some (.unenumerated sourceNode sourceScs))\n    (targetStored : before.values[target]? = some (.unenumerated targetNode targetScs))\n    (different : target \u2260 source) :\n    StorageValid (assimilated before target source (.unenumerated merged (sourceScs ++ targetScs))) \u2227\n      EnumerationCanonicalWaiting.Correct roots\n        (assimilated before target source (.unenumerated merged (sourceScs ++ targetScs))).values waiting\n",
+    "context.lean.txt": "import MicroCFTA.SourcePruningEnumerationFold\nimport MicroCFTA.EnumerationCanonicalWaiting\n\nnamespace MicroCFTA.SourcePruningEnumerationFoldInvariants\nopen EnumerationState EnumerationCorrectness\nopen InternedConstructorTemplates\nlocal notation \"Symbol\" => SourcePruningTemplates.Symbol\nlocal notation \"Constraint\" => SourceSymbolicIndex.Constraint FullSyntax.Formula\nlocal notation \"Node\" => InternedConstructorTemplates.Value Symbol Constraint\nlocal notation \"Caller\" => SourceCurrentAllocatedPartialState.State\nlocal notation \"Queries\" => SourceEndpointMemo.Memos\nvariable {EnumGuard : Type} {width : Nat}\n",
+    "dispatch-header.lean.txt": "theorem dispatch_preserves\n    [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Constraint)] [DecidableEq Node]\n    (checkEmpty : Bool) (nativeFuel p h : Nat)\n    (beforeCaller : Caller width) (before : EnumerationState.State Symbol EnumGuard)\n    (source target : Nat) (queries : Queries) (action : EnumerateM Symbol EnumGuard Unit)\n    (afterCaller : Caller width) (savedQueries : Queries)\n    (after : EnumerationState.State Symbol EnumGuard)\n    (roots : Nat \u2192 Nat) (waiting : EnumerationWaitingIndex.Waiting)\n    (storage : StorageValid before)\n    (counts : EnumerationCanonicalWaiting.Correct roots before.values waiting)\n    (selected : SourcePruningEnumerationDispatch.dispatch checkEmpty nativeFuel p h\n      beforeCaller before source target queries = (.ok (some action), afterCaller, savedQueries))\n    (completed : ExceptT.run (action before) = [.ok ((), after)]) :\n    StorageValid after \u2227 EnumerationCanonicalWaiting.Correct roots after.values waiting\n",
+    "local-first.lean.txt": "have first : StorageValid {before with values := before.values.set target (.unenumerated merged (sourceScs ++ targetScs))}\n",
+    "local-merged-bound.lean.txt": "have mergedBound : SlotBound before.counter (.unenumerated merged (sourceScs ++ targetScs) : UVarValue Symbol)\n",
+    "local-second.lean.txt": "have second : StorageValid {{before with values := before.values.set target (.unenumerated merged (sourceScs ++ targetScs))} with\n      values := (before.values.set target (.unenumerated merged (sourceScs ++ targetScs))).set source .eliminated}\n",
+    "local-source-bound.lean.txt": "have sourceBound : SlotBound before.counter (.unenumerated sourceNode sourceScs : UVarValue Symbol)\n",
+    "local-target-bound.lean.txt": "have targetBound : SlotBound before.counter (.unenumerated targetNode targetScs : UVarValue Symbol)\n",
+    "run-header.lean.txt": "theorem run_preserves\n    [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Constraint)] [DecidableEq Node]\n    (checkEmpty : Bool) (nativeFuel p h : Nat) (sources : List Nat)\n    (beforeCaller : Caller width) (before : EnumerationState.State Symbol EnumGuard)\n    (target : Nat) (queries : Queries)\n    (result : Except (SourceEqualityNativeDemand.Outcome width Node \u2295\n      SourceCurrentAllocatedConjunctionWorker.Outcome width)\n      (Option (List (Except EnumerationState.Error (Unit \u00d7 EnumerationState.State Symbol EnumGuard)))))\n    (afterCaller : Caller width) (savedQueries : Queries)\n    (after : EnumerationState.State Symbol EnumGuard)\n    (roots : Nat \u2192 Nat) (waiting : EnumerationWaitingIndex.Waiting)\n    (storage : StorageValid before)\n    (counts : EnumerationCanonicalWaiting.Correct roots before.values waiting)\n    (observed : SourcePruningEnumerationFold.run checkEmpty nativeFuel p h sources\n      beforeCaller before target queries = (result, afterCaller, savedQueries, after)) :\n    StorageValid after \u2227 EnumerationCanonicalWaiting.Correct roots after.values waiting\n"
+  },
+  "schema": {
+    "module": "MicroCFTA.SourcePruningEnumerationFoldInvariants",
+    "public_heads": [
+      {
+        "name": "assimilated_preserves",
+        "kind": "theorem",
+        "file": "assimilated-header.lean.txt",
+        "attachment": " := by\n"
+      },
+      {
+        "name": "dispatch_preserves",
+        "kind": "theorem",
+        "file": "dispatch-header.lean.txt",
+        "attachment": " := by\n"
+      },
+      {
+        "name": "run_preserves",
+        "kind": "theorem",
+        "file": "run-header.lean.txt",
+        "attachment": " := by\n"
+      }
+    ],
+    "public_head_order": [
+      "assimilated_preserves",
+      "dispatch_preserves",
+      "run_preserves"
+    ],
+    "contract_count": 9,
+    "contract_lines": 61,
+    "context_lines": 12,
+    "public_header_lines": 43,
+    "proof_local_have_count": 5,
+    "proof_local_let_count": 0,
+    "definition_count": 0,
+    "new_actions": [],
+    "helpers": [],
+    "new_types": [],
+    "new_carriers": [],
+    "new_predicates": [],
+    "local_instance_count": 0,
+    "global_instance_count": 0,
+    "LawfulMonad_count": 0,
+    "obtain_count": 1,
+    "obtain_field_count": 2,
+    "scoped_type_count": 213,
+    "induction_count": 1,
+    "IH_count": 1,
+    "source_count": 14,
+    "cut_count": 18,
+    "cut_lines": 333,
+    "route_count": 13,
+    "route_source_count": 22,
+    "target_source_lines": [
+      220,
+      340
+    ],
+    "proposed_hard_cap": 460,
+    "compiler_evidence": false,
+    "bodies_present": false
+  },
+  "script_frozen_sha256": "dacc048ee11ff16f36a38e2fa2afb6a39db73cc93503c89a0cf9f8fd05a29214",
+  "reviews": {
+    "setup": {
+      "path": "/tmp/mcfta-pruning-enumeration-fold-invariants-20261024-setup-review.md",
+      "sha256": "a74cdd05acb6bc41e5a48223c14a2509fba5c247dcb42f0764a29a956470f0f1"
+    },
+    "source": {
+      "path": "/tmp/mcfta-pruning-enumeration-fold-invariants-20261024-source-review.md",
+      "sha256": "95f85d313e63732ccdcf7281a3a900b4453464945670dcd429e5e2a37282179b"
+    },
+    "declaration": {
+      "path": "/tmp/mcfta-pruning-enumeration-fold-invariants-20261024-declaration-review.md",
+      "sha256": "f58a3fc788083be49f404c656caac776e35c0bb60bde6c53d46e572e2167e828"
+    },
+    "seal-script": {
+      "path": "/tmp/mcfta-pruning-enumeration-fold-invariants-20261024-seal-script-review.md",
+      "sha256": "1fd15403f84632716f95e4ee44a753d550874c06d279e57a65509c5b25fb32fe"
+    }
+  },
+  "personal_review": "All nine literal contracts (61 lines), complete 213 scoped entries, case and obtain inventory, 333 source-cut lines and live source identities read. All 471 script lines, templates, schema and exact recipes read. All 83 owner and 40 script pins and five bidirectional adapters verified.",
+  "limits": "Lean 4.34.1 default proof limits; all linters and warnings as errors; 4 GiB memory/high, zero swap, five minutes, serial; no added axiom or premise.",
+  "source_budget": [
+    220,
+    340
+  ],
+  "hard_cap": 460,
+  "activation": "not yet",
+  "bodies": "not yet"
+}

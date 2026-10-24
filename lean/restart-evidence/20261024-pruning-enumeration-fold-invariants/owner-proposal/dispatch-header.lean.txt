@@ -1,0 +1,14 @@
+theorem dispatch_preserves
+    [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Constraint)] [DecidableEq Node]
+    (checkEmpty : Bool) (nativeFuel p h : Nat)
+    (beforeCaller : Caller width) (before : EnumerationState.State Symbol EnumGuard)
+    (source target : Nat) (queries : Queries) (action : EnumerateM Symbol EnumGuard Unit)
+    (afterCaller : Caller width) (savedQueries : Queries)
+    (after : EnumerationState.State Symbol EnumGuard)
+    (roots : Nat → Nat) (waiting : EnumerationWaitingIndex.Waiting)
+    (storage : StorageValid before)
+    (counts : EnumerationCanonicalWaiting.Correct roots before.values waiting)
+    (selected : SourcePruningEnumerationDispatch.dispatch checkEmpty nativeFuel p h
+      beforeCaller before source target queries = (.ok (some action), afterCaller, savedQueries))
+    (completed : ExceptT.run (action before) = [.ok ((), after)]) :
+    StorageValid after ∧ EnumerationCanonicalWaiting.Correct roots after.values waiting

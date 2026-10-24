@@ -1,0 +1,12 @@
+/-- Success and failure retain the full checked state and actual fourth memo. -/
+inductive Outcome (width : Nat) : Type 1 where
+  | done (answer : Bool) (checked : Checked width) (memo : Memo)
+  | failed (fault : Fault) (checked : Checked width) (memo : Memo)
+
+def Outcome.state : Outcome width → Checked width
+  | .done _ checked _ | .failed _ checked _ => checked
+
+def Outcome.memo : Outcome width → Memo
+  | .done _ _ memo | .failed _ _ memo => memo
+
+/-- Lift the literal physical call at its exact returned heap and operation cache. -/

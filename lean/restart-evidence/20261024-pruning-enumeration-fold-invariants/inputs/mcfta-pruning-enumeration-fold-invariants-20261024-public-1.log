@@ -1,0 +1,84 @@
+{"command": ["/home/tritlo/.elan/toolchains/leanprover--lean4---v4.34.1/bin/lean", "-R", "/tmp/mcfta-pruning-enumeration-fold-invariants-20261024/public-1", "-DwarningAsError=true", "-Dlinter.all=true", "/tmp/mcfta-pruning-enumeration-fold-invariants-20261024/public-1/checked.lean"], "exit_code": 0, "raw_bytes": 5709, "raw_sha256": "7527ef466061e202ab8b22c046a4b7796389c22608a37ffc48d0fb83b0dfd0f7", "source_sha256": "843297b046a9ba1cd0f036b075d2f77bf0744f98f10b6f0b15b19517654e0c7f"}
+@MicroCFTA.SourcePruningEnumerationFoldInvariants.assimilated_preserves : ∀ {EnumGuard : Type}
+  (before : MicroCFTA.EnumerationState.State MicroCFTA.SourcePruningTemplates.Symbol EnumGuard) (source target : Nat)
+  (sourceNode targetNode merged : Option Nat) (sourceScs targetScs : List MicroCFTA.EnumerationState.Suspended)
+  (roots : Nat → Nat) (waiting : MicroCFTA.EnumerationWaitingIndex.Waiting),
+  MicroCFTA.EnumerationCorrectness.StorageValid before →
+    MicroCFTA.EnumerationCanonicalWaiting.Correct roots before.values waiting →
+      before.values[source]? = some (MicroCFTA.EnumerationState.UVarValue.unenumerated sourceNode sourceScs) →
+        before.values[target]? = some (MicroCFTA.EnumerationState.UVarValue.unenumerated targetNode targetScs) →
+          target ≠ source →
+            MicroCFTA.EnumerationCorrectness.StorageValid
+                (MicroCFTA.EnumerationCorrectness.assimilated before target source
+                  (MicroCFTA.EnumerationState.UVarValue.unenumerated merged (sourceScs ++ targetScs))) ∧
+              MicroCFTA.EnumerationCanonicalWaiting.Correct roots
+                (MicroCFTA.EnumerationCorrectness.assimilated before target source
+                    (MicroCFTA.EnumerationState.UVarValue.unenumerated merged (sourceScs ++ targetScs))).values
+                waiting
+'MicroCFTA.SourcePruningEnumerationFoldInvariants.assimilated_preserves' depends on axioms: [propext, Quot.sound]
+@MicroCFTA.SourcePruningEnumerationFoldInvariants.dispatch_preserves : ∀ {EnumGuard : Type} {width : Nat}
+  [inst : DecidableEq MicroCFTA.SourcePruningTemplates.Symbol]
+  [inst_1 :
+    DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey MicroCFTA.SourcePruningTemplates.Symbol
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  [inst_2 :
+    DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.Value MicroCFTA.SourcePruningTemplates.Symbol
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  (checkEmpty : Bool) (nativeFuel p h : Nat) (beforeCaller : MicroCFTA.SourceCurrentAllocatedPartialState.State width)
+  (before : MicroCFTA.EnumerationState.State MicroCFTA.SourcePruningTemplates.Symbol EnumGuard) (source target : Nat)
+  (queries : MicroCFTA.SourceEndpointMemo.Memos)
+  (action : MicroCFTA.EnumerationState.EnumerateM MicroCFTA.SourcePruningTemplates.Symbol EnumGuard Unit)
+  (afterCaller : MicroCFTA.SourceCurrentAllocatedPartialState.State width)
+  (savedQueries : MicroCFTA.SourceEndpointMemo.Memos)
+  (after : MicroCFTA.EnumerationState.State MicroCFTA.SourcePruningTemplates.Symbol EnumGuard) (roots : Nat → Nat)
+  (waiting : MicroCFTA.EnumerationWaitingIndex.Waiting),
+  MicroCFTA.EnumerationCorrectness.StorageValid before →
+    MicroCFTA.EnumerationCanonicalWaiting.Correct roots before.values waiting →
+      MicroCFTA.SourcePruningEnumerationDispatch.dispatch checkEmpty nativeFuel p h beforeCaller before source target
+            queries =
+          (Except.ok (some action), afterCaller, savedQueries) →
+        (action before).run = [Except.ok ((), after)] →
+          MicroCFTA.EnumerationCorrectness.StorageValid after ∧
+            MicroCFTA.EnumerationCanonicalWaiting.Correct roots after.values waiting
+'MicroCFTA.SourcePruningEnumerationFoldInvariants.dispatch_preserves' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+@MicroCFTA.SourcePruningEnumerationFoldInvariants.run_preserves : ∀ {EnumGuard : Type} {width : Nat}
+  [inst : DecidableEq MicroCFTA.SourcePruningTemplates.Symbol]
+  [inst_1 :
+    DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey MicroCFTA.SourcePruningTemplates.Symbol
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  [inst_2 :
+    DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.Value MicroCFTA.SourcePruningTemplates.Symbol
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  (checkEmpty : Bool) (nativeFuel p h : Nat) (sources : List Nat)
+  (beforeCaller : MicroCFTA.SourceCurrentAllocatedPartialState.State width)
+  (before : MicroCFTA.EnumerationState.State MicroCFTA.SourcePruningTemplates.Symbol EnumGuard) (target : Nat)
+  (queries : MicroCFTA.SourceEndpointMemo.Memos)
+  (result :
+    Except
+      (MicroCFTA.SourceEqualityNativeDemand.Outcome width
+          (MicroCFTA.InternedConstructorTemplates.Value MicroCFTA.SourcePruningTemplates.Symbol
+            (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)) ⊕
+        MicroCFTA.SourceCurrentAllocatedConjunctionWorker.Outcome width)
+      (Option
+        (List
+          (Except MicroCFTA.EnumerationState.Error
+            (Unit × MicroCFTA.EnumerationState.State MicroCFTA.SourcePruningTemplates.Symbol EnumGuard)))))
+  (afterCaller : MicroCFTA.SourceCurrentAllocatedPartialState.State width)
+  (savedQueries : MicroCFTA.SourceEndpointMemo.Memos)
+  (after : MicroCFTA.EnumerationState.State MicroCFTA.SourcePruningTemplates.Symbol EnumGuard) (roots : Nat → Nat)
+  (waiting : MicroCFTA.EnumerationWaitingIndex.Waiting),
+  MicroCFTA.EnumerationCorrectness.StorageValid before →
+    MicroCFTA.EnumerationCanonicalWaiting.Correct roots before.values waiting →
+      MicroCFTA.SourcePruningEnumerationFold.run checkEmpty nativeFuel p h sources beforeCaller before target queries =
+          (result, afterCaller, savedQueries, after) →
+        MicroCFTA.EnumerationCorrectness.StorageValid after ∧
+          MicroCFTA.EnumerationCanonicalWaiting.Correct roots after.values waiting
+'MicroCFTA.SourcePruningEnumerationFoldInvariants.run_preserves' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]

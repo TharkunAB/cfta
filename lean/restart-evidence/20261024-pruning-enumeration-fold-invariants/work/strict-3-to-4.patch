@@ -1,0 +1,62 @@
+--- strict-3
++++ strict-4
+@@ -119,10 +119,10 @@
+                 Id.run, pure, Prod.mk.injEq, Except.ok.injEq, Option.some.injEq] at selected
+               rcases selected with ⟨rfl, rfl, rfl⟩
+               by_cases empty : targetNode = some 0
+-              · simp [SourcePruningEnumerationDispatch.finishOptional, empty] at completed
++              · simp [SourcePruningEnumerationDispatch.finishOptional, empty, ExceptT.run] at completed
+               · change (if targetNode = some 0 then [] else
+                   [Except.ok ((), assimilated before target source (.unenumerated targetNode (sourceScs ++ targetScs)))]) = _ at completed
+-                rw [if_neg empty] at completed
++                rw [ite_eq_right empty] at completed
+                 simp only [List.cons.injEq, and_true, Except.ok.injEq, Prod.mk.injEq, true_and] at completed
+                 subst after
+                 exact assimilated_preserves before source target none targetNode targetNode sourceScs targetScs
+@@ -136,10 +136,10 @@
+                   Id.run, pure, Prod.mk.injEq, Except.ok.injEq, Option.some.injEq] at selected
+                 rcases selected with ⟨rfl, rfl, rfl⟩
+                 by_cases empty : (some sourceHandle : Option Nat) = some 0
+-                · simp [SourcePruningEnumerationDispatch.finishOptional, empty] at completed
++                · simp [SourcePruningEnumerationDispatch.finishOptional, empty, ExceptT.run] at completed
+                 · change (if (some sourceHandle : Option Nat) = some 0 then [] else
+                     [Except.ok ((), assimilated before target source (.unenumerated (some sourceHandle) (sourceScs ++ targetScs)))]) = _ at completed
+-                  rw [if_neg empty] at completed
++                  rw [ite_eq_right empty] at completed
+                   simp only [List.cons.injEq, and_true, Except.ok.injEq, Prod.mk.injEq, true_and] at completed
+                   subst after
+                   exact assimilated_preserves before source target (some sourceHandle) none (some sourceHandle)
+@@ -183,27 +183,32 @@
+                             encoded, Option.map_some, Except.mapError, Id.run, pure,
+                             Prod.mk.injEq, Except.ok.injEq, Option.some.injEq] at selected
+                           rcases selected with ⟨rfl, rfl, rfl⟩
++                          revert completed
+                           cases (if answer then (.empty : Node) else query) with
+-                          | empty => cases completed
++                          | empty => intro completed; cases completed
+                           | reference name =>
++                            intro completed
+                             change [Except.ok ((), assimilated before target source (.unenumerated (some handle) (sourceScs ++ targetScs)))] = _ at completed
+                             simp only [List.cons.injEq, and_true, Except.ok.injEq, Prod.mk.injEq, true_and] at completed
+                             subst after
+                             exact assimilated_preserves before source target (some sourceHandle) (some targetHandle)
+                               (some handle) sourceScs targetScs roots waiting storage counts sourceStored targetStored (Ne.symm same)
+                           | node entry edges depth free =>
++                            intro completed
+                             change [Except.ok ((), assimilated before target source (.unenumerated (some handle) (sourceScs ++ targetScs)))] = _ at completed
+                             simp only [List.cons.injEq, and_true, Except.ok.injEq, Prod.mk.injEq, true_and] at completed
+                             subst after
+                             exact assimilated_preserves before source target (some sourceHandle) (some targetHandle)
+                               (some handle) sourceScs targetScs roots waiting storage counts sourceStored targetStored (Ne.symm same)
+                           | union entry members depth free =>
++                            intro completed
+                             change [Except.ok ((), assimilated before target source (.unenumerated (some handle) (sourceScs ++ targetScs)))] = _ at completed
+                             simp only [List.cons.injEq, and_true, Except.ok.injEq, Prod.mk.injEq, true_and] at completed
+                             subst after
+                             exact assimilated_preserves before source target (some sourceHandle) (some targetHandle)
+                               (some handle) sourceScs targetScs roots waiting storage counts sourceStored targetStored (Ne.symm same)
+                           | mu entry body depthShape ordinaryShape =>
++                            intro completed
+                             change [Except.ok ((), assimilated before target source (.unenumerated (some handle) (sourceScs ++ targetScs)))] = _ at completed
+                             simp only [List.cons.injEq, and_true, Except.ok.injEq, Prod.mk.injEq, true_and] at completed
+                             subst after

@@ -1,0 +1,45 @@
+theorem assimilated_preserves
+    (before : EnumerationState.State Symbol EnumGuard) (source target : Nat)
+    (sourceNode targetNode merged : Option Nat)
+    (sourceScs targetScs : List EnumerationState.Suspended)
+    (roots : Nat → Nat) (waiting : EnumerationWaitingIndex.Waiting)
+    (storage : StorageValid before)
+    (counts : EnumerationCanonicalWaiting.Correct roots before.values waiting)
+    (sourceStored : before.values[source]? = some (.unenumerated sourceNode sourceScs))
+    (targetStored : before.values[target]? = some (.unenumerated targetNode targetScs))
+    (different : target ≠ source) :
+    StorageValid (assimilated before target source (.unenumerated merged (sourceScs ++ targetScs))) ∧
+      EnumerationCanonicalWaiting.Correct roots
+        (assimilated before target source (.unenumerated merged (sourceScs ++ targetScs))).values waiting
+
+theorem dispatch_preserves
+    [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Constraint)] [DecidableEq Node]
+    (checkEmpty : Bool) (nativeFuel p h : Nat)
+    (beforeCaller : Caller width) (before : EnumerationState.State Symbol EnumGuard)
+    (source target : Nat) (queries : Queries) (action : EnumerateM Symbol EnumGuard Unit)
+    (afterCaller : Caller width) (savedQueries : Queries)
+    (after : EnumerationState.State Symbol EnumGuard)
+    (roots : Nat → Nat) (waiting : EnumerationWaitingIndex.Waiting)
+    (storage : StorageValid before)
+    (counts : EnumerationCanonicalWaiting.Correct roots before.values waiting)
+    (selected : SourcePruningEnumerationDispatch.dispatch checkEmpty nativeFuel p h
+      beforeCaller before source target queries = (.ok (some action), afterCaller, savedQueries))
+    (completed : ExceptT.run (action before) = [.ok ((), after)]) :
+    StorageValid after ∧ EnumerationCanonicalWaiting.Correct roots after.values waiting
+
+theorem run_preserves
+    [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Constraint)] [DecidableEq Node]
+    (checkEmpty : Bool) (nativeFuel p h : Nat) (sources : List Nat)
+    (beforeCaller : Caller width) (before : EnumerationState.State Symbol EnumGuard)
+    (target : Nat) (queries : Queries)
+    (result : Except (SourceEqualityNativeDemand.Outcome width Node ⊕
+      SourceCurrentAllocatedConjunctionWorker.Outcome width)
+      (Option (List (Except EnumerationState.Error (Unit × EnumerationState.State Symbol EnumGuard)))))
+    (afterCaller : Caller width) (savedQueries : Queries)
+    (after : EnumerationState.State Symbol EnumGuard)
+    (roots : Nat → Nat) (waiting : EnumerationWaitingIndex.Waiting)
+    (storage : StorageValid before)
+    (counts : EnumerationCanonicalWaiting.Correct roots before.values waiting)
+    (observed : SourcePruningEnumerationFold.run checkEmpty nativeFuel p h sources
+      beforeCaller before target queries = (result, afterCaller, savedQueries, after)) :
+    StorageValid after ∧ EnumerationCanonicalWaiting.Correct roots after.values waiting

@@ -1,0 +1,13 @@
+theorem assimilated_preserves
+    (before : EnumerationState.State Symbol EnumGuard) (source target : Nat)
+    (sourceNode targetNode merged : Option Nat)
+    (sourceScs targetScs : List EnumerationState.Suspended)
+    (roots : Nat → Nat) (waiting : EnumerationWaitingIndex.Waiting)
+    (storage : StorageValid before)
+    (counts : EnumerationCanonicalWaiting.Correct roots before.values waiting)
+    (sourceStored : before.values[source]? = some (.unenumerated sourceNode sourceScs))
+    (targetStored : before.values[target]? = some (.unenumerated targetNode targetScs))
+    (different : target ≠ source) :
+    StorageValid (assimilated before target source (.unenumerated merged (sourceScs ++ targetScs))) ∧
+      EnumerationCanonicalWaiting.Correct roots
+        (assimilated before target source (.unenumerated merged (sourceScs ++ targetScs))).values waiting

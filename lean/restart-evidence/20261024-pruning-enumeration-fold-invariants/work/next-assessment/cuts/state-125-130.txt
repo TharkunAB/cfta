@@ -1,0 +1,6 @@
+/-- Give a variable the ancestry of the current expansion. -/
+def inheritAncestry (uv : Nat) : EnumerateM Symbol Guard Unit :=
+  modify fun state => {state with recursionAncestry := (fun other =>
+    if other = uv then (state.expansionAncestry ++ state.recursionAncestry uv).eraseDups
+    else state.recursionAncestry other)}
+

@@ -1,0 +1,98 @@
+/tmp/mcfta-pruning-enumeration-fold-invariants-20261024/strict-3/MicroCFTA/SourcePruningEnumerationFoldInvariants.lean:122:14: error: unsolved goals
+case pos
+EnumGuard : Type
+width : Nat
+inst✝² : DecidableEq Symbol
+inst✝¹ : DecidableEq (EdgeKey Symbol Constraint)
+inst✝ : DecidableEq Node
+checkEmpty : Bool
+nativeFuel p h : Nat
+beforeCaller : Caller width
+before : EnumerationState.State Symbol EnumGuard
+source target : Nat
+queries : Queries
+after : EnumerationState.State Symbol EnumGuard
+roots : Nat → Nat
+waiting : EnumerationWaitingIndex.Waiting
+storage : StorageValid before
+counts : EnumerationCanonicalWaiting.Correct roots before.values waiting
+same : ¬source = target
+sourceScs : List Suspended
+targetNode : Option Nat
+targetScs : List Suspended
+targetStored : before.values[target]? = some (UVarValue.unenumerated targetNode targetScs)
+sourceStored : before.values[source]? = some (UVarValue.unenumerated none sourceScs)
+empty : targetNode = some 0
+completed : ExceptT.run [] = [Except.ok ((), after)]
+⊢ StorageValid after ∧ EnumerationCanonicalWaiting.Correct roots after.values waiting
+/tmp/mcfta-pruning-enumeration-fold-invariants-20261024/strict-3/MicroCFTA/SourcePruningEnumerationFoldInvariants.lean:125:20: error: `if_neg` has been deprecated: Use `ite_eq_right` instead
+/tmp/mcfta-pruning-enumeration-fold-invariants-20261024/strict-3/MicroCFTA/SourcePruningEnumerationFoldInvariants.lean:139:16: error: unsolved goals
+case pos
+EnumGuard : Type
+width : Nat
+inst✝² : DecidableEq Symbol
+inst✝¹ : DecidableEq (EdgeKey Symbol Constraint)
+inst✝ : DecidableEq Node
+checkEmpty : Bool
+nativeFuel p h : Nat
+beforeCaller : Caller width
+before : EnumerationState.State Symbol EnumGuard
+source target : Nat
+queries : Queries
+after : EnumerationState.State Symbol EnumGuard
+roots : Nat → Nat
+waiting : EnumerationWaitingIndex.Waiting
+storage : StorageValid before
+counts : EnumerationCanonicalWaiting.Correct roots before.values waiting
+same : ¬source = target
+sourceScs targetScs : List Suspended
+sourceHandle : Nat
+sourceStored : before.values[source]? = some (UVarValue.unenumerated (some sourceHandle) sourceScs)
+targetStored : before.values[target]? = some (UVarValue.unenumerated none targetScs)
+empty : some sourceHandle = some 0
+completed : ExceptT.run [] = [Except.ok ((), after)]
+⊢ StorageValid after ∧ EnumerationCanonicalWaiting.Correct roots after.values waiting
+/tmp/mcfta-pruning-enumeration-fold-invariants-20261024/strict-3/MicroCFTA/SourcePruningEnumerationFoldInvariants.lean:142:22: error: `if_neg` has been deprecated: Use `ite_eq_right` instead
+/tmp/mcfta-pruning-enumeration-fold-invariants-20261024/strict-3/MicroCFTA/SourcePruningEnumerationFoldInvariants.lean:187:37: error: Dependent elimination failed: Failed to solve equation
+  [Except.ok ((), after)] =
+    (match if answer = true then Value.empty else query with
+      | Value.empty => reject
+      | x => do
+        setValue target (UVarValue.unenumerated (some handle) (sourceScs ++ targetScs))
+        setValue source UVarValue.eliminated
+        modify fun state =>
+            { counter := state.counter, representatives := state.representatives, values := state.values,
+              obligations := state.obligations,
+              recursionAncestry := fun other =>
+                if other = target then (state.recursionAncestry source ++ state.recursionAncestry target).eraseDups
+                else state.recursionAncestry other,
+              expansionAncestry := state.expansionAncestry })
+      before
+/tmp/mcfta-pruning-enumeration-fold-invariants-20261024/strict-3/MicroCFTA/SourcePruningEnumerationFoldInvariants.lean:189:28: error: 'change' tactic failed, pattern
+  [Except.ok ((), assimilated before target source (UVarValue.unenumerated (some handle) (sourceScs ++ targetScs)))] =
+    ?m.1323
+is not definitionally equal to target
+  (SourcePruningEnumerationAssimilation.finish source target handle sourceScs targetScs
+        (if answer = true then Value.empty else query) before).run =
+    [Except.ok ((), after)]
+/tmp/mcfta-pruning-enumeration-fold-invariants-20261024/strict-3/MicroCFTA/SourcePruningEnumerationFoldInvariants.lean:195:28: error: 'change' tactic failed, pattern
+  [Except.ok ((), assimilated before target source (UVarValue.unenumerated (some handle) (sourceScs ++ targetScs)))] =
+    ?m.1349
+is not definitionally equal to target
+  (SourcePruningEnumerationAssimilation.finish source target handle sourceScs targetScs
+        (if answer = true then Value.empty else query) before).run =
+    [Except.ok ((), after)]
+/tmp/mcfta-pruning-enumeration-fold-invariants-20261024/strict-3/MicroCFTA/SourcePruningEnumerationFoldInvariants.lean:201:28: error: 'change' tactic failed, pattern
+  [Except.ok ((), assimilated before target source (UVarValue.unenumerated (some handle) (sourceScs ++ targetScs)))] =
+    ?m.1375
+is not definitionally equal to target
+  (SourcePruningEnumerationAssimilation.finish source target handle sourceScs targetScs
+        (if answer = true then Value.empty else query) before).run =
+    [Except.ok ((), after)]
+/tmp/mcfta-pruning-enumeration-fold-invariants-20261024/strict-3/MicroCFTA/SourcePruningEnumerationFoldInvariants.lean:207:28: error: 'change' tactic failed, pattern
+  [Except.ok ((), assimilated before target source (UVarValue.unenumerated (some handle) (sourceScs ++ targetScs)))] =
+    ?m.1401
+is not definitionally equal to target
+  (SourcePruningEnumerationAssimilation.finish source target handle sourceScs targetScs
+        (if answer = true then Value.empty else query) before).run =
+    [Except.ok ((), after)]

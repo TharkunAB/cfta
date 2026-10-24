@@ -1,0 +1,11 @@
+/-- Count every occurrence of one raw suspended UVar. -/
+def occurrences (uv : Nat) : List Suspended → Int
+  | [] => 0
+  | sc :: rest => (if sc.var = uv then 1 else 0) + occurrences uv rest
+
+/-- Reference multiplicities add when assimilation appends suspended constraints. -/
+theorem occurrences_append (uv : Nat) (first second : List Suspended) :
+    occurrences uv (first ++ second) = occurrences uv first + occurrences uv second := by
+  induction first with
+  | nil => simp [occurrences]
+  | cons sc rest ih => simp [occurrences, ih, Int.add_assoc]

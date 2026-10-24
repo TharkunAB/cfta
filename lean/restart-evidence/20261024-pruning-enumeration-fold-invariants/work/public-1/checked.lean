@@ -1,0 +1,9 @@
+import MicroCFTA.SourcePruningEnumerationFoldInvariants
+set_option pp.deepTerms true
+set_option pp.maxSteps 1000000
+#check @MicroCFTA.SourcePruningEnumerationFoldInvariants.assimilated_preserves
+#print axioms MicroCFTA.SourcePruningEnumerationFoldInvariants.assimilated_preserves
+#check @MicroCFTA.SourcePruningEnumerationFoldInvariants.dispatch_preserves
+#print axioms MicroCFTA.SourcePruningEnumerationFoldInvariants.dispatch_preserves
+#check @MicroCFTA.SourcePruningEnumerationFoldInvariants.run_preserves
+#print axioms MicroCFTA.SourcePruningEnumerationFoldInvariants.run_preserves

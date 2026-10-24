@@ -1,0 +1,1472 @@
+/tmp/mcfta-pruning-enumeration-fold-invariants-20261024/strict-2/MicroCFTA/SourcePruningEnumerationFoldInvariants.lean:119:35: error: Tactic `cases` failed with a nested error:
+Dependent elimination failed: Failed to solve equation
+  (Except.ok (some action), afterCaller, savedQueries) =
+    match sourceNode with
+    | some sourceHandle =>
+      match targetNode with
+      | some targetHandle =>
+        match SourcePruningEnumerationNodes.lookupNode beforeCaller.checked.native.machine.heap sourceHandle with
+        | some left =>
+          match SourcePruningEnumerationNodes.lookupNode beforeCaller.checked.native.machine.heap targetHandle with
+          | some right =>
+            match
+              SourceEqualityNativeDemand.execute nativeFuel
+                (SourceEqualityNativeDemand.Control.code
+                  (SourceRecursiveIntersectionCode.requestNode IntersectionEmptyDomain.emptyDomain left right))
+                beforeCaller.checked with
+            | SourceEqualityNativeDemand.Outcome.done query queried =>
+              (Except.mapError Sum.inr
+                  (SourcePruningEnumerationDispatch.afterQuery checkEmpty p h source target sourceScs targetScs query
+                      queried beforeCaller queries).fst,
+                (SourcePruningEnumerationDispatch.afterQuery checkEmpty p h source target sourceScs targetScs query
+                      queried beforeCaller queries).snd.fst,
+                (SourcePruningEnumerationDispatch.afterQuery checkEmpty p h source target sourceScs targetScs query
+                      queried beforeCaller queries).snd.snd)
+            | other =>
+              (Except.error (Sum.inl other),
+                SourceCurrentAllocatedPartialState.advance beforeCaller other.state beforeCaller.fourth
+                  beforeCaller.merge,
+                queries)
+          | x => (Except.ok none, beforeCaller, queries)
+        | x => (Except.ok none, beforeCaller, queries)
+      | x =>
+        (Except.ok
+            (some
+              (SourcePruningEnumerationDispatch.finishOptional source target (some sourceHandle) sourceScs targetScs)),
+          beforeCaller, queries)
+    | x =>
+      (Except.ok (some (SourcePruningEnumerationDispatch.finishOptional source target targetNode sourceScs targetScs)),
+        beforeCaller, queries)
+at case `Eq.refl`
+/tmp/mcfta-pruning-enumeration-fold-invariants-20261024/strict-2/MicroCFTA/SourcePruningEnumerationFoldInvariants.lean:134:37: error: Tactic `cases` failed with a nested error:
+Dependent elimination failed: Failed to solve equation
+  (Except.ok (some action), afterCaller, savedQueries) =
+    match sourceNode with
+    | some sourceHandle =>
+      match targetNode with
+      | some targetHandle =>
+        match SourcePruningEnumerationNodes.lookupNode beforeCaller.checked.native.machine.heap sourceHandle with
+        | some left =>
+          match SourcePruningEnumerationNodes.lookupNode beforeCaller.checked.native.machine.heap targetHandle with
+          | some right =>
+            match
+              SourceEqualityNativeDemand.execute nativeFuel
+                (SourceEqualityNativeDemand.Control.code
+                  (SourceRecursiveIntersectionCode.requestNode IntersectionEmptyDomain.emptyDomain left right))
+                beforeCaller.checked with
+            | SourceEqualityNativeDemand.Outcome.done query queried =>
+              (Except.mapError Sum.inr
+                  (SourcePruningEnumerationDispatch.afterQuery checkEmpty p h source target sourceScs targetScs query
+                      queried beforeCaller queries).fst,
+                (SourcePruningEnumerationDispatch.afterQuery checkEmpty p h source target sourceScs targetScs query
+                      queried beforeCaller queries).snd.fst,
+                (SourcePruningEnumerationDispatch.afterQuery checkEmpty p h source target sourceScs targetScs query
+                      queried beforeCaller queries).snd.snd)
+            | other =>
+              (Except.error (Sum.inl other),
+                SourceCurrentAllocatedPartialState.advance beforeCaller other.state beforeCaller.fourth
+                  beforeCaller.merge,
+                queries)
+          | x => (Except.ok none, beforeCaller, queries)
+        | x => (Except.ok none, beforeCaller, queries)
+      | x =>
+        (Except.ok
+            (some
+              (SourcePruningEnumerationDispatch.finishOptional source target (some sourceHandle) sourceScs targetScs)),
+          beforeCaller, queries)
+    | x =>
+      (Except.ok (some (SourcePruningEnumerationDispatch.finishOptional source target targetNode sourceScs targetScs)),
+        beforeCaller, queries)
+at case `Eq.refl`
+/tmp/mcfta-pruning-enumeration-fold-invariants-20261024/strict-2/MicroCFTA/SourcePruningEnumerationFoldInvariants.lean:146:23: error: unsolved goals
+case neg.some.unenumerated.some.unenumerated.some.some.none
+EnumGuard : Type
+width : Nat
+inst✝² : DecidableEq Symbol
+inst✝¹ : DecidableEq (EdgeKey Symbol Constraint)
+inst✝ : DecidableEq Node
+checkEmpty : Bool
+nativeFuel p h : Nat
+beforeCaller : Caller width
+before : EnumerationState.State Symbol EnumGuard
+source target : Nat
+queries : Queries
+action : EnumerateM Symbol EnumGuard Unit
+afterCaller : Caller width
+savedQueries : Queries
+after : EnumerationState.State Symbol EnumGuard
+roots : Nat → Nat
+waiting : EnumerationWaitingIndex.Waiting
+storage : StorageValid before
+counts : EnumerationCanonicalWaiting.Correct roots before.values waiting
+completed : (action before).run = [Except.ok ((), after)]
+same : ¬source = target
+sourceNode : Option Nat
+sourceScs : List Suspended
+sourceStored : before.values[source]? = some (UVarValue.unenumerated sourceNode sourceScs)
+targetNode : Option Nat
+targetScs : List Suspended
+targetStored : before.values[target]? = some (UVarValue.unenumerated targetNode targetScs)
+sourceHandle : Nat
+sourceNodeSame : sourceNode = some sourceHandle
+targetHandle : Nat
+targetNodeSame : targetNode = some targetHandle
+leftDecoded : SourcePruningEnumerationNodes.lookupNode beforeCaller.checked.native.machine.heap sourceHandle = none
+selected :
+  (match sourceNode with
+      | some sourceHandle =>
+        match targetNode with
+        | some targetHandle =>
+          match SourcePruningEnumerationNodes.lookupNode beforeCaller.checked.native.machine.heap sourceHandle with
+          | some left =>
+            match SourcePruningEnumerationNodes.lookupNode beforeCaller.checked.native.machine.heap targetHandle with
+            | some right =>
+              match
+                SourceEqualityNativeDemand.execute nativeFuel
+                  (SourceEqualityNativeDemand.Control.code
+                    (SourceRecursiveIntersectionCode.requestNode IntersectionEmptyDomain.emptyDomain left right))
+                  beforeCaller.checked with
+              | SourceEqualityNativeDemand.Outcome.done query queried =>
+                pure
+                  (Except.mapError Sum.inr
+                      (SourcePruningEnumerationDispatch.afterQuery checkEmpty p h source target sourceScs targetScs
+                          query queried beforeCaller queries).fst,
+                    (SourcePruningEnumerationDispatch.afterQuery checkEmpty p h source target sourceScs targetScs query
+                          queried beforeCaller queries).snd.fst,
+                    (SourcePruningEnumerationDispatch.afterQuery checkEmpty p h source target sourceScs targetScs query
+                          queried beforeCaller queries).snd.snd)
+              | other =>
+                pure
+                  (Except.error (Sum.inl other),
+                    SourceCurrentAllocatedPartialState.advance beforeCaller other.state beforeCaller.fourth
+                      beforeCaller.merge,
+                    queries)
+            | x => pure (Except.ok none, beforeCaller, queries)
+          | x => pure (Except.ok none, beforeCaller, queries)
+        | x =>
+          pure
+            (Except.ok
+                (some
+                  (SourcePruningEnumerationDispatch.finishOptional source target (some sourceHandle) sourceScs
+                    targetScs)),
+              beforeCaller, queries)
+      | x =>
+        pure
+          (Except.ok
+              (some (SourcePruningEnumerationDispatch.finishOptional source target targetNode sourceScs targetScs)),
+            beforeCaller, queries)).run =
+    (Except.ok (some action), afterCaller, savedQueries)
+⊢ StorageValid after ∧ EnumerationCanonicalWaiting.Correct roots after.values waiting
+/tmp/mcfta-pruning-enumeration-fold-invariants-20261024/strict-2/MicroCFTA/SourcePruningEnumerationFoldInvariants.lean:149:25: error: unsolved goals
+case neg.some.unenumerated.some.unenumerated.some.some.some.none
+EnumGuard : Type
+width : Nat
+inst✝² : DecidableEq Symbol
+inst✝¹ : DecidableEq (EdgeKey Symbol Constraint)
+inst✝ : DecidableEq Node
+checkEmpty : Bool
+nativeFuel p h : Nat
+beforeCaller : Caller width
+before : EnumerationState.State Symbol EnumGuard
+source target : Nat
+queries : Queries
+action : EnumerateM Symbol EnumGuard Unit
+afterCaller : Caller width
+savedQueries : Queries
+after : EnumerationState.State Symbol EnumGuard
+roots : Nat → Nat
+waiting : EnumerationWaitingIndex.Waiting
+storage : StorageValid before
+counts : EnumerationCanonicalWaiting.Correct roots before.values waiting
+completed : (action before).run = [Except.ok ((), after)]
+same : ¬source = target
+sourceNode : Option Nat
+sourceScs : List Suspended
+sourceStored : before.values[source]? = some (UVarValue.unenumerated sourceNode sourceScs)
+targetNode : Option Nat
+targetScs : List Suspended
+targetStored : before.values[target]? = some (UVarValue.unenumerated targetNode targetScs)
+sourceHandle : Nat
+sourceNodeSame : sourceNode = some sourceHandle
+targetHandle : Nat
+targetNodeSame : targetNode = some targetHandle
+left : Node
+leftDecoded : SourcePruningEnumerationNodes.lookupNode beforeCaller.checked.native.machine.heap sourceHandle = some left
+rightDecoded : SourcePruningEnumerationNodes.lookupNode beforeCaller.checked.native.machine.heap targetHandle = none
+selected :
+  (match sourceNode with
+      | some sourceHandle =>
+        match targetNode with
+        | some targetHandle =>
+          match SourcePruningEnumerationNodes.lookupNode beforeCaller.checked.native.machine.heap sourceHandle with
+          | some left =>
+            match SourcePruningEnumerationNodes.lookupNode beforeCaller.checked.native.machine.heap targetHandle with
+            | some right =>
+              match
+                SourceEqualityNativeDemand.execute nativeFuel
+                  (SourceEqualityNativeDemand.Control.code
+                    (SourceRecursiveIntersectionCode.requestNode IntersectionEmptyDomain.emptyDomain left right))
+                  beforeCaller.checked with
+              | SourceEqualityNativeDemand.Outcome.done query queried =>
+                pure
+                  (Except.mapError Sum.inr
+                      (SourcePruningEnumerationDispatch.afterQuery checkEmpty p h source target sourceScs targetScs
+                          query queried beforeCaller queries).fst,
+                    (SourcePruningEnumerationDispatch.afterQuery checkEmpty p h source target sourceScs targetScs query
+                          queried beforeCaller queries).snd.fst,
+                    (SourcePruningEnumerationDispatch.afterQuery checkEmpty p h source target sourceScs targetScs query
+                          queried beforeCaller queries).snd.snd)
+              | other =>
+                pure
+                  (Except.error (Sum.inl other),
+                    SourceCurrentAllocatedPartialState.advance beforeCaller other.state beforeCaller.fourth
+                      beforeCaller.merge,
+                    queries)
+            | x => pure (Except.ok none, beforeCaller, queries)
+          | x => pure (Except.ok none, beforeCaller, queries)
+        | x =>
+          pure
+            (Except.ok
+                (some
+                  (SourcePruningEnumerationDispatch.finishOptional source target (some sourceHandle) sourceScs
+                    targetScs)),
+              beforeCaller, queries)
+      | x =>
+        pure
+          (Except.ok
+              (some (SourcePruningEnumerationDispatch.finishOptional source target targetNode sourceScs targetScs)),
+            beforeCaller, queries)).run =
+    (Except.ok (some action), afterCaller, savedQueries)
+⊢ StorageValid after ∧ EnumerationCanonicalWaiting.Correct roots after.values waiting
+/tmp/mcfta-pruning-enumeration-fold-invariants-20261024/strict-2/MicroCFTA/SourcePruningEnumerationFoldInvariants.lean:153:51: error: unsolved goals
+case neg.some.unenumerated.some.unenumerated.some.some.some.some.yielded
+EnumGuard : Type
+width : Nat
+inst✝² : DecidableEq Symbol
+inst✝¹ : DecidableEq (EdgeKey Symbol Constraint)
+inst✝ : DecidableEq Node
+checkEmpty : Bool
+nativeFuel p h : Nat
+beforeCaller : Caller width
+before : EnumerationState.State Symbol EnumGuard
+source target : Nat
+queries : Queries
+action : EnumerateM Symbol EnumGuard Unit
+afterCaller : Caller width
+savedQueries : Queries
+after : EnumerationState.State Symbol EnumGuard
+roots : Nat → Nat
+waiting : EnumerationWaitingIndex.Waiting
+storage : StorageValid before
+counts : EnumerationCanonicalWaiting.Correct roots before.values waiting
+completed : (action before).run = [Except.ok ((), after)]
+same : ¬source = target
+sourceNode : Option Nat
+sourceScs : List Suspended
+sourceStored : before.values[source]? = some (UVarValue.unenumerated sourceNode sourceScs)
+targetNode : Option Nat
+targetScs : List Suspended
+targetStored : before.values[target]? = some (UVarValue.unenumerated targetNode targetScs)
+sourceHandle : Nat
+sourceNodeSame : sourceNode = some sourceHandle
+targetHandle : Nat
+targetNodeSame : targetNode = some targetHandle
+left : Node
+leftDecoded : SourcePruningEnumerationNodes.lookupNode beforeCaller.checked.native.machine.heap sourceHandle = some left
+right : Node
+rightDecoded :
+  SourcePruningEnumerationNodes.lookupNode beforeCaller.checked.native.machine.heap targetHandle = some right
+control : SourceEqualityNativeDemand.Control (Value (SourceObservations.Label FullSyntax.Formula) Constraint)
+checkedAfter : SourceEqualityNativeDemand.State width
+native :
+  SourceEqualityNativeDemand.execute nativeFuel
+      (SourceEqualityNativeDemand.Control.code
+        (SourceRecursiveIntersectionCode.requestNode IntersectionEmptyDomain.emptyDomain left right))
+      beforeCaller.checked =
+    SourceEqualityNativeDemand.Outcome.yielded control checkedAfter
+selected :
+  (match sourceNode with
+      | some sourceHandle =>
+        match targetNode with
+        | some targetHandle =>
+          match SourcePruningEnumerationNodes.lookupNode beforeCaller.checked.native.machine.heap sourceHandle with
+          | some left =>
+            match SourcePruningEnumerationNodes.lookupNode beforeCaller.checked.native.machine.heap targetHandle with
+            | some right =>
+              match
+                SourceEqualityNativeDemand.execute nativeFuel
+                  (SourceEqualityNativeDemand.Control.code
+                    (SourceRecursiveIntersectionCode.requestNode IntersectionEmptyDomain.emptyDomain left right))
+                  beforeCaller.checked with
+              | SourceEqualityNativeDemand.Outcome.done query queried =>
+                pure
+                  (Except.mapError Sum.inr
+                      (SourcePruningEnumerationDispatch.afterQuery checkEmpty p h source target sourceScs targetScs
+                          query queried beforeCaller queries).fst,
+                    (SourcePruningEnumerationDispatch.afterQuery checkEmpty p h source target sourceScs targetScs query
+                          queried beforeCaller queries).snd.fst,
+                    (SourcePruningEnumerationDispatch.afterQuery checkEmpty p h source target sourceScs targetScs query
+                          queried beforeCaller queries).snd.snd)
+              | other =>
+                pure
+                  (Except.error (Sum.inl other),
+                    SourceCurrentAllocatedPartialState.advance beforeCaller other.state beforeCaller.fourth
+                      beforeCaller.merge,
+                    queries)
+            | x => pure (Except.ok none, beforeCaller, queries)
+          | x => pure (Except.ok none, beforeCaller, queries)
+        | x =>
+          pure
+            (Except.ok
+                (some
+                  (SourcePruningEnumerationDispatch.finishOptional source target (some sourceHandle) sourceScs
+                    targetScs)),
+              beforeCaller, queries)
+      | x =>
+        pure
+          (Except.ok
+              (some (SourcePruningEnumerationDispatch.finishOptional source target targetNode sourceScs targetScs)),
+            beforeCaller, queries)).run =
+    (Except.ok (some action), afterCaller, savedQueries)
+⊢ StorageValid after ∧ EnumerationCanonicalWaiting.Correct roots after.values waiting
+/tmp/mcfta-pruning-enumeration-fold-invariants-20261024/strict-2/MicroCFTA/SourcePruningEnumerationFoldInvariants.lean:155:56: error: unsolved goals
+case neg.some.unenumerated.some.unenumerated.some.some.some.some.failed
+EnumGuard : Type
+width : Nat
+inst✝² : DecidableEq Symbol
+inst✝¹ : DecidableEq (EdgeKey Symbol Constraint)
+inst✝ : DecidableEq Node
+checkEmpty : Bool
+nativeFuel p h : Nat
+beforeCaller : Caller width
+before : EnumerationState.State Symbol EnumGuard
+source target : Nat
+queries : Queries
+action : EnumerateM Symbol EnumGuard Unit
+afterCaller : Caller width
+savedQueries : Queries
+after : EnumerationState.State Symbol EnumGuard
+roots : Nat → Nat
+waiting : EnumerationWaitingIndex.Waiting
+storage : StorageValid before
+counts : EnumerationCanonicalWaiting.Correct roots before.values waiting
+completed : (action before).run = [Except.ok ((), after)]
+same : ¬source = target
+sourceNode : Option Nat
+sourceScs : List Suspended
+sourceStored : before.values[source]? = some (UVarValue.unenumerated sourceNode sourceScs)
+targetNode : Option Nat
+targetScs : List Suspended
+targetStored : before.values[target]? = some (UVarValue.unenumerated targetNode targetScs)
+sourceHandle : Nat
+sourceNodeSame : sourceNode = some sourceHandle
+targetHandle : Nat
+targetNodeSame : targetNode = some targetHandle
+left : Node
+leftDecoded : SourcePruningEnumerationNodes.lookupNode beforeCaller.checked.native.machine.heap sourceHandle = some left
+right : Node
+rightDecoded :
+  SourcePruningEnumerationNodes.lookupNode beforeCaller.checked.native.machine.heap targetHandle = some right
+nativeFailure : SourceRecursiveIntersectionKernel.Failure
+checkedAfter : SourceEqualityNativeDemand.State width
+native :
+  SourceEqualityNativeDemand.execute nativeFuel
+      (SourceEqualityNativeDemand.Control.code
+        (SourceRecursiveIntersectionCode.requestNode IntersectionEmptyDomain.emptyDomain left right))
+      beforeCaller.checked =
+    SourceEqualityNativeDemand.Outcome.failed nativeFailure checkedAfter
+selected :
+  (match sourceNode with
+      | some sourceHandle =>
+        match targetNode with
+        | some targetHandle =>
+          match SourcePruningEnumerationNodes.lookupNode beforeCaller.checked.native.machine.heap sourceHandle with
+          | some left =>
+            match SourcePruningEnumerationNodes.lookupNode beforeCaller.checked.native.machine.heap targetHandle with
+            | some right =>
+              match
+                SourceEqualityNativeDemand.execute nativeFuel
+                  (SourceEqualityNativeDemand.Control.code
+                    (SourceRecursiveIntersectionCode.requestNode IntersectionEmptyDomain.emptyDomain left right))
+                  beforeCaller.checked with
+              | SourceEqualityNativeDemand.Outcome.done query queried =>
+                pure
+                  (Except.mapError Sum.inr
+                      (SourcePruningEnumerationDispatch.afterQuery checkEmpty p h source target sourceScs targetScs
+                          query queried beforeCaller queries).fst,
+                    (SourcePruningEnumerationDispatch.afterQuery checkEmpty p h source target sourceScs targetScs query
+                          queried beforeCaller queries).snd.fst,
+                    (SourcePruningEnumerationDispatch.afterQuery checkEmpty p h source target sourceScs targetScs query
+                          queried beforeCaller queries).snd.snd)
+              | other =>
+                pure
+                  (Except.error (Sum.inl other),
+                    SourceCurrentAllocatedPartialState.advance beforeCaller other.state beforeCaller.fourth
+                      beforeCaller.merge,
+                    queries)
+            | x => pure (Except.ok none, beforeCaller, queries)
+          | x => pure (Except.ok none, beforeCaller, queries)
+        | x =>
+          pure
+            (Except.ok
+                (some
+                  (SourcePruningEnumerationDispatch.finishOptional source target (some sourceHandle) sourceScs
+                    targetScs)),
+              beforeCaller, queries)
+      | x =>
+        pure
+          (Except.ok
+              (some (SourcePruningEnumerationDispatch.finishOptional source target targetNode sourceScs targetScs)),
+            beforeCaller, queries)).run =
+    (Except.ok (some action), afterCaller, savedQueries)
+⊢ StorageValid after ∧ EnumerationCanonicalWaiting.Correct roots after.values waiting
+/tmp/mcfta-pruning-enumeration-fold-invariants-20261024/strict-2/MicroCFTA/SourcePruningEnumerationFoldInvariants.lean:157:59: error: unsolved goals
+case neg.some.unenumerated.some.unenumerated.some.some.some.some.constraintError
+EnumGuard : Type
+width : Nat
+inst✝² : DecidableEq Symbol
+inst✝¹ : DecidableEq (EdgeKey Symbol Constraint)
+inst✝ : DecidableEq Node
+checkEmpty : Bool
+nativeFuel p h : Nat
+beforeCaller : Caller width
+before : EnumerationState.State Symbol EnumGuard
+source target : Nat
+queries : Queries
+action : EnumerateM Symbol EnumGuard Unit
+afterCaller : Caller width
+savedQueries : Queries
+after : EnumerationState.State Symbol EnumGuard
+roots : Nat → Nat
+waiting : EnumerationWaitingIndex.Waiting
+storage : StorageValid before
+counts : EnumerationCanonicalWaiting.Correct roots before.values waiting
+completed : (action before).run = [Except.ok ((), after)]
+same : ¬source = target
+sourceNode : Option Nat
+sourceScs : List Suspended
+sourceStored : before.values[source]? = some (UVarValue.unenumerated sourceNode sourceScs)
+targetNode : Option Nat
+targetScs : List Suspended
+targetStored : before.values[target]? = some (UVarValue.unenumerated targetNode targetScs)
+sourceHandle : Nat
+sourceNodeSame : sourceNode = some sourceHandle
+targetHandle : Nat
+targetNodeSame : targetNode = some targetHandle
+left : Node
+leftDecoded : SourcePruningEnumerationNodes.lookupNode beforeCaller.checked.native.machine.heap sourceHandle = some left
+right : Node
+rightDecoded :
+  SourcePruningEnumerationNodes.lookupNode beforeCaller.checked.native.machine.heap targetHandle = some right
+message : String
+checkedAfter : SourceEqualityNativeDemand.State width
+native :
+  SourceEqualityNativeDemand.execute nativeFuel
+      (SourceEqualityNativeDemand.Control.code
+        (SourceRecursiveIntersectionCode.requestNode IntersectionEmptyDomain.emptyDomain left right))
+      beforeCaller.checked =
+    SourceEqualityNativeDemand.Outcome.constraintError message checkedAfter
+selected :
+  (match sourceNode with
+      | some sourceHandle =>
+        match targetNode with
+        | some targetHandle =>
+          match SourcePruningEnumerationNodes.lookupNode beforeCaller.checked.native.machine.heap sourceHandle with
+          | some left =>
+            match SourcePruningEnumerationNodes.lookupNode beforeCaller.checked.native.machine.heap targetHandle with
+            | some right =>
+              match
+                SourceEqualityNativeDemand.execute nativeFuel
+                  (SourceEqualityNativeDemand.Control.code
+                    (SourceRecursiveIntersectionCode.requestNode IntersectionEmptyDomain.emptyDomain left right))
+                  beforeCaller.checked with
+              | SourceEqualityNativeDemand.Outcome.done query queried =>
+                pure
+                  (Except.mapError Sum.inr
+                      (SourcePruningEnumerationDispatch.afterQuery checkEmpty p h source target sourceScs targetScs
+                          query queried beforeCaller queries).fst,
+                    (SourcePruningEnumerationDispatch.afterQuery checkEmpty p h source target sourceScs targetScs query
+                          queried beforeCaller queries).snd.fst,
+                    (SourcePruningEnumerationDispatch.afterQuery checkEmpty p h source target sourceScs targetScs query
+                          queried beforeCaller queries).snd.snd)
+              | other =>
+                pure
+                  (Except.error (Sum.inl other),
+                    SourceCurrentAllocatedPartialState.advance beforeCaller other.state beforeCaller.fourth
+                      beforeCaller.merge,
+                    queries)
+            | x => pure (Except.ok none, beforeCaller, queries)
+          | x => pure (Except.ok none, beforeCaller, queries)
+        | x =>
+          pure
+            (Except.ok
+                (some
+                  (SourcePruningEnumerationDispatch.finishOptional source target (some sourceHandle) sourceScs
+                    targetScs)),
+              beforeCaller, queries)
+      | x =>
+        pure
+          (Except.ok
+              (some (SourcePruningEnumerationDispatch.finishOptional source target targetNode sourceScs targetScs)),
+            beforeCaller, queries)).run =
+    (Except.ok (some action), afterCaller, savedQueries)
+⊢ StorageValid after ∧ EnumerationCanonicalWaiting.Correct roots after.values waiting
+/tmp/mcfta-pruning-enumeration-fold-invariants-20261024/strict-2/MicroCFTA/SourcePruningEnumerationFoldInvariants.lean:159:58: error: unsolved goals
+case neg.some.unenumerated.some.unenumerated.some.some.some.some.blocked
+EnumGuard : Type
+width : Nat
+inst✝² : DecidableEq Symbol
+inst✝¹ : DecidableEq (EdgeKey Symbol Constraint)
+inst✝ : DecidableEq Node
+checkEmpty : Bool
+nativeFuel p h : Nat
+beforeCaller : Caller width
+before : EnumerationState.State Symbol EnumGuard
+source target : Nat
+queries : Queries
+action : EnumerateM Symbol EnumGuard Unit
+afterCaller : Caller width
+savedQueries : Queries
+after : EnumerationState.State Symbol EnumGuard
+roots : Nat → Nat
+waiting : EnumerationWaitingIndex.Waiting
+storage : StorageValid before
+counts : EnumerationCanonicalWaiting.Correct roots before.values waiting
+completed : (action before).run = [Except.ok ((), after)]
+same : ¬source = target
+sourceNode : Option Nat
+sourceScs : List Suspended
+sourceStored : before.values[source]? = some (UVarValue.unenumerated sourceNode sourceScs)
+targetNode : Option Nat
+targetScs : List Suspended
+targetStored : before.values[target]? = some (UVarValue.unenumerated targetNode targetScs)
+sourceHandle : Nat
+sourceNodeSame : sourceNode = some sourceHandle
+targetHandle : Nat
+targetNodeSame : targetNode = some targetHandle
+left : Node
+leftDecoded : SourcePruningEnumerationNodes.lookupNode beforeCaller.checked.native.machine.heap sourceHandle = some left
+right : Node
+rightDecoded :
+  SourcePruningEnumerationNodes.lookupNode beforeCaller.checked.native.machine.heap targetHandle = some right
+reason : SourceEqualityNativeDemand.Blocked
+control : SourceEqualityNativeDemand.Control (Value (SourceObservations.Label FullSyntax.Formula) Constraint)
+checkedAfter : SourceEqualityNativeDemand.State width
+native :
+  SourceEqualityNativeDemand.execute nativeFuel
+      (SourceEqualityNativeDemand.Control.code
+        (SourceRecursiveIntersectionCode.requestNode IntersectionEmptyDomain.emptyDomain left right))
+      beforeCaller.checked =
+    SourceEqualityNativeDemand.Outcome.blocked reason control checkedAfter
+selected :
+  (match sourceNode with
+      | some sourceHandle =>
+        match targetNode with
+        | some targetHandle =>
+          match SourcePruningEnumerationNodes.lookupNode beforeCaller.checked.native.machine.heap sourceHandle with
+          | some left =>
+            match SourcePruningEnumerationNodes.lookupNode beforeCaller.checked.native.machine.heap targetHandle with
+            | some right =>
+              match
+                SourceEqualityNativeDemand.execute nativeFuel
+                  (SourceEqualityNativeDemand.Control.code
+                    (SourceRecursiveIntersectionCode.requestNode IntersectionEmptyDomain.emptyDomain left right))
+                  beforeCaller.checked with
+              | SourceEqualityNativeDemand.Outcome.done query queried =>
+                pure
+                  (Except.mapError Sum.inr
+                      (SourcePruningEnumerationDispatch.afterQuery checkEmpty p h source target sourceScs targetScs
+                          query queried beforeCaller queries).fst,
+                    (SourcePruningEnumerationDispatch.afterQuery checkEmpty p h source target sourceScs targetScs query
+                          queried beforeCaller queries).snd.fst,
+                    (SourcePruningEnumerationDispatch.afterQuery checkEmpty p h source target sourceScs targetScs query
+                          queried beforeCaller queries).snd.snd)
+              | other =>
+                pure
+                  (Except.error (Sum.inl other),
+                    SourceCurrentAllocatedPartialState.advance beforeCaller other.state beforeCaller.fourth
+                      beforeCaller.merge,
+                    queries)
+            | x => pure (Except.ok none, beforeCaller, queries)
+          | x => pure (Except.ok none, beforeCaller, queries)
+        | x =>
+          pure
+            (Except.ok
+                (some
+                  (SourcePruningEnumerationDispatch.finishOptional source target (some sourceHandle) sourceScs
+                    targetScs)),
+              beforeCaller, queries)
+      | x =>
+        pure
+          (Except.ok
+              (some (SourcePruningEnumerationDispatch.finishOptional source target targetNode sourceScs targetScs)),
+            beforeCaller, queries)).run =
+    (Except.ok (some action), afterCaller, savedQueries)
+⊢ StorageValid after ∧ EnumerationCanonicalWaiting.Correct roots after.values waiting
+/tmp/mcfta-pruning-enumeration-fold-invariants-20261024/strict-2/MicroCFTA/SourcePruningEnumerationFoldInvariants.lean:166:56: error: unsolved goals
+case neg.some.unenumerated.some.unenumerated.some.some.some.some.done.failed
+EnumGuard : Type
+width : Nat
+inst✝² : DecidableEq Symbol
+inst✝¹ : DecidableEq (EdgeKey Symbol Constraint)
+inst✝ : DecidableEq Node
+checkEmpty : Bool
+nativeFuel p h : Nat
+beforeCaller : Caller width
+before : EnumerationState.State Symbol EnumGuard
+source target : Nat
+queries : Queries
+action : EnumerateM Symbol EnumGuard Unit
+afterCaller : Caller width
+savedQueries : Queries
+after : EnumerationState.State Symbol EnumGuard
+roots : Nat → Nat
+waiting : EnumerationWaitingIndex.Waiting
+storage : StorageValid before
+counts : EnumerationCanonicalWaiting.Correct roots before.values waiting
+completed : (action before).run = [Except.ok ((), after)]
+same : ¬source = target
+sourceNode : Option Nat
+sourceScs : List Suspended
+sourceStored : before.values[source]? = some (UVarValue.unenumerated sourceNode sourceScs)
+targetNode : Option Nat
+targetScs : List Suspended
+targetStored : before.values[target]? = some (UVarValue.unenumerated targetNode targetScs)
+sourceHandle : Nat
+sourceNodeSame : sourceNode = some sourceHandle
+targetHandle : Nat
+targetNodeSame : targetNode = some targetHandle
+left : Node
+leftDecoded : SourcePruningEnumerationNodes.lookupNode beforeCaller.checked.native.machine.heap sourceHandle = some left
+right : Node
+rightDecoded :
+  SourcePruningEnumerationNodes.lookupNode beforeCaller.checked.native.machine.heap targetHandle = some right
+query : Value (SourceObservations.Label FullSyntax.Formula) Constraint
+queried : SourceEqualityNativeDemand.State width
+native :
+  SourceEqualityNativeDemand.execute nativeFuel
+      (SourceEqualityNativeDemand.Control.code
+        (SourceRecursiveIntersectionCode.requestNode IntersectionEmptyDomain.emptyDomain left right))
+      beforeCaller.checked =
+    SourceEqualityNativeDemand.Outcome.done query queried
+worker : SourceCurrentAllocatedConjunctionWorker.Outcome width
+workerQueries : Queries
+phase :
+  (if checkEmpty = true then SourcePruningEnumerationEnabledEmpty.check p h query queried beforeCaller.fourth queries
+    else (SourceCurrentAllocatedConjunctionWorker.Outcome.done false queried beforeCaller.fourth, queries)) =
+    (worker, workerQueries)
+fault : SourceCurrentConjunctionWorker.Fault (SourceObservations.Label FullSyntax.Formula) FullSyntax.Formula
+checkedAfter : SourceEqualityNativeDemand.State width
+saved : SourceCurrentEmptinessMemo.Memo
+workerSame : worker = SourceCurrentAllocatedConjunctionWorker.Outcome.failed fault checkedAfter saved
+selected :
+  (match sourceNode with
+      | some sourceHandle =>
+        match targetNode with
+        | some targetHandle =>
+          match SourcePruningEnumerationNodes.lookupNode beforeCaller.checked.native.machine.heap sourceHandle with
+          | some left =>
+            match SourcePruningEnumerationNodes.lookupNode beforeCaller.checked.native.machine.heap targetHandle with
+            | some right =>
+              match
+                SourceEqualityNativeDemand.execute nativeFuel
+                  (SourceEqualityNativeDemand.Control.code
+                    (SourceRecursiveIntersectionCode.requestNode IntersectionEmptyDomain.emptyDomain left right))
+                  beforeCaller.checked with
+              | SourceEqualityNativeDemand.Outcome.done query queried =>
+                pure
+                  (match
+                      (match
+                          (if checkEmpty = true then
+                              SourcePruningEnumerationEnabledEmpty.check p h query queried beforeCaller.fourth queries
+                            else
+                              (SourceCurrentAllocatedConjunctionWorker.Outcome.done false queried beforeCaller.fourth,
+                                queries)).fst with
+                        | SourceCurrentAllocatedConjunctionWorker.Outcome.done answer checkedAfter saved =>
+                          (Except.ok
+                              (Option.map
+                                (fun handle =>
+                                  SourcePruningEnumerationAssimilation.finish source target handle sourceScs targetScs
+                                    (if answer = true then Value.empty else query))
+                                (SourcePruningEnumerationNodes.encodeNode
+                                  (if answer = true then Value.empty else query))),
+                            SourceCurrentAllocatedPartialState.advance beforeCaller checkedAfter saved
+                              beforeCaller.merge,
+                            (if checkEmpty = true then
+                                SourcePruningEnumerationEnabledEmpty.check p h query queried beforeCaller.fourth queries
+                              else
+                                (SourceCurrentAllocatedConjunctionWorker.Outcome.done false queried beforeCaller.fourth,
+                                  queries)).snd)
+                        | SourceCurrentAllocatedConjunctionWorker.Outcome.failed fault checkedAfter saved =>
+                          (Except.error
+                              (if checkEmpty = true then
+                                  SourcePruningEnumerationEnabledEmpty.check p h query queried beforeCaller.fourth
+                                    queries
+                                else
+                                  (SourceCurrentAllocatedConjunctionWorker.Outcome.done false queried
+                                      beforeCaller.fourth,
+                                    queries)).fst,
+                            SourceCurrentAllocatedPartialState.advance beforeCaller checkedAfter saved
+                              beforeCaller.merge,
+                            (if checkEmpty = true then
+                                SourcePruningEnumerationEnabledEmpty.check p h query queried beforeCaller.fourth queries
+                              else
+                                (SourceCurrentAllocatedConjunctionWorker.Outcome.done false queried beforeCaller.fourth,
+                                  queries)).snd)).fst with
+                    | Except.error err => Except.error (Sum.inr err)
+                    | Except.ok v => Except.ok v,
+                    (match
+                          (if checkEmpty = true then
+                              SourcePruningEnumerationEnabledEmpty.check p h query queried beforeCaller.fourth queries
+                            else
+                              (SourceCurrentAllocatedConjunctionWorker.Outcome.done false queried beforeCaller.fourth,
+                                queries)).fst with
+                        | SourceCurrentAllocatedConjunctionWorker.Outcome.done answer checkedAfter saved =>
+                          (Except.ok
+                              (Option.map
+                                (fun handle =>
+                                  SourcePruningEnumerationAssimilation.finish source target handle sourceScs targetScs
+                                    (if answer = true then Value.empty else query))
+                                (SourcePruningEnumerationNodes.encodeNode
+                                  (if answer = true then Value.empty else query))),
+                            SourceCurrentAllocatedPartialState.advance beforeCaller checkedAfter saved
+                              beforeCaller.merge,
+                            (if checkEmpty = true then
+                                SourcePruningEnumerationEnabledEmpty.check p h query queried beforeCaller.fourth queries
+                              else
+                                (SourceCurrentAllocatedConjunctionWorker.Outcome.done false queried beforeCaller.fourth,
+                                  queries)).snd)
+                        | SourceCurrentAllocatedConjunctionWorker.Outcome.failed fault checkedAfter saved =>
+                          (Except.error
+                              (if checkEmpty = true then
+                                  SourcePruningEnumerationEnabledEmpty.check p h query queried beforeCaller.fourth
+                                    queries
+                                else
+                                  (SourceCurrentAllocatedConjunctionWorker.Outcome.done false queried
+                                      beforeCaller.fourth,
+                                    queries)).fst,
+                            SourceCurrentAllocatedPartialState.advance beforeCaller checkedAfter saved
+                              beforeCaller.merge,
+                            (if checkEmpty = true then
+                                SourcePruningEnumerationEnabledEmpty.check p h query queried beforeCaller.fourth queries
+                              else
+                                (SourceCurrentAllocatedConjunctionWorker.Outcome.done false queried beforeCaller.fourth,
+                                  queries)).snd)).snd.fst,
+                    (match
+                          (if checkEmpty = true then
+                              SourcePruningEnumerationEnabledEmpty.check p h query queried beforeCaller.fourth queries
+                            else
+                              (SourceCurrentAllocatedConjunctionWorker.Outcome.done false queried beforeCaller.fourth,
+                                queries)).fst with
+                        | SourceCurrentAllocatedConjunctionWorker.Outcome.done answer checkedAfter saved =>
+                          (Except.ok
+                              (Option.map
+                                (fun handle =>
+                                  SourcePruningEnumerationAssimilation.finish source target handle sourceScs targetScs
+                                    (if answer = true then Value.empty else query))
+                                (SourcePruningEnumerationNodes.encodeNode
+                                  (if answer = true then Value.empty else query))),
+                            SourceCurrentAllocatedPartialState.advance beforeCaller checkedAfter saved
+                              beforeCaller.merge,
+                            (if checkEmpty = true then
+                                SourcePruningEnumerationEnabledEmpty.check p h query queried beforeCaller.fourth queries
+                              else
+                                (SourceCurrentAllocatedConjunctionWorker.Outcome.done false queried beforeCaller.fourth,
+                                  queries)).snd)
+                        | SourceCurrentAllocatedConjunctionWorker.Outcome.failed fault checkedAfter saved =>
+                          (Except.error
+                              (if checkEmpty = true then
+                                  SourcePruningEnumerationEnabledEmpty.check p h query queried beforeCaller.fourth
+                                    queries
+                                else
+                                  (SourceCurrentAllocatedConjunctionWorker.Outcome.done false queried
+                                      beforeCaller.fourth,
+                                    queries)).fst,
+                            SourceCurrentAllocatedPartialState.advance beforeCaller checkedAfter saved
+                              beforeCaller.merge,
+                            (if checkEmpty = true then
+                                SourcePruningEnumerationEnabledEmpty.check p h query queried beforeCaller.fourth queries
+                              else
+                                (SourceCurrentAllocatedConjunctionWorker.Outcome.done false queried beforeCaller.fourth,
+                                  queries)).snd)).snd.snd)
+              | other =>
+                pure
+                  (Except.error (Sum.inl other),
+                    SourceCurrentAllocatedPartialState.advance beforeCaller other.state beforeCaller.fourth
+                      beforeCaller.merge,
+                    queries)
+            | x => pure (Except.ok none, beforeCaller, queries)
+          | x => pure (Except.ok none, beforeCaller, queries)
+        | x =>
+          pure
+            (Except.ok
+                (some
+                  (SourcePruningEnumerationDispatch.finishOptional source target (some sourceHandle) sourceScs
+                    targetScs)),
+              beforeCaller, queries)
+      | x =>
+        pure
+          (Except.ok
+              (some (SourcePruningEnumerationDispatch.finishOptional source target targetNode sourceScs targetScs)),
+            beforeCaller, queries)).run =
+    (Except.ok (some action), afterCaller, savedQueries)
+⊢ StorageValid after ∧ EnumerationCanonicalWaiting.Correct roots after.values waiting
+/tmp/mcfta-pruning-enumeration-fold-invariants-20261024/strict-2/MicroCFTA/SourcePruningEnumerationFoldInvariants.lean:171:31: error: unsolved goals
+case neg.some.unenumerated.some.unenumerated.some.some.some.some.done.done.none
+EnumGuard : Type
+width : Nat
+inst✝² : DecidableEq Symbol
+inst✝¹ : DecidableEq (EdgeKey Symbol Constraint)
+inst✝ : DecidableEq Node
+checkEmpty : Bool
+nativeFuel p h : Nat
+beforeCaller : Caller width
+before : EnumerationState.State Symbol EnumGuard
+source target : Nat
+queries : Queries
+action : EnumerateM Symbol EnumGuard Unit
+afterCaller : Caller width
+savedQueries : Queries
+after : EnumerationState.State Symbol EnumGuard
+roots : Nat → Nat
+waiting : EnumerationWaitingIndex.Waiting
+storage : StorageValid before
+counts : EnumerationCanonicalWaiting.Correct roots before.values waiting
+completed : (action before).run = [Except.ok ((), after)]
+same : ¬source = target
+sourceNode : Option Nat
+sourceScs : List Suspended
+sourceStored : before.values[source]? = some (UVarValue.unenumerated sourceNode sourceScs)
+targetNode : Option Nat
+targetScs : List Suspended
+targetStored : before.values[target]? = some (UVarValue.unenumerated targetNode targetScs)
+sourceHandle : Nat
+sourceNodeSame : sourceNode = some sourceHandle
+targetHandle : Nat
+targetNodeSame : targetNode = some targetHandle
+left : Node
+leftDecoded : SourcePruningEnumerationNodes.lookupNode beforeCaller.checked.native.machine.heap sourceHandle = some left
+right : Node
+rightDecoded :
+  SourcePruningEnumerationNodes.lookupNode beforeCaller.checked.native.machine.heap targetHandle = some right
+query : Value (SourceObservations.Label FullSyntax.Formula) Constraint
+queried : SourceEqualityNativeDemand.State width
+native :
+  SourceEqualityNativeDemand.execute nativeFuel
+      (SourceEqualityNativeDemand.Control.code
+        (SourceRecursiveIntersectionCode.requestNode IntersectionEmptyDomain.emptyDomain left right))
+      beforeCaller.checked =
+    SourceEqualityNativeDemand.Outcome.done query queried
+worker : SourceCurrentAllocatedConjunctionWorker.Outcome width
+workerQueries : Queries
+phase :
+  (if checkEmpty = true then SourcePruningEnumerationEnabledEmpty.check p h query queried beforeCaller.fourth queries
+    else (SourceCurrentAllocatedConjunctionWorker.Outcome.done false queried beforeCaller.fourth, queries)) =
+    (worker, workerQueries)
+answer : Bool
+checkedAfter : SourceEqualityNativeDemand.State width
+saved : SourceCurrentEmptinessMemo.Memo
+workerSame : worker = SourceCurrentAllocatedConjunctionWorker.Outcome.done answer checkedAfter saved
+encoded : SourcePruningEnumerationNodes.encodeNode (if answer = true then Value.empty else query) = none
+selected :
+  (match sourceNode with
+      | some sourceHandle =>
+        match targetNode with
+        | some targetHandle =>
+          match SourcePruningEnumerationNodes.lookupNode beforeCaller.checked.native.machine.heap sourceHandle with
+          | some left =>
+            match SourcePruningEnumerationNodes.lookupNode beforeCaller.checked.native.machine.heap targetHandle with
+            | some right =>
+              match
+                SourceEqualityNativeDemand.execute nativeFuel
+                  (SourceEqualityNativeDemand.Control.code
+                    (SourceRecursiveIntersectionCode.requestNode IntersectionEmptyDomain.emptyDomain left right))
+                  beforeCaller.checked with
+              | SourceEqualityNativeDemand.Outcome.done query queried =>
+                pure
+                  (match
+                      (match
+                          (if checkEmpty = true then
+                              SourcePruningEnumerationEnabledEmpty.check p h query queried beforeCaller.fourth queries
+                            else
+                              (SourceCurrentAllocatedConjunctionWorker.Outcome.done false queried beforeCaller.fourth,
+                                queries)).fst with
+                        | SourceCurrentAllocatedConjunctionWorker.Outcome.done answer checkedAfter saved =>
+                          (Except.ok
+                              (Option.map
+                                (fun handle =>
+                                  SourcePruningEnumerationAssimilation.finish source target handle sourceScs targetScs
+                                    (if answer = true then Value.empty else query))
+                                (SourcePruningEnumerationNodes.encodeNode
+                                  (if answer = true then Value.empty else query))),
+                            SourceCurrentAllocatedPartialState.advance beforeCaller checkedAfter saved
+                              beforeCaller.merge,
+                            (if checkEmpty = true then
+                                SourcePruningEnumerationEnabledEmpty.check p h query queried beforeCaller.fourth queries
+                              else
+                                (SourceCurrentAllocatedConjunctionWorker.Outcome.done false queried beforeCaller.fourth,
+                                  queries)).snd)
+                        | SourceCurrentAllocatedConjunctionWorker.Outcome.failed fault checkedAfter saved =>
+                          (Except.error
+                              (if checkEmpty = true then
+                                  SourcePruningEnumerationEnabledEmpty.check p h query queried beforeCaller.fourth
+                                    queries
+                                else
+                                  (SourceCurrentAllocatedConjunctionWorker.Outcome.done false queried
+                                      beforeCaller.fourth,
+                                    queries)).fst,
+                            SourceCurrentAllocatedPartialState.advance beforeCaller checkedAfter saved
+                              beforeCaller.merge,
+                            (if checkEmpty = true then
+                                SourcePruningEnumerationEnabledEmpty.check p h query queried beforeCaller.fourth queries
+                              else
+                                (SourceCurrentAllocatedConjunctionWorker.Outcome.done false queried beforeCaller.fourth,
+                                  queries)).snd)).fst with
+                    | Except.error err => Except.error (Sum.inr err)
+                    | Except.ok v => Except.ok v,
+                    (match
+                          (if checkEmpty = true then
+                              SourcePruningEnumerationEnabledEmpty.check p h query queried beforeCaller.fourth queries
+                            else
+                              (SourceCurrentAllocatedConjunctionWorker.Outcome.done false queried beforeCaller.fourth,
+                                queries)).fst with
+                        | SourceCurrentAllocatedConjunctionWorker.Outcome.done answer checkedAfter saved =>
+                          (Except.ok
+                              (Option.map
+                                (fun handle =>
+                                  SourcePruningEnumerationAssimilation.finish source target handle sourceScs targetScs
+                                    (if answer = true then Value.empty else query))
+                                (SourcePruningEnumerationNodes.encodeNode
+                                  (if answer = true then Value.empty else query))),
+                            SourceCurrentAllocatedPartialState.advance beforeCaller checkedAfter saved
+                              beforeCaller.merge,
+                            (if checkEmpty = true then
+                                SourcePruningEnumerationEnabledEmpty.check p h query queried beforeCaller.fourth queries
+                              else
+                                (SourceCurrentAllocatedConjunctionWorker.Outcome.done false queried beforeCaller.fourth,
+                                  queries)).snd)
+                        | SourceCurrentAllocatedConjunctionWorker.Outcome.failed fault checkedAfter saved =>
+                          (Except.error
+                              (if checkEmpty = true then
+                                  SourcePruningEnumerationEnabledEmpty.check p h query queried beforeCaller.fourth
+                                    queries
+                                else
+                                  (SourceCurrentAllocatedConjunctionWorker.Outcome.done false queried
+                                      beforeCaller.fourth,
+                                    queries)).fst,
+                            SourceCurrentAllocatedPartialState.advance beforeCaller checkedAfter saved
+                              beforeCaller.merge,
+                            (if checkEmpty = true then
+                                SourcePruningEnumerationEnabledEmpty.check p h query queried beforeCaller.fourth queries
+                              else
+                                (SourceCurrentAllocatedConjunctionWorker.Outcome.done false queried beforeCaller.fourth,
+                                  queries)).snd)).snd.fst,
+                    (match
+                          (if checkEmpty = true then
+                              SourcePruningEnumerationEnabledEmpty.check p h query queried beforeCaller.fourth queries
+                            else
+                              (SourceCurrentAllocatedConjunctionWorker.Outcome.done false queried beforeCaller.fourth,
+                                queries)).fst with
+                        | SourceCurrentAllocatedConjunctionWorker.Outcome.done answer checkedAfter saved =>
+                          (Except.ok
+                              (Option.map
+                                (fun handle =>
+                                  SourcePruningEnumerationAssimilation.finish source target handle sourceScs targetScs
+                                    (if answer = true then Value.empty else query))
+                                (SourcePruningEnumerationNodes.encodeNode
+                                  (if answer = true then Value.empty else query))),
+                            SourceCurrentAllocatedPartialState.advance beforeCaller checkedAfter saved
+                              beforeCaller.merge,
+                            (if checkEmpty = true then
+                                SourcePruningEnumerationEnabledEmpty.check p h query queried beforeCaller.fourth queries
+                              else
+                                (SourceCurrentAllocatedConjunctionWorker.Outcome.done false queried beforeCaller.fourth,
+                                  queries)).snd)
+                        | SourceCurrentAllocatedConjunctionWorker.Outcome.failed fault checkedAfter saved =>
+                          (Except.error
+                              (if checkEmpty = true then
+                                  SourcePruningEnumerationEnabledEmpty.check p h query queried beforeCaller.fourth
+                                    queries
+                                else
+                                  (SourceCurrentAllocatedConjunctionWorker.Outcome.done false queried
+                                      beforeCaller.fourth,
+                                    queries)).fst,
+                            SourceCurrentAllocatedPartialState.advance beforeCaller checkedAfter saved
+                              beforeCaller.merge,
+                            (if checkEmpty = true then
+                                SourcePruningEnumerationEnabledEmpty.check p h query queried beforeCaller.fourth queries
+                              else
+                                (SourceCurrentAllocatedConjunctionWorker.Outcome.done false queried beforeCaller.fourth,
+                                  queries)).snd)).snd.snd)
+              | other =>
+                pure
+                  (Except.error (Sum.inl other),
+                    SourceCurrentAllocatedPartialState.advance beforeCaller other.state beforeCaller.fourth
+                      beforeCaller.merge,
+                    queries)
+            | x => pure (Except.ok none, beforeCaller, queries)
+          | x => pure (Except.ok none, beforeCaller, queries)
+        | x =>
+          pure
+            (Except.ok
+                (some
+                  (SourcePruningEnumerationDispatch.finishOptional source target (some sourceHandle) sourceScs
+                    targetScs)),
+              beforeCaller, queries)
+      | x =>
+        pure
+          (Except.ok
+              (some (SourcePruningEnumerationDispatch.finishOptional source target targetNode sourceScs targetScs)),
+            beforeCaller, queries)).run =
+    (Except.ok (some action), afterCaller, savedQueries)
+⊢ StorageValid after ∧ EnumerationCanonicalWaiting.Correct roots after.values waiting
+/tmp/mcfta-pruning-enumeration-fold-invariants-20261024/strict-2/MicroCFTA/SourcePruningEnumerationFoldInvariants.lean:179:47: error: Tactic `cases` failed with a nested error:
+Dependent elimination failed: Failed to solve equation
+  (Except.ok (some action), afterCaller, savedQueries) =
+    match sourceNode with
+    | some sourceHandle =>
+      match targetNode with
+      | some targetHandle =>
+        match SourcePruningEnumerationNodes.lookupNode beforeCaller.checked.native.machine.heap sourceHandle with
+        | some left =>
+          match SourcePruningEnumerationNodes.lookupNode beforeCaller.checked.native.machine.heap targetHandle with
+          | some right =>
+            match
+              SourceEqualityNativeDemand.execute nativeFuel
+                (SourceEqualityNativeDemand.Control.code
+                  (SourceRecursiveIntersectionCode.requestNode IntersectionEmptyDomain.emptyDomain left right))
+                beforeCaller.checked with
+            | SourceEqualityNativeDemand.Outcome.done query queried =>
+              (match
+                  (match
+                      (if checkEmpty = true then
+                          SourcePruningEnumerationEnabledEmpty.check p h query queried beforeCaller.fourth queries
+                        else
+                          (SourceCurrentAllocatedConjunctionWorker.Outcome.done false queried beforeCaller.fourth,
+                            queries)).fst with
+                    | SourceCurrentAllocatedConjunctionWorker.Outcome.done answer checkedAfter saved =>
+                      (Except.ok
+                          (Option.map
+                            (fun handle =>
+                              SourcePruningEnumerationAssimilation.finish source target handle sourceScs targetScs
+                                (if answer = true then Value.empty else query))
+                            (SourcePruningEnumerationNodes.encodeNode (if answer = true then Value.empty else query))),
+                        SourceCurrentAllocatedPartialState.advance beforeCaller checkedAfter saved beforeCaller.merge,
+                        (if checkEmpty = true then
+                            SourcePruningEnumerationEnabledEmpty.check p h query queried beforeCaller.fourth queries
+                          else
+                            (SourceCurrentAllocatedConjunctionWorker.Outcome.done false queried beforeCaller.fourth,
+                              queries)).snd)
+                    | SourceCurrentAllocatedConjunctionWorker.Outcome.failed fault checkedAfter saved =>
+                      (Except.error
+                          (if checkEmpty = true then
+                              SourcePruningEnumerationEnabledEmpty.check p h query queried beforeCaller.fourth queries
+                            else
+                              (SourceCurrentAllocatedConjunctionWorker.Outcome.done false queried beforeCaller.fourth,
+                                queries)).fst,
+                        SourceCurrentAllocatedPartialState.advance beforeCaller checkedAfter saved beforeCaller.merge,
+                        (if checkEmpty = true then
+                            SourcePruningEnumerationEnabledEmpty.check p h query queried beforeCaller.fourth queries
+                          else
+                            (SourceCurrentAllocatedConjunctionWorker.Outcome.done false queried beforeCaller.fourth,
+                              queries)).snd)).fst with
+                | Except.error err => Except.error (Sum.inr err)
+                | Except.ok v => Except.ok v,
+                (match
+                      (if checkEmpty = true then
+                          SourcePruningEnumerationEnabledEmpty.check p h query queried beforeCaller.fourth queries
+                        else
+                          (SourceCurrentAllocatedConjunctionWorker.Outcome.done false queried beforeCaller.fourth,
+                            queries)).fst with
+                    | SourceCurrentAllocatedConjunctionWorker.Outcome.done answer checkedAfter saved =>
+                      (Except.ok
+                          (Option.map
+                            (fun handle =>
+                              SourcePruningEnumerationAssimilation.finish source target handle sourceScs targetScs
+                                (if answer = true then Value.empty else query))
+                            (SourcePruningEnumerationNodes.encodeNode (if answer = true then Value.empty else query))),
+                        SourceCurrentAllocatedPartialState.advance beforeCaller checkedAfter saved beforeCaller.merge,
+                        (if checkEmpty = true then
+                            SourcePruningEnumerationEnabledEmpty.check p h query queried beforeCaller.fourth queries
+                          else
+                            (SourceCurrentAllocatedConjunctionWorker.Outcome.done false queried beforeCaller.fourth,
+                              queries)).snd)
+                    | SourceCurrentAllocatedConjunctionWorker.Outcome.failed fault checkedAfter saved =>
+                      (Except.error
+                          (if checkEmpty = true then
+                              SourcePruningEnumerationEnabledEmpty.check p h query queried beforeCaller.fourth queries
+                            else
+                              (SourceCurrentAllocatedConjunctionWorker.Outcome.done false queried beforeCaller.fourth,
+                                queries)).fst,
+                        SourceCurrentAllocatedPartialState.advance beforeCaller checkedAfter saved beforeCaller.merge,
+                        (if checkEmpty = true then
+                            SourcePruningEnumerationEnabledEmpty.check p h query queried beforeCaller.fourth queries
+                          else
+                            (SourceCurrentAllocatedConjunctionWorker.Outcome.done false queried beforeCaller.fourth,
+                              queries)).snd)).snd.fst,
+                (match
+                      (if checkEmpty = true then
+                          SourcePruningEnumerationEnabledEmpty.check p h query queried beforeCaller.fourth queries
+                        else
+                          (SourceCurrentAllocatedConjunctionWorker.Outcome.done false queried beforeCaller.fourth,
+                            queries)).fst with
+                    | SourceCurrentAllocatedConjunctionWorker.Outcome.done answer checkedAfter saved =>
+                      (Except.ok
+                          (Option.map
+                            (fun handle =>
+                              SourcePruningEnumerationAssimilation.finish source target handle sourceScs targetScs
+                                (if answer = true then Value.empty else query))
+                            (SourcePruningEnumerationNodes.encodeNode (if answer = true then Value.empty else query))),
+                        SourceCurrentAllocatedPartialState.advance beforeCaller checkedAfter saved beforeCaller.merge,
+                        (if checkEmpty = true then
+                            SourcePruningEnumerationEnabledEmpty.check p h query queried beforeCaller.fourth queries
+                          else
+                            (SourceCurrentAllocatedConjunctionWorker.Outcome.done false queried beforeCaller.fourth,
+                              queries)).snd)
+                    | SourceCurrentAllocatedConjunctionWorker.Outcome.failed fault checkedAfter saved =>
+                      (Except.error
+                          (if checkEmpty = true then
+                              SourcePruningEnumerationEnabledEmpty.check p h query queried beforeCaller.fourth queries
+                            else
+                              (SourceCurrentAllocatedConjunctionWorker.Outcome.done false queried beforeCaller.fourth,
+                                queries)).fst,
+                        SourceCurrentAllocatedPartialState.advance beforeCaller checkedAfter saved beforeCaller.merge,
+                        (if checkEmpty = true then
+                            SourcePruningEnumerationEnabledEmpty.check p h query queried beforeCaller.fourth queries
+                          else
+                            (SourceCurrentAllocatedConjunctionWorker.Outcome.done false queried beforeCaller.fourth,
+                              queries)).snd)).snd.snd)
+            | other =>
+              (Except.error (Sum.inl other),
+                SourceCurrentAllocatedPartialState.advance beforeCaller other.state beforeCaller.fourth
+                  beforeCaller.merge,
+                queries)
+          | x => (Except.ok none, beforeCaller, queries)
+        | x => (Except.ok none, beforeCaller, queries)
+      | x =>
+        (Except.ok
+            (some
+              (SourcePruningEnumerationDispatch.finishOptional source target (some sourceHandle) sourceScs targetScs)),
+          beforeCaller, queries)
+    | x =>
+      (Except.ok (some (SourcePruningEnumerationDispatch.finishOptional source target targetNode sourceScs targetScs)),
+        beforeCaller, queries)
+at case `Eq.refl`
+/tmp/mcfta-pruning-enumeration-fold-invariants-20261024/strict-2/MicroCFTA/SourcePruningEnumerationFoldInvariants.lean:118:30: error: This simp argument is unused:
+  Prod.mk.injEq
+
+Hint: Omit it from the simp argument list.
+  [apply] simp only [SourcePruningEnumerationDispatch.dispatch, ite_eq_right same, sourceStored, targetStored, Id.run,
+    pure, Except.ok.injEq, Option.some.injEq] at selected
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/tmp/mcfta-pruning-enumeration-fold-invariants-20261024/strict-2/MicroCFTA/SourcePruningEnumerationFoldInvariants.lean:118:45: error: This simp argument is unused:
+  Except.ok.injEq
+
+Hint: Omit it from the simp argument list.
+  [apply] simp only [SourcePruningEnumerationDispatch.dispatch, ite_eq_right same, sourceStored, targetStored, Id.run,
+    pure, Prod.mk.injEq, Option.some.injEq] at selected
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/tmp/mcfta-pruning-enumeration-fold-invariants-20261024/strict-2/MicroCFTA/SourcePruningEnumerationFoldInvariants.lean:118:62: error: This simp argument is unused:
+  Option.some.injEq
+
+Hint: Omit it from the simp argument list.
+  [apply] simp only [SourcePruningEnumerationDispatch.dispatch, ite_eq_right same, sourceStored, targetStored, Id.run,
+    pure, Prod.mk.injEq, Except.ok.injEq] at selected
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/tmp/mcfta-pruning-enumeration-fold-invariants-20261024/strict-2/MicroCFTA/SourcePruningEnumerationFoldInvariants.lean:133:32: error: This simp argument is unused:
+  Prod.mk.injEq
+
+Hint: Omit it from the simp argument list.
+  [apply] simp only [SourcePruningEnumerationDispatch.dispatch, ite_eq_right same, sourceStored, targetStored, Id.run,
+    pure, Except.ok.injEq, Option.some.injEq] at selected
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/tmp/mcfta-pruning-enumeration-fold-invariants-20261024/strict-2/MicroCFTA/SourcePruningEnumerationFoldInvariants.lean:133:47: error: This simp argument is unused:
+  Except.ok.injEq
+
+Hint: Omit it from the simp argument list.
+  [apply] simp only [SourcePruningEnumerationDispatch.dispatch, ite_eq_right same, sourceStored, targetStored, Id.run,
+    pure, Prod.mk.injEq, Option.some.injEq] at selected
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/tmp/mcfta-pruning-enumeration-fold-invariants-20261024/strict-2/MicroCFTA/SourcePruningEnumerationFoldInvariants.lean:133:64: error: This simp argument is unused:
+  Option.some.injEq
+
+Hint: Omit it from the simp argument list.
+  [apply] simp only [SourcePruningEnumerationDispatch.dispatch, ite_eq_right same, sourceStored, targetStored, Id.run,
+    pure, Prod.mk.injEq, Except.ok.injEq] at selected
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/tmp/mcfta-pruning-enumeration-fold-invariants-20261024/strict-2/MicroCFTA/SourcePruningEnumerationFoldInvariants.lean:146:109: error: This simp argument is unused:
+  leftDecoded
+
+Hint: Omit it from the simp argument list.
+  [apply] simp [SourcePruningEnumerationDispatch.dispatch, same, sourceStored, targetStored] at selected
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/tmp/mcfta-pruning-enumeration-fold-invariants-20261024/strict-2/MicroCFTA/SourcePruningEnumerationFoldInvariants.lean:149:111: error: This simp argument is unused:
+  leftDecoded
+
+Hint: Omit it from the simp argument list.
+  [apply] simp [SourcePruningEnumerationDispatch.dispatch, same, sourceStored, targetStored, rightDecoded] at selected
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/tmp/mcfta-pruning-enumeration-fold-invariants-20261024/strict-2/MicroCFTA/SourcePruningEnumerationFoldInvariants.lean:149:124: error: This simp argument is unused:
+  rightDecoded
+
+Hint: Omit it from the simp argument list.
+  [apply] simp [SourcePruningEnumerationDispatch.dispatch, same, sourceStored, targetStored, leftDecoded] at selected
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/tmp/mcfta-pruning-enumeration-fold-invariants-20261024/strict-2/MicroCFTA/SourcePruningEnumerationFoldInvariants.lean:154:105: error: This simp argument is unused:
+  leftDecoded
+
+Hint: Omit it from the simp argument list.
+  [apply] simp [SourcePruningEnumerationDispatch.dispatch, same, sourceStored, targetStored, rightDecoded,
+    native] at selected
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/tmp/mcfta-pruning-enumeration-fold-invariants-20261024/strict-2/MicroCFTA/SourcePruningEnumerationFoldInvariants.lean:154:118: error: This simp argument is unused:
+  rightDecoded
+
+Hint: Omit it from the simp argument list.
+  [apply] simp [SourcePruningEnumerationDispatch.dispatch, same, sourceStored, targetStored, leftDecoded,
+    native] at selected
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/tmp/mcfta-pruning-enumeration-fold-invariants-20261024/strict-2/MicroCFTA/SourcePruningEnumerationFoldInvariants.lean:154:132: error: This simp argument is unused:
+  native
+
+Hint: Omit it from the simp argument list.
+  [apply] simp [SourcePruningEnumerationDispatch.dispatch, same, sourceStored, targetStored, leftDecoded,
+    rightDecoded] at selected
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/tmp/mcfta-pruning-enumeration-fold-invariants-20261024/strict-2/MicroCFTA/SourcePruningEnumerationFoldInvariants.lean:156:105: error: This simp argument is unused:
+  leftDecoded
+
+Hint: Omit it from the simp argument list.
+  [apply] simp [SourcePruningEnumerationDispatch.dispatch, same, sourceStored, targetStored, rightDecoded,
+    native] at selected
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/tmp/mcfta-pruning-enumeration-fold-invariants-20261024/strict-2/MicroCFTA/SourcePruningEnumerationFoldInvariants.lean:156:118: error: This simp argument is unused:
+  rightDecoded
+
+Hint: Omit it from the simp argument list.
+  [apply] simp [SourcePruningEnumerationDispatch.dispatch, same, sourceStored, targetStored, leftDecoded,
+    native] at selected
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/tmp/mcfta-pruning-enumeration-fold-invariants-20261024/strict-2/MicroCFTA/SourcePruningEnumerationFoldInvariants.lean:156:132: error: This simp argument is unused:
+  native
+
+Hint: Omit it from the simp argument list.
+  [apply] simp [SourcePruningEnumerationDispatch.dispatch, same, sourceStored, targetStored, leftDecoded,
+    rightDecoded] at selected
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/tmp/mcfta-pruning-enumeration-fold-invariants-20261024/strict-2/MicroCFTA/SourcePruningEnumerationFoldInvariants.lean:158:105: error: This simp argument is unused:
+  leftDecoded
+
+Hint: Omit it from the simp argument list.
+  [apply] simp [SourcePruningEnumerationDispatch.dispatch, same, sourceStored, targetStored, rightDecoded,
+    native] at selected
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/tmp/mcfta-pruning-enumeration-fold-invariants-20261024/strict-2/MicroCFTA/SourcePruningEnumerationFoldInvariants.lean:158:118: error: This simp argument is unused:
+  rightDecoded
+
+Hint: Omit it from the simp argument list.
+  [apply] simp [SourcePruningEnumerationDispatch.dispatch, same, sourceStored, targetStored, leftDecoded,
+    native] at selected
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/tmp/mcfta-pruning-enumeration-fold-invariants-20261024/strict-2/MicroCFTA/SourcePruningEnumerationFoldInvariants.lean:158:132: error: This simp argument is unused:
+  native
+
+Hint: Omit it from the simp argument list.
+  [apply] simp [SourcePruningEnumerationDispatch.dispatch, same, sourceStored, targetStored, leftDecoded,
+    rightDecoded] at selected
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/tmp/mcfta-pruning-enumeration-fold-invariants-20261024/strict-2/MicroCFTA/SourcePruningEnumerationFoldInvariants.lean:160:105: error: This simp argument is unused:
+  leftDecoded
+
+Hint: Omit it from the simp argument list.
+  [apply] simp [SourcePruningEnumerationDispatch.dispatch, same, sourceStored, targetStored, rightDecoded,
+    native] at selected
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/tmp/mcfta-pruning-enumeration-fold-invariants-20261024/strict-2/MicroCFTA/SourcePruningEnumerationFoldInvariants.lean:160:118: error: This simp argument is unused:
+  rightDecoded
+
+Hint: Omit it from the simp argument list.
+  [apply] simp [SourcePruningEnumerationDispatch.dispatch, same, sourceStored, targetStored, leftDecoded,
+    native] at selected
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/tmp/mcfta-pruning-enumeration-fold-invariants-20261024/strict-2/MicroCFTA/SourcePruningEnumerationFoldInvariants.lean:160:132: error: This simp argument is unused:
+  native
+
+Hint: Omit it from the simp argument list.
+  [apply] simp [SourcePruningEnumerationDispatch.dispatch, same, sourceStored, targetStored, leftDecoded,
+    rightDecoded] at selected
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/tmp/mcfta-pruning-enumeration-fold-invariants-20261024/strict-2/MicroCFTA/SourcePruningEnumerationFoldInvariants.lean:167:107: error: This simp argument is unused:
+  leftDecoded
+
+Hint: Omit it from the simp argument list.
+  [apply] simp [SourcePruningEnumerationDispatch.dispatch, same, sourceStored, targetStored, rightDecoded, native,
+    SourcePruningEnumerationDispatch.afterQuery, phase, Except.mapError] at selected
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/tmp/mcfta-pruning-enumeration-fold-invariants-20261024/strict-2/MicroCFTA/SourcePruningEnumerationFoldInvariants.lean:168:26: error: This simp argument is unused:
+  rightDecoded
+
+Hint: Omit it from the simp argument list.
+  [apply] simp [SourcePruningEnumerationDispatch.dispatch, same, sourceStored, targetStored, leftDecoded, native,
+    SourcePruningEnumerationDispatch.afterQuery, phase, Except.mapError] at selected
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/tmp/mcfta-pruning-enumeration-fold-invariants-20261024/strict-2/MicroCFTA/SourcePruningEnumerationFoldInvariants.lean:168:40: error: This simp argument is unused:
+  native
+
+Hint: Omit it from the simp argument list.
+  [apply] simp [SourcePruningEnumerationDispatch.dispatch, same, sourceStored, targetStored, leftDecoded, rightDecoded,
+    SourcePruningEnumerationDispatch.afterQuery, phase, Except.mapError] at selected
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/tmp/mcfta-pruning-enumeration-fold-invariants-20261024/strict-2/MicroCFTA/SourcePruningEnumerationFoldInvariants.lean:168:93: error: This simp argument is unused:
+  phase
+
+Hint: Omit it from the simp argument list.
+  [apply] simp [SourcePruningEnumerationDispatch.dispatch, same, sourceStored, targetStored, leftDecoded, rightDecoded,
+    native, SourcePruningEnumerationDispatch.afterQuery, Except.mapError] at selected
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/tmp/mcfta-pruning-enumeration-fold-invariants-20261024/strict-2/MicroCFTA/SourcePruningEnumerationFoldInvariants.lean:172:109: error: This simp argument is unused:
+  leftDecoded
+
+Hint: Omit it from the simp argument list.
+  [apply] simp [SourcePruningEnumerationDispatch.dispatch, same, sourceStored, targetStored, rightDecoded, native,
+    SourcePruningEnumerationDispatch.afterQuery, phase, encoded, Except.mapError] at selected
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/tmp/mcfta-pruning-enumeration-fold-invariants-20261024/strict-2/MicroCFTA/SourcePruningEnumerationFoldInvariants.lean:173:28: error: This simp argument is unused:
+  rightDecoded
+
+Hint: Omit it from the simp argument list.
+  [apply] simp [SourcePruningEnumerationDispatch.dispatch, same, sourceStored, targetStored, leftDecoded, native,
+    SourcePruningEnumerationDispatch.afterQuery, phase, encoded, Except.mapError] at selected
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/tmp/mcfta-pruning-enumeration-fold-invariants-20261024/strict-2/MicroCFTA/SourcePruningEnumerationFoldInvariants.lean:173:42: error: This simp argument is unused:
+  native
+
+Hint: Omit it from the simp argument list.
+  [apply] simp [SourcePruningEnumerationDispatch.dispatch, same, sourceStored, targetStored, leftDecoded, rightDecoded,
+    SourcePruningEnumerationDispatch.afterQuery, phase, encoded, Except.mapError] at selected
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/tmp/mcfta-pruning-enumeration-fold-invariants-20261024/strict-2/MicroCFTA/SourcePruningEnumerationFoldInvariants.lean:173:95: error: This simp argument is unused:
+  phase
+
+Hint: Omit it from the simp argument list.
+  [apply] simp [SourcePruningEnumerationDispatch.dispatch, same, sourceStored, targetStored, leftDecoded, rightDecoded,
+    native, SourcePruningEnumerationDispatch.afterQuery, encoded, Except.mapError] at selected
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/tmp/mcfta-pruning-enumeration-fold-invariants-20261024/strict-2/MicroCFTA/SourcePruningEnumerationFoldInvariants.lean:173:102: error: This simp argument is unused:
+  encoded
+
+Hint: Omit it from the simp argument list.
+  [apply] simp [SourcePruningEnumerationDispatch.dispatch, same, sourceStored, targetStored, leftDecoded, rightDecoded,
+    native, SourcePruningEnumerationDispatch.afterQuery, phase, Except.mapError] at selected
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/tmp/mcfta-pruning-enumeration-fold-invariants-20261024/strict-2/MicroCFTA/SourcePruningEnumerationFoldInvariants.lean:176:28: error: This simp argument is unused:
+  leftDecoded
+
+Hint: Omit it from the simp argument list.
+  [apply] simp only [SourcePruningEnumerationDispatch.dispatch, ite_eq_right same, sourceStored, targetStored,
+    rightDecoded, native, SourcePruningEnumerationDispatch.afterQuery, phase, encoded, Option.map_some, Except.mapError,
+    Id.run, pure, Prod.mk.injEq, Except.ok.injEq, Option.some.injEq] at selected
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/tmp/mcfta-pruning-enumeration-fold-invariants-20261024/strict-2/MicroCFTA/SourcePruningEnumerationFoldInvariants.lean:176:41: error: This simp argument is unused:
+  rightDecoded
+
+Hint: Omit it from the simp argument list.
+  [apply] simp only [SourcePruningEnumerationDispatch.dispatch, ite_eq_right same, sourceStored, targetStored,
+    leftDecoded, native, SourcePruningEnumerationDispatch.afterQuery, phase, encoded, Option.map_some, Except.mapError,
+    Id.run, pure, Prod.mk.injEq, Except.ok.injEq, Option.some.injEq] at selected
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/tmp/mcfta-pruning-enumeration-fold-invariants-20261024/strict-2/MicroCFTA/SourcePruningEnumerationFoldInvariants.lean:176:55: error: This simp argument is unused:
+  native
+
+Hint: Omit it from the simp argument list.
+  [apply] simp only [SourcePruningEnumerationDispatch.dispatch, ite_eq_right same, sourceStored, targetStored,
+    leftDecoded, rightDecoded, SourcePruningEnumerationDispatch.afterQuery, phase, encoded, Option.map_some,
+    Except.mapError, Id.run, pure, Prod.mk.injEq, Except.ok.injEq, Option.some.injEq] at selected
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/tmp/mcfta-pruning-enumeration-fold-invariants-20261024/strict-2/MicroCFTA/SourcePruningEnumerationFoldInvariants.lean:176:108: error: This simp argument is unused:
+  phase
+
+Hint: Omit it from the simp argument list.
+  [apply] simp only [SourcePruningEnumerationDispatch.dispatch, ite_eq_right same, sourceStored, targetStored,
+    leftDecoded, rightDecoded, native, SourcePruningEnumerationDispatch.afterQuery, encoded, Option.map_some,
+    Except.mapError, Id.run, pure, Prod.mk.injEq, Except.ok.injEq, Option.some.injEq] at selected
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/tmp/mcfta-pruning-enumeration-fold-invariants-20261024/strict-2/MicroCFTA/SourcePruningEnumerationFoldInvariants.lean:177:28: error: This simp argument is unused:
+  encoded
+
+Hint: Omit it from the simp argument list.
+  [apply] simp only [SourcePruningEnumerationDispatch.dispatch, ite_eq_right same, sourceStored, targetStored,
+    leftDecoded, rightDecoded, native, SourcePruningEnumerationDispatch.afterQuery, phase, Option.map_some,
+    Except.mapError, Id.run, pure, Prod.mk.injEq, Except.ok.injEq, Option.some.injEq] at selected
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/tmp/mcfta-pruning-enumeration-fold-invariants-20261024/strict-2/MicroCFTA/SourcePruningEnumerationFoldInvariants.lean:177:37: error: This simp argument is unused:
+  Option.map_some
+
+Hint: Omit it from the simp argument list.
+  [apply] simp only [SourcePruningEnumerationDispatch.dispatch, ite_eq_right same, sourceStored, targetStored,
+    leftDecoded, rightDecoded, native, SourcePruningEnumerationDispatch.afterQuery, phase, encoded, Except.mapError,
+    Id.run, pure, Prod.mk.injEq, Except.ok.injEq, Option.some.injEq] at selected
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/tmp/mcfta-pruning-enumeration-fold-invariants-20261024/strict-2/MicroCFTA/SourcePruningEnumerationFoldInvariants.lean:178:28: error: This simp argument is unused:
+  Prod.mk.injEq
+
+Hint: Omit it from the simp argument list.
+  [apply] simp only [SourcePruningEnumerationDispatch.dispatch, ite_eq_right same, sourceStored, targetStored,
+    leftDecoded, rightDecoded, native, SourcePruningEnumerationDispatch.afterQuery, phase, encoded, Option.map_some,
+    Except.mapError, Id.run, pure, Except.ok.injEq, Option.some.injEq] at selected
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/tmp/mcfta-pruning-enumeration-fold-invariants-20261024/strict-2/MicroCFTA/SourcePruningEnumerationFoldInvariants.lean:178:43: error: This simp argument is unused:
+  Except.ok.injEq
+
+Hint: Omit it from the simp argument list.
+  [apply] simp only [SourcePruningEnumerationDispatch.dispatch, ite_eq_right same, sourceStored, targetStored,
+    leftDecoded, rightDecoded, native, SourcePruningEnumerationDispatch.afterQuery, phase, encoded, Option.map_some,
+    Except.mapError, Id.run, pure, Prod.mk.injEq, Option.some.injEq] at selected
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/tmp/mcfta-pruning-enumeration-fold-invariants-20261024/strict-2/MicroCFTA/SourcePruningEnumerationFoldInvariants.lean:178:60: error: This simp argument is unused:
+  Option.some.injEq
+
+Hint: Omit it from the simp argument list.
+  [apply] simp only [SourcePruningEnumerationDispatch.dispatch, ite_eq_right same, sourceStored, targetStored,
+    leftDecoded, rightDecoded, native, SourcePruningEnumerationDispatch.afterQuery, phase, encoded, Option.map_some,
+    Except.mapError, Id.run, pure, Prod.mk.injEq, Except.ok.injEq] at selected
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`

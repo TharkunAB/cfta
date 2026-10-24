@@ -1,0 +1,2475 @@
+{
+  "entries": [
+    {
+      "scope": "context",
+      "name": "EnumGuard",
+      "type": "Type",
+      "kind": "context",
+      "used": true
+    },
+    {
+      "scope": "context",
+      "name": "width",
+      "type": "Nat",
+      "kind": "context",
+      "used": true
+    },
+    {
+      "scope": "context",
+      "name": "Symbol",
+      "type": "SourcePruningTemplates.Symbol",
+      "kind": "context",
+      "used": true
+    },
+    {
+      "scope": "context",
+      "name": "Constraint",
+      "type": "SourceSymbolicIndex.Constraint FullSyntax.Formula",
+      "kind": "context",
+      "used": true
+    },
+    {
+      "scope": "context",
+      "name": "Node",
+      "type": "InternedConstructorTemplates.Value Symbol Constraint",
+      "kind": "context",
+      "used": true
+    },
+    {
+      "scope": "context",
+      "name": "Caller",
+      "type": "SourceCurrentAllocatedPartialState.State",
+      "kind": "context",
+      "used": true
+    },
+    {
+      "scope": "context",
+      "name": "Queries",
+      "type": "SourceEndpointMemo.Memos",
+      "kind": "context",
+      "used": true
+    },
+    {
+      "scope": "assimilated_preserves",
+      "name": "before",
+      "type": "EnumerationState.State Symbol EnumGuard",
+      "kind": "public binder",
+      "used": true
+    },
+    {
+      "scope": "assimilated_preserves",
+      "name": "source",
+      "type": "Nat",
+      "kind": "public binder",
+      "used": true
+    },
+    {
+      "scope": "assimilated_preserves",
+      "name": "target",
+      "type": "Nat",
+      "kind": "public binder",
+      "used": true
+    },
+    {
+      "scope": "assimilated_preserves",
+      "name": "roots",
+      "type": "Nat → Nat",
+      "kind": "public binder",
+      "used": true
+    },
+    {
+      "scope": "assimilated_preserves",
+      "name": "waiting",
+      "type": "EnumerationWaitingIndex.Waiting",
+      "kind": "public binder",
+      "used": true
+    },
+    {
+      "scope": "assimilated_preserves",
+      "name": "storage",
+      "type": "StorageValid before",
+      "kind": "public binder",
+      "used": true
+    },
+    {
+      "scope": "assimilated_preserves",
+      "name": "counts",
+      "type": "EnumerationCanonicalWaiting.Correct roots before.values waiting",
+      "kind": "public binder",
+      "used": true
+    },
+    {
+      "scope": "assimilated_preserves",
+      "name": "sourceNode",
+      "type": "Option Nat",
+      "kind": "public binder",
+      "used": true
+    },
+    {
+      "scope": "assimilated_preserves",
+      "name": "targetNode",
+      "type": "Option Nat",
+      "kind": "public binder",
+      "used": true
+    },
+    {
+      "scope": "assimilated_preserves",
+      "name": "merged",
+      "type": "Option Nat",
+      "kind": "public binder",
+      "used": true
+    },
+    {
+      "scope": "assimilated_preserves",
+      "name": "sourceScs",
+      "type": "List EnumerationState.Suspended",
+      "kind": "public binder",
+      "used": true
+    },
+    {
+      "scope": "assimilated_preserves",
+      "name": "targetScs",
+      "type": "List EnumerationState.Suspended",
+      "kind": "public binder",
+      "used": true
+    },
+    {
+      "scope": "assimilated_preserves",
+      "name": "sourceStored",
+      "type": "before.values[source]? = some (.unenumerated sourceNode sourceScs)",
+      "kind": "public binder",
+      "used": true
+    },
+    {
+      "scope": "assimilated_preserves",
+      "name": "targetStored",
+      "type": "before.values[target]? = some (.unenumerated targetNode targetScs)",
+      "kind": "public binder",
+      "used": true
+    },
+    {
+      "scope": "assimilated_preserves",
+      "name": "different",
+      "type": "target ≠ source",
+      "kind": "public binder",
+      "used": true
+    },
+    {
+      "scope": "dispatch_preserves",
+      "name": "instSymbol",
+      "type": "DecidableEq Symbol",
+      "kind": "anonymous public instance binder",
+      "used": true
+    },
+    {
+      "scope": "dispatch_preserves",
+      "name": "instEdgeKey",
+      "type": "DecidableEq (EdgeKey Symbol Constraint)",
+      "kind": "anonymous public instance binder",
+      "used": true
+    },
+    {
+      "scope": "dispatch_preserves",
+      "name": "instNode",
+      "type": "DecidableEq Node",
+      "kind": "anonymous public instance binder",
+      "used": true
+    },
+    {
+      "scope": "dispatch_preserves",
+      "name": "checkEmpty",
+      "type": "Bool",
+      "kind": "public binder",
+      "used": true
+    },
+    {
+      "scope": "dispatch_preserves",
+      "name": "nativeFuel",
+      "type": "Nat",
+      "kind": "public binder",
+      "used": true
+    },
+    {
+      "scope": "dispatch_preserves",
+      "name": "p",
+      "type": "Nat",
+      "kind": "public binder",
+      "used": true
+    },
+    {
+      "scope": "dispatch_preserves",
+      "name": "h",
+      "type": "Nat",
+      "kind": "public binder",
+      "used": true
+    },
+    {
+      "scope": "dispatch_preserves",
+      "name": "beforeCaller",
+      "type": "Caller width",
+      "kind": "public binder",
+      "used": true
+    },
+    {
+      "scope": "dispatch_preserves",
+      "name": "before",
+      "type": "EnumerationState.State Symbol EnumGuard",
+      "kind": "public binder",
+      "used": true
+    },
+    {
+      "scope": "dispatch_preserves",
+      "name": "target",
+      "type": "Nat",
+      "kind": "public binder",
+      "used": true
+    },
+    {
+      "scope": "dispatch_preserves",
+      "name": "queries",
+      "type": "Queries",
+      "kind": "public binder",
+      "used": true
+    },
+    {
+      "scope": "dispatch_preserves",
+      "name": "afterCaller",
+      "type": "Caller width",
+      "kind": "public binder",
+      "used": true
+    },
+    {
+      "scope": "dispatch_preserves",
+      "name": "savedQueries",
+      "type": "Queries",
+      "kind": "public binder",
+      "used": true
+    },
+    {
+      "scope": "dispatch_preserves",
+      "name": "after",
+      "type": "EnumerationState.State Symbol EnumGuard",
+      "kind": "public binder",
+      "used": true
+    },
+    {
+      "scope": "dispatch_preserves",
+      "name": "roots",
+      "type": "Nat → Nat",
+      "kind": "public binder",
+      "used": true
+    },
+    {
+      "scope": "dispatch_preserves",
+      "name": "waiting",
+      "type": "EnumerationWaitingIndex.Waiting",
+      "kind": "public binder",
+      "used": true
+    },
+    {
+      "scope": "dispatch_preserves",
+      "name": "storage",
+      "type": "StorageValid before",
+      "kind": "public binder",
+      "used": true
+    },
+    {
+      "scope": "dispatch_preserves",
+      "name": "counts",
+      "type": "EnumerationCanonicalWaiting.Correct roots before.values waiting",
+      "kind": "public binder",
+      "used": true
+    },
+    {
+      "scope": "run_preserves",
+      "name": "instSymbol",
+      "type": "DecidableEq Symbol",
+      "kind": "anonymous public instance binder",
+      "used": true
+    },
+    {
+      "scope": "run_preserves",
+      "name": "instEdgeKey",
+      "type": "DecidableEq (EdgeKey Symbol Constraint)",
+      "kind": "anonymous public instance binder",
+      "used": true
+    },
+    {
+      "scope": "run_preserves",
+      "name": "instNode",
+      "type": "DecidableEq Node",
+      "kind": "anonymous public instance binder",
+      "used": true
+    },
+    {
+      "scope": "run_preserves",
+      "name": "checkEmpty",
+      "type": "Bool",
+      "kind": "public binder",
+      "used": true
+    },
+    {
+      "scope": "run_preserves",
+      "name": "nativeFuel",
+      "type": "Nat",
+      "kind": "public binder",
+      "used": true
+    },
+    {
+      "scope": "run_preserves",
+      "name": "p",
+      "type": "Nat",
+      "kind": "public binder",
+      "used": true
+    },
+    {
+      "scope": "run_preserves",
+      "name": "h",
+      "type": "Nat",
+      "kind": "public binder",
+      "used": true
+    },
+    {
+      "scope": "run_preserves",
+      "name": "beforeCaller",
+      "type": "Caller width",
+      "kind": "public binder",
+      "used": true
+    },
+    {
+      "scope": "run_preserves",
+      "name": "before",
+      "type": "EnumerationState.State Symbol EnumGuard",
+      "kind": "public binder",
+      "used": true
+    },
+    {
+      "scope": "run_preserves",
+      "name": "target",
+      "type": "Nat",
+      "kind": "public binder",
+      "used": true
+    },
+    {
+      "scope": "run_preserves",
+      "name": "queries",
+      "type": "Queries",
+      "kind": "public binder",
+      "used": true
+    },
+    {
+      "scope": "run_preserves",
+      "name": "afterCaller",
+      "type": "Caller width",
+      "kind": "public binder",
+      "used": true
+    },
+    {
+      "scope": "run_preserves",
+      "name": "savedQueries",
+      "type": "Queries",
+      "kind": "public binder",
+      "used": true
+    },
+    {
+      "scope": "run_preserves",
+      "name": "after",
+      "type": "EnumerationState.State Symbol EnumGuard",
+      "kind": "public binder",
+      "used": true
+    },
+    {
+      "scope": "run_preserves",
+      "name": "roots",
+      "type": "Nat → Nat",
+      "kind": "public binder",
+      "used": true
+    },
+    {
+      "scope": "run_preserves",
+      "name": "waiting",
+      "type": "EnumerationWaitingIndex.Waiting",
+      "kind": "public binder",
+      "used": true
+    },
+    {
+      "scope": "run_preserves",
+      "name": "storage",
+      "type": "StorageValid before",
+      "kind": "public binder",
+      "used": true
+    },
+    {
+      "scope": "run_preserves",
+      "name": "counts",
+      "type": "EnumerationCanonicalWaiting.Correct roots before.values waiting",
+      "kind": "public binder",
+      "used": true
+    },
+    {
+      "scope": "dispatch_preserves",
+      "name": "source",
+      "type": "Nat",
+      "kind": "public binder",
+      "used": true
+    },
+    {
+      "scope": "dispatch_preserves",
+      "name": "action",
+      "type": "EnumerateM Symbol EnumGuard Unit",
+      "kind": "public binder",
+      "used": true
+    },
+    {
+      "scope": "dispatch_preserves",
+      "name": "selected",
+      "type": "SourcePruningEnumerationDispatch.dispatch checkEmpty nativeFuel p h beforeCaller before source target queries = (.ok (some action), afterCaller, savedQueries)",
+      "kind": "public binder",
+      "used": true
+    },
+    {
+      "scope": "dispatch_preserves",
+      "name": "completed",
+      "type": "ExceptT.run (action before) = [.ok ((), after)]",
+      "kind": "public binder",
+      "used": true
+    },
+    {
+      "scope": "run_preserves",
+      "name": "sources",
+      "type": "List Nat",
+      "kind": "public binder",
+      "used": true
+    },
+    {
+      "scope": "run_preserves",
+      "name": "result",
+      "type": "Except (SourceEqualityNativeDemand.Outcome width Node ⊕ SourceCurrentAllocatedConjunctionWorker.Outcome width) (Option (List (Except EnumerationState.Error (Unit × EnumerationState.State Symbol EnumGuard))))",
+      "kind": "public binder",
+      "used": true
+    },
+    {
+      "scope": "run_preserves",
+      "name": "observed",
+      "type": "SourcePruningEnumerationFold.run checkEmpty nativeFuel p h sources beforeCaller before target queries = (result, afterCaller, savedQueries, after)",
+      "kind": "public binder",
+      "used": true
+    },
+    {
+      "scope": "assimilated_preserves",
+      "name": "first",
+      "type": "StorageValid {before with values := before.values.set target (.unenumerated merged (sourceScs ++ targetScs))}",
+      "kind": "typed have",
+      "used": true
+    },
+    {
+      "scope": "assimilated_preserves",
+      "name": "mergedBound",
+      "type": "SlotBound before.counter (.unenumerated merged (sourceScs ++ targetScs) : UVarValue Symbol)",
+      "kind": "typed have",
+      "used": true
+    },
+    {
+      "scope": "assimilated_preserves",
+      "name": "second",
+      "type": "StorageValid {{before with values := before.values.set target (.unenumerated merged (sourceScs ++ targetScs))} with\n      values := (before.values.set target (.unenumerated merged (sourceScs ++ targetScs))).set source .eliminated}",
+      "kind": "typed have",
+      "used": true
+    },
+    {
+      "scope": "assimilated_preserves",
+      "name": "sourceBound",
+      "type": "SlotBound before.counter (.unenumerated sourceNode sourceScs : UVarValue Symbol)",
+      "kind": "typed have",
+      "used": true
+    },
+    {
+      "scope": "assimilated_preserves",
+      "name": "targetBound",
+      "type": "SlotBound before.counter (.unenumerated targetNode targetScs : UVarValue Symbol)",
+      "kind": "typed have",
+      "used": true
+    },
+    {
+      "scope": "assimilated_preserves.mergedBound",
+      "name": "sc",
+      "type": "EnumerationState.Suspended",
+      "kind": "intro",
+      "used": true
+    },
+    {
+      "scope": "assimilated_preserves.mergedBound",
+      "name": "member",
+      "type": "sc ∈ sourceScs ++ targetScs",
+      "kind": "intro",
+      "used": true
+    },
+    {
+      "scope": "assimilated_preserves.mergedBound.source",
+      "name": "sourceMember",
+      "type": "sc ∈ sourceScs",
+      "kind": "case binder",
+      "used": true
+    },
+    {
+      "scope": "assimilated_preserves.mergedBound.target",
+      "name": "targetMember",
+      "type": "sc ∈ targetScs",
+      "kind": "case binder",
+      "used": true
+    },
+    {
+      "scope": "dispatch_preserves.same",
+      "name": "same",
+      "type": "source = target",
+      "kind": "condition",
+      "used": true
+    },
+    {
+      "scope": "dispatch_preserves.different",
+      "name": "same",
+      "type": "¬ source = target",
+      "kind": "condition",
+      "used": true
+    },
+    {
+      "scope": "dispatch_preserves.source.some",
+      "name": "sourceValue",
+      "type": "EnumerationState.UVarValue Symbol",
+      "kind": "match equation",
+      "used": true
+    },
+    {
+      "scope": "dispatch_preserves.source.some",
+      "name": "sourceStored",
+      "type": "before.values[source]? = some sourceValue",
+      "kind": "match equation",
+      "used": true
+    },
+    {
+      "scope": "dispatch_preserves.source.none",
+      "name": "sourceStored",
+      "type": "before.values[source]? = none",
+      "kind": "match equation",
+      "used": true
+    },
+    {
+      "scope": "dispatch_preserves.sourceValue.enumerated",
+      "name": "sourceFragment",
+      "type": "Fragments.Fragment Symbol",
+      "kind": "case binder",
+      "used": true
+    },
+    {
+      "scope": "dispatch_preserves.sourceValue.unenumerated",
+      "name": "sourceNode",
+      "type": "Option Nat",
+      "kind": "case binder",
+      "used": true
+    },
+    {
+      "scope": "dispatch_preserves.sourceValue.unenumerated",
+      "name": "sourceScs",
+      "type": "List EnumerationState.Suspended",
+      "kind": "case binder",
+      "used": true
+    },
+    {
+      "scope": "dispatch_preserves.targetValue.enumerated",
+      "name": "targetFragment",
+      "type": "Fragments.Fragment Symbol",
+      "kind": "case binder",
+      "used": true
+    },
+    {
+      "scope": "dispatch_preserves.targetValue.unenumerated",
+      "name": "targetNode",
+      "type": "Option Nat",
+      "kind": "case binder",
+      "used": true
+    },
+    {
+      "scope": "dispatch_preserves.targetValue.unenumerated",
+      "name": "targetScs",
+      "type": "List EnumerationState.Suspended",
+      "kind": "case binder",
+      "used": true
+    },
+    {
+      "scope": "dispatch_preserves.target.some",
+      "name": "targetValue",
+      "type": "EnumerationState.UVarValue Symbol",
+      "kind": "match equation",
+      "used": true
+    },
+    {
+      "scope": "dispatch_preserves.target.some",
+      "name": "targetStored",
+      "type": "before.values[target]? = some targetValue",
+      "kind": "match equation",
+      "used": true
+    },
+    {
+      "scope": "dispatch_preserves.target.none",
+      "name": "targetStored",
+      "type": "before.values[target]? = none",
+      "kind": "match equation",
+      "used": true
+    },
+    {
+      "scope": "dispatch_preserves.sourceNode.none",
+      "name": "sourceNodeSame",
+      "type": "sourceNode = none",
+      "kind": "match equation",
+      "used": true
+    },
+    {
+      "scope": "dispatch_preserves.sourceNode.some",
+      "name": "sourceHandle",
+      "type": "Nat",
+      "kind": "match equation",
+      "used": true
+    },
+    {
+      "scope": "dispatch_preserves.sourceNode.some",
+      "name": "sourceNodeSame",
+      "type": "sourceNode = some sourceHandle",
+      "kind": "match equation",
+      "used": true
+    },
+    {
+      "scope": "dispatch_preserves.targetNode.none",
+      "name": "targetNodeSame",
+      "type": "targetNode = none",
+      "kind": "match equation",
+      "used": true
+    },
+    {
+      "scope": "dispatch_preserves.targetNode.some",
+      "name": "targetHandle",
+      "type": "Nat",
+      "kind": "match equation",
+      "used": true
+    },
+    {
+      "scope": "dispatch_preserves.targetNode.some",
+      "name": "targetNodeSame",
+      "type": "targetNode = some targetHandle",
+      "kind": "match equation",
+      "used": true
+    },
+    {
+      "scope": "dispatch_preserves.left.none",
+      "name": "leftDecoded",
+      "type": "SourcePruningEnumerationNodes.lookupNode beforeCaller.checked.native.machine.heap sourceHandle = none",
+      "kind": "match equation",
+      "used": true
+    },
+    {
+      "scope": "dispatch_preserves.left.some",
+      "name": "left",
+      "type": "Node",
+      "kind": "match equation",
+      "used": true
+    },
+    {
+      "scope": "dispatch_preserves.left.some",
+      "name": "leftDecoded",
+      "type": "SourcePruningEnumerationNodes.lookupNode beforeCaller.checked.native.machine.heap sourceHandle = some left",
+      "kind": "match equation",
+      "used": true
+    },
+    {
+      "scope": "dispatch_preserves.right.none",
+      "name": "rightDecoded",
+      "type": "SourcePruningEnumerationNodes.lookupNode beforeCaller.checked.native.machine.heap targetHandle = none",
+      "kind": "match equation",
+      "used": true
+    },
+    {
+      "scope": "dispatch_preserves.right.some",
+      "name": "right",
+      "type": "Node",
+      "kind": "match equation",
+      "used": true
+    },
+    {
+      "scope": "dispatch_preserves.right.some",
+      "name": "rightDecoded",
+      "type": "SourcePruningEnumerationNodes.lookupNode beforeCaller.checked.native.machine.heap targetHandle = some right",
+      "kind": "match equation",
+      "used": true
+    },
+    {
+      "scope": "dispatch_preserves.native.yielded",
+      "name": "control",
+      "type": "SourceEqualityNativeDemand.Control Node",
+      "kind": "match equation",
+      "used": true
+    },
+    {
+      "scope": "dispatch_preserves.native.yielded",
+      "name": "checkedAfter",
+      "type": "SourceEqualityNativeDemand.State width",
+      "kind": "match equation",
+      "used": true
+    },
+    {
+      "scope": "dispatch_preserves.native.yielded",
+      "name": "native",
+      "type": "SourceEqualityNativeDemand.execute nativeFuel (.code (SourceRecursiveIntersectionCode.requestNode IntersectionEmptyDomain.emptyDomain left right)) beforeCaller.checked = .yielded control checkedAfter",
+      "kind": "match equation",
+      "used": true
+    },
+    {
+      "scope": "dispatch_preserves.native.done",
+      "name": "query",
+      "type": "Node",
+      "kind": "match equation",
+      "used": true
+    },
+    {
+      "scope": "dispatch_preserves.native.done",
+      "name": "queried",
+      "type": "SourceEqualityNativeDemand.State width",
+      "kind": "match equation",
+      "used": true
+    },
+    {
+      "scope": "dispatch_preserves.native.done",
+      "name": "native",
+      "type": "SourceEqualityNativeDemand.execute nativeFuel (.code (SourceRecursiveIntersectionCode.requestNode IntersectionEmptyDomain.emptyDomain left right)) beforeCaller.checked = .done query queried",
+      "kind": "match equation",
+      "used": true
+    },
+    {
+      "scope": "dispatch_preserves.native.failed",
+      "name": "nativeFailure",
+      "type": "SourceRecursiveIntersectionKernel.Failure",
+      "kind": "match equation",
+      "used": true
+    },
+    {
+      "scope": "dispatch_preserves.native.failed",
+      "name": "checkedAfter",
+      "type": "SourceEqualityNativeDemand.State width",
+      "kind": "match equation",
+      "used": true
+    },
+    {
+      "scope": "dispatch_preserves.native.failed",
+      "name": "native",
+      "type": "SourceEqualityNativeDemand.execute nativeFuel (.code (SourceRecursiveIntersectionCode.requestNode IntersectionEmptyDomain.emptyDomain left right)) beforeCaller.checked = .failed nativeFailure checkedAfter",
+      "kind": "match equation",
+      "used": true
+    },
+    {
+      "scope": "dispatch_preserves.native.constraintError",
+      "name": "message",
+      "type": "String",
+      "kind": "match equation",
+      "used": true
+    },
+    {
+      "scope": "dispatch_preserves.native.constraintError",
+      "name": "checkedAfter",
+      "type": "SourceEqualityNativeDemand.State width",
+      "kind": "match equation",
+      "used": true
+    },
+    {
+      "scope": "dispatch_preserves.native.constraintError",
+      "name": "native",
+      "type": "SourceEqualityNativeDemand.execute nativeFuel (.code (SourceRecursiveIntersectionCode.requestNode IntersectionEmptyDomain.emptyDomain left right)) beforeCaller.checked = .constraintError message checkedAfter",
+      "kind": "match equation",
+      "used": true
+    },
+    {
+      "scope": "dispatch_preserves.native.blocked",
+      "name": "reason",
+      "type": "SourceEqualityNativeDemand.Blocked",
+      "kind": "match equation",
+      "used": true
+    },
+    {
+      "scope": "dispatch_preserves.native.blocked",
+      "name": "control",
+      "type": "SourceEqualityNativeDemand.Control Node",
+      "kind": "match equation",
+      "used": true
+    },
+    {
+      "scope": "dispatch_preserves.native.blocked",
+      "name": "checkedAfter",
+      "type": "SourceEqualityNativeDemand.State width",
+      "kind": "match equation",
+      "used": true
+    },
+    {
+      "scope": "dispatch_preserves.native.blocked",
+      "name": "native",
+      "type": "SourceEqualityNativeDemand.execute nativeFuel (.code (SourceRecursiveIntersectionCode.requestNode IntersectionEmptyDomain.emptyDomain left right)) beforeCaller.checked = .blocked reason control checkedAfter",
+      "kind": "match equation",
+      "used": true
+    },
+    {
+      "scope": "dispatch_preserves.phase.pair",
+      "name": "worker",
+      "type": "SourceCurrentAllocatedConjunctionWorker.Outcome width",
+      "kind": "match equation",
+      "used": true
+    },
+    {
+      "scope": "dispatch_preserves.phase.pair",
+      "name": "workerQueries",
+      "type": "Queries",
+      "kind": "match equation",
+      "used": true
+    },
+    {
+      "scope": "dispatch_preserves.phase.pair",
+      "name": "phase",
+      "type": "(if checkEmpty then SourcePruningEnumerationEnabledEmpty.check p h query queried beforeCaller.fourth queries else (.done false queried beforeCaller.fourth, queries)) = (worker, workerQueries)",
+      "kind": "match equation",
+      "used": true
+    },
+    {
+      "scope": "dispatch_preserves.phase.done",
+      "name": "answer",
+      "type": "Bool",
+      "kind": "match equation",
+      "used": true
+    },
+    {
+      "scope": "dispatch_preserves.phase.done",
+      "name": "checkedAfter",
+      "type": "SourceEqualityNativeDemand.State width",
+      "kind": "match equation",
+      "used": true
+    },
+    {
+      "scope": "dispatch_preserves.phase.done",
+      "name": "saved",
+      "type": "SourceCurrentEmptinessMemo.Memo",
+      "kind": "match equation",
+      "used": true
+    },
+    {
+      "scope": "dispatch_preserves.phase.done",
+      "name": "workerSame",
+      "type": "worker = .done answer checkedAfter saved",
+      "kind": "match equation",
+      "used": true
+    },
+    {
+      "scope": "dispatch_preserves.phase.failed",
+      "name": "fault",
+      "type": "SourceCurrentConjunctionWorker.Fault Symbol FullSyntax.Formula",
+      "kind": "match equation",
+      "used": true
+    },
+    {
+      "scope": "dispatch_preserves.phase.failed",
+      "name": "checkedAfter",
+      "type": "SourceEqualityNativeDemand.State width",
+      "kind": "match equation",
+      "used": true
+    },
+    {
+      "scope": "dispatch_preserves.phase.failed",
+      "name": "saved",
+      "type": "SourceCurrentEmptinessMemo.Memo",
+      "kind": "match equation",
+      "used": true
+    },
+    {
+      "scope": "dispatch_preserves.phase.failed",
+      "name": "workerSame",
+      "type": "worker = .failed fault checkedAfter saved",
+      "kind": "match equation",
+      "used": true
+    },
+    {
+      "scope": "dispatch_preserves.encoded.none",
+      "name": "encoded",
+      "type": "SourcePruningEnumerationNodes.encodeNode (if answer then (.empty : Node) else query) = none",
+      "kind": "match equation",
+      "used": true
+    },
+    {
+      "scope": "dispatch_preserves.encoded.some",
+      "name": "handle",
+      "type": "Nat",
+      "kind": "match equation",
+      "used": true
+    },
+    {
+      "scope": "dispatch_preserves.encoded.some",
+      "name": "encoded",
+      "type": "SourcePruningEnumerationNodes.encodeNode (if answer then (.empty : Node) else query) = some handle",
+      "kind": "match equation",
+      "used": true
+    },
+    {
+      "scope": "dispatch_preserves.optionalTarget.reject",
+      "name": "empty",
+      "type": "targetNode = some 0",
+      "kind": "condition",
+      "used": true
+    },
+    {
+      "scope": "dispatch_preserves.optionalTarget.survive",
+      "name": "empty",
+      "type": "targetNode ≠ some 0",
+      "kind": "condition",
+      "used": true
+    },
+    {
+      "scope": "dispatch_preserves.optionalSource.reject",
+      "name": "empty",
+      "type": "some sourceHandle = some 0",
+      "kind": "condition",
+      "used": true
+    },
+    {
+      "scope": "dispatch_preserves.optionalSource.survive",
+      "name": "empty",
+      "type": "some sourceHandle ≠ some 0",
+      "kind": "condition",
+      "used": true
+    },
+    {
+      "scope": "dispatch_preserves.replacement.reference",
+      "name": "name",
+      "type": "InternedBinderProtocol.Reference",
+      "kind": "case binder",
+      "used": true
+    },
+    {
+      "scope": "dispatch_preserves.replacement.node",
+      "name": "entry",
+      "type": "Cache.Interned InternedBinderProtocol.NodeKey",
+      "kind": "case binder",
+      "used": true
+    },
+    {
+      "scope": "dispatch_preserves.replacement.node",
+      "name": "edges",
+      "type": "List (InternedConstructorTemplates.EdgeValue Symbol Constraint)",
+      "kind": "case binder",
+      "used": true
+    },
+    {
+      "scope": "dispatch_preserves.replacement.node",
+      "name": "depth",
+      "type": "Nat",
+      "kind": "case binder",
+      "used": true
+    },
+    {
+      "scope": "dispatch_preserves.replacement.node",
+      "name": "free",
+      "type": "List InternedBinderProtocol.Reference",
+      "kind": "case binder",
+      "used": true
+    },
+    {
+      "scope": "dispatch_preserves.replacement.union",
+      "name": "entry",
+      "type": "Cache.Interned InternedBinderProtocol.NodeKey",
+      "kind": "case binder",
+      "used": true
+    },
+    {
+      "scope": "dispatch_preserves.replacement.union",
+      "name": "members",
+      "type": "List Node",
+      "kind": "case binder",
+      "used": true
+    },
+    {
+      "scope": "dispatch_preserves.replacement.union",
+      "name": "depth",
+      "type": "Nat",
+      "kind": "case binder",
+      "used": true
+    },
+    {
+      "scope": "dispatch_preserves.replacement.union",
+      "name": "free",
+      "type": "List InternedBinderProtocol.Reference",
+      "kind": "case binder",
+      "used": true
+    },
+    {
+      "scope": "dispatch_preserves.replacement.mu",
+      "name": "entry",
+      "type": "Cache.Interned InternedBinderProtocol.NodeKey",
+      "kind": "case binder",
+      "used": true
+    },
+    {
+      "scope": "dispatch_preserves.replacement.mu",
+      "name": "body",
+      "type": "Node",
+      "kind": "case binder",
+      "used": true
+    },
+    {
+      "scope": "dispatch_preserves.replacement.mu",
+      "name": "depthShape",
+      "type": "Node",
+      "kind": "case binder",
+      "used": true
+    },
+    {
+      "scope": "dispatch_preserves.replacement.mu",
+      "name": "ordinaryShape",
+      "type": "Node",
+      "kind": "case binder",
+      "used": true
+    },
+    {
+      "scope": "dispatch_preserves.selected.noop",
+      "name": "actionSame",
+      "type": "(fun state => [.ok ((), state)] : EnumerateM Symbol EnumGuard Unit) = action",
+      "kind": "rfl-pattern elimination",
+      "used": true
+    },
+    {
+      "scope": "dispatch_preserves.selected.noop",
+      "name": "callerSame",
+      "type": "beforeCaller = afterCaller",
+      "kind": "rfl-pattern elimination",
+      "used": true
+    },
+    {
+      "scope": "dispatch_preserves.selected.noop",
+      "name": "queriesSame",
+      "type": "queries = savedQueries",
+      "kind": "rfl-pattern elimination",
+      "used": true
+    },
+    {
+      "scope": "dispatch_preserves.selected.optionalTarget",
+      "name": "actionSame",
+      "type": "SourcePruningEnumerationDispatch.finishOptional source target targetNode sourceScs targetScs = action",
+      "kind": "rfl-pattern elimination",
+      "used": true
+    },
+    {
+      "scope": "dispatch_preserves.selected.optionalTarget",
+      "name": "callerSame",
+      "type": "beforeCaller = afterCaller",
+      "kind": "rfl-pattern elimination",
+      "used": true
+    },
+    {
+      "scope": "dispatch_preserves.selected.optionalTarget",
+      "name": "queriesSame",
+      "type": "queries = savedQueries",
+      "kind": "rfl-pattern elimination",
+      "used": true
+    },
+    {
+      "scope": "dispatch_preserves.selected.optionalSource",
+      "name": "actionSame",
+      "type": "SourcePruningEnumerationDispatch.finishOptional source target (some sourceHandle) sourceScs targetScs = action",
+      "kind": "rfl-pattern elimination",
+      "used": true
+    },
+    {
+      "scope": "dispatch_preserves.selected.optionalSource",
+      "name": "callerSame",
+      "type": "beforeCaller = afterCaller",
+      "kind": "rfl-pattern elimination",
+      "used": true
+    },
+    {
+      "scope": "dispatch_preserves.selected.optionalSource",
+      "name": "queriesSame",
+      "type": "queries = savedQueries",
+      "kind": "rfl-pattern elimination",
+      "used": true
+    },
+    {
+      "scope": "dispatch_preserves.selected.present",
+      "name": "actionSame",
+      "type": "SourcePruningEnumerationAssimilation.finish source target handle sourceScs targetScs (if answer then (.empty : Node) else query) = action",
+      "kind": "rfl-pattern elimination",
+      "used": true
+    },
+    {
+      "scope": "dispatch_preserves.selected.present",
+      "name": "callerSame",
+      "type": "SourceCurrentAllocatedPartialState.advance beforeCaller checkedAfter saved beforeCaller.merge = afterCaller",
+      "kind": "rfl-pattern elimination",
+      "used": true
+    },
+    {
+      "scope": "dispatch_preserves.selected.present",
+      "name": "queriesSame",
+      "type": "workerQueries = savedQueries",
+      "kind": "rfl-pattern elimination",
+      "used": true
+    },
+    {
+      "scope": "dispatch_preserves.completed.optionalTarget",
+      "name": "afterSame",
+      "type": "assimilated before target source (.unenumerated (targetNode) (sourceScs ++ targetScs)) = after",
+      "kind": "rfl-pattern elimination",
+      "used": true
+    },
+    {
+      "scope": "dispatch_preserves.completed.optionalSource",
+      "name": "afterSame",
+      "type": "assimilated before target source (.unenumerated (some sourceHandle) (sourceScs ++ targetScs)) = after",
+      "kind": "rfl-pattern elimination",
+      "used": true
+    },
+    {
+      "scope": "dispatch_preserves.completed.present",
+      "name": "afterSame",
+      "type": "assimilated before target source (.unenumerated (some handle) (sourceScs ++ targetScs)) = after",
+      "kind": "rfl-pattern elimination",
+      "used": true
+    },
+    {
+      "scope": "dispatch_preserves.completed.noop",
+      "name": "afterSame",
+      "type": "before = after",
+      "kind": "rfl-pattern elimination",
+      "used": true
+    },
+    {
+      "scope": "run_preserves.cons",
+      "name": "source",
+      "type": "Nat",
+      "kind": "case binder",
+      "used": true
+    },
+    {
+      "scope": "run_preserves.cons",
+      "name": "rest",
+      "type": "List Nat",
+      "kind": "case binder",
+      "used": true
+    },
+    {
+      "scope": "run_preserves.dispatch.pair",
+      "name": "dispatchResult",
+      "type": "Except (SourceEqualityNativeDemand.Outcome width Node ⊕ SourceCurrentAllocatedConjunctionWorker.Outcome width) (Option (EnumerateM Symbol EnumGuard Unit))",
+      "kind": "match equation",
+      "used": true
+    },
+    {
+      "scope": "run_preserves.dispatch.pair",
+      "name": "reachedCaller",
+      "type": "Caller width",
+      "kind": "match equation",
+      "used": true
+    },
+    {
+      "scope": "run_preserves.dispatch.pair",
+      "name": "saved",
+      "type": "Queries",
+      "kind": "match equation",
+      "used": true
+    },
+    {
+      "scope": "run_preserves.dispatch.pair",
+      "name": "dispatchObserved",
+      "type": "SourcePruningEnumerationDispatch.dispatch checkEmpty nativeFuel p h beforeCaller before source target queries = (dispatchResult, reachedCaller, saved)",
+      "kind": "match equation",
+      "used": true
+    },
+    {
+      "scope": "run_preserves.dispatch.error",
+      "name": "fault",
+      "type": "SourceEqualityNativeDemand.Outcome width Node ⊕ SourceCurrentAllocatedConjunctionWorker.Outcome width",
+      "kind": "case binder",
+      "used": true
+    },
+    {
+      "scope": "run_preserves.dispatch.some",
+      "name": "action",
+      "type": "EnumerateM Symbol EnumGuard Unit",
+      "kind": "case binder",
+      "used": true
+    },
+    {
+      "scope": "run_preserves.raw.nil",
+      "name": "rawObserved",
+      "type": "ExceptT.run (action before) = []",
+      "kind": "match equation",
+      "used": true
+    },
+    {
+      "scope": "run_preserves.raw.cons",
+      "name": "head",
+      "type": "Except EnumerationState.Error (Unit × EnumerationState.State Symbol EnumGuard)",
+      "kind": "match equation",
+      "used": true
+    },
+    {
+      "scope": "run_preserves.raw.cons",
+      "name": "tail",
+      "type": "List (Except EnumerationState.Error (Unit × EnumerationState.State Symbol EnumGuard))",
+      "kind": "match equation",
+      "used": true
+    },
+    {
+      "scope": "run_preserves.raw.cons",
+      "name": "rawObserved",
+      "type": "ExceptT.run (action before) = head :: tail",
+      "kind": "match equation",
+      "used": true
+    },
+    {
+      "scope": "run_preserves.raw.error",
+      "name": "error",
+      "type": "EnumerationState.Error",
+      "kind": "case binder",
+      "used": true
+    },
+    {
+      "scope": "run_preserves.raw.ok",
+      "name": "unit",
+      "type": "Unit",
+      "kind": "case binder",
+      "used": true
+    },
+    {
+      "scope": "run_preserves.raw.ok",
+      "name": "middle",
+      "type": "EnumerationState.State Symbol EnumGuard",
+      "kind": "case binder",
+      "used": true
+    },
+    {
+      "scope": "run_preserves.raw.tail.cons",
+      "name": "second",
+      "type": "Except EnumerationState.Error (Unit × EnumerationState.State Symbol EnumGuard)",
+      "kind": "case binder",
+      "used": true
+    },
+    {
+      "scope": "run_preserves.raw.tail.cons",
+      "name": "remaining",
+      "type": "List (Except EnumerationState.Error (Unit × EnumerationState.State Symbol EnumGuard))",
+      "kind": "case binder",
+      "used": true
+    },
+    {
+      "scope": "run_preserves.raw.singleton",
+      "name": "rawObserved",
+      "type": "ExceptT.run (action before) = [.ok ((), middle)]",
+      "kind": "match equation",
+      "used": true
+    },
+    {
+      "scope": "run_preserves.raw.singleton",
+      "name": "middleStorage",
+      "type": "StorageValid middle",
+      "kind": "obtain field",
+      "used": true
+    },
+    {
+      "scope": "run_preserves.raw.singleton",
+      "name": "middleCounts",
+      "type": "EnumerationCanonicalWaiting.Correct roots middle.values waiting",
+      "kind": "obtain field",
+      "used": true
+    },
+    {
+      "scope": "run_preserves.observed.error",
+      "name": "resultSame",
+      "type": ".error fault = result",
+      "kind": "rfl-pattern elimination",
+      "used": true
+    },
+    {
+      "scope": "run_preserves.observed.error",
+      "name": "callerSame",
+      "type": "reachedCaller = afterCaller",
+      "kind": "rfl-pattern elimination",
+      "used": true
+    },
+    {
+      "scope": "run_preserves.observed.error",
+      "name": "queriesSame",
+      "type": "saved = savedQueries",
+      "kind": "rfl-pattern elimination",
+      "used": true
+    },
+    {
+      "scope": "run_preserves.observed.error",
+      "name": "afterSame",
+      "type": "before = after",
+      "kind": "rfl-pattern elimination",
+      "used": true
+    },
+    {
+      "scope": "run_preserves.observed.none",
+      "name": "resultSame",
+      "type": ".ok none = result",
+      "kind": "rfl-pattern elimination",
+      "used": true
+    },
+    {
+      "scope": "run_preserves.observed.none",
+      "name": "callerSame",
+      "type": "reachedCaller = afterCaller",
+      "kind": "rfl-pattern elimination",
+      "used": true
+    },
+    {
+      "scope": "run_preserves.observed.none",
+      "name": "queriesSame",
+      "type": "saved = savedQueries",
+      "kind": "rfl-pattern elimination",
+      "used": true
+    },
+    {
+      "scope": "run_preserves.observed.none",
+      "name": "afterSame",
+      "type": "before = after",
+      "kind": "rfl-pattern elimination",
+      "used": true
+    },
+    {
+      "scope": "run_preserves.observed.raw.nil",
+      "name": "resultSame",
+      "type": ".ok (some []) = result",
+      "kind": "rfl-pattern elimination",
+      "used": true
+    },
+    {
+      "scope": "run_preserves.observed.raw.nil",
+      "name": "callerSame",
+      "type": "reachedCaller = afterCaller",
+      "kind": "rfl-pattern elimination",
+      "used": true
+    },
+    {
+      "scope": "run_preserves.observed.raw.nil",
+      "name": "queriesSame",
+      "type": "saved = savedQueries",
+      "kind": "rfl-pattern elimination",
+      "used": true
+    },
+    {
+      "scope": "run_preserves.observed.raw.nil",
+      "name": "afterSame",
+      "type": "before = after",
+      "kind": "rfl-pattern elimination",
+      "used": true
+    },
+    {
+      "scope": "run_preserves.observed.raw.error",
+      "name": "resultSame",
+      "type": ".ok (some (.error error :: tail)) = result",
+      "kind": "rfl-pattern elimination",
+      "used": true
+    },
+    {
+      "scope": "run_preserves.observed.raw.error",
+      "name": "callerSame",
+      "type": "reachedCaller = afterCaller",
+      "kind": "rfl-pattern elimination",
+      "used": true
+    },
+    {
+      "scope": "run_preserves.observed.raw.error",
+      "name": "queriesSame",
+      "type": "saved = savedQueries",
+      "kind": "rfl-pattern elimination",
+      "used": true
+    },
+    {
+      "scope": "run_preserves.observed.raw.error",
+      "name": "afterSame",
+      "type": "before = after",
+      "kind": "rfl-pattern elimination",
+      "used": true
+    },
+    {
+      "scope": "run_preserves.observed.raw.multiple",
+      "name": "resultSame",
+      "type": ".ok (some (.ok ((), middle) :: second :: remaining)) = result",
+      "kind": "rfl-pattern elimination",
+      "used": true
+    },
+    {
+      "scope": "run_preserves.observed.raw.multiple",
+      "name": "callerSame",
+      "type": "reachedCaller = afterCaller",
+      "kind": "rfl-pattern elimination",
+      "used": true
+    },
+    {
+      "scope": "run_preserves.observed.raw.multiple",
+      "name": "queriesSame",
+      "type": "saved = savedQueries",
+      "kind": "rfl-pattern elimination",
+      "used": true
+    },
+    {
+      "scope": "run_preserves.observed.raw.multiple",
+      "name": "afterSame",
+      "type": "before = after",
+      "kind": "rfl-pattern elimination",
+      "used": true
+    },
+    {
+      "scope": "run_preserves.cons",
+      "name": "ih",
+      "type": "∀ (beforeCaller : Caller width) (before : EnumerationState.State Symbol EnumGuard) (queries : Queries), StorageValid before → EnumerationCanonicalWaiting.Correct roots before.values waiting → SourcePruningEnumerationFold.run checkEmpty nativeFuel p h rest beforeCaller before target queries = (result, afterCaller, savedQueries, after) → StorageValid after ∧ EnumerationCanonicalWaiting.Correct roots after.values waiting",
+      "kind": "structural IH",
+      "used": true
+    },
+    {
+      "scope": "dispatch_preserves.selected.invalid",
+      "name": "actionSame",
+      "type": "failure .invalidIntersection = action",
+      "kind": "rfl-pattern elimination",
+      "used": true
+    },
+    {
+      "scope": "dispatch_preserves.selected.invalid",
+      "name": "callerSame",
+      "type": "beforeCaller = afterCaller",
+      "kind": "rfl-pattern elimination",
+      "used": true
+    },
+    {
+      "scope": "dispatch_preserves.selected.invalid",
+      "name": "queriesSame",
+      "type": "queries = savedQueries",
+      "kind": "rfl-pattern elimination",
+      "used": true
+    },
+    {
+      "scope": "run_preserves.observed.nil",
+      "name": "resultSame",
+      "type": ".ok (some [.ok ((), before)]) = result",
+      "kind": "rfl-pattern elimination",
+      "used": true
+    },
+    {
+      "scope": "run_preserves.observed.nil",
+      "name": "callerSame",
+      "type": "beforeCaller = afterCaller",
+      "kind": "rfl-pattern elimination",
+      "used": true
+    },
+    {
+      "scope": "run_preserves.observed.nil",
+      "name": "queriesSame",
+      "type": "queries = savedQueries",
+      "kind": "rfl-pattern elimination",
+      "used": true
+    },
+    {
+      "scope": "run_preserves.observed.nil",
+      "name": "afterSame",
+      "type": "before = after",
+      "kind": "rfl-pattern elimination",
+      "used": true
+    },
+    {
+      "scope": "run_preserves.dispatch.ok",
+      "name": "possible",
+      "type": "Option (EnumerateM Symbol EnumGuard Unit)",
+      "kind": "case binder",
+      "used": true
+    },
+    {
+      "scope": "run_preserves.raw.ok.pair",
+      "name": "pair",
+      "type": "Unit × EnumerationState.State Symbol EnumGuard",
+      "kind": "case binder",
+      "used": true
+    }
+  ],
+  "count": 213,
+  "intro_groups": [
+    {
+      "scope": "assimilated_preserves.mergedBound",
+      "kind": "intro",
+      "binders": [
+        {
+          "name": "sc",
+          "type": "EnumerationState.Suspended"
+        },
+        {
+          "name": "member",
+          "type": "sc ∈ sourceScs ++ targetScs"
+        }
+      ]
+    },
+    {
+      "scope": "assimilated_preserves.mergedBound.source",
+      "kind": "case binder",
+      "binders": [
+        {
+          "name": "sourceMember",
+          "type": "sc ∈ sourceScs"
+        }
+      ]
+    },
+    {
+      "scope": "assimilated_preserves.mergedBound.target",
+      "kind": "case binder",
+      "binders": [
+        {
+          "name": "targetMember",
+          "type": "sc ∈ targetScs"
+        }
+      ]
+    },
+    {
+      "scope": "dispatch_preserves.same",
+      "kind": "condition",
+      "binders": [
+        {
+          "name": "same",
+          "type": "source = target"
+        }
+      ]
+    },
+    {
+      "scope": "dispatch_preserves.different",
+      "kind": "condition",
+      "binders": [
+        {
+          "name": "same",
+          "type": "¬ source = target"
+        }
+      ]
+    },
+    {
+      "scope": "dispatch_preserves.source.some",
+      "kind": "match equation",
+      "binders": [
+        {
+          "name": "sourceValue",
+          "type": "EnumerationState.UVarValue Symbol"
+        },
+        {
+          "name": "sourceStored",
+          "type": "before.values[source]? = some sourceValue"
+        }
+      ]
+    },
+    {
+      "scope": "dispatch_preserves.source.none",
+      "kind": "match equation",
+      "binders": [
+        {
+          "name": "sourceStored",
+          "type": "before.values[source]? = none"
+        }
+      ]
+    },
+    {
+      "scope": "dispatch_preserves.sourceValue.eliminated",
+      "kind": "case binder",
+      "binders": []
+    },
+    {
+      "scope": "dispatch_preserves.sourceValue.enumerated",
+      "kind": "case binder",
+      "binders": [
+        {
+          "name": "sourceFragment",
+          "type": "Fragments.Fragment Symbol"
+        }
+      ]
+    },
+    {
+      "scope": "dispatch_preserves.sourceValue.unenumerated",
+      "kind": "case binder",
+      "binders": [
+        {
+          "name": "sourceNode",
+          "type": "Option Nat"
+        },
+        {
+          "name": "sourceScs",
+          "type": "List EnumerationState.Suspended"
+        }
+      ]
+    },
+    {
+      "scope": "dispatch_preserves.targetValue.eliminated",
+      "kind": "case binder",
+      "binders": []
+    },
+    {
+      "scope": "dispatch_preserves.targetValue.enumerated",
+      "kind": "case binder",
+      "binders": [
+        {
+          "name": "targetFragment",
+          "type": "Fragments.Fragment Symbol"
+        }
+      ]
+    },
+    {
+      "scope": "dispatch_preserves.targetValue.unenumerated",
+      "kind": "case binder",
+      "binders": [
+        {
+          "name": "targetNode",
+          "type": "Option Nat"
+        },
+        {
+          "name": "targetScs",
+          "type": "List EnumerationState.Suspended"
+        }
+      ]
+    },
+    {
+      "scope": "dispatch_preserves.target.some",
+      "kind": "match equation",
+      "binders": [
+        {
+          "name": "targetValue",
+          "type": "EnumerationState.UVarValue Symbol"
+        },
+        {
+          "name": "targetStored",
+          "type": "before.values[target]? = some targetValue"
+        }
+      ]
+    },
+    {
+      "scope": "dispatch_preserves.target.none",
+      "kind": "match equation",
+      "binders": [
+        {
+          "name": "targetStored",
+          "type": "before.values[target]? = none"
+        }
+      ]
+    },
+    {
+      "scope": "dispatch_preserves.sourceNode.none",
+      "kind": "match equation",
+      "binders": [
+        {
+          "name": "sourceNodeSame",
+          "type": "sourceNode = none"
+        }
+      ]
+    },
+    {
+      "scope": "dispatch_preserves.sourceNode.some",
+      "kind": "match equation",
+      "binders": [
+        {
+          "name": "sourceHandle",
+          "type": "Nat"
+        },
+        {
+          "name": "sourceNodeSame",
+          "type": "sourceNode = some sourceHandle"
+        }
+      ]
+    },
+    {
+      "scope": "dispatch_preserves.targetNode.none",
+      "kind": "match equation",
+      "binders": [
+        {
+          "name": "targetNodeSame",
+          "type": "targetNode = none"
+        }
+      ]
+    },
+    {
+      "scope": "dispatch_preserves.targetNode.some",
+      "kind": "match equation",
+      "binders": [
+        {
+          "name": "targetHandle",
+          "type": "Nat"
+        },
+        {
+          "name": "targetNodeSame",
+          "type": "targetNode = some targetHandle"
+        }
+      ]
+    },
+    {
+      "scope": "dispatch_preserves.left.none",
+      "kind": "match equation",
+      "binders": [
+        {
+          "name": "leftDecoded",
+          "type": "SourcePruningEnumerationNodes.lookupNode beforeCaller.checked.native.machine.heap sourceHandle = none"
+        }
+      ]
+    },
+    {
+      "scope": "dispatch_preserves.left.some",
+      "kind": "match equation",
+      "binders": [
+        {
+          "name": "left",
+          "type": "Node"
+        },
+        {
+          "name": "leftDecoded",
+          "type": "SourcePruningEnumerationNodes.lookupNode beforeCaller.checked.native.machine.heap sourceHandle = some left"
+        }
+      ]
+    },
+    {
+      "scope": "dispatch_preserves.right.none",
+      "kind": "match equation",
+      "binders": [
+        {
+          "name": "rightDecoded",
+          "type": "SourcePruningEnumerationNodes.lookupNode beforeCaller.checked.native.machine.heap targetHandle = none"
+        }
+      ]
+    },
+    {
+      "scope": "dispatch_preserves.right.some",
+      "kind": "match equation",
+      "binders": [
+        {
+          "name": "right",
+          "type": "Node"
+        },
+        {
+          "name": "rightDecoded",
+          "type": "SourcePruningEnumerationNodes.lookupNode beforeCaller.checked.native.machine.heap targetHandle = some right"
+        }
+      ]
+    },
+    {
+      "scope": "dispatch_preserves.native.yielded",
+      "kind": "match equation",
+      "binders": [
+        {
+          "name": "control",
+          "type": "SourceEqualityNativeDemand.Control Node"
+        },
+        {
+          "name": "checkedAfter",
+          "type": "SourceEqualityNativeDemand.State width"
+        },
+        {
+          "name": "native",
+          "type": "SourceEqualityNativeDemand.execute nativeFuel (.code (SourceRecursiveIntersectionCode.requestNode IntersectionEmptyDomain.emptyDomain left right)) beforeCaller.checked = .yielded control checkedAfter"
+        }
+      ]
+    },
+    {
+      "scope": "dispatch_preserves.native.done",
+      "kind": "match equation",
+      "binders": [
+        {
+          "name": "query",
+          "type": "Node"
+        },
+        {
+          "name": "queried",
+          "type": "SourceEqualityNativeDemand.State width"
+        },
+        {
+          "name": "native",
+          "type": "SourceEqualityNativeDemand.execute nativeFuel (.code (SourceRecursiveIntersectionCode.requestNode IntersectionEmptyDomain.emptyDomain left right)) beforeCaller.checked = .done query queried"
+        }
+      ]
+    },
+    {
+      "scope": "dispatch_preserves.native.failed",
+      "kind": "match equation",
+      "binders": [
+        {
+          "name": "nativeFailure",
+          "type": "SourceRecursiveIntersectionKernel.Failure"
+        },
+        {
+          "name": "checkedAfter",
+          "type": "SourceEqualityNativeDemand.State width"
+        },
+        {
+          "name": "native",
+          "type": "SourceEqualityNativeDemand.execute nativeFuel (.code (SourceRecursiveIntersectionCode.requestNode IntersectionEmptyDomain.emptyDomain left right)) beforeCaller.checked = .failed nativeFailure checkedAfter"
+        }
+      ]
+    },
+    {
+      "scope": "dispatch_preserves.native.constraintError",
+      "kind": "match equation",
+      "binders": [
+        {
+          "name": "message",
+          "type": "String"
+        },
+        {
+          "name": "checkedAfter",
+          "type": "SourceEqualityNativeDemand.State width"
+        },
+        {
+          "name": "native",
+          "type": "SourceEqualityNativeDemand.execute nativeFuel (.code (SourceRecursiveIntersectionCode.requestNode IntersectionEmptyDomain.emptyDomain left right)) beforeCaller.checked = .constraintError message checkedAfter"
+        }
+      ]
+    },
+    {
+      "scope": "dispatch_preserves.native.blocked",
+      "kind": "match equation",
+      "binders": [
+        {
+          "name": "reason",
+          "type": "SourceEqualityNativeDemand.Blocked"
+        },
+        {
+          "name": "control",
+          "type": "SourceEqualityNativeDemand.Control Node"
+        },
+        {
+          "name": "checkedAfter",
+          "type": "SourceEqualityNativeDemand.State width"
+        },
+        {
+          "name": "native",
+          "type": "SourceEqualityNativeDemand.execute nativeFuel (.code (SourceRecursiveIntersectionCode.requestNode IntersectionEmptyDomain.emptyDomain left right)) beforeCaller.checked = .blocked reason control checkedAfter"
+        }
+      ]
+    },
+    {
+      "scope": "dispatch_preserves.phase.pair",
+      "kind": "match equation",
+      "binders": [
+        {
+          "name": "worker",
+          "type": "SourceCurrentAllocatedConjunctionWorker.Outcome width"
+        },
+        {
+          "name": "workerQueries",
+          "type": "Queries"
+        },
+        {
+          "name": "phase",
+          "type": "(if checkEmpty then SourcePruningEnumerationEnabledEmpty.check p h query queried beforeCaller.fourth queries else (.done false queried beforeCaller.fourth, queries)) = (worker, workerQueries)"
+        }
+      ]
+    },
+    {
+      "scope": "dispatch_preserves.phase.done",
+      "kind": "match equation",
+      "binders": [
+        {
+          "name": "answer",
+          "type": "Bool"
+        },
+        {
+          "name": "checkedAfter",
+          "type": "SourceEqualityNativeDemand.State width"
+        },
+        {
+          "name": "saved",
+          "type": "SourceCurrentEmptinessMemo.Memo"
+        },
+        {
+          "name": "workerSame",
+          "type": "worker = .done answer checkedAfter saved"
+        }
+      ]
+    },
+    {
+      "scope": "dispatch_preserves.phase.failed",
+      "kind": "match equation",
+      "binders": [
+        {
+          "name": "fault",
+          "type": "SourceCurrentConjunctionWorker.Fault Symbol FullSyntax.Formula"
+        },
+        {
+          "name": "checkedAfter",
+          "type": "SourceEqualityNativeDemand.State width"
+        },
+        {
+          "name": "saved",
+          "type": "SourceCurrentEmptinessMemo.Memo"
+        },
+        {
+          "name": "workerSame",
+          "type": "worker = .failed fault checkedAfter saved"
+        }
+      ]
+    },
+    {
+      "scope": "dispatch_preserves.encoded.none",
+      "kind": "match equation",
+      "binders": [
+        {
+          "name": "encoded",
+          "type": "SourcePruningEnumerationNodes.encodeNode (if answer then (.empty : Node) else query) = none"
+        }
+      ]
+    },
+    {
+      "scope": "dispatch_preserves.encoded.some",
+      "kind": "match equation",
+      "binders": [
+        {
+          "name": "handle",
+          "type": "Nat"
+        },
+        {
+          "name": "encoded",
+          "type": "SourcePruningEnumerationNodes.encodeNode (if answer then (.empty : Node) else query) = some handle"
+        }
+      ]
+    },
+    {
+      "scope": "dispatch_preserves.optionalTarget.reject",
+      "kind": "condition",
+      "binders": [
+        {
+          "name": "empty",
+          "type": "targetNode = some 0"
+        }
+      ]
+    },
+    {
+      "scope": "dispatch_preserves.optionalTarget.survive",
+      "kind": "condition",
+      "binders": [
+        {
+          "name": "empty",
+          "type": "targetNode ≠ some 0"
+        }
+      ]
+    },
+    {
+      "scope": "dispatch_preserves.optionalSource.reject",
+      "kind": "condition",
+      "binders": [
+        {
+          "name": "empty",
+          "type": "some sourceHandle = some 0"
+        }
+      ]
+    },
+    {
+      "scope": "dispatch_preserves.optionalSource.survive",
+      "kind": "condition",
+      "binders": [
+        {
+          "name": "empty",
+          "type": "some sourceHandle ≠ some 0"
+        }
+      ]
+    },
+    {
+      "scope": "dispatch_preserves.replacement.empty",
+      "kind": "case binder",
+      "binders": []
+    },
+    {
+      "scope": "dispatch_preserves.replacement.reference",
+      "kind": "case binder",
+      "binders": [
+        {
+          "name": "name",
+          "type": "InternedBinderProtocol.Reference"
+        }
+      ]
+    },
+    {
+      "scope": "dispatch_preserves.replacement.node",
+      "kind": "case binder",
+      "binders": [
+        {
+          "name": "entry",
+          "type": "Cache.Interned InternedBinderProtocol.NodeKey"
+        },
+        {
+          "name": "edges",
+          "type": "List (InternedConstructorTemplates.EdgeValue Symbol Constraint)"
+        },
+        {
+          "name": "depth",
+          "type": "Nat"
+        },
+        {
+          "name": "free",
+          "type": "List InternedBinderProtocol.Reference"
+        }
+      ]
+    },
+    {
+      "scope": "dispatch_preserves.replacement.union",
+      "kind": "case binder",
+      "binders": [
+        {
+          "name": "entry",
+          "type": "Cache.Interned InternedBinderProtocol.NodeKey"
+        },
+        {
+          "name": "members",
+          "type": "List Node"
+        },
+        {
+          "name": "depth",
+          "type": "Nat"
+        },
+        {
+          "name": "free",
+          "type": "List InternedBinderProtocol.Reference"
+        }
+      ]
+    },
+    {
+      "scope": "dispatch_preserves.replacement.mu",
+      "kind": "case binder",
+      "binders": [
+        {
+          "name": "entry",
+          "type": "Cache.Interned InternedBinderProtocol.NodeKey"
+        },
+        {
+          "name": "body",
+          "type": "Node"
+        },
+        {
+          "name": "depthShape",
+          "type": "Node"
+        },
+        {
+          "name": "ordinaryShape",
+          "type": "Node"
+        }
+      ]
+    },
+    {
+      "scope": "dispatch_preserves.selected.noop",
+      "kind": "rfl-pattern elimination",
+      "binders": [
+        {
+          "name": "actionSame",
+          "type": "(fun state => [.ok ((), state)] : EnumerateM Symbol EnumGuard Unit) = action"
+        },
+        {
+          "name": "callerSame",
+          "type": "beforeCaller = afterCaller"
+        },
+        {
+          "name": "queriesSame",
+          "type": "queries = savedQueries"
+        }
+      ]
+    },
+    {
+      "scope": "dispatch_preserves.selected.optionalTarget",
+      "kind": "rfl-pattern elimination",
+      "binders": [
+        {
+          "name": "actionSame",
+          "type": "SourcePruningEnumerationDispatch.finishOptional source target targetNode sourceScs targetScs = action"
+        },
+        {
+          "name": "callerSame",
+          "type": "beforeCaller = afterCaller"
+        },
+        {
+          "name": "queriesSame",
+          "type": "queries = savedQueries"
+        }
+      ]
+    },
+    {
+      "scope": "dispatch_preserves.selected.optionalSource",
+      "kind": "rfl-pattern elimination",
+      "binders": [
+        {
+          "name": "actionSame",
+          "type": "SourcePruningEnumerationDispatch.finishOptional source target (some sourceHandle) sourceScs targetScs = action"
+        },
+        {
+          "name": "callerSame",
+          "type": "beforeCaller = afterCaller"
+        },
+        {
+          "name": "queriesSame",
+          "type": "queries = savedQueries"
+        }
+      ]
+    },
+    {
+      "scope": "dispatch_preserves.selected.present",
+      "kind": "rfl-pattern elimination",
+      "binders": [
+        {
+          "name": "actionSame",
+          "type": "SourcePruningEnumerationAssimilation.finish source target handle sourceScs targetScs (if answer then (.empty : Node) else query) = action"
+        },
+        {
+          "name": "callerSame",
+          "type": "SourceCurrentAllocatedPartialState.advance beforeCaller checkedAfter saved beforeCaller.merge = afterCaller"
+        },
+        {
+          "name": "queriesSame",
+          "type": "workerQueries = savedQueries"
+        }
+      ]
+    },
+    {
+      "scope": "dispatch_preserves.completed.optionalTarget",
+      "kind": "rfl-pattern elimination",
+      "binders": [
+        {
+          "name": "afterSame",
+          "type": "assimilated before target source (.unenumerated (targetNode) (sourceScs ++ targetScs)) = after"
+        }
+      ]
+    },
+    {
+      "scope": "dispatch_preserves.completed.optionalSource",
+      "kind": "rfl-pattern elimination",
+      "binders": [
+        {
+          "name": "afterSame",
+          "type": "assimilated before target source (.unenumerated (some sourceHandle) (sourceScs ++ targetScs)) = after"
+        }
+      ]
+    },
+    {
+      "scope": "dispatch_preserves.completed.present",
+      "kind": "rfl-pattern elimination",
+      "binders": [
+        {
+          "name": "afterSame",
+          "type": "assimilated before target source (.unenumerated (some handle) (sourceScs ++ targetScs)) = after"
+        }
+      ]
+    },
+    {
+      "scope": "dispatch_preserves.completed.noop",
+      "kind": "rfl-pattern elimination",
+      "binders": [
+        {
+          "name": "afterSame",
+          "type": "before = after"
+        }
+      ]
+    },
+    {
+      "scope": "run_preserves.cons",
+      "kind": "case binder",
+      "binders": [
+        {
+          "name": "source",
+          "type": "Nat"
+        },
+        {
+          "name": "rest",
+          "type": "List Nat"
+        }
+      ]
+    },
+    {
+      "scope": "run_preserves.dispatch.pair",
+      "kind": "match equation",
+      "binders": [
+        {
+          "name": "dispatchResult",
+          "type": "Except (SourceEqualityNativeDemand.Outcome width Node ⊕ SourceCurrentAllocatedConjunctionWorker.Outcome width) (Option (EnumerateM Symbol EnumGuard Unit))"
+        },
+        {
+          "name": "reachedCaller",
+          "type": "Caller width"
+        },
+        {
+          "name": "saved",
+          "type": "Queries"
+        },
+        {
+          "name": "dispatchObserved",
+          "type": "SourcePruningEnumerationDispatch.dispatch checkEmpty nativeFuel p h beforeCaller before source target queries = (dispatchResult, reachedCaller, saved)"
+        }
+      ]
+    },
+    {
+      "scope": "run_preserves.dispatch.error",
+      "kind": "case binder",
+      "binders": [
+        {
+          "name": "fault",
+          "type": "SourceEqualityNativeDemand.Outcome width Node ⊕ SourceCurrentAllocatedConjunctionWorker.Outcome width"
+        }
+      ]
+    },
+    {
+      "scope": "run_preserves.dispatch.some",
+      "kind": "case binder",
+      "binders": [
+        {
+          "name": "action",
+          "type": "EnumerateM Symbol EnumGuard Unit"
+        }
+      ]
+    },
+    {
+      "scope": "run_preserves.raw.nil",
+      "kind": "match equation",
+      "binders": [
+        {
+          "name": "rawObserved",
+          "type": "ExceptT.run (action before) = []"
+        }
+      ]
+    },
+    {
+      "scope": "run_preserves.raw.cons",
+      "kind": "match equation",
+      "binders": [
+        {
+          "name": "head",
+          "type": "Except EnumerationState.Error (Unit × EnumerationState.State Symbol EnumGuard)"
+        },
+        {
+          "name": "tail",
+          "type": "List (Except EnumerationState.Error (Unit × EnumerationState.State Symbol EnumGuard))"
+        },
+        {
+          "name": "rawObserved",
+          "type": "ExceptT.run (action before) = head :: tail"
+        }
+      ]
+    },
+    {
+      "scope": "run_preserves.raw.error",
+      "kind": "case binder",
+      "binders": [
+        {
+          "name": "error",
+          "type": "EnumerationState.Error"
+        }
+      ]
+    },
+    {
+      "scope": "run_preserves.raw.ok",
+      "kind": "case binder",
+      "binders": [
+        {
+          "name": "unit",
+          "type": "Unit"
+        },
+        {
+          "name": "middle",
+          "type": "EnumerationState.State Symbol EnumGuard"
+        }
+      ]
+    },
+    {
+      "scope": "run_preserves.raw.tail.cons",
+      "kind": "case binder",
+      "binders": [
+        {
+          "name": "second",
+          "type": "Except EnumerationState.Error (Unit × EnumerationState.State Symbol EnumGuard)"
+        },
+        {
+          "name": "remaining",
+          "type": "List (Except EnumerationState.Error (Unit × EnumerationState.State Symbol EnumGuard))"
+        }
+      ]
+    },
+    {
+      "scope": "run_preserves.raw.singleton",
+      "kind": "match equation",
+      "binders": [
+        {
+          "name": "rawObserved",
+          "type": "ExceptT.run (action before) = [.ok ((), middle)]"
+        }
+      ]
+    },
+    {
+      "scope": "run_preserves.observed.error",
+      "kind": "rfl-pattern elimination",
+      "binders": [
+        {
+          "name": "resultSame",
+          "type": ".error fault = result"
+        },
+        {
+          "name": "callerSame",
+          "type": "reachedCaller = afterCaller"
+        },
+        {
+          "name": "queriesSame",
+          "type": "saved = savedQueries"
+        },
+        {
+          "name": "afterSame",
+          "type": "before = after"
+        }
+      ]
+    },
+    {
+      "scope": "run_preserves.observed.none",
+      "kind": "rfl-pattern elimination",
+      "binders": [
+        {
+          "name": "resultSame",
+          "type": ".ok none = result"
+        },
+        {
+          "name": "callerSame",
+          "type": "reachedCaller = afterCaller"
+        },
+        {
+          "name": "queriesSame",
+          "type": "saved = savedQueries"
+        },
+        {
+          "name": "afterSame",
+          "type": "before = after"
+        }
+      ]
+    },
+    {
+      "scope": "run_preserves.observed.raw.nil",
+      "kind": "rfl-pattern elimination",
+      "binders": [
+        {
+          "name": "resultSame",
+          "type": ".ok (some []) = result"
+        },
+        {
+          "name": "callerSame",
+          "type": "reachedCaller = afterCaller"
+        },
+        {
+          "name": "queriesSame",
+          "type": "saved = savedQueries"
+        },
+        {
+          "name": "afterSame",
+          "type": "before = after"
+        }
+      ]
+    },
+    {
+      "scope": "run_preserves.observed.raw.error",
+      "kind": "rfl-pattern elimination",
+      "binders": [
+        {
+          "name": "resultSame",
+          "type": ".ok (some (.error error :: tail)) = result"
+        },
+        {
+          "name": "callerSame",
+          "type": "reachedCaller = afterCaller"
+        },
+        {
+          "name": "queriesSame",
+          "type": "saved = savedQueries"
+        },
+        {
+          "name": "afterSame",
+          "type": "before = after"
+        }
+      ]
+    },
+    {
+      "scope": "run_preserves.observed.raw.multiple",
+      "kind": "rfl-pattern elimination",
+      "binders": [
+        {
+          "name": "resultSame",
+          "type": ".ok (some (.ok ((), middle) :: second :: remaining)) = result"
+        },
+        {
+          "name": "callerSame",
+          "type": "reachedCaller = afterCaller"
+        },
+        {
+          "name": "queriesSame",
+          "type": "saved = savedQueries"
+        },
+        {
+          "name": "afterSame",
+          "type": "before = after"
+        }
+      ]
+    },
+    {
+      "scope": "dispatch_preserves.selected.invalid",
+      "kind": "rfl-pattern elimination",
+      "binders": [
+        {
+          "name": "actionSame",
+          "type": "failure .invalidIntersection = action"
+        },
+        {
+          "name": "callerSame",
+          "type": "beforeCaller = afterCaller"
+        },
+        {
+          "name": "queriesSame",
+          "type": "queries = savedQueries"
+        }
+      ]
+    },
+    {
+      "scope": "run_preserves.observed.nil",
+      "kind": "rfl-pattern elimination",
+      "binders": [
+        {
+          "name": "resultSame",
+          "type": ".ok (some [.ok ((), before)]) = result"
+        },
+        {
+          "name": "callerSame",
+          "type": "beforeCaller = afterCaller"
+        },
+        {
+          "name": "queriesSame",
+          "type": "queries = savedQueries"
+        },
+        {
+          "name": "afterSame",
+          "type": "before = after"
+        }
+      ]
+    },
+    {
+      "scope": "run_preserves.dispatch.ok",
+      "kind": "case binder",
+      "binders": [
+        {
+          "name": "possible",
+          "type": "Option (EnumerateM Symbol EnumGuard Unit)"
+        }
+      ]
+    },
+    {
+      "scope": "run_preserves.raw.ok.pair",
+      "kind": "case binder",
+      "binders": [
+        {
+          "name": "pair",
+          "type": "Unit × EnumerationState.State Symbol EnumGuard"
+        }
+      ]
+    }
+  ],
+  "explicit_manual_inventory": true,
+  "no_expression_binder_regex": true,
+  "local_haves": 5,
+  "local_lets": 0,
+  "public_quantified_binders": "No additional public forall/lambda/conditional-arrow binders occur beyond named theorem premises. The actual observation equalities are premises, not desired results.",
+  "no_new_assumptions": "All case/equation/rfl-pattern rows are proof-local inversions of existing expressions."
+}

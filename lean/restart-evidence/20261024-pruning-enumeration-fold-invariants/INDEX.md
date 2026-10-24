@@ -1,0 +1,15 @@
+# Storage and waiting counts through the checked fold
+
+The three state-preservation theorems use existing actions. assimilated_preserves starts from the two actual pending slots, distinct source and target, StorageValid and canonical waiting counts. It retains storage and counts for the literal concatenated-reference assimilation. The fixed external waiting map and root function stay unchanged.
+
+dispatch_preserves uses the actual selected action and its observed successful singleton. Selection and execution use the SAME before state. The action captures suspended references from that state. Context, range admission, Graph, native completion and desired query meaning are not input premises for this state-only result.
+
+run_preserves observes the existing ordered Fold once. It covers every actual returned outer enum endpoint, including native interruption, no selected action, raw rejection, errors and malformed raw lists. One List induction follows the exact successful-singleton recursive branch. It does not construct a completed Fold. Existing Fold completion can later supply that execution without a duplicate completion packet.
+
+The selected interface has three public theorems and no new definition, action, instance, helper, carrier or type. Root selected a220–340 ordinary-line estimate and hard460 before owner/body freeze. Actual owner metadata supplies exact contracts and counts. No source estimate predicts a compiler outcome.
+
+Work retains all baseline blobs/modes/refs/stashes/worktrees, nine exact document inverses, one Audit prepend, full actual public output and allowed axiom subsets including empty sets, every real failed input/raw report and all six-artifact resource families. Exactly26 prior IncomingNode publication inputs and already sealed assessment/peer context remain protected. The current fresh owner is copied once. Earlier owner revisions remain protected in the baseline. No current revision or failed attempt is assumed.
+
+Run verify-checkpoint.py with an explicit repository root. Force-add every manifest path and SHA256SUMS, including ignored raw logs. Publication requires every sealed path in HEAD, exact filesystem/index/tree/modes, a singleton push URL and ordinary formalize push. Root supplies actual build/public/axiom outcomes after execution. No future check, seal or push result is asserted.
+
+StorageValid does not establish Safe or LiveRoots. Fixed logical count preservation does not establish native gained-only cancellation, expandable-index maintenance, Int/IntSet/physical-ID extraction or root-map correspondence. Current reached WordRanges, full terminal composition, flag/partition provenance, shared driver language and initial-only future query admission remain separate. Full typing/pruning/solver/runtime/resources/convergence remain open. H6 stays strongest; the whole goal is ACTIVE and incomplete. The optimized core and earlier proofs remain. Six imported Haskell repair handoffs stay first in FINDINGS. No Haskell source change is claimed.

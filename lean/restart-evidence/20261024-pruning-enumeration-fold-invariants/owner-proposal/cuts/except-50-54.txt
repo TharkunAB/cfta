@@ -1,0 +1,5 @@
+@[always_inline, inline]
+protected def mapError (f : ε → ε') : Except ε α → Except ε' α
+  | Except.error err => Except.error <| f err
+  | Except.ok v      => Except.ok v
+

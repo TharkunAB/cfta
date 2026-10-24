@@ -1,0 +1,15 @@
+/-- Joined root classes and actual source-slot elimination restore the complete live-root invariant. -/
+theorem terminal_assimilation_live (graph : Graph Symbol Guard) (values : List (UVarValue Symbol))
+    (roots : Nat → Nat) (selected sources : List Nat) (first target count : Nat)
+    (before after : State Symbol Guard) (valid : Merging values roots selected before)
+    (oldLive : ∀ uv < values.length, LiveAt values uv ↔ roots uv = uv)
+    (sameSelected : ∀ uv, uv ∈ sources ↔ uv ∈ selected) (firstSelected : roots first ∈ selected)
+    (path : UnionFind.Reaches before.representatives first target count)
+    (success : Success (sources.forM (EnumerationState.assimilate graph target)) before () after) :
+    LiveRoots after := by
+  obtain ⟨forestSame, lengthSame, liveSlots⟩ := terminal_assimilations graph target sources before after success
+  intro uv value stored
+  have insideAfter := (List.getElem?_eq_some_iff.mp stored).1
+  have insideOld : uv < values.length := by simpa [lengthSame, valid.values] using insideAfter
+  rw [← liveAt_read after.values uv value stored, liveSlots uv, valid.values, oldLive uv insideOld,
+    sameSelected uv, forestSame, joined_root_set values roots selected before valid first target count firstSelected path uv]

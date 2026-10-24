@@ -1,0 +1,16 @@
+theorem run_preserves
+    [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Constraint)] [DecidableEq Node]
+    (checkEmpty : Bool) (nativeFuel p h : Nat) (sources : List Nat)
+    (beforeCaller : Caller width) (before : EnumerationState.State Symbol EnumGuard)
+    (target : Nat) (queries : Queries)
+    (result : Except (SourceEqualityNativeDemand.Outcome width Node ⊕
+      SourceCurrentAllocatedConjunctionWorker.Outcome width)
+      (Option (List (Except EnumerationState.Error (Unit × EnumerationState.State Symbol EnumGuard)))))
+    (afterCaller : Caller width) (savedQueries : Queries)
+    (after : EnumerationState.State Symbol EnumGuard)
+    (roots : Nat → Nat) (waiting : EnumerationWaitingIndex.Waiting)
+    (storage : StorageValid before)
+    (counts : EnumerationCanonicalWaiting.Correct roots before.values waiting)
+    (observed : SourcePruningEnumerationFold.run checkEmpty nativeFuel p h sources
+      beforeCaller before target queries = (result, afterCaller, savedQueries, after)) :
+    StorageValid after ∧ EnumerationCanonicalWaiting.Correct roots after.values waiting

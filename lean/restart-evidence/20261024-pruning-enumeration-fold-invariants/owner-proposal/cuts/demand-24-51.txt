@@ -1,0 +1,28 @@
+/-- Native requests retain both physical equality caches and their completed operation tables. -/
+structure State (width : Nat) : Type 1 where
+  native : Native width Symbol Guard
+  operations : Operations
+
+/-- A demanded edge body resumes without looking up its running thunk again. -/
+inductive Control (Output : Type) : Type 1 where
+  | code (body : Code Symbol Guard Output)
+  | edgeBody (request : EdgeRequest Symbol Guard) (next : EdgeValue Symbol Guard → Code Symbol Guard Output)
+
+/-- Missing model storage is distinct from a native busy thunk or a source error. -/
+inductive Blocked where
+  | native (reason : SourceRecursiveIntersectionNative.Blocked)
+  | missingField (original : Guard)
+
+/-- Every observation retains the current equality state and complete native state. -/
+inductive Outcome (width : Nat) (Output : Type) : Type 1 where
+  | yielded (control : Control Output) (state : State width)
+  | done (value : Output) (state : State width)
+  | failed (failure : SourceRecursiveIntersectionKernel.Failure) (state : State width)
+  | constraintError (message : String) (state : State width)
+  | blocked (reason : Blocked) (control : Control Output) (state : State width)
+
+/-- Read actual returned state from every complete or incomplete observation. -/
+def Outcome.state : Outcome width Output → State width
+  | .yielded _ state | .done _ state | .failed _ state | .constraintError _ state | .blocked _ _ state => state
+
+/-- Ordinary source instructions retain equality state at the exact native continuation. -/

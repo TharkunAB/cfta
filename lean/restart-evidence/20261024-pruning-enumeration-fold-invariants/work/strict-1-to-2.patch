@@ -1,0 +1,140 @@
+--- strict-1
++++ strict-2
+@@ -69,23 +69,23 @@
+     StorageValid after ∧ EnumerationCanonicalWaiting.Correct roots after.values waiting
+  := by
+   by_cases same : source = target
+-  · simp only [SourcePruningEnumerationDispatch.dispatch, ite_eq_left same, Id.run,
++  · simp only [SourcePruningEnumerationDispatch.dispatch, ite_eq_left same, Id.run, pure,
+       Prod.mk.injEq, Except.ok.injEq, Option.some.injEq] at selected
+-  rcases selected with ⟨rfl, rfl, rfl⟩
+-  change [Except.ok ((), before)] = [Except.ok ((), after)] at completed
+-  simp only [List.cons.injEq, List.nil.injEq, and_true, Except.ok.injEq, Prod.mk.injEq, true_and] at completed
+-  subst after
+-  exact ⟨storage, counts⟩
++    rcases selected with ⟨rfl, rfl, rfl⟩
++    change [Except.ok ((), before)] = [Except.ok ((), after)] at completed
++    simp only [List.cons.injEq, and_true, Except.ok.injEq, Prod.mk.injEq, true_and] at completed
++    subst after
++    exact ⟨storage, counts⟩
+   · cases sourceStored : before.values[source]? with
+     | none => simp [SourcePruningEnumerationDispatch.dispatch, same, sourceStored] at selected
+     | some sourceValue =>
+       cases sourceValue with
+       | eliminated =>
+-        simp only [SourcePruningEnumerationDispatch.dispatch, ite_eq_right same, sourceStored, Id.run,
++        simp only [SourcePruningEnumerationDispatch.dispatch, ite_eq_right same, sourceStored, Id.run, pure,
+           Prod.mk.injEq, Except.ok.injEq, Option.some.injEq] at selected
+         rcases selected with ⟨rfl, rfl, rfl⟩
+         change [Except.ok ((), before)] = [Except.ok ((), after)] at completed
+-        simp only [List.cons.injEq, List.nil.injEq, and_true, Except.ok.injEq, Prod.mk.injEq, true_and] at completed
++        simp only [List.cons.injEq, and_true, Except.ok.injEq, Prod.mk.injEq, true_and] at completed
+         subst after
+         exact ⟨storage, counts⟩
+       | enumerated sourceFragment =>
+@@ -93,7 +93,7 @@
+         | none => simp [SourcePruningEnumerationDispatch.dispatch, same, sourceStored, targetStored] at selected
+         | some targetValue =>
+           simp only [SourcePruningEnumerationDispatch.dispatch, ite_eq_right same, sourceStored, targetStored,
+-            Id.run, Prod.mk.injEq, Except.ok.injEq, Option.some.injEq] at selected
++            Id.run, pure, Prod.mk.injEq, Except.ok.injEq, Option.some.injEq] at selected
+           rcases selected with ⟨rfl, rfl, rfl⟩
+           cases completed
+       | unenumerated sourceNode sourceScs =>
+@@ -103,26 +103,26 @@
+           cases targetValue with
+           | eliminated =>
+             simp only [SourcePruningEnumerationDispatch.dispatch, ite_eq_right same, sourceStored, targetStored,
+-              Id.run, Prod.mk.injEq, Except.ok.injEq, Option.some.injEq] at selected
++              Id.run, pure, Prod.mk.injEq, Except.ok.injEq, Option.some.injEq] at selected
+             rcases selected with ⟨rfl, rfl, rfl⟩
+             cases completed
+           | enumerated targetFragment =>
+             simp only [SourcePruningEnumerationDispatch.dispatch, ite_eq_right same, sourceStored, targetStored,
+-              Id.run, Prod.mk.injEq, Except.ok.injEq, Option.some.injEq] at selected
++              Id.run, pure, Prod.mk.injEq, Except.ok.injEq, Option.some.injEq] at selected
+             rcases selected with ⟨rfl, rfl, rfl⟩
+             cases completed
+           | unenumerated targetNode targetScs =>
+             cases sourceNodeSame : sourceNode with
+             | none =>
+               simp only [SourcePruningEnumerationDispatch.dispatch, ite_eq_right same, sourceStored, targetStored,
+-                Id.run, Prod.mk.injEq, Except.ok.injEq, Option.some.injEq] at selected
++                Id.run, pure, Prod.mk.injEq, Except.ok.injEq, Option.some.injEq] at selected
+               rcases selected with ⟨rfl, rfl, rfl⟩
+               by_cases empty : targetNode = some 0
+               · simp [SourcePruningEnumerationDispatch.finishOptional, empty] at completed
+               · change (if targetNode = some 0 then [] else
+                   [Except.ok ((), assimilated before target source (.unenumerated targetNode (sourceScs ++ targetScs)))]) = _ at completed
+                 rw [if_neg empty] at completed
+-                simp only [List.cons.injEq, List.nil.injEq, and_true, Except.ok.injEq, Prod.mk.injEq, true_and] at completed
++                simp only [List.cons.injEq, and_true, Except.ok.injEq, Prod.mk.injEq, true_and] at completed
+                 subst after
+                 exact assimilated_preserves before source target none targetNode targetNode sourceScs targetScs
+                   roots waiting storage counts sourceStored targetStored (Ne.symm same)
+@@ -130,14 +130,14 @@
+               cases targetNodeSame : targetNode with
+               | none =>
+                 simp only [SourcePruningEnumerationDispatch.dispatch, ite_eq_right same, sourceStored, targetStored,
+-                  Id.run, Prod.mk.injEq, Except.ok.injEq, Option.some.injEq] at selected
++                  Id.run, pure, Prod.mk.injEq, Except.ok.injEq, Option.some.injEq] at selected
+                 rcases selected with ⟨rfl, rfl, rfl⟩
+                 by_cases empty : (some sourceHandle : Option Nat) = some 0
+                 · simp [SourcePruningEnumerationDispatch.finishOptional, empty] at completed
+                 · change (if (some sourceHandle : Option Nat) = some 0 then [] else
+                     [Except.ok ((), assimilated before target source (.unenumerated (some sourceHandle) (sourceScs ++ targetScs)))]) = _ at completed
+                   rw [if_neg empty] at completed
+-                  simp only [List.cons.injEq, List.nil.injEq, and_true, Except.ok.injEq, Prod.mk.injEq, true_and] at completed
++                  simp only [List.cons.injEq, and_true, Except.ok.injEq, Prod.mk.injEq, true_and] at completed
+                   subst after
+                   exact assimilated_preserves before source target (some sourceHandle) none (some sourceHandle)
+                     sourceScs targetScs roots waiting storage counts sourceStored targetStored (Ne.symm same)
+@@ -174,32 +174,32 @@
+                         | some handle =>
+                           simp only [SourcePruningEnumerationDispatch.dispatch, ite_eq_right same, sourceStored, targetStored,
+                             leftDecoded, rightDecoded, native, SourcePruningEnumerationDispatch.afterQuery, phase,
+-                            encoded, Option.map_some, Except.mapError, Id.run,
++                            encoded, Option.map_some, Except.mapError, Id.run, pure,
+                             Prod.mk.injEq, Except.ok.injEq, Option.some.injEq] at selected
+                           rcases selected with ⟨rfl, rfl, rfl⟩
+                           cases (if answer then (.empty : Node) else query) with
+                           | empty => cases completed
+                           | reference name =>
+                             change [Except.ok ((), assimilated before target source (.unenumerated (some handle) (sourceScs ++ targetScs)))] = _ at completed
+-                            simp only [List.cons.injEq, List.nil.injEq, and_true, Except.ok.injEq, Prod.mk.injEq, true_and] at completed
++                            simp only [List.cons.injEq, and_true, Except.ok.injEq, Prod.mk.injEq, true_and] at completed
+                             subst after
+                             exact assimilated_preserves before source target (some sourceHandle) (some targetHandle)
+                               (some handle) sourceScs targetScs roots waiting storage counts sourceStored targetStored (Ne.symm same)
+                           | node entry edges depth free =>
+                             change [Except.ok ((), assimilated before target source (.unenumerated (some handle) (sourceScs ++ targetScs)))] = _ at completed
+-                            simp only [List.cons.injEq, List.nil.injEq, and_true, Except.ok.injEq, Prod.mk.injEq, true_and] at completed
++                            simp only [List.cons.injEq, and_true, Except.ok.injEq, Prod.mk.injEq, true_and] at completed
+                             subst after
+                             exact assimilated_preserves before source target (some sourceHandle) (some targetHandle)
+                               (some handle) sourceScs targetScs roots waiting storage counts sourceStored targetStored (Ne.symm same)
+                           | union entry members depth free =>
+                             change [Except.ok ((), assimilated before target source (.unenumerated (some handle) (sourceScs ++ targetScs)))] = _ at completed
+-                            simp only [List.cons.injEq, List.nil.injEq, and_true, Except.ok.injEq, Prod.mk.injEq, true_and] at completed
++                            simp only [List.cons.injEq, and_true, Except.ok.injEq, Prod.mk.injEq, true_and] at completed
+                             subst after
+                             exact assimilated_preserves before source target (some sourceHandle) (some targetHandle)
+                               (some handle) sourceScs targetScs roots waiting storage counts sourceStored targetStored (Ne.symm same)
+                           | mu entry body depthShape ordinaryShape =>
+                             change [Except.ok ((), assimilated before target source (.unenumerated (some handle) (sourceScs ++ targetScs)))] = _ at completed
+-                            simp only [List.cons.injEq, List.nil.injEq, and_true, Except.ok.injEq, Prod.mk.injEq, true_and] at completed
++                            simp only [List.cons.injEq, and_true, Except.ok.injEq, Prod.mk.injEq, true_and] at completed
+                             subst after
+                             exact assimilated_preserves before source target (some sourceHandle) (some targetHandle)
+                               (some handle) sourceScs targetScs roots waiting storage counts sourceStored targetStored (Ne.symm same)
+@@ -254,8 +254,8 @@
+             rcases observed with ⟨rfl, rfl, rfl, rfl⟩
+             exact ⟨storage, counts⟩
+           | ok pair =>
+-            rcases pair with ⟨unit, middle⟩
+-            cases unit
++            rcases pair with ⟨valueUnit, middle⟩
++            cases valueUnit
+             cases tail with
+             | nil =>
+               obtain ⟨middleStorage, middleCounts⟩ := dispatch_preserves checkEmpty nativeFuel p h

@@ -1,0 +1,147 @@
+{
+  "packets": [
+    {
+      "scope": "run_preserves.raw.singleton",
+      "name": "completedHead",
+      "api": "dispatch_preserves checkEmpty nativeFuel p h beforeCaller before source target queries action reachedCaller saved middle roots waiting storage counts dispatchObserved rawObserved",
+      "fields": [
+        {
+          "name": "middleStorage",
+          "type": "StorageValid middle",
+          "used": true
+        },
+        {
+          "name": "middleCounts",
+          "type": "EnumerationCanonicalWaiting.Correct roots middle.values waiting",
+          "used": true
+        }
+      ],
+      "skipped_fields": []
+    }
+  ],
+  "count": 1,
+  "field_count": 2,
+  "rfl_pattern_eliminations": [
+    {
+      "scope": "dispatch_preserves.selected.noop",
+      "from": "selected after concrete branch reduction",
+      "fields": [
+        {
+          "name": "actionSame",
+          "type": "(fun state => [.ok ((), state)] : EnumerateM Symbol EnumGuard Unit) = action"
+        },
+        {
+          "name": "callerSame",
+          "type": "beforeCaller = afterCaller"
+        },
+        {
+          "name": "queriesSame",
+          "type": "queries = savedQueries"
+        }
+      ],
+      "patterns": [
+        "rfl",
+        "rfl",
+        "rfl"
+      ],
+      "not_extra_haves": true
+    },
+    {
+      "scope": "dispatch_preserves.selected.optionalTarget",
+      "from": "selected after concrete branch reduction",
+      "fields": [
+        {
+          "name": "actionSame",
+          "type": "SourcePruningEnumerationDispatch.finishOptional source target targetNode sourceScs targetScs = action"
+        },
+        {
+          "name": "callerSame",
+          "type": "beforeCaller = afterCaller"
+        },
+        {
+          "name": "queriesSame",
+          "type": "queries = savedQueries"
+        }
+      ],
+      "patterns": [
+        "rfl",
+        "rfl",
+        "rfl"
+      ],
+      "not_extra_haves": true
+    },
+    {
+      "scope": "dispatch_preserves.selected.optionalSource",
+      "from": "selected after concrete branch reduction",
+      "fields": [
+        {
+          "name": "actionSame",
+          "type": "SourcePruningEnumerationDispatch.finishOptional source target (some sourceHandle) sourceScs targetScs = action"
+        },
+        {
+          "name": "callerSame",
+          "type": "beforeCaller = afterCaller"
+        },
+        {
+          "name": "queriesSame",
+          "type": "queries = savedQueries"
+        }
+      ],
+      "patterns": [
+        "rfl",
+        "rfl",
+        "rfl"
+      ],
+      "not_extra_haves": true
+    },
+    {
+      "scope": "dispatch_preserves.selected.present",
+      "from": "selected after concrete branch reduction",
+      "fields": [
+        {
+          "name": "actionSame",
+          "type": "SourcePruningEnumerationAssimilation.finish source target handle sourceScs targetScs (if answer then (.empty : Node) else query) = action"
+        },
+        {
+          "name": "callerSame",
+          "type": "SourceCurrentAllocatedPartialState.advance beforeCaller checkedAfter saved beforeCaller.merge = afterCaller"
+        },
+        {
+          "name": "queriesSame",
+          "type": "workerQueries = savedQueries"
+        }
+      ],
+      "patterns": [
+        "rfl",
+        "rfl",
+        "rfl"
+      ],
+      "not_extra_haves": true
+    },
+    {
+      "scope": "dispatch_preserves.selected.invalid",
+      "from": "selected after malformed-present branch reduction",
+      "fields": [
+        {
+          "name": "actionSame",
+          "type": "failure .invalidIntersection = action"
+        },
+        {
+          "name": "callerSame",
+          "type": "beforeCaller = afterCaller"
+        },
+        {
+          "name": "queriesSame",
+          "type": "queries = savedQueries"
+        }
+      ],
+      "patterns": [
+        "rfl",
+        "rfl",
+        "rfl"
+      ],
+      "not_extra_haves": true
+    }
+  ],
+  "no_other_named_obtains_planned": true
+}
