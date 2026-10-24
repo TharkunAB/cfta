@@ -1,5 +1,33 @@
 Continue the cfta formalization in /home/tritlo/Code/mcfta.
 
+## Actual interned-node narrowing and emptiness
+
+Updated: 2026-10-24. Main `74250bd88` is incorporated.
+Proof: `0e231e740dd20edc97b9cdcc49c73f4d4f25132e`.
+Read `lean/notes-current-pruning-native-view.md`.
+
+The concrete source filter, repaired reader and actual smart constructor now
+derive finite narrowing from an initially Ready cache and closed available input. The final
+cache retains validity and issued-name history. Exact normalized rows and the
+empty-result equivalence are proved. The actual second read retains the final
+cache. Non-Mu emptyAt derives its Boolean result; Mu alone returns false without
+a read. Union stays in the actual narrowing path. Full symbols and edges remain.
+
+Strict checking and the installed build pass. Audit passes 3679 jobs and 76089
+dependency checks, with one older warning and no new-source warning. All six
+signatures and three actual axiom reports were read; only the standard three
+Lean axioms occur. Failed inputs and the original frozen proposal remain.
+
+Next connect enumeration IDs to stored interned Values and cache histories,
+then compose the outer narrow wrapper, actual typing and memo2 with typedTypes.
+The semantic laws of fits/admits, global helper canonicality, mutation histories,
+selected-current protection, cached scheduling, semantic pruning, phase 4,
+resources, practical width, runtime/solver and convergence remain open.
+H6 remains strongest combined. H23 stays queued. No Haskell source changes.
+FINDINGS keeps its external repair index FIRST. All six recorded fixes are on
+main. The full goal is ACTIVE and incomplete. This precedes evidence and push.
+
+
 ## Generated-name repair merged on main
 
 Updated: 2026-10-24. Main `74250bd88` is incorporated.
