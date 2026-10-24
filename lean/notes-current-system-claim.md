@@ -1,5 +1,43 @@
 # Current system claim
 
+## Outer pruning wrapper and finite completion
+
+Updated: 2026-10-24. Main `74250bd88` is incorporated.
+Proof: `f1b32242e383a19ddaf907e01d8173729223526a`.
+Read `lean/notes-current-pruning-outer-narrow.md`.
+
+The outer narrow definition preserves Mu first, then preserves nodes at raw
+type positions. Both bypasses retain the complete input Value and native heap
+at every fuel. The fallback calls actual narrowAt at holeKey metadata.typing uv
+using the original selected raw UVar. Union is not a Mu bypass. Ready,
+availability and closedness derive actual finite completion, Keeps and
+availability/closedness in the actual returned heap. Every larger fuel retains
+that chosen result and heap. The combined result does not assert Ordinary.
+
+The first actual strict Lean attempt, source-check-2, passes with an empty
+log. Earlier source-check-1 stopped in setup before Lean read a source. Its
+failed capped receipt remains separate from the four actual passing checks.
+The public readback passes with all five full types and no display omission.
+The installed build passes 567 jobs. Audit passes 3686 jobs and
+76128 dependency checks, with one older warning and no new-source
+warning. All five complete public types and actual axiom reports were read.
+All five declarations report only propext, Classical.choice and Quot.sound.
+All frozen declarations, source cuts, reviews and raw evidence remain.
+There is one definition and four theorems. No helper, carrier, type or instance
+is added. The source public holeKey/fits/admits callbacks remain explicit.
+
+Next connect the wrapper to realized pending observations. Select bypasses
+before running the native narrowing suffix. Preserve the original raw UVar
+for membership and keys. Concrete typing/key laws, native graph/ID/index
+correspondence, full caller composition, memo2, intersection/assimilation,
+open-hole bounds, ordered/lazy effects, typedTypes and semantic pruning remain.
+Global canonicality/history/scheduling, phase4, resources, practical width,
+runtime/solver and convergence remain open. H6 remains strongest combined.
+H23 stays queued. No Haskell source changes. FINDINGS keeps its external
+repair index FIRST. All six fixes are on main. The full goal stays ACTIVE
+and incomplete. This record precedes evidence and push.
+
+
 ## Computed narrowing and enumeration branch effects
 
 Updated: 2026-10-24. Main `74250bd88` is incorporated.
