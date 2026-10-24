@@ -1,0 +1,15 @@
+# Enabled emptiness: prospective design only
+
+Recorded 2026-10-24T19:11:04.456002+02:00. These are exact body-free proposed headers. No owner, body, instance fields or compiler evidence is supplied.
+
+Recommend one check action and one producer before finish. The action returns the existing Worker.Outcome paired with existing SourceEndpointMemo.Memos. It performs SourceEndpointMemo.run once. A false returned guard skips the fourth memo and retains the checked state. A true guard invokes the existing current checked call with exploration budget1000. The independent p/h bounds remain lower-stage execution bounds. Existing failure outcomes retain their actual fault, checked state and fourth memo. No new state or receipt type is needed.
+
+The producer starts with a genuine PRE-query Context and the same two actual pending raw slots. PendingRealized derives both complete operands. Computed-match WordRanges concerns exactly those operands. TargetQuery.finite is used once. The actual query Receipt derives a local caller Context: ready/admitted/effects/globals come from the receipt; Sound.advance, Stored.grows and fourth Correct.grows preserve warm tables; Covered is unchanged; MuRebuild.trace_heap derives probes from the same Step.run trace. No post-query Context is assumed.
+
+The actual descendant run equation and its existing Checked receipt are retained once. Its returned query memos replace only memos.query. The worker receives that exact global record. WorkerActual.finite supplies stable execution. WorkerActual.verified inverts that SAME chosen done equation to expose CallReads and its final/Post witness; it does not execute another query or worker. The initial finite Post witness need not be copied into the result. Compose the derived query Post with that returned Post. Both outer result tables and merge remain those in PartialState.advance; the complete operations cache stays in the actual checked state.
+
+The computed replacement is Empty exactly when the returned answer is true. AnswerSound plus the query Receipt proves exact intersection-language equivalence. False alone proves no acceptance. Existing available_readback derives its handle and full readback. Actual Keeps transports every old pending slot at the unchanged enumeration state. Source and target need not be distinct at this computation-only stage.
+
+Keep finish separate. Its existing rejection/write/elimination/ancestry proof need not be repeated here. The proposed result provides its actual replacement and handle. Native global cache storage, lazy publication and host extraction remain separate; the guard receipt is the existing completed memo model, including descendant and predicate histories. No older NativeThunk executor is substituted.
+
+Expected source size is about210–280 ordinary lines; choose the exact cap after the scoped proof inventory is approved. No new helper, type, predicate, global/local instance or equality premise beyond the three existing worker dictionaries is proposed. The whole driver and caller scheduling remain open. H6 stays strongest.

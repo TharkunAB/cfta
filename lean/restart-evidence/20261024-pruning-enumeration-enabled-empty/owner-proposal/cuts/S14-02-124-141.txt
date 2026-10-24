@@ -1,0 +1,18 @@
+noncomputable def run (value : Value Symbol Guard) (memos : Memos) : Bool × Memos :=
+  match memos.descendants value.referenceOf with
+  | some (_, answer) => (answer, memos)
+  | none =>
+      let result :=
+        if value.depth == 0 then (false, memos) else
+          match value with
+          | .mu .. =>
+              let predicate := SourceUnconstrainedMemo.run value memos.predicate
+              (!predicate.1, { memos with predicate := predicate.2 })
+          | .union _ members _ _ => many members memos
+          | .node _ edges _ _ => rows edges memos
+          | _ => (false, memos)
+      (result.1, {result.2 with descendants := save result.2.descendants value result.1})
+termination_by sizeOf value
+
+/-- Each false child passes both memos to the next original child. -/
+noncomputable def many (values : List (Value Symbol Guard)) (memos : Memos) : Bool × Memos :=

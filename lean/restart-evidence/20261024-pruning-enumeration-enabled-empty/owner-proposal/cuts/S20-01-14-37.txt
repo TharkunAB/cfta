@@ -1,0 +1,24 @@
+mutual
+/-- Execute the source endpoint descendant check on complete stored records. -/
+def reaches (unconstrained : Value Symbol Guard → Bool) (value : Value Symbol Guard) : Bool :=
+  if value.depth == 0 then false else
+    match value with
+    | .mu .. => !unconstrained value
+    | .union _ members _ _ => many unconstrained members
+    | .node _ edges _ _ => rows unconstrained edges
+    | _ => false
+termination_by sizeOf value
+
+/-- Check stored members in source order and stop at the first true result. -/
+def many (unconstrained : Value Symbol Guard → Bool) (values : List (Value Symbol Guard)) : Bool :=
+  match values with
+  | [] => false
+  | first :: rest => reaches unconstrained first || many unconstrained rest
+termination_by sizeOf values
+
+/-- Traverse the original edge children without inspecting edge annotations. -/
+def rows (unconstrained : Value Symbol Guard → Bool) (edges : List (EdgeValue Symbol Guard)) : Bool :=
+  match edges with
+  | [] => false
+  | .mk _ children :: rest => many unconstrained children || rows unconstrained rest
+termination_by sizeOf edges

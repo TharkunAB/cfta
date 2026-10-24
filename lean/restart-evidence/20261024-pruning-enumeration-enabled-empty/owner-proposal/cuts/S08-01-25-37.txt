@@ -1,0 +1,13 @@
+abbrev Memo := NodeRef → Option (Value × Bool)
+
+/-- Each stored answer rejects open queries and soundly certifies true answers. -/
+def AnswerSound (formulas : SourceGuards.Formulas FullSyntax.Formula)
+    (solver : SourceGuards.Entailment FullSyntax.Formula) (input : Value) (answer : Bool) : Prop :=
+  (input.free ≠ [] → answer = false) ∧
+    (answer = true → ∀ ambient term, ¬meaning (SourceEqualityPCSGuard.holds formulas solver) ambient input term)
+
+/-- Every completed entry has its actual physical key and conservative semantic law. -/
+def Correct (formulas : SourceGuards.Formulas FullSyntax.Formula)
+    (solver : SourceGuards.Entailment FullSyntax.Formula) (heap : State Symbol Guard) (memo : Memo) : Prop :=
+  ∀ key input answer, memo key = some (input, answer) →
+    input.referenceOf = key ∧ Available heap input ∧ AnswerSound formulas solver input answer

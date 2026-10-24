@@ -1,0 +1,79 @@
+{
+  "definition": {
+    "let": {
+      "fragment": "local-guard-result.lean.txt",
+      "type": "Bool × Queries",
+      "header_only": true,
+      "attachment": " := SourceEndpointMemo.run query queries\n",
+      "rhs_authorship": "Root after gate"
+    },
+    "if": {
+      "fragment": "condition-check.lean.txt",
+      "discriminant": "guardResult.1",
+      "type": "Bool",
+      "true": "existing checked call p h 1000 paired with guardResult.2",
+      "false": "existing Outcome.done false before memo paired with guardResult.2",
+      "case_count": 2
+    }
+  },
+  "proof": [
+    {
+      "scope": "queryProbes",
+      "discriminant": "receipt.actual",
+      "constructor": "SourceCurrentAllocatedTargetQuery.Step.run",
+      "binders": [
+        {
+          "name": "fuel",
+          "type": "Nat",
+          "implicit": true
+        },
+        {
+          "name": "trace",
+          "type": "SourceCurrentAllocatedNativePhysicalTraceCompletion.Trace fuel (.code (SourceRecursiveIntersectionCode.requestNode IntersectionEmptyDomain.emptyDomain left right)) beforeCaller.checked (.code (.pure query)) queried"
+        }
+      ]
+    },
+    {
+      "scope": "after queryProbes",
+      "fragment": "case-guard-run.lean.txt",
+      "discriminant_type": "Bool × Queries",
+      "constructor": "Prod.mk",
+      "binders": [
+        {
+          "name": "reached",
+          "type": "Bool"
+        },
+        {
+          "name": "guardSaved",
+          "type": "Queries"
+        }
+      ],
+      "equation": "SourceEndpointMemo.run query memos.query = (reached, guardSaved)"
+    },
+    {
+      "scope": "phase only",
+      "fragment": "case-reached.lean.txt",
+      "discriminant_type": "Bool",
+      "cases": [
+        "false",
+        "true"
+      ],
+      "worker_invoked_only": "true",
+      "specialized_equations_in": "scoped-types.json"
+    },
+    {
+      "scope": "replacementFacts only",
+      "fragment": "case-answer.lean.txt",
+      "discriminant_type": "Bool",
+      "cases": [
+        "false",
+        "true"
+      ],
+      "no_new_worker_call": true
+    }
+  ],
+  "Value_case_count": 0,
+  "induction_count": 0,
+  "all_other_tag_cases": [],
+  "new_conditions": []
+}

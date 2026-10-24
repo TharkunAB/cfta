@@ -1,0 +1,11 @@
+--- strict-2
++++ strict-3
+@@ -181,7 +181,7 @@
+           intro ambient term
+           constructor
+           · intro accepted
+-            exact False.elim (show False from accepted)
++            simp only [↓reduceIte, InternedGuardedLanguage.meaning] at accepted
+           · intro accepted
+             exact False.elim (sound.2 rfl ambient term accepted)
+     obtain ⟨replacementAvailable, replacementClosed, replacementMeaning⟩ := replacementFacts

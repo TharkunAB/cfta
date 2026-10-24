@@ -1,0 +1,257 @@
+{
+  "commands": [
+    {
+      "scope": "phase stable false branch",
+      "binders": [
+        {
+          "scope": "phase stable false branch",
+          "name": "P",
+          "type": "Nat",
+          "kind": "forall intro",
+          "used": false,
+          "unused_reason": "False guard ignores all lower-stage bounds."
+        },
+        {
+          "scope": "phase stable false branch",
+          "name": "H",
+          "type": "Nat",
+          "kind": "forall intro",
+          "used": false,
+          "unused_reason": "False guard ignores all lower-stage bounds."
+        },
+        {
+          "scope": "phase stable false branch",
+          "name": "enoughP",
+          "type": "p ≤ P",
+          "kind": "forall intro",
+          "used": false,
+          "unused_reason": "False guard ignores all lower-stage bounds."
+        },
+        {
+          "scope": "phase stable false branch",
+          "name": "enoughH",
+          "type": "h ≤ H",
+          "kind": "forall intro",
+          "used": false,
+          "unused_reason": "False guard ignores all lower-stage bounds."
+        }
+      ]
+    },
+    {
+      "scope": "phase false skip implication",
+      "binders": [
+        {
+          "scope": "phase false skip implication",
+          "name": "notReached",
+          "type": "false = false",
+          "kind": "intro",
+          "used": false,
+          "unused_reason": "Reflexive antecedent is not needed to return the exact false branch."
+        }
+      ]
+    },
+    {
+      "scope": "phase false performed implication",
+      "binders": [
+        {
+          "scope": "phase false performed implication",
+          "name": "isReached",
+          "type": "false = true",
+          "kind": "intro",
+          "used": true,
+          "unused_reason": null
+        }
+      ]
+    },
+    {
+      "scope": "false phase AnswerSound second",
+      "binders": [
+        {
+          "scope": "false phase AnswerSound second",
+          "name": "impossible",
+          "type": "false = true",
+          "kind": "intro"
+        }
+      ]
+    },
+    {
+      "scope": "phase stable true branch",
+      "binders": [
+        {
+          "scope": "phase stable true branch",
+          "name": "P",
+          "type": "Nat",
+          "kind": "forall intro",
+          "used": true,
+          "unused_reason": null
+        },
+        {
+          "scope": "phase stable true branch",
+          "name": "H",
+          "type": "Nat",
+          "kind": "forall intro",
+          "used": true,
+          "unused_reason": null
+        },
+        {
+          "scope": "phase stable true branch",
+          "name": "enoughP",
+          "type": "p ≤ P",
+          "kind": "forall intro",
+          "used": true,
+          "unused_reason": null
+        },
+        {
+          "scope": "phase stable true branch",
+          "name": "enoughH",
+          "type": "h ≤ H",
+          "kind": "forall intro",
+          "used": true,
+          "unused_reason": null
+        }
+      ]
+    },
+    {
+      "scope": "phase true skip implication",
+      "binders": [
+        {
+          "scope": "phase true skip implication",
+          "name": "notReached",
+          "type": "true = false",
+          "kind": "intro",
+          "used": true,
+          "unused_reason": null
+        }
+      ]
+    },
+    {
+      "scope": "phase true performed implication",
+      "binders": [
+        {
+          "scope": "phase true performed implication",
+          "name": "isReached",
+          "type": "true = true",
+          "kind": "intro",
+          "used": false,
+          "unused_reason": "Reflexive antecedent is not needed to package the already constructed actual Call/CallReads."
+        }
+      ]
+    },
+    {
+      "scope": "replacementFacts language",
+      "binders": [
+        {
+          "scope": "replacementFacts language",
+          "name": "ambient",
+          "type": "InternedGuardedLanguage.Env Symbol",
+          "kind": "lambda/forall binder"
+        },
+        {
+          "scope": "replacementFacts language",
+          "name": "term",
+          "type": "Language.Term Symbol",
+          "kind": "lambda/forall binder"
+        }
+      ]
+    },
+    {
+      "scope": "replacementFacts true forward",
+      "binders": [
+        {
+          "scope": "replacementFacts true forward",
+          "name": "accepted",
+          "type": "InternedGuardedLanguage.meaning (SourceEqualityPCSGuard.holds formulas solver) ambient .empty term",
+          "kind": "intro"
+        }
+      ]
+    },
+    {
+      "scope": "replacementFacts true reverse",
+      "binders": [
+        {
+          "scope": "replacementFacts true reverse",
+          "name": "accepted",
+          "type": "InternedGuardedLanguage.meaning (SourceEqualityPCSGuard.holds formulas solver) ambient query term",
+          "kind": "intro"
+        }
+      ]
+    }
+  ],
+  "command_count": 10,
+  "binder_count": 17,
+  "lambdas": [
+    {
+      "scope": "queryPost fourth reflexivity lambda",
+      "binders": [
+        {
+          "scope": "queryPost fourth reflexivity lambda",
+          "name": "key",
+          "type": "InternedBinderProtocol.NodeRef",
+          "kind": "lambda binder"
+        },
+        {
+          "scope": "queryPost fourth reflexivity lambda",
+          "name": "entry",
+          "type": "Node × Bool",
+          "kind": "lambda binder"
+        },
+        {
+          "scope": "queryPost fourth reflexivity lambda",
+          "name": "found",
+          "type": "beforeCaller.fourth key = some entry",
+          "kind": "lambda binder"
+        }
+      ]
+    },
+    {
+      "scope": "false phase AnswerSound first",
+      "binders": [
+        {
+          "scope": "false phase AnswerSound first",
+          "name": "opened",
+          "type": "query.free ≠ []",
+          "kind": "lambda",
+          "used": false,
+          "unused_reason": "The returned answer is false for every input free-list."
+        }
+      ]
+    },
+    {
+      "scope": "replacementFacts language",
+      "binders": [
+        {
+          "scope": "replacementFacts language",
+          "name": "ambient",
+          "type": "InternedGuardedLanguage.Env Symbol",
+          "kind": "lambda/forall binder"
+        },
+        {
+          "scope": "replacementFacts language",
+          "name": "term",
+          "type": "Language.Term Symbol",
+          "kind": "lambda/forall binder"
+        }
+      ]
+    },
+    {
+      "scope": "final language composition lambda",
+      "binders": [
+        {
+          "scope": "final language composition lambda",
+          "name": "ambient",
+          "type": "InternedGuardedLanguage.Env Symbol",
+          "kind": "lambda/forall binder"
+        },
+        {
+          "scope": "final language composition lambda",
+          "name": "term",
+          "type": "Language.Term Symbol",
+          "kind": "lambda/forall binder"
+        }
+      ]
+    }
+  ],
+  "lambda_group_count": 4,
+  "lambda_binder_count": 8,
+  "scope_note": "The replacementFacts ambient/term pair is introduced in each appropriate branch as an intro or lambda. Types are identical; there is no extra theorem/helper premise."
+}

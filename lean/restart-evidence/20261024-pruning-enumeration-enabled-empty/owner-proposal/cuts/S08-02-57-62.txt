@@ -1,0 +1,6 @@
+/-- Physical heap history preserves every earlier immutable semantic memo law. -/
+theorem grows (formulas : SourceGuards.Formulas FullSyntax.Formula)
+    (solver : SourceGuards.Entailment FullSyntax.Formula) {before after : State Symbol Guard}
+    (keeps : Keeps before after) (memo : Memo) (correct : Correct formulas solver before memo) :
+    Correct formulas solver after memo := by
+  intro key input answer found

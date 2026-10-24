@@ -1,0 +1,117 @@
+{"command": ["/home/tritlo/.elan/toolchains/leanprover--lean4---v4.34.1/bin/lean", "-o", "/tmp/mcfta-pruning-enumeration-enabled-empty-20261024/strict-lib/MicroCFTA/SourcePruningEnumerationEnabledEmpty.olean", "-R", "/tmp/mcfta-pruning-enumeration-enabled-empty-20261024/strict-1", "-DwarningAsError=true", "-Dlinter.all=true", "/tmp/mcfta-pruning-enumeration-enabled-empty-20261024/strict-1/MicroCFTA/SourcePruningEnumerationEnabledEmpty.lean"], "exit_code": 1, "raw_bytes": 6461, "raw_sha256": "bef4efa1d950acc1f1305190388ccee155b079561d0d25d8fac3c08de97affdf", "source_sha256": "1a1907016dc1f5394dec69b6faab8767634d9f943f670a440e60a2f381d1da4b"}
+/tmp/mcfta-pruning-enumeration-enabled-empty-20261024/strict-1/MicroCFTA/SourcePruningEnumerationEnabledEmpty.lean:106:33: error(lean.invalidField): Invalid field `normal`: The environment does not contain `MicroCFTA.SourceEqualityRequiredCache.Ready.normal`, so it is not possible to project the field `normal` from an expression
+  receipt.ready.semantic.ready
+of type
+  SourceEqualityRequiredCache.Ready queried.native.machine.heap
+/tmp/mcfta-pruning-enumeration-enabled-empty-20261024/strict-1/MicroCFTA/SourcePruningEnumerationEnabledEmpty.lean:184:12: error: Tactic `cases` failed: major premise type is not an inductive type
+  InternedGuardedLanguage.meaning (SourceEqualityPCSGuard.holds formulas solver) ambient
+    (if true = true then Value.empty else query) term
+
+Explanation: the `cases` tactic is for constructor-based reasoning as well as for applying custom cases principles with a 'using' clause or a registered '@[cases_eliminator]' theorem. The above type neither is an inductive type nor has a registered theorem.
+
+case true.mp
+EnumGuard : Type
+width : Nat
+inst✝² : DecidableEq Symbol
+inst✝¹ : DecidableEq (EdgeKey Symbol Constraint)
+inst✝ : DecidableEq Node
+formulas : SourceGuards.Formulas FullSyntax.Formula
+solver : SourceGuards.Entailment FullSyntax.Formula
+inventory : Inventory
+beforeCaller : Caller width
+before : EnumerationState.State Symbol EnumGuard
+source target sourceHandle targetHandle : Nat
+sourceScs targetScs : List EnumerationState.Suspended
+memos : Memos
+initial : Context formulas solver inventory beforeCaller memos
+realized : PendingRealized beforeCaller.checked.native.machine.heap before
+sourceStored : before.values[source]? = some (EnumerationState.UVarValue.unenumerated (some sourceHandle) sourceScs)
+targetStored : before.values[target]? = some (EnumerationState.UVarValue.unenumerated (some targetHandle) targetScs)
+ranges :
+  match lookupNode beforeCaller.checked.native.machine.heap sourceHandle,
+    lookupNode beforeCaller.checked.native.machine.heap targetHandle with
+  | some left, some right =>
+    SourceCurrentAllocatedNativeRequestBounds.WordRanges
+      (SourceEqualityNativeDemand.Control.code
+        (SourceRecursiveIntersectionCode.requestNode IntersectionEmptyDomain.emptyDomain left right))
+      beforeCaller.checked
+  | x, x_1 => True
+left : Node
+leftDecoded : lookupNode beforeCaller.checked.native.machine.heap sourceHandle = some left
+leftAvailable : Available beforeCaller.checked.native.machine.heap left
+leftClosed : left.free = []
+right : Node
+rightDecoded : lookupNode beforeCaller.checked.native.machine.heap targetHandle = some right
+rightAvailable : Available beforeCaller.checked.native.machine.heap right
+rightClosed : right.free = []
+decodedRanges :
+  SourceCurrentAllocatedNativeRequestBounds.WordRanges
+    (SourceEqualityNativeDemand.Control.code
+      (SourceRecursiveIntersectionCode.requestNode IntersectionEmptyDomain.emptyDomain left right))
+    beforeCaller.checked
+next : Inventory
+query : Value (SourceObservations.Label FullSyntax.Formula) Constraint
+queried : Checked width
+nextSource : next.source = beforeCaller.checked.native.machine.heap
+nextRoots : next.roots = inventory.roots ++ [left, right]
+receipt :
+  SourceCurrentAllocatedTargetQuery.Receipt formulas solver next left right beforeCaller.checked query queried memos
+queryProbes : InternedFreshOrdinaryProbeHeap.Heap queried.native.machine.heap
+reached : Bool
+guardSaved : Queries
+guardRun : SourceEndpointMemo.run query memos.query = (reached, guardSaved)
+guardChecked :
+  SourceEndpointMemoCorrect.Checked queried.native.machine.heap memos.query (reaches query) (reached, guardSaved)
+queryContext :
+  Context formulas solver next
+    (SourceCurrentAllocatedPartialState.advance beforeCaller queried beforeCaller.fourth beforeCaller.merge)
+    { unfolding := memos.unfolding, query := guardSaved }
+queryPost :
+  Post formulas solver next beforeCaller
+    (SourceCurrentAllocatedPartialState.advance beforeCaller queried beforeCaller.fourth beforeCaller.merge)
+    { unfolding := memos.unfolding, query := guardSaved }
+checkedAfter : Checked width
+saved : Fourth
+final : Memos
+p h : Nat
+checkPost :
+  Post formulas solver next
+    (SourceCurrentAllocatedPartialState.advance beforeCaller queried beforeCaller.fourth beforeCaller.merge)
+    (SourceCurrentAllocatedPartialState.advance beforeCaller checkedAfter saved beforeCaller.merge) final
+queryAvailable : Available checkedAfter.native.machine.heap query
+unfolding : Cache.Extends memos.unfolding final.unfolding
+querySame : final.query = guardSaved
+finalPost :
+  Post formulas solver next beforeCaller
+    (SourceCurrentAllocatedPartialState.advance beforeCaller checkedAfter saved beforeCaller.merge) final
+stable :
+  ∀ (P H : Nat),
+    p ≤ P →
+      h ≤ H →
+        check P H query queried beforeCaller.fourth memos.query =
+          (SourceCurrentAllocatedConjunctionWorker.Outcome.done true checkedAfter saved, guardSaved)
+skipped :
+  reached = false →
+    true = false ∧
+      checkedAfter = queried ∧
+        saved = beforeCaller.fourth ∧ final = { unfolding := memos.unfolding, query := guardSaved }
+performed :
+  reached = true →
+    ∃ reachedPhysical,
+      checkedAfter = advancePhysical queried reachedPhysical ∧
+        ∃ actual,
+          SourceCurrentConjunctionGlobalMemos.CallReads actual { unfolding := memos.unfolding, query := guardSaved }
+            final
+sound : SourceCurrentEmptinessMemo.AnswerSound formulas solver query true
+ambient : InternedGuardedLanguage.Env (SourceObservations.Label FullSyntax.Formula)
+term : Language.Term (SourceObservations.Label FullSyntax.Formula)
+accepted :
+  InternedGuardedLanguage.meaning (SourceEqualityPCSGuard.holds formulas solver) ambient
+    (if true = true then Value.empty else query) term
+⊢ InternedGuardedLanguage.meaning (SourceEqualityPCSGuard.holds formulas solver) ambient query term
+/tmp/mcfta-pruning-enumeration-enabled-empty-20261024/strict-1/MicroCFTA/SourcePruningEnumerationEnabledEmpty.lean:189:76: error(lean.invalidField): Invalid field `normal`: The environment does not contain `MicroCFTA.SourceEqualityRequiredCache.Ready.normal`, so it is not possible to project the field `normal` from an expression
+  finalPost.context.ready.semantic.ready
+of type
+  SourceEqualityRequiredCache.Ready
+    (SourceCurrentAllocatedPartialState.advance beforeCaller checkedAfter saved
+              beforeCaller.merge).checked.native.machine.heap

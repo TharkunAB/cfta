@@ -1,0 +1,9 @@
+/-- An actual completed physical trace derives the final probe heap from its own reached checks. -/
+theorem trace_heap [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)]
+    {fuel : Nat} {control : Control Output} {before after : Checked width} {value : Output}
+    (trace : SourceCurrentAllocatedNativePhysicalTraceCompletion.Trace fuel control before (.code (.pure value)) after)
+    (semantic : SemanticReady before.native.machine.heap) (probes : ProbeHeap before.native.machine.heap) :
+    ProbeHeap after.native.machine.heap := by
+  have done := trace_done fuel control before after value trace.steps
+  simpa only [done, Outcome.state] using execute_heap_of_physical (fuel + 1) control before semantic probes trace.plan
+

@@ -1,0 +1,31 @@
+theorem actual {inventory : Inventory} {budget : Nat} {before : Caller width} {after : Physical}
+    {query : Value Symbol Guard} {answer : Bool} {saved : Memo} {memos : Memos}
+    (call : Call budget before.fourth query (physical before.checked) answer after saved)
+    (initial : Context formulas solver inventory before memos)
+    (available : Available before.checked.native.machine.heap query) :
+    ∃ final, CallReads call memos final ∧
+      Post formulas solver inventory before
+        (SourceCurrentAllocatedPartialState.advance before (advancePhysical before.checked after) saved before.merge) final ∧
+      SourceCurrentEmptinessMemo.AnswerSound formulas solver query answer ∧ Available after.heap query ∧
+      Extends memos.unfolding final.unfolding ∧ final.query = memos.query := by
+  have ready := SourceCurrentAllocatedConjunctionMemo.ready before.checked initial.ready.good
+    initial.ready.semantic initial.ready.costs
+  obtain ⟨final, reads, _⟩ := SourceCurrentConjunctionGlobalMemos.call_memos call ready available memos initial.globals
+  exact ⟨final, reads, verified formulas solver reads initial available⟩
+
+/-- Legitimate caller entry constructs a finite current call and its full returned invariant. -/
+theorem finite {inventory : Inventory} {before : Caller width} {query : Value Symbol Guard} {memos : Memos}
+    (budget : Nat) (initial : Context formulas solver inventory before memos)
+    (available : Available before.checked.native.machine.heap query) :
+    ∃ answer after saved final, ∃ call : Call budget before.fourth query (physical before.checked) answer after saved,
+      CallReads call memos final ∧
+      Post formulas solver inventory before
+        (SourceCurrentAllocatedPartialState.advance before (advancePhysical before.checked after) saved before.merge) final ∧
+      SourceCurrentEmptinessMemo.AnswerSound formulas solver query answer ∧ Available after.heap query ∧
+      Extends memos.unfolding final.unfolding ∧ final.query = memos.query := by
+  have ready := SourceCurrentAllocatedConjunctionMemo.ready before.checked initial.ready.good
+    initial.ready.semantic initial.ready.costs
+  obtain ⟨answer, after, saved, call, _⟩ := SourceCurrentConjunctionMemo.complete budget before.fourth query
+    (physical before.checked) ready available
+  obtain ⟨final, reads, post⟩ := actual formulas solver call initial available
+  exact ⟨answer, after, saved, final, call, reads, post⟩

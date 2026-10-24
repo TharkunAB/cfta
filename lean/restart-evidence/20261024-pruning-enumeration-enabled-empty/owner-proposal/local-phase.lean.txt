@@ -1,0 +1,18 @@
+have phase : ∃ (answer : Bool) (checkedAfter : Checked width) (saved : Fourth)
+        (final : Memos) (p h : Nat),
+        (∀ P H, p ≤ P → h ≤ H →
+          check P H query queried beforeCaller.fourth memos.query = (.done answer checkedAfter saved, guardSaved)) ∧
+        Post formulas solver next
+          (SourceCurrentAllocatedPartialState.advance beforeCaller queried beforeCaller.fourth beforeCaller.merge)
+          (SourceCurrentAllocatedPartialState.advance beforeCaller checkedAfter saved beforeCaller.merge) final ∧
+        (reached = false → answer = false ∧ checkedAfter = queried ∧ saved = beforeCaller.fourth ∧
+          final = {memos with query := guardSaved}) ∧
+        (reached = true →
+          ∃ reachedPhysical : SourceCurrentConjunctionRowsAllocation.State Symbol FullSyntax.Formula,
+            checkedAfter = advancePhysical queried reachedPhysical ∧
+            ∃ actual : SourceCurrentConjunctionMemo.Call 1000 beforeCaller.fourth query
+                (physical queried) answer reachedPhysical saved,
+              SourceCurrentConjunctionGlobalMemos.CallReads actual {memos with query := guardSaved} final) ∧
+        SourceCurrentEmptinessMemo.AnswerSound formulas solver query answer ∧
+        Available checkedAfter.native.machine.heap query ∧
+        Cache.Extends memos.unfolding final.unfolding ∧ final.query = guardSaved

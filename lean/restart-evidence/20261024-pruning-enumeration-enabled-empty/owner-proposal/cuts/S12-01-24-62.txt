@@ -1,0 +1,39 @@
+/-- Success and failure retain the full checked state and actual fourth memo. -/
+inductive Outcome (width : Nat) : Type 1 where
+  | done (answer : Bool) (checked : Checked width) (memo : Memo)
+  | failed (fault : Fault) (checked : Checked width) (memo : Memo)
+
+def Outcome.state : Outcome width → Checked width
+  | .done _ checked _ | .failed _ checked _ => checked
+
+def Outcome.memo : Outcome width → Memo
+  | .done _ _ memo | .failed _ _ memo => memo
+
+/-- Lift the literal physical call at its exact returned heap and operation cache. -/
+noncomputable def call [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)]
+    [DecidableEq (Value Symbol Guard)] (p h budget : Nat) (query : Value Symbol Guard)
+    (before : Checked width) (memo : Memo) : Outcome width :=
+  match SourceCurrentConjunctionWorker.call p h budget memo query (physical before) with
+  | .done (answer, saved) after => .done answer (advancePhysical before after) saved
+  | .failed fault after => .failed fault (advancePhysical before after) memo
+
+variable [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)] [DecidableEq (Value Symbol Guard)] {width : Nat}
+
+/-- A warm hit ignores both execution bounds and retains the identical complete checked state. -/
+theorem call_hit (p h budget : Nat) (query original : Value Symbol Guard) (before : Checked width)
+    (memo : Memo) (answer : Bool) (found : memo query.referenceOf = some (original, answer)) :
+    call p h budget query before memo = .done answer before memo := by
+  simp only [call, SourceCurrentConjunctionWorker.call, found, SourceCurrentAllocatedConjunctionMemo.advance_self]
+
+/-- A completed physical call yields the same answer and full checked return. -/
+theorem call_lift {p h budget : Nat} {query : Value Symbol Guard} {before : Checked width}
+    {memo saved : Memo} {answer : Bool} {after : Physical}
+    (done : SourceCurrentConjunctionWorker.call p h budget memo query (physical before) = .done (answer, saved) after) :
+    call p h budget query before memo = .done answer (advancePhysical before after) saved := by
+  simp only [call, done]
+
+/-- A physical failure retains its exact reached state and installs no fourth-memo entry. -/
+theorem call_failed_lift {p h budget : Nat} {query : Value Symbol Guard} {before : Checked width}
+    {memo : Memo} {fault : Fault} {after : Physical}
+    (failed : SourceCurrentConjunctionWorker.call p h budget memo query (physical before) = .failed fault after) :
+    call p h budget query before memo = .failed fault (advancePhysical before after) memo := by

@@ -1,0 +1,25 @@
+structure Inventory where
+  source : InternedConstructorTemplates.State Symbol Guard
+  facts : InternedNestedFacts.Facts source
+  roots : List (Value Symbol Guard)
+  originals : ∀ root ∈ roots, Original root
+  available : Values source roots
+  closed : ∀ root ∈ roots, root.free = []
+
+/-- The input interpretation is computed from the stored physical inventory. -/
+def Inventory.inputs (inventory : Inventory) (holds : Guard → Term Symbol → Bool) :
+    FiniteInput (view inventory.source holds) :=
+  SourceCurrentAllocatedNativeInputInventoryModels.finiteInput inventory.source inventory.facts holds
+    inventory.roots inventory.originals inventory.available inventory.closed
+
+/-- One current checked state retains the same model, requests, and original source records. -/
+structure At (formulas : SourceGuards.Formulas FullSyntax.Formula)
+    (solver : SourceGuards.Entailment FullSyntax.Formula) (inventory : Inventory) (state : Checked width) : Prop where
+  contextual : SourceCurrentAllocatedNativeContextCache.Contextual
+    (view inventory.source (SourceEqualityPCSGuard.holds formulas solver))
+    (finiteInputMeaning (view inventory.source (SourceEqualityPCSGuard.holds formulas solver))
+      (inventory.inputs (SourceEqualityPCSGuard.holds formulas solver)))
+    (finiteRankedInput (view inventory.source (SourceEqualityPCSGuard.holds formulas solver))
+      (inventory.inputs (SourceEqualityPCSGuard.holds formulas solver)))
+    (SourceEqualityPCSGuard.holds formulas solver) state.native
+  covered : SourceCurrentAllocatedNativeAdmissionCache.Covered

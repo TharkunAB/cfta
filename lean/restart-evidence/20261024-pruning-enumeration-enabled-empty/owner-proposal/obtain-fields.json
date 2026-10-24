@@ -1,0 +1,322 @@
+{
+  "packets": [
+    {
+      "name": "leftSlot",
+      "scope": "initial proof",
+      "api": "PendingRealized applied to actual sourceStored",
+      "fields": [
+        {
+          "name": "left",
+          "type": "Node",
+          "used": true
+        },
+        {
+          "name": "leftDecoded",
+          "type": "lookupNode beforeCaller.checked.native.machine.heap sourceHandle = some left",
+          "used": true
+        },
+        {
+          "name": "leftAvailable",
+          "type": "Available beforeCaller.checked.native.machine.heap left",
+          "used": true
+        },
+        {
+          "name": "leftClosed",
+          "type": "left.free = []",
+          "used": true
+        }
+      ],
+      "field_count": 4,
+      "skipped_fields": []
+    },
+    {
+      "name": "rightSlot",
+      "scope": "initial proof",
+      "api": "PendingRealized applied to actual targetStored",
+      "fields": [
+        {
+          "name": "right",
+          "type": "Node",
+          "used": true
+        },
+        {
+          "name": "rightDecoded",
+          "type": "lookupNode beforeCaller.checked.native.machine.heap targetHandle = some right",
+          "used": true
+        },
+        {
+          "name": "rightAvailable",
+          "type": "Available beforeCaller.checked.native.machine.heap right",
+          "used": true
+        },
+        {
+          "name": "rightClosed",
+          "type": "right.free = []",
+          "used": true
+        }
+      ],
+      "field_count": 4,
+      "skipped_fields": []
+    },
+    {
+      "name": "query",
+      "scope": "initial proof",
+      "api": "SourceCurrentAllocatedTargetQuery.finite",
+      "fields": [
+        {
+          "name": "next",
+          "type": "Inventory",
+          "used": true
+        },
+        {
+          "name": "query",
+          "type": "Node",
+          "used": true
+        },
+        {
+          "name": "queried",
+          "type": "Checked width",
+          "used": true
+        },
+        {
+          "name": "nextSource",
+          "type": "next.source = beforeCaller.checked.native.machine.heap",
+          "used": true
+        },
+        {
+          "name": "nextRoots",
+          "type": "next.roots = inventory.roots ++ [left, right]",
+          "used": true
+        },
+        {
+          "name": "receipt",
+          "type": "SourceCurrentAllocatedTargetQuery.Receipt formulas solver next left right beforeCaller.checked query queried memos",
+          "used": true
+        }
+      ],
+      "field_count": 6,
+      "skipped_fields": []
+    },
+    {
+      "name": "worker",
+      "scope": "phase reached=true",
+      "api": "SourceCurrentAllocatedConjunctionCaller.finite formulas solver 1000 queryContext receipt.available",
+      "fields": [
+        {
+          "name": "workerAnswer",
+          "type": "Bool",
+          "used": true
+        },
+        {
+          "name": "workerPhysical",
+          "type": "SourceCurrentConjunctionRowsAllocation.State Symbol FullSyntax.Formula",
+          "used": true
+        },
+        {
+          "name": "workerSaved",
+          "type": "Fourth",
+          "used": true
+        },
+        {
+          "name": "workerFinal",
+          "type": "Memos",
+          "used": true
+        },
+        {
+          "name": "actualCall",
+          "type": "SourceCurrentConjunctionMemo.Call 1000 beforeCaller.fourth query (physical queried) workerAnswer workerPhysical workerSaved",
+          "used": true
+        },
+        {
+          "name": "actualReads",
+          "type": "SourceCurrentConjunctionGlobalMemos.CallReads actualCall {memos with query := guardSaved} workerFinal",
+          "used": true
+        },
+        {
+          "name": "workerPost",
+          "type": "Post formulas solver next (SourceCurrentAllocatedPartialState.advance beforeCaller queried beforeCaller.fourth beforeCaller.merge) (SourceCurrentAllocatedPartialState.advance (SourceCurrentAllocatedPartialState.advance beforeCaller queried beforeCaller.fourth beforeCaller.merge) (advancePhysical queried workerPhysical) workerSaved beforeCaller.merge) workerFinal",
+          "used": true
+        },
+        {
+          "name": "workerSound",
+          "type": "SourceCurrentEmptinessMemo.AnswerSound formulas solver query workerAnswer",
+          "used": true
+        },
+        {
+          "name": "workerAvailable",
+          "type": "Available workerPhysical.heap query",
+          "used": true
+        },
+        {
+          "name": "workerUnfolding",
+          "type": "Cache.Extends memos.unfolding workerFinal.unfolding",
+          "used": true
+        },
+        {
+          "name": "workerQuerySame",
+          "type": "workerFinal.query = guardSaved",
+          "used": true
+        }
+      ],
+      "field_count": 11,
+      "skipped_fields": [],
+      "normalization": "Caller.finite types normalize the projections of the exact advance caller; no changed tables or arbitrary caller replacement."
+    },
+    {
+      "name": "bounds",
+      "scope": "phase reached=true",
+      "api": "SourceCurrentConjunctionWorkerCompletion.call_complete actualCall",
+      "fields": [
+        {
+          "name": "p",
+          "type": "Nat",
+          "used": true
+        },
+        {
+          "name": "h",
+          "type": "Nat",
+          "used": true
+        },
+        {
+          "name": "physicalStable",
+          "type": "∀ P H, p ≤ P → h ≤ H → SourceCurrentConjunctionWorker.call P H 1000 beforeCaller.fourth query (physical queried) = .done (workerAnswer, workerSaved) workerPhysical",
+          "used": true
+        }
+      ],
+      "field_count": 3,
+      "skipped_fields": []
+    },
+    {
+      "name": "phase",
+      "scope": "after local phase",
+      "api": "phase",
+      "fields": [
+        {
+          "name": "answer",
+          "type": "Bool",
+          "used": true
+        },
+        {
+          "name": "checkedAfter",
+          "type": "Checked width",
+          "used": true
+        },
+        {
+          "name": "saved",
+          "type": "Fourth",
+          "used": true
+        },
+        {
+          "name": "final",
+          "type": "Memos",
+          "used": true
+        },
+        {
+          "name": "p",
+          "type": "Nat",
+          "used": true
+        },
+        {
+          "name": "h",
+          "type": "Nat",
+          "used": true
+        },
+        {
+          "name": "stable",
+          "type": "∀ P H, p ≤ P → h ≤ H → check P H query queried beforeCaller.fourth memos.query = (.done answer checkedAfter saved, guardSaved)",
+          "used": true
+        },
+        {
+          "name": "checkPost",
+          "type": "Post formulas solver next (SourceCurrentAllocatedPartialState.advance beforeCaller queried beforeCaller.fourth beforeCaller.merge) (SourceCurrentAllocatedPartialState.advance beforeCaller checkedAfter saved beforeCaller.merge) final",
+          "used": true
+        },
+        {
+          "name": "skipped",
+          "type": "reached = false → answer = false ∧ checkedAfter = queried ∧ saved = beforeCaller.fourth ∧ final = {memos with query := guardSaved}",
+          "used": true
+        },
+        {
+          "name": "performed",
+          "type": "reached = true → ∃ reachedPhysical : SourceCurrentConjunctionRowsAllocation.State Symbol FullSyntax.Formula, checkedAfter = advancePhysical queried reachedPhysical ∧ ∃ actual : SourceCurrentConjunctionMemo.Call 1000 beforeCaller.fourth query (physical queried) answer reachedPhysical saved, SourceCurrentConjunctionGlobalMemos.CallReads actual {memos with query := guardSaved} final",
+          "used": true
+        },
+        {
+          "name": "sound",
+          "type": "SourceCurrentEmptinessMemo.AnswerSound formulas solver query answer",
+          "used": true
+        },
+        {
+          "name": "queryAvailable",
+          "type": "Available checkedAfter.native.machine.heap query",
+          "used": true
+        },
+        {
+          "name": "unfolding",
+          "type": "Cache.Extends memos.unfolding final.unfolding",
+          "used": true
+        },
+        {
+          "name": "querySame",
+          "type": "final.query = guardSaved",
+          "used": true
+        }
+      ],
+      "field_count": 14,
+      "skipped_fields": []
+    },
+    {
+      "name": "replacement",
+      "scope": "after replacementFacts",
+      "api": "replacementFacts",
+      "fields": [
+        {
+          "name": "replacementAvailable",
+          "type": "Available checkedAfter.native.machine.heap (if answer then .empty else query)",
+          "used": true
+        },
+        {
+          "name": "replacementClosed",
+          "type": "(if answer then .empty else query).free = []",
+          "used": true
+        },
+        {
+          "name": "replacementMeaning",
+          "type": "∀ ambient term, InternedGuardedLanguage.meaning (SourceEqualityPCSGuard.holds formulas solver) ambient (if answer then .empty else query) term ↔ InternedGuardedLanguage.meaning (SourceEqualityPCSGuard.holds formulas solver) ambient query term",
+          "used": true
+        }
+      ],
+      "field_count": 3,
+      "skipped_fields": []
+    },
+    {
+      "name": "readback",
+      "scope": "final proof",
+      "api": "SourcePruningEnumerationNodes.available_readback",
+      "fields": [
+        {
+          "name": "handle",
+          "type": "Nat",
+          "used": true
+        },
+        {
+          "name": "encoded",
+          "type": "encodeNode (if answer then .empty else query) = some handle",
+          "used": true
+        },
+        {
+          "name": "decoded",
+          "type": "lookupNode checkedAfter.native.machine.heap handle = some (if answer then .empty else query)",
+          "used": true
+        }
+      ],
+      "field_count": 3,
+      "skipped_fields": []
+    }
+  ],
+  "obtain_count": 8,
+  "field_count": 48,
+  "skipped_fields": [],
+  "all_fields_have_explicit_types": true,
+  "no_duplicate_query_or_finish_packet": true
+}

@@ -1,0 +1,7 @@
+import MicroCFTA.SourcePruningEnumerationEnabledEmpty
+set_option pp.deepTerms true
+set_option pp.maxSteps 1000000
+#check @MicroCFTA.SourcePruningEnumerationEnabledEmpty.check
+#print axioms MicroCFTA.SourcePruningEnumerationEnabledEmpty.check
+#check @MicroCFTA.SourcePruningEnumerationEnabledEmpty.pending_enabled_complete
+#print axioms MicroCFTA.SourcePruningEnumerationEnabledEmpty.pending_enabled_complete

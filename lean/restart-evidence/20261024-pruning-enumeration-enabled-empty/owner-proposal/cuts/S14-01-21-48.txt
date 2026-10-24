@@ -1,0 +1,28 @@
+abbrev Memo := NodeRef → Option (Value Symbol Guard × Bool)
+
+/-- Saved descendant answers match the physical record and the concrete source predicate. -/
+def Correct (heap : State Symbol Guard) (memo : Memo) : Prop :=
+  ∀ key input answer, memo key = some (input, answer) → input.referenceOf = key ∧
+    Available heap input ∧ answer = SourceEndpointReachability.reaches SourceMemoGate.unconstrained input
+
+/-- A descendant traversal carries its own memo and the separate constraint-predicate memo. -/
+structure Memos where
+  descendants : Memo
+  predicate : SourceUnconstrainedMemo.Memo
+
+/-- Both memo families retain complete resident inputs and exact answers. -/
+structure Valid (heap : State Symbol Guard) (memos : Memos) : Prop where
+  descendants : Correct heap memos.descendants
+  predicate : SourceUnconstrainedMemo.Correct heap memos.predicate
+
+/-- Every earlier completed entry remains unchanged in its own memo family. -/
+structure Keeps (before after : Memos) : Prop where
+  descendants : Extends before.descendants after.descendants
+  predicate : Extends before.predicate after.predicate
+
+/-- Both memo families start without saved results. -/
+def empty : Memos := ⟨fun _ => none, SourceUnconstrainedMemo.empty⟩
+
+/-- Empty memo families are valid in every physical heap. -/
+theorem empty_valid (heap : State Symbol Guard) : Valid heap empty := by
+  constructor

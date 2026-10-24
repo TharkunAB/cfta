@@ -1,0 +1,1169 @@
+{
+  "entries": [
+    {
+      "scope": "context implicit",
+      "name": "EnumGuard",
+      "type": "Type",
+      "kind": "binder"
+    },
+    {
+      "scope": "context implicit",
+      "name": "width",
+      "type": "Nat",
+      "kind": "binder"
+    },
+    {
+      "scope": "local notation",
+      "name": "Symbol",
+      "type": "Type := SourcePruningTemplates.Symbol",
+      "kind": "notation"
+    },
+    {
+      "scope": "local notation",
+      "name": "Constraint",
+      "type": "Type := SourceSymbolicIndex.Constraint FullSyntax.Formula",
+      "kind": "notation"
+    },
+    {
+      "scope": "local notation",
+      "name": "Node",
+      "type": "Type := InternedConstructorTemplates.Value Symbol Constraint",
+      "kind": "notation"
+    },
+    {
+      "scope": "local notation",
+      "name": "Checked",
+      "type": "Nat → Type 1 := SourceEqualityNativeDemand.State",
+      "kind": "notation"
+    },
+    {
+      "scope": "local notation",
+      "name": "Caller",
+      "type": "Nat → Type 1 := SourceCurrentAllocatedPartialState.State",
+      "kind": "notation"
+    },
+    {
+      "scope": "local notation",
+      "name": "Memos",
+      "type": "Type := EndpointMemoGateTrace.Memos",
+      "kind": "notation"
+    },
+    {
+      "scope": "local notation",
+      "name": "Fourth",
+      "type": "Type := SourceCurrentEmptinessMemo.Memo",
+      "kind": "notation"
+    },
+    {
+      "scope": "local notation",
+      "name": "Queries",
+      "type": "Type := SourceEndpointMemo.Memos",
+      "kind": "notation"
+    },
+    {
+      "scope": "local notation",
+      "name": "reaches",
+      "type": "Node → Bool := SourceEndpointReachability.reaches SourceMemoGate.unconstrained",
+      "kind": "notation"
+    },
+    {
+      "scope": "check",
+      "name": "instSymbol",
+      "type": "DecidableEq Symbol",
+      "kind": "inline typeclass",
+      "used": true
+    },
+    {
+      "scope": "check",
+      "name": "instEdge",
+      "type": "DecidableEq (EdgeKey Symbol Constraint)",
+      "kind": "inline typeclass",
+      "used": true
+    },
+    {
+      "scope": "check",
+      "name": "instValue",
+      "type": "DecidableEq Node",
+      "kind": "inline typeclass",
+      "used": true
+    },
+    {
+      "scope": "pending_enabled_complete",
+      "name": "instSymbol",
+      "type": "DecidableEq Symbol",
+      "kind": "inline typeclass",
+      "used": true
+    },
+    {
+      "scope": "pending_enabled_complete",
+      "name": "instEdge",
+      "type": "DecidableEq (EdgeKey Symbol Constraint)",
+      "kind": "inline typeclass",
+      "used": true
+    },
+    {
+      "scope": "pending_enabled_complete",
+      "name": "instValue",
+      "type": "DecidableEq Node",
+      "kind": "inline typeclass",
+      "used": true
+    },
+    {
+      "scope": "check",
+      "name": "p",
+      "type": "Nat",
+      "kind": "binder"
+    },
+    {
+      "scope": "check",
+      "name": "h",
+      "type": "Nat",
+      "kind": "binder"
+    },
+    {
+      "scope": "check",
+      "name": "query",
+      "type": "Node",
+      "kind": "binder"
+    },
+    {
+      "scope": "check",
+      "name": "before",
+      "type": "Checked width",
+      "kind": "binder"
+    },
+    {
+      "scope": "check",
+      "name": "memo",
+      "type": "Fourth",
+      "kind": "binder"
+    },
+    {
+      "scope": "check",
+      "name": "queries",
+      "type": "Queries",
+      "kind": "binder"
+    },
+    {
+      "scope": "check definition",
+      "name": "guardResult",
+      "type": "Bool × Queries",
+      "kind": "let header",
+      "value_attachment": " := SourceEndpointMemo.run query queries",
+      "body_present": false
+    },
+    {
+      "scope": "check true branch",
+      "name": "guardResult.1",
+      "type": "Bool := true",
+      "kind": "case specialization"
+    },
+    {
+      "scope": "check false branch",
+      "name": "guardResult.1",
+      "type": "Bool := false",
+      "kind": "case specialization"
+    },
+    {
+      "scope": "pending_enabled_complete",
+      "name": "formulas",
+      "type": "SourceGuards.Formulas FullSyntax.Formula",
+      "kind": "binder"
+    },
+    {
+      "scope": "pending_enabled_complete",
+      "name": "solver",
+      "type": "SourceGuards.Entailment FullSyntax.Formula",
+      "kind": "binder"
+    },
+    {
+      "scope": "pending_enabled_complete",
+      "name": "inventory",
+      "type": "Inventory",
+      "kind": "binder"
+    },
+    {
+      "scope": "pending_enabled_complete",
+      "name": "beforeCaller",
+      "type": "Caller width",
+      "kind": "binder"
+    },
+    {
+      "scope": "pending_enabled_complete",
+      "name": "before",
+      "type": "EnumerationState.State Symbol EnumGuard",
+      "kind": "binder"
+    },
+    {
+      "scope": "pending_enabled_complete",
+      "name": "source",
+      "type": "Nat",
+      "kind": "binder"
+    },
+    {
+      "scope": "pending_enabled_complete",
+      "name": "target",
+      "type": "Nat",
+      "kind": "binder"
+    },
+    {
+      "scope": "pending_enabled_complete",
+      "name": "sourceHandle",
+      "type": "Nat",
+      "kind": "binder"
+    },
+    {
+      "scope": "pending_enabled_complete",
+      "name": "targetHandle",
+      "type": "Nat",
+      "kind": "binder"
+    },
+    {
+      "scope": "pending_enabled_complete",
+      "name": "sourceScs",
+      "type": "List EnumerationState.Suspended",
+      "kind": "binder"
+    },
+    {
+      "scope": "pending_enabled_complete",
+      "name": "targetScs",
+      "type": "List EnumerationState.Suspended",
+      "kind": "binder"
+    },
+    {
+      "scope": "pending_enabled_complete",
+      "name": "memos",
+      "type": "Memos",
+      "kind": "binder"
+    },
+    {
+      "scope": "pending_enabled_complete",
+      "name": "initial",
+      "type": "Context formulas solver inventory beforeCaller memos",
+      "kind": "binder"
+    },
+    {
+      "scope": "pending_enabled_complete",
+      "name": "realized",
+      "type": "PendingRealized beforeCaller.checked.native.machine.heap before",
+      "kind": "binder"
+    },
+    {
+      "scope": "pending_enabled_complete",
+      "name": "sourceStored",
+      "type": "before.values[source]? = some (.unenumerated (some sourceHandle) sourceScs)",
+      "kind": "binder"
+    },
+    {
+      "scope": "pending_enabled_complete",
+      "name": "targetStored",
+      "type": "before.values[target]? = some (.unenumerated (some targetHandle) targetScs)",
+      "kind": "binder"
+    },
+    {
+      "scope": "pending_enabled_complete",
+      "name": "ranges",
+      "type": "match lookupNode beforeCaller.checked.native.machine.heap sourceHandle, lookupNode beforeCaller.checked.native.machine.heap targetHandle with | some left, some right => SourceCurrentAllocatedNativeRequestBounds.WordRanges (.code (SourceRecursiveIntersectionCode.requestNode IntersectionEmptyDomain.emptyDomain left right)) beforeCaller.checked | _, _ => True",
+      "kind": "binder"
+    },
+    {
+      "scope": "ranges some/some",
+      "name": "left",
+      "type": "Node",
+      "kind": "match binder"
+    },
+    {
+      "scope": "ranges some/some",
+      "name": "right",
+      "type": "Node",
+      "kind": "match binder"
+    },
+    {
+      "scope": "public existential",
+      "name": "left",
+      "type": "Node",
+      "kind": "witness"
+    },
+    {
+      "scope": "public existential",
+      "name": "right",
+      "type": "Node",
+      "kind": "witness"
+    },
+    {
+      "scope": "public existential",
+      "name": "next",
+      "type": "Inventory",
+      "kind": "witness"
+    },
+    {
+      "scope": "public existential",
+      "name": "query",
+      "type": "Node",
+      "kind": "witness"
+    },
+    {
+      "scope": "public existential",
+      "name": "queried",
+      "type": "Checked width",
+      "kind": "witness"
+    },
+    {
+      "scope": "public existential",
+      "name": "reached",
+      "type": "Bool",
+      "kind": "witness"
+    },
+    {
+      "scope": "public existential",
+      "name": "answer",
+      "type": "Bool",
+      "kind": "witness"
+    },
+    {
+      "scope": "public existential",
+      "name": "guardSaved",
+      "type": "Queries",
+      "kind": "witness"
+    },
+    {
+      "scope": "public existential",
+      "name": "checkedAfter",
+      "type": "Checked width",
+      "kind": "witness"
+    },
+    {
+      "scope": "public existential",
+      "name": "saved",
+      "type": "Fourth",
+      "kind": "witness"
+    },
+    {
+      "scope": "public existential",
+      "name": "final",
+      "type": "Memos",
+      "kind": "witness"
+    },
+    {
+      "scope": "public existential",
+      "name": "replacement",
+      "type": "Node",
+      "kind": "witness"
+    },
+    {
+      "scope": "public existential",
+      "name": "handle",
+      "type": "Nat",
+      "kind": "witness"
+    },
+    {
+      "scope": "public existential",
+      "name": "p",
+      "type": "Nat",
+      "kind": "witness"
+    },
+    {
+      "scope": "public existential",
+      "name": "h",
+      "type": "Nat",
+      "kind": "witness"
+    },
+    {
+      "scope": "public stable",
+      "name": "P",
+      "type": "Nat",
+      "kind": "forall intro",
+      "used": true,
+      "unused_reason": null
+    },
+    {
+      "scope": "public stable",
+      "name": "H",
+      "type": "Nat",
+      "kind": "forall intro",
+      "used": true,
+      "unused_reason": null
+    },
+    {
+      "scope": "public stable",
+      "name": "enoughP",
+      "type": "p ≤ P",
+      "kind": "forall intro",
+      "used": true,
+      "unused_reason": null
+    },
+    {
+      "scope": "public stable",
+      "name": "enoughH",
+      "type": "h ≤ H",
+      "kind": "forall intro",
+      "used": true,
+      "unused_reason": null
+    },
+    {
+      "scope": "phase stable false branch",
+      "name": "P",
+      "type": "Nat",
+      "kind": "forall intro",
+      "used": false,
+      "unused_reason": "False guard ignores all lower-stage bounds."
+    },
+    {
+      "scope": "phase stable false branch",
+      "name": "H",
+      "type": "Nat",
+      "kind": "forall intro",
+      "used": false,
+      "unused_reason": "False guard ignores all lower-stage bounds."
+    },
+    {
+      "scope": "phase stable false branch",
+      "name": "enoughP",
+      "type": "p ≤ P",
+      "kind": "forall intro",
+      "used": false,
+      "unused_reason": "False guard ignores all lower-stage bounds."
+    },
+    {
+      "scope": "phase stable false branch",
+      "name": "enoughH",
+      "type": "h ≤ H",
+      "kind": "forall intro",
+      "used": false,
+      "unused_reason": "False guard ignores all lower-stage bounds."
+    },
+    {
+      "scope": "phase stable true branch",
+      "name": "P",
+      "type": "Nat",
+      "kind": "forall intro",
+      "used": true,
+      "unused_reason": null
+    },
+    {
+      "scope": "phase stable true branch",
+      "name": "H",
+      "type": "Nat",
+      "kind": "forall intro",
+      "used": true,
+      "unused_reason": null
+    },
+    {
+      "scope": "phase stable true branch",
+      "name": "enoughP",
+      "type": "p ≤ P",
+      "kind": "forall intro",
+      "used": true,
+      "unused_reason": null
+    },
+    {
+      "scope": "phase stable true branch",
+      "name": "enoughH",
+      "type": "h ≤ H",
+      "kind": "forall intro",
+      "used": true,
+      "unused_reason": null
+    },
+    {
+      "scope": "public performed",
+      "name": "reachedPhysical",
+      "type": "SourceCurrentConjunctionRowsAllocation.State Symbol FullSyntax.Formula",
+      "kind": "existential witness"
+    },
+    {
+      "scope": "public performed",
+      "name": "actual",
+      "type": "SourceCurrentConjunctionMemo.Call 1000 beforeCaller.fourth query (physical queried) answer reachedPhysical saved",
+      "kind": "dependent witness"
+    },
+    {
+      "scope": "phase performed true branch",
+      "name": "reachedPhysical",
+      "type": "SourceCurrentConjunctionRowsAllocation.State Symbol FullSyntax.Formula",
+      "kind": "existential witness"
+    },
+    {
+      "scope": "phase performed true branch",
+      "name": "actual",
+      "type": "SourceCurrentConjunctionMemo.Call 1000 beforeCaller.fourth query (physical queried) answer reachedPhysical saved",
+      "kind": "dependent witness"
+    },
+    {
+      "scope": "public language",
+      "name": "ambient",
+      "type": "InternedGuardedLanguage.Env Symbol",
+      "kind": "lambda/forall binder"
+    },
+    {
+      "scope": "public language",
+      "name": "term",
+      "type": "Language.Term Symbol",
+      "kind": "lambda/forall binder"
+    },
+    {
+      "scope": "replacementFacts language",
+      "name": "ambient",
+      "type": "InternedGuardedLanguage.Env Symbol",
+      "kind": "lambda/forall binder"
+    },
+    {
+      "scope": "replacementFacts language",
+      "name": "term",
+      "type": "Language.Term Symbol",
+      "kind": "lambda/forall binder"
+    },
+    {
+      "scope": "final language composition lambda",
+      "name": "ambient",
+      "type": "InternedGuardedLanguage.Env Symbol",
+      "kind": "lambda/forall binder"
+    },
+    {
+      "scope": "final language composition lambda",
+      "name": "term",
+      "type": "Language.Term Symbol",
+      "kind": "lambda/forall binder"
+    },
+    {
+      "scope": "proof typed have",
+      "name": "decodedRanges",
+      "type": "SourceCurrentAllocatedNativeRequestBounds.WordRanges\n      (.code (SourceRecursiveIntersectionCode.requestNode IntersectionEmptyDomain.emptyDomain left right)) beforeCaller.checked",
+      "kind": "have",
+      "fragment": "local-decoded-ranges.lean.txt"
+    },
+    {
+      "scope": "proof typed have",
+      "name": "queryProbes",
+      "type": "InternedFreshOrdinaryProbeHeap.Heap queried.native.machine.heap",
+      "kind": "have",
+      "fragment": "local-query-probes.lean.txt"
+    },
+    {
+      "scope": "proof typed have",
+      "name": "guardChecked",
+      "type": "SourceEndpointMemoCorrect.Checked queried.native.machine.heap\n        memos.query (reaches query) (reached, guardSaved)",
+      "kind": "have",
+      "fragment": "local-guard-checked.lean.txt"
+    },
+    {
+      "scope": "proof typed have",
+      "name": "queryContext",
+      "type": "Context formulas solver next\n        (SourceCurrentAllocatedPartialState.advance beforeCaller queried beforeCaller.fourth beforeCaller.merge)\n        {memos with query := guardSaved}",
+      "kind": "have",
+      "fragment": "local-query-context.lean.txt"
+    },
+    {
+      "scope": "proof typed have",
+      "name": "queryPost",
+      "type": "Post formulas solver next beforeCaller\n        (SourceCurrentAllocatedPartialState.advance beforeCaller queried beforeCaller.fourth beforeCaller.merge)\n        {memos with query := guardSaved}",
+      "kind": "have",
+      "fragment": "local-query-post.lean.txt"
+    },
+    {
+      "scope": "proof typed have",
+      "name": "phase",
+      "type": "∃ (answer : Bool) (checkedAfter : Checked width) (saved : Fourth)\n        (final : Memos) (p h : Nat),\n        (∀ P H, p ≤ P → h ≤ H →\n          check P H query queried beforeCaller.fourth memos.query = (.done answer checkedAfter saved, guardSaved)) ∧\n        Post formulas solver next\n          (SourceCurrentAllocatedPartialState.advance beforeCaller queried beforeCaller.fourth beforeCaller.merge)\n          (SourceCurrentAllocatedPartialState.advance beforeCaller checkedAfter saved beforeCaller.merge) final ∧\n        (reached = false → answer = false ∧ checkedAfter = queried ∧ saved = beforeCaller.fourth ∧\n          final = {memos with query := guardSaved}) ∧\n        (reached = true →\n          ∃ reachedPhysical : SourceCurrentConjunctionRowsAllocation.State Symbol FullSyntax.Formula,\n            checkedAfter = advancePhysical queried reachedPhysical ∧\n            ∃ actual : SourceCurrentConjunctionMemo.Call 1000 beforeCaller.fourth query\n                (physical queried) answer reachedPhysical saved,\n              SourceCurrentConjunctionGlobalMemos.CallReads actual {memos with query := guardSaved} final) ∧\n        SourceCurrentEmptinessMemo.AnswerSound formulas solver query answer ∧\n        Available checkedAfter.native.machine.heap query ∧\n        Cache.Extends memos.unfolding final.unfolding ∧ final.query = guardSaved",
+      "kind": "have",
+      "fragment": "local-phase.lean.txt"
+    },
+    {
+      "scope": "proof typed have",
+      "name": "finalPost",
+      "type": "Post formulas solver next beforeCaller\n        (SourceCurrentAllocatedPartialState.advance beforeCaller checkedAfter saved beforeCaller.merge) final",
+      "kind": "have",
+      "fragment": "local-final-post.lean.txt"
+    },
+    {
+      "scope": "proof typed have",
+      "name": "replacementFacts",
+      "type": "Available checkedAfter.native.machine.heap (if answer then .empty else query) ∧\n        (if answer then .empty else query).free = [] ∧\n        (∀ ambient term,\n          InternedGuardedLanguage.meaning (SourceEqualityPCSGuard.holds formulas solver) ambient\n            (if answer then .empty else query) term ↔\n          InternedGuardedLanguage.meaning (SourceEqualityPCSGuard.holds formulas solver) ambient query term)",
+      "kind": "have",
+      "fragment": "local-replacement-facts.lean.txt"
+    },
+    {
+      "scope": "proof typed have",
+      "name": "finalRealized",
+      "type": "PendingRealized checkedAfter.native.machine.heap before",
+      "kind": "have",
+      "fragment": "local-final-realized.lean.txt"
+    },
+    {
+      "scope": "queryProbes receipt.actual.run",
+      "name": "fuel",
+      "type": "Nat",
+      "kind": "constructor implicit index",
+      "used": false,
+      "unused_reason": "Only the existing trace theorem uses the trace; no new fuel calculation."
+    },
+    {
+      "scope": "queryProbes receipt.actual.run",
+      "name": "trace",
+      "type": "SourceCurrentAllocatedNativePhysicalTraceCompletion.Trace fuel (.code (SourceRecursiveIntersectionCode.requestNode IntersectionEmptyDomain.emptyDomain left right)) beforeCaller.checked (.code (.pure query)) queried",
+      "kind": "constructor field"
+    },
+    {
+      "scope": "guard run Prod.mk case",
+      "name": "reached",
+      "type": "Bool",
+      "kind": "case binder/equation"
+    },
+    {
+      "scope": "guard run Prod.mk case",
+      "name": "guardSaved",
+      "type": "Queries",
+      "kind": "case binder/equation"
+    },
+    {
+      "scope": "guard run Prod.mk case",
+      "name": "guardRun",
+      "type": "SourceEndpointMemo.run query memos.query = (reached, guardSaved)",
+      "kind": "case binder/equation"
+    },
+    {
+      "scope": "phase false",
+      "name": "guardRun",
+      "type": "SourceEndpointMemo.run query memos.query = (false, guardSaved)",
+      "kind": "specialized equation"
+    },
+    {
+      "scope": "phase false",
+      "name": "guardChecked",
+      "type": "SourceEndpointMemoCorrect.Checked queried.native.machine.heap memos.query (reaches query) (false, guardSaved)",
+      "kind": "specialized fact"
+    },
+    {
+      "scope": "phase false skip implication",
+      "name": "notReached",
+      "type": "false = false",
+      "kind": "intro",
+      "used": false,
+      "unused_reason": "Reflexive antecedent is not needed to return the exact false branch."
+    },
+    {
+      "scope": "phase false performed implication",
+      "name": "isReached",
+      "type": "false = true",
+      "kind": "intro",
+      "used": true,
+      "unused_reason": null
+    },
+    {
+      "scope": "phase true",
+      "name": "guardRun",
+      "type": "SourceEndpointMemo.run query memos.query = (true, guardSaved)",
+      "kind": "specialized equation"
+    },
+    {
+      "scope": "phase true",
+      "name": "guardChecked",
+      "type": "SourceEndpointMemoCorrect.Checked queried.native.machine.heap memos.query (reaches query) (true, guardSaved)",
+      "kind": "specialized fact"
+    },
+    {
+      "scope": "phase true skip implication",
+      "name": "notReached",
+      "type": "true = false",
+      "kind": "intro",
+      "used": true,
+      "unused_reason": null
+    },
+    {
+      "scope": "phase true performed implication",
+      "name": "isReached",
+      "type": "true = true",
+      "kind": "intro",
+      "used": false,
+      "unused_reason": "Reflexive antecedent is not needed to package the already constructed actual Call/CallReads."
+    },
+    {
+      "scope": "false phase AnswerSound first",
+      "name": "opened",
+      "type": "query.free ≠ []",
+      "kind": "lambda",
+      "used": false,
+      "unused_reason": "The returned answer is false for every input free-list."
+    },
+    {
+      "scope": "false phase AnswerSound second",
+      "name": "impossible",
+      "type": "false = true",
+      "kind": "intro"
+    },
+    {
+      "scope": "replacementFacts false",
+      "name": "answer",
+      "type": "Bool := false",
+      "kind": "case specialization"
+    },
+    {
+      "scope": "replacementFacts true",
+      "name": "answer",
+      "type": "Bool := true",
+      "kind": "case specialization"
+    },
+    {
+      "scope": "replacementFacts true forward",
+      "name": "accepted",
+      "type": "InternedGuardedLanguage.meaning (SourceEqualityPCSGuard.holds formulas solver) ambient .empty term",
+      "kind": "intro"
+    },
+    {
+      "scope": "replacementFacts true reverse",
+      "name": "accepted",
+      "type": "InternedGuardedLanguage.meaning (SourceEqualityPCSGuard.holds formulas solver) ambient query term",
+      "kind": "intro"
+    },
+    {
+      "scope": "queryContext covered projection",
+      "name": "ambient",
+      "type": "InternedGuardedLanguage.Env Symbol",
+      "kind": "existing forall field",
+      "authored": false
+    },
+    {
+      "scope": "queryContext record field",
+      "name": "ready",
+      "type": "SourceCurrentConjunctionClassScan.Ready queried",
+      "kind": "constructor field type",
+      "authored_binder": false
+    },
+    {
+      "scope": "queryContext record field",
+      "name": "admitted",
+      "type": "SourceCurrentAllocatedNativeInventoryState.At formulas solver next queried",
+      "kind": "constructor field type",
+      "authored_binder": false
+    },
+    {
+      "scope": "queryContext record field",
+      "name": "sound",
+      "type": "SourceCurrentAllocatedPartialMemoSound.Sound formulas solver (SourceCurrentAllocatedPartialState.advance beforeCaller queried beforeCaller.fourth beforeCaller.merge)",
+      "kind": "constructor field type",
+      "authored_binder": false
+    },
+    {
+      "scope": "queryContext record field",
+      "name": "stored",
+      "type": "SourceCurrentMemoMergeEffects.Stored queried.native.machine.heap beforeCaller.merge",
+      "kind": "constructor field type",
+      "authored_binder": false
+    },
+    {
+      "scope": "queryContext record field",
+      "name": "covered",
+      "type": "∀ ambient, SourceCurrentMemoMergeLanguage.CacheCovers (SourceEqualityPCSGuard.holds formulas solver) ambient beforeCaller.merge",
+      "kind": "constructor field type",
+      "authored_binder": false
+    },
+    {
+      "scope": "queryContext record field",
+      "name": "correct",
+      "type": "SourceCurrentEmptinessMemo.Correct formulas solver queried.native.machine.heap beforeCaller.fourth",
+      "kind": "constructor field type",
+      "authored_binder": false
+    },
+    {
+      "scope": "queryContext record field",
+      "name": "globals",
+      "type": "EndpointMemoGateTrace.Valid queried.native.machine.heap {memos with query := guardSaved}",
+      "kind": "constructor field type",
+      "authored_binder": false
+    },
+    {
+      "scope": "queryContext record field",
+      "name": "probes",
+      "type": "InternedFreshOrdinaryProbeHeap.Heap queried.native.machine.heap",
+      "kind": "constructor field type",
+      "authored_binder": false
+    },
+    {
+      "scope": "queryPost record field",
+      "name": "context",
+      "type": "Context formulas solver next (SourceCurrentAllocatedPartialState.advance beforeCaller queried beforeCaller.fourth beforeCaller.merge) {memos with query := guardSaved}",
+      "kind": "constructor field type",
+      "authored_binder": false
+    },
+    {
+      "scope": "queryPost record field",
+      "name": "effects",
+      "type": "SourceCurrentConjunctionRowsAllocation.Effects (physical beforeCaller.checked) (physical queried)",
+      "kind": "constructor field type",
+      "authored_binder": false
+    },
+    {
+      "scope": "queryPost record field",
+      "name": "retained",
+      "type": "Cache.Extends beforeCaller.merge beforeCaller.merge",
+      "kind": "constructor field type",
+      "authored_binder": false
+    },
+    {
+      "scope": "queryPost record field",
+      "name": "fourthRetained",
+      "type": "SourceCurrentEmptinessMemo.Extends beforeCaller.fourth beforeCaller.fourth",
+      "kind": "constructor field type",
+      "authored_binder": false
+    },
+    {
+      "scope": "queryPost fourth reflexivity lambda",
+      "name": "key",
+      "type": "InternedBinderProtocol.NodeRef",
+      "kind": "lambda binder"
+    },
+    {
+      "scope": "queryPost fourth reflexivity lambda",
+      "name": "entry",
+      "type": "Node × Bool",
+      "kind": "lambda binder"
+    },
+    {
+      "scope": "queryPost fourth reflexivity lambda",
+      "name": "found",
+      "type": "beforeCaller.fourth key = some entry",
+      "kind": "lambda binder"
+    },
+    {
+      "scope": "initial proof",
+      "name": "left",
+      "type": "Node",
+      "kind": "obtain field",
+      "used": true
+    },
+    {
+      "scope": "initial proof",
+      "name": "leftDecoded",
+      "type": "lookupNode beforeCaller.checked.native.machine.heap sourceHandle = some left",
+      "kind": "obtain field",
+      "used": true
+    },
+    {
+      "scope": "initial proof",
+      "name": "leftAvailable",
+      "type": "Available beforeCaller.checked.native.machine.heap left",
+      "kind": "obtain field",
+      "used": true
+    },
+    {
+      "scope": "initial proof",
+      "name": "leftClosed",
+      "type": "left.free = []",
+      "kind": "obtain field",
+      "used": true
+    },
+    {
+      "scope": "initial proof",
+      "name": "right",
+      "type": "Node",
+      "kind": "obtain field",
+      "used": true
+    },
+    {
+      "scope": "initial proof",
+      "name": "rightDecoded",
+      "type": "lookupNode beforeCaller.checked.native.machine.heap targetHandle = some right",
+      "kind": "obtain field",
+      "used": true
+    },
+    {
+      "scope": "initial proof",
+      "name": "rightAvailable",
+      "type": "Available beforeCaller.checked.native.machine.heap right",
+      "kind": "obtain field",
+      "used": true
+    },
+    {
+      "scope": "initial proof",
+      "name": "rightClosed",
+      "type": "right.free = []",
+      "kind": "obtain field",
+      "used": true
+    },
+    {
+      "scope": "initial proof",
+      "name": "next",
+      "type": "Inventory",
+      "kind": "obtain field",
+      "used": true
+    },
+    {
+      "scope": "initial proof",
+      "name": "query",
+      "type": "Node",
+      "kind": "obtain field",
+      "used": true
+    },
+    {
+      "scope": "initial proof",
+      "name": "queried",
+      "type": "Checked width",
+      "kind": "obtain field",
+      "used": true
+    },
+    {
+      "scope": "initial proof",
+      "name": "nextSource",
+      "type": "next.source = beforeCaller.checked.native.machine.heap",
+      "kind": "obtain field",
+      "used": true
+    },
+    {
+      "scope": "initial proof",
+      "name": "nextRoots",
+      "type": "next.roots = inventory.roots ++ [left, right]",
+      "kind": "obtain field",
+      "used": true
+    },
+    {
+      "scope": "initial proof",
+      "name": "receipt",
+      "type": "SourceCurrentAllocatedTargetQuery.Receipt formulas solver next left right beforeCaller.checked query queried memos",
+      "kind": "obtain field",
+      "used": true
+    },
+    {
+      "scope": "phase reached=true",
+      "name": "workerAnswer",
+      "type": "Bool",
+      "kind": "obtain field",
+      "used": true
+    },
+    {
+      "scope": "phase reached=true",
+      "name": "workerPhysical",
+      "type": "SourceCurrentConjunctionRowsAllocation.State Symbol FullSyntax.Formula",
+      "kind": "obtain field",
+      "used": true
+    },
+    {
+      "scope": "phase reached=true",
+      "name": "workerSaved",
+      "type": "Fourth",
+      "kind": "obtain field",
+      "used": true
+    },
+    {
+      "scope": "phase reached=true",
+      "name": "workerFinal",
+      "type": "Memos",
+      "kind": "obtain field",
+      "used": true
+    },
+    {
+      "scope": "phase reached=true",
+      "name": "actualCall",
+      "type": "SourceCurrentConjunctionMemo.Call 1000 beforeCaller.fourth query (physical queried) workerAnswer workerPhysical workerSaved",
+      "kind": "obtain field",
+      "used": true
+    },
+    {
+      "scope": "phase reached=true",
+      "name": "actualReads",
+      "type": "SourceCurrentConjunctionGlobalMemos.CallReads actualCall {memos with query := guardSaved} workerFinal",
+      "kind": "obtain field",
+      "used": true
+    },
+    {
+      "scope": "phase reached=true",
+      "name": "workerPost",
+      "type": "Post formulas solver next (SourceCurrentAllocatedPartialState.advance beforeCaller queried beforeCaller.fourth beforeCaller.merge) (SourceCurrentAllocatedPartialState.advance (SourceCurrentAllocatedPartialState.advance beforeCaller queried beforeCaller.fourth beforeCaller.merge) (advancePhysical queried workerPhysical) workerSaved beforeCaller.merge) workerFinal",
+      "kind": "obtain field",
+      "used": true
+    },
+    {
+      "scope": "phase reached=true",
+      "name": "workerSound",
+      "type": "SourceCurrentEmptinessMemo.AnswerSound formulas solver query workerAnswer",
+      "kind": "obtain field",
+      "used": true
+    },
+    {
+      "scope": "phase reached=true",
+      "name": "workerAvailable",
+      "type": "Available workerPhysical.heap query",
+      "kind": "obtain field",
+      "used": true
+    },
+    {
+      "scope": "phase reached=true",
+      "name": "workerUnfolding",
+      "type": "Cache.Extends memos.unfolding workerFinal.unfolding",
+      "kind": "obtain field",
+      "used": true
+    },
+    {
+      "scope": "phase reached=true",
+      "name": "workerQuerySame",
+      "type": "workerFinal.query = guardSaved",
+      "kind": "obtain field",
+      "used": true
+    },
+    {
+      "scope": "phase reached=true",
+      "name": "p",
+      "type": "Nat",
+      "kind": "obtain field",
+      "used": true
+    },
+    {
+      "scope": "phase reached=true",
+      "name": "h",
+      "type": "Nat",
+      "kind": "obtain field",
+      "used": true
+    },
+    {
+      "scope": "phase reached=true",
+      "name": "physicalStable",
+      "type": "∀ P H, p ≤ P → h ≤ H → SourceCurrentConjunctionWorker.call P H 1000 beforeCaller.fourth query (physical queried) = .done (workerAnswer, workerSaved) workerPhysical",
+      "kind": "obtain field",
+      "used": true
+    },
+    {
+      "scope": "after local phase",
+      "name": "answer",
+      "type": "Bool",
+      "kind": "obtain field",
+      "used": true
+    },
+    {
+      "scope": "after local phase",
+      "name": "checkedAfter",
+      "type": "Checked width",
+      "kind": "obtain field",
+      "used": true
+    },
+    {
+      "scope": "after local phase",
+      "name": "saved",
+      "type": "Fourth",
+      "kind": "obtain field",
+      "used": true
+    },
+    {
+      "scope": "after local phase",
+      "name": "final",
+      "type": "Memos",
+      "kind": "obtain field",
+      "used": true
+    },
+    {
+      "scope": "after local phase",
+      "name": "p",
+      "type": "Nat",
+      "kind": "obtain field",
+      "used": true
+    },
+    {
+      "scope": "after local phase",
+      "name": "h",
+      "type": "Nat",
+      "kind": "obtain field",
+      "used": true
+    },
+    {
+      "scope": "after local phase",
+      "name": "stable",
+      "type": "∀ P H, p ≤ P → h ≤ H → check P H query queried beforeCaller.fourth memos.query = (.done answer checkedAfter saved, guardSaved)",
+      "kind": "obtain field",
+      "used": true
+    },
+    {
+      "scope": "after local phase",
+      "name": "checkPost",
+      "type": "Post formulas solver next (SourceCurrentAllocatedPartialState.advance beforeCaller queried beforeCaller.fourth beforeCaller.merge) (SourceCurrentAllocatedPartialState.advance beforeCaller checkedAfter saved beforeCaller.merge) final",
+      "kind": "obtain field",
+      "used": true
+    },
+    {
+      "scope": "after local phase",
+      "name": "skipped",
+      "type": "reached = false → answer = false ∧ checkedAfter = queried ∧ saved = beforeCaller.fourth ∧ final = {memos with query := guardSaved}",
+      "kind": "obtain field",
+      "used": true
+    },
+    {
+      "scope": "after local phase",
+      "name": "performed",
+      "type": "reached = true → ∃ reachedPhysical : SourceCurrentConjunctionRowsAllocation.State Symbol FullSyntax.Formula, checkedAfter = advancePhysical queried reachedPhysical ∧ ∃ actual : SourceCurrentConjunctionMemo.Call 1000 beforeCaller.fourth query (physical queried) answer reachedPhysical saved, SourceCurrentConjunctionGlobalMemos.CallReads actual {memos with query := guardSaved} final",
+      "kind": "obtain field",
+      "used": true
+    },
+    {
+      "scope": "after local phase",
+      "name": "sound",
+      "type": "SourceCurrentEmptinessMemo.AnswerSound formulas solver query answer",
+      "kind": "obtain field",
+      "used": true
+    },
+    {
+      "scope": "after local phase",
+      "name": "queryAvailable",
+      "type": "Available checkedAfter.native.machine.heap query",
+      "kind": "obtain field",
+      "used": true
+    },
+    {
+      "scope": "after local phase",
+      "name": "unfolding",
+      "type": "Cache.Extends memos.unfolding final.unfolding",
+      "kind": "obtain field",
+      "used": true
+    },
+    {
+      "scope": "after local phase",
+      "name": "querySame",
+      "type": "final.query = guardSaved",
+      "kind": "obtain field",
+      "used": true
+    },
+    {
+      "scope": "after replacementFacts",
+      "name": "replacementAvailable",
+      "type": "Available checkedAfter.native.machine.heap (if answer then .empty else query)",
+      "kind": "obtain field",
+      "used": true
+    },
+    {
+      "scope": "after replacementFacts",
+      "name": "replacementClosed",
+      "type": "(if answer then .empty else query).free = []",
+      "kind": "obtain field",
+      "used": true
+    },
+    {
+      "scope": "after replacementFacts",
+      "name": "replacementMeaning",
+      "type": "∀ ambient term, InternedGuardedLanguage.meaning (SourceEqualityPCSGuard.holds formulas solver) ambient (if answer then .empty else query) term ↔ InternedGuardedLanguage.meaning (SourceEqualityPCSGuard.holds formulas solver) ambient query term",
+      "kind": "obtain field",
+      "used": true
+    },
+    {
+      "scope": "final proof",
+      "name": "handle",
+      "type": "Nat",
+      "kind": "obtain field",
+      "used": true
+    },
+    {
+      "scope": "final proof",
+      "name": "encoded",
+      "type": "encodeNode (if answer then .empty else query) = some handle",
+      "kind": "obtain field",
+      "used": true
+    },
+    {
+      "scope": "final proof",
+      "name": "decoded",
+      "type": "lookupNode checkedAfter.native.machine.heap handle = some (if answer then .empty else query)",
+      "kind": "obtain field",
+      "used": true
+    }
+  ],
+  "count": 174,
+  "fixed_symbol": true,
+  "new_type_count": 0,
+  "local_instance_count": 0,
+  "global_instance_count": 0,
+  "all_authored_lambda_and_intro_binders_declared": true,
+  "note": "Logical header implications and existing Context fields are marked non-authored where no tactic/lambda introduction is required."
+}
