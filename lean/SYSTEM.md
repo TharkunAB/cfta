@@ -1,5 +1,46 @@
 # Constrained languages, indexing, and distributions
 
+## Ordered selected-edge branch body
+
+Updated: 2026-10-24. Main `74250bd88` is incorporated.
+Proof: `eccb08b1558906402c06d97b723ee7fe294cb7a1`.
+Read `lean/notes-current-pruning-enumeration-ordinary-branches.md`.
+
+A concrete list worker chooses each edge before its actual captured prepare.
+Every alternative starts from the SAME before. A derived Language.All₂ list
+pairs each selected occurrence with its complete raw rows. The full stream
+is their ordered flatten. Order and duplicates remain; rejection gives raw[].
+Missing projection stays a model-domain signal, distinct from successful
+unsupported-child none. No Haskell Nothing, rejection or fault is invented.
+
+The actual Ready/available/closed ordinary parent and selected-row membership,
+PendingRealized and alignment derive completion. Existing edge completion and
+RawExact supply the SAME successful witness and raw singleton. No desired
+Success, output or callback law is assumed. No full packet is duplicated.
+Selected list input permits later canonical callers to derive order and
+membership without a synthetic reordered parent. No ordering law is assumed.
+
+This is the shallow branch BODY. Terminal-root caller dispatch remains separate.
+runsInterned uses eager children; termsPruneUntil uses canonical order. Neither
+full public entry point is claimed. Native order/container/ID realization stays.
+
+The first strict input failed on an unprojected ExceptT append and an unnecessary explicit generalization. A separately reviewed V2 makes the raw projections explicit and retains the original owner. The second input failed because simplification removed the raw wrapper before the bind rule and left a concrete Option match unreduced. The third input rewrites bind before projection and explicitly reduces that match. It passes with a literal empty log under all linters and warnings as errors. Both failed inputs, complete raw outputs, exact successive patches, both gates and the corrected declaration reviews remain. The separate metadata assembly diagnostic is retained as author-only data. No proof limit changed. The installed build, complete public readback and Audit pass. All 52 public-output lines retain both complete signatures without display omissions. No passing build was repeated.
+The installed build passes 624 jobs. Audit passes 3699 jobs and
+76213 dependency checks, with the unchanged older warning.
+run and run_complete each report exactly propext, Classical.choice and Quot.sound. No project axiom is added.
+Frozen owners, scoped inventories, reviews and actual evidence remain. Prior
+RawExact checkpoint's 26 post-seal inputs and its already-sealed assessment
+remain. All older failures, proofs, drafts, repairs and verifier corrections stay protected.
+No Haskell changes. Six imported repair handoffs stay first in FINDINGS.
+
+Terminal intersection/assimilation/emptiness and slots/count/ancestry, native
+canonical sorting/order/IDs/containers, all-producer origins/edits, selector/
+Graph/index/memo2, extraction/signed bounds, cutoff language and full typing/
+pruning/driver/runtime/solver/resources/convergence remain. H6 stays strongest
+combined. H23, older work and the optimized core remain. The full goal stays
+ACTIVE and incomplete. This record precedes evidence and push.
+
+
 ## Exact raw results of native edge traversal
 
 Updated: 2026-10-24. Main `74250bd88` is incorporated.
