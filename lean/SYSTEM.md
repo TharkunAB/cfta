@@ -1,5 +1,46 @@
 # Constrained languages, indexing, and distributions
 
+## Native shallow-child preparation
+
+Updated: 2026-10-24. Main `74250bd88` is incorporated.
+Proof: `1326ed2d825f3b5b6b64ed7f809a525cce3806ca`.
+Read `lean/notes-current-pruning-enumeration-shallow-child.md`.
+
+The executable child stage reads the complete native Value. Empty rejects
+first. Supported ordinary children allocate and write the original suspended
+list. Mu and retained unions allocate the source diagnostic cutoff slot with
+an empty list. Terminal merging and free-reference representation remain
+separate. An absent action is not rejection or an enumeration error.
+The selected root still must choose an edge before deferring its children.
+
+Coherence, availability, closedness, all-slot realization, supply alignment
+and the no-terminal condition derive the handle and complete readback.
+The theorem derives the actual selected action and its fresh-hole success.
+The actual allocated state, ordinary write at that same slot, exact final
+record, stored list, incremented counter, supply alignment and final all-slot
+realization remain. The allocated ancestry update is retained. No desired
+output, graph equality or replacement state carrier is assumed.
+
+The first strict input passes with a literal empty log under all linters and warnings as errors. All four actual source/public/build/Audit checks pass. No failed compiler attempt or proof-limit change occurred. The public readback retains all 55 lines with both complete signatures and no display omission. The actual dependent matches and generated record-update binding retain the frozen header's original premises and state.
+The installed build passes 564 jobs. Audit passes 3689 jobs and
+76144 dependency checks, with one older warning and no new source
+warning. Both complete public signatures and actual axiom reports were read.
+The definition reports only propext. The theorem reports only propext and Quot.sound. Neither reports Classical.choice.
+All frozen declarations, scoped types, source cuts, reviews and raw evidence
+remain. The previous action checkpoint's26 post-seal inputs remain.
+
+The source permits constraints below a recursive cutoff to be discarded.
+The source-only marker witness is not an executed native bug reproduction.
+This operational theorem does not prove concrete-language nonemptiness or
+suspended-assignment preservation below that cutoff. Terminal intersection,
+native graph/ID/index/memo2 and constraint projection, ordered edge exposure,
+concrete typing/pruning, full expansion/driver and runtime/solver/convergence
+remain open. H6 stays strongest combined. H23 and older constructor/equality
+work stay queued. No Haskell changes. FINDINGS keeps all six repair handoffs
+FIRST. All earlier work and the optimized core remain. The full goal stays
+ACTIVE and incomplete. This record precedes evidence and push.
+
+
 ## Executable outer narrowing and enumeration actions
 
 Updated: 2026-10-24. Main `74250bd88` is incorporated.
