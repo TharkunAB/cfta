@@ -1,0 +1,29 @@
+nodeCaches = unsafePerformIO newCacheFamily
+{-# NOINLINE nodeCaches #-}
+
+-- | Next identity for a node in any typed cache.
+nodeIds :: IdSupply
+nodeIds = unsafePerformIO newIdSupply
+{-# NOINLINE nodeIds #-}
+
+-- | Return the canonical node in its typed cache.
+{-# INLINEABLE internNode #-}
+internNode ::
+    forall symbol.
+    (Typeable symbol) => UninternedNode symbol -> Node symbol
+internNode = intern (selectCache @symbol nodeCaches (freshCacheWith nodeIds)) (identifyNode . NodeId)
+
+{-# INLINEABLE identifyNode #-}
+identifyNode :: NodeId -> UninternedNode symbol -> Node symbol
+identifyNode i (UninternedNode es) =
+    InternedNode $
+        MkInternedNode
+            { internedNodeId = i
+            , internedNodeEdges = es
+            , internedNodeNumNestedMu = maximum (0 : [numNestedMu child | edge <- es, child <- edgeChildren edge])
+            , internedNodeFree = Set.unions [freeVars child | edge <- es, child <- edgeChildren edge]
+            }
+identifyNode _ UninternedEmptyNode = EmptyNode
+identifyNode i (UninternedUnion members) =
+    InternedUnion $
+        MkInternedUnion i members (maximum $ 0 : map numNestedMu members) (Set.unions $ map freeVars members)

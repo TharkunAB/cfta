@@ -1,0 +1,60 @@
+{
+  "status": "REVIEW_ONLY_BODY_FREE",
+  "encodeNode": {
+    "subject": "value",
+    "branches": [
+      {
+        "pattern": ".empty",
+        "result": "some 0"
+      },
+      {
+        "pattern": ".reference name",
+        "result": "none"
+      },
+      {
+        "pattern": ".node entry edges depth free",
+        "result": "some (entry.identity + 1)"
+      },
+      {
+        "pattern": ".union entry members depth free",
+        "result": "some (entry.identity + 1)"
+      },
+      {
+        "pattern": ".mu entry body depthShape ordinaryShape",
+        "result": "some (entry.identity + 1)"
+      }
+    ]
+  },
+  "lookupNode": {
+    "subject": "node",
+    "branches": [
+      {
+        "pattern": "0",
+        "result": "some .empty"
+      },
+      {
+        "pattern": "identity + 1",
+        "steps_in_order": [
+          {
+            "read": "heap.nodes.issued identity",
+            "on_none": "none",
+            "on_some_binder": "key"
+          },
+          {
+            "read": "heap.nodes.table key",
+            "on_none": "none",
+            "on_some_binder": "entry"
+          },
+          {
+            "condition": "entry.identity = identity",
+            "on_false": "none",
+            "on_true": "heap.nodeRecords key"
+          }
+        ]
+      }
+    ],
+    "forbidden_fallback": "No getD Empty, no pending-to-Empty conversion, no issued-only lookup, no caller decoder."
+  },
+  "instances": "No DecidableEq Symbol, Guard or EdgeKey instance is required. Only the existing Nat equality decides the winner check.",
+  "model_boundary": "0 / positive ID+1 is the existing MODEL handle convention. It is not native raw NodeId extraction. Raw UVar IDs remain separate."
+}

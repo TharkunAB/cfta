@@ -1,0 +1,39 @@
+/tmp/mcfta-pruning-enumeration-nodes-20261024/source-check-1/MicroCFTA/SourcePruningEnumerationNodes.lean:59:13: error: unsolved goals
+case succ.none
+Guard : Type
+before after : State Symbol Guard
+kept : SourceEqualityRequiredCache.Keeps before after
+value : Value Symbol Guard
+identity : Nat
+issued : before.nodes.issued identity = none
+present : none = some value
+⊢ lookupNode after (identity + 1) = some value
+/tmp/mcfta-pruning-enumeration-nodes-20261024/source-check-1/MicroCFTA/SourcePruningEnumerationNodes.lean:62:17: error: unsolved goals
+case succ.some.none
+Guard : Type
+before after : State Symbol Guard
+kept : SourceEqualityRequiredCache.Keeps before after
+value : Value Symbol Guard
+identity : Nat
+key : InternedBinderProtocol.NodeKey
+issued : before.nodes.issued identity = some key
+canonical : before.nodes.table key = none
+present : none = some value
+⊢ lookupNode after (identity + 1) = some value
+/tmp/mcfta-pruning-enumeration-nodes-20261024/source-check-1/MicroCFTA/SourcePruningEnumerationNodes.lean:65:58: error: `if_pos` has been deprecated: Use `ite_eq_left` instead
+/tmp/mcfta-pruning-enumeration-nodes-20261024/source-check-1/MicroCFTA/SourcePruningEnumerationNodes.lean:67:57: error: `if_pos` has been deprecated: Use `ite_eq_left` instead
+/tmp/mcfta-pruning-enumeration-nodes-20261024/source-check-1/MicroCFTA/SourcePruningEnumerationNodes.lean:69:58: error: `if_neg` has been deprecated: Use `ite_eq_right` instead
+/tmp/mcfta-pruning-enumeration-nodes-20261024/source-check-1/MicroCFTA/SourcePruningEnumerationNodes.lean:69:14: error: unsolved goals
+case neg
+Guard : Type
+before after : State Symbol Guard
+kept : SourceEqualityRequiredCache.Keeps before after
+value : Value Symbol Guard
+identity : Nat
+key : InternedBinderProtocol.NodeKey
+issued : before.nodes.issued identity = some key
+entry : Cache.Interned InternedBinderProtocol.NodeKey
+canonical : before.nodes.table key = some entry
+winner : ¬entry.identity = identity
+present : none = some value
+⊢ lookupNode after (identity + 1) = some value

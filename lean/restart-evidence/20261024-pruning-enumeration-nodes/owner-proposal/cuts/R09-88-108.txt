@@ -1,0 +1,21 @@
+structure Caches (Symbol Guard : Type) where
+  edges : Cache.State (EnumerationState.Edge Symbol Guard)
+  nodes : Cache.State (List Nat)
+
+/-- A stored node key is nonempty, sorted, and refers only to canonical edges. -/
+def NodeKeys (state : Caches Symbol Guard) : Prop :=
+  ∀ identity ids, state.nodes.issued identity = some ids →
+    ids ≠ [] ∧ canonicalIds ids = ids ∧
+      ∀ edgeId ∈ ids, ∃ entry, state.edges.table entry.key = some entry ∧ entry.identity = edgeId
+
+/-- The two caches retain their own canonical-key invariants. -/
+structure Valid (state : Caches Symbol Guard) : Prop where
+  edges : Cache.Valid state.edges
+  nodes : Cache.Valid state.nodes
+  keys : NodeKeys state
+
+/-- Zero represents EmptyNode; a stored node identity is shifted by one. -/
+def rows (state : Caches Symbol Guard) : Nat → List (EnumerationState.Edge Symbol Guard)
+  | 0 => []
+  | identity + 1 => ((state.nodes.issued identity).getD []).filterMap state.edges.issued
+

@@ -1,0 +1,216 @@
+{
+  "status": "PROPOSED_REVIEW_ONLY_EXACT_TYPES; NO_BODY_TEXT",
+  "constructor_cases": [
+    {
+      "owner": "encodeNode",
+      "subject": "value",
+      "cases": [
+        {
+          "constructor": "empty",
+          "fields": {}
+        },
+        {
+          "constructor": "reference",
+          "fields": {
+            "name": "InternedBinderProtocol.Reference"
+          }
+        },
+        {
+          "constructor": "node",
+          "fields": {
+            "entry": "Cache.Interned InternedBinderProtocol.NodeKey",
+            "edges": "List (EdgeValue Symbol Guard)",
+            "depth": "Nat",
+            "free": "List InternedBinderProtocol.Reference"
+          }
+        },
+        {
+          "constructor": "union",
+          "fields": {
+            "entry": "Cache.Interned InternedBinderProtocol.NodeKey",
+            "members": "List (Value Symbol Guard)",
+            "depth": "Nat",
+            "free": "List InternedBinderProtocol.Reference"
+          }
+        },
+        {
+          "constructor": "mu",
+          "fields": {
+            "entry": "Cache.Interned InternedBinderProtocol.NodeKey",
+            "body": "Value Symbol Guard",
+            "depthShape": "Value Symbol Guard",
+            "ordinaryShape": "Value Symbol Guard"
+          }
+        }
+      ],
+      "required_named_fields": [
+        "entry"
+      ],
+      "unused_fields": "Use anonymous patterns. Full constructor field types are recorded for review, not a demand to bind unused names."
+    },
+    {
+      "owner": "available_readback",
+      "subject": "value",
+      "cases": [
+        {
+          "constructor": "empty",
+          "fields": {}
+        },
+        {
+          "constructor": "reference",
+          "fields": {
+            "name": "InternedBinderProtocol.Reference"
+          }
+        },
+        {
+          "constructor": "node",
+          "fields": {
+            "entry": "Cache.Interned InternedBinderProtocol.NodeKey",
+            "edges": "List (EdgeValue Symbol Guard)",
+            "depth": "Nat",
+            "free": "List InternedBinderProtocol.Reference"
+          }
+        },
+        {
+          "constructor": "union",
+          "fields": {
+            "entry": "Cache.Interned InternedBinderProtocol.NodeKey",
+            "members": "List (Value Symbol Guard)",
+            "depth": "Nat",
+            "free": "List InternedBinderProtocol.Reference"
+          }
+        },
+        {
+          "constructor": "mu",
+          "fields": {
+            "entry": "Cache.Interned InternedBinderProtocol.NodeKey",
+            "body": "Value Symbol Guard",
+            "depthShape": "Value Symbol Guard",
+            "ordinaryShape": "Value Symbol Guard"
+          }
+        }
+      ],
+      "required_named_fields": [
+        "entry"
+      ],
+      "activation": "Cases on the actual supplied Value. This is not an induction and has no IH."
+    }
+  ],
+  "natural_cases": {
+    "owners": [
+      "lookupNode",
+      "lookupNode_keeps"
+    ],
+    "subject": "node",
+    "cases": [
+      {
+        "constructor": "zero",
+        "binders": {}
+      },
+      {
+        "constructor": "succ",
+        "binders": {
+          "identity": "Nat"
+        }
+      }
+    ]
+  },
+  "lookup_option_cases": [
+    {
+      "owner": "lookupNode",
+      "subject": "heap.nodes.issued identity",
+      "none_binders": {},
+      "some_binders": {
+        "key": "InternedBinderProtocol.NodeKey"
+      }
+    },
+    {
+      "owner": "lookupNode",
+      "subject": "heap.nodes.table key",
+      "none_binders": {},
+      "some_binders": {
+        "entry": "Cache.Interned InternedBinderProtocol.NodeKey"
+      }
+    }
+  ],
+  "conditional_fragments": [
+    {
+      "owner": "lookupNode",
+      "expression": "entry.identity = identity",
+      "decision": "Existing DecidableEq Nat only",
+      "true_result": "heap.nodeRecords key",
+      "false_result": "none"
+    },
+    {
+      "owner": "lookupNode_keeps",
+      "activation": "by_cases winner : entry.identity = identity",
+      "true_type": "entry.identity = identity",
+      "false_type": "¬entry.identity = identity"
+    }
+  ],
+  "haves": [
+    {
+      "name": "canonical",
+      "owner": "available_readback",
+      "scope": "Each node/union/mu branch for the actual entry",
+      "type": "heap.nodes.table entry.key = some entry",
+      "api": "InternedFreshProbeKeys.resident_entry heap coherent _ available.resident entry rfl"
+    },
+    {
+      "name": "issued",
+      "owner": "available_readback",
+      "scope": "Each node/union/mu branch after canonical",
+      "type": "heap.nodes.issued entry.identity = some entry.key",
+      "api": "The issued-key component of coherent.valid.2.2 entry.key entry canonical"
+    }
+  ],
+  "case_equations": [
+    {
+      "owner": "lookupNode_keeps",
+      "activation": "cases issued : before.nodes.issued identity",
+      "specializations": [
+        {
+          "scope": "none",
+          "type": "before.nodes.issued identity = none"
+        },
+        {
+          "scope": "some key",
+          "type": "before.nodes.issued identity = some key",
+          "binders": {
+            "key": "InternedBinderProtocol.NodeKey"
+          }
+        }
+      ]
+    },
+    {
+      "owner": "lookupNode_keeps",
+      "activation": "cases canonical : before.nodes.table key",
+      "specializations": [
+        {
+          "scope": "none",
+          "type": "before.nodes.table key = none"
+        },
+        {
+          "scope": "some entry",
+          "type": "before.nodes.table key = some entry",
+          "binders": {
+            "entry": "Cache.Interned InternedBinderProtocol.NodeKey"
+          }
+        }
+      ]
+    }
+  ],
+  "lets": [],
+  "obtains": [],
+  "typed_shows": [],
+  "new_lambdas": [],
+  "induction": null,
+  "recursive_calls": [],
+  "private_declarations": [],
+  "witness": "available_readback returns node=0 for Empty and node=entry.identity+1 for each stored constructor. No external index witness is an input.",
+  "growth_uses": [
+    "kept.history identity key issued",
+    "kept.growth.nodes key entry canonical",
+    "kept.growth.nodeRecords key value actual_initial_payload"
+  ]
+}

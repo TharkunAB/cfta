@@ -1,0 +1,15 @@
+structure Interned (Key : Type) where
+  identity : Nat
+  key : Key
+deriving DecidableEq
+
+/-- The identity supply records issued candidates, including candidates that lose races. -/
+structure State (Key : Type) where
+  next : Nat
+  issued : Nat → Option Key
+  table : Table Key (Interned Key)
+
+/-- Every table entry has its own key and an identity reserved for that key. -/
+def Valid (state : State Key) : Prop :=
+  (∀ ident key, state.issued ident = some key → ident < state.next) ∧
+  (∀ key value, state.table key = some value →

@@ -1,0 +1,10 @@
+/-- Read the canonical entry carried by a stored node constructor. -/
+def entryOf : Value Symbol Guard → Option (Interned NodeKey)
+  | .node entry _ _ _ | .union entry _ _ _ | .mu entry _ _ _ => some entry
+  | .empty | .reference _ => none
+
+/-- Constructor-field agreement fixes the complete entry carried by the record. -/
+theorem fields_entry (key : NodeKey) (entry : Interned NodeKey) (value : Value Symbol Guard)
+    (fields : NodeFields key entry value) : entryOf value = some entry := by
+  cases value <;> simp_all [NodeFields, entryOf]
+

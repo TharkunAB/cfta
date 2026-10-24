@@ -1,0 +1,22 @@
+{"command": ["/home/tritlo/.elan/toolchains/leanprover--lean4---v4.34.1/bin/lean", "-R", "/tmp/mcfta-pruning-enumeration-nodes-20261024/public-1", "-DwarningAsError=true", "-Dlinter.all=true", "/tmp/mcfta-pruning-enumeration-nodes-20261024/public-1/checked.lean"], "exit_code": 0, "raw_bytes": 1939, "raw_sha256": "c94b17d6ae5d660883b556a0639749a1c08a140de1ebb0ac9a688ca50f153f4a", "source_sha256": "c3d56c192c7e185fd1d814853d52556b368f73cad7db8d76891ce1ced76c5a25"}
+MicroCFTA.SourcePruningEnumerationNodes.encodeNode {Guard : Type}
+  (value : MicroCFTA.InternedConstructorTemplates.Value MicroCFTA.SourcePruningTemplates.Symbol Guard) : Option.{0} Nat
+MicroCFTA.SourcePruningEnumerationNodes.lookupNode {Guard : Type}
+  (heap : MicroCFTA.InternedConstructorTemplates.State MicroCFTA.SourcePruningTemplates.Symbol Guard) (node : Nat) :
+  Option.{0} (MicroCFTA.InternedConstructorTemplates.Value MicroCFTA.SourcePruningTemplates.Symbol Guard)
+MicroCFTA.SourcePruningEnumerationNodes.available_readback {Guard : Type}
+  (heap : MicroCFTA.InternedConstructorTemplates.State MicroCFTA.SourcePruningTemplates.Symbol Guard)
+  (value : MicroCFTA.InternedConstructorTemplates.Value MicroCFTA.SourcePruningTemplates.Symbol Guard)
+  (coherent : MicroCFTA.InternedRecordCoherence.Coherent heap)
+  (available : MicroCFTA.InternedProbeProvenance.Available heap value) (closed : Eq.{1} value.free List.nil.{0}) :
+  Exists.{1} fun node =>
+    Eq.{1} (MicroCFTA.SourcePruningEnumerationNodes.encodeNode value) (Option.some.{0} node) ∧
+      Eq.{1} (MicroCFTA.SourcePruningEnumerationNodes.lookupNode heap node) (Option.some.{0} value)
+MicroCFTA.SourcePruningEnumerationNodes.lookupNode_keeps {Guard : Type}
+  (before after : MicroCFTA.InternedConstructorTemplates.State MicroCFTA.SourcePruningTemplates.Symbol Guard)
+  (kept : MicroCFTA.SourceEqualityRequiredCache.Keeps before after) (node : Nat)
+  (value : MicroCFTA.InternedConstructorTemplates.Value MicroCFTA.SourcePruningTemplates.Symbol Guard)
+  (present : Eq.{1} (MicroCFTA.SourcePruningEnumerationNodes.lookupNode before node) (Option.some.{0} value)) :
+  Eq.{1} (MicroCFTA.SourcePruningEnumerationNodes.lookupNode after node) (Option.some.{0} value)
+'MicroCFTA.SourcePruningEnumerationNodes.available_readback' depends on axioms: [propext, Quot.sound.{u}]
+'MicroCFTA.SourcePruningEnumerationNodes.lookupNode_keeps' depends on axioms: [propext, Quot.sound.{u}]

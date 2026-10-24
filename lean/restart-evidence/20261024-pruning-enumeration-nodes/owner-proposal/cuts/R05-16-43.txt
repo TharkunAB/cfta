@@ -1,0 +1,28 @@
+
+/-- Each node payload has the fields used to construct its actual cache key. -/
+def NodeFields (key : NodeKey) (entry : Interned NodeKey) : Value Symbol Guard → Prop
+  | .node actual edges depth free =>
+      actual = entry ∧ key = .node (edges.map (fun edge => edge.entry.identity)) ∧
+        depth = maximumDepth (edges.flatMap EdgeValue.children) ∧
+        free = childFree (edges.flatMap EdgeValue.children)
+  | .union actual members depth free =>
+      actual = entry ∧ key = .union (members.map Value.referenceOf) ∧
+        depth = maximumDepth members ∧ free = childFree members
+  | .mu actual _ depthShape ordinaryShape =>
+      actual = entry ∧ key = muKey depthShape ordinaryShape
+  | .empty | .reference _ => False
+
+/-- Stored payloads agree with canonical entries and their constructor fields. -/
+structure Coherent (state : InternedConstructorTemplates.State Symbol Guard) : Prop where
+  valid : InternedConstructorTemplates.Valid state
+  edges : ∀ key value, state.edgeRecords key = some value →
+    state.edges.table key = some value.entry ∧ EdgeFields key value
+  nodes : ∀ key value, state.nodeRecords key = some value →
+    ∃ entry, state.nodes.table key = some entry ∧ NodeFields key entry value
+
+/-- Every completed identity request has a payload. Listed Mu keys may still be pending. -/
+structure Covered (pending : List NodeKey) (state : InternedConstructorTemplates.State Symbol Guard) : Prop where
+  edges : ∀ key entry, state.edges.table key = some entry → ∃ value, state.edgeRecords key = some value
+  nodes : ∀ key entry, state.nodes.table key = some entry →
+    key ∈ pending ∨ ∃ value, state.nodeRecords key = some value
+

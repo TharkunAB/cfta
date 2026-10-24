@@ -1,0 +1,40 @@
+{"command": ["/home/tritlo/.elan/toolchains/leanprover--lean4---v4.34.1/bin/lean", "-o", "/home/tritlo/Code/mcfta/lean/.lake/build/lib/lean/MicroCFTA/SourcePruningEnumerationNodes.olean", "-R", "/tmp/mcfta-pruning-enumeration-nodes-20261024/source-check-1", "-DwarningAsError=true", "-Dlinter.all=true", "/tmp/mcfta-pruning-enumeration-nodes-20261024/source-check-1/MicroCFTA/SourcePruningEnumerationNodes.lean"], "exit_code": 1, "raw_bytes": 2036, "raw_sha256": "6732f679e49015e927323e08c6e4a412410831bd58e71d0a802991b1de4c8668", "source_sha256": "1b3948c3099aedc2992bf3a329bc2578e36278f9371021929efd1b9fb223778e"}
+/tmp/mcfta-pruning-enumeration-nodes-20261024/source-check-1/MicroCFTA/SourcePruningEnumerationNodes.lean:59:13: error: unsolved goals
+case succ.none
+Guard : Type
+before after : State Symbol Guard
+kept : SourceEqualityRequiredCache.Keeps before after
+value : Value Symbol Guard
+identity : Nat
+issued : before.nodes.issued identity = none
+present : none = some value
+⊢ lookupNode after (identity + 1) = some value
+/tmp/mcfta-pruning-enumeration-nodes-20261024/source-check-1/MicroCFTA/SourcePruningEnumerationNodes.lean:62:17: error: unsolved goals
+case succ.some.none
+Guard : Type
+before after : State Symbol Guard
+kept : SourceEqualityRequiredCache.Keeps before after
+value : Value Symbol Guard
+identity : Nat
+key : InternedBinderProtocol.NodeKey
+issued : before.nodes.issued identity = some key
+canonical : before.nodes.table key = none
+present : none = some value
+⊢ lookupNode after (identity + 1) = some value
+/tmp/mcfta-pruning-enumeration-nodes-20261024/source-check-1/MicroCFTA/SourcePruningEnumerationNodes.lean:65:58: error: `if_pos` has been deprecated: Use `ite_eq_left` instead
+/tmp/mcfta-pruning-enumeration-nodes-20261024/source-check-1/MicroCFTA/SourcePruningEnumerationNodes.lean:67:57: error: `if_pos` has been deprecated: Use `ite_eq_left` instead
+/tmp/mcfta-pruning-enumeration-nodes-20261024/source-check-1/MicroCFTA/SourcePruningEnumerationNodes.lean:69:58: error: `if_neg` has been deprecated: Use `ite_eq_right` instead
+/tmp/mcfta-pruning-enumeration-nodes-20261024/source-check-1/MicroCFTA/SourcePruningEnumerationNodes.lean:69:14: error: unsolved goals
+case neg
+Guard : Type
+before after : State Symbol Guard
+kept : SourceEqualityRequiredCache.Keeps before after
+value : Value Symbol Guard
+identity : Nat
+key : InternedBinderProtocol.NodeKey
+issued : before.nodes.issued identity = some key
+entry : Cache.Interned InternedBinderProtocol.NodeKey
+canonical : before.nodes.table key = some entry
+winner : ¬entry.identity = identity
+present : none = some value
+⊢ lookupNode after (identity + 1) = some value

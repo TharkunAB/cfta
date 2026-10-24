@@ -1,0 +1,41 @@
+def Resident (state : InternedConstructorTemplates.State Symbol Guard) (value : Value Symbol Guard) : Prop :=
+  ∀ entry, entryOf value = some entry → state.nodeRecords entry.key = some value
+
+/-- Actual coherent table readback supplies residency without a separate identity assumption. -/
+theorem stored_resident (state : InternedConstructorTemplates.State Symbol Guard) (coherent : Coherent state)
+    (key : NodeKey) (value : Value Symbol Guard) (stored : state.nodeRecords key = some value) : Resident state value := by
+  obtain ⟨actual, present, fields⟩ := coherent.nodes key value stored
+  intro entry field
+  have same : actual = entry := Option.some.inj ((fields_entry _ _ _ fields).symm.trans field)
+  subst actual
+  have keyEq := (coherent.valid.2.2 key entry present).1
+  simpa [keyEq] using stored
+
+/-- Resident records remain resident after actual record-table growth. -/
+theorem resident_grows (before after : InternedConstructorTemplates.State Symbol Guard)
+    (growth : Grows before after) (value : Value Symbol Guard) (resident : Resident before value) : Resident after value :=
+  fun entry field => growth.nodeRecords _ _ (resident entry field)
+
+/-- A resident record carries the exact canonical entry in its identity table. -/
+theorem resident_entry (state : InternedConstructorTemplates.State Symbol Guard) (coherent : Coherent state)
+    (value : Value Symbol Guard) (resident : Resident state value) (entry : Interned NodeKey)
+    (field : entryOf value = some entry) : state.nodes.table entry.key = some entry := by
+  obtain ⟨actual, present, fields⟩ := coherent.nodes entry.key value (resident entry field)
+  have same : actual = entry := Option.some.inj ((fields_entry _ _ _ fields).symm.trans field)
+  simpa [same] using present
+
+/-- Resident records with the same canonical node identity are equal as complete immutable records. -/
+theorem resident_identity_unique (state : InternedConstructorTemplates.State Symbol Guard) (coherent : Coherent state)
+    (left right : Value Symbol Guard) (leftResident : Resident state left) (rightResident : Resident state right)
+    (first second : Interned NodeKey) (leftField : entryOf left = some first) (rightField : entryOf right = some second)
+    (same : first.identity = second.identity) : left = right := by
+  have firstStored := resident_entry state coherent left leftResident first leftField
+  have secondStored := resident_entry state coherent right rightResident second rightField
+  have keys := (Cache.identity_eq_iff_key_eq state.nodes coherent.valid.2 firstStored secondStored).mp same
+  have leftStored := leftResident first leftField
+  have rightStored := rightResident second rightField
+  rw [← keys] at rightStored
+  exact Option.some.inj (leftStored.symm.trans rightStored)
+
+/-- Source node-reference equality determines the complete record for all resident constructor kinds. -/
+theorem resident_reference_injective (state : InternedConstructorTemplates.State Symbol Guard) (coherent : Coherent state)

@@ -1,0 +1,22 @@
+import MicroCFTA.SourcePruningNativeView
+
+namespace MicroCFTA.SourcePruningEnumerationNodes
+open InternedConstructorTemplates InternedProbeProvenance
+local notation "Symbol" => SourcePruningTemplates.Symbol
+variable {Guard : Type}
+
+def encodeNode (value : Value Symbol Guard) : Option Nat
+
+def lookupNode (heap : State Symbol Guard) (node : Nat) : Option (Value Symbol Guard)
+
+theorem available_readback (heap : State Symbol Guard) (value : Value Symbol Guard)
+    (coherent : InternedRecordCoherence.Coherent heap)
+    (available : Available heap value) (closed : value.free = []) :
+    ∃ node, encodeNode value = some node ∧ lookupNode heap node = some value
+
+theorem lookupNode_keeps (before after : State Symbol Guard)
+    (kept : SourceEqualityRequiredCache.Keeps before after)
+    (node : Nat) (value : Value Symbol Guard)
+    (present : lookupNode before node = some value) : lookupNode after node = some value
+
+end MicroCFTA.SourcePruningEnumerationNodes

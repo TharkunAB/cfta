@@ -1,0 +1,21 @@
+MicroCFTA.SourcePruningEnumerationNodes.encodeNode {Guard : Type}
+  (value : MicroCFTA.InternedConstructorTemplates.Value MicroCFTA.SourcePruningTemplates.Symbol Guard) : Option.{0} Nat
+MicroCFTA.SourcePruningEnumerationNodes.lookupNode {Guard : Type}
+  (heap : MicroCFTA.InternedConstructorTemplates.State MicroCFTA.SourcePruningTemplates.Symbol Guard) (node : Nat) :
+  Option.{0} (MicroCFTA.InternedConstructorTemplates.Value MicroCFTA.SourcePruningTemplates.Symbol Guard)
+MicroCFTA.SourcePruningEnumerationNodes.available_readback {Guard : Type}
+  (heap : MicroCFTA.InternedConstructorTemplates.State MicroCFTA.SourcePruningTemplates.Symbol Guard)
+  (value : MicroCFTA.InternedConstructorTemplates.Value MicroCFTA.SourcePruningTemplates.Symbol Guard)
+  (coherent : MicroCFTA.InternedRecordCoherence.Coherent heap)
+  (available : MicroCFTA.InternedProbeProvenance.Available heap value) (closed : Eq.{1} value.free List.nil.{0}) :
+  Exists.{1} fun node =>
+    Eq.{1} (MicroCFTA.SourcePruningEnumerationNodes.encodeNode value) (Option.some.{0} node) ∧
+      Eq.{1} (MicroCFTA.SourcePruningEnumerationNodes.lookupNode heap node) (Option.some.{0} value)
+MicroCFTA.SourcePruningEnumerationNodes.lookupNode_keeps {Guard : Type}
+  (before after : MicroCFTA.InternedConstructorTemplates.State MicroCFTA.SourcePruningTemplates.Symbol Guard)
+  (kept : MicroCFTA.SourceEqualityRequiredCache.Keeps before after) (node : Nat)
+  (value : MicroCFTA.InternedConstructorTemplates.Value MicroCFTA.SourcePruningTemplates.Symbol Guard)
+  (present : Eq.{1} (MicroCFTA.SourcePruningEnumerationNodes.lookupNode before node) (Option.some.{0} value)) :
+  Eq.{1} (MicroCFTA.SourcePruningEnumerationNodes.lookupNode after node) (Option.some.{0} value)
+'MicroCFTA.SourcePruningEnumerationNodes.available_readback' depends on axioms: [propext, Quot.sound.{u}]
+'MicroCFTA.SourcePruningEnumerationNodes.lookupNode_keeps' depends on axioms: [propext, Quot.sound.{u}]

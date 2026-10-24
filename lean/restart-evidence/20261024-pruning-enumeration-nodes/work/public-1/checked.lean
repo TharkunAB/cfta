@@ -1,0 +1,12 @@
+import MicroCFTA.SourcePruningEnumerationNodes
+
+set_option pp.universes true
+set_option pp.fullNames true
+
+#check MicroCFTA.SourcePruningEnumerationNodes.encodeNode
+#check MicroCFTA.SourcePruningEnumerationNodes.lookupNode
+#check MicroCFTA.SourcePruningEnumerationNodes.available_readback
+#check MicroCFTA.SourcePruningEnumerationNodes.lookupNode_keeps
+
+#print axioms MicroCFTA.SourcePruningEnumerationNodes.available_readback
+#print axioms MicroCFTA.SourcePruningEnumerationNodes.lookupNode_keeps
