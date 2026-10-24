@@ -1,0 +1,19 @@
+{
+  "status": "ROOT_EXACT_OWNER_AND_LIVE_SOURCE_VERIFIED",
+  "payloads": 64,
+  "sources": 14,
+  "cuts": 24,
+  "cut_lines": 260,
+  "routes": 10,
+  "defining_sources": 33,
+  "contracts": {
+    "context.lean.txt": "import MicroCFTA.SourcePruningEnumerationAssimilation\n\nnamespace MicroCFTA.SourcePruningEnumerationFinish\nopen EnumerationState EnumerationCorrectness\nopen SourcePruningEnumerationNodes SourcePruningEnumerationObservation\nopen SourcePruningEnumerationAssimilation (finish)\nlocal notation \"Symbol\" => SourcePruningTemplates.Symbol\nlocal notation \"Constraint\" => SourceSymbolicIndex.Constraint FullSyntax.Formula\nvariable {EnumGuard : Type}\n",
+    "local-raw.lean.txt": "have raw : ExceptT.run (finish (EnumGuard := EnumGuard) source target resultHandle sourceScs targetScs result before) =\n        [.ok ((), assimilated before target source (.unenumerated (some resultHandle) (sourceScs ++ targetScs)))]\n",
+    "local-same-handle.lean.txt": "have sameHandle : writtenHandle = resultHandle\n",
+    "local-source-inside.lean.txt": "have sourceInside : source < before.values.length\n",
+    "local-target-inside.lean.txt": "have targetInside : target < before.values.length\n",
+    "public-complete.lean.txt": "/-- The existing finish action consumes the derived replacement without another query. -/\ntheorem finish_complete\n    (heap : InternedConstructorTemplates.State Symbol Constraint)\n    (before : EnumerationState.State Symbol EnumGuard)\n    (result : InternedConstructorTemplates.Value Symbol Constraint)\n    (source target sourceHandle targetHandle resultHandle : Nat)\n    (sourceScs targetScs : List EnumerationState.Suspended)\n    (coherent : InternedRecordCoherence.Coherent heap)\n    (available : InternedProbeProvenance.Available heap result) (closed : result.free = [])\n    (encoded : encodeNode result = some resultHandle)\n    (realized : PendingRealized heap before)\n    (sourceStored : before.values[source]? = some (.unenumerated (some sourceHandle) sourceScs))\n    (targetStored : before.values[target]? = some (.unenumerated (some targetHandle) targetScs))\n    (different : target \u2260 source) :\n    (result = .empty \u2192\n      ExceptT.run (finish (EnumGuard := EnumGuard) source target resultHandle sourceScs targetScs result before) = []) \u2227\n    (result \u2260 .empty \u2192 \u2203 after : EnumerationState.State Symbol EnumGuard,\n      ExceptT.run (finish (EnumGuard := EnumGuard) source target resultHandle sourceScs targetScs result before) =\n        [.ok ((), after)] \u2227\n      after = assimilated before target source (.unenumerated (some resultHandle) (sourceScs ++ targetScs)) \u2227\n      after.values[target]? = some (.unenumerated (some resultHandle) (sourceScs ++ targetScs)) \u2227\n      after.values[source]? = some .eliminated \u2227 PendingRealized heap after)\n"
+  },
+  "frozen_sha256": "f0a0181fb39ef3f8deea8f530173fe364c97eb2adef37f864b4fd4893bc46394",
+  "note": "Root fully read all6 exact context/public/local fragments,88 scopes,11 obtain entries,all case/introduction/lambda inventories,all260cuts,selected source plans. written explicitly unused false; no new instance or action. Standard-library provenance separately pinned; no invented project import edge."
+}

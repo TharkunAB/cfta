@@ -1,0 +1,40 @@
+@MicroCFTA.SourcePruningEnumerationFinish.finish_complete : ∀ {EnumGuard : Type}
+  (heap :
+    MicroCFTA.InternedConstructorTemplates.State MicroCFTA.SourcePruningTemplates.Symbol
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+  (before : MicroCFTA.EnumerationState.State MicroCFTA.SourcePruningTemplates.Symbol EnumGuard)
+  (result :
+    MicroCFTA.InternedConstructorTemplates.Value MicroCFTA.SourcePruningTemplates.Symbol
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+  (source target sourceHandle targetHandle resultHandle : Nat)
+  (sourceScs targetScs : List MicroCFTA.EnumerationState.Suspended),
+  MicroCFTA.InternedRecordCoherence.Coherent heap →
+    MicroCFTA.InternedProbeProvenance.Available heap result →
+      result.free = [] →
+        MicroCFTA.SourcePruningEnumerationNodes.encodeNode result = some resultHandle →
+          MicroCFTA.SourcePruningEnumerationObservation.PendingRealized heap before →
+            before.values[source]? =
+                some (MicroCFTA.EnumerationState.UVarValue.unenumerated (some sourceHandle) sourceScs) →
+              before.values[target]? =
+                  some (MicroCFTA.EnumerationState.UVarValue.unenumerated (some targetHandle) targetScs) →
+                target ≠ source →
+                  (result = MicroCFTA.InternedConstructorTemplates.Value.empty →
+                      (MicroCFTA.SourcePruningEnumerationAssimilation.finish source target resultHandle sourceScs
+                            targetScs result before).run =
+                        []) ∧
+                    (result ≠ MicroCFTA.InternedConstructorTemplates.Value.empty →
+                      ∃ after,
+                        (MicroCFTA.SourcePruningEnumerationAssimilation.finish source target resultHandle sourceScs
+                                targetScs result before).run =
+                            [Except.ok ((), after)] ∧
+                          after =
+                              MicroCFTA.EnumerationCorrectness.assimilated before target source
+                                (MicroCFTA.EnumerationState.UVarValue.unenumerated (some resultHandle)
+                                  (sourceScs ++ targetScs)) ∧
+                            after.values[target]? =
+                                some
+                                  (MicroCFTA.EnumerationState.UVarValue.unenumerated (some resultHandle)
+                                    (sourceScs ++ targetScs)) ∧
+                              after.values[source]? = some MicroCFTA.EnumerationState.UVarValue.eliminated ∧
+                                MicroCFTA.SourcePruningEnumerationObservation.PendingRealized heap after)
+'MicroCFTA.SourcePruningEnumerationFinish.finish_complete' depends on axioms: [propext, Quot.sound]

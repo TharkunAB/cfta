@@ -1,0 +1,89 @@
+{
+  "commands": [
+    {
+      "scope": "Empty implication",
+      "binders": [
+        {
+          "name": "isEmpty",
+          "type": "result = .empty"
+        }
+      ]
+    },
+    {
+      "scope": "nonempty implication",
+      "binders": [
+        {
+          "name": "nonempty",
+          "type": "result ≠ .empty"
+        }
+      ]
+    },
+    {
+      "scope": "final PendingRealized",
+      "binders": [
+        {
+          "name": "slot",
+          "type": "Nat"
+        },
+        {
+          "name": "node",
+          "type": "Nat"
+        },
+        {
+          "name": "scs",
+          "type": "List EnumerationState.Suspended"
+        },
+        {
+          "name": "stored",
+          "type": "(assimilated before target source (.unenumerated (some resultHandle) (sourceScs ++ targetScs))).values[slot]? = some (.unenumerated (some node) scs)"
+        }
+      ]
+    }
+  ],
+  "command_count": 3,
+  "binder_count": 6,
+  "lambda_groups": [
+    {
+      "scope": "source bound extraction",
+      "binders": [
+        {
+          "scope": "source bound extraction",
+          "name": "bound",
+          "type": "source < before.values.length",
+          "kind": "Exists.elim lambda",
+          "used": true
+        },
+        {
+          "scope": "source bound extraction",
+          "name": "storedValue",
+          "type": "before.values[source]'bound = .unenumerated (some sourceHandle) sourceScs",
+          "kind": "Exists.elim lambda",
+          "used": false,
+          "unused_reason": "Only the actual list bound is used; the element equality is retained in the source slot equation."
+        }
+      ]
+    },
+    {
+      "scope": "target bound extraction",
+      "binders": [
+        {
+          "scope": "target bound extraction",
+          "name": "bound",
+          "type": "target < before.values.length",
+          "kind": "Exists.elim lambda",
+          "used": true
+        },
+        {
+          "scope": "target bound extraction",
+          "name": "storedValue",
+          "type": "before.values[target]'bound = .unenumerated (some targetHandle) targetScs",
+          "kind": "Exists.elim lambda",
+          "used": false,
+          "unused_reason": "Only the actual list bound is used; the element equality is retained in the source slot equation."
+        }
+      ]
+    }
+  ],
+  "lambda_group_count": 2,
+  "lambda_binder_count": 4
+}

@@ -1,0 +1,117 @@
+{
+  "packets": [
+    {
+      "name": "write",
+      "scope": "nonempty after both bounds",
+      "api": "SourcePruningEnumerationWrites.write_available_realized",
+      "kind": "conjunction/existentials",
+      "field_count": 7,
+      "fields": [
+        {
+          "name": "writtenHandle",
+          "type": "Nat",
+          "used": true
+        },
+        {
+          "name": "middle",
+          "type": "EnumerationState.State Symbol EnumGuard",
+          "used": true
+        },
+        {
+          "name": "writtenEncoded",
+          "type": "encodeNode result = some writtenHandle",
+          "used": true
+        },
+        {
+          "name": "written",
+          "type": "Success (setValue target (.unenumerated (some writtenHandle) (sourceScs ++ targetScs))) before () middle",
+          "used": false,
+          "unused_reason": "The final raw equality is derived directly from existing finish. This intermediate target-write Success is not consumed."
+        },
+        {
+          "name": "middleSame",
+          "type": "middle = {before with values := before.values.set target (.unenumerated (some writtenHandle) (sourceScs ++ targetScs))}",
+          "used": true
+        },
+        {
+          "name": "middleStored",
+          "type": "middle.values[target]? = some (.unenumerated (some writtenHandle) (sourceScs ++ targetScs))",
+          "used": true
+        },
+        {
+          "name": "middleRealized",
+          "type": "PendingRealized heap middle",
+          "used": true
+        }
+      ],
+      "skipped_fields": [
+        {
+          "name": "written",
+          "reason": "Unused target-write Success; actual full raw suffix is reduced directly."
+        }
+      ]
+    },
+    {
+      "name": "membership",
+      "scope": "final PendingRealized proof",
+      "api": "List.mem_or_eq_of_mem_set (List.mem_of_getElem? stored)",
+      "kind": "disjunction alternatives, not two simultaneously assumed witnesses",
+      "field_count": 2,
+      "fields": [
+        {
+          "name": "old",
+          "type": ".unenumerated (some node) scs ∈ before.values.set target (.unenumerated (some resultHandle) (sourceScs ++ targetScs))",
+          "used": true
+        },
+        {
+          "name": "fresh",
+          "type": ".unenumerated (some node) scs = .eliminated",
+          "used": true
+        }
+      ],
+      "skipped_fields": []
+    },
+    {
+      "name": "oldSlot",
+      "scope": "old membership branch",
+      "api": "List.getElem?_of_mem old",
+      "kind": "conjunction/existentials",
+      "field_count": 2,
+      "fields": [
+        {
+          "name": "oldSlot",
+          "type": "Nat",
+          "used": true
+        },
+        {
+          "name": "oldStored",
+          "type": "(before.values.set target (.unenumerated (some resultHandle) (sourceScs ++ targetScs)))[oldSlot]? = some (.unenumerated (some node) scs)",
+          "used": true
+        }
+      ],
+      "skipped_fields": []
+    }
+  ],
+  "obtain_count": 3,
+  "field_count": 11,
+  "producer_obtain_count": 1,
+  "producer_field_count": 7,
+  "skipped_fields": [
+    {
+      "packet": "write",
+      "name": "written",
+      "used": false,
+      "reason": "Raw finish equality is computed directly; the intermediate target-write Success is unused."
+    }
+  ],
+  "substitutions": [
+    {
+      "name": "writtenHandle",
+      "equality": "sameHandle : writtenHandle = resultHandle"
+    },
+    {
+      "name": "middle",
+      "equality": "middleSame"
+    }
+  ]
+}

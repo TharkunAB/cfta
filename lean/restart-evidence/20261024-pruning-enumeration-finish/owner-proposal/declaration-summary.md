@@ -1,0 +1,13 @@
+# Exact existing-finish completion declaration
+
+Recorded 2026-10-24T19:48:59.186463+02:00. One theorem for the existing Assimilation.finish action. The selected context/public bytes are unchanged. Root owns all proof bodies and execution. No new action, helper, instance, type, carrier, predicate or induction is present.
+
+The genuine inputs are the complete replacement and its actual derived encoding at the same coherent heap, availability/closedness, all-slot realization, the two original stored-slot equations and distinct raw addresses. EnabledEmpty already supplies the native result facts at its returned heap. This theorem does not copy its Receipt/Post or issue another query.
+
+Prove the Empty implication first by substitution and the existing action reduction. It returns raw[] before both writes. All bounds and producer calls belong only to the nonempty implication. Both actual slot equations give list bounds through the active existential List API. Four typed local haves are frozen: sourceInside, targetInside, sameHandle and raw.
+
+Call write_available_realized once at target with sourceScs ++ targetScs. Its seven-field packet is fully typed. written is explicitly marked used:false and skipped: final raw equality is derived from the existing action, so this intermediate write Success is not consumed. All other producer fields are used. Option.some.inj matches its encoded handle to resultHandle. Substituting the matched handle and exact middle state retains the actual target readback and all-slot realization.
+
+The five complete Value cases derive the exact assimilated singleton for a nonempty result. Every constructor payload and specialized fact/goal is inventoried. Distinctness preserves the target read through source elimination. The source bound plus length_set gives the eliminated-source read. The list-set membership disjunction then reuses middle realization; its fresh eliminated case is impossible. Three obtains have11 field/alternative entries; all unused information is marked explicitly. Bounds have two fully typed existential-elimination lambdas. There are no new equality dictionaries or proof-limit overrides.
+
+Exact final state includes source-then-target ancestry. It changes values/ancestry, so no compression Frame is claimed. True pruning selects Empty; false may retain an already Empty query, and this suffix still rejects it. Native cache indexes, original recursion flag, optional/no-op dispatch, host containers and whole-driver preservation remain separate. H6 stays strongest; the whole goal remains ACTIVE. Target80–125 ordinary lines, hard160, without padding.

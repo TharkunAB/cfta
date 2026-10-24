@@ -1,0 +1,151 @@
+{
+  "definition_cases": [],
+  "proof": [
+    {
+      "scope": "Empty implication",
+      "operation": "intro isEmpty; substitute result",
+      "fact": "result = .empty",
+      "effect": "Existing finish reduces to raw [] before both writes; no bound/write producer is invoked in this implication."
+    },
+    {
+      "scope": "local raw in nonempty implication",
+      "operation": "cases result with",
+      "constructors": [
+        {
+          "constructor": "empty",
+          "value": ".empty",
+          "binders": [],
+          "specializations": {
+            "nonempty": "(.empty) ≠ .empty",
+            "available": "InternedProbeProvenance.Available heap (.empty)",
+            "closed": "(.empty).free = []",
+            "encoded": "encodeNode (.empty) = some resultHandle",
+            "raw": "ExceptT.run (finish (EnumGuard := EnumGuard) source target resultHandle sourceScs targetScs (.empty) before) = [.ok ((), assimilated before target source (.unenumerated (some resultHandle) (sourceScs ++ targetScs)))]"
+          },
+          "route": "nonempty rfl contradiction"
+        },
+        {
+          "constructor": "reference",
+          "value": ".reference name",
+          "binders": [
+            {
+              "name": "name",
+              "type": "InternedBinderProtocol.Reference"
+            }
+          ],
+          "specializations": {
+            "nonempty": "(.reference name) ≠ .empty",
+            "available": "InternedProbeProvenance.Available heap (.reference name)",
+            "closed": "(.reference name).free = []",
+            "encoded": "encodeNode (.reference name) = some resultHandle",
+            "raw": "ExceptT.run (finish (EnumGuard := EnumGuard) source target resultHandle sourceScs targetScs (.reference name) before) = [.ok ((), assimilated before target source (.unenumerated (some resultHandle) (sourceScs ++ targetScs)))]"
+          },
+          "route": "definitionally reduce existing finish/action dictionaries; no new instance"
+        },
+        {
+          "constructor": "node",
+          "value": ".node entry edges depth free",
+          "binders": [
+            {
+              "name": "entry",
+              "type": "Cache.Interned InternedBinderProtocol.NodeKey"
+            },
+            {
+              "name": "edges",
+              "type": "List (InternedConstructorTemplates.EdgeValue Symbol Constraint)"
+            },
+            {
+              "name": "depth",
+              "type": "Nat"
+            },
+            {
+              "name": "free",
+              "type": "List InternedBinderProtocol.Reference"
+            }
+          ],
+          "specializations": {
+            "nonempty": "(.node entry edges depth free) ≠ .empty",
+            "available": "InternedProbeProvenance.Available heap (.node entry edges depth free)",
+            "closed": "(.node entry edges depth free).free = []",
+            "encoded": "encodeNode (.node entry edges depth free) = some resultHandle",
+            "raw": "ExceptT.run (finish (EnumGuard := EnumGuard) source target resultHandle sourceScs targetScs (.node entry edges depth free) before) = [.ok ((), assimilated before target source (.unenumerated (some resultHandle) (sourceScs ++ targetScs)))]"
+          },
+          "route": "definitionally reduce existing finish/action dictionaries; no new instance"
+        },
+        {
+          "constructor": "union",
+          "value": ".union entry members depth free",
+          "binders": [
+            {
+              "name": "entry",
+              "type": "Cache.Interned InternedBinderProtocol.NodeKey"
+            },
+            {
+              "name": "members",
+              "type": "List (InternedConstructorTemplates.Value Symbol Constraint)"
+            },
+            {
+              "name": "depth",
+              "type": "Nat"
+            },
+            {
+              "name": "free",
+              "type": "List InternedBinderProtocol.Reference"
+            }
+          ],
+          "specializations": {
+            "nonempty": "(.union entry members depth free) ≠ .empty",
+            "available": "InternedProbeProvenance.Available heap (.union entry members depth free)",
+            "closed": "(.union entry members depth free).free = []",
+            "encoded": "encodeNode (.union entry members depth free) = some resultHandle",
+            "raw": "ExceptT.run (finish (EnumGuard := EnumGuard) source target resultHandle sourceScs targetScs (.union entry members depth free) before) = [.ok ((), assimilated before target source (.unenumerated (some resultHandle) (sourceScs ++ targetScs)))]"
+          },
+          "route": "definitionally reduce existing finish/action dictionaries; no new instance"
+        },
+        {
+          "constructor": "mu",
+          "value": ".mu entry body depthShape ordinaryShape",
+          "binders": [
+            {
+              "name": "entry",
+              "type": "Cache.Interned InternedBinderProtocol.NodeKey"
+            },
+            {
+              "name": "body",
+              "type": "InternedConstructorTemplates.Value Symbol Constraint"
+            },
+            {
+              "name": "depthShape",
+              "type": "InternedConstructorTemplates.Value Symbol Constraint"
+            },
+            {
+              "name": "ordinaryShape",
+              "type": "InternedConstructorTemplates.Value Symbol Constraint"
+            }
+          ],
+          "specializations": {
+            "nonempty": "(.mu entry body depthShape ordinaryShape) ≠ .empty",
+            "available": "InternedProbeProvenance.Available heap (.mu entry body depthShape ordinaryShape)",
+            "closed": "(.mu entry body depthShape ordinaryShape).free = []",
+            "encoded": "encodeNode (.mu entry body depthShape ordinaryShape) = some resultHandle",
+            "raw": "ExceptT.run (finish (EnumGuard := EnumGuard) source target resultHandle sourceScs targetScs (.mu entry body depthShape ordinaryShape) before) = [.ok ((), assimilated before target source (.unenumerated (some resultHandle) (sourceScs ++ targetScs)))]"
+          },
+          "route": "definitionally reduce existing finish/action dictionaries; no new instance"
+        }
+      ],
+      "constructor_count": 5,
+      "constructor_binder_count": 13
+    },
+    {
+      "scope": "final realization membership fresh branch",
+      "operation": "cases fresh",
+      "equation": ".unenumerated (some node) scs = .eliminated",
+      "reason": "Different UVarValue constructors; impossible without new premise."
+    }
+  ],
+  "proof_case_command_count": 2,
+  "Value_case_specialization_count": 5,
+  "Value_case_binder_count": 13,
+  "induction_count": 0,
+  "new_conditions": []
+}

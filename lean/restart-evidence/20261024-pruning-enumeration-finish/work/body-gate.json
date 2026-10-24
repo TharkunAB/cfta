@@ -1,0 +1,61 @@
+{
+  "status": "ROOT_EXACT_BODY_GATE_ACCEPTED",
+  "at": "2026-10-24T19:52:55.616337+02:00",
+  "owner": "/tmp/mcfta-pruning-enumeration-finish-20261024-proposal",
+  "frozen_sha256": "f0a0181fb39ef3f8deea8f530173fe364c97eb2adef37f864b4fd4893bc46394",
+  "pins_sha256": "5758183ebe2cd5cc12748cc9e0518eaf3fc41a54655b9be12af04dd7c03fb536",
+  "contracts": {
+    "context.lean.txt": "import MicroCFTA.SourcePruningEnumerationAssimilation\n\nnamespace MicroCFTA.SourcePruningEnumerationFinish\nopen EnumerationState EnumerationCorrectness\nopen SourcePruningEnumerationNodes SourcePruningEnumerationObservation\nopen SourcePruningEnumerationAssimilation (finish)\nlocal notation \"Symbol\" => SourcePruningTemplates.Symbol\nlocal notation \"Constraint\" => SourceSymbolicIndex.Constraint FullSyntax.Formula\nvariable {EnumGuard : Type}\n",
+    "local-raw.lean.txt": "have raw : ExceptT.run (finish (EnumGuard := EnumGuard) source target resultHandle sourceScs targetScs result before) =\n        [.ok ((), assimilated before target source (.unenumerated (some resultHandle) (sourceScs ++ targetScs)))]\n",
+    "local-same-handle.lean.txt": "have sameHandle : writtenHandle = resultHandle\n",
+    "local-source-inside.lean.txt": "have sourceInside : source < before.values.length\n",
+    "local-target-inside.lean.txt": "have targetInside : target < before.values.length\n",
+    "public-complete.lean.txt": "/-- The existing finish action consumes the derived replacement without another query. -/\ntheorem finish_complete\n    (heap : InternedConstructorTemplates.State Symbol Constraint)\n    (before : EnumerationState.State Symbol EnumGuard)\n    (result : InternedConstructorTemplates.Value Symbol Constraint)\n    (source target sourceHandle targetHandle resultHandle : Nat)\n    (sourceScs targetScs : List EnumerationState.Suspended)\n    (coherent : InternedRecordCoherence.Coherent heap)\n    (available : InternedProbeProvenance.Available heap result) (closed : result.free = [])\n    (encoded : encodeNode result = some resultHandle)\n    (realized : PendingRealized heap before)\n    (sourceStored : before.values[source]? = some (.unenumerated (some sourceHandle) sourceScs))\n    (targetStored : before.values[target]? = some (.unenumerated (some targetHandle) targetScs))\n    (different : target \u2260 source) :\n    (result = .empty \u2192\n      ExceptT.run (finish (EnumGuard := EnumGuard) source target resultHandle sourceScs targetScs result before) = []) \u2227\n    (result \u2260 .empty \u2192 \u2203 after : EnumerationState.State Symbol EnumGuard,\n      ExceptT.run (finish (EnumGuard := EnumGuard) source target resultHandle sourceScs targetScs result before) =\n        [.ok ((), after)] \u2227\n      after = assimilated before target source (.unenumerated (some resultHandle) (sourceScs ++ targetScs)) \u2227\n      after.values[target]? = some (.unenumerated (some resultHandle) (sourceScs ++ targetScs)) \u2227\n      after.values[source]? = some .eliminated \u2227 PendingRealized heap after)\n"
+  },
+  "reviews": {
+    "source": "50de1d246df441333620be084672957112feca107e8cbb943625c7c00e6ae9e9",
+    "declaration": "a582fb4806b302eecba6f3c16e008700ccfa376b43cd001c56d408f1d1cc59a4",
+    "seal-script": "d885695e97e991544fd17a4d8d6595abe115c68bc58e722a806331c1a885071f"
+  },
+  "scripts_frozen_sha256": "3cf1e54234e5a4f5784f78a08b2894c91e16ea26537893ee2bfbb6d90c23e2d6",
+  "selected_scripts": {
+    "check": {
+      "path": "/tmp/mcfta-pruning-enumeration-finish-20261024-check.py",
+      "sha256": "dd2c57adf319f9092c97ec35700f7bb25b902ae1a523866ff1139e2fb46766a1"
+    },
+    "documents": {
+      "path": "/tmp/mcfta-pruning-enumeration-finish-20261024-documents.py",
+      "sha256": "650a281ed109f2b5363d2cadfbe60c437f5a2923c477cc288826fc9f50160476"
+    },
+    "archive": {
+      "path": "/tmp/mcfta-pruning-enumeration-finish-20261024-archive.py",
+      "sha256": "45847020acda6933b346e89ab69f8a3c328b99bafac0b34ef6453fe46bf9ac83"
+    },
+    "verify": {
+      "path": "/tmp/mcfta-pruning-enumeration-finish-20261024-verify.py",
+      "sha256": "931a1a6b812a055e7b53a299ad837cd47c28c6939fe1c92f89048f02a0543cb0"
+    },
+    "publication": {
+      "path": "/tmp/mcfta-pruning-enumeration-finish-20261024-publication.py",
+      "sha256": "45b97cc857ec14ea66d5ac987edc0a9fbe2ef82e39f12340a2005ce5cffe8e31"
+    }
+  },
+  "hard_cap": 160,
+  "expected_source_lines": [
+    80,
+    125
+  ],
+  "new_public_heads": 1,
+  "typed_haves": 4,
+  "proof_lets": 0,
+  "obtains": 3,
+  "obtain_fields_or_alternatives": 11,
+  "unused_obtain_fields": [
+    "written"
+  ],
+  "new_actions_helpers_types_carriers_predicates_instances_induction": 0,
+  "route": "Existing finish, Empty before writes, actual bounds, one write_available_realized, same encoded handle, exact raw singleton and all pending slots; native result packet not copied",
+  "before_any_body_or_compiler": true,
+  "root_owns_all_bodies": true,
+  "goal": "ACTIVE_INCOMPLETE"
+}

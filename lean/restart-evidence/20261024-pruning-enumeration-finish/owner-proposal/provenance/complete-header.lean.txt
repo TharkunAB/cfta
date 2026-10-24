@@ -1,0 +1,22 @@
+/-- The existing finish action consumes the derived replacement without another query. -/
+theorem finish_complete
+    (heap : InternedConstructorTemplates.State Symbol Constraint)
+    (before : EnumerationState.State Symbol EnumGuard)
+    (result : InternedConstructorTemplates.Value Symbol Constraint)
+    (source target sourceHandle targetHandle resultHandle : Nat)
+    (sourceScs targetScs : List EnumerationState.Suspended)
+    (coherent : InternedRecordCoherence.Coherent heap)
+    (available : InternedProbeProvenance.Available heap result) (closed : result.free = [])
+    (encoded : encodeNode result = some resultHandle)
+    (realized : PendingRealized heap before)
+    (sourceStored : before.values[source]? = some (.unenumerated (some sourceHandle) sourceScs))
+    (targetStored : before.values[target]? = some (.unenumerated (some targetHandle) targetScs))
+    (different : target ≠ source) :
+    (result = .empty →
+      ExceptT.run (finish (EnumGuard := EnumGuard) source target resultHandle sourceScs targetScs result before) = []) ∧
+    (result ≠ .empty → ∃ after : EnumerationState.State Symbol EnumGuard,
+      ExceptT.run (finish (EnumGuard := EnumGuard) source target resultHandle sourceScs targetScs result before) =
+        [.ok ((), after)] ∧
+      after = assimilated before target source (.unenumerated (some resultHandle) (sourceScs ++ targetScs)) ∧
+      after.values[target]? = some (.unenumerated (some resultHandle) (sourceScs ++ targetScs)) ∧
+      after.values[source]? = some .eliminated ∧ PendingRealized heap after)
