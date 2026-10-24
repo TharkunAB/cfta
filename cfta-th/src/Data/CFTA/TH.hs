@@ -6,6 +6,7 @@ module Data.CFTA.TH (deriveNode) where
 
 import Control.Monad (forM, unless, when)
 import Data.Char (isUpper)
+import Data.List (isSuffixOf)
 import Data.Maybe (isJust)
 import GHC.Generics (Generic)
 import Language.Haskell.TH
@@ -31,9 +32,10 @@ the single parameter @e@. The source datatype still needs its usual
 @HasFTA@ instance when used with the generator APIs.
 
 This operation accepts ordinary data and newtype declarations. It rejects
-name collisions, symbolic names, datatype contexts, existential or
-constrained constructors, GADTs, type synonyms, and data families. Write a
-manual view for records of measures or for other supported source forms.
+name collisions, symbolic names, names ending in @#@, datatype contexts,
+existential or constrained constructors, GADTs, type synonyms, and data
+families. Write a manual view for records of measures or for other supported
+source forms.
 -}
 deriveNode :: Name -> Q [Dec]
 deriveNode source = do
@@ -64,6 +66,7 @@ deriveNode source = do
         fail $ "deriveNode " <> nameBase source <> ": " <> feature <> " need a manual node view"
     generatedName lookupName name = case nameBase name of
         first : _ | isUpper first -> do
+            when ("#" `isSuffixOf` nameBase name) $ unsupported "names ending in #"
             let generated = nameBase name <> "Node"
             existing <- lookupName generated
             when (isJust existing)

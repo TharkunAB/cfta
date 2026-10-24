@@ -16,10 +16,37 @@ Focused native repair probes pass. Historical counterexamples remain below.
 | Negative Specftacular type depth | Fixed by `75cfc19b8`, merged in PR #168 at `a5fbb66eec`. Its source equals local `058b11fe8f`; all three public checks remain verified. | No additional patch. Keep the pre-fix timeout and the retained validation. |
 | Optional LPO comparator transitivity | Fixed by `70a252537`, merged in PR #169 at `0db62d26b`. The recorded typed cycle is gone, also after canonicalTypes. | No additional patch for this witness. Keep the general order-law proof obligation. |
 | Optional LPO application context | Fixed by `f484c0ca0`, merged in PR #169 at `0db62d26b`. The comparator reversal remains; contextual rewriting and template gates prevent its unsafe use. | No additional patch for this witness. Keep general context, substitution and pruning proof obligations. |
+| Generated scalar-view names ending in # | Repaired on formalize. The producer rejects trailing-hash type and constructor names before namespace lookup. | Import the shared name check, two existing-suite regression cases and documentation. The repair is not on main. |
 
-All five listed repairs are in the imported main history. The current notes
-record the type-depth and LPO validation. General proofs remain separate.
-All earlier repair entries and evidence remain below.
+The first five repairs are in the imported main history. The generated-name
+repair is on formalize and still needs an upstream import. General proofs
+remain separate. All earlier repair entries and evidence remain below.
+
+### Generated scalar-view names ending in #
+
+The new cfta-th producer accepts legal MagicHash source names, then appends
+Node. Constructor# becomes Constructor#Node, which GHC rejects with GHC-55017.
+A source type Hashy# similarly produces the invalid type name Hashy#Node.
+The ordinary-name control compiles. Both native failures are retained.
+
+The local repair rejects names ending in # in the shared generatedName function,
+after the uppercase test and before either namespace lookup. It returns the
+existing manual-view diagnostic with the feature text "names ending in #".
+It preserves the literal Node suffix rule and requires no new dependency.
+The source Haddock, package README, design note and changelog state this limit.
+
+The existing rejection example now includes both source forms. Its two added
+recover checks return False on the unchanged upstream producer. With the repair,
+all seven checks return True. The suite passes all four examples. The native
+probes now report the exact intended diagnostic for each form. The ordinary
+control still compiles. fourmolu, cabal-gild, cabal check and HLint at the CI
+warning threshold pass. A plain HLint run reports the older Amount newtype
+suggestion; the source fixture is unchanged. These raw results remain retained.
+
+External action: import the generatedName suffix check, the two rejection cases
+and their documentation from formalize. Do not change the Node naming rule.
+Evidence will be sealed in lean/restart-evidence/20261024-derived-scalar-shape.
+TH/Generic extraction, valid-position build/read and source codec laws stay open.
 
 
 ## Generated scalar node views incorporated
