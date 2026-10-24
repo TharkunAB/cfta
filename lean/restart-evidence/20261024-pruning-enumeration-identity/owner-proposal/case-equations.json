@@ -1,0 +1,94 @@
+{
+  "status": "EXACT_CASE_EQUATIONS_AND_CONDITION_TYPES",
+  "owner": "lookup_encode",
+  "families": [
+    {
+      "name": "issued",
+      "activation": "cases issued : heap.nodes.issued identity with",
+      "expression": "heap.nodes.issued identity",
+      "expression_type": "Option InternedBinderProtocol.NodeKey",
+      "specializations": [
+        {
+          "constructor": "none",
+          "binders": [],
+          "type": "heap.nodes.issued identity = none"
+        },
+        {
+          "constructor": "some",
+          "binders": [
+            {
+              "name": "key",
+              "type": "InternedBinderProtocol.NodeKey"
+            }
+          ],
+          "type": "heap.nodes.issued identity = some key"
+        }
+      ]
+    },
+    {
+      "name": "canonical",
+      "activation": "cases canonical : heap.nodes.table key with",
+      "expression": "heap.nodes.table key",
+      "expression_type": "Option (Cache.Interned InternedBinderProtocol.NodeKey)",
+      "specializations": [
+        {
+          "constructor": "none",
+          "binders": [],
+          "type": "heap.nodes.table key = none"
+        },
+        {
+          "constructor": "some",
+          "binders": [
+            {
+              "name": "entry",
+              "type": "Cache.Interned InternedBinderProtocol.NodeKey"
+            }
+          ],
+          "type": "heap.nodes.table key = some entry"
+        }
+      ]
+    }
+  ],
+  "conditions": [
+    {
+      "name": "winner",
+      "fragment": "winner-condition.lean.txt",
+      "scope": "canonical some entry",
+      "positive_type": "entry.identity = identity",
+      "negative_type": "\u00ac (entry.identity = identity)"
+    }
+  ],
+  "handle_found_specializations": [
+    {
+      "scope": "zero",
+      "type": "lookupNode heap 0 = some value",
+      "literal_changed_type": "some (InternedConstructorTemplates.Value.empty : InternedConstructorTemplates.Value Symbol Guard) = some value"
+    },
+    {
+      "scope": "succ identity",
+      "type": "lookupNode heap (Nat.succ identity) = some value"
+    }
+  ],
+  "carried_value_specializations": [
+    {
+      "constructor": "empty",
+      "type": "(none : Option (Cache.Interned InternedBinderProtocol.NodeKey)) = some entry"
+    },
+    {
+      "constructor": "reference",
+      "type": "(none : Option (Cache.Interned InternedBinderProtocol.NodeKey)) = some entry"
+    },
+    {
+      "constructor": "node",
+      "type": "some valueEntry = some entry"
+    },
+    {
+      "constructor": "union",
+      "type": "some valueEntry = some entry"
+    },
+    {
+      "constructor": "mu",
+      "type": "some valueEntry = some entry"
+    }
+  ]
+}

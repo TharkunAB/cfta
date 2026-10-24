@@ -1,0 +1,6 @@
+import MicroCFTA.SourcePruningEnumerationIdentity
+
+#check @MicroCFTA.SourcePruningEnumerationIdentity.lookup_encode
+#print axioms MicroCFTA.SourcePruningEnumerationIdentity.lookup_encode
+#check @MicroCFTA.SourcePruningEnumerationIdentity.narrowAt_empty
+#print axioms MicroCFTA.SourcePruningEnumerationIdentity.narrowAt_empty

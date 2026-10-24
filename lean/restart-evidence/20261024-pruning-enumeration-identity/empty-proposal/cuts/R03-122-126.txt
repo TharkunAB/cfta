@@ -1,0 +1,5 @@
+def run [DecidableEq (EdgeKey Symbol Guard)] (work : Work Symbol Guard Result) (state : State Symbol Guard) :
+    Result × State Symbol Guard :=
+  match work with
+  | .pure value => (value, state)
+  | .edge key identify resume =>

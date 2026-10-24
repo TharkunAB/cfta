@@ -1,0 +1,10 @@
+def mergeSort : ∀ (xs : List α) (le : α → α → Bool := by exact fun a b => a ≤ b), List α
+  | [], _ => []
+  | [a], _ => [a]
+  | a :: b :: xs, le =>
+    let lr := splitInTwo ⟨a :: b :: xs, rfl⟩
+    have := by simpa using lr.2.2
+    have := by simpa using lr.1.2
+    merge (mergeSort lr.1 le) (mergeSort lr.2 le) le
+termination_by xs => xs.length
+

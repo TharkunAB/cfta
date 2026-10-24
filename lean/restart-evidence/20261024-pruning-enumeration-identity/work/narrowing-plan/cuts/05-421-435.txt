@@ -1,0 +1,15 @@
+theorem node_identity_unique [DecidableEq (EdgeKey Symbol Guard)]
+    (state : InternedConstructorTemplates.State Symbol Guard) (built : Constructed state)
+    (leftKey rightKey : NodeKey) (left right : Value Symbol Guard)
+    (leftStored : state.nodeRecords leftKey = some left) (rightStored : state.nodeRecords rightKey = some right)
+    (leftEntry rightEntry : Interned NodeKey) (leftField : entryOf left = some leftEntry)
+    (rightField : entryOf right = some rightEntry) (same : leftEntry.identity = rightEntry.identity) : left = right := by
+  have coherent := (constructed_correct built).1
+  obtain ⟨first, firstStored, firstFields⟩ := coherent.nodes leftKey left leftStored
+  obtain ⟨second, secondStored, secondFields⟩ := coherent.nodes rightKey right rightStored
+  have firstEq : first = leftEntry := Option.some.inj ((fields_entry _ _ _ firstFields).symm.trans leftField)
+  have secondEq : second = rightEntry := Option.some.inj ((fields_entry _ _ _ secondFields).symm.trans rightField)
+  subst first second
+  have keys := (Cache.identity_eq_iff_key_eq state.nodes coherent.valid.2 firstStored secondStored).mp same
+  subst rightKey
+  exact Option.some.inj (leftStored.symm.trans rightStored)

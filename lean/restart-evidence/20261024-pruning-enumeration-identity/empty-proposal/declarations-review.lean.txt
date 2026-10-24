@@ -1,0 +1,15 @@
+import MicroCFTA.SourcePruningNativeView
+import MicroCFTA.SourcePruningEnumerationNodes
+
+namespace MicroCFTA.SourcePruningEnumerationIdentity
+open InternedConstructorTemplates InternedRecordCoherence
+open SourcePruningEnumerationNodes
+local notation "Symbol" => SourcePruningTemplates.Symbol
+variable {Guard : Type}
+
+theorem narrowAt_empty {Key : Type}
+    [DecidableEq (InternedConstructorTemplates.EdgeKey Symbol Guard)]
+    (fits : Key → Symbol → Bool)
+    (admits : Key → InternedConstructorTemplates.Value Symbol Guard → Bool)
+    (fuel : Nat) (key : Key) (before : InternedConstructorTemplates.State Symbol Guard) :
+    SourcePruningNativeView.narrowAt fits admits fuel key .empty before = .done .empty before

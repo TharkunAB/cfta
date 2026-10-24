@@ -1,0 +1,18 @@
+{"command": ["/home/tritlo/.elan/toolchains/leanprover--lean4---v4.34.1/bin/lean", "-R", "/tmp/mcfta-pruning-enumeration-identity-20261024/public-1", "-DwarningAsError=true", "-Dlinter.all=true", "/tmp/mcfta-pruning-enumeration-identity-20261024/public-1/checked.lean"], "exit_code": 0, "raw_bytes": 1496, "raw_sha256": "7f0c64c514936d2364e2b142d7182d124ea3f1c81556cba11266899922e85758", "source_sha256": "6e4cdbccc69768515c3c9ed1bf80f03f39f397de6ba9cbd9bddd8dfa47be0551"}
+@MicroCFTA.SourcePruningEnumerationIdentity.lookup_encode : ∀ {Guard : Type}
+  (heap : MicroCFTA.InternedConstructorTemplates.State MicroCFTA.SourcePruningTemplates.Symbol Guard) (handle : Nat)
+  (value : MicroCFTA.InternedConstructorTemplates.Value MicroCFTA.SourcePruningTemplates.Symbol Guard),
+  MicroCFTA.InternedRecordCoherence.Coherent heap →
+    MicroCFTA.SourcePruningEnumerationNodes.lookupNode heap handle = some value →
+      MicroCFTA.SourcePruningEnumerationNodes.encodeNode value = some handle
+'MicroCFTA.SourcePruningEnumerationIdentity.lookup_encode' depends on axioms: [propext, Quot.sound]
+@MicroCFTA.SourcePruningEnumerationIdentity.narrowAt_empty : ∀ {Guard Key : Type}
+  [inst : DecidableEq (MicroCFTA.InternedConstructorTemplates.EdgeKey MicroCFTA.SourcePruningTemplates.Symbol Guard)]
+  (fits : Key → MicroCFTA.SourcePruningTemplates.Symbol → Bool)
+  (admits : Key → MicroCFTA.InternedConstructorTemplates.Value MicroCFTA.SourcePruningTemplates.Symbol Guard → Bool)
+  (fuel : Nat) (key : Key)
+  (before : MicroCFTA.InternedConstructorTemplates.State MicroCFTA.SourcePruningTemplates.Symbol Guard),
+  MicroCFTA.SourcePruningNativeView.narrowAt fits admits fuel key MicroCFTA.InternedConstructorTemplates.Value.empty
+      before =
+    MicroCFTA.MergedSourceComparison.Result.done MicroCFTA.InternedConstructorTemplates.Value.empty before
+'MicroCFTA.SourcePruningEnumerationIdentity.narrowAt_empty' depends on axioms: [propext, Classical.choice, Quot.sound]

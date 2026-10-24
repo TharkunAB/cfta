@@ -1,0 +1,189 @@
+{
+  "status": "COMPLETE_PROPOSED_SCOPED_TYPES_NO_BODIES",
+  "owner": "lookup_encode",
+  "haves": [
+    {
+      "name": "stored",
+      "type": "heap.nodeRecords key = some value",
+      "fragment": "local-stored.lean.txt",
+      "scope": "issued some key / canonical some entry / winner positive",
+      "source": "Actual successful decoder equation found after simplification."
+    },
+    {
+      "name": "same",
+      "type": "actual = entry",
+      "fragment": "local-same.lean.txt",
+      "scope": "After coherent.nodes obtains actual/actualStored/fields",
+      "source": "Option.some injectivity applied to actualStored.symm.trans canonical."
+    },
+    {
+      "name": "carried",
+      "type": "InternedRecordCoherence.entryOf value = some entry",
+      "fragment": "local-carried.lean.txt",
+      "scope": "After subst actual using same",
+      "source": "InternedRecordCoherence.fields_entry key entry value fields."
+    }
+  ],
+  "obtains": [
+    {
+      "scope": "Winner positive after stored",
+      "api": "coherent.nodes key value stored",
+      "binders": [
+        {
+          "name": "actual",
+          "type": "Cache.Interned InternedBinderProtocol.NodeKey"
+        },
+        {
+          "name": "actualStored",
+          "type": "heap.nodes.table key = some actual"
+        },
+        {
+          "name": "fields",
+          "type": "InternedRecordCoherence.NodeFields key actual value"
+        }
+      ]
+    }
+  ],
+  "fields_after_substitution": {
+    "scope": "After subst actual",
+    "type": "InternedRecordCoherence.NodeFields key entry value"
+  },
+  "case_patterns": [
+    {
+      "owner": "lookup_encode",
+      "activation": "cases handle with",
+      "constructors": [
+        {
+          "name": "zero",
+          "binders": []
+        },
+        {
+          "name": "succ",
+          "binders": [
+            {
+              "name": "identity",
+              "type": "Nat"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "owner": "lookup_encode",
+      "activation": "cases value with, after carried is established",
+      "grouping": "Empty and reference branches contradict carried; node/union/mu share the entry-equality elimination.",
+      "constructors": [
+        {
+          "name": "empty",
+          "binders": []
+        },
+        {
+          "name": "reference",
+          "binders": [
+            {
+              "name": "_",
+              "type": "InternedBinderProtocol.Reference",
+              "anonymous": true
+            }
+          ]
+        },
+        {
+          "name": "node",
+          "binders": [
+            {
+              "name": "valueEntry",
+              "type": "Cache.Interned InternedBinderProtocol.NodeKey"
+            },
+            {
+              "name": "_",
+              "type": "List (InternedConstructorTemplates.EdgeValue Symbol Guard)",
+              "anonymous": true
+            },
+            {
+              "name": "_",
+              "type": "Nat",
+              "anonymous": true
+            },
+            {
+              "name": "_",
+              "type": "List InternedBinderProtocol.Reference",
+              "anonymous": true
+            }
+          ]
+        },
+        {
+          "name": "union",
+          "binders": [
+            {
+              "name": "valueEntry",
+              "type": "Cache.Interned InternedBinderProtocol.NodeKey"
+            },
+            {
+              "name": "_",
+              "type": "List (InternedConstructorTemplates.Value Symbol Guard)",
+              "anonymous": true
+            },
+            {
+              "name": "_",
+              "type": "Nat",
+              "anonymous": true
+            },
+            {
+              "name": "_",
+              "type": "List InternedBinderProtocol.Reference",
+              "anonymous": true
+            }
+          ]
+        },
+        {
+          "name": "mu",
+          "binders": [
+            {
+              "name": "valueEntry",
+              "type": "Cache.Interned InternedBinderProtocol.NodeKey"
+            },
+            {
+              "name": "_",
+              "type": "InternedConstructorTemplates.Value Symbol Guard",
+              "anonymous": true
+            },
+            {
+              "name": "_",
+              "type": "InternedConstructorTemplates.Value Symbol Guard",
+              "anonymous": true
+            },
+            {
+              "name": "_",
+              "type": "InternedConstructorTemplates.Value Symbol Guard",
+              "anonymous": true
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "anonymous_equality_eliminations": [
+    {
+      "scope": "handle zero after changing found",
+      "type": "(InternedConstructorTemplates.Value.empty : InternedConstructorTemplates.Value Symbol Guard) = value",
+      "source": "Option.some.inj found"
+    },
+    {
+      "scope": "Final node/union/mu branches",
+      "type": "valueEntry = entry",
+      "source": "Option.some.inj carried; entryOf reduces on these constructor cases."
+    }
+  ],
+  "negative_branch_equation": {
+    "scope": "issued none / canonical none / winner negative",
+    "type": "(none : Option (InternedConstructorTemplates.Value Symbol Guard)) = some value",
+    "source": "Simplify ONLY the actual lookupNode and active branch equations in found."
+  },
+  "intro_binders": [],
+  "lets": [],
+  "typed_shows": [],
+  "induction": null,
+  "IH": null,
+  "recursive_calls": [],
+  "private_helpers": []
+}

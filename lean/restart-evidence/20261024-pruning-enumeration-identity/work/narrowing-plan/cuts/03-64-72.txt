@@ -1,0 +1,9 @@
+{- | The identity of an interned node.
+
+The interning cache gives each new node a fresh identity. Identities are
+unique, but they are not dense. A recursive node and an ordinary node draw
+identities from one counter.
+-}
+newtype NodeId = NodeId Int
+    deriving newtype (Eq, Ord, Show, Hashable)
+

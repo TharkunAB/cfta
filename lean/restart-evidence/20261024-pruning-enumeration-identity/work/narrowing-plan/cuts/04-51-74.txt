@@ -1,0 +1,24 @@
+theorem lookupNode_keeps (before after : State Symbol Guard)
+    (kept : SourceEqualityRequiredCache.Keeps before after)
+    (node : Nat) (value : Value Symbol Guard)
+    (present : lookupNode before node = some value) : lookupNode after node = some value := by
+  cases node with
+  | zero => exact present
+  | succ identity =>
+      cases issued : before.nodes.issued identity with
+      | none =>
+          simp only [lookupNode, issued] at present
+          cases present
+      | some key =>
+          cases canonical : before.nodes.table key with
+          | none =>
+              simp only [lookupNode, issued, canonical] at present
+              cases present
+          | some entry =>
+              by_cases winner : entry.identity = identity
+              · simp only [lookupNode, issued, canonical, ite_eq_left winner] at present
+                simpa only [lookupNode, kept.history identity key issued,
+                  kept.growth.nodes key entry canonical, ite_eq_left winner] using
+                  kept.growth.nodeRecords key value present
+              · simp only [lookupNode, issued, canonical, ite_eq_right winner] at present
+                cases present
