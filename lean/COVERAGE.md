@@ -1,5 +1,36 @@
 # Full formalization coverage
 
+## Generated scalar shape proof and Haskell name repair
+
+Updated: 2026-10-24. Main `c4f7319acf` is incorporated.
+Proof: `78f985d26b423108396cf8db36bc559eded73dfd`.
+Haskell repair: `07229ca7f3208385a52c442965d8f2dcf73f7d99`.
+Read `lean/notes-current-derived-scalar-shape.md`.
+
+The checked declaration descriptor yields exact ordered scalar names and arities.
+Independent input validity derives success. Error precedence and the conditional
+first-constructor-error law retain source order. The generated suffix discharges
+the existing positional prefix check. TH/GHC extraction, Generic metadata,
+valid-position build/read and source codec laws remain open. This adds no general
+language or rank guarantee. H6 remains strongest combined.
+
+Native probes found invalid generated names from legal trailing-# source names.
+The shared producer now rejects those names before namespace lookup. Both new
+regression cases fail on the original producer and pass after repair. Four Hspec
+examples, formatting, package checks and lint at CI's warning threshold pass.
+FINDINGS keeps its external repair index FIRST. The sixth fix needs an upstream
+import; the previous five, including both LPO repairs, remain on main.
+
+Strict Lean and installed build pass. Audit passes 3676 jobs and 75963 dependency
+checks, one older warning and no new-source warning. All 27 signatures and 13
+axiom reports were read; only propext, Classical.choice and Quot.sound occur.
+Next model position helpers and recordTypes. Complete typedTypes needs a Mu-only
+node view that preserves union behavior. Canonical histories, cached scheduling,
+semantic pruning, phase 4, resources, practical width, runtime/solver and
+convergence remain open. H23 stays queued. The full goal is ACTIVE and incomplete.
+This record precedes the evidence commit and authorized push.
+
+
 ## Generated scalar node views incorporated
 
 Updated: 2026-10-24. Main: `c4f7319acf84213fccc8ea389487d4176e4f0b62`.

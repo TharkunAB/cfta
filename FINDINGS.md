@@ -16,7 +16,7 @@ Focused native repair probes pass. Historical counterexamples remain below.
 | Negative Specftacular type depth | Fixed by `75cfc19b8`, merged in PR #168 at `a5fbb66eec`. Its source equals local `058b11fe8f`; all three public checks remain verified. | No additional patch. Keep the pre-fix timeout and the retained validation. |
 | Optional LPO comparator transitivity | Fixed by `70a252537`, merged in PR #169 at `0db62d26b`. The recorded typed cycle is gone, also after canonicalTypes. | No additional patch for this witness. Keep the general order-law proof obligation. |
 | Optional LPO application context | Fixed by `f484c0ca0`, merged in PR #169 at `0db62d26b`. The comparator reversal remains; contextual rewriting and template gates prevent its unsafe use. | No additional patch for this witness. Keep general context, substitution and pruning proof obligations. |
-| Generated scalar-view names ending in # | Repaired on formalize. The producer rejects trailing-hash type and constructor names before namespace lookup. | Import the shared name check, two existing-suite regression cases and documentation. The repair is not on main. |
+| Generated scalar-view names ending in # | Repaired on formalize at `07229ca7f3`. The producer rejects trailing-hash type and constructor names before namespace lookup. | Import the shared name check, two existing-suite regression cases and documentation. The repair is not on main. |
 
 The first five repairs are in the imported main history. The generated-name
 repair is on formalize and still needs an upstream import. General proofs
@@ -43,10 +43,42 @@ control still compiles. fourmolu, cabal-gild, cabal check and HLint at the CI
 warning threshold pass. A plain HLint run reports the older Amount newtype
 suggestion; the source fixture is unchanged. These raw results remain retained.
 
-External action: import the generatedName suffix check, the two rejection cases
-and their documentation from formalize. Do not change the Node naming rule.
-Evidence will be sealed in lean/restart-evidence/20261024-derived-scalar-shape.
+External action: import `07229ca7f3208385a52c442965d8f2dcf73f7d99` from formalize.
+It contains the generatedName suffix check, two rejection cases and documentation.
+Do not change the Node naming rule.
+Evidence is in lean/restart-evidence/20261024-derived-scalar-shape.
 TH/Generic extraction, valid-position build/read and source codec laws stay open.
+
+
+## Generated scalar shape proof and Haskell name repair
+
+Updated: 2026-10-24. Main `c4f7319acf` is incorporated.
+Proof: `78f985d26b423108396cf8db36bc559eded73dfd`.
+Haskell repair: `07229ca7f3208385a52c442965d8f2dcf73f7d99`.
+Read `lean/notes-current-derived-scalar-shape.md`.
+
+The checked declaration descriptor yields exact ordered scalar names and arities.
+Independent input validity derives success. Error precedence and the conditional
+first-constructor-error law retain source order. The generated suffix discharges
+the existing positional prefix check. TH/GHC extraction, Generic metadata,
+valid-position build/read and source codec laws remain open. This adds no general
+language or rank guarantee. H6 remains strongest combined.
+
+Native probes found invalid generated names from legal trailing-# source names.
+The shared producer now rejects those names before namespace lookup. Both new
+regression cases fail on the original producer and pass after repair. Four Hspec
+examples, formatting, package checks and lint at CI's warning threshold pass.
+FINDINGS keeps its external repair index FIRST. The sixth fix needs an upstream
+import; the previous five, including both LPO repairs, remain on main.
+
+Strict Lean and installed build pass. Audit passes 3676 jobs and 75963 dependency
+checks, one older warning and no new-source warning. All 27 signatures and 13
+axiom reports were read; only propext, Classical.choice and Quot.sound occur.
+Next model position helpers and recordTypes. Complete typedTypes needs a Mu-only
+node view that preserves union behavior. Canonical histories, cached scheduling,
+semantic pruning, phase 4, resources, practical width, runtime/solver and
+convergence remain open. H23 stays queued. The full goal is ACTIVE and incomplete.
+This record precedes the evidence commit and authorized push.
 
 
 ## Generated scalar node views incorporated
