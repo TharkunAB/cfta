@@ -1,5 +1,6 @@
 module Data.CFTA.Edit.BetweenSpec (spec) where
 
+import Control.Monad (forM_)
 import Data.List (sort)
 import Test.Hspec (Spec, describe, it, shouldBe, shouldSatisfy)
 
@@ -7,10 +8,12 @@ import qualified Data.CFTA as FTA
 import Data.CFTA.Constraint (Constraint, noConstraint)
 import Data.CFTA.Edit
 import Data.CFTA.Edit.Between
+import Data.CFTA.Edit.Internal (sitePath)
+import Data.CFTA.Edit.Sets (SetSymbol (..), applyEditSet, editSetAutomaton, editsOfSet)
 import qualified Data.CFTA.Gen as Gen
 import Data.CFTA.Index (ChildIndex (..), Size (..), TransitionIndex (..))
 import Data.CFTA.Interned (fromFTA)
-import Data.CFTA.Path (path)
+import Data.CFTA.Path (Path, path)
 import Data.CFTA.Sized (sized, termsOfSize)
 import Data.CFTA.Term (Term)
 import qualified Data.CFTA.Term as Term
@@ -94,10 +97,85 @@ spec = describe "Data.CFTA.Edit.Between" $ do
     describe "rejects"
         $ it "an old term that the automaton does not accept"
         $ editsBetween expressions (Term.Node "one" []) sum' `shouldSatisfy` either (== BetweenEdit NotAccepted) (const False)
+    describe "edit sets" $ do
+        it "finds every edit set of one or two edits, up to a size, and no other" $
+            forM_ fixtures $ \(name, automaton, given) -> forM_ [1, 2] $ \k -> do
+                let sets = either (error . show) id $ editSetAutomaton k automaton given
+                    classes = either (error . show) id $ sized sets
+                    found = concat [termsOfSize classes (Size size) | size <- [1 .. setLimit k]]
+                    edited = [(set, result) | set <- found, Just result <- [applyEditSet given set]]
+                forM_ edited $ \(set, result) -> do
+                    between <- either (fail . show) pure $ editSetsBetween k automaton given result
+                    ((name, k), set `elem` between) `shouldBe` ((name, k), True)
+                    -- The edit sets of the same size range that give the result are the ones of the automaton.
+                    sort (filter ((<= fromInteger (setLimit k)) . length) between)
+                        `shouldBe` sort [other | (other, otherResult) <- edited, otherResult == result]
+                ((name, k), length edited > 10) `shouldBe` ((name, k), True)
+        it "gives the edits of editsBetween as its sets of one edit" $
+            forM_ [1, 2, 3] $ \k ->
+                [ edits | Just edits@[_] <- map editsOfSet $ either (error . show) id $ editSetsBetween k expressions twoSites twoSitesNew
+                ]
+                    `shouldBe` map pure (either (error . show) id $ editsBetween expressions twoSites twoSitesNew)
+        it "gives the two replacements of a change at two sites, and the replacements at the common ancestor and above" $ do
+            -- The smallest first: the two leaves (4 nodes), a leaf and a literal (5), two literals and the inner sum (6), the whole term (8).
+            let found = either (error . show) id $ editSetsBetween 2 expressions twoSites twoSitesNew
+                atLeaves =
+                    Term.Node
+                        (Link $ ReplaceAt $ path [0, 0, 0])
+                        [inside "two" [], Term.Node (Last $ ReplaceAt $ path [0, 1, 0]) [inside "two" []]]
+            (atLeaves `elem` found, [map sitePathOf edits | Just edits <- map editsOfSet found])
+                `shouldBe` ( True
+                           ,
+                               [ [path [0, 0, 0], path [0, 1, 0]]
+                               , [path [0, 0], path [0, 1, 0]]
+                               , [path [0, 0, 0], path [0, 1]]
+                               , [path [0, 0], path [0, 1]]
+                               , [path [0]]
+                               , [path []]
+                               ]
+                           )
+        it "gives no edit set for two equal terms" $
+            editSetsBetween 2 expressions sum' sum' `shouldBe` Right []
+        it "refuses a change with more candidate sets than the limit, with their number" $
+            -- A complete binary tree of depth h has 1 + c(h - 1)^2 cuts: 2, 5, 26, 677, and 458330 for depth 5.
+            editSetsBetween 32 trees (complete 5 "a") (complete 5 "b") `shouldBe` Left (TooManyCandidates 458330)
+        it "gives the rank of each edit set in the generator of the automaton of edit sets, in rank order" $ do
+            let sets = either (error . show) id $ editSetAutomaton 2 expressions twoSites
+                generator = Gen.fromAutomaton $ fromFTA sets
+                ranked = either (error . show) id $ rankedEditSetsBetween 2 expressions twoSites twoSitesNew
+            sort (map snd ranked) `shouldBe` sort (either (error . show) id $ editSetsBetween 2 expressions twoSites twoSitesNew)
+            map fst ranked `shouldBe` sort (map fst ranked)
+            map (\(rank, _) -> Gen.unrank generator rank) ranked `shouldBe` map (Right . snd) ranked
 
 -- | The largest edit size, minus one, that the tests compare.
 bound :: Integer
 bound = 5
+
+-- | The largest new material of an edit set that the tests compare.
+setBound :: Integer
+setBound = 3
+
+-- | The largest size of an edit set of at most k edits with the new material up to 'setBound'.
+setLimit :: Int -> Integer
+setLimit k = setBound + toInteger k
+
+-- | The path of the site of an edit.
+sitePathOf :: Edit String -> Path
+sitePathOf (Term.Node site _) = sitePath site
+
+-- | Binary trees over a and b.
+trees :: FTA.PlainFTA String String
+trees = fromRows "s" [("s", [leaf "a", leaf "b", node "g" ["s", "s"]])]
+
+-- | The complete binary tree of a depth with the leaf at each place.
+complete :: Int -> String -> Term String
+complete depth leaf'
+    | depth <= 0 = Term.Node leaf' []
+    | otherwise = Term.Node "g" [complete (depth - 1) leaf', complete (depth - 1) leaf']
+
+-- | New material of an edit set from its symbol and children.
+inside :: String -> [Term (SetSymbol String)] -> Term (SetSymbol String)
+inside = Term.Node . Inside . Material
 
 -- | The fixtures: an unambiguous automaton and a term that it accepts.
 fixtures :: [(String, FTA.PlainFTA String String, Term String)]
