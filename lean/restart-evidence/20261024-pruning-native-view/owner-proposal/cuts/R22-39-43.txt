@@ -1,0 +1,5 @@
+structure Covered (pending : List NodeKey) (state : InternedConstructorTemplates.State Symbol Guard) : Prop where
+  edges : ∀ key entry, state.edges.table key = some entry → ∃ value, state.edgeRecords key = some value
+  nodes : ∀ key entry, state.nodes.table key = some entry →
+    key ∈ pending ∨ ∃ value, state.nodeRecords key = some value
+

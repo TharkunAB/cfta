@@ -1,0 +1,127 @@
+/tmp/mcfta-pruning-native-view-20261024/public-1/checked.lean:5:0: error: Unknown option `pp.width`
+MicroCFTA.SourcePruningNativeView.keeps {Guard Key : Type} (fits : Key → MicroCFTA.SourcePruningTemplates.Symbol → Bool)
+  (admits : Key → MicroCFTA.InternedConstructorTemplates.Value MicroCFTA.SourcePruningTemplates.Symbol Guard → Bool)
+  (key : Key) (edge : MicroCFTA.InternedConstructorTemplates.EdgeValue MicroCFTA.SourcePruningTemplates.Symbol Guard) :
+  Bool
+MicroCFTA.SourcePruningNativeView.narrowAt {Guard Key : Type}
+  [DecidableEq.{1} (MicroCFTA.InternedConstructorTemplates.EdgeKey MicroCFTA.SourcePruningTemplates.Symbol Guard)]
+  (fits : Key → MicroCFTA.SourcePruningTemplates.Symbol → Bool)
+  (admits : Key → MicroCFTA.InternedConstructorTemplates.Value MicroCFTA.SourcePruningTemplates.Symbol Guard → Bool)
+  (fuel : Nat) (key : Key)
+  (value : MicroCFTA.InternedConstructorTemplates.Value MicroCFTA.SourcePruningTemplates.Symbol Guard)
+  (before : MicroCFTA.InternedConstructorTemplates.State MicroCFTA.SourcePruningTemplates.Symbol Guard) :
+  MicroCFTA.MergedSourceComparison.Result MicroCFTA.SourcePruningTemplates.Symbol Guard
+    (MicroCFTA.InternedConstructorTemplates.Value MicroCFTA.SourcePruningTemplates.Symbol Guard)
+MicroCFTA.SourcePruningNativeView.emptyAt {Guard Key : Type}
+  [DecidableEq.{1} (MicroCFTA.InternedConstructorTemplates.EdgeKey MicroCFTA.SourcePruningTemplates.Symbol Guard)]
+  (fits : Key → MicroCFTA.SourcePruningTemplates.Symbol → Bool)
+  (admits : Key → MicroCFTA.InternedConstructorTemplates.Value MicroCFTA.SourcePruningTemplates.Symbol Guard → Bool)
+  (fuel : Nat) (key : Key)
+  (value : MicroCFTA.InternedConstructorTemplates.Value MicroCFTA.SourcePruningTemplates.Symbol Guard)
+  (before : MicroCFTA.InternedConstructorTemplates.State MicroCFTA.SourcePruningTemplates.Symbol Guard) :
+  MicroCFTA.MergedSourceComparison.Result MicroCFTA.SourcePruningTemplates.Symbol Guard Bool
+MicroCFTA.SourcePruningNativeView.narrowAt_complete {Guard Key : Type}
+  [DecidableEq.{1} (MicroCFTA.InternedConstructorTemplates.EdgeKey MicroCFTA.SourcePruningTemplates.Symbol Guard)]
+  (fits : Key → MicroCFTA.SourcePruningTemplates.Symbol → Bool)
+  (admits : Key → MicroCFTA.InternedConstructorTemplates.Value MicroCFTA.SourcePruningTemplates.Symbol Guard → Bool)
+  (key : Key) (value : MicroCFTA.InternedConstructorTemplates.Value MicroCFTA.SourcePruningTemplates.Symbol Guard)
+  (before : MicroCFTA.InternedConstructorTemplates.State MicroCFTA.SourcePruningTemplates.Symbol Guard)
+  (ready : MicroCFTA.SourceEqualityRequiredCache.Ready before)
+  (available : MicroCFTA.InternedProbeProvenance.Available before value) (closed : Eq.{1} value.free List.nil.{0}) :
+  Exists.{1} fun fuel =>
+    Exists.{1} fun rows =>
+      Exists.{1} fun middle =>
+        Exists.{1} fun result =>
+          Exists.{1} fun after =>
+            Eq.{1} (MicroCFTA.MergedFreshOrdinaryExposure.nodeEdges fuel value before)
+                (MicroCFTA.MergedSourceExposure.Result.done rows middle) ∧
+              Eq.{1}
+                  (MicroCFTA.InternedConstructorTemplates.run
+                    (MicroCFTA.InternedConstructorTemplates.makeNode
+                      (List.filter.{0} (MicroCFTA.SourcePruningNativeView.keeps fits admits key) rows))
+                    middle)
+                  (Prod.mk.{0, 0} result after) ∧
+                Eq.{1} (MicroCFTA.SourcePruningNativeView.narrowAt fits admits fuel key value before)
+                    (MicroCFTA.MergedSourceComparison.Result.done result after) ∧
+                  MicroCFTA.SourceEqualityRequiredCache.Keeps before after ∧
+                    MicroCFTA.InternedProbeProvenance.Available after result ∧
+                      Eq.{1} result.free List.nil.{0} ∧
+                        MicroCFTA.SourceEqualityRequiredCache.Ordinary result ∧
+                          Eq.{1} (MicroCFTA.InternedEdgeResidency.nodeEdges result)
+                              (MicroCFTA.InternedConstructorTemplates.canonicalEdges
+                                (MicroCFTA.InternedConstructorTemplates.surviving
+                                  (List.filter.{0} (MicroCFTA.SourcePruningNativeView.keeps fits admits key) rows))) ∧
+                            (∀ (readFuel : Nat),
+                                Eq.{1} (MicroCFTA.MergedFreshOrdinaryExposure.nodeEdges readFuel result after)
+                                  (MicroCFTA.MergedSourceExposure.Result.done
+                                    (MicroCFTA.InternedEdgeResidency.nodeEdges result) after)) ∧
+                              (Eq.{1} result MicroCFTA.InternedConstructorTemplates.Value.empty ↔
+                                  ∀
+                                    (edge :
+                                      MicroCFTA.InternedConstructorTemplates.EdgeValue
+                                        MicroCFTA.SourcePruningTemplates.Symbol Guard),
+                                    Membership.mem.{0, 0} rows edge →
+                                      Eq.{1} (MicroCFTA.SourcePruningNativeView.keeps fits admits key edge)
+                                        Bool.false) ∧
+                                (Eq.{1} (List.isEmpty.{0} (MicroCFTA.InternedEdgeResidency.nodeEdges result))
+                                      Bool.true ↔
+                                    ∀
+                                      (edge :
+                                        MicroCFTA.InternedConstructorTemplates.EdgeValue
+                                          MicroCFTA.SourcePruningTemplates.Symbol Guard),
+                                      Membership.mem.{0, 0} rows edge →
+                                        Eq.{1} (MicroCFTA.SourcePruningNativeView.keeps fits admits key edge)
+                                          Bool.false) ∧
+                                  ∀ (extra : Nat),
+                                    Eq.{1}
+                                      (MicroCFTA.SourcePruningNativeView.narrowAt fits admits
+                                        (HAdd.hAdd.{0, 0, 0} fuel extra) key value before)
+                                      (MicroCFTA.MergedSourceComparison.Result.done result after)
+MicroCFTA.SourcePruningNativeView.emptyAt_complete {Guard Key : Type}
+  [DecidableEq.{1} (MicroCFTA.InternedConstructorTemplates.EdgeKey MicroCFTA.SourcePruningTemplates.Symbol Guard)]
+  (fits : Key → MicroCFTA.SourcePruningTemplates.Symbol → Bool)
+  (admits : Key → MicroCFTA.InternedConstructorTemplates.Value MicroCFTA.SourcePruningTemplates.Symbol Guard → Bool)
+  (key : Key) (value : MicroCFTA.InternedConstructorTemplates.Value MicroCFTA.SourcePruningTemplates.Symbol Guard)
+  (before : MicroCFTA.InternedConstructorTemplates.State MicroCFTA.SourcePruningTemplates.Symbol Guard)
+  (ready : MicroCFTA.SourceEqualityRequiredCache.Ready before)
+  (available : MicroCFTA.InternedProbeProvenance.Available before value) (closed : Eq.{1} value.free List.nil.{0})
+  (notMu :
+    ∀ (entry : MicroCFTA.Cache.Interned MicroCFTA.InternedBinderProtocol.NodeKey)
+      (body depthShape ordinaryShape :
+        MicroCFTA.InternedConstructorTemplates.Value MicroCFTA.SourcePruningTemplates.Symbol Guard),
+      Ne.{1} value (MicroCFTA.InternedConstructorTemplates.Value.mu entry body depthShape ordinaryShape)) :
+  Exists.{1} fun fuel =>
+    Exists.{1} fun rows =>
+      Exists.{1} fun middle =>
+        Exists.{1} fun result =>
+          Exists.{1} fun after =>
+            Eq.{1} (MicroCFTA.MergedFreshOrdinaryExposure.nodeEdges fuel value before)
+                (MicroCFTA.MergedSourceExposure.Result.done rows middle) ∧
+              Eq.{1} (MicroCFTA.SourcePruningNativeView.narrowAt fits admits fuel key value before)
+                  (MicroCFTA.MergedSourceComparison.Result.done result after) ∧
+                MicroCFTA.SourceEqualityRequiredCache.Keeps before after ∧
+                  Eq.{1} (MicroCFTA.SourcePruningNativeView.emptyAt fits admits fuel key value before)
+                      (MicroCFTA.MergedSourceComparison.Result.done
+                        (List.isEmpty.{0} (MicroCFTA.InternedEdgeResidency.nodeEdges result)) after) ∧
+                    (Eq.{1} (List.isEmpty.{0} (MicroCFTA.InternedEdgeResidency.nodeEdges result)) Bool.true ↔
+                      ∀
+                        (edge :
+                          MicroCFTA.InternedConstructorTemplates.EdgeValue MicroCFTA.SourcePruningTemplates.Symbol
+                            Guard),
+                        Membership.mem.{0, 0} rows edge →
+                          Eq.{1} (MicroCFTA.SourcePruningNativeView.keeps fits admits key edge) Bool.false)
+MicroCFTA.SourcePruningNativeView.emptyAt_mu {Guard Key : Type}
+  [DecidableEq.{1} (MicroCFTA.InternedConstructorTemplates.EdgeKey MicroCFTA.SourcePruningTemplates.Symbol Guard)]
+  (fits : Key → MicroCFTA.SourcePruningTemplates.Symbol → Bool)
+  (admits : Key → MicroCFTA.InternedConstructorTemplates.Value MicroCFTA.SourcePruningTemplates.Symbol Guard → Bool)
+  (fuel : Nat) (key : Key) (entry : MicroCFTA.Cache.Interned MicroCFTA.InternedBinderProtocol.NodeKey)
+  (body depthShape ordinaryShape :
+    MicroCFTA.InternedConstructorTemplates.Value MicroCFTA.SourcePruningTemplates.Symbol Guard)
+  (before : MicroCFTA.InternedConstructorTemplates.State MicroCFTA.SourcePruningTemplates.Symbol Guard) :
+  Eq.{1}
+    (MicroCFTA.SourcePruningNativeView.emptyAt fits admits fuel key
+      (MicroCFTA.InternedConstructorTemplates.Value.mu entry body depthShape ordinaryShape) before)
+    (MicroCFTA.MergedSourceComparison.Result.done Bool.false before)
+'MicroCFTA.SourcePruningNativeView.narrowAt_complete' depends on axioms: [propext, Classical.choice.{u}, Quot.sound.{u}]
+'MicroCFTA.SourcePruningNativeView.emptyAt_complete' depends on axioms: [propext, Classical.choice.{u}, Quot.sound.{u}]
+'MicroCFTA.SourcePruningNativeView.emptyAt_mu' depends on axioms: [propext, Classical.choice.{u}, Quot.sound.{u}]

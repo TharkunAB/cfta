@@ -1,0 +1,89 @@
+{
+  "status": "PROPOSED_REVIEW_ONLY_NO_DEFINITION_BODIES",
+  "recorded_at": "2026-10-24T04:27:14.119983+02:00",
+  "symbol": "SourcePruningTemplates.Symbol = SourceObservations.Label FullSyntax.Formula",
+  "keeps": {
+    "subject": "edge.children; symbol is edge.entry.key.symbol",
+    "branches_in_order": [
+      {
+        "children": "[annotation, _, _, _]",
+        "result": "if edge.entry.key.symbol = (\"app\", FullSyntax.Formula.top) then admits key annotation else true"
+      },
+      {
+        "children": "[annotation, _]",
+        "result": "if edge.entry.key.symbol = (\"filter\", FullSyntax.Formula.top) then admits key annotation else true"
+      },
+      {
+        "children": "[annotation]",
+        "result": "admits key annotation && fits key edge.entry.key.symbol"
+      },
+      {
+        "children": "_",
+        "result": "true"
+      }
+    ],
+    "effect": "Pure predicate. Keep each selected complete original EdgeValue."
+  },
+  "narrowAt": {
+    "subject": "MergedFreshOrdinaryExposure.nodeEdges fuel value before",
+    "branches": [
+      {
+        "pattern": ".done rows middle",
+        "result": "let constructed := run (makeNode (rows.filter (keeps fits admits key))) middle; .done constructed.1 constructed.2"
+      },
+      {
+        "pattern": ".unresolved name after",
+        "result": ".failed (.unresolved name) after"
+      },
+      {
+        "pattern": ".pending pendingKey after",
+        "result": ".failed (.pending pendingKey) after"
+      },
+      {
+        "pattern": ".exhausted after",
+        "result": ".failed .exhausted after"
+      }
+    ],
+    "forbidden": "MergedSourceComparison.read invokes the old reader and must not be called."
+  },
+  "emptyAt": {
+    "first_subject": "value",
+    "mu_case": {
+      "pattern": ".mu entry body depthShape ordinaryShape",
+      "result": ".done false before"
+    },
+    "other_case": "(narrowAt fits admits fuel key value before).bind next",
+    "next_binders": {
+      "narrowed": "Value Symbol Guard",
+      "middle": "State Symbol Guard"
+    },
+    "next_subject": "MergedFreshOrdinaryExposure.nodeEdges fuel narrowed middle",
+    "next_branches": [
+      {
+        "pattern": ".done rows after",
+        "result": ".done rows.isEmpty after"
+      },
+      {
+        "pattern": ".unresolved name after",
+        "result": ".failed (.unresolved name) after"
+      },
+      {
+        "pattern": ".pending pendingKey after",
+        "result": ".failed (.pending pendingKey) after"
+      },
+      {
+        "pattern": ".exhausted after",
+        "result": ".failed .exhausted after"
+      }
+    ],
+    "state_rule": "Retain the exact returned heap at every success or failure. Preserve the second actual reader."
+  },
+  "not_proposed": [
+    "type-position narrow wrapper",
+    "enumeration Nat-to-Value map",
+    "typing/key implementation",
+    "narrowAt memo2 runtime cache",
+    "new result carrier",
+    "new recursive reader"
+  ]
+}

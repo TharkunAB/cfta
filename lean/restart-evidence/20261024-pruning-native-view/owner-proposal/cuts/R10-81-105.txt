@@ -1,0 +1,25 @@
+theorem nodeEdges_live [DecidableEq (EdgeKey Symbol Guard)] (fuel : Nat) (value : Value Symbol Guard)
+    (state : State Symbol Guard) (semantic : SemanticHeap state) (covered : Covered [] state)
+    (available : Available state value) (closed : value.free = []) : Live (nodeEdges fuel value state) := by
+  have fallback (current : State Symbol Guard) (currentSemantic : SemanticHeap current)
+      (currentCovered : Covered [] current) (root : Value Symbol Guard)
+      (rootAvailable : Available current root) (rootClosed : root.free = []) :
+      Live (collect fuel current [] [root]).canonical :=
+    canonical _ (collect_live fuel current currentSemantic currentCovered [] [root]
+      (by intro value member; simpa only [List.mem_singleton.mp member] using rootAvailable)
+      (by intro value member; simpa only [List.mem_singleton.mp member] using rootClosed))
+  cases value with
+  | empty | reference => exact fun _ member => False.elim (List.not_mem_nil member)
+  | node entry edges depth free =>
+      exact InternedLiveEdges.resident_live state semantic.1.normal.live _ available.resident
+  | union entry members depth free => exact fallback state semantic covered _ available closed
+  | mu entry body depth ordinary =>
+      obtain ⟨result, after, done, context, heap, finalCovered, resultAvailable, growth, history⟩ :=
+        InternedFreshOrdinaryStoredSubstitution.unfold_complete_decoded (.mu entry body depth ordinary)
+          state semantic.1 available semantic.2 covered
+      have next := fallback after ⟨context, heap⟩ finalCovered _ (available.grows state after growth history) closed
+      cases result with
+      | node entry edges depth free =>
+          simpa only [nodeEdges, done, Live, InternedLiveEdges.ValueLive, InternedEdgeResidency.nodeEdges] using
+            InternedLiveEdges.resident_live after context.normal.live (.node entry edges depth free) resultAvailable.resident
+      | empty | reference | union | mu => simpa only [nodeEdges, done] using next

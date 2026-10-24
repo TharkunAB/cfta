@@ -1,0 +1,38 @@
+theorem reference_empty (value : Value Symbol Guard) : value.referenceOf = .empty ↔ value = .empty := by
+  cases value <;> simp [Value.referenceOf]
+
+/-- Actual node normalization is empty exactly when all original edges contain an empty child. -/
+theorem makeNode_empty_iff [DecidableEq (EdgeKey Symbol Guard)] (edges : List (EdgeValue Symbol Guard))
+    (state : State Symbol Guard) (coherent : Coherent state) (linked : Linked state)
+    (resident : ∀ edge ∈ edges, EdgeResident state edge) :
+    (run (makeNode edges) state).1.referenceOf = .empty ↔
+      ∀ edge ∈ edges, edge.children.any (fun child => child.referenceOf == .empty) = true := by
+  have selected : ∀ edge ∈ canonicalEdges (surviving edges), EdgeResident state edge :=
+    fun edge member => resident edge (List.mem_filter.mp (canonicalEdges_member _ edge member)).1
+  have shape : (run (makeNode edges) state).1.referenceOf = .empty ↔ canonicalEdges (surviving edges) = [] := by
+    unfold makeNode
+    dsimp only
+    split
+    · rename_i same
+      simp [run, Value.referenceOf, same]
+    · rename_i first rest same
+      obtain ⟨entry, actual⟩ := identifyNode_readback (first :: rest) state coherent linked (by simpa [same] using selected)
+      simp only [run, actual, identifyNode, Value.referenceOf]
+      simp [same]
+  rw [shape]
+  constructor
+  · intro empty edge member
+    cases alive : edge.children.any (fun child => child.referenceOf == .empty) with
+    | true => rfl
+    | false =>
+        have survives : edge ∈ surviving edges := by simp [surviving, member, alive]
+        have retained := canonicalEdges_retains state coherent _ edge
+          (fun value included => resident value (List.mem_filter.mp included).1) survives
+        exact False.elim (List.not_mem_nil (empty ▸ retained))
+  · intro allEmpty
+    have none : surviving edges = [] := by
+      apply List.filter_eq_nil_iff.mpr
+      intro edge member
+      simp [allEmpty edge member]
+    rw [none]
+    simp [canonicalEdges, EnumerationBuilderCaches.canonicalIds]

@@ -1,0 +1,15 @@
+matchMu (InternedMu mu) = Just $ \n' ->
+    if
+        | n' == Rec (muPlaceholder (internedMuDepthShape mu)) ->
+            -- Special case justified by the invariant on 'internedMuShape'
+            internedMuShape mu
+        | n' == Rec RecDepth ->
+            -- Reuse the exact depth probe stored in the interning key. It is
+            -- not interchangeable with 'internedMuShape': the distinction is
+            -- what keeps an unused nested binder from colliding with a used
+            -- binder that has the same ordinary shape.
+            internedMuDepthShape mu
+        | otherwise ->
+            substFree (RecInt (internedMuId mu)) n' (internedMuBody mu)
+matchMu _otherwise = Nothing
+

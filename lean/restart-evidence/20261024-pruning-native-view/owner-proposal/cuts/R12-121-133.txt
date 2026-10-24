@@ -1,0 +1,13 @@
+/-- Execute generated cache requests with separate state updates. -/
+def run [DecidableEq (EdgeKey Symbol Guard)] (work : Work Symbol Guard Result) (state : State Symbol Guard) :
+    Result × State Symbol Guard :=
+  match work with
+  | .pure value => (value, state)
+  | .edge key identify resume =>
+      let result := edgeStep key identify state
+      run (resume result.1) result.2
+  | .node key identify resume =>
+      let result := nodeStep key identify state
+      run (resume result.1) result.2
+
+/-- Each edge-cache request preserves validity and every earlier canonical record. -/

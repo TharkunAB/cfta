@@ -1,0 +1,20 @@
+import MicroCFTA.SourcePruningPartialMatch
+import MicroCFTA.Fragments
+import MicroCFTA.SourceObservations
+import MicroCFTA.FormulaExecutable
+
+/-!
+# Pure helpers for the partial pruning oracle
+
+Full labels retain source names and refinements. Tagged finite buckets
+represent the observable lookup and ascending traversal of the source maps.
+-/
+namespace MicroCFTA.SourcePruningTemplates
+open Language Fragments EnumerationState SourcePruningPartialMatch
+attribute [local instance] FormulaExecutable.formulaDecidableEq
+
+/-- The existing complete source alphabet, including refinements. -/
+abbrev Symbol := SourceObservations.Label FullSyntax.Formula
+
+/-- A partial term with full labels, raw holes and truncation. -/
+abbrev PartialTerm := Language.Term (EnumerationState.PartialSymbol Symbol)

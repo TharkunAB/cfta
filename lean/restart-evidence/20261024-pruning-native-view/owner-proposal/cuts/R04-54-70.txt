@@ -1,0 +1,17 @@
+{- | An interned text and refinement, with the ordinary symbol of the text:
+the symbol itself when it is ordinary. The ordinary symbol is found once, when
+it is first read, so that reading it again allocates nothing.
+-}
+data Symbol = InternedSymbol !SymbolId !Int !Text !Formula Symbol
+
+{- | An ordinary symbol of a text. As a pattern, it matches every symbol and
+gives its text; the refinement is not part of the match.
+-}
+pattern Symbol :: Text -> Symbol
+pattern Symbol text <- InternedSymbol _ _ text _ _
+  where
+    Symbol text = internSymbol text Top
+
+{-# COMPLETE Symbol #-}
+
+{- | A refined symbol: an ordinary symbol and a refinement. As a pattern, it

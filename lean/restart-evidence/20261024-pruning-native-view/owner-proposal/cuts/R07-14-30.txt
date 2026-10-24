@@ -1,0 +1,17 @@
+
+/-- Physical edge exposure retains each source failure and the exact returned cache. -/
+inductive Result (Symbol Guard : Type) where
+  | done (edges : List (EdgeValue Symbol Guard)) (state : State Symbol Guard)
+  | unresolved (name : Reference) (state : State Symbol Guard)
+  | pending (key : NodeKey) (state : State Symbol Guard)
+  | exhausted (state : State Symbol Guard)
+
+/-- Source failures and successful reads both retain their actual final cache. -/
+def Result.state : Result Symbol Guard → State Symbol Guard
+  | .done _ state | .unresolved _ state | .pending _ state | .exhausted state => state
+
+/-- Process earlier ordinary edges before the remaining source worklist. -/
+def Result.prepend (edges : List (EdgeValue Symbol Guard)) : Result Symbol Guard → Result Symbol Guard
+  | .done rest state => .done (edges ++ rest) state
+  | .unresolved name state => .unresolved name state
+  | .pending key state => .pending key state

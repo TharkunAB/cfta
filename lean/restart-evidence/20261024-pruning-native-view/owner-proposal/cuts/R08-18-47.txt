@@ -1,0 +1,30 @@
+def collect [DecidableEq (EdgeKey Symbol Guard)] : Nat → State Symbol Guard →
+    List Nat → List (Value Symbol Guard) → Result Symbol Guard
+  | _, state, _, [] => .done [] state
+  | 0, state, _, _ :: _ => .exhausted state
+  | fuel + 1, state, seen, value :: rest =>
+      match value with
+      | .empty => collect fuel state seen rest
+      | .reference name => .unresolved name state
+      | .node _ edges _ _ => (collect fuel state seen rest).prepend edges
+      | .union entry members _ _ =>
+          if entry.identity ∈ seen then collect fuel state seen rest
+          else collect fuel state (entry.identity :: seen) (members ++ rest)
+      | value@(.mu entry ..) =>
+          if entry.identity ∈ seen then collect fuel state seen rest
+          else match InternedFreshOrdinaryStoredSubstitution.unfold value state with
+            | .done result after => collect fuel after (entry.identity :: seen) (result :: rest)
+            | .pending key after => .pending key after
+
+/-- Expose the source's direct ordinary/Mu paths and canonicalized closure fallback. -/
+def nodeEdges [DecidableEq (EdgeKey Symbol Guard)] (fuel : Nat) (value : Value Symbol Guard)
+    (state : State Symbol Guard) : Result Symbol Guard :=
+  match value with
+  | .empty | .reference _ => .done [] state
+  | .node _ edges _ _ => .done edges state
+  | value@(.mu ..) =>
+      match InternedFreshOrdinaryStoredSubstitution.unfold value state with
+      | .done (.node _ edges _ _) after => .done edges after
+      | .done _ after => (collect fuel after [] [value]).canonical
+      | .pending key after => .pending key after
+  | value@(.union ..) => (collect fuel state [] [value]).canonical

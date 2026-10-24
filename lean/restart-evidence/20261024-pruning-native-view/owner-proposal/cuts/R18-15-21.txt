@@ -1,0 +1,7 @@
+/-- Every returned child is available in the actual final state. -/
+def Values (state : State Symbol Guard) (values : List (Value Symbol Guard)) : Prop :=
+  ∀ value ∈ values, Available state value
+
+/-- Every returned edge is the complete canonical payload in the final state. -/
+def Edges (state : State Symbol Guard) (edges : List (EdgeValue Symbol Guard)) : Prop :=
+  ∀ edge ∈ edges, EdgeResident state edge

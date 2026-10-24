@@ -1,0 +1,130 @@
+{
+  "value_cases": {
+    "subject": "constructed.1",
+    "owners": [
+      "ordinaryEmpty",
+      "secondRead"
+    ],
+    "constructors": [
+      {
+        "constructor": "empty",
+        "binders": {}
+      },
+      {
+        "constructor": "reference",
+        "binders": {
+          "name": "InternedBinderProtocol.Reference"
+        }
+      },
+      {
+        "constructor": "node",
+        "binders": {
+          "entry": "Cache.Interned InternedBinderProtocol.NodeKey",
+          "edges": "List (EdgeValue Symbol Guard)",
+          "depth": "Nat",
+          "free": "List InternedBinderProtocol.Reference"
+        }
+      },
+      {
+        "constructor": "union",
+        "binders": {
+          "entry": "Cache.Interned InternedBinderProtocol.NodeKey",
+          "members": "List (Value Symbol Guard)",
+          "depth": "Nat",
+          "free": "List InternedBinderProtocol.Reference"
+        }
+      },
+      {
+        "constructor": "mu",
+        "binders": {
+          "entry": "Cache.Interned InternedBinderProtocol.NodeKey",
+          "body": "Value Symbol Guard",
+          "depthShape": "Value Symbol Guard",
+          "ordinaryShape": "Value Symbol Guard"
+        }
+      }
+    ]
+  },
+  "emptyAt_input_cases": {
+    "subject": "value",
+    "constructors": [
+      {
+        "constructor": "empty",
+        "binders": {}
+      },
+      {
+        "constructor": "reference",
+        "binders": {
+          "name": "InternedBinderProtocol.Reference"
+        }
+      },
+      {
+        "constructor": "node",
+        "binders": {
+          "entry": "Cache.Interned InternedBinderProtocol.NodeKey",
+          "edges": "List (EdgeValue Symbol Guard)",
+          "depth": "Nat",
+          "free": "List InternedBinderProtocol.Reference"
+        }
+      },
+      {
+        "constructor": "union",
+        "binders": {
+          "entry": "Cache.Interned InternedBinderProtocol.NodeKey",
+          "members": "List (Value Symbol Guard)",
+          "depth": "Nat",
+          "free": "List InternedBinderProtocol.Reference"
+        }
+      },
+      {
+        "constructor": "mu",
+        "binders": {
+          "entry": "Cache.Interned InternedBinderProtocol.NodeKey",
+          "body": "Value Symbol Guard",
+          "depthShape": "Value Symbol Guard",
+          "ordinaryShape": "Value Symbol Guard"
+        }
+      }
+    ],
+    "grouping": "Mu has its own branch. All other constructors share the actual narrowAt/second-read continuation."
+  },
+  "reader_outcomes": [
+    {
+      "constructor": "done",
+      "binders": {
+        "rows": "List (EdgeValue Symbol Guard)",
+        "middle": "State Symbol Guard"
+      }
+    },
+    {
+      "constructor": "unresolved",
+      "binders": {
+        "name": "InternedBinderProtocol.Reference",
+        "after": "State Symbol Guard"
+      }
+    },
+    {
+      "constructor": "pending",
+      "binders": {
+        "pendingKey": "InternedBinderProtocol.NodeKey",
+        "after": "State Symbol Guard"
+      }
+    },
+    {
+      "constructor": "exhausted",
+      "binders": {
+        "after": "State Symbol Guard"
+      }
+    }
+  ],
+  "emptyAt_continuation": {
+    "narrowed": "Value Symbol Guard",
+    "middle": "State Symbol Guard"
+  },
+  "keeps_annotation": {
+    "annotation": "Value Symbol Guard",
+    "symbol": "Symbol (the complete edge.entry.key.symbol)"
+  },
+  "whole_match_equalities": "No named constructor equations are required. Source can use cases without an equation binder.",
+  "all_states": "Both success and failure retain the full State Symbol Guard, not only a heap counter or an old snapshot."
+}

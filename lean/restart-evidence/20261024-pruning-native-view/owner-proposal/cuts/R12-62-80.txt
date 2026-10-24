@@ -1,0 +1,19 @@
+structure State (Symbol Guard : Type) where
+  edges : Cache.State (EdgeKey Symbol Guard)
+  nodes : Cache.State NodeKey
+  edgeRecords : Table (EdgeKey Symbol Guard) (EdgeValue Symbol Guard)
+  nodeRecords : Table NodeKey (Value Symbol Guard)
+
+/-- Both source cache families and both record maps start empty. -/
+def empty : State Symbol Guard := ⟨Cache.emptyState, Cache.emptyState, fun _ => none, fun _ => none⟩
+
+/-- Every counter retains its own reservation and canonical-key invariant. -/
+def Valid (state : State Symbol Guard) : Prop := Cache.Valid state.edges ∧ Cache.Valid state.nodes
+
+/-- Empty independent caches satisfy both reservation invariants. -/
+theorem empty_valid : Valid (empty (Symbol := Symbol) (Guard := Guard)) := ⟨Cache.empty_valid, Cache.empty_valid⟩
+
+/-- Later operations preserve both identity tables and both record tables. -/
+structure Grows (before after : State Symbol Guard) : Prop where
+  edges : Extends before.edges.table after.edges.table
+  nodes : Extends before.nodes.table after.nodes.table

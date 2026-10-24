@@ -1,0 +1,162 @@
+{"command": ["/home/tritlo/.elan/toolchains/leanprover--lean4---v4.34.1/bin/lean", "-o", "/home/tritlo/Code/mcfta/lean/.lake/build/lib/lean/MicroCFTA/SourcePruningNativeView.olean", "-R", "/tmp/mcfta-pruning-native-view-20261024/source-check-1", "-DwarningAsError=true", "-Dlinter.all=true", "/tmp/mcfta-pruning-native-view-20261024/source-check-1/MicroCFTA/SourcePruningNativeView.lean"], "exit_code": 1, "raw_bytes": 8356, "raw_sha256": "a5d7ad12a7c8e407620a1fe3654c1b97f5d45a7b8f25213d0dc154039e63612c", "source_sha256": "ab1518213a1eb0d2708a78a37eb8eb5d4125933b15b527661bad08124f5ddca3"}
+/tmp/mcfta-pruning-native-view-20261024/source-check-1/MicroCFTA/SourcePruningNativeView.lean:130:38: error: Type mismatch: After simplification, term
+  builtOrdinary
+ has type
+  match (run (makeNode selected) middle).fst with
+  | Value.empty => True
+  | Value.node entry edges depth free => True
+  | x => False
+but is expected to have type
+  False
+/tmp/mcfta-pruning-native-view-20261024/source-check-1/MicroCFTA/SourcePruningNativeView.lean:130:38: error: Type mismatch: After simplification, term
+  builtOrdinary
+ has type
+  match (run (makeNode selected) middle).fst with
+  | Value.empty => True
+  | Value.node entry edges depth free => True
+  | x => False
+but is expected to have type
+  False
+/tmp/mcfta-pruning-native-view-20261024/source-check-1/MicroCFTA/SourcePruningNativeView.lean:130:38: error: Type mismatch: After simplification, term
+  builtOrdinary
+ has type
+  match (run (makeNode selected) middle).fst with
+  | Value.empty => True
+  | Value.node entry edges depth free => True
+  | x => False
+but is expected to have type
+  False
+/tmp/mcfta-pruning-native-view-20261024/source-check-1/MicroCFTA/SourcePruningNativeView.lean:138:38: error: Type mismatch: After simplification, term
+  builtOrdinary
+ has type
+  match (run (makeNode selected) middle).fst with
+  | Value.empty => True
+  | Value.node entry edges depth free => True
+  | x => False
+but is expected to have type
+  False
+/tmp/mcfta-pruning-native-view-20261024/source-check-1/MicroCFTA/SourcePruningNativeView.lean:138:38: error: Type mismatch: After simplification, term
+  builtOrdinary
+ has type
+  match (run (makeNode selected) middle).fst with
+  | Value.empty => True
+  | Value.node entry edges depth free => True
+  | x => False
+but is expected to have type
+  False
+/tmp/mcfta-pruning-native-view-20261024/source-check-1/MicroCFTA/SourcePruningNativeView.lean:138:38: error: Type mismatch: After simplification, term
+  builtOrdinary
+ has type
+  match (run (makeNode selected) middle).fst with
+  | Value.empty => True
+  | Value.node entry edges depth free => True
+  | x => False
+but is expected to have type
+  False
+/tmp/mcfta-pruning-native-view-20261024/source-check-1/MicroCFTA/SourcePruningNativeView.lean:143:2: error: unsolved goals
+case refine_1
+Guard Key : Type
+inst✝ : DecidableEq (EdgeKey Symbol Guard)
+fits : Key → Symbol → Bool
+admits : Key → Value Symbol Guard → Bool
+key : Key
+value : Value Symbol Guard
+before : State Symbol Guard
+ready : SourceEqualityRequiredCache.Ready before
+available : Available before value
+closed : value.free = []
+fuel : Nat
+rows : List (EdgeValue Symbol Guard)
+middle : State Symbol Guard
+exposed : MergedFreshOrdinaryExposure.nodeEdges fuel value before = MergedSourceExposure.Result.done rows middle
+semantic : SourceRecursiveIntersectionSemanticHeap.SemanticHeap middle
+covered : InternedRecordCoherence.Covered [] middle
+depth : InternedOpenDepthReadback.Heap middle
+growth : Grows before middle
+history : Cache.Extends before.nodes.issued middle.nodes.issued
+resident : InternedNestedProvenance.Edges middle rows
+closedRows : MergedColdReaderClosedInputs.ClosedEdges rows
+stable :
+  ∀ (extra : Nat),
+    MergedFreshOrdinaryExposure.nodeEdges (fuel + extra) value before = MergedSourceExposure.Result.done rows middle
+selected : List (EdgeValue Symbol Guard) := List.filter (keeps fits admits key) rows
+constructed : Value Symbol Guard × State Symbol Guard := run (makeNode selected) middle
+middleReady : SourceEqualityRequiredCache.Ready middle
+readKeeps : SourceEqualityRequiredCache.Keeps before middle
+selectedResident : InternedNestedProvenance.Edges middle selected
+selectedClosed : MergedColdReaderClosedInputs.ClosedEdges selected
+builtKeeps : SourceEqualityRequiredCache.Keeps middle (run (makeNode selected) middle).snd
+builtAvailable : Available (run (makeNode selected) middle).snd (run (makeNode selected) middle).fst
+builtClosed : (run (makeNode selected) middle).fst.free = []
+builtOrdinary : SourceEqualityRequiredCache.Ordinary (run (makeNode selected) middle).fst
+liveRows :
+  ∀ (edge : EdgeValue Symbol Guard),
+    edge ∈ rows → (edge.children.any fun child => child.referenceOf == InternedBinderProtocol.NodeRef.empty) = false
+constructedRows : InternedEdgeResidency.nodeEdges constructed.fst = canonicalEdges (surviving selected)
+referenceEmpty :
+  constructed.fst.referenceOf = InternedBinderProtocol.NodeRef.empty ↔
+    ∀ (edge : EdgeValue Symbol Guard), edge ∈ rows → keeps fits admits key edge = false
+emptyValue :
+  constructed.fst = Value.empty ↔ ∀ (edge : EdgeValue Symbol Guard), edge ∈ rows → keeps fits admits key edge = false
+ordinaryEmpty : (InternedEdgeResidency.nodeEdges constructed.fst).isEmpty = true ↔ constructed.fst = Value.empty
+secondRead :
+  ∀ (readFuel : Nat),
+    MergedFreshOrdinaryExposure.nodeEdges readFuel constructed.fst constructed.snd =
+      MergedSourceExposure.Result.done (InternedEdgeResidency.nodeEdges constructed.fst) constructed.snd
+⊢ MergedSourceComparison.Result.done (run (makeNode (List.filter (keeps fits admits key) rows)) middle).fst
+      (run (makeNode (List.filter (keeps fits admits key) rows)) middle).snd =
+    MergedSourceComparison.Result.done constructed.fst constructed.snd
+/tmp/mcfta-pruning-native-view-20261024/source-check-1/MicroCFTA/SourcePruningNativeView.lean:144:2: error: unsolved goals
+case refine_2
+Guard Key : Type
+inst✝ : DecidableEq (EdgeKey Symbol Guard)
+fits : Key → Symbol → Bool
+admits : Key → Value Symbol Guard → Bool
+key : Key
+value : Value Symbol Guard
+before : State Symbol Guard
+ready : SourceEqualityRequiredCache.Ready before
+available : Available before value
+closed : value.free = []
+fuel : Nat
+rows : List (EdgeValue Symbol Guard)
+middle : State Symbol Guard
+exposed : MergedFreshOrdinaryExposure.nodeEdges fuel value before = MergedSourceExposure.Result.done rows middle
+semantic : SourceRecursiveIntersectionSemanticHeap.SemanticHeap middle
+covered : InternedRecordCoherence.Covered [] middle
+depth : InternedOpenDepthReadback.Heap middle
+growth : Grows before middle
+history : Cache.Extends before.nodes.issued middle.nodes.issued
+resident : InternedNestedProvenance.Edges middle rows
+closedRows : MergedColdReaderClosedInputs.ClosedEdges rows
+stable :
+  ∀ (extra : Nat),
+    MergedFreshOrdinaryExposure.nodeEdges (fuel + extra) value before = MergedSourceExposure.Result.done rows middle
+selected : List (EdgeValue Symbol Guard) := List.filter (keeps fits admits key) rows
+constructed : Value Symbol Guard × State Symbol Guard := run (makeNode selected) middle
+middleReady : SourceEqualityRequiredCache.Ready middle
+readKeeps : SourceEqualityRequiredCache.Keeps before middle
+selectedResident : InternedNestedProvenance.Edges middle selected
+selectedClosed : MergedColdReaderClosedInputs.ClosedEdges selected
+builtKeeps : SourceEqualityRequiredCache.Keeps middle (run (makeNode selected) middle).snd
+builtAvailable : Available (run (makeNode selected) middle).snd (run (makeNode selected) middle).fst
+builtClosed : (run (makeNode selected) middle).fst.free = []
+builtOrdinary : SourceEqualityRequiredCache.Ordinary (run (makeNode selected) middle).fst
+liveRows :
+  ∀ (edge : EdgeValue Symbol Guard),
+    edge ∈ rows → (edge.children.any fun child => child.referenceOf == InternedBinderProtocol.NodeRef.empty) = false
+constructedRows : InternedEdgeResidency.nodeEdges constructed.fst = canonicalEdges (surviving selected)
+referenceEmpty :
+  constructed.fst.referenceOf = InternedBinderProtocol.NodeRef.empty ↔
+    ∀ (edge : EdgeValue Symbol Guard), edge ∈ rows → keeps fits admits key edge = false
+emptyValue :
+  constructed.fst = Value.empty ↔ ∀ (edge : EdgeValue Symbol Guard), edge ∈ rows → keeps fits admits key edge = false
+ordinaryEmpty : (InternedEdgeResidency.nodeEdges constructed.fst).isEmpty = true ↔ constructed.fst = Value.empty
+secondRead :
+  ∀ (readFuel : Nat),
+    MergedFreshOrdinaryExposure.nodeEdges readFuel constructed.fst constructed.snd =
+      MergedSourceExposure.Result.done (InternedEdgeResidency.nodeEdges constructed.fst) constructed.snd
+extra : Nat
+⊢ MergedSourceComparison.Result.done (run (makeNode (List.filter (keeps fits admits key) rows)) middle).fst
+      (run (makeNode (List.filter (keeps fits admits key) rows)) middle).snd =
+    MergedSourceComparison.Result.done constructed.fst constructed.snd

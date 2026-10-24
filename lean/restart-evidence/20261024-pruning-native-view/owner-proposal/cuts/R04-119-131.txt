@@ -1,0 +1,13 @@
+    InternedSymbol left _ _ _ _ == InternedSymbol right _ _ _ _ = left == right
+
+-- | Text order, then refinement order. Equal identities skip the comparison.
+instance Ord Symbol where
+    compare (InternedSymbol left _ leftText leftRefinement _) (InternedSymbol right _ rightText rightRefinement _)
+        | left == right = EQ
+        | otherwise = compare leftText rightText <> compare leftRefinement rightRefinement
+
+instance Hashable Symbol where
+    hashWithSalt salt (InternedSymbol _ structural _ _ _) = hashWithSalt salt structural
+
+-- | An ordinary symbol shows as its text; a refined one also shows its refinement.
+instance Show Symbol where

@@ -1,0 +1,13 @@
+theorem emptyAt_complete [DecidableEq (EdgeKey Symbol Guard)]
+    (fits : Key → Symbol → Bool) (admits : Key → Value Symbol Guard → Bool)
+    (key : Key) (value : Value Symbol Guard) (before : State Symbol Guard)
+    (ready : SourceEqualityRequiredCache.Ready before)
+    (available : Available before value) (closed : value.free = [])
+    (notMu : ∀ entry body depthShape ordinaryShape, value ≠ .mu entry body depthShape ordinaryShape) :
+    ∃ fuel rows middle result after,
+      MergedFreshOrdinaryExposure.nodeEdges fuel value before = .done rows middle ∧
+      narrowAt fits admits fuel key value before = .done result after ∧
+      SourceEqualityRequiredCache.Keeps before after ∧
+      emptyAt fits admits fuel key value before = .done (InternedEdgeResidency.nodeEdges result).isEmpty after ∧
+      ((InternedEdgeResidency.nodeEdges result).isEmpty = true ↔
+        ∀ edge ∈ rows, keeps fits admits key edge = false)

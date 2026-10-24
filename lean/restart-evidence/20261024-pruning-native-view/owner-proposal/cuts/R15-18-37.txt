@@ -1,0 +1,20 @@
+  | .node _ edges _ _ => edges ≠ []
+  | .union _ members _ _ => 2 ≤ members.length ∧ (members.map Value.referenceOf).Nodup
+  | _ => True
+
+/-- Every actual complete payload has the constructor shape required by source normalization. -/
+def NonemptyRecords (state : State Symbol Guard) : Prop :=
+  ∀ key value, state.nodeRecords key = some value → StoredNonempty value
+
+/-- Empty source tables contain no malformed constructor record. -/
+theorem empty_nonempty : NonemptyRecords (empty (Symbol := Symbol) (Guard := Guard)) := by
+  intro key value impossible
+  cases impossible
+
+/-- Actual canonical records inherit the constructor shape of their complete stored payload. -/
+theorem resident_nonempty (state : State Symbol Guard) (nonempty : NonemptyRecords state)
+    (value : Value Symbol Guard) (resident : Resident state value) : StoredNonempty value := by
+  cases value with
+  | node entry edges depth free => exact nonempty entry.key _ (resident entry rfl)
+  | union entry members depth free => exact nonempty entry.key _ (resident entry rfl)
+  | empty | reference | mu => trivial

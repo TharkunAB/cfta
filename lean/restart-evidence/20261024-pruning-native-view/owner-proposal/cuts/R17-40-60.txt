@@ -1,0 +1,21 @@
+theorem Available.resident (available : Available state value) : Resident state value := by
+  cases available with | intro _ resident _ _ => exact resident
+
+/-- Availability exposes actual issued-name provenance, including false or erased branches. -/
+theorem Available.issued (available : Available state value) : IssuedReferences state.nodes value := by
+  cases available with | intro _ _ issued _ => exact issued
+
+/-- Each retained child is available independently of whether its parent later survives normalization. -/
+theorem Available.children (available : Available state value) : ∀ child ∈ children value, Available state child := by
+  cases available with | intro _ _ _ children => exact children
+
+/-- Record growth and reservation growth preserve all recursively retained inputs. -/
+theorem Available.grows (before after : InternedConstructorTemplates.State Symbol Guard)
+    (growth : Grows before after) (issuedGrowth : Extends before.nodes.issued after.nodes.issued)
+    (available : Available before value) : Available after value := by
+  induction available with
+  | intro value resident issued children ih =>
+      refine .intro value (resident_grows before after growth value resident) ?_ ih
+      intro identity member
+      obtain ⟨key, present⟩ := issued identity member
+      exact ⟨key, issuedGrowth identity key present⟩

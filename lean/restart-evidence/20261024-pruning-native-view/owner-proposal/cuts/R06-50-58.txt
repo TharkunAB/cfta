@@ -1,0 +1,9 @@
+  | .pending key after => .failed (.pending key) after
+  | .exhausted after => .failed .exhausted after
+
+/-- Ordered child conjunction uses the source's `zipWith` stopping behavior. -/
+def children (compare : Value Symbol Guard → Value Symbol Guard → State Symbol Guard → Result Symbol Guard Bool) :
+    List (Value Symbol Guard) → List (Value Symbol Guard) → State Symbol Guard → Result Symbol Guard Bool
+  | [], _, state | _, [], state => .done true state
+  | wide :: wides, narrow :: narrows, state =>
+      (compare wide narrow state).bind fun accepted after =>

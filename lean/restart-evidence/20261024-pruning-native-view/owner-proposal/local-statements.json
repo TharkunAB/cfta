@@ -1,0 +1,238 @@
+{
+  "status": "PROPOSED_EXACT_TYPES_NO_PROOF_BODIES",
+  "owner": "narrowAt_complete",
+  "obtains": [
+    {
+      "name": "read",
+      "api": "MergedFreshOrdinaryColdTermination.read_closed value before ready.semantic ready.covered ready.depth available closed",
+      "binders": [
+        {
+          "name": "fuel",
+          "type": "Nat"
+        },
+        {
+          "name": "rows",
+          "type": "List (EdgeValue Symbol Guard)"
+        },
+        {
+          "name": "middle",
+          "type": "State Symbol Guard"
+        },
+        {
+          "name": "exposed",
+          "type": "MergedFreshOrdinaryExposure.nodeEdges fuel value before = .done rows middle"
+        },
+        {
+          "name": "semantic",
+          "type": "SourceRecursiveIntersectionSemanticHeap.SemanticHeap middle"
+        },
+        {
+          "name": "covered",
+          "type": "InternedRecordCoherence.Covered [] middle"
+        },
+        {
+          "name": "depth",
+          "type": "InternedOpenDepthReadback.Heap middle"
+        },
+        {
+          "name": "growth",
+          "type": "Grows before middle"
+        },
+        {
+          "name": "history",
+          "type": "Cache.Extends before.nodes.issued middle.nodes.issued"
+        },
+        {
+          "name": "resident",
+          "type": "InternedNestedProvenance.Edges middle rows"
+        },
+        {
+          "name": "closedRows",
+          "type": "MergedColdReaderClosedInputs.ClosedEdges rows"
+        },
+        {
+          "name": "stable",
+          "type": "∀ extra, MergedFreshOrdinaryExposure.nodeEdges (fuel + extra) value before = .done rows middle"
+        }
+      ]
+    },
+    {
+      "name": "construction",
+      "api": "SourceEqualityRequiredCache.node selected middle middleReady selectedResident selectedClosed",
+      "binders": [
+        {
+          "name": "builtKeeps",
+          "type": "SourceEqualityRequiredCache.Keeps middle constructed.2"
+        },
+        {
+          "name": "builtAvailable",
+          "type": "Available constructed.2 constructed.1"
+        },
+        {
+          "name": "builtClosed",
+          "type": "constructed.1.free = []"
+        },
+        {
+          "name": "builtOrdinary",
+          "type": "SourceEqualityRequiredCache.Ordinary constructed.1"
+        }
+      ]
+    }
+  ],
+  "lets": [
+    {
+      "name": "selected",
+      "type": "List (EdgeValue Symbol Guard)",
+      "value": "rows.filter (keeps fits admits key)",
+      "scope": "narrowAt_complete after read obtain"
+    },
+    {
+      "name": "constructed",
+      "type": "Value Symbol Guard × State Symbol Guard",
+      "value": "run (makeNode selected) middle",
+      "scope": "narrowAt_complete before construction obtain"
+    },
+    {
+      "name": "constructed",
+      "type": "Value Symbol Guard × State Symbol Guard",
+      "value": "run (makeNode (rows.filter (keeps fits admits key))) middle",
+      "scope": "narrowAt done branch only"
+    }
+  ],
+  "haves": [
+    {
+      "name": "middleReady",
+      "type": "SourceEqualityRequiredCache.Ready middle",
+      "scope": "narrowAt_complete",
+      "basis": "After read_closed obtains semantic, covered and depth."
+    },
+    {
+      "name": "readKeeps",
+      "type": "SourceEqualityRequiredCache.Keeps before middle",
+      "scope": "narrowAt_complete",
+      "basis": "Use exact read growth/history and middleReady."
+    },
+    {
+      "name": "selectedResident",
+      "type": "InternedNestedProvenance.Edges middle selected",
+      "scope": "narrowAt_complete",
+      "basis": "Filter actual resident rows."
+    },
+    {
+      "name": "selectedClosed",
+      "type": "MergedColdReaderClosedInputs.ClosedEdges selected",
+      "scope": "narrowAt_complete",
+      "basis": "Filter actual closed rows."
+    },
+    {
+      "name": "liveRows",
+      "type": "∀ edge ∈ rows, edge.children.any (fun child => child.referenceOf == .empty) = false",
+      "scope": "narrowAt_complete",
+      "basis": "Rewrite nodeEdges_live using exposed."
+    },
+    {
+      "name": "constructedRows",
+      "type": "InternedEdgeResidency.nodeEdges constructed.1 = canonicalEdges (surviving selected)",
+      "scope": "narrowAt_complete",
+      "basis": "Apply makeNode_edges in middle with its real coherent/linked facts."
+    },
+    {
+      "name": "referenceEmpty",
+      "type": "constructed.1.referenceOf = .empty ↔ ∀ edge ∈ rows, keeps fits admits key edge = false",
+      "scope": "narrowAt_complete",
+      "basis": "Apply makeNode_empty_iff and derived liveRows."
+    },
+    {
+      "name": "emptyValue",
+      "type": "constructed.1 = .empty ↔ ∀ edge ∈ rows, keeps fits admits key edge = false",
+      "scope": "narrowAt_complete",
+      "basis": "Use reference_empty on referenceEmpty."
+    },
+    {
+      "name": "ordinaryEmpty",
+      "type": "(InternedEdgeResidency.nodeEdges constructed.1).isEmpty = true ↔ constructed.1 = .empty",
+      "scope": "narrowAt_complete",
+      "basis": "Use builtOrdinary plus final Ready.normal.proper and builtAvailable.resident."
+    },
+    {
+      "name": "secondRead",
+      "type": "∀ readFuel, MergedFreshOrdinaryExposure.nodeEdges readFuel constructed.1 constructed.2 = .done (InternedEdgeResidency.nodeEdges constructed.1) constructed.2",
+      "scope": "narrowAt_complete",
+      "basis": "Cases on the existing Value constructor; builtOrdinary excludes reference/union/mu."
+    }
+  ],
+  "induction": null,
+  "private_lemmas": [],
+  "public_statement_lambda_binders": [
+    {
+      "scope": "second actual read conclusion",
+      "name": "readFuel",
+      "type": "Nat"
+    },
+    {
+      "scope": "emptiness iff right side",
+      "name": "edge",
+      "type": "EdgeValue Symbol Guard"
+    },
+    {
+      "scope": "emptiness iff right side",
+      "name": "member",
+      "type": "edge ∈ rows"
+    },
+    {
+      "scope": "larger bound stability conclusion",
+      "name": "extra",
+      "type": "Nat"
+    }
+  ],
+  "proof_lambda_binders": [
+    {
+      "scope": "selectedResident / selectedClosed",
+      "binders": {
+        "edge": "EdgeValue Symbol Guard",
+        "member": "edge ∈ selected"
+      }
+    },
+    {
+      "scope": "liveRows",
+      "binders": {
+        "edge": "EdgeValue Symbol Guard",
+        "member": "edge ∈ rows"
+      }
+    },
+    {
+      "scope": "referenceEmpty forward",
+      "binders": {
+        "allDead": "∀ edge ∈ selected, edge.children.any (fun child => child.referenceOf == .empty) = true",
+        "edge": "EdgeValue Symbol Guard",
+        "member": "edge ∈ rows"
+      }
+    },
+    {
+      "scope": "referenceEmpty reverse",
+      "binders": {
+        "noneKept": "∀ edge ∈ rows, keeps fits admits key edge = false",
+        "edge": "EdgeValue Symbol Guard",
+        "member": "edge ∈ selected"
+      }
+    },
+    {
+      "scope": "secondRead",
+      "binders": {
+        "readFuel": "Nat"
+      }
+    },
+    {
+      "scope": "final larger bound",
+      "binders": {
+        "extra": "Nat"
+      }
+    }
+  ],
+  "conditional_fact": {
+    "name": "kept",
+    "type": "keeps fits admits key edge = true",
+    "scope": "referenceEmpty forward true branch; use Bool cases if needed"
+  },
+  "attachment_policy": "Only bare local types are proposed. Root must review the complete source before a compiler command. No proof text is present."
+}

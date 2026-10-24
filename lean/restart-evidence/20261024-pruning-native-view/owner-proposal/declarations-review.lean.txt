@@ -1,0 +1,55 @@
+import MicroCFTA.SourcePruningTemplates
+import MicroCFTA.SourceEqualityRequiredCache
+import MicroCFTA.MergedFreshOrdinaryExposureLive
+import MicroCFTA.EqualityLeafProjectionPhysical
+import MicroCFTA.InternedEmptyNormalization
+
+namespace MicroCFTA.SourcePruningNativeView
+open InternedConstructorTemplates InternedProbeProvenance
+local notation "Symbol" => SourcePruningTemplates.Symbol
+attribute [local instance] FormulaExecutable.formulaDecidableEq
+variable {Guard Key : Type}
+
+def keeps (fits : Key → Symbol → Bool)
+    (admits : Key → Value Symbol Guard → Bool)
+    (key : Key) (edge : EdgeValue Symbol Guard) : Bool
+
+def narrowAt [DecidableEq (EdgeKey Symbol Guard)]
+    (fits : Key → Symbol → Bool) (admits : Key → Value Symbol Guard → Bool)
+    (fuel : Nat) (key : Key) (value : Value Symbol Guard)
+    (before : State Symbol Guard) : MergedSourceComparison.Result Symbol Guard (Value Symbol Guard)
+
+def emptyAt [DecidableEq (EdgeKey Symbol Guard)]
+    (fits : Key → Symbol → Bool) (admits : Key → Value Symbol Guard → Bool)
+    (fuel : Nat) (key : Key) (value : Value Symbol Guard)
+    (before : State Symbol Guard) : MergedSourceComparison.Result Symbol Guard Bool
+
+theorem narrowAt_complete [DecidableEq (EdgeKey Symbol Guard)]
+    (fits : Key → Symbol → Bool) (admits : Key → Value Symbol Guard → Bool)
+    (key : Key) (value : Value Symbol Guard) (before : State Symbol Guard)
+    (ready : SourceEqualityRequiredCache.Ready before)
+    (available : Available before value) (closed : value.free = []) :
+    ∃ fuel rows middle result after,
+      MergedFreshOrdinaryExposure.nodeEdges fuel value before = .done rows middle ∧
+      run (makeNode (rows.filter (keeps fits admits key))) middle = (result, after) ∧
+      narrowAt fits admits fuel key value before = .done result after ∧
+      SourceEqualityRequiredCache.Keeps before after ∧
+      Available after result ∧ result.free = [] ∧
+      SourceEqualityRequiredCache.Ordinary result ∧
+      InternedEdgeResidency.nodeEdges result =
+        canonicalEdges (surviving (rows.filter (keeps fits admits key))) ∧
+      (∀ readFuel, MergedFreshOrdinaryExposure.nodeEdges readFuel result after =
+        .done (InternedEdgeResidency.nodeEdges result) after) ∧
+      (result = .empty ↔ ∀ edge ∈ rows, keeps fits admits key edge = false) ∧
+      ((InternedEdgeResidency.nodeEdges result).isEmpty = true ↔
+        ∀ edge ∈ rows, keeps fits admits key edge = false) ∧
+      (∀ extra, narrowAt fits admits (fuel + extra) key value before = .done result after)
+
+theorem emptyAt_mu [DecidableEq (EdgeKey Symbol Guard)]
+    (fits : Key → Symbol → Bool) (admits : Key → Value Symbol Guard → Bool)
+    (fuel : Nat) (key : Key)
+    (entry : Cache.Interned InternedBinderProtocol.NodeKey)
+    (body depthShape ordinaryShape : Value Symbol Guard) (before : State Symbol Guard) :
+    emptyAt fits admits fuel key (.mu entry body depthShape ordinaryShape) before = .done false before
+
+end MicroCFTA.SourcePruningNativeView

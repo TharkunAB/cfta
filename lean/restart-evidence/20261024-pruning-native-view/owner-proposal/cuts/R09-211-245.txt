@@ -1,0 +1,35 @@
+theorem read_closed [DecidableEq (EdgeKey Symbol Guard)] (value : Value Symbol Guard)
+    (state : State Symbol Guard) (semantic : SemanticHeap state) (covered : Covered [] state)
+    (heap : InternedOpenDepthReadback.Heap state) (available : Available state value) (closed : value.free = []) :
+    ∃ fuel edges after, nodeEdges fuel value state = .done edges after ∧
+      SemanticHeap after ∧ Covered [] after ∧ InternedOpenDepthReadback.Heap after ∧
+      Grows state after ∧ Extends state.nodes.issued after.nodes.issued ∧
+      InternedNestedProvenance.Edges after edges ∧ MergedColdReaderClosedInputs.ClosedEdges edges ∧
+      ∀ extra, nodeEdges (fuel + extra) value state = .done edges after := by
+  obtain ⟨fuel, edges, after, done, afterHeap⟩ := nodeEdges_complete value state semantic covered heap available closed
+  have checked := MergedFreshOrdinaryColdEffects.nodeEdges_verified fuel value state semantic covered available closed
+  refine ⟨fuel, edges, after, done, ?_, ?_, afterHeap, ?_, ?_, checked.edges edges after done, checked.closed edges after done, ?_⟩
+  · simpa only [done, MergedSourceExposure.Result.state] using checked.semantic
+  · simpa only [done, MergedSourceExposure.Result.state] using checked.covered
+  · simpa only [done, MergedSourceExposure.Result.state] using checked.growth
+  · simpa only [done, MergedSourceExposure.Result.state] using checked.history
+  · intro extra
+    exact (MergedFreshOrdinaryColdReplay.nodeEdges_stable fuel extra value state
+      (by simp only [done, MergedSourceExposure.Finished])).trans done
+
+/-- Actual closed source construction derives every heap premise of a finite stable repaired cold read. -/
+theorem constructed_read_closed [DecidableEq (EdgeKey Symbol Guard)] (expression : InternedNestedConstruction.Syntax Symbol Guard)
+    (value : Value Symbol Guard) (state : State Symbol Guard)
+    (built : InternedFreshOrdinaryConstruction.build expression [] empty = .done value state) :
+    ∃ fuel edges after, nodeEdges fuel value state = .done edges after ∧
+      SemanticHeap after ∧ Covered [] after ∧ InternedOpenDepthReadback.Heap after ∧
+      Grows state after ∧ Extends state.nodes.issued after.nodes.issued ∧
+      InternedNestedProvenance.Edges after edges ∧ MergedColdReaderClosedInputs.ClosedEdges edges ∧
+      ∀ extra, nodeEdges (fuel + extra) value state = .done edges after := by
+  have semantic := SourceRecursiveIntersectionSemanticHeap.constructed expression value state built
+  have covered := InternedFreshOrdinaryCoverage.closed_covered expression value state built
+  have heap : InternedOpenDepthReadback.Heap state := by
+    simpa only [built, InternedNestedConstruction.Outcome.state] using InternedOpenDepthExecution.closed_heap expression
+  have available := (InternedFreshOrdinaryFacts.closed_verified expression).result value state built
+  have closed := InternedFreshOrdinarySourceFreeNames.closed_free_empty expression value state built
+  exact read_closed value state semantic covered heap available closed

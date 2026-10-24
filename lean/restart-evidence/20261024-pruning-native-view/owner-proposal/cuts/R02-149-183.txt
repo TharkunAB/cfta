@@ -1,0 +1,35 @@
+  where
+    go n@(Mu x) = x n
+    go _ = error "unfoldOuterRec: Must be called on a Mu node"
+
+{- | Outgoing alternatives after finite closure of recursive and union references.
+
+An ordinary node and a 'Mu' that unfolds to one give their edges directly.
+Other nodes take the closure through unfoldings and union operands. An open
+union must be bound before this view can expose its alternatives. An
+unresolved union reference is an error, not an empty language.
+-}
+{-# INLINEABLE nodeEdges #-}
+nodeEdges ::
+    (Hashable symbol, Typeable symbol) => Node symbol -> [Edge symbol]
+nodeEdges (InternedNode node) = internedNodeEdges node
+nodeEdges EmptyNode = []
+nodeEdges (Rec _) = []
+nodeEdges node@(InternedMu _)
+    | InternedNode unfolded <- unfoldOuterRec node = internedNodeEdges unfolded
+nodeEdges root = Set.toList $ Set.fromList $ collect IntSet.empty [root]
+  where
+    collect _ [] = []
+    collect seen (EmptyNode : rest) = collect seen rest
+    collect _ (Rec reference : _) = error $ "nodeEdges: unresolved union reference " <> show reference
+    collect seen (InternedNode node : rest) = internedNodeEdges node ++ collect seen rest
+    collect seen (node : rest)
+        | IntSet.member ident seen = collect seen rest
+        | otherwise = collect (IntSet.insert ident seen) (members node ++ rest)
+      where
+        NodeId ident = nodeIdentity node
+
+    members node@(InternedMu _) = [unfoldOuterRec node]
+    members (InternedUnion alternatives) = internedUnionMembers alternatives
+    members _ = []
+

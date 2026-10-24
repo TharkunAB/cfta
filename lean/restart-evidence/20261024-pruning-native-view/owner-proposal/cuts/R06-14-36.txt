@@ -1,0 +1,23 @@
+
+/-- A source failure remains distinct from a completed Boolean answer. -/
+inductive Fault where
+  | unresolved (name : Reference)
+  | pending (key : NodeKey)
+  | identity (value : NodeRef)
+  | exhausted
+
+/-- Each ordered comparison stage returns its actual physical cache. -/
+inductive Result (Symbol Guard Output : Type) where
+  | done (value : Output) (state : State Symbol Guard)
+  | failed (fault : Fault) (state : State Symbol Guard)
+
+/-- Both success and failure retain the last source cache. -/
+def Result.state : Result Symbol Guard Output → State Symbol Guard
+  | .done _ state | .failed _ state => state
+
+/-- Source sequencing passes only a successful value to the next effect. -/
+def Result.bind (result : Result Symbol Guard First)
+    (next : First → State Symbol Guard → Result Symbol Guard Output) : Result Symbol Guard Output :=
+  match result with
+  | .done value state => next value state
+  | .failed fault state => .failed fault state

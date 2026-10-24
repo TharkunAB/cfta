@@ -1,0 +1,6 @@
+theorem emptyAt_mu [DecidableEq (EdgeKey Symbol Guard)]
+    (fits : Key → Symbol → Bool) (admits : Key → Value Symbol Guard → Bool)
+    (fuel : Nat) (key : Key)
+    (entry : Cache.Interned InternedBinderProtocol.NodeKey)
+    (body depthShape ordinaryShape : Value Symbol Guard) (before : State Symbol Guard) :
+    emptyAt fits admits fuel key (.mu entry body depthShape ordinaryShape) before = .done false before
