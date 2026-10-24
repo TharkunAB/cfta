@@ -22,6 +22,7 @@ import Data.CFTA.Gen.Typing (TypingState)
 import Data.CFTA.Gen.UntypedExpressionLanguage (expressionAutomaton)
 import Data.CFTA.Generic (Constructor (..))
 import Data.CFTA.Index (Cardinality (..), ClassRank (..), Rank (..), Size (..))
+import Data.CFTA.Refinement.Verdict (Entailment (Entailment), Verdict (..))
 import Data.CFTA.Sized (countOfSize, sized, sizedStates, termsOfSize, unrankOfSize)
 import Data.CFTA.Sized.Prefix
 import Data.CFTA.Symbol (Symbol (Symbol))
@@ -49,6 +50,15 @@ spec = describe "Data.CFTA.Sized.Prefix" $ do
     it "counts the terms of the fixtures with equality constraints up to their bounds" $
         [completionCount $ start sizeBound equalPairs, completionCount $ start 7 equalArithmetic] `shouldBe` [4, 38]
     fixture "equal pairs" equalPairs
+    describe "walks the prefixes of automata with equality constraints as the listed completions, without a solver" $
+        forM_ [("", Nothing), (", with the product at once", Just 0), (", with the product after one filling", Just 1)] $
+            \(route, cap) -> do
+                it ("on equal pairs" <> route) $ walksAsListing (maybe deciding decidingWithCap cap) 6 equalPairs
+                it ("on equal sums" <> route) $ walksAsListing (maybe deciding decidingWithCap cap) 7 equalSums
+                it ("on typed arithmetic with equal operands and branches, with three children" <> route)
+                    $ walksAsListing (maybe deciding decidingWithCap cap) 7
+                    $ either (error . show) id
+                    $ FTA.mapSymbols (Symbol . Text.pack . show) equalArithmetic
     fixtureUpTo 7 "typed arithmetic with equal operands and branches" equalArithmetic
     it "offers only the equal child after the first child of a pair" $ do
         let completions = start sizeBound equalPairs
@@ -303,6 +313,54 @@ equalArithmetic = FTA.annotate annotation (arithAutomaton 2)
         "If" -> equal 1 2
         _ -> noConstraint
     equal left right = equalityConstraint $ ECTA.mkEqConstraints [[ECTA.path [left], ECTA.path [right]]]
+
+-- | The untyped expressions over symbols, with equal operands of a sum.
+equalSums :: FTA.FTA String Symbol Constraint
+equalSums =
+    automaton
+        "s"
+        [("s", [leaf "zero", leaf "one", FTA.Transition (sym "add") ["s", "s"] equal, node "multiply" ["s", "s"]])]
+  where
+    equal = equalityConstraint $ ECTA.mkEqConstraints [[ECTA.path [0], ECTA.path [1]]]
+
+{- | A walk on every prefix of every accepted term, and every such prefix with
+one more token: the step is 'Nothing' exactly where 'afterPrefix' of the listed
+completions is, and the walk offers the tokens of 'nextTokens'.
+-}
+walksAsListing ::
+    (Ord state) =>
+    (Entailment -> Size -> FTA.FTA state Symbol Constraint -> IO Deciding) ->
+    Integer ->
+    FTA.FTA state Symbol Constraint ->
+    IO ()
+walksAsListing walking bound graph = do
+    let eager = start bound graph
+        tokens =
+            nubOrd
+                [ (FTA.transitionSymbol transition, length $ FTA.transitionChildren transition)
+                | transition <- concat $ Map.elems $ FTA.transitionTable graph
+                ]
+        prefixes = nubOrd $ concat [inits tokens' | term <- completionTerms eager, tokens' <- [preorder term]]
+    walk <- walking unusedSolver (Size bound) graph
+    forM_ (prefixes <> [prefix <> [token] | prefix <- prefixes, token <- tokens]) $ \prefix -> do
+        walked <- walkTo walk prefix
+        let expected = afterPrefix eager prefix
+        (prefix, isJust walked) `shouldBe` (prefix, isJust expected)
+        case (walked, expected) of
+            (Just found, Just after) -> do
+                verdicts <- decidingTokens found
+                (prefix, verdicts)
+                    `shouldBe` (prefix, (if isComplete after then Yes else No, [(token, Yes) | (token, _) <- nextTokens after]))
+            _ -> pure ()
+
+-- | A walk after the tokens of a prefix, the first token first.
+walkTo :: Deciding -> [(Symbol, Int)] -> IO (Maybe Deciding)
+walkTo walk [] = pure (Just walk)
+walkTo walk (token : rest) = decidingStep walk token >>= maybe (pure Nothing) (`walkTo` rest)
+
+-- | A solver that fails the test when the walk calls it.
+unusedSolver :: Entailment
+unusedSolver = Entailment $ \_ _ -> fail "unexpected solver call"
 
 -- | A recursion in which @f(a)@ and @f(f(a))@ have two runs.
 overlapping :: FTA.FTA String Symbol Constraint

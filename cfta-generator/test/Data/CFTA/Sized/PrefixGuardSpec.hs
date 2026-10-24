@@ -40,7 +40,11 @@ spec = describe "Data.CFTA.Sized.Prefix with a solver" $ do
         it "accepts the terms that the reference denotation accepts, and rejects the terms that it rejects" $
             agreesWithDenotation bound graph
         it "walks each prefix to the results of prefixCompletionsWith, alone and with a shared memory" $
-            walksAsEager bound graph
+            walksAsEager deciding bound graph
+        it "walks each prefix so, with the product of an equality constraint at once" $
+            walksAsEager (decidingWithCap 0) bound graph
+        it "walks each prefix so, with the product of an equality constraint after one filling" $
+            walksAsEager (decidingWithCap 1) bound graph
     it "offers, leaves undecided, and rejects one token each after a pair node" $ do
         completions <- prefixCompletionsWith partialEntailment 3 guardedPairs
         let after = afterToken completions (sym "g", 2)
@@ -193,12 +197,16 @@ exactly where 'afterPrefix' does, its tokens are those of 'nextTokens' and
 'undecidedTokens', and its decided completions are those of
 'prefixCompletionsWith' after the prefix.
 -}
-walksAsEager :: Integer -> FTA.FTA String Symbol Constraint -> IO ()
-walksAsEager bound graph = do
+walksAsEager ::
+    (Entailment -> Size -> FTA.FTA String Symbol Constraint -> IO Deciding) ->
+    Integer ->
+    FTA.FTA String Symbol Constraint ->
+    IO ()
+walksAsEager walking bound graph = do
     eager <- prefixCompletionsWith partialEntailment (Size bound) graph
-    shared <- deciding partialEntailment (Size bound) graph
+    shared <- walking partialEntailment (Size bound) graph
     forM_ (nubOrd $ concatMap (inits . preorder) $ candidates bound graph) $ \prefix -> do
-        fresh <- deciding partialEntailment (Size bound) graph
+        fresh <- walking partialEntailment (Size bound) graph
         forM_ [("fresh", fresh), ("shared", shared)] $ \(name, start) -> do
             walked <- walkTo start prefix
             let expected = afterPrefix eager prefix

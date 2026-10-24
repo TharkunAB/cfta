@@ -83,6 +83,17 @@ run. 'decided' gives the 'Completions' of the current prefix, the same as
 'prefixCompletionsWith' and 'afterPrefix' give. A query for counts needs
 every candidate decided, so it gains nothing from the walk.
 
+With equality constraints, a query first tries the fillings of the pending
+states, up to 'fillingsBeforeProduct' of them. Then it takes its candidates
+from an automaton of the terms of each exact size up to the bound, restricted
+to the prefix, whose enumerator ("Data.CFTA.Enumeration") solves the
+equalities by unification; the walk builds it once, and its later queries use
+it at once. A token is offered at the first completion that either route
+gives, so the tokens are exact without a list of the terms up to the bound. The counts
+are not: an equality class that joins two pending nodes makes the count of
+their fillings more than a product of their counts, so 'decided' and the
+counts still list the candidates.
+
 'withWeights' gives each symbol a weight, a non-negative 'Rational'. The weight
 of a term is the product of the weights of the symbols of its nodes.
 'nextTokenWeights' gives the total weight of the completions after each token,
@@ -127,6 +138,8 @@ module Data.CFTA.Sized.Prefix (
     -- * Verdicts on demand
     Deciding,
     deciding,
+    decidingWithCap,
+    fillingsBeforeProduct,
     decidingPrefix,
     decidingStep,
     decidingTokens,
@@ -136,7 +149,7 @@ module Data.CFTA.Sized.Prefix (
 import Control.Monad (foldM, void)
 import Data.Containers.ListUtils (nubOrd)
 import Data.Either (fromRight)
-import Data.IORef (modifyIORef', newIORef, readIORef)
+import Data.IORef (IORef, modifyIORef', newIORef, readIORef, writeIORef)
 import qualified Data.IntMap.Lazy as IntMap
 import Data.List (genericDrop, genericIndex, genericLength, genericReplicate, genericTake)
 import qualified Data.Map.Strict as Map
@@ -147,14 +160,17 @@ import qualified Test.QuickCheck as QC
 
 import qualified Data.CFTA as FTA
 import Data.CFTA.Constraint (Constraint, constraintPaths, equalities, equalityConstraint, noConstraint, residual)
+import qualified Data.CFTA.Enumeration as Enumeration
+import Data.CFTA.Equality.Constraint (EqConstraints (EqConstraints), unPathEClass)
 import qualified Data.CFTA.Gen.Internal.Table as Ordinary
 import Data.CFTA.Index (Cardinality (..), ClassRank (..), Rank (..), Size (..))
+import Data.CFTA.Interned (Node (Node), edgeChildren, fromFTA, nodeEdges, setChildren)
 import Data.CFTA.Path (ChildIndex (..), Path, getPath, path, unPath)
 import Data.CFTA.Refinement.Evaluate (evaluateConstraint)
 import Data.CFTA.Refinement.Verdict (Entailment, Verdict (..), andVerdicts, orVerdicts)
 import Data.CFTA.Sized (Sized, countOfSize, sizedStates, termsOfSize, unrankOfSize)
 import Data.CFTA.Symbol (Symbol)
-import Data.CFTA.Template (Template (..), preorderPrefix)
+import Data.CFTA.Template (Template (..), preorderPrefix, restrict)
 import Data.CFTA.Term (Term)
 import qualified Data.CFTA.Term as Term
 
@@ -290,8 +306,18 @@ data Deciding = Deciding
     , decidingRuns :: Set.Set Run
     -- ^ The runs on the prefix that can have a candidate within the budget.
     , decidingMachine :: Machine
-    -- ^ The automaton, and the memories of the verdicts, for the whole walk.
+    , decidingCap :: Int
+    -- ^ The number of fillings that a query tries before the product, with equality constraints.
+    , decidingFellBack :: IORef Bool
+    -- ^ Whether a query of the walk has used the product: then the later queries use it at once.
+    , decidingProduct :: Maybe (Node Symbol)
+    {- ^ With equality constraints, the automaton of the terms of each exact
+    size up to the bound, restricted to the prefix: its enumeration gives the
+    completions, with the equalities solved by unification.
+    -}
     }
+
+-- \^ The automaton, and the memories of the verdicts, for the whole walk.
 
 {- | A run of the automaton on the nodes of a prefix: the stack of pending
 states; the constraints of the prefix nodes that the prefix does not decide,
@@ -322,7 +348,31 @@ data Machine = Machine
 decided yet.
 -}
 deciding :: (Ord state) => Entailment -> Size -> FTA.FTA state Symbol Constraint -> IO Deciding
-deciding entailment (Size bound) automaton = do
+deciding = decidingWithCap fillingsBeforeProduct
+
+{- | The number of fillings of the pending states that a query of a walk tries
+for a token, with equality constraints, before it builds the product by size
+('decidingWithCap'). The fillings ignore the equality classes that join two
+pending nodes, so a query can need very many of them; the product solves
+those classes by unification, but its construction costs more than a few
+fillings. After the first query that uses the product, the later queries of
+the walk use it at once.
+
+On the probe of the walk, the queries of the typed arithmetic with three
+children needed at most 160 fillings up to 21 nodes, and a few queries of the
+sums and the pairs needed thousands. So the queries of the arithmetic stay in
+the fillings, and those of the sums and the pairs pay 256 fillings once.
+-}
+fillingsBeforeProduct :: Int
+fillingsBeforeProduct = 256
+
+{- | 'deciding' with the number of fillings that a query tries before the
+product by size. With 0, every query of an automaton with equality
+constraints enumerates the product. Both routes give the same verdicts.
+-}
+decidingWithCap :: (Ord state) => Int -> Entailment -> Size -> FTA.FTA state Symbol Constraint -> IO Deciding
+decidingWithCap cap entailment (Size bound) automaton = do
+    fellBack <- newIORef False
     (stateVerdict, constraintVerdict) <- memoryOfVerdicts entailment numberedRows
     let machine =
             Machine
@@ -353,6 +403,12 @@ deciding entailment (Size bound) automaton = do
             , decidingPending = [path []]
             , decidingRuns = Set.fromList $ filter (runFits machine bound) [([machineInitial machine], [], False)]
             , decidingMachine = machine
+            , decidingCap = cap
+            , decidingFellBack = fellBack
+            , decidingProduct =
+                if any (any (hasEqualities . FTA.transitionConstraint)) (FTA.transitionTable $ FTA.trim automaton)
+                    then Just $ fromFTA $ FTA.trim $ bySize bound automaton
+                    else Nothing
             }
   where
     rows = FTA.transitionTable automaton
@@ -390,7 +446,7 @@ first, until one is not rejected.
 -}
 decidingStep :: Deciding -> (Symbol, Int) -> IO (Maybe Deciding)
 decidingStep walk token = do
-    (runs, verdicts) <- afterRuns walk token
+    (runs, verdicts, restricted) <- afterRuns walk token
     found <- anyIO (fmap (/= No)) $ verdicts $ Set.toList runs
     pure $
         if found
@@ -402,6 +458,7 @@ decidingStep walk token = do
                         , decidingCandidates = [(term, rest) | (term, next : rest) <- decidingCandidates walk, next == token]
                         , decidingPending = pendingAfter walk token
                         , decidingRuns = runs
+                        , decidingProduct = restricted
                         }
             else Nothing
 
@@ -436,7 +493,7 @@ decidingTokens walk = do
                 , token <- Map.keys $ IntMap.findWithDefault Map.empty top $ machineTokens $ decidingMachine walk
                 ]
     tokenVerdict token = do
-        (after, verdicts) <- afterRuns walk token
+        (after, verdicts, _) <- afterRuns walk token
         best <- firstAccepted No $ verdicts [run | run@(_, _, False) <- Set.toList after]
         case best of
             No -> do
@@ -453,12 +510,22 @@ decidingTokens walk = do
             No -> firstAccepted found rest
 
 {- | The runs after a token, with the constraints that the prefix and the token
-decide, and the verdicts of the candidates of given runs, smallest first.
+decide; the verdicts of the candidates of given runs, smallest first; and,
+with equality constraints, the product restricted to the prefix and the token.
+
+Without equality constraints, the candidates of a run are the fillings of its
+pending states. With them, a filling can break an equality class that joins
+two pending nodes, and the search would try fillings until one holds. So
+after the cap of fillings, the candidates are the terms of the product,
+which the enumerator builds with the equalities solved: the first one is a
+completion, and none means that there is none.
 -}
-afterRuns :: Deciding -> (Symbol, Int) -> IO (Set.Set Run, [Run] -> [IO Verdict])
+afterRuns :: Deciding -> (Symbol, Int) -> IO (Set.Set Run, [Run] -> [IO Verdict], Maybe (Node Symbol))
 afterRuns walk token = case decidingPending walk of
-    [] -> pure (Set.empty, const [])
+    [] -> pure (Set.empty, const [], Nothing)
     here : _ -> do
+        fellBack <- readIORef $ decidingFellBack walk
+        let cap = if fellBack then 0 else decidingCap walk
         found <-
             traverse
                 decideRun
@@ -467,8 +534,11 @@ afterRuns walk token = case decidingPending walk of
                 , (children, index) <- Map.findWithDefault [] token $ IntMap.findWithDefault Map.empty top $ machineTokens machine
                 , runFits machine budget (children <> rest, [], False)
                 ]
-        pure (Set.fromList (catMaybes found), verdictsOf)
+        pure (Set.fromList (catMaybes found), verdictsOf cap, restricted)
   where
+    restricted = case decidingPending walk of
+        here : _ -> restrictAt (unPath here) (TemplateNode (fst token) (replicate (snd token) Hole)) <$> decidingProduct walk
+        [] -> Nothing
     machine = decidingMachine walk
     budget = decidingBudget walk - 1
     prefix = decidingPrefix walk <> [token]
@@ -482,6 +552,7 @@ afterRuns walk token = case decidingPending walk of
       where
         go open flag [] = pure $ Just (stack, reverse open, flag)
         go open flag (obligation@(node, state, index) : rest)
+            | equalitiesFail template node (constraintAt state index) = pure Nothing
             | decidedBy template node (constraintAt state index) = do
                 verdict <- case getPath node placeholder of
                     Just subterm -> machineConstraint machine state index subterm
@@ -491,8 +562,22 @@ afterRuns walk token = case decidingPending walk of
                     Yes -> go open flag rest
                     Unknown -> go open True rest
             | otherwise = go (obligation : open) flag rest
-    -- The verdicts of the candidates of the runs, smallest first.
-    verdictsOf runs =
+    -- The verdicts of the candidates of the runs: the fillings, smallest
+    -- first; with equality constraints, after the cap, the terms of the product.
+    verdictsOf _ [] = []
+    verdictsOf cap runs = case restricted of
+        Just node -> capped cap node (fillingVerdicts runs)
+        Nothing -> fillingVerdicts runs
+    -- The first fillings up to the cap, then the terms of the product if a
+    -- filling remains. The list is lazy, so a query that ends in the
+    -- fillings builds no product. The product notes that the walk uses it,
+    -- with a verdict 'No' that changes no answer.
+    capped _ _ [] = []
+    capped 0 node _ =
+        (writeIORef (decidingFellBack walk) True >> pure No)
+            : map (machineState machine $ machineInitial machine) (Enumeration.terms node)
+    capped left node (verdict : rest) = verdict : capped (left - 1) node rest
+    fillingVerdicts runs =
         [ candidateVerdict run terms
         | size <- [0 .. budget]
         , run@(stack, _, _) <- runs
@@ -506,6 +591,105 @@ afterRuns walk token = case decidingPending walk of
                    , (node, state, index) <- open
                    ]
                 <> zipWith (machineState machine) stack terms
+
+-- | Whether a constraint has an equality class.
+hasEqualities :: Constraint -> Bool
+hasEqualities constraint = case equalities constraint of
+    EqConstraints [] -> False
+    _ -> True
+
+{- | The automaton of the terms with at most the given number of nodes: a state
+for each state and exact size, and a root for every size. A transition has a
+copy for each split of its size over its children. Children that one class of
+its equality constraints names directly have one size, because equal terms
+have equal sizes. The constraints keep their paths. The automaton is acyclic,
+so its enumeration ends, and it has no term above the bound.
+
+A transition with @k@ children has a copy for each of the about
+@size^(k-1)@ splits of each size, so the automaton grows with the arities.
+-}
+bySize ::
+    (Ord state, Ord symbol) =>
+    Integer -> FTA.FTA state symbol Constraint -> FTA.FTA (Maybe (state, Integer)) symbol Constraint
+bySize bound automaton =
+    fromRight (error "bySize: the states of a valid automaton give a valid automaton")
+        $ FTA.mkFTA Nothing
+        $ (Nothing, root)
+            : explore Set.empty [child | transition <- root, Just child <- FTA.transitionChildren transition] []
+  where
+    initial = FTA.initialState automaton
+    least = Map.map (\(Size size) -> size) $ Ordinary.minimumSizes $ FTA.transitionTable automaton
+    root = concat [rowOf initial size | size <- [1 .. bound]]
+    -- The rows of the pairs of a state and a size that the root reaches.
+    explore _ [] rows = rows
+    explore seen (pair@(state, size) : pending) rows
+        | Set.member pair seen = explore seen pending rows
+        | otherwise =
+            let row = rowOf state size
+             in explore
+                    (Set.insert pair seen)
+                    ([child | transition <- row, Just child <- FTA.transitionChildren transition] <> pending)
+                    ((Just pair, row) : rows)
+    rowOf state size =
+        [ transition
+            { FTA.transitionChildren = zipWith (curry Just) (FTA.transitionChildren transition) parts
+            }
+        | transition <- FTA.transitionsFrom automaton state
+        , parts <- splits (FTA.transitionChildren transition) (size - 1)
+        , equalSizes (FTA.transitionConstraint transition) parts
+        ]
+    -- The sizes of the children, each at least the least size of its state.
+    splits [] total = [[] | total == 0]
+    splits (child : rest) total = case (Map.lookup child least, traverse (`Map.lookup` least) rest) of
+        (Just smallest, Just others) ->
+            [first : sizes | first <- [smallest .. total - sum others], sizes <- splits rest (total - first)]
+        _ -> []
+    equalSizes constraint parts = case equalities constraint of
+        EqConstraints classes ->
+            and
+                [ all (== first) rest
+                | equal <- classes
+                , first : rest <- [[parts !! child | [ChildIndex child] <- map unPath $ Set.toList $ unPathEClass equal]]
+                ]
+        _ -> True
+
+-- | A node with the node at a path below its root restricted to a template.
+restrictAt :: [ChildIndex] -> Template Symbol -> Node Symbol -> Node Symbol
+restrictAt [] template node = restrict template node
+restrictAt (ChildIndex index : rest) template node =
+    Node
+        [ setChildren
+            edge
+            [ if position == index then restrictAt rest template child else child
+            | (position, child) <- zip [0 ..] $ edgeChildren edge
+            ]
+        | edge <- nodeEdges node
+        ]
+
+{- | Whether the prefix decides that the equality constraints of the node at a
+path fail for every completion: a path leaves the term at a node that the
+prefix fixes, or two paths of a class reach nodes that the prefix fixes with
+different symbols or numbers of children at the same place.
+-}
+equalitiesFail :: Template Symbol -> Path -> Constraint -> Bool
+equalitiesFail template node constraint = case equalities constraint of
+    EqConstraints classes -> any (classFails . map (at template . (unPath node <>) . unPath) . Set.toList . unPathEClass) classes
+    _ -> True
+  where
+    classFails found =
+        Nothing `elem` found || or [conflict left right | (left, rights) <- pairs (catMaybes found), right <- rights]
+    pairs (first : rest) = (first, rest) : pairs rest
+    pairs [] = []
+    -- The part of the prefix at a path: 'Nothing' when the path leaves the
+    -- term at a node that the prefix fixes, and 'Just Hole' below a pending node.
+    at part [] = Just part
+    at (TemplateNode _ children) (ChildIndex child : rest) = case drop child children of
+        next : _ | child >= 0 -> at next rest
+        _ -> Nothing
+    at _ _ = Just Hole
+    conflict (TemplateNode left lefts) (TemplateNode right rights) =
+        left /= right || length lefts /= length rights || or (zipWith conflict lefts rights)
+    conflict _ _ = False
 
 -- | Whether the prefix fixes every path that a constraint of the node at a path reads.
 decidedBy :: Template Symbol -> Path -> Constraint -> Bool
