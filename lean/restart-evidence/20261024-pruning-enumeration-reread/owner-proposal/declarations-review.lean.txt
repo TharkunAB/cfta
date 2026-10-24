@@ -1,0 +1,22 @@
+import MicroCFTA.EnumerationObservations
+
+namespace MicroCFTA.SourcePruningEnumerationReread
+open EnumerationState EnumerationCorrectness EnumerationCompressionFrame EnumerationObservations
+variable {Symbol Guard : Type}
+
+theorem pending_reread_complete (readFuel uv oldHandle : Nat) (scs : List EnumerationState.Suspended)
+    (before readAfter entry : EnumerationState.State Symbol Guard)
+    (total : UnionFind.Total before.representatives)
+    (observed : Success (getValue readFuel uv) before (.unenumerated (some oldHandle) scs) readAfter)
+    (entered : Frame readAfter entry) :
+    ∃ (root size rereadFuel : Nat) (after : EnumerationState.State Symbol Guard),
+      Frame before readAfter ∧ UnionFind.Reaches before.representatives uv root size ∧
+      Success (representative rereadFuel uv) entry root after ∧
+      Frame entry after ∧ Frame before after ∧
+      after.values[root]? = some (.unenumerated (some oldHandle) scs) ∧ root < after.values.length
+
+theorem checkRepeated_false_frame (graph : EnumerationState.Graph Symbol Guard)
+    (fuel uv node : Nat) (scs : List EnumerationState.Suspended)
+    (before after : EnumerationState.State Symbol Guard) (total : UnionFind.Total before.representatives)
+    (observed : Success (EnumerationDriver.checkRepeated graph fuel uv node scs) before false after) :
+    Frame before after

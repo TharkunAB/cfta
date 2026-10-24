@@ -1,0 +1,205 @@
+{
+  "status": "EXACT_ALL_SCOPED_TYPES_NO_BODIES",
+  "generic_symbol_guard": true,
+  "new_instances": [],
+  "private_helpers": [],
+  "new_definitions": [],
+  "induction": null,
+  "recursive_calls": [],
+  "typed_shows": [],
+  "pending_reread_complete": {
+    "haves": [
+      {
+        "name": "firstRepresentative",
+        "type": "Success (representative readFuel uv) before found.representative readAfter",
+        "fragment": "local-firstRepresentative.lean.txt"
+      },
+      {
+        "name": "firstFrame",
+        "type": "Frame before readAfter",
+        "fragment": "local-firstFrame.lean.txt"
+      },
+      {
+        "name": "rereadFrame",
+        "type": "Frame entry after",
+        "fragment": "local-rereadFrame.lean.txt"
+      },
+      {
+        "name": "stored",
+        "type": "after.values[found.representative]? = some (.unenumerated (some oldHandle) scs)",
+        "fragment": "local-stored.lean.txt"
+      }
+    ],
+    "obtains": [
+      {
+        "api": "(EnumerationCorrectness.getValue_success readFuel uv before readAfter (.unenumerated (some oldHandle) scs)).mp observed",
+        "binders": [
+          {
+            "name": "found",
+            "type": "UnionFind.Result"
+          },
+          {
+            "name": "lookup",
+            "type": "UnionFind.findRoot readFuel before.representatives uv = some found"
+          },
+          {
+            "name": "initialStored",
+            "type": "before.values[found.representative]? = some (.unenumerated (some oldHandle) scs)"
+          },
+          {
+            "name": "readState",
+            "type": "readAfter = {before with representatives := found.forest}"
+          }
+        ]
+      },
+      {
+        "api": "EnumerationObservations.representative_transport readFuel uv before entry readAfter found.representative (firstFrame.trans entered) total firstRepresentative",
+        "binders": [
+          {
+            "name": "rereadFuel",
+            "type": "Nat"
+          },
+          {
+            "name": "after",
+            "type": "EnumerationState.State Symbol Guard"
+          },
+          {
+            "name": "second",
+            "type": "Success (representative rereadFuel uv) entry found.representative after"
+          },
+          {
+            "name": "finalFrame",
+            "type": "Frame readAfter after"
+          }
+        ]
+      }
+    ],
+    "public_existential_witnesses": [
+      {
+        "name": "root",
+        "value": "found.representative",
+        "type": "Nat"
+      },
+      {
+        "name": "size",
+        "value": "found.size",
+        "type": "Nat"
+      },
+      {
+        "name": "rereadFuel",
+        "value": "Actual representative_transport output",
+        "type": "Nat"
+      },
+      {
+        "name": "after",
+        "value": "Actual representative_transport output, not a replacement input state",
+        "type": "EnumerationState.State Symbol Guard"
+      }
+    ],
+    "derived_premises_used_inline": [
+      {
+        "type": "UnionFind.Total entry.representatives",
+        "term": "(firstFrame.trans entered).total total"
+      },
+      {
+        "type": "Frame before after",
+        "term": "firstFrame.trans finalFrame"
+      },
+      {
+        "type": "UnionFind.Reaches before.representatives uv found.representative found.size",
+        "term": "(UnionFind.findRoot_correct readFuel before.representatives uv found lookup).1"
+      },
+      {
+        "type": "found.representative < after.values.length",
+        "term": "(List.getElem?_eq_some_iff.mp stored).elim (fun bound _ => bound)"
+      }
+    ],
+    "intro_binders": [],
+    "lets": [],
+    "cases": [],
+    "case_equations": [],
+    "by_cases": [],
+    "inline_lambda_binders": [
+      {
+        "activation": "The successful list lookup existential is eliminated only to derive the output list bound.",
+        "term": "(List.getElem?_eq_some_iff.mp stored).elim (fun bound _ => bound)",
+        "binders": [
+          {
+            "name": "bound",
+            "type": "found.representative < after.values.length"
+          },
+          {
+            "name": "_",
+            "type": "after.values[found.representative]'bound = .unenumerated (some oldHandle) scs"
+          }
+        ]
+      }
+    ]
+  },
+  "checkRepeated_false_frame": {
+    "haves": [
+      {
+        "name": "same",
+        "type": "after = resolved",
+        "fragment": "local-same.lean.txt",
+        "activation": "Recursive view and seen negative; derive from actual continued Success."
+      }
+    ],
+    "obtains": [
+      {
+        "activation": "Recursive graph view only, after exposing the actual representative prefix",
+        "api": "EnumerationCorrectness.success_bind on the representative prefix of observed",
+        "binders": [
+          {
+            "name": "root",
+            "type": "Nat"
+          },
+          {
+            "name": "resolved",
+            "type": "EnumerationState.State Symbol Guard"
+          },
+          {
+            "name": "resolution",
+            "type": "Success (representative fuel uv) before root resolved"
+          },
+          {
+            "name": "continued",
+            "type": "Success (fun current : EnumerationState.State Symbol Guard => if recursionKey node scs \u2208 current.recursionAncestry root then [Except.ok (true, {current with values := current.values.set root (.unenumerated (some node) [])})] else [Except.ok (false, current)]) resolved false after",
+            "normalization": "Exact type after reducing the existing deterministic get/set/pure continuation; no additional observer or state is run."
+          }
+        ]
+      }
+    ],
+    "intro_binders": [],
+    "lets": [],
+    "typed_shows": [],
+    "induction": null,
+    "by_cases": [
+      {
+        "name": "seen",
+        "fragment": "seen-condition.lean.txt",
+        "positive_type": "recursionKey node scs \u2208 resolved.recursionAncestry root",
+        "negative_type": "\u00ac (recursionKey node scs \u2208 resolved.recursionAncestry root)"
+      }
+    ],
+    "true_branch_normal_form": {
+      "type": "Success (fun current : EnumerationState.State Symbol Guard => [Except.ok (true, {current with values := current.values.set root (.unenumerated (some node) [])})]) resolved false after",
+      "reason": "Its returned Bool is true, so it cannot satisfy the observed false Success. No post-write frame is claimed."
+    },
+    "false_branch_normal_form": {
+      "type": "Success (fun current : EnumerationState.State Symbol Guard => [Except.ok (false, current)]) resolved false after",
+      "derived_equality": "after = resolved"
+    },
+    "nonrecursive_normal_form": {
+      "type": "Success (fun current : EnumerationState.State Symbol Guard => [Except.ok (false, current)]) before false after",
+      "frame_api": "EnumerationCompressionFrame.pure_frame with its expected existing pure action; no new List Monad instance or fresh pure expression is required."
+    },
+    "normalized_type_binders": [
+      {
+        "name": "current",
+        "type": "EnumerationState.State Symbol Guard",
+        "scope": "The recorded raw continuation normal forms only. This is the existing source continuation argument, not an additional proof/body lambda or action."
+      }
+    ]
+  }
+}

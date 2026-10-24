@@ -1,0 +1,12 @@
+def nodeEdges [DecidableEq (EdgeKey Symbol Guard)] (fuel : Nat) (value : Value Symbol Guard)
+    (state : State Symbol Guard) : Result Symbol Guard :=
+  match value with
+  | .empty | .reference _ => .done [] state
+  | .node _ edges _ _ => .done edges state
+  | value@(.mu ..) =>
+      match InternedFreshOrdinaryStoredSubstitution.unfold value state with
+      | .done (.node _ edges _ _) after => .done edges after
+      | .done _ after => (collect fuel after [] [value]).canonical
+      | .pending key after => .pending key after
+  | value@(.union ..) => (collect fuel state [] [value]).canonical
+

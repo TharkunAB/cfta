@@ -1,0 +1,6 @@
+import MicroCFTA.SourcePruningEnumerationReread
+
+#check @MicroCFTA.SourcePruningEnumerationReread.pending_reread_complete
+#print axioms MicroCFTA.SourcePruningEnumerationReread.pending_reread_complete
+#check @MicroCFTA.SourcePruningEnumerationReread.checkRepeated_false_frame
+#print axioms MicroCFTA.SourcePruningEnumerationReread.checkRepeated_false_frame

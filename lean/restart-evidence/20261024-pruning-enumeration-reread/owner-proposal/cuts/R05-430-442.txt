@@ -1,0 +1,13 @@
+/-- The source repeated-recursion branch clears only the selected pending constraints. -/
+def checkRepeated (graph : Graph Symbol Guard) (fuel uv node : Nat) (scs : List Suspended) :
+    EnumerateM Symbol Guard Bool := do
+  match graph.node node with
+  | .recursive _ =>
+      let root ← representative fuel uv
+      let current : State Symbol Guard ← get
+      if recursionKey node scs ∈ current.recursionAncestry root then
+        setValue root (.unenumerated (some node) [])
+        pure true
+      else pure false
+  | _ => pure false
+

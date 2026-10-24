@@ -1,0 +1,14 @@
+/-- One successful representative read gives an actual finite read in the related state. -/
+theorem representative_transport (leftFuel uv : Nat)
+    (left right leftAfter : State Symbol Guard) (root : Nat)
+    (frame : Frame left right) (total : UnionFind.Total left.representatives)
+    (leftRead : Success (representative leftFuel uv) left root leftAfter) :
+    ∃ rightFuel rightAfter,
+      Success (representative rightFuel uv) right root rightAfter ∧ Frame leftAfter rightAfter := by
+  obtain ⟨rightFuel, rightRoot, rightAfter, rightRead, _⟩ :=
+    EnumerationExecution.representative_terminates right (frame.total total) uv
+  obtain ⟨same, finalFrame⟩ :=
+    representative_agrees leftFuel rightFuel uv left right leftAfter rightAfter root rightRoot
+      frame total leftRead rightRead
+  exact ⟨rightFuel, rightAfter, same.symm ▸ rightRead, finalFrame⟩
+

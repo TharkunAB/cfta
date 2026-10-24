@@ -1,0 +1,19 @@
+theorem representative_agrees (leftFuel rightFuel uv : Nat)
+    (left right leftAfter rightAfter : State Symbol Guard) (leftRoot rightRoot : Nat)
+    (frame : Frame left right) (total : UnionFind.Total left.representatives)
+    (leftRead : Success (representative leftFuel uv) left leftRoot leftAfter)
+    (rightRead : Success (representative rightFuel uv) right rightRoot rightAfter) :
+    leftRoot = rightRoot ∧ Frame leftAfter rightAfter := by
+  obtain ⟨leftFound, leftLookup, leftRootEq, _⟩ :=
+    (representative_success leftFuel uv left leftAfter leftRoot).mp leftRead
+  obtain ⟨rightFound, rightLookup, rightRootEq, _⟩ :=
+    (representative_success rightFuel uv right rightAfter rightRoot).mp rightRead
+  have leftPath := (UnionFind.findRoot_correct leftFuel left.representatives uv leftFound leftLookup).1
+  have rightPath := (UnionFind.findRoot_correct rightFuel right.representatives uv rightFound rightLookup).1
+  have same := (UnionFind.reaches_unique leftPath
+    ((frame.reaches uv rightFound.representative rightFound.size).mp rightPath)).1
+  have leftFrame := representative_frame leftFuel uv leftRoot left leftAfter total leftRead
+  have rightFrame := representative_frame rightFuel uv rightRoot right rightAfter (frame.total total) rightRead
+  exact ⟨leftRootEq.trans (same.trans rightRootEq.symm), leftFrame.symm.trans (frame.trans rightFrame)⟩
+
+/-- Independent successful slot reads give the same complete value and a final frame. -/

@@ -1,0 +1,38 @@
+{"command": ["/home/tritlo/.elan/toolchains/leanprover--lean4---v4.34.1/bin/lean", "-o", "/home/tritlo/Code/mcfta/lean/.lake/build/lib/lean/MicroCFTA/SourcePruningEnumerationReread.olean", "-R", "/tmp/mcfta-pruning-enumeration-reread-20261024/source-check-1", "-DwarningAsError=true", "-Dlinter.all=true", "/tmp/mcfta-pruning-enumeration-reread-20261024/source-check-1/MicroCFTA/SourcePruningEnumerationReread.lean"], "exit_code": 1, "raw_bytes": 1534, "raw_sha256": "aac64dc790da397f339d3101619e0960aa0cbd04e6d5e1ac6949d08d394d9947", "source_sha256": "56595cc35f847a1f1e8e66c43f03af38c3b220a12e3925ec4c6e196ab86231ee"}
+/tmp/mcfta-pruning-enumeration-reread-20261024/source-check-1/MicroCFTA/SourcePruningEnumerationReread.lean:52:6: error: unsolved goals
+case pos
+Symbol Guard : Type
+graph : Graph Symbol Guard
+fuel uv node : Nat
+scs : List Suspended
+before after : State Symbol Guard
+total : UnionFind.Total before.representatives
+a✝ : Nat
+view : graph.node node = Node.recursive a✝
+observed :
+  Success
+    (do
+      let root ← representative fuel uv
+      let current ← get
+      if recursionKey node scs ∈ current.recursionAncestry root then do
+          setValue root (UVarValue.unenumerated (some node) [])
+          pure true
+        else pure false)
+    before false after
+root : Nat
+resolved : State Symbol Guard
+resolution : Success (representative fuel uv) before root resolved
+seen : recursionKey node scs ∈ resolved.recursionAncestry root
+continued :
+  Except.ok (false, after) ∈
+    StateT.pure true
+      { counter := resolved.counter, representatives := resolved.representatives,
+        values := resolved.values.set root (UVarValue.unenumerated (some node) []), obligations := resolved.obligations,
+        recursionAncestry := resolved.recursionAncestry, expansionAncestry := resolved.expansionAncestry }
+⊢ Frame before after
+/tmp/mcfta-pruning-enumeration-reread-20261024/source-check-1/MicroCFTA/SourcePruningEnumerationReread.lean:56:10: error: Type mismatch: After simplification, term
+  continued
+ has type
+  Except.ok (false, after) ∈ StateT.pure false resolved
+but is expected to have type
+  after = resolved

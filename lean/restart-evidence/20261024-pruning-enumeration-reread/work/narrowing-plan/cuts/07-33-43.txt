@@ -1,0 +1,11 @@
+def narrowAt [DecidableEq (EdgeKey Symbol Guard)]
+    (fits : Key → Symbol → Bool) (admits : Key → Value Symbol Guard → Bool)
+    (fuel : Nat) (key : Key) (value : Value Symbol Guard)
+    (before : State Symbol Guard) : MergedSourceComparison.Result Symbol Guard (Value Symbol Guard) :=
+  match MergedFreshOrdinaryExposure.nodeEdges fuel value before with
+  | .done rows middle =>
+      let constructed := run (makeNode (rows.filter (keeps fits admits key))) middle
+      .done constructed.1 constructed.2
+  | .unresolved name after => .failed (.unresolved name) after
+  | .pending pendingKey after => .failed (.pending pendingKey) after
+  | .exhausted after => .failed .exhausted after

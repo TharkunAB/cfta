@@ -1,0 +1,40 @@
+structure Frame (before after : State Symbol Guard) : Prop where
+  /-- Compression keeps the allocation counter. -/
+  counter : after.counter = before.counter
+  /-- Compression keeps every stored slot. -/
+  values : after.values = before.values
+  /-- Compression keeps every residual obligation. -/
+  obligations : after.obligations = before.obligations
+  /-- Compression keeps the complete per-variable ancestry function. -/
+  recursionAncestry : after.recursionAncestry = before.recursionAncestry
+  /-- Compression keeps the current expansion ancestry. -/
+  expansionAncestry : after.expansionAncestry = before.expansionAncestry
+  /-- Every finite root path has the same representative and size. -/
+  reaches : ∀ uv root size,
+    UnionFind.Reaches after.representatives uv root size ↔
+      UnionFind.Reaches before.representatives uv root size
+
+/-- An unchanged state satisfies the complete frame. -/
+theorem Frame.refl (state : State Symbol Guard) : Frame state state :=
+  ⟨rfl, rfl, rfl, rfl, rfl, fun _ _ _ => Iff.rfl⟩
+
+/-- Consecutive frames preserve the same fields and root paths. -/
+theorem Frame.trans (left : Frame before middle) (right : Frame middle after) : Frame before after :=
+  ⟨right.counter.trans left.counter, right.values.trans left.values,
+    right.obligations.trans left.obligations, right.recursionAncestry.trans left.recursionAncestry,
+    right.expansionAncestry.trans left.expansionAncestry,
+    fun uv root size => (right.reaches uv root size).trans (left.reaches uv root size)⟩
+
+/-- A complete frame preserves finite root paths for every variable. -/
+theorem Frame.total (frame : Frame before after) (total : UnionFind.Total before.representatives) :
+    UnionFind.Total after.representatives := by
+  intro uv
+  obtain ⟨root, size, path⟩ := total uv
+  exact ⟨root, size, (frame.reaches uv root size).mpr path⟩
+
+/-- A pure result changes no state field. -/
+theorem pure_frame (value result : α) (before after : State Symbol Guard)
+    (success : Success (pure value) before result after) : Frame before after := by
+  obtain ⟨_, same⟩ := (success_pure value result before after).mp success
+  subst after
+  exact .refl before

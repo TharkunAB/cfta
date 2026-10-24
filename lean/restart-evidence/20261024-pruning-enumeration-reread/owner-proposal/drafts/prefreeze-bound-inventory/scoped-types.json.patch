@@ -1,0 +1,50 @@
+--- before/scoped-types.json
++++ after/scoped-types.json
+@@ -111,14 +111,30 @@
+       },
+       {
+         "type": "found.representative < after.values.length",
+-        "term": "(List.getElem?_eq_some_iff.mp stored).1"
++        "term": "(List.getElem?_eq_some_iff.mp stored).elim (fun bound _ => bound)"
+       }
+     ],
+     "intro_binders": [],
+     "lets": [],
+     "cases": [],
+     "case_equations": [],
+-    "by_cases": []
++    "by_cases": [],
++    "inline_lambda_binders": [
++      {
++        "activation": "The successful list lookup existential is eliminated only to derive the output list bound.",
++        "term": "(List.getElem?_eq_some_iff.mp stored).elim (fun bound _ => bound)",
++        "binders": [
++          {
++            "name": "bound",
++            "type": "found.representative < after.values.length"
++          },
++          {
++            "name": "_",
++            "type": "after.values[found.representative]'bound = .unenumerated (some oldHandle) scs"
++          }
++        ]
++      }
++    ]
+   },
+   "checkRepeated_false_frame": {
+     "haves": [
+@@ -177,6 +193,13 @@
+     "nonrecursive_normal_form": {
+       "type": "Success (fun current : EnumerationState.State Symbol Guard => [Except.ok (false, current)]) before false after",
+       "frame_api": "EnumerationCompressionFrame.pure_frame with its expected existing pure action; no new List Monad instance or fresh pure expression is required."
+-    }
++    },
++    "normalized_type_binders": [
++      {
++        "name": "current",
++        "type": "EnumerationState.State Symbol Guard",
++        "scope": "The recorded raw continuation normal forms only. This is the existing source continuation argument, not an additional proof/body lambda or action."
++      }
++    ]
+   }
+ }

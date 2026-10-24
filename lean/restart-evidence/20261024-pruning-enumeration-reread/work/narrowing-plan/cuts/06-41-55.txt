@@ -1,0 +1,15 @@
+theorem resident_identity_unique (state : InternedConstructorTemplates.State Symbol Guard) (coherent : Coherent state)
+    (left right : Value Symbol Guard) (leftResident : Resident state left) (rightResident : Resident state right)
+    (first second : Interned NodeKey) (leftField : entryOf left = some first) (rightField : entryOf right = some second)
+    (same : first.identity = second.identity) : left = right := by
+  have firstStored := resident_entry state coherent left leftResident first leftField
+  have secondStored := resident_entry state coherent right rightResident second rightField
+  have keys := (Cache.identity_eq_iff_key_eq state.nodes coherent.valid.2 firstStored secondStored).mp same
+  have leftStored := leftResident first leftField
+  have rightStored := rightResident second rightField
+  rw [← keys] at rightStored
+  exact Option.some.inj (leftStored.symm.trans rightStored)
+
+/-- Source node-reference equality determines the complete record for all resident constructor kinds. -/
+theorem resident_reference_injective (state : InternedConstructorTemplates.State Symbol Guard) (coherent : Coherent state)
+    (left right : Value Symbol Guard) (leftResident : Resident state left) (rightResident : Resident state right)

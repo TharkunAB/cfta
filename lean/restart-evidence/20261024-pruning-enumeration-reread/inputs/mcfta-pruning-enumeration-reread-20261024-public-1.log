@@ -1,0 +1,27 @@
+{"command": ["/home/tritlo/.elan/toolchains/leanprover--lean4---v4.34.1/bin/lean", "-R", "/tmp/mcfta-pruning-enumeration-reread-20261024/public-1", "-DwarningAsError=true", "-Dlinter.all=true", "/tmp/mcfta-pruning-enumeration-reread-20261024/public-1/checked.lean"], "exit_code": 0, "raw_bytes": 2043, "raw_sha256": "a729498986800a27f36eccfa7d6577795173366d267f4df02610b9c6c721564c", "source_sha256": "9091fd7c89412ef242438a251fe58750f348e4d90a132619ebca8e6bdce4df14"}
+@MicroCFTA.SourcePruningEnumerationReread.pending_reread_complete : ∀ {Symbol Guard : Type}
+  (readFuel uv oldHandle : Nat) (scs : List MicroCFTA.EnumerationState.Suspended)
+  (before readAfter entry : MicroCFTA.EnumerationState.State Symbol Guard),
+  MicroCFTA.UnionFind.Total before.representatives →
+    MicroCFTA.EnumerationCorrectness.Success (MicroCFTA.EnumerationState.getValue readFuel uv) before
+        (MicroCFTA.EnumerationState.UVarValue.unenumerated (some oldHandle) scs) readAfter →
+      MicroCFTA.EnumerationCompressionFrame.Frame readAfter entry →
+        ∃ root size rereadFuel after,
+          MicroCFTA.EnumerationCompressionFrame.Frame before readAfter ∧
+            MicroCFTA.UnionFind.Reaches before.representatives uv root size ∧
+              MicroCFTA.EnumerationCorrectness.Success (MicroCFTA.EnumerationState.representative rereadFuel uv) entry
+                  root after ∧
+                MicroCFTA.EnumerationCompressionFrame.Frame entry after ∧
+                  MicroCFTA.EnumerationCompressionFrame.Frame before after ∧
+                    after.values[root]? =
+                        some (MicroCFTA.EnumerationState.UVarValue.unenumerated (some oldHandle) scs) ∧
+                      root < after.values.length
+'MicroCFTA.SourcePruningEnumerationReread.pending_reread_complete' depends on axioms: [propext, Quot.sound]
+@MicroCFTA.SourcePruningEnumerationReread.checkRepeated_false_frame : ∀ {Symbol Guard : Type}
+  (graph : MicroCFTA.EnumerationState.Graph Symbol Guard) (fuel uv node : Nat)
+  (scs : List MicroCFTA.EnumerationState.Suspended) (before after : MicroCFTA.EnumerationState.State Symbol Guard),
+  MicroCFTA.UnionFind.Total before.representatives →
+    MicroCFTA.EnumerationCorrectness.Success (MicroCFTA.EnumerationDriver.checkRepeated graph fuel uv node scs) before
+        false after →
+      MicroCFTA.EnumerationCompressionFrame.Frame before after
+'MicroCFTA.SourcePruningEnumerationReread.checkRepeated_false_frame' depends on axioms: [propext, Quot.sound]

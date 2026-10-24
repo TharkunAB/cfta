@@ -1,0 +1,58 @@
+{
+  "status": "EXACT_GENERATED_GRAPH_VIEW_TYPES",
+  "owner": "checkRepeated_false_frame",
+  "families": [
+    {
+      "name": "view",
+      "activation": "cases view : graph.node node with",
+      "expression": "graph.node node",
+      "expression_type": "EnumerationState.Node Symbol Guard",
+      "specializations": [
+        {
+          "constructor": "empty",
+          "binders": [],
+          "type": "graph.node node = .empty"
+        },
+        {
+          "constructor": "alternatives",
+          "binders": [
+            {
+              "name": "_edges",
+              "type": "List (EnumerationState.Edge Symbol Guard)"
+            }
+          ],
+          "type": "graph.node node = .alternatives _edges"
+        },
+        {
+          "constructor": "recursive",
+          "binders": [
+            {
+              "name": "_body",
+              "type": "Nat"
+            }
+          ],
+          "type": "graph.node node = .recursive _body"
+        },
+        {
+          "constructor": "unresolved",
+          "binders": [
+            {
+              "name": "_reference",
+              "type": "Nat"
+            }
+          ],
+          "type": "graph.node node = .unresolved _reference"
+        }
+      ]
+    }
+  ],
+  "condition_families": [
+    {
+      "name": "seen",
+      "positive_type": "recursionKey node scs \u2208 resolved.recursionAncestry root",
+      "negative_type": "\u00ac (recursionKey node scs \u2208 resolved.recursionAncestry root)"
+    }
+  ],
+  "main_reread_case_splits": [],
+  "false_check_true_write_branch_result": "The actual true result contradicts false; no final frame for that write branch is asserted."
+}

@@ -1,0 +1,6 @@
+theorem findRoot_correct (fuel : Nat) (forest : Forest) (uv : Nat) (found : Result)
+    (result : findRoot fuel forest uv = some found) :
+    Reaches forest uv found.representative found.size ∧
+      (∀ {other root count}, Reaches forest other root count → Reaches found.forest other root count) := by
+  induction fuel generalizing forest uv found with
+  | zero => simp [findRoot] at result

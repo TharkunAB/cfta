@@ -1,0 +1,25 @@
+structure Ready (state : State Symbol Guard) : Prop where
+  semantic : SemanticHeap state
+  covered : Covered [] state
+  depth : InternedOpenDepthReadback.Heap state
+
+/-- A completed reconstruction retains the full ready cache and both histories. -/
+structure Keeps (before after : State Symbol Guard) : Prop where
+  ready : Ready after
+  growth : Grows before after
+  history : Extends before.nodes.issued after.nodes.issued
+
+/-- Earlier available values remain available after actual worker effects. -/
+theorem Keeps.available {before after : State Symbol Guard} (keeps : Keeps before after)
+    (value : Value Symbol Guard) (available : Available before value) : Available after value :=
+  available.grows before after keeps.growth keeps.history
+
+/-- An operation with no effects retains every ready-cache premise. -/
+theorem pure_keeps (state : State Symbol Guard) (ready : Ready state) : Keeps state state :=
+  ⟨ready, grows_refl _, extends_refl _⟩
+
+/-- Successive physical operations compose their exact cache histories. -/
+theorem Keeps.trans {before middle after : State Symbol Guard}
+    (first : Keeps before middle) (second : Keeps middle after) : Keeps before after :=
+  ⟨second.ready, grows_trans first.growth second.growth, extends_trans first.history second.history⟩
+

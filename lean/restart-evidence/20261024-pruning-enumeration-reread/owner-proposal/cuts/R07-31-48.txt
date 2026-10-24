@@ -1,0 +1,18 @@
+inductive UVarValue (Symbol : Type) where
+  | unenumerated : Option Nat → List Suspended → UVarValue Symbol
+  | enumerated : Fragment Symbol → UVarValue Symbol
+  | eliminated
+
+/-- One graph edge and its two kinds of constraints. -/
+structure Edge (Symbol Guard : Type) where
+  symbol : Symbol
+  children : List Nat
+  equalities : List EqualityTrie.Trie
+  residual : Option Guard
+
+/-- The recursive case supplies the unfolded outer body. -/
+inductive Node (Symbol Guard : Type) where
+  | empty
+  | alternatives : List (Edge Symbol Guard) → Node Symbol Guard
+  | recursive : Nat → Node Symbol Guard
+  | unresolved : Nat → Node Symbol Guard

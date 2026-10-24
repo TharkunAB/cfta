@@ -1,0 +1,10 @@
+theorem pending_reread_complete (readFuel uv oldHandle : Nat) (scs : List EnumerationState.Suspended)
+    (before readAfter entry : EnumerationState.State Symbol Guard)
+    (total : UnionFind.Total before.representatives)
+    (observed : Success (getValue readFuel uv) before (.unenumerated (some oldHandle) scs) readAfter)
+    (entered : Frame readAfter entry) :
+    ∃ (root size rereadFuel : Nat) (after : EnumerationState.State Symbol Guard),
+      Frame before readAfter ∧ UnionFind.Reaches before.representatives uv root size ∧
+      Success (representative rereadFuel uv) entry root after ∧
+      Frame entry after ∧ Frame before after ∧
+      after.values[root]? = some (.unenumerated (some oldHandle) scs) ∧ root < after.values.length
