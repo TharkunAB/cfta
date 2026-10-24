@@ -8,6 +8,8 @@ The negative type-depth repair is merged in PR #168 at `a5fbb66eec`.
 Upstream `75cfc19b8` has the same source as local `058b11fe8f`.
 Both recorded LPO repairs are merged in PR #169 at `0db62d26b`.
 Focused native repair probes pass. Historical counterexamples remain below.
+The generated scalar-view name repair is merged in PR #172 at `74250bd88`.
+Upstream `f1f266ab4` has the same five files as local `07229ca7f3`.
 
 | Repair | Current status | External action |
 | --- | --- | --- |
@@ -16,40 +18,61 @@ Focused native repair probes pass. Historical counterexamples remain below.
 | Negative Specftacular type depth | Fixed by `75cfc19b8`, merged in PR #168 at `a5fbb66eec`. Its source equals local `058b11fe8f`; all three public checks remain verified. | No additional patch. Keep the pre-fix timeout and the retained validation. |
 | Optional LPO comparator transitivity | Fixed by `70a252537`, merged in PR #169 at `0db62d26b`. The recorded typed cycle is gone, also after canonicalTypes. | No additional patch for this witness. Keep the general order-law proof obligation. |
 | Optional LPO application context | Fixed by `f484c0ca0`, merged in PR #169 at `0db62d26b`. The comparator reversal remains; contextual rewriting and template gates prevent its unsafe use. | No additional patch for this witness. Keep general context, substitution and pruning proof obligations. |
-| Generated scalar-view names ending in # | Repaired on formalize at `07229ca7f3`. The producer rejects trailing-hash type and constructor names before namespace lookup. | Import the shared name check, two existing-suite regression cases and documentation. The repair is not on main. |
+| Generated scalar-view names ending in # | Fixed by `f1f266ab4`, merged in PR #172 at `74250bd88`. Its five source/package files equal local `07229ca7f3`. | No additional patch. Keep the producer rejection, regression cases and evidence. |
 
-The first five repairs are in the imported main history. The generated-name
-repair is on formalize and still needs an upstream import. General proofs
-remain separate. All earlier repair entries and evidence remain below.
+All six repairs are in the imported main history. General proofs remain
+separate. All earlier repair entries and evidence remain below.
 
 ### Generated scalar-view names ending in #
 
-The new cfta-th producer accepts legal MagicHash source names, then appends
-Node. Constructor# becomes Constructor#Node, which GHC rejects with GHC-55017.
-A source type Hashy# similarly produces the invalid type name Hashy#Node.
+The original cfta-th producer accepted legal MagicHash source names, then
+appended Node. Constructor# became Constructor#Node, which GHC rejected with
+GHC-55017. A source type Hashy# produced the invalid type name Hashy#Node.
 The ordinary-name control compiles. Both native failures are retained.
 
-The local repair rejects names ending in # in the shared generatedName function,
+The repair rejects names ending in # in the shared generatedName function,
 after the uppercase test and before either namespace lookup. It returns the
 existing manual-view diagnostic with the feature text "names ending in #".
 It preserves the literal Node suffix rule and requires no new dependency.
 The source Haddock, package README, design note and changelog state this limit.
 
 The existing rejection example now includes both source forms. Its two added
-recover checks return False on the unchanged upstream producer. With the repair,
+recover checks returned False on the original producer. With the repair,
 all seven checks return True. The suite passes all four examples. The native
 probes now report the exact intended diagnostic for each form. The ordinary
 control still compiles. fourmolu, cabal-gild, cabal check and HLint at the CI
 warning threshold pass. A plain HLint run reports the older Amount newtype
 suggestion; the source fixture is unchanged. These raw results remain retained.
 
-External action: import `07229ca7f3208385a52c442965d8f2dcf73f7d99` from formalize.
-It contains the generatedName suffix check, two rejection cases and documentation.
-Do not change the Node naming rule.
+External action: no additional patch. PR #172 merges the suffix check, both
+rejection cases and documentation. The five files equal local `07229ca7f3`.
+Keep the Node naming rule and the retained regression evidence.
 Evidence is in lean/restart-evidence/20261024-derived-scalar-shape.
 TH/Generic extraction, valid-position build/read and source codec laws stay open.
 
 
+
+
+## Generated-name repair merged on main
+
+Updated: 2026-10-24. Main `74250bd88` is incorporated.
+Merge: `ea9965949bdad994709318cf54162bea1c23cf40`.
+Read `lean/notes-current-th-repair-main.md`.
+
+PR #172 merges the trailing-hash generated-name repair. Its five files equal
+local `07229ca7f3` byte for byte and mode for mode. The merge tree equals the
+previous pushed tree. No Haskell or Lean source contents change. Existing
+validation applies to the same bytes; no successful check is repeated.
+FINDINGS keeps the repair index FIRST and marks all six fixes merged.
+No external patch remains for these six recorded defects. General proofs stay open.
+
+The checked recordTypes and position-helper observation results remain.
+H6 remains strongest combined. Next continue the concrete Mu-only native node
+view and enumeration-ID/cache-history bridge for typedTypes. Global helper
+canonicality, mutation histories, selected-current protection, cached scheduling,
+semantic pruning, phase 4, resources, practical width, runtime/solver and
+convergence remain open. H23 stays queued. The full goal is ACTIVE and incomplete.
+This record precedes evidence creation and the authorized push.
 
 ## Type-position recording and callback observations
 

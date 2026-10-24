@@ -1,5 +1,27 @@
 # cfta formal model
 
+## Generated-name repair merged on main
+
+Updated: 2026-10-24. Main `74250bd88` is incorporated.
+Merge: `ea9965949bdad994709318cf54162bea1c23cf40`.
+Read `lean/notes-current-th-repair-main.md`.
+
+PR #172 merges the trailing-hash generated-name repair. Its five files equal
+local `07229ca7f3` byte for byte and mode for mode. The merge tree equals the
+previous pushed tree. No Haskell or Lean source contents change. Existing
+validation applies to the same bytes; no successful check is repeated.
+FINDINGS keeps the repair index FIRST and marks all six fixes merged.
+No external patch remains for these six recorded defects. General proofs stay open.
+
+The checked recordTypes and position-helper observation results remain.
+H6 remains strongest combined. Next continue the concrete Mu-only native node
+view and enumeration-ID/cache-history bridge for typedTypes. Global helper
+canonicality, mutation histories, selected-current protection, cached scheduling,
+semantic pruning, phase 4, resources, practical width, runtime/solver and
+convergence remain open. H23 stays queued. The full goal is ACTIVE and incomplete.
+This record precedes evidence creation and the authorized push.
+
+
 ## Type-position recording and callback observations
 
 Updated: 2026-10-24. Main `c4f7319acf` is incorporated.
