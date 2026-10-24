@@ -1,5 +1,44 @@
 # Constrained languages, indexing, and distributions
 
+## Exact raw results of native edge traversal
+
+Updated: 2026-10-24. Main `74250bd88` is incorporated.
+Proof: `b9faa1c5a04fd290e9191ffa52f963b538e3702e`.
+Read `lean/notes-current-pruning-enumeration-raw-exact.md`.
+
+Two source-specific uniqueness facts strengthen the SAME observed Success,
+result and final state from the existing completion producers to a complete
+raw singleton. They exclude extra successes, duplicate results and errors.
+The child theorem uses only the actual captured prepareChild map. The edge
+theorem identifies the actual computed preparation. No arbitrary callback or
+supplied singleton law, new action or duplicate completion packet is added.
+
+The facts need no native validity, closure, realization or alignment premise.
+Existing completion producers keep those separate safety/existence inputs.
+Uniqueness alone promises no success or semantic validity of malformed slots.
+The actual first-unsupported child endpoint retains preceding effects.
+Successful none, absent outer preparation and raw rejection remain distinct.
+Inherited arity rejects before projection/allocation. Residual recording
+still follows only a completed child list. Noncomputable projection remains.
+
+The first three strict inputs failed. The corrections use case syntax, reduce the public staged let, supply the concrete bind states and unfold the actual state/error transformer operations. The fourth strict input passes with a literal empty log under all linters and warnings as errors. All three failed inputs, complete raw outputs and exact successive patches remain. No proof limit changed. The installed build, complete public readback and Audit pass. All 34 public-output lines retain both complete signatures without display omissions. The evidence verifier uses the actual installed-1 path and exact second-line Audit insertion. Both prior verifier inputs and exact corrections remain. No passing build was repeated.
+The installed build passes 623 jobs. Audit passes 3698 jobs and
+76204 dependency checks, with the unchanged older warning.
+runStaged_exact reports propext and Quot.sound. prepare_exact reports propext, Classical.choice and Quot.sound. No project axiom is added.
+All frozen contracts, scoped inventories, reviews and actual evidence remain.
+The preceding checked-row checkpoint's26 post-seal inputs and already-sealed
+assessment remain. Earlier failures, proofs, drafts and repairs stay protected.
+No Haskell changes. FINDINGS keeps all six imported repair handoffs first.
+
+Ordinary choice, native ordering/IDs/containers, terminal intersection/
+assimilation/emptiness and slot/count/ancestry, all-producer origins/edits,
+selector, Graph/index/memo2, extraction/signed bounds, cutoff language and
+full typing/pruning/driver/runtime/solver/resources/convergence remain.
+H6 stays strongest combined. H23 and all older work and the optimized core
+remain. The complete goal stays ACTIVE and incomplete. This record precedes
+evidence and push.
+
+
 ## Finite checked-row construction histories
 
 Updated: 2026-10-24. Main `74250bd88` is incorporated.
