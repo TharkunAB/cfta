@@ -1,3 +1,4 @@
+import MicroCFTA.SourcePruningEnumerationEnabledEmpty
 import MicroCFTA.SourcePruningEnumerationAssimilation
 import MicroCFTA.SourcePruningEnumerationIntersectionWrite
 import MicroCFTA.SourcePruningEnumerationOrdinaryBranches
