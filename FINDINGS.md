@@ -6,19 +6,50 @@
 
 The negative type-depth repair is merged in PR #168 at `a5fbb66eec`.
 Upstream `75cfc19b8` has the same source as local `058b11fe8f`.
-Two optional LPO repairs remain open. Native counterexamples are retained below.
+Both recorded LPO repairs are merged in PR #169 at `0db62d26b`.
+Focused native repair probes pass. Historical counterexamples remain below.
 
 | Repair | Current status | External action |
 | --- | --- | --- |
 | Recursive self-type field pools | Fixed by `b9219b9e`, merged in PR #65 at `c0cc8a05`. The API rejects a field pool for the datatype itself. This includes the reported `Chain` case. | No additional patch. Keep the historical reproducer and validation below. |
 | Typing binder size-order documentation | Fixed by `74691832`, merged in PR #97 at the earlier imported main `794903b3f`. This changes documentation. | No additional patch. The earlier failed runtime reproduction remains unvalidated. |
 | Negative Specftacular type depth | Fixed by `75cfc19b8`, merged in PR #168 at `a5fbb66eec`. Its source equals local `058b11fe8f`; all three public checks remain verified. | No additional patch. Keep the pre-fix timeout and the retained validation. |
-| Optional LPO comparator transitivity | OPEN. Native well-typed terms give `s < t < u < s`, also after canonicalTypes. | Repair annotation handling and the order fallback. See the retained comparator regression. |
-| Optional LPO application context | OPEN. Native terms give `f a > a` and `(f a) x < a x`. | Establish an order compatible with function application and actual rewriting. The annotation repair alone is insufficient. |
+| Optional LPO comparator transitivity | Fixed by `70a252537`, merged in PR #169 at `0db62d26b`. The recorded typed cycle is gone, also after canonicalTypes. | No additional patch for this witness. Keep the general order-law proof obligation. |
+| Optional LPO application context | Fixed by `f484c0ca0`, merged in PR #169 at `0db62d26b`. The comparator reversal remains; contextual rewriting and template gates prevent its unsafe use. | No additional patch for this witness. Keep general context, substitution and pruning proof obligations. |
 
-All three completed repairs are in the imported main history. The
-type-depth fix and both open LPO repairs are recorded in the current note.
+All five listed repairs are in the imported main history. The current notes
+record the type-depth and LPO validation. General proofs remain separate.
 All earlier repair entries and evidence remain below.
+
+
+## Ordered pruning resume and main LPO repairs
+
+Updated: 2026-10-24. Proof: `6b168d41cc9a5e7c1a7f2eb0db6f0e395edebe32`.
+Main: `0db62d26b`. Merge: `504523e47a`. Start: `74104221af`.
+Read `lean/notes-current-pruning-resume.md` and `lean/notes-current-upstream-lpo.md`.
+
+The actual partial matcher and ordered Pruning.resume are now modeled.
+Successful resumes preserve the complete compression frame. Framed inputs give
+exactly equal ordered optional results at independent successful bounds.
+One actual success constructs a finite matching run in the related input.
+All representative reads precede pure Option sequencing, including after none.
+Raw current and hole IDs, pending order and duplicates remain explicit.
+No canonical-current, Safe, completion or desired right-success premise is added.
+
+Both final sources passed strict Lean checks. Audit passed: 3673 jobs and
+75792 dependency checks, one older warning and no new-source warning.
+All 11 public signatures and eight axiom reports were read in full.
+PR #169 repairs both recorded LPO failure mechanisms. Goldens, formatting and
+focused public-API repair probes passed. The application comparator reversal
+remains; contextual rewriting and template admissibility prevent its unsafe use.
+FINDINGS keeps the external repair index FIRST and marks both repairs merged.
+General order laws and pruning soundness remain unproved. No local Haskell patch.
+
+Next, compose actual templateOracle behavior and typedTypes observations.
+Complete canonical mutation histories and the cached-driver bridge remain open.
+H6 remains strongest combined. H23 remains queued. Full-pipeline, resource,
+practical-width, Haskell/solver, phase-4 and convergence gaps remain.
+The full goal is ACTIVE and incomplete. This record precedes the authorized push.
 
 
 ## Partial rendering: agreement and finite transport
