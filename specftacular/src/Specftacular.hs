@@ -1156,14 +1156,15 @@ runPhase env@Settings{..} size skeletons stecta@StEcta{..}
             Nothing
                 | termSplit > 0 ->
                     -- Each shape of the spine is reduced and enumerated on its own,
-                    -- as for the phase 4 skeletons (see 'spineParts').
-                    pure
-                        [ canonicalTypes (npTerm' t)
-                        | let prepare = preparePruning bucketTemplates
-                        , space <- searchSpaceParts termSplit stecta lvl tc
-                        , let (pruningRoot, oracleTemplates) = prepare (refold space)
-                        , t <- prunedTerms oracleTemplates pruningRoot
-                        ]
+                    -- as for the phase 4 skeletons (see 'spineParts'), in its own
+                    -- thread. The parts are joined in their order.
+                    let prepare = preparePruning bucketTemplates
+                        parts =
+                            [ [canonicalTypes (npTerm' t) | t <- prunedTerms oracleTemplates pruningRoot]
+                            | space <- searchSpaceParts termSplit stecta lvl tc
+                            , let (pruningRoot, oracleTemplates) = prepare (refold space)
+                            ]
+                     in concat <$> forceInParallel diagnostics lvl tc parts
             Nothing -> do
                 refreshCount progress "Reducing  ECTA" (" for " ++ show tc) "" lvl (so_far s)
                 reduced <- diagnose env lvl (show tc) "reduce_whnf" s $ evaluate (searchSpace stecta lvl tc)
