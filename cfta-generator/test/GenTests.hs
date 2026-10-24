@@ -2,6 +2,7 @@ module Main (main) where
 
 import Test.Hspec (hspec)
 
+import qualified Data.CFTA.Edit.SetsSpec
 import qualified Data.CFTA.EditSpec
 import qualified Data.CFTA.Gen.Equality.DatatypeGenSpec
 import qualified Data.CFTA.Gen.Equality.GenSpec
@@ -35,4 +36,5 @@ main =
         Data.CFTA.Gen.Synthesis.StatesSpec.spec
         Data.CFTA.Gen.TypingSpec.spec
         Data.CFTA.SizedSpec.spec
+        Data.CFTA.Edit.SetsSpec.spec
         Data.CFTA.EditSpec.spec
