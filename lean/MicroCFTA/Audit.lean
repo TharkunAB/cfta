@@ -1,3 +1,4 @@
+import MicroCFTA.SourcePruningEnumerationEntry
 import MicroCFTA.SourcePruningEnumerationFinalize
 import MicroCFTA.SourcePruningEnumerationNativeIndex
 import MicroCFTA.SourcePruningEnumerationTerminal
