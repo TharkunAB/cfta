@@ -1,0 +1,67 @@
+{
+  "definition_conditions": [
+    {
+      "expression": "arityAllows edge.children.length scs",
+      "true_branch": "inspect actual project",
+      "false_branch": "some reject FIRST"
+    }
+  ],
+  "definition_projection_match": {
+    "type": "Option (List EqualityTrie.Trie × Option Constraint)",
+    "cases": [
+      {
+        "pattern": "none",
+        "fields": []
+      },
+      {
+        "pattern": "some (tries,residual)",
+        "fields": [
+          {
+            "name": "tries",
+            "type": "List EqualityTrie.Trie"
+          },
+          {
+            "name": "residual",
+            "type": "Option Constraint"
+          }
+        ]
+      }
+    ]
+  },
+  "proof_main_condition": {
+    "contract": "condition-allowed.lean.txt",
+    "positive_type": "arityAllows edge.children.length scs = true",
+    "negative_type": "¬ (arityAllows edge.children.length scs = true)"
+  },
+  "proof_projection_match": {
+    "command": "cases projected : SourcePruningEnumerationConstraint.project edge.entry.key.constraint with",
+    "cases": [
+      {
+        "pattern": "none",
+        "equation": {
+          "name": "projected",
+          "type": "SourcePruningEnumerationConstraint.project edge.entry.key.constraint = none"
+        },
+        "fields": []
+      },
+      {
+        "pattern": "some pair",
+        "equation": {
+          "name": "projected",
+          "type": "SourcePruningEnumerationConstraint.project edge.entry.key.constraint = some pair"
+        },
+        "fields": [
+          {
+            "name": "pair",
+            "type": "List EqualityTrie.Trie × Option Constraint"
+          }
+        ],
+        "after_pair_elimination": "projected : SourcePruningEnumerationConstraint.project edge.entry.key.constraint = some (tries,residual)"
+      }
+    ]
+  },
+  "helper_count_cases": "induction.json",
+  "helper_membership_cases": "obtain-inventory.json oldOrFresh",
+  "no_child_constructor_or_child_Action_case_split": true,
+  "new_Error_cases": []
+}

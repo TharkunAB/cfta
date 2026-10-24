@@ -1,0 +1,5 @@
+/-- Pure equality allocations retain every complete realized pending node value. -/
+theorem suspended_realized (count : Nat)
+    (heap : InternedConstructorTemplates.State Symbol Constraint)
+    (before : EnumerationState.State Symbol Constraint) (realized : PendingRealized heap before) :
+    PendingRealized heap (suspendedState count before)

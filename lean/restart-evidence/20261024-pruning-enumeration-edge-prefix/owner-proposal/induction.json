@@ -1,0 +1,55 @@
+{
+  "owner": "suspended_realized",
+  "command": "induction count generalizing before with",
+  "target": {
+    "name": "count",
+    "type": "Nat"
+  },
+  "generalized": [
+    {
+      "name": "before",
+      "type": "EnumerationState.State Symbol Constraint"
+    },
+    {
+      "name": "realized",
+      "type": "PendingRealized heap before",
+      "dependent_premise": true
+    }
+  ],
+  "fixed": [
+    {
+      "name": "heap",
+      "type": "InternedConstructorTemplates.State Symbol Constraint"
+    }
+  ],
+  "cases": [
+    {
+      "pattern": "zero",
+      "fields": [],
+      "result": "PendingRealized heap (suspendedState 0 before)"
+    },
+    {
+      "pattern": "succ count ih",
+      "fields": [
+        {
+          "name": "count",
+          "type": "Nat"
+        },
+        {
+          "name": "ih",
+          "type": "∀ (before : EnumerationState.State Symbol Constraint),\n    PendingRealized heap before →\n      PendingRealized heap (suspendedState count before)"
+        }
+      ],
+      "result": "PendingRealized heap (suspendedState (count + 1) before)"
+    }
+  ],
+  "IH_file": "suspended-IH.lean.txt",
+  "actual_IH_application": {
+    "term": "ih (allocated none before)",
+    "remaining_input": "PendingRealized heap (allocated none before)",
+    "result": "PendingRealized heap (suspendedState count (allocated none before))"
+  },
+  "decrease": "The successor case uses the predecessor count once; before may change only through the actual allocated none update.",
+  "no_unrestricted_other_count_oracle": true,
+  "main_theorem_induction": false
+}

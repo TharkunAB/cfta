@@ -1,0 +1,77 @@
+{
+  "APIs": [
+    {
+      "name": "EnumerationCorrectness.suspendMany_exact",
+      "source": "S03",
+      "cut": [
+        421,
+        430
+      ],
+      "result": "tries.mapM suspend before = [.ok (suspendedVars before.counter tries,suspendedState tries.length before)]"
+    },
+    {
+      "name": "EnumerationCorrectness.suspended_supply",
+      "source": "S03",
+      "cut": [
+        433,
+        438
+      ],
+      "result": "SupplyAligned before → SupplyAligned (suspendedState count before)"
+    },
+    {
+      "name": "EnumerationCorrectness.bind_single",
+      "source": "S03",
+      "cut": [
+        69,
+        79
+      ],
+      "use": "Actual suspension singleton gives its actual own list and full middle state to the same pure payload continuation."
+    },
+    {
+      "name": "EnumerationSchedule.suspended_counter",
+      "source": "S09",
+      "result": "(suspendedState count before).counter = before.counter + count"
+    },
+    {
+      "name": "EnumerationState.allocated",
+      "source": "S04",
+      "cut": [
+        568,
+        576
+      ],
+      "use": "Full exact None allocation record, including ancestry update."
+    },
+    {
+      "name": "SourcePruningEnumerationObservation.PendingRealized",
+      "source": "S05",
+      "use": "Actual node-bearing pending slots decode to complete available closed values."
+    },
+    {
+      "name": "SourcePruningEnumerationShallowChild.prepareChild",
+      "source": "S01",
+      "use": "Pure staged Option of the existing action. No theorem assumption or execution needed."
+    },
+    {
+      "name": "SourcePruningEnumerationConstraint.project",
+      "source": "S02",
+      "use": "Actual inherited noncomputable projection, no desired pair premise."
+    },
+    {
+      "name": "EqualityTrie.descendScs",
+      "source": "S07",
+      "use": "Source-order list buckets; incoming descent precedes own descent."
+    },
+    {
+      "name": "List.mem_append/List.mem_of_getElem?/List.getElem?_of_mem",
+      "source": "S15",
+      "use": "Actual None-allocation realization proof, no alignment required."
+    },
+    {
+      "name": "List.zipIdx",
+      "source": "S16",
+      "use": "Starts at zero; preserves original child order."
+    }
+  ],
+  "new_public_preservation_helper": "suspended_realized",
+  "new_carrier_or_decoder": false
+}

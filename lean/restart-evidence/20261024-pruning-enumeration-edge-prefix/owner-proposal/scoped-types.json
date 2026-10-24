@@ -1,0 +1,191 @@
+{
+  "header_and_public_let_binders": [
+    {
+      "name": "scs",
+      "type": "List EnumerationState.Suspended",
+      "scope": "prepare and prepare_complete"
+    },
+    {
+      "name": "edge",
+      "type": "InternedConstructorTemplates.EdgeValue Symbol Constraint",
+      "scope": "prepare and prepare_complete"
+    },
+    {
+      "name": "count",
+      "type": "Nat",
+      "scope": "suspended_realized"
+    },
+    {
+      "name": "heap",
+      "type": "InternedConstructorTemplates.State Symbol Constraint",
+      "scope": "both theorems"
+    },
+    {
+      "name": "before",
+      "type": "EnumerationState.State Symbol Constraint",
+      "scope": "both theorems"
+    },
+    {
+      "name": "realized",
+      "type": "PendingRealized heap before",
+      "scope": "both theorems"
+    },
+    {
+      "name": "aligned",
+      "type": "before.counter = before.values.length",
+      "scope": "prepare_complete"
+    },
+    {
+      "name": "tries",
+      "type": "List EqualityTrie.Trie",
+      "scope": "some projection pair in definition/public theorem"
+    },
+    {
+      "name": "residual",
+      "type": "Option Constraint",
+      "scope": "same pair"
+    },
+    {
+      "name": "own",
+      "type": "List EnumerationState.Suspended",
+      "scope": "actual suspension bind in prepare; computed public let in prepare_complete"
+    },
+    {
+      "name": "staged",
+      "type": "List (InternedConstructorTemplates.Value Symbol Constraint × List EnumerationState.Suspended × Option (EnumerateM Symbol Constraint (Fragments.Fragment Symbol)))",
+      "scope": "public computed let"
+    },
+    {
+      "name": "action",
+      "type": "EnumerateM Symbol Constraint (Symbol × List (InternedConstructorTemplates.Value Symbol Constraint × List EnumerationState.Suspended × Option (EnumerateM Symbol Constraint (Fragments.Fragment Symbol))) × Option Constraint)",
+      "scope": "public supported-case existential"
+    }
+  ],
+  "public_let_equations": [
+    {
+      "name": "own",
+      "type": "List EnumerationState.Suspended",
+      "value": "suspendedVars before.counter tries"
+    },
+    {
+      "name": "staged",
+      "type": "List (InternedConstructorTemplates.Value Symbol Constraint × List EnumerationState.Suspended × Option (EnumerateM Symbol Constraint (Fragments.Fragment Symbol)))",
+      "value": "edge.children.zipIdx.map of actual child and incoming-descend ++ own-descend bucket, plus existing prepareChild at EnumGuard:=Constraint",
+      "exact_literal_source": "public-header.lean.txt"
+    }
+  ],
+  "proof_intros": [
+    {
+      "name": "slot",
+      "type": "Nat",
+      "scope": "helper succ case after applying IH to actual allocated-none state"
+    },
+    {
+      "name": "node",
+      "type": "Nat",
+      "scope": "same"
+    },
+    {
+      "name": "scs",
+      "type": "List EnumerationState.Suspended",
+      "scope": "same; shadows no global suspended list in helper"
+    },
+    {
+      "name": "stored",
+      "type": "(allocated none before).values[slot]? = some (.unenumerated (some node) scs)",
+      "scope": "same, before literal typed change"
+    }
+  ],
+  "lambda_binders": [
+    {
+      "name": "own",
+      "type": "List EnumerationState.Suspended",
+      "scope": "prepare actual mapM suspension continuation"
+    },
+    {
+      "name": "indexed",
+      "type": "InternedConstructorTemplates.Value Symbol Constraint × Nat",
+      "scope": "prepare staged map"
+    },
+    {
+      "name": "indexed",
+      "type": "InternedConstructorTemplates.Value Symbol Constraint × Nat",
+      "scope": "public staged let map"
+    },
+    {
+      "name": "own",
+      "type": "List EnumerationState.Suspended",
+      "scope": "prepare_complete chosen action witness suspension continuation"
+    },
+    {
+      "name": "indexed",
+      "type": "InternedConstructorTemplates.Value Symbol Constraint × Nat",
+      "scope": "same witness staged map"
+    }
+  ],
+  "condition_facts": [
+    {
+      "name": "allowed",
+      "type": "arityAllows edge.children.length scs = true",
+      "scope": "positive main branch"
+    },
+    {
+      "name": "allowed",
+      "type": "¬ (arityAllows edge.children.length scs = true)",
+      "scope": "negative main branch"
+    }
+  ],
+  "local_instance": {
+    "name": "prefixMonadList",
+    "type": "Monad List",
+    "visibility": "local",
+    "universe": "List : Type u → Type u",
+    "fields": [
+      {
+        "name": "pure",
+        "type": "{α : Type u} → α → List α",
+        "binders": [
+          {
+            "name": "value",
+            "type": "α"
+          }
+        ],
+        "term": "[value]"
+      },
+      {
+        "name": "bind",
+        "type": "{α β : Type u} → List α → (α → List β) → List β",
+        "binders": [
+          {
+            "name": "values",
+            "type": "List α"
+          },
+          {
+            "name": "continuation",
+            "type": "α → List β"
+          }
+        ],
+        "term": "values.flatMap continuation"
+      }
+    ],
+    "global_instance_count": 0
+  },
+  "implicit_context_aliases": [
+    {
+      "name": "Symbol",
+      "type": "Type",
+      "value": "SourcePruningTemplates.Symbol",
+      "new_definition": false
+    },
+    {
+      "name": "Constraint",
+      "type": "Type",
+      "value": "SourceSymbolicIndex.Constraint FullSyntax.Formula",
+      "new_definition": false
+    }
+  ],
+  "all_obtained_fields_file": "obtain-inventory.json",
+  "all_induction_binders_file": "induction.json",
+  "case_equations_file": "case-inventory.json",
+  "no_other_local_have_let_show_helper_or_global_instance_planned": true
+}

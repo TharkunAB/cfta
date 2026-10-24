@@ -1,0 +1,9 @@
+import MicroCFTA.SourcePruningEnumerationEdgePrefix
+set_option pp.deepTerms true
+set_option pp.maxSteps 100000
+#check @MicroCFTA.SourcePruningEnumerationEdgePrefix.prepare
+#print axioms MicroCFTA.SourcePruningEnumerationEdgePrefix.prepare
+#check @MicroCFTA.SourcePruningEnumerationEdgePrefix.suspended_realized
+#print axioms MicroCFTA.SourcePruningEnumerationEdgePrefix.suspended_realized
+#check @MicroCFTA.SourcePruningEnumerationEdgePrefix.prepare_complete
+#print axioms MicroCFTA.SourcePruningEnumerationEdgePrefix.prepare_complete

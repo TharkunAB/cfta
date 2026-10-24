@@ -1,0 +1,102 @@
+{
+  "owner": "/tmp/mcfta-pruning-enumeration-edge-prefix-20261024-proposal",
+  "compiled_contracts": [
+    "context.lean.txt",
+    "prepare-header.lean.txt",
+    "suspended-realized-header.lean.txt",
+    "public-header.lean.txt",
+    "condition-allowed.lean.txt",
+    "change-allocated-none.lean.txt"
+  ],
+  "all_fragments": [
+    {
+      "file": "context.lean.txt",
+      "bytes": 558,
+      "sha256": "819178becd4cc156ebfabd3b9adb3ee78fea692ecb84f206ca94fb3e6372da35",
+      "lines": 12
+    },
+    {
+      "file": "prepare-header.lean.txt",
+      "bytes": 496,
+      "sha256": "78d2ae16f093427fb2a11b5c4cf8e96a923be09bf7c45b623ba6deeb5cc9b922",
+      "lines": 7
+    },
+    {
+      "file": "suspended-realized-header.lean.txt",
+      "bytes": 345,
+      "sha256": "94048a2ea81b35c29bcf213e15a079316091319664a31bb8525ecc05c1f5f334",
+      "lines": 5
+    },
+    {
+      "file": "public-header.lean.txt",
+      "bytes": 1549,
+      "sha256": "3bfd3fdf5674f0682ea44ace13ee7d5ce3d076acb249a6886146fe39bad90824",
+      "lines": 21
+    },
+    {
+      "file": "condition-allowed.lean.txt",
+      "bytes": 63,
+      "sha256": "6f60db8107d76c57ca8128844580a289236e4d784bc6fe73ecdc603d2baed239",
+      "lines": 1
+    },
+    {
+      "file": "change-allocated-none.lean.txt",
+      "bytes": 114,
+      "sha256": "1264668c8124856676dec76c90cf4d130097290d2c2631435a0123b33801e3a0",
+      "lines": 2
+    }
+  ],
+  "public_heads": [
+    {
+      "name": "prepare",
+      "kind": "def",
+      "modifier": "noncomputable",
+      "declaration_keyword": "noncomputable def",
+      "file": "prepare-header.lean.txt",
+      "attachment": " :=\n"
+    },
+    {
+      "name": "suspended_realized",
+      "kind": "theorem",
+      "file": "suspended-realized-header.lean.txt",
+      "attachment": " := by\n"
+    },
+    {
+      "name": "prepare_complete",
+      "kind": "theorem",
+      "file": "public-header.lean.txt",
+      "attachment": " := by\n"
+    }
+  ],
+  "local_haves": [],
+  "conditions": [
+    {
+      "file": "condition-allowed.lean.txt",
+      "owner": "prepare_complete",
+      "expected_count": 1,
+      "first_line_indent": 2,
+      "scope": "before projected Option case analysis"
+    }
+  ],
+  "typed_changes": [
+    {
+      "file": "change-allocated-none.lean.txt",
+      "owner": "suspended_realized",
+      "expected_count": 1,
+      "first_line_indent": 6,
+      "continuation_spaces": 8,
+      "scope": "succ IH after application at allocated none before and pending-slot introductions"
+    }
+  ],
+  "review_only_fragments": [
+    {
+      "file": "suspended-IH.lean.txt",
+      "role": "complete IH type; not inserted as an extra declaration",
+      "lines": 3,
+      "bytes": 150,
+      "sha256": "64ad654ee98b366a17d42cef043327b241dc80383c21a88518e2378dbe77d27a"
+    }
+  ],
+  "body_free": true,
+  "noncomputable_prefix_required": true
+}

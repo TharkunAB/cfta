@@ -1,0 +1,63 @@
+{
+  "observed_at": "2026-10-24T08:42:40.828600+00:00",
+  "status": "ROOT_ACCEPTS_EXACT_DECLARATION_BODY_GATE",
+  "baseline": "a2123393a3e669a5b7e658c929d52c40654249e6",
+  "main": "74250bd889685da436cdbfe32ac4b5a0878ffd09",
+  "owner": "/tmp/mcfta-pruning-enumeration-edge-prefix-20261024-proposal",
+  "frozen_sha256": "cdbcf6bf3a3450c345356164d950cd77d0a3a21a05a0b44457e9d026d0c9a2c6",
+  "pins_sha256": "6ef04ef0f49948428f96a921696c3321828778b927651550c7fa657fd011bad9",
+  "independent_declaration_review_sha256": "941083318711b065db1c40d6feb8b66dfc1b957417e64f4e6faeac7c4c365a30",
+  "contracts": {
+    "context.lean.txt": "import MicroCFTA.SourcePruningEnumerationShallowChild\nimport MicroCFTA.SourcePruningEnumerationConstraint\n\nnamespace MicroCFTA.SourcePruningEnumerationEdgePrefix\nopen Fragments EnumerationState EnumerationCorrectness\nopen InternedConstructorTemplates SourcePruningEnumerationObservation\nlocal notation \"Symbol\" => SourcePruningTemplates.Symbol\nlocal notation \"Constraint\" => SourceSymbolicIndex.Constraint FullSyntax.Formula\n\nlocal instance prefixMonadList : Monad List where\n  pure value := [value]\n  bind values continuation := values.flatMap continuation\n",
+    "prepare-header.lean.txt": "/-- Allocate own equality variables and stage the ordered child actions without running them. -/\nnoncomputable def prepare (scs : List EnumerationState.Suspended)\n    (edge : InternedConstructorTemplates.EdgeValue Symbol Constraint) :\n    Option (EnumerateM Symbol Constraint\n      (Symbol \u00d7 List (InternedConstructorTemplates.Value Symbol Constraint \u00d7\n        List EnumerationState.Suspended \u00d7\n        Option (EnumerateM Symbol Constraint (Fragments.Fragment Symbol))) \u00d7 Option Constraint))\n",
+    "suspended-realized-header.lean.txt": "/-- Pure equality allocations retain every complete realized pending node value. -/\ntheorem suspended_realized (count : Nat)\n    (heap : InternedConstructorTemplates.State Symbol Constraint)\n    (before : EnumerationState.State Symbol Constraint) (realized : PendingRealized heap before) :\n    PendingRealized heap (suspendedState count before)\n",
+    "public-header.lean.txt": "/-- Derive the exact allocation endpoint and the same edge's ordered staged payload. -/\ntheorem prepare_complete (scs : List EnumerationState.Suspended)\n    (edge : InternedConstructorTemplates.EdgeValue Symbol Constraint)\n    (heap : InternedConstructorTemplates.State Symbol Constraint)\n    (before : EnumerationState.State Symbol Constraint) (realized : PendingRealized heap before)\n    (aligned : before.counter = before.values.length) :\n    if arityAllows edge.children.length scs then\n      match SourcePruningEnumerationConstraint.project edge.entry.key.constraint with\n      | none => prepare scs edge = none\n      | some (tries, residual) =>\n          let own : List EnumerationState.Suspended := suspendedVars before.counter tries\n          let staged := edge.children.zipIdx.map (fun indexed =>\n            (indexed.1, descendScs indexed.2 scs ++ descendScs indexed.2 own,\n              SourcePruningEnumerationShallowChild.prepareChild (EnumGuard := Constraint)\n                (descendScs indexed.2 scs ++ descendScs indexed.2 own) indexed.1))\n          \u2203 action, prepare scs edge = some action \u2227\n            action before = [.ok ((edge.entry.key.symbol, staged, residual), suspendedState tries.length before)] \u2227\n            (suspendedState tries.length before).counter = before.counter + tries.length \u2227\n            (suspendedState tries.length before).counter = (suspendedState tries.length before).values.length \u2227\n            PendingRealized heap (suspendedState tries.length before)\n    else prepare scs edge = some reject\n",
+    "condition-allowed.lean.txt": "by_cases allowed : arityAllows edge.children.length scs = true\n",
+    "change-allocated-none.lean.txt": "change (before.values ++ [.unenumerated none []])[slot]? =\n        some (.unenumerated (some node) scs) at stored\n"
+  },
+  "root_read": {
+    "contract_lines": 48,
+    "restricted_IH_lines": 3,
+    "obtains": 3,
+    "obtain_fields": 6,
+    "proof_intros": 4,
+    "sources": 16,
+    "cuts": 30,
+    "cut_lines": 308,
+    "import_identities": 42,
+    "routes": 10,
+    "checked_import_edges": 63
+  },
+  "local_instance_count": 1,
+  "global_instance_count": 0,
+  "public_heads": [
+    {
+      "name": "prepare",
+      "kind": "def",
+      "modifier": "noncomputable",
+      "declaration_keyword": "noncomputable def"
+    },
+    {
+      "name": "suspended_realized",
+      "kind": "theorem"
+    },
+    {
+      "name": "prepare_complete",
+      "kind": "theorem"
+    }
+  ],
+  "proof_local_have_let_show": 0,
+  "induction": "one Nat count induction generalizing actual before and dependent realization, at actual allocated-none state",
+  "budget": {
+    "target": [
+      110,
+      170
+    ],
+    "hard_cap": 200,
+    "shorter_complete_allowed": true
+  },
+  "scope": "Exact arity-first mathematical native-edge prefix; actual pure equality allocations, full state, ordered child buckets and concrete optional child actions. No child action execution, terminal merge, final fragment/residual insertion, native extraction/Graph or whole-driver/language claim. Inherited project is noncomputable. Checked own-arity receipt transport remains separate.",
+  "preparation_history": "Baseline/pull/backup and source-only script/text preparation completed. Root has authored no Lean body and run no Lean parser/compiler or selected prefix program before this gate. Every old file remains.",
+  "prior_goal_turn": "PROGRESS: previous concrete constraint projection proved/sealed/pushed/remote-verified through a2123393a.",
+  "goal": "ACTIVE_INCOMPLETE"
+}

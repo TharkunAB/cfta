@@ -1,0 +1,5 @@
+
+-- | Extract equality classes, failing on 'EqContradiction'.
+unsafeGetEclasses :: EqConstraints -> [PathEClass]
+unsafeGetEclasses EqContradiction = error "unsafeGetEclasses: Illegal argument 'EqContradiction'"
+unsafeGetEclasses (EqConstraints eclasses) = eclasses

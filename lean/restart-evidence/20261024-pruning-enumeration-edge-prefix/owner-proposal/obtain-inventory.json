@@ -1,0 +1,60 @@
+{
+  "obtain_count": 3,
+  "field_count": 6,
+  "obtains": [
+    {
+      "id": "oldOrFresh",
+      "owner": "suspended_realized",
+      "scope": "successor case, actual stored pending Some-node payload after literal change",
+      "API": "List.mem_append.mp (List.mem_of_getElem? stored)",
+      "pattern": "old | fresh",
+      "fields": [
+        {
+          "name": "old",
+          "type": ".unenumerated (some node) scs ∈ before.values",
+          "branch": "old"
+        },
+        {
+          "name": "fresh",
+          "type": ".unenumerated (some node) scs ∈ [.unenumerated none []]",
+          "branch": "fresh"
+        }
+      ],
+      "fresh_contradiction": "Singleton membership and UVarValue.unenumerated constructor injectivity imply some node = none; no Eq instance is required."
+    },
+    {
+      "id": "oldActualSlot",
+      "owner": "suspended_realized",
+      "scope": "old membership branch",
+      "API": "List.getElem?_of_mem old",
+      "fields": [
+        {
+          "name": "oldSlot",
+          "type": "Nat"
+        },
+        {
+          "name": "oldStored",
+          "type": "before.values[oldSlot]? = some (.unenumerated (some node) scs)"
+        }
+      ],
+      "use": "Apply the genuine incoming realized at oldSlot, node and scs."
+    },
+    {
+      "id": "projectPair",
+      "owner": "prepare_complete",
+      "scope": "some pair projection case",
+      "API": "Prod elimination on actual pair",
+      "fields": [
+        {
+          "name": "tries",
+          "type": "List EqualityTrie.Trie"
+        },
+        {
+          "name": "residual",
+          "type": "Option Constraint"
+        }
+      ],
+      "no_desired_projection_premise": true
+    }
+  ]
+}

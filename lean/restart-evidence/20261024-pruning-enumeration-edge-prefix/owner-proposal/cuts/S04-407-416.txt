@@ -1,0 +1,10 @@
+/-- Source maximum-index checks and the executable arity predicate agree on valid tries. -/
+theorem arityAllows_maximum (arity : Nat) (scs : List Suspended)
+    (valid : ∀ sc ∈ scs, EqualityTrie.Valid sc.trie) :
+    arityAllows arity scs = true ↔
+      ∀ sc ∈ scs, (EqualityTrie.getMaxNonemptyIndex sc.trie).all (· < arity) = true := by
+  rw [arityAllows_correct]
+  constructor
+  · intro bounds sc member
+    exact (EqualityTrie.arity_exact sc.trie (valid sc member) arity).mpr (bounds sc member)
+  · intro bounds sc member

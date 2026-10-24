@@ -1,0 +1,72 @@
+MicroCFTA.SourcePruningEnumerationEdgePrefix.prepare : List MicroCFTA.EnumerationState.Suspended →
+  MicroCFTA.InternedConstructorTemplates.EdgeValue MicroCFTA.SourcePruningTemplates.Symbol
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) →
+    Option
+      (MicroCFTA.EnumerationState.EnumerateM MicroCFTA.SourcePruningTemplates.Symbol
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourcePruningTemplates.Symbol ×
+          List
+              (MicroCFTA.InternedConstructorTemplates.Value MicroCFTA.SourcePruningTemplates.Symbol
+                  (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) ×
+                List MicroCFTA.EnumerationState.Suspended ×
+                  Option
+                    (MicroCFTA.EnumerationState.EnumerateM MicroCFTA.SourcePruningTemplates.Symbol
+                      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+                      (MicroCFTA.Fragments.Fragment MicroCFTA.SourcePruningTemplates.Symbol))) ×
+            Option (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)))
+'MicroCFTA.SourcePruningEnumerationEdgePrefix.prepare' depends on axioms: [propext, Classical.choice, Quot.sound]
+MicroCFTA.SourcePruningEnumerationEdgePrefix.suspended_realized : ∀ (count : Nat)
+  (heap :
+    MicroCFTA.InternedConstructorTemplates.State MicroCFTA.SourcePruningTemplates.Symbol
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+  (before :
+    MicroCFTA.EnumerationState.State MicroCFTA.SourcePruningTemplates.Symbol
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)),
+  MicroCFTA.SourcePruningEnumerationObservation.PendingRealized heap before →
+    MicroCFTA.SourcePruningEnumerationObservation.PendingRealized heap
+      (MicroCFTA.EnumerationCorrectness.suspendedState count before)
+'MicroCFTA.SourcePruningEnumerationEdgePrefix.suspended_realized' depends on axioms: [propext]
+MicroCFTA.SourcePruningEnumerationEdgePrefix.prepare_complete : ∀ (scs : List MicroCFTA.EnumerationState.Suspended)
+  (edge :
+    MicroCFTA.InternedConstructorTemplates.EdgeValue MicroCFTA.SourcePruningTemplates.Symbol
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+  (heap :
+    MicroCFTA.InternedConstructorTemplates.State MicroCFTA.SourcePruningTemplates.Symbol
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+  (before :
+    MicroCFTA.EnumerationState.State MicroCFTA.SourcePruningTemplates.Symbol
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)),
+  MicroCFTA.SourcePruningEnumerationObservation.PendingRealized heap before →
+    before.counter = before.values.length →
+      if MicroCFTA.EnumerationState.arityAllows edge.children.length scs = true then
+        match MicroCFTA.SourcePruningEnumerationConstraint.project edge.entry.key.constraint with
+        | none => MicroCFTA.SourcePruningEnumerationEdgePrefix.prepare scs edge = none
+        | some (tries, residual) =>
+          have own := MicroCFTA.EnumerationCorrectness.suspendedVars before.counter tries;
+          have staged :=
+            List.map
+              (fun indexed =>
+                (indexed.fst,
+                  MicroCFTA.EnumerationState.descendScs indexed.snd scs ++
+                    MicroCFTA.EnumerationState.descendScs indexed.snd own,
+                  MicroCFTA.SourcePruningEnumerationShallowChild.prepareChild
+                    (MicroCFTA.EnumerationState.descendScs indexed.snd scs ++
+                      MicroCFTA.EnumerationState.descendScs indexed.snd own)
+                    indexed.fst))
+              edge.children.zipIdx;
+          ∃ action,
+            MicroCFTA.SourcePruningEnumerationEdgePrefix.prepare scs edge = some action ∧
+              action before =
+                  [Except.ok
+                      ((edge.entry.key.symbol, staged, residual),
+                        MicroCFTA.EnumerationCorrectness.suspendedState tries.length before)] ∧
+                (MicroCFTA.EnumerationCorrectness.suspendedState tries.length before).counter =
+                    before.counter + tries.length ∧
+                  (MicroCFTA.EnumerationCorrectness.suspendedState tries.length before).counter =
+                      (MicroCFTA.EnumerationCorrectness.suspendedState tries.length before).values.length ∧
+                    MicroCFTA.SourcePruningEnumerationObservation.PendingRealized heap
+                      (MicroCFTA.EnumerationCorrectness.suspendedState tries.length before)
+      else MicroCFTA.SourcePruningEnumerationEdgePrefix.prepare scs edge = some MicroCFTA.EnumerationState.reject
+'MicroCFTA.SourcePruningEnumerationEdgePrefix.prepare_complete' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]

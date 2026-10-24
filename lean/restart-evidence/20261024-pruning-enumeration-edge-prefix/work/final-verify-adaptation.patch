@@ -1,0 +1,142 @@
+--- mcfta-pruning-enumeration-constraint-20261024-verify.py
++++ mcfta-pruning-enumeration-edge-prefix-20261024-verify.py
+@@ -1,4 +1,4 @@
+-"""Verify concrete source constraint projection and the complete preserved baseline."""
++"""Verify the ordered native edge prefix and the complete preserved baseline."""
+ import argparse
+ import gzip
+ import hashlib
+@@ -10,8 +10,8 @@
+ parser = argparse.ArgumentParser(description=__doc__)
+ parser.add_argument('--root', type=Path, required=True)
+ root = parser.parse_args().root.resolve()
+-here = root / 'lean/restart-evidence/20261024-pruning-enumeration-constraint'
+-baseline = '0c65fc85e37a1f5c9523007937f27b31f8054ec6'
++here = root / 'lean/restart-evidence/20261024-pruning-enumeration-edge-prefix'
++baseline = 'a2123393a3e669a5b7e658c929d52c40654249e6'
+ main = '74250bd889685da436cdbfe32ac4b5a0878ffd09'
+ 
+ def sha(data):
+@@ -40,7 +40,7 @@
+     subprocess.run(['git', *args], cwd=root, check=True)
+ assert git('rev-list', '--parents', '-n', '1', proof).decode().split() == [proof, baseline]
+ assert set(git('diff-tree', '--no-commit-id', '--name-only', '-r', proof).decode().splitlines()) == {
+-    'lean/MicroCFTA/SourcePruningEnumerationConstraint.lean', 'lean/MicroCFTA/Audit.lean'}
++    'lean/MicroCFTA/SourcePruningEnumerationEdgePrefix.lean', 'lean/MicroCFTA/Audit.lean'}
+ tree = gzip.decompress((here / 'work/baseline-tree.txt.gz').read_bytes())
+ assert tree == git('ls-tree', '-r', '-z', baseline)
+ assert sha(tree) == load('work/baseline.json')['tree_sha256']
+@@ -70,14 +70,14 @@
+         changed.append(name)
+     elif name == 'lean/MicroCFTA/Audit.lean':
+         addition = audit_change['prefix'].encode()
+-        assert addition == b'import MicroCFTA.SourcePruningEnumerationConstraint\n'
++        assert addition == b'import MicroCFTA.SourcePruningEnumerationEdgePrefix\n'
+         assert sha(data) == audit_change['after_sha256'] and data.startswith(addition)
+         data = data[len(addition):]
+         assert sha(data) == audit_change['before_sha256']
+         changed.append(name)
+     assert hashlib.sha1(b'blob ' + str(len(data)).encode() + b'\0' + data).hexdigest() == blob, name
+     count += 1
+-assert count == 130607 and len(changed) == 10
++assert count == 130812 and len(changed) == 10
+ assert git('stash', 'list', '--format=%gd %H %s') == (here / 'work/baseline-stashes.txt').read_bytes()
+ worktrees = (here / 'work/baseline-worktrees.txt').read_bytes()
+ assert git('worktree', 'list', '--porcelain') == worktrees.replace(
+@@ -86,17 +86,15 @@
+     value, ref = line.split()
+     if ref not in ['refs/heads/formalize', 'refs/remotes/origin/formalize']:
+         assert git('rev-parse', ref).decode().strip() == value, ref
+-assert git('rev-parse', 'codex/backup-pruning-enumeration-constraint-20261024-0951').decode().strip() == baseline
++assert git('rev-parse', 'codex/backup-pruning-enumeration-edge-prefix-20261024-1027').decode().strip() == baseline
+ 
+ checks = load('work/build-summary.json')
+-source = (root / 'lean/MicroCFTA/SourcePruningEnumerationConstraint.lean').read_bytes()
+-assert source == (here / 'production-sources/SourcePruningEnumerationConstraint.lean').read_bytes()
+-assert source == (here / 'work' / checks['successful_source_attempt'] / 'MicroCFTA/SourcePruningEnumerationConstraint.lean').read_bytes()
++source = (root / 'lean/MicroCFTA/SourcePruningEnumerationEdgePrefix.lean').read_bytes()
++assert source == (here / 'production-sources/SourcePruningEnumerationEdgePrefix.lean').read_bytes()
++assert source == (here / 'work' / checks['successful_source_attempt'] / 'MicroCFTA/SourcePruningEnumerationEdgePrefix.lean').read_bytes()
+ assert sha(source) == load('work/installation.json')['source_sha256']
+ assert len(source.splitlines()) == checks['source_lines']
+ assert not re.search(rb'\b(?:sorry|admit|axiom|unsafe|set_option)\b', source)
+-assert re.findall(rb'^(?:noncomputable )?(def|theorem) ', source, re.M) == [b'def', b'theorem']
+-assert len(re.findall(rb'^local instance ', source, re.M)) == 0
+ assert not re.search(rb'^(?:instance|structure|inductive|private) ', source, re.M)
+ text = source.decode()
+ 
+@@ -105,8 +103,11 @@
+ assert len(pins) == frozen['pins_count'] and frozen['compiler_evidence'] is False
+ assert len((here / 'owner-proposal/pins.json').read_bytes()) == frozen['pins']['bytes']
+ assert sha((here / 'owner-proposal/pins.json').read_bytes()) == frozen['pins']['sha256']
+-assert frozen['local_instance_count'] == 0 and frozen['global_instance_count'] == 0
+-assert len(source.splitlines()) <= frozen['proposed_hard_cap'] == 220
++headers = load('owner-proposal/insertion-map.json')['public_heads']
++assert re.findall(rb'^(?:noncomputable )?(def|theorem) ', source, re.M) == [item['kind'].encode() for item in headers]
++assert len(re.findall(rb'^local instance ', source, re.M)) == frozen['local_instance_count']
++assert frozen['global_instance_count'] == 0
++assert len(source.splitlines()) <= frozen['proposed_hard_cap'] == 200
+ assert sha((here / 'owner-proposal/FROZEN.json').read_bytes()) == load('work/body-gate.json')['frozen_sha256']
+ assert {p.relative_to(here / 'owner-proposal').as_posix() for p in (here / 'owner-proposal').rglob('*') if p.is_file()} == set(pins) | {'pins.json', 'FROZEN.json'}
+ for name, pin in pins.items():
+@@ -162,24 +163,24 @@
+ assert '⋯' not in public
+ decls = load('work/public-declarations.json')
+ assert re.findall(r'^@?(MicroCFTA\.[\w.]+)(?=\s)', public, re.M) == decls['declarations']
+-assert len(decls['declarations']) == 2
++assert len(decls['declarations']) == len(headers)
+ axioms = {}
+ for name, names in re.findall(r"'(MicroCFTA\.[^']+)' depends on axioms: \[(.*?)\]", public, re.S):
+     axioms[name] = sorted(name.strip().split('.{', 1)[0] for name in names.split(',') if name.strip())
+ for name in re.findall(r"'(MicroCFTA\.[^']+)' does not depend on any axioms", public):
+     axioms[name] = []
+-assert set(axioms) == set(decls['declarations']) and len(axioms) == 2
++assert set(axioms) == set(decls['declarations']) and len(axioms) == len(headers)
+ assert axioms == decls['axioms']
+-assert len(decls['theorems']) == 1 and len(decls['definitions']) == 1
+-headers = load('owner-proposal/insertion-map.json')['public_heads']
+-namespace = 'MicroCFTA.SourcePruningEnumerationConstraint.'
++assert len(decls['theorems']) == sum(item['kind'] == 'theorem' for item in headers)
++assert len(decls['definitions']) == sum(item['kind'] == 'def' for item in headers)
++namespace = 'MicroCFTA.SourcePruningEnumerationEdgePrefix.'
+ assert decls['definitions'] == [namespace + item['name'] for item in headers if item['kind'] == 'def']
+ assert decls['theorems'] == [namespace + item['name'] for item in headers if item['kind'] == 'theorem']
+ assert set(decls['definitions'] + decls['theorems']) == set(decls['declarations'])
+ for names in axioms.values():
+     assert set(names) <= {'Classical.choice', 'Quot.sound', 'propext'}
+ receipt_stems = ['baseline-1'] + checks['attempts']
+-prefix = 'mcfta-pruning-enumeration-constraint-20261024-'
++prefix = 'mcfta-pruning-enumeration-edge-prefix-20261024-'
+ expected_stems = {prefix + stem for stem in receipt_stems}
+ for suffix in ['limits.json', 'usage.json']:
+     paths = list((here / 'inputs').glob('*.' + suffix))
+@@ -194,23 +195,23 @@
+     usage = load('inputs/' + prefix + stem + '.usage.json')
+     assert 0 <= usage['age_seconds'] <= 600 and usage['remaining_percent'] > 1
+ for name in ['declaration', 'model', 'public', 'document', 'seal-script', 'root']:
+-    assert (here / 'inputs' / ('mcfta-pruning-enumeration-constraint-20261024-' + name + '-review.md')).is_file()
+-assert (root / 'lean/notes-current-pruning-enumeration-constraint.md').read_bytes() == (here / 'current-note.md').read_bytes()
+-findings = (root / 'FINDINGS.md').read_text().split('## Concrete source constraint projection', 1)[0]
++    assert (here / 'inputs' / ('mcfta-pruning-enumeration-edge-prefix-20261024-' + name + '-review.md')).is_file()
++assert (root / 'lean/notes-current-pruning-enumeration-edge-prefix.md').read_bytes() == (here / 'current-note.md').read_bytes()
++findings = (root / 'FINDINGS.md').read_text().split('## Ordered native edge preparation prefix', 1)[0]
+ assert '## Haskell fix handoff for external work' in findings and findings.count('| Fixed by ') == 6
+ assert 'All six repairs are in the imported main history.' in findings
+ prior = load('previous-publication/remote-publication.json')
+ assert prior['status'] == 'PUSHED_AND_REMOTE_VERIFIED' and prior['remote_head'] == baseline
+ assert load('previous-publication/publication-spec.json')['head'] == baseline
+ assessment = (here / 'previous-publication/next-assessment.md').read_bytes()
+-assert sha(assessment) == '41fe79f79c383e3d572b00dabf8d445be67f5a003358f171d4050a76453bcc4b'
++assert sha(assessment) == 'f804d5f3bffa328521bb4f9037037012e32d8385dbc415123f2be0ab6f1e2467'
+ summary = load('previous-publication/post-publication-summary.json')
+ assert summary['head'] == baseline and summary['goal'] == 'ACTIVE_INCOMPLETE'
+ assert summary['component_status'] == 'PROVED_SEALED_PUSHED_REMOTE_VERIFIED'
+ assert summary['next_assessment_sha256'] == sha(assessment)
+-assert sha((here / 'inputs/mcfta-pruning-enumeration-constraint-20261024-source-review.md').read_bytes()) == '96f95e10e226c3f73d65ac99d2414484c7d45588d10e4bf10ee1be94a6be13c6'
++assert sha((here / 'inputs/mcfta-pruning-enumeration-edge-prefix-20261024-source-review.md').read_bytes()) == '922549ae04d47a22b7d6480a5d70692866af54f7d73a9b2fc855575ad338a8f1'
+ 
+ print(json.dumps(dict(status='PASS', baseline=baseline, main=main, proof=proof,
+     baseline_files=count, unchanged_files=count - len(changed), exact_changed_files=changed,
+-    new_modules=1, lean_attempts=len(expected), public_signatures=2, axiom_reports=2,
++    new_modules=1, lean_attempts=len(expected), public_signatures=len(headers), axiom_reports=len(headers),
+     resource_receipts=len(receipt_stems), sealed_files=len(manifest), goal='ACTIVE_INCOMPLETE'), indent=2))

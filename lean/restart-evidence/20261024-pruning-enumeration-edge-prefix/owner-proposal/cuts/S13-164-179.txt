@@ -1,0 +1,16 @@
+
+Each child gets its obligations in the order of the input. An obligation that
+reaches no child, because its paths end here, goes to no child.
+-}
+descendScs ::
+    (Foldable f) =>
+    IntMap.IntMap (Seq SuspendedConstraint) -> f SuspendedConstraint -> IntMap.IntMap (Seq SuspendedConstraint)
+descendScs = Foldable.foldl' descend
+  where
+    descend children (SuspendedConstraint (PathTrie tries) uv) =
+        IntMap.foldlWithKey'
+            (\m i pt -> IntMap.insertWith (flip (<>)) i (Sequence.singleton (SuspendedConstraint pt uv)) m)
+            children
+            tries
+    descend children _ = children
+

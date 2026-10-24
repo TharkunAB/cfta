@@ -1,0 +1,15 @@
+# Exact declaration self-review
+
+Ready for independent SOURCE-ONLY declaration review. This is the proposal author's review, not compiler or independent proof evidence.
+
+Six exact compiled STRING fragments have48lines: context12, noncomputable prepare7, suspended_realized5, prepare_complete21, condition1 and typed change2. The complete restricted helper IH is a separate three-line review fragment. There are three public heads, one named local List Monad, zero global instances, zero private helpers and zero new carriers/types/predicates. No definition or proof body is present.
+
+The inherited arity branch wins before projection. Arity failure returns some reject. Only the passing branch inspects the actual noncomputable constraint projection. Projection none remains outside the action and distinct from native unsafe-accessor fault, enum error and list rejection. The supported branch allocates its actual tries in order and stages existing child Options without executing them. The product payload preserves the actual edge symbol, complete children, exact incoming-descend ++ own-descend buckets, optional actions and original residual. No obligation is inserted.
+
+The public type uses the actual same-edge fields. Its two public lets are pure computed expressions. The explicit EnumGuard:=Constraint argument fixes the staged child action's type; it does not add a premise. Native and enum guards intentionally use the same complete Constraint FullSyntax.Formula for this component. Symbol is the existing full label alias.
+
+The exact-state conclusion is stronger than a supplied success law. The actual returned action at before has exactly one ok result at the actual suspendedState endpoint. It also derives counter increment, alignment and PendingRealized. Existing suspendMany_exact supplies actual own variables and full middle state. The helper proves None-allocation preservation through one count induction generalizing the actual state, without alignment/Coherent/Available/closed premises. Both old/fresh membership fields, the actual old slot packet, every intro/lambda and the complete IH application are inventoried. There is no proof-local have/let/show or hidden helper.
+
+The source identity table has16 defining snapshots and30focused cuts308lines. Ten real import routes retain42live module identities. No broad new source survey or compiler work is included. Arity correspondence for malformed incoming tries is not inferred from PendingRealized; the existing maximum-index theorem needs validity. Own-class source arity enforcement/receipt integration and complete child execution remain outside this prefix. No suspended-language or whole-driver preservation is claimed.
+
+Static checks verify all literals, byte/hash identities, exact slices, adjacent import edges and complete safe-relative file-set pins. Only top-level pins.json and FROZEN.json are excluded. Earlier owners and source files remain unchanged. Root owns all future bodies and execution after independent declaration clearance and acceptance.
