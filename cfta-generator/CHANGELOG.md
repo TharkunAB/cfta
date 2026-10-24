@@ -148,6 +148,10 @@ tree automata of `cfta`, with QuickCheck integration.
   replaces a subterm by a child that its state accepts. A context wrap
   (`ContextAt`, with `HoleParent` in its new term) puts a new term with one hole
   above the subterm, deeper than a wrap does.
+- `Data.CFTA.Edit.Trees`: `editTreeAutomaton k automaton term` gives an
+  automaton whose terms are the edit trees of a term: edit sets where an edit
+  may lie inside a wrap whose hole has the state of its position. `applyEditTree`
+  gives the edited term.
 - Terms are `Term symbol` from `Data.CFTA.Term` of `cfta`:
   `fromAutomaton`, `fromAutomatonUpToDepth`, `termAt`, `rankOf`, `ranksOf`,
   `rankOfTerm`, `surface`, and the refinement witnesses take and give `Term`

@@ -52,15 +52,15 @@ module Data.CFTA.Edit.Sets (
 import Control.Monad (foldM)
 import Data.Either (fromRight)
 import Data.Hashable (Hashable)
-import Data.List (mapAccumL)
 import qualified Data.Map.Strict as Map
 import GHC.Generics (Generic)
 
 import qualified Data.CFTA as FTA
 import Data.CFTA.Constraint (Constraint, noConstraint)
 import Data.CFTA.Edit
+import Data.CFTA.Edit.Internal (bug, dyadicCover, extents, sitePath)
 import Data.CFTA.Index (ChildIndex (..))
-import Data.CFTA.Path (Path, unPath)
+import Data.CFTA.Path (unPath)
 import Data.CFTA.Term (Term)
 import qualified Data.CFTA.Term as Term
 
@@ -130,10 +130,6 @@ editSetAutomaton bound automaton given = do
         rowOf (SetBelow _) = []
     pure $ close (materialRows edits) rowOf
 
--- | An impossible case.
-bug :: String -> a
-bug message = error $ "cfta-generator bug in Data.CFTA.Edit.Sets: " <> message
-
 -- | The rows of the new material: the rows of the edit automaton without its root.
 materialRows ::
     (Ord state, Ord symbol) =>
@@ -192,37 +188,6 @@ sitesOf edits given =
   where
     extentsOfPaths = Map.fromList $ extents given
     unChild (ChildIndex index) = index
-
--- | The preorder index and the first index after the subtree of each position of a term.
-extents :: Term symbol -> [([Int], (Int, Int))]
-extents = fst . go 0 []
-  where
-    go next at (Term.Node _ children) =
-        let (after, inner) = mapAccumL step (next + 1) (zip [0 ..] children)
-            step current (index, child) = let (found, following) = go current (at <> [index]) child in (following, found)
-         in ((at, (next, after)) : concat inner, after)
-
--- | The path of an edit site.
-sitePath :: EditSymbol symbol -> Path
-sitePath symbol = case symbol of
-    ReplaceAt at -> at
-    WrapAt at _ _ _ -> at
-    UnwrapAt at _ -> at
-    ContextAt at _ _ _ -> at
-    HoleParent _ _ -> mempty
-    Material _ -> mempty
-
-{- | The canonical cover of the indexes from a bound up to a power of two by
-dyadic ranges (first index, number of indexes): the largest aligned range that
-starts at the bound and fits, and then the cover of the rest.
--}
-dyadicCover :: Int -> Int -> [(Int, Int)]
-dyadicCover total = go
-  where
-    go from
-        | from >= total = []
-        | otherwise = let size = largest from in (from, size) : go (from + size)
-    largest from = last [size | size <- takeWhile (<= total) (iterate (* 2) 1), from `mod` size == 0, from + size <= total]
 
 {- | The edits of an edit set, one for each site, in the order of the chain. The
 paths are pairwise incomparable. 'Nothing' for a term that is not an edit set.

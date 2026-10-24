@@ -58,6 +58,7 @@ module Data.CFTA.Edit (
     Edit,
     editAutomaton,
     applyEdit,
+    holedRows,
 ) where
 
 import Control.Monad (guard)
@@ -166,7 +167,7 @@ editAutomaton automaton given
               )
                 : [(Free state, map (onChildren Free) transitions) | (state, transitions) <- Map.toList $ FTA.transitionTable automaton]
                     <> Map.toList (Map.unions [excludedRows exclusion | (_, _, _, exclusion) <- sites])
-                    <> concatMap holedRows (Set.toList $ Set.fromList [accepting old | (_, _, old, _) <- sites])
+                    <> concatMap (holedRows automaton) (Set.toList $ Set.fromList [accepting old | (_, _, old, _) <- sites])
       where
         sites = [(at, state, old, excludeFTA [template old] (rootedAt state)) | (at, state, old) <- positions]
     -- The replacement site at a position: a term of the state other than the old subterm.
@@ -198,26 +199,6 @@ editAutomaton automaton given
         ]
     -- The states that accept a term.
     accepting old = Set.fromList [state | state <- FTA.states automaton, FTA.accepts (rootedAt state) old]
-    -- The rows of the states with one hole.
-    holedRows holeStates =
-        [ (Holed holeStates state, concatMap (holedTransitions holeStates) transitions)
-        | (state, transitions) <- Map.toList $ FTA.transitionTable automaton
-        ]
-    holedTransitions holeStates (FTA.Transition symbol children _) =
-        concat
-            [ [ FTA.Transition
-                    (HoleParent symbol (ChildIndex hole))
-                    [Free other | (index, other) <- zip [0 :: Int ..] children, index /= hole]
-                    noConstraint
-              | child `Set.member` holeStates
-              ]
-                <> [ FTA.Transition
-                        (Material symbol)
-                        [if index == hole then Holed holeStates other else Free other | (index, other) <- zip [0 ..] children]
-                        noConstraint
-                   ]
-            | (hole, child) <- zip [0 ..] children
-            ]
     excludedRows exclusion =
         Map.fromList
             [ (Excluded pair, map (onChildren Excluded) transitions)
@@ -237,6 +218,37 @@ editAutomaton automaton given
         , length childStates == length children
         , childRuns <- sequence $ zipWith runsFrom childStates children
         ]
+
+{- | The rows of the states with one hole, for a set of states of the hole. A
+row of @Holed holeStates state@ has the transitions of the state: a node of the
+new term that has the hole as a child, when the child has a state of the set,
+and a node with the hole below one of its children.
+-}
+holedRows ::
+    (Ord state) =>
+    FTA.PlainFTA state symbol ->
+    Set state ->
+    [(EditState state symbol, [FTA.Transition (EditState state symbol) (EditSymbol symbol) Constraint])]
+holedRows automaton holeStates =
+    [ (Holed holeStates state, concatMap holedTransitions transitions)
+    | (state, transitions) <- Map.toList $ FTA.transitionTable automaton
+    ]
+  where
+    holedTransitions (FTA.Transition symbol children _) =
+        concat
+            [ [ FTA.Transition
+                    (HoleParent symbol (ChildIndex hole))
+                    [Free other | (index, other) <- zip [0 :: Int ..] children, index /= hole]
+                    noConstraint
+              | child `Set.member` holeStates
+              ]
+                <> [ FTA.Transition
+                        (Material symbol)
+                        [if index == hole then Holed holeStates other else Free other | (index, other) <- zip [0 ..] children]
+                        noConstraint
+                   ]
+            | (hole, child) <- zip [0 ..] children
+            ]
 
 {- | The edited term of an edit. 'Nothing' when the edit does not fit the term:
 a path that the term does not have, a child index out of range, or a root
