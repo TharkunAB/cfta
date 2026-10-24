@@ -644,7 +644,8 @@ parseOptions = O.execParser (O.info (options O.<**> O.helper) (O.fullDesc <> O.p
             ( O.long "completion-fuel"
                 <> O.metavar "N"
                 <> O.value completionFuelDefault
-                <> O.help "Stop the completion of a law after N critical pairs, and keep the rules that it has (0: no limit, the default)"
+                <> O.help
+                    "Stop the completion of a law after N critical pairs, and keep the rules that it has (default 30000; 0: no limit)"
             )
     recheckOption =
         O.option
@@ -1591,9 +1592,17 @@ completions that end.
 completionBudget :: Word64
 completionBudget = 256 * 1024 * 1024 * 1024
 
--- | The default number of critical pairs of the completion of one law (@--completion-fuel@; 0: no limit).
+{- | The default number of critical pairs that the completion of one law may
+take (@--completion-fuel@; 0: no limit). A pair costs about 1 MiB of
+allocation at HugeLists, so the fuel stops a completion at about 30 GiB,
+and the law keeps the rules that it has. At HugeLists 7-p4, 78 completions
+ran over the allocation budget and kept only the rules of their laws; they
+took 76 % of the time of the completion. With this fuel, 6-p4 gives the same
+laws in 15 % less time, and 7-p4 runs in 41 % of the time (see the
+comparison with Spectacular).
+-}
 completionFuelDefault :: Int
-completionFuelDefault = 0
+completionFuelDefault = 30000
 
 {- | The completed rules of a law, if their computation stays within the
 limits of the completion (see 'completionTimeout', 'completionMemLimit',
