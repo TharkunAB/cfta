@@ -253,8 +253,10 @@ ambiguity. A guard beyond equality
 constraints is `ResidualGuard`. `sizedUpTo` builds the classes up to a size
 bound with a solver that decides every guard on each term, as
 `denotationAtMost` does by depth, so it also takes a liquid automaton whose
-guards pruning did not discharge. An interned automaton enters through
-`toFTA` of `Data.CFTA.Interned`.
+guards pruning did not discharge. `sizedStates` gives the classes of each
+state, as `sized` gives them with that state as the initial state, with one
+table for all the states. An interned automaton enters through `toFTA` of
+`Data.CFTA.Interned`.
 
 ```haskell
 module Main (main) where
@@ -290,6 +292,23 @@ The order is the order of the count table: the transitions of a state by
 arity, symbol, and the classes of their children; the children of a
 transition by the size of the earlier children, in ascending order; and a
 term that several transitions accept at its first place.
+
+### The completions of a prefix
+
+`Data.CFTA.Sized.Prefix` reads the terms of an automaton one node at a time,
+in preorder, as a decoder writes them. A token is a symbol with its number of
+children, and a prefix is a list of tokens. `prefixCompletions` takes a size
+bound and an automaton without constraints, and gives the completions of the
+empty prefix: the accepted terms with at most the bound of nodes.
+`nextTokens` gives the tokens that can come next, each with the number of
+completions that start with the prefix and the token. `afterToken` adds one
+token, and it gives `Nothing` when no completion starts with the result, so a
+caller can reject a token at once. `isComplete` says whether the prefix is an
+accepted term. `completionCount`, `completionTerms`, `unrankCompletion`, and
+`sampleCompletion` count, list, unrank, and sample the completions uniformly.
+The completions are distinct terms, as in `Data.CFTA.Sized`, also when the
+automaton is ambiguous. For the empty prefix their order is the order of
+`sized`.
 
 ## Equality-constrained generators
 

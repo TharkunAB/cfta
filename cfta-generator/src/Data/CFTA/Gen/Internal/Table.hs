@@ -1,12 +1,15 @@
 -- | Shared size indexing for ordinary, possibly recursive automata.
 module Data.CFTA.Gen.Internal.Table (
     tableIndex,
+    tableIndexes,
     tablePosition,
     minimumSizes,
+    unambiguousRows,
 ) where
 
 import Control.Monad (zipWithM)
 import Data.Foldable (toList)
+import Data.List (tails)
 import Data.List.NonEmpty (NonEmpty)
 import qualified Data.List.NonEmpty as NonEmpty
 import qualified Data.Map.Lazy as LazyMap
@@ -43,6 +46,13 @@ before supplying ordinary rows. This worker does not interpret constraints.
 tableIndex ::
     (Ord state) => state -> Map.Map state [FTA.Transition state symbol ()] -> SizeIndex (Term symbol)
 tableIndex initial rows = fst (stateTable rows) initial
+
+{- | The size index of each state of the rows, as 'tableIndex' gives it.
+Apply the function to the rows once: the states then share one table.
+-}
+tableIndexes ::
+    (Ord state) => Map.Map state [FTA.Transition state symbol ()] -> state -> SizeIndex (Term symbol)
+tableIndexes rows = fst (stateTable rows)
 
 {- | Find the size class and the position in it of a term that the initial
 state accepts, as 'tableIndex' selects the term.
@@ -161,3 +171,35 @@ minimumSizes rows = converge Map.empty
                 sizes -> Map.insertWith min state (minimum sizes) known
     transitionMinimum known transition =
         (1 +) . sum <$> traverse (`Map.lookup` known) (FTA.transitionChildren transition)
+
+{- | Whether each term has at most one run in the rows.
+
+The synchronous product accepts the common terms of each pair of states.
+Two alternatives overlap when every pair of child states is productive.
+-}
+unambiguousRows :: (Ord state, Eq symbol) => Map.Map state [FTA.Transition state symbol ()] -> Bool
+unambiguousRows rows =
+    not $
+        or
+            [ FTA.transitionSymbol left == FTA.transitionSymbol right
+                && length (FTA.transitionChildren left) == length (FTA.transitionChildren right)
+                && all (`Map.member` productive) (zip (FTA.transitionChildren left) (FTA.transitionChildren right))
+            | alternatives <- Map.elems rows
+            , left : rest <- tails alternatives
+            , right <- rest
+            ]
+  where
+    productive = minimumSizes products
+    products =
+        Map.fromList
+            [ ( (leftState, rightState)
+              , [ FTA.Transition (FTA.transitionSymbol left) (zip (FTA.transitionChildren left) (FTA.transitionChildren right)) ()
+                | left <- leftRows
+                , right <- rightRows
+                , FTA.transitionSymbol left == FTA.transitionSymbol right
+                , length (FTA.transitionChildren left) == length (FTA.transitionChildren right)
+                ]
+              )
+            | (leftState, leftRows) <- Map.toList rows
+            , (rightState, rightRows) <- Map.toList rows
+            ]
