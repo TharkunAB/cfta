@@ -1,0 +1,29 @@
+# Independent enumeration-slot writes document review
+
+[2026-10-24 05:52:20 CEST] CLEAR for the final79-line focused note and all nine actual30-LF status insertions. I read the complete note, complete common prefix, full first external repair index, complete installed/Audit logs and reports, build summary and proof metadata. I checked the live insertions against the retained baseline tree and the statements against my unchanged full-source/public review. Root authored these documents and proof bodies; Arity authored declarations. I executed no compiler, prepared script, Git command or repository mutation.
+
+The note accurately requires Coherent/Available/closed native input plus incoming PendingRealized for both theorems. Allocation separately requires counter/list alignment, derives its handle, actual returned raw UVar, exact fresh slot and full allocated state including incremented counter and ancestry inheritance. Raw replacement separately requires an address inside the values list, derives its computed handle and exact whole-state values.set update, and does not require the address to be a representative. All pending slots are covered. No desired final invariant, successful decoder or selected output handle is supplied.
+
+The native heap stays identical. The note correctly limits these results to the existing modeled value/ancestry actions. Native expandable/waiting-index maintenance, native state equality and shallow preparation are not claimed. Arbitrary suspended constraints retain their order/duplicates but do NOT establish StorageValid or suspended-address bounds. A model Empty handle does not prove that the full driver accepts Empty. Intersection/assimilation/native-heap realization, actual narrowing composition, open-hole bounds, ordered observations, lazy native emptiness calls and typedTypes remain explicit later obligations.
+
+H6 remains strongest combined. I reused the exact unchanged source identity from the complete H6 read in the preceding document review. The note preserves its genuine original allocation history/covered closed construction, sufficient mathematical width/fuels and any finite number of modeled rounds. Empty inherited payload yields finite-term language equivalence. withoutRedundantEdges and convergence are excluded. These slot writes add no language theorem; native/runtime/resource and full-goal claims remain open.
+
+I checked all nine final insertion offsets/texts and after hashes. Each uses identical1735-character text with30 LF characters. Removing it recovers the recorded before-SHA256 AND the exact original Git blob hash from the retained128571-entry baseline tree. Every document keeps its original executable mode. The updated writer's literal prefix, statically substituted with recorded proof/build metrics, reproduces the actual inserted text; no writer execution occurred. This verifies preservation of all old document bytes without rereading unrelated historical sections. FINDINGS retains the complete six-fix external repair index before this update, with all six fixes on main and no new repair claim.
+
+Installed source matches strict1/candidate at69 lines/SHA25632864f9158615ee7787c7490356471489978a5622ea984d904f7b03329510a7e. The exact installed109-byte log records563 jobs/exit0. The full617-byte Audit log records3682 jobs/76103 dependency checks/exit0 and only the older InternedFreshOrdinaryClosedCompletion24:5 unused-input warning. Raw sizes/hashes agree with reports and build-summary. First strict success/empty log, both complete public signatures and both actual propext+Quot.sound reports remain those already reviewed. No failed compiler attempt is concealed. The42-payload/three-contract owner is described correctly.
+
+proof-commit.json records5574e476b4fefd2a6716813ea483bab374c41367 over baseline597dc875e576d348073d03c49e3aa8ab523b33c3, with module/Audit paths only. I did not use Git to recheck ancestry. Prefixes explicitly precede evidence creation and authorized push. The evidence path is the intended archive location; this review assumes no completed seal/publication or whole-baseline runtime verification. The goal remains ACTIVE/incomplete; prior reviews stay unchanged.
+
+Exact input pins:
+
+- /home/tritlo/Code/mcfta/lean/notes-current-pruning-enumeration-writes.md: 4900 bytes; SHA256 1f3d430fc5797a38a889eddc824b3b7f6dd505597cb9004e0a1b35dd9810ccdb.
+- /tmp/mcfta-pruning-enumeration-writes-20261024/document-changes.json: 18218 bytes; SHA256 2670a413c42603db21eb47e7e15edec108891c6d31423b4a78d86bf98ea66f5e.
+- /tmp/mcfta-pruning-enumeration-writes-20261024/build-summary.json: 234 bytes; SHA256 effba3ce4251cea6a9972bca5efa0007ac8f45ce4e0869a8f2bb20f1de62b41e.
+- /tmp/mcfta-pruning-enumeration-writes-20261024/proof-commit.json: 225 bytes; SHA256 71084c7f10d86f8bf7108deab19ade40c4f04bee88ae4ba1a24acb7cd9355c1f.
+- /tmp/mcfta-pruning-enumeration-writes-20261024/installed-build-1/report.json: 325 bytes; SHA256 10ee14352d67cd5e647bca018a4bf24ab2117999cb9e0dce39a999376fa183ee.
+- /tmp/mcfta-pruning-enumeration-writes-20261024/installed-build-1/raw.log: 109 bytes; SHA256 66666f8b1b5722113b612b6207708ff8465bd74bedef21d0f6292ede074f08af.
+- /tmp/mcfta-pruning-enumeration-writes-20261024/audit-1/report.json: 300 bytes; SHA256 09ddcdea7f88b52cfb06500a5e77f269881c5928ed8dc80ff888c2fd75cf7264.
+- /tmp/mcfta-pruning-enumeration-writes-20261024/audit-1/raw.log: 617 bytes; SHA256 007195e73e7e64b8f402cf407bbe904daf15a88515999053dbc8a6cfd997d4ac.
+- /tmp/mcfta-pruning-enumeration-writes-20261024-public-review.md: 6431 bytes; SHA256 f88c056a26ec70f00b1c65a441e7967c55f421ff26820c80cbef80f38353b5a8.
+- /home/tritlo/Code/mcfta/lean/MicroCFTA/SourceCurrentColdFiniteWarmCalls.lean: 10004 bytes; SHA256 e4665b0bb522ec88f1925fe6bc360b76e9e4bdfbe6192210ac708a3097a20cc5.
+- /tmp/mcfta-pruning-enumeration-writes-20261024-documents.py: 4213 bytes; SHA256 8dae650d36ddd43aa46f91133a653147c3f48d1f4e9c8c4a41cb877a09e3cbe8.

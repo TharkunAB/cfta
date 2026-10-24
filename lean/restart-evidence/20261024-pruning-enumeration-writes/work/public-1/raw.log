@@ -1,0 +1,46 @@
+MicroCFTA.SourcePruningEnumerationWrites.allocate_available_realized {EnumGuard NativeGuard : Type}
+  (heap : MicroCFTA.InternedConstructorTemplates.State MicroCFTA.SourcePruningTemplates.Symbol NativeGuard)
+  (before : MicroCFTA.EnumerationState.State MicroCFTA.SourcePruningTemplates.Symbol EnumGuard)
+  (value : MicroCFTA.InternedConstructorTemplates.Value MicroCFTA.SourcePruningTemplates.Symbol NativeGuard)
+  (coherent : MicroCFTA.InternedRecordCoherence.Coherent heap)
+  (available : MicroCFTA.InternedProbeProvenance.Available heap value) (closed : Eq.{1} value.free List.nil.{0})
+  (realized : MicroCFTA.SourcePruningEnumerationObservation.PendingRealized heap before)
+  (aligned : Eq.{1} before.counter (List.length.{0} before.values)) :
+  Exists.{1} fun node =>
+    Eq.{1} (MicroCFTA.SourcePruningEnumerationNodes.encodeNode value) (Option.some.{0} node) ∧
+      MicroCFTA.EnumerationCorrectness.Success (MicroCFTA.EnumerationState.allocate (Option.some.{0} node)) before
+          before.counter (MicroCFTA.EnumerationState.allocated (Option.some.{0} node) before) ∧
+        Eq.{1}
+            (GetElem?.getElem?.{0, 0, 0} (MicroCFTA.EnumerationState.allocated (Option.some.{0} node) before).values
+              before.counter)
+            (Option.some.{0} (MicroCFTA.EnumerationState.UVarValue.unenumerated (Option.some.{0} node) List.nil.{0})) ∧
+          MicroCFTA.SourcePruningEnumerationObservation.PendingRealized heap
+            (MicroCFTA.EnumerationState.allocated (Option.some.{0} node) before)
+MicroCFTA.SourcePruningEnumerationWrites.write_available_realized {EnumGuard NativeGuard : Type}
+  (heap : MicroCFTA.InternedConstructorTemplates.State MicroCFTA.SourcePruningTemplates.Symbol NativeGuard)
+  (before : MicroCFTA.EnumerationState.State MicroCFTA.SourcePruningTemplates.Symbol EnumGuard)
+  (value : MicroCFTA.InternedConstructorTemplates.Value MicroCFTA.SourcePruningTemplates.Symbol NativeGuard)
+  (slot : Nat) (scs : List.{0} MicroCFTA.EnumerationState.Suspended)
+  (coherent : MicroCFTA.InternedRecordCoherence.Coherent heap)
+  (available : MicroCFTA.InternedProbeProvenance.Available heap value) (closed : Eq.{1} value.free List.nil.{0})
+  (realized : MicroCFTA.SourcePruningEnumerationObservation.PendingRealized heap before)
+  (inside : LT.lt.{0} slot (List.length.{0} before.values)) :
+  Exists.{1} fun node =>
+    Exists.{1} fun after =>
+      Eq.{1} (MicroCFTA.SourcePruningEnumerationNodes.encodeNode value) (Option.some.{0} node) ∧
+        MicroCFTA.EnumerationCorrectness.Success
+            (MicroCFTA.EnumerationState.setValue slot
+              (MicroCFTA.EnumerationState.UVarValue.unenumerated (Option.some.{0} node) scs))
+            before () after ∧
+          Eq.{1} after
+              { counter := before.counter, representatives := before.representatives,
+                values :=
+                  List.set.{0} before.values slot
+                    (MicroCFTA.EnumerationState.UVarValue.unenumerated (Option.some.{0} node) scs),
+                obligations := before.obligations, recursionAncestry := before.recursionAncestry,
+                expansionAncestry := before.expansionAncestry } ∧
+            Eq.{1} (GetElem?.getElem?.{0, 0, 0} after.values slot)
+                (Option.some.{0} (MicroCFTA.EnumerationState.UVarValue.unenumerated (Option.some.{0} node) scs)) ∧
+              MicroCFTA.SourcePruningEnumerationObservation.PendingRealized heap after
+'MicroCFTA.SourcePruningEnumerationWrites.allocate_available_realized' depends on axioms: [propext, Quot.sound.{u}]
+'MicroCFTA.SourcePruningEnumerationWrites.write_available_realized' depends on axioms: [propext, Quot.sound.{u}]

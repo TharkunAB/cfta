@@ -1,0 +1,231 @@
+{
+  "status": "SOURCE_ONLY_COMPLETE_PLANNED_LOCAL_INVENTORY",
+  "all_local_haves": [],
+  "all_local_lets": [],
+  "typed_shows": [],
+  "case_equations": [],
+  "induction": null,
+  "recursive_calls": [],
+  "private_helpers": [],
+  "no_bodies_or_skeletons": true,
+  "allocate_available_realized": {
+    "obtains": [
+      {
+        "order": 0,
+        "activation": "Before constructing existential output packet",
+        "api": "SourcePruningEnumerationNodes.available_readback heap value coherent available closed",
+        "binders": [
+          {
+            "name": "node",
+            "type": "Nat"
+          },
+          {
+            "name": "encoded",
+            "type": "encodeNode value = some node"
+          },
+          {
+            "name": "decoded",
+            "type": "lookupNode heap node = some value"
+          }
+        ]
+      },
+      {
+        "order": 1,
+        "activation": "Inside PendingRealized proof, after the four intro binders",
+        "api": "List.mem_append.mp (List.mem_of_getElem? stored)",
+        "disjunction": {
+          "left": {
+            "name": "old",
+            "type": "(UVarValue.unenumerated (some storedNode) storedScs : UVarValue Symbol) \u2208 before.values"
+          },
+          "right": {
+            "name": "fresh",
+            "type": "(UVarValue.unenumerated (some storedNode) storedScs : UVarValue Symbol) \u2208 [(UVarValue.unenumerated (some node) [] : UVarValue Symbol)]"
+          }
+        }
+      },
+      {
+        "order": 2,
+        "activation": "Old-member branch only",
+        "api": "List.getElem?_of_mem old",
+        "binders": [
+          {
+            "name": "oldSlot",
+            "type": "Nat"
+          },
+          {
+            "name": "oldStored",
+            "type": "before.values[oldSlot]? = some (.unenumerated (some storedNode) storedScs)"
+          }
+        ]
+      },
+      {
+        "order": 3,
+        "activation": "Fresh-member/equality branch only, after constructor equality simplification",
+        "api": "Anonymous equality elimination on fresh",
+        "binders": [],
+        "anonymous_equalities": [
+          "storedNode = node",
+          "storedScs = []"
+        ],
+        "scope_after_elimination": "The certificate is value/decoded/available/closed; no new local fact is introduced."
+      }
+    ],
+    "intro_binders": [
+      {
+        "name": "storedSlot",
+        "type": "Nat"
+      },
+      {
+        "name": "storedNode",
+        "type": "Nat"
+      },
+      {
+        "name": "storedScs",
+        "type": "List EnumerationState.Suspended"
+      },
+      {
+        "name": "stored",
+        "type": "(allocated (some node) before).values[storedSlot]? = some (.unenumerated (some storedNode) storedScs)"
+      }
+    ],
+    "literal_change_fragment": "change (before.values ++ [.unenumerated (some node) []])[storedSlot]? =\n  some (.unenumerated (some storedNode) storedScs) at stored",
+    "fresh_type_after_simp": "storedNode = node \u2227 storedScs = []",
+    "old_branch_public_call": "realized oldSlot storedNode storedScs oldStored",
+    "haves": [],
+    "lets": [],
+    "cases": [],
+    "by_cases": [],
+    "induction": null,
+    "typed_shows": [],
+    "anonymous_elimination_types": [
+      {
+        "scope": "fresh",
+        "type": "storedNode = node"
+      },
+      {
+        "scope": "fresh",
+        "type": "storedScs = []"
+      }
+    ],
+    "existential_witnesses": [
+      {
+        "name": "node",
+        "kind": "Actual output of available_readback"
+      }
+    ]
+  },
+  "write_available_realized": {
+    "obtains": [
+      {
+        "order": 0,
+        "activation": "Before constructing existential output packet",
+        "api": "SourcePruningEnumerationNodes.available_readback heap value coherent available closed",
+        "binders": [
+          {
+            "name": "node",
+            "type": "Nat"
+          },
+          {
+            "name": "encoded",
+            "type": "encodeNode value = some node"
+          },
+          {
+            "name": "decoded",
+            "type": "lookupNode heap node = some value"
+          }
+        ]
+      },
+      {
+        "order": 1,
+        "activation": "Inside PendingRealized proof, after the four intro binders",
+        "api": "List.mem_or_eq_of_mem_set (List.mem_of_getElem? stored)",
+        "disjunction": {
+          "left": {
+            "name": "old",
+            "type": "(UVarValue.unenumerated (some storedNode) storedScs : UVarValue Symbol) \u2208 before.values"
+          },
+          "right": {
+            "name": "fresh",
+            "type": "(UVarValue.unenumerated (some storedNode) storedScs : UVarValue Symbol) = (UVarValue.unenumerated (some node) scs : UVarValue Symbol)"
+          }
+        }
+      },
+      {
+        "order": 2,
+        "activation": "Old-member branch only",
+        "api": "List.getElem?_of_mem old",
+        "binders": [
+          {
+            "name": "oldSlot",
+            "type": "Nat"
+          },
+          {
+            "name": "oldStored",
+            "type": "before.values[oldSlot]? = some (.unenumerated (some storedNode) storedScs)"
+          }
+        ]
+      },
+      {
+        "order": 3,
+        "activation": "Fresh-member/equality branch only, after constructor equality simplification",
+        "api": "Anonymous equality elimination on fresh",
+        "binders": [],
+        "anonymous_equalities": [
+          "storedNode = node",
+          "storedScs = scs"
+        ],
+        "scope_after_elimination": "The certificate is value/decoded/available/closed; no new local fact is introduced."
+      }
+    ],
+    "intro_binders": [
+      {
+        "name": "storedSlot",
+        "type": "Nat"
+      },
+      {
+        "name": "storedNode",
+        "type": "Nat"
+      },
+      {
+        "name": "storedScs",
+        "type": "List EnumerationState.Suspended"
+      },
+      {
+        "name": "stored",
+        "type": "({before with values := before.values.set slot (.unenumerated (some node) scs)} : EnumerationState.State Symbol EnumGuard).values[storedSlot]? = some (.unenumerated (some storedNode) storedScs)"
+      }
+    ],
+    "literal_change_fragment": "change (before.values.set slot (.unenumerated (some node) scs))[storedSlot]? =\n  some (.unenumerated (some storedNode) storedScs) at stored",
+    "fresh_type_after_simp": "storedNode = node \u2227 storedScs = scs",
+    "old_branch_public_call": "realized oldSlot storedNode storedScs oldStored",
+    "haves": [],
+    "lets": [],
+    "cases": [],
+    "by_cases": [],
+    "induction": null,
+    "typed_shows": [],
+    "anonymous_elimination_types": [
+      {
+        "scope": "fresh",
+        "type": "storedNode = node"
+      },
+      {
+        "scope": "fresh",
+        "type": "storedScs = scs"
+      }
+    ],
+    "existential_witnesses": [
+      {
+        "name": "node",
+        "kind": "Actual output of available_readback"
+      },
+      {
+        "name": "after",
+        "type": "EnumerationState.State Symbol EnumGuard",
+        "value": "{before with values := before.values.set slot (.unenumerated (some node) scs)}",
+        "kind": "Public existential witness supplied literally, not a local let or additional assumption."
+      }
+    ]
+  }
+}

@@ -1,0 +1,7 @@
+import MicroCFTA.SourcePruningEnumerationWrites
+set_option pp.universes true
+set_option pp.fullNames true
+#check MicroCFTA.SourcePruningEnumerationWrites.allocate_available_realized
+#check MicroCFTA.SourcePruningEnumerationWrites.write_available_realized
+#print axioms MicroCFTA.SourcePruningEnumerationWrites.allocate_available_realized
+#print axioms MicroCFTA.SourcePruningEnumerationWrites.write_available_realized

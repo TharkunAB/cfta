@@ -1,0 +1,12 @@
+      UVarUnenumerated
+        -- | Node still to enumerate, or 'Nothing' for pure constraint variables.
+        !(Maybe (Node symbol))
+        -- | Constraints that should be carried while enumerating this value.
+        !(Seq SuspendedConstraint)
+    | -- | UVar has been expanded to a fragment.
+      UVarEnumerated !(TermFragment symbol)
+    | -- | UVar was merged into another representative and should no longer be used.
+      UVarEliminated
+    deriving (Eq, Show)
+
+{- | Intersect two UVar values. With the first argument true, an intersection

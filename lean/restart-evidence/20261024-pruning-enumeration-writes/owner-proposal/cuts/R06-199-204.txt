@@ -1,0 +1,6 @@
+/-- A state update has exactly its stated result. -/
+theorem modify_success (update : State Symbol Guard → State Symbol Guard) (before after : State Symbol Guard) :
+    Success (modify update) before () after ↔ after = update before := by
+  simp [Success, modify, modifyGet, MonadStateOf.modifyGet, StateT.modifyGet,
+    pure, ExceptT.pure, ExceptT.mk, ExceptT.run]
+

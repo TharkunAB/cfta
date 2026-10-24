@@ -1,0 +1,11 @@
+theorem allocate_available_realized
+    (heap : InternedConstructorTemplates.State Symbol NativeGuard)
+    (before : EnumerationState.State Symbol EnumGuard)
+    (value : InternedConstructorTemplates.Value Symbol NativeGuard)
+    (coherent : InternedRecordCoherence.Coherent heap)
+    (available : InternedProbeProvenance.Available heap value) (closed : value.free = [])
+    (realized : PendingRealized heap before) (aligned : before.counter = before.values.length) :
+    ∃ node : Nat, encodeNode value = some node ∧
+      Success (allocate (some node)) before before.counter (allocated (some node) before) ∧
+      (allocated (some node) before).values[before.counter]? = some (.unenumerated (some node) []) ∧
+      PendingRealized heap (allocated (some node) before)
