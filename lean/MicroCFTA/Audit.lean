@@ -1,3 +1,4 @@
+import MicroCFTA.SourcePruningEnumerationOuter
 import MicroCFTA.SourcePruningOuterNarrow
 import MicroCFTA.SourcePruningEnumerationNarrowing
 import MicroCFTA.SourcePruningEnumerationReread
