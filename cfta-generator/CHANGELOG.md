@@ -158,7 +158,9 @@ tree automata of `cfta`, with QuickCheck integration.
   asks the solver only when a query needs a verdict: `deciding` starts it,
   `decidingStep` adds a token, `decidingTokens` gives the verdict of each next
   token, and `decided` gives the `Completions` of the current prefix. The
-  verdicts are kept for the whole walk. `withWeights` gives each symbol a
+  verdicts are kept for the whole walk. The next tokens come from the runs of
+  the automaton on the prefix, and a constraint that the prefix fixes is
+  decided once for its whole run. `withWeights` gives each symbol a
   non-negative `Rational` weight, and the weight of a term is the product
   over its nodes: `completionWeight`, `nextTokenWeights`, and
   `tokenProbability` give the exact masses and probabilities, and

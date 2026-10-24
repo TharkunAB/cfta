@@ -76,9 +76,12 @@ starts the walk, 'decidingStep' adds a token, and 'decidingTokens' gives the
 verdict of each next token. They ask the solver only about the candidates that
 the prefix can still reach, and only until a verdict is known: a token is
 offered at its first accepted candidate. The verdicts that the solver gives
-are kept for the whole walk. 'decided' gives the 'Completions' of the current
-prefix, the same as 'prefixCompletionsWith' and 'afterPrefix' give. A query
-for counts needs every candidate decided, so it gains nothing from the walk.
+are kept for the whole walk. The next tokens come from the runs of the
+automaton on the prefix, not from a list of the candidates, and a constraint
+of a prefix node whose paths the prefix fixes is decided once for its whole
+run. 'decided' gives the 'Completions' of the current prefix, the same as
+'prefixCompletionsWith' and 'afterPrefix' give. A query for counts needs
+every candidate decided, so it gains nothing from the walk.
 
 'withWeights' gives each symbol a weight, a non-negative 'Rational'. The weight
 of a term is the product of the weights of the symbols of its nodes.
@@ -137,7 +140,7 @@ import Data.IORef (modifyIORef', newIORef, readIORef)
 import qualified Data.IntMap.Lazy as IntMap
 import Data.List (genericDrop, genericIndex, genericLength, genericReplicate, genericTake)
 import qualified Data.Map.Strict as Map
-import Data.Maybe (fromMaybe, listToMaybe)
+import Data.Maybe (catMaybes, fromMaybe, listToMaybe)
 import Data.Ratio (denominator, numerator)
 import qualified Data.Set as Set
 import qualified Test.QuickCheck as QC
@@ -146,11 +149,12 @@ import qualified Data.CFTA as FTA
 import Data.CFTA.Constraint (Constraint, constraintPaths, equalities, equalityConstraint, noConstraint, residual)
 import qualified Data.CFTA.Gen.Internal.Table as Ordinary
 import Data.CFTA.Index (Cardinality (..), ClassRank (..), Rank (..), Size (..))
-import Data.CFTA.Path (getPath)
+import Data.CFTA.Path (ChildIndex (..), Path, getPath, path, unPath)
 import Data.CFTA.Refinement.Evaluate (evaluateConstraint)
 import Data.CFTA.Refinement.Verdict (Entailment, Verdict (..), andVerdicts, orVerdicts)
-import Data.CFTA.Sized (Sized, countOfSize, sized, sizedStates, termsOfSize, unrankOfSize)
+import Data.CFTA.Sized (Sized, countOfSize, sizedStates, termsOfSize, unrankOfSize)
 import Data.CFTA.Symbol (Symbol)
+import Data.CFTA.Template (Template (..), preorderPrefix)
 import Data.CFTA.Term (Term)
 import qualified Data.CFTA.Term as Term
 
@@ -281,8 +285,37 @@ data Deciding = Deciding
     -- ^ The number of nodes that the pending nodes can have together.
     , decidingCandidates :: [(Term Symbol, [(Symbol, Int)])]
     -- ^ The candidates that start with the prefix, in order, each with its tokens after the prefix.
-    , decidingVerdict :: Term Symbol -> IO Verdict
-    -- ^ The verdict of a term, kept for the whole walk.
+    , decidingPending :: [Path]
+    -- ^ The paths of the pending nodes from the root, in preorder.
+    , decidingRuns :: Set.Set Run
+    -- ^ The runs on the prefix that can have a candidate within the budget.
+    , decidingMachine :: Machine
+    -- ^ The automaton, and the memories of the verdicts, for the whole walk.
+    }
+
+{- | A run of the automaton on the nodes of a prefix: the stack of pending
+states; the constraints of the prefix nodes that the prefix does not decide,
+each as the path of its node, its state, and the index of its transition; and
+whether a constraint that the prefix decides is 'Unknown'.
+-}
+type Run = ([Int], [(Path, Int, Int)], Bool)
+
+-- | The automaton of a walk, with each state as its number, and its verdicts.
+data Machine = Machine
+    { machineTokens :: IntMap.IntMap (Map.Map (Symbol, Int) [([Int], Int)])
+    -- ^ The transitions of each state by token: their child states and their index.
+    , machineConstraints :: IntMap.IntMap (IntMap.IntMap Constraint)
+    -- ^ The constraint of each transition of each state, by index.
+    , machineMinimum :: IntMap.IntMap Integer
+    -- ^ The least size of a term of each state that accepts a term, without the constraints.
+    , machineClasses :: Int -> Sized Symbol
+    -- ^ The size classes of each state, with each constraint reduced to its equality constraints.
+    , machineState :: Int -> Term Symbol -> IO Verdict
+    -- ^ The verdict of a state on a term, kept for the whole walk.
+    , machineConstraint :: Int -> Int -> Term Symbol -> IO Verdict
+    -- ^ The verdict of the constraint of a transition on a term, kept for the whole walk.
+    , machineInitial :: Int
+    -- ^ The initial state.
     }
 
 {- | The walk of the empty prefix of an automaton with guards. No guard is
@@ -290,19 +323,57 @@ decided yet.
 -}
 deciding :: (Ord state) => Entailment -> Size -> FTA.FTA state Symbol Constraint -> IO Deciding
 deciding entailment (Size bound) automaton = do
-    verdict <- memoryOfVerdicts entailment automaton
+    (stateVerdict, constraintVerdict) <- memoryOfVerdicts entailment numberedRows
+    let machine =
+            Machine
+                { machineTokens =
+                    IntMap.map
+                        ( \row ->
+                            Map.fromListWith
+                                (flip (<>))
+                                [(tokenOf transition, [(FTA.transitionChildren transition, index)]) | (index, transition) <- row]
+                        )
+                        numberedRows
+                , machineConstraints =
+                    IntMap.map
+                        (\row -> IntMap.fromList [(index, FTA.transitionConstraint transition) | (index, transition) <- row])
+                        numberedRows
+                , machineMinimum = IntMap.fromList [(number state, size) | (state, Size size) <- Map.toList $ Ordinary.minimumSizes rows]
+                , machineClasses = (reducedClasses Map.!) . (states IntMap.!)
+                , machineState = stateVerdict
+                , machineConstraint = constraintVerdict
+                , machineInitial = number $ FTA.initialState automaton
+                }
     pure
         Deciding
             { decidingTokensBefore = []
             , decidingBudget = bound
-            , decidingCandidates = [(term, preorder term) | size <- [1 .. bound], term <- termsOfSize equalitiesOnly (Size size)]
-            , decidingVerdict = verdict
+            , decidingCandidates =
+                [(term, preorder term) | size <- [1 .. bound], term <- termsOfSize (reduced $ FTA.initialState automaton) (Size size)]
+            , decidingPending = [path []]
+            , decidingRuns = Set.fromList $ filter (runFits machine bound) [([machineInitial machine], [], False)]
+            , decidingMachine = machine
             }
   where
-    equalitiesOnly =
+    rows = FTA.transitionTable automaton
+    numbers = Map.fromList $ zip (Map.keys rows) [0 :: Int ..]
+    number state = numbers Map.! state
+    states = IntMap.fromList [(index, state) | (state, index) <- Map.toList numbers]
+    numberedRows =
+        IntMap.fromList
+            [ ( number state
+              , zip
+                    [0 ..]
+                    [transition{FTA.transitionChildren = map number $ FTA.transitionChildren transition} | transition <- transitions]
+              )
+            | (state, transitions) <- Map.toList rows
+            ]
+    tokenOf transition = (FTA.transitionSymbol transition, length $ FTA.transitionChildren transition)
+    reduced =
         fromRight (error "deciding: an automaton with equality constraints has size classes")
-            $ sized
+            $ sizedStates
             $ FTA.mapConstraints (equalityConstraint . equalities) automaton
+    reducedClasses = Map.fromList [(state, reduced state) | state <- Map.keys rows]
 
 -- | The completions of the empty prefix, with the weight one for each symbol.
 emptyPrefix :: Integer -> Route symbol -> Completions symbol
@@ -314,47 +385,152 @@ decidingPrefix = reverse . decidingTokensBefore
 
 {- | The walk after one more token. 'Nothing' when the solver rejects every
 candidate that starts with the prefix and the token, as 'afterToken' gives.
-The solver decides the candidates in order until one is not rejected.
+The solver decides the candidates of the runs after the token, smallest
+first, until one is not rejected.
 -}
 decidingStep :: Deciding -> (Symbol, Int) -> IO (Maybe Deciding)
 decidingStep walk token = do
-    live <- anyIO (fmap (/= No) . decidingVerdict walk . fst) kept
+    (runs, verdicts) <- afterRuns walk token
+    found <- anyIO (fmap (/= No)) $ verdicts $ Set.toList runs
     pure $
-        if live
+        if found
             then
                 Just
                     walk
                         { decidingTokensBefore = token : decidingTokensBefore walk
                         , decidingBudget = decidingBudget walk - 1
-                        , decidingCandidates = kept
+                        , decidingCandidates = [(term, rest) | (term, next : rest) <- decidingCandidates walk, next == token]
+                        , decidingPending = pendingAfter walk token
+                        , decidingRuns = runs
                         }
             else Nothing
-  where
-    kept = [(term, rest) | (term, next : rest) <- decidingCandidates walk, next == token]
 
 {- | The verdict of the prefix as a term ('completeVerdict'), and the verdict of
 each next token in ascending order: 'Yes' for a token of 'nextTokens',
 'Unknown' for a token of 'undecidedTokens'. A rejected token is not in the
-list. The solver decides the candidates of a token in order until one is
-accepted, so a token is offered at its first accepted candidate; an undecided
-token needs every candidate decided.
+list.
+
+The next tokens come from the runs of the automaton on the prefix, not from
+the candidates. After a token, a constraint of a prefix node whose paths the
+prefix fixes is decided once for all the candidates of the run: a run whose
+constraint fails goes, and a run whose constraint is 'Unknown' has no
+accepted candidate. Then the solver decides the candidates of the runs,
+smallest first, until one is accepted; for an undecided token, until one is
+not rejected. So a token needs every candidate of a run decided only when no
+candidate of the run is accepted and the prefix does not decide that.
 -}
 decidingTokens :: Deciding -> IO (Verdict, [((Symbol, Int), Verdict)])
 decidingTokens walk = do
-    complete <- case [term | (term, []) <- decidingCandidates walk] of
-        term : _ -> decidingVerdict walk term
-        [] -> pure No
-    tokens <- traverse (\(token, terms) -> (,) token <$> tokenVerdict No terms) $ Map.toList groups
+    tokens <- traverse (\token -> (,) token <$> tokenVerdict token) candidates
     pure (complete, [(token, verdict) | (token, verdict) <- tokens, verdict /= No])
   where
-    groups = Map.map reverse $ Map.fromListWith (<>) [(next, [term]) | (term, next : _) <- decidingCandidates walk]
-    tokenVerdict found [] = pure found
-    tokenVerdict found (term : rest) = do
-        verdict <- decidingVerdict walk term
+    runs = Set.toList $ decidingRuns walk
+    complete = case [unknown | ([], _, unknown) <- runs] of
+        [] -> No
+        flags -> if and flags then Unknown else Yes
+    candidates =
+        Set.toList $
+            Set.fromList
+                [ token
+                | (top : _, _, _) <- runs
+                , token <- Map.keys $ IntMap.findWithDefault Map.empty top $ machineTokens $ decidingMachine walk
+                ]
+    tokenVerdict token = do
+        (after, verdicts) <- afterRuns walk token
+        best <- firstAccepted No $ verdicts [run | run@(_, _, False) <- Set.toList after]
+        case best of
+            No -> do
+                undecided <- anyIO (fmap (/= No)) $ verdicts [run | run@(_, _, True) <- Set.toList after]
+                pure $ if undecided then Unknown else No
+            _ -> pure best
+    -- 'Yes' at the first accepted candidate, else whether one was undecided.
+    firstAccepted found [] = pure found
+    firstAccepted found (decide : rest) = do
+        verdict <- decide
         case verdict of
             Yes -> pure Yes
-            Unknown -> tokenVerdict Unknown rest
-            No -> tokenVerdict found rest
+            Unknown -> firstAccepted Unknown rest
+            No -> firstAccepted found rest
+
+{- | The runs after a token, with the constraints that the prefix and the token
+decide, and the verdicts of the candidates of given runs, smallest first.
+-}
+afterRuns :: Deciding -> (Symbol, Int) -> IO (Set.Set Run, [Run] -> [IO Verdict])
+afterRuns walk token = case decidingPending walk of
+    [] -> pure (Set.empty, const [])
+    here : _ -> do
+        found <-
+            traverse
+                decideRun
+                [ (children <> rest, obligations <> [(here, top, index) | constraintAt top index /= noConstraint], unknown)
+                | (top : rest, obligations, unknown) <- Set.toList $ decidingRuns walk
+                , (children, index) <- Map.findWithDefault [] token $ IntMap.findWithDefault Map.empty top $ machineTokens machine
+                , runFits machine budget (children <> rest, [], False)
+                ]
+        pure (Set.fromList (catMaybes found), verdictsOf)
+  where
+    machine = decidingMachine walk
+    budget = decidingBudget walk - 1
+    prefix = decidingPrefix walk <> [token]
+    pending = pendingAfter walk token
+    template = preorderPrefix prefix
+    -- The prefix with a leaf at each pending node: the constraints that the
+    -- prefix decides do not read the pending nodes.
+    placeholder = fill prefix [Term.Node (fst token) [] | _ <- pending]
+    constraintAt state index = IntMap.findWithDefault IntMap.empty state (machineConstraints machine) IntMap.! index
+    decideRun (stack, obligations, unknown) = go [] unknown obligations
+      where
+        go open flag [] = pure $ Just (stack, reverse open, flag)
+        go open flag (obligation@(node, state, index) : rest)
+            | decidedBy template node (constraintAt state index) = do
+                verdict <- case getPath node placeholder of
+                    Just subterm -> machineConstraint machine state index subterm
+                    Nothing -> pure No
+                case verdict of
+                    No -> pure Nothing
+                    Yes -> go open flag rest
+                    Unknown -> go open True rest
+            | otherwise = go (obligation : open) flag rest
+    -- The verdicts of the candidates of the runs, smallest first.
+    verdictsOf runs =
+        [ candidateVerdict run terms
+        | size <- [0 .. budget]
+        , run@(stack, _, _) <- runs
+        , terms <- fillings (machineClasses machine) stack size
+        ]
+    candidateVerdict (stack, open, flag) terms =
+        andVerdicts $
+            [pure Unknown | flag]
+                <> [ maybe (pure No) (machineConstraint machine state index) (getPath node term)
+                   | let term = fill prefix terms
+                   , (node, state, index) <- open
+                   ]
+                <> zipWith (machineState machine) stack terms
+
+-- | Whether the prefix fixes every path that a constraint of the node at a path reads.
+decidedBy :: Template Symbol -> Path -> Constraint -> Bool
+decidedBy template node constraint =
+    all (fixedAt template . (unPath node <>) . unPath) $ Set.toList $ constraintPaths constraint
+  where
+    fixedAt Hole _ = False
+    fixedAt part [] = complete part
+    fixedAt (TemplateNode _ children) (ChildIndex child : rest) = case drop child children of
+        next : _ | child >= 0 -> fixedAt next rest
+        _ -> True
+    fixedAt _ _ = False
+    complete (TemplateNode _ children) = all complete children
+    complete _ = False
+
+-- | The paths of the pending nodes after a token.
+pendingAfter :: Deciding -> (Symbol, Int) -> [Path]
+pendingAfter walk (_, arity) = case decidingPending walk of
+    [] -> []
+    here : rest -> [path (unPath here <> [ChildIndex child]) | child <- [0 .. arity - 1]] <> rest
+
+-- | Whether the pending states of a run have terms within the budget, without the constraints.
+runFits :: Machine -> Integer -> Run -> Bool
+runFits machine budget (stack, _, _) =
+    maybe False ((<= budget) . sum) $ traverse (`IntMap.lookup` machineMinimum machine) stack
 
 {- | The completions of the prefix of a walk, with every candidate decided: the
 completions that 'prefixCompletionsWith' and 'afterPrefix' give, with the
@@ -363,7 +539,7 @@ candidate decided, as a count does.
 -}
 decided :: Deciding -> IO (Completions Symbol)
 decided walk = do
-    found <- traverse (decidingVerdict walk . fst) $ decidingCandidates walk
+    found <- traverse (machineState machine (machineInitial machine) . fst) $ decidingCandidates walk
     pure
         Completions
             { completionsPrefix = decidingTokensBefore walk
@@ -372,6 +548,8 @@ decided walk = do
             , completionsRoute =
                 Listed [(term, rest, verdict) | ((term, rest), verdict) <- zip (decidingCandidates walk) found, verdict /= No]
             }
+  where
+    machine = decidingMachine walk
 
 -- | Whether an action holds for one element, tried in order until it does.
 anyIO :: (element -> IO Bool) -> [element] -> IO Bool
@@ -491,7 +669,7 @@ completionTerms completions = case completionsRoute completions of
         [ fill prefix terms
         | size <- [0 .. completionsBudget completions]
         , stack <- Set.toList stacks
-        , terms <- fillings tables stack size
+        , terms <- fillings (classesOf tables) stack size
         ]
 
 {- | The completions that the solver does not decide, each once, in order.
@@ -726,13 +904,13 @@ stackCounts tables budget = products budget . map stateCounts
 {- | The fillings of a stack of pending states with the given total size, in
 order: the term of the first pending node varies slowest.
 -}
-fillings :: Tables symbol -> [Int] -> Integer -> [[Term symbol]]
+fillings :: (Int -> Sized symbol) -> [Int] -> Integer -> [[Term symbol]]
 fillings _ [] size = [[] | size == 0]
-fillings tables (state : rest) size =
+fillings classes (state : rest) size =
     [ term : terms
     | first <- [1 .. size]
-    , term <- termsOfSize (classesOf tables state) (Size first)
-    , terms <- fillings tables rest (size - first)
+    , term <- termsOfSize (classes state) (Size first)
+    , terms <- fillings classes rest (size - first)
     ]
 
 {- | The filling at a rank among the fillings of a stack with the given total
@@ -766,8 +944,11 @@ decides each such question once. The constraint of a transition is decided
 before its children, so a constraint that fails rejects the term without the
 verdicts of the children.
 -}
-memoryOfVerdicts :: (Ord state) => Entailment -> FTA.FTA state Symbol Constraint -> IO (Term Symbol -> IO Verdict)
-memoryOfVerdicts entailment automaton = do
+memoryOfVerdicts ::
+    Entailment ->
+    IntMap.IntMap [(Int, FTA.Transition Int Symbol Constraint)] ->
+    IO (Int -> Term Symbol -> IO Verdict, Int -> Int -> Term Symbol -> IO Verdict)
+memoryOfVerdicts entailment rows = do
     states <- newIORef Map.empty
     constraints <- newIORef Map.empty
     let remembered memory key decide = do
@@ -778,25 +959,24 @@ memoryOfVerdicts entailment automaton = do
                     verdict <- decide
                     modifyIORef' memory $ Map.insert key verdict
                     pure verdict
-        constraintOf state index transition term =
-            remembered
-                constraints
-                ( state
-                , index
-                , [getPath inspected term | inspected <- Set.toList $ constraintPaths $ FTA.transitionConstraint transition]
-                )
-                (evaluateConstraint entailment (FTA.transitionConstraint transition) term)
+        row state = IntMap.findWithDefault [] state rows
+        constraintOf state index term =
+            let constraint = maybe noConstraint FTA.transitionConstraint $ lookup index $ row state
+             in remembered
+                    constraints
+                    (state, index, [getPath inspected term | inspected <- Set.toList $ constraintPaths constraint])
+                    (evaluateConstraint entailment constraint term)
         verdictOf state term@(Term.Node symbol children) =
             remembered states (state, term) $
                 orVerdicts
                     [ andVerdicts $
-                        constraintOf state index transition term
+                        constraintOf state index term
                             : zipWith verdictOf (FTA.transitionChildren transition) children
-                    | (index, transition) <- zip [0 :: Int ..] $ FTA.transitionsFrom automaton state
+                    | (index, transition) <- row state
                     , FTA.transitionSymbol transition == symbol
                     , length (FTA.transitionChildren transition) == length children
                     ]
-    pure $ verdictOf $ FTA.initialState automaton
+    pure (verdictOf, constraintOf)
 
 -- | The tokens of a term in preorder.
 preorder :: Term symbol -> [(symbol, Int)]
