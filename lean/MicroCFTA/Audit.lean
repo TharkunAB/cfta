@@ -1,3 +1,4 @@
+import MicroCFTA.SourcePruningRecordTypes
 import MicroCFTA.SourceGeneratedNodeViewShape
 import MicroCFTA.SourcePruningOracle
 import MicroCFTA.SourcePruningResume
