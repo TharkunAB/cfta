@@ -62,6 +62,21 @@ Wilf, and Feat (ranking).
   refines the second (the **supertype**); the LTA paper writes `δi ≲ δj`.
   Minimization keeps the **representative** and removes the supertype.
 
+## Editable languages
+
+- **Source document**: an editable language definition that retains named
+  transitions and their separate facts before compilation.
+- **Language update**: a reusable expression that changes source definitions or
+  named exclusions. It does not contain an expected source version.
+- **Named exclusion**: a removable restriction that rejects matching whole terms
+  or terms with matching subtrees. The source definition remains available.
+- **Production reference**: a source state and the stable name of one transition
+  in that state.
+- **Source fact**: one named constraint attached to a source transition.
+  Removing a fact removes that obligation. It does not negate the constraint.
+- **Patch**: an ordered batch of edits together with the source document it
+  expects. A valid patch produces a new source document.
+
 ## Transformations
 
 - **Exact transformation**: an operation on an automaton that keeps its

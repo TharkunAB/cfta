@@ -46,6 +46,7 @@ import qualified Data.CFTA as FTA
 import qualified Data.CFTA.Enumeration as Enumeration
 import qualified Data.CFTA.Generic as Generic
 import qualified Data.CFTA.Interned as Common
+import qualified Data.CFTA.Language as Language
 import qualified Data.CFTA.Template as Template
 ```
 
@@ -58,6 +59,7 @@ import qualified Data.CFTA.Template as Template
 | Encode or decode one value | `Generic.encodeTerm`, `Generic.datatypeDecode` | A constructor tree or a typed value. This does not enumerate the grammar. |
 | Check membership | `FTA.accepts`, `Common.acceptsWith` | Whether a supplied tree belongs. The interned API takes a constraint interpreter. |
 | List accepted terms | `FTA.terms`, `Enumeration.terms`, `Enumeration.plainTerms`, `Enumeration.plainTermsAtMost` | Every term. `FTA.terms`, `plainTerms`, and `plainTermsAtMost` list by depth. `FTA.terms` and `plainTerms` ignore constraints and give an infinite list for a recursive grammar, and `plainTermsAtMost` stops at a depth. `terms` solves constraints and stops at recursion. For an automaton with constraints or recursion, it lists in the order of the runs, each term once. |
+| Edit a language | `Language.update`, `Language.define`, `Language.require`, `Language.relax`, `Language.without`, `Language.restore` | A new language value with its source productions, named facts, and named exclusions. `Language.compileGraph` gives the graph to query. |
 | Restrict to a pattern | `Template.restrictFTA`, `Template.restrict` | A grammar for the terms that match a `Template`. |
 | List terms a check accepts | `FTA.termsUpToM` | The terms up to a depth, each checked once by a monadic predicate that sees its transition. |
 | Bound tree depth | `FTA.boundDepth` | Another grammar, restricted to trees within the bound. |
@@ -252,6 +254,16 @@ An ordinary automaton has `noConstraint` on every transition.
 input annotations. Apply `dropConstraints` to the result of two plain FTAs before
 calling `accepts`. Use `intersectWith` when you need a different annotation
 combination. `dropConstraints` removes annotations; it does not solve constraints.
+
+## Edit a language
+
+`Data.CFTA.Language` keeps the source of a language: named productions, their
+named facts, and named exclusions. Combine `define`, `require`, `relax`,
+`without`, and `restore` with `<>`, and apply the result with `update`.
+`wholeTerm` excludes one complete term. `subterm` excludes every term that
+contains it. `compileGraph` gives a new graph for queries, and the language
+keeps its source for the next edit. See
+[editable languages](../docs/editable-languages.md).
 
 ## Visualize a grammar
 

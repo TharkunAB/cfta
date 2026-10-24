@@ -4,6 +4,12 @@
 
 Before release, the package was called `microcfta`.
 
+- Add `Data.CFTA.Document`: editable source documents with named
+  productions and named facts, and patches that check the document they
+  were prepared on. `applyEdits` applies a batch without that check. Both
+  replace only the changed rows and share the others.
+- Add `Data.CFTA.Language`: updates that combine with `<>` over a source
+  document, and named exclusions that `restore` removes again.
 - `Data.CFTA.replaceRows` applies row replacements and deletions to an
   existing explicit automaton. It shares unchanged rows and validates the
   complete result after the batch. The original automaton stays unchanged.
