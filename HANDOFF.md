@@ -1,5 +1,45 @@
 # cfta formalization restart handoff
 
+## Captured-slot fragment finalization
+
+Current source: `SourcePruningEnumerationFinalize`.
+Proof: `3c9a3e85c7cfcc415071fdaedc8785c245d3c0f2`. Main remains `74250bd889685da436cdbfe32ac4b5a0878ffd09`.
+The whole goal stays ACTIVE and incomplete. H6 remains strongest.
+
+finish and its cached run clear expansion ancestry FIRST, then read the CURRENT
+raw slot at the captured original target. They store the enumerated fragment at
+that same target. No representative lookup or later winner substitution occurs.
+NativeIndex.write receives gained=[] and lost=references of that current value,
+including when the current slot is eliminated. Pre-expansion scs are not reused.
+Missing storage is outside the producer. Its rawValue/Option.none cases
+describe model partiality, with no native Haskell error equivalence.
+
+The finite producer uses the actual current stored equation, Roots/counts/native
+flags, StorageValid, FragmentBound and PendingRealized. It derives a stable
+finite cached run, actual enum singleton, exact reset/write core and target
+readback, false target flag, canonical removal count and the retained invariants.
+It assumes no successful earlier prefix or callback. The fragment is supplied;
+full earlier expansion and fragment production remain separate. No full Frame
+across the value write or final Safe/LiveRoots result is claimed.
+
+Validation: The first two strict inputs failed. The first required an explicit contradiction for the impossible fresh pending case, reduction of the empty gained-count fold, replacement of a nondefinitional raw-match proof with explicit monad reduction, and removal of an unused simp argument. The second required explicit singleton-bind reduction before the stored-slot rewrite. The third strict input passes with a literal empty log under all linters and warnings as errors. Both failed sources, complete raw logs and exact repair patches remain. All 10 literal contracts and three public headers remain unchanged. No premise or proof limit changed. The final 120-line source is below the selected soft estimate and within hard limit 320. The separate pre-body scope overlay corrects metadata only. The installed build, complete public readback and Audit pass. All 59 public-output lines retain three full signatures without display omissions. The older unused-variable warning remains unchanged. No passing check was repeated. The post-body presence annotation records one absent historical match payload; original owner controls remain unchanged. Read-only locator diagnostics stay separate from compiler or cap failures. No seal has failed.
+Installed focused build: 1310 jobs; Audit: 3712 jobs and
+76322 theorem dependency checks. Actual public axioms: finish and run each report propext only. complete reports propext and Quot.sound.
+All actual failed inputs/raw logs/cap receipts remain. Exactly 26 previous
+publication inputs and the separately sealed assessment peer remain protected.
+No future seal or push result is asserted.
+
+Machine arithmetic, native map/set extraction, original flags/partition,
+initial-only query admission and complete driver correspondence remain open.
+All six imported Haskell repair handoffs remain first in FINDINGS.
+No Haskell source change is claimed. H6 still covers closed construction with a
+valid initial cache and allocation history, and any prescribed finite number of
+actual modeled node-reduction calls at derived width/fuels. Empty inherited
+payload preserves the same finite trees under formal guard/solver semantics.
+Full typing/pruning/driver/native extraction/solver implementation/runtime,
+resource bounds and convergence remain open.
+
+
 ## Native terminal scheduling indexes
 
 Current source: `SourcePruningEnumerationNativeIndex`.
