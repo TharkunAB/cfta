@@ -1,5 +1,43 @@
 # Public API and source correspondence
 
+## Ordered native edge preparation prefix
+
+Updated: 2026-10-24. Main `74250bd88` is incorporated.
+Proof: `e54a5e7e22857996ce17b7dd54e0aaaa38fc5617`.
+Read `lean/notes-current-pruning-enumeration-edge-prefix.md`.
+
+The operation consumes the actual complete EdgeValue. Inherited arity rejection
+precedes the actual constraint projection. Projection absence stays distinct
+from list rejection, enumeration error and completed native behavior.
+The supported action allocates pure equality variables in class order. Its
+payload retains the actual symbol, original ordered complete children, each
+inherited-then-fresh descended bucket, the same concrete optional child action,
+and the complete residual for later insertion. It executes no child action.
+
+The theorem derives the exact singleton result and complete allocated state,
+including ancestry, counter increase and supply alignment. The all-None
+allocation theorem preserves every realized pending native slot without
+extra coherence, availability or alignment premises for that preservation.
+No callback/output law, independent Graph or replacement state is assumed.
+
+The first strict input failed in the rejected-arity Boolean simplification and reported one unused simp argument. The second input changes only that final proof line. It passes with a literal empty log under all linters and warnings as errors. The original input, full failed output and exact correction remain. The complete public readback, installed build and Audit pass. All 72 public-output lines retain three complete signatures. No proof limit changed.
+The installed build passes 621 jobs. Audit passes 3691 jobs and
+76154 dependency checks, with the unchanged older warning.
+prepare and prepare_complete report exactly propext, Classical.choice and Quot.sound. suspended_realized reports only propext. No project axiom is added.
+Frozen declarations, reviews and raw evidence remain. The preceding constraint
+checkpoint's 26 actual post-seal inputs remain. No proof limit changes.
+
+Own-path child arity still needs the checked constructor receipt connection. Terminal
+merging, child execution, fragment construction, residual insertion and the
+default selector remain. Projection normalization remains noncomputable.
+Native graph/ID/index/memo2, full enumeration/pruning/typing, lazy callbacks,
+driver, runtime/solver and convergence remain. H6 stays strongest combined.
+H23 and older constructor/equality work remain. No Haskell source changes.
+FINDINGS keeps the six imported repair handoffs first. All earlier work and
+the optimized core remain. The full goal stays ACTIVE and incomplete.
+This record precedes evidence and push.
+
+
 ## Concrete source constraint projection
 
 Updated: 2026-10-24. Main `74250bd88` is incorporated.
