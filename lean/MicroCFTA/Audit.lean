@@ -1,3 +1,4 @@
+import MicroCFTA.SourcePruningEnumerationObservation
 import MicroCFTA.SourcePruningEnumerationNodes
 import MicroCFTA.SourcePruningNativeView
 import MicroCFTA.SourcePruningRecordTypes
