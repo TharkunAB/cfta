@@ -1,5 +1,45 @@
 # Public API and source correspondence
 
+## Checked constructor output projected arity
+
+Updated: 2026-10-24. Main `74250bd88` is incorporated.
+Proof: `cdd0d27ca8d9e529c508ed2d4f0d7e265dd352d4`.
+Read `lean/notes-current-pruning-enumeration-checked-arity.md`.
+
+Both actual checked-constructor outcomes now supply their own projected arity.
+The theorem derives the actual check answer. It requires child availability
+only when that computed answer is true. Original Cached, the same physical
+read, stored Ready, operation validity and native Ready remain distinct.
+The result retains the actual build, outputState at the actual post-check
+state, validity, growth, native Keeps, residency and complete returned fields.
+Acceptance returns the original complete constraint and ordered children.
+Rejection returns Top/[Empty]. Only the returned constraint supplies the
+Some projection, valid tries, exact path readback and full residual choice.
+Its own suspended variables fit the returned child arity for every start.
+
+Rejection retains any live accessor allocations. It then interns the empty
+equality field and sentinel edge. No unchanged operation-state claim or
+bound for the rejected requested guard is made. No check-true, desired bound,
+callback/output law, new helper/type/definition/instance or term satisfaction
+is assumed. Inherited noncomputable normalization remains explicit.
+
+The first strict input failed on a redundant dsimp step. The second input reported unused actualBuilt and keepEq arguments in two branch simplifications. The third input removes only those proof redundancies. It passes with a literal empty log under all linters and warnings as errors. Both failed inputs, complete raw outputs and exact patches remain. No proof limit changed. Public readback, the installed build and Audit pass. All 76 public-output lines retain the complete theorem signature without display omissions.
+The installed build passes 1053 jobs. Audit passes 3695 jobs and
+76177 dependency checks, with the unchanged older warning.
+checked_projected_arity reports exactly propext, Classical.choice and Quot.sound. No project axiom is added.
+Frozen declarations, scoped types, reviews and all actual raw evidence remain.
+The preceding child-replacement checkpoint's26 actual post-seal inputs remain.
+Its assessment was already sealed. Older failed inputs/seals remain protected.
+
+Universal resident/selected checked origin, changed-arity caller correspondence,
+terminal merging, selector, native graph/ID/index/memo2, extraction/signed
+bounds, cutoff language, full typing/pruning/driver, runtime/solver/resources
+and convergence remain. H6 stays strongest combined. H23 and older constructor/
+equality work remain. No Haskell source changes. FINDINGS keeps all six repair
+handoffs first. All earlier work and the optimized core remain. The full goal
+stays ACTIVE and incomplete. This record precedes evidence and push.
+
+
 ## Accepted edge arity after equal-length child replacement
 
 Updated: 2026-10-24. Main `74250bd88` is incorporated.
