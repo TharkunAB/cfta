@@ -1,3 +1,4 @@
+import MicroCFTA.SourcePruningEnumerationSelectedRow
 import MicroCFTA.SourcePruningEnumerationCheckedArity
 import MicroCFTA.SourcePruningEnumerationSetChildrenArity
 import MicroCFTA.SourcePruningEnumerationOwnArity
