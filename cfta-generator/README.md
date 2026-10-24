@@ -341,6 +341,27 @@ can repeat or skip terms of the old one. The route decides equality
 constraints. A guard beyond equality constraints needs a solver, and `resume`
 rejects it with `QueryFailed ResidualGuard`.
 
+`startSampling` and `resumeSampling` draw terms from the same listing in a
+sampled run. Without weights, each term up to the bound has the same chance:
+a draw selects a rank of the listing. With a weight for each size, a draw
+selects a size by its weight, then a term of that size. A size with no terms
+is not selected. Draw `i` uses SplitMix64 (`splitMix64`, as `splitmix64.c` of
+Sebastiano Vigna) from a word that depends only on the seed and on `i`. Thus a
+sampling checkpoint holds the seed and the number of draws, and no state of
+the generator. A new process that resumes it gives the same next draws.
+
+```haskell
+weights = Just (Map.fromList [(1, 1), (5, 3)])
+run <- either (fail . show) pure $ Checkpoint.resumeSampling (Checkpoint.startSampling 7 weights 42 automaton) automaton weights
+let saved = snd (run !! 99) -- the checkpoint after one hundred draws
+```
+
+`resumeSampling` rejects another graph and other weights as stale
+(`StaleRow`, `StaleWeights`). It also rejects another version of the route
+(`sized-sample`) or of the generator (`splitmix64`). The bound and the seed
+come from the checkpoint. `printSamplingCheckpoint` of cfta-serialization
+saves it with its graph.
+
 ## Equality-constrained generators
 
 An equality generator is a `Gen Symbol`, with the name `ECTAGen`. Each

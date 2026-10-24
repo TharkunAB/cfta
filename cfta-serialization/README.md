@@ -20,6 +20,7 @@ Redex, Nanopass, EDN, and KDL, and explains why the format has its own syntax.
 | `Document state` | `printDocument` | `parseDocument` | `document 1;` |
 | `Language state` | `printLanguage` | `parseLanguage` | `language 1;` |
 | `Checkpoint state` | `printCheckpoint` | `parseCheckpoint` | `checkpoint 1;` |
+| `SamplingCheckpoint state` | `printSamplingCheckpoint` | `parseSamplingCheckpoint` | `sampling 1;` |
 
 Printers return `Text`. Parsers return `Either (TextError state) value`.
 `explainTextError` reports a syntax line/column or a checked source error.
@@ -42,9 +43,11 @@ data State = Atom | Expr deriving (Eq, Ord, Show, Read)
 
 For custom or portable state labels, use `StateCodec state` and the corresponding
 `printGraphWith`/`parseGraphWith`, `printDocumentWith`/`parseDocumentWith`,
-`printLanguageWith`/`parseLanguageWith`, or
-`printCheckpointWith`/`parseCheckpointWith` functions. The codec contains
-`encodeState :: state -> Text` and `decodeState :: Text -> Either String state`.
+`printLanguageWith`/`parseLanguageWith`,
+`printCheckpointWith`/`parseCheckpointWith`, or
+`printSamplingCheckpointWith`/`parseSamplingCheckpointWith` functions. The
+codec contains `encodeState :: state -> Text` and
+`decodeState :: Text -> Either String state`.
 The snapshot printer handles quoting. For a graph with `Text` state names:
 
 ```haskell
@@ -240,6 +243,39 @@ differs. A new order of the transitions of one state also makes a checkpoint
 stale, because the ranks follow the order of the rows. To resume the saved
 version, use `checkpointGraph saved` as the graph. To continue in an edited
 graph, use `relocate`: it does not continue the old listing.
+
+## Sampling checkpoints
+
+`printSamplingCheckpoint` and `parseSamplingCheckpoint` store a
+`SamplingCheckpoint`: a saved position in a sampled run of draws from the
+same listing. `startSampling` and `resumeSampling` of
+`Data.CFTA.Sized.Checkpoint` make and resume it.
+
+```text
+sampling 1;
+query sized-sample 1;
+bound 7;
+weights [1: 1, 5: 3];
+prng splitmix64 1;
+seed 11;
+draws 12;
+
+graph 1;
+start tree;
+
+state tree {
+  leaf;
+  node(tree, tree);
+}
+```
+
+`weights` gives a weight for each size, as `SIZE: WEIGHT`, or `uniform` for
+the same chance for each term of the listing. `prng` gives the pseudorandom
+generator and its version. `seed` is a 64-bit word, and `draws` is the number
+of draws before the next draw. A draw depends only on the seed and on its
+index, so the file holds no state of the generator. As in a checkpoint, the
+remaining text is the text of `printGraph` for the graph. `resumeSampling`
+rejects another graph and other weights.
 
 ## Ranks after reopening
 

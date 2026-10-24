@@ -130,6 +130,14 @@ Wilf, and Feat (ranking).
 - **Relocation**: finding a term in another graph, and making a checkpoint at
   that term. It does not continue the old listing: the new listing can repeat
   or skip terms of the old one.
+- **Sampled run**: the terms that a sequence of draws from a listing gives,
+  one term for each draw. Draw *i* depends only on the seed and on *i*.
+  Without weights, each term of the listing has the same chance. With weights,
+  a draw selects a size by its weight, then a term of that size.
+- **Sampling checkpoint**: a saved position in a sampled run: the graph, the
+  route and its version, the size bound, the weights, the pseudorandom
+  generator (PRNG) and its version, the seed, and the number of draws so far.
+  It is stale for each graph other than its own graph, and for other weights.
 
 ## Generators
 
