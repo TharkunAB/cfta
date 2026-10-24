@@ -1,0 +1,10 @@
+end ExceptT
+
+/-! # Except -/
+
+instance : LawfulMonad (Except ε) := LawfulMonad.mk'
+  (id_map := fun x => by cases x <;> rfl)
+  (pure_bind := fun _ _ => by rfl)
+  (bind_assoc := fun a _ _ => by cases a <;> rfl)
+
+instance : LawfulApplicative (Except ε) := inferInstance

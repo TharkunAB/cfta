@@ -1,0 +1,49 @@
+{"command": ["nix-shell", "--run", "export PATH=/usr/bin:$PATH; cabal exec -- ghc-9.14.1 -v0 -fno-code -fforce-recomp -hide-all-packages -package-id base-4.22.0.0-fde1 -package-id cfta-th-0.1.0.0-inplace /tmp/mcfta-derived-scalar-shape-20261024/name-regression-red/MagicHashType.hs"], "exit_code": 1, "raw_bytes": 349, "raw_sha256": "f5dc9030e4cbeaa7916c79da525378de43c72948081a7c53be5fd721838278be"}
+/tmp/mcfta-derived-scalar-shape-20261024/name-regression-red/MagicHashType.hs:5:2: error: [GHC-55017]
+    Illegal type constructor or class name: ‘Hashy#Node’
+    When splicing a TH declaration:
+      data Hashy#Node e_0
+    = ConstructorNode
+    deriving GHC.Internal.Generics.Generic
+  |
+5 | $(deriveNode ''Hashy#)
+  |  ^^^^^^^^^^^^^^^^^^^^^
+
+
+{"command": ["nix-shell", "--run", "export PATH=/usr/bin:$PATH; cabal test cfta-th:node-views -j1 --ghc-options=-Werror --test-show-details=direct --test-options=\"+RTS -N1 -M1G -RTS\""], "exit_code": 1, "raw_bytes": 1722, "raw_sha256": "ae927364419f835fef5569a7dca16045f2b76c59fccaf1d817179dff00f70137"}
+Build profile: -w ghc-9.14.1 -O0
+In order, the following will be built (use -v for more details):
+ - cfta-th-0.1.0.0 (test:node-views) (file test/Spec.hs changed)
+Preprocessing test suite 'node-views' for cfta-th-0.1.0.0...
+Building test suite 'node-views' for cfta-th-0.1.0.0...
+[1 of 1] Compiling Main             ( test/Spec.hs, /home/tritlo/Code/mcfta/dist-newstyle/build/x86_64-linux/ghc-9.14.1/cfta-th-0.1.0.0/t/node-views/noopt/build/node-views/node-views-tmp/Main.o ) [Source file changed]
+[2 of 2] Linking /home/tritlo/Code/mcfta/dist-newstyle/build/x86_64-linux/ghc-9.14.1/cfta-th-0.1.0.0/t/node-views/noopt/build/node-views/node-views [Objects changed]
+Running 1 test suites...
+Test suite node-views: RUNNING...
+
+deriveNode
+  gives the same typed terms and ranks as a hand-written view [✔]
+  gives the same refined terms and ranks as a hand-written view [✔]
+  keeps the constructors in order with their field counts [✔]
+  rejects the declarations that need a hand-written view [✘]
+
+Failures:
+
+  test/Spec.hs:132:13: 
+  1) deriveNode rejects the declarations that need a hand-written view
+       expected: [True,True,True,True,True,True,True]
+        but got: [True,True,True,True,True,False,False]
+
+  To rerun use: --match "/deriveNode/rejects the declarations that need a hand-written view/" --seed 922937373
+
+Randomized with seed 922937373
+
+Finished in 0.0162 seconds
+4 examples, 1 failure
+Test suite node-views: FAIL
+Test suite logged to:
+/home/tritlo/Code/mcfta/dist-newstyle/build/x86_64-linux/ghc-9.14.1/cfta-th-0.1.0.0/t/node-views/noopt/test/cfta-th-0.1.0.0-node-views.log
+0 of 1 test suites (0 of 1 test cases) passed.
+Error: [Cabal-7125]
+Tests failed for test:node-views from cfta-th-0.1.0.0.
+

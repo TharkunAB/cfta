@@ -1,0 +1,47 @@
+{"command": ["nix-shell", "--run", "export PATH=/usr/bin:$PATH; cabal test cfta-th:node-views -j1 --ghc-options=-Werror --test-show-details=direct --test-options=\"+RTS -N1 -M1G -RTS\""], "exit_code": 0, "raw_bytes": 1861, "raw_sha256": "54a3ddf42a8f93974c63e5b0a2191dd12d9d806b3d4d119000cf79fb3da2253e"}
+Build profile: -w ghc-9.14.1 -O0
+In order, the following will be built (use -v for more details):
+ - cfta-th-0.1.0.0 (lib) (file src/Data/CFTA/TH.hs changed)
+ - cfta-th-0.1.0.0 (test:node-views) (dependency rebuilt)
+Preprocessing library for cfta-th-0.1.0.0...
+Building library for cfta-th-0.1.0.0...
+[1 of 1] Compiling Data.CFTA.TH     ( src/Data/CFTA/TH.hs, /home/tritlo/Code/mcfta/dist-newstyle/build/x86_64-linux/ghc-9.14.1/cfta-th-0.1.0.0/noopt/build/Data/CFTA/TH.o, /home/tritlo/Code/mcfta/dist-newstyle/build/x86_64-linux/ghc-9.14.1/cfta-th-0.1.0.0/noopt/build/Data/CFTA/TH.dyn_o ) [Source file changed]
+Preprocessing test suite 'node-views' for cfta-th-0.1.0.0...
+Building test suite 'node-views' for cfta-th-0.1.0.0...
+[1 of 1] Compiling Main             ( test/Spec.hs, /home/tritlo/Code/mcfta/dist-newstyle/build/x86_64-linux/ghc-9.14.1/cfta-th-0.1.0.0/t/node-views/noopt/build/node-views/node-views-tmp/Main.o ) [/home/tritlo/Code/mcfta/dist-newstyle/build/x86_64-linux/ghc-9.14.1/cfta-th-0.1.0.0/noopt/build/libHScfta-th-0.1.0.0-inplace-ghc9.14.1.so changed]
+[2 of 2] Linking /home/tritlo/Code/mcfta/dist-newstyle/build/x86_64-linux/ghc-9.14.1/cfta-th-0.1.0.0/t/node-views/noopt/build/node-views/node-views [Objects changed]
+Running 1 test suites...
+Test suite node-views: RUNNING...
+
+deriveNode
+  gives the same typed terms and ranks as a hand-written view [✔]
+  gives the same refined terms and ranks as a hand-written view [✔]
+  keeps the constructors in order with their field counts [✔]
+  rejects the declarations that need a hand-written view [✔]
+
+Finished in 0.0139 seconds
+4 examples, 0 failures
+Test suite node-views: PASS
+Test suite logged to:
+/home/tritlo/Code/mcfta/dist-newstyle/build/x86_64-linux/ghc-9.14.1/cfta-th-0.1.0.0/t/node-views/noopt/test/cfta-th-0.1.0.0-node-views.log
+1 of 1 test suites (1 of 1 test cases) passed.
+
+{"command": ["fourmolu", "--mode", "check", "cfta-th/src/Data/CFTA/TH.hs", "cfta-th/test/Spec.hs"], "exit_code": 0, "raw_bytes": 58, "raw_sha256": "5e9ce55055974291cc141f348aff187d72f3871a1662a95af93deb2dd7341175"}
+Loaded config from: /home/tritlo/Code/mcfta/fourmolu.yaml
+
+{"command": ["hlint", "cfta-th/src", "cfta-th/test"], "exit_code": 1, "raw_bytes": 339, "raw_sha256": "db3bc19f084c6d64ebeb5a59a52b5035c89c8f0a01fe9b099343c528ccbde3ee"}
+cfta-th/test/Spec.hs:(41,1)-(43,30): Suggestion: Use newtype instead of data
+Found:
+  data Amount
+    = Amount Integer
+    deriving stock (Eq, Show, Generic)
+    deriving anyclass (HasFTA)
+Perhaps:
+  newtype Amount
+    = Amount Integer
+    deriving stock (Eq, Show, Generic)
+    deriving anyclass (HasFTA)
+Note: decreases laziness
+
+1 hint
+

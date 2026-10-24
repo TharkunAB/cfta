@@ -1,0 +1,14 @@
+  ⟨toList_injective, (· ▸ rfl)⟩
+
+@[deprecated String.toList_inj (since := "2025-10-30")]
+theorem String.data_inj {s₁ s₂ : String} : s₁.toList = s₂.toList ↔ s₁ = s₂ :=
+  String.toList_inj
+
+@[simp]
+theorem String.toList_append {s t : String} : (s ++ t).toList = s.toList ++ t.toList := by
+  simp [← String.ofList_inj]
+
+@[deprecated String.toList_append (since := "2025-10-30")]
+theorem String.data_append {l₁ l₂ : String} : (l₁ ++ l₂).toList = l₁.toList ++ l₂.toList :=
+  String.toList_append
+

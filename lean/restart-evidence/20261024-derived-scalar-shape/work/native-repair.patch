@@ -1,0 +1,161 @@
+diff --git a/FINDINGS.md b/FINDINGS.md
+index 11da28eeb..943531dc7 100644
+--- a/FINDINGS.md
++++ b/FINDINGS.md
+@@ -16,10 +16,37 @@ Focused native repair probes pass. Historical counterexamples remain below.
+ | Negative Specftacular type depth | Fixed by `75cfc19b8`, merged in PR #168 at `a5fbb66eec`. Its source equals local `058b11fe8f`; all three public checks remain verified. | No additional patch. Keep the pre-fix timeout and the retained validation. |
+ | Optional LPO comparator transitivity | Fixed by `70a252537`, merged in PR #169 at `0db62d26b`. The recorded typed cycle is gone, also after canonicalTypes. | No additional patch for this witness. Keep the general order-law proof obligation. |
+ | Optional LPO application context | Fixed by `f484c0ca0`, merged in PR #169 at `0db62d26b`. The comparator reversal remains; contextual rewriting and template gates prevent its unsafe use. | No additional patch for this witness. Keep general context, substitution and pruning proof obligations. |
+-
+-All five listed repairs are in the imported main history. The current notes
+-record the type-depth and LPO validation. General proofs remain separate.
+-All earlier repair entries and evidence remain below.
++| Generated scalar-view names ending in # | Repaired on formalize. The producer rejects trailing-hash type and constructor names before namespace lookup. | Import the shared name check, two existing-suite regression cases and documentation. The repair is not on main. |
++
++The first five repairs are in the imported main history. The generated-name
++repair is on formalize and still needs an upstream import. General proofs
++remain separate. All earlier repair entries and evidence remain below.
++
++### Generated scalar-view names ending in #
++
++The new cfta-th producer accepts legal MagicHash source names, then appends
++Node. Constructor# becomes Constructor#Node, which GHC rejects with GHC-55017.
++A source type Hashy# similarly produces the invalid type name Hashy#Node.
++The ordinary-name control compiles. Both native failures are retained.
++
++The local repair rejects names ending in # in the shared generatedName function,
++after the uppercase test and before either namespace lookup. It returns the
++existing manual-view diagnostic with the feature text "names ending in #".
++It preserves the literal Node suffix rule and requires no new dependency.
++The source Haddock, package README, design note and changelog state this limit.
++
++The existing rejection example now includes both source forms. Its two added
++recover checks return False on the unchanged upstream producer. With the repair,
++all seven checks return True. The suite passes all four examples. The native
++probes now report the exact intended diagnostic for each form. The ordinary
++control still compiles. fourmolu, cabal-gild, cabal check and HLint at the CI
++warning threshold pass. A plain HLint run reports the older Amount newtype
++suggestion; the source fixture is unchanged. These raw results remain retained.
++
++External action: import the generatedName suffix check, the two rejection cases
++and their documentation from formalize. Do not change the Node naming rule.
++Evidence will be sealed in lean/restart-evidence/20261024-derived-scalar-shape.
++TH/Generic extraction, valid-position build/read and source codec laws stay open.
+ 
+ 
+ ## Generated scalar node views incorporated
+diff --git a/cfta-th/CHANGELOG.md b/cfta-th/CHANGELOG.md
+index 15949a9b4..bb84fe974 100644
+--- a/cfta-th/CHANGELOG.md
++++ b/cfta-th/CHANGELOG.md
+@@ -2,4 +2,5 @@
+ 
+ ## 0.1.0.0
+ 
++- Reject type and constructor names ending in `#` before generating invalid names.
+ - Add `deriveNode` to generate scalar node views for typing rules and refinements.
+diff --git a/cfta-th/README.md b/cfta-th/README.md
+index e4bce6c1b..69fe4a248 100644
+--- a/cfta-th/README.md
++++ b/cfta-th/README.md
+@@ -50,9 +50,10 @@ and on recursive fields still apply. Empty datatypes also need
+ `EmptyDataDeriving` for the generated instance.
+ 
+ GADTs, existential or constrained constructors, datatype contexts, symbolic
+-names, type synonyms, and data families need a manual view. A view with a
+-record of measures also remains manual. This package generates scalar views;
+-it does not change term types, constraints, counts, or ranks.
++names, names ending in `#`, type synonyms, and data families need a manual
++view. A view with a record of measures also remains manual. This package
++generates scalar views; it does not change term types, constraints, counts,
++or ranks.
+ 
+ See the [design note](../docs/generated-node-views.md) for the boundary and
+ validation plan. Quasiquoters are separate authoring work.
+diff --git a/cfta-th/src/Data/CFTA/TH.hs b/cfta-th/src/Data/CFTA/TH.hs
+index 18d57769d..dd846ea05 100644
+--- a/cfta-th/src/Data/CFTA/TH.hs
++++ b/cfta-th/src/Data/CFTA/TH.hs
+@@ -6,6 +6,7 @@ module Data.CFTA.TH (deriveNode) where
+ 
+ import Control.Monad (forM, unless, when)
+ import Data.Char (isUpper)
++import Data.List (isSuffixOf)
+ import Data.Maybe (isJust)
+ import GHC.Generics (Generic)
+ import Language.Haskell.TH
+@@ -31,9 +32,10 @@ the single parameter @e@. The source datatype still needs its usual
+ @HasFTA@ instance when used with the generator APIs.
+ 
+ This operation accepts ordinary data and newtype declarations. It rejects
+-name collisions, symbolic names, datatype contexts, existential or
+-constrained constructors, GADTs, type synonyms, and data families. Write a
+-manual view for records of measures or for other supported source forms.
++name collisions, symbolic names, names ending in @#@, datatype contexts,
++existential or constrained constructors, GADTs, type synonyms, and data
++families. Write a manual view for records of measures or for other supported
++source forms.
+ -}
+ deriveNode :: Name -> Q [Dec]
+ deriveNode source = do
+@@ -64,6 +66,7 @@ deriveNode source = do
+         fail $ "deriveNode " <> nameBase source <> ": " <> feature <> " need a manual node view"
+     generatedName lookupName name = case nameBase name of
+         first : _ | isUpper first -> do
++            when ("#" `isSuffixOf` nameBase name) $ unsupported "names ending in #"
+             let generated = nameBase name <> "Node"
+             existing <- lookupName generated
+             when (isJust existing)
+diff --git a/cfta-th/test/Spec.hs b/cfta-th/test/Spec.hs
+index cb20731e1..a2ef475c4 100644
+--- a/cfta-th/test/Spec.hs
++++ b/cfta-th/test/Spec.hs
+@@ -4,6 +4,7 @@
+ {-# LANGUAGE EmptyDataDeriving #-}
+ {-# LANGUAGE ExistentialQuantification #-}
+ {-# LANGUAGE GADTs #-}
++{-# LANGUAGE MagicHash #-}
+ {-# LANGUAGE TemplateHaskell #-}
+ {-# LANGUAGE TypeApplications #-}
+ {-# LANGUAGE TypeOperators #-}
+@@ -77,6 +78,12 @@ data Clash = Clash
+ -- | The name that the view of 'Clash' would have.
+ data ClashNode = ClashNode
+ 
++-- | A source type name that cannot take the Node suffix.
++data HashName# = HashName
++
++-- | A source constructor name that cannot take the Node suffix.
++data HashConstructor = HashConstructor#
++
+ $(deriveNode ''Expr)
+ $(deriveNode ''Amount)
+ $(deriveNode ''Record)
+@@ -119,8 +126,10 @@ spec = describe "deriveNode" $ do
+         , $(recover [|True|] (deriveNode ''(:+:) >> [|False|]))
+         , $(recover [|True|] (deriveNode ''Synonym >> [|False|]))
+         , $(recover [|True|] (deriveNode ''Clash >> [|False|]))
++        , $(recover [|True|] (deriveNode ''HashName# >> [|False|]))
++        , $(recover [|True|] (deriveNode ''HashConstructor >> [|False|]))
+         ]
+-            `shouldBe` replicate 5 True
++            `shouldBe` replicate 7 True
+   where
+     typed rules = either (error . show) id (fromTypingRules (Typing (Nesting 2) [] [()] rules)) :: Gen.Gen Symbol Expr
+     refined measured = LTA.compile $ either (error . show) id $ deriveLTAFrom @Amount 0 (atom @Integer LTA.every) measured
+diff --git a/docs/generated-node-views.md b/docs/generated-node-views.md
+index 2b13c4fbf..8c9279e38 100644
+--- a/docs/generated-node-views.md
++++ b/docs/generated-node-views.md
+@@ -25,8 +25,9 @@ The result has one parameter: the type of a child observation or premise.
+ 
+ Accept ordinary `data` and `newtype` declarations with named constructors.
+ Reject datatype contexts, existential or constrained constructors, GADTs,
+-symbolic names, type synonyms, and data families with an explanation at the
+-splice. Such types need a manual view where the existing APIs support them.
++symbolic names, names ending in `#`, type synonyms, and data families with an
++explanation at the splice. Such types need a manual view where the existing
++APIs support them.
+ Views with records of measures also remain manual; this operation generates
+ the scalar views used by typing rules and single-measure invariants.
+ 

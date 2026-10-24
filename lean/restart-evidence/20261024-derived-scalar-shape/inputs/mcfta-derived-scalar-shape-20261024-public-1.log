@@ -1,0 +1,127 @@
+{"command": ["/home/tritlo/.elan/toolchains/leanprover--lean4---v4.34.1/bin/lean", "-R", "/tmp/mcfta-derived-scalar-shape-20261024/public-1", "-DwarningAsError=true", "-Dlinter.all=true", "/tmp/mcfta-derived-scalar-shape-20261024/public-1/checked.lean"], "exit_code": 0, "raw_bytes": 10603, "raw_sha256": "ff247ce0597b34ee58c76c896585596cb6ece139fb1ee85bf754bde30cb68f25", "source_sha256": "be698a5946ef92e07d870eed8676d37979c59c3ffafa5c009ed1ed83e02878bc"}
+MicroCFTA.SourceGeneratedNodeViewShape.Constructor : Type
+MicroCFTA.SourceGeneratedNodeViewShape.Reified : Type
+MicroCFTA.SourceGeneratedNodeViewShape.ScalarShape : Type
+MicroCFTA.SourceGeneratedNodeViewShape.ViewShape : Type
+MicroCFTA.SourceGeneratedNodeViewShape.unsupported (source feature : String) : String
+MicroCFTA.SourceGeneratedNodeViewShape.collision (source generated : String) : String
+MicroCFTA.SourceGeneratedNodeViewShape.upperName (upper : Char → Bool) (name : String) : Bool
+MicroCFTA.SourceGeneratedNodeViewShape.endsInHash (name : String) : Bool
+MicroCFTA.SourceGeneratedNodeViewShape.generatedName (source : String) (upper : Char → Bool) (inScope : String → Bool)
+  (name : String) : Except String String
+MicroCFTA.SourceGeneratedNodeViewShape.ValidName (upper : Char → Bool) (inScope : String → Bool) (name : String) : Prop
+MicroCFTA.SourceGeneratedNodeViewShape.generateConstructor (source : String) (upper : Char → Bool)
+  (valuesInScope : String → Bool) :
+  MicroCFTA.SourceGeneratedNodeViewShape.Constructor → Except String MicroCFTA.SourceGeneratedNodeViewShape.ScalarShape
+MicroCFTA.SourceGeneratedNodeViewShape.ValidConstructor (upper : Char → Bool) (valuesInScope : String → Bool) :
+  MicroCFTA.SourceGeneratedNodeViewShape.Constructor → Prop
+MicroCFTA.SourceGeneratedNodeViewShape.scalarShape :
+  MicroCFTA.SourceGeneratedNodeViewShape.Constructor → MicroCFTA.SourceGeneratedNodeViewShape.ScalarShape
+MicroCFTA.SourceGeneratedNodeViewShape.derive (source : String) (upper : Char → Bool)
+  (typesInScope valuesInScope : String → Bool)
+  (reified : Except String MicroCFTA.SourceGeneratedNodeViewShape.Reified) :
+  Except String MicroCFTA.SourceGeneratedNodeViewShape.ViewShape
+MicroCFTA.SourceGeneratedNodeViewShape.generatedName_success (source : String) (upper : Char → Bool)
+  (inScope : String → Bool) (name result : String) :
+  MicroCFTA.SourceGeneratedNodeViewShape.generatedName source upper inScope name = Except.ok result ↔
+    MicroCFTA.SourceGeneratedNodeViewShape.ValidName upper inScope name ∧ result = name ++ "Node"
+MicroCFTA.SourceGeneratedNodeViewShape.constructor_success (source : String) (upper : Char → Bool)
+  (valuesInScope : String → Bool) (constructor : MicroCFTA.SourceGeneratedNodeViewShape.Constructor)
+  (result : MicroCFTA.SourceGeneratedNodeViewShape.ScalarShape) :
+  MicroCFTA.SourceGeneratedNodeViewShape.generateConstructor source upper valuesInScope constructor = Except.ok result ↔
+    MicroCFTA.SourceGeneratedNodeViewShape.ValidConstructor upper valuesInScope constructor ∧
+      result = MicroCFTA.SourceGeneratedNodeViewShape.scalarShape constructor
+MicroCFTA.SourceGeneratedNodeViewShape.constructors_success (source : String) (upper : Char → Bool)
+  (valuesInScope : String → Bool) (constructors : List MicroCFTA.SourceGeneratedNodeViewShape.Constructor)
+  (result : List MicroCFTA.SourceGeneratedNodeViewShape.ScalarShape) :
+  List.mapM (MicroCFTA.SourceGeneratedNodeViewShape.generateConstructor source upper valuesInScope) constructors =
+      Except.ok result ↔
+    (∀ (constructor : MicroCFTA.SourceGeneratedNodeViewShape.Constructor),
+        constructor ∈ constructors →
+          MicroCFTA.SourceGeneratedNodeViewShape.ValidConstructor upper valuesInScope constructor) ∧
+      result = List.map MicroCFTA.SourceGeneratedNodeViewShape.scalarShape constructors
+MicroCFTA.SourceGeneratedNodeViewShape.constructors_first_error (source : String) (upper : Char → Bool)
+  (valuesInScope : String → Bool) (earlier later : List MicroCFTA.SourceGeneratedNodeViewShape.Constructor)
+  (bad : MicroCFTA.SourceGeneratedNodeViewShape.Constructor) (error : String)
+  (valid :
+    ∀ (constructor : MicroCFTA.SourceGeneratedNodeViewShape.Constructor),
+      constructor ∈ earlier → MicroCFTA.SourceGeneratedNodeViewShape.ValidConstructor upper valuesInScope constructor)
+  (failed :
+    MicroCFTA.SourceGeneratedNodeViewShape.generateConstructor source upper valuesInScope bad = Except.error error) :
+  List.mapM (MicroCFTA.SourceGeneratedNodeViewShape.generateConstructor source upper valuesInScope)
+      (earlier ++ bad :: later) =
+    Except.error error
+MicroCFTA.SourceGeneratedNodeViewShape.derive_data_success (source : String) (upper : Char → Bool)
+  (typesInScope valuesInScope : String → Bool) (constructors : List MicroCFTA.SourceGeneratedNodeViewShape.Constructor)
+  (result : MicroCFTA.SourceGeneratedNodeViewShape.ViewShape) :
+  MicroCFTA.SourceGeneratedNodeViewShape.derive source upper typesInScope valuesInScope
+        (Except.ok (MicroCFTA.SourceGeneratedNodeViewShape.Reified.dataD [] constructors)) =
+      Except.ok result ↔
+    MicroCFTA.SourceGeneratedNodeViewShape.ValidName upper typesInScope source ∧
+      (∀ (constructor : MicroCFTA.SourceGeneratedNodeViewShape.Constructor),
+          constructor ∈ constructors →
+            MicroCFTA.SourceGeneratedNodeViewShape.ValidConstructor upper valuesInScope constructor) ∧
+        result =
+          { name := source ++ "Node",
+            constructors := List.map MicroCFTA.SourceGeneratedNodeViewShape.scalarShape constructors }
+MicroCFTA.SourceGeneratedNodeViewShape.derive_newtype (source : String) (upper : Char → Bool)
+  (typesInScope valuesInScope : String → Bool) (context : List Unit)
+  (constructor : MicroCFTA.SourceGeneratedNodeViewShape.Constructor) :
+  MicroCFTA.SourceGeneratedNodeViewShape.derive source upper typesInScope valuesInScope
+      (Except.ok (MicroCFTA.SourceGeneratedNodeViewShape.Reified.newtypeD context constructor)) =
+    MicroCFTA.SourceGeneratedNodeViewShape.derive source upper typesInScope valuesInScope
+      (Except.ok (MicroCFTA.SourceGeneratedNodeViewShape.Reified.dataD context [constructor]))
+MicroCFTA.SourceGeneratedNodeViewShape.reify_error (source : String) (upper : Char → Bool)
+  (typesInScope valuesInScope : String → Bool) (error : String) :
+  MicroCFTA.SourceGeneratedNodeViewShape.derive source upper typesInScope valuesInScope (Except.error error) =
+    Except.error error
+MicroCFTA.SourceGeneratedNodeViewShape.declaration_error (source : String) (upper : Char → Bool)
+  (typesInScope valuesInScope : String → Bool) :
+  MicroCFTA.SourceGeneratedNodeViewShape.derive source upper typesInScope valuesInScope
+      (Except.ok MicroCFTA.SourceGeneratedNodeViewShape.Reified.other) =
+    Except.error (MicroCFTA.SourceGeneratedNodeViewShape.unsupported source "type synonyms and data families")
+MicroCFTA.SourceGeneratedNodeViewShape.context_error (source : String) (upper : Char → Bool)
+  (typesInScope valuesInScope : String → Bool) (first : Unit) (rest : List Unit)
+  (constructors : List MicroCFTA.SourceGeneratedNodeViewShape.Constructor) :
+  MicroCFTA.SourceGeneratedNodeViewShape.derive source upper typesInScope valuesInScope
+      (Except.ok (MicroCFTA.SourceGeneratedNodeViewShape.Reified.dataD (first :: rest) constructors)) =
+    Except.error (MicroCFTA.SourceGeneratedNodeViewShape.unsupported source "datatype contexts")
+MicroCFTA.SourceGeneratedNodeViewShape.type_collision (source : String) (upper : Char → Bool)
+  (typesInScope valuesInScope : String → Bool) (constructors : List MicroCFTA.SourceGeneratedNodeViewShape.Constructor)
+  (first : MicroCFTA.SourceGeneratedNodeViewShape.upperName upper source = true)
+  (plain : MicroCFTA.SourceGeneratedNodeViewShape.endsInHash source = false)
+  (present : typesInScope (source ++ "Node") = true) :
+  MicroCFTA.SourceGeneratedNodeViewShape.derive source upper typesInScope valuesInScope
+      (Except.ok (MicroCFTA.SourceGeneratedNodeViewShape.Reified.dataD [] constructors)) =
+    Except.error (MicroCFTA.SourceGeneratedNodeViewShape.collision source (source ++ "Node"))
+MicroCFTA.SourceGeneratedNodeViewShape.generatedName_hash (source : String) (upper : Char → Bool)
+  (inScope : String → Bool) (name : String) (first : MicroCFTA.SourceGeneratedNodeViewShape.upperName upper name = true)
+  (suffix : MicroCFTA.SourceGeneratedNodeViewShape.endsInHash name = true) :
+  MicroCFTA.SourceGeneratedNodeViewShape.generatedName source upper inScope name =
+    Except.error (MicroCFTA.SourceGeneratedNodeViewShape.unsupported source "names ending in #")
+MicroCFTA.SourceGeneratedNodeViewShape.type_hash_error (source : String) (upper : Char → Bool)
+  (typesInScope valuesInScope : String → Bool) (constructors : List MicroCFTA.SourceGeneratedNodeViewShape.Constructor)
+  (first : MicroCFTA.SourceGeneratedNodeViewShape.upperName upper source = true)
+  (suffix : MicroCFTA.SourceGeneratedNodeViewShape.endsInHash source = true) :
+  MicroCFTA.SourceGeneratedNodeViewShape.derive source upper typesInScope valuesInScope
+      (Except.ok (MicroCFTA.SourceGeneratedNodeViewShape.Reified.dataD [] constructors)) =
+    Except.error (MicroCFTA.SourceGeneratedNodeViewShape.unsupported source "names ending in #")
+MicroCFTA.SourceGeneratedNodeViewShape.generated_names_pass (names : List String) :
+  MicroCFTA.SourceDeriveNodeViewNames.checkNames (List.map (fun name => (name, name ++ "Node")) names) = Except.ok ()
+'MicroCFTA.SourceGeneratedNodeViewShape.generatedName_success' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'MicroCFTA.SourceGeneratedNodeViewShape.constructor_success' depends on axioms: [propext, Classical.choice, Quot.sound]
+'MicroCFTA.SourceGeneratedNodeViewShape.constructors_success' depends on axioms: [propext, Classical.choice, Quot.sound]
+'MicroCFTA.SourceGeneratedNodeViewShape.constructors_first_error' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'MicroCFTA.SourceGeneratedNodeViewShape.derive_data_success' depends on axioms: [propext, Classical.choice, Quot.sound]
+'MicroCFTA.SourceGeneratedNodeViewShape.derive_newtype' depends on axioms: [propext, Classical.choice, Quot.sound]
+'MicroCFTA.SourceGeneratedNodeViewShape.reify_error' depends on axioms: [propext, Classical.choice, Quot.sound]
+'MicroCFTA.SourceGeneratedNodeViewShape.declaration_error' depends on axioms: [propext, Classical.choice, Quot.sound]
+'MicroCFTA.SourceGeneratedNodeViewShape.context_error' depends on axioms: [propext, Classical.choice, Quot.sound]
+'MicroCFTA.SourceGeneratedNodeViewShape.type_collision' depends on axioms: [propext, Classical.choice, Quot.sound]
+'MicroCFTA.SourceGeneratedNodeViewShape.generatedName_hash' depends on axioms: [propext, Classical.choice, Quot.sound]
+'MicroCFTA.SourceGeneratedNodeViewShape.type_hash_error' depends on axioms: [propext, Classical.choice, Quot.sound]
+'MicroCFTA.SourceGeneratedNodeViewShape.generated_names_pass' depends on axioms: [propext, Classical.choice, Quot.sound]

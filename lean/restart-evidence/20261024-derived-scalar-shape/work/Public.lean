@@ -1,0 +1,41 @@
+import MicroCFTA.SourceGeneratedNodeViewShape
+#check MicroCFTA.SourceGeneratedNodeViewShape.Constructor
+#check MicroCFTA.SourceGeneratedNodeViewShape.Reified
+#check MicroCFTA.SourceGeneratedNodeViewShape.ScalarShape
+#check MicroCFTA.SourceGeneratedNodeViewShape.ViewShape
+#check MicroCFTA.SourceGeneratedNodeViewShape.unsupported
+#check MicroCFTA.SourceGeneratedNodeViewShape.collision
+#check MicroCFTA.SourceGeneratedNodeViewShape.upperName
+#check MicroCFTA.SourceGeneratedNodeViewShape.endsInHash
+#check MicroCFTA.SourceGeneratedNodeViewShape.generatedName
+#check MicroCFTA.SourceGeneratedNodeViewShape.ValidName
+#check MicroCFTA.SourceGeneratedNodeViewShape.generateConstructor
+#check MicroCFTA.SourceGeneratedNodeViewShape.ValidConstructor
+#check MicroCFTA.SourceGeneratedNodeViewShape.scalarShape
+#check MicroCFTA.SourceGeneratedNodeViewShape.derive
+#check MicroCFTA.SourceGeneratedNodeViewShape.generatedName_success
+#check MicroCFTA.SourceGeneratedNodeViewShape.constructor_success
+#check MicroCFTA.SourceGeneratedNodeViewShape.constructors_success
+#check MicroCFTA.SourceGeneratedNodeViewShape.constructors_first_error
+#check MicroCFTA.SourceGeneratedNodeViewShape.derive_data_success
+#check MicroCFTA.SourceGeneratedNodeViewShape.derive_newtype
+#check MicroCFTA.SourceGeneratedNodeViewShape.reify_error
+#check MicroCFTA.SourceGeneratedNodeViewShape.declaration_error
+#check MicroCFTA.SourceGeneratedNodeViewShape.context_error
+#check MicroCFTA.SourceGeneratedNodeViewShape.type_collision
+#check MicroCFTA.SourceGeneratedNodeViewShape.generatedName_hash
+#check MicroCFTA.SourceGeneratedNodeViewShape.type_hash_error
+#check MicroCFTA.SourceGeneratedNodeViewShape.generated_names_pass
+#print axioms MicroCFTA.SourceGeneratedNodeViewShape.generatedName_success
+#print axioms MicroCFTA.SourceGeneratedNodeViewShape.constructor_success
+#print axioms MicroCFTA.SourceGeneratedNodeViewShape.constructors_success
+#print axioms MicroCFTA.SourceGeneratedNodeViewShape.constructors_first_error
+#print axioms MicroCFTA.SourceGeneratedNodeViewShape.derive_data_success
+#print axioms MicroCFTA.SourceGeneratedNodeViewShape.derive_newtype
+#print axioms MicroCFTA.SourceGeneratedNodeViewShape.reify_error
+#print axioms MicroCFTA.SourceGeneratedNodeViewShape.declaration_error
+#print axioms MicroCFTA.SourceGeneratedNodeViewShape.context_error
+#print axioms MicroCFTA.SourceGeneratedNodeViewShape.type_collision
+#print axioms MicroCFTA.SourceGeneratedNodeViewShape.generatedName_hash
+#print axioms MicroCFTA.SourceGeneratedNodeViewShape.type_hash_error
+#print axioms MicroCFTA.SourceGeneratedNodeViewShape.generated_names_pass

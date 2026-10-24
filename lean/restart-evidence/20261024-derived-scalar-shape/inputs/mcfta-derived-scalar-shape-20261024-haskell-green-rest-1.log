@@ -1,0 +1,26 @@
+{"command": ["hlint", "--ignore-suggestions", "cfta-th/src", "cfta-th/test"], "exit_code": 0, "raw_bytes": 9, "raw_sha256": "3ad781d618c325a4232d57cc2d042c8bc78de184f9fc851181cf789e52f3ef09"}
+No hints
+
+{"command": ["cabal-gild", "--mode", "check", "cfta-th/cfta-th.cabal"], "exit_code": 0, "raw_bytes": 0, "raw_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"}
+
+{"command": ["nix-shell", "--run", "export PATH=/usr/bin:$PATH; cd cfta-th && cabal check"], "exit_code": 0, "raw_bytes": 53, "raw_sha256": "a19b4064f1acadadad1e1f24beae3785b778a6c5baabde7f333e4dacb7191d30"}
+No errors or warnings could be found in the package.
+
+{"command": ["nix-shell", "--run", "export PATH=/usr/bin:$PATH; cabal exec -- ghc-9.14.1 -v0 -fno-code -fforce-recomp -hide-all-packages -package-id base-4.22.0.0-fde1 -package-id cfta-th-0.1.0.0-inplace /tmp/mcfta-derived-scalar-shape-20261024/native-names/Control.hs"], "exit_code": 0, "expected_diagnostic": null, "raw_bytes": 0, "raw_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"}
+
+{"command": ["nix-shell", "--run", "export PATH=/usr/bin:$PATH; cabal exec -- ghc-9.14.1 -v0 -fno-code -fforce-recomp -hide-all-packages -package-id base-4.22.0.0-fde1 -package-id cfta-th-0.1.0.0-inplace /tmp/mcfta-derived-scalar-shape-20261024/native-names/MagicHashConstructor.hs"], "exit_code": 1, "expected_diagnostic": "deriveNode Hashy: names ending in # need a manual node view", "raw_bytes": 223, "raw_sha256": "7337263a05372e4f19ce4951aa4245ec78968a2e5eae0011316389e610854437"}
+/tmp/mcfta-derived-scalar-shape-20261024/native-names/MagicHashConstructor.hs:5:2: error: [GHC-39584]
+    deriveNode Hashy: names ending in # need a manual node view
+  |
+5 | $(deriveNode ''Hashy)
+  |  ^^^^^^^^^^^^^^^^^^^^
+
+
+{"command": ["nix-shell", "--run", "export PATH=/usr/bin:$PATH; cabal exec -- ghc-9.14.1 -v0 -fno-code -fforce-recomp -hide-all-packages -package-id base-4.22.0.0-fde1 -package-id cfta-th-0.1.0.0-inplace /tmp/mcfta-derived-scalar-shape-20261024/name-regression-red/MagicHashType.hs"], "exit_code": 1, "expected_diagnostic": "deriveNode Hashy#: names ending in # need a manual node view", "raw_bytes": 226, "raw_sha256": "199e77f8c974e22a84fcb3d4aa8820ea5c537fd6bbeee52c7616d2ab37c6662c"}
+/tmp/mcfta-derived-scalar-shape-20261024/name-regression-red/MagicHashType.hs:5:2: error: [GHC-39584]
+    deriveNode Hashy#: names ending in # need a manual node view
+  |
+5 | $(deriveNode ''Hashy#)
+  |  ^^^^^^^^^^^^^^^^^^^^^
+
+

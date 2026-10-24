@@ -1,0 +1,29 @@
+@[simp] theorem mapM'_cons [Monad m] {f : α → m β} :
+    mapM' f (a :: l) = return ((← f a) :: (← l.mapM' f)) :=
+  rfl
+
+theorem mapM'_eq_mapM [Monad m] [LawfulMonad m] {f : α → m β} {l : List α} :
+    mapM' f l = mapM f l := by simp [go, mapM] where
+  go : ∀ l acc, mapM.loop f l acc = return acc.reverse ++ (← mapM' f l)
+    | [], acc => by simp [mapM.loop, mapM']
+    | a::l, acc => by simp [go l, mapM.loop, mapM']
+
+@[simp, grind =] theorem mapM_nil [Monad m] {f : α → m β} : [].mapM f = pure [] := rfl
+
+@[simp, grind =] theorem mapM_cons [Monad m] [LawfulMonad m] {f : α → m β} :
+    (a :: l).mapM f = (return (← f a) :: (← l.mapM f)) := by simp [← mapM'_eq_mapM, mapM']
+
+@[simp] theorem mapM_pure [Monad m] [LawfulMonad m] {l : List α} {f : α → β} :
+    l.mapM (m := m) (pure <| f ·) = pure (l.map f) := by
+  induction l <;> simp_all
+
+@[simp, grind =] theorem idRun_mapM {l : List α} {f : α → Id β} : (l.mapM f).run = l.map (f · |>.run) :=
+  mapM_pure
+
+@[simp, grind =] theorem mapM_map [Monad m] [LawfulMonad m] {f : α → β} {g : β → m γ} {l : List α} :
+    (l.map f).mapM g = l.mapM (g ∘ f) := by
+  induction l <;> simp_all
+
+@[simp, grind =] theorem mapM_append [Monad m] [LawfulMonad m] {f : α → m β} {l₁ l₂ : List α} :
+    (l₁ ++ l₂).mapM f = (return (← l₁.mapM f) ++ (← l₂.mapM f)) := by induction l₁ <;> simp [*]
+
