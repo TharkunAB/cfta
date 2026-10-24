@@ -1,3 +1,4 @@
+import MicroCFTA.SourcePruningEnumerationIntersectionWrite
 import MicroCFTA.SourcePruningEnumerationOrdinaryBranches
 import MicroCFTA.SourcePruningEnumerationCheckedRows
 import MicroCFTA.SourcePruningEnumerationRawExact
