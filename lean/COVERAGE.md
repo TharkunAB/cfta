@@ -1,5 +1,46 @@
 # Full formalization coverage
 
+## Executable outer narrowing and enumeration actions
+
+Updated: 2026-10-24. Main `74250bd88` is incorporated.
+Proof: `b2fe79af95c4c589b17cd813c801ab159dad63b6`.
+Read `lean/notes-current-pruning-enumeration-action.md`.
+
+The executable prepare stage computes outer narrowing once and retains its
+actual result Value and native heap beside the optional existing Unit action.
+Native failure, encoding absence, Empty rejection and enumeration error stay
+distinct. Empty rejects before encoding or identity comparison. Equal handles
+select pure success. Changed handles select the actual representative read
+and write at its returned root with the original suspended list.
+
+One use of the existing outer pending consumer derives the old Value from
+the same actual first pending read. Its selected native result/fuel/heap,
+Keeps, complete readbacks, larger-fuel equation and realization remain.
+Each branch includes the actual prepare equation. Changed handles use the
+same chosen representative fuel, compressed Q, root/old slot/bound and final
+F for that equation and the actual bind success. Exact final record/new slot
+and final realization remain. No full frame crosses changed values.
+
+The first strict input fails because the changed prepare equation does not specify EnumGuard and six body uses select deprecated aliases. A separate reviewed V2 adds the explicit EnumGuard argument. The body uses the supported ite_eq_left and ite_eq_right lemmas. The executable definition is unchanged. The second strict input passes with a literal empty log. Both inputs and the actual failed output remain. The public readback retains all 152 lines with both complete signatures and no display omission.
+The installed build passes 576 jobs. Audit passes 3688 jobs and
+76131 dependency checks, with one older warning and no new source
+warning. Both complete public signatures and actual axiom reports were read.
+Both declarations report exactly propext, Classical.choice and Quot.sound.
+One definition, one theorem and one named local Monad List instance are added.
+The original source-plan hold and separate payload correction remain. All
+frozen declarations, source cuts, reviews and raw evidence remain.
+
+The pure Nat driver and Oracle still need native heap/Value/Graph bridges.
+Native IDs, graph/index/memo2 laws, intersection/assimilation, concrete typing
+and key laws, Right/Left/expansion/recursion/scheduling, full driver/typedTypes
+and semantic pruning remain open. Global histories, phase4, resources,
+practical width, runtime/solver and convergence remain. H6 stays strongest
+combined. H23 and older constructor/equality targets stay queued. No Haskell
+changes. FINDINGS keeps all six imported repair handoffs FIRST. Earlier work
+and the optimized core remain. The full goal stays ACTIVE and incomplete.
+This record precedes evidence and push.
+
+
 ## Outer pruning at realized pending slots
 
 Updated: 2026-10-24. Main `74250bd88` is incorporated.
