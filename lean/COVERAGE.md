@@ -1,5 +1,35 @@
 # Full formalization coverage
 
+## Encoded enumeration-slot writes
+
+Updated: 2026-10-24. Main `74250bd88` is incorporated.
+Proof: `5574e476b4fefd2a6716813ea483bab374c41367`.
+Read `lean/notes-current-pruning-enumeration-writes.md`.
+
+Coherent/Available/closed inputs and incoming realization derive the exact
+computed handle for actual allocation or raw slot replacement. Alignment gives
+the returned allocation slot. An in-range raw address gives exact replacement.
+Both operations retain realization of every pending slot and the full modeled
+state effects. The native heap stays the same. Suspended lists remain intact.
+
+Strict checking passes on the first attempt with an empty log. The installed
+build passes. Audit passes 3682 jobs and 76103 dependency checks, with
+one older warning and no new-source warning. Both signatures and both actual
+axiom reports were read. Each reports only propext and Quot.sound.
+The 69-line module adds two theorems. Its frozen 42-payload owner remains.
+
+Next compose actual native narrowing, retaining Empty rejection, the actual
+heap and the unchanged-ID branch. General intersection/assimilation needs its
+native handle/heap connection. Native cached-index maintenance, open-hole bounds,
+ordered reads, lazy emptiness, typing, outer narrow, memo2 and typedTypes remain.
+Global helper canonicality, mutation histories, selected-current protection,
+cached scheduling, semantic pruning, phase 4, resources, practical width,
+runtime/solver and convergence stay open. H6 remains strongest combined.
+H23 stays queued. No Haskell source changes. FINDINGS keeps its external repair
+index FIRST. All six recorded fixes are on main. The full goal is ACTIVE and
+incomplete. This record precedes evidence creation and the authorized push.
+
+
 ## Actual pending-node observations
 
 Updated: 2026-10-24. Main `74250bd88` is incorporated.
