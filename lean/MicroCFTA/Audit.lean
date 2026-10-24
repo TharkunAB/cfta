@@ -1,3 +1,4 @@
+import MicroCFTA.SourcePruningOracle
 import MicroCFTA.SourcePruningResume
 import MicroCFTA.EnumerationPartialRoot
 import MicroCFTA.EnumerationNodeObservation
