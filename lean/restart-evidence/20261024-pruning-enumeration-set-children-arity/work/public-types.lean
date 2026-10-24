@@ -1,0 +1,7 @@
+import MicroCFTA.SourcePruningEnumerationSetChildrenArity
+
+set_option pp.deepTerms true
+set_option pp.maxSteps 100000
+
+#check @MicroCFTA.SourcePruningEnumerationSetChildrenArity.accepted_setChildren_arity
+#print axioms MicroCFTA.SourcePruningEnumerationSetChildrenArity.accepted_setChildren_arity

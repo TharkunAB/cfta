@@ -1,0 +1,8 @@
+
+    editNode :: Edits symbol -> Node symbol -> Node symbol
+    editNode (EditAt f) n = f n
+    editNode _ EmptyNode = EmptyNode
+    editNode below n@(Mu _) = editNode below (Node $ nodeEdges n)
+    editNode below n@(InternedUnion _) = editNode below (Node $ nodeEdges n)
+    editNode below (Node es) = Node (map (\e -> setChildren e (editList below (edgeChildren e))) es)
+    editNode _ (Rec _) = error "editAll: unexpected Rec"

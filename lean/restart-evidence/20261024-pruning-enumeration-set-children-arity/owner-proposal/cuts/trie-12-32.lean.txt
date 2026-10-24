@@ -1,0 +1,21 @@
+namespace MicroCFTA.EqualityTrie
+
+abbrev Path := List Nat
+
+/-- A terminal-or-branch trie for equality paths. -/
+inductive Trie where
+  | empty
+  | terminal
+  | branch (children : List (Nat × Trie))
+  deriving Repr
+
+mutual
+  /-- Enumerate every represented path. -/
+  def fromPathTrie : Trie → List Path
+    | .empty => []
+    | .terminal => [[]]
+    | .branch children => fromChildren children
+  /-- Prefix each child path by its child index. -/
+  def fromChildren : List (Nat × Trie) → List Path
+    | [] => []
+    | (index, child) :: rest => (fromPathTrie child).map (index :: ·) ++ fromChildren rest

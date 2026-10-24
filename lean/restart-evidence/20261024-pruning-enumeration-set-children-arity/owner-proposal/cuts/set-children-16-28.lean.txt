@@ -1,0 +1,13 @@
+/-- Copy the source equal-arity shortcut while leaving the unused checked branch explicit. -/
+def setChildren (checked : Symbol → List (Value Symbol Guard) → Guard → Work Symbol Guard (EdgeValue Symbol Guard))
+    (edge : EdgeValue Symbol Guard) (children : List (Value Symbol Guard)) : Work Symbol Guard (EdgeValue Symbol Guard) :=
+  if children.length = edge.children.length then
+    makeEdge edge.entry.key.symbol edge.entry.key.constraint children
+  else checked edge.entry.key.symbol children edge.entry.key.constraint
+
+/-- The direct source branch retains the exact symbol and full constraint without normalization. -/
+theorem same_arity
+    (checked : Symbol → List (Value Symbol Guard) → Guard → Work Symbol Guard (EdgeValue Symbol Guard))
+    (edge : EdgeValue Symbol Guard) (children : List (Value Symbol Guard)) (same : children.length = edge.children.length) :
+    setChildren checked edge children = makeEdge edge.entry.key.symbol edge.entry.key.constraint children := by
+  simp only [setChildren, same, ↓reduceIte]

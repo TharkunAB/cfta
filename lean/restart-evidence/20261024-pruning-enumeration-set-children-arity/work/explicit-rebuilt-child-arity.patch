@@ -1,0 +1,13 @@
+--- strict-1
++++ strict-2
+@@ -93,6 +93,9 @@
+     simpa only [oldGuard] using oldProjected
+   · intro start
+     refine ⟨oldArity start, ?_⟩
+-    simpa only [newChildren, sameLength, oldChildren] using oldArity start
++    change arityAllows actualRebuilt.1.children.length
++      (suspendedVars start (EnumerationEquality.readClasses classes)) = true
++    rw [newChildren, sameLength]
++    simpa only [oldChildren] using oldArity start
+ 
+ end MicroCFTA.SourcePruningEnumerationSetChildrenArity

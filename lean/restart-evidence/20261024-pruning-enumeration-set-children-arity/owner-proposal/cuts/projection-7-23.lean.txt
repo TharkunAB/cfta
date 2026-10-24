@@ -1,0 +1,17 @@
+variable {Formula : Type}
+
+/-- Read the actual source equalities and retain the complete residual constraint. -/
+noncomputable def project (constraint : SourceSymbolicIndex.Constraint Formula) :
+    Option (List EqualityTrie.Trie × Option (SourceSymbolicIndex.Constraint Formula))
+ :=
+  match sourceEqualities constraint with
+  | none => none
+  | some classes =>
+      some (EnumerationEquality.readClasses classes,
+        if (positive constraint.guard).isSome then none else some constraint)
+
+/-- Derive valid path tries and the exact complete-constraint meaning of the projection. -/
+theorem project_complete [DecidableEq Formula]
+    (constraint : SourceSymbolicIndex.Constraint Formula) (cached : Cached constraint.equalities) :
+    match sourceEqualities constraint with
+    | none => project constraint = none ∧

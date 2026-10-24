@@ -1,0 +1,38 @@
+{
+  "status": "ROOT_EXACT_SOURCE_BODY_GATE_PASS",
+  "recorded_at": "2026-10-24T14:20:10.127016+02:00",
+  "body_or_compiler_started": false,
+  "owner": "/tmp/mcfta-pruning-enumeration-set-children-arity-20261024-proposal",
+  "frozen_sha256": "b8647d049244df63d08a28cde9636cbc0daa37756bb4e4a24f8ec61d1971d71e",
+  "pins_sha256": "0f768678216b0348d9bc749cf33fa29c2c0e07e321bcb2434baf7a618f4242ae",
+  "contracts": {
+    "context.lean.txt": "import MicroCFTA.SourcePruningEnumerationOwnArity\nimport MicroCFTA.EqualityLeafProjectionSetChildren\n\nnamespace MicroCFTA.SourcePruningEnumerationSetChildrenArity\nopen InternedConstructorTemplates EnumerationState EnumerationCorrectness\nlocal notation \"Symbol\" => SourcePruningTemplates.Symbol\nlocal notation \"Constraint\" => SourceSymbolicIndex.Constraint FullSyntax.Formula\n",
+    "public-header.lean.txt": "/-- Equal-length setChildren retains the checked edge's constraint and projected arity at the current heap. -/\ntheorem accepted_setChildren_arity [DecidableEq (InternedConstructorTemplates.EdgeKey Symbol Constraint)]\n    (symbol : Symbol) (original : Constraint) (stored : SourceEqualityConstraintAllocation.Value)\n    (children replacements : List (InternedConstructorTemplates.Value Symbol Constraint))\n    (before : SourceEqualityConstraintMemoAllocation.State)\n    (heap current : InternedConstructorTemplates.State Symbol Constraint)\n    (fallback : Symbol \u2192 List (InternedConstructorTemplates.Value Symbol Constraint) \u2192 Constraint \u2192\n      InternedConstructorTemplates.Work Symbol Constraint (InternedConstructorTemplates.EdgeValue Symbol Constraint))\n    (cached : SourceEqualityGuardReadback.Cached original.equalities)\n    (physical : SourceEqualityPhysicalPayload.read original.equalities = .ok stored.payload)\n    (storedReady : SourceEqualityConstraintAllocation.Ready before.constraints stored)\n    (valid : SourceEqualityConstraintMemoAllocation.Valid before)\n    (heapReady : SourceEqualityRequiredCache.Ready heap)\n    (available : InternedNestedProvenance.Values heap children)\n    (checked : (SourceEqualityMkEdgeAllocation.check stored original.guard children.length before).1 = .ok true)\n    (currentReady : SourceEqualityRequiredCache.Ready current)\n    (replacementAvailable : InternedNestedProvenance.Values current replacements)\n    (sameLength : replacements.length = children.length) :\n    let built := InternedConstructorTemplates.run (InternedConstructorTemplates.makeEdge symbol original children) heap\n    let rebuilt := InternedConstructorTemplates.run\n      (EqualityLeafProjectionSetChildren.setChildren fallback built.1 replacements) current\n    SourceEqualityMkEdgeAllocation.build symbol stored original.guard children before heap =\n      (.ok built.1, (SourceEqualityMkEdgeAllocation.check stored original.guard children.length before).2, built.2) \u2227\n    SourceEqualityConstraintMemoAllocation.Valid\n      (SourceEqualityMkEdgeAllocation.check stored original.guard children.length before).2 \u2227\n    SourceEqualityConstraintMemoAllocation.Grows before\n      (SourceEqualityMkEdgeAllocation.check stored original.guard children.length before).2 \u2227\n    SourceEqualityRequiredCache.Keeps heap built.2 \u2227\n    built.1.entry.key.symbol = symbol \u2227 built.1.entry.key.constraint = original \u2227 built.1.children = children \u2227\n    EqualityLeafProjectionSetChildren.setChildren fallback built.1 replacements =\n      InternedConstructorTemplates.makeEdge symbol original replacements \u2227\n    rebuilt = InternedConstructorTemplates.run (InternedConstructorTemplates.makeEdge symbol original replacements) current \u2227\n    SourceEqualityRequiredCache.Keeps current rebuilt.2 \u2227\n    InternedEdgeResidency.EdgeResident rebuilt.2 rebuilt.1 \u2227\n    rebuilt.1.entry.key.symbol = symbol \u2227 rebuilt.1.entry.key.constraint = original \u2227 rebuilt.1.children = replacements \u2227\n    \u2203 classes : EqualityNormalize.Constraints,\n      SourceCompactGuards.sourceEqualities built.1.entry.key.constraint = some classes \u2227\n      SourceCompactGuards.sourceEqualities rebuilt.1.entry.key.constraint = some classes \u2227\n      SourcePruningEnumerationConstraint.project built.1.entry.key.constraint =\n        some (EnumerationEquality.readClasses classes,\n          if (SourceCompactGuards.positive original.guard).isSome then none else some original) \u2227\n      SourcePruningEnumerationConstraint.project rebuilt.1.entry.key.constraint =\n        some (EnumerationEquality.readClasses classes,\n          if (SourceCompactGuards.positive original.guard).isSome then none else some original) \u2227\n      (\u2200 trie \u2208 EnumerationEquality.readClasses classes, EqualityTrie.Valid trie) \u2227\n      (\u2200 paths \u2208 classes, \u2200 path,\n        path \u2208 EqualityTrie.fromPathTrie (EnumerationEquality.classTrie paths) \u2194 path \u2208 paths) \u2227\n      \u2200 start : Nat, arityAllows built.1.children.length\n        (suspendedVars start (EnumerationEquality.readClasses classes)) = true \u2227\n        arityAllows rebuilt.1.children.length\n          (suspendedVars start (EnumerationEquality.readClasses classes)) = true\n",
+    "local-built.lean.txt": "let actualBuilt : InternedConstructorTemplates.EdgeValue Symbol Constraint \u00d7\n        InternedConstructorTemplates.State Symbol Constraint :=\n      InternedConstructorTemplates.run (InternedConstructorTemplates.makeEdge symbol original children) heap\n",
+    "local-rebuilt.lean.txt": "let actualRebuilt : InternedConstructorTemplates.EdgeValue Symbol Constraint \u00d7\n        InternedConstructorTemplates.State Symbol Constraint :=\n      InternedConstructorTemplates.run\n        (EqualityLeafProjectionSetChildren.setChildren fallback actualBuilt.1 replacements) current\n",
+    "local-direct.lean.txt": "have direct : EqualityLeafProjectionSetChildren.setChildren fallback actualBuilt.1 replacements =\n        InternedConstructorTemplates.makeEdge symbol original replacements\n",
+    "local-rebuilt-same.lean.txt": "have rebuiltSame : actualRebuilt =\n        InternedConstructorTemplates.run (InternedConstructorTemplates.makeEdge symbol original replacements) current\n"
+  },
+  "review_sha256": "a65d42344c69fbfe48c8fdb04fd2713307e08ac204c1e6aa3bc6a1e10eeaa38f",
+  "source_review_sha256": "ac9b32354aaf295bb7b84c273bd25918244649e0f9224c60d2f3a11f29455077",
+  "sources_live_checked": 19,
+  "cuts_live_checked": 31,
+  "defining_import_sources": 63,
+  "root_full_read": [
+    "six literal contracts69lines",
+    "all52 scoped types",
+    "three complete obtain packets19fields",
+    "case/induction/scope/budget/schema/insertion/proofroute",
+    "all31 exact source cuts358lines",
+    "all17 import routes and live63 identity checks",
+    "independent source and complete exact declaration reviews"
+  ],
+  "hard_cap": 180,
+  "new_local_instances": 0,
+  "new_global_instances": 0,
+  "new_helpers": 0,
+  "new_types": 0,
+  "induction_count": 0,
+  "goal": "ACTIVE_INCOMPLETE",
+  "boundary": "Genuine accepted old edge; actual same-length rebuild at independent current Ready heap. No origin-to-current history or arbitrary resident origin claimed."
+}

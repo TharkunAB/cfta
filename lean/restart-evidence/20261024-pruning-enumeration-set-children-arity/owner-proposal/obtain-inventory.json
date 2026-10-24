@@ -1,0 +1,106 @@
+{
+  "packets": [
+    {
+      "owner": "accepted_setChildren_arity",
+      "scope": "same original accepted receipt (single use)",
+      "api": "SourcePruningEnumerationOwnArity.accepted_projected_arity symbol original stored children before heap cached physical storedReady valid heapReady available checked",
+      "fields": [
+        {
+          "name": "receipt",
+          "type": "SourceEqualityMkEdgeAllocation.build symbol stored original.guard children before heap = (.ok actualBuilt.1, (SourceEqualityMkEdgeAllocation.check stored original.guard children.length before).2, actualBuilt.2)"
+        },
+        {
+          "name": "checkedValid",
+          "type": "SourceEqualityConstraintMemoAllocation.Valid (SourceEqualityMkEdgeAllocation.check stored original.guard children.length before).2"
+        },
+        {
+          "name": "checkedGrowth",
+          "type": "SourceEqualityConstraintMemoAllocation.Grows before (SourceEqualityMkEdgeAllocation.check stored original.guard children.length before).2"
+        },
+        {
+          "name": "oldKept",
+          "type": "SourceEqualityRequiredCache.Keeps heap actualBuilt.2"
+        },
+        {
+          "name": "oldSymbol",
+          "type": "actualBuilt.1.entry.key.symbol = symbol"
+        },
+        {
+          "name": "oldGuard",
+          "type": "actualBuilt.1.entry.key.constraint = original"
+        },
+        {
+          "name": "oldChildren",
+          "type": "actualBuilt.1.children = children"
+        },
+        {
+          "name": "classes",
+          "type": "EqualityNormalize.Constraints"
+        },
+        {
+          "name": "oldSource",
+          "type": "SourceCompactGuards.sourceEqualities actualBuilt.1.entry.key.constraint = some classes"
+        },
+        {
+          "name": "oldProjected",
+          "type": "SourcePruningEnumerationConstraint.project actualBuilt.1.entry.key.constraint = some (EnumerationEquality.readClasses classes, if (SourceCompactGuards.positive original.guard).isSome then none else some original)"
+        },
+        {
+          "name": "validTries",
+          "type": "∀ trie ∈ EnumerationEquality.readClasses classes, EqualityTrie.Valid trie"
+        },
+        {
+          "name": "pathReadback",
+          "type": "∀ paths ∈ classes, ∀ path, path ∈ EqualityTrie.fromPathTrie (EnumerationEquality.classTrie paths) ↔ path ∈ paths"
+        },
+        {
+          "name": "oldArity",
+          "type": "∀ start : Nat, arityAllows actualBuilt.1.children.length (suspendedVars start (EnumerationEquality.readClasses classes)) = true"
+        }
+      ],
+      "normalization": "Only unfold the two actual run aliases; no new check/build/normalization execution."
+    },
+    {
+      "owner": "accepted_setChildren_arity",
+      "scope": "actual current-heap rebuilding cache packet",
+      "api": "SourceEqualityRequiredCache.edge symbol original replacements current currentReady replacementAvailable",
+      "fields": [
+        {
+          "name": "newKept",
+          "type": "SourceEqualityRequiredCache.Keeps current actualRebuilt.2"
+        },
+        {
+          "name": "newResident",
+          "type": "InternedEdgeResidency.EdgeResident actualRebuilt.2 actualRebuilt.1"
+        },
+        {
+          "name": "newChildren",
+          "type": "actualRebuilt.1.children = replacements"
+        }
+      ],
+      "normalization": "Before rewriting rebuiltSame these fields refer literally to run(makeEdge symbol original replacements) current. Rewrite to actualRebuilt with the exact proved run equality."
+    },
+    {
+      "owner": "accepted_setChildren_arity",
+      "scope": "actual current-heap canonical complete fields",
+      "api": "MergedPhysicalGroupEdges.makeEdge_fields current currentReady.semantic.1.normal.facts symbol original replacements replacementAvailable",
+      "fields": [
+        {
+          "name": "newSymbol",
+          "type": "actualRebuilt.1.entry.key.symbol = symbol"
+        },
+        {
+          "name": "newGuard",
+          "type": "actualRebuilt.1.entry.key.constraint = original"
+        },
+        {
+          "name": "_sameChildren",
+          "type": "actualRebuilt.1.children = replacements"
+        }
+      ],
+      "normalization": "Same rewriting by rebuiltSame; unused duplicate child field is explicitly retained in inventory."
+    }
+  ],
+  "packet_count": 3,
+  "field_count": 19
+}

@@ -1,0 +1,11 @@
+# Exact source-only scope
+
+One public theorem retains one genuine accepted checked-constructor receipt. It then proves the actual equal-length setChildren run at the explicit current heap. The old edge is the immutable computed output of the original receipt. Replacement children are available at current, which is Ready. Their length equals the original children length. The theorem derives old and new complete fields, exact source-class reads and projections, valid tries, exact class-path readback, and own arity for every start. It retains original operation Valid/Grows and native Keeps, plus current-to-actual-final Keeps and returned-edge residency.
+
+The original heap and current are distinct input heaps. No equality, growth, history or operation links them in this statement. A concrete child-work caller keeps that trace separately. The theorem does not require the immutable old edge to be resident at current. The equal-length branch reads its immutable fields and requests makeEdge at current.
+
+The fallback is an existing setChildren argument. It is arbitrary and unreachable in this branch. No callback law is assumed. The theorem neither executes a second checked constructor on replacements nor proves the unequal-length branch. Empty replacements and Empty child values remain allowed. No inhabited-language conclusion follows.
+
+Cached for the original equality field remains separate from physical stored readiness, valid operation state and native Ready. No desired old bound, satisfying term, Graph equality, desired output heap or universal resident-edge origin premise occurs. Rejected top/[empty] sentinel behavior remains separate. Generic makeEdge and Ready do not prove that every resident edge had checked origin.
+
+No new definition, helper, predicate, carrier, type or local/global instance is selected. The existing edge-key DecidableEq dictionary is the only instance premise. Two public lets and two proof lets name computed runs. Two proof haves name actual Work/run equalities. There are no cases, conditions, induction hypotheses, recursive calls or lambdas. The inherited source projection is noncomputable; this theorem adds no executable projection or new choice mechanism. All body authorship and execution belong to Root after exact independent review and a separate gate. The whole goal and H6 boundaries stay unchanged.

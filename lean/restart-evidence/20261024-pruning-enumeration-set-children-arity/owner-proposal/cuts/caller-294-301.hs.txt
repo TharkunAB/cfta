@@ -1,0 +1,8 @@
+    requireNode _ EmptyNode = EmptyNode
+    requireNode needed n@(Mu _) = requireNode needed (Node $ nodeEdges n)
+    requireNode needed n@(InternedUnion _) = requireNode needed (Node $ nodeEdges n)
+    requireNode needed@(Needed children) (Node es) =
+        Node
+            [ setChildren e (requireList needed (edgeChildren e))
+            | e <- es
+            , compareLength (edgeChildren e) (fst (IntMap.findMax children)) == GT

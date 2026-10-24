@@ -1,0 +1,14 @@
+
+/-- Retain equality effects and then execute the actual selected edge interner request. -/
+noncomputable def build [DecidableEq (InternedConstructorTemplates.EdgeKey Symbol (Constraint Formula))]
+    (symbol : Symbol) (stored : Value) (guard : SourceGuards.Guard Formula)
+    (children : List (InternedConstructorTemplates.Value Symbol (Constraint Formula))) (before : OpState)
+    (heap : InternedConstructorTemplates.State Symbol (Constraint Formula)) :
+    Except String (InternedConstructorTemplates.EdgeValue Symbol (Constraint Formula)) × OpState ×
+      InternedConstructorTemplates.State Symbol (Constraint Formula) :=
+  let checked := check stored guard children.length before
+  match checked.1 with
+  | .error message => (.error message, checked.2, heap)
+  | .ok keep =>
+      let built := InternedConstructorTemplates.run
+        (work symbol (SourceEqualityAccessorAllocation.constraint stored guard) children keep) heap

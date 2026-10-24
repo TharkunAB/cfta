@@ -1,0 +1,8 @@
+def nodeEdges : Value Symbol Guard → List (EdgeValue Symbol Guard)
+  | .node _ edges _ _ => edges
+  | _ => []
+
+/-- An edge payload is the complete canonical record under its own key. -/
+def EdgeResident (state : State Symbol Guard) (edge : EdgeValue Symbol Guard) : Prop :=
+  state.edgeRecords edge.entry.key = some edge
+

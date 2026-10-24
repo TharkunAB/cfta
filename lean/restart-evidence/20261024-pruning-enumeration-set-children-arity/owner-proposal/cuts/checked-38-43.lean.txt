@@ -1,0 +1,6 @@
+noncomputable def accepted (constraint : Constraint Formula) (arity : Nat) : Bool :=
+  if contradictory constraint then false else fits arity (SourceCompactGuards.sourceEqualities constraint)
+
+/-- Demand only the accessor needed by the actual source constructor guard. -/
+noncomputable def check (stored : Value) (guard : SourceGuards.Guard Formula) (arity : Nat) (before : OpState) :
+    Except String Bool × OpState :=
