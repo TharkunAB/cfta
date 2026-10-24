@@ -1,5 +1,38 @@
 # Proof status at 2026-10-18
 
+## Actual pending-node representative rereads
+
+Updated: 2026-10-24. Main `74250bd88` is incorporated.
+Proof: `96f1c8dd07097b4b051e6203a085e3c739a154d4`.
+Read `lean/notes-current-pruning-enumeration-reread.md`.
+
+An actual pending read and an intervening full frame derive a finite actual
+representative reread at the same root. Its actual compressed state, full
+frames, old handle, ordered suspended list and slot bound are retained.
+An actual false recursion check also retains the complete frame.
+No Safe, Ready, StorageValid, supplied root or second success is assumed.
+
+The second strict input passes with an empty log after the StateT.pure-only
+repair. The failed first input remains. The installed build passes.
+Audit passes 3684 jobs and 76118 dependency checks, with one older
+warning and no new-source warning. Both complete signatures and actual axiom
+reports were read. Each reports only propext and Quot.sound.
+The 62-line module adds two theorems. All 51 frozen payloads remain.
+
+Next compose actual narrowing with both heap and enumeration-state effects.
+Preserve Empty rejection, equal handles, the actual second representative read
+and its actual compressed state before the changed write. Keep the original
+raw UVar in typing and holeKey tests. The changed write updates values.
+Native cached indices, intersection/assimilation, open-hole bounds, ordered
+reads, lazy emptiness, typing, outer narrow, memo2 and typedTypes remain open.
+Global helper canonicality, mutation histories, selected-current protection,
+cached scheduling, semantic pruning, phase 4, resources, practical width,
+native extraction, runtime/solver and convergence stay open. H6 remains
+strongest combined. H23 stays queued. No Haskell source changes. FINDINGS keeps
+its external repair index FIRST. All six recorded fixes are on main.
+The full goal is ACTIVE and incomplete. This record precedes evidence and push.
+
+
 ## Enumeration handle identity
 
 Updated: 2026-10-24. Main `74250bd88` is incorporated.
