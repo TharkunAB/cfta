@@ -1,0 +1,41 @@
+{"command": ["/home/tritlo/.elan/toolchains/leanprover--lean4---v4.34.1/bin/lean", "-o", "/home/tritlo/Code/mcfta/lean/.lake/build/lib/lean/MicroCFTA/SourcePruningEnumerationObservation.olean", "-R", "/tmp/mcfta-pruning-enumeration-observation-20261024/source-check-3", "-DwarningAsError=true", "-Dlinter.all=true", "/tmp/mcfta-pruning-enumeration-observation-20261024/source-check-3/MicroCFTA/SourcePruningEnumerationObservation.lean"], "exit_code": 1, "raw_bytes": 1751, "raw_sha256": "d4fda51ea6142467670dd1ad2ea23bc00709e39cd95ce426d3b493d4202bb210", "source_sha256": "024d49ebd4d8ef203f0f225b00ef6216c95b1d4082129848d402f7605ea400e8"}
+/tmp/mcfta-pruning-enumeration-observation-20261024/source-check-3/MicroCFTA/SourcePruningEnumerationObservation.lean:113:57: error: Tactic `generalize` failed: result is not type correct
+  ∀ (x : UVarValue Symbol),
+    (match x, stored with
+      | UVarValue.unenumerated pending a, stored => pending
+      | x, stored => none) =
+      match x with
+      | UVarValue.unenumerated stored a => stored
+      | x => none
+
+EnumGuard NativeGuard : Type
+heap : InternedConstructorTemplates.State Symbol NativeGuard
+before : State Symbol EnumGuard
+uv : Nat
+realized : PendingRealized heap before
+storage : StorageValid before
+inside : uv < before.counter
+root size : Nat
+path : UnionFind.Reaches before.representatives uv root size
+fuel : Nat
+found : UnionFind.Result
+lookup : UnionFind.findRoot fuel before.representatives uv = some found
+rootInside : found.representative < before.counter
+listInside : found.representative < before.values.length
+storedValue : UVarValue Symbol := before.values[found.representative]
+stored : before.values[found.representative]? = some storedValue
+after : State Symbol EnumGuard :=
+  { counter := before.counter, representatives := found.forest, values := before.values,
+    obligations := before.obligations, recursionAncestry := before.recursionAncestry,
+    expansionAncestry := before.expansionAncestry }
+observed : Option Nat :=
+  match storedValue, stored with
+  | UVarValue.unenumerated pending a, stored => pending
+  | x, stored => none
+valueRead : Success (getValue fuel uv) before storedValue after
+⊢ (match storedValue, stored with
+    | UVarValue.unenumerated pending a, stored => pending
+    | x, stored => none) =
+    match storedValue with
+    | UVarValue.unenumerated stored a => stored
+    | x => none

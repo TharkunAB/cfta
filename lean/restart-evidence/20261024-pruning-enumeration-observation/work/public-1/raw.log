@@ -1,0 +1,60 @@
+MicroCFTA.SourcePruningEnumerationObservation.PendingRealized {EnumGuard NativeGuard : Type}
+  (heap : MicroCFTA.InternedConstructorTemplates.State MicroCFTA.SourcePruningTemplates.Symbol NativeGuard)
+  (state : MicroCFTA.EnumerationState.State MicroCFTA.SourcePruningTemplates.Symbol EnumGuard) : Prop
+MicroCFTA.SourcePruningEnumerationObservation.initial_realized {EnumGuard NativeGuard : Type}
+  (heap : MicroCFTA.InternedConstructorTemplates.State MicroCFTA.SourcePruningTemplates.Symbol NativeGuard)
+  (value : MicroCFTA.InternedConstructorTemplates.Value MicroCFTA.SourcePruningTemplates.Symbol NativeGuard)
+  (coherent : MicroCFTA.InternedRecordCoherence.Coherent heap)
+  (available : MicroCFTA.InternedProbeProvenance.Available heap value) (closed : Eq.{1} value.free List.nil.{0}) :
+  Exists.{1} fun node =>
+    Eq.{1} (MicroCFTA.SourcePruningEnumerationNodes.encodeNode value) (Option.some.{0} node) ∧
+      MicroCFTA.SourcePruningEnumerationObservation.PendingRealized heap (MicroCFTA.EnumerationState.initial node)
+MicroCFTA.SourcePruningEnumerationObservation.realized_preserved {EnumGuard NativeGuard : Type}
+  (heap nextHeap : MicroCFTA.InternedConstructorTemplates.State MicroCFTA.SourcePruningTemplates.Symbol NativeGuard)
+  (before after : MicroCFTA.EnumerationState.State MicroCFTA.SourcePruningTemplates.Symbol EnumGuard)
+  (realized : MicroCFTA.SourcePruningEnumerationObservation.PendingRealized heap before)
+  (frame : MicroCFTA.EnumerationCompressionFrame.Frame before after)
+  (kept : MicroCFTA.SourceEqualityRequiredCache.Keeps heap nextHeap) :
+  MicroCFTA.SourcePruningEnumerationObservation.PendingRealized nextHeap after
+MicroCFTA.SourcePruningEnumerationObservation.observed_realized {EnumGuard NativeGuard : Type}
+  (heap : MicroCFTA.InternedConstructorTemplates.State MicroCFTA.SourcePruningTemplates.Symbol NativeGuard)
+  (fuel uv node : Nat)
+  (before after : MicroCFTA.EnumerationState.State MicroCFTA.SourcePruningTemplates.Symbol EnumGuard)
+  (realized : MicroCFTA.SourcePruningEnumerationObservation.PendingRealized heap before)
+  (total : MicroCFTA.UnionFind.Total before.representatives)
+  (observed :
+    MicroCFTA.EnumerationCorrectness.Success (MicroCFTA.EnumerationObservations.getUnexpandedNode fuel uv) before
+      (Option.some.{0} node) after) :
+  MicroCFTA.EnumerationCompressionFrame.Frame before after ∧
+    Exists.{1} fun value =>
+      Eq.{1} (MicroCFTA.SourcePruningEnumerationNodes.lookupNode heap node) (Option.some.{0} value) ∧
+        MicroCFTA.InternedProbeProvenance.Available heap value ∧ Eq.{1} value.free List.nil.{0}
+MicroCFTA.SourcePruningEnumerationObservation.observation_storage {EnumGuard : Type} (fuel uv : Nat)
+  (before after : MicroCFTA.EnumerationState.State MicroCFTA.SourcePruningTemplates.Symbol EnumGuard)
+  (node : Option.{0} Nat) (storage : MicroCFTA.EnumerationCorrectness.StorageValid before)
+  (inside : LT.lt.{0} uv before.counter)
+  (observed :
+    MicroCFTA.EnumerationCorrectness.Success (MicroCFTA.EnumerationObservations.getUnexpandedNode fuel uv) before node
+      after) :
+  MicroCFTA.EnumerationCorrectness.StorageValid after
+MicroCFTA.SourcePruningEnumerationObservation.observation_complete {EnumGuard NativeGuard : Type}
+  (heap : MicroCFTA.InternedConstructorTemplates.State MicroCFTA.SourcePruningTemplates.Symbol NativeGuard)
+  (before : MicroCFTA.EnumerationState.State MicroCFTA.SourcePruningTemplates.Symbol EnumGuard) (uv : Nat)
+  (realized : MicroCFTA.SourcePruningEnumerationObservation.PendingRealized heap before)
+  (storage : MicroCFTA.EnumerationCorrectness.StorageValid before) (inside : LT.lt.{0} uv before.counter) :
+  Exists.{1} fun fuel =>
+    Exists.{1} fun observed =>
+      Exists.{1} fun after =>
+        MicroCFTA.EnumerationCorrectness.Success (MicroCFTA.EnumerationObservations.getUnexpandedNode fuel uv) before
+            observed after ∧
+          MicroCFTA.EnumerationCompressionFrame.Frame before after ∧
+            ∀ (node : Nat),
+              Eq.{1} observed (Option.some.{0} node) →
+                Exists.{1} fun value =>
+                  Eq.{1} (MicroCFTA.SourcePruningEnumerationNodes.lookupNode heap node) (Option.some.{0} value) ∧
+                    MicroCFTA.InternedProbeProvenance.Available heap value ∧ Eq.{1} value.free List.nil.{0}
+'MicroCFTA.SourcePruningEnumerationObservation.initial_realized' depends on axioms: [propext, Quot.sound.{u}]
+'MicroCFTA.SourcePruningEnumerationObservation.realized_preserved' depends on axioms: [propext, Quot.sound.{u}]
+'MicroCFTA.SourcePruningEnumerationObservation.observed_realized' depends on axioms: [propext, Quot.sound.{u}]
+'MicroCFTA.SourcePruningEnumerationObservation.observation_storage' depends on axioms: [propext, Quot.sound.{u}]
+'MicroCFTA.SourcePruningEnumerationObservation.observation_complete' depends on axioms: [propext, Quot.sound.{u}]

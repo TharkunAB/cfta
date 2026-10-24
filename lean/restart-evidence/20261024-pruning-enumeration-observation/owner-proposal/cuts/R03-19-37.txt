@@ -1,0 +1,19 @@
+def getUnexpandedNode (fuel uv : Nat) : EnumerateM Symbol Guard (Option Nat) := do
+  let value ← getValue fuel uv
+  pure (match value with | .unenumerated node _ => node | _ => none)
+
+/-- A successful node observation is the actual value read and its projection. -/
+theorem getUnexpandedNode_success (fuel uv : Nat) (before after : State Symbol Guard) (node : Option Nat) :
+    Success (getUnexpandedNode fuel uv) before node after ↔
+      ∃ value, Success (getValue fuel uv) before value after ∧
+        node = (match value with | .unenumerated stored _ => stored | _ => none) := by
+  unfold getUnexpandedNode
+  constructor
+  · intro success
+    obtain ⟨value, middle, reading, final⟩ := (success_bind _ _ _ _ _).mp success
+    obtain ⟨projected, same⟩ := (success_pure _ node middle after).mp final
+    subst after
+    exact ⟨value, reading, projected⟩
+  · rintro ⟨value, reading, projected⟩
+    exact (success_bind _ _ _ _ _).mpr
+      ⟨value, after, reading, (success_pure _ node after after).mpr ⟨projected, rfl⟩⟩

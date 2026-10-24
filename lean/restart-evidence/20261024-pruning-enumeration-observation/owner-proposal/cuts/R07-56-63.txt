@@ -1,0 +1,8 @@
+  | intro value resident issued children ih =>
+      refine .intro value (resident_grows before after growth value resident) ?_ ih
+      intro identity member
+      obtain ⟨key, present⟩ := issued identity member
+      exact ⟨key, issuedGrowth identity key present⟩
+
+/-- Constructor contents grow with the actual record and reservation histories. -/
+theorem contents_grows (before after : InternedConstructorTemplates.State Symbol Guard)

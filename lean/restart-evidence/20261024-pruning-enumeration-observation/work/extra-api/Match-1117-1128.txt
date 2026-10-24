@@ -1,0 +1,12 @@
+private def elabMatchAux (generalizing? : Option Bool) (discrStxs : Array Syntax) (altViews : Array TermMatchAltView) (matchOptMotive : Syntax) (expectedType : Expr)
+    : TermElabM Expr := do
+  let mut generalizing? := generalizing?
+  if !matchOptMotive.isNone then
+    if generalizing? == some true then
+      throwError "The '(generalizing := true)' parameter is not supported when the 'match' motive is explicitly provided"
+    generalizing? := some false
+  let (discrs, matchType, altLHSS, isDep, rhss) ← commitIfDidNotPostpone do
+    let ⟨discrs, matchType, isDep, altViews⟩ ← elabMatchTypeAndDiscrs discrStxs matchOptMotive altViews expectedType
+    let matchAlts ← liftMacroM <| expandMacrosInPatterns altViews
+    trace[Elab.match] "matchType: {matchType}"
+    let (discrs, matchType, alts, refined) ← elabMatchAltViews generalizing? discrs matchType matchAlts

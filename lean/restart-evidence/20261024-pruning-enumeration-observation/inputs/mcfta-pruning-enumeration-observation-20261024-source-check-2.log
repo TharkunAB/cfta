@@ -1,0 +1,115 @@
+{"command": ["/home/tritlo/.elan/toolchains/leanprover--lean4---v4.34.1/bin/lean", "-o", "/home/tritlo/Code/mcfta/lean/.lake/build/lib/lean/MicroCFTA/SourcePruningEnumerationObservation.olean", "-R", "/tmp/mcfta-pruning-enumeration-observation-20261024/source-check-2", "-DwarningAsError=true", "-Dlinter.all=true", "/tmp/mcfta-pruning-enumeration-observation-20261024/source-check-2/MicroCFTA/SourcePruningEnumerationObservation.lean"], "exit_code": 1, "raw_bytes": 4852, "raw_sha256": "a441bddac0ad3417cadbdbc7268e2875e44eaaa4e253404d941dc9868335d490", "source_sha256": "afd575e6a2d9d47c5b3978777b4461fee9df128ef0c8957755a22a37652e9097"}
+/tmp/mcfta-pruning-enumeration-observation-20261024/source-check-2/MicroCFTA/SourcePruningEnumerationObservation.lean:113:56: error: Tactic `rfl` failed: The left-hand side
+  observed
+is not definitionally equal to the right-hand side
+  match UVarValue.unenumerated a✝¹ a✝ with
+  | UVarValue.unenumerated stored a => stored
+  | x => none
+
+case unenumerated
+EnumGuard NativeGuard : Type
+heap : InternedConstructorTemplates.State Symbol NativeGuard
+before : State Symbol EnumGuard
+uv : Nat
+realized : PendingRealized heap before
+storage : StorageValid before
+inside : uv < before.counter
+root size : Nat
+path : UnionFind.Reaches before.representatives uv root size
+fuel : Nat
+found : UnionFind.Result
+lookup : UnionFind.findRoot fuel before.representatives uv = some found
+rootInside : found.representative < before.counter
+listInside : found.representative < before.values.length
+storedValue : UVarValue Symbol := before.values[found.representative]
+stored : before.values[found.representative]? = some storedValue
+after : State Symbol EnumGuard :=
+  { counter := before.counter, representatives := found.forest, values := before.values,
+    obligations := before.obligations, recursionAncestry := before.recursionAncestry,
+    expansionAncestry := before.expansionAncestry }
+observed : Option Nat :=
+  match storedValue, stored with
+  | UVarValue.unenumerated pending a, stored => pending
+  | x, stored => none
+valueRead : Success (getValue fuel uv) before storedValue after
+a✝¹ : Option Nat
+a✝ : List Suspended
+⊢ observed =
+    match UVarValue.unenumerated a✝¹ a✝ with
+    | UVarValue.unenumerated stored a => stored
+    | x => none
+/tmp/mcfta-pruning-enumeration-observation-20261024/source-check-2/MicroCFTA/SourcePruningEnumerationObservation.lean:113:56: error: Tactic `rfl` failed: The left-hand side
+  observed
+is not definitionally equal to the right-hand side
+  match UVarValue.enumerated a✝ with
+  | UVarValue.unenumerated stored a => stored
+  | x => none
+
+case enumerated
+EnumGuard NativeGuard : Type
+heap : InternedConstructorTemplates.State Symbol NativeGuard
+before : State Symbol EnumGuard
+uv : Nat
+realized : PendingRealized heap before
+storage : StorageValid before
+inside : uv < before.counter
+root size : Nat
+path : UnionFind.Reaches before.representatives uv root size
+fuel : Nat
+found : UnionFind.Result
+lookup : UnionFind.findRoot fuel before.representatives uv = some found
+rootInside : found.representative < before.counter
+listInside : found.representative < before.values.length
+storedValue : UVarValue Symbol := before.values[found.representative]
+stored : before.values[found.representative]? = some storedValue
+after : State Symbol EnumGuard :=
+  { counter := before.counter, representatives := found.forest, values := before.values,
+    obligations := before.obligations, recursionAncestry := before.recursionAncestry,
+    expansionAncestry := before.expansionAncestry }
+observed : Option Nat :=
+  match storedValue, stored with
+  | UVarValue.unenumerated pending a, stored => pending
+  | x, stored => none
+valueRead : Success (getValue fuel uv) before storedValue after
+a✝ : Fragments.Fragment Symbol
+⊢ observed =
+    match UVarValue.enumerated a✝ with
+    | UVarValue.unenumerated stored a => stored
+    | x => none
+/tmp/mcfta-pruning-enumeration-observation-20261024/source-check-2/MicroCFTA/SourcePruningEnumerationObservation.lean:113:56: error: Tactic `rfl` failed: The left-hand side
+  observed
+is not definitionally equal to the right-hand side
+  match UVarValue.eliminated with
+  | UVarValue.unenumerated stored a => stored
+  | x => none
+
+case eliminated
+EnumGuard NativeGuard : Type
+heap : InternedConstructorTemplates.State Symbol NativeGuard
+before : State Symbol EnumGuard
+uv : Nat
+realized : PendingRealized heap before
+storage : StorageValid before
+inside : uv < before.counter
+root size : Nat
+path : UnionFind.Reaches before.representatives uv root size
+fuel : Nat
+found : UnionFind.Result
+lookup : UnionFind.findRoot fuel before.representatives uv = some found
+rootInside : found.representative < before.counter
+listInside : found.representative < before.values.length
+storedValue : UVarValue Symbol := before.values[found.representative]
+stored : before.values[found.representative]? = some storedValue
+after : State Symbol EnumGuard :=
+  { counter := before.counter, representatives := found.forest, values := before.values,
+    obligations := before.obligations, recursionAncestry := before.recursionAncestry,
+    expansionAncestry := before.expansionAncestry }
+observed : Option Nat :=
+  match storedValue, stored with
+  | UVarValue.unenumerated pending a, stored => pending
+  | x, stored => none
+valueRead : Success (getValue fuel uv) before storedValue after
+⊢ observed =
+    match UVarValue.eliminated with
+    | UVarValue.unenumerated stored a => stored
+    | x => none

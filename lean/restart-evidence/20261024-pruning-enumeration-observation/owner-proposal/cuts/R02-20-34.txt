@@ -1,0 +1,15 @@
+/-- The existing checked path-trie model supplies suspended equality variables. -/
+abbrev Suspended := EqualityTrie.Suspended Nat
+
+/-- Use the source-equivalent checked trie descent. -/
+abbrev descendScs := @EqualityTrie.descendScs Nat
+
+/-- Every represented path must reach the assigned equality variable. -/
+def Suspended.Holds (assignment : Nat → Term Symbol) (term : Term Symbol) (sc : Suspended) : Prop :=
+  ∀ path ∈ EqualityTrie.fromPathTrie sc.trie, term.atPath path = some (assignment sc.var)
+
+/-- Source UVar states. A missing node is a pure equality variable. -/
+inductive UVarValue (Symbol : Type) where
+  | unenumerated : Option Nat → List Suspended → UVarValue Symbol
+  | enumerated : Fragment Symbol → UVarValue Symbol
+  | eliminated

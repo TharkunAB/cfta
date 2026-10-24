@@ -1,0 +1,8 @@
+-- This is only needed locally; after the `LawfulGetElem` instance the general `getElem?_pos` lemma applies.
+@[local simp] theorem getElem?_eq_getElem {l : List α} {i} (h : i < l.length) :
+    l[i]? = some l[i] := by
+  induction l generalizing i with
+  | nil => cases h
+  | cons a l ih =>
+    cases i with
+    | zero => rfl

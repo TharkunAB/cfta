@@ -1,0 +1,373 @@
+{
+  "status": "PROPOSED_EXACT_LOCAL_TYPES_NO_BODIES",
+  "definition_binders": {
+    "owner": "PendingRealized",
+    "forall": [
+      {
+        "name": "slot",
+        "type": "Nat"
+      },
+      {
+        "name": "node",
+        "type": "Nat"
+      },
+      {
+        "name": "scs",
+        "type": "List EnumerationState.Suspended"
+      },
+      {
+        "name": "stored",
+        "type": "state.values[slot]? = some (.unenumerated (some node) scs)"
+      }
+    ],
+    "exists": [
+      {
+        "name": "value",
+        "type": "InternedConstructorTemplates.Value Symbol NativeGuard"
+      }
+    ]
+  },
+  "initial_realized": {
+    "obtains": [
+      {
+        "api": "SourcePruningEnumerationNodes.available_readback heap value coherent available closed",
+        "binders": [
+          {
+            "name": "node",
+            "type": "Nat"
+          },
+          {
+            "name": "encoded",
+            "type": "encodeNode value = some node"
+          },
+          {
+            "name": "decoded",
+            "type": "lookupNode heap node = some value"
+          }
+        ]
+      }
+    ],
+    "intro_binders": [
+      {
+        "name": "slot",
+        "type": "Nat"
+      },
+      {
+        "name": "storedNode",
+        "type": "Nat"
+      },
+      {
+        "name": "scs",
+        "type": "List EnumerationState.Suspended"
+      },
+      {
+        "name": "stored",
+        "type": "(EnumerationState.initial node : EnumerationState.State Symbol EnumGuard).values[slot]? = some (.unenumerated (some storedNode) scs)"
+      }
+    ],
+    "cases": [
+      {
+        "subject": "slot",
+        "constructors": [
+          {
+            "name": "zero",
+            "binders": []
+          },
+          {
+            "name": "succ",
+            "binders": [
+              {
+                "name": "rest",
+                "type": "Nat"
+              }
+            ],
+            "unused": "Use anonymous rest if not needed."
+          }
+        ]
+      }
+    ],
+    "haves": [],
+    "lets": [],
+    "case_equation_names": []
+  },
+  "realized_preserved": {
+    "intro_binders": [
+      {
+        "name": "slot",
+        "type": "Nat"
+      },
+      {
+        "name": "node",
+        "type": "Nat"
+      },
+      {
+        "name": "scs",
+        "type": "List EnumerationState.Suspended"
+      },
+      {
+        "name": "stored",
+        "type": "after.values[slot]? = some (.unenumerated (some node) scs)"
+      }
+    ],
+    "haves": [
+      {
+        "name": "earlierStored",
+        "type": "before.values[slot]? = some (.unenumerated (some node) scs)"
+      }
+    ],
+    "obtains": [
+      {
+        "api": "realized slot node scs earlierStored",
+        "binders": [
+          {
+            "name": "value",
+            "type": "InternedConstructorTemplates.Value Symbol NativeGuard"
+          },
+          {
+            "name": "decoded",
+            "type": "lookupNode heap node = some value"
+          },
+          {
+            "name": "available",
+            "type": "InternedProbeProvenance.Available heap value"
+          },
+          {
+            "name": "closed",
+            "type": "value.free = []"
+          }
+        ]
+      }
+    ],
+    "lets": [],
+    "cases": [],
+    "case_equation_names": []
+  },
+  "observed_realized": {
+    "obtains": [
+      {
+        "api": "(EnumerationObservations.getUnexpandedNode_success fuel uv before after (some node)).mp observed",
+        "binders": [
+          {
+            "name": "storedValue",
+            "type": "EnumerationState.UVarValue Symbol"
+          },
+          {
+            "name": "valueRead",
+            "type": "Success (EnumerationState.getValue fuel uv) before storedValue after"
+          },
+          {
+            "name": "projected",
+            "type": "some node = (match storedValue with | .unenumerated pending _ => pending | _ => none)"
+          }
+        ]
+      },
+      {
+        "api": "(EnumerationCorrectness.getValue_success fuel uv before after storedValue).mp valueRead",
+        "binders": [
+          {
+            "name": "found",
+            "type": "UnionFind.Result"
+          },
+          {
+            "name": "lookup",
+            "type": "UnionFind.findRoot fuel before.representatives uv = some found"
+          },
+          {
+            "name": "stored",
+            "type": "before.values[found.representative]? = some storedValue"
+          },
+          {
+            "name": "afterSame",
+            "type": "after = {before with representatives := found.forest}"
+          }
+        ]
+      }
+    ],
+    "haves": [
+      {
+        "name": "frame",
+        "type": "Frame before after"
+      }
+    ],
+    "cases": [
+      {
+        "subject": "storedValue",
+        "constructors": [
+          {
+            "name": "unenumerated",
+            "binders": [
+              {
+                "name": "pending",
+                "type": "Option Nat"
+              },
+              {
+                "name": "scs",
+                "type": "List EnumerationState.Suspended"
+              }
+            ]
+          },
+          {
+            "name": "enumerated",
+            "binders": [
+              {
+                "name": "fragment",
+                "type": "Fragments.Fragment Symbol"
+              }
+            ],
+            "unused": "Use anonymous fragment if not needed."
+          },
+          {
+            "name": "eliminated",
+            "binders": []
+          }
+        ]
+      },
+      {
+        "subject": "pending",
+        "activation": "Only the unenumerated branch",
+        "constructors": [
+          {
+            "name": "none",
+            "binders": []
+          },
+          {
+            "name": "some",
+            "binders": [
+              {
+                "name": "pendingNode",
+                "type": "Nat"
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "projected_specializations": [
+      {
+        "scope": "enumerated/eliminated/unenumerated none",
+        "type": "some node = (none : Option Nat)"
+      },
+      {
+        "scope": "unenumerated (some pendingNode) scs",
+        "type": "some node = some pendingNode"
+      }
+    ],
+    "lets": [],
+    "case_equation_names": []
+  },
+  "observation_complete": {
+    "obtains": [
+      {
+        "api": "storage.total uv",
+        "binders": [
+          {
+            "name": "root",
+            "type": "Nat"
+          },
+          {
+            "name": "size",
+            "type": "Nat"
+          },
+          {
+            "name": "path",
+            "type": "UnionFind.Reaches before.representatives uv root size"
+          }
+        ]
+      },
+      {
+        "api": "UnionFind.findRoot_terminates path",
+        "binders": [
+          {
+            "name": "fuel",
+            "type": "Nat"
+          },
+          {
+            "name": "found",
+            "type": "UnionFind.Result"
+          },
+          {
+            "name": "lookup",
+            "type": "UnionFind.findRoot fuel before.representatives uv = some found"
+          }
+        ]
+      }
+    ],
+    "haves": [
+      {
+        "name": "rootInside",
+        "type": "found.representative < before.counter"
+      },
+      {
+        "name": "listInside",
+        "type": "found.representative < before.values.length"
+      },
+      {
+        "name": "stored",
+        "type": "before.values[found.representative]? = some storedValue"
+      },
+      {
+        "name": "valueRead",
+        "type": "Success (EnumerationState.getValue fuel uv) before storedValue after"
+      },
+      {
+        "name": "nodeRead",
+        "type": "Success (getUnexpandedNode fuel uv) before observed after"
+      },
+      {
+        "name": "frame",
+        "type": "Frame before after"
+      }
+    ],
+    "lets": [
+      {
+        "name": "storedValue",
+        "type": "EnumerationState.UVarValue Symbol",
+        "value": "before.values[found.representative]'listInside",
+        "activation": "After listInside"
+      },
+      {
+        "name": "after",
+        "type": "EnumerationState.State Symbol EnumGuard",
+        "value": "{before with representatives := found.forest}"
+      },
+      {
+        "name": "observed",
+        "type": "Option Nat",
+        "value": "match storedValue with | .unenumerated pending _ => pending | _ => none"
+      }
+    ],
+    "result_projection_pattern_binder": [
+      {
+        "name": "pending",
+        "type": "Option Nat"
+      }
+    ],
+    "final_intro_binders": [
+      {
+        "name": "node",
+        "type": "Nat"
+      },
+      {
+        "name": "same",
+        "type": "observed = some node"
+      }
+    ],
+    "cases": [],
+    "case_equation_names": []
+  },
+  "global_inventory": {
+    "private_helpers": [],
+    "new_datatypes": [],
+    "new_instances": [],
+    "induction": null,
+    "recursive_calls": [],
+    "typed_shows": [],
+    "unrestricted_IH": false
+  },
+  "public_dependency": {
+    "owner": "observation_complete",
+    "callee": "observed_realized",
+    "kind": "Earlier public theorem, not recursion",
+    "arguments": "heap fuel uv node before after realized storage.total; actual nodeRead rewritten by same"
+  }
+}

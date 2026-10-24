@@ -1,0 +1,25 @@
+theorem findRoot_bounded (fuel : Nat) (forest : UnionFind.Forest) (limit uv : Nat)
+    (bounded : ForestBound limit forest) (inside : uv < limit) (found : UnionFind.Result)
+    (result : UnionFind.findRoot fuel forest uv = some found) :
+    found.representative < limit ∧ ForestBound limit found.forest := by
+  induction fuel generalizing forest uv found with
+  | zero => simp [UnionFind.findRoot] at result
+  | succ fuel ih =>
+      cases stored : forest uv with
+      | none =>
+          simp [UnionFind.findRoot, stored] at result
+          subst found
+          exact ⟨inside, put_forest_bound forest limit uv (.root 1) bounded inside trivial⟩
+      | some entry =>
+          cases entry with
+          | root size =>
+              simp [UnionFind.findRoot, stored] at result
+              subst found
+              exact ⟨inside, bounded⟩
+          | parent next =>
+              cases recursive : UnionFind.findRoot fuel forest next with
+              | none => simp [UnionFind.findRoot, stored, recursive] at result
+              | some earlier =>
+                  obtain ⟨repBound, forestBound⟩ := ih forest next bounded (bounded uv (.parent next) stored).2 earlier recursive
+                  simp [UnionFind.findRoot, stored, recursive] at result
+                  subst found

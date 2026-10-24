@@ -1,0 +1,55 @@
+  /-- `FVarId`s of the variables that have been generalized. We store them to clear after in each branch. -/
+  toClear   : Array FVarId := #[]
+  matchType : Expr
+  altViews  : Array TermMatchAltView
+  refined   : Bool := false
+
+/--
+  "Generalize" variables that depend on the discriminants.
+
+  Remarks and limitations:
+  - We currently do not generalize let-decls.
+  - We abort generalization if the new `matchType` is type incorrect.
+  - Only discriminants that are free variables are considered during specialization.
+  - We "generalize" by adding new discriminants and pattern variables. We do not "clear" the generalized variables,
+    but they become inaccessible since they are shadowed by the patterns variables. We assume this is ok since
+    this is the exact behavior users would get if they had written it by hand. Recall there is no `clear` in term mode.
+-/
+private def generalize (discrs : Array Discr) (matchType : Expr) (altViews : Array TermMatchAltView) (generalizing? : Option Bool) : TermElabM GeneralizeResult := do
+  let gen := if let some g := generalizing? then g else true
+  if !gen then
+    return { discrs, matchType, altViews }
+  else
+    let discrExprs := discrs.map (·.expr)
+    /- let-decls are currently being ignored by the generalizer. -/
+    let ysFVarIds ← getFVarsToGeneralize discrExprs (ignoreLetDecls := true)
+    if ysFVarIds.isEmpty then
+      return { discrs, matchType, altViews }
+    else
+      let ys := ysFVarIds.map mkFVar
+      let matchType' ← forallBoundedTelescope matchType discrs.size fun ds type => do
+        let type ← mkForallFVars ys type
+        let (discrs', ds') := Array.unzip <| Array.zip discrExprs ds |>.filter fun (di, _) => di.isFVar
+        let type := type.replaceFVars discrs' ds'
+        mkForallFVars ds type
+      if (← isTypeCorrect matchType') then
+        let discrs := discrs ++  ys.map fun y => { expr := y : Discr }
+        let altViews ← altViews.mapM fun altView => do
+          let patternVars ← getPatternsVars altView.patterns
+          -- We traverse backwards because we want to keep the most recent names.
+          -- For example, if `ys` contains `#[h, h]`, we want to make sure `mkFreshUsername is applied to the first `h`,
+          -- since it is already shadowed by the second.
+          let ysUserNames ← ys.foldrM (init := #[]) fun ys ysUserNames => do
+            let yDecl ← ys.fvarId!.getDecl
+            let mut yUserName := yDecl.userName
+            if ysUserNames.contains yUserName then
+              yUserName ← mkFreshUserName yUserName
+            -- Explicitly provided pattern variables shadow `y`
+            else if patternVars.any fun x => x.getId == yUserName then
+              yUserName ← mkFreshUserName yUserName
+            return ysUserNames.push yUserName
+          let ysIds ← ysUserNames.reverse.mapM fun n => return mkIdentFrom (← getRef) n
+          return { altView with patterns := altView.patterns ++ ysIds }
+        return { discrs, toClear := ysFVarIds, matchType := matchType', altViews, refined := true }
+      else
+        return { discrs, matchType, altViews }

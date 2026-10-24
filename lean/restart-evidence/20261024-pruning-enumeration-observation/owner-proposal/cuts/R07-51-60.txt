@@ -1,0 +1,10 @@
+/-- Record growth and reservation growth preserve all recursively retained inputs. -/
+theorem Available.grows (before after : InternedConstructorTemplates.State Symbol Guard)
+    (growth : Grows before after) (issuedGrowth : Extends before.nodes.issued after.nodes.issued)
+    (available : Available before value) : Available after value := by
+  induction available with
+  | intro value resident issued children ih =>
+      refine .intro value (resident_grows before after growth value resident) ?_ ih
+      intro identity member
+      obtain ⟨key, present⟩ := issued identity member
+      exact ⟨key, issuedGrowth identity key present⟩

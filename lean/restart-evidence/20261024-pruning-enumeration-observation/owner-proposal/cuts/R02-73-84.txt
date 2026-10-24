@@ -1,0 +1,12 @@
+  expansionAncestry : List RecursionKey
+
+/-- The root starts in UVar zero. -/
+def initial (root : Nat) : State Symbol Guard :=
+  ⟨1, UnionFind.withInitialValues [0], [.unenumerated (some root) []], [], fun _ => [], []⟩
+
+/-- Source invariant failures and explicit finite execution bounds. -/
+inductive Error where
+  | fuelExhausted | representativeFuel | invalidSlot | invalidIntersection
+  | unresolvedReference | unfinishedFragment
+  deriving DecidableEq, Repr
+

@@ -1,0 +1,6 @@
+theorem initial_realized (heap : InternedConstructorTemplates.State Symbol NativeGuard)
+    (value : InternedConstructorTemplates.Value Symbol NativeGuard)
+    (coherent : InternedRecordCoherence.Coherent heap)
+    (available : InternedProbeProvenance.Available heap value) (closed : value.free = []) :
+    ∃ node, encodeNode value = some node ∧
+      PendingRealized heap (EnumerationState.initial node : EnumerationState.State Symbol EnumGuard)

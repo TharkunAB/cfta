@@ -1,0 +1,17 @@
+import MicroCFTA.SourcePruningEnumerationObservation
+
+set_option pp.universes true
+set_option pp.fullNames true
+
+#check MicroCFTA.SourcePruningEnumerationObservation.PendingRealized
+#check MicroCFTA.SourcePruningEnumerationObservation.initial_realized
+#check MicroCFTA.SourcePruningEnumerationObservation.realized_preserved
+#check MicroCFTA.SourcePruningEnumerationObservation.observed_realized
+#check MicroCFTA.SourcePruningEnumerationObservation.observation_storage
+#check MicroCFTA.SourcePruningEnumerationObservation.observation_complete
+
+#print axioms MicroCFTA.SourcePruningEnumerationObservation.initial_realized
+#print axioms MicroCFTA.SourcePruningEnumerationObservation.realized_preserved
+#print axioms MicroCFTA.SourcePruningEnumerationObservation.observed_realized
+#print axioms MicroCFTA.SourcePruningEnumerationObservation.observation_storage
+#print axioms MicroCFTA.SourcePruningEnumerationObservation.observation_complete

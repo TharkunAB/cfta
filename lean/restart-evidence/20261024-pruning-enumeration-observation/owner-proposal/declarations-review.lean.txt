@@ -1,0 +1,45 @@
+import MicroCFTA.SourcePruningEnumerationNodes
+import MicroCFTA.EnumerationNodeObservation
+
+namespace MicroCFTA.SourcePruningEnumerationObservation
+open EnumerationState EnumerationCorrectness EnumerationCompressionFrame EnumerationObservations
+open SourcePruningEnumerationNodes
+local notation "Symbol" => SourcePruningTemplates.Symbol
+variable {EnumGuard NativeGuard : Type}
+
+def PendingRealized (heap : InternedConstructorTemplates.State Symbol NativeGuard)
+    (state : EnumerationState.State Symbol EnumGuard) : Prop
+
+theorem initial_realized (heap : InternedConstructorTemplates.State Symbol NativeGuard)
+    (value : InternedConstructorTemplates.Value Symbol NativeGuard)
+    (coherent : InternedRecordCoherence.Coherent heap)
+    (available : InternedProbeProvenance.Available heap value) (closed : value.free = []) :
+    ∃ node, encodeNode value = some node ∧
+      PendingRealized heap (EnumerationState.initial node : EnumerationState.State Symbol EnumGuard)
+
+theorem realized_preserved (heap nextHeap : InternedConstructorTemplates.State Symbol NativeGuard)
+    (before after : EnumerationState.State Symbol EnumGuard)
+    (realized : PendingRealized heap before) (frame : Frame before after)
+    (kept : SourceEqualityRequiredCache.Keeps heap nextHeap) : PendingRealized nextHeap after
+
+theorem observed_realized (heap : InternedConstructorTemplates.State Symbol NativeGuard)
+    (fuel uv node : Nat) (before after : EnumerationState.State Symbol EnumGuard)
+    (realized : PendingRealized heap before) (total : UnionFind.Total before.representatives)
+    (observed : Success (getUnexpandedNode fuel uv) before (some node) after) :
+    Frame before after ∧
+      ∃ value : InternedConstructorTemplates.Value Symbol NativeGuard,
+        lookupNode heap node = some value ∧
+        InternedProbeProvenance.Available heap value ∧ value.free = []
+
+theorem observation_complete (heap : InternedConstructorTemplates.State Symbol NativeGuard)
+    (before : EnumerationState.State Symbol EnumGuard) (uv : Nat)
+    (realized : PendingRealized heap before)
+    (storage : StorageValid before) (inside : uv < before.counter) :
+    ∃ fuel observed after,
+      Success (getUnexpandedNode fuel uv) before observed after ∧ Frame before after ∧
+      (∀ node, observed = some node →
+        ∃ value : InternedConstructorTemplates.Value Symbol NativeGuard,
+          lookupNode heap node = some value ∧
+          InternedProbeProvenance.Available heap value ∧ value.free = [])
+
+end MicroCFTA.SourcePruningEnumerationObservation
