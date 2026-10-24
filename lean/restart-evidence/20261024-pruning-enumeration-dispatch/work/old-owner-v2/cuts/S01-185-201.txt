@@ -1,0 +1,17 @@
+          · intro accepted
+            exact False.elim (sound.2 rfl ambient term accepted)
+    obtain ⟨replacementAvailable, replacementClosed, replacementMeaning⟩ := replacementFacts
+    obtain ⟨handle, encoded, decoded⟩ := available_readback checkedAfter.native.machine.heap
+      (if answer then .empty else query) finalPost.effects.keeps.ready.semantic.1.normal.facts.coherent
+      replacementAvailable replacementClosed
+    have finalRealized : PendingRealized checkedAfter.native.machine.heap before := by
+      exact realized_preserved beforeCaller.checked.native.machine.heap checkedAfter.native.machine.heap
+        before before realized (EnumerationCompressionFrame.Frame.refl before) finalPost.effects.keeps
+    exact ⟨left, right, next, query, queried, reached, answer, guardSaved, checkedAfter, saved,
+      final, (if answer then .empty else query), handle, p, h,
+      leftDecoded, rightDecoded, nextSource, nextRoots, receipt, guardRun, guardChecked, stable,
+      finalPost, skipped, performed, sound, unfolding, querySame, rfl,
+      replacementAvailable, replacementClosed, encoded, decoded, finalRealized,
+      fun ambient term => (replacementMeaning ambient term).trans (receipt.meaning ambient term)⟩
+
+end MicroCFTA.SourcePruningEnumerationEnabledEmpty

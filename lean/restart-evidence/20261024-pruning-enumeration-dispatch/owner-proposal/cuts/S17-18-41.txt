@@ -1,0 +1,24 @@
+structure Checked (heap : State Symbol Guard) (before : Memos) (expected : Bool) (result : Bool × Memos) : Prop where
+  answer : result.1 = expected
+  valid : SourceEndpointMemo.Valid heap result.2
+  keeps : Keeps before result.2
+
+/-- A result without memo effects retains the initial invariants. -/
+theorem pure_checked (heap : State Symbol Guard) (memos : Memos) (valid : SourceEndpointMemo.Valid heap memos)
+    (answer : Bool) : Checked heap memos answer (answer, memos) := ⟨rfl, valid, keeps_refl memos⟩
+
+/-- Saving the completed root answer preserves all earlier recursive-call results. -/
+theorem finish_checked (heap : State Symbol Guard) (before : Memos) (value : Value Symbol Guard)
+    (available : Available heap value) (result : Bool × Memos)
+    (checked : Checked heap before (SourceEndpointReachability.reaches source value) result) :
+    Checked heap before (SourceEndpointReachability.reaches source value)
+      (result.1, {result.2 with descendants := save result.2.descendants value result.1}) := by
+  refine ⟨checked.answer, ⟨save_correct heap result.2.descendants checked.valid.descendants value available
+    result.1 checked.answer, checked.valid.predicate⟩, ?_⟩
+  exact keeps_trans checked.keeps ⟨save_extends _ _ _, extends_refl _⟩
+
+mutual
+/-- Every actual descendant query returns the concrete source Boolean and two coherent retained memos. -/
+theorem run_checked (value : Value Symbol Guard) (heap : State Symbol Guard) (coherent : Coherent heap)
+    (available : Available heap value) (memos : Memos) (valid : SourceEndpointMemo.Valid heap memos) :
+    Checked heap memos (SourceEndpointReachability.reaches source value) (SourceEndpointMemo.run value memos) := by

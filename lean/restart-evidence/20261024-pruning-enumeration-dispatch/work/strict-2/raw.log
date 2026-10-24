@@ -1,0 +1,432 @@
+/tmp/mcfta-pruning-enumeration-dispatch-20261024/strict-2/MicroCFTA/SourcePruningEnumerationDispatch.lean:341:4: error: unsolved goals
+case pos.refine_1
+EnumGuard : Type
+width : Nat
+inst✝² : DecidableEq Symbol
+inst✝¹ : DecidableEq (EdgeKey Symbol Constraint)
+inst✝ : DecidableEq Node
+formulas : SourceGuards.Formulas FullSyntax.Formula
+solver : SourceGuards.Entailment FullSyntax.Formula
+inventory : Inventory
+beforeCaller : Caller width
+before : EnumerationState.State Symbol EnumGuard
+checkEmpty : Bool
+source target : Nat
+memos : Memos
+initial : Context formulas solver inventory beforeCaller memos
+realized : PendingRealized beforeCaller.checked.native.machine.heap before
+slots :
+  source = target ∨
+    before.values[source]? = some UVarValue.eliminated ∨
+      ∃ sourceNode targetNode sourceScs targetScs,
+        before.values[source]? = some (UVarValue.unenumerated sourceNode sourceScs) ∧
+          before.values[target]? = some (UVarValue.unenumerated targetNode targetScs)
+ranges :
+  if source = target then True
+  else
+    match before.values[source]?, before.values[target]? with
+    | some (UVarValue.unenumerated (some left) a), some (UVarValue.unenumerated (some right) a_1) =>
+      match lookupNode beforeCaller.checked.native.machine.heap left,
+        lookupNode beforeCaller.checked.native.machine.heap right with
+      | some first, some second =>
+        SourceCurrentAllocatedNativeRequestBounds.WordRanges
+          (SourceEqualityNativeDemand.Control.code
+            (SourceRecursiveIntersectionCode.requestNode IntersectionEmptyDomain.emptyDomain first second))
+          beforeCaller.checked
+      | x, x_1 => True
+    | x, x_1 => True
+optionalPacket :
+  ∀ (sourceNode targetNode merged : Option Nat) (sourceScs targetScs : List Suspended),
+    before.values[source]? = some (UVarValue.unenumerated sourceNode sourceScs) →
+      before.values[target]? = some (UVarValue.unenumerated targetNode targetScs) →
+        source ≠ target →
+          sourceNode = none ∨ targetNode = none →
+            (merged = sourceNode.orElse fun x => targetNode) →
+              ((finishOptional source target merged sourceScs targetScs before).run =
+                  if merged = some 0 then []
+                  else
+                    [Except.ok
+                        ((),
+                          assimilated before target source (UVarValue.unenumerated merged (sourceScs ++ targetScs)))]) ∧
+                (merged ≠ some 0 →
+                  (assimilated before target source
+                            (UVarValue.unenumerated merged (sourceScs ++ targetScs))).values[target]? =
+                      some (UVarValue.unenumerated merged (sourceScs ++ targetScs)) ∧
+                    (assimilated before target source
+                              (UVarValue.unenumerated merged (sourceScs ++ targetScs))).values[source]? =
+                        some UVarValue.eliminated ∧
+                      PendingRealized beforeCaller.checked.native.machine.heap
+                        (assimilated before target source (UVarValue.unenumerated merged (sourceScs ++ targetScs))))
+presentPacket :
+  ∀ (sourceHandle targetHandle : Nat) (sourceScs targetScs : List Suspended),
+    before.values[source]? = some (UVarValue.unenumerated (some sourceHandle) sourceScs) →
+      before.values[target]? = some (UVarValue.unenumerated (some targetHandle) targetScs) →
+        source ≠ target →
+          ∃ left right query replacement queried handle afterCaller savedQueries final next p h,
+            lookupNode beforeCaller.checked.native.machine.heap sourceHandle = some left ∧
+              lookupNode beforeCaller.checked.native.machine.heap targetHandle = some right ∧
+                next.source = beforeCaller.checked.native.machine.heap ∧
+                  next.roots = inventory.roots ++ [left, right] ∧
+                    SourceCurrentAllocatedTargetQuery.Receipt formulas solver next left right beforeCaller.checked query
+                        queried memos ∧
+                      (∀ (P H : Nat),
+                          p ≤ P →
+                            h ≤ H →
+                              afterQuery checkEmpty P H source target sourceScs targetScs query queried beforeCaller
+                                  memos.query =
+                                (Except.ok
+                                    (some
+                                      (SourcePruningEnumerationAssimilation.finish source target handle sourceScs
+                                        targetScs replacement)),
+                                  afterCaller, savedQueries)) ∧
+                        Post formulas solver next beforeCaller afterCaller final ∧
+                          final.query = savedQueries ∧
+                            PendingRealized afterCaller.checked.native.machine.heap before ∧
+                              encodeNode replacement = some handle ∧
+                                lookupNode afterCaller.checked.native.machine.heap handle = some replacement ∧
+                                  Available afterCaller.checked.native.machine.heap replacement ∧
+                                    replacement.free = [] ∧
+                                      (∀
+                                          (ambient :
+                                            InternedGuardedLanguage.Env (SourceObservations.Label FullSyntax.Formula))
+                                          (term : Language.Term (SourceObservations.Label FullSyntax.Formula)),
+                                          InternedGuardedLanguage.meaning (SourceEqualityPCSGuard.holds formulas solver)
+                                              ambient replacement term ↔
+                                            InternedGuardedLanguage.meaning
+                                                (SourceEqualityPCSGuard.holds formulas solver) ambient left term ∧
+                                              InternedGuardedLanguage.meaning
+                                                (SourceEqualityPCSGuard.holds formulas solver) ambient right term) ∧
+                                        (checkEmpty = false →
+                                            replacement = query ∧
+                                              afterCaller =
+                                                  SourceCurrentAllocatedPartialState.advance beforeCaller queried
+                                                    beforeCaller.fourth beforeCaller.merge ∧
+                                                final = memos) ∧
+                                          (checkEmpty = true → ∃ reached answer guardSaved, ⋯)
+same : source = target
+extra P H : Nat
+enoughP : 0 ≤ P
+enoughH : 0 ≤ H
+⊢ pure (Except.ok (some fun state => [Except.ok ((), state)]), beforeCaller, memos.query) =
+    (Except.ok (some fun state => [Except.ok ((), state)]), beforeCaller, memos.query)
+/tmp/mcfta-pruning-enumeration-dispatch-20261024/strict-2/MicroCFTA/SourcePruningEnumerationDispatch.lean:350:4: error: unsolved goals
+case pos.refine_1
+EnumGuard : Type
+width : Nat
+inst✝² : DecidableEq Symbol
+inst✝¹ : DecidableEq (EdgeKey Symbol Constraint)
+inst✝ : DecidableEq Node
+formulas : SourceGuards.Formulas FullSyntax.Formula
+solver : SourceGuards.Entailment FullSyntax.Formula
+inventory : Inventory
+beforeCaller : Caller width
+before : EnumerationState.State Symbol EnumGuard
+checkEmpty : Bool
+source target : Nat
+memos : Memos
+initial : Context formulas solver inventory beforeCaller memos
+realized : PendingRealized beforeCaller.checked.native.machine.heap before
+slots :
+  source = target ∨
+    before.values[source]? = some UVarValue.eliminated ∨
+      ∃ sourceNode targetNode sourceScs targetScs,
+        before.values[source]? = some (UVarValue.unenumerated sourceNode sourceScs) ∧
+          before.values[target]? = some (UVarValue.unenumerated targetNode targetScs)
+ranges :
+  if source = target then True
+  else
+    match before.values[source]?, before.values[target]? with
+    | some (UVarValue.unenumerated (some left) a), some (UVarValue.unenumerated (some right) a_1) =>
+      match lookupNode beforeCaller.checked.native.machine.heap left,
+        lookupNode beforeCaller.checked.native.machine.heap right with
+      | some first, some second =>
+        SourceCurrentAllocatedNativeRequestBounds.WordRanges
+          (SourceEqualityNativeDemand.Control.code
+            (SourceRecursiveIntersectionCode.requestNode IntersectionEmptyDomain.emptyDomain first second))
+          beforeCaller.checked
+      | x, x_1 => True
+    | x, x_1 => True
+optionalPacket :
+  ∀ (sourceNode targetNode merged : Option Nat) (sourceScs targetScs : List Suspended),
+    before.values[source]? = some (UVarValue.unenumerated sourceNode sourceScs) →
+      before.values[target]? = some (UVarValue.unenumerated targetNode targetScs) →
+        source ≠ target →
+          sourceNode = none ∨ targetNode = none →
+            (merged = sourceNode.orElse fun x => targetNode) →
+              ((finishOptional source target merged sourceScs targetScs before).run =
+                  if merged = some 0 then []
+                  else
+                    [Except.ok
+                        ((),
+                          assimilated before target source (UVarValue.unenumerated merged (sourceScs ++ targetScs)))]) ∧
+                (merged ≠ some 0 →
+                  (assimilated before target source
+                            (UVarValue.unenumerated merged (sourceScs ++ targetScs))).values[target]? =
+                      some (UVarValue.unenumerated merged (sourceScs ++ targetScs)) ∧
+                    (assimilated before target source
+                              (UVarValue.unenumerated merged (sourceScs ++ targetScs))).values[source]? =
+                        some UVarValue.eliminated ∧
+                      PendingRealized beforeCaller.checked.native.machine.heap
+                        (assimilated before target source (UVarValue.unenumerated merged (sourceScs ++ targetScs))))
+presentPacket :
+  ∀ (sourceHandle targetHandle : Nat) (sourceScs targetScs : List Suspended),
+    before.values[source]? = some (UVarValue.unenumerated (some sourceHandle) sourceScs) →
+      before.values[target]? = some (UVarValue.unenumerated (some targetHandle) targetScs) →
+        source ≠ target →
+          ∃ left right query replacement queried handle afterCaller savedQueries final next p h,
+            lookupNode beforeCaller.checked.native.machine.heap sourceHandle = some left ∧
+              lookupNode beforeCaller.checked.native.machine.heap targetHandle = some right ∧
+                next.source = beforeCaller.checked.native.machine.heap ∧
+                  next.roots = inventory.roots ++ [left, right] ∧
+                    SourceCurrentAllocatedTargetQuery.Receipt formulas solver next left right beforeCaller.checked query
+                        queried memos ∧
+                      (∀ (P H : Nat),
+                          p ≤ P →
+                            h ≤ H →
+                              afterQuery checkEmpty P H source target sourceScs targetScs query queried beforeCaller
+                                  memos.query =
+                                (Except.ok
+                                    (some
+                                      (SourcePruningEnumerationAssimilation.finish source target handle sourceScs
+                                        targetScs replacement)),
+                                  afterCaller, savedQueries)) ∧
+                        Post formulas solver next beforeCaller afterCaller final ∧
+                          final.query = savedQueries ∧
+                            PendingRealized afterCaller.checked.native.machine.heap before ∧
+                              encodeNode replacement = some handle ∧
+                                lookupNode afterCaller.checked.native.machine.heap handle = some replacement ∧
+                                  Available afterCaller.checked.native.machine.heap replacement ∧
+                                    replacement.free = [] ∧
+                                      (∀
+                                          (ambient :
+                                            InternedGuardedLanguage.Env (SourceObservations.Label FullSyntax.Formula))
+                                          (term : Language.Term (SourceObservations.Label FullSyntax.Formula)),
+                                          InternedGuardedLanguage.meaning (SourceEqualityPCSGuard.holds formulas solver)
+                                              ambient replacement term ↔
+                                            InternedGuardedLanguage.meaning
+                                                (SourceEqualityPCSGuard.holds formulas solver) ambient left term ∧
+                                              InternedGuardedLanguage.meaning
+                                                (SourceEqualityPCSGuard.holds formulas solver) ambient right term) ∧
+                                        (checkEmpty = false →
+                                            replacement = query ∧
+                                              afterCaller =
+                                                  SourceCurrentAllocatedPartialState.advance beforeCaller queried
+                                                    beforeCaller.fourth beforeCaller.merge ∧
+                                                final = memos) ∧
+                                          (checkEmpty = true → ∃ reached answer guardSaved, ⋯)
+same : ¬source = target
+eliminated : before.values[source]? = some UVarValue.eliminated
+extra P H : Nat
+enoughP : 0 ≤ P
+enoughH : 0 ≤ H
+⊢ pure (Except.ok (some fun state => [Except.ok ((), state)]), beforeCaller, memos.query) =
+    (Except.ok (some fun state => [Except.ok ((), state)]), beforeCaller, memos.query)
+/tmp/mcfta-pruning-enumeration-dispatch-20261024/strict-2/MicroCFTA/SourcePruningEnumerationDispatch.lean:408:6: error: unsolved goals
+case neg.some.some.refine_1
+EnumGuard : Type
+width : Nat
+inst✝² : DecidableEq Symbol
+inst✝¹ : DecidableEq (EdgeKey Symbol Constraint)
+inst✝ : DecidableEq Node
+formulas : SourceGuards.Formulas FullSyntax.Formula
+solver : SourceGuards.Entailment FullSyntax.Formula
+inventory : Inventory
+beforeCaller : Caller width
+before : EnumerationState.State Symbol EnumGuard
+checkEmpty : Bool
+source target : Nat
+memos : Memos
+initial : Context formulas solver inventory beforeCaller memos
+realized : PendingRealized beforeCaller.checked.native.machine.heap before
+slots :
+  source = target ∨
+    before.values[source]? = some UVarValue.eliminated ∨
+      ∃ sourceNode targetNode sourceScs targetScs,
+        before.values[source]? = some (UVarValue.unenumerated sourceNode sourceScs) ∧
+          before.values[target]? = some (UVarValue.unenumerated targetNode targetScs)
+ranges :
+  if source = target then True
+  else
+    match before.values[source]?, before.values[target]? with
+    | some (UVarValue.unenumerated (some left) a), some (UVarValue.unenumerated (some right) a_1) =>
+      match lookupNode beforeCaller.checked.native.machine.heap left,
+        lookupNode beforeCaller.checked.native.machine.heap right with
+      | some first, some second =>
+        SourceCurrentAllocatedNativeRequestBounds.WordRanges
+          (SourceEqualityNativeDemand.Control.code
+            (SourceRecursiveIntersectionCode.requestNode IntersectionEmptyDomain.emptyDomain first second))
+          beforeCaller.checked
+      | x, x_1 => True
+    | x, x_1 => True
+optionalPacket :
+  ∀ (sourceNode targetNode merged : Option Nat) (sourceScs targetScs : List Suspended),
+    before.values[source]? = some (UVarValue.unenumerated sourceNode sourceScs) →
+      before.values[target]? = some (UVarValue.unenumerated targetNode targetScs) →
+        source ≠ target →
+          sourceNode = none ∨ targetNode = none →
+            (merged = sourceNode.orElse fun x => targetNode) →
+              ((finishOptional source target merged sourceScs targetScs before).run =
+                  if merged = some 0 then []
+                  else
+                    [Except.ok
+                        ((),
+                          assimilated before target source (UVarValue.unenumerated merged (sourceScs ++ targetScs)))]) ∧
+                (merged ≠ some 0 →
+                  (assimilated before target source
+                            (UVarValue.unenumerated merged (sourceScs ++ targetScs))).values[target]? =
+                      some (UVarValue.unenumerated merged (sourceScs ++ targetScs)) ∧
+                    (assimilated before target source
+                              (UVarValue.unenumerated merged (sourceScs ++ targetScs))).values[source]? =
+                        some UVarValue.eliminated ∧
+                      PendingRealized beforeCaller.checked.native.machine.heap
+                        (assimilated before target source (UVarValue.unenumerated merged (sourceScs ++ targetScs))))
+presentPacket :
+  ∀ (sourceHandle targetHandle : Nat) (sourceScs targetScs : List Suspended),
+    before.values[source]? = some (UVarValue.unenumerated (some sourceHandle) sourceScs) →
+      before.values[target]? = some (UVarValue.unenumerated (some targetHandle) targetScs) →
+        source ≠ target →
+          ∃ left right query replacement queried handle afterCaller savedQueries final next p h,
+            lookupNode beforeCaller.checked.native.machine.heap sourceHandle = some left ∧
+              lookupNode beforeCaller.checked.native.machine.heap targetHandle = some right ∧
+                next.source = beforeCaller.checked.native.machine.heap ∧
+                  next.roots = inventory.roots ++ [left, right] ∧
+                    SourceCurrentAllocatedTargetQuery.Receipt formulas solver next left right beforeCaller.checked query
+                        queried memos ∧
+                      (∀ (P H : Nat),
+                          p ≤ P →
+                            h ≤ H →
+                              afterQuery checkEmpty P H source target sourceScs targetScs query queried beforeCaller
+                                  memos.query =
+                                (Except.ok
+                                    (some
+                                      (SourcePruningEnumerationAssimilation.finish source target handle sourceScs
+                                        targetScs replacement)),
+                                  afterCaller, savedQueries)) ∧
+                        Post formulas solver next beforeCaller afterCaller final ∧
+                          final.query = savedQueries ∧
+                            PendingRealized afterCaller.checked.native.machine.heap before ∧
+                              encodeNode replacement = some handle ∧
+                                lookupNode afterCaller.checked.native.machine.heap handle = some replacement ∧
+                                  Available afterCaller.checked.native.machine.heap replacement ∧
+                                    replacement.free = [] ∧
+                                      (∀
+                                          (ambient :
+                                            InternedGuardedLanguage.Env (SourceObservations.Label FullSyntax.Formula))
+                                          (term : Language.Term (SourceObservations.Label FullSyntax.Formula)),
+                                          InternedGuardedLanguage.meaning (SourceEqualityPCSGuard.holds formulas solver)
+                                              ambient replacement term ↔
+                                            InternedGuardedLanguage.meaning
+                                                (SourceEqualityPCSGuard.holds formulas solver) ambient left term ∧
+                                              InternedGuardedLanguage.meaning
+                                                (SourceEqualityPCSGuard.holds formulas solver) ambient right term) ∧
+                                        (checkEmpty = false →
+                                            replacement = query ∧
+                                              afterCaller =
+                                                  SourceCurrentAllocatedPartialState.advance beforeCaller queried
+                                                    beforeCaller.fourth beforeCaller.merge ∧
+                                                final = memos) ∧
+                                          (checkEmpty = true → ∃ reached answer guardSaved, ⋯)
+same : ¬source = target
+eliminated : ¬before.values[source]? = some UVarValue.eliminated
+sourceScs targetScs : List Suspended
+sourceHandle : Nat
+sourceStored : before.values[source]? = some (UVarValue.unenumerated (some sourceHandle) sourceScs)
+targetHandle : Nat
+targetStored : before.values[target]? = some (UVarValue.unenumerated (some targetHandle) targetScs)
+missing : ¬(some sourceHandle = none ∨ some targetHandle = none)
+left right query replacement : Node
+queried : Checked width
+handle : Nat
+afterCaller : Caller width
+savedQueries : Queries
+final : Memos
+next : Inventory
+p h : Nat
+leftDecoded : lookupNode beforeCaller.checked.native.machine.heap sourceHandle = some left
+rightDecoded : lookupNode beforeCaller.checked.native.machine.heap targetHandle = some right
+nextSource : next.source = beforeCaller.checked.native.machine.heap
+nextRoots : next.roots = inventory.roots ++ [left, right]
+receipt :
+  SourceCurrentAllocatedTargetQuery.Receipt formulas solver next left right beforeCaller.checked query queried memos
+phaseStable :
+  ∀ (P H : Nat),
+    p ≤ P →
+      h ≤ H →
+        afterQuery checkEmpty P H source target sourceScs targetScs query queried beforeCaller memos.query =
+          (Except.ok
+              (some (SourcePruningEnumerationAssimilation.finish source target handle sourceScs targetScs replacement)),
+            afterCaller, savedQueries)
+post : Post formulas solver next beforeCaller afterCaller final
+querySame : final.query = savedQueries
+preRealized : PendingRealized afterCaller.checked.native.machine.heap before
+encoded : encodeNode replacement = some handle
+decoded : lookupNode afterCaller.checked.native.machine.heap handle = some replacement
+available : Available afterCaller.checked.native.machine.heap replacement
+closed : replacement.free = []
+meaning :
+  ∀ (ambient : InternedGuardedLanguage.Env (SourceObservations.Label FullSyntax.Formula))
+    (term : Language.Term (SourceObservations.Label FullSyntax.Formula)),
+    InternedGuardedLanguage.meaning (SourceEqualityPCSGuard.holds formulas solver) ambient replacement term ↔
+      InternedGuardedLanguage.meaning (SourceEqualityPCSGuard.holds formulas solver) ambient left term ∧
+        InternedGuardedLanguage.meaning (SourceEqualityPCSGuard.holds formulas solver) ambient right term
+disabled :
+  checkEmpty = false →
+    replacement = query ∧
+      afterCaller =
+          SourceCurrentAllocatedPartialState.advance beforeCaller queried beforeCaller.fourth beforeCaller.merge ∧
+        final = memos
+enabled :
+  checkEmpty = true →
+    ∃ reached answer guardSaved,
+      SourceEndpointMemo.run query memos.query = (reached, guardSaved) ∧
+        SourceEndpointMemoCorrect.Checked queried.native.machine.heap memos.query
+            (SourceCurrentEmptinessMerge.reaches query) (reached, guardSaved) ∧
+          (∀ (P H : Nat),
+              p ≤ P →
+                h ≤ H →
+                  SourcePruningEnumerationEnabledEmpty.check P H query queried beforeCaller.fourth memos.query =
+                    (SourceCurrentAllocatedConjunctionWorker.Outcome.done answer afterCaller.checked afterCaller.fourth,
+                      guardSaved)) ∧
+            savedQueries = guardSaved ∧
+              (replacement = if answer = true then Value.empty else query) ∧
+                (reached = false →
+                    answer = false ∧
+                      afterCaller.checked = queried ∧
+                        afterCaller.fourth = beforeCaller.fourth ∧
+                          final = { unfolding := memos.unfolding, query := guardSaved }) ∧
+                  (reached = true →
+                    ∃ reachedPhysical,
+                      afterCaller.checked = SourceCurrentAllocatedQueryMemo.advancePhysical queried reachedPhysical ∧
+                        ∃ actual,
+                          SourceCurrentConjunctionGlobalMemos.CallReads actual
+                            { unfolding := memos.unfolding, query := guardSaved } final)
+fuel : Nat
+actualDone :
+  SourceEqualityNativeDemand.execute fuel
+      (SourceEqualityNativeDemand.Control.code
+        (SourceRecursiveIntersectionCode.requestNode IntersectionEmptyDomain.emptyDomain left right))
+      beforeCaller.checked =
+    SourceEqualityNativeDemand.Outcome.done query queried
+emptyRaw :
+  replacement = Value.empty →
+    (SourcePruningEnumerationAssimilation.finish source target handle sourceScs targetScs replacement before).run = []
+nonemptyRaw :
+  replacement ≠ Value.empty →
+    ∃ after,
+      (SourcePruningEnumerationAssimilation.finish source target handle sourceScs targetScs replacement before).run =
+          [Except.ok ((), after)] ∧
+        after = assimilated before target source (UVarValue.unenumerated (some handle) (sourceScs ++ targetScs)) ∧
+          after.values[target]? = some (UVarValue.unenumerated (some handle) (sourceScs ++ targetScs)) ∧
+            after.values[source]? = some UVarValue.eliminated ∧
+              PendingRealized afterCaller.checked.native.machine.heap after
+emptyIff : replacement = Value.empty ↔ handle = 0
+extra P H : Nat
+enoughP : p ≤ P
+enoughH : h ≤ H
+⊢ pure
+      (Except.ok
+          (some (SourcePruningEnumerationAssimilation.finish source target handle sourceScs targetScs replacement)),
+        afterCaller, savedQueries) =
+    (Except.ok
+        (some (SourcePruningEnumerationAssimilation.finish source target handle sourceScs targetScs replacement)),
+      afterCaller, savedQueries)

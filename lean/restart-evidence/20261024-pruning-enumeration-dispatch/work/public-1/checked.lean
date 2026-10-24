@@ -1,0 +1,11 @@
+import MicroCFTA.SourcePruningEnumerationDispatch
+set_option pp.deepTerms true
+set_option pp.maxSteps 1000000
+#check @MicroCFTA.SourcePruningEnumerationDispatch.finishOptional
+#check @MicroCFTA.SourcePruningEnumerationDispatch.afterQuery
+#check @MicroCFTA.SourcePruningEnumerationDispatch.dispatch
+#check @MicroCFTA.SourcePruningEnumerationDispatch.dispatch_complete
+#print axioms MicroCFTA.SourcePruningEnumerationDispatch.finishOptional
+#print axioms MicroCFTA.SourcePruningEnumerationDispatch.afterQuery
+#print axioms MicroCFTA.SourcePruningEnumerationDispatch.dispatch
+#print axioms MicroCFTA.SourcePruningEnumerationDispatch.dispatch_complete

@@ -1,0 +1,13 @@
+theorem Sound.advance {before : Caller width} (sound : Sound formulas solver before)
+    (checked : Checked width) (fourth : Fourth) (merge : MergeMemo)
+    (effects : SourceCurrentConjunctionRowsAllocation.Effects (physical before.checked) (physical checked)) :
+    Sound formulas solver (advance before checked fourth merge) :=
+  ⟨sound.valid.advance before checked fourth merge effects.grows.constraint_growth,
+    fun handle cell stored => (sound.nodes handle cell stored).grows formulas solver effects,
+    fun handle cell stored => (sound.edges handle cell stored).grows formulas solver effects⟩
+
+private theorem node_valid {before : Caller width} (sound : Sound formulas solver before) :
+    FlatMemoThunk.Valid (NodeLinked before.checked.operations.constraints) (NodeGood formulas solver before.checked) before.nodeResults :=
+  ⟨sound.valid.nodes.bounded, sound.valid.nodes.linked, sound.nodes⟩
+
+private theorem edge_valid {before : Caller width} (sound : Sound formulas solver before) :

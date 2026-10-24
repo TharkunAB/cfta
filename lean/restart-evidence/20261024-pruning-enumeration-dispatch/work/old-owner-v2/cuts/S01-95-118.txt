@@ -1,0 +1,24 @@
+      initial.ready initial.admitted leftAvailable rightAvailable leftClosed rightClosed decodedRanges
+      memos initial.globals
+  have queryProbes : InternedFreshOrdinaryProbeHeap.Heap queried.native.machine.heap := by
+    cases receipt.actual with
+    | run trace =>
+        exact SourceCurrentAllocatedMuRebuild.trace_heap trace initial.ready.semantic initial.probes
+  cases guardRun : SourceEndpointMemo.run query memos.query with
+  | mk reached guardSaved =>
+    have guardChecked : SourceEndpointMemoCorrect.Checked queried.native.machine.heap
+        memos.query (reaches query) (reached, guardSaved) := by
+      simpa only [guardRun] using SourceEndpointMemoCorrect.run_checked query queried.native.machine.heap
+        receipt.effects.keeps.ready.semantic.1.normal.facts.coherent receipt.available memos.query receipt.globals.query
+    have queryContext : Context formulas solver next
+        (SourceCurrentAllocatedPartialState.advance beforeCaller queried beforeCaller.fourth beforeCaller.merge)
+        {memos with query := guardSaved} := by
+      exact ⟨receipt.ready, receipt.admitted,
+        initial.sound.advance formulas solver queried beforeCaller.fourth beforeCaller.merge receipt.effects,
+        initial.stored.grows receipt.effects.keeps, initial.covered,
+        SourceCurrentEmptinessMemo.grows formulas solver receipt.effects.keeps beforeCaller.fourth initial.correct,
+        ⟨receipt.globals.unfolding, guardChecked.valid⟩, queryProbes⟩
+    have queryPost : Post formulas solver next beforeCaller
+        (SourceCurrentAllocatedPartialState.advance beforeCaller queried beforeCaller.fourth beforeCaller.merge)
+        {memos with query := guardSaved} := by
+      exact ⟨queryContext, receipt.effects, Cache.extends_refl _, fun key entry found => found⟩

@@ -1,0 +1,46 @@
+noncomputable def execute [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)] :
+    Nat → Control Output → State width → Outcome width Output
+  | 0, control, state => .yielded control state
+  | fuel + 1, control, state =>
+      match step control state with
+      | .yielded next after => execute fuel next after
+      | .done value after => .done value after
+      | .failed failure after => .failed failure after
+      | .constraintError message after => .constraintError message after
+      | .blocked reason next after => .blocked reason next after
+
+/-- Only yielded work continues under another finite bound. -/
+noncomputable def resume [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)]
+    (fuel : Nat) : Outcome width Output → Outcome width Output
+  | .yielded next after => execute fuel next after
+  | .done value after => .done value after
+  | .failed failure after => .failed failure after
+  | .constraintError message after => .constraintError message after
+  | .blocked reason next after => .blocked reason next after
+
+/-- Splitting a bound preserves every continuation, publication, and operation cache. -/
+theorem execute_add [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)]
+    (fuel extra : Nat) (control : Control Output) (state : State width) :
+    execute (fuel + extra) control state = resume extra (execute fuel control state) := by
+  induction fuel generalizing control state with
+  | zero => simp only [Nat.zero_add, execute, resume]
+  | succ fuel ih =>
+      simp only [Nat.succ_add, execute]
+      cases actual : step control state with
+      | yielded next after => exact ih next after
+      | done | failed | constraintError | blocked => rfl
+
+/-- A completed result retains its actual state under every larger bound. -/
+theorem done_stable [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)]
+    (fuel extra : Nat) (control : Control Output) (before after : State width) (value : Output)
+    (done : execute fuel control before = .done value after) :
+    execute (fuel + extra) control before = .done value after := by
+  rw [execute_add, done]
+  rfl
+
+/-- Additional fuel cannot change a blocked body or fabricate a completed result. -/
+theorem blocked_stable [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)]
+    (fuel extra : Nat) (control next : Control Output) (before after : State width) (reason : Blocked)
+    (blocked : execute fuel control before = .blocked reason next after) :
+    execute (fuel + extra) control before = .blocked reason next after := by
+  rw [execute_add, blocked]

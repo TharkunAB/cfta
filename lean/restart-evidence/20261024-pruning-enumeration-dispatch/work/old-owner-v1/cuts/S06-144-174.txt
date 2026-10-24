@@ -1,0 +1,31 @@
+def intersectValues (graph : Graph Symbol Guard) :
+    UVarValue Symbol → UVarValue Symbol → Option (UVarValue Symbol)
+  | .unenumerated left ls, .unenumerated right rs =>
+      some (.unenumerated (match left, right with
+        | none, node => node
+        | node, none => node
+        | some a, some b => some (graph.intersect a b)) (ls ++ rs))
+  | _, _ => none
+
+/-- Structural emptiness rejects an intersection branch. -/
+def hasEmptyContents (graph : Graph Symbol Guard) : UVarValue Symbol → Bool
+  | .unenumerated (some node) _ => match graph.node node with | .empty => true | _ => false
+  | _ => false
+
+/-- Move an old representative's contents into the current representative. -/
+def assimilate (graph : Graph Symbol Guard) (target source : Nat) : EnumerateM Symbol Guard Unit := do
+  if target = source then pure () else
+    let sourceValue ← rawValue source
+    match sourceValue with
+    | .eliminated => pure ()
+    | _ =>
+        let targetValue ← rawValue target
+        match intersectValues graph sourceValue targetValue with
+        | none => failure .invalidIntersection
+        | some merged =>
+            require (!hasEmptyContents graph merged)
+            setValue target merged
+            setValue source .eliminated
+            modify fun state => {state with recursionAncestry := (fun other =>
+              if other = target then
+                (state.recursionAncestry source ++ state.recursionAncestry target).eraseDups

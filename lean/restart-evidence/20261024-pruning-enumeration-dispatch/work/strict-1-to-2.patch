@@ -1,0 +1,71 @@
+--- strict-1
++++ strict-2
+@@ -62,7 +62,7 @@
+   let some sourceValue := before.values[source]? | return (.ok none, beforeCaller, queries)
+   match sourceValue with
+   | .eliminated => return (.ok (some noop), beforeCaller, queries)
+-  | _ => pure ()
++  | _ => pure PUnit.unit
+   let some targetValue := before.values[target]? | return (.ok none, beforeCaller, queries)
+   let .unenumerated sourceNode sourceScs := sourceValue |
+     return (.ok (some (failure .invalidIntersection)), beforeCaller, queries)
+@@ -276,7 +276,7 @@
+             (.code (SourceRecursiveIntersectionCode.requestNode IntersectionEmptyDomain.emptyDomain first second))
+             beforeCaller.checked
+         | _, _ => True := by
+-      simpa only [if_neg _different, sourceStored, targetStored] using ranges
++      simpa only [ite_eq_right _different, sourceStored, targetStored] using ranges
+     cases checkEmpty with
+     | false =>
+       obtain ⟨left, leftDecoded, leftAvailable, leftClosed⟩ := realized source sourceHandle sourceScs sourceStored
+@@ -339,7 +339,7 @@
+   · refine ⟨0, 0, 0, (fun state => [.ok ((), state)]), beforeCaller, memos.query, memos, inventory,
+       ?_, Post.refl initial, rfl, realized, ?_, ?_⟩
+     · intro extra P H enoughP enoughH
+-      simp only [dispatch, if_pos same]
++      simp only [dispatch, ite_eq_left same, Id.run]
+     · intro noWork
+       exact ⟨rfl, rfl, rfl, rfl⟩
+     · intro different notEliminated
+@@ -348,7 +348,7 @@
+   · refine ⟨0, 0, 0, (fun state => [.ok ((), state)]), beforeCaller, memos.query, memos, inventory,
+       ?_, Post.refl initial, rfl, realized, ?_, ?_⟩
+     · intro extra P H enoughP enoughH
+-      simp only [dispatch, if_neg same, eliminated]
++      simp only [dispatch, ite_eq_right same, eliminated, Id.run]
+     · intro noWork
+       exact ⟨rfl, rfl, rfl, rfl⟩
+     · intro different notEliminated
+@@ -361,7 +361,7 @@
+     refine ⟨0, 0, 0, finishOptional source target merged sourceScs targetScs,
+       beforeCaller, memos.query, memos, inventory, ?_, Post.refl initial, rfl, realized, ?_, ?_⟩
+     · intro extra P H enoughP enoughH
+-      simp only [dispatch, if_neg same, sourceStored, targetStored]
++      simp only [dispatch, ite_eq_right same, sourceStored, targetStored]
+       cases sourceNode with
+       | none => rfl
+       | some sourceHandle =>
+@@ -406,19 +406,19 @@
+       refine ⟨fuel, p, h, SourcePruningEnumerationAssimilation.finish source target handle sourceScs targetScs replacement,
+         afterCaller, savedQueries, final, next, ?_, post, querySame, preRealized, ?_, ?_⟩
+       · intro extra P H enoughP enoughH
+-        simp only [dispatch, if_neg same, sourceStored, targetStored, leftDecoded, rightDecoded,
++        simp only [dispatch, ite_eq_right same, sourceStored, targetStored, leftDecoded, rightDecoded,
+           SourceEqualityNativeDemand.done_stable fuel extra _ beforeCaller.checked queried query actualDone,
+-          phaseStable P H enoughP enoughH, Except.mapError]
++          phaseStable P H enoughP enoughH, Except.mapError, Id.run]
+       · intro noWork
+         exact False.elim (noWork.elim same eliminated)
+       · intro different notEliminated
+         refine ⟨some sourceHandle, some targetHandle, some handle, sourceScs, targetScs,
+           sourceStored, targetStored, ?_, ?_, ?_, ?_⟩
+         · by_cases isEmpty : replacement = .empty
+-          · simpa only [if_pos (congrArg some (emptyIff.mp isEmpty))] using emptyRaw isEmpty
++          · simpa only [ite_eq_left (congrArg some (emptyIff.mp isEmpty))] using emptyRaw isEmpty
+           · obtain ⟨after, raw, afterSame, targetRead, sourceRead, afterRealized⟩ := nonemptyRaw isEmpty
+             subst after
+-            simpa only [if_neg (fun zero => isEmpty (emptyIff.mpr (Option.some.inj zero)))] using raw
++            simpa only [ite_eq_right (fun zero => isEmpty (emptyIff.mpr (Option.some.inj zero)))] using raw
+         · intro nonzero
+           obtain ⟨after, raw, afterSame, targetRead, sourceRead, afterRealized⟩ :=
+             nonemptyRaw (fun isEmpty => nonzero (congrArg some (emptyIff.mp isEmpty)))

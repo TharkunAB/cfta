@@ -1,0 +1,29 @@
+--- strict-2
++++ strict-3
+@@ -339,7 +339,7 @@
+   · refine ⟨0, 0, 0, (fun state => [.ok ((), state)]), beforeCaller, memos.query, memos, inventory,
+       ?_, Post.refl initial, rfl, realized, ?_, ?_⟩
+     · intro extra P H enoughP enoughH
+-      simp only [dispatch, ite_eq_left same, Id.run]
++      simp only [dispatch, ite_eq_left same, Id.run]; rfl
+     · intro noWork
+       exact ⟨rfl, rfl, rfl, rfl⟩
+     · intro different notEliminated
+@@ -348,7 +348,7 @@
+   · refine ⟨0, 0, 0, (fun state => [.ok ((), state)]), beforeCaller, memos.query, memos, inventory,
+       ?_, Post.refl initial, rfl, realized, ?_, ?_⟩
+     · intro extra P H enoughP enoughH
+-      simp only [dispatch, ite_eq_right same, eliminated, Id.run]
++      simp only [dispatch, ite_eq_right same, eliminated, Id.run]; rfl
+     · intro noWork
+       exact ⟨rfl, rfl, rfl, rfl⟩
+     · intro different notEliminated
+@@ -408,7 +408,7 @@
+       · intro extra P H enoughP enoughH
+         simp only [dispatch, ite_eq_right same, sourceStored, targetStored, leftDecoded, rightDecoded,
+           SourceEqualityNativeDemand.done_stable fuel extra _ beforeCaller.checked queried query actualDone,
+-          phaseStable P H enoughP enoughH, Except.mapError, Id.run]
++          phaseStable P H enoughP enoughH, Except.mapError, Id.run]; rfl
+       · intro noWork
+         exact False.elim (noWork.elim same eliminated)
+       · intro different notEliminated

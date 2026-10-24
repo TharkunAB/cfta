@@ -1,0 +1,9 @@
+inductive CallReads [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)] [DecidableEq (Value Symbol Guard)] :
+    {budget : Nat} → {memo saved : SourceCurrentEmptinessMemo.Memo} → {query : Value Symbol Guard} →
+    {before after : Physical} → {answer : Bool} →
+    SourceCurrentConjunctionMemo.Call budget memo query before answer after saved → Memos → Memos → Prop where
+  | hit {budget : Nat} {memo : SourceCurrentEmptinessMemo.Memo} {query original : Value Symbol Guard}
+      {answer : Bool} {before : Physical} {memos : Memos}
+      (found : memo query.referenceOf = some (original, answer)) :
+      CallReads (SourceCurrentConjunctionMemo.Call.hit (budget := budget) (before := before) found) memos memos
+  | miss (calls : DecisionReads actual memos saved) : CallReads (.miss absent actual) memos saved

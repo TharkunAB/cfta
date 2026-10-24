@@ -1,0 +1,726 @@
+{
+  "definition_cases": [
+    {
+      "scope": "finishOptional",
+      "constructor": "raw action",
+      "fields": [
+        {
+          "name": "state",
+          "type": "EnumerationState.State Symbol EnumGuard"
+        }
+      ]
+    },
+    {
+      "scope": "afterQuery",
+      "constructor": "done",
+      "fields": [
+        {
+          "name": "answer",
+          "type": "Bool"
+        },
+        {
+          "name": "checkedAfter",
+          "type": "Checked width"
+        },
+        {
+          "name": "saved",
+          "type": "SourceCurrentEmptinessMemo.Memo"
+        }
+      ]
+    },
+    {
+      "scope": "afterQuery",
+      "constructor": "failed",
+      "fields": [
+        {
+          "name": "fault",
+          "type": "SourceCurrentConjunctionWorker.Fault Symbol FullSyntax.Formula"
+        },
+        {
+          "name": "checkedAfter",
+          "type": "Checked width"
+        },
+        {
+          "name": "saved",
+          "type": "SourceCurrentEmptinessMemo.Memo"
+        }
+      ]
+    },
+    {
+      "scope": "afterQuery.encode.map",
+      "constructor": "some",
+      "fields": [
+        {
+          "name": "handle",
+          "type": "Nat"
+        }
+      ]
+    },
+    {
+      "scope": "dispatch.noop",
+      "constructor": "raw action",
+      "fields": [
+        {
+          "name": "state",
+          "type": "EnumerationState.State Symbol EnumGuard"
+        }
+      ]
+    },
+    {
+      "scope": "dispatch.actual",
+      "constructor": "yielded",
+      "fields": [
+        {
+          "name": "control",
+          "type": "SourceEqualityNativeDemand.Control Node"
+        },
+        {
+          "name": "checkedAfter",
+          "type": "Checked width"
+        }
+      ]
+    },
+    {
+      "scope": "dispatch.actual",
+      "constructor": "done",
+      "fields": [
+        {
+          "name": "query",
+          "type": "Node"
+        },
+        {
+          "name": "queried",
+          "type": "Checked width"
+        }
+      ]
+    },
+    {
+      "scope": "dispatch.actual",
+      "constructor": "failed",
+      "fields": [
+        {
+          "name": "fault",
+          "type": "SourceRecursiveIntersectionKernel.Failure"
+        },
+        {
+          "name": "checkedAfter",
+          "type": "Checked width"
+        }
+      ]
+    },
+    {
+      "scope": "dispatch.actual",
+      "constructor": "constraintError",
+      "fields": [
+        {
+          "name": "message",
+          "type": "String"
+        },
+        {
+          "name": "checkedAfter",
+          "type": "Checked width"
+        }
+      ]
+    },
+    {
+      "scope": "dispatch.actual",
+      "constructor": "blocked",
+      "fields": [
+        {
+          "name": "reason",
+          "type": "SourceEqualityNativeDemand.Blocked"
+        },
+        {
+          "name": "control",
+          "type": "SourceEqualityNativeDemand.Control Node"
+        },
+        {
+          "name": "checkedAfter",
+          "type": "Checked width"
+        }
+      ]
+    },
+    {
+      "scope": "dispatch.raw source",
+      "constructor": "none",
+      "fields": []
+    },
+    {
+      "scope": "dispatch.raw source",
+      "constructor": "eliminated",
+      "fields": []
+    },
+    {
+      "scope": "dispatch.raw source",
+      "constructor": "enumerated",
+      "fields": [
+        {
+          "name": "sourceFragment",
+          "type": "Fragments.Fragment Symbol"
+        }
+      ]
+    },
+    {
+      "scope": "dispatch.raw source",
+      "constructor": "unenumerated",
+      "fields": [
+        {
+          "name": "sourceNode",
+          "type": "Option Nat"
+        },
+        {
+          "name": "sourceScs",
+          "type": "List EnumerationState.Suspended"
+        }
+      ]
+    },
+    {
+      "scope": "dispatch.raw target",
+      "constructor": "none",
+      "fields": []
+    },
+    {
+      "scope": "dispatch.raw target",
+      "constructor": "eliminated",
+      "fields": []
+    },
+    {
+      "scope": "dispatch.raw target",
+      "constructor": "enumerated",
+      "fields": [
+        {
+          "name": "targetFragment",
+          "type": "Fragments.Fragment Symbol"
+        }
+      ]
+    },
+    {
+      "scope": "dispatch.raw target",
+      "constructor": "unenumerated",
+      "fields": [
+        {
+          "name": "targetNode",
+          "type": "Option Nat"
+        },
+        {
+          "name": "targetScs",
+          "type": "List EnumerationState.Suspended"
+        }
+      ]
+    },
+    {
+      "scope": "dispatch.optional source",
+      "constructor": "none",
+      "fields": []
+    },
+    {
+      "scope": "dispatch.optional source",
+      "constructor": "some",
+      "fields": [
+        {
+          "name": "sourceHandle",
+          "type": "Nat"
+        }
+      ]
+    },
+    {
+      "scope": "dispatch.decode source",
+      "constructor": "none",
+      "fields": []
+    },
+    {
+      "scope": "dispatch.decode source",
+      "constructor": "some",
+      "fields": [
+        {
+          "name": "left",
+          "type": "Node"
+        }
+      ]
+    },
+    {
+      "scope": "dispatch.optional target",
+      "constructor": "none",
+      "fields": []
+    },
+    {
+      "scope": "dispatch.optional target",
+      "constructor": "some",
+      "fields": [
+        {
+          "name": "targetHandle",
+          "type": "Nat"
+        }
+      ]
+    },
+    {
+      "scope": "dispatch.decode target",
+      "constructor": "none",
+      "fields": []
+    },
+    {
+      "scope": "dispatch.decode target",
+      "constructor": "some",
+      "fields": [
+        {
+          "name": "right",
+          "type": "Node"
+        }
+      ]
+    }
+  ],
+  "proof_cases": [
+    {
+      "scope": "main",
+      "name": "same",
+      "condition": "source = target",
+      "negative": "source \u2260 target"
+    },
+    {
+      "scope": "main",
+      "name": "eliminated",
+      "condition": "before.values[source]? = some .eliminated",
+      "negative": "before.values[source]? \u2260 some .eliminated"
+    },
+    {
+      "scope": "main pending",
+      "name": "missing",
+      "condition": "sourceNode = none \u2228 targetNode = none",
+      "negative": "\u00ac (sourceNode = none \u2228 targetNode = none)"
+    },
+    {
+      "scope": "presentPacket",
+      "name": "checkEmpty",
+      "constructors": [
+        "false",
+        "true"
+      ],
+      "fields": []
+    },
+    {
+      "scope": "main two-present",
+      "name": "isEmpty",
+      "condition": "replacement = .empty",
+      "negative": "replacement \u2260 .empty"
+    },
+    {
+      "scope": "optionalPacket.carriedRealized",
+      "name": "sourceNode",
+      "constructors": [
+        "none",
+        "some sourceHandle"
+      ],
+      "fields": [
+        {
+          "name": "sourceHandle",
+          "type": "Nat"
+        }
+      ]
+    },
+    {
+      "scope": "optionalPacket.carriedRealized none",
+      "name": "targetNode",
+      "constructors": [
+        "none",
+        "some targetHandle"
+      ],
+      "fields": [
+        {
+          "name": "targetHandle",
+          "type": "Nat"
+        }
+      ]
+    },
+    {
+      "scope": "main pending not missing",
+      "name": "sourceNode",
+      "constructors": [
+        "none",
+        "some sourceHandle"
+      ],
+      "fields": [
+        {
+          "name": "sourceHandle",
+          "type": "Nat"
+        }
+      ]
+    },
+    {
+      "scope": "main pending not missing some",
+      "name": "targetNode",
+      "constructors": [
+        "none",
+        "some targetHandle"
+      ],
+      "fields": [
+        {
+          "name": "targetHandle",
+          "type": "Nat"
+        }
+      ]
+    }
+  ],
+  "intro_groups": [
+    {
+      "scope": "optionalPacket",
+      "fields": [
+        {
+          "name": "sourceNode",
+          "type": "Option Nat"
+        },
+        {
+          "name": "targetNode",
+          "type": "Option Nat"
+        },
+        {
+          "name": "merged",
+          "type": "Option Nat"
+        },
+        {
+          "name": "sourceScs",
+          "type": "List EnumerationState.Suspended"
+        },
+        {
+          "name": "targetScs",
+          "type": "List EnumerationState.Suspended"
+        },
+        {
+          "name": "sourceStored",
+          "type": "before.values[source]? = some (.unenumerated sourceNode sourceScs)"
+        },
+        {
+          "name": "targetStored",
+          "type": "before.values[target]? = some (.unenumerated targetNode targetScs)"
+        },
+        {
+          "name": "different",
+          "type": "source \u2260 target"
+        },
+        {
+          "name": "_missing",
+          "type": "sourceNode = none \u2228 targetNode = none"
+        },
+        {
+          "name": "carried",
+          "type": "merged = sourceNode.orElse (fun _ => targetNode)"
+        }
+      ]
+    },
+    {
+      "scope": "presentPacket",
+      "fields": [
+        {
+          "name": "sourceHandle",
+          "type": "Nat"
+        },
+        {
+          "name": "targetHandle",
+          "type": "Nat"
+        },
+        {
+          "name": "sourceScs",
+          "type": "List EnumerationState.Suspended"
+        },
+        {
+          "name": "targetScs",
+          "type": "List EnumerationState.Suspended"
+        },
+        {
+          "name": "sourceStored",
+          "type": "before.values[source]? = some (.unenumerated (some sourceHandle) sourceScs)"
+        },
+        {
+          "name": "targetStored",
+          "type": "before.values[target]? = some (.unenumerated (some targetHandle) targetScs)"
+        },
+        {
+          "name": "_different",
+          "type": "source \u2260 target"
+        }
+      ]
+    },
+    {
+      "scope": "optionalPacket.carriedRealized",
+      "fields": [
+        {
+          "name": "slot",
+          "type": "Nat"
+        },
+        {
+          "name": "node",
+          "type": "Nat"
+        },
+        {
+          "name": "scs",
+          "type": "List EnumerationState.Suspended"
+        },
+        {
+          "name": "stored",
+          "type": "(before.values.set target (.unenumerated merged (sourceScs ++ targetScs)))[slot]? = some (.unenumerated (some node) scs)"
+        }
+      ]
+    },
+    {
+      "scope": "optionalPacket final realization",
+      "fields": [
+        {
+          "name": "slot",
+          "type": "Nat"
+        },
+        {
+          "name": "node",
+          "type": "Nat"
+        },
+        {
+          "name": "scs",
+          "type": "List EnumerationState.Suspended"
+        },
+        {
+          "name": "stored",
+          "type": "(((before.values.set target (.unenumerated merged (sourceScs ++ targetScs))).set source .eliminated))[slot]? = some (.unenumerated (some node) scs)"
+        }
+      ]
+    },
+    {
+      "scope": "optionalPacket surviving suffix",
+      "fields": [
+        {
+          "name": "nonzero",
+          "type": "merged \u2260 some 0"
+        }
+      ]
+    },
+    {
+      "scope": "no-op stable",
+      "fields": [
+        {
+          "name": "extra",
+          "type": "Nat"
+        },
+        {
+          "name": "P",
+          "type": "Nat"
+        },
+        {
+          "name": "H",
+          "type": "Nat"
+        },
+        {
+          "name": "enoughP",
+          "type": "p \u2264 P"
+        },
+        {
+          "name": "enoughH",
+          "type": "h \u2264 H"
+        }
+      ]
+    },
+    {
+      "scope": "optional stable",
+      "fields": [
+        {
+          "name": "extra",
+          "type": "Nat"
+        },
+        {
+          "name": "P",
+          "type": "Nat"
+        },
+        {
+          "name": "H",
+          "type": "Nat"
+        },
+        {
+          "name": "enoughP",
+          "type": "p \u2264 P"
+        },
+        {
+          "name": "enoughH",
+          "type": "h \u2264 H"
+        }
+      ]
+    },
+    {
+      "scope": "presentPacket phase stable",
+      "fields": [
+        {
+          "name": "P",
+          "type": "Nat"
+        },
+        {
+          "name": "H",
+          "type": "Nat"
+        },
+        {
+          "name": "enoughP",
+          "type": "p \u2264 P"
+        },
+        {
+          "name": "enoughH",
+          "type": "h \u2264 H"
+        }
+      ]
+    },
+    {
+      "scope": "main two-present stable",
+      "fields": [
+        {
+          "name": "extra",
+          "type": "Nat"
+        },
+        {
+          "name": "P",
+          "type": "Nat"
+        },
+        {
+          "name": "H",
+          "type": "Nat"
+        },
+        {
+          "name": "enoughP",
+          "type": "p \u2264 P"
+        },
+        {
+          "name": "enoughH",
+          "type": "h \u2264 H"
+        }
+      ]
+    },
+    {
+      "scope": "main no-op implication",
+      "fields": [
+        {
+          "name": "noWork",
+          "type": "source = target \u2228 before.values[source]? = some .eliminated"
+        }
+      ]
+    },
+    {
+      "scope": "main non-no-op implication",
+      "fields": [
+        {
+          "name": "different",
+          "type": "source \u2260 target"
+        },
+        {
+          "name": "notEliminated",
+          "type": "before.values[source]? \u2260 some .eliminated"
+        }
+      ]
+    },
+    {
+      "scope": "main optional branch packet",
+      "fields": [
+        {
+          "name": "missing",
+          "type": "sourceNode = none \u2228 targetNode = none"
+        }
+      ]
+    },
+    {
+      "scope": "main two-present decoded packet",
+      "fields": [
+        {
+          "name": "leftHandle",
+          "type": "Nat"
+        },
+        {
+          "name": "rightHandle",
+          "type": "Nat"
+        },
+        {
+          "name": "leftSame",
+          "type": "some sourceHandle = some leftHandle"
+        },
+        {
+          "name": "rightSame",
+          "type": "some targetHandle = some rightHandle"
+        }
+      ]
+    },
+    {
+      "scope": "main surviving two-present",
+      "fields": [
+        {
+          "name": "nonzero",
+          "type": "some handle \u2260 some 0"
+        }
+      ]
+    },
+    {
+      "scope": "emptyIff forward",
+      "fields": [
+        {
+          "name": "isEmpty",
+          "type": "replacement = .empty"
+        }
+      ]
+    },
+    {
+      "scope": "emptyIff reverse",
+      "fields": [
+        {
+          "name": "isZero",
+          "type": "handle = 0"
+        }
+      ]
+    }
+  ],
+  "lambda_groups": [
+    {
+      "scope": "optionalPacket source bound",
+      "api": "(List.getElem?_eq_some_iff.mp sourceStored).elim",
+      "fields": [
+        {
+          "name": "bound",
+          "type": "source < before.values.length"
+        },
+        {
+          "name": "_storedValue",
+          "type": "before.values[source] = .unenumerated sourceNode sourceScs"
+        }
+      ]
+    },
+    {
+      "scope": "optionalPacket target bound",
+      "api": "(List.getElem?_eq_some_iff.mp targetStored).elim",
+      "fields": [
+        {
+          "name": "bound",
+          "type": "target < before.values.length"
+        },
+        {
+          "name": "_storedValue",
+          "type": "before.values[target] = .unenumerated targetNode targetScs"
+        }
+      ]
+    },
+    {
+      "scope": "orElse",
+      "fields": [
+        {
+          "name": "_unit",
+          "type": "Unit"
+        }
+      ]
+    },
+    {
+      "scope": "afterQuery encoding",
+      "fields": [
+        {
+          "name": "handle",
+          "type": "Nat"
+        }
+      ]
+    }
+  ],
+  "safe_entry_elimination": {
+    "branches": [
+      "same : source = target",
+      "eliminated : before.values[source]? = some .eliminated",
+      "sourceNode targetNode sourceScs targetScs sourceStored targetStored"
+    ],
+    "types_literal": "public-complete.lean.txt lines10-13"
+  },
+  "inherited_enabled_proof_receipts": "The existing enabled packet fields retain their original scoped CallReads and answer types; no new worker/body execution is invented."
+}

@@ -1,0 +1,16 @@
+have optionalPacket :
+    ∀ (sourceNode targetNode merged : Option Nat) (sourceScs targetScs : List EnumerationState.Suspended),
+      before.values[source]? = some (.unenumerated sourceNode sourceScs) →
+      before.values[target]? = some (.unenumerated targetNode targetScs) →
+      source ≠ target → (sourceNode = none ∨ targetNode = none) →
+      merged = sourceNode.orElse (fun _ => targetNode) →
+      ExceptT.run (finishOptional (EnumGuard := EnumGuard) source target merged sourceScs targetScs before) =
+        (if merged = some 0 then [] else
+          [.ok ((), assimilated before target source (.unenumerated merged (sourceScs ++ targetScs)))]) ∧
+      (merged ≠ some 0 →
+        (assimilated before target source (.unenumerated merged (sourceScs ++ targetScs))).values[target]? =
+          some (.unenumerated merged (sourceScs ++ targetScs)) ∧
+        (assimilated before target source (.unenumerated merged (sourceScs ++ targetScs))).values[source]? =
+          some .eliminated ∧
+        PendingRealized beforeCaller.checked.native.machine.heap
+          (assimilated before target source (.unenumerated merged (sourceScs ++ targetScs))))

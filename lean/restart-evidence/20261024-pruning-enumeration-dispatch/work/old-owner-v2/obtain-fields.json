@@ -1,0 +1,657 @@
+{
+  "packets": [
+    {
+      "name": "leftOperand",
+      "scope": "presentPacket disabled",
+      "api": "realized source sourceHandle sourceScs sourceStored",
+      "fields": [
+        {
+          "name": "left",
+          "type": "Node",
+          "used": true
+        },
+        {
+          "name": "leftDecoded",
+          "type": "lookupNode beforeCaller.checked.native.machine.heap sourceHandle = some left",
+          "used": true
+        },
+        {
+          "name": "leftAvailable",
+          "type": "Available beforeCaller.checked.native.machine.heap left",
+          "used": true
+        },
+        {
+          "name": "leftClosed",
+          "type": "left.free = []",
+          "used": true
+        }
+      ],
+      "field_count": 4,
+      "producer": false,
+      "skipped_fields": []
+    },
+    {
+      "name": "rightOperand",
+      "scope": "presentPacket disabled",
+      "api": "realized target targetHandle targetScs targetStored",
+      "fields": [
+        {
+          "name": "right",
+          "type": "Node",
+          "used": true
+        },
+        {
+          "name": "rightDecoded",
+          "type": "lookupNode beforeCaller.checked.native.machine.heap targetHandle = some right",
+          "used": true
+        },
+        {
+          "name": "rightAvailable",
+          "type": "Available beforeCaller.checked.native.machine.heap right",
+          "used": true
+        },
+        {
+          "name": "rightClosed",
+          "type": "right.free = []",
+          "used": true
+        }
+      ],
+      "field_count": 4,
+      "producer": false,
+      "skipped_fields": []
+    },
+    {
+      "name": "disabledQuery",
+      "scope": "presentPacket disabled",
+      "api": "SourceCurrentAllocatedTargetQuery.finite",
+      "fields": [
+        {
+          "name": "next",
+          "type": "Inventory",
+          "used": true
+        },
+        {
+          "name": "query",
+          "type": "Node",
+          "used": true
+        },
+        {
+          "name": "queried",
+          "type": "Checked width",
+          "used": true
+        },
+        {
+          "name": "nextSource",
+          "type": "next.source = beforeCaller.checked.native.machine.heap",
+          "used": true
+        },
+        {
+          "name": "nextRoots",
+          "type": "next.roots = inventory.roots ++ [left, right]",
+          "used": true
+        },
+        {
+          "name": "receipt",
+          "type": "SourceCurrentAllocatedTargetQuery.Receipt formulas solver next left right beforeCaller.checked query queried memos",
+          "used": true
+        }
+      ],
+      "field_count": 6,
+      "producer": true,
+      "skipped_fields": []
+    },
+    {
+      "name": "disabledReadback",
+      "scope": "presentPacket disabled",
+      "api": "available_readback",
+      "fields": [
+        {
+          "name": "handle",
+          "type": "Nat",
+          "used": true
+        },
+        {
+          "name": "encoded",
+          "type": "encodeNode query = some handle",
+          "used": true
+        },
+        {
+          "name": "decoded",
+          "type": "lookupNode queried.native.machine.heap handle = some query",
+          "used": true
+        }
+      ],
+      "field_count": 3,
+      "producer": false,
+      "skipped_fields": []
+    },
+    {
+      "name": "enabled",
+      "scope": "presentPacket enabled",
+      "api": "SourcePruningEnumerationEnabledEmpty.pending_enabled_complete",
+      "fields": [
+        {
+          "name": "left",
+          "type": "Node",
+          "used": true
+        },
+        {
+          "name": "right",
+          "type": "Node",
+          "used": true
+        },
+        {
+          "name": "next",
+          "type": "Inventory",
+          "used": true
+        },
+        {
+          "name": "query",
+          "type": "Node",
+          "used": true
+        },
+        {
+          "name": "queried",
+          "type": "Checked width",
+          "used": true
+        },
+        {
+          "name": "reached",
+          "type": "Bool",
+          "used": true
+        },
+        {
+          "name": "answer",
+          "type": "Bool",
+          "used": true
+        },
+        {
+          "name": "guardSaved",
+          "type": "Queries",
+          "used": true
+        },
+        {
+          "name": "checkedAfter",
+          "type": "Checked width",
+          "used": true
+        },
+        {
+          "name": "saved",
+          "type": "SourceCurrentEmptinessMemo.Memo",
+          "used": true
+        },
+        {
+          "name": "final",
+          "type": "Memos",
+          "used": true
+        },
+        {
+          "name": "replacement",
+          "type": "Node",
+          "used": true
+        },
+        {
+          "name": "handle",
+          "type": "Nat",
+          "used": true
+        },
+        {
+          "name": "p",
+          "type": "Nat",
+          "used": true
+        },
+        {
+          "name": "h",
+          "type": "Nat",
+          "used": true
+        },
+        {
+          "name": "leftDecoded",
+          "type": "lookupNode beforeCaller.checked.native.machine.heap sourceHandle = some left",
+          "used": true
+        },
+        {
+          "name": "rightDecoded",
+          "type": "lookupNode beforeCaller.checked.native.machine.heap targetHandle = some right",
+          "used": true
+        },
+        {
+          "name": "nextSource",
+          "type": "next.source = beforeCaller.checked.native.machine.heap",
+          "used": true
+        },
+        {
+          "name": "nextRoots",
+          "type": "next.roots = inventory.roots ++ [left, right]",
+          "used": true
+        },
+        {
+          "name": "receipt",
+          "type": "SourceCurrentAllocatedTargetQuery.Receipt formulas solver next left right beforeCaller.checked query queried memos",
+          "used": true
+        },
+        {
+          "name": "guardRun",
+          "type": "SourceEndpointMemo.run query memos.query = (reached, guardSaved)",
+          "used": true
+        },
+        {
+          "name": "guardChecked",
+          "type": "SourceEndpointMemoCorrect.Checked queried.native.machine.heap memos.query (SourceCurrentEmptinessMerge.reaches query) (reached, guardSaved)",
+          "used": true
+        },
+        {
+          "name": "stable",
+          "type": "\u2200 P H, p \u2264 P \u2192 h \u2264 H \u2192 SourcePruningEnumerationEnabledEmpty.check P H query queried beforeCaller.fourth memos.query = (.done answer checkedAfter saved, guardSaved)",
+          "used": true
+        },
+        {
+          "name": "post",
+          "type": "Post formulas solver next beforeCaller (SourceCurrentAllocatedPartialState.advance beforeCaller checkedAfter saved beforeCaller.merge) final",
+          "used": true
+        },
+        {
+          "name": "skipped",
+          "type": "reached = false \u2192 answer = false \u2227 checkedAfter = queried \u2227 saved = beforeCaller.fourth \u2227 final = {memos with query := guardSaved}",
+          "used": true
+        },
+        {
+          "name": "performed",
+          "type": "reached = true \u2192 \u2203 reachedPhysical : SourceCurrentConjunctionRowsAllocation.State Symbol FullSyntax.Formula, checkedAfter = SourceCurrentAllocatedQueryMemo.advancePhysical queried reachedPhysical \u2227 \u2203 actual : SourceCurrentConjunctionMemo.Call 1000 beforeCaller.fourth query (physical queried) answer reachedPhysical saved, SourceCurrentConjunctionGlobalMemos.CallReads actual {memos with query := guardSaved} final",
+          "used": true
+        },
+        {
+          "name": "sound",
+          "type": "SourceCurrentEmptinessMemo.AnswerSound formulas solver query answer",
+          "used": false,
+          "unused_reason": "The existing replacementMeaning already supplies the required exact language result."
+        },
+        {
+          "name": "unfolding",
+          "type": "Cache.Extends memos.unfolding final.unfolding",
+          "used": false,
+          "unused_reason": "The same Post and CallReads are retained; no additional extension conjunct is exported."
+        },
+        {
+          "name": "querySame",
+          "type": "final.query = guardSaved",
+          "used": true
+        },
+        {
+          "name": "replacementSame",
+          "type": "replacement = (if answer then .empty else query)",
+          "used": true
+        },
+        {
+          "name": "available",
+          "type": "Available checkedAfter.native.machine.heap replacement",
+          "used": true
+        },
+        {
+          "name": "closed",
+          "type": "replacement.free = []",
+          "used": true
+        },
+        {
+          "name": "encoded",
+          "type": "encodeNode replacement = some handle",
+          "used": true
+        },
+        {
+          "name": "decoded",
+          "type": "lookupNode checkedAfter.native.machine.heap handle = some replacement",
+          "used": true
+        },
+        {
+          "name": "preRealized",
+          "type": "PendingRealized checkedAfter.native.machine.heap before",
+          "used": true
+        },
+        {
+          "name": "meaning",
+          "type": "\u2200 ambient term, InternedGuardedLanguage.meaning (SourceEqualityPCSGuard.holds formulas solver) ambient replacement term \u2194 InternedGuardedLanguage.meaning (SourceEqualityPCSGuard.holds formulas solver) ambient left term \u2227 InternedGuardedLanguage.meaning (SourceEqualityPCSGuard.holds formulas solver) ambient right term",
+          "used": true
+        }
+      ],
+      "field_count": 36,
+      "producer": true,
+      "skipped_fields": [
+        {
+          "name": "sound",
+          "reason": "The existing replacementMeaning already supplies the required exact language result."
+        },
+        {
+          "name": "unfolding",
+          "reason": "The same Post and CallReads are retained; no additional extension conjunct is exported."
+        }
+      ]
+    },
+    {
+      "name": "present",
+      "scope": "dispatch_complete two-present",
+      "api": "presentPacket",
+      "fields": [
+        {
+          "name": "left",
+          "type": "Node",
+          "used": true
+        },
+        {
+          "name": "right",
+          "type": "Node",
+          "used": true
+        },
+        {
+          "name": "query",
+          "type": "Node",
+          "used": true
+        },
+        {
+          "name": "replacement",
+          "type": "Node",
+          "used": true
+        },
+        {
+          "name": "queried",
+          "type": "Checked width",
+          "used": true
+        },
+        {
+          "name": "handle",
+          "type": "Nat",
+          "used": true
+        },
+        {
+          "name": "afterCaller",
+          "type": "Caller width",
+          "used": true
+        },
+        {
+          "name": "savedQueries",
+          "type": "Queries",
+          "used": true
+        },
+        {
+          "name": "final",
+          "type": "Memos",
+          "used": true
+        },
+        {
+          "name": "next",
+          "type": "Inventory",
+          "used": true
+        },
+        {
+          "name": "p",
+          "type": "Nat",
+          "used": true
+        },
+        {
+          "name": "h",
+          "type": "Nat",
+          "used": true
+        },
+        {
+          "name": "leftDecoded",
+          "type": "lookupNode beforeCaller.checked.native.machine.heap sourceHandle = some left",
+          "used": true
+        },
+        {
+          "name": "rightDecoded",
+          "type": "lookupNode beforeCaller.checked.native.machine.heap targetHandle = some right",
+          "used": true
+        },
+        {
+          "name": "nextSource",
+          "type": "next.source = beforeCaller.checked.native.machine.heap",
+          "used": true
+        },
+        {
+          "name": "nextRoots",
+          "type": "next.roots = inventory.roots ++ [left, right]",
+          "used": true
+        },
+        {
+          "name": "receipt",
+          "type": "SourceCurrentAllocatedTargetQuery.Receipt formulas solver next left right\n          beforeCaller.checked query queried memos",
+          "used": true
+        },
+        {
+          "name": "phaseStable",
+          "type": "(\u2200 P H, p \u2264 P \u2192 h \u2264 H \u2192\n          afterQuery checkEmpty P H source target sourceScs targetScs query queried beforeCaller memos.query =\n            (.ok (some (SourcePruningEnumerationAssimilation.finish (EnumGuard := EnumGuard)\n              source target handle sourceScs targetScs replacement)), afterCaller, savedQueries))",
+          "used": true
+        },
+        {
+          "name": "post",
+          "type": "Post formulas solver next beforeCaller afterCaller final",
+          "used": true
+        },
+        {
+          "name": "querySame",
+          "type": "final.query = savedQueries",
+          "used": true
+        },
+        {
+          "name": "preRealized",
+          "type": "PendingRealized afterCaller.checked.native.machine.heap before",
+          "used": true
+        },
+        {
+          "name": "encoded",
+          "type": "encodeNode replacement = some handle",
+          "used": true
+        },
+        {
+          "name": "decoded",
+          "type": "lookupNode afterCaller.checked.native.machine.heap handle = some replacement",
+          "used": true
+        },
+        {
+          "name": "available",
+          "type": "Available afterCaller.checked.native.machine.heap replacement",
+          "used": true
+        },
+        {
+          "name": "closed",
+          "type": "replacement.free = []",
+          "used": true
+        },
+        {
+          "name": "meaning",
+          "type": "(\u2200 ambient term,\n          InternedGuardedLanguage.meaning (SourceEqualityPCSGuard.holds formulas solver) ambient replacement term \u2194\n            InternedGuardedLanguage.meaning (SourceEqualityPCSGuard.holds formulas solver) ambient left term \u2227\n            InternedGuardedLanguage.meaning (SourceEqualityPCSGuard.holds formulas solver) ambient right term)",
+          "used": true
+        },
+        {
+          "name": "disabled",
+          "type": "(checkEmpty = false \u2192 replacement = query \u2227\n          afterCaller = SourceCurrentAllocatedPartialState.advance beforeCaller queried\n            beforeCaller.fourth beforeCaller.merge \u2227 final = memos)",
+          "used": true
+        },
+        {
+          "name": "enabled",
+          "type": "(checkEmpty = true \u2192 \u2203 reached answer guardSaved,\n          SourceEndpointMemo.run query memos.query = (reached, guardSaved) \u2227\n          SourceEndpointMemoCorrect.Checked queried.native.machine.heap memos.query\n            (SourceCurrentEmptinessMerge.reaches query) (reached, guardSaved) \u2227\n          (\u2200 P H, p \u2264 P \u2192 h \u2264 H \u2192\n            SourcePruningEnumerationEnabledEmpty.check P H query queried beforeCaller.fourth memos.query =\n              (.done answer afterCaller.checked afterCaller.fourth, guardSaved)) \u2227\n          savedQueries = guardSaved \u2227 replacement = (if answer then .empty else query) \u2227\n          (reached = false \u2192 answer = false \u2227 afterCaller.checked = queried \u2227\n            afterCaller.fourth = beforeCaller.fourth \u2227 final = {memos with query := guardSaved}) \u2227\n          (reached = true \u2192\n            \u2203 (reachedPhysical : SourceCurrentConjunctionRowsAllocation.State Symbol FullSyntax.Formula),\n              afterCaller.checked = SourceCurrentAllocatedQueryMemo.advancePhysical queried reachedPhysical \u2227\n              \u2203 actual : SourceCurrentConjunctionMemo.Call 1000 beforeCaller.fourth query\n                  (physical queried) answer reachedPhysical afterCaller.fourth,\n                SourceCurrentConjunctionGlobalMemos.CallReads actual {memos with query := guardSaved} final))",
+          "used": true
+        }
+      ],
+      "field_count": 28,
+      "producer": false,
+      "skipped_fields": []
+    },
+    {
+      "name": "actualFuel",
+      "scope": "dispatch_complete two-present",
+      "api": "receipt.actual.done",
+      "fields": [
+        {
+          "name": "fuel",
+          "type": "Nat",
+          "used": true
+        },
+        {
+          "name": "actualDone",
+          "type": "SourceEqualityNativeDemand.execute fuel (.code (SourceRecursiveIntersectionCode.requestNode IntersectionEmptyDomain.emptyDomain left right)) beforeCaller.checked = .done query queried",
+          "used": true
+        }
+      ],
+      "field_count": 2,
+      "producer": false,
+      "skipped_fields": []
+    },
+    {
+      "name": "finish",
+      "scope": "dispatch_complete two-present",
+      "api": "SourcePruningEnumerationFinish.finish_complete",
+      "fields": [
+        {
+          "name": "emptyRaw",
+          "type": "replacement = .empty \u2192 ExceptT.run (SourcePruningEnumerationAssimilation.finish (EnumGuard := EnumGuard) source target handle sourceScs targetScs replacement before) = []",
+          "used": true
+        },
+        {
+          "name": "nonemptyRaw",
+          "type": "replacement \u2260 .empty \u2192 \u2203 after : EnumerationState.State Symbol EnumGuard, ExceptT.run (SourcePruningEnumerationAssimilation.finish (EnumGuard := EnumGuard) source target handle sourceScs targetScs replacement before) = [.ok ((), after)] \u2227 after = assimilated before target source (.unenumerated (some handle) (sourceScs ++ targetScs)) \u2227 after.values[target]? = some (.unenumerated (some handle) (sourceScs ++ targetScs)) \u2227 after.values[source]? = some .eliminated \u2227 PendingRealized afterCaller.checked.native.machine.heap after",
+          "used": true
+        }
+      ],
+      "field_count": 2,
+      "producer": true,
+      "skipped_fields": []
+    },
+    {
+      "name": "nonemptyFinish",
+      "scope": "dispatch_complete two-present nonempty",
+      "api": "nonemptyRaw nonempty",
+      "fields": [
+        {
+          "name": "after",
+          "type": "EnumerationState.State Symbol EnumGuard",
+          "used": true
+        },
+        {
+          "name": "raw",
+          "type": "ExceptT.run (SourcePruningEnumerationAssimilation.finish (EnumGuard := EnumGuard) source target handle sourceScs targetScs replacement before) = [.ok ((), after)]",
+          "used": true
+        },
+        {
+          "name": "afterSame",
+          "type": "after = assimilated before target source (.unenumerated (some handle) (sourceScs ++ targetScs))",
+          "used": true
+        },
+        {
+          "name": "targetRead",
+          "type": "after.values[target]? = some (.unenumerated (some handle) (sourceScs ++ targetScs))",
+          "used": true
+        },
+        {
+          "name": "sourceRead",
+          "type": "after.values[source]? = some .eliminated",
+          "used": true
+        },
+        {
+          "name": "afterRealized",
+          "type": "PendingRealized afterCaller.checked.native.machine.heap after",
+          "used": true
+        }
+      ],
+      "field_count": 6,
+      "producer": false,
+      "skipped_fields": []
+    },
+    {
+      "name": "targetMembership",
+      "scope": "optionalPacket.carriedRealized",
+      "api": "List.mem_or_eq_of_mem_set (List.mem_of_getElem? stored)",
+      "fields": [
+        {
+          "name": "old",
+          "type": ".unenumerated (some node) scs \u2208 before.values",
+          "used": true
+        },
+        {
+          "name": "fresh",
+          "type": ".unenumerated (some node) scs = .unenumerated merged (sourceScs ++ targetScs)",
+          "used": true
+        }
+      ],
+      "field_count": 2,
+      "producer": false,
+      "skipped_fields": []
+    },
+    {
+      "name": "targetMembershipOldSlot",
+      "scope": "optionalPacket.carriedRealized old",
+      "api": "List.getElem?_of_mem old",
+      "fields": [
+        {
+          "name": "oldSlot",
+          "type": "Nat",
+          "used": true
+        },
+        {
+          "name": "oldStored",
+          "type": "(before.values)[oldSlot]? = some (.unenumerated (some node) scs)",
+          "used": true
+        }
+      ],
+      "field_count": 2,
+      "producer": false,
+      "skipped_fields": []
+    },
+    {
+      "name": "sourceMembership",
+      "scope": "optionalPacket final realization",
+      "api": "List.mem_or_eq_of_mem_set (List.mem_of_getElem? stored)",
+      "fields": [
+        {
+          "name": "old",
+          "type": ".unenumerated (some node) scs \u2208 before.values.set target (.unenumerated merged (sourceScs ++ targetScs))",
+          "used": true
+        },
+        {
+          "name": "fresh",
+          "type": ".unenumerated (some node) scs = .eliminated",
+          "used": true
+        }
+      ],
+      "field_count": 2,
+      "producer": false,
+      "skipped_fields": []
+    },
+    {
+      "name": "sourceMembershipOldSlot",
+      "scope": "optionalPacket final realization old",
+      "api": "List.getElem?_of_mem old",
+      "fields": [
+        {
+          "name": "oldSlot",
+          "type": "Nat",
+          "used": true
+        },
+        {
+          "name": "oldStored",
+          "type": "(before.values.set target (.unenumerated merged (sourceScs ++ targetScs)))[oldSlot]? = some (.unenumerated (some node) scs)",
+          "used": true
+        }
+      ],
+      "field_count": 2,
+      "producer": false,
+      "skipped_fields": []
+    }
+  ],
+  "obtain_count": 13,
+  "field_count": 99,
+  "producer_obtain_count": 3,
+  "producer_field_count": 44,
+  "skipped_fields": [
+    {
+      "packet": "enabled",
+      "name": "sound",
+      "reason": "The existing replacementMeaning already supplies the required exact language result."
+    },
+    {
+      "packet": "enabled",
+      "name": "unfolding",
+      "reason": "The same Post and CallReads are retained; no additional extension conjunct is exported."
+    }
+  ],
+  "packet_repetition": "each named packet has one source contract; repeated field specializations reference the same exact imported/local contract"
+}

@@ -1,0 +1,7 @@
+noncomputable def afterQuery
+    [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Constraint)] [DecidableEq Node]
+    (checkEmpty : Bool) (p h : Nat) (source target : Nat)
+    (sourceScs targetScs : List EnumerationState.Suspended)
+    (query : Node) (queried : Checked width) (beforeCaller : Caller width) (queries : Queries) :
+    (Except (SourceCurrentAllocatedConjunctionWorker.Outcome width)
+      (Option (EnumerateM Symbol EnumGuard Unit))) × Caller width × Queries

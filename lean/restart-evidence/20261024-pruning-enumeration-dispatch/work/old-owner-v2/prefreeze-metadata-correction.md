@@ -1,0 +1,1 @@
+The first metadata-only check rejected pairRanges continuation indent4 at first-line indent4. Before freeze, all its continuation lines gained four spaces. No type or public declaration changed. The metadata script was rerun. No Lean parser, compiler or body was executed.

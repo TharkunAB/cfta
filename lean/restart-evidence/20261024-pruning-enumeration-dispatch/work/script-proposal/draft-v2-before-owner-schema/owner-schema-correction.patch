@@ -1,0 +1,21 @@
+--- draft-v2-before-owner-schema/candidate/verify.py
++++ candidate/verify.py
+@@ -136,14 +136,15 @@
+     source_ids[pin['id']] = (pin['path'], data)
+ assert len(source_index['cuts']) == frozen['cut_count']
+ for cut in source_index['cuts']:
+-    source_path, data = source_ids[cut['source']]
+-    assert cut['path'] == source_path
++    _, data = source_ids[cut['source']]
+     assert 1 <= cut['start'] <= cut['end'] <= len(data.splitlines())
+     part = b''.join(data.splitlines(keepends=True)[cut['start'] - 1:cut['end']])
+     assert part == (here / 'owner-proposal' / cut['snapshot']).read_bytes()
+     assert len(part) == cut['bytes'] and sha(part) == cut['sha256']
+ for pin in load('owner-proposal/import-routes.json')['defining_import_sources']:
+-    data = (root / Path(pin['path']).relative_to('/home/tritlo/Code/mcfta')).read_bytes()
++    path = Path(pin['path'])
++    assert not path.is_absolute() and '..' not in path.parts
++    data = (root / path).read_bytes()
+     assert len(data) == pin['bytes'] and sha(data) == pin['sha256']
+ 
+ reports = list((here / 'work').glob('*/report.json'))
