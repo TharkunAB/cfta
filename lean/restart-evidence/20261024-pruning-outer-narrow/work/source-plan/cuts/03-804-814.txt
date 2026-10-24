@@ -1,0 +1,11 @@
+{- | Whether a constant of the signature can have a type, within the
+type depth bound. The type variables of the type are renamed apart from
+those of the constant.
+-}
+constantFits :: Maybe Int -> Sig -> TypeSkeleton -> Symbol -> Bool
+constantFits bound sig ty symbol = typableAt bound sig (renameApart ty) (Term symbol [Term "?" []])
+  where
+    renameApart t = case t of
+        TVar v -> TVar ("e:" <> v)
+        TCons name args -> TCons name (map renameApart args)
+        TFun arg result -> TFun (renameApart arg) (renameApart result)

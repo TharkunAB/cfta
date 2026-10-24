@@ -1,0 +1,20 @@
+{
+  "recorded_at": "2026-10-24T07:28:24.834070+02:00",
+  "status": "ROOT_ACCEPTED_EXACT_DECLARATIONS_BEFORE_BODY",
+  "frozen_sha256": "d742fa145205d8d29f92edb303e2d1a5f83064d85d33cd69b01253a3acec3b16",
+  "pins_sha256": "4ca506dea1d6a6b4691137ad0dbf5622b1bdc668f047804e41b6632b70ac8982",
+  "contracts": {
+    "context.lean.txt": "import MicroCFTA.SourcePruningRecordTypes\nimport MicroCFTA.SourcePruningNativeView\n\nnamespace MicroCFTA.SourcePruningOuterNarrow\nopen InternedConstructorTemplates InternedProbeProvenance\nopen SourcePruningRecordTypes (Metadata)\nlocal notation \"Symbol\" => SourcePruningTemplates.Symbol\nvariable {Guard Typing Key : Type}\n",
+    "narrow-header.lean.txt": "def narrow [DecidableEq (EdgeKey Symbol Guard)]\n    (holeKey : Typing \u2192 Nat \u2192 Key) (fits : Key \u2192 Symbol \u2192 Bool)\n    (admits : Key \u2192 Value Symbol Guard \u2192 Bool) (metadata : Metadata Typing)\n    (fuel uv : Nat) (value : Value Symbol Guard) (before : State Symbol Guard) :\n    MergedSourceComparison.Result Symbol Guard (Value Symbol Guard)\n",
+    "mu-header.lean.txt": "theorem narrow_mu [DecidableEq (EdgeKey Symbol Guard)]\n    (holeKey : Typing \u2192 Nat \u2192 Key) (fits : Key \u2192 Symbol \u2192 Bool)\n    (admits : Key \u2192 Value Symbol Guard \u2192 Bool) (metadata : Metadata Typing) (fuel uv : Nat)\n    (entry : Cache.Interned InternedBinderProtocol.NodeKey)\n    (body depthShape ordinaryShape : Value Symbol Guard) (before : State Symbol Guard) :\n    narrow holeKey fits admits metadata fuel uv (.mu entry body depthShape ordinaryShape) before =\n      .done (.mu entry body depthShape ordinaryShape) before\n",
+    "type-header.lean.txt": "theorem narrow_type [DecidableEq (EdgeKey Symbol Guard)]\n    (holeKey : Typing \u2192 Nat \u2192 Key) (fits : Key \u2192 Symbol \u2192 Bool)\n    (admits : Key \u2192 Value Symbol Guard \u2192 Bool) (metadata : Metadata Typing)\n    (fuel uv : Nat) (value : Value Symbol Guard) (before : State Symbol Guard)\n    (inside : uv \u2208 metadata.types) :\n    narrow holeKey fits admits metadata fuel uv value before = .done value before\n",
+    "fallback-header.lean.txt": "theorem narrow_fallback [DecidableEq (EdgeKey Symbol Guard)]\n    (holeKey : Typing \u2192 Nat \u2192 Key) (fits : Key \u2192 Symbol \u2192 Bool)\n    (admits : Key \u2192 Value Symbol Guard \u2192 Bool) (metadata : Metadata Typing)\n    (fuel uv : Nat) (value : Value Symbol Guard) (before : State Symbol Guard)\n    (notMu : \u2200 entry body depthShape ordinaryShape, value \u2260 .mu entry body depthShape ordinaryShape)\n    (outside : uv \u2209 metadata.types) :\n    narrow holeKey fits admits metadata fuel uv value before =\n      SourcePruningNativeView.narrowAt fits admits fuel (holeKey metadata.typing uv) value before\n",
+    "complete-header.lean.txt": "theorem narrow_complete [DecidableEq (EdgeKey Symbol Guard)]\n    (holeKey : Typing \u2192 Nat \u2192 Key) (fits : Key \u2192 Symbol \u2192 Bool)\n    (admits : Key \u2192 Value Symbol Guard \u2192 Bool) (metadata : Metadata Typing)\n    (uv : Nat) (value : Value Symbol Guard) (before : State Symbol Guard)\n    (ready : SourceEqualityRequiredCache.Ready before)\n    (available : Available before value) (closed : value.free = []) :\n    \u2203 fuel result after,\n      narrow holeKey fits admits metadata fuel uv value before = .done result after \u2227\n      SourceEqualityRequiredCache.Keeps before after \u2227 Available after result \u2227 result.free = [] \u2227\n      (\u2200 extra, narrow holeKey fits admits metadata (fuel + extra) uv value before = .done result after)\n",
+    "local-inTypes.lean.txt": "by_cases inTypes : uv \u2208 metadata.types\n"
+  },
+  "declaration_review_sha256": "1e634983c4193bd121af84ee1e9d58932862a7b76c2b1a8d0ba4f2101991b221",
+  "root_review": "Root read all seven exact fragments, all scoped types and cases, obtains, import routes and all409 retained cut lines. The independent exact declaration review is SOURCE_ONLY_DECLARATION_CLEAR.",
+  "mathematical_body_exists": false,
+  "compiler_invoked": false,
+  "setup_failure_retained": "setup-failures.json"
+}

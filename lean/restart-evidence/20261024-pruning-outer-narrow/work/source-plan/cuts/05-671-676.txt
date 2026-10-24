@@ -1,0 +1,6 @@
+pattern Mu ::
+    (Hashable symbol, Typeable symbol) =>
+    (Node symbol -> Node symbol) -> Node symbol
+pattern Mu f <- (matchMu -> Just f)
+  where
+    Mu = createMu

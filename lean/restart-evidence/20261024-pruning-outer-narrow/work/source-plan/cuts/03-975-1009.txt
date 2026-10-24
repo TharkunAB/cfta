@@ -1,0 +1,35 @@
+{- | The typing of a partial program of the programs enumeration, kept
+from one expansion to the next. It has a substitution and the instance type
+variables of the constants. The hole @?program#n@ has the type variable
+@h#n@.
+-}
+data PartialTyping = PartialTyping (Map T.Text TypeSkeleton) [T.Text]
+
+-- | The typing of the program that is the hole @?program#0@ at a result type.
+startTyping :: TypeSkeleton -> PartialTyping
+startTyping resultType = PartialTyping (Map.singleton "h#0" resultType) []
+
+{- | The typing after the hole @?program#n@ expands to a fragment, as
+'typableAt' types it. 'Nothing' if the fragment cannot have the type of the
+hole, or if a type variable of a constant takes a type deeper than the
+bound. Each hole of the fragment has a fresh type.
+-}
+extendTyping :: Maybe Int -> Sig -> Int -> Term -> PartialTyping -> Maybe PartialTyping
+extendTyping bound sig n fragment (PartialTyping substitution instances) = do
+    let name = T.pack (show n)
+    (typed, equations) <- annotateWith True sig ("u" <> name <> ":") fragment
+    substitution' <- foldM (\s (a, b) -> unifyTypes a b s) substitution ((TVar ("h#" <> name), nodeType typed) : equations)
+    let instances' = [v | v <- concatMap typeVariablesOf (nodeTypes typed), "c:" `T.isPrefixOf` v] ++ instances
+        within d = all (\v -> typeDepthOf (applyTypes substitution' (TVar v)) <= d) instances'
+    if maybe True within bound then Just (PartialTyping substitution' instances') else Nothing
+
+{- | A type with its type variables renamed in the order of their first
+occurrence, so that two types that differ only in the names of their type
+variables are equal.
+-}
+canonicalVariables :: TypeSkeleton -> TypeSkeleton
+canonicalVariables ty = applyTypes (Map.fromList (zip (nubOrd (typeVariablesOf ty)) (map (TVar . T.pack . show) [0 :: Int ..]))) ty
+
+-- | The type of the hole @?program#n@ under a typing.
+holeTypeOf :: PartialTyping -> Int -> TypeSkeleton
+holeTypeOf (PartialTyping substitution _) n = applyTypes substitution (TVar ("h#" <> T.pack (show n)))

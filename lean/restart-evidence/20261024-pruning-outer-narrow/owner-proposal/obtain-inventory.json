@@ -1,0 +1,415 @@
+{
+  "owner": "narrow_complete",
+  "activation": "Only a non-Mu constructor case with inTypes.neg. Exactly one actual narrowAt_complete invocation per selected proof branch.",
+  "api": "MicroCFTA.SourcePruningNativeView.narrowAt_complete",
+  "argument_expression": "fits admits (holeKey metadata.typing uv) CASE_VALUE before ready available closed",
+  "field_order": [
+    "fuel",
+    "_rows",
+    "_middle",
+    "result",
+    "after",
+    "_exposed",
+    "_built",
+    "narrowed",
+    "kept",
+    "resultAvailable",
+    "resultClosed",
+    "_ordinary",
+    "_resultRows",
+    "_secondRead",
+    "_emptyIff",
+    "_rowsEmptyIff",
+    "stable"
+  ],
+  "fields": [
+    {
+      "name": "fuel",
+      "type_template": "Nat"
+    },
+    {
+      "name": "_rows",
+      "type_template": "List (EdgeValue Symbol Guard)"
+    },
+    {
+      "name": "_middle",
+      "type_template": "State Symbol Guard"
+    },
+    {
+      "name": "result",
+      "type_template": "Value Symbol Guard"
+    },
+    {
+      "name": "after",
+      "type_template": "State Symbol Guard"
+    },
+    {
+      "name": "_exposed",
+      "type_template": "MergedFreshOrdinaryExposure.nodeEdges fuel CASE_VALUE before = .done _rows _middle"
+    },
+    {
+      "name": "_built",
+      "type_template": "run (makeNode (_rows.filter (SourcePruningNativeView.keeps fits admits (holeKey metadata.typing uv)))) _middle = (result, after)"
+    },
+    {
+      "name": "narrowed",
+      "type_template": "SourcePruningNativeView.narrowAt fits admits fuel (holeKey metadata.typing uv) CASE_VALUE before = .done result after"
+    },
+    {
+      "name": "kept",
+      "type_template": "SourceEqualityRequiredCache.Keeps before after"
+    },
+    {
+      "name": "resultAvailable",
+      "type_template": "Available after result"
+    },
+    {
+      "name": "resultClosed",
+      "type_template": "result.free = []"
+    },
+    {
+      "name": "_ordinary",
+      "type_template": "SourceEqualityRequiredCache.Ordinary result"
+    },
+    {
+      "name": "_resultRows",
+      "type_template": "InternedEdgeResidency.nodeEdges result = canonicalEdges (surviving (_rows.filter (SourcePruningNativeView.keeps fits admits (holeKey metadata.typing uv))))"
+    },
+    {
+      "name": "_secondRead",
+      "type_template": "∀ readFuel, MergedFreshOrdinaryExposure.nodeEdges readFuel result after = .done (InternedEdgeResidency.nodeEdges result) after"
+    },
+    {
+      "name": "_emptyIff",
+      "type_template": "result = .empty ↔ ∀ edge ∈ _rows, SourcePruningNativeView.keeps fits admits (holeKey metadata.typing uv) edge = false"
+    },
+    {
+      "name": "_rowsEmptyIff",
+      "type_template": "(InternedEdgeResidency.nodeEdges result).isEmpty = true ↔ ∀ edge ∈ _rows, SourcePruningNativeView.keeps fits admits (holeKey metadata.typing uv) edge = false"
+    },
+    {
+      "name": "stable",
+      "type_template": "∀ extra, SourcePruningNativeView.narrowAt fits admits (fuel + extra) (holeKey metadata.typing uv) CASE_VALUE before = .done result after"
+    }
+  ],
+  "case_instantiations": [
+    {
+      "scope": "narrow_complete/empty/inTypes.neg",
+      "actual_value": ".empty",
+      "fields": [
+        {
+          "name": "fuel",
+          "type": "Nat"
+        },
+        {
+          "name": "_rows",
+          "type": "List (EdgeValue Symbol Guard)"
+        },
+        {
+          "name": "_middle",
+          "type": "State Symbol Guard"
+        },
+        {
+          "name": "result",
+          "type": "Value Symbol Guard"
+        },
+        {
+          "name": "after",
+          "type": "State Symbol Guard"
+        },
+        {
+          "name": "_exposed",
+          "type": "MergedFreshOrdinaryExposure.nodeEdges fuel .empty before = .done _rows _middle"
+        },
+        {
+          "name": "_built",
+          "type": "run (makeNode (_rows.filter (SourcePruningNativeView.keeps fits admits (holeKey metadata.typing uv)))) _middle = (result, after)"
+        },
+        {
+          "name": "narrowed",
+          "type": "SourcePruningNativeView.narrowAt fits admits fuel (holeKey metadata.typing uv) .empty before = .done result after"
+        },
+        {
+          "name": "kept",
+          "type": "SourceEqualityRequiredCache.Keeps before after"
+        },
+        {
+          "name": "resultAvailable",
+          "type": "Available after result"
+        },
+        {
+          "name": "resultClosed",
+          "type": "result.free = []"
+        },
+        {
+          "name": "_ordinary",
+          "type": "SourceEqualityRequiredCache.Ordinary result"
+        },
+        {
+          "name": "_resultRows",
+          "type": "InternedEdgeResidency.nodeEdges result = canonicalEdges (surviving (_rows.filter (SourcePruningNativeView.keeps fits admits (holeKey metadata.typing uv))))"
+        },
+        {
+          "name": "_secondRead",
+          "type": "∀ readFuel, MergedFreshOrdinaryExposure.nodeEdges readFuel result after = .done (InternedEdgeResidency.nodeEdges result) after"
+        },
+        {
+          "name": "_emptyIff",
+          "type": "result = .empty ↔ ∀ edge ∈ _rows, SourcePruningNativeView.keeps fits admits (holeKey metadata.typing uv) edge = false"
+        },
+        {
+          "name": "_rowsEmptyIff",
+          "type": "(InternedEdgeResidency.nodeEdges result).isEmpty = true ↔ ∀ edge ∈ _rows, SourcePruningNativeView.keeps fits admits (holeKey metadata.typing uv) edge = false"
+        },
+        {
+          "name": "stable",
+          "type": "∀ extra, SourcePruningNativeView.narrowAt fits admits (fuel + extra) (holeKey metadata.typing uv) .empty before = .done result after"
+        }
+      ]
+    },
+    {
+      "scope": "narrow_complete/reference/inTypes.neg",
+      "actual_value": "(.reference name)",
+      "fields": [
+        {
+          "name": "fuel",
+          "type": "Nat"
+        },
+        {
+          "name": "_rows",
+          "type": "List (EdgeValue Symbol Guard)"
+        },
+        {
+          "name": "_middle",
+          "type": "State Symbol Guard"
+        },
+        {
+          "name": "result",
+          "type": "Value Symbol Guard"
+        },
+        {
+          "name": "after",
+          "type": "State Symbol Guard"
+        },
+        {
+          "name": "_exposed",
+          "type": "MergedFreshOrdinaryExposure.nodeEdges fuel (.reference name) before = .done _rows _middle"
+        },
+        {
+          "name": "_built",
+          "type": "run (makeNode (_rows.filter (SourcePruningNativeView.keeps fits admits (holeKey metadata.typing uv)))) _middle = (result, after)"
+        },
+        {
+          "name": "narrowed",
+          "type": "SourcePruningNativeView.narrowAt fits admits fuel (holeKey metadata.typing uv) (.reference name) before = .done result after"
+        },
+        {
+          "name": "kept",
+          "type": "SourceEqualityRequiredCache.Keeps before after"
+        },
+        {
+          "name": "resultAvailable",
+          "type": "Available after result"
+        },
+        {
+          "name": "resultClosed",
+          "type": "result.free = []"
+        },
+        {
+          "name": "_ordinary",
+          "type": "SourceEqualityRequiredCache.Ordinary result"
+        },
+        {
+          "name": "_resultRows",
+          "type": "InternedEdgeResidency.nodeEdges result = canonicalEdges (surviving (_rows.filter (SourcePruningNativeView.keeps fits admits (holeKey metadata.typing uv))))"
+        },
+        {
+          "name": "_secondRead",
+          "type": "∀ readFuel, MergedFreshOrdinaryExposure.nodeEdges readFuel result after = .done (InternedEdgeResidency.nodeEdges result) after"
+        },
+        {
+          "name": "_emptyIff",
+          "type": "result = .empty ↔ ∀ edge ∈ _rows, SourcePruningNativeView.keeps fits admits (holeKey metadata.typing uv) edge = false"
+        },
+        {
+          "name": "_rowsEmptyIff",
+          "type": "(InternedEdgeResidency.nodeEdges result).isEmpty = true ↔ ∀ edge ∈ _rows, SourcePruningNativeView.keeps fits admits (holeKey metadata.typing uv) edge = false"
+        },
+        {
+          "name": "stable",
+          "type": "∀ extra, SourcePruningNativeView.narrowAt fits admits (fuel + extra) (holeKey metadata.typing uv) (.reference name) before = .done result after"
+        }
+      ]
+    },
+    {
+      "scope": "narrow_complete/node/inTypes.neg",
+      "actual_value": "(.node entry edges depth free)",
+      "fields": [
+        {
+          "name": "fuel",
+          "type": "Nat"
+        },
+        {
+          "name": "_rows",
+          "type": "List (EdgeValue Symbol Guard)"
+        },
+        {
+          "name": "_middle",
+          "type": "State Symbol Guard"
+        },
+        {
+          "name": "result",
+          "type": "Value Symbol Guard"
+        },
+        {
+          "name": "after",
+          "type": "State Symbol Guard"
+        },
+        {
+          "name": "_exposed",
+          "type": "MergedFreshOrdinaryExposure.nodeEdges fuel (.node entry edges depth free) before = .done _rows _middle"
+        },
+        {
+          "name": "_built",
+          "type": "run (makeNode (_rows.filter (SourcePruningNativeView.keeps fits admits (holeKey metadata.typing uv)))) _middle = (result, after)"
+        },
+        {
+          "name": "narrowed",
+          "type": "SourcePruningNativeView.narrowAt fits admits fuel (holeKey metadata.typing uv) (.node entry edges depth free) before = .done result after"
+        },
+        {
+          "name": "kept",
+          "type": "SourceEqualityRequiredCache.Keeps before after"
+        },
+        {
+          "name": "resultAvailable",
+          "type": "Available after result"
+        },
+        {
+          "name": "resultClosed",
+          "type": "result.free = []"
+        },
+        {
+          "name": "_ordinary",
+          "type": "SourceEqualityRequiredCache.Ordinary result"
+        },
+        {
+          "name": "_resultRows",
+          "type": "InternedEdgeResidency.nodeEdges result = canonicalEdges (surviving (_rows.filter (SourcePruningNativeView.keeps fits admits (holeKey metadata.typing uv))))"
+        },
+        {
+          "name": "_secondRead",
+          "type": "∀ readFuel, MergedFreshOrdinaryExposure.nodeEdges readFuel result after = .done (InternedEdgeResidency.nodeEdges result) after"
+        },
+        {
+          "name": "_emptyIff",
+          "type": "result = .empty ↔ ∀ edge ∈ _rows, SourcePruningNativeView.keeps fits admits (holeKey metadata.typing uv) edge = false"
+        },
+        {
+          "name": "_rowsEmptyIff",
+          "type": "(InternedEdgeResidency.nodeEdges result).isEmpty = true ↔ ∀ edge ∈ _rows, SourcePruningNativeView.keeps fits admits (holeKey metadata.typing uv) edge = false"
+        },
+        {
+          "name": "stable",
+          "type": "∀ extra, SourcePruningNativeView.narrowAt fits admits (fuel + extra) (holeKey metadata.typing uv) (.node entry edges depth free) before = .done result after"
+        }
+      ]
+    },
+    {
+      "scope": "narrow_complete/union/inTypes.neg",
+      "actual_value": "(.union entry members depth free)",
+      "fields": [
+        {
+          "name": "fuel",
+          "type": "Nat"
+        },
+        {
+          "name": "_rows",
+          "type": "List (EdgeValue Symbol Guard)"
+        },
+        {
+          "name": "_middle",
+          "type": "State Symbol Guard"
+        },
+        {
+          "name": "result",
+          "type": "Value Symbol Guard"
+        },
+        {
+          "name": "after",
+          "type": "State Symbol Guard"
+        },
+        {
+          "name": "_exposed",
+          "type": "MergedFreshOrdinaryExposure.nodeEdges fuel (.union entry members depth free) before = .done _rows _middle"
+        },
+        {
+          "name": "_built",
+          "type": "run (makeNode (_rows.filter (SourcePruningNativeView.keeps fits admits (holeKey metadata.typing uv)))) _middle = (result, after)"
+        },
+        {
+          "name": "narrowed",
+          "type": "SourcePruningNativeView.narrowAt fits admits fuel (holeKey metadata.typing uv) (.union entry members depth free) before = .done result after"
+        },
+        {
+          "name": "kept",
+          "type": "SourceEqualityRequiredCache.Keeps before after"
+        },
+        {
+          "name": "resultAvailable",
+          "type": "Available after result"
+        },
+        {
+          "name": "resultClosed",
+          "type": "result.free = []"
+        },
+        {
+          "name": "_ordinary",
+          "type": "SourceEqualityRequiredCache.Ordinary result"
+        },
+        {
+          "name": "_resultRows",
+          "type": "InternedEdgeResidency.nodeEdges result = canonicalEdges (surviving (_rows.filter (SourcePruningNativeView.keeps fits admits (holeKey metadata.typing uv))))"
+        },
+        {
+          "name": "_secondRead",
+          "type": "∀ readFuel, MergedFreshOrdinaryExposure.nodeEdges readFuel result after = .done (InternedEdgeResidency.nodeEdges result) after"
+        },
+        {
+          "name": "_emptyIff",
+          "type": "result = .empty ↔ ∀ edge ∈ _rows, SourcePruningNativeView.keeps fits admits (holeKey metadata.typing uv) edge = false"
+        },
+        {
+          "name": "_rowsEmptyIff",
+          "type": "(InternedEdgeResidency.nodeEdges result).isEmpty = true ↔ ∀ edge ∈ _rows, SourcePruningNativeView.keeps fits admits (holeKey metadata.typing uv) edge = false"
+        },
+        {
+          "name": "stable",
+          "type": "∀ extra, SourcePruningNativeView.narrowAt fits admits (fuel + extra) (holeKey metadata.typing uv) (.union entry members depth free) before = .done result after"
+        }
+      ]
+    }
+  ],
+  "nested_bound_variables": [
+    {
+      "name": "readFuel",
+      "type": "Nat",
+      "scope": "_secondRead forall only; no proof intro"
+    },
+    {
+      "name": "edge",
+      "type": "EdgeValue Symbol Guard",
+      "scope": "_emptyIff and _rowsEmptyIff forall only; no proof intro"
+    },
+    {
+      "name": "member",
+      "type": "edge ∈ _rows",
+      "scope": "_emptyIff and _rowsEmptyIff forall only; no proof intro"
+    },
+    {
+      "name": "extra",
+      "type": "Nat",
+      "scope": "stable forall only; public retention proof uses the separate extra intro"
+    }
+  ]
+}

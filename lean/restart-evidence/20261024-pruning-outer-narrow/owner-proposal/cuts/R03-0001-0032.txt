@@ -1,0 +1,32 @@
+import MicroCFTA.SourcePruningPositions
+import MicroCFTA.SourcePruningOracle
+
+/-!
+# The concrete type-position recording callback
+
+The callback updates type positions from the incoming metadata. An empty
+catalog skips the oracle. Other calls use the actual checked template oracle.
+The complete enumeration compression frame remains separate from metadata.
+Native IntSet correspondence requires ascending unique input lists.
+-/
+namespace MicroCFTA.SourcePruningRecordTypes
+open Language Fragments EnumerationState EnumerationCorrectness EnumerationSchedule
+open EnumerationCompressionFrame EnumerationExecution SourcePruningPartialMatch SourcePruningTemplates
+attribute [local instance] FormulaExecutable.formulaDecidableEq
+
+local instance recordTypesMonadList : Monad List where
+  pure value := [value]
+  bind values continuation := values.flatMap continuation
+
+variable {Guard Typing : Type}
+
+/-- The four source metadata fields retain pending order and raw hole IDs. -/
+structure Metadata (Typing : Type) where
+  /-- Pending template checks retain order and repeated occurrences. -/
+  pending : List (Pending Symbol)
+  /-- Raw type-position IDs model the source IntSet observation. -/
+  types : List Nat
+  /-- Raw open-program IDs use the same source set representation. -/
+  openHoles : List Nat
+  /-- The caller's typing state is unchanged by recording. -/
+  typing : Typing

@@ -1,0 +1,10 @@
+theorem narrow_complete [DecidableEq (EdgeKey Symbol Guard)]
+    (holeKey : Typing → Nat → Key) (fits : Key → Symbol → Bool)
+    (admits : Key → Value Symbol Guard → Bool) (metadata : Metadata Typing)
+    (uv : Nat) (value : Value Symbol Guard) (before : State Symbol Guard)
+    (ready : SourceEqualityRequiredCache.Ready before)
+    (available : Available before value) (closed : value.free = []) :
+    ∃ fuel result after,
+      narrow holeKey fits admits metadata fuel uv value before = .done result after ∧
+      SourceEqualityRequiredCache.Keeps before after ∧ Available after result ∧ result.free = [] ∧
+      (∀ extra, narrow holeKey fits admits metadata (fuel + extra) uv value before = .done result after)

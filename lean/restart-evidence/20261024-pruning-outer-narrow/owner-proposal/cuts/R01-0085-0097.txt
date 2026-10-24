@@ -1,0 +1,13 @@
+prunedPrograms ::
+    (Hashable k) =>
+    t ->
+    (Int -> CT.Term Symbol -> t -> Maybe t) ->
+    (t -> Int -> k) ->
+    (k -> Symbol -> Bool) ->
+    (k -> Node Symbol -> Bool) ->
+    [Template Symbol] ->
+    Node Symbol ->
+    [CT.Term Symbol]
+prunedPrograms start extend holeKey fits admits templates =
+    map (openTypes False)
+        . termsPruneUntil ([], IntSet.empty, IntSet.singleton 0, start) typesLast narrow atTypes typedTypes

@@ -1,0 +1,41 @@
+{
+  "recorded_at": "2026-10-24T07:28:24.832338+02:00",
+  "compiler_invoked": false,
+  "classification": "Root setup failure; not a Lean or proof failure",
+  "sequence": [
+    "Gate writer treated literal STRING contracts as SHA-256 digests and stopped at an assertion before writing the gate.",
+    "Body writer stopped on its required missing-gate assertion before creating the source.",
+    "Root orchestration incorrectly continued to the capped check after the two failures. The driver failed while reading the absent source, before spawning Lean."
+  ],
+  "capped_attempts": {
+    "source-check-1": {
+      "exit_code": 1,
+      "log_sha256": "9f8af3d737259eafb24fe8970ac0620704108267f04a8aca940363d7bccc7ce1",
+      "receipt": {
+        "command": [
+          "/usr/bin/python3",
+          "/tmp/mcfta-pruning-outer-narrow-20261024-check.py",
+          "source",
+          "source-check-1",
+          "/tmp/mcfta-pruning-outer-narrow-20261024/SourcePruningOuterNarrow.lean",
+          "/home/tritlo/Code/mcfta/lean/.lake/build/lib/lean/MicroCFTA/SourcePruningOuterNarrow.olean"
+        ],
+        "wrapper": [
+          "/home/tritlo/Code/heavy-management/bin/capped",
+          "--mem",
+          "4G",
+          "--time",
+          "5m",
+          "/usr/bin/python3",
+          "/home/tritlo/Code/mcfta/lean/restart-evidence/20261023-scan-node-counter-growth/root-capped-worker.py"
+        ],
+        "exit_code": 1,
+        "observed_at": "2026-10-24T05:24:29.889223+00:00",
+        "log": "/tmp/mcfta-pruning-outer-narrow-20261024-source-check-1.log",
+        "limits": "/tmp/mcfta-pruning-outer-narrow-20261024-source-check-1.limits.json"
+      },
+      "no_source_report_or_raw_log": true
+    }
+  },
+  "correction": "Read the literal STRING schema exactly. Bind its exact values in the gate and verifier. Check every dependent tool result before starting the next action. Keep this failed receipt and unique attempt name."
+}

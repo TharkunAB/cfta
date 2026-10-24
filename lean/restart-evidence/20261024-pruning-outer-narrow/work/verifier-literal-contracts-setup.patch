@@ -1,0 +1,44 @@
+--- before
++++ after
+@@ -113,10 +113,11 @@
+     assert len(data) == pin['bytes'] and sha(data) == pin['sha256']
+ contracts = load('owner-proposal/contracts.json')
+ assert contracts == load('work/body-gate.json')['contracts']
+-for name, digest in contracts.items():
++for name, literal in contracts.items():
++    assert isinstance(literal, str)
+     data = (here / 'owner-proposal' / name).read_bytes()
+-    assert sha(data) == digest
+-    assert text.count(data.decode().rstrip('\n')) == 1
++    assert data.decode() == literal
++    assert text.count(literal.rstrip('\n')) == 1
+ sources = load('owner-proposal/source-index.json')['sources']
+ assert len(sources) == 12
+ for pin in sources:
+@@ -170,7 +171,16 @@
+ assert len(decls['theorems']) == 4 and len(decls['definitions']) == 1
+ for names in axioms.values():
+     assert set(names) <= {'Classical.choice', 'Quot.sound', 'propext'}
+-receipt_stems = ['baseline-1'] + checks['attempts']
++setup = load('work/setup-failures.json')
++assert setup['compiler_invoked'] is False
++setup_failed = set(setup['capped_attempts'])
++assert setup_failed == {'source-check-1'} and not (setup_failed & expected)
++for stem in setup_failed:
++    assert not (here / 'work' / stem / 'report.json').exists()
++    assert not (here / 'work' / stem / 'raw.log').exists()
++    assert not list((here / 'work' / stem).rglob('*.lean'))
++    assert sha((here / 'inputs' / ('mcfta-pruning-outer-narrow-20261024-' + stem + '.log')).read_bytes()) == setup['capped_attempts'][stem]['log_sha256']
++receipt_stems = ['baseline-1'] + sorted(setup_failed) + checks['attempts']
+ prefix = 'mcfta-pruning-outer-narrow-20261024-'
+ expected_stems = {prefix + stem for stem in receipt_stems}
+ for suffix in ['limits.json', 'usage.json']:
+@@ -180,7 +190,7 @@
+     for suffix in ['json', 'log', 'limits.json', 'usage.json', 'source.py', 'peaks.txt']:
+         assert (here / 'inputs' / (prefix + stem + '.' + suffix)).is_file()
+     receipt = load('inputs/' + prefix + stem + '.json')
+-    assert receipt['exit_code'] == (1 if stem in failed else 0)
++    assert receipt['exit_code'] == (1 if stem in failed | setup_failed else 0)
+     limits = load('inputs/' + prefix + stem + '.limits.json')
+     assert limits == {'memory.max': '4294967296', 'memory.high': '4294967296', 'memory.swap.max': '0'}
+     usage = load('inputs/' + prefix + stem + '.usage.json')

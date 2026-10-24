@@ -1,0 +1,57 @@
+prunedPrograms ::
+    (Hashable k) =>
+    t ->
+    (Int -> CT.Term Symbol -> t -> Maybe t) ->
+    (t -> Int -> k) ->
+    (k -> Symbol -> Bool) ->
+    (k -> Node Symbol -> Bool) ->
+    [Template Symbol] ->
+    Node Symbol ->
+    [CT.Term Symbol]
+prunedPrograms start extend holeKey fits admits templates =
+    map (openTypes False)
+        . termsPruneUntil ([], IntSet.empty, IntSet.singleton 0, start) typesLast narrow atTypes typedTypes
+  where
+    -- The state: the pending template checks, the holes at type positions,
+    -- the open holes at program positions, and the typing.
+    (order, oracle) = templateOracle templates
+    typesLast (pending, types, _, _) candidates =
+        case order pending candidates of
+            Just uv -> Just uv
+            Nothing -> find (\uv -> uvarToInt uv `IntSet.notMember` types) candidates
+    atTypes (pending, types, _, _) uv = uvarToInt uv `IntSet.member` types && all (all ((/= uv) . snd)) pending
+    recordTypes (pending, types, open, typing) uv input = do
+        let types' = case input of
+                Left fragment -> typePositions (uvarToInt uv `IntSet.member` types) fragment types
+                Right _ -> types
+        (prune, pending') <- if null templates then pure (False, pending) else oracle pending uv input
+        pure (prune, (pending', types', open, typing))
+    typedTypes state@(_, types, _, _) uv input = do
+        (prune, state'@(pending, types', open, typing)) <- recordTypes state uv input
+        case input of
+            Left fragment
+                | not prune
+                , uvarToInt uv `IntSet.notMember` types -> do
+                    partial <- expandPartialTermFrag fragment
+                    case extend (uvarToInt uv) (openProgram False partial) typing of
+                        Nothing -> pure (True, state')
+                        Just typing' -> do
+                            let open' = foldr IntSet.insert (IntSet.delete (uvarToInt uv) open) (programHoles False fragment)
+                            dead <- or <$> mapM (\h -> maybe False (emptyAt typing' h) <$> getUnexpandedNode (intToUVar h)) (IntSet.toList open')
+                            pure (if dead then (True, state') else (False, (pending, types', open', typing')))
+            _ -> pure (prune, state')
+    narrow (_, types, _, typing) uv n = case n of
+        Mu _ -> n
+        _
+            | uvarToInt uv `IntSet.member` types -> n
+            | otherwise -> narrowAt n (holeKey typing (uvarToInt uv))
+    emptyAt typing h n = case n of
+        Mu _ -> False
+        _ -> null (nodeEdges (narrowAt n (holeKey typing h)))
+    -- One table for each call.
+    narrowAt = memo2 (\n k -> Node [e | e <- nodeEdges n, keeps k e])
+    keeps k e = case (edgeSymbol e, edgeChildren e) of
+        ("app", [annotation, _, _, _]) -> admits k annotation
+        ("filter", [annotation, _]) -> admits k annotation
+        (symbol, [annotation]) -> admits k annotation && fits k symbol
+        _ -> True

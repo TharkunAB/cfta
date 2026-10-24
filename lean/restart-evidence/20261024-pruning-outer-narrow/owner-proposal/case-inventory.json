@@ -1,0 +1,318 @@
+{
+  "definition": {
+    "owner": "narrow",
+    "scrutinee": "value",
+    "scrutinee_type": "Value Symbol Guard",
+    "branches": [
+      {
+        "pattern": ".mu ..",
+        "introduced_binders": [],
+        "effect": "Return the original value and before heap."
+      },
+      {
+        "pattern": "_",
+        "introduced_binders": [],
+        "condition": "metadata.types.contains uv",
+        "condition_type": "Bool",
+        "true_effect": "Return the original value and before heap.",
+        "false_effect": "Delegate unchanged to the actual narrowAt at holeKey metadata.typing uv."
+      }
+    ],
+    "branch_priority": [
+      "mu",
+      "raw type membership",
+      "narrowAt"
+    ],
+    "named_case_equations": []
+  },
+  "proof_constructor_cases": [
+    {
+      "owner": "narrow_type",
+      "cases": [
+        {
+          "constructor": "empty",
+          "value_term": ".empty",
+          "binders": [],
+          "case_equation": null,
+          "case_activation": "cases value (no named case equality)"
+        },
+        {
+          "constructor": "reference",
+          "value_term": "(.reference name)",
+          "binders": [
+            {
+              "name": "name",
+              "type": "InternedBinderProtocol.Reference"
+            }
+          ],
+          "case_equation": null,
+          "case_activation": "cases value (no named case equality)"
+        },
+        {
+          "constructor": "node",
+          "value_term": "(.node entry edges depth free)",
+          "binders": [
+            {
+              "name": "entry",
+              "type": "Cache.Interned InternedBinderProtocol.NodeKey"
+            },
+            {
+              "name": "edges",
+              "type": "List (EdgeValue Symbol Guard)"
+            },
+            {
+              "name": "depth",
+              "type": "Nat"
+            },
+            {
+              "name": "free",
+              "type": "List InternedBinderProtocol.Reference"
+            }
+          ],
+          "case_equation": null,
+          "case_activation": "cases value (no named case equality)"
+        },
+        {
+          "constructor": "union",
+          "value_term": "(.union entry members depth free)",
+          "binders": [
+            {
+              "name": "entry",
+              "type": "Cache.Interned InternedBinderProtocol.NodeKey"
+            },
+            {
+              "name": "members",
+              "type": "List (Value Symbol Guard)"
+            },
+            {
+              "name": "depth",
+              "type": "Nat"
+            },
+            {
+              "name": "free",
+              "type": "List InternedBinderProtocol.Reference"
+            }
+          ],
+          "case_equation": null,
+          "case_activation": "cases value (no named case equality)"
+        },
+        {
+          "constructor": "mu",
+          "value_term": "(.mu entry body depthShape ordinaryShape)",
+          "binders": [
+            {
+              "name": "entry",
+              "type": "Cache.Interned InternedBinderProtocol.NodeKey"
+            },
+            {
+              "name": "body",
+              "type": "Value Symbol Guard"
+            },
+            {
+              "name": "depthShape",
+              "type": "Value Symbol Guard"
+            },
+            {
+              "name": "ordinaryShape",
+              "type": "Value Symbol Guard"
+            }
+          ],
+          "case_equation": null,
+          "case_activation": "cases value (no named case equality)"
+        }
+      ]
+    },
+    {
+      "owner": "narrow_fallback",
+      "cases": [
+        {
+          "constructor": "empty",
+          "value_term": ".empty",
+          "binders": [],
+          "case_equation": null,
+          "case_activation": "cases value (no named case equality)"
+        },
+        {
+          "constructor": "reference",
+          "value_term": "(.reference name)",
+          "binders": [
+            {
+              "name": "name",
+              "type": "InternedBinderProtocol.Reference"
+            }
+          ],
+          "case_equation": null,
+          "case_activation": "cases value (no named case equality)"
+        },
+        {
+          "constructor": "node",
+          "value_term": "(.node entry edges depth free)",
+          "binders": [
+            {
+              "name": "entry",
+              "type": "Cache.Interned InternedBinderProtocol.NodeKey"
+            },
+            {
+              "name": "edges",
+              "type": "List (EdgeValue Symbol Guard)"
+            },
+            {
+              "name": "depth",
+              "type": "Nat"
+            },
+            {
+              "name": "free",
+              "type": "List InternedBinderProtocol.Reference"
+            }
+          ],
+          "case_equation": null,
+          "case_activation": "cases value (no named case equality)"
+        },
+        {
+          "constructor": "union",
+          "value_term": "(.union entry members depth free)",
+          "binders": [
+            {
+              "name": "entry",
+              "type": "Cache.Interned InternedBinderProtocol.NodeKey"
+            },
+            {
+              "name": "members",
+              "type": "List (Value Symbol Guard)"
+            },
+            {
+              "name": "depth",
+              "type": "Nat"
+            },
+            {
+              "name": "free",
+              "type": "List InternedBinderProtocol.Reference"
+            }
+          ],
+          "case_equation": null,
+          "case_activation": "cases value (no named case equality)"
+        },
+        {
+          "constructor": "mu",
+          "value_term": "(.mu entry body depthShape ordinaryShape)",
+          "binders": [
+            {
+              "name": "entry",
+              "type": "Cache.Interned InternedBinderProtocol.NodeKey"
+            },
+            {
+              "name": "body",
+              "type": "Value Symbol Guard"
+            },
+            {
+              "name": "depthShape",
+              "type": "Value Symbol Guard"
+            },
+            {
+              "name": "ordinaryShape",
+              "type": "Value Symbol Guard"
+            }
+          ],
+          "case_equation": null,
+          "case_activation": "cases value (no named case equality)"
+        }
+      ]
+    },
+    {
+      "owner": "narrow_complete",
+      "cases": [
+        {
+          "constructor": "empty",
+          "value_term": ".empty",
+          "binders": [],
+          "case_equation": null,
+          "case_activation": "cases value (no named case equality)"
+        },
+        {
+          "constructor": "reference",
+          "value_term": "(.reference name)",
+          "binders": [
+            {
+              "name": "name",
+              "type": "InternedBinderProtocol.Reference"
+            }
+          ],
+          "case_equation": null,
+          "case_activation": "cases value (no named case equality)"
+        },
+        {
+          "constructor": "node",
+          "value_term": "(.node entry edges depth free)",
+          "binders": [
+            {
+              "name": "entry",
+              "type": "Cache.Interned InternedBinderProtocol.NodeKey"
+            },
+            {
+              "name": "edges",
+              "type": "List (EdgeValue Symbol Guard)"
+            },
+            {
+              "name": "depth",
+              "type": "Nat"
+            },
+            {
+              "name": "free",
+              "type": "List InternedBinderProtocol.Reference"
+            }
+          ],
+          "case_equation": null,
+          "case_activation": "cases value (no named case equality)"
+        },
+        {
+          "constructor": "union",
+          "value_term": "(.union entry members depth free)",
+          "binders": [
+            {
+              "name": "entry",
+              "type": "Cache.Interned InternedBinderProtocol.NodeKey"
+            },
+            {
+              "name": "members",
+              "type": "List (Value Symbol Guard)"
+            },
+            {
+              "name": "depth",
+              "type": "Nat"
+            },
+            {
+              "name": "free",
+              "type": "List InternedBinderProtocol.Reference"
+            }
+          ],
+          "case_equation": null,
+          "case_activation": "cases value (no named case equality)"
+        },
+        {
+          "constructor": "mu",
+          "value_term": "(.mu entry body depthShape ordinaryShape)",
+          "binders": [
+            {
+              "name": "entry",
+              "type": "Cache.Interned InternedBinderProtocol.NodeKey"
+            },
+            {
+              "name": "body",
+              "type": "Value Symbol Guard"
+            },
+            {
+              "name": "depthShape",
+              "type": "Value Symbol Guard"
+            },
+            {
+              "name": "ordinaryShape",
+              "type": "Value Symbol Guard"
+            }
+          ],
+          "case_equation": null,
+          "case_activation": "cases value (no named case equality)"
+        }
+      ]
+    }
+  ]
+}

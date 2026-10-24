@@ -1,0 +1,74 @@
+@MicroCFTA.SourcePruningOuterNarrow.narrow : {Guard Typing Key : Type} →
+  [DecidableEq (MicroCFTA.InternedConstructorTemplates.EdgeKey MicroCFTA.SourcePruningTemplates.Symbol Guard)] →
+    (Typing → Nat → Key) →
+      (Key → MicroCFTA.SourcePruningTemplates.Symbol → Bool) →
+        (Key → MicroCFTA.InternedConstructorTemplates.Value MicroCFTA.SourcePruningTemplates.Symbol Guard → Bool) →
+          MicroCFTA.SourcePruningRecordTypes.Metadata Typing →
+            Nat →
+              Nat →
+                MicroCFTA.InternedConstructorTemplates.Value MicroCFTA.SourcePruningTemplates.Symbol Guard →
+                  MicroCFTA.InternedConstructorTemplates.State MicroCFTA.SourcePruningTemplates.Symbol Guard →
+                    MicroCFTA.MergedSourceComparison.Result MicroCFTA.SourcePruningTemplates.Symbol Guard
+                      (MicroCFTA.InternedConstructorTemplates.Value MicroCFTA.SourcePruningTemplates.Symbol Guard)
+@MicroCFTA.SourcePruningOuterNarrow.narrow_mu : ∀ {Guard Typing Key : Type}
+  [inst : DecidableEq (MicroCFTA.InternedConstructorTemplates.EdgeKey MicroCFTA.SourcePruningTemplates.Symbol Guard)]
+  (holeKey : Typing → Nat → Key) (fits : Key → MicroCFTA.SourcePruningTemplates.Symbol → Bool)
+  (admits : Key → MicroCFTA.InternedConstructorTemplates.Value MicroCFTA.SourcePruningTemplates.Symbol Guard → Bool)
+  (metadata : MicroCFTA.SourcePruningRecordTypes.Metadata Typing) (fuel uv : Nat)
+  (entry : MicroCFTA.Cache.Interned MicroCFTA.InternedBinderProtocol.NodeKey)
+  (body depthShape ordinaryShape :
+    MicroCFTA.InternedConstructorTemplates.Value MicroCFTA.SourcePruningTemplates.Symbol Guard)
+  (before : MicroCFTA.InternedConstructorTemplates.State MicroCFTA.SourcePruningTemplates.Symbol Guard),
+  MicroCFTA.SourcePruningOuterNarrow.narrow holeKey fits admits metadata fuel uv
+      (MicroCFTA.InternedConstructorTemplates.Value.mu entry body depthShape ordinaryShape) before =
+    MicroCFTA.MergedSourceComparison.Result.done
+      (MicroCFTA.InternedConstructorTemplates.Value.mu entry body depthShape ordinaryShape) before
+@MicroCFTA.SourcePruningOuterNarrow.narrow_type : ∀ {Guard Typing Key : Type}
+  [inst : DecidableEq (MicroCFTA.InternedConstructorTemplates.EdgeKey MicroCFTA.SourcePruningTemplates.Symbol Guard)]
+  (holeKey : Typing → Nat → Key) (fits : Key → MicroCFTA.SourcePruningTemplates.Symbol → Bool)
+  (admits : Key → MicroCFTA.InternedConstructorTemplates.Value MicroCFTA.SourcePruningTemplates.Symbol Guard → Bool)
+  (metadata : MicroCFTA.SourcePruningRecordTypes.Metadata Typing) (fuel uv : Nat)
+  (value : MicroCFTA.InternedConstructorTemplates.Value MicroCFTA.SourcePruningTemplates.Symbol Guard)
+  (before : MicroCFTA.InternedConstructorTemplates.State MicroCFTA.SourcePruningTemplates.Symbol Guard),
+  uv ∈ metadata.types →
+    MicroCFTA.SourcePruningOuterNarrow.narrow holeKey fits admits metadata fuel uv value before =
+      MicroCFTA.MergedSourceComparison.Result.done value before
+@MicroCFTA.SourcePruningOuterNarrow.narrow_fallback : ∀ {Guard Typing Key : Type}
+  [inst : DecidableEq (MicroCFTA.InternedConstructorTemplates.EdgeKey MicroCFTA.SourcePruningTemplates.Symbol Guard)]
+  (holeKey : Typing → Nat → Key) (fits : Key → MicroCFTA.SourcePruningTemplates.Symbol → Bool)
+  (admits : Key → MicroCFTA.InternedConstructorTemplates.Value MicroCFTA.SourcePruningTemplates.Symbol Guard → Bool)
+  (metadata : MicroCFTA.SourcePruningRecordTypes.Metadata Typing) (fuel uv : Nat)
+  (value : MicroCFTA.InternedConstructorTemplates.Value MicroCFTA.SourcePruningTemplates.Symbol Guard)
+  (before : MicroCFTA.InternedConstructorTemplates.State MicroCFTA.SourcePruningTemplates.Symbol Guard),
+  (∀ (entry : MicroCFTA.Cache.Interned MicroCFTA.InternedBinderProtocol.NodeKey)
+      (body depthShape ordinaryShape :
+        MicroCFTA.InternedConstructorTemplates.Value MicroCFTA.SourcePruningTemplates.Symbol Guard),
+      value ≠ MicroCFTA.InternedConstructorTemplates.Value.mu entry body depthShape ordinaryShape) →
+    ¬uv ∈ metadata.types →
+      MicroCFTA.SourcePruningOuterNarrow.narrow holeKey fits admits metadata fuel uv value before =
+        MicroCFTA.SourcePruningNativeView.narrowAt fits admits fuel (holeKey metadata.typing uv) value before
+@MicroCFTA.SourcePruningOuterNarrow.narrow_complete : ∀ {Guard Typing Key : Type}
+  [inst : DecidableEq (MicroCFTA.InternedConstructorTemplates.EdgeKey MicroCFTA.SourcePruningTemplates.Symbol Guard)]
+  (holeKey : Typing → Nat → Key) (fits : Key → MicroCFTA.SourcePruningTemplates.Symbol → Bool)
+  (admits : Key → MicroCFTA.InternedConstructorTemplates.Value MicroCFTA.SourcePruningTemplates.Symbol Guard → Bool)
+  (metadata : MicroCFTA.SourcePruningRecordTypes.Metadata Typing) (uv : Nat)
+  (value : MicroCFTA.InternedConstructorTemplates.Value MicroCFTA.SourcePruningTemplates.Symbol Guard)
+  (before : MicroCFTA.InternedConstructorTemplates.State MicroCFTA.SourcePruningTemplates.Symbol Guard),
+  MicroCFTA.SourceEqualityRequiredCache.Ready before →
+    MicroCFTA.InternedProbeProvenance.Available before value →
+      value.free = [] →
+        ∃ fuel result after,
+          MicroCFTA.SourcePruningOuterNarrow.narrow holeKey fits admits metadata fuel uv value before =
+              MicroCFTA.MergedSourceComparison.Result.done result after ∧
+            MicroCFTA.SourceEqualityRequiredCache.Keeps before after ∧
+              MicroCFTA.InternedProbeProvenance.Available after result ∧
+                result.free = [] ∧
+                  ∀ (extra : Nat),
+                    MicroCFTA.SourcePruningOuterNarrow.narrow holeKey fits admits metadata (fuel + extra) uv value
+                        before =
+                      MicroCFTA.MergedSourceComparison.Result.done result after
+'MicroCFTA.SourcePruningOuterNarrow.narrow' depends on axioms: [propext, Classical.choice, Quot.sound]
+'MicroCFTA.SourcePruningOuterNarrow.narrow_mu' depends on axioms: [propext, Classical.choice, Quot.sound]
+'MicroCFTA.SourcePruningOuterNarrow.narrow_type' depends on axioms: [propext, Classical.choice, Quot.sound]
+'MicroCFTA.SourcePruningOuterNarrow.narrow_fallback' depends on axioms: [propext, Classical.choice, Quot.sound]
+'MicroCFTA.SourcePruningOuterNarrow.narrow_complete' depends on axioms: [propext, Classical.choice, Quot.sound]

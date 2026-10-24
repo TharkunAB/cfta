@@ -1,0 +1,32 @@
+--- verify-before-owner-schema.py
++++ verify.py
+@@ -102,9 +102,9 @@
+ 
+ frozen = load('owner-proposal/FROZEN.json')
+ pins = load('owner-proposal/pins.json')
+-assert len(pins) == frozen['pinned_files'] and frozen['compiler_evidence'] is False
++assert len(pins) == frozen['pins_count'] and frozen['compiler_evidence'] is False
+ assert sha((here / 'owner-proposal/pins.json').read_bytes()) == frozen['pins_sha256']
+-assert frozen['local_instances'] == 0 and frozen['global_instances'] == 0
++assert frozen['local_instance_count'] == 0 and frozen['global_instance_count'] == 0
+ assert sha((here / 'owner-proposal/FROZEN.json').read_bytes()) == load('work/body-gate.json')['frozen_sha256']
+ assert {p.relative_to(here / 'owner-proposal').as_posix() for p in (here / 'owner-proposal').rglob('*') if p.is_file()} == set(pins) | {'pins.json', 'FROZEN.json'}
+ for name, pin in pins.items():
+@@ -118,7 +118,7 @@
+     assert sha(data) == digest
+     assert text.count(data.decode().rstrip('\n')) == 1
+ sources = load('owner-proposal/source-index.json')['sources']
+-assert len(sources) == frozen['source_snapshots']
++assert len(sources) == 12
+ for pin in sources:
+     pinned_path = Path(pin['path'])
+     if pinned_path.is_relative_to('/home/tritlo/Code/mcfta'):
+@@ -130,7 +130,7 @@
+         part = b''.join(data.splitlines(keepends=True)[cut['start'] - 1:cut['end']])
+         assert part == (here / 'owner-proposal' / cut['snapshot']).read_bytes()
+         assert len(part) == cut['bytes'] and sha(part) == cut['sha256']
+-for pin in load('owner-proposal/import-routes.json')['files']:
++for pin in load('owner-proposal/import-routes.json')['route_defining_sources'].values():
+     data = (root / Path(pin['path']).relative_to('/home/tritlo/Code/mcfta')).read_bytes()
+     assert len(data) == pin['bytes'] and sha(data) == pin['sha256']
+ 
