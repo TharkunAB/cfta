@@ -35,6 +35,14 @@ Wilf, and Feat (ranking).
 - **Depth**: the longest root-to-leaf path of a term, in edges; a leaf has
   depth 0. TATA's *height* counts a constant as 1, so height = depth + 1.
   **Mu depth** is the nesting depth of `Mu` binders, a different quantity.
+- **Edit** (of a term): a change at one position of a term that keeps the
+  state of the position. A **replacement** gives the position another term of
+  its state. A **wrap** puts a new node of that state above the old subterm,
+  as one of its children. An **edit site** is a position with a kind of edit:
+  a replacement, or a wrap with a transition index and a child index. The
+  **new material** of an edit is what it adds: the new subterm, or the other
+  children of the new node. Not a row edit of an automaton
+  (`Data.CFTA.replaceRows`).
 
 ## Constraints
 

@@ -137,6 +137,14 @@ tree automata of `cfta`, with QuickCheck integration.
   classes up to a size bound with a solver that decides every guard on each
   built term, so a liquid automaton has an exact route that needs no
   pruning; a guard the solver cannot decide is `GuardUnknown`.
+- `Data.CFTA.Edit`: `editAutomaton` gives an automaton whose terms are the
+  edits of one term of a plain automaton: replacements of a subterm by
+  another term of the state of its position, and wraps of a subterm in a new
+  node of that state. Each edit site has a root symbol of its own, and the
+  children are the new material, so the size-major order gives the edits with
+  the least new material first. The edit automaton is unambiguous when the
+  automaton is, so the generator import and the count table accept it.
+  `applyEdit` gives the edited term of an edit.
 - Terms are `Term symbol` from `Data.CFTA.Term` of `cfta`:
   `fromAutomaton`, `fromAutomatonUpToDepth`, `termAt`, `rankOf`, `ranksOf`,
   `rankOfTerm`, `surface`, and the refinement witnesses take and give `Term`
