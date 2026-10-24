@@ -1,0 +1,125 @@
+@MicroCFTA.EnumerationObservations.rootFragment_success : ∀ {Symbol Guard : Type} (fuel : Nat)
+  (before after : MicroCFTA.EnumerationState.State Symbol Guard) (fragment : MicroCFTA.Fragments.Fragment Symbol),
+  MicroCFTA.EnumerationCorrectness.Success (MicroCFTA.EnumerationUntil.rootFragment fuel) before fragment after ↔
+    Exists.{1} fun value =>
+      MicroCFTA.EnumerationCorrectness.Success (MicroCFTA.EnumerationState.getValue (HAdd.hAdd.{0, 0, 0} fuel 1) 0)
+          before value after ∧
+        Eq.{1} fragment
+          (match value with
+          | MicroCFTA.EnumerationState.UVarValue.enumerated stored => stored
+          | x => MicroCFTA.Fragments.Fragment.hole 0)
+@MicroCFTA.EnumerationObservations.rootFragment_frame : ∀ {Symbol Guard : Type} (fuel : Nat)
+  (before after : MicroCFTA.EnumerationState.State Symbol Guard) (fragment : MicroCFTA.Fragments.Fragment Symbol),
+  MicroCFTA.UnionFind.Total before.representatives →
+    MicroCFTA.EnumerationCorrectness.Success (MicroCFTA.EnumerationUntil.rootFragment fuel) before fragment after →
+      MicroCFTA.EnumerationCompressionFrame.Frame before after
+@MicroCFTA.EnumerationObservations.rootFragment_agrees : ∀ {Symbol Guard : Type} (leftFuel rightFuel : Nat)
+  (left right leftAfter rightAfter : MicroCFTA.EnumerationState.State Symbol Guard)
+  (leftFragment rightFragment : MicroCFTA.Fragments.Fragment Symbol),
+  MicroCFTA.EnumerationCompressionFrame.Frame left right →
+    MicroCFTA.UnionFind.Total left.representatives →
+      MicroCFTA.EnumerationCorrectness.Success (MicroCFTA.EnumerationUntil.rootFragment leftFuel) left leftFragment
+          leftAfter →
+        MicroCFTA.EnumerationCorrectness.Success (MicroCFTA.EnumerationUntil.rootFragment rightFuel) right rightFragment
+            rightAfter →
+          Eq.{1} leftFragment rightFragment ∧ MicroCFTA.EnumerationCompressionFrame.Frame leftAfter rightAfter
+@MicroCFTA.EnumerationObservations.rootFragment_transport : ∀ {Symbol Guard : Type} (leftFuel : Nat)
+  (left right leftAfter : MicroCFTA.EnumerationState.State Symbol Guard)
+  (fragment : MicroCFTA.Fragments.Fragment Symbol),
+  MicroCFTA.EnumerationCompressionFrame.Frame left right →
+    MicroCFTA.UnionFind.Total left.representatives →
+      MicroCFTA.EnumerationCorrectness.Success (MicroCFTA.EnumerationUntil.rootFragment leftFuel) left fragment
+          leftAfter →
+        Exists.{1} fun rightFuel =>
+          Exists.{1} fun rightAfter =>
+            MicroCFTA.EnumerationCorrectness.Success (MicroCFTA.EnumerationUntil.rootFragment rightFuel) right fragment
+                rightAfter ∧
+              MicroCFTA.EnumerationCompressionFrame.Frame leftAfter rightAfter
+@MicroCFTA.EnumerationObservations.rootFragment_moreFuel : ∀ {Symbol Guard : Type} (fuel extra : Nat),
+  MicroCFTA.EnumerationExecution.Retains (MicroCFTA.EnumerationUntil.rootFragment fuel)
+    (MicroCFTA.EnumerationUntil.rootFragment (HAdd.hAdd.{0, 0, 0} fuel extra))
+@MicroCFTA.EnumerationObservations.expandPartial_agrees : ∀ {Symbol Guard : Type}
+  (graph : MicroCFTA.EnumerationState.Graph Symbol Guard) (leftFuel rightFuel : Nat)
+  (fragment : MicroCFTA.Fragments.Fragment Symbol)
+  (left right leftAfter rightAfter : MicroCFTA.EnumerationState.State Symbol Guard)
+  (leftTerm rightTerm : MicroCFTA.Language.Term (MicroCFTA.EnumerationState.PartialSymbol Symbol)),
+  MicroCFTA.EnumerationCompressionFrame.Frame left right →
+    MicroCFTA.UnionFind.Total left.representatives →
+      MicroCFTA.EnumerationCorrectness.Success (MicroCFTA.EnumerationState.expandPartial graph leftFuel fragment) left
+          leftTerm leftAfter →
+        MicroCFTA.EnumerationCorrectness.Success (MicroCFTA.EnumerationState.expandPartial graph rightFuel fragment)
+            right rightTerm rightAfter →
+          Eq.{1} leftTerm rightTerm ∧ MicroCFTA.EnumerationCompressionFrame.Frame leftAfter rightAfter
+@MicroCFTA.EnumerationObservations.expandPartial_transport : ∀ {Symbol Guard : Type}
+  (graph : MicroCFTA.EnumerationState.Graph Symbol Guard) (leftFuel : Nat)
+  (fragment : MicroCFTA.Fragments.Fragment Symbol)
+  (left right leftAfter : MicroCFTA.EnumerationState.State Symbol Guard)
+  (term : MicroCFTA.Language.Term (MicroCFTA.EnumerationState.PartialSymbol Symbol)),
+  MicroCFTA.EnumerationCompressionFrame.Frame left right →
+    MicroCFTA.UnionFind.Total left.representatives →
+      MicroCFTA.EnumerationCorrectness.Success (MicroCFTA.EnumerationState.expandPartial graph leftFuel fragment) left
+          term leftAfter →
+        Exists.{1} fun rightFuel =>
+          Exists.{1} fun rightAfter =>
+            MicroCFTA.EnumerationCorrectness.Success (MicroCFTA.EnumerationState.expandPartial graph rightFuel fragment)
+                right term rightAfter ∧
+              MicroCFTA.EnumerationCompressionFrame.Frame leftAfter rightAfter
+@MicroCFTA.EnumerationObservations.rootPartial_frame : ∀ {Symbol Guard : Type}
+  (graph : MicroCFTA.EnumerationState.Graph Symbol Guard) (fuel : Nat)
+  (before after : MicroCFTA.EnumerationState.State Symbol Guard)
+  (term : MicroCFTA.Language.Term (MicroCFTA.EnumerationState.PartialSymbol Symbol)),
+  MicroCFTA.UnionFind.Total before.representatives →
+    MicroCFTA.EnumerationCorrectness.Success
+        (bind.{0, 0} (MicroCFTA.EnumerationUntil.rootFragment fuel)
+          (MicroCFTA.EnumerationState.expandPartial graph fuel))
+        before term after →
+      MicroCFTA.EnumerationCompressionFrame.Frame before after
+@MicroCFTA.EnumerationObservations.rootPartial_agrees : ∀ {Symbol Guard : Type}
+  (graph : MicroCFTA.EnumerationState.Graph Symbol Guard) (leftFuel rightFuel : Nat)
+  (left right leftAfter rightAfter : MicroCFTA.EnumerationState.State Symbol Guard)
+  (leftTerm rightTerm : MicroCFTA.Language.Term (MicroCFTA.EnumerationState.PartialSymbol Symbol)),
+  MicroCFTA.EnumerationCompressionFrame.Frame left right →
+    MicroCFTA.UnionFind.Total left.representatives →
+      MicroCFTA.EnumerationCorrectness.Success
+          (bind.{0, 0} (MicroCFTA.EnumerationUntil.rootFragment leftFuel)
+            (MicroCFTA.EnumerationState.expandPartial graph leftFuel))
+          left leftTerm leftAfter →
+        MicroCFTA.EnumerationCorrectness.Success
+            (bind.{0, 0} (MicroCFTA.EnumerationUntil.rootFragment rightFuel)
+              (MicroCFTA.EnumerationState.expandPartial graph rightFuel))
+            right rightTerm rightAfter →
+          Eq.{1} leftTerm rightTerm ∧ MicroCFTA.EnumerationCompressionFrame.Frame leftAfter rightAfter
+@MicroCFTA.EnumerationObservations.rootPartial_moreFuel : ∀ {Symbol Guard : Type}
+  (graph : MicroCFTA.EnumerationState.Graph Symbol Guard) (fuel extra : Nat),
+  MicroCFTA.EnumerationExecution.Retains
+    (bind.{0, 0} (MicroCFTA.EnumerationUntil.rootFragment fuel) (MicroCFTA.EnumerationState.expandPartial graph fuel))
+    (bind.{0, 0} (MicroCFTA.EnumerationUntil.rootFragment (HAdd.hAdd.{0, 0, 0} fuel extra))
+      (MicroCFTA.EnumerationState.expandPartial graph (HAdd.hAdd.{0, 0, 0} fuel extra)))
+@MicroCFTA.EnumerationObservations.rootPartial_transport : ∀ {Symbol Guard : Type}
+  (graph : MicroCFTA.EnumerationState.Graph Symbol Guard) (leftFuel : Nat)
+  (left right leftAfter : MicroCFTA.EnumerationState.State Symbol Guard)
+  (term : MicroCFTA.Language.Term (MicroCFTA.EnumerationState.PartialSymbol Symbol)),
+  MicroCFTA.EnumerationCompressionFrame.Frame left right →
+    MicroCFTA.UnionFind.Total left.representatives →
+      MicroCFTA.EnumerationCorrectness.Success
+          (bind.{0, 0} (MicroCFTA.EnumerationUntil.rootFragment leftFuel)
+            (MicroCFTA.EnumerationState.expandPartial graph leftFuel))
+          left term leftAfter →
+        Exists.{1} fun rightFuel =>
+          Exists.{1} fun rightAfter =>
+            MicroCFTA.EnumerationCorrectness.Success
+                (bind.{0, 0} (MicroCFTA.EnumerationUntil.rootFragment rightFuel)
+                  (MicroCFTA.EnumerationState.expandPartial graph rightFuel))
+                right term rightAfter ∧
+              MicroCFTA.EnumerationCompressionFrame.Frame leftAfter rightAfter
+'MicroCFTA.EnumerationObservations.rootFragment_success' depends on axioms: [propext, Quot.sound.{u}]
+'MicroCFTA.EnumerationObservations.rootFragment_frame' depends on axioms: [propext, Quot.sound.{u}]
+'MicroCFTA.EnumerationObservations.rootFragment_agrees' depends on axioms: [propext, Quot.sound.{u}]
+'MicroCFTA.EnumerationObservations.rootFragment_transport' depends on axioms: [propext, Quot.sound.{u}]
+'MicroCFTA.EnumerationObservations.rootFragment_moreFuel' depends on axioms: [propext, Quot.sound.{u}]
+'MicroCFTA.EnumerationObservations.expandPartial_agrees' depends on axioms: [propext, Quot.sound.{u}]
+'MicroCFTA.EnumerationObservations.expandPartial_transport' depends on axioms: [propext, Quot.sound.{u}]
+'MicroCFTA.EnumerationObservations.rootPartial_frame' depends on axioms: [propext, Quot.sound.{u}]
+'MicroCFTA.EnumerationObservations.rootPartial_agrees' depends on axioms: [propext, Quot.sound.{u}]
+'MicroCFTA.EnumerationObservations.rootPartial_moreFuel' depends on axioms: [propext, Quot.sound.{u}]
+'MicroCFTA.EnumerationObservations.rootPartial_transport' depends on axioms: [propext, Quot.sound.{u}]

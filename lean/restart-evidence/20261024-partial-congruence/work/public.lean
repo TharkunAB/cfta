@@ -1,0 +1,26 @@
+import MicroCFTA.EnumerationPartialRoot
+
+set_option pp.universes true
+
+#check @MicroCFTA.EnumerationObservations.rootFragment_success
+#check @MicroCFTA.EnumerationObservations.rootFragment_frame
+#check @MicroCFTA.EnumerationObservations.rootFragment_agrees
+#check @MicroCFTA.EnumerationObservations.rootFragment_transport
+#check @MicroCFTA.EnumerationObservations.rootFragment_moreFuel
+#check @MicroCFTA.EnumerationObservations.expandPartial_agrees
+#check @MicroCFTA.EnumerationObservations.expandPartial_transport
+#check @MicroCFTA.EnumerationObservations.rootPartial_frame
+#check @MicroCFTA.EnumerationObservations.rootPartial_agrees
+#check @MicroCFTA.EnumerationObservations.rootPartial_moreFuel
+#check @MicroCFTA.EnumerationObservations.rootPartial_transport
+#print axioms MicroCFTA.EnumerationObservations.rootFragment_success
+#print axioms MicroCFTA.EnumerationObservations.rootFragment_frame
+#print axioms MicroCFTA.EnumerationObservations.rootFragment_agrees
+#print axioms MicroCFTA.EnumerationObservations.rootFragment_transport
+#print axioms MicroCFTA.EnumerationObservations.rootFragment_moreFuel
+#print axioms MicroCFTA.EnumerationObservations.expandPartial_agrees
+#print axioms MicroCFTA.EnumerationObservations.expandPartial_transport
+#print axioms MicroCFTA.EnumerationObservations.rootPartial_frame
+#print axioms MicroCFTA.EnumerationObservations.rootPartial_agrees
+#print axioms MicroCFTA.EnumerationObservations.rootPartial_moreFuel
+#print axioms MicroCFTA.EnumerationObservations.rootPartial_transport

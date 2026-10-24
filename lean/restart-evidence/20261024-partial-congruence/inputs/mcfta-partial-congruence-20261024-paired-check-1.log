@@ -1,0 +1,71 @@
+{"command": ["/home/tritlo/.elan/toolchains/leanprover--lean4---v4.34.1/bin/lean", "-R", "/tmp/mcfta-partial-congruence-20261024/paired-check-1", "-DwarningAsError=true", "-Dlinter.all=true", "/tmp/mcfta-partial-congruence-20261024/paired-check-1/checked.lean"], "exit_code": 1, "raw_bytes": 3818, "raw_sha256": "2f2c385cfd4524e73519837a23d14dd307a5388b5eb0ca18156eb1940d285c6a", "source_sha256": "a80cab1534295394ebdd70773139a0bacfa378b973082f8c24aba1b0816abd70"}
+/tmp/mcfta-partial-congruence-20261024/paired-check-1/checked.lean:38:10: error(lean.synthInstanceFailed): failed to synthesize instance of type class
+  LawfulMonad (EnumerateM Symbol Guard)
+
+Hint: Type class instance resolution failures can be inspected with the `set_option trace.Meta.synthInstance true` command.
+/tmp/mcfta-partial-congruence-20261024/paired-check-1/checked.lean:38:10: error(lean.synthInstanceFailed): failed to synthesize instance of type class
+  LawfulMonad (EnumerateM Symbol Guard)
+
+Hint: Type class instance resolution failures can be inspected with the `set_option trace.Meta.synthInstance true` command.
+/tmp/mcfta-partial-congruence-20261024/paired-check-1/checked.lean:37:23: error: unsolved goals
+Symbol Guard : Type
+graph : Graph Symbol Guard
+leftFuel rightFuel : Nat
+paired :
+  ∀ (fragment : Fragment Symbol) (left right leftAfter rightAfter : State Symbol Guard)
+    (leftTerm rightTerm : Term (PartialSymbol Symbol)),
+    Frame left right →
+      UnionFind.Total left.representatives →
+        Success (expandPartial graph leftFuel fragment) left leftTerm leftAfter →
+          Success (expandPartial graph rightFuel fragment) right rightTerm rightAfter →
+            leftTerm = rightTerm ∧ Frame leftAfter rightAfter
+child : Fragment Symbol
+rest : List (Fragment Symbol)
+ih :
+  ∀ (left right leftAfter rightAfter : State Symbol Guard) (leftTerms rightTerms : List (Term (PartialSymbol Symbol))),
+    Frame left right →
+      UnionFind.Total left.representatives →
+        Success (List.mapM (expandPartial graph leftFuel) rest) left leftTerms leftAfter →
+          Success (List.mapM (expandPartial graph rightFuel) rest) right rightTerms rightAfter →
+            leftTerms = rightTerms ∧ Frame leftAfter rightAfter
+left right leftAfter rightAfter : State Symbol Guard
+leftTerms rightTerms : List (Term (PartialSymbol Symbol))
+frame : Frame left right
+total : UnionFind.Total left.representatives
+leftRead :
+  Success
+    (do
+      let __do_lift ← expandPartial graph leftFuel child
+      let __do_lift_1 ← List.mapM (expandPartial graph leftFuel) rest
+      pure (__do_lift :: __do_lift_1))
+    left leftTerms leftAfter
+rightRead : Success (List.mapM (expandPartial graph rightFuel) (child :: rest)) right rightTerms rightAfter
+⊢ LawfulMonad (EnumerateM Symbol Guard)
+
+Symbol Guard : Type
+graph : Graph Symbol Guard
+leftFuel rightFuel : Nat
+paired :
+  ∀ (fragment : Fragment Symbol) (left right leftAfter rightAfter : State Symbol Guard)
+    (leftTerm rightTerm : Term (PartialSymbol Symbol)),
+    Frame left right →
+      UnionFind.Total left.representatives →
+        Success (expandPartial graph leftFuel fragment) left leftTerm leftAfter →
+          Success (expandPartial graph rightFuel fragment) right rightTerm rightAfter →
+            leftTerm = rightTerm ∧ Frame leftAfter rightAfter
+child : Fragment Symbol
+rest : List (Fragment Symbol)
+ih :
+  ∀ (left right leftAfter rightAfter : State Symbol Guard) (leftTerms rightTerms : List (Term (PartialSymbol Symbol))),
+    Frame left right →
+      UnionFind.Total left.representatives →
+        Success (List.mapM (expandPartial graph leftFuel) rest) left leftTerms leftAfter →
+          Success (List.mapM (expandPartial graph rightFuel) rest) right rightTerms rightAfter →
+            leftTerms = rightTerms ∧ Frame leftAfter rightAfter
+left right leftAfter rightAfter : State Symbol Guard
+leftTerms rightTerms : List (Term (PartialSymbol Symbol))
+frame : Frame left right
+total : UnionFind.Total left.representatives
+leftRead : Success (List.mapM (expandPartial graph leftFuel) (child :: rest)) left leftTerms leftAfter
+rightRead : Success (List.mapM (expandPartial graph rightFuel) (child :: rest)) right rightTerms rightAfter
+⊢ LawfulMonad (EnumerateM Symbol Guard)

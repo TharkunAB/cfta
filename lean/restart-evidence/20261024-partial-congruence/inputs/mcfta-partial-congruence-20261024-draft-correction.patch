@@ -1,0 +1,21 @@
+--- draft-v1
++++ candidate
+@@ -29,7 +29,7 @@
+     (leftRead : Success (children.mapM (expandPartial graph leftFuel)) left leftTerms leftAfter)
+     (rightRead : Success (children.mapM (expandPartial graph rightFuel)) right rightTerms rightAfter) :
+     leftTerms = rightTerms ∧ Frame leftAfter rightAfter := by
+-  induction children generalizing left right leftTerms rightTerms with
++  induction children generalizing left right leftAfter rightAfter leftTerms rightTerms with
+   | nil =>
+       obtain ⟨leftEq, leftSame⟩ := (success_pure [] leftTerms left leftAfter).mp leftRead
+       obtain ⟨rightEq, rightSame⟩ := (success_pure [] rightTerms right rightAfter).mp rightRead
+@@ -43,7 +43,8 @@
+       obtain ⟨sameFirst, middleFrame⟩ := paired child left right leftMiddle rightMiddle
+         leftTerm rightTerm frame total leftFirst rightFirst
+       have middleTotal := (expandPartial_frame graph leftFuel child left leftMiddle leftTerm total leftFirst).total total
+-      obtain ⟨sameTail, lastFrame⟩ := ih leftMiddle rightMiddle leftTail rightTail middleFrame middleTotal leftRest rightRest
++      obtain ⟨sameTail, lastFrame⟩ := ih leftMiddle rightMiddle leftLast rightLast leftTail rightTail
++        middleFrame middleTotal leftRest rightRest
+       obtain ⟨leftEq, leftSame⟩ := (success_pure (leftTerm :: leftTail) leftTerms leftLast leftAfter).mp leftFinal
+       obtain ⟨rightEq, rightSame⟩ := (success_pure (rightTerm :: rightTail) rightTerms rightLast rightAfter).mp rightFinal
+       refine ⟨?_, ?_⟩
