@@ -149,7 +149,12 @@ tree automata of `cfta`, with QuickCheck integration.
   `unrankCompletion`, and `sampleCompletion` count, list, unrank, and sample
   them uniformly. An automaton with equality constraints lists its terms up
   to the bound and keeps those with the prefix. A guard beyond equality
-  constraints is `GuardedTransition`.
+  constraints is `GuardedTransition`. `prefixCompletionsWith` takes an
+  `Entailment` and decides the guards on each candidate term: `nextTokens`
+  gives the tokens with an accepted completion, `undecidedTokens` the tokens
+  that the solver neither offers nor rejects, `undecidedTerms` the undecided
+  completions, and `completeVerdict` whether the prefix is an accepted term,
+  with `Unknown` when the solver does not decide it.
 - Terms are `Term symbol` from `Data.CFTA.Term` of `cfta`:
   `fromAutomaton`, `fromAutomatonUpToDepth`, `termAt`, `rankOf`, `ranksOf`,
   `rankOfTerm`, `surface`, and the refinement witnesses take and give `Term`

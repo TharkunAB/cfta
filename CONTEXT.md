@@ -113,6 +113,10 @@ Wilf, and Feat (ranking).
   states, in preorder.
 - **Completion**: an accepted term within a size bound whose preorder starts
   with a prefix.
+- **Undecided completion, undecided token**: with a solver, a completion is
+  undecided when the solver neither accepts nor rejects it. A token is
+  undecided when the solver accepts none of its completions and some of them
+  are undecided. An undecided token is neither offered nor rejected.
 
 ## Generators
 

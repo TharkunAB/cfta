@@ -311,7 +311,12 @@ The completions are distinct terms, as in `Data.CFTA.Sized`, also when the
 automaton is ambiguous. For the empty prefix their order is the order of
 `sized`. Without constraints, the queries count each stack of pending states
 from the size classes of its states. With equality constraints, they list the
-accepted terms up to the bound and keep those with the prefix.
+accepted terms up to the bound and keep those with the prefix. With guards,
+`prefixCompletionsWith` takes an `Entailment` and decides the guards on each
+listed term. A token is then offered, rejected, or undecided: `nextTokens`
+gives the offered tokens, `undecidedTokens` the tokens that the solver neither
+offers nor rejects, and `undecidedTerms` the completions that it does not
+decide.
 
 ## Equality-constrained generators
 
