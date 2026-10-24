@@ -144,7 +144,10 @@ tree automata of `cfta`, with QuickCheck integration.
   children are the new material, so the size-major order gives the edits with
   the least new material first. The edit automaton is unambiguous when the
   automaton is, so the generator import and the count table accept it.
-  `applyEdit` gives the edited term of an edit.
+  `applyEdit` gives the edited term of an edit. An unwrap (`UnwrapAt`)
+  replaces a subterm by a child that its state accepts. A context wrap
+  (`ContextAt`, with `HoleParent` in its new term) puts a new term with one hole
+  above the subterm, deeper than a wrap does.
 - Terms are `Term symbol` from `Data.CFTA.Term` of `cfta`:
   `fromAutomaton`, `fromAutomatonUpToDepth`, `termAt`, `rankOf`, `ranksOf`,
   `rankOfTerm`, `surface`, and the refinement witnesses take and give `Term`

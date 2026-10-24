@@ -207,6 +207,9 @@ sitePath :: EditSymbol symbol -> Path
 sitePath symbol = case symbol of
     ReplaceAt at -> at
     WrapAt at _ _ _ -> at
+    UnwrapAt at _ -> at
+    ContextAt at _ _ _ -> at
+    HoleParent _ _ -> mempty
     Material _ -> mempty
 
 {- | The canonical cover of the indexes from a bound up to a power of two by
