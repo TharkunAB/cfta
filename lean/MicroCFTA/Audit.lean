@@ -1,3 +1,4 @@
+import MicroCFTA.SourcePruningEnumerationOrdinaryBranches
 import MicroCFTA.SourcePruningEnumerationCheckedRows
 import MicroCFTA.SourcePruningEnumerationRawExact
 import MicroCFTA.SourcePruningEnumerationSelectedRow
