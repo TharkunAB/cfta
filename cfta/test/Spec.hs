@@ -4,6 +4,7 @@ import System.Directory (findExecutable)
 import System.Exit (die)
 import Test.Hspec (hspec)
 
+import qualified Data.CFTA.AbstractionSpec
 import qualified Data.CFTA.Equality.ConstraintSpec
 import qualified Data.CFTA.Equality.FTASpec
 import qualified Data.CFTA.EqualitySpec
@@ -50,3 +51,4 @@ main = do
         Data.CFTA.SimpleSpec.spec
         Data.CFTA.Refinement.SimpleSpec.spec
         Data.CFTA.LoweringSpec.spec
+        Data.CFTA.AbstractionSpec.spec

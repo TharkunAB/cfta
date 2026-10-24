@@ -321,6 +321,11 @@ For example, let `earlier` have the sums of `zero` and `one` at the state
 with the term `double(one)` and its lowering `mul(one, one)`. With
 `double(x) -> add(x, x)`, the report is empty.
 
+An abstraction extension splits a production into refined variants, for
+example a digit into the digits above four and the digits up to four.
+`checkAbstraction` and `checkOverlaps` of `Data.CFTA.Abstraction`, in `cfta`,
+check it with a solver.
+
 ## Equality-constrained generators
 
 An equality generator is a `Gen Symbol`, with the name `ECTAGen`. Each
