@@ -2,6 +2,14 @@
 
 ## 0.1.0.0 - Unreleased
 
+- Add `Data.CFTA.Trace`: the trace languages of state machines. A
+  `StateMachine` gives the precondition and the next state of each step over
+  a finite abstract state, and the final states. `traceAutomaton` builds the
+  automaton of its traces as right spines. The automaton is unambiguous, so
+  the generators of cfta-generator count, rank, sample, and shrink the traces
+  of each length exactly. `feasibility` gives the shortest prefix of a
+  sequence of steps that has no run, and the states in which its last symbol
+  fails.
 Before release, the package was called `microcfta`.
 
 - Add `Data.CFTA.Lowering`: template lowerings, which translate the terms of
