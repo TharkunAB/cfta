@@ -1,5 +1,40 @@
 # cfta formalization restart handoff
 
+## Concrete source constraint projection
+
+Updated: 2026-10-24. Main `74250bd88` is incorporated.
+Proof: `1847ec2e577a9931918163716751427db2e098e2`.
+Read `lean/notes-current-pruning-enumeration-constraint.md`.
+
+The projection reads actual source equalities and retains the complete original
+constraint when the guard requires a residual. The stored Cached invariant
+derives consistent nontrivial classes, real trie success, validity and exact
+path readback. The equality tries and residual have exactly the complete
+constraint meaning for every modeled finite term. No callback/output law or
+Graph equality is assumed. Reflexive Same retains its path-existence test.
+A contradictory equality accessor has no projection; Bottom can instead
+have a present projection with a false residual.
+
+The definition inherits the existing noncomputable normalization accessor.
+This proves a concrete mathematical projection. Extracted execution, native
+containers, signed paths and external solver correctness remain separate.
+The first strict input fails on one unused simp argument in the residual branch. The second input removes only that argument. It passes with a literal empty log under all linters and warnings as errors. The original input, failed output and exact correction remain. The selected source, complete public readback, installed build and Audit all pass. All 41 public-output lines retain both complete signatures. No proof limit changed.
+The installed build passes 597 jobs. Audit passes 3690 jobs and
+76149 dependency checks, with the unchanged older warning.
+Both declarations report exactly propext, Classical.choice and Quot.sound. No project axiom is added.
+All frozen declarations, scoped types, source cuts, reviews and raw evidence
+remain. The previous shallow-child checkpoint's26 post-seal inputs remain.
+
+Actual per-edge arity checks, equality-variable allocation, descent, ordered
+child preparation and residual insertion remain. Terminal merging and the
+default canonical/weighted selector remain open. Native graph/ID/index/memo2,
+concrete typing/pruning, complete driver, runtime/solver and convergence remain.
+H6 stays strongest combined. H23 and older constructor/equality work remain.
+No Haskell changes. FINDINGS retains all six imported repair handoffs FIRST.
+All earlier work and the optimized core remain. The full goal stays ACTIVE
+and incomplete. This record precedes evidence and push.
+
+
 ## Native shallow-child preparation
 
 Updated: 2026-10-24. Main `74250bd88` is incorporated.
