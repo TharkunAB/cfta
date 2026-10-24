@@ -1,6 +1,33 @@
 # Full formalization coverage
 
 
+## Canonical cached selection and actual union transfer
+
+Updated: 2026-10-24. Proof: `5b7ce34f0d72d27ef88aac6471e0279042de7c74`.
+Base: `a0c955144d`. Imported main: `a5fbb66eec`.
+Read `lean/notes-current-canonical-cached-selection.md`.
+
+The pure selector now follows the source canonical waiting keys without a lookup.
+Its CPS action retains the same complete modeled cached state. Correct indexes
+and actual root paths give the old scan's exact choices, with order and blocked
+versus completed results retained. The old scan's actual after state preserves
+all five other fields and every root ID and stored size. Sufficient fuel exists.
+Canonical counts are maintained by initialization, allocation and replacement.
+The actual pending assimilation branch keeps counts at its completed endpoint.
+The same recorded pre-scan, union loop and winner lookup derive the final root
+map and completed count transfer. No desired final root-map premise is added.
+Earlier raw-index models and all proof bodies remain. Audit adds two imports.
+
+Strict checks and installed builds passed. Audit passed: 3664 jobs, 75730 theorem
+checks, one older warning and no new warning. All 55 public signatures and
+38 axiom sets were read. Failed attempts remain retained in the evidence.
+Observer congruence, full canonical mutation histories, machine bounds and the
+phase-4 source obligations remain open. H6 remains strongest combined.
+No new Haskell repair is claimed. FINDINGS keeps its external repair index FIRST.
+The next step is the actual public observer bridge. H23 remains queued.
+The full goal is ACTIVE and incomplete. This record precedes the authorized push.
+
+
 ## Current main incorporated
 
 Updated: 2026-10-24. Main: `a5fbb66eec`. Merge: `65f237954c3`.
