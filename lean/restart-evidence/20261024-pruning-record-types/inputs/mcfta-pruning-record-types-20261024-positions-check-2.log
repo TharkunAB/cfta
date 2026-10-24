@@ -1,0 +1,171 @@
+{"command": ["/home/tritlo/.elan/toolchains/leanprover--lean4---v4.34.1/bin/lean", "-o", "/home/tritlo/Code/mcfta/lean/.lake/build/lib/lean/MicroCFTA/SourcePruningPositions.olean", "-R", "/tmp/mcfta-pruning-record-types-20261024/positions-check-2", "-DwarningAsError=true", "-Dlinter.all=true", "/tmp/mcfta-pruning-record-types-20261024/positions-check-2/MicroCFTA/SourcePruningPositions.lean"], "exit_code": 1, "raw_bytes": 8760, "raw_sha256": "0ae0452a2bf818a406f4372475ec21a6c1b4e3c7cf5bfc84e1a79903539da2be", "source_sha256": "3ca5e05619e3b65f7dcd26acae4d90aec3708d734c0ec4903e907f9a8d16e201"}
+/tmp/mcfta-pruning-record-types-20261024/positions-check-2/MicroCFTA/SourcePruningPositions.lean:18:4: error: fail to show termination for
+  MicroCFTA.SourcePruningPositions.typePositions
+with errors
+failed to infer structural recursion:
+Cannot use parameter isType:
+  the type Bool does not have a `.brecOn` recursor
+Cannot use parameter fragment:
+  insufficient number of parameters at recursive application 
+    typePositions true
+Cannot use parameter types:
+  insufficient number of parameters at recursive application 
+    typePositions true
+
+
+Could not find a decreasing measure.
+The basic measures relate at each recursive call as follows:
+(<, ≤, =: relation proved, ? all proofs failed, _: no proof attempted)
+            #1 #2 types
+1) 18:4-17   ≤  <     ?
+2) 26:42-60  ≤  ?     _
+3) 27:45-64  ≤  _     _
+4) 18:4-17   ≤  _     _
+5) 31:45-75  ≤  _     _
+6) 31:14-76  ≤  _     _
+7) 18:4-17   ≤  _     _
+8) 18:4-17   ≤  _     _
+
+#1: isType
+#2: fragment
+
+Please use `termination_by` to specify a decreasing measure.
+/tmp/mcfta-pruning-record-types-20261024/positions-check-2/MicroCFTA/SourcePruningPositions.lean:51:4: error: fail to show termination for
+  MicroCFTA.SourcePruningPositions.openProgram
+with errors
+failed to infer structural recursion:
+Cannot use parameter isType:
+  the type Bool does not have a `.brecOn` recursor
+Cannot use parameter term:
+  insufficient number of parameters at recursive application 
+    openProgram true
+
+
+Could not find a decreasing measure.
+The basic measures relate at each recursive call as follows:
+(<, ≤, =: relation proved, ? all proofs failed, _: no proof attempted)
+            #1 term
+1) 51:4-15   ≤    <
+2) 62:28-55  ≤    <
+3) 62:57-80  ≤    <
+4) 63:16-42  ≤    <
+5) 63:44-70  ≤    <
+6) 51:4-15   ≤    ?
+7) 67:28-55  ≤    _
+8) 67:57-79  ≤    _
+9) 51:4-15   ≤    _
+10) 51:4-15  ≤    _
+
+#1: isType
+
+Please use `termination_by` to specify a decreasing measure.
+/tmp/mcfta-pruning-record-types-20261024/positions-check-2/MicroCFTA/SourcePruningPositions.lean:71:0: error: Not a definitional equality: the left-hand side
+  typePositions true (Fragment.hole uv) types
+is not definitionally equal to the right-hand side
+  canonicalIds (uv :: types)
+/tmp/mcfta-pruning-record-types-20261024/positions-check-2/MicroCFTA/SourcePruningPositions.lean:73:72: error: Type mismatch
+  rfl
+has type
+  ?m.5 = ?m.5
+but is expected to have type
+  typePositions true (Fragment.hole uv) types = canonicalIds (uv :: types)
+/tmp/mcfta-pruning-record-types-20261024/positions-check-2/MicroCFTA/SourcePruningPositions.lean:75:0: error: Not a definitional equality: the left-hand side
+  typePositions false (Fragment.hole uv) types
+is not definitionally equal to the right-hand side
+  types
+/tmp/mcfta-pruning-record-types-20261024/positions-check-2/MicroCFTA/SourcePruningPositions.lean:77:52: error: Type mismatch
+  rfl
+has type
+  ?m.4 = ?m.4
+but is expected to have type
+  typePositions false (Fragment.hole uv) types = types
+/tmp/mcfta-pruning-record-types-20261024/positions-check-2/MicroCFTA/SourcePruningPositions.lean:87:51: error: Type mismatch
+  canonicalIds_nodup (uv :: types)
+has type
+  (canonicalIds (uv :: types)).Nodup
+but is expected to have type
+  (typePositions true (Fragment.hole uv) types).Nodup
+/tmp/mcfta-pruning-record-types-20261024/positions-check-2/MicroCFTA/SourcePruningPositions.lean:91:62: error: Type mismatch
+  canonicalIds_sorted (uv :: types)
+has type
+  List.Pairwise (fun x1 x2 => x1 ≤ x2) (canonicalIds (uv :: types))
+but is expected to have type
+  List.Pairwise (fun x1 x2 => x1 ≤ x2) (typePositions true (Fragment.hole uv) types)
+/tmp/mcfta-pruning-record-types-20261024/positions-check-2/MicroCFTA/SourcePruningPositions.lean:93:0: error: Not a definitional equality: the left-hand side
+  typePositions true (Fragment.node symbol children) types
+is not definitionally equal to the right-hand side
+  List.foldr (typePositions true) types children
+/tmp/mcfta-pruning-record-types-20261024/positions-check-2/MicroCFTA/SourcePruningPositions.lean:95:100: error: Type mismatch
+  rfl
+has type
+  ?m.6 = ?m.6
+but is expected to have type
+  typePositions true (Fragment.node symbol children) types = List.foldr (typePositions true) types children
+/tmp/mcfta-pruning-record-types-20261024/positions-check-2/MicroCFTA/SourcePruningPositions.lean:102:2: error: `simp` made no progress
+/tmp/mcfta-pruning-record-types-20261024/positions-check-2/MicroCFTA/SourcePruningPositions.lean:108:2: error: `simp` made no progress
+/tmp/mcfta-pruning-record-types-20261024/positions-check-2/MicroCFTA/SourcePruningPositions.lean:112:21: error: Tactic `rfl` failed: The left-hand side
+  programHoles true (Fragment.node symbol✝ children✝)
+is not definitionally equal to the right-hand side
+  []
+
+case node
+symbol✝ : Symbol
+children✝ : List (Fragment Symbol)
+⊢ programHoles true (Fragment.node symbol✝ children✝) = []
+/tmp/mcfta-pruning-record-types-20261024/positions-check-2/MicroCFTA/SourcePruningPositions.lean:120:68: error: unsolved goals
+annotation marker function argument : Fragment Symbol
+⊢ (if false = true then [] else programHoles false function ++ programHoles false argument) =
+    programHoles false function ++ programHoles false argument
+/tmp/mcfta-pruning-record-types-20261024/positions-check-2/MicroCFTA/SourcePruningPositions.lean:132:33: error: unsolved goals
+annotation term : Fragment Symbol
+⊢ (if false = true then [] else programHoles false term) = programHoles false term
+/tmp/mcfta-pruning-record-types-20261024/positions-check-2/MicroCFTA/SourcePruningPositions.lean:145:87: error: unsolved goals
+symbol : Symbol
+annotation marker function argument : Fragment Symbol
+other : symbol ≠ ("app", FullSyntax.Formula.top)
+⊢ (if false = true then [] else []) = []
+/tmp/mcfta-pruning-record-types-20261024/positions-check-2/MicroCFTA/SourcePruningPositions.lean:148:0: error: Not a definitional equality: the left-hand side
+  openProgram true (Term.node (PartialSymbol.hole uv) children)
+is not definitionally equal to the right-hand side
+  Term.node ("?", FullSyntax.Formula.top) []
+/tmp/mcfta-pruning-record-types-20261024/positions-check-2/MicroCFTA/SourcePruningPositions.lean:150:93: error: Type mismatch
+  rfl
+has type
+  ?m.11 = ?m.11
+but is expected to have type
+  openProgram true (Term.node (PartialSymbol.hole uv) children) = Term.node ("?", FullSyntax.Formula.top) []
+/tmp/mcfta-pruning-record-types-20261024/positions-check-2/MicroCFTA/SourcePruningPositions.lean:152:0: error: Not a definitional equality: the left-hand side
+  openProgram false (Term.node (PartialSymbol.hole uv) children)
+is not definitionally equal to the right-hand side
+  Term.node ("?program#" ++ toString uv, FullSyntax.Formula.top) []
+/tmp/mcfta-pruning-record-types-20261024/positions-check-2/MicroCFTA/SourcePruningPositions.lean:155:71: error: Type mismatch
+  rfl
+has type
+  ?m.17 = ?m.17
+but is expected to have type
+  openProgram false (Term.node (PartialSymbol.hole uv) children) =
+    Term.node ("?program#" ++ toString uv, FullSyntax.Formula.top) []
+/tmp/mcfta-pruning-record-types-20261024/positions-check-2/MicroCFTA/SourcePruningPositions.lean:157:0: error: Not a definitional equality: the left-hand side
+  openProgram isType (Term.node PartialSymbol.truncated children)
+is not definitionally equal to the right-hand side
+  Term.node ("Mu", FullSyntax.Formula.top) []
+/tmp/mcfta-pruning-record-types-20261024/positions-check-2/MicroCFTA/SourcePruningPositions.lean:159:96: error: Type mismatch
+  rfl
+has type
+  ?m.11 = ?m.11
+but is expected to have type
+  openProgram isType (Term.node PartialSymbol.truncated children) = Term.node ("Mu", FullSyntax.Formula.top) []
+/tmp/mcfta-pruning-record-types-20261024/positions-check-2/MicroCFTA/SourcePruningPositions.lean:161:0: error: Not a definitional equality: the left-hand side
+  openProgram true (Term.node (PartialSymbol.concrete symbol) children)
+is not definitionally equal to the right-hand side
+  Term.node symbol (List.map (openProgram true) children)
+/tmp/mcfta-pruning-record-types-20261024/positions-check-2/MicroCFTA/SourcePruningPositions.lean:164:56: error: Type mismatch
+  rfl
+has type
+  ?m.10 = ?m.10
+but is expected to have type
+  openProgram true (Term.node (PartialSymbol.concrete symbol) children) =
+    Term.node symbol (List.map (openProgram true) children)
+/tmp/mcfta-pruning-record-types-20261024/positions-check-2/MicroCFTA/SourcePruningPositions.lean:172:2: error: `simp` made no progress
+/tmp/mcfta-pruning-record-types-20261024/positions-check-2/MicroCFTA/SourcePruningPositions.lean:178:2: error: `simp` made no progress
+/tmp/mcfta-pruning-record-types-20261024/positions-check-2/MicroCFTA/SourcePruningPositions.lean:186:2: error: `simp` made no progress

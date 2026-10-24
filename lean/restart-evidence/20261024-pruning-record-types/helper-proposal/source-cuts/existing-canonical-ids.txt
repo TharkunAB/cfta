@@ -1,0 +1,42 @@
+import MicroCFTA.EnumerationBuilderLanguage
+
+/-!
+# Edge-cache and node-cache constructor readback
+
+Copied edges are interned in order. The node constructor removes edges with
+an empty child. It sorts and deduplicates the surviving edge identities,
+then interns that list. Empty output has no node-cache identity.
+-/
+namespace MicroCFTA.EnumerationBuilderCaches
+open Language EnumerationState EnumerationSemantics EnumerationCorrectness
+
+/-- The source node key is the ascending set of its edge identities. -/
+def canonicalIds (identities : List Nat) : List Nat := identities.eraseDups.mergeSort (· ≤ ·)
+
+theorem canonicalIds_member (identities : List Nat) (identity : Nat) :
+    identity ∈ canonicalIds identities ↔ identity ∈ identities := by
+  simp [canonicalIds]
+
+theorem canonicalIds_nodup (identities : List Nat) : (canonicalIds identities).Nodup := by
+  exact (List.mergeSort_perm _ _).symm.nodup (EqualityTrie.eraseDups_nodup _)
+
+theorem canonicalIds_sorted (identities : List Nat) : (canonicalIds identities).Pairwise (· ≤ ·) := by
+  simpa [canonicalIds] using List.pairwise_mergeSort (le := fun a b : Nat => decide (a ≤ b))
+    (by intro a b c ab bc; simp only [decide_eq_true_eq] at *; omega)
+    (by intro a b; simp only [Bool.or_eq_true, decide_eq_true_eq]; omega) identities.eraseDups
+
+/-- Node keys are equal exactly when they contain the same edge identities. -/
+theorem canonicalIds_equal (left right : List Nat) :
+    canonicalIds left = canonicalIds right ↔ ∀ identity, identity ∈ left ↔ identity ∈ right := by
+  constructor
+  · intro same identity
+    rw [← canonicalIds_member left identity, same, canonicalIds_member]
+  · intro members
+    apply List.Perm.eq_of_pairwise (fun a b _ _ ab ba => Nat.le_antisymm ab ba)
+      (canonicalIds_sorted left) (canonicalIds_sorted right)
+    apply (List.perm_ext_iff_of_nodup (canonicalIds_nodup left) (canonicalIds_nodup right)).mpr
+    intro identity
+    simpa only [canonicalIds_member] using members identity
+
+/-- Sequential interning preserves issued identities and canonical table entries. -/
+theorem intern_grows [DecidableEq Key] (state : Cache.State Key) (valid : Cache.Valid state) (key : Key) :

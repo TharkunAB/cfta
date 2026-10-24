@@ -1,0 +1,31 @@
+{"command": ["/home/tritlo/.elan/toolchains/leanprover--lean4---v4.34.1/bin/lean", "-o", "/home/tritlo/Code/mcfta/lean/.lake/build/lib/lean/MicroCFTA/SourcePruningPositions.olean", "-R", "/tmp/mcfta-pruning-record-types-20261024/positions-check-5", "-DwarningAsError=true", "-Dlinter.all=true", "/tmp/mcfta-pruning-record-types-20261024/positions-check-5/MicroCFTA/SourcePruningPositions.lean"], "exit_code": 1, "raw_bytes": 1669, "raw_sha256": "41927be2adc942b11325ef8040bda0805df66b5eabd8f51b5e02966152313f3e", "source_sha256": "1893187574f635e04447665cca73c699ae88333a75e0effa91c8a7605bd8e023"}
+/tmp/mcfta-pruning-record-types-20261024/positions-check-5/MicroCFTA/SourcePruningPositions.lean:103:0: error: Not a definitional equality: the left-hand side
+  typePositions true (Fragment.node symbol children) types
+is not definitionally equal to the right-hand side
+  List.foldr (typePositions true) types children
+/tmp/mcfta-pruning-record-types-20261024/positions-check-5/MicroCFTA/SourcePruningPositions.lean:105:100: error: Type mismatch
+  rfl
+has type
+  ?m.6 = ?m.6
+but is expected to have type
+  typePositions true (Fragment.node symbol children) types = List.foldr (typePositions true) types children
+/tmp/mcfta-pruning-record-types-20261024/positions-check-5/MicroCFTA/SourcePruningPositions.lean:122:21: error: Tactic `rfl` failed: The left-hand side
+  programHoles true (Fragment.node symbol✝ children✝)
+is not definitionally equal to the right-hand side
+  []
+
+case node
+symbol✝ : Symbol
+children✝ : List (Fragment Symbol)
+⊢ programHoles true (Fragment.node symbol✝ children✝) = []
+/tmp/mcfta-pruning-record-types-20261024/positions-check-5/MicroCFTA/SourcePruningPositions.lean:174:0: error: Not a definitional equality: the left-hand side
+  openProgram true (Term.node (PartialSymbol.concrete symbol) children)
+is not definitionally equal to the right-hand side
+  Term.node symbol (List.map (openProgram true) children)
+/tmp/mcfta-pruning-record-types-20261024/positions-check-5/MicroCFTA/SourcePruningPositions.lean:177:56: error: Type mismatch
+  rfl
+has type
+  ?m.10 = ?m.10
+but is expected to have type
+  openProgram true (Term.node (PartialSymbol.concrete symbol) children) =
+    Term.node symbol (List.map (openProgram true) children)

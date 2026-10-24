@@ -1,0 +1,73 @@
+import MicroCFTA.SourcePruningRecordTypes
+#check MicroCFTA.SourcePruningPositions.typePositions
+#check MicroCFTA.SourcePruningPositions.programHoles
+#check MicroCFTA.SourcePruningPositions.openProgram
+#check MicroCFTA.SourcePruningPositions.typePositions_hole_true
+#check MicroCFTA.SourcePruningPositions.typePositions_hole_false
+#check MicroCFTA.SourcePruningPositions.typePositions_hole_member
+#check MicroCFTA.SourcePruningPositions.typePositions_hole_nodup
+#check MicroCFTA.SourcePruningPositions.typePositions_hole_sorted
+#check MicroCFTA.SourcePruningPositions.typePositions_type_node
+#check MicroCFTA.SourcePruningPositions.typePositions_app
+#check MicroCFTA.SourcePruningPositions.typePositions_filter
+#check MicroCFTA.SourcePruningPositions.programHoles_type
+#check MicroCFTA.SourcePruningPositions.programHoles_hole
+#check MicroCFTA.SourcePruningPositions.programHoles_app
+#check MicroCFTA.SourcePruningPositions.programHoles_app_member
+#check MicroCFTA.SourcePruningPositions.programHoles_filter
+#check MicroCFTA.SourcePruningPositions.programHoles_repeated
+#check MicroCFTA.SourcePruningPositions.programHoles_other_four
+#check MicroCFTA.SourcePruningPositions.openProgram_type_hole
+#check MicroCFTA.SourcePruningPositions.openProgram_program_hole
+#check MicroCFTA.SourcePruningPositions.openProgram_truncated
+#check MicroCFTA.SourcePruningPositions.openProgram_type_node
+#check MicroCFTA.SourcePruningPositions.openProgram_app
+#check MicroCFTA.SourcePruningPositions.openProgram_filter
+#check MicroCFTA.SourcePruningPositions.openProgram_other_four
+#check MicroCFTA.SourcePruningRecordTypes.Metadata
+#check MicroCFTA.SourcePruningRecordTypes.typesLast
+#check MicroCFTA.SourcePruningRecordTypes.atTypes
+#check MicroCFTA.SourcePruningRecordTypes.updatedTypes
+#check MicroCFTA.SourcePruningRecordTypes.recordTypes
+#check MicroCFTA.SourcePruningRecordTypes.typesLast_pending
+#check MicroCFTA.SourcePruningRecordTypes.typesLast_fallback
+#check MicroCFTA.SourcePruningRecordTypes.atTypes_exact
+#check MicroCFTA.SourcePruningRecordTypes.recordTypes_empty
+#check MicroCFTA.SourcePruningRecordTypes.recordTypes_inr
+#check MicroCFTA.SourcePruningRecordTypes.recordTypes_metadata
+#check MicroCFTA.SourcePruningRecordTypes.recordTypes_frame
+#check MicroCFTA.SourcePruningRecordTypes.recordTypes_agrees
+#check MicroCFTA.SourcePruningRecordTypes.recordTypes_moreFuel
+#check MicroCFTA.SourcePruningRecordTypes.recordTypes_transport
+#print axioms MicroCFTA.SourcePruningPositions.typePositions_hole_true
+#print axioms MicroCFTA.SourcePruningPositions.typePositions_hole_false
+#print axioms MicroCFTA.SourcePruningPositions.typePositions_hole_member
+#print axioms MicroCFTA.SourcePruningPositions.typePositions_hole_nodup
+#print axioms MicroCFTA.SourcePruningPositions.typePositions_hole_sorted
+#print axioms MicroCFTA.SourcePruningPositions.typePositions_type_node
+#print axioms MicroCFTA.SourcePruningPositions.typePositions_app
+#print axioms MicroCFTA.SourcePruningPositions.typePositions_filter
+#print axioms MicroCFTA.SourcePruningPositions.programHoles_type
+#print axioms MicroCFTA.SourcePruningPositions.programHoles_hole
+#print axioms MicroCFTA.SourcePruningPositions.programHoles_app
+#print axioms MicroCFTA.SourcePruningPositions.programHoles_app_member
+#print axioms MicroCFTA.SourcePruningPositions.programHoles_filter
+#print axioms MicroCFTA.SourcePruningPositions.programHoles_repeated
+#print axioms MicroCFTA.SourcePruningPositions.programHoles_other_four
+#print axioms MicroCFTA.SourcePruningPositions.openProgram_type_hole
+#print axioms MicroCFTA.SourcePruningPositions.openProgram_program_hole
+#print axioms MicroCFTA.SourcePruningPositions.openProgram_truncated
+#print axioms MicroCFTA.SourcePruningPositions.openProgram_type_node
+#print axioms MicroCFTA.SourcePruningPositions.openProgram_app
+#print axioms MicroCFTA.SourcePruningPositions.openProgram_filter
+#print axioms MicroCFTA.SourcePruningPositions.openProgram_other_four
+#print axioms MicroCFTA.SourcePruningRecordTypes.typesLast_pending
+#print axioms MicroCFTA.SourcePruningRecordTypes.typesLast_fallback
+#print axioms MicroCFTA.SourcePruningRecordTypes.atTypes_exact
+#print axioms MicroCFTA.SourcePruningRecordTypes.recordTypes_empty
+#print axioms MicroCFTA.SourcePruningRecordTypes.recordTypes_inr
+#print axioms MicroCFTA.SourcePruningRecordTypes.recordTypes_metadata
+#print axioms MicroCFTA.SourcePruningRecordTypes.recordTypes_frame
+#print axioms MicroCFTA.SourcePruningRecordTypes.recordTypes_agrees
+#print axioms MicroCFTA.SourcePruningRecordTypes.recordTypes_moreFuel
+#print axioms MicroCFTA.SourcePruningRecordTypes.recordTypes_transport

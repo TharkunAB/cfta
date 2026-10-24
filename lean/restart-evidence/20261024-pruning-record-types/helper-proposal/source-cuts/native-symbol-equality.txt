@@ -1,0 +1,35 @@
+
+-- | The process-global table of symbols.
+symbols :: Cache (Text, Formula) Symbol
+symbols = unsafePerformIO $ freshCacheWith =<< newIdSupply
+{-# NOINLINE symbols #-}
+
+instance Eq Symbol where
+    InternedSymbol left _ _ _ _ == InternedSymbol right _ _ _ _ = left == right
+
+-- | Text order, then refinement order. Equal identities skip the comparison.
+instance Ord Symbol where
+    compare (InternedSymbol left _ leftText leftRefinement _) (InternedSymbol right _ rightText rightRefinement _)
+        | left == right = EQ
+        | otherwise = compare leftText rightText <> compare leftRefinement rightRefinement
+
+instance Hashable Symbol where
+    hashWithSalt salt (InternedSymbol _ structural _ _ _) = hashWithSalt salt structural
+
+-- | An ordinary symbol shows as its text; a refined one also shows its refinement.
+instance Show Symbol where
+    showsPrec precedence symbol@(InternedSymbol _ _ text refinement _)
+        | refinement == Top = showsPrec precedence text
+        | otherwise =
+            showParen (precedence > 10) $
+                showString "RefinedSymbol " . showsPrec 11 (unrefined symbol) . showChar ' ' . showsPrec 11 refinement
+
+{- | A literal symbol interns its text once. 'fromString' does not inline, so
+GHC keeps @fromString "add"@ as one constant, also in a pattern of a
+function that runs once per term. Inlined, the call can turn into a
+lookup in the symbol table on each call.
+-}
+instance IsString Symbol where
+    fromString = Symbol . fromString
+    {-# NOINLINE fromString #-}
+

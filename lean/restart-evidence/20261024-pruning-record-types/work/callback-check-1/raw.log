@@ -1,0 +1,46 @@
+/tmp/mcfta-pruning-record-types-20261024/callback-check-1/MicroCFTA/SourcePruningRecordTypes.lean:96:76: error: Application type mismatch: The argument
+  success
+has type
+  Success
+    (have types := updatedTypes metadata uv input;
+    have __do_jp := fun observed =>
+      pure
+        (observed.fst,
+          { pending := observed.snd, types := types, openHoles := metadata.openHoles, typing := metadata.typing });
+    if templates.isEmpty = true then do
+      let observed ← pure (false, metadata.pending)
+      __do_jp observed
+    else do
+      let observed ← SourcePruningOracle.oracle graph templates fuel metadata.pending uv input
+      __do_jp observed)
+    before result after
+but is expected to have type
+  Success (?m.27 >>= ?m.28) ?m.29 ?m.30 ?m.31
+in the application
+  (success_bind ?m.27 ?m.28 ?m.29 ?m.30 ?m.31).mp success
+/tmp/mcfta-pruning-record-types-20261024/callback-check-1/MicroCFTA/SourcePruningRecordTypes.lean:186:10: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  recordTypes ?graph [] ?fuel ?metadata ?uv ?input
+in the target expression
+  ∃ rightFuel rightAfter,
+    Success (recordTypes graph [] rightFuel metadata uv input) right result rightAfter ∧ Frame leftAfter rightAfter
+
+case nil
+Guard Typing : Type
+graph : Graph Symbol Guard
+leftFuel : Nat
+metadata : Metadata Typing
+uv : Nat
+input : Fragment Symbol ⊕ Nat
+left right leftAfter : State Symbol Guard
+result : Bool × Metadata Typing
+frame : Frame left right
+total : UnionFind.Total left.representatives
+leftRead :
+  Success
+    (pure
+      (false,
+        { pending := metadata.pending, types := updatedTypes metadata uv input, openHoles := metadata.openHoles,
+          typing := metadata.typing }))
+    left result leftAfter
+⊢ ∃ rightFuel rightAfter,
+    Success (recordTypes graph [] rightFuel metadata uv input) right result rightAfter ∧ Frame leftAfter rightAfter

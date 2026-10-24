@@ -1,0 +1,9 @@
+
+/-- Keep real symbols, unresolved holes, and recursion truncation distinct. -/
+inductive PartialSymbol (Symbol : Type) where
+  | concrete : Symbol → PartialSymbol Symbol
+  | hole : Nat → PartialSymbol Symbol
+  | truncated
+  deriving DecidableEq, Repr
+
+/-- Diagnostic rendering distinguishes pending recursive constraints from final truncation. -/

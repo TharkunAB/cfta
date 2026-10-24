@@ -1,0 +1,37 @@
+{- | A term of 'termsPruneUntil' with @?@ at its holes at type positions, as
+'typePositions' finds them. With 'True', the term is at a type position. A
+hole at a program position is an error, because the stop rule of
+'prunedPrograms' accepts only holes at type positions.
+-}
+openTypes :: Bool -> PartialTerm -> CT.Term Symbol
+openTypes isType (CT.Node symbol children) = case symbol of
+    UVarHole _
+        | isType -> CT.Node "?" []
+        | otherwise -> error "prunedPrograms: a hole at a program position"
+    TruncatedRecursion -> CT.Node "Mu" []
+    ConcreteSymbol concrete
+        | isType -> CT.Node concrete (map (openTypes True) children)
+        | otherwise -> case (concrete, children) of
+            ("app", [annotation, marker, function, argument]) ->
+                CT.Node concrete [openTypes True annotation, openTypes True marker, openTypes False function, openTypes False argument]
+            ("filter", [annotation, term]) -> CT.Node concrete [openTypes True annotation, openTypes False term]
+            _ -> CT.Node concrete (map (openTypes True) children)
+
+{- | 'openTypes' for a partial program, with @?program@ at each hole at
+a program position.
+-}
+openProgram :: Bool -> PartialTerm -> CT.Term Symbol
+openProgram isType (CT.Node symbol children) = case symbol of
+    UVarHole uv
+        | isType -> CT.Node "?" []
+        | otherwise -> CT.Node (Symbol ("?program#" <> Text.pack (show (uvarToInt uv)))) []
+    TruncatedRecursion -> CT.Node "Mu" []
+    ConcreteSymbol concrete
+        | isType -> CT.Node concrete (map (openProgram True) children)
+        | otherwise -> case (concrete, children) of
+            ("app", [annotation, marker, function, argument]) ->
+                CT.Node
+                    concrete
+                    [openProgram True annotation, openProgram True marker, openProgram False function, openProgram False argument]
+            ("filter", [annotation, term]) -> CT.Node concrete [openProgram True annotation, openProgram False term]
+            _ -> CT.Node concrete (map (openProgram True) children)

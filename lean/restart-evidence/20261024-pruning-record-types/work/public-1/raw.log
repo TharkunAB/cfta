@@ -1,0 +1,269 @@
+MicroCFTA.SourcePruningPositions.typePositions (isType : Bool)
+  (fragment : MicroCFTA.Fragments.Fragment MicroCFTA.SourcePruningTemplates.Symbol) (types : List Nat) : List Nat
+MicroCFTA.SourcePruningPositions.programHoles (isType : Bool)
+  (fragment : MicroCFTA.Fragments.Fragment MicroCFTA.SourcePruningTemplates.Symbol) : List Nat
+MicroCFTA.SourcePruningPositions.openProgram (isType : Bool) (term : MicroCFTA.SourcePruningTemplates.PartialTerm) :
+  MicroCFTA.Language.Term MicroCFTA.SourcePruningTemplates.Symbol
+MicroCFTA.SourcePruningPositions.typePositions_hole_true (uv : Nat) (types : List Nat) :
+  MicroCFTA.SourcePruningPositions.typePositions true (MicroCFTA.Fragments.Fragment.hole uv) types =
+    MicroCFTA.EnumerationBuilderCaches.canonicalIds (uv :: types)
+MicroCFTA.SourcePruningPositions.typePositions_hole_false (uv : Nat) (types : List Nat) :
+  MicroCFTA.SourcePruningPositions.typePositions false (MicroCFTA.Fragments.Fragment.hole uv) types = types
+MicroCFTA.SourcePruningPositions.typePositions_hole_member (uv identity : Nat) (types : List Nat) :
+  identity ∈ MicroCFTA.SourcePruningPositions.typePositions true (MicroCFTA.Fragments.Fragment.hole uv) types ↔
+    identity = uv ∨ identity ∈ types
+MicroCFTA.SourcePruningPositions.typePositions_hole_nodup (uv : Nat) (types : List Nat) :
+  (MicroCFTA.SourcePruningPositions.typePositions true (MicroCFTA.Fragments.Fragment.hole uv) types).Nodup
+MicroCFTA.SourcePruningPositions.typePositions_hole_sorted (uv : Nat) (types : List Nat) :
+  List.Pairwise (fun x1 x2 => x1 ≤ x2)
+    (MicroCFTA.SourcePruningPositions.typePositions true (MicroCFTA.Fragments.Fragment.hole uv) types)
+MicroCFTA.SourcePruningPositions.typePositions_type_node (symbol : MicroCFTA.SourcePruningTemplates.Symbol)
+  (children : List (MicroCFTA.Fragments.Fragment MicroCFTA.SourcePruningTemplates.Symbol)) (types : List Nat) :
+  MicroCFTA.SourcePruningPositions.typePositions true (MicroCFTA.Fragments.Fragment.node symbol children) types =
+    List.foldr (MicroCFTA.SourcePruningPositions.typePositions true) types children
+MicroCFTA.SourcePruningPositions.typePositions_app
+  (annotation marker function argument : MicroCFTA.Fragments.Fragment MicroCFTA.SourcePruningTemplates.Symbol)
+  (types : List Nat) :
+  MicroCFTA.SourcePruningPositions.typePositions false
+      (MicroCFTA.Fragments.Fragment.node ("app", MicroCFTA.FullSyntax.Formula.top)
+        [annotation, marker, function, argument])
+      types =
+    List.foldr (MicroCFTA.SourcePruningPositions.typePositions true)
+      (List.foldr (MicroCFTA.SourcePruningPositions.typePositions false) types [function, argument])
+      [annotation, marker]
+MicroCFTA.SourcePruningPositions.typePositions_filter
+  (annotation term : MicroCFTA.Fragments.Fragment MicroCFTA.SourcePruningTemplates.Symbol) (types : List Nat) :
+  MicroCFTA.SourcePruningPositions.typePositions false
+      (MicroCFTA.Fragments.Fragment.node ("filter", MicroCFTA.FullSyntax.Formula.top) [annotation, term]) types =
+    MicroCFTA.SourcePruningPositions.typePositions true annotation
+      (MicroCFTA.SourcePruningPositions.typePositions false term types)
+MicroCFTA.SourcePruningPositions.programHoles_type
+  (fragment : MicroCFTA.Fragments.Fragment MicroCFTA.SourcePruningTemplates.Symbol) :
+  MicroCFTA.SourcePruningPositions.programHoles true fragment = []
+MicroCFTA.SourcePruningPositions.programHoles_hole (uv : Nat) :
+  MicroCFTA.SourcePruningPositions.programHoles false (MicroCFTA.Fragments.Fragment.hole uv) = [uv]
+MicroCFTA.SourcePruningPositions.programHoles_app
+  (annotation marker function argument : MicroCFTA.Fragments.Fragment MicroCFTA.SourcePruningTemplates.Symbol) :
+  MicroCFTA.SourcePruningPositions.programHoles false
+      (MicroCFTA.Fragments.Fragment.node ("app", MicroCFTA.FullSyntax.Formula.top)
+        [annotation, marker, function, argument]) =
+    MicroCFTA.SourcePruningPositions.programHoles false function ++
+      MicroCFTA.SourcePruningPositions.programHoles false argument
+MicroCFTA.SourcePruningPositions.programHoles_app_member
+  (annotation marker function argument : MicroCFTA.Fragments.Fragment MicroCFTA.SourcePruningTemplates.Symbol)
+  (uv : Nat) :
+  uv ∈
+      MicroCFTA.SourcePruningPositions.programHoles false
+        (MicroCFTA.Fragments.Fragment.node ("app", MicroCFTA.FullSyntax.Formula.top)
+          [annotation, marker, function, argument]) ↔
+    uv ∈ MicroCFTA.SourcePruningPositions.programHoles false function ∨
+      uv ∈ MicroCFTA.SourcePruningPositions.programHoles false argument
+MicroCFTA.SourcePruningPositions.programHoles_filter
+  (annotation term : MicroCFTA.Fragments.Fragment MicroCFTA.SourcePruningTemplates.Symbol) :
+  MicroCFTA.SourcePruningPositions.programHoles false
+      (MicroCFTA.Fragments.Fragment.node ("filter", MicroCFTA.FullSyntax.Formula.top) [annotation, term]) =
+    MicroCFTA.SourcePruningPositions.programHoles false term
+MicroCFTA.SourcePruningPositions.programHoles_repeated
+  (annotation marker : MicroCFTA.Fragments.Fragment MicroCFTA.SourcePruningTemplates.Symbol) (uv : Nat) :
+  MicroCFTA.SourcePruningPositions.programHoles false
+      (MicroCFTA.Fragments.Fragment.node ("app", MicroCFTA.FullSyntax.Formula.top)
+        [annotation, marker, MicroCFTA.Fragments.Fragment.hole uv, MicroCFTA.Fragments.Fragment.hole uv]) =
+    [uv, uv]
+MicroCFTA.SourcePruningPositions.programHoles_other_four (symbol : MicroCFTA.SourcePruningTemplates.Symbol)
+  (annotation marker function argument : MicroCFTA.Fragments.Fragment MicroCFTA.SourcePruningTemplates.Symbol)
+  (other : symbol ≠ ("app", MicroCFTA.FullSyntax.Formula.top)) :
+  MicroCFTA.SourcePruningPositions.programHoles false
+      (MicroCFTA.Fragments.Fragment.node symbol [annotation, marker, function, argument]) =
+    []
+MicroCFTA.SourcePruningPositions.openProgram_type_hole (uv : Nat)
+  (children : List MicroCFTA.SourcePruningTemplates.PartialTerm) :
+  MicroCFTA.SourcePruningPositions.openProgram true
+      (MicroCFTA.Language.Term.node (MicroCFTA.EnumerationState.PartialSymbol.hole uv) children) =
+    MicroCFTA.Language.Term.node ("?", MicroCFTA.FullSyntax.Formula.top) []
+MicroCFTA.SourcePruningPositions.openProgram_program_hole (uv : Nat)
+  (children : List MicroCFTA.SourcePruningTemplates.PartialTerm) :
+  MicroCFTA.SourcePruningPositions.openProgram false
+      (MicroCFTA.Language.Term.node (MicroCFTA.EnumerationState.PartialSymbol.hole uv) children) =
+    MicroCFTA.Language.Term.node ("?program#" ++ toString uv, MicroCFTA.FullSyntax.Formula.top) []
+MicroCFTA.SourcePruningPositions.openProgram_truncated (isType : Bool)
+  (children : List MicroCFTA.SourcePruningTemplates.PartialTerm) :
+  MicroCFTA.SourcePruningPositions.openProgram isType
+      (MicroCFTA.Language.Term.node MicroCFTA.EnumerationState.PartialSymbol.truncated children) =
+    MicroCFTA.Language.Term.node ("Mu", MicroCFTA.FullSyntax.Formula.top) []
+MicroCFTA.SourcePruningPositions.openProgram_type_node (symbol : MicroCFTA.SourcePruningTemplates.Symbol)
+  (children : List MicroCFTA.SourcePruningTemplates.PartialTerm) :
+  MicroCFTA.SourcePruningPositions.openProgram true
+      (MicroCFTA.Language.Term.node (MicroCFTA.EnumerationState.PartialSymbol.concrete symbol) children) =
+    MicroCFTA.Language.Term.node symbol (List.map (MicroCFTA.SourcePruningPositions.openProgram true) children)
+MicroCFTA.SourcePruningPositions.openProgram_app
+  (annotation marker function argument : MicroCFTA.SourcePruningTemplates.PartialTerm) :
+  MicroCFTA.SourcePruningPositions.openProgram false
+      (MicroCFTA.Language.Term.node
+        (MicroCFTA.EnumerationState.PartialSymbol.concrete ("app", MicroCFTA.FullSyntax.Formula.top))
+        [annotation, marker, function, argument]) =
+    MicroCFTA.Language.Term.node ("app", MicroCFTA.FullSyntax.Formula.top)
+      [MicroCFTA.SourcePruningPositions.openProgram true annotation,
+        MicroCFTA.SourcePruningPositions.openProgram true marker,
+        MicroCFTA.SourcePruningPositions.openProgram false function,
+        MicroCFTA.SourcePruningPositions.openProgram false argument]
+MicroCFTA.SourcePruningPositions.openProgram_filter (annotation term : MicroCFTA.SourcePruningTemplates.PartialTerm) :
+  MicroCFTA.SourcePruningPositions.openProgram false
+      (MicroCFTA.Language.Term.node
+        (MicroCFTA.EnumerationState.PartialSymbol.concrete ("filter", MicroCFTA.FullSyntax.Formula.top))
+        [annotation, term]) =
+    MicroCFTA.Language.Term.node ("filter", MicroCFTA.FullSyntax.Formula.top)
+      [MicroCFTA.SourcePruningPositions.openProgram true annotation,
+        MicroCFTA.SourcePruningPositions.openProgram false term]
+MicroCFTA.SourcePruningPositions.openProgram_other_four (symbol : MicroCFTA.SourcePruningTemplates.Symbol)
+  (annotation marker function argument : MicroCFTA.SourcePruningTemplates.PartialTerm)
+  (other : symbol ≠ ("app", MicroCFTA.FullSyntax.Formula.top)) :
+  MicroCFTA.SourcePruningPositions.openProgram false
+      (MicroCFTA.Language.Term.node (MicroCFTA.EnumerationState.PartialSymbol.concrete symbol)
+        [annotation, marker, function, argument]) =
+    MicroCFTA.Language.Term.node symbol
+      (List.map (MicroCFTA.SourcePruningPositions.openProgram true) [annotation, marker, function, argument])
+MicroCFTA.SourcePruningRecordTypes.Metadata (Typing : Type) : Type
+MicroCFTA.SourcePruningRecordTypes.typesLast {Typing : Type}
+  (metadata : MicroCFTA.SourcePruningRecordTypes.Metadata Typing) (candidates : List Nat) : Option Nat
+MicroCFTA.SourcePruningRecordTypes.atTypes {Typing : Type}
+  (metadata : MicroCFTA.SourcePruningRecordTypes.Metadata Typing) (uv : Nat) : Bool
+MicroCFTA.SourcePruningRecordTypes.updatedTypes {Typing : Type}
+  (metadata : MicroCFTA.SourcePruningRecordTypes.Metadata Typing) (uv : Nat) :
+  MicroCFTA.Fragments.Fragment MicroCFTA.SourcePruningTemplates.Symbol ⊕ Nat → List Nat
+MicroCFTA.SourcePruningRecordTypes.recordTypes {Guard Typing : Type}
+  (graph : MicroCFTA.EnumerationState.Graph MicroCFTA.SourcePruningTemplates.Symbol Guard)
+  (templates : List (MicroCFTA.Template.Pattern MicroCFTA.SourcePruningTemplates.Symbol)) (fuel : Nat) :
+  MicroCFTA.EnumerationState.Oracle MicroCFTA.SourcePruningTemplates.Symbol Guard
+    (MicroCFTA.SourcePruningRecordTypes.Metadata Typing)
+MicroCFTA.SourcePruningRecordTypes.typesLast_pending {Typing : Type}
+  (metadata : MicroCFTA.SourcePruningRecordTypes.Metadata Typing) (candidates : List Nat) (uv : Nat)
+  (chosen : MicroCFTA.SourcePruningTemplates.order metadata.pending candidates = some uv) :
+  MicroCFTA.SourcePruningRecordTypes.typesLast metadata candidates = some uv
+MicroCFTA.SourcePruningRecordTypes.typesLast_fallback {Typing : Type}
+  (metadata : MicroCFTA.SourcePruningRecordTypes.Metadata Typing) (candidates : List Nat)
+  (missed : MicroCFTA.SourcePruningTemplates.order metadata.pending candidates = none) :
+  MicroCFTA.SourcePruningRecordTypes.typesLast metadata candidates =
+    List.find? (fun uv => !metadata.types.contains uv) candidates
+MicroCFTA.SourcePruningRecordTypes.atTypes_exact {Typing : Type}
+  (metadata : MicroCFTA.SourcePruningRecordTypes.Metadata Typing) (uv : Nat) :
+  MicroCFTA.SourcePruningRecordTypes.atTypes metadata uv = true ↔
+    uv ∈ metadata.types ∧
+      ∀ (group : MicroCFTA.SourcePruningPartialMatch.Pending MicroCFTA.SourcePruningTemplates.Symbol),
+        group ∈ metadata.pending →
+          ∀ (entry : MicroCFTA.Template.Pattern MicroCFTA.SourcePruningTemplates.Symbol × Nat),
+            entry ∈ group → entry.snd ≠ uv
+MicroCFTA.SourcePruningRecordTypes.recordTypes_empty {Guard Typing : Type}
+  (graph : MicroCFTA.EnumerationState.Graph MicroCFTA.SourcePruningTemplates.Symbol Guard) (fuel : Nat)
+  (metadata : MicroCFTA.SourcePruningRecordTypes.Metadata Typing) (uv : Nat)
+  (input : MicroCFTA.Fragments.Fragment MicroCFTA.SourcePruningTemplates.Symbol ⊕ Nat) :
+  MicroCFTA.SourcePruningRecordTypes.recordTypes graph [] fuel metadata uv input =
+    pure
+      (false,
+        { pending := metadata.pending, types := MicroCFTA.SourcePruningRecordTypes.updatedTypes metadata uv input,
+          openHoles := metadata.openHoles, typing := metadata.typing })
+MicroCFTA.SourcePruningRecordTypes.recordTypes_inr {Guard Typing : Type}
+  (graph : MicroCFTA.EnumerationState.Graph MicroCFTA.SourcePruningTemplates.Symbol Guard)
+  (templates : List (MicroCFTA.Template.Pattern MicroCFTA.SourcePruningTemplates.Symbol)) (fuel : Nat)
+  (metadata : MicroCFTA.SourcePruningRecordTypes.Metadata Typing) (uv node : Nat) :
+  MicroCFTA.SourcePruningRecordTypes.recordTypes graph templates fuel metadata uv (Sum.inr node) =
+    pure (false, metadata)
+MicroCFTA.SourcePruningRecordTypes.recordTypes_metadata {Guard Typing : Type}
+  (graph : MicroCFTA.EnumerationState.Graph MicroCFTA.SourcePruningTemplates.Symbol Guard)
+  (templates : List (MicroCFTA.Template.Pattern MicroCFTA.SourcePruningTemplates.Symbol)) (fuel : Nat)
+  (metadata : MicroCFTA.SourcePruningRecordTypes.Metadata Typing) (uv : Nat)
+  (input : MicroCFTA.Fragments.Fragment MicroCFTA.SourcePruningTemplates.Symbol ⊕ Nat)
+  (before after : MicroCFTA.EnumerationState.State MicroCFTA.SourcePruningTemplates.Symbol Guard)
+  (result : Bool × MicroCFTA.SourcePruningRecordTypes.Metadata Typing)
+  (success :
+    MicroCFTA.EnumerationCorrectness.Success
+      (MicroCFTA.SourcePruningRecordTypes.recordTypes graph templates fuel metadata uv input) before result after) :
+  result.snd.types = MicroCFTA.SourcePruningRecordTypes.updatedTypes metadata uv input ∧
+    result.snd.openHoles = metadata.openHoles ∧ result.snd.typing = metadata.typing
+MicroCFTA.SourcePruningRecordTypes.recordTypes_frame {Guard Typing : Type}
+  (graph : MicroCFTA.EnumerationState.Graph MicroCFTA.SourcePruningTemplates.Symbol Guard)
+  (templates : List (MicroCFTA.Template.Pattern MicroCFTA.SourcePruningTemplates.Symbol)) (fuel : Nat)
+  (metadata : MicroCFTA.SourcePruningRecordTypes.Metadata Typing) (uv : Nat)
+  (input : MicroCFTA.Fragments.Fragment MicroCFTA.SourcePruningTemplates.Symbol ⊕ Nat)
+  (before after : MicroCFTA.EnumerationState.State MicroCFTA.SourcePruningTemplates.Symbol Guard)
+  (result : Bool × MicroCFTA.SourcePruningRecordTypes.Metadata Typing)
+  (total : MicroCFTA.UnionFind.Total before.representatives)
+  (success :
+    MicroCFTA.EnumerationCorrectness.Success
+      (MicroCFTA.SourcePruningRecordTypes.recordTypes graph templates fuel metadata uv input) before result after) :
+  MicroCFTA.EnumerationCompressionFrame.Frame before after
+MicroCFTA.SourcePruningRecordTypes.recordTypes_agrees {Guard Typing : Type}
+  (graph : MicroCFTA.EnumerationState.Graph MicroCFTA.SourcePruningTemplates.Symbol Guard)
+  (templates : List (MicroCFTA.Template.Pattern MicroCFTA.SourcePruningTemplates.Symbol)) (leftFuel rightFuel : Nat)
+  (metadata : MicroCFTA.SourcePruningRecordTypes.Metadata Typing) (uv : Nat)
+  (input : MicroCFTA.Fragments.Fragment MicroCFTA.SourcePruningTemplates.Symbol ⊕ Nat)
+  (left right leftAfter rightAfter : MicroCFTA.EnumerationState.State MicroCFTA.SourcePruningTemplates.Symbol Guard)
+  (leftResult rightResult : Bool × MicroCFTA.SourcePruningRecordTypes.Metadata Typing)
+  (frame : MicroCFTA.EnumerationCompressionFrame.Frame left right)
+  (total : MicroCFTA.UnionFind.Total left.representatives)
+  (leftRead :
+    MicroCFTA.EnumerationCorrectness.Success
+      (MicroCFTA.SourcePruningRecordTypes.recordTypes graph templates leftFuel metadata uv input) left leftResult
+      leftAfter)
+  (rightRead :
+    MicroCFTA.EnumerationCorrectness.Success
+      (MicroCFTA.SourcePruningRecordTypes.recordTypes graph templates rightFuel metadata uv input) right rightResult
+      rightAfter) :
+  leftResult = rightResult ∧ MicroCFTA.EnumerationCompressionFrame.Frame leftAfter rightAfter
+MicroCFTA.SourcePruningRecordTypes.recordTypes_moreFuel {Guard Typing : Type}
+  (graph : MicroCFTA.EnumerationState.Graph MicroCFTA.SourcePruningTemplates.Symbol Guard)
+  (templates : List (MicroCFTA.Template.Pattern MicroCFTA.SourcePruningTemplates.Symbol)) (fuel extra : Nat)
+  (metadata : MicroCFTA.SourcePruningRecordTypes.Metadata Typing) (uv : Nat)
+  (input : MicroCFTA.Fragments.Fragment MicroCFTA.SourcePruningTemplates.Symbol ⊕ Nat) :
+  MicroCFTA.EnumerationExecution.Retains
+    (MicroCFTA.SourcePruningRecordTypes.recordTypes graph templates fuel metadata uv input)
+    (MicroCFTA.SourcePruningRecordTypes.recordTypes graph templates (fuel + extra) metadata uv input)
+MicroCFTA.SourcePruningRecordTypes.recordTypes_transport {Guard Typing : Type}
+  (graph : MicroCFTA.EnumerationState.Graph MicroCFTA.SourcePruningTemplates.Symbol Guard)
+  (templates : List (MicroCFTA.Template.Pattern MicroCFTA.SourcePruningTemplates.Symbol)) (leftFuel : Nat)
+  (metadata : MicroCFTA.SourcePruningRecordTypes.Metadata Typing) (uv : Nat)
+  (input : MicroCFTA.Fragments.Fragment MicroCFTA.SourcePruningTemplates.Symbol ⊕ Nat)
+  (left right leftAfter : MicroCFTA.EnumerationState.State MicroCFTA.SourcePruningTemplates.Symbol Guard)
+  (result : Bool × MicroCFTA.SourcePruningRecordTypes.Metadata Typing)
+  (frame : MicroCFTA.EnumerationCompressionFrame.Frame left right)
+  (total : MicroCFTA.UnionFind.Total left.representatives)
+  (leftRead :
+    MicroCFTA.EnumerationCorrectness.Success
+      (MicroCFTA.SourcePruningRecordTypes.recordTypes graph templates leftFuel metadata uv input) left result
+      leftAfter) :
+  ∃ rightFuel rightAfter,
+    MicroCFTA.EnumerationCorrectness.Success
+        (MicroCFTA.SourcePruningRecordTypes.recordTypes graph templates rightFuel metadata uv input) right result
+        rightAfter ∧
+      MicroCFTA.EnumerationCompressionFrame.Frame leftAfter rightAfter
+'MicroCFTA.SourcePruningPositions.typePositions_hole_true' depends on axioms: [propext, Classical.choice, Quot.sound]
+'MicroCFTA.SourcePruningPositions.typePositions_hole_false' depends on axioms: [propext, Classical.choice, Quot.sound]
+'MicroCFTA.SourcePruningPositions.typePositions_hole_member' depends on axioms: [propext, Classical.choice, Quot.sound]
+'MicroCFTA.SourcePruningPositions.typePositions_hole_nodup' depends on axioms: [propext, Classical.choice, Quot.sound]
+'MicroCFTA.SourcePruningPositions.typePositions_hole_sorted' depends on axioms: [propext, Classical.choice, Quot.sound]
+'MicroCFTA.SourcePruningPositions.typePositions_type_node' depends on axioms: [propext, Classical.choice, Quot.sound]
+'MicroCFTA.SourcePruningPositions.typePositions_app' depends on axioms: [propext, Classical.choice, Quot.sound]
+'MicroCFTA.SourcePruningPositions.typePositions_filter' depends on axioms: [propext, Classical.choice, Quot.sound]
+'MicroCFTA.SourcePruningPositions.programHoles_type' depends on axioms: [propext, Classical.choice, Quot.sound]
+'MicroCFTA.SourcePruningPositions.programHoles_hole' depends on axioms: [propext, Classical.choice, Quot.sound]
+'MicroCFTA.SourcePruningPositions.programHoles_app' depends on axioms: [propext, Classical.choice, Quot.sound]
+'MicroCFTA.SourcePruningPositions.programHoles_app_member' depends on axioms: [propext, Classical.choice, Quot.sound]
+'MicroCFTA.SourcePruningPositions.programHoles_filter' depends on axioms: [propext, Classical.choice, Quot.sound]
+'MicroCFTA.SourcePruningPositions.programHoles_repeated' depends on axioms: [propext, Classical.choice, Quot.sound]
+'MicroCFTA.SourcePruningPositions.programHoles_other_four' depends on axioms: [propext, Classical.choice, Quot.sound]
+'MicroCFTA.SourcePruningPositions.openProgram_type_hole' depends on axioms: [propext, Classical.choice, Quot.sound]
+'MicroCFTA.SourcePruningPositions.openProgram_program_hole' depends on axioms: [propext, Classical.choice, Quot.sound]
+'MicroCFTA.SourcePruningPositions.openProgram_truncated' depends on axioms: [propext, Classical.choice, Quot.sound]
+'MicroCFTA.SourcePruningPositions.openProgram_type_node' depends on axioms: [propext, Classical.choice, Quot.sound]
+'MicroCFTA.SourcePruningPositions.openProgram_app' depends on axioms: [propext, Classical.choice, Quot.sound]
+'MicroCFTA.SourcePruningPositions.openProgram_filter' depends on axioms: [propext, Classical.choice, Quot.sound]
+'MicroCFTA.SourcePruningPositions.openProgram_other_four' depends on axioms: [propext, Classical.choice, Quot.sound]
+'MicroCFTA.SourcePruningRecordTypes.typesLast_pending' depends on axioms: [propext]
+'MicroCFTA.SourcePruningRecordTypes.typesLast_fallback' depends on axioms: [propext]
+'MicroCFTA.SourcePruningRecordTypes.atTypes_exact' depends on axioms: [propext, Quot.sound]
+'MicroCFTA.SourcePruningRecordTypes.recordTypes_empty' depends on axioms: [propext, Classical.choice, Quot.sound]
+'MicroCFTA.SourcePruningRecordTypes.recordTypes_inr' depends on axioms: [propext, Classical.choice, Quot.sound]
+'MicroCFTA.SourcePruningRecordTypes.recordTypes_metadata' depends on axioms: [propext, Classical.choice, Quot.sound]
+'MicroCFTA.SourcePruningRecordTypes.recordTypes_frame' depends on axioms: [propext, Classical.choice, Quot.sound]
+'MicroCFTA.SourcePruningRecordTypes.recordTypes_agrees' depends on axioms: [propext, Classical.choice, Quot.sound]
+'MicroCFTA.SourcePruningRecordTypes.recordTypes_moreFuel' depends on axioms: [propext, Classical.choice, Quot.sound]
+'MicroCFTA.SourcePruningRecordTypes.recordTypes_transport' depends on axioms: [propext, Classical.choice, Quot.sound]
