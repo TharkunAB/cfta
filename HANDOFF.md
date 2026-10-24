@@ -1,5 +1,47 @@
 # cfta formalization restart handoff
 
+## Outer pruning at realized pending slots
+
+Updated: 2026-10-24. Main `74250bd88` is incorporated.
+Proof: `b6fc88f51e7666af7116a72879d1d32219ec378e`.
+Read `lean/notes-current-pruning-enumeration-outer.md`.
+
+The same actual pending read derives the complete old Value before classifying
+Mu or incoming raw type membership. Both bypasses retain the actual entry
+state, full Value, heap and handle. Only the fallback invokes the existing
+inner pending producer at holeKey metadata.typing uv. Its old Value is
+identified by the same lookup. The outer done and larger-fuel equations,
+actual heap/Keeps, complete readbacks and all-slot realization remain.
+Empty rejects before handle comparison. Equal surviving handles give Value
+equality and pure entry-state success. Changed fallback handles retain the
+actual second representative read, compressed state, root/list/old slot,
+exact write/final record/new slot, final realization and literal bind success.
+The changed write has no full frame across modified values.
+
+The first strict Lean attempt passes with an empty log. All four actual
+source/public/build/Audit checks pass. The public readback has the complete
+type with no display omission. Before body authorship, a separate reviewed
+V2 fixes only one continuation indentation; V1 remains unchanged. No failed
+compiler attempt or parser experiment occurred.
+The installed build passes 575 jobs. Audit passes 3687 jobs and
+76129 dependency checks, with one older warning and no new-source
+warning. The complete actual public type and axiom report were read.
+It reports only propext, Classical.choice and Quot.sound.
+One theorem and one named local Monad List instance are added. No helper,
+action, carrier, packet type or global instance is added. Frozen declarations,
+source cuts, reviews, raw evidence and predecessor publication inputs remain.
+
+The pure Nat driver still lacks its explicit native heap/result connection.
+Right/Left oracles and fragment expansion, native ID/graph/index/memo2 laws,
+intersection/assimilation, open-hole bounds, ordered/lazy effects, concrete
+typing/key laws, full driver/typedTypes and semantic pruning remain open.
+Global canonicality/history/scheduling, phase4, resources, practical width,
+runtime/solver and convergence remain open. H6 stays strongest combined.
+H23 and earlier constructor/equality targets stay queued. No Haskell changes.
+FINDINGS keeps all six imported repair handoffs FIRST. The full goal remains
+ACTIVE and incomplete. This record precedes evidence and push.
+
+
 ## Outer pruning wrapper and finite completion
 
 Updated: 2026-10-24. Main `74250bd88` is incorporated.
