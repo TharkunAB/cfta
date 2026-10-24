@@ -1,0 +1,7 @@
+def Canonical (waiting : Waiting) : Prop := ∀ uv, waiting uv = encode (read waiting uv)
+
+/-- The map contains exactly the full raw-slot occurrence count. -/
+def Correct (values : List (UVarValue Symbol)) (waiting : Waiting) : Prop :=
+  ∀ uv, waiting uv = encode (total uv values)
+
+@[simp] theorem encode_read (value : Int) : (encode value).getD 0 = value := by

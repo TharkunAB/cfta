@@ -1,0 +1,11 @@
+# Terminal script predraft
+
+Timestamp: 2026-10-25 00:05:39 CEST. Status: UNFROZEN SOURCE-ONLY PREDRAFT. I authored these adapters and templates. No selected program is activated or executed.
+
+All five complete active FoldInvariants bases are retained. Candidates select Terminal module/area/note/evidence, actual baseline04822017ec505dd481a7c67979c77655cb1fec70/137786 and backup2348, exact custody index6f9984db794cfbbc4f64907cb4898ec7e6624bbf719cd6aefe0426923d0b78c8, source-reviewa42c0653b5ab78d40c9bd40b7dea0e363a2023f778dcc2981645f7e504774131 and already sealed FoldInvariants assessment/peer identities. Exactly26 custody inputs remain. The current owner is copied once; old revisions remain baseline history.
+
+All generic baseline/mode/ref/stash/worktree, nine document inverse, Audit prepend, exact proof parent/path, literal contract, source/cut/import, actual report/failure, complete public/axiom-subset, six-artifact cap, all-manifest-in-HEAD and ordinary singleton-push guards remain. The established flat source-ID cut reader is unchanged. Ten complete patches and reversible character-span recipes preserve both source endpoints. The FINDINGS insertion precedes the FoldInvariants section and keeps all six repairs first.
+
+INDEX and both unrendered templates follow the selected staged action/producer. Incoming Empty precedes Prefix; Fold rejection precedes incoming work. The outer read state and moved map are staging, not a final waiting table. Incoming write/inherit precedes Empty rejection; its gained-map certificate applies to the actual prefix even on rejection. A hole is returned only on success and is not installed at winner. Current-range admission, flag/partition provenance, later captured-uv store, native extraction/indexes, Safe/LiveRoots and whole-driver/H6 boundaries stay explicit.
+
+Actual final owner contracts, inventories, instance counts, hard budget and source/import schema remain to be checked before package freeze. The selected prospective heads are run/gained_correct/run_complete; one local List Monad, no LawfulMonad and hard650 are selected, not inferred compiler results. No new check metrics, failures, axioms, seal or publication outcome are bound. No parser, compiler, math/action/instance body, Git/network or repository action occurred.

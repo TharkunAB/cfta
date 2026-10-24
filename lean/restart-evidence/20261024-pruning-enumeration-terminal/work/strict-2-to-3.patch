@@ -1,0 +1,23 @@
+--- strict-2
++++ strict-3
+@@ -21,7 +21,7 @@
+ local notation "FoldRaw" => List (Except EnumerationState.Error (Unit × EnumerationState.State Symbol EnumGuard))
+ local notation "TerminalRaw" => List (Except EnumerationState.Error
+   (Fragments.Fragment Symbol × EnumerationState.State Symbol EnumGuard))
+-local notation "NativeOutcome" => SourceEqualityNativeDemand.Outcome («Symbol» := Symbol) («Guard» := Constraint) width Node
++local notation "NativeOutcome" => SourceEqualityNativeDemand.Outcome width Node
+ local notation "WorkerOutcome" => SourceCurrentAllocatedConjunctionWorker.Outcome width
+ 
+ local instance terminalMonadList : Monad List where
+@@ -233,9 +233,8 @@
+       exact foldPost.effects.keeps.available incoming available
+     have foldedBounded : ∀ sc ∈ incomingScs, sc.var < folded.counter := by
+       intro sc member
+-      rw [foldCounter, show joined.counter = before.counter from
+-        congrArg EnumerationState.State.counter joinedSame]
+-      exact incomingBounded sc member
++      rw [foldCounter]
++      simpa only [congrArg EnumerationState.State.counter joinedSame] using incomingBounded sc member
+     obtain ⟨incomingR, incomingN, incomingP, incomingH, oldNode, oldScs, read, afterWrite,
+       afterCaller, savedQueries, final, next, replacement, handle, reading, frame, incomingRun,
+       writePrefix, afterSame, afterStored, afterStorage, afterRealized, incomingPost,

@@ -1,0 +1,31 @@
+--- strict-1
++++ strict-2
+@@ -21,7 +21,7 @@
+ local notation "FoldRaw" => List (Except EnumerationState.Error (Unit × EnumerationState.State Symbol EnumGuard))
+ local notation "TerminalRaw" => List (Except EnumerationState.Error
+   (Fragments.Fragment Symbol × EnumerationState.State Symbol EnumGuard))
+-local notation "NativeOutcome" => SourceEqualityNativeDemand.Outcome (Symbol := Symbol) (Guard := Constraint) width Node
++local notation "NativeOutcome" => SourceEqualityNativeDemand.Outcome («Symbol» := Symbol) («Guard» := Constraint) width Node
+ local notation "WorkerOutcome" => SourceCurrentAllocatedConjunctionWorker.Outcome width
+ 
+ local instance terminalMonadList : Monad List where
+@@ -74,7 +74,7 @@
+     EnumerationCanonicalWaiting.Correct roots
+       (values.set target (.unenumerated newNode (incomingScs ++ oldScs)))
+       (EnumerationCanonicalWaiting.count roots 1 incomingScs waiting) := by
+-  have same : EnumerationCanonicalWaiting.replace (Symbol := Symbol) roots
++  have same : EnumerationCanonicalWaiting.replace («Symbol» := Symbol) roots
+       (.unenumerated oldNode oldScs) (.unenumerated newNode (incomingScs ++ oldScs)) waiting =
+       EnumerationCanonicalWaiting.count roots 1 incomingScs waiting := by
+     funext key
+@@ -233,7 +233,9 @@
+       exact foldPost.effects.keeps.available incoming available
+     have foldedBounded : ∀ sc ∈ incomingScs, sc.var < folded.counter := by
+       intro sc member
+-      simpa only [foldCounter, joinedSame] using incomingBounded sc member
++      rw [foldCounter, show joined.counter = before.counter from
++        congrArg EnumerationState.State.counter joinedSame]
++      exact incomingBounded sc member
+     obtain ⟨incomingR, incomingN, incomingP, incomingH, oldNode, oldScs, read, afterWrite,
+       afterCaller, savedQueries, final, next, replacement, handle, reading, frame, incomingRun,
+       writePrefix, afterSame, afterStored, afterStorage, afterRealized, incomingPost,

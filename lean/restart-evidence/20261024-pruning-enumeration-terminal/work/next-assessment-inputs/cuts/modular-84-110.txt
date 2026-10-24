@@ -1,0 +1,27 @@
+theorem wrap_exact (bits : Nat) (value : Int) (nonnegative : 0 ≤ value) (bounded : value < (2 : Int) ^ bits) :
+    wrap bits value = value := by
+  simpa [wordAdd, wrap] using wordAdd_exact bits value 0 (by omega) (by omega)
+
+/-- Exact count correctness is needed only at the observed endpoint, not throughout a transient update. -/
+theorem correct_of_endpoint (bits : Nat) (values : List (UVarValue Symbol)) (waiting : Waiting)
+    (represented : Represents bits (fun uv => total uv values) waiting)
+    (bounded : ∀ uv, total uv values < (2 : Int) ^ bits) : Correct values waiting := by
+  intro uv
+  rw [represented uv, wrap_exact bits _ (total_nonnegative uv values) (bounded uv)]
+
+/-- Below one full word period, a nonnegative count wraps to zero exactly when it is zero. -/
+theorem wrap_zero_iff (bits : Nat) (value : Int) (nonnegative : 0 ≤ value)
+    (bounded : value < (2 : Int) ^ (bits + 1)) : wrap bits value = 0 ↔ value = 0 := by
+  constructor
+  · intro zero
+    have equal : BitVec.ofInt (bits + 1) value = 0 := BitVec.eq_of_toInt_eq (by simpa [wrap] using zero)
+    have digits := congrArg BitVec.toNat equal
+    simp [BitVec.toNat_ofInt, Int.natCast_pow, Int.emod_eq_of_lt nonnegative bounded] at digits
+    omega
+  · rintro rfl; simp [wrap]
+
+/-- Scheduling uses only map keys, so the full word-period bound suffices even for negative stored counts. -/
+theorem support_exact (bits : Nat) (values : List (UVarValue Symbol)) (waiting : Waiting)
+    (represented : Represents bits (fun uv => total uv values) waiting)
+    (bounded : ∀ uv, total uv values < (2 : Int) ^ (bits + 1)) (uv : Nat) :
+    waiting uv ≠ none ↔ ∃ value ∈ values, ∃ sc ∈ references value, sc.var = uv := by

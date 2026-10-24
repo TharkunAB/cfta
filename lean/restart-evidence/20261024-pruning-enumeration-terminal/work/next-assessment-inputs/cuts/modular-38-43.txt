@@ -1,0 +1,6 @@
+theorem count_represents (bits : Nat) (counts : Nat → Int) (waiting : Waiting)
+    (represented : Represents bits counts waiting) (change : Int) (scs : List Suspended) :
+    Represents bits (fun uv => counts uv + change * occurrences uv scs) (countWord bits change scs waiting) := by
+  induction scs generalizing counts waiting with
+  | nil => simpa [countWord, occurrences] using represented
+  | cons first rest ih =>

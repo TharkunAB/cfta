@@ -1,0 +1,637 @@
+{
+  "packets": [
+    {
+      "scope": "run_complete.common",
+      "name": "prefix",
+      "api": "SourcePruningEnumerationTerminalPrefix.run_complete beforeCaller.checked.native.machine.heap before first rest waiting roots paths counts safe bounded pending realized",
+      "fields": [
+        {
+          "name": "prefixFuel",
+          "type": "Nat",
+          "used": true
+        },
+        {
+          "name": "recorded",
+          "type": "List Nat",
+          "used": true
+        },
+        {
+          "name": "winner",
+          "type": "Nat",
+          "used": true
+        },
+        {
+          "name": "moved",
+          "type": "EnumerationWaitingIndex.Waiting",
+          "used": true
+        },
+        {
+          "name": "scanned",
+          "type": "EnumerationState.State Symbol EnumGuard",
+          "used": false,
+          "reason": "Retained imported stage witness; main composition uses prefixRun and the final prefix invariant fields."
+        },
+        {
+          "name": "united",
+          "type": "EnumerationState.State Symbol EnumGuard",
+          "used": false,
+          "reason": "Retained imported stage witness; main composition uses prefixRun and the final prefix invariant fields."
+        },
+        {
+          "name": "joined",
+          "type": "EnumerationState.State Symbol EnumGuard",
+          "used": true
+        },
+        {
+          "name": "prefixRun",
+          "type": "∀ extra, ExceptT.run (SourcePruningEnumerationTerminalPrefix.run (prefixFuel + extra) first rest waiting before) = [.ok ((recorded, winner, moved), joined)]",
+          "used": true
+        },
+        {
+          "name": "scanRun",
+          "type": "∀ extra, ExceptT.run (((first :: rest).mapM fun sc => representative (prefixFuel + extra) sc.var) before) = [.ok (recorded, scanned)]",
+          "used": false,
+          "reason": "Retained imported stage witness; main composition uses prefixRun and the final prefix invariant fields."
+        },
+        {
+          "name": "unionRun",
+          "type": "∀ extra, ExceptT.run ((rest.forM fun sc => unionVariables (prefixFuel + extra) first.var sc.var) scanned) = [.ok ((), united)]",
+          "used": false,
+          "reason": "Retained imported stage witness; main composition uses prefixRun and the final prefix invariant fields."
+        },
+        {
+          "name": "winnerRun",
+          "type": "∀ extra, ExceptT.run (representative (prefixFuel + extra) first.var united) = [.ok (winner, joined)]",
+          "used": false,
+          "reason": "Retained imported stage witness; main composition uses prefixRun and the final prefix invariant fields."
+        },
+        {
+          "name": "recordedSame",
+          "type": "recorded = (first :: rest).map (fun sc => roots sc.var)",
+          "used": true
+        },
+        {
+          "name": "movedSame",
+          "type": "moved = EnumerationCanonicalWaiting.moveMany winner (EnumerationBuilderCaches.canonicalIds (recorded.filter (fun key => key != winner))) waiting",
+          "used": true
+        },
+        {
+          "name": "winnerMember",
+          "type": "winner ∈ recorded",
+          "used": true
+        },
+        {
+          "name": "rootWinner",
+          "type": "roots winner = winner",
+          "used": true
+        },
+        {
+          "name": "prefixRoots",
+          "type": "Roots joined.representatives (EnumerationCanonicalUnion.mergedRoots roots recorded winner)",
+          "used": true
+        },
+        {
+          "name": "prefixCounts",
+          "type": "EnumerationCanonicalWaiting.Correct (EnumerationCanonicalUnion.mergedRoots roots recorded winner) joined.values moved",
+          "used": true
+        },
+        {
+          "name": "joinedSame",
+          "type": "joined = {before with representatives := joined.representatives}",
+          "used": true
+        },
+        {
+          "name": "joinedStorage",
+          "type": "StorageValid joined",
+          "used": true
+        },
+        {
+          "name": "joinedRealized",
+          "type": "PendingRealized beforeCaller.checked.native.machine.heap joined",
+          "used": true
+        },
+        {
+          "name": "winnerPending",
+          "type": "PendingAt joined winner",
+          "used": true
+        },
+        {
+          "name": "recordedPending",
+          "type": "∀ (source : Nat), source ∈ recorded → PendingAt joined source",
+          "used": true
+        },
+        {
+          "name": "keysNodup",
+          "type": "(EnumerationBuilderCaches.canonicalIds (recorded.filter (fun key => key != winner))).Nodup",
+          "used": false,
+          "reason": "Retained imported stage witness; main composition uses prefixRun and the final prefix invariant fields."
+        },
+        {
+          "name": "keysSorted",
+          "type": "(EnumerationBuilderCaches.canonicalIds (recorded.filter (fun key => key != winner))).Pairwise (· ≤ ·)",
+          "used": false,
+          "reason": "Retained imported stage witness; main composition uses prefixRun and the final prefix invariant fields."
+        },
+        {
+          "name": "keyMembers",
+          "type": "∀ (key : Nat), key ∈ EnumerationBuilderCaches.canonicalIds (recorded.filter (fun key => key != winner)) ↔ key ∈ recorded ∧ key ≠ winner",
+          "used": false,
+          "reason": "Retained imported stage witness; main composition uses prefixRun and the final prefix invariant fields."
+        }
+      ],
+      "skipped_fields": [
+        {
+          "name": "scanned",
+          "reason": "Retained imported stage witness; main composition uses prefixRun and the final prefix invariant fields."
+        },
+        {
+          "name": "united",
+          "reason": "Retained imported stage witness; main composition uses prefixRun and the final prefix invariant fields."
+        },
+        {
+          "name": "scanRun",
+          "reason": "Retained imported stage witness; main composition uses prefixRun and the final prefix invariant fields."
+        },
+        {
+          "name": "unionRun",
+          "reason": "Retained imported stage witness; main composition uses prefixRun and the final prefix invariant fields."
+        },
+        {
+          "name": "winnerRun",
+          "reason": "Retained imported stage witness; main composition uses prefixRun and the final prefix invariant fields."
+        },
+        {
+          "name": "keysNodup",
+          "reason": "Retained imported stage witness; main composition uses prefixRun and the final prefix invariant fields."
+        },
+        {
+          "name": "keysSorted",
+          "reason": "Retained imported stage witness; main composition uses prefixRun and the final prefix invariant fields."
+        },
+        {
+          "name": "keyMembers",
+          "reason": "Retained imported stage witness; main composition uses prefixRun and the final prefix invariant fields."
+        }
+      ]
+    },
+    {
+      "scope": "run_complete.common",
+      "name": "fold",
+      "api": "SourcePruningEnumerationFold.run_complete formulas solver inventory beforeCaller joined recorded checkEmpty winner memos initial joinedRealized winnerPending (derived recordedPending disjunction) (ranges prefixFuel recorded winner moved joined (prefixRun 0)).1",
+      "fields": [
+        {
+          "name": "foldFuel",
+          "type": "Nat",
+          "used": true
+        },
+        {
+          "name": "foldP",
+          "type": "Nat",
+          "used": true
+        },
+        {
+          "name": "foldH",
+          "type": "Nat",
+          "used": true
+        },
+        {
+          "name": "foldRaw",
+          "type": "FoldRaw",
+          "used": true
+        },
+        {
+          "name": "foldCaller",
+          "type": "Caller width",
+          "used": true
+        },
+        {
+          "name": "folded",
+          "type": "EnumerationState.State Symbol EnumGuard",
+          "used": true
+        },
+        {
+          "name": "foldQueries",
+          "type": "Queries",
+          "used": true
+        },
+        {
+          "name": "foldFinal",
+          "type": "Memos",
+          "used": true
+        },
+        {
+          "name": "foldInventory",
+          "type": "Inventory",
+          "used": true
+        },
+        {
+          "name": "foldRun",
+          "type": "∀ extra P H, foldP ≤ P → foldH ≤ H → SourcePruningEnumerationFold.run checkEmpty (foldFuel + extra) P H recorded beforeCaller joined winner memos.query = (.ok (some foldRaw), foldCaller, foldQueries, folded)",
+          "used": true
+        },
+        {
+          "name": "foldPost",
+          "type": "Post formulas solver foldInventory beforeCaller foldCaller foldFinal",
+          "used": true
+        },
+        {
+          "name": "foldQuerySame",
+          "type": "foldFinal.query = foldQueries",
+          "used": true
+        },
+        {
+          "name": "foldRealized",
+          "type": "PendingRealized foldCaller.checked.native.machine.heap folded",
+          "used": true
+        },
+        {
+          "name": "foldShape",
+          "type": "foldRaw = [] ∨ foldRaw = [.ok ((), folded)]",
+          "used": true
+        },
+        {
+          "name": "foldCompleted",
+          "type": "foldRaw = [.ok ((), folded)] → (∃ (node : Option Nat) (scs : List EnumerationState.Suspended), folded.values[winner]? = some (.unenumerated node scs)) ∧ ∀ source ∈ recorded, source ≠ winner → folded.values[source]? = some .eliminated",
+          "used": true
+        },
+        {
+          "name": "foldEliminated",
+          "type": "∀ (slot : Nat), joined.values[slot]? = some .eliminated → folded.values[slot]? = some .eliminated",
+          "used": false,
+          "reason": "Imported fold frame/rejection detail is not needed by this Terminal conclusion."
+        },
+        {
+          "name": "foldLength",
+          "type": "folded.values.length = joined.values.length",
+          "used": false,
+          "reason": "Imported fold frame/rejection detail is not needed by this Terminal conclusion."
+        },
+        {
+          "name": "foldForest",
+          "type": "folded.representatives = joined.representatives",
+          "used": true
+        },
+        {
+          "name": "foldCounter",
+          "type": "folded.counter = joined.counter",
+          "used": true
+        },
+        {
+          "name": "foldObligations",
+          "type": "folded.obligations = joined.obligations",
+          "used": false,
+          "reason": "Imported fold frame/rejection detail is not needed by this Terminal conclusion."
+        },
+        {
+          "name": "foldExpansion",
+          "type": "folded.expansionAncestry = joined.expansionAncestry",
+          "used": false,
+          "reason": "Imported fold frame/rejection detail is not needed by this Terminal conclusion."
+        },
+        {
+          "name": "foldAncestry",
+          "type": "∀ (slot : Nat), slot ≠ winner → folded.recursionAncestry slot = joined.recursionAncestry slot",
+          "used": false,
+          "reason": "Imported fold frame/rejection detail is not needed by this Terminal conclusion."
+        },
+        {
+          "name": "foldRejection",
+          "type": "foldRaw = [] →\n        ∃ («prefix» : List Nat) (source : Nat) (suffix : List Nat)\n          (prefixCaller : Caller width) (prefixEnum : EnumerationState.State Symbol EnumGuard)\n          (prefixQueries : Queries) (action : EnumerateM Symbol EnumGuard Unit),\n          recorded = «prefix» ++ source :: suffix ∧\n          (∀ extra P H, foldP ≤ P → foldH ≤ H →\n            SourcePruningEnumerationFold.run checkEmpty (foldFuel + extra) P H «prefix» beforeCaller joined winner memos.query =\n              (.ok (some [.ok ((), prefixEnum)]), prefixCaller, prefixQueries, prefixEnum)) ∧\n          (∀ extra P H, foldP ≤ P → foldH ≤ H →\n            SourcePruningEnumerationDispatch.dispatch checkEmpty (foldFuel + extra) P H\n              prefixCaller prefixEnum source winner prefixQueries =\n                (.ok (some action), foldCaller, foldQueries)) ∧\n          ExceptT.run (action prefixEnum) = [] ∧ folded = prefixEnum",
+          "used": false,
+          "reason": "Imported fold frame/rejection detail is not needed by this Terminal conclusion."
+        }
+      ],
+      "skipped_fields": [
+        {
+          "name": "foldEliminated",
+          "reason": "Imported fold frame/rejection detail is not needed by this Terminal conclusion."
+        },
+        {
+          "name": "foldLength",
+          "reason": "Imported fold frame/rejection detail is not needed by this Terminal conclusion."
+        },
+        {
+          "name": "foldObligations",
+          "reason": "Imported fold frame/rejection detail is not needed by this Terminal conclusion."
+        },
+        {
+          "name": "foldExpansion",
+          "reason": "Imported fold frame/rejection detail is not needed by this Terminal conclusion."
+        },
+        {
+          "name": "foldAncestry",
+          "reason": "Imported fold frame/rejection detail is not needed by this Terminal conclusion."
+        },
+        {
+          "name": "foldRejection",
+          "reason": "Imported fold frame/rejection detail is not needed by this Terminal conclusion."
+        }
+      ]
+    },
+    {
+      "scope": "run_complete.common",
+      "name": "foldInvariants",
+      "api": "SourcePruningEnumerationFoldInvariants.run_preserves on SAME foldRun at extra=0 P=foldP H=foldH and prefixCounts",
+      "fields": [
+        {
+          "name": "foldedStorage",
+          "type": "StorageValid folded",
+          "used": true
+        },
+        {
+          "name": "foldCounts",
+          "type": "EnumerationCanonicalWaiting.Correct (EnumerationCanonicalUnion.mergedRoots roots recorded winner) folded.values moved",
+          "used": true
+        }
+      ],
+      "skipped_fields": []
+    },
+    {
+      "scope": "run_complete.singleton",
+      "name": "incoming",
+      "api": "SourcePruningEnumerationIncomingNode.run_complete formulas solver foldInventory foldCaller folded checkEmpty winner incoming incomingScs foldFinal foldPost.context foldRealized foldedStorage foldedRoot (foldCompleted completed).1 foldedAvailable closed foldedBounded (ranges at SAME prefix and fold singleton).2",
+      "fields": [
+        {
+          "name": "incomingR",
+          "type": "Nat",
+          "used": true
+        },
+        {
+          "name": "incomingN",
+          "type": "Nat",
+          "used": true
+        },
+        {
+          "name": "incomingP",
+          "type": "Nat",
+          "used": true
+        },
+        {
+          "name": "incomingH",
+          "type": "Nat",
+          "used": true
+        },
+        {
+          "name": "oldNode",
+          "type": "Option Nat",
+          "used": true
+        },
+        {
+          "name": "oldScs",
+          "type": "List EnumerationState.Suspended",
+          "used": true
+        },
+        {
+          "name": "read",
+          "type": "EnumerationState.State Symbol EnumGuard",
+          "used": true
+        },
+        {
+          "name": "afterWrite",
+          "type": "EnumerationState.State Symbol EnumGuard",
+          "used": true
+        },
+        {
+          "name": "afterCaller",
+          "type": "Caller width",
+          "used": true
+        },
+        {
+          "name": "savedQueries",
+          "type": "Queries",
+          "used": true
+        },
+        {
+          "name": "final",
+          "type": "Memos",
+          "used": true
+        },
+        {
+          "name": "next",
+          "type": "Inventory",
+          "used": true
+        },
+        {
+          "name": "replacement",
+          "type": "Node",
+          "used": true
+        },
+        {
+          "name": "handle",
+          "type": "Nat",
+          "used": true
+        },
+        {
+          "name": "reading",
+          "type": "∀ extra, ExceptT.run (getValue (incomingR + extra) winner folded) = [.ok (.unenumerated oldNode oldScs, read)]",
+          "used": true
+        },
+        {
+          "name": "frame",
+          "type": "EnumerationCompressionFrame.Frame folded read",
+          "used": true
+        },
+        {
+          "name": "incomingRun",
+          "type": "∀ extra extraNative P H, incomingP ≤ P → incomingH ≤ H → SourcePruningEnumerationIncomingNode.run checkEmpty (incomingR + extra) (incomingN + extraNative) P H foldCaller folded winner incoming incomingScs foldFinal.query = (.ok (some (if replacement = .empty then [] else [.ok ((), afterWrite)])), afterCaller, savedQueries, read)",
+          "used": true
+        },
+        {
+          "name": "writePrefix",
+          "type": "ExceptT.run ((do\n  setValue winner (.unenumerated (some handle) (incomingScs ++ oldScs))\n  inheritAncestry winner) read) = [.ok ((), afterWrite)]",
+          "used": true
+        },
+        {
+          "name": "afterSame",
+          "type": "afterWrite = {read with values := read.values.set winner (.unenumerated (some handle) (incomingScs ++ oldScs)), recursionAncestry := fun other => if other = winner then (read.expansionAncestry ++ read.recursionAncestry winner).eraseDups else read.recursionAncestry other}",
+          "used": true
+        },
+        {
+          "name": "afterStored",
+          "type": "afterWrite.values[winner]? = some (.unenumerated (some handle) (incomingScs ++ oldScs))",
+          "used": true
+        },
+        {
+          "name": "afterStorage",
+          "type": "StorageValid afterWrite",
+          "used": true
+        },
+        {
+          "name": "afterRealized",
+          "type": "PendingRealized afterCaller.checked.native.machine.heap afterWrite",
+          "used": true
+        },
+        {
+          "name": "incomingPost",
+          "type": "Post formulas solver next foldCaller afterCaller final",
+          "used": true
+        },
+        {
+          "name": "incomingQuerySame",
+          "type": "final.query = savedQueries",
+          "used": true
+        },
+        {
+          "name": "unfolding",
+          "type": "Cache.Extends foldFinal.unfolding final.unfolding",
+          "used": false,
+          "reason": "The public Terminal packet retains Post and query identity but does not separately repeat unfolding extension."
+        },
+        {
+          "name": "replacementAvailable",
+          "type": "Available afterCaller.checked.native.machine.heap replacement",
+          "used": true
+        },
+        {
+          "name": "replacementClosed",
+          "type": "replacement.free = []",
+          "used": true
+        },
+        {
+          "name": "encoded",
+          "type": "encodeNode replacement = some handle",
+          "used": true
+        },
+        {
+          "name": "decoded",
+          "type": "lookupNode afterCaller.checked.native.machine.heap handle = some replacement",
+          "used": true
+        },
+        {
+          "name": "optional",
+          "type": "oldNode = none → replacement = incoming ∧ afterCaller = foldCaller ∧ savedQueries = foldFinal.query ∧ final = foldFinal ∧ next = foldInventory",
+          "used": true
+        },
+        {
+          "name": "present",
+          "type": "∀ oldHandle, oldNode = some oldHandle → ∃ (old query : Node) (queried : SourceEqualityNativeDemand.State width), lookupNode foldCaller.checked.native.machine.heap oldHandle = some old ∧ next.source = foldCaller.checked.native.machine.heap ∧ next.roots = foldInventory.roots ++ [incoming, old] ∧ SourceCurrentAllocatedTargetQuery.Receipt formulas solver next incoming old foldCaller.checked query queried foldFinal ∧ (∀ ambient term, InternedGuardedLanguage.meaning (SourceEqualityPCSGuard.holds formulas solver) ambient replacement term ↔ InternedGuardedLanguage.meaning (SourceEqualityPCSGuard.holds formulas solver) ambient incoming term ∧ InternedGuardedLanguage.meaning (SourceEqualityPCSGuard.holds formulas solver) ambient old term) ∧ (checkEmpty = false → replacement = query ∧ afterCaller = SourceCurrentAllocatedPartialState.advance foldCaller queried foldCaller.fourth foldCaller.merge ∧ final = foldFinal)",
+          "used": true
+        }
+      ],
+      "skipped_fields": [
+        {
+          "name": "unfolding",
+          "reason": "The public Terminal packet retains Post and query identity but does not separately repeat unfolding extension."
+        }
+      ]
+    },
+    {
+      "scope": "run_complete.singleton",
+      "name": "actualOldRead",
+      "api": "EnumerationCorrectness.getValue_success incomingR winner folded read (.unenumerated oldNode oldScs), with observed Success from reading 0",
+      "fields": [
+        {
+          "name": "found",
+          "type": "UnionFind.Result",
+          "used": true
+        },
+        {
+          "name": "lookup",
+          "type": "UnionFind.findRoot incomingR folded.representatives winner = some found",
+          "used": true
+        },
+        {
+          "name": "oldStored",
+          "type": "folded.values[found.representative]? = some (.unenumerated oldNode oldScs)",
+          "used": true
+        },
+        {
+          "name": "readSame",
+          "type": "read = {folded with representatives := found.forest}",
+          "used": false,
+          "reason": "Read counts/stored slot use the retained actual frame.values; this equivalent endpoint equation is redundant."
+        }
+      ],
+      "skipped_fields": [
+        {
+          "name": "readSame",
+          "reason": "Read counts/stored slot use the retained actual frame.values; this equivalent endpoint equation is redundant."
+        }
+      ]
+    },
+    {
+      "scope": "run_complete.singleton",
+      "name": "winnerRoot",
+      "api": "foldedRoot",
+      "fields": [
+        {
+          "name": "size",
+          "type": "Nat",
+          "used": true
+        },
+        {
+          "name": "path",
+          "type": "UnionFind.Reaches folded.representatives winner winner size",
+          "used": true
+        }
+      ],
+      "skipped_fields": []
+    },
+    {
+      "scope": "run_complete.singleton.present",
+      "name": "actualPresent",
+      "api": "present requestedHandle someEq",
+      "fields": [
+        {
+          "name": "old",
+          "type": "Node",
+          "used": true
+        },
+        {
+          "name": "query",
+          "type": "Node",
+          "used": true
+        },
+        {
+          "name": "queried",
+          "type": "SourceEqualityNativeDemand.State width",
+          "used": true
+        },
+        {
+          "name": "oldDecoded",
+          "type": "lookupNode foldCaller.checked.native.machine.heap requestedHandle = some old",
+          "used": true
+        },
+        {
+          "name": "nextSource",
+          "type": "next.source = foldCaller.checked.native.machine.heap",
+          "used": true
+        },
+        {
+          "name": "nextRoots",
+          "type": "next.roots = foldInventory.roots ++ [incoming, old]",
+          "used": true
+        },
+        {
+          "name": "receipt",
+          "type": "SourceCurrentAllocatedTargetQuery.Receipt formulas solver next incoming old foldCaller.checked query queried foldFinal",
+          "used": true
+        },
+        {
+          "name": "meaning",
+          "type": "∀ ambient term, InternedGuardedLanguage.meaning (SourceEqualityPCSGuard.holds formulas solver) ambient replacement term ↔ InternedGuardedLanguage.meaning (SourceEqualityPCSGuard.holds formulas solver) ambient incoming term ∧ InternedGuardedLanguage.meaning (SourceEqualityPCSGuard.holds formulas solver) ambient old term",
+          "used": true
+        },
+        {
+          "name": "disabled",
+          "type": "checkEmpty = false → replacement = query ∧ afterCaller = SourceCurrentAllocatedPartialState.advance foldCaller queried foldCaller.fourth foldCaller.merge ∧ final = foldFinal",
+          "used": false,
+          "reason": "Terminal retains the SAME actual receipt/meaning but does not repeat the imported flag-false subpacket."
+        }
+      ],
+      "skipped_fields": [
+        {
+          "name": "disabled",
+          "reason": "Terminal retains the SAME actual receipt/meaning but does not repeat the imported flag-false subpacket."
+        }
+      ]
+    }
+  ],
+  "count": 7,
+  "field_count": 96,
+  "all_skipped_fields_explicit": true,
+  "no_other_named_obtains_planned": true,
+  "partial_field_use": {
+    "foldCompleted": "Only the .1 actual target-pending conjunct is needed. The per-source eliminated conjunct remains in the imported field but is not repeated."
+  }
+}

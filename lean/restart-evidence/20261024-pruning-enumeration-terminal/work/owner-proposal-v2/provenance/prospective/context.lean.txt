@@ -1,0 +1,25 @@
+import MicroCFTA.SourcePruningEnumerationTerminalPrefix
+import MicroCFTA.SourcePruningEnumerationFoldInvariants
+import MicroCFTA.SourcePruningEnumerationIncomingNode
+
+namespace MicroCFTA.SourcePruningEnumerationTerminal
+open EnumerationState EnumerationCorrectness EnumerationSchedule
+open EnumerationCompleteness EnumerationDependencies
+open InternedConstructorTemplates InternedProbeProvenance
+open SourcePruningEnumerationNodes SourcePruningEnumerationObservation
+open SourceCurrentAllocatedNativeInventoryState (Inventory)
+open SourceCurrentAllocatedPartialInvariant (Context Post)
+local notation "Symbol" => SourcePruningTemplates.Symbol
+local notation "Constraint" => SourceSymbolicIndex.Constraint FullSyntax.Formula
+local notation "Node" => InternedConstructorTemplates.Value Symbol Constraint
+local notation "Caller" => SourceCurrentAllocatedPartialState.State
+local notation "Memos" => EndpointMemoGateTrace.Memos
+local notation "Queries" => SourceEndpointMemo.Memos
+variable {EnumGuard : Type} {width : Nat}
+local notation "PrefixRaw" => List (Except EnumerationState.Error
+  ((List Nat × Nat × EnumerationWaitingIndex.Waiting) × EnumerationState.State Symbol EnumGuard))
+local notation "FoldRaw" => List (Except EnumerationState.Error (Unit × EnumerationState.State Symbol EnumGuard))
+local notation "TerminalRaw" => List (Except EnumerationState.Error
+  (Fragments.Fragment Symbol × EnumerationState.State Symbol EnumGuard))
+local notation "NativeOutcome" => SourceEqualityNativeDemand.Outcome (Symbol := Symbol) (Guard := Constraint) width Node
+local notation "WorkerOutcome" => SourceCurrentAllocatedConjunctionWorker.Outcome width

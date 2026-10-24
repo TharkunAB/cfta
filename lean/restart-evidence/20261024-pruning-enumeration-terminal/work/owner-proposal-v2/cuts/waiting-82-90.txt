@@ -1,0 +1,9 @@
+/-- A fixed class map gives exact replacement counts at a stored raw slot. -/
+theorem replace_correct (roots : Nat → Nat) (values : List (UVarValue Symbol)) (index : Nat)
+    (old new : UVarValue Symbol) (stored : values[index]? = some old)
+    (waiting : EnumerationWaitingIndex.Waiting) (correct : Correct roots values waiting) :
+    Correct roots (values.set index new) (replace roots old new waiting) := by
+  unfold Correct at *
+  rw [replace_eq, List.map_set]
+  exact EnumerationWaitingIndex.replace_correct (values.map (canonicalValue roots)) index
+    (canonicalValue roots old) (canonicalValue roots new) (by simp [stored]) waiting correct

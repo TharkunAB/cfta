@@ -1,0 +1,113 @@
+{
+  "status": "ACCEPTED_BEFORE_ANY_BODY_OR_ACTIVATION",
+  "accepted_at": "2026-10-24T22:17:39.909804+00:00",
+  "owner": "/tmp/mcfta-pruning-enumeration-terminal-20261024-proposal",
+  "frozen_sha256": "7bdd110dac45b41ba26fd468d98870d57cec0a56f56479db0fc9b3e555da3e70",
+  "pins_sha256": "dd25cb6ef36cfcf95f17ea5f126f6d109b6da7fa257c188c248239ccf5d4d540",
+  "contracts": {
+    "complete-header.lean.txt": "theorem run_complete\n    [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Constraint)] [DecidableEq Node]\n    (formulas : SourceGuards.Formulas FullSyntax.Formula)\n    (solver : SourceGuards.Entailment FullSyntax.Formula)\n    (inventory : Inventory) (beforeCaller : Caller width)\n    (before : EnumerationState.State Symbol EnumGuard)\n    (checkEmpty : Bool) (first : EnumerationState.Suspended) (rest : List EnumerationState.Suspended)\n    (incoming : Node) (incomingScs : List EnumerationState.Suspended)\n    (waiting : EnumerationWaitingIndex.Waiting) (roots : Nat \u2192 Nat) (memos : Memos)\n    (initial : Context formulas solver inventory beforeCaller memos)\n    (safe : Safe before) (paths : Roots before.representatives roots)\n    (counts : EnumerationCanonicalWaiting.Correct roots before.values waiting)\n    (bounded : \u2200 sc \u2208 first :: rest, sc.var < before.counter)\n    (pending : InputsPending before (first :: rest))\n    (realized : PendingRealized beforeCaller.checked.native.machine.heap before)\n    (nonempty : incoming \u2260 .empty)\n    (available : Available beforeCaller.checked.native.machine.heap incoming) (closed : incoming.free = [])\n    (incomingBounded : \u2200 sc \u2208 incomingScs, sc.var < before.counter)\n    (ranges : \u2200 (prefixFuel : Nat) (recorded : List Nat) (winner : Nat)\n      (moved : EnumerationWaitingIndex.Waiting) (joined : EnumerationState.State Symbol EnumGuard),\n      ExceptT.run (SourcePruningEnumerationTerminalPrefix.run prefixFuel first rest waiting before) =\n        [.ok ((recorded, winner, moved), joined)] \u2192\n      SourcePruningEnumerationFold.Ranges checkEmpty recorded beforeCaller joined winner memos.query \u2227\n      \u2200 (foldFuel P H : Nat) (foldCaller : Caller width)\n        (folded : EnumerationState.State Symbol EnumGuard) (foldQueries : Queries),\n        SourcePruningEnumerationFold.run checkEmpty foldFuel P H recorded beforeCaller joined winner memos.query =\n          (.ok (some [.ok ((), folded)]), foldCaller, foldQueries, folded) \u2192\n        match folded.values[winner]? with\n        | some (.unenumerated (some oldHandle) _) =>\n            match lookupNode foldCaller.checked.native.machine.heap oldHandle with\n            | some old => SourceCurrentAllocatedNativeRequestBounds.WordRanges\n                (.code (SourceRecursiveIntersectionCode.requestNode IntersectionEmptyDomain.emptyDomain incoming old))\n                foldCaller.checked\n            | none => True\n        | _ => True) :\n    \u2203 (r n p h : Nat) (recorded : List Nat) (winner : Nat)\n      (moved : EnumerationWaitingIndex.Waiting) (joined : EnumerationState.State Symbol EnumGuard)\n      (foldRaw : FoldRaw) (foldCaller : Caller width) (folded : EnumerationState.State Symbol EnumGuard)\n      (foldQueries : Queries) (foldFinal : Memos) (foldInventory : Inventory)\n      (raw : TerminalRaw) (afterCaller : Caller width) (outer : EnumerationState.State Symbol EnumGuard)\n      (savedQueries : Queries) (final : Memos) (next : Inventory),\n      (\u2200 extra, ExceptT.run (SourcePruningEnumerationTerminalPrefix.run (r + extra) first rest waiting before) =\n        [.ok ((recorded, winner, moved), joined)]) \u2227\n      recorded = (first :: rest).map (fun sc => roots sc.var) \u2227 winner \u2208 recorded \u2227\n      moved = EnumerationCanonicalWaiting.moveMany winner\n        (EnumerationBuilderCaches.canonicalIds (recorded.filter (fun key => key != winner))) waiting \u2227\n      (\u2200 extra P H, p \u2264 P \u2192 h \u2264 H \u2192\n        SourcePruningEnumerationFold.run checkEmpty (n + extra) P H recorded beforeCaller joined winner memos.query =\n          (.ok (some foldRaw), foldCaller, foldQueries, folded)) \u2227\n      (foldRaw = [] \u2228 foldRaw = [.ok ((), folded)]) \u2227\n      Post formulas solver foldInventory beforeCaller foldCaller foldFinal \u2227 foldFinal.query = foldQueries \u2227\n      StorageValid folded \u2227 PendingRealized foldCaller.checked.native.machine.heap folded \u2227\n      IsRoot folded.representatives winner \u2227\n      EnumerationCanonicalWaiting.Correct (EnumerationCanonicalUnion.mergedRoots roots recorded winner)\n        folded.values moved \u2227\n      (\u2200 extraRepresentative extraNative P H, p \u2264 P \u2192 h \u2264 H \u2192\n        run checkEmpty (r + extraRepresentative) (n + extraNative) P H first rest waiting\n          beforeCaller before incoming incomingScs memos.query =\n          (.ok (some raw), afterCaller, savedQueries, outer, moved)) \u2227\n      Post formulas solver next beforeCaller afterCaller final \u2227 final.query = savedQueries \u2227\n      (foldRaw = [] \u2192 raw = [] \u2227 afterCaller = foldCaller \u2227 savedQueries = foldQueries \u2227\n        outer = folded \u2227 final = foldFinal \u2227 next = foldInventory) \u2227\n      (foldRaw = [.ok ((), folded)] \u2192\n        \u2203 (oldNode : Option Nat) (oldScs : List EnumerationState.Suspended)\n          (read afterWrite : EnumerationState.State Symbol EnumGuard) (replacement : Node) (handle : Nat),\n          outer = read \u2227\n          (\u2200 extra, ExceptT.run (getValue (r + extra) winner folded) =\n            [.ok (.unenumerated oldNode oldScs, read)]) \u2227\n          EnumerationCompressionFrame.Frame folded read \u2227\n          (\u2200 extraRepresentative extraNative P H, p \u2264 P \u2192 h \u2264 H \u2192\n            SourcePruningEnumerationIncomingNode.run checkEmpty (r + extraRepresentative) (n + extraNative) P H\n              foldCaller folded winner incoming incomingScs foldQueries =\n              (.ok (some (if replacement = .empty then [] else [.ok ((), afterWrite)])),\n                afterCaller, savedQueries, read)) \u2227\n          ExceptT.run ((do\n            setValue winner (.unenumerated (some handle) (incomingScs ++ oldScs))\n            inheritAncestry winner) read) = [.ok ((), afterWrite)] \u2227\n          afterWrite.values[winner]? = some (.unenumerated (some handle) (incomingScs ++ oldScs)) \u2227\n          StorageValid afterWrite \u2227 PendingRealized afterCaller.checked.native.machine.heap afterWrite \u2227\n          EnumerationCanonicalWaiting.Correct (EnumerationCanonicalUnion.mergedRoots roots recorded winner)\n            afterWrite.values\n            (EnumerationCanonicalWaiting.count (EnumerationCanonicalUnion.mergedRoots roots recorded winner)\n              1 incomingScs moved) \u2227\n          raw = (if replacement = .empty then [] else [.ok (.hole winner, afterWrite)]) \u2227\n          FragmentBound afterWrite.counter (.hole winner : Fragments.Fragment Symbol) \u2227\n          Available afterCaller.checked.native.machine.heap replacement \u2227 replacement.free = [] \u2227\n          encodeNode replacement = some handle \u2227 lookupNode afterCaller.checked.native.machine.heap handle = some replacement \u2227\n          (oldNode = none \u2192 replacement = incoming \u2227 afterCaller = foldCaller \u2227\n            savedQueries = foldQueries \u2227 final = foldFinal \u2227 next = foldInventory) \u2227\n          (\u2200 oldHandle, oldNode = some oldHandle \u2192\n            \u2203 (old query : Node) (queried : SourceEqualityNativeDemand.State width),\n              lookupNode foldCaller.checked.native.machine.heap oldHandle = some old \u2227\n              next.source = foldCaller.checked.native.machine.heap \u2227\n              next.roots = foldInventory.roots ++ [incoming, old] \u2227\n              SourceCurrentAllocatedTargetQuery.Receipt formulas solver next incoming old\n                foldCaller.checked query queried foldFinal \u2227\n              (\u2200 ambient term,\n                InternedGuardedLanguage.meaning (SourceEqualityPCSGuard.holds formulas solver) ambient replacement term \u2194\n                  InternedGuardedLanguage.meaning (SourceEqualityPCSGuard.holds formulas solver) ambient incoming term \u2227\n                  InternedGuardedLanguage.meaning (SourceEqualityPCSGuard.holds formulas solver) ambient old term)))\n",
+    "context.lean.txt": "import MicroCFTA.SourcePruningEnumerationTerminalPrefix\nimport MicroCFTA.SourcePruningEnumerationFoldInvariants\nimport MicroCFTA.SourcePruningEnumerationIncomingNode\n\nnamespace MicroCFTA.SourcePruningEnumerationTerminal\nopen EnumerationState EnumerationCorrectness EnumerationSchedule\nopen EnumerationCompleteness EnumerationDependencies\nopen InternedConstructorTemplates InternedProbeProvenance\nopen SourcePruningEnumerationNodes SourcePruningEnumerationObservation\nopen SourceCurrentAllocatedNativeInventoryState (Inventory)\nopen SourceCurrentAllocatedPartialInvariant (Context Post)\nlocal notation \"Symbol\" => SourcePruningTemplates.Symbol\nlocal notation \"Constraint\" => SourceSymbolicIndex.Constraint FullSyntax.Formula\nlocal notation \"Node\" => InternedConstructorTemplates.Value Symbol Constraint\nlocal notation \"Caller\" => SourceCurrentAllocatedPartialState.State\nlocal notation \"Memos\" => EndpointMemoGateTrace.Memos\nlocal notation \"Queries\" => SourceEndpointMemo.Memos\nvariable {EnumGuard : Type} {width : Nat}\nlocal notation \"PrefixRaw\" => List (Except EnumerationState.Error\n  ((List Nat \u00d7 Nat \u00d7 EnumerationWaitingIndex.Waiting) \u00d7 EnumerationState.State Symbol EnumGuard))\nlocal notation \"FoldRaw\" => List (Except EnumerationState.Error (Unit \u00d7 EnumerationState.State Symbol EnumGuard))\nlocal notation \"TerminalRaw\" => List (Except EnumerationState.Error\n  (Fragments.Fragment Symbol \u00d7 EnumerationState.State Symbol EnumGuard))\nlocal notation \"NativeOutcome\" => SourceEqualityNativeDemand.Outcome (Symbol := Symbol) (Guard := Constraint) width Node\nlocal notation \"WorkerOutcome\" => SourceCurrentAllocatedConjunctionWorker.Outcome width\n",
+    "gained-header.lean.txt": "theorem gained_correct\n    (values : List (EnumerationState.UVarValue Symbol)) (target : Nat)\n    (oldNode newNode : Option Nat) (incomingScs oldScs : List EnumerationState.Suspended)\n    (roots : Nat \u2192 Nat) (waiting : EnumerationWaitingIndex.Waiting)\n    (stored : values[target]? = some (.unenumerated oldNode oldScs))\n    (counts : EnumerationCanonicalWaiting.Correct roots values waiting) :\n    EnumerationCanonicalWaiting.Correct roots\n      (values.set target (.unenumerated newNode (incomingScs ++ oldScs)))\n      (EnumerationCanonicalWaiting.count roots 1 incomingScs waiting)\n",
+    "gained-same.lean.txt": "have same : EnumerationCanonicalWaiting.replace (Symbol := Symbol) roots\n      (.unenumerated oldNode oldScs) (.unenumerated newNode (incomingScs ++ oldScs)) waiting =\n      EnumerationCanonicalWaiting.count roots 1 incomingScs waiting\n",
+    "instance-header.lean.txt": "local instance terminalMonadList : Monad List\n",
+    "local-folded-available.lean.txt": "have foldedAvailable : Available foldCaller.checked.native.machine.heap incoming\n",
+    "local-folded-bounded.lean.txt": "have foldedBounded : \u2200 sc \u2208 incomingScs, sc.var < folded.counter\n",
+    "local-folded-root.lean.txt": "have foldedRoot : IsRoot folded.representatives winner\n",
+    "local-found-winner.lean.txt": "have foundWinner : found.representative = winner\n",
+    "local-joined-root.lean.txt": "have joinedRoot : IsRoot joined.representatives winner\n",
+    "local-read-counts.lean.txt": "have readCounts : EnumerationCanonicalWaiting.Correct\n      (EnumerationCanonicalUnion.mergedRoots roots recorded winner) read.values moved\n",
+    "local-read-stored.lean.txt": "have readStored : read.values[winner]? = some (.unenumerated oldNode oldScs)\n",
+    "local-winner-bound.lean.txt": "have winnerBound : winner < afterWrite.counter\n",
+    "local-write-counts.lean.txt": "have writeCounts : EnumerationCanonicalWaiting.Correct\n      (EnumerationCanonicalUnion.mergedRoots roots recorded winner) afterWrite.values\n      (EnumerationCanonicalWaiting.count (EnumerationCanonicalUnion.mergedRoots roots recorded winner) 1 incomingScs moved)\n",
+    "run-header.lean.txt": "noncomputable def run\n    [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Constraint)] [DecidableEq Node]\n    (checkEmpty : Bool) (representativeFuel nativeFuel p h : Nat)\n    (first : EnumerationState.Suspended) (rest : List EnumerationState.Suspended)\n    (waiting : EnumerationWaitingIndex.Waiting)\n    (beforeCaller : Caller width) (before : EnumerationState.State Symbol EnumGuard)\n    (incoming : Node) (incomingScs : List EnumerationState.Suspended) (queries : Queries) :\n    (Except (PrefixRaw \u2295 ((NativeOutcome \u2295 WorkerOutcome) \u2295 FoldRaw)) (Option TerminalRaw)) \u00d7\n      Caller width \u00d7 Queries \u00d7 EnumerationState.State Symbol EnumGuard \u00d7 EnumerationWaitingIndex.Waiting\n"
+  },
+  "schema": {
+    "module": "MicroCFTA.SourcePruningEnumerationTerminal",
+    "public_heads": [
+      {
+        "name": "run",
+        "kind": "def",
+        "noncomputable": true,
+        "file": "run-header.lean.txt",
+        "attachment": " :=\n"
+      },
+      {
+        "name": "gained_correct",
+        "kind": "theorem",
+        "file": "gained-header.lean.txt",
+        "attachment": " := by\n"
+      },
+      {
+        "name": "run_complete",
+        "kind": "theorem",
+        "file": "complete-header.lean.txt",
+        "attachment": " := by\n"
+      }
+    ],
+    "public_head_order": [
+      "run",
+      "gained_correct",
+      "run_complete"
+    ],
+    "contract_count": 15,
+    "contract_lines": 159,
+    "context_lines": 25,
+    "public_header_lines": 118,
+    "proof_local_have_count": 10,
+    "proof_local_let_count": 0,
+    "definition_local_let_count": 0,
+    "definition_count": 1,
+    "helpers": [],
+    "new_types": [],
+    "new_carriers": [],
+    "new_predicates": [],
+    "local_instance_count": 1,
+    "global_instance_count": 0,
+    "LawfulMonad_count": 0,
+    "obtain_count": 7,
+    "obtain_field_count": 96,
+    "scoped_type_count": 313,
+    "induction_count": 0,
+    "IH_count": 0,
+    "source_count": 18,
+    "cut_count": 31,
+    "cut_lines": 647,
+    "route_count": 23,
+    "route_source_count": 44,
+    "target_source_lines": [
+      300,
+      450
+    ],
+    "proposed_hard_cap": 650,
+    "compiler_evidence": false,
+    "bodies_present": false
+  },
+  "script_frozen_sha256": "38fd215529f5e5171061b199a5bcd47efe1ae343858da5de30701acdac6ec78a",
+  "reviews": {
+    "setup": {
+      "path": "/tmp/mcfta-pruning-enumeration-terminal-20261024-setup-review.md",
+      "sha256": "09a59b87954cad221b7ff7a35d4b4611638c77ffdd64ef5f4e31cb2bac500d97"
+    },
+    "source": {
+      "path": "/tmp/mcfta-pruning-enumeration-terminal-20261024-source-review.md",
+      "sha256": "a42c0653b5ab78d40c9bd40b7dea0e363a2023f778dcc2981645f7e504774131"
+    },
+    "declaration": {
+      "path": "/tmp/mcfta-pruning-enumeration-terminal-20261024-declaration-review.md",
+      "sha256": "41bec82c99575e7b37ecd8185fa4e5d82feaffd1d69fd5f0b0f47783c00a4eb7"
+    },
+    "seal-script": {
+      "path": "/tmp/mcfta-pruning-enumeration-terminal-20261024-seal-script-review.md",
+      "sha256": "eeecc5f06e92827681f120718f3f8ba99072333b7fa849c774a954dc0cb74725"
+    }
+  },
+  "personal_review": "All15 literal contracts159lines,313 scoped types,7 packets96fields and647 source-cut lines read. All133owner pins,18live sources31cuts44imports23routes and exact selected public bundle verified. All471 candidate script lines, both templates, final preparation, five original bases and complete inverse span recipes read and verified; all40script pins match. Current H6 statement read in full. No mathematical/action/instance body or selected execution yet.",
+  "limits": "Lean4.34.1 default proof limits; all linters and warnings as errors;4GiB memory/high,zero swap,five minutes,serial. No new axiom, successful-execution premise or proof-limit change.",
+  "source_budget": [
+    300,
+    450
+  ],
+  "hard_cap": 650,
+  "activation": "not yet",
+  "bodies": "not yet"
+}

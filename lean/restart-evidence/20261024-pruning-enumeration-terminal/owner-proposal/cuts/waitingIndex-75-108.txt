@@ -1,0 +1,34 @@
+theorem count_read (change : Int) (scs : List Suspended) (waiting : Waiting) (uv : Nat) :
+    read (count change scs waiting) uv = read waiting uv + change * occurrences uv scs := by
+  induction scs generalizing waiting with
+  | nil => simp [count, occurrences]
+  | cons first rest ih =>
+      simp only [count, List.foldl_cons] at *
+      rw [ih, bump_read]
+      by_cases same : first.var = uv
+      · simp [occurrences, same, Int.mul_add, Int.add_assoc]
+      · simp [occurrences, same, Ne.symm same]
+
+/-- Repeated source updates retain zero-entry deletion. -/
+theorem count_canonical (change : Int) (scs : List Suspended) (waiting : Waiting) (canonical : Canonical waiting) :
+    Canonical (count change scs waiting) := by
+  induction scs generalizing waiting with
+  | nil => exact canonical
+  | cons first rest ih => exact ih (bump change first.var waiting) (bump_canonical change first.var waiting canonical)
+
+/-- Replacement subtracts the old multiplicity and adds the new multiplicity. -/
+theorem replace_read (old new : UVarValue Symbol) (waiting : Waiting) (uv : Nat) :
+    read (replace old new waiting) uv =
+      read waiting uv - occurrences uv (references old) + occurrences uv (references new) := by
+  simp [replace, count_read, Int.sub_eq_add_neg]
+
+/-- Replacement preserves the sparse map representation. -/
+theorem replace_canonical (old new : UVarValue Symbol) (waiting : Waiting) (canonical : Canonical waiting) :
+    Canonical (replace old new waiting) :=
+  count_canonical 1 _ _ (count_canonical (-1) _ waiting canonical)
+
+/-- A correct counter table is sparse and has the exact integer scan value. -/
+theorem Correct.facts (correct : Correct values waiting) :
+    Canonical waiting ∧ ∀ uv, read waiting uv = total uv values := by
+  have same : ∀ uv, read waiting uv = total uv values := by intro uv; simp [read, correct uv]
+  exact ⟨fun uv => by rw [same uv]; exact correct uv, same⟩

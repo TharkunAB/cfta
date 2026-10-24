@@ -1,0 +1,7 @@
+/-- Replace the selected old classes by the actual winning root. -/
+def mergedRoots (roots : Nat → Nat) (selected : List Nat) (target uv : Nat) : Nat :=
+  if roots uv ∈ selected then target else roots uv
+
+/-- An actual representative map fixes every representative it names. -/
+theorem roots_idempotent (forest : UnionFind.Forest) (roots : Nat → Nat) (paths : Roots forest roots) :
+    ∀ uv, roots (roots uv) = roots uv := by

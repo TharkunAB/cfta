@@ -1,0 +1,17 @@
+theorem reaches_terminal (path : Reaches forest uv representative size) :
+    read forest representative = .root size := by
+  induction path with
+  | root lookup => exact lookup
+  | parent _ _ ih => exact ih
+
+/-- A finite parent path has a unique representative and stored size. -/
+theorem reaches_unique (left : Reaches forest uv root₁ size₁)
+    (right : Reaches forest uv root₂ size₂) : root₁ = root₂ ∧ size₁ = size₂ := by
+  induction left generalizing root₂ size₂ with
+  | root lookup =>
+    cases right with
+    | root other => simp_all
+    | parent other tail => simp_all
+  | parent lookup tail ih =>
+    cases right with
+    | root other => simp_all

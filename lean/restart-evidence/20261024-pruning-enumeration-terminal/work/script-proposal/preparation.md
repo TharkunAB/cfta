@@ -1,0 +1,13 @@
+# Terminal script preparation
+
+Timestamp: 2026-10-25 00:12:18 CEST. Verdict: FINAL SOURCE-ONLY PROPOSAL. I authored the adapters and templates. Independent peer review and Root activation remain separate.
+
+I read all471 selected source lines, five complete active FoldInvariants bases, exact bidirectional diffs and both templates. Literal changes select the Terminal module/area/evidence/note, actual04822017ec505dd481a7c67979c77655cb1fec70 baseline,137786 files, backup2348, custody index6f9984db794cfbbc4f64907cb4898ec7e6624bbf719cd6aefe0426923d0b78c8 and source-reviewa42c0653b5ab78d40c9bd40b7dea0e363a2023f778dcc2981645f7e504774131. Exactly26 prior FoldInvariants publication inputs and separately sealed assessment/peer context match actual source bytes. The current owner is copied once; old history stays baseline protected.
+
+The actual133-payload owner7bdd110dac45b41ba26fd468d98870d57cec0a56f56479db0fc9b3e555da3e70 fits the inherited flat reader without a schema patch. All18 live sources,31 cuts and44 project import identities match snapshots/bytes/hashes. All15 STRING contracts159lines match literal files. Context, instance header and three public heads reconstruct Root's entire selected bundle byte-for-byte. One definition, two theorems, one local Monad, zero Lawful/global instances and hard650 fit the generic guards.
+
+All baseline/mode/ref/stash/worktree, nine document inverse, Audit prepend, exact proof parent/path, literal contract, source/import, actual report/failure/public/axiom-subset, six-artifact cap, manifest and filesystem/index/tree controls remain. Publication requires every sealed path in HEAD, including ignored logs, and the original singleton destination/ordinary formalize push. Ten patches and character-span recipes reconstruct both complete script endpoints exactly as data.
+
+Both unrendered templates and INDEX distinguish staging outer read+moved map from the logical gained-map certificate at the actual write/inherit prefix, including rejection. Incoming Empty precedes Prefix; Fold rejection stops incoming work. Only success returns a hole, without installing it at winner. Current conditional ranges, flag/partition/later captured-uv store, native indexes/extraction, Safe/LiveRoots and H6/full-goal boundaries stay explicit. Six repair handoffs remain first; no Haskell change is claimed.
+
+No parser, selected-program/compiler execution, math/action/instance body, Git/network or repository edit occurred. All new check outcomes, actual failures, source lengths, axioms, seal and publication results remain unbound. Root owns activation and execution.

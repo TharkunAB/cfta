@@ -1,0 +1,236 @@
+{
+  "groups": [
+    {
+      "scope": "run_complete.reject",
+      "kind": "condition",
+      "binders": [
+        {
+          "name": "rejected",
+          "type": "foldRaw = []"
+        }
+      ]
+    },
+    {
+      "scope": "run_complete.singleton",
+      "kind": "condition",
+      "binders": [
+        {
+          "name": "completed",
+          "type": "foldRaw = [.ok ((), folded)]"
+        }
+      ]
+    },
+    {
+      "scope": "run_complete.singleton.raw.empty",
+      "kind": "condition",
+      "binders": [
+        {
+          "name": "empty",
+          "type": "replacement = .empty"
+        }
+      ]
+    },
+    {
+      "scope": "run_complete.singleton.raw.nonempty",
+      "kind": "condition",
+      "binders": [
+        {
+          "name": "empty",
+          "type": "replacement ≠ .empty"
+        }
+      ]
+    },
+    {
+      "scope": "run.incoming.empty",
+      "kind": "condition",
+      "binders": [
+        {
+          "name": "incomingEmpty",
+          "type": "incoming = .empty"
+        }
+      ]
+    },
+    {
+      "scope": "run.incoming.nonempty",
+      "kind": "condition",
+      "binders": [
+        {
+          "name": "incomingEmpty",
+          "type": "incoming ≠ .empty"
+        }
+      ]
+    },
+    {
+      "scope": "run.prefix.singleton",
+      "kind": "raw pattern",
+      "binders": [
+        {
+          "name": "recorded",
+          "type": "List Nat"
+        },
+        {
+          "name": "winner",
+          "type": "Nat"
+        },
+        {
+          "name": "moved",
+          "type": "EnumerationWaitingIndex.Waiting"
+        },
+        {
+          "name": "joined",
+          "type": "EnumerationState.State Symbol EnumGuard"
+        }
+      ]
+    },
+    {
+      "scope": "run.prefix.other",
+      "kind": "raw pattern",
+      "binders": [
+        {
+          "name": "prefixRaw",
+          "type": "PrefixRaw"
+        }
+      ]
+    },
+    {
+      "scope": "run.fold.tuple",
+      "kind": "raw pattern",
+      "binders": [
+        {
+          "name": "foldResult",
+          "type": "Except (NativeOutcome ⊕ WorkerOutcome) (Option FoldRaw)"
+        },
+        {
+          "name": "foldCaller",
+          "type": "Caller width"
+        },
+        {
+          "name": "foldQueries",
+          "type": "Queries"
+        },
+        {
+          "name": "foldOuter",
+          "type": "EnumerationState.State Symbol EnumGuard"
+        }
+      ]
+    },
+    {
+      "scope": "run.fold.error",
+      "kind": "case binder",
+      "binders": [
+        {
+          "name": "foldFault",
+          "type": "NativeOutcome ⊕ WorkerOutcome"
+        }
+      ]
+    },
+    {
+      "scope": "run.fold.none",
+      "kind": "case binder",
+      "binders": []
+    },
+    {
+      "scope": "run.fold.some",
+      "kind": "case binder",
+      "binders": [
+        {
+          "name": "foldRaw",
+          "type": "FoldRaw"
+        }
+      ]
+    },
+    {
+      "scope": "run.fold.reject",
+      "kind": "raw pattern",
+      "binders": []
+    },
+    {
+      "scope": "run.fold.singleton",
+      "kind": "raw pattern",
+      "binders": [
+        {
+          "name": "folded",
+          "type": "EnumerationState.State Symbol EnumGuard"
+        }
+      ]
+    },
+    {
+      "scope": "run.fold.other",
+      "kind": "raw pattern",
+      "binders": [
+        {
+          "name": "stoppedRaw",
+          "type": "FoldRaw"
+        }
+      ]
+    },
+    {
+      "scope": "run.incoming.tuple",
+      "kind": "raw pattern",
+      "binders": [
+        {
+          "name": "incomingResult",
+          "type": "Except (NativeOutcome ⊕ WorkerOutcome) (Option FoldRaw)"
+        },
+        {
+          "name": "afterCaller",
+          "type": "Caller width"
+        },
+        {
+          "name": "savedQueries",
+          "type": "Queries"
+        },
+        {
+          "name": "read",
+          "type": "EnumerationState.State Symbol EnumGuard"
+        }
+      ]
+    },
+    {
+      "scope": "run.incoming.error",
+      "kind": "case binder",
+      "binders": [
+        {
+          "name": "incomingFault",
+          "type": "NativeOutcome ⊕ WorkerOutcome"
+        }
+      ]
+    },
+    {
+      "scope": "run.incoming.none",
+      "kind": "case binder",
+      "binders": []
+    },
+    {
+      "scope": "run.incoming.some",
+      "kind": "case binder",
+      "binders": [
+        {
+          "name": "incomingRaw",
+          "type": "FoldRaw"
+        }
+      ]
+    },
+    {
+      "scope": "run.incoming.map.error",
+      "kind": "case binder",
+      "binders": [
+        {
+          "name": "error",
+          "type": "EnumerationState.Error"
+        }
+      ]
+    }
+  ],
+  "count": 20,
+  "runtime_no_lets": true,
+  "no_Value_constructor_split_in_producer": true,
+  "pattern_order": [
+    "incoming Empty rejects before Prefix",
+    "exact Prefix singleton continues; fallback retains PrefixRaw",
+    "Fold error/none/[]/singleton/other in that order",
+    "Incoming native outcome retained; only Unit rows map to hole winner"
+  ],
+  "root_path_inversion": "winnerRoot packet, no inferred helper",
+  "replacement_split": "Only final raw rewrite splits replacement = .empty; no new typed have."
+}

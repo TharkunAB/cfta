@@ -1,0 +1,729 @@
+{
+  "context_imports": [
+    "MicroCFTA.SourcePruningEnumerationTerminalPrefix",
+    "MicroCFTA.SourcePruningEnumerationFoldInvariants",
+    "MicroCFTA.SourcePruningEnumerationIncomingNode"
+  ],
+  "routes": [
+    {
+      "target": "MicroCFTA.SourcePruningEnumerationTerminalPrefix",
+      "route": [
+        "MicroCFTA.SourcePruningEnumerationTerminalPrefix"
+      ]
+    },
+    {
+      "target": "MicroCFTA.SourcePruningEnumerationFoldInvariants",
+      "route": [
+        "MicroCFTA.SourcePruningEnumerationFoldInvariants"
+      ]
+    },
+    {
+      "target": "MicroCFTA.SourcePruningEnumerationFold",
+      "route": [
+        "MicroCFTA.SourcePruningEnumerationFoldInvariants",
+        "MicroCFTA.SourcePruningEnumerationFold"
+      ]
+    },
+    {
+      "target": "MicroCFTA.SourcePruningEnumerationIncomingNode",
+      "route": [
+        "MicroCFTA.SourcePruningEnumerationIncomingNode"
+      ]
+    },
+    {
+      "target": "MicroCFTA.EnumerationCorrectness",
+      "route": [
+        "MicroCFTA.SourcePruningEnumerationTerminalPrefix",
+        "MicroCFTA.EnumerationCanonicalUnion",
+        "MicroCFTA.EnumerationSchedule",
+        "MicroCFTA.EnumerationCorrectness"
+      ]
+    },
+    {
+      "target": "MicroCFTA.EnumerationCompleteness",
+      "route": [
+        "MicroCFTA.SourcePruningEnumerationTerminalPrefix",
+        "MicroCFTA.EnumerationCompleteness"
+      ]
+    },
+    {
+      "target": "MicroCFTA.EnumerationDependencies",
+      "route": [
+        "MicroCFTA.SourcePruningEnumerationIncomingNode",
+        "MicroCFTA.EnumerationExecution",
+        "MicroCFTA.EnumerationAssignment",
+        "MicroCFTA.EnumerationOrder",
+        "MicroCFTA.EnumerationReferences",
+        "MicroCFTA.EnumerationDependencies"
+      ]
+    },
+    {
+      "target": "MicroCFTA.EnumerationSchedule",
+      "route": [
+        "MicroCFTA.SourcePruningEnumerationTerminalPrefix",
+        "MicroCFTA.EnumerationCanonicalUnion",
+        "MicroCFTA.EnumerationSchedule"
+      ]
+    },
+    {
+      "target": "MicroCFTA.EnumerationCanonicalUnion",
+      "route": [
+        "MicroCFTA.SourcePruningEnumerationTerminalPrefix",
+        "MicroCFTA.EnumerationCanonicalUnion"
+      ]
+    },
+    {
+      "target": "MicroCFTA.EnumerationCanonicalWaiting",
+      "route": [
+        "MicroCFTA.SourcePruningEnumerationFoldInvariants",
+        "MicroCFTA.EnumerationCanonicalWaiting"
+      ]
+    },
+    {
+      "target": "MicroCFTA.EnumerationWaitingIndex",
+      "route": [
+        "MicroCFTA.SourcePruningEnumerationFoldInvariants",
+        "MicroCFTA.EnumerationCanonicalWaiting",
+        "MicroCFTA.EnumerationWaitingIndex"
+      ]
+    },
+    {
+      "target": "MicroCFTA.EnumerationCompressionFrame",
+      "route": [
+        "MicroCFTA.SourcePruningEnumerationTerminalPrefix",
+        "MicroCFTA.EnumerationCanonicalUnion",
+        "MicroCFTA.EnumerationPureSelection",
+        "MicroCFTA.EnumerationCompressionFrame"
+      ]
+    },
+    {
+      "target": "MicroCFTA.UnionFind",
+      "route": [
+        "MicroCFTA.SourcePruningEnumerationTerminalPrefix",
+        "MicroCFTA.EnumerationCanonicalUnion",
+        "MicroCFTA.EnumerationSchedule",
+        "MicroCFTA.EnumerationCorrectness",
+        "MicroCFTA.EnumerationState",
+        "MicroCFTA.Fragments",
+        "MicroCFTA.UnionFind"
+      ]
+    },
+    {
+      "target": "MicroCFTA.Fragments",
+      "route": [
+        "MicroCFTA.SourcePruningEnumerationTerminalPrefix",
+        "MicroCFTA.EnumerationCanonicalUnion",
+        "MicroCFTA.EnumerationSchedule",
+        "MicroCFTA.EnumerationCorrectness",
+        "MicroCFTA.EnumerationState",
+        "MicroCFTA.Fragments"
+      ]
+    },
+    {
+      "target": "MicroCFTA.SourcePruningEnumerationNodes",
+      "route": [
+        "MicroCFTA.SourcePruningEnumerationTerminalPrefix",
+        "MicroCFTA.SourcePruningEnumerationObservation",
+        "MicroCFTA.SourcePruningEnumerationNodes"
+      ]
+    },
+    {
+      "target": "MicroCFTA.SourcePruningEnumerationObservation",
+      "route": [
+        "MicroCFTA.SourcePruningEnumerationTerminalPrefix",
+        "MicroCFTA.SourcePruningEnumerationObservation"
+      ]
+    },
+    {
+      "target": "MicroCFTA.SourceCurrentAllocatedPartialInvariant",
+      "route": [
+        "MicroCFTA.SourcePruningEnumerationIncomingNode",
+        "MicroCFTA.SourcePruningEnumerationIncomingQuery",
+        "MicroCFTA.SourcePruningEnumerationEnabledEmpty",
+        "MicroCFTA.SourceCurrentAllocatedConjunctionCaller",
+        "MicroCFTA.SourceCurrentAllocatedPartialInvariant"
+      ]
+    },
+    {
+      "target": "MicroCFTA.SourceCurrentAllocatedNativeInventoryState",
+      "route": [
+        "MicroCFTA.SourcePruningEnumerationIncomingNode",
+        "MicroCFTA.SourcePruningEnumerationIncomingQuery",
+        "MicroCFTA.SourcePruningEnumerationEnabledEmpty",
+        "MicroCFTA.SourceCurrentAllocatedTargetQuery",
+        "MicroCFTA.SourceCurrentAllocatedNativeInventoryState"
+      ]
+    },
+    {
+      "target": "MicroCFTA.SourceCurrentAllocatedPartialState",
+      "route": [
+        "MicroCFTA.SourcePruningEnumerationIncomingNode",
+        "MicroCFTA.SourcePruningEnumerationIncomingQuery",
+        "MicroCFTA.SourcePruningEnumerationEnabledEmpty",
+        "MicroCFTA.SourceCurrentAllocatedConjunctionCaller",
+        "MicroCFTA.SourceCurrentAllocatedPartialInvariant",
+        "MicroCFTA.SourceCurrentAllocatedPartialMemoSound",
+        "MicroCFTA.SourceCurrentAllocatedPartialState"
+      ]
+    },
+    {
+      "target": "MicroCFTA.SourceCurrentAllocatedTargetQuery",
+      "route": [
+        "MicroCFTA.SourcePruningEnumerationIncomingNode",
+        "MicroCFTA.SourcePruningEnumerationIncomingQuery",
+        "MicroCFTA.SourcePruningEnumerationEnabledEmpty",
+        "MicroCFTA.SourceCurrentAllocatedTargetQuery"
+      ]
+    },
+    {
+      "target": "MicroCFTA.SourceCurrentAllocatedNativeRequestBounds",
+      "route": [
+        "MicroCFTA.SourcePruningEnumerationIncomingNode",
+        "MicroCFTA.SourcePruningEnumerationIncomingQuery",
+        "MicroCFTA.SourcePruningEnumerationEnabledEmpty",
+        "MicroCFTA.SourceCurrentAllocatedTargetQuery",
+        "MicroCFTA.SourceCurrentAllocatedNativeInventoryState",
+        "MicroCFTA.SourceCurrentAllocatedNativeCoveredQuery",
+        "MicroCFTA.SourceCurrentAllocatedNativeAdmissionEdgeCertificates",
+        "MicroCFTA.SourceCurrentAllocatedNativeCodeProgress",
+        "MicroCFTA.SourceCurrentAllocatedNativeRequestBounds"
+      ]
+    },
+    {
+      "target": "MicroCFTA.InternedGuardedLanguage",
+      "route": [
+        "MicroCFTA.SourcePruningEnumerationIncomingNode",
+        "MicroCFTA.SourcePruningEnumerationIncomingQuery",
+        "MicroCFTA.SourcePruningEnumerationEnabledEmpty",
+        "MicroCFTA.SourceCurrentAllocatedConjunctionCaller",
+        "MicroCFTA.SourceCurrentAllocatedPartialInvariant",
+        "MicroCFTA.SourceCurrentAllocatedPartialMemoSound",
+        "MicroCFTA.SourceEqualityPartialKeyTransport",
+        "MicroCFTA.InternedGuardedLanguage"
+      ]
+    },
+    {
+      "target": "MicroCFTA.SourceEqualityPCSGuard",
+      "route": [
+        "MicroCFTA.SourcePruningEnumerationFoldInvariants",
+        "MicroCFTA.SourcePruningEnumerationFold",
+        "MicroCFTA.SourcePruningEnumerationDispatch",
+        "MicroCFTA.SourceCurrentEmptinessMerge",
+        "MicroCFTA.SourceCurrentEmptinessMemo",
+        "MicroCFTA.SourceCurrentEmptinessDecision",
+        "MicroCFTA.SourceEmptinessDecision",
+        "MicroCFTA.SourceEmptinessTaskSoundness",
+        "MicroCFTA.SourceEqualityPCSConstructors",
+        "MicroCFTA.SourceEqualityPCSGuard"
+      ]
+    }
+  ],
+  "defining_import_sources": [
+    {
+      "module": "MicroCFTA.EnumerationAssignment",
+      "path": "lean/MicroCFTA/EnumerationAssignment.lean",
+      "snapshot": "import-sources/EnumerationAssignment.lean",
+      "bytes": 11799,
+      "sha256": "9db7a42259e5bac782ff5d9f64f06d627325d9f4306f314e560a41c79180c871",
+      "imports": [
+        "MicroCFTA.EnumerationOrder"
+      ]
+    },
+    {
+      "module": "MicroCFTA.EnumerationCanonicalUnion",
+      "path": "lean/MicroCFTA/EnumerationCanonicalUnion.lean",
+      "snapshot": "import-sources/EnumerationCanonicalUnion.lean",
+      "bytes": 9776,
+      "sha256": "b76617ea7f0fb0ba74b78125f9c2232302e7513d378ddbfa8deef0fea9cf8bd6",
+      "imports": [
+        "MicroCFTA.EnumerationPureSelection",
+        "MicroCFTA.EnumerationSchedule"
+      ]
+    },
+    {
+      "module": "MicroCFTA.EnumerationCanonicalWaiting",
+      "path": "lean/MicroCFTA/EnumerationCanonicalWaiting.lean",
+      "snapshot": "import-sources/EnumerationCanonicalWaiting.lean",
+      "bytes": 14833,
+      "sha256": "a941b9b49e87115f26ecba015bc23e15a3d873410ac943ded77ff5f8963057bd",
+      "imports": [
+        "MicroCFTA.EnumerationWaitingIndex"
+      ]
+    },
+    {
+      "module": "MicroCFTA.EnumerationCompleteness",
+      "path": "lean/MicroCFTA/EnumerationCompleteness.lean",
+      "snapshot": "import-sources/EnumerationCompleteness.lean",
+      "bytes": 23285,
+      "sha256": "1cafd52affc702de54e22a37e4ac12496d860b964c0628d95eb94f015fbf34f7",
+      "imports": [
+        "MicroCFTA.EnumerationExecution"
+      ]
+    },
+    {
+      "module": "MicroCFTA.EnumerationCompressionFrame",
+      "path": "lean/MicroCFTA/EnumerationCompressionFrame.lean",
+      "snapshot": "import-sources/EnumerationCompressionFrame.lean",
+      "bytes": 8220,
+      "sha256": "5b6e6a4b11c21b949874db500e23aa074fcdd4e0de683f46f33863113dc91375",
+      "imports": [
+        "MicroCFTA.EnumerationDriver"
+      ]
+    },
+    {
+      "module": "MicroCFTA.EnumerationCorrectness",
+      "path": "lean/MicroCFTA/EnumerationCorrectness.lean",
+      "snapshot": "import-sources/EnumerationCorrectness.lean",
+      "bytes": 76898,
+      "sha256": "087b96d593bb42cea0b61b2742b43d4a41ce5a2d990e300c8d15700e2eb0672d",
+      "imports": [
+        "MicroCFTA.EnumerationState"
+      ]
+    },
+    {
+      "module": "MicroCFTA.EnumerationDependencies",
+      "path": "lean/MicroCFTA/EnumerationDependencies.lean",
+      "snapshot": "import-sources/EnumerationDependencies.lean",
+      "bytes": 29230,
+      "sha256": "d0ab8f9bf345495711bc2e98fe22e188f2d0f00229f13ea2e3c4de895f294a21",
+      "imports": [
+        "MicroCFTA.EnumerationProgress"
+      ]
+    },
+    {
+      "module": "MicroCFTA.EnumerationExecution",
+      "path": "lean/MicroCFTA/EnumerationExecution.lean",
+      "snapshot": "import-sources/EnumerationExecution.lean",
+      "bytes": 30176,
+      "sha256": "b81e03600e03085ec32fc8c85026ca4af562593764b28d6f8dd776eb3ac98346",
+      "imports": [
+        "MicroCFTA.EnumerationAssignment"
+      ]
+    },
+    {
+      "module": "MicroCFTA.EnumerationOrder",
+      "path": "lean/MicroCFTA/EnumerationOrder.lean",
+      "snapshot": "import-sources/EnumerationOrder.lean",
+      "bytes": 23066,
+      "sha256": "ba321f3490d5e0884bcdd538efd4ee4e600de765185137b49f3e7f538b39754b",
+      "imports": [
+        "MicroCFTA.EnumerationReferences"
+      ]
+    },
+    {
+      "module": "MicroCFTA.EnumerationPureSelection",
+      "path": "lean/MicroCFTA/EnumerationPureSelection.lean",
+      "snapshot": "import-sources/EnumerationPureSelection.lean",
+      "bytes": 14461,
+      "sha256": "32c3840fbade865c3e9342f6b7dddcc44fbfef0db0185b4950aedce3912e6729",
+      "imports": [
+        "MicroCFTA.EnumerationCanonicalWaiting",
+        "MicroCFTA.EnumerationCompressionFrame",
+        "MicroCFTA.EnumerationIndexSelection",
+        "MicroCFTA.EnumerationUntil",
+        "MicroCFTA.EnumerationCPS",
+        "MicroCFTA.EnumerationIndexSource"
+      ]
+    },
+    {
+      "module": "MicroCFTA.EnumerationReferences",
+      "path": "lean/MicroCFTA/EnumerationReferences.lean",
+      "snapshot": "import-sources/EnumerationReferences.lean",
+      "bytes": 39454,
+      "sha256": "8c6f8fa2b6ffeb550da4b3b25bff7d5596910107d663c28987137231d61ba1fc",
+      "imports": [
+        "MicroCFTA.EnumerationDependencies"
+      ]
+    },
+    {
+      "module": "MicroCFTA.EnumerationSchedule",
+      "path": "lean/MicroCFTA/EnumerationSchedule.lean",
+      "snapshot": "import-sources/EnumerationSchedule.lean",
+      "bytes": 86287,
+      "sha256": "3e84f2059725b3c0392d4df005574fde2918290cb393c4be0d549a62ad4a4e45",
+      "imports": [
+        "MicroCFTA.EnumerationCorrectness"
+      ]
+    },
+    {
+      "module": "MicroCFTA.EnumerationState",
+      "path": "lean/MicroCFTA/EnumerationState.lean",
+      "snapshot": "import-sources/EnumerationState.lean",
+      "bytes": 33489,
+      "sha256": "83a898b883ec7b52469bccd87e8afa4f7abb320e3c935bf48f3d80ad77003cc4",
+      "imports": [
+        "MicroCFTA.Fragments",
+        "MicroCFTA.EqualityTrie"
+      ]
+    },
+    {
+      "module": "MicroCFTA.EnumerationWaitingIndex",
+      "path": "lean/MicroCFTA/EnumerationWaitingIndex.lean",
+      "snapshot": "import-sources/EnumerationWaitingIndex.lean",
+      "bytes": 10656,
+      "sha256": "3dd9d39df6a289d3b9689280f0dbb786ea4609b8132016d1e4178d2ea9c0d8e5",
+      "imports": [
+        "MicroCFTA.EnumerationSchedule"
+      ]
+    },
+    {
+      "module": "MicroCFTA.Fragments",
+      "path": "lean/MicroCFTA/Fragments.lean",
+      "snapshot": "import-sources/Fragments.lean",
+      "bytes": 14675,
+      "sha256": "a182ef3932d50a660878e33b201e415b22bf9c26eaacfb0f4bcbaad431ba9f07",
+      "imports": [
+        "MicroCFTA.Language",
+        "MicroCFTA.UnionFind"
+      ]
+    },
+    {
+      "module": "MicroCFTA.InternedGuardedLanguage",
+      "path": "lean/MicroCFTA/InternedGuardedLanguage.lean",
+      "snapshot": "import-sources/InternedGuardedLanguage.lean",
+      "bytes": 9311,
+      "sha256": "bb63b73b2f104e49e0cbbd76436a5936dae03ea358a3b5659b45b8f4aa109f2e",
+      "imports": [
+        "MicroCFTA.BinderLanguage",
+        "MicroCFTA.MergedColdInterpretation"
+      ]
+    },
+    {
+      "module": "MicroCFTA.SourceCurrentAllocatedConjunctionCaller",
+      "path": "lean/MicroCFTA/SourceCurrentAllocatedConjunctionCaller.lean",
+      "snapshot": "import-sources/SourceCurrentAllocatedConjunctionCaller.lean",
+      "bytes": 6509,
+      "sha256": "1b8387b19deff7f88d95648fdbef8e530b3aa18f8f5c1c30c46cdf59b1db63d5",
+      "imports": [
+        "MicroCFTA.SourceCurrentAllocatedPartialInvariant",
+        "MicroCFTA.SourceCurrentAllocatedConjunctionReadValidity",
+        "MicroCFTA.SourceCurrentAllocatedProbeConjunction"
+      ]
+    },
+    {
+      "module": "MicroCFTA.SourceCurrentAllocatedNativeAdmissionEdgeCertificates",
+      "path": "lean/MicroCFTA/SourceCurrentAllocatedNativeAdmissionEdgeCertificates.lean",
+      "snapshot": "import-sources/SourceCurrentAllocatedNativeAdmissionEdgeCertificates.lean",
+      "bytes": 7969,
+      "sha256": "e9b59bec554c83387b6627ca78c75528432dc83bf1e94eaad44ce4d428dcb4a2",
+      "imports": [
+        "MicroCFTA.SourceCurrentAllocatedNativeAdmissionCode",
+        "MicroCFTA.SourceCurrentAllocatedNativeRequestAdmission",
+        "MicroCFTA.SourceCurrentAllocatedNativeCodeProgress"
+      ]
+    },
+    {
+      "module": "MicroCFTA.SourceCurrentAllocatedNativeCodeProgress",
+      "path": "lean/MicroCFTA/SourceCurrentAllocatedNativeCodeProgress.lean",
+      "snapshot": "import-sources/SourceCurrentAllocatedNativeCodeProgress.lean",
+      "bytes": 31825,
+      "sha256": "35f942dcd7caa97253a5d3d29cf26f5a5042044cde40c853497357c4b31c0d6f",
+      "imports": [
+        "MicroCFTA.SourceRecursiveIntersectionCompileNodeBounds",
+        "MicroCFTA.SourceRecursiveIntersectionCompileSafety",
+        "MicroCFTA.SourceCurrentAllocatedNativeRequestBounds",
+        "MicroCFTA.SourceCurrentAllocatedNativeFieldClosure"
+      ]
+    },
+    {
+      "module": "MicroCFTA.SourceCurrentAllocatedNativeCoveredQuery",
+      "path": "lean/MicroCFTA/SourceCurrentAllocatedNativeCoveredQuery.lean",
+      "snapshot": "import-sources/SourceCurrentAllocatedNativeCoveredQuery.lean",
+      "bytes": 11371,
+      "sha256": "aaacfcfbe966ff0f90cefbf9d7e5f6580e27684af1725a79af801c19e16de30d",
+      "imports": [
+        "MicroCFTA.SourceCurrentAllocatedNativeAdmissionTrace",
+        "MicroCFTA.SourceCurrentAllocatedNativeAdmissionNodeCertificates",
+        "MicroCFTA.SourceCurrentAllocatedNativeAdmissionEdgeCertificates",
+        "MicroCFTA.SourceCurrentAllocatedNativeWarmQuery",
+        "MicroCFTA.SourceCurrentAllocatedNativeAdmittedQuery"
+      ]
+    },
+    {
+      "module": "MicroCFTA.SourceCurrentAllocatedNativeInventoryState",
+      "path": "lean/MicroCFTA/SourceCurrentAllocatedNativeInventoryState.lean",
+      "snapshot": "import-sources/SourceCurrentAllocatedNativeInventoryState.lean",
+      "bytes": 7743,
+      "sha256": "4944b25b19d4a897a49faedff94205058d4fbcf0e0fecafbcc40bb3d026998fc",
+      "imports": [
+        "MicroCFTA.SourceCurrentAllocatedNativeCoveredQuery",
+        "MicroCFTA.SourceCurrentAllocatedQueryMemo"
+      ]
+    },
+    {
+      "module": "MicroCFTA.SourceCurrentAllocatedNativeRequestBounds",
+      "path": "lean/MicroCFTA/SourceCurrentAllocatedNativeRequestBounds.lean",
+      "snapshot": "import-sources/SourceCurrentAllocatedNativeRequestBounds.lean",
+      "bytes": 11750,
+      "sha256": "a839f5aec103d0965a9b97b7cbf476293d927b01edc15bc96ed54dd0cfc7636d",
+      "imports": [
+        "MicroCFTA.SourceRecursiveIntersectionCodeBounds",
+        "MicroCFTA.SourceEqualityNativeDemandOperations",
+        "MicroCFTA.SourceEqualityNativeDemandTrace"
+      ]
+    },
+    {
+      "module": "MicroCFTA.SourceCurrentAllocatedPartialInvariant",
+      "path": "lean/MicroCFTA/SourceCurrentAllocatedPartialInvariant.lean",
+      "snapshot": "import-sources/SourceCurrentAllocatedPartialInvariant.lean",
+      "bytes": 5356,
+      "sha256": "5162416df367a97e743e2a0d38601026bb15862dc4c648fa518ad0308a919bc0",
+      "imports": [
+        "MicroCFTA.SourceCurrentAllocatedPartialMemoSound",
+        "MicroCFTA.SourceCurrentConjunctionClassScan",
+        "MicroCFTA.SourceCurrentAllocatedMuRebuild",
+        "MicroCFTA.SourceCurrentAllocatedNativeInventoryState",
+        "MicroCFTA.SourceCurrentMemoMergeLanguage"
+      ]
+    },
+    {
+      "module": "MicroCFTA.SourceCurrentAllocatedPartialMemoSound",
+      "path": "lean/MicroCFTA/SourceCurrentAllocatedPartialMemoSound.lean",
+      "snapshot": "import-sources/SourceCurrentAllocatedPartialMemoSound.lean",
+      "bytes": 27237,
+      "sha256": "d9954897cde59e88abb27f68fde9842f60662f862847ede783193283fe3c8d7e",
+      "imports": [
+        "MicroCFTA.SourceCurrentAllocatedPartialState",
+        "MicroCFTA.SourceEqualityPartialKeyTransport"
+      ]
+    },
+    {
+      "module": "MicroCFTA.SourceCurrentAllocatedPartialState",
+      "path": "lean/MicroCFTA/SourceCurrentAllocatedPartialState.lean",
+      "snapshot": "import-sources/SourceCurrentAllocatedPartialState.lean",
+      "bytes": 15737,
+      "sha256": "631ba3b6bde5f91c45b3b82fe9332f1c1a43f62a46723b56dda64f4f547b09da",
+      "imports": [
+        "MicroCFTA.SourceCurrentAllocatedNativeEffects",
+        "MicroCFTA.SourceCurrentMemoMergeGraph",
+        "MicroCFTA.SourceCurrentEmptinessMemo",
+        "MicroCFTA.SourceEqualityConstraintAllocation",
+        "MicroCFTA.FlatMemoThunkRunning",
+        "MicroCFTA.FlatMemoThunkReturned"
+      ]
+    },
+    {
+      "module": "MicroCFTA.SourceCurrentAllocatedTargetQuery",
+      "path": "lean/MicroCFTA/SourceCurrentAllocatedTargetQuery.lean",
+      "snapshot": "import-sources/SourceCurrentAllocatedTargetQuery.lean",
+      "bytes": 8024,
+      "sha256": "20231be214e9d62e97f92b41d32fce62be959e78e24141c9a7fe73dd2060e9a6",
+      "imports": [
+        "MicroCFTA.SourceCurrentAllocatedNativeInventoryState",
+        "MicroCFTA.SourceCurrentAllocatedNativeGlobalMemos",
+        "MicroCFTA.SourceCurrentConjunctionClassScan"
+      ]
+    },
+    {
+      "module": "MicroCFTA.SourceCurrentEmptinessDecision",
+      "path": "lean/MicroCFTA/SourceCurrentEmptinessDecision.lean",
+      "snapshot": "import-sources/SourceCurrentEmptinessDecision.lean",
+      "bytes": 6626,
+      "sha256": "ca91560e357d649330a49e3ba2590a8d2e87b3f1912154024a4a1e86d15bde61",
+      "imports": [
+        "MicroCFTA.SourceCurrentEmptinessTable",
+        "MicroCFTA.SourceEmptinessDecision"
+      ]
+    },
+    {
+      "module": "MicroCFTA.SourceCurrentEmptinessMemo",
+      "path": "lean/MicroCFTA/SourceCurrentEmptinessMemo.lean",
+      "snapshot": "import-sources/SourceCurrentEmptinessMemo.lean",
+      "bytes": 7444,
+      "sha256": "3b155d2d597d3ca126ee1178c42d34f0f160a14b6f2983b441f6acb1f0282c00",
+      "imports": [
+        "MicroCFTA.SourceCurrentEmptinessDecision"
+      ]
+    },
+    {
+      "module": "MicroCFTA.SourceCurrentEmptinessMerge",
+      "path": "lean/MicroCFTA/SourceCurrentEmptinessMerge.lean",
+      "snapshot": "import-sources/SourceCurrentEmptinessMerge.lean",
+      "bytes": 9373,
+      "sha256": "bfc1e15d0d26e89385eb78f4bec01b66badfa385a226ed8e483e2279e3587718",
+      "imports": [
+        "MicroCFTA.SourceCurrentEmptinessMemo",
+        "MicroCFTA.SourceEndpointReachability",
+        "MicroCFTA.SourceMemoGate",
+        "MicroCFTA.EnumerationState"
+      ]
+    },
+    {
+      "module": "MicroCFTA.SourceEmptinessDecision",
+      "path": "lean/MicroCFTA/SourceEmptinessDecision.lean",
+      "snapshot": "import-sources/SourceEmptinessDecision.lean",
+      "bytes": 6578,
+      "sha256": "bc65fbaaaf6057d70c4a8991272aea350359d67d90717ddae4e404c2dac1df4a",
+      "imports": [
+        "MicroCFTA.SourceEmptinessTaskSoundness"
+      ]
+    },
+    {
+      "module": "MicroCFTA.SourceEmptinessTaskSoundness",
+      "path": "lean/MicroCFTA/SourceEmptinessTaskSoundness.lean",
+      "snapshot": "import-sources/SourceEmptinessTaskSoundness.lean",
+      "bytes": 11303,
+      "sha256": "9be92c34986e6e51ad970d58c420ceffc8e4392a5c20024e51962c851bd42850",
+      "imports": [
+        "MicroCFTA.SourceEmptinessTaskRequirements",
+        "MicroCFTA.SourceEmptinessTaskEntryRows",
+        "MicroCFTA.SourceEmptinessTaskTableReadback",
+        "MicroCFTA.SourceEqualityPCSConstructors"
+      ]
+    },
+    {
+      "module": "MicroCFTA.SourceEqualityPCSConstructors",
+      "path": "lean/MicroCFTA/SourceEqualityPCSConstructors.lean",
+      "snapshot": "import-sources/SourceEqualityPCSConstructors.lean",
+      "bytes": 3139,
+      "sha256": "72861352368dc9aec2c8c879fc67b270bc1be358928eaec98330d21fcc85c4b8",
+      "imports": [
+        "MicroCFTA.SourceEqualityPCSGuard"
+      ]
+    },
+    {
+      "module": "MicroCFTA.SourceEqualityPCSGuard",
+      "path": "lean/MicroCFTA/SourceEqualityPCSGuard.lean",
+      "snapshot": "import-sources/SourceEqualityPCSGuard.lean",
+      "bytes": 6228,
+      "sha256": "80a9ed35efe9992207429c7d45be0282c9484368834bcb36a42a4c8bb72857b4",
+      "imports": [
+        "MicroCFTA.SourceEqualityConstraintConstructors"
+      ]
+    },
+    {
+      "module": "MicroCFTA.SourceEqualityPartialKeyTransport",
+      "path": "lean/MicroCFTA/SourceEqualityPartialKeyTransport.lean",
+      "snapshot": "import-sources/SourceEqualityPartialKeyTransport.lean",
+      "bytes": 10464,
+      "sha256": "6cd769a418bd5615b2e21ab520f0317d1e1cbc7883088e1ac73dd72d77d4cf70",
+      "imports": [
+        "MicroCFTA.SourceEqualityPartialConstraintKey",
+        "MicroCFTA.SourceEqualityDescend",
+        "MicroCFTA.InternedProbeProvenance",
+        "MicroCFTA.InternedGuardedLanguage"
+      ]
+    },
+    {
+      "module": "MicroCFTA.SourcePruningEnumerationDispatch",
+      "path": "lean/MicroCFTA/SourcePruningEnumerationDispatch.lean",
+      "snapshot": "import-sources/SourcePruningEnumerationDispatch.lean",
+      "bytes": 30270,
+      "sha256": "fb2dcd0c1c5ba5abee27afeda86cb676682590f232b9c24ac75a759f843e970d",
+      "imports": [
+        "MicroCFTA.SourcePruningEnumerationEnabledEmpty",
+        "MicroCFTA.SourcePruningEnumerationFinish",
+        "MicroCFTA.SourceCurrentEmptinessMerge"
+      ]
+    },
+    {
+      "module": "MicroCFTA.SourcePruningEnumerationEnabledEmpty",
+      "path": "lean/MicroCFTA/SourcePruningEnumerationEnabledEmpty.lean",
+      "snapshot": "import-sources/SourcePruningEnumerationEnabledEmpty.lean",
+      "bytes": 13940,
+      "sha256": "03039515e7610ec219ef04a32d10d881dff112da15db97c87198a1d3ff9c536e",
+      "imports": [
+        "MicroCFTA.SourcePruningEnumerationObservation",
+        "MicroCFTA.SourceCurrentAllocatedTargetQuery",
+        "MicroCFTA.SourceCurrentAllocatedConjunctionCaller",
+        "MicroCFTA.SourceCurrentConjunctionWorkerCompletion",
+        "MicroCFTA.SourceCurrentAllocatedConjunctionWorker",
+        "MicroCFTA.SourceEndpointMemoCorrect"
+      ]
+    },
+    {
+      "module": "MicroCFTA.SourcePruningEnumerationFold",
+      "path": "lean/MicroCFTA/SourcePruningEnumerationFold.lean",
+      "snapshot": "import-sources/SourcePruningEnumerationFold.lean",
+      "bytes": 22663,
+      "sha256": "0a5ae94315af7024fc4cc80bcc00163996fceaf95568969df73401fea9c2db16",
+      "imports": [
+        "MicroCFTA.SourcePruningEnumerationDispatch"
+      ]
+    },
+    {
+      "module": "MicroCFTA.SourcePruningEnumerationFoldInvariants",
+      "path": "lean/MicroCFTA/SourcePruningEnumerationFoldInvariants.lean",
+      "snapshot": "import-sources/SourcePruningEnumerationFoldInvariants.lean",
+      "bytes": 19497,
+      "sha256": "570a5775066a06755e4c4a2ebb86f95740da2710b77b6ea6f3186fb688263a58",
+      "imports": [
+        "MicroCFTA.SourcePruningEnumerationFold",
+        "MicroCFTA.EnumerationCanonicalWaiting"
+      ]
+    },
+    {
+      "module": "MicroCFTA.SourcePruningEnumerationIncomingNode",
+      "path": "lean/MicroCFTA/SourcePruningEnumerationIncomingNode.lean",
+      "snapshot": "import-sources/SourcePruningEnumerationIncomingNode.lean",
+      "bytes": 19670,
+      "sha256": "ff3a4fa83ad6f3368a1141cf6b908f5d1e5a56d500b4efc3c480d2b263b508c4",
+      "imports": [
+        "MicroCFTA.SourcePruningEnumerationIncomingQuery",
+        "MicroCFTA.EnumerationCompleteness",
+        "MicroCFTA.EnumerationExecution",
+        "MicroCFTA.SourcePruningEnumerationWrites"
+      ]
+    },
+    {
+      "module": "MicroCFTA.SourcePruningEnumerationIncomingQuery",
+      "path": "lean/MicroCFTA/SourcePruningEnumerationIncomingQuery.lean",
+      "snapshot": "import-sources/SourcePruningEnumerationIncomingQuery.lean",
+      "bytes": 14564,
+      "sha256": "3d2b4ac8761e99178c6dc6f760f21cf6da623243199d7f136a6e7263ce85f21b",
+      "imports": [
+        "MicroCFTA.SourcePruningEnumerationEnabledEmpty"
+      ]
+    },
+    {
+      "module": "MicroCFTA.SourcePruningEnumerationNodes",
+      "path": "lean/MicroCFTA/SourcePruningEnumerationNodes.lean",
+      "snapshot": "import-sources/SourcePruningEnumerationNodes.lean",
+      "bytes": 3546,
+      "sha256": "1fb4077739402c31ec48d4bfa8254ef9c1b7453601290dfcd1c0c0031eeee8a4",
+      "imports": [
+        "MicroCFTA.SourcePruningNativeView"
+      ]
+    },
+    {
+      "module": "MicroCFTA.SourcePruningEnumerationObservation",
+      "path": "lean/MicroCFTA/SourcePruningEnumerationObservation.lean",
+      "snapshot": "import-sources/SourcePruningEnumerationObservation.lean",
+      "bytes": 7357,
+      "sha256": "5a7b858adc4febb75621b9836053f308924c22d5fd7662741da61cbdab629bf4",
+      "imports": [
+        "MicroCFTA.SourcePruningEnumerationNodes",
+        "MicroCFTA.EnumerationNodeObservation"
+      ]
+    },
+    {
+      "module": "MicroCFTA.SourcePruningEnumerationTerminalPrefix",
+      "path": "lean/MicroCFTA/SourcePruningEnumerationTerminalPrefix.lean",
+      "snapshot": "import-sources/SourcePruningEnumerationTerminalPrefix.lean",
+      "bytes": 16850,
+      "sha256": "bc975e650b8ee6cecba75605107cbf2ad458e02137854994d91541b4b63d9b30",
+      "imports": [
+        "MicroCFTA.EnumerationCompleteness",
+        "MicroCFTA.EnumerationCanonicalUnion",
+        "MicroCFTA.EnumerationBuilderCaches",
+        "MicroCFTA.SourcePruningEnumerationObservation"
+      ]
+    },
+    {
+      "module": "MicroCFTA.UnionFind",
+      "path": "lean/MicroCFTA/UnionFind.lean",
+      "snapshot": "import-sources/UnionFind.lean",
+      "bytes": 41077,
+      "sha256": "3668867a41890e4721c301092a06c48d3bd757a8eede4b92340fe5db80119a14",
+      "imports": [
+        "Std"
+      ]
+    }
+  ],
+  "external_implicit_prelude_sources": [
+    "list"
+  ],
+  "native_source_not_a_Lean_import": "native",
+  "route_count": 23,
+  "route_source_count": 44
+}

@@ -1,0 +1,17 @@
+/-- Candidate flags and canonical waiting counts describe the stored slots. -/
+structure Correct (graph : Graph Symbol Guard) (roots : Nat → Nat) (state : Cached Symbol Guard) : Prop where
+  /-- The dense slot domain agrees with the allocation supply. -/
+  aligned : state.core.counter = state.core.values.length
+  /-- Each flag is the actual source candidate predicate. -/
+  expandable : ∀ uv, state.expandable uv = ((state.core.values[uv]?).map (candidate graph)).getD false
+  /-- Each waiting key counts references to its representative class. -/
+  waiting : EnumerationCanonicalWaiting.Correct roots state.core.values state.waiting
+
+/-- Replace one raw slot and update its candidate flag and canonical counts. -/
+def write (graph : Graph Symbol Guard) (roots : Nat → Nat) (uv : Nat) (value : UVarValue Symbol)
+    (state : Cached Symbol Guard) : Option (Cached Symbol Guard) := do
+  let old ← state.core.values[uv]?
+  pure ⟨{state.core with values := state.core.values.set uv value},
+    fun other => if other = uv then candidate graph value else state.expandable other,
+    EnumerationCanonicalWaiting.replace roots old value state.waiting⟩
+

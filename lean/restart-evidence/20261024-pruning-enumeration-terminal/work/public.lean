@@ -1,0 +1,9 @@
+import MicroCFTA.SourcePruningEnumerationTerminal
+set_option pp.deepTerms true
+set_option pp.maxSteps 1000000
+#check @MicroCFTA.SourcePruningEnumerationTerminal.run
+#print axioms MicroCFTA.SourcePruningEnumerationTerminal.run
+#check @MicroCFTA.SourcePruningEnumerationTerminal.gained_correct
+#print axioms MicroCFTA.SourcePruningEnumerationTerminal.gained_correct
+#check @MicroCFTA.SourcePruningEnumerationTerminal.run_complete
+#print axioms MicroCFTA.SourcePruningEnumerationTerminal.run_complete

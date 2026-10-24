@@ -1,0 +1,9 @@
+theorem gained_correct
+    (values : List (EnumerationState.UVarValue Symbol)) (target : Nat)
+    (oldNode newNode : Option Nat) (incomingScs oldScs : List EnumerationState.Suspended)
+    (roots : Nat → Nat) (waiting : EnumerationWaitingIndex.Waiting)
+    (stored : values[target]? = some (.unenumerated oldNode oldScs))
+    (counts : EnumerationCanonicalWaiting.Correct roots values waiting) :
+    EnumerationCanonicalWaiting.Correct roots
+      (values.set target (.unenumerated newNode (incomingScs ++ oldScs)))
+      (EnumerationCanonicalWaiting.count roots 1 incomingScs waiting)
