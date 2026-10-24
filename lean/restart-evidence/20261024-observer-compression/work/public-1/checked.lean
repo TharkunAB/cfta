@@ -1,0 +1,28 @@
+import MicroCFTA.EnumerationNodeObservation
+import MicroCFTA.EnumerationPartialObservation
+
+set_option pp.universes true
+
+#check @MicroCFTA.EnumerationCompressionFrame.Frame.symm
+#check @MicroCFTA.EnumerationObservations.representative_agrees
+#check @MicroCFTA.EnumerationObservations.getValue_agrees
+#check @MicroCFTA.EnumerationObservations.representative_transport
+#check @MicroCFTA.EnumerationObservations.getValue_transport
+#check @MicroCFTA.EnumerationObservations.getUnexpandedNode
+#check @MicroCFTA.EnumerationObservations.getUnexpandedNode_success
+#check @MicroCFTA.EnumerationObservations.getUnexpandedNode_agrees
+#check @MicroCFTA.EnumerationObservations.getUnexpandedNode_transport
+#check @MicroCFTA.EnumerationObservations.getUnexpandedNode_moreFuel
+#check @MicroCFTA.EnumerationObservations.expandPartial_frame
+#check @MicroCFTA.EnumerationObservations.expandPartial_moreFuel
+#print axioms MicroCFTA.EnumerationCompressionFrame.Frame.symm
+#print axioms MicroCFTA.EnumerationObservations.representative_agrees
+#print axioms MicroCFTA.EnumerationObservations.getValue_agrees
+#print axioms MicroCFTA.EnumerationObservations.representative_transport
+#print axioms MicroCFTA.EnumerationObservations.getValue_transport
+#print axioms MicroCFTA.EnumerationObservations.getUnexpandedNode_success
+#print axioms MicroCFTA.EnumerationObservations.getUnexpandedNode_agrees
+#print axioms MicroCFTA.EnumerationObservations.getUnexpandedNode_transport
+#print axioms MicroCFTA.EnumerationObservations.getUnexpandedNode_moreFuel
+#print axioms MicroCFTA.EnumerationObservations.expandPartial_frame
+#print axioms MicroCFTA.EnumerationObservations.expandPartial_moreFuel

@@ -1,0 +1,105 @@
+{"command": ["/home/tritlo/.elan/toolchains/leanprover--lean4---v4.34.1/bin/lean", "-R", "/tmp/mcfta-observer-frame-20261024/public-1", "-DwarningAsError=true", "-Dlinter.all=true", "/tmp/mcfta-observer-frame-20261024/public-1/checked.lean"], "exit_code": 0, "raw_bytes": 8108, "raw_sha256": "d8d7a3e83374f4b117fdaf5c52a83f5e0fe33f6ab8176d64d328778787e5ede7", "source_sha256": "9704d15f5c9327a95afc2f9fe2f750ee29e8f61b316f3001cf70e4d9309dc6c8"}
+@MicroCFTA.EnumerationCompressionFrame.Frame.symm : ∀ {Symbol Guard : Type}
+  {before after : MicroCFTA.EnumerationState.State Symbol Guard},
+  MicroCFTA.EnumerationCompressionFrame.Frame before after → MicroCFTA.EnumerationCompressionFrame.Frame after before
+@MicroCFTA.EnumerationObservations.representative_agrees : ∀ {Symbol Guard : Type} (leftFuel rightFuel uv : Nat)
+  (left right leftAfter rightAfter : MicroCFTA.EnumerationState.State Symbol Guard) (leftRoot rightRoot : Nat),
+  MicroCFTA.EnumerationCompressionFrame.Frame left right →
+    MicroCFTA.UnionFind.Total left.representatives →
+      MicroCFTA.EnumerationCorrectness.Success (MicroCFTA.EnumerationState.representative leftFuel uv) left leftRoot
+          leftAfter →
+        MicroCFTA.EnumerationCorrectness.Success (MicroCFTA.EnumerationState.representative rightFuel uv) right
+            rightRoot rightAfter →
+          Eq.{1} leftRoot rightRoot ∧ MicroCFTA.EnumerationCompressionFrame.Frame leftAfter rightAfter
+@MicroCFTA.EnumerationObservations.getValue_agrees : ∀ {Symbol Guard : Type} (leftFuel rightFuel uv : Nat)
+  (left right leftAfter rightAfter : MicroCFTA.EnumerationState.State Symbol Guard)
+  (leftValue rightValue : MicroCFTA.EnumerationState.UVarValue Symbol),
+  MicroCFTA.EnumerationCompressionFrame.Frame left right →
+    MicroCFTA.UnionFind.Total left.representatives →
+      MicroCFTA.EnumerationCorrectness.Success (MicroCFTA.EnumerationState.getValue leftFuel uv) left leftValue
+          leftAfter →
+        MicroCFTA.EnumerationCorrectness.Success (MicroCFTA.EnumerationState.getValue rightFuel uv) right rightValue
+            rightAfter →
+          Eq.{1} leftValue rightValue ∧ MicroCFTA.EnumerationCompressionFrame.Frame leftAfter rightAfter
+@MicroCFTA.EnumerationObservations.representative_transport : ∀ {Symbol Guard : Type} (leftFuel uv : Nat)
+  (left right leftAfter : MicroCFTA.EnumerationState.State Symbol Guard) (root : Nat),
+  MicroCFTA.EnumerationCompressionFrame.Frame left right →
+    MicroCFTA.UnionFind.Total left.representatives →
+      MicroCFTA.EnumerationCorrectness.Success (MicroCFTA.EnumerationState.representative leftFuel uv) left root
+          leftAfter →
+        Exists.{1} fun rightFuel =>
+          Exists.{1} fun rightAfter =>
+            MicroCFTA.EnumerationCorrectness.Success (MicroCFTA.EnumerationState.representative rightFuel uv) right root
+                rightAfter ∧
+              MicroCFTA.EnumerationCompressionFrame.Frame leftAfter rightAfter
+@MicroCFTA.EnumerationObservations.getValue_transport : ∀ {Symbol Guard : Type} (leftFuel uv : Nat)
+  (left right leftAfter : MicroCFTA.EnumerationState.State Symbol Guard)
+  (value : MicroCFTA.EnumerationState.UVarValue Symbol),
+  MicroCFTA.EnumerationCompressionFrame.Frame left right →
+    MicroCFTA.UnionFind.Total left.representatives →
+      MicroCFTA.EnumerationCorrectness.Success (MicroCFTA.EnumerationState.getValue leftFuel uv) left value leftAfter →
+        Exists.{1} fun rightFuel =>
+          Exists.{1} fun rightAfter =>
+            MicroCFTA.EnumerationCorrectness.Success (MicroCFTA.EnumerationState.getValue rightFuel uv) right value
+                rightAfter ∧
+              MicroCFTA.EnumerationCompressionFrame.Frame leftAfter rightAfter
+@MicroCFTA.EnumerationObservations.getUnexpandedNode : {Symbol Guard : Type} →
+  Nat → Nat → MicroCFTA.EnumerationState.EnumerateM Symbol Guard (Option.{0} Nat)
+@MicroCFTA.EnumerationObservations.getUnexpandedNode_success : ∀ {Symbol Guard : Type} (fuel uv : Nat)
+  (before after : MicroCFTA.EnumerationState.State Symbol Guard) (node : Option.{0} Nat),
+  MicroCFTA.EnumerationCorrectness.Success (MicroCFTA.EnumerationObservations.getUnexpandedNode fuel uv) before node
+      after ↔
+    Exists.{1} fun value =>
+      MicroCFTA.EnumerationCorrectness.Success (MicroCFTA.EnumerationState.getValue fuel uv) before value after ∧
+        Eq.{1} node
+          (match value with
+          | MicroCFTA.EnumerationState.UVarValue.unenumerated stored a => stored
+          | x => none.{0})
+@MicroCFTA.EnumerationObservations.getUnexpandedNode_agrees : ∀ {Symbol Guard : Type} (leftFuel rightFuel uv : Nat)
+  (left right leftAfter rightAfter : MicroCFTA.EnumerationState.State Symbol Guard)
+  (leftNode rightNode : Option.{0} Nat),
+  MicroCFTA.EnumerationCompressionFrame.Frame left right →
+    MicroCFTA.UnionFind.Total left.representatives →
+      MicroCFTA.EnumerationCorrectness.Success (MicroCFTA.EnumerationObservations.getUnexpandedNode leftFuel uv) left
+          leftNode leftAfter →
+        MicroCFTA.EnumerationCorrectness.Success (MicroCFTA.EnumerationObservations.getUnexpandedNode rightFuel uv)
+            right rightNode rightAfter →
+          Eq.{1} leftNode rightNode ∧ MicroCFTA.EnumerationCompressionFrame.Frame leftAfter rightAfter
+@MicroCFTA.EnumerationObservations.getUnexpandedNode_transport : ∀ {Symbol Guard : Type} (leftFuel uv : Nat)
+  (left right leftAfter : MicroCFTA.EnumerationState.State Symbol Guard) (node : Option.{0} Nat),
+  MicroCFTA.EnumerationCompressionFrame.Frame left right →
+    MicroCFTA.UnionFind.Total left.representatives →
+      MicroCFTA.EnumerationCorrectness.Success (MicroCFTA.EnumerationObservations.getUnexpandedNode leftFuel uv) left
+          node leftAfter →
+        Exists.{1} fun rightFuel =>
+          Exists.{1} fun rightAfter =>
+            MicroCFTA.EnumerationCorrectness.Success (MicroCFTA.EnumerationObservations.getUnexpandedNode rightFuel uv)
+                right node rightAfter ∧
+              MicroCFTA.EnumerationCompressionFrame.Frame leftAfter rightAfter
+@MicroCFTA.EnumerationObservations.getUnexpandedNode_moreFuel : ∀ {Symbol Guard : Type} (fuel extra uv : Nat),
+  MicroCFTA.EnumerationExecution.Retains (MicroCFTA.EnumerationObservations.getUnexpandedNode fuel uv)
+    (MicroCFTA.EnumerationObservations.getUnexpandedNode (HAdd.hAdd.{0, 0, 0} fuel extra) uv)
+@MicroCFTA.EnumerationObservations.expandPartial_frame : ∀ {Symbol Guard : Type}
+  (graph : MicroCFTA.EnumerationState.Graph Symbol Guard) (fuel : Nat) (fragment : MicroCFTA.Fragments.Fragment Symbol)
+  (before after : MicroCFTA.EnumerationState.State Symbol Guard)
+  (term : MicroCFTA.Language.Term (MicroCFTA.EnumerationState.PartialSymbol Symbol)),
+  MicroCFTA.UnionFind.Total before.representatives →
+    MicroCFTA.EnumerationCorrectness.Success (MicroCFTA.EnumerationState.expandPartial graph fuel fragment) before term
+        after →
+      MicroCFTA.EnumerationCompressionFrame.Frame before after
+@MicroCFTA.EnumerationObservations.expandPartial_moreFuel : ∀ {Symbol Guard : Type}
+  (graph : MicroCFTA.EnumerationState.Graph Symbol Guard) (fuel extra : Nat)
+  (fragment : MicroCFTA.Fragments.Fragment Symbol),
+  MicroCFTA.EnumerationExecution.Retains (MicroCFTA.EnumerationState.expandPartial graph fuel fragment)
+    (MicroCFTA.EnumerationState.expandPartial graph (HAdd.hAdd.{0, 0, 0} fuel extra) fragment)
+'MicroCFTA.EnumerationCompressionFrame.Frame.symm' does not depend on any axioms
+'MicroCFTA.EnumerationObservations.representative_agrees' depends on axioms: [propext, Quot.sound.{u}]
+'MicroCFTA.EnumerationObservations.getValue_agrees' depends on axioms: [propext, Quot.sound.{u}]
+'MicroCFTA.EnumerationObservations.representative_transport' depends on axioms: [propext, Quot.sound.{u}]
+'MicroCFTA.EnumerationObservations.getValue_transport' depends on axioms: [propext, Quot.sound.{u}]
+'MicroCFTA.EnumerationObservations.getUnexpandedNode_success' depends on axioms: [propext, Quot.sound.{u}]
+'MicroCFTA.EnumerationObservations.getUnexpandedNode_agrees' depends on axioms: [propext, Quot.sound.{u}]
+'MicroCFTA.EnumerationObservations.getUnexpandedNode_transport' depends on axioms: [propext, Quot.sound.{u}]
+'MicroCFTA.EnumerationObservations.getUnexpandedNode_moreFuel' depends on axioms: [propext, Quot.sound.{u}]
+'MicroCFTA.EnumerationObservations.expandPartial_frame' depends on axioms: [propext, Quot.sound.{u}]
+'MicroCFTA.EnumerationObservations.expandPartial_moreFuel' depends on axioms: [propext, Quot.sound.{u}]

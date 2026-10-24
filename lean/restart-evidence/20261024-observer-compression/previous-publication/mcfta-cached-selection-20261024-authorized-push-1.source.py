@@ -1,0 +1,72 @@
+import hashlib
+import json
+import subprocess
+import sys
+from pathlib import Path
+
+root = Path('/home/tritlo/Code/mcfta')
+area = Path('/tmp/mcfta-cached-selection-20261024')
+evidence = root / 'lean/restart-evidence/20261024-canonical-cached-selection'
+previous = 'a0c955144d91fe1a3ee759c864c7ecd0a9dcda77'
+destination = 'git@github.com:TharkunAB/cfta.git'
+
+def git(*args):
+    return subprocess.check_output(['git', *args], cwd=root)
+
+head = git('rev-parse', 'HEAD').decode().strip()
+assert head == 'ae8970309774ea10a833b64de7945f48d50ff11e'
+assert git('branch', '--show-current').decode().strip() == 'formalize'
+assert git('remote', 'get-url', 'origin').decode().strip() == destination
+assert not git('status', '--porcelain')
+if sys.argv[1] == 'local':
+    for line in (evidence / 'SHA256SUMS').read_text().splitlines():
+        digest, name = line.split('  ', 1)
+        assert hashlib.sha256((evidence / name).read_bytes()).hexdigest() == digest, name
+    indexed = {}
+    for raw in git('ls-files', '--stage', '-z').split(b'\0'):
+        if raw:
+            metadata, name = raw.split(b'\t', 1)
+            mode, blob, stage = metadata.decode().split()
+            assert stage == '0'
+            indexed[name] = (mode, blob)
+    tree = {}
+    for raw in git('ls-tree', '-r', '-z', 'HEAD').split(b'\0'):
+        if not raw:
+            continue
+        metadata, name = raw.split(b'\t', 1)
+        mode, kind, blob = metadata.decode().split()
+        assert kind == 'blob'
+        path = root / name.decode()
+        data = path.read_bytes()
+        assert hashlib.sha1(b'blob ' + str(len(data)).encode() + b'\0' + data).hexdigest() == blob, name
+        assert ('100755' if path.stat().st_mode & 0o111 else '100644') == mode, name
+        tree[name] = (mode, blob)
+    assert indexed == tree and len(tree) == 126751
+    commits = git('rev-list', '--reverse', previous + '..HEAD').decode().splitlines()
+    assert commits == ['216bdc8ada7ebf88b89d565784ed552c15ae824b', '978cca806abed4949416ac86daa89e58dd940f7f', '5b7ce34f0d72d27ef88aac6471e0279042de7c74', head]
+    report = dict(status='PASS', head=head, previous=previous, destination=destination,
+                  commits=commits, tracked_files=len(tree), index_equals_tree_equals_files=True,
+                  clean=True, evidence_manifest='PASS', goal='ACTIVE_INCOMPLETE')
+    (area / 'local-publication.json').write_text(json.dumps(report, indent=2) + '\n')
+else:
+    assert sys.argv[1] == 'push'
+    assert json.loads((area / 'local-publication.json').read_text())['head'] == head
+    command = ['git', '-c', 'url.https://github.com/.insteadOf=git@github.com:',
+               '-c', 'credential.helper=', '-c', 'credential.helper=!/snap/bin/gh auth git-credential']
+    def remote():
+        return subprocess.check_output(command + ['ls-remote', '--exit-code', 'origin', 'refs/heads/formalize'],
+                                       cwd=root, timeout=60).decode().split()[0]
+    before = remote()
+    assert before in [previous, head], before
+    if before != head:
+        result = subprocess.run(command + ['push', 'origin', 'HEAD:refs/heads/formalize'],
+                                cwd=root, capture_output=True, timeout=60)
+        (area / 'push.log').write_bytes(result.stdout + result.stderr)
+        assert result.returncode == 0, (result.stdout + result.stderr).decode()
+    after = remote()
+    assert after == head and not git('status', '--porcelain')
+    report = dict(status='PUSHED_AND_REMOTE_VERIFIED', destination=destination,
+                  ref='refs/heads/formalize', previous_remote=before, remote_head=after,
+                  clean=True, goal='ACTIVE_INCOMPLETE')
+    (area / 'remote-publication.json').write_text(json.dumps(report, indent=2) + '\n')
+print(json.dumps(report))

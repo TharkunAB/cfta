@@ -1,0 +1,32 @@
+/tmp/mcfta-observer-frame-20261024/partial-frame-check-1/checked.lean:81:29: error: unexpected token '('; expected ')', ',' or ':'
+/tmp/mcfta-observer-frame-20261024/partial-frame-check-1/checked.lean:80:41: error: Type mismatch: After simplification, term
+  getValue_moreFuel
+ has type
+  ∀ (fuel extra uv : Nat), Retains (getValue fuel uv) (getValue (fuel + extra) uv)
+but is expected to have type
+  Retains (getValue (fuel + 1) uv) (getValue (extra + (fuel + 1)) uv)
+/tmp/mcfta-observer-frame-20261024/partial-frame-check-1/checked.lean:78:16: error: unsolved goals
+case succ.hole
+Symbol Guard : Type
+graph : Graph Symbol Guard
+extra fuel : Nat
+ih :
+  ∀ (fragment : Fragment Symbol),
+    Retains (expandPartial graph fuel fragment) (expandPartial graph (fuel + extra) fragment)
+uv : Nat
+⊢ ∀ (value : UVarValue Symbol),
+    Retains
+      (match value with
+      | UVarValue.enumerated fragment => expandPartial graph fuel fragment
+      | UVarValue.unenumerated (some node) [] =>
+        match graph.node node with
+        | Node.recursive a => pure (Term.node PartialSymbol.truncated [])
+        | x => pure (Term.node (PartialSymbol.hole uv) [])
+      | x => pure (Term.node (PartialSymbol.hole uv) []))
+      (match value with
+      | UVarValue.enumerated fragment => expandPartial graph (fuel + extra) fragment
+      | UVarValue.unenumerated (some node) [] =>
+        match graph.node node with
+        | Node.recursive a => pure (Term.node PartialSymbol.truncated [])
+        | x => pure (Term.node (PartialSymbol.hole uv) [])
+      | x => pure (Term.node (PartialSymbol.hole uv) []))
