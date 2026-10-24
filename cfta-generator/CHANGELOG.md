@@ -24,6 +24,10 @@ tree automata of `cfta`, with QuickCheck integration.
   counts by size, `pmf`, the structural `shrinkRank`, and `smallerMembers`. A
   generator keeps each construction failure as one `GenError`. `explain`
   describes it, and `orFail` fails with that text.
+- `Data.CFTA.Gen` invertible blocks: `invertible`, `invertibleMap`, `invertiblePair`,
+  and `rankOfInvertible` give the ranks of a value in a finite generator built
+  from blocks that have an inverse. A choice, `pay`, `node`, and `atomic` keep
+  the inverse. This is the term-to-rank map of a combinator generator.
 - `Data.CFTA.Gen.Synthesis`: Hectare, the type-directed component
   synthesizer of the ECTA paper. `synthesize` lists the programs of a query
   by size, and `distinctProgramsIn` lists each program of a search space
