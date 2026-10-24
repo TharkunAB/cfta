@@ -1,5 +1,41 @@
 # Public API and source correspondence
 
+## Computed narrowing and enumeration branch effects
+
+Updated: 2026-10-24. Main `74250bd88` is incorporated.
+Proof: `7ef31cf002475708fd6b5b7b8427b6ea34f3e845`.
+Read `lean/notes-current-pruning-enumeration-narrowing.md`.
+
+An actual pending observation and all-slot realization derive the complete
+old Value. One actual narrowAt computation derives the result, final native
+heap, Keeps, stable larger fuel, both encodings and complete readbacks.
+Empty rejects. Equal surviving handles give complete Value equality and a
+pure enumeration continuation. Changed handles derive the actual finite
+second representative read and its compressed state, then write the result
+at that root with the same suspended list. The exact final record update,
+literal bind success and all-slot realization remain.
+
+Strict checking passes on the first attempt with an empty log.
+The installed build passes 566 jobs. Audit passes 3685 jobs and
+76119 dependency checks, with one older warning and no new-source
+warning. The complete actual signature and axiom report were read.
+The theorem uses only propext, Classical.choice and Quot.sound.
+All frozen declarations, scoped types, source cuts, reviews and raw evidence
+remain. No new action, carrier, predicate, helper or global instance is added.
+One local Monad List instance retains the existing singleton/flatMap choice.
+
+Next connect the outer Mu/type-position bypasses and original raw UVar key.
+The computed native result is not yet connected to the pure Nat callback and
+graph classification in EnumerationUntil. Native indices, intersection and
+assimilation, open-hole bounds, ordered reads, lazy emptiness, typing, memo2
+and typedTypes remain open. Global canonicality, mutation histories,
+selected-current protection, cached scheduling, semantic pruning, phase 4,
+resources, practical width, extraction, runtime/solver and convergence remain.
+H6 remains strongest combined. H23 stays queued. No Haskell source changes.
+FINDINGS keeps its external repair index FIRST. All six fixes are on main.
+The full goal is ACTIVE and incomplete. This record precedes evidence and push.
+
+
 ## Actual pending-node representative rereads
 
 Updated: 2026-10-24. Main `74250bd88` is incorporated.
