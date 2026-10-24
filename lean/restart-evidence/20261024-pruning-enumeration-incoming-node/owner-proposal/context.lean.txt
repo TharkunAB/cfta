@@ -1,0 +1,23 @@
+import MicroCFTA.SourcePruningEnumerationIncomingQuery
+import MicroCFTA.EnumerationCompleteness
+import MicroCFTA.EnumerationExecution
+import MicroCFTA.SourcePruningEnumerationWrites
+
+namespace MicroCFTA.SourcePruningEnumerationIncomingNode
+open EnumerationState EnumerationCorrectness EnumerationSchedule EnumerationExecution
+open EnumerationCompressionFrame
+open InternedConstructorTemplates InternedProbeProvenance
+open SourcePruningEnumerationNodes SourcePruningEnumerationObservation SourcePruningEnumerationWrites
+open SourceCurrentAllocatedNativeInventoryState (Inventory)
+open SourceCurrentAllocatedPartialInvariant (Context Post)
+open SourceCurrentAllocatedNativeEffects (physical)
+open SourceCurrentAllocatedQueryMemo (advancePhysical)
+local notation "Symbol" => SourcePruningTemplates.Symbol
+local notation "Constraint" => SourceSymbolicIndex.Constraint FullSyntax.Formula
+local notation "Node" => InternedConstructorTemplates.Value Symbol Constraint
+local notation "Checked" => SourceEqualityNativeDemand.State
+local notation "Caller" => SourceCurrentAllocatedPartialState.State
+local notation "Memos" => EndpointMemoGateTrace.Memos
+local notation "Fourth" => SourceCurrentEmptinessMemo.Memo
+local notation "Queries" => SourceEndpointMemo.Memos
+variable {EnumGuard : Type} {width : Nat}

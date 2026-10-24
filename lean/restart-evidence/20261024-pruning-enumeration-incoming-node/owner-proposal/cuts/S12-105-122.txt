@@ -1,0 +1,18 @@
+noncomputable def execute [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)] :
+    Nat → Control Output → State width → Outcome width Output
+  | 0, control, state => .yielded control state
+  | fuel + 1, control, state =>
+      match step control state with
+      | .yielded next after => execute fuel next after
+      | .done value after => .done value after
+      | .failed failure after => .failed failure after
+      | .constraintError message after => .constraintError message after
+      | .blocked reason next after => .blocked reason next after
+
+/-- Only yielded work continues under another finite bound. -/
+noncomputable def resume [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)]
+    (fuel : Nat) : Outcome width Output → Outcome width Output
+  | .yielded next after => execute fuel next after
+  | .done value after => .done value after
+  | .failed failure after => .failed failure after
+  | .constraintError message after => .constraintError message after

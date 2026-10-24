@@ -1,0 +1,11 @@
+--- predraft/candidate/verify.py
++++ corrected/candidate/verify.py
+@@ -86,7 +86,7 @@
+     value, ref = line.split()
+     if ref not in ['refs/heads/formalize', 'refs/remotes/origin/formalize'] and not ref.startswith('refs/codex/turn-diffs/'):
+         assert git('rev-parse', ref).decode().strip() == value, ref
+-assert git('rev-parse', 'codex/backup-pruning-enumeration-incoming-20261024-2221').decode().strip() == baseline
++assert git('rev-parse', 'codex/backup-pruning-enumeration-incoming-node-20261024-2244').decode().strip() == baseline
+ 
+ checks = load('work/build-summary.json')
+ source = (root / 'lean/MicroCFTA/SourcePruningEnumerationIncomingNode.lean').read_bytes()

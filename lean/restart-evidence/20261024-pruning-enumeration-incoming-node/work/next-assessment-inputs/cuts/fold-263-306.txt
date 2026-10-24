@@ -1,0 +1,44 @@
+          assimilated before target source (.unenumerated merged (sourceScs ++ targetScs)), dispatchQueries,
+          dispatchMemos, dispatchInventory, dispatchStable, dispatchPost, dispatchQuerySame,
+          changedRealized, .inr (by simpa only [ite_eq_right empty] using actionRaw), ?_,
+          ⟨merged, sourceScs ++ targetScs, targetAfterStored⟩, changedFrame.2, ?_, changedFrame.1,
+          ?_, rfl, rfl, rfl, rfl, ?_⟩
+        · intro rejected
+          rw [actionRaw, ite_eq_right empty] at rejected
+          cases rejected
+        · intro _different _completed
+          exact sourceAfterStored
+        · simp only [assimilated, List.length_set]
+        · intro slot different
+          simp only [assimilated, ite_eq_right different]
+    obtain ⟨headFuel, headP, headH, action, headCaller, headAfter, headQueries, headMemos, headInventory,
+      headRun, headPost, headQuerySame, headRealized, headShape, headRejectedSame, headTarget, headSelected,
+      headSource, headEliminated, headLength, headRepresentatives, headCounter, headObligations,
+      headExpansion, headAncestry⟩ := headPacket
+    rcases headShape with headRejected | headCompleted
+    · obtain rfl := (headRejectedSame headRejected).symm
+      refine ⟨headFuel, headP, headH, [], headCaller, before, headQueries, headMemos, headInventory,
+        ?_, headPost, headQuerySame, headRealized, .inl rfl, ?_, headEliminated,
+        headLength, headRepresentatives, headCounter, headObligations, headExpansion, headAncestry, ?_⟩
+      · intro extra P H largeP largeH
+        simp only [run, headRun extra P H largeP largeH, headRejected]
+      · intro completed
+        cases completed
+      · intro _rejected
+        exact ⟨[], source, rest, beforeCaller, before, memos.query, action,
+          rfl, by intros; rfl, headRun, headRejected, rfl⟩
+    ·
+      have tailRanges : Ranges checkEmpty rest headCaller headAfter target headMemos.query := by
+        simpa only [headQuerySame, Nat.add_zero] using
+          ranges.2 headFuel headP headH action headCaller headQueries headAfter
+            (headRun 0 headP headH (Nat.le_refl _) (Nat.le_refl _)) headCompleted
+      obtain ⟨tailFuel, tailP, tailH, tailRaw, tailCaller, tailAfter, tailQueries, tailMemos, tailInventory,
+        tailRun, tailPost, tailQuerySame, tailRealized, tailShape, tailCompleted, tailEliminated,
+        tailLength, tailRepresentatives, tailCounter, tailObligations, tailExpansion, tailAncestry,
+        tailRejection⟩ := ih headInventory headCaller headAfter headMemos headPost.context
+          headRealized headTarget headSelected tailRanges
+      have headAt : ∀ extra P H, max headP tailP ≤ P → max headH tailH ≤ H →
+        SourcePruningEnumerationDispatch.dispatch checkEmpty (headFuel + tailFuel + extra) P H
+          beforeCaller before source target memos.query = (.ok (some action), headCaller, headQueries) := by
+        intro extra P H largeP largeH
+        simpa only [Nat.add_assoc] using headRun (tailFuel + extra) P H

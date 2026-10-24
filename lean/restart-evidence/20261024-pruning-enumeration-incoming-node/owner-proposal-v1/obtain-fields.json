@@ -1,0 +1,467 @@
+{
+  "packets": [
+    {
+      "scope": "finish_complete",
+      "name": "write",
+      "api": "write_available_realized",
+      "fields": [
+        {
+          "name": "writtenHandle",
+          "type": "Nat",
+          "used": true
+        },
+        {
+          "name": "middle",
+          "type": "EnumerationState.State Symbol EnumGuard",
+          "used": true
+        },
+        {
+          "name": "writtenEncoded",
+          "type": "encodeNode replacement = some writtenHandle",
+          "used": true
+        },
+        {
+          "name": "written",
+          "type": "Success (setValue target (.unenumerated (some writtenHandle) (incomingScs ++ oldScs))) before () middle",
+          "used": false,
+          "reason": "Raw set/inherit execution is computed directly; the already-derived membership witness is redundant."
+        },
+        {
+          "name": "middleSame",
+          "type": "middle = {before with values := before.values.set target (.unenumerated (some writtenHandle) (incomingScs ++ oldScs))}",
+          "used": true
+        },
+        {
+          "name": "middleStored",
+          "type": "middle.values[target]? = some (.unenumerated (some writtenHandle) (incomingScs ++ oldScs))",
+          "used": true
+        },
+        {
+          "name": "middleRealized",
+          "type": "PendingRealized heap middle",
+          "used": true
+        }
+      ],
+      "skipped_fields": [
+        "written"
+      ]
+    },
+    {
+      "scope": "run_complete",
+      "name": "actualPending",
+      "api": "pending",
+      "fields": [
+        {
+          "name": "oldNode",
+          "type": "Option Nat",
+          "used": true
+        },
+        {
+          "name": "oldScs",
+          "type": "List EnumerationState.Suspended",
+          "used": true
+        },
+        {
+          "name": "stored",
+          "type": "before.values[uv]? = some (.unenumerated oldNode oldScs)",
+          "used": true
+        }
+      ],
+      "skipped_fields": []
+    },
+    {
+      "scope": "run_complete",
+      "name": "actualSelfRoot",
+      "api": "root",
+      "fields": [
+        {
+          "name": "size",
+          "type": "Nat",
+          "used": true
+        },
+        {
+          "name": "path",
+          "type": "UnionFind.Reaches before.representatives uv uv size",
+          "used": true
+        }
+      ],
+      "skipped_fields": []
+    },
+    {
+      "scope": "run_complete",
+      "name": "actualRepresentative",
+      "api": "UnionFind.findRoot_terminates path",
+      "fields": [
+        {
+          "name": "r",
+          "type": "Nat",
+          "used": true
+        },
+        {
+          "name": "found",
+          "type": "UnionFind.Result",
+          "used": true
+        },
+        {
+          "name": "lookup",
+          "type": "UnionFind.findRoot r before.representatives uv = some found",
+          "used": true
+        }
+      ],
+      "skipped_fields": []
+    },
+    {
+      "scope": "run_complete.none",
+      "name": "incomingReadback",
+      "api": "available_readback",
+      "fields": [
+        {
+          "name": "handle",
+          "type": "Nat",
+          "used": true
+        },
+        {
+          "name": "encoded",
+          "type": "encodeNode incoming = some handle",
+          "used": true
+        },
+        {
+          "name": "decoded",
+          "type": "lookupNode beforeCaller.checked.native.machine.heap handle = some incoming",
+          "used": true
+        }
+      ],
+      "skipped_fields": []
+    },
+    {
+      "scope": "run_complete.none",
+      "name": "finished",
+      "api": "finish_complete",
+      "fields": [
+        {
+          "name": "after",
+          "type": "EnumerationState.State Symbol EnumGuard",
+          "used": true
+        },
+        {
+          "name": "writePrefix",
+          "type": "ExceptT.run ((do setValue uv (.unenumerated (some handle) (incomingScs ++ oldScs)); inheritAncestry uv) read) = [.ok ((), after)]",
+          "used": true
+        },
+        {
+          "name": "raw",
+          "type": "ExceptT.run (finish uv handle incomingScs oldScs incoming read) = (if incoming = .empty then [] else [.ok ((), after)])",
+          "used": true
+        },
+        {
+          "name": "afterSame",
+          "type": "after = {read with values := read.values.set uv (.unenumerated (some handle) (incomingScs ++ oldScs)), recursionAncestry := fun other => if other = uv then (read.expansionAncestry ++ read.recursionAncestry uv).eraseDups else read.recursionAncestry other}",
+          "used": true
+        },
+        {
+          "name": "afterStored",
+          "type": "after.values[uv]? = some (.unenumerated (some handle) (incomingScs ++ oldScs))",
+          "used": true
+        },
+        {
+          "name": "afterStorage",
+          "type": "StorageValid after",
+          "used": true
+        },
+        {
+          "name": "afterRealized",
+          "type": "PendingRealized beforeCaller.checked.native.machine.heap after",
+          "used": true
+        }
+      ],
+      "skipped_fields": []
+    },
+    {
+      "scope": "run_complete.some",
+      "name": "oldRealized",
+      "api": "realized uv oldHandle oldScs stored",
+      "fields": [
+        {
+          "name": "old",
+          "type": "Node",
+          "used": true
+        },
+        {
+          "name": "oldDecoded",
+          "type": "lookupNode beforeCaller.checked.native.machine.heap oldHandle = some old",
+          "used": true
+        },
+        {
+          "name": "oldAvailable",
+          "type": "Available beforeCaller.checked.native.machine.heap old",
+          "used": true
+        },
+        {
+          "name": "oldClosed",
+          "type": "old.free = []",
+          "used": true
+        }
+      ],
+      "skipped_fields": []
+    },
+    {
+      "scope": "run_complete.some",
+      "name": "query",
+      "api": "SourcePruningEnumerationIncomingQuery.complete",
+      "fields": [
+        {
+          "name": "next",
+          "type": "Inventory",
+          "used": true
+        },
+        {
+          "name": "query",
+          "type": "Node",
+          "used": true
+        },
+        {
+          "name": "queried",
+          "type": "Checked width",
+          "used": true
+        },
+        {
+          "name": "answer",
+          "type": "Bool",
+          "used": true
+        },
+        {
+          "name": "checkedAfter",
+          "type": "Checked width",
+          "used": true
+        },
+        {
+          "name": "saved",
+          "type": "Fourth",
+          "used": true
+        },
+        {
+          "name": "final",
+          "type": "Memos",
+          "used": true
+        },
+        {
+          "name": "queries",
+          "type": "Queries",
+          "used": true
+        },
+        {
+          "name": "replacement",
+          "type": "Node",
+          "used": true
+        },
+        {
+          "name": "handle",
+          "type": "Nat",
+          "used": true
+        },
+        {
+          "name": "n",
+          "type": "Nat",
+          "used": true
+        },
+        {
+          "name": "p",
+          "type": "Nat",
+          "used": true
+        },
+        {
+          "name": "h",
+          "type": "Nat",
+          "used": true
+        },
+        {
+          "name": "nextSource",
+          "type": "next.source = beforeCaller.checked.native.machine.heap",
+          "used": true
+        },
+        {
+          "name": "nextRoots",
+          "type": "next.roots = inventory.roots ++ [incoming, old]",
+          "used": true
+        },
+        {
+          "name": "receipt",
+          "type": "SourceCurrentAllocatedTargetQuery.Receipt formulas solver next incoming old beforeCaller.checked query queried memos",
+          "used": true
+        },
+        {
+          "name": "nativeStable",
+          "type": "∀ (extra : Nat), SourceEqualityNativeDemand.execute (n + extra) (.code (SourceRecursiveIntersectionCode.requestNode IntersectionEmptyDomain.emptyDomain incoming old)) beforeCaller.checked = .done query queried",
+          "used": true
+        },
+        {
+          "name": "checkStable",
+          "type": "∀ (P H : Nat), p ≤ P → h ≤ H → (if checkEmpty then SourcePruningEnumerationEnabledEmpty.check P H query queried beforeCaller.fourth memos.query else (.done false queried beforeCaller.fourth, memos.query)) = (.done answer checkedAfter saved, queries)",
+          "used": true
+        },
+        {
+          "name": "actualPost",
+          "type": "Post formulas solver next beforeCaller (SourceCurrentAllocatedPartialState.advance beforeCaller checkedAfter saved beforeCaller.merge) final",
+          "used": true
+        },
+        {
+          "name": "querySame",
+          "type": "final.query = queries",
+          "used": true
+        },
+        {
+          "name": "unfolding",
+          "type": "Cache.Extends memos.unfolding final.unfolding",
+          "used": true
+        },
+        {
+          "name": "sound",
+          "type": "SourceCurrentEmptinessMemo.AnswerSound formulas solver query answer",
+          "used": false,
+          "reason": "IncomingQuery already certifies replacement language; no need to re-prove soundness here."
+        },
+        {
+          "name": "replacementSame",
+          "type": "replacement = (if answer then .empty else query)",
+          "used": true
+        },
+        {
+          "name": "replacementAvailable",
+          "type": "Available checkedAfter.native.machine.heap replacement",
+          "used": true
+        },
+        {
+          "name": "replacementClosed",
+          "type": "replacement.free = []",
+          "used": true
+        },
+        {
+          "name": "encoded",
+          "type": "encodeNode replacement = some handle",
+          "used": true
+        },
+        {
+          "name": "decoded",
+          "type": "lookupNode checkedAfter.native.machine.heap handle = some replacement",
+          "used": true
+        },
+        {
+          "name": "meaning",
+          "type": "∀ ambient term, InternedGuardedLanguage.meaning (SourceEqualityPCSGuard.holds formulas solver) ambient replacement term ↔ InternedGuardedLanguage.meaning (SourceEqualityPCSGuard.holds formulas solver) ambient incoming term ∧ InternedGuardedLanguage.meaning (SourceEqualityPCSGuard.holds formulas solver) ambient old term",
+          "used": true
+        },
+        {
+          "name": "disabled",
+          "type": "checkEmpty = false → answer = false ∧ replacement = query ∧ checkedAfter = queried ∧ saved = beforeCaller.fourth ∧ queries = memos.query ∧ final = memos",
+          "used": true
+        },
+        {
+          "name": "enabled",
+          "type": "checkEmpty = true → ∃ reached, SourceEndpointMemo.run query memos.query = (reached, queries) ∧ SourceEndpointMemoCorrect.Checked queried.native.machine.heap memos.query (SourceEndpointReachability.reaches SourceMemoGate.unconstrained query) (reached, queries) ∧ (reached = false → answer = false ∧ checkedAfter = queried ∧ saved = beforeCaller.fourth ∧ final = {memos with query := queries}) ∧ (reached = true → ∃ reachedPhysical : SourceCurrentConjunctionRowsAllocation.State Symbol FullSyntax.Formula, checkedAfter = advancePhysical queried reachedPhysical ∧ ∃ actual : SourceCurrentConjunctionMemo.Call 1000 beforeCaller.fourth query (physical queried) answer reachedPhysical saved, SourceCurrentConjunctionGlobalMemos.CallReads actual {memos with query := queries} final)",
+          "used": false,
+          "reason": "Existing full receipt remains available in the imported theorem; current public consumer does not duplicate enabled CallReads."
+        }
+      ],
+      "skipped_fields": [
+        "sound",
+        "enabled"
+      ]
+    },
+    {
+      "scope": "run_complete.some",
+      "name": "finished",
+      "api": "finish_complete",
+      "fields": [
+        {
+          "name": "after",
+          "type": "EnumerationState.State Symbol EnumGuard",
+          "used": true
+        },
+        {
+          "name": "writePrefix",
+          "type": "ExceptT.run ((do setValue uv (.unenumerated (some handle) (incomingScs ++ oldScs)); inheritAncestry uv) read) = [.ok ((), after)]",
+          "used": true
+        },
+        {
+          "name": "raw",
+          "type": "ExceptT.run (finish uv handle incomingScs oldScs replacement read) = (if replacement = .empty then [] else [.ok ((), after)])",
+          "used": true
+        },
+        {
+          "name": "afterSame",
+          "type": "after = {read with values := read.values.set uv (.unenumerated (some handle) (incomingScs ++ oldScs)), recursionAncestry := fun other => if other = uv then (read.expansionAncestry ++ read.recursionAncestry uv).eraseDups else read.recursionAncestry other}",
+          "used": true
+        },
+        {
+          "name": "afterStored",
+          "type": "after.values[uv]? = some (.unenumerated (some handle) (incomingScs ++ oldScs))",
+          "used": true
+        },
+        {
+          "name": "afterStorage",
+          "type": "StorageValid after",
+          "used": true
+        },
+        {
+          "name": "afterRealized",
+          "type": "PendingRealized checkedAfter.native.machine.heap after",
+          "used": true
+        }
+      ],
+      "skipped_fields": []
+    },
+    {
+      "scope": "run_complete.some.disabled",
+      "name": "disabledResults",
+      "api": "disabled disabledFlag",
+      "fields": [
+        {
+          "name": "answerFalse",
+          "type": "answer = false",
+          "used": false,
+          "reason": "Retained typed field, intentionally redundant for this proof."
+        },
+        {
+          "name": "replacementQuery",
+          "type": "replacement = query",
+          "used": true
+        },
+        {
+          "name": "checkedSame",
+          "type": "checkedAfter = queried",
+          "used": true
+        },
+        {
+          "name": "savedSame",
+          "type": "saved = beforeCaller.fourth",
+          "used": true
+        },
+        {
+          "name": "queriesSame",
+          "type": "queries = memos.query",
+          "used": false,
+          "reason": "Current disabled output requires caller/final identity; final.query is already retained separately."
+        },
+        {
+          "name": "finalSame",
+          "type": "final = memos",
+          "used": true
+        }
+      ],
+      "skipped_fields": [
+        "answerFalse",
+        "queriesSame"
+      ]
+    }
+  ],
+  "count": 10,
+  "field_count": 72,
+  "unused_fields": [
+    "finish_complete.written",
+    "run_complete.some.sound",
+    "run_complete.some.enabled",
+    "run_complete.some.disabled.answerFalse",
+    "run_complete.some.disabled.queriesSame"
+  ],
+  "replacementSame_is_used": true
+}

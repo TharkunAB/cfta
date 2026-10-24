@@ -1,0 +1,405 @@
+cfta/src/Data/CFTA/Enumeration.hs:200-218
+-}
+intersectUVarValue ::
+    (Hashable symbol, Typeable symbol) =>
+    Bool -> UVarValue symbol -> UVarValue symbol -> UVarValue symbol
+intersectUVarValue checkEmpty (UVarUnenumerated mn1 scs1) (UVarUnenumerated mn2 scs2) =
+    let newContents = case (mn1, mn2) of
+            (Nothing, x) -> x
+            (x, Nothing) -> x
+            (Just n1, Just n2) -> Just (emptyIfProvably (n1 `intersect` n2))
+        newConstraints = scs1 <> scs2
+     in UVarUnenumerated newContents newConstraints
+  where
+    -- An intersection can unfold a recursive node with constraints into a
+    -- node that needs itself again with no base case. Enumeration of such a
+    -- node would not end, so the merge makes it 'EmptyNode', and the caller
+    -- ends the branch.
+    emptyIfProvably n
+        | checkEmpty, reachesConstrainedMu n, provablyEmpty n = EmptyNode
+        | otherwise = n
+
+cfta/src/Data/CFTA/Enumeration.hs:437-467
+setUVarValue uv val = do
+    old <- gets (\s -> _uvarValues s IntMap.! uvarToInt uv)
+    writeUVarValue (suspended val) (suspended old) uv val
+  where
+    suspended (UVarUnenumerated _ scs) = scs
+    suspended _ = Sequence.Empty
+
+{- | 'setUVarValue' with the suspended constraints that the slot gains and
+loses, for a caller that knows them: the constraints that stay in the slot
+change no count.
+-}
+writeUVarValue ::
+    Seq SuspendedConstraint -> Seq SuspendedConstraint -> UVar -> UVarValue symbol -> EnumerateM symbol ()
+writeUVarValue gained lost uv val =
+    modify' $ \s ->
+        s
+            { _uvarValues = IntMap.insert idx val (_uvarValues s)
+            , _expandableUVars =
+                if expandable val
+                    then IntSet.insert idx (_expandableUVars s)
+                    else IntSet.delete idx (_expandableUVars s)
+            , _waitingUVars = count (_uvarRepresentative s) 1 gained (count (_uvarRepresentative s) (-1) lost (_waitingUVars s))
+            }
+  where
+    idx = uvarToInt uv
+    count uf change scs waiting =
+        Foldable.foldl' (\m sc -> IntMap.alter (add change) (uvarToInt (UnionFind.root (scGetUVar sc) uf)) m) waiting scs
+    add change old = case maybe change (+ change) old of
+        0 -> Nothing
+        new -> Just new
+
+
+cfta/src/Data/CFTA/Enumeration.hs:512-529
+-- | Intersect a node and inherited constraints into the value for a UVar.
+mergeNodeIntoUVarVal ::
+    (Hashable symbol, Typeable symbol) =>
+    UVar -> Node symbol -> Seq SuspendedConstraint -> EnumerateM symbol ()
+mergeNodeIntoUVarVal uv n scs = do
+    uv' <- getUVarRepresentative uv
+    let idx = uvarToInt uv'
+    values <- gets _uvarValues
+    checkEmpty <- gets _constrainedRecursion
+    let new = intersectUVarValue checkEmpty (UVarUnenumerated (Just n) scs) (values IntMap.! idx)
+    -- The slot keeps its suspended constraints and gains these.
+    writeUVarValue scs Sequence.Empty uv' new
+    inheritAncestry idx
+    guard $ not $ hasEmptyContents new
+
+-- | Whether an unenumerated variable has already reduced to the empty node.
+hasEmptyContents :: UVarValue symbol -> Bool
+hasEmptyContents (UVarUnenumerated (Just EmptyNode) _) = True
+
+lean/MicroCFTA/EnumerationState.lean:102-130
+/-- Write the supplied UVar, not its representative. -/
+def setValue (uv : Nat) (value : UVarValue Symbol) : EnumerateM Symbol Guard Unit :=
+  modify fun state => {state with values := state.values.set uv value}
+
+/-- Read one raw slot. -/
+def rawValue (uv : Nat) : EnumerateM Symbol Guard (UVarValue Symbol) := do
+  match (← get).values[uv]? with
+  | none => failure .invalidSlot
+  | some value => pure value
+
+/-- Find and path-compress a representative. -/
+def representative (fuel uv : Nat) : EnumerateM Symbol Guard Nat := do
+  let state ← get
+  match UnionFind.findRoot fuel state.representatives uv with
+  | none => failure .representativeFuel
+  | some found =>
+      set {state with representatives := found.forest}
+      pure found.representative
+
+/-- Read the current representative's slot. -/
+def getValue (fuel uv : Nat) : EnumerateM Symbol Guard (UVarValue Symbol) := do
+  rawValue (← representative fuel uv)
+
+/-- Give a variable the ancestry of the current expansion. -/
+def inheritAncestry (uv : Nat) : EnumerateM Symbol Guard Unit :=
+  modify fun state => {state with recursionAncestry := (fun other =>
+    if other = uv then (state.expansionAncestry ++ state.recursionAncestry uv).eraseDups
+    else state.recursionAncestry other)}
+
+
+lean/MicroCFTA/EnumerationState.lean:178-188
+def mergeNode (graph : Graph Symbol Guard) (fuel uv node : Nat) (scs : List Suspended) :
+    EnumerateM Symbol Guard Unit := do
+  let root ← representative fuel uv
+  let previous ← rawValue root
+  match intersectValues graph (.unenumerated (some node) scs) previous with
+  | none => failure .invalidIntersection
+  | some merged =>
+      setValue root merged
+      inheritAncestry root
+      require (!hasEmptyContents graph merged)
+
+
+lean/MicroCFTA/EnumerationCorrectness.lean:328-347
+  {state with
+    representatives := found.forest
+    values := state.values.set found.representative merged
+    recursionAncestry := fun other => if other = found.representative then
+      (state.expansionAncestry ++ state.recursionAncestry found.representative).eraseDups
+      else state.recursionAncestry other}
+
+/-- The actual node-merge action performs the representative lookup, payload intersection, and ancestry update. -/
+theorem mergeNode_exact (graph : Graph Symbol Guard) (state : State Symbol Guard) (fuel uv node : Nat)
+    (scs : List Suspended) (found : UnionFind.Result) (previous merged : UVarValue Symbol)
+    (lookup : UnionFind.findRoot fuel state.representatives uv = some found)
+    (stored : state.values[found.representative]? = some previous)
+    (intersection : intersectValues graph (.unenumerated (some node) scs) previous = some merged)
+    (notEmpty : hasEmptyContents graph merged = false) :
+    mergeNode graph fuel uv node scs state = [.ok ((), nodeMerged state found merged)] := by
+  simp [mergeNode, representative, lookup, rawValue, stored, intersection, require, notEmpty,
+    setValue, inheritAncestry, nodeMerged, bind, get, getThe, MonadStateOf.get, set, pure,
+    modify, modifyGet, MonadStateOf.modifyGet, StateT.bind, StateT.pure, StateT.get, StateT.set, StateT.modifyGet,
+    ExceptT.bind, ExceptT.pure, ExceptT.bindCont, ExceptT.mk]
+
+
+lean/MicroCFTA/EnumerationCorrectness.lean:644-649
+structure StorageValid (state : State Symbol Guard) : Prop where
+  aligned : SupplyAligned state
+  total : UnionFind.Total state.representatives
+  forest : ForestBound state.counter state.representatives
+  values : ∀ value ∈ state.values, SlotBound state.counter value
+  guards : ∀ obligation ∈ state.obligations, FragmentBound state.counter obligation.2
+
+lean/MicroCFTA/EnumerationCorrectness.lean:931-938
+theorem representative_storage (state : State Symbol Guard) (valid : StorageValid state) (fuel uv : Nat)
+    (inside : uv < state.counter) (found : UnionFind.Result)
+    (result : UnionFind.findRoot fuel state.representatives uv = some found) :
+    StorageValid {state with representatives := found.forest} :=
+  ⟨valid.aligned, UnionFind.findRoot_total valid.total result,
+    (findRoot_bounded fuel state.representatives state.counter uv valid.forest inside found result).2,
+    valid.values, valid.guards⟩
+
+
+lean/MicroCFTA/EnumerationCorrectness.lean:959-966
+theorem set_storage (state : State Symbol Guard) (valid : StorageValid state) (uv : Nat)
+    (value : UVarValue Symbol) (bounded : SlotBound state.counter value) :
+    StorageValid {state with values := state.values.set uv value} := by
+  refine ⟨by simpa [SupplyAligned] using valid.aligned, valid.total, valid.forest, ?_, valid.guards⟩
+  intro stored member
+  rcases List.mem_or_eq_of_mem_set member with old | same
+  · exact valid.values stored old
+  · simpa [same] using bounded
+
+lean/MicroCFTA/EnumerationCorrectness.lean:1018-1025
+theorem getValue_success (fuel uv : Nat) (state after : State Symbol Guard) (value : UVarValue Symbol) :
+    Success (getValue fuel uv) state value after ↔
+      ∃ found, UnionFind.findRoot fuel state.representatives uv = some found ∧
+        state.values[found.representative]? = some value ∧ after = {state with representatives := found.forest} := by
+  cases lookup : UnionFind.findRoot fuel state.representatives uv with
+  | none =>
+      simp [Success, getValue, representative, lookup, rawValue, EnumerationState.failure, bind, get, getThe, MonadStateOf.get, set, pure,
+        StateT.bind, StateT.get, ExceptT.bind, ExceptT.pure, ExceptT.bindCont, ExceptT.mk, ExceptT.run]
+
+lean/MicroCFTA/EnumerationCompressionFrame.lean:69-88
+theorem representative_frame (fuel uv root : Nat) (before after : State Symbol Guard)
+    (total : UnionFind.Total before.representatives)
+    (success : Success (representative fuel uv) before root after) : Frame before after := by
+  obtain ⟨found, lookup, _, rfl⟩ := (representative_success fuel uv before after root).mp success
+  refine ⟨rfl, rfl, rfl, rfl, rfl, ?_⟩
+  intro other actual size
+  exact UnionFind.findRoot_reaches_iff total lookup other actual size
+
+/-- A successful value read retains the actual root, its size, and its slot. -/
+theorem getValue_frame (fuel uv : Nat) (before after : State Symbol Guard) (value : UVarValue Symbol)
+    (total : UnionFind.Total before.representatives)
+    (success : Success (getValue fuel uv) before value after) :
+    Frame before after ∧ ∃ root size,
+      UnionFind.Reaches before.representatives uv root size ∧
+      UnionFind.Reaches after.representatives uv root size ∧ before.values[root]? = some value := by
+  obtain ⟨found, lookup, stored, rfl⟩ := (getValue_success fuel uv before after value).mp success
+  obtain ⟨path, preserved⟩ := UnionFind.findRoot_correct fuel before.representatives uv found lookup
+  refine ⟨⟨rfl, rfl, rfl, rfl, rfl, ?_⟩, found.representative, found.size, path, preserved path, stored⟩
+  intro other root size
+  exact UnionFind.findRoot_reaches_iff total lookup other root size
+
+lean/MicroCFTA/SourcePruningEnumerationObservation.lean:20-26
+    (state : EnumerationState.State Symbol EnumGuard) : Prop :=
+  ∀ (slot node : Nat) (scs : List EnumerationState.Suspended),
+    state.values[slot]? = some (.unenumerated (some node) scs) →
+      ∃ value : InternedConstructorTemplates.Value Symbol NativeGuard,
+        lookupNode heap node = some value ∧
+        InternedProbeProvenance.Available heap value ∧ value.free = []
+
+
+lean/MicroCFTA/SourcePruningEnumerationObservation.lean:45-54
+theorem realized_preserved (heap nextHeap : InternedConstructorTemplates.State Symbol NativeGuard)
+    (before after : EnumerationState.State Symbol EnumGuard)
+    (realized : PendingRealized heap before) (frame : Frame before after)
+    (kept : SourceEqualityRequiredCache.Keeps heap nextHeap) : PendingRealized nextHeap after := by
+  intro slot node scs stored
+  have earlierStored : before.values[slot]? = some (.unenumerated (some node) scs) := by
+    simpa only [frame.values] using stored
+  obtain ⟨value, decoded, available, closed⟩ := realized slot node scs earlierStored
+  exact ⟨value, lookupNode_keeps heap nextHeap kept node value decoded,
+    available.grows heap nextHeap kept.growth kept.history, closed⟩
+
+lean/MicroCFTA/SourcePruningEnumerationWrites.lean:42-65
+theorem write_available_realized
+    (heap : InternedConstructorTemplates.State Symbol NativeGuard)
+    (before : EnumerationState.State Symbol EnumGuard)
+    (value : InternedConstructorTemplates.Value Symbol NativeGuard) (slot : Nat)
+    (scs : List EnumerationState.Suspended)
+    (coherent : InternedRecordCoherence.Coherent heap)
+    (available : InternedProbeProvenance.Available heap value) (closed : value.free = [])
+    (realized : PendingRealized heap before) (inside : slot < before.values.length) :
+    ∃ (node : Nat) (after : EnumerationState.State Symbol EnumGuard),
+      encodeNode value = some node ∧
+      Success (setValue slot (.unenumerated (some node) scs)) before () after ∧
+      after = {before with values := before.values.set slot (.unenumerated (some node) scs)} ∧
+      after.values[slot]? = some (.unenumerated (some node) scs) ∧ PendingRealized heap after := by
+  obtain ⟨node, encoded, decoded⟩ := available_readback heap value coherent available closed
+  refine ⟨node, {before with values := before.values.set slot (.unenumerated (some node) scs)},
+    encoded, ?_, rfl, List.getElem?_set_self inside, ?_⟩
+  · exact (EnumerationDriver.modify_success _ _ _).mpr rfl
+  · intro storedSlot storedNode storedScs stored
+    change (before.values.set slot (.unenumerated (some node) scs))[storedSlot]? =
+      some (.unenumerated (some storedNode) storedScs) at stored
+    obtain old | fresh := List.mem_or_eq_of_mem_set (List.mem_of_getElem? stored)
+    · obtain ⟨oldSlot, oldStored⟩ := List.getElem?_of_mem old
+      exact realized oldSlot storedNode storedScs oldStored
+    · simp only [UVarValue.unenumerated.injEq, Option.some.injEq] at fresh
+
+lean/MicroCFTA/EnumerationSchedule.lean:273-278
+def IsRoot (forest : UnionFind.Forest) (uv : Nat) : Prop :=
+  ∃ size, UnionFind.Reaches forest uv uv size
+
+/-- Every allocated nonrepresentative is eliminated; every allocated representative is live. -/
+def LiveRoots (state : State Symbol Guard) : Prop :=
+  ∀ uv value, state.values[uv]? = some value → (value ≠ .eliminated ↔ IsRoot state.representatives uv)
+
+lean/MicroCFTA/EnumerationExecution.lean:413-418
+theorem representative_terminates (before : State Symbol Guard) (total : UnionFind.Total before.representatives) (uv : Nat) :
+    ∃ fuel root after, Success (representative fuel uv) before root after ∧ UnionFind.Total after.representatives := by
+  obtain ⟨root, size, path⟩ := total uv
+  obtain ⟨fuel, found, lookup⟩ := UnionFind.findRoot_terminates path
+  exact ⟨fuel, found.representative, {before with representatives := found.forest},
+    (representative_success _ _ _ _ _).mpr ⟨found, lookup, rfl, rfl⟩, UnionFind.findRoot_total total lookup⟩
+
+lean/MicroCFTA/EnumerationCompleteness.lean:18-20
+def PendingAt (state : State Symbol Guard) (uv : Nat) : Prop :=
+  ∃ node scs, state.values[uv]? = some (.unenumerated node scs)
+
+
+lean/MicroCFTA/EnumerationDriver.lean:682-692
+theorem getValue_storage (fuel uv : Nat) (before after : State Symbol Guard) (value : UVarValue Symbol)
+    (safe : Safe before) (inside : uv < before.counter)
+    (success : Success (getValue fuel uv) before value after) : RenderStable before after ∧ SlotBound after.counter value := by
+  obtain ⟨found, lookup, stored, rfl⟩ := (getValue_success fuel uv before after value).mp success
+  have reached := (UnionFind.findRoot_correct fuel before.representatives uv found lookup).1
+  have root : IsRoot before.representatives found.representative := ⟨found.size, .root (UnionFind.reaches_terminal reached)⟩
+  have safeAfter := (compression_safe before safe fuel uv found.representative inside root found lookup).1
+  exact ⟨⟨safeAfter, rfl, rfl, rfl, UnionFind.findRoot_classes safe.1.total lookup⟩,
+    safe.1.values value (List.mem_of_getElem? stored)⟩
+
+/-- A bounded fragment list bounds each listed child. -/
+
+lean/MicroCFTA/SourcePruningEnumerationIncomingQuery.lean:22-73
+theorem complete
+    [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Constraint)] [DecidableEq Node]
+    (formulas : SourceGuards.Formulas FullSyntax.Formula)
+    (solver : SourceGuards.Entailment FullSyntax.Formula)
+    (inventory : Inventory) (beforeCaller : Caller width)
+    (left right : Node) (checkEmpty : Bool) (memos : Memos)
+    (initial : Context formulas solver inventory beforeCaller memos)
+    (leftAvailable : Available beforeCaller.checked.native.machine.heap left)
+    (rightAvailable : Available beforeCaller.checked.native.machine.heap right)
+    (leftClosed : left.free = []) (rightClosed : right.free = [])
+    (ranges : SourceCurrentAllocatedNativeRequestBounds.WordRanges
+      (.code (SourceRecursiveIntersectionCode.requestNode IntersectionEmptyDomain.emptyDomain left right))
+      beforeCaller.checked) :
+    ∃ (next : Inventory) (query : Node) (queried : Checked width)
+      (answer : Bool) (checkedAfter : Checked width) (saved : Fourth)
+      (final : Memos) (queries : Queries) (replacement : Node) (handle fuel p h : Nat),
+      next.source = beforeCaller.checked.native.machine.heap ∧ next.roots = inventory.roots ++ [left, right] ∧
+      SourceCurrentAllocatedTargetQuery.Receipt formulas solver next left right
+        beforeCaller.checked query queried memos ∧
+      (∀ extra, SourceEqualityNativeDemand.execute (fuel + extra)
+        (.code (SourceRecursiveIntersectionCode.requestNode IntersectionEmptyDomain.emptyDomain left right))
+        beforeCaller.checked = .done query queried) ∧
+      (∀ P H, p ≤ P → h ≤ H →
+        (if checkEmpty then
+          SourcePruningEnumerationEnabledEmpty.check P H query queried beforeCaller.fourth memos.query
+        else (.done false queried beforeCaller.fourth, memos.query)) =
+          (.done answer checkedAfter saved, queries)) ∧
+      Post formulas solver next beforeCaller
+        (SourceCurrentAllocatedPartialState.advance beforeCaller checkedAfter saved beforeCaller.merge) final ∧
+      final.query = queries ∧ Cache.Extends memos.unfolding final.unfolding ∧
+      SourceCurrentEmptinessMemo.AnswerSound formulas solver query answer ∧
+      replacement = (if answer then .empty else query) ∧
+      Available checkedAfter.native.machine.heap replacement ∧ replacement.free = [] ∧
+      encodeNode replacement = some handle ∧ lookupNode checkedAfter.native.machine.heap handle = some replacement ∧
+      (∀ ambient term,
+        InternedGuardedLanguage.meaning (SourceEqualityPCSGuard.holds formulas solver) ambient replacement term ↔
+          InternedGuardedLanguage.meaning (SourceEqualityPCSGuard.holds formulas solver) ambient left term ∧
+          InternedGuardedLanguage.meaning (SourceEqualityPCSGuard.holds formulas solver) ambient right term) ∧
+      (checkEmpty = false → answer = false ∧ replacement = query ∧ checkedAfter = queried ∧
+        saved = beforeCaller.fourth ∧ queries = memos.query ∧ final = memos) ∧
+      (checkEmpty = true → ∃ reached,
+        SourceEndpointMemo.run query memos.query = (reached, queries) ∧
+        SourceEndpointMemoCorrect.Checked queried.native.machine.heap memos.query
+          (SourceEndpointReachability.reaches SourceMemoGate.unconstrained query) (reached, queries) ∧
+        (reached = false → answer = false ∧ checkedAfter = queried ∧ saved = beforeCaller.fourth ∧
+          final = {memos with query := queries}) ∧
+        (reached = true →
+          ∃ reachedPhysical : SourceCurrentConjunctionRowsAllocation.State Symbol FullSyntax.Formula,
+            checkedAfter = advancePhysical queried reachedPhysical ∧
+            ∃ actual : SourceCurrentConjunctionMemo.Call 1000 beforeCaller.fourth query
+                (physical queried) answer reachedPhysical saved,
+              SourceCurrentConjunctionGlobalMemos.CallReads actual {memos with query := queries} final)) := by
+
+lean/MicroCFTA/SourcePruningEnumerationDispatch.lean:49-90
+        SourceCurrentAllocatedPartialState.advance beforeCaller checkedAfter saved beforeCaller.merge, phase.2)
+
+/-- Select the source branches before the actual checked query and enabled check. -/
+noncomputable def dispatch
+    [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Constraint)] [DecidableEq Node]
+    (checkEmpty : Bool) (nativeFuel p h : Nat)
+    (beforeCaller : Caller width) (before : EnumerationState.State Symbol EnumGuard)
+    (source target : Nat) (queries : Queries) :
+    (Except (SourceEqualityNativeDemand.Outcome width Node ⊕
+      SourceCurrentAllocatedConjunctionWorker.Outcome width)
+      (Option (EnumerateM Symbol EnumGuard Unit))) × Caller width × Queries := Id.run do
+  let noop : EnumerateM Symbol EnumGuard Unit := fun state => [.ok ((), state)]
+  if source = target then return (.ok (some noop), beforeCaller, queries)
+  let some sourceValue := before.values[source]? | return (.ok none, beforeCaller, queries)
+  match sourceValue with
+  | .eliminated => return (.ok (some noop), beforeCaller, queries)
+  | _ => pure PUnit.unit
+  let some targetValue := before.values[target]? | return (.ok none, beforeCaller, queries)
+  let .unenumerated sourceNode sourceScs := sourceValue |
+    return (.ok (some (failure .invalidIntersection)), beforeCaller, queries)
+  let .unenumerated targetNode targetScs := targetValue |
+    return (.ok (some (failure .invalidIntersection)), beforeCaller, queries)
+  let some sourceHandle := sourceNode |
+    return (.ok (some (finishOptional source target targetNode sourceScs targetScs)), beforeCaller, queries)
+  let some targetHandle := targetNode |
+    return (.ok (some (finishOptional source target (some sourceHandle) sourceScs targetScs)), beforeCaller, queries)
+  let some left := lookupNode beforeCaller.checked.native.machine.heap sourceHandle |
+    return (.ok none, beforeCaller, queries)
+  let some right := lookupNode beforeCaller.checked.native.machine.heap targetHandle |
+    return (.ok none, beforeCaller, queries)
+  let actual : SourceEqualityNativeDemand.Outcome width Node :=
+    SourceEqualityNativeDemand.execute nativeFuel
+      (.code (SourceRecursiveIntersectionCode.requestNode IntersectionEmptyDomain.emptyDomain left right)) beforeCaller.checked
+  match actual with
+  | .done query queried =>
+    let prepared :
+      (Except (SourceCurrentAllocatedConjunctionWorker.Outcome width)
+        (Option (EnumerateM Symbol EnumGuard Unit))) × Caller width × Queries :=
+      afterQuery checkEmpty p h source target sourceScs targetScs query queried beforeCaller queries
+    return (prepared.1.mapError Sum.inr, prepared.2.1, prepared.2.2)
+  | other => return (.error (.inl other),
+      SourceCurrentAllocatedPartialState.advance beforeCaller other.state beforeCaller.fourth beforeCaller.merge, queries)
+
+lean/MicroCFTA/SourcePruningEnumerationFold.lean:20-44
+    (beforeCaller : Caller width) (before : EnumerationState.State Symbol EnumGuard)
+    (target : Nat) (queries : Queries) :
+    (Except (SourceEqualityNativeDemand.Outcome width Node ⊕
+      SourceCurrentAllocatedConjunctionWorker.Outcome width)
+      (Option (List (Except EnumerationState.Error (Unit × EnumerationState.State Symbol EnumGuard))))) ×
+      Caller width × Queries × EnumerationState.State Symbol EnumGuard :=
+  match sources with
+  | [] => (.ok (some [.ok ((), before)]), beforeCaller, queries, before)
+  | source :: rest =>
+    let observation :
+      (Except (SourceEqualityNativeDemand.Outcome width Node ⊕
+        SourceCurrentAllocatedConjunctionWorker.Outcome width)
+        (Option (EnumerateM Symbol EnumGuard Unit))) × Caller width × Queries :=
+      SourcePruningEnumerationDispatch.dispatch checkEmpty nativeFuel p h beforeCaller before source target queries
+    match observation with
+    | (.error fault, reachedCaller, savedQueries) => (.error fault, reachedCaller, savedQueries, before)
+    | (.ok none, reachedCaller, savedQueries) => (.ok none, reachedCaller, savedQueries, before)
+    | (.ok (some action), reachedCaller, savedQueries) =>
+        let raw : List (Except EnumerationState.Error (Unit × EnumerationState.State Symbol EnumGuard)) := ExceptT.run (action before)
+        match raw with
+        | [.ok ((), after)] => run checkEmpty nativeFuel p h rest reachedCaller after target savedQueries
+        | other => (.ok (some other), reachedCaller, savedQueries, before)
+
+/-- Every reached decoded request fits the fixed machine width. -/
+def Ranges

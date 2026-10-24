@@ -1,0 +1,23 @@
+theorem set_storage (state : State Symbol Guard) (valid : StorageValid state) (uv : Nat)
+    (value : UVarValue Symbol) (bounded : SlotBound state.counter value) :
+    StorageValid {state with values := state.values.set uv value} := by
+  refine ⟨by simpa [SupplyAligned] using valid.aligned, valid.total, valid.forest, ?_, valid.guards⟩
+  intro stored member
+  rcases List.mem_or_eq_of_mem_set member with old | same
+  · exact valid.values stored old
+  · simpa [same] using bounded
+
+/-- Successful assimilation preserves the concrete storage invariant. -/
+theorem assimilation_storage (graph : Graph Symbol Guard) (state : State Symbol Guard)
+    (valid : StorageValid state) (target source : Nat) (sourceValue targetValue merged : UVarValue Symbol)
+    (sourceRead : state.values[source]? = some sourceValue)
+    (targetRead : state.values[target]? = some targetValue)
+    (intersection : intersectValues graph sourceValue targetValue = some merged) :
+    StorageValid (assimilated state target source merged) := by
+  have sourceBound := valid.values sourceValue (List.mem_of_getElem? sourceRead)
+  have targetBound := valid.values targetValue (List.mem_of_getElem? targetRead)
+  have mergedBound := intersection_storage graph state.counter sourceValue targetValue merged sourceBound targetBound intersection
+  have first := set_storage state valid target merged mergedBound
+  have second := set_storage _ first source .eliminated trivial
+  exact ⟨second.aligned, second.total, second.forest, second.values, second.guards⟩
+

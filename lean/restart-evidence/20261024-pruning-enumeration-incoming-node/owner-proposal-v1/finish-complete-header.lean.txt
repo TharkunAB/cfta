@@ -1,0 +1,23 @@
+theorem finish_complete [DecidableEq Node]
+    (heap : InternedConstructorTemplates.State Symbol Constraint)
+    (before : EnumerationState.State Symbol EnumGuard) (replacement : Node) (target handle : Nat)
+    (incomingScs oldScs : List EnumerationState.Suspended)
+    (coherent : InternedRecordCoherence.Coherent heap)
+    (available : Available heap replacement) (closed : replacement.free = [])
+    (encoded : encodeNode replacement = some handle)
+    (realized : PendingRealized heap before) (storage : StorageValid before)
+    (inside : target < before.values.length)
+    (bounded : ∀ sc ∈ incomingScs ++ oldScs, sc.var < before.counter) :
+    ∃ after : EnumerationState.State Symbol EnumGuard,
+      ExceptT.run ((do
+        setValue target (.unenumerated (some handle) (incomingScs ++ oldScs))
+        inheritAncestry target) before) = [.ok ((), after)] ∧
+      ExceptT.run (finish target handle incomingScs oldScs replacement before) =
+        (if replacement = .empty then [] else [.ok ((), after)]) ∧
+      after = {before with
+        values := before.values.set target (.unenumerated (some handle) (incomingScs ++ oldScs))
+        recursionAncestry := fun other => if other = target then
+          (before.expansionAncestry ++ before.recursionAncestry target).eraseDups
+          else before.recursionAncestry other} ∧
+      after.values[target]? = some (.unenumerated (some handle) (incomingScs ++ oldScs)) ∧
+      StorageValid after ∧ PendingRealized heap after

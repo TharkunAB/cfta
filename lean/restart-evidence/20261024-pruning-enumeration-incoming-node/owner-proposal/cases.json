@@ -1,0 +1,159 @@
+{
+  "definition_cases": [
+    {
+      "scope": "finish",
+      "expression": "replacement",
+      "type": "Node",
+      "constructors": [
+        "empty",
+        "wildcard nonempty"
+      ],
+      "fields": [],
+      "position": "AFTER setValue and inheritAncestry"
+    },
+    {
+      "scope": "run",
+      "expression": "UnionFind.findRoot representativeFuel before.representatives uv",
+      "type": "Option UnionFind.Result",
+      "constructors": [
+        "none",
+        "some found"
+      ]
+    },
+    {
+      "scope": "run",
+      "expression": "before.values[found.representative]?",
+      "type": "Option (EnumerationState.UVarValue Symbol)",
+      "constructors": [
+        "none",
+        "some (.unenumerated oldNode oldScs)",
+        "some _ (invalidIntersection)"
+      ]
+    },
+    {
+      "scope": "run",
+      "expression": "oldNode",
+      "type": "Option Nat",
+      "constructors": [
+        "none",
+        "some oldHandle"
+      ]
+    },
+    {
+      "scope": "run",
+      "expression": "encodeNode incoming",
+      "type": "Option Nat",
+      "constructors": [
+        "none",
+        "some handle"
+      ]
+    },
+    {
+      "scope": "run",
+      "expression": "lookupNode beforeCaller.checked.native.machine.heap oldHandle",
+      "type": "Option Node",
+      "constructors": [
+        "none",
+        "some old"
+      ]
+    },
+    {
+      "scope": "run",
+      "expression": "actual",
+      "type": "SourceEqualityNativeDemand.Outcome width Node",
+      "constructors": [
+        "done query queried",
+        "other"
+      ],
+      "other_retains": [
+        "yielded control state",
+        "failed failure state",
+        "constraintError message state",
+        "blocked reason control state"
+      ]
+    },
+    {
+      "scope": "run",
+      "expression": "phase.1",
+      "type": "SourceCurrentAllocatedConjunctionWorker.Outcome width",
+      "constructors": [
+        "done answer checkedAfter saved",
+        "failed fault checkedAfter saved"
+      ]
+    },
+    {
+      "scope": "run",
+      "expression": "encodeNode replacement",
+      "type": "Option Nat",
+      "constructors": [
+        "none",
+        "some handle"
+      ]
+    }
+  ],
+  "proof_cases": [
+    {
+      "scope": "finish_complete.raw",
+      "expression": "replacement",
+      "type": "Node",
+      "constructors": [
+        {
+          "constructor": "empty",
+          "fields": {}
+        },
+        {
+          "constructor": "reference",
+          "fields": {
+            "name": "InternedBinderProtocol.Reference"
+          }
+        },
+        {
+          "constructor": "node",
+          "fields": {
+            "entry": "Cache.Interned InternedBinderProtocol.NodeKey",
+            "edges": "List (InternedConstructorTemplates.EdgeValue Symbol Constraint)",
+            "depth": "Nat",
+            "free": "List InternedBinderProtocol.Reference"
+          }
+        },
+        {
+          "constructor": "union",
+          "fields": {
+            "entry": "Cache.Interned InternedBinderProtocol.NodeKey",
+            "members": "List Node",
+            "depth": "Nat",
+            "free": "List InternedBinderProtocol.Reference"
+          }
+        },
+        {
+          "constructor": "mu",
+          "fields": {
+            "entry": "Cache.Interned InternedBinderProtocol.NodeKey",
+            "body": "Node",
+            "depthShape": "Node",
+            "ordinaryShape": "Node"
+          }
+        }
+      ]
+    },
+    {
+      "scope": "run_complete",
+      "expression": "oldNode",
+      "type": "Option Nat",
+      "constructors": [
+        "none",
+        "some oldHandle"
+      ]
+    },
+    {
+      "scope": "run_complete.mergedBounded",
+      "expression": "List.mem_append.mp member",
+      "type": "sc ∈ incomingScs ∨ sc ∈ oldScs",
+      "constructors": [
+        "inl incomingMember",
+        "inr oldMember"
+      ]
+    }
+  ],
+  "failure_semantics": "Raw errors use List (Except EnumerationState.Error (Unit × EnumState)); Unit/PUnit unit is inferred at that fixed public type. Missing model encoding/decoding is ok none; native/worker observations remain full error alternatives outside reached Caller/query/read endpoint."
+}

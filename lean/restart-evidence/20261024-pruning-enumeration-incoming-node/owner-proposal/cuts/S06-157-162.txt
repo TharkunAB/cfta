@@ -1,0 +1,6 @@
+theorem representative_exact (fuel uv : Nat) (state : State Symbol Guard) (found : UnionFind.Result)
+    (result : UnionFind.findRoot fuel state.representatives uv = some found) :
+    representative fuel uv state = [.ok (found.representative, {state with representatives := found.forest})] := by
+  simp [representative, result, bind, get, getThe, MonadStateOf.get, set, pure,
+    StateT.bind, StateT.pure, StateT.get, StateT.set, ExceptT.bind, ExceptT.pure, ExceptT.bindCont, ExceptT.mk]
+

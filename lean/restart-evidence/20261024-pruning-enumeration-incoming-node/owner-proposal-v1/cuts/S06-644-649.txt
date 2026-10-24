@@ -1,0 +1,6 @@
+structure StorageValid (state : State Symbol Guard) : Prop where
+  aligned : SupplyAligned state
+  total : UnionFind.Total state.representatives
+  forest : ForestBound state.counter state.representatives
+  values : ∀ value ∈ state.values, SlotBound state.counter value
+  guards : ∀ obligation ∈ state.obligations, FragmentBound state.counter obligation.2

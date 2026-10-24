@@ -1,0 +1,30 @@
+          ExceptT.run (action before) =
+            (if merged = some 0 then [] else
+              [.ok ((), assimilated before target source (.unenumerated merged (sourceScs ++ targetScs)))]) ∧
+          (merged ≠ some 0 →
+            (assimilated before target source (.unenumerated merged (sourceScs ++ targetScs))).values[target]? =
+              some (.unenumerated merged (sourceScs ++ targetScs)) ∧
+            (assimilated before target source (.unenumerated merged (sourceScs ++ targetScs))).values[source]? =
+              some .eliminated ∧
+            PendingRealized afterCaller.checked.native.machine.heap
+              (assimilated before target source (.unenumerated merged (sourceScs ++ targetScs)))) ∧
+          ((sourceNode = none ∨ targetNode = none) →
+            merged = sourceNode.orElse (fun _ => targetNode) ∧
+            afterCaller = beforeCaller ∧ final = memos ∧ next = inventory) ∧
+          (∀ leftHandle rightHandle, sourceNode = some leftHandle → targetNode = some rightHandle →
+            ∃ (left right query replacement : Node) (queried : Checked width) (handle : Nat),
+              lookupNode beforeCaller.checked.native.machine.heap leftHandle = some left ∧
+              lookupNode beforeCaller.checked.native.machine.heap rightHandle = some right ∧
+              next.source = beforeCaller.checked.native.machine.heap ∧ next.roots = inventory.roots ++ [left, right] ∧
+              SourceCurrentAllocatedTargetQuery.Receipt formulas solver next left right
+                beforeCaller.checked query queried memos ∧
+              merged = some handle ∧ encodeNode replacement = some handle ∧
+              lookupNode afterCaller.checked.native.machine.heap handle = some replacement ∧
+              Available afterCaller.checked.native.machine.heap replacement ∧ replacement.free = [] ∧
+              (∀ ambient term,
+                InternedGuardedLanguage.meaning (SourceEqualityPCSGuard.holds formulas solver) ambient replacement term ↔
+                  InternedGuardedLanguage.meaning (SourceEqualityPCSGuard.holds formulas solver) ambient left term ∧
+                  InternedGuardedLanguage.meaning (SourceEqualityPCSGuard.holds formulas solver) ambient right term) ∧
+              (checkEmpty = false → replacement = query ∧
+                afterCaller = SourceCurrentAllocatedPartialState.advance beforeCaller queried
+                  beforeCaller.fourth beforeCaller.merge ∧ final = memos) ∧

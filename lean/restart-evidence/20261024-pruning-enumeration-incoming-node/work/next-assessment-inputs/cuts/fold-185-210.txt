@@ -1,0 +1,26 @@
+          ?_, ?_, ?_, rfl, rfl, rfl, rfl, rfl, ?_⟩
+        · intro _rejected
+          rfl
+        · intro remaining member
+          exact selected remaining (by simp [member])
+        · intro different _completed
+          exact False.elim (different same)
+        · intro slot oldEliminated
+          exact oldEliminated
+        · intro slot _different
+          rfl
+      by_cases eliminated : before.values[source]? = some .eliminated
+      · refine ⟨dispatchFuel, dispatchP, dispatchH, action, dispatchCaller, before, dispatchQueries,
+          dispatchMemos, dispatchInventory, dispatchStable, dispatchPost, dispatchQuerySame,
+          unchangedRealized, .inr (noopOutcome (.inr eliminated)).1, ?_, ⟨targetNode, targetScs, targetPendingStored⟩,
+          ?_, ?_, ?_, rfl, rfl, rfl, rfl, rfl, ?_⟩
+        · intro _rejected
+          rfl
+        · intro remaining member
+          exact selected remaining (by simp [member])
+        · intro _different _completed
+          exact eliminated
+        · intro slot oldEliminated
+          exact oldEliminated
+        · intro slot _different
+          rfl

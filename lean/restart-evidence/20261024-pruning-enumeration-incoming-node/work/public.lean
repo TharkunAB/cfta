@@ -1,0 +1,12 @@
+import MicroCFTA.SourcePruningEnumerationIncomingNode
+set_option pp.deepTerms true
+set_option pp.maxSteps 1000000
+
+#check @MicroCFTA.SourcePruningEnumerationIncomingNode.finish
+#print axioms MicroCFTA.SourcePruningEnumerationIncomingNode.finish
+#check @MicroCFTA.SourcePruningEnumerationIncomingNode.run
+#print axioms MicroCFTA.SourcePruningEnumerationIncomingNode.run
+#check @MicroCFTA.SourcePruningEnumerationIncomingNode.finish_complete
+#print axioms MicroCFTA.SourcePruningEnumerationIncomingNode.finish_complete
+#check @MicroCFTA.SourcePruningEnumerationIncomingNode.run_complete
+#print axioms MicroCFTA.SourcePruningEnumerationIncomingNode.run_complete

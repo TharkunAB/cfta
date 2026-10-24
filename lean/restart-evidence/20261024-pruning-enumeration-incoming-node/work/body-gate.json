@@ -1,0 +1,138 @@
+{
+  "status": "ACCEPTED_BEFORE_ANY_BODY_OR_ACTIVATION",
+  "accepted_at": "2026-10-24T21:06:11.860462+00:00",
+  "owner": "/tmp/mcfta-pruning-enumeration-incoming-node-20261024-proposal-v2",
+  "frozen_sha256": "d1e687859e929c5e00cc034c44341caf17a2a6c98ca6f914c054cca92bb45add",
+  "pins_sha256": "fd12839c0e06b42c2cff622d77c19933e827cec572825d27236921c4cfe9dd9f",
+  "contracts": {
+    "context.lean.txt": "import MicroCFTA.SourcePruningEnumerationIncomingQuery\nimport MicroCFTA.EnumerationCompleteness\nimport MicroCFTA.EnumerationExecution\nimport MicroCFTA.SourcePruningEnumerationWrites\n\nnamespace MicroCFTA.SourcePruningEnumerationIncomingNode\nopen EnumerationState EnumerationCorrectness EnumerationSchedule EnumerationExecution\nopen EnumerationCompressionFrame\nopen InternedConstructorTemplates InternedProbeProvenance\nopen SourcePruningEnumerationNodes SourcePruningEnumerationObservation SourcePruningEnumerationWrites\nopen SourceCurrentAllocatedNativeInventoryState (Inventory)\nopen SourceCurrentAllocatedPartialInvariant (Context Post)\nopen SourceCurrentAllocatedNativeEffects (physical)\nopen SourceCurrentAllocatedQueryMemo (advancePhysical)\nlocal notation \"Symbol\" => SourcePruningTemplates.Symbol\nlocal notation \"Constraint\" => SourceSymbolicIndex.Constraint FullSyntax.Formula\nlocal notation \"Node\" => InternedConstructorTemplates.Value Symbol Constraint\nlocal notation \"Checked\" => SourceEqualityNativeDemand.State\nlocal notation \"Caller\" => SourceCurrentAllocatedPartialState.State\nlocal notation \"Memos\" => EndpointMemoGateTrace.Memos\nlocal notation \"Fourth\" => SourceCurrentEmptinessMemo.Memo\nlocal notation \"Queries\" => SourceEndpointMemo.Memos\nvariable {EnumGuard : Type} {width : Nat}\n",
+    "definition-actual.lean.txt": "let actual : SourceEqualityNativeDemand.Outcome width Node\n",
+    "definition-after-caller.lean.txt": "let afterCaller : Caller width\n",
+    "definition-phase.lean.txt": "let phase : SourceCurrentAllocatedConjunctionWorker.Outcome width \u00d7 Queries\n",
+    "definition-read-state.lean.txt": "let readState : EnumerationState.State Symbol EnumGuard\n",
+    "definition-replacement.lean.txt": "let replacement : Node\n",
+    "finish-complete-header.lean.txt": "theorem finish_complete [DecidableEq Node]\n    (heap : InternedConstructorTemplates.State Symbol Constraint)\n    (before : EnumerationState.State Symbol EnumGuard) (replacement : Node) (target handle : Nat)\n    (incomingScs oldScs : List EnumerationState.Suspended)\n    (coherent : InternedRecordCoherence.Coherent heap)\n    (available : Available heap replacement) (closed : replacement.free = [])\n    (encoded : encodeNode replacement = some handle)\n    (realized : PendingRealized heap before) (storage : StorageValid before)\n    (inside : target < before.values.length)\n    (bounded : \u2200 sc \u2208 incomingScs ++ oldScs, sc.var < before.counter) :\n    \u2203 after : EnumerationState.State Symbol EnumGuard,\n      ExceptT.run ((do\n        setValue target (.unenumerated (some handle) (incomingScs ++ oldScs))\n        inheritAncestry target) before) = [.ok ((), after)] \u2227\n      ExceptT.run (finish target handle incomingScs oldScs replacement before) =\n        (if replacement = .empty then [] else [.ok ((), after)]) \u2227\n      after = {before with\n        values := before.values.set target (.unenumerated (some handle) (incomingScs ++ oldScs))\n        recursionAncestry := fun other => if other = target then\n          (before.expansionAncestry ++ before.recursionAncestry target).eraseDups\n          else before.recursionAncestry other} \u2227\n      after.values[target]? = some (.unenumerated (some handle) (incomingScs ++ oldScs)) \u2227\n      StorageValid after \u2227 PendingRealized heap after\n",
+    "finish-header.lean.txt": "def finish (target handle : Nat) (incomingScs oldScs : List EnumerationState.Suspended)\n    (replacement : Node) : EnumerateM Symbol EnumGuard Unit\n",
+    "instance-header.lean.txt": "local instance incomingNodeMonadList : Monad List\n",
+    "local-decoded-ranges.lean.txt": "have decodedRanges : SourceCurrentAllocatedNativeRequestBounds.WordRanges\n        (.code (SourceRecursiveIntersectionCode.requestNode IntersectionEmptyDomain.emptyDomain incoming old))\n        beforeCaller.checked\n",
+    "local-final-realized.lean.txt": "have finalRealized : PendingRealized checkedAfter.native.machine.heap read\n",
+    "local-finish-after.lean.txt": "let after : EnumerationState.State Symbol EnumGuard\n",
+    "local-finish-raw.lean.txt": "have raw : ExceptT.run (finish target handle incomingScs oldScs replacement before) =\n      (if replacement = .empty then [] else [.ok ((), after)])\n",
+    "local-finish-storage.lean.txt": "have afterStorage : StorageValid after\n",
+    "local-frame.lean.txt": "have frame : Frame before read\n",
+    "local-lookup-more.lean.txt": "have lookupMore : \u2200 (extra : Nat),\n      UnionFind.findRoot (r + extra) before.representatives uv = some found\n",
+    "local-merged-bounded.lean.txt": "have mergedBounded : \u2200 sc \u2208 incomingScs ++ oldScs, sc.var < read.counter\n",
+    "local-read-realized.lean.txt": "have readRealized : PendingRealized beforeCaller.checked.native.machine.heap read\n",
+    "local-read-storage.lean.txt": "have readStorage : StorageValid read\n",
+    "local-read.lean.txt": "let read : EnumerationState.State Symbol EnumGuard\n",
+    "local-reading.lean.txt": "have reading : \u2200 (extra : Nat), ExceptT.run (getValue (r + extra) uv before) =\n      [.ok (.unenumerated oldNode oldScs, read)]\n",
+    "local-representative-run.lean.txt": "have representativeRun : Success (representative r uv) before uv read\n",
+    "local-representative-same.lean.txt": "have representativeSame : found.representative = uv\n",
+    "local-same-handle.lean.txt": "have sameHandle : writtenHandle = handle\n",
+    "run-complete-header.lean.txt": "theorem run_complete\n    [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Constraint)] [DecidableEq Node]\n    (formulas : SourceGuards.Formulas FullSyntax.Formula)\n    (solver : SourceGuards.Entailment FullSyntax.Formula)\n    (inventory : Inventory) (beforeCaller : Caller width)\n    (before : EnumerationState.State Symbol EnumGuard)\n    (checkEmpty : Bool) (uv : Nat) (incoming : Node)\n    (incomingScs : List EnumerationState.Suspended) (memos : Memos)\n    (initial : Context formulas solver inventory beforeCaller memos)\n    (realized : PendingRealized beforeCaller.checked.native.machine.heap before)\n    (storage : StorageValid before) (root : EnumerationSchedule.IsRoot before.representatives uv)\n    (pending : EnumerationCompleteness.PendingAt before uv)\n    (available : Available beforeCaller.checked.native.machine.heap incoming) (closed : incoming.free = [])\n    (bounded : \u2200 sc \u2208 incomingScs, sc.var < before.counter)\n    (ranges : match before.values[uv]? with\n      | some (.unenumerated (some oldHandle) _) =>\n          match lookupNode beforeCaller.checked.native.machine.heap oldHandle with\n          | some old => SourceCurrentAllocatedNativeRequestBounds.WordRanges\n              (.code (SourceRecursiveIntersectionCode.requestNode IntersectionEmptyDomain.emptyDomain incoming old))\n              beforeCaller.checked\n          | none => True\n      | _ => True) :\n    \u2203 (r n p h : Nat) (oldNode : Option Nat) (oldScs : List EnumerationState.Suspended)\n      (read after : EnumerationState.State Symbol EnumGuard) (afterCaller : Caller width)\n      (savedQueries : Queries) (final : Memos) (next : Inventory) (replacement : Node) (handle : Nat),\n      (\u2200 extra, ExceptT.run (getValue (r + extra) uv before) =\n        [.ok (.unenumerated oldNode oldScs, read)]) \u2227\n      EnumerationCompressionFrame.Frame before read \u2227\n      (\u2200 extra extraNative P H, p \u2264 P \u2192 h \u2264 H \u2192\n        run checkEmpty (r + extra) (n + extraNative) P H beforeCaller before uv incoming incomingScs memos.query =\n          (.ok (some (if replacement = .empty then [] else [.ok ((), after)])),\n            afterCaller, savedQueries, read)) \u2227\n      ExceptT.run ((do\n        setValue uv (.unenumerated (some handle) (incomingScs ++ oldScs))\n        inheritAncestry uv) read) = [.ok ((), after)] \u2227\n      after = {read with\n        values := read.values.set uv (.unenumerated (some handle) (incomingScs ++ oldScs))\n        recursionAncestry := fun other => if other = uv then\n          (read.expansionAncestry ++ read.recursionAncestry uv).eraseDups else read.recursionAncestry other} \u2227\n      after.values[uv]? = some (.unenumerated (some handle) (incomingScs ++ oldScs)) \u2227\n      StorageValid after \u2227 PendingRealized afterCaller.checked.native.machine.heap after \u2227\n      Post formulas solver next beforeCaller afterCaller final \u2227 final.query = savedQueries \u2227\n      Cache.Extends memos.unfolding final.unfolding \u2227\n      Available afterCaller.checked.native.machine.heap replacement \u2227 replacement.free = [] \u2227\n      encodeNode replacement = some handle \u2227 lookupNode afterCaller.checked.native.machine.heap handle = some replacement \u2227\n      (oldNode = none \u2192 replacement = incoming \u2227 afterCaller = beforeCaller \u2227\n        savedQueries = memos.query \u2227 final = memos \u2227 next = inventory) \u2227\n      (\u2200 oldHandle, oldNode = some oldHandle \u2192\n        \u2203 (old query : Node) (queried : Checked width),\n          lookupNode beforeCaller.checked.native.machine.heap oldHandle = some old \u2227\n          next.source = beforeCaller.checked.native.machine.heap \u2227 next.roots = inventory.roots ++ [incoming, old] \u2227\n          SourceCurrentAllocatedTargetQuery.Receipt formulas solver next incoming old beforeCaller.checked query queried memos \u2227\n          (\u2200 ambient term,\n            InternedGuardedLanguage.meaning (SourceEqualityPCSGuard.holds formulas solver) ambient replacement term \u2194\n              InternedGuardedLanguage.meaning (SourceEqualityPCSGuard.holds formulas solver) ambient incoming term \u2227\n              InternedGuardedLanguage.meaning (SourceEqualityPCSGuard.holds formulas solver) ambient old term) \u2227\n          (checkEmpty = false \u2192 replacement = query \u2227\n            afterCaller = SourceCurrentAllocatedPartialState.advance beforeCaller queried beforeCaller.fourth beforeCaller.merge \u2227\n            final = memos))\n",
+    "run-header.lean.txt": "noncomputable def run\n    [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Constraint)] [DecidableEq Node]\n    (checkEmpty : Bool) (representativeFuel nativeFuel p h : Nat)\n    (beforeCaller : Caller width) (before : EnumerationState.State Symbol EnumGuard)\n    (uv : Nat) (incoming : Node) (incomingScs : List EnumerationState.Suspended) (queries : Queries) :\n    (Except (SourceEqualityNativeDemand.Outcome width Node \u2295\n      SourceCurrentAllocatedConjunctionWorker.Outcome width)\n      (Option (List (Except EnumerationState.Error (Unit \u00d7 EnumerationState.State Symbol EnumGuard))))) \u00d7\n      Caller width \u00d7 Queries \u00d7 EnumerationState.State Symbol EnumGuard\n"
+  },
+  "schema": {
+    "module": "MicroCFTA.SourcePruningEnumerationIncomingNode",
+    "public_heads": [
+      {
+        "name": "finish",
+        "kind": "def",
+        "file": "finish-header.lean.txt",
+        "attachment": " := do\n"
+      },
+      {
+        "name": "run",
+        "kind": "def",
+        "file": "run-header.lean.txt",
+        "attachment": " :=\n",
+        "noncomputable": true
+      },
+      {
+        "name": "finish_complete",
+        "kind": "theorem",
+        "file": "finish-complete-header.lean.txt",
+        "attachment": " := by\n"
+      },
+      {
+        "name": "run_complete",
+        "kind": "theorem",
+        "file": "run-complete-header.lean.txt",
+        "attachment": " := by\n"
+      }
+    ],
+    "public_head_order": [
+      "finish",
+      "run",
+      "finish_complete",
+      "run_complete"
+    ],
+    "contract_count": 26,
+    "contract_lines": 142,
+    "context_lines": 23,
+    "public_header_lines": 93,
+    "proof_local_have_count": 13,
+    "proof_local_let_count": 2,
+    "definition_local_let_count": 5,
+    "local_instance_count": 1,
+    "global_instance_count": 0,
+    "LawfulMonad_count": 0,
+    "obtain_count": 10,
+    "obtain_field_count": 72,
+    "scoped_type_count": 271,
+    "induction_count": 0,
+    "IH_count": 0,
+    "source_count": 18,
+    "cut_count": 34,
+    "cut_lines": 575,
+    "route_count": 15,
+    "route_source_count": 29,
+    "new_definitions": [
+      "finish",
+      "run"
+    ],
+    "new_actions": [
+      "finish"
+    ],
+    "private_helpers": [],
+    "new_types": [],
+    "new_carriers": [],
+    "new_predicates": [],
+    "target_source_lines": [
+      300,
+      430
+    ],
+    "proposed_hard_cap": 560,
+    "compiler_evidence": false,
+    "bodies_present": false,
+    "instance_body_present": false
+  },
+  "script_frozen_sha256": "d9a8e03a0a4f47a9518e4bb9e047cbe39c3b1016ad3f306e31bf8d801cee4ed5",
+  "reviews": {
+    "setup": {
+      "path": "/tmp/mcfta-pruning-enumeration-incoming-node-20261024-setup-review.md",
+      "sha256": "8b9b34c2f046cda33d9c93bdbf7cea7a6bdf9b4fc299964a2b618535cb4fa998"
+    },
+    "source": {
+      "path": "/tmp/mcfta-pruning-enumeration-incoming-node-20261024-source-review.md",
+      "sha256": "9c6f5800fcdf94a0c2713f62433de586a33fb6ee05023a9ff252b01eacfc6ccc"
+    },
+    "declaration": {
+      "path": "/tmp/mcfta-pruning-enumeration-incoming-node-20261024-declaration-review.md",
+      "sha256": "ae568e366870e2222964e5ca192e8ecf7df5bff5f358e6fa40e6127c1611f0d7"
+    },
+    "seal-script": {
+      "path": "/tmp/mcfta-pruning-enumeration-incoming-node-20261024-seal-script-review.md",
+      "sha256": "4253f4e35b0cb842a067c67ca9697a0911d5b5f5c26b7796c68e9b411fda65f6"
+    }
+  },
+  "personal_review": "All142 literal lines, full scoped inventory249 plus V2 delta22 and two branch equalities, all72 obtain fields and actual575 cut lines read. Complete472 script lines and all exact final deltas read. All5 forward/inverse adapters byte verified. All99 owner and52 script payload pins verified.",
+  "limits": "Lean4.34.1 default proof limits, all linters and warnings as errors, 4GiB memory/high, zero swap, five minutes, serial checks. No added axiom or premise.",
+  "source_budget": [
+    300,
+    430
+  ],
+  "hard_cap": 560,
+  "activation": "not yet",
+  "bodies": "not yet"
+}

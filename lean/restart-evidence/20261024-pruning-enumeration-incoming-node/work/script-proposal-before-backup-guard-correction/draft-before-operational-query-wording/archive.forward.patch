@@ -1,0 +1,61 @@
+--- basis/archive.py
++++ candidate/archive.py
+@@ -6,12 +6,12 @@
+ from pathlib import Path
+ 
+ root = Path('/home/tritlo/Code/mcfta')
+-area = Path('/tmp/mcfta-pruning-enumeration-incoming-20261024')
+-evidence = root / 'lean/restart-evidence/20261024-pruning-enumeration-incoming'
++area = Path('/tmp/mcfta-pruning-enumeration-incoming-node-20261024')
++evidence = root / 'lean/restart-evidence/20261024-pruning-enumeration-incoming-node'
+ assert not evidence.exists()
+ custody = json.loads((area / 'prior-custody-index.json').read_text())
+ assert len(custody) == 26 and len({pin['target'] for pin in custody}) == 26
+-assert hashlib.sha256((area / 'prior-custody-index.json').read_bytes()).hexdigest() == 'be78e347eb990b8506182fcb5b4deb484000f43cd8e9de00201ace203cbd3039'
++assert hashlib.sha256((area / 'prior-custody-index.json').read_bytes()).hexdigest() == 'bf78359344ea2400354ae2364f278d0ba0bdcec07a50edaa82dac0e961125f2a'
+ summary = json.loads((area / 'previous-publication/post-publication-summary.json').read_text())
+ assert [pin['source'] for pin in custody] == summary['next_custody_inputs']
+ for pin in custody:
+@@ -19,11 +19,11 @@
+     data = (area / 'previous-publication' / pin['target']).read_bytes()
+     assert len(data) == pin['bytes'] and hashlib.sha256(data).hexdigest() == pin['sha256']
+ assert {p.name for p in (area / 'previous-publication').iterdir()} == {pin['target'] for pin in custody}
+-assert Path('/tmp/mcfta-pruning-enumeration-incoming-20261024-source-review.md').is_file()
++assert Path('/tmp/mcfta-pruning-enumeration-incoming-node-20261024-source-review.md').is_file()
+ for args in [('diff', '--quiet'), ('diff', '--cached', '--quiet')]:
+     subprocess.run(['git', *args], cwd=root, check=True)
+ for name in ['declaration', 'model', 'public', 'document', 'seal-script', 'root']:
+-    assert Path('/tmp/mcfta-pruning-enumeration-incoming-20261024-' + name + '-review.md').is_file()
++    assert Path('/tmp/mcfta-pruning-enumeration-incoming-node-20261024-' + name + '-review.md').is_file()
+ evidence.mkdir()
+ for path in sorted(area.rglob('*')):
+     if not path.is_file():
+@@ -36,21 +36,21 @@
+         target.write_bytes(path.read_bytes())
+ inputs = evidence / 'inputs'
+ inputs.mkdir()
+-for pattern in ['mcfta-pruning-enumeration-incoming-20261024-*']:
++for pattern in ['mcfta-pruning-enumeration-incoming-node-20261024-*']:
+     for path in sorted(Path('/tmp').glob(pattern)):
+-        if path.is_file() and not path.name.startswith('mcfta-pruning-enumeration-incoming-20261024-archive-1.'):
++        if path.is_file() and not path.name.startswith('mcfta-pruning-enumeration-incoming-node-20261024-archive-1.'):
+             shutil.copyfile(path, inputs / path.name)
+-shutil.copytree('/tmp/mcfta-pruning-enumeration-incoming-20261024-proposal', evidence / 'owner-proposal')
++shutil.copytree('/tmp/mcfta-pruning-enumeration-incoming-node-20261024-proposal', evidence / 'owner-proposal')
+ prior = evidence / 'previous-publication'
+ prior.mkdir()
+ for pin in custody:
+     shutil.copyfile(area / 'previous-publication' / pin['target'], prior / pin['target'])
+ production = evidence / 'production-sources'
+ production.mkdir()
+-shutil.copyfile(root / 'lean/MicroCFTA/SourcePruningEnumerationIncomingQuery.lean', production / 'SourcePruningEnumerationIncomingQuery.lean')
+-shutil.copyfile(root / 'lean/notes-current-pruning-enumeration-incoming-query.md', evidence / 'current-note.md')
+-shutil.copyfile('/tmp/mcfta-pruning-enumeration-incoming-20261024-verify.py', evidence / 'verify-checkpoint.py')
+-(evidence / 'INDEX.md').write_text('# Checked replacement for incoming node values\n\nThis dependency takes two supplied complete available closed native values in the SAME current heap. Existing TargetQuery.finite constructs the actual next inventory, query, checked endpoint and complete Receipt. The derived Demand execution is stable at every sufficient larger native fuel. No second pending source slot, decoded slot fiction, replacement Graph or desired computed result is supplied.\n\nThe native intersection always runs, including when checkEmpty is false. The false flag skips only the descendant query guard and fourth-memo worker. It retains the queried endpoint, original fourth memo, original query memos and computed query. Enabled checking uses the existing EnabledEmpty.check and concrete SourceEndpointMemo.run. A false reachability result retains the checked query state while updating query memos. A true reachability result retains the actual conjunction Call and CallReads with the physical endpoint and logical global memo evidence. Stable p/h bounds describe that SAME call.\n\nThe theorem derives replacement Empty on true answer and query on false answer. Query may already be Empty on false. AnswerSound provides no acceptance or nonempty conclusion for false. Existing readback derives the encoded handle and actual lookup from the SAME complete replacement. Its language is the intersection of both supplied inputs. Full Receipt, Post, query memo equality and unfolding extension remain distinct evidence. Current-entry WordRanges remains explicit; this is not initial-only resource admission for a future sequence.\n\nThis component has one theorem complete and adds no definitions, actions, instances, helper, carrier or induction. The actual owner supplies the exact contracts and hard source cap. No enumeration state/write, ancestry effect, source elimination or final raw Empty guard is performed. The full incoming-node operation remains a separate consumer: actual pending-root observation, optional-old bypass, target write and expansion ancestry inheritance BEFORE Empty rejection.\n\nWork retains all baseline blobs/modes/refs/stashes/worktrees, nine exact document inverses, one Audit prepend, full actual public output, allowed axiom subsets including empty sets, every real failed input/raw report and all six-artifact resource families. Prior custody is exactly26 actual inputs. The primary TerminalPrefix V2 assessment and independent review already match sealed copies. Prior owner V1/V2/V3 and all prior failures remain protected by the baseline. No current revision or failure is invented.\n\nRun verify-checkpoint.py with an explicit repository root. Force-add every manifest path and SHA256SUMS, including ignored raw logs. Publication requires every sealed path in HEAD, exact filesystem/index/tree/modes, a singleton push URL and ordinary formalize push. Root supplies actual build/public/axiom outcomes after execution. No future check, seal or push result is asserted.\n\nH6 remains strongest and the whole goal remains ACTIVE and incomplete. Full terminal composition, initial-only range admission, native cached indexes/Int/IntSet extraction, code generation, full typing/pruning/solver/runtime/resources/convergence remain separate. Six imported Haskell repair handoffs remain first in FINDINGS. No Haskell source change is claimed.\n')
++shutil.copyfile(root / 'lean/MicroCFTA/SourcePruningEnumerationIncomingNode.lean', production / 'SourcePruningEnumerationIncomingNode.lean')
++shutil.copyfile(root / 'lean/notes-current-pruning-enumeration-incoming-node.md', evidence / 'current-note.md')
++shutil.copyfile('/tmp/mcfta-pruning-enumeration-incoming-node-20261024-verify.py', evidence / 'verify-checkpoint.py')
++(evidence / 'INDEX.md').write_text('# Incoming node merge at the current root\n\nThe literal consumer reads the actual current representative and complete raw pending payload. A genuine current IsRoot, PendingAt, StorageValid and all-slot realization domain identifies that SAME target without Safe or LiveRoots. Incoming suspended references must be allocated. No projected optional-node read substitutes for the complete pending payload.\n\nOld optional-none encodes the incoming complete available closed value and bypasses native query/checking. Old optional-some decodes the actual old value and uses existing IncomingQuery with incoming FIRST and old SECOND, then encodes its SAME derived replacement. The false flag still intersects; it skips only descendant/fourth checking. Current-entry decoded-pair WordRanges remains conditional and explicit. Receipt, Post, saved query memos, unfolding extension, readback and old-some intersection language remain evidence of the actual result.\n\nfinish writes incomingScs++oldScs to the actual root, inherits expansion ancestry and only THEN rejects an Empty replacement. There is no source elimination. The finite producer records the actual completed write/inherit prefix endpoint even when the final raw list is empty. Rejection returns no successful enum state. The outer product retains the actual representative-read endpoint; the surviving raw singleton carries the later written/inherited endpoint. These states are distinct. A full compression Frame is proved only for the read stage, not across the value write. StorageValid and all-slot realization are retained at the separately derived prefix endpoint.\n\nThe selected interface has finish/run definitions and finish_complete/run_complete theorems. It uses one named local List Monad instance and no LawfulMonad instance, induction, new carrier or helper. Root selected a300–430 ordinary-line estimate and hard560 before the owner/body freeze. Actual owner metadata supplies exact contracts and counts. No earlier rough source budget predicts a result.\n\nWork retains all baseline blobs/modes/refs/stashes/worktrees, nine exact document inverses, one Audit prepend, full actual public output and allowed axiom subsets including empty sets, every real failed input/raw report and all six-artifact resource families. Exactly26 prior IncomingQuery publication inputs and already sealed assessment/peer context remain protected. Old revisions remain baseline history; no current revision or failure is invented.\n\nRun verify-checkpoint.py with an explicit repository root. Force-add every manifest path and SHA256SUMS, including ignored raw logs. Publication requires every sealed path in HEAD, exact filesystem/index/tree/modes, a singleton push URL and ordinary formalize push. Root supplies actual build/public/axiom outcomes after execution. No future check, seal or push result is asserted.\n\nNative gained=incoming/lost=[] waiting updates, expandable indexes, Int/IntSet/physical-ID extraction, Fold final storage composition and initial-only future range admission remain separate. Full terminal/driver language, typing/pruning/solver/runtime/resources/convergence remain open. H6 stays strongest; the whole goal is ACTIVE and incomplete. The optimized core and earlier proofs remain. Six imported Haskell repair handoffs stay first in FINDINGS. No Haskell source change is claimed.\n')
+ 
+ files = sorted(p for p in evidence.rglob('*') if p.is_file())
+ (evidence / 'SHA256SUMS').write_text(''.join(hashlib.sha256(p.read_bytes()).hexdigest() + '  ' + p.relative_to(evidence).as_posix() + '\n' for p in files))

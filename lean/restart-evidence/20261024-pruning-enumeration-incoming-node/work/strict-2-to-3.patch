@@ -1,0 +1,25 @@
+--- strict-2/SourcePruningEnumerationIncomingNode.lean
++++ strict-3/SourcePruningEnumerationIncomingNode.lean
+@@ -249,8 +249,7 @@
+       Post.refl initial, rfl, Cache.extends_refl _, available, closed, encoded, decoded, ?_, ?_⟩
+     · intro extra extraNative P H enoughP enoughH
+       simp only [run, lookupMore extra, representativeSame, stored, encoded]
+-      change (.ok (some (ExceptT.run (finish uv handle incomingScs oldScs incoming read))),
+-        beforeCaller, memos.query, read) = _
++      simp only [read] at raw
+       rw [raw]
+     · intro noneEq
+       exact ⟨rfl, rfl, rfl, rfl, rfl⟩
+@@ -282,10 +281,8 @@
+       encoded, decoded, ?_, ?_⟩
+     · intro extra extraNative P H enoughP enoughH
+       simp only [run, lookupMore extra, representativeSame, stored, oldDecoded, nativeStable extraNative,
+-        checkStable P H enoughP enoughH, SourceCurrentAllocatedConjunctionWorker.Outcome.state,
+-        SourceCurrentAllocatedConjunctionWorker.Outcome.memo, ← replacementSame, encoded]
+-      change (.ok (some (ExceptT.run (finish uv handle incomingScs oldScs replacement read))),
+-        SourceCurrentAllocatedPartialState.advance beforeCaller checkedAfter saved beforeCaller.merge, queries, read) = _
++        checkStable P H enoughP enoughH, ← replacementSame, encoded]
++      simp only [read] at raw
+       rw [raw]
+     · intro noneEq
+       cases noneEq

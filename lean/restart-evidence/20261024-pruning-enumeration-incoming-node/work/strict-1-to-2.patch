@@ -1,0 +1,60 @@
+--- strict-1/SourcePruningEnumerationIncomingNode.lean
++++ strict-2/SourcePruningEnumerationIncomingNode.lean
+@@ -82,7 +82,8 @@
+                           | none => (.ok none, afterCaller, phase.2, readState)
+                           | some handle =>
+                               (.ok (some (ExceptT.run (finish found.representative handle incomingScs oldScs replacement readState))),
+-                                afterCaller, phase.2, readState)
++                                SourceCurrentAllocatedPartialState.advance beforeCaller checkedAfter saved beforeCaller.merge,
++                                phase.2, readState)
+                       | .failed fault checkedAfter saved =>
+                           (.error (.inr (.failed fault checkedAfter saved)), afterCaller, phase.2, readState)
+                   | other =>
+@@ -136,8 +137,8 @@
+     | union entry members depth free => simp only [reduceCtorEq, ↓reduceIte]; rfl
+     | mu entry body depthShape ordinaryShape => simp only [reduceCtorEq, ↓reduceIte]; rfl
+   have afterStorage : StorageValid after := by
+-    exact ⟨(set_storage before storage target _ bounded).aligned,
+-      storage.total, storage.forest, (set_storage before storage target _ bounded).values, storage.guards⟩
++    exact ⟨(set_storage before storage target (.unenumerated (some handle) (incomingScs ++ oldScs)) bounded).aligned,
++      storage.total, storage.forest, (set_storage before storage target (.unenumerated (some handle) (incomingScs ++ oldScs)) bounded).values, storage.guards⟩
+   exact ⟨after, rfl, raw, rfl, middleStored, afterStorage, middleRealized⟩
+ 
+ /-- Construct finite execution from a realized pending root and current bounds. -/
+@@ -238,17 +239,19 @@
+   cases oldNode with
+   | none =>
+     obtain ⟨handle, encoded, decoded⟩ := available_readback beforeCaller.checked.native.machine.heap incoming
+-      initial.ready.semantic.1.normal.facts.coherent available closed
++      initial.ready.semantic.ready.semantic.1.normal.facts.coherent available closed
+     obtain ⟨after, writePrefix, raw, afterSame, afterStored, afterStorage, afterRealized⟩ :=
+       finish_complete beforeCaller.checked.native.machine.heap read incoming uv handle incomingScs oldScs
+-        initial.ready.semantic.1.normal.facts.coherent available closed encoded readRealized readStorage
++        initial.ready.semantic.ready.semantic.1.normal.facts.coherent available closed encoded readRealized readStorage
+         ((List.getElem?_eq_some_iff.mp stored).elim (fun bound _elementEquality => bound)) mergedBounded
+     refine ⟨r, 0, 0, 0, none, oldScs, read, after, beforeCaller, memos.query, memos, inventory, incoming, handle,
+       reading, frame, ?_, writePrefix, afterSame, afterStored, afterStorage, afterRealized,
+       Post.refl initial, rfl, Cache.extends_refl _, available, closed, encoded, decoded, ?_, ?_⟩
+     · intro extra extraNative P H enoughP enoughH
+-      simp only [run, lookupMore extra, representativeSame, stored, encoded, raw]
+-      rfl
++      simp only [run, lookupMore extra, representativeSame, stored, encoded]
++      change (.ok (some (ExceptT.run (finish uv handle incomingScs oldScs incoming read))),
++        beforeCaller, memos.query, read) = _
++      rw [raw]
+     · intro noneEq
+       exact ⟨rfl, rfl, rfl, rfl, rfl⟩
+     · intro requestedHandle someEq
+@@ -280,8 +283,10 @@
+     · intro extra extraNative P H enoughP enoughH
+       simp only [run, lookupMore extra, representativeSame, stored, oldDecoded, nativeStable extraNative,
+         checkStable P H enoughP enoughH, SourceCurrentAllocatedConjunctionWorker.Outcome.state,
+-        SourceCurrentAllocatedConjunctionWorker.Outcome.memo, ← replacementSame, encoded, raw]
+-      rfl
++        SourceCurrentAllocatedConjunctionWorker.Outcome.memo, ← replacementSame, encoded]
++      change (.ok (some (ExceptT.run (finish uv handle incomingScs oldScs replacement read))),
++        SourceCurrentAllocatedPartialState.advance beforeCaller checkedAfter saved beforeCaller.merge, queries, read) = _
++      rw [raw]
+     · intro noneEq
+       cases noneEq
+     · intro requestedHandle someEq

@@ -1,0 +1,336 @@
+/tmp/mcfta-pruning-enumeration-incoming-node-20261024/strict-1/MicroCFTA/SourcePruningEnumerationIncomingNode.lean:79:37: error: Variable name `checkedAfter` is not explicitly referenced.
+
+Hint: The binding can be removed (if unused) or named `_` (if used implicitly). Alternatively, prefix the name with `_` to silence this warning:
+  [apply] _checkedAfter
+
+Note: This linter can be disabled with `set_option linter.unusedVariables false`
+/tmp/mcfta-pruning-enumeration-incoming-node-20261024/strict-1/MicroCFTA/SourcePruningEnumerationIncomingNode.lean:79:50: error: Variable name `saved` is not explicitly referenced.
+
+Hint: The binding can be removed (if unused) or named `_` (if used implicitly). Alternatively, prefix the name with `_` to silence this warning:
+  [apply] _saved
+
+Note: This linter can be disabled with `set_option linter.unusedVariables false`
+/tmp/mcfta-pruning-enumeration-incoming-node-20261024/strict-1/MicroCFTA/SourcePruningEnumerationIncomingNode.lean:139:48: error: Application type mismatch: The argument
+  bounded
+has type
+  ∀ (sc : Suspended), sc ∈ incomingScs ++ oldScs → sc.var < before.counter
+but is expected to have type
+  SlotBound before.counter ?m.369
+in the application
+  set_storage before storage target ?m.369 bounded
+/tmp/mcfta-pruning-enumeration-incoming-node-20261024/strict-1/MicroCFTA/SourcePruningEnumerationIncomingNode.lean:140:74: error: Application type mismatch: The argument
+  bounded
+has type
+  ∀ (sc : Suspended), sc ∈ incomingScs ++ oldScs → sc.var < before.counter
+but is expected to have type
+  SlotBound before.counter ?m.381
+in the application
+  set_storage before storage target ?m.381 bounded
+/tmp/mcfta-pruning-enumeration-incoming-node-20261024/strict-1/MicroCFTA/SourcePruningEnumerationIncomingNode.lean:241:31: error(lean.invalidField): Invalid field `normal`: The environment does not contain `MicroCFTA.SourceEqualityRequiredCache.Ready.normal`, so it is not possible to project the field `normal` from an expression
+  initial.ready.semantic.ready
+of type
+  SourceEqualityRequiredCache.Ready beforeCaller.checked.native.machine.heap
+/tmp/mcfta-pruning-enumeration-incoming-node-20261024/strict-1/MicroCFTA/SourcePruningEnumerationIncomingNode.lean:244:33: error(lean.invalidField): Invalid field `normal`: The environment does not contain `MicroCFTA.SourceEqualityRequiredCache.Ready.normal`, so it is not possible to project the field `normal` from an expression
+  initial.ready.semantic.ready
+of type
+  SourceEqualityRequiredCache.Ready beforeCaller.checked.native.machine.heap
+/tmp/mcfta-pruning-enumeration-incoming-node-20261024/strict-1/MicroCFTA/SourcePruningEnumerationIncomingNode.lean:251:6: error: Tactic `rfl` failed: The left-hand side
+  (Except.ok
+      (some
+        (finish uv handle incomingScs oldScs incoming
+            { counter := before.counter, representatives := found.forest, values := before.values,
+              obligations := before.obligations, recursionAncestry := before.recursionAncestry,
+              expansionAncestry := before.expansionAncestry }).run),
+    beforeCaller, memos.query,
+    { counter := before.counter, representatives := found.forest, values := before.values,
+      obligations := before.obligations, recursionAncestry := before.recursionAncestry,
+      expansionAncestry := before.expansionAncestry })
+is not definitionally equal to the right-hand side
+  (Except.ok (some (if incoming = Value.empty then [] else [Except.ok ((), after)])), beforeCaller, memos.query, read)
+
+case none.refine_1
+EnumGuard : Type
+width : Nat
+inst✝² : DecidableEq Symbol
+inst✝¹ : DecidableEq (EdgeKey Symbol Constraint)
+inst✝ : DecidableEq Node
+formulas : SourceGuards.Formulas FullSyntax.Formula
+solver : SourceGuards.Entailment FullSyntax.Formula
+inventory : Inventory
+beforeCaller : Caller width
+before : EnumerationState.State Symbol EnumGuard
+checkEmpty : Bool
+uv : Nat
+incoming : Node
+incomingScs : List Suspended
+memos : Memos
+initial : Context formulas solver inventory beforeCaller memos
+realized : PendingRealized beforeCaller.checked.native.machine.heap before
+storage : StorageValid before
+available : Available beforeCaller.checked.native.machine.heap incoming
+closed : incoming.free = []
+bounded : ∀ (sc : Suspended), sc ∈ incomingScs → sc.var < before.counter
+ranges :
+  match before.values[uv]? with
+  | some (UVarValue.unenumerated (some oldHandle) a) =>
+    match lookupNode beforeCaller.checked.native.machine.heap oldHandle with
+    | some old =>
+      SourceCurrentAllocatedNativeRequestBounds.WordRanges
+        (SourceEqualityNativeDemand.Control.code
+          (SourceRecursiveIntersectionCode.requestNode IntersectionEmptyDomain.emptyDomain incoming old))
+        beforeCaller.checked
+    | none => True
+  | x => True
+oldScs : List Suspended
+size : Nat
+path : UnionFind.Reaches before.representatives uv uv size
+r : Nat
+found : UnionFind.Result
+lookup : UnionFind.findRoot r before.representatives uv = some found
+representativeSame : found.representative = uv
+lookupMore : ∀ (extra : Nat), UnionFind.findRoot (r + extra) before.representatives uv = some found
+read : EnumerationState.State Symbol EnumGuard :=
+  { counter := before.counter, representatives := found.forest, values := before.values,
+    obligations := before.obligations, recursionAncestry := before.recursionAncestry,
+    expansionAncestry := before.expansionAncestry }
+representativeRun : Success (representative r uv) before uv read
+frame : Frame before read
+readStorage : StorageValid read
+readRealized : PendingRealized beforeCaller.checked.native.machine.heap read
+mergedBounded : ∀ (sc : Suspended), sc ∈ incomingScs ++ oldScs → sc.var < read.counter
+stored : before.values[uv]? = some (UVarValue.unenumerated none oldScs)
+reading : ∀ (extra : Nat), (getValue (r + extra) uv before).run = [Except.ok (UVarValue.unenumerated none oldScs, read)]
+handle : Nat
+encoded : encodeNode incoming = some handle
+decoded : lookupNode beforeCaller.checked.native.machine.heap handle = some incoming
+after : EnumerationState.State Symbol EnumGuard
+writePrefix :
+  ((setValue uv (UVarValue.unenumerated (some handle) (incomingScs ++ oldScs)) >>= fun __r => inheritAncestry uv)
+        read).run =
+    [Except.ok ((), after)]
+raw :
+  (finish uv handle incomingScs oldScs incoming read).run =
+    if incoming = Value.empty then [] else [Except.ok ((), after)]
+afterSame :
+  after =
+    { counter := read.counter, representatives := read.representatives,
+      values := read.values.set uv (UVarValue.unenumerated (some handle) (incomingScs ++ oldScs)),
+      obligations := read.obligations,
+      recursionAncestry := fun other =>
+        if other = uv then (read.expansionAncestry ++ read.recursionAncestry uv).eraseDups
+        else read.recursionAncestry other,
+      expansionAncestry := read.expansionAncestry }
+afterStored : after.values[uv]? = some (UVarValue.unenumerated (some handle) (incomingScs ++ oldScs))
+afterStorage : StorageValid after
+afterRealized : PendingRealized beforeCaller.checked.native.machine.heap after
+extra extraNative P H : Nat
+enoughP : 0 ≤ P
+enoughH : 0 ≤ H
+⊢ (Except.ok
+        (some
+          (finish uv handle incomingScs oldScs incoming
+              { counter := before.counter, representatives := found.forest, values := before.values,
+                obligations := before.obligations, recursionAncestry := before.recursionAncestry,
+                expansionAncestry := before.expansionAncestry }).run),
+      beforeCaller, memos.query,
+      { counter := before.counter, representatives := found.forest, values := before.values,
+        obligations := before.obligations, recursionAncestry := before.recursionAncestry,
+        expansionAncestry := before.expansionAncestry }) =
+    (Except.ok (some (if incoming = Value.empty then [] else [Except.ok ((), after)])), beforeCaller, memos.query, read)
+/tmp/mcfta-pruning-enumeration-incoming-node-20261024/strict-1/MicroCFTA/SourcePruningEnumerationIncomingNode.lean:284:6: error: Tactic `rfl` failed: The left-hand side
+  (Except.ok
+      (some
+        (finish uv handle incomingScs oldScs replacement
+            { counter := before.counter, representatives := found.forest, values := before.values,
+              obligations := before.obligations, recursionAncestry := before.recursionAncestry,
+              expansionAncestry := before.expansionAncestry }).run),
+    SourceCurrentAllocatedPartialState.advance beforeCaller checkedAfter saved beforeCaller.merge, queries,
+    { counter := before.counter, representatives := found.forest, values := before.values,
+      obligations := before.obligations, recursionAncestry := before.recursionAncestry,
+      expansionAncestry := before.expansionAncestry })
+is not definitionally equal to the right-hand side
+  (Except.ok (some (if replacement = Value.empty then [] else [Except.ok ((), after)])),
+    SourceCurrentAllocatedPartialState.advance beforeCaller checkedAfter saved beforeCaller.merge, queries, read)
+
+case some.refine_1
+EnumGuard : Type
+width : Nat
+inst✝² : DecidableEq Symbol
+inst✝¹ : DecidableEq (EdgeKey Symbol Constraint)
+inst✝ : DecidableEq Node
+formulas : SourceGuards.Formulas FullSyntax.Formula
+solver : SourceGuards.Entailment FullSyntax.Formula
+inventory : Inventory
+beforeCaller : Caller width
+before : EnumerationState.State Symbol EnumGuard
+checkEmpty : Bool
+uv : Nat
+incoming : Node
+incomingScs : List Suspended
+memos : Memos
+initial : Context formulas solver inventory beforeCaller memos
+realized : PendingRealized beforeCaller.checked.native.machine.heap before
+storage : StorageValid before
+available : Available beforeCaller.checked.native.machine.heap incoming
+closed : incoming.free = []
+bounded : ∀ (sc : Suspended), sc ∈ incomingScs → sc.var < before.counter
+ranges :
+  match before.values[uv]? with
+  | some (UVarValue.unenumerated (some oldHandle) a) =>
+    match lookupNode beforeCaller.checked.native.machine.heap oldHandle with
+    | some old =>
+      SourceCurrentAllocatedNativeRequestBounds.WordRanges
+        (SourceEqualityNativeDemand.Control.code
+          (SourceRecursiveIntersectionCode.requestNode IntersectionEmptyDomain.emptyDomain incoming old))
+        beforeCaller.checked
+    | none => True
+  | x => True
+oldScs : List Suspended
+size : Nat
+path : UnionFind.Reaches before.representatives uv uv size
+r : Nat
+found : UnionFind.Result
+lookup : UnionFind.findRoot r before.representatives uv = some found
+representativeSame : found.representative = uv
+lookupMore : ∀ (extra : Nat), UnionFind.findRoot (r + extra) before.representatives uv = some found
+read : EnumerationState.State Symbol EnumGuard :=
+  { counter := before.counter, representatives := found.forest, values := before.values,
+    obligations := before.obligations, recursionAncestry := before.recursionAncestry,
+    expansionAncestry := before.expansionAncestry }
+representativeRun : Success (representative r uv) before uv read
+frame : Frame before read
+readStorage : StorageValid read
+readRealized : PendingRealized beforeCaller.checked.native.machine.heap read
+mergedBounded : ∀ (sc : Suspended), sc ∈ incomingScs ++ oldScs → sc.var < read.counter
+oldHandle : Nat
+stored : before.values[uv]? = some (UVarValue.unenumerated (some oldHandle) oldScs)
+reading :
+  ∀ (extra : Nat),
+    (getValue (r + extra) uv before).run = [Except.ok (UVarValue.unenumerated (some oldHandle) oldScs, read)]
+old : Node
+oldDecoded : lookupNode beforeCaller.checked.native.machine.heap oldHandle = some old
+oldAvailable : Available beforeCaller.checked.native.machine.heap old
+oldClosed : old.free = []
+decodedRanges :
+  SourceCurrentAllocatedNativeRequestBounds.WordRanges
+    (SourceEqualityNativeDemand.Control.code
+      (SourceRecursiveIntersectionCode.requestNode IntersectionEmptyDomain.emptyDomain incoming old))
+    beforeCaller.checked
+next : Inventory
+query : Node
+queried : Checked width
+answer : Bool
+checkedAfter : Checked width
+saved : Fourth
+final : Memos
+queries : Queries
+replacement : Node
+handle n p h : Nat
+nextSource : next.source = beforeCaller.checked.native.machine.heap
+nextRoots : next.roots = inventory.roots ++ [incoming, old]
+receipt :
+  SourceCurrentAllocatedTargetQuery.Receipt formulas solver next incoming old beforeCaller.checked query queried memos
+nativeStable :
+  ∀ (extra : Nat),
+    SourceEqualityNativeDemand.execute (n + extra)
+        (SourceEqualityNativeDemand.Control.code
+          (SourceRecursiveIntersectionCode.requestNode IntersectionEmptyDomain.emptyDomain incoming old))
+        beforeCaller.checked =
+      SourceEqualityNativeDemand.Outcome.done query queried
+checkStable :
+  ∀ (P H : Nat),
+    p ≤ P →
+      h ≤ H →
+        (if checkEmpty = true then
+            SourcePruningEnumerationEnabledEmpty.check P H query queried beforeCaller.fourth memos.query
+          else (SourceCurrentAllocatedConjunctionWorker.Outcome.done false queried beforeCaller.fourth, memos.query)) =
+          (SourceCurrentAllocatedConjunctionWorker.Outcome.done answer checkedAfter saved, queries)
+actualPost :
+  Post formulas solver next beforeCaller
+    (SourceCurrentAllocatedPartialState.advance beforeCaller checkedAfter saved beforeCaller.merge) final
+querySame : final.query = queries
+unfolding : Cache.Extends memos.unfolding final.unfolding
+_sound : SourceCurrentEmptinessMemo.AnswerSound formulas solver query answer
+replacementSame : replacement = if answer = true then Value.empty else query
+replacementAvailable : Available checkedAfter.native.machine.heap replacement
+replacementClosed : replacement.free = []
+encoded : encodeNode replacement = some handle
+decoded : lookupNode checkedAfter.native.machine.heap handle = some replacement
+meaning :
+  ∀ (ambient : InternedGuardedLanguage.Env (SourceObservations.Label FullSyntax.Formula))
+    (term : Language.Term (SourceObservations.Label FullSyntax.Formula)),
+    InternedGuardedLanguage.meaning (SourceEqualityPCSGuard.holds formulas solver) ambient replacement term ↔
+      InternedGuardedLanguage.meaning (SourceEqualityPCSGuard.holds formulas solver) ambient incoming term ∧
+        InternedGuardedLanguage.meaning (SourceEqualityPCSGuard.holds formulas solver) ambient old term
+disabled :
+  checkEmpty = false →
+    answer = false ∧
+      replacement = query ∧ checkedAfter = queried ∧ saved = beforeCaller.fourth ∧ queries = memos.query ∧ final = memos
+_enabled :
+  checkEmpty = true →
+    ∃ reached,
+      SourceEndpointMemo.run query memos.query = (reached, queries) ∧
+        SourceEndpointMemoCorrect.Checked queried.native.machine.heap memos.query
+            (SourceEndpointReachability.reaches SourceMemoGate.unconstrained query) (reached, queries) ∧
+          (reached = false →
+              answer = false ∧
+                checkedAfter = queried ∧
+                  saved = beforeCaller.fourth ∧ final = { unfolding := memos.unfolding, query := queries }) ∧
+            (reached = true →
+              ∃ reachedPhysical,
+                checkedAfter = advancePhysical queried reachedPhysical ∧
+                  ∃ actual,
+                    SourceCurrentConjunctionGlobalMemos.CallReads actual
+                      { unfolding := memos.unfolding, query := queries } final)
+finalRealized : PendingRealized checkedAfter.native.machine.heap read
+after : EnumerationState.State Symbol EnumGuard
+writePrefix :
+  ((setValue uv (UVarValue.unenumerated (some handle) (incomingScs ++ oldScs)) >>= fun __r => inheritAncestry uv)
+        read).run =
+    [Except.ok ((), after)]
+raw :
+  (finish uv handle incomingScs oldScs replacement read).run =
+    if replacement = Value.empty then [] else [Except.ok ((), after)]
+afterSame :
+  after =
+    { counter := read.counter, representatives := read.representatives,
+      values := read.values.set uv (UVarValue.unenumerated (some handle) (incomingScs ++ oldScs)),
+      obligations := read.obligations,
+      recursionAncestry := fun other =>
+        if other = uv then (read.expansionAncestry ++ read.recursionAncestry uv).eraseDups
+        else read.recursionAncestry other,
+      expansionAncestry := read.expansionAncestry }
+afterStored : after.values[uv]? = some (UVarValue.unenumerated (some handle) (incomingScs ++ oldScs))
+afterStorage : StorageValid after
+afterRealized : PendingRealized checkedAfter.native.machine.heap after
+extra extraNative P H : Nat
+enoughP : p ≤ P
+enoughH : h ≤ H
+⊢ (Except.ok
+        (some
+          (finish uv handle incomingScs oldScs replacement
+              { counter := before.counter, representatives := found.forest, values := before.values,
+                obligations := before.obligations, recursionAncestry := before.recursionAncestry,
+                expansionAncestry := before.expansionAncestry }).run),
+      SourceCurrentAllocatedPartialState.advance beforeCaller checkedAfter saved beforeCaller.merge, queries,
+      { counter := before.counter, representatives := found.forest, values := before.values,
+        obligations := before.obligations, recursionAncestry := before.recursionAncestry,
+        expansionAncestry := before.expansionAncestry }) =
+    (Except.ok (some (if replacement = Value.empty then [] else [Except.ok ((), after)])),
+      SourceCurrentAllocatedPartialState.advance beforeCaller checkedAfter saved beforeCaller.merge, queries, read)
+/tmp/mcfta-pruning-enumeration-incoming-node-20261024/strict-1/MicroCFTA/SourcePruningEnumerationIncomingNode.lean:250:77: error: This simp argument is unused:
+  raw
+
+Hint: Omit it from the simp argument list.
+  [apply] simp only [run, lookupMore extra, representativeSame, stored, encoded]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/tmp/mcfta-pruning-enumeration-incoming-node-20261024/strict-1/MicroCFTA/SourcePruningEnumerationIncomingNode.lean:283:90: error: This simp argument is unused:
+  raw
+
+Hint: Omit it from the simp argument list.
+  [apply] simp only [run, lookupMore extra, representativeSame, stored, oldDecoded, nativeStable extraNative,
+    checkStable P H enoughP enoughH, SourceCurrentAllocatedConjunctionWorker.Outcome.state,
+    SourceCurrentAllocatedConjunctionWorker.Outcome.memo, ← replacementSame, encoded]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`

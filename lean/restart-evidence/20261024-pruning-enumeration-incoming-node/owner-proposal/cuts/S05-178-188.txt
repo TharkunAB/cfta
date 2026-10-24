@@ -1,0 +1,11 @@
+def mergeNode (graph : Graph Symbol Guard) (fuel uv node : Nat) (scs : List Suspended) :
+    EnumerateM Symbol Guard Unit := do
+  let root ← representative fuel uv
+  let previous ← rawValue root
+  match intersectValues graph (.unenumerated (some node) scs) previous with
+  | none => failure .invalidIntersection
+  | some merged =>
+      setValue root merged
+      inheritAncestry root
+      require (!hasEmptyContents graph merged)
+

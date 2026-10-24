@@ -1,0 +1,32 @@
+/-- Completed assimilation keeps the counts when it moves all source references to the target. -/
+theorem assimilation_correct (roots : Nat → Nat) (values : List (UVarValue Symbol))
+    (target source : Nat) (oldSource oldTarget merged : UVarValue Symbol)
+    (different : target ≠ source) (sourceRead : values[source]? = some oldSource)
+    (targetRead : values[target]? = some oldTarget)
+    (mergedRefs : references merged = references oldSource ++ references oldTarget)
+    (waiting : EnumerationWaitingIndex.Waiting) (correct : Correct roots values waiting) :
+    Correct roots ((values.set target merged).set source .eliminated) waiting := by
+  unfold Correct at *
+  rw [List.map_set, List.map_set]
+  intro key
+  have targetStored : (values.map (canonicalValue roots))[target]? =
+      some (canonicalValue roots oldTarget) := by simp [targetRead]
+  have sourceStored : ((values.map (canonicalValue roots)).set target
+      (canonicalValue roots merged))[source]? = some (canonicalValue roots oldSource) := by
+    rw [List.getElem?_set_ne different]
+    simp [sourceRead]
+  have mergedCount : EnumerationWaitingIndex.occurrences key (references (canonicalValue roots merged)) =
+      EnumerationWaitingIndex.occurrences key (references (canonicalValue roots oldSource)) +
+      EnumerationWaitingIndex.occurrences key (references (canonicalValue roots oldTarget)) := by
+    simp only [references_canonicalValue, mergedRefs, List.map_append,
+      EnumerationWaitingIndex.occurrences_append]
+  apply Eq.trans (correct key)
+  apply congrArg EnumerationWaitingIndex.encode
+  rw [show canonicalValue roots (.eliminated : UVarValue Symbol) = .eliminated from rfl]
+  rw [EnumerationWaitingIndex.total_set key source
+      ((values.map (canonicalValue roots)).set target (canonicalValue roots merged))
+      (canonicalValue roots oldSource) .eliminated sourceStored,
+    EnumerationWaitingIndex.total_set key target (values.map (canonicalValue roots))
+      (canonicalValue roots oldTarget) (canonicalValue roots merged) targetStored]
+  simp only [references, EnumerationWaitingIndex.occurrences] at mergedCount ⊢
+  omega

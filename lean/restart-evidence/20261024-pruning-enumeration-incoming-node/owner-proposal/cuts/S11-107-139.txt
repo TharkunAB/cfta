@@ -1,0 +1,33 @@
+structure Result where
+  representative : Nat
+  size : Nat
+  forest : Forest
+
+/-- Execute the Haskell lookup with an explicit finite recursion bound. -/
+def findRoot : Nat → Forest → Nat → Option Result
+  | 0, _, _ => none
+  | fuel + 1, forest, uv =>
+    match forest uv with
+    | none => some ⟨uv, 1, put forest uv (.root 1)⟩
+    | some (.root size) => some ⟨uv, size, forest⟩
+    | some (.parent next) => do
+      let found ← findRoot fuel forest next
+      some {found with forest := put found.forest uv (.parent found.representative)}
+
+/-- Every successful lookup follows an original path and preserves all original paths. -/
+theorem findRoot_correct (fuel : Nat) (forest : Forest) (uv : Nat) (found : Result)
+    (result : findRoot fuel forest uv = some found) :
+    Reaches forest uv found.representative found.size ∧
+      (∀ {other root count}, Reaches forest other root count → Reaches found.forest other root count) := by
+  induction fuel generalizing forest uv found with
+  | zero => simp [findRoot] at result
+  | succ fuel ih =>
+    cases lookup : forest uv with
+    | none =>
+      simp [findRoot, lookup] at result
+      subst found
+      refine ⟨.root (by simp [read, lookup]), ?_⟩
+      intro other root count path
+      exact reaches_congr (fun other => (insert_missing lookup other).symm) path
+    | some entry =>
+      cases entry with
