@@ -79,6 +79,54 @@ TH/Generic extraction, valid-position build/read and source codec laws stay open
 
 
 
+
+## Native terminal representative and waiting prefix
+
+Updated: 2026-10-24. Main `74250bd88` is incorporated.
+Proof: `4de8664d49fc06c5b7c64aa99e462d96e92d18a5`.
+Read `lean/notes-current-pruning-enumeration-terminal-prefix.md`.
+
+The prefix scans ALL original suspended variables, unions the first ORIGINAL
+variable with each remaining ORIGINAL variable, resolves the actual winner
+and transfers distinct old nonwinner waiting buckets. It retains original
+recorded order, duplicates and the winner for the later checked fold.
+It does not union recorded roots or deduplicate that assimilation list.
+
+Genuine safety, allocated input references and pending-input conditions are
+combined with an initial root map and correct canonical waiting counts.
+Safe alone is insufficient. Existing finite producers construct the actual
+scan/union/winner observations before schedule/canonical results identify
+the same endpoint. No desired successful observation replaces construction.
+The transferred waiting-count view is computed in the returned product.
+Values and required nonforest fields remain unchanged. The action has no
+Caller/memo parameters and executes no native Caller or memo actions. Original recorded slots and the actual winner provide pending
+input slots for the later fold. No Safe/LiveRoots or compression Frame is
+asserted across the union-only endpoint. StorageValid after is derived
+without an extra input premise. No new Graph/carrier/shared monad.
+Two public heads, two local List instances (Monad/LawfulMonad), two local
+proof inductions and hard cap360 are the exact frozen interface.
+
+The first strict input failed only at the final ExceptT raw-result equality. The second input adds an explicit ExceptT.run reduction and passes with a literal empty log. Source review then found three temporary inferred haves outside the frozen local inventory. The final source inlines their unchanged retention terms and passes a third strict check with a literal empty log. This source change justified the second installed build and public readback. The earlier passing outputs remain. All 31 literal contracts remain unchanged. The failed source, full raw output and both exact patches remain. No premise or proof limit changed. The source has 259 ordinary lines, within the soft estimate and hard cap. All 72 final public-output lines retain both complete signatures without omissions. The installed build, public readback and Audit pass. Static pre-body V2/V3 metadata corrections and read-only setup diagnostics remain separate from compiler or cap failures.
+The installed build passes 572 jobs. Audit passes 3706 jobs and
+76263 dependency checks, with the unchanged older warning.
+run reports exactly propext and Quot.sound. run_complete reports exactly propext, Classical.choice and Quot.sound. No project axiom is added.
+All actual inputs, failures, public output and resource receipts remain.
+Exactly26 prior custody inputs retain Fold's embedded raw-data whitespace
+diagnostic. It is not a new Lean/cap/seal failure or extra custody input.
+The already sealed prospective assessment and independent review remain.
+
+Initial-only range admission for the later fold, native root flags, waiting/
+candidate indexes, host Int/IntSet extraction and incoming-node merge remain
+separate. Native incoming-node effects precede its final Empty guard.
+Full terminal/driver language, code generation and runtime/resource/solver/
+convergence remain open. H6 stays strongest combined with the same covered
+construction/cache/allocation-history and derived finite-call conditions.
+Exact finite-tree language for empty inherited payload is retained.
+All-producer origins/edits and cutoff language remain open. H23, older proofs
+and the optimized core remain. No Haskell changes. Six repair handoffs remain
+first in FINDINGS. The whole goal stays ACTIVE and incomplete.
+This record precedes evidence and push.
+
 ## Ordered checked pending-slot assimilation
 
 Updated: 2026-10-24. Main `74250bd88` is incorporated.
