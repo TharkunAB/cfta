@@ -2,6 +2,9 @@
 
 ## 0.1.0.0 - Unreleased
 
+- `Data.CFTA.Trace.projectMaybe`: a projection that hides the steps whose
+  image is `Nothing`. The subset construction closes each set of states
+  under hidden steps, so the result still has one run for each trace.
 - `Data.CFTA.Trace`: `determinize` makes the automaton of a trace language
   with one run for each trace (the subset construction, at most `2^n - 1`
   states for an input of `n` states). `concatenate` gives the traces of one

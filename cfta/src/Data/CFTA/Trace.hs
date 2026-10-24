@@ -27,8 +27,8 @@ symbol fails.
 An automaton can have more than one run of a trace, for example after
 'Data.CFTA.mapSymbols' maps two steps to one. Then "Data.CFTA.Sized" lists
 each class to count it, and the generators can reject it. 'determinize' makes the
-automaton with one run for each trace. 'concatenate' and 'project' use it,
-so their results are deterministic too.
+automaton with one run for each trace. 'concatenate', 'project', and
+'projectMaybe' use it, so their results are deterministic too.
 -}
 module Data.CFTA.Trace (
     TraceSymbol (..),
@@ -41,9 +41,9 @@ module Data.CFTA.Trace (
     determinize,
     concatenate,
     project,
+    projectMaybe,
 ) where
 
-import Data.Bifunctor (first)
 import Data.Containers.ListUtils (nubOrd)
 import Data.Either (fromRight)
 import Data.Hashable (Hashable)
@@ -184,7 +184,7 @@ and 'Step' with one child. It does not interpret annotations.
 determinize ::
     (Ord state, Ord step) =>
     FTA state (TraceSymbol step) annotation -> PlainFTA (Set state) (TraceSymbol step)
-determinize automaton = subsets (edges automaton) (FTA.initialState automaton)
+determinize automaton = subsets (edges automaton) (const []) (FTA.initialState automaton)
 
 {- | The traces that are a trace of the first automaton followed by a trace of
 the second. A trace can continue with a trace of the second automaton where
@@ -200,12 +200,13 @@ concatenate ::
     FTA left (TraceSymbol step) leftAnnotation ->
     FTA right (TraceSymbol step) rightAnnotation ->
     PlainFTA (Set (Either left right)) (TraceSymbol step)
-concatenate before after = subsets edgesOf (Left $ FTA.initialState before)
+concatenate before after = subsets edgesOf continue (Left $ FTA.initialState before)
   where
-    edgesOf (Left state) =
-        [(symbol, map Left children) | (symbol, children) <- edges before state, symbol /= End]
-            <> if (End, []) `elem` edges before state then edgesOf (Right $ FTA.initialState after) else []
+    edgesOf (Left state) = [(symbol, map Left children) | (symbol, children) <- edges before state, symbol /= End]
     edgesOf (Right state) = [(symbol, map Right children) | (symbol, children) <- edges after state]
+    -- Where a trace of the first automaton can end, the second automaton starts without a step.
+    continue (Left state) = [Right $ FTA.initialState after | (End, []) `elem` edges before state]
+    continue (Right _) = []
 
 {- | The traces of an automaton with each step replaced by its image: a
 projection to a coarser alphabet of steps. Two steps with one image can give
@@ -216,7 +217,23 @@ the same bound on its size. The function does not interpret annotations.
 project ::
     (Ord state, Ord coarse) =>
     (step -> coarse) -> FTA state (TraceSymbol step) annotation -> PlainFTA (Set state) (TraceSymbol coarse)
-project image automaton = subsets (map (first $ fmap image) . edges automaton) (FTA.initialState automaton)
+project image = projectMaybe (Just . image)
+
+{- | 'project' with hidden steps: a step whose image is 'Nothing' is removed
+from the trace. A state of the result is a set of input states that is
+closed under hidden steps, so the result has one run for each trace, and the
+same bound on its size as 'determinize'. Hidden steps can form a cycle. The
+function does not interpret annotations.
+-}
+projectMaybe ::
+    (Ord state, Ord coarse) =>
+    (step -> Maybe coarse) -> FTA state (TraceSymbol step) annotation -> PlainFTA (Set state) (TraceSymbol coarse)
+projectMaybe image automaton = subsets visible hidden (FTA.initialState automaton)
+  where
+    visible state = [(symbol, children) | (trace, children) <- edges automaton state, Just symbol <- [shown trace]]
+    hidden state = [child | (Step step, [child]) <- edges automaton state, Nothing <- [image step]]
+    shown End = Just End
+    shown (Step step) = Step <$> image step
 
 -- | The symbol and the children of each transition of a state.
 edges :: (Ord state) => FTA state symbol annotation -> state -> [(symbol, [state])]
@@ -224,22 +241,29 @@ edges automaton state =
     [(transitionSymbol transition, transitionChildren transition) | transition <- FTA.transitionsFrom automaton state]
 
 {- | The subset construction from the symbol and the children of each
-transition of a state, and an initial state. It reads only 'End' with no
-child and 'Step' with one child.
+transition of a state, the states that a state goes to without a step, and
+an initial state. A state of the result is a set of states that contains
+each state that one of its states goes to without a step. The construction
+reads only 'End' with no child and 'Step' with one child.
 -}
 subsets ::
     (Ord state, Ord step) =>
-    (state -> [(TraceSymbol step, [state])]) -> state -> PlainFTA (Set state) (TraceSymbol step)
-subsets edgesOf initial =
+    (state -> [(TraceSymbol step, [state])]) -> (state -> [state]) -> state -> PlainFTA (Set state) (TraceSymbol step)
+subsets edgesOf silent initial =
     -- Each child is an explored set, and each symbol has one arity, so validation cannot fail.
     fromRight (error "subsets: the subset construction of trace terms is valid")
         $ FTA.mkFTA start
         $ explore row FTA.transitionChildren start
   where
-    start = Set.singleton initial
+    start = closure $ Set.singleton initial
     row states =
         [Transition End [] noConstraint | (End, []) `elem` outgoing]
-            <> [Transition (Step step) [next] noConstraint | (step, next) <- Map.toList successors]
+            <> [Transition (Step step) [closure next] noConstraint | (step, next) <- Map.toList successors]
       where
         outgoing = concatMap edgesOf $ Set.toList states
         successors = Map.fromListWith Set.union [(step, Set.singleton child) | (Step step, [child]) <- outgoing]
+    -- The states that a set reaches without a step.
+    closure states = case Set.difference (Set.fromList $ concatMap silent $ Set.toList states) states of
+        added
+            | Set.null added -> states
+            | otherwise -> closure $ Set.union states added

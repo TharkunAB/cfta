@@ -5,6 +5,7 @@ import Control.Monad (foldM, forM_, replicateM)
 import Data.Containers.ListUtils (nubOrd)
 import Data.Hashable (Hashable)
 import Data.List (sort)
+import qualified Data.Set as Set
 import GHC.Generics (Generic)
 import System.Timeout (timeout)
 import Test.Hspec (Expectation, Spec, describe, it, shouldBe, shouldReturn)
@@ -169,6 +170,32 @@ concatenated before after length_ =
     , or [runs before (take split steps) && runs after (drop split steps) | split <- [0 .. length_]]
     ]
 
+{- | Whether some trace of a state machine has the image, by a search over
+pairs of a state and the number of image steps read. A hidden step reads no
+image step.
+-}
+hasImage :: (Ord state, Eq coarse) => StateMachine state step -> (step -> Maybe coarse) -> [coarse] -> Bool
+hasImage StateMachine{machineInitial, machineSteps, machineNext, machineFinal} image target =
+    search Set.empty [(machineInitial, 0)]
+  where
+    search _ [] = False
+    search seen (pair@(state, position) : pending)
+        | Set.member pair seen = search seen pending
+        | position == length target && machineFinal state = True
+        | otherwise = search (Set.insert pair seen) (next <> pending)
+      where
+        next =
+            [ (after, moved)
+            | step <- machineSteps
+            , Just after <- [machineNext state step]
+            , Just moved <- [advance step]
+            ]
+        advance step = case image step of
+            Nothing -> Just position
+            Just coarse
+                | take 1 (drop position target) == [coarse] -> Just (position + 1)
+                | otherwise -> Nothing
+
 {- | Whether each state has at most one transition for each symbol. Then each
 term has at most one run, and 'sized' uses its count table.
 -}
@@ -329,3 +356,19 @@ spec = describe "Data.CFTA.Trace" $ do
             fmap sort (tracesOf result length_)
                 `shouldBe` Just (sort $ nubOrd $ map (map shape) $ bruteForce typedStack length_)
             countOfSize (classesOf result) (sizeOf length_) `shouldBe` countOfSize reference (sizeOf length_)
+    it "hides steps in a projection, also on a cycle of hidden steps" $ do
+        let hidePops command = if command == Typed.Pop then Nothing else Just $ shape command
+            withoutPops = projectMaybe hidePops $ traceAutomaton typedStack
+        checkRoutes withoutPops 6
+        forM_ [0 .. 5] $ \length_ ->
+            fmap sort (tracesOf withoutPops length_)
+                `shouldBe` Just
+                    (sort [steps | steps <- replicateM length_ [Pushes, Combines, Negates], hasImage typedStack hidePops steps])
+        -- Open and Close form a cycle of hidden steps between the reads.
+        let onlyReads step = if step == Read then Just Read else Nothing
+            reads_ = projectMaybe onlyReads $ traceAutomaton handle{machineFinal = (== Closed)}
+            nothing = projectMaybe (const Nothing :: HandleStep -> Maybe HandleStep) $ traceAutomaton handle
+        checkRoutes reads_ 7
+        forM_ [0 .. 7] $ \length_ -> do
+            tracesOf reads_ length_ `shouldBe` Just [replicate length_ Read]
+            tracesOf nothing length_ `shouldBe` Just [[] | length_ == 0]
