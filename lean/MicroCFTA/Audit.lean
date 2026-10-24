@@ -1,3 +1,4 @@
+import MicroCFTA.SourcePruningEnumerationEdgePrefix
 import MicroCFTA.SourcePruningEnumerationConstraint
 import MicroCFTA.SourcePruningEnumerationShallowChild
 import MicroCFTA.SourcePruningEnumerationAction
