@@ -1,5 +1,42 @@
 # Full formalization coverage
 
+## Native terminal scheduling indexes
+
+Current source: `SourcePruningEnumerationNativeIndex`.
+Proof: `d826d582252c2993184f7510a59e32979b98769e`. Main remains `74250bd889685da436cdbfe32ac4b5a0878ffd09`.
+The whole goal stays ACTIVE and incomplete. H6 remains strongest.
+
+The selected candidate/count/write interface uses existing Cached state and
+native recursiveBoundary, including Mu and InternedUnion. It has no Graph
+parameter or new carrier. The count certificate follows actual representative
+reads under the current root map.
+
+The gained certificate consumes the same actual Terminal write/inherit prefix,
+old stored value, initial alignment/native flags/counts/Roots and Keeps between
+the native heaps. The new handle is decoded at the actual next heap. It derives
+finite cached-write execution, exact raw fields and returned alignment through
+Cached.frame. It assumes no desired final index or successful future query.
+Moved waiting returned by Terminal remains staging data. Initial alignment and
+native flags are still required; machine map/set extraction remains separate.
+
+Validation: The first strict input failed on two ambiguous dotted constructor uses and the deprecated if_neg name. V2 adds the explicit Except/Error type and uses ite_eq_right. The second strict input passes with a literal empty log under all linters and warnings as errors. The failed source, full raw output and exact repair remain. All 12 literal contracts and five public headers stay unchanged. No premise or proof limit changed. The 177-line source is below the selected soft estimate and within hard limit 560. The installed build, complete public readback and Audit pass. All 83 public-output lines retain five full signatures without display omissions. The older unused-variable warning remains unchanged. No passing check was repeated. The pre-body three-unused-binding overlay and the separate cleared-equation usage annotation only correct static metadata. Read-only locator and data-reader diagnostics are separate from compiler/cap failures. No seal has failed.
+Installed focused build: 1309 jobs; Audit: 3711 jobs and
+76318 theorem dependency checks. Actual public axioms: candidate, count, write and count_complete each report propext only. gained_complete reports propext and Quot.sound.
+All actual failed inputs/raw logs/cap receipts remain. Exactly 26 previous
+publication inputs and the separately sealed assessment peer remain protected.
+No future seal or push result is asserted.
+
+Machine bounds, original-root flags/partition provenance, the later captured
+original-uv′ store, initial-only query admission, Safe/LiveRoots and full-driver
+correspondence remain open. All six imported Haskell repair handoffs remain
+first in FINDINGS. No Haskell source change is claimed.
+H6 still covers closed construction with a valid initial cache and allocation
+history, and any prescribed finite number of actual modeled node-reduction
+calls at derived width/fuels. Empty inherited payload preserves the same finite
+trees under formal guard/solver semantics. Full typing/pruning/driver/native
+extraction/solver implementation/runtime/resources/convergence remain open.
+
+
 ## Checked terminal-arm composition
 
 Current source: `SourcePruningEnumerationTerminal`.
