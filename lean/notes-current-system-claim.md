@@ -1,5 +1,53 @@
 # Current system claim
 
+## Checked enabled emptiness after pending intersections
+
+Updated: 2026-10-24. Main `74250bd88` is incorporated.
+Proof: `16136af08905281831885f9dce104bfd1602dc13`.
+Read `lean/notes-current-pruning-enumeration-enabled-empty.md`.
+
+A genuine initial caller Context and two actual pending slots derive one
+checked intersection. The same Receipt and physical trace derive post-query
+caller laws and filtered probes. No post-query Context, result or successful
+worker is assumed. Existing warm tables and operations remain intact.
+
+check performs the actual descendant/predicate memo runner on that result.
+The saved guard memos remain even when false skips the fourth-memo call.
+True enters the existing checked worker with exploration budget 1000.
+One Caller.finite receipt supplies the actual Call and CallReads. Existing
+completion and checked lifting derive stable p/h bounds for that SAME call.
+The full caller retains both outer result tables, merge, checked operations,
+fourth memo and global reads. The final query field equals the saved guard
+memos. Smaller lower-stage bounds can fail without publishing a fourth entry.
+
+A computed true emptiness answer selects Empty. Every other answer retains
+the original intersection, which can itself be Empty. False has no acceptance
+claim. The exact
+intersection language, closedness, availability, handle/readback and all old
+PendingRealized slots are derived at the actual returned heap.
+This stage performs no enum write. Equal raw IDs are allowed here; the full
+native caller skips them earlier. finish composition, initial flag selection,
+omitted dispatch, native indexes and containers, lazy publication and verified
+Haskell extraction remain separate. No new checked lift or receipt type is
+introduced. No Haskell source changes. Six repairs remain first in FINDINGS.
+
+The first strict input failed at two coherence projections and the Empty-language reduction. The second input fixes both projections but still needs the well-founded meaning equation. The third input rewrites that equation explicitly and passes with a literal empty log under all linters and warnings as errors. Both failed sources, complete raw outputs and exact successive patches remain. All public and local types stay unchanged. No proof limit changed. The installed build, complete public readback and Audit pass. All 127 public-output lines retain both signatures without display omissions. No passing build was repeated.
+The installed build passes 1286 jobs. Audit passes 3702 jobs and
+76217 dependency checks, with the unchanged older warning.
+check and pending_enabled_complete each report exactly propext, Classical.choice and Quot.sound. No project axiom is added.
+Frozen contracts, scoped inventories, independent reviews and actual raw
+attempts remain. All 26 prior publication-custody inputs remain byte-exact.
+
+H6 stays strongest combined: covered closed construction with valid initial
+caches supports any chosen finite number of node-reduction calls at derived
+sufficient mathematical width/fuels and exact finite-tree language with the
+empty inherited payload. All-producer origins/edits, native order/IDs/indexes/
+containers/memo2, signed extraction bounds, cutoff language and full typing/
+pruning/driver/runtime/solver/resources/convergence remain. H23, all older work
+and the optimized core remain. The full goal stays ACTIVE and incomplete.
+This record precedes evidence and push.
+
+
 ## Checked pending-slot assimilation without conservative emptiness
 
 Updated: 2026-10-24. Main `74250bd88` is incorporated.
