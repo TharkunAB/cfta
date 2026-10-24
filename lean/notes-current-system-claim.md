@@ -1,5 +1,50 @@
 # Current system claim
 
+## Checked terminal-arm composition
+
+Current source: `SourcePruningEnumerationTerminal`.
+Proof: `9258e0012080ef26156ecd3af492e9b6e194621d`. Main remains `74250bd889685da436cdbfe32ac4b5a0878ffd09`.
+The whole goal stays ACTIVE and incomplete. H6 remains strongest.
+
+The staged action rejects incoming Empty before Prefix. Its finite producer
+covers the nonempty incoming arm. Prefix preserves the recorded order and
+duplicates; sorted distinct keys serve only waiting transfer. The existing Fold
+consumes that original list. Fold [] stops before IncomingNode or count gains.
+
+IncomingNode uses the SAME folded endpoint. It writes the actual replacement and
+inherits ancestry before Empty rejection. Its outer read endpoint differs from
+the write/inherit prefix. Raw [] returns no successful enum state. Only success
+returns Fragment.hole winner at the actual written state. It does not install
+that hole at winner. The later captured original-uv′ store remains separate.
+
+The returned outer state and moved waiting map are STAGING data, not a final
+waiting table for a raw row. A separate gained_correct certificate derives the
+logical gained-only map at the actual write/inherit prefix, even on rejection.
+Canonical zero-entry facts and actual old references remain required.
+
+The producer derives execution from genuine initial domain facts and explicit
+current reached Fold.Ranges/conditional incoming WordRanges. It retains actual
+Post/receipt/language evidence, read Frame, storage and realized-slot facts at
+their distinct endpoints. It assumes no successful future continuation.
+Original-root flag provenance, terminal partitioning, later fragment storage,
+native index/Int extraction, initial-only query admission, Safe/LiveRoots and
+whole-driver correspondence remain separate. No Haskell source change.
+All six imported Haskell repair handoffs remain first in FINDINGS.
+
+Validation: The first strict input failed on unescaped named arguments and recursive simplification of a self-referential state equality. V2 escaped the names. The second input exposed unsupported Outcome arguments and an expected-type error in the counter projection. V3 uses the defining Outcome signature. The proof simplifies the separately inferred counter equality. The third strict input passes with a literal empty log under all linters and warnings as errors. All three owner versions, both failed sources, full raw outputs and exact patches remain. The three public headers stay unchanged. No premise or proof limit changed. The source has309 ordinary lines, within the selected soft estimate and hard cap. The installed build, complete public readback and Audit pass. All321 public-output lines retain three complete signatures without display omissions. The older unused-variable warning remains unchanged. No passing check was repeated. Declaration revisions and read-only setup diagnostics remain separate from compiler or cap failures. No seal has failed.
+Installed focused build: 1307 jobs; Audit: 3710 jobs and
+76301 theorem dependency checks. Actual public axioms: run and run_complete each report exactly propext, Classical.choice and Quot.sound. gained_correct reports propext and Quot.sound.
+All actual failed sources/raw logs/cap receipts remain. Exactly26 prior
+publication inputs and the separately sealed assessment review remain protected.
+No future seal or push result is asserted.
+
+H6 still covers closed construction with valid initial cache and allocation
+history, and any prescribed finite number of actual modeled node-reduction
+calls at derived width/fuels. Empty inherited payload preserves the same finite
+trees under formal guard/solver semantics. Full typing/pruning/driver/native
+extraction/solver implementation/runtime/resources/convergence remain open.
+
+
 ## Storage and waiting counts through the checked fold
 
 Current source: `SourcePruningEnumerationFoldInvariants`.
