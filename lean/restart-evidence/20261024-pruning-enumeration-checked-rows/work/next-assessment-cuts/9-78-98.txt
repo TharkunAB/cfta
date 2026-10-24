@@ -1,0 +1,21 @@
+theorem complete [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)]
+    (emptyGuard : Guard) (conjoin : Guard → Guard → Guard)
+    (before : SourceRecursiveIntersectionThunks.State width Symbol Guard) (ready : IdleReady emptyGuard conjoin before)
+    (target input : Value Symbol Guard) (targetAvailable : Available before.machine.heap target)
+    (inputAvailable : Available before.machine.heap input) (targetClosed : target.free = []) (inputClosed : input.free = [])
+    (ranges : SourceRecursiveIntersectionNative.WordRanges emptyGuard conjoin
+      (.node ⟨IntersectionEmptyDomain.emptyDomain, target, input⟩ .pure) before)
+    (holds : Guard → Term Symbol → Bool)
+    (conjoined : ∀ first second term, holds (conjoin first second) term = (holds first term && holds second term)) :
+    ∃ result after, Step emptyGuard conjoin target input before result after ∧ IdleReady emptyGuard conjoin after ∧
+      Keeps before.machine.heap after.machine.heap ∧ Available after.machine.heap result ∧ result.free = [] ∧
+      ∀ ambient term, meaning holds ambient result term ↔ meaning holds ambient input term ∧ meaning holds ambient target term := by
+  have targetOriginal := SourceRecursiveIntersectionOriginalOutput.closed_original target before.machine.heap
+    ready.semantic.ready.semantic.1.normal.facts.coherent targetAvailable targetClosed
+  have inputOriginal := SourceRecursiveIntersectionOriginalOutput.closed_original input before.machine.heap
+    ready.semantic.ready.semantic.1.normal.facts.coherent inputAvailable inputClosed
+  obtain ⟨fuel, result, after, actual, _⟩ := SourceRecursiveIntersectionNative.warm_node_complete emptyGuard conjoin before
+    ready.valid ready.idle ready.semantic.ready.semantic ready.semantic.ready.covered holds target input
+    targetOriginal inputOriginal targetAvailable inputAvailable targetClosed inputClosed ranges
+  have trace : Step emptyGuard conjoin target input before result after := .done fuel ranges actual
+  exact ⟨result, after, trace, trace.verified ready targetAvailable inputAvailable targetClosed inputClosed holds conjoined⟩

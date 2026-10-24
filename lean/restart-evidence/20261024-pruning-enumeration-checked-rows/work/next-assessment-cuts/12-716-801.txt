@@ -1,0 +1,86 @@
+enumerateNode _ EmptyNode = mzero
+enumerateNode scs n =
+    let (hereConstraints, descendantConstraints) = Sequence.partition (\(SuspendedConstraint pt _) -> isTerminalPathTrie pt) scs
+     in case hereConstraints of
+            Sequence.Empty -> case n of
+                Mu _ -> TermFragmentUVar <$> addUVarValue (Just n)
+                InternedUnion _ -> TermFragmentUVar <$> addUVarValue (Just n)
+                Node _ -> do
+                    edgesOf <- gets _edgesOf
+                    enumerateEdge scs =<< branches (edgesOf n)
+                Rec recId ->
+                    error $
+                        "enumerateNode: unexpected unresolved recursive reference "
+                            <> show recId
+                            <> " for symbol type "
+                            <> show (typeRep @symbol)
+            (x :<| xs) -> do
+                reps <- mapM (getUVarRepresentative . scGetUVar) hereConstraints
+                forM_ xs $ \sc ->
+                    modify' $ \s ->
+                        s{_uvarRepresentative = UnionFind.union (scGetUVar x) (scGetUVar sc) (_uvarRepresentative s)}
+                uv <- getUVarRepresentative (scGetUVar x)
+                -- The waiting counts of the old representatives go to the new one.
+                let merged = IntSet.delete (uvarToInt uv) (IntSet.fromList (map uvarToInt (Foldable.toList reps)))
+                    move waiting old = case IntMap.lookup old waiting of
+                        Just waits -> IntMap.insertWith (+) (uvarToInt uv) waits (IntMap.delete old waiting)
+                        Nothing -> waiting
+                modify' $ \s -> s{_waitingUVars = IntSet.foldl' move (_waitingUVars s) merged}
+                mapM_ (assimilateUvarVal uv) reps
+
+                mergeNodeIntoUVarVal uv n descendantConstraints
+                return $ TermFragmentUVar uv
+
+-- | Enumerate one edge, introducing UVars for its equality classes.
+enumerateEdge ::
+    (Hashable symbol, Typeable symbol) =>
+    Seq SuspendedConstraint -> Edge symbol -> EnumerateM symbol (TermFragment symbol)
+enumerateEdge = enumerateEdgeWith enumerateNode
+
+-- | Prepare the children of one selected edge with the supplied function.
+enumerateEdgeWith ::
+    (Seq SuspendedConstraint -> Node symbol -> EnumerateM symbol (TermFragment symbol)) ->
+    Seq SuspendedConstraint ->
+    Edge symbol ->
+    EnumerateM symbol (TermFragment symbol)
+enumerateEdgeWith prepareChild scs e = do
+    let inherited = descendScs IntMap.empty scs
+    -- The inherited obligations must fit the edge. Its own classes fit it.
+    guard $ maybe True (\(highest, _) -> compareLength (edgeChildren e) highest == GT) (IntMap.lookupMax inherited)
+
+    newScs <- mapM pecToSuspendedConstraint (unsafeGetEclasses $ equalities $ edgeConstraint e)
+    let children = descendScs inherited newScs
+    fragment <-
+        TermFragmentNode (edgeSymbol e)
+            <$> zipWithM (\i n -> prepareChild (IntMap.findWithDefault Sequence.Empty i children) n) [0 ..] (edgeChildren e)
+    when (residual (edgeConstraint e)) $
+        modify' $
+            \s -> s{_obligations = (edgeConstraint e, fragment) : _obligations s}
+    return fragment
+
+{- | Expand one ordinary node and defer its eligible children.
+Keep the existing preparation of terminal equality endpoints and recursive
+boundaries. A selected root must not defer itself into another fresh slot.
+-}
+enumerateShallowHere ::
+    (Hashable symbol, Typeable symbol) =>
+    Seq SuspendedConstraint -> Node symbol -> EnumerateM symbol (TermFragment symbol)
+enumerateShallowHere scs n@(Node _)
+    | not (any (isTerminalPathTrie . scGetPathTrie) scs) = do
+        edgesOf <- gets _edgesOf
+        enumerateEdgeWith prepareShallowChild scs =<< branches (edgesOf n)
+enumerateShallowHere scs n = enumerateNode scs n
+
+{- | Keep an ordinary child in a slot until the ready-hole loop selects it.
+Install its full suspended constraints through the existing waiting counter.
+Terminal endpoints still merge through the existing node-preparation path.
+-}
+prepareShallowChild ::
+    (Hashable symbol, Typeable symbol) =>
+    Seq SuspendedConstraint -> Node symbol -> EnumerateM symbol (TermFragment symbol)
+prepareShallowChild scs n@(Node _)
+    | not (any (isTerminalPathTrie . scGetPathTrie) scs) = do
+        uv <- addUVarValue (Just n)
+        setUVarValue uv (UVarUnenumerated (Just n) scs)
+        pure (TermFragmentUVar uv)
+prepareShallowChild scs n = enumerateNode scs n

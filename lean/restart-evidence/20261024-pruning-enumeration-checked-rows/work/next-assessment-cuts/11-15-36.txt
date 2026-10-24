@@ -1,0 +1,22 @@
+abbrev RowKey (Symbol Guard : Type) := List (Edge Symbol Guard)
+
+/-- Issued identities name immutable constructor row keys. -/
+def lookup (state : Cache.State (RowKey Symbol Guard)) (identity : Nat) : RowKey Symbol Guard :=
+  (state.issued identity).getD []
+
+/-- Interned row keys contain only checked constructor edges. -/
+def StoredValid (state : Cache.State (RowKey Symbol Guard)) : Prop :=
+  ∀ identity key, state.issued identity = some key → ∀ edge ∈ key, ValidEdge edge
+
+/-- Read the finite interned row table as an enumeration graph. -/
+def graph (state : Cache.State (RowKey Symbol Guard)) (meet : Nat → Nat → Nat) : Graph Symbol Guard where
+  node identity := match lookup state identity with | [] => .empty | edge :: rest => .alternatives (edge :: rest)
+  intersect := meet
+
+theorem graph_rows (state : Cache.State (RowKey Symbol Guard)) (meet : Nat → Nat → Nat) (identity : Nat) :
+    nodeRows (graph state meet) identity = lookup state identity := by
+  cases found : lookup state identity <;> simp [nodeRows, graph, found]
+
+/-- A valid stored row table derives the complete enumeration invariant. -/
+theorem complete (state : Cache.State (RowKey Symbol Guard)) (meet : Nat → Nat → Nat)
+    (valid : StoredValid state) : CompleteGraph (graph state meet) := by

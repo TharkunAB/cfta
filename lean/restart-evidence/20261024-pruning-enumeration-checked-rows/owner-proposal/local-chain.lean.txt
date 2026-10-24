@@ -1,0 +1,5 @@
+have chain : ∀ boundary : Fin (count + 1),
+      SourceEqualityConstraintMemoAllocation.Valid (operations boundary) ∧
+      SourceEqualityRequiredCache.Keeps (heaps 0) (heaps boundary) ∧
+      ∀ index : Fin count, index.val < boundary.val →
+        SourceEqualityRequiredCache.Keeps (actualBuilt index).2 (heaps boundary)

@@ -1,0 +1,44 @@
+/-- Only the rejected branch demands the sentinel's stored equality field. -/
+def outputState (before : OpState) (keep : Bool) : OpState :=
+  if keep then before else emptyField before
+
+/-- Both selected branches retain actual valid growing operation state. -/
+theorem outputState_correct (before : OpState) (keep : Bool) (valid : Valid before) :
+    Valid (outputState before keep) ∧ Grows before (outputState before keep) := by
+  cases keep with
+  | false => exact (emptyField_correct before valid).imp_right And.left
+  | true => exact ⟨valid, SourceEqualityConstraintMemoAllocation.grows_refl before⟩
+
+/-- Retain equality effects and then execute the actual selected edge interner request. -/
+noncomputable def build [DecidableEq (InternedConstructorTemplates.EdgeKey Symbol (Constraint Formula))]
+    (symbol : Symbol) (stored : Value) (guard : SourceGuards.Guard Formula)
+    (children : List (InternedConstructorTemplates.Value Symbol (Constraint Formula))) (before : OpState)
+    (heap : InternedConstructorTemplates.State Symbol (Constraint Formula)) :
+    Except String (InternedConstructorTemplates.EdgeValue Symbol (Constraint Formula)) × OpState ×
+      InternedConstructorTemplates.State Symbol (Constraint Formula) :=
+  let checked := check stored guard children.length before
+  match checked.1 with
+  | .error message => (.error message, checked.2, heap)
+  | .ok keep =>
+      let built := InternedConstructorTemplates.run
+        (work symbol (SourceEqualityAccessorAllocation.constraint stored guard) children keep) heap
+      (.ok built.1, outputState checked.2 keep, built.2)
+
+/-- Exact source checks select a concrete constructor receipt without an assumed cached answer. -/
+theorem build_receipt [DecidableEq (InternedConstructorTemplates.EdgeKey Symbol (Constraint Formula))]
+    (symbol : Symbol) (stored : Value) (guard : SourceGuards.Guard Formula)
+    (children : List (InternedConstructorTemplates.Value Symbol (Constraint Formula))) (before : OpState)
+    (heap : InternedConstructorTemplates.State Symbol (Constraint Formula))
+    (valid : Valid before) (ready : Ready before.constraints stored) :
+    let constraint := SourceEqualityAccessorAllocation.constraint stored guard
+    let built := InternedConstructorTemplates.run (work symbol constraint children (accepted constraint children.length)) heap
+    build symbol stored guard children before heap =
+      (.ok built.1, outputState (check stored guard children.length before).2 (accepted constraint children.length), built.2) ∧
+      Valid (build symbol stored guard children before heap).2.1 ∧
+      Grows before (build symbol stored guard children before heap).2.1 := by
+  obtain ⟨done, afterValid, growth⟩ := check_correct stored guard children.length before valid ready
+  have after := outputState_correct _ (accepted (SourceEqualityAccessorAllocation.constraint stored guard) children.length) afterValid
+  simp only [build, done]
+  exact ⟨trivial, after.1, ⟨steps_trans growth.constraints after.2.constraints,
+    Cache.extends_trans growth.combinations after.2.combinations,
+    Cache.extends_trans growth.descents after.2.descents⟩⟩

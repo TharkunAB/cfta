@@ -1,0 +1,13 @@
+theorem ofFn_getElem {xs : List α} :
+    List.ofFn (fun i : Fin xs.length => xs[i.val]) = xs := by
+  apply ext_getElem <;> simp
+
+@[simp 500, grind =]
+theorem mem_ofFn {n} {f : Fin n → α} {a : α} : a ∈ ofFn f ↔ ∃ i, f i = a := by
+  constructor
+  · intro w
+    obtain ⟨i, h, rfl⟩ := getElem_of_mem w
+    exact ⟨⟨i, by simpa using h⟩, by simp⟩
+  · rintro ⟨i, rfl⟩
+    apply mem_of_getElem (i := i) <;> simp
+

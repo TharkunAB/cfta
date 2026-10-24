@@ -1,0 +1,34 @@
+theorem makeNode_edges [DecidableEq (EdgeKey Symbol Guard)] (edges : List (EdgeValue Symbol Guard))
+    (state : State Symbol Guard) (coherent : Coherent state) (linked : Linked state)
+    (resident : ∀ edge ∈ edges, EdgeResident state edge) :
+    nodeEdges (run (makeNode edges) state).1 = canonicalEdges (surviving edges) := by
+  have selected : ∀ edge ∈ canonicalEdges (surviving edges), EdgeResident state edge := by
+    intro edge member
+    exact resident edge (List.mem_filter.mp (canonicalEdges_member _ edge member)).1
+  unfold makeNode
+  dsimp only
+  split
+  · rename_i same
+    simp only [run, nodeEdges, same]
+  · rename_i first rest same
+    obtain ⟨entry, exactResult⟩ := identifyNode_readback (first :: rest) state coherent linked
+      (by simpa only [same] using selected)
+    simp only [run, exactResult, identifyNode, nodeEdges, same]
+
+/-- Deadness is the source's literal empty-child test. -/
+def dead (edge : EdgeValue Symbol Guard) : Bool :=
+  edge.children.any (fun child => child.referenceOf == .empty)
+
+/-- Normalized physical membership removes only dead rows and duplicate identities. -/
+theorem normalized_member (state : State Symbol Guard) (coherent : Coherent state)
+    (edges : List (EdgeValue Symbol Guard)) (resident : ∀ edge ∈ edges, EdgeResident state edge)
+    (edge : EdgeValue Symbol Guard) :
+    edge ∈ canonicalEdges (surviving edges) ↔ edge ∈ edges ∧ dead edge = false := by
+  constructor
+  · intro member
+    have present := List.mem_filter.mp (canonicalEdges_member _ edge member)
+    exact ⟨present.1, by simpa only [dead, Bool.not_eq_true'] using present.2⟩
+  · rintro ⟨member, live⟩
+    exact canonicalEdges_retains state coherent (surviving edges) edge
+      (fun value member => resident value (List.mem_filter.mp member).1)
+      (List.mem_filter.mpr ⟨member, by simpa only [dead, Bool.not_eq_true'] using live⟩)

@@ -1,0 +1,66 @@
+/-- A finite actual checked-constructor history gives every selected parent row its checked origin. -/
+theorem checked_rows_selected_origin [DecidableEq (InternedConstructorTemplates.EdgeKey Symbol Constraint)]
+    (count : Nat) (symbols : Fin count → Symbol) (originals : Fin count → Constraint)
+    (stored : Fin count → SourceEqualityConstraintAllocation.Value)
+    (children : Fin count → List (InternedConstructorTemplates.Value Symbol Constraint))
+    (operations : Fin (count + 1) → SourceEqualityConstraintMemoAllocation.State)
+    (heaps : Fin (count + 1) → InternedConstructorTemplates.State Symbol Constraint)
+    (inputs : Fin count → InternedConstructorTemplates.State Symbol Constraint)
+    (initialValid : SourceEqualityConstraintMemoAllocation.Valid (operations 0))
+    (initialReady : SourceEqualityRequiredCache.Ready (heaps 0))
+    (prework : ∀ index : Fin count,
+      SourceEqualityRequiredCache.Keeps (heaps index.castSucc) (inputs index))
+    (cached : ∀ index : Fin count, SourceEqualityGuardReadback.Cached (originals index).equalities)
+    (physical : ∀ index : Fin count,
+      SourceEqualityPhysicalPayload.read (originals index).equalities = .ok (stored index).payload)
+    (storedReady : ∀ index : Fin count,
+      SourceEqualityConstraintAllocation.Ready (operations index.castSucc).constraints (stored index))
+    (available : ∀ index : Fin count,
+      SourceEqualityMkEdgeAllocation.accepted (originals index) (children index).length = true →
+        InternedNestedProvenance.Values (inputs index) (children index))
+    (closed : ∀ index : Fin count,
+      SourceEqualityMkEdgeAllocation.accepted (originals index) (children index).length = true →
+        MergedColdReaderClosedInputs.ClosedValues (children index))
+    (operationNext : ∀ index : Fin count, operations index.succ =
+      (SourceEqualityMkEdgeAllocation.build (symbols index) (stored index) (originals index).guard
+        (children index) (operations index.castSucc) (inputs index)).2.1)
+    (heapNext : ∀ index : Fin count, heaps index.succ =
+      (SourceEqualityMkEdgeAllocation.build (symbols index) (stored index) (originals index).guard
+        (children index) (operations index.castSucc) (inputs index)).2.2) :
+    let built := fun index : Fin count => InternedConstructorTemplates.run
+      (SourceEqualityMkEdgeAllocation.work (symbols index) (originals index) (children index)
+        (SourceEqualityMkEdgeAllocation.accepted (originals index) (children index).length)) (inputs index)
+    let rows := List.ofFn (fun index : Fin count => (built index).1)
+    let parent := InternedConstructorTemplates.run (InternedConstructorTemplates.makeNode rows) (heaps (Fin.last count))
+    (∀ boundary : Fin (count + 1),
+      SourceEqualityConstraintMemoAllocation.Valid (operations boundary) ∧
+      SourceEqualityRequiredCache.Keeps (heaps 0) (heaps boundary) ∧
+      ∀ index : Fin count, index.val < boundary.val →
+        SourceEqualityRequiredCache.Keeps (built index).2 (heaps boundary)) ∧
+    InternedNestedProvenance.Edges (heaps (Fin.last count)) rows ∧
+    MergedColdReaderClosedInputs.ClosedEdges rows ∧
+    SourceEqualityRequiredCache.Keeps (heaps (Fin.last count)) parent.2 ∧
+    SourceEqualityRequiredCache.Keeps (heaps 0) parent.2 ∧
+    SourceEqualityRequiredCache.Ready parent.2 ∧ InternedProbeProvenance.Available parent.2 parent.1 ∧
+    parent.1.free = [] ∧
+    ∀ edge ∈ InternedEdgeResidency.nodeEdges parent.1,
+      ∃ index : Fin count, edge = (built index).1 ∧
+        SourceEqualityMkEdgeAllocation.accepted (originals index) (children index).length = true ∧
+        (SourceEqualityMkEdgeAllocation.check (stored index) (originals index).guard
+          (children index).length (operations index.castSucc)).1 = .ok true ∧
+        SourceEqualityMkEdgeAllocation.build (symbols index) (stored index) (originals index).guard
+          (children index) (operations index.castSucc) (inputs index) =
+          (.ok edge, operations index.succ, heaps index.succ) ∧
+        edge.entry.key.symbol = symbols index ∧ edge.entry.key.constraint = originals index ∧
+        edge.children = children index ∧
+        ∃ classes : EqualityNormalize.Constraints,
+          SourceCompactGuards.sourceEqualities edge.entry.key.constraint = some classes ∧
+          SourcePruningEnumerationConstraint.project edge.entry.key.constraint =
+            some (EnumerationEquality.readClasses classes,
+              if (SourceCompactGuards.positive edge.entry.key.constraint.guard).isSome
+                then none else some edge.entry.key.constraint) ∧
+          (∀ trie ∈ EnumerationEquality.readClasses classes, EqualityTrie.Valid trie) ∧
+          (∀ paths ∈ classes, ∀ path,
+            path ∈ EqualityTrie.fromPathTrie (EnumerationEquality.classTrie paths) ↔ path ∈ paths) ∧
+          ∀ start : Nat, arityAllows edge.children.length
+            (suspendedVars start (EnumerationEquality.readClasses classes)) = true

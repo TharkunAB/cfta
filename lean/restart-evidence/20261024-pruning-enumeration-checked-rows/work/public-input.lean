@@ -1,0 +1,5 @@
+import MicroCFTA.SourcePruningEnumerationCheckedRows
+set_option pp.deepTerms true
+set_option pp.maxSteps 1000000
+#check @MicroCFTA.SourcePruningEnumerationCheckedRows.checked_rows_selected_origin
+#print axioms MicroCFTA.SourcePruningEnumerationCheckedRows.checked_rows_selected_origin

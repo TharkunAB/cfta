@@ -1,0 +1,47 @@
+def prepareChild (scs : List EnumerationState.Suspended)
+    (value : InternedConstructorTemplates.Value Symbol NativeGuard) :
+    Option (EnumerateM Symbol EnumGuard (Fragments.Fragment Symbol))
+ :=
+  match value with
+  | .empty => some reject
+  | .reference _ => none
+  | .node _ _ _ _ | .union _ _ _ _ | .mu _ _ _ _ =>
+      if scs.any (fun sc => EqualityTrie.isTerminal sc.trie) then
+        none
+      else
+        match encodeNode value with
+        | none => none
+        | some node =>
+            some (allocate (some node) >>= fun uv =>
+              match value with
+              | .node _ _ _ _ =>
+                  setValue uv (.unenumerated (some node) scs) >>= fun _ => pure (.hole uv)
+              | _ => pure (.hole uv))
+
+/-- Derive the actual child action, fresh slot and complete realized final state. -/
+theorem prepareChild_complete
+    (heap : InternedConstructorTemplates.State Symbol NativeGuard)
+    (before : EnumerationState.State Symbol EnumGuard)
+    (scs : List EnumerationState.Suspended) (value : InternedConstructorTemplates.Value Symbol NativeGuard)
+    (coherent : InternedRecordCoherence.Coherent heap)
+    (available : InternedProbeProvenance.Available heap value) (closed : value.free = [])
+    (realized : PendingRealized heap before) (aligned : before.counter = before.values.length)
+    (nonterminal : scs.any (fun sc => EqualityTrie.isTerminal sc.trie) = false) :
+    ∃ node : Nat, encodeNode value = some node ∧ lookupNode heap node = some value ∧
+      (value = .empty →
+        prepareChild scs value = some (reject : EnumerateM Symbol EnumGuard (Fragments.Fragment Symbol)) ∧
+        ¬ ∃ (fragment : Fragments.Fragment Symbol) (after : EnumerationState.State Symbol EnumGuard),
+          Success (reject : EnumerateM Symbol EnumGuard (Fragments.Fragment Symbol)) before fragment after) ∧
+      (value ≠ .empty →
+        ∃ (action : EnumerateM Symbol EnumGuard (Fragments.Fragment Symbol))
+          (after : EnumerationState.State Symbol EnumGuard),
+          prepareChild scs value = some action ∧ Success action before (.hole before.counter) after ∧
+          after = (match value with
+            | .node _ _ _ _ =>
+                {allocated (some node) before with values :=
+                  (allocated (some node) before).values.set before.counter (.unenumerated (some node) scs)}
+            | _ => allocated (some node) before) ∧
+          after.values[before.counter]? = some (.unenumerated (some node)
+            (match value with | .node _ _ _ _ => scs | _ => [])) ∧
+          after.counter = before.counter + 1 ∧ after.counter = after.values.length ∧
+          PendingRealized heap after)

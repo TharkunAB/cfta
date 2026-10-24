@@ -1,0 +1,1068 @@
+{
+  "entries": [
+    {
+      "owner": "checked_rows_selected_origin",
+      "name": "[instance]",
+      "type": "DecidableEq (InternedConstructorTemplates.EdgeKey Symbol Constraint)",
+      "scope": "public premise",
+      "role": "binder"
+    },
+    {
+      "owner": "checked_rows_selected_origin",
+      "name": "count",
+      "type": "Nat",
+      "scope": "public premise",
+      "role": "binder"
+    },
+    {
+      "owner": "checked_rows_selected_origin",
+      "name": "symbols",
+      "type": "Fin count → Symbol",
+      "scope": "public premise",
+      "role": "binder"
+    },
+    {
+      "owner": "checked_rows_selected_origin",
+      "name": "originals",
+      "type": "Fin count → Constraint",
+      "scope": "public premise",
+      "role": "binder"
+    },
+    {
+      "owner": "checked_rows_selected_origin",
+      "name": "stored",
+      "type": "Fin count → SourceEqualityConstraintAllocation.Value",
+      "scope": "public premise",
+      "role": "binder"
+    },
+    {
+      "owner": "checked_rows_selected_origin",
+      "name": "children",
+      "type": "Fin count → List (InternedConstructorTemplates.Value Symbol Constraint)",
+      "scope": "public premise",
+      "role": "binder"
+    },
+    {
+      "owner": "checked_rows_selected_origin",
+      "name": "operations",
+      "type": "Fin (count + 1) → SourceEqualityConstraintMemoAllocation.State",
+      "scope": "public premise",
+      "role": "binder"
+    },
+    {
+      "owner": "checked_rows_selected_origin",
+      "name": "heaps",
+      "type": "Fin (count + 1) → InternedConstructorTemplates.State Symbol Constraint",
+      "scope": "public premise",
+      "role": "binder"
+    },
+    {
+      "owner": "checked_rows_selected_origin",
+      "name": "inputs",
+      "type": "Fin count → InternedConstructorTemplates.State Symbol Constraint",
+      "scope": "public premise",
+      "role": "binder"
+    },
+    {
+      "owner": "checked_rows_selected_origin",
+      "name": "initialValid",
+      "type": "SourceEqualityConstraintMemoAllocation.Valid (operations 0)",
+      "scope": "public premise",
+      "role": "binder"
+    },
+    {
+      "owner": "checked_rows_selected_origin",
+      "name": "initialReady",
+      "type": "SourceEqualityRequiredCache.Ready (heaps 0)",
+      "scope": "public premise",
+      "role": "binder"
+    },
+    {
+      "owner": "checked_rows_selected_origin",
+      "name": "prework",
+      "type": "∀ index : Fin count, SourceEqualityRequiredCache.Keeps (heaps index.castSucc) (inputs index)",
+      "scope": "public premise",
+      "role": "binder"
+    },
+    {
+      "owner": "checked_rows_selected_origin",
+      "name": "cached",
+      "type": "∀ index : Fin count, SourceEqualityGuardReadback.Cached (originals index).equalities",
+      "scope": "public premise",
+      "role": "binder"
+    },
+    {
+      "owner": "checked_rows_selected_origin",
+      "name": "physical",
+      "type": "∀ index : Fin count, SourceEqualityPhysicalPayload.read (originals index).equalities = .ok (stored index).payload",
+      "scope": "public premise",
+      "role": "binder"
+    },
+    {
+      "owner": "checked_rows_selected_origin",
+      "name": "storedReady",
+      "type": "∀ index : Fin count, SourceEqualityConstraintAllocation.Ready (operations index.castSucc).constraints (stored index)",
+      "scope": "public premise",
+      "role": "binder"
+    },
+    {
+      "owner": "checked_rows_selected_origin",
+      "name": "available",
+      "type": "∀ index : Fin count, SourceEqualityMkEdgeAllocation.accepted (originals index) (children index).length = true → InternedNestedProvenance.Values (inputs index) (children index)",
+      "scope": "public premise",
+      "role": "binder"
+    },
+    {
+      "owner": "checked_rows_selected_origin",
+      "name": "closed",
+      "type": "∀ index : Fin count, SourceEqualityMkEdgeAllocation.accepted (originals index) (children index).length = true → MergedColdReaderClosedInputs.ClosedValues (children index)",
+      "scope": "public premise",
+      "role": "binder"
+    },
+    {
+      "owner": "checked_rows_selected_origin",
+      "name": "operationNext",
+      "type": "∀ index : Fin count, operations index.succ = (SourceEqualityMkEdgeAllocation.build (symbols index) (stored index) (originals index).guard (children index) (operations index.castSucc) (inputs index)).2.1",
+      "scope": "public premise",
+      "role": "binder"
+    },
+    {
+      "owner": "checked_rows_selected_origin",
+      "name": "heapNext",
+      "type": "∀ index : Fin count, heaps index.succ = (SourceEqualityMkEdgeAllocation.build (symbols index) (stored index) (originals index).guard (children index) (operations index.castSucc) (inputs index)).2.2",
+      "scope": "public premise",
+      "role": "binder"
+    },
+    {
+      "owner": "checked_rows_selected_origin",
+      "name": "index",
+      "type": "Fin count",
+      "scope": "public prework quantified family",
+      "role": "binder"
+    },
+    {
+      "owner": "checked_rows_selected_origin",
+      "name": "index",
+      "type": "Fin count",
+      "scope": "public cached quantified family",
+      "role": "binder"
+    },
+    {
+      "owner": "checked_rows_selected_origin",
+      "name": "index",
+      "type": "Fin count",
+      "scope": "public physical quantified family",
+      "role": "binder"
+    },
+    {
+      "owner": "checked_rows_selected_origin",
+      "name": "index",
+      "type": "Fin count",
+      "scope": "public storedReady quantified family",
+      "role": "binder"
+    },
+    {
+      "owner": "checked_rows_selected_origin",
+      "name": "index",
+      "type": "Fin count",
+      "scope": "public available quantified family",
+      "role": "binder"
+    },
+    {
+      "owner": "checked_rows_selected_origin",
+      "name": "index",
+      "type": "Fin count",
+      "scope": "public closed quantified family",
+      "role": "binder"
+    },
+    {
+      "owner": "checked_rows_selected_origin",
+      "name": "index",
+      "type": "Fin count",
+      "scope": "public operationNext quantified family",
+      "role": "binder"
+    },
+    {
+      "owner": "checked_rows_selected_origin",
+      "name": "index",
+      "type": "Fin count",
+      "scope": "public heapNext quantified family",
+      "role": "binder"
+    },
+    {
+      "owner": "checked_rows_selected_origin",
+      "name": "built",
+      "type": "Fin count → InternedConstructorTemplates.EdgeValue Symbol Constraint × InternedConstructorTemplates.State Symbol Constraint",
+      "scope": "public conclusion",
+      "role": "computed let"
+    },
+    {
+      "owner": "checked_rows_selected_origin",
+      "name": "index",
+      "type": "Fin count",
+      "scope": "public built lambda",
+      "role": "lambda binder"
+    },
+    {
+      "owner": "checked_rows_selected_origin",
+      "name": "rows",
+      "type": "List (InternedConstructorTemplates.EdgeValue Symbol Constraint)",
+      "scope": "public conclusion",
+      "role": "computed let"
+    },
+    {
+      "owner": "checked_rows_selected_origin",
+      "name": "index",
+      "type": "Fin count",
+      "scope": "public rows lambda",
+      "role": "lambda binder"
+    },
+    {
+      "owner": "checked_rows_selected_origin",
+      "name": "parent",
+      "type": "InternedConstructorTemplates.Value Symbol Constraint × InternedConstructorTemplates.State Symbol Constraint",
+      "scope": "public conclusion",
+      "role": "computed let"
+    },
+    {
+      "owner": "checked_rows_selected_origin",
+      "name": "boundary",
+      "type": "Fin (count + 1)",
+      "scope": "public boundary history",
+      "role": "binder"
+    },
+    {
+      "owner": "checked_rows_selected_origin",
+      "name": "index",
+      "type": "Fin count",
+      "scope": "public boundary history",
+      "role": "binder"
+    },
+    {
+      "owner": "checked_rows_selected_origin",
+      "name": "[processed]",
+      "type": "index.val < boundary.val",
+      "scope": "public boundary history",
+      "role": "logical implication premise"
+    },
+    {
+      "owner": "checked_rows_selected_origin",
+      "name": "edge",
+      "type": "InternedConstructorTemplates.EdgeValue Symbol Constraint",
+      "scope": "public selected conclusion",
+      "role": "binder"
+    },
+    {
+      "owner": "checked_rows_selected_origin",
+      "name": "[selected]",
+      "type": "edge ∈ InternedEdgeResidency.nodeEdges parent.1",
+      "scope": "public selected conclusion",
+      "role": "logical binder"
+    },
+    {
+      "owner": "checked_rows_selected_origin",
+      "name": "index",
+      "type": "Fin count",
+      "scope": "public selected conclusion",
+      "role": "binder"
+    },
+    {
+      "owner": "checked_rows_selected_origin",
+      "name": "classes",
+      "type": "EqualityNormalize.Constraints",
+      "scope": "public selected conclusion",
+      "role": "binder"
+    },
+    {
+      "owner": "checked_rows_selected_origin",
+      "name": "trie",
+      "type": "EqualityTrie.Trie",
+      "scope": "public selected conclusion",
+      "role": "binder"
+    },
+    {
+      "owner": "checked_rows_selected_origin",
+      "name": "[trieMember]",
+      "type": "trie ∈ EnumerationEquality.readClasses classes",
+      "scope": "public selected conclusion",
+      "role": "logical binder"
+    },
+    {
+      "owner": "checked_rows_selected_origin",
+      "name": "paths",
+      "type": "EqualityNormalize.Class",
+      "scope": "public selected conclusion",
+      "role": "binder"
+    },
+    {
+      "owner": "checked_rows_selected_origin",
+      "name": "[classMember]",
+      "type": "paths ∈ classes",
+      "scope": "public selected conclusion",
+      "role": "logical binder"
+    },
+    {
+      "owner": "checked_rows_selected_origin",
+      "name": "path",
+      "type": "EqualityNormalize.Path",
+      "scope": "public selected conclusion",
+      "role": "binder"
+    },
+    {
+      "owner": "checked_rows_selected_origin",
+      "name": "start",
+      "type": "Nat",
+      "scope": "public selected conclusion",
+      "role": "binder"
+    },
+    {
+      "owner": "checked_rows_selected_origin",
+      "name": "actualBuilt",
+      "type": "Fin count → InternedConstructorTemplates.EdgeValue Symbol Constraint × InternedConstructorTemplates.State Symbol Constraint",
+      "scope": "theorem proof prefix",
+      "role": "proof let",
+      "fragment": "local-built.lean.txt"
+    },
+    {
+      "owner": "checked_rows_selected_origin",
+      "name": "actualRows",
+      "type": "List (InternedConstructorTemplates.EdgeValue Symbol Constraint)",
+      "scope": "theorem proof prefix",
+      "role": "proof let",
+      "fragment": "local-rows.lean.txt"
+    },
+    {
+      "owner": "checked_rows_selected_origin",
+      "name": "actualParent",
+      "type": "InternedConstructorTemplates.Value Symbol Constraint × InternedConstructorTemplates.State Symbol Constraint",
+      "scope": "theorem proof prefix",
+      "role": "proof let",
+      "fragment": "local-parent.lean.txt"
+    },
+    {
+      "owner": "checked_rows_selected_origin",
+      "name": "index",
+      "type": "Fin count",
+      "scope": "actualBuilt function parameter",
+      "role": "binder"
+    },
+    {
+      "owner": "checked_rows_selected_origin",
+      "name": "index",
+      "type": "Fin count",
+      "scope": "actualRows lambda",
+      "role": "lambda binder"
+    },
+    {
+      "owner": "checked_rows_selected_origin",
+      "name": "chain",
+      "type": "∀ boundary : Fin (count + 1),\n      SourceEqualityConstraintMemoAllocation.Valid (operations boundary) ∧\n      SourceEqualityRequiredCache.Keeps (heaps 0) (heaps boundary) ∧\n      ∀ index : Fin count, index.val < boundary.val →\n        SourceEqualityRequiredCache.Keeps (actualBuilt index).2 (heaps boundary)",
+      "scope": "theorem proof prefix",
+      "role": "proof have",
+      "fragment": "local-chain.lean.txt"
+    },
+    {
+      "owner": "checked_rows_selected_origin",
+      "name": "operationAfter",
+      "type": "operations index.succ =\n        SourceEqualityMkEdgeAllocation.outputState\n          (SourceEqualityMkEdgeAllocation.check (stored index) (originals index).guard\n            (children index).length (operations index.castSucc)).2\n          (SourceEqualityMkEdgeAllocation.accepted (originals index) (children index).length)",
+      "scope": "chain successor",
+      "role": "proof have",
+      "fragment": "local-operation-after.lean.txt"
+    },
+    {
+      "owner": "checked_rows_selected_origin",
+      "name": "heapAfter",
+      "type": "heaps index.succ = (actualBuilt index).2",
+      "scope": "chain successor",
+      "role": "proof have",
+      "fragment": "local-heap-after.lean.txt"
+    },
+    {
+      "owner": "checked_rows_selected_origin",
+      "name": "earlierLess",
+      "type": "earlier.val < index.val",
+      "scope": "chain successor",
+      "role": "proof have",
+      "fragment": "local-earlier-less.lean.txt"
+    },
+    {
+      "owner": "checked_rows_selected_origin",
+      "name": "rowPackets",
+      "type": "∀ index : Fin count,\n      InternedEdgeResidency.EdgeResident (heaps (Fin.last count)) (actualBuilt index).1 ∧\n      MergedColdReaderClosedInputs.ClosedValues (actualBuilt index).1.children",
+      "scope": "theorem proof prefix",
+      "role": "proof have",
+      "fragment": "local-row-packets.lean.txt"
+    },
+    {
+      "owner": "checked_rows_selected_origin",
+      "name": "rowsResident",
+      "type": "InternedNestedProvenance.Edges (heaps (Fin.last count)) actualRows",
+      "scope": "theorem proof prefix",
+      "role": "proof have",
+      "fragment": "local-resident.lean.txt"
+    },
+    {
+      "owner": "checked_rows_selected_origin",
+      "name": "rowsClosed",
+      "type": "MergedColdReaderClosedInputs.ClosedEdges actualRows",
+      "scope": "theorem proof prefix",
+      "role": "proof have",
+      "fragment": "local-closed.lean.txt"
+    },
+    {
+      "owner": "checked_rows_selected_origin",
+      "name": "normalized",
+      "type": "InternedEdgeResidency.nodeEdges actualParent.1 =\n        InternedConstructorTemplates.canonicalEdges (InternedConstructorTemplates.surviving actualRows)",
+      "scope": "theorem proof prefix",
+      "role": "proof have",
+      "fragment": "local-normalized.lean.txt"
+    },
+    {
+      "owner": "checked_rows_selected_origin",
+      "name": "earlier",
+      "type": "Fin count",
+      "scope": "chain base suffix",
+      "role": "intro or condition"
+    },
+    {
+      "owner": "checked_rows_selected_origin",
+      "name": "processed",
+      "type": "earlier.val < (0 : Fin (count + 1)).val",
+      "scope": "chain base suffix",
+      "role": "intro or condition"
+    },
+    {
+      "owner": "checked_rows_selected_origin",
+      "name": "index",
+      "type": "Fin count",
+      "scope": "chain successor",
+      "role": "intro or condition"
+    },
+    {
+      "owner": "checked_rows_selected_origin",
+      "name": "ih",
+      "type": "SourceEqualityConstraintMemoAllocation.Valid (operations index.castSucc) ∧ SourceEqualityRequiredCache.Keeps (heaps 0) (heaps index.castSucc) ∧ ∀ earlier : Fin count, earlier.val < index.castSucc.val → SourceEqualityRequiredCache.Keeps (actualBuilt earlier).2 (heaps index.castSucc)",
+      "scope": "chain successor",
+      "role": "IH"
+    },
+    {
+      "owner": "checked_rows_selected_origin",
+      "name": "earlier",
+      "type": "Fin count",
+      "scope": "chain successor suffix",
+      "role": "intro or condition"
+    },
+    {
+      "owner": "checked_rows_selected_origin",
+      "name": "processed",
+      "type": "earlier.val < index.succ.val",
+      "scope": "chain successor suffix",
+      "role": "intro or condition"
+    },
+    {
+      "owner": "checked_rows_selected_origin",
+      "name": "same",
+      "type": "earlier = index",
+      "scope": "chain successor suffix same branch",
+      "role": "intro or condition"
+    },
+    {
+      "owner": "checked_rows_selected_origin",
+      "name": "same",
+      "type": "¬ earlier = index",
+      "scope": "chain successor suffix different branch",
+      "role": "intro or condition"
+    },
+    {
+      "owner": "checked_rows_selected_origin",
+      "name": "equal",
+      "type": "earlier.val = index.val",
+      "scope": "earlierLess proof lambda",
+      "role": "lambda binder"
+    },
+    {
+      "owner": "checked_rows_selected_origin",
+      "name": "index",
+      "type": "Fin count",
+      "scope": "rowPackets proof",
+      "role": "intro or condition"
+    },
+    {
+      "owner": "checked_rows_selected_origin",
+      "name": "value",
+      "type": "InternedConstructorTemplates.Value Symbol Constraint",
+      "scope": "rowPackets false closure",
+      "role": "intro or condition"
+    },
+    {
+      "owner": "checked_rows_selected_origin",
+      "name": "member",
+      "type": "value ∈ ([.empty] : List (InternedConstructorTemplates.Value Symbol Constraint))",
+      "scope": "rowPackets false closure",
+      "role": "intro or condition"
+    },
+    {
+      "owner": "checked_rows_selected_origin",
+      "name": "edge",
+      "type": "InternedConstructorTemplates.EdgeValue Symbol Constraint",
+      "scope": "rowsResident proof",
+      "role": "intro or condition"
+    },
+    {
+      "owner": "checked_rows_selected_origin",
+      "name": "member",
+      "type": "edge ∈ actualRows",
+      "scope": "rowsResident proof",
+      "role": "intro or condition"
+    },
+    {
+      "owner": "checked_rows_selected_origin",
+      "name": "edge",
+      "type": "InternedConstructorTemplates.EdgeValue Symbol Constraint",
+      "scope": "rowsClosed proof",
+      "role": "intro or condition"
+    },
+    {
+      "owner": "checked_rows_selected_origin",
+      "name": "member",
+      "type": "edge ∈ actualRows",
+      "scope": "rowsClosed proof",
+      "role": "intro or condition"
+    },
+    {
+      "owner": "checked_rows_selected_origin",
+      "name": "edge",
+      "type": "InternedConstructorTemplates.EdgeValue Symbol Constraint",
+      "scope": "selected conclusion proof",
+      "role": "intro or condition"
+    },
+    {
+      "owner": "checked_rows_selected_origin",
+      "name": "selected",
+      "type": "edge ∈ InternedEdgeResidency.nodeEdges actualParent.1",
+      "scope": "selected conclusion proof",
+      "role": "intro or condition"
+    },
+    {
+      "owner": "checked_rows_selected_origin",
+      "name": "_stepChecked",
+      "type": "(SourceEqualityMkEdgeAllocation.check (stored index) (originals index).guard (children index).length (operations index.castSucc)).1 = .ok (SourceEqualityMkEdgeAllocation.accepted (originals index) (children index).length)",
+      "scope": "chain successor",
+      "role": "obtain field"
+    },
+    {
+      "owner": "checked_rows_selected_origin",
+      "name": "stepReceipt",
+      "type": "SourceEqualityMkEdgeAllocation.build (symbols index) (stored index) (originals index).guard (children index) (operations index.castSucc) (inputs index) = (.ok (actualBuilt index).1, (SourceEqualityMkEdgeAllocation.outputState (SourceEqualityMkEdgeAllocation.check (stored index) (originals index).guard (children index).length (operations index.castSucc)).2 (SourceEqualityMkEdgeAllocation.accepted (originals index) (children index).length)), (actualBuilt index).2)",
+      "scope": "chain successor",
+      "role": "obtain field"
+    },
+    {
+      "owner": "checked_rows_selected_origin",
+      "name": "stepValid",
+      "type": "SourceEqualityConstraintMemoAllocation.Valid (SourceEqualityMkEdgeAllocation.outputState (SourceEqualityMkEdgeAllocation.check (stored index) (originals index).guard (children index).length (operations index.castSucc)).2 (SourceEqualityMkEdgeAllocation.accepted (originals index) (children index).length))",
+      "scope": "chain successor",
+      "role": "obtain field"
+    },
+    {
+      "owner": "checked_rows_selected_origin",
+      "name": "_stepGrowth",
+      "type": "SourceEqualityConstraintMemoAllocation.Grows (operations index.castSucc) (SourceEqualityMkEdgeAllocation.outputState (SourceEqualityMkEdgeAllocation.check (stored index) (originals index).guard (children index).length (operations index.castSucc)).2 (SourceEqualityMkEdgeAllocation.accepted (originals index) (children index).length))",
+      "scope": "chain successor",
+      "role": "obtain field"
+    },
+    {
+      "owner": "checked_rows_selected_origin",
+      "name": "stepKept",
+      "type": "SourceEqualityRequiredCache.Keeps (inputs index) (actualBuilt index).2",
+      "scope": "chain successor",
+      "role": "obtain field"
+    },
+    {
+      "owner": "checked_rows_selected_origin",
+      "name": "_stepResident",
+      "type": "InternedEdgeResidency.EdgeResident (actualBuilt index).2 (actualBuilt index).1",
+      "scope": "chain successor",
+      "role": "obtain field"
+    },
+    {
+      "owner": "checked_rows_selected_origin",
+      "name": "_stepSymbol",
+      "type": "(actualBuilt index).1.entry.key.(symbols index) = (symbols index)",
+      "scope": "chain successor",
+      "role": "obtain field"
+    },
+    {
+      "owner": "checked_rows_selected_origin",
+      "name": "_stepGuard",
+      "type": "(actualBuilt index).1.entry.key.constraint = (if SourceEqualityMkEdgeAllocation.accepted (originals index) (children index).length then (originals index) else SourceEqualityConstraintConstructors.top (Formula := FullSyntax.Formula))",
+      "scope": "chain successor",
+      "role": "obtain field"
+    },
+    {
+      "owner": "checked_rows_selected_origin",
+      "name": "_stepChildren",
+      "type": "(actualBuilt index).1.children = (if SourceEqualityMkEdgeAllocation.accepted (originals index) (children index).length then (children index) else [.empty])",
+      "scope": "chain successor",
+      "role": "obtain field"
+    },
+    {
+      "owner": "checked_rows_selected_origin",
+      "name": "_stepClasses",
+      "type": "EqualityNormalize.Constraints",
+      "scope": "chain successor",
+      "role": "obtain field"
+    },
+    {
+      "owner": "checked_rows_selected_origin",
+      "name": "_stepSource",
+      "type": "SourceCompactGuards.sourceEqualities (actualBuilt index).1.entry.key.constraint = some _stepClasses",
+      "scope": "chain successor",
+      "role": "obtain field"
+    },
+    {
+      "owner": "checked_rows_selected_origin",
+      "name": "_stepProjected",
+      "type": "SourcePruningEnumerationConstraint.project (actualBuilt index).1.entry.key.constraint = some (EnumerationEquality.readClasses _stepClasses, if (SourceCompactGuards.positive (actualBuilt index).1.entry.key.constraint.guard).isSome then none else some (actualBuilt index).1.entry.key.constraint)",
+      "scope": "chain successor",
+      "role": "obtain field"
+    },
+    {
+      "owner": "checked_rows_selected_origin",
+      "name": "_stepTries",
+      "type": "∀ trie ∈ EnumerationEquality.readClasses _stepClasses, EqualityTrie.Valid trie",
+      "scope": "chain successor",
+      "role": "obtain field"
+    },
+    {
+      "owner": "checked_rows_selected_origin",
+      "name": "_stepPaths",
+      "type": "∀ paths ∈ _stepClasses, ∀ path, path ∈ EqualityTrie.fromPathTrie (EnumerationEquality.classTrie paths) ↔ path ∈ paths",
+      "scope": "chain successor",
+      "role": "obtain field"
+    },
+    {
+      "owner": "checked_rows_selected_origin",
+      "name": "_stepArity",
+      "type": "∀ start : Nat, arityAllows (actualBuilt index).1.children.length (suspendedVars start (EnumerationEquality.readClasses _stepClasses)) = true",
+      "scope": "chain successor",
+      "role": "obtain field"
+    },
+    {
+      "owner": "checked_rows_selected_origin",
+      "name": "_rowChecked",
+      "type": "(SourceEqualityMkEdgeAllocation.check (stored index) (originals index).guard (children index).length (operations index.castSucc)).1 = .ok (SourceEqualityMkEdgeAllocation.accepted (originals index) (children index).length)",
+      "scope": "rowPackets proof",
+      "role": "obtain field"
+    },
+    {
+      "owner": "checked_rows_selected_origin",
+      "name": "_rowReceipt",
+      "type": "SourceEqualityMkEdgeAllocation.build (symbols index) (stored index) (originals index).guard (children index) (operations index.castSucc) (inputs index) = (.ok (actualBuilt index).1, (SourceEqualityMkEdgeAllocation.outputState (SourceEqualityMkEdgeAllocation.check (stored index) (originals index).guard (children index).length (operations index.castSucc)).2 (SourceEqualityMkEdgeAllocation.accepted (originals index) (children index).length)), (actualBuilt index).2)",
+      "scope": "rowPackets proof",
+      "role": "obtain field"
+    },
+    {
+      "owner": "checked_rows_selected_origin",
+      "name": "_rowValid",
+      "type": "SourceEqualityConstraintMemoAllocation.Valid (SourceEqualityMkEdgeAllocation.outputState (SourceEqualityMkEdgeAllocation.check (stored index) (originals index).guard (children index).length (operations index.castSucc)).2 (SourceEqualityMkEdgeAllocation.accepted (originals index) (children index).length))",
+      "scope": "rowPackets proof",
+      "role": "obtain field"
+    },
+    {
+      "owner": "checked_rows_selected_origin",
+      "name": "_rowGrowth",
+      "type": "SourceEqualityConstraintMemoAllocation.Grows (operations index.castSucc) (SourceEqualityMkEdgeAllocation.outputState (SourceEqualityMkEdgeAllocation.check (stored index) (originals index).guard (children index).length (operations index.castSucc)).2 (SourceEqualityMkEdgeAllocation.accepted (originals index) (children index).length))",
+      "scope": "rowPackets proof",
+      "role": "obtain field"
+    },
+    {
+      "owner": "checked_rows_selected_origin",
+      "name": "_rowKept",
+      "type": "SourceEqualityRequiredCache.Keeps (inputs index) (actualBuilt index).2",
+      "scope": "rowPackets proof",
+      "role": "obtain field"
+    },
+    {
+      "owner": "checked_rows_selected_origin",
+      "name": "rowResident",
+      "type": "InternedEdgeResidency.EdgeResident (actualBuilt index).2 (actualBuilt index).1",
+      "scope": "rowPackets proof",
+      "role": "obtain field"
+    },
+    {
+      "owner": "checked_rows_selected_origin",
+      "name": "_rowSymbol",
+      "type": "(actualBuilt index).1.entry.key.(symbols index) = (symbols index)",
+      "scope": "rowPackets proof",
+      "role": "obtain field"
+    },
+    {
+      "owner": "checked_rows_selected_origin",
+      "name": "_rowGuard",
+      "type": "(actualBuilt index).1.entry.key.constraint = (if SourceEqualityMkEdgeAllocation.accepted (originals index) (children index).length then (originals index) else SourceEqualityConstraintConstructors.top (Formula := FullSyntax.Formula))",
+      "scope": "rowPackets proof",
+      "role": "obtain field"
+    },
+    {
+      "owner": "checked_rows_selected_origin",
+      "name": "rowChildren",
+      "type": "(actualBuilt index).1.children = (if SourceEqualityMkEdgeAllocation.accepted (originals index) (children index).length then (children index) else [.empty])",
+      "scope": "rowPackets proof",
+      "role": "obtain field"
+    },
+    {
+      "owner": "checked_rows_selected_origin",
+      "name": "_rowClasses",
+      "type": "EqualityNormalize.Constraints",
+      "scope": "rowPackets proof",
+      "role": "obtain field"
+    },
+    {
+      "owner": "checked_rows_selected_origin",
+      "name": "_rowSource",
+      "type": "SourceCompactGuards.sourceEqualities (actualBuilt index).1.entry.key.constraint = some _rowClasses",
+      "scope": "rowPackets proof",
+      "role": "obtain field"
+    },
+    {
+      "owner": "checked_rows_selected_origin",
+      "name": "_rowProjected",
+      "type": "SourcePruningEnumerationConstraint.project (actualBuilt index).1.entry.key.constraint = some (EnumerationEquality.readClasses _rowClasses, if (SourceCompactGuards.positive (actualBuilt index).1.entry.key.constraint.guard).isSome then none else some (actualBuilt index).1.entry.key.constraint)",
+      "scope": "rowPackets proof",
+      "role": "obtain field"
+    },
+    {
+      "owner": "checked_rows_selected_origin",
+      "name": "_rowTries",
+      "type": "∀ trie ∈ EnumerationEquality.readClasses _rowClasses, EqualityTrie.Valid trie",
+      "scope": "rowPackets proof",
+      "role": "obtain field"
+    },
+    {
+      "owner": "checked_rows_selected_origin",
+      "name": "_rowPaths",
+      "type": "∀ paths ∈ _rowClasses, ∀ path, path ∈ EqualityTrie.fromPathTrie (EnumerationEquality.classTrie paths) ↔ path ∈ paths",
+      "scope": "rowPackets proof",
+      "role": "obtain field"
+    },
+    {
+      "owner": "checked_rows_selected_origin",
+      "name": "_rowArity",
+      "type": "∀ start : Nat, arityAllows (actualBuilt index).1.children.length (suspendedVars start (EnumerationEquality.readClasses _rowClasses)) = true",
+      "scope": "rowPackets proof",
+      "role": "obtain field"
+    },
+    {
+      "owner": "checked_rows_selected_origin",
+      "name": "index",
+      "type": "Fin count",
+      "scope": "rowsResident proof",
+      "role": "obtain field"
+    },
+    {
+      "owner": "checked_rows_selected_origin",
+      "name": "rowEq",
+      "type": "(actualBuilt index).1 = edge",
+      "scope": "rowsResident proof",
+      "role": "obtain field"
+    },
+    {
+      "owner": "checked_rows_selected_origin",
+      "name": "index",
+      "type": "Fin count",
+      "scope": "rowsClosed proof",
+      "role": "obtain field"
+    },
+    {
+      "owner": "checked_rows_selected_origin",
+      "name": "rowEq",
+      "type": "(actualBuilt index).1 = edge",
+      "scope": "rowsClosed proof",
+      "role": "obtain field"
+    },
+    {
+      "owner": "checked_rows_selected_origin",
+      "name": "parentKept",
+      "type": "SourceEqualityRequiredCache.Keeps (heaps (Fin.last count)) actualParent.2",
+      "scope": "actual node packet",
+      "role": "obtain field"
+    },
+    {
+      "owner": "checked_rows_selected_origin",
+      "name": "parentAvailable",
+      "type": "InternedProbeProvenance.Available actualParent.2 actualParent.1",
+      "scope": "actual node packet",
+      "role": "obtain field"
+    },
+    {
+      "owner": "checked_rows_selected_origin",
+      "name": "parentClosed",
+      "type": "actualParent.1.free = []",
+      "scope": "actual node packet",
+      "role": "obtain field"
+    },
+    {
+      "owner": "checked_rows_selected_origin",
+      "name": "_parentOrdinary",
+      "type": "SourceEqualityRequiredCache.Ordinary actualParent.1",
+      "scope": "actual node packet",
+      "role": "obtain field"
+    },
+    {
+      "owner": "checked_rows_selected_origin",
+      "name": "inputMember",
+      "type": "edge ∈ actualRows",
+      "scope": "selected conclusion normalized membership",
+      "role": "obtain field"
+    },
+    {
+      "owner": "checked_rows_selected_origin",
+      "name": "_live",
+      "type": "EqualityLeafProjectionPhysical.dead edge = false",
+      "scope": "selected conclusion normalized membership",
+      "role": "obtain field"
+    },
+    {
+      "owner": "checked_rows_selected_origin",
+      "name": "index",
+      "type": "Fin count",
+      "scope": "selected conclusion indexed membership",
+      "role": "obtain field"
+    },
+    {
+      "owner": "checked_rows_selected_origin",
+      "name": "indexEq",
+      "type": "(actualBuilt index).1 = edge",
+      "scope": "selected conclusion indexed membership",
+      "role": "obtain field"
+    },
+    {
+      "owner": "checked_rows_selected_origin",
+      "name": "accepted",
+      "type": "SourceEqualityMkEdgeAllocation.accepted (originals index) (children index).length = true",
+      "scope": "selected conclusion origin",
+      "role": "obtain field"
+    },
+    {
+      "owner": "checked_rows_selected_origin",
+      "name": "checked",
+      "type": "(SourceEqualityMkEdgeAllocation.check (stored index) (originals index).guard (children index).length (operations index.castSucc)).1 = .ok true",
+      "scope": "selected conclusion origin",
+      "role": "obtain field"
+    },
+    {
+      "owner": "checked_rows_selected_origin",
+      "name": "receipt",
+      "type": "SourceEqualityMkEdgeAllocation.build (symbols index) (stored index) (originals index).guard (children index) (operations index.castSucc) (inputs index) = (.ok (actualBuilt index).1, SourceEqualityMkEdgeAllocation.outputState (SourceEqualityMkEdgeAllocation.check (stored index) (originals index).guard (children index).length (operations index.castSucc)).2 (SourceEqualityMkEdgeAllocation.accepted (originals index) (children index).length), (actualBuilt index).2)",
+      "scope": "selected conclusion origin",
+      "role": "obtain field"
+    },
+    {
+      "owner": "checked_rows_selected_origin",
+      "name": "_selectedValid",
+      "type": "SourceEqualityConstraintMemoAllocation.Valid (SourceEqualityMkEdgeAllocation.outputState (SourceEqualityMkEdgeAllocation.check (stored index) (originals index).guard (children index).length (operations index.castSucc)).2 (SourceEqualityMkEdgeAllocation.accepted (originals index) (children index).length))",
+      "scope": "selected conclusion origin",
+      "role": "obtain field"
+    },
+    {
+      "owner": "checked_rows_selected_origin",
+      "name": "_selectedGrowth",
+      "type": "SourceEqualityConstraintMemoAllocation.Grows (operations index.castSucc) (SourceEqualityMkEdgeAllocation.outputState (SourceEqualityMkEdgeAllocation.check (stored index) (originals index).guard (children index).length (operations index.castSucc)).2 (SourceEqualityMkEdgeAllocation.accepted (originals index) (children index).length))",
+      "scope": "selected conclusion origin",
+      "role": "obtain field"
+    },
+    {
+      "owner": "checked_rows_selected_origin",
+      "name": "rowSymbol",
+      "type": "(actualBuilt index).1.entry.key.(symbols index) = (symbols index)",
+      "scope": "selected conclusion origin",
+      "role": "obtain field"
+    },
+    {
+      "owner": "checked_rows_selected_origin",
+      "name": "rowGuard",
+      "type": "(actualBuilt index).1.entry.key.constraint = (originals index)",
+      "scope": "selected conclusion origin",
+      "role": "obtain field"
+    },
+    {
+      "owner": "checked_rows_selected_origin",
+      "name": "selectedChildren",
+      "type": "(actualBuilt index).1.children = (children index)",
+      "scope": "selected conclusion origin",
+      "role": "obtain field"
+    },
+    {
+      "owner": "checked_rows_selected_origin",
+      "name": "_selectedNormalized",
+      "type": "InternedEdgeResidency.nodeEdges actualParent.1 = InternedConstructorTemplates.canonicalEdges (InternedConstructorTemplates.surviving actualRows)",
+      "scope": "selected conclusion origin",
+      "role": "obtain field"
+    },
+    {
+      "owner": "checked_rows_selected_origin",
+      "name": "_selectedInput",
+      "type": "(actualBuilt index).1 ∈ actualRows",
+      "scope": "selected conclusion origin",
+      "role": "obtain field"
+    },
+    {
+      "owner": "checked_rows_selected_origin",
+      "name": "_selectedLive",
+      "type": "EqualityLeafProjectionPhysical.dead (actualBuilt index).1 = false",
+      "scope": "selected conclusion origin",
+      "role": "obtain field"
+    },
+    {
+      "owner": "checked_rows_selected_origin",
+      "name": "_selectedParentKept",
+      "type": "SourceEqualityRequiredCache.Keeps (heaps (Fin.last count)) actualParent.2",
+      "scope": "selected conclusion origin",
+      "role": "obtain field"
+    },
+    {
+      "owner": "checked_rows_selected_origin",
+      "name": "_selectedTotalKept",
+      "type": "SourceEqualityRequiredCache.Keeps (inputs index) actualParent.2",
+      "scope": "selected conclusion origin",
+      "role": "obtain field"
+    },
+    {
+      "owner": "checked_rows_selected_origin",
+      "name": "_selectedReady",
+      "type": "SourceEqualityRequiredCache.Ready actualParent.2",
+      "scope": "selected conclusion origin",
+      "role": "obtain field"
+    },
+    {
+      "owner": "checked_rows_selected_origin",
+      "name": "_selectedAvailable",
+      "type": "InternedProbeProvenance.Available actualParent.2 actualParent.1",
+      "scope": "selected conclusion origin",
+      "role": "obtain field"
+    },
+    {
+      "owner": "checked_rows_selected_origin",
+      "name": "_selectedClosed",
+      "type": "actualParent.1.free = []",
+      "scope": "selected conclusion origin",
+      "role": "obtain field"
+    },
+    {
+      "owner": "checked_rows_selected_origin",
+      "name": "classes",
+      "type": "EqualityNormalize.Constraints",
+      "scope": "selected conclusion origin",
+      "role": "obtain field"
+    },
+    {
+      "owner": "checked_rows_selected_origin",
+      "name": "source",
+      "type": "SourceCompactGuards.sourceEqualities (actualBuilt index).1.entry.key.constraint = some classes",
+      "scope": "selected conclusion origin",
+      "role": "obtain field"
+    },
+    {
+      "owner": "checked_rows_selected_origin",
+      "name": "projected",
+      "type": "SourcePruningEnumerationConstraint.project (actualBuilt index).1.entry.key.constraint = some (EnumerationEquality.readClasses classes, if (SourceCompactGuards.positive (actualBuilt index).1.entry.key.constraint.guard).isSome then none else some (actualBuilt index).1.entry.key.constraint)",
+      "scope": "selected conclusion origin",
+      "role": "obtain field"
+    },
+    {
+      "owner": "checked_rows_selected_origin",
+      "name": "validTries",
+      "type": "∀ trie ∈ EnumerationEquality.readClasses classes, EqualityTrie.Valid trie",
+      "scope": "selected conclusion origin",
+      "role": "obtain field"
+    },
+    {
+      "owner": "checked_rows_selected_origin",
+      "name": "pathReadback",
+      "type": "∀ paths ∈ classes, ∀ path, path ∈ EqualityTrie.fromPathTrie (EnumerationEquality.classTrie paths) ↔ path ∈ paths",
+      "scope": "selected conclusion origin",
+      "role": "obtain field"
+    },
+    {
+      "owner": "checked_rows_selected_origin",
+      "name": "ownArity",
+      "type": "∀ start : Nat, arityAllows (actualBuilt index).1.children.length (suspendedVars start (EnumerationEquality.readClasses classes)) = true",
+      "scope": "selected conclusion origin",
+      "role": "obtain field"
+    },
+    {
+      "owner": "checked_rows_selected_origin",
+      "name": "classes",
+      "type": "EqualityNormalize.Constraints",
+      "scope": "logical nested fields of CheckedArity/SelectedRow packet",
+      "role": "scoped logical binder"
+    },
+    {
+      "owner": "checked_rows_selected_origin",
+      "name": "trie",
+      "type": "EqualityTrie.Trie",
+      "scope": "logical nested fields of CheckedArity/SelectedRow packet",
+      "role": "scoped logical binder"
+    },
+    {
+      "owner": "checked_rows_selected_origin",
+      "name": "trieMember",
+      "type": "trie ∈ EnumerationEquality.readClasses classes",
+      "scope": "logical nested fields of CheckedArity/SelectedRow packet",
+      "role": "scoped logical binder"
+    },
+    {
+      "owner": "checked_rows_selected_origin",
+      "name": "paths",
+      "type": "EqualityNormalize.Class",
+      "scope": "logical nested fields of CheckedArity/SelectedRow packet",
+      "role": "scoped logical binder"
+    },
+    {
+      "owner": "checked_rows_selected_origin",
+      "name": "classMember",
+      "type": "paths ∈ classes",
+      "scope": "logical nested fields of CheckedArity/SelectedRow packet",
+      "role": "scoped logical binder"
+    },
+    {
+      "owner": "checked_rows_selected_origin",
+      "name": "path",
+      "type": "EqualityNormalize.Path",
+      "scope": "logical nested fields of CheckedArity/SelectedRow packet",
+      "role": "scoped logical binder"
+    },
+    {
+      "owner": "checked_rows_selected_origin",
+      "name": "start",
+      "type": "Nat",
+      "scope": "logical nested fields of CheckedArity/SelectedRow packet",
+      "role": "scoped logical binder"
+    }
+  ],
+  "entry_count": 147,
+  "inline_api_argument_facts": [
+    {
+      "scope": "chain successor",
+      "type": "SourceEqualityConstraintMemoAllocation.Valid (operations index.succ)",
+      "derived_from": "stepValid rewritten by operationAfter"
+    },
+    {
+      "scope": "chain successor fresh suffix",
+      "type": "SourceEqualityRequiredCache.Keeps (actualBuilt index).2 (heaps index.succ)",
+      "derived_from": "pure_keeps at actual output, stepKept.ready and heapAfter"
+    },
+    {
+      "scope": "selected conclusion origin API",
+      "type": "(actualBuilt index).1 ∈ InternedEdgeResidency.nodeEdges actualParent.1",
+      "derived_from": "selected and indexEq"
+    },
+    {
+      "scope": "selected conclusion exact receipt",
+      "type": "SourceEqualityMkEdgeAllocation.build (symbols index) (stored index) (originals index).guard (children index) (operations index.castSucc) (inputs index) = (.ok edge, operations index.succ, heaps index.succ)",
+      "derived_from": "receipt plus operationNext/heapNext and indexEq; exact same build projections"
+    }
+  ],
+  "note": "All scopes are within the sole theorem. No additional helper, predicate, type, instance or action is introduced. Unused obtained fields remain explicitly typed."
+}

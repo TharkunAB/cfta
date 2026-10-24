@@ -1,0 +1,4 @@
+protected theorem Nat.lt_of_le_of_ne {n m : Nat} (h₁ : LE.le n m) (h₂ : Not (Eq n m)) : LT.lt n m :=
+  match Nat.lt_or_ge n m with
+  | Or.inl h₃ => h₃
+  | Or.inr h₃ => absurd (Nat.le_antisymm h₁ h₃) h₂

@@ -1,0 +1,10 @@
+def intersectValues (intersect : Value → Value → Value) (checkEmpty : Bool) (answer : Value → Bool) :
+    UVarValue → UVarValue → Except String UVarValue
+  | .unenumerated first left, .unenumerated second right =>
+      .ok (.unenumerated (match first, second with
+        | none, other => other
+        | other, none => other
+        | some first, some second => some (emptyIfProvably checkEmpty answer (intersect first second))) (left ++ right))
+  | .eliminated, _ => .error "intersectUVarValue: Unexpected UVarEliminated"
+  | _, .eliminated => .error "intersectUVarValue: Unexpected UVarEliminated"
+  | _, _ => .error "intersectUVarValue: Intersecting with enumerated value not implemented"

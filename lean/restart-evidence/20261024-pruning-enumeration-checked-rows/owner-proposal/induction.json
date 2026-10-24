@@ -1,0 +1,20 @@
+{
+  "owner": "checked_rows_selected_origin",
+  "fragment": "local-chain.lean.txt",
+  "api": "Fin.induction",
+  "induction_count": 1,
+  "IH_count": 1,
+  "motive": "∀ boundary : Fin (count + 1), SourceEqualityConstraintMemoAllocation.Valid (operations boundary) ∧ SourceEqualityRequiredCache.Keeps (heaps 0) (heaps boundary) ∧ ∀ earlier : Fin count, earlier.val < boundary.val → SourceEqualityRequiredCache.Keeps (actualBuilt earlier).2 (heaps boundary)",
+  "base_target": "SourceEqualityConstraintMemoAllocation.Valid (operations 0) ∧ SourceEqualityRequiredCache.Keeps (heaps 0) (heaps 0) ∧ ∀ earlier : Fin count, earlier.val < (0 : Fin (count + 1)).val → SourceEqualityRequiredCache.Keeps (actualBuilt earlier).2 (heaps 0)",
+  "step_index_type": "Fin count",
+  "IH_full_type": "SourceEqualityConstraintMemoAllocation.Valid (operations index.castSucc) ∧ SourceEqualityRequiredCache.Keeps (heaps 0) (heaps index.castSucc) ∧ ∀ earlier : Fin count, earlier.val < index.castSucc.val → SourceEqualityRequiredCache.Keeps (actualBuilt earlier).2 (heaps index.castSucc)",
+  "step_target": "SourceEqualityConstraintMemoAllocation.Valid (operations index.succ) ∧ SourceEqualityRequiredCache.Keeps (heaps 0) (heaps index.succ) ∧ ∀ earlier : Fin count, earlier.val < index.succ.val → SourceEqualityRequiredCache.Keeps (actualBuilt earlier).2 (heaps index.succ)",
+  "generalized_parameters": "All request and endpoint families remain fixed. The motive varies the exact boundary. No stronger all-index IH is available.",
+  "IH_uses": [
+    "ih.1 supplies actual operation Valid for this step",
+    "ih.2.1 composes genuine prefix/prework/step Keeps",
+    "ih.2.2 earlier earlierLess is used ONLY when earlier ≠ index and processed establishes earlier<index"
+  ],
+  "decrease": "Fin.induction supplies castSucc boundary IH for exactly the next succ boundary. No theorem recursion or arbitrary boundary IH call.",
+  "finite_endpoint": "Fin.last count : Fin (count+1); index.isLt is the actual strict bound for any index : Fin count. Count0 has only base and no selected row."
+}

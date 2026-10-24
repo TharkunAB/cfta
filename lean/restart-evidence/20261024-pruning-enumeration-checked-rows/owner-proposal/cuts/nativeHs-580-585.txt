@@ -1,0 +1,6 @@
+-- | Intern a set of alternatives and discard edges with empty children.
+{-# INLINEABLE mkNode #-}
+mkNode :: (Typeable symbol) => [Edge symbol] -> Node symbol
+mkNode es = case removeEmptyEdges es of
+    [] -> EmptyNode
+    es' -> internNode $ UninternedNode $ Set.toList $ Set.fromList es'

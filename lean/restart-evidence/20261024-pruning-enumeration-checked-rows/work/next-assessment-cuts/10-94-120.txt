@@ -1,0 +1,27 @@
+inductive Check [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)] {width : Nat} :
+    Bool → Value → Native width Symbol Guard → SourceCurrentEmptinessMemo.Memo →
+      Value → Native width Symbol Guard → SourceCurrentEmptinessMemo.Memo → Prop where
+  | disabled : Check false input before memo input before memo
+  | clear (absent : reaches input = false) : Check true input before memo input before memo
+  | query (reached : reaches input = true)
+      (actual : SourceCurrentEmptinessMemo.Call memo input before answer after saved) :
+      Check true input before memo (if answer then .empty else input) after saved
+
+/-- Actual pruning preserves native invariants and every earlier completed emptiness entry. -/
+theorem Check.effects [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)]
+    (formulas : SourceGuards.Formulas FullSyntax.Formula) (solver : SourceGuards.Entailment FullSyntax.Formula)
+    {input result : Value} {before after : Native width Symbol Guard} {memo saved : SourceCurrentEmptinessMemo.Memo}
+    (check : Check enabled input before memo result after saved) (ready : IdleReady top conjoin before)
+    (fields : SourceEqualityNativeDemandFieldHeap.Heap before.machine.heap)
+    (available : Available before.machine.heap input)
+    (correct : SourceCurrentEmptinessMemo.Correct formulas solver before.machine.heap memo) :
+    IdleReady top conjoin after ∧ Keeps before.machine.heap after.machine.heap ∧
+      SourceEqualityNativeDemandFieldHeap.Heap after.machine.heap ∧
+      SourceCurrentEmptinessMemo.Correct formulas solver after.machine.heap saved ∧
+      SourceCurrentEmptinessMemo.Extends memo saved := by
+  cases check with
+  | disabled => exact ⟨ready, pure_keeps _ ready.semantic.ready, fields, correct, fun _ _ found => found⟩
+  | clear => exact ⟨ready, pure_keeps _ ready.semantic.ready, fields, correct, fun _ _ found => found⟩
+  | query _ actual =>
+      have checked := SourceCurrentEmptinessMemo.verified formulas solver actual ready fields available correct
+      exact ⟨checked.1, checked.2.1, checked.2.2.1, checked.2.2.2.1, checked.2.2.2.2.2⟩

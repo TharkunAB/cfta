@@ -1,0 +1,46 @@
+{
+  "cases": [
+    {
+      "owner": "checked_rows_selected_origin",
+      "scope": "rowPackets child closure proof",
+      "fragment": "case-keep.lean.txt",
+      "scrutinee": "SourceEqualityMkEdgeAllocation.accepted (originals index) (children index).length",
+      "type": "Bool",
+      "equation_name": "keepEq",
+      "branches": [
+        {
+          "constructor": "false",
+          "binders": [],
+          "equation_type": "SourceEqualityMkEdgeAllocation.accepted (originals index) (children index).length = false",
+          "specialized_rowChildren": "(actualBuilt index).1.children = ([.empty] : List (InternedConstructorTemplates.Value Symbol Constraint))"
+        },
+        {
+          "constructor": "true",
+          "binders": [],
+          "equation_type": "SourceEqualityMkEdgeAllocation.accepted (originals index) (children index).length = true",
+          "specialized_rowChildren": "(actualBuilt index).1.children = children index"
+        }
+      ]
+    }
+  ],
+  "conditions": [
+    {
+      "owner": "checked_rows_selected_origin",
+      "scope": "chain successor suffix",
+      "fragment": "condition-earlier.lean.txt",
+      "proposition": "earlier = index",
+      "positive_type": "earlier = index",
+      "negative_type": "¬ earlier = index",
+      "earlierLess_type": "earlier.val < index.val",
+      "lambda_binder": {
+        "name": "equal",
+        "type": "earlier.val = index.val"
+      },
+      "route": "Nat.lt_of_le_of_ne (Nat.le_of_lt_succ processed) with the negative Fin equality via Fin.ext equal"
+    }
+  ],
+  "case_family_count": 1,
+  "case_specialization_count": 2,
+  "by_cases_count": 1,
+  "new_constructor_pattern_binders": 0
+}

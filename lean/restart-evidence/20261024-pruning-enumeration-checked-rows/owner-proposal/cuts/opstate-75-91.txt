@@ -1,0 +1,17 @@
+structure Grows (before after : State) : Prop where
+  constraints : Cache.Steps before.constraints after.constraints
+  combinations : Cache.Extends before.combinations after.combinations
+  descents : Cache.Extends before.descents after.descents
+
+/-- An unchanged operation state needs no allocation event. -/
+theorem grows_refl (state : State) : Grows state state :=
+  ⟨.refl _, Cache.extends_refl _, Cache.extends_refl _⟩
+
+/-- Allocation receipts retain every earlier canonical constraint value. -/
+theorem Grows.constraint_growth (growth : Grows before after) :
+    Cache.Extends before.constraints.table after.constraints.table := Cache.steps_table_extends growth.constraints
+
+/-- Canonical storage growth retains every completed combination receipt. -/
+theorem CombineGood.grows (good : CombineGood before key cell)
+    (growth : Cache.Extends before.table after.table) : CombineGood after key cell :=
+  ⟨good.first_ready.grows growth, good.second_ready.grows growth, good.result_ready.grows growth,

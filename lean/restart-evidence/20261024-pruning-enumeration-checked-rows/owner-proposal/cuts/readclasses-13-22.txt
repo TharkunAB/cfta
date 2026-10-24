@@ -1,0 +1,10 @@
+namespace MicroCFTA.EnumerationEquality
+open Language EnumerationCorrectness EqualityNormalize
+
+/-- Read a canonical path class through the source trie constructor. -/
+def classTrie (paths : Class) : EqualityTrie.Trie :=
+  (EqualityTrie.toPathTrie paths.eraseDups).getD .empty
+
+/-- The source stores one trie for each normalized equality class. -/
+def readClasses (classes : Constraints) : List EqualityTrie.Trie := classes.map classTrie
+
