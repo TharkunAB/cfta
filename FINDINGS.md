@@ -52,13 +52,18 @@ and line 510 define process-global interning caches and identity supplies.
 Interned/Cache.hs:169 and Interned/Memo.hs:91 use shared mutable tables.
 Rejected branches retain evaluated native effects too.
 
-The next native formal wrapper must restore the branch-local enumeration
-cache while accounting for shared native growth and memo effects. The lazy
-result list and cached result thunks leave forcing order explicit. Independent
-runs from one complete caller/query state do not reproduce that global history.
-This is a correspondence boundary. No Haskell runtime defect or repair is
-identified. External action: no patch is proposed for this source observation.
-Details: lean/notes-current-pruning-enumeration-captured-edge.md.
+The native formal alternative worker now restores the branch-local enumeration
+cache and threads the reached caller and queries through evaluated alternatives.
+Its admitted theorem derives common finite bounds and keeps a cache certificate
+for each receipt at its own reached heap. Supported annotations complete the
+ordered scan, including valid rejection receipts.
+
+The worker chooses serial forcing. The lazy result list and cached result thunks
+leave exact agreement with arbitrary Haskell demand open. Independent runs from
+one complete caller/query state do not reproduce that shared global history.
+No Haskell runtime defect or repair is identified. External action: no patch is
+proposed for this source observation.
+Details: lean/notes-current-pruning-enumeration-native-alternatives.md.
 
 ### Specftacular parallel completion follow-ups
 
@@ -180,6 +185,29 @@ TH/Generic extraction, valid-position build/read and source codec laws stay open
 
 
 
+
+## Ordered native alternatives with enumeration rollback
+
+Worker and transport: `a3b400c4f2cc2146368d37e5f80ec4d2152c7637`.
+Admitted completion: `e8bcb10c65090595572c6edc930ad52a20f624a6`.
+The goal stays ACTIVE.
+
+The new serial worker restores the identical enumeration cache for each
+alternative and threads the reached native caller and queries. Each receipt
+keeps its own branch cache. Valid child rejection continues from the original
+safe cache while retaining its native effects. Conditional numeric ranges
+now derive common sufficient finite bounds. Unsupported preparation stops
+explicitly. Supported annotations derive completion of the whole ordered list,
+including valid rejection receipts. There is no merged enumeration cache.
+Every processed receipt retains its own reached-heap cache certificate.
+
+All three strict modules, installed readback and Audit pass. The audit checks
+76695 theorem dependencies. Haskell runtime and H6 are unchanged.
+H6 remains the strongest end-to-end result. Next: actual entry composition,
+global pending-reference and fragment-dependency history, then successful
+receipt extraction and whole-driver language semantics. This worker chooses
+serial forcing; arbitrary Haskell demand and full raw-stream erasure stay open.
+Details: `lean/notes-current-pruning-enumeration-native-alternatives.md`.
 
 ## Native captured-slot edge finalization
 

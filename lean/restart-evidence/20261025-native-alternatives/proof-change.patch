@@ -1,0 +1,389 @@
+diff --git a/lean/MicroCFTA/Audit.lean b/lean/MicroCFTA/Audit.lean
+index cbf2f6a30..d5022b02b 100644
+--- a/lean/MicroCFTA/Audit.lean
++++ b/lean/MicroCFTA/Audit.lean
+@@ -1,3 +1,4 @@
++import MicroCFTA.SourcePruningEnumerationNativeBranchCompletion
+ import MicroCFTA.SourcePruningEnumerationCapturedEdge
+ import MicroCFTA.SourcePruningEnumerationSelectedEdge
+ import MicroCFTA.SourcePruningEnumerationTraversalCompletion
+diff --git a/lean/MicroCFTA/SourcePruningEnumerationNativeBranchCompletion.lean b/lean/MicroCFTA/SourcePruningEnumerationNativeBranchCompletion.lean
+new file mode 100644
+index 000000000..ac20185d4
+--- /dev/null
++++ b/lean/MicroCFTA/SourcePruningEnumerationNativeBranchCompletion.lean
+@@ -0,0 +1,210 @@
++import MicroCFTA.SourcePruningEnumerationNativeBranches
++import MicroCFTA.SourcePruningEnumerationNativeGrowth
++
++namespace MicroCFTA.SourcePruningEnumerationNativeBranchCompletion
++open EnumerationState EnumerationCorrectness EnumerationSchedule EnumerationDependencies
++open InternedConstructorTemplates InternedProbeProvenance
++open SourcePruningEnumerationNodes SourcePruningEnumerationObservation
++open SourceCurrentAllocatedNativeInventoryState (Inventory)
++open SourceCurrentAllocatedPartialInvariant (Context Post)
++open SourcePruningEnumerationNativeBranches (advance)
++local notation "Symbol" => SourcePruningTemplates.Symbol
++local notation "Constraint" => SourceSymbolicIndex.Constraint FullSyntax.Formula
++local notation "Node" => InternedConstructorTemplates.Value Symbol Constraint
++local notation "Caller" => SourceCurrentAllocatedPartialState.State
++local notation "Memos" => EndpointMemoGateTrace.Memos
++local notation "Queries" => SourceEndpointMemo.Memos
++local notation "Cached" => EnumerationExpandableIndex.Cached Symbol Constraint
++local notation "Receipt" => SourcePruningEnumerationSelectedEdge.Result
++local notation "Result" => SourcePruningEnumerationNativeBranches.Result
++variable {width : Nat}
++
++/-- Each branch retains its own native cache invariants at its reached caller. -/
++def CacheValid (caller : Caller width) (after : Cached) : Prop :=
++  ∃ roots, Roots after.core.representatives roots ∧ StorageValid after.core ∧
++    PendingRealized caller.checked.native.machine.heap after.core ∧
++    EnumerationCanonicalWaiting.Correct roots after.core.values after.waiting ∧
++    ∀ slot, SourcePruningEnumerationNativeIndex.candidate caller.checked.native.machine.heap
++      ((after.core.values[slot]?).getD .eliminated) = some (after.expandable slot)
++
++/-- Successful receipts retain safe finalization; valid rejection retains its actual indexed cache. -/
++def Admitted (target : Nat) : Receipt width → Prop
++  | .complete fragment caller _ after =>
++      CacheValid caller after ∧ Safe after.core ∧ FragmentBound after.core.counter fragment ∧
++      after.core.values[target]? = some (.enumerated fragment) ∧ after.core.expansionAncestry = [] ∧
++      IsRoot after.core.representatives target
++  | .rejected caller _ after => CacheValid caller after
++  | .stopped _ (.ok (some []), caller, _, _outer, _waiting) (some after) => CacheValid caller after
++  | .unhandled => True
++  | _ => False
++
++variable [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Constraint)] [DecidableEq Node]
++
++/-- Numeric suffix admission follows actual continuations with the original enumeration cache. -/
++def Ranges (checkEmpty : Bool) (target : Nat) (scs : List Suspended) (before : Cached) :
++    List (EdgeValue Symbol Constraint) → Caller width → Queries → Prop
++  | [], _, _ => True
++  | edge :: rest, caller, queries =>
++      SourcePruningEnumerationSelectedEdge.Ranges checkEmpty scs edge caller before queries ∧
++      ∀ r n p h k receipt afterCaller saved,
++        SourcePruningEnumerationCapturedEdge.run checkEmpty r n p h k target scs edge caller before queries =
++          some receipt →
++        advance receipt = some (afterCaller, saved) → Ranges checkEmpty target scs before rest afterCaller saved
++
++private theorem head_complete
++    (formulas : SourceGuards.Formulas FullSyntax.Formula)
++    (solver : SourceGuards.Entailment FullSyntax.Formula)
++    (inventory : Inventory) (caller : Caller width) (before : Cached) (checkEmpty : Bool)
++    (uv handle : Nat) (scs : List Suspended)
++    (parentEntry : Cache.Interned InternedBinderProtocol.NodeKey)
++    (edges : List (EdgeValue Symbol Constraint)) (depth : Nat) (free : List InternedBinderProtocol.Reference)
++    (edge : EdgeValue Symbol Constraint) (roots : Nat → Nat) (memos : Memos)
++    (initial : Context formulas solver inventory caller memos)
++    (ready : EnumerationDriver.Ready uv before.core)
++    (stored : before.core.values[uv]? = some (.unenumerated (some handle) scs))
++    (decoded : lookupNode caller.checked.native.machine.heap handle = some (.node parentEntry edges depth free))
++    (realized : PendingRealized caller.checked.native.machine.heap before.core) (selected : edge ∈ edges)
++    (paths : Roots before.core.representatives roots)
++    (counts : EnumerationCanonicalWaiting.Correct roots before.core.values before.waiting)
++    (flags : ∀ slot, SourcePruningEnumerationNativeIndex.candidate caller.checked.native.machine.heap
++      ((before.core.values[slot]?).getD .eliminated) = some (before.expandable slot))
++    (pending : InputsPending before.core scs)
++    (ranges : SourcePruningEnumerationSelectedEdge.Ranges checkEmpty scs edge caller before memos.query) :
++    ∃ (r n p h k : Nat) (receipt : Receipt width) (afterCaller : Caller width) (saved : Queries)
++      (final : Memos) (next : Inventory),
++      (∀ er en P H ek, p ≤ P → h ≤ H →
++        SourcePruningEnumerationCapturedEdge.run checkEmpty (r + er) (n + en) P H (k + ek)
++          uv scs edge caller before memos.query = some receipt) ∧
++      Post formulas solver next caller afterCaller final ∧ final.query = saved ∧ Admitted uv receipt ∧
++      (advance receipt = some (afterCaller, saved) ∨
++        receipt = .unhandled ∧ arityAllows edge.children.length scs = true ∧
++          SourcePruningEnumerationConstraint.project edge.entry.key.constraint = none) := by
++  by_cases allowed : arityAllows edge.children.length scs = true
++  · cases projected : SourcePruningEnumerationConstraint.project edge.entry.key.constraint with
++    | none =>
++        refine ⟨0, 0, 0, 0, 0, .unhandled, caller, memos.query, memos, inventory,
++          ?_, Post.refl initial, rfl, trivial, .inr ⟨rfl, allowed, rfl⟩⟩
++        intro er en P H ek _largeP _largeH
++        rw [SourcePruningEnumerationCapturedEdge.run,
++          SourcePruningEnumerationSelectedEdge.unsupported checkEmpty _ _ _ _ _ scs edge caller before memos.query
++            allowed projected]
++    | some pair =>
++        rcases pair with ⟨tries, residual⟩
++        obtain ⟨r, n, p, h, k, afterCaller, after, saved, final, next, afterRoots, result,
++          stable, post, querySame, _growth, afterPaths, storage, afterRealized, afterCounts,
++          afterFlags, _origin, _retained, _protects, shape⟩ :=
++          SourcePruningEnumerationCapturedEdge.complete formulas solver inventory caller before checkEmpty
++            uv handle scs parentEntry edges depth free edge roots memos initial ready stored decoded realized
++            selected paths counts flags pending allowed tries residual projected ranges
++        have valid : CacheValid afterCaller after :=
++          ⟨afterRoots, afterPaths, storage, afterRealized, afterCounts, afterFlags⟩
++        rcases shape with ⟨fragment, completed, safe, bounded, written, ancestry, root⟩ |
++          ⟨fragments, outer, waiting, stopped⟩
++        · subst result
++          exact ⟨r, n, p, h, k, _, afterCaller, saved, final, next, stable, post, querySame,
++            ⟨valid, safe, bounded, written, ancestry, root⟩, .inl rfl⟩
++        · subst result
++          exact ⟨r, n, p, h, k, _, afterCaller, saved, final, next, stable, post, querySame, valid, .inl rfl⟩
++  · have rejected : arityAllows edge.children.length scs = false := by
++      cases value : arityAllows edge.children.length scs with
++      | false => rfl
++      | true => exact (allowed value).elim
++    refine ⟨0, 0, 0, 0, 0, .rejected caller memos.query before, caller, memos.query, memos, inventory,
++      ?_, Post.refl initial, rfl, ⟨roots, paths, ready.safe.1, realized, counts, flags⟩, .inl rfl⟩
++    intro er en P H ek _largeP _largeH
++    rw [SourcePruningEnumerationCapturedEdge.run,
++      SourcePruningEnumerationSelectedEdge.arity_rejected checkEmpty _ _ _ _ _ scs edge caller before memos.query rejected]
++
++/-- Genuine alternatives derive one serial scan, stopping only at unsupported preparation. -/
++theorem complete
++    (formulas : SourceGuards.Formulas FullSyntax.Formula)
++    (solver : SourceGuards.Entailment FullSyntax.Formula)
++    (inventory : Inventory) (caller : Caller width) (before : Cached) (checkEmpty : Bool)
++    (uv handle : Nat) (scs : List Suspended)
++    (parentEntry : Cache.Interned InternedBinderProtocol.NodeKey)
++    (storedEdges selectedEdges : List (EdgeValue Symbol Constraint))
++    (depth : Nat) (free : List InternedBinderProtocol.Reference) (roots : Nat → Nat) (memos : Memos)
++    (initial : Context formulas solver inventory caller memos)
++    (ready : EnumerationDriver.Ready uv before.core)
++    (stored : before.core.values[uv]? = some (.unenumerated (some handle) scs))
++    (decoded : lookupNode caller.checked.native.machine.heap handle = some (.node parentEntry storedEdges depth free))
++    (realized : PendingRealized caller.checked.native.machine.heap before.core)
++    (selected : ∀ edge ∈ selectedEdges, edge ∈ storedEdges)
++    (paths : Roots before.core.representatives roots)
++    (counts : EnumerationCanonicalWaiting.Correct roots before.core.values before.waiting)
++    (flags : ∀ slot, SourcePruningEnumerationNativeIndex.candidate caller.checked.native.machine.heap
++      ((before.core.values[slot]?).getD .eliminated) = some (before.expandable slot))
++    (pending : InputsPending before.core scs)
++    (ranges : Ranges checkEmpty uv scs before selectedEdges caller memos.query) :
++    ∃ (r n p h k : Nat) (processed : List (Receipt width)) (afterCaller : Caller width) (saved : Queries)
++      (final : Memos) (next : Inventory) (result : Result width),
++      (∀ er en P H ek, p ≤ P → h ≤ H →
++        SourcePruningEnumerationNativeBranches.run checkEmpty (r + er) (n + en) P H (k + ek)
++          uv scs before selectedEdges caller memos.query = result) ∧
++      Post formulas solver next caller afterCaller final ∧ final.query = saved ∧
++      (∀ receipt ∈ processed, Admitted uv receipt) ∧
++      (result = .complete processed afterCaller saved ∨ result = .stopped processed (some .unhandled)) ∧
++      ((∀ edge ∈ selectedEdges, arityAllows edge.children.length scs = true →
++          SourcePruningEnumerationConstraint.project edge.entry.key.constraint ≠ none) →
++        result = .complete processed afterCaller saved) := by
++  induction selectedEdges generalizing inventory caller memos with
++  | nil =>
++      exact ⟨0, 0, 0, 0, 0, [], caller, memos.query, memos, inventory, .complete [] caller memos.query,
++        fun _ _ _ _ _ _ _ => rfl, Post.refl initial, rfl, by simp, .inl rfl, fun _ => rfl⟩
++  | cons edge rest ih =>
++      obtain ⟨r, n, p, h, k, receipt, middleCaller, middleQueries, middleMemos, middleInventory,
++        headRun, headPost, headQueries, admitted, shape⟩ :=
++        head_complete formulas solver inventory caller before checkEmpty uv handle scs parentEntry storedEdges depth free
++          edge roots memos initial ready stored decoded realized (selected edge (by simp)) paths counts flags pending ranges.1
++      rcases shape with continued | ⟨unhandled, allowed, projected⟩
++      · have kept := headPost.effects.keeps
++        have middleRealized : PendingRealized middleCaller.checked.native.machine.heap before.core :=
++          realized_preserved _ _ before.core before.core realized (EnumerationCompressionFrame.Frame.refl _) kept
++        have middleFlags := SourcePruningEnumerationNativeGrowth.flags _ _ kept before flags
++        have tailRanges : Ranges checkEmpty uv scs before rest middleCaller middleMemos.query := by
++          rw [headQueries]
++          apply ranges.2 r n p h k receipt middleCaller middleQueries
++          · simpa only [Nat.add_zero] using headRun 0 0 p h 0 (Nat.le_refl _) (Nat.le_refl _)
++          · exact continued
++        obtain ⟨tr, tn, tp, th, tk, processed, afterCaller, saved, final, next, tailResult,
++          tailRun, tailPost, querySame, admittedTail, tailShape, tailSupported⟩ :=
++          ih middleInventory middleCaller middleMemos headPost.context
++            (lookupNode_keeps _ _ kept handle _ decoded) middleRealized
++            (fun chosen member => selected chosen (List.mem_cons_of_mem _ member)) middleFlags tailRanges
++        let result : Result width := match (generalizing := false) tailResult with
++          | .complete receipts afterCaller saved => .complete (receipt :: receipts) afterCaller saved
++          | .stopped receipts current => .stopped (receipt :: receipts) current
++        refine ⟨r + tr, n + tn, max p tp, max h th, k + tk, receipt :: processed,
++          afterCaller, saved, final, next, result, ?_, headPost.trans tailPost, querySame, ?_, ?_, ?_⟩
++        · intro er en P H ek largeP largeH
++          have first := headRun (tr + er) (tn + en) P H (tk + ek)
++            (Nat.le_trans (Nat.le_max_left _ _) largeP) (Nat.le_trans (Nat.le_max_left _ _) largeH)
++          have last := tailRun (r + er) (n + en) P H (k + ek)
++            (Nat.le_trans (Nat.le_max_right _ _) largeP) (Nat.le_trans (Nat.le_max_right _ _) largeH)
++          have later : SourcePruningEnumerationNativeBranches.run checkEmpty (r + tr + er) (n + tn + en) P H
++              (k + tk + ek) uv scs before rest middleCaller middleMemos.query = tailResult := by
++            simpa only [Nat.add_assoc, Nat.add_left_comm, Nat.add_comm] using last
++          rw [headQueries] at later
++          simp only [Nat.add_assoc] at later
++          simp only [SourcePruningEnumerationNativeBranches.run, Nat.add_assoc, first, continued, later]
++          rfl
++        · intro current member
++          rcases List.mem_cons.mp member with same | member
++          · simpa only [same] using admitted
++          · exact admittedTail current member
++        · rcases tailShape with completed | stopped
++          · exact .inl (by simp only [result, completed])
++          · exact .inr (by simp only [result, stopped])
++        · intro supported
++          have finished := tailSupported (fun chosen member fits =>
++            supported chosen (List.mem_cons_of_mem _ member) fits)
++          simp only [result, finished]
++      · subst receipt
++        refine ⟨r, n, p, h, k, [], middleCaller, middleQueries, middleMemos, middleInventory,
++          .stopped [] (some .unhandled), ?_, headPost, headQueries, by simp, .inr rfl, ?_⟩
++        · intro er en P H ek largeP largeH
++          simp only [SourcePruningEnumerationNativeBranches.run, headRun er en P H ek largeP largeH, advance]
++        · intro supported
++          exact (supported edge (by simp) allowed projected).elim
++
++end MicroCFTA.SourcePruningEnumerationNativeBranchCompletion
+diff --git a/lean/MicroCFTA/SourcePruningEnumerationNativeBranches.lean b/lean/MicroCFTA/SourcePruningEnumerationNativeBranches.lean
+new file mode 100644
+index 000000000..382a9288a
+--- /dev/null
++++ b/lean/MicroCFTA/SourcePruningEnumerationNativeBranches.lean
+@@ -0,0 +1,116 @@
++import MicroCFTA.SourcePruningEnumerationCapturedEdge
++
++namespace MicroCFTA.SourcePruningEnumerationNativeBranches
++open EnumerationState InternedConstructorTemplates
++local notation "Symbol" => SourcePruningTemplates.Symbol
++local notation "Constraint" => SourceSymbolicIndex.Constraint FullSyntax.Formula
++local notation "Node" => InternedConstructorTemplates.Value Symbol Constraint
++local notation "Caller" => SourceCurrentAllocatedPartialState.State
++local notation "Queries" => SourceEndpointMemo.Memos
++local notation "Cached" => EnumerationExpandableIndex.Cached Symbol Constraint
++local notation "Receipt" => SourcePruningEnumerationSelectedEdge.Result
++variable {width : Nat}
++
++/-- Complete the ordered alternatives or retain the first unsupported receipt. -/
++inductive Result (width : Nat) where
++  /-- Every alternative has a continuable result, including valid rejections. -/
++  | complete (processed : List (Receipt width)) (caller : Caller width) (queries : Queries)
++  /-- Retain processed alternatives and the exact first noncontinuable result. -/
++  | stopped (processed : List (Receipt width)) (current : Option (Receipt width))
++
++/-- Retain native effects after a completed edge, arity rejection or valid child rejection. -/
++def advance : Receipt width → Option (Caller width × Queries)
++  | .complete _ caller queries _ => some (caller, queries)
++  | .rejected caller queries _ => some (caller, queries)
++  | .stopped _ (.ok (some []), caller, queries, _outer, _waiting) (some _) => some (caller, queries)
++  | _ => none
++
++variable [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Constraint)] [DecidableEq Node]
++
++/-- Restore the captured enumeration input while retaining reached native caller and queries. -/
++noncomputable def run (checkEmpty : Bool) (r n p h k target : Nat) (scs : List Suspended)
++    (before : Cached) : List (EdgeValue Symbol Constraint) → Caller width → Queries → Result width
++  | [], caller, queries => .complete [] caller queries
++  | edge :: rest, caller, queries =>
++      match SourcePruningEnumerationCapturedEdge.run checkEmpty r n p h k target scs edge caller before queries with
++      | none => .stopped [] none
++      | some receipt =>
++          match advance receipt with
++          | none => .stopped [] (some receipt)
++          | some (middleCaller, middleQueries) =>
++              match run checkEmpty r n p h k target scs before rest middleCaller middleQueries with
++              | .complete processed afterCaller saved => .complete (receipt :: processed) afterCaller saved
++              | .stopped processed current => .stopped (receipt :: processed) current
++
++/-- A missing captured-edge result stops before the suffix without inventing an endpoint. -/
++theorem uncached (checkEmpty : Bool) (r n p h k target : Nat) (scs : List Suspended)
++    (before : Cached) (edge : EdgeValue Symbol Constraint) (rest : List (EdgeValue Symbol Constraint))
++    (caller : Caller width) (queries : Queries)
++    (missing : SourcePruningEnumerationCapturedEdge.run checkEmpty r n p h k target scs edge caller before queries = none) :
++    run checkEmpty r n p h k target scs before (edge :: rest) caller queries = .stopped [] none := by
++  rw [run, missing]
++
++/-- A noncontinuable receipt remains exact and does not run a later alternative. -/
++theorem not_continued (checkEmpty : Bool) (r n p h k target : Nat) (scs : List Suspended)
++    (before : Cached) (edge : EdgeValue Symbol Constraint) (rest : List (EdgeValue Symbol Constraint))
++    (caller : Caller width) (queries : Queries) (receipt : Receipt width)
++    (observed : SourcePruningEnumerationCapturedEdge.run checkEmpty r n p h k target scs edge caller before queries =
++      some receipt) (halted : advance receipt = none) :
++    run checkEmpty r n p h k target scs before (edge :: rest) caller queries = .stopped [] (some receipt) := by
++  simp only [run, observed, halted]
++
++/-- Each ordered receipt records a call at the same captured enumeration input. -/
++inductive Trace (checkEmpty : Bool) (r n p h k target : Nat) (scs : List Suspended) (before : Cached) :
++    List (EdgeValue Symbol Constraint) → Caller width → Queries →
++      List (Receipt width) → Caller width → Queries → Prop
++  /-- No alternative changes the current native endpoint. -/
++  | nil (caller : Caller width) (queries : Queries) :
++      Trace checkEmpty r n p h k target scs before [] caller queries [] caller queries
++  /-- The head retains its exact receipt and supplies only the next native endpoint. -/
++  | cons {edge : EdgeValue Symbol Constraint} {rest : List (EdgeValue Symbol Constraint)}
++      {caller middleCaller afterCaller : Caller width} {queries middleQueries saved : Queries}
++      {receipt : Receipt width} {processed : List (Receipt width)}
++      (head : SourcePruningEnumerationCapturedEdge.run checkEmpty r n p h k target scs edge caller before queries =
++        some receipt)
++      (continued : advance receipt = some (middleCaller, middleQueries))
++      (tail : Trace checkEmpty r n p h k target scs before rest middleCaller middleQueries
++        processed afterCaller saved) :
++      Trace checkEmpty r n p h k target scs before (edge :: rest) caller queries
++        (receipt :: processed) afterCaller saved
++
++/-- Every actual ordered trace completes through the same worker. -/
++theorem trace_complete
++    (trace : Trace (width := width) checkEmpty r n p h k target scs before edges caller queries
++      processed afterCaller saved) :
++    run checkEmpty r n p h k target scs before edges caller queries = .complete processed afterCaller saved := by
++  induction trace with
++  | nil => rfl
++  | cons head continued _tail ih => simp only [run, head, continued, ih]
++
++/-- Every completed run retains the actual caller-threaded trace and every branch cache. -/
++theorem complete_trace (checkEmpty : Bool) (r n p h k target : Nat) (scs : List Suspended)
++    (before : Cached) (edges : List (EdgeValue Symbol Constraint))
++    (caller afterCaller : Caller width) (queries saved : Queries) (processed : List (Receipt width))
++    (completed : run checkEmpty r n p h k target scs before edges caller queries =
++      .complete processed afterCaller saved) :
++    Trace checkEmpty r n p h k target scs before edges caller queries processed afterCaller saved := by
++  induction edges generalizing caller queries processed with
++  | nil =>
++      cases completed
++      exact .nil _ _
++  | cons edge rest ih =>
++      cases head : SourcePruningEnumerationCapturedEdge.run checkEmpty r n p h k target scs edge caller before queries with
++      | none => simp only [run, head] at completed; cases completed
++      | some receipt =>
++          cases continued : advance receipt with
++          | none => simp only [run, head, continued] at completed; cases completed
++          | some endpoint =>
++              rcases endpoint with ⟨middleCaller, middleQueries⟩
++              cases tail : run checkEmpty r n p h k target scs before rest middleCaller middleQueries with
++              | stopped processedTail current => simp only [run, head, continued, tail] at completed; cases completed
++              | complete processedTail finalCaller finalQueries =>
++                  simp only [run, head, continued, tail, Result.complete.injEq] at completed
++                  obtain ⟨rfl, rfl, rfl⟩ := completed
++                  exact .cons head continued (ih middleCaller middleQueries processedTail tail)
++
++end MicroCFTA.SourcePruningEnumerationNativeBranches
+diff --git a/lean/MicroCFTA/SourcePruningEnumerationNativeGrowth.lean b/lean/MicroCFTA/SourcePruningEnumerationNativeGrowth.lean
+new file mode 100644
+index 000000000..15d356182
+--- /dev/null
++++ b/lean/MicroCFTA/SourcePruningEnumerationNativeGrowth.lean
+@@ -0,0 +1,36 @@
++import MicroCFTA.SourcePruningEnumerationNativeIndex
++import MicroCFTA.SourcePruningEnumerationObservation
++
++namespace MicroCFTA.SourcePruningEnumerationNativeGrowth
++open EnumerationState SourcePruningEnumerationNodes
++local notation "Symbol" => SourcePruningTemplates.Symbol
++variable {EnumGuard NativeGuard : Type}
++
++/-- Native growth retains every valid flag of an unchanged enumeration cache. -/
++theorem flags
++    (heap nextHeap : InternedConstructorTemplates.State Symbol NativeGuard)
++    (kept : SourceEqualityRequiredCache.Keeps heap nextHeap)
++    (before : EnumerationExpandableIndex.Cached Symbol EnumGuard)
++    (checked : ∀ slot, SourcePruningEnumerationNativeIndex.candidate heap
++      ((before.core.values[slot]?).getD .eliminated) = some (before.expandable slot)) :
++    ∀ slot, SourcePruningEnumerationNativeIndex.candidate nextHeap
++      ((before.core.values[slot]?).getD .eliminated) = some (before.expandable slot) := by
++  intro slot
++  specialize checked slot
++  generalize valueSame : ((before.core.values[slot]?).getD .eliminated) = value at checked ⊢
++  clear valueSame
++  cases value with
++  | enumerated _ | eliminated => exact checked
++  | unenumerated node scs =>
++      cases node with
++      | none => exact checked
++      | some handle =>
++          cases decoded : lookupNode heap handle with
++          | none =>
++              simp only [SourcePruningEnumerationNativeIndex.candidate, decoded, Option.map_none] at checked
++              cases checked
++          | some value =>
++              simpa only [SourcePruningEnumerationNativeIndex.candidate, decoded,
++                lookupNode_keeps heap nextHeap kept handle value decoded, Option.map_some] using checked
++
++end MicroCFTA.SourcePruningEnumerationNativeGrowth

@@ -1,0 +1,37 @@
+/tmp/mcfta-native-alternatives-20261025/native-branches-strict-1/MicroCFTA/SourcePruningEnumerationNativeBranches.lean:92:14: error: Alternative `complete` has not been provided
+/tmp/mcfta-native-alternatives-20261025/native-branches-strict-1/MicroCFTA/SourcePruningEnumerationNativeBranches.lean:90:26: error: unsolved goals
+case cons.some.some.stopped
+width : Nat
+inst✝² : DecidableEq Symbol
+inst✝¹ : DecidableEq (EdgeKey Symbol Constraint)
+inst✝ : DecidableEq Node
+checkEmpty : Bool
+r n p h k target : Nat
+scs : List Suspended
+before : Cached
+afterCaller : Caller width
+saved : Queries
+edge : EdgeValue Symbol Constraint
+rest : List (EdgeValue Symbol Constraint)
+ih :
+  ∀ (caller : Caller width) (queries : Queries) (processed : List (Receipt width)),
+    run checkEmpty r n p h k target scs before rest caller queries = Result.complete processed afterCaller saved →
+      Trace checkEmpty r n p h k target scs before rest caller queries processed afterCaller saved
+caller : Caller width
+queries : Queries
+processed : List (Receipt width)
+completed :
+  run checkEmpty r n p h k target scs before (edge :: rest) caller queries = Result.complete processed afterCaller saved
+receipt : Receipt width
+head :
+  SourcePruningEnumerationCapturedEdge.run checkEmpty r n p h k target scs edge caller before queries = some receipt
+middleCaller : Caller width
+middleQueries : Queries
+continued : advance receipt = some (middleCaller, middleQueries)
+processed✝ : List (Receipt width)
+current✝ : Option (Receipt width)
+tail : run checkEmpty r n p h k target scs before rest middleCaller middleQueries = Result.stopped processed✝ current✝
+⊢ Trace checkEmpty r n p h k target scs before (edge :: rest) caller queries processed afterCaller saved
+/tmp/mcfta-native-alternatives-20261025/native-branches-strict-1/MicroCFTA/SourcePruningEnumerationNativeBranches.lean:93:30: error: unexpected identifier; expected ':'
+/tmp/mcfta-native-alternatives-20261025/native-branches-strict-1/MicroCFTA/SourcePruningEnumerationNativeBranches.lean:94:31: error: unexpected identifier; expected ':'
+/tmp/mcfta-native-alternatives-20261025/native-branches-strict-1/MicroCFTA/SourcePruningEnumerationNativeBranches.lean:97:82: error: unexpected identifier; expected ':'
