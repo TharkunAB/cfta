@@ -383,32 +383,33 @@ worklist.
 -}
 analyseFrom ::
     (Eq d) => (f -> [d] -> d) -> (d -> d -> d) -> EGraph s f -> IntMap.IntMap d -> [Int] -> (IntMap.IntMap d, IntSet.IntSet)
-analyseFrom make join g = go IntSet.empty
+analyseFrom make join g known0 todo = go IntSet.empty known0 (IntSet.fromList [r | i <- todo, let ClassId r = find g (ClassId i)])
   where
-    go changed known [] = (known, changed)
-    go changed known (i0 : rest) = case IntMap.lookup i (classes g) of
-        Nothing -> go changed known rest
-        Just e ->
-            let values =
-                    [ make f ds
-                    | ENode _ f cs <- HashSet.toList (classNodes e)
-                    , Just ds <- [traverse (\c -> let ClassId j = find g c in IntMap.lookup j known) cs]
-                    ]
-             in case values of
-                    [] -> go changed known rest
-                    v : vs ->
-                        let new = foldl' join v vs
-                            old = IntMap.lookup i known
-                            new' = maybe new (join new) old
-                         in if Just new' == old
-                                then go changed known rest
-                                else
-                                    go
-                                        (IntSet.insert i changed)
-                                        (IntMap.insert i new' known)
-                                        ([j | (_, owner) <- classUsers e, let { ClassId j = find g owner }] ++ rest)
-      where
-        ClassId i = find g (ClassId i0)
+    -- The worklist is a set, so an e-class waits once, and the oldest
+    -- e-class, which is often a child of the others, comes first.
+    go changed known pending = case IntSet.minView pending of
+        Nothing -> (known, changed)
+        Just (i, rest) -> case IntMap.lookup i (classes g) of
+            Nothing -> go changed known rest
+            Just e ->
+                let values =
+                        [ make f ds
+                        | ENode _ f cs <- HashSet.toList (classNodes e)
+                        , Just ds <- [traverse (\c -> let ClassId j = find g c in IntMap.lookup j known) cs]
+                        ]
+                 in case values of
+                        [] -> go changed known rest
+                        v : vs ->
+                            let new = foldl' join v vs
+                                old = IntMap.lookup i known
+                                new' = maybe new (join new) old
+                             in if Just new' == old
+                                    then go changed known rest
+                                    else
+                                        go
+                                            (IntSet.insert i changed)
+                                            (IntMap.insert i new' known)
+                                            (foldl' (\p (_, owner) -> let ClassId j = find g owner in IntSet.insert j p) rest (classUsers e))
 
 {- | The cheapest term of an e-class, with its cost. The cost of a term
 comes from its symbol and the costs of its children, and must be greater
