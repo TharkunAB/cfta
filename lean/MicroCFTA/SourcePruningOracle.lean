@@ -395,4 +395,65 @@ theorem oracle_inl_complete (graph : Graph Symbol Guard) (templates : List (Temp
         EnumerationOrder.stratified_read before after level frontier stable stratified⟩
       simpa only [oracle, ite_eq_right rejected, ite_eq_right skipped] using observed
 
+/-- A completed fragment callback returns only allocated pending references. -/
+theorem oracle_inl_bounded (graph : Graph Symbol Guard) (templates : List (Template.Pattern Symbol))
+    (fuel : Nat) (pending : List (Pending Symbol)) (uv : Nat) (fragment : Fragment Symbol)
+    (before after : State Symbol Guard) (result : Bool × List (Pending Symbol))
+    (safe : Safe before) (allocated : FragmentBound before.counter fragment)
+    (bounded : ∀ group ∈ pending, PendingBound before.counter group)
+    (success : Success (oracle graph templates fuel pending uv (.inl fragment)) before result after) :
+    ∀ group ∈ result.2, PendingBound after.counter group := by
+  by_cases rejected : rejectEarly templates fragment = true
+  · simp only [oracle, ite_eq_left rejected] at success
+    obtain ⟨rfl, rfl⟩ := (success_pure (true, pending) result before after).mp success
+    exact bounded
+  · by_cases skipped : idle pending fragment = true
+    · simp only [oracle, ite_eq_right rejected, ite_eq_left skipped] at success
+      obtain ⟨rfl, rfl⟩ := (success_pure (false, []) result before after).mp success
+      simp
+    · simp only [oracle, ite_eq_right rejected, ite_eq_right skipped] at success
+      unfold observe at success
+      obtain ⟨term, middle, rendered, continued⟩ := (success_bind _ _ _ _ _).mp success
+      obtain ⟨resumed, last, traversed, final⟩ := (success_bind _ _ _ _ _).mp continued
+      obtain ⟨renderStable, termBound⟩ :=
+        EnumerationPartialBounds.expandPartial_bounded graph fuel fragment before middle term safe allocated rendered
+      have groups : ∀ (pending : List (Pending Symbol)) (before after : State Symbol Guard)
+          (results : List (Option (Pending Symbol))), Safe before →
+          (∀ group ∈ pending, PendingBound before.counter group) →
+          EnumerationPartialBounds.TermBound before.counter term →
+          Success (pending.mapM (SourcePruningResume.resume fuel uv term)) before results after →
+          EnumerationDriver.RenderStable before after ∧
+            ∀ result ∈ results, ∀ group, result = some group → PendingBound after.counter group := by
+        intro pending
+        induction pending with
+        | nil =>
+            intro before after results safe _bounded _termBound success
+            obtain ⟨rfl, rfl⟩ := (success_pure [] results before after).mp success
+            exact ⟨.refl _ safe, by simp⟩
+        | cons first rest ih =>
+            intro before after results safe bounded termBound success
+            rw [List.mapM_cons] at success
+            obtain ⟨firstResult, reached, firstRead, continued⟩ := (success_bind _ _ _ _ _).mp success
+            obtain ⟨tailResults, last, restRead, final⟩ := (success_bind _ _ _ _ _).mp continued
+            obtain ⟨rfl, rfl⟩ := (success_pure (firstResult :: tailResults) results last after).mp final
+            have firstStable := SourcePruningResume.resume_read fuel uv term first before reached firstResult
+              safe (bounded first (by simp)) firstRead
+            have firstBound := SourcePruningResume.resume_bounded fuel uv term first before reached firstResult
+              safe (bounded first (by simp)) termBound firstRead
+            obtain ⟨lastStable, tailBound⟩ := ih reached after tailResults firstStable.safe
+              (by intro group member; rw [firstStable.counter]; exact bounded group (List.mem_cons_of_mem _ member))
+              (by simpa only [firstStable.counter] using termBound) restRead
+            refine ⟨firstStable.trans lastStable, ?_⟩
+            intro result member group same
+            rcases List.mem_cons.mp member with rfl | member
+            · rw [lastStable.counter]
+              exact firstBound group same
+            · exact tailBound result member group same
+      obtain ⟨groupStable, resultBounds⟩ := groups pending middle last resumed renderStable.safe
+        (by intro group member; rw [renderStable.counter]; exact bounded group member) termBound traversed
+      obtain ⟨rfl, rfl⟩ := (success_pure (finishChecks resumed (startMatches templates term)) result last after).mp final
+      exact finishChecks_bounded after.counter resumed (startMatches templates term)
+        (fun group member => resultBounds (some group) member group rfl)
+        (startMatches_bounded after.counter templates term (by simpa only [groupStable.counter] using termBound))
+
 end MicroCFTA.SourcePruningOracle
