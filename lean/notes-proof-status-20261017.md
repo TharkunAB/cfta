@@ -1,5 +1,27 @@
 # Proof status at 2026-10-18
 
+## Admitted ordered native child traversal
+
+Child completion: `a8593e70a465299b3f1d2f6bda1320b9b07005f9`.
+Traversal completion: `06fc7521a9d83a0d7a053c5f6496f02fc1e8d510`.
+The goal stays ACTIVE.
+
+Genuine caller/cache invariants and conditional numeric ranges now derive
+common sufficient bounds for all executed children. The worker completes
+or stops at its first valid raw-empty rejection with the actual cache.
+No future-success premise is used. Both outcomes retain indexes, caller
+effects, enumerated-value origin and old enumerated-root protection.
+Complete output retains Safe. Rejection has no unconditional Safe claim.
+Any old allocated root avoided by all child buckets is also protected.
+Parent InputsPending transports, including on rejection. The captured-slot
+root and avoidance obligations remain explicit.
+
+All three strict proof modules, installed readback and Audit pass.
+The audit checks 76623 theorem dependencies. Haskell runtime is unchanged.
+H6 remains the strongest end-to-end result. Next: actual selected-edge
+input admission, then the residual and original captured-slot final write.
+Details: `lean/notes-current-pruning-enumeration-admitted-traversal.md`.
+
 ## Deterministic Sized gate from main
 
 Main `153e1a211b56dd78bd22f6b427fb78e673041d55` is integrated.
