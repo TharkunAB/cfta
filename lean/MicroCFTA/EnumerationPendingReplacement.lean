@@ -51,4 +51,31 @@ theorem setValue_pending (slot : Nat) (oldNode newNode : Option Nat) (scs : List
   exact setValue_incoming held slot oldNode newNode scs before after stored
     (pending held fragment original) written
 
+/-- Clearing a pending bucket retains each incoming-reference condition. -/
+theorem setValue_clear_incoming (held slot : Nat) (node : Option Nat)
+    (before after : State Symbol Guard) (incoming : IncomingAvoid held before)
+    (written : Success (setValue slot (.unenumerated node [])) before () after) : IncomingAvoid held after := by
+  have allowed := setValue_allowed (fun uv => ¬UnionFind.SameClass before.representatives held uv)
+    slot (.unenumerated node []) before after incoming (by simp [EnumerationSchedule.references, InputsAllowed]) written
+  have shape := (EnumerationDriver.modify_success _ before after).mp written
+  simpa only [IncomingAvoid, shape] using allowed
+
+/-- Clearing a stored pending bucket creates no enumerated slot or suspended reference. -/
+theorem setValue_clear_pending (slot : Nat) (node : Option Nat) (scs : List Suspended)
+    (before after : State Symbol Guard)
+    (stored : before.values[slot]? = some (.unenumerated node scs))
+    (pending : PendingReferences before)
+    (written : Success (setValue slot (.unenumerated node [])) before () after) : PendingReferences after := by
+  have shape := (EnumerationDriver.modify_success _ before after).mp written
+  intro held fragment expanded
+  have different : held ≠ slot := by
+    intro same
+    subst held
+    have inside : slot < before.values.length := (List.getElem?_eq_some_iff.mp stored).1
+    simp only [shape, List.getElem?_set_self inside] at expanded
+    cases expanded
+  have original : before.values[held]? = some (.enumerated fragment) := by
+    simpa only [shape, List.getElem?_set_ne (Ne.symm different)] using expanded
+  exact setValue_clear_incoming held slot node before after (pending held fragment original) written
+
 end MicroCFTA.EnumerationPendingReplacement
