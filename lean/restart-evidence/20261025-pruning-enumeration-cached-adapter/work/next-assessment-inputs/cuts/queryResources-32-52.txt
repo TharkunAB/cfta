@@ -1,0 +1,21 @@
+structure Receipt (profile : Profile)
+    (formulas : SourceGuards.Formulas FullSyntax.Formula) (solver : SourceGuards.Entailment FullSyntax.Formula)
+    (inventory : Inventory) (fuel : Nat) (left right : Value Symbol Guard) (before : Checked width)
+    (value : Value Symbol Guard) (after : Checked width) (memos : Memos) : Prop where
+  /-- The actual return has exact intersection language and global memo laws. -/
+  query : SourceCurrentAllocatedTargetQuery.Receipt formulas solver inventory left right before value after memos
+  /-- The same inventory and state admit the next query. -/
+  frame : Frame formulas solver inventory after
+  /-- The instruction count belongs to this exact physical trace. -/
+  trace : SourceCurrentAllocatedNativePhysicalTraceCompletion.Trace fuel
+    (.code (requestNode IntersectionEmptyDomain.emptyDomain left right)) before (.code (.pure value)) after
+  /-- The initial profile bounds the literal trace length. -/
+  count : fuel ≤ instructionBound profile.nodes profile.edges profile.mass
+  /-- The initial computed fuel returns the same complete state. -/
+  done : execute (instructionBound profile.nodes profile.edges profile.mass + 1)
+    (.code (requestNode IntersectionEmptyDomain.emptyDomain left right)) before = .done value after
+  /-- The complete returned state fits the initial one-query forecast. -/
+  fits : Fits (SourceCurrentAllocatedNativeResourceForecast.step profile) after
+  /-- The returned payload fits the same initial mass schedule. -/
+  mass : InternedValueMass.value value ≤
+    massAfter (instructionBound profile.nodes profile.edges profile.mass) profile.mass

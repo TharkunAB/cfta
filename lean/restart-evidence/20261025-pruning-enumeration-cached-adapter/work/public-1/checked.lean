@@ -1,0 +1,9 @@
+import MicroCFTA.SourcePruningEnumerationCachedAdapter
+set_option pp.deepTerms true
+set_option pp.maxSteps 1000000
+#check @MicroCFTA.SourcePruningEnumerationCachedAdapter.adapt
+#print axioms MicroCFTA.SourcePruningEnumerationCachedAdapter.adapt
+#check @MicroCFTA.SourcePruningEnumerationCachedAdapter.run
+#print axioms MicroCFTA.SourcePruningEnumerationCachedAdapter.run
+#check @MicroCFTA.SourcePruningEnumerationCachedAdapter.complete
+#print axioms MicroCFTA.SourcePruningEnumerationCachedAdapter.complete

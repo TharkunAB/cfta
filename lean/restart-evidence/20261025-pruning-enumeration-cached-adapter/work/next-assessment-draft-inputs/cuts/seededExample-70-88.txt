@@ -1,0 +1,19 @@
+      obtain ⟨tail, later, next, _final, rest, _reads, receipt, laterFits, _included, _done⟩ :=
+        SourceCurrentConstrainedCapSeededNumeric.fold_complete formulas solver inventory unconstrained anchor anchorSemantic anchorReady
+          values seed paths middle (projectionProfile path values.length profile) middleFrame middleFits
+          nextValues nextGrowth nextSupport nextProper reserved.1 middleMemos firstGlobals.valid
+      apply cons_ranges
+      · intro other after actual
+        obtain ⟨rfl, rfl⟩ := first.unique actual
+        exact tailRanges
+      · intro other after result final actual actualRest
+        obtain ⟨rfl, rfl⟩ := first.unique actual
+        obtain ⟨rfl, rfl⟩ := rest.unique actualRest
+        have room := laterFits.room reserved.2
+        have resident := receipt.effects.keeps.available head headAvailable
+        have facts := receipt.frame.ready.good.native.machine.1
+        exact (SourceCurrentAllocatedRecursiveWarmInitialRanges.warm_initial_ranges bits later receipt.frame.ready.good
+          receipt.frame.ready.semantic head tail
+          (SourceRecursiveIntersectionOriginalOutput.closed_original head _ facts.coherent resident headClosed)
+          (SourceRecursiveIntersectionOriginalOutput.closed_original tail _ facts.coherent receipt.available receipt.closed)
+          resident receipt.available room.1 room.2.1 room.2.2).1

@@ -1,0 +1,416 @@
+{
+  "packets": [
+    {
+      "scope": "complete.dispatch",
+      "producer": "SourcePruningEnumerationCachedDispatch.complete formulas solver inventory beforeCaller before checkEmpty source target memos roots initial storage realized paths counts flags slots ranges",
+      "fields": [
+        {
+          "scope": "complete.dispatch",
+          "name": "fuel",
+          "type": "Nat",
+          "used": true,
+          "kind": "obtain"
+        },
+        {
+          "scope": "complete.dispatch",
+          "name": "p",
+          "type": "Nat",
+          "used": true,
+          "kind": "obtain"
+        },
+        {
+          "scope": "complete.dispatch",
+          "name": "h",
+          "type": "Nat",
+          "used": true,
+          "kind": "obtain"
+        },
+        {
+          "scope": "complete.dispatch",
+          "name": "action",
+          "type": "EnumerateM Symbol Constraint Unit",
+          "used": true,
+          "kind": "obtain"
+        },
+        {
+          "scope": "complete.dispatch",
+          "name": "afterCaller",
+          "type": "Caller width",
+          "used": true,
+          "kind": "obtain"
+        },
+        {
+          "scope": "complete.dispatch",
+          "name": "savedQueries",
+          "type": "Queries",
+          "used": true,
+          "kind": "obtain"
+        },
+        {
+          "scope": "complete.dispatch",
+          "name": "final",
+          "type": "Memos",
+          "used": true,
+          "kind": "obtain"
+        },
+        {
+          "scope": "complete.dispatch",
+          "name": "next",
+          "type": "Inventory",
+          "used": true,
+          "kind": "obtain"
+        },
+        {
+          "scope": "complete.dispatch",
+          "name": "rows",
+          "type": "List (Unit × EnumerationExpandableIndex.Cached Symbol Constraint)",
+          "used": true,
+          "kind": "obtain"
+        },
+        {
+          "scope": "complete.dispatch",
+          "name": "after",
+          "type": "EnumerationExpandableIndex.Cached Symbol Constraint",
+          "used": true,
+          "kind": "obtain"
+        },
+        {
+          "scope": "complete.dispatch",
+          "name": "actual",
+          "type": "∀ extra P H, p ≤ P → h ≤ H → SourcePruningEnumerationDispatch.dispatch checkEmpty (fuel + extra) P H beforeCaller before.core source target memos.query = (.ok (some action), afterCaller, savedQueries)",
+          "used": true,
+          "kind": "obtain"
+        },
+        {
+          "scope": "complete.dispatch",
+          "name": "post",
+          "type": "Post formulas solver next beforeCaller afterCaller final",
+          "used": true,
+          "kind": "obtain"
+        },
+        {
+          "scope": "complete.dispatch",
+          "name": "savedSame",
+          "type": "final.query = savedQueries",
+          "used": true,
+          "kind": "obtain"
+        },
+        {
+          "scope": "complete.dispatch",
+          "name": "rawCached",
+          "type": "ExceptT.run (action before.core) = rows.map (fun row => .ok (row.1, row.2.core))",
+          "used": true,
+          "kind": "obtain"
+        },
+        {
+          "scope": "complete.dispatch",
+          "name": "counterSame",
+          "type": "after.core.counter = before.core.counter",
+          "used": true,
+          "kind": "obtain"
+        },
+        {
+          "scope": "complete.dispatch",
+          "name": "forestSame",
+          "type": "after.core.representatives = before.core.representatives",
+          "used": true,
+          "kind": "obtain"
+        },
+        {
+          "scope": "complete.dispatch",
+          "name": "afterPaths",
+          "type": "Roots after.core.representatives roots",
+          "used": true,
+          "kind": "obtain"
+        },
+        {
+          "scope": "complete.dispatch",
+          "name": "afterStorage",
+          "type": "StorageValid after.core",
+          "used": true,
+          "kind": "obtain"
+        },
+        {
+          "scope": "complete.dispatch",
+          "name": "cacheRealized",
+          "type": "PendingRealized afterCaller.checked.native.machine.heap after.core",
+          "used": true,
+          "kind": "obtain"
+        },
+        {
+          "scope": "complete.dispatch",
+          "name": "afterCounts",
+          "type": "EnumerationCanonicalWaiting.Correct roots after.core.values after.waiting",
+          "used": true,
+          "kind": "obtain"
+        },
+        {
+          "scope": "complete.dispatch",
+          "name": "waitingSame",
+          "type": "after.waiting = before.waiting",
+          "used": true,
+          "kind": "obtain"
+        },
+        {
+          "scope": "complete.dispatch",
+          "name": "afterFlags",
+          "type": "∀ (slot : Nat), SourcePruningEnumerationNativeIndex.candidate afterCaller.checked.native.machine.heap ((after.core.values[slot]?).getD .eliminated) = some (after.expandable slot)",
+          "used": true,
+          "kind": "obtain"
+        },
+        {
+          "scope": "complete.dispatch",
+          "name": "noOpResult",
+          "type": "(source = target ∨ before.core.values[source]? = some .eliminated) → rows = [((), before)] ∧ after = before ∧ afterCaller = beforeCaller ∧ final = memos ∧ next = inventory",
+          "used": true,
+          "kind": "obtain"
+        },
+        {
+          "scope": "complete.dispatch",
+          "name": "liveResult",
+          "type": "source ≠ target → before.core.values[source]? ≠ some .eliminated →\n        ∃ (sourceNode targetNode merged : Option Nat) (sourceScs targetScs : List EnumerationState.Suspended),\n          before.core.values[source]? = some (.unenumerated sourceNode sourceScs) ∧\n          before.core.values[target]? = some (.unenumerated targetNode targetScs) ∧\n          (∀ (cacheFuel : Nat), SourcePruningEnumerationCachedAssimilation.finish\n            afterCaller.checked.native.machine.heap cacheFuel source target merged sourceScs targetScs before =\n              some (rows, after)) ∧\n          (if merged = some 0 then rows = [] ∧ after = before else\n            rows = [((), after)] ∧\n            after.core = assimilated before.core target source (.unenumerated merged (sourceScs ++ targetScs)) ∧\n            after.core.values[source]? = some .eliminated ∧\n            after.core.values[target]? = some (.unenumerated merged (sourceScs ++ targetScs)) ∧\n            after.expandable source = false ∧\n            (∀ (slot : Nat), slot ≠ source → slot ≠ target → after.expandable slot = before.expandable slot)) ∧\n          ((sourceNode = none ∨ targetNode = none) →\n            merged = sourceNode.orElse (fun _ => targetNode) ∧\n            afterCaller = beforeCaller ∧ final = memos ∧ next = inventory) ∧\n          (∀ leftHandle rightHandle, sourceNode = some leftHandle → targetNode = some rightHandle →\n            ∃ (left right query replacement : Node) (queried : SourceEqualityNativeDemand.State width) (handle : Nat),\n              lookupNode beforeCaller.checked.native.machine.heap leftHandle = some left ∧\n              lookupNode beforeCaller.checked.native.machine.heap rightHandle = some right ∧\n              next.source = beforeCaller.checked.native.machine.heap ∧ next.roots = inventory.roots ++ [left, right] ∧\n              SourceCurrentAllocatedTargetQuery.Receipt formulas solver next left right\n                beforeCaller.checked query queried memos ∧\n              merged = some handle ∧ encodeNode replacement = some handle ∧\n              lookupNode afterCaller.checked.native.machine.heap handle = some replacement ∧\n              Available afterCaller.checked.native.machine.heap replacement ∧ replacement.free = [] ∧\n              (∀ ambient term,\n                InternedGuardedLanguage.meaning (SourceEqualityPCSGuard.holds formulas solver) ambient replacement term ↔\n                  InternedGuardedLanguage.meaning (SourceEqualityPCSGuard.holds formulas solver) ambient left term ∧\n                  InternedGuardedLanguage.meaning (SourceEqualityPCSGuard.holds formulas solver) ambient right term) ∧\n              (checkEmpty = false → replacement = query ∧\n                afterCaller = SourceCurrentAllocatedPartialState.advance beforeCaller queried\n                  beforeCaller.fourth beforeCaller.merge ∧ final = memos) ∧\n              (checkEmpty = true → ∃ reached answer guardSaved,\n                SourceEndpointMemo.run query memos.query = (reached, guardSaved) ∧\n                SourceEndpointMemoCorrect.SourceEqualityNativeDemand.State queried.native.machine.heap memos.query\n                  (SourceCurrentEmptinessMerge.reaches query) (reached, guardSaved) ∧\n                (∀ P H, p ≤ P → h ≤ H →\n                  SourcePruningEnumerationEnabledEmpty.check P H query queried beforeCaller.fourth memos.query =\n                    (.done answer afterCaller.checked afterCaller.fourth, guardSaved)) ∧\n                savedQueries = guardSaved ∧ replacement = (if answer then .empty else query) ∧\n                (reached = false → answer = false ∧ afterCaller.checked = queried ∧\n                  afterCaller.fourth = beforeCaller.fourth ∧ final = {memos with query := guardSaved}) ∧\n                (reached = true →\n                  ∃ (reachedPhysical : SourceCurrentConjunctionRowsAllocation.State Symbol FullSyntax.Formula),\n                    afterCaller.checked = SourceCurrentAllocatedQueryMemo.advancePhysical queried reachedPhysical ∧\n                    ∃ actual : SourceCurrentConjunctionMemo.Call 1000 beforeCaller.fourth query\n                        (SourceCurrentAllocatedNativeEffects.SourceCurrentAllocatedNativeEffects.physical queried) answer reachedPhysical afterCaller.fourth,\n                      SourceCurrentConjunctionGlobalMemos.CallReads actual {memos with query := guardSaved} final)))",
+          "used": true,
+          "kind": "obtain"
+        }
+      ]
+    },
+    {
+      "scope": "complete.adapted.sameId",
+      "producer": "noOpResult applied to the actual positive no-op branch",
+      "fields": [
+        {
+          "scope": "complete.adapted.sameId",
+          "name": "rowsSame",
+          "type": "rows = [((), before)]",
+          "used": true,
+          "kind": "obtain"
+        },
+        {
+          "scope": "complete.adapted.sameId",
+          "name": "afterSame",
+          "type": "after = before",
+          "used": true,
+          "kind": "obtain"
+        },
+        {
+          "scope": "complete.adapted.sameId",
+          "name": "_callerSame",
+          "type": "afterCaller = beforeCaller",
+          "used": false,
+          "kind": "obtain"
+        },
+        {
+          "scope": "complete.adapted.sameId",
+          "name": "_finalSame",
+          "type": "final = memos",
+          "used": false,
+          "kind": "obtain"
+        },
+        {
+          "scope": "complete.adapted.sameId",
+          "name": "_nextSame",
+          "type": "next = inventory",
+          "used": false,
+          "kind": "obtain"
+        }
+      ]
+    },
+    {
+      "scope": "complete.adapted.sourceEliminated",
+      "producer": "noOpResult applied to the actual positive no-op branch",
+      "fields": [
+        {
+          "scope": "complete.adapted.sourceEliminated",
+          "name": "rowsSame",
+          "type": "rows = [((), before)]",
+          "used": true,
+          "kind": "obtain"
+        },
+        {
+          "scope": "complete.adapted.sourceEliminated",
+          "name": "afterSame",
+          "type": "after = before",
+          "used": true,
+          "kind": "obtain"
+        },
+        {
+          "scope": "complete.adapted.sourceEliminated",
+          "name": "_callerSame",
+          "type": "afterCaller = beforeCaller",
+          "used": false,
+          "kind": "obtain"
+        },
+        {
+          "scope": "complete.adapted.sourceEliminated",
+          "name": "_finalSame",
+          "type": "final = memos",
+          "used": false,
+          "kind": "obtain"
+        },
+        {
+          "scope": "complete.adapted.sourceEliminated",
+          "name": "_nextSame",
+          "type": "next = inventory",
+          "used": false,
+          "kind": "obtain"
+        }
+      ]
+    },
+    {
+      "scope": "complete.adapted.live",
+      "producer": "liveResult applied to the actual unequal and non-eliminated source branch",
+      "fields": [
+        {
+          "scope": "complete.adapted.live",
+          "name": "_sourceNode",
+          "type": "Option Nat",
+          "used": false,
+          "kind": "obtain",
+          "usage_reason": "Retained dependent type parameter; no explicit proof use planned."
+        },
+        {
+          "scope": "complete.adapted.live",
+          "name": "_targetNode",
+          "type": "Option Nat",
+          "used": false,
+          "kind": "obtain",
+          "usage_reason": "Retained dependent type parameter; no explicit proof use planned."
+        },
+        {
+          "scope": "complete.adapted.live",
+          "name": "merged",
+          "type": "Option Nat",
+          "used": true,
+          "kind": "obtain"
+        },
+        {
+          "scope": "complete.adapted.live",
+          "name": "sourceScs",
+          "type": "List EnumerationState.Suspended",
+          "used": true,
+          "kind": "obtain"
+        },
+        {
+          "scope": "complete.adapted.live",
+          "name": "targetScs",
+          "type": "List EnumerationState.Suspended",
+          "used": true,
+          "kind": "obtain"
+        },
+        {
+          "scope": "complete.adapted.live",
+          "name": "sourceStored",
+          "type": "before.core.values[source]? = some (.unenumerated _sourceNode sourceScs)",
+          "used": true,
+          "kind": "obtain"
+        },
+        {
+          "scope": "complete.adapted.live",
+          "name": "_targetStored",
+          "type": "before.core.values[target]? = some (.unenumerated _targetNode targetScs)",
+          "used": false,
+          "kind": "obtain"
+        },
+        {
+          "scope": "complete.adapted.live",
+          "name": "_computed",
+          "type": "∀ (cacheFuel : Nat), SourcePruningEnumerationCachedAssimilation.finish afterCaller.checked.native.machine.heap cacheFuel source target merged sourceScs targetScs before = some (rows, after)",
+          "used": false,
+          "kind": "obtain"
+        },
+        {
+          "scope": "complete.adapted.live",
+          "name": "selectedResult",
+          "type": "if merged = some 0 then rows = [] ∧ after = before else rows = [((), after)] ∧ after.core = assimilated before.core target source (.unenumerated merged (sourceScs ++ targetScs)) ∧ after.core.values[source]? = some .eliminated ∧ after.core.values[target]? = some (.unenumerated merged (sourceScs ++ targetScs)) ∧ after.expandable source = false ∧ (∀ (slot : Nat), slot ≠ source → slot ≠ target → after.expandable slot = before.expandable slot)",
+          "used": true,
+          "kind": "obtain"
+        },
+        {
+          "scope": "complete.adapted.live",
+          "name": "_optionalOrigin",
+          "type": "(_sourceNode = none ∨ _targetNode = none) → merged = _sourceNode.orElse (fun _ => _targetNode) ∧ afterCaller = beforeCaller ∧ final = memos ∧ next = inventory",
+          "used": false,
+          "kind": "obtain"
+        },
+        {
+          "scope": "complete.adapted.live",
+          "name": "_queriedOrigin",
+          "type": "∀ (leftHandle rightHandle : Nat), _sourceNode = some leftHandle → _targetNode = some rightHandle → ∃ (left : Node) (right : Node) (query : Node) (replacement : Node) (queried : SourceEqualityNativeDemand.State width) (handle : Nat), (lookupNode beforeCaller.checked.native.machine.heap leftHandle = some left) ∧ (lookupNode beforeCaller.checked.native.machine.heap rightHandle = some right) ∧ (next.source = beforeCaller.checked.native.machine.heap) ∧ (next.roots = inventory.roots ++ [left, right]) ∧ (SourceCurrentAllocatedTargetQuery.Receipt formulas solver next left right beforeCaller.checked query queried memos) ∧ (merged = some handle) ∧ (encodeNode replacement = some handle) ∧ (lookupNode afterCaller.checked.native.machine.heap handle = some replacement) ∧ (Available afterCaller.checked.native.machine.heap replacement) ∧ (replacement.free = []) ∧ (∀ ambient term, InternedGuardedLanguage.meaning (SourceEqualityPCSGuard.holds formulas solver) ambient replacement term ↔ InternedGuardedLanguage.meaning (SourceEqualityPCSGuard.holds formulas solver) ambient left term ∧ InternedGuardedLanguage.meaning (SourceEqualityPCSGuard.holds formulas solver) ambient right term) ∧ (checkEmpty = false → replacement = query ∧ afterCaller = SourceCurrentAllocatedPartialState.advance beforeCaller queried beforeCaller.fourth beforeCaller.merge ∧ final = memos) ∧ (checkEmpty = true → ∃ (reached : Bool) (answer : Bool) (guardSaved : Queries), (SourceEndpointMemo.run query memos.query = (reached, guardSaved)) ∧ (SourceEndpointMemoCorrect.SourceEqualityNativeDemand.State queried.native.machine.heap memos.query (SourceCurrentEmptinessMerge.reaches query) (reached, guardSaved)) ∧ (∀ P H, p ≤ P → h ≤ H → SourcePruningEnumerationEnabledEmpty.check P H query queried beforeCaller.fourth memos.query = (.done answer afterCaller.checked afterCaller.fourth, guardSaved)) ∧ (savedQueries = guardSaved) ∧ (replacement = (if answer then .empty else query)) ∧ (reached = false → answer = false ∧ afterCaller.checked = queried ∧ afterCaller.fourth = beforeCaller.fourth ∧ final = {memos with query := guardSaved}) ∧ (reached = true → ∃ reachedPhysical : SourceCurrentConjunctionRowsAllocation.State Symbol FullSyntax.Formula, afterCaller.checked = SourceCurrentAllocatedQueryMemo.advancePhysical queried reachedPhysical ∧ ∃ actual : SourceCurrentConjunctionMemo.Call 1000 beforeCaller.fourth query (SourceCurrentAllocatedNativeEffects.SourceCurrentAllocatedNativeEffects.physical queried) answer reachedPhysical afterCaller.fourth, SourceCurrentConjunctionGlobalMemos.CallReads actual {memos with query := guardSaved} final))",
+          "used": false,
+          "kind": "obtain"
+        }
+      ]
+    },
+    {
+      "scope": "complete.adapted.live.rejected",
+      "producer": "selectedResult in the actual merged = some 0 branch",
+      "fields": [
+        {
+          "scope": "complete.adapted.live.rejected",
+          "name": "rowsSame",
+          "type": "rows = []",
+          "used": true,
+          "kind": "obtain"
+        },
+        {
+          "scope": "complete.adapted.live.rejected",
+          "name": "afterSame",
+          "type": "after = before",
+          "used": true,
+          "kind": "obtain"
+        }
+      ]
+    },
+    {
+      "scope": "complete.adapted.live.accepted",
+      "producer": "selectedResult in the actual merged ≠ some 0 branch",
+      "fields": [
+        {
+          "scope": "complete.adapted.live.accepted",
+          "name": "rowsSame",
+          "type": "rows = [((), after)]",
+          "used": true,
+          "kind": "obtain"
+        },
+        {
+          "scope": "complete.adapted.live.accepted",
+          "name": "_coreSame",
+          "type": "after.core = assimilated before.core target source (.unenumerated merged (sourceScs ++ targetScs))",
+          "used": false,
+          "kind": "obtain"
+        },
+        {
+          "scope": "complete.adapted.live.accepted",
+          "name": "_sourceAfter",
+          "type": "after.core.values[source]? = some .eliminated",
+          "used": false,
+          "kind": "obtain"
+        },
+        {
+          "scope": "complete.adapted.live.accepted",
+          "name": "targetAfter",
+          "type": "after.core.values[target]? = some (.unenumerated merged (sourceScs ++ targetScs))",
+          "used": true,
+          "kind": "obtain"
+        },
+        {
+          "scope": "complete.adapted.live.accepted",
+          "name": "sourceFlag",
+          "type": "after.expandable source = false",
+          "used": true,
+          "kind": "obtain"
+        },
+        {
+          "scope": "complete.adapted.live.accepted",
+          "name": "otherFlags",
+          "type": "∀ (slot : Nat), slot ≠ source → slot ≠ target → after.expandable slot = before.expandable slot",
+          "used": true,
+          "kind": "obtain"
+        }
+      ]
+    }
+  ],
+  "count": 6,
+  "field_count": 53,
+  "inline_fields": []
+}

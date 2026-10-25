@@ -1,0 +1,134 @@
+{
+  "root_selected_binders_before_bodies": true,
+  "definition_adapt": {
+    "raw_cases": [
+      "nil",
+      "singleton_ok_unit_core",
+      "other"
+    ],
+    "raw_pattern_bindings": {
+      "core": "EnumerationState.State Symbol Constraint"
+    },
+    "lazy_checks": [
+      "if source = target",
+      "match before.core.values[source]? with some .eliminated or _"
+    ],
+    "callbacks": {
+      "value": "EnumerationState.UVarValue Symbol",
+      "flag": "Bool",
+      "slot": "Nat"
+    },
+    "other_no_named_pattern_payload": true,
+    "empty_receipt": "some before",
+    "classifier_failure": "none",
+    "waiting": "before.waiting"
+  },
+  "definition_run": {
+    "one_dispatch": true,
+    "one_action": true,
+    "cases": [
+      "error fault reachedCaller savedQueries",
+      "ok none reachedCaller savedQueries",
+      "ok some action reachedCaller savedQueries"
+    ],
+    "fault_type": "SourceEqualityNativeDemand.Outcome width Node \u2295 SourceCurrentAllocatedConjunctionWorker.Outcome width",
+    "action_type": "EnumerateM Symbol Constraint Unit",
+    "reachedCaller_type": "Caller width",
+    "savedQueries_type": "Queries",
+    "let": "raw.let",
+    "no_receipt_on_fault_or_outer_none": true
+  },
+  "proof_complete": {
+    "producer": "SourcePruningEnumerationCachedDispatch.complete",
+    "producer_packet": [
+      "fuel",
+      "p",
+      "h",
+      "action",
+      "afterCaller",
+      "savedQueries",
+      "final",
+      "next",
+      "rows",
+      "after",
+      "actual",
+      "post",
+      "savedSame",
+      "rawCached",
+      "counterSame",
+      "forestSame",
+      "afterPaths",
+      "afterStorage",
+      "cacheRealized",
+      "afterCounts",
+      "waitingSame",
+      "afterFlags",
+      "noOpResult",
+      "liveResult"
+    ],
+    "cases": [
+      "sameId : source = target",
+      "sourceEliminated : before.core.values[source]? = some .eliminated",
+      "rejected : merged = some 0",
+      "sourceId : slot = source",
+      "targetId : slot = target"
+    ],
+    "no_op_packet_twice": [
+      "rowsSame",
+      "afterSame",
+      "_callerSame",
+      "_finalSame",
+      "_nextSame"
+    ],
+    "live_packet": [
+      "sourceNode",
+      "targetNode",
+      "merged",
+      "sourceScs",
+      "targetScs",
+      "sourceStored",
+      "_targetStored",
+      "_computed",
+      "selectedResult",
+      "_optionalOrigin",
+      "_queriedOrigin"
+    ],
+    "rejected_packet": [
+      "rowsSame",
+      "afterSame"
+    ],
+    "accepted_packet": [
+      "rowsSame",
+      "_coreSame",
+      "_sourceAfter",
+      "targetAfter",
+      "sourceFlag",
+      "otherFlags"
+    ],
+    "have_headers": [
+      "adapted",
+      "classified",
+      "flagsSame",
+      "cacheSame"
+    ],
+    "funext": "slot : Nat",
+    "run_stability_binders": [
+      "extra : Nat",
+      "P : Nat",
+      "H : Nat",
+      "pBound : p \u2264 P",
+      "hBound : h \u2264 H"
+    ],
+    "packet_count": 6,
+    "packet_fields": 53,
+    "haves": 4,
+    "no_new_lemma_premise": true
+  },
+  "public_result": "Stable actual run observation with exact raw/cache shape, Post and saved query equality and all completed cache/index laws; no duplicated full query-language receipt telescope. Prior observational theorem remains imported.",
+  "scope_boundaries": [
+    "No Haskell extraction",
+    "No arbitrary fault cache-invariant theorem",
+    "No future Fold.Ranges or supplied successful continuation",
+    "H6 remains strongest"
+  ]
+}

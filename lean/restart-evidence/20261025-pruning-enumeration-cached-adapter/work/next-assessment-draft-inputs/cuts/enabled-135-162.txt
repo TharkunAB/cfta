@@ -1,0 +1,28 @@
+        Available checkedAfter.native.machine.heap query ∧
+        Cache.Extends memos.unfolding final.unfolding ∧ final.query = guardSaved := by
+      cases reached with
+      | false =>
+          refine ⟨false, queried, beforeCaller.fourth, {memos with query := guardSaved}, 0, 0,
+            ?_, Post.refl queryContext, ?_, ?_, ?_, receipt.available, Cache.extends_refl _, rfl⟩
+          · intro P H enoughP enoughH
+            simp only [check, guardRun, Bool.false_eq_true, ↓reduceIte]
+          · intro notReached
+            exact ⟨rfl, rfl, rfl, rfl⟩
+          · intro isReached
+            cases isReached
+          · refine ⟨fun opened => rfl, ?_⟩
+            intro impossible
+            cases impossible
+      | true =>
+          obtain ⟨workerAnswer, workerPhysical, workerSaved, workerFinal, actualCall, actualReads,
+            workerPost, workerSound, workerAvailable, workerUnfolding, workerQuerySame⟩ :=
+            SourceCurrentAllocatedConjunctionCaller.finite formulas solver 1000 queryContext receipt.available
+          obtain ⟨p, h, physicalStable⟩ := SourceCurrentConjunctionWorkerCompletion.call_complete actualCall
+          refine ⟨workerAnswer, advancePhysical queried workerPhysical, workerSaved, workerFinal, p, h,
+            ?_, workerPost, ?_, ?_, workerSound, workerAvailable, workerUnfolding, workerQuerySame⟩
+          · intro P H enoughP enoughH
+            simp only [check, guardRun, ↓reduceIte]
+            exact Prod.ext (SourceCurrentAllocatedConjunctionWorker.call_lift
+              (physicalStable P H enoughP enoughH)) rfl
+          · intro notReached
+            cases notReached

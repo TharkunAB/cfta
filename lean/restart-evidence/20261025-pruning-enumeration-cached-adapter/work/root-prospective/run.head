@@ -1,0 +1,9 @@
+noncomputable def run
+    [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Constraint)] [DecidableEq Node]
+    (checkEmpty : Bool) (nativeFuel p h : Nat)
+    (beforeCaller : Caller width) (before : EnumerationExpandableIndex.Cached Symbol Constraint)
+    (source target : Nat) (queries : Queries) :
+    (Except (SourceEqualityNativeDemand.Outcome width Node ⊕
+      SourceCurrentAllocatedConjunctionWorker.Outcome width)
+      (Option (List (Except EnumerationState.Error (Unit × EnumerationState.State Symbol Constraint))))) ×
+      Caller width × Queries × Option (EnumerationExpandableIndex.Cached Symbol Constraint) :=

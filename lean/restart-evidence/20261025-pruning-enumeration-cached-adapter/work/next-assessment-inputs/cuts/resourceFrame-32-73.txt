@@ -1,0 +1,42 @@
+/-- Actual counters and every stored payload fit the supplied numeric forecast. -/
+structure Fits (profile : Profile) (state : Checked width) : Prop where
+  /-- The current node supply fits the forecast. -/
+  nodes : state.native.machine.heap.nodes.next ≤ profile.nodes
+  /-- The current edge supply fits the forecast. -/
+  edges : state.native.machine.heap.edges.next ≤ profile.edges
+  /-- The current domain supply fits the forecast. -/
+  domains : state.native.machine.domains.next ≤ profile.domains
+  /-- Every successful stored payload fits the causal mass bound. -/
+  stored : Stored profile.mass state.native.machine.heap
+
+/-- Initial numeric room bounds the actual query entry. -/
+theorem Fits.room {profile : Profile} {state : Checked width} (fits : Fits profile state)
+    (room : Room bits profile) :
+    state.native.machine.heap.nodes.next < 2 ^ bits ∧
+      state.native.machine.heap.edges.next ≤ 2 ^ (bits + 2) ∧
+      state.native.machine.domains.next +
+        2 ^ (state.native.machine.heap.nodes.next + state.native.machine.heap.nodes.next * state.native.machine.heap.nodes.next) <
+        2 ^ (bits + 1) := by
+  exact Room.mono room (show Le
+    ⟨state.native.machine.heap.nodes.next, state.native.machine.heap.edges.next, state.native.machine.domains.next, profile.mass⟩
+    profile from ⟨fits.nodes, fits.edges, fits.domains, Nat.le_refl _⟩)
+
+/-- Larger numeric forecasts retain the same actual state. -/
+theorem Fits.mono {first last : Profile} {state : Checked width} (fits : Fits first state) (larger : Le first last) :
+    Fits last state :=
+  ⟨Nat.le_trans fits.nodes larger.1, Nat.le_trans fits.edges larger.2.1,
+    Nat.le_trans fits.domains larger.2.2.1, fits.stored.mono larger.2.2.2⟩
+
+/-- One current inventory retains all laws needed by the next generated query. -/
+structure Frame (formulas : SourceGuards.Formulas FullSyntax.Formula)
+    (solver : SourceGuards.Entailment FullSyntax.Formula) (inventory : Inventory) (state : Checked width) : Prop where
+  /-- The same state retains all physical query invariants. -/
+  ready : Ready state
+  /-- Populated native cells retain current inventory admission. -/
+  admitted : At formulas solver inventory state
+  /-- The current heap retains its semantic and guard observations. -/
+  context : Context Plain inventory.source state.native.machine
+  /-- Completed native cells retain both joint laws. -/
+  joint : SourceCurrentConstrainedCapCheckedJointCache.Stored Plain inventory.source state.native
+  /-- Every allocated native cell retains its captured source witnesses. -/
+  origins : SourceCurrentConstrainedCapCheckedJointOrigins.Stored inventory.source state.native

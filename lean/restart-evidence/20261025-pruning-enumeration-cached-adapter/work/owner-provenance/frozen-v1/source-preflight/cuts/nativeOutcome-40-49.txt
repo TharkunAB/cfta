@@ -1,0 +1,10 @@
+inductive Outcome (width : Nat) (Output : Type) : Type 1 where
+  | yielded (control : Control Output) (state : State width)
+  | done (value : Output) (state : State width)
+  | failed (failure : SourceRecursiveIntersectionKernel.Failure) (state : State width)
+  | constraintError (message : String) (state : State width)
+  | blocked (reason : Blocked) (control : Control Output) (state : State width)
+
+/-- Read actual returned state from every complete or incomplete observation. -/
+def Outcome.state : Outcome width Output → State width
+  | .yielded _ state | .done _ state | .failed _ state | .constraintError _ state | .blocked _ _ state => state

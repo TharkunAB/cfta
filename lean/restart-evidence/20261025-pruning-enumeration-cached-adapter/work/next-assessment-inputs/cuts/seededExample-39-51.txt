@@ -1,0 +1,13 @@
+theorem fold_ranges (formulas : SourceGuards.Formulas FullSyntax.Formula)
+    (solver : SourceGuards.Entailment FullSyntax.Formula) (inventory : Inventory)
+    (unconstrained : Value Symbol Guard → Bool) (anchor : State Symbol Guard)
+    (anchorSemantic : SemanticReady anchor) (anchorReady : GateReady anchor)
+    (values : List (Value Symbol Guard)) (seed : List Int) (paths : List (List Int))
+    (before : Checked (bits + 2)) (profile : Profile)
+    (frame : Frame formulas solver inventory before) (fits : Fits profile before)
+    (available : Values before.native.machine.heap values) (growth : Grows anchor before.native.machine.heap)
+    (supported : ∀ path ∈ seed :: paths, PathSupport unconstrained anchor path values)
+    (proper : ∀ path ∈ seed :: paths, path ≠ [])
+    (reserved : Reserved bits values.length seed paths profile)
+    (memos : Memos) (valid : EndpointMemoGateTrace.Valid before.native.machine.heap memos) :
+    FoldRanges values (paths ++ [seed]) before := by

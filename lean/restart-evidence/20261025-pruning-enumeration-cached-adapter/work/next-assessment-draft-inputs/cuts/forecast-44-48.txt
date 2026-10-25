@@ -1,0 +1,5 @@
+def step (profile : Profile) : Profile :=
+  let instructions := instructionBound profile.nodes profile.edges profile.mass
+  let constructors := credit instructions profile.mass
+  ⟨profile.nodes + constructors, profile.edges + constructors,
+    profile.domains + instructions, massAfter instructions profile.mass⟩

@@ -1,0 +1,189 @@
+{
+  "groups": [
+    {
+      "scope": "adapt.raw",
+      "kind": "match",
+      "expression": "raw",
+      "branches": [
+        {
+          "name": "nil",
+          "fields": []
+        },
+        {
+          "name": "singleton_ok_unit_core",
+          "fields": [
+            {
+              "name": "core",
+              "type": "EnumerationState.State Symbol Constraint",
+              "used": true
+            }
+          ]
+        },
+        {
+          "name": "other",
+          "fields": [],
+          "anonymous_pattern": true
+        }
+      ]
+    },
+    {
+      "scope": "adapt.raw.singleton.source",
+      "kind": "match",
+      "expression": "before.core.values[source]?",
+      "branches": [
+        {
+          "name": "some_eliminated",
+          "fields": []
+        },
+        {
+          "name": "other",
+          "fields": [],
+          "anonymous_pattern": true
+        }
+      ]
+    },
+    {
+      "scope": "run.dispatch",
+      "kind": "match",
+      "expression": "the single actual Dispatch.dispatch result",
+      "branches": [
+        {
+          "name": "error",
+          "fields": [
+            {
+              "name": "fault",
+              "type": "SourceEqualityNativeDemand.Outcome width Node ⊕ SourceCurrentAllocatedConjunctionWorker.Outcome width",
+              "used": true
+            },
+            {
+              "name": "reachedCaller",
+              "type": "Caller width",
+              "used": true
+            },
+            {
+              "name": "savedQueries",
+              "type": "Queries",
+              "used": true
+            }
+          ]
+        },
+        {
+          "name": "ok_none",
+          "fields": [
+            {
+              "name": "reachedCaller",
+              "type": "Caller width",
+              "used": true
+            },
+            {
+              "name": "savedQueries",
+              "type": "Queries",
+              "used": true
+            }
+          ]
+        },
+        {
+          "name": "ok_some",
+          "fields": [
+            {
+              "name": "action",
+              "type": "EnumerateM Symbol Constraint Unit",
+              "used": true
+            },
+            {
+              "name": "reachedCaller",
+              "type": "Caller width",
+              "used": true
+            },
+            {
+              "name": "savedQueries",
+              "type": "Queries",
+              "used": true
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "scope": "complete.adapted.sameId",
+      "kind": "by_cases",
+      "expression": "source = target",
+      "hypothesis": "sameId",
+      "branches": [
+        {
+          "name": "positive",
+          "type": "source = target"
+        },
+        {
+          "name": "negative",
+          "type": "¬ (source = target)"
+        }
+      ]
+    },
+    {
+      "scope": "complete.adapted.sourceEliminated",
+      "kind": "by_cases",
+      "expression": "before.core.values[source]? = some .eliminated",
+      "hypothesis": "sourceEliminated",
+      "branches": [
+        {
+          "name": "positive",
+          "type": "before.core.values[source]? = some .eliminated"
+        },
+        {
+          "name": "negative",
+          "type": "¬ (before.core.values[source]? = some .eliminated)"
+        }
+      ]
+    },
+    {
+      "scope": "complete.adapted.live.rejected",
+      "kind": "by_cases",
+      "expression": "merged = some 0",
+      "hypothesis": "rejected",
+      "branches": [
+        {
+          "name": "positive",
+          "type": "merged = some 0"
+        },
+        {
+          "name": "negative",
+          "type": "¬ (merged = some 0)"
+        }
+      ]
+    },
+    {
+      "scope": "complete.adapted.live.accepted.flagsSame.sourceId",
+      "kind": "by_cases",
+      "expression": "slot = source",
+      "hypothesis": "sourceId",
+      "branches": [
+        {
+          "name": "positive",
+          "type": "slot = source"
+        },
+        {
+          "name": "negative",
+          "type": "¬ (slot = source)"
+        }
+      ]
+    },
+    {
+      "scope": "complete.adapted.live.accepted.flagsSame.targetId",
+      "kind": "by_cases",
+      "expression": "slot = target",
+      "hypothesis": "targetId",
+      "branches": [
+        {
+          "name": "positive",
+          "type": "slot = target"
+        },
+        {
+          "name": "negative",
+          "type": "¬ (slot = target)"
+        }
+      ]
+    }
+  ],
+  "count": 8
+}

@@ -1,0 +1,7 @@
+FINAL SOURCE/DATA OWNER. Root selected and authored all nine exact mathematical fragments. This owner contains their unchanged bytes, typed inventories, insertion instructions and existing source provenance. It contains no definition, proof, instance or initializer body. Root alone may author bodies after independent reviews and the body gate.
+
+Two definitions adapt/run and one theorem complete; four haves, one typed definition-let raw, zero proof lets, instances, inductions, helpers, new types or carriers. The producer yields one actual dispatch/action packet. The non-injective raw projection is supplemented by final flags and waiting to prove cache equality. Genuine initial admission remains; no supplied callback success, desired endpoint or future Fold ranges. H6 and the whole active goal remain unchanged.
+
+The 235 rows distinguish named lexical bindings from dependent type positions. Six packets retain all 53 fields and explicit type-only/unused skips. Eight structural case groups follow Root’s plan. All selected fragments already include their assignment or proof opener, so insertion adds no duplicate token. The raw initializer is a plaintext Root recipe only.
+
+The original 50-payload preflight and all pre-freeze namespace/display/schema corrections remain exact. The new owner adds the actual Observation definition and minimal Env/Term defining sources. All whole files, inclusive slices and literal routes were checked as data. No program, parser, compiler, Git, network or board operation was run.

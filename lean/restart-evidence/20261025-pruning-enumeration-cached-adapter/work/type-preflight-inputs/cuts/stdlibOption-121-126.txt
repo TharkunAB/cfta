@@ -1,0 +1,6 @@
+@[inline, implicit_reducible] protected def bind : Option α → (α → Option β) → Option β
+  | none,   _ => none
+  | some a, f => f a
+
+@[simp, grind =] theorem bind_none (f : α → Option β) : none.bind f = none := rfl
+@[simp, grind =] theorem bind_some (a) (f : α → Option β) : (some a).bind f = f a := rfl

@@ -1,0 +1,9 @@
+# CachedAdapter selected source draft
+
+UNFROZEN SOURCE/DATA ONLY. Root selected nine exact fragments / 95 lines: adapt/run definitions, complete, four typed haves and one definition-local raw let. No proof lets, instances, induction, helpers, new types/predicates/carriers or Graph. Source estimate 260–420, hard cap 640. Actual canonical source e731a016f3936360b9961af1b6778be9ce2ad8f80c299c58434953f923805eca is bound. Frozen owner/schema controls remain pending; validation outcomes stay unbound.
+
+All five complete actual active CachedDispatch bases, ten exact patches and both-direction Unicode recipes remain. Current component/note/evidence/backup paths are CachedAdapter/0810; the actual prior assessment stays CachedDispatch. All preservation, exact original literal/body-gate, report/raw/public/axiom/cap, documents-1 non-Lean ledger, manifest-in-HEAD/index/tree/mode and ordinary singleton destination algorithms are unchanged. Exactly 26 prior inputs and the complete 13618-byte summary remain; sealed peer is separate context.
+
+The selected adapter retains actual original outcomes/raw rows/Caller/queries and gives an optional cache separately. Genuine complete-domain facts recover the SAME cache using actual core, classifier, all flags and unchanged waiting, not raw-map injectivity. The smaller theorem keeps Post/final-query and cache laws without duplicating the large original language receipt. No callback success, desired endpoint, proof witness extraction or future Fold.Ranges is added. H6 and all six Haskell handoffs remain; whole goal ACTIVE.
+
+The complete earlier unbound scaffold and initial destination-correction draft are retained separately under program-provenance. No selected program was parsed, imported, activated or executed; no body, Git/network/board or repository edit occurred. Await actual frozen owner before final control/prose binding, freeze and independent review.

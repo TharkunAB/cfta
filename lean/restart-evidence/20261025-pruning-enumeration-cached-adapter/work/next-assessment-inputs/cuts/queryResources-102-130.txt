@@ -1,0 +1,29 @@
+theorem complete (profile : Profile)
+    (formulas : SourceGuards.Formulas FullSyntax.Formula) (solver : SourceGuards.Entailment FullSyntax.Formula)
+    (inventory : Inventory) (before : Checked (bits + 2)) (frame : Frame formulas solver inventory before)
+    (fits : Fits profile before) (room : Room bits profile)
+    (left right : Value Symbol Guard)
+    (leftAvailable : Available before.native.machine.heap left) (rightAvailable : Available before.native.machine.heap right)
+    (leftClosed : left.free = []) (rightClosed : right.free = [])
+    (memos : Memos) (valid : Valid before.native.machine.heap memos) :
+    ∃ next fuel value after, Receipt profile formulas solver next fuel left right before value after memos := by
+  have actualRoom := fits.room room
+  let source := before.native.machine.heap
+  let holds := SourceEqualityPCSGuard.holds formulas solver
+  let request : NodeRequest Symbol Guard := ⟨IntersectionEmptyDomain.emptyDomain, left, right⟩
+  let next := SourceCurrentAllocatedNativeInventoryRebase.extend inventory source frame.ready.good.native.machine.1
+    frame.admitted.growth frame.admitted.history left right leftAvailable rightAvailable leftClosed rightClosed
+  have rebased := SourceCurrentAllocatedNativeInventoryRebase.rebase formulas solver inventory before frame.ready.good
+    frame.admitted left right leftAvailable rightAvailable leftClosed rightClosed
+  have jointRebased := SourceCurrentConstrainedCapCheckedJointRebase.rebase Plain inventory.source before.native
+    inventory.facts frame.admitted.growth frame.admitted.history frame.ready.good.native frame.origins frame.joint
+  have nextContext : Context Plain next.source before.native.machine :=
+    ⟨frame.ready.good.native.machine, frame.context.semantic, frame.context.guards, grows_refl _, extends_refl _⟩
+  have nextFrame : Frame formulas solver next before :=
+    ⟨frame.ready, rebased.1, nextContext, jointRebased.1, jointRebased.2⟩
+  have facts := frame.ready.good.native.machine.1
+  have leftOriginal := SourceRecursiveIntersectionOriginalOutput.closed_original left source facts.coherent leftAvailable leftClosed
+  have rightOriginal := SourceRecursiveIntersectionOriginalOutput.closed_original right source facts.coherent rightAvailable rightClosed
+  have ranges := (SourceCurrentAllocatedRecursiveWarmInitialRanges.warm_initial_ranges bits before frame.ready.good
+    frame.ready.semantic left right leftOriginal rightOriginal leftAvailable rightAvailable
+    actualRoom.1 actualRoom.2.1 actualRoom.2.2).1

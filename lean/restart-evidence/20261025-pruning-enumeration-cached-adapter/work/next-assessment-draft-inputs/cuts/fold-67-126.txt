@@ -1,0 +1,60 @@
+
+/-- Safe pending slots derive either the complete fold or its first rejection. -/
+theorem run_complete
+    [DecidableEq Symbol] [DecidableEq (InternedConstructorTemplates.EdgeKey Symbol Constraint)] [DecidableEq Node]
+    (formulas : SourceGuards.Formulas FullSyntax.Formula)
+    (solver : SourceGuards.Entailment FullSyntax.Formula)
+    (inventory : Inventory) (beforeCaller : Caller width)
+    (before : EnumerationState.State Symbol EnumGuard) (sources : List Nat)
+    (checkEmpty : Bool) (target : Nat) (memos : Memos)
+    (initial : Context formulas solver inventory beforeCaller memos)
+    (realized : PendingRealized beforeCaller.checked.native.machine.heap before)
+    (targetPending : ∃ (node : Option Nat) (scs : List EnumerationState.Suspended),
+      before.values[target]? = some (.unenumerated node scs))
+    (selected : ∀ source ∈ sources, before.values[source]? = some .eliminated ∨
+      ∃ (node : Option Nat) (scs : List EnumerationState.Suspended),
+        before.values[source]? = some (.unenumerated node scs))
+    (ranges : Ranges checkEmpty sources beforeCaller before target memos.query) :
+    ∃ (fuel p h : Nat)
+      (raw : List (Except EnumerationState.Error (Unit × EnumerationState.State Symbol EnumGuard)))
+      (afterCaller : Caller width) (after : EnumerationState.State Symbol EnumGuard)
+      (savedQueries : Queries) (final : Memos) (next : Inventory),
+      (∀ extra P H, p ≤ P → h ≤ H →
+        run checkEmpty (fuel + extra) P H sources beforeCaller before target memos.query =
+          (.ok (some raw), afterCaller, savedQueries, after)) ∧
+      Post formulas solver next beforeCaller afterCaller final ∧ final.query = savedQueries ∧
+      PendingRealized afterCaller.checked.native.machine.heap after ∧
+      (raw = [] ∨ raw = [.ok ((), after)]) ∧
+      (raw = [.ok ((), after)] →
+        (∃ (node : Option Nat) (scs : List EnumerationState.Suspended),
+          after.values[target]? = some (.unenumerated node scs)) ∧
+        ∀ source ∈ sources, source ≠ target → after.values[source]? = some .eliminated) ∧
+      (∀ (slot : Nat), before.values[slot]? = some .eliminated → after.values[slot]? = some .eliminated) ∧
+      after.values.length = before.values.length ∧
+      after.representatives = before.representatives ∧ after.counter = before.counter ∧
+      after.obligations = before.obligations ∧ after.expansionAncestry = before.expansionAncestry ∧
+      (∀ slot, slot ≠ target → after.recursionAncestry slot = before.recursionAncestry slot) ∧
+      (raw = [] →
+        ∃ («prefix» : List Nat) (source : Nat) (suffix : List Nat)
+          (prefixCaller : Caller width) (prefixEnum : EnumerationState.State Symbol EnumGuard)
+          (prefixQueries : Queries) (action : EnumerateM Symbol EnumGuard Unit),
+          sources = «prefix» ++ source :: suffix ∧
+          (∀ extra P H, p ≤ P → h ≤ H →
+            run checkEmpty (fuel + extra) P H «prefix» beforeCaller before target memos.query =
+              (.ok (some [.ok ((), prefixEnum)]), prefixCaller, prefixQueries, prefixEnum)) ∧
+          (∀ extra P H, p ≤ P → h ≤ H →
+            SourcePruningEnumerationDispatch.dispatch checkEmpty (fuel + extra) P H
+              prefixCaller prefixEnum source target prefixQueries =
+                (.ok (some action), afterCaller, savedQueries)) ∧
+          ExceptT.run (action prefixEnum) = [] ∧ after = prefixEnum) := by
+  induction sources generalizing inventory beforeCaller before memos with
+  | nil =>
+    refine ⟨0, 0, 0, [.ok ((), before)], beforeCaller, before, memos.query, memos, inventory,
+      ?_, Post.refl initial, rfl, realized, .inr rfl, ?_, ?_, rfl, rfl, rfl, rfl, rfl, ?_, ?_⟩
+    · intro extra P H _largeP _largeH
+      rfl
+    · intro _completed
+      exact ⟨targetPending, by simp⟩
+    · intro slot oldEliminated
+      exact oldEliminated
+    · intro slot _different
