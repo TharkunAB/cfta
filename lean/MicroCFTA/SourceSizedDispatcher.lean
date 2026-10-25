@@ -1,12 +1,13 @@
-import MicroCFTA.SourceSizedDispatchGraph
+import MicroCFTA.SourceSizedDeterministic
 import MicroCFTA.SourceSizedTrimGuards
 
 /-!
 # The public two-branch Sized dispatcher
 
 Both branches return the same four query functions. The plain-constraint
-scan derives the guard-erasure fact. The product-minimum scan derives run
-uniqueness. A failed scan uses the reference residual-guard precheck.
+scan derives the guard-erasure fact. Either the deterministic key check or
+the product-minimum scan derives run uniqueness. A failed scan uses the
+reference residual-guard precheck.
 The row argument is the canonical ordering of the original raw rows.
 -/
 namespace MicroCFTA.SourceSizedDispatcher
@@ -15,9 +16,13 @@ open SourceSymbolicIndex SourceObservations SourceGuards
 
 /-- The four source queries, including their signed sizes and ranks. -/
 structure Api (Symbol : Type) where
+  /-- List one exact size class in source order. -/
   terms : Int → List (Term Symbol)
+  /-- Count one exact size class. -/
   count : Int → Nat
+  /-- Select one term by its signed size and rank. -/
   unrank : Int → Int → Option (Term Symbol)
+  /-- Find the size and rank of an accepted term. -/
   rank : Term Symbol → Option Position
 
 /-- Reference queries read one first-occurrence distinct class sequence. -/
@@ -46,29 +51,45 @@ theorem reference_terms_toNat [DecidableEq Symbol]
     rw [zero, SourceSizedReference.classes_zero]
   · rfl
 
-/-- A passing direct graph gate makes the complete optimized record equal to the reference. -/
-theorem optimizedApi_eq_reference [DecidableEq State] [DecidableEq Symbol]
+/-- Distinct run classes identify the complete optimized and reference query records. -/
+theorem optimizedApi_of_unique [DecidableEq Symbol]
     (rows : Automaton State Symbol) (plain : Decoder.Plain rows)
-    (states : List State) (complete : ∀ state, state ∈ states)
-    (passed : SourceSizedDispatchGraph.unambiguousRows rows states complete = true) (root : State) :
+    (unique : SizedRank.Unambiguous rows) (root : State) :
     optimizedApi rows root = referenceApi rows root := by
-  obtain ⟨listed, counted, selected, ranked⟩ :=
-    SourceSizedDispatchGraph.optimized_reference rows plain states complete passed root
+  have reference := SourceSizedReference.classes_eq_enumerate rows plain unique
   change Api.mk _ _ _ _ = Api.mk _ _ _ _
   congr 1
   · funext size
-    rw [listed, reference_terms_toNat]
+    rw [SourceSizedDispatch.terms_exact, reference_terms_toNat, reference]
   · funext size
     dsimp only [optimizedApi, referenceApi, SourceSizedQueries.countSigned]
-    rw [counted, reference_terms_toNat]
+    rw [countAt_correct, reference_terms_toNat, reference]
   · funext size rank
     dsimp only [optimizedApi, referenceApi, SourceSizedQueries.unrankSigned]
-    rw [selected, reference_terms_toNat]
+    rw [SourceSizedDispatch.select_exact, reference_terms_toNat, reference]
     by_cases negative : rank < 0
     · simp [negative, show ¬0 ≤ rank by omega]
     · simp [negative, show 0 ≤ rank by omega]
   · funext term
-    exact ranked term
+    change TablePosition.positionsOf rows term root = _
+    rw [TablePosition.positionsOf_eq_termPosition rows plain unique, termPosition, ← reference]
+    rfl
+
+/-- A passing product-minimum gate identifies all four optimized queries. -/
+theorem optimizedApi_eq_reference [DecidableEq State] [DecidableEq Symbol]
+    (rows : Automaton State Symbol) (plain : Decoder.Plain rows)
+    (states : List State) (complete : ∀ state, state ∈ states)
+    (passed : SourceSizedDispatchGraph.unambiguousRows rows states complete = true) (root : State) :
+    optimizedApi rows root = referenceApi rows root :=
+  optimizedApi_of_unique rows plain (SourceSizedDispatchGraph.gate_unique rows plain states complete passed) root
+
+/-- A passing deterministic key gate identifies all four optimized queries. -/
+theorem optimizedApi_eq_deterministic [DecidableEq State] [DecidableEq Symbol]
+    (rows : Automaton State Symbol) (plain : Decoder.Plain rows)
+    (states : List State) (support : ∀ state edge, edge ∈ rows state → state ∈ states)
+    (passed : SourceSizedDeterministic.bottomUpDeterministic rows states = true) (root : State) :
+    optimizedApi rows root = referenceApi rows root :=
+  optimizedApi_of_unique rows plain (SourceSizedDeterministic.gate_unique rows plain states support passed) root
 
 /-- The source identity constraint has no equality class and a Top guard. -/
 def noConstraint : Constraint Formula := ⟨some [], .top⟩
@@ -135,7 +156,8 @@ noncomputable def sized [DecidableEq State] [DecidableEq Formula]
     (rows : State → List (Row State (Label Formula) (Constraint Formula)))
     (states : List State) (complete : ∀ state, state ∈ states) (root : State) : Except Unit (Api (Label Formula)) :=
   if plainCheck rows states &&
-      SourceSizedDispatchGraph.unambiguousRows (ordinaryRows rows) states complete then
+      (SourceSizedDeterministic.bottomUpDeterministic (ordinaryRows rows) states ||
+        SourceSizedDispatchGraph.unambiguousRows (ordinaryRows rows) states complete) then
     .ok (optimizedApi (ordinaryRows rows) root)
   else reference rows states root
 
@@ -170,10 +192,16 @@ theorem sized_eq_reference [DecidableEq State] [DecidableEq Formula]
   split
   · rename_i passed
     have both : plainCheck rows states = true ∧
-        SourceSizedDispatchGraph.unambiguousRows (ordinaryRows rows) states complete = true := by
-      simpa only [Bool.and_eq_true] using passed
-    obtain ⟨plain, unique⟩ := both
-    rw [optimizedApi_eq_reference _ (ordinary_plain rows) states complete unique,
+        (SourceSizedDeterministic.bottomUpDeterministic (ordinaryRows rows) states = true ∨
+          SourceSizedDispatchGraph.unambiguousRows (ordinaryRows rows) states complete = true) := by
+      simpa only [Bool.and_eq_true, Bool.or_eq_true] using passed
+    obtain ⟨plain, gate⟩ := both
+    have same : optimizedApi (ordinaryRows rows) root = referenceApi (ordinaryRows rows) root := by
+      rcases gate with deterministic | product
+      · exact optimizedApi_eq_deterministic _ (ordinary_plain rows) states (fun state _ _ => complete state)
+          deterministic root
+      · exact optimizedApi_eq_reference _ (ordinary_plain rows) states complete product root
+    rw [same,
       reference, plain_residual rows states complete root plain]
     simp only [↓reduceIte, checked_rows rows states complete plain]
   · rfl
