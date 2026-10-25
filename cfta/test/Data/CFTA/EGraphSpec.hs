@@ -23,9 +23,18 @@ import qualified Data.CFTA as FTA
 import Data.CFTA.Constraint (equalitiesHold, equalityConstraint, noConstraint)
 import Data.CFTA.EGraph
 import Data.CFTA.Equality.Constraint (mkEqConstraints)
+import Data.CFTA.Formula (Formula (..), Name (..), Relation (..))
+import qualified Data.CFTA.Formula as Formula
 import Data.CFTA.Index (Depth (..))
 import Data.CFTA.Path (path)
+import Data.CFTA.Refinement.Lattice (latticeEntailment)
+import Data.CFTA.Refinement.Verdict (Verdict (..), entailsWithBindings)
+import Data.CFTA.Symbol (valueName)
 import Data.CFTA.Term (Term, pattern Node)
+import Data.Hashable (Hashable)
+import qualified Data.Text as Text
+import GHC.Generics (Generic)
+import System.IO.Unsafe (unsafePerformIO)
 
 -- A term with a sort at each node, for 'addTermWith'.
 data Sorted = Sorted (Maybe (Term String)) String [Sorted]
@@ -105,6 +114,58 @@ termDepth :: Term String -> Int
 termDepth (Node _ []) = 0
 termDepth (Node _ ts) = 1 + maximum (map termDepth ts)
 
+-- An integer language with the length of a list: a literal, a variable, a length, a sum, and a quotient.
+data Arith = Lit Integer | Var String | Len String | Plus | Quotient
+    deriving (Eq, Ord, Show, Generic)
+
+instance Hashable Arith
+
+-- The values that an e-class can have: an interval, with no bound where Nothing.
+data Interval = Interval (Maybe Integer) (Maybe Integer)
+    deriving (Eq, Show)
+
+{- An analysis of refinements: the interval of the value of each e-class. All
+terms of an e-class have one value, so the join is the intersection: an
+e-class knows what each of its e-nodes knows. A point is a constant, which
+folds into its literal.
+-}
+refinements :: Analysis Arith Interval
+refinements = Analysis make meet leaf
+  where
+    make (Lit n) [] = Interval (Just n) (Just n)
+    make (Len _) [] = Interval (Just 0) Nothing
+    make Plus [Interval a b, Interval c d] = Interval ((+) <$> a <*> c) ((+) <$> b <*> d)
+    make Quotient [Interval (Just a) (Just b), Interval (Just c) (Just d)] | a == b, c == d, c /= 0 = Interval (Just (a `div` c)) (Just (a `div` c))
+    make _ _ = Interval Nothing Nothing
+    meet (Interval a b) (Interval c d) = Interval (bound max a c) (bound min b d)
+    bound f x y = maybe y (\x' -> Just (maybe x' (f x') y)) x
+    leaf (Interval (Just a) (Just b)) | a == b = Just (Lit a)
+    leaf _ = Nothing
+
+-- The refinement of an interval, a formula about the value.
+refinement :: Interval -> Formula
+refinement (Interval lo hi) =
+    Formula.conjunction
+        ([Atom Ge value (Formula.Lit a) | Just a <- [lo]] ++ [Atom Le value (Formula.Lit b) | Just b <- [hi]])
+  where
+    value = Formula.Var (Name (Text.pack valueName))
+
+{- The condition that a variable is not zero: the refinement of its e-class
+implies it, as the lattice of cfta decides without a solver.
+-}
+nonzero :: String -> Condition () Arith Interval
+nonzero x _ dataOf var = case var x >>= dataOf of
+    Just interval ->
+        unsafePerformIO
+            ( entailsWithBindings
+                latticeEntailment
+                []
+                (refinement interval)
+                (Atom Ne (Formula.Var (Name (Text.pack valueName))) (Formula.Lit 0))
+            )
+            == Yes
+    Nothing -> False
+
 -- The sum x1 + ... + xn, associated to the left.
 sumOf :: Int -> Term String
 sumOf n = foldl1 (\a b -> Node "+" [a, b]) [Node ('x' : show i) [] | i <- [1 .. n]]
@@ -166,6 +227,24 @@ spec = describe "Data.CFTA.EGraph" $ do
                             ]
                 Left err -> expectationFailure (show err)
             _ -> expectationFailure "no automaton"
+    describe "an analysis of refinements" $ do
+        let x = PVar "x"
+            divide = either (error . show) id (rule (PNode Quotient [x, x]) (PNode (Lit 1) []))
+            same lhs =
+                let (c, g) = addTerm lhs (emptyEGraph :: EGraph () Arith)
+                    (one, g') = addTerm (Node (Lit 1) []) g
+                    (g'', _) = saturateWith refinements (Limits 10 1000 0) [(divide, nonzero "x")] g'
+                 in equivalent g'' c one
+            succLen = Node Plus [Node (Len "xs") [], Node (Lit 1) []]
+        it "rewrites x / x to 1 when the refinement of x excludes 0" $
+            same (Node Quotient [succLen, succLen]) `shouldBe` True
+        it "does not rewrite x / x when the refinement of x allows 0" $
+            same (Node Quotient [Node (Len "xs") [], Node (Len "xs") []]) `shouldBe` False
+        it "folds a constant into its literal" $ do
+            let (c, g) = addTerm (Node Plus [Node (Lit 2) [], Node (Lit 3) []]) (emptyEGraph :: EGraph () Arith)
+                (five, g') = addTerm (Node (Lit 5) []) g
+                (g'', _) = saturateWith refinements (Limits 10 1000 0) [] g'
+            equivalent g'' c five `shouldBe` True
     it "holds the n! * Catalan(n - 1) terms of an AC sum of n variables, in 3^n - 2^(n+1) + n + 1 e-nodes" $
         forM_ [(3, 12), (4, 120), (5, 1680)] $ \(n, count) -> do
             let (c, g) = addTerm (sumOf n) emptyEGraph
