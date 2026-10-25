@@ -1,3 +1,4 @@
+import MicroCFTA.SourcePruningEnumerationNarrowContext
 import MicroCFTA.SourcePruningEnumerationNarrowCache
 import MicroCFTA.SourcePruningEnumerationReplacement
 import MicroCFTA.SourcePruningEnumerationNativeOrdinary
