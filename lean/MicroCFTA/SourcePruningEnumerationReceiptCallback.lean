@@ -1,4 +1,4 @@
-import MicroCFTA.SourcePruningEnumerationNativeBranchCompletion
+import MicroCFTA.SourcePruningEnumerationNativeCacheFrame
 import MicroCFTA.SourcePruningCallbackCompletion
 
 namespace MicroCFTA.SourcePruningEnumerationReceiptCallback
@@ -13,7 +13,7 @@ variable {Typing : Type} {width : Nat}
 def Completes (graph : Graph Symbol Constraint) (templates : List (Template.Pattern Symbol))
     (metadata : Metadata Typing) (uv : Nat) (before : EnumerationState.State Symbol Constraint) :
     Receipt width → Prop
-  | .complete fragment _ _ after =>
+  | .complete fragment caller queries after =>
       ∀ level frontier, Stratified before level frontier →
         (∀ group ∈ metadata.pending, PendingBound before.counter group) →
         ∃ nextLevel fuel result final,
@@ -21,6 +21,12 @@ def Completes (graph : Graph Symbol Constraint) (templates : List (Template.Patt
           RenderStable after.core final ∧ Frame after.core final ∧ Stratified final nextLevel (frontier + 1) ∧
           result.2.types = updatedTypes metadata uv (.inl fragment) ∧
           result.2.openHoles = metadata.openHoles ∧ result.2.typing = metadata.typing ∧
+          Admitted uv (.complete fragment caller queries (EnumerationExpandableIndex.frame final after)) ∧
+          FragmentHistory before (.complete fragment caller queries (EnumerationExpandableIndex.frame final after)) ∧
+          (Pending (.complete fragment caller queries after) →
+            Pending (.complete fragment caller queries (EnumerationExpandableIndex.frame final after))) ∧
+          (∀ preference, EnumerationPureSelection.next preference (EnumerationExpandableIndex.frame final after) =
+            EnumerationPureSelection.next preference after) ∧
           ∀ group ∈ result.2.pending, PendingBound final.counter group
   | _ => True
 
@@ -39,7 +45,12 @@ theorem completes (graph : Graph Symbol Constraint) (templates : List (Template.
       obtain ⟨fuel, result, final, success, stable, frame, finalOrder, types, holes, typing, finalBounded⟩ :=
         recordTypes_inl_complete_bounded graph templates nextLevel (frontier + 1) metadata uv fragment
           after.core admitted.2.1 afterOrder admitted.2.2.1 afterBounded
-      exact ⟨nextLevel, fuel, result, final, success, stable, frame, finalOrder, types, holes, typing, finalBounded⟩
+      exact ⟨nextLevel, fuel, result, final, success, stable, frame, finalOrder, types, holes, typing,
+        admitted_complete_frame uv fragment caller queries after final frame stable.safe admitted,
+        fragmentHistory_complete_frame before fragment caller queries after final frame history,
+        fun pending => pending_complete_frame fragment caller queries after final frame pending,
+        fun preference => selection_frame preference after final frame.counter,
+        finalBounded⟩
   | unhandled | rejected _ _ _ | stopped _ _ _ => trivial
 
 end MicroCFTA.SourcePruningEnumerationReceiptCallback
