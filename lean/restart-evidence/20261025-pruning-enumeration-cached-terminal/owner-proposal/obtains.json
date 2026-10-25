@@ -1,0 +1,749 @@
+{
+  "packets": [
+    {
+      "scope": "complete.prefix",
+      "producer": "SourcePruningEnumerationTerminalPrefix.run_complete beforeCaller.checked.native.machine.heap before.core first rest before.waiting roots paths counts safe bounded pending realized",
+      "fields": [
+        {
+          "scope": "complete.prefix",
+          "name": "prefixFuel",
+          "type": "Nat",
+          "used": true,
+          "kind": "obtain",
+          "type_only": false
+        },
+        {
+          "scope": "complete.prefix",
+          "name": "recorded",
+          "type": "List Nat",
+          "used": true,
+          "kind": "obtain",
+          "type_only": false
+        },
+        {
+          "scope": "complete.prefix",
+          "name": "winner",
+          "type": "Nat",
+          "used": true,
+          "kind": "obtain",
+          "type_only": false
+        },
+        {
+          "scope": "complete.prefix",
+          "name": "moved",
+          "type": "EnumerationWaitingIndex.Waiting",
+          "used": true,
+          "kind": "obtain",
+          "type_only": false
+        },
+        {
+          "scope": "complete.prefix",
+          "name": "_scanned",
+          "type": "EnumerationState.State Symbol Constraint",
+          "used": false,
+          "kind": "obtain",
+          "type_only": true
+        },
+        {
+          "scope": "complete.prefix",
+          "name": "_united",
+          "type": "EnumerationState.State Symbol Constraint",
+          "used": false,
+          "kind": "obtain",
+          "type_only": true
+        },
+        {
+          "scope": "complete.prefix",
+          "name": "joined",
+          "type": "EnumerationState.State Symbol Constraint",
+          "used": true,
+          "kind": "obtain",
+          "type_only": false
+        },
+        {
+          "scope": "complete.prefix",
+          "name": "prefixRun",
+          "type": "∀ (extra : Nat), ExceptT.run (SourcePruningEnumerationTerminalPrefix.run (prefixFuel + extra) first rest before.waiting before.core) = [.ok ((recorded, winner, moved), joined)]",
+          "used": true,
+          "kind": "obtain",
+          "type_only": false
+        },
+        {
+          "scope": "complete.prefix",
+          "name": "_scanRun",
+          "type": "∀ (extra : Nat), ExceptT.run (((first :: rest).mapM fun sc => representative (prefixFuel + extra) sc.var) before.core) = [.ok (recorded, _scanned)]",
+          "used": false,
+          "kind": "obtain",
+          "type_only": true
+        },
+        {
+          "scope": "complete.prefix",
+          "name": "_unionRun",
+          "type": "∀ (extra : Nat), ExceptT.run ((rest.forM fun sc => unionVariables (prefixFuel + extra) first.var sc.var) _scanned) = [.ok ((), _united)]",
+          "used": false,
+          "kind": "obtain",
+          "type_only": true
+        },
+        {
+          "scope": "complete.prefix",
+          "name": "_winnerRun",
+          "type": "∀ (extra : Nat), ExceptT.run (representative (prefixFuel + extra) first.var _united) = [.ok (winner, joined)]",
+          "used": false,
+          "kind": "obtain",
+          "type_only": true
+        },
+        {
+          "scope": "complete.prefix",
+          "name": "recordedSame",
+          "type": "recorded = (first :: rest).map (fun sc => roots sc.var)",
+          "used": true,
+          "kind": "obtain",
+          "type_only": false
+        },
+        {
+          "scope": "complete.prefix",
+          "name": "movedSame",
+          "type": "moved = EnumerationCanonicalWaiting.moveMany winner (EnumerationBuilderCaches.canonicalIds (recorded.filter (fun key => key != winner))) before.waiting",
+          "used": true,
+          "kind": "obtain",
+          "type_only": false
+        },
+        {
+          "scope": "complete.prefix",
+          "name": "winnerMember",
+          "type": "winner ∈ recorded",
+          "used": true,
+          "kind": "obtain",
+          "type_only": false
+        },
+        {
+          "scope": "complete.prefix",
+          "name": "rootWinner",
+          "type": "roots winner = winner",
+          "used": true,
+          "kind": "obtain",
+          "type_only": false
+        },
+        {
+          "scope": "complete.prefix",
+          "name": "prefixRoots",
+          "type": "Roots joined.representatives (EnumerationCanonicalUnion.mergedRoots roots recorded winner)",
+          "used": true,
+          "kind": "obtain",
+          "type_only": false
+        },
+        {
+          "scope": "complete.prefix",
+          "name": "prefixCounts",
+          "type": "EnumerationCanonicalWaiting.Correct (EnumerationCanonicalUnion.mergedRoots roots recorded winner) joined.values moved",
+          "used": true,
+          "kind": "obtain",
+          "type_only": false
+        },
+        {
+          "scope": "complete.prefix",
+          "name": "joinedSame",
+          "type": "joined = {before.core with representatives := joined.representatives}",
+          "used": true,
+          "kind": "obtain",
+          "type_only": false
+        },
+        {
+          "scope": "complete.prefix",
+          "name": "joinedStorage",
+          "type": "StorageValid joined",
+          "used": true,
+          "kind": "obtain",
+          "type_only": false
+        },
+        {
+          "scope": "complete.prefix",
+          "name": "joinedRealized",
+          "type": "PendingRealized beforeCaller.checked.native.machine.heap joined",
+          "used": true,
+          "kind": "obtain",
+          "type_only": false
+        },
+        {
+          "scope": "complete.prefix",
+          "name": "winnerPending",
+          "type": "PendingAt joined winner",
+          "used": true,
+          "kind": "obtain",
+          "type_only": false
+        },
+        {
+          "scope": "complete.prefix",
+          "name": "recordedPending",
+          "type": "∀ (source : Nat), source ∈ recorded → PendingAt joined source",
+          "used": true,
+          "kind": "obtain",
+          "type_only": false
+        },
+        {
+          "scope": "complete.prefix",
+          "name": "_keysNodup",
+          "type": "(EnumerationBuilderCaches.canonicalIds (recorded.filter (fun key => key != winner))).Nodup",
+          "used": false,
+          "kind": "obtain",
+          "type_only": true
+        },
+        {
+          "scope": "complete.prefix",
+          "name": "_keysSorted",
+          "type": "(EnumerationBuilderCaches.canonicalIds (recorded.filter (fun key => key != winner))).Pairwise (· ≤ ·)",
+          "used": false,
+          "kind": "obtain",
+          "type_only": true
+        },
+        {
+          "scope": "complete.prefix",
+          "name": "_keysMember",
+          "type": "∀ (key : Nat), key ∈ EnumerationBuilderCaches.canonicalIds (recorded.filter (fun key => key != winner)) ↔ key ∈ recorded ∧ key ≠ winner",
+          "used": false,
+          "kind": "obtain",
+          "type_only": true
+        }
+      ]
+    },
+    {
+      "scope": "complete.fold",
+      "producer": "SourcePruningEnumerationCachedFoldCompletion.complete formulas solver inventory beforeCaller joinedCache recorded checkEmpty winner memos (EnumerationCanonicalUnion.mergedRoots roots recorded winner) initial joinedStorage joinedRealized prefixRoots prefixCounts joinedFlags winnerPending (fun source member => Or.inl (recordedPending source member)) actual derived ranges.1",
+      "fields": [
+        {
+          "scope": "complete.fold",
+          "name": "foldFuel",
+          "type": "Nat",
+          "used": true,
+          "kind": "obtain",
+          "type_only": false
+        },
+        {
+          "scope": "complete.fold",
+          "name": "foldP",
+          "type": "Nat",
+          "used": true,
+          "kind": "obtain",
+          "type_only": false
+        },
+        {
+          "scope": "complete.fold",
+          "name": "foldH",
+          "type": "Nat",
+          "used": true,
+          "kind": "obtain",
+          "type_only": false
+        },
+        {
+          "scope": "complete.fold",
+          "name": "foldRows",
+          "type": "List (Unit × EnumerationExpandableIndex.Cached Symbol Constraint)",
+          "used": true,
+          "kind": "obtain",
+          "type_only": false
+        },
+        {
+          "scope": "complete.fold",
+          "name": "foldCaller",
+          "type": "Caller width",
+          "used": true,
+          "kind": "obtain",
+          "type_only": false
+        },
+        {
+          "scope": "complete.fold",
+          "name": "foldQueries",
+          "type": "Queries",
+          "used": true,
+          "kind": "obtain",
+          "type_only": false
+        },
+        {
+          "scope": "complete.fold",
+          "name": "foldFinal",
+          "type": "Memos",
+          "used": true,
+          "kind": "obtain",
+          "type_only": false
+        },
+        {
+          "scope": "complete.fold",
+          "name": "foldInventory",
+          "type": "Inventory",
+          "used": true,
+          "kind": "obtain",
+          "type_only": false
+        },
+        {
+          "scope": "complete.fold",
+          "name": "folded",
+          "type": "EnumerationExpandableIndex.Cached Symbol Constraint",
+          "used": true,
+          "kind": "obtain",
+          "type_only": false
+        },
+        {
+          "scope": "complete.fold",
+          "name": "cachedFoldRun",
+          "type": "∀ extra P H, foldP ≤ P → foldH ≤ H → SourcePruningEnumerationCachedFold.run checkEmpty (foldFuel + extra) P H recorded beforeCaller joinedCache winner memos.query = ((.ok (some (foldRows.map (fun row => .ok (row.1, row.2.core)))), foldCaller, foldQueries, folded.core), some folded)",
+          "used": true,
+          "kind": "obtain",
+          "type_only": false
+        },
+        {
+          "scope": "complete.fold",
+          "name": "foldPost",
+          "type": "Post formulas solver foldInventory beforeCaller foldCaller foldFinal",
+          "used": true,
+          "kind": "obtain",
+          "type_only": false
+        },
+        {
+          "scope": "complete.fold",
+          "name": "foldQuerySame",
+          "type": "foldFinal.query = foldQueries",
+          "used": true,
+          "kind": "obtain",
+          "type_only": false
+        },
+        {
+          "scope": "complete.fold",
+          "name": "foldCounter",
+          "type": "folded.core.counter = joinedCache.core.counter",
+          "used": true,
+          "kind": "obtain",
+          "type_only": false
+        },
+        {
+          "scope": "complete.fold",
+          "name": "foldForest",
+          "type": "folded.core.representatives = joinedCache.core.representatives",
+          "used": true,
+          "kind": "obtain",
+          "type_only": false
+        },
+        {
+          "scope": "complete.fold",
+          "name": "foldPaths",
+          "type": "Roots folded.core.representatives (EnumerationCanonicalUnion.mergedRoots roots recorded winner)",
+          "used": true,
+          "kind": "obtain",
+          "type_only": false
+        },
+        {
+          "scope": "complete.fold",
+          "name": "foldStorage",
+          "type": "StorageValid folded.core",
+          "used": true,
+          "kind": "obtain",
+          "type_only": false
+        },
+        {
+          "scope": "complete.fold",
+          "name": "foldRealized",
+          "type": "PendingRealized foldCaller.checked.native.machine.heap folded.core",
+          "used": true,
+          "kind": "obtain",
+          "type_only": false
+        },
+        {
+          "scope": "complete.fold",
+          "name": "foldCounts",
+          "type": "EnumerationCanonicalWaiting.Correct (EnumerationCanonicalUnion.mergedRoots roots recorded winner) folded.core.values folded.waiting",
+          "used": true,
+          "kind": "obtain",
+          "type_only": false
+        },
+        {
+          "scope": "complete.fold",
+          "name": "foldWaiting",
+          "type": "folded.waiting = joinedCache.waiting",
+          "used": true,
+          "kind": "obtain",
+          "type_only": false
+        },
+        {
+          "scope": "complete.fold",
+          "name": "foldFlags",
+          "type": "∀ (slot : Nat), SourcePruningEnumerationNativeIndex.candidate foldCaller.checked.native.machine.heap ((folded.core.values[slot]?).getD .eliminated) = some (folded.expandable slot)",
+          "used": true,
+          "kind": "obtain",
+          "type_only": false
+        },
+        {
+          "scope": "complete.fold",
+          "name": "foldShape",
+          "type": "foldRows = [] ∨ foldRows = [((), folded)]",
+          "used": true,
+          "kind": "obtain",
+          "type_only": false
+        },
+        {
+          "scope": "complete.fold",
+          "name": "foldPending",
+          "type": "PendingAt folded.core winner",
+          "used": true,
+          "kind": "obtain",
+          "type_only": false
+        },
+        {
+          "scope": "complete.fold",
+          "name": "foldEliminated",
+          "type": "∀ (slot : Nat), joinedCache.core.values[slot]? = some .eliminated → folded.core.values[slot]? = some .eliminated",
+          "used": true,
+          "kind": "obtain",
+          "type_only": false
+        },
+        {
+          "scope": "complete.fold",
+          "name": "foldCompleted",
+          "type": "foldRows = [((), folded)] → ∀ source ∈ recorded, source ≠ winner → folded.core.values[source]? = some .eliminated",
+          "used": true,
+          "kind": "obtain",
+          "type_only": false
+        }
+      ]
+    },
+    {
+      "scope": "complete.completed.incoming",
+      "producer": "SourcePruningEnumerationCachedIncoming.complete formulas solver foldInventory foldCaller folded checkEmpty winner incoming incomingScs foldFinal (EnumerationCanonicalUnion.mergedRoots roots recorded winner) foldPost.context foldStorage foldRealized foldPaths foldCounts foldFlags foldedRoot foldPending foldedAvailable closed foldedBounded actual derived current incoming ranges",
+      "fields": [
+        {
+          "scope": "complete.completed.incoming",
+          "name": "incomingR",
+          "type": "Nat",
+          "used": true,
+          "kind": "obtain",
+          "type_only": false
+        },
+        {
+          "scope": "complete.completed.incoming",
+          "name": "incomingN",
+          "type": "Nat",
+          "used": true,
+          "kind": "obtain",
+          "type_only": false
+        },
+        {
+          "scope": "complete.completed.incoming",
+          "name": "incomingP",
+          "type": "Nat",
+          "used": true,
+          "kind": "obtain",
+          "type_only": false
+        },
+        {
+          "scope": "complete.completed.incoming",
+          "name": "incomingH",
+          "type": "Nat",
+          "used": true,
+          "kind": "obtain",
+          "type_only": false
+        },
+        {
+          "scope": "complete.completed.incoming",
+          "name": "k",
+          "type": "Nat",
+          "used": true,
+          "kind": "obtain",
+          "type_only": false
+        },
+        {
+          "scope": "complete.completed.incoming",
+          "name": "oldNode",
+          "type": "Option Nat",
+          "used": true,
+          "kind": "obtain",
+          "type_only": false
+        },
+        {
+          "scope": "complete.completed.incoming",
+          "name": "oldScs",
+          "type": "List EnumerationState.Suspended",
+          "used": true,
+          "kind": "obtain",
+          "type_only": false
+        },
+        {
+          "scope": "complete.completed.incoming",
+          "name": "read",
+          "type": "EnumerationState.State Symbol Constraint",
+          "used": true,
+          "kind": "obtain",
+          "type_only": false
+        },
+        {
+          "scope": "complete.completed.incoming",
+          "name": "afterCaller",
+          "type": "Caller width",
+          "used": true,
+          "kind": "obtain",
+          "type_only": false
+        },
+        {
+          "scope": "complete.completed.incoming",
+          "name": "savedQueries",
+          "type": "Queries",
+          "used": true,
+          "kind": "obtain",
+          "type_only": false
+        },
+        {
+          "scope": "complete.completed.incoming",
+          "name": "final",
+          "type": "Memos",
+          "used": true,
+          "kind": "obtain",
+          "type_only": false
+        },
+        {
+          "scope": "complete.completed.incoming",
+          "name": "next",
+          "type": "Inventory",
+          "used": true,
+          "kind": "obtain",
+          "type_only": false
+        },
+        {
+          "scope": "complete.completed.incoming",
+          "name": "replacement",
+          "type": "Node",
+          "used": true,
+          "kind": "obtain",
+          "type_only": false
+        },
+        {
+          "scope": "complete.completed.incoming",
+          "name": "handle",
+          "type": "Nat",
+          "used": true,
+          "kind": "obtain",
+          "type_only": false
+        },
+        {
+          "scope": "complete.completed.incoming",
+          "name": "after",
+          "type": "EnumerationExpandableIndex.Cached Symbol Constraint",
+          "used": true,
+          "kind": "obtain",
+          "type_only": false
+        },
+        {
+          "scope": "complete.completed.incoming",
+          "name": "reading",
+          "type": "∀ extra, ExceptT.run (getValue (incomingR + extra) winner folded.core) = [.ok (.unenumerated oldNode oldScs, read)]",
+          "used": true,
+          "kind": "obtain",
+          "type_only": false
+        },
+        {
+          "scope": "complete.completed.incoming",
+          "name": "frame",
+          "type": "EnumerationCompressionFrame.Frame folded.core read",
+          "used": true,
+          "kind": "obtain",
+          "type_only": false
+        },
+        {
+          "scope": "complete.completed.incoming",
+          "name": "incomingRun",
+          "type": "∀ extra extraNative P H, incomingP ≤ P → incomingH ≤ H → SourcePruningEnumerationIncomingNode.run checkEmpty (incomingR + extra) (incomingN + extraNative) P H foldCaller folded.core winner incoming incomingScs foldFinal.query = (.ok (some (if replacement = .empty then [] else [.ok ((), after.core)])), afterCaller, savedQueries, read)",
+          "used": true,
+          "kind": "obtain",
+          "type_only": false
+        },
+        {
+          "scope": "complete.completed.incoming",
+          "name": "writePrefix",
+          "type": "ExceptT.run ((do setValue winner (.unenumerated (some handle) (incomingScs ++ oldScs)); inheritAncestry winner) read) = [.ok ((), after.core)]",
+          "used": true,
+          "kind": "obtain",
+          "type_only": false
+        },
+        {
+          "scope": "complete.completed.incoming",
+          "name": "afterSame",
+          "type": "after.core = {read with values := read.values.set winner (.unenumerated (some handle) (incomingScs ++ oldScs)), recursionAncestry := fun other => if other = winner then (read.expansionAncestry ++ read.recursionAncestry winner).eraseDups else read.recursionAncestry other}",
+          "used": true,
+          "kind": "obtain",
+          "type_only": false
+        },
+        {
+          "scope": "complete.completed.incoming",
+          "name": "afterStored",
+          "type": "after.core.values[winner]? = some (.unenumerated (some handle) (incomingScs ++ oldScs))",
+          "used": true,
+          "kind": "obtain",
+          "type_only": false
+        },
+        {
+          "scope": "complete.completed.incoming",
+          "name": "afterStorage",
+          "type": "StorageValid after.core",
+          "used": true,
+          "kind": "obtain",
+          "type_only": false
+        },
+        {
+          "scope": "complete.completed.incoming",
+          "name": "afterRealized",
+          "type": "PendingRealized afterCaller.checked.native.machine.heap after.core",
+          "used": true,
+          "kind": "obtain",
+          "type_only": false
+        },
+        {
+          "scope": "complete.completed.incoming",
+          "name": "incomingPost",
+          "type": "Post formulas solver next foldCaller afterCaller final",
+          "used": true,
+          "kind": "obtain",
+          "type_only": false
+        },
+        {
+          "scope": "complete.completed.incoming",
+          "name": "incomingQuerySame",
+          "type": "final.query = savedQueries",
+          "used": true,
+          "kind": "obtain",
+          "type_only": false
+        },
+        {
+          "scope": "complete.completed.incoming",
+          "name": "unfolding",
+          "type": "Cache.Extends foldFinal.unfolding final.unfolding",
+          "used": true,
+          "kind": "obtain",
+          "type_only": false
+        },
+        {
+          "scope": "complete.completed.incoming",
+          "name": "replacementAvailable",
+          "type": "Available afterCaller.checked.native.machine.heap replacement",
+          "used": true,
+          "kind": "obtain",
+          "type_only": false
+        },
+        {
+          "scope": "complete.completed.incoming",
+          "name": "replacementClosed",
+          "type": "replacement.free = []",
+          "used": true,
+          "kind": "obtain",
+          "type_only": false
+        },
+        {
+          "scope": "complete.completed.incoming",
+          "name": "encoded",
+          "type": "encodeNode replacement = some handle",
+          "used": true,
+          "kind": "obtain",
+          "type_only": false
+        },
+        {
+          "scope": "complete.completed.incoming",
+          "name": "decoded",
+          "type": "lookupNode afterCaller.checked.native.machine.heap handle = some replacement",
+          "used": true,
+          "kind": "obtain",
+          "type_only": false
+        },
+        {
+          "scope": "complete.completed.incoming",
+          "name": "cacheRun",
+          "type": "∀ extra, (SourcePruningEnumerationNativeIndex.write afterCaller.checked.native.machine.heap (k + extra) winner (.unenumerated (some handle) (incomingScs ++ oldScs)) incomingScs [] (EnumerationExpandableIndex.frame read folded)).map (EnumerationExpandableIndex.frame after.core) = some after",
+          "used": true,
+          "kind": "obtain",
+          "type_only": false
+        },
+        {
+          "scope": "complete.completed.incoming",
+          "name": "afterCounter",
+          "type": "after.core.counter = folded.core.counter",
+          "used": true,
+          "kind": "obtain",
+          "type_only": false
+        },
+        {
+          "scope": "complete.completed.incoming",
+          "name": "afterRepresentatives",
+          "type": "after.core.representatives = read.representatives",
+          "used": true,
+          "kind": "obtain",
+          "type_only": false
+        },
+        {
+          "scope": "complete.completed.incoming",
+          "name": "afterPaths",
+          "type": "Roots after.core.representatives (EnumerationCanonicalUnion.mergedRoots roots recorded winner)",
+          "used": true,
+          "kind": "obtain",
+          "type_only": false
+        },
+        {
+          "scope": "complete.completed.incoming",
+          "name": "afterCounts",
+          "type": "EnumerationCanonicalWaiting.Correct (EnumerationCanonicalUnion.mergedRoots roots recorded winner) after.core.values after.waiting",
+          "used": true,
+          "kind": "obtain",
+          "type_only": false
+        },
+        {
+          "scope": "complete.completed.incoming",
+          "name": "incomingWaiting",
+          "type": "after.waiting = EnumerationCanonicalWaiting.count (EnumerationCanonicalUnion.mergedRoots roots recorded winner) 1 incomingScs folded.waiting",
+          "used": true,
+          "kind": "obtain",
+          "type_only": false
+        },
+        {
+          "scope": "complete.completed.incoming",
+          "name": "afterFlags",
+          "type": "∀ (slot : Nat), SourcePruningEnumerationNativeIndex.candidate afterCaller.checked.native.machine.heap ((after.core.values[slot]?).getD .eliminated) = some (after.expandable slot)",
+          "used": true,
+          "kind": "obtain",
+          "type_only": false
+        },
+        {
+          "scope": "complete.completed.incoming",
+          "name": "afterExpandable",
+          "type": "after.expandable = (fun slot => if slot = winner then !(MergedOrdinaryHeight.recursiveBoundary replacement && (incomingScs ++ oldScs).isEmpty) else folded.expandable slot)",
+          "used": true,
+          "kind": "obtain",
+          "type_only": false
+        },
+        {
+          "scope": "complete.completed.incoming",
+          "name": "optional",
+          "type": "oldNode = none → replacement = incoming ∧ afterCaller = foldCaller ∧ savedQueries = foldFinal.query ∧ final = foldFinal ∧ next = foldInventory",
+          "used": true,
+          "kind": "obtain",
+          "type_only": false
+        },
+        {
+          "scope": "complete.completed.incoming",
+          "name": "present",
+          "type": "∀ oldHandle, oldNode = some oldHandle → ∃ (old query : Node) (queried : Checked width), lookupNode foldCaller.checked.native.machine.heap oldHandle = some old ∧ next.source = foldCaller.checked.native.machine.heap ∧ next.roots = foldInventory.roots ++ [incoming, old] ∧ SourceCurrentAllocatedTargetQuery.Receipt formulas solver next incoming old foldCaller.checked query queried foldFinal ∧ (∀ ambient term, InternedGuardedLanguage.meaning (SourceEqualityPCSGuard.holds formulas solver) ambient replacement term ↔ InternedGuardedLanguage.meaning (SourceEqualityPCSGuard.holds formulas solver) ambient incoming term ∧ InternedGuardedLanguage.meaning (SourceEqualityPCSGuard.holds formulas solver) ambient old term) ∧ (checkEmpty = false → replacement = query ∧ afterCaller = SourceCurrentAllocatedPartialState.advance foldCaller queried foldCaller.fourth foldCaller.merge ∧ final = foldFinal)",
+          "used": true,
+          "kind": "obtain",
+          "type_only": false
+        }
+      ]
+    }
+  ],
+  "obtain_count": 3,
+  "field_count": 89,
+  "all_fields_expanded": true,
+  "root_packet_order_exact": true,
+  "unused_field_names": [
+    "_scanned",
+    "_united",
+    "_scanRun",
+    "_unionRun",
+    "_winnerRun",
+    "_keysNodup",
+    "_keysSorted",
+    "_keysMember"
+  ],
+  "body_author": "Root only"
+}

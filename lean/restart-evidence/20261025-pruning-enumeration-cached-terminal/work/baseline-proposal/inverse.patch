@@ -1,0 +1,24 @@
+--- candidate.py
++++ basis.py
+@@ -5,17 +5,17 @@
+ from pathlib import Path
+ 
+ root = Path('/home/tritlo/Code/mcfta')
+-area = Path('/tmp/mcfta-pruning-enumeration-cached-terminal-20261025')
++area = Path('/tmp/mcfta-pruning-enumeration-cached-incoming-20261025')
+ area.mkdir(exist_ok=True)
+ def git(*args):
+     return subprocess.check_output(['git', *args], cwd=root)
+ head = git('rev-parse', 'HEAD').decode().strip()
+ main = git('rev-parse', 'origin/main').decode().strip()
+-assert head == '338e65bc8592434b5a21928d822e10ccc12cbcd0'
++assert head == '017a8fbacc9e824dd311fef40291965b350f19f4'
+ assert main == '74250bd889685da436cdbfe32ac4b5a0878ffd09'
+ assert not git('status', '--porcelain')
+-git('branch', 'codex/backup-pruning-enumeration-cached-terminal-20261025-1100', head)
+-assert git('rev-parse', 'codex/backup-pruning-enumeration-cached-terminal-20261025-1100').decode().strip() == head
++git('branch', 'codex/backup-pruning-enumeration-cached-incoming-20261025-1021', head)
++assert git('rev-parse', 'codex/backup-pruning-enumeration-cached-incoming-20261025-1021').decode().strip() == head
+ tree = git('ls-tree', '-r', '-z', head)
+ (area / 'baseline-tree.txt').write_bytes(tree)
+ for name, args in [('refs', ('for-each-ref', '--format=%(objectname) %(refname)')),

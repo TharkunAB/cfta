@@ -1,0 +1,49 @@
+theorem finish_complete [DecidableEq Node]
+    (heap : InternedConstructorTemplates.State Symbol Constraint)
+    (before : EnumerationState.State Symbol EnumGuard) (replacement : Node) (target handle : Nat)
+    (incomingScs oldScs : List EnumerationState.Suspended)
+    (coherent : InternedRecordCoherence.Coherent heap)
+    (available : Available heap replacement) (closed : replacement.free = [])
+    (encoded : encodeNode replacement = some handle)
+    (realized : PendingRealized heap before) (storage : StorageValid before)
+    (inside : target < before.values.length)
+    (bounded : ∀ sc ∈ incomingScs ++ oldScs, sc.var < before.counter) :
+    ∃ after : EnumerationState.State Symbol EnumGuard,
+      ExceptT.run ((do
+        setValue target (.unenumerated (some handle) (incomingScs ++ oldScs))
+        inheritAncestry target) before) = [.ok ((), after)] ∧
+      ExceptT.run (finish target handle incomingScs oldScs replacement before) =
+        (if replacement = .empty then [] else [.ok ((), after)]) ∧
+      after = {before with
+        values := before.values.set target (.unenumerated (some handle) (incomingScs ++ oldScs))
+        recursionAncestry := fun other => if other = target then
+          (before.expansionAncestry ++ before.recursionAncestry target).eraseDups
+          else before.recursionAncestry other} ∧
+      after.values[target]? = some (.unenumerated (some handle) (incomingScs ++ oldScs)) ∧
+      StorageValid after ∧ PendingRealized heap after := by
+  obtain ⟨writtenHandle, middle, writtenEncoded, _written, middleSame, middleStored, middleRealized⟩ :=
+    write_available_realized heap before replacement target (incomingScs ++ oldScs)
+      coherent available closed realized inside
+  have sameHandle : writtenHandle = handle := by
+    exact Option.some.inj (writtenEncoded.symm.trans encoded)
+  subst writtenHandle
+  subst middle
+  let after : EnumerationState.State Symbol EnumGuard :=
+    {before with
+      values := before.values.set target (.unenumerated (some handle) (incomingScs ++ oldScs))
+      recursionAncestry := fun other => if other = target then
+        (before.expansionAncestry ++ before.recursionAncestry target).eraseDups
+        else before.recursionAncestry other}
+  have raw : ExceptT.run (finish target handle incomingScs oldScs replacement before) =
+      (if replacement = .empty then [] else [.ok ((), after)]) := by
+    cases replacement with
+    | empty => simp only [↓reduceIte]; rfl
+    | reference name => simp only [reduceCtorEq, ↓reduceIte]; rfl
+    | node entry edges depth free => simp only [reduceCtorEq, ↓reduceIte]; rfl
+    | union entry members depth free => simp only [reduceCtorEq, ↓reduceIte]; rfl
+    | mu entry body depthShape ordinaryShape => simp only [reduceCtorEq, ↓reduceIte]; rfl
+  have afterStorage : StorageValid after := by
+    exact ⟨(set_storage before storage target (.unenumerated (some handle) (incomingScs ++ oldScs)) bounded).aligned,
+      storage.total, storage.forest, (set_storage before storage target (.unenumerated (some handle) (incomingScs ++ oldScs)) bounded).values, storage.guards⟩
+  exact ⟨after, rfl, raw, rfl, middleStored, afterStorage, middleRealized⟩
+

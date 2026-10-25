@@ -1,0 +1,33 @@
+    refine ⟨prefixFuel + incomingR, foldFuel + incomingN, foldP + incomingP, foldH + incomingH,
+      recorded, winner, moved, joined, [.ok ((), folded)], foldCaller, folded, foldQueries, foldFinal,
+      foldInventory, (if replacement = .empty then [] else [.ok (.hole winner, afterWrite)]),
+      afterCaller, read, savedQueries, final, next, ?_, recordedSame, winnerMember, movedSame,
+      ?_, .inr rfl, foldPost, foldQuerySame, foldedStorage, foldRealized, foldedRoot, foldCounts,
+      ?_, foldPost.trans incomingPost, incomingQuerySame, ?_, ?_⟩
+    · intro extra
+      simpa only [Nat.add_assoc] using prefixRun (incomingR + extra)
+    · intro extra P H enoughP enoughH
+      simpa only [Nat.add_assoc] using foldRun (incomingN + extra) P H (by omega) (by omega)
+    · intro extraRepresentative extraNative P H enoughP enoughH
+      simp only [run, ite_eq_right nonempty, Nat.add_assoc,
+        prefixRun (incomingR + extraRepresentative),
+        foldRun (incomingN + extraNative) P H (by omega) (by omega)]
+      rw [Nat.add_left_comm prefixFuel incomingR extraRepresentative,
+        Nat.add_left_comm foldFuel incomingN extraNative,
+        incomingRun (prefixFuel + extraRepresentative) (foldFuel + extraNative) P H (by omega) (by omega)]
+      by_cases empty : replacement = .empty <;> simp [empty]
+    · intro isRejected
+      cases isRejected
+    · intro isCompleted
+      refine ⟨oldNode, oldScs, read, afterWrite, replacement, handle, rfl, ?_, frame, ?_, writePrefix,
+        afterStored, afterStorage, afterRealized, writeCounts, rfl, winnerBound, replacementAvailable,
+        replacementClosed, encoded, decoded, optional, ?_⟩
+      · intro extra
+        simpa only [Nat.add_assoc, Nat.add_left_comm prefixFuel incomingR extra] using reading (prefixFuel + extra)
+      · intro extraRepresentative extraNative P H enoughP enoughH
+        simpa only [Nat.add_assoc, Nat.add_left_comm prefixFuel incomingR extraRepresentative,
+          Nat.add_left_comm foldFuel incomingN extraNative] using
+          incomingRun (prefixFuel + extraRepresentative) (foldFuel + extraNative) P H (by omega) (by omega)
+      · intro requestedHandle someEq
+        obtain ⟨old, query, queried, oldDecoded, nextSource, nextRoots, receipt, meaning, _⟩ := present requestedHandle someEq
+        exact ⟨old, query, queried, oldDecoded, nextSource, nextRoots, receipt, meaning⟩

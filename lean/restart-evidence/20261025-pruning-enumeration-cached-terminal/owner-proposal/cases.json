@@ -1,0 +1,84 @@
+{
+  "groups": [
+    {
+      "scope": "complete.foldShape",
+      "kind": "rcases",
+      "expression": "foldShape",
+      "branches": [
+        {
+          "name": "rejected",
+          "fields": [
+            {
+              "scope": "complete.foldShape.rejected",
+              "name": "rejected",
+              "type": "foldRows = []",
+              "used": true,
+              "kind": "case"
+            }
+          ]
+        },
+        {
+          "name": "completed",
+          "fields": [
+            {
+              "scope": "complete.foldShape.completed",
+              "name": "completed",
+              "type": "foldRows = [((), folded)]",
+              "used": true,
+              "kind": "case"
+            }
+          ]
+        }
+      ],
+      "substitution": "Root substitutes foldRows in each branch; no additional case payload."
+    },
+    {
+      "scope": "complete.rejected.impossible",
+      "kind": "impossible_equality_elimination",
+      "expression": "isCompleted",
+      "branches": [],
+      "generated_payloads": []
+    },
+    {
+      "scope": "complete.completed.terminal.empty",
+      "kind": "by_cases",
+      "expression": "replacement = .empty",
+      "branches": [
+        {
+          "name": "positive",
+          "fields": [
+            {
+              "scope": "complete.completed.terminal.empty.positive",
+              "name": "empty",
+              "type": "replacement = .empty",
+              "used": true,
+              "kind": "case"
+            }
+          ]
+        },
+        {
+          "name": "negative",
+          "fields": [
+            {
+              "scope": "complete.completed.terminal.empty.negative",
+              "name": "empty",
+              "type": "¬ (replacement = .empty)",
+              "used": true,
+              "kind": "case"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "scope": "complete.completed.impossible",
+      "kind": "impossible_equality_elimination",
+      "expression": "isRejected",
+      "branches": [],
+      "generated_payloads": []
+    }
+  ],
+  "runtime_case_group_count": 0,
+  "proof_case_group_count": 4,
+  "note": "Two impossible equality eliminations have zero generated fields. Both branch premises are independently typed."
+}

@@ -1,0 +1,4 @@
+theorem Post.trans (first : Post formulas solver inventory before middle memos)
+    (last : Post formulas solver next middle after final) : Post formulas solver next before after final :=
+  ⟨last.context, first.effects.trans last.effects, Cache.extends_trans first.retained last.retained,
+    fun key value found => last.fourthRetained key value (first.fourthRetained key value found)⟩

@@ -1,0 +1,7 @@
+def finish (target handle : Nat) (incomingScs oldScs : List EnumerationState.Suspended)
+    (replacement : Node) : EnumerateM Symbol EnumGuard Unit := do
+  setValue target (.unenumerated (some handle) (incomingScs ++ oldScs))
+  inheritAncestry target
+  match replacement with
+  | .empty => reject
+  | _ => pure ()

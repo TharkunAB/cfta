@@ -1,0 +1,61 @@
+--- candidate/archive.py
++++ basis/archive.py
+@@ -6,12 +6,12 @@
+ from pathlib import Path
+ 
+ root = Path('/home/tritlo/Code/mcfta')
+-area = Path('/tmp/mcfta-pruning-enumeration-cached-terminal-20261025')
+-evidence = root / 'lean/restart-evidence/20261025-pruning-enumeration-cached-terminal'
++area = Path('/tmp/mcfta-pruning-enumeration-cached-incoming-20261025')
++evidence = root / 'lean/restart-evidence/20261025-pruning-enumeration-cached-incoming'
+ assert not evidence.exists()
+ custody = json.loads((area / 'prior-custody-index.json').read_text())
+ assert len(custody) == 26 and len({pin['target'] for pin in custody}) == 26
+-assert hashlib.sha256((area / 'prior-custody-index.json').read_bytes()).hexdigest() == 'd6b8904d798026b23116ec3171c0638aa247d6eb78238b658a5d718421c540a1'
++assert hashlib.sha256((area / 'prior-custody-index.json').read_bytes()).hexdigest() == 'fa67d7602cec27735848b60824c2f5f5aeb1a6a8f177950c4535d51c79aa1cf3'
+ summary = json.loads((area / 'previous-publication/post-publication-summary.json').read_text())
+ assert [pin['source'] for pin in custody] == summary['next_custody_inputs']
+ for pin in custody:
+@@ -19,11 +19,11 @@
+     data = (area / 'previous-publication' / pin['target']).read_bytes()
+     assert len(data) == pin['bytes'] and hashlib.sha256(data).hexdigest() == pin['sha256']
+ assert {p.name for p in (area / 'previous-publication').iterdir()} == {pin['target'] for pin in custody}
+-assert Path('/tmp/mcfta-pruning-enumeration-cached-terminal-20261025-source-review.md').is_file()
++assert Path('/tmp/mcfta-pruning-enumeration-cached-incoming-20261025-source-review.md').is_file()
+ for args in [('diff', '--quiet'), ('diff', '--cached', '--quiet')]:
+     subprocess.run(['git', *args], cwd=root, check=True)
+ for name in ['declaration', 'model', 'public', 'document', 'seal-script', 'root']:
+-    assert Path('/tmp/mcfta-pruning-enumeration-cached-terminal-20261025-' + name + '-review.md').is_file()
++    assert Path('/tmp/mcfta-pruning-enumeration-cached-incoming-20261025-' + name + '-review.md').is_file()
+ evidence.mkdir()
+ for path in sorted(area.rglob('*')):
+     if not path.is_file():
+@@ -36,21 +36,21 @@
+         target.write_bytes(path.read_bytes())
+ inputs = evidence / 'inputs'
+ inputs.mkdir()
+-for pattern in ['mcfta-pruning-enumeration-cached-terminal-20261025-*']:
++for pattern in ['mcfta-pruning-enumeration-cached-incoming-20261025-*']:
+     for path in sorted(Path('/tmp').glob(pattern)):
+-        if path.is_file() and not path.name.startswith('mcfta-pruning-enumeration-cached-terminal-20261025-archive-1.'):
++        if path.is_file() and not path.name.startswith('mcfta-pruning-enumeration-cached-incoming-20261025-archive-1.'):
+             shutil.copyfile(path, inputs / path.name)
+-shutil.copytree('/tmp/mcfta-pruning-enumeration-cached-terminal-20261025-proposal', evidence / 'owner-proposal')
++shutil.copytree('/tmp/mcfta-pruning-enumeration-cached-incoming-20261025-proposal-v2', evidence / 'owner-proposal')
+ prior = evidence / 'previous-publication'
+ prior.mkdir()
+ for pin in custody:
+     shutil.copyfile(area / 'previous-publication' / pin['target'], prior / pin['target'])
+ production = evidence / 'production-sources'
+ production.mkdir()
+-shutil.copyfile(root / 'lean/MicroCFTA/SourcePruningEnumerationCachedTerminal.lean', production / 'SourcePruningEnumerationCachedTerminal.lean')
+-shutil.copyfile(root / 'lean/notes-current-pruning-enumeration-cached-terminal.md', evidence / 'current-note.md')
+-shutil.copyfile('/tmp/mcfta-pruning-enumeration-cached-terminal-20261025-verify.py', evidence / 'verify-checkpoint.py')
+-(evidence / 'INDEX.md').write_text("# Native cached terminal completion\n\nRoot selected one theorem complete for the existing nonempty terminal arm. It adds no new definition, action, instance declaration, helper, type, predicate, carrier or Graph. It uses eight typed local haves, one typed proof let for an inline existing Cached value and no induction. Context activates the existing public named SourcePruningEnumerationTerminal.terminalMonadList dictionary once, with no new dictionary body. Context contains 21 lines and the public head contains 148. Source estimate 360–600 ordinary lines, hard limit 900. Actual source review is bound; owner/schema binding remains pending. No check, axiom set or future publication outcome is claimed.\n\nGenuine initial inputs are Context, Safe, Roots, canonical waiting counts, all-Nat native flags, bounded first/rest suspended variables, InputsPending, pending realization, nonempty available closed incoming value and bounded incomingScs. Explicit conditional admission supplies recursive Fold.Ranges at every actual prefix and current incoming WordRanges at every actual completed fold. It does not supply a desired prefix, final cache, successful callback or initial-only numeric forecast.\n\nThe prefix derives recorded representatives in original order with duplicates, winner and actual joined core. Only waiting-transfer keys use ascending distinct nonwinners. Inline Cached packaging keeps the original flags and attaches the computed moved waiting map; plain frame alone would keep the wrong waiting map. Roots/counts use mergedRoots. Winner rootness and pending source/target facts justify one CachedFoldCompletion result on the same recorded list. CachedFold.erase identifies the original Fold at the same bounds. Actual rejected fold rows stop before incoming and retain their reached Caller, saved queries, cache prefix and Post.\n\nOnly the completed-fold branch invokes CachedIncoming.complete at its actual current Context, heap, target and ranges. It retains the full original read/run/write-prefix, Post, query/unfolding, available/closed/codec and optional/present intersection-language receipts. One actual gained-only write attaches the logical cache to the same after-write core and reached heap. Exact Terminal.run remains the observed runtime, including returned read core and joined moved map. Replacement Empty performs write/inherit before raw rejection. That raw [] does not expose the logical after-write cache. The incoming Empty arm runs before the prefix and is outside this nonempty theorem. The returned fragment is a bounded winner hole, not a write at captured wrapper uv-prime.\n\nAll 150635 baseline blobs/modes/refs/stashes/worktrees, nine document inverses, Audit prepend plus separate audit-addition.json and original owner/body-gate equality/exact-once strings remain guarded. Exactly 26 actual prior CachedIncoming inputs retain their order, FULL 16218-byte summary, canonical assessment and separate sealed peer context. All actual failures/raw/public axiom sets, six-artifact 4 GiB caps, documents-1 non-Lean ledger, manifest-in-HEAD and exact files/index/tree/modes, singleton ordinary publication destination remain unchanged. The current owner is copied once; old revisions and complete program/draft history remain protected by baseline and custody.\n\nH6 remains strongest, the full goal ACTIVE and all six Haskell handoffs first. No Haskell change is claimed. Executable incoming receipt instrumentation/all-bounded erasure, initial-only mixed numeric admission, final Safe/LiveRoots, selector/partition/fallback, wrapper normalization/reconstruction at captured original uv-prime, physical maps/machine integers, extraction and full driver correspondence remain open. No future check, seal or push result is inferred.\n")
++shutil.copyfile(root / 'lean/MicroCFTA/SourcePruningEnumerationCachedIncoming.lean', production / 'SourcePruningEnumerationCachedIncoming.lean')
++shutil.copyfile(root / 'lean/notes-current-pruning-enumeration-cached-incoming.md', evidence / 'current-note.md')
++shutil.copyfile('/tmp/mcfta-pruning-enumeration-cached-incoming-20261025-verify.py', evidence / 'verify-checkpoint.py')
++(evidence / 'INDEX.md').write_text("# Native cached incoming-node completion\n\nRoot selected one theorem complete for the existing incoming-node action. It adds no new runtime definition, instance declaration, induction, helper, type, predicate, carrier or Graph. Ten selected strings contain 107 lines: context 17, public head 80 and eight typed local have heads 10. Source estimate 180–320 ordinary lines, hard limit 520. Actual source review and the frozen owner/schema are bound: 167 payloads / 169 files, ten exact strings / 107 lines, 154 typed scope positions, five packets / 50 fields and zero case groups. The V2 context activates one existing public named Monad List dictionary, SourcePruningEnumerationIncomingNode.incomingNodeMonadList; it declares no new instance or dictionary body. This pre-body source correction is not a compiler failure. Complete V1 owners/programs and prior drafts remain separately protected by whole-area custody. The owner retains 27 whole sources, 33 inclusive cuts / 394 lines, 19 literal import edges and 27 project identities. No check result or future publication outcome is claimed.\n\nGenuine inputs are the initial Context, StorageValid, pending realization, Roots, canonical waiting counts, all-Nat native flags, a representative target with an actual pending slot, available closed incoming value, bounded incoming suspended variables and the current conditional WordRanges. The producer derives the actual representative read and compression Frame, raw incoming run, actual setValue/inheritAncestry prefix and after-write core. It retains the full Post, saved-query equality, unfolding extension, availability, closure, encoding/decoding, optional old value and present-value semantic receipt. No desired write prefix, final cache or successful callback is supplied.\n\nThe selected result derives finite native gained-only indexes at the same actual after-write heap/core. It frames the original cache onto the derived read core, performs the actual NativeIndex.write with gained=incomingScs and lost=[], then frames that result onto after.core. It retains counter, read representatives, Roots, canonical counts, the exact occurrence-sensitive waiting update and all-slot flags. The target predicate uses the actual replacement boundary and concatenated suspended list. Original order and duplicate occurrences remain. The old-none branch retains incoming and the unchanged Caller/memos/inventory; the old-some branch retains the actual checked-query receipt and intersection language. The false flag retains the original query endpoint and memos as specified.\n\nThis is a logical after-write witness. The existing runtime returns its earlier read endpoint. Replacement Empty performs write/inherit before raw rejection []; that raw stream does not contain the after-write cache. The theorem does not implement executable cache recovery or replace the existing action. Earlier incoming Empty and terminal moved-waiting composition remain separate.\n\nAll 149682 baseline files/modes/refs/stashes/worktrees, nine exact document inverses, one Audit prepend and separate audit-addition.json remain guarded. Exactly 26 actual prior CachedFoldCompletion artifacts retain their order, FULL 16168-byte summary, canonical assessment and separate sealed peer context. Original owner strings must equal the body gate and occur exactly once. All failure/raw/public/axiom checks, six-artifact 4 GiB caps, documents-1 non-Lean ledger, full manifest membership in HEAD, exact files/index/tree/modes and singleton ordinary publication destination remain unchanged. The current owner is copied once; older owners, raw attempts and drafts remain protected by baseline/custody.\n\nAll six Haskell repair handoffs remain first. H6 stays strongest and the whole goal ACTIVE. Terminal moved-waiting/mergedRoots packaging, Safe and InputsPending admission, explicit mixed-loop ranges, initial-only numeric admission, arbitrary-fault cache recovery, selector/partition/fallback, wrapper normalization/reconstruction, physical maps/machine integers, extraction and full driver correspondence remain open. No Haskell change, future passing check, seal or push is asserted.\n")
+ 
+ files = sorted(p for p in evidence.rglob('*') if p.is_file())
+ (evidence / 'SHA256SUMS').write_text(''.join(hashlib.sha256(p.read_bytes()).hexdigest() + '  ' + p.relative_to(evidence).as_posix() + '\n' for p in files))

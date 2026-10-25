@@ -1,0 +1,234 @@
+{
+  "at": "2026-10-25T11:07:57.791008+01:00",
+  "prefix_packet": [
+    "prefixFuel",
+    "recorded",
+    "winner",
+    "moved",
+    "_scanned",
+    "_united",
+    "joined",
+    "prefixRun",
+    "_scanRun",
+    "_unionRun",
+    "_winnerRun",
+    "recordedSame",
+    "movedSame",
+    "winnerMember",
+    "rootWinner",
+    "prefixRoots",
+    "prefixCounts",
+    "joinedSame",
+    "joinedStorage",
+    "joinedRealized",
+    "winnerPending",
+    "recordedPending",
+    "_keysNodup",
+    "_keysSorted",
+    "_keysMember"
+  ],
+  "fold_packet": [
+    "foldFuel",
+    "foldP",
+    "foldH",
+    "foldRows",
+    "foldCaller",
+    "foldQueries",
+    "foldFinal",
+    "foldInventory",
+    "folded",
+    "cachedFoldRun",
+    "foldPost",
+    "foldQuerySame",
+    "foldCounter",
+    "foldForest",
+    "foldPaths",
+    "foldStorage",
+    "foldRealized",
+    "foldCounts",
+    "foldWaiting",
+    "foldFlags",
+    "foldShape",
+    "foldPending",
+    "foldEliminated",
+    "foldCompleted"
+  ],
+  "incoming_packet": [
+    "incomingR",
+    "incomingN",
+    "incomingP",
+    "incomingH",
+    "k",
+    "oldNode",
+    "oldScs",
+    "read",
+    "afterCaller",
+    "savedQueries",
+    "final",
+    "next",
+    "replacement",
+    "handle",
+    "after",
+    "reading",
+    "frame",
+    "incomingRun",
+    "writePrefix",
+    "afterSame",
+    "afterStored",
+    "afterStorage",
+    "afterRealized",
+    "incomingPost",
+    "incomingQuerySame",
+    "unfolding",
+    "replacementAvailable",
+    "replacementClosed",
+    "encoded",
+    "decoded",
+    "cacheRun",
+    "afterCounter",
+    "afterRepresentatives",
+    "afterPaths",
+    "afterCounts",
+    "incomingWaiting",
+    "afterFlags",
+    "afterExpandable",
+    "optional",
+    "present"
+  ],
+  "obtain_groups": 3,
+  "obtain_fields": 89,
+  "typed_haves": [
+    "joinedRoot",
+    "joinedFlags",
+    "foldRun",
+    "foldedRoot",
+    "foldedAvailable",
+    "foldedBounded",
+    "writeWaiting",
+    "winnerBound"
+  ],
+  "proof_let": {
+    "name": "joinedCache",
+    "type": "EnumerationExpandableIndex.Cached Symbol Constraint",
+    "initializer_plan": "Package the actual joined core, original before.expandable and actual moved waiting in the existing carrier. No new runtime action."
+  },
+  "branch_groups": [
+    {
+      "kind": "rcases",
+      "scrutinee": "foldShape",
+      "branches": [
+        "rejected",
+        "completed"
+      ],
+      "substitution": "subst foldRows in each branch"
+    },
+    {
+      "kind": "impossible equality elimination",
+      "branch": "rejected",
+      "scrutinee": "isCompleted",
+      "named_case_fields": []
+    },
+    {
+      "kind": "by_cases",
+      "branch": "completed terminal observation",
+      "name": "empty",
+      "proposition": "replacement = .empty",
+      "branches": [
+        "positive",
+        "negative"
+      ]
+    },
+    {
+      "kind": "impossible equality elimination",
+      "branch": "completed",
+      "scrutinee": "isRejected",
+      "named_case_fields": []
+    }
+  ],
+  "proof_binder_plan": {
+    "foldRun": [
+      "extra",
+      "P",
+      "H",
+      "enoughP",
+      "enoughH"
+    ],
+    "fold_selected_callback": [
+      "source",
+      "member"
+    ],
+    "rejected_terminal_run": [
+      "extraRepresentative",
+      "extraNative",
+      "P",
+      "H",
+      "enoughP",
+      "enoughH"
+    ],
+    "rejected_receipt": [
+      "isRejected"
+    ],
+    "rejected_impossible_completion": [
+      "isCompleted"
+    ],
+    "foldedBounded": [
+      "sc",
+      "member"
+    ],
+    "winnerBound_elim_lambda": [
+      "inside",
+      "_elementEquality"
+    ],
+    "completed_prefix_run": [
+      "extra"
+    ],
+    "completed_cached_fold_run": [
+      "extra",
+      "P",
+      "H",
+      "enoughP",
+      "enoughH"
+    ],
+    "completed_original_fold_run": [
+      "extra",
+      "P",
+      "H",
+      "enoughP",
+      "enoughH"
+    ],
+    "completed_terminal_run": [
+      "extraRepresentative",
+      "extraNative",
+      "P",
+      "H",
+      "enoughP",
+      "enoughH"
+    ],
+    "completed_impossible_rejection": [
+      "isRejected"
+    ],
+    "completed_receipt": [
+      "isCompleted"
+    ],
+    "completed_receipt_read": [
+      "extra"
+    ],
+    "completed_receipt_incoming_run": [
+      "extraRepresentative",
+      "extraNative",
+      "P",
+      "H",
+      "enoughP",
+      "enoughH"
+    ]
+  },
+  "existing_instance_activation": "SourcePruningEnumerationTerminal.terminalMonadList, defined at Terminal27\u201329 and already Root-read in whole source. Include those exact three lines in owner cut inventory. No new instance/dictionary.",
+  "public_head_lines": 148,
+  "context_lines": 21,
+  "literal_strings": 11,
+  "source_estimate": "360\u2013600",
+  "hard_cap": 900,
+  "body_written": false,
+  "Root_only_mathematical_bodies": true,
+  "H6_unchanged": true
+}

@@ -1,0 +1,13 @@
+          (oldNode = none → replacement = incoming ∧ afterCaller = foldCaller ∧
+            savedQueries = foldQueries ∧ final = foldFinal ∧ next = foldInventory) ∧
+          (∀ oldHandle, oldNode = some oldHandle →
+            ∃ (old query : Node) (queried : SourceEqualityNativeDemand.State width),
+              lookupNode foldCaller.checked.native.machine.heap oldHandle = some old ∧
+              next.source = foldCaller.checked.native.machine.heap ∧
+              next.roots = foldInventory.roots ++ [incoming, old] ∧
+              SourceCurrentAllocatedTargetQuery.Receipt formulas solver next incoming old
+                foldCaller.checked query queried foldFinal ∧
+              (∀ ambient term,
+                InternedGuardedLanguage.meaning (SourceEqualityPCSGuard.holds formulas solver) ambient replacement term ↔
+                  InternedGuardedLanguage.meaning (SourceEqualityPCSGuard.holds formulas solver) ambient incoming term ∧
+                  InternedGuardedLanguage.meaning (SourceEqualityPCSGuard.holds formulas solver) ambient old term))) := by

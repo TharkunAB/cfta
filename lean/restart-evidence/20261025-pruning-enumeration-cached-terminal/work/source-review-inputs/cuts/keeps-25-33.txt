@@ -1,0 +1,9 @@
+structure Keeps (before after : State Symbol Guard) : Prop where
+  ready : Ready after
+  growth : Grows before after
+  history : Extends before.nodes.issued after.nodes.issued
+
+/-- Earlier available values remain available after actual worker effects. -/
+theorem Keeps.available {before after : State Symbol Guard} (keeps : Keeps before after)
+    (value : Value Symbol Guard) (available : Available before value) : Available after value :=
+  available.grows before after keeps.growth keeps.history

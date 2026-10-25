@@ -1,0 +1,11 @@
+structure Context (formulas : SourceGuards.Formulas FullSyntax.Formula)
+    (solver : SourceGuards.Entailment FullSyntax.Formula) (inventory : Inventory)
+    (state : Caller width) (memos : Memos) : Prop where
+  ready : SourceCurrentConjunctionClassScan.Ready state.checked
+  admitted : At formulas solver inventory state.checked
+  sound : SourceCurrentAllocatedPartialMemoSound.Sound formulas solver state
+  stored : SourceCurrentMemoMergeEffects.Stored state.checked.native.machine.heap state.merge
+  covered : ∀ ambient, SourceCurrentMemoMergeLanguage.CacheCovers (SourceEqualityPCSGuard.holds formulas solver) ambient state.merge
+  correct : SourceCurrentEmptinessMemo.Correct formulas solver state.checked.native.machine.heap state.fourth
+  globals : EndpointMemoGateTrace.Valid state.checked.native.machine.heap memos
+  probes : InternedFreshOrdinaryProbeHeap.Heap state.checked.native.machine.heap

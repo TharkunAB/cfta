@@ -1,0 +1,63 @@
+def finish (target handle : Nat) (incomingScs oldScs : List EnumerationState.Suspended)
+    (replacement : Node) : EnumerateM Symbol EnumGuard Unit := do
+  setValue target (.unenumerated (some handle) (incomingScs ++ oldScs))
+  inheritAncestry target
+  match replacement with
+  | .empty => reject
+  | _ => pure ()
+
+/-- Execute the incoming merge and retain the actual reached read endpoint. -/
+noncomputable def run
+    [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Constraint)] [DecidableEq Node]
+    (checkEmpty : Bool) (representativeFuel nativeFuel p h : Nat)
+    (beforeCaller : Caller width) (before : EnumerationState.State Symbol EnumGuard)
+    (uv : Nat) (incoming : Node) (incomingScs : List EnumerationState.Suspended) (queries : Queries) :
+    (Except (SourceEqualityNativeDemand.Outcome width Node ⊕
+      SourceCurrentAllocatedConjunctionWorker.Outcome width)
+      (Option (List (Except EnumerationState.Error (Unit × EnumerationState.State Symbol EnumGuard))))) ×
+      Caller width × Queries × EnumerationState.State Symbol EnumGuard :=
+  match UnionFind.findRoot representativeFuel before.representatives uv with
+  | none => (.ok (some [.error .representativeFuel]), beforeCaller, queries, before)
+  | some found =>
+      let readState : EnumerationState.State Symbol EnumGuard := {before with representatives := found.forest}
+      match before.values[found.representative]? with
+      | none => (.ok (some [.error .invalidSlot]), beforeCaller, queries, readState)
+      | some (.unenumerated oldNode oldScs) =>
+          match oldNode with
+          | none =>
+              match encodeNode incoming with
+              | none => (.ok none, beforeCaller, queries, readState)
+              | some handle =>
+                  (.ok (some (ExceptT.run (finish found.representative handle incomingScs oldScs incoming readState))),
+                    beforeCaller, queries, readState)
+          | some oldHandle =>
+              match lookupNode beforeCaller.checked.native.machine.heap oldHandle with
+              | none => (.ok none, beforeCaller, queries, readState)
+              | some old =>
+                  let actual : SourceEqualityNativeDemand.Outcome width Node :=
+                    SourceEqualityNativeDemand.execute nativeFuel
+                      (.code (SourceRecursiveIntersectionCode.requestNode IntersectionEmptyDomain.emptyDomain incoming old))
+                      beforeCaller.checked
+                  match actual with
+                  | .done query queried =>
+                      let phase : SourceCurrentAllocatedConjunctionWorker.Outcome width × Queries :=
+                        if checkEmpty then
+                          SourcePruningEnumerationEnabledEmpty.check p h query queried beforeCaller.fourth queries
+                        else (.done false queried beforeCaller.fourth, queries)
+                      let afterCaller : Caller width :=
+                        SourceCurrentAllocatedPartialState.advance beforeCaller phase.1.state phase.1.memo beforeCaller.merge
+                      match phase.1 with
+                      | .done answer checkedAfter saved =>
+                          let replacement : Node := if answer then .empty else query
+                          match encodeNode replacement with
+                          | none => (.ok none, afterCaller, phase.2, readState)
+                          | some handle =>
+                              (.ok (some (ExceptT.run (finish found.representative handle incomingScs oldScs replacement readState))),
+                                SourceCurrentAllocatedPartialState.advance beforeCaller checkedAfter saved beforeCaller.merge,
+                                phase.2, readState)
+                      | .failed fault checkedAfter saved =>
+                          (.error (.inr (.failed fault checkedAfter saved)), afterCaller, phase.2, readState)
+                  | other =>
+                      (.error (.inl other), SourceCurrentAllocatedPartialState.advance
+                        beforeCaller other.state beforeCaller.fourth beforeCaller.merge, queries, readState)
+      | some _ => (.ok (some [.error .invalidIntersection]), beforeCaller, queries, readState)
