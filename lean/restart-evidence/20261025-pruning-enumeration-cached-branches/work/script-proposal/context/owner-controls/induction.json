@@ -1,0 +1,42 @@
+{
+  "inductions": [
+    {
+      "scope": "complete",
+      "on": "selectedEdges",
+      "syntax": "induction selectedEdges with",
+      "fixed": [
+        "heap",
+        "parentEntry",
+        "storedEdges",
+        "depth",
+        "free",
+        "scs",
+        "roots",
+        "ready",
+        "parentAvailable",
+        "parentClosed",
+        "before",
+        "storage",
+        "realized",
+        "paths",
+        "counts",
+        "flags",
+        "bounded"
+      ],
+      "dependent_membership": "selected",
+      "generalized_only": [
+        "selected"
+      ],
+      "IH_type": "(∀ edge ∈ rest, edge ∈ storedEdges) → ∃ (fuel : Nat) (outcomes : List (Option (List (Option (Fragments.Fragment Symbol) × EnumerationExpandableIndex.Cached Symbol Constraint) × EnumerationExpandableIndex.Cached Symbol Constraint))), (∀ (extra : Nat), run heap (fuel + extra) scs rest before = outcomes) ∧ Language.All₂ (fun edge outcome => (SourcePruningEnumerationEdgeTraversal.prepare scs edge = none ↔ outcome = none) ∧ (∀ (action : EnumerateM Symbol Constraint (Option (Fragments.Fragment Symbol))), SourcePruningEnumerationEdgeTraversal.prepare scs edge = some action → ∃ (rows : List (Option (Fragments.Fragment Symbol) × EnumerationExpandableIndex.Cached Symbol Constraint)) (after : EnumerationExpandableIndex.Cached Symbol Constraint), outcome = some (rows, after) ∧ ExceptT.run (action before.core) = rows.map (fun row => .ok (row.1, row.2.core)) ∧ before.core.counter ≤ after.core.counter ∧ after.core.counter = after.core.values.length ∧ after.core.representatives = before.core.representatives ∧ Roots after.core.representatives roots ∧ StorageValid after.core ∧ PendingRealized heap after.core ∧ EnumerationCanonicalWaiting.Correct roots after.core.values after.waiting ∧ (∀ (slot : Nat), SourcePruningEnumerationNativeIndex.candidate heap ((after.core.values[slot]?).getD .eliminated) = some (after.expandable slot)) ∧ (rows = [] ∨ ∃ result : Option (Fragments.Fragment Symbol), rows = [(result, after)] ∧ (∀ (fragment : Fragments.Fragment Symbol), result = some fragment → FragmentBound («Symbol» := Symbol) after.core.counter fragment)))) rest outcomes ∧ ExceptT.run (SourcePruningEnumerationOrdinaryBranches.run scs rest before.core) = (outcomes.map (fun outcome => match outcome with | none => [.ok (none, before.core)] | some (rows, _prefix) => rows.map (fun row => .ok (some row.1, row.2.core)))).flatten"
+    }
+  ],
+  "IHs": [
+    {
+      "scope": "complete.cons",
+      "name": "ih",
+      "type": "(∀ edge ∈ rest, edge ∈ storedEdges) → ∃ (fuel : Nat) (outcomes : List (Option (List (Option (Fragments.Fragment Symbol) × EnumerationExpandableIndex.Cached Symbol Constraint) × EnumerationExpandableIndex.Cached Symbol Constraint))), (∀ (extra : Nat), run heap (fuel + extra) scs rest before = outcomes) ∧ Language.All₂ (fun edge outcome => (SourcePruningEnumerationEdgeTraversal.prepare scs edge = none ↔ outcome = none) ∧ (∀ (action : EnumerateM Symbol Constraint (Option (Fragments.Fragment Symbol))), SourcePruningEnumerationEdgeTraversal.prepare scs edge = some action → ∃ (rows : List (Option (Fragments.Fragment Symbol) × EnumerationExpandableIndex.Cached Symbol Constraint)) (after : EnumerationExpandableIndex.Cached Symbol Constraint), outcome = some (rows, after) ∧ ExceptT.run (action before.core) = rows.map (fun row => .ok (row.1, row.2.core)) ∧ before.core.counter ≤ after.core.counter ∧ after.core.counter = after.core.values.length ∧ after.core.representatives = before.core.representatives ∧ Roots after.core.representatives roots ∧ StorageValid after.core ∧ PendingRealized heap after.core ∧ EnumerationCanonicalWaiting.Correct roots after.core.values after.waiting ∧ (∀ (slot : Nat), SourcePruningEnumerationNativeIndex.candidate heap ((after.core.values[slot]?).getD .eliminated) = some (after.expandable slot)) ∧ (rows = [] ∨ ∃ result : Option (Fragments.Fragment Symbol), rows = [(result, after)] ∧ (∀ (fragment : Fragments.Fragment Symbol), result = some fragment → FragmentBound («Symbol» := Symbol) after.core.counter fragment)))) rest outcomes ∧ ExceptT.run (SourcePruningEnumerationOrdinaryBranches.run scs rest before.core) = (outcomes.map (fun outcome => match outcome with | none => [.ok (none, before.core)] | some (rows, _prefix) => rows.map (fun row => .ok (some row.1, row.2.core)))).flatten"
+    }
+  ],
+  "induction_count": 1,
+  "IH_count": 1
+}

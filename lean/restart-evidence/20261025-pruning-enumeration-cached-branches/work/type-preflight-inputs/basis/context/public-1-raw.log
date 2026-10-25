@@ -1,0 +1,88 @@
+MicroCFTA.SourcePruningEnumerationCachedEdge.prepare : MicroCFTA.InternedConstructorTemplates.State
+    MicroCFTA.SourcePruningTemplates.Symbol (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) →
+  Nat →
+    List MicroCFTA.EnumerationState.Suspended →
+      MicroCFTA.InternedConstructorTemplates.EdgeValue MicroCFTA.SourcePruningTemplates.Symbol
+          (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) →
+        MicroCFTA.EnumerationExpandableIndex.Cached MicroCFTA.SourcePruningTemplates.Symbol
+            (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) →
+          Option
+            (List
+                (Option (MicroCFTA.Fragments.Fragment MicroCFTA.SourcePruningTemplates.Symbol) ×
+                  MicroCFTA.EnumerationExpandableIndex.Cached MicroCFTA.SourcePruningTemplates.Symbol
+                    (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)) ×
+              MicroCFTA.EnumerationExpandableIndex.Cached MicroCFTA.SourcePruningTemplates.Symbol
+                (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+'MicroCFTA.SourcePruningEnumerationCachedEdge.prepare' depends on axioms: [propext, Classical.choice, Quot.sound]
+MicroCFTA.SourcePruningEnumerationCachedEdge.complete : ∀
+  (heap :
+    MicroCFTA.InternedConstructorTemplates.State MicroCFTA.SourcePruningTemplates.Symbol
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+  (parentEntry : MicroCFTA.Cache.Interned MicroCFTA.InternedBinderProtocol.NodeKey)
+  (edges :
+    List
+      (MicroCFTA.InternedConstructorTemplates.EdgeValue MicroCFTA.SourcePruningTemplates.Symbol
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)))
+  (depth : Nat) (free : List MicroCFTA.InternedBinderProtocol.Reference)
+  (edge :
+    MicroCFTA.InternedConstructorTemplates.EdgeValue MicroCFTA.SourcePruningTemplates.Symbol
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+  (scs : List MicroCFTA.EnumerationState.Suspended) (roots : Nat → Nat),
+  MicroCFTA.SourceEqualityRequiredCache.Ready heap →
+    MicroCFTA.InternedProbeProvenance.Available heap
+        (MicroCFTA.InternedConstructorTemplates.Value.node parentEntry edges depth free) →
+      free = [] →
+        edge ∈ edges →
+          ∀
+            (before :
+              MicroCFTA.EnumerationExpandableIndex.Cached MicroCFTA.SourcePruningTemplates.Symbol
+                (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)),
+            MicroCFTA.EnumerationCorrectness.StorageValid before.core →
+              MicroCFTA.SourcePruningEnumerationObservation.PendingRealized heap before.core →
+                MicroCFTA.EnumerationSchedule.Roots before.core.representatives roots →
+                  MicroCFTA.EnumerationCanonicalWaiting.Correct roots before.core.values before.waiting →
+                    (∀ (slot : Nat),
+                        MicroCFTA.SourcePruningEnumerationNativeIndex.candidate heap
+                            (before.core.values[slot]?.getD MicroCFTA.EnumerationState.UVarValue.eliminated) =
+                          some (before.expandable slot)) →
+                      (∀ (sc : MicroCFTA.EnumerationState.Suspended), sc ∈ scs → sc.var < before.core.counter) →
+                        ∃ fuel outcome,
+                          (∀ (extra : Nat),
+                              MicroCFTA.SourcePruningEnumerationCachedEdge.prepare heap (fuel + extra) scs edge before =
+                                outcome) ∧
+                            (MicroCFTA.SourcePruningEnumerationEdgeTraversal.prepare scs edge = none ↔ outcome = none) ∧
+                              ∀
+                                (action :
+                                  MicroCFTA.EnumerationState.EnumerateM MicroCFTA.SourcePruningTemplates.Symbol
+                                    (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+                                    (Option (MicroCFTA.Fragments.Fragment MicroCFTA.SourcePruningTemplates.Symbol))),
+                                MicroCFTA.SourcePruningEnumerationEdgeTraversal.prepare scs edge = some action →
+                                  ∃ rows after,
+                                    outcome = some (rows, after) ∧
+                                      (action before.core).run =
+                                          List.map (fun row => Except.ok (row.fst, row.snd.core)) rows ∧
+                                        before.core.counter ≤ after.core.counter ∧
+                                          after.core.counter = after.core.values.length ∧
+                                            after.core.representatives = before.core.representatives ∧
+                                              MicroCFTA.EnumerationSchedule.Roots after.core.representatives roots ∧
+                                                MicroCFTA.EnumerationCorrectness.StorageValid after.core ∧
+                                                  MicroCFTA.SourcePruningEnumerationObservation.PendingRealized heap
+                                                      after.core ∧
+                                                    MicroCFTA.EnumerationCanonicalWaiting.Correct roots
+                                                        after.core.values after.waiting ∧
+                                                      (∀ (slot : Nat),
+                                                          MicroCFTA.SourcePruningEnumerationNativeIndex.candidate heap
+                                                              (after.core.values[slot]?.getD
+                                                                MicroCFTA.EnumerationState.UVarValue.eliminated) =
+                                                            some (after.expandable slot)) ∧
+                                                        (rows = [] ∨
+                                                          ∃ result,
+                                                            rows = [(result, after)] ∧
+                                                              ∀
+                                                                (fragment :
+                                                                  MicroCFTA.Fragments.Fragment
+                                                                    MicroCFTA.SourcePruningTemplates.Symbol),
+                                                                result = some fragment →
+                                                                  MicroCFTA.EnumerationCorrectness.FragmentBound
+                                                                    after.core.counter fragment)
+'MicroCFTA.SourcePruningEnumerationCachedEdge.complete' depends on axioms: [propext, Classical.choice, Quot.sound]

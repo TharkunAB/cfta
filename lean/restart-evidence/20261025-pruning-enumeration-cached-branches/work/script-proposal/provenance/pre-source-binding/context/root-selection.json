@@ -1,0 +1,119 @@
+{
+  "at": "2026-10-25T06:26:19.507101+01:00",
+  "author": "Root",
+  "module": "MicroCFTA.SourcePruningEnumerationCachedBranches",
+  "heading": "Native cached same-before alternatives",
+  "public_heads": [
+    {
+      "name": "run",
+      "kind": "noncomputable def",
+      "file": "run-header.lean.txt",
+      "attachment": " :=\n"
+    },
+    {
+      "name": "complete",
+      "kind": "theorem",
+      "file": "complete-header.lean.txt",
+      "attachment": " := by\n"
+    }
+  ],
+  "locals": [
+    {
+      "name": "selectedHead",
+      "file": "local-selected-head.lean.txt",
+      "scope": "complete.cons",
+      "first_line_indent": 4,
+      "attachment": " := by\n"
+    },
+    {
+      "name": "selectedTail",
+      "file": "local-selected-tail.lean.txt",
+      "scope": "complete.cons",
+      "first_line_indent": 4,
+      "attachment": " := by\n"
+    }
+  ],
+  "local_haves": 2,
+  "proof_lets": 0,
+  "definition_lets": 0,
+  "public_result_lets": 0,
+  "instances": 0,
+  "inductions": 1,
+  "new_helpers": [],
+  "new_types": [],
+  "new_predicates": [],
+  "new_carriers": [],
+  "soft_lines": [
+    140,
+    240
+  ],
+  "hard_cap": 400,
+  "Root_authors_all_bodies": true,
+  "definition_recipe": "selectedEdges.map (fun edge => CachedEdge.prepare heap fuel scs edge before). Every callback uses the same before. Existing List/Option/products only.",
+  "proof_recipe": "Induct selectedEdges, empty witnesses fuel0/outcomes[], cons derives selectedHead/selectedTail, obtains five-field head CachedEdge.complete and five-field IH receipt at same before, witnesses headFuel+tailFuel/headOutcome::tailOutcomes. Stability re-associates the common bound, All2 cons retains the head classification/raw/cache packet and tail relation. Raw proof unfolds compiled OrdinaryBranches.run/run_bind in tailRaw and main goal, reduces choose/map/flatMap_cons, rewrites tailRaw and outcome-list map/flatten_cons, cases actual EdgeTraversal.prepare scs edge: none uses headAbsent.mp; some action obtains rows/after/outcomeEq/actualRaw/_invariants, rewrites raw bind and maps, using flatMap_map and reverse map_eq_flatMap. No new bind/pure term, local MonadList or global instance.",
+  "planned_packets": {
+    "head": [
+      "headFuel",
+      "headOutcome",
+      "headRun",
+      "headAbsent",
+      "headReceipt"
+    ],
+    "tail": [
+      "tailFuel",
+      "tailOutcomes",
+      "tailRun",
+      "tailRelated",
+      "tailRaw"
+    ],
+    "prepared": [
+      "rows",
+      "after",
+      "outcomeEq",
+      "actualRaw",
+      "_invariants"
+    ]
+  },
+  "planned_cases": [
+    {
+      "scope": "complete.selectedEdges",
+      "kind": "induction",
+      "branches": [
+        "nil",
+        "cons edge rest ih"
+      ]
+    },
+    {
+      "scope": "complete.cons.raw",
+      "kind": "cases actual prepared option",
+      "branches": [
+        "none",
+        "some action"
+      ]
+    }
+  ],
+  "contract_count": 5,
+  "contract_lines": 66,
+  "contracts": {
+    "context.lean.txt": {
+      "bytes": 414,
+      "sha256": "976828b186423ab896b0da5719c80abec7a4570a0bb60497ad9304cc3ad34b52"
+    },
+    "run-header.lean.txt": {
+      "bytes": 559,
+      "sha256": "d2ccf6efb3ed640c8c8960d5cb233401cf6f4c90f1e47a562faaf6ce6afd141a"
+    },
+    "complete-header.lean.txt": {
+      "bytes": 3444,
+      "sha256": "f909b6d5ac8518e71e3daab8adbb54a33e478395c3d8b456b9b725d2adcd3d5e"
+    },
+    "local-selected-head.lean.txt": {
+      "bytes": 41,
+      "sha256": "170553b4cd0b6ad28bb9f5a416589f7a196920652945b5e1f702bf0b604e9959"
+    },
+    "local-selected-tail.lean.txt": {
+      "bytes": 60,
+      "sha256": "b6e1003009d854fe05bdf3e3dda53d61266120afa4f171a58d831c1b607c3839"
+    }
+  }
+}

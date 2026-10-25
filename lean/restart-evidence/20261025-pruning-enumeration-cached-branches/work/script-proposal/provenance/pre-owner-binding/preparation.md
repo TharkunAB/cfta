@@ -1,0 +1,11 @@
+# CachedBranches selected source draft
+
+[2026-10-25 06:30 CET] UNFROZEN SOURCE ONLY. Root selected run/complete: one noncomputable definition and one theorem, two typed haves, zero lets/instances/helpers/new types and one list induction. Five selected fragments contain 66 lines. Source estimate 140–240, hard limit 400. Source-review digest and actual owner/schema still await their authoritative controls. No activation clearance or actual proof/build outcome is supplied by this draft.
+
+All five complete actual active CachedEdge bases remain, including the final 269-line verifier. The new 247-line verifier removes only that old CURRENT-component two-literal namespace exception and restores every new selected literal exactly once. Original owner/body-gate equality stays. All other preservation, raw/failure/public/axiom/cap/document/Audit/manifest/index/files/destination algorithms and the documents-1 non-Lean ledger remain. Ten patches and bidirectional Unicode recipes reconstruct both directions. Original identity-only draft and removed block remain as provenance.
+
+The selected worker preserves supplied edge order/duplicates and the SAME original cache for every occurrence. Language.All₂ retains each classification/raw/cache packet, and encoded flattened rows equal OrdinaryBranches.run. A derived common finite fuel bound does not sum branch allocations. Rejected rows, outer unprepared, inner unsupported and successful fragments keep their exact nesting and separate branch caches. No merged final cache, callback-success, desired endpoint or future Ranges premise is introduced.
+
+The exact 26 actual prior inputs/full 14936-byte summary/canonical assessment and separately sealed peer are bound as data. All six Haskell handoffs stay first; H6 and the ACTIVE whole-goal boundary remain unchanged. Source metrics, failures, public axiom sets and future checks/seal/push outcomes stay unbound. Literal note/prefix templates retain validation placeholders, one note final LF and the prefix paragraph separator.
+
+No candidate was parsed, imported, activated or executed. No mathematical/action/instance body, Git, network, board or repository mutation occurred. Final freezing requires actual source review and frozen owner correlation, then independent peer and Root gate.

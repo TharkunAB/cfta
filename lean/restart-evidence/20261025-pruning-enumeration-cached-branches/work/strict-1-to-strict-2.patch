@@ -1,0 +1,26 @@
+--- strict-1/SourcePruningEnumerationCachedBranches.lean
++++ strict-2/SourcePruningEnumerationCachedBranches.lean
+@@ -97,18 +97,17 @@
+       rw [SourcePruningEnumerationOrdinaryBranches.run, run_bind]
+       simp only [choose, ExceptT.run, List.map_cons, List.flatMap_cons]
+       rw [tailRaw]
+-      simp only [List.map_cons, List.flatten_cons]
++      simp only [List.flatten_cons]
+       cases prepared : SourcePruningEnumerationEdgeTraversal.prepare scs edge with
+       | none =>
+-        rw [headAbsent.mp (by simpa only [prepared] using prepared)]
+-        simp only [prepared]
++        rw [headAbsent.mp prepared]
+         rfl
+       | some action =>
+         obtain ⟨rows, after, outcomeEq, actualRaw, _invariants⟩ :=
+-          headReceipt action (by simpa only [prepared] using prepared)
++          headReceipt action prepared
+         rw [outcomeEq]
+-        simp only [prepared]
+-        rw [run_bind, actualRaw]
++        simp only [bind, StateT.bind, ExceptT.run, ExceptT.bind, ExceptT.mk] at actualRaw ⊢
++        rw [actualRaw]
+         simp only [List.flatMap_map, ← List.map_eq_flatMap]
+ 
+ end MicroCFTA.SourcePruningEnumerationCachedBranches

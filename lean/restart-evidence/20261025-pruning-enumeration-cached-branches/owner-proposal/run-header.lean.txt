@@ -1,0 +1,9 @@
+/-- Run every selected edge from the same original cache in list order. -/
+noncomputable def run
+    (heap : InternedConstructorTemplates.State Symbol Constraint) (fuel : Nat)
+    (scs : List EnumerationState.Suspended)
+    (selectedEdges : List (InternedConstructorTemplates.EdgeValue Symbol Constraint))
+    (before : EnumerationExpandableIndex.Cached Symbol Constraint) :
+    List (Option (List (Option (Fragments.Fragment Symbol) ×
+      EnumerationExpandableIndex.Cached Symbol Constraint) ×
+      EnumerationExpandableIndex.Cached Symbol Constraint))

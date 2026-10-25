@@ -1,0 +1,195 @@
+{"command": ["/home/tritlo/.elan/toolchains/leanprover--lean4---v4.34.1/bin/lean", "-o", "/tmp/mcfta-pruning-enumeration-cached-branches-20261025/strict-2/SourcePruningEnumerationCachedBranches.olean", "-R", "/tmp/mcfta-pruning-enumeration-cached-branches-20261025/strict-2", "-DwarningAsError=true", "-Dlinter.all=true", "/tmp/mcfta-pruning-enumeration-cached-branches-20261025/strict-2/MicroCFTA/SourcePruningEnumerationCachedBranches.lean"], "exit_code": 1, "raw_bytes": 11460, "raw_sha256": "8207538f590d255315448bc83a732d6a3cb6c08c75de45e4ee73b35653660bae", "source_sha256": "0f43e6c3816d827dc5e0d757cec83e8ecd217ac696a4340cbfc08387c39c26a8"}
+/tmp/mcfta-pruning-enumeration-cached-branches-20261025/strict-2/MicroCFTA/SourcePruningEnumerationCachedBranches.lean:105:20: error: unsolved goals
+case cons.refine_2.some
+heap : InternedConstructorTemplates.State Symbol Constraint
+parentEntry : Cache.Interned InternedBinderProtocol.NodeKey
+storedEdges : List (InternedConstructorTemplates.EdgeValue Symbol Constraint)
+depth : Nat
+free : List InternedBinderProtocol.Reference
+scs : List Suspended
+roots : Nat → Nat
+ready : SourceEqualityRequiredCache.Ready heap
+parentAvailable :
+  InternedProbeProvenance.Available heap (InternedConstructorTemplates.Value.node parentEntry storedEdges depth free)
+parentClosed : free = []
+before : EnumerationExpandableIndex.Cached Symbol Constraint
+storage : StorageValid before.core
+realized : PendingRealized heap before.core
+paths : Roots before.core.representatives roots
+counts : EnumerationCanonicalWaiting.Correct roots before.core.values before.waiting
+flags :
+  ∀ (slot : Nat),
+    SourcePruningEnumerationNativeIndex.candidate heap (before.core.values[slot]?.getD UVarValue.eliminated) =
+      some (before.expandable slot)
+bounded : ∀ (sc : Suspended), sc ∈ scs → sc.var < before.core.counter
+edge : InternedConstructorTemplates.EdgeValue Symbol Constraint
+rest : List (InternedConstructorTemplates.EdgeValue Symbol Constraint)
+ih :
+  (∀ (edge : InternedConstructorTemplates.EdgeValue Symbol Constraint), edge ∈ rest → edge ∈ storedEdges) →
+    ∃ fuel outcomes,
+      (∀ (extra : Nat), run heap (fuel + extra) scs rest before = outcomes) ∧
+        Language.All₂
+            (fun edge outcome =>
+              (SourcePruningEnumerationEdgeTraversal.prepare scs edge = none ↔ outcome = none) ∧
+                ∀ (action : EnumerateM Symbol Constraint (Option (Fragments.Fragment Symbol))),
+                  SourcePruningEnumerationEdgeTraversal.prepare scs edge = some action →
+                    ∃ rows after,
+                      outcome = some (rows, after) ∧
+                        (action before.core).run = List.map (fun row => Except.ok (row.fst, row.snd.core)) rows ∧
+                          before.core.counter ≤ after.core.counter ∧
+                            after.core.counter = after.core.values.length ∧
+                              after.core.representatives = before.core.representatives ∧
+                                Roots after.core.representatives roots ∧
+                                  StorageValid after.core ∧
+                                    PendingRealized heap after.core ∧
+                                      EnumerationCanonicalWaiting.Correct roots after.core.values after.waiting ∧
+                                        (∀ (slot : Nat),
+                                            SourcePruningEnumerationNativeIndex.candidate heap
+                                                (after.core.values[slot]?.getD UVarValue.eliminated) =
+                                              some (after.expandable slot)) ∧
+                                          (rows = [] ∨
+                                            ∃ result,
+                                              rows = [(result, after)] ∧
+                                                ∀ (fragment : Fragments.Fragment Symbol),
+                                                  result = some fragment → FragmentBound after.core.counter fragment))
+            rest outcomes ∧
+          (SourcePruningEnumerationOrdinaryBranches.run scs rest before.core).run =
+            (List.map
+                (fun outcome =>
+                  match outcome with
+                  | none => [Except.ok (none, before.core)]
+                  | some (rows, _prefix) => List.map (fun row => Except.ok (some row.fst, row.snd.core)) rows)
+                outcomes).flatten
+selected :
+  ∀ (edge_1 : InternedConstructorTemplates.EdgeValue Symbol Constraint), edge_1 ∈ edge :: rest → edge_1 ∈ storedEdges
+selectedHead : edge ∈ storedEdges
+selectedTail : ∀ (edge : InternedConstructorTemplates.EdgeValue Symbol Constraint), edge ∈ rest → edge ∈ storedEdges
+headFuel : Nat
+headOutcome :
+  Option
+    (List (Option (Fragments.Fragment Symbol) × EnumerationExpandableIndex.Cached Symbol Constraint) ×
+      EnumerationExpandableIndex.Cached Symbol Constraint)
+headRun :
+  ∀ (extra : Nat), SourcePruningEnumerationCachedEdge.prepare heap (headFuel + extra) scs edge before = headOutcome
+headAbsent : SourcePruningEnumerationEdgeTraversal.prepare scs edge = none ↔ headOutcome = none
+headReceipt :
+  ∀ (action : EnumerateM Symbol Constraint (Option (Fragments.Fragment Symbol))),
+    SourcePruningEnumerationEdgeTraversal.prepare scs edge = some action →
+      ∃ rows after,
+        headOutcome = some (rows, after) ∧
+          (action before.core).run = List.map (fun row => Except.ok (row.fst, row.snd.core)) rows ∧
+            before.core.counter ≤ after.core.counter ∧
+              after.core.counter = after.core.values.length ∧
+                after.core.representatives = before.core.representatives ∧
+                  Roots after.core.representatives roots ∧
+                    StorageValid after.core ∧
+                      PendingRealized heap after.core ∧
+                        EnumerationCanonicalWaiting.Correct roots after.core.values after.waiting ∧
+                          (∀ (slot : Nat),
+                              SourcePruningEnumerationNativeIndex.candidate heap
+                                  (after.core.values[slot]?.getD UVarValue.eliminated) =
+                                some (after.expandable slot)) ∧
+                            (rows = [] ∨
+                              ∃ result,
+                                rows = [(result, after)] ∧
+                                  ∀ (fragment : Fragments.Fragment Symbol),
+                                    result = some fragment → FragmentBound after.core.counter fragment)
+tailFuel : Nat
+tailOutcomes :
+  List
+    (Option
+      (List (Option (Fragments.Fragment Symbol) × EnumerationExpandableIndex.Cached Symbol Constraint) ×
+        EnumerationExpandableIndex.Cached Symbol Constraint))
+tailRun : ∀ (extra : Nat), run heap (tailFuel + extra) scs rest before = tailOutcomes
+tailRelated :
+  Language.All₂
+    (fun edge outcome =>
+      (SourcePruningEnumerationEdgeTraversal.prepare scs edge = none ↔ outcome = none) ∧
+        ∀ (action : EnumerateM Symbol Constraint (Option (Fragments.Fragment Symbol))),
+          SourcePruningEnumerationEdgeTraversal.prepare scs edge = some action →
+            ∃ rows after,
+              outcome = some (rows, after) ∧
+                (action before.core).run = List.map (fun row => Except.ok (row.fst, row.snd.core)) rows ∧
+                  before.core.counter ≤ after.core.counter ∧
+                    after.core.counter = after.core.values.length ∧
+                      after.core.representatives = before.core.representatives ∧
+                        Roots after.core.representatives roots ∧
+                          StorageValid after.core ∧
+                            PendingRealized heap after.core ∧
+                              EnumerationCanonicalWaiting.Correct roots after.core.values after.waiting ∧
+                                (∀ (slot : Nat),
+                                    SourcePruningEnumerationNativeIndex.candidate heap
+                                        (after.core.values[slot]?.getD UVarValue.eliminated) =
+                                      some (after.expandable slot)) ∧
+                                  (rows = [] ∨
+                                    ∃ result,
+                                      rows = [(result, after)] ∧
+                                        ∀ (fragment : Fragments.Fragment Symbol),
+                                          result = some fragment → FragmentBound after.core.counter fragment))
+    rest tailOutcomes
+tailRaw :
+  List.flatMap
+      (fun result =>
+        match result with
+        | Except.error error => [Except.error error]
+        | Except.ok (value, after) =>
+          (match SourcePruningEnumerationEdgeTraversal.prepare scs value with
+            | none => pure none
+            | some action => do
+              let result ← action
+              pure (some result))
+            after)
+      (List.map (fun value => Except.ok (value, before.core)) rest) =
+    (List.map
+        (fun outcome =>
+          match outcome with
+          | none => [Except.ok (none, before.core)]
+          | some (rows, _prefix) => List.map (fun row => Except.ok (some row.fst, row.snd.core)) rows)
+        tailOutcomes).flatten
+action : EnumerateM Symbol Constraint (Option (Fragments.Fragment Symbol))
+prepared : SourcePruningEnumerationEdgeTraversal.prepare scs edge = some action
+rows : List (Option (Fragments.Fragment Symbol) × EnumerationExpandableIndex.Cached Symbol Constraint)
+after : EnumerationExpandableIndex.Cached Symbol Constraint
+outcomeEq : headOutcome = some (rows, after)
+actualRaw : action before.core = List.map (fun row => Except.ok (row.fst, row.snd.core)) rows
+_invariants :
+  before.core.counter ≤ after.core.counter ∧
+    after.core.counter = after.core.values.length ∧
+      after.core.representatives = before.core.representatives ∧
+        Roots after.core.representatives roots ∧
+          StorageValid after.core ∧
+            PendingRealized heap after.core ∧
+              EnumerationCanonicalWaiting.Correct roots after.core.values after.waiting ∧
+                (∀ (slot : Nat),
+                    SourcePruningEnumerationNativeIndex.candidate heap
+                        (after.core.values[slot]?.getD UVarValue.eliminated) =
+                      some (after.expandable slot)) ∧
+                  (rows = [] ∨
+                    ∃ result,
+                      rows = [(result, after)] ∧
+                        ∀ (fragment : Fragments.Fragment Symbol),
+                          result = some fragment → FragmentBound after.core.counter fragment)
+⊢ List.flatMap (fun a => ExceptT.bindCont (fun __x => pure (some __x.fst) __x.snd) (Except.ok (a.fst, a.snd.core)))
+        rows ++
+      (List.map
+          (fun outcome =>
+            match outcome with
+            | none => [Except.ok (none, before.core)]
+            | some (rows, _prefix) => List.map (fun row => Except.ok (some row.fst, row.snd.core)) rows)
+          tailOutcomes).flatten =
+    List.map (fun row => Except.ok (some row.fst, row.snd.core)) rows ++
+      (List.map
+          (fun outcome =>
+            match outcome with
+            | none => [Except.ok (none, before.core)]
+            | some (rows, _prefix) => List.map (fun row => Except.ok (some row.fst, row.snd.core)) rows)
+          tailOutcomes).flatten
+/tmp/mcfta-pruning-enumeration-cached-branches-20261025/strict-2/MicroCFTA/SourcePruningEnumerationCachedBranches.lean:111:37: error: This simp argument is unused:
+  ← List.map_eq_flatMap
+
+Hint: Omit it from the simp argument list.
+  [apply] simp only [List.flatMap_map]
+
+Note: Simp arguments with `←` have the additional effect of removing the other direction from the simp set, even if the simp argument itself is unused. If the hint above does not work, try replacing `←` with `-` to only get that effect and silence this warning.
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`

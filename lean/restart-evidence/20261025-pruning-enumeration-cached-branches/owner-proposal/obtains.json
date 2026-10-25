@@ -1,0 +1,139 @@
+{
+  "packets": [
+    {
+      "scope": "complete.cons.head",
+      "from": "SourcePruningEnumerationCachedEdge.complete heap parentEntry storedEdges depth free edge scs roots ready parentAvailable parentClosed selectedHead before storage realized paths counts flags bounded",
+      "fields": [
+        {
+          "scope": "complete.cons.head",
+          "name": "headFuel",
+          "type": "Nat",
+          "used": true,
+          "kind": "obtain"
+        },
+        {
+          "scope": "complete.cons.head",
+          "name": "headOutcome",
+          "type": "Option (List (Option (Fragments.Fragment Symbol) × EnumerationExpandableIndex.Cached Symbol Constraint) × EnumerationExpandableIndex.Cached Symbol Constraint)",
+          "used": true,
+          "kind": "obtain"
+        },
+        {
+          "scope": "complete.cons.head",
+          "name": "headRun",
+          "type": "∀ (extra : Nat), SourcePruningEnumerationCachedEdge.prepare heap (headFuel + extra) scs edge before = headOutcome",
+          "used": true,
+          "kind": "obtain"
+        },
+        {
+          "scope": "complete.cons.head",
+          "name": "headAbsent",
+          "type": "SourcePruningEnumerationEdgeTraversal.prepare scs edge = none ↔ headOutcome = none",
+          "used": true,
+          "kind": "obtain"
+        },
+        {
+          "scope": "complete.cons.head",
+          "name": "headReceipt",
+          "type": "∀ (action : EnumerateM Symbol Constraint (Option (Fragments.Fragment Symbol))), SourcePruningEnumerationEdgeTraversal.prepare scs edge = some action → ∃ (rows : List (Option (Fragments.Fragment Symbol) × EnumerationExpandableIndex.Cached Symbol Constraint)) (after : EnumerationExpandableIndex.Cached Symbol Constraint), headOutcome = some (rows, after) ∧ ExceptT.run (action before.core) = rows.map (fun row => .ok (row.1, row.2.core)) ∧ before.core.counter ≤ after.core.counter ∧ after.core.counter = after.core.values.length ∧ after.core.representatives = before.core.representatives ∧ Roots after.core.representatives roots ∧ StorageValid after.core ∧ PendingRealized heap after.core ∧ EnumerationCanonicalWaiting.Correct roots after.core.values after.waiting ∧ (∀ (slot : Nat), SourcePruningEnumerationNativeIndex.candidate heap ((after.core.values[slot]?).getD .eliminated) = some (after.expandable slot)) ∧ (rows = [] ∨ ∃ result : Option (Fragments.Fragment Symbol), rows = [(result, after)] ∧ (∀ (fragment : Fragments.Fragment Symbol), result = some fragment → FragmentBound («Symbol» := Symbol) after.core.counter fragment))",
+          "used": true,
+          "kind": "obtain"
+        }
+      ],
+      "field_count": 5,
+      "skipped_fields": []
+    },
+    {
+      "scope": "complete.cons.tail",
+      "from": "ih selectedTail",
+      "fields": [
+        {
+          "scope": "complete.cons.tail",
+          "name": "tailFuel",
+          "type": "Nat",
+          "used": true,
+          "kind": "obtain"
+        },
+        {
+          "scope": "complete.cons.tail",
+          "name": "tailOutcomes",
+          "type": "List (Option (List (Option (Fragments.Fragment Symbol) × EnumerationExpandableIndex.Cached Symbol Constraint) × EnumerationExpandableIndex.Cached Symbol Constraint))",
+          "used": true,
+          "kind": "obtain"
+        },
+        {
+          "scope": "complete.cons.tail",
+          "name": "tailRun",
+          "type": "∀ (extra : Nat), run heap (tailFuel + extra) scs rest before = tailOutcomes",
+          "used": true,
+          "kind": "obtain"
+        },
+        {
+          "scope": "complete.cons.tail",
+          "name": "tailRelated",
+          "type": "Language.All₂ (fun edge outcome => (SourcePruningEnumerationEdgeTraversal.prepare scs edge = none ↔ outcome = none) ∧ (∀ (action : EnumerateM Symbol Constraint (Option (Fragments.Fragment Symbol))), SourcePruningEnumerationEdgeTraversal.prepare scs edge = some action → ∃ (rows : List (Option (Fragments.Fragment Symbol) × EnumerationExpandableIndex.Cached Symbol Constraint)) (after : EnumerationExpandableIndex.Cached Symbol Constraint), outcome = some (rows, after) ∧ ExceptT.run (action before.core) = rows.map (fun row => .ok (row.1, row.2.core)) ∧ before.core.counter ≤ after.core.counter ∧ after.core.counter = after.core.values.length ∧ after.core.representatives = before.core.representatives ∧ Roots after.core.representatives roots ∧ StorageValid after.core ∧ PendingRealized heap after.core ∧ EnumerationCanonicalWaiting.Correct roots after.core.values after.waiting ∧ (∀ (slot : Nat), SourcePruningEnumerationNativeIndex.candidate heap ((after.core.values[slot]?).getD .eliminated) = some (after.expandable slot)) ∧ (rows = [] ∨ ∃ result : Option (Fragments.Fragment Symbol), rows = [(result, after)] ∧ (∀ (fragment : Fragments.Fragment Symbol), result = some fragment → FragmentBound («Symbol» := Symbol) after.core.counter fragment)))) rest tailOutcomes",
+          "used": true,
+          "kind": "obtain"
+        },
+        {
+          "scope": "complete.cons.tail",
+          "name": "tailRaw",
+          "type": "ExceptT.run (SourcePruningEnumerationOrdinaryBranches.run scs rest before.core) = (tailOutcomes.map (fun outcome => match outcome with | none => [.ok (none, before.core)] | some (rows, _prefix) => rows.map (fun row => .ok (some row.1, row.2.core)))).flatten",
+          "used": true,
+          "kind": "obtain"
+        }
+      ],
+      "field_count": 5,
+      "skipped_fields": []
+    },
+    {
+      "scope": "complete.cons.raw.some",
+      "from": "headReceipt action prepared",
+      "fields": [
+        {
+          "scope": "complete.cons.raw.some",
+          "name": "rows",
+          "type": "List (Option (Fragments.Fragment Symbol) × EnumerationExpandableIndex.Cached Symbol Constraint)",
+          "used": true,
+          "kind": "obtain"
+        },
+        {
+          "scope": "complete.cons.raw.some",
+          "name": "after",
+          "type": "EnumerationExpandableIndex.Cached Symbol Constraint",
+          "used": true,
+          "kind": "obtain"
+        },
+        {
+          "scope": "complete.cons.raw.some",
+          "name": "outcomeEq",
+          "type": "headOutcome = some (rows, after)",
+          "used": true,
+          "kind": "obtain"
+        },
+        {
+          "scope": "complete.cons.raw.some",
+          "name": "actualRaw",
+          "type": "ExceptT.run (action before.core) = rows.map (fun row => .ok (row.1, row.2.core))",
+          "used": true,
+          "kind": "obtain"
+        },
+        {
+          "scope": "complete.cons.raw.some",
+          "name": "_invariants",
+          "type": "before.core.counter ≤ after.core.counter ∧ after.core.counter = after.core.values.length ∧ after.core.representatives = before.core.representatives ∧ Roots after.core.representatives roots ∧ StorageValid after.core ∧ PendingRealized heap after.core ∧ EnumerationCanonicalWaiting.Correct roots after.core.values after.waiting ∧ (∀ (slot : Nat), SourcePruningEnumerationNativeIndex.candidate heap ((after.core.values[slot]?).getD .eliminated) = some (after.expandable slot)) ∧ (rows = [] ∨ ∃ result : Option (Fragments.Fragment Symbol), rows = [(result, after)] ∧ (∀ (fragment : Fragments.Fragment Symbol), result = some fragment → FragmentBound («Symbol» := Symbol) after.core.counter fragment))",
+          "used": false,
+          "kind": "obtain",
+          "reason": "Retained derived invariant packet; raw proof only consumes outcomeEq and actualRaw."
+        }
+      ],
+      "field_count": 5,
+      "skipped_fields": [
+        "_invariants"
+      ]
+    }
+  ],
+  "count": 3,
+  "field_count": 15,
+  "inline_fields": []
+}

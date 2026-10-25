@@ -1,0 +1,11 @@
+--- strict-2/SourcePruningEnumerationCachedBranches.lean
++++ strict-3/SourcePruningEnumerationCachedBranches.lean
+@@ -108,6 +108,7 @@
+         rw [outcomeEq]
+         simp only [bind, StateT.bind, ExceptT.run, ExceptT.bind, ExceptT.mk] at actualRaw ⊢
+         rw [actualRaw]
+-        simp only [List.flatMap_map, ← List.map_eq_flatMap]
++        simp only [List.flatMap_map, ExceptT.bindCont, pure, StateT.pure,
++          ExceptT.pure, ExceptT.mk, ← List.map_eq_flatMap]
+ 
+ end MicroCFTA.SourcePruningEnumerationCachedBranches

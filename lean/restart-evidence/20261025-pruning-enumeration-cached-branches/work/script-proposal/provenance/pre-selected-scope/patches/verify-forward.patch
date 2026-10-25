@@ -1,0 +1,164 @@
+--- /tmp/mcfta-pruning-enumeration-cached-edge-20261025-verify.py
++++ /tmp/mcfta-pruning-enumeration-cached-branches-20261025/script-proposal/candidate/verify.py
+@@ -1,4 +1,4 @@
+-"""Verify Native cached selected-edge execution and the preserved baseline."""
++"""Verify Native cached same-before alternatives and the preserved baseline."""
+ import argparse
+ import gzip
+ import hashlib
+@@ -10,8 +10,8 @@
+ parser = argparse.ArgumentParser(description=__doc__)
+ parser.add_argument('--root', type=Path, required=True)
+ root = parser.parse_args().root.resolve()
+-here = root / 'lean/restart-evidence/20261025-pruning-enumeration-cached-edge'
+-baseline = '56d96e1566f02971dfb2f4c3f8e99c7c942b2a22'
++here = root / 'lean/restart-evidence/20261025-pruning-enumeration-cached-branches'
++baseline = 'b55caa02925ae35670ba02098fdd6c5dc7c1db97'
+ main = '74250bd889685da436cdbfe32ac4b5a0878ffd09'
+ 
+ def sha(data):
+@@ -40,7 +40,7 @@
+     subprocess.run(['git', *args], cwd=root, check=True)
+ assert git('rev-list', '--parents', '-n', '1', proof).decode().split() == [proof, baseline]
+ assert set(git('diff-tree', '--no-commit-id', '--name-only', '-r', proof).decode().splitlines()) == {
+-    'lean/MicroCFTA/SourcePruningEnumerationCachedEdge.lean', 'lean/MicroCFTA/Audit.lean'}
++    'lean/MicroCFTA/SourcePruningEnumerationCachedBranches.lean', 'lean/MicroCFTA/Audit.lean'}
+ tree = gzip.decompress((here / 'work/baseline-tree.txt.gz').read_bytes())
+ assert tree == git('ls-tree', '-r', '-z', baseline)
+ assert sha(tree) == load('work/baseline.json')['tree_sha256']
+@@ -70,14 +70,14 @@
+         changed.append(name)
+     elif name == 'lean/MicroCFTA/Audit.lean':
+         addition = audit_change['prefix'].encode()
+-        assert addition == b'import MicroCFTA.SourcePruningEnumerationCachedEdge\n'
++        assert addition == b'import MicroCFTA.SourcePruningEnumerationCachedBranches\n'
+         assert sha(data) == audit_change['after_sha256'] and data.startswith(addition)
+         data = data[len(addition):]
+         assert sha(data) == audit_change['before_sha256']
+         changed.append(name)
+     assert hashlib.sha1(b'blob ' + str(len(data)).encode() + b'\0' + data).hexdigest() == blob, name
+     count += 1
+-assert count == 144967 and len(changed) == 10
++assert count == 145664 and len(changed) == 10
+ assert git('stash', 'list', '--format=%gd %H %s') == (here / 'work/baseline-stashes.txt').read_bytes()
+ worktrees = (here / 'work/baseline-worktrees.txt').read_bytes()
+ assert git('worktree', 'list', '--porcelain') == worktrees.replace(
+@@ -86,12 +86,12 @@
+     value, ref = line.split()
+     if ref not in ['refs/heads/formalize', 'refs/remotes/origin/formalize'] and not ref.startswith('refs/codex/turn-diffs/'):
+         assert git('rev-parse', ref).decode().strip() == value, ref
+-assert git('rev-parse', 'codex/backup-pruning-enumeration-cached-edge-20261025-0542').decode().strip() == baseline
++assert git('rev-parse', 'codex/backup-pruning-enumeration-cached-branches-20261025-0624').decode().strip() == baseline
+ 
+ checks = load('work/build-summary.json')
+-source = (root / 'lean/MicroCFTA/SourcePruningEnumerationCachedEdge.lean').read_bytes()
+-assert source == (here / 'production-sources/SourcePruningEnumerationCachedEdge.lean').read_bytes()
+-assert source == (here / 'work' / checks['successful_source_attempt'] / 'MicroCFTA/SourcePruningEnumerationCachedEdge.lean').read_bytes()
++source = (root / 'lean/MicroCFTA/SourcePruningEnumerationCachedBranches.lean').read_bytes()
++assert source == (here / 'production-sources/SourcePruningEnumerationCachedBranches.lean').read_bytes()
++assert source == (here / 'work' / checks['successful_source_attempt'] / 'MicroCFTA/SourcePruningEnumerationCachedBranches.lean').read_bytes()
+ assert sha(source) == load('work/installation.json')['source_sha256']
+ assert len(source.splitlines()) == checks['source_lines']
+ assert not re.search(rb'\b(?:sorry|admit|axiom|unsafe|set_option)\b', source)
+@@ -116,33 +116,11 @@
+     assert len(data) == pin['bytes'] and sha(data) == pin['sha256']
+ contracts = load('owner-proposal/contracts.json')
+ assert contracts == load('work/body-gate.json')['contracts']
+-amendment = here / 'work/frame-name-amendment'
+-assert sha((amendment / 'FROZEN.json').read_bytes()) == '0680eaac4891543c3904f6d00119c0d4f00f6305997c7a9d3bcb25dd09952227'
+-assert load('work/body-gate-frame-name.json')['frame_amendment_frozen_sha256'] == sha((amendment / 'FROZEN.json').read_bytes())
+-amendment_frozen = load('work/frame-name-amendment/FROZEN.json')
+-amendment_pins = load('work/frame-name-amendment/pins.json')
+-assert len(amendment_pins) == amendment_frozen['pins_count'] == 18
+-assert sha((amendment / 'pins.json').read_bytes()) == amendment_frozen['pins_sha256']
+-assert {p.relative_to(amendment).as_posix() for p in amendment.rglob('*') if p.is_file()} == set(amendment_pins) | {'pins.json', 'FROZEN.json'}
+-for name, pin in amendment_pins.items():
+-    assert not Path(name).is_absolute() and '..' not in Path(name).parts
+-    data = (amendment / name).read_bytes()
+-    assert len(data) == pin['bytes'] and sha(data) == pin['sha256']
+-effective_contracts = load('work/frame-name-amendment/effective-contracts.json')
+-assert set(effective_contracts) == set(contracts)
+-corrected = {'let-definition-finished.lean.txt', 'let-proof-finished.lean.txt'}
+-assert {name for name in contracts if contracts[name] != effective_contracts[name]} == corrected
+ for name, literal in contracts.items():
+     assert isinstance(literal, str)
+     data = (here / 'owner-proposal' / name).read_bytes()
+     assert data.decode() == literal
+-    expected = literal.replace('EnumerationExpandableIndex.Cached.frame', 'EnumerationExpandableIndex.frame') if name in corrected else literal
+-    assert effective_contracts[name] == expected
+-    if name in corrected:
+-        assert (amendment / 'basis' / name).read_bytes() == data
+-        assert (amendment / 'candidate' / name).read_text() == expected
+-    assert text.count(expected.rstrip('\n')) == 1
+-assert 'EnumerationExpandableIndex.Cached.frame' not in text
++    assert text.count(literal.rstrip('\n')) == 1
+ source_index = load('owner-proposal/source-index.json')
+ sources = source_index['sources']
+ assert len(sources) == frozen['source_count']
+@@ -204,7 +182,7 @@
+ assert axioms == decls['axioms']
+ assert len(decls['theorems']) == sum(item['kind'] == 'theorem' for item in headers)
+ assert len(decls['definitions']) == sum(item['kind'] == 'def' for item in headers)
+-namespace = 'MicroCFTA.SourcePruningEnumerationCachedEdge.'
++namespace = 'MicroCFTA.SourcePruningEnumerationCachedBranches.'
+ assert decls['definitions'] == [namespace + item['name'] for item in headers if item['kind'] == 'def']
+ assert decls['theorems'] == [namespace + item['name'] for item in headers if item['kind'] == 'theorem']
+ assert set(decls['definitions'] + decls['theorems']) == set(decls['declarations'])
+@@ -213,7 +191,7 @@
+ failed_seals = checks['failed_seal_attempts']
+ assert checks['non_lean_cap_attempts'] == ['documents-1']
+ receipt_stems = ['refresh-1', 'baseline-1'] + checks['non_lean_cap_attempts'] + checks['attempts'] + failed_seals
+-prefix = 'mcfta-pruning-enumeration-cached-edge-20261025-'
++prefix = 'mcfta-pruning-enumeration-cached-branches-20261025-'
+ expected_stems = {prefix + stem for stem in receipt_stems}
+ for suffix in ['limits.json', 'usage.json']:
+     paths = list((here / 'inputs').glob('*.' + suffix))
+@@ -228,16 +206,16 @@
+     usage = load('inputs/' + prefix + stem + '.usage.json')
+     assert 0 <= usage['age_seconds'] <= 600 and usage['remaining_percent'] > 1
+ for name in ['declaration', 'model', 'public', 'document', 'seal-script', 'root']:
+-    assert (here / 'inputs' / ('mcfta-pruning-enumeration-cached-edge-20261025-' + name + '-review.md')).is_file()
+-assert (root / 'lean/notes-current-pruning-enumeration-cached-edge.md').read_bytes() == (here / 'current-note.md').read_bytes()
+-findings = (root / 'FINDINGS.md').read_text().split('## Native cached selected-edge execution', 1)[0]
++    assert (here / 'inputs' / ('mcfta-pruning-enumeration-cached-branches-20261025-' + name + '-review.md')).is_file()
++assert (root / 'lean/notes-current-pruning-enumeration-cached-branches.md').read_bytes() == (here / 'current-note.md').read_bytes()
++findings = (root / 'FINDINGS.md').read_text().split('## Native cached same-before alternatives', 1)[0]
+ assert '## Haskell fix handoff for external work' in findings and findings.count('| Fixed by ') == 6
+ assert 'All six repairs are in the imported main history.' in findings
+ prior = load('previous-publication/remote-publication.json')
+ assert prior['status'] == 'PUSHED_AND_REMOTE_VERIFIED' and prior['remote_head'] == baseline
+ assert load('previous-publication/publication-spec.json')['head'] == baseline
+ custody = load('work/prior-custody-index.json')
+-assert sha((here / 'work/prior-custody-index.json').read_bytes()) == '6e3d681532b1eb9387a3478cd042af9e0d53e06e1ea71fcd83cd96f563d2da68'
++assert sha((here / 'work/prior-custody-index.json').read_bytes()) == '2da7b977548ad7ded887f75f59c91bfef7eb4cd7af57f434f2beba9a5b922afd'
+ assert len(custody) == 26 and len({pin['target'] for pin in custody}) == 26
+ assert len({pin['source'] for pin in custody}) == 26
+ assert {p.name for p in (here / 'previous-publication').iterdir()} == {pin['target'] for pin in custody}
+@@ -245,8 +223,8 @@
+     assert not Path(pin['target']).is_absolute() and '..' not in Path(pin['target']).parts
+     data = (here / 'previous-publication' / pin['target']).read_bytes()
+     assert len(data) == pin['bytes'] and sha(data) == pin['sha256']
+-assessment = (here / 'previous-publication/mcfta-pruning-enumeration-cached-stages-20261025-next-assessment.md').read_bytes()
+-assert sha(assessment) == '87d500b2a572229d77a768e0e6f56cdd6fb02dfa8507cc911025447803f2a663'
++assessment = (here / 'previous-publication/mcfta-pruning-enumeration-cached-edge-20261025-next-assessment.md').read_bytes()
++assert sha(assessment) == 'f672d43526ae379391f5e7cf54311a6ad18f100582e743a1e553fdace12599d4'
+ summary = load('previous-publication/post-publication-summary.json')
+ assert summary['head'] == baseline and summary['goal'] == 'ACTIVE_INCOMPLETE'
+ assert summary['component_status'] == 'PROVED_SEALED_PUSHED_REMOTE_VERIFIED'
+@@ -254,14 +232,14 @@
+ assert summary['next_assessment_is_currently_sealed'] is True
+ assert (root / summary['sealed_next_assessment_path']).read_bytes() == assessment
+ assessment_review = (here / 'work/script-proposal/context/prior-assessment-review.md').read_bytes()
+-assert sha(assessment_review) == '5f886c8fb68802a35b1f5a1b591d8c5ca9d67fe5e8148667ffe6041dd44347a6'
++assert sha(assessment_review) == '0bde2503e04ee6fd977880b2dcc5a356c02c16819b969271d93711f46d820712'
+ assert summary['next_assessment_review_is_currently_sealed'] is True
+ assert (root / summary['sealed_next_assessment_review_path']).read_bytes() == assessment_review
+ assert summary['seal_attempt'] == 'archive-1'
+ assert [pin['source'] for pin in custody] == summary['next_custody_inputs']
+ assert summary['final_local_publication_attempt'] == 'local-publication-1'
+ assert summary['all_manifest_files_committed'] is True
+-assert sha((here / 'inputs/mcfta-pruning-enumeration-cached-edge-20261025-source-review.md').read_bytes()) == '7274ac9c31bfeec5cfbc50644fe85b23aae4f9e55a95ed7748bda5307bf9d71a'
++assert sha((here / 'inputs/mcfta-pruning-enumeration-cached-branches-20261025-source-review.md').read_bytes()) == 'CURRENT_SOURCE_REVIEW_SHA_PENDING'
+ 
+ print(json.dumps(dict(status='PASS', baseline=baseline, main=main, proof=proof,
+     baseline_files=count, unchanged_files=count - len(changed), exact_changed_files=changed,

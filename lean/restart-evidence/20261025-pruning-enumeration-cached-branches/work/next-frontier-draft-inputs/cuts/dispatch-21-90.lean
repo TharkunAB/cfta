@@ -1,0 +1,70 @@
+/-- Retain the optional node and reject its empty handle before writes. -/
+def finishOptional (source target : Nat) (node : Option Nat)
+    (sourceScs targetScs : List EnumerationState.Suspended) :
+    EnumerateM Symbol EnumGuard Unit :=
+  fun state =>
+    if node = some 0 then [] else
+      [.ok ((), assimilated state target source (.unenumerated node (sourceScs ++ targetScs)))]
+
+/-- Keep the reached caller and query pair outside a missing encoded action. -/
+noncomputable def afterQuery
+    [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Constraint)] [DecidableEq Node]
+    (checkEmpty : Bool) (p h : Nat) (source target : Nat)
+    (sourceScs targetScs : List EnumerationState.Suspended)
+    (query : Node) (queried : Checked width) (beforeCaller : Caller width) (queries : Queries) :
+    (Except (SourceCurrentAllocatedConjunctionWorker.Outcome width)
+      (Option (EnumerateM Symbol EnumGuard Unit))) × Caller width × Queries :=
+  let phase : SourceCurrentAllocatedConjunctionWorker.Outcome width × Queries :=
+    if checkEmpty then
+      SourcePruningEnumerationEnabledEmpty.check p h query queried beforeCaller.fourth queries
+    else (.done false queried beforeCaller.fourth, queries)
+  match phase.1 with
+  | .done answer checkedAfter saved =>
+      let replacement : Node := if answer then .empty else query
+      (.ok ((encodeNode replacement).map (fun handle =>
+          SourcePruningEnumerationAssimilation.finish source target handle sourceScs targetScs replacement)),
+        SourceCurrentAllocatedPartialState.advance beforeCaller checkedAfter saved beforeCaller.merge, phase.2)
+  | .failed _ checkedAfter saved =>
+      (.error phase.1,
+        SourceCurrentAllocatedPartialState.advance beforeCaller checkedAfter saved beforeCaller.merge, phase.2)
+
+/-- Select the source branches before the actual checked query and enabled check. -/
+noncomputable def dispatch
+    [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Constraint)] [DecidableEq Node]
+    (checkEmpty : Bool) (nativeFuel p h : Nat)
+    (beforeCaller : Caller width) (before : EnumerationState.State Symbol EnumGuard)
+    (source target : Nat) (queries : Queries) :
+    (Except (SourceEqualityNativeDemand.Outcome width Node ⊕
+      SourceCurrentAllocatedConjunctionWorker.Outcome width)
+      (Option (EnumerateM Symbol EnumGuard Unit))) × Caller width × Queries := Id.run do
+  let noop : EnumerateM Symbol EnumGuard Unit := fun state => [.ok ((), state)]
+  if source = target then return (.ok (some noop), beforeCaller, queries)
+  let some sourceValue := before.values[source]? | return (.ok none, beforeCaller, queries)
+  match sourceValue with
+  | .eliminated => return (.ok (some noop), beforeCaller, queries)
+  | _ => pure PUnit.unit
+  let some targetValue := before.values[target]? | return (.ok none, beforeCaller, queries)
+  let .unenumerated sourceNode sourceScs := sourceValue |
+    return (.ok (some (failure .invalidIntersection)), beforeCaller, queries)
+  let .unenumerated targetNode targetScs := targetValue |
+    return (.ok (some (failure .invalidIntersection)), beforeCaller, queries)
+  let some sourceHandle := sourceNode |
+    return (.ok (some (finishOptional source target targetNode sourceScs targetScs)), beforeCaller, queries)
+  let some targetHandle := targetNode |
+    return (.ok (some (finishOptional source target (some sourceHandle) sourceScs targetScs)), beforeCaller, queries)
+  let some left := lookupNode beforeCaller.checked.native.machine.heap sourceHandle |
+    return (.ok none, beforeCaller, queries)
+  let some right := lookupNode beforeCaller.checked.native.machine.heap targetHandle |
+    return (.ok none, beforeCaller, queries)
+  let actual : SourceEqualityNativeDemand.Outcome width Node :=
+    SourceEqualityNativeDemand.execute nativeFuel
+      (.code (SourceRecursiveIntersectionCode.requestNode IntersectionEmptyDomain.emptyDomain left right)) beforeCaller.checked
+  match actual with
+  | .done query queried =>
+    let prepared :
+      (Except (SourceCurrentAllocatedConjunctionWorker.Outcome width)
+        (Option (EnumerateM Symbol EnumGuard Unit))) × Caller width × Queries :=
+      afterQuery checkEmpty p h source target sourceScs targetScs query queried beforeCaller queries
+    return (prepared.1.mapError Sum.inr, prepared.2.1, prepared.2.2)
+  | other => return (.error (.inl other),
+      SourceCurrentAllocatedPartialState.advance beforeCaller other.state beforeCaller.fourth beforeCaller.merge, queries)

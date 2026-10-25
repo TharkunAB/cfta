@@ -1,0 +1,61 @@
+{
+  "at": "2026-10-25T06:41:19.829984+01:00",
+  "author": "Root",
+  "frozen_sha256": "9054106031ceaacc93a830081aac3a411f1345ce1004b3060ada855ba643b861",
+  "contracts": {
+    "context.lean.txt": "import MicroCFTA.SourcePruningEnumerationCachedEdge\nimport MicroCFTA.SourcePruningEnumerationOrdinaryBranches\n\nnamespace MicroCFTA.SourcePruningEnumerationCachedBranches\nopen EnumerationState EnumerationSchedule EnumerationCorrectness\nopen SourcePruningEnumerationObservation\nlocal notation \"Symbol\" => SourcePruningTemplates.Symbol\nlocal notation \"Constraint\" => SourceSymbolicIndex.Constraint FullSyntax.Formula\n",
+    "run-header.lean.txt": "/-- Run every selected edge from the same original cache in list order. -/\nnoncomputable def run\n    (heap : InternedConstructorTemplates.State Symbol Constraint) (fuel : Nat)\n    (scs : List EnumerationState.Suspended)\n    (selectedEdges : List (InternedConstructorTemplates.EdgeValue Symbol Constraint))\n    (before : EnumerationExpandableIndex.Cached Symbol Constraint) :\n    List (Option (List (Option (Fragments.Fragment Symbol) \u00d7\n      EnumerationExpandableIndex.Cached Symbol Constraint) \u00d7\n      EnumerationExpandableIndex.Cached Symbol Constraint))\n",
+    "complete-header.lean.txt": "/-- Derive stable ordered alternatives, separate cache receipts and the exact raw branch stream. -/\ntheorem complete\n    (heap : InternedConstructorTemplates.State Symbol Constraint)\n    (parentEntry : Cache.Interned InternedBinderProtocol.NodeKey)\n    (storedEdges selectedEdges : List (InternedConstructorTemplates.EdgeValue Symbol Constraint))\n    (depth : Nat) (free : List InternedBinderProtocol.Reference)\n    (scs : List EnumerationState.Suspended) (roots : Nat \u2192 Nat)\n    (ready : SourceEqualityRequiredCache.Ready heap)\n    (parentAvailable : InternedProbeProvenance.Available heap (.node parentEntry storedEdges depth free))\n    (parentClosed : free = []) (selected : \u2200 edge \u2208 selectedEdges, edge \u2208 storedEdges)\n    (before : EnumerationExpandableIndex.Cached Symbol Constraint)\n    (storage : StorageValid before.core) (realized : PendingRealized heap before.core)\n    (paths : Roots before.core.representatives roots)\n    (counts : EnumerationCanonicalWaiting.Correct roots before.core.values before.waiting)\n    (flags : \u2200 (slot : Nat), SourcePruningEnumerationNativeIndex.candidate heap\n      ((before.core.values[slot]?).getD .eliminated) = some (before.expandable slot))\n    (bounded : \u2200 sc \u2208 scs, sc.var < before.core.counter) :\n    \u2203 (fuel : Nat)\n      (outcomes : List (Option (List (Option (Fragments.Fragment Symbol) \u00d7\n        EnumerationExpandableIndex.Cached Symbol Constraint) \u00d7\n        EnumerationExpandableIndex.Cached Symbol Constraint))),\n      (\u2200 (extra : Nat), run heap (fuel + extra) scs selectedEdges before = outcomes) \u2227\n      Language.All\u2082 (fun edge outcome =>\n        (SourcePruningEnumerationEdgeTraversal.prepare scs edge = none \u2194 outcome = none) \u2227\n        (\u2200 (action : EnumerateM Symbol Constraint (Option (Fragments.Fragment Symbol))),\n          SourcePruningEnumerationEdgeTraversal.prepare scs edge = some action \u2192\n          \u2203 (rows : List (Option (Fragments.Fragment Symbol) \u00d7\n              EnumerationExpandableIndex.Cached Symbol Constraint))\n            (after : EnumerationExpandableIndex.Cached Symbol Constraint),\n            outcome = some (rows, after) \u2227\n            ExceptT.run (action before.core) = rows.map (fun row => .ok (row.1, row.2.core)) \u2227\n            before.core.counter \u2264 after.core.counter \u2227\n            after.core.counter = after.core.values.length \u2227\n            after.core.representatives = before.core.representatives \u2227 Roots after.core.representatives roots \u2227\n            StorageValid after.core \u2227 PendingRealized heap after.core \u2227\n            EnumerationCanonicalWaiting.Correct roots after.core.values after.waiting \u2227\n            (\u2200 (slot : Nat), SourcePruningEnumerationNativeIndex.candidate heap\n              ((after.core.values[slot]?).getD .eliminated) = some (after.expandable slot)) \u2227\n            (rows = [] \u2228 \u2203 result : Option (Fragments.Fragment Symbol),\n              rows = [(result, after)] \u2227\n              (\u2200 (fragment : Fragments.Fragment Symbol), result = some fragment \u2192\n                FragmentBound (\u00abSymbol\u00bb := Symbol) after.core.counter fragment)))) selectedEdges outcomes \u2227\n      ExceptT.run (SourcePruningEnumerationOrdinaryBranches.run scs selectedEdges before.core) =\n        (outcomes.map (fun outcome =>\n          match outcome with\n          | none => [.ok (none, before.core)]\n          | some (rows, _prefix) => rows.map (fun row => .ok (some row.1, row.2.core)))).flatten\n",
+    "local-selected-head.lean.txt": "have selectedHead : edge \u2208 storedEdges\n",
+    "local-selected-tail.lean.txt": "have selectedTail : \u2200 edge \u2208 rest, edge \u2208 storedEdges\n"
+  },
+  "program_frozen_sha256": "a6da1a39815c96d430c7416775905b617bcd1e27d80dbaf9ae365775178a17ed",
+  "declaration_review_sha256": "c45ab48cc24fcadc40015b1e9aabf3ec8da1961880178b69054e76cafda93dbc",
+  "seal_script_review_sha256": "54b3965ad8cab35c06ba46ede4f4fb83b4349ae7732d03a62ea817e2c93ecb7b",
+  "source_review_sha256": "3ecf40babdd35755729ccddcdf4bdc584ccc75760af92717f0983fe6bc18b7b4",
+  "Root_read_and_accepts_full_declaration_inventory_source_cuts_programs_deltas_and_templates": true,
+  "programs": {
+    "check": {
+      "path": "/tmp/mcfta-pruning-enumeration-cached-branches-20261025/script-proposal/candidate/check.py",
+      "bytes": 1643,
+      "lines": 33,
+      "sha256": "64703b56c8e03040d80ecbf58c774005815544377d622c5034499d612c88cbbf"
+    },
+    "documents": {
+      "path": "/tmp/mcfta-pruning-enumeration-cached-branches-20261025/script-proposal/candidate/documents.py",
+      "bytes": 2687,
+      "lines": 51,
+      "sha256": "6b6ceb2d16cff5053f06658fc97f9c23910becbe0575994cc3be691716f06383"
+    },
+    "archive": {
+      "path": "/tmp/mcfta-pruning-enumeration-cached-branches-20261025/script-proposal/candidate/archive.py",
+      "bytes": 7239,
+      "lines": 63,
+      "sha256": "2af6b52c7710c68da3f7bf59379bbef553bbea16c2e6707628702323fbb01a6f"
+    },
+    "verify": {
+      "path": "/tmp/mcfta-pruning-enumeration-cached-branches-20261025/script-proposal/candidate/verify.py",
+      "bytes": 15172,
+      "lines": 247,
+      "sha256": "d24654a324b498cd83068feb3d68a7deeab5f02c63f9514bc45dcbad70a02fe1"
+    },
+    "publication": {
+      "path": "/tmp/mcfta-pruning-enumeration-cached-branches-20261025/script-proposal/candidate/publication.py",
+      "bytes": 4199,
+      "lines": 78,
+      "sha256": "4e0a30ed03010d7022dcb89b8963750b989cc30933f41b436051ba862a81553c"
+    }
+  },
+  "source_body_author": "Root",
+  "public_heads": [
+    "run",
+    "complete"
+  ],
+  "all_selected_types_and_premises_unchanged": true,
+  "body_not_authored_at_gate": true,
+  "instances": 0,
+  "haves": 2,
+  "lets": 0,
+  "inductions": 1,
+  "hard_cap": 400
+}
