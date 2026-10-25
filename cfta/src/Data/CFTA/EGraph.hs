@@ -1,22 +1,66 @@
 {-# LANGUAGE PatternSynonyms #-}
 
-{- | E-graphs with sorts.
+{- | E-graphs with sorts, and how they are tree automata.
 
 An e-graph holds a set of terms and an equivalence of these terms that is a
 congruence: when two terms are equal, the terms that differ only in them
 are equal too. An e-class is a set of equal terms. An e-node is a symbol
 with an e-class for each child. Each e-node has one e-class, and two e-nodes
-with the same symbol and children are the same e-node (the hash-cons).
+with the same symbol and children are the same e-node (the hash-cons). The
+e-graph follows egg (Willsey et al., POPL 2021): a hash-cons, a union-find
+of e-classes, and rebuilding, which restores the congruence after merges.
 
 Each e-class has a sort, or no sort. A sort is a term over sort symbols,
 such as a type. The sort is part of the identity of an e-node, so the
 constant @[]@ of sort @[Int]@ and the constant @[]@ of sort @[Bool]@ are two
 e-nodes. Two e-classes of different sorts do not merge. Sorts are
-hash-consed as well, and they never merge.
+hash-consed as well, and they never merge. egglog has sorts in the same way.
 
-The e-graph is a persistent value. 'classAutomaton' gives the terms of one
-e-class as an automaton, so "Data.CFTA.Sized" in @cfta-generator@ counts,
-lists, ranks, and unranks them.
+The e-graph is a persistent value, so a caller can keep an old version.
+
+= E-graphs are tree automata
+
+An e-graph is a bottom-up deterministic tree automaton (Pollock and Haan, in
+Wang et al., "E-Graphs, VSAs, and Tree Automata: a Rosetta Stone", EGRAPHS
+2022):
+
+* An e-class is a state.
+* An e-node @f(c1, ..., cn)@ of the e-class @c@ is a transition
+  @f(c1, ..., cn) -> c@.
+* The hash-cons makes the automaton deterministic: one left side of a
+  transition has one state.
+* Rebuilding keeps the automaton deterministic after a merge: when two
+  transitions become the same, their states merge. This is the congruence.
+
+So the terms of an e-class are the language of its state. 'classAutomaton'
+gives this automaton, and "Data.CFTA.Sized" in @cfta-generator@ counts,
+lists, ranks, unranks, and samples the terms. A general FTA has no
+hash-cons: two transitions with one left side can have two states. A
+version space algebra is an acyclic FTA.
+
+An ECTA (Koppel et al., ICFP 2022) adds equality constraints to the
+transitions of an FTA: the subterms at some paths must be equal. With
+equality constraints, an automaton describes some sets of terms with far
+fewer states, and some infinite sets that no FTA describes, such as the
+terms @f(t, t)@. Equality constraints occur here in two places:
+
+* A pattern in which a variable occurs twice, such as @x + x@, accepts the
+  terms whose subterms at the two paths of @x@ are equal.
+* An ECTA of typed terms puts the type of a term in a child, and equality
+  constraints make the types agree. A sorted e-graph keeps the sort in the
+  e-node instead. A sort variable that occurs twice in a pattern is an
+  equality constraint between the paths of the sorts.
+
+= E-matching is an intersection
+
+The matches of a pattern are the terms of the product of the e-graph
+automaton and the automaton of the pattern that satisfy the equality
+constraints of the pattern. 'ematchByIntersection' computes the matches by
+this definition, with 'FTA.intersectWith'. 'ematch' and the saturation
+explore the same product from a few roots, and compute the matches of each
+pair of an e-class and a node of a pattern once, so that the parents of an
+e-class share them. The test suite checks that the two give the same
+matches.
 -}
 module Data.CFTA.EGraph (
     -- * E-graphs
@@ -44,6 +88,7 @@ module Data.CFTA.EGraph (
     rule,
     equation,
     ematch,
+    ematchByIntersection,
 
     -- * Equality saturation
     Limits (..),
@@ -66,7 +111,9 @@ import qualified Data.Map.Strict as Map
 import Data.Ord (comparing)
 
 import qualified Data.CFTA as FTA
-import Data.CFTA.Constraint (Constraint, noConstraint)
+import Data.CFTA.Constraint (Constraint, equalitiesHold, equalityConstraint, noConstraint)
+import Data.CFTA.Equality.Constraint (mkEqConstraints)
+import Data.CFTA.Path (ChildIndex (..), path)
 import Data.CFTA.Term (Term, pattern Node)
 
 -- | The identity of an e-class. 'find' gives the identity of the root of its e-class.
@@ -661,3 +708,136 @@ run limits rules goal g0 = go 0 IntMap.empty (rebuild g0)
                                 then (g'', Report (i + 1) (size g'') (if reached g'' then Equal else Saturated))
                                 else go (i + 1) bans' g''
     sortId h c = let ClassId j = find h c in maybe 0 classSort (IntMap.lookup j (classes h))
+
+-- The states of the e-graph automaton of 'ematchByIntersection'.
+data GState = GRoot | GClass !Int | GName !Int | GSort !Int
+    deriving (Eq, Ord)
+
+-- The symbols of the e-graph automaton and of the product.
+data GSymbol s f = GMatch | GNode !f !Int | GVar | GNameLeaf !Int | GSortNode !s !Int | GSortLeaf !Int | GNoSort
+    deriving (Eq, Ord)
+
+instance (Hashable s, Hashable f) => Hashable (GSymbol s f) where
+    hashWithSalt salt = \case
+        GMatch -> salt `hashWithSalt` (0 :: Int)
+        GNode f n -> salt `hashWithSalt` (1 :: Int) `hashWithSalt` f `hashWithSalt` n
+        GVar -> salt `hashWithSalt` (2 :: Int)
+        GNameLeaf i -> salt `hashWithSalt` (3 :: Int) `hashWithSalt` i
+        GSortNode s n -> salt `hashWithSalt` (4 :: Int) `hashWithSalt` s `hashWithSalt` n
+        GSortLeaf k -> salt `hashWithSalt` (5 :: Int) `hashWithSalt` k
+        GNoSort -> salt `hashWithSalt` (6 :: Int)
+
+-- The symbols of the pattern automaton.
+data PSymbol s f = PMatchRoot | PNodeSymbol !f !Int | PVariable | PAnyName | PSortSymbol !s !Int | PAnySort | PSortVariable
+    deriving (Eq, Ord)
+
+{- | The matches of a pattern by the definition: the terms of the product of
+two automata, as 'FTA.intersectWith' builds it.
+
+The e-graph automaton has a state for each e-class and for each sort. An
+e-node @f(c1, ..., cn)@ of sort @k@ in the e-class @c@ is the transition
+@f(k, c1, ..., cn) -> c@: the sort is the first child, as in the encoding
+of types in an ECTA. A further transition of @c@ names the e-class and its
+sort, for the variables. The automaton of the pattern accepts the instances
+of the pattern. A variable that occurs twice, and a sort variable that
+occurs twice, are equality classes of paths: an equality constraint, as in
+an ECTA. A term of the product that satisfies the constraint is a match.
+
+This is slow, because it builds the product and lists its terms. 'ematch'
+gives the same matches. A node with two sort patterns keeps the inner one
+here; 'ematch' requires both.
+-}
+ematchByIntersection ::
+    (Ord s, Hashable s, Ord f, Hashable f) => EGraph s f -> Pattern s f -> [(ClassId, Map.Map String ClassId)]
+ematchByIntersection g pat = case (FTA.mkFTA GRoot graphRows, FTA.mkFTA (-1 :: Int) patternRows) of
+    (Right graph, Right patterns) -> case FTA.intersectWith same (\_ c -> c) graph patterns of
+        Right product' ->
+            [ (c, bindings)
+            | term@(Node GMatch [instance']) <- FTA.terms product'
+            , all (\t -> equalitiesHold (FTA.transitionConstraint t) term) (FTA.transitionsFrom product' (FTA.initialState product'))
+            , Just c <- [classOf instance']
+            , Just bindings <- [bind pat instance' Map.empty]
+            ]
+        Left _ -> []
+    _ -> []
+  where
+    nodesOf = IntMap.mapWithKey (\i _ -> canonicalNodes g i) (classes g)
+    graphRows =
+        (GRoot, [FTA.Transition GMatch [GClass i] noConstraint | i <- IntMap.keys nodesOf])
+            : [ ( GClass i
+                , FTA.Transition GVar [GName i, GSort (classSort e)] noConstraint
+                    : [ FTA.Transition (GNode f (length cs)) (GSort k : [GClass j | ClassId j <- cs]) noConstraint
+                      | ENode k f cs <- nodesOf IntMap.! i
+                      ]
+                )
+              | (i, e) <- IntMap.toList (classes g)
+              ]
+            ++ [(GName i, [FTA.Transition (GNameLeaf i) [] noConstraint]) | i <- IntMap.keys nodesOf]
+            ++ (GSort 0, [FTA.Transition GNoSort [] noConstraint])
+            : [ ( GSort k
+                , [FTA.Transition (GSortNode s (length ks)) (map GSort ks) noConstraint, FTA.Transition (GSortLeaf k) [] noConstraint]
+                )
+              | (k, SortNode s ks) <- IntMap.toList (sortNodes g)
+              ]
+    -- The pattern automaton: -1 is the root, -2 a name, -3 any sort, -4 a
+    -- sort variable, and 0, 1, ... the other states.
+    patternRows =
+        let (top, rows, _, occ) = goPattern Nothing pat [0] 0
+            classes' = [map (path . map ChildIndex) ps | ps <- Map.elems occ, length ps > 1]
+            constraint = if null classes' then noConstraint else equalityConstraint (mkEqConstraints classes')
+         in (-1, [FTA.Transition PMatchRoot [top] constraint])
+                : (-2, [FTA.Transition PAnyName [] noConstraint])
+                : (-3, [FTA.Transition PAnySort [] noConstraint])
+                : (-4, [FTA.Transition PSortVariable [] noConstraint])
+                : rows
+    goPattern _ (PSorted sp p) here next = goPattern (Just sp) p here next
+    goPattern sort (PVar v) here next =
+        let (sortState, rows, next', occ) = goSort sort (here ++ [1]) (next + 1)
+         in ( next
+            , (next, [FTA.Transition PVariable [-2, sortState] noConstraint]) : rows
+            , next'
+            , Map.insertWith (++) (Left v) [here ++ [0]] occ
+            )
+    goPattern sort (PNode f ps) here next =
+        let (sortState, rows, next1, occ) = goSort sort (here ++ [0]) (next + 1)
+            (kids, rows', next', occ') =
+                foldl'
+                    ( \(ks, rs, n, o) (i, p) -> let (k, r, n', o') = goPattern Nothing p (here ++ [i]) n in (ks ++ [k], rs ++ r, n', Map.unionWith (++) o o')
+                    )
+                    ([], rows, next1, occ)
+                    (zip [1 ..] ps)
+         in (next, (next, [FTA.Transition (PNodeSymbol f (length ps)) (sortState : kids) noConstraint]) : rows', next', occ')
+    goSort Nothing _ next = (-3, [], next, Map.empty)
+    goSort (Just (SVar a)) here next = (-4, [], next, Map.singleton (Right a) [here])
+    goSort (Just (SNode s ps)) here next =
+        let (kids, rows, next', occ) =
+                foldl'
+                    ( \(ks, rs, n, o) (i, p) -> let (k, r, n', o') = goSort (Just p) (here ++ [i]) n in (ks ++ [k], rs ++ r, n', Map.unionWith (++) o o')
+                    )
+                    ([], [], next + 1, Map.empty)
+                    (zip [0 ..] ps)
+         in (next, (next, [FTA.Transition (PSortSymbol s (length ps)) kids noConstraint]) : rows, next', occ)
+    same GMatch PMatchRoot = Just GMatch
+    same (GNode f n) (PNodeSymbol f' n') | f == f' && n == n' = Just (GNode f n)
+    same GVar PVariable = Just GVar
+    same (GNameLeaf i) PAnyName = Just (GNameLeaf i)
+    same (GSortNode s n) (PSortSymbol s' n') | s == s' && n == n' = Just (GSortNode s n)
+    same (GSortLeaf k) PAnySort = Just (GSortLeaf k)
+    same GNoSort PAnySort = Just GNoSort
+    same (GSortLeaf k) PSortVariable = Just (GSortLeaf k)
+    same _ _ = Nothing
+    -- The e-class of an instance, through the memo.
+    classOf (Node GVar [Node (GNameLeaf i) [], _]) = Just (find g (ClassId i))
+    classOf (Node (GNode f _) (sortChild : kids)) = do
+        k <- sortIdOf sortChild
+        cs <- traverse classOf kids
+        find g <$> HashMap.lookup (ENode k f cs) (memo g)
+    classOf _ = Nothing
+    sortIdOf (Node GNoSort []) = Just 0
+    sortIdOf (Node (GSortLeaf k) []) = Just k
+    sortIdOf (Node (GSortNode s _) kids) = traverse sortIdOf kids >>= \ks -> HashMap.lookup (SortNode s ks) (sortIds g)
+    sortIdOf _ = Nothing
+    bind (PSorted _ p) t b = bind p t b
+    bind (PVar v) (Node GVar [Node (GNameLeaf i) [], _]) b = Just (Map.insert v (find g (ClassId i)) b)
+    bind (PNode _ ps) (Node (GNode _ _) (_ : kids)) b = foldM (\acc (p, t) -> bind p t acc) b (zip ps kids)
+    bind _ _ _ = Nothing
