@@ -1,0 +1,379 @@
+diff --git a/lean/MicroCFTA/Audit.lean b/lean/MicroCFTA/Audit.lean
+index 304c2bfba..427b88c65 100644
+--- a/lean/MicroCFTA/Audit.lean
++++ b/lean/MicroCFTA/Audit.lean
+@@ -1,3 +1,4 @@
++import MicroCFTA.SourcePruningEnumerationSelectedEdge
+ import MicroCFTA.SourcePruningEnumerationTraversalCompletion
+ import MicroCFTA.SourcePruningEnumerationChildTraversal
+ import MicroCFTA.SourcePruningEnumerationChildEffects
+diff --git a/lean/MicroCFTA/SourcePruningEnumerationEdgeInputs.lean b/lean/MicroCFTA/SourcePruningEnumerationEdgeInputs.lean
+new file mode 100644
+index 000000000..32459ca4a
+--- /dev/null
++++ b/lean/MicroCFTA/SourcePruningEnumerationEdgeInputs.lean
+@@ -0,0 +1,133 @@
++import MicroCFTA.SourcePruningEnumerationCachedOwn
++import MicroCFTA.EnumerationConstruction
++
++namespace MicroCFTA.SourcePruningEnumerationEdgeInputs
++open EnumerationState EnumerationCorrectness EnumerationSchedule EnumerationDependencies
++open SourcePruningEnumerationObservation
++open InternedConstructorTemplates InternedProbeProvenance
++local notation "Symbol" => SourcePruningTemplates.Symbol
++local notation "Constraint" => SourceSymbolicIndex.Constraint FullSyntax.Formula
++local notation "Node" => InternedConstructorTemplates.Value Symbol Constraint
++local notation "Cached" => EnumerationExpandableIndex.Cached Symbol Constraint
++local notation "Fragment" => Fragments.Fragment Symbol
++
++/-- The actual selected-edge children retain inherited and fresh own-class descents. -/
++def children (edge : EdgeValue Symbol Constraint) (scs : List Suspended)
++    (start : Nat) (tries : List EqualityTrie.Trie) : List (Node × List Suspended) :=
++  edge.children.zipIdx.map fun indexed =>
++    (indexed.1, descendScs indexed.2 scs ++ descendScs indexed.2 (suspendedVars start tries))
++
++private theorem descend_append (index : Nat) (first second : List Suspended) :
++    descendScs index (first ++ second) = descendScs index first ++ descendScs index second := by
++  simp only [descendScs, EqualityTrie.descendScs, List.map_append, List.filter_append]
++
++/-- The actual own-class prefix derives child admission and separate parent-root protection. -/
++theorem complete
++    (heap : InternedConstructorTemplates.State Symbol Constraint)
++    (parentEntry : Cache.Interned InternedBinderProtocol.NodeKey)
++    (edges : List (EdgeValue Symbol Constraint)) (depth : Nat) (free : List InternedBinderProtocol.Reference)
++    (edge : EdgeValue Symbol Constraint) (scs : List Suspended) (roots : Nat → Nat)
++    (ready : SourceEqualityRequiredCache.Ready heap)
++    (parentAvailable : Available heap (.node parentEntry edges depth free))
++    (parentClosed : free = []) (selected : edge ∈ edges)
++    (before : Cached) (safe : Safe before.core) (realized : PendingRealized heap before.core)
++    (paths : Roots before.core.representatives roots)
++    (counts : EnumerationCanonicalWaiting.Correct roots before.core.values before.waiting)
++    (flags : ∀ slot, SourcePruningEnumerationNativeIndex.candidate heap
++      ((before.core.values[slot]?).getD .eliminated) = some (before.expandable slot))
++    (bounded : ∀ sc ∈ scs, sc.var < before.core.counter) (pending : InputsPending before.core scs)
++    (allowed : arityAllows edge.children.length scs = true)
++    (tries : List EqualityTrie.Trie) (residual : Option Constraint)
++    (projected : SourcePruningEnumerationConstraint.project edge.entry.key.constraint = some (tries, residual)) :
++    ∃ (action : EnumerateM Symbol Constraint
++        (Symbol × List (Node × List Suspended × Option (EnumerateM Symbol Constraint Fragment)) × Option Constraint))
++      (after : Cached),
++      SourcePruningEnumerationEdgePrefix.prepare scs edge = some action ∧
++      SourcePruningEnumerationCachedOwn.prepare heap scs edge before =
++        some [((edge.entry.key.symbol,
++          (children edge scs before.core.counter tries).map (fun input =>
++            (input.1, input.2, SourcePruningEnumerationShallowChild.prepareChild input.2 input.1)), residual), after)] ∧
++      ExceptT.run (action before.core) =
++        [.ok ((edge.entry.key.symbol,
++          (children edge scs before.core.counter tries).map (fun input =>
++            (input.1, input.2, SourcePruningEnumerationShallowChild.prepareChild input.2 input.1)), residual), after.core)] ∧
++      after.core = suspendedState tries.length before.core ∧
++      after.core.counter = before.core.counter + tries.length ∧
++      after.core.representatives = before.core.representatives ∧
++      Safe after.core ∧ Roots after.core.representatives roots ∧ PendingRealized heap after.core ∧
++      EnumerationCanonicalWaiting.Correct roots after.core.values after.waiting ∧
++      (∀ slot, SourcePruningEnumerationNativeIndex.candidate heap
++        ((after.core.values[slot]?).getD .eliminated) = some (after.expandable slot)) ∧
++      InputsPending after.core (scs ++ suspendedVars before.core.counter tries) ∧
++      (∀ incoming bucket, (incoming, bucket) ∈ children edge scs before.core.counter tries →
++        Available heap incoming ∧ incoming.free = [] ∧
++        (∀ sc ∈ bucket, sc.var < after.core.counter) ∧ InputsPending after.core bucket) ∧
++      (∀ held, held < before.core.counter → IsRoot before.core.representatives held →
++        Avoids before.core.representatives held scs →
++        EnumerationDriver.Protected held before.core after.core ∧
++          ∀ incoming bucket, (incoming, bucket) ∈ children edge scs before.core.counter tries →
++            Avoids after.core.representatives held bucket) := by
++  have packet := SourcePruningEnumerationCachedOwn.complete heap before scs edge roots
++    safe.1 realized paths counts flags
++  simp only [allowed, ↓reduceIte, projected] at packet
++  obtain ⟨action, after, prepared, cachedRun, raw, coreSame, counter, _aligned, forestSame,
++    afterPaths, _storage, afterRealized, afterCounts, _waiting, _expandable, afterFlags⟩ := packet
++  have staged : (children edge scs before.core.counter tries).map (fun input =>
++      (input.1, input.2, SourcePruningEnumerationShallowChild.prepareChild (EnumGuard := Constraint) input.2 input.1)) =
++      edge.children.zipIdx.map (fun indexed =>
++        (indexed.1, descendScs indexed.2 scs ++ descendScs indexed.2 (suspendedVars before.core.counter tries),
++          SourcePruningEnumerationShallowChild.prepareChild (EnumGuard := Constraint)
++            (descendScs indexed.2 scs ++ descendScs indexed.2 (suspendedVars before.core.counter tries)) indexed.1)) := by
++    simp only [children, List.map_map]
++    rfl
++  have afterSafe : Safe after.core := by
++    rw [coreSame]
++    exact suspension_safe tries.length before.core safe
++  have combinedPending : InputsPending after.core (scs ++ suspendedVars before.core.counter tries) := by
++    rw [coreSame]
++    exact EnumerationConstruction.suspension_inputs_pending before.core safe scs pending tries
++  have childrenAvailable : ∀ child ∈ edge.children, Available heap child := by
++    intro child member
++    exact parentAvailable.children child (List.mem_flatMap.mpr ⟨edge, selected, member⟩)
++  have childrenClosed : ∀ child ∈ edge.children, child.free = [] :=
++    MergedColdReaderClosed.node_children_closed heap ready.semantic.1.normal.facts
++      parentEntry edges depth free parentAvailable parentClosed edge selected
++  refine ⟨action, after, prepared, ?_, ?_, coreSame, counter, forestSame, afterSafe,
++    afterPaths, afterRealized, afterCounts, afterFlags, combinedPending, ?_, ?_⟩
++  · simpa only [staged] using cachedRun
++  · simpa only [staged] using raw
++  · intro incoming bucket member
++    obtain ⟨indexed, indexedMember, pairSame⟩ := List.mem_map.mp member
++    cases pairSame
++    have combinedBounded : ∀ sc ∈ scs ++ suspendedVars before.core.counter tries, sc.var < after.core.counter := by
++      intro sc member
++      rw [counter]
++      rcases List.mem_append.mp member with inherited | own
++      · have := bounded sc inherited
++        omega
++      · exact suspended_bounded before.core.counter tries sc own
++    refine ⟨childrenAvailable indexed.1 (List.fst_mem_of_mem_zipIdx indexedMember),
++      childrenClosed indexed.1 (List.fst_mem_of_mem_zipIdx indexedMember), ?_, ?_⟩
++    · rw [← descend_append]
++      exact descend_bounded _ indexed.2 _ combinedBounded
++    · intro held fragment stored
++      rw [← descend_append]
++      exact descend_avoids _ held indexed.2 _ (combinedPending held fragment stored)
++  · intro held inside root avoids
++    have frame : EnumerationDriver.Protected held before.core after.core := by
++      rw [coreSame]
++      exact EnumerationDriver.suspension_protected held tries.length before.core safe inside root
++    refine ⟨frame, ?_⟩
++    have combinedAvoids : Avoids before.core.representatives held (scs ++ suspendedVars before.core.counter tries) := by
++      intro sc member
++      rcases List.mem_append.mp member with inherited | own
++      · exact avoids sc inherited
++      · exact fresh_avoids before.core safe.1 held inside tries sc own
++    have afterAvoids := frame.avoids _ combinedAvoids
++    intro incoming bucket member
++    obtain ⟨indexed, _indexedMember, pairSame⟩ := List.mem_map.mp member
++    cases pairSame
++    rw [← descend_append]
++    exact descend_avoids _ held indexed.2 _ afterAvoids
++
++end MicroCFTA.SourcePruningEnumerationEdgeInputs
+diff --git a/lean/MicroCFTA/SourcePruningEnumerationSelectedEdge.lean b/lean/MicroCFTA/SourcePruningEnumerationSelectedEdge.lean
+new file mode 100644
+index 000000000..14475a9ff
+--- /dev/null
++++ b/lean/MicroCFTA/SourcePruningEnumerationSelectedEdge.lean
+@@ -0,0 +1,225 @@
++import MicroCFTA.SourcePruningEnumerationEdgeInputs
++import MicroCFTA.SourcePruningEnumerationTraversalCompletion
++
++namespace MicroCFTA.SourcePruningEnumerationSelectedEdge
++open EnumerationState EnumerationCorrectness EnumerationSchedule EnumerationDependencies
++open InternedConstructorTemplates InternedProbeProvenance
++open SourcePruningEnumerationNodes SourcePruningEnumerationObservation
++open SourceCurrentAllocatedNativeInventoryState (Inventory)
++open SourceCurrentAllocatedPartialInvariant (Context Post)
++local notation "Symbol" => SourcePruningTemplates.Symbol
++local notation "Constraint" => SourceSymbolicIndex.Constraint FullSyntax.Formula
++local notation "Node" => InternedConstructorTemplates.Value Symbol Constraint
++local notation "Caller" => SourceCurrentAllocatedPartialState.State
++local notation "Memos" => EndpointMemoGateTrace.Memos
++local notation "Queries" => SourceEndpointMemo.Memos
++local notation "Cached" => EnumerationExpandableIndex.Cached Symbol Constraint
++local notation "Fragment" => Fragments.Fragment Symbol
++variable {width : Nat}
++
++/-- Retain prefix rejection, unsupported preparation, stopped children and a completed edge. -/
++inductive Result (width : Nat) where
++  /-- The prefix does not supply the supported singleton packet. -/
++  | unhandled
++  /-- The arity check rejects before any child runs. -/
++  | rejected (caller : Caller width) (queries : Queries) (after : Cached)
++  /-- Retain the exact first stopping child observation and optional cache. -/
++  | stopped (completedPrefix : List Fragment)
++      (observation : SourcePruningEnumerationChildDispatch.Observation width) (candidate : Option Cached)
++  /-- Every child succeeds and the edge residual is recorded. -/
++  | complete (fragment : Fragment) (caller : Caller width) (queries : Queries) (after : Cached)
++
++/-- Record the residual in the actual completed cache. -/
++def finish (residual : Option Constraint) (fragment : Fragment) (before : Cached) : Cached :=
++  EnumerationExpandableIndex.frame {before.core with obligations :=
++    match residual with
++    | none => before.core.obligations
++    | some guard => (guard, fragment) :: before.core.obligations} before
++
++/-- Residual recording has exactly the source action's successful singleton result. -/
++theorem finish_raw (residual : Option Constraint) (fragment : Fragment) (before : Cached) :
++    ExceptT.run (recordResidual residual fragment before.core) = [.ok ((), (finish residual fragment before).core)] := by
++  cases residual <;> rfl
++
++/-- A bounded completed fragment permits the exact residual update. -/
++theorem finish_safe (residual : Option Constraint) (fragment : Fragment) (before : Cached)
++    (safe : Safe before.core) (bounded : FragmentBound before.core.counter fragment) :
++    Safe (finish residual fragment before).core := by
++  apply (recordResidual_safe residual fragment before.core _ safe bounded ?_).1
++  rw [Success, finish_raw]
++  simp
++
++/-- Residual recording retains every existing root, its stored value and its class. -/
++theorem finish_protected (residual : Option Constraint) (fragment : Fragment) (before : Cached)
++    (held : Nat) (root : IsRoot before.core.representatives held) :
++    EnumerationDriver.Protected held before.core (finish residual fragment before).core :=
++  ⟨rfl, root, fun _ => Iff.rfl⟩
++
++private theorem node_bound (limit : Nat) (symbol : Symbol) (fragments : List Fragment)
++    (bounded : ∀ fragment ∈ fragments, FragmentBound limit fragment) :
++    FragmentBound limit (.node symbol fragments) := by
++  induction fragments with
++  | nil => trivial
++  | cons first rest ih =>
++      exact ⟨bounded first (by simp), ih (fun fragment member => bounded fragment (by simp [member]))⟩
++
++variable [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Constraint)] [DecidableEq Node]
++
++/-- Run the actual own-class prefix, ordered native children and final residual update. -/
++noncomputable def run (checkEmpty : Bool) (r n p h k : Nat)
++    (scs : List Suspended) (edge : EdgeValue Symbol Constraint)
++    (caller : Caller width) (before : Cached) (queries : Queries) : Result width :=
++  match SourcePruningEnumerationCachedOwn.prepare caller.checked.native.machine.heap scs edge before with
++  | none => .unhandled
++  | some [] => .rejected caller queries before
++  | some [((symbol, staged, residual), middle)] =>
++      match SourcePruningEnumerationChildTraversal.run checkEmpty r n p h k
++          (staged.map (fun input => (input.1, input.2.1))) caller middle queries with
++      | .stopped fragments observation candidate => .stopped fragments observation candidate
++      | .complete fragments afterCaller saved after =>
++          let fragment := Fragments.Fragment.node symbol fragments
++          .complete fragment afterCaller saved (finish residual fragment after)
++  | _ => .unhandled
++
++/-- Numeric admission is required at the actual successful own-class prefix endpoint. -/
++def Ranges (checkEmpty : Bool) (scs : List Suspended) (edge : EdgeValue Symbol Constraint)
++    (caller : Caller width) (before : Cached) (queries : Queries) : Prop :=
++  ∀ symbol staged residual middle,
++    SourcePruningEnumerationCachedOwn.prepare caller.checked.native.machine.heap scs edge before =
++      some [((symbol, staged, residual), middle)] →
++    SourcePruningEnumerationTraversalCompletion.Ranges checkEmpty
++      (staged.map (fun input => (input.1, input.2.1))) caller middle queries
++
++/-- Arity rejection retains the original caller and cache without running a child. -/
++theorem arity_rejected (checkEmpty : Bool) (r n p h k : Nat) (scs : List Suspended)
++    (edge : EdgeValue Symbol Constraint) (caller : Caller width) (before : Cached) (queries : Queries)
++    (rejected : arityAllows edge.children.length scs = false) :
++    run checkEmpty r n p h k scs edge caller before queries = .rejected caller queries before := by
++  simp only [run, SourcePruningEnumerationCachedOwn.prepare, rejected, Bool.false_eq_true, ↓reduceIte]
++
++/-- Unsupported annotations retain the explicit prefix fallback. -/
++theorem unsupported (checkEmpty : Bool) (r n p h k : Nat) (scs : List Suspended)
++    (edge : EdgeValue Symbol Constraint) (caller : Caller width) (before : Cached) (queries : Queries)
++    (allowed : arityAllows edge.children.length scs = true)
++    (projected : SourcePruningEnumerationConstraint.project edge.entry.key.constraint = none) :
++    run checkEmpty r n p h k scs edge caller before queries = .unhandled := by
++  simp only [run, SourcePruningEnumerationCachedOwn.prepare, allowed, ↓reduceIte, projected]
++
++/-- Every stopped child receipt retains its prefix, observation and optional cache. -/
++theorem children_stopped (checkEmpty : Bool) (r n p h k : Nat) (scs : List Suspended)
++    (edge : EdgeValue Symbol Constraint) (caller : Caller width) (before : Cached) (queries : Queries)
++    (symbol : Symbol) (staged : List (Node × List Suspended × Option (EnumerateM Symbol Constraint Fragment)))
++    (residual : Option Constraint) (middle : Cached) (fragments : List Fragment)
++    (observation : SourcePruningEnumerationChildDispatch.Observation width) (candidate : Option Cached)
++    (prepared : SourcePruningEnumerationCachedOwn.prepare caller.checked.native.machine.heap scs edge before =
++      some [((symbol, staged, residual), middle)])
++    (stopped : SourcePruningEnumerationChildTraversal.run checkEmpty r n p h k
++      (staged.map (fun input => (input.1, input.2.1))) caller middle queries =
++        .stopped fragments observation candidate) :
++    run checkEmpty r n p h k scs edge caller before queries = .stopped fragments observation candidate := by
++  simp only [run, prepared, stopped]
++
++/-- A selected supported edge derives native completion or its first valid child rejection. -/
++theorem complete
++    (formulas : SourceGuards.Formulas FullSyntax.Formula)
++    (solver : SourceGuards.Entailment FullSyntax.Formula)
++    (inventory : Inventory) (caller : Caller width) (before : Cached) (checkEmpty : Bool)
++    (parentEntry : Cache.Interned InternedBinderProtocol.NodeKey)
++    (edges : List (EdgeValue Symbol Constraint)) (depth : Nat) (free : List InternedBinderProtocol.Reference)
++    (edge : EdgeValue Symbol Constraint) (scs : List Suspended) (roots : Nat → Nat) (memos : Memos)
++    (initial : Context formulas solver inventory caller memos)
++    (parentAvailable : Available caller.checked.native.machine.heap (.node parentEntry edges depth free))
++    (parentClosed : free = []) (selected : edge ∈ edges)
++    (safe : Safe before.core) (realized : PendingRealized caller.checked.native.machine.heap before.core)
++    (paths : Roots before.core.representatives roots)
++    (counts : EnumerationCanonicalWaiting.Correct roots before.core.values before.waiting)
++    (flags : ∀ slot, SourcePruningEnumerationNativeIndex.candidate caller.checked.native.machine.heap
++      ((before.core.values[slot]?).getD .eliminated) = some (before.expandable slot))
++    (bounded : ∀ sc ∈ scs, sc.var < before.core.counter) (pending : InputsPending before.core scs)
++    (allowed : arityAllows edge.children.length scs = true)
++    (tries : List EqualityTrie.Trie) (residual : Option Constraint)
++    (projected : SourcePruningEnumerationConstraint.project edge.entry.key.constraint = some (tries, residual))
++    (ranges : Ranges checkEmpty scs edge caller before memos.query) :
++    ∃ (r n p h k : Nat) (afterCaller : Caller width) (after : Cached) (savedQueries : Queries)
++      (final : Memos) (next : Inventory) (afterRoots : Nat → Nat) (result : Result width),
++      (∀ er en P H ek, p ≤ P → h ≤ H →
++        run checkEmpty (r + er) (n + en) P H (k + ek) scs edge caller before memos.query = result) ∧
++      Post formulas solver next caller afterCaller final ∧ final.query = savedQueries ∧
++      before.core.counter ≤ after.core.counter ∧ Roots after.core.representatives afterRoots ∧
++      StorageValid after.core ∧ PendingRealized afterCaller.checked.native.machine.heap after.core ∧
++      EnumerationCanonicalWaiting.Correct afterRoots after.core.values after.waiting ∧
++      (∀ slot, SourcePruningEnumerationNativeIndex.candidate afterCaller.checked.native.machine.heap
++        ((after.core.values[slot]?).getD .eliminated) = some (after.expandable slot)) ∧
++      EnumeratedOrigin before.core after.core ∧ InputsPending after.core scs ∧
++      (∀ held, held < before.core.counter → IsRoot before.core.representatives held →
++        Avoids before.core.representatives held scs → EnumerationDriver.Protected held before.core after.core) ∧
++      ((∃ fragment, result = .complete fragment afterCaller savedQueries after ∧
++          Safe after.core ∧ FragmentBound after.core.counter fragment) ∨
++        ∃ fragments outer waiting, result = .stopped fragments
++          (.ok (some []), afterCaller, savedQueries, outer, waiting) (some after)) := by
++  obtain ⟨action, own, _prepared, ownRun, _raw, ownCore, ownCounter, _ownForest, ownSafe,
++    ownPaths, ownRealized, ownCounts, ownFlags, _combinedPending, genuine, ownProtects⟩ :=
++    SourcePruningEnumerationEdgeInputs.complete caller.checked.native.machine.heap parentEntry edges depth free
++      edge scs roots initial.ready.semantic.ready parentAvailable parentClosed selected before safe realized
++      paths counts flags bounded pending allowed tries residual projected
++  let inputs := SourcePruningEnumerationEdgeInputs.children edge scs before.core.counter tries
++  have readback : ((inputs.map (fun input =>
++      (input.1, input.2, SourcePruningEnumerationShallowChild.prepareChild (EnumGuard := Constraint) input.2 input.1))).map
++      (fun input => (input.1, input.2.1))) = inputs := by
++    simp only [List.map_map]
++    exact List.map_id _
++  have numeric : SourcePruningEnumerationTraversalCompletion.Ranges checkEmpty inputs caller own memos.query := by
++    have admitted := ranges edge.entry.key.symbol _ residual own ownRun
++    rwa [readback] at admitted
++  obtain ⟨r, n, p, h, k, fragments, afterCaller, after, savedQueries, final, next, afterRoots,
++    childResult, childrenRun, post, querySame, growth, afterPaths, storage, afterRealized,
++    afterCounts, afterFlags, origin, enumProtects, rootsProtects, fragmentBounds, shape⟩ :=
++    SourcePruningEnumerationTraversalCompletion.complete formulas solver inventory caller own checkEmpty inputs roots memos
++      initial ownSafe ownPaths ownCounts ownFlags ownRealized genuine numeric
++  have ownOrigin : EnumeratedOrigin before.core own.core := by
++    rw [ownCore]
++    exact suspension_origin tries.length before.core
++  have fullOrigin := ownOrigin.trans origin
++  have ownPending : InputsPending own.core scs := by
++    intro held fragment stored
++    have old := ownOrigin held fragment stored
++    have frame := EnumerationDriver.suspension_protected held tries.length before.core safe
++      (enumerated_root before.core safe held fragment old).1 (enumerated_root before.core safe held fragment old).2
++    rw [← ownCore] at frame
++    exact frame.avoids scs (pending held fragment old)
++  have retained := SourcePruningEnumerationTraversalCompletion.retained_inputs own.core after.core scs
++    ownPending origin enumProtects
++  have protectedRoots : ∀ held, held < before.core.counter → IsRoot before.core.representatives held →
++      Avoids before.core.representatives held scs → EnumerationDriver.Protected held before.core after.core := by
++    intro held inside root avoids
++    obtain ⟨frame, avoidsChildren⟩ := ownProtects held inside root avoids
++    exact frame.trans (rootsProtects held (by omega) frame.root avoidsChildren)
++  rcases shape with ⟨completed, afterSafe⟩ | ⟨outer, waiting, stopped⟩
++  · subst childResult
++    let fragment : Fragment := .node edge.entry.key.symbol fragments
++    let finished := finish residual fragment after
++    have fragmentBound : FragmentBound after.core.counter fragment := node_bound _ _ _ fragmentBounds
++    refine ⟨r, n, p, h, k, afterCaller, finished, savedQueries, final, next, afterRoots,
++      .complete fragment afterCaller savedQueries finished, ?_, post, querySame, ?_, afterPaths,
++      (finish_safe residual fragment after afterSafe fragmentBound).1, afterRealized, afterCounts,
++      afterFlags, fullOrigin, retained, ?_, .inl ⟨fragment, rfl,
++        finish_safe residual fragment after afterSafe fragmentBound, fragmentBound⟩⟩
++    · intro er en P H ek largeP largeH
++      simp only [run, ownRun]
++      rw [readback, childrenRun er en P H ek largeP largeH]
++    · change before.core.counter ≤ after.core.counter
++      omega
++    · intro held inside root avoids
++      have frame := protectedRoots held inside root avoids
++      exact frame.trans (finish_protected residual fragment after held frame.root)
++  · subst childResult
++    refine ⟨r, n, p, h, k, afterCaller, after, savedQueries, final, next, afterRoots,
++      .stopped fragments (.ok (some []), afterCaller, savedQueries, outer, waiting) (some after),
++      ?_, post, querySame, ?_, afterPaths, storage, afterRealized, afterCounts, afterFlags,
++      fullOrigin, retained, protectedRoots, .inr ⟨fragments, outer, waiting, rfl⟩⟩
++    · intro er en P H ek largeP largeH
++      simp only [run, ownRun]
++      rw [readback, childrenRun er en P H ek largeP largeH]
++    · omega
++
++end MicroCFTA.SourcePruningEnumerationSelectedEdge

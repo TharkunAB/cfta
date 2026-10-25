@@ -1,0 +1,131 @@
+import MicroCFTA.SourcePruningEnumerationCachedOwn
+import MicroCFTA.EnumerationConstruction
+
+namespace MicroCFTA.SourcePruningEnumerationEdgeInputs
+open EnumerationState EnumerationCorrectness EnumerationSchedule EnumerationDependencies
+open SourcePruningEnumerationObservation
+open InternedConstructorTemplates InternedProbeProvenance
+local notation "Symbol" => SourcePruningTemplates.Symbol
+local notation "Constraint" => SourceSymbolicIndex.Constraint FullSyntax.Formula
+local notation "Node" => InternedConstructorTemplates.Value Symbol Constraint
+local notation "Cached" => EnumerationExpandableIndex.Cached Symbol Constraint
+local notation "Fragment" => Fragments.Fragment Symbol
+
+/-- The actual selected-edge children retain inherited and fresh own-class descents. -/
+def children (edge : EdgeValue Symbol Constraint) (scs : List Suspended)
+    (start : Nat) (tries : List EqualityTrie.Trie) : List (Node × List Suspended) :=
+  edge.children.zipIdx.map fun indexed =>
+    (indexed.1, descendScs indexed.2 scs ++ descendScs indexed.2 (suspendedVars start tries))
+
+private theorem descend_append (index : Nat) (first second : List Suspended) :
+    descendScs index (first ++ second) = descendScs index first ++ descendScs index second := by
+  simp only [descendScs, EqualityTrie.descendScs, List.map_append, List.filter_append]
+
+/-- The actual own-class prefix derives child admission and separate parent-root protection. -/
+theorem complete
+    (heap : InternedConstructorTemplates.State Symbol Constraint)
+    (parentEntry : Cache.Interned InternedBinderProtocol.NodeKey)
+    (edges : List (EdgeValue Symbol Constraint)) (depth : Nat) (free : List InternedBinderProtocol.Reference)
+    (edge : EdgeValue Symbol Constraint) (scs : List Suspended) (roots : Nat → Nat)
+    (ready : SourceEqualityRequiredCache.Ready heap)
+    (parentAvailable : Available heap (.node parentEntry edges depth free))
+    (parentClosed : free = []) (selected : edge ∈ edges)
+    (before : Cached) (safe : Safe before.core) (realized : PendingRealized heap before.core)
+    (paths : Roots before.core.representatives roots)
+    (counts : EnumerationCanonicalWaiting.Correct roots before.core.values before.waiting)
+    (flags : ∀ slot, SourcePruningEnumerationNativeIndex.candidate heap
+      ((before.core.values[slot]?).getD .eliminated) = some (before.expandable slot))
+    (bounded : ∀ sc ∈ scs, sc.var < before.core.counter) (pending : InputsPending before.core scs)
+    (allowed : arityAllows edge.children.length scs = true)
+    (tries : List EqualityTrie.Trie) (residual : Option Constraint)
+    (projected : SourcePruningEnumerationConstraint.project edge.entry.key.constraint = some (tries, residual)) :
+    ∃ (action : EnumerateM Symbol Constraint
+        (Symbol × List (Node × List Suspended × Option (EnumerateM Symbol Constraint Fragment)) × Option Constraint))
+      (after : Cached),
+      SourcePruningEnumerationEdgePrefix.prepare scs edge = some action ∧
+      SourcePruningEnumerationCachedOwn.prepare heap scs edge before =
+        some [((edge.entry.key.symbol,
+          (children edge scs before.core.counter tries).map (fun input =>
+            (input.1, input.2, SourcePruningEnumerationShallowChild.prepareChild input.2 input.1)), residual), after)] ∧
+      ExceptT.run (action before.core) =
+        [.ok ((edge.entry.key.symbol,
+          (children edge scs before.core.counter tries).map (fun input =>
+            (input.1, input.2, SourcePruningEnumerationShallowChild.prepareChild input.2 input.1)), residual), after.core)] ∧
+      after.core = suspendedState tries.length before.core ∧
+      after.core.counter = before.core.counter + tries.length ∧
+      after.core.representatives = before.core.representatives ∧
+      Safe after.core ∧ Roots after.core.representatives roots ∧ PendingRealized heap after.core ∧
+      EnumerationCanonicalWaiting.Correct roots after.core.values after.waiting ∧
+      (∀ slot, SourcePruningEnumerationNativeIndex.candidate heap
+        ((after.core.values[slot]?).getD .eliminated) = some (after.expandable slot)) ∧
+      InputsPending after.core (scs ++ suspendedVars before.core.counter tries) ∧
+      (∀ incoming bucket, (incoming, bucket) ∈ children edge scs before.core.counter tries →
+        Available heap incoming ∧ incoming.free = [] ∧
+        (∀ sc ∈ bucket, sc.var < after.core.counter) ∧ InputsPending after.core bucket) ∧
+      (∀ held, held < before.core.counter → IsRoot before.core.representatives held →
+        Avoids before.core.representatives held scs →
+        EnumerationDriver.Protected held before.core after.core ∧
+          ∀ incoming bucket, (incoming, bucket) ∈ children edge scs before.core.counter tries →
+            Avoids after.core.representatives held bucket) := by
+  have packet := SourcePruningEnumerationCachedOwn.complete heap before scs edge roots
+    safe.1 realized paths counts flags
+  simp only [allowed, ↓reduceIte, projected] at packet
+  obtain ⟨action, after, prepared, cachedRun, raw, coreSame, counter, _aligned, forestSame,
+    afterPaths, _storage, afterRealized, afterCounts, _waiting, _expandable, afterFlags⟩ := packet
+  have staged : (children edge scs before.core.counter tries).map (fun input =>
+      (input.1, input.2, SourcePruningEnumerationShallowChild.prepareChild (EnumGuard := Constraint) input.2 input.1)) =
+      edge.children.zipIdx.map (fun indexed =>
+        (indexed.1, descendScs indexed.2 scs ++ descendScs indexed.2 (suspendedVars before.core.counter tries),
+          SourcePruningEnumerationShallowChild.prepareChild (EnumGuard := Constraint)
+            (descendScs indexed.2 scs ++ descendScs indexed.2 (suspendedVars before.core.counter tries)) indexed.1)) := by
+    simp only [children, List.map_map]
+    rfl
+  have afterSafe : Safe after.core := coreSame ▸ suspension_safe tries.length before.core safe
+  have combinedPending : InputsPending after.core (scs ++ suspendedVars before.core.counter tries) := by
+    rw [coreSame]
+    exact EnumerationConstruction.suspension_inputs_pending before.core safe scs pending tries
+  have childrenAvailable : ∀ child ∈ edge.children, Available heap child := by
+    intro child member
+    exact parentAvailable.children child (List.mem_flatMap.mpr ⟨edge, selected, member⟩)
+  have childrenClosed : ∀ child ∈ edge.children, child.free = [] :=
+    MergedColdReaderClosed.node_children_closed heap ready.semantic.1.normal.facts
+      parentEntry edges depth free parentAvailable parentClosed edge selected
+  refine ⟨action, after, prepared, ?_, ?_, coreSame, counter, forestSame, afterSafe,
+    afterPaths, afterRealized, afterCounts, afterFlags, combinedPending, ?_, ?_⟩
+  · simpa only [staged] using cachedRun
+  · simpa only [staged] using raw
+  · intro incoming bucket member
+    obtain ⟨indexed, indexedMember, pairSame⟩ := List.mem_map.mp member
+    cases pairSame
+    have combinedBounded : ∀ sc ∈ scs ++ suspendedVars before.core.counter tries, sc.var < after.core.counter := by
+      intro sc member
+      rw [counter]
+      rcases List.mem_append.mp member with inherited | own
+      · have := bounded sc inherited
+        omega
+      · exact suspended_bounded before.core.counter tries sc own
+    refine ⟨childrenAvailable indexed.1 (List.fst_mem_of_mem_zipIdx indexedMember),
+      childrenClosed indexed.1 (List.fst_mem_of_mem_zipIdx indexedMember), ?_, ?_⟩
+    · rw [← descend_append]
+      exact descend_bounded _ indexed.2 _ combinedBounded
+    · intro held fragment stored
+      rw [← descend_append]
+      exact descend_avoids _ held indexed.2 _ (combinedPending held fragment stored)
+  · intro held inside root avoids
+    have protected : EnumerationDriver.Protected held before.core after.core := by
+      rw [coreSame]
+      exact EnumerationDriver.suspension_protected held tries.length before.core safe inside root
+    refine ⟨protected, ?_⟩
+    have combinedAvoids : Avoids before.core.representatives held (scs ++ suspendedVars before.core.counter tries) := by
+      intro sc member
+      rcases List.mem_append.mp member with inherited | own
+      · exact avoids sc inherited
+      · exact fresh_avoids before.core safe.1 held inside tries sc own
+    have afterAvoids := protected.avoids _ combinedAvoids
+    intro incoming bucket member
+    obtain ⟨indexed, _indexedMember, pairSame⟩ := List.mem_map.mp member
+    cases pairSame
+    rw [← descend_append]
+    exact descend_avoids _ held indexed.2 _ afterAvoids
+
+end MicroCFTA.SourcePruningEnumerationEdgeInputs

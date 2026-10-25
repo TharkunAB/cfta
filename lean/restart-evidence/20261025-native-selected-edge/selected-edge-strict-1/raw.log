@@ -1,0 +1,394 @@
+/tmp/mcfta-edge-inputs-20261025/selected-edge-strict-1/MicroCFTA/SourcePruningEnumerationSelectedEdge.lean:185:40: error: Application type mismatch: The argument
+  protectedRoots
+has type
+  ∀ (held : Nat),
+    held < before.core.counter →
+      IsRoot before.core.representatives held →
+        Avoids before.core.representatives held scs → EnumerationDriver.Protected held before.core after.core
+but is expected to have type
+  ∀ (held : Nat),
+    held < before.core.counter →
+      IsRoot before.core.representatives held →
+        Avoids before.core.representatives held scs → EnumerationDriver.Protected held before.core finished.core
+in the application
+  And.intro protectedRoots
+/tmp/mcfta-edge-inputs-20261025/selected-edge-strict-1/MicroCFTA/SourcePruningEnumerationSelectedEdge.lean:189:6: error: Tactic `rfl` failed: The left-hand side
+  match
+    SourcePruningEnumerationChildTraversal.run checkEmpty (r + er) (n + en) P H (k + ek)
+      (List.map (fun input => (input.fst, input.snd.fst))
+        (List.map
+          (fun input => (input.fst, input.snd, SourcePruningEnumerationShallowChild.prepareChild input.snd input.fst))
+          (SourcePruningEnumerationEdgeInputs.children edge scs before.core.counter tries)))
+      caller own memos.query with
+  | SourcePruningEnumerationChildTraversal.Result.stopped fragments observation candidate =>
+    Result.stopped fragments observation candidate
+  | SourcePruningEnumerationChildTraversal.Result.complete fragments afterCaller saved after =>
+    Result.complete (Fragments.Fragment.node edge.entry.key.symbol fragments) afterCaller saved
+      (finish residual (Fragments.Fragment.node edge.entry.key.symbol fragments) after)
+is not definitionally equal to the right-hand side
+  Result.complete fragment afterCaller savedQueries finished
+
+case inl.refine_1
+width : Nat
+inst✝² : DecidableEq Symbol
+inst✝¹ : DecidableEq (EdgeKey Symbol Constraint)
+inst✝ : DecidableEq Node
+formulas : SourceGuards.Formulas FullSyntax.Formula
+solver : SourceGuards.Entailment FullSyntax.Formula
+inventory : Inventory
+caller : Caller width
+before : Cached
+checkEmpty : Bool
+parentEntry : Cache.Interned InternedBinderProtocol.NodeKey
+edges : List (EdgeValue Symbol Constraint)
+depth : Nat
+free : List InternedBinderProtocol.Reference
+edge : EdgeValue Symbol Constraint
+scs : List Suspended
+roots : Nat → Nat
+memos : Memos
+initial : Context formulas solver inventory caller memos
+parentAvailable : Available caller.checked.native.machine.heap (Value.node parentEntry edges depth free)
+parentClosed : free = []
+selected : edge ∈ edges
+safe : Safe before.core
+realized : PendingRealized caller.checked.native.machine.heap before.core
+paths : Roots before.core.representatives roots
+counts : EnumerationCanonicalWaiting.Correct roots before.core.values before.waiting
+flags :
+  ∀ (slot : Nat),
+    SourcePruningEnumerationNativeIndex.candidate caller.checked.native.machine.heap
+        (before.core.values[slot]?.getD UVarValue.eliminated) =
+      some (before.expandable slot)
+bounded : ∀ (sc : Suspended), sc ∈ scs → sc.var < before.core.counter
+pending : InputsPending before.core scs
+allowed : arityAllows edge.children.length scs = true
+tries : List EqualityTrie.Trie
+residual : Option Constraint
+projected : SourcePruningEnumerationConstraint.project edge.entry.key.constraint = some (tries, residual)
+ranges : Ranges checkEmpty scs edge caller before memos.query
+action :
+  EnumerateM Symbol Constraint
+    (Symbol × List (Node × List Suspended × Option (EnumerateM Symbol Constraint Fragment)) × Option Constraint)
+own : Cached
+_prepared : SourcePruningEnumerationEdgePrefix.prepare scs edge = some action
+ownRun :
+  SourcePruningEnumerationCachedOwn.prepare caller.checked.native.machine.heap scs edge before =
+    some
+      [((edge.entry.key.symbol,
+            List.map
+              (fun input =>
+                (input.fst, input.snd, SourcePruningEnumerationShallowChild.prepareChild input.snd input.fst))
+              (SourcePruningEnumerationEdgeInputs.children edge scs before.core.counter tries),
+            residual),
+          own)]
+_raw :
+  (action before.core).run =
+    [Except.ok
+        ((edge.entry.key.symbol,
+            List.map
+              (fun input =>
+                (input.fst, input.snd, SourcePruningEnumerationShallowChild.prepareChild input.snd input.fst))
+              (SourcePruningEnumerationEdgeInputs.children edge scs before.core.counter tries),
+            residual),
+          own.core)]
+ownCore : own.core = suspendedState tries.length before.core
+ownCounter : own.core.counter = before.core.counter + tries.length
+_ownForest : own.core.representatives = before.core.representatives
+ownSafe : Safe own.core
+ownPaths : Roots own.core.representatives roots
+ownRealized : PendingRealized caller.checked.native.machine.heap own.core
+ownCounts : EnumerationCanonicalWaiting.Correct roots own.core.values own.waiting
+ownFlags :
+  ∀ (slot : Nat),
+    SourcePruningEnumerationNativeIndex.candidate caller.checked.native.machine.heap
+        (own.core.values[slot]?.getD UVarValue.eliminated) =
+      some (own.expandable slot)
+_combinedPending : InputsPending own.core (scs ++ suspendedVars before.core.counter tries)
+genuine :
+  ∀ (incoming : Node) (bucket : List Suspended),
+    (incoming, bucket) ∈ SourcePruningEnumerationEdgeInputs.children edge scs before.core.counter tries →
+      Available caller.checked.native.machine.heap incoming ∧
+        incoming.free = [] ∧
+          (∀ (sc : Suspended), sc ∈ bucket → sc.var < own.core.counter) ∧ InputsPending own.core bucket
+ownProtects :
+  ∀ (held : Nat),
+    held < before.core.counter →
+      IsRoot before.core.representatives held →
+        Avoids before.core.representatives held scs →
+          EnumerationDriver.Protected held before.core own.core ∧
+            ∀ (incoming : Node) (bucket : List Suspended),
+              (incoming, bucket) ∈ SourcePruningEnumerationEdgeInputs.children edge scs before.core.counter tries →
+                Avoids own.core.representatives held bucket
+inputs : List (Node × List Suspended) := SourcePruningEnumerationEdgeInputs.children edge scs before.core.counter tries
+readback :
+  List.map (fun input => (input.fst, input.snd.fst))
+      (List.map
+        (fun input => (input.fst, input.snd, SourcePruningEnumerationShallowChild.prepareChild input.snd input.fst))
+        inputs) =
+    inputs
+numeric : SourcePruningEnumerationTraversalCompletion.Ranges checkEmpty inputs caller own memos.query
+r n p h k : Nat
+fragments : List Fragment
+afterCaller : Caller width
+after : Cached
+savedQueries : Queries
+final : Memos
+next : Inventory
+afterRoots : Nat → Nat
+post : Post formulas solver next caller afterCaller final
+querySame : final.query = savedQueries
+growth : own.core.counter ≤ after.core.counter
+afterPaths : Roots after.core.representatives afterRoots
+storage : StorageValid after.core
+afterRealized : PendingRealized afterCaller.checked.native.machine.heap after.core
+afterCounts : EnumerationCanonicalWaiting.Correct afterRoots after.core.values after.waiting
+afterFlags :
+  ∀ (slot : Nat),
+    SourcePruningEnumerationNativeIndex.candidate afterCaller.checked.native.machine.heap
+        (after.core.values[slot]?.getD UVarValue.eliminated) =
+      some (after.expandable slot)
+origin : EnumeratedOrigin own.core after.core
+enumProtects :
+  ∀ (held : Nat) (fragment : Fragment),
+    own.core.values[held]? = some (UVarValue.enumerated fragment) → EnumerationDriver.Protected held own.core after.core
+rootsProtects :
+  ∀ (held : Nat),
+    held < own.core.counter →
+      IsRoot own.core.representatives held →
+        (∀ (incoming : Node) (bucket : List Suspended),
+            (incoming, bucket) ∈ inputs → Avoids own.core.representatives held bucket) →
+          EnumerationDriver.Protected held own.core after.core
+fragmentBounds : ∀ (fragment : Fragment), fragment ∈ fragments → FragmentBound after.core.counter fragment
+ownOrigin : EnumeratedOrigin before.core own.core
+fullOrigin : EnumeratedOrigin before.core after.core
+ownPending : InputsPending own.core scs
+retained : InputsPending after.core scs
+protectedRoots :
+  ∀ (held : Nat),
+    held < before.core.counter →
+      IsRoot before.core.representatives held →
+        Avoids before.core.representatives held scs → EnumerationDriver.Protected held before.core after.core
+afterSafe : Safe after.core
+childrenRun :
+  ∀ (extraRepresentative extraNative P H extraIndex : Nat),
+    p ≤ P →
+      h ≤ H →
+        SourcePruningEnumerationChildTraversal.run checkEmpty (r + extraRepresentative) (n + extraNative) P H
+            (k + extraIndex) inputs caller own memos.query =
+          SourcePruningEnumerationChildTraversal.Result.complete fragments afterCaller savedQueries after
+fragment : Fragment := Fragments.Fragment.node edge.entry.key.symbol fragments
+finished : Cached := finish residual fragment after
+fragmentBound : FragmentBound after.core.counter fragment
+er en P H ek : Nat
+largeP : p ≤ P
+largeH : h ≤ H
+⊢ (match
+      SourcePruningEnumerationChildTraversal.run checkEmpty (r + er) (n + en) P H (k + ek)
+        (List.map (fun input => (input.fst, input.snd.fst))
+          (List.map
+            (fun input => (input.fst, input.snd, SourcePruningEnumerationShallowChild.prepareChild input.snd input.fst))
+            (SourcePruningEnumerationEdgeInputs.children edge scs before.core.counter tries)))
+        caller own memos.query with
+    | SourcePruningEnumerationChildTraversal.Result.stopped fragments observation candidate =>
+      Result.stopped fragments observation candidate
+    | SourcePruningEnumerationChildTraversal.Result.complete fragments afterCaller saved after =>
+      Result.complete (Fragments.Fragment.node edge.entry.key.symbol fragments) afterCaller saved
+        (finish residual (Fragments.Fragment.node edge.entry.key.symbol fragments) after)) =
+    Result.complete fragment afterCaller savedQueries finished
+/tmp/mcfta-edge-inputs-20261025/selected-edge-strict-1/MicroCFTA/SourcePruningEnumerationSelectedEdge.lean:197:4: error: unsolved goals
+case inr.refine_1
+width : Nat
+inst✝² : DecidableEq Symbol
+inst✝¹ : DecidableEq (EdgeKey Symbol Constraint)
+inst✝ : DecidableEq Node
+formulas : SourceGuards.Formulas FullSyntax.Formula
+solver : SourceGuards.Entailment FullSyntax.Formula
+inventory : Inventory
+caller : Caller width
+before : Cached
+checkEmpty : Bool
+parentEntry : Cache.Interned InternedBinderProtocol.NodeKey
+edges : List (EdgeValue Symbol Constraint)
+depth : Nat
+free : List InternedBinderProtocol.Reference
+edge : EdgeValue Symbol Constraint
+scs : List Suspended
+roots : Nat → Nat
+memos : Memos
+initial : Context formulas solver inventory caller memos
+parentAvailable : Available caller.checked.native.machine.heap (Value.node parentEntry edges depth free)
+parentClosed : free = []
+selected : edge ∈ edges
+safe : Safe before.core
+realized : PendingRealized caller.checked.native.machine.heap before.core
+paths : Roots before.core.representatives roots
+counts : EnumerationCanonicalWaiting.Correct roots before.core.values before.waiting
+flags :
+  ∀ (slot : Nat),
+    SourcePruningEnumerationNativeIndex.candidate caller.checked.native.machine.heap
+        (before.core.values[slot]?.getD UVarValue.eliminated) =
+      some (before.expandable slot)
+bounded : ∀ (sc : Suspended), sc ∈ scs → sc.var < before.core.counter
+pending : InputsPending before.core scs
+allowed : arityAllows edge.children.length scs = true
+tries : List EqualityTrie.Trie
+residual : Option Constraint
+projected : SourcePruningEnumerationConstraint.project edge.entry.key.constraint = some (tries, residual)
+ranges : Ranges checkEmpty scs edge caller before memos.query
+action :
+  EnumerateM Symbol Constraint
+    (Symbol × List (Node × List Suspended × Option (EnumerateM Symbol Constraint Fragment)) × Option Constraint)
+own : Cached
+_prepared : SourcePruningEnumerationEdgePrefix.prepare scs edge = some action
+ownRun :
+  SourcePruningEnumerationCachedOwn.prepare caller.checked.native.machine.heap scs edge before =
+    some
+      [((edge.entry.key.symbol,
+            List.map
+              (fun input =>
+                (input.fst, input.snd, SourcePruningEnumerationShallowChild.prepareChild input.snd input.fst))
+              (SourcePruningEnumerationEdgeInputs.children edge scs before.core.counter tries),
+            residual),
+          own)]
+_raw :
+  (action before.core).run =
+    [Except.ok
+        ((edge.entry.key.symbol,
+            List.map
+              (fun input =>
+                (input.fst, input.snd, SourcePruningEnumerationShallowChild.prepareChild input.snd input.fst))
+              (SourcePruningEnumerationEdgeInputs.children edge scs before.core.counter tries),
+            residual),
+          own.core)]
+ownCore : own.core = suspendedState tries.length before.core
+ownCounter : own.core.counter = before.core.counter + tries.length
+_ownForest : own.core.representatives = before.core.representatives
+ownSafe : Safe own.core
+ownPaths : Roots own.core.representatives roots
+ownRealized : PendingRealized caller.checked.native.machine.heap own.core
+ownCounts : EnumerationCanonicalWaiting.Correct roots own.core.values own.waiting
+ownFlags :
+  ∀ (slot : Nat),
+    SourcePruningEnumerationNativeIndex.candidate caller.checked.native.machine.heap
+        (own.core.values[slot]?.getD UVarValue.eliminated) =
+      some (own.expandable slot)
+_combinedPending : InputsPending own.core (scs ++ suspendedVars before.core.counter tries)
+genuine :
+  ∀ (incoming : Node) (bucket : List Suspended),
+    (incoming, bucket) ∈ SourcePruningEnumerationEdgeInputs.children edge scs before.core.counter tries →
+      Available caller.checked.native.machine.heap incoming ∧
+        incoming.free = [] ∧
+          (∀ (sc : Suspended), sc ∈ bucket → sc.var < own.core.counter) ∧ InputsPending own.core bucket
+ownProtects :
+  ∀ (held : Nat),
+    held < before.core.counter →
+      IsRoot before.core.representatives held →
+        Avoids before.core.representatives held scs →
+          EnumerationDriver.Protected held before.core own.core ∧
+            ∀ (incoming : Node) (bucket : List Suspended),
+              (incoming, bucket) ∈ SourcePruningEnumerationEdgeInputs.children edge scs before.core.counter tries →
+                Avoids own.core.representatives held bucket
+inputs : List (Node × List Suspended) := SourcePruningEnumerationEdgeInputs.children edge scs before.core.counter tries
+readback :
+  List.map (fun input => (input.fst, input.snd.fst))
+      (List.map
+        (fun input => (input.fst, input.snd, SourcePruningEnumerationShallowChild.prepareChild input.snd input.fst))
+        inputs) =
+    inputs
+numeric : SourcePruningEnumerationTraversalCompletion.Ranges checkEmpty inputs caller own memos.query
+r n p h k : Nat
+fragments : List Fragment
+afterCaller : Caller width
+after : Cached
+savedQueries : Queries
+final : Memos
+next : Inventory
+afterRoots : Nat → Nat
+post : Post formulas solver next caller afterCaller final
+querySame : final.query = savedQueries
+growth : own.core.counter ≤ after.core.counter
+afterPaths : Roots after.core.representatives afterRoots
+storage : StorageValid after.core
+afterRealized : PendingRealized afterCaller.checked.native.machine.heap after.core
+afterCounts : EnumerationCanonicalWaiting.Correct afterRoots after.core.values after.waiting
+afterFlags :
+  ∀ (slot : Nat),
+    SourcePruningEnumerationNativeIndex.candidate afterCaller.checked.native.machine.heap
+        (after.core.values[slot]?.getD UVarValue.eliminated) =
+      some (after.expandable slot)
+origin : EnumeratedOrigin own.core after.core
+enumProtects :
+  ∀ (held : Nat) (fragment : Fragment),
+    own.core.values[held]? = some (UVarValue.enumerated fragment) → EnumerationDriver.Protected held own.core after.core
+rootsProtects :
+  ∀ (held : Nat),
+    held < own.core.counter →
+      IsRoot own.core.representatives held →
+        (∀ (incoming : Node) (bucket : List Suspended),
+            (incoming, bucket) ∈ inputs → Avoids own.core.representatives held bucket) →
+          EnumerationDriver.Protected held own.core after.core
+fragmentBounds : ∀ (fragment : Fragment), fragment ∈ fragments → FragmentBound after.core.counter fragment
+ownOrigin : EnumeratedOrigin before.core own.core
+fullOrigin : EnumeratedOrigin before.core after.core
+ownPending : InputsPending own.core scs
+retained : InputsPending after.core scs
+protectedRoots :
+  ∀ (held : Nat),
+    held < before.core.counter →
+      IsRoot before.core.representatives held →
+        Avoids before.core.representatives held scs → EnumerationDriver.Protected held before.core after.core
+outer : EnumerationState.State Symbol Constraint
+waiting : EnumerationWaitingIndex.Waiting
+childrenRun :
+  ∀ (extraRepresentative extraNative P H extraIndex : Nat),
+    p ≤ P →
+      h ≤ H →
+        SourcePruningEnumerationChildTraversal.run checkEmpty (r + extraRepresentative) (n + extraNative) P H
+            (k + extraIndex) inputs caller own memos.query =
+          SourcePruningEnumerationChildTraversal.Result.stopped fragments
+            (Except.ok (some []), afterCaller, savedQueries, outer, waiting) (some after)
+er en P H ek : Nat
+largeP : p ≤ P
+largeH : h ≤ H
+⊢ (match
+      SourcePruningEnumerationChildTraversal.run checkEmpty (r + er) (n + en) P H (k + ek)
+        (List.map (fun input => (input.fst, input.snd.fst))
+          (List.map
+            (fun input => (input.fst, input.snd, SourcePruningEnumerationShallowChild.prepareChild input.snd input.fst))
+            (SourcePruningEnumerationEdgeInputs.children edge scs before.core.counter tries)))
+        caller own memos.query with
+    | SourcePruningEnumerationChildTraversal.Result.stopped fragments observation candidate =>
+      Result.stopped fragments observation candidate
+    | SourcePruningEnumerationChildTraversal.Result.complete fragments afterCaller saved after =>
+      Result.complete (Fragments.Fragment.node edge.entry.key.symbol fragments) afterCaller saved
+        (finish residual (Fragments.Fragment.node edge.entry.key.symbol fragments) after)) =
+    Result.stopped fragments (Except.ok (some []), afterCaller, savedQueries, outer, waiting) (some after)
+/tmp/mcfta-edge-inputs-20261025/selected-edge-strict-1/MicroCFTA/SourcePruningEnumerationSelectedEdge.lean:188:30: error: This simp argument is unused:
+  readback
+
+Hint: Omit it from the simp argument list.
+  [apply] simp only [run, ownRun, childrenRun er en P H ek largeP largeH]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/tmp/mcfta-edge-inputs-20261025/selected-edge-strict-1/MicroCFTA/SourcePruningEnumerationSelectedEdge.lean:188:40: error: This simp argument is unused:
+  childrenRun er en P H ek largeP largeH
+
+Hint: Omit it from the simp argument list.
+  [apply] simp only [run, ownRun, readback]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/tmp/mcfta-edge-inputs-20261025/selected-edge-strict-1/MicroCFTA/SourcePruningEnumerationSelectedEdge.lean:198:30: error: This simp argument is unused:
+  readback
+
+Hint: Omit it from the simp argument list.
+  [apply] simp only [run, ownRun, childrenRun er en P H ek largeP largeH]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/tmp/mcfta-edge-inputs-20261025/selected-edge-strict-1/MicroCFTA/SourcePruningEnumerationSelectedEdge.lean:198:40: error: This simp argument is unused:
+  childrenRun er en P H ek largeP largeH
+
+Hint: Omit it from the simp argument list.
+  [apply] simp only [run, ownRun, readback]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`

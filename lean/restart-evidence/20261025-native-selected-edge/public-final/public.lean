@@ -1,0 +1,27 @@
+import MicroCFTA.SourcePruningEnumerationSelectedEdge
+set_option pp.maxSteps 1000000
+set_option pp.deepTerms true
+#check MicroCFTA.SourcePruningEnumerationEdgeInputs.children
+#print axioms MicroCFTA.SourcePruningEnumerationEdgeInputs.children
+#check MicroCFTA.SourcePruningEnumerationEdgeInputs.complete
+#print axioms MicroCFTA.SourcePruningEnumerationEdgeInputs.complete
+#check MicroCFTA.SourcePruningEnumerationSelectedEdge.finish
+#print axioms MicroCFTA.SourcePruningEnumerationSelectedEdge.finish
+#check MicroCFTA.SourcePruningEnumerationSelectedEdge.finish_raw
+#print axioms MicroCFTA.SourcePruningEnumerationSelectedEdge.finish_raw
+#check MicroCFTA.SourcePruningEnumerationSelectedEdge.finish_safe
+#print axioms MicroCFTA.SourcePruningEnumerationSelectedEdge.finish_safe
+#check MicroCFTA.SourcePruningEnumerationSelectedEdge.finish_protected
+#print axioms MicroCFTA.SourcePruningEnumerationSelectedEdge.finish_protected
+#check MicroCFTA.SourcePruningEnumerationSelectedEdge.run
+#print axioms MicroCFTA.SourcePruningEnumerationSelectedEdge.run
+#check MicroCFTA.SourcePruningEnumerationSelectedEdge.Ranges
+#print axioms MicroCFTA.SourcePruningEnumerationSelectedEdge.Ranges
+#check MicroCFTA.SourcePruningEnumerationSelectedEdge.arity_rejected
+#print axioms MicroCFTA.SourcePruningEnumerationSelectedEdge.arity_rejected
+#check MicroCFTA.SourcePruningEnumerationSelectedEdge.unsupported
+#print axioms MicroCFTA.SourcePruningEnumerationSelectedEdge.unsupported
+#check MicroCFTA.SourcePruningEnumerationSelectedEdge.children_stopped
+#print axioms MicroCFTA.SourcePruningEnumerationSelectedEdge.children_stopped
+#check MicroCFTA.SourcePruningEnumerationSelectedEdge.complete
+#print axioms MicroCFTA.SourcePruningEnumerationSelectedEdge.complete
