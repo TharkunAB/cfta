@@ -1,0 +1,11 @@
+[2026-10-25 02:58:52 CET] FINAL source/data amendment assessment: CLEAR for Root's independent read and separate gate. I authored this metadata; I did not author any Lean body.
+
+The actual strict-3 report/raw/source agree: exit1, raw3813B SHA39f5a09b11ef52f8896988994b718e74ad60498a6f444f05781b3781d3e8a8e4, failed source SHAd28a4ba3c83f97a920acf85f6607c6493c858df17acb027009aadaf7c891cf3b. I read the full raw mismatch and V3 source. The remaining error compares branchAdmission's decoded-plus-proof telescope with the desired decoded-only match. Root selected structural constructor specialization of that SAME witness after refining the output packet. This amendment only inventories that repeated final case scope.
+
+The original89 payloads, five literal contracts and99 scoped entries remain unchanged. Effective scoped-types appends13 generated payload labels and cases appends one five-constructor group:112 scopes, five case groups. Types match the actual Value constructor definition. Reference1/node4/union4/mu4 are complete; empty has zero fields. Original entries/groups are identical prefixes. Inventory labels do not prescribe source names. All fields have no direct source reference and record implicit specialization/reduction use, with storedEdges in the specialized ordinary proposition. No additional have/let/instance/IH/action/assumption or limit change is selected.
+
+Complete failedV3 source/raw/report and original controls are retained. Strict1/2 remain at original paths; no history is relabeled. This is explicitly post-failure/pre-V4 and supplies no passing outcome. Root must gate the overlay before revised body authorship. Original declaration/script/source reviews remain immutable.
+
+Package:/tmp/mcfta-pruning-enumeration-admission-20261025/metadata-amendment-final-decoded;12 payloads/14 files. FROZEN:8a8be59961bef3514fcbe6f1cc9797a93bf666f0a17579982aaf2261d8d81e47; pins:4a625e8896b9a312820cfc4a6596cfa85872ff790531ab06988d27814ed2477f. Parent FROZEN:5f9052b7f393ae0d760e64298c0dc36853aaf8b90a5d608b6a7a69bfc3cbd808; parent pins:7a09471756ea6c7149f6ff91b35433e568b424ed11afea38c227a6e52e03806e.
+
+Only permitted metadata assembly/copies/hash comparisons occurred. No Lean body, compiler/parser, selected program, Git/network/board or repository edit was performed.

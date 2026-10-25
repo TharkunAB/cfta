@@ -1,0 +1,113 @@
+{"command": ["/home/tritlo/.elan/toolchains/leanprover--lean4---v4.34.1/bin/lean", "-R", "/tmp/mcfta-pruning-enumeration-admission-20261025/public-1", "-DwarningAsError=true", "-Dlinter.all=true", "/tmp/mcfta-pruning-enumeration-admission-20261025/public-1/checked.lean"], "exit_code": 0, "raw_bytes": 9194, "raw_sha256": "6f26e20943d1805bd08f327ca87c4a9124f4f488d9c840cb1a71ff562d24d2bd", "source_sha256": "24397cea59d18484a414f98dc223869e2c4bb8f824c5ba94c405cab51871960a"}
+MicroCFTA.SourcePruningEnumerationAdmission.complete : ∀
+  (heap :
+    MicroCFTA.InternedConstructorTemplates.State MicroCFTA.SourcePruningTemplates.Symbol
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)),
+  MicroCFTA.SourceEqualityRequiredCache.Ready heap →
+    ∀
+      (before :
+        MicroCFTA.EnumerationState.State MicroCFTA.SourcePruningTemplates.Symbol
+          (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+      (uv : Nat),
+      MicroCFTA.EnumerationCorrectness.StorageValid before →
+        uv < before.counter →
+          MicroCFTA.SourcePruningEnumerationObservation.PendingRealized heap before →
+            ∃ fuel readValue readAfter,
+              (∀ (extra : Nat),
+                  (MicroCFTA.EnumerationState.getValue (fuel + extra) uv before).run =
+                    [Except.ok (readValue, readAfter)]) ∧
+                MicroCFTA.EnumerationCompressionFrame.Frame before readAfter ∧
+                  match readValue with
+                  | MicroCFTA.EnumerationState.UVarValue.unenumerated (some handle) scs =>
+                    ∃ target decoded compressed entered,
+                      MicroCFTA.EnumerationCompressionFrame.Frame before compressed ∧
+                        (∀ (extra : Nat),
+                            (MicroCFTA.EnumerationState.representative (fuel + extra) uv readAfter).run =
+                              [Except.ok (target, compressed)]) ∧
+                          compressed.values[target]? =
+                              some (MicroCFTA.EnumerationState.UVarValue.unenumerated (some handle) scs) ∧
+                            MicroCFTA.SourcePruningEnumerationNodes.lookupNode heap handle = some decoded ∧
+                              MicroCFTA.InternedProbeProvenance.Available heap decoded ∧
+                                decoded.free = [] ∧
+                                  entered =
+                                      { counter := compressed.counter, representatives := compressed.representatives,
+                                        values := compressed.values, obligations := compressed.obligations,
+                                        recursionAncestry := compressed.recursionAncestry,
+                                        expansionAncestry :=
+                                          if MicroCFTA.MergedOrdinaryHeight.recursiveBoundary decoded = true then
+                                            (MicroCFTA.EnumerationState.recursionKey handle scs ::
+                                                compressed.recursionAncestry target).eraseDups
+                                          else compressed.recursionAncestry target } ∧
+                                    (∀ (extra : Nat),
+                                        (MicroCFTA.SourcePruningEnumerationEntry.enter heap (fuel + extra) uv
+                                              before).run =
+                                          [Except.ok ((target, handle, scs, decoded), entered)]) ∧
+                                      MicroCFTA.EnumerationCorrectness.StorageValid entered ∧
+                                        MicroCFTA.SourcePruningEnumerationObservation.PendingRealized heap entered ∧
+                                          (∀ (sc : MicroCFTA.EnumerationState.Suspended),
+                                              sc ∈ scs → sc.var < entered.counter) ∧
+                                            match decoded with
+                                            |
+                                            MicroCFTA.InternedConstructorTemplates.Value.node entry storedEdges depth
+                                                free =>
+                                              if
+                                                  (scs.any fun sc => MicroCFTA.EqualityTrie.isTerminal sc.trie) =
+                                                    true then
+                                                True
+                                              else
+                                                ∀
+                                                  (selectedEdges :
+                                                    List
+                                                      (MicroCFTA.InternedConstructorTemplates.EdgeValue
+                                                        MicroCFTA.SourcePruningTemplates.Symbol
+                                                        (MicroCFTA.SourceSymbolicIndex.Constraint
+                                                          MicroCFTA.FullSyntax.Formula))),
+                                                  (∀
+                                                      (edge :
+                                                        MicroCFTA.InternedConstructorTemplates.EdgeValue
+                                                          MicroCFTA.SourcePruningTemplates.Symbol
+                                                          (MicroCFTA.SourceSymbolicIndex.Constraint
+                                                            MicroCFTA.FullSyntax.Formula)),
+                                                      edge ∈ selectedEdges → edge ∈ storedEdges) →
+                                                    ∃ branchRows,
+                                                      MicroCFTA.Language.All₂
+                                                          (fun edge rows =>
+                                                            if
+                                                                MicroCFTA.EnumerationState.arityAllows
+                                                                    edge.children.length scs =
+                                                                  true then
+                                                              match
+                                                                MicroCFTA.SourcePruningEnumerationConstraint.project
+                                                                  edge.entry.key.constraint with
+                                                              | none => rows = [Except.ok (none, entered)]
+                                                              | some val =>
+                                                                ∃ action result after,
+                                                                  MicroCFTA.SourcePruningEnumerationEdgeTraversal.prepare
+                                                                        scs edge =
+                                                                      some action ∧
+                                                                    MicroCFTA.EnumerationCorrectness.Success action
+                                                                        entered result after ∧
+                                                                      rows = [Except.ok (some result, after)] ∧
+                                                                        after.counter = after.values.length ∧
+                                                                          MicroCFTA.SourcePruningEnumerationObservation.PendingRealized
+                                                                              heap after ∧
+                                                                            MicroCFTA.EnumerationCorrectness.StorageValid
+                                                                                after ∧
+                                                                              (∀
+                                                                                  (fragment :
+                                                                                    MicroCFTA.Fragments.Fragment
+                                                                                      MicroCFTA.SourcePruningTemplates.Symbol),
+                                                                                  result = some fragment →
+                                                                                    MicroCFTA.EnumerationCorrectness.FragmentBound
+                                                                                      after.counter fragment) ∧
+                                                                                entered.counter ≤ after.counter
+                                                            else rows = [])
+                                                          selectedEdges branchRows ∧
+                                                        MicroCFTA.SourcePruningEnumerationOrdinaryBranches.run scs
+                                                            selectedEdges entered =
+                                                          branchRows.flatten
+                                            | x => True
+                  | x =>
+                    ∀ (extra : Nat),
+                      (MicroCFTA.SourcePruningEnumerationEntry.enter heap (fuel + extra) uv before).run = []
+'MicroCFTA.SourcePruningEnumerationAdmission.complete' depends on axioms: [propext, Classical.choice, Quot.sound]

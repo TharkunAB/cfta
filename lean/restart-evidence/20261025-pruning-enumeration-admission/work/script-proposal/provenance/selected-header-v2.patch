@@ -1,0 +1,11 @@
+--- selected-prospective/complete-header.lean.txt
++++ selected-prospective-v2/complete-header-v2.lean.txt
+@@ -29,7 +29,7 @@
+             StorageValid entered ∧ PendingRealized heap entered ∧
+             (∀ sc ∈ scs, sc.var < entered.counter) ∧
+             (match decoded with
+-            | .node entry storedEdges depth free =>
++            | .node _ storedEdges _ _ =>
+                 if scs.any (fun sc => EqualityTrie.isTerminal sc.trie) then True else
+                   ∀ (selectedEdges : List (InternedConstructorTemplates.EdgeValue Symbol Constraint)),
+                     (∀ edge ∈ selectedEdges, edge ∈ storedEdges) →

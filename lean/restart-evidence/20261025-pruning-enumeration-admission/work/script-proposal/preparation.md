@@ -1,0 +1,13 @@
+# Admission adapter preparation
+
+Status: FINAL FROZEN, source and data only. I authored the five adapters and literal documentation templates. Root owns all mathematical bodies, activation and execution. No selected script was parsed, imported, activated or executed. No check, seal or publication outcome is supplied.
+
+The package retains the five complete actual successful Storage bases, all ten forward/inverse patches and Unicode replacement spans. Both directions reconstruct every complete source as data. The selected candidates contain 471 lines. Public kinds, counts, instances and the source cap remain derived from the actual frozen owner. All existing preservation and publication guard algorithms remain.
+
+The actual Admission owner has 89 payloads, 5 literal contracts with 91 lines, 99 scopes, one complete theorem, no definitions or instances, and hard limit 380. Its 9 whole-source snapshots, 11 flat cuts and 20 project import identities match live data. The existing reader fits this schema. The selected V2 public header and context match the frozen contracts. Source review 9f65a263cb1da585914c0d284e1b830d8b9bb4d25b75e4a6e5952ea1020b754d is copied and bound.
+
+Root and Guard identified five stale current-family filenames in the predraft. The archive glob/exclusion and verifier receipt/review/source-review paths now name Admission. The whole predraft, exact correction and earlier source-pin/selection drafts remain under provenance. The genuine prior Storage assessment path stays unchanged. Final owner binding changes only pending prose in the archive INDEX and two unrendered templates. No selected-program failure occurred during preparation.
+
+Baseline 38d82798dd7c36e16fdd1fb5c8eeef9c14d95d00 contains 141794 files. Main, backup 0240, all baseline modes/refs/stashes/worktrees, nine exact document inverses, Audit prepend, actual failures/raw reports/cap receipts, complete public signatures and actual axiom subsets remain guarded. Exactly 26 prior Storage custody inputs and the separately sealed assessment peer remain bound. Publication retains all-manifest membership, filesystem/index/tree equality and the singleton ordinary formalize destination.
+
+The theorem derives Entry once and scs bounds from the same actual pending slot. Only ordinary decoded nodes under the genuine nonterminal test receive Storage admission at that entered endpoint. Ordered rows, duplicates and partial-result distinctions remain. No successful-entry premise, default selector or full wrapper action is added. Templates retain six Haskell handoffs first, H6 strongest, the whole goal ACTIVE, and native-index/extraction/wrapper/driver boundaries. Exact identities and reconstruction data accompany this report.

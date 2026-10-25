@@ -1,0 +1,194 @@
+{
+  "cases": [
+    {
+      "scope": "complete.readValue",
+      "kind": "cases readValue",
+      "branches": [
+        {
+          "name": "enumerated",
+          "fields": [
+            {
+              "name": "fragment",
+              "type": "Fragments.Fragment Symbol",
+              "used": false,
+              "Root_authored_binding": "_fragment"
+            }
+          ]
+        },
+        {
+          "name": "eliminated",
+          "fields": []
+        },
+        {
+          "name": "unenumerated",
+          "fields": [
+            {
+              "name": "node",
+              "type": "Option Nat",
+              "used": true
+            },
+            {
+              "name": "scs",
+              "type": "List EnumerationState.Suspended",
+              "used": true
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "scope": "complete.nodeOption",
+      "kind": "cases node",
+      "branches": [
+        {
+          "name": "none",
+          "fields": []
+        },
+        {
+          "name": "some",
+          "fields": [
+            {
+              "name": "handle",
+              "type": "Nat",
+              "used": true
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "scope": "complete.branchAdmission.decoded",
+      "kind": "cases decoded",
+      "branches": [
+        {
+          "name": "empty",
+          "fields": []
+        },
+        {
+          "name": "reference",
+          "fields": [
+            {
+              "name": "name",
+              "type": "InternedBinderProtocol.Reference",
+              "used": false,
+              "Root_authored_binding": "_name"
+            }
+          ]
+        },
+        {
+          "name": "node",
+          "fields": [
+            {
+              "name": "entry",
+              "type": "Cache.Interned InternedBinderProtocol.NodeKey",
+              "used": true
+            },
+            {
+              "name": "storedEdges",
+              "type": "List (InternedConstructorTemplates.EdgeValue Symbol Constraint)",
+              "used": true
+            },
+            {
+              "name": "depth",
+              "type": "Nat",
+              "used": true
+            },
+            {
+              "name": "free",
+              "type": "List InternedBinderProtocol.Reference",
+              "used": true
+            }
+          ]
+        },
+        {
+          "name": "union",
+          "fields": [
+            {
+              "name": "entry",
+              "type": "Cache.Interned InternedBinderProtocol.NodeKey",
+              "used": false,
+              "Root_authored_binding": "_entry"
+            },
+            {
+              "name": "members",
+              "type": "List (InternedConstructorTemplates.Value Symbol Constraint)",
+              "used": false,
+              "Root_authored_binding": "_members"
+            },
+            {
+              "name": "depth",
+              "type": "Nat",
+              "used": false,
+              "Root_authored_binding": "_depth"
+            },
+            {
+              "name": "free",
+              "type": "List InternedBinderProtocol.Reference",
+              "used": false,
+              "Root_authored_binding": "_free"
+            }
+          ]
+        },
+        {
+          "name": "mu",
+          "fields": [
+            {
+              "name": "entry",
+              "type": "Cache.Interned InternedBinderProtocol.NodeKey",
+              "used": false,
+              "Root_authored_binding": "_entry"
+            },
+            {
+              "name": "body",
+              "type": "InternedConstructorTemplates.Value Symbol Constraint",
+              "used": false,
+              "Root_authored_binding": "_body"
+            },
+            {
+              "name": "depthShape",
+              "type": "InternedConstructorTemplates.Value Symbol Constraint",
+              "used": false,
+              "Root_authored_binding": "_depthShape"
+            },
+            {
+              "name": "ordinaryShape",
+              "type": "InternedConstructorTemplates.Value Symbol Constraint",
+              "used": false,
+              "Root_authored_binding": "_ordinaryShape"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "scope": "complete.branchAdmission.node.terminal",
+      "kind": "by_cases terminal : scs.any (fun sc => EqualityTrie.isTerminal sc.trie) = true",
+      "branches": [
+        {
+          "name": "true",
+          "fields": [
+            {
+              "name": "terminal",
+              "type": "scs.any (fun sc => EqualityTrie.isTerminal sc.trie) = true",
+              "used": true
+            }
+          ]
+        },
+        {
+          "name": "false",
+          "fields": [
+            {
+              "name": "terminal",
+              "type": "¬ (scs.any (fun sc => EqualityTrie.isTerminal sc.trie) = true)",
+              "used": true
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "count": 4,
+  "all_constructor_fields_manual": true,
+  "wildcard_public_branches_bind_no_payloads": true,
+  "case_equations": false
+}

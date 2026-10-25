@@ -1,0 +1,62 @@
+{"command": ["/home/tritlo/.elan/toolchains/leanprover--lean4---v4.34.1/bin/lean", "-o", "/tmp/mcfta-pruning-enumeration-admission-20261025/strict-3-output/MicroCFTA/SourcePruningEnumerationAdmission.olean", "-R", "/tmp/mcfta-pruning-enumeration-admission-20261025/strict-3", "-DwarningAsError=true", "-Dlinter.all=true", "/tmp/mcfta-pruning-enumeration-admission-20261025/strict-3/MicroCFTA/SourcePruningEnumerationAdmission.lean"], "exit_code": 1, "raw_bytes": 3813, "raw_sha256": "39f5a09b11ef52f8896988994b718e74ad60498a6f444f05781b3781d3e8a8e4", "source_sha256": "d28a4ba3c83f97a920acf85f6607c6493c858df17acb027009aadaf7c891cf3b"}
+/tmp/mcfta-pruning-enumeration-admission-20261025/strict-3/MicroCFTA/SourcePruningEnumerationAdmission.lean:125:6: error: Type mismatch: After simplification, term
+  branchAdmission
+ has type
+  match decoded, decodedLookup, available, closed, ancestry, entryExact with
+  | InternedConstructorTemplates.Value.node entry storedEdges depth free, decodedLookup, available, closed, ancestry,
+    entryExact =>
+    if (scs.any fun sc => EqualityTrie.isTerminal sc.trie) = true then True
+    else
+      ∀ (selectedEdges : List (InternedConstructorTemplates.EdgeValue Symbol Constraint)),
+        (∀ (edge : InternedConstructorTemplates.EdgeValue Symbol Constraint),
+            edge ∈ selectedEdges → edge ∈ storedEdges) →
+          ∃ branchRows,
+            Language.All₂
+                (fun edge rows =>
+                  if arityAllows edge.children.length scs = true then
+                    match SourcePruningEnumerationConstraint.project edge.entry.key.constraint with
+                    | none => rows = [Except.ok (none, entered)]
+                    | some val =>
+                      ∃ action result after,
+                        SourcePruningEnumerationEdgeTraversal.prepare scs edge = some action ∧
+                          Success action entered result after ∧
+                            rows = [Except.ok (some result, after)] ∧
+                              after.counter = after.values.length ∧
+                                PendingRealized heap after ∧
+                                  StorageValid after ∧
+                                    (∀ (fragment : Fragments.Fragment Symbol),
+                                        result = some fragment → FragmentBound after.counter fragment) ∧
+                                      entered.counter ≤ after.counter
+                  else rows = [])
+                selectedEdges branchRows ∧
+              SourcePruningEnumerationOrdinaryBranches.run scs selectedEdges entered = branchRows.flatten
+  | x, decodedLookup, available, closed, ancestry, entryExact => True
+but is expected to have type
+  match decoded with
+  | InternedConstructorTemplates.Value.node entry storedEdges depth free =>
+    if (scs.any fun sc => EqualityTrie.isTerminal sc.trie) = true then True
+    else
+      ∀ (selectedEdges : List (InternedConstructorTemplates.EdgeValue Symbol Constraint)),
+        (∀ (edge : InternedConstructorTemplates.EdgeValue Symbol Constraint),
+            edge ∈ selectedEdges → edge ∈ storedEdges) →
+          ∃ branchRows,
+            Language.All₂
+                (fun edge rows =>
+                  if arityAllows edge.children.length scs = true then
+                    match SourcePruningEnumerationConstraint.project edge.entry.key.constraint with
+                    | none => rows = [Except.ok (none, entered)]
+                    | some val =>
+                      ∃ action result after,
+                        SourcePruningEnumerationEdgeTraversal.prepare scs edge = some action ∧
+                          Success action entered result after ∧
+                            rows = [Except.ok (some result, after)] ∧
+                              after.counter = after.values.length ∧
+                                PendingRealized heap after ∧
+                                  StorageValid after ∧
+                                    (∀ (fragment : Fragments.Fragment Symbol),
+                                        result = some fragment → FragmentBound after.counter fragment) ∧
+                                      entered.counter ≤ after.counter
+                  else rows = [])
+                selectedEdges branchRows ∧
+              SourcePruningEnumerationOrdinaryBranches.run scs selectedEdges entered = branchRows.flatten
+  | x => True

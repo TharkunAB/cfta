@@ -1,0 +1,7 @@
+[2026-10-25 02:58:52 CET] FINAL data-only scope/cases amendment, authored after actual strict-3 failure and before Root V4 authorship.
+
+The original frozen89-payload owner remains byte-exact. All five literal contracts, mathematical types, assumptions and hard380 remain unchanged. This overlay appends13 anonymous/generated constructor payload scopes (reference1/node4/union4/mu4), effective112, and one repeated final decoded case group, effective5. Empty adds no fields. The original99 scopes and four case groups remain identical prefixes.
+
+Root selected final structural specialization of the SAME branchAdmission and desired match after refining the full output packet. The failed strict-3 raw3813B shows the proof-dependent telescope mismatch. Its complete actual source/raw/report are retained and hash-correlated. No new theorem premise, helper, have, let, instance, induction, action or successful callback is introduced. Payload labels are inventory names, not selected Lean variable names. Use is implicit through dependent case specialization/reduction; no direct source-name reference is claimed. The node storedEdges list remains in the specialized ordinary proposition.
+
+This package supplies no Lean tactic body or candidate and makes no V4 passing claim. Root must bind the separate amendment before revised authorship. Only source/data copies, hashes, JSON and comparisons were used; no compiler/parser/reviewed program, Git/network/board or repository edit occurred. Root must independently read this reviewer-authored metadata before activation.

@@ -1,0 +1,10 @@
+--- before-admission-verification/assessment.md
++++ assessment.md
+@@ -1,6 +1,6 @@
+ # Next gap: native cached shallow-child allocation
+ 
+-At this source cut, Storage is verified at proof d836d0aa637a284bb80d4ce4b76e5f076f514de7. Admission has a frozen selected contract, but no compiler result is assumed here. H6 remains strongest and the whole goal remains ACTIVE.
++Storage is verified at proof d836d0aa637a284bb80d4ce4b76e5f076f514de7. Admission now passes strict-4 with an empty log, installed build (628 jobs), full public readback and Audit (3717 jobs; 76342 dependencies). Its source has 127 lines; all 5 frozen contracts remain unchanged. The three earlier strict failures remain. No seal or push outcome is assumed. H6 remains strongest; the whole goal remains ACTIVE.
+ 
+ The smallest next component is a source-specific cached fresh allocation followed by the ordinary child's full-scs raw write. The core behavior already exists in ShallowChild.prepareChild and prepareChild_complete. The missing result must derive the actual cached stages, not repeat their core allocation theorem. Reuse existing Cached as the carrier and NativeIndex.write as the write operation.
+ 

@@ -1,0 +1,635 @@
+{
+  "entries": [
+    {
+      "scope": "complete",
+      "name": "heap",
+      "type": "InternedConstructorTemplates.State Symbol Constraint",
+      "used": true
+    },
+    {
+      "scope": "complete",
+      "name": "ready",
+      "type": "SourceEqualityRequiredCache.Ready heap",
+      "used": true
+    },
+    {
+      "scope": "complete",
+      "name": "before",
+      "type": "EnumerationState.State Symbol Constraint",
+      "used": true
+    },
+    {
+      "scope": "complete",
+      "name": "uv",
+      "type": "Nat",
+      "used": true
+    },
+    {
+      "scope": "complete",
+      "name": "storage",
+      "type": "StorageValid before",
+      "used": true
+    },
+    {
+      "scope": "complete",
+      "name": "inside",
+      "type": "uv < before.counter",
+      "used": true
+    },
+    {
+      "scope": "complete",
+      "name": "realized",
+      "type": "PendingRealized heap before",
+      "used": true
+    },
+    {
+      "scope": "complete.entry",
+      "name": "fuel",
+      "type": "Nat",
+      "used": true
+    },
+    {
+      "scope": "complete.entry",
+      "name": "readValue",
+      "type": "EnumerationState.UVarValue Symbol",
+      "used": true
+    },
+    {
+      "scope": "complete.entry",
+      "name": "readAfter",
+      "type": "EnumerationState.State Symbol Constraint",
+      "used": true
+    },
+    {
+      "scope": "complete.entry",
+      "name": "readExact",
+      "type": "∀ (extra : Nat), ExceptT.run (getValue (fuel + extra) uv before) = [.ok (readValue, readAfter)]",
+      "used": true
+    },
+    {
+      "scope": "complete.entry",
+      "name": "readFrame",
+      "type": "Frame before readAfter",
+      "used": true
+    },
+    {
+      "scope": "complete.entry",
+      "name": "packet",
+      "type": "match readValue with\n      | .unenumerated (some handle) scs =>\n          ∃ (target : Nat) (decoded : InternedConstructorTemplates.Value Symbol Constraint)\n            (compressed entered : EnumerationState.State Symbol Constraint),\n            Frame before compressed ∧\n            (∀ (extra : Nat), ExceptT.run (representative (fuel + extra) uv readAfter) =\n              [.ok (target, compressed)]) ∧\n            compressed.values[target]? = some (.unenumerated (some handle) scs) ∧\n            lookupNode heap handle = some decoded ∧\n            InternedProbeProvenance.Available heap decoded ∧ decoded.free = [] ∧\n            entered = {compressed with expansionAncestry :=\n              if MergedOrdinaryHeight.recursiveBoundary decoded then\n                (recursionKey handle scs :: compressed.recursionAncestry target).eraseDups\n              else compressed.recursionAncestry target} ∧\n            (∀ (extra : Nat), ExceptT.run (SourcePruningEnumerationEntry.enter heap (fuel + extra) uv before) =\n              [.ok ((target, handle, scs, decoded), entered)]) ∧\n            StorageValid entered ∧ PendingRealized heap entered\n      | _ => ∀ (extra : Nat), ExceptT.run (SourcePruningEnumerationEntry.enter heap (fuel + extra) uv before) = []",
+      "used": true
+    },
+    {
+      "scope": "complete.pendingSome",
+      "name": "target",
+      "type": "Nat",
+      "used": true
+    },
+    {
+      "scope": "complete.pendingSome",
+      "name": "decoded",
+      "type": "InternedConstructorTemplates.Value Symbol Constraint",
+      "used": true
+    },
+    {
+      "scope": "complete.pendingSome",
+      "name": "compressed",
+      "type": "EnumerationState.State Symbol Constraint",
+      "used": true
+    },
+    {
+      "scope": "complete.pendingSome",
+      "name": "entered",
+      "type": "EnumerationState.State Symbol Constraint",
+      "used": true
+    },
+    {
+      "scope": "complete.pendingSome",
+      "name": "fullFrame",
+      "type": "Frame before compressed",
+      "used": true
+    },
+    {
+      "scope": "complete.pendingSome",
+      "name": "captureExact",
+      "type": "∀ (extra : Nat), ExceptT.run (representative (fuel + extra) uv readAfter) = [.ok (target, compressed)]",
+      "used": true
+    },
+    {
+      "scope": "complete.pendingSome",
+      "name": "storedCapture",
+      "type": "compressed.values[target]? = some (.unenumerated (some handle) scs)",
+      "used": true
+    },
+    {
+      "scope": "complete.pendingSome",
+      "name": "decodedLookup",
+      "type": "lookupNode heap handle = some decoded",
+      "used": true
+    },
+    {
+      "scope": "complete.pendingSome",
+      "name": "available",
+      "type": "InternedProbeProvenance.Available heap decoded",
+      "used": true
+    },
+    {
+      "scope": "complete.pendingSome",
+      "name": "closed",
+      "type": "decoded.free = []",
+      "used": true
+    },
+    {
+      "scope": "complete.pendingSome",
+      "name": "ancestry",
+      "type": "entered = {compressed with expansionAncestry := if MergedOrdinaryHeight.recursiveBoundary decoded then (recursionKey handle scs :: compressed.recursionAncestry target).eraseDups else compressed.recursionAncestry target}",
+      "used": true
+    },
+    {
+      "scope": "complete.pendingSome",
+      "name": "entryExact",
+      "type": "∀ (extra : Nat), ExceptT.run (SourcePruningEnumerationEntry.enter heap (fuel + extra) uv before) = [.ok ((target, handle, scs, decoded), entered)]",
+      "used": true
+    },
+    {
+      "scope": "complete.pendingSome",
+      "name": "enteredStorage",
+      "type": "StorageValid entered",
+      "used": true
+    },
+    {
+      "scope": "complete.pendingSome",
+      "name": "enteredRealized",
+      "type": "PendingRealized heap entered",
+      "used": true
+    },
+    {
+      "scope": "complete.public.result",
+      "name": "fuel",
+      "type": "Nat",
+      "used": true
+    },
+    {
+      "scope": "complete.public.result",
+      "name": "readValue",
+      "type": "EnumerationState.UVarValue Symbol",
+      "used": true
+    },
+    {
+      "scope": "complete.public.result",
+      "name": "readAfter",
+      "type": "EnumerationState.State Symbol Constraint",
+      "used": true
+    },
+    {
+      "scope": "complete.public.getValue",
+      "name": "extra",
+      "type": "Nat",
+      "used": true
+    },
+    {
+      "scope": "complete.public.pendingSome",
+      "name": "handle",
+      "type": "Nat",
+      "used": true
+    },
+    {
+      "scope": "complete.public.pendingSome",
+      "name": "scs",
+      "type": "List EnumerationState.Suspended",
+      "used": true
+    },
+    {
+      "scope": "complete.public.pendingSome",
+      "name": "target",
+      "type": "Nat",
+      "used": true
+    },
+    {
+      "scope": "complete.public.pendingSome",
+      "name": "decoded",
+      "type": "InternedConstructorTemplates.Value Symbol Constraint",
+      "used": true
+    },
+    {
+      "scope": "complete.public.pendingSome",
+      "name": "compressed",
+      "type": "EnumerationState.State Symbol Constraint",
+      "used": true
+    },
+    {
+      "scope": "complete.public.pendingSome",
+      "name": "entered",
+      "type": "EnumerationState.State Symbol Constraint",
+      "used": true
+    },
+    {
+      "scope": "complete.public.representative",
+      "name": "extra",
+      "type": "Nat",
+      "used": true
+    },
+    {
+      "scope": "complete.public.enter",
+      "name": "extra",
+      "type": "Nat",
+      "used": true
+    },
+    {
+      "scope": "complete.public.reject",
+      "name": "extra",
+      "type": "Nat",
+      "used": true
+    },
+    {
+      "scope": "complete.public.bounded",
+      "name": "sc",
+      "type": "EnumerationState.Suspended",
+      "used": true
+    },
+    {
+      "scope": "complete.public.bounded",
+      "name": "member",
+      "type": "sc ∈ scs",
+      "used": true
+    },
+    {
+      "scope": "complete.public.branch.decoded.node",
+      "name": "entry",
+      "type": "Cache.Interned InternedBinderProtocol.NodeKey",
+      "used": true
+    },
+    {
+      "scope": "complete.public.branch.decoded.node",
+      "name": "storedEdges",
+      "type": "List (InternedConstructorTemplates.EdgeValue Symbol Constraint)",
+      "used": true
+    },
+    {
+      "scope": "complete.public.branch.decoded.node",
+      "name": "depth",
+      "type": "Nat",
+      "used": true
+    },
+    {
+      "scope": "complete.public.branch.decoded.node",
+      "name": "free",
+      "type": "List InternedBinderProtocol.Reference",
+      "used": true
+    },
+    {
+      "scope": "complete.public.branch.catalogue",
+      "name": "selectedEdges",
+      "type": "List (InternedConstructorTemplates.EdgeValue Symbol Constraint)",
+      "used": true
+    },
+    {
+      "scope": "complete.public.branch.catalogue",
+      "name": "selected",
+      "type": "∀ edge ∈ selectedEdges, edge ∈ storedEdges",
+      "used": true
+    },
+    {
+      "scope": "complete.public.branch.selected",
+      "name": "edge",
+      "type": "InternedConstructorTemplates.EdgeValue Symbol Constraint",
+      "used": true
+    },
+    {
+      "scope": "complete.public.branch.selected",
+      "name": "member",
+      "type": "edge ∈ selectedEdges",
+      "used": true
+    },
+    {
+      "scope": "complete.public.branch.result",
+      "name": "branchRows",
+      "type": "List (List (Except EnumerationState.Error (Option (Option (Fragments.Fragment Symbol)) × EnumerationState.State Symbol Constraint)))",
+      "used": true
+    },
+    {
+      "scope": "complete.public.branch.relation",
+      "name": "edge",
+      "type": "InternedConstructorTemplates.EdgeValue Symbol Constraint",
+      "used": true
+    },
+    {
+      "scope": "complete.public.branch.relation",
+      "name": "rows",
+      "type": "List (Except EnumerationState.Error (Option (Option (Fragments.Fragment Symbol)) × EnumerationState.State Symbol Constraint))",
+      "used": true
+    },
+    {
+      "scope": "complete.public.branch.relation",
+      "name": "action",
+      "type": "EnumerateM Symbol Constraint (Option (Fragments.Fragment Symbol))",
+      "used": true
+    },
+    {
+      "scope": "complete.public.branch.relation",
+      "name": "result",
+      "type": "Option (Fragments.Fragment Symbol)",
+      "used": true
+    },
+    {
+      "scope": "complete.public.branch.relation",
+      "name": "after",
+      "type": "EnumerationState.State Symbol Constraint",
+      "used": true
+    },
+    {
+      "scope": "complete.public.branch.relation.project.some",
+      "name": "_projection",
+      "type": "List EqualityTrie.Trie × Option Constraint",
+      "used": false,
+      "Root_authored_binding": "_",
+      "reason": "Anonymous projection payload is not inspected by the branch relation."
+    },
+    {
+      "scope": "complete.public.branch.present",
+      "name": "fragment",
+      "type": "Fragments.Fragment Symbol",
+      "used": true
+    },
+    {
+      "scope": "complete.public.branch.present",
+      "name": "same",
+      "type": "result = some fragment",
+      "used": true
+    },
+    {
+      "scope": "complete.pendingSome.branchAdmission.decoded.node",
+      "name": "entry",
+      "type": "Cache.Interned InternedBinderProtocol.NodeKey",
+      "used": true
+    },
+    {
+      "scope": "complete.pendingSome.branchAdmission.decoded.node",
+      "name": "storedEdges",
+      "type": "List (InternedConstructorTemplates.EdgeValue Symbol Constraint)",
+      "used": true
+    },
+    {
+      "scope": "complete.pendingSome.branchAdmission.decoded.node",
+      "name": "depth",
+      "type": "Nat",
+      "used": true
+    },
+    {
+      "scope": "complete.pendingSome.branchAdmission.decoded.node",
+      "name": "free",
+      "type": "List InternedBinderProtocol.Reference",
+      "used": true
+    },
+    {
+      "scope": "complete.pendingSome.branchAdmission.catalogue",
+      "name": "selectedEdges",
+      "type": "List (InternedConstructorTemplates.EdgeValue Symbol Constraint)",
+      "used": true
+    },
+    {
+      "scope": "complete.pendingSome.branchAdmission.catalogue",
+      "name": "selected",
+      "type": "∀ edge ∈ selectedEdges, edge ∈ storedEdges",
+      "used": true
+    },
+    {
+      "scope": "complete.pendingSome.branchAdmission.selected",
+      "name": "edge",
+      "type": "InternedConstructorTemplates.EdgeValue Symbol Constraint",
+      "used": true
+    },
+    {
+      "scope": "complete.pendingSome.branchAdmission.selected",
+      "name": "member",
+      "type": "edge ∈ selectedEdges",
+      "used": true
+    },
+    {
+      "scope": "complete.pendingSome.branchAdmission.result",
+      "name": "branchRows",
+      "type": "List (List (Except EnumerationState.Error (Option (Option (Fragments.Fragment Symbol)) × EnumerationState.State Symbol Constraint)))",
+      "used": true
+    },
+    {
+      "scope": "complete.pendingSome.branchAdmission.relation",
+      "name": "edge",
+      "type": "InternedConstructorTemplates.EdgeValue Symbol Constraint",
+      "used": true
+    },
+    {
+      "scope": "complete.pendingSome.branchAdmission.relation",
+      "name": "rows",
+      "type": "List (Except EnumerationState.Error (Option (Option (Fragments.Fragment Symbol)) × EnumerationState.State Symbol Constraint))",
+      "used": true
+    },
+    {
+      "scope": "complete.pendingSome.branchAdmission.relation",
+      "name": "action",
+      "type": "EnumerateM Symbol Constraint (Option (Fragments.Fragment Symbol))",
+      "used": true
+    },
+    {
+      "scope": "complete.pendingSome.branchAdmission.relation",
+      "name": "result",
+      "type": "Option (Fragments.Fragment Symbol)",
+      "used": true
+    },
+    {
+      "scope": "complete.pendingSome.branchAdmission.relation",
+      "name": "after",
+      "type": "EnumerationState.State Symbol Constraint",
+      "used": true
+    },
+    {
+      "scope": "complete.pendingSome.branchAdmission.relation.project.some",
+      "name": "_projection",
+      "type": "List EqualityTrie.Trie × Option Constraint",
+      "used": false,
+      "Root_authored_binding": "_",
+      "reason": "Anonymous projection payload is not inspected by the branch relation."
+    },
+    {
+      "scope": "complete.pendingSome.branchAdmission.present",
+      "name": "fragment",
+      "type": "Fragments.Fragment Symbol",
+      "used": true
+    },
+    {
+      "scope": "complete.pendingSome.branchAdmission.present",
+      "name": "same",
+      "type": "result = some fragment",
+      "used": true
+    },
+    {
+      "scope": "complete.readValue.enumerated",
+      "name": "fragment",
+      "type": "Fragments.Fragment Symbol",
+      "used": false,
+      "Root_authored_binding": "_fragment"
+    },
+    {
+      "scope": "complete.readValue.unenumerated",
+      "name": "node",
+      "type": "Option Nat",
+      "used": true
+    },
+    {
+      "scope": "complete.readValue.unenumerated",
+      "name": "scs",
+      "type": "List EnumerationState.Suspended",
+      "used": true
+    },
+    {
+      "scope": "complete.nodeOption.some",
+      "name": "handle",
+      "type": "Nat",
+      "used": true
+    },
+    {
+      "scope": "complete.branchAdmission.decoded.reference",
+      "name": "name",
+      "type": "InternedBinderProtocol.Reference",
+      "used": false,
+      "Root_authored_binding": "_name"
+    },
+    {
+      "scope": "complete.branchAdmission.decoded.node",
+      "name": "entry",
+      "type": "Cache.Interned InternedBinderProtocol.NodeKey",
+      "used": true
+    },
+    {
+      "scope": "complete.branchAdmission.decoded.node",
+      "name": "storedEdges",
+      "type": "List (InternedConstructorTemplates.EdgeValue Symbol Constraint)",
+      "used": true
+    },
+    {
+      "scope": "complete.branchAdmission.decoded.node",
+      "name": "depth",
+      "type": "Nat",
+      "used": true
+    },
+    {
+      "scope": "complete.branchAdmission.decoded.node",
+      "name": "free",
+      "type": "List InternedBinderProtocol.Reference",
+      "used": true
+    },
+    {
+      "scope": "complete.branchAdmission.decoded.union",
+      "name": "entry",
+      "type": "Cache.Interned InternedBinderProtocol.NodeKey",
+      "used": false,
+      "Root_authored_binding": "_entry"
+    },
+    {
+      "scope": "complete.branchAdmission.decoded.union",
+      "name": "members",
+      "type": "List (InternedConstructorTemplates.Value Symbol Constraint)",
+      "used": false,
+      "Root_authored_binding": "_members"
+    },
+    {
+      "scope": "complete.branchAdmission.decoded.union",
+      "name": "depth",
+      "type": "Nat",
+      "used": false,
+      "Root_authored_binding": "_depth"
+    },
+    {
+      "scope": "complete.branchAdmission.decoded.union",
+      "name": "free",
+      "type": "List InternedBinderProtocol.Reference",
+      "used": false,
+      "Root_authored_binding": "_free"
+    },
+    {
+      "scope": "complete.branchAdmission.decoded.mu",
+      "name": "entry",
+      "type": "Cache.Interned InternedBinderProtocol.NodeKey",
+      "used": false,
+      "Root_authored_binding": "_entry"
+    },
+    {
+      "scope": "complete.branchAdmission.decoded.mu",
+      "name": "body",
+      "type": "InternedConstructorTemplates.Value Symbol Constraint",
+      "used": false,
+      "Root_authored_binding": "_body"
+    },
+    {
+      "scope": "complete.branchAdmission.decoded.mu",
+      "name": "depthShape",
+      "type": "InternedConstructorTemplates.Value Symbol Constraint",
+      "used": false,
+      "Root_authored_binding": "_depthShape"
+    },
+    {
+      "scope": "complete.branchAdmission.decoded.mu",
+      "name": "ordinaryShape",
+      "type": "InternedConstructorTemplates.Value Symbol Constraint",
+      "used": false,
+      "Root_authored_binding": "_ordinaryShape"
+    },
+    {
+      "scope": "complete.branchAdmission.node.terminal.true",
+      "name": "terminal",
+      "type": "scs.any (fun sc => EqualityTrie.isTerminal sc.trie) = true",
+      "used": true
+    },
+    {
+      "scope": "complete.branchAdmission.node.terminal.false",
+      "name": "terminal",
+      "type": "¬ (scs.any (fun sc => EqualityTrie.isTerminal sc.trie) = true)",
+      "used": true
+    },
+    {
+      "scope": "complete.pendingSome",
+      "name": "enteredStored",
+      "type": "entered.values[target]? = some (.unenumerated (some handle) scs)",
+      "used": true
+    },
+    {
+      "scope": "complete.pendingSome",
+      "name": "bounded",
+      "type": "∀ sc ∈ scs, sc.var < entered.counter",
+      "used": true
+    },
+    {
+      "scope": "complete.pendingSome",
+      "name": "branchAdmission",
+      "type": "match decoded with\n            | .node entry storedEdges depth free =>\n                if scs.any (fun sc => EqualityTrie.isTerminal sc.trie) then True else\n                  ∀ (selectedEdges : List (InternedConstructorTemplates.EdgeValue Symbol Constraint)),\n                    (∀ edge ∈ selectedEdges, edge ∈ storedEdges) →\n                    ∃ branchRows : List (List (Except EnumerationState.Error\n                        (Option (Option (Fragments.Fragment Symbol)) × EnumerationState.State Symbol Constraint))),\n                      Language.All₂ (fun edge rows =>\n                        if arityAllows edge.children.length scs then\n                          match SourcePruningEnumerationConstraint.project edge.entry.key.constraint with\n                          | none => rows = [.ok (none, entered)]\n                          | some _ =>\n                              ∃ (action : EnumerateM Symbol Constraint (Option (Fragments.Fragment Symbol)))\n                                (result : Option (Fragments.Fragment Symbol))\n                                (after : EnumerationState.State Symbol Constraint),\n                                SourcePruningEnumerationEdgeTraversal.prepare scs edge = some action ∧\n                                Success action entered result after ∧ rows = [.ok (some result, after)] ∧\n                                after.counter = after.values.length ∧ PendingRealized heap after ∧\n                                StorageValid after ∧\n                                (∀ (fragment : Fragments.Fragment Symbol),\n                                  result = some fragment → FragmentBound after.counter fragment) ∧\n                                entered.counter ≤ after.counter\n                        else rows = []) selectedEdges branchRows ∧\n                      SourcePruningEnumerationOrdinaryBranches.run scs selectedEdges entered = branchRows.flatten\n            | _ => True",
+      "used": true
+    },
+    {
+      "scope": "complete.pendingSome.bounded",
+      "name": "sc",
+      "type": "EnumerationState.Suspended",
+      "used": true
+    },
+    {
+      "scope": "complete.pendingSome.bounded",
+      "name": "member",
+      "type": "sc ∈ scs",
+      "used": true
+    },
+    {
+      "scope": "complete.branchAdmission.node.nonterminal.intro",
+      "name": "selectedEdges",
+      "type": "List (InternedConstructorTemplates.EdgeValue Symbol Constraint)",
+      "used": true
+    },
+    {
+      "scope": "complete.branchAdmission.node.nonterminal.intro",
+      "name": "selected",
+      "type": "∀ edge ∈ selectedEdges, edge ∈ storedEdges",
+      "used": true
+    }
+  ],
+  "count": 102,
+  "manual_inventory": true,
+  "named_arguments_are_not_binders": true,
+  "no_regex_binder_inference": true,
+  "coverage": "Public quantified/existential/match scopes, actual6+14 packet fields, source read/optional/decoded/terminal cases, three typed haves and all planned forall/intro parameters."
+}

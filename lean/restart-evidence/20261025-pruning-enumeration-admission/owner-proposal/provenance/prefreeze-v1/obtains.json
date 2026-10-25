@@ -1,0 +1,127 @@
+{
+  "packets": [
+    {
+      "scope": "complete.entry",
+      "api": "SourcePruningEnumerationEntry.complete heap before uv storage inside realized",
+      "fields": [
+        {
+          "name": "fuel",
+          "type": "Nat",
+          "used": true
+        },
+        {
+          "name": "readValue",
+          "type": "EnumerationState.UVarValue Symbol",
+          "used": true
+        },
+        {
+          "name": "readAfter",
+          "type": "EnumerationState.State Symbol Constraint",
+          "used": true
+        },
+        {
+          "name": "readExact",
+          "type": "∀ (extra : Nat), ExceptT.run (getValue (fuel + extra) uv before) = [.ok (readValue, readAfter)]",
+          "used": true
+        },
+        {
+          "name": "readFrame",
+          "type": "Frame before readAfter",
+          "used": true
+        },
+        {
+          "name": "packet",
+          "type": "match readValue with\n      | .unenumerated (some handle) scs =>\n          ∃ (target : Nat) (decoded : InternedConstructorTemplates.Value Symbol Constraint)\n            (compressed entered : EnumerationState.State Symbol Constraint),\n            Frame before compressed ∧\n            (∀ (extra : Nat), ExceptT.run (representative (fuel + extra) uv readAfter) =\n              [.ok (target, compressed)]) ∧\n            compressed.values[target]? = some (.unenumerated (some handle) scs) ∧\n            lookupNode heap handle = some decoded ∧\n            InternedProbeProvenance.Available heap decoded ∧ decoded.free = [] ∧\n            entered = {compressed with expansionAncestry :=\n              if MergedOrdinaryHeight.recursiveBoundary decoded then\n                (recursionKey handle scs :: compressed.recursionAncestry target).eraseDups\n              else compressed.recursionAncestry target} ∧\n            (∀ (extra : Nat), ExceptT.run (SourcePruningEnumerationEntry.enter heap (fuel + extra) uv before) =\n              [.ok ((target, handle, scs, decoded), entered)]) ∧\n            StorageValid entered ∧ PendingRealized heap entered\n      | _ => ∀ (extra : Nat), ExceptT.run (SourcePruningEnumerationEntry.enter heap (fuel + extra) uv before) = []",
+          "used": true
+        }
+      ],
+      "skipped_fields": []
+    },
+    {
+      "scope": "complete.pendingSome",
+      "api": "Eliminate SAME Entry.complete packet after actual readValue/nodeOption cases",
+      "fields": [
+        {
+          "name": "target",
+          "type": "Nat",
+          "used": true
+        },
+        {
+          "name": "decoded",
+          "type": "InternedConstructorTemplates.Value Symbol Constraint",
+          "used": true
+        },
+        {
+          "name": "compressed",
+          "type": "EnumerationState.State Symbol Constraint",
+          "used": true
+        },
+        {
+          "name": "entered",
+          "type": "EnumerationState.State Symbol Constraint",
+          "used": true
+        },
+        {
+          "name": "fullFrame",
+          "type": "Frame before compressed",
+          "used": true
+        },
+        {
+          "name": "captureExact",
+          "type": "∀ (extra : Nat), ExceptT.run (representative (fuel + extra) uv readAfter) = [.ok (target, compressed)]",
+          "used": true
+        },
+        {
+          "name": "storedCapture",
+          "type": "compressed.values[target]? = some (.unenumerated (some handle) scs)",
+          "used": true
+        },
+        {
+          "name": "decodedLookup",
+          "type": "lookupNode heap handle = some decoded",
+          "used": true
+        },
+        {
+          "name": "available",
+          "type": "InternedProbeProvenance.Available heap decoded",
+          "used": true
+        },
+        {
+          "name": "closed",
+          "type": "decoded.free = []",
+          "used": true
+        },
+        {
+          "name": "ancestry",
+          "type": "entered = {compressed with expansionAncestry := if MergedOrdinaryHeight.recursiveBoundary decoded then (recursionKey handle scs :: compressed.recursionAncestry target).eraseDups else compressed.recursionAncestry target}",
+          "used": true
+        },
+        {
+          "name": "entryExact",
+          "type": "∀ (extra : Nat), ExceptT.run (SourcePruningEnumerationEntry.enter heap (fuel + extra) uv before) = [.ok ((target, handle, scs, decoded), entered)]",
+          "used": true
+        },
+        {
+          "name": "enteredStorage",
+          "type": "StorageValid entered",
+          "used": true
+        },
+        {
+          "name": "enteredRealized",
+          "type": "PendingRealized heap entered",
+          "used": true
+        }
+      ],
+      "skipped_fields": []
+    }
+  ],
+  "count": 2,
+  "field_count": 20,
+  "packet_sizes": [
+    6,
+    14
+  ],
+  "inline_eliminations": [],
+  "all_fields_retained": true,
+  "Storage_complete_packet_reobtained": false
+}

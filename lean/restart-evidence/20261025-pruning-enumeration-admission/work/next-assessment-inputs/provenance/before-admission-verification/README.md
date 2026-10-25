@@ -1,0 +1,1 @@
+Source-only assessment inputs. All 398 selected cut lines were read. Complete original snapshots provide identity evidence. This does not claim a manual review of every complete source body. The Admission header is selected and frozen but is not asserted compiler-verified at this cut. No future header, program, check result or post-state law is supplied.

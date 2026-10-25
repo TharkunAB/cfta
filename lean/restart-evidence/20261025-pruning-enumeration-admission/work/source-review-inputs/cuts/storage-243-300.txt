@@ -1,0 +1,58 @@
+/-- Derive storage and fragment admission for the complete ordered ordinary branch stream. -/
+theorem complete
+    (scs : List EnumerationState.Suspended)
+    (heap : InternedConstructorTemplates.State Symbol Constraint)
+    (entry : Cache.Interned InternedBinderProtocol.NodeKey)
+    (storedEdges selectedEdges : List (InternedConstructorTemplates.EdgeValue Symbol Constraint))
+    (depth : Nat) (free : List InternedBinderProtocol.Reference)
+    (ready : SourceEqualityRequiredCache.Ready heap)
+    (parentAvailable : InternedProbeProvenance.Available heap (.node entry storedEdges depth free))
+    (parentClosed : free = [])
+    (selected : ∀ edge ∈ selectedEdges, edge ∈ storedEdges)
+    (before : EnumerationState.State Symbol Constraint)
+    (realized : SourcePruningEnumerationObservation.PendingRealized heap before)
+    (storage : StorageValid before)
+    (bounded : ∀ sc ∈ scs, sc.var < before.counter) :
+    ∃ branchRows : List (List (Except EnumerationState.Error
+        (Option (Option (Fragments.Fragment Symbol)) × EnumerationState.State Symbol Constraint))),
+      Language.All₂ (fun edge rows =>
+        if arityAllows edge.children.length scs then
+          match SourcePruningEnumerationConstraint.project edge.entry.key.constraint with
+          | none => rows = [.ok (none, before)]
+          | some _ =>
+              ∃ (action : EnumerateM Symbol Constraint (Option (Fragments.Fragment Symbol)))
+                (result : Option (Fragments.Fragment Symbol))
+                (after : EnumerationState.State Symbol Constraint),
+                SourcePruningEnumerationEdgeTraversal.prepare scs edge = some action ∧
+                Success action before result after ∧ rows = [.ok (some result, after)] ∧
+                after.counter = after.values.length ∧
+                SourcePruningEnumerationObservation.PendingRealized heap after ∧
+                StorageValid after ∧
+                (∀ (fragment : Fragments.Fragment Symbol),
+                  result = some fragment → FragmentBound after.counter fragment) ∧
+                before.counter ≤ after.counter
+        else rows = []) selectedEdges branchRows ∧
+      SourcePruningEnumerationOrdinaryBranches.run scs selectedEdges before = branchRows.flatten := by
+  obtain ⟨branchRows, related, raw⟩ := SourcePruningEnumerationOrdinaryBranches.run_complete
+    scs heap entry storedEdges selectedEdges depth free ready parentAvailable parentClosed
+    selected before realized storage.aligned
+  refine ⟨branchRows, Language.All₂.imp ?_ related, raw⟩
+  intro edge rows row
+  by_cases allowed : arityAllows edge.children.length scs = true
+  · simp only [allowed, ↓reduceIte] at row ⊢
+    cases projected : SourcePruningEnumerationConstraint.project edge.entry.key.constraint with
+    | none =>
+      simpa only [projected] using row
+    | some _pair =>
+      simp only [projected] at row ⊢
+      obtain ⟨action, result, after, prepared, observed, rawRow, aligned, realized⟩ := row
+      obtain ⟨afterStorage, resultBound, grows⟩ :=
+        edge_storage scs edge action before after result storage bounded prepared observed
+      refine ⟨action, result, after, prepared, observed, rawRow, aligned, realized,
+        afterStorage, ?_, grows⟩
+      intro fragment same
+      subst result
+      exact resultBound
+  · simpa only [allowed, Bool.false_eq_true, ↓reduceIte] using row
+
+end MicroCFTA.SourcePruningEnumerationStorage

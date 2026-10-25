@@ -1,0 +1,25 @@
+match decoded with
+            | .node _ storedEdges _ _ =>
+                if scs.any (fun sc => EqualityTrie.isTerminal sc.trie) then True else
+                  ∀ (selectedEdges : List (InternedConstructorTemplates.EdgeValue Symbol Constraint)),
+                    (∀ edge ∈ selectedEdges, edge ∈ storedEdges) →
+                    ∃ branchRows : List (List (Except EnumerationState.Error
+                        (Option (Option (Fragments.Fragment Symbol)) × EnumerationState.State Symbol Constraint))),
+                      Language.All₂ (fun edge rows =>
+                        if arityAllows edge.children.length scs then
+                          match SourcePruningEnumerationConstraint.project edge.entry.key.constraint with
+                          | none => rows = [.ok (none, entered)]
+                          | some _ =>
+                              ∃ (action : EnumerateM Symbol Constraint (Option (Fragments.Fragment Symbol)))
+                                (result : Option (Fragments.Fragment Symbol))
+                                (after : EnumerationState.State Symbol Constraint),
+                                SourcePruningEnumerationEdgeTraversal.prepare scs edge = some action ∧
+                                Success action entered result after ∧ rows = [.ok (some result, after)] ∧
+                                after.counter = after.values.length ∧ PendingRealized heap after ∧
+                                StorageValid after ∧
+                                (∀ (fragment : Fragments.Fragment Symbol),
+                                  result = some fragment → FragmentBound after.counter fragment) ∧
+                                entered.counter ≤ after.counter
+                        else rows = []) selectedEdges branchRows ∧
+                      SourcePruningEnumerationOrdinaryBranches.run scs selectedEdges entered = branchRows.flatten
+            | _ => True

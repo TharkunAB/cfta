@@ -1,0 +1,100 @@
+/tmp/mcfta-pruning-enumeration-admission-20261025/strict-2/MicroCFTA/SourcePruningEnumerationAdmission.lean:124:50: error: don't know how to synthesize placeholder for argument `right`
+context:
+heap : InternedConstructorTemplates.State Symbol Constraint
+ready : SourceEqualityRequiredCache.Ready heap
+before : State Symbol Constraint
+uv : Nat
+storage : StorageValid before
+inside : uv < before.counter
+realized : PendingRealized heap before
+fuel : Nat
+readAfter : State Symbol Constraint
+readFrame : Frame before readAfter
+scs : List Suspended
+handle : Nat
+readExact :
+  ∀ (extra : Nat),
+    (getValue (fuel + extra) uv before).run = [Except.ok (UVarValue.unenumerated (some handle) scs, readAfter)]
+target : Nat
+decoded : InternedConstructorTemplates.Value Symbol Constraint
+compressed entered : State Symbol Constraint
+fullFrame : Frame before compressed
+captureExact : ∀ (extra : Nat), (representative (fuel + extra) uv readAfter).run = [Except.ok (target, compressed)]
+storedCapture : compressed.values[target]? = some (UVarValue.unenumerated (some handle) scs)
+decodedLookup : lookupNode heap handle = some decoded
+available : InternedProbeProvenance.Available heap decoded
+closed : decoded.free = []
+ancestry :
+  entered =
+    { counter := compressed.counter, representatives := compressed.representatives, values := compressed.values,
+      obligations := compressed.obligations, recursionAncestry := compressed.recursionAncestry,
+      expansionAncestry :=
+        if MergedOrdinaryHeight.recursiveBoundary decoded = true then
+          (recursionKey handle scs :: compressed.recursionAncestry target).eraseDups
+        else compressed.recursionAncestry target }
+entryExact :
+  ∀ (extra : Nat),
+    (SourcePruningEnumerationEntry.enter heap (fuel + extra) uv before).run =
+      [Except.ok ((target, handle, scs, decoded), entered)]
+enteredStorage : StorageValid entered
+enteredRealized : PendingRealized heap entered
+enteredStored : entered.values[target]? = some (UVarValue.unenumerated (some handle) scs)
+bounded : ∀ (sc : Suspended), sc ∈ scs → sc.var < entered.counter
+branchAdmission :
+  match decoded, decodedLookup, available, closed, ancestry, entryExact with
+  | InternedConstructorTemplates.Value.node entry storedEdges depth free, decodedLookup, available, closed, ancestry,
+    entryExact =>
+    if (scs.any fun sc => EqualityTrie.isTerminal sc.trie) = true then True
+    else
+      ∀ (selectedEdges : List (InternedConstructorTemplates.EdgeValue Symbol Constraint)),
+        (∀ (edge : InternedConstructorTemplates.EdgeValue Symbol Constraint),
+            edge ∈ selectedEdges → edge ∈ storedEdges) →
+          ∃ branchRows,
+            Language.All₂
+                (fun edge rows =>
+                  if arityAllows edge.children.length scs = true then
+                    match SourcePruningEnumerationConstraint.project edge.entry.key.constraint with
+                    | none => rows = [Except.ok (none, entered)]
+                    | some val =>
+                      ∃ action result after,
+                        SourcePruningEnumerationEdgeTraversal.prepare scs edge = some action ∧
+                          Success action entered result after ∧
+                            rows = [Except.ok (some result, after)] ∧
+                              after.counter = after.values.length ∧
+                                PendingRealized heap after ∧
+                                  StorageValid after ∧
+                                    (∀ (fragment : Fragments.Fragment Symbol),
+                                        result = some fragment → FragmentBound after.counter fragment) ∧
+                                      entered.counter ≤ after.counter
+                  else rows = [])
+                selectedEdges branchRows ∧
+              SourcePruningEnumerationOrdinaryBranches.run scs selectedEdges entered = branchRows.flatten
+  | x, decodedLookup, available, closed, ancestry, entryExact => True
+⊢ match decoded with
+  | InternedConstructorTemplates.Value.node entry storedEdges depth free =>
+    if (scs.any fun sc => EqualityTrie.isTerminal sc.trie) = true then True
+    else
+      ∀ (selectedEdges : List (InternedConstructorTemplates.EdgeValue Symbol Constraint)),
+        (∀ (edge : InternedConstructorTemplates.EdgeValue Symbol Constraint),
+            edge ∈ selectedEdges → edge ∈ storedEdges) →
+          ∃ branchRows,
+            Language.All₂
+                (fun edge rows =>
+                  if arityAllows edge.children.length scs = true then
+                    match SourcePruningEnumerationConstraint.project edge.entry.key.constraint with
+                    | none => rows = [Except.ok (none, entered)]
+                    | some val =>
+                      ∃ action result after,
+                        SourcePruningEnumerationEdgeTraversal.prepare scs edge = some action ∧
+                          Success action entered result after ∧
+                            rows = [Except.ok (some result, after)] ∧
+                              after.counter = after.values.length ∧
+                                PendingRealized heap after ∧
+                                  StorageValid after ∧
+                                    (∀ (fragment : Fragments.Fragment Symbol),
+                                        result = some fragment → FragmentBound after.counter fragment) ∧
+                                      entered.counter ≤ after.counter
+                  else rows = [])
+                selectedEdges branchRows ∧
+              SourcePruningEnumerationOrdinaryBranches.run scs selectedEdges entered = branchRows.flatten
+  | x => True
