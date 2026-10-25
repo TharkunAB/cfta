@@ -1,0 +1,15 @@
+import MicroCFTA.SourcePruningEnumerationRecursion
+set_option pp.maxSteps 1000000
+set_option pp.deepTerms true
+#check MicroCFTA.EnumerationPendingReplacement.setValue_clear_incoming
+#print axioms MicroCFTA.EnumerationPendingReplacement.setValue_clear_incoming
+#check MicroCFTA.EnumerationPendingReplacement.setValue_clear_pending
+#print axioms MicroCFTA.EnumerationPendingReplacement.setValue_clear_pending
+#check MicroCFTA.SourcePruningEnumerationClear.complete
+#print axioms MicroCFTA.SourcePruningEnumerationClear.complete
+#check MicroCFTA.SourcePruningEnumerationRecursion.checkRepeated
+#print axioms MicroCFTA.SourcePruningEnumerationRecursion.checkRepeated
+#check MicroCFTA.SourcePruningEnumerationRecursion.complete
+#print axioms MicroCFTA.SourcePruningEnumerationRecursion.complete
+#check MicroCFTA.SourcePruningEnumerationRecursion.selected_complete
+#print axioms MicroCFTA.SourcePruningEnumerationRecursion.selected_complete

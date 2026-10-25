@@ -1,0 +1,61 @@
+/tmp/mcfta-native-recursion-20261025/native-recursion-strict-1/MicroCFTA/SourcePruningEnumerationRecursion.lean:67:40: error: unexpected token 'protected'; expected rcasesPat
+/tmp/mcfta-native-recursion-20261025/native-recursion-strict-1/MicroCFTA/SourcePruningEnumerationRecursion.lean:67:4: error: Unexpected syntax
+  failed to pretty print term (use 'set_option pp.rawOnError true' for raw representation)
+/tmp/mcfta-native-recursion-20261025/native-recursion-strict-1/MicroCFTA/SourcePruningEnumerationRecursion.lean:63:120: error: unsolved goals
+case neg
+EnumGuard NativeGuard : Type
+heap : InternedConstructorTemplates.State Symbol NativeGuard
+before : EnumerationExpandableIndex.Cached Symbol EnumGuard
+uv handle : Nat
+scs : List Suspended
+value : Value Symbol NativeGuard
+roots : Nat → Nat
+ready : EnumerationDriver.Ready uv before.core
+stored : before.core.values[uv]? = some (UVarValue.unenumerated (some handle) scs)
+realized : PendingRealized heap before.core
+decoded : lookupNode heap handle = some value
+paths : Roots before.core.representatives roots
+counts : EnumerationCanonicalWaiting.Correct roots before.core.values before.waiting
+flags :
+  ∀ (slot : Nat),
+    SourcePruningEnumerationNativeIndex.candidate heap (before.core.values[slot]?.getD UVarValue.eliminated) =
+      some (before.expandable slot)
+boundary : ¬MergedOrdinaryHeight.recursiveBoundary value = true
+⊢ ∃ fuel repeated after,
+    (∀ (extra : Nat),
+        (checkRepeated heap (fuel + extra) uv handle scs before.core).run = [Except.ok (repeated, after.core)]) ∧
+      EnumerationDriver.Ready uv after.core ∧
+        Roots after.core.representatives roots ∧
+          PendingRealized heap after.core ∧
+            EnumerationCanonicalWaiting.Correct roots after.core.values after.waiting ∧
+              (∀ (slot : Nat),
+                  SourcePruningEnumerationNativeIndex.candidate heap
+                      (after.core.values[slot]?.getD UVarValue.eliminated) =
+                    some (after.expandable slot)) ∧
+                (EnumerationReferences.PendingReferences before.core →
+                    EnumerationReferences.PendingReferences after.core) ∧
+                  (∀ (held : Nat),
+                      EnumerationReferences.IncomingAvoid held before.core →
+                        EnumerationReferences.IncomingAvoid held after.core) ∧
+                    (repeated = false →
+                        Frame before.core after.core ∧
+                          after.expandable = before.expandable ∧
+                            after.waiting = before.waiting ∧
+                              after.core.values[uv]? = some (UVarValue.unenumerated (some handle) scs)) ∧
+                      (repeated = true →
+                        MergedOrdinaryHeight.recursiveBoundary value = true ∧
+                          after.core.values[uv]? = some (UVarValue.unenumerated (some handle) []) ∧
+                            after.expandable uv = false ∧
+                              after.waiting = EnumerationCanonicalWaiting.count roots (-1) scs before.waiting ∧
+                                ∃ resolved countFuel,
+                                  Frame before.core resolved ∧
+                                    Success (representative fuel uv) before.core uv resolved ∧
+                                      recursionKey handle scs ∈ resolved.recursionAncestry uv ∧
+                                        Success (setValue uv (UVarValue.unenumerated (some handle) [])) resolved ()
+                                            after.core ∧
+                                          ∀ (extra : Nat),
+                                            SourcePruningEnumerationNativeIndex.write heap (countFuel + extra) uv
+                                                (UVarValue.unenumerated (some handle) []) [] scs
+                                                (EnumerationExpandableIndex.frame resolved before) =
+                                              some after)
+/tmp/mcfta-native-recursion-20261025/native-recursion-strict-1/MicroCFTA/SourcePruningEnumerationRecursion.lean:67:50: error: unexpected token '⟩'; expected 'abbrev', 'axiom', 'builtin_initialize', 'class', 'coinductive', 'def', 'example', 'inductive', 'initialize', 'instance', 'opaque', 'structure' or 'theorem'

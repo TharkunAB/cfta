@@ -1,5 +1,27 @@
 # Public API and source correspondence
 
+## Selected reads and native recursion checks complete
+
+Clearing history and indexes: `0e9d54829`. Native prefix: `b13953d85`.
+The goal stays ACTIVE.
+
+Original selection and initial invariants now derive the actual pending read
+and native recursion check. No successful read or check is supplied. Mu and
+explicit Union use the native boundary test. A false check retains its full
+compression frame and bucket. A repeated key clears the bucket, subtracts
+all lost references from waiting counts and disables the selected slot.
+Both endpoints retain safety and native cache/reference invariants.
+The selected proof uses no early ordinary-entry ancestry update.
+
+All four changed modules, installed public readback and Audit pass. Audit
+checks 76730 dependencies. H6 remains the strongest end-to-end language result.
+Haskell is unchanged. Next: expose the false check's actual compression frame
+in NarrowCache/NarrowContext via the existing framed Action producer, without
+an extra source read. Then compose the pure Right callback and ordinary entry.
+The repeated branch's scheduler restart, fragment history, extraction and
+whole-driver language semantics remain open. No loop termination is proved.
+Details: `lean/notes-current-pruning-enumeration-native-recursion.md`.
+
 ## Actual native narrowing derives caller and indexed caches together
 
 Caller and memos: `d677fd77b`. Combined producer: `6e83025d8`.

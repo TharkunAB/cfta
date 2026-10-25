@@ -70,6 +70,21 @@ Terminal parents retain the existing enumerateNode fallback boundary. Native
 children can still take their terminal dispatcher. No Haskell fix is needed.
 Details: lean/notes-current-pruning-enumeration-native-ordinary.md.
 
+### Native repeated-recursion clearing and source order
+
+Enumeration.hs:993 reads the selected pending value before checking recursion.
+Interned/Type.hs:608 treats both Mu and explicit Union as recursive boundaries.
+The new native guard follows those cases. A repeated key clears the full
+suspended bucket, removes every lost waiting count and disables the slot.
+It restarts selection without narrowing or an oracle call. A false check can
+compress representatives. The proof retains that actual frame and does not
+perform the later ordinary-entry ancestry update early. Stable finite prefix
+execution and native cache invariants are proved from original selection.
+Whole-loop progress and language equivalence of clearing remain open.
+No new Haskell runtime defect or repair is found.
+External action: no patch is proposed for this source observation.
+Details: lean/notes-current-pruning-enumeration-native-recursion.md.
+
 ### Actual native narrowing retains the full caller and memos
 
 The modeled native narrowing producer now derives the full checked Caller
@@ -258,6 +273,28 @@ TH/Generic extraction, valid-position build/read and source codec laws stay open
 
 
 
+
+## Selected reads and native recursion checks complete
+
+Clearing history and indexes: `0e9d54829`. Native prefix: `b13953d85`.
+The goal stays ACTIVE.
+
+Original selection and initial invariants now derive the actual pending read
+and native recursion check. No successful read or check is supplied. Mu and
+explicit Union use the native boundary test. A false check retains its full
+compression frame and bucket. A repeated key clears the bucket, subtracts
+all lost references from waiting counts and disables the selected slot.
+Both endpoints retain safety and native cache/reference invariants.
+The selected proof uses no early ordinary-entry ancestry update.
+
+All four changed modules, installed public readback and Audit pass. Audit
+checks 76730 dependencies. H6 remains the strongest end-to-end language result.
+Haskell is unchanged. Next: expose the false check's actual compression frame
+in NarrowCache/NarrowContext via the existing framed Action producer, without
+an extra source read. Then compose the pure Right callback and ordinary entry.
+The repeated branch's scheduler restart, fragment history, extraction and
+whole-driver language semantics remain open. No loop termination is proved.
+Details: `lean/notes-current-pruning-enumeration-native-recursion.md`.
 
 ## Actual native narrowing derives caller and indexed caches together
 
