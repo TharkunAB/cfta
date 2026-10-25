@@ -1,0 +1,154 @@
+/tmp/mcfta-native-fragment-history-20261025/strict-child-history-1/MicroCFTA/SourcePruningEnumerationChildCompletion.lean:153:12: error: don't know how to synthesize implicit argument `Symbol`
+  @FragmentAvoid (?m.992 held) after.core.representatives held (Fragments.Fragment.hole before.core.counter)
+context:
+width : Nat
+inst✝² : DecidableEq Symbol
+inst✝¹ : DecidableEq (EdgeKey Symbol Constraint)
+inst✝ : DecidableEq Node
+formulas : SourceGuards.Formulas FullSyntax.Formula
+solver : SourceGuards.Entailment FullSyntax.Formula
+inventory : Inventory
+beforeCaller : Caller width
+before : Cached
+checkEmpty : Bool
+bucket : List Suspended
+incoming : Node
+roots : Nat → Nat
+memos : Memos
+initial : Context formulas solver inventory beforeCaller memos
+safe : Safe before.core
+paths : Roots before.core.representatives roots
+counts : EnumerationCanonicalWaiting.Correct roots before.core.values before.waiting
+flags :
+  ∀ (slot : Nat),
+    SourcePruningEnumerationNativeIndex.candidate beforeCaller.checked.native.machine.heap
+        (before.core.values[slot]?.getD UVarValue.eliminated) =
+      some (before.expandable slot)
+realized : PendingRealized beforeCaller.checked.native.machine.heap before.core
+bounded : ∀ (sc : Suspended), sc ∈ bucket → sc.var < before.core.counter
+pending : InputsPending before.core bucket
+available : Available beforeCaller.checked.native.machine.heap incoming
+closed : incoming.free = []
+ranges : Ranges checkEmpty bucket incoming beforeCaller before memos.query
+empty : ¬incoming = Value.empty
+descendants : List Suspended
+partitioned : List.partition (fun sc => EqualityTrie.isTerminal sc.trie) bucket = ([], descendants)
+noHere : (List.partition (fun sc => EqualityTrie.isTerminal sc.trie) bucket).fst = []
+noTerminal : (bucket.any fun sc => EqualityTrie.isTerminal sc.trie) = false
+action : EnumerateM Symbol Constraint Fragment
+k : Nat
+after : Cached
+prepared : SourcePruningEnumerationShallowChild.prepareChild bucket incoming = some action
+rawRun : (action before.core).run = [Except.ok (Fragments.Fragment.hole before.core.counter, after.core)]
+observed :
+  ∀ (extra : Nat),
+    SourcePruningEnumerationChildDispatch.run checkEmpty 0 0 0 0 (k + extra) bucket incoming beforeCaller before
+        memos.query =
+      ((Except.ok (some [Except.ok (Fragments.Fragment.hole before.core.counter, after.core)]), beforeCaller,
+          memos.query, before.core, before.waiting),
+        some after)
+grows : after.core.counter = before.core.counter + 1
+_aligned : after.core.counter = after.core.values.length
+forestSame : after.core.representatives = before.core.representatives
+afterPaths : Roots after.core.representatives roots
+storage : StorageValid after.core
+afterRealized : PendingRealized beforeCaller.checked.native.machine.heap after.core
+afterCounts : EnumerationCanonicalWaiting.Correct roots after.core.values after.waiting
+afterFlags :
+  ∀ (slot : Nat),
+    SourcePruningEnumerationNativeIndex.candidate beforeCaller.checked.native.machine.heap
+        (after.core.values[slot]?.getD UVarValue.eliminated) =
+      some (after.expandable slot)
+bound : FragmentBound after.core.counter (Fragments.Fragment.hole before.core.counter)
+success : Success action before.core (Fragments.Fragment.hole before.core.counter) after.core
+afterSafe : Safe after.core
+origin : EnumeratedOrigin before.core after.core
+protects :
+  ∀ (held : Nat),
+    held < before.core.counter →
+      IsRoot before.core.representatives held → EnumerationDriver.Protected held before.core after.core
+freshPath : UnionFind.Reaches after.core.representatives before.core.counter before.core.counter 1
+index : before.core.counter < after.core.values.length
+value : UVarValue Symbol := ⋯
+stored : after.core.values[before.core.counter]? = some value
+live : value ≠ UVarValue.eliminated
+fragmentPending : PendingFragment after.core (Fragments.Fragment.hole before.core.counter)
+held : Nat
+⊢ Type
+/tmp/mcfta-native-fragment-history-20261025/strict-child-history-1/MicroCFTA/SourcePruningEnumerationChildCompletion.lean:153:59: error: don't know how to synthesize implicit argument `Symbol`
+  @Fragments.Fragment.hole (?m.992 held) before.core.counter
+context:
+width : Nat
+inst✝² : DecidableEq Symbol
+inst✝¹ : DecidableEq (EdgeKey Symbol Constraint)
+inst✝ : DecidableEq Node
+formulas : SourceGuards.Formulas FullSyntax.Formula
+solver : SourceGuards.Entailment FullSyntax.Formula
+inventory : Inventory
+beforeCaller : Caller width
+before : Cached
+checkEmpty : Bool
+bucket : List Suspended
+incoming : Node
+roots : Nat → Nat
+memos : Memos
+initial : Context formulas solver inventory beforeCaller memos
+safe : Safe before.core
+paths : Roots before.core.representatives roots
+counts : EnumerationCanonicalWaiting.Correct roots before.core.values before.waiting
+flags :
+  ∀ (slot : Nat),
+    SourcePruningEnumerationNativeIndex.candidate beforeCaller.checked.native.machine.heap
+        (before.core.values[slot]?.getD UVarValue.eliminated) =
+      some (before.expandable slot)
+realized : PendingRealized beforeCaller.checked.native.machine.heap before.core
+bounded : ∀ (sc : Suspended), sc ∈ bucket → sc.var < before.core.counter
+pending : InputsPending before.core bucket
+available : Available beforeCaller.checked.native.machine.heap incoming
+closed : incoming.free = []
+ranges : Ranges checkEmpty bucket incoming beforeCaller before memos.query
+empty : ¬incoming = Value.empty
+descendants : List Suspended
+partitioned : List.partition (fun sc => EqualityTrie.isTerminal sc.trie) bucket = ([], descendants)
+noHere : (List.partition (fun sc => EqualityTrie.isTerminal sc.trie) bucket).fst = []
+noTerminal : (bucket.any fun sc => EqualityTrie.isTerminal sc.trie) = false
+action : EnumerateM Symbol Constraint Fragment
+k : Nat
+after : Cached
+prepared : SourcePruningEnumerationShallowChild.prepareChild bucket incoming = some action
+rawRun : (action before.core).run = [Except.ok (Fragments.Fragment.hole before.core.counter, after.core)]
+observed :
+  ∀ (extra : Nat),
+    SourcePruningEnumerationChildDispatch.run checkEmpty 0 0 0 0 (k + extra) bucket incoming beforeCaller before
+        memos.query =
+      ((Except.ok (some [Except.ok (Fragments.Fragment.hole before.core.counter, after.core)]), beforeCaller,
+          memos.query, before.core, before.waiting),
+        some after)
+grows : after.core.counter = before.core.counter + 1
+_aligned : after.core.counter = after.core.values.length
+forestSame : after.core.representatives = before.core.representatives
+afterPaths : Roots after.core.representatives roots
+storage : StorageValid after.core
+afterRealized : PendingRealized beforeCaller.checked.native.machine.heap after.core
+afterCounts : EnumerationCanonicalWaiting.Correct roots after.core.values after.waiting
+afterFlags :
+  ∀ (slot : Nat),
+    SourcePruningEnumerationNativeIndex.candidate beforeCaller.checked.native.machine.heap
+        (after.core.values[slot]?.getD UVarValue.eliminated) =
+      some (after.expandable slot)
+bound : FragmentBound after.core.counter (Fragments.Fragment.hole before.core.counter)
+success : Success action before.core (Fragments.Fragment.hole before.core.counter) after.core
+afterSafe : Safe after.core
+origin : EnumeratedOrigin before.core after.core
+protects :
+  ∀ (held : Nat),
+    held < before.core.counter →
+      IsRoot before.core.representatives held → EnumerationDriver.Protected held before.core after.core
+freshPath : UnionFind.Reaches after.core.representatives before.core.counter before.core.counter 1
+index : before.core.counter < after.core.values.length
+value : UVarValue Symbol := ⋯
+stored : after.core.values[before.core.counter]? = some value
+live : value ≠ UVarValue.eliminated
+fragmentPending : PendingFragment after.core (Fragments.Fragment.hole before.core.counter)
+held : Nat
+⊢ Type

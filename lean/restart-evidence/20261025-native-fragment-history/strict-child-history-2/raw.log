@@ -1,0 +1,127 @@
+/tmp/mcfta-native-fragment-history-20261025/strict-child-history-2/MicroCFTA/SourcePruningEnumerationChildCompletion.lean:153:33: error: unexpected token ':='; expected ')', ',' or ':'
+/tmp/mcfta-native-fragment-history-20261025/strict-child-history-2/MicroCFTA/SourcePruningEnumerationChildCompletion.lean:153:26: error: Application type mismatch: The argument
+  Symbol
+has type
+  Type
+of sort `Type 1` but is expected to have type
+  UnionFind.Forest
+of sort `Type` in the application
+  FragmentAvoid Symbol
+/tmp/mcfta-native-fragment-history-20261025/strict-child-history-2/MicroCFTA/SourcePruningEnumerationChildCompletion.lean:151:13: error: Missing cases:
+/tmp/mcfta-native-fragment-history-20261025/strict-child-history-2/MicroCFTA/SourcePruningEnumerationChildCompletion.lean:111:12: error: unsolved goals
+case neg.mk.nil
+width : Nat
+inst✝² : DecidableEq Symbol
+inst✝¹ : DecidableEq (EdgeKey Symbol Constraint)
+inst✝ : DecidableEq Node
+formulas : SourceGuards.Formulas FullSyntax.Formula
+solver : SourceGuards.Entailment FullSyntax.Formula
+inventory : Inventory
+beforeCaller : Caller width
+before : Cached
+checkEmpty : Bool
+bucket : List Suspended
+incoming : Node
+roots : Nat → Nat
+memos : Memos
+initial : Context formulas solver inventory beforeCaller memos
+safe : Safe before.core
+paths : Roots before.core.representatives roots
+counts : EnumerationCanonicalWaiting.Correct roots before.core.values before.waiting
+flags :
+  ∀ (slot : Nat),
+    SourcePruningEnumerationNativeIndex.candidate beforeCaller.checked.native.machine.heap
+        (before.core.values[slot]?.getD UVarValue.eliminated) =
+      some (before.expandable slot)
+realized : PendingRealized beforeCaller.checked.native.machine.heap before.core
+bounded : ∀ (sc : Suspended), sc ∈ bucket → sc.var < before.core.counter
+pending : InputsPending before.core bucket
+available : Available beforeCaller.checked.native.machine.heap incoming
+closed : incoming.free = []
+ranges : Ranges checkEmpty bucket incoming beforeCaller before memos.query
+empty : ¬incoming = Value.empty
+descendants : List Suspended
+partitioned : List.partition (fun sc => EqualityTrie.isTerminal sc.trie) bucket = ([], descendants)
+noHere : (List.partition (fun sc => EqualityTrie.isTerminal sc.trie) bucket).fst = []
+noTerminal : (bucket.any fun sc => EqualityTrie.isTerminal sc.trie) = false
+action : EnumerateM Symbol Constraint Fragment
+k : Nat
+after : Cached
+prepared : SourcePruningEnumerationShallowChild.prepareChild bucket incoming = some action
+rawRun : (action before.core).run = [Except.ok (Fragments.Fragment.hole before.core.counter, after.core)]
+observed :
+  ∀ (extra : Nat),
+    SourcePruningEnumerationChildDispatch.run checkEmpty 0 0 0 0 (k + extra) bucket incoming beforeCaller before
+        memos.query =
+      ((Except.ok (some [Except.ok (Fragments.Fragment.hole before.core.counter, after.core)]), beforeCaller,
+          memos.query, before.core, before.waiting),
+        some after)
+grows : after.core.counter = before.core.counter + 1
+_aligned : after.core.counter = after.core.values.length
+forestSame : after.core.representatives = before.core.representatives
+afterPaths : Roots after.core.representatives roots
+storage : StorageValid after.core
+afterRealized : PendingRealized beforeCaller.checked.native.machine.heap after.core
+afterCounts : EnumerationCanonicalWaiting.Correct roots after.core.values after.waiting
+afterFlags :
+  ∀ (slot : Nat),
+    SourcePruningEnumerationNativeIndex.candidate beforeCaller.checked.native.machine.heap
+        (after.core.values[slot]?.getD UVarValue.eliminated) =
+      some (after.expandable slot)
+bound : FragmentBound after.core.counter (Fragments.Fragment.hole before.core.counter)
+success : Success action before.core (Fragments.Fragment.hole before.core.counter) after.core
+afterSafe : Safe after.core
+origin : EnumeratedOrigin before.core after.core
+protects :
+  ∀ (held : Nat),
+    held < before.core.counter →
+      IsRoot before.core.representatives held → EnumerationDriver.Protected held before.core after.core
+freshPath : UnionFind.Reaches after.core.representatives before.core.counter before.core.counter 1
+index : before.core.counter < after.core.values.length
+value : UVarValue Symbol := after.core.values[before.core.counter]
+stored : after.core.values[before.core.counter]? = some value
+live : value ≠ UVarValue.eliminated
+fragmentPending : PendingFragment after.core (Fragments.Fragment.hole before.core.counter)
+separate : (held : Nat) → held < before.core.counter → IsRoot before.core.representatives held → sorry
+⊢ ∃ r n p h k raw afterCaller after savedQueries final next afterRoots outer waiting,
+    (∀ (extraRepresentative extraNative P H extraIndex : Nat),
+        p ≤ P →
+          h ≤ H →
+            SourcePruningEnumerationChildDispatch.run checkEmpty (r + extraRepresentative) (n + extraNative) P H
+                (k + extraIndex) bucket incoming beforeCaller before memos.query =
+              ((Except.ok (some raw), afterCaller, savedQueries, outer, waiting), some after)) ∧
+      Post formulas solver next beforeCaller afterCaller final ∧
+        final.query = savedQueries ∧
+          before.core.counter ≤ after.core.counter ∧
+            Roots after.core.representatives afterRoots ∧
+              StorageValid after.core ∧
+                PendingRealized afterCaller.checked.native.machine.heap after.core ∧
+                  EnumerationCanonicalWaiting.Correct afterRoots after.core.values after.waiting ∧
+                    (∀ (slot : Nat),
+                        SourcePruningEnumerationNativeIndex.candidate afterCaller.checked.native.machine.heap
+                            (after.core.values[slot]?.getD UVarValue.eliminated) =
+                          some (after.expandable slot)) ∧
+                      EnumeratedOrigin before.core after.core ∧
+                        (∀ (held : Nat),
+                            held < before.core.counter →
+                              IsRoot before.core.representatives held →
+                                Avoids before.core.representatives held bucket →
+                                  EnumerationDriver.Protected held before.core after.core) ∧
+                          (∀ (allowed : Nat → Prop),
+                              EnumerationReferences.ReferencesAllowed allowed before.core →
+                                EnumerationReferences.InputsAllowed allowed bucket →
+                                  EnumerationReferences.ReferencesAllowed allowed after.core) ∧
+                            (EnumerationReferences.PendingReferences before.core →
+                                EnumerationReferences.PendingReferences after.core) ∧
+                              (raw = [] ∨
+                                ∃ fragment,
+                                  raw = [Except.ok (fragment, after.core)] ∧
+                                    Safe after.core ∧
+                                      FragmentBound after.core.counter fragment ∧
+                                        PendingFragment after.core fragment ∧
+                                          ∀ (held : Nat),
+                                            held < before.core.counter →
+                                              IsRoot before.core.representatives held →
+                                                Avoids before.core.representatives held bucket →
+                                                  FragmentAvoid after.core.representatives held fragment)
+/tmp/mcfta-native-fragment-history-20261025/strict-child-history-2/MicroCFTA/SourcePruningEnumerationChildCompletion.lean:110:6: error: Alternative `cons` has not been provided

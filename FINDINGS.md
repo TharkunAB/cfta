@@ -70,6 +70,20 @@ Terminal parents retain the existing enumerateNode fallback boundary. Native
 children can still take their terminal dispatcher. No Haskell fix is needed.
 Details: lean/notes-current-pruning-enumeration-native-ordinary.md.
 
+### Native fragment dependencies survive captured finalization
+
+The admitted native captured-edge model now derives pending targets and
+protected-parent separation for returned fragment holes. Child traversal
+retains both facts through actual suffix states. Finalization uses the same
+captured raw slot and the same indexed write witness. It derives pending
+targets after that write and frontier+1 from any initial Stratified order.
+No producer input, runtime worker or older completion type changes.
+This closes fragment-history preservation for the admitted captured-edge
+path. Alternative receipt integration and whole-driver semantics remain open.
+It identifies no Haskell runtime defect. External action: no new patch is
+proposed. Keep the external repair table and Sized documentation repair above.
+Details: lean/notes-current-pruning-enumeration-fragment-history.md.
+
 ### Returned callback pending IDs stay allocated
 
 The modeled concrete Left callback now preserves the allocation bound for
@@ -333,6 +347,30 @@ TH/Generic extraction, valid-position build/read and source codec laws stay open
 
 
 
+
+## Native captured edges preserve fragment dependency history
+
+Child and traversal history: `9c3091a3a`. Native finalization: `4b23cd411`.
+The goal stays ACTIVE.
+
+Admitted native child completion now derives pending targets for returned
+holes and separation from protected parent classes. Traversal retains
+both facts through the actual successful suffix. Selected-edge completion
+retains them after residual recording. The same actual captured-slot write
+then preserves pending targets and advances every initial Stratified order
+to frontier+1. No new producer admission input is added. All four older
+complete interfaces retain their exact declaration types.
+
+All six changed modules pass strict checking. Installed public readback
+and Audit pass. Audit checks 76825 dependencies. H6 remains the strongest
+end-to-end language result. Haskell and Audit source stay unchanged.
+Next: propagate these histories through actual alternative receipts and
+selected-prefix composition, then run concrete Left callbacks at each
+receipt's own cache/Caller/memos. Preserve initial stratification through
+the preceding read, guard and narrowing steps. Native Graph classification,
+initial-only capacity, scheduler restart, forcing, extraction and whole-driver
+language semantics remain open. Rejected caches gain no Safe/rank promise.
+Details: `lean/notes-current-pruning-enumeration-fragment-history.md`.
 
 ## Concrete callbacks preserve allocated pending IDs
 
