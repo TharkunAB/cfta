@@ -133,7 +133,8 @@ tree automata of `cfta`, with QuickCheck integration.
   builds each class from smaller ones; `sized` gives the same sequence with
   the count table, read from the original rows, when the automaton has no
   constraint and no ambiguity. A bottom-up deterministic automaton, such as
-  an e-graph, has no ambiguity, and a linear check finds it. A guard
+  an e-graph, has no ambiguity. A set of transition keys checks this before
+  the product check. A guard
   beyond equality constraints is `ResidualGuard`. `sizedUpTo` builds the
   classes up to a size bound with a solver that decides every guard on each
   built term, so a liquid automaton has an exact route that needs no
