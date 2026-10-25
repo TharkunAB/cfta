@@ -5,7 +5,19 @@ module Data.CFTA.EGraphSpec (spec) where
 import Control.Monad (forM_)
 import qualified Data.Set as Set
 import Test.Hspec (Spec, describe, it, shouldBe)
-import Test.QuickCheck (Gen, choose, elements, forAll, frequency, oneof, property, vectorOf, (===))
+import Test.QuickCheck (
+    Gen,
+    choose,
+    counterexample,
+    elements,
+    forAll,
+    frequency,
+    oneof,
+    property,
+    vectorOf,
+    (===),
+    (==>),
+ )
 
 import qualified Data.CFTA as FTA
 import Data.CFTA.EGraph
@@ -82,6 +94,13 @@ genAbstraction graph@(Graph terms _) = elements terms >>= go
         Just s -> frequency [(2, pure p), (1, pure (PSorted (ground s) p)), (1, pure (PSorted (SVar (show s)) p))]
     ground (Node s ss) = SNode s (map ground ss)
 
+termSize :: Term String -> Int
+termSize (Node _ ts) = 1 + sum (map termSize ts)
+
+termDepth :: Term String -> Int
+termDepth (Node _ []) = 0
+termDepth (Node _ ts) = 1 + maximum (map termDepth ts)
+
 -- The sum x1 + ... + xn, associated to the left.
 sumOf :: Int -> Term String
 sumOf n = foldl1 (\a b -> Node "+" [a, b]) [Node ('x' : show i) [] | i <- [1 .. n]]
@@ -100,6 +119,17 @@ spec = describe "Data.CFTA.EGraph" $ do
         property $
             forAll genGraph $ \graph -> forAll (oneof [genPattern 2, genAbstraction graph]) $ \p ->
                 let g = build graph in Set.fromList (ematch g p) === Set.fromList (ematchByIntersection g p)
+    it "extracts a term of the least size of the language of an e-class" $
+        property $
+            forAll genGraph $ \graph@(Graph terms _) -> forAll (elements terms) $ \t ->
+                let g = build graph
+                    (c, _) = addTermWith (\(Sorted s f ts) -> (s, f, ts)) t g
+                 in case (extract (\_ ks -> 1 + sum ks) g c, classAutomaton g c) of
+                        (Just (k, u), Right automaton) ->
+                            -- The terms of depth at most k, which hold every term of size k.
+                            let shallow = take 20001 (takeWhile ((<= k) . termDepth) (FTA.terms automaton))
+                             in length shallow <= 20000 ==> (k, termSize u, minimum (map termSize shallow)) === (k, k, k)
+                        (e, a) -> counterexample (show (fmap fst e, either show (const "an automaton") a)) False
     it "holds the n! * Catalan(n - 1) terms of an AC sum of n variables, in 3^n - 2^(n+1) + n + 1 e-nodes" $
         forM_ [(3, 12), (4, 120), (5, 1680)] $ \(n, count) -> do
             let (c, g) = addTerm (sumOf n) emptyEGraph

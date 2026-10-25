@@ -78,6 +78,8 @@ module Data.CFTA.EGraph (
     -- * The terms of an e-class
     classAutomaton,
     classAutomatonWith,
+    analyse,
+    extract,
 
     -- * Patterns and rules
     Pattern (..),
@@ -107,7 +109,7 @@ import qualified Data.IntMap.Strict as IntMap
 import qualified Data.IntSet as IntSet
 import Data.List (minimumBy, sortOn, (!?))
 import qualified Data.Map.Strict as Map
-import Data.Maybe (isJust)
+import Data.Maybe (isJust, listToMaybe)
 import Data.Ord (comparing)
 
 import qualified Data.CFTA as FTA
@@ -335,6 +337,63 @@ rebuild g0 = case pending g0 of
                     }
       where
         ClassId i' = find g (ClassId i)
+
+{- | An e-class analysis: for each e-class, the join of the data of its
+e-nodes. The data of an e-node comes from its symbol and the data of its
+children. This is the least fixed point of an evaluation of the e-graph
+automaton from the leaves up, as cfta computes the productive states of an
+automaton: an e-class whose e-nodes all need an e-class without data has no
+data. The join must be associative, commutative, and idempotent, and must
+have no infinite ascending chain, so that the fixed point exists.
+-}
+analyse :: (Eq d) => (f -> [d] -> d) -> (d -> d -> d) -> EGraph s f -> ClassId -> Maybe d
+analyse make join g = \c -> let ClassId i = find g c in IntMap.lookup i final
+  where
+    final =
+        go
+            (IntMap.keys (IntMap.filter (any (\(ENode _ _ cs) -> null cs) . HashSet.toList . classNodes) (classes g)))
+            IntMap.empty
+    -- A worklist of e-classes whose data can grow.
+    go [] known = known
+    go (i : rest) known = case IntMap.lookup i (classes g) of
+        Nothing -> go rest known
+        Just e ->
+            let values =
+                    [ make f ds
+                    | ENode _ f cs <- canonicalNodes' e
+                    , Just ds <- [traverse (\(ClassId j) -> IntMap.lookup j known) (map (find g) cs)]
+                    ]
+             in case values of
+                    [] -> go rest known
+                    v : vs ->
+                        let new = foldl' join v vs
+                            old = IntMap.lookup i known
+                            new' = maybe new (join new) old
+                         in if Just new' == old
+                                then go rest known
+                                else go ([j | (_, owner) <- classUsers e, let { ClassId j = find g owner }] ++ rest) (IntMap.insert i new' known)
+    canonicalNodes' = HashSet.toList . classNodes
+
+{- | The cheapest term of an e-class, with its cost. The cost of a term
+comes from its symbol and the costs of its children, and must be greater
+than each of them, as @1 + sum@ is, so that the cheapest term is finite.
+-}
+extract :: (Ord c) => (f -> [c] -> c) -> EGraph s f -> ClassId -> Maybe (c, Term f)
+extract cost g c0 = do
+    (k, _) <- best (find g c0)
+    t <- build (find g c0)
+    Just (k, t)
+  where
+    costOf = analyse cost min g
+    best c = do
+        k <- costOf c
+        e <- let ClassId i = find g c in IntMap.lookup i (classes g)
+        node <-
+            listToMaybe [n | n@(ENode _ f cs) <- HashSet.toList (classNodes e), Just ks <- [traverse costOf cs], cost f ks == k]
+        Just (k, node)
+    build c = do
+        (_, ENode _ f cs) <- best c
+        Node f <$> traverse (build . find g) cs
 
 -- | The number of e-classes.
 eClassCount :: EGraph s f -> Int
