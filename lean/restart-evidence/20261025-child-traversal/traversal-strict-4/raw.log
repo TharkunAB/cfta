@@ -1,0 +1,79 @@
+/tmp/mcfta-child-traversal-20261025/traversal-strict-4/MicroCFTA/SourcePruningEnumerationChildTraversal.lean:131:12: error: Tactic `rfl` failed: The left-hand side
+  match run checkEmpty representativeFuel nativeFuel p h indexFuel rest reachedCaller✝ after✝ savedQueries✝ with
+  | Result.complete fragments finalCaller finalQueries final =>
+    Result.complete (fragment✝ :: fragments) finalCaller finalQueries final
+  | Result.stopped completedPrefix observation candidate =>
+    Result.stopped (fragment✝ :: completedPrefix) observation candidate
+is not definitionally equal to the right-hand side
+  Result.stopped [] observation none
+
+case h_1
+width : Nat
+inst✝² : DecidableEq Symbol
+inst✝¹ : DecidableEq (EdgeKey Symbol Constraint)
+inst✝ : DecidableEq Node
+checkEmpty : Bool
+representativeFuel nativeFuel p h indexFuel : Nat
+value : Node
+bucket : List Suspended
+rest : List (Node × List Suspended)
+beforeCaller : Caller width
+before : Cached
+queries : Queries
+observation : SourcePruningEnumerationChildDispatch.Observation width
+observed :
+  SourcePruningEnumerationChildDispatch.run checkEmpty representativeFuel nativeFuel p h indexFuel bucket value
+      beforeCaller before queries =
+    (observation, none)
+x✝ : SourcePruningEnumerationChildDispatch.Observation width × Option Cached
+fragment✝ : Fragment
+_returned✝ : EnumerationState.State Symbol Constraint
+reachedCaller✝ : Caller width
+savedQueries✝ : Queries
+_outer✝ : EnumerationState.State Symbol Constraint
+_waiting✝ : EnumerationWaitingIndex.Waiting
+after✝ : Cached
+heq✝ :
+  (observation, none) =
+    ((Except.ok (some [Except.ok (fragment✝, _returned✝)]), reachedCaller✝, savedQueries✝, _outer✝, _waiting✝),
+      some after✝)
+⊢ (match run checkEmpty representativeFuel nativeFuel p h indexFuel rest reachedCaller✝ after✝ savedQueries✝ with
+    | Result.complete fragments finalCaller finalQueries final =>
+      Result.complete (fragment✝ :: fragments) finalCaller finalQueries final
+    | Result.stopped completedPrefix observation candidate =>
+      Result.stopped (fragment✝ :: completedPrefix) observation candidate) =
+    Result.stopped [] observation none
+/tmp/mcfta-child-traversal-20261025/traversal-strict-4/MicroCFTA/SourcePruningEnumerationChildTraversal.lean:131:12: error: Tactic `rfl` failed: The left-hand side
+  Result.stopped [] observation✝ candidate✝
+is not definitionally equal to the right-hand side
+  Result.stopped [] observation none
+
+case h_2
+width : Nat
+inst✝² : DecidableEq Symbol
+inst✝¹ : DecidableEq (EdgeKey Symbol Constraint)
+inst✝ : DecidableEq Node
+checkEmpty : Bool
+representativeFuel nativeFuel p h indexFuel : Nat
+value : Node
+bucket : List Suspended
+rest : List (Node × List Suspended)
+beforeCaller : Caller width
+before : Cached
+queries : Queries
+observation : SourcePruningEnumerationChildDispatch.Observation width
+observed :
+  SourcePruningEnumerationChildDispatch.run checkEmpty representativeFuel nativeFuel p h indexFuel bucket value
+      beforeCaller before queries =
+    (observation, none)
+x✝¹ : SourcePruningEnumerationChildDispatch.Observation width × Option Cached
+observation✝ : SourcePruningEnumerationChildDispatch.Observation width
+candidate✝ : Option Cached
+x✝ :
+  ∀ (fragment : Fragment) (_returned : EnumerationState.State Symbol Constraint) (reachedCaller : Caller width)
+    (savedQueries : Queries) (_outer : EnumerationState.State Symbol Constraint)
+    (_waiting : EnumerationWaitingIndex.Waiting) (after : Cached),
+    observation✝ = (Except.ok (some [Except.ok (fragment, _returned)]), reachedCaller, savedQueries, _outer, _waiting) →
+      candidate✝ = some after → False
+heq✝ : (observation, none) = (observation✝, candidate✝)
+⊢ Result.stopped [] observation✝ candidate✝ = Result.stopped [] observation none

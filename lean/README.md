@@ -1,5 +1,23 @@
 # cfta formal model
 
+## Ordered native child traversal
+
+Core agreement: `48c9d2f325c36225e9a2d9ef589636fd22b55af5`.
+Traversal: `14c03485bd007c318da0093f2d4b4ed7593a0a6f`. The goal stays ACTIVE.
+
+The new worker threads the reached caller, queries and actual post-write cache
+in child order. Successful singleton caches have exactly the raw row core at
+all fixed bounds. Complete and stopped results retain actual child traces.
+Missing caches stop explicitly with the exact observation and completed prefix.
+These are structural trace results. Admitted traversal completion remains open.
+
+Strict checks, installed public readback and Audit pass. The audit checks
+76594 theorem dependencies. H6 remains the strongest end-to-end theorem.
+Next: compose genuine per-child completion, heap/root/waiting transport and
+conditional numeric admission, then edge residual and captured-slot final write.
+Full typing/pruning and Haskell correspondence remain open.
+Details: `lean/notes-current-pruning-enumeration-child-traversal.md`.
+
 ## Native child safety and retained pending inputs
 
 Terminal origin: `2c669906bad15602e34f6dd72135e92a7a1c7aa5`.
