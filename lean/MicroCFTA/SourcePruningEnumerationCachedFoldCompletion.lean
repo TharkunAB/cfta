@@ -57,18 +57,22 @@ theorem complete
       (∀ (slot : Nat), before.core.values[slot]? = some .eliminated →
         after.core.values[slot]? = some .eliminated) ∧
       (rows = [((), after)] → ∀ source ∈ sources, source ≠ target →
-        after.core.values[source]? = some .eliminated) := by
+        after.core.values[source]? = some .eliminated) ∧
+      (∀ (slot : Nat), slot ∉ sources → slot ≠ target →
+        after.core.values[slot]? = before.core.values[slot]?) := by
   induction sources generalizing inventory beforeCaller before memos with
   | nil =>
     refine ⟨0, 0, 0, [((), before)], beforeCaller, memos.query, memos, inventory, before,
       ?_, Post.refl initial, rfl, rfl, rfl, paths, storage, realized, counts, rfl,
-      flags, .inr rfl, targetPending, ?_, ?_⟩
+      flags, .inr rfl, targetPending, ?_, ?_, ?_⟩
     · intro extra P H _largeP _largeH
       rfl
     · intro slot oldEliminated
       exact oldEliminated
     · intro _completed source member _different
       cases member
+    · intro _slot _outside _different
+      rfl
   | cons source rest ih =>
     have slots : source = target ∨ before.core.values[source]? = some .eliminated ∨
         ∃ (sourceNode targetNode : Option Nat) (sourceScs targetScs : List EnumerationState.Suspended),
@@ -93,11 +97,13 @@ theorem complete
           headAfter.core.values[slot]? = some .eliminated) ∧
         (source ≠ target → headRows = [((), headAfter)] →
           headAfter.core.values[source]? = some .eliminated) ∧
-        (headRows = [] → headAfter = before) := by
+        (headRows = [] → headAfter = before) ∧
+        (∀ (slot : Nat), slot ≠ source → slot ≠ target →
+          headAfter.core.values[slot]? = before.core.values[slot]?) := by
       by_cases sameId : source = target
       · obtain ⟨rowsSame, afterSame, _callerSame, _finalSame, _nextSame⟩ := noOpResult (Or.inl sameId)
         rw [rowsSame, afterSame]
-        refine ⟨?_, .inr rfl, targetPending, ?_, ?_, ?_, ?_⟩
+        refine ⟨?_, .inr rfl, targetPending, ?_, ?_, ?_, ?_, ?_⟩
         · simp only [List.map_cons, List.map_nil, SourcePruningEnumerationCachedAdapter.adapt,
             ite_eq_left sameId]
         · intro remaining member
@@ -108,10 +114,12 @@ theorem complete
           exact False.elim (different sameId)
         · intro rejectedRows
           cases rejectedRows
+        · intro _slot _sourceDifferent _targetDifferent
+          rfl
       · by_cases sourceEliminated : before.core.values[source]? = some .eliminated
         · obtain ⟨rowsSame, afterSame, _callerSame, _finalSame, _nextSame⟩ := noOpResult (Or.inr sourceEliminated)
           rw [rowsSame, afterSame]
-          refine ⟨?_, .inr rfl, targetPending, ?_, ?_, ?_, ?_⟩
+          refine ⟨?_, .inr rfl, targetPending, ?_, ?_, ?_, ?_, ?_⟩
           · simp only [List.map_cons, List.map_nil, SourcePruningEnumerationCachedAdapter.adapt,
               ite_eq_right sameId, sourceEliminated]
           · intro remaining member
@@ -122,6 +130,8 @@ theorem complete
             exact sourceEliminated
           · intro rejectedRows
             cases rejectedRows
+          · intro _slot _sourceDifferent _targetDifferent
+            rfl
         · obtain ⟨_sourceNode, _targetNode, merged, sourceScs, targetScs, sourceStored,
             targetStored, _computed, selectedResult, _optionalOrigin, _queriedOrigin⟩ :=
               liveResult sameId sourceEliminated
@@ -129,7 +139,7 @@ theorem complete
           · rw [ite_eq_left rejected] at selectedResult
             obtain ⟨rowsSame, afterSame⟩ := selectedResult
             rw [rowsSame, afterSame]
-            refine ⟨rfl, .inl rfl, targetPending, ?_, ?_, ?_, ?_⟩
+            refine ⟨rfl, .inl rfl, targetPending, ?_, ?_, ?_, ?_, ?_⟩
             · intro remaining member
               exact selected remaining (by simp [member])
             · intro slot oldEliminated
@@ -137,6 +147,8 @@ theorem complete
             · intro _different _completed
               cases _completed
             · intro _rejectedRows
+              rfl
+            · intro _slot _sourceDifferent _targetDifferent
               rfl
           · rw [ite_eq_right rejected] at selectedResult
             obtain ⟨rowsSame, coreSame, sourceAfter, targetAfter, sourceFlag, otherFlags⟩ := selectedResult
@@ -169,7 +181,7 @@ theorem complete
             obtain ⟨pendingTarget, keptSlots⟩ := EnumerationCompleteness.assimilated_pending
               before.core target source merged (sourceScs ++ targetScs) (Ne.symm sameId)
                 targetInside sourceInside
-            refine ⟨?_, .inr rowsSame, ?_, ?_, ?_, ?_, ?_⟩
+            refine ⟨?_, .inr rowsSame, ?_, ?_, ?_, ?_, ?_, ?_⟩
             · rw [rowsSame]
               simp only [List.map_cons, List.map_nil, SourcePruningEnumerationCachedAdapter.adapt,
                 ite_eq_right sameId, sourceStored, targetAfter, Option.bind_some, classified, Option.map_some]
@@ -195,20 +207,26 @@ theorem complete
             · intro rejectedRows
               rw [rowsSame] at rejectedRows
               cases rejectedRows
+            · intro slot sourceDifferent targetDifferent
+              rw [coreSame]
+              exact assimilation_frame before.core target source slot
+                (.unenumerated merged (sourceScs ++ targetScs)) targetDifferent sourceDifferent
     rcases headFacts with ⟨headAdapted, headShape, headTarget, headSelected, headEliminated,
-      headSource, headRejectedSame⟩
+      headSource, headRejectedSame, headFrame⟩
     rcases headShape with headRejected | headCompleted
     · obtain rfl := (headRejectedSame headRejected).symm
       refine ⟨headFuel, headP, headH, [], headCaller, headQueries, headMemos, headInventory,
         before, ?_, headPost, headQuerySame, headCounter, headRepresentatives, headPaths,
         headStorage, headRealized, headCounts, headWaiting, headFlags, .inl rfl,
-        headTarget, headEliminated, ?_⟩
+        headTarget, headEliminated, ?_, ?_⟩
       · intro extra P H largeP largeH
         simp only [SourcePruningEnumerationCachedFold.run, SourcePruningEnumerationCachedAdapter.run,
           headRun extra P H largeP largeH, rawCached, headRejected, List.map_nil,
           SourcePruningEnumerationCachedAdapter.adapt]
       · intro completed
         cases completed
+      · intro _slot _outside _different
+        rfl
     ·
       have tailRanges : SourcePruningEnumerationFold.Ranges checkEmpty rest
           headCaller headAfter.core target headMemos.query := by
@@ -219,7 +237,7 @@ theorem complete
       obtain ⟨tailFuel, tailP, tailH, tailRows, tailCaller, tailQueries, tailMemos, tailInventory,
         tailAfter, tailRun, tailPost, tailQuerySame, tailCounter, tailRepresentatives, tailPaths,
         tailStorage, tailRealized, tailCounts, tailWaiting, tailFlags, tailShape, tailTarget,
-        tailEliminated, tailCompleted⟩ :=
+        tailEliminated, tailCompleted, tailFrame⟩ :=
           ih headInventory headCaller headAfter headMemos headPost.context headStorage headRealized
             headPaths headCounts headFlags headTarget headSelected tailRanges
       have headAt : ∀ extra P H, max headP tailP ≤ P → max headH tailH ≤ H →
@@ -246,7 +264,7 @@ theorem complete
         tailQueries, tailMemos, tailInventory, tailAfter, ?_, headPost.trans tailPost,
         tailQuerySame, tailCounter.trans headCounter, tailRepresentatives.trans headRepresentatives,
         tailPaths, tailStorage, tailRealized, tailCounts, tailWaiting.trans headWaiting,
-        tailFlags, tailShape, tailTarget, ?_, ?_⟩
+        tailFlags, tailShape, tailTarget, ?_, ?_, ?_⟩
       · intro extra P H largeP largeH
         rw [SourcePruningEnumerationCachedFold.run, headAt extra P H largeP largeH]
         simp only [headCompleted, List.map_cons, List.map_nil]
@@ -261,5 +279,11 @@ theorem complete
         · subst remaining
           exact tailEliminated source (headSource different headCompleted)
         · exact tailCompleted completed remaining memberRest different
+      · intro slot outside different
+        have headDifferent : slot ≠ source := by
+          intro same
+          exact outside (List.mem_cons.mpr (.inl same))
+        have tailOutside : slot ∉ rest := fun member => outside (List.mem_cons_of_mem source member)
+        exact (tailFrame slot tailOutside different).trans (headFrame slot headDifferent different)
 
 end MicroCFTA.SourcePruningEnumerationCachedFoldCompletion

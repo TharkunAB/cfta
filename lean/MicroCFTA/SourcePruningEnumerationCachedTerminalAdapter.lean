@@ -167,6 +167,45 @@ theorem erase
                             | none => rfl
                             | some incomingRaw => rfl'
 
+/-- The recorded root map and write frame retain every separate held class and slot. -/
+theorem protects
+    (before after : EnumerationState.State Symbol Constraint)
+    (roots : Nat → Nat) (first : Suspended) (rest : List Suspended)
+    (recorded : List Nat) (winner : Nat)
+    (paths : Roots before.representatives roots)
+    (recordedSame : recorded = (first :: rest).map (fun sc => roots sc.var))
+    (winnerMember : winner ∈ recorded)
+    (afterPaths : Roots after.representatives (EnumerationCanonicalUnion.mergedRoots roots recorded winner))
+    (values : ∀ (slot : Nat), slot ∉ recorded → after.values[slot]? = before.values[slot]?)
+    (held : Nat) (root : IsRoot before.representatives held)
+    (avoids : Avoids before.representatives held (first :: rest)) :
+    EnumerationDriver.Protected held before after := by
+  have fixed : roots held = held := (root_iff _ roots paths held).mp root
+  have outside : held ∉ recorded := by
+    intro member
+    rw [recordedSame] at member
+    obtain ⟨sc, scMember, named⟩ := List.mem_map.mp member
+    exact avoids sc scMember ((class_iff _ roots paths held sc.var).mpr (fixed.trans named.symm))
+  refine ⟨values held outside, ?_, ?_⟩
+  · apply (root_iff _ _ afterPaths held).mpr
+    simp only [EnumerationCanonicalUnion.mergedRoots, fixed, ite_eq_right outside]
+  · intro uv
+    rw [class_iff _ _ afterPaths held uv, class_iff _ roots paths held uv]
+    by_cases selected : roots uv ∈ recorded
+    · simp only [EnumerationCanonicalUnion.mergedRoots, fixed, ite_eq_right outside,
+        ite_eq_left selected]
+      constructor
+      · intro same
+        exfalso
+        apply outside
+        simpa only [same] using winnerMember
+      · intro same
+        exfalso
+        apply outside
+        simpa only [same] using selected
+    · simp only [EnumerationCanonicalUnion.mergedRoots, fixed, ite_eq_right outside,
+        ite_eq_right selected]
+
 /-- Genuine admitted inputs produce the exact terminal observation and cache. -/
 theorem complete
     [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Constraint)] [DecidableEq Node]
@@ -253,6 +292,8 @@ theorem complete
         folded.core.values[slot]? = some .eliminated) ∧
       (foldRows = [((), folded)] → ∀ source ∈ recorded, source ≠ winner →
         folded.core.values[source]? = some .eliminated) ∧
+      (∀ (slot : Nat), slot ∉ recorded → folded.core.values[slot]? = before.core.values[slot]?) ∧
+      (foldRows = [((), folded)] → Safe folded.core) ∧
       (∀ extraRepresentative extraNative P H, p ≤ P → h ≤ H →
         SourcePruningEnumerationTerminal.run checkEmpty (r + extraRepresentative) (n + extraNative) P H
           first rest before.waiting beforeCaller before.core incoming incomingScs memos.query =
@@ -270,6 +311,11 @@ theorem complete
       (∀ (slot : Nat), SourcePruningEnumerationNativeIndex.candidate
         afterCaller.checked.native.machine.heap
         ((resultCache.core.values[slot]?).getD .eliminated) = some (resultCache.expandable slot)) ∧
+      (∀ (slot : Nat), slot ∉ recorded → resultCache.core.values[slot]? = before.core.values[slot]?) ∧
+      (raw ≠ [] → Safe resultCache.core) ∧
+      (∀ (held : Nat), IsRoot before.core.representatives held →
+        Avoids before.core.representatives held (first :: rest) →
+        EnumerationDriver.Protected held before.core resultCache.core) ∧
       (foldRows = [] → resultCache = folded) ∧
       (foldRows = [] → raw = [] ∧ afterCaller = foldCaller ∧ savedQueries = foldQueries ∧
         outer = folded.core ∧ final = foldFinal ∧ next = foldInventory) ∧
@@ -336,6 +382,7 @@ theorem complete
     prefixRoots, prefixCounts, joinedFlags, cachedFoldRun, foldRun, foldShape, foldPost,
     foldQuerySame, foldCounter, foldForest, foldPaths, foldStorage, foldRealized, foldedRoot,
     foldPending, foldCounts, foldWaiting, foldFlags, foldEliminated, foldCompleted,
+    foldedFrame, foldedSafe,
     terminalRun, post, querySame, rejectedBranch, completedBranch⟩ :=
     SourcePruningEnumerationCachedTerminal.complete formulas solver inventory beforeCaller before
       checkEmpty first rest incoming incomingScs roots memos initial safe paths counts flags
@@ -349,15 +396,20 @@ theorem complete
       prefixRoots, prefixCounts, joinedFlags, cachedFoldRun, foldRun, .inl rfl, foldPost,
       foldQuerySame, foldCounter, foldForest, foldPaths, foldStorage, foldRealized, foldedRoot,
       foldPending, foldCounts, foldWaiting, foldFlags, foldEliminated, foldCompleted,
+      foldedFrame, foldedSafe,
       terminalRun, post, querySame, ?_,
       (by simpa only [congrArg EnumerationState.State.counter joinedSame] using foldCounter), foldPaths,
-      foldStorage, ?_, foldCounts, ?_, ?_, rejectedBranch, ?_⟩
+      foldStorage, ?_, foldCounts, ?_, foldedFrame, ?_,
+      (protects before.core folded.core roots first rest recorded winner paths recordedSame
+        winnerMember foldPaths foldedFrame), ?_, rejectedBranch, ?_⟩
     · intro extraRepresentative extraNative P H extraIndex enoughP enoughH
       rw [rawNil, callerSame, queriesSame, outerSame]
       simp only [run, ite_eq_right nonempty, prefixRun extraRepresentative,
         ← joinedFlagsSame, cachedFoldRun extraNative P H enoughP enoughH, List.map_nil]
     · simpa only [callerSame] using foldRealized
     · simpa only [callerSame] using foldFlags
+    · intro survives
+      exact (survives rawNil).elim
     · intro isRejected
       rfl
     · intro isCompleted
@@ -396,15 +448,38 @@ theorem complete
       · simp only [ite_eq_right empty, SourcePruningEnumerationIncomingCacheAdapter.adapt,
           afterStored, Option.bind_some]
         exact cacheRun extraIndex
+    have resultFrame : ∀ (slot : Nat), slot ∉ recorded →
+        after.core.values[slot]? = before.core.values[slot]? := by
+      intro slot outside
+      have different : slot ≠ winner := fun same => outside (same ▸ winnerMember)
+      simpa only [afterSame, List.getElem?_set_ne (Ne.symm different), frame.values] using
+        foldedFrame slot outside
+    have resultSafe : Safe after.core := by
+      refine ⟨afterStorage, ?_⟩
+      intro slot value stored
+      by_cases same : slot = winner
+      · subst slot
+        have valueSame : value = .unenumerated (some handle) (incomingScs ++ oldScs) :=
+          Option.some.inj (stored.symm.trans afterStored)
+        have root : IsRoot after.core.representatives winner :=
+          (root_iff _ _ afterPaths winner).mpr ((root_iff _ _ foldPaths winner).mp foldedRoot)
+        exact ⟨fun _ => root, fun _ => by simp only [valueSame, ne_eq, reduceCtorEq, not_false_eq_true]⟩
+      · have oldStored : folded.core.values[slot]? = some value := by
+          simpa only [afterSame, List.getElem?_set_ne (Ne.symm same), frame.values] using stored
+        exact ((foldedSafe rfl).2 slot value oldStored).trans
+          ((root_iff _ _ foldPaths slot).trans (root_iff _ _ afterPaths slot).symm)
     refine ⟨r, n, p, h, incomingK, recorded, winner, joined, [((), folded)], foldCaller,
       foldQueries, foldFinal, foldInventory, folded, raw, afterCaller, outer, savedQueries,
       final, next, after, prefixRun, recordedSame, winnerMember, movedSame, joinedSame,
       joinedFlagsSame, prefixRoots, prefixCounts, joinedFlags, cachedFoldRun, foldRun,
       .inr rfl, foldPost, foldQuerySame, foldCounter, foldForest, foldPaths, foldStorage,
       foldRealized, foldedRoot, foldPending, foldCounts, foldWaiting, foldFlags, foldEliminated,
-      foldCompleted, terminalRun, post, querySame, ?_,
+      foldCompleted, foldedFrame, foldedSafe, terminalRun, post, querySame, ?_,
       (by simpa only [congrArg EnumerationState.State.counter joinedSame] using afterCounter.trans foldCounter),
-      afterPaths, afterStorage, afterRealized, afterCounts, afterFlags, ?_, rejectedBranch, ?_⟩
+      afterPaths, afterStorage, afterRealized, afterCounts, afterFlags, resultFrame,
+      (fun _ => resultSafe),
+      (protects before.core after.core roots first rest recorded winner paths recordedSame
+        winnerMember afterPaths resultFrame), ?_, rejectedBranch, ?_⟩
     · intro extraRepresentative extraNative P H extraIndex enoughP enoughH
       rw [outerRead, rawSame]
       simp only [run, ite_eq_right nonempty, prefixRun extraRepresentative,
