@@ -1,5 +1,28 @@
 Continue the cfta formalization in /home/tritlo/Code/mcfta.
 
+## Original selection reaches admitted ordinary expansion
+
+Per-receipt Caller/memos: `8d8693df7`. Selected composition: `82bfc44ff`.
+The goal stays ACTIVE.
+
+Original selection now connects through read, native guard, narrowing, pure
+Right callback and admitted ordinary entry/scan. The ordinary continuation
+uses the actual narrowed Caller/cache/memos. Each processed alternative now
+retains its actual advance endpoint and full prefix Post from the original
+Caller, plus its own cache and pending-reference certificate.
+Initial global pending history is a genuine input. Ordinary node shape,
+nonterminal bucket, selected narrowed rows and reached-state Ranges remain
+explicit conditions. Parked, Empty and unsupported outcomes stay exact.
+Both older completion interfaces retain their declaration types.
+
+All strict checks, public readback and Audit pass. Audit checks 76737
+dependencies. H6 remains the strongest end-to-end language result. Haskell
+is unchanged. Next: branch-endpoint Left callbacks, initial-only capacity
+forecasts, fragment-hole history and extraction. The serial scan does not
+establish arbitrary Haskell forcing or callback interleaving. Scheduler
+restart and whole-driver language semantics remain open.
+Details: `lean/notes-current-pruning-enumeration-selected-ordinary.md`.
+
 ## Original selection reaches native narrowing and the Right callback
 
 Framed replacement: `fc1e38a19`. Cache and Caller: `93d621a5c`.
