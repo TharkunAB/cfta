@@ -1,5 +1,43 @@
 Continue the cfta formalization in /home/tritlo/Code/mcfta.
 
+## Native cached selection and upstream integration
+
+Current proof: `SourcePruningEnumerationSelection` at
+`805aa57cf3dc5df066010194ae74ef3396c222ec`.
+Main `9d4e4d584aa7a681f075790e98466afe7531838a` is merged at
+`eb52d43780d5b1f3b260bb51fbef86526d0e0830`. The goal stays ACTIVE.
+H6 remains the strongest end-to-end theorem.
+
+The actual pure cached selector now derives `EnumerationDriver.Ready`
+from native candidate flags, exact canonical waiting counts, root paths
+and `Safe`. No `Graph` correspondence premise is used. Selection gives an
+allocated candidate with no waiting entry. Exact counts separate its class
+from every stored pending reference. `PendingRealized` also derives its
+actual decoded, available, closed pending value. Empty remains eligible.
+Recursive boundaries require a nonempty suspended bucket. The result does
+not assert that the selected value is ordinary or nonempty.
+
+Strict Lean checking, installed public readback and the aggregate Audit
+pass. The audit checks 76525 theorems. All four new theorems use only the
+allowed standard axioms. The first failed strict input and its full log
+remain in `lean/restart-evidence/20261025-native-selection`.
+
+Upstream changes only Specftacular and its documents. Existing goldens pass
+at one and two capabilities. A public probe preserves all four mini-list
+laws with optional parallel tests and speculation. Invalid completion
+exponents -1 and 63 are rejected. Formatting checks pass. An exact-helper
+probe confirms unused speculative suffix exceptions and blocking. These
+are external repair follow-ups in `FINDINGS.md`; no Haskell repair is made.
+
+The next substantive gap is root protection through actual child expansion
+and final captured-slot installation. The native write-site audit suggests
+that stored pending buckets have no terminal constraint. Terminal child
+fallback must preserve the outer held root. This history property is not
+yet a global theorem. Arbitrary mixed calls, initial-only numeric admission,
+whole typing/pruning, extraction, concrete solver, resources, convergence
+and full Haskell correspondence remain open. Details and restart targets:
+`lean/notes-current-pruning-enumeration-selection.md`.
+
 ## Native cached terminal adapter
 
 Current source: `SourcePruningEnumerationCachedTerminalAdapter`.
