@@ -1,0 +1,6 @@
+def root : Nat → Forest → Nat → Option Nat
+  | 0, _, _ => none
+  | fuel + 1, forest, uv =>
+      match forest uv with
+      | some (.parent parent) => root fuel forest parent
+      | _ => some uv

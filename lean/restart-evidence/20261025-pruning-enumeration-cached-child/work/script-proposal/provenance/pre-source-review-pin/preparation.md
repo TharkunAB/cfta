@@ -1,0 +1,9 @@
+# CachedChild adapter predraft
+
+Status: UNFROZEN SOURCE ONLY. Root selected allocate/writeSlot/prepareOrdinary definitions and allocate_node_flags/complete theorems, 18 typed haves and one proof let, zero instances/induction/new types/Graph; estimate 280–480/hard limit 680. Actual source review and frozen owner/schema remain pending. I authored these source adapters and literal templates. No selected script was parsed, imported, activated or executed.
+
+The complete five active Admission sources are retained as bases. All ten exact patches and Unicode spans reconstruct the complete sources in both directions as data. Guard algorithms remain unchanged. Current filename families, baseline/backup, module/note/evidence, prior custody/assessment/peer and scope literals are adapted. The verifier has one explicit source-review digest placeholder. Owner-derived public kinds/counts/instances/cap stay dynamic. No previous success or failure becomes a current outcome.
+
+The scope retains genuine nonterminal scs, native decoded flags, old raw-slot read, full-scs count update at current roots and exact core child singleton, with the same intermediate/final storage and indexes. No Graph comparison, changed-slot frame, extra final inherit, successful callback or final-index premise is substituted.
+
+Exactly 26 prior Admission inputs retain the complete 39372-byte summary, embedded optional whitespace diagnostics and canonical assessment. Its separately sealed peer/nonterminal guard qualification remains context. All baseline refs/modes/stashes/worktrees, nine doc inverses/Audit prepend and separate audit-addition, actual failed inputs/raw reports/public axiom subsets/resource receipts, all-manifest membership and ordinary singleton push guards remain. Final freeze waits actual source review and owner controls.

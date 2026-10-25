@@ -1,0 +1,22 @@
+--- original/complete-header.lean.txt
++++ effective/complete-header.lean.txt
+@@ -36,7 +36,7 @@
+       (∀ (extra : Nat), prepareOrdinary heap (fuel + extra) scs
+         (.node entry edges depth free) before = some (.hole before.core.counter, after)) ∧
+       after.core = {allocatedCached.core with values :=
+-        allocatedCached.core.values.set before.core.counter (.unenumerated (some handle) scs)} ∧
++                allocatedCached.core.values.set before.core.counter (.unenumerated (some handle) scs)} ∧
+       after.core.values[before.core.counter]? = some (.unenumerated (some handle) scs) ∧
+       after.core.counter = before.core.counter + 1 ∧ after.core.counter = after.core.values.length ∧
+       after.core.representatives = before.core.representatives ∧ Roots after.core.representatives roots ∧
+@@ -47,4 +47,4 @@
+       after.expandable =
+         (fun slot => if slot = before.core.counter then true else before.expandable slot) ∧
+       after.waiting = EnumerationCanonicalWaiting.count roots 1 scs before.waiting ∧
+-      FragmentBound after.core.counter (.hole before.core.counter)
++      FragmentBound («Symbol» := Symbol) after.core.counter (.hole before.core.counter)
+--- original/local-bound.lean.txt
++++ effective/local-bound.lean.txt
+@@ -1 +1 @@
+-have bound : SlotBound allocatedCached.core.counter (.unenumerated (some handle) scs)
++have bound : SlotBound («Symbol» := Symbol) allocatedCached.core.counter (.unenumerated (some handle) scs)

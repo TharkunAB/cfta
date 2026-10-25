@@ -1,0 +1,13 @@
+import MicroCFTA.SourcePruningEnumerationCachedChild
+set_option pp.deepTerms true
+set_option pp.maxSteps 1000000
+#check @MicroCFTA.SourcePruningEnumerationCachedChild.allocate
+#print axioms MicroCFTA.SourcePruningEnumerationCachedChild.allocate
+#check @MicroCFTA.SourcePruningEnumerationCachedChild.writeSlot
+#print axioms MicroCFTA.SourcePruningEnumerationCachedChild.writeSlot
+#check @MicroCFTA.SourcePruningEnumerationCachedChild.prepareOrdinary
+#print axioms MicroCFTA.SourcePruningEnumerationCachedChild.prepareOrdinary
+#check @MicroCFTA.SourcePruningEnumerationCachedChild.allocate_node_flags
+#print axioms MicroCFTA.SourcePruningEnumerationCachedChild.allocate_node_flags
+#check @MicroCFTA.SourcePruningEnumerationCachedChild.complete
+#print axioms MicroCFTA.SourcePruningEnumerationCachedChild.complete

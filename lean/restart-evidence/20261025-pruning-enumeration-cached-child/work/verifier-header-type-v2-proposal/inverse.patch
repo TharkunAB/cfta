@@ -1,0 +1,59 @@
+--- candidate.py
++++ basis.py
+@@ -116,55 +116,11 @@
+     assert len(data) == pin['bytes'] and sha(data) == pin['sha256']
+ contracts = load('owner-proposal/contracts.json')
+ assert contracts == load('work/body-gate.json')['contracts']
+-layout_root = here / 'work/header-type-overlay-v2'
+-layout_frozen = load('work/header-type-overlay-v2/FROZEN.json')
+-assert sha((layout_root / 'FROZEN.json').read_bytes()) == '590ada5decbaefeedad96beb03ee964d076d3199bc65311ecade7291d4210d54'
+-layout_pins = load('work/header-type-overlay-v2/pins.json')
+-assert len(layout_pins) == layout_frozen['pins_count'] == 6
+-assert layout_frozen['contracts_changed'] == 2 and layout_frozen['bodies'] is False
+-assert sha((layout_root / 'pins.json').read_bytes()) == layout_frozen['pins_sha256']
+-assert {p.relative_to(layout_root).as_posix() for p in layout_root.rglob('*') if p.is_file()} == set(layout_pins) | {'pins.json', 'FROZEN.json'}
+-for name, pin in layout_pins.items():
+-    assert not Path(name).is_absolute() and '..' not in Path(name).parts
+-    data = (layout_root / name).read_bytes()
+-    assert len(data) == pin['bytes'] and sha(data) == pin['sha256']
+-layout = load('work/header-type-overlay-v2/overlay.json')
+-assert layout['parent_FROZEN_sha256'] == sha((here / 'owner-proposal/FROZEN.json').read_bytes())
+-layout_contracts = layout['contracts']
+-layout_specs = {
+-    'complete-header.lean.txt': ('before-complete-header.lean.txt', 'after-complete-header.lean.txt', 'a29f4fc175b417128cdbb697d8f000a086df103f662bd54c093d73eeb7ad88a8', 'a23374b2967e3489e94f48e9340525451282b5d29d0c9b0ebb173dc844b14cbf'),
+-    'local-bound.lean.txt': ('before-local-bound.lean.txt', 'after-local-bound.lean.txt', 'fe5a65504621fda1a23eb2e71947b975bed3c3290f1d9511f02a5c564d06c370', '1cec1011a256733e7aee4d5cccd1fa49e54969ae3cf8b72e4a79d09179926a30'),
+-}
+-assert set(layout_contracts) == set(layout_specs)
+-for name, (before_file, after_file, before_sha, after_sha) in layout_specs.items():
+-    item = layout_contracts[name]
+-    assert isinstance(item['old'], str) and isinstance(item['new'], str)
+-    assert item['old'] == contracts[name]
+-    assert item['before_file'] == before_file and item['after_file'] == after_file
+-    assert (layout_root / before_file).read_bytes() == item['old'].encode()
+-    assert (layout_root / after_file).read_bytes() == item['new'].encode()
+-    assert sha(item['old'].encode()) == item['before_sha256'] == before_sha
+-    assert sha(item['new'].encode()) == item['after_sha256'] == after_sha
+-old_header, new_header = (layout_contracts['complete-header.lean.txt'][key] for key in ('old', 'new'))
+-old_line = '        allocatedCached.core.values.set before.core.counter (.unenumerated (some handle) scs)} ∧'
+-new_line = '                allocatedCached.core.values.set before.core.counter (.unenumerated (some handle) scs)} ∧'
+-old_bound = 'FragmentBound after.core.counter (.hole before.core.counter)'
+-new_bound = 'FragmentBound («Symbol» := Symbol) after.core.counter (.hole before.core.counter)'
+-assert old_header.count(old_line) == old_header.count(old_bound) == 1
+-assert new_header == old_header.replace(old_line, new_line, 1).replace(old_bound, new_bound, 1)
+-old_slot = 'SlotBound allocatedCached.core.counter (.unenumerated (some handle) scs)'
+-new_slot = 'SlotBound («Symbol» := Symbol) allocatedCached.core.counter (.unenumerated (some handle) scs)'
+-assert layout_contracts['local-bound.lean.txt']['old'].count(old_slot) == 1
+-assert layout_contracts['local-bound.lean.txt']['new'] == layout_contracts['local-bound.lean.txt']['old'].replace(old_slot, new_slot, 1)
+-assert len(contracts) == 25
+ for name, literal in contracts.items():
+     assert isinstance(literal, str)
+     data = (here / 'owner-proposal' / name).read_bytes()
+     assert data.decode() == literal
+-    effective_literal = layout_contracts[name]['new'] if name in layout_specs else literal
+-    assert text.count(effective_literal.rstrip('\n')) == 1
+-for item in layout_contracts.values():
+-    assert text.count(item['old'].rstrip('\n')) == 0
++    assert text.count(literal.rstrip('\n')) == 1
+ source_index = load('owner-proposal/source-index.json')
+ sources = source_index['sources']
+ assert len(sources) == frozen['source_count']

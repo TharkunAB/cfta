@@ -1,0 +1,376 @@
+{
+  "selected_at": "2026-10-25T03:18:07.821304+01:00",
+  "target_module": "MicroCFTA.SourcePruningEnumerationCachedChild",
+  "public_heads": [
+    {
+      "name": "allocate",
+      "file": "allocate-header.lean.txt",
+      "kind": "def"
+    },
+    {
+      "name": "writeSlot",
+      "file": "write-slot-header.lean.txt",
+      "kind": "def"
+    },
+    {
+      "name": "prepareOrdinary",
+      "file": "prepare-ordinary-header.lean.txt",
+      "kind": "def"
+    },
+    {
+      "name": "allocate_node_flags",
+      "file": "allocate-node-flags-header.lean.txt",
+      "kind": "theorem"
+    },
+    {
+      "name": "complete",
+      "file": "complete-header.lean.txt",
+      "kind": "theorem"
+    }
+  ],
+  "local_haves": [
+    {
+      "file": "local-candidate-true.lean.txt",
+      "scope": "helper",
+      "first_line_indent": 2,
+      "attachment": " := by\n",
+      "continuation": "Prefix first line only; preserve continuation bytes."
+    },
+    {
+      "file": "local-different.lean.txt",
+      "scope": "helper.oldSlot",
+      "first_line_indent": 4,
+      "attachment": " := by\n",
+      "continuation": "Prefix first line only; preserve continuation bytes."
+    },
+    {
+      "file": "local-absent.lean.txt",
+      "scope": "helper.beyond",
+      "first_line_indent": 6,
+      "attachment": " := by\n",
+      "continuation": "Prefix first line only; preserve continuation bytes."
+    },
+    {
+      "file": "local-whole-absent.lean.txt",
+      "scope": "helper.beyond",
+      "first_line_indent": 6,
+      "attachment": " := by\n",
+      "continuation": "Prefix first line only; preserve continuation bytes."
+    },
+    {
+      "file": "local-allocated-handle-same.lean.txt",
+      "scope": "complete",
+      "first_line_indent": 2,
+      "attachment": " := by\n",
+      "continuation": "Prefix first line only; preserve continuation bytes."
+    },
+    {
+      "file": "local-allocated-stored.lean.txt",
+      "scope": "complete",
+      "first_line_indent": 2,
+      "attachment": " := by\n",
+      "continuation": "Prefix first line only; preserve continuation bytes."
+    },
+    {
+      "file": "local-allocated-storage.lean.txt",
+      "scope": "complete",
+      "first_line_indent": 2,
+      "attachment": " := by\n",
+      "continuation": "Prefix first line only; preserve continuation bytes."
+    },
+    {
+      "file": "local-allocated-realized.lean.txt",
+      "scope": "complete",
+      "first_line_indent": 2,
+      "attachment": " := by\n",
+      "continuation": "Prefix first line only; preserve continuation bytes."
+    },
+    {
+      "file": "local-allocated-counts.lean.txt",
+      "scope": "complete",
+      "first_line_indent": 2,
+      "attachment": " := by\n",
+      "continuation": "Prefix first line only; preserve continuation bytes."
+    },
+    {
+      "file": "local-allocated-paths.lean.txt",
+      "scope": "complete",
+      "first_line_indent": 2,
+      "attachment": " := by\n",
+      "continuation": "Prefix first line only; preserve continuation bytes."
+    },
+    {
+      "file": "local-inside.lean.txt",
+      "scope": "complete",
+      "first_line_indent": 2,
+      "attachment": " := by\n",
+      "continuation": "Prefix first line only; preserve continuation bytes."
+    },
+    {
+      "file": "local-bound.lean.txt",
+      "scope": "complete",
+      "first_line_indent": 2,
+      "attachment": " := by\n",
+      "continuation": "Prefix first line only; preserve continuation bytes."
+    },
+    {
+      "file": "local-saved-core.lean.txt",
+      "scope": "complete",
+      "first_line_indent": 2,
+      "attachment": " := by\n",
+      "continuation": "Prefix first line only; preserve continuation bytes."
+    },
+    {
+      "file": "local-saved-storage.lean.txt",
+      "scope": "complete",
+      "first_line_indent": 2,
+      "attachment": " := by\n",
+      "continuation": "Prefix first line only; preserve continuation bytes."
+    },
+    {
+      "file": "local-saved-counts.lean.txt",
+      "scope": "complete",
+      "first_line_indent": 2,
+      "attachment": " := by\n",
+      "continuation": "Prefix first line only; preserve continuation bytes."
+    },
+    {
+      "file": "local-saved-flags.lean.txt",
+      "scope": "complete",
+      "first_line_indent": 2,
+      "attachment": " := by\n",
+      "continuation": "Prefix first line only; preserve continuation bytes."
+    },
+    {
+      "file": "local-native-run.lean.txt",
+      "scope": "complete",
+      "first_line_indent": 2,
+      "attachment": " := by\n",
+      "continuation": "Prefix first line only; preserve continuation bytes."
+    },
+    {
+      "file": "local-core-raw.lean.txt",
+      "scope": "complete",
+      "first_line_indent": 2,
+      "attachment": " := by\n",
+      "continuation": "Prefix first line only; preserve continuation bytes."
+    }
+  ],
+  "let_contract": {
+    "file": "let-saved.lean.txt",
+    "scope": "complete",
+    "first_line_indent": 2,
+    "continuation": "Prefix first line only; preserve continuation bytes."
+  },
+  "typed_haves": 18,
+  "proof_lets": 1,
+  "definition_lets": 0,
+  "instances": 0,
+  "inductions": 0,
+  "source_estimate": "280 to 480 ordinary lines",
+  "hard_cap": 680,
+  "Root_authors_all_bodies": true,
+  "no_body_yet": true,
+  "definition_recipe": {
+    "allocate": "Native candidate.map flag; return current counter and cached allocated core; flag function preserves old flags unless flag is true and slot equals fresh counter. Waiting unchanged. Core allocated inherits ancestry once.",
+    "writeSlot": "Raw optional slot lookup.bind old, then NativeIndex.write with references value as gained and references old as lost. No representative resolution of target, no ancestry update.",
+    "prepareOrdinary": "Match only ordinary node. Reject terminal-scs bucket; encode.bind handle; allocate.bind allocation pair; writeSlot full scs at allocation.1 and allocation.2; map after to (.hole allocation.1,after). Other value shapes return none."
+  },
+  "obtain_packets": [
+    {
+      "api": "ShallowChild.prepareChild_complete",
+      "fields": [
+        "handle",
+        "encoded",
+        "decoded",
+        "_emptyCase",
+        "nonemptyCase"
+      ]
+    },
+    {
+      "api": "nonemptyCase applied to ordinary node nonempty",
+      "fields": [
+        "action",
+        "coreAfter",
+        "prepared",
+        "_observed",
+        "afterShape",
+        "afterSlot",
+        "grows",
+        "alignedAfter",
+        "realizedAfter"
+      ]
+    },
+    {
+      "api": "Writes.allocate_available_realized",
+      "fields": [
+        "allocatedHandle",
+        "allocatedEncoded",
+        "_allocation",
+        "baseStored",
+        "baseRealized"
+      ]
+    },
+    {
+      "api": "allocate_node_flags",
+      "fields": [
+        "allocatedCached",
+        "nativeAllocated",
+        "allocatedShape",
+        "waitingSame",
+        "flagShape",
+        "allocatedFlags"
+      ]
+    },
+    {
+      "api": "NativeIndex.count_complete at allocated forest",
+      "fields": [
+        "fuel",
+        "countRun"
+      ]
+    }
+  ],
+  "definition_binders": {
+    "allocate": [
+      [
+        "flag",
+        "Bool"
+      ],
+      [
+        "slot",
+        "Nat"
+      ]
+    ],
+    "writeSlot": [
+      [
+        "old",
+        "EnumerationState.UVarValue Symbol"
+      ]
+    ],
+    "prepareOrdinary": [
+      [
+        "sc",
+        "EnumerationState.Suspended"
+      ],
+      [
+        "handle",
+        "Nat"
+      ],
+      [
+        "allocation",
+        "Nat \u00d7 EnumerationExpandableIndex.Cached Symbol EnumGuard"
+      ],
+      [
+        "after",
+        "EnumerationExpandableIndex.Cached Symbol EnumGuard"
+      ]
+    ]
+  },
+  "manual_case_plan": {
+    "helper": "by_cases beforeSlot : slot < before.core.values.length; in complement by_cases same : slot = before.core.counter",
+    "complete_savedFlags": "by_cases same : slot = before.core.counter"
+  },
+  "source_domain": "Only ordinary nonterminal prepareChild/prepareShallowChild arm. No full Safe, LiveRoots, scheduler, terminal path or native IntMap extraction.",
+  "contracts": {
+    "allocate-header.lean.txt": {
+      "bytes": 319,
+      "sha256": "097889790011ce23f3f893d02ec7d3bcde554fdfce9e884dbb53ff9c59cb45ba"
+    },
+    "allocate-node-flags-header.lean.txt": {
+      "bytes": 1404,
+      "sha256": "1eef38fc033528c2de31758b4b6c70d95f27378079dfe882a7bb3f663ea6db18"
+    },
+    "complete-header.lean.txt": {
+      "bytes": 3815,
+      "sha256": "a29f4fc175b417128cdbb697d8f000a086df103f662bd54c093d73eeb7ad88a8"
+    },
+    "context.lean.txt": {
+      "bytes": 397,
+      "sha256": "be024c8b22f7e9f33aa46a5f0a6a86bcdbbbd8019add25b41215c2e0f97dd613"
+    },
+    "let-saved.lean.txt": {
+      "bytes": 379,
+      "sha256": "590e08c0cf15917931bbef092de66782c227138f71b6220956490ac7c917c0b3"
+    },
+    "local-absent.lean.txt": {
+      "bytes": 47,
+      "sha256": "ba3feb164ac2a3c326d81f768e1968ee388042bdc8bd42c6509297d4ad4bc645"
+    },
+    "local-allocated-counts.lean.txt": {
+      "bytes": 123,
+      "sha256": "617212cd86df06701c8b464c51cc6e9842dd4eeb5db20c912fe037f5df15068e"
+    },
+    "local-allocated-handle-same.lean.txt": {
+      "bytes": 52,
+      "sha256": "26731d36bcbb09def740b2a4deed08d6f68abb6c0b7322973c41d90a993be981"
+    },
+    "local-allocated-paths.lean.txt": {
+      "bytes": 71,
+      "sha256": "a172bdb9c17156a5d119bd26315bedfa859ac211b9e3fedc0aca8e55ac57ee32"
+    },
+    "local-allocated-realized.lean.txt": {
+      "bytes": 67,
+      "sha256": "d9b6df73931aab6310f82c73eb551ef99e5a50f67ce518b1f8320c89f2f07d17"
+    },
+    "local-allocated-storage.lean.txt": {
+      "bytes": 58,
+      "sha256": "8e1c89dcf700a3507dc3128f686a4d3c3c7bdd71fac32c0f6648879f95feb1d0"
+    },
+    "local-allocated-stored.lean.txt": {
+      "bytes": 119,
+      "sha256": "991932cfb18c2a6e3969789ff772b2031134f1382a1e1a5d4e57e4b8dba8863a"
+    },
+    "local-bound.lean.txt": {
+      "bytes": 86,
+      "sha256": "fe5a65504621fda1a23eb2e71947b975bed3c3290f1d9511f02a5c564d06c370"
+    },
+    "local-candidate-true.lean.txt": {
+      "bytes": 123,
+      "sha256": "5a21a7838678844bfaa9426fc254b47c039efdee48c658f37ff36e8792cd0f60"
+    },
+    "local-core-raw.lean.txt": {
+      "bytes": 102,
+      "sha256": "c2c8219dca80458639ea4bbf5240f9eb42cd83351b04cf8df89519a20aa8e6bf"
+    },
+    "local-different.lean.txt": {
+      "bytes": 46,
+      "sha256": "d603e3cbce00b9e89ae31416b3860be6ca34f8131a3695a5c006b717da92b77e"
+    },
+    "local-inside.lean.txt": {
+      "bytes": 71,
+      "sha256": "27807b476f1c26e9f664382f5b3ecc301067ec4b89345921be12979285423606"
+    },
+    "local-native-run.lean.txt": {
+      "bytes": 155,
+      "sha256": "85f76750182354f81a79eb277e57cde79deea060e1fdeff851cba30708d2c363"
+    },
+    "local-saved-core.lean.txt": {
+      "bytes": 40,
+      "sha256": "c7e2bc394605750de0fbe387dd0a6b6ae3cccafa4edb25d2958ebf60c9ab1f09"
+    },
+    "local-saved-counts.lean.txt": {
+      "bytes": 93,
+      "sha256": "929bad671262366c5c928d9c1b554e00251c5585db83709d40669b4346f80f00"
+    },
+    "local-saved-flags.lean.txt": {
+      "bytes": 170,
+      "sha256": "42b8d7f325d37f470eec80a7af2f9e85cba747f7bbe0af1090c87a600abe76a3"
+    },
+    "local-saved-storage.lean.txt": {
+      "bytes": 44,
+      "sha256": "b257098faec12483b1f5c121868d4073ae842312a528cd794a66fbe5a3975457"
+    },
+    "local-whole-absent.lean.txt": {
+      "bytes": 95,
+      "sha256": "781876bce3f0e7abe6a0f124079a6b372eea5a2da558b213f45ab439ecd15031"
+    },
+    "prepare-ordinary-header.lean.txt": {
+      "bytes": 452,
+      "sha256": "331c66c8bdc9d0cac80d1ef46f52a6677ddd77605b484d068589ef73c2cbbcb3"
+    },
+    "write-slot-header.lean.txt": {
+      "bytes": 351,
+      "sha256": "68cdf23e49a18d5e62530bcc1501403109ba28ae2f302b930dca37bab5aad7bc"
+    }
+  }
+}

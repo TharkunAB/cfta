@@ -1,0 +1,24 @@
+def suspendedVars (start : Nat) : List EqualityTrie.Trie → List Suspended
+  | [] => []
+  | trie :: rest => ⟨trie, start⟩ :: suspendedVars (start + 1) rest
+
+/-- Apply the actual pure-equality allocation update once per class. -/
+def suspendedState : Nat → State Symbol Guard → State Symbol Guard
+  | 0, state => state
+  | count + 1, state => suspendedState count (allocated none state)
+
+/-- The actual equality-class traversal allocates exactly the consecutive variables and states above. -/
+theorem suspendMany_exact (tries : List EqualityTrie.Trie) (state : State Symbol Guard) :
+    tries.mapM suspend state = [.ok (suspendedVars state.counter tries, suspendedState tries.length state)] := by
+  induction tries generalizing state with
+  | nil => rfl
+  | cons trie rest ih =>
+      rw [List.mapM_cons]
+      rw [bind_single _ _ state (allocated none state) ⟨trie, state.counter⟩ (suspend_exact trie state)]
+      rw [bind_single _ _ (allocated none state) (suspendedState rest.length (allocated none state))
+        (suspendedVars (allocated none state).counter rest) (ih (allocated none state))]
+      rfl
+
+/-- Multi-class suspension retains the allocator-slot alignment. -/
+theorem suspended_supply (count : Nat) (state : State Symbol Guard) (aligned : SupplyAligned state) :
+    SupplyAligned (suspendedState count state) := by

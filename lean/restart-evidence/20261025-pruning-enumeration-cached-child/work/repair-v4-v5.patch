@@ -1,0 +1,20 @@
+--- root-v4/SourcePruningEnumerationCachedChild.lean
++++ root-v5/SourcePruningEnumerationCachedChild.lean
+@@ -144,7 +144,7 @@
+       after.expandable =
+         (fun slot => if slot = before.core.counter then true else before.expandable slot) ∧
+       after.waiting = EnumerationCanonicalWaiting.count roots 1 scs before.waiting ∧
+-      FragmentBound after.core.counter (.hole before.core.counter) := by
++      FragmentBound («Symbol» := Symbol) after.core.counter (.hole before.core.counter) := by
+   obtain ⟨handle, encoded, decoded, _emptyCase, nonemptyCase⟩ :=
+     SourcePruningEnumerationShallowChild.prepareChild_complete heap before.core scs
+       (.node entry edges depth free) coherent available closed realized storage.aligned nonterminal
+@@ -175,7 +175,7 @@
+     simpa only [allocatedShape, EnumerationState.allocated] using paths
+   have inside : before.core.counter < allocatedCached.core.values.length := by
+     exact (List.getElem?_eq_some_iff.mp allocatedStored).elim (fun bound _elementEquality => bound)
+-  have bound : SlotBound allocatedCached.core.counter (.unenumerated (some handle) scs) := by
++  have bound : SlotBound («Symbol» := Symbol) allocatedCached.core.counter (.unenumerated (some handle) scs) := by
+     intro sc member
+     rw [allocatedShape]
+     exact Nat.lt_trans (bounded sc member) (Nat.lt_succ_self before.core.counter)

@@ -1,0 +1,48 @@
+{
+  "author": "Root",
+  "recipes": {
+    "allocate": "Native candidate.map flag; return current counter and cached allocated core; flag function preserves old flags unless flag is true and slot equals fresh counter. Waiting unchanged. Core allocated inherits ancestry once.",
+    "writeSlot": "Raw optional slot lookup.bind old, then NativeIndex.write with references value as gained and references old as lost. No representative resolution of target, no ancestry update.",
+    "prepareOrdinary": "Match only ordinary node. Reject terminal-scs bucket; encode.bind handle; allocate.bind allocation pair; writeSlot full scs at allocation.1 and allocation.2; map after to (.hole allocation.1,after). Other value shapes return none."
+  },
+  "binders": {
+    "allocate": [
+      [
+        "flag",
+        "Bool"
+      ],
+      [
+        "slot",
+        "Nat"
+      ]
+    ],
+    "writeSlot": [
+      [
+        "old",
+        "EnumerationState.UVarValue Symbol"
+      ]
+    ],
+    "prepareOrdinary": [
+      [
+        "sc",
+        "EnumerationState.Suspended"
+      ],
+      [
+        "handle",
+        "Nat"
+      ],
+      [
+        "allocation",
+        "Nat × EnumerationExpandableIndex.Cached Symbol EnumGuard"
+      ],
+      [
+        "after",
+        "EnumerationExpandableIndex.Cached Symbol EnumGuard"
+      ]
+    ]
+  },
+  "new_definition_bodies_authored_by_owner": false,
+  "no_final_extra_inherit": true,
+  "raw_slot_read_before_native_write": true,
+  "native_candidate_not_Graph": true
+}

@@ -1,0 +1,210 @@
+{
+  "packets": [
+    {
+      "scope": "complete.child",
+      "api": "SourcePruningEnumerationShallowChild.prepareChild_complete heap before.core scs ordinary coherent available closed realized storage.aligned nonterminal",
+      "fields": [
+        {
+          "name": "handle",
+          "type": "Nat",
+          "used": true
+        },
+        {
+          "name": "encoded",
+          "type": "encodeNode (.node entry edges depth free) = some handle",
+          "used": true
+        },
+        {
+          "name": "decoded",
+          "type": "lookupNode heap handle = some (.node entry edges depth free)",
+          "used": true
+        },
+        {
+          "name": "_emptyCase",
+          "type": "(.node entry edges depth free) = .empty → SourcePruningEnumerationShallowChild.prepareChild scs (.node entry edges depth free) = some (reject : EnumerateM Symbol EnumGuard (Fragments.Fragment Symbol)) ∧ ¬ ∃ (fragment : Fragments.Fragment Symbol) (after : EnumerationState.State Symbol EnumGuard), Success (reject : EnumerateM Symbol EnumGuard (Fragments.Fragment Symbol)) before.core fragment after",
+          "used": false,
+          "reason": "The actual input is an ordinary node. This impossible Empty implication is not invoked.",
+          "Root_authored_binding": "_emptyCase"
+        },
+        {
+          "name": "nonemptyCase",
+          "type": "(.node entry edges depth free) ≠ .empty → ∃ (action : EnumerateM Symbol EnumGuard (Fragments.Fragment Symbol)) (coreAfter : EnumerationState.State Symbol EnumGuard), SourcePruningEnumerationShallowChild.prepareChild scs (.node entry edges depth free) = some action ∧ Success action before.core (.hole before.core.counter) coreAfter ∧ coreAfter = (match (.node entry edges depth free) with | .node _ _ _ _ => {EnumerationState.allocated (some handle) before.core with values := (EnumerationState.allocated (some handle) before.core).values.set before.core.counter (.unenumerated (some handle) scs)} | _ => EnumerationState.allocated (some handle) before.core) ∧ coreAfter.values[before.core.counter]? = some (.unenumerated (some handle) (match (.node entry edges depth free) with | .node _ _ _ _ => scs | _ => [])) ∧ coreAfter.counter = before.core.counter + 1 ∧ coreAfter.counter = coreAfter.values.length ∧ PendingRealized heap coreAfter",
+          "used": true
+        }
+      ],
+      "skipped_fields": [
+        {
+          "name": "_emptyCase",
+          "reason": "The actual input is an ordinary node. This impossible Empty implication is not invoked."
+        }
+      ]
+    },
+    {
+      "scope": "complete.child.nonempty",
+      "api": "nonemptyCase applied to constructor-disjoint ordinary node nonemptiness",
+      "fields": [
+        {
+          "name": "action",
+          "type": "EnumerateM Symbol EnumGuard (Fragments.Fragment Symbol)",
+          "used": true
+        },
+        {
+          "name": "coreAfter",
+          "type": "EnumerationState.State Symbol EnumGuard",
+          "used": true
+        },
+        {
+          "name": "prepared",
+          "type": "SourcePruningEnumerationShallowChild.prepareChild scs (.node entry edges depth free) = some action",
+          "used": true
+        },
+        {
+          "name": "_observed",
+          "type": "Success action before.core (.hole before.core.counter) coreAfter",
+          "used": false,
+          "reason": "Exact coreRaw is derived directly from the concrete prepared action, not from Success membership.",
+          "Root_authored_binding": "_observed"
+        },
+        {
+          "name": "afterShape",
+          "type": "coreAfter = (match (.node entry edges depth free) with | .node _ _ _ _ => {EnumerationState.allocated (some handle) before.core with values := (EnumerationState.allocated (some handle) before.core).values.set before.core.counter (.unenumerated (some handle) scs)} | _ => EnumerationState.allocated (some handle) before.core)",
+          "used": true
+        },
+        {
+          "name": "afterSlot",
+          "type": "coreAfter.values[before.core.counter]? = some (.unenumerated (some handle) (match (.node entry edges depth free) with | .node _ _ _ _ => scs | _ => []))",
+          "used": true
+        },
+        {
+          "name": "grows",
+          "type": "coreAfter.counter = before.core.counter + 1",
+          "used": true
+        },
+        {
+          "name": "alignedAfter",
+          "type": "coreAfter.counter = coreAfter.values.length",
+          "used": true
+        },
+        {
+          "name": "realizedAfter",
+          "type": "PendingRealized heap coreAfter",
+          "used": true
+        }
+      ],
+      "skipped_fields": [
+        {
+          "name": "_observed",
+          "reason": "Exact coreRaw is derived directly from the concrete prepared action, not from Success membership."
+        }
+      ]
+    },
+    {
+      "scope": "complete.allocation",
+      "api": "SourcePruningEnumerationWrites.allocate_available_realized heap before.core ordinary coherent available closed realized storage.aligned",
+      "fields": [
+        {
+          "name": "allocatedHandle",
+          "type": "Nat",
+          "used": true
+        },
+        {
+          "name": "allocatedEncoded",
+          "type": "encodeNode (.node entry edges depth free) = some allocatedHandle",
+          "used": true
+        },
+        {
+          "name": "_allocation",
+          "type": "Success (EnumerationState.allocate (some allocatedHandle)) before.core before.core.counter (EnumerationState.allocated (some allocatedHandle) before.core)",
+          "used": false,
+          "reason": "The exact allocation reduction uses allocate_exact directly. This derived membership witness is not consumed.",
+          "Root_authored_binding": "_allocation"
+        },
+        {
+          "name": "baseStored",
+          "type": "(EnumerationState.allocated (some allocatedHandle) before.core).values[before.core.counter]? = some (.unenumerated (some allocatedHandle) [])",
+          "used": true
+        },
+        {
+          "name": "baseRealized",
+          "type": "PendingRealized heap (EnumerationState.allocated (some allocatedHandle) before.core)",
+          "used": true
+        }
+      ],
+      "skipped_fields": [
+        {
+          "name": "_allocation",
+          "reason": "The exact allocation reduction uses allocate_exact directly. This derived membership witness is not consumed."
+        }
+      ]
+    },
+    {
+      "scope": "complete.nativeAllocation",
+      "api": "allocate_node_flags heap before handle entry edges depth free decoded storage.aligned flags",
+      "fields": [
+        {
+          "name": "allocatedCached",
+          "type": "EnumerationExpandableIndex.Cached Symbol EnumGuard",
+          "used": true
+        },
+        {
+          "name": "nativeAllocated",
+          "type": "allocate heap (some handle) before = some (before.core.counter, allocatedCached)",
+          "used": true
+        },
+        {
+          "name": "allocatedShape",
+          "type": "allocatedCached.core = EnumerationState.allocated (some handle) before.core",
+          "used": true
+        },
+        {
+          "name": "waitingSame",
+          "type": "allocatedCached.waiting = before.waiting",
+          "used": true
+        },
+        {
+          "name": "flagShape",
+          "type": "allocatedCached.expandable = (fun (slot : Nat) => if slot = before.core.counter then true else before.expandable slot)",
+          "used": true
+        },
+        {
+          "name": "allocatedFlags",
+          "type": "∀ (slot : Nat), SourcePruningEnumerationNativeIndex.candidate heap ((allocatedCached.core.values[slot]?).getD .eliminated) = some (allocatedCached.expandable slot)",
+          "used": true
+        }
+      ],
+      "skipped_fields": []
+    },
+    {
+      "scope": "complete.count",
+      "api": "SourcePruningEnumerationNativeIndex.count_complete allocatedCached.core.representatives roots allocatedPaths scs",
+      "fields": [
+        {
+          "name": "fuel",
+          "type": "Nat",
+          "used": true
+        },
+        {
+          "name": "countRun",
+          "type": "∀ (extra : Nat) (change : Int) (waiting : EnumerationWaitingIndex.Waiting), SourcePruningEnumerationNativeIndex.count (fuel + extra) allocatedCached.core.representatives change scs waiting = some (EnumerationCanonicalWaiting.count roots change scs waiting)",
+          "used": true
+        }
+      ],
+      "skipped_fields": []
+    }
+  ],
+  "count": 5,
+  "field_count": 27,
+  "packet_sizes": [
+    5,
+    9,
+    5,
+    6,
+    2
+  ],
+  "inline_eliminations": [],
+  "unused_fields": [
+    "_emptyCase",
+    "_observed",
+    "_allocation"
+  ]
+}

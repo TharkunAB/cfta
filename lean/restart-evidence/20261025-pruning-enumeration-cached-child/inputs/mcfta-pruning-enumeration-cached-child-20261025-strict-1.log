@@ -1,0 +1,42 @@
+{"command": ["/home/tritlo/.elan/toolchains/leanprover--lean4---v4.34.1/bin/lean", "-o", "/tmp/mcfta-pruning-enumeration-cached-child-20261025/strict-1/SourcePruningEnumerationCachedChild.olean", "-R", "/tmp/mcfta-pruning-enumeration-cached-child-20261025/strict-1", "-DwarningAsError=true", "-Dlinter.all=true", "/tmp/mcfta-pruning-enumeration-cached-child-20261025/strict-1/MicroCFTA/SourcePruningEnumerationCachedChild.lean"], "exit_code": 1, "raw_bytes": 2504, "raw_sha256": "08793458987e33886ccd2c5e783e0de5a0ea06645378a70c8d828424dc65ad4c", "source_sha256": "a0f9d06c9dcd7c3bd166298fa0fbb0c9df39ad9b5fd33eedd41db83bae265695"}
+/tmp/mcfta-pruning-enumeration-cached-child-20261025/strict-1/MicroCFTA/SourcePruningEnumerationCachedChild.lean:90:6: error: unsolved goals
+case neg
+EnumGuard NativeGuard : Type
+heap : InternedConstructorTemplates.State Symbol NativeGuard
+before : EnumerationExpandableIndex.Cached Symbol EnumGuard
+handle : Nat
+entry : Cache.Interned InternedBinderProtocol.NodeKey
+edges : List (InternedConstructorTemplates.EdgeValue Symbol NativeGuard)
+depth : Nat
+free : List InternedBinderProtocol.Reference
+decoded : lookupNode heap handle = some (InternedConstructorTemplates.Value.node entry edges depth free)
+aligned : before.core.counter = before.core.values.length
+flags :
+  ∀ (slot : Nat),
+    SourcePruningEnumerationNativeIndex.candidate heap (before.core.values[slot]?.getD UVarValue.eliminated) =
+      some (before.expandable slot)
+candidateTrue : SourcePruningEnumerationNativeIndex.candidate heap (UVarValue.unenumerated (some handle) []) = some true
+slot : Nat
+beforeSlot : ¬slot < before.core.values.length
+same : ¬slot = before.core.counter
+absent : before.core.values[slot]? = none
+⊢ SourcePruningEnumerationNativeIndex.candidate heap
+      ({ core := allocated (some handle) before.core,
+                  expandable := fun slot => if slot = before.core.counter then true else before.expandable slot,
+                  waiting := before.waiting }.core.values[slot]?.getD
+        UVarValue.eliminated) =
+    some
+      ({ core := allocated (some handle) before.core,
+            expandable := fun slot => if slot = before.core.counter then true else before.expandable slot,
+            waiting := before.waiting }.expandable
+        slot)
+/tmp/mcfta-pruning-enumeration-cached-child-20261025/strict-1/MicroCFTA/SourcePruningEnumerationCachedChild.lean:92:6: error: No goals to be solved
+/tmp/mcfta-pruning-enumeration-cached-child-20261025/strict-1/MicroCFTA/SourcePruningEnumerationCachedChild.lean:78:57: error: This simp argument is unused:
+  Bool.true_eq
+
+Hint: Omit it from the simp argument list.
+  [apply] simp only [allocate, candidateTrue, Option.map_some, ↓reduceIte]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/tmp/mcfta-pruning-enumeration-cached-child-20261025/strict-1/MicroCFTA/SourcePruningEnumerationCachedChild.lean:96:8: error: unexpected identifier; expected command
+/tmp/mcfta-pruning-enumeration-cached-child-20261025/strict-1/MicroCFTA/SourcePruningEnumerationCachedChild.lean:136:39: error: unexpected identifier; expected '}'

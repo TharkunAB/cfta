@@ -1,0 +1,174 @@
+{
+  "cases": [
+    {
+      "scope": "allocate_node_flags.beforeSlot",
+      "kind": "by_cases beforeSlot : slot < before.core.values.length",
+      "branches": [
+        {
+          "name": "true",
+          "fields": [
+            {
+              "name": "beforeSlot",
+              "type": "slot < before.core.values.length",
+              "used": true
+            }
+          ]
+        },
+        {
+          "name": "false",
+          "fields": [
+            {
+              "name": "beforeSlot",
+              "type": "¬ (slot < before.core.values.length)",
+              "used": true
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "scope": "allocate_node_flags.same",
+      "kind": "by_cases same : slot = before.core.counter within not-beforeSlot",
+      "branches": [
+        {
+          "name": "true",
+          "fields": [
+            {
+              "name": "same",
+              "type": "slot = before.core.counter",
+              "used": true
+            }
+          ]
+        },
+        {
+          "name": "false",
+          "fields": [
+            {
+              "name": "same",
+              "type": "¬ (slot = before.core.counter)",
+              "used": true
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "scope": "complete.savedFlags.same",
+      "kind": "by_cases same : slot = before.core.counter",
+      "branches": [
+        {
+          "name": "true",
+          "fields": [
+            {
+              "name": "same",
+              "type": "slot = before.core.counter",
+              "used": true
+            }
+          ]
+        },
+        {
+          "name": "false",
+          "fields": [
+            {
+              "name": "same",
+              "type": "¬ (slot = before.core.counter)",
+              "used": true
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "scope": "complete.finalFlagShape.split",
+      "kind": "actual split <;> rfl after funext slot",
+      "scrutinee": "slot = before.core.counter",
+      "branches": [
+        {
+          "name": "true",
+          "fields": [
+            {
+              "scope": "complete.finalFlagShape.split.true",
+              "name": "anonymous_generated_condition",
+              "source_name": null,
+              "type": "slot = before.core.counter",
+              "used": true,
+              "binding_kind": "Generated split branch premise; no manually authored Lean identifier"
+            }
+          ]
+        },
+        {
+          "name": "false",
+          "fields": [
+            {
+              "scope": "complete.finalFlagShape.split.false",
+              "name": "anonymous_generated_condition",
+              "source_name": null,
+              "type": "¬ (slot = before.core.counter)",
+              "used": true,
+              "binding_kind": "Generated split branch premise; no manually authored Lean identifier"
+            }
+          ]
+        }
+      ],
+      "manual_named_premise": false,
+      "generated_proof_names_are_not_fixed": true
+    }
+  ],
+  "count": 4,
+  "definition_patterns": [
+    {
+      "scope": "prepareOrdinary",
+      "pattern": ".node _ _ _ _",
+      "named_payload_binders": [],
+      "typed_positions": [
+        "Cache.Interned InternedBinderProtocol.NodeKey",
+        "List (InternedConstructorTemplates.EdgeValue Symbol NativeGuard)",
+        "Nat",
+        "List InternedBinderProtocol.Reference"
+      ]
+    },
+    {
+      "scope": "prepareOrdinary",
+      "pattern": "_ (all other Value shapes)",
+      "named_payload_binders": []
+    }
+  ],
+  "definition_condition": "actual scs.any (fun sc => EqualityTrie.isTerminal sc.trie); only false continues",
+  "definition_option_callbacks": {
+    "allocate": [
+      [
+        "flag",
+        "Bool"
+      ],
+      [
+        "slot",
+        "Nat"
+      ]
+    ],
+    "writeSlot": [
+      [
+        "old",
+        "EnumerationState.UVarValue Symbol"
+      ]
+    ],
+    "prepareOrdinary": [
+      [
+        "sc",
+        "EnumerationState.Suspended"
+      ],
+      [
+        "handle",
+        "Nat"
+      ],
+      [
+        "allocation",
+        "Nat × EnumerationExpandableIndex.Cached Symbol EnumGuard"
+      ],
+      [
+        "after",
+        "EnumerationExpandableIndex.Cached Symbol EnumGuard"
+      ]
+    ]
+  },
+  "no_induction": true
+}

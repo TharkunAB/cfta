@@ -1,0 +1,20 @@
+--- root-v1/SourcePruningEnumerationCachedChild.lean
++++ root-v2/SourcePruningEnumerationCachedChild.lean
+@@ -75,7 +75,7 @@
+   refine ⟨⟨EnumerationState.allocated (some handle) before.core,
+     fun slot => if slot = before.core.counter then true else before.expandable slot,
+     before.waiting⟩, ?_, rfl, rfl, rfl, ?_⟩
+-  · simp only [allocate, candidateTrue, Option.map_some, Bool.true_eq, ↓reduceIte]
++  · simp only [allocate, candidateTrue, Option.map_some, ↓reduceIte]
+   · intro slot
+     by_cases beforeSlot : slot < before.core.values.length
+     · have different : slot ≠ before.core.counter := by
+@@ -89,7 +89,7 @@
+           Option.getD_some, ↓reduceIte] using candidateTrue
+       · have absent : before.core.values[slot]? = none := by
+           exact List.getElem?_eq_none (by omega)
+-      have wholeAbsent : (EnumerationState.allocated (some handle) before.core).values[slot]? = none := by
++        have wholeAbsent : (EnumerationState.allocated (some handle) before.core).values[slot]? = none := by
+           apply List.getElem?_eq_none
+           simp only [EnumerationState.allocated, List.length_append, List.length_singleton]
+           omega

@@ -1,0 +1,21 @@
+/-- The decoded ordinary allocation derives the complete native flag scan. -/
+theorem allocate_node_flags
+    (heap : InternedConstructorTemplates.State Symbol NativeGuard)
+    (before : EnumerationExpandableIndex.Cached Symbol EnumGuard) (handle : Nat)
+    (entry : Cache.Interned InternedBinderProtocol.NodeKey)
+    (edges : List (InternedConstructorTemplates.EdgeValue Symbol NativeGuard))
+    (depth : Nat) (free : List InternedBinderProtocol.Reference)
+    (decoded : lookupNode heap handle = some (.node entry edges depth free))
+    (aligned : before.core.counter = before.core.values.length)
+    (flags : ∀ (slot : Nat),
+      SourcePruningEnumerationNativeIndex.candidate heap
+        ((before.core.values[slot]?).getD .eliminated) = some (before.expandable slot)) :
+    ∃ allocatedCached : EnumerationExpandableIndex.Cached Symbol EnumGuard,
+      allocate heap (some handle) before = some (before.core.counter, allocatedCached) ∧
+      allocatedCached.core = EnumerationState.allocated (some handle) before.core ∧
+      allocatedCached.waiting = before.waiting ∧
+      allocatedCached.expandable =
+        (fun slot => if slot = before.core.counter then true else before.expandable slot) ∧
+      (∀ (slot : Nat), SourcePruningEnumerationNativeIndex.candidate heap
+        ((allocatedCached.core.values[slot]?).getD .eliminated) =
+          some (allocatedCached.expandable slot))

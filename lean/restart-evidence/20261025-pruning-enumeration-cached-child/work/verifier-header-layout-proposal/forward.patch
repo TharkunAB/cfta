@@ -1,0 +1,46 @@
+--- basis.py
++++ candidate.py
+@@ -116,11 +116,42 @@
+     assert len(data) == pin['bytes'] and sha(data) == pin['sha256']
+ contracts = load('owner-proposal/contracts.json')
+ assert contracts == load('work/body-gate.json')['contracts']
++layout_root = here / 'work/header-layout-overlay'
++layout_frozen = load('work/header-layout-overlay/FROZEN.json')
++assert sha((layout_root / 'FROZEN.json').read_bytes()) == '48babc2f4bf2383465160747b2ac0677f543a396564313079f3a5cebc4a3a03e'
++layout_pins = load('work/header-layout-overlay/pins.json')
++assert len(layout_pins) == layout_frozen['pins_count'] == 4
++assert sha((layout_root / 'pins.json').read_bytes()) == layout_frozen['pins_sha256']
++assert {p.relative_to(layout_root).as_posix() for p in layout_root.rglob('*') if p.is_file()} == set(layout_pins) | {'pins.json', 'FROZEN.json'}
++for name, pin in layout_pins.items():
++    assert not Path(name).is_absolute() and '..' not in Path(name).parts
++    data = (layout_root / name).read_bytes()
++    assert len(data) == pin['bytes'] and sha(data) == pin['sha256']
++layout = load('work/header-layout-overlay/overlay.json')
++assert layout['parent_owner_sha256'] == sha((here / 'owner-proposal/FROZEN.json').read_bytes())
++assert layout['contract_key'] == 'complete-header.lean.txt'
++assert layout['before_file'] == 'complete-header-before.lean.txt'
++assert layout['after_file'] == 'complete-header-after.lean.txt'
++old_literal, new_literal = layout['old'], layout['new']
++assert isinstance(old_literal, str) and isinstance(new_literal, str)
++assert old_literal == contracts['complete-header.lean.txt']
++assert (layout_root / layout['before_file']).read_bytes() == old_literal.encode()
++assert (layout_root / layout['after_file']).read_bytes() == new_literal.encode()
++assert sha(old_literal.encode()) == layout['before_sha256'] == 'a29f4fc175b417128cdbb697d8f000a086df103f662bd54c093d73eeb7ad88a8'
++assert sha(new_literal.encode()) == layout['after_sha256'] == 'c289ce4d9e4d2a33068379f2d8c2758d5edb8d4b0221cfbbe568c0c01431d1d2'
++old_line = '        allocatedCached.core.values.set before.core.counter (.unenumerated (some handle) scs)} ∧'
++new_line = '              allocatedCached.core.values.set before.core.counter (.unenumerated (some handle) scs)} ∧'
++assert old_literal.count(old_line) == 1
++assert new_literal == old_literal.replace(old_line, new_line, 1)
++assert old_literal.split() == new_literal.split()
++assert len(contracts) == 25
+ for name, literal in contracts.items():
+     assert isinstance(literal, str)
+     data = (here / 'owner-proposal' / name).read_bytes()
+     assert data.decode() == literal
+-    assert text.count(literal.rstrip('\n')) == 1
++    effective_literal = new_literal if name == layout['contract_key'] else literal
++    assert text.count(effective_literal.rstrip('\n')) == 1
++assert text.count(old_literal.rstrip('\n')) == 0
+ source_index = load('owner-proposal/source-index.json')
+ sources = source_index['sources']
+ assert len(sources) == frozen['source_count']

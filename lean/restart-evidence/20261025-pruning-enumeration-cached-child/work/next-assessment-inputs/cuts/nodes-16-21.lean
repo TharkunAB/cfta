@@ -1,0 +1,6 @@
+def encodeNode (value : Value Symbol Guard) : Option Nat :=
+  match value with
+  | .empty => some 0
+  | .reference _ => none
+  | .node entry _ _ _ | .union entry _ _ _ | .mu entry _ _ _ => some (entry.identity + 1)
+

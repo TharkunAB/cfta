@@ -1,0 +1,28 @@
+--- root-v3/SourcePruningEnumerationCachedChild.lean
++++ root-v4/SourcePruningEnumerationCachedChild.lean
+@@ -133,7 +133,7 @@
+       (∀ (extra : Nat), prepareOrdinary heap (fuel + extra) scs
+         (.node entry edges depth free) before = some (.hole before.core.counter, after)) ∧
+       after.core = {allocatedCached.core with values :=
+-              allocatedCached.core.values.set before.core.counter (.unenumerated (some handle) scs)} ∧
++                allocatedCached.core.values.set before.core.counter (.unenumerated (some handle) scs)} ∧
+       after.core.values[before.core.counter]? = some (.unenumerated (some handle) scs) ∧
+       after.core.counter = before.core.counter + 1 ∧ after.core.counter = after.core.values.length ∧
+       after.core.representatives = before.core.representatives ∧ Roots after.core.representatives roots ∧
+@@ -224,10 +224,12 @@
+     simp only [SourcePruningEnumerationShallowChild.prepareChild, nonterminal,
+       Bool.false_eq_true, ↓reduceIte, encoded, Option.some.injEq] at prepared
+     rw [← prepared]
+-    change [.ok (.hole before.core.counter,
+-      {EnumerationState.allocated (some handle) before.core with values :=
+-        (EnumerationState.allocated (some handle) before.core).values.set before.core.counter
+-          (.unenumerated (some handle) scs)})] = _
++    change [(.ok (.hole before.core.counter,
++      {EnumerationState.allocated (some handle) before.core with
++        values := (EnumerationState.allocated (some handle) before.core).values.set
++          before.core.counter (.unenumerated (some handle) scs)}) :
++            Except EnumerationState.Error
++              (Fragments.Fragment Symbol × EnumerationState.State Symbol EnumGuard))] = _
+     rw [savedCore, afterShape]
+   refine ⟨handle, action, allocatedCached, saved, fuel, encoded, decoded, prepared, coreRaw,
+     nativeAllocated, allocatedShape, allocatedStored, allocatedStorage, allocatedRealized,

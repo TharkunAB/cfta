@@ -1,0 +1,50 @@
+{
+  "basis": {
+    "path": "/tmp/mcfta-pruning-enumeration-cached-child-20261025-verify.py",
+    "bytes": 15046,
+    "lines": 246,
+    "sha256": "e1f5299c7dca23b53e9c91d7394aa9b4e4be1cb9aa2e38c4561cb947f025a050"
+  },
+  "candidate": {
+    "path": "/tmp/mcfta-pruning-enumeration-cached-child-20261025/verifier-header-layout-proposal/candidate.py",
+    "bytes": 17362,
+    "lines": 277,
+    "sha256": "3eda9476c38309fc642e7701dc6ce394d3a0a5bf633f4f7b3665f6747f8e6d9f"
+  },
+  "coordinate_unit": "Unicode characters",
+  "spans": [
+    {
+      "basis_start": 6363,
+      "basis_end": 6363,
+      "candidate_start": 6363,
+      "candidate_end": 8533,
+      "old": "",
+      "new": "layout_root = here / 'work/header-layout-overlay'\nlayout_frozen = load('work/header-layout-overlay/FROZEN.json')\nassert sha((layout_root / 'FROZEN.json').read_bytes()) == '48babc2f4bf2383465160747b2ac0677f543a396564313079f3a5cebc4a3a03e'\nlayout_pins = load('work/header-layout-overlay/pins.json')\nassert len(layout_pins) == layout_frozen['pins_count'] == 4\nassert sha((layout_root / 'pins.json').read_bytes()) == layout_frozen['pins_sha256']\nassert {p.relative_to(layout_root).as_posix() for p in layout_root.rglob('*') if p.is_file()} == set(layout_pins) | {'pins.json', 'FROZEN.json'}\nfor name, pin in layout_pins.items():\n    assert not Path(name).is_absolute() and '..' not in Path(name).parts\n    data = (layout_root / name).read_bytes()\n    assert len(data) == pin['bytes'] and sha(data) == pin['sha256']\nlayout = load('work/header-layout-overlay/overlay.json')\nassert layout['parent_owner_sha256'] == sha((here / 'owner-proposal/FROZEN.json').read_bytes())\nassert layout['contract_key'] == 'complete-header.lean.txt'\nassert layout['before_file'] == 'complete-header-before.lean.txt'\nassert layout['after_file'] == 'complete-header-after.lean.txt'\nold_literal, new_literal = layout['old'], layout['new']\nassert isinstance(old_literal, str) and isinstance(new_literal, str)\nassert old_literal == contracts['complete-header.lean.txt']\nassert (layout_root / layout['before_file']).read_bytes() == old_literal.encode()\nassert (layout_root / layout['after_file']).read_bytes() == new_literal.encode()\nassert sha(old_literal.encode()) == layout['before_sha256'] == 'a29f4fc175b417128cdbb697d8f000a086df103f662bd54c093d73eeb7ad88a8'\nassert sha(new_literal.encode()) == layout['after_sha256'] == 'c289ce4d9e4d2a33068379f2d8c2758d5edb8d4b0221cfbbe568c0c01431d1d2'\nold_line = '        allocatedCached.core.values.set before.core.counter (.unenumerated (some handle) scs)} ∧'\nnew_line = '              allocatedCached.core.values.set before.core.counter (.unenumerated (some handle) scs)} ∧'\nassert old_literal.count(old_line) == 1\nassert new_literal == old_literal.replace(old_line, new_line, 1)\nassert old_literal.split() == new_literal.split()\nassert len(contracts) == 25\n"
+    },
+    {
+      "basis_start": 6536,
+      "basis_end": 6536,
+      "candidate_start": 8706,
+      "candidate_end": 8789,
+      "old": "",
+      "new": "effective_literal = new_literal if name == layout['contract_key'] else literal\n    "
+    },
+    {
+      "basis_start": 6554,
+      "basis_end": 6554,
+      "candidate_start": 8807,
+      "candidate_end": 8817,
+      "old": "",
+      "new": "effective_"
+    },
+    {
+      "basis_start": 6580,
+      "basis_end": 6580,
+      "candidate_start": 8843,
+      "candidate_end": 8892,
+      "old": "",
+      "new": "\nassert text.count(old_literal.rstrip('\\n')) == 0"
+    }
+  ],
+  "both_directions_verified_as_data": true
+}

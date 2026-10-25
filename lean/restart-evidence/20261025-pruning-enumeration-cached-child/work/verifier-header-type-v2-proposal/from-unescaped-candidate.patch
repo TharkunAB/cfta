@@ -1,0 +1,47 @@
+--- historical-unescaped-candidate.py
++++ candidate.py
+@@ -116,10 +116,10 @@
+     assert len(data) == pin['bytes'] and sha(data) == pin['sha256']
+ contracts = load('owner-proposal/contracts.json')
+ assert contracts == load('work/body-gate.json')['contracts']
+-layout_root = here / 'work/header-type-overlay'
+-layout_frozen = load('work/header-type-overlay/FROZEN.json')
+-assert sha((layout_root / 'FROZEN.json').read_bytes()) == '39c9b8e82c7e56d55e0a1cc708e2cb503876d41382a27d7cca6347abe0ccb0b3'
+-layout_pins = load('work/header-type-overlay/pins.json')
++layout_root = here / 'work/header-type-overlay-v2'
++layout_frozen = load('work/header-type-overlay-v2/FROZEN.json')
++assert sha((layout_root / 'FROZEN.json').read_bytes()) == '590ada5decbaefeedad96beb03ee964d076d3199bc65311ecade7291d4210d54'
++layout_pins = load('work/header-type-overlay-v2/pins.json')
+ assert len(layout_pins) == layout_frozen['pins_count'] == 6
+ assert layout_frozen['contracts_changed'] == 2 and layout_frozen['bodies'] is False
+ assert sha((layout_root / 'pins.json').read_bytes()) == layout_frozen['pins_sha256']
+@@ -128,12 +128,12 @@
+     assert not Path(name).is_absolute() and '..' not in Path(name).parts
+     data = (layout_root / name).read_bytes()
+     assert len(data) == pin['bytes'] and sha(data) == pin['sha256']
+-layout = load('work/header-type-overlay/overlay.json')
++layout = load('work/header-type-overlay-v2/overlay.json')
+ assert layout['parent_FROZEN_sha256'] == sha((here / 'owner-proposal/FROZEN.json').read_bytes())
+ layout_contracts = layout['contracts']
+ layout_specs = {
+-    'complete-header.lean.txt': ('before-complete-header.lean.txt', 'after-complete-header.lean.txt', 'a29f4fc175b417128cdbb697d8f000a086df103f662bd54c093d73eeb7ad88a8', '0756cfa9d917ac176756b0c63a39ad685742a006d9789962689814e4b19455cf'),
+-    'local-bound.lean.txt': ('before-local-bound.lean.txt', 'after-local-bound.lean.txt', 'fe5a65504621fda1a23eb2e71947b975bed3c3290f1d9511f02a5c564d06c370', 'c3e837a20f00aca3a354049be2b309bf9b967bec570e3eab9d58443add8e163e'),
++    'complete-header.lean.txt': ('before-complete-header.lean.txt', 'after-complete-header.lean.txt', 'a29f4fc175b417128cdbb697d8f000a086df103f662bd54c093d73eeb7ad88a8', 'a23374b2967e3489e94f48e9340525451282b5d29d0c9b0ebb173dc844b14cbf'),
++    'local-bound.lean.txt': ('before-local-bound.lean.txt', 'after-local-bound.lean.txt', 'fe5a65504621fda1a23eb2e71947b975bed3c3290f1d9511f02a5c564d06c370', '1cec1011a256733e7aee4d5cccd1fa49e54969ae3cf8b72e4a79d09179926a30'),
+ }
+ assert set(layout_contracts) == set(layout_specs)
+ for name, (before_file, after_file, before_sha, after_sha) in layout_specs.items():
+@@ -149,11 +149,11 @@
+ old_line = '        allocatedCached.core.values.set before.core.counter (.unenumerated (some handle) scs)} ∧'
+ new_line = '                allocatedCached.core.values.set before.core.counter (.unenumerated (some handle) scs)} ∧'
+ old_bound = 'FragmentBound after.core.counter (.hole before.core.counter)'
+-new_bound = 'FragmentBound (Symbol := Symbol) after.core.counter (.hole before.core.counter)'
++new_bound = 'FragmentBound («Symbol» := Symbol) after.core.counter (.hole before.core.counter)'
+ assert old_header.count(old_line) == old_header.count(old_bound) == 1
+ assert new_header == old_header.replace(old_line, new_line, 1).replace(old_bound, new_bound, 1)
+ old_slot = 'SlotBound allocatedCached.core.counter (.unenumerated (some handle) scs)'
+-new_slot = 'SlotBound (Symbol := Symbol) allocatedCached.core.counter (.unenumerated (some handle) scs)'
++new_slot = 'SlotBound («Symbol» := Symbol) allocatedCached.core.counter (.unenumerated (some handle) scs)'
+ assert layout_contracts['local-bound.lean.txt']['old'].count(old_slot) == 1
+ assert layout_contracts['local-bound.lean.txt']['new'] == layout_contracts['local-bound.lean.txt']['old'].replace(old_slot, new_slot, 1)
+ assert len(contracts) == 25

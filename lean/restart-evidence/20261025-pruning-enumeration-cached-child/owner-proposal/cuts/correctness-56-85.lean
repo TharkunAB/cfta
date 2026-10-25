@@ -1,0 +1,30 @@
+theorem success_bind (action : EnumerateM Symbol Guard α) (next : α → EnumerateM Symbol Guard β)
+    (before : State Symbol Guard) (value : β) (after : State Symbol Guard) :
+    Success (action >>= next) before value after ↔
+      ∃ middle intermediate, Success action before middle intermediate ∧ Success (next middle) intermediate value after := by
+  simp only [Success, run_bind, List.mem_flatMap]
+  constructor
+  · rintro ⟨result, member, continued⟩
+    cases result with
+    | error error => simp at continued
+    | ok pair => exact ⟨pair.1, pair.2, member, continued⟩
+  · rintro ⟨middle, intermediate, member, continued⟩
+    exact ⟨.ok (middle, intermediate), member, continued⟩
+
+/-- A deterministic first step supplies exactly its returned state to the next step. -/
+theorem bind_single (action : EnumerateM Symbol Guard α) (next : α → EnumerateM Symbol Guard β)
+    (before after : State Symbol Guard) (value : α)
+    (result : action before = [.ok (value, after)]) :
+    (action >>= next) before = next value after := by
+  change ExceptT.run ((action >>= next) before) = ExceptT.run (next value after)
+  rw [run_bind]
+  change (action before : List (Except Error (α × State Symbol Guard))).flatMap _ = _
+  rw [result]
+  simp
+
+/-- Stored graph references denote their complete term languages. -/
+abbrev NodeLanguage (Symbol : Type) := Nat → Term Symbol → Prop
+
+/-- One source equality class requires a common existing subtree at every represented path. -/
+def EqualityHolds (term : Term Symbol) (trie : EqualityTrie.Trie) : Prop :=
+  ∃ common, ∀ path ∈ EqualityTrie.fromPathTrie trie, term.atPath path = some common

@@ -1,0 +1,12 @@
+[2026-10-25 03:16 CET] FINAL independent setup review — CLEAR.
+
+I read the complete 29-line baseline basis and candidate, both exact patches and the 23 Unicode replacement spans. I verified all seven payloads and the exact nine-file set. The basis equals the active Admission baseline. The candidate changes only the area, expected HEAD and two backup-branch literals. The clean-tree and main-ref assertions, backup verification, tree capture, refs/worktrees/stashes capture and dynamic file count remain intact. I did not activate or execute either program.
+
+I verified all 30 custody payloads and the exact 32-file set. The 26 original sources, copied bytes, lengths, hashes and order equal the actual Admission summary. The six-artifact archive-1, local-publication-1 and push-1 families precede the eight actual tail inputs. The complete 39372-byte summary retains its post-seal whitespace diagnostics. The separately sealed assessment peer is context, not input 27. Its actual nonterminal guard qualification remains explicit. The recorded lowercase-substring and filename locator assertions were data-reader diagnostics, not selected-program, compiler, cap or seal failures.
+
+The actual Root refresh and baseline receipts both terminate with exit code zero. Their complete short logs report clean HEAD/origin formalize 936f677bbe5904fca271568455fe21e9561df19b and unchanged origin/main 74250bd889685da436cdbfe32ac4b5a0878ffd09. Baseline data records 142364 files and tree SHA256 0bec08fb0e840fe2ed0309c3ab1ed644e48ae0075e0a2b139253462b73f4b7dd. Existing worktrees and stashes remain in the captured refresh output. The prior-turn classification is PROGRESS; the whole goal remains active and incomplete. This review establishes no current proof, seal or publication outcome.
+
+Exact identities (SHA256):
+- Baseline FROZEN: e28740b57c8f816f3a694a4ed8aa34d5bb80cf24537e1811538d4d260a4fab2d; pins: f527e3538c006aeb7406119546a3367c6f96093624820b47dc6fe30e7304380f; candidate: 95a102baec22a0cb134f970dc772444e777d703e84bee5e4f87fb445268c1fa3.
+- Custody FROZEN: b8045781c69528979aa722947059425950c9b2788a7a53078ff7b71a9d47ace0; pins: 3318049b9a1d24327a2206cc2c77b3060e0be101b0aee70e75d96ca86252c5d1; index: a4091150505fc7418247e3d6bddb7a68266e08d1c729d2d4e4ce6fe575383623.
+- Original summary: f1eee9c733e13710c5ee2ce4272ae32d36a8d9c328658a24248a0dd120fbb5fd; separate peer: a2ca290ddc57cf0468f37b6265704ceb747dd358a99b1bd88b8ed9b30730b5dd.
