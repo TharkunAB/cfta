@@ -1,5 +1,26 @@
 # Public API and source correspondence
 
+## Deterministic Sized gate from main
+
+Main `153e1a211b56dd78bd22f6b427fb78e673041d55` is integrated.
+Gate proof: `cb59a931b06e54bf217fca7cd86f4d8a2cacb998`.
+Dispatcher and rank integration: `01882288bb037712665f5d134b3005d2cc717da3`.
+The goal stays ACTIVE.
+
+The executable global key-cardinality check derives state and run uniqueness.
+Public and raw finite-map dispatch now check it before the product gate.
+Both routes return exactly the reference query record and residual errors.
+This is extensional API equality. Physical set correctness, branch identity
+and cost are outside this proof. Original guard and validation limits remain.
+
+All five strict Lean checks, installed readback and Audit pass.
+The audit checks 76607 theorem dependencies. Native Sized: 11 examples pass,
+including four properties with 300 cases each. Formatting checks pass.
+The Haskell documentation correction is recorded first in root FINDINGS.
+H6 remains the strongest end-to-end result. Next: admitted ordered child
+traversal, then the residual and captured-slot final write.
+Details: `lean/notes-current-sized-deterministic.md`.
+
 ## Ordered native child traversal
 
 Core agreement: `48c9d2f325c36225e9a2d9ef589636fd22b55af5`.
