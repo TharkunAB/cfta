@@ -168,4 +168,82 @@ theorem finishChecks_nil : finishChecks [] [] = (false, []) := by
 theorem order_nil (pending : List (Pending Symbol)) : order pending [] = none := by
   rfl
 
+/-- Program selection retains the allocated-hole bound of the original partial term. -/
+theorem programs_bounded (limit : Nat) (term program : PartialTerm)
+    (bounded : EnumerationPartialBounds.TermBound limit term) (member : program ∈ programs term) :
+    EnumerationPartialBounds.TermBound limit program := by
+  induction term using Language.Term.rec
+    (motive_2 := fun children => ∀ child ∈ children, ∀ program,
+      EnumerationPartialBounds.TermBound limit child → program ∈ programs child →
+      EnumerationPartialBounds.TermBound limit program) generalizing program with
+  | node symbol children ih =>
+      cases symbol with
+      | hole uv => simp [programs] at member
+      | truncated => simp [programs] at member
+      | concrete symbol =>
+          cases children with
+          | nil => simp [programs] at member
+          | cons annotation children =>
+              cases children with
+              | nil => simp [programs] at member
+              | cons second children =>
+                  cases children with
+                  | nil =>
+                      simp only [programs] at member
+                      split at member
+                      · exact ih second (by simp) program
+                          (EnumerationPartialBounds.termsBound_member limit _ bounded.2 second (by simp)) member
+                      · simp at member
+                  | cons third children =>
+                      cases children with
+                      | nil => simp [programs] at member
+                      | cons fourth children =>
+                          cases children with
+                          | nil =>
+                              simp only [programs] at member
+                              split at member
+                              · rcases List.mem_cons.mp member with same | member
+                                · subst program
+                                  exact bounded
+                                · rcases List.mem_append.mp member with inFunction | inArgument
+                                  · exact ih third (by simp) program
+                                      (EnumerationPartialBounds.termsBound_member limit _ bounded.2 third (by simp)) inFunction
+                                  · exact ih fourth (by simp) program
+                                      (EnumerationPartialBounds.termsBound_member limit _ bounded.2 fourth (by simp)) inArgument
+                              · simp at member
+                          | cons fifth rest => simp [programs] at member
+  | nil =>
+      rename_i child member program bounded observed
+      cases member
+  | cons child children first rest =>
+      rename_i selected member program bounded observed
+      rcases List.mem_cons.mp member with same | member
+      · subst selected
+        exact first program bounded observed
+      · exact rest selected member program bounded observed
+
+/-- Every newly parked match inherits the allocated IDs of the selected program. -/
+theorem startMatches_bounded (limit : Nat) (templates : List (Template.Pattern Symbol))
+    (term : PartialTerm) (bounded : EnumerationPartialBounds.TermBound limit term) :
+    ∀ pending, some pending ∈ startMatches templates term → PendingBound limit pending := by
+  intro pending member
+  unfold startMatches at member
+  obtain ⟨program, selected, member⟩ := List.mem_flatMap.mp member
+  obtain ⟨pattern, _indexed, matched⟩ := List.mem_map.mp member
+  exact matchPartial_bounded limit pattern program pending
+    (programs_bounded limit term program bounded selected) matched
+
+/-- Combining match results retains the bound of every retained pending group. -/
+theorem finishChecks_bounded (limit : Nat) (resumed started : List (Option (Pending Symbol)))
+    (resumedBounded : ∀ pending, some pending ∈ resumed → PendingBound limit pending)
+    (startedBounded : ∀ pending, some pending ∈ started → PendingBound limit pending) :
+    ∀ group ∈ (finishChecks resumed started).2, PendingBound limit group := by
+  intro group member
+  change group ∈ ((resumed ++ started).filterMap id).filter (fun pending => !pending.isEmpty) at member
+  have retained := (List.mem_filter.mp member).1
+  obtain ⟨entry, listed, found⟩ := List.mem_filterMap.mp retained
+  have same : entry = some group := found
+  subst entry
+  exact (List.mem_append.mp listed).elim (resumedBounded group) (startedBounded group)
+
 end MicroCFTA.SourcePruningTemplates
