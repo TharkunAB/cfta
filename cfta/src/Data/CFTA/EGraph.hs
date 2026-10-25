@@ -521,12 +521,14 @@ matchRule g region bySymbol r = [(c, m) | c <- roots, m <- down (ruleLeft r) c (
     down (CNode f kids sorts) c@(ClassId i) (Subst vs ss) = case sortsFrom c sorts ss of
         Nothing -> []
         Just ss' ->
-            [ m
-            | ENode _ f' cs <- IntMap.findWithDefault [] i region
-            , f' == f
-            , length cs == length kids
-            , m <- foldM (\acc (child, kid) -> down kid child acc) (Subst vs ss') (zip cs kids)
-            ]
+            let arity = length kids
+             in [ m
+                | ENode _ f' cs <- IntMap.findWithDefault [] i region
+                , f' == f
+                , length cs == arity
+                , m <- foldM (\acc (child, kid) -> down kid child acc) (Subst vs ss') (zip cs kids)
+                ]
+    sortsFrom _ [] ss = Just ss
     sortsFrom (ClassId i) sorts ss = do
         e <- IntMap.lookup i (classes g)
         foldM (\b sp -> matchSort g sp (classSort e) b) ss sorts
