@@ -1,0 +1,22 @@
+Source preparation failed before target writes:
+  /tmp/mcfta-reference-shape.py, line 19
+  AssertionError: ('(some sourceHandle) none (some sourceHandle)\n                    sourceScs targetScs', 0)
+The script had not reached either write_text call.
+
+The next capped check driver was issued too early:
+  strict dispatch-shape-strict-1 SourcePruningEnumerationDispatchShape
+  FileNotFoundError: [Errno 2] No such file or directory:
+  '/home/tritlo/Code/mcfta/lean/MicroCFTA/SourcePruningEnumerationDispatchShape.lean'
+The driver stopped during shutil.copyfile. It did not run Lean or write a
+compiler report. The existing empty run directory was not reused. Actual
+compiler attempts start with dispatch-shape-strict-2.
+
+The corrected generator matches whitespace before replacing six existing
+mutation conclusions. It then creates the shape theorem and refactors the
+storage/counts proof. The dependent-case equality repair follows in the
+retained compiler snapshots. The final generator is retained as preparation
+provenance. Do not run it again on the already refactored source.
+
+Two apply_patch context checks failed before any source change. They concerned
+the child result tuple and a stale captured-edge context. Corrected targeted
+patches then applied. These were not compiler or resource-limit failures.

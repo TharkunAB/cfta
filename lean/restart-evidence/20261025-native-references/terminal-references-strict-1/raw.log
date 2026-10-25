@@ -1,0 +1,778 @@
+/tmp/mcfta-native-references-20261025/terminal-references-strict-1/MicroCFTA/SourcePruningEnumerationCachedTerminalAdapter.lean:623:21: error: unexpected identifier; expected ')', ',' or ':'
+/tmp/mcfta-native-references-20261025/terminal-references-strict-1/MicroCFTA/SourcePruningEnumerationCachedTerminalAdapter.lean:505:10: error: Tactic `simp` failed with a nested error:
+maximum recursion depth has been reached
+use `set_option maxRecDepth <num>` to increase limit
+use `set_option diagnostics true` to get diagnostic information
+/tmp/mcfta-native-references-20261025/terminal-references-strict-1/MicroCFTA/SourcePruningEnumerationCachedTerminalAdapter.lean:622:31: error: Type mismatch: After simplification, term
+  foldAllowed
+ has type
+  ∀ (allowed : Nat → Prop),
+    (∀ (value : UVarValue Symbol),
+        value ∈ before.core.values → EnumerationReferences.InputsAllowed allowed (references value)) →
+      ∀ (value : UVarValue Symbol),
+        value ∈ folded.core.values → EnumerationReferences.InputsAllowed allowed (references value)
+but is expected to have type
+  ∀ (value : UVarValue Symbol),
+    value ∈ folded.core.values → EnumerationReferences.InputsAllowed allowed (references value)
+/tmp/mcfta-native-references-20261025/terminal-references-strict-1/MicroCFTA/SourcePruningEnumerationCachedTerminalAdapter.lean:535:2: error: unsolved goals
+case inr.refine_3
+width : Nat
+inst✝² : DecidableEq Symbol
+inst✝¹ : DecidableEq (EdgeKey Symbol Constraint)
+inst✝ : DecidableEq Node
+formulas : SourceGuards.Formulas FullSyntax.Formula
+solver : SourceGuards.Entailment FullSyntax.Formula
+inventory : Inventory
+beforeCaller : Caller width
+before : EnumerationExpandableIndex.Cached Symbol Constraint
+checkEmpty : Bool
+first : Suspended
+rest : List Suspended
+incoming : Node
+incomingScs : List Suspended
+roots : Nat → Nat
+memos : Memos
+initial : Context formulas solver inventory beforeCaller memos
+safe : Safe before.core
+paths : Roots before.core.representatives roots
+counts : EnumerationCanonicalWaiting.Correct roots before.core.values before.waiting
+flags :
+  ∀ (slot : Nat),
+    SourcePruningEnumerationNativeIndex.candidate beforeCaller.checked.native.machine.heap
+        (before.core.values[slot]?.getD UVarValue.eliminated) =
+      some (before.expandable slot)
+bounded : ∀ (sc : Suspended), sc ∈ first :: rest → sc.var < before.core.counter
+pending : InputsPending before.core (first :: rest)
+realized : PendingRealized beforeCaller.checked.native.machine.heap before.core
+nonempty : incoming ≠ Value.empty
+available : Available beforeCaller.checked.native.machine.heap incoming
+closed : incoming.free = []
+incomingBounded : ∀ (sc : Suspended), sc ∈ incomingScs → sc.var < before.core.counter
+ranges : Ranges checkEmpty first rest beforeCaller before incoming memos.query
+r n p h : Nat
+recorded : List Nat
+winner : Nat
+joined : EnumerationExpandableIndex.Cached Symbol Constraint
+foldCaller : Caller width
+foldQueries : Queries
+foldFinal : Memos
+foldInventory : Inventory
+folded : EnumerationExpandableIndex.Cached Symbol Constraint
+raw : List (Except Error (Fragments.Fragment Symbol × EnumerationState.State Symbol Constraint))
+afterCaller : Caller width
+outer : EnumerationState.State Symbol Constraint
+savedQueries : Queries
+final : Memos
+next : Inventory
+prefixRun :
+  ∀ (extra : Nat),
+    (SourcePruningEnumerationTerminalPrefix.run (r + extra) first rest before.waiting before.core).run =
+      [Except.ok ((recorded, winner, joined.waiting), joined.core)]
+recordedSame : recorded = List.map (fun sc => roots sc.var) (first :: rest)
+winnerMember : winner ∈ recorded
+movedSame :
+  joined.waiting =
+    EnumerationCanonicalWaiting.moveMany winner
+      (EnumerationBuilderCaches.canonicalIds (List.filter (fun key => key != winner) recorded)) before.waiting
+joinedSame :
+  joined.core =
+    have __src := before.core;
+    { counter := __src.counter, representatives := joined.core.representatives, values := __src.values,
+      obligations := __src.obligations, recursionAncestry := __src.recursionAncestry,
+      expansionAncestry := __src.expansionAncestry }
+joinedFlagsSame : joined.expandable = before.expandable
+prefixRoots : Roots joined.core.representatives (EnumerationCanonicalUnion.mergedRoots roots recorded winner)
+prefixCounts :
+  EnumerationCanonicalWaiting.Correct (EnumerationCanonicalUnion.mergedRoots roots recorded winner) joined.core.values
+    joined.waiting
+joinedFlags :
+  ∀ (slot : Nat),
+    SourcePruningEnumerationNativeIndex.candidate beforeCaller.checked.native.machine.heap
+        (joined.core.values[slot]?.getD UVarValue.eliminated) =
+      some (joined.expandable slot)
+foldPost : Post formulas solver foldInventory beforeCaller foldCaller foldFinal
+foldQuerySame : foldFinal.query = foldQueries
+foldCounter : folded.core.counter = joined.core.counter
+foldForest : folded.core.representatives = joined.core.representatives
+foldPaths : Roots folded.core.representatives (EnumerationCanonicalUnion.mergedRoots roots recorded winner)
+foldStorage : StorageValid folded.core
+foldRealized : PendingRealized foldCaller.checked.native.machine.heap folded.core
+foldedRoot : IsRoot folded.core.representatives winner
+foldPending : PendingAt folded.core winner
+foldCounts :
+  EnumerationCanonicalWaiting.Correct (EnumerationCanonicalUnion.mergedRoots roots recorded winner) folded.core.values
+    folded.waiting
+foldWaiting : folded.waiting = joined.waiting
+foldFlags :
+  ∀ (slot : Nat),
+    SourcePruningEnumerationNativeIndex.candidate foldCaller.checked.native.machine.heap
+        (folded.core.values[slot]?.getD UVarValue.eliminated) =
+      some (folded.expandable slot)
+foldEliminated :
+  ∀ (slot : Nat),
+    joined.core.values[slot]? = some UVarValue.eliminated → folded.core.values[slot]? = some UVarValue.eliminated
+foldedFrame : ∀ (slot : Nat), ¬slot ∈ recorded → folded.core.values[slot]? = before.core.values[slot]?
+foldedOrigin :
+  ∀ (slot : Nat) (fragment : Fragments.Fragment Symbol),
+    folded.core.values[slot]? = some (UVarValue.enumerated fragment) →
+      before.core.values[slot]? = some (UVarValue.enumerated fragment)
+terminalRun :
+  ∀ (extraRepresentative extraNative P H : Nat),
+    p ≤ P →
+      h ≤ H →
+        SourcePruningEnumerationTerminal.run checkEmpty (r + extraRepresentative) (n + extraNative) P H first rest
+            before.waiting beforeCaller before.core incoming incomingScs memos.query =
+          (Except.ok (some raw), afterCaller, savedQueries, outer, joined.waiting)
+post : Post formulas solver next beforeCaller afterCaller final
+querySame : final.query = savedQueries
+foldAllowed :
+  ∀ (allowed : Nat → Prop),
+    EnumerationReferences.ReferencesAllowed allowed before.core →
+      EnumerationReferences.ReferencesAllowed allowed folded.core
+cachedFoldRun :
+  ∀ (extra P H : Nat),
+    p ≤ P →
+      h ≤ H →
+        SourcePruningEnumerationCachedFold.run checkEmpty (n + extra) P H recorded beforeCaller joined winner
+            memos.query =
+          ((Except.ok (some (List.map (fun row => Except.ok (row.fst, row.snd.core)) [((), folded)])), foldCaller,
+              foldQueries, folded.core),
+            some folded)
+foldRun :
+  ∀ (extra P H : Nat),
+    p ≤ P →
+      h ≤ H →
+        SourcePruningEnumerationFold.run checkEmpty (n + extra) P H recorded beforeCaller joined.core winner
+            memos.query =
+          (Except.ok (some (List.map (fun row => Except.ok (row.fst, row.snd.core)) [((), folded)])), foldCaller,
+            foldQueries, folded.core)
+foldCompleted :
+  [((), folded)] = [((), folded)] →
+    ∀ (source : Nat), source ∈ recorded → source ≠ winner → folded.core.values[source]? = some UVarValue.eliminated
+foldedSafe : [((), folded)] = [((), folded)] → Safe folded.core
+rejectedBranch :
+  [((), folded)] = [] →
+    raw = [] ∧
+      afterCaller = foldCaller ∧
+        savedQueries = foldQueries ∧ outer = folded.core ∧ final = foldFinal ∧ next = foldInventory
+completedBranch :
+  [((), folded)] = [((), folded)] →
+    ∃ k oldNode oldScs read after replacement handle,
+      outer = read ∧
+        (∀ (extra : Nat),
+            (getValue (r + extra) winner folded.core).run = [Except.ok (UVarValue.unenumerated oldNode oldScs, read)]) ∧
+          EnumerationCompressionFrame.Frame folded.core read ∧
+            (∀ (extraRepresentative extraNative P H : Nat),
+                p ≤ P →
+                  h ≤ H →
+                    SourcePruningEnumerationIncomingNode.run checkEmpty (r + extraRepresentative) (n + extraNative) P H
+                        foldCaller folded.core winner incoming incomingScs foldQueries =
+                      (Except.ok (some (if replacement = Value.empty then [] else [Except.ok ((), after.core)])),
+                        afterCaller, savedQueries, read)) ∧
+              ((setValue winner (UVarValue.unenumerated (some handle) (incomingScs ++ oldScs)) >>= fun __r =>
+                        inheritAncestry winner)
+                      read).run =
+                  [Except.ok ((), after.core)] ∧
+                after.core =
+                    { counter := read.counter, representatives := read.representatives,
+                      values := read.values.set winner (UVarValue.unenumerated (some handle) (incomingScs ++ oldScs)),
+                      obligations := read.obligations,
+                      recursionAncestry := fun other =>
+                        if other = winner then (read.expansionAncestry ++ read.recursionAncestry winner).eraseDups
+                        else read.recursionAncestry other,
+                      expansionAncestry := read.expansionAncestry } ∧
+                  after.core.values[winner]? = some (UVarValue.unenumerated (some handle) (incomingScs ++ oldScs)) ∧
+                    StorageValid after.core ∧
+                      PendingRealized afterCaller.checked.native.machine.heap after.core ∧
+                        Post formulas solver next foldCaller afterCaller final ∧
+                          Cache.Extends foldFinal.unfolding final.unfolding ∧
+                            (∀ (extra : Nat),
+                                Option.map (EnumerationExpandableIndex.frame after.core)
+                                    (SourcePruningEnumerationNativeIndex.write afterCaller.checked.native.machine.heap
+                                      (k + extra) winner (UVarValue.unenumerated (some handle) (incomingScs ++ oldScs))
+                                      incomingScs [] (EnumerationExpandableIndex.frame read folded)) =
+                                  some after) ∧
+                              after.core.counter = folded.core.counter ∧
+                                after.core.representatives = read.representatives ∧
+                                  Roots after.core.representatives
+                                      (EnumerationCanonicalUnion.mergedRoots roots recorded winner) ∧
+                                    EnumerationCanonicalWaiting.Correct
+                                        (EnumerationCanonicalUnion.mergedRoots roots recorded winner) after.core.values
+                                        after.waiting ∧
+                                      after.waiting =
+                                          EnumerationCanonicalWaiting.count
+                                            (EnumerationCanonicalUnion.mergedRoots roots recorded winner) 1 incomingScs
+                                            joined.waiting ∧
+                                        (∀ (slot : Nat),
+                                            SourcePruningEnumerationNativeIndex.candidate
+                                                afterCaller.checked.native.machine.heap
+                                                (after.core.values[slot]?.getD UVarValue.eliminated) =
+                                              some (after.expandable slot)) ∧
+                                          (after.expandable = fun slot =>
+                                              if slot = winner then
+                                                !(MergedOrdinaryHeight.recursiveBoundary replacement &&
+                                                    (incomingScs ++ oldScs).isEmpty)
+                                              else folded.expandable slot) ∧
+                                            (raw =
+                                                if replacement = Value.empty then []
+                                                else [Except.ok (Fragments.Fragment.hole winner, after.core)]) ∧
+                                              FragmentBound after.core.counter (Fragments.Fragment.hole winner) ∧
+                                                Available afterCaller.checked.native.machine.heap replacement ∧
+                                                  replacement.free = [] ∧
+                                                    encodeNode replacement = some handle ∧
+                                                      lookupNode afterCaller.checked.native.machine.heap handle =
+                                                          some replacement ∧
+                                                        (oldNode = none →
+                                                            replacement = incoming ∧
+                                                              afterCaller = foldCaller ∧
+                                                                savedQueries = foldQueries ∧
+                                                                  final = foldFinal ∧ next = foldInventory) ∧
+                                                          ∀ (oldHandle : Nat),
+                                                            oldNode = some oldHandle →
+                                                              ∃ old query queried,
+                                                                lookupNode foldCaller.checked.native.machine.heap
+                                                                      oldHandle =
+                                                                    some old ∧
+                                                                  next.source = foldCaller.checked.native.machine.heap ∧
+                                                                    ⋯
+incomingK : Nat
+oldNode : Option Nat
+oldScs : List Suspended
+read : EnumerationState.State Symbol Constraint
+after : EnumerationExpandableIndex.Cached Symbol Constraint
+replacement : Node
+handle : Nat
+outerRead : outer = read
+reading :
+  ∀ (extra : Nat),
+    (getValue (r + extra) winner folded.core).run = [Except.ok (UVarValue.unenumerated oldNode oldScs, read)]
+frame : EnumerationCompressionFrame.Frame folded.core read
+incomingRun :
+  ∀ (extraRepresentative extraNative P H : Nat),
+    p ≤ P →
+      h ≤ H →
+        SourcePruningEnumerationIncomingNode.run checkEmpty (r + extraRepresentative) (n + extraNative) P H foldCaller
+            folded.core winner incoming incomingScs foldQueries =
+          (Except.ok (some (if replacement = Value.empty then [] else [Except.ok ((), after.core)])), afterCaller,
+            savedQueries, read)
+writePrefix :
+  ((setValue winner (UVarValue.unenumerated (some handle) (incomingScs ++ oldScs)) >>= fun __r =>
+          inheritAncestry winner)
+        read).run =
+    [Except.ok ((), after.core)]
+afterSame :
+  after.core =
+    { counter := read.counter, representatives := read.representatives,
+      values := read.values.set winner (UVarValue.unenumerated (some handle) (incomingScs ++ oldScs)),
+      obligations := read.obligations,
+      recursionAncestry := fun other =>
+        if other = winner then (read.expansionAncestry ++ read.recursionAncestry winner).eraseDups
+        else read.recursionAncestry other,
+      expansionAncestry := read.expansionAncestry }
+afterStored : after.core.values[winner]? = some (UVarValue.unenumerated (some handle) (incomingScs ++ oldScs))
+afterStorage : StorageValid after.core
+afterRealized : PendingRealized afterCaller.checked.native.machine.heap after.core
+incomingPost : Post formulas solver next foldCaller afterCaller final
+unfolding : Cache.Extends foldFinal.unfolding final.unfolding
+cacheRun :
+  ∀ (extra : Nat),
+    Option.map (EnumerationExpandableIndex.frame after.core)
+        (SourcePruningEnumerationNativeIndex.write afterCaller.checked.native.machine.heap (incomingK + extra) winner
+          (UVarValue.unenumerated (some handle) (incomingScs ++ oldScs)) incomingScs []
+          (EnumerationExpandableIndex.frame read folded)) =
+      some after
+afterCounter : after.core.counter = folded.core.counter
+afterRepresentatives : after.core.representatives = read.representatives
+afterPaths : Roots after.core.representatives (EnumerationCanonicalUnion.mergedRoots roots recorded winner)
+afterCounts :
+  EnumerationCanonicalWaiting.Correct (EnumerationCanonicalUnion.mergedRoots roots recorded winner) after.core.values
+    after.waiting
+writeWaiting :
+  after.waiting =
+    EnumerationCanonicalWaiting.count (EnumerationCanonicalUnion.mergedRoots roots recorded winner) 1 incomingScs
+      joined.waiting
+afterFlags :
+  ∀ (slot : Nat),
+    SourcePruningEnumerationNativeIndex.candidate afterCaller.checked.native.machine.heap
+        (after.core.values[slot]?.getD UVarValue.eliminated) =
+      some (after.expandable slot)
+afterExpandable :
+  after.expandable = fun slot =>
+    if slot = winner then !(MergedOrdinaryHeight.recursiveBoundary replacement && (incomingScs ++ oldScs).isEmpty)
+    else folded.expandable slot
+rawSame : raw = if replacement = Value.empty then [] else [Except.ok (Fragments.Fragment.hole winner, after.core)]
+winnerBound : FragmentBound after.core.counter (Fragments.Fragment.hole winner)
+replacementAvailable : Available afterCaller.checked.native.machine.heap replacement
+replacementClosed : replacement.free = []
+encoded : encodeNode replacement = some handle
+decoded : lookupNode afterCaller.checked.native.machine.heap handle = some replacement
+optional :
+  oldNode = none →
+    replacement = incoming ∧
+      afterCaller = foldCaller ∧ savedQueries = foldQueries ∧ final = foldFinal ∧ next = foldInventory
+present :
+  ∀ (oldHandle : Nat),
+    oldNode = some oldHandle →
+      ∃ old query queried,
+        lookupNode foldCaller.checked.native.machine.heap oldHandle = some old ∧
+          next.source = foldCaller.checked.native.machine.heap ∧
+            next.roots = foldInventory.roots ++ [incoming, old] ∧
+              SourceCurrentAllocatedTargetQuery.Receipt formulas solver next incoming old foldCaller.checked query
+                  queried foldFinal ∧
+                (∀ (ambient : InternedGuardedLanguage.Env (SourceObservations.Label FullSyntax.Formula))
+                    (term : Language.Term (SourceObservations.Label FullSyntax.Formula)),
+                    InternedGuardedLanguage.meaning (SourceEqualityPCSGuard.holds formulas solver) ambient replacement
+                        term ↔
+                      InternedGuardedLanguage.meaning (SourceEqualityPCSGuard.holds formulas solver) ambient incoming
+                          term ∧
+                        InternedGuardedLanguage.meaning (SourceEqualityPCSGuard.holds formulas solver) ambient old
+                          term) ∧
+                  (checkEmpty = false →
+                    replacement = query ∧
+                      afterCaller =
+                          SourceCurrentAllocatedPartialState.advance foldCaller queried foldCaller.fourth
+                            foldCaller.merge ∧
+                        final = foldFinal)
+found : UnionFind.Result
+lookup : UnionFind.findRoot r folded.core.representatives winner = some found
+oldStored : folded.core.values[found.representative]? = some (UVarValue.unenumerated oldNode oldScs)
+_readSame :
+  read =
+    { counter := folded.core.counter, representatives := found.forest, values := folded.core.values,
+      obligations := folded.core.obligations, recursionAncestry := folded.core.recursionAncestry,
+      expansionAncestry := folded.core.expansionAncestry }
+foundTarget : found.representative = winner
+readStored : read.values[winner]? = some (UVarValue.unenumerated oldNode oldScs)
+adapted :
+  ∀ (extraIndex : Nat),
+    SourcePruningEnumerationIncomingCacheAdapter.adapt afterCaller.checked.native.machine.heap (incomingK + extraIndex)
+        winner incomingScs folded read (if replacement = Value.empty then [] else [Except.ok ((), after.core)]) =
+      some after
+resultFrame : ∀ (slot : Nat), ¬slot ∈ recorded → after.core.values[slot]? = before.core.values[slot]?
+resultSafe : Safe after.core
+resultOrigin :
+  ∀ (slot : Nat) (fragment : Fragments.Fragment Symbol),
+    after.core.values[slot]? = some (UVarValue.enumerated fragment) →
+      before.core.values[slot]? = some (UVarValue.enumerated fragment)
+⊢ [((), folded)] = [] → after = folded
+
+case inr.refine_4
+width : Nat
+inst✝² : DecidableEq Symbol
+inst✝¹ : DecidableEq (EdgeKey Symbol Constraint)
+inst✝ : DecidableEq Node
+formulas : SourceGuards.Formulas FullSyntax.Formula
+solver : SourceGuards.Entailment FullSyntax.Formula
+inventory : Inventory
+beforeCaller : Caller width
+before : EnumerationExpandableIndex.Cached Symbol Constraint
+checkEmpty : Bool
+first : Suspended
+rest : List Suspended
+incoming : Node
+incomingScs : List Suspended
+roots : Nat → Nat
+memos : Memos
+initial : Context formulas solver inventory beforeCaller memos
+safe : Safe before.core
+paths : Roots before.core.representatives roots
+counts : EnumerationCanonicalWaiting.Correct roots before.core.values before.waiting
+flags :
+  ∀ (slot : Nat),
+    SourcePruningEnumerationNativeIndex.candidate beforeCaller.checked.native.machine.heap
+        (before.core.values[slot]?.getD UVarValue.eliminated) =
+      some (before.expandable slot)
+bounded : ∀ (sc : Suspended), sc ∈ first :: rest → sc.var < before.core.counter
+pending : InputsPending before.core (first :: rest)
+realized : PendingRealized beforeCaller.checked.native.machine.heap before.core
+nonempty : incoming ≠ Value.empty
+available : Available beforeCaller.checked.native.machine.heap incoming
+closed : incoming.free = []
+incomingBounded : ∀ (sc : Suspended), sc ∈ incomingScs → sc.var < before.core.counter
+ranges : Ranges checkEmpty first rest beforeCaller before incoming memos.query
+r n p h : Nat
+recorded : List Nat
+winner : Nat
+joined : EnumerationExpandableIndex.Cached Symbol Constraint
+foldCaller : Caller width
+foldQueries : Queries
+foldFinal : Memos
+foldInventory : Inventory
+folded : EnumerationExpandableIndex.Cached Symbol Constraint
+raw : List (Except Error (Fragments.Fragment Symbol × EnumerationState.State Symbol Constraint))
+afterCaller : Caller width
+outer : EnumerationState.State Symbol Constraint
+savedQueries : Queries
+final : Memos
+next : Inventory
+prefixRun :
+  ∀ (extra : Nat),
+    (SourcePruningEnumerationTerminalPrefix.run (r + extra) first rest before.waiting before.core).run =
+      [Except.ok ((recorded, winner, joined.waiting), joined.core)]
+recordedSame : recorded = List.map (fun sc => roots sc.var) (first :: rest)
+winnerMember : winner ∈ recorded
+movedSame :
+  joined.waiting =
+    EnumerationCanonicalWaiting.moveMany winner
+      (EnumerationBuilderCaches.canonicalIds (List.filter (fun key => key != winner) recorded)) before.waiting
+joinedSame :
+  joined.core =
+    have __src := before.core;
+    { counter := __src.counter, representatives := joined.core.representatives, values := __src.values,
+      obligations := __src.obligations, recursionAncestry := __src.recursionAncestry,
+      expansionAncestry := __src.expansionAncestry }
+joinedFlagsSame : joined.expandable = before.expandable
+prefixRoots : Roots joined.core.representatives (EnumerationCanonicalUnion.mergedRoots roots recorded winner)
+prefixCounts :
+  EnumerationCanonicalWaiting.Correct (EnumerationCanonicalUnion.mergedRoots roots recorded winner) joined.core.values
+    joined.waiting
+joinedFlags :
+  ∀ (slot : Nat),
+    SourcePruningEnumerationNativeIndex.candidate beforeCaller.checked.native.machine.heap
+        (joined.core.values[slot]?.getD UVarValue.eliminated) =
+      some (joined.expandable slot)
+foldPost : Post formulas solver foldInventory beforeCaller foldCaller foldFinal
+foldQuerySame : foldFinal.query = foldQueries
+foldCounter : folded.core.counter = joined.core.counter
+foldForest : folded.core.representatives = joined.core.representatives
+foldPaths : Roots folded.core.representatives (EnumerationCanonicalUnion.mergedRoots roots recorded winner)
+foldStorage : StorageValid folded.core
+foldRealized : PendingRealized foldCaller.checked.native.machine.heap folded.core
+foldedRoot : IsRoot folded.core.representatives winner
+foldPending : PendingAt folded.core winner
+foldCounts :
+  EnumerationCanonicalWaiting.Correct (EnumerationCanonicalUnion.mergedRoots roots recorded winner) folded.core.values
+    folded.waiting
+foldWaiting : folded.waiting = joined.waiting
+foldFlags :
+  ∀ (slot : Nat),
+    SourcePruningEnumerationNativeIndex.candidate foldCaller.checked.native.machine.heap
+        (folded.core.values[slot]?.getD UVarValue.eliminated) =
+      some (folded.expandable slot)
+foldEliminated :
+  ∀ (slot : Nat),
+    joined.core.values[slot]? = some UVarValue.eliminated → folded.core.values[slot]? = some UVarValue.eliminated
+foldedFrame : ∀ (slot : Nat), ¬slot ∈ recorded → folded.core.values[slot]? = before.core.values[slot]?
+foldedOrigin :
+  ∀ (slot : Nat) (fragment : Fragments.Fragment Symbol),
+    folded.core.values[slot]? = some (UVarValue.enumerated fragment) →
+      before.core.values[slot]? = some (UVarValue.enumerated fragment)
+terminalRun :
+  ∀ (extraRepresentative extraNative P H : Nat),
+    p ≤ P →
+      h ≤ H →
+        SourcePruningEnumerationTerminal.run checkEmpty (r + extraRepresentative) (n + extraNative) P H first rest
+            before.waiting beforeCaller before.core incoming incomingScs memos.query =
+          (Except.ok (some raw), afterCaller, savedQueries, outer, joined.waiting)
+post : Post formulas solver next beforeCaller afterCaller final
+querySame : final.query = savedQueries
+foldAllowed :
+  ∀ (allowed : Nat → Prop),
+    EnumerationReferences.ReferencesAllowed allowed before.core →
+      EnumerationReferences.ReferencesAllowed allowed folded.core
+cachedFoldRun :
+  ∀ (extra P H : Nat),
+    p ≤ P →
+      h ≤ H →
+        SourcePruningEnumerationCachedFold.run checkEmpty (n + extra) P H recorded beforeCaller joined winner
+            memos.query =
+          ((Except.ok (some (List.map (fun row => Except.ok (row.fst, row.snd.core)) [((), folded)])), foldCaller,
+              foldQueries, folded.core),
+            some folded)
+foldRun :
+  ∀ (extra P H : Nat),
+    p ≤ P →
+      h ≤ H →
+        SourcePruningEnumerationFold.run checkEmpty (n + extra) P H recorded beforeCaller joined.core winner
+            memos.query =
+          (Except.ok (some (List.map (fun row => Except.ok (row.fst, row.snd.core)) [((), folded)])), foldCaller,
+            foldQueries, folded.core)
+foldCompleted :
+  [((), folded)] = [((), folded)] →
+    ∀ (source : Nat), source ∈ recorded → source ≠ winner → folded.core.values[source]? = some UVarValue.eliminated
+foldedSafe : [((), folded)] = [((), folded)] → Safe folded.core
+rejectedBranch :
+  [((), folded)] = [] →
+    raw = [] ∧
+      afterCaller = foldCaller ∧
+        savedQueries = foldQueries ∧ outer = folded.core ∧ final = foldFinal ∧ next = foldInventory
+completedBranch :
+  [((), folded)] = [((), folded)] →
+    ∃ k oldNode oldScs read after replacement handle,
+      outer = read ∧
+        (∀ (extra : Nat),
+            (getValue (r + extra) winner folded.core).run = [Except.ok (UVarValue.unenumerated oldNode oldScs, read)]) ∧
+          EnumerationCompressionFrame.Frame folded.core read ∧
+            (∀ (extraRepresentative extraNative P H : Nat),
+                p ≤ P →
+                  h ≤ H →
+                    SourcePruningEnumerationIncomingNode.run checkEmpty (r + extraRepresentative) (n + extraNative) P H
+                        foldCaller folded.core winner incoming incomingScs foldQueries =
+                      (Except.ok (some (if replacement = Value.empty then [] else [Except.ok ((), after.core)])),
+                        afterCaller, savedQueries, read)) ∧
+              ((setValue winner (UVarValue.unenumerated (some handle) (incomingScs ++ oldScs)) >>= fun __r =>
+                        inheritAncestry winner)
+                      read).run =
+                  [Except.ok ((), after.core)] ∧
+                after.core =
+                    { counter := read.counter, representatives := read.representatives,
+                      values := read.values.set winner (UVarValue.unenumerated (some handle) (incomingScs ++ oldScs)),
+                      obligations := read.obligations,
+                      recursionAncestry := fun other =>
+                        if other = winner then (read.expansionAncestry ++ read.recursionAncestry winner).eraseDups
+                        else read.recursionAncestry other,
+                      expansionAncestry := read.expansionAncestry } ∧
+                  after.core.values[winner]? = some (UVarValue.unenumerated (some handle) (incomingScs ++ oldScs)) ∧
+                    StorageValid after.core ∧
+                      PendingRealized afterCaller.checked.native.machine.heap after.core ∧
+                        Post formulas solver next foldCaller afterCaller final ∧
+                          Cache.Extends foldFinal.unfolding final.unfolding ∧
+                            (∀ (extra : Nat),
+                                Option.map (EnumerationExpandableIndex.frame after.core)
+                                    (SourcePruningEnumerationNativeIndex.write afterCaller.checked.native.machine.heap
+                                      (k + extra) winner (UVarValue.unenumerated (some handle) (incomingScs ++ oldScs))
+                                      incomingScs [] (EnumerationExpandableIndex.frame read folded)) =
+                                  some after) ∧
+                              after.core.counter = folded.core.counter ∧
+                                after.core.representatives = read.representatives ∧
+                                  Roots after.core.representatives
+                                      (EnumerationCanonicalUnion.mergedRoots roots recorded winner) ∧
+                                    EnumerationCanonicalWaiting.Correct
+                                        (EnumerationCanonicalUnion.mergedRoots roots recorded winner) after.core.values
+                                        after.waiting ∧
+                                      after.waiting =
+                                          EnumerationCanonicalWaiting.count
+                                            (EnumerationCanonicalUnion.mergedRoots roots recorded winner) 1 incomingScs
+                                            joined.waiting ∧
+                                        (∀ (slot : Nat),
+                                            SourcePruningEnumerationNativeIndex.candidate
+                                                afterCaller.checked.native.machine.heap
+                                                (after.core.values[slot]?.getD UVarValue.eliminated) =
+                                              some (after.expandable slot)) ∧
+                                          (after.expandable = fun slot =>
+                                              if slot = winner then
+                                                !(MergedOrdinaryHeight.recursiveBoundary replacement &&
+                                                    (incomingScs ++ oldScs).isEmpty)
+                                              else folded.expandable slot) ∧
+                                            (raw =
+                                                if replacement = Value.empty then []
+                                                else [Except.ok (Fragments.Fragment.hole winner, after.core)]) ∧
+                                              FragmentBound after.core.counter (Fragments.Fragment.hole winner) ∧
+                                                Available afterCaller.checked.native.machine.heap replacement ∧
+                                                  replacement.free = [] ∧
+                                                    encodeNode replacement = some handle ∧
+                                                      lookupNode afterCaller.checked.native.machine.heap handle =
+                                                          some replacement ∧
+                                                        (oldNode = none →
+                                                            replacement = incoming ∧
+                                                              afterCaller = foldCaller ∧
+                                                                savedQueries = foldQueries ∧
+                                                                  final = foldFinal ∧ next = foldInventory) ∧
+                                                          ∀ (oldHandle : Nat),
+                                                            oldNode = some oldHandle →
+                                                              ∃ old query queried,
+                                                                lookupNode foldCaller.checked.native.machine.heap
+                                                                      oldHandle =
+                                                                    some old ∧
+                                                                  next.source = foldCaller.checked.native.machine.heap ∧
+                                                                    ⋯
+incomingK : Nat
+oldNode : Option Nat
+oldScs : List Suspended
+read : EnumerationState.State Symbol Constraint
+after : EnumerationExpandableIndex.Cached Symbol Constraint
+replacement : Node
+handle : Nat
+outerRead : outer = read
+reading :
+  ∀ (extra : Nat),
+    (getValue (r + extra) winner folded.core).run = [Except.ok (UVarValue.unenumerated oldNode oldScs, read)]
+frame : EnumerationCompressionFrame.Frame folded.core read
+incomingRun :
+  ∀ (extraRepresentative extraNative P H : Nat),
+    p ≤ P →
+      h ≤ H →
+        SourcePruningEnumerationIncomingNode.run checkEmpty (r + extraRepresentative) (n + extraNative) P H foldCaller
+            folded.core winner incoming incomingScs foldQueries =
+          (Except.ok (some (if replacement = Value.empty then [] else [Except.ok ((), after.core)])), afterCaller,
+            savedQueries, read)
+writePrefix :
+  ((setValue winner (UVarValue.unenumerated (some handle) (incomingScs ++ oldScs)) >>= fun __r =>
+          inheritAncestry winner)
+        read).run =
+    [Except.ok ((), after.core)]
+afterSame :
+  after.core =
+    { counter := read.counter, representatives := read.representatives,
+      values := read.values.set winner (UVarValue.unenumerated (some handle) (incomingScs ++ oldScs)),
+      obligations := read.obligations,
+      recursionAncestry := fun other =>
+        if other = winner then (read.expansionAncestry ++ read.recursionAncestry winner).eraseDups
+        else read.recursionAncestry other,
+      expansionAncestry := read.expansionAncestry }
+afterStored : after.core.values[winner]? = some (UVarValue.unenumerated (some handle) (incomingScs ++ oldScs))
+afterStorage : StorageValid after.core
+afterRealized : PendingRealized afterCaller.checked.native.machine.heap after.core
+incomingPost : Post formulas solver next foldCaller afterCaller final
+unfolding : Cache.Extends foldFinal.unfolding final.unfolding
+cacheRun :
+  ∀ (extra : Nat),
+    Option.map (EnumerationExpandableIndex.frame after.core)
+        (SourcePruningEnumerationNativeIndex.write afterCaller.checked.native.machine.heap (incomingK + extra) winner
+          (UVarValue.unenumerated (some handle) (incomingScs ++ oldScs)) incomingScs []
+          (EnumerationExpandableIndex.frame read folded)) =
+      some after
+afterCounter : after.core.counter = folded.core.counter
+afterRepresentatives : after.core.representatives = read.representatives
+afterPaths : Roots after.core.representatives (EnumerationCanonicalUnion.mergedRoots roots recorded winner)
+afterCounts :
+  EnumerationCanonicalWaiting.Correct (EnumerationCanonicalUnion.mergedRoots roots recorded winner) after.core.values
+    after.waiting
+writeWaiting :
+  after.waiting =
+    EnumerationCanonicalWaiting.count (EnumerationCanonicalUnion.mergedRoots roots recorded winner) 1 incomingScs
+      joined.waiting
+afterFlags :
+  ∀ (slot : Nat),
+    SourcePruningEnumerationNativeIndex.candidate afterCaller.checked.native.machine.heap
+        (after.core.values[slot]?.getD UVarValue.eliminated) =
+      some (after.expandable slot)
+afterExpandable :
+  after.expandable = fun slot =>
+    if slot = winner then !(MergedOrdinaryHeight.recursiveBoundary replacement && (incomingScs ++ oldScs).isEmpty)
+    else folded.expandable slot
+rawSame : raw = if replacement = Value.empty then [] else [Except.ok (Fragments.Fragment.hole winner, after.core)]
+winnerBound : FragmentBound after.core.counter (Fragments.Fragment.hole winner)
+replacementAvailable : Available afterCaller.checked.native.machine.heap replacement
+replacementClosed : replacement.free = []
+encoded : encodeNode replacement = some handle
+decoded : lookupNode afterCaller.checked.native.machine.heap handle = some replacement
+optional :
+  oldNode = none →
+    replacement = incoming ∧
+      afterCaller = foldCaller ∧ savedQueries = foldQueries ∧ final = foldFinal ∧ next = foldInventory
+present :
+  ∀ (oldHandle : Nat),
+    oldNode = some oldHandle →
+      ∃ old query queried,
+        lookupNode foldCaller.checked.native.machine.heap oldHandle = some old ∧
+          next.source = foldCaller.checked.native.machine.heap ∧
+            next.roots = foldInventory.roots ++ [incoming, old] ∧
+              SourceCurrentAllocatedTargetQuery.Receipt formulas solver next incoming old foldCaller.checked query
+                  queried foldFinal ∧
+                (∀ (ambient : InternedGuardedLanguage.Env (SourceObservations.Label FullSyntax.Formula))
+                    (term : Language.Term (SourceObservations.Label FullSyntax.Formula)),
+                    InternedGuardedLanguage.meaning (SourceEqualityPCSGuard.holds formulas solver) ambient replacement
+                        term ↔
+                      InternedGuardedLanguage.meaning (SourceEqualityPCSGuard.holds formulas solver) ambient incoming
+                          term ∧
+                        InternedGuardedLanguage.meaning (SourceEqualityPCSGuard.holds formulas solver) ambient old
+                          term) ∧
+                  (checkEmpty = false →
+                    replacement = query ∧
+                      afterCaller =
+                          SourceCurrentAllocatedPartialState.advance foldCaller queried foldCaller.fourth
+                            foldCaller.merge ∧
+                        final = foldFinal)
+found : UnionFind.Result
+lookup : UnionFind.findRoot r folded.core.representatives winner = some found
+oldStored : folded.core.values[found.representative]? = some (UVarValue.unenumerated oldNode oldScs)
+_readSame :
+  read =
+    { counter := folded.core.counter, representatives := found.forest, values := folded.core.values,
+      obligations := folded.core.obligations, recursionAncestry := folded.core.recursionAncestry,
+      expansionAncestry := folded.core.expansionAncestry }
+foundTarget : found.representative = winner
+readStored : read.values[winner]? = some (UVarValue.unenumerated oldNode oldScs)
+adapted :
+  ∀ (extraIndex : Nat),
+    SourcePruningEnumerationIncomingCacheAdapter.adapt afterCaller.checked.native.machine.heap (incomingK + extraIndex)
+        winner incomingScs folded read (if replacement = Value.empty then [] else [Except.ok ((), after.core)]) =
+      some after
+resultFrame : ∀ (slot : Nat), ¬slot ∈ recorded → after.core.values[slot]? = before.core.values[slot]?
+resultSafe : Safe after.core
+resultOrigin :
+  ∀ (slot : Nat) (fragment : Fragments.Fragment Symbol),
+    after.core.values[slot]? = some (UVarValue.enumerated fragment) →
+      before.core.values[slot]? = some (UVarValue.enumerated fragment)
+⊢ [((), folded)] = [((), folded)] →
+    ∃ incomingK oldNode oldScs read after_1 replacement handle,
+      after_1 = after ∧
+        outer = read ∧
+          (∀ (extra : Nat),
+              (getValue (r + extra) winner folded.core).run =
+                [Except.ok (UVarValue.unenumerated oldNode oldScs, read)]) ∧
+            EnumerationCompressionFrame.Frame folded.core read ∧
+              (∀ (extraRepresentative extraNative P H : Nat),
+                  p ≤ P →
+                    h ≤ H →
+                      SourcePruningEnumerationIncomingNode.run checkEmpty (r + extraRepresentative) (n + extraNative) P
+                          H foldCaller folded.core winner incoming incomingScs foldQueries =
+                        (Except.ok (some (if replacement = Value.empty then [] else [Except.ok ((), after_1.core)])),
+                          afterCaller, savedQueries, read)) ∧
+                ((setValue winner (UVarValue.unenumerated (some handle) (incomingScs ++ oldScs)) >>= fun __r =>
+                          inheritAncestry winner)
+                        read).run =
+                    [Except.ok ((), after_1.core)] ∧
+                  after_1.core =
+                      { counter := read.counter, representatives := read.representatives,
+                        values := read.values.set winner (UVarValue.unenumerated (some handle) (incomingScs ++ oldScs)),
+                        obligations := read.obligations,
+                        recursionAncestry := fun other =>
+                          if other = winner then (read.expansionAncestry ++ read.recursionAncestry winner).eraseDups
+                          else read.recursionAncestry other,
+                        expansionAncestry := read.expansionAncestry } ∧
+                    after_1.core.values[winner]? = some (UVarValue.unenumerated (some handle) (incomingScs ++ oldScs)) ∧
+                      StorageValid after_1.core ∧
+                        PendingRealized afterCaller.checked.native.machine.heap after_1.core ∧
+                          Post formulas solver next foldCaller afterCaller final ∧
+                            Cache.Extends foldFinal.unfolding final.unfolding ∧
+                              (∀ (extra : Nat),
+                                  Option.map (EnumerationExpandableIndex.frame after_1.core)
+                                      (SourcePruningEnumerationNativeIndex.write afterCaller.checked.native.machine.heap
+                                        (incomingK + extra) winner
+                                        (UVarValue.unenumerated (some handle) (incomingScs ++ oldScs)) incomingScs []
+                                        (EnumerationExpandableIndex.frame read folded)) =
+                                    some after_1) ∧
+                                after_1.core.counter = folded.core.counter ∧
+                                  after_1.core.representatives = read.representatives ∧
+                                    Roots after_1.core.representatives
+                                        (EnumerationCanonicalUnion.mergedRoots roots recorded winner) ∧
+                                      EnumerationCanonicalWaiting.Correct
+                                          (EnumerationCanonicalUnion.mergedRoots roots recorded winner)
+                                          after_1.core.values after_1.waiting ∧
+                                        after_1.waiting =
+                                            EnumerationCanonicalWaiting.count
+                                              (EnumerationCanonicalUnion.mergedRoots roots recorded winner) 1
+                                              incomingScs joined.waiting ∧
+                                          (∀ (slot : Nat),
+                                              SourcePruningEnumerationNativeIndex.candidate
+                                                  afterCaller.checked.native.machine.heap
+                                                  (after_1.core.values[slot]?.getD UVarValue.eliminated) =
+                                                some (after_1.expandable slot)) ∧
+                                            (after_1.expandable = fun slot =>
+                                                if slot = winner then
+                                                  !(MergedOrdinaryHeight.recursiveBoundary replacement &&
+                                                      (incomingScs ++ oldScs).isEmpty)
+                                                else folded.expandable slot) ∧
+                                              (raw =
+                                                  if replacement = Value.empty then []
+                                                  else [Except.ok (Fragments.Fragment.hole winner, after_1.core)]) ∧
+                                                FragmentBound after_1.core.counter (Fragments.Fragment.hole winner) ∧
+                                                  Available afterCaller.checked.native.machine.heap replacement ∧
+                                                    replacement.free = [] ∧
+                                                      encodeNode replacement = some handle ∧
+                                                        lookupNode afterCaller.checked.native.machine.heap handle =
+                                                            some replacement ∧
+                                                          (oldNode = none →
+                                                              replacement = incoming ∧
+                                                                afterCaller = foldCaller ∧
+                                                                  savedQueries = foldQueries ∧
+                                                                    final = foldFinal ∧ next = foldInventory) ∧
+                                                            ∀ (oldHandle : Nat),
+                                                              oldNode = some oldHandle →
+                                                                ∃ old query queried,
+                                                                  lookupNode foldCaller.checked.native.machine.heap
+                                                                        oldHandle =
+                                                                      some old ∧
+                                                                    ⋯

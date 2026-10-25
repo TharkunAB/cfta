@@ -1,0 +1,919 @@
+diff --git a/lean/MicroCFTA/SourcePruningEnumerationCachedTerminalAdapter.lean b/lean/MicroCFTA/SourcePruningEnumerationCachedTerminalAdapter.lean
+index cfcdce2b3..4f01bdb0e 100644
+--- a/lean/MicroCFTA/SourcePruningEnumerationCachedTerminalAdapter.lean
++++ b/lean/MicroCFTA/SourcePruningEnumerationCachedTerminalAdapter.lean
+@@ -1,5 +1,6 @@
+ import MicroCFTA.SourcePruningEnumerationCachedTerminal
+ import MicroCFTA.SourcePruningEnumerationIncomingCacheAdapter
++import MicroCFTA.SourcePruningEnumerationNativeReferences
+ 
+ namespace MicroCFTA.SourcePruningEnumerationCachedTerminalAdapter
+ open EnumerationState EnumerationCorrectness EnumerationSchedule
+@@ -422,6 +423,9 @@ theorem complete
+       (∀ (slot : Nat) (fragment : Fragments.Fragment Symbol),
+         resultCache.core.values[slot]? = some (.enumerated fragment) →
+         before.core.values[slot]? = some (.enumerated fragment)) ∧
++      (∀ allowed, EnumerationReferences.ReferencesAllowed allowed before.core →
++        EnumerationReferences.InputsAllowed allowed incomingScs →
++        EnumerationReferences.ReferencesAllowed allowed resultCache.core) ∧
+       (foldRows = [] → resultCache = folded) ∧
+       (foldRows = [] → raw = [] ∧ afterCaller = foldCaller ∧ savedQueries = foldQueries ∧
+         outer = folded.core ∧ final = foldFinal ∧ next = foldInventory) ∧
+@@ -493,6 +497,15 @@ theorem complete
+     SourcePruningEnumerationCachedTerminal.complete formulas solver inventory beforeCaller before
+       checkEmpty first rest incoming incomingScs roots memos initial safe paths counts flags
+       bounded pending realized nonempty available closed incomingBounded ranges
++  have foldAllowed : ∀ allowed, EnumerationReferences.ReferencesAllowed allowed before.core →
++      EnumerationReferences.ReferencesAllowed allowed folded.core := by
++    intro allowed valid
++    have values := congrArg EnumerationState.State.values joinedSame
++    change joined.core.values = before.core.values at values
++    apply SourcePruningEnumerationNativeReferences.fold_allowed allowed checkEmpty n p h recorded
++      beforeCaller joined.core winner memos.query _ foldCaller foldQueries folded.core
++      (by simpa only [EnumerationReferences.ReferencesAllowed, values] using valid)
++    simpa only [Nat.add_zero] using foldRun 0 p h (Nat.le_refl _) (Nat.le_refl _)
+   rcases foldShape with rejected | completed
+   · subst foldRows
+     obtain ⟨rawNil, callerSame, queriesSame, outerSame, _finalSame, _nextSame⟩ := rejectedBranch rfl
+@@ -507,7 +520,8 @@ theorem complete
+       (by simpa only [congrArg EnumerationState.State.counter joinedSame] using foldCounter), foldPaths,
+       foldStorage, ?_, foldCounts, ?_, foldedFrame, ?_,
+       (protects before.core folded.core roots first rest recorded winner paths recordedSame
+-        winnerMember foldPaths foldedFrame), foldedOrigin, ?_, rejectedBranch, ?_⟩
++        winnerMember foldPaths foldedFrame), foldedOrigin, (fun allowed valid _ => foldAllowed allowed valid),
++      ?_, rejectedBranch, ?_⟩
+     · intro extraRepresentative extraNative P H extraIndex enoughP enoughH
+       rw [rawNil, callerSame, queriesSame, outerSame]
+       simp only [run, ite_eq_right nonempty, prefixRun extraRepresentative,
+@@ -595,7 +609,7 @@ theorem complete
+       afterPaths, afterStorage, afterRealized, afterCounts, afterFlags, resultFrame,
+       (fun _ => resultSafe),
+       (protects before.core after.core roots first rest recorded winner paths recordedSame
+-        winnerMember afterPaths resultFrame), resultOrigin, ?_, rejectedBranch, ?_⟩
++        winnerMember afterPaths resultFrame), resultOrigin, ?_, ?_, rejectedBranch, ?_⟩
+     · intro extraRepresentative extraNative P H extraIndex enoughP enoughH
+       rw [outerRead, rawSame]
+       simp only [run, ite_eq_right nonempty, prefixRun extraRepresentative,
+@@ -605,6 +619,11 @@ theorem complete
+         incomingRun extraRepresentative extraNative P H enoughP enoughH,
+         adapted extraIndex]
+       simp only [apply_ite, List.map_nil, List.map_cons]
++    · intro allowed valid inputs
++      exact SourcePruningEnumerationNativeReferences.incoming_written allowed read after.core winner handle oldNode
++        incomingScs oldScs (by simpa only [EnumerationReferences.ReferencesAllowed, frame.values] using
++          (foldAllowed allowed valid)) inputs readStored
++        (by rw [afterSame])
+     · simp
+     · intro isCompleted
+       exact ⟨incomingK, oldNode, oldScs, read, after, replacement, handle, rfl, outerRead,
+diff --git a/lean/MicroCFTA/SourcePruningEnumerationCapturedEdge.lean b/lean/MicroCFTA/SourcePruningEnumerationCapturedEdge.lean
+index 29ee07219..099860c31 100644
+--- a/lean/MicroCFTA/SourcePruningEnumerationCapturedEdge.lean
++++ b/lean/MicroCFTA/SourcePruningEnumerationCapturedEdge.lean
+@@ -81,6 +81,8 @@ theorem complete
+       InputsPending after.core scs ∧
+       (∀ held, held ≠ uv → held < before.core.counter → IsRoot before.core.representatives held →
+         Avoids before.core.representatives held scs → EnumerationDriver.Protected held before.core after.core) ∧
++      (EnumerationReferences.PendingReferences before.core → EnumerationReferences.IncomingAvoid uv before.core →
++        EnumerationReferences.PendingReferences after.core) ∧
+       ((∃ fragment, result = .complete fragment afterCaller savedQueries after ∧
+           Safe after.core ∧ FragmentBound after.core.counter fragment ∧
+           after.core.values[uv]? = some (.enumerated fragment) ∧ after.core.expansionAncestry = [] ∧
+@@ -95,7 +97,7 @@ theorem complete
+   have avoids := ready.avoids handle scs stored
+   obtain ⟨r, n, p, h, k, afterCaller, middle, savedQueries, final, next, afterRoots, edgeResult,
+     edgeRun, post, querySame, growth, middlePaths, storage, middleRealized, middleCounts,
+-    middleFlags, origin, retained, protects, shape⟩ :=
++    middleFlags, origin, retained, protects, pendingHistory, incomingHistory, shape⟩ :=
+     SourcePruningEnumerationSelectedEdge.complete formulas solver inventory caller before checkEmpty
+       parentEntry edges depth free edge scs roots memos initial available closed selected ready.safe realized
+       paths counts flags bounded pending allowed tries residual projected ranges
+@@ -122,7 +124,7 @@ theorem complete
+         simpa only [List.getElem?_set_ne (Ne.symm same)] using expanded
+     refine ⟨r, n, p, h, k + fuel, afterCaller, after, savedQueries, final, next, afterRoots,
+       .complete fragment afterCaller savedQueries after, ?_, post, querySame, ?_, afterPaths,
+-      afterStorage, afterRealized, afterCounts, afterFlags, ?_, afterPending, ?_,
++      afterStorage, afterRealized, afterCounts, afterFlags, ?_, afterPending, ?_, ?_,
+       .inl ⟨fragment, rfl, afterSafe, ?_, finalStored, ?_, ?_⟩⟩
+     · intro er en P H ek largeP largeH
+       have selectedRun := edgeRun er en P H (fuel + ek) largeP largeH
+@@ -148,6 +150,13 @@ theorem complete
+         exact oldFrame.root
+       · rw [core]
+         exact fun _ => Iff.rfl
++    · intro history incoming
++      have written := EnumerationReferences.setValue_pending uv fragment middle.core
++        {middle.core with values := middle.core.values.set uv (.enumerated fragment)}
++        (pendingHistory history) (incomingHistory uv ready.inside ready.root avoids incoming)
++        ((EnumerationDriver.modify_success _ _ _).mpr rfl)
++      rw [core]
++      exact written
+     · rw [core]
+       exact fragmentBound
+     · rw [core]
+@@ -159,6 +168,7 @@ theorem complete
+       ?_, post, querySame, growth, middlePaths, storage, middleRealized, middleCounts, middleFlags,
+       fun held old _ expanded => origin held old expanded, retained,
+       fun held _ inside root separate => protects held inside root separate,
++      (fun history _ => pendingHistory history),
+       .inr ⟨fragments, outer, waiting, rfl⟩⟩
+     intro er en P H ek largeP largeH
+     rw [run, edgeRun er en P H ek largeP largeH]
+diff --git a/lean/MicroCFTA/SourcePruningEnumerationChildCompletion.lean b/lean/MicroCFTA/SourcePruningEnumerationChildCompletion.lean
+index 4499b1f02..0dbb9fc6d 100644
+--- a/lean/MicroCFTA/SourcePruningEnumerationChildCompletion.lean
++++ b/lean/MicroCFTA/SourcePruningEnumerationChildCompletion.lean
+@@ -85,13 +85,17 @@ theorem complete
+       EnumeratedOrigin before.core after.core ∧
+       (∀ held, held < before.core.counter → IsRoot before.core.representatives held →
+         Avoids before.core.representatives held bucket → EnumerationDriver.Protected held before.core after.core) ∧
++      (∀ allowed, EnumerationReferences.ReferencesAllowed allowed before.core →
++        EnumerationReferences.InputsAllowed allowed bucket →
++        EnumerationReferences.ReferencesAllowed allowed after.core) ∧
++      (EnumerationReferences.PendingReferences before.core → EnumerationReferences.PendingReferences after.core) ∧
+       (raw = [] ∨ ∃ fragment, raw = [.ok (fragment, after.core)] ∧
+         Safe after.core ∧ FragmentBound after.core.counter fragment) := by
+   by_cases empty : incoming = .empty
+   · subst incoming
+     refine ⟨0, 0, 0, 0, 0, [], beforeCaller, before, memos.query, memos, inventory, roots,
+       before.core, before.waiting, ?_, Post.refl initial, rfl, Nat.le_refl _, paths, safe.1,
+-      realized, counts, flags, .refl _, ?_, .inl rfl⟩
++      realized, counts, flags, .refl _, ?_, (fun _ valid _ => valid), (fun valid => valid), .inl rfl⟩
+     · intro er en P H ek _ _
+       exact SourcePruningEnumerationChildDispatch.empty checkEmpty _ _ _ _ _ _ _ _ _
+     · intro held _ root _
+@@ -116,9 +120,23 @@ theorem complete
+           simp
+         obtain ⟨afterSafe, origin, protects⟩ := SourcePruningEnumerationChildEffects.child
+           bucket incoming action before.core after.core _ safe bounded prepared success
++        have references : ∀ allowed, EnumerationReferences.ReferencesAllowed allowed before.core →
++            EnumerationReferences.InputsAllowed allowed bucket →
++            EnumerationReferences.ReferencesAllowed allowed after.core := by
++          intro allowed valid inputs
++          exact SourcePruningEnumerationNativeReferences.prepared_allowed allowed bucket incoming action
++            before.core after.core _ valid inputs prepared success
++        have global : EnumerationReferences.PendingReferences before.core →
++            EnumerationReferences.PendingReferences after.core := by
++          intro history
++          apply SourcePruningEnumerationNativeReferences.pending_preserved before.core after.core bucket
++            history pending origin _ references
++          intro held fragment stored
++          obtain ⟨inside, root⟩ := enumerated_root before.core safe held fragment stored
++          exact protects held inside root
+         refine ⟨0, 0, 0, 0, k, [.ok (.hole before.core.counter, after.core)], beforeCaller, after,
+           memos.query, memos, inventory, roots, before.core, before.waiting, ?_, Post.refl initial,
+-          rfl, ?_, afterPaths, storage, afterRealized, afterCounts, afterFlags, origin, ?_,
++          rfl, ?_, afterPaths, storage, afterRealized, afterCounts, afterFlags, origin, ?_, references, global,
+           .inr ⟨.hole before.core.counter, rfl, afterSafe, bound⟩⟩
+         · intro er en P H ek _ _
+           rw [nonterminal_parameters checkEmpty _ _ _ _ _ bucket incoming beforeCaller before memos.query empty noHere]
+@@ -141,15 +159,29 @@ theorem complete
+           _foldPending, _foldCounts, _foldWaiting, _foldFlags, _foldEliminated, _foldCompleted,
+           _foldedFrame, _foldedSafe, _foldedOrigin, _terminalRun, post, querySame, cacheRun,
+           counter, afterPaths, storage, afterRealized, afterCounts, afterFlags, _outside,
+-          afterSafe, protects, origin, _rejectedCache, rejected, completed⟩ :=
++          afterSafe, protects, origin, references, _rejectedCache, rejected, completed⟩ :=
+           SourcePruningEnumerationCachedTerminalAdapter.complete formulas solver inventory beforeCaller before
+             checkEmpty first rest incoming descendants roots memos initial safe paths counts flags
+             activeBounded activePending realized empty available closed
+             (fun sc member => bounded sc (subsets.2 member))
+             (ranges empty first rest descendants partitioned)
++        have fullReferences : ∀ allowed, EnumerationReferences.ReferencesAllowed allowed before.core →
++            EnumerationReferences.InputsAllowed allowed bucket →
++            EnumerationReferences.ReferencesAllowed allowed after.core := by
++          intro allowed valid inputs
++          exact references allowed valid (fun sc member => inputs sc (subsets.2 member))
++        have global : EnumerationReferences.PendingReferences before.core →
++            EnumerationReferences.PendingReferences after.core := by
++          intro history
++          apply SourcePruningEnumerationNativeReferences.pending_preserved before.core after.core bucket
++            history pending origin _ fullReferences
++          intro held fragment stored
++          have root := (enumerated_root before.core safe held fragment stored).2
++          exact protects held root (fun sc member => pending held fragment stored sc (subsets.1 member))
+         refine ⟨r, n, p, h, k, raw, afterCaller, after, savedQueries, final, next,
+           EnumerationCanonicalUnion.mergedRoots roots recorded winner, outer, joined.waiting,
+-          ?_, post, querySame, ?_, afterPaths, storage, afterRealized, afterCounts, afterFlags, origin, ?_, ?_⟩
++          ?_, post, querySame, ?_, afterPaths, storage, afterRealized, afterCounts, afterFlags, origin,
++          ?_, fullReferences, global, ?_⟩
+         · intro er en P H ek largeP largeH
+           rw [SourcePruningEnumerationChildDispatch.terminal checkEmpty _ _ _ _ _ bucket incoming
+             beforeCaller before memos.query first rest descendants partitioned]
+diff --git a/lean/MicroCFTA/SourcePruningEnumerationDispatchShape.lean b/lean/MicroCFTA/SourcePruningEnumerationDispatchShape.lean
+new file mode 100644
+index 000000000..b26950d65
+--- /dev/null
++++ b/lean/MicroCFTA/SourcePruningEnumerationDispatchShape.lean
+@@ -0,0 +1,170 @@
++import MicroCFTA.SourcePruningEnumerationDispatch
++
++namespace MicroCFTA.SourcePruningEnumerationDispatchShape
++open EnumerationState EnumerationCorrectness
++open InternedConstructorTemplates
++local notation "Symbol" => SourcePruningTemplates.Symbol
++local notation "Constraint" => SourceSymbolicIndex.Constraint FullSyntax.Formula
++local notation "Node" => InternedConstructorTemplates.Value Symbol Constraint
++local notation "Caller" => SourceCurrentAllocatedPartialState.State
++local notation "Queries" => SourceEndpointMemo.Memos
++variable {EnumGuard : Type} {width : Nat}
++
++/-- An actual singleton retains the input or assimilates its two stored pending payloads. -/
++theorem singleton
++    [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Constraint)] [DecidableEq Node]
++    (checkEmpty : Bool) (nativeFuel p h : Nat)
++    (beforeCaller : Caller width) (before : EnumerationState.State Symbol EnumGuard)
++    (source target : Nat) (queries : Queries) (action : EnumerateM Symbol EnumGuard Unit)
++    (afterCaller : Caller width) (savedQueries : Queries)
++    (after : EnumerationState.State Symbol EnumGuard)
++    (selected : SourcePruningEnumerationDispatch.dispatch checkEmpty nativeFuel p h
++      beforeCaller before source target queries = (.ok (some action), afterCaller, savedQueries))
++    (completed : ExceptT.run (action before) = [.ok ((), after)]) :
++    after = before ∨ source ≠ target ∧
++      ∃ (sourceNode targetNode merged : Option Nat) (sourceScs targetScs : List Suspended),
++        before.values[source]? = some (.unenumerated sourceNode sourceScs) ∧
++        before.values[target]? = some (.unenumerated targetNode targetScs) ∧
++        after = assimilated before target source (.unenumerated merged (sourceScs ++ targetScs)) := by
++  by_cases same : source = target
++  · simp only [SourcePruningEnumerationDispatch.dispatch, ite_eq_left same, Id.run, pure,
++      Prod.mk.injEq, Except.ok.injEq, Option.some.injEq] at selected
++    rcases selected with ⟨rfl, rfl, rfl⟩
++    change [Except.ok ((), before)] = [Except.ok ((), after)] at completed
++    simp only [List.cons.injEq, and_true, Except.ok.injEq, Prod.mk.injEq, true_and] at completed
++    subst after
++    exact .inl rfl
++  · cases sourceStored : before.values[source]? with
++    | none => simp [SourcePruningEnumerationDispatch.dispatch, same, sourceStored] at selected
++    | some sourceValue =>
++      cases sourceValue with
++      | eliminated =>
++        simp only [SourcePruningEnumerationDispatch.dispatch, ite_eq_right same, sourceStored, Id.run, pure,
++          Prod.mk.injEq, Except.ok.injEq, Option.some.injEq] at selected
++        rcases selected with ⟨rfl, rfl, rfl⟩
++        change [Except.ok ((), before)] = [Except.ok ((), after)] at completed
++        simp only [List.cons.injEq, and_true, Except.ok.injEq, Prod.mk.injEq, true_and] at completed
++        subst after
++        exact .inl rfl
++      | enumerated sourceFragment =>
++        cases targetStored : before.values[target]? with
++        | none => simp [SourcePruningEnumerationDispatch.dispatch, same, sourceStored, targetStored] at selected
++        | some targetValue =>
++          simp only [SourcePruningEnumerationDispatch.dispatch, ite_eq_right same, sourceStored, targetStored,
++            Id.run, pure, Prod.mk.injEq, Except.ok.injEq, Option.some.injEq] at selected
++          rcases selected with ⟨rfl, rfl, rfl⟩
++          cases completed
++      | unenumerated sourceNode sourceScs =>
++        cases targetStored : before.values[target]? with
++        | none => simp [SourcePruningEnumerationDispatch.dispatch, same, sourceStored, targetStored] at selected
++        | some targetValue =>
++          cases targetValue with
++          | eliminated =>
++            simp only [SourcePruningEnumerationDispatch.dispatch, ite_eq_right same, sourceStored, targetStored,
++              Id.run, pure, Prod.mk.injEq, Except.ok.injEq, Option.some.injEq] at selected
++            rcases selected with ⟨rfl, rfl, rfl⟩
++            cases completed
++          | enumerated targetFragment =>
++            simp only [SourcePruningEnumerationDispatch.dispatch, ite_eq_right same, sourceStored, targetStored,
++              Id.run, pure, Prod.mk.injEq, Except.ok.injEq, Option.some.injEq] at selected
++            rcases selected with ⟨rfl, rfl, rfl⟩
++            cases completed
++          | unenumerated targetNode targetScs =>
++            cases sourceNodeSame : sourceNode with
++            | none =>
++              subst sourceNode
++              simp only [SourcePruningEnumerationDispatch.dispatch, ite_eq_right same, sourceStored, targetStored,
++                Id.run, pure, Prod.mk.injEq, Except.ok.injEq, Option.some.injEq] at selected
++              rcases selected with ⟨rfl, rfl, rfl⟩
++              by_cases empty : targetNode = some 0
++              · simp [SourcePruningEnumerationDispatch.finishOptional, empty, ExceptT.run] at completed
++              · change (if targetNode = some 0 then [] else
++                  [Except.ok ((), assimilated before target source (.unenumerated targetNode (sourceScs ++ targetScs)))]) = _ at completed
++                rw [ite_eq_right empty] at completed
++                simp only [List.cons.injEq, and_true, Except.ok.injEq, Prod.mk.injEq, true_and] at completed
++                subst after
++                exact .inr ⟨same, none, targetNode, targetNode, sourceScs, targetScs, rfl, rfl, rfl⟩
++            | some sourceHandle =>
++              subst sourceNode
++              cases targetNodeSame : targetNode with
++              | none =>
++                subst targetNode
++                simp only [SourcePruningEnumerationDispatch.dispatch, ite_eq_right same, sourceStored, targetStored,
++                  Id.run, pure, Prod.mk.injEq, Except.ok.injEq, Option.some.injEq] at selected
++                rcases selected with ⟨rfl, rfl, rfl⟩
++                by_cases empty : (some sourceHandle : Option Nat) = some 0
++                · simp [SourcePruningEnumerationDispatch.finishOptional, empty, ExceptT.run] at completed
++                · change (if (some sourceHandle : Option Nat) = some 0 then [] else
++                    [Except.ok ((), assimilated before target source (.unenumerated (some sourceHandle) (sourceScs ++ targetScs)))]) = _ at completed
++                  rw [ite_eq_right empty] at completed
++                  simp only [List.cons.injEq, and_true, Except.ok.injEq, Prod.mk.injEq, true_and] at completed
++                  subst after
++                  exact .inr ⟨same, some sourceHandle, none, some sourceHandle, sourceScs, targetScs, rfl, rfl, rfl⟩
++              | some targetHandle =>
++                subst targetNode
++                cases leftDecoded : SourcePruningEnumerationNodes.lookupNode beforeCaller.checked.native.machine.heap sourceHandle with
++                | none => simp [SourcePruningEnumerationDispatch.dispatch, same, sourceStored, targetStored, leftDecoded] at selected
++                | some left =>
++                  cases rightDecoded : SourcePruningEnumerationNodes.lookupNode beforeCaller.checked.native.machine.heap targetHandle with
++                  | none => simp [SourcePruningEnumerationDispatch.dispatch, same, sourceStored, targetStored, leftDecoded, rightDecoded] at selected
++                  | some right =>
++                    cases native : SourceEqualityNativeDemand.execute nativeFuel
++                        (.code (SourceRecursiveIntersectionCode.requestNode IntersectionEmptyDomain.emptyDomain left right)) beforeCaller.checked with
++                    | yielded control checkedAfter =>
++                      simp [SourcePruningEnumerationDispatch.dispatch, same, sourceStored, targetStored, leftDecoded, rightDecoded, native] at selected
++                    | failed nativeFailure checkedAfter =>
++                      simp [SourcePruningEnumerationDispatch.dispatch, same, sourceStored, targetStored, leftDecoded, rightDecoded, native] at selected
++                    | constraintError message checkedAfter =>
++                      simp [SourcePruningEnumerationDispatch.dispatch, same, sourceStored, targetStored, leftDecoded, rightDecoded, native] at selected
++                    | blocked reason control checkedAfter =>
++                      simp [SourcePruningEnumerationDispatch.dispatch, same, sourceStored, targetStored, leftDecoded, rightDecoded, native] at selected
++                    | done query queried =>
++                      rcases phase : (if checkEmpty then
++                        SourcePruningEnumerationEnabledEmpty.check p h query queried beforeCaller.fourth queries
++                        else (.done false queried beforeCaller.fourth, queries)) with ⟨worker, workerQueries⟩
++                      cases workerSame : worker with
++                      | failed fault checkedAfter saved =>
++                        subst worker
++                        simp [SourcePruningEnumerationDispatch.dispatch, same, sourceStored, targetStored, leftDecoded,
++                          rightDecoded, native, SourcePruningEnumerationDispatch.afterQuery, phase, Except.mapError] at selected
++                      | done answer checkedAfter saved =>
++                        subst worker
++                        cases encoded : SourcePruningEnumerationNodes.encodeNode (if answer then (.empty : Node) else query) with
++                        | none =>
++                          simp [SourcePruningEnumerationDispatch.dispatch, same, sourceStored, targetStored, leftDecoded,
++                            rightDecoded, native, SourcePruningEnumerationDispatch.afterQuery, phase, encoded, Except.mapError] at selected
++                        | some handle =>
++                          simp only [SourcePruningEnumerationDispatch.dispatch, ite_eq_right same, sourceStored, targetStored,
++                            leftDecoded, rightDecoded, native, SourcePruningEnumerationDispatch.afterQuery, phase,
++                            encoded, Option.map_some, Except.mapError, Id.run, pure,
++                            Prod.mk.injEq, Except.ok.injEq, Option.some.injEq] at selected
++                          rcases selected with ⟨rfl, rfl, rfl⟩
++                          revert completed
++                          cases (if answer then (.empty : Node) else query) with
++                          | empty => intro completed; cases completed
++                          | reference name =>
++                            intro completed
++                            change [Except.ok ((), assimilated before target source (.unenumerated (some handle) (sourceScs ++ targetScs)))] = _ at completed
++                            simp only [List.cons.injEq, and_true, Except.ok.injEq, Prod.mk.injEq, true_and] at completed
++                            subst after
++                            exact .inr ⟨same, some sourceHandle, some targetHandle, some handle, sourceScs, targetScs, rfl, rfl, rfl⟩
++                          | node entry edges depth free =>
++                            intro completed
++                            change [Except.ok ((), assimilated before target source (.unenumerated (some handle) (sourceScs ++ targetScs)))] = _ at completed
++                            simp only [List.cons.injEq, and_true, Except.ok.injEq, Prod.mk.injEq, true_and] at completed
++                            subst after
++                            exact .inr ⟨same, some sourceHandle, some targetHandle, some handle, sourceScs, targetScs, rfl, rfl, rfl⟩
++                          | union entry members depth free =>
++                            intro completed
++                            change [Except.ok ((), assimilated before target source (.unenumerated (some handle) (sourceScs ++ targetScs)))] = _ at completed
++                            simp only [List.cons.injEq, and_true, Except.ok.injEq, Prod.mk.injEq, true_and] at completed
++                            subst after
++                            exact .inr ⟨same, some sourceHandle, some targetHandle, some handle, sourceScs, targetScs, rfl, rfl, rfl⟩
++                          | mu entry body depthShape ordinaryShape =>
++                            intro completed
++                            change [Except.ok ((), assimilated before target source (.unenumerated (some handle) (sourceScs ++ targetScs)))] = _ at completed
++                            simp only [List.cons.injEq, and_true, Except.ok.injEq, Prod.mk.injEq, true_and] at completed
++                            subst after
++                            exact .inr ⟨same, some sourceHandle, some targetHandle, some handle, sourceScs, targetScs, rfl, rfl, rfl⟩
++
++end MicroCFTA.SourcePruningEnumerationDispatchShape
+diff --git a/lean/MicroCFTA/SourcePruningEnumerationFoldInvariants.lean b/lean/MicroCFTA/SourcePruningEnumerationFoldInvariants.lean
+index 44a44c763..bdc9c6b80 100644
+--- a/lean/MicroCFTA/SourcePruningEnumerationFoldInvariants.lean
++++ b/lean/MicroCFTA/SourcePruningEnumerationFoldInvariants.lean
+@@ -1,4 +1,5 @@
+ import MicroCFTA.SourcePruningEnumerationFold
++import MicroCFTA.SourcePruningEnumerationDispatchShape
+ import MicroCFTA.EnumerationCanonicalWaiting
+ 
+ namespace MicroCFTA.SourcePruningEnumerationFoldInvariants
+@@ -68,152 +69,12 @@ theorem dispatch_preserves
+     (completed : ExceptT.run (action before) = [.ok ((), after)]) :
+     StorageValid after ∧ EnumerationCanonicalWaiting.Correct roots after.values waiting
+  := by
+-  by_cases same : source = target
+-  · simp only [SourcePruningEnumerationDispatch.dispatch, ite_eq_left same, Id.run, pure,
+-      Prod.mk.injEq, Except.ok.injEq, Option.some.injEq] at selected
+-    rcases selected with ⟨rfl, rfl, rfl⟩
+-    change [Except.ok ((), before)] = [Except.ok ((), after)] at completed
+-    simp only [List.cons.injEq, and_true, Except.ok.injEq, Prod.mk.injEq, true_and] at completed
+-    subst after
+-    exact ⟨storage, counts⟩
+-  · cases sourceStored : before.values[source]? with
+-    | none => simp [SourcePruningEnumerationDispatch.dispatch, same, sourceStored] at selected
+-    | some sourceValue =>
+-      cases sourceValue with
+-      | eliminated =>
+-        simp only [SourcePruningEnumerationDispatch.dispatch, ite_eq_right same, sourceStored, Id.run, pure,
+-          Prod.mk.injEq, Except.ok.injEq, Option.some.injEq] at selected
+-        rcases selected with ⟨rfl, rfl, rfl⟩
+-        change [Except.ok ((), before)] = [Except.ok ((), after)] at completed
+-        simp only [List.cons.injEq, and_true, Except.ok.injEq, Prod.mk.injEq, true_and] at completed
+-        subst after
+-        exact ⟨storage, counts⟩
+-      | enumerated sourceFragment =>
+-        cases targetStored : before.values[target]? with
+-        | none => simp [SourcePruningEnumerationDispatch.dispatch, same, sourceStored, targetStored] at selected
+-        | some targetValue =>
+-          simp only [SourcePruningEnumerationDispatch.dispatch, ite_eq_right same, sourceStored, targetStored,
+-            Id.run, pure, Prod.mk.injEq, Except.ok.injEq, Option.some.injEq] at selected
+-          rcases selected with ⟨rfl, rfl, rfl⟩
+-          cases completed
+-      | unenumerated sourceNode sourceScs =>
+-        cases targetStored : before.values[target]? with
+-        | none => simp [SourcePruningEnumerationDispatch.dispatch, same, sourceStored, targetStored] at selected
+-        | some targetValue =>
+-          cases targetValue with
+-          | eliminated =>
+-            simp only [SourcePruningEnumerationDispatch.dispatch, ite_eq_right same, sourceStored, targetStored,
+-              Id.run, pure, Prod.mk.injEq, Except.ok.injEq, Option.some.injEq] at selected
+-            rcases selected with ⟨rfl, rfl, rfl⟩
+-            cases completed
+-          | enumerated targetFragment =>
+-            simp only [SourcePruningEnumerationDispatch.dispatch, ite_eq_right same, sourceStored, targetStored,
+-              Id.run, pure, Prod.mk.injEq, Except.ok.injEq, Option.some.injEq] at selected
+-            rcases selected with ⟨rfl, rfl, rfl⟩
+-            cases completed
+-          | unenumerated targetNode targetScs =>
+-            cases sourceNodeSame : sourceNode with
+-            | none =>
+-              subst sourceNode
+-              simp only [SourcePruningEnumerationDispatch.dispatch, ite_eq_right same, sourceStored, targetStored,
+-                Id.run, pure, Prod.mk.injEq, Except.ok.injEq, Option.some.injEq] at selected
+-              rcases selected with ⟨rfl, rfl, rfl⟩
+-              by_cases empty : targetNode = some 0
+-              · simp [SourcePruningEnumerationDispatch.finishOptional, empty, ExceptT.run] at completed
+-              · change (if targetNode = some 0 then [] else
+-                  [Except.ok ((), assimilated before target source (.unenumerated targetNode (sourceScs ++ targetScs)))]) = _ at completed
+-                rw [ite_eq_right empty] at completed
+-                simp only [List.cons.injEq, and_true, Except.ok.injEq, Prod.mk.injEq, true_and] at completed
+-                subst after
+-                exact assimilated_preserves before source target none targetNode targetNode sourceScs targetScs
+-                  roots waiting storage counts sourceStored targetStored (Ne.symm same)
+-            | some sourceHandle =>
+-              subst sourceNode
+-              cases targetNodeSame : targetNode with
+-              | none =>
+-                subst targetNode
+-                simp only [SourcePruningEnumerationDispatch.dispatch, ite_eq_right same, sourceStored, targetStored,
+-                  Id.run, pure, Prod.mk.injEq, Except.ok.injEq, Option.some.injEq] at selected
+-                rcases selected with ⟨rfl, rfl, rfl⟩
+-                by_cases empty : (some sourceHandle : Option Nat) = some 0
+-                · simp [SourcePruningEnumerationDispatch.finishOptional, empty, ExceptT.run] at completed
+-                · change (if (some sourceHandle : Option Nat) = some 0 then [] else
+-                    [Except.ok ((), assimilated before target source (.unenumerated (some sourceHandle) (sourceScs ++ targetScs)))]) = _ at completed
+-                  rw [ite_eq_right empty] at completed
+-                  simp only [List.cons.injEq, and_true, Except.ok.injEq, Prod.mk.injEq, true_and] at completed
+-                  subst after
+-                  exact assimilated_preserves before source target (some sourceHandle) none (some sourceHandle)
+-                    sourceScs targetScs roots waiting storage counts sourceStored targetStored (Ne.symm same)
+-              | some targetHandle =>
+-                subst targetNode
+-                cases leftDecoded : SourcePruningEnumerationNodes.lookupNode beforeCaller.checked.native.machine.heap sourceHandle with
+-                | none => simp [SourcePruningEnumerationDispatch.dispatch, same, sourceStored, targetStored, leftDecoded] at selected
+-                | some left =>
+-                  cases rightDecoded : SourcePruningEnumerationNodes.lookupNode beforeCaller.checked.native.machine.heap targetHandle with
+-                  | none => simp [SourcePruningEnumerationDispatch.dispatch, same, sourceStored, targetStored, leftDecoded, rightDecoded] at selected
+-                  | some right =>
+-                    cases native : SourceEqualityNativeDemand.execute nativeFuel
+-                        (.code (SourceRecursiveIntersectionCode.requestNode IntersectionEmptyDomain.emptyDomain left right)) beforeCaller.checked with
+-                    | yielded control checkedAfter =>
+-                      simp [SourcePruningEnumerationDispatch.dispatch, same, sourceStored, targetStored, leftDecoded, rightDecoded, native] at selected
+-                    | failed nativeFailure checkedAfter =>
+-                      simp [SourcePruningEnumerationDispatch.dispatch, same, sourceStored, targetStored, leftDecoded, rightDecoded, native] at selected
+-                    | constraintError message checkedAfter =>
+-                      simp [SourcePruningEnumerationDispatch.dispatch, same, sourceStored, targetStored, leftDecoded, rightDecoded, native] at selected
+-                    | blocked reason control checkedAfter =>
+-                      simp [SourcePruningEnumerationDispatch.dispatch, same, sourceStored, targetStored, leftDecoded, rightDecoded, native] at selected
+-                    | done query queried =>
+-                      rcases phase : (if checkEmpty then
+-                        SourcePruningEnumerationEnabledEmpty.check p h query queried beforeCaller.fourth queries
+-                        else (.done false queried beforeCaller.fourth, queries)) with ⟨worker, workerQueries⟩
+-                      cases workerSame : worker with
+-                      | failed fault checkedAfter saved =>
+-                        subst worker
+-                        simp [SourcePruningEnumerationDispatch.dispatch, same, sourceStored, targetStored, leftDecoded,
+-                          rightDecoded, native, SourcePruningEnumerationDispatch.afterQuery, phase, Except.mapError] at selected
+-                      | done answer checkedAfter saved =>
+-                        subst worker
+-                        cases encoded : SourcePruningEnumerationNodes.encodeNode (if answer then (.empty : Node) else query) with
+-                        | none =>
+-                          simp [SourcePruningEnumerationDispatch.dispatch, same, sourceStored, targetStored, leftDecoded,
+-                            rightDecoded, native, SourcePruningEnumerationDispatch.afterQuery, phase, encoded, Except.mapError] at selected
+-                        | some handle =>
+-                          simp only [SourcePruningEnumerationDispatch.dispatch, ite_eq_right same, sourceStored, targetStored,
+-                            leftDecoded, rightDecoded, native, SourcePruningEnumerationDispatch.afterQuery, phase,
+-                            encoded, Option.map_some, Except.mapError, Id.run, pure,
+-                            Prod.mk.injEq, Except.ok.injEq, Option.some.injEq] at selected
+-                          rcases selected with ⟨rfl, rfl, rfl⟩
+-                          revert completed
+-                          cases (if answer then (.empty : Node) else query) with
+-                          | empty => intro completed; cases completed
+-                          | reference name =>
+-                            intro completed
+-                            change [Except.ok ((), assimilated before target source (.unenumerated (some handle) (sourceScs ++ targetScs)))] = _ at completed
+-                            simp only [List.cons.injEq, and_true, Except.ok.injEq, Prod.mk.injEq, true_and] at completed
+-                            subst after
+-                            exact assimilated_preserves before source target (some sourceHandle) (some targetHandle)
+-                              (some handle) sourceScs targetScs roots waiting storage counts sourceStored targetStored (Ne.symm same)
+-                          | node entry edges depth free =>
+-                            intro completed
+-                            change [Except.ok ((), assimilated before target source (.unenumerated (some handle) (sourceScs ++ targetScs)))] = _ at completed
+-                            simp only [List.cons.injEq, and_true, Except.ok.injEq, Prod.mk.injEq, true_and] at completed
+-                            subst after
+-                            exact assimilated_preserves before source target (some sourceHandle) (some targetHandle)
+-                              (some handle) sourceScs targetScs roots waiting storage counts sourceStored targetStored (Ne.symm same)
+-                          | union entry members depth free =>
+-                            intro completed
+-                            change [Except.ok ((), assimilated before target source (.unenumerated (some handle) (sourceScs ++ targetScs)))] = _ at completed
+-                            simp only [List.cons.injEq, and_true, Except.ok.injEq, Prod.mk.injEq, true_and] at completed
+-                            subst after
+-                            exact assimilated_preserves before source target (some sourceHandle) (some targetHandle)
+-                              (some handle) sourceScs targetScs roots waiting storage counts sourceStored targetStored (Ne.symm same)
+-                          | mu entry body depthShape ordinaryShape =>
+-                            intro completed
+-                            change [Except.ok ((), assimilated before target source (.unenumerated (some handle) (sourceScs ++ targetScs)))] = _ at completed
+-                            simp only [List.cons.injEq, and_true, Except.ok.injEq, Prod.mk.injEq, true_and] at completed
+-                            subst after
+-                            exact assimilated_preserves before source target (some sourceHandle) (some targetHandle)
+-                              (some handle) sourceScs targetScs roots waiting storage counts sourceStored targetStored (Ne.symm same)
++  rcases SourcePruningEnumerationDispatchShape.singleton checkEmpty nativeFuel p h
++    beforeCaller before source target queries action afterCaller savedQueries after selected completed with
++    rfl | ⟨different, sourceNode, targetNode, merged, sourceScs, targetScs, sourceStored, targetStored, rfl⟩
++  · exact ⟨storage, counts⟩
++  · exact assimilated_preserves before source target sourceNode targetNode merged sourceScs targetScs
++      roots waiting storage counts sourceStored targetStored (Ne.symm different)
+ 
+ /-- Every returned outer fold state retains storage and waiting counts. -/
+ theorem run_preserves
+diff --git a/lean/MicroCFTA/SourcePruningEnumerationNativeBranchCompletion.lean b/lean/MicroCFTA/SourcePruningEnumerationNativeBranchCompletion.lean
+index ac20185d4..93957bbeb 100644
+--- a/lean/MicroCFTA/SourcePruningEnumerationNativeBranchCompletion.lean
++++ b/lean/MicroCFTA/SourcePruningEnumerationNativeBranchCompletion.lean
+@@ -92,7 +92,7 @@ private theorem head_complete
+         rcases pair with ⟨tries, residual⟩
+         obtain ⟨r, n, p, h, k, afterCaller, after, saved, final, next, afterRoots, result,
+           stable, post, querySame, _growth, afterPaths, storage, afterRealized, afterCounts,
+-          afterFlags, _origin, _retained, _protects, shape⟩ :=
++          afterFlags, _origin, _retained, _protects, _pendingHistory, shape⟩ :=
+           SourcePruningEnumerationCapturedEdge.complete formulas solver inventory caller before checkEmpty
+             uv handle scs parentEntry edges depth free edge roots memos initial ready stored decoded realized
+             selected paths counts flags pending allowed tries residual projected ranges
+diff --git a/lean/MicroCFTA/SourcePruningEnumerationNativeReferences.lean b/lean/MicroCFTA/SourcePruningEnumerationNativeReferences.lean
+new file mode 100644
+index 000000000..75b52f180
+--- /dev/null
++++ b/lean/MicroCFTA/SourcePruningEnumerationNativeReferences.lean
+@@ -0,0 +1,201 @@
++import MicroCFTA.SourcePruningEnumerationDispatchShape
++import MicroCFTA.SourcePruningEnumerationFold
++import MicroCFTA.SourcePruningEnumerationShallowChild
++import MicroCFTA.EnumerationReferences
++
++namespace MicroCFTA.SourcePruningEnumerationNativeReferences
++open EnumerationState EnumerationCorrectness EnumerationSchedule EnumerationDependencies EnumerationReferences
++open InternedConstructorTemplates
++local notation "Symbol" => SourcePruningTemplates.Symbol
++local notation "Constraint" => SourceSymbolicIndex.Constraint FullSyntax.Formula
++local notation "Node" => InternedConstructorTemplates.Value Symbol Constraint
++local notation "Caller" => SourceCurrentAllocatedPartialState.State
++local notation "Queries" => SourceEndpointMemo.Memos
++variable {EnumGuard : Type} {width : Nat}
++
++/-- Assimilation stores only references from its two actual pending slots. -/
++theorem assimilated_allowed (allowed : Nat → Prop)
++    (before : EnumerationState.State Symbol EnumGuard) (source target : Nat)
++    (sourceNode targetNode merged : Option Nat) (sourceScs targetScs : List Suspended)
++    (valid : ReferencesAllowed allowed before)
++    (sourceStored : before.values[source]? = some (.unenumerated sourceNode sourceScs))
++    (targetStored : before.values[target]? = some (.unenumerated targetNode targetScs)) :
++    ReferencesAllowed allowed (assimilated before target source (.unenumerated merged (sourceScs ++ targetScs))) := by
++  have sourceInputs : InputsAllowed allowed sourceScs := valid _ (List.mem_of_getElem? sourceStored)
++  have targetInputs : InputsAllowed allowed targetScs := valid _ (List.mem_of_getElem? targetStored)
++  let middle := {before with values := before.values.set target (.unenumerated merged (sourceScs ++ targetScs))}
++  have first : ReferencesAllowed allowed middle :=
++    setValue_allowed allowed target _ before middle valid
++      (fun sc member => (List.mem_append.mp member).elim (sourceInputs sc) (targetInputs sc))
++      ((EnumerationDriver.modify_success _ _ _).mpr rfl)
++  exact setValue_allowed allowed source .eliminated middle
++    {middle with values := middle.values.set source .eliminated} first
++    (by simp [InputsAllowed, references]) ((EnumerationDriver.modify_success _ _ _).mpr rfl)
++
++/-- A native incoming write adds its supplied bucket to the actual current payload. -/
++theorem incoming_written (allowed : Nat → Prop)
++    (read after : EnumerationState.State Symbol EnumGuard) (target handle : Nat)
++    (oldNode : Option Nat) (incomingScs oldScs : List Suspended)
++    (valid : ReferencesAllowed allowed read) (inputs : InputsAllowed allowed incomingScs)
++    (stored : read.values[target]? = some (.unenumerated oldNode oldScs))
++    (written : after.values = read.values.set target (.unenumerated (some handle) (incomingScs ++ oldScs))) :
++    ReferencesAllowed allowed after := by
++  have oldInputs : InputsAllowed allowed oldScs := valid _ (List.mem_of_getElem? stored)
++  intro value member
++  rw [written] at member
++  rcases List.mem_or_eq_of_mem_set member with old | same
++  · exact valid value old
++  · subst value
++    intro sc listed
++    exact (List.mem_append.mp listed).elim (inputs sc) (oldInputs sc)
++
++/-- An actual native dispatcher singleton retains the fixed allowed-reference predicate. -/
++theorem dispatch_allowed
++    [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Constraint)] [DecidableEq Node]
++    (allowed : Nat → Prop) (checkEmpty : Bool) (nativeFuel p h : Nat)
++    (beforeCaller : Caller width) (before : EnumerationState.State Symbol EnumGuard)
++    (source target : Nat) (queries : Queries) (action : EnumerateM Symbol EnumGuard Unit)
++    (afterCaller : Caller width) (savedQueries : Queries) (after : EnumerationState.State Symbol EnumGuard)
++    (valid : ReferencesAllowed allowed before)
++    (selected : SourcePruningEnumerationDispatch.dispatch checkEmpty nativeFuel p h
++      beforeCaller before source target queries = (.ok (some action), afterCaller, savedQueries))
++    (completed : ExceptT.run (action before) = [.ok ((), after)]) : ReferencesAllowed allowed after := by
++  rcases SourcePruningEnumerationDispatchShape.singleton checkEmpty nativeFuel p h
++    beforeCaller before source target queries action afterCaller savedQueries after selected completed with
++    rfl | ⟨_different, sourceNode, targetNode, merged, sourceScs, targetScs, sourceStored, targetStored, rfl⟩
++  · exact valid
++  · exact assimilated_allowed allowed before source target sourceNode targetNode merged sourceScs targetScs
++      valid sourceStored targetStored
++
++/-- Every actual fold endpoint retains the fixed predicate, including rejection and faults. -/
++theorem fold_allowed
++    [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Constraint)] [DecidableEq Node]
++    (allowed : Nat → Prop) (checkEmpty : Bool) (nativeFuel p h : Nat) (sources : List Nat)
++    (beforeCaller : Caller width) (before : EnumerationState.State Symbol EnumGuard)
++    (target : Nat) (queries : Queries)
++    (result : Except (SourceEqualityNativeDemand.Outcome width Node ⊕
++      SourceCurrentAllocatedConjunctionWorker.Outcome width)
++      (Option (List (Except EnumerationState.Error (Unit × EnumerationState.State Symbol EnumGuard)))))
++    (afterCaller : Caller width) (savedQueries : Queries) (after : EnumerationState.State Symbol EnumGuard)
++    (valid : ReferencesAllowed allowed before)
++    (observed : SourcePruningEnumerationFold.run checkEmpty nativeFuel p h sources
++      beforeCaller before target queries = (result, afterCaller, savedQueries, after)) : ReferencesAllowed allowed after := by
++  induction sources generalizing beforeCaller before queries with
++  | nil =>
++    simp only [SourcePruningEnumerationFold.run, Prod.mk.injEq] at observed
++    rcases observed with ⟨rfl, rfl, rfl, rfl⟩
++    exact valid
++  | cons source rest ih =>
++    rcases dispatchObserved : SourcePruningEnumerationDispatch.dispatch checkEmpty nativeFuel p h
++      beforeCaller before source target queries with ⟨dispatchResult, reachedCaller, saved⟩
++    cases dispatchResult with
++    | error fault =>
++      simp only [SourcePruningEnumerationFold.run, dispatchObserved, Prod.mk.injEq] at observed
++      rcases observed with ⟨rfl, rfl, rfl, rfl⟩
++      exact valid
++    | ok possible =>
++      cases possible with
++      | none =>
++        simp only [SourcePruningEnumerationFold.run, dispatchObserved, Prod.mk.injEq] at observed
++        rcases observed with ⟨rfl, rfl, rfl, rfl⟩
++        exact valid
++      | some action =>
++        cases rawObserved : ExceptT.run (action before) with
++        | nil =>
++          simp only [SourcePruningEnumerationFold.run, dispatchObserved, rawObserved, Prod.mk.injEq] at observed
++          rcases observed with ⟨rfl, rfl, rfl, rfl⟩
++          exact valid
++        | cons head tail =>
++          cases head with
++          | error error =>
++            simp only [SourcePruningEnumerationFold.run, dispatchObserved, rawObserved, Prod.mk.injEq] at observed
++            rcases observed with ⟨rfl, rfl, rfl, rfl⟩
++            exact valid
++          | ok pair =>
++            rcases pair with ⟨valueUnit, middle⟩
++            cases valueUnit
++            cases tail with
++            | nil =>
++              have middleValid := dispatch_allowed allowed checkEmpty nativeFuel p h beforeCaller before
++                source target queries action reachedCaller saved middle valid dispatchObserved rawObserved
++              simp only [SourcePruningEnumerationFold.run, dispatchObserved, rawObserved] at observed
++              exact ih reachedCaller middle saved middleValid observed
++            | cons second remaining =>
++              simp only [SourcePruningEnumerationFold.run, dispatchObserved, rawObserved, Prod.mk.injEq] at observed
++              rcases observed with ⟨rfl, rfl, rfl, rfl⟩
++              exact valid
++
++/-- A prepared shallow child stores only its supplied suspended references. -/
++theorem prepared_allowed (allowed : Nat → Prop) (scs : List Suspended) (value : Node)
++    (action : EnumerateM Symbol EnumGuard (Fragments.Fragment Symbol))
++    (before after : EnumerationState.State Symbol EnumGuard) (fragment : Fragments.Fragment Symbol)
++    (valid : ReferencesAllowed allowed before) (inputs : InputsAllowed allowed scs)
++    (prepared : SourcePruningEnumerationShallowChild.prepareChild scs value = some action)
++    (observed : Success action before fragment after) : ReferencesAllowed allowed after := by
++  cases value with
++  | empty =>
++    simp only [SourcePruningEnumerationShallowChild.prepareChild, Option.some.injEq] at prepared
++    subst action
++    exact (reject_unsuccessful before after fragment observed).elim
++  | reference _name => simp [SourcePruningEnumerationShallowChild.prepareChild] at prepared
++  | node entry _edges _depth _free =>
++    by_cases terminal : scs.any (fun sc => EqualityTrie.isTerminal sc.trie) = true
++    · simp [SourcePruningEnumerationShallowChild.prepareChild, terminal] at prepared
++    simp only [SourcePruningEnumerationShallowChild.prepareChild, terminal, Bool.false_eq_true,
++      ↓reduceIte, SourcePruningEnumerationNodes.encodeNode, Option.some.injEq] at prepared
++    subst action
++    have shape : fragment = .hole before.counter ∧
++        after = {allocated (some (entry.identity + 1)) before with
++          values := (allocated (some (entry.identity + 1)) before).values.set before.counter
++            (.unenumerated (some (entry.identity + 1)) scs)} := by
++      unfold Success at observed
++      rw [bind_single _ _ before (allocated (some (entry.identity + 1)) before)
++        before.counter (allocate_exact _ _)] at observed
++      simpa [setValue, bind, pure, modify, modifyGet, MonadStateOf.modifyGet,
++        StateT.bind, StateT.pure, StateT.modifyGet, ExceptT.bind, ExceptT.pure,
++        ExceptT.bindCont, ExceptT.mk, ExceptT.run, eq_comm] using observed
++    obtain ⟨rfl, rfl⟩ := shape
++    exact setValue_allowed allowed before.counter (.unenumerated (some (entry.identity + 1)) scs)
++      (allocated (some (entry.identity + 1)) before) _ (allocation_allowed allowed _ before valid) inputs
++      ((EnumerationDriver.modify_success _ _ _).mpr rfl)
++  | union entry _ _ _ | mu entry _ _ _ =>
++    by_cases terminal : scs.any (fun sc => EqualityTrie.isTerminal sc.trie) = true
++    · simp [SourcePruningEnumerationShallowChild.prepareChild, terminal] at prepared
++    simp only [SourcePruningEnumerationShallowChild.prepareChild, terminal, Bool.false_eq_true,
++      ↓reduceIte, SourcePruningEnumerationNodes.encodeNode, Option.some.injEq] at prepared
++    subst action
++    have shape : fragment = .hole before.counter ∧
++        after = allocated (some (entry.identity + 1)) before := by
++      unfold Success at observed
++      rw [bind_single _ _ before (allocated (some (entry.identity + 1)) before)
++        before.counter (allocate_exact _ _)] at observed
++      simpa [pure, StateT.pure, ExceptT.pure, ExceptT.mk, ExceptT.run, eq_comm] using observed
++    obtain ⟨rfl, rfl⟩ := shape
++    exact allocation_allowed allowed _ before valid
++
++/-- Fixed reference preservation and protected class equivalence retain incoming avoidance. -/
++theorem incoming_preserved (before after : EnumerationState.State Symbol EnumGuard)
++    (held : Nat) (scs : List Suspended) (incoming : IncomingAvoid held before)
++    (inputs : Avoids before.representatives held scs)
++    (classes : ∀ uv, UnionFind.SameClass after.representatives held uv ↔
++      UnionFind.SameClass before.representatives held uv)
++    (effects : ∀ allowed, ReferencesAllowed allowed before → InputsAllowed allowed scs →
++      ReferencesAllowed allowed after) : IncomingAvoid held after := by
++  have valid := effects (fun uv => ¬UnionFind.SameClass before.representatives held uv) incoming inputs
++  intro value member sc listed same
++  exact valid value member sc listed ((classes sc.var).mp same)
++
++/-- Actual reference effects and protected old enumerated roots retain global pending references. -/
++theorem pending_preserved (before after : EnumerationState.State Symbol EnumGuard) (scs : List Suspended)
++    (pending : PendingReferences before) (inputs : InputsPending before scs)
++    (origin : EnumeratedOrigin before after)
++    (protects : ∀ held fragment, before.values[held]? = some (.enumerated fragment) →
++      EnumerationDriver.Protected held before after)
++    (effects : ∀ allowed, ReferencesAllowed allowed before → InputsAllowed allowed scs →
++      ReferencesAllowed allowed after) : PendingReferences after := by
++  intro held fragment stored
++  have old := origin held fragment stored
++  exact incoming_preserved before after held scs (pending held fragment old) (inputs held fragment old)
++    (protects held fragment old).classes effects
++
++end MicroCFTA.SourcePruningEnumerationNativeReferences
+diff --git a/lean/MicroCFTA/SourcePruningEnumerationSelectedEdge.lean b/lean/MicroCFTA/SourcePruningEnumerationSelectedEdge.lean
+index 14475a9ff..d5b057d41 100644
+--- a/lean/MicroCFTA/SourcePruningEnumerationSelectedEdge.lean
++++ b/lean/MicroCFTA/SourcePruningEnumerationSelectedEdge.lean
+@@ -153,6 +153,10 @@ theorem complete
+       EnumeratedOrigin before.core after.core ∧ InputsPending after.core scs ∧
+       (∀ held, held < before.core.counter → IsRoot before.core.representatives held →
+         Avoids before.core.representatives held scs → EnumerationDriver.Protected held before.core after.core) ∧
++      (EnumerationReferences.PendingReferences before.core → EnumerationReferences.PendingReferences after.core) ∧
++      (∀ held, held < before.core.counter → IsRoot before.core.representatives held →
++        Avoids before.core.representatives held scs → EnumerationReferences.IncomingAvoid held before.core →
++        EnumerationReferences.IncomingAvoid held after.core) ∧
+       ((∃ fragment, result = .complete fragment afterCaller savedQueries after ∧
+           Safe after.core ∧ FragmentBound after.core.counter fragment) ∨
+         ∃ fragments outer waiting, result = .stopped fragments
+@@ -173,7 +177,7 @@ theorem complete
+     rwa [readback] at admitted
+   obtain ⟨r, n, p, h, k, fragments, afterCaller, after, savedQueries, final, next, afterRoots,
+     childResult, childrenRun, post, querySame, growth, afterPaths, storage, afterRealized,
+-    afterCounts, afterFlags, origin, enumProtects, rootsProtects, fragmentBounds, shape⟩ :=
++    afterCounts, afterFlags, origin, enumProtects, rootsProtects, references, _pendingHistory, fragmentBounds, shape⟩ :=
+     SourcePruningEnumerationTraversalCompletion.complete formulas solver inventory caller own checkEmpty inputs roots memos
+       initial ownSafe ownPaths ownCounts ownFlags ownRealized genuine numeric
+   have ownOrigin : EnumeratedOrigin before.core own.core := by
+@@ -194,6 +198,28 @@ theorem complete
+     intro held inside root avoids
+     obtain ⟨frame, avoidsChildren⟩ := ownProtects held inside root avoids
+     exact frame.trans (rootsProtects held (by omega) frame.root avoidsChildren)
++  have incomingPreserved : ∀ held, held < before.core.counter → IsRoot before.core.representatives held →
++      Avoids before.core.representatives held scs → EnumerationReferences.IncomingAvoid held before.core →
++      EnumerationReferences.IncomingAvoid held after.core := by
++    intro held inside root avoids incoming
++    obtain ⟨frame, avoidsChildren⟩ := ownProtects held inside root avoids
++    have ownAllowed : EnumerationReferences.ReferencesAllowed
++        (fun uv => ¬UnionFind.SameClass before.core.representatives held uv) own.core := by
++      rw [ownCore]
++      exact EnumerationReferences.suspension_allowed _ tries.length before.core incoming
++    have ownIncoming : EnumerationReferences.IncomingAvoid held own.core := by
++      intro value member sc listed same
++      exact ownAllowed value member sc listed ((frame.classes sc.var).mp same)
++    have allowedAfter := references _ ownIncoming avoidsChildren
++    have childFrame := rootsProtects held (by omega) frame.root avoidsChildren
++    intro value member sc listed same
++    exact allowedAfter value member sc listed ((childFrame.classes sc.var).mp same)
++  have pendingPreserved : EnumerationReferences.PendingReferences before.core →
++      EnumerationReferences.PendingReferences after.core := by
++    intro history held fragment stored
++    have old := fullOrigin held fragment stored
++    obtain ⟨inside, root⟩ := enumerated_root before.core safe held fragment old
++    exact incomingPreserved held inside root (pending held fragment old) (history held fragment old)
+   rcases shape with ⟨completed, afterSafe⟩ | ⟨outer, waiting, stopped⟩
+   · subst childResult
+     let fragment : Fragment := .node edge.entry.key.symbol fragments
+@@ -202,7 +228,7 @@ theorem complete
+     refine ⟨r, n, p, h, k, afterCaller, finished, savedQueries, final, next, afterRoots,
+       .complete fragment afterCaller savedQueries finished, ?_, post, querySame, ?_, afterPaths,
+       (finish_safe residual fragment after afterSafe fragmentBound).1, afterRealized, afterCounts,
+-      afterFlags, fullOrigin, retained, ?_, .inl ⟨fragment, rfl,
++      afterFlags, fullOrigin, retained, ?_, pendingPreserved, incomingPreserved, .inl ⟨fragment, rfl,
+         finish_safe residual fragment after afterSafe fragmentBound, fragmentBound⟩⟩
+     · intro er en P H ek largeP largeH
+       simp only [run, ownRun]
+@@ -216,7 +242,8 @@ theorem complete
+     refine ⟨r, n, p, h, k, afterCaller, after, savedQueries, final, next, afterRoots,
+       .stopped fragments (.ok (some []), afterCaller, savedQueries, outer, waiting) (some after),
+       ?_, post, querySame, ?_, afterPaths, storage, afterRealized, afterCounts, afterFlags,
+-      fullOrigin, retained, protectedRoots, .inr ⟨fragments, outer, waiting, rfl⟩⟩
++      fullOrigin, retained, protectedRoots, pendingPreserved, incomingPreserved,
++      .inr ⟨fragments, outer, waiting, rfl⟩⟩
+     · intro er en P H ek largeP largeH
+       simp only [run, ownRun]
+       rw [readback, childrenRun er en P H ek largeP largeH]
+diff --git a/lean/MicroCFTA/SourcePruningEnumerationTraversalCompletion.lean b/lean/MicroCFTA/SourcePruningEnumerationTraversalCompletion.lean
+index da5ef6f2a..cb940025d 100644
+--- a/lean/MicroCFTA/SourcePruningEnumerationTraversalCompletion.lean
++++ b/lean/MicroCFTA/SourcePruningEnumerationTraversalCompletion.lean
+@@ -64,6 +64,10 @@ theorem complete
+       (∀ held, held < before.core.counter → IsRoot before.core.representatives held →
+         (∀ incoming bucket, (incoming, bucket) ∈ inputs → Avoids before.core.representatives held bucket) →
+         EnumerationDriver.Protected held before.core after.core) ∧
++      (∀ allowed, EnumerationReferences.ReferencesAllowed allowed before.core →
++        (∀ incoming bucket, (incoming, bucket) ∈ inputs → EnumerationReferences.InputsAllowed allowed bucket) →
++        EnumerationReferences.ReferencesAllowed allowed after.core) ∧
++      (EnumerationReferences.PendingReferences before.core → EnumerationReferences.PendingReferences after.core) ∧
+       (∀ fragment ∈ fragments, FragmentBound after.core.counter fragment) ∧
+       ((result = .complete fragments afterCaller savedQueries after ∧ Safe after.core) ∨
+         ∃ outer waiting, result = .stopped fragments
+@@ -72,7 +76,8 @@ theorem complete
+   | nil =>
+       refine ⟨0, 0, 0, 0, 0, [], beforeCaller, before, memos.query, memos, inventory, roots,
+         .complete [] beforeCaller memos.query before, ?_, Post.refl initial, rfl, Nat.le_refl _,
+-        paths, safe.1, realized, counts, flags, .refl _, ?_, ?_, ?_, .inl ⟨rfl, safe⟩⟩
++        paths, safe.1, realized, counts, flags, .refl _, ?_, ?_, (fun _ valid _ => valid),
++        (fun valid => valid), ?_, .inl ⟨rfl, safe⟩⟩
+       · intros; rfl
+       · intro held fragment stored
+         exact EnumerationDriver.Protected.refl held before.core (enumerated_root before.core safe held fragment stored).2
+@@ -84,7 +89,8 @@ theorem complete
+       obtain ⟨available, closed, bounded, pending⟩ := genuine incoming bucket (by simp)
+       obtain ⟨r, n, p, h, k, raw, middleCaller, middle, middleQueries, middleMemos, middleInventory,
+         middleRoots, outer, waiting, headRun, headPost, headQueries, growth, middlePaths,
+-        middleStorage, middleRealized, middleCounts, middleFlags, headOrigin, headProtected, shape⟩ :=
++        middleStorage, middleRealized, middleCounts, middleFlags, headOrigin, headProtected,
++        headReferences, headPending, shape⟩ :=
+         SourcePruningEnumerationChildCompletion.complete formulas solver inventory beforeCaller before
+           checkEmpty bucket incoming roots memos initial safe paths counts flags realized bounded pending available closed ranges.1
+       have protects : ∀ held fragment, before.core.values[held]? = some (.enumerated fragment) →
+@@ -97,11 +103,13 @@ theorem complete
+         refine ⟨r, n, p, h, k, [], middleCaller, middle, middleQueries, middleMemos, middleInventory,
+           middleRoots, .stopped [] (.ok (some []), middleCaller, middleQueries, outer, waiting) (some middle),
+           ?_, headPost, headQueries, growth, middlePaths, middleStorage, middleRealized, middleCounts,
+-          middleFlags, headOrigin, protects, ?_, ?_, .inr ⟨outer, waiting, rfl⟩⟩
++          middleFlags, headOrigin, protects, ?_, ?_, headPending, ?_, .inr ⟨outer, waiting, rfl⟩⟩
+         · intro er en P H ek largeP largeH
+           simp only [SourcePruningEnumerationChildTraversal.run, headRun er en P H ek largeP largeH]
+         · intro held inside root avoids
+           exact headProtected held inside root (avoids incoming bucket (by simp))
++        · intro allowed valid allowedInputs
++          exact headReferences allowed valid (allowedInputs incoming bucket (by simp))
+         · simp
+       · have tailGenuine : ∀ value bucket, (value, bucket) ∈ rest →
+             Available middleCaller.checked.native.machine.heap value ∧ value.free = [] ∧
+@@ -122,7 +130,7 @@ theorem complete
+         obtain ⟨tailR, tailN, tailP, tailH, tailK, tailFragments, afterCaller, after, savedQueries,
+           final, next, afterRoots, tailResult, tailRun, tailPost, querySame, tailGrowth, afterPaths,
+           storage, afterRealized, afterCounts, afterFlags, tailOrigin, tailProtected, tailRootsProtected,
+-          tailBounds, tailShape⟩ :=
++          tailReferences, tailPending, tailBounds, tailShape⟩ :=
+           ih middleInventory middleCaller middle middleRoots middleMemos headPost.context middleSafe
+             middlePaths middleCounts middleFlags middleRealized tailGenuine tailRanges
+         let result : SourcePruningEnumerationChildTraversal.Result width := match tailResult with
+@@ -131,7 +139,8 @@ theorem complete
+         refine ⟨r + tailR, n + tailN, max p tailP, max h tailH, k + tailK,
+           fragment :: tailFragments, afterCaller, after, savedQueries, final, next, afterRoots, result,
+           ?_, headPost.trans tailPost, querySame, Nat.le_trans growth tailGrowth, afterPaths,
+-          storage, afterRealized, afterCounts, afterFlags, headOrigin.trans tailOrigin, ?_, ?_, ?_, ?_⟩
++          storage, afterRealized, afterCounts, afterFlags, headOrigin.trans tailOrigin, ?_, ?_, ?_,
++          (fun valid => tailPending (headPending valid)), ?_, ?_⟩
+         · intro er en P H ek largeP largeH
+           have head := headRun (tailR + er) (tailN + en) P H (tailK + ek)
+             (Nat.le_trans (Nat.le_max_left _ _) largeP) (Nat.le_trans (Nat.le_max_left _ _) largeH)
+@@ -156,6 +165,11 @@ theorem complete
+           apply tailRootsProtected held (Nat.lt_of_lt_of_le inside growth) first.root
+           intro value retained member
+           exact first.avoids retained (avoids value retained (List.mem_cons_of_mem _ member))
++        · intro allowed valid allowedInputs
++          apply tailReferences allowed
++            (headReferences allowed valid (allowedInputs incoming bucket (by simp)))
++          intro value retained member
++          exact allowedInputs value retained (List.mem_cons_of_mem _ member)
+         · intro child member
+           rcases List.mem_cons.mp member with rfl | member
+           · exact fragmentBound_mono _ _ tailGrowth _ fragmentBound
