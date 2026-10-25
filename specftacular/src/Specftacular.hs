@@ -303,6 +303,8 @@ data Settings = Settings
     -- ^ The order of the rewriting (see 'searchTermOrder').
     , completionFuel :: Maybe Int
     -- ^ The critical pairs that the completion of one law may take (see 'addLaw').
+    , parallelTests :: Maybe Int
+    -- ^ The test cases after which a comparison tests in parallel (see 'DT.insertWith').
     , speculation :: Int
     -- ^ The critical pairs that the completion decides in parallel threads (see 'addLaw').
     , completionAllocLimit :: Word64
@@ -406,6 +408,11 @@ data SearchOptions = SearchOptions
     (0: no limit). Then the law keeps the rules that its completion has
     (see 'addLaw').
     -}
+    , searchParallelTests :: Maybe Int
+    {- ^ A comparison tests the cases after the first n in parallel chunks,
+    one for each capability (see 'DT.insertWith'). The laws do not change.
+    'Nothing' tests in order.
+    -}
     , searchSpeculation :: Int
     {- ^ The largest number of critical pairs that the completion of a law
     decides in parallel threads (0: none; see 'addLaw'). The laws do not
@@ -480,6 +487,7 @@ defaultOptions size phase =
         , searchCompletionMemLimit = completionMemoryLimit
         , searchCompletionAllocLimit = completionBudget
         , searchCompletionFuel = completionFuelDefault
+        , searchParallelTests = Nothing
         , searchSpeculation = 0
         , searchRecheck = 0
         , searchTests = 1000
@@ -519,6 +527,7 @@ parseOptions = O.execParser (O.info (options O.<**> O.helper) (O.fullDesc <> O.p
             <*> completionMemLimitOption
             <*> completionAllocLimitOption
             <*> completionFuelOption
+            <*> O.optional parallelTestsOption
             <*> speculateOption
             <*> recheckOption
             <*> testsOption
@@ -660,6 +669,13 @@ parseOptions = O.execParser (O.info (options O.<**> O.helper) (O.fullDesc <> O.p
                 <> O.help
                     "Stop the completion of a law after 2^K critical pairs, and keep the rules that it has (default 15, 32768 pairs; 0: no limit)"
             )
+    parallelTestsOption =
+        O.option
+            O.auto
+            ( O.long "parallel-tests"
+                <> O.metavar "N"
+                <> O.help "Test the cases of a comparison after the first N in parallel chunks (default: in order; needs +RTS -N)"
+            )
     speculateOption =
         O.option
             O.auto
@@ -770,6 +786,7 @@ searchPhases
         , searchCompletionMemLimit = completionMemLimitSetting
         , searchCompletionAllocLimit = completionAllocLimitSetting
         , searchCompletionFuel = completionFuelSetting
+        , searchParallelTests = parallelTestsSetting
         , searchSpeculation = speculationSetting
         , searchRecheck = recheckSetting
         , searchTests = numTests
@@ -850,6 +867,7 @@ searchPhases
                         , completionMemLimit = completionMemLimitSetting
                         , completionAllocLimit = completionAllocLimitSetting
                         , completionFuel = if completionFuelSetting > 0 then Just (2 ^ completionFuelSetting) else Nothing
+                        , parallelTests = parallelTestsSetting
                         , speculation = speculationSetting
                         , recheckCount = recheckSetting
                         , lawSink = sink
@@ -1421,7 +1439,7 @@ consider env@Settings{..} StEcta{..} lvl full_term s0
         -- evaluated on the test cases of its path only.
         inserted <-
             diagnose env lvl (show current_ty) "schema_tests" s0 $
-                DT.insertWith known (valuesEqual eq_inst) test_cases np_term (values np_term) tree
+                DT.insertWith parallelTests known (valuesEqual eq_inst) test_cases np_term (values np_term) tree
         let s = s0{so_far = so_far s0 + 1}
             -- A later phase enumerates the schema again, so it goes into
             -- seen.
@@ -1521,7 +1539,7 @@ consider env@Settings{..} StEcta{..} lvl full_term s0
                 known a b = a == b || joinable isVar (rewrite_rules s) a b
             inserted <-
                 diagnose env lvl (show current_ty) "instance_tests" s $
-                    DT.insertWith known (valuesEqual eq_inst) test_cases i (values i) table
+                    DT.insertWith parallelTests known (valuesEqual eq_inst) test_cases i (values i) table
             case inserted of
                 DT.Untested -> return (Knew, s)
                 DT.Distinct table' ->
