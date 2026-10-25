@@ -95,6 +95,57 @@ TH/Generic extraction, valid-position build/read and source codec laws stay open
 
 
 
+
+## Native cached selected-edge execution
+
+Current source: `SourcePruningEnumerationCachedEdge`.
+Proof: `138d1f3032c576318209541de9b506de2df8709f`. Main remains `74250bd889685da436cdbfe32ac4b5a0878ffd09`.
+The whole goal stays ACTIVE and incomplete. H6 remains strongest.
+
+Actual own-class preparation precedes ordered captured-child execution,
+including duplicates. Arity reject, absent projection, Empty reject,
+unsupported singleton and successful fragment construction remain distinct.
+Only successful some-fragments record the computed residual. Raw [] remains
+separate from the independent completed-prefix cache; outer None carries no
+cache promise. No arbitrary-fuel guarantee is made.
+
+The producer takes genuine Ready, an available closed ordinary parent,
+stored-edge membership, inherited bounds, storage/realization, Roots and both
+native index laws. It derives child availability/closure and
+bucket bounds. One derived finite bound stabilizes the whole outcome for
+all larger fuel, with exact unprepared iff outer None. Every actual prepared
+action has derived exact raw rows and endpoint invariants. No callback-success
+or desired endpoint/future Ranges premise is introduced. Counter monotonicity,
+alignment, forest/Roots, storage, realization, counts, native flags and
+successful fragment bounds retain that endpoint. EnumerationExpandableIndex.frame attaches the
+indexes to the actual residual obligations update.
+
+Root selected one noncomputable definition, one theorem, seven haves, three
+proof lets and two definition lets, without instances/induction/new helpers
+or types. Fifteen selected fragments / 98 lines remain. Source estimate
+300–480, hard limit 680. Source review is bound. The frozen owner records 90 payloads, 172 scoped entries, 8 obtain packets
+with 45 fields, 7 case groups, 17 whole sources and 28 cuts / 510 lines,
+plus 10 routes and 17 project identities. Thirteen original literals remain
+exact. A separate two-literal namespace amendment names the existing
+EnumerationExpandableIndex.frame. All original owner bytes remain. These source controls supply no compiler or execution result.
+
+Validation: Strict attempt 4 passes with a literal empty log under all linters and warnings as errors. Three earlier failed inputs and their complete 20346-byte, 16875-byte and 10885-byte raw logs remain. Strict-1 found the wrong frame namespace and local refine syntax. Strict-2 required explicit map composition and false-Boolean reductions. Strict-3 required a residual case split for the proof-local match telescope. Thirteen original literals remain exact. A separately reviewed two-literal overlay names the existing EnumerationExpandableIndex.frame. No public header, type, premise, intended behavior or proof limit changes. The original 172 scopes and seven case groups remain; a separate pre-revised-body annotation adds one unused residual payload and one group, for 173 scopes and eight groups. A separate post-body annotation marks the raw residual guard as unused without a source rename. The source has 260 ordinary lines, below the selected 300 to 480 estimate and within hard cap 680; no padding was added. The installed build, complete public readback and aggregate Audit pass. All 88 public output lines retain two complete signatures without display omissions. The older unused-inputs warning remains unchanged. No passing check was repeated. No seal has failed. All actual resource receipts remain. Read-only lookup diagnostics remain separate from compiler and seal failures. The original owner, five-program package and all separate amendments remain immutable.
+Installed focused build: 1318 jobs; Audit: 3722 jobs and
+76419 theorem dependency checks. Actual public axioms: prepare and complete each report propext, Classical.choice and Quot.sound.
+All actual failed inputs/raw logs/cap receipts remain. The documents-1
+non-Lean ledger stays separate. Exactly 26 prior CachedStages inputs preserve
+archive-1/local-publication-1/push-1 and the full 12204-byte summary. Its sealed
+canonical assessment and separate peer remain. No future seal or push is asserted.
+
+Later alternatives retain same-before order and duplicates. Native terminal
+fallback, configured/canonical selection, physical maps/machine integers,
+extraction, Safe/LiveRoots, wrapper reconstruction and full driver remain open.
+All six Haskell repair handoffs remain first in FINDINGS. No Haskell change is
+claimed. H6 covers closed construction with valid cache/allocation history and
+any prescribed finite modeled node-call trace at derived bounds. Empty inherited
+payload preserves the same finite trees under formal guard/solver semantics.
+Full typing/pruning, solver implementation/runtime/resources/convergence stay open.
+
 ## Native cached ordered child execution
 
 Current source: `SourcePruningEnumerationCachedStages`.
