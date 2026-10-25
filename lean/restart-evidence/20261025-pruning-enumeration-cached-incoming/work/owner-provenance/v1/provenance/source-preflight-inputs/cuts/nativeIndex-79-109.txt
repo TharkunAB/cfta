@@ -1,0 +1,31 @@
+theorem gained_complete
+    (heap nextHeap : InternedConstructorTemplates.State Symbol NativeGuard)
+    (kept : SourceEqualityRequiredCache.Keeps heap nextHeap)
+    (before : EnumerationExpandableIndex.Cached Symbol EnumGuard)
+    (after : EnumerationState.State Symbol EnumGuard)
+    (target : Nat) (oldNode : Option Nat) (oldScs incomingScs : List EnumerationState.Suspended)
+    (handle : Nat) (value : InternedConstructorTemplates.Value Symbol NativeGuard)
+    (roots : Nat → Nat) (paths : Roots before.core.representatives roots)
+    (stored : before.core.values[target]? = some (.unenumerated oldNode oldScs))
+    (decoded : lookupNode nextHeap handle = some value)
+    (aligned : before.core.counter = before.core.values.length)
+    (counts : EnumerationCanonicalWaiting.Correct roots before.core.values before.waiting)
+    (flags : ∀ (slot : Nat),
+      candidate heap ((before.core.values[slot]?).getD .eliminated) = some (before.expandable slot))
+    (actualPrefix : ExceptT.run ((do
+      setValue target (.unenumerated (some handle) (incomingScs ++ oldScs))
+      inheritAncestry target) before.core) = [.ok ((), after)]) :
+    ∃ (fuel : Nat) (written : EnumerationExpandableIndex.Cached Symbol EnumGuard),
+      (∀ (extra : Nat), write nextHeap (fuel + extra) target
+        (.unenumerated (some handle) (incomingScs ++ oldScs)) incomingScs [] before = some written) ∧
+      written.core = {before.core with
+        values := before.core.values.set target (.unenumerated (some handle) (incomingScs ++ oldScs))} ∧
+      written.expandable = (fun (slot : Nat) => if slot = target then
+        !(MergedOrdinaryHeight.recursiveBoundary value && (incomingScs ++ oldScs).isEmpty)
+        else before.expandable slot) ∧
+      written.waiting = EnumerationCanonicalWaiting.count roots 1 incomingScs before.waiting ∧
+      (EnumerationExpandableIndex.frame after written).core = after ∧
+      after.counter = after.values.length ∧ Roots after.representatives roots ∧
+      EnumerationCanonicalWaiting.Correct roots after.values written.waiting ∧
+      (∀ (slot : Nat),
+        candidate nextHeap ((after.values[slot]?).getD .eliminated) = some (written.expandable slot)) := by

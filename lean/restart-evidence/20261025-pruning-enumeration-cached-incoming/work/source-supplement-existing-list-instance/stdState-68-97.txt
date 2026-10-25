@@ -1,0 +1,30 @@
+section
+variable {σ : Type u} {m : Type u → Type v}
+variable [Monad m] {α β : Type u}
+
+/--
+Returns the given value without modifying the state. Typically used via `Pure.pure`.
+-/
+@[always_inline, inline, expose]
+protected def pure (a : α) : StateT σ m α :=
+  fun s => pure (a, s)
+
+/--
+Sequences two actions. Typically used via the `>>=` operator.
+-/
+@[always_inline, inline, expose]
+protected def bind (x : StateT σ m α) (f : α → StateT σ m β) : StateT σ m β :=
+  fun s => do let (a, s) ← x s; f a s
+
+/--
+Modifies the value returned by a computation. Typically used via the `<$>` operator.
+-/
+@[always_inline, inline, expose]
+protected def map (f : α → β) (x : StateT σ m α) : StateT σ m β :=
+  fun s => do let (a, s) ← x s; pure (f a, s)
+
+@[always_inline]
+instance : Monad (StateT σ m) where
+  pure := StateT.pure
+  bind := StateT.bind
+  map  := StateT.map

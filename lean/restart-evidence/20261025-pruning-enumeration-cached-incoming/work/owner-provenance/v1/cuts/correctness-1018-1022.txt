@@ -1,0 +1,5 @@
+theorem getValue_success (fuel uv : Nat) (state after : State Symbol Guard) (value : UVarValue Symbol) :
+    Success (getValue fuel uv) state value after ↔
+      ∃ found, UnionFind.findRoot fuel state.representatives uv = some found ∧
+        state.values[found.representative]? = some value ∧ after = {state with representatives := found.forest} := by
+  cases lookup : UnionFind.findRoot fuel state.representatives uv with

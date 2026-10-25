@@ -1,0 +1,12 @@
+/-- A successful value read retains the actual root, its size, and its slot. -/
+theorem getValue_frame (fuel uv : Nat) (before after : State Symbol Guard) (value : UVarValue Symbol)
+    (total : UnionFind.Total before.representatives)
+    (success : Success (getValue fuel uv) before value after) :
+    Frame before after ∧ ∃ root size,
+      UnionFind.Reaches before.representatives uv root size ∧
+      UnionFind.Reaches after.representatives uv root size ∧ before.values[root]? = some value := by
+  obtain ⟨found, lookup, stored, rfl⟩ := (getValue_success fuel uv before after value).mp success
+  obtain ⟨path, preserved⟩ := UnionFind.findRoot_correct fuel before.representatives uv found lookup
+  refine ⟨⟨rfl, rfl, rfl, rfl, rfl, ?_⟩, found.representative, found.size, path, preserved path, stored⟩
+  intro other root size
+  exact UnionFind.findRoot_reaches_iff total lookup other root size

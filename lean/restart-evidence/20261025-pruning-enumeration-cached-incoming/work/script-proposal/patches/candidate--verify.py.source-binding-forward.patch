@@ -1,0 +1,20 @@
+--- initial-unbound/candidate/verify.py
++++ candidate/verify.py
+@@ -86,7 +86,7 @@
+     value, ref = line.split()
+     if ref not in ['refs/heads/formalize', 'refs/remotes/origin/formalize'] and not ref.startswith('refs/codex/turn-diffs/'):
+         assert git('rev-parse', ref).decode().strip() == value, ref
+-assert git('rev-parse', 'codex/backup-pruning-enumeration-cached-fold-completion-20261025-0930').decode().strip() == baseline
++assert git('rev-parse', 'codex/backup-pruning-enumeration-cached-incoming-20261025-1021').decode().strip() == baseline
+ 
+ checks = load('work/build-summary.json')
+ source = (root / 'lean/MicroCFTA/SourcePruningEnumerationCachedIncoming.lean').read_bytes()
+@@ -239,7 +239,7 @@
+ assert [pin['source'] for pin in custody] == summary['next_custody_inputs']
+ assert summary['final_local_publication_attempt'] == 'local-publication-1'
+ assert summary['all_manifest_files_committed'] is True
+-assert sha((here / 'inputs/mcfta-pruning-enumeration-cached-incoming-20261025-source-review.md').read_bytes()) == 'PENDING_ACTUAL_SOURCE_REVIEW_SHA256'
++assert sha((here / 'inputs/mcfta-pruning-enumeration-cached-incoming-20261025-source-review.md').read_bytes()) == 'cd24fc70e7df17218f398302e62ec9b996ad51e74aa55e2376dd02f2f7324327'
+ 
+ print(json.dumps(dict(status='PASS', baseline=baseline, main=main, proof=proof,
+     baseline_files=count, unchanged_files=count - len(changed), exact_changed_files=changed,

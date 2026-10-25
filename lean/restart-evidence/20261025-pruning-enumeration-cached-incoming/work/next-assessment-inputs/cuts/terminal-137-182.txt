@@ -1,0 +1,46 @@
+      (∀ extra, ExceptT.run (SourcePruningEnumerationTerminalPrefix.run (r + extra) first rest waiting before) =
+        [.ok ((recorded, winner, moved), joined)]) ∧
+      recorded = (first :: rest).map (fun sc => roots sc.var) ∧ winner ∈ recorded ∧
+      moved = EnumerationCanonicalWaiting.moveMany winner
+        (EnumerationBuilderCaches.canonicalIds (recorded.filter (fun key => key != winner))) waiting ∧
+      (∀ extra P H, p ≤ P → h ≤ H →
+        SourcePruningEnumerationFold.run checkEmpty (n + extra) P H recorded beforeCaller joined winner memos.query =
+          (.ok (some foldRaw), foldCaller, foldQueries, folded)) ∧
+      (foldRaw = [] ∨ foldRaw = [.ok ((), folded)]) ∧
+      Post formulas solver foldInventory beforeCaller foldCaller foldFinal ∧ foldFinal.query = foldQueries ∧
+      StorageValid folded ∧ PendingRealized foldCaller.checked.native.machine.heap folded ∧
+      IsRoot folded.representatives winner ∧
+      EnumerationCanonicalWaiting.Correct (EnumerationCanonicalUnion.mergedRoots roots recorded winner)
+        folded.values moved ∧
+      (∀ extraRepresentative extraNative P H, p ≤ P → h ≤ H →
+        run checkEmpty (r + extraRepresentative) (n + extraNative) P H first rest waiting
+          beforeCaller before incoming incomingScs memos.query =
+          (.ok (some raw), afterCaller, savedQueries, outer, moved)) ∧
+      Post formulas solver next beforeCaller afterCaller final ∧ final.query = savedQueries ∧
+      (foldRaw = [] → raw = [] ∧ afterCaller = foldCaller ∧ savedQueries = foldQueries ∧
+        outer = folded ∧ final = foldFinal ∧ next = foldInventory) ∧
+      (foldRaw = [.ok ((), folded)] →
+        ∃ (oldNode : Option Nat) (oldScs : List EnumerationState.Suspended)
+          (read afterWrite : EnumerationState.State Symbol EnumGuard) (replacement : Node) (handle : Nat),
+          outer = read ∧
+          (∀ extra, ExceptT.run (getValue (r + extra) winner folded) =
+            [.ok (.unenumerated oldNode oldScs, read)]) ∧
+          EnumerationCompressionFrame.Frame folded read ∧
+          (∀ extraRepresentative extraNative P H, p ≤ P → h ≤ H →
+            SourcePruningEnumerationIncomingNode.run checkEmpty (r + extraRepresentative) (n + extraNative) P H
+              foldCaller folded winner incoming incomingScs foldQueries =
+              (.ok (some (if replacement = .empty then [] else [.ok ((), afterWrite)])),
+                afterCaller, savedQueries, read)) ∧
+          ExceptT.run ((do
+            setValue winner (.unenumerated (some handle) (incomingScs ++ oldScs))
+            inheritAncestry winner) read) = [.ok ((), afterWrite)] ∧
+          afterWrite.values[winner]? = some (.unenumerated (some handle) (incomingScs ++ oldScs)) ∧
+          StorageValid afterWrite ∧ PendingRealized afterCaller.checked.native.machine.heap afterWrite ∧
+          EnumerationCanonicalWaiting.Correct (EnumerationCanonicalUnion.mergedRoots roots recorded winner)
+            afterWrite.values
+            (EnumerationCanonicalWaiting.count (EnumerationCanonicalUnion.mergedRoots roots recorded winner)
+              1 incomingScs moved) ∧
+          raw = (if replacement = .empty then [] else [.ok (.hole winner, afterWrite)]) ∧
+          FragmentBound afterWrite.counter (.hole winner : Fragments.Fragment Symbol) ∧
+          Available afterCaller.checked.native.machine.heap replacement ∧ replacement.free = [] ∧
+          encodeNode replacement = some handle ∧ lookupNode afterCaller.checked.native.machine.heap handle = some replacement ∧

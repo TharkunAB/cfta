@@ -1,0 +1,7 @@
+theorem root_iff (forest : UnionFind.Forest) (roots : Nat → Nat) (paths : Roots forest roots) (uv : Nat) :
+    IsRoot forest uv ↔ roots uv = uv := by
+  obtain ⟨size, path⟩ := paths uv
+  constructor
+  · rintro ⟨count, self⟩
+    exact (UnionFind.reaches_unique path self).1
+  · intro same

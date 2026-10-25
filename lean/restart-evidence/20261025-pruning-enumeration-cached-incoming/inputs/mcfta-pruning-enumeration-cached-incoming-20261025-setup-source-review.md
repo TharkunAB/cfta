@@ -1,0 +1,13 @@
+[2026-10-25 10:24 CET] FINAL source/data setup preparation — READY FOR INDEPENDENT REVIEW.
+
+I read the complete actual 29-line prior baseline, the full 16168-byte/206-line post-publication summary, both complete assessment reports, and all six current refresh artifacts. Root's actual refresh-1 exits zero. HEAD and origin/formalize are 017a8fbacc9e824dd311fef40291965b350f19f4; main remains 74250bd889685da436cdbfe32ac4b5a0878ffd09. The actual 4 GiB limits, four worktrees, two stashes and unrelated remote-branch observation are retained. No current baseline run or backup creation is claimed.
+
+The frozen baseline proposal has exactly seven payloads/nine files. Its complete basis is 1538 bytes, SHA256 1737903369b682c85974f4c62b0389e1e23a5032931097672b74d0d28e560898. The candidate is 1517 bytes/29 lines, SHA256 ba57ab99b3dd5eae48adb7bba7cb9bf6d1ba3d012664c44ff01cd9b54ed09da8. Only four full-literal Unicode spans change the area, expected HEAD and two backup occurrences. Both directions reconstruct exactly; both unified patches are exact. All main/clean, tree, refs, worktree and stash controls remain unchanged. Expected tracked count is 149682. Proposed backup: codex/backup-pruning-enumeration-cached-incoming-20261025-1021.
+
+Baseline FROZEN SHA256: d74628b9ec31501e433ace97a62e0ad708525e4bd40db5957a387a969d64ca4d. Baseline pins SHA256: d7a230fa73d2354ea8b6ff2cd7d3fbe274e27d942803a1689bda2214cf98c3de.
+
+The custody proposal has exactly 30 payloads/32 files. Its index preserves exactly 26 actual ordered inputs: three six-artifact archive-1/local-publication-1/push-1 families, then eight canonical tails. Every copied byte length and SHA256 matches its source. The full summary retains SHA256 1e09ae83e54de9acc1d5f417c4b749d5aee4408ee039c8e745250ebb25ac0bb1. The canonical assessment equals its sealed copy. The separate sealed peer is copied from its declared committed path as context and is not a 27th input.
+
+Custody index SHA256: fa67d7602cec27735848b60824c2f5f5aeb1a6a8f177950c4535d51c79aa1cf3. Custody FROZEN SHA256: 6dcd0c04e091a4b71107cb1ba4c1b5ea488c135037f6f0dc258f00dadde52425. Custody pins SHA256: 45bf2bc507875d2e32496538a10e2e01b3182c76426702dfd7b4cff0ef72fc75. Separate peer SHA256: 7de1186acc841332cadb6e7a2c63f5923fe7d55ef7b277a4036e62337948727a.
+
+This work used source/data reads, comparisons and /tmp writes only. Bare python was unavailable; python3 performed the data operations. This locator diagnostic is not a compiler, cap or seal failure. No selected program, parser, compiler, Git or network operation ran. Root owns all activation and execution. No incoming contract, mathematical body, check or future publication outcome is inferred.

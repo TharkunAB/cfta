@@ -1,0 +1,52 @@
+  obtain ⟨prefixFuel, recorded, winner, moved, _, _, joined, prefixRun, _, _, _, recordedSame,
+    movedSame, winnerMember, rootWinner, prefixRoots, prefixCounts, joinedSame, joinedStorage,
+    joinedRealized, winnerPending, recordedPending, _, _, _⟩ :=
+    SourcePruningEnumerationTerminalPrefix.run_complete beforeCaller.checked.native.machine.heap before
+      first rest waiting roots paths counts safe bounded pending realized
+  have joinedRoot : IsRoot joined.representatives winner := by
+    apply (root_iff joined.representatives _ prefixRoots winner).mpr
+    simp only [EnumerationCanonicalUnion.mergedRoots, rootWinner, ite_self]
+  obtain ⟨foldFuel, foldP, foldH, foldRaw, foldCaller, folded, foldQueries, foldFinal, foldInventory,
+    foldRun, foldPost, foldQuerySame, foldRealized, foldShape, foldCompleted, _, _, foldForest,
+    foldCounter, _, _, _, _⟩ :=
+    SourcePruningEnumerationFold.run_complete formulas solver inventory beforeCaller joined recorded
+      checkEmpty winner memos initial joinedRealized winnerPending
+      (fun source member => .inr (recordedPending source member))
+      (ranges prefixFuel recorded winner moved joined (by simpa only [Nat.add_zero] using prefixRun 0)).1
+  obtain ⟨foldedStorage, foldCounts⟩ := SourcePruningEnumerationFoldInvariants.run_preserves
+    checkEmpty foldFuel foldP foldH recorded beforeCaller joined winner memos.query (.ok (some foldRaw))
+    foldCaller foldQueries folded (EnumerationCanonicalUnion.mergedRoots roots recorded winner) moved
+    joinedStorage prefixCounts (by simpa only [Nat.add_zero] using foldRun 0 foldP foldH (by omega) (by omega))
+  have foldedRoot : IsRoot folded.representatives winner := by
+    simpa only [foldForest] using joinedRoot
+  rcases foldShape with rejected | completed
+  · subst foldRaw
+    refine ⟨prefixFuel, foldFuel, foldP, foldH, recorded, winner, moved, joined, [], foldCaller,
+      folded, foldQueries, foldFinal, foldInventory, [], foldCaller, folded, foldQueries, foldFinal,
+      foldInventory, prefixRun, recordedSame, winnerMember, movedSame, foldRun, .inl rfl,
+      foldPost, foldQuerySame, foldedStorage, foldRealized, foldedRoot, foldCounts,
+      ?_, foldPost, foldQuerySame, ?_, ?_⟩
+    · intro extraRepresentative extraNative P H enoughP enoughH
+      simp only [run, ite_eq_right nonempty, prefixRun extraRepresentative,
+        foldRun extraNative P H enoughP enoughH]
+    · intro isRejected
+      exact ⟨rfl, rfl, rfl, rfl, rfl, rfl⟩
+    · intro isCompleted
+      cases isCompleted
+  · subst foldRaw
+    have foldedAvailable : Available foldCaller.checked.native.machine.heap incoming := by
+      exact foldPost.effects.keeps.available incoming available
+    have foldedBounded : ∀ sc ∈ incomingScs, sc.var < folded.counter := by
+      intro sc member
+      rw [foldCounter]
+      simpa only [congrArg EnumerationState.State.counter joinedSame] using incomingBounded sc member
+    obtain ⟨incomingR, incomingN, incomingP, incomingH, oldNode, oldScs, read, afterWrite,
+      afterCaller, savedQueries, final, next, replacement, handle, reading, frame, incomingRun,
+      writePrefix, afterSame, afterStored, afterStorage, afterRealized, incomingPost,
+      incomingQuerySame, _, replacementAvailable, replacementClosed, encoded, decoded, optional, present⟩ :=
+      SourcePruningEnumerationIncomingNode.run_complete formulas solver foldInventory foldCaller folded
+        checkEmpty winner incoming incomingScs foldFinal foldPost.context foldRealized foldedStorage
+        foldedRoot (foldCompleted rfl).1 foldedAvailable closed foldedBounded
+        ((ranges prefixFuel recorded winner moved joined
+          (by simpa only [Nat.add_zero] using prefixRun 0)).2 foldFuel foldP foldH foldCaller folded foldQueries
+          (by simpa only [Nat.add_zero] using foldRun 0 foldP foldH (by omega) (by omega)))

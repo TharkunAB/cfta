@@ -1,0 +1,17 @@
+    obtain ⟨found, lookup, oldStored, _⟩ := (getValue_success incomingR winner folded read
+      (.unenumerated oldNode oldScs)).mp (by
+        unfold Success
+        rw [show ExceptT.run (getValue incomingR winner folded) =
+            [.ok (.unenumerated oldNode oldScs, read)] from
+          by simpa only [Nat.add_zero] using reading 0]
+        exact List.mem_singleton_self _)
+    have foundWinner : found.representative = winner := by
+      obtain ⟨size, path⟩ := foldedRoot
+      exact (UnionFind.reaches_unique
+        (UnionFind.findRoot_correct incomingR folded.representatives winner found lookup).1 path).1
+    have readStored : read.values[winner]? = some (.unenumerated oldNode oldScs) := by
+      rw [frame.values, ← foundWinner]
+      exact oldStored
+    have readCounts : EnumerationCanonicalWaiting.Correct
+      (EnumerationCanonicalUnion.mergedRoots roots recorded winner) read.values moved := by
+      simpa only [frame.values] using foldCounts
