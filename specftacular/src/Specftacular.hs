@@ -9,6 +9,7 @@ module Specftacular (
     discoverMonomorphic,
     experimentalPhases,
     SearchOptions (..),
+    EGraphMode (..),
     TermOrder (..),
     Diagnostics (..),
     defaultOptions,
@@ -17,11 +18,13 @@ module Specftacular (
 ) where
 
 import qualified Data.Bifunctor as Bi
+import qualified Data.CFTA.EGraph as EG
 import Data.Map.Strict (Map)
 import qualified Data.Map.Strict as Map
 import Data.Proxy (Proxy (..))
 import qualified Specftacular.CompiledPruning as Compile
 import qualified Specftacular.DecisionTree as DT
+import Specftacular.EGraph (Law, defaultEGraphLimits, equalUnder, lawSides)
 import Specftacular.Pruning (prunedPrograms, prunedTerms)
 import Specftacular.Rewriting
 import Specftacular.Types
@@ -220,6 +223,14 @@ isGivenVar sig (Symbol x) = case sig Map.!? x of
     Just (GivenFun{given_info = GivenVar{}}) -> True
     _ -> False
 
+{- | How equality saturation ('equalUnder') takes part in the search. In
+'EGraphExtra' and 'EGraphReplace', the search does not print a law that the
+printed laws prove within the limits. The law keeps its own rules, so that
+the pruning does not get weaker. 'EGraphReplace' also completes no law.
+-}
+data EGraphMode = EGraphOff | EGraphExtra | EGraphReplace
+    deriving (Eq, Show)
+
 -- | The state of the search. The phases and the sizes share it.
 data Search = Search
     { seen :: !(HS.HashSet Term)
@@ -236,6 +247,8 @@ data Search = Search
     -- ^ The number of terms that the search examined.
     , law_count :: !Int
     -- ^ The number of laws that the search found.
+    , egraph_laws :: ![Law]
+    -- ^ The rules of the printed laws, for 'equalUnder'.
     , pending_laws :: ![(Term, Term, Sig, Term)]
     {- ^ With 'deferLaws', the laws of a bucket, newest first: the two terms
     of the test, and the signature and the law that 'generalizeLaw' gives.
@@ -303,6 +316,10 @@ data Settings = Settings
     -- ^ The order of the rewriting (see 'searchTermOrder').
     , completionFuel :: Maybe Int
     -- ^ The critical pairs that the completion of one law may take (see 'addLaw').
+    , egraphMode :: EGraphMode
+    -- ^ Whether equality saturation decides that a law follows (see 'EGraphMode').
+    , egraphLimits :: EG.Limits
+    -- ^ The limits of each saturation.
     , parallelTests :: Maybe Int
     -- ^ The test cases after which a comparison tests in parallel (see 'DT.insertWith').
     , speculation :: Int
@@ -408,6 +425,10 @@ data SearchOptions = SearchOptions
     (0: no limit). Then the law keeps the rules that its completion has
     (see 'addLaw').
     -}
+    , searchEGraph :: EGraphMode
+    -- ^ Whether equality saturation decides that a law follows (see 'EGraphMode').
+    , searchEGraphLimits :: EG.Limits
+    -- ^ The limits of each saturation (see 'EG.Limits').
     , searchParallelTests :: Maybe Int
     {- ^ A comparison tests the cases after the first n in parallel chunks,
     one for each capability (see 'DT.insertWith'). The laws do not change.
@@ -487,6 +508,8 @@ defaultOptions size phase =
         , searchCompletionMemLimit = completionMemoryLimit
         , searchCompletionAllocLimit = completionBudget
         , searchCompletionFuel = completionFuelDefault
+        , searchEGraph = EGraphOff
+        , searchEGraphLimits = defaultEGraphLimits
         , searchParallelTests = Nothing
         , searchSpeculation = 0
         , searchRecheck = 0
@@ -527,6 +550,15 @@ parseOptions = O.execParser (O.info (options O.<**> O.helper) (O.fullDesc <> O.p
             <*> completionMemLimitOption
             <*> completionAllocLimitOption
             <*> completionFuelOption
+            <*> egraphOption
+            <*> ( EG.Limits
+                    <$> egraphNumber "egraph-iterations" 8 "The iterations of each saturation (default 8)"
+                    <*> egraphNumber "egraph-nodes" 4000 "The e-nodes that each saturation may add (default 4000)"
+                    <*> egraphNumber
+                        "egraph-match-limit"
+                        0
+                        "The matches of a rule in one iteration after which the backoff of egg bans it (default 0: no backoff)"
+                )
             <*> O.optional parallelTestsOption
             <*> speculateOption
             <*> recheckOption
@@ -669,6 +701,22 @@ parseOptions = O.execParser (O.info (options O.<**> O.helper) (O.fullDesc <> O.p
                 <> O.help
                     "Stop the completion of a law after 2^K critical pairs, and keep the rules that it has (default 15, 32768 pairs; 0: no limit)"
             )
+    egraphOption =
+        O.option
+            ( O.eitherReader $ \text -> case text of
+                "off" -> Right EGraphOff
+                "extra" -> Right EGraphExtra
+                "replace" -> Right EGraphReplace
+                _ -> Left "the e-graph mode is off, extra or replace"
+            )
+            ( O.long "egraph"
+                <> O.metavar "MODE"
+                <> O.value EGraphOff
+                <> O.help
+                    "Decide with equality saturation whether the printed laws prove a law: off, extra (after the completion), or replace (no completion)"
+            )
+    egraphNumber name value help =
+        O.option O.auto (O.long name <> O.metavar "N" <> O.value value <> O.help help)
     parallelTestsOption =
         O.option
             O.auto
@@ -786,6 +834,8 @@ searchPhases
         , searchCompletionMemLimit = completionMemLimitSetting
         , searchCompletionAllocLimit = completionAllocLimitSetting
         , searchCompletionFuel = completionFuelSetting
+        , searchEGraph = egraphSetting
+        , searchEGraphLimits = egraphLimitsSetting
         , searchParallelTests = parallelTestsSetting
         , searchSpeculation = speculationSetting
         , searchRecheck = recheckSetting
@@ -808,6 +858,8 @@ searchPhases
                 fail "type depth must be a nonnegative integer"
             when (completionFuelSetting < 0 || completionFuelSetting > completionFuelMax) $
                 fail completionFuelMessage
+            when (egraphSetting /= EGraphOff && parallelSetting) $
+                fail "--egraph does not work with --parallel"
             -- Threads write whole diagnostic lines.
             when parallelSetting $ hSetBuffering stderr LineBuffering
             sink <- newIORef []
@@ -867,6 +919,8 @@ searchPhases
                         , completionMemLimit = completionMemLimitSetting
                         , completionAllocLimit = completionAllocLimitSetting
                         , completionFuel = if completionFuelSetting > 0 then Just (2 ^ completionFuelSetting) else Nothing
+                        , egraphMode = egraphSetting
+                        , egraphLimits = egraphLimitsSetting
                         , parallelTests = parallelTestsSetting
                         , speculation = speculationSetting
                         , recheckCount = recheckSetting
@@ -987,6 +1041,7 @@ runPhases env size lastPhase instances sig =
             , rewrite_rules = emptyRules (termOrder env)
             , so_far = 0
             , law_count = 0
+            , egraph_laws = []
             , pending_laws = []
             , touched_reps = HS.empty
             }
@@ -1586,6 +1641,28 @@ consider env@Settings{..} StEcta{..} lvl full_term s0
                     ((\x -> (x, inst_sig Map.! x)) <$> sample)
                     (eq_type, eq_inst)
                     (lawOf w)
+            let (proved, report) = equalUnder egraphLimits (egraph_laws s) w i
+            when (egraphMode /= EGraphOff) $
+                hPutStrLn
+                    stderr
+                    ( intercalate
+                        "\t"
+                        [ "egraph-query"
+                        , show proved
+                        , show (EG.reportIterations report)
+                        , show (EG.reportNodes report)
+                        , show (EG.reportStop report)
+                        , show (length (egraph_laws s))
+                        ]
+                    )
+            if egraphMode /= EGraphOff && proved
+                then do
+                    -- The law follows from the printed laws. It keeps its own
+                    -- rules, so that the pruning does not get weaker.
+                    hPutStrLn stderr ("egraph-proves\t" ++ ppNpTerm (canonicalLaw lawSig law))
+                    return (Knew, s{rewrite_rules = addLawRules lawSig law (rewrite_rules s)})
+                else printLaw w lawSig law
+        printLaw w lawSig law = do
             let n = law_count s + 1
                 law_str = show n <> ". " <> ppNpTerm (canonicalLaw lawSig law)
             unless deferLaws $ do
@@ -1598,6 +1675,7 @@ consider env@Settings{..} StEcta{..} lvl full_term s0
             -- bucket adds the rules of the law alone.
             let complete
                     | parallelBuckets = return (addLawRules lawSig law (rewrite_rules s))
+                    | egraphMode == EGraphReplace = return (addLawRules lawSig law (rewrite_rules s))
                     | otherwise =
                         boundedCompletion
                             env
@@ -1613,6 +1691,7 @@ consider env@Settings{..} StEcta{..} lvl full_term s0
                 , s
                     { law_count = n
                     , rewrite_rules = rules
+                    , egraph_laws = [sides | egraphMode /= EGraphOff, Just sides <- [lawSides lawSig law]] ++ egraph_laws s
                     , pending_laws = [(w, i, lawSig, law) | deferLaws] ++ pending_laws s
                     }
                 )
