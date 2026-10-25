@@ -70,6 +70,19 @@ Terminal parents retain the existing enumerateNode fallback boundary. Native
 children can still take their terminal dispatcher. No Haskell fix is needed.
 Details: lean/notes-current-pruning-enumeration-native-ordinary.md.
 
+### Native reference mutation order
+
+Assimilation rejects Empty before its target replacement and source elimination.
+Incoming restriction writes its pending payload and inherits ancestry before
+Empty rejection. A raw-empty result therefore does not always mean no mutation.
+The actual incoming cache adapter reconstructs that post-write cache.
+The native reference proof now covers both cases on the actual returned
+producer witnesses. Captured finalization additionally needs no incoming
+reference to the target that becomes enumerated. Ready.avoids alone covers
+only that target's own bucket. No Haskell runtime defect or new repair is
+identified. External action: no patch is proposed for this source observation.
+Details: lean/notes-current-pruning-enumeration-native-references.md.
+
 ### Specftacular parallel completion follow-ups
 
 Main `9d4e4d584aa7a681f075790e98466afe7531838a` is imported.
@@ -190,6 +203,30 @@ TH/Generic extraction, valid-position build/read and source codec laws stay open
 
 
 
+
+## Native suspended-reference history through captured finalization
+
+Mutation shape: `fa26b8e1b14aeb15a9c04bdc178200fb0b3db068`.
+Reference history: `3a765d71dee49787ab5f191a3a9eb59818c180c2`.
+The goal stays ACTIVE.
+
+Actual terminal, child and traversal completion now retain fixed allowed
+references. These producers and selected-edge completion preserve global
+pending-reference history. Selected-edge completion also preserves incoming
+avoidance of a protected old root.
+Captured-edge completion preserves global pending references through the
+original raw-slot final write, given initial pending history and no incoming
+reference to its target. These are output implications. No producer admission
+premise, numeric Ranges condition or runtime worker body changed. Both valid
+rejection paths remain covered without an unconditional Safe claim.
+
+All nine changed modules pass strict checking. Installed public readback and
+Audit pass. The audit checks 76709 theorem dependencies. Haskell and H6 are
+unchanged. H6 remains the strongest end-to-end language theorem. Next carry
+the captured-edge history into each alternative receipt and derive initial
+incoming avoidance from actual unblocked selection. Fragment-hole history,
+extraction, narrowing/oracle preservation and whole-driver semantics remain.
+Details: `lean/notes-current-pruning-enumeration-native-references.md`.
 
 ## Actual entry and native ordinary alternatives
 

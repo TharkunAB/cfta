@@ -1,5 +1,29 @@
 # Current system claim
 
+## Native suspended-reference history through captured finalization
+
+Mutation shape: `fa26b8e1b14aeb15a9c04bdc178200fb0b3db068`.
+Reference history: `3a765d71dee49787ab5f191a3a9eb59818c180c2`.
+The goal stays ACTIVE.
+
+Actual terminal, child and traversal completion now retain fixed allowed
+references. These producers and selected-edge completion preserve global
+pending-reference history. Selected-edge completion also preserves incoming
+avoidance of a protected old root.
+Captured-edge completion preserves global pending references through the
+original raw-slot final write, given initial pending history and no incoming
+reference to its target. These are output implications. No producer admission
+premise, numeric Ranges condition or runtime worker body changed. Both valid
+rejection paths remain covered without an unconditional Safe claim.
+
+All nine changed modules pass strict checking. Installed public readback and
+Audit pass. The audit checks 76709 theorem dependencies. Haskell and H6 are
+unchanged. H6 remains the strongest end-to-end language theorem. Next carry
+the captured-edge history into each alternative receipt and derive initial
+incoming avoidance from actual unblocked selection. Fragment-hole history,
+extraction, narrowing/oracle preservation and whole-driver semantics remain.
+Details: `lean/notes-current-pruning-enumeration-native-references.md`.
+
 ## Actual entry and native ordinary alternatives
 
 Entry preservation: `4f85bd0adff78903bbe771f4816b2033d39b69ec`.
