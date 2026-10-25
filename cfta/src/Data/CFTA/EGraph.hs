@@ -106,6 +106,7 @@ import qualified Data.IntMap.Strict as IntMap
 import qualified Data.IntSet as IntSet
 import Data.List (minimumBy, sortOn, (!?))
 import qualified Data.Map.Strict as Map
+import Data.Maybe (isJust)
 import Data.Ord (comparing)
 
 import qualified Data.CFTA as FTA
@@ -574,19 +575,36 @@ ematch g p = case rule p p of
 substitution has no sort for a sort variable.
 -}
 instantiate :: (Hashable s, Hashable f) => Subst -> Int -> CPat s f -> EGraph s f -> Maybe (ClassId, EGraph s f)
-instantiate (Subst vs ss) rootSort = go True
+instantiate (Subst vs ss) rootSort pat g0 = case pat of
+    CVar v _ -> (\c -> (c, g0)) <$> IntMap.lookup v vs
+    -- The root has the sort of the matched e-class, or the merge fails.
+    CNode f kids sorts
+        | all (\sp -> isJust (matchSort g0 sp rootSort ss)) sorts -> do
+            (cs, g1) <- children kids g0
+            Just (addNode (ENode rootSort f cs) g1)
+        | otherwise -> Nothing
   where
-    go _ (CVar v _) h = (\c -> (c, h)) <$> IntMap.lookup v vs
-    go top (CNode f kids sorts) h = do
-        (cs, h1) <- foldM (\(acc, h0) kid -> (\(c, h') -> (acc ++ [c], h')) <$> go False kid h0) ([], h) kids
-        (k, h2) <- case sorts of
-            sp : _ -> sortOfPattern sp h1
-            [] -> Just (if top then rootSort else 0, h1)
-        Just (addNode (ENode k f cs) h2)
-    sortOfPattern (CSVar v) h = (\k -> (k, h)) <$> IntMap.lookup v ss
-    sortOfPattern (CSNode s ps) h = do
-        (ks, h1) <- foldM (\(acc, h0) p -> (\(k, h') -> (acc ++ [k], h')) <$> sortOfPattern p h0) ([], h) ps
-        Just (internSortNode (SortNode s ks) h1)
+    children [] g = Just ([], g)
+    children (kid : rest) g = do
+        (c, g1) <- node kid g
+        (cs, g2) <- children rest g1
+        Just (c : cs, g2)
+    node (CVar v _) g = (\c -> (c, g)) <$> IntMap.lookup v vs
+    node (CNode f kids sorts) g = do
+        (cs, g1) <- children kids g
+        (k, g2) <- case sorts of
+            sp : _ -> sortOfPattern sp g1
+            [] -> Just (0, g1)
+        Just (addNode (ENode k f cs) g2)
+    sortOfPattern (CSVar v) g = (\k -> (k, g)) <$> IntMap.lookup v ss
+    sortOfPattern (CSNode s ps) g = do
+        (ks, g1) <- sortChildren ps g
+        Just (internSortNode (SortNode s ks) g1)
+    sortChildren [] g = Just ([], g)
+    sortChildren (p : ps) g = do
+        (k, g1) <- sortOfPattern p g
+        (ks, g2) <- sortChildren ps g1
+        Just (k : ks, g2)
 
 {- | The limits of a saturation. No limit is time, so the result does not
 depend on the load.
