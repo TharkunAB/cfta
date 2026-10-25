@@ -1,5 +1,27 @@
 # cfta formal model
 
+## Native child dispatch and terminal root protection
+
+Child dispatch: `3a01c37c06b74d313f509b38166671fb7e9d83dd`.
+Terminal protection: `ea425d8d9076ee8f1d09698c6ee508134a20289d`.
+Main remains `9d4e4d584aa7a681f075790e98466afe7531838a`. The goal stays ACTIVE.
+
+The new child dispatcher rejects Empty first. It uses the actual ordered
+terminal partition and preserves every original observation at fixed bounds.
+Terminal completion now retains every separate held root, its stored value
+and its complete class. Successful output also retains `Safe` at the actual
+after-write cache. Rejection has no unconditional `Safe` claim. All original
+admission and numeric-range premises remain. The strengthened terminal proofs
+reuse the original completion producers.
+
+Strict checks, installed public readback and Audit pass. The audit checks
+76553 theorem dependencies. The next gap is ordered traversal across children:
+thread raw-row state, caller, queries, roots and post-child waiting, then
+connect the captured-slot final write. Cache absence needs explicit handling.
+H6 remains the strongest end-to-end theorem. Full native traversal, typing/
+pruning, extraction, resources and full Haskell correspondence remain open.
+Details: `lean/notes-current-pruning-enumeration-child-dispatch.md`.
+
 ## Native cached selection and upstream integration
 
 Current proof: `SourcePruningEnumerationSelection` at
