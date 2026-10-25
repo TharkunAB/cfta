@@ -1,0 +1,1174 @@
+MicroCFTA.SourcePruningEnumerationChildEffects.child (scs : List MicroCFTA.EnumerationState.Suspended)
+  (value :
+    MicroCFTA.InternedConstructorTemplates.Value MicroCFTA.SourcePruningTemplates.Symbol
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+  (action :
+    MicroCFTA.EnumerationState.EnumerateM MicroCFTA.SourcePruningTemplates.Symbol
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+      (MicroCFTA.Fragments.Fragment MicroCFTA.SourcePruningTemplates.Symbol))
+  (before after :
+    MicroCFTA.EnumerationState.State MicroCFTA.SourcePruningTemplates.Symbol
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+  (fragment : MicroCFTA.Fragments.Fragment MicroCFTA.SourcePruningTemplates.Symbol)
+  (safe : MicroCFTA.EnumerationSchedule.Safe before)
+  (bounded : ∀ (sc : MicroCFTA.EnumerationState.Suspended), sc ∈ scs → sc.var < before.counter)
+  (prepared : MicroCFTA.SourcePruningEnumerationShallowChild.prepareChild scs value = some action)
+  (observed : MicroCFTA.EnumerationCorrectness.Success action before fragment after) :
+  MicroCFTA.EnumerationSchedule.Safe after ∧
+    MicroCFTA.EnumerationDependencies.EnumeratedOrigin before after ∧
+      ∀ (held : Nat),
+        held < before.counter →
+          MicroCFTA.EnumerationSchedule.IsRoot before.representatives held →
+            MicroCFTA.EnumerationDriver.Protected held before after
+'MicroCFTA.SourcePruningEnumerationChildEffects.child' depends on axioms: [propext, Quot.sound]
+MicroCFTA.SourcePruningEnumerationChildEffects.child_inputs (scs retained : List MicroCFTA.EnumerationState.Suspended)
+  (value :
+    MicroCFTA.InternedConstructorTemplates.Value MicroCFTA.SourcePruningTemplates.Symbol
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+  (action :
+    MicroCFTA.EnumerationState.EnumerateM MicroCFTA.SourcePruningTemplates.Symbol
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+      (MicroCFTA.Fragments.Fragment MicroCFTA.SourcePruningTemplates.Symbol))
+  (before after :
+    MicroCFTA.EnumerationState.State MicroCFTA.SourcePruningTemplates.Symbol
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+  (fragment : MicroCFTA.Fragments.Fragment MicroCFTA.SourcePruningTemplates.Symbol)
+  (safe : MicroCFTA.EnumerationSchedule.Safe before)
+  (bounded : ∀ (sc : MicroCFTA.EnumerationState.Suspended), sc ∈ scs → sc.var < before.counter)
+  (pending : MicroCFTA.EnumerationDependencies.InputsPending before retained)
+  (prepared : MicroCFTA.SourcePruningEnumerationShallowChild.prepareChild scs value = some action)
+  (observed : MicroCFTA.EnumerationCorrectness.Success action before fragment after) :
+  MicroCFTA.EnumerationDependencies.InputsPending after retained
+'MicroCFTA.SourcePruningEnumerationChildEffects.child_inputs' depends on axioms: [propext, Quot.sound]
+MicroCFTA.SourcePruningEnumerationChildEffects.retained_inputs
+  (before after :
+    MicroCFTA.EnumerationState.State MicroCFTA.SourcePruningTemplates.Symbol
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+  (scs active : List MicroCFTA.EnumerationState.Suspended) (safe : MicroCFTA.EnumerationSchedule.Safe before)
+  (pending : MicroCFTA.EnumerationDependencies.InputsPending before scs)
+  (descended :
+    ∀ (held : Nat),
+      MicroCFTA.EnumerationCorrectness.Avoids before.representatives held scs →
+        MicroCFTA.EnumerationCorrectness.Avoids before.representatives held active)
+  (origin : MicroCFTA.EnumerationDependencies.EnumeratedOrigin before after)
+  (protects :
+    ∀ (held : Nat),
+      MicroCFTA.EnumerationSchedule.IsRoot before.representatives held →
+        MicroCFTA.EnumerationCorrectness.Avoids before.representatives held active →
+          MicroCFTA.EnumerationDriver.Protected held before after) :
+  MicroCFTA.EnumerationDependencies.InputsPending after scs
+'MicroCFTA.SourcePruningEnumerationChildEffects.retained_inputs' depends on axioms: [propext]
+MicroCFTA.SourcePruningEnumerationChildEffects.terminal_inputs
+  (before after :
+    MicroCFTA.EnumerationState.State MicroCFTA.SourcePruningTemplates.Symbol
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+  (scs : List MicroCFTA.EnumerationState.Suspended) (index : Nat) (first : MicroCFTA.EnumerationState.Suspended)
+  (rest descendants : List MicroCFTA.EnumerationState.Suspended) (safe : MicroCFTA.EnumerationSchedule.Safe before)
+  (pending : MicroCFTA.EnumerationDependencies.InputsPending before scs)
+  (partitioned :
+    List.partition (fun sc => MicroCFTA.EqualityTrie.isTerminal sc.trie)
+        (MicroCFTA.EnumerationState.descendScs index scs) =
+      (first :: rest, descendants))
+  (origin : MicroCFTA.EnumerationDependencies.EnumeratedOrigin before after)
+  (protects :
+    ∀ (held : Nat),
+      MicroCFTA.EnumerationSchedule.IsRoot before.representatives held →
+        MicroCFTA.EnumerationCorrectness.Avoids before.representatives held (first :: rest) →
+          MicroCFTA.EnumerationDriver.Protected held before after) :
+  MicroCFTA.EnumerationDependencies.InputsPending after scs
+'MicroCFTA.SourcePruningEnumerationChildEffects.terminal_inputs' depends on axioms: [propext, Quot.sound]
+MicroCFTA.SourcePruningEnumerationCachedFoldCompletion.complete {width : Nat}
+  [DecidableEq MicroCFTA.SourcePruningTemplates.Symbol]
+  [DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey MicroCFTA.SourcePruningTemplates.Symbol
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  [DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.Value MicroCFTA.SourcePruningTemplates.Symbol
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  (formulas : MicroCFTA.SourceGuards.Formulas MicroCFTA.FullSyntax.Formula)
+  (solver : MicroCFTA.SourceGuards.Entailment MicroCFTA.FullSyntax.Formula)
+  (inventory : MicroCFTA.SourceCurrentAllocatedNativeInventoryState.Inventory)
+  (beforeCaller : MicroCFTA.SourceCurrentAllocatedPartialState.State width)
+  (before :
+    MicroCFTA.EnumerationExpandableIndex.Cached MicroCFTA.SourcePruningTemplates.Symbol
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+  (sources : List Nat) (checkEmpty : Bool) (target : Nat) (memos : MicroCFTA.EndpointMemoGateTrace.Memos)
+  (roots : Nat → Nat)
+  (initial : MicroCFTA.SourceCurrentAllocatedPartialInvariant.Context formulas solver inventory beforeCaller memos)
+  (storage : MicroCFTA.EnumerationCorrectness.StorageValid before.core)
+  (realized :
+    MicroCFTA.SourcePruningEnumerationObservation.PendingRealized beforeCaller.checked.native.machine.heap before.core)
+  (paths : MicroCFTA.EnumerationSchedule.Roots before.core.representatives roots)
+  (counts : MicroCFTA.EnumerationCanonicalWaiting.Correct roots before.core.values before.waiting)
+  (flags :
+    ∀ (slot : Nat),
+      MicroCFTA.SourcePruningEnumerationNativeIndex.candidate beforeCaller.checked.native.machine.heap
+          (before.core.values[slot]?.getD MicroCFTA.EnumerationState.UVarValue.eliminated) =
+        some (before.expandable slot))
+  (targetPending : MicroCFTA.EnumerationCompleteness.PendingAt before.core target)
+  (selected :
+    ∀ (source : Nat), source ∈ sources → MicroCFTA.EnumerationCompleteness.PendingOrEliminated before.core source)
+  (ranges :
+    MicroCFTA.SourcePruningEnumerationFold.Ranges checkEmpty sources beforeCaller before.core target memos.query) :
+  ∃ fuel p h rows afterCaller savedQueries final next after,
+    (∀ (extra P H : Nat),
+        p ≤ P →
+          h ≤ H →
+            MicroCFTA.SourcePruningEnumerationCachedFold.run checkEmpty (fuel + extra) P H sources beforeCaller before
+                target memos.query =
+              ((Except.ok (some (List.map (fun row => Except.ok (row.fst, row.snd.core)) rows)), afterCaller,
+                  savedQueries, after.core),
+                some after)) ∧
+      MicroCFTA.SourceCurrentAllocatedPartialInvariant.Post formulas solver next beforeCaller afterCaller final ∧
+        final.query = savedQueries ∧
+          after.core.counter = before.core.counter ∧
+            after.core.representatives = before.core.representatives ∧
+              MicroCFTA.EnumerationSchedule.Roots after.core.representatives roots ∧
+                MicroCFTA.EnumerationCorrectness.StorageValid after.core ∧
+                  MicroCFTA.SourcePruningEnumerationObservation.PendingRealized afterCaller.checked.native.machine.heap
+                      after.core ∧
+                    MicroCFTA.EnumerationCanonicalWaiting.Correct roots after.core.values after.waiting ∧
+                      after.waiting = before.waiting ∧
+                        (∀ (slot : Nat),
+                            MicroCFTA.SourcePruningEnumerationNativeIndex.candidate
+                                afterCaller.checked.native.machine.heap
+                                (after.core.values[slot]?.getD MicroCFTA.EnumerationState.UVarValue.eliminated) =
+                              some (after.expandable slot)) ∧
+                          (rows = [] ∨ rows = [((), after)]) ∧
+                            MicroCFTA.EnumerationCompleteness.PendingAt after.core target ∧
+                              (∀ (slot : Nat),
+                                  before.core.values[slot]? = some MicroCFTA.EnumerationState.UVarValue.eliminated →
+                                    after.core.values[slot]? = some MicroCFTA.EnumerationState.UVarValue.eliminated) ∧
+                                (rows = [((), after)] →
+                                    ∀ (source : Nat),
+                                      source ∈ sources →
+                                        source ≠ target →
+                                          after.core.values[source]? =
+                                            some MicroCFTA.EnumerationState.UVarValue.eliminated) ∧
+                                  (∀ (slot : Nat),
+                                      ¬slot ∈ sources →
+                                        slot ≠ target → after.core.values[slot]? = before.core.values[slot]?) ∧
+                                    ∀ (slot : Nat)
+                                      (fragment : MicroCFTA.Fragments.Fragment MicroCFTA.SourcePruningTemplates.Symbol),
+                                      after.core.values[slot]? =
+                                          some (MicroCFTA.EnumerationState.UVarValue.enumerated fragment) →
+                                        before.core.values[slot]? =
+                                          some (MicroCFTA.EnumerationState.UVarValue.enumerated fragment)
+'MicroCFTA.SourcePruningEnumerationCachedFoldCompletion.complete' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+MicroCFTA.SourcePruningEnumerationCachedTerminal.complete {width : Nat}
+  [DecidableEq MicroCFTA.SourcePruningTemplates.Symbol]
+  [DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey MicroCFTA.SourcePruningTemplates.Symbol
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  [DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.Value MicroCFTA.SourcePruningTemplates.Symbol
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  (formulas : MicroCFTA.SourceGuards.Formulas MicroCFTA.FullSyntax.Formula)
+  (solver : MicroCFTA.SourceGuards.Entailment MicroCFTA.FullSyntax.Formula)
+  (inventory : MicroCFTA.SourceCurrentAllocatedNativeInventoryState.Inventory)
+  (beforeCaller : MicroCFTA.SourceCurrentAllocatedPartialState.State width)
+  (before :
+    MicroCFTA.EnumerationExpandableIndex.Cached MicroCFTA.SourcePruningTemplates.Symbol
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+  (checkEmpty : Bool) (first : MicroCFTA.EnumerationState.Suspended) (rest : List MicroCFTA.EnumerationState.Suspended)
+  (incoming :
+    MicroCFTA.InternedConstructorTemplates.Value MicroCFTA.SourcePruningTemplates.Symbol
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+  (incomingScs : List MicroCFTA.EnumerationState.Suspended) (roots : Nat → Nat)
+  (memos : MicroCFTA.EndpointMemoGateTrace.Memos)
+  (initial : MicroCFTA.SourceCurrentAllocatedPartialInvariant.Context formulas solver inventory beforeCaller memos)
+  (safe : MicroCFTA.EnumerationSchedule.Safe before.core)
+  (paths : MicroCFTA.EnumerationSchedule.Roots before.core.representatives roots)
+  (counts : MicroCFTA.EnumerationCanonicalWaiting.Correct roots before.core.values before.waiting)
+  (flags :
+    ∀ (slot : Nat),
+      MicroCFTA.SourcePruningEnumerationNativeIndex.candidate beforeCaller.checked.native.machine.heap
+          (before.core.values[slot]?.getD MicroCFTA.EnumerationState.UVarValue.eliminated) =
+        some (before.expandable slot))
+  (bounded : ∀ (sc : MicroCFTA.EnumerationState.Suspended), sc ∈ first :: rest → sc.var < before.core.counter)
+  (pending : MicroCFTA.EnumerationDependencies.InputsPending before.core (first :: rest))
+  (realized :
+    MicroCFTA.SourcePruningEnumerationObservation.PendingRealized beforeCaller.checked.native.machine.heap before.core)
+  (nonempty : incoming ≠ MicroCFTA.InternedConstructorTemplates.Value.empty)
+  (available : MicroCFTA.InternedProbeProvenance.Available beforeCaller.checked.native.machine.heap incoming)
+  (closed : incoming.free = [])
+  (incomingBounded : ∀ (sc : MicroCFTA.EnumerationState.Suspended), sc ∈ incomingScs → sc.var < before.core.counter)
+  (ranges :
+    ∀ (prefixFuel : Nat) (recorded : List Nat) (winner : Nat) (moved : MicroCFTA.EnumerationWaitingIndex.Waiting)
+      (joined :
+        MicroCFTA.EnumerationState.State MicroCFTA.SourcePruningTemplates.Symbol
+          (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)),
+      (MicroCFTA.SourcePruningEnumerationTerminalPrefix.run prefixFuel first rest before.waiting before.core).run =
+          [Except.ok ((recorded, winner, moved), joined)] →
+        MicroCFTA.SourcePruningEnumerationFold.Ranges checkEmpty recorded beforeCaller joined winner memos.query ∧
+          ∀ (foldFuel P H : Nat) (foldCaller : MicroCFTA.SourceCurrentAllocatedPartialState.State width)
+            (folded :
+              MicroCFTA.EnumerationState.State MicroCFTA.SourcePruningTemplates.Symbol
+                (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+            (foldQueries : MicroCFTA.SourceEndpointMemo.Memos),
+            MicroCFTA.SourcePruningEnumerationFold.run checkEmpty foldFuel P H recorded beforeCaller joined winner
+                  memos.query =
+                (Except.ok (some [Except.ok ((), folded)]), foldCaller, foldQueries, folded) →
+              match folded.values[winner]? with
+              | some (MicroCFTA.EnumerationState.UVarValue.unenumerated (some oldHandle) a) =>
+                match
+                  MicroCFTA.SourcePruningEnumerationNodes.lookupNode foldCaller.checked.native.machine.heap
+                    oldHandle with
+                | some old =>
+                  MicroCFTA.SourceCurrentAllocatedNativeRequestBounds.WordRanges
+                    (MicroCFTA.SourceEqualityNativeDemand.Control.code
+                      (MicroCFTA.SourceRecursiveIntersectionCode.requestNode
+                        MicroCFTA.IntersectionEmptyDomain.emptyDomain incoming old))
+                    foldCaller.checked
+                | none => True
+              | x => True) :
+  ∃ r n p h recorded winner joined foldRows foldCaller foldQueries foldFinal foldInventory folded raw afterCaller outer
+    savedQueries final next,
+    (∀ (extra : Nat),
+        (MicroCFTA.SourcePruningEnumerationTerminalPrefix.run (r + extra) first rest before.waiting before.core).run =
+          [Except.ok ((recorded, winner, joined.waiting), joined.core)]) ∧
+      recorded = List.map (fun sc => roots sc.var) (first :: rest) ∧
+        winner ∈ recorded ∧
+          joined.waiting =
+              MicroCFTA.EnumerationCanonicalWaiting.moveMany winner
+                (MicroCFTA.EnumerationBuilderCaches.canonicalIds (List.filter (fun key => key != winner) recorded))
+                before.waiting ∧
+            (joined.core =
+                have __src := before.core;
+                { counter := __src.counter, representatives := joined.core.representatives, values := __src.values,
+                  obligations := __src.obligations, recursionAncestry := __src.recursionAncestry,
+                  expansionAncestry := __src.expansionAncestry }) ∧
+              joined.expandable = before.expandable ∧
+                MicroCFTA.EnumerationSchedule.Roots joined.core.representatives
+                    (MicroCFTA.EnumerationCanonicalUnion.mergedRoots roots recorded winner) ∧
+                  MicroCFTA.EnumerationCanonicalWaiting.Correct
+                      (MicroCFTA.EnumerationCanonicalUnion.mergedRoots roots recorded winner) joined.core.values
+                      joined.waiting ∧
+                    (∀ (slot : Nat),
+                        MicroCFTA.SourcePruningEnumerationNativeIndex.candidate beforeCaller.checked.native.machine.heap
+                            (joined.core.values[slot]?.getD MicroCFTA.EnumerationState.UVarValue.eliminated) =
+                          some (joined.expandable slot)) ∧
+                      (∀ (extra P H : Nat),
+                          p ≤ P →
+                            h ≤ H →
+                              MicroCFTA.SourcePruningEnumerationCachedFold.run checkEmpty (n + extra) P H recorded
+                                  beforeCaller joined winner memos.query =
+                                ((Except.ok (some (List.map (fun row => Except.ok (row.fst, row.snd.core)) foldRows)),
+                                    foldCaller, foldQueries, folded.core),
+                                  some folded)) ∧
+                        (∀ (extra P H : Nat),
+                            p ≤ P →
+                              h ≤ H →
+                                MicroCFTA.SourcePruningEnumerationFold.run checkEmpty (n + extra) P H recorded
+                                    beforeCaller joined.core winner memos.query =
+                                  (Except.ok (some (List.map (fun row => Except.ok (row.fst, row.snd.core)) foldRows)),
+                                    foldCaller, foldQueries, folded.core)) ∧
+                          (foldRows = [] ∨ foldRows = [((), folded)]) ∧
+                            MicroCFTA.SourceCurrentAllocatedPartialInvariant.Post formulas solver foldInventory
+                                beforeCaller foldCaller foldFinal ∧
+                              foldFinal.query = foldQueries ∧
+                                folded.core.counter = joined.core.counter ∧
+                                  folded.core.representatives = joined.core.representatives ∧
+                                    MicroCFTA.EnumerationSchedule.Roots folded.core.representatives
+                                        (MicroCFTA.EnumerationCanonicalUnion.mergedRoots roots recorded winner) ∧
+                                      MicroCFTA.EnumerationCorrectness.StorageValid folded.core ∧
+                                        MicroCFTA.SourcePruningEnumerationObservation.PendingRealized
+                                            foldCaller.checked.native.machine.heap folded.core ∧
+                                          MicroCFTA.EnumerationSchedule.IsRoot folded.core.representatives winner ∧
+                                            MicroCFTA.EnumerationCompleteness.PendingAt folded.core winner ∧
+                                              MicroCFTA.EnumerationCanonicalWaiting.Correct
+                                                  (MicroCFTA.EnumerationCanonicalUnion.mergedRoots roots recorded
+                                                    winner)
+                                                  folded.core.values folded.waiting ∧
+                                                folded.waiting = joined.waiting ∧
+                                                  (∀ (slot : Nat),
+                                                      MicroCFTA.SourcePruningEnumerationNativeIndex.candidate
+                                                          foldCaller.checked.native.machine.heap
+                                                          (folded.core.values[slot]?.getD
+                                                            MicroCFTA.EnumerationState.UVarValue.eliminated) =
+                                                        some (folded.expandable slot)) ∧
+                                                    (∀ (slot : Nat),
+                                                        joined.core.values[slot]? =
+                                                            some MicroCFTA.EnumerationState.UVarValue.eliminated →
+                                                          folded.core.values[slot]? =
+                                                            some MicroCFTA.EnumerationState.UVarValue.eliminated) ∧
+                                                      (foldRows = [((), folded)] →
+                                                          ∀ (source : Nat),
+                                                            source ∈ recorded →
+                                                              source ≠ winner →
+                                                                folded.core.values[source]? =
+                                                                  some
+                                                                    MicroCFTA.EnumerationState.UVarValue.eliminated) ∧
+                                                        (∀ (slot : Nat),
+                                                            ¬slot ∈ recorded →
+                                                              folded.core.values[slot]? = before.core.values[slot]?) ∧
+                                                          (foldRows = [((), folded)] →
+                                                              MicroCFTA.EnumerationSchedule.Safe folded.core) ∧
+                                                            (∀ (slot : Nat)
+                                                                (fragment :
+                                                                  MicroCFTA.Fragments.Fragment
+                                                                    MicroCFTA.SourcePruningTemplates.Symbol),
+                                                                folded.core.values[slot]? =
+                                                                    some
+                                                                      (MicroCFTA.EnumerationState.UVarValue.enumerated
+                                                                        fragment) →
+                                                                  before.core.values[slot]? =
+                                                                    some
+                                                                      (MicroCFTA.EnumerationState.UVarValue.enumerated
+                                                                        fragment)) ∧
+                                                              (∀ (extraRepresentative extraNative P H : Nat),
+                                                                  p ≤ P →
+                                                                    h ≤ H →
+                                                                      MicroCFTA.SourcePruningEnumerationTerminal.run
+                                                                          checkEmpty (r + extraRepresentative)
+                                                                          (n + extraNative) P H first rest
+                                                                          before.waiting beforeCaller before.core
+                                                                          incoming incomingScs memos.query =
+                                                                        (Except.ok (some raw), afterCaller,
+                                                                          savedQueries, outer, joined.waiting)) ∧
+                                                                MicroCFTA.SourceCurrentAllocatedPartialInvariant.Post
+                                                                    formulas solver next beforeCaller afterCaller
+                                                                    final ∧
+                                                                  final.query = savedQueries ∧
+                                                                    (foldRows = [] →
+                                                                        raw = [] ∧
+                                                                          afterCaller = foldCaller ∧
+                                                                            savedQueries = foldQueries ∧
+                                                                              outer = folded.core ∧
+                                                                                final = foldFinal ∧
+                                                                                  next = foldInventory) ∧
+                                                                      (foldRows = [((), folded)] →
+                                                                        ∃ k oldNode oldScs read after replacement
+                                                                          handle,
+                                                                          outer = read ∧
+                                                                            (∀ (extra : Nat),
+                                                                                (MicroCFTA.EnumerationState.getValue
+                                                                                      (r + extra) winner
+                                                                                      folded.core).run =
+                                                                                  [Except.ok
+                                                                                      (MicroCFTA.EnumerationState.UVarValue.unenumerated
+                                                                                          oldNode oldScs,
+                                                                                        read)]) ∧
+                                                                              MicroCFTA.EnumerationCompressionFrame.Frame
+                                                                                  folded.core read ∧
+                                                                                (∀
+                                                                                    (extraRepresentative extraNative P
+                                                                                      H : Nat),
+                                                                                    p ≤ P →
+                                                                                      h ≤ H →
+                                                                                        MicroCFTA.SourcePruningEnumerationIncomingNode.run
+                                                                                            checkEmpty
+                                                                                            (r + extraRepresentative)
+                                                                                            (n + extraNative) P H
+                                                                                            foldCaller folded.core
+                                                                                            winner incoming incomingScs
+                                                                                            foldQueries =
+                                                                                          (Except.ok
+                                                                                              (some
+                                                                                                (if
+                                                                                                    replacement =
+                                                                                                      MicroCFTA.InternedConstructorTemplates.Value.empty then
+                                                                                                  []
+                                                                                                else
+                                                                                                  [Except.ok
+                                                                                                      ((),
+                                                                                                        after.core)])),
+                                                                                            afterCaller, savedQueries,
+                                                                                            read)) ∧
+                                                                                  ((MicroCFTA.EnumerationState.setValue
+                                                                                              winner
+                                                                                              (MicroCFTA.EnumerationState.UVarValue.unenumerated
+                                                                                                (some handle)
+                                                                                                (incomingScs ++
+                                                                                                  oldScs)) >>=
+                                                                                            fun __r =>
+                                                                                            MicroCFTA.EnumerationState.inheritAncestry
+                                                                                              winner)
+                                                                                          read).run =
+                                                                                      [Except.ok ((), after.core)] ∧
+                                                                                    after.core =
+                                                                                        { counter := read.counter,
+                                                                                          representatives :=
+                                                                                            read.representatives,
+                                                                                          values :=
+                                                                                            read.values.set winner
+                                                                                              (MicroCFTA.EnumerationState.UVarValue.unenumerated
+                                                                                                (some handle)
+                                                                                                (incomingScs ++
+                                                                                                  oldScs)),
+                                                                                          obligations :=
+                                                                                            read.obligations,
+                                                                                          recursionAncestry :=
+                                                                                            fun other =>
+                                                                                            if other = winner then
+                                                                                              (read.expansionAncestry ++
+                                                                                                  read.recursionAncestry
+                                                                                                    winner).eraseDups
+                                                                                            else
+                                                                                              read.recursionAncestry
+                                                                                                other,
+                                                                                          expansionAncestry :=
+                                                                                            read.expansionAncestry } ∧
+                                                                                      after.core.values[winner]? =
+                                                                                          some
+                                                                                            (MicroCFTA.EnumerationState.UVarValue.unenumerated
+                                                                                              (some handle)
+                                                                                              (incomingScs ++ oldScs)) ∧
+                                                                                        MicroCFTA.EnumerationCorrectness.StorageValid
+                                                                                            after.core ∧
+                                                                                          MicroCFTA.SourcePruningEnumerationObservation.PendingRealized
+                                                                                              afterCaller.checked.native.machine.heap
+                                                                                              after.core ∧
+                                                                                            MicroCFTA.SourceCurrentAllocatedPartialInvariant.Post
+                                                                                                formulas solver next
+                                                                                                foldCaller afterCaller
+                                                                                                final ∧
+                                                                                              MicroCFTA.Cache.Extends
+                                                                                                  foldFinal.unfolding
+                                                                                                  final.unfolding ∧
+                                                                                                (∀ (extra : Nat),
+                                                                                                    Option.map
+                                                                                                        (MicroCFTA.EnumerationExpandableIndex.frame
+                                                                                                          after.core)
+                                                                                                        (MicroCFTA.SourcePruningEnumerationNativeIndex.write
+                                                                                                          afterCaller.checked.native.machine.heap
+                                                                                                          (k + extra)
+                                                                                                          winner
+                                                                                                          (MicroCFTA.EnumerationState.UVarValue.unenumerated
+                                                                                                            (some
+                                                                                                              handle)
+                                                                                                            (incomingScs ++
+                                                                                                              oldScs))
+                                                                                                          incomingScs []
+                                                                                                          (MicroCFTA.EnumerationExpandableIndex.frame
+                                                                                                            read
+                                                                                                            folded)) =
+                                                                                                      some after) ∧
+                                                                                                  after.core.counter =
+                                                                                                      folded.core.counter ∧
+                                                                                                    after.core.representatives =
+                                                                                                        read.representatives ∧
+                                                                                                      MicroCFTA.EnumerationSchedule.Roots
+                                                                                                          after.core.representatives
+                                                                                                          (MicroCFTA.EnumerationCanonicalUnion.mergedRoots
+                                                                                                            roots
+                                                                                                            recorded
+                                                                                                            winner) ∧
+                                                                                                        MicroCFTA.EnumerationCanonicalWaiting.Correct
+                                                                                                            (MicroCFTA.EnumerationCanonicalUnion.mergedRoots
+                                                                                                              roots
+                                                                                                              recorded
+                                                                                                              winner)
+                                                                                                            after.core.values
+                                                                                                            after.waiting ∧
+                                                                                                          after.waiting =
+                                                                                                              MicroCFTA.EnumerationCanonicalWaiting.count
+                                                                                                                (MicroCFTA.EnumerationCanonicalUnion.mergedRoots
+                                                                                                                  roots
+                                                                                                                  recorded
+                                                                                                                  winner)
+                                                                                                                1
+                                                                                                                incomingScs
+                                                                                                                joined.waiting ∧
+                                                                                                            (∀
+                                                                                                                (slot :
+                                                                                                                  Nat),
+                                                                                                                MicroCFTA.SourcePruningEnumerationNativeIndex.candidate
+                                                                                                                    afterCaller.checked.native.machine.heap
+                                                                                                                    (after.core.values[slot]?.getD
+                                                                                                                      MicroCFTA.EnumerationState.UVarValue.eliminated) =
+                                                                                                                  some
+                                                                                                                    (after.expandable
+                                                                                                                      slot)) ∧
+                                                                                                              (after.expandable =
+                                                                                                                  fun
+                                                                                                                    slot =>
+                                                                                                                  if
+                                                                                                                      slot =
+                                                                                                                        winner then
+                                                                                                                    !(MicroCFTA.MergedOrdinaryHeight.recursiveBoundary
+                                                                                                                          replacement &&
+                                                                                                                        (incomingScs ++
+                                                                                                                            oldScs).isEmpty)
+                                                                                                                  else
+                                                                                                                    folded.expandable
+                                                                                                                      slot) ∧
+                                                                                                                (raw =
+                                                                                                                    if
+                                                                                                                        replacement =
+                                                                                                                          MicroCFTA.InternedConstructorTemplates.Value.empty then
+                                                                                                                      []
+                                                                                                                    else
+                                                                                                                      [Except.ok
+                                                                                                                          (MicroCFTA.Fragments.Fragment.hole
+                                                                                                                              winner,
+                                                                                                                            after.core)]) ∧
+                                                                                                                  MicroCFTA.EnumerationCorrectness.FragmentBound
+                                                                                                                      after.core.counter
+                                                                                                                      (MicroCFTA.Fragments.Fragment.hole
+                                                                                                                        winner) ∧
+                                                                                                                    MicroCFTA.InternedProbeProvenance.Available
+                                                                                                                        afterCaller.checked.native.machine.heap
+                                                                                                                        replacement ∧
+                                                                                                                      replacement.free =
+                                                                                                                          [] ∧
+                                                                                                                        MicroCFTA.SourcePruningEnumerationNodes.encodeNode
+                                                                                                                              replacement =
+                                                                                                                            some
+                                                                                                                              handle ∧
+                                                                                                                          MicroCFTA.SourcePruningEnumerationNodes.lookupNode
+                                                                                                                                afterCaller.checked.native.machine.heap
+                                                                                                                                handle =
+                                                                                                                              some
+                                                                                                                                replacement ∧
+                                                                                                                            (oldNode =
+                                                                                                                                  none →
+                                                                                                                                replacement =
+                                                                                                                                    incoming ∧
+                                                                                                                                  afterCaller =
+                                                                                                                                      foldCaller ∧
+                                                                                                                                    savedQueries =
+                                                                                                                                        foldQueries ∧
+                                                                                                                                      final =
+                                                                                                                                          foldFinal ∧
+                                                                                                                                        next =
+                                                                                                                                          foldInventory) ∧
+                                                                                                                              ∀
+                                                                                                                                (oldHandle :
+                                                                                                                                  Nat),
+                                                                                                                                oldNode =
+                                                                                                                                    some
+                                                                                                                                      oldHandle →
+                                                                                                                                  ∃
+                                                                                                                                    old
+                                                                                                                                    query
+                                                                                                                                    queried,
+                                                                                                                                    MicroCFTA.SourcePruningEnumerationNodes.lookupNode
+                                                                                                                                          foldCaller.checked.native.machine.heap
+                                                                                                                                          oldHandle =
+                                                                                                                                        some
+                                                                                                                                          old ∧
+                                                                                                                                      next.source =
+                                                                                                                                          foldCaller.checked.native.machine.heap ∧
+                                                                                                                                        next.roots =
+                                                                                                                                            foldInventory.roots ++
+                                                                                                                                              [incoming,
+                                                                                                                                                old] ∧
+                                                                                                                                          MicroCFTA.SourceCurrentAllocatedTargetQuery.Receipt
+                                                                                                                                              formulas
+                                                                                                                                              solver
+                                                                                                                                              next
+                                                                                                                                              incoming
+                                                                                                                                              old
+                                                                                                                                              foldCaller.checked
+                                                                                                                                              query
+                                                                                                                                              queried
+                                                                                                                                              foldFinal ∧
+                                                                                                                                            (∀
+                                                                                                                                                (ambient :
+                                                                                                                                                  MicroCFTA.InternedGuardedLanguage.Env
+                                                                                                                                                    (MicroCFTA.SourceObservations.Label
+                                                                                                                                                      MicroCFTA.FullSyntax.Formula))
+                                                                                                                                                (term :
+                                                                                                                                                  MicroCFTA.Language.Term
+                                                                                                                                                    (MicroCFTA.SourceObservations.Label
+                                                                                                                                                      MicroCFTA.FullSyntax.Formula)),
+                                                                                                                                                MicroCFTA.InternedGuardedLanguage.meaning
+                                                                                                                                                    (MicroCFTA.SourceEqualityPCSGuard.holds
+                                                                                                                                                      formulas
+                                                                                                                                                      solver)
+                                                                                                                                                    ambient
+                                                                                                                                                    replacement
+                                                                                                                                                    term ↔
+                                                                                                                                                  MicroCFTA.InternedGuardedLanguage.meaning
+                                                                                                                                                      (MicroCFTA.SourceEqualityPCSGuard.holds
+                                                                                                                                                        formulas
+                                                                                                                                                        solver)
+                                                                                                                                                      ambient
+                                                                                                                                                      incoming
+                                                                                                                                                      term ∧
+                                                                                                                                                    MicroCFTA.InternedGuardedLanguage.meaning
+                                                                                                                                                      (MicroCFTA.SourceEqualityPCSGuard.holds
+                                                                                                                                                        formulas
+                                                                                                                                                        solver)
+                                                                                                                                                      ambient
+                                                                                                                                                      old
+                                                                                                                                                      term) ∧
+                                                                                                                                              (checkEmpty =
+                                                                                                                                                  false →
+                                                                                                                                                replacement =
+                                                                                                                                                    query ∧
+                                                                                                                                                  afterCaller =
+                                                                                                                                                      MicroCFTA.SourceCurrentAllocatedPartialState.advance
+                                                                                                                                                        foldCaller
+                                                                                                                                                        queried
+                                                                                                                                                        foldCaller.fourth
+                                                                                                                                                        foldCaller.merge ∧
+                                                                                                                                                    final =
+                                                                                                                                                      foldFinal))
+'MicroCFTA.SourcePruningEnumerationCachedTerminal.complete' depends on axioms: [propext, Classical.choice, Quot.sound]
+MicroCFTA.SourcePruningEnumerationCachedTerminalAdapter.complete {width : Nat}
+  [DecidableEq MicroCFTA.SourcePruningTemplates.Symbol]
+  [DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey MicroCFTA.SourcePruningTemplates.Symbol
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  [DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.Value MicroCFTA.SourcePruningTemplates.Symbol
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  (formulas : MicroCFTA.SourceGuards.Formulas MicroCFTA.FullSyntax.Formula)
+  (solver : MicroCFTA.SourceGuards.Entailment MicroCFTA.FullSyntax.Formula)
+  (inventory : MicroCFTA.SourceCurrentAllocatedNativeInventoryState.Inventory)
+  (beforeCaller : MicroCFTA.SourceCurrentAllocatedPartialState.State width)
+  (before :
+    MicroCFTA.EnumerationExpandableIndex.Cached MicroCFTA.SourcePruningTemplates.Symbol
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+  (checkEmpty : Bool) (first : MicroCFTA.EnumerationState.Suspended) (rest : List MicroCFTA.EnumerationState.Suspended)
+  (incoming :
+    MicroCFTA.InternedConstructorTemplates.Value MicroCFTA.SourcePruningTemplates.Symbol
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+  (incomingScs : List MicroCFTA.EnumerationState.Suspended) (roots : Nat → Nat)
+  (memos : MicroCFTA.EndpointMemoGateTrace.Memos)
+  (initial : MicroCFTA.SourceCurrentAllocatedPartialInvariant.Context formulas solver inventory beforeCaller memos)
+  (safe : MicroCFTA.EnumerationSchedule.Safe before.core)
+  (paths : MicroCFTA.EnumerationSchedule.Roots before.core.representatives roots)
+  (counts : MicroCFTA.EnumerationCanonicalWaiting.Correct roots before.core.values before.waiting)
+  (flags :
+    ∀ (slot : Nat),
+      MicroCFTA.SourcePruningEnumerationNativeIndex.candidate beforeCaller.checked.native.machine.heap
+          (before.core.values[slot]?.getD MicroCFTA.EnumerationState.UVarValue.eliminated) =
+        some (before.expandable slot))
+  (bounded : ∀ (sc : MicroCFTA.EnumerationState.Suspended), sc ∈ first :: rest → sc.var < before.core.counter)
+  (pending : MicroCFTA.EnumerationDependencies.InputsPending before.core (first :: rest))
+  (realized :
+    MicroCFTA.SourcePruningEnumerationObservation.PendingRealized beforeCaller.checked.native.machine.heap before.core)
+  (nonempty : incoming ≠ MicroCFTA.InternedConstructorTemplates.Value.empty)
+  (available : MicroCFTA.InternedProbeProvenance.Available beforeCaller.checked.native.machine.heap incoming)
+  (closed : incoming.free = [])
+  (incomingBounded : ∀ (sc : MicroCFTA.EnumerationState.Suspended), sc ∈ incomingScs → sc.var < before.core.counter)
+  (ranges :
+    ∀ (prefixFuel : Nat) (recorded : List Nat) (winner : Nat) (moved : MicroCFTA.EnumerationWaitingIndex.Waiting)
+      (joined :
+        MicroCFTA.EnumerationState.State MicroCFTA.SourcePruningTemplates.Symbol
+          (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)),
+      (MicroCFTA.SourcePruningEnumerationTerminalPrefix.run prefixFuel first rest before.waiting before.core).run =
+          [Except.ok ((recorded, winner, moved), joined)] →
+        MicroCFTA.SourcePruningEnumerationFold.Ranges checkEmpty recorded beforeCaller joined winner memos.query ∧
+          ∀ (foldFuel P H : Nat) (foldCaller : MicroCFTA.SourceCurrentAllocatedPartialState.State width)
+            (folded :
+              MicroCFTA.EnumerationState.State MicroCFTA.SourcePruningTemplates.Symbol
+                (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+            (foldQueries : MicroCFTA.SourceEndpointMemo.Memos),
+            MicroCFTA.SourcePruningEnumerationFold.run checkEmpty foldFuel P H recorded beforeCaller joined winner
+                  memos.query =
+                (Except.ok (some [Except.ok ((), folded)]), foldCaller, foldQueries, folded) →
+              match folded.values[winner]? with
+              | some (MicroCFTA.EnumerationState.UVarValue.unenumerated (some oldHandle) a) =>
+                match
+                  MicroCFTA.SourcePruningEnumerationNodes.lookupNode foldCaller.checked.native.machine.heap
+                    oldHandle with
+                | some old =>
+                  MicroCFTA.SourceCurrentAllocatedNativeRequestBounds.WordRanges
+                    (MicroCFTA.SourceEqualityNativeDemand.Control.code
+                      (MicroCFTA.SourceRecursiveIntersectionCode.requestNode
+                        MicroCFTA.IntersectionEmptyDomain.emptyDomain incoming old))
+                    foldCaller.checked
+                | none => True
+              | x => True) :
+  ∃ r n p h k recorded winner joined foldRows foldCaller foldQueries foldFinal foldInventory folded raw afterCaller
+    outer savedQueries final next resultCache,
+    (∀ (extra : Nat),
+        (MicroCFTA.SourcePruningEnumerationTerminalPrefix.run (r + extra) first rest before.waiting before.core).run =
+          [Except.ok ((recorded, winner, joined.waiting), joined.core)]) ∧
+      recorded = List.map (fun sc => roots sc.var) (first :: rest) ∧
+        winner ∈ recorded ∧
+          joined.waiting =
+              MicroCFTA.EnumerationCanonicalWaiting.moveMany winner
+                (MicroCFTA.EnumerationBuilderCaches.canonicalIds (List.filter (fun key => key != winner) recorded))
+                before.waiting ∧
+            (joined.core =
+                have __src := before.core;
+                { counter := __src.counter, representatives := joined.core.representatives, values := __src.values,
+                  obligations := __src.obligations, recursionAncestry := __src.recursionAncestry,
+                  expansionAncestry := __src.expansionAncestry }) ∧
+              joined.expandable = before.expandable ∧
+                MicroCFTA.EnumerationSchedule.Roots joined.core.representatives
+                    (MicroCFTA.EnumerationCanonicalUnion.mergedRoots roots recorded winner) ∧
+                  MicroCFTA.EnumerationCanonicalWaiting.Correct
+                      (MicroCFTA.EnumerationCanonicalUnion.mergedRoots roots recorded winner) joined.core.values
+                      joined.waiting ∧
+                    (∀ (slot : Nat),
+                        MicroCFTA.SourcePruningEnumerationNativeIndex.candidate beforeCaller.checked.native.machine.heap
+                            (joined.core.values[slot]?.getD MicroCFTA.EnumerationState.UVarValue.eliminated) =
+                          some (joined.expandable slot)) ∧
+                      (∀ (extra P H : Nat),
+                          p ≤ P →
+                            h ≤ H →
+                              MicroCFTA.SourcePruningEnumerationCachedFold.run checkEmpty (n + extra) P H recorded
+                                  beforeCaller joined winner memos.query =
+                                ((Except.ok (some (List.map (fun row => Except.ok (row.fst, row.snd.core)) foldRows)),
+                                    foldCaller, foldQueries, folded.core),
+                                  some folded)) ∧
+                        (∀ (extra P H : Nat),
+                            p ≤ P →
+                              h ≤ H →
+                                MicroCFTA.SourcePruningEnumerationFold.run checkEmpty (n + extra) P H recorded
+                                    beforeCaller joined.core winner memos.query =
+                                  (Except.ok (some (List.map (fun row => Except.ok (row.fst, row.snd.core)) foldRows)),
+                                    foldCaller, foldQueries, folded.core)) ∧
+                          (foldRows = [] ∨ foldRows = [((), folded)]) ∧
+                            MicroCFTA.SourceCurrentAllocatedPartialInvariant.Post formulas solver foldInventory
+                                beforeCaller foldCaller foldFinal ∧
+                              foldFinal.query = foldQueries ∧
+                                folded.core.counter = joined.core.counter ∧
+                                  folded.core.representatives = joined.core.representatives ∧
+                                    MicroCFTA.EnumerationSchedule.Roots folded.core.representatives
+                                        (MicroCFTA.EnumerationCanonicalUnion.mergedRoots roots recorded winner) ∧
+                                      MicroCFTA.EnumerationCorrectness.StorageValid folded.core ∧
+                                        MicroCFTA.SourcePruningEnumerationObservation.PendingRealized
+                                            foldCaller.checked.native.machine.heap folded.core ∧
+                                          MicroCFTA.EnumerationSchedule.IsRoot folded.core.representatives winner ∧
+                                            MicroCFTA.EnumerationCompleteness.PendingAt folded.core winner ∧
+                                              MicroCFTA.EnumerationCanonicalWaiting.Correct
+                                                  (MicroCFTA.EnumerationCanonicalUnion.mergedRoots roots recorded
+                                                    winner)
+                                                  folded.core.values folded.waiting ∧
+                                                folded.waiting = joined.waiting ∧
+                                                  (∀ (slot : Nat),
+                                                      MicroCFTA.SourcePruningEnumerationNativeIndex.candidate
+                                                          foldCaller.checked.native.machine.heap
+                                                          (folded.core.values[slot]?.getD
+                                                            MicroCFTA.EnumerationState.UVarValue.eliminated) =
+                                                        some (folded.expandable slot)) ∧
+                                                    (∀ (slot : Nat),
+                                                        joined.core.values[slot]? =
+                                                            some MicroCFTA.EnumerationState.UVarValue.eliminated →
+                                                          folded.core.values[slot]? =
+                                                            some MicroCFTA.EnumerationState.UVarValue.eliminated) ∧
+                                                      (foldRows = [((), folded)] →
+                                                          ∀ (source : Nat),
+                                                            source ∈ recorded →
+                                                              source ≠ winner →
+                                                                folded.core.values[source]? =
+                                                                  some
+                                                                    MicroCFTA.EnumerationState.UVarValue.eliminated) ∧
+                                                        (∀ (slot : Nat),
+                                                            ¬slot ∈ recorded →
+                                                              folded.core.values[slot]? = before.core.values[slot]?) ∧
+                                                          (foldRows = [((), folded)] →
+                                                              MicroCFTA.EnumerationSchedule.Safe folded.core) ∧
+                                                            (∀ (slot : Nat)
+                                                                (fragment :
+                                                                  MicroCFTA.Fragments.Fragment
+                                                                    MicroCFTA.SourcePruningTemplates.Symbol),
+                                                                folded.core.values[slot]? =
+                                                                    some
+                                                                      (MicroCFTA.EnumerationState.UVarValue.enumerated
+                                                                        fragment) →
+                                                                  before.core.values[slot]? =
+                                                                    some
+                                                                      (MicroCFTA.EnumerationState.UVarValue.enumerated
+                                                                        fragment)) ∧
+                                                              (∀ (extraRepresentative extraNative P H : Nat),
+                                                                  p ≤ P →
+                                                                    h ≤ H →
+                                                                      MicroCFTA.SourcePruningEnumerationTerminal.run
+                                                                          checkEmpty (r + extraRepresentative)
+                                                                          (n + extraNative) P H first rest
+                                                                          before.waiting beforeCaller before.core
+                                                                          incoming incomingScs memos.query =
+                                                                        (Except.ok (some raw), afterCaller,
+                                                                          savedQueries, outer, joined.waiting)) ∧
+                                                                MicroCFTA.SourceCurrentAllocatedPartialInvariant.Post
+                                                                    formulas solver next beforeCaller afterCaller
+                                                                    final ∧
+                                                                  final.query = savedQueries ∧
+                                                                    (∀
+                                                                        (extraRepresentative extraNative P H
+                                                                          extraIndex : Nat),
+                                                                        p ≤ P →
+                                                                          h ≤ H →
+                                                                            MicroCFTA.SourcePruningEnumerationCachedTerminalAdapter.run
+                                                                                checkEmpty (r + extraRepresentative)
+                                                                                (n + extraNative) P H (k + extraIndex)
+                                                                                first rest beforeCaller before incoming
+                                                                                incomingScs memos.query =
+                                                                              ((Except.ok (some raw), afterCaller,
+                                                                                  savedQueries, outer, joined.waiting),
+                                                                                some resultCache)) ∧
+                                                                      resultCache.core.counter = before.core.counter ∧
+                                                                        MicroCFTA.EnumerationSchedule.Roots
+                                                                            resultCache.core.representatives
+                                                                            (MicroCFTA.EnumerationCanonicalUnion.mergedRoots
+                                                                              roots recorded winner) ∧
+                                                                          MicroCFTA.EnumerationCorrectness.StorageValid
+                                                                              resultCache.core ∧
+                                                                            MicroCFTA.SourcePruningEnumerationObservation.PendingRealized
+                                                                                afterCaller.checked.native.machine.heap
+                                                                                resultCache.core ∧
+                                                                              MicroCFTA.EnumerationCanonicalWaiting.Correct
+                                                                                  (MicroCFTA.EnumerationCanonicalUnion.mergedRoots
+                                                                                    roots recorded winner)
+                                                                                  resultCache.core.values
+                                                                                  resultCache.waiting ∧
+                                                                                (∀ (slot : Nat),
+                                                                                    MicroCFTA.SourcePruningEnumerationNativeIndex.candidate
+                                                                                        afterCaller.checked.native.machine.heap
+                                                                                        (resultCache.core.values[slot]?.getD
+                                                                                          MicroCFTA.EnumerationState.UVarValue.eliminated) =
+                                                                                      some
+                                                                                        (resultCache.expandable slot)) ∧
+                                                                                  (∀ (slot : Nat),
+                                                                                      ¬slot ∈ recorded →
+                                                                                        resultCache.core.values[slot]? =
+                                                                                          before.core.values[slot]?) ∧
+                                                                                    (raw ≠ [] →
+                                                                                        MicroCFTA.EnumerationSchedule.Safe
+                                                                                          resultCache.core) ∧
+                                                                                      (∀ (held : Nat),
+                                                                                          MicroCFTA.EnumerationSchedule.IsRoot
+                                                                                              before.core.representatives
+                                                                                              held →
+                                                                                            MicroCFTA.EnumerationCorrectness.Avoids
+                                                                                                before.core.representatives
+                                                                                                held (first :: rest) →
+                                                                                              MicroCFTA.EnumerationDriver.Protected
+                                                                                                held before.core
+                                                                                                resultCache.core) ∧
+                                                                                        (∀ (slot : Nat)
+                                                                                            (fragment :
+                                                                                              MicroCFTA.Fragments.Fragment
+                                                                                                MicroCFTA.SourcePruningTemplates.Symbol),
+                                                                                            resultCache.core.values[slot]? =
+                                                                                                some
+                                                                                                  (MicroCFTA.EnumerationState.UVarValue.enumerated
+                                                                                                    fragment) →
+                                                                                              before.core.values[slot]? =
+                                                                                                some
+                                                                                                  (MicroCFTA.EnumerationState.UVarValue.enumerated
+                                                                                                    fragment)) ∧
+                                                                                          (foldRows = [] →
+                                                                                              resultCache = folded) ∧
+                                                                                            (foldRows = [] →
+                                                                                                raw = [] ∧
+                                                                                                  afterCaller =
+                                                                                                      foldCaller ∧
+                                                                                                    savedQueries =
+                                                                                                        foldQueries ∧
+                                                                                                      outer =
+                                                                                                          folded.core ∧
+                                                                                                        final =
+                                                                                                            foldFinal ∧
+                                                                                                          next =
+                                                                                                            foldInventory) ∧
+                                                                                              (foldRows =
+                                                                                                  [((), folded)] →
+                                                                                                ∃ incomingK oldNode
+                                                                                                  oldScs read after
+                                                                                                  replacement handle,
+                                                                                                  after = resultCache ∧
+                                                                                                    outer = read ∧
+                                                                                                      (∀ (extra : Nat),
+                                                                                                          (MicroCFTA.EnumerationState.getValue
+                                                                                                                (r +
+                                                                                                                  extra)
+                                                                                                                winner
+                                                                                                                folded.core).run =
+                                                                                                            [Except.ok
+                                                                                                                (MicroCFTA.EnumerationState.UVarValue.unenumerated
+                                                                                                                    oldNode
+                                                                                                                    oldScs,
+                                                                                                                  read)]) ∧
+                                                                                                        MicroCFTA.EnumerationCompressionFrame.Frame
+                                                                                                            folded.core
+                                                                                                            read ∧
+                                                                                                          (∀
+                                                                                                              (extraRepresentative
+                                                                                                                extraNative
+                                                                                                                P H :
+                                                                                                                Nat),
+                                                                                                              p ≤ P →
+                                                                                                                h ≤ H →
+                                                                                                                  MicroCFTA.SourcePruningEnumerationIncomingNode.run
+                                                                                                                      checkEmpty
+                                                                                                                      (r +
+                                                                                                                        extraRepresentative)
+                                                                                                                      (n +
+                                                                                                                        extraNative)
+                                                                                                                      P
+                                                                                                                      H
+                                                                                                                      foldCaller
+                                                                                                                      folded.core
+                                                                                                                      winner
+                                                                                                                      incoming
+                                                                                                                      incomingScs
+                                                                                                                      foldQueries =
+                                                                                                                    (Except.ok
+                                                                                                                        (some
+                                                                                                                          (if
+                                                                                                                              replacement =
+                                                                                                                                MicroCFTA.InternedConstructorTemplates.Value.empty then
+                                                                                                                            []
+                                                                                                                          else
+                                                                                                                            [Except.ok
+                                                                                                                                ((),
+                                                                                                                                  after.core)])),
+                                                                                                                      afterCaller,
+                                                                                                                      savedQueries,
+                                                                                                                      read)) ∧
+                                                                                                            ((MicroCFTA.EnumerationState.setValue
+                                                                                                                        winner
+                                                                                                                        (MicroCFTA.EnumerationState.UVarValue.unenumerated
+                                                                                                                          (some
+                                                                                                                            handle)
+                                                                                                                          (incomingScs ++
+                                                                                                                            oldScs)) >>=
+                                                                                                                      fun
+                                                                                                                        __r =>
+                                                                                                                      MicroCFTA.EnumerationState.inheritAncestry
+                                                                                                                        winner)
+                                                                                                                    read).run =
+                                                                                                                [Except.ok
+                                                                                                                    ((),
+                                                                                                                      after.core)] ∧
+                                                                                                              after.core =
+                                                                                                                  {
+                                                                                                                    counter :=
+                                                                                                                      read.counter,
+                                                                                                                    representatives :=
+                                                                                                                      read.representatives,
+                                                                                                                    values :=
+                                                                                                                      read.values.set
+                                                                                                                        winner
+                                                                                                                        (MicroCFTA.EnumerationState.UVarValue.unenumerated
+                                                                                                                          (some
+                                                                                                                            handle)
+                                                                                                                          (incomingScs ++
+                                                                                                                            oldScs)),
+                                                                                                                    obligations :=
+                                                                                                                      read.obligations,
+                                                                                                                    recursionAncestry :=
+                                                                                                                      fun
+                                                                                                                        other =>
+                                                                                                                      if
+                                                                                                                          other =
+                                                                                                                            winner then
+                                                                                                                        (read.expansionAncestry ++
+                                                                                                                            read.recursionAncestry
+                                                                                                                              winner).eraseDups
+                                                                                                                      else
+                                                                                                                        read.recursionAncestry
+                                                                                                                          other,
+                                                                                                                    expansionAncestry :=
+                                                                                                                      read.expansionAncestry } ∧
+                                                                                                                after.core.values[winner]? =
+                                                                                                                    some
+                                                                                                                      (MicroCFTA.EnumerationState.UVarValue.unenumerated
+                                                                                                                        (some
+                                                                                                                          handle)
+                                                                                                                        (incomingScs ++
+                                                                                                                          oldScs)) ∧
+                                                                                                                  MicroCFTA.EnumerationCorrectness.StorageValid
+                                                                                                                      after.core ∧
+                                                                                                                    MicroCFTA.SourcePruningEnumerationObservation.PendingRealized
+                                                                                                                        afterCaller.checked.native.machine.heap
+                                                                                                                        after.core ∧
+                                                                                                                      MicroCFTA.SourceCurrentAllocatedPartialInvariant.Post
+                                                                                                                          formulas
+                                                                                                                          solver
+                                                                                                                          next
+                                                                                                                          foldCaller
+                                                                                                                          afterCaller
+                                                                                                                          final ∧
+                                                                                                                        MicroCFTA.Cache.Extends
+                                                                                                                            foldFinal.unfolding
+                                                                                                                            final.unfolding ∧
+                                                                                                                          (∀
+                                                                                                                              (extra :
+                                                                                                                                Nat),
+                                                                                                                              Option.map
+                                                                                                                                  (MicroCFTA.EnumerationExpandableIndex.frame
+                                                                                                                                    after.core)
+                                                                                                                                  (MicroCFTA.SourcePruningEnumerationNativeIndex.write
+                                                                                                                                    afterCaller.checked.native.machine.heap
+                                                                                                                                    (incomingK +
+                                                                                                                                      extra)
+                                                                                                                                    winner
+                                                                                                                                    (MicroCFTA.EnumerationState.UVarValue.unenumerated
+                                                                                                                                      (some
+                                                                                                                                        handle)
+                                                                                                                                      (incomingScs ++
+                                                                                                                                        oldScs))
+                                                                                                                                    incomingScs
+                                                                                                                                    []
+                                                                                                                                    (MicroCFTA.EnumerationExpandableIndex.frame
+                                                                                                                                      read
+                                                                                                                                      folded)) =
+                                                                                                                                some
+                                                                                                                                  after) ∧
+                                                                                                                            after.core.counter =
+                                                                                                                                folded.core.counter ∧
+                                                                                                                              after.core.representatives =
+                                                                                                                                  read.representatives ∧
+                                                                                                                                MicroCFTA.EnumerationSchedule.Roots
+                                                                                                                                    after.core.representatives
+                                                                                                                                    (MicroCFTA.EnumerationCanonicalUnion.mergedRoots
+                                                                                                                                      roots
+                                                                                                                                      recorded
+                                                                                                                                      winner) ∧
+                                                                                                                                  MicroCFTA.EnumerationCanonicalWaiting.Correct
+                                                                                                                                      (MicroCFTA.EnumerationCanonicalUnion.mergedRoots
+                                                                                                                                        roots
+                                                                                                                                        recorded
+                                                                                                                                        winner)
+                                                                                                                                      after.core.values
+                                                                                                                                      after.waiting ∧
+                                                                                                                                    after.waiting =
+                                                                                                                                        MicroCFTA.EnumerationCanonicalWaiting.count
+                                                                                                                                          (MicroCFTA.EnumerationCanonicalUnion.mergedRoots
+                                                                                                                                            roots
+                                                                                                                                            recorded
+                                                                                                                                            winner)
+                                                                                                                                          1
+                                                                                                                                          incomingScs
+                                                                                                                                          joined.waiting ∧
+                                                                                                                                      (∀
+                                                                                                                                          (slot :
+                                                                                                                                            Nat),
+                                                                                                                                          MicroCFTA.SourcePruningEnumerationNativeIndex.candidate
+                                                                                                                                              afterCaller.checked.native.machine.heap
+                                                                                                                                              (after.core.values[slot]?.getD
+                                                                                                                                                MicroCFTA.EnumerationState.UVarValue.eliminated) =
+                                                                                                                                            some
+                                                                                                                                              (after.expandable
+                                                                                                                                                slot)) ∧
+                                                                                                                                        (after.expandable =
+                                                                                                                                            fun
+                                                                                                                                              slot =>
+                                                                                                                                            if
+                                                                                                                                                slot =
+                                                                                                                                                  winner then
+                                                                                                                                              !(MicroCFTA.MergedOrdinaryHeight.recursiveBoundary
+                                                                                                                                                    replacement &&
+                                                                                                                                                  (incomingScs ++
+                                                                                                                                                      oldScs).isEmpty)
+                                                                                                                                            else
+                                                                                                                                              folded.expandable
+                                                                                                                                                slot) ∧
+                                                                                                                                          (raw =
+                                                                                                                                              if
+                                                                                                                                                  replacement =
+                                                                                                                                                    MicroCFTA.InternedConstructorTemplates.Value.empty then
+                                                                                                                                                []
+                                                                                                                                              else
+                                                                                                                                                [Except.ok
+                                                                                                                                                    (MicroCFTA.Fragments.Fragment.hole
+                                                                                                                                                        winner,
+                                                                                                                                                      after.core)]) ∧
+                                                                                                                                            MicroCFTA.EnumerationCorrectness.FragmentBound
+                                                                                                                                                after.core.counter
+                                                                                                                                                (MicroCFTA.Fragments.Fragment.hole
+                                                                                                                                                  winner) ∧
+                                                                                                                                              MicroCFTA.InternedProbeProvenance.Available
+                                                                                                                                                  afterCaller.checked.native.machine.heap
+                                                                                                                                                  replacement ∧
+                                                                                                                                                replacement.free =
+                                                                                                                                                    [] ∧
+                                                                                                                                                  MicroCFTA.SourcePruningEnumerationNodes.encodeNode
+                                                                                                                                                        replacement =
+                                                                                                                                                      some
+                                                                                                                                                        handle ∧
+                                                                                                                                                    MicroCFTA.SourcePruningEnumerationNodes.lookupNode
+                                                                                                                                                          afterCaller.checked.native.machine.heap
+                                                                                                                                                          handle =
+                                                                                                                                                        some
+                                                                                                                                                          replacement ∧
+                                                                                                                                                      (oldNode =
+                                                                                                                                                            none →
+                                                                                                                                                          replacement =
+                                                                                                                                                              incoming ∧
+                                                                                                                                                            afterCaller =
+                                                                                                                                                                foldCaller ∧
+                                                                                                                                                              savedQueries =
+                                                                                                                                                                  foldQueries ∧
+                                                                                                                                                                final =
+                                                                                                                                                                    foldFinal ∧
+                                                                                                                                                                  next =
+                                                                                                                                                                    foldInventory) ∧
+                                                                                                                                                        ∀
+                                                                                                                                                          (oldHandle :
+                                                                                                                                                            Nat),
+                                                                                                                                                          oldNode =
+                                                                                                                                                              some
+                                                                                                                                                                oldHandle →
+                                                                                                                                                            ∃
+                                                                                                                                                              old
+                                                                                                                                                              query
+                                                                                                                                                              queried,
+                                                                                                                                                              MicroCFTA.SourcePruningEnumerationNodes.lookupNode
+                                                                                                                                                                    foldCaller.checked.native.machine.heap
+                                                                                                                                                                    oldHandle =
+                                                                                                                                                                  some
+                                                                                                                                                                    old ∧
+                                                                                                                                                                next.source =
+                                                                                                                                                                    foldCaller.checked.native.machine.heap ∧
+                                                                                                                                                                  next.roots =
+                                                                                                                                                                      foldInventory.roots ++
+                                                                                                                                                                        [incoming,
+                                                                                                                                                                          old] ∧
+                                                                                                                                                                    MicroCFTA.SourceCurrentAllocatedTargetQuery.Receipt
+                                                                                                                                                                        formulas
+                                                                                                                                                                        solver
+                                                                                                                                                                        next
+                                                                                                                                                                        incoming
+                                                                                                                                                                        old
+                                                                                                                                                                        foldCaller.checked
+                                                                                                                                                                        query
+                                                                                                                                                                        queried
+                                                                                                                                                                        foldFinal ∧
+                                                                                                                                                                      (∀
+                                                                                                                                                                          (ambient :
+                                                                                                                                                                            MicroCFTA.InternedGuardedLanguage.Env
+                                                                                                                                                                              (MicroCFTA.SourceObservations.Label
+                                                                                                                                                                                MicroCFTA.FullSyntax.Formula))
+                                                                                                                                                                          (term :
+                                                                                                                                                                            MicroCFTA.Language.Term
+                                                                                                                                                                              (MicroCFTA.SourceObservations.Label
+                                                                                                                                                                                MicroCFTA.FullSyntax.Formula)),
+                                                                                                                                                                          MicroCFTA.InternedGuardedLanguage.meaning
+                                                                                                                                                                              (MicroCFTA.SourceEqualityPCSGuard.holds
+                                                                                                                                                                                formulas
+                                                                                                                                                                                solver)
+                                                                                                                                                                              ambient
+                                                                                                                                                                              replacement
+                                                                                                                                                                              term ↔
+                                                                                                                                                                            MicroCFTA.InternedGuardedLanguage.meaning
+                                                                                                                                                                                (MicroCFTA.SourceEqualityPCSGuard.holds
+                                                                                                                                                                                  formulas
+                                                                                                                                                                                  solver)
+                                                                                                                                                                                ambient
+                                                                                                                                                                                incoming
+                                                                                                                                                                                term ∧
+                                                                                                                                                                              MicroCFTA.InternedGuardedLanguage.meaning
+                                                                                                                                                                                (MicroCFTA.SourceEqualityPCSGuard.holds
+                                                                                                                                                                                  formulas
+                                                                                                                                                                                  solver)
+                                                                                                                                                                                ambient
+                                                                                                                                                                                old
+                                                                                                                                                                                term) ∧
+                                                                                                                                                                        (checkEmpty =
+                                                                                                                                                                            false →
+                                                                                                                                                                          replacement =
+                                                                                                                                                                              query ∧
+                                                                                                                                                                            afterCaller =
+                                                                                                                                                                                MicroCFTA.SourceCurrentAllocatedPartialState.advance
+                                                                                                                                                                                  foldCaller
+                                                                                                                                                                                  queried
+                                                                                                                                                                                  foldCaller.fourth
+                                                                                                                                                                                  foldCaller.merge ∧
+                                                                                                                                                                              final =
+                                                                                                                                                                                foldFinal))
+'MicroCFTA.SourcePruningEnumerationCachedTerminalAdapter.complete' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]

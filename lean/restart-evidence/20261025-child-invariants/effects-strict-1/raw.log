@@ -1,0 +1,41 @@
+/tmp/mcfta-child-invariants-20261025/effects-strict-1/MicroCFTA/SourcePruningEnumerationChildEffects.lean:23:40: error: unexpected identifier; expected '}'
+/tmp/mcfta-child-invariants-20261025/effects-strict-1/MicroCFTA/SourcePruningEnumerationChildEffects.lean:74:82: error: unexpected token '('; expected '}'
+/tmp/mcfta-child-invariants-20261025/effects-strict-1/MicroCFTA/SourcePruningEnumerationChildEffects.lean:74:10: error: Type mismatch
+  (allocated (some (entry.identity + 1)) before).values.set before.counter
+has type
+  UVarValue Symbol → List (UVarValue Symbol)
+but is expected to have type
+  List (UVarValue Symbol)
+/tmp/mcfta-child-invariants-20261025/effects-strict-1/MicroCFTA/SourcePruningEnumerationChildEffects.lean:72:9: error: Missing cases:
+/tmp/mcfta-child-invariants-20261025/effects-strict-1/MicroCFTA/SourcePruningEnumerationChildEffects.lean:66:35: error: unsolved goals
+case neg
+scs : List Suspended
+before after : State Symbol Constraint
+fragment : Fragments.Fragment Symbol
+safe : Safe before
+bounded : ∀ (sc : Suspended), sc ∈ scs → sc.var < before.counter
+entry : Cache.Interned InternedBinderProtocol.NodeKey
+_edges : List (InternedConstructorTemplates.EdgeValue Symbol Constraint)
+_depth : Nat
+_free : List InternedBinderProtocol.Reference
+terminal : ¬(scs.any fun sc => EqualityTrie.isTerminal sc.trie) = true
+observed :
+  Success
+    (do
+      let uv ← allocate (some (entry.identity + 1))
+      setValue uv (UVarValue.unenumerated (some (entry.identity + 1)) scs)
+      pure (Fragments.Fragment.hole uv))
+    before fragment after
+shape :
+  fragment = Fragments.Fragment.hole before.counter ∧
+    after =
+      let __src := allocated (some (entry.identity + 1)) before;
+      { counter := __src.counter, representatives := __src.representatives, values := sorry,
+        obligations := __src.obligations, recursionAncestry := __src.recursionAncestry,
+        expansionAncestry := __src.expansionAncestry }
+⊢ Safe after ∧
+    EnumeratedOrigin before after ∧
+      ∀ (held : Nat),
+        held < before.counter → IsRoot before.representatives held → EnumerationDriver.Protected held before after
+/tmp/mcfta-child-invariants-20261025/effects-strict-1/MicroCFTA/SourcePruningEnumerationChildEffects.lean:59:2: error: Alternative `union` has not been provided
+/tmp/mcfta-child-invariants-20261025/effects-strict-1/MicroCFTA/SourcePruningEnumerationChildEffects.lean:59:2: error: Alternative `mu` has not been provided

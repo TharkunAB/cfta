@@ -1,0 +1,17 @@
+import MicroCFTA.SourcePruningEnumerationChildEffects
+set_option pp.maxSteps 1000000
+set_option pp.deepTerms true
+#check MicroCFTA.SourcePruningEnumerationChildEffects.child
+#print axioms MicroCFTA.SourcePruningEnumerationChildEffects.child
+#check MicroCFTA.SourcePruningEnumerationChildEffects.child_inputs
+#print axioms MicroCFTA.SourcePruningEnumerationChildEffects.child_inputs
+#check MicroCFTA.SourcePruningEnumerationChildEffects.retained_inputs
+#print axioms MicroCFTA.SourcePruningEnumerationChildEffects.retained_inputs
+#check MicroCFTA.SourcePruningEnumerationChildEffects.terminal_inputs
+#print axioms MicroCFTA.SourcePruningEnumerationChildEffects.terminal_inputs
+#check MicroCFTA.SourcePruningEnumerationCachedFoldCompletion.complete
+#print axioms MicroCFTA.SourcePruningEnumerationCachedFoldCompletion.complete
+#check MicroCFTA.SourcePruningEnumerationCachedTerminal.complete
+#print axioms MicroCFTA.SourcePruningEnumerationCachedTerminal.complete
+#check MicroCFTA.SourcePruningEnumerationCachedTerminalAdapter.complete
+#print axioms MicroCFTA.SourcePruningEnumerationCachedTerminalAdapter.complete
