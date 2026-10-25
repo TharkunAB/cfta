@@ -1,0 +1,5 @@
+# Storage prior-publication custody
+
+Prepared 2026-10-25T02:08:04.116899+01:00. I authored these data copies. The actual Union summary supplies exactly26 source files in order: archive-1/local-publication-1/push-1, six artifacts each, then eight tail inputs. The selected assessment tail is the explicitly versioned V2 report, not immutable historical V1. Every copy is byte-exact and indexed. The V2 peer is already sealed and stays separate context, not item27. The unchanged summary retains the failed alias-copy PermissionError and explicit V2 selection; the actual archive passed and was not repeated. Root reported clean fresh refresh progress. No current source theorem, compiler result, body gate or future publication outcome is inferred. No selected program, Git, compiler, network or board operation was executed. Root independently reviews and activates.
+
+Summary `d887ae99eb0523d7cc69b789591087df0273841ca5b56453b38ae9083ba9e775`; index `98f6324694af7eb1752c1354d2d384f9aeba0f78bc18cb815322d1abe8beeb2a`; peer `199f3b9ead0698a2385b53a9284f32522b6e1513a16e0c09ef709dd8fee14736`.

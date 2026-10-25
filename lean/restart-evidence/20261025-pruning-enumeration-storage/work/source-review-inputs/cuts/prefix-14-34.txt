@@ -1,0 +1,21 @@
+/-- Allocate own equality variables and stage the ordered child actions without running them. -/
+noncomputable def prepare (scs : List EnumerationState.Suspended)
+    (edge : InternedConstructorTemplates.EdgeValue Symbol Constraint) :
+    Option (EnumerateM Symbol Constraint
+      (Symbol × List (InternedConstructorTemplates.Value Symbol Constraint ×
+        List EnumerationState.Suspended ×
+        Option (EnumerateM Symbol Constraint (Fragments.Fragment Symbol))) × Option Constraint))
+ :=
+  if arityAllows edge.children.length scs then
+    match SourcePruningEnumerationConstraint.project edge.entry.key.constraint with
+    | none => none
+    | some (tries, residual) =>
+        some (tries.mapM suspend >>= fun own =>
+          pure (edge.entry.key.symbol,
+            edge.children.zipIdx.map (fun indexed =>
+              (indexed.1, descendScs indexed.2 scs ++ descendScs indexed.2 own,
+                SourcePruningEnumerationShallowChild.prepareChild (EnumGuard := Constraint)
+                  (descendScs indexed.2 scs ++ descendScs indexed.2 own) indexed.1)), residual))
+  else some reject
+
+/-- Pure equality allocations retain every complete realized pending node value. -/

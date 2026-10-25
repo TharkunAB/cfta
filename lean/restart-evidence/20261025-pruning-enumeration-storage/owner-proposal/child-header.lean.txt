@@ -1,0 +1,13 @@
+/-- An actual prepared child preserves storage and returns an allocated fragment. -/
+theorem child_storage
+    (scs : List EnumerationState.Suspended)
+    (value : InternedConstructorTemplates.Value Symbol Constraint)
+    (action : EnumerateM Symbol Constraint (Fragments.Fragment Symbol))
+    (before after : EnumerationState.State Symbol Constraint)
+    (fragment : Fragments.Fragment Symbol)
+    (storage : StorageValid before)
+    (bounded : ∀ sc ∈ scs, sc.var < before.counter)
+    (prepared : SourcePruningEnumerationShallowChild.prepareChild
+      (EnumGuard := Constraint) scs value = some action)
+    (observed : Success action before fragment after) :
+    StorageValid after ∧ FragmentBound after.counter fragment ∧ before.counter ≤ after.counter

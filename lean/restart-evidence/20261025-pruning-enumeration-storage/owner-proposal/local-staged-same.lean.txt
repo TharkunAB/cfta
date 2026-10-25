@@ -1,0 +1,7 @@
+have stagedSame : inputs.map (fun input =>
+        (input.1, input.2, SourcePruningEnumerationShallowChild.prepareChild
+          (EnumGuard := Constraint) input.2 input.1)) =
+        edge.children.zipIdx.map (fun indexed =>
+          (indexed.1, descendScs indexed.2 scs ++ descendScs indexed.2 (suspendedVars before.counter tries),
+            SourcePruningEnumerationShallowChild.prepareChild (EnumGuard := Constraint)
+              (descendScs indexed.2 scs ++ descendScs indexed.2 (suspendedVars before.counter tries)) indexed.1))

@@ -1,0 +1,127 @@
+{"command": ["/home/tritlo/.elan/toolchains/leanprover--lean4---v4.34.1/bin/lean", "-R", "/tmp/mcfta-pruning-enumeration-storage-20261025/public-1", "-DwarningAsError=true", "-Dlinter.all=true", "/tmp/mcfta-pruning-enumeration-storage-20261025/public-1/checked.lean"], "exit_code": 0, "raw_bytes": 8527, "raw_sha256": "d8f9a46442699085f665d7e9b900b671346c9a8450996474eb397fcadcb719fb", "source_sha256": "6ab87fd37f511982d609d0fcb887a60956df3faee7e46962b34ce73ae6f8c315"}
+MicroCFTA.SourcePruningEnumerationStorage.child_storage : ∀ (scs : List MicroCFTA.EnumerationState.Suspended)
+  (value :
+    MicroCFTA.InternedConstructorTemplates.Value MicroCFTA.SourcePruningTemplates.Symbol
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+  (action :
+    MicroCFTA.EnumerationState.EnumerateM MicroCFTA.SourcePruningTemplates.Symbol
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+      (MicroCFTA.Fragments.Fragment MicroCFTA.SourcePruningTemplates.Symbol))
+  (before after :
+    MicroCFTA.EnumerationState.State MicroCFTA.SourcePruningTemplates.Symbol
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+  (fragment : MicroCFTA.Fragments.Fragment MicroCFTA.SourcePruningTemplates.Symbol),
+  MicroCFTA.EnumerationCorrectness.StorageValid before →
+    (∀ (sc : MicroCFTA.EnumerationState.Suspended), sc ∈ scs → sc.var < before.counter) →
+      MicroCFTA.SourcePruningEnumerationShallowChild.prepareChild scs value = some action →
+        MicroCFTA.EnumerationCorrectness.Success action before fragment after →
+          MicroCFTA.EnumerationCorrectness.StorageValid after ∧
+            MicroCFTA.EnumerationCorrectness.FragmentBound after.counter fragment ∧ before.counter ≤ after.counter
+'MicroCFTA.SourcePruningEnumerationStorage.child_storage' depends on axioms: [propext, Quot.sound]
+MicroCFTA.SourcePruningEnumerationStorage.staged_storage : ∀
+  (inputs :
+    List
+      (MicroCFTA.InternedConstructorTemplates.Value MicroCFTA.SourcePruningTemplates.Symbol
+          (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) ×
+        List MicroCFTA.EnumerationState.Suspended))
+  (before after :
+    MicroCFTA.EnumerationState.State MicroCFTA.SourcePruningTemplates.Symbol
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+  (result : Option (List (MicroCFTA.Fragments.Fragment MicroCFTA.SourcePruningTemplates.Symbol))),
+  MicroCFTA.EnumerationCorrectness.StorageValid before →
+    (∀
+        (input :
+          MicroCFTA.InternedConstructorTemplates.Value MicroCFTA.SourcePruningTemplates.Symbol
+              (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) ×
+            List MicroCFTA.EnumerationState.Suspended),
+        input ∈ inputs → ∀ (sc : MicroCFTA.EnumerationState.Suspended), sc ∈ input.snd → sc.var < before.counter) →
+      ∀
+        (observed :
+          MicroCFTA.EnumerationCorrectness.Success
+            (MicroCFTA.SourcePruningEnumerationEdgeTraversal.runStaged
+              (List.map
+                (fun input =>
+                  (input.fst, input.snd,
+                    MicroCFTA.SourcePruningEnumerationShallowChild.prepareChild input.snd input.fst))
+                inputs))
+            before result after),
+        MicroCFTA.EnumerationCorrectness.StorageValid after ∧
+          (match result, observed with
+            | none, observed => True
+            | some fragments, observed => MicroCFTA.EnumerationCorrectness.FragmentsBound after.counter fragments) ∧
+            before.counter ≤ after.counter
+'MicroCFTA.SourcePruningEnumerationStorage.staged_storage' depends on axioms: [propext, Quot.sound]
+MicroCFTA.SourcePruningEnumerationStorage.edge_storage : ∀ (scs : List MicroCFTA.EnumerationState.Suspended)
+  (edge :
+    MicroCFTA.InternedConstructorTemplates.EdgeValue MicroCFTA.SourcePruningTemplates.Symbol
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+  (action :
+    MicroCFTA.EnumerationState.EnumerateM MicroCFTA.SourcePruningTemplates.Symbol
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+      (Option (MicroCFTA.Fragments.Fragment MicroCFTA.SourcePruningTemplates.Symbol)))
+  (before after :
+    MicroCFTA.EnumerationState.State MicroCFTA.SourcePruningTemplates.Symbol
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+  (result : Option (MicroCFTA.Fragments.Fragment MicroCFTA.SourcePruningTemplates.Symbol)),
+  MicroCFTA.EnumerationCorrectness.StorageValid before →
+    (∀ (sc : MicroCFTA.EnumerationState.Suspended), sc ∈ scs → sc.var < before.counter) →
+      MicroCFTA.SourcePruningEnumerationEdgeTraversal.prepare scs edge = some action →
+        ∀ (observed : MicroCFTA.EnumerationCorrectness.Success action before result after),
+          MicroCFTA.EnumerationCorrectness.StorageValid after ∧
+            (match result, observed with
+              | none, observed => True
+              | some fragment, observed => MicroCFTA.EnumerationCorrectness.FragmentBound after.counter fragment) ∧
+              before.counter ≤ after.counter
+'MicroCFTA.SourcePruningEnumerationStorage.edge_storage' depends on axioms: [propext, Classical.choice, Quot.sound]
+MicroCFTA.SourcePruningEnumerationStorage.complete : ∀ (scs : List MicroCFTA.EnumerationState.Suspended)
+  (heap :
+    MicroCFTA.InternedConstructorTemplates.State MicroCFTA.SourcePruningTemplates.Symbol
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+  (entry : MicroCFTA.Cache.Interned MicroCFTA.InternedBinderProtocol.NodeKey)
+  (storedEdges selectedEdges :
+    List
+      (MicroCFTA.InternedConstructorTemplates.EdgeValue MicroCFTA.SourcePruningTemplates.Symbol
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)))
+  (depth : Nat) (free : List MicroCFTA.InternedBinderProtocol.Reference),
+  MicroCFTA.SourceEqualityRequiredCache.Ready heap →
+    MicroCFTA.InternedProbeProvenance.Available heap
+        (MicroCFTA.InternedConstructorTemplates.Value.node entry storedEdges depth free) →
+      free = [] →
+        (∀
+            (edge :
+              MicroCFTA.InternedConstructorTemplates.EdgeValue MicroCFTA.SourcePruningTemplates.Symbol
+                (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)),
+            edge ∈ selectedEdges → edge ∈ storedEdges) →
+          ∀
+            (before :
+              MicroCFTA.EnumerationState.State MicroCFTA.SourcePruningTemplates.Symbol
+                (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)),
+            MicroCFTA.SourcePruningEnumerationObservation.PendingRealized heap before →
+              MicroCFTA.EnumerationCorrectness.StorageValid before →
+                (∀ (sc : MicroCFTA.EnumerationState.Suspended), sc ∈ scs → sc.var < before.counter) →
+                  ∃ branchRows,
+                    MicroCFTA.Language.All₂
+                        (fun edge rows =>
+                          if MicroCFTA.EnumerationState.arityAllows edge.children.length scs = true then
+                            match MicroCFTA.SourcePruningEnumerationConstraint.project edge.entry.key.constraint with
+                            | none => rows = [Except.ok (none, before)]
+                            | some val =>
+                              ∃ action result after,
+                                MicroCFTA.SourcePruningEnumerationEdgeTraversal.prepare scs edge = some action ∧
+                                  MicroCFTA.EnumerationCorrectness.Success action before result after ∧
+                                    rows = [Except.ok (some result, after)] ∧
+                                      after.counter = after.values.length ∧
+                                        MicroCFTA.SourcePruningEnumerationObservation.PendingRealized heap after ∧
+                                          MicroCFTA.EnumerationCorrectness.StorageValid after ∧
+                                            (∀
+                                                (fragment :
+                                                  MicroCFTA.Fragments.Fragment MicroCFTA.SourcePruningTemplates.Symbol),
+                                                result = some fragment →
+                                                  MicroCFTA.EnumerationCorrectness.FragmentBound after.counter
+                                                    fragment) ∧
+                                              before.counter ≤ after.counter
+                          else rows = [])
+                        selectedEdges branchRows ∧
+                      MicroCFTA.SourcePruningEnumerationOrdinaryBranches.run scs selectedEdges before =
+                        branchRows.flatten
+'MicroCFTA.SourcePruningEnumerationStorage.complete' depends on axioms: [propext, Classical.choice, Quot.sound]

@@ -1,0 +1,14 @@
+/-- An actual prepared edge preserves storage and bounds its returned fragment. -/
+theorem edge_storage
+    (scs : List EnumerationState.Suspended)
+    (edge : InternedConstructorTemplates.EdgeValue Symbol Constraint)
+    (action : EnumerateM Symbol Constraint (Option (Fragments.Fragment Symbol)))
+    (before after : EnumerationState.State Symbol Constraint)
+    (result : Option (Fragments.Fragment Symbol))
+    (storage : StorageValid before)
+    (bounded : ∀ sc ∈ scs, sc.var < before.counter)
+    (prepared : SourcePruningEnumerationEdgeTraversal.prepare scs edge = some action)
+    (observed : Success action before result after) :
+    StorageValid after ∧
+      (match result with | none => True | some fragment => FragmentBound after.counter fragment) ∧
+      before.counter ≤ after.counter

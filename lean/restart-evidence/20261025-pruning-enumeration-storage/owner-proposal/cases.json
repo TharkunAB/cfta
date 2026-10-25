@@ -1,0 +1,424 @@
+{
+  "cases": [
+    {
+      "scope": "child_storage.value",
+      "kind": "cases value",
+      "branches": [
+        {
+          "name": "empty",
+          "fields": []
+        },
+        {
+          "name": "reference",
+          "fields": [
+            {
+              "name": "name",
+              "type": "InternedBinderProtocol.Reference",
+              "used": false,
+              "Root_authored_binding": "_name"
+            }
+          ]
+        },
+        {
+          "name": "node",
+          "fields": [
+            {
+              "name": "entry",
+              "type": "Cache.Interned InternedBinderProtocol.NodeKey",
+              "used": true
+            },
+            {
+              "name": "edges",
+              "type": "List (InternedConstructorTemplates.EdgeValue Symbol Constraint)",
+              "used": false,
+              "Root_authored_binding": "_edges"
+            },
+            {
+              "name": "depth",
+              "type": "Nat",
+              "used": false,
+              "Root_authored_binding": "_depth"
+            },
+            {
+              "name": "free",
+              "type": "List InternedBinderProtocol.Reference",
+              "used": false,
+              "Root_authored_binding": "_free"
+            }
+          ]
+        },
+        {
+          "name": "union",
+          "fields": [
+            {
+              "name": "entry",
+              "type": "Cache.Interned InternedBinderProtocol.NodeKey",
+              "used": true
+            },
+            {
+              "name": "members",
+              "type": "List (InternedConstructorTemplates.Value Symbol Constraint)",
+              "used": false,
+              "Root_authored_binding": "_members"
+            },
+            {
+              "name": "depth",
+              "type": "Nat",
+              "used": false,
+              "Root_authored_binding": "_depth"
+            },
+            {
+              "name": "free",
+              "type": "List InternedBinderProtocol.Reference",
+              "used": false,
+              "Root_authored_binding": "_free"
+            }
+          ]
+        },
+        {
+          "name": "mu",
+          "fields": [
+            {
+              "name": "entry",
+              "type": "Cache.Interned InternedBinderProtocol.NodeKey",
+              "used": true
+            },
+            {
+              "name": "body",
+              "type": "InternedConstructorTemplates.Value Symbol Constraint",
+              "used": false,
+              "Root_authored_binding": "_body"
+            },
+            {
+              "name": "depthShape",
+              "type": "InternedConstructorTemplates.Value Symbol Constraint",
+              "used": false,
+              "Root_authored_binding": "_depthShape"
+            },
+            {
+              "name": "ordinaryShape",
+              "type": "InternedConstructorTemplates.Value Symbol Constraint",
+              "used": false,
+              "Root_authored_binding": "_ordinaryShape"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "scope": "child_storage.node.terminal",
+      "kind": "by_cases terminal : scs.any (fun sc => EqualityTrie.isTerminal sc.trie) = true",
+      "branches": [
+        {
+          "name": "true",
+          "fields": [
+            {
+              "name": "terminal",
+              "type": "scs.any (fun sc => EqualityTrie.isTerminal sc.trie) = true",
+              "used": true
+            }
+          ]
+        },
+        {
+          "name": "false",
+          "fields": [
+            {
+              "name": "terminal",
+              "type": "¬ (scs.any (fun sc => EqualityTrie.isTerminal sc.trie) = true)",
+              "used": true
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "scope": "child_storage.union.terminal",
+      "kind": "by_cases terminal : scs.any (fun sc => EqualityTrie.isTerminal sc.trie) = true",
+      "branches": [
+        {
+          "name": "true",
+          "fields": [
+            {
+              "name": "terminal",
+              "type": "scs.any (fun sc => EqualityTrie.isTerminal sc.trie) = true",
+              "used": true
+            }
+          ]
+        },
+        {
+          "name": "false",
+          "fields": [
+            {
+              "name": "terminal",
+              "type": "¬ (scs.any (fun sc => EqualityTrie.isTerminal sc.trie) = true)",
+              "used": true
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "scope": "child_storage.mu.terminal",
+      "kind": "by_cases terminal : scs.any (fun sc => EqualityTrie.isTerminal sc.trie) = true",
+      "branches": [
+        {
+          "name": "true",
+          "fields": [
+            {
+              "name": "terminal",
+              "type": "scs.any (fun sc => EqualityTrie.isTerminal sc.trie) = true",
+              "used": true
+            }
+          ]
+        },
+        {
+          "name": "false",
+          "fields": [
+            {
+              "name": "terminal",
+              "type": "¬ (scs.any (fun sc => EqualityTrie.isTerminal sc.trie) = true)",
+              "used": true
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "scope": "staged_storage.preparedChild",
+      "kind": "cases preparedChild : prepareChild bucket value",
+      "branches": [
+        {
+          "name": "none",
+          "fields": [
+            {
+              "name": "preparedChild",
+              "type": "SourcePruningEnumerationShallowChild.prepareChild (EnumGuard := Constraint) bucket value = none",
+              "used": true
+            }
+          ]
+        },
+        {
+          "name": "some",
+          "fields": [
+            {
+              "name": "childAction",
+              "type": "EnumerateM Symbol Constraint (Fragments.Fragment Symbol)",
+              "used": true
+            },
+            {
+              "name": "preparedChild",
+              "type": "SourcePruningEnumerationShallowChild.prepareChild (EnumGuard := Constraint) bucket value = some childAction",
+              "used": true
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "scope": "staged_storage.tailResult",
+      "kind": "cases tailResult",
+      "branches": [
+        {
+          "name": "none",
+          "fields": []
+        },
+        {
+          "name": "some",
+          "fields": [
+            {
+              "name": "fragments",
+              "type": "List (Fragments.Fragment Symbol)",
+              "used": true
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "scope": "edge_storage.allowed",
+      "kind": "by_cases allowed : arityAllows edge.children.length scs = true",
+      "branches": [
+        {
+          "name": "true",
+          "fields": [
+            {
+              "name": "allowed",
+              "type": "arityAllows edge.children.length scs = true",
+              "used": true
+            }
+          ]
+        },
+        {
+          "name": "false",
+          "fields": [
+            {
+              "name": "allowed",
+              "type": "¬ (arityAllows edge.children.length scs = true)",
+              "used": true
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "scope": "edge_storage.projected",
+      "kind": "cases projected : project edge.entry.key.constraint",
+      "branches": [
+        {
+          "name": "none",
+          "fields": [
+            {
+              "name": "projected",
+              "type": "SourcePruningEnumerationConstraint.project edge.entry.key.constraint = none",
+              "used": true
+            }
+          ]
+        },
+        {
+          "name": "some",
+          "fields": [
+            {
+              "name": "pair",
+              "type": "List EqualityTrie.Trie × Option Constraint",
+              "used": true
+            },
+            {
+              "name": "projected",
+              "type": "SourcePruningEnumerationConstraint.project edge.entry.key.constraint = some pair",
+              "used": true
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "scope": "complete.allowed",
+      "kind": "by_cases allowed : arityAllows edge.children.length scs = true",
+      "branches": [
+        {
+          "name": "true",
+          "fields": [
+            {
+              "name": "allowed",
+              "type": "arityAllows edge.children.length scs = true",
+              "used": true
+            }
+          ]
+        },
+        {
+          "name": "false",
+          "fields": [
+            {
+              "name": "allowed",
+              "type": "¬ (arityAllows edge.children.length scs = true)",
+              "used": true
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "scope": "complete.projected",
+      "kind": "cases projected : project edge.entry.key.constraint",
+      "branches": [
+        {
+          "name": "none",
+          "fields": [
+            {
+              "name": "projected",
+              "type": "SourcePruningEnumerationConstraint.project edge.entry.key.constraint = none",
+              "used": true
+            }
+          ]
+        },
+        {
+          "name": "some",
+          "fields": [
+            {
+              "name": "pair",
+              "type": "List EqualityTrie.Trie × Option Constraint",
+              "used": false,
+              "Root_authored_binding": "_pair",
+              "reason": "The relation does not inspect its payload."
+            },
+            {
+              "name": "projected",
+              "type": "SourcePruningEnumerationConstraint.project edge.entry.key.constraint = some pair",
+              "used": true
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "scope": "edge_storage.childrenResult",
+      "kind": "cases childrenResult",
+      "branches": [
+        {
+          "name": "none",
+          "fields": []
+        },
+        {
+          "name": "some",
+          "fields": [
+            {
+              "name": "fragments",
+              "type": "List (Fragments.Fragment Symbol)",
+              "used": true
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "scope": "edge_storage.residual",
+      "kind": "cases residual",
+      "branches": [
+        {
+          "name": "none",
+          "fields": []
+        },
+        {
+          "name": "some",
+          "fields": [
+            {
+              "name": "guard",
+              "type": "Constraint",
+              "used": true
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "scope": "edge_storage.bound.append",
+      "kind": "List.mem_append.mp scMember",
+      "branches": [
+        {
+          "name": "inherited",
+          "fields": [
+            {
+              "name": "inherited",
+              "type": "sc ∈ descendScs indexed.2 scs",
+              "used": true
+            }
+          ]
+        },
+        {
+          "name": "own",
+          "fields": [
+            {
+              "name": "ownMember",
+              "type": "sc ∈ descendScs indexed.2 (suspendedVars before.counter tries)",
+              "used": true
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "count": 13,
+  "compiled_condition_contracts": [],
+  "all_types_manual": true,
+  "Root_authors_all_branch_terms": true
+}

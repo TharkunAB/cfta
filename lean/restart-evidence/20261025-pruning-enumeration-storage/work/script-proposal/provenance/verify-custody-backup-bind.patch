@@ -1,0 +1,20 @@
+--- pre-custody-and-backup-bind/candidate/verify.py
++++ candidate/verify.py
+@@ -86,7 +86,7 @@
+     value, ref = line.split()
+     if ref not in ['refs/heads/formalize', 'refs/remotes/origin/formalize'] and not ref.startswith('refs/codex/turn-diffs/'):
+         assert git('rev-parse', ref).decode().strip() == value, ref
+-assert git('rev-parse', 'codex/backup-pruning-enumeration-union-20261025-0239').decode().strip() == baseline
++assert git('rev-parse', 'codex/backup-pruning-enumeration-storage-20261025-0206').decode().strip() == baseline
+ 
+ checks = load('work/build-summary.json')
+ source = (root / 'lean/MicroCFTA/SourcePruningEnumerationStorage.lean').read_bytes()
+@@ -214,7 +214,7 @@
+ assert prior['status'] == 'PUSHED_AND_REMOTE_VERIFIED' and prior['remote_head'] == baseline
+ assert load('previous-publication/publication-spec.json')['head'] == baseline
+ custody = load('work/prior-custody-index.json')
+-assert sha((here / 'work/prior-custody-index.json').read_bytes()) == 'CUSTODY_INDEX_SHA_PENDING'
++assert sha((here / 'work/prior-custody-index.json').read_bytes()) == '98f6324694af7eb1752c1354d2d384f9aeba0f78bc18cb815322d1abe8beeb2a'
+ assert len(custody) == 26 and len({pin['target'] for pin in custody}) == 26
+ assert len({pin['source'] for pin in custody}) == 26
+ assert {p.name for p in (here / 'previous-publication').iterdir()} == {pin['target'] for pin in custody}

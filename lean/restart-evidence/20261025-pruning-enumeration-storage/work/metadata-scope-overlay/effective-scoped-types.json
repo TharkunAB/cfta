@@ -1,0 +1,1263 @@
+{
+  "entries": [
+    {
+      "scope": "child_storage",
+      "name": "scs",
+      "type": "List EnumerationState.Suspended",
+      "used": true
+    },
+    {
+      "scope": "child_storage",
+      "name": "value",
+      "type": "InternedConstructorTemplates.Value Symbol Constraint",
+      "used": true
+    },
+    {
+      "scope": "child_storage",
+      "name": "action",
+      "type": "EnumerateM Symbol Constraint (Fragments.Fragment Symbol)",
+      "used": true
+    },
+    {
+      "scope": "child_storage",
+      "name": "before",
+      "type": "EnumerationState.State Symbol Constraint",
+      "used": true
+    },
+    {
+      "scope": "child_storage",
+      "name": "after",
+      "type": "EnumerationState.State Symbol Constraint",
+      "used": true
+    },
+    {
+      "scope": "child_storage",
+      "name": "fragment",
+      "type": "Fragments.Fragment Symbol",
+      "used": true
+    },
+    {
+      "scope": "child_storage",
+      "name": "storage",
+      "type": "StorageValid before",
+      "used": true
+    },
+    {
+      "scope": "child_storage",
+      "name": "bounded",
+      "type": "∀ sc ∈ scs, sc.var < before.counter",
+      "used": true
+    },
+    {
+      "scope": "child_storage",
+      "name": "prepared",
+      "type": "SourcePruningEnumerationShallowChild.prepareChild (EnumGuard := Constraint) scs value = some action",
+      "used": true
+    },
+    {
+      "scope": "child_storage",
+      "name": "observed",
+      "type": "Success action before fragment after",
+      "used": true
+    },
+    {
+      "scope": "staged_storage",
+      "name": "inputs",
+      "type": "List (InternedConstructorTemplates.Value Symbol Constraint × List EnumerationState.Suspended)",
+      "used": true
+    },
+    {
+      "scope": "staged_storage",
+      "name": "before",
+      "type": "EnumerationState.State Symbol Constraint",
+      "used": true
+    },
+    {
+      "scope": "staged_storage",
+      "name": "after",
+      "type": "EnumerationState.State Symbol Constraint",
+      "used": true
+    },
+    {
+      "scope": "staged_storage",
+      "name": "result",
+      "type": "Option (List (Fragments.Fragment Symbol))",
+      "used": true
+    },
+    {
+      "scope": "staged_storage",
+      "name": "storage",
+      "type": "StorageValid before",
+      "used": true
+    },
+    {
+      "scope": "staged_storage",
+      "name": "bounded",
+      "type": "∀ input ∈ inputs, ∀ sc ∈ input.2, sc.var < before.counter",
+      "used": true
+    },
+    {
+      "scope": "staged_storage",
+      "name": "observed",
+      "type": "Success (SourcePruningEnumerationEdgeTraversal.runStaged (inputs.map (fun input => (input.1, input.2, SourcePruningEnumerationShallowChild.prepareChild (EnumGuard := Constraint) input.2 input.1)))) before result after",
+      "used": true
+    },
+    {
+      "scope": "edge_storage",
+      "name": "scs",
+      "type": "List EnumerationState.Suspended",
+      "used": true
+    },
+    {
+      "scope": "edge_storage",
+      "name": "edge",
+      "type": "InternedConstructorTemplates.EdgeValue Symbol Constraint",
+      "used": true
+    },
+    {
+      "scope": "edge_storage",
+      "name": "action",
+      "type": "EnumerateM Symbol Constraint (Option (Fragments.Fragment Symbol))",
+      "used": true
+    },
+    {
+      "scope": "edge_storage",
+      "name": "before",
+      "type": "EnumerationState.State Symbol Constraint",
+      "used": true
+    },
+    {
+      "scope": "edge_storage",
+      "name": "after",
+      "type": "EnumerationState.State Symbol Constraint",
+      "used": true
+    },
+    {
+      "scope": "edge_storage",
+      "name": "result",
+      "type": "Option (Fragments.Fragment Symbol)",
+      "used": true
+    },
+    {
+      "scope": "edge_storage",
+      "name": "storage",
+      "type": "StorageValid before",
+      "used": true
+    },
+    {
+      "scope": "edge_storage",
+      "name": "bounded",
+      "type": "∀ sc ∈ scs, sc.var < before.counter",
+      "used": true
+    },
+    {
+      "scope": "edge_storage",
+      "name": "prepared",
+      "type": "SourcePruningEnumerationEdgeTraversal.prepare scs edge = some action",
+      "used": true
+    },
+    {
+      "scope": "edge_storage",
+      "name": "observed",
+      "type": "Success action before result after",
+      "used": true
+    },
+    {
+      "scope": "complete",
+      "name": "scs",
+      "type": "List EnumerationState.Suspended",
+      "used": true
+    },
+    {
+      "scope": "complete",
+      "name": "heap",
+      "type": "InternedConstructorTemplates.State Symbol Constraint",
+      "used": true
+    },
+    {
+      "scope": "complete",
+      "name": "entry",
+      "type": "Cache.Interned InternedBinderProtocol.NodeKey",
+      "used": true
+    },
+    {
+      "scope": "complete",
+      "name": "storedEdges",
+      "type": "List (InternedConstructorTemplates.EdgeValue Symbol Constraint)",
+      "used": true
+    },
+    {
+      "scope": "complete",
+      "name": "selectedEdges",
+      "type": "List (InternedConstructorTemplates.EdgeValue Symbol Constraint)",
+      "used": true
+    },
+    {
+      "scope": "complete",
+      "name": "depth",
+      "type": "Nat",
+      "used": true
+    },
+    {
+      "scope": "complete",
+      "name": "free",
+      "type": "List InternedBinderProtocol.Reference",
+      "used": true
+    },
+    {
+      "scope": "complete",
+      "name": "ready",
+      "type": "SourceEqualityRequiredCache.Ready heap",
+      "used": true
+    },
+    {
+      "scope": "complete",
+      "name": "parentAvailable",
+      "type": "InternedProbeProvenance.Available heap (.node entry storedEdges depth free)",
+      "used": true
+    },
+    {
+      "scope": "complete",
+      "name": "parentClosed",
+      "type": "free = []",
+      "used": true
+    },
+    {
+      "scope": "complete",
+      "name": "selected",
+      "type": "∀ edge ∈ selectedEdges, edge ∈ storedEdges",
+      "used": true
+    },
+    {
+      "scope": "complete",
+      "name": "before",
+      "type": "EnumerationState.State Symbol Constraint",
+      "used": true
+    },
+    {
+      "scope": "complete",
+      "name": "realized",
+      "type": "SourcePruningEnumerationObservation.PendingRealized heap before",
+      "used": true
+    },
+    {
+      "scope": "complete",
+      "name": "storage",
+      "type": "StorageValid before",
+      "used": true
+    },
+    {
+      "scope": "complete",
+      "name": "bounded",
+      "type": "∀ sc ∈ scs, sc.var < before.counter",
+      "used": true
+    },
+    {
+      "scope": "child_storage.bounded",
+      "name": "sc",
+      "type": "EnumerationState.Suspended",
+      "used": true
+    },
+    {
+      "scope": "child_storage.bounded",
+      "name": "member",
+      "type": "sc ∈ scs",
+      "used": true
+    },
+    {
+      "scope": "edge_storage.bounded",
+      "name": "sc",
+      "type": "EnumerationState.Suspended",
+      "used": true
+    },
+    {
+      "scope": "edge_storage.bounded",
+      "name": "member",
+      "type": "sc ∈ scs",
+      "used": true
+    },
+    {
+      "scope": "complete.bounded",
+      "name": "sc",
+      "type": "EnumerationState.Suspended",
+      "used": true
+    },
+    {
+      "scope": "complete.bounded",
+      "name": "member",
+      "type": "sc ∈ scs",
+      "used": true
+    },
+    {
+      "scope": "staged_storage.bounded",
+      "name": "input",
+      "type": "InternedConstructorTemplates.Value Symbol Constraint × List EnumerationState.Suspended",
+      "used": true
+    },
+    {
+      "scope": "staged_storage.bounded",
+      "name": "inputMember",
+      "type": "input ∈ inputs",
+      "used": true
+    },
+    {
+      "scope": "staged_storage.bounded",
+      "name": "sc",
+      "type": "EnumerationState.Suspended",
+      "used": true
+    },
+    {
+      "scope": "staged_storage.bounded",
+      "name": "member",
+      "type": "sc ∈ input.2",
+      "used": true
+    },
+    {
+      "scope": "complete.selected",
+      "name": "edge",
+      "type": "InternedConstructorTemplates.EdgeValue Symbol Constraint",
+      "used": true
+    },
+    {
+      "scope": "complete.selected",
+      "name": "member",
+      "type": "edge ∈ selectedEdges",
+      "used": true
+    },
+    {
+      "scope": "complete.result",
+      "name": "branchRows",
+      "type": "List (List (Except EnumerationState.Error (Option (Option (Fragments.Fragment Symbol)) × EnumerationState.State Symbol Constraint)))",
+      "used": true,
+      "binding_kind": "public existential / relation / present-fragment implication binder"
+    },
+    {
+      "scope": "complete.result",
+      "name": "edge",
+      "type": "InternedConstructorTemplates.EdgeValue Symbol Constraint",
+      "used": true,
+      "binding_kind": "public existential / relation / present-fragment implication binder"
+    },
+    {
+      "scope": "complete.result",
+      "name": "rows",
+      "type": "List (Except EnumerationState.Error (Option (Option (Fragments.Fragment Symbol)) × EnumerationState.State Symbol Constraint))",
+      "used": true,
+      "binding_kind": "public existential / relation / present-fragment implication binder"
+    },
+    {
+      "scope": "complete.result",
+      "name": "action",
+      "type": "EnumerateM Symbol Constraint (Option (Fragments.Fragment Symbol))",
+      "used": true,
+      "binding_kind": "public existential / relation / present-fragment implication binder"
+    },
+    {
+      "scope": "complete.result",
+      "name": "result",
+      "type": "Option (Fragments.Fragment Symbol)",
+      "used": true,
+      "binding_kind": "public existential / relation / present-fragment implication binder"
+    },
+    {
+      "scope": "complete.result",
+      "name": "after",
+      "type": "EnumerationState.State Symbol Constraint",
+      "used": true,
+      "binding_kind": "public existential / relation / present-fragment implication binder"
+    },
+    {
+      "scope": "complete.result",
+      "name": "fragment",
+      "type": "Fragments.Fragment Symbol",
+      "used": true,
+      "binding_kind": "public existential / relation / present-fragment implication binder"
+    },
+    {
+      "scope": "complete.result",
+      "name": "same",
+      "type": "result = some fragment",
+      "used": true,
+      "binding_kind": "public existential / relation / present-fragment implication binder"
+    },
+    {
+      "scope": "staged_storage.cons.input",
+      "name": "value",
+      "type": "InternedConstructorTemplates.Value Symbol Constraint",
+      "used": true
+    },
+    {
+      "scope": "staged_storage.cons.input",
+      "name": "bucket",
+      "type": "List EnumerationState.Suspended",
+      "used": true
+    },
+    {
+      "scope": "staged_storage.nil.pure",
+      "name": "resultSame",
+      "type": "result = some []",
+      "used": true
+    },
+    {
+      "scope": "staged_storage.nil.pure",
+      "name": "afterSame",
+      "type": "after = before",
+      "used": true
+    },
+    {
+      "scope": "staged_storage.none.pure",
+      "name": "resultSame",
+      "type": "result = none",
+      "used": true
+    },
+    {
+      "scope": "staged_storage.none.pure",
+      "name": "afterSame",
+      "type": "after = before",
+      "used": true
+    },
+    {
+      "scope": "staged_storage.some.head",
+      "name": "fragment",
+      "type": "Fragments.Fragment Symbol",
+      "used": true
+    },
+    {
+      "scope": "staged_storage.some.head",
+      "name": "middle",
+      "type": "EnumerationState.State Symbol Constraint",
+      "used": true
+    },
+    {
+      "scope": "staged_storage.some.head",
+      "name": "headSuccess",
+      "type": "Success childAction before fragment middle",
+      "used": true
+    },
+    {
+      "scope": "staged_storage.some.head",
+      "name": "tailBindSuccess",
+      "type": "Success (SourcePruningEnumerationEdgeTraversal.runStaged (rest.map (fun input => (input.1, input.2, SourcePruningEnumerationShallowChild.prepareChild (EnumGuard := Constraint) input.2 input.1))) >>= fun tailResult => pure (tailResult.map (fun tail => fragment :: tail))) middle result after",
+      "used": true
+    },
+    {
+      "scope": "staged_storage.some.tail",
+      "name": "tailResult",
+      "type": "Option (List (Fragments.Fragment Symbol))",
+      "used": true
+    },
+    {
+      "scope": "staged_storage.some.tail",
+      "name": "last",
+      "type": "EnumerationState.State Symbol Constraint",
+      "used": true
+    },
+    {
+      "scope": "staged_storage.some.tail",
+      "name": "tailSuccess",
+      "type": "Success (SourcePruningEnumerationEdgeTraversal.runStaged (rest.map (fun input => (input.1, input.2, SourcePruningEnumerationShallowChild.prepareChild (EnumGuard := Constraint) input.2 input.1)))) middle tailResult last",
+      "used": true
+    },
+    {
+      "scope": "staged_storage.some.tail",
+      "name": "mappedSuccess",
+      "type": "Success (pure (tailResult.map (fun tail => fragment :: tail))) last result after",
+      "used": true
+    },
+    {
+      "scope": "staged_storage.some.pure",
+      "name": "resultSame",
+      "type": "result = tailResult.map (fun tail => fragment :: tail)",
+      "used": true
+    },
+    {
+      "scope": "staged_storage.some.pure",
+      "name": "afterSame",
+      "type": "after = last",
+      "used": true
+    },
+    {
+      "scope": "staged_storage.some.child",
+      "name": "middleStorage",
+      "type": "StorageValid middle",
+      "used": true
+    },
+    {
+      "scope": "staged_storage.some.child",
+      "name": "fragmentBound",
+      "type": "FragmentBound middle.counter fragment",
+      "used": true
+    },
+    {
+      "scope": "staged_storage.some.child",
+      "name": "middleGrows",
+      "type": "before.counter ≤ middle.counter",
+      "used": true
+    },
+    {
+      "scope": "staged_storage.some.IH",
+      "name": "afterStorage",
+      "type": "StorageValid after",
+      "used": true
+    },
+    {
+      "scope": "staged_storage.some.IH",
+      "name": "tailBounds",
+      "type": "(match tailResult with | none => True | some fragments => FragmentsBound after.counter fragments)",
+      "used": true
+    },
+    {
+      "scope": "staged_storage.some.IH",
+      "name": "afterGrows",
+      "type": "middle.counter ≤ after.counter",
+      "used": true
+    },
+    {
+      "scope": "edge_storage.some.projection",
+      "name": "tries",
+      "type": "List EqualityTrie.Trie",
+      "used": true
+    },
+    {
+      "scope": "edge_storage.some.projection",
+      "name": "residual",
+      "type": "Option Constraint",
+      "used": true
+    },
+    {
+      "scope": "edge_storage.some.children",
+      "name": "childrenResult",
+      "type": "Option (List (Fragments.Fragment Symbol))",
+      "used": true
+    },
+    {
+      "scope": "edge_storage.some.children",
+      "name": "childrenAfter",
+      "type": "EnumerationState.State Symbol Constraint",
+      "used": true
+    },
+    {
+      "scope": "edge_storage.some.children",
+      "name": "childrenSuccess",
+      "type": "Success (SourcePruningEnumerationEdgeTraversal.runStaged (inputs.map (fun input => (input.1, input.2, SourcePruningEnumerationShallowChild.prepareChild (EnumGuard := Constraint) input.2 input.1)))) (suspendedState tries.length before) childrenResult childrenAfter",
+      "used": true
+    },
+    {
+      "scope": "edge_storage.some.children",
+      "name": "continued",
+      "type": "Success (match childrenResult with | none => (pure none : EnumerateM Symbol Constraint (Option (Fragments.Fragment Symbol))) | some fragments => EnumerationSchedule.recordResidual residual (.node edge.entry.key.symbol fragments) >>= fun _ => pure (some (.node edge.entry.key.symbol fragments))) childrenAfter result after",
+      "used": true
+    },
+    {
+      "scope": "edge_storage.some.staged",
+      "name": "childrenStorage",
+      "type": "StorageValid childrenAfter",
+      "used": true
+    },
+    {
+      "scope": "edge_storage.some.staged",
+      "name": "childrenBounds",
+      "type": "(match childrenResult with | none => True | some fragments => FragmentsBound childrenAfter.counter fragments)",
+      "used": true
+    },
+    {
+      "scope": "edge_storage.some.staged",
+      "name": "childrenGrows",
+      "type": "(suspendedState tries.length before).counter ≤ childrenAfter.counter",
+      "used": true
+    },
+    {
+      "scope": "edge_storage.none.pure",
+      "name": "resultSame",
+      "type": "result = none",
+      "used": true
+    },
+    {
+      "scope": "edge_storage.none.pure",
+      "name": "afterSame",
+      "type": "after = childrenAfter",
+      "used": true
+    },
+    {
+      "scope": "complete.ordinary",
+      "name": "branchRows",
+      "type": "List (List (Except EnumerationState.Error (Option (Option (Fragments.Fragment Symbol)) × EnumerationState.State Symbol Constraint)))",
+      "used": true
+    },
+    {
+      "scope": "complete.ordinary",
+      "name": "related",
+      "type": "Language.All₂ (fun edge rows => if arityAllows edge.children.length scs then match SourcePruningEnumerationConstraint.project edge.entry.key.constraint with | none => rows = [.ok (none, before)] | some _ => ∃ (action : EnumerateM Symbol Constraint (Option (Fragments.Fragment Symbol))) (result : Option (Fragments.Fragment Symbol)) (after : EnumerationState.State Symbol Constraint), SourcePruningEnumerationEdgeTraversal.prepare scs edge = some action ∧ Success action before result after ∧ rows = [.ok (some result, after)] ∧ after.counter = after.values.length ∧ SourcePruningEnumerationObservation.PendingRealized heap after else rows = []) selectedEdges branchRows",
+      "used": true,
+      "exact_type_source": "The unchanged if/arity/project relation in OrdinaryBranches.run_complete lines37–49; expanded literal stored separately in relation-types.json."
+    },
+    {
+      "scope": "complete.ordinary",
+      "name": "raw",
+      "type": "SourcePruningEnumerationOrdinaryBranches.run scs selectedEdges before = branchRows.flatten",
+      "used": true
+    },
+    {
+      "scope": "complete.some.action",
+      "name": "action",
+      "type": "EnumerateM Symbol Constraint (Option (Fragments.Fragment Symbol))",
+      "used": true
+    },
+    {
+      "scope": "complete.some.action",
+      "name": "result",
+      "type": "Option (Fragments.Fragment Symbol)",
+      "used": true
+    },
+    {
+      "scope": "complete.some.action",
+      "name": "after",
+      "type": "EnumerationState.State Symbol Constraint",
+      "used": true
+    },
+    {
+      "scope": "complete.some.action",
+      "name": "prepared",
+      "type": "SourcePruningEnumerationEdgeTraversal.prepare scs edge = some action",
+      "used": true
+    },
+    {
+      "scope": "complete.some.action",
+      "name": "observed",
+      "type": "Success action before result after",
+      "used": true
+    },
+    {
+      "scope": "complete.some.action",
+      "name": "rawRow",
+      "type": "rows = [.ok (some result, after)]",
+      "used": true
+    },
+    {
+      "scope": "complete.some.action",
+      "name": "aligned",
+      "type": "after.counter = after.values.length",
+      "used": true
+    },
+    {
+      "scope": "complete.some.action",
+      "name": "realized",
+      "type": "SourcePruningEnumerationObservation.PendingRealized heap after",
+      "used": true
+    },
+    {
+      "scope": "complete.some.storage",
+      "name": "afterStorage",
+      "type": "StorageValid after",
+      "used": true
+    },
+    {
+      "scope": "complete.some.storage",
+      "name": "resultBound",
+      "type": "(match result with | none => True | some fragment => FragmentBound after.counter fragment)",
+      "used": true
+    },
+    {
+      "scope": "complete.some.storage",
+      "name": "grows",
+      "type": "before.counter ≤ after.counter",
+      "used": true
+    },
+    {
+      "scope": "edge_storage.some.staged.bound",
+      "name": "indexed",
+      "type": "InternedConstructorTemplates.Value Symbol Constraint × Nat",
+      "used": true
+    },
+    {
+      "scope": "edge_storage.some.staged.bound",
+      "name": "_indexedMember",
+      "type": "indexed ∈ edge.children.zipIdx",
+      "used": false,
+      "reason": "Index membership is needed only to obtain the mapped pair; the bound holds for every index.",
+      "Root_authored_binding": "_indexedMember"
+    },
+    {
+      "scope": "edge_storage.some.staged.bound",
+      "name": "inputSame",
+      "type": "(indexed.1, descendScs indexed.2 scs ++ descendScs indexed.2 (suspendedVars before.counter tries)) = input",
+      "used": true,
+      "Root_authored_binding": "rfl"
+    },
+    {
+      "scope": "child_storage.value.reference",
+      "name": "name",
+      "type": "InternedBinderProtocol.Reference",
+      "used": false,
+      "Root_authored_binding": "_name"
+    },
+    {
+      "scope": "child_storage.value.node",
+      "name": "entry",
+      "type": "Cache.Interned InternedBinderProtocol.NodeKey",
+      "used": true
+    },
+    {
+      "scope": "child_storage.value.node",
+      "name": "edges",
+      "type": "List (InternedConstructorTemplates.EdgeValue Symbol Constraint)",
+      "used": false,
+      "Root_authored_binding": "_edges"
+    },
+    {
+      "scope": "child_storage.value.node",
+      "name": "depth",
+      "type": "Nat",
+      "used": false,
+      "Root_authored_binding": "_depth"
+    },
+    {
+      "scope": "child_storage.value.node",
+      "name": "free",
+      "type": "List InternedBinderProtocol.Reference",
+      "used": false,
+      "Root_authored_binding": "_free"
+    },
+    {
+      "scope": "child_storage.value.union",
+      "name": "entry",
+      "type": "Cache.Interned InternedBinderProtocol.NodeKey",
+      "used": true
+    },
+    {
+      "scope": "child_storage.value.union",
+      "name": "members",
+      "type": "List (InternedConstructorTemplates.Value Symbol Constraint)",
+      "used": false,
+      "Root_authored_binding": "_members"
+    },
+    {
+      "scope": "child_storage.value.union",
+      "name": "depth",
+      "type": "Nat",
+      "used": false,
+      "Root_authored_binding": "_depth"
+    },
+    {
+      "scope": "child_storage.value.union",
+      "name": "free",
+      "type": "List InternedBinderProtocol.Reference",
+      "used": false,
+      "Root_authored_binding": "_free"
+    },
+    {
+      "scope": "child_storage.value.mu",
+      "name": "entry",
+      "type": "Cache.Interned InternedBinderProtocol.NodeKey",
+      "used": true
+    },
+    {
+      "scope": "child_storage.value.mu",
+      "name": "body",
+      "type": "InternedConstructorTemplates.Value Symbol Constraint",
+      "used": false,
+      "Root_authored_binding": "_body"
+    },
+    {
+      "scope": "child_storage.value.mu",
+      "name": "depthShape",
+      "type": "InternedConstructorTemplates.Value Symbol Constraint",
+      "used": false,
+      "Root_authored_binding": "_depthShape"
+    },
+    {
+      "scope": "child_storage.value.mu",
+      "name": "ordinaryShape",
+      "type": "InternedConstructorTemplates.Value Symbol Constraint",
+      "used": false,
+      "Root_authored_binding": "_ordinaryShape"
+    },
+    {
+      "scope": "child_storage.node.terminal.true",
+      "name": "terminal",
+      "type": "scs.any (fun sc => EqualityTrie.isTerminal sc.trie) = true",
+      "used": true
+    },
+    {
+      "scope": "child_storage.node.terminal.false",
+      "name": "terminal",
+      "type": "¬ (scs.any (fun sc => EqualityTrie.isTerminal sc.trie) = true)",
+      "used": true
+    },
+    {
+      "scope": "child_storage.union.terminal.true",
+      "name": "terminal",
+      "type": "scs.any (fun sc => EqualityTrie.isTerminal sc.trie) = true",
+      "used": true
+    },
+    {
+      "scope": "child_storage.union.terminal.false",
+      "name": "terminal",
+      "type": "¬ (scs.any (fun sc => EqualityTrie.isTerminal sc.trie) = true)",
+      "used": true
+    },
+    {
+      "scope": "child_storage.mu.terminal.true",
+      "name": "terminal",
+      "type": "scs.any (fun sc => EqualityTrie.isTerminal sc.trie) = true",
+      "used": true
+    },
+    {
+      "scope": "child_storage.mu.terminal.false",
+      "name": "terminal",
+      "type": "¬ (scs.any (fun sc => EqualityTrie.isTerminal sc.trie) = true)",
+      "used": true
+    },
+    {
+      "scope": "staged_storage.preparedChild.none",
+      "name": "preparedChild",
+      "type": "SourcePruningEnumerationShallowChild.prepareChild (EnumGuard := Constraint) bucket value = none",
+      "used": true
+    },
+    {
+      "scope": "staged_storage.preparedChild.some",
+      "name": "childAction",
+      "type": "EnumerateM Symbol Constraint (Fragments.Fragment Symbol)",
+      "used": true
+    },
+    {
+      "scope": "staged_storage.preparedChild.some",
+      "name": "preparedChild",
+      "type": "SourcePruningEnumerationShallowChild.prepareChild (EnumGuard := Constraint) bucket value = some childAction",
+      "used": true
+    },
+    {
+      "scope": "staged_storage.tailResult.some",
+      "name": "fragments",
+      "type": "List (Fragments.Fragment Symbol)",
+      "used": true
+    },
+    {
+      "scope": "edge_storage.allowed.true",
+      "name": "allowed",
+      "type": "arityAllows edge.children.length scs = true",
+      "used": true
+    },
+    {
+      "scope": "edge_storage.allowed.false",
+      "name": "allowed",
+      "type": "¬ (arityAllows edge.children.length scs = true)",
+      "used": true
+    },
+    {
+      "scope": "edge_storage.projected.none",
+      "name": "projected",
+      "type": "SourcePruningEnumerationConstraint.project edge.entry.key.constraint = none",
+      "used": true
+    },
+    {
+      "scope": "edge_storage.projected.some",
+      "name": "pair",
+      "type": "List EqualityTrie.Trie × Option Constraint",
+      "used": true
+    },
+    {
+      "scope": "edge_storage.projected.some",
+      "name": "projected",
+      "type": "SourcePruningEnumerationConstraint.project edge.entry.key.constraint = some pair",
+      "used": true
+    },
+    {
+      "scope": "complete.allowed.true",
+      "name": "allowed",
+      "type": "arityAllows edge.children.length scs = true",
+      "used": true
+    },
+    {
+      "scope": "complete.allowed.false",
+      "name": "allowed",
+      "type": "¬ (arityAllows edge.children.length scs = true)",
+      "used": true
+    },
+    {
+      "scope": "complete.projected.none",
+      "name": "projected",
+      "type": "SourcePruningEnumerationConstraint.project edge.entry.key.constraint = none",
+      "used": true
+    },
+    {
+      "scope": "complete.projected.some",
+      "name": "pair",
+      "type": "List EqualityTrie.Trie × Option Constraint",
+      "used": false,
+      "Root_authored_binding": "_pair",
+      "reason": "The relation does not inspect its payload."
+    },
+    {
+      "scope": "complete.projected.some",
+      "name": "projected",
+      "type": "SourcePruningEnumerationConstraint.project edge.entry.key.constraint = some pair",
+      "used": true
+    },
+    {
+      "scope": "edge_storage.childrenResult.some",
+      "name": "fragments",
+      "type": "List (Fragments.Fragment Symbol)",
+      "used": true
+    },
+    {
+      "scope": "edge_storage.residual.some",
+      "name": "guard",
+      "type": "Constraint",
+      "used": true
+    },
+    {
+      "scope": "edge_storage.bound.append.inherited",
+      "name": "inherited",
+      "type": "sc ∈ descendScs indexed.2 scs",
+      "used": true
+    },
+    {
+      "scope": "edge_storage.bound.append.own",
+      "name": "ownMember",
+      "type": "sc ∈ descendScs indexed.2 (suspendedVars before.counter tries)",
+      "used": true
+    },
+    {
+      "scope": "staged_storage.induction.cons",
+      "name": "input",
+      "type": "InternedConstructorTemplates.Value Symbol Constraint × List EnumerationState.Suspended",
+      "used": true
+    },
+    {
+      "scope": "staged_storage.induction.cons",
+      "name": "rest",
+      "type": "List (InternedConstructorTemplates.Value Symbol Constraint × List EnumerationState.Suspended)",
+      "used": true
+    },
+    {
+      "scope": "staged_storage.induction.cons",
+      "name": "ih",
+      "type": "∀ (before after : EnumerationState.State Symbol Constraint) (result : Option (List (Fragments.Fragment Symbol))), StorageValid before → (∀ input ∈ rest, ∀ sc ∈ input.2, sc.var < before.counter) → Success (SourcePruningEnumerationEdgeTraversal.runStaged (rest.map (fun input => (input.1, input.2, SourcePruningEnumerationShallowChild.prepareChild (EnumGuard := Constraint) input.2 input.1)))) before result after → StorageValid after ∧ (match result with | none => True | some fragments => FragmentsBound after.counter fragments) ∧ before.counter ≤ after.counter",
+      "used": true
+    },
+    {
+      "scope": "staged_storage.IH",
+      "name": "before",
+      "type": "EnumerationState.State Symbol Constraint",
+      "used": true
+    },
+    {
+      "scope": "staged_storage.IH",
+      "name": "after",
+      "type": "EnumerationState.State Symbol Constraint",
+      "used": true
+    },
+    {
+      "scope": "staged_storage.IH",
+      "name": "result",
+      "type": "Option (List (Fragments.Fragment Symbol))",
+      "used": true
+    },
+    {
+      "scope": "staged_storage.IH",
+      "name": "storage",
+      "type": "StorageValid before",
+      "used": true
+    },
+    {
+      "scope": "staged_storage.IH",
+      "name": "bounded",
+      "type": "∀ input ∈ rest, ∀ sc ∈ input.2, sc.var < before.counter",
+      "used": true
+    },
+    {
+      "scope": "staged_storage.IH",
+      "name": "observed",
+      "type": "Success (SourcePruningEnumerationEdgeTraversal.runStaged (rest.map (fun input => (input.1, input.2, SourcePruningEnumerationShallowChild.prepareChild (EnumGuard := Constraint) input.2 input.1)))) before result after",
+      "used": true
+    },
+    {
+      "scope": "child_storage.node",
+      "name": "nodeShape",
+      "type": "fragment = .hole before.counter ∧\n      after = {allocated (some (entry.identity + 1)) before with\n        values := (allocated (some (entry.identity + 1)) before).values.set before.counter\n          (.unenumerated (some (entry.identity + 1)) scs)}",
+      "used": true
+    },
+    {
+      "scope": "child_storage.union",
+      "name": "unionShape",
+      "type": "fragment = .hole before.counter ∧\n      after = allocated (some (entry.identity + 1)) before",
+      "used": true
+    },
+    {
+      "scope": "child_storage.mu",
+      "name": "muShape",
+      "type": "fragment = .hole before.counter ∧\n      after = allocated (some (entry.identity + 1)) before",
+      "used": true
+    },
+    {
+      "scope": "edge_storage.some",
+      "name": "stagedSame",
+      "type": "inputs.map (fun input =>\n        (input.1, input.2, SourcePruningEnumerationShallowChild.prepareChild\n          (EnumGuard := Constraint) input.2 input.1)) =\n        edge.children.zipIdx.map (fun indexed =>\n          (indexed.1, descendScs indexed.2 scs ++ descendScs indexed.2 (suspendedVars before.counter tries),\n            SourcePruningEnumerationShallowChild.prepareChild (EnumGuard := Constraint)\n              (descendScs indexed.2 scs ++ descendScs indexed.2 (suspendedVars before.counter tries)) indexed.1))",
+      "used": true
+    },
+    {
+      "scope": "edge_storage.some",
+      "name": "prefixExact",
+      "type": "(tries.mapM suspend >>= fun own =>\n        pure (edge.entry.key.symbol,\n          edge.children.zipIdx.map (fun indexed =>\n            (indexed.1, descendScs indexed.2 scs ++ descendScs indexed.2 own,\n              SourcePruningEnumerationShallowChild.prepareChild (EnumGuard := Constraint)\n                (descendScs indexed.2 scs ++ descendScs indexed.2 own) indexed.1)), residual)) before =\n        [.ok ((edge.entry.key.symbol,\n          edge.children.zipIdx.map (fun indexed =>\n            (indexed.1, descendScs indexed.2 scs ++ descendScs indexed.2 (suspendedVars before.counter tries),\n              SourcePruningEnumerationShallowChild.prepareChild (EnumGuard := Constraint)\n                (descendScs indexed.2 scs ++ descendScs indexed.2 (suspendedVars before.counter tries)) indexed.1)), residual),\n          suspendedState tries.length before)]",
+      "used": true
+    },
+    {
+      "scope": "edge_storage.childrenResult.some",
+      "name": "returned",
+      "type": "result = some (.node edge.entry.key.symbol fragments) ∧\n          after = (match residual with\n            | none => childrenAfter\n            | some guard => {childrenAfter with obligations :=\n                (guard, .node edge.entry.key.symbol fragments) :: childrenAfter.obligations})",
+      "used": true
+    },
+    {
+      "scope": "edge_storage.some",
+      "name": "inputs",
+      "type": "List (InternedConstructorTemplates.Value Symbol Constraint × List EnumerationState.Suspended)",
+      "used": true
+    },
+    {
+      "scope": "staged_storage.observed.map",
+      "name": "input",
+      "type": "InternedConstructorTemplates.Value Symbol Constraint × List EnumerationState.Suspended",
+      "used": true
+    },
+    {
+      "scope": "staged_storage.some.mapped",
+      "name": "tailResult",
+      "type": "Option (List (Fragments.Fragment Symbol))",
+      "used": true
+    },
+    {
+      "scope": "staged_storage.some.mapped",
+      "name": "tail",
+      "type": "List (Fragments.Fragment Symbol)",
+      "used": true
+    },
+    {
+      "scope": "staged_storage.some.child.bound",
+      "name": "sc",
+      "type": "EnumerationState.Suspended",
+      "used": true
+    },
+    {
+      "scope": "staged_storage.some.child.bound",
+      "name": "member",
+      "type": "sc ∈ bucket",
+      "used": true
+    },
+    {
+      "scope": "staged_storage.some.tail.bound",
+      "name": "input",
+      "type": "InternedConstructorTemplates.Value Symbol Constraint × List EnumerationState.Suspended",
+      "used": true
+    },
+    {
+      "scope": "staged_storage.some.tail.bound",
+      "name": "member",
+      "type": "input ∈ rest",
+      "used": true
+    },
+    {
+      "scope": "staged_storage.some.tail.bound",
+      "name": "sc",
+      "type": "EnumerationState.Suspended",
+      "used": true
+    },
+    {
+      "scope": "staged_storage.some.tail.bound",
+      "name": "scMember",
+      "type": "sc ∈ input.2",
+      "used": true
+    },
+    {
+      "scope": "edge_storage.inputs.initializer",
+      "name": "indexed",
+      "type": "InternedConstructorTemplates.Value Symbol Constraint × Nat",
+      "used": true
+    },
+    {
+      "scope": "edge_storage.stagedSame.map",
+      "name": "input",
+      "type": "InternedConstructorTemplates.Value Symbol Constraint × List EnumerationState.Suspended",
+      "used": true
+    },
+    {
+      "scope": "edge_storage.stagedSame.zip",
+      "name": "indexed",
+      "type": "InternedConstructorTemplates.Value Symbol Constraint × Nat",
+      "used": true
+    },
+    {
+      "scope": "edge_storage.prefixExact",
+      "name": "own",
+      "type": "List EnumerationState.Suspended",
+      "used": true
+    },
+    {
+      "scope": "edge_storage.prefixExact.first",
+      "name": "indexed",
+      "type": "InternedConstructorTemplates.Value Symbol Constraint × Nat",
+      "used": true
+    },
+    {
+      "scope": "edge_storage.prefixExact.last",
+      "name": "indexed",
+      "type": "InternedConstructorTemplates.Value Symbol Constraint × Nat",
+      "used": true
+    },
+    {
+      "scope": "edge_storage.some.staged.bound",
+      "name": "input",
+      "type": "InternedConstructorTemplates.Value Symbol Constraint × List EnumerationState.Suspended",
+      "used": true
+    },
+    {
+      "scope": "edge_storage.some.staged.bound",
+      "name": "member",
+      "type": "input ∈ inputs",
+      "used": true
+    },
+    {
+      "scope": "edge_storage.some.staged.bound",
+      "name": "sc",
+      "type": "EnumerationState.Suspended",
+      "used": true
+    },
+    {
+      "scope": "edge_storage.some.staged.bound",
+      "name": "scMember",
+      "type": "sc ∈ input.2",
+      "used": true
+    },
+    {
+      "scope": "complete.All2.imp",
+      "name": "edge",
+      "type": "InternedConstructorTemplates.EdgeValue Symbol Constraint",
+      "used": true
+    },
+    {
+      "scope": "complete.All2.imp",
+      "name": "rows",
+      "type": "List (Except EnumerationState.Error (Option (Option (Fragments.Fragment Symbol)) × EnumerationState.State Symbol Constraint))",
+      "used": true
+    },
+    {
+      "scope": "complete.All2.imp",
+      "name": "row",
+      "type": "if arityAllows edge.children.length scs then match SourcePruningEnumerationConstraint.project edge.entry.key.constraint with | none => rows = [.ok (none, before)] | some _ => ∃ (action : EnumerateM Symbol Constraint (Option (Fragments.Fragment Symbol))) (result : Option (Fragments.Fragment Symbol)) (after : EnumerationState.State Symbol Constraint), SourcePruningEnumerationEdgeTraversal.prepare scs edge = some action ∧ Success action before result after ∧ rows = [.ok (some result, after)] ∧ after.counter = after.values.length ∧ SourcePruningEnumerationObservation.PendingRealized heap after else rows = []",
+      "used": true
+    },
+    {
+      "scope": "complete.present",
+      "name": "fragment",
+      "type": "Fragments.Fragment Symbol",
+      "used": true
+    },
+    {
+      "scope": "complete.present",
+      "name": "same",
+      "type": "result = some fragment",
+      "used": true
+    },
+    {
+      "scope": "edge_storage.children.continuation",
+      "name": "ignored",
+      "type": "Unit",
+      "used": false,
+      "Root_authored_binding": "_",
+      "reason": "recordResidual Unit result is discarded."
+    },
+    {
+      "scope": "storageMonadList.pure",
+      "name": "α",
+      "type": "Type u",
+      "used": true,
+      "binding_kind": "implicit method parameter; metadata label"
+    },
+    {
+      "scope": "storageMonadList.pure",
+      "name": "value",
+      "type": "α",
+      "used": true
+    },
+    {
+      "scope": "storageMonadList.bind",
+      "name": "α",
+      "type": "Type u",
+      "used": true,
+      "binding_kind": "implicit method parameter; metadata label"
+    },
+    {
+      "scope": "storageMonadList.bind",
+      "name": "β",
+      "type": "Type u",
+      "used": true,
+      "binding_kind": "implicit method parameter; metadata label"
+    },
+    {
+      "scope": "storageMonadList.bind",
+      "name": "values",
+      "type": "List α",
+      "used": true
+    },
+    {
+      "scope": "storageMonadList.bind",
+      "name": "continuation",
+      "type": "α → List β",
+      "used": true
+    },
+    {
+      "scope": "staged_storage.IH.bounded",
+      "name": "input",
+      "type": "InternedConstructorTemplates.Value Symbol Constraint × List EnumerationState.Suspended",
+      "used": true,
+      "binding_kind": "nested IH bounded-bucket parameters"
+    },
+    {
+      "scope": "staged_storage.IH.bounded",
+      "name": "inputMember",
+      "type": "input ∈ rest",
+      "used": true,
+      "binding_kind": "nested IH bounded-bucket parameters"
+    },
+    {
+      "scope": "staged_storage.IH.bounded",
+      "name": "sc",
+      "type": "EnumerationState.Suspended",
+      "used": true,
+      "binding_kind": "nested IH bounded-bucket parameters"
+    },
+    {
+      "scope": "staged_storage.IH.bounded",
+      "name": "member",
+      "type": "sc ∈ input.2",
+      "used": true,
+      "binding_kind": "nested IH bounded-bucket parameters"
+    },
+    {
+      "scope": "staged_storage.public.result.match.some",
+      "name": "fragments",
+      "type": "List (Fragments.Fragment Symbol)",
+      "used": true,
+      "binding_kind": "public result match payload; distinct from staged tail proof-case payload"
+    },
+    {
+      "scope": "edge_storage.public.result.match.some",
+      "name": "fragment",
+      "type": "Fragments.Fragment Symbol",
+      "used": true,
+      "binding_kind": "public result match payload; distinct from final present-fragment implication"
+    },
+    {
+      "scope": "staged_storage.IH.result.match.some",
+      "name": "fragments",
+      "type": "List (Fragments.Fragment Symbol)",
+      "used": true,
+      "binding_kind": "result match payload in full generalized IH; distinct from IH bounded-input parameters"
+    }
+  ],
+  "count": 203,
+  "manual_inventory": true,
+  "named_arguments_are_not_binders": true,
+  "no_regex_binder_inference": true,
+  "coverage": "All public binders/forall/relation scopes, all producer/inline fields, finite constructor/Bool/Option/append cases, one full IH, six have types/one prooflet and its metadata initializer, all planned callback/lambda/intro/instance method parameters. Existing parameter specializations are represented by case fields and literal have scopes; no unlisted helper."
+}

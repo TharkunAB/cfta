@@ -1,0 +1,6 @@
+
+@[simp, grind ←] theorem not_mem_nil {a : α} : ¬ a ∈ [] := nofun
+
+@[simp, grind =] theorem mem_cons : a ∈ b :: l ↔ a = b ∨ a ∈ l :=
+  ⟨fun h => by cases h <;> simp [Membership.mem, *],
+   fun | Or.inl rfl => by constructor | Or.inr h => by constructor; assumption⟩

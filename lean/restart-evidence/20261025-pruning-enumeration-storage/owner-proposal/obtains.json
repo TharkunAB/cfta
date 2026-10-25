@@ -1,0 +1,405 @@
+{
+  "packets": [
+    {
+      "scope": "staged_storage.cons.input",
+      "api": "Prod destructuring input",
+      "fields": [
+        {
+          "name": "value",
+          "type": "InternedConstructorTemplates.Value Symbol Constraint",
+          "used": true
+        },
+        {
+          "name": "bucket",
+          "type": "List EnumerationState.Suspended",
+          "used": true
+        }
+      ],
+      "skipped_fields": []
+    },
+    {
+      "scope": "staged_storage.nil.pure",
+      "api": "success_pure (some []) result before after",
+      "fields": [
+        {
+          "name": "resultSame",
+          "type": "result = some []",
+          "used": true
+        },
+        {
+          "name": "afterSame",
+          "type": "after = before",
+          "used": true
+        }
+      ],
+      "skipped_fields": []
+    },
+    {
+      "scope": "staged_storage.none.pure",
+      "api": "success_pure none result before after",
+      "fields": [
+        {
+          "name": "resultSame",
+          "type": "result = none",
+          "used": true
+        },
+        {
+          "name": "afterSame",
+          "type": "after = before",
+          "used": true
+        }
+      ],
+      "skipped_fields": []
+    },
+    {
+      "scope": "staged_storage.some.head",
+      "api": "success_bind childAction continuation before result after",
+      "fields": [
+        {
+          "name": "fragment",
+          "type": "Fragments.Fragment Symbol",
+          "used": true
+        },
+        {
+          "name": "middle",
+          "type": "EnumerationState.State Symbol Constraint",
+          "used": true
+        },
+        {
+          "name": "headSuccess",
+          "type": "Success childAction before fragment middle",
+          "used": true
+        },
+        {
+          "name": "tailBindSuccess",
+          "type": "Success (SourcePruningEnumerationEdgeTraversal.runStaged (rest.map (fun input => (input.1, input.2, SourcePruningEnumerationShallowChild.prepareChild (EnumGuard := Constraint) input.2 input.1))) >>= fun tailResult => pure (tailResult.map (fun tail => fragment :: tail))) middle result after",
+          "used": true
+        }
+      ],
+      "skipped_fields": []
+    },
+    {
+      "scope": "staged_storage.some.tail",
+      "api": "success_bind (runStaged capturedRest) mapped continuation",
+      "fields": [
+        {
+          "name": "tailResult",
+          "type": "Option (List (Fragments.Fragment Symbol))",
+          "used": true
+        },
+        {
+          "name": "last",
+          "type": "EnumerationState.State Symbol Constraint",
+          "used": true
+        },
+        {
+          "name": "tailSuccess",
+          "type": "Success (SourcePruningEnumerationEdgeTraversal.runStaged (rest.map (fun input => (input.1, input.2, SourcePruningEnumerationShallowChild.prepareChild (EnumGuard := Constraint) input.2 input.1)))) middle tailResult last",
+          "used": true
+        },
+        {
+          "name": "mappedSuccess",
+          "type": "Success (pure (tailResult.map (fun tail => fragment :: tail))) last result after",
+          "used": true
+        }
+      ],
+      "skipped_fields": []
+    },
+    {
+      "scope": "staged_storage.some.pure",
+      "api": "success_pure _ result last after",
+      "fields": [
+        {
+          "name": "resultSame",
+          "type": "result = tailResult.map (fun tail => fragment :: tail)",
+          "used": true
+        },
+        {
+          "name": "afterSame",
+          "type": "after = last",
+          "used": true
+        }
+      ],
+      "skipped_fields": []
+    },
+    {
+      "scope": "staged_storage.some.child",
+      "api": "child_storage bucket value childAction before middle fragment storage boundedHead preparedChild headSuccess",
+      "fields": [
+        {
+          "name": "middleStorage",
+          "type": "StorageValid middle",
+          "used": true
+        },
+        {
+          "name": "fragmentBound",
+          "type": "FragmentBound middle.counter fragment",
+          "used": true
+        },
+        {
+          "name": "middleGrows",
+          "type": "before.counter ≤ middle.counter",
+          "used": true
+        }
+      ],
+      "skipped_fields": []
+    },
+    {
+      "scope": "staged_storage.some.IH",
+      "api": "IH at actual middle/after/tailResult after subst last",
+      "fields": [
+        {
+          "name": "afterStorage",
+          "type": "StorageValid after",
+          "used": true
+        },
+        {
+          "name": "tailBounds",
+          "type": "(match tailResult with | none => True | some fragments => FragmentsBound after.counter fragments)",
+          "used": true
+        },
+        {
+          "name": "afterGrows",
+          "type": "middle.counter ≤ after.counter",
+          "used": true
+        }
+      ],
+      "skipped_fields": []
+    },
+    {
+      "scope": "edge_storage.some.projection",
+      "api": "Prod destructuring project pair",
+      "fields": [
+        {
+          "name": "tries",
+          "type": "List EqualityTrie.Trie",
+          "used": true
+        },
+        {
+          "name": "residual",
+          "type": "Option Constraint",
+          "used": true
+        }
+      ],
+      "skipped_fields": []
+    },
+    {
+      "scope": "edge_storage.some.children",
+      "api": "success_bind actual runStaged continuation at suspendedState",
+      "fields": [
+        {
+          "name": "childrenResult",
+          "type": "Option (List (Fragments.Fragment Symbol))",
+          "used": true
+        },
+        {
+          "name": "childrenAfter",
+          "type": "EnumerationState.State Symbol Constraint",
+          "used": true
+        },
+        {
+          "name": "childrenSuccess",
+          "type": "Success (SourcePruningEnumerationEdgeTraversal.runStaged (inputs.map (fun input => (input.1, input.2, SourcePruningEnumerationShallowChild.prepareChild (EnumGuard := Constraint) input.2 input.1)))) (suspendedState tries.length before) childrenResult childrenAfter",
+          "used": true
+        },
+        {
+          "name": "continued",
+          "type": "Success (match childrenResult with | none => (pure none : EnumerateM Symbol Constraint (Option (Fragments.Fragment Symbol))) | some fragments => EnumerationSchedule.recordResidual residual (.node edge.entry.key.symbol fragments) >>= fun _ => pure (some (.node edge.entry.key.symbol fragments))) childrenAfter result after",
+          "used": true
+        }
+      ],
+      "skipped_fields": []
+    },
+    {
+      "scope": "edge_storage.some.staged",
+      "api": "staged_storage inputs (suspendedState tries.length before) childrenAfter childrenResult with derived bounds",
+      "fields": [
+        {
+          "name": "childrenStorage",
+          "type": "StorageValid childrenAfter",
+          "used": true
+        },
+        {
+          "name": "childrenBounds",
+          "type": "(match childrenResult with | none => True | some fragments => FragmentsBound childrenAfter.counter fragments)",
+          "used": true
+        },
+        {
+          "name": "childrenGrows",
+          "type": "(suspendedState tries.length before).counter ≤ childrenAfter.counter",
+          "used": true
+        }
+      ],
+      "skipped_fields": []
+    },
+    {
+      "scope": "edge_storage.none.pure",
+      "api": "success_pure none result childrenAfter after",
+      "fields": [
+        {
+          "name": "resultSame",
+          "type": "result = none",
+          "used": true
+        },
+        {
+          "name": "afterSame",
+          "type": "after = childrenAfter",
+          "used": true
+        }
+      ],
+      "skipped_fields": []
+    },
+    {
+      "scope": "complete.ordinary",
+      "api": "SourcePruningEnumerationOrdinaryBranches.run_complete scs heap entry storedEdges selectedEdges depth free ready parentAvailable parentClosed selected before realized storage.aligned",
+      "fields": [
+        {
+          "name": "branchRows",
+          "type": "List (List (Except EnumerationState.Error (Option (Option (Fragments.Fragment Symbol)) × EnumerationState.State Symbol Constraint)))",
+          "used": true
+        },
+        {
+          "name": "related",
+          "type": "Language.All₂ (fun edge rows => if arityAllows edge.children.length scs then match SourcePruningEnumerationConstraint.project edge.entry.key.constraint with | none => rows = [.ok (none, before)] | some _ => ∃ (action : EnumerateM Symbol Constraint (Option (Fragments.Fragment Symbol))) (result : Option (Fragments.Fragment Symbol)) (after : EnumerationState.State Symbol Constraint), SourcePruningEnumerationEdgeTraversal.prepare scs edge = some action ∧ Success action before result after ∧ rows = [.ok (some result, after)] ∧ after.counter = after.values.length ∧ SourcePruningEnumerationObservation.PendingRealized heap after else rows = []) selectedEdges branchRows",
+          "used": true
+        },
+        {
+          "name": "raw",
+          "type": "SourcePruningEnumerationOrdinaryBranches.run scs selectedEdges before = branchRows.flatten",
+          "used": true
+        }
+      ],
+      "skipped_fields": []
+    },
+    {
+      "scope": "complete.some.action",
+      "api": "Eliminate original actual All₂ row packet after allowed/projected simplification",
+      "fields": [
+        {
+          "name": "action",
+          "type": "EnumerateM Symbol Constraint (Option (Fragments.Fragment Symbol))",
+          "used": true
+        },
+        {
+          "name": "result",
+          "type": "Option (Fragments.Fragment Symbol)",
+          "used": true
+        },
+        {
+          "name": "after",
+          "type": "EnumerationState.State Symbol Constraint",
+          "used": true
+        },
+        {
+          "name": "prepared",
+          "type": "SourcePruningEnumerationEdgeTraversal.prepare scs edge = some action",
+          "used": true
+        },
+        {
+          "name": "observed",
+          "type": "Success action before result after",
+          "used": true
+        },
+        {
+          "name": "rawRow",
+          "type": "rows = [.ok (some result, after)]",
+          "used": true
+        },
+        {
+          "name": "aligned",
+          "type": "after.counter = after.values.length",
+          "used": true
+        },
+        {
+          "name": "realized",
+          "type": "SourcePruningEnumerationObservation.PendingRealized heap after",
+          "used": true
+        }
+      ],
+      "skipped_fields": []
+    },
+    {
+      "scope": "complete.some.storage",
+      "api": "edge_storage scs edge action before after result storage bounded prepared observed",
+      "fields": [
+        {
+          "name": "afterStorage",
+          "type": "StorageValid after",
+          "used": true
+        },
+        {
+          "name": "resultBound",
+          "type": "(match result with | none => True | some fragment => FragmentBound after.counter fragment)",
+          "used": true
+        },
+        {
+          "name": "grows",
+          "type": "before.counter ≤ after.counter",
+          "used": true
+        }
+      ],
+      "skipped_fields": []
+    }
+  ],
+  "count": 15,
+  "field_count": 47,
+  "inline_eliminations": [
+    {
+      "scope": "edge_storage.some.staged.bound",
+      "api": "List.mem_map.mp member; witness equality consumed as rfl",
+      "fields": [
+        {
+          "name": "indexed",
+          "type": "InternedConstructorTemplates.Value Symbol Constraint × Nat",
+          "used": true
+        },
+        {
+          "name": "_indexedMember",
+          "type": "indexed ∈ edge.children.zipIdx",
+          "used": false,
+          "reason": "Index membership is needed only to obtain the mapped pair; the bound holds for every index.",
+          "Root_authored_binding": "_indexedMember"
+        },
+        {
+          "name": "inputSame",
+          "type": "(indexed.1, descendScs indexed.2 scs ++ descendScs indexed.2 (suspendedVars before.counter tries)) = input",
+          "used": true,
+          "Root_authored_binding": "rfl"
+        }
+      ],
+      "skipped_fields": [
+        "_indexedMember"
+      ]
+    }
+  ],
+  "inline_field_count": 3,
+  "shape_eliminations": [
+    {
+      "scope": "child_storage.node",
+      "have": "nodeShape",
+      "patterns": [
+        "rfl",
+        "rfl"
+      ],
+      "new_binders": []
+    },
+    {
+      "scope": "child_storage.union",
+      "have": "unionShape",
+      "patterns": [
+        "rfl",
+        "rfl"
+      ],
+      "new_binders": []
+    },
+    {
+      "scope": "child_storage.mu",
+      "have": "muShape",
+      "patterns": [
+        "rfl",
+        "rfl"
+      ],
+      "new_binders": []
+    }
+  ]
+}

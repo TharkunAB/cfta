@@ -1,0 +1,13 @@
+import MicroCFTA.SourcePruningEnumerationStorage
+
+set_option pp.deepTerms true
+set_option pp.maxSteps 1000000
+
+#check @MicroCFTA.SourcePruningEnumerationStorage.child_storage
+#print axioms MicroCFTA.SourcePruningEnumerationStorage.child_storage
+#check @MicroCFTA.SourcePruningEnumerationStorage.staged_storage
+#print axioms MicroCFTA.SourcePruningEnumerationStorage.staged_storage
+#check @MicroCFTA.SourcePruningEnumerationStorage.edge_storage
+#print axioms MicroCFTA.SourcePruningEnumerationStorage.edge_storage
+#check @MicroCFTA.SourcePruningEnumerationStorage.complete
+#print axioms MicroCFTA.SourcePruningEnumerationStorage.complete

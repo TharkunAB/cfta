@@ -1,0 +1,15 @@
+/-- The actual captured child list preserves storage through its completed prefix. -/
+theorem staged_storage
+    (inputs : List (InternedConstructorTemplates.Value Symbol Constraint ×
+      List EnumerationState.Suspended))
+    (before after : EnumerationState.State Symbol Constraint)
+    (result : Option (List (Fragments.Fragment Symbol)))
+    (storage : StorageValid before)
+    (bounded : ∀ input ∈ inputs, ∀ sc ∈ input.2, sc.var < before.counter)
+    (observed : Success (SourcePruningEnumerationEdgeTraversal.runStaged
+      (inputs.map (fun input =>
+        (input.1, input.2, SourcePruningEnumerationShallowChild.prepareChild
+          (EnumGuard := Constraint) input.2 input.1)))) before result after) :
+    StorageValid after ∧
+      (match result with | none => True | some fragments => FragmentsBound after.counter fragments) ∧
+      before.counter ≤ after.counter

@@ -1,0 +1,11 @@
+def allocate (node : Option Nat) : EnumerateM Symbol Guard Nat := do
+  let state ← get
+  let uv := state.counter
+  set {state with counter := uv + 1, values := state.values ++ [UVarValue.unenumerated node []]}
+  inheritAncestry uv
+  pure uv
+
+/-- A new equality class starts with a pure equality variable. -/
+def suspend (trie : EqualityTrie.Trie) : EnumerateM Symbol Guard Suspended := do
+  pure ⟨trie, ← allocate none⟩
+

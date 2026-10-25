@@ -1,0 +1,34 @@
+        SourcePruningEnumerationEdgePrefix.prepare, allowed, projected] at prepared
+    | some pair =>
+      obtain ⟨tries, residual⟩ := pair
+      simp only [SourcePruningEnumerationEdgeTraversal.prepare,
+        SourcePruningEnumerationEdgePrefix.prepare, allowed, ↓reduceIte,
+        projected, Option.some.injEq] at prepared
+      subst action
+      let inputs : List (InternedConstructorTemplates.Value Symbol Constraint × List EnumerationState.Suspended) :=
+        edge.children.zipIdx.map (fun indexed =>
+          (indexed.1, descendScs indexed.2 scs ++ descendScs indexed.2 (suspendedVars before.counter tries)))
+      have stagedSame : inputs.map (fun input =>
+        (input.1, input.2, SourcePruningEnumerationShallowChild.prepareChild
+          (EnumGuard := Constraint) input.2 input.1)) =
+        edge.children.zipIdx.map (fun indexed =>
+          (indexed.1, descendScs indexed.2 scs ++ descendScs indexed.2 (suspendedVars before.counter tries),
+            SourcePruningEnumerationShallowChild.prepareChild (EnumGuard := Constraint)
+              (descendScs indexed.2 scs ++ descendScs indexed.2 (suspendedVars before.counter tries)) indexed.1)) := by
+        simp only [inputs, List.map_map]
+        rfl
+      have prefixExact : (tries.mapM suspend >>= fun own =>
+        pure (edge.entry.key.symbol,
+          edge.children.zipIdx.map (fun indexed =>
+            (indexed.1, descendScs indexed.2 scs ++ descendScs indexed.2 own,
+              SourcePruningEnumerationShallowChild.prepareChild (EnumGuard := Constraint)
+                (descendScs indexed.2 scs ++ descendScs indexed.2 own) indexed.1)), residual)) before =
+        [.ok ((edge.entry.key.symbol,
+          edge.children.zipIdx.map (fun indexed =>
+            (indexed.1, descendScs indexed.2 scs ++ descendScs indexed.2 (suspendedVars before.counter tries),
+              SourcePruningEnumerationShallowChild.prepareChild (EnumGuard := Constraint)
+                (descendScs indexed.2 scs ++ descendScs indexed.2 (suspendedVars before.counter tries)) indexed.1)), residual),
+          suspendedState tries.length before)] := by
+        rw [bind_single _ _ _ _ _ (suspendMany_exact tries before)]
+        rfl
+      unfold Success at observed

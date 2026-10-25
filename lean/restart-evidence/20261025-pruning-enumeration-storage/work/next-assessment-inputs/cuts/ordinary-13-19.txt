@@ -1,0 +1,7 @@
+noncomputable def run (scs : List EnumerationState.Suspended)
+    (selectedEdges : List (InternedConstructorTemplates.EdgeValue Symbol Constraint)) :
+    EnumerateM Symbol Constraint (Option (Option (Fragments.Fragment Symbol))) :=
+  choose selectedEdges >>= fun edge =>
+    match SourcePruningEnumerationEdgeTraversal.prepare scs edge with
+    | none => pure none
+    | some action => action >>= fun result => pure (some result)

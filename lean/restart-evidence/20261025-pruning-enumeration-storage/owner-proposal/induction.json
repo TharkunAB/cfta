@@ -1,0 +1,27 @@
+{
+  "induction_count": 1,
+  "IH_count": 1,
+  "inductions": [
+    {
+      "scope": "staged_storage",
+      "syntax": "induction inputs generalizing before after result with",
+      "cases": [
+        "nil",
+        "cons input rest ih"
+      ],
+      "generalized": [
+        "before",
+        "after",
+        "result"
+      ],
+      "dependent_premises": [
+        "storage",
+        "bounded",
+        "observed"
+      ],
+      "IH": "∀ (before after : EnumerationState.State Symbol Constraint) (result : Option (List (Fragments.Fragment Symbol))), StorageValid before → (∀ input ∈ rest, ∀ sc ∈ input.2, sc.var < before.counter) → Success (SourcePruningEnumerationEdgeTraversal.runStaged (rest.map (fun input => (input.1, input.2, SourcePruningEnumerationShallowChild.prepareChild (EnumGuard := Constraint) input.2 input.1)))) before result after → StorageValid after ∧ (match result with | none => True | some fragments => FragmentsBound after.counter fragments) ∧ before.counter ≤ after.counter",
+      "fixed": []
+    }
+  ],
+  "no_second_ordered_list_induction": true
+}

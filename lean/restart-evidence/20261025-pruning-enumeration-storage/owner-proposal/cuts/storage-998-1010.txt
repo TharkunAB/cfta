@@ -1,0 +1,13 @@
+theorem guard_storage (state : State Symbol Guard) (valid : StorageValid state)
+    (guard : Guard) (fragment : Fragment Symbol) (bounded : FragmentBound state.counter fragment) :
+    StorageValid {state with obligations := (guard, fragment) :: state.obligations} := by
+  refine ⟨valid.aligned, valid.total, valid.forest, valid.values, ?_⟩
+  intro obligation member
+  rcases List.mem_cons.mp member with same | old
+  · simpa [same] using bounded
+  · exact valid.guards obligation old
+
+/-- A pure result leaves the complete state unchanged. -/
+theorem success_pure (value result : α) (before after : State Symbol Guard) :
+    Success (pure value) before result after ↔ result = value ∧ after = before := by
+  simp [Success, pure, StateT.pure, ExceptT.pure, ExceptT.mk, ExceptT.run, eq_comm]

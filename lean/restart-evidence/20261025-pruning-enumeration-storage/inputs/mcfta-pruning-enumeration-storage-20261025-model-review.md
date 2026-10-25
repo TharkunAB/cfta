@@ -1,0 +1,25 @@
+[2026-10-25 02:30:54 CET] FINAL independent source/model review: CLEAR.
+
+I read all300 lines of the actual Root-authored source, the unchanged13 literal contracts, the original200 scoped entries and the separate three-row overlay. The effective inventory has203 entries. The source has four public theorems, six typed local haves, one proof let, one structural staged induction and one local List Monad. The pure/bind fields and all mathematical bodies are Root's work. I authored the declaration metadata and this independent static review. I did not modify the proof or run a compiler, candidate, prepared script, Git, network or board operation.
+
+The actual source is300 lines/17703 bytes, within the selected220–380 soft range and hard520 cap. Its SHA-256 is `f10a2602610641a45941b24a4e31fe815db4adb94cd41235ca5013eb158c3030`. The retained strict-1 input has the same identity. The actual strict report records exit0 and a literally empty raw log. This is Root's execution evidence, not an independent compiler run by me. There is no failed mathematical attempt or limit increase to disclose for this source.
+
+`child_storage` analyzes all five concrete Value constructors. Empty cannot supply the assumed successful observation; reference and terminal live branches cannot supply a prepared action. For each supported live constructor, the proof inverts the actual allocation singleton. The ordinary node then writes the full inherited suspended constraints into that fresh slot. Its bounds follow from the genuine initial constraint bound and the new counter. Union and Mu retain the actual allocation-only update. The resulting hole names the old counter and is below the reached counter. No native-handle availability or arbitrary resident invariant is assumed.
+
+The staged induction generalizes the actual before/after/result. It uses the real captured prepareChild action at each position. A missing head returns none at that position's input state. A present head runs before the recursive tail. The proof transports tail bucket bounds through the actual head counter increase, and raises the earlier fragment bound to the tail's returned counter. Inner none therefore retains the completed-prefix storage; it does not preflight, rerun or invent a final full-child state. The result match makes no fragment claim for none.
+
+`edge_storage` preserves the actual arity-before-projection order. It identifies the single own-equality suspension traversal using suspendMany_exact and the frozen prefixExact type. Descended inherited and own constraints are bounded at that actual suspension endpoint. The staged result supplies the child endpoint directly. None records no residual. Some fragments produce the actual node fragment; a present residual changes only obligations and is justified by guard_storage at the same endpoint. Rejection and missing preparation cannot be converted into successful observations.
+
+The public `complete` calls OrdinaryBranches.run_complete exactly once. Its Success witnesses are derived in that packet, not required from the caller. All₂.imp strengthens the SAME rows and leaves the original flatten equality intact. Every edge alternative starts at the same before. Ordered duplicates remain. False arity stays raw[], projection absence stays outer none at before, and child unsupportedness stays inner none at its reached state. Alignment and all pending realization remain those of the original producer. Initial StorageValid and the explicit inherited-scs bound are essential genuine inputs; later callers can derive the latter from their same pending-slot equation and StorageValid.values.
+
+All planned15 named obtain packets/47 fields and inline3 fields correlate with the source. Anonymous constructor payloads, the projection payload and the unused map-membership witness agree with their declared unused status. Conjunction eliminations by rfl introduce no extra named scope. No used/unused amendment is needed. There is no new helper, action, carrier, predicate, Lawful instance or Graph premise.
+
+This proves storage/fragment admission for the existing ordinary branch body. It does not establish native cached-index updates, canonical selector extraction, future resource admission, wrapper composition or the full native driver. H6 remains strongest and the whole goal remains ACTIVE.
+
+Bound controls and evidence:
+
+- Original owner FROZEN: `618acf2419f382928aab5b597441e3df4d00f2944608bd8bebef460b0e219cab`; pins: `1d7297031eaef9cb95ec5969ee96f937214c3bd81ab6148ae24028bab139748e`.
+- Three-row overlay FROZEN: `8638cd56fbfa31e317668c4252963628b774645d3c2f5f838f6e3e129a29db37`; effective scopes: `d54087908eb326e1841d04a9b3f74fa6d860ef1ad7ada7222c95e5f32a2b560d`.
+- Independent declaration review: `e32907e02e3d2a23e61e6464d4ca63054a0d0b45a793838dfe7434f11fe42e55`.
+- Root body gate: `e1076d9bef558ab03c95c58df8aa676d879e8fd17f81adaf110029daf94a2d55`.
+- Actual strict-1 report: `35c969ec8b6829fd1b8bbbd8dc757aa5626a2020ce0c5546c4d27cd0e8f833bb`; empty raw: `e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855`.

@@ -1,0 +1,39 @@
+/-- Derive storage and fragment admission for the complete ordered ordinary branch stream. -/
+theorem complete
+    (scs : List EnumerationState.Suspended)
+    (heap : InternedConstructorTemplates.State Symbol Constraint)
+    (entry : Cache.Interned InternedBinderProtocol.NodeKey)
+    (storedEdges selectedEdges : List (InternedConstructorTemplates.EdgeValue Symbol Constraint))
+    (depth : Nat) (free : List InternedBinderProtocol.Reference)
+    (ready : SourceEqualityRequiredCache.Ready heap)
+    (parentAvailable : InternedProbeProvenance.Available heap (.node entry storedEdges depth free))
+    (parentClosed : free = [])
+    (selected : ∀ edge ∈ selectedEdges, edge ∈ storedEdges)
+    (before : EnumerationState.State Symbol Constraint)
+    (realized : SourcePruningEnumerationObservation.PendingRealized heap before)
+    (storage : StorageValid before)
+    (bounded : ∀ sc ∈ scs, sc.var < before.counter) :
+    ∃ branchRows : List (List (Except EnumerationState.Error
+        (Option (Option (Fragments.Fragment Symbol)) × EnumerationState.State Symbol Constraint))),
+      Language.All₂ (fun edge rows =>
+        if arityAllows edge.children.length scs then
+          match SourcePruningEnumerationConstraint.project edge.entry.key.constraint with
+          | none => rows = [.ok (none, before)]
+          | some _ =>
+              ∃ (action : EnumerateM Symbol Constraint (Option (Fragments.Fragment Symbol)))
+                (result : Option (Fragments.Fragment Symbol))
+                (after : EnumerationState.State Symbol Constraint),
+                SourcePruningEnumerationEdgeTraversal.prepare scs edge = some action ∧
+                Success action before result after ∧ rows = [.ok (some result, after)] ∧
+                after.counter = after.values.length ∧
+                SourcePruningEnumerationObservation.PendingRealized heap after
+        else rows = []) selectedEdges branchRows ∧
+      SourcePruningEnumerationOrdinaryBranches.run scs selectedEdges before = branchRows.flatten ∧
+      ∀ (result : Option (Option (Fragments.Fragment Symbol)))
+        (after : EnumerationState.State Symbol Constraint),
+        Except.ok (result, after) ∈ branchRows.flatten →
+          StorageValid after ∧
+            (match result with
+              | some (some fragment) => FragmentBound after.counter fragment
+              | _ => True) ∧
+            before.counter ≤ after.counter

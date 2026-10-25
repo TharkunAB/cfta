@@ -1,0 +1,11 @@
+--- pre-custody-and-backup-bind/candidate/archive.py
++++ candidate/archive.py
+@@ -11,7 +11,7 @@
+ assert not evidence.exists()
+ custody = json.loads((area / 'prior-custody-index.json').read_text())
+ assert len(custody) == 26 and len({pin['target'] for pin in custody}) == 26
+-assert hashlib.sha256((area / 'prior-custody-index.json').read_bytes()).hexdigest() == 'CUSTODY_INDEX_SHA_PENDING'
++assert hashlib.sha256((area / 'prior-custody-index.json').read_bytes()).hexdigest() == '98f6324694af7eb1752c1354d2d384f9aeba0f78bc18cb815322d1abe8beeb2a'
+ summary = json.loads((area / 'previous-publication/post-publication-summary.json').read_text())
+ assert [pin['source'] for pin in custody] == summary['next_custody_inputs']
+ for pin in custody:

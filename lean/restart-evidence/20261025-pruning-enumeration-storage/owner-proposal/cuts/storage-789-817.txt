@@ -1,0 +1,29 @@
+
+mutual
+theorem fragmentBound_mono (low high : Nat) (increase : low ≤ high) (fragment : Fragment Symbol)
+    (bounded : FragmentBound low fragment) : FragmentBound high fragment := by
+  cases fragment with
+  | hole uv => exact Nat.lt_of_lt_of_le bounded increase
+  | node symbol children => exact fragmentsBound_mono low high increase children bounded
+termination_by sizeOf fragment
+
+theorem fragmentsBound_mono (low high : Nat) (increase : low ≤ high) (children : List (Fragment Symbol))
+    (bounded : FragmentsBound low children) : FragmentsBound high children := by
+  cases children with
+  | nil => trivial
+  | cons child rest => exact ⟨fragmentBound_mono low high increase child bounded.1,
+      fragmentsBound_mono low high increase rest bounded.2⟩
+termination_by sizeOf children
+end
+
+theorem slotBound_mono (low high : Nat) (increase : low ≤ high) (value : UVarValue Symbol)
+    (bounded : SlotBound low value) : SlotBound high value := by
+  cases value with
+  | eliminated => trivial
+  | enumerated fragment => exact fragmentBound_mono low high increase fragment bounded
+  | unenumerated _ scs => exact fun sc member => Nat.lt_of_lt_of_le (bounded sc member) increase
+
+theorem forestBound_mono (low high : Nat) (increase : low ≤ high) (forest : UnionFind.Forest)
+    (bounded : ForestBound low forest) : ForestBound high forest := by
+  intro uv entry stored
+  obtain ⟨address, target⟩ := bounded uv entry stored

@@ -1,0 +1,11 @@
+/-- A rejecting action has no successful branch. -/
+theorem reject_unsuccessful (before after : State Symbol Guard) (value : α) : ¬Success reject before value after := by
+  simp [Success, reject, ExceptT.run]
+
+/-- The residual-recording clause of actual edge enumeration. -/
+def recordResidual (residual : Option Guard) (fragment : Fragment Symbol) : EnumerateM Symbol Guard Unit :=
+  match residual with
+  | none => pure ()
+  | some guard => modify fun state => {state with obligations := (guard, fragment) :: state.obligations}
+
+/-- Residual recording preserves safety when the guarded fragment refers only to allocated variables. -/

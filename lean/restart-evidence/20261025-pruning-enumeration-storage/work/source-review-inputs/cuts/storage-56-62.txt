@@ -1,0 +1,7 @@
+theorem success_bind (action : EnumerateM Symbol Guard α) (next : α → EnumerateM Symbol Guard β)
+    (before : State Symbol Guard) (value : β) (after : State Symbol Guard) :
+    Success (action >>= next) before value after ↔
+      ∃ middle intermediate, Success action before middle intermediate ∧ Success (next middle) intermediate value after := by
+  simp only [Success, run_bind, List.mem_flatMap]
+  constructor
+  · rintro ⟨result, member, continued⟩
