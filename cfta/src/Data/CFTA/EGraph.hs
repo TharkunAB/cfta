@@ -98,6 +98,13 @@ module Data.CFTA.EGraph (
     Report (..),
     saturate,
     saturateUntilEqual,
+
+    -- * Analyses and conditions in a saturation
+    Analysis (..),
+    Condition,
+    saturateWith,
+    eClasses,
+    eNodesOf,
 ) where
 
 import Control.Monad (foldM)
@@ -347,32 +354,42 @@ data. The join must be associative, commutative, and idempotent, and must
 have no infinite ascending chain, so that the fixed point exists.
 -}
 analyse :: (Eq d) => (f -> [d] -> d) -> (d -> d -> d) -> EGraph s f -> ClassId -> Maybe d
-analyse make join g = \c -> let ClassId i = find g c in IntMap.lookup i final
+analyse make join g = \c -> let ClassId i = find g c in IntMap.lookup i (fst (analyseFrom make join g IntMap.empty (IntMap.keys (classes g))))
+
+{- | The fixed point of an analysis from a table of the data of e-classes and
+a worklist of the e-classes whose data can change, and the e-classes whose
+data changed. Each e-class gets the join of the data of its e-nodes whose
+children have data, and of its earlier data; a change sends its users to the
+worklist.
+-}
+analyseFrom ::
+    (Eq d) => (f -> [d] -> d) -> (d -> d -> d) -> EGraph s f -> IntMap.IntMap d -> [Int] -> (IntMap.IntMap d, IntSet.IntSet)
+analyseFrom make join g = go IntSet.empty
   where
-    final =
-        go
-            (IntMap.keys (IntMap.filter (any (\(ENode _ _ cs) -> null cs) . HashSet.toList . classNodes) (classes g)))
-            IntMap.empty
-    -- A worklist of e-classes whose data can grow.
-    go [] known = known
-    go (i : rest) known = case IntMap.lookup i (classes g) of
-        Nothing -> go rest known
+    go changed known [] = (known, changed)
+    go changed known (i0 : rest) = case IntMap.lookup i (classes g) of
+        Nothing -> go changed known rest
         Just e ->
             let values =
                     [ make f ds
-                    | ENode _ f cs <- canonicalNodes' e
-                    , Just ds <- [traverse (\(ClassId j) -> IntMap.lookup j known) (map (find g) cs)]
+                    | ENode _ f cs <- HashSet.toList (classNodes e)
+                    , Just ds <- [traverse (\c -> let ClassId j = find g c in IntMap.lookup j known) cs]
                     ]
              in case values of
-                    [] -> go rest known
+                    [] -> go changed known rest
                     v : vs ->
                         let new = foldl' join v vs
                             old = IntMap.lookup i known
                             new' = maybe new (join new) old
                          in if Just new' == old
-                                then go rest known
-                                else go ([j | (_, owner) <- classUsers e, let { ClassId j = find g owner }] ++ rest) (IntMap.insert i new' known)
-    canonicalNodes' = HashSet.toList . classNodes
+                                then go changed known rest
+                                else
+                                    go
+                                        (IntSet.insert i changed)
+                                        (IntMap.insert i new' known)
+                                        ([j | (_, owner) <- classUsers e, let { ClassId j = find g owner }] ++ rest)
+      where
+        ClassId i = find g (ClassId i0)
 
 {- | The cheapest term of an e-class, with its cost. The cost of a term
 comes from its symbol and the costs of its children, and must be greater
@@ -735,6 +752,43 @@ data Report = Report {reportIterations :: !Int, reportNodes :: !Int, reportStop 
 saturate :: (Hashable s, Hashable f) => Limits -> [Rule s f] -> EGraph s f -> (EGraph s f, Report)
 saturate limits rules = run limits rules Nothing
 
+{- | An e-class analysis for a saturation, as in egg: the data of an e-node
+from its symbol and the data of its children, the join of the data of the
+e-nodes of one e-class, and a leaf that an e-class with some data equals,
+such as the constant that the data is (the constant folding of egg).
+-}
+data Analysis f d = Analysis
+    { analysisMake :: f -> [d] -> d
+    , analysisJoin :: d -> d -> d
+    , analysisLeaf :: d -> Maybe f
+    }
+
+{- | The condition of a rule on a match: the e-graph, the data of each
+e-class, and the e-class of each variable of the rule.
+-}
+type Condition s f d = EGraph s f -> (ClassId -> Maybe d) -> (String -> Maybe ClassId) -> Bool
+
+{- | 'saturate' with an analysis, and a condition for each rule. The data of
+each e-class is the fixed point of 'analyse', kept up to date after each
+iteration from the e-classes that changed, and each e-class with a leaf gets
+it, as hegg does in its rebuild. A condition sees the data at the start of
+the iteration and the e-graph when its match applies. An e-class whose data
+changes counts as changed for the matching of only the changed e-classes, so
+a condition that failed is tried again.
+-}
+saturateWith ::
+    (Hashable s, Hashable f, Eq d) =>
+    Analysis f d -> Limits -> [(Rule s f, Condition s f d)] -> EGraph s f -> (EGraph s f, Report)
+saturateWith analysis limits rules = runWith (Just analysis) limits rules Nothing
+
+-- | The roots of the e-classes.
+eClasses :: EGraph s f -> [ClassId]
+eClasses = map ClassId . IntMap.keys . classes
+
+-- | The canonical e-nodes of an e-class: the symbol and the e-classes of the children of each.
+eNodesOf :: (Hashable f) => EGraph s f -> ClassId -> [(f, [ClassId])]
+eNodesOf g c = let ClassId i = find g c in [(f, cs) | ENode _ f cs <- canonicalNodes g i]
+
 {- | Apply the rules to the e-classes that two e-classes reach, until the two
 e-classes are one, nothing changes, or a limit stops it. This decides
 whether the rules prove an equation within the limits, and its work does
@@ -746,17 +800,57 @@ saturateUntilEqual limits rules a b = run limits rules (Just (a, b))
 
 run ::
     (Hashable s, Hashable f) => Limits -> [Rule s f] -> Maybe (ClassId, ClassId) -> EGraph s f -> (EGraph s f, Report)
-run limits rules goal g0 = go 0 IntMap.empty IntMap.empty IntMap.empty g1
+run limits rules = runWith (Nothing :: Maybe (Analysis f ())) limits [(r, \_ _ _ -> True) | r <- rules]
+
+runWith ::
+    (Hashable s, Hashable f, Eq d) =>
+    Maybe (Analysis f d) ->
+    Limits ->
+    [(Rule s f, Condition s f d)] ->
+    Maybe (ClassId, ClassId) ->
+    EGraph s f ->
+    (EGraph s f, Report)
+runWith analysis limits rules goal g0 = go 0 IntMap.empty IntMap.empty IntMap.empty known0 g1
   where
     -- The changes before the saturation have older stamps than its first iteration.
     g1 = let h = rebuild g0 in h{clock = clock h + 1}
+    known0 =
+        maybe
+            IntMap.empty
+            (\a -> fst (analyseFrom (analysisMake a) (analysisJoin a) g1 IntMap.empty (IntMap.keys (classes g1))))
+            analysis
+    -- After an iteration: update the data from the e-classes that changed,
+    -- give each e-class with a leaf its leaf, and repeat until no leaf is
+    -- new. An e-class whose data changed gets the stamp of the iteration. In
+    -- the first iteration, each e-class of the start can need its leaf.
+    settle first now known h = case analysis of
+        Nothing -> (h, known)
+        Just a ->
+            let fresh = [j | (j, e) <- IntMap.toList (classes h), classStamp e >= now]
+                (known', changed) = analyseFrom (analysisMake a) (analysisJoin a) h known fresh
+                stamped = h{classes = IntSet.foldr (IntMap.adjust (\e -> e{classStamp = now})) (classes h) changed}
+                candidates = if first then IntMap.keys known' else IntSet.toList changed
+                leaves =
+                    [ (ClassId j, leaf)
+                    | j <- candidates
+                    , IntMap.member j (classes stamped)
+                    , Just d <- [IntMap.lookup j known']
+                    , Just leaf <- [analysisLeaf a d]
+                    ]
+                addLeaf (h', grew) (c, leaf) =
+                    let (c', h'') = addNode (ENode (sortId h' c) leaf []) h'
+                     in case union c c' h'' of
+                            Just (u, h''') -> (h''', grew || u || added h'' /= added h')
+                            Nothing -> (h'', grew || added h'' /= added h')
+                (withLeaves, grew') = foldl' addLeaf (stamped, False) leaves
+             in if grew' then settle False now known' (rebuild withLeaves) else (withLeaves, known')
     start = added g0
     size g = added g - start
     reached g = maybe False (uncurry (equivalent g)) goal
     -- ran: the clock at which each rule last ran; entered: the clock
     -- before the one at which each e-class entered the region of a goal, so
     -- that an e-class is new to a rule when it entered after the rule ran.
-    go i bans ran entered g
+    go i bans ran entered known g
         | reached g = (g, Report i (size g) Equal)
         | i >= limitIterations limits = (g, Report i (size g) IterationLimit)
         | size g > limitNodes limits = (g, Report i (size g) NodeLimit)
@@ -774,8 +868,9 @@ run limits rules goal g0 = go 0 IntMap.empty IntMap.empty IntMap.empty g1
                 changedSince t = Map.findWithDefault IntSet.empty t changedSets
                 present = HashSet.fromList [f | ns <- IntMap.elems region, ENode _ f _ <- ns]
                 bySymbol = symbolIndex region
+                dataOf c = let ClassId j = find g c in IntMap.lookup j known
                 -- The ban of a rule, the rule if it ran, and its matches.
-                search (k, r)
+                search (k, (r, condition))
                     | not (all (`HashSet.member` present) (ruleSymbols r)) = (Nothing, Just k, [])
                     | Just (_, until', _) <- IntMap.lookup k bans, i < until' = (Nothing, Nothing, [])
                     | otherwise =
@@ -784,7 +879,7 @@ run limits rules goal g0 = go 0 IntMap.empty IntMap.empty IntMap.empty g1
                             (limit, _, ban) = IntMap.findWithDefault (limitMatches limits, 0, 5) k bans
                          in if limitMatches limits > 0 && length (take (limit + 1) ms) > limit
                                 then (Just (k, (2 * limit, i + ban, 2 * ban)), Nothing, [])
-                                else (Nothing, Just k, [(c, m, r) | (c, m) <- ms])
+                                else (Nothing, Just k, [(c, m, r, condition) | (c, m) <- ms])
                 results = map search (zip [0 :: Int ..] rules)
                 bans' = foldl' (\m (k, e) -> IntMap.insert k e m) bans [e | (Just e, _, _) <- results]
                 ran' = foldl' (\m k -> IntMap.insert k now m) ran [k | (_, Just k, _) <- results]
@@ -792,19 +887,23 @@ run limits rules goal g0 = go 0 IntMap.empty IntMap.empty IntMap.empty g1
                 -- when the e-nodes reach the limit.
                 apply h changed [] = Right (h, changed)
                 apply h changed _ | size h > limitNodes limits = Right (h, changed)
-                apply h changed ((c, m, r) : rest) =
-                    case instantiate m (sortId h c) (ruleRight r) h of
+                apply h changed ((c, m@(Subst vs _), r, condition) : rest)
+                    | not (condition h dataOf (\v -> lookup v (zip (ruleNames r) [0 ..]) >>= (`IntMap.lookup` vs))) = apply h changed rest
+                    | otherwise = case instantiate m (sortId h c) (ruleRight r) h of
                         Nothing -> apply h changed rest
                         Just (c', h') -> case union c c' h' of
                             Nothing -> apply h' changed rest
                             Just (u, h'') -> if u && reached h'' then Left h'' else apply h'' (changed || u) rest
              in case apply g False (concat [ms | (_, _, ms) <- results]) of
-                    Left h -> let h' = rebuild h in (h'{clock = now + 1}, Report (i + 1) (size h') Equal)
+                    Left h ->
+                        let (h', _) = settle (i == 0) now known (rebuild h)
+                         in (h'{clock = now + 1}, Report (i + 1) (size h') Equal)
                     Right (g', changed) ->
-                        let g'' = (rebuild g'){clock = now + 1}
+                        let (settled, known') = settle (i == 0) now known (rebuild g')
+                            g'' = settled{clock = now + 1}
                          in if not changed && size g'' == size g
                                 then (g'', Report (i + 1) (size g'') (if reached g'' then Equal else Saturated))
-                                else go (i + 1) bans' ran' entered' g''
+                                else go (i + 1) bans' ran' entered' known' g''
     sortId h c = let ClassId j = find h c in maybe 0 classSort (IntMap.lookup j (classes h))
 
 -- The states of the e-graph automaton of 'ematchByIntersection'.
