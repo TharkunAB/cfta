@@ -164,6 +164,29 @@ TH/Generic extraction, valid-position build/read and source codec laws stay open
 
 
 
+## Native selected-edge admission and completion
+
+Input admission: `80a2935ca94caf8a99beacc39a3a43be528c2a10`.
+Selected-edge completion: `9c2dae8934c63a26b466d6acb62ebb130cc73425`.
+The goal stays ACTIVE.
+
+Actual own-class preparation now derives admission for the ordered native
+children of a supported selected edge. Conditional numeric ranges derive
+sufficient common bounds. Complete traversal constructs the parent fragment
+and records its residual at the actual result cache. The other admitted
+outcome is the first valid raw-empty child rejection with its exact cache.
+Both outcomes retain caller and index invariants and inherited pending inputs.
+Only complete output retains unconditional Safe. Separate fixed-bound laws
+retain arity rejection, unsupported preparation and every stopped receipt.
+Protection of a separate old root keeps allocation, rootness and inherited
+avoidance premises explicit. No future successful trace is assumed.
+
+Both strict modules, installed readback and Audit pass. The audit checks
+76650 theorem dependencies. Haskell runtime and H6 are unchanged.
+H6 remains the strongest end-to-end result. Next: original captured-slot
+finalization, then ordered alternatives and whole-driver semantics.
+Details: `lean/notes-current-pruning-enumeration-selected-edge.md`.
+
 ## Admitted ordered native child traversal
 
 Child completion: `a8593e70a465299b3f1d2f6bda1320b9b07005f9`.
