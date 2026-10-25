@@ -1,5 +1,57 @@
 # cfta formalization restart handoff
 
+## Native cached raw-row adapter
+
+Current source: `SourcePruningEnumerationCachedAdapter`.
+Proof: `ad444a83399085fad94b37f83bda202018b96c09`. Main remains `74250bd889685da436cdbfe32ac4b5a0878ffd09`.
+The whole goal stays ACTIVE and incomplete. H6 remains strongest.
+
+run obtains original dispatch once, runs a captured action once and keeps
+actual faults/outer None, reached Caller, saved queries and the whole raw
+list. adapt supplies a separate optional cache. Raw [] retains before;
+only an exact singleton checks equal IDs then eliminated original source
+before reading/classifying its actual target slot at the reached heap.
+The actual core/source/target/other flags and unchanged waiting determine
+the cache. Missing target, classifier failure, raw errors or unexpected rows
+keep raw observation without a cache witness. No default false or head pick.
+
+complete derives stable adequate bounds from CachedDispatch.complete once,
+with SAME actual heap/core, exact raw/cache shape, original Post and saved/
+final query equality. Genuine Context/storage/realization/Roots/counts/flags,
+lazy slot domain and current initial WordRanges remain inputs. Raw projection
+is not injective on caches. No successful callback, desired endpoint,
+merged witness, closure inspection or future Fold.Ranges is assumed.
+The full query-language packet remains in the imported original theorem;
+it is not duplicated here. Empty raw rejection can retain enum cache while
+prior Caller/memo effects remain. Outer None and pending None stay distinct.
+
+Two definitions, one theorem, four haves and one definition-local raw let;
+no proof lets, instances, induction, helpers/newtypes/carriers. Nine literals
+contain 95 lines; source estimate 260–420, hard limit 640. Actual source and
+V2 owner/schema controls are bound: 104 payloads, 235 scopes, six packets /
+53 fields, eight cases; 17 whole sources, 24 cuts / 347 lines, 12 routes /
+14 project identities. V2 adds six reader-control aliases only; all 101 V1
+payloads and full V1 controls/history remain exact and separately retained.
+
+Validation: Strict attempt 2 passes with a literal empty log under all linters and warnings as errors. The first failed input and complete 2608-byte raw log remain. Body-only repairs use the existing current conditional lemmas and construct the no-op pair before simplification. A separate source annotation retains the existing standard-library conditional declarations. All nine original literals, 235 scoped type positions, six packets with 53 fields, eight case groups, public types, premises, binders and limits remain unchanged. No helper, instance, monadic dictionary or proof limit is added. The source has 171 ordinary lines, below the selected 260 to 420 estimate and within hard cap 640; no padding was added. The installed build, complete public readback and aggregate Audit pass. All three complete public signatures occupy 137 output lines without display omissions. The older unused-inputs warning remains unchanged. No passing check was repeated. No seal has run. All actual failed inputs, complete raw logs and cap receipts remain. Read-only locators and pre-body metadata normalization stay separate from compiler and seal failures. Original V1 and selected V2 owners and all source-bound drafts remain immutable.
+Installed focused build: 1312 jobs; Audit: 3726 jobs and
+76447 theorem dependency checks. Actual public axioms: adapt reports propext. run and complete each report propext, Classical.choice and Quot.sound.
+Only actual reports bind these fields. The documents-1 ledger stays separate.
+Exactly 26 prior artifacts preserve the full 13618-byte summary and actual
+archive-1/local-publication-1/push-1 families; sealed peer is separate context.
+All 147603 baseline files/modes and nine document inverses remain guarded.
+No future seal/push outcome or Haskell change is asserted.
+
+All six Haskell handoffs stay first. No arbitrary fault cache laws, future
+Fold request admission, terminal/incoming integration, selector/partition/
+fallback, wrappers, physical maps/machine integers, extraction, Safe/LiveRoots
+or full-driver result is claimed. H6 remains strongest: covered closed
+construction with valid cache/allocation history supports prescribed finite
+modeled node calls at derived bounds and the same finite trees for empty
+inherited payload under formal guard/solver semantics. Whole typing/pruning,
+concrete solver, runtime/resources/convergence remain open.
+
+
 ## Native cached dispatcher completion
 
 Current source: `SourcePruningEnumerationCachedDispatch`.
