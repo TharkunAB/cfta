@@ -1,5 +1,68 @@
 # Full formalization coverage
 
+## Native cached terminal completion
+
+Current source: `SourcePruningEnumerationCachedTerminal`.
+Proof: `b00c0e6a3a067f77d35ec4754afab852baffb537`. Main remains `74250bd889685da436cdbfe32ac4b5a0878ffd09`.
+The whole goal stays ACTIVE and incomplete. H6 remains strongest.
+
+One complete theorem composes the actual nonempty terminal prefix, ordered
+cached fold/erasure and completed-branch cached incoming producer. Genuine
+Context/Safe/Roots/counts/flags, InputsPending, storage/realization and
+variable bounds remain. Available closed incoming is nonempty. Explicit
+conditional Fold.Ranges/current incoming WordRanges admit actual requests;
+no desired prefix, future callback success or final cache is supplied.
+
+Recorded representatives retain source order and duplicates. Only waiting-
+transfer keys are ascending distinct nonwinners. Inline existing Cached
+packaging uses unchanged flags, actual moved waiting and mergedRoots. A plain
+frame would retain old waiting. The same cached fold erases to original Fold.
+Rejection stops before incoming with actual reached Caller/query/cache/Post.
+Completed folding supplies the current incoming entry, bounds and ranges.
+Full incoming read/run/write-prefix, Post/query/unfolding, codec, optional
+absence and present-value query/intersection-language receipts remain.
+
+Logical incoming indexes attach to the same after-write heap/core, including
+gained waiting and exact flags. Runtime Terminal.run retains the earlier
+read core and joined moved map. Replacement Empty writes/inherits before
+raw []; the raw list does not itself carry its after-write cache. In the
+admitted incoming domain, Empty has fixed handle 0; returned read data may
+support a partial post-observation adapter without a second query. This
+theorem implements no adapter or correspondence law. A terminal raw [] may
+also be fold rejection; actual stage/branch evidence remains necessary. Incoming Empty stops
+before the prefix and is outside this nonempty theorem. The returned
+winner hole is not the later captured-original-uv-prime wrapper write.
+
+One theorem, eight typed haves, one typed proof let and no induction/new
+runtime definition/action/instance declaration/helper/type/carrier/Graph.
+One existing named terminalMonadList dictionary is activated locally; no
+new dictionary body. Context 21 lines, public head 148; source estimate
+360–600 ordinary lines, hard limit 900.
+Actual source review and the single frozen owner/schema are bound: 169
+payloads / 171 files, 11 strings / 185 lines, 338 scopes, three packets /
+89 fields and four proof cases; 24 whole sources, 46 cuts / 753 lines,
+ten literal import edges and 22 project identities.
+
+Validation: Strict attempt 2 passes with a literal empty log under all linters and warnings as errors. Strict attempt 1 failed on body continuation layout and explicit inline-cache reduction; its full input and raw log remain. Only body proofs changed. All eleven selected strings, 338 typed positions, three packets with 89 fields, four case groups, eight typed haves and one proof let remain unchanged. One existing named Monad List dictionary is activated; no new dictionary body, definition, instance, helper, type or induction was added. The source has 293 ordinary lines, below the selected 360 to 600 estimate and within hard cap 900; no padding was added. The installed build, complete public readback and aggregate Audit pass. The public signature has 502 output lines without display omissions. The older unused-inputs warning remains unchanged. No passing check was repeated. All actual complete inputs, raw logs and cap receipts remain. Seal and push results are recorded separately.
+Installed focused build: 1316 jobs; Audit: 3730 jobs and
+76479 theorem dependency checks. Actual public axioms: complete reports propext, Classical.choice and Quot.sound.
+Only actual reports bind these fields. The documents-1 ledger stays separate.
+Exactly 26 prior inputs preserve the FULL 16218-byte summary and actual
+archive-1/local-publication-1/push-1 families; sealed peer is separate context.
+All 150635 baseline files/modes and nine document inverses remain guarded.
+No future seal/push outcome or Haskell change is asserted.
+
+All six Haskell handoffs remain first. A post-observation adapter and its
+erasure/correspondence, initial-only mixed numeric admission, final Safe/LiveRoots, selector/
+partition/fallback, wrapper normalization/reconstruction, physical maps/
+machine integers, extraction and full driver correspondence remain open.
+H6 stays strongest: covered closed construction with valid cache/allocation
+history supports prescribed finite modeled node calls at derived bounds
+and the same finite trees for empty inherited payload under formal guard/
+solver semantics. Whole typing/pruning, concrete solver, runtime, resources
+and convergence remain open.
+
+
 ## Native cached incoming-node completion
 
 Current source: `SourcePruningEnumerationCachedIncoming`.
