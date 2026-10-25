@@ -99,6 +99,7 @@ module Data.CFTA.EGraph (
 ) where
 
 import Control.Monad (foldM)
+import Data.Containers.ListUtils (nubOrd)
 import qualified Data.HashMap.Strict as HashMap
 import qualified Data.HashSet as HashSet
 import Data.Hashable (Hashable (..))
@@ -403,6 +404,8 @@ data Rule s f = Rule
     {- ^ The symbol of each node of the left side, and the path to it from
     the root: the symbol, the arity, and the child index of each node above it.
     -}
+    , rulePaths :: ![[(f, Int, Int)]]
+    -- ^ The path to each node and each variable of the left side.
     , ruleNames :: ![String]
     -- ^ The variables of the left side, by number.
     }
@@ -423,7 +426,7 @@ rule left right = do
     let (l, vars, sortVars) = compileLeft left
     r <- compileRight vars sortVars right
     let symbols = HashSet.toList (HashSet.fromList (patternSymbols left))
-    pure (Rule l r symbols (anchorsOf l) (map fst (sortOn snd (Map.toList vars))))
+    pure (Rule l r symbols (anchorsOf l) (pathsOf l) (map fst (sortOn snd (Map.toList vars))))
 
 {- | The rules of an equation: the direction from each side whose other side
 has no other variables.
@@ -441,6 +444,12 @@ anchorsOf = go []
   where
     go _ (CVar _ _) = []
     go above (CNode f kids _) = (f, reverse above) : concat [go ((f, length kids, k) : above) kid | (k, kid) <- zip [0 ..] kids]
+
+pathsOf :: CPat s f -> [[(f, Int, Int)]]
+pathsOf = go []
+  where
+    go above (CVar _ _) = [reverse above]
+    go above (CNode f kids _) = reverse above : concat [go ((f, length kids, k) : above) kid | (k, kid) <- zip [0 ..] kids]
 
 -- Compile a left side: the pattern, and the numbers of its variables and sort variables.
 compileLeft :: Pattern s f -> (CPat s f, Map.Map String Int, Map.Map String Int)
@@ -519,9 +528,10 @@ matchRule ::
     HashMap.HashMap f (Int, [ClassId]) ->
     (Int -> Int) ->
     Int ->
+    Maybe IntSet.IntSet ->
     Rule s f ->
     [(ClassId, Subst)]
-matchRule g region bySymbol stampOf since r =
+matchRule g region bySymbol stampOf since changed r =
     [(c, m) | c <- roots, (m, True) <- down (ruleLeft r) c (Subst IntMap.empty IntMap.empty, since == minBound)]
   where
     -- A match is new when it passes an e-class that changed since the rule
@@ -547,12 +557,17 @@ matchRule g region bySymbol stampOf since r =
     sortsFrom (ClassId i) sorts ss = do
         e <- IntMap.lookup i (classes g)
         foldM (\b sp -> matchSort g sp (classSort e) b) ss sorts
+    -- The roots from the rarest symbol, or, when few e-classes changed, the
+    -- roots of the paths up from them: a new match passes a changed e-class.
     roots = case ruleAnchors r of
-        [] -> map ClassId (IntMap.keys region)
+        [] -> maybe (map ClassId (IntMap.keys region)) deltaRoots changed
         anchors ->
             let (f, steps) = minimumBy (comparing (\(h, _) -> maybe 0 fst (HashMap.lookup h bySymbol))) anchors
-                start = IntSet.fromList [i | ClassId i <- maybe [] snd (HashMap.lookup f bySymbol)]
-             in map ClassId (IntSet.toAscList (foldr up start steps))
+                (count, members) = HashMap.lookupDefault (0, []) f bySymbol
+             in case changed of
+                    Just xs | IntSet.size xs * length (rulePaths r) < count -> deltaRoots xs
+                    _ -> map ClassId (IntSet.toAscList (foldr up (IntSet.fromList [i | ClassId i <- members]) steps))
+    deltaRoots xs = map ClassId (IntSet.toAscList (IntSet.unions [foldr up xs steps | steps <- rulePaths r]))
     -- The e-classes with an e-node of the step whose child is in the set.
     up (f, n, k) xs =
         IntSet.fromList
@@ -585,7 +600,7 @@ ematch g p = case rule p p of
     Right r ->
         let region = IntMap.mapWithKey (\i _ -> canonicalNodes g i) (classes g)
          in [ (c, Map.fromList [(v, vs IntMap.! i) | (i, v) <- zip [0 ..] (ruleNames r)])
-            | (c, Subst vs _) <- matchRule g region (symbolIndex region) (const 0) minBound r
+            | (c, Subst vs _) <- matchRule g region (symbolIndex region) (const 0) minBound Nothing r
             ]
 
 {- | Build the right side of a rule for a match, or Nothing when the
@@ -695,6 +710,9 @@ run limits rules goal g0 = go 0 IntMap.empty IntMap.empty IntMap.empty g1
                     Nothing -> entered
                     Just _ -> IntMap.union entered (IntMap.map (const (now - 1)) region)
                 stampOf j = max (maybe 0 classStamp (IntMap.lookup j (classes g))) (IntMap.findWithDefault minBound j entered')
+                -- The e-classes that changed since a clock, once for each clock.
+                changedSets = Map.fromList [(t, IntSet.fromList [j | j <- IntMap.keys region, stampOf j >= t]) | t <- nubOrd (IntMap.elems ran)]
+                changedSince t = Map.findWithDefault IntSet.empty t changedSets
                 present = HashSet.fromList [f | ns <- IntMap.elems region, ENode _ f _ <- ns]
                 bySymbol = symbolIndex region
                 -- The ban of a rule, the rule if it ran, and its matches.
@@ -702,7 +720,8 @@ run limits rules goal g0 = go 0 IntMap.empty IntMap.empty IntMap.empty g1
                     | not (all (`HashSet.member` present) (ruleSymbols r)) = (Nothing, Just k, [])
                     | Just (_, until', _) <- IntMap.lookup k bans, i < until' = (Nothing, Nothing, [])
                     | otherwise =
-                        let ms = matchRule g region bySymbol stampOf (IntMap.findWithDefault minBound k ran) r
+                        let since = IntMap.findWithDefault minBound k ran
+                            ms = matchRule g region bySymbol stampOf since (if since == minBound then Nothing else Just (changedSince since)) r
                             (limit, _, ban) = IntMap.findWithDefault (limitMatches limits, 0, 5) k bans
                          in if limitMatches limits > 0 && length (take (limit + 1) ms) > limit
                                 then (Just (k, (2 * limit, i + ban, 2 * ban)), Nothing, [])
