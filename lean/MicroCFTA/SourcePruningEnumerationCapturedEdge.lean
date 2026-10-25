@@ -81,6 +81,8 @@ theorem complete
       InputsPending after.core scs ∧
       (∀ held, held ≠ uv → held < before.core.counter → IsRoot before.core.representatives held →
         Avoids before.core.representatives held scs → EnumerationDriver.Protected held before.core after.core) ∧
+      (EnumerationReferences.PendingReferences before.core → EnumerationReferences.IncomingAvoid uv before.core →
+        EnumerationReferences.PendingReferences after.core) ∧
       ((∃ fragment, result = .complete fragment afterCaller savedQueries after ∧
           Safe after.core ∧ FragmentBound after.core.counter fragment ∧
           after.core.values[uv]? = some (.enumerated fragment) ∧ after.core.expansionAncestry = [] ∧
@@ -95,7 +97,7 @@ theorem complete
   have avoids := ready.avoids handle scs stored
   obtain ⟨r, n, p, h, k, afterCaller, middle, savedQueries, final, next, afterRoots, edgeResult,
     edgeRun, post, querySame, growth, middlePaths, storage, middleRealized, middleCounts,
-    middleFlags, origin, retained, protects, shape⟩ :=
+    middleFlags, origin, retained, protects, pendingHistory, incomingHistory, shape⟩ :=
     SourcePruningEnumerationSelectedEdge.complete formulas solver inventory caller before checkEmpty
       parentEntry edges depth free edge scs roots memos initial available closed selected ready.safe realized
       paths counts flags bounded pending allowed tries residual projected ranges
@@ -122,7 +124,7 @@ theorem complete
         simpa only [List.getElem?_set_ne (Ne.symm same)] using expanded
     refine ⟨r, n, p, h, k + fuel, afterCaller, after, savedQueries, final, next, afterRoots,
       .complete fragment afterCaller savedQueries after, ?_, post, querySame, ?_, afterPaths,
-      afterStorage, afterRealized, afterCounts, afterFlags, ?_, afterPending, ?_,
+      afterStorage, afterRealized, afterCounts, afterFlags, ?_, afterPending, ?_, ?_,
       .inl ⟨fragment, rfl, afterSafe, ?_, finalStored, ?_, ?_⟩⟩
     · intro er en P H ek largeP largeH
       have selectedRun := edgeRun er en P H (fuel + ek) largeP largeH
@@ -148,6 +150,13 @@ theorem complete
         exact oldFrame.root
       · rw [core]
         exact fun _ => Iff.rfl
+    · intro history incoming
+      have written := EnumerationReferences.setValue_pending uv fragment middle.core
+        {middle.core with values := middle.core.values.set uv (.enumerated fragment)}
+        (pendingHistory history) (incomingHistory uv ready.inside ready.root avoids incoming)
+        ((EnumerationDriver.modify_success _ _ _).mpr rfl)
+      rw [core]
+      exact written
     · rw [core]
       exact fragmentBound
     · rw [core]
@@ -159,6 +168,7 @@ theorem complete
       ?_, post, querySame, growth, middlePaths, storage, middleRealized, middleCounts, middleFlags,
       fun held old _ expanded => origin held old expanded, retained,
       fun held _ inside root separate => protects held inside root separate,
+      (fun history _ => pendingHistory history),
       .inr ⟨fragments, outer, waiting, rfl⟩⟩
     intro er en P H ek largeP largeH
     rw [run, edgeRun er en P H ek largeP largeH]

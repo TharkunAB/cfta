@@ -92,7 +92,7 @@ private theorem head_complete
         rcases pair with ⟨tries, residual⟩
         obtain ⟨r, n, p, h, k, afterCaller, after, saved, final, next, afterRoots, result,
           stable, post, querySame, _growth, afterPaths, storage, afterRealized, afterCounts,
-          afterFlags, _origin, _retained, _protects, shape⟩ :=
+          afterFlags, _origin, _retained, _protects, _pendingHistory, shape⟩ :=
           SourcePruningEnumerationCapturedEdge.complete formulas solver inventory caller before checkEmpty
             uv handle scs parentEntry edges depth free edge roots memos initial ready stored decoded realized
             selected paths counts flags pending allowed tries residual projected ranges
