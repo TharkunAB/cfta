@@ -1,5 +1,28 @@
 # cfta formal model
 
+## Concrete fragment callbacks now have finite completion proofs
+
+Partial rendering and resume: `4880eef42`. Concrete callback: `32ceddf6c`.
+The goal stays ACTIVE.
+
+A safe cache, bounded fragment holes, allocated parked IDs and the existing
+Stratified dependency levels now derive an actual finite Left callback.
+The proof constructs partial rendering and every pending-group read before
+combining results. It retains rejection, idle and empty-catalog branches.
+The returned cache is safe and framed. The actual type-position update and
+unchanged open-hole and typing fields are derived at that same endpoint.
+No successful rendering, resume or callback is an input premise.
+
+All five changed modules pass strict checking. Installed public readback
+and Audit pass. Audit checks 76754 dependencies. H6 remains the strongest
+end-to-end language result. Runtime workers and Haskell stay unchanged.
+Next: preserve bounds for newly returned pending matches, and establish
+Stratified history through native traversal, merges and final writes.
+These inputs are not derived from pending-reference history alone.
+Branch-endpoint callback integration, initial-only capacity, scheduler
+restart, extraction and whole-driver language semantics remain open.
+Details: `lean/notes-current-pruning-enumeration-callback-completion.md`.
+
 ## Original selection reaches admitted ordinary expansion
 
 Per-receipt Caller/memos: `8d8693df7`. Selected composition: `82bfc44ff`.
