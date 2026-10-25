@@ -1,3 +1,5 @@
+import MicroCFTA.SourcePruningEnumerationNarrowCache
+import MicroCFTA.SourcePruningEnumerationReplacement
 import MicroCFTA.SourcePruningEnumerationNativeOrdinary
 import MicroCFTA.SourcePruningEnumerationNativeBranchCompletion
 import MicroCFTA.SourcePruningEnumerationCapturedEdge
