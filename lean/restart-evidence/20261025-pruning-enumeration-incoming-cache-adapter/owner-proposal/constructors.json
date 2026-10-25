@@ -1,0 +1,82 @@
+{
+  "records": [
+    {
+      "scope": "adapt.nil.value",
+      "existing_constructor": "EnumerationState.UVarValue.unenumerated",
+      "fields": [
+        {
+          "name": "node",
+          "type": "Option Nat",
+          "Root_selected_data": "some 0"
+        },
+        {
+          "name": "scs",
+          "type": "List EnumerationState.Suspended",
+          "Root_selected_data": "incomingScs ++ oldScs"
+        }
+      ]
+    },
+    {
+      "scope": "adapt.nil.core",
+      "existing_record": "EnumerationState.State Symbol Constraint",
+      "record_base": "read",
+      "fields": [
+        {
+          "name": "counter",
+          "type": "Nat",
+          "selection": "retained read field"
+        },
+        {
+          "name": "representatives",
+          "type": "UnionFind.Forest",
+          "selection": "retained read field"
+        },
+        {
+          "name": "values",
+          "type": "List (EnumerationState.UVarValue Symbol)",
+          "selection": "set target to the Root-selected value"
+        },
+        {
+          "name": "obligations",
+          "type": "List (Constraint × Fragments.Fragment Symbol)",
+          "selection": "retained read field"
+        },
+        {
+          "name": "recursionAncestry",
+          "type": "Nat → List EnumerationState.RecursionKey",
+          "selection": "actual Incoming inheritance at target; other Nat callback inventoried"
+        },
+        {
+          "name": "expansionAncestry",
+          "type": "List EnumerationState.RecursionKey",
+          "selection": "retained read field"
+        }
+      ]
+    },
+    {
+      "scope": "run.observed",
+      "existing_product": "original Incoming result",
+      "fields": [
+        {
+          "name": "outcome",
+          "type": "Except (SourceEqualityNativeDemand.Outcome width Node ⊕ SourceCurrentAllocatedConjunctionWorker.Outcome width) (Option Raw)"
+        },
+        {
+          "name": "Caller",
+          "type": "Caller width"
+        },
+        {
+          "name": "Queries",
+          "type": "Queries"
+        },
+        {
+          "name": "read",
+          "type": "EnumerationState.State Symbol Constraint"
+        }
+      ]
+    }
+  ],
+  "new_carriers": [],
+  "constructor_or_initializer_bodies_present": false,
+  "body_author": "Root only after gate"
+}

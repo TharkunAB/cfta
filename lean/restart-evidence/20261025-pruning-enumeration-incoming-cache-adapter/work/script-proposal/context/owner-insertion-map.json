@@ -1,0 +1,212 @@
+{
+  "owner": "/tmp/mcfta-pruning-enumeration-incoming-cache-adapter-20261025-proposal",
+  "context": "context.lean",
+  "public_heads": [
+    {
+      "name": "adapt",
+      "kind": "def",
+      "file": "adapt.head",
+      "attachment": "",
+      "proof_opener_already_present": false,
+      "noncomputable": false
+    },
+    {
+      "name": "run",
+      "kind": "def",
+      "file": "run.head",
+      "attachment": "",
+      "proof_opener_already_present": false,
+      "noncomputable": true
+    },
+    {
+      "name": "erase",
+      "kind": "theorem",
+      "file": "erase.head",
+      "attachment": "",
+      "proof_opener_already_present": true,
+      "noncomputable": false
+    },
+    {
+      "name": "complete",
+      "kind": "theorem",
+      "file": "complete.head",
+      "attachment": "",
+      "proof_opener_already_present": true,
+      "noncomputable": false
+    }
+  ],
+  "locals": [
+    {
+      "name": "foundTarget",
+      "kind": "have",
+      "file": "foundTarget.head",
+      "scope": "complete",
+      "first_line_indent": 2,
+      "continuation_bytes": "literal unchanged",
+      "attachment": "",
+      "proof_opener_already_present": true
+    },
+    {
+      "name": "readStored",
+      "kind": "have",
+      "file": "readStored.head",
+      "scope": "complete",
+      "first_line_indent": 2,
+      "continuation_bytes": "literal unchanged",
+      "attachment": "",
+      "proof_opener_already_present": true
+    },
+    {
+      "name": "adapted",
+      "kind": "have",
+      "file": "adapted.head",
+      "scope": "complete",
+      "first_line_indent": 2,
+      "continuation_bytes": "literal unchanged",
+      "attachment": "",
+      "proof_opener_already_present": true
+    },
+    {
+      "name": "handleZero",
+      "kind": "have",
+      "file": "handleZero.head",
+      "scope": "complete.adapted.empty.positive",
+      "first_line_indent": 6,
+      "continuation_bytes": "literal unchanged",
+      "attachment": "",
+      "proof_opener_already_present": true
+    }
+  ],
+  "definition_lets": [
+    {
+      "name": "value",
+      "scope": "adapt.nil",
+      "file": "value.head",
+      "type": "EnumerationState.UVarValue Symbol",
+      "first_line_indent": 8,
+      "initializer_by": "Root only after gate",
+      "selected_data_recipe": {
+        "constructor": "UVarValue.unenumerated",
+        "node": "some model handle0",
+        "suspended": "incomingScs ++ oldScs"
+      }
+    },
+    {
+      "name": "core",
+      "scope": "adapt.nil",
+      "file": "core.head",
+      "type": "EnumerationState.State Symbol Constraint",
+      "first_line_indent": 8,
+      "initializer_by": "Root only after gate",
+      "selected_data_recipe": {
+        "record_base": "read",
+        "values": "read.values.set target value",
+        "recursionAncestry": "exact existing Incoming write/inherit record at target; other : Nat callback inventoried",
+        "other_fields": "retained from read"
+      }
+    },
+    {
+      "name": "observed",
+      "scope": "run",
+      "file": "observed.head",
+      "type": "(Except (SourceEqualityNativeDemand.Outcome width Node ⊕ SourceCurrentAllocatedConjunctionWorker.Outcome width) (Option Raw)) × Caller width × Queries × EnumerationState.State Symbol Constraint",
+      "first_line_indent": 2,
+      "initializer_by": "Root only after gate",
+      "selected_data_recipe": {
+        "function": "SourcePruningEnumerationIncomingNode.run",
+        "arguments": [
+          "checkEmpty",
+          "representativeFuel",
+          "nativeFuel",
+          "p",
+          "h",
+          "beforeCaller",
+          "before.core",
+          "target",
+          "incoming",
+          "incomingScs",
+          "queries"
+        ],
+        "call_count": 1
+      }
+    }
+  ],
+  "proof_lets": [],
+  "local_instances": [],
+  "existing_instance_activations": [
+    {
+      "scope": "context.existing_instance_activation",
+      "name": "SourcePruningEnumerationIncomingNode.incomingNodeMonadList",
+      "type": "Monad List",
+      "used": true,
+      "kind": "existing_instance_activation",
+      "body_lexical": false,
+      "existing_public_constant": true,
+      "new_dictionary_term_or_body": false
+    }
+  ],
+  "compiled_contracts": [
+    {
+      "file": "context.lean",
+      "bytes": 1110,
+      "sha256": "687ebba6c7f998ebb6cc4331e9093f7ab5a9df43ccf6a2ec028c87305c0c59f1"
+    },
+    {
+      "file": "adapt.head",
+      "bytes": 356,
+      "sha256": "1c55c938905bf2050e150fccf73cba77800b068902232f0336b11e7aa70928be"
+    },
+    {
+      "file": "run.head",
+      "bytes": 678,
+      "sha256": "940258baebfffc0b2eb97a1ce7448895153bc8963fe500df42a439673aa16db8"
+    },
+    {
+      "file": "erase.head",
+      "bytes": 678,
+      "sha256": "f4df3806add9055f0339f7661e1168eb381f436064e6599708fdcc1fb0a1e767"
+    },
+    {
+      "file": "complete.head",
+      "bytes": 6615,
+      "sha256": "86d0bc4fd1a876ded174dad7b251cd69878e04c85bdf726ed066bd3bea302032"
+    },
+    {
+      "file": "foundTarget.head",
+      "bytes": 57,
+      "sha256": "110e3337448dcc9820b609e144f4f32130e0f987b44cf6a6ea069cea2a4afe25"
+    },
+    {
+      "file": "readStored.head",
+      "bytes": 85,
+      "sha256": "0f12a846c5575728aef0a178b46b5b42b2f49a50bf6a3cb3afab94ed90347c33"
+    },
+    {
+      "file": "adapted.head",
+      "bytes": 222,
+      "sha256": "aaf2be12c49e94c1cb44d15eeeb1a2a5346302db117ab2c5a47ce8e27c329b5e"
+    },
+    {
+      "file": "handleZero.head",
+      "bytes": 41,
+      "sha256": "383b369e9e2872d42aa93fb57b7d722033efa79ea519b1028fb78a2dd21f1cc9"
+    },
+    {
+      "file": "value.head",
+      "bytes": 57,
+      "sha256": "f84875f10561c06cf43c77402c3bdc82f0f201dcc03e0256c0dd105fd60c6117"
+    },
+    {
+      "file": "core.head",
+      "bytes": 63,
+      "sha256": "d163f0a90a4b479cff91b654a9b354707913e533a4026ffa4ae6005558b4cdf1"
+    },
+    {
+      "file": "observed.head",
+      "bytes": 231,
+      "sha256": "30041a6ff0f93bab0bba9784e2cf8e5beea5cefb3048f7e6e6b1ec0aa9f023a2"
+    }
+  ],
+  "bodies_present": false,
+  "body_author": "Root only after independent reviews and gate"
+}

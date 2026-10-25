@@ -1,0 +1,40 @@
+  obtain ⟨r, n, p, h, oldNode, oldScs, read, afterCore, afterCaller, savedQueries,
+    final, next, replacement, handle, reading, frame, runStable, writePrefix,
+    coreSame, storedAfter, afterStorage, afterRealized, post, querySame, unfolding,
+    replacementAvailable, replacementClosed, encoded, decoded, optional, present⟩ :=
+    SourcePruningEnumerationIncomingNode.run_complete formulas solver inventory
+      beforeCaller before.core checkEmpty target incoming incomingScs memos initial
+      realized storage root pending available closed bounded ranges
+  obtain ⟨found, lookup, oldStored, _readSame⟩ :=
+    (getValue_success r target before.core read (.unenumerated oldNode oldScs)).mp (by
+      unfold Success
+      rw [show ExceptT.run (getValue r target before.core) =
+        [.ok (.unenumerated oldNode oldScs, read)] from
+          by simpa only [Nat.add_zero] using reading 0]
+      exact List.mem_singleton_self _)
+  have foundTarget : found.representative = target := by
+    obtain ⟨rootSize, rootPath⟩ := root
+    exact (UnionFind.reaches_unique
+      (UnionFind.findRoot_correct r before.core.representatives target found lookup).1 rootPath).1
+  have readStored : read.values[target]? = some (.unenumerated oldNode oldScs) := by
+    rw [frame.values, ← foundTarget]
+    exact oldStored
+  have readPaths : Roots read.representatives roots := by
+    intro slot
+    obtain ⟨size, path⟩ := paths slot
+    exact ⟨size, (frame.reaches slot (roots slot) size).mpr path⟩
+  have readCounts : EnumerationCanonicalWaiting.Correct roots read.values before.waiting := by
+    simpa only [frame.values] using counts
+  have readFlags : ∀ (slot : Nat), SourcePruningEnumerationNativeIndex.candidate
+      beforeCaller.checked.native.machine.heap
+      ((read.values[slot]?).getD .eliminated) = some (before.expandable slot) := by
+    simpa only [frame.values] using flags
+  have readAligned : read.counter = read.values.length := by
+    simpa only [SupplyAligned, frame.counter, frame.values] using storage.aligned
+  obtain ⟨k, written, cacheRun, _writtenCore, writtenFlags, writtenWaiting,
+    _framedCore, _afterAligned, afterPaths, afterCounts, afterFlags⟩ :=
+    SourcePruningEnumerationNativeIndex.gained_complete
+      beforeCaller.checked.native.machine.heap afterCaller.checked.native.machine.heap
+      post.effects.keeps (EnumerationExpandableIndex.frame read before) afterCore
+      target oldNode oldScs incomingScs handle replacement roots readPaths readStored
+      decoded readAligned readCounts readFlags writePrefix

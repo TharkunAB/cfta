@@ -1,0 +1,18 @@
+mergeNodeIntoUVarVal ::
+    (Hashable symbol, Typeable symbol) =>
+    UVar -> Node symbol -> Seq SuspendedConstraint -> EnumerateM symbol ()
+mergeNodeIntoUVarVal uv n scs = do
+    uv' <- getUVarRepresentative uv
+    let idx = uvarToInt uv'
+    values <- gets _uvarValues
+    checkEmpty <- gets _constrainedRecursion
+    let new = intersectUVarValue checkEmpty (UVarUnenumerated (Just n) scs) (values IntMap.! idx)
+    -- The slot keeps its suspended constraints and gains these.
+    writeUVarValue scs Sequence.Empty uv' new
+    inheritAncestry idx
+    guard $ not $ hasEmptyContents new
+
+-- | Whether an unenumerated variable has already reduced to the empty node.
+hasEmptyContents :: UVarValue symbol -> Bool
+hasEmptyContents (UVarUnenumerated (Just EmptyNode) _) = True
+hasEmptyContents _ = False

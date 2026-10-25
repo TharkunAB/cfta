@@ -1,0 +1,24 @@
+[2026-10-25 12:10 CET] FINAL CLEAR — independent IncomingCacheAdapter public readback.
+
+I read all 317 actual public output lines/27,846 bytes and the full 211-line/14,203-byte installed source. Public raw SHA256 is c1a7be834185e0b5a0a9e652017a21ebb1185903fc945b601eae5958e9904dc1; report SHA256 is 7bcce19ca33a9ae0212dcd08672824e688c01442302b5cebddb688253969923b. The exact checked public input is bbe1118dcd748feb6dedcc6776cb2a4a33301bac41f09a51d078789440b67b6e. Report/input/raw identities agree and public exit code is zero. All four complete signatures appear once, in selected order, without ellipsis.
+
+Actual axiom sets in MicroCFTA.SourcePruningEnumerationIncomingCacheAdapter are:
+
+- adapt: propext.
+- run: propext, Classical.choice, Quot.sound.
+- erase: propext, Classical.choice, Quot.sound.
+- complete: propext, Classical.choice, Quot.sound.
+
+The final source SHA256 is a0523be08beddc7e84ed4b3d191a1434144c493ec6ba453c452e083cb78e0c05. It equals the successful strict input and production file. All twelve original strings/141 lines occur exactly once. All 233 immutable owner payload pins remain exact; FROZEN is ad03138e60c7828e73f88598db04d361f81464c156e8c1d9f9fef055f59c1d14 and pins are d790d221c578e5e41bbe78b878545672e936535a792f99f34b5953680026558e. Four haves, three definition lets, two definitions/two theorems and one existing named List dictionary activation remain. No selected premise, header, hard700 limit, helper, induction or new instance declaration is introduced. The source is below the estimate without padding or statement weakening.
+
+The public adapt type is computable and uses constructor matches. Raw nil reads the same returned target pending slot and reconstructs model handle0 plus incomingScs/oldScs and the exact ancestry update. Singleton success uses its actual returned core and target payload. Both reuse reached-heap NativeIndex.write with frame read before, gained incomingScs and lost[], mapped through the endpoint frame. Residual raw shapes produce no candidate. The implementation does not require a general State/UVarValue equality instance or invert the noninjective frame map.
+
+run binds one original Incoming observation and retains that exact observation as its first projection. Its cache attachment uses the actual reached heap and read core; it does not repeat the query. erase is unconditional at every fixed representative/native/P/H/index bound and retains the entire original fault/None/raw result, Caller, Queries and read state. This says nothing by itself about the correctness of a candidate outside the admitted domain; that candidate is unverified and need not always be None.
+
+complete invokes the existing CachedIncoming producer once. Its getter/root-path/representative-uniqueness route identifies the precise oldNode/oldScs in the actual read target slot. The positive Empty branch derives handle0 from the same encoded replacement. The negative branch uses afterStored. Both reuse the existing mapped cacheRun receipt. The public result retains full original read/run/write-prefix, Post/query/unfolding, codec, optional absence and present old-value intersection-language semantics, together with exact after cache, counts/waiting, flags, storage, realization and roots. No repeated counting theorem, native primitive, callback success or desired endpoint is added.
+
+Genuine Context, IsRoot/PendingAt, storage/realization, Roots/counts/all-slot flags, available closed input, suspended-variable bounds and current conditional WordRanges remain required for finite completion. Incoming may itself be Empty. Empty rejection follows its certified write/inherit prefix, so the assimilation nil-before-write rule is not used. Whole Terminal nil still needs stage evidence. Handle0 is a model codec convention. This does not complete terminal adapter composition, captured-original-variable installation, extraction or the full driver.
+
+Actual strict-1 passes on its first attempt with literal-empty raw; report SHA256 is f72d9e846a070f999e1adb04fcb509bdd58040e7f436ceb86613d97563c98bd7. Installed-1 passes 1,311 jobs; its 564-byte raw is 94ff73b6b07d8ebfa14afe3549edd1ca1f29510840fd8ff193d796b8574ce570. I also read the now-terminal actual Audit report/raw: exit zero, 3,731 jobs and 76,490 dependency checks; raw616 SHA256 6733699b46498fa78a47e815ff17e994e0591072aadf3d2411b4b4293718b648 and report448209dbd434b99ef6de9c204376ec91139537bf079db9ac390ccd2a4aa7382e. The sole replayed warning is the older InternedFreshOrdinaryClosedCompletion inputs binder. All reported lengths/hashes match retained raw bytes.
+
+This review ran no checks, compiler, selected program, Git or network operation and changed no proof/source/control. It records actual evidence only and infers no seal or push outcome. H6 remains proved and strongest; the whole goal and remaining native/driver boundaries remain open. No blocker was found.

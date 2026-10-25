@@ -1,0 +1,166 @@
+{
+  "groups": [
+    {
+      "scope": "adapt.raw",
+      "kind": "definition_match",
+      "scrutinee": "raw : Raw",
+      "branches": [
+        {
+          "pattern": "[]",
+          "payloads": []
+        },
+        {
+          "pattern": "[.ok ((), returned)]",
+          "payloads": [
+            {
+              "scope": "adapt.raw.singleton",
+              "name": "returned",
+              "type": "EnumerationState.State Symbol Constraint",
+              "used": true,
+              "kind": "match"
+            }
+          ]
+        },
+        {
+          "pattern": "_",
+          "payloads": [
+            {
+              "scope": "adapt.raw.other",
+              "name": "(wildcard raw)",
+              "type": "Raw",
+              "used": false,
+              "kind": "match",
+              "anonymous": true
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "scope": "adapt.nil.readslot",
+      "kind": "definition_match",
+      "scrutinee": "read.values[target]? : Option (EnumerationState.UVarValue Symbol)",
+      "branches": [
+        {
+          "pattern": "some (.unenumerated _oldNode oldScs)",
+          "payloads": [
+            {
+              "scope": "adapt.nil.readslot.pending",
+              "name": "_oldNode",
+              "type": "Option Nat",
+              "used": false,
+              "kind": "match"
+            },
+            {
+              "scope": "adapt.nil.readslot.pending",
+              "name": "oldScs",
+              "type": "List EnumerationState.Suspended",
+              "used": true,
+              "kind": "match"
+            }
+          ]
+        },
+        {
+          "pattern": "_",
+          "payloads": [
+            {
+              "scope": "adapt.nil.readslot.other",
+              "name": "(wildcard raw slot)",
+              "type": "Option (EnumerationState.UVarValue Symbol)",
+              "used": false,
+              "kind": "match",
+              "anonymous": true
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "scope": "run.observed.cache",
+      "kind": "definition_match",
+      "scrutinee": "observed : (Except (SourceEqualityNativeDemand.Outcome width Node ⊕ SourceCurrentAllocatedConjunctionWorker.Outcome width) (Option Raw)) × Caller width × Queries × EnumerationState.State Symbol Constraint",
+      "branches": [
+        {
+          "pattern": "(.ok (some raw), reachedCaller, _savedQueries, read)",
+          "payloads": [
+            {
+              "scope": "run.observed.cache.okSome",
+              "name": "raw",
+              "type": "Raw",
+              "used": true,
+              "kind": "match"
+            },
+            {
+              "scope": "run.observed.cache.okSome",
+              "name": "reachedCaller",
+              "type": "Caller width",
+              "used": true,
+              "kind": "match"
+            },
+            {
+              "scope": "run.observed.cache.okSome",
+              "name": "_savedQueries",
+              "type": "Queries",
+              "used": false,
+              "kind": "match"
+            },
+            {
+              "scope": "run.observed.cache.okSome",
+              "name": "read",
+              "type": "EnumerationState.State Symbol Constraint",
+              "used": true,
+              "kind": "match"
+            }
+          ]
+        },
+        {
+          "pattern": "_",
+          "payloads": [
+            {
+              "scope": "run.observed.cache.other",
+              "name": "(wildcard observed)",
+              "type": "(Except (SourceEqualityNativeDemand.Outcome width Node ⊕ SourceCurrentAllocatedConjunctionWorker.Outcome width) (Option Raw)) × Caller width × Queries × EnumerationState.State Symbol Constraint",
+              "used": false,
+              "kind": "match",
+              "anonymous": true
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "scope": "complete.adapted.empty",
+      "kind": "by_cases",
+      "scrutinee": "replacement = .empty",
+      "branches": [
+        {
+          "pattern": "positive",
+          "payloads": [
+            {
+              "scope": "complete.adapted.empty.positive",
+              "name": "empty",
+              "type": "replacement = .empty",
+              "used": true,
+              "kind": "case"
+            }
+          ]
+        },
+        {
+          "pattern": "negative",
+          "payloads": [
+            {
+              "scope": "complete.adapted.empty.negative",
+              "name": "empty",
+              "type": "¬ (replacement = .empty)",
+              "used": true,
+              "kind": "case"
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "definition_case_group_count": 3,
+  "runtime_case_group_count": 3,
+  "proof_case_group_count": 1
+}

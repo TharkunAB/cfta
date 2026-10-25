@@ -1,0 +1,9 @@
+theorem getElem?_eq_some_iff {l : List α} : l[i]? = some a ↔ ∃ h : i < l.length, l[i] = a :=
+  match l with
+  | [] => by simp
+  | _ :: l => by
+    simp only [getElem?_cons, length_cons]
+    split <;> rename_i h
+    · simp_all
+    · match i, h with
+      | i + 1, h => simp [getElem?_eq_some_iff, Nat.succ_lt_succ_iff]

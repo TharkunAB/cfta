@@ -1,0 +1,8 @@
+theorem map_inj_right {f : α → β} {o o' : Option α} (w : ∀ x y, f x = f y → x = y) :
+    o.map f = o'.map f ↔ o = o' := by
+  cases o with
+  | none => cases o' <;> simp
+  | some a =>
+    cases o' with
+    | none => simp
+    | some a' => simpa using ⟨fun h => w _ _ h, fun h => congrArg f h⟩

@@ -1,0 +1,22 @@
+
+/-- Mutable state copied separately for each nondeterministic branch. -/
+structure State (Symbol Guard : Type) where
+  counter : Nat
+  representatives : UnionFind.Forest
+  values : List (UVarValue Symbol)
+  obligations : List (Guard × Fragment Symbol)
+  recursionAncestry : Nat → List RecursionKey
+  expansionAncestry : List RecursionKey
+
+/-- The root starts in UVar zero. -/
+def initial (root : Nat) : State Symbol Guard :=
+  ⟨1, UnionFind.withInitialValues [0], [.unenumerated (some root) []], [], fun _ => [], []⟩
+
+/-- Source invariant failures and explicit finite execution bounds. -/
+inductive Error where
+  | fuelExhausted | representativeFuel | invalidSlot | invalidIntersection
+  | unresolvedReference | unfinishedFragment
+  deriving DecidableEq, Repr
+
+/-- State and errors are local to each nondeterministic alternative. -/
+abbrev EnumerateM (Symbol Guard : Type) := StateT (State Symbol Guard) (ExceptT Error List)

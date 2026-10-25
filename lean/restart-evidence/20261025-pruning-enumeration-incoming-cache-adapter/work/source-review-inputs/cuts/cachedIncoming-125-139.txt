@@ -1,0 +1,15 @@
+  have readCounts : EnumerationCanonicalWaiting.Correct roots read.values before.waiting := by
+    simpa only [frame.values] using counts
+  have readFlags : ∀ (slot : Nat), SourcePruningEnumerationNativeIndex.candidate
+      beforeCaller.checked.native.machine.heap
+      ((read.values[slot]?).getD .eliminated) = some (before.expandable slot) := by
+    simpa only [frame.values] using flags
+  have readAligned : read.counter = read.values.length := by
+    simpa only [SupplyAligned, frame.counter, frame.values] using storage.aligned
+  obtain ⟨k, written, cacheRun, _writtenCore, writtenFlags, writtenWaiting,
+    _framedCore, _afterAligned, afterPaths, afterCounts, afterFlags⟩ :=
+    SourcePruningEnumerationNativeIndex.gained_complete
+      beforeCaller.checked.native.machine.heap afterCaller.checked.native.machine.heap
+      post.effects.keeps (EnumerationExpandableIndex.frame read before) afterCore
+      target oldNode oldScs incomingScs handle replacement roots readPaths readStored
+      decoded readAligned readCounts readFlags writePrefix

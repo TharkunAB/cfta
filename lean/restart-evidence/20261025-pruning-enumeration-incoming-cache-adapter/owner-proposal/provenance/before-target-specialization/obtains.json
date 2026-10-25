@@ -1,0 +1,397 @@
+{
+  "packets": [
+    {
+      "scope": "complete.incoming",
+      "producer": "SourcePruningEnumerationCachedIncoming.complete formulas solver inventory beforeCaller before checkEmpty target incoming incomingScs memos roots initial storage realized paths counts flags root pending available closed bounded ranges",
+      "fields": [
+        {
+          "scope": "complete.incoming",
+          "name": "r",
+          "type": "Nat",
+          "used": true,
+          "kind": "obtain",
+          "type_only": false
+        },
+        {
+          "scope": "complete.incoming",
+          "name": "n",
+          "type": "Nat",
+          "used": true,
+          "kind": "obtain",
+          "type_only": false
+        },
+        {
+          "scope": "complete.incoming",
+          "name": "p",
+          "type": "Nat",
+          "used": true,
+          "kind": "obtain",
+          "type_only": false
+        },
+        {
+          "scope": "complete.incoming",
+          "name": "h",
+          "type": "Nat",
+          "used": true,
+          "kind": "obtain",
+          "type_only": false
+        },
+        {
+          "scope": "complete.incoming",
+          "name": "k",
+          "type": "Nat",
+          "used": true,
+          "kind": "obtain",
+          "type_only": false
+        },
+        {
+          "scope": "complete.incoming",
+          "name": "oldNode",
+          "type": "Option Nat",
+          "used": true,
+          "kind": "obtain",
+          "type_only": false
+        },
+        {
+          "scope": "complete.incoming",
+          "name": "oldScs",
+          "type": "List EnumerationState.Suspended",
+          "used": true,
+          "kind": "obtain",
+          "type_only": false
+        },
+        {
+          "scope": "complete.incoming",
+          "name": "read",
+          "type": "EnumerationState.State Symbol Constraint",
+          "used": true,
+          "kind": "obtain",
+          "type_only": false
+        },
+        {
+          "scope": "complete.incoming",
+          "name": "afterCaller",
+          "type": "Caller width",
+          "used": true,
+          "kind": "obtain",
+          "type_only": false
+        },
+        {
+          "scope": "complete.incoming",
+          "name": "savedQueries",
+          "type": "Queries",
+          "used": true,
+          "kind": "obtain",
+          "type_only": false
+        },
+        {
+          "scope": "complete.incoming",
+          "name": "final",
+          "type": "Memos",
+          "used": true,
+          "kind": "obtain",
+          "type_only": false
+        },
+        {
+          "scope": "complete.incoming",
+          "name": "next",
+          "type": "Inventory",
+          "used": true,
+          "kind": "obtain",
+          "type_only": false
+        },
+        {
+          "scope": "complete.incoming",
+          "name": "replacement",
+          "type": "Node",
+          "used": true,
+          "kind": "obtain",
+          "type_only": false
+        },
+        {
+          "scope": "complete.incoming",
+          "name": "handle",
+          "type": "Nat",
+          "used": true,
+          "kind": "obtain",
+          "type_only": false
+        },
+        {
+          "scope": "complete.incoming",
+          "name": "after",
+          "type": "EnumerationExpandableIndex.Cached Symbol Constraint",
+          "used": true,
+          "kind": "obtain",
+          "type_only": false
+        },
+        {
+          "scope": "complete.incoming",
+          "name": "reading",
+          "type": "∀ extra, ExceptT.run (getValue (r + extra) winner before.core) = [.ok (.unenumerated oldNode oldScs, read)]",
+          "used": true,
+          "kind": "obtain",
+          "type_only": false
+        },
+        {
+          "scope": "complete.incoming",
+          "name": "frame",
+          "type": "EnumerationCompressionFrame.Frame before.core read",
+          "used": true,
+          "kind": "obtain",
+          "type_only": false
+        },
+        {
+          "scope": "complete.incoming",
+          "name": "originalRun",
+          "type": "∀ extra extraNative P H, p ≤ P → h ≤ H → SourcePruningEnumerationIncomingNode.run checkEmpty (r + extra) (n + extraNative) P H beforeCaller before.core winner incoming incomingScs memos.query = (.ok (some (if replacement = .empty then [] else [.ok ((), after.core)])), afterCaller, savedQueries, read)",
+          "used": true,
+          "kind": "obtain",
+          "type_only": false
+        },
+        {
+          "scope": "complete.incoming",
+          "name": "writePrefix",
+          "type": "ExceptT.run ((do setValue winner (.unenumerated (some handle) (incomingScs ++ oldScs)); inheritAncestry winner) read) = [.ok ((), after.core)]",
+          "used": true,
+          "kind": "obtain",
+          "type_only": false
+        },
+        {
+          "scope": "complete.incoming",
+          "name": "afterSame",
+          "type": "after.core = {read with values := read.values.set winner (.unenumerated (some handle) (incomingScs ++ oldScs)), recursionAncestry := fun other => if other = winner then (read.expansionAncestry ++ read.recursionAncestry winner).eraseDups else read.recursionAncestry other}",
+          "used": true,
+          "kind": "obtain",
+          "type_only": false
+        },
+        {
+          "scope": "complete.incoming",
+          "name": "afterStored",
+          "type": "after.core.values[winner]? = some (.unenumerated (some handle) (incomingScs ++ oldScs))",
+          "used": true,
+          "kind": "obtain",
+          "type_only": false
+        },
+        {
+          "scope": "complete.incoming",
+          "name": "afterStorage",
+          "type": "StorageValid after.core",
+          "used": true,
+          "kind": "obtain",
+          "type_only": false
+        },
+        {
+          "scope": "complete.incoming",
+          "name": "afterRealized",
+          "type": "PendingRealized afterCaller.checked.native.machine.heap after.core",
+          "used": true,
+          "kind": "obtain",
+          "type_only": false
+        },
+        {
+          "scope": "complete.incoming",
+          "name": "post",
+          "type": "Post formulas solver next beforeCaller afterCaller final",
+          "used": true,
+          "kind": "obtain",
+          "type_only": false
+        },
+        {
+          "scope": "complete.incoming",
+          "name": "querySame",
+          "type": "final.query = savedQueries",
+          "used": true,
+          "kind": "obtain",
+          "type_only": false
+        },
+        {
+          "scope": "complete.incoming",
+          "name": "unfolding",
+          "type": "Cache.Extends memos.unfolding final.unfolding",
+          "used": true,
+          "kind": "obtain",
+          "type_only": false
+        },
+        {
+          "scope": "complete.incoming",
+          "name": "replacementAvailable",
+          "type": "Available afterCaller.checked.native.machine.heap replacement",
+          "used": true,
+          "kind": "obtain",
+          "type_only": false
+        },
+        {
+          "scope": "complete.incoming",
+          "name": "replacementClosed",
+          "type": "replacement.free = []",
+          "used": true,
+          "kind": "obtain",
+          "type_only": false
+        },
+        {
+          "scope": "complete.incoming",
+          "name": "encoded",
+          "type": "encodeNode replacement = some handle",
+          "used": true,
+          "kind": "obtain",
+          "type_only": false
+        },
+        {
+          "scope": "complete.incoming",
+          "name": "decoded",
+          "type": "lookupNode afterCaller.checked.native.machine.heap handle = some replacement",
+          "used": true,
+          "kind": "obtain",
+          "type_only": false
+        },
+        {
+          "scope": "complete.incoming",
+          "name": "cacheRun",
+          "type": "∀ extra, (SourcePruningEnumerationNativeIndex.write afterCaller.checked.native.machine.heap (k + extra) winner (.unenumerated (some handle) (incomingScs ++ oldScs)) incomingScs [] (EnumerationExpandableIndex.frame read before)).map (EnumerationExpandableIndex.frame after.core) = some after",
+          "used": true,
+          "kind": "obtain",
+          "type_only": false
+        },
+        {
+          "scope": "complete.incoming",
+          "name": "afterCounter",
+          "type": "after.core.counter = before.core.counter",
+          "used": true,
+          "kind": "obtain",
+          "type_only": false
+        },
+        {
+          "scope": "complete.incoming",
+          "name": "afterRepresentatives",
+          "type": "after.core.representatives = read.representatives",
+          "used": true,
+          "kind": "obtain",
+          "type_only": false
+        },
+        {
+          "scope": "complete.incoming",
+          "name": "afterPaths",
+          "type": "Roots after.core.representatives roots",
+          "used": true,
+          "kind": "obtain",
+          "type_only": false
+        },
+        {
+          "scope": "complete.incoming",
+          "name": "afterCounts",
+          "type": "EnumerationCanonicalWaiting.Correct roots after.core.values after.waiting",
+          "used": true,
+          "kind": "obtain",
+          "type_only": false
+        },
+        {
+          "scope": "complete.incoming",
+          "name": "waiting",
+          "type": "after.waiting = EnumerationCanonicalWaiting.count roots 1 incomingScs before.waiting",
+          "used": true,
+          "kind": "obtain",
+          "type_only": false
+        },
+        {
+          "scope": "complete.incoming",
+          "name": "flagsAfter",
+          "type": "∀ (slot : Nat), SourcePruningEnumerationNativeIndex.candidate afterCaller.checked.native.machine.heap ((after.core.values[slot]?).getD .eliminated) = some (after.expandable slot)",
+          "used": true,
+          "kind": "obtain",
+          "type_only": false
+        },
+        {
+          "scope": "complete.incoming",
+          "name": "expandableAfter",
+          "type": "after.expandable = (fun slot => if slot = winner then !(MergedOrdinaryHeight.recursiveBoundary replacement && (incomingScs ++ oldScs).isEmpty) else before.expandable slot)",
+          "used": true,
+          "kind": "obtain",
+          "type_only": false
+        },
+        {
+          "scope": "complete.incoming",
+          "name": "optional",
+          "type": "oldNode = none → replacement = incoming ∧ afterCaller = beforeCaller ∧ savedQueries = memos.query ∧ final = memos ∧ next = inventory",
+          "used": true,
+          "kind": "obtain",
+          "type_only": false
+        },
+        {
+          "scope": "complete.incoming",
+          "name": "present",
+          "type": "∀ oldHandle, oldNode = some oldHandle → ∃ (old query : Node) (queried : Checked width), lookupNode beforeCaller.checked.native.machine.heap oldHandle = some old ∧ next.source = beforeCaller.checked.native.machine.heap ∧ next.roots = inventory.roots ++ [incoming, old] ∧ SourceCurrentAllocatedTargetQuery.Receipt formulas solver next incoming old beforeCaller.checked query queried memos ∧ (∀ ambient term, InternedGuardedLanguage.meaning (SourceEqualityPCSGuard.holds formulas solver) ambient replacement term ↔ InternedGuardedLanguage.meaning (SourceEqualityPCSGuard.holds formulas solver) ambient incoming term ∧ InternedGuardedLanguage.meaning (SourceEqualityPCSGuard.holds formulas solver) ambient old term) ∧ (checkEmpty = false → replacement = query ∧ afterCaller = SourceCurrentAllocatedPartialState.advance beforeCaller queried beforeCaller.fourth beforeCaller.merge ∧ final = memos)",
+          "used": true,
+          "kind": "obtain",
+          "type_only": false
+        }
+      ]
+    },
+    {
+      "scope": "complete.getter",
+      "producer": "(EnumerationCorrectness.getValue_success r target before.core read (.unenumerated oldNode oldScs)).mp of the actual reading 0 singleton",
+      "fields": [
+        {
+          "scope": "complete.getter",
+          "name": "found",
+          "type": "UnionFind.Result",
+          "used": true,
+          "kind": "obtain",
+          "type_only": false
+        },
+        {
+          "scope": "complete.getter",
+          "name": "lookup",
+          "type": "UnionFind.findRoot r before.core.representatives target = some found",
+          "used": true,
+          "kind": "obtain",
+          "type_only": false
+        },
+        {
+          "scope": "complete.getter",
+          "name": "oldStored",
+          "type": "before.core.values[found.representative]? = some (.unenumerated oldNode oldScs)",
+          "used": true,
+          "kind": "obtain",
+          "type_only": false
+        },
+        {
+          "scope": "complete.getter",
+          "name": "_readSame",
+          "type": "read = {before.core with representatives := found.forest}",
+          "used": false,
+          "kind": "obtain",
+          "type_only": true
+        }
+      ]
+    },
+    {
+      "scope": "complete.foundTarget",
+      "producer": "genuine root : IsRoot before.core.representatives target",
+      "fields": [
+        {
+          "scope": "complete.foundTarget",
+          "name": "rootSize",
+          "type": "Nat",
+          "used": true,
+          "kind": "obtain",
+          "type_only": true
+        },
+        {
+          "scope": "complete.foundTarget",
+          "name": "rootPath",
+          "type": "UnionFind.Reaches before.core.representatives target target rootSize",
+          "used": true,
+          "kind": "obtain",
+          "type_only": false
+        }
+      ]
+    }
+  ],
+  "obtain_count": 3,
+  "field_count": 46,
+  "all_fields_expanded": true,
+  "unused_fields": [
+    "_readSame"
+  ],
+  "Root_packet_orders_exact": true
+}
