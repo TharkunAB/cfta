@@ -298,6 +298,30 @@ theorem protects
     · simp only [EnumerationCanonicalUnion.mergedRoots, fixed, ite_eq_right outside,
         ite_eq_right selected]
 
+/-- Each reached terminal request fits the fixed mathematical machine width. -/
+def Ranges
+    [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Constraint)] [DecidableEq Node]
+    (checkEmpty : Bool) (first : Suspended) (rest : List Suspended)
+    (beforeCaller : Caller width) (before : EnumerationExpandableIndex.Cached Symbol Constraint)
+    (incoming : Node) (queries : Queries) : Prop :=
+  ∀ (prefixFuel : Nat) (recorded : List Nat) (winner : Nat)
+      (moved : EnumerationWaitingIndex.Waiting) (joined : EnumerationState.State Symbol Constraint),
+      ExceptT.run (SourcePruningEnumerationTerminalPrefix.run prefixFuel first rest before.waiting before.core) =
+        [.ok ((recorded, winner, moved), joined)] →
+      SourcePruningEnumerationFold.Ranges checkEmpty recorded beforeCaller joined winner queries ∧
+      ∀ (foldFuel P H : Nat) (foldCaller : Caller width)
+        (folded : EnumerationState.State Symbol Constraint) (foldQueries : Queries),
+        SourcePruningEnumerationFold.run checkEmpty foldFuel P H recorded beforeCaller joined winner queries =
+          (.ok (some [.ok ((), folded)]), foldCaller, foldQueries, folded) →
+        match folded.values[winner]? with
+        | some (.unenumerated (some oldHandle) _) =>
+            match lookupNode foldCaller.checked.native.machine.heap oldHandle with
+            | some old => SourceCurrentAllocatedNativeRequestBounds.WordRanges
+                (.code (SourceRecursiveIntersectionCode.requestNode IntersectionEmptyDomain.emptyDomain incoming old))
+                foldCaller.checked
+            | none => True
+        | _ => True
+
 /-- Genuine admitted inputs produce the exact terminal observation and cache. -/
 theorem complete
     [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Constraint)] [DecidableEq Node]
@@ -320,23 +344,7 @@ theorem complete
     (nonempty : incoming ≠ .empty)
     (available : Available beforeCaller.checked.native.machine.heap incoming) (closed : incoming.free = [])
     (incomingBounded : ∀ sc ∈ incomingScs, sc.var < before.core.counter)
-    (ranges : ∀ (prefixFuel : Nat) (recorded : List Nat) (winner : Nat)
-      (moved : EnumerationWaitingIndex.Waiting) (joined : EnumerationState.State Symbol Constraint),
-      ExceptT.run (SourcePruningEnumerationTerminalPrefix.run prefixFuel first rest before.waiting before.core) =
-        [.ok ((recorded, winner, moved), joined)] →
-      SourcePruningEnumerationFold.Ranges checkEmpty recorded beforeCaller joined winner memos.query ∧
-      ∀ (foldFuel P H : Nat) (foldCaller : Caller width)
-        (folded : EnumerationState.State Symbol Constraint) (foldQueries : Queries),
-        SourcePruningEnumerationFold.run checkEmpty foldFuel P H recorded beforeCaller joined winner memos.query =
-          (.ok (some [.ok ((), folded)]), foldCaller, foldQueries, folded) →
-        match folded.values[winner]? with
-        | some (.unenumerated (some oldHandle) _) =>
-            match lookupNode foldCaller.checked.native.machine.heap oldHandle with
-            | some old => SourceCurrentAllocatedNativeRequestBounds.WordRanges
-                (.code (SourceRecursiveIntersectionCode.requestNode IntersectionEmptyDomain.emptyDomain incoming old))
-                foldCaller.checked
-            | none => True
-        | _ => True) :
+    (ranges : Ranges checkEmpty first rest beforeCaller before incoming memos.query) :
     ∃ (r n p h k : Nat) (recorded : List Nat) (winner : Nat)
       (joined : EnumerationExpandableIndex.Cached Symbol Constraint)
       (foldRows : List (Unit × EnumerationExpandableIndex.Cached Symbol Constraint))
