@@ -1,5 +1,29 @@
 # cfta formalization restart handoff
 
+## Actual entry and native ordinary alternatives
+
+Entry preservation: `4f85bd0adff78903bbe771f4816b2033d39b69ec`.
+Ordinary composition: `ae1a6b4cb99e6532e53c3f5ebb68bdfb8a712a90`.
+The goal stays ACTIVE.
+
+Actual ready entry now composes with the native ordinary alternative scan.
+It derives common sufficient bounds and retains the full raw entry receipt.
+The source's nonterminal parent gate remains explicit. The edge callback
+selects actual stored edges. Each alternative restores the entered enumeration
+cache while retaining reached native caller and query effects. Supported
+annotations complete the scan, including valid rejections. Entry also exports
+RenderStable, which transports existing global reference facts through entry.
+
+Both changed modules pass strict checking. Installed public readback and Audit
+pass. The audit checks 76699 theorem dependencies. Haskell and H6 are unchanged.
+H6 remains the strongest end-to-end result. Next: native reference provenance
+and incoming avoidance through child writes, then global pending/fragment
+history and successful receipt/whole-driver language semantics. Ready and
+PendingReferences alone do not exclude other buckets from the pending target.
+Terminal parents, parent normalization, narrowing/oracle preservation and
+arbitrary Haskell demand remain open integration boundaries.
+Details: `lean/notes-current-pruning-enumeration-native-ordinary.md`.
+
 ## Ordered native alternatives with enumeration rollback
 
 Worker and transport: `a3b400c4f2cc2146368d37e5f80ec4d2152c7637`.
