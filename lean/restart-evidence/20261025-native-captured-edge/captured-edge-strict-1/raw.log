@@ -1,0 +1,266 @@
+/tmp/mcfta-captured-finalization-20261025/captured-edge-strict-1/MicroCFTA/SourcePruningEnumerationCapturedEdge.lean:119:8: error: Tactic `apply` failed: could not unify the conclusion of `retained held old`
+  Avoids middle.core.representatives held scs
+with the goal
+  Avoids after.core.representatives held scs
+
+Note: The full type of `retained held old` is
+  middle.core.values[held]? = some (UVarValue.enumerated old) → Avoids middle.core.representatives held scs
+
+case neg
+width : Nat
+inst✝² : DecidableEq Symbol
+inst✝¹ : DecidableEq (EdgeKey Symbol Constraint)
+inst✝ : DecidableEq Node
+formulas : SourceGuards.Formulas FullSyntax.Formula
+solver : SourceGuards.Entailment FullSyntax.Formula
+inventory : Inventory
+caller : Caller width
+before : Cached
+checkEmpty : Bool
+uv handle : Nat
+scs : List Suspended
+parentEntry : Cache.Interned InternedBinderProtocol.NodeKey
+edges : List (EdgeValue Symbol Constraint)
+depth : Nat
+free : List InternedBinderProtocol.Reference
+edge : EdgeValue Symbol Constraint
+roots : Nat → Nat
+memos : Memos
+initial : Context formulas solver inventory caller memos
+ready : EnumerationDriver.Ready uv before.core
+stored : before.core.values[uv]? = some (UVarValue.unenumerated (some handle) scs)
+decoded : lookupNode caller.checked.native.machine.heap handle = some (Value.node parentEntry edges depth free)
+realized : PendingRealized caller.checked.native.machine.heap before.core
+selected : edge ∈ edges
+paths : Roots before.core.representatives roots
+counts : EnumerationCanonicalWaiting.Correct roots before.core.values before.waiting
+flags :
+  ∀ (slot : Nat),
+    SourcePruningEnumerationNativeIndex.candidate caller.checked.native.machine.heap
+        (before.core.values[slot]?.getD UVarValue.eliminated) =
+      some (before.expandable slot)
+pending : InputsPending before.core scs
+allowed : arityAllows edge.children.length scs = true
+tries : List EqualityTrie.Trie
+residual : Option Constraint
+projected : SourcePruningEnumerationConstraint.project edge.entry.key.constraint = some (tries, residual)
+ranges : SourcePruningEnumerationSelectedEdge.Ranges checkEmpty scs edge caller before memos.query
+lookup : lookupNode caller.checked.native.machine.heap handle = some (Value.node parentEntry edges depth free)
+available : Available caller.checked.native.machine.heap (Value.node parentEntry edges depth free)
+closed : (Value.node parentEntry edges depth free).free = []
+bounded : ∀ (sc : Suspended), sc ∈ scs → sc.var < before.core.counter
+avoids : Avoids before.core.representatives uv scs
+r n p h k : Nat
+afterCaller : Caller width
+middle : Cached
+savedQueries : Queries
+final : Memos
+next : Inventory
+afterRoots : Nat → Nat
+post : Post formulas solver next caller afterCaller final
+querySame : final.query = savedQueries
+growth : before.core.counter ≤ middle.core.counter
+middlePaths : Roots middle.core.representatives afterRoots
+storage : StorageValid middle.core
+middleRealized : PendingRealized afterCaller.checked.native.machine.heap middle.core
+middleCounts : EnumerationCanonicalWaiting.Correct afterRoots middle.core.values middle.waiting
+middleFlags :
+  ∀ (slot : Nat),
+    SourcePruningEnumerationNativeIndex.candidate afterCaller.checked.native.machine.heap
+        (middle.core.values[slot]?.getD UVarValue.eliminated) =
+      some (middle.expandable slot)
+origin : EnumeratedOrigin before.core middle.core
+retained : InputsPending middle.core scs
+protects :
+  ∀ (held : Nat),
+    held < before.core.counter →
+      IsRoot before.core.representatives held →
+        Avoids before.core.representatives held scs → EnumerationDriver.Protected held before.core middle.core
+fragment : Fragment
+middleSafe : Safe middle.core
+fragmentBound : FragmentBound middle.core.counter fragment
+edgeRun :
+  ∀ (er en P H ek : Nat),
+    p ≤ P →
+      h ≤ H →
+        SourcePruningEnumerationSelectedEdge.run checkEmpty (r + er) (n + en) P H (k + ek) scs edge caller before
+            memos.query =
+          SourcePruningEnumerationSelectedEdge.Result.complete fragment afterCaller savedQueries middle
+frame : EnumerationDriver.Protected uv before.core middle.core
+currentStored : middle.core.values[uv]? = some (UVarValue.unenumerated (some handle) scs)
+fuel : Nat
+after : Cached
+finishRun :
+  ∀ (extra : Nat),
+    SourcePruningEnumerationFinalize.run afterCaller.checked.native.machine.heap (fuel + extra) uv fragment middle =
+      some after
+_raw : (SourcePruningEnumerationFinalize.finish uv fragment middle.core).run = [Except.ok (fragment, after.core)]
+core :
+  after.core =
+    have __src := middle.core;
+    { counter := __src.counter, representatives := __src.representatives,
+      values := middle.core.values.set uv (UVarValue.enumerated fragment), obligations := __src.obligations,
+      recursionAncestry := __src.recursionAncestry, expansionAncestry := [] }
+finalStored : after.core.values[uv]? = some (UVarValue.enumerated fragment)
+_finalFlag : after.expandable = fun slot => if slot = uv then false else middle.expandable slot
+_finalWaiting :
+  after.waiting =
+    EnumerationCanonicalWaiting.count afterRoots (-1) (references (UVarValue.unenumerated (some handle) scs))
+      middle.waiting
+afterPaths : Roots after.core.representatives afterRoots
+afterCounts : EnumerationCanonicalWaiting.Correct afterRoots after.core.values after.waiting
+afterFlags :
+  ∀ (slot : Nat),
+    SourcePruningEnumerationNativeIndex.candidate afterCaller.checked.native.machine.heap
+        (after.core.values[slot]?.getD UVarValue.eliminated) =
+      some (after.expandable slot)
+afterStorage : StorageValid after.core
+afterRealized : PendingRealized afterCaller.checked.native.machine.heap after.core
+safeFinish : Safe middle.core → IsRoot middle.core.representatives uv → Safe after.core
+afterSafe : Safe after.core
+held : Nat
+old : Fragment
+expanded : after.core.values[held]? = some (UVarValue.enumerated old)
+same : ¬held = uv
+⊢ Avoids after.core.representatives held scs
+/tmp/mcfta-captured-finalization-20261025/captured-edge-strict-1/MicroCFTA/SourcePruningEnumerationCapturedEdge.lean:132:10: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  SourcePruningEnumerationFinalize.run afterCaller.checked.native.machine.heap (k + fuel + ek) uv fragment middle
+in the target expression
+  (match SourcePruningEnumerationSelectedEdge.Result.complete fragment afterCaller savedQueries middle with
+    | SourcePruningEnumerationSelectedEdge.Result.complete fragment afterCaller saved after =>
+      Option.map
+        (fun finished => SourcePruningEnumerationSelectedEdge.Result.complete fragment afterCaller saved finished)
+        (SourcePruningEnumerationFinalize.run afterCaller.checked.native.machine.heap (k + fuel + ek) uv fragment after)
+    | result => some result) =
+    some (SourcePruningEnumerationSelectedEdge.Result.complete fragment afterCaller savedQueries after)
+
+case inl.refine_1
+width : Nat
+inst✝² : DecidableEq Symbol
+inst✝¹ : DecidableEq (EdgeKey Symbol Constraint)
+inst✝ : DecidableEq Node
+formulas : SourceGuards.Formulas FullSyntax.Formula
+solver : SourceGuards.Entailment FullSyntax.Formula
+inventory : Inventory
+caller : Caller width
+before : Cached
+checkEmpty : Bool
+uv handle : Nat
+scs : List Suspended
+parentEntry : Cache.Interned InternedBinderProtocol.NodeKey
+edges : List (EdgeValue Symbol Constraint)
+depth : Nat
+free : List InternedBinderProtocol.Reference
+edge : EdgeValue Symbol Constraint
+roots : Nat → Nat
+memos : Memos
+initial : Context formulas solver inventory caller memos
+ready : EnumerationDriver.Ready uv before.core
+stored : before.core.values[uv]? = some (UVarValue.unenumerated (some handle) scs)
+decoded : lookupNode caller.checked.native.machine.heap handle = some (Value.node parentEntry edges depth free)
+realized : PendingRealized caller.checked.native.machine.heap before.core
+selected : edge ∈ edges
+paths : Roots before.core.representatives roots
+counts : EnumerationCanonicalWaiting.Correct roots before.core.values before.waiting
+flags :
+  ∀ (slot : Nat),
+    SourcePruningEnumerationNativeIndex.candidate caller.checked.native.machine.heap
+        (before.core.values[slot]?.getD UVarValue.eliminated) =
+      some (before.expandable slot)
+pending : InputsPending before.core scs
+allowed : arityAllows edge.children.length scs = true
+tries : List EqualityTrie.Trie
+residual : Option Constraint
+projected : SourcePruningEnumerationConstraint.project edge.entry.key.constraint = some (tries, residual)
+ranges : SourcePruningEnumerationSelectedEdge.Ranges checkEmpty scs edge caller before memos.query
+lookup : lookupNode caller.checked.native.machine.heap handle = some (Value.node parentEntry edges depth free)
+available : Available caller.checked.native.machine.heap (Value.node parentEntry edges depth free)
+closed : (Value.node parentEntry edges depth free).free = []
+bounded : ∀ (sc : Suspended), sc ∈ scs → sc.var < before.core.counter
+avoids : Avoids before.core.representatives uv scs
+r n p h k : Nat
+afterCaller : Caller width
+middle : Cached
+savedQueries : Queries
+final : Memos
+next : Inventory
+afterRoots : Nat → Nat
+post : Post formulas solver next caller afterCaller final
+querySame : final.query = savedQueries
+growth : before.core.counter ≤ middle.core.counter
+middlePaths : Roots middle.core.representatives afterRoots
+storage : StorageValid middle.core
+middleRealized : PendingRealized afterCaller.checked.native.machine.heap middle.core
+middleCounts : EnumerationCanonicalWaiting.Correct afterRoots middle.core.values middle.waiting
+middleFlags :
+  ∀ (slot : Nat),
+    SourcePruningEnumerationNativeIndex.candidate afterCaller.checked.native.machine.heap
+        (middle.core.values[slot]?.getD UVarValue.eliminated) =
+      some (middle.expandable slot)
+origin : EnumeratedOrigin before.core middle.core
+retained : InputsPending middle.core scs
+protects :
+  ∀ (held : Nat),
+    held < before.core.counter →
+      IsRoot before.core.representatives held →
+        Avoids before.core.representatives held scs → EnumerationDriver.Protected held before.core middle.core
+fragment : Fragment
+middleSafe : Safe middle.core
+fragmentBound : FragmentBound middle.core.counter fragment
+edgeRun :
+  ∀ (er en P H ek : Nat),
+    p ≤ P →
+      h ≤ H →
+        SourcePruningEnumerationSelectedEdge.run checkEmpty (r + er) (n + en) P H (k + ek) scs edge caller before
+            memos.query =
+          SourcePruningEnumerationSelectedEdge.Result.complete fragment afterCaller savedQueries middle
+frame : EnumerationDriver.Protected uv before.core middle.core
+currentStored : middle.core.values[uv]? = some (UVarValue.unenumerated (some handle) scs)
+fuel : Nat
+after : Cached
+finishRun :
+  ∀ (extra : Nat),
+    SourcePruningEnumerationFinalize.run afterCaller.checked.native.machine.heap (fuel + extra) uv fragment middle =
+      some after
+_raw : (SourcePruningEnumerationFinalize.finish uv fragment middle.core).run = [Except.ok (fragment, after.core)]
+core :
+  after.core =
+    have __src := middle.core;
+    { counter := __src.counter, representatives := __src.representatives,
+      values := middle.core.values.set uv (UVarValue.enumerated fragment), obligations := __src.obligations,
+      recursionAncestry := __src.recursionAncestry, expansionAncestry := [] }
+finalStored : after.core.values[uv]? = some (UVarValue.enumerated fragment)
+_finalFlag : after.expandable = fun slot => if slot = uv then false else middle.expandable slot
+_finalWaiting :
+  after.waiting =
+    EnumerationCanonicalWaiting.count afterRoots (-1) (references (UVarValue.unenumerated (some handle) scs))
+      middle.waiting
+afterPaths : Roots after.core.representatives afterRoots
+afterCounts : EnumerationCanonicalWaiting.Correct afterRoots after.core.values after.waiting
+afterFlags :
+  ∀ (slot : Nat),
+    SourcePruningEnumerationNativeIndex.candidate afterCaller.checked.native.machine.heap
+        (after.core.values[slot]?.getD UVarValue.eliminated) =
+      some (after.expandable slot)
+afterStorage : StorageValid after.core
+afterRealized : PendingRealized afterCaller.checked.native.machine.heap after.core
+safeFinish : Safe middle.core → IsRoot middle.core.representatives uv → Safe after.core
+afterSafe : Safe after.core
+afterPending : InputsPending after.core scs
+er en P H ek : Nat
+largeP : p ≤ P
+largeH : h ≤ H
+selectedRun :
+  SourcePruningEnumerationSelectedEdge.run checkEmpty (r + er) (n + en) P H (k + fuel + ek) scs edge caller before
+      memos.query =
+    SourcePruningEnumerationSelectedEdge.Result.complete fragment afterCaller savedQueries middle
+finalRun :
+  SourcePruningEnumerationFinalize.run afterCaller.checked.native.machine.heap (k + fuel + ek) uv fragment middle =
+    some after
+⊢ (match SourcePruningEnumerationSelectedEdge.Result.complete fragment afterCaller savedQueries middle with
+    | SourcePruningEnumerationSelectedEdge.Result.complete fragment afterCaller saved after =>
+      Option.map
+        (fun finished => SourcePruningEnumerationSelectedEdge.Result.complete fragment afterCaller saved finished)
+        (SourcePruningEnumerationFinalize.run afterCaller.checked.native.machine.heap (k + fuel + ek) uv fragment after)
+    | result => some result) =
+    some (SourcePruningEnumerationSelectedEdge.Result.complete fragment afterCaller savedQueries after)

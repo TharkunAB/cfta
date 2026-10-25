@@ -1,0 +1,15 @@
+import MicroCFTA.SourcePruningEnumerationCapturedEdge
+set_option pp.maxSteps 1000000
+set_option pp.deepTerms true
+#check MicroCFTA.SourcePruningEnumerationSelectedEntry.complete
+#print axioms MicroCFTA.SourcePruningEnumerationSelectedEntry.complete
+#check MicroCFTA.SourcePruningEnumerationFinalize.written_safe
+#print axioms MicroCFTA.SourcePruningEnumerationFinalize.written_safe
+#check MicroCFTA.SourcePruningEnumerationFinalize.complete
+#print axioms MicroCFTA.SourcePruningEnumerationFinalize.complete
+#check MicroCFTA.SourcePruningEnumerationCapturedEdge.run
+#print axioms MicroCFTA.SourcePruningEnumerationCapturedEdge.run
+#check MicroCFTA.SourcePruningEnumerationCapturedEdge.children_stopped
+#print axioms MicroCFTA.SourcePruningEnumerationCapturedEdge.children_stopped
+#check MicroCFTA.SourcePruningEnumerationCapturedEdge.complete
+#print axioms MicroCFTA.SourcePruningEnumerationCapturedEdge.complete

@@ -1,5 +1,30 @@
 # Constrained languages, indexing, and distributions
 
+## Native captured-slot edge finalization
+
+Finalization safety: `3197aaaa47cf0080e9097da1191f36947bb2fd5b`.
+Selected entry: `2bfd43cfe3e7001dbdec7adbae2c98b98a7d1ca7`.
+Captured edge: `736d95555def03b909a25d5b1a756270f95055dd`.
+The goal stays ACTIVE.
+
+Actual entry retains readiness and proves captured target identity.
+The separately composed captured-edge worker derives sufficient bounds
+for a supported edge and its original raw-slot write, or exact child rejection.
+Successful output resets expansion ancestry and retains Safe and all indexes.
+Rejection does not finalize or claim unconditional Safe. Enumerated origin
+and unchanged-value protection are restricted away from the new target.
+Inherited InputsPending is retained. Its original premise and conditional
+numeric admission remain. Readiness is required at the actual entry state.
+Oracle preservation, global PendingReferences and fragment acyclicity stay open.
+
+All three strict modules, installed readback and Audit pass. The audit checks
+76656 theorem dependencies. Haskell runtime and H6 are unchanged.
+H6 remains the strongest end-to-end result. Next: combine the entry and
+captured-edge steps into ordered alternatives. Restore enumeration input
+per branch, but account for shared native growth and query memo effects.
+The Haskell result list is lazy; exact forcing correspondence remains open.
+Details: `lean/notes-current-pruning-enumeration-captured-edge.md`.
+
 ## Native selected-edge admission and completion
 
 Input admission: `80a2935ca94caf8a99beacc39a3a43be528c2a10`.
