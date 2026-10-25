@@ -1,5 +1,24 @@
 # Current system claim
 
+## Native child safety and retained pending inputs
+
+Terminal origin: `2c669906bad15602e34f6dd72135e92a7a1c7aa5`.
+Child invariants: `a323cf8accc68cf55455866bd240dfe4e4ebb693`. The goal stays ACTIVE.
+
+Actual supported nonterminal child success preserves `Safe`, old root values
+and complete classes. It creates no enumerated values. The cached terminal
+adapter now also retains enumerated-value origin at its actual result cache,
+including rejection. Previous admission and safety limits stay unchanged.
+The new transport lemmas preserve the parent `InputsPending` condition for
+later child descents. They consume step receipts; full traversal is still open.
+
+Strict checks and installed public readback pass. Audit passes with 76560
+theorem dependencies. H6 remains the strongest end-to-end theorem.
+Next: explicit ordered traversal with actual post-write cache/caller/query
+threading, then the original captured-slot final write. Missing caches must
+stop explicitly. Full typing/pruning and Haskell correspondence remain open.
+Details: `lean/notes-current-pruning-enumeration-child-invariants.md`.
+
 ## Native child dispatch and terminal root protection
 
 Child dispatch: `3a01c37c06b74d313f509b38166671fb7e9d83dd`.
