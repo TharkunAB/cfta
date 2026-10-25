@@ -1,3 +1,4 @@
+import MicroCFTA.SourcePruningEnumerationSelection
 import MicroCFTA.SourcePruningEnumerationCachedTerminalAdapter
 import MicroCFTA.SourcePruningEnumerationIncomingCacheAdapter
 import MicroCFTA.SourcePruningEnumerationCachedTerminal
