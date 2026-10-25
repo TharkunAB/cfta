@@ -70,6 +70,28 @@ Terminal parents retain the existing enumerateNode fallback boundary. Native
 children can still take their terminal dispatcher. No Haskell fix is needed.
 Details: lean/notes-current-pruning-enumeration-native-ordinary.md.
 
+### Callback and repeated-recursion restart boundary
+
+The concrete callback model now composes its pruning Boolean with the source
+stop/selection step. Rejection excludes successful continuations. It does
+not erase raw callback fuel errors. Accepted callbacks use their own returned
+metadata and actual cache. The selected ordinary producer inherits the proof.
+
+The repeated-recursion model reads and checks once. Its true branch rebuilds
+indexes from the full original suspended bucket and retains the checked core.
+The original selected producer derives the needed index fuel and exact raw
+restart result. This path uses unchanged metadata and no oracle or narrowing.
+Outside the admitted state and sufficient fuel, adapter failure remains an
+explicit error. There is no general error-classification claim for that case.
+
+Enumeration.hs:963 checks the nonempty full candidate set before selection.
+Lines 980 and 1004 restart after accepted Left callbacks and repeated guards.
+The model retains this order. Exact depth-first native effect interleaving
+and complete recursive-driver semantics remain open. No new Haskell defect
+or repair is identified. External action: no new patch is proposed.
+Keep the repair table and pending Sized documentation repair above.
+Details: lean/notes-current-pruning-enumeration-callback-restart.md.
+
 ### Concrete callbacks preserve native cache certificates
 
 The modeled concrete Left callback now returns the full indexed-cache
@@ -380,6 +402,33 @@ TH/Generic extraction, valid-position build/read and source codec laws stay open
 
 
 
+
+## Concrete callbacks and parked recursion reach source restart
+
+Callback composition: `3f02ddcef`. Parked restart: `6dff1a207`.
+The goal stays ACTIVE.
+
+An accepted concrete Left callback now reaches the actual stop/selection
+restart at its returned metadata and cache. A pruning result or stuck
+restart excludes all successful continuations. This does not assert an
+empty raw stream: callback fuel errors can remain. The existing selected
+ordinary producer inherits this output with its exact source unchanged.
+
+Original native selection also derives the repeated-recursion restart.
+Its actual clear write removes the full old bucket from waiting counts,
+disables the slot and retains the observed core. The producer derives
+sufficient index fuel. No future cache or continuation success is assumed.
+This branch retains metadata and dependency levels. It performs no narrowing
+or oracle call. The false guard result still awaits narrowing composition.
+
+Stop checks all remaining candidates, including blocked candidates, before
+selection. All five changed modules pass strict checks. Installed public
+readback and Audit pass; Audit checks 76876 dependencies. H6 remains the
+strongest end-to-end language theorem. Haskell source stays unchanged.
+Next: compose a complete selected step and its depth-first continuation
+with shared native effects. Initial-only capacity, native Graph correspondence,
+terminal/nonordinary fallback, extraction and whole-driver language semantics
+remain open. Details: `lean/notes-current-pruning-enumeration-callback-restart.md`.
 
 ## Concrete callbacks retain the native indexed cache
 
