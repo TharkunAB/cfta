@@ -70,6 +70,24 @@ Terminal parents retain the existing enumerateNode fallback boundary. Native
 children can still take their terminal dispatcher. No Haskell fix is needed.
 Details: lean/notes-current-pruning-enumeration-native-ordinary.md.
 
+### Selected receipts and concrete callback availability
+
+The selected ordinary model now retains fragment history and allocation
+growth for each completed alternative at its own cache. Initial dependency
+levels and parked-ID bounds derive a finite concrete Left callback there.
+The callback can accept or reject. Both outcomes retain safe framed storage,
+exact metadata fields and allocated returned pending IDs.
+No successful callback execution is an input premise. No runtime worker changes.
+
+Enumeration.hs:975 captures the same ost' for sibling alternatives. Each
+callback returns its own ost'', which feeds that branch's recursive continuation.
+A metadata fold across sibling alternatives is not required by this source.
+The proof derives independent callbacks. Exact interleaving of native effects,
+callbacks and recursive continuations remains open. No Haskell runtime defect
+or new repair is identified. External action: no new patch is proposed.
+Keep the repair table and pending Sized documentation repair above.
+Details: lean/notes-current-pruning-enumeration-receipt-history.md.
+
 ### Native fragment dependencies survive captured finalization
 
 The admitted native captured-edge model now derives pending targets and
@@ -347,6 +365,34 @@ TH/Generic extraction, valid-position build/read and source codec laws stay open
 
 
 
+
+## Selected ordinary receipts derive concrete fragment callbacks
+
+Native receipt history: `59706bb3f`. Prefix and callbacks: `0f8037add`.
+The goal stays ACTIVE.
+
+Every processed native alternative now retains completion-only fragment
+history at its own actual cache. Successful receipts retain allocation growth,
+pending hole targets and conditional frontier advancement. Ordinary entry and
+original selection transport that history through their actual reads, false
+recursion guard and pending-handle replacement. No producer input changes.
+
+The selected result now derives finite concrete Left callbacks for every
+completed receipt, from original dependency levels and parked-ID bounds.
+Each callback uses that receipt's cache and the supplied metadata. It returns
+safe framed storage, the exact type-position update and allocated pending IDs.
+Either pruning Boolean is allowed. Siblings use the same input metadata in
+the source; each callback output feeds its own recursive continuation.
+This proof does not execute callbacks inside the serial alternative scan.
+
+All six changed modules, public readback and Audit pass. Audit checks 76834
+dependencies. Six older public declaration types remain exact. H6 remains
+the strongest end-to-end language result. Haskell and Audit source stay exact.
+Next: retain the full native indexed-cache packet through actual callback
+reads, then model callback and recursive-continuation interleaving with shared
+native effects. Initial-only capacity, native Graph correspondence, scheduler
+restart, extraction and whole-driver language semantics remain open.
+Details: `lean/notes-current-pruning-enumeration-receipt-history.md`.
 
 ## Native captured edges preserve fragment dependency history
 
