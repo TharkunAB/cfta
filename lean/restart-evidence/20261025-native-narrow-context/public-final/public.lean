@@ -1,0 +1,15 @@
+import MicroCFTA.SourcePruningEnumerationNarrowContext
+set_option pp.maxSteps 1000000
+set_option pp.deepTerms true
+#check MicroCFTA.SourcePruningNativeContext.narrowAt_post
+#print axioms MicroCFTA.SourcePruningNativeContext.narrowAt_post
+#check MicroCFTA.SourcePruningNativeContext.outer_post
+#print axioms MicroCFTA.SourcePruningNativeContext.outer_post
+#check MicroCFTA.SourcePruningEnumerationNarrowContext.complete
+#print axioms MicroCFTA.SourcePruningEnumerationNarrowContext.complete
+#check MicroCFTA.SourcePruningEnumerationNarrowCache.complete
+#print axioms MicroCFTA.SourcePruningEnumerationNarrowCache.complete
+#check MicroCFTA.SourcePruningEnumerationNativeGrowth.flags
+#print axioms MicroCFTA.SourcePruningEnumerationNativeGrowth.flags
+#check MicroCFTA.SourcePruningRecordTypes.recordTypes_inr
+#print axioms MicroCFTA.SourcePruningRecordTypes.recordTypes_inr

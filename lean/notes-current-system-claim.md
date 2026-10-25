@@ -1,5 +1,27 @@
 # Current system claim
 
+## Actual native narrowing derives caller and indexed caches together
+
+Caller and memos: `d677fd77b`. Combined producer: `6e83025d8`.
+The goal stays ACTIVE.
+
+One actual native narrowing result now derives the full checked Caller Post,
+valid saved global memos and indexed enumeration cache at the same result
+heap. The proof uses the actual exposure and filtered constructor. The
+combined producer derives completion and the final Context from initial
+invariants and an actual value-read receipt. Equal handles retain their
+framed cache. Changed handles retain the actual reread and indexed write.
+Empty retains reached Caller effects and has no successful enumeration state.
+Saved memos belong to the chosen exposure fuel; their equality across all
+larger fuels is not proved. No old producer or runtime worker changes.
+
+Both new modules, Audit import and installed public readback pass. Audit
+checks 76724 theorem dependencies. H6 remains the strongest end-to-end language
+result. Haskell is unchanged. Next: actual selection/recursion/callback/entry
+composition. Fragment-hole history, extraction and whole-driver semantics
+remain open. Arbitrary narrowing predicates have no new semantic guarantee.
+Details: `lean/notes-current-pruning-enumeration-narrow-context.md`.
+
 ## Actual native narrowing derives indexed caches
 
 Replacement and reads: `9d4de2db2`. Narrowing producer: `04a5ba6d0`.

@@ -1,0 +1,239 @@
+diff --git a/lean/MicroCFTA/Audit.lean b/lean/MicroCFTA/Audit.lean
+index 58c579361..8f3fbfe30 100644
+--- a/lean/MicroCFTA/Audit.lean
++++ b/lean/MicroCFTA/Audit.lean
+@@ -1,3 +1,4 @@
++import MicroCFTA.SourcePruningEnumerationNarrowContext
+ import MicroCFTA.SourcePruningEnumerationNarrowCache
+ import MicroCFTA.SourcePruningEnumerationReplacement
+ import MicroCFTA.SourcePruningEnumerationNativeOrdinary
+diff --git a/lean/MicroCFTA/SourcePruningEnumerationNarrowContext.lean b/lean/MicroCFTA/SourcePruningEnumerationNarrowContext.lean
+new file mode 100644
+index 000000000..50d405e69
+--- /dev/null
++++ b/lean/MicroCFTA/SourcePruningEnumerationNarrowContext.lean
+@@ -0,0 +1,91 @@
++import MicroCFTA.SourcePruningEnumerationNarrowCache
++import MicroCFTA.SourcePruningNativeContext
++
++namespace MicroCFTA.SourcePruningEnumerationNarrowContext
++open Cache EnumerationState EnumerationCorrectness EnumerationSchedule
++open InternedConstructorTemplates InternedProbeProvenance
++open SourcePruningEnumerationNodes SourcePruningEnumerationObservation
++open SourceCurrentAllocatedQueryMemo (advancePhysical)
++open SourceCurrentAllocatedNativeInventoryState (Inventory)
++open SourceCurrentAllocatedPartialInvariant (Context Post)
++local notation "Symbol" => SourcePruningTemplates.Symbol
++local notation "Constraint" => SourceSymbolicIndex.Constraint FullSyntax.Formula
++local notation "Node" => Value Symbol Constraint
++local notation "Caller" => SourceCurrentAllocatedPartialState.State
++local notation "Memos" => EndpointMemoGateTrace.Memos
++variable {EnumGuard Typing Key : Type} {width : Nat}
++variable [DecidableEq (EdgeKey Symbol Constraint)]
++
++/-- One native narrowing result derives its caller, memos and indexed enumeration cache together. -/
++theorem complete
++    (formulas : SourceGuards.Formulas FullSyntax.Formula)
++    (solver : SourceGuards.Entailment FullSyntax.Formula)
++    (inventory : Inventory) (caller : Caller width) (memos : Memos)
++    (holeKey : Typing → Nat → Key) (fits : Key → Symbol → Bool) (admits : Key → Node → Bool)
++    (metadata : SourcePruningRecordTypes.Metadata Typing)
++    (before : EnumerationExpandableIndex.Cached Symbol EnumGuard)
++    (readAfter : EnumerationState.State Symbol EnumGuard)
++    (readFuel uv oldHandle : Nat) (scs : List Suspended) (roots : Nat → Nat)
++    (initial : Context formulas solver inventory caller memos)
++    (ready : EnumerationDriver.Ready uv before.core)
++    (realized : PendingRealized caller.checked.native.machine.heap before.core)
++    (paths : Roots before.core.representatives roots)
++    (counts : EnumerationCanonicalWaiting.Correct roots before.core.values before.waiting)
++    (flags : ∀ slot, SourcePruningEnumerationNativeIndex.candidate caller.checked.native.machine.heap
++      ((before.core.values[slot]?).getD .eliminated) = some (before.expandable slot))
++    (read : Success (getValue readFuel uv) before.core (.unenumerated (some oldHandle) scs) readAfter) :
++    ∃ (oldValue result : Node) (nativeFuel : Nat) (heap : InternedConstructorTemplates.State Symbol Constraint)
++      (newHandle : Nat) (final : Memos),
++      let afterCaller := SourceCurrentAllocatedPartialState.advance caller
++        (advancePhysical caller.checked ⟨heap, caller.checked.operations⟩) caller.fourth caller.merge
++      lookupNode caller.checked.native.machine.heap oldHandle = some oldValue ∧
++      SourcePruningOuterNarrow.narrow holeKey fits admits metadata nativeFuel uv oldValue caller.checked.native.machine.heap =
++        .done result heap ∧
++      (∀ extra, SourcePruningOuterNarrow.narrow holeKey fits admits metadata (nativeFuel + extra) uv oldValue
++        caller.checked.native.machine.heap = .done result heap) ∧
++      Post formulas solver inventory caller afterCaller final ∧
++      Extends memos.unfolding final.unfolding ∧ final.query = memos.query ∧
++      Available afterCaller.checked.native.machine.heap result ∧ result.free = [] ∧
++      encodeNode result = some newHandle ∧ lookupNode afterCaller.checked.native.machine.heap newHandle = some result ∧
++      (result = .empty → ∀ representativeFuel,
++        SourcePruningEnumerationAction.prepare holeKey fits admits metadata nativeFuel representativeFuel uv oldHandle
++          scs oldValue caller.checked.native.machine.heap =
++          .done (result, some (reject : EnumerateM Symbol EnumGuard Unit)) heap ∧
++        ¬ ∃ after : EnumerationState.State Symbol EnumGuard,
++          Success (reject : EnumerateM Symbol EnumGuard Unit) readAfter () after) ∧
++      (result ≠ .empty →
++        ∃ (representativeFuel countFuel : Nat) (action : EnumerateM Symbol EnumGuard Unit)
++          (after : EnumerationExpandableIndex.Cached Symbol EnumGuard),
++          SourcePruningEnumerationAction.prepare holeKey fits admits metadata nativeFuel representativeFuel uv oldHandle
++            scs oldValue caller.checked.native.machine.heap = .done (result, some action) heap ∧
++          Success action readAfter () after.core ∧
++          ((newHandle = oldHandle ∧ after = EnumerationExpandableIndex.frame readAfter before) ∨
++            (newHandle ≠ oldHandle ∧ ∃ rereadAfter : EnumerationState.State Symbol EnumGuard,
++              Success (representative representativeFuel uv) readAfter uv rereadAfter ∧
++              Success (setValue uv (.unenumerated (some newHandle) scs)) rereadAfter () after.core ∧
++              ∀ extra, SourcePruningEnumerationNativeIndex.write afterCaller.checked.native.machine.heap (countFuel + extra) uv
++                (.unenumerated (some newHandle) scs) scs scs (EnumerationExpandableIndex.frame rereadAfter before) = some after)) ∧
++          after.waiting = before.waiting ∧ EnumerationDriver.Ready uv after.core ∧
++          Roots after.core.representatives roots ∧ PendingRealized afterCaller.checked.native.machine.heap after.core ∧
++          after.core.values[uv]? = some (.unenumerated (some newHandle) scs) ∧
++          EnumerationCanonicalWaiting.Correct roots after.core.values after.waiting ∧
++          (∀ slot, SourcePruningEnumerationNativeIndex.candidate afterCaller.checked.native.machine.heap
++            ((after.core.values[slot]?).getD .eliminated) = some (after.expandable slot)) ∧
++          (EnumerationReferences.PendingReferences before.core → EnumerationReferences.PendingReferences after.core) ∧
++          (∀ held, EnumerationReferences.IncomingAvoid held before.core →
++            EnumerationReferences.IncomingAvoid held after.core)) := by
++  obtain ⟨oldValue, result, nativeFuel, heap, newHandle, oldDecoded, narrowed, stable, _kept,
++    resultAvailable, resultClosed, encoded, decoded, rejected, completed⟩ :=
++    SourcePruningEnumerationNarrowCache.complete holeKey fits admits metadata caller.checked.native.machine.heap
++      before readAfter readFuel uv oldHandle scs roots initial.ready.semantic.ready ready realized paths counts flags read
++  obtain ⟨found, _lookup, stored, _readState⟩ :=
++    (getValue_success readFuel uv before.core readAfter (.unenumerated (some oldHandle) scs)).mp read
++  obtain ⟨old, oldLookup, oldAvailable, _oldClosed⟩ := realized found.representative oldHandle scs stored
++  have same : old = oldValue := Option.some.inj (oldLookup.symm.trans oldDecoded)
++  subst old
++  obtain ⟨final, post, retained, query⟩ := SourcePruningNativeContext.outer_post formulas solver inventory caller memos
++    holeKey fits admits metadata nativeFuel uv oldValue result heap initial oldAvailable narrowed
++  exact ⟨oldValue, result, nativeFuel, heap, newHandle, final, oldDecoded, narrowed, stable, post,
++    retained, query, resultAvailable, resultClosed, encoded, decoded, rejected, completed⟩
++
++end MicroCFTA.SourcePruningEnumerationNarrowContext
+diff --git a/lean/MicroCFTA/SourcePruningNativeContext.lean b/lean/MicroCFTA/SourcePruningNativeContext.lean
+new file mode 100644
+index 000000000..f6481d9b3
+--- /dev/null
++++ b/lean/MicroCFTA/SourcePruningNativeContext.lean
+@@ -0,0 +1,127 @@
++import MicroCFTA.SourcePruningOuterNarrow
++import MicroCFTA.SourceCurrentAllocatedPartialInvariant
++import MicroCFTA.SourceCurrentAllocatedGateFields
++import MicroCFTA.SourceCurrentAllocatedProbeExposure
++import MicroCFTA.SourceEqualityQueryGlobalMemos
++
++namespace MicroCFTA.SourcePruningNativeContext
++open Cache InternedConstructorTemplates InternedProbeProvenance
++open SourceCurrentAllocatedNativeEffects (physical)
++open SourceCurrentAllocatedQueryMemo (advancePhysical)
++open SourceCurrentAllocatedNativeInventoryState (Inventory)
++open SourceCurrentAllocatedPartialInvariant (Context Post)
++local notation "Symbol" => SourcePruningTemplates.Symbol
++local notation "Constraint" => SourceSymbolicIndex.Constraint FullSyntax.Formula
++local notation "Node" => Value Symbol Constraint
++local notation "Caller" => SourceCurrentAllocatedPartialState.State
++local notation "Memos" => EndpointMemoGateTrace.Memos
++variable {Key Typing : Type} {width : Nat}
++variable [DecidableEq (EdgeKey Symbol Constraint)]
++
++/-- A completed actual narrowing read and filtered constructor derive the full caller postcondition. -/
++theorem narrowAt_post
++    (formulas : SourceGuards.Formulas FullSyntax.Formula)
++    (solver : SourceGuards.Entailment FullSyntax.Formula)
++    (inventory : Inventory) (before : Caller width) (memos : Memos)
++    (fits : Key → Symbol → Bool) (admits : Key → Node → Bool) (key : Key)
++    (fuel : Nat) (value result : Node) (heap : State Symbol Constraint)
++    (initial : Context formulas solver inventory before memos)
++    (available : Available before.checked.native.machine.heap value)
++    (done : SourcePruningNativeView.narrowAt fits admits fuel key value before.checked.native.machine.heap =
++      .done result heap) :
++    ∃ final : Memos,
++      Post formulas solver inventory before
++        (SourceCurrentAllocatedPartialState.advance before
++          (advancePhysical before.checked ⟨heap, before.checked.operations⟩) before.fourth before.merge) final ∧
++      Extends memos.unfolding final.unfolding ∧ final.query = memos.query ∧
++      ∃ (rows : List (EdgeValue Symbol Constraint)) (middle : State Symbol Constraint),
++        MergedFreshOrdinaryExposure.nodeEdges fuel value before.checked.native.machine.heap = .done rows middle ∧
++        run (makeNode (rows.filter (SourcePruningNativeView.keeps fits admits key))) middle = (result, heap) ∧
++        SourceEqualityQueryGlobalMemos.ExposureReads fuel value before.checked.native.machine.heap memos final := by
++  unfold SourcePruningNativeView.narrowAt at done
++  cases exposed : MergedFreshOrdinaryExposure.nodeEdges fuel value before.checked.native.machine.heap with
++  | unresolved | pending | exhausted => simp only [exposed] at done; cases done
++  | done rows middle =>
++    have built : run (makeNode (rows.filter (SourcePruningNativeView.keeps fits admits key))) middle = (result, heap) := by
++      exact Prod.ext (MergedSourceComparison.Result.done.inj (by simpa only [exposed] using done)).1
++        (MergedSourceComparison.Result.done.inj (by simpa only [exposed] using done)).2
++    have physicalReady := SourceCurrentAllocatedConjunctionMemo.ready before.checked initial.ready.good
++      initial.ready.semantic initial.ready.costs
++    have read := SourceCurrentAllocatedGateFields.read (.done fuel exposed) physicalReady available
++    have selected : InternedNestedProvenance.Edges middle (rows.filter (SourcePruningNativeView.keeps fits admits key)) :=
++      fun edge member => read.2 edge (List.mem_filter.mp member).1
++    have constructor := SourceCurrentRequiredHeapEffects.node_constructor
++      (SourceCurrentConjunctionEquality.FieldAvailable before.checked.operations)
++      (rows.filter (SourcePruningNativeView.keeps fits admits key)) middle read.1.ready.semantic
++      read.1.ready.costs read.1.ready.fields selected
++    rw [built] at constructor
++    have constructed : SourceCurrentConjunctionRowsAllocation.Effects
++        ⟨middle, before.checked.operations⟩ ⟨heap, before.checked.operations⟩ :=
++      ⟨constructor.1, ⟨constructor.2.1, constructor.2.2.1, physicalReady.valid, constructor.2.2.2.1⟩,
++        SourceEqualityConstraintMemoAllocation.grows_refl _⟩
++    have effects := read.1.trans constructed
++    obtain ⟨final, calls, valid, retained⟩ := SourceEqualityQueryGlobalMemos.exposure_memos fuel value
++      before.checked.native.machine.heap initial.ready.semantic initial.ready.costs available memos initial.globals
++    have middleValid : EndpointMemoGateTrace.Valid middle final := by
++      simpa only [exposed, MergedSourceExposure.Result.state] using valid
++    have finalValid := SourceQueryUnfoldMemo.valid_grows middle heap read.1.ready.semantic constructor.1 final middleValid
++    have readProbes := SourceCurrentAllocatedProbeExposure.read_heap (.done fuel exposed)
++      initial.ready.semantic available initial.probes
++    have finalProbes := InternedFreshOrdinaryProbeHeap.node
++      (rows.filter (SourcePruningNativeView.keeps fits admits key)) middle readProbes
++    rw [built] at finalProbes
++    let checked := advancePhysical before.checked ⟨heap, before.checked.operations⟩
++    have afterContext : Context formulas solver inventory
++        (SourceCurrentAllocatedPartialState.advance before checked before.fourth before.merge) final := by
++      refine ⟨SourceCurrentConjunctionClassScan.advance_ready before.checked _ initial.ready effects,
++        initial.admitted.advance _ (SourceCurrentAllocatedQueryMemo.advance_extension before.checked _ effects),
++        initial.sound.advance formulas solver checked before.fourth before.merge effects,
++        initial.stored.grows effects.keeps, initial.covered,
++        SourceCurrentEmptinessMemo.grows formulas solver effects.keeps before.fourth initial.correct,
++        finalValid, finalProbes⟩
++    exact ⟨final, ⟨afterContext, effects, extends_refl _, fun _ _ found => found⟩,
++      retained, calls.2, rows, middle, rfl, built, calls⟩
++
++/-- Mu and type skips or the actual filtered read derive the outer narrowing caller postcondition. -/
++theorem outer_post
++    (formulas : SourceGuards.Formulas FullSyntax.Formula)
++    (solver : SourceGuards.Entailment FullSyntax.Formula)
++    (inventory : Inventory) (before : Caller width) (memos : Memos)
++    (holeKey : Typing → Nat → Key) (fits : Key → Symbol → Bool) (admits : Key → Node → Bool)
++    (metadata : SourcePruningRecordTypes.Metadata Typing) (fuel uv : Nat) (value result : Node)
++    (heap : State Symbol Constraint)
++    (initial : Context formulas solver inventory before memos)
++    (available : Available before.checked.native.machine.heap value)
++    (done : SourcePruningOuterNarrow.narrow holeKey fits admits metadata fuel uv value before.checked.native.machine.heap =
++      .done result heap) :
++    ∃ final : Memos,
++      Post formulas solver inventory before
++        (SourceCurrentAllocatedPartialState.advance before
++          (advancePhysical before.checked ⟨heap, before.checked.operations⟩) before.fourth before.merge) final ∧
++      Extends memos.unfolding final.unfolding ∧ final.query = memos.query := by
++  have skipped (same : result = value ∧ heap = before.checked.native.machine.heap) :
++      ∃ final : Memos,
++        Post formulas solver inventory before
++          (SourceCurrentAllocatedPartialState.advance before
++            (advancePhysical before.checked ⟨heap, before.checked.operations⟩) before.fourth before.merge) final ∧
++        Extends memos.unfolding final.unfolding ∧ final.query = memos.query := by
++    rcases same with ⟨rfl, rfl⟩
++    exact ⟨memos, Post.refl initial, extends_refl _, rfl⟩
++  by_cases typed : uv ∈ metadata.types
++  · apply skipped
++    have pureDone := SourcePruningOuterNarrow.narrow_type holeKey fits admits metadata fuel uv value
++      before.checked.native.machine.heap typed
++    have parts := MergedSourceComparison.Result.done.inj (pureDone.symm.trans done)
++    exact ⟨parts.1.symm, parts.2.symm⟩
++  · cases value with
++    | mu =>
++        have parts := MergedSourceComparison.Result.done.inj done
++        exact skipped ⟨parts.1.symm, parts.2.symm⟩
++    | empty | reference | node | union =>
++        have actual := done
++        simp [SourcePruningOuterNarrow.narrow, typed] at actual
++        obtain ⟨final, post, retained, query, _receipt⟩ := narrowAt_post formulas solver inventory before memos
++          fits admits (holeKey metadata.typing uv) fuel _ result heap initial available actual
++        exact ⟨final, post, retained, query⟩
++
++end MicroCFTA.SourcePruningNativeContext

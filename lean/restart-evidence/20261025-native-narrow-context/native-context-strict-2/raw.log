@@ -1,0 +1,75 @@
+/tmp/mcfta-native-narrow-context-20261025/native-context-strict-2/MicroCFTA/SourcePruningNativeContext.lean:22:0: error: automatically included section variable(s) unused in theorem `MicroCFTA.SourcePruningNativeContext.narrowAt_post`:
+  [DecidableEq Symbol]
+consider restructuring your `variable` declarations so that the variables are not in scope or explicitly omit them:
+  omit [DecidableEq Symbol] in theorem ...
+
+Note: This linter can be disabled with `set_option linter.unusedSectionVars false`
+/tmp/mcfta-native-narrow-context-20261025/native-context-strict-2/MicroCFTA/SourcePruningNativeContext.lean:117:101: error: don't know how to synthesize placeholder for argument `before`
+context:
+Key Typing : Type
+width : Nat
+inst✝¹ : DecidableEq Symbol
+inst✝ : DecidableEq (EdgeKey Symbol Constraint)
+formulas : SourceGuards.Formulas FullSyntax.Formula
+solver : SourceGuards.Entailment FullSyntax.Formula
+inventory : Inventory
+before : Caller width
+memos : Memos
+holeKey : Typing → Nat → Key
+fits : Key → Symbol → Bool
+admits : Key → Node → Bool
+metadata : SourcePruningRecordTypes.Metadata Typing
+fuel uv : Nat
+result : Node
+heap : InternedConstructorTemplates.State Symbol Constraint
+initial : Context formulas solver inventory before memos
+available : Available before.checked.native.machine.heap Value.empty
+done :
+  SourcePruningOuterNarrow.narrow holeKey fits admits metadata fuel uv Value.empty before.checked.native.machine.heap =
+    MergedSourceComparison.Result.done result heap
+skipped :
+  result = Value.empty ∧ heap = before.checked.native.machine.heap →
+    ∃ final,
+      Post formulas solver inventory before
+          (SourceCurrentAllocatedPartialState.advance before
+            (advancePhysical before.checked { heap := heap, equality := before.checked.operations }) before.fourth
+            before.merge)
+          final ∧
+        Extends memos.unfolding final.unfolding ∧ final.query = memos.query
+typed : uv ∈ metadata.types
+⊢ InternedConstructorTemplates.State Symbol Constraint
+/tmp/mcfta-native-narrow-context-20261025/native-context-strict-2/MicroCFTA/SourcePruningNativeContext.lean:117:99: error: don't know how to synthesize placeholder for argument `value`
+context:
+Key Typing : Type
+width : Nat
+inst✝¹ : DecidableEq Symbol
+inst✝ : DecidableEq (EdgeKey Symbol Constraint)
+formulas : SourceGuards.Formulas FullSyntax.Formula
+solver : SourceGuards.Entailment FullSyntax.Formula
+inventory : Inventory
+before : Caller width
+memos : Memos
+holeKey : Typing → Nat → Key
+fits : Key → Symbol → Bool
+admits : Key → Node → Bool
+metadata : SourcePruningRecordTypes.Metadata Typing
+fuel uv : Nat
+result : Node
+heap : InternedConstructorTemplates.State Symbol Constraint
+initial : Context formulas solver inventory before memos
+available : Available before.checked.native.machine.heap Value.empty
+done :
+  SourcePruningOuterNarrow.narrow holeKey fits admits metadata fuel uv Value.empty before.checked.native.machine.heap =
+    MergedSourceComparison.Result.done result heap
+skipped :
+  result = Value.empty ∧ heap = before.checked.native.machine.heap →
+    ∃ final,
+      Post formulas solver inventory before
+          (SourceCurrentAllocatedPartialState.advance before
+            (advancePhysical before.checked { heap := heap, equality := before.checked.operations }) before.fourth
+            before.merge)
+          final ∧
+        Extends memos.unfolding final.unfolding ∧ final.query = memos.query
+typed : uv ∈ metadata.types
+⊢ Node
+/tmp/mcfta-native-narrow-context-20261025/native-context-strict-2/MicroCFTA/SourcePruningNativeContext.lean:117:13: error: failed to infer `have` declaration type

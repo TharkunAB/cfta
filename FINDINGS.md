@@ -70,6 +70,19 @@ Terminal parents retain the existing enumerateNode fallback boundary. Native
 children can still take their terminal dispatcher. No Haskell fix is needed.
 Details: lean/notes-current-pruning-enumeration-native-ordinary.md.
 
+### Actual native narrowing retains the full caller and memos
+
+The modeled native narrowing producer now derives the full checked Caller
+Post, global memo validity and indexed enumeration cache at one result heap.
+The proof follows the actual row exposure and filtered constructor. It keeps
+native effects on Empty before enumeration rejects. The earlier full Caller
+boundary is closed for this operation. The saved memo receipt uses one
+concrete exposure fuel; equality of saved tables across larger fuels is open.
+Actual recursion checks, callbacks and whole-driver composition remain open.
+These are proof boundaries. No new Haskell runtime defect or repair is found.
+External action: no patch is proposed for this source observation.
+Details: lean/notes-current-pruning-enumeration-narrow-context.md.
+
 ### Indexed native narrowing and the full caller boundary
 
 Enumeration.hs:436 passes the full old suspended bucket to writeUVarValue as
@@ -245,6 +258,28 @@ TH/Generic extraction, valid-position build/read and source codec laws stay open
 
 
 
+
+## Actual native narrowing derives caller and indexed caches together
+
+Caller and memos: `d677fd77b`. Combined producer: `6e83025d8`.
+The goal stays ACTIVE.
+
+One actual native narrowing result now derives the full checked Caller Post,
+valid saved global memos and indexed enumeration cache at the same result
+heap. The proof uses the actual exposure and filtered constructor. The
+combined producer derives completion and the final Context from initial
+invariants and an actual value-read receipt. Equal handles retain their
+framed cache. Changed handles retain the actual reread and indexed write.
+Empty retains reached Caller effects and has no successful enumeration state.
+Saved memos belong to the chosen exposure fuel; their equality across all
+larger fuels is not proved. No old producer or runtime worker changes.
+
+Both new modules, Audit import and installed public readback pass. Audit
+checks 76724 theorem dependencies. H6 remains the strongest end-to-end language
+result. Haskell is unchanged. Next: actual selection/recursion/callback/entry
+composition. Fragment-hole history, extraction and whole-driver semantics
+remain open. Arbitrary narrowing predicates have no new semantic guarantee.
+Details: `lean/notes-current-pruning-enumeration-narrow-context.md`.
 
 ## Actual native narrowing derives indexed caches
 
