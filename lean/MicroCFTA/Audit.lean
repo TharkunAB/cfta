@@ -1,3 +1,4 @@
+import MicroCFTA.SourcePruningEnumerationCachedStages
 import MicroCFTA.SourcePruningEnumerationCachedOwn
 import MicroCFTA.SourcePruningEnumerationCachedPrepare
 import MicroCFTA.SourcePruningEnumerationCachedChild
