@@ -142,6 +142,8 @@ data EClass f = EClass
     , classUsers :: ![(ENode f, ClassId)]
     , classUserCount :: !Int
     , classSort :: !Int
+    , classStamp :: !Int
+    -- ^ The 'clock' of the last change: a new e-node or a merge.
     }
 
 {- | An e-graph of terms over the symbols @f@, with sorts over the sort
@@ -165,11 +167,13 @@ data EGraph s f = EGraph
     , sortNodes :: !(IntMap.IntMap (SortNode s))
     , pending :: ![ClassId]
     -- ^ The roots whose users 'rebuild' must make canonical.
+    , clock :: !Int
+    -- ^ The iteration of the saturation, for the stamps of the e-classes.
     }
 
 -- | The e-graph without terms.
 emptyEGraph :: EGraph s f
-emptyEGraph = EGraph IntMap.empty IntMap.empty HashMap.empty 0 0 HashMap.empty IntMap.empty []
+emptyEGraph = EGraph IntMap.empty IntMap.empty HashMap.empty 0 0 HashMap.empty IntMap.empty [] 0
 
 -- | The root of the e-class of an identity.
 find :: EGraph s f -> ClassId -> ClassId
@@ -219,7 +223,7 @@ addNode n0 g = case HashMap.lookup n (memo g) of
             use = IntMap.adjust (\e -> e{classUsers = (n, c) : classUsers e, classUserCount = classUserCount e + 1})
          in ( c
             , g
-                { classes = foldr (\(ClassId j) -> use j) (IntMap.insert i (EClass (HashSet.singleton n) [] 0 k) (classes g)) cs
+                { classes = foldr (\(ClassId j) -> use j) (IntMap.insert i (EClass (HashSet.singleton n) [] 0 k (clock g)) (classes g)) cs
                 , memo = HashMap.insert n c (memo g)
                 , classCount = classCount g + 1
                 , added = added g + 1
@@ -276,6 +280,7 @@ union a b g
                             (classUsers eSmall ++ classUsers eBig)
                             (classUserCount eSmall + classUserCount eBig)
                             (classSort eBig)
+                            (clock g)
                  in Just
                         ( True
                         , g
@@ -509,16 +514,26 @@ head.
 -}
 matchRule ::
     (Eq s, Hashable f) =>
-    EGraph s f -> IntMap.IntMap [ENode f] -> HashMap.HashMap f (Int, [ClassId]) -> Rule s f -> [(ClassId, Subst)]
-matchRule g region bySymbol r = [(c, m) | c <- roots, m <- down (ruleLeft r) c (Subst IntMap.empty IntMap.empty)]
+    EGraph s f ->
+    IntMap.IntMap [ENode f] ->
+    HashMap.HashMap f (Int, [ClassId]) ->
+    (Int -> Int) ->
+    Int ->
+    Rule s f ->
+    [(ClassId, Subst)]
+matchRule g region bySymbol stampOf since r =
+    [(c, m) | c <- roots, (m, True) <- down (ruleLeft r) c (Subst IntMap.empty IntMap.empty, since == minBound)]
   where
-    down (CVar v sorts) c (Subst vs ss) = case sortsFrom c sorts ss of
+    -- A match is new when it passes an e-class that changed since the rule
+    -- last ran; the rule applied the other matches then.
+    seen (ClassId i) fresh = fresh || stampOf i >= since
+    down (CVar v sorts) c (Subst vs ss, fresh) = case sortsFrom c sorts ss of
         Nothing -> []
         Just ss' -> case IntMap.lookup v vs of
-            Nothing -> [Subst (IntMap.insert v c vs) ss']
-            Just c' | equivalent g c c' -> [Subst vs ss']
+            Nothing -> [(Subst (IntMap.insert v c vs) ss', seen c fresh)]
+            Just c' | equivalent g c c' -> [(Subst vs ss', seen c fresh)]
             _ -> []
-    down (CNode f kids sorts) c@(ClassId i) (Subst vs ss) = case sortsFrom c sorts ss of
+    down (CNode f kids sorts) c@(ClassId i) (Subst vs ss, fresh) = case sortsFrom c sorts ss of
         Nothing -> []
         Just ss' ->
             let arity = length kids
@@ -526,7 +541,7 @@ matchRule g region bySymbol r = [(c, m) | c <- roots, m <- down (ruleLeft r) c (
                 | ENode _ f' cs <- IntMap.findWithDefault [] i region
                 , f' == f
                 , length cs == arity
-                , m <- foldM (\acc (child, kid) -> down kid child acc) (Subst vs ss') (zip cs kids)
+                , m <- foldM (\acc (child, kid) -> down kid child acc) (Subst vs ss', seen c fresh) (zip cs kids)
                 ]
     sortsFrom _ [] ss = Just ss
     sortsFrom (ClassId i) sorts ss = do
@@ -570,7 +585,7 @@ ematch g p = case rule p p of
     Right r ->
         let region = IntMap.mapWithKey (\i _ -> canonicalNodes g i) (classes g)
          in [ (c, Map.fromList [(v, vs IntMap.! i) | (i, v) <- zip [0 ..] (ruleNames r)])
-            | (c, Subst vs _) <- matchRule g region (symbolIndex region) r
+            | (c, Subst vs _) <- matchRule g region (symbolIndex region) (const 0) minBound r
             ]
 
 {- | Build the right side of a rule for a match, or Nothing when the
@@ -657,12 +672,17 @@ saturateUntilEqual limits rules a b = run limits rules (Just (a, b))
 
 run ::
     (Hashable s, Hashable f) => Limits -> [Rule s f] -> Maybe (ClassId, ClassId) -> EGraph s f -> (EGraph s f, Report)
-run limits rules goal g0 = go 0 IntMap.empty (rebuild g0)
+run limits rules goal g0 = go 0 IntMap.empty IntMap.empty IntMap.empty g1
   where
+    -- The changes before the saturation have older stamps than its first iteration.
+    g1 = let h = rebuild g0 in h{clock = clock h + 1}
     start = added g0
     size g = added g - start
     reached g = maybe False (uncurry (equivalent g)) goal
-    go i bans g
+    -- ran: the clock at which each rule last ran; entered: the clock
+    -- before the one at which each e-class entered the region of a goal, so
+    -- that an e-class is new to a rule when it entered after the rule ran.
+    go i bans ran entered g
         | reached g = (g, Report i (size g) Equal)
         | i >= limitIterations limits = (g, Report i (size g) IterationLimit)
         | size g > limitNodes limits = (g, Report i (size g) NodeLimit)
@@ -670,19 +690,26 @@ run limits rules goal g0 = go 0 IntMap.empty (rebuild g0)
             let region = case goal of
                     Nothing -> IntMap.mapWithKey (\j _ -> canonicalNodes g j) (classes g)
                     Just (a, b) -> reach g [a, b]
+                now = clock g
+                entered' = case goal of
+                    Nothing -> entered
+                    Just _ -> IntMap.union entered (IntMap.map (const (now - 1)) region)
+                stampOf j = max (maybe 0 classStamp (IntMap.lookup j (classes g))) (IntMap.findWithDefault minBound j entered')
                 present = HashSet.fromList [f | ns <- IntMap.elems region, ENode _ f _ <- ns]
                 bySymbol = symbolIndex region
+                -- The ban of a rule, the rule if it ran, and its matches.
                 search (k, r)
-                    | not (all (`HashSet.member` present) (ruleSymbols r)) = (Nothing, [])
-                    | Just (_, until', _) <- IntMap.lookup k bans, i < until' = (Nothing, [])
+                    | not (all (`HashSet.member` present) (ruleSymbols r)) = (Nothing, Just k, [])
+                    | Just (_, until', _) <- IntMap.lookup k bans, i < until' = (Nothing, Nothing, [])
                     | otherwise =
-                        let ms = matchRule g region bySymbol r
+                        let ms = matchRule g region bySymbol stampOf (IntMap.findWithDefault minBound k ran) r
                             (limit, _, ban) = IntMap.findWithDefault (limitMatches limits, 0, 5) k bans
                          in if limitMatches limits > 0 && length (take (limit + 1) ms) > limit
-                                then (Just (k, (2 * limit, i + ban, 2 * ban)), [])
-                                else (Nothing, [(c, m, r) | (c, m) <- ms])
+                                then (Just (k, (2 * limit, i + ban, 2 * ban)), Nothing, [])
+                                else (Nothing, Just k, [(c, m, r) | (c, m) <- ms])
                 results = map search (zip [0 :: Int ..] rules)
-                bans' = foldl' (\m (k, e) -> IntMap.insert k e m) bans [e | (Just e, _) <- results]
+                bans' = foldl' (\m (k, e) -> IntMap.insert k e m) bans [e | (Just e, _, _) <- results]
+                ran' = foldl' (\m k -> IntMap.insert k now m) ran [k | (_, Just k, _) <- results]
                 -- Stop as soon as a merge makes the two e-classes one, and
                 -- when the e-nodes reach the limit.
                 apply h changed [] = Right (h, changed)
@@ -693,13 +720,13 @@ run limits rules goal g0 = go 0 IntMap.empty (rebuild g0)
                         Just (c', h') -> case union c c' h' of
                             Nothing -> apply h' changed rest
                             Just (u, h'') -> if u && reached h'' then Left h'' else apply h'' (changed || u) rest
-             in case apply g False (concatMap snd results) of
-                    Left h -> let h' = rebuild h in (h', Report (i + 1) (size h') Equal)
+             in case apply g False (concat [ms | (_, _, ms) <- results]) of
+                    Left h -> let h' = rebuild h in (h'{clock = now + 1}, Report (i + 1) (size h') Equal)
                     Right (g', changed) ->
-                        let g'' = rebuild g'
+                        let g'' = (rebuild g'){clock = now + 1}
                          in if not changed && size g'' == size g
                                 then (g'', Report (i + 1) (size g'') (if reached g'' then Equal else Saturated))
-                                else go (i + 1) bans' g''
+                                else go (i + 1) bans' ran' entered' g''
     sortId h c = let ClassId j = find h c in maybe 0 classSort (IntMap.lookup j (classes h))
 
 -- The states of the e-graph automaton of 'ematchByIntersection'.
