@@ -31,6 +31,20 @@ def run (heap : InternedConstructorTemplates.State Symbol NativeGuard)
     SourcePruningEnumerationNativeIndex.write heap fuel target (.enumerated fragment)
       [] (references old) reset
 
+/-- Resetting ancestry and replacing a root by a bounded fragment retains safety. -/
+theorem written_safe
+    (before : EnumerationExpandableIndex.Cached Symbol EnumGuard)
+    (target : Nat) (fragment : Fragments.Fragment Symbol)
+    (safe : Safe before.core) (root : IsRoot before.core.representatives target)
+    (bounded : FragmentBound before.core.counter fragment) :
+    Safe {before.core with
+      values := before.core.values.set target (.enumerated fragment)
+      expansionAncestry := []} := by
+  apply (EnumerationDriver.setValue_safe target (.enumerated fragment)
+    {before.core with expansionAncestry := []} _
+    (EnumerationDriver.ancestry_safe before.core [] safe) root (by simp) bounded ?_).1
+  exact (EnumerationDriver.modify_success _ _ _).mpr rfl
+
 /-- Derive finite finalization and the retained storage and index invariants. -/
 theorem complete
     (heap : InternedConstructorTemplates.State Symbol NativeGuard)
@@ -61,7 +75,8 @@ theorem complete
       (∀ (slot : Nat),
         SourcePruningEnumerationNativeIndex.candidate heap
           ((after.core.values[slot]?).getD .eliminated) = some (after.expandable slot)) ∧
-      StorageValid after.core ∧ PendingRealized heap after.core := by
+      StorageValid after.core ∧ PendingRealized heap after.core ∧
+      (Safe before.core → IsRoot before.core.representatives target → Safe after.core) := by
   obtain ⟨fuel, countRun⟩ := SourcePruningEnumerationNativeIndex.count_complete
     before.core.representatives roots paths (references old)
   have inside : target < before.core.values.length := by
@@ -101,7 +116,8 @@ theorem complete
     fun slot => if slot = target then false else before.expandable slot,
     EnumerationCanonicalWaiting.count roots (-1) (references old) before.waiting⟩,
     ?_, ?_, rfl, List.getElem?_set_self inside, rfl, rfl, paths, ?_,
-    writtenFlags, writtenStorage, writtenRealized⟩
+    writtenFlags, writtenStorage, writtenRealized,
+    fun safe root => written_safe before target fragment safe root bounded⟩
   · intro extra
     simp only [run, EnumerationExpandableIndex.frame, stored, Option.bind_some,
       SourcePruningEnumerationNativeIndex.write, SourcePruningEnumerationNativeIndex.candidate,
