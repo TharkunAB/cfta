@@ -85,13 +85,17 @@ theorem complete
       EnumeratedOrigin before.core after.core ∧
       (∀ held, held < before.core.counter → IsRoot before.core.representatives held →
         Avoids before.core.representatives held bucket → EnumerationDriver.Protected held before.core after.core) ∧
+      (∀ allowed, EnumerationReferences.ReferencesAllowed allowed before.core →
+        EnumerationReferences.InputsAllowed allowed bucket →
+        EnumerationReferences.ReferencesAllowed allowed after.core) ∧
+      (EnumerationReferences.PendingReferences before.core → EnumerationReferences.PendingReferences after.core) ∧
       (raw = [] ∨ ∃ fragment, raw = [.ok (fragment, after.core)] ∧
         Safe after.core ∧ FragmentBound after.core.counter fragment) := by
   by_cases empty : incoming = .empty
   · subst incoming
     refine ⟨0, 0, 0, 0, 0, [], beforeCaller, before, memos.query, memos, inventory, roots,
       before.core, before.waiting, ?_, Post.refl initial, rfl, Nat.le_refl _, paths, safe.1,
-      realized, counts, flags, .refl _, ?_, .inl rfl⟩
+      realized, counts, flags, .refl _, ?_, (fun _ valid _ => valid), (fun valid => valid), .inl rfl⟩
     · intro er en P H ek _ _
       exact SourcePruningEnumerationChildDispatch.empty checkEmpty _ _ _ _ _ _ _ _ _
     · intro held _ root _
@@ -116,9 +120,23 @@ theorem complete
           simp
         obtain ⟨afterSafe, origin, protects⟩ := SourcePruningEnumerationChildEffects.child
           bucket incoming action before.core after.core _ safe bounded prepared success
+        have references : ∀ allowed, EnumerationReferences.ReferencesAllowed allowed before.core →
+            EnumerationReferences.InputsAllowed allowed bucket →
+            EnumerationReferences.ReferencesAllowed allowed after.core := by
+          intro allowed valid inputs
+          exact SourcePruningEnumerationNativeReferences.prepared_allowed allowed bucket incoming action
+            before.core after.core _ valid inputs prepared success
+        have global : EnumerationReferences.PendingReferences before.core →
+            EnumerationReferences.PendingReferences after.core := by
+          intro history
+          apply SourcePruningEnumerationNativeReferences.pending_preserved before.core after.core bucket
+            history pending origin _ references
+          intro held fragment stored
+          obtain ⟨inside, root⟩ := enumerated_root before.core safe held fragment stored
+          exact protects held inside root
         refine ⟨0, 0, 0, 0, k, [.ok (.hole before.core.counter, after.core)], beforeCaller, after,
           memos.query, memos, inventory, roots, before.core, before.waiting, ?_, Post.refl initial,
-          rfl, ?_, afterPaths, storage, afterRealized, afterCounts, afterFlags, origin, ?_,
+          rfl, ?_, afterPaths, storage, afterRealized, afterCounts, afterFlags, origin, ?_, references, global,
           .inr ⟨.hole before.core.counter, rfl, afterSafe, bound⟩⟩
         · intro er en P H ek _ _
           rw [nonterminal_parameters checkEmpty _ _ _ _ _ bucket incoming beforeCaller before memos.query empty noHere]
@@ -141,15 +159,29 @@ theorem complete
           _foldPending, _foldCounts, _foldWaiting, _foldFlags, _foldEliminated, _foldCompleted,
           _foldedFrame, _foldedSafe, _foldedOrigin, _terminalRun, post, querySame, cacheRun,
           counter, afterPaths, storage, afterRealized, afterCounts, afterFlags, _outside,
-          afterSafe, protects, origin, _rejectedCache, rejected, completed⟩ :=
+          afterSafe, protects, origin, references, _rejectedCache, rejected, completed⟩ :=
           SourcePruningEnumerationCachedTerminalAdapter.complete formulas solver inventory beforeCaller before
             checkEmpty first rest incoming descendants roots memos initial safe paths counts flags
             activeBounded activePending realized empty available closed
             (fun sc member => bounded sc (subsets.2 member))
             (ranges empty first rest descendants partitioned)
+        have fullReferences : ∀ allowed, EnumerationReferences.ReferencesAllowed allowed before.core →
+            EnumerationReferences.InputsAllowed allowed bucket →
+            EnumerationReferences.ReferencesAllowed allowed after.core := by
+          intro allowed valid inputs
+          exact references allowed valid (fun sc member => inputs sc (subsets.2 member))
+        have global : EnumerationReferences.PendingReferences before.core →
+            EnumerationReferences.PendingReferences after.core := by
+          intro history
+          apply SourcePruningEnumerationNativeReferences.pending_preserved before.core after.core bucket
+            history pending origin _ fullReferences
+          intro held fragment stored
+          have root := (enumerated_root before.core safe held fragment stored).2
+          exact protects held root (fun sc member => pending held fragment stored sc (subsets.1 member))
         refine ⟨r, n, p, h, k, raw, afterCaller, after, savedQueries, final, next,
           EnumerationCanonicalUnion.mergedRoots roots recorded winner, outer, joined.waiting,
-          ?_, post, querySame, ?_, afterPaths, storage, afterRealized, afterCounts, afterFlags, origin, ?_, ?_⟩
+          ?_, post, querySame, ?_, afterPaths, storage, afterRealized, afterCounts, afterFlags, origin,
+          ?_, fullReferences, global, ?_⟩
         · intro er en P H ek largeP largeH
           rw [SourcePruningEnumerationChildDispatch.terminal checkEmpty _ _ _ _ _ bucket incoming
             beforeCaller before memos.query first rest descendants partitioned]

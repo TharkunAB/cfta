@@ -64,6 +64,10 @@ theorem complete
       (∀ held, held < before.core.counter → IsRoot before.core.representatives held →
         (∀ incoming bucket, (incoming, bucket) ∈ inputs → Avoids before.core.representatives held bucket) →
         EnumerationDriver.Protected held before.core after.core) ∧
+      (∀ allowed, EnumerationReferences.ReferencesAllowed allowed before.core →
+        (∀ incoming bucket, (incoming, bucket) ∈ inputs → EnumerationReferences.InputsAllowed allowed bucket) →
+        EnumerationReferences.ReferencesAllowed allowed after.core) ∧
+      (EnumerationReferences.PendingReferences before.core → EnumerationReferences.PendingReferences after.core) ∧
       (∀ fragment ∈ fragments, FragmentBound after.core.counter fragment) ∧
       ((result = .complete fragments afterCaller savedQueries after ∧ Safe after.core) ∨
         ∃ outer waiting, result = .stopped fragments
@@ -72,7 +76,8 @@ theorem complete
   | nil =>
       refine ⟨0, 0, 0, 0, 0, [], beforeCaller, before, memos.query, memos, inventory, roots,
         .complete [] beforeCaller memos.query before, ?_, Post.refl initial, rfl, Nat.le_refl _,
-        paths, safe.1, realized, counts, flags, .refl _, ?_, ?_, ?_, .inl ⟨rfl, safe⟩⟩
+        paths, safe.1, realized, counts, flags, .refl _, ?_, ?_, (fun _ valid _ => valid),
+        (fun valid => valid), ?_, .inl ⟨rfl, safe⟩⟩
       · intros; rfl
       · intro held fragment stored
         exact EnumerationDriver.Protected.refl held before.core (enumerated_root before.core safe held fragment stored).2
@@ -84,7 +89,8 @@ theorem complete
       obtain ⟨available, closed, bounded, pending⟩ := genuine incoming bucket (by simp)
       obtain ⟨r, n, p, h, k, raw, middleCaller, middle, middleQueries, middleMemos, middleInventory,
         middleRoots, outer, waiting, headRun, headPost, headQueries, growth, middlePaths,
-        middleStorage, middleRealized, middleCounts, middleFlags, headOrigin, headProtected, shape⟩ :=
+        middleStorage, middleRealized, middleCounts, middleFlags, headOrigin, headProtected,
+        headReferences, headPending, shape⟩ :=
         SourcePruningEnumerationChildCompletion.complete formulas solver inventory beforeCaller before
           checkEmpty bucket incoming roots memos initial safe paths counts flags realized bounded pending available closed ranges.1
       have protects : ∀ held fragment, before.core.values[held]? = some (.enumerated fragment) →
@@ -97,11 +103,13 @@ theorem complete
         refine ⟨r, n, p, h, k, [], middleCaller, middle, middleQueries, middleMemos, middleInventory,
           middleRoots, .stopped [] (.ok (some []), middleCaller, middleQueries, outer, waiting) (some middle),
           ?_, headPost, headQueries, growth, middlePaths, middleStorage, middleRealized, middleCounts,
-          middleFlags, headOrigin, protects, ?_, ?_, .inr ⟨outer, waiting, rfl⟩⟩
+          middleFlags, headOrigin, protects, ?_, ?_, headPending, ?_, .inr ⟨outer, waiting, rfl⟩⟩
         · intro er en P H ek largeP largeH
           simp only [SourcePruningEnumerationChildTraversal.run, headRun er en P H ek largeP largeH]
         · intro held inside root avoids
           exact headProtected held inside root (avoids incoming bucket (by simp))
+        · intro allowed valid allowedInputs
+          exact headReferences allowed valid (allowedInputs incoming bucket (by simp))
         · simp
       · have tailGenuine : ∀ value bucket, (value, bucket) ∈ rest →
             Available middleCaller.checked.native.machine.heap value ∧ value.free = [] ∧
@@ -122,7 +130,7 @@ theorem complete
         obtain ⟨tailR, tailN, tailP, tailH, tailK, tailFragments, afterCaller, after, savedQueries,
           final, next, afterRoots, tailResult, tailRun, tailPost, querySame, tailGrowth, afterPaths,
           storage, afterRealized, afterCounts, afterFlags, tailOrigin, tailProtected, tailRootsProtected,
-          tailBounds, tailShape⟩ :=
+          tailReferences, tailPending, tailBounds, tailShape⟩ :=
           ih middleInventory middleCaller middle middleRoots middleMemos headPost.context middleSafe
             middlePaths middleCounts middleFlags middleRealized tailGenuine tailRanges
         let result : SourcePruningEnumerationChildTraversal.Result width := match tailResult with
@@ -131,7 +139,8 @@ theorem complete
         refine ⟨r + tailR, n + tailN, max p tailP, max h tailH, k + tailK,
           fragment :: tailFragments, afterCaller, after, savedQueries, final, next, afterRoots, result,
           ?_, headPost.trans tailPost, querySame, Nat.le_trans growth tailGrowth, afterPaths,
-          storage, afterRealized, afterCounts, afterFlags, headOrigin.trans tailOrigin, ?_, ?_, ?_, ?_⟩
+          storage, afterRealized, afterCounts, afterFlags, headOrigin.trans tailOrigin, ?_, ?_, ?_,
+          (fun valid => tailPending (headPending valid)), ?_, ?_⟩
         · intro er en P H ek largeP largeH
           have head := headRun (tailR + er) (tailN + en) P H (tailK + ek)
             (Nat.le_trans (Nat.le_max_left _ _) largeP) (Nat.le_trans (Nat.le_max_left _ _) largeH)
@@ -156,6 +165,11 @@ theorem complete
           apply tailRootsProtected held (Nat.lt_of_lt_of_le inside growth) first.root
           intro value retained member
           exact first.avoids retained (avoids value retained (List.mem_cons_of_mem _ member))
+        · intro allowed valid allowedInputs
+          apply tailReferences allowed
+            (headReferences allowed valid (allowedInputs incoming bucket (by simp)))
+          intro value retained member
+          exact allowedInputs value retained (List.mem_cons_of_mem _ member)
         · intro child member
           rcases List.mem_cons.mp member with rfl | member
           · exact fragmentBound_mono _ _ tailGrowth _ fragmentBound

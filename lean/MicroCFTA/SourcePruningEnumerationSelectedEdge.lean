@@ -153,6 +153,10 @@ theorem complete
       EnumeratedOrigin before.core after.core ∧ InputsPending after.core scs ∧
       (∀ held, held < before.core.counter → IsRoot before.core.representatives held →
         Avoids before.core.representatives held scs → EnumerationDriver.Protected held before.core after.core) ∧
+      (EnumerationReferences.PendingReferences before.core → EnumerationReferences.PendingReferences after.core) ∧
+      (∀ held, held < before.core.counter → IsRoot before.core.representatives held →
+        Avoids before.core.representatives held scs → EnumerationReferences.IncomingAvoid held before.core →
+        EnumerationReferences.IncomingAvoid held after.core) ∧
       ((∃ fragment, result = .complete fragment afterCaller savedQueries after ∧
           Safe after.core ∧ FragmentBound after.core.counter fragment) ∨
         ∃ fragments outer waiting, result = .stopped fragments
@@ -173,7 +177,7 @@ theorem complete
     rwa [readback] at admitted
   obtain ⟨r, n, p, h, k, fragments, afterCaller, after, savedQueries, final, next, afterRoots,
     childResult, childrenRun, post, querySame, growth, afterPaths, storage, afterRealized,
-    afterCounts, afterFlags, origin, enumProtects, rootsProtects, fragmentBounds, shape⟩ :=
+    afterCounts, afterFlags, origin, enumProtects, rootsProtects, references, _pendingHistory, fragmentBounds, shape⟩ :=
     SourcePruningEnumerationTraversalCompletion.complete formulas solver inventory caller own checkEmpty inputs roots memos
       initial ownSafe ownPaths ownCounts ownFlags ownRealized genuine numeric
   have ownOrigin : EnumeratedOrigin before.core own.core := by
@@ -194,6 +198,28 @@ theorem complete
     intro held inside root avoids
     obtain ⟨frame, avoidsChildren⟩ := ownProtects held inside root avoids
     exact frame.trans (rootsProtects held (by omega) frame.root avoidsChildren)
+  have incomingPreserved : ∀ held, held < before.core.counter → IsRoot before.core.representatives held →
+      Avoids before.core.representatives held scs → EnumerationReferences.IncomingAvoid held before.core →
+      EnumerationReferences.IncomingAvoid held after.core := by
+    intro held inside root avoids incoming
+    obtain ⟨frame, avoidsChildren⟩ := ownProtects held inside root avoids
+    have ownAllowed : EnumerationReferences.ReferencesAllowed
+        (fun uv => ¬UnionFind.SameClass before.core.representatives held uv) own.core := by
+      rw [ownCore]
+      exact EnumerationReferences.suspension_allowed _ tries.length before.core incoming
+    have ownIncoming : EnumerationReferences.IncomingAvoid held own.core := by
+      intro value member sc listed same
+      exact ownAllowed value member sc listed ((frame.classes sc.var).mp same)
+    have allowedAfter := references _ ownIncoming avoidsChildren
+    have childFrame := rootsProtects held (by omega) frame.root avoidsChildren
+    intro value member sc listed same
+    exact allowedAfter value member sc listed ((childFrame.classes sc.var).mp same)
+  have pendingPreserved : EnumerationReferences.PendingReferences before.core →
+      EnumerationReferences.PendingReferences after.core := by
+    intro history held fragment stored
+    have old := fullOrigin held fragment stored
+    obtain ⟨inside, root⟩ := enumerated_root before.core safe held fragment old
+    exact incomingPreserved held inside root (pending held fragment old) (history held fragment old)
   rcases shape with ⟨completed, afterSafe⟩ | ⟨outer, waiting, stopped⟩
   · subst childResult
     let fragment : Fragment := .node edge.entry.key.symbol fragments
@@ -202,7 +228,7 @@ theorem complete
     refine ⟨r, n, p, h, k, afterCaller, finished, savedQueries, final, next, afterRoots,
       .complete fragment afterCaller savedQueries finished, ?_, post, querySame, ?_, afterPaths,
       (finish_safe residual fragment after afterSafe fragmentBound).1, afterRealized, afterCounts,
-      afterFlags, fullOrigin, retained, ?_, .inl ⟨fragment, rfl,
+      afterFlags, fullOrigin, retained, ?_, pendingPreserved, incomingPreserved, .inl ⟨fragment, rfl,
         finish_safe residual fragment after afterSafe fragmentBound, fragmentBound⟩⟩
     · intro er en P H ek largeP largeH
       simp only [run, ownRun]
@@ -216,7 +242,8 @@ theorem complete
     refine ⟨r, n, p, h, k, afterCaller, after, savedQueries, final, next, afterRoots,
       .stopped fragments (.ok (some []), afterCaller, savedQueries, outer, waiting) (some after),
       ?_, post, querySame, ?_, afterPaths, storage, afterRealized, afterCounts, afterFlags,
-      fullOrigin, retained, protectedRoots, .inr ⟨fragments, outer, waiting, rfl⟩⟩
+      fullOrigin, retained, protectedRoots, pendingPreserved, incomingPreserved,
+      .inr ⟨fragments, outer, waiting, rfl⟩⟩
     · intro er en P H ek largeP largeH
       simp only [run, ownRun]
       rw [readback, childrenRun er en P H ek largeP largeH]

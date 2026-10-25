@@ -1,5 +1,6 @@
 import MicroCFTA.SourcePruningEnumerationCachedTerminal
 import MicroCFTA.SourcePruningEnumerationIncomingCacheAdapter
+import MicroCFTA.SourcePruningEnumerationNativeReferences
 
 namespace MicroCFTA.SourcePruningEnumerationCachedTerminalAdapter
 open EnumerationState EnumerationCorrectness EnumerationSchedule
@@ -422,6 +423,9 @@ theorem complete
       (∀ (slot : Nat) (fragment : Fragments.Fragment Symbol),
         resultCache.core.values[slot]? = some (.enumerated fragment) →
         before.core.values[slot]? = some (.enumerated fragment)) ∧
+      (∀ allowed, EnumerationReferences.ReferencesAllowed allowed before.core →
+        EnumerationReferences.InputsAllowed allowed incomingScs →
+        EnumerationReferences.ReferencesAllowed allowed resultCache.core) ∧
       (foldRows = [] → resultCache = folded) ∧
       (foldRows = [] → raw = [] ∧ afterCaller = foldCaller ∧ savedQueries = foldQueries ∧
         outer = folded.core ∧ final = foldFinal ∧ next = foldInventory) ∧
@@ -493,6 +497,15 @@ theorem complete
     SourcePruningEnumerationCachedTerminal.complete formulas solver inventory beforeCaller before
       checkEmpty first rest incoming incomingScs roots memos initial safe paths counts flags
       bounded pending realized nonempty available closed incomingBounded ranges
+  have foldAllowed : ∀ allowed, EnumerationReferences.ReferencesAllowed allowed before.core →
+      EnumerationReferences.ReferencesAllowed allowed folded.core := by
+    intro allowed valid
+    have values := congrArg EnumerationState.State.values joinedSame
+    change joined.core.values = before.core.values at values
+    apply SourcePruningEnumerationNativeReferences.fold_allowed allowed checkEmpty n p h recorded
+      beforeCaller joined.core winner memos.query _ foldCaller foldQueries folded.core
+      (by simpa only [EnumerationReferences.ReferencesAllowed, values] using valid)
+    simpa only [Nat.add_zero] using foldRun 0 p h (Nat.le_refl _) (Nat.le_refl _)
   rcases foldShape with rejected | completed
   · subst foldRows
     obtain ⟨rawNil, callerSame, queriesSame, outerSame, _finalSame, _nextSame⟩ := rejectedBranch rfl
@@ -507,7 +520,8 @@ theorem complete
       (by simpa only [congrArg EnumerationState.State.counter joinedSame] using foldCounter), foldPaths,
       foldStorage, ?_, foldCounts, ?_, foldedFrame, ?_,
       (protects before.core folded.core roots first rest recorded winner paths recordedSame
-        winnerMember foldPaths foldedFrame), foldedOrigin, ?_, rejectedBranch, ?_⟩
+        winnerMember foldPaths foldedFrame), foldedOrigin, (fun allowed valid _ => foldAllowed allowed valid),
+      ?_, rejectedBranch, ?_⟩
     · intro extraRepresentative extraNative P H extraIndex enoughP enoughH
       rw [rawNil, callerSame, queriesSame, outerSame]
       simp only [run, ite_eq_right nonempty, prefixRun extraRepresentative,
@@ -595,7 +609,7 @@ theorem complete
       afterPaths, afterStorage, afterRealized, afterCounts, afterFlags, resultFrame,
       (fun _ => resultSafe),
       (protects before.core after.core roots first rest recorded winner paths recordedSame
-        winnerMember afterPaths resultFrame), resultOrigin, ?_, rejectedBranch, ?_⟩
+        winnerMember afterPaths resultFrame), resultOrigin, ?_, ?_, rejectedBranch, ?_⟩
     · intro extraRepresentative extraNative P H extraIndex enoughP enoughH
       rw [outerRead, rawSame]
       simp only [run, ite_eq_right nonempty, prefixRun extraRepresentative,
@@ -605,6 +619,11 @@ theorem complete
         incomingRun extraRepresentative extraNative P H enoughP enoughH,
         adapted extraIndex]
       simp only [apply_ite, List.map_nil, List.map_cons]
+    · intro allowed valid inputs
+      exact SourcePruningEnumerationNativeReferences.incoming_written allowed read after.core winner handle oldNode
+        incomingScs oldScs (by simpa only [EnumerationReferences.ReferencesAllowed, frame.values] using
+          (foldAllowed allowed valid)) inputs readStored
+        (by rw [afterSame])
     · simp
     · intro isCompleted
       exact ⟨incomingK, oldNode, oldScs, read, after, replacement, handle, rfl, outerRead,
