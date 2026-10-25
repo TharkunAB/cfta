@@ -1,0 +1,49 @@
+MicroCFTA.SourcePruningEnumerationSelection.offered {EnumGuard : Type}
+  (before : MicroCFTA.EnumerationExpandableIndex.Cached MicroCFTA.SourcePruningTemplates.Symbol EnumGuard)
+  (preference : List Nat → Option Nat) (uv : Nat)
+  (selected : MicroCFTA.EnumerationPureSelection.next preference before = MicroCFTA.EnumerationState.Next.expand uv) :
+  uv < before.core.counter ∧ before.expandable uv = true ∧ before.waiting uv = none
+'MicroCFTA.SourcePruningEnumerationSelection.offered' depends on axioms: [propext, Quot.sound]
+MicroCFTA.SourcePruningEnumerationSelection.unblocked_avoids {EnumGuard : Type}
+  (before : MicroCFTA.EnumerationExpandableIndex.Cached MicroCFTA.SourcePruningTemplates.Symbol EnumGuard)
+  (roots : Nat → Nat) (paths : MicroCFTA.EnumerationSchedule.Roots before.core.representatives roots)
+  (counts : MicroCFTA.EnumerationCanonicalWaiting.Correct roots before.core.values before.waiting) (held : Nat)
+  (root : MicroCFTA.EnumerationSchedule.IsRoot before.core.representatives held)
+  (unblocked : before.waiting held = none) (slot : Nat) (node : Option Nat)
+  (scs : List MicroCFTA.EnumerationState.Suspended)
+  (stored : before.core.values[slot]? = some (MicroCFTA.EnumerationState.UVarValue.unenumerated node scs)) :
+  MicroCFTA.EnumerationCorrectness.Avoids before.core.representatives held scs
+'MicroCFTA.SourcePruningEnumerationSelection.unblocked_avoids' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+MicroCFTA.SourcePruningEnumerationSelection.ready {EnumGuard NativeGuard : Type}
+  (heap : MicroCFTA.InternedConstructorTemplates.State MicroCFTA.SourcePruningTemplates.Symbol NativeGuard)
+  (before : MicroCFTA.EnumerationExpandableIndex.Cached MicroCFTA.SourcePruningTemplates.Symbol EnumGuard)
+  (preference : List Nat → Option Nat) (uv : Nat) (safe : MicroCFTA.EnumerationSchedule.Safe before.core)
+  (roots : Nat → Nat) (paths : MicroCFTA.EnumerationSchedule.Roots before.core.representatives roots)
+  (counts : MicroCFTA.EnumerationCanonicalWaiting.Correct roots before.core.values before.waiting)
+  (flags :
+    ∀ (slot : Nat),
+      MicroCFTA.SourcePruningEnumerationNativeIndex.candidate heap
+          (before.core.values[slot]?.getD MicroCFTA.EnumerationState.UVarValue.eliminated) =
+        some (before.expandable slot))
+  (selected : MicroCFTA.EnumerationPureSelection.next preference before = MicroCFTA.EnumerationState.Next.expand uv) :
+  MicroCFTA.EnumerationDriver.Ready uv before.core
+'MicroCFTA.SourcePruningEnumerationSelection.ready' depends on axioms: [propext, Classical.choice, Quot.sound]
+MicroCFTA.SourcePruningEnumerationSelection.realized {EnumGuard NativeGuard : Type}
+  (heap : MicroCFTA.InternedConstructorTemplates.State MicroCFTA.SourcePruningTemplates.Symbol NativeGuard)
+  (before : MicroCFTA.EnumerationExpandableIndex.Cached MicroCFTA.SourcePruningTemplates.Symbol EnumGuard)
+  (preference : List Nat → Option Nat) (uv : Nat) (aligned : before.core.counter = before.core.values.length)
+  (pending : MicroCFTA.SourcePruningEnumerationObservation.PendingRealized heap before.core)
+  (flags :
+    ∀ (slot : Nat),
+      MicroCFTA.SourcePruningEnumerationNativeIndex.candidate heap
+          (before.core.values[slot]?.getD MicroCFTA.EnumerationState.UVarValue.eliminated) =
+        some (before.expandable slot))
+  (selected : MicroCFTA.EnumerationPureSelection.next preference before = MicroCFTA.EnumerationState.Next.expand uv) :
+  ∃ node scs value,
+    before.core.values[uv]? = some (MicroCFTA.EnumerationState.UVarValue.unenumerated (some node) scs) ∧
+      MicroCFTA.SourcePruningEnumerationNodes.lookupNode heap node = some value ∧
+        MicroCFTA.InternedProbeProvenance.Available heap value ∧
+          value.free = [] ∧ (!(MicroCFTA.MergedOrdinaryHeight.recursiveBoundary value && scs.isEmpty)) = true
+'MicroCFTA.SourcePruningEnumerationSelection.realized' depends on axioms: [propext, Quot.sound]

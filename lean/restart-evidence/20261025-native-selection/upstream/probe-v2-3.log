@@ -1,0 +1,32 @@
+/tmp/mcfta-main-20261025/HelperProbe.hs:37:23: warning: [GHC-63394] [-Wx-partial]
+    In the use of ‘head’
+    (imported from Prelude, but defined in GHC.Internal.List):
+    "This is a partial function, it throws an error on empty lists. Use pattern matching, 'Data.List.uncons' or 'Data.Maybe.listToMaybe' instead. Consider refactoring to use "Data.List.NonEmpty"."
+   |
+37 |   serial <- evaluate (head (map decision [0,1]))
+   |                       ^^^^
+
+/tmp/mcfta-main-20261025/HelperProbe.hs:38:32: warning: [GHC-63394] [-Wx-partial]
+    In the use of ‘head’
+    (imported from Prelude, but defined in GHC.Internal.List):
+    "This is a partial function, it throws an error on empty lists. Use pattern matching, 'Data.List.uncons' or 'Data.Maybe.listToMaybe' instead. Consider refactoring to use "Data.List.NonEmpty"."
+   |
+38 |   concurrent <- try (evaluate (head (decideInParallel decision [0,1]))) :: IO (Either SomeException (Maybe ()))
+   |                                ^^^^
+
+/tmp/mcfta-main-20261025/HelperProbe.hs:47:30: warning: [GHC-63394] [-Wx-partial]
+    In the use of ‘head’
+    (imported from Prelude, but defined in GHC.Internal.List):
+    "This is a partial function, it throws an error on empty lists. Use pattern matching, 'Data.List.uncons' or 'Data.Maybe.listToMaybe' instead. Consider refactoring to use "Data.List.NonEmpty"."
+   |
+47 |   serialBlocked <- evaluate (head (map blocking [0,1]))
+   |                              ^^^^
+
+/tmp/mcfta-main-20261025/HelperProbe.hs:48:50: warning: [GHC-63394] [-Wx-partial]
+    In the use of ‘head’
+    (imported from Prelude, but defined in GHC.Internal.List):
+    "This is a partial function, it throws an error on empty lists. Use pattern matching, 'Data.List.uncons' or 'Data.Maybe.listToMaybe' instead. Consider refactoring to use "Data.List.NonEmpty"."
+   |
+48 |   concurrentBlocked <- timeout 500000 (evaluate (head (decideInParallel blocking [0,1])))
+   |                                                  ^^^^
+

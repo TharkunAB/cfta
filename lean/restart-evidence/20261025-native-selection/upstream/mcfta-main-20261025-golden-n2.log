@@ -1,0 +1,473 @@
+Build profile: -w ghc-9.14.1 -O0
+In order, the following will be built (use -v for more details):
+ - specftacular-0.0.1 (test:golden) (first run)
+Preprocessing test suite 'golden' for specftacular-0.0.1...
+Building test suite 'golden' for specftacular-0.0.1...
+Running 1 test suites...
+Test suite golden: RUNNING...
+In Scope (19 functions/constants):
+---------------------------------
+++
+0
+1
+[]
+concat
+f0_<A -> B>
+length
+map
+reverse
+x0_<A>
+x0_<B>
+x0_<Int>
+xs0_<[A -> B]>
+xs0_<[A]>
+xs0_<[B]>
+xs0_<[Int]>
+xs0_<[[A]]>
+xs0_<[[B]]>
+xs0_<[[[A]]]>
+
+Type constructors (and derived) in the signature:
+---------------------------------
+TCons "GHC.Internal.Types.Int" []
+TCons "Specftacular.Types.A" []
+TCons "Specftacular.Types.B" []
+TCons "[]" [TCons "GHC.Internal.Types.Int" []]
+TCons "[]" [TCons "Specftacular.Types.A" []]
+TCons "[]" [TCons "Specftacular.Types.B" []]
+TCons "[]" [TCons "[]" [TCons "Specftacular.Types.A" []]]
+TCons "[]" [TCons "[]" [TCons "Specftacular.Types.B" []]]
+TCons "[]" [TCons "[]" [TCons "[]" [TCons "Specftacular.Types.A" []]]]
+
+Variable generators
+---------------------------------
+(TFun (TCons "Specftacular.Types.A" []) (TCons "Specftacular.Types.B" []),("f0_<A -> B>",GivenFun {given_info = GivenVar "f" "A -> B" 0 <generator>, giv_rep = TFun (TCons "Specftacular.Types.A" []) (TCons "Specftacular.Types.B" [])}))
+(TCons "GHC.Internal.Types.Int" [],("x0_<Int>",GivenFun {given_info = GivenVar "x" "Int" 0 <generator>, giv_rep = TCons "GHC.Internal.Types.Int" []}))
+(TCons "Specftacular.Types.A" [],("x0_<A>",GivenFun {given_info = GivenVar "x" "A" 0 <generator>, giv_rep = TCons "Specftacular.Types.A" []}))
+(TCons "Specftacular.Types.B" [],("x0_<B>",GivenFun {given_info = GivenVar "x" "B" 0 <generator>, giv_rep = TCons "Specftacular.Types.B" []}))
+(TCons "[]" [TFun (TCons "Specftacular.Types.A" []) (TCons "Specftacular.Types.B" [])],("xs0_<[A -> B]>",GivenFun {given_info = GivenVar "xs" "[A -> B]" 0 <generator>, giv_rep = TCons "[]" [TFun (TCons "Specftacular.Types.A" []) (TCons "Specftacular.Types.B" [])]}))
+(TCons "[]" [TCons "GHC.Internal.Types.Int" []],("xs0_<[Int]>",GivenFun {given_info = GivenVar "xs" "[Int]" 0 <generator>, giv_rep = TCons "[]" [TCons "GHC.Internal.Types.Int" []]}))
+(TCons "[]" [TCons "Specftacular.Types.A" []],("xs0_<[A]>",GivenFun {given_info = GivenVar "xs" "[A]" 0 <generator>, giv_rep = TCons "[]" [TCons "Specftacular.Types.A" []]}))
+(TCons "[]" [TCons "Specftacular.Types.B" []],("xs0_<[B]>",GivenFun {given_info = GivenVar "xs" "[B]" 0 <generator>, giv_rep = TCons "[]" [TCons "Specftacular.Types.B" []]}))
+(TCons "[]" [TCons "[]" [TCons "Specftacular.Types.A" []]],("xs0_<[[A]]>",GivenFun {given_info = GivenVar "xs" "[[A]]" 0 <generator>, giv_rep = TCons "[]" [TCons "[]" [TCons "Specftacular.Types.A" []]]}))
+(TCons "[]" [TCons "[]" [TCons "Specftacular.Types.B" []]],("xs0_<[[B]]>",GivenFun {given_info = GivenVar "xs" "[[B]]" 0 <generator>, giv_rep = TCons "[]" [TCons "[]" [TCons "Specftacular.Types.B" []]]}))
+(TCons "[]" [TCons "[]" [TCons "[]" [TCons "Specftacular.Types.A" []]]],("xs0_<[[[A]]]>",GivenFun {given_info = GivenVar "xs" "[[[A]]]" 0 <generator>, giv_rep = TCons "[]" [TCons "[]" [TCons "[]" [TCons "Specftacular.Types.A" []]]]}))
+
+Laws according to Haskell's (==):
+---------------------------------
+1. 0 == length []
+2. [] == reverse []
+3. length xs0_<[A]> == length (reverse xs0_<[A]>)
+4. xs0_<[A]> == reverse (reverse xs0_<[A]>)
+5. xs0_<[A]> == ((++) xs0_<[A]>) []
+6. xs0_<[A]> == ((++) []) xs0_<[A]>
+7. [] == (map f0_<B -> A>) []
+8. length (((++) xs0_<[A]>) xs1_<[A]>) == length (((++) xs1_<[A]>) xs0_<[A]>)
+9. length xs0_<[A]> == length ((map f0_<A -> B>) xs0_<[A]>)
+10. reverse ((map f0_<B -> A>) xs0_<[B]>) == (map f0_<B -> A>) (reverse xs0_<[B]>)
+Fully monomorphic phase finished..36 terms examined.
+27 unique terms discovered.
+In Scope (19 functions/constants):
+---------------------------------
+++
+0
+1
+[]
+concat
+f0_<A -> B>
+length
+map
+reverse
+x0_<A>
+x0_<B>
+x0_<Int>
+xs0_<[A -> B]>
+xs0_<[A]>
+xs0_<[B]>
+xs0_<[Int]>
+xs0_<[[A]]>
+xs0_<[[B]]>
+xs0_<[[[A]]]>
+
+Type constructors (and derived) in the signature:
+---------------------------------
+TCons "GHC.Internal.Types.Int" []
+TCons "Specftacular.Types.A" []
+TCons "Specftacular.Types.B" []
+TCons "[]" [TCons "GHC.Internal.Types.Int" []]
+TCons "[]" [TCons "Specftacular.Types.A" []]
+TCons "[]" [TCons "Specftacular.Types.B" []]
+TCons "[]" [TCons "[]" [TCons "Specftacular.Types.A" []]]
+TCons "[]" [TCons "[]" [TCons "Specftacular.Types.B" []]]
+TCons "[]" [TCons "[]" [TCons "[]" [TCons "Specftacular.Types.A" []]]]
+
+Variable generators
+---------------------------------
+(TFun (TCons "Specftacular.Types.A" []) (TCons "Specftacular.Types.B" []),("f0_<A -> B>",GivenFun {given_info = GivenVar "f" "A -> B" 0 <generator>, giv_rep = TFun (TCons "Specftacular.Types.A" []) (TCons "Specftacular.Types.B" [])}))
+(TCons "GHC.Internal.Types.Int" [],("x0_<Int>",GivenFun {given_info = GivenVar "x" "Int" 0 <generator>, giv_rep = TCons "GHC.Internal.Types.Int" []}))
+(TCons "Specftacular.Types.A" [],("x0_<A>",GivenFun {given_info = GivenVar "x" "A" 0 <generator>, giv_rep = TCons "Specftacular.Types.A" []}))
+(TCons "Specftacular.Types.B" [],("x0_<B>",GivenFun {given_info = GivenVar "x" "B" 0 <generator>, giv_rep = TCons "Specftacular.Types.B" []}))
+(TCons "[]" [TFun (TCons "Specftacular.Types.A" []) (TCons "Specftacular.Types.B" [])],("xs0_<[A -> B]>",GivenFun {given_info = GivenVar "xs" "[A -> B]" 0 <generator>, giv_rep = TCons "[]" [TFun (TCons "Specftacular.Types.A" []) (TCons "Specftacular.Types.B" [])]}))
+(TCons "[]" [TCons "GHC.Internal.Types.Int" []],("xs0_<[Int]>",GivenFun {given_info = GivenVar "xs" "[Int]" 0 <generator>, giv_rep = TCons "[]" [TCons "GHC.Internal.Types.Int" []]}))
+(TCons "[]" [TCons "Specftacular.Types.A" []],("xs0_<[A]>",GivenFun {given_info = GivenVar "xs" "[A]" 0 <generator>, giv_rep = TCons "[]" [TCons "Specftacular.Types.A" []]}))
+(TCons "[]" [TCons "Specftacular.Types.B" []],("xs0_<[B]>",GivenFun {given_info = GivenVar "xs" "[B]" 0 <generator>, giv_rep = TCons "[]" [TCons "Specftacular.Types.B" []]}))
+(TCons "[]" [TCons "[]" [TCons "Specftacular.Types.A" []]],("xs0_<[[A]]>",GivenFun {given_info = GivenVar "xs" "[[A]]" 0 <generator>, giv_rep = TCons "[]" [TCons "[]" [TCons "Specftacular.Types.A" []]]}))
+(TCons "[]" [TCons "[]" [TCons "Specftacular.Types.B" []]],("xs0_<[[B]]>",GivenFun {given_info = GivenVar "xs" "[[B]]" 0 <generator>, giv_rep = TCons "[]" [TCons "[]" [TCons "Specftacular.Types.B" []]]}))
+(TCons "[]" [TCons "[]" [TCons "[]" [TCons "Specftacular.Types.A" []]]],("xs0_<[[[A]]]>",GivenFun {given_info = GivenVar "xs" "[[[A]]]" 0 <generator>, giv_rep = TCons "[]" [TCons "[]" [TCons "[]" [TCons "Specftacular.Types.A" []]]]}))
+
+Laws according to Haskell's (==):
+---------------------------------
+1. 0 == length []
+2. [] == reverse []
+3. length xs0_<[A]> == length (reverse xs0_<[A]>)
+4. xs0_<[A]> == reverse (reverse xs0_<[A]>)
+5. xs0_<[A]> == ((++) xs0_<[A]>) []
+6. xs0_<[A]> == ((++) []) xs0_<[A]>
+7. [] == (map f0_<B -> A>) []
+8. length (((++) xs0_<[A]>) xs1_<[A]>) == length (((++) xs1_<[A]>) xs0_<[A]>)
+9. length xs0_<[A]> == length ((map f0_<A -> B>) xs0_<[A]>)
+10. reverse ((map f0_<B -> A>) xs0_<[B]>) == (map f0_<B -> A>) (reverse xs0_<[B]>)
+Fully monomorphic phase finished..36 terms examined.
+27 unique terms discovered.
+In Scope (11 functions/constants):
+---------------------------------
+++
+>>=
+f0_<A -> [B]>
+return
+x0_<A>
+x0_<B>
+xs0_<[A -> [B]]>
+xs0_<[A]>
+xs0_<[B]>
+xs0_<[[A]]>
+xs0_<[[B]]>
+
+Type constructors (and derived) in the signature:
+---------------------------------
+TCons "Specftacular.Types.A" []
+TCons "Specftacular.Types.B" []
+TCons "[]" [TCons "Specftacular.Types.A" []]
+TCons "[]" [TCons "Specftacular.Types.B" []]
+TCons "[]" [TCons "[]" [TCons "Specftacular.Types.A" []]]
+TCons "[]" [TCons "[]" [TCons "Specftacular.Types.B" []]]
+
+Variable generators
+---------------------------------
+(TFun (TCons "Specftacular.Types.A" []) (TCons "[]" [TCons "Specftacular.Types.B" []]),("f0_<A -> [B]>",GivenFun {given_info = GivenVar "f" "A -> [B]" 0 <generator>, giv_rep = TFun (TCons "Specftacular.Types.A" []) (TCons "[]" [TCons "Specftacular.Types.B" []])}))
+(TCons "Specftacular.Types.A" [],("x0_<A>",GivenFun {given_info = GivenVar "x" "A" 0 <generator>, giv_rep = TCons "Specftacular.Types.A" []}))
+(TCons "Specftacular.Types.B" [],("x0_<B>",GivenFun {given_info = GivenVar "x" "B" 0 <generator>, giv_rep = TCons "Specftacular.Types.B" []}))
+(TCons "[]" [TFun (TCons "Specftacular.Types.A" []) (TCons "[]" [TCons "Specftacular.Types.B" []])],("xs0_<[A -> [B]]>",GivenFun {given_info = GivenVar "xs" "[A -> [B]]" 0 <generator>, giv_rep = TCons "[]" [TFun (TCons "Specftacular.Types.A" []) (TCons "[]" [TCons "Specftacular.Types.B" []])]}))
+(TCons "[]" [TCons "Specftacular.Types.A" []],("xs0_<[A]>",GivenFun {given_info = GivenVar "xs" "[A]" 0 <generator>, giv_rep = TCons "[]" [TCons "Specftacular.Types.A" []]}))
+(TCons "[]" [TCons "Specftacular.Types.B" []],("xs0_<[B]>",GivenFun {given_info = GivenVar "xs" "[B]" 0 <generator>, giv_rep = TCons "[]" [TCons "Specftacular.Types.B" []]}))
+(TCons "[]" [TCons "[]" [TCons "Specftacular.Types.A" []]],("xs0_<[[A]]>",GivenFun {given_info = GivenVar "xs" "[[A]]" 0 <generator>, giv_rep = TCons "[]" [TCons "[]" [TCons "Specftacular.Types.A" []]]}))
+(TCons "[]" [TCons "[]" [TCons "Specftacular.Types.B" []]],("xs0_<[[B]]>",GivenFun {given_info = GivenVar "xs" "[[B]]" 0 <generator>, giv_rep = TCons "[]" [TCons "[]" [TCons "Specftacular.Types.B" []]]}))
+
+Laws according to Haskell's (==):
+---------------------------------
+1. xs0_<[A]> == ((>>=) xs0_<[A]>) return
+2. f0_<B -> [A]> x0_<B> == ((>>=) (return x0_<B>)) f0_<B -> [A]>
+Fully monomorphic phase finished..14 terms examined.
+12 unique terms discovered.
+In Scope (11 functions/constants):
+---------------------------------
+++
+>>=
+f0_<A -> [B]>
+return
+x0_<A>
+x0_<B>
+xs0_<[A -> [B]]>
+xs0_<[A]>
+xs0_<[B]>
+xs0_<[[A]]>
+xs0_<[[B]]>
+
+Type constructors (and derived) in the signature:
+---------------------------------
+TCons "Specftacular.Types.A" []
+TCons "Specftacular.Types.B" []
+TCons "[]" [TCons "Specftacular.Types.A" []]
+TCons "[]" [TCons "Specftacular.Types.B" []]
+TCons "[]" [TCons "[]" [TCons "Specftacular.Types.A" []]]
+TCons "[]" [TCons "[]" [TCons "Specftacular.Types.B" []]]
+
+Variable generators
+---------------------------------
+(TFun (TCons "Specftacular.Types.A" []) (TCons "[]" [TCons "Specftacular.Types.B" []]),("f0_<A -> [B]>",GivenFun {given_info = GivenVar "f" "A -> [B]" 0 <generator>, giv_rep = TFun (TCons "Specftacular.Types.A" []) (TCons "[]" [TCons "Specftacular.Types.B" []])}))
+(TCons "Specftacular.Types.A" [],("x0_<A>",GivenFun {given_info = GivenVar "x" "A" 0 <generator>, giv_rep = TCons "Specftacular.Types.A" []}))
+(TCons "Specftacular.Types.B" [],("x0_<B>",GivenFun {given_info = GivenVar "x" "B" 0 <generator>, giv_rep = TCons "Specftacular.Types.B" []}))
+(TCons "[]" [TFun (TCons "Specftacular.Types.A" []) (TCons "[]" [TCons "Specftacular.Types.B" []])],("xs0_<[A -> [B]]>",GivenFun {given_info = GivenVar "xs" "[A -> [B]]" 0 <generator>, giv_rep = TCons "[]" [TFun (TCons "Specftacular.Types.A" []) (TCons "[]" [TCons "Specftacular.Types.B" []])]}))
+(TCons "[]" [TCons "Specftacular.Types.A" []],("xs0_<[A]>",GivenFun {given_info = GivenVar "xs" "[A]" 0 <generator>, giv_rep = TCons "[]" [TCons "Specftacular.Types.A" []]}))
+(TCons "[]" [TCons "Specftacular.Types.B" []],("xs0_<[B]>",GivenFun {given_info = GivenVar "xs" "[B]" 0 <generator>, giv_rep = TCons "[]" [TCons "Specftacular.Types.B" []]}))
+(TCons "[]" [TCons "[]" [TCons "Specftacular.Types.A" []]],("xs0_<[[A]]>",GivenFun {given_info = GivenVar "xs" "[[A]]" 0 <generator>, giv_rep = TCons "[]" [TCons "[]" [TCons "Specftacular.Types.A" []]]}))
+(TCons "[]" [TCons "[]" [TCons "Specftacular.Types.B" []]],("xs0_<[[B]]>",GivenFun {given_info = GivenVar "xs" "[[B]]" 0 <generator>, giv_rep = TCons "[]" [TCons "[]" [TCons "Specftacular.Types.B" []]]}))
+
+Laws according to Haskell's (==):
+---------------------------------
+1. xs0_<[A]> == ((>>=) xs0_<[A]>) return
+2. f0_<B -> [A]> x0_<B> == ((>>=) (return x0_<B>)) f0_<B -> [A]>
+Fully monomorphic phase finished..14 terms examined.
+12 unique terms discovered.
+In Scope (10 functions/constants):
+---------------------------------
+False
+True
+[]
+null
+reverse
+x0_<A>
+x0_<Bool>
+xs0_<[A]>
+xs0_<[Bool]>
+xs0_<[[A]]>
+
+Type constructors (and derived) in the signature:
+---------------------------------
+TCons "GHC.Internal.Types.Bool" []
+TCons "Specftacular.Types.A" []
+TCons "[]" [TCons "GHC.Internal.Types.Bool" []]
+TCons "[]" [TCons "Specftacular.Types.A" []]
+TCons "[]" [TCons "[]" [TCons "Specftacular.Types.A" []]]
+
+Variable generators
+---------------------------------
+(TCons "GHC.Internal.Types.Bool" [],("x0_<Bool>",GivenFun {given_info = GivenVar "x" "Bool" 0 <generator>, giv_rep = TCons "GHC.Internal.Types.Bool" []}))
+(TCons "Specftacular.Types.A" [],("x0_<A>",GivenFun {given_info = GivenVar "x" "A" 0 <generator>, giv_rep = TCons "Specftacular.Types.A" []}))
+(TCons "[]" [TCons "GHC.Internal.Types.Bool" []],("xs0_<[Bool]>",GivenFun {given_info = GivenVar "xs" "[Bool]" 0 <generator>, giv_rep = TCons "[]" [TCons "GHC.Internal.Types.Bool" []]}))
+(TCons "[]" [TCons "Specftacular.Types.A" []],("xs0_<[A]>",GivenFun {given_info = GivenVar "xs" "[A]" 0 <generator>, giv_rep = TCons "[]" [TCons "Specftacular.Types.A" []]}))
+(TCons "[]" [TCons "[]" [TCons "Specftacular.Types.A" []]],("xs0_<[[A]]>",GivenFun {given_info = GivenVar "xs" "[[A]]" 0 <generator>, giv_rep = TCons "[]" [TCons "[]" [TCons "Specftacular.Types.A" []]]}))
+
+Laws according to Haskell's (==):
+---------------------------------
+1. True == null []
+2. [] == reverse []
+3. null xs0_<[A]> == null (reverse xs0_<[A]>)
+4. xs0_<[A]> == reverse (reverse xs0_<[A]>)
+Fully monomorphic phase finished..14 terms examined.
+10 unique terms discovered.
+In Scope (10 functions/constants):
+---------------------------------
+False
+True
+[]
+null
+reverse
+x0_<A>
+x0_<Bool>
+xs0_<[A]>
+xs0_<[Bool]>
+xs0_<[[A]]>
+
+Type constructors (and derived) in the signature:
+---------------------------------
+TCons "GHC.Internal.Types.Bool" []
+TCons "Specftacular.Types.A" []
+TCons "[]" [TCons "GHC.Internal.Types.Bool" []]
+TCons "[]" [TCons "Specftacular.Types.A" []]
+TCons "[]" [TCons "[]" [TCons "Specftacular.Types.A" []]]
+
+Variable generators
+---------------------------------
+(TCons "GHC.Internal.Types.Bool" [],("x0_<Bool>",GivenFun {given_info = GivenVar "x" "Bool" 0 <generator>, giv_rep = TCons "GHC.Internal.Types.Bool" []}))
+(TCons "Specftacular.Types.A" [],("x0_<A>",GivenFun {given_info = GivenVar "x" "A" 0 <generator>, giv_rep = TCons "Specftacular.Types.A" []}))
+(TCons "[]" [TCons "GHC.Internal.Types.Bool" []],("xs0_<[Bool]>",GivenFun {given_info = GivenVar "xs" "[Bool]" 0 <generator>, giv_rep = TCons "[]" [TCons "GHC.Internal.Types.Bool" []]}))
+(TCons "[]" [TCons "Specftacular.Types.A" []],("xs0_<[A]>",GivenFun {given_info = GivenVar "xs" "[A]" 0 <generator>, giv_rep = TCons "[]" [TCons "Specftacular.Types.A" []]}))
+(TCons "[]" [TCons "[]" [TCons "Specftacular.Types.A" []]],("xs0_<[[A]]>",GivenFun {given_info = GivenVar "xs" "[[A]]" 0 <generator>, giv_rep = TCons "[]" [TCons "[]" [TCons "Specftacular.Types.A" []]]}))
+
+Laws according to Haskell's (==):
+---------------------------------
+1. True == null []
+2. [] == reverse []
+3. null xs0_<[A]> == null (reverse xs0_<[A]>)
+4. xs0_<[A]> == reverse (reverse xs0_<[A]>)
+Fully monomorphic phase finished..14 terms examined.
+10 unique terms discovered.
+In Scope (6 functions/constants):
+---------------------------------
+++
+[]
+reverse
+x0_<A>
+xs0_<[A]>
+xs0_<[[A]]>
+
+Type constructors (and derived) in the signature:
+---------------------------------
+TCons "Specftacular.Types.A" []
+TCons "[]" [TCons "Specftacular.Types.A" []]
+TCons "[]" [TCons "[]" [TCons "Specftacular.Types.A" []]]
+
+Variable generators
+---------------------------------
+(TCons "Specftacular.Types.A" [],("x0_<A>",GivenFun {given_info = GivenVar "x" "A" 0 <generator>, giv_rep = TCons "Specftacular.Types.A" []}))
+(TCons "[]" [TCons "Specftacular.Types.A" []],("xs0_<[A]>",GivenFun {given_info = GivenVar "xs" "[A]" 0 <generator>, giv_rep = TCons "[]" [TCons "Specftacular.Types.A" []]}))
+(TCons "[]" [TCons "[]" [TCons "Specftacular.Types.A" []]],("xs0_<[[A]]>",GivenFun {given_info = GivenVar "xs" "[[A]]" 0 <generator>, giv_rep = TCons "[]" [TCons "[]" [TCons "Specftacular.Types.A" []]]}))
+
+Laws according to Haskell's (==):
+---------------------------------
+1. [] == reverse []
+2. xs0_<[A]> == reverse (reverse xs0_<[A]>)
+3. xs0_<[A]> == ((++) xs0_<[A]>) []
+4. xs0_<[A]> == ((++) []) xs0_<[A]>
+5. ((++) xs0_<[A]>) (reverse xs1_<[A]>) == reverse (((++) xs1_<[A]>) (reverse xs0_<[A]>))
+6. ((++) xs0_<[A]>) (((++) xs1_<[A]>) xs2_<[A]>) == ((++) (((++) xs0_<[A]>) xs1_<[A]>)) xs2_<[A]>
+Fully monomorphic phase finished..16 terms examined.
+10 unique terms discovered.
+In Scope (6 functions/constants):
+---------------------------------
+++
+[]
+reverse
+x0_<A>
+xs0_<[A]>
+xs0_<[[A]]>
+
+Type constructors (and derived) in the signature:
+---------------------------------
+TCons "Specftacular.Types.A" []
+TCons "[]" [TCons "Specftacular.Types.A" []]
+TCons "[]" [TCons "[]" [TCons "Specftacular.Types.A" []]]
+
+Variable generators
+---------------------------------
+(TCons "Specftacular.Types.A" [],("x0_<A>",GivenFun {given_info = GivenVar "x" "A" 0 <generator>, giv_rep = TCons "Specftacular.Types.A" []}))
+(TCons "[]" [TCons "Specftacular.Types.A" []],("xs0_<[A]>",GivenFun {given_info = GivenVar "xs" "[A]" 0 <generator>, giv_rep = TCons "[]" [TCons "Specftacular.Types.A" []]}))
+(TCons "[]" [TCons "[]" [TCons "Specftacular.Types.A" []]],("xs0_<[[A]]>",GivenFun {given_info = GivenVar "xs" "[[A]]" 0 <generator>, giv_rep = TCons "[]" [TCons "[]" [TCons "Specftacular.Types.A" []]]}))
+
+Laws according to Haskell's (==):
+---------------------------------
+1. [] == reverse []
+2. xs0_<[A]> == reverse (reverse xs0_<[A]>)
+3. xs0_<[A]> == ((++) xs0_<[A]>) []
+4. xs0_<[A]> == ((++) []) xs0_<[A]>
+5. ((++) xs0_<[A]>) (reverse xs1_<[A]>) == reverse (((++) xs1_<[A]>) (reverse xs0_<[A]>))
+6. ((++) xs0_<[A]>) (((++) xs1_<[A]>) xs2_<[A]>) == ((++) (((++) xs0_<[A]>) xs1_<[A]>)) xs2_<[A]>
+Fully monomorphic phase finished..16 terms examined.
+10 unique terms discovered.
+In Scope (6 functions/constants):
+---------------------------------
+++
+[]
+reverse
+x0_<A>
+xs0_<[A]>
+xs0_<[[A]]>
+
+Type constructors (and derived) in the signature:
+---------------------------------
+TCons "Specftacular.Types.A" []
+TCons "[]" [TCons "Specftacular.Types.A" []]
+TCons "[]" [TCons "[]" [TCons "Specftacular.Types.A" []]]
+
+Variable generators
+---------------------------------
+(TCons "Specftacular.Types.A" [],("x0_<A>",GivenFun {given_info = GivenVar "x" "A" 0 <generator>, giv_rep = TCons "Specftacular.Types.A" []}))
+(TCons "[]" [TCons "Specftacular.Types.A" []],("xs0_<[A]>",GivenFun {given_info = GivenVar "xs" "[A]" 0 <generator>, giv_rep = TCons "[]" [TCons "Specftacular.Types.A" []]}))
+(TCons "[]" [TCons "[]" [TCons "Specftacular.Types.A" []]],("xs0_<[[A]]>",GivenFun {given_info = GivenVar "xs" "[[A]]" 0 <generator>, giv_rep = TCons "[]" [TCons "[]" [TCons "Specftacular.Types.A" []]]}))
+
+Laws according to Haskell's (==):
+---------------------------------
+1. [] == reverse []
+2. xs0_<[A]> == ((++) xs0_<[A]>) []
+3. xs0_<[A]> == ((++) []) xs0_<[A]>
+4. xs0_<[A]> == reverse (reverse xs0_<[A]>)
+5. ((++) xs0_<[A]>) (((++) xs1_<[A]>) xs2_<[A]>) == ((++) (((++) xs0_<[A]>) xs1_<[A]>)) xs2_<[A]>
+6. reverse (((++) xs0_<[A]>) xs1_<[A]>) == ((++) (reverse xs1_<[A]>)) (reverse xs0_<[A]>)
+Fully monomorphic phase finished..16 terms examined.
+10 unique terms discovered.
+In Scope (6 functions/constants):
+---------------------------------
+++
+[]
+reverse
+x0_<A>
+xs0_<[A]>
+xs0_<[[A]]>
+
+Type constructors (and derived) in the signature:
+---------------------------------
+TCons "Specftacular.Types.A" []
+TCons "[]" [TCons "Specftacular.Types.A" []]
+TCons "[]" [TCons "[]" [TCons "Specftacular.Types.A" []]]
+
+Variable generators
+---------------------------------
+(TCons "Specftacular.Types.A" [],("x0_<A>",GivenFun {given_info = GivenVar "x" "A" 0 <generator>, giv_rep = TCons "Specftacular.Types.A" []}))
+(TCons "[]" [TCons "Specftacular.Types.A" []],("xs0_<[A]>",GivenFun {given_info = GivenVar "xs" "[A]" 0 <generator>, giv_rep = TCons "[]" [TCons "Specftacular.Types.A" []]}))
+(TCons "[]" [TCons "[]" [TCons "Specftacular.Types.A" []]],("xs0_<[[A]]>",GivenFun {given_info = GivenVar "xs" "[[A]]" 0 <generator>, giv_rep = TCons "[]" [TCons "[]" [TCons "Specftacular.Types.A" []]]}))
+
+Laws according to Haskell's (==):
+---------------------------------
+1. [] == reverse []
+2. xs0_<[A]> == ((++) xs0_<[A]>) []
+3. xs0_<[A]> == ((++) []) xs0_<[A]>
+4. xs0_<[A]> == reverse (reverse xs0_<[A]>)
+5. ((++) xs0_<[A]>) (((++) xs1_<[A]>) xs2_<[A]>) == ((++) (((++) xs0_<[A]>) xs1_<[A]>)) xs2_<[A]>
+6. reverse (((++) xs0_<[A]>) xs1_<[A]>) == ((++) (reverse xs1_<[A]>)) (reverse xs0_<[A]>)
+Fully monomorphic phase finished..16 terms examined.
+10 unique terms discovered.
+In Scope (7 functions/constants):
+---------------------------------
+0
+1029
+1071
+21
+gcd
+x0_<PosInt>
+xs0_<[PosInt]>
+
+Type constructors (and derived) in the signature:
+---------------------------------
+TCons "Main.PosInt" []
+TCons "[]" [TCons "Main.PosInt" []]
+
+Variable generators
+---------------------------------
+(TCons "Main.PosInt" [],("x0_<PosInt>",GivenFun {given_info = GivenVar "x" "PosInt" 0 <generator>, giv_rep = TCons "Main.PosInt" []}))
+(TCons "[]" [TCons "Main.PosInt" []],("xs0_<[PosInt]>",GivenFun {given_info = GivenVar "xs" "[PosInt]" 0 <generator>, giv_rep = TCons "[]" [TCons "Main.PosInt" []]}))
+
+Laws according to Haskell's (==):
+---------------------------------
+1. (gcd x0_<PosInt>) x1_<PosInt> == (gcd x1_<PosInt>) x0_<PosInt>
+2. x0_<PosInt> == (gcd x0_<PosInt>) x0_<PosInt>
+3. x0_<PosInt> == (gcd x0_<PosInt>) 0
+4. 21 == (gcd 1029) 1071
+5. 21 == (gcd 1029) 21
+6. 21 == (gcd 1071) 21
+Fully monomorphic phase finished..14 terms examined.
+9 unique terms discovered.
+In Scope (7 functions/constants):
+---------------------------------
+0
+1029
+1071
+21
+gcd
+x0_<PosInt>
+xs0_<[PosInt]>
+
+Type constructors (and derived) in the signature:
+---------------------------------
+TCons "Main.PosInt" []
+TCons "[]" [TCons "Main.PosInt" []]
+
+Variable generators
+---------------------------------
+(TCons "Main.PosInt" [],("x0_<PosInt>",GivenFun {given_info = GivenVar "x" "PosInt" 0 <generator>, giv_rep = TCons "Main.PosInt" []}))
+(TCons "[]" [TCons "Main.PosInt" []],("xs0_<[PosInt]>",GivenFun {given_info = GivenVar "xs" "[PosInt]" 0 <generator>, giv_rep = TCons "[]" [TCons "Main.PosInt" []]}))
+
+Laws according to Haskell's (==):
+---------------------------------
+1. (gcd x0_<PosInt>) x1_<PosInt> == (gcd x1_<PosInt>) x0_<PosInt>
+2. x0_<PosInt> == (gcd x0_<PosInt>) x0_<PosInt>
+3. x0_<PosInt> == (gcd x0_<PosInt>) 0
+4. 21 == (gcd 1029) 1071
+5. 21 == (gcd 1029) 21
+6. 21 == (gcd 1071) 21
+Fully monomorphic phase finished..14 terms examined.
+9 unique terms discovered.
+Test suite golden: PASS
+Test suite logged to:
+/home/tritlo/Code/mcfta/dist-newstyle/build/x86_64-linux/ghc-9.14.1/specftacular-0.0.1/t/golden/noopt/test/specftacular-0.0.1-golden.log
+1 of 1 test suites (1 of 1 test cases) passed.

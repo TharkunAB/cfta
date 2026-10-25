@@ -1,0 +1,174 @@
+/tmp/mcfta-main-20261025/PublicProbe.hs:11:15: error: [GHC-83865]
+    • Couldn't match expected type: IO (t0 a0)
+                  with actual type: [Sig] -> IO [String]
+    • Probable cause: ‘experimentalPhases’ is applied to too few arguments
+      In a stmt of a 'do' block:
+        original <- experimentalPhases options signature
+      In the expression:
+        do let options = defaultOptions 4 1
+               signature = ...
+           unless
+             (searchCompletionFuel options == 15
+                &&
+                  searchParallelTests options == Nothing
+                    && searchSpeculation options == 0)
+             (error "unexpected defaults")
+           original <- experimentalPhases options signature
+           parallel <- experimentalPhases
+                         options {searchParallelTests = Just 0, searchSpeculation = 2}
+                         signature
+           ....
+      In an equation for ‘main’:
+          main
+            = do let options = ...
+                     ....
+                 unless
+                   (searchCompletionFuel options == 15
+                      &&
+                        searchParallelTests options == Nothing
+                          && searchSpeculation options == 0)
+                   (error "unexpected defaults")
+                 original <- experimentalPhases options signature
+                 ....
+   |
+11 |   original <- experimentalPhases options signature
+   |               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+/tmp/mcfta-main-20261025/PublicProbe.hs:11:42: error: [GHC-83865]
+    • Couldn't match expected type: TypeSkeleton
+                                    -> Maybe GeneratedInstance
+                  with actual type: [Sig]
+    • In the second argument of ‘experimentalPhases’, namely
+        ‘signature’
+      In a stmt of a 'do' block:
+        original <- experimentalPhases options signature
+      In the expression:
+        do let options = defaultOptions 4 1
+               signature = ...
+           unless
+             (searchCompletionFuel options == 15
+                &&
+                  searchParallelTests options == Nothing
+                    && searchSpeculation options == 0)
+             (error "unexpected defaults")
+           original <- experimentalPhases options signature
+           parallel <- experimentalPhases
+                         options {searchParallelTests = Just 0, searchSpeculation = 2}
+                         signature
+           ....
+   |
+11 |   original <- experimentalPhases options signature
+   |                                          ^^^^^^^^^
+
+/tmp/mcfta-main-20261025/PublicProbe.hs:12:15: error: [GHC-83865]
+    • Couldn't match expected type: IO (t0 a0)
+                  with actual type: [Sig] -> IO [String]
+    • Probable cause: ‘experimentalPhases’ is applied to too few arguments
+      In a stmt of a 'do' block:
+        parallel <- experimentalPhases
+                      options {searchParallelTests = Just 0, searchSpeculation = 2}
+                      signature
+      In the expression:
+        do let options = defaultOptions 4 1
+               signature = ...
+           unless
+             (searchCompletionFuel options == 15
+                &&
+                  searchParallelTests options == Nothing
+                    && searchSpeculation options == 0)
+             (error "unexpected defaults")
+           original <- experimentalPhases options signature
+           parallel <- experimentalPhases
+                         options {searchParallelTests = Just 0, searchSpeculation = 2}
+                         signature
+           ....
+      In an equation for ‘main’:
+          main
+            = do let options = ...
+                     ....
+                 unless
+                   (searchCompletionFuel options == 15
+                      &&
+                        searchParallelTests options == Nothing
+                          && searchSpeculation options == 0)
+                   (error "unexpected defaults")
+                 original <- experimentalPhases options signature
+                 ....
+    • Relevant bindings include
+        original :: t0 a0
+          (bound at /tmp/mcfta-main-20261025/PublicProbe.hs:11:3)
+   |
+12 |   parallel <- experimentalPhases options {searchParallelTests = Just 0, searchSpeculation = 2} signature
+   |               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+/tmp/mcfta-main-20261025/PublicProbe.hs:12:96: error: [GHC-83865]
+    • Couldn't match expected type: TypeSkeleton
+                                    -> Maybe GeneratedInstance
+                  with actual type: [Sig]
+    • In the second argument of ‘experimentalPhases’, namely
+        ‘signature’
+      In a stmt of a 'do' block:
+        parallel <- experimentalPhases
+                      options {searchParallelTests = Just 0, searchSpeculation = 2}
+                      signature
+      In the expression:
+        do let options = defaultOptions 4 1
+               signature = ...
+           unless
+             (searchCompletionFuel options == 15
+                &&
+                  searchParallelTests options == Nothing
+                    && searchSpeculation options == 0)
+             (error "unexpected defaults")
+           original <- experimentalPhases options signature
+           parallel <- experimentalPhases
+                         options {searchParallelTests = Just 0, searchSpeculation = 2}
+                         signature
+           ....
+   |
+12 |   parallel <- experimentalPhases options {searchParallelTests = Just 0, searchSpeculation = 2} signature
+   |                                                                                                ^^^^^^^^^
+
+/tmp/mcfta-main-20261025/PublicProbe.hs:16:20: error: [GHC-83865]
+    • Couldn't match expected type: IO [String]
+                  with actual type: [Sig] -> IO [String]
+    • Probable cause: ‘experimentalPhases’ is applied to too few arguments
+      In the first argument of ‘try’, namely
+        ‘(experimentalPhases
+            options {searchCompletionFuel = fuel} signature)’
+      In a stmt of a 'do' block:
+        result <- try
+                    (experimentalPhases
+                       options {searchCompletionFuel = fuel} signature) ::
+                    IO (Either SomeException [String])
+      In the expression:
+        do result <- try
+                       (experimentalPhases
+                          options {searchCompletionFuel = fuel} signature) ::
+                       IO (Either SomeException [String])
+           case result of
+             Left _
+               -> putStrLn ("invalid completion exponent rejected: " ++ show fuel)
+             Right _ -> error "invalid completion exponent accepted"
+   |
+16 |     result <- try (experimentalPhases options {searchCompletionFuel = fuel} signature) :: IO (Either SomeException [String])
+   |                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+/tmp/mcfta-main-20261025/PublicProbe.hs:16:77: error: [GHC-83865]
+    • Couldn't match expected type: TypeSkeleton
+                                    -> Maybe GeneratedInstance
+                  with actual type: [Sig]
+    • In the second argument of ‘experimentalPhases’, namely
+        ‘signature’
+      In the first argument of ‘try’, namely
+        ‘(experimentalPhases
+            options {searchCompletionFuel = fuel} signature)’
+      In a stmt of a 'do' block:
+        result <- try
+                    (experimentalPhases
+                       options {searchCompletionFuel = fuel} signature) ::
+                    IO (Either SomeException [String])
+   |
+16 |     result <- try (experimentalPhases options {searchCompletionFuel = fuel} signature) :: IO (Either SomeException [String])
+   |                                                                             ^^^^^^^^^
+

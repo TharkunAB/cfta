@@ -1,0 +1,42 @@
+/tmp/mcfta-selection-20261025/strict-1/MicroCFTA/SourcePruningEnumerationSelection.lean:106:6: error: Dependent elimination failed: Failed to solve equation
+  some true =
+    match before.core.values[uv] with
+    | UVarValue.unenumerated node scs =>
+      match node with
+      | none => some false
+      | some handle =>
+        Option.map (fun decodedValue => !(MergedOrdinaryHeight.recursiveBoundary decodedValue && scs.isEmpty))
+          (lookupNode heap handle)
+    | UVarValue.enumerated a => some false
+    | UVarValue.eliminated => some false
+/tmp/mcfta-selection-20261025/strict-1/MicroCFTA/SourcePruningEnumerationSelection.lean:108:72: error: Application type mismatch: The argument
+  stored
+has type
+  before.core.values[uv]? = some before.core.values[uv]
+but is expected to have type
+  before.core.values[uv]? = some (UVarValue.unenumerated (some node) scs)
+in the application
+  pending uv node scs stored
+/tmp/mcfta-selection-20261025/strict-1/MicroCFTA/SourcePruningEnumerationSelection.lean:109:32: error: Application type mismatch: The argument
+  stored
+has type
+  before.core.values[uv]? = some before.core.values[uv]
+but is expected to have type
+  before.core.values[uv]? = some (UVarValue.unenumerated (some node) scs)
+in the application
+  And.intro stored
+/tmp/mcfta-selection-20261025/strict-1/MicroCFTA/SourcePruningEnumerationSelection.lean:110:6: error: Type mismatch: After simplification, term
+  nativeFlag
+ has type
+  (match before.core.values[uv] with
+    | UVarValue.unenumerated node scs =>
+      match node with
+      | none => some false
+      | some handle =>
+        Option.map (fun decodedValue => !(MergedOrdinaryHeight.recursiveBoundary decodedValue && scs.isEmpty))
+          (lookupNode heap handle)
+    | UVarValue.enumerated a => some false
+    | UVarValue.eliminated => some false) =
+    some true
+but is expected to have type
+  (!decide ((MergedOrdinaryHeight.recursiveBoundary value && scs.isEmpty) = true)) = true
