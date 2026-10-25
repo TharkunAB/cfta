@@ -17,10 +17,10 @@ local notation "FoldRaw" => List (Except EnumerationState.Error
 local notation "TerminalRaw" => List (Except EnumerationState.Error
   (Fragments.Fragment Symbol × EnumerationState.State Symbol Constraint))
 variable {width : Nat}
-local notation "NativeOutcome" => SourceEqualityNativeDemand.Outcome width Node
-local notation "WorkerOutcome" => SourceCurrentAllocatedConjunctionWorker.Outcome width
-local notation "Observation" =>
-  (Except (PrefixRaw ⊕ ((NativeOutcome ⊕ WorkerOutcome) ⊕ FoldRaw)) (Option TerminalRaw)) ×
+/-- Keep the complete raw child observation and its reached state. -/
+abbrev Observation (width : Nat) :=
+  (Except (PrefixRaw ⊕ ((SourceEqualityNativeDemand.Outcome width Node ⊕
+    SourceCurrentAllocatedConjunctionWorker.Outcome width) ⊕ FoldRaw)) (Option TerminalRaw)) ×
     Caller width × Queries × EnumerationState.State Symbol Constraint × EnumerationWaitingIndex.Waiting
 variable [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Constraint)] [DecidableEq Node]
 
@@ -29,7 +29,7 @@ noncomputable def observe
     (checkEmpty : Bool) (representativeFuel nativeFuel p h : Nat)
     (scs : List Suspended) (incoming : Node)
     (beforeCaller : Caller width) (before : EnumerationState.State Symbol Constraint)
-    (waiting : EnumerationWaitingIndex.Waiting) (queries : Queries) : Observation :=
+    (waiting : EnumerationWaitingIndex.Waiting) (queries : Queries) : Observation width :=
   if incoming = .empty then
     (.ok (some []), beforeCaller, queries, before, waiting)
   else
@@ -47,7 +47,7 @@ noncomputable def run
     (checkEmpty : Bool) (representativeFuel nativeFuel p h indexFuel : Nat)
     (scs : List Suspended) (incoming : Node)
     (beforeCaller : Caller width) (before : EnumerationExpandableIndex.Cached Symbol Constraint)
-    (queries : Queries) : Observation × Option (EnumerationExpandableIndex.Cached Symbol Constraint) :=
+    (queries : Queries) : Observation width × Option (EnumerationExpandableIndex.Cached Symbol Constraint) :=
   if incoming = .empty then
     ((.ok (some []), beforeCaller, queries, before.core, before.waiting), some before)
   else
@@ -102,6 +102,56 @@ theorem terminal
   by_cases empty : incoming = .empty
   · simp only [run, SourcePruningEnumerationCachedTerminalAdapter.run, ite_eq_left empty]
   · simp only [run, ite_eq_right empty, partitioned]
+
+/-- Every successful singleton cache has the actual raw row core at fixed bounds. -/
+theorem singleton_core
+    (checkEmpty : Bool) (representativeFuel nativeFuel p h indexFuel : Nat)
+    (scs : List Suspended) (incoming : Node)
+    (beforeCaller reachedCaller : Caller width)
+    (before after : EnumerationExpandableIndex.Cached Symbol Constraint)
+    (queries savedQueries : Queries) (fragment : Fragments.Fragment Symbol)
+    (returned outer : EnumerationState.State Symbol Constraint)
+    (waiting : EnumerationWaitingIndex.Waiting)
+    (observed : run checkEmpty representativeFuel nativeFuel p h indexFuel scs incoming
+      beforeCaller before queries =
+      ((.ok (some [.ok (fragment, returned)]), reachedCaller, savedQueries, outer, waiting), some after)) :
+    after.core = returned := by
+  by_cases empty : incoming = .empty
+  · simp [run, empty] at observed
+  · cases partitioned : scs.partition (fun sc => EqualityTrie.isTerminal sc.trie) with
+    | mk here descendants =>
+      cases here with
+      | cons first rest =>
+        apply SourcePruningEnumerationCachedTerminalAdapter.singleton_core checkEmpty
+          representativeFuel nativeFuel p h indexFuel first rest beforeCaller reachedCaller
+          before after incoming descendants queries savedQueries fragment returned outer waiting
+        simpa only [run, ite_eq_right empty, partitioned] using observed
+      | nil =>
+        cases cached : SourcePruningEnumerationCachedPrepare.prepareChild
+            beforeCaller.checked.native.machine.heap indexFuel scs incoming before with
+        | none => simp only [run, ite_eq_right empty, partitioned, cached, Prod.mk.injEq,
+            reduceCtorEq, and_false] at observed
+        | some rows =>
+          have erasure := SourcePruningEnumerationCachedPrepare.erase_some
+            beforeCaller.checked.native.machine.heap indexFuel scs incoming before rows cached
+          cases prepared : SourcePruningEnumerationShallowChild.prepareChild
+              (EnumGuard := Constraint) scs incoming with
+          | none => simp only [prepared, Option.map_none, reduceCtorEq] at erasure
+          | some action =>
+            have raw := congrArg (fun result => result.1.1) observed
+            simp only [run, observe, ite_eq_right empty, partitioned, prepared] at raw
+            simp only [prepared, Option.map_some, Option.some.injEq] at erasure
+            have rowsSame : rows.map (fun row => Except.ok (row.1, row.2.core)) =
+                [.ok (fragment, returned)] :=
+              erasure.symm.trans (Option.some.inj (Except.ok.inj raw))
+            obtain ⟨row, singleton, mapped⟩ := List.map_eq_singleton_iff.mp rowsSame
+            rcases row with ⟨childFragment, childCache⟩
+            subst rows
+            have cacheSame : childCache = after := by
+              simpa only [run, ite_eq_right empty, partitioned, cached, Option.some.injEq] using
+                congrArg Prod.snd observed
+            subst after
+            exact (Prod.mk.inj (Except.ok.inj mapped)).2
 
 /-- Empty rejects before partition, prefix execution or any native query. -/
 theorem empty

@@ -167,6 +167,98 @@ theorem erase
                             | none => rfl
                             | some incomingRaw => rfl'
 
+/-- A successful terminal row and its attached cache have the same core. -/
+theorem singleton_core
+    [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Constraint)] [DecidableEq Node]
+    (checkEmpty : Bool) (representativeFuel nativeFuel p h indexFuel : Nat)
+    (first : Suspended) (rest : List Suspended)
+    (beforeCaller reachedCaller : Caller width)
+    (before after : EnumerationExpandableIndex.Cached Symbol Constraint)
+    (incoming : Node) (incomingScs : List Suspended) (queries savedQueries : Queries)
+    (fragment : Fragments.Fragment Symbol) (returned outer : EnumerationState.State Symbol Constraint)
+    (waiting : EnumerationWaitingIndex.Waiting)
+    (observed : run checkEmpty representativeFuel nativeFuel p h indexFuel
+      first rest beforeCaller before incoming incomingScs queries =
+      ((.ok (some [.ok (fragment, returned)]), reachedCaller, savedQueries, outer, waiting), some after)) :
+    after.core = returned := by
+  by_cases empty : incoming = .empty
+  · simp [run, empty] at observed
+  · cases prefixResultEq : ExceptT.run (SourcePruningEnumerationTerminalPrefix.run
+        representativeFuel first rest before.waiting before.core) with
+    | nil => simp [run, empty, prefixResultEq] at observed
+    | cons prefixEntry prefixTail =>
+      cases prefixEntry with
+      | error prefixError => simp [run, empty, prefixResultEq] at observed
+      | ok prefixResult =>
+        rcases prefixResult with ⟨⟨recorded, winner, moved⟩, joined⟩
+        cases prefixTail with
+        | cons prefixNext prefixRest => simp [run, empty, prefixResultEq] at observed
+        | nil =>
+          cases foldResultEq : SourcePruningEnumerationCachedFold.run checkEmpty nativeFuel p h recorded
+              beforeCaller ⟨joined, before.expandable, moved⟩ winner queries with
+          | mk foldObservation foldCache =>
+            rcases foldObservation with ⟨foldOutcome, foldCaller, foldQueries, foldOuter⟩
+            simp only [run, ite_eq_right empty, prefixResultEq, foldResultEq] at observed
+            cases foldOutcome with
+            | error fault => simp at observed
+            | ok foldReturned =>
+              cases foldReturned with
+              | none => simp at observed
+              | some foldRaw =>
+                cases foldRaw with
+                | nil => simp at observed
+                | cons foldEntry foldTail =>
+                  cases foldEntry with
+                  | error foldError => simp at observed
+                  | ok foldValue =>
+                    rcases foldValue with ⟨foldUnit, folded⟩
+                    cases foldUnit
+                    cases foldTail with
+                    | cons foldNext foldRest => simp at observed
+                    | nil =>
+                      cases foldCache with
+                      | none =>
+                        cases resultEq : SourcePruningEnumerationIncomingNode.run checkEmpty
+                            representativeFuel nativeFuel p h foldCaller folded winner incoming incomingScs
+                            foldQueries with
+                        | mk outcome reached =>
+                          rcases reached with ⟨caller, saved, read⟩
+                          simp only [resultEq] at observed
+                          cases outcome with
+                          | error fault => simp at observed
+                          | ok result => cases result <;> simp at observed
+                      | some recovered =>
+                        cases incomingEq : SourcePruningEnumerationIncomingCacheAdapter.run checkEmpty
+                            representativeFuel nativeFuel p h indexFuel foldCaller
+                            (EnumerationExpandableIndex.frame folded recovered) winner incoming incomingScs
+                            foldQueries with
+                        | mk incomingObservation incomingCache =>
+                          rcases incomingObservation with ⟨outcome, caller, saved, read⟩
+                          simp only [incomingEq] at observed
+                          cases outcome with
+                          | error fault => simp at observed
+                          | ok result =>
+                            cases result with
+                            | none => simp at observed
+                            | some raw =>
+                              have mapped := congrArg (fun result => result.1.1) observed
+                              simp only [Except.ok.injEq, Option.some.injEq,
+                                List.map_eq_singleton_iff] at mapped
+                              obtain ⟨row, rawSame, rowSame⟩ := mapped
+                              cases row with
+                              | error error => cases rowSame
+                              | ok result =>
+                                rcases result with ⟨incomingUnit, core⟩
+                                cases incomingUnit
+                                have coreSame : core = returned := (Prod.mk.inj (Except.ok.inj rowSame)).2
+                                subst core
+                                have cacheSame : incomingCache = some after := congrArg Prod.snd observed
+                                apply SourcePruningEnumerationIncomingCacheAdapter.singleton_core checkEmpty
+                                  representativeFuel nativeFuel p h indexFuel foldCaller caller
+                                  (EnumerationExpandableIndex.frame folded recovered) after winner incoming
+                                  incomingScs foldQueries saved read returned
+                                simpa only [rawSame, cacheSame] using incomingEq
+
 /-- The recorded root map and write frame retain every separate held class and slot. -/
 theorem protects
     (before after : EnumerationState.State Symbol Constraint)
