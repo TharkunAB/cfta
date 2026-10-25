@@ -46,6 +46,19 @@ def adapt
           (EnumerationExpandableIndex.frame read before)).map (EnumerationExpandableIndex.frame returned)
   | _ => none
 
+/-- A successful raw singleton supplies the candidate's exact core. -/
+theorem adapt_singleton_core
+    (heap : InternedConstructorTemplates.State Symbol Constraint)
+    (indexFuel target : Nat) (incomingScs : List EnumerationState.Suspended)
+    (before after : EnumerationExpandableIndex.Cached Symbol Constraint)
+    (read returned : EnumerationState.State Symbol Constraint)
+    (adapted : adapt heap indexFuel target incomingScs before read [.ok ((), returned)] = some after) :
+    after.core = returned := by
+  simp only [adapt, Option.bind_eq_some_iff, Option.map_eq_some_iff] at adapted
+  obtain ⟨value, _stored, cached, _written, same⟩ := adapted
+  subst after
+  rfl
+
 /-- Retain one original observation and attach its optional cache candidate. -/
 noncomputable def run
     [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Constraint)] [DecidableEq Node]
@@ -77,6 +90,27 @@ theorem erase
       SourcePruningEnumerationIncomingNode.run checkEmpty representativeFuel nativeFuel p h
         beforeCaller before.core target incoming incomingScs queries := by
   rfl
+
+/-- The attached cache retains the core in an actual successful singleton row. -/
+theorem singleton_core
+    [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Constraint)] [DecidableEq Node]
+    (checkEmpty : Bool) (representativeFuel nativeFuel p h indexFuel : Nat)
+    (beforeCaller reachedCaller : Caller width)
+    (before after : EnumerationExpandableIndex.Cached Symbol Constraint)
+    (target : Nat) (incoming : Node) (incomingScs : List EnumerationState.Suspended)
+    (queries savedQueries : Queries) (read returned : EnumerationState.State Symbol Constraint)
+    (observed : run checkEmpty representativeFuel nativeFuel p h indexFuel beforeCaller before
+      target incoming incomingScs queries =
+      ((.ok (some [.ok ((), returned)]), reachedCaller, savedQueries, read), some after)) :
+    after.core = returned := by
+  have original : SourcePruningEnumerationIncomingNode.run checkEmpty representativeFuel nativeFuel p h
+      beforeCaller before.core target incoming incomingScs queries =
+      (.ok (some [.ok ((), returned)]), reachedCaller, savedQueries, read) := by
+    rw [← erase checkEmpty representativeFuel nativeFuel p h indexFuel beforeCaller before
+      target incoming incomingScs queries, observed]
+  apply adapt_singleton_core reachedCaller.checked.native.machine.heap indexFuel target
+    incomingScs before after read returned
+  simpa only [run, original] using congrArg Prod.snd observed
 
 /-- Genuine initial inputs produce the original result and its completed cache. -/
 theorem complete
