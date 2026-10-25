@@ -1,0 +1,20 @@
+noncomputable def run
+    [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Constraint)] [DecidableEq Node]
+    (checkEmpty : Bool) (nativeFuel p h : Nat)
+    (beforeCaller : Caller width) (before : EnumerationExpandableIndex.Cached Symbol Constraint)
+    (source target : Nat) (queries : Queries) :
+    (Except (SourceEqualityNativeDemand.Outcome width Node ⊕
+      SourceCurrentAllocatedConjunctionWorker.Outcome width)
+      (Option (List (Except EnumerationState.Error (Unit × EnumerationState.State Symbol Constraint))))) ×
+      Caller width × Queries × Option (EnumerationExpandableIndex.Cached Symbol Constraint) :=
+  match SourcePruningEnumerationDispatch.dispatch checkEmpty nativeFuel p h
+      beforeCaller before.core source target queries with
+  | (.error fault, reachedCaller, savedQueries) =>
+      (.error fault, reachedCaller, savedQueries, none)
+  | (.ok none, reachedCaller, savedQueries) =>
+      (.ok none, reachedCaller, savedQueries, none)
+  | (.ok (some action), reachedCaller, savedQueries) =>
+      let raw : List (Except EnumerationState.Error (Unit × EnumerationState.State Symbol Constraint)) :=
+        ExceptT.run (action before.core)
+      (.ok (some raw), reachedCaller, savedQueries,
+        adapt reachedCaller.checked.native.machine.heap before source target raw)

@@ -1,0 +1,254 @@
+--- basis/check.py
++++ candidate/check.py
+@@ -2,7 +2,7 @@
+ from pathlib import Path
+ 
+ root = Path('/home/tritlo/Code/mcfta')
+-area = Path('/tmp/mcfta-pruning-enumeration-incoming-cache-adapter-20261025')
++area = Path('/tmp/mcfta-pruning-enumeration-cached-terminal-adapter-20261025')
+ kind, attempt, *paths = sys.argv[1:]
+ target = area / attempt
+ target.mkdir()
+--- basis/documents.py
++++ candidate/documents.py
+@@ -4,8 +4,8 @@
+ from pathlib import Path
+ 
+ root = Path('/home/tritlo/Code/mcfta')
+-area = Path('/tmp/mcfta-pruning-enumeration-incoming-cache-adapter-20261025')
+-baseline = '8f47b4357751716acb07f384d00e8115112820a3'
++area = Path('/tmp/mcfta-pruning-enumeration-cached-terminal-adapter-20261025')
++baseline = '2a94951522fbc9077d4370dfc768bdc40038a776'
+ proof = subprocess.check_output(['git', 'rev-parse', 'HEAD'], cwd=root).decode().strip()
+ assert subprocess.check_output(['git', 'rev-list', '--parents', '-n', '1', proof], cwd=root).decode().split() == [proof, baseline]
+ checks = json.loads((area / 'build-summary.json').read_text())
+@@ -25,7 +25,7 @@
+ note = expand((area / 'current-note.md').read_text())
+ note = note.replace('Main: `74250bd889685da436cdbfe32ac4b5a0878ffd09`, incorporated.',
+     'Main: `74250bd889685da436cdbfe32ac4b5a0878ffd09`, incorporated.\nProof: `' + proof + '`.')
+-destination = root / 'lean/notes-current-pruning-enumeration-incoming-cache-adapter.md'
++destination = root / 'lean/notes-current-pruning-enumeration-cached-terminal-adapter.md'
+ assert not destination.exists()
+ destination.write_text(note)
+ (area / 'current-note.md').write_text(note)
+@@ -39,7 +39,7 @@
+     path = root / name
+     before = path.read_text()
+     assert path.read_bytes() == subprocess.check_output(['git', 'show', baseline + ':' + name], cwd=root)
+-    position = before.index('## Native cached terminal completion') if name == 'FINDINGS.md' else before.index('\n') + 1
++    position = before.index('## Native incoming cache adapter') if name == 'FINDINGS.md' else before.index('\n') + 1
+     after = before[:position] + prefix + before[position:]
+     path.write_text(after)
+     changes[name] = dict(insertion_character=position, inserted=prefix,
+@@ -47,5 +47,5 @@
+         after_sha256=hashlib.sha256(after.encode()).hexdigest())
+ (area / 'document-changes.json').write_text(json.dumps(changes, indent=2) + '\n')
+ (area / 'proof-commit.json').write_text(json.dumps(dict(commit=proof, baseline=baseline,
+-    paths=['lean/MicroCFTA/SourcePruningEnumerationIncomingCacheAdapter.lean', 'lean/MicroCFTA/Audit.lean']), indent=2) + '\n')
++    paths=['lean/MicroCFTA/SourcePruningEnumerationCachedTerminalAdapter.lean', 'lean/MicroCFTA/Audit.lean']), indent=2) + '\n')
+ print(json.dumps(dict(documents=paths, note=str(destination), proof=proof)))
+--- basis/archive.py
++++ candidate/archive.py
+@@ -6,12 +6,12 @@
+ from pathlib import Path
+ 
+ root = Path('/home/tritlo/Code/mcfta')
+-area = Path('/tmp/mcfta-pruning-enumeration-incoming-cache-adapter-20261025')
+-evidence = root / 'lean/restart-evidence/20261025-pruning-enumeration-incoming-cache-adapter'
++area = Path('/tmp/mcfta-pruning-enumeration-cached-terminal-adapter-20261025')
++evidence = root / 'lean/restart-evidence/20261025-pruning-enumeration-cached-terminal-adapter'
+ assert not evidence.exists()
+ custody = json.loads((area / 'prior-custody-index.json').read_text())
+ assert len(custody) == 26 and len({pin['target'] for pin in custody}) == 26
+-assert hashlib.sha256((area / 'prior-custody-index.json').read_bytes()).hexdigest() == '6da6f3b3a0fe80324b26a4bf1dc198cad75f1f0eb4c3c34492c485f0019dc0b6'
++assert hashlib.sha256((area / 'prior-custody-index.json').read_bytes()).hexdigest() == 'fc9a373141ae25e5a57f74940b049fa5219b8286495b75e32f4d0420df92c1c0'
+ summary = json.loads((area / 'previous-publication/post-publication-summary.json').read_text())
+ assert [pin['source'] for pin in custody] == summary['next_custody_inputs']
+ for pin in custody:
+@@ -19,11 +19,11 @@
+     data = (area / 'previous-publication' / pin['target']).read_bytes()
+     assert len(data) == pin['bytes'] and hashlib.sha256(data).hexdigest() == pin['sha256']
+ assert {p.name for p in (area / 'previous-publication').iterdir()} == {pin['target'] for pin in custody}
+-assert Path('/tmp/mcfta-pruning-enumeration-incoming-cache-adapter-20261025-source-review.md').is_file()
++assert Path('/tmp/mcfta-pruning-enumeration-cached-terminal-adapter-20261025-source-review.md').is_file()
+ for args in [('diff', '--quiet'), ('diff', '--cached', '--quiet')]:
+     subprocess.run(['git', *args], cwd=root, check=True)
+ for name in ['declaration', 'model', 'public', 'document', 'seal-script', 'root']:
+-    assert Path('/tmp/mcfta-pruning-enumeration-incoming-cache-adapter-20261025-' + name + '-review.md').is_file()
++    assert Path('/tmp/mcfta-pruning-enumeration-cached-terminal-adapter-20261025-' + name + '-review.md').is_file()
+ evidence.mkdir()
+ for path in sorted(area.rglob('*')):
+     if not path.is_file():
+@@ -36,21 +36,21 @@
+         target.write_bytes(path.read_bytes())
+ inputs = evidence / 'inputs'
+ inputs.mkdir()
+-for pattern in ['mcfta-pruning-enumeration-incoming-cache-adapter-20261025-*']:
++for pattern in ['mcfta-pruning-enumeration-cached-terminal-adapter-20261025-*']:
+     for path in sorted(Path('/tmp').glob(pattern)):
+-        if path.is_file() and not path.name.startswith('mcfta-pruning-enumeration-incoming-cache-adapter-20261025-archive-1.'):
++        if path.is_file() and not path.name.startswith('mcfta-pruning-enumeration-cached-terminal-adapter-20261025-archive-1.'):
+             shutil.copyfile(path, inputs / path.name)
+-shutil.copytree('/tmp/mcfta-pruning-enumeration-incoming-cache-adapter-20261025-proposal', evidence / 'owner-proposal')
++shutil.copytree('/tmp/mcfta-pruning-enumeration-cached-terminal-adapter-20261025-proposal', evidence / 'owner-proposal')
+ prior = evidence / 'previous-publication'
+ prior.mkdir()
+ for pin in custody:
+     shutil.copyfile(area / 'previous-publication' / pin['target'], prior / pin['target'])
+ production = evidence / 'production-sources'
+ production.mkdir()
+-shutil.copyfile(root / 'lean/MicroCFTA/SourcePruningEnumerationIncomingCacheAdapter.lean', production / 'SourcePruningEnumerationIncomingCacheAdapter.lean')
+-shutil.copyfile(root / 'lean/notes-current-pruning-enumeration-incoming-cache-adapter.md', evidence / 'current-note.md')
+-shutil.copyfile('/tmp/mcfta-pruning-enumeration-incoming-cache-adapter-20261025-verify.py', evidence / 'verify-checkpoint.py')
+-(evidence / 'INDEX.md').write_text("# Native incoming cache adapter\n\nRoot selects two definitions adapt/run and two theorems erase/complete. The pure adapt definition is computable; run retains the original Incoming action's noncomputability. Four typed haves and three typed definition lets are selected. There is no proof let, induction, helper, new type, predicate, carrier or Graph. The definitions add no native query or mutation primitive. Context activates the existing named incomingNodeMonadList dictionary once, with zero new instance declarations or dictionary bodies. Context has 19 lines and four public heads have 111. The twelve exact strings contain 141 lines. Source estimate 260–440 ordinary lines, hard limit 700. Actual source review and the single frozen owner/schema are bound: 233 payloads / 235 files, 12 exact strings / 141 lines, 217 typed positions, three packets / 46 fields and four case groups (three definition matches and one proof case). It retains 28 whole sources including three separate standard-library provenance sources, 44 cuts / 515 lines, twelve literal import edges and 25 project identities.\n\nOne original Incoming observation is retained as the first projection. Erasure holds at every fixed representative/native/P/H/index bound. It preserves the exact fault, outer None, raw errors/multirows/rejection, reached Caller, saved Queries and read core. The wrapper makes no second query. It attaches an optional candidate only after the actual observed successful outer shape. Outside the genuine completion domain that candidate is unverified; it need not always be None. No invariant checker or global fault cache law is promised.\n\nAdmitted completion reuses the existing CachedIncoming producer and its full original semantics. Actual getValue_success, root self-path and representative uniqueness identify the returned read's target slot with the same oldNode/oldScs. For replacement Empty, the original raw result is nil; encodeNode fixes model handle 0. The adapter reconstructs the exact pending write and ancestry update from that same read. For singleton success it uses the actual returned core and slot. Residual raw shapes return no candidate. NativeIndex.write uses the reached heap, frame read before, gained incomingScs and lost []; the existing mapped frame receipt returns the same after cache. No frame injectivity, second query or count theorem is assumed or reproved.\n\nGenuine Context, IsRoot/PendingAt, StorageValid, PendingRealized, Roots, canonical waiting counts, all-Nat native flags, available closed incoming, bounded incomingScs and current conditional WordRanges remain. Incoming itself may be Empty. The complete packet retains the original read/run/write-prefix, Post, query/unfolding, available/closed codec, optional absence and present-value query/intersection-language receipts. The recovered after cache has the exact core, waiting map, flags, counts, storage, realization and root facts. All-bound erasure alone does not establish these admitted invariants.\n\nAll 151391 baseline blobs/modes/refs/stashes/worktrees, nine document inverses, Audit prepend plus separate audit-addition.json and original owner/body-gate equality/exact-once strings remain guarded. Exactly 26 actual prior CachedTerminal inputs retain their order, FULL 16733-byte summary, canonical assessment and separate sealed peer context. All actual failures/raw/public axiom sets, six-artifact 4 GiB caps, documents-1 non-Lean ledger, manifest-in-HEAD and exact files/index/tree/modes, singleton ordinary publication destination remain unchanged. The current owner is copied once; all previous owners and complete program/draft history remain protected by baseline and custody. No validation outcome is bound here.\n\nH6 remains proved and strongest, the full goal ACTIVE and all six Haskell handoffs first. No Haskell or native extraction change is claimed. Whole Terminal nil can arise before Incoming and remains stage-ambiguous. Terminal adapter/correspondence, captured-original-variable wrapper installation, initial-only mixed numeric admission, final Safe/LiveRoots, selector/partition/fallback, wrapper normalization/reconstruction, physical maps/machine integers, extraction, whole typing/pruning, concrete solver, practical resources, convergence and full driver correspondence remain open. No future check, seal or push result is inferred.\n")
++shutil.copyfile(root / 'lean/MicroCFTA/SourcePruningEnumerationCachedTerminalAdapter.lean', production / 'SourcePruningEnumerationCachedTerminalAdapter.lean')
++shutil.copyfile(root / 'lean/notes-current-pruning-enumeration-cached-terminal-adapter.md', evidence / 'current-note.md')
++shutil.copyfile('/tmp/mcfta-pruning-enumeration-cached-terminal-adapter-20261025-verify.py', evidence / 'verify-checkpoint.py')
++(evidence / 'INDEX.md').write_text('# Native cached terminal adapter\n\nRoot selects one noncomputable run definition and erase/complete theorems. Five typed haves and one three-line typed definition let are selected. There is no proof let, induction, helper, new type, predicate, carrier, Graph or instance declaration. Context activates the existing terminalMonadList dictionary once and adds no dictionary body. The adapter adds no native query or mutation primitive. Context has 28 lines; public heads have 181; ten exact strings contain 221 lines. Source estimate 400–700 ordinary lines, hard limit 1000. Actual source review and the single frozen owner/schema are bound: 255 payloads / 257 files, ten exact strings / 221 lines, 457 typed positions, five packets / 96 fields and 28 case groups (eight runtime and twenty proof). It retains 37 whole sources including two separate standard-library provenance sources, 61 cuts / 889 lines, eighteen literal import edges and 34 project identities.\n\nThe run definition follows actual terminal stages. Incoming Empty stops before Prefix and retains the original observation with the prior cache candidate. Otherwise it observes Prefix once, packages the actual joined core with original flags and moved waiting, then observes the ordered CachedFold once. Recorded order and duplicates remain. Fold faults, outer None, raw nil, errors and unmatched lists retain original tags and reached Caller/Queries/outer core. Cache absence does not stop an original successful singleton continuation: use original Incoming once when the fold cache is absent, or IncomingCacheAdapter once on the actual singleton core framed into the recovered cache. The typed incomingObserved let shares this stage result. No query is rerun.\n\nAt every fixed representative/native/P/H/index bound, erase preserves the complete original Terminal.run five-tuple by first projection. Successful Unit rows map to the winner hole; raw errors stay errors. Returned Caller, Queries, outer read core and moved staging waiting map remain outside optional cache data. The admitted incoming cache retains its write/inherit endpoint and gained waiting; it is not framed back to the earlier outer read. Whole nil remains stage-sensitive: direct Empty, folded rejection and incoming Empty-after-write are different branches. Candidates outside the admitted completion domain are unverified; neither erasure nor their presence is an invariant checker.\n\nNonempty admitted complete consumes CachedTerminal.complete once. It keeps that full original semantic packet. Rejected folding returns its actual folded cache and endpoints. Completed folding derives the exact read slot using getter/root uniqueness, then reuses the same mapped native-write cache receipt for Empty handle0 or singleton success. No second existential completion producer, frame injectivity, query execution or count proof is introduced. The same final cache has counter, roots, storage, realization, canonical counts and all-slot native flags. The completed incoming subpacket retains full Post/query/unfolding, optional/present intersection-language, codec and raw/write receipts and identifies after with the result cache.\n\nGenuine initial Context, Safe, Roots/counts/all-slot flags, InputsPending, bounded first/rest, realization, nonempty available closed incoming and bounded incomingScs remain. Conditional recursive Fold.Ranges and actual current incoming WordRanges are still required. No successful callback, desired final cache or initial-only numeric forecast replaces them. The terminal winner hole is not the later captured-original-variable installation target. H6 remains proved and strongest; full goal ACTIVE, six Haskell handoffs first and no Haskell/native extraction change.\n\nAll 152148 baseline blobs/modes/refs/stashes/worktrees, nine document inverses, Audit prepend/separate audit-addition.json, original owner/body-gate equality and all exact strings once remain guarded. Exactly 26 actual prior IncomingCacheAdapter inputs retain FULL 17113-byte summary, original order, canonical assessment and separate sealed peer context. Actual failed raw/public axiom sets, six-artifact 4 GiB caps, documents-1 non-Lean ledger, manifest in HEAD, exact files/index/tree/modes and ordinary singleton publication destination remain unchanged. All old owners, programs and drafts remain protected. Initial-only mixed numeric admission, final Safe/LiveRoots, selector/partition/fallback, full captured-variable wrapper normalization/installation, physical maps/machine integers, extraction, whole typing/pruning, concrete solver, practical resources, convergence and full driver correspondence remain open. No future validation, seal or push result is asserted.\n')
+ 
+ files = sorted(p for p in evidence.rglob('*') if p.is_file())
+ (evidence / 'SHA256SUMS').write_text(''.join(hashlib.sha256(p.read_bytes()).hexdigest() + '  ' + p.relative_to(evidence).as_posix() + '\n' for p in files))
+--- basis/verify.py
++++ candidate/verify.py
+@@ -1,4 +1,4 @@
+-"""Verify Native incoming cache adapter and the preserved baseline."""
++"""Verify Native cached terminal adapter and the preserved baseline."""
+ import argparse
+ import gzip
+ import hashlib
+@@ -10,8 +10,8 @@
+ parser = argparse.ArgumentParser(description=__doc__)
+ parser.add_argument('--root', type=Path, required=True)
+ root = parser.parse_args().root.resolve()
+-here = root / 'lean/restart-evidence/20261025-pruning-enumeration-incoming-cache-adapter'
+-baseline = '8f47b4357751716acb07f384d00e8115112820a3'
++here = root / 'lean/restart-evidence/20261025-pruning-enumeration-cached-terminal-adapter'
++baseline = '2a94951522fbc9077d4370dfc768bdc40038a776'
+ main = '74250bd889685da436cdbfe32ac4b5a0878ffd09'
+ 
+ def sha(data):
+@@ -40,7 +40,7 @@
+     subprocess.run(['git', *args], cwd=root, check=True)
+ assert git('rev-list', '--parents', '-n', '1', proof).decode().split() == [proof, baseline]
+ assert set(git('diff-tree', '--no-commit-id', '--name-only', '-r', proof).decode().splitlines()) == {
+-    'lean/MicroCFTA/SourcePruningEnumerationIncomingCacheAdapter.lean', 'lean/MicroCFTA/Audit.lean'}
++    'lean/MicroCFTA/SourcePruningEnumerationCachedTerminalAdapter.lean', 'lean/MicroCFTA/Audit.lean'}
+ tree = gzip.decompress((here / 'work/baseline-tree.txt.gz').read_bytes())
+ assert tree == git('ls-tree', '-r', '-z', baseline)
+ assert sha(tree) == load('work/baseline.json')['tree_sha256']
+@@ -70,14 +70,14 @@
+         changed.append(name)
+     elif name == 'lean/MicroCFTA/Audit.lean':
+         addition = audit_change['prefix'].encode()
+-        assert addition == b'import MicroCFTA.SourcePruningEnumerationIncomingCacheAdapter\n'
++        assert addition == b'import MicroCFTA.SourcePruningEnumerationCachedTerminalAdapter\n'
+         assert sha(data) == audit_change['after_sha256'] and data.startswith(addition)
+         data = data[len(addition):]
+         assert sha(data) == audit_change['before_sha256']
+         changed.append(name)
+     assert hashlib.sha1(b'blob ' + str(len(data)).encode() + b'\0' + data).hexdigest() == blob, name
+     count += 1
+-assert count == 151391 and len(changed) == 10
++assert count == 152148 and len(changed) == 10
+ assert git('stash', 'list', '--format=%gd %H %s') == (here / 'work/baseline-stashes.txt').read_bytes()
+ worktrees = (here / 'work/baseline-worktrees.txt').read_bytes()
+ assert git('worktree', 'list', '--porcelain') == worktrees.replace(
+@@ -86,12 +86,12 @@
+     value, ref = line.split()
+     if ref not in ['refs/heads/formalize', 'refs/remotes/origin/formalize'] and not ref.startswith('refs/codex/turn-diffs/'):
+         assert git('rev-parse', ref).decode().strip() == value, ref
+-assert git('rev-parse', 'codex/backup-pruning-enumeration-incoming-cache-adapter-20261025-1146').decode().strip() == baseline
++assert git('rev-parse', 'codex/backup-pruning-enumeration-cached-terminal-adapter-20261025-1227').decode().strip() == baseline
+ 
+ checks = load('work/build-summary.json')
+-source = (root / 'lean/MicroCFTA/SourcePruningEnumerationIncomingCacheAdapter.lean').read_bytes()
+-assert source == (here / 'production-sources/SourcePruningEnumerationIncomingCacheAdapter.lean').read_bytes()
+-assert source == (here / 'work' / checks['successful_source_attempt'] / 'MicroCFTA/SourcePruningEnumerationIncomingCacheAdapter.lean').read_bytes()
++source = (root / 'lean/MicroCFTA/SourcePruningEnumerationCachedTerminalAdapter.lean').read_bytes()
++assert source == (here / 'production-sources/SourcePruningEnumerationCachedTerminalAdapter.lean').read_bytes()
++assert source == (here / 'work' / checks['successful_source_attempt'] / 'MicroCFTA/SourcePruningEnumerationCachedTerminalAdapter.lean').read_bytes()
+ assert sha(source) == load('work/installation.json')['source_sha256']
+ assert len(source.splitlines()) == checks['source_lines']
+ assert not re.search(rb'\b(?:sorry|admit|axiom|unsafe|set_option)\b', source)
+@@ -182,7 +182,7 @@
+ assert axioms == decls['axioms']
+ assert len(decls['theorems']) == sum(item['kind'] == 'theorem' for item in headers)
+ assert len(decls['definitions']) == sum(item['kind'] == 'def' for item in headers)
+-namespace = 'MicroCFTA.SourcePruningEnumerationIncomingCacheAdapter.'
++namespace = 'MicroCFTA.SourcePruningEnumerationCachedTerminalAdapter.'
+ assert decls['definitions'] == [namespace + item['name'] for item in headers if item['kind'] == 'def']
+ assert decls['theorems'] == [namespace + item['name'] for item in headers if item['kind'] == 'theorem']
+ assert set(decls['definitions'] + decls['theorems']) == set(decls['declarations'])
+@@ -191,7 +191,7 @@
+ failed_seals = checks['failed_seal_attempts']
+ assert checks['non_lean_cap_attempts'] == ['documents-1']
+ receipt_stems = ['refresh-1', 'baseline-1'] + checks['non_lean_cap_attempts'] + checks['attempts'] + failed_seals
+-prefix = 'mcfta-pruning-enumeration-incoming-cache-adapter-20261025-'
++prefix = 'mcfta-pruning-enumeration-cached-terminal-adapter-20261025-'
+ expected_stems = {prefix + stem for stem in receipt_stems}
+ for suffix in ['limits.json', 'usage.json']:
+     paths = list((here / 'inputs').glob('*.' + suffix))
+@@ -206,16 +206,16 @@
+     usage = load('inputs/' + prefix + stem + '.usage.json')
+     assert 0 <= usage['age_seconds'] <= 600 and usage['remaining_percent'] > 1
+ for name in ['declaration', 'model', 'public', 'document', 'seal-script', 'root']:
+-    assert (here / 'inputs' / ('mcfta-pruning-enumeration-incoming-cache-adapter-20261025-' + name + '-review.md')).is_file()
+-assert (root / 'lean/notes-current-pruning-enumeration-incoming-cache-adapter.md').read_bytes() == (here / 'current-note.md').read_bytes()
+-findings = (root / 'FINDINGS.md').read_text().split('## Native incoming cache adapter', 1)[0]
++    assert (here / 'inputs' / ('mcfta-pruning-enumeration-cached-terminal-adapter-20261025-' + name + '-review.md')).is_file()
++assert (root / 'lean/notes-current-pruning-enumeration-cached-terminal-adapter.md').read_bytes() == (here / 'current-note.md').read_bytes()
++findings = (root / 'FINDINGS.md').read_text().split('## Native cached terminal adapter', 1)[0]
+ assert '## Haskell fix handoff for external work' in findings and findings.count('| Fixed by ') == 6
+ assert 'All six repairs are in the imported main history.' in findings
+ prior = load('previous-publication/remote-publication.json')
+ assert prior['status'] == 'PUSHED_AND_REMOTE_VERIFIED' and prior['remote_head'] == baseline
+ assert load('previous-publication/publication-spec.json')['head'] == baseline
+ custody = load('work/prior-custody-index.json')
+-assert sha((here / 'work/prior-custody-index.json').read_bytes()) == '6da6f3b3a0fe80324b26a4bf1dc198cad75f1f0eb4c3c34492c485f0019dc0b6'
++assert sha((here / 'work/prior-custody-index.json').read_bytes()) == 'fc9a373141ae25e5a57f74940b049fa5219b8286495b75e32f4d0420df92c1c0'
+ assert len(custody) == 26 and len({pin['target'] for pin in custody}) == 26
+ assert len({pin['source'] for pin in custody}) == 26
+ assert {p.name for p in (here / 'previous-publication').iterdir()} == {pin['target'] for pin in custody}
+@@ -223,8 +223,8 @@
+     assert not Path(pin['target']).is_absolute() and '..' not in Path(pin['target']).parts
+     data = (here / 'previous-publication' / pin['target']).read_bytes()
+     assert len(data) == pin['bytes'] and sha(data) == pin['sha256']
+-assessment = (here / 'previous-publication/mcfta-pruning-enumeration-cached-terminal-20261025-next-assessment.md').read_bytes()
+-assert sha(assessment) == 'de2c65c11ee41384983156e03dbbf7e0df814308e21a768044e01f9739b83d14'
++assessment = (here / 'previous-publication/mcfta-pruning-enumeration-incoming-cache-adapter-20261025-next-assessment.md').read_bytes()
++assert sha(assessment) == '239981e8b782e59a9fe6910559e4ca931490a5825ef449d2205f7495f4dc1da4'
+ summary = load('previous-publication/post-publication-summary.json')
+ assert summary['head'] == baseline and summary['goal'] == 'ACTIVE_INCOMPLETE'
+ assert summary['component_status'] == 'PROVED_SEALED_PUSHED_REMOTE_VERIFIED'
+@@ -232,14 +232,14 @@
+ assert summary['next_assessment_is_currently_sealed'] is True
+ assert (root / summary['sealed_next_assessment_path']).read_bytes() == assessment
+ assessment_review = (here / 'work/script-proposal/context/prior-assessment-review.md').read_bytes()
+-assert sha(assessment_review) == '2c4769633d863a22e621b05694b758b166c39e0f6e441f43bbb17a8b80b42885'
++assert sha(assessment_review) == 'ce9745a7f5aa243aee7ab8cec3c4399dad956cd77a8bca1074085367b593bb20'
+ assert summary['next_assessment_review_is_currently_sealed'] is True
+ assert (root / summary['sealed_next_assessment_review_path']).read_bytes() == assessment_review
+ assert summary['seal_attempt'] == 'archive-1'
+ assert [pin['source'] for pin in custody] == summary['next_custody_inputs']
+ assert summary['final_local_publication_attempt'] == 'local-publication-1'
+ assert summary['all_manifest_files_committed'] is True
+-assert sha((here / 'inputs/mcfta-pruning-enumeration-incoming-cache-adapter-20261025-source-review.md').read_bytes()) == '3627e5eb740833dd61aadd4ff87e8116e49092680946257f245ee611369caaef'
++assert sha((here / 'inputs/mcfta-pruning-enumeration-cached-terminal-adapter-20261025-source-review.md').read_bytes()) == 'f424b6214a2707df30e3e15cf044c9aa05226070816c266be2c14ed2b176cc04'
+ 
+ print(json.dumps(dict(status='PASS', baseline=baseline, main=main, proof=proof,
+     baseline_files=count, unchanged_files=count - len(changed), exact_changed_files=changed,
+--- basis/publication.py
++++ candidate/publication.py
+@@ -5,9 +5,9 @@
+ from pathlib import Path
+ 
+ root = Path('/home/tritlo/Code/mcfta')
+-area = Path('/tmp/mcfta-pruning-enumeration-incoming-cache-adapter-20261025')
+-evidence = root / 'lean/restart-evidence/20261025-pruning-enumeration-incoming-cache-adapter'
+-previous = '8f47b4357751716acb07f384d00e8115112820a3'
++area = Path('/tmp/mcfta-pruning-enumeration-cached-terminal-adapter-20261025')
++evidence = root / 'lean/restart-evidence/20261025-pruning-enumeration-cached-terminal-adapter'
++previous = '2a94951522fbc9077d4370dfc768bdc40038a776'
+ destination = 'git@github.com:TharkunAB/cfta.git'
+ 
+ def git(*args):

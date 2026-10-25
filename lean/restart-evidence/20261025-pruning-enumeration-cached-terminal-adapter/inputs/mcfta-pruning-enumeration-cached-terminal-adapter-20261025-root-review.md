@@ -1,0 +1,13 @@
+# Root final review
+
+The cached terminal checkpoint is proved. The exact installed source has 425 lines and SHA256 b8265f6072fe0de05397f402e5063cb1257fdcf1f6a003876034a098916325be. Strict attempt 4 has literal-empty output with all linters and warnings as errors. Installed, full public readback and Audit pass. Their actual counts are 1318 jobs, 664 public lines and 3732 jobs with 76521 dependency checks. All three public declarations use only propext, Classical.choice and Quot.sound. Root read the complete public output and the independent reviews.
+
+All ten selected strings remain exact. The original owner and programs remain immutable. Root read the typed positions, full packet types, case inventory, insertion recipes and source cuts. The 50-field existing completion packet is consumed once. Its own incoming projection supplies recovery. The runtime continues on absent cache. Erasure preserves every original fixed-bound observation. Admitted completion returns its actual cache and all original semantic receipts. The incoming cache keeps the write endpoint and gained waiting. The original outer observation keeps read and moved waiting.
+
+The three failed complete inputs and raw logs remain. Repairs only change proof bodies. Existing tactic definitions and two unused proof-input annotations are separate. The temporary display option appears only in failed attempt 3. No statement, premise, binder type, dictionary body or proof limit changed. No passing check was repeated.
+
+Root read the complete rendered note and prefix. Nine exact inverses restore the baseline documents. The six imported Haskell repair handoffs remain first. The separate documents ledger was updated after actual documents-1 PASS. Ten actual preseal cap families retain all six artifacts and the exact 4 GiB limits. Root read the final independent document review. The existing archive verifier will check all 152148 baseline blobs and modes before publication.
+
+Root read the canonical 670-word next assessment, all 389 cut lines, routes and its independent peer. All 55 payloads and exact 57-file set match. The next target uses the captured original raw variable and its current old payload. The conditional nonroot versus LiveRoots obstruction is an open structural obligation, not a reachable Haskell bug. No future header or body is selected.
+
+H6 remains proved and strongest. Current request ranges, final Safe/LiveRoots, full wrapper and mixed driver composition, physical extraction, concrete solver and convergence remain open. The full goal is ACTIVE and incomplete. No seal or push outcome is asserted by this preseal review.

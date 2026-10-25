@@ -1,0 +1,9 @@
+noncomputable def run
+    [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Constraint)] [DecidableEq Node]
+    (checkEmpty : Bool) (representativeFuel nativeFuel p h indexFuel : Nat)
+    (first : EnumerationState.Suspended) (rest : List EnumerationState.Suspended)
+    (beforeCaller : Caller width) (before : EnumerationExpandableIndex.Cached Symbol Constraint)
+    (incoming : Node) (incomingScs : List EnumerationState.Suspended) (queries : Queries) :
+    ((Except (PrefixRaw ⊕ ((NativeOutcome ⊕ WorkerOutcome) ⊕ FoldRaw)) (Option TerminalRaw)) ×
+      Caller width × Queries × EnumerationState.State Symbol Constraint × EnumerationWaitingIndex.Waiting) ×
+      Option (EnumerationExpandableIndex.Cached Symbol Constraint) :=

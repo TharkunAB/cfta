@@ -1,0 +1,57 @@
+{
+  "definition_lets": [
+    {
+      "name": "incomingObserved",
+      "scope": "run.foldRaw.singleton",
+      "file": "incomingObserved.head",
+      "type": "((Except (NativeOutcome ⊕ WorkerOutcome) (Option Raw)) × Caller width × Queries × EnumerationState.State Symbol Constraint) × Option (EnumerationExpandableIndex.Cached Symbol Constraint)",
+      "first_line_indent": 12,
+      "initializer_by": "Root only after gate",
+      "selected_data_recipe": {
+        "scrutinee": "foldCache : Option (EnumerationExpandableIndex.Cached Symbol Constraint)",
+        "none": {
+          "existing_function": "SourcePruningEnumerationIncomingNode.run",
+          "arguments": [
+            "checkEmpty",
+            "representativeFuel",
+            "nativeFuel",
+            "p",
+            "h",
+            "foldCaller",
+            "folded",
+            "winner",
+            "incoming",
+            "incomingScs",
+            "foldQueries"
+          ],
+          "additional_cache": "none",
+          "call_count": 1
+        },
+        "some_recovered": {
+          "existing_function": "SourcePruningEnumerationIncomingCacheAdapter.run",
+          "arguments": [
+            "checkEmpty",
+            "representativeFuel",
+            "nativeFuel",
+            "p",
+            "h",
+            "indexFuel",
+            "foldCaller",
+            "EnumerationExpandableIndex.frame folded recovered",
+            "winner",
+            "incoming",
+            "incomingScs",
+            "foldQueries"
+          ],
+          "call_count": 1
+        },
+        "branches_mutually_exclusive": true,
+        "new_body_present": false
+      }
+    }
+  ],
+  "proof_lets": [],
+  "public_result_lets": [],
+  "initializer_bodies_present": false,
+  "body_author": "Root only after gate"
+}

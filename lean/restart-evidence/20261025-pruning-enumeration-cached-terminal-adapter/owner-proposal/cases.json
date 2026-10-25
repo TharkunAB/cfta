@@ -1,0 +1,1043 @@
+{
+  "groups": [
+    {
+      "scope": "run.incomingEmpty",
+      "kind": "definition_if",
+      "scrutinee": "incoming = .empty",
+      "branches": [
+        {
+          "pattern": "true",
+          "payloads": []
+        },
+        {
+          "pattern": "false",
+          "payloads": []
+        }
+      ]
+    },
+    {
+      "scope": "run.prefix",
+      "kind": "definition_match",
+      "scrutinee": "ExceptT.run (SourcePruningEnumerationTerminalPrefix.run representativeFuel first rest before.waiting before.core)",
+      "branches": [
+        {
+          "pattern": "[.ok ((recorded, winner, moved), joined)]",
+          "payloads": [
+            {
+              "scope": "run.prefix.singleton",
+              "name": "recorded",
+              "type": "List Nat",
+              "used": true,
+              "kind": "match"
+            },
+            {
+              "scope": "run.prefix.singleton",
+              "name": "winner",
+              "type": "Nat",
+              "used": true,
+              "kind": "match"
+            },
+            {
+              "scope": "run.prefix.singleton",
+              "name": "moved",
+              "type": "EnumerationWaitingIndex.Waiting",
+              "used": true,
+              "kind": "match"
+            },
+            {
+              "scope": "run.prefix.singleton",
+              "name": "joined",
+              "type": "EnumerationState.State Symbol Constraint",
+              "used": true,
+              "kind": "match"
+            }
+          ]
+        },
+        {
+          "pattern": "prefixRaw",
+          "payloads": [
+            {
+              "scope": "run.prefix.other",
+              "name": "prefixRaw",
+              "type": "PrefixRaw",
+              "used": true,
+              "kind": "match"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "scope": "run.cachedFold",
+      "kind": "definition_match",
+      "scrutinee": "SourcePruningEnumerationCachedFold.run checkEmpty nativeFuel p h recorded beforeCaller ⟨joined, before.expandable, moved⟩ winner queries",
+      "branches": [
+        {
+          "pattern": "((foldResult, foldCaller, foldQueries, foldOuter), foldCache)",
+          "payloads": [
+            {
+              "scope": "run.cachedFold.product",
+              "name": "foldResult",
+              "type": "Except (NativeOutcome ⊕ WorkerOutcome) (Option Raw)",
+              "used": true,
+              "kind": "match"
+            },
+            {
+              "scope": "run.cachedFold.product",
+              "name": "foldCaller",
+              "type": "Caller width",
+              "used": true,
+              "kind": "match"
+            },
+            {
+              "scope": "run.cachedFold.product",
+              "name": "foldQueries",
+              "type": "Queries",
+              "used": true,
+              "kind": "match"
+            },
+            {
+              "scope": "run.cachedFold.product",
+              "name": "foldOuter",
+              "type": "EnumerationState.State Symbol Constraint",
+              "used": true,
+              "kind": "match"
+            },
+            {
+              "scope": "run.cachedFold.product",
+              "name": "foldCache",
+              "type": "Option (EnumerationExpandableIndex.Cached Symbol Constraint)",
+              "used": true,
+              "kind": "match"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "scope": "run.foldResult",
+      "kind": "definition_match",
+      "scrutinee": "foldResult",
+      "branches": [
+        {
+          "pattern": ".error foldFault",
+          "payloads": [
+            {
+              "scope": "run.foldResult.error",
+              "name": "foldFault",
+              "type": "NativeOutcome ⊕ WorkerOutcome",
+              "used": true,
+              "kind": "match"
+            }
+          ]
+        },
+        {
+          "pattern": ".ok none",
+          "payloads": []
+        },
+        {
+          "pattern": ".ok (some foldRaw)",
+          "payloads": [
+            {
+              "scope": "run.foldResult.some",
+              "name": "foldRaw",
+              "type": "Raw",
+              "used": true,
+              "kind": "match"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "scope": "run.foldRaw",
+      "kind": "definition_match",
+      "scrutinee": "foldRaw",
+      "branches": [
+        {
+          "pattern": "[]",
+          "payloads": []
+        },
+        {
+          "pattern": "[.ok ((), folded)]",
+          "payloads": [
+            {
+              "scope": "run.foldRaw.singleton",
+              "name": "folded",
+              "type": "EnumerationState.State Symbol Constraint",
+              "used": true,
+              "kind": "match"
+            }
+          ]
+        },
+        {
+          "pattern": "stoppedRaw",
+          "payloads": [
+            {
+              "scope": "run.foldRaw.other",
+              "name": "stoppedRaw",
+              "type": "FoldRaw",
+              "used": true,
+              "kind": "match"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "scope": "run.incomingObserved.initializer",
+      "kind": "definition_match",
+      "scrutinee": "foldCache",
+      "branches": [
+        {
+          "pattern": "none",
+          "payloads": []
+        },
+        {
+          "pattern": "some recovered",
+          "payloads": [
+            {
+              "scope": "run.incomingObserved.initializer.some",
+              "name": "recovered",
+              "type": "EnumerationExpandableIndex.Cached Symbol Constraint",
+              "used": true,
+              "kind": "match"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "scope": "run.incomingObserved.product",
+      "kind": "definition_match",
+      "scrutinee": "incomingObserved",
+      "branches": [
+        {
+          "pattern": "((incomingResult, afterCaller, savedQueries, read), incomingCache)",
+          "payloads": [
+            {
+              "scope": "run.incomingObserved.product.product",
+              "name": "incomingResult",
+              "type": "Except (NativeOutcome ⊕ WorkerOutcome) (Option Raw)",
+              "used": true,
+              "kind": "match"
+            },
+            {
+              "scope": "run.incomingObserved.product.product",
+              "name": "afterCaller",
+              "type": "Caller width",
+              "used": true,
+              "kind": "match"
+            },
+            {
+              "scope": "run.incomingObserved.product.product",
+              "name": "savedQueries",
+              "type": "Queries",
+              "used": true,
+              "kind": "match"
+            },
+            {
+              "scope": "run.incomingObserved.product.product",
+              "name": "read",
+              "type": "EnumerationState.State Symbol Constraint",
+              "used": true,
+              "kind": "match"
+            },
+            {
+              "scope": "run.incomingObserved.product.product",
+              "name": "incomingCache",
+              "type": "Option (EnumerationExpandableIndex.Cached Symbol Constraint)",
+              "used": true,
+              "kind": "match"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "scope": "run.incomingResult",
+      "kind": "definition_match",
+      "scrutinee": "incomingResult",
+      "branches": [
+        {
+          "pattern": ".error incomingFault",
+          "payloads": [
+            {
+              "scope": "run.incomingResult.error",
+              "name": "incomingFault",
+              "type": "NativeOutcome ⊕ WorkerOutcome",
+              "used": true,
+              "kind": "match"
+            }
+          ]
+        },
+        {
+          "pattern": ".ok none",
+          "payloads": []
+        },
+        {
+          "pattern": ".ok (some incomingRaw)",
+          "payloads": [
+            {
+              "scope": "run.incomingResult.some",
+              "name": "incomingRaw",
+              "type": "Raw",
+              "used": true,
+              "kind": "match"
+            }
+          ]
+        }
+      ],
+      "nested_raw_row_match": {
+        "scrutinee": "row : Except EnumerationState.Error (Unit × EnumerationState.State Symbol Constraint)",
+        "branches": [
+          ".error error",
+          ".ok result"
+        ],
+        "lexical_payloads": [
+          {
+            "scope": "run.incomingResult.some.map",
+            "name": "row",
+            "type": "Except EnumerationState.Error (Unit × EnumerationState.State Symbol Constraint)",
+            "used": true,
+            "kind": "callback"
+          },
+          {
+            "scope": "run.incomingResult.some.map.error",
+            "name": "error",
+            "type": "EnumerationState.Error",
+            "used": true,
+            "kind": "match"
+          },
+          {
+            "scope": "run.incomingResult.some.map.ok",
+            "name": "result",
+            "type": "Unit × EnumerationState.State Symbol Constraint",
+            "used": true,
+            "kind": "match"
+          }
+        ],
+        "counting": "Nested raw mapping belongs to the selected incomingResult runtime group; no separately selected top-level group."
+      }
+    },
+    {
+      "scope": "erase.incomingEmpty",
+      "kind": "by_cases",
+      "scrutinee": "incoming = .empty",
+      "branches": [
+        {
+          "pattern": "positive",
+          "payloads": [
+            {
+              "scope": "erase.incomingEmpty.positive",
+              "name": "empty",
+              "type": "incoming = .empty",
+              "used": true,
+              "kind": "case"
+            }
+          ]
+        },
+        {
+          "pattern": "negative",
+          "payloads": [
+            {
+              "scope": "erase.incomingEmpty.negative",
+              "name": "empty",
+              "type": "¬ (incoming = .empty)",
+              "used": true,
+              "kind": "case"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "scope": "erase.prefixList",
+      "kind": "cases",
+      "scrutinee": "ExceptT.run (SourcePruningEnumerationTerminalPrefix.run representativeFuel first rest before.waiting before.core)",
+      "branches": [
+        {
+          "pattern": "List.nil",
+          "payloads": [
+            {
+              "scope": "erase.prefixList.nil",
+              "name": "prefixResultEq",
+              "type": "ExceptT.run (SourcePruningEnumerationTerminalPrefix.run representativeFuel first rest before.waiting before.core) = []",
+              "used": true,
+              "kind": "case"
+            }
+          ]
+        },
+        {
+          "pattern": "List.cons prefixEntry prefixTail",
+          "payloads": [
+            {
+              "scope": "erase.prefixList.cons",
+              "name": "prefixEntry",
+              "type": "Except EnumerationState.Error ((List Nat × Nat × EnumerationWaitingIndex.Waiting) × EnumerationState.State Symbol Constraint)",
+              "used": true,
+              "kind": "case"
+            },
+            {
+              "scope": "erase.prefixList.cons",
+              "name": "prefixTail",
+              "type": "PrefixRaw",
+              "used": true,
+              "kind": "case"
+            },
+            {
+              "scope": "erase.prefixList.cons",
+              "name": "prefixResultEq",
+              "type": "ExceptT.run (SourcePruningEnumerationTerminalPrefix.run representativeFuel first rest before.waiting before.core) = prefixEntry :: prefixTail",
+              "used": true,
+              "kind": "case"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "scope": "erase.prefixEntry",
+      "kind": "cases",
+      "scrutinee": "prefixEntry",
+      "branches": [
+        {
+          "pattern": "Except.error prefixError",
+          "payloads": [
+            {
+              "scope": "erase.prefixEntry.error",
+              "name": "prefixError",
+              "type": "EnumerationState.Error",
+              "used": true,
+              "kind": "case"
+            }
+          ]
+        },
+        {
+          "pattern": "Except.ok prefixResult",
+          "payloads": [
+            {
+              "scope": "erase.prefixEntry.ok",
+              "name": "prefixResult",
+              "type": "(List Nat × Nat × EnumerationWaitingIndex.Waiting) × EnumerationState.State Symbol Constraint",
+              "used": true,
+              "kind": "case"
+            }
+          ]
+        }
+      ],
+      "ok_tuple_destructure": [
+        {
+          "scope": "erase.prefixEntry.ok.destructure",
+          "name": "recorded",
+          "type": "List Nat",
+          "used": true,
+          "kind": "pattern"
+        },
+        {
+          "scope": "erase.prefixEntry.ok.destructure",
+          "name": "winner",
+          "type": "Nat",
+          "used": true,
+          "kind": "pattern"
+        },
+        {
+          "scope": "erase.prefixEntry.ok.destructure",
+          "name": "moved",
+          "type": "EnumerationWaitingIndex.Waiting",
+          "used": true,
+          "kind": "pattern"
+        },
+        {
+          "scope": "erase.prefixEntry.ok.destructure",
+          "name": "joined",
+          "type": "EnumerationState.State Symbol Constraint",
+          "used": true,
+          "kind": "pattern"
+        }
+      ]
+    },
+    {
+      "scope": "erase.prefixTail",
+      "kind": "cases",
+      "scrutinee": "prefixTail",
+      "branches": [
+        {
+          "pattern": "List.nil",
+          "payloads": []
+        },
+        {
+          "pattern": "List.cons prefixNext prefixRest",
+          "payloads": [
+            {
+              "scope": "erase.prefixTail.cons",
+              "name": "prefixNext",
+              "type": "Except EnumerationState.Error ((List Nat × Nat × EnumerationWaitingIndex.Waiting) × EnumerationState.State Symbol Constraint)",
+              "used": true,
+              "kind": "case"
+            },
+            {
+              "scope": "erase.prefixTail.cons",
+              "name": "prefixRest",
+              "type": "PrefixRaw",
+              "used": true,
+              "kind": "case"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "scope": "erase.cachedFold",
+      "kind": "cases",
+      "scrutinee": "SourcePruningEnumerationCachedFold.run checkEmpty nativeFuel p h recorded beforeCaller ⟨joined, before.expandable, moved⟩ winner queries",
+      "branches": [
+        {
+          "pattern": "Prod.mk foldObservation foldCache",
+          "payloads": [
+            {
+              "scope": "erase.cachedFold.mk",
+              "name": "foldObservation",
+              "type": "(Except (NativeOutcome ⊕ WorkerOutcome) (Option Raw)) × Caller width × Queries × EnumerationState.State Symbol Constraint",
+              "used": true,
+              "kind": "case"
+            },
+            {
+              "scope": "erase.cachedFold.mk",
+              "name": "foldCache",
+              "type": "Option (EnumerationExpandableIndex.Cached Symbol Constraint)",
+              "used": true,
+              "kind": "case"
+            },
+            {
+              "scope": "erase.cachedFold.mk",
+              "name": "cachedFoldResult",
+              "type": "SourcePruningEnumerationCachedFold.run checkEmpty nativeFuel p h recorded beforeCaller ⟨joined, before.expandable, moved⟩ winner queries = (foldObservation, foldCache)",
+              "used": true,
+              "kind": "case"
+            }
+          ]
+        }
+      ],
+      "observation_destructure": [
+        {
+          "scope": "erase.cachedFold.mk.destructure",
+          "name": "foldOutcome",
+          "type": "Except (NativeOutcome ⊕ WorkerOutcome) (Option Raw)",
+          "used": true,
+          "kind": "pattern"
+        },
+        {
+          "scope": "erase.cachedFold.mk.destructure",
+          "name": "foldCaller",
+          "type": "Caller width",
+          "used": true,
+          "kind": "pattern"
+        },
+        {
+          "scope": "erase.cachedFold.mk.destructure",
+          "name": "foldQueries",
+          "type": "Queries",
+          "used": true,
+          "kind": "pattern"
+        },
+        {
+          "scope": "erase.cachedFold.mk.destructure",
+          "name": "foldOuter",
+          "type": "EnumerationState.State Symbol Constraint",
+          "used": true,
+          "kind": "pattern"
+        }
+      ]
+    },
+    {
+      "scope": "erase.foldOutcome",
+      "kind": "cases",
+      "scrutinee": "foldOutcome",
+      "branches": [
+        {
+          "pattern": "Except.error foldFault",
+          "payloads": [
+            {
+              "scope": "erase.foldOutcome.error",
+              "name": "foldFault",
+              "type": "NativeOutcome ⊕ WorkerOutcome",
+              "used": true,
+              "kind": "case"
+            }
+          ]
+        },
+        {
+          "pattern": "Except.ok foldReturned",
+          "payloads": [
+            {
+              "scope": "erase.foldOutcome.ok",
+              "name": "foldReturned",
+              "type": "Option Raw",
+              "used": true,
+              "kind": "case"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "scope": "erase.foldReturned",
+      "kind": "cases",
+      "scrutinee": "foldReturned",
+      "branches": [
+        {
+          "pattern": "Option.none",
+          "payloads": []
+        },
+        {
+          "pattern": "Option.some foldRaw",
+          "payloads": [
+            {
+              "scope": "erase.foldReturned.some",
+              "name": "foldRaw",
+              "type": "Raw",
+              "used": true,
+              "kind": "case"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "scope": "erase.foldRaw",
+      "kind": "cases",
+      "scrutinee": "foldRaw",
+      "branches": [
+        {
+          "pattern": "List.nil",
+          "payloads": []
+        },
+        {
+          "pattern": "List.cons foldEntry foldTail",
+          "payloads": [
+            {
+              "scope": "erase.foldRaw.cons",
+              "name": "foldEntry",
+              "type": "Except EnumerationState.Error (Unit × EnumerationState.State Symbol Constraint)",
+              "used": true,
+              "kind": "case"
+            },
+            {
+              "scope": "erase.foldRaw.cons",
+              "name": "foldTail",
+              "type": "Raw",
+              "used": true,
+              "kind": "case"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "scope": "erase.foldEntry",
+      "kind": "cases",
+      "scrutinee": "foldEntry",
+      "branches": [
+        {
+          "pattern": "Except.error foldError",
+          "payloads": [
+            {
+              "scope": "erase.foldEntry.error",
+              "name": "foldError",
+              "type": "EnumerationState.Error",
+              "used": true,
+              "kind": "case"
+            }
+          ]
+        },
+        {
+          "pattern": "Except.ok foldValue",
+          "payloads": [
+            {
+              "scope": "erase.foldEntry.ok",
+              "name": "foldValue",
+              "type": "Unit × EnumerationState.State Symbol Constraint",
+              "used": true,
+              "kind": "case"
+            }
+          ]
+        }
+      ],
+      "ok_tuple_destructure": [
+        {
+          "scope": "erase.foldEntry.ok.destructure",
+          "name": "foldUnit",
+          "type": "Unit",
+          "used": true,
+          "kind": "pattern"
+        },
+        {
+          "scope": "erase.foldEntry.ok.destructure",
+          "name": "folded",
+          "type": "EnumerationState.State Symbol Constraint",
+          "used": true,
+          "kind": "pattern"
+        }
+      ]
+    },
+    {
+      "scope": "erase.foldUnit",
+      "kind": "cases",
+      "scrutinee": "foldUnit",
+      "branches": [
+        {
+          "pattern": "Unit.unit",
+          "payloads": []
+        }
+      ]
+    },
+    {
+      "scope": "erase.foldTail",
+      "kind": "cases",
+      "scrutinee": "foldTail",
+      "branches": [
+        {
+          "pattern": "List.nil",
+          "payloads": []
+        },
+        {
+          "pattern": "List.cons foldNext foldRest",
+          "payloads": [
+            {
+              "scope": "erase.foldTail.cons",
+              "name": "foldNext",
+              "type": "Except EnumerationState.Error (Unit × EnumerationState.State Symbol Constraint)",
+              "used": true,
+              "kind": "case"
+            },
+            {
+              "scope": "erase.foldTail.cons",
+              "name": "foldRest",
+              "type": "Raw",
+              "used": true,
+              "kind": "case"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "scope": "erase.foldCache",
+      "kind": "cases",
+      "scrutinee": "foldCache",
+      "branches": [
+        {
+          "pattern": "Option.none",
+          "payloads": []
+        },
+        {
+          "pattern": "Option.some recovered",
+          "payloads": [
+            {
+              "scope": "erase.foldCache.some",
+              "name": "recovered",
+              "type": "EnumerationExpandableIndex.Cached Symbol Constraint",
+              "used": true,
+              "kind": "case"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "scope": "erase.fallbackIncoming",
+      "kind": "cases",
+      "scrutinee": "SourcePruningEnumerationIncomingNode.run checkEmpty representativeFuel nativeFuel p h foldCaller folded winner incoming incomingScs foldQueries",
+      "branches": [
+        {
+          "pattern": "Prod.mk incomingOutcome incomingObservation",
+          "payloads": [
+            {
+              "scope": "erase.fallbackIncoming.mk",
+              "name": "incomingOutcome",
+              "type": "Except (NativeOutcome ⊕ WorkerOutcome) (Option Raw)",
+              "used": true,
+              "kind": "case"
+            },
+            {
+              "scope": "erase.fallbackIncoming.mk",
+              "name": "incomingObservation",
+              "type": "Caller width × Queries × EnumerationState.State Symbol Constraint",
+              "used": true,
+              "kind": "case"
+            },
+            {
+              "scope": "erase.fallbackIncoming.mk",
+              "name": "fallbackIncomingResult",
+              "type": "SourcePruningEnumerationIncomingNode.run checkEmpty representativeFuel nativeFuel p h foldCaller folded winner incoming incomingScs foldQueries = (incomingOutcome, incomingObservation)",
+              "used": true,
+              "kind": "case"
+            }
+          ]
+        }
+      ],
+      "observation_rest_destructure": [
+        {
+          "scope": "erase.fallbackIncoming.mk.destructure",
+          "name": "afterCaller",
+          "type": "Caller width",
+          "used": true,
+          "kind": "pattern"
+        },
+        {
+          "scope": "erase.fallbackIncoming.mk.destructure",
+          "name": "savedQueries",
+          "type": "Queries",
+          "used": true,
+          "kind": "pattern"
+        },
+        {
+          "scope": "erase.fallbackIncoming.mk.destructure",
+          "name": "read",
+          "type": "EnumerationState.State Symbol Constraint",
+          "used": true,
+          "kind": "pattern"
+        }
+      ]
+    },
+    {
+      "scope": "erase.fallbackIncomingOutcome",
+      "kind": "cases",
+      "scrutinee": "incomingOutcome",
+      "branches": [
+        {
+          "pattern": "Except.error incomingFault",
+          "payloads": [
+            {
+              "scope": "erase.fallbackIncomingOutcome.error",
+              "name": "incomingFault",
+              "type": "NativeOutcome ⊕ WorkerOutcome",
+              "used": true,
+              "kind": "case"
+            }
+          ]
+        },
+        {
+          "pattern": "Except.ok incomingReturned",
+          "payloads": [
+            {
+              "scope": "erase.fallbackIncomingOutcome.ok",
+              "name": "incomingReturned",
+              "type": "Option Raw",
+              "used": true,
+              "kind": "case"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "scope": "erase.fallbackIncomingReturned",
+      "kind": "cases",
+      "scrutinee": "incomingReturned",
+      "branches": [
+        {
+          "pattern": "Option.none",
+          "payloads": []
+        },
+        {
+          "pattern": "Option.some incomingRaw",
+          "payloads": [
+            {
+              "scope": "erase.fallbackIncomingReturned.some",
+              "name": "incomingRaw",
+              "type": "Raw",
+              "used": true,
+              "kind": "case"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "scope": "erase.cachedIncoming",
+      "kind": "cases",
+      "scrutinee": "SourcePruningEnumerationIncomingCacheAdapter.run checkEmpty representativeFuel nativeFuel p h indexFuel foldCaller (EnumerationExpandableIndex.frame folded recovered) winner incoming incomingScs foldQueries",
+      "branches": [
+        {
+          "pattern": "Prod.mk incomingObservation incomingCache",
+          "payloads": [
+            {
+              "scope": "erase.cachedIncoming.mk",
+              "name": "incomingObservation",
+              "type": "(Except (NativeOutcome ⊕ WorkerOutcome) (Option Raw)) × Caller width × Queries × EnumerationState.State Symbol Constraint",
+              "used": true,
+              "kind": "case"
+            },
+            {
+              "scope": "erase.cachedIncoming.mk",
+              "name": "incomingCache",
+              "type": "Option (EnumerationExpandableIndex.Cached Symbol Constraint)",
+              "used": true,
+              "kind": "case"
+            },
+            {
+              "scope": "erase.cachedIncoming.mk",
+              "name": "cachedIncomingResult",
+              "type": "SourcePruningEnumerationIncomingCacheAdapter.run checkEmpty representativeFuel nativeFuel p h indexFuel foldCaller (EnumerationExpandableIndex.frame folded recovered) winner incoming incomingScs foldQueries = (incomingObservation, incomingCache)",
+              "used": true,
+              "kind": "case"
+            }
+          ]
+        }
+      ],
+      "observation_destructure": [
+        {
+          "scope": "erase.cachedIncoming.mk.destructure",
+          "name": "incomingOutcome",
+          "type": "Except (NativeOutcome ⊕ WorkerOutcome) (Option Raw)",
+          "used": true,
+          "kind": "pattern"
+        },
+        {
+          "scope": "erase.cachedIncoming.mk.destructure",
+          "name": "afterCaller",
+          "type": "Caller width",
+          "used": true,
+          "kind": "pattern"
+        },
+        {
+          "scope": "erase.cachedIncoming.mk.destructure",
+          "name": "savedQueries",
+          "type": "Queries",
+          "used": true,
+          "kind": "pattern"
+        },
+        {
+          "scope": "erase.cachedIncoming.mk.destructure",
+          "name": "read",
+          "type": "EnumerationState.State Symbol Constraint",
+          "used": true,
+          "kind": "pattern"
+        }
+      ]
+    },
+    {
+      "scope": "erase.cachedIncomingOutcome",
+      "kind": "cases",
+      "scrutinee": "incomingOutcome",
+      "branches": [
+        {
+          "pattern": "Except.error incomingFault",
+          "payloads": [
+            {
+              "scope": "erase.cachedIncomingOutcome.error",
+              "name": "incomingFault",
+              "type": "NativeOutcome ⊕ WorkerOutcome",
+              "used": true,
+              "kind": "case"
+            }
+          ]
+        },
+        {
+          "pattern": "Except.ok incomingReturned",
+          "payloads": [
+            {
+              "scope": "erase.cachedIncomingOutcome.ok",
+              "name": "incomingReturned",
+              "type": "Option Raw",
+              "used": true,
+              "kind": "case"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "scope": "erase.cachedIncomingReturned",
+      "kind": "cases",
+      "scrutinee": "incomingReturned",
+      "branches": [
+        {
+          "pattern": "Option.none",
+          "payloads": []
+        },
+        {
+          "pattern": "Option.some incomingRaw",
+          "payloads": [
+            {
+              "scope": "erase.cachedIncomingReturned.some",
+              "name": "incomingRaw",
+              "type": "Raw",
+              "used": true,
+              "kind": "case"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "scope": "complete.foldShape",
+      "kind": "rcases",
+      "scrutinee": "foldShape : foldRows = [] ∨ foldRows = [((), folded)]",
+      "branches": [
+        {
+          "pattern": "Or.inl rejected",
+          "payloads": [
+            {
+              "scope": "complete.foldShape.rejected",
+              "name": "rejected",
+              "type": "foldRows = []",
+              "used": true,
+              "kind": "case"
+            }
+          ]
+        },
+        {
+          "pattern": "Or.inr completed",
+          "payloads": [
+            {
+              "scope": "complete.foldShape.completed",
+              "name": "completed",
+              "type": "foldRows = [((), folded)]",
+              "used": true,
+              "kind": "case"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "scope": "complete.completed.adapted.empty",
+      "kind": "by_cases",
+      "scrutinee": "replacement = .empty",
+      "branches": [
+        {
+          "pattern": "positive",
+          "payloads": [
+            {
+              "scope": "complete.completed.adapted.empty.positive",
+              "name": "empty",
+              "type": "replacement = .empty",
+              "used": true,
+              "kind": "case"
+            }
+          ]
+        },
+        {
+          "pattern": "negative",
+          "payloads": [
+            {
+              "scope": "complete.completed.adapted.empty.negative",
+              "name": "empty",
+              "type": "¬ (replacement = .empty)",
+              "used": true,
+              "kind": "case"
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "runtime_case_group_count": 8,
+  "proof_case_group_count": 20,
+  "case_group_count": 28,
+  "nested_raw_map_explained": true,
+  "induction": false
+}

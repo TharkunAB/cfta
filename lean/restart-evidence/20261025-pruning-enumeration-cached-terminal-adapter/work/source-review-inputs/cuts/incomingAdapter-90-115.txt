@@ -1,0 +1,26 @@
+    (initial : Context formulas solver inventory beforeCaller memos)
+    (storage : StorageValid before.core)
+    (realized : PendingRealized beforeCaller.checked.native.machine.heap before.core)
+    (paths : Roots before.core.representatives roots)
+    (counts : EnumerationCanonicalWaiting.Correct roots before.core.values before.waiting)
+    (flags : ∀ (slot : Nat), SourcePruningEnumerationNativeIndex.candidate
+      beforeCaller.checked.native.machine.heap
+      ((before.core.values[slot]?).getD .eliminated) = some (before.expandable slot))
+    (root : IsRoot before.core.representatives target)
+    (pending : EnumerationCompleteness.PendingAt before.core target)
+    (available : Available beforeCaller.checked.native.machine.heap incoming) (closed : incoming.free = [])
+    (bounded : ∀ sc ∈ incomingScs, sc.var < before.core.counter)
+    (ranges : match before.core.values[target]? with
+      | some (.unenumerated (some oldHandle) _) =>
+          match lookupNode beforeCaller.checked.native.machine.heap oldHandle with
+          | some old => SourceCurrentAllocatedNativeRequestBounds.WordRanges
+              (.code (SourceRecursiveIntersectionCode.requestNode IntersectionEmptyDomain.emptyDomain incoming old))
+              beforeCaller.checked
+          | none => True
+      | _ => True) :
+    ∃ (r n p h k : Nat) (oldNode : Option Nat) (oldScs : List EnumerationState.Suspended)
+      (read : EnumerationState.State Symbol Constraint) (afterCaller : Caller width)
+      (savedQueries : Queries) (final : Memos) (next : Inventory) (replacement : Node) (handle : Nat)
+      (after : EnumerationExpandableIndex.Cached Symbol Constraint),
+      (∀ extra, ExceptT.run (getValue (r + extra) target before.core) =
+        [.ok (.unenumerated oldNode oldScs, read)]) ∧

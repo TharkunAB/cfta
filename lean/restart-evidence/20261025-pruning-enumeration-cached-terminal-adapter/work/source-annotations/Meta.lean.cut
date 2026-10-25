@@ -1,0 +1,6 @@
+
+/-- `erw [rules]` is a shorthand for `rw (transparency := .default) [rules]`.
+This does rewriting up to unfolding of regular definitions (by comparison to regular `rw`
+which only unfolds `@[reducible]` definitions). -/
+macro "erw" c:optConfig s:rwRuleSeq loc:(location)? : tactic => do
+  `(tactic| rw $[$(getConfigItems c)]* (transparency := .default) $s:rwRuleSeq $(loc)?)

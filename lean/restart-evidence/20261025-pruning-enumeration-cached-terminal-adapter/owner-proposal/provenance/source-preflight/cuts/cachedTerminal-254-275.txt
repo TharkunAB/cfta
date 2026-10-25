@@ -1,0 +1,22 @@
+    refine ⟨prefixFuel + incomingR, foldFuel + incomingN, foldP + incomingP, foldH + incomingH,
+      recorded, winner, joinedCache, [((), folded)], foldCaller, foldQueries, foldFinal,
+      foldInventory, folded, (if replacement = .empty then [] else [.ok (.hole winner, after.core)]),
+      afterCaller, read, savedQueries, final, next, ?_, recordedSame, winnerMember, movedSame,
+      joinedSame, rfl, prefixRoots, prefixCounts, joinedFlags, ?_, ?_, .inr rfl, foldPost,
+      foldQuerySame, foldCounter, foldForest, foldPaths, foldStorage, foldRealized, foldedRoot,
+      foldPending, foldCounts, foldWaiting, foldFlags, foldEliminated, foldCompleted, ?_,
+      foldPost.trans incomingPost, incomingQuerySame, ?_, ?_⟩
+    · intro extra
+      simpa only [Nat.add_assoc] using prefixRun (incomingR + extra)
+    · intro extra P H enoughP enoughH
+      simpa only [Nat.add_assoc] using
+        cachedFoldRun (incomingN + extra) P H (by omega) (by omega)
+    · intro extra P H enoughP enoughH
+      simpa only [Nat.add_assoc] using foldRun (incomingN + extra) P H (by omega) (by omega)
+    · intro extraRepresentative extraNative P H enoughP enoughH
+      simp only [SourcePruningEnumerationTerminal.run, ite_eq_right nonempty, Nat.add_assoc,
+        prefixRun (incomingR + extraRepresentative),
+        foldRun (incomingN + extraNative) P H (by omega) (by omega), List.map_cons, List.map_nil, joinedCache]
+      rw [Nat.add_left_comm prefixFuel incomingR extraRepresentative,
+        Nat.add_left_comm foldFuel incomingN extraNative,
+        incomingRun (prefixFuel + extraRepresentative) (foldFuel + extraNative) P H (by omega) (by omega)]

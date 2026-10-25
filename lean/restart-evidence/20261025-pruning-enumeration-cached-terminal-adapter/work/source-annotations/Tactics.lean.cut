@@ -1,0 +1,6 @@
+macro_rules | `(tactic| rfl) => `(tactic| exact HEq.rfl)
+/--
+`rfl'` is similar to `rfl`, but disables smart unfolding and unfolds all kinds of definitions,
+theorems included (relevant for declarations defined by well-founded recursion).
+-/
+macro "rfl'" : tactic => `(tactic| set_option smartUnfolding false in with_unfolding_all rfl)

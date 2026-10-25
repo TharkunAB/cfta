@@ -1,0 +1,10 @@
+theorem erase
+    [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Constraint)] [DecidableEq Node]
+    (checkEmpty : Bool) (representativeFuel nativeFuel p h indexFuel : Nat)
+    (first : EnumerationState.Suspended) (rest : List EnumerationState.Suspended)
+    (beforeCaller : Caller width) (before : EnumerationExpandableIndex.Cached Symbol Constraint)
+    (incoming : Node) (incomingScs : List EnumerationState.Suspended) (queries : Queries) :
+    (run checkEmpty representativeFuel nativeFuel p h indexFuel first rest beforeCaller before
+      incoming incomingScs queries).1 =
+      SourcePruningEnumerationTerminal.run checkEmpty representativeFuel nativeFuel p h
+        first rest before.waiting beforeCaller before.core incoming incomingScs queries := by

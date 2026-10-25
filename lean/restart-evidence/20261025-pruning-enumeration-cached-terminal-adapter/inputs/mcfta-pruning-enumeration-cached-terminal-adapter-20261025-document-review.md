@@ -1,0 +1,15 @@
+# CachedTerminalAdapter document review
+
+FINAL CLEAR — independent source/data review, 2026-10-25 13:20 CET.
+
+I read the complete rendered note and common status prefix, all nine insertion records, actual build summary, document receipt/log, model review and public review. The live note equals current-note.md: 6513 bytes, SHA256 `26c48a7f7a4912606dc9ced1856a13fae7319cf045e866033bb6e41e64bebb02`. The common prefix is 5277 bytes, SHA256 `01900987af524f6df9282497c17b9c9f32f68d873a9a9ce5e450b496d0bfed10`. Both exactly expand the immutable reviewed templates with actual proof and validation fields. The note has one final LF.
+
+All nine additive inverses restore the exact baseline blobs and Git executable modes at `2a94951522fbc9077d4370dfc768bdc40038a776`. Their individual before/after SHA256 values and baseline blob identities are retained in the review inputs. Historical document text is unchanged. FINDINGS keeps all six Haskell repair handoffs first, before the new heading and previous incoming adapter section. All 264 non-evidence Haskell files and the H6 source equal baseline. The proof record binds `37860fd5ba1d4f676d1959565023f800cf7f5037`; its actual commit object has that baseline as its sole parent. The Audit prepend restores the original Audit blob exactly.
+
+The actual source is 425 lines / 29791 bytes, SHA256 `b8265f6072fe0de05397f402e5063cb1257fdcf1f6a003876034a098916325be`. Production, Root source and strict-4 input match. All ten owner strings remain exact and equal the body gate. Original owner and five-program pins remain intact. Validation correctly records three failed complete inputs/raw logs, body-only repairs, the failed third attempt's display diagnostic and final literal-empty strict pass. Installed 1318 jobs, public 664 lines / 84988 bytes and Audit 3732 jobs / 76521 dependency checks agree with retained reports. All three public axiom sets are exactly propext, Classical.choice and Quot.sound. The older inputs warning remains separate.
+
+All ten actual cap families have six retained artifacts and the recorded 4 GiB limits. The documents-1 ledger was added after its actual zero exit; the earlier summary remains. No seal or push success is asserted.
+
+The prose separates unconditional bounded erasure from admitted nonempty completion. It preserves original order, duplicates and staged nil cases. Incoming cache state keeps the actual write/inherit endpoint and gained waiting; outer read/moved observations remain distinct. It claims no query rerun, second completion producer, arbitrary candidate validation, initial-only mixed ranges, final Safe/LiveRoots, captured-variable installation, extraction or full driver result. H6 stays proved and strongest; the whole goal remains ACTIVE and incomplete.
+
+Review inputs: `mcfta-pruning-enumeration-cached-terminal-adapter-20261025-document-review-inputs.json` (31398 bytes), SHA256 `0d3ffcbb77f13e18b2f77a93da51860ebb7a7a3aafaf98091f92b8f2af00a109`. They include all nine inverse hashes, ten cap families, actual source/report controls and read-only reader diagnostics. No compiler, selected program, Git, network or production write was used for this review.

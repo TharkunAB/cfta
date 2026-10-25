@@ -1,0 +1,25 @@
+def adapt
+    (heap : InternedConstructorTemplates.State Symbol Constraint)
+    (indexFuel target : Nat) (incomingScs : List EnumerationState.Suspended)
+    (before : EnumerationExpandableIndex.Cached Symbol Constraint)
+    (read : EnumerationState.State Symbol Constraint) (raw : Raw) :
+    Option (EnumerationExpandableIndex.Cached Symbol Constraint) :=
+  match raw with
+  | [] =>
+      match read.values[target]? with
+      | some (.unenumerated _oldNode oldScs) =>
+        let value : EnumerationState.UVarValue Symbol :=
+          .unenumerated (some 0) (incomingScs ++ oldScs)
+        let core : EnumerationState.State Symbol Constraint :=
+          {read with
+            values := read.values.set target value
+            recursionAncestry := fun other => if other = target then
+              (read.expansionAncestry ++ read.recursionAncestry target).eraseDups
+              else read.recursionAncestry other}
+        (SourcePruningEnumerationNativeIndex.write heap indexFuel target value incomingScs []
+          (EnumerationExpandableIndex.frame read before)).map (EnumerationExpandableIndex.frame core)
+      | _ => none
+  | [.ok ((), returned)] =>
+      (returned.values[target]?).bind fun slotValue =>
+        (SourcePruningEnumerationNativeIndex.write heap indexFuel target slotValue incomingScs []
+          (EnumerationExpandableIndex.frame read before)).map (EnumerationExpandableIndex.frame returned)

@@ -1,0 +1,63 @@
+import gzip
+import hashlib
+import json
+import shutil
+import subprocess
+from pathlib import Path
+
+root = Path('/home/tritlo/Code/mcfta')
+area = Path('/tmp/mcfta-pruning-enumeration-incoming-cache-adapter-20261025')
+evidence = root / 'lean/restart-evidence/20261025-pruning-enumeration-incoming-cache-adapter'
+assert not evidence.exists()
+custody = json.loads((area / 'prior-custody-index.json').read_text())
+assert len(custody) == 26 and len({pin['target'] for pin in custody}) == 26
+assert hashlib.sha256((area / 'prior-custody-index.json').read_bytes()).hexdigest() == '6da6f3b3a0fe80324b26a4bf1dc198cad75f1f0eb4c3c34492c485f0019dc0b6'
+summary = json.loads((area / 'previous-publication/post-publication-summary.json').read_text())
+assert [pin['source'] for pin in custody] == summary['next_custody_inputs']
+for pin in custody:
+    assert not Path(pin['target']).is_absolute() and '..' not in Path(pin['target']).parts
+    data = (area / 'previous-publication' / pin['target']).read_bytes()
+    assert len(data) == pin['bytes'] and hashlib.sha256(data).hexdigest() == pin['sha256']
+assert {p.name for p in (area / 'previous-publication').iterdir()} == {pin['target'] for pin in custody}
+assert Path('/tmp/mcfta-pruning-enumeration-incoming-cache-adapter-20261025-source-review.md').is_file()
+for args in [('diff', '--quiet'), ('diff', '--cached', '--quiet')]:
+    subprocess.run(['git', *args], cwd=root, check=True)
+for name in ['declaration', 'model', 'public', 'document', 'seal-script', 'root']:
+    assert Path('/tmp/mcfta-pruning-enumeration-incoming-cache-adapter-20261025-' + name + '-review.md').is_file()
+evidence.mkdir()
+for path in sorted(area.rglob('*')):
+    if not path.is_file():
+        continue
+    target = evidence / 'work' / path.relative_to(area)
+    target.parent.mkdir(parents=True, exist_ok=True)
+    if path.name == 'baseline-tree.txt':
+        target.with_suffix('.txt.gz').write_bytes(gzip.compress(path.read_bytes(), mtime=0))
+    else:
+        target.write_bytes(path.read_bytes())
+inputs = evidence / 'inputs'
+inputs.mkdir()
+for pattern in ['mcfta-pruning-enumeration-incoming-cache-adapter-20261025-*']:
+    for path in sorted(Path('/tmp').glob(pattern)):
+        if path.is_file() and not path.name.startswith('mcfta-pruning-enumeration-incoming-cache-adapter-20261025-archive-1.'):
+            shutil.copyfile(path, inputs / path.name)
+shutil.copytree('/tmp/mcfta-pruning-enumeration-incoming-cache-adapter-20261025-proposal', evidence / 'owner-proposal')
+prior = evidence / 'previous-publication'
+prior.mkdir()
+for pin in custody:
+    shutil.copyfile(area / 'previous-publication' / pin['target'], prior / pin['target'])
+production = evidence / 'production-sources'
+production.mkdir()
+shutil.copyfile(root / 'lean/MicroCFTA/SourcePruningEnumerationIncomingCacheAdapter.lean', production / 'SourcePruningEnumerationIncomingCacheAdapter.lean')
+shutil.copyfile(root / 'lean/notes-current-pruning-enumeration-incoming-cache-adapter.md', evidence / 'current-note.md')
+shutil.copyfile('/tmp/mcfta-pruning-enumeration-incoming-cache-adapter-20261025-verify.py', evidence / 'verify-checkpoint.py')
+(evidence / 'INDEX.md').write_text("# Native incoming cache adapter\n\nRoot selects two definitions adapt/run and two theorems erase/complete. The pure adapt definition is computable; run retains the original Incoming action's noncomputability. Four typed haves and three typed definition lets are selected. There is no proof let, induction, helper, new type, predicate, carrier or Graph. The definitions add no native query or mutation primitive. Context activates the existing named incomingNodeMonadList dictionary once, with zero new instance declarations or dictionary bodies. Context has 19 lines and four public heads have 111. The twelve exact strings contain 141 lines. Source estimate 260–440 ordinary lines, hard limit 700. Actual source review and the single frozen owner/schema are bound: 233 payloads / 235 files, 12 exact strings / 141 lines, 217 typed positions, three packets / 46 fields and four case groups (three definition matches and one proof case). It retains 28 whole sources including three separate standard-library provenance sources, 44 cuts / 515 lines, twelve literal import edges and 25 project identities.\n\nOne original Incoming observation is retained as the first projection. Erasure holds at every fixed representative/native/P/H/index bound. It preserves the exact fault, outer None, raw errors/multirows/rejection, reached Caller, saved Queries and read core. The wrapper makes no second query. It attaches an optional candidate only after the actual observed successful outer shape. Outside the genuine completion domain that candidate is unverified; it need not always be None. No invariant checker or global fault cache law is promised.\n\nAdmitted completion reuses the existing CachedIncoming producer and its full original semantics. Actual getValue_success, root self-path and representative uniqueness identify the returned read's target slot with the same oldNode/oldScs. For replacement Empty, the original raw result is nil; encodeNode fixes model handle 0. The adapter reconstructs the exact pending write and ancestry update from that same read. For singleton success it uses the actual returned core and slot. Residual raw shapes return no candidate. NativeIndex.write uses the reached heap, frame read before, gained incomingScs and lost []; the existing mapped frame receipt returns the same after cache. No frame injectivity, second query or count theorem is assumed or reproved.\n\nGenuine Context, IsRoot/PendingAt, StorageValid, PendingRealized, Roots, canonical waiting counts, all-Nat native flags, available closed incoming, bounded incomingScs and current conditional WordRanges remain. Incoming itself may be Empty. The complete packet retains the original read/run/write-prefix, Post, query/unfolding, available/closed codec, optional absence and present-value query/intersection-language receipts. The recovered after cache has the exact core, waiting map, flags, counts, storage, realization and root facts. All-bound erasure alone does not establish these admitted invariants.\n\nAll 151391 baseline blobs/modes/refs/stashes/worktrees, nine document inverses, Audit prepend plus separate audit-addition.json and original owner/body-gate equality/exact-once strings remain guarded. Exactly 26 actual prior CachedTerminal inputs retain their order, FULL 16733-byte summary, canonical assessment and separate sealed peer context. All actual failures/raw/public axiom sets, six-artifact 4 GiB caps, documents-1 non-Lean ledger, manifest-in-HEAD and exact files/index/tree/modes, singleton ordinary publication destination remain unchanged. The current owner is copied once; all previous owners and complete program/draft history remain protected by baseline and custody. No validation outcome is bound here.\n\nH6 remains proved and strongest, the full goal ACTIVE and all six Haskell handoffs first. No Haskell or native extraction change is claimed. Whole Terminal nil can arise before Incoming and remains stage-ambiguous. Terminal adapter/correspondence, captured-original-variable wrapper installation, initial-only mixed numeric admission, final Safe/LiveRoots, selector/partition/fallback, wrapper normalization/reconstruction, physical maps/machine integers, extraction, whole typing/pruning, concrete solver, practical resources, convergence and full driver correspondence remain open. No future check, seal or push result is inferred.\n")
+
+files = sorted(p for p in evidence.rglob('*') if p.is_file())
+(evidence / 'SHA256SUMS').write_text(''.join(hashlib.sha256(p.read_bytes()).hexdigest() + '  ' + p.relative_to(evidence).as_posix() + '\n' for p in files))
+result = subprocess.run(['/usr/bin/python3', str(evidence / 'verify-checkpoint.py'), '--root', str(root)], cwd=root, capture_output=True)
+report = dict(exit_code=result.returncode,
+    manifest_sha256=hashlib.sha256((evidence / 'SHA256SUMS').read_bytes()).hexdigest(),
+    manifest_entries=len(files), stdout=result.stdout.decode(), stderr=result.stderr.decode())
+(area / 'seal-result.json').write_text(json.dumps(report, indent=2) + '\n')
+print(json.dumps(report, indent=2))
+assert result.returncode == 0

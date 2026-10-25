@@ -1,0 +1,13 @@
+
+/-- Update the raw slot and remove lost counts before adding gained counts. -/
+def write
+    (heap : InternedConstructorTemplates.State Symbol NativeGuard)
+    (fuel target : Nat) (value : EnumerationState.UVarValue Symbol)
+    (gained lost : List EnumerationState.Suspended)
+    (before : EnumerationExpandableIndex.Cached Symbol EnumGuard) :
+    Option (EnumerationExpandableIndex.Cached Symbol EnumGuard) :=
+  (candidate heap value).bind fun flag =>
+    (count fuel before.core.representatives (-1) lost before.waiting).bind fun removed =>
+      (count fuel before.core.representatives 1 gained removed).bind fun saved =>
+        some ⟨{before.core with values := before.core.values.set target value},
+          fun other => if other = target then flag else before.expandable other, saved⟩

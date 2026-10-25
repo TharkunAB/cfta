@@ -1,0 +1,16 @@
+    simpa only [congrArg EnumerationState.State.values joinedSame] using flags
+  let joinedCache : EnumerationExpandableIndex.Cached Symbol Constraint :=
+    ⟨joined, before.expandable, moved⟩
+  obtain ⟨foldFuel, foldP, foldH, foldRows, foldCaller, foldQueries, foldFinal, foldInventory,
+    folded, cachedFoldRun, foldPost, foldQuerySame, foldCounter, foldForest, foldPaths,
+    foldStorage, foldRealized, foldCounts, foldWaiting, foldFlags, foldShape, foldPending,
+    foldEliminated, foldCompleted⟩ :=
+    SourcePruningEnumerationCachedFoldCompletion.complete formulas solver inventory beforeCaller
+      joinedCache recorded checkEmpty winner memos
+      (EnumerationCanonicalUnion.mergedRoots roots recorded winner) initial joinedStorage
+      joinedRealized prefixRoots prefixCounts joinedFlags winnerPending
+      (fun source member => .inl (recordedPending source member))
+      (ranges prefixFuel recorded winner moved joined (by simpa only [Nat.add_zero] using prefixRun 0)).1
+  have foldRun : ∀ extra P H, foldP ≤ P → foldH ≤ H →
+      SourcePruningEnumerationFold.run checkEmpty (foldFuel + extra) P H recorded
+        beforeCaller joined winner memos.query =

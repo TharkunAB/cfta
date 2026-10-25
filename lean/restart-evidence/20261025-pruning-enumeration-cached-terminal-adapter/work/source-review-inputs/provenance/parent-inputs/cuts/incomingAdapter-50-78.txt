@@ -1,0 +1,29 @@
+noncomputable def run
+    [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Constraint)] [DecidableEq Node]
+    (checkEmpty : Bool) (representativeFuel nativeFuel p h indexFuel : Nat)
+    (beforeCaller : Caller width) (before : EnumerationExpandableIndex.Cached Symbol Constraint)
+    (target : Nat) (incoming : Node) (incomingScs : List EnumerationState.Suspended) (queries : Queries) :
+    ((Except (SourceEqualityNativeDemand.Outcome width Node ⊕
+      SourceCurrentAllocatedConjunctionWorker.Outcome width) (Option Raw)) ×
+      Caller width × Queries × EnumerationState.State Symbol Constraint) ×
+      Option (EnumerationExpandableIndex.Cached Symbol Constraint) :=
+  let observed : (Except (SourceEqualityNativeDemand.Outcome width Node ⊕
+      SourceCurrentAllocatedConjunctionWorker.Outcome width) (Option Raw)) ×
+      Caller width × Queries × EnumerationState.State Symbol Constraint :=
+    SourcePruningEnumerationIncomingNode.run checkEmpty representativeFuel nativeFuel p h
+      beforeCaller before.core target incoming incomingScs queries
+  (observed, match observed with
+    | (.ok (some raw), reachedCaller, _savedQueries, read) =>
+        adapt reachedCaller.checked.native.machine.heap indexFuel target incomingScs before read raw
+    | _ => none)
+
+/-- The first projection retains the original action at every fixed bound. -/
+theorem erase
+    [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Constraint)] [DecidableEq Node]
+    (checkEmpty : Bool) (representativeFuel nativeFuel p h indexFuel : Nat)
+    (beforeCaller : Caller width) (before : EnumerationExpandableIndex.Cached Symbol Constraint)
+    (target : Nat) (incoming : Node) (incomingScs : List EnumerationState.Suspended) (queries : Queries) :
+    (run checkEmpty representativeFuel nativeFuel p h indexFuel beforeCaller before
+      target incoming incomingScs queries).1 =
+      SourcePruningEnumerationIncomingNode.run checkEmpty representativeFuel nativeFuel p h
+        beforeCaller before.core target incoming incomingScs queries := by

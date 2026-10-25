@@ -1,0 +1,27 @@
+theorem complete [DecidableEq (EdgeKey Symbol Constraint)]
+    (formulas : SourceGuards.Formulas FullSyntax.Formula)
+    (solver : SourceGuards.Entailment FullSyntax.Formula)
+    (inventory : Inventory) (beforeCaller : Caller width) (memos : Memos)
+    (entry : Cache.Interned InternedBinderProtocol.NodeKey)
+    (members : List Node) (depth : Nat) (free : List InternedBinderProtocol.Reference)
+    (before : EnumerationState.State Symbol EnumGuard)
+    (initial : Context formulas solver inventory beforeCaller memos)
+    (available : Available beforeCaller.checked.native.machine.heap (.union entry members depth free))
+    (closed : (Value.union entry members depth free).free = [])
+    (realized : PendingRealized beforeCaller.checked.native.machine.heap before) :
+    ∃ (result : Node) (nextHeap : InternedConstructorTemplates.State Symbol Constraint)
+      (saved : Memos) (afterCaller : Caller width)
+      (actual : SourceEqualityRequiredHead.Head (.union entry members depth free)
+        beforeCaller.checked.native.machine.heap result nextHeap),
+      SourceCurrentRequiredQueryMemos.HeadReads actual memos saved ∧
+      afterCaller = SourceCurrentAllocatedPartialState.advance beforeCaller
+        (advancePhysical beforeCaller.checked ⟨nextHeap, beforeCaller.checked.operations⟩)
+        beforeCaller.fourth beforeCaller.merge ∧
+      Post formulas solver inventory beforeCaller afterCaller saved ∧
+      saved.query = memos.query ∧ Cache.Extends memos.unfolding saved.unfolding ∧
+      Available nextHeap result ∧ result.free = [] ∧ SourceEqualityRequiredCache.Ordinary result ∧
+      (∀ (holds : Constraint → Language.Term Symbol → Bool)
+        (ambient : InternedGuardedLanguage.Env Symbol) (term : Language.Term Symbol),
+        InternedGuardedLanguage.meaning holds ambient result term ↔
+          InternedGuardedLanguage.meaning holds ambient (.union entry members depth free) term) ∧
+      PendingRealized nextHeap before := by
