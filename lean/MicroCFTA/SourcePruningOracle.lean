@@ -2,6 +2,7 @@ import MicroCFTA.SourcePruningTemplates
 import MicroCFTA.SourcePruningResume
 import MicroCFTA.EnumerationPartialCongruence
 import MicroCFTA.EnumerationPartialTransport
+import MicroCFTA.EnumerationPartialCompletion
 
 /-!
 # The concrete template pruning callback
@@ -316,5 +317,82 @@ theorem oracle_transport (graph : Graph Symbol Guard) (templates : List (Templat
           exact pure_transport _ result left right leftAfter frame leftRead
         · simp only [oracle, ite_eq_right rejected, ite_eq_right skipped] at leftRead ⊢
           exact observe_transport graph templates leftFuel pending uv fragment left right leftAfter result frame total leftRead
+
+/-- Bounded fragment history constructs the actual callback and every pending-group read. -/
+theorem oracle_inl_complete (graph : Graph Symbol Guard) (templates : List (Template.Pattern Symbol))
+    (level : Nat → Nat) (frontier : Nat) (pending : List (Pending Symbol))
+    (uv : Nat) (fragment : Fragment Symbol) (before : State Symbol Guard)
+    (safe : Safe before)
+    (stratified : EnumerationOrder.Stratified before level frontier)
+    (allocated : FragmentBound before.counter fragment)
+    (bounded : ∀ group ∈ pending, ∀ entry ∈ group, entry.2 < before.counter) :
+    ∃ fuel result after, Success (oracle graph templates fuel pending uv (.inl fragment)) before result after ∧
+      EnumerationDriver.RenderStable before after ∧ Frame before after ∧
+      EnumerationOrder.Stratified after level frontier := by
+  by_cases rejected : rejectEarly templates fragment = true
+  · refine ⟨0, (true, pending), before, ?_, .refl before safe, .refl before, stratified⟩
+    simp only [oracle, ite_eq_left rejected]
+    exact (success_pure _ _ _ _).mpr ⟨rfl, rfl⟩
+  · by_cases skipped : idle pending fragment = true
+    · refine ⟨0, (false, []), before, ?_, .refl before safe, .refl before, stratified⟩
+      simp only [oracle, ite_eq_right rejected, ite_eq_left skipped]
+      exact (success_pure _ _ _ _).mpr ⟨rfl, rfl⟩
+    · obtain ⟨renderFuel, term, middle, rendered, renderStable, _renderFrame, _renderStratified⟩ :=
+        EnumerationPartialCompletion.expandPartial_complete graph level frontier fragment before safe stratified allocated
+      have groups : ∀ (pending : List (Pending Symbol)) (previous : State Symbol Guard),
+          Safe previous →
+          (∀ group ∈ pending, ∀ entry ∈ group, entry.2 < previous.counter) →
+          ∃ fuel resumed after,
+            Success (pending.mapM (SourcePruningResume.resume fuel uv term)) previous resumed after ∧
+            EnumerationDriver.RenderStable previous after := by
+        intro pending
+        induction pending with
+        | nil =>
+            intro previous previousSafe _bounded
+            exact ⟨0, [], previous, (success_pure _ _ _ _).mpr ⟨rfl, rfl⟩, .refl previous previousSafe⟩
+        | cons first rest ih =>
+            intro previous previousSafe pendingBounded
+            obtain ⟨firstFuel, firstResult, reached, firstRead, _firstFrame⟩ :=
+              SourcePruningResume.resume_complete uv term first previous previousSafe.1.total
+            have firstStable := SourcePruningResume.resume_read firstFuel uv term first previous reached firstResult
+              previousSafe (pendingBounded first (by simp)) firstRead
+            obtain ⟨restFuel, resumed, after, restRead, restStable⟩ :=
+              ih reached firstStable.safe (by
+                intro group member entry present
+                rw [firstStable.counter]
+                exact pendingBounded group (List.mem_cons_of_mem first member) entry present)
+            refine ⟨firstFuel + restFuel, firstResult :: resumed, after, ?_, firstStable.trans restStable⟩
+            rw [List.mapM_cons]
+            apply (success_bind _ _ _ _ _).mpr
+            refine ⟨firstResult, reached,
+              SourcePruningResume.resume_moreFuel firstFuel restFuel uv term first previous firstResult reached firstRead, ?_⟩
+            apply (success_bind _ _ _ _ _).mpr
+            refine ⟨resumed, after, ?_, (success_pure _ _ _ _).mpr ⟨rfl, rfl⟩⟩
+            have raised := retains_mapM _ _
+              (fun group => SourcePruningResume.resume_moreFuel restFuel firstFuel uv term group)
+              rest reached resumed after restRead
+            simpa only [Nat.add_comm] using raised
+      obtain ⟨groupFuel, resumed, after, traversed, groupStable⟩ := groups pending middle renderStable.safe (by
+        intro group member entry present
+        rw [renderStable.counter]
+        exact bounded group member entry present)
+      let result := finishChecks resumed (startMatches templates term)
+      have observed : Success (observe graph templates (renderFuel + groupFuel) pending uv fragment)
+          before result after := by
+        unfold observe
+        apply (success_bind _ _ _ _ _).mpr
+        refine ⟨term, middle,
+          expandPartial_moreFuel graph renderFuel groupFuel fragment before term middle rendered, ?_⟩
+        apply (success_bind _ _ _ _ _).mpr
+        refine ⟨resumed, after, ?_, (success_pure _ _ _ _).mpr ⟨rfl, rfl⟩⟩
+        have raised := retains_mapM _ _
+          (fun group => SourcePruningResume.resume_moreFuel groupFuel renderFuel uv term group)
+          pending middle resumed after traversed
+        simpa only [Nat.add_comm] using raised
+      have stable := renderStable.trans groupStable
+      refine ⟨renderFuel + groupFuel, result, after, ?_, stable,
+        observe_frame graph templates (renderFuel + groupFuel) pending uv fragment before after result safe.1.total observed,
+        EnumerationOrder.stratified_read before after level frontier stable stratified⟩
+      simpa only [oracle, ite_eq_right rejected, ite_eq_right skipped] using observed
 
 end MicroCFTA.SourcePruningOracle

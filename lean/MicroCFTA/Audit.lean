@@ -1,3 +1,4 @@
+import MicroCFTA.SourcePruningCallbackCompletion
 import MicroCFTA.SourcePruningEnumerationSelectedOrdinary
 import MicroCFTA.SourcePruningEnumerationSelectedNarrow
 import MicroCFTA.SourcePruningEnumerationRecursion
