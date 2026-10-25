@@ -1,0 +1,29 @@
+--- strict-1
++++ strict-2
+@@ -64,7 +64,8 @@
+     | some handle =>
+         obtain ⟨value, decoded, _available, _closed⟩ := realizable handle rfl
+         refine ⟨!(MergedOrdinaryHeight.recursiveBoundary value && true), ?_⟩
+-        simp only [SourcePruningEnumerationNativeIndex.candidate, decoded, Option.map_some]
++        simp only [SourcePruningEnumerationNativeIndex.candidate, decoded, Option.map_some,
++          List.isEmpty_nil]
+   obtain ⟨flag, classified⟩ := classification
+   have freshAbsent : before.core.values[before.core.counter]? = none := by
+     exact List.getElem?_eq_none (Nat.le_of_eq storage.aligned.symm)
+@@ -101,6 +102,7 @@
+         have wholeAbsent : (EnumerationState.allocated node before.core).values[slot]? = none := by
+           apply List.getElem?_eq_none
+           simp only [EnumerationState.allocated, List.length_append, List.length_singleton]
++          rw [storage.aligned] at same
+           omega
+         simpa only [wholeAbsent, absent, Option.getD_none, ite_eq_right same] using flags slot
+   refine ⟨flag, ⟨EnumerationState.allocated node before.core,
+@@ -176,7 +178,7 @@
+   have flagFalse : flag = false := by
+     apply Option.some.inj
+     simpa only [SourcePruningEnumerationNativeIndex.candidate, decoded, Option.map_some,
+-      boundary] using classified.symm
++      boundary, List.isEmpty_nil] using classified.symm
+   subst flag
+   have coreRaw : ExceptT.run (action before.core) =
+       [.ok (.hole before.core.counter, after.core)] := by

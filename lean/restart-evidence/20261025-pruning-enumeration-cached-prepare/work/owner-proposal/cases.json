@@ -1,0 +1,518 @@
+{
+  "cases": [
+    {
+      "scope": "allocate_complete.classification.node",
+      "kind": "cases node",
+      "branches": [
+        {
+          "name": "none",
+          "fields": []
+        },
+        {
+          "name": "some",
+          "fields": [
+            {
+              "name": "handle",
+              "type": "Nat",
+              "used": true
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "scope": "allocate_complete.allocatedRealized.membership",
+      "kind": "old | fresh append membership",
+      "branches": [
+        {
+          "name": "old",
+          "fields": [
+            {
+              "name": "old",
+              "type": ".unenumerated (some storedNode) storedScs ∈ before.core.values",
+              "used": true
+            }
+          ]
+        },
+        {
+          "name": "fresh",
+          "fields": [
+            {
+              "name": "fresh",
+              "type": ".unenumerated (some storedNode) storedScs ∈ [.unenumerated node []]",
+              "used": true
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "scope": "allocate_complete.allocatedFlags.beforeSlot",
+      "kind": "by_cases beforeSlot : slot < before.core.values.length",
+      "branches": [
+        {
+          "name": "true",
+          "fields": [
+            {
+              "name": "beforeSlot",
+              "type": "slot < before.core.values.length",
+              "used": true
+            }
+          ]
+        },
+        {
+          "name": "false",
+          "fields": [
+            {
+              "name": "beforeSlot",
+              "type": "¬ (slot < before.core.values.length)",
+              "used": true
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "scope": "allocate_complete.allocatedFlags.same",
+      "kind": "by_cases same : slot = before.core.counter",
+      "branches": [
+        {
+          "name": "true",
+          "fields": [
+            {
+              "name": "same",
+              "type": "slot = before.core.counter",
+              "used": true
+            }
+          ]
+        },
+        {
+          "name": "false",
+          "fields": [
+            {
+              "name": "same",
+              "type": "¬ (slot = before.core.counter)",
+              "used": true
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "scope": "allocate_complete.nativeEquality.flag",
+      "kind": "cases flag",
+      "branches": [
+        {
+          "name": "false",
+          "fields": []
+        },
+        {
+          "name": "true",
+          "fields": []
+        }
+      ]
+    },
+    {
+      "scope": "allocate_complete.nativeEquality.same",
+      "kind": "by_cases same : slot = before.core.counter in false flag branch",
+      "branches": [
+        {
+          "name": "true",
+          "fields": [
+            {
+              "name": "same",
+              "type": "slot = before.core.counter",
+              "used": true
+            }
+          ]
+        },
+        {
+          "name": "false",
+          "fields": [
+            {
+              "name": "same",
+              "type": "¬ (slot = before.core.counter)",
+              "used": true
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "scope": "boundary_complete.coreRaw.value",
+      "kind": "cases value; boundary=false constructors close, Mu/Union actual action reduces",
+      "branches": [
+        {
+          "name": "empty",
+          "fields": []
+        },
+        {
+          "name": "reference",
+          "fields": [
+            {
+              "name": "name",
+              "type": "InternedBinderProtocol.Reference",
+              "used": false,
+              "binding_kind": "Root-selected explicit constructor payload"
+            }
+          ]
+        },
+        {
+          "name": "node",
+          "fields": [
+            {
+              "name": "entry",
+              "type": "Cache.Interned InternedBinderProtocol.NodeKey",
+              "used": false,
+              "binding_kind": "Root-selected explicit constructor payload"
+            },
+            {
+              "name": "edges",
+              "type": "List (InternedConstructorTemplates.EdgeValue Symbol NativeGuard)",
+              "used": false,
+              "binding_kind": "Root-selected explicit constructor payload"
+            },
+            {
+              "name": "depth",
+              "type": "Nat",
+              "used": false,
+              "binding_kind": "Root-selected explicit constructor payload"
+            },
+            {
+              "name": "free",
+              "type": "List InternedBinderProtocol.Reference",
+              "used": false,
+              "binding_kind": "Root-selected explicit constructor payload"
+            }
+          ]
+        },
+        {
+          "name": "union",
+          "fields": [
+            {
+              "name": "entry",
+              "type": "Cache.Interned InternedBinderProtocol.NodeKey",
+              "used": false,
+              "binding_kind": "Root-selected explicit constructor payload"
+            },
+            {
+              "name": "members",
+              "type": "List (InternedConstructorTemplates.Value Symbol NativeGuard)",
+              "used": false,
+              "binding_kind": "Root-selected explicit constructor payload"
+            },
+            {
+              "name": "depth",
+              "type": "Nat",
+              "used": false,
+              "binding_kind": "Root-selected explicit constructor payload"
+            },
+            {
+              "name": "free",
+              "type": "List InternedBinderProtocol.Reference",
+              "used": false,
+              "binding_kind": "Root-selected explicit constructor payload"
+            }
+          ]
+        },
+        {
+          "name": "mu",
+          "fields": [
+            {
+              "name": "entry",
+              "type": "Cache.Interned InternedBinderProtocol.NodeKey",
+              "used": false,
+              "binding_kind": "Root-selected explicit constructor payload"
+            },
+            {
+              "name": "body",
+              "type": "InternedConstructorTemplates.Value Symbol NativeGuard",
+              "used": false,
+              "binding_kind": "Root-selected explicit constructor payload"
+            },
+            {
+              "name": "depthShape",
+              "type": "InternedConstructorTemplates.Value Symbol NativeGuard",
+              "used": false,
+              "binding_kind": "Root-selected explicit constructor payload"
+            },
+            {
+              "name": "ordinaryShape",
+              "type": "InternedConstructorTemplates.Value Symbol NativeGuard",
+              "used": false,
+              "binding_kind": "Root-selected explicit constructor payload"
+            }
+          ]
+        }
+      ],
+      "explicit_Root_selected_payload_names": true
+    },
+    {
+      "scope": "boundary_complete.cachedRun.value",
+      "kind": "cases value; boundary=false constructors close, Mu/Union actual action reduces",
+      "branches": [
+        {
+          "name": "empty",
+          "fields": []
+        },
+        {
+          "name": "reference",
+          "fields": [
+            {
+              "name": "name",
+              "type": "InternedBinderProtocol.Reference",
+              "used": false,
+              "binding_kind": "Root-selected explicit constructor payload"
+            }
+          ]
+        },
+        {
+          "name": "node",
+          "fields": [
+            {
+              "name": "entry",
+              "type": "Cache.Interned InternedBinderProtocol.NodeKey",
+              "used": false,
+              "binding_kind": "Root-selected explicit constructor payload"
+            },
+            {
+              "name": "edges",
+              "type": "List (InternedConstructorTemplates.EdgeValue Symbol NativeGuard)",
+              "used": false,
+              "binding_kind": "Root-selected explicit constructor payload"
+            },
+            {
+              "name": "depth",
+              "type": "Nat",
+              "used": false,
+              "binding_kind": "Root-selected explicit constructor payload"
+            },
+            {
+              "name": "free",
+              "type": "List InternedBinderProtocol.Reference",
+              "used": false,
+              "binding_kind": "Root-selected explicit constructor payload"
+            }
+          ]
+        },
+        {
+          "name": "union",
+          "fields": [
+            {
+              "name": "entry",
+              "type": "Cache.Interned InternedBinderProtocol.NodeKey",
+              "used": false,
+              "binding_kind": "Root-selected explicit constructor payload"
+            },
+            {
+              "name": "members",
+              "type": "List (InternedConstructorTemplates.Value Symbol NativeGuard)",
+              "used": false,
+              "binding_kind": "Root-selected explicit constructor payload"
+            },
+            {
+              "name": "depth",
+              "type": "Nat",
+              "used": false,
+              "binding_kind": "Root-selected explicit constructor payload"
+            },
+            {
+              "name": "free",
+              "type": "List InternedBinderProtocol.Reference",
+              "used": false,
+              "binding_kind": "Root-selected explicit constructor payload"
+            }
+          ]
+        },
+        {
+          "name": "mu",
+          "fields": [
+            {
+              "name": "entry",
+              "type": "Cache.Interned InternedBinderProtocol.NodeKey",
+              "used": false,
+              "binding_kind": "Root-selected explicit constructor payload"
+            },
+            {
+              "name": "body",
+              "type": "InternedConstructorTemplates.Value Symbol NativeGuard",
+              "used": false,
+              "binding_kind": "Root-selected explicit constructor payload"
+            },
+            {
+              "name": "depthShape",
+              "type": "InternedConstructorTemplates.Value Symbol NativeGuard",
+              "used": false,
+              "binding_kind": "Root-selected explicit constructor payload"
+            },
+            {
+              "name": "ordinaryShape",
+              "type": "InternedConstructorTemplates.Value Symbol NativeGuard",
+              "used": false,
+              "binding_kind": "Root-selected explicit constructor payload"
+            }
+          ]
+        }
+      ],
+      "explicit_Root_selected_payload_names": true
+    },
+    {
+      "scope": "complete.value",
+      "kind": "cases value",
+      "branches": [
+        {
+          "name": "empty",
+          "fields": []
+        },
+        {
+          "name": "reference",
+          "fields": [
+            {
+              "name": "name",
+              "type": "InternedBinderProtocol.Reference",
+              "used": false
+            }
+          ]
+        },
+        {
+          "name": "node",
+          "fields": [
+            {
+              "name": "entry",
+              "type": "Cache.Interned InternedBinderProtocol.NodeKey",
+              "used": true
+            },
+            {
+              "name": "edges",
+              "type": "List (InternedConstructorTemplates.EdgeValue Symbol NativeGuard)",
+              "used": true
+            },
+            {
+              "name": "depth",
+              "type": "Nat",
+              "used": true
+            },
+            {
+              "name": "free",
+              "type": "List InternedBinderProtocol.Reference",
+              "used": true
+            }
+          ]
+        },
+        {
+          "name": "union",
+          "fields": [
+            {
+              "name": "entry",
+              "type": "Cache.Interned InternedBinderProtocol.NodeKey",
+              "used": true
+            },
+            {
+              "name": "members",
+              "type": "List (InternedConstructorTemplates.Value Symbol NativeGuard)",
+              "used": true
+            },
+            {
+              "name": "depth",
+              "type": "Nat",
+              "used": true
+            },
+            {
+              "name": "free",
+              "type": "List InternedBinderProtocol.Reference",
+              "used": true
+            }
+          ]
+        },
+        {
+          "name": "mu",
+          "fields": [
+            {
+              "name": "entry",
+              "type": "Cache.Interned InternedBinderProtocol.NodeKey",
+              "used": true
+            },
+            {
+              "name": "body",
+              "type": "InternedConstructorTemplates.Value Symbol NativeGuard",
+              "used": true
+            },
+            {
+              "name": "depthShape",
+              "type": "InternedConstructorTemplates.Value Symbol NativeGuard",
+              "used": true
+            },
+            {
+              "name": "ordinaryShape",
+              "type": "InternedConstructorTemplates.Value Symbol NativeGuard",
+              "used": true
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "count": 9,
+  "definition_patterns": [
+    {
+      "pattern": ".empty",
+      "meaning": "some [] BEFORE terminal test"
+    },
+    {
+      "pattern": ".reference _",
+      "typed_positions": [
+        "InternedBinderProtocol.Reference"
+      ],
+      "named_payload_binders": []
+    },
+    {
+      "pattern": ".node _ _ _ _",
+      "typed_positions": [
+        "Cache.Interned InternedBinderProtocol.NodeKey",
+        "List (InternedConstructorTemplates.EdgeValue Symbol NativeGuard)",
+        "Nat",
+        "List InternedBinderProtocol.Reference"
+      ],
+      "named_payload_binders": []
+    },
+    {
+      "pattern": ".union _ _ _ _",
+      "typed_positions": [
+        "Cache.Interned InternedBinderProtocol.NodeKey",
+        "List (InternedConstructorTemplates.Value Symbol NativeGuard)",
+        "Nat",
+        "List InternedBinderProtocol.Reference"
+      ],
+      "named_payload_binders": []
+    },
+    {
+      "pattern": ".mu _ _ _ _",
+      "typed_positions": [
+        "Cache.Interned InternedBinderProtocol.NodeKey",
+        "InternedConstructorTemplates.Value Symbol NativeGuard",
+        "InternedConstructorTemplates.Value Symbol NativeGuard",
+        "InternedConstructorTemplates.Value Symbol NativeGuard"
+      ],
+      "named_payload_binders": []
+    }
+  ],
+  "definition_callbacks": [
+    [
+      "result",
+      "Fragments.Fragment Symbol × EnumerationExpandableIndex.Cached Symbol EnumGuard"
+    ],
+    [
+      "sc",
+      "EnumerationState.Suspended"
+    ],
+    [
+      "handle",
+      "Nat"
+    ],
+    [
+      "allocation",
+      "Nat × EnumerationExpandableIndex.Cached Symbol EnumGuard"
+    ]
+  ],
+  "all_shapes_include_Empty_reject_and_Reference_partial": true
+}

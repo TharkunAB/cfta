@@ -1,0 +1,39 @@
+/tmp/mcfta-pruning-enumeration-cached-prepare-20261025/strict-1/MicroCFTA/SourcePruningEnumerationCachedPrepare.lean:64:18: error: unsolved goals
+case some
+EnumGuard NativeGuard : Type
+heap : InternedConstructorTemplates.State Symbol NativeGuard
+before : EnumerationExpandableIndex.Cached Symbol EnumGuard
+roots : Nat → Nat
+storage : StorageValid before.core
+realized : PendingRealized heap before.core
+paths : Roots before.core.representatives roots
+counts : EnumerationCanonicalWaiting.Correct roots before.core.values before.waiting
+flags :
+  ∀ (slot : Nat),
+    SourcePruningEnumerationNativeIndex.candidate heap (before.core.values[slot]?.getD UVarValue.eliminated) =
+      some (before.expandable slot)
+handle : Nat
+realizable :
+  ∀ (handle_1 : Nat),
+    some handle = some handle_1 →
+      ∃ value, lookupNode heap handle_1 = some value ∧ InternedProbeProvenance.Available heap value ∧ value.free = []
+value : InternedConstructorTemplates.Value Symbol NativeGuard
+decoded : lookupNode heap handle = some value
+_available : InternedProbeProvenance.Available heap value
+_closed : value.free = []
+⊢ (some !(MergedOrdinaryHeight.recursiveBoundary value && [].isEmpty)) =
+    some !(MergedOrdinaryHeight.recursiveBoundary value && true)
+/tmp/mcfta-pruning-enumeration-cached-prepare-20261025/strict-1/MicroCFTA/SourcePruningEnumerationCachedPrepare.lean:104:10: error: omega could not prove the goal:
+a possible counterexample may satisfy the constraints
+  b ≥ 0
+  a ≥ 0
+  a - b ≤ -1
+where
+ a := ↑before.core.values.length
+ b := ↑before.core.counter
+/tmp/mcfta-pruning-enumeration-cached-prepare-20261025/strict-1/MicroCFTA/SourcePruningEnumerationCachedPrepare.lean:178:4: error: Type mismatch: After simplification, term
+  Eq.symm classified
+ has type
+  @Eq (Option Bool) (some flag) (some !(true && [].isEmpty))
+but is expected to have type
+  @Eq (Option Bool) (some flag) (some false)

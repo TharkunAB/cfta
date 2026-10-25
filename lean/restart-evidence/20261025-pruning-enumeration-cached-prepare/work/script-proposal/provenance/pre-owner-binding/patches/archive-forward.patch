@@ -1,0 +1,61 @@
+--- basis/archive.py
++++ candidate/archive.py
+@@ -6,12 +6,12 @@
+ from pathlib import Path
+ 
+ root = Path('/home/tritlo/Code/mcfta')
+-area = Path('/tmp/mcfta-pruning-enumeration-cached-child-20261025')
+-evidence = root / 'lean/restart-evidence/20261025-pruning-enumeration-cached-child'
++area = Path('/tmp/mcfta-pruning-enumeration-cached-prepare-20261025')
++evidence = root / 'lean/restart-evidence/20261025-pruning-enumeration-cached-prepare'
+ assert not evidence.exists()
+ custody = json.loads((area / 'prior-custody-index.json').read_text())
+ assert len(custody) == 26 and len({pin['target'] for pin in custody}) == 26
+-assert hashlib.sha256((area / 'prior-custody-index.json').read_bytes()).hexdigest() == 'a4091150505fc7418247e3d6bddb7a68266e08d1c729d2d4e4ce6fe575383623'
++assert hashlib.sha256((area / 'prior-custody-index.json').read_bytes()).hexdigest() == 'd9ac05a718f3945feda1cbc3893ada021c5a9ad33fcd653af109296db3efe3d9'
+ summary = json.loads((area / 'previous-publication/post-publication-summary.json').read_text())
+ assert [pin['source'] for pin in custody] == summary['next_custody_inputs']
+ for pin in custody:
+@@ -19,11 +19,11 @@
+     data = (area / 'previous-publication' / pin['target']).read_bytes()
+     assert len(data) == pin['bytes'] and hashlib.sha256(data).hexdigest() == pin['sha256']
+ assert {p.name for p in (area / 'previous-publication').iterdir()} == {pin['target'] for pin in custody}
+-assert Path('/tmp/mcfta-pruning-enumeration-cached-child-20261025-source-review.md').is_file()
++assert Path('/tmp/mcfta-pruning-enumeration-cached-prepare-20261025-source-review.md').is_file()
+ for args in [('diff', '--quiet'), ('diff', '--cached', '--quiet')]:
+     subprocess.run(['git', *args], cwd=root, check=True)
+ for name in ['declaration', 'model', 'public', 'document', 'seal-script', 'root']:
+-    assert Path('/tmp/mcfta-pruning-enumeration-cached-child-20261025-' + name + '-review.md').is_file()
++    assert Path('/tmp/mcfta-pruning-enumeration-cached-prepare-20261025-' + name + '-review.md').is_file()
+ evidence.mkdir()
+ for path in sorted(area.rglob('*')):
+     if not path.is_file():
+@@ -36,21 +36,21 @@
+         target.write_bytes(path.read_bytes())
+ inputs = evidence / 'inputs'
+ inputs.mkdir()
+-for pattern in ['mcfta-pruning-enumeration-cached-child-20261025-*']:
++for pattern in ['mcfta-pruning-enumeration-cached-prepare-20261025-*']:
+     for path in sorted(Path('/tmp').glob(pattern)):
+-        if path.is_file() and not path.name.startswith('mcfta-pruning-enumeration-cached-child-20261025-archive-1.'):
++        if path.is_file() and not path.name.startswith('mcfta-pruning-enumeration-cached-prepare-20261025-archive-1.'):
+             shutil.copyfile(path, inputs / path.name)
+-shutil.copytree('/tmp/mcfta-pruning-enumeration-cached-child-20261025-proposal', evidence / 'owner-proposal')
++shutil.copytree('/tmp/mcfta-pruning-enumeration-cached-prepare-20261025-proposal', evidence / 'owner-proposal')
+ prior = evidence / 'previous-publication'
+ prior.mkdir()
+ for pin in custody:
+     shutil.copyfile(area / 'previous-publication' / pin['target'], prior / pin['target'])
+ production = evidence / 'production-sources'
+ production.mkdir()
+-shutil.copyfile(root / 'lean/MicroCFTA/SourcePruningEnumerationCachedChild.lean', production / 'SourcePruningEnumerationCachedChild.lean')
+-shutil.copyfile(root / 'lean/notes-current-pruning-enumeration-cached-child.md', evidence / 'current-note.md')
+-shutil.copyfile('/tmp/mcfta-pruning-enumeration-cached-child-20261025-verify.py', evidence / 'verify-checkpoint.py')
+-(evidence / 'INDEX.md').write_text('# Native cached ordinary child preparation\n\nThe selected interface has allocate, writeSlot and prepareOrdinary definitions, plus allocate_node_flags and complete theorems. Root selected 18 typed haves and one proof let, with no instances, induction, new type or Graph carrier. The source estimate is 280–480 ordinary lines, hard limit 680. The frozen owner records 25 literal contracts, 139 scopes, 18 whole-source snapshots and 39 cuts. The actual source review is bound.\n\nThe ordinary nonterminal producer starts from genuine current coherence, a closed available ordinary child value, StorageValid, PendingRealized, Roots, exact canonical waiting counts, actual native classified flags and bounded scs. The actual scs.any terminal=false guard is an independent premise; storage bounds do not derive it. The handle/readback is derived. The producer derives the exact singleton of the existing prepareChild action. No supplied successful callback, final state or final index law replaces execution.\n\nThe cached allocation runs the actual native candidate, appends the empty-scs slot at the current counter, updates the flag, leaves waiting unchanged and inherits ancestry once through the allocated core. writeSlot reads that actual raw old slot and calls NativeIndex.write with the full gained scs and old lost references. Counts retain current read-only roots, source order and all duplicate occurrences. The final write does not add a second inheritance. The producer derives matching intermediate/final core states, slots, classified flags, exact waiting counts, storage, realization, unchanged forest/Roots, counter growth and the returned fresh hole. It does not use Graph Cached.allocate or changed-slot Cached.frame as a native proof.\n\nWork retains all 142364 baseline files/modes/refs/stashes/worktrees, nine exact document inverses, one Audit prepend, all actual failed inputs/raw reports, complete public signatures/actual axiom subsets and complete resource families. The separate audit-addition.json record remains required. Exactly 26 prior Admission inputs retain archive-1/local-publication-1/push-1, canonical assessment and the complete 39372-byte summary with optional Git whitespace diagnostics. Its sealed peer and explicit nonterminal-domain qualification remain separate context. Older strict failures, metadata repairs and optional diagnostics remain historical facts, not current outcomes.\n\nForce-add every manifest path and SHA256SUMS, including ignored logs. Publication requires all sealed paths in HEAD, exact filesystem/index/tree/modes and a singleton ordinary formalize destination. Only actual retained reports supply validation. No passing check, seal or push is predicted.\n\nWhole-edge cached sequencing, interrupted prefixes and branch alternatives, current-resource admission, native Int/IntMap/IntSet extraction, selector order, full Safe/LiveRoots, wrapper reconstruction and complete scheduler/driver correspondence remain open. Existing Mu/Union and optimized-core proofs remain protected. H6 stays strongest and the whole goal remains ACTIVE and incomplete. All six imported Haskell repair handoffs remain first in FINDINGS. No Haskell source change is claimed.\n')
++shutil.copyfile(root / 'lean/MicroCFTA/SourcePruningEnumerationCachedPrepare.lean', production / 'SourcePruningEnumerationCachedPrepare.lean')
++shutil.copyfile(root / 'lean/notes-current-pruning-enumeration-cached-prepare.md', evidence / 'current-note.md')
++shutil.copyfile('/tmp/mcfta-pruning-enumeration-cached-prepare-20261025-verify.py', evidence / 'verify-checkpoint.py')
++(evidence / 'INDEX.md').write_text("# Native cached child shape preparation\n\nThe selected interface has prepareChild and allocate_complete, boundary_complete and complete. There is one definition and three theorems, with 11 typed haves, no lets, instances, induction, new type or Graph carrier. The source estimate is 330–520 ordinary lines, hard limit 720. Root's 16 exact selected fragments and the actual source review are retained. Final owner/schema binding remains pending; no proof or check outcome is supplied by these templates.\n\nGeneral cached allocation uses the actual optional-handle readback, available closed value when a handle is present, StorageValid, PendingRealized, current Roots, canonical waiting counts and the all-Nat native candidate flag invariant. The old counter slot is absent by alignment. Its genuine previous flag is false. This fact handles false classification without assuming a desired new flag law. Absent-node allocation has no some-handle realization obligation. Allocation inherits ancestry once and keeps waiting and the forest unchanged.\n\nFor nonterminal available closed Mu/Union, readback derives the handle and actual core action. The stored bucket is empty even when the input nonterminal bucket is nonempty. No full-scs write or second inheritance is added. Their fresh native flag is false and waiting remains unchanged. Ordinary nodes reuse CachedChild.complete with their genuine inherited-scs bounds and native full-scs write. The independent nonterminal test is not derived from storage bounds.\n\nEmpty returns some [] before allocation or terminal tests. No cache endpoint is claimed for that rejection. Reference remains model unsupported; native unresolved-reference errors are not equated with None. Missing decode, unsupported terminal buckets on nonempty shapes and insufficient ordinary-write fuel remain partiality. The producer derives a stable adequate bound and exact raw core rows. It does not assume successful callbacks, desired future states or Graph index laws.\n\nWork retains all 143150 baseline files/modes/refs/stashes/worktrees, nine exact document inverses, one Audit prepend, actual failed inputs/raw reports, full public signatures/actual axiom subsets and complete resource families. The separate audit-addition.json record remains required. Exactly 26 prior CachedChild inputs retain archive-1/local-publication-1/push-1, the canonical already sealed assessment and complete 13800-byte summary. Its sealed peer is separate context. Old four strict failures, exact header/type repairs and metadata overlays remain prior history, not current outcomes.\n\nForce-add every manifest path and SHA256SUMS, including ignored logs. Publication requires every sealed path in HEAD, exact filesystem/index/tree/modes and the singleton ordinary formalize destination. Only actual retained reports supply validation. No passing check, seal or push is predicted.\n\nWhole-edge cached sequencing, reached interrupted prefixes, own-class allocation, residual ordering and same-before branch alternatives remain open. Native maps/machine integers, configured selector order, Safe/LiveRoots, wrapper reconstruction and complete scheduler/driver correspondence remain open. H6 stays strongest and the whole goal remains ACTIVE and incomplete. All six imported Haskell repair handoffs remain first in FINDINGS. No Haskell source change is claimed.\n")
+ 
+ files = sorted(p for p in evidence.rglob('*') if p.is_file())
+ (evidence / 'SHA256SUMS').write_text(''.join(hashlib.sha256(p.read_bytes()).hexdigest() + '  ' + p.relative_to(evidence).as_posix() + '\n' for p in files))

@@ -1,0 +1,13 @@
+[2026-10-25 04:18 CET] FINAL body-free CachedPrepare declaration owner.
+
+The owner retains all16 Root-selected fragments byte-for-byte (124 lines). It has one definition, three theorems,11 typed local haves, zero lets, instances, inductions, helper theorems, predicates or new carriers. The selected estimate is330–520 ordinary lines and the hard cap is720. The estimate is not an actual source count. Root writes all bodies after the gate.
+
+prepareChild keeps Empty's some[] rejection before the terminal test. Reference is model partiality. Ordinary nodes delegate to the existing full-scs cached worker. Mu/Union use the actual nonterminal test and allocation only, with a fresh empty bucket. No additional ancestry inheritance or waiting-count write occurs there.
+
+allocate_complete takes genuine optional-handle lookup, availability and closure, vacuous for none. It derives the classifier and actual cached/core allocation, exact fresh slot, counter/alignment, forest/Roots, storage, all realized pending slots, canonical counts, unchanged waiting and every native flag. It supplies no desired flag or endpoint. Boundary completion derives the existing action and actual codec. Its forall-fuel result is allocation-only and needs no inherited-scs bounds. Complete reuses the ordinary and boundary producers. It derives a stable adequate ordinary bound and exact raw-row correspondence. Empty has no returned cache row. The genuine bounded-scs input remains for ordinary storage.
+
+The manual inventory retains290 scopes and ten complete packets with115 fields. Every unused producer field is explicit. Nine case groups include concrete Root-selected constructor names for both boundary case passes and full completion. All definition callbacks, result binders, quantified arguments, old/fresh membership fields and native flag function arguments are typed. No successful callback or future result premise is added.
+
+The source index retains16 whole identities and34 inclusive cuts/534 lines. Five actual import routes retain20 project identities. Standard-library List/getElem APIs are external provenance. The defining Value/free, all ordinary packet fields and storage/hole definitions are retained. Whole hashes do not claim whole-file manual reads. The immutable source-review controls, Root selection, original prospective bytes and focused prior reviews remain in provenance.
+
+This is a source/data freeze only. No proof/action/instance body, parser, compiler, selected program, repository/Git operation, network or board activity ran here. It makes no compiler, publication or full-driver claim. H6 and the whole-goal boundary remain unchanged. Exact independent declaration/script reviews and Root's body gate remain required.

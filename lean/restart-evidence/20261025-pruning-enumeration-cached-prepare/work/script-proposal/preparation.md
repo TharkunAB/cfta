@@ -1,0 +1,11 @@
+# CachedPrepare program preparation
+
+FINAL SOURCE ONLY. This package retains the five complete actual active CachedChild bases, including its final 290-line verifier. Exact forward/inverse patches and per-program Unicode spans reconstruct every candidate and basis as data. The complete reviewed pre-owner draft is retained under provenance/pre-owner-binding.
+
+The new verifier is 246 lines. It removes only the prior component's two-literal repair exception and restores the original exact source-occurrence check for every new contract. Original owner pins, contract equality with the Root body gate and all dynamic schema checks remain. All 16 new literals must remain byte-exact. The actual flat owner has 113 payloads, 16 contracts / 124 lines, 290 scopes, four heads (one definition, three theorems), zero instances and hard limit 720. All payloads, 16 live source identities, 34 inclusive cuts / 534 lines and 20 project import identities were verified as data. Hash checks do not claim manual whole-source reads.
+
+All baseline blobs/modes/refs/worktrees/stashes, nine document inverses, Audit prepend/separate audit record, strict linters, actual reports/raw failures, complete public types/actual axiom subsets, capped receipt sets, every-manifest-path-in-HEAD, filesystem/index/tree and singleton ordinary destination guards remain. Exactly 26 prior CachedChild custody inputs and the separately sealed peer are retained. Prior failures and header/type repairs remain prior history.
+
+The selected templates preserve Empty rejection before allocation, genuine nonterminal tests, Mu/Union empty stored buckets and the ordinary existing full-scs operation. No desired callback, flag result or future state replaces execution. Metrics, failures, axiom sets and publication outcomes remain unbound. Final changes since Root's full draft read are only archive INDEX owner facts and the two templates' owner facts; the other four candidates are identical. Both templates retain their intended EOF format.
+
+No program was parsed, imported, activated or executed. No mathematical/action/instance body or repository/Git/network/board operation was made. Root and independent Guard review precede Root activation and body gate.

@@ -1,0 +1,186 @@
+--- basis/verify.py
++++ candidate/verify.py
+@@ -1,4 +1,4 @@
+-"""Verify Native cached ordinary child preparation and the preserved baseline."""
++"""Verify Native cached child shape preparation and the preserved baseline."""
+ import argparse
+ import gzip
+ import hashlib
+@@ -10,8 +10,8 @@
+ parser = argparse.ArgumentParser(description=__doc__)
+ parser.add_argument('--root', type=Path, required=True)
+ root = parser.parse_args().root.resolve()
+-here = root / 'lean/restart-evidence/20261025-pruning-enumeration-cached-child'
+-baseline = '936f677bbe5904fca271568455fe21e9561df19b'
++here = root / 'lean/restart-evidence/20261025-pruning-enumeration-cached-prepare'
++baseline = '172fe9418e58f8faf16671d3828d8de8ce1b0ce9'
+ main = '74250bd889685da436cdbfe32ac4b5a0878ffd09'
+ 
+ def sha(data):
+@@ -40,7 +40,7 @@
+     subprocess.run(['git', *args], cwd=root, check=True)
+ assert git('rev-list', '--parents', '-n', '1', proof).decode().split() == [proof, baseline]
+ assert set(git('diff-tree', '--no-commit-id', '--name-only', '-r', proof).decode().splitlines()) == {
+-    'lean/MicroCFTA/SourcePruningEnumerationCachedChild.lean', 'lean/MicroCFTA/Audit.lean'}
++    'lean/MicroCFTA/SourcePruningEnumerationCachedPrepare.lean', 'lean/MicroCFTA/Audit.lean'}
+ tree = gzip.decompress((here / 'work/baseline-tree.txt.gz').read_bytes())
+ assert tree == git('ls-tree', '-r', '-z', baseline)
+ assert sha(tree) == load('work/baseline.json')['tree_sha256']
+@@ -70,14 +70,14 @@
+         changed.append(name)
+     elif name == 'lean/MicroCFTA/Audit.lean':
+         addition = audit_change['prefix'].encode()
+-        assert addition == b'import MicroCFTA.SourcePruningEnumerationCachedChild\n'
++        assert addition == b'import MicroCFTA.SourcePruningEnumerationCachedPrepare\n'
+         assert sha(data) == audit_change['after_sha256'] and data.startswith(addition)
+         data = data[len(addition):]
+         assert sha(data) == audit_change['before_sha256']
+         changed.append(name)
+     assert hashlib.sha1(b'blob ' + str(len(data)).encode() + b'\0' + data).hexdigest() == blob, name
+     count += 1
+-assert count == 142364 and len(changed) == 10
++assert count == 143150 and len(changed) == 10
+ assert git('stash', 'list', '--format=%gd %H %s') == (here / 'work/baseline-stashes.txt').read_bytes()
+ worktrees = (here / 'work/baseline-worktrees.txt').read_bytes()
+ assert git('worktree', 'list', '--porcelain') == worktrees.replace(
+@@ -86,12 +86,12 @@
+     value, ref = line.split()
+     if ref not in ['refs/heads/formalize', 'refs/remotes/origin/formalize'] and not ref.startswith('refs/codex/turn-diffs/'):
+         assert git('rev-parse', ref).decode().strip() == value, ref
+-assert git('rev-parse', 'codex/backup-pruning-enumeration-cached-child-20261025-0310').decode().strip() == baseline
++assert git('rev-parse', 'codex/backup-pruning-enumeration-cached-prepare-20261025-0358').decode().strip() == baseline
+ 
+ checks = load('work/build-summary.json')
+-source = (root / 'lean/MicroCFTA/SourcePruningEnumerationCachedChild.lean').read_bytes()
+-assert source == (here / 'production-sources/SourcePruningEnumerationCachedChild.lean').read_bytes()
+-assert source == (here / 'work' / checks['successful_source_attempt'] / 'MicroCFTA/SourcePruningEnumerationCachedChild.lean').read_bytes()
++source = (root / 'lean/MicroCFTA/SourcePruningEnumerationCachedPrepare.lean').read_bytes()
++assert source == (here / 'production-sources/SourcePruningEnumerationCachedPrepare.lean').read_bytes()
++assert source == (here / 'work' / checks['successful_source_attempt'] / 'MicroCFTA/SourcePruningEnumerationCachedPrepare.lean').read_bytes()
+ assert sha(source) == load('work/installation.json')['source_sha256']
+ assert len(source.splitlines()) == checks['source_lines']
+ assert not re.search(rb'\b(?:sorry|admit|axiom|unsafe|set_option)\b', source)
+@@ -116,55 +116,11 @@
+     assert len(data) == pin['bytes'] and sha(data) == pin['sha256']
+ contracts = load('owner-proposal/contracts.json')
+ assert contracts == load('work/body-gate.json')['contracts']
+-layout_root = here / 'work/header-type-overlay-v2'
+-layout_frozen = load('work/header-type-overlay-v2/FROZEN.json')
+-assert sha((layout_root / 'FROZEN.json').read_bytes()) == '590ada5decbaefeedad96beb03ee964d076d3199bc65311ecade7291d4210d54'
+-layout_pins = load('work/header-type-overlay-v2/pins.json')
+-assert len(layout_pins) == layout_frozen['pins_count'] == 6
+-assert layout_frozen['contracts_changed'] == 2 and layout_frozen['bodies'] is False
+-assert sha((layout_root / 'pins.json').read_bytes()) == layout_frozen['pins_sha256']
+-assert {p.relative_to(layout_root).as_posix() for p in layout_root.rglob('*') if p.is_file()} == set(layout_pins) | {'pins.json', 'FROZEN.json'}
+-for name, pin in layout_pins.items():
+-    assert not Path(name).is_absolute() and '..' not in Path(name).parts
+-    data = (layout_root / name).read_bytes()
+-    assert len(data) == pin['bytes'] and sha(data) == pin['sha256']
+-layout = load('work/header-type-overlay-v2/overlay.json')
+-assert layout['parent_FROZEN_sha256'] == sha((here / 'owner-proposal/FROZEN.json').read_bytes())
+-layout_contracts = layout['contracts']
+-layout_specs = {
+-    'complete-header.lean.txt': ('before-complete-header.lean.txt', 'after-complete-header.lean.txt', 'a29f4fc175b417128cdbb697d8f000a086df103f662bd54c093d73eeb7ad88a8', 'a23374b2967e3489e94f48e9340525451282b5d29d0c9b0ebb173dc844b14cbf'),
+-    'local-bound.lean.txt': ('before-local-bound.lean.txt', 'after-local-bound.lean.txt', 'fe5a65504621fda1a23eb2e71947b975bed3c3290f1d9511f02a5c564d06c370', '1cec1011a256733e7aee4d5cccd1fa49e54969ae3cf8b72e4a79d09179926a30'),
+-}
+-assert set(layout_contracts) == set(layout_specs)
+-for name, (before_file, after_file, before_sha, after_sha) in layout_specs.items():
+-    item = layout_contracts[name]
+-    assert isinstance(item['old'], str) and isinstance(item['new'], str)
+-    assert item['old'] == contracts[name]
+-    assert item['before_file'] == before_file and item['after_file'] == after_file
+-    assert (layout_root / before_file).read_bytes() == item['old'].encode()
+-    assert (layout_root / after_file).read_bytes() == item['new'].encode()
+-    assert sha(item['old'].encode()) == item['before_sha256'] == before_sha
+-    assert sha(item['new'].encode()) == item['after_sha256'] == after_sha
+-old_header, new_header = (layout_contracts['complete-header.lean.txt'][key] for key in ('old', 'new'))
+-old_line = '        allocatedCached.core.values.set before.core.counter (.unenumerated (some handle) scs)} ∧'
+-new_line = '                allocatedCached.core.values.set before.core.counter (.unenumerated (some handle) scs)} ∧'
+-old_bound = 'FragmentBound after.core.counter (.hole before.core.counter)'
+-new_bound = 'FragmentBound («Symbol» := Symbol) after.core.counter (.hole before.core.counter)'
+-assert old_header.count(old_line) == old_header.count(old_bound) == 1
+-assert new_header == old_header.replace(old_line, new_line, 1).replace(old_bound, new_bound, 1)
+-old_slot = 'SlotBound allocatedCached.core.counter (.unenumerated (some handle) scs)'
+-new_slot = 'SlotBound («Symbol» := Symbol) allocatedCached.core.counter (.unenumerated (some handle) scs)'
+-assert layout_contracts['local-bound.lean.txt']['old'].count(old_slot) == 1
+-assert layout_contracts['local-bound.lean.txt']['new'] == layout_contracts['local-bound.lean.txt']['old'].replace(old_slot, new_slot, 1)
+-assert len(contracts) == 25
+ for name, literal in contracts.items():
+     assert isinstance(literal, str)
+     data = (here / 'owner-proposal' / name).read_bytes()
+     assert data.decode() == literal
+-    effective_literal = layout_contracts[name]['new'] if name in layout_specs else literal
+-    assert text.count(effective_literal.rstrip('\n')) == 1
+-for item in layout_contracts.values():
+-    assert text.count(item['old'].rstrip('\n')) == 0
++    assert text.count(literal.rstrip('\n')) == 1
+ source_index = load('owner-proposal/source-index.json')
+ sources = source_index['sources']
+ assert len(sources) == frozen['source_count']
+@@ -226,7 +182,7 @@
+ assert axioms == decls['axioms']
+ assert len(decls['theorems']) == sum(item['kind'] == 'theorem' for item in headers)
+ assert len(decls['definitions']) == sum(item['kind'] == 'def' for item in headers)
+-namespace = 'MicroCFTA.SourcePruningEnumerationCachedChild.'
++namespace = 'MicroCFTA.SourcePruningEnumerationCachedPrepare.'
+ assert decls['definitions'] == [namespace + item['name'] for item in headers if item['kind'] == 'def']
+ assert decls['theorems'] == [namespace + item['name'] for item in headers if item['kind'] == 'theorem']
+ assert set(decls['definitions'] + decls['theorems']) == set(decls['declarations'])
+@@ -234,7 +190,7 @@
+     assert set(names) <= {'Classical.choice', 'Quot.sound', 'propext'}
+ failed_seals = checks['failed_seal_attempts']
+ receipt_stems = ['refresh-1', 'baseline-1'] + checks['attempts'] + failed_seals
+-prefix = 'mcfta-pruning-enumeration-cached-child-20261025-'
++prefix = 'mcfta-pruning-enumeration-cached-prepare-20261025-'
+ expected_stems = {prefix + stem for stem in receipt_stems}
+ for suffix in ['limits.json', 'usage.json']:
+     paths = list((here / 'inputs').glob('*.' + suffix))
+@@ -249,16 +205,16 @@
+     usage = load('inputs/' + prefix + stem + '.usage.json')
+     assert 0 <= usage['age_seconds'] <= 600 and usage['remaining_percent'] > 1
+ for name in ['declaration', 'model', 'public', 'document', 'seal-script', 'root']:
+-    assert (here / 'inputs' / ('mcfta-pruning-enumeration-cached-child-20261025-' + name + '-review.md')).is_file()
+-assert (root / 'lean/notes-current-pruning-enumeration-cached-child.md').read_bytes() == (here / 'current-note.md').read_bytes()
+-findings = (root / 'FINDINGS.md').read_text().split('## Native cached ordinary child preparation', 1)[0]
++    assert (here / 'inputs' / ('mcfta-pruning-enumeration-cached-prepare-20261025-' + name + '-review.md')).is_file()
++assert (root / 'lean/notes-current-pruning-enumeration-cached-prepare.md').read_bytes() == (here / 'current-note.md').read_bytes()
++findings = (root / 'FINDINGS.md').read_text().split('## Native cached child shape preparation', 1)[0]
+ assert '## Haskell fix handoff for external work' in findings and findings.count('| Fixed by ') == 6
+ assert 'All six repairs are in the imported main history.' in findings
+ prior = load('previous-publication/remote-publication.json')
+ assert prior['status'] == 'PUSHED_AND_REMOTE_VERIFIED' and prior['remote_head'] == baseline
+ assert load('previous-publication/publication-spec.json')['head'] == baseline
+ custody = load('work/prior-custody-index.json')
+-assert sha((here / 'work/prior-custody-index.json').read_bytes()) == 'a4091150505fc7418247e3d6bddb7a68266e08d1c729d2d4e4ce6fe575383623'
++assert sha((here / 'work/prior-custody-index.json').read_bytes()) == 'd9ac05a718f3945feda1cbc3893ada021c5a9ad33fcd653af109296db3efe3d9'
+ assert len(custody) == 26 and len({pin['target'] for pin in custody}) == 26
+ assert len({pin['source'] for pin in custody}) == 26
+ assert {p.name for p in (here / 'previous-publication').iterdir()} == {pin['target'] for pin in custody}
+@@ -266,8 +222,8 @@
+     assert not Path(pin['target']).is_absolute() and '..' not in Path(pin['target']).parts
+     data = (here / 'previous-publication' / pin['target']).read_bytes()
+     assert len(data) == pin['bytes'] and sha(data) == pin['sha256']
+-assessment = (here / 'previous-publication/mcfta-pruning-enumeration-admission-20261025-next-assessment.md').read_bytes()
+-assert sha(assessment) == 'a6c694165dc6cc35c052015da75635d4f83ab03dc3d2a70b5c49a47a5f2fcd4f'
++assessment = (here / 'previous-publication/mcfta-pruning-enumeration-cached-child-20261025-next-assessment.md').read_bytes()
++assert sha(assessment) == '0a2289ee4d0347e38542fc2831bc7e2a0274d76d0a42ed6924e05f8c4e060a15'
+ summary = load('previous-publication/post-publication-summary.json')
+ assert summary['head'] == baseline and summary['goal'] == 'ACTIVE_INCOMPLETE'
+ assert summary['component_status'] == 'PROVED_SEALED_PUSHED_REMOTE_VERIFIED'
+@@ -275,14 +231,14 @@
+ assert summary['next_assessment_is_currently_sealed'] is True
+ assert (root / summary['sealed_next_assessment_path']).read_bytes() == assessment
+ assessment_review = (here / 'work/script-proposal/context/prior-assessment-review.md').read_bytes()
+-assert sha(assessment_review) == 'a2ca290ddc57cf0468f37b6265704ceb747dd358a99b1bd88b8ed9b30730b5dd'
++assert sha(assessment_review) == '8b9116c4945882cfba7d5a2a15440efbae71d3a08cc0faa6c0dcabbfebd8797e'
+ assert summary['next_assessment_review_is_currently_sealed'] is True
+ assert (root / summary['sealed_next_assessment_review_path']).read_bytes() == assessment_review
+ assert summary['seal_attempt'] == 'archive-1'
+ assert [pin['source'] for pin in custody] == summary['next_custody_inputs']
+ assert summary['final_local_publication_attempt'] == 'local-publication-1'
+ assert summary['all_manifest_files_committed'] is True
+-assert sha((here / 'inputs/mcfta-pruning-enumeration-cached-child-20261025-source-review.md').read_bytes()) == '2daf57365b068290c438d54d583362582d2a035017c916290fa315a794d5d041'
++assert sha((here / 'inputs/mcfta-pruning-enumeration-cached-prepare-20261025-source-review.md').read_bytes()) == '9a709a1075bbd1fefd434cabe80a625d0c9d4feee5276e4884c76d532fffd3b5'
+ 
+ print(json.dumps(dict(status='PASS', baseline=baseline, main=main, proof=proof,
+     baseline_files=count, unchanged_files=count - len(changed), exact_changed_files=changed,

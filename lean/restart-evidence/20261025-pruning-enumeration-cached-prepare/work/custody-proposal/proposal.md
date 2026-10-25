@@ -1,0 +1,7 @@
+# Exact prior CachedChild publication custody
+
+FINAL SOURCE/DATA ONLY. This package copies exactly the 26 paths, in order, from the complete actual CachedChild post-publication summary. It retains the final archive-1, local-publication-1 and push-1 six-artifact families, followed by the eight canonical tails. All source and copy bytes and hashes match. The full 13800-byte summary retains its gate history, four prior strict failures and instruction boundary. Those are prior facts, not new component failures.
+
+The final assessment is already sealed and is the canonical 0a2289ee... input. The already sealed 8b9116c4... peer is copied as separate context. It is not a 27th custody input. The complete report and peer were read. Their qualification remains explicit: Mu/Union child linkage requires the independent nonterminal-scs test; false fresh allocation requires the genuine all-slot native flag invariant and aligned counter/length. No new interface, theorem or proof is selected here.
+
+The index uses safe unique basenames and contains exact source paths, byte counts and SHA256 identities. No aliases, overwrites, content normalization or pruning occur. Two missing guessed metadata filenames were read-only locator diagnostics. Their actual names and locations are recorded separately from compiler, resource and seal outcomes. No selected program, Git, compiler, parser, repository, network or board operation ran here. Root reviews and activates the copies.

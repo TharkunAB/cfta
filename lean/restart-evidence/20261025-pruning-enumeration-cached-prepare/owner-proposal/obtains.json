@@ -1,0 +1,937 @@
+{
+  "packets": [
+    {
+      "scope": "allocate_complete.classification.some",
+      "api": "realizable handle rfl",
+      "fields": [
+        {
+          "name": "value",
+          "type": "InternedConstructorTemplates.Value Symbol NativeGuard",
+          "used": true
+        },
+        {
+          "name": "decoded",
+          "type": "lookupNode heap handle = some value",
+          "used": true
+        },
+        {
+          "name": "_available",
+          "type": "InternedProbeProvenance.Available heap value",
+          "used": false,
+          "reason": "Derived producer field retained but not consumed by the selected proof route.",
+          "Root_authored_binding": "_available"
+        },
+        {
+          "name": "_closed",
+          "type": "value.free = []",
+          "used": false,
+          "reason": "Derived producer field retained but not consumed by the selected proof route.",
+          "Root_authored_binding": "_closed"
+        }
+      ],
+      "skipped_fields": [
+        {
+          "name": "_available",
+          "reason": "Derived producer field retained but not consumed by the selected proof route."
+        },
+        {
+          "name": "_closed",
+          "reason": "Derived producer field retained but not consumed by the selected proof route."
+        }
+      ]
+    },
+    {
+      "scope": "allocate_complete",
+      "api": "classification",
+      "fields": [
+        {
+          "name": "flag",
+          "type": "Bool",
+          "used": true
+        },
+        {
+          "name": "classified",
+          "type": "SourcePruningEnumerationNativeIndex.candidate heap (.unenumerated node []) = some flag",
+          "used": true
+        }
+      ],
+      "skipped_fields": []
+    },
+    {
+      "scope": "allocate_complete.allocatedRealized.old",
+      "api": "List.getElem?_of_mem old",
+      "fields": [
+        {
+          "name": "oldSlot",
+          "type": "Nat",
+          "used": true
+        },
+        {
+          "name": "oldStored",
+          "type": "before.core.values[oldSlot]? = some (.unenumerated (some storedNode) storedScs)",
+          "used": true
+        }
+      ],
+      "skipped_fields": []
+    },
+    {
+      "scope": "allocate_complete.allocatedRealized.fresh",
+      "api": "Fresh singleton membership and UVarValue constructor injection",
+      "fields": [
+        {
+          "name": "nodeSame",
+          "type": "some storedNode = node",
+          "used": true
+        },
+        {
+          "name": "_scsSame",
+          "type": "storedScs = []",
+          "used": false,
+          "reason": "Derived producer field retained but not consumed by the selected proof route.",
+          "Root_authored_binding": "_scsSame"
+        }
+      ],
+      "skipped_fields": [
+        {
+          "name": "_scsSame",
+          "reason": "Derived producer field retained but not consumed by the selected proof route."
+        }
+      ]
+    },
+    {
+      "scope": "boundary_complete",
+      "api": "SourcePruningEnumerationShallowChild.prepareChild_complete heap before.core scs value coherent available closed realized storage.aligned nonterminal",
+      "fields": [
+        {
+          "name": "handle",
+          "type": "Nat",
+          "used": true
+        },
+        {
+          "name": "encoded",
+          "type": "encodeNode value = some handle",
+          "used": true
+        },
+        {
+          "name": "decoded",
+          "type": "lookupNode heap handle = some value",
+          "used": true
+        },
+        {
+          "name": "_emptyCase",
+          "type": "value = .empty → SourcePruningEnumerationShallowChild.prepareChild scs value = some (reject : EnumerateM Symbol EnumGuard (Fragments.Fragment Symbol)) ∧ ¬ ∃ (fragment : Fragments.Fragment Symbol) (after : EnumerationState.State Symbol EnumGuard), Success (reject : EnumerateM Symbol EnumGuard (Fragments.Fragment Symbol)) before.core fragment after",
+          "used": false,
+          "reason": "Derived producer field retained but not consumed by the selected proof route.",
+          "Root_authored_binding": "_emptyCase"
+        },
+        {
+          "name": "nonemptyCase",
+          "type": "value ≠ .empty → ∃ (action : EnumerateM Symbol EnumGuard (Fragments.Fragment Symbol)) (coreAfter : EnumerationState.State Symbol EnumGuard), SourcePruningEnumerationShallowChild.prepareChild scs value = some action ∧ Success action before.core (.hole before.core.counter) coreAfter ∧ coreAfter = (match value with | .node _ _ _ _ => {EnumerationState.allocated (some handle) before.core with values := (EnumerationState.allocated (some handle) before.core).values.set before.core.counter (.unenumerated (some handle) scs)} | _ => EnumerationState.allocated (some handle) before.core) ∧ coreAfter.values[before.core.counter]? = some (.unenumerated (some handle) (match value with | .node _ _ _ _ => scs | _ => [])) ∧ coreAfter.counter = before.core.counter + 1 ∧ coreAfter.counter = coreAfter.values.length ∧ PendingRealized heap coreAfter",
+          "used": true
+        }
+      ],
+      "skipped_fields": [
+        {
+          "name": "_emptyCase",
+          "reason": "Derived producer field retained but not consumed by the selected proof route."
+        }
+      ]
+    },
+    {
+      "scope": "boundary_complete.nonempty",
+      "api": "nonemptyCase nonempty",
+      "fields": [
+        {
+          "name": "action",
+          "type": "EnumerateM Symbol EnumGuard (Fragments.Fragment Symbol)",
+          "used": true
+        },
+        {
+          "name": "_coreAfter",
+          "type": "EnumerationState.State Symbol EnumGuard",
+          "used": false,
+          "reason": "Derived producer field retained but not consumed by the selected proof route.",
+          "Root_authored_binding": "_coreAfter"
+        },
+        {
+          "name": "prepared",
+          "type": "SourcePruningEnumerationShallowChild.prepareChild scs value = some action",
+          "used": true
+        },
+        {
+          "name": "_observed",
+          "type": "Success action before.core (.hole before.core.counter) _coreAfter",
+          "used": false,
+          "reason": "Derived producer field retained but not consumed by the selected proof route.",
+          "Root_authored_binding": "_observed"
+        },
+        {
+          "name": "_afterShape",
+          "type": "_coreAfter = (match value with | .node _ _ _ _ => {EnumerationState.allocated (some handle) before.core with values := (EnumerationState.allocated (some handle) before.core).values.set before.core.counter (.unenumerated (some handle) scs)} | _ => EnumerationState.allocated (some handle) before.core)",
+          "used": false,
+          "reason": "Derived producer field retained but not consumed by the selected proof route.",
+          "Root_authored_binding": "_afterShape"
+        },
+        {
+          "name": "_afterSlot",
+          "type": "_coreAfter.values[before.core.counter]? = some (.unenumerated (some handle) (match value with | .node _ _ _ _ => scs | _ => []))",
+          "used": false,
+          "reason": "Derived producer field retained but not consumed by the selected proof route.",
+          "Root_authored_binding": "_afterSlot"
+        },
+        {
+          "name": "_grows",
+          "type": "_coreAfter.counter = before.core.counter + 1",
+          "used": false,
+          "reason": "Derived producer field retained but not consumed by the selected proof route.",
+          "Root_authored_binding": "_grows"
+        },
+        {
+          "name": "_alignedAfter",
+          "type": "_coreAfter.counter = _coreAfter.values.length",
+          "used": false,
+          "reason": "Derived producer field retained but not consumed by the selected proof route.",
+          "Root_authored_binding": "_alignedAfter"
+        },
+        {
+          "name": "_realizedAfter",
+          "type": "PendingRealized heap _coreAfter",
+          "used": false,
+          "reason": "Derived producer field retained but not consumed by the selected proof route.",
+          "Root_authored_binding": "_realizedAfter"
+        }
+      ],
+      "skipped_fields": [
+        {
+          "name": "_coreAfter",
+          "reason": "Derived producer field retained but not consumed by the selected proof route."
+        },
+        {
+          "name": "_observed",
+          "reason": "Derived producer field retained but not consumed by the selected proof route."
+        },
+        {
+          "name": "_afterShape",
+          "reason": "Derived producer field retained but not consumed by the selected proof route."
+        },
+        {
+          "name": "_afterSlot",
+          "reason": "Derived producer field retained but not consumed by the selected proof route."
+        },
+        {
+          "name": "_grows",
+          "reason": "Derived producer field retained but not consumed by the selected proof route."
+        },
+        {
+          "name": "_alignedAfter",
+          "reason": "Derived producer field retained but not consumed by the selected proof route."
+        },
+        {
+          "name": "_realizedAfter",
+          "reason": "Derived producer field retained but not consumed by the selected proof route."
+        }
+      ]
+    },
+    {
+      "scope": "boundary_complete.allocation",
+      "api": "allocate_complete heap (some handle) before roots (derived genuine realizable) storage realized paths counts flags",
+      "fields": [
+        {
+          "name": "flag",
+          "type": "Bool",
+          "used": true
+        },
+        {
+          "name": "after",
+          "type": "EnumerationExpandableIndex.Cached Symbol EnumGuard",
+          "used": true
+        },
+        {
+          "name": "classified",
+          "type": "SourcePruningEnumerationNativeIndex.candidate heap (.unenumerated (some handle) []) = some flag",
+          "used": true
+        },
+        {
+          "name": "nativeAllocated",
+          "type": "SourcePruningEnumerationCachedChild.allocate heap (some handle) before = some (before.core.counter, after)",
+          "used": true
+        },
+        {
+          "name": "_allocationRaw",
+          "type": "ExceptT.run (EnumerationState.allocate (some handle) before.core) = [.ok (before.core.counter, after.core)]",
+          "used": false,
+          "reason": "Derived producer field retained but not consumed by the selected proof route.",
+          "Root_authored_binding": "_allocationRaw"
+        },
+        {
+          "name": "shape",
+          "type": "after.core = EnumerationState.allocated (some handle) before.core",
+          "used": true
+        },
+        {
+          "name": "stored",
+          "type": "after.core.values[before.core.counter]? = some (.unenumerated (some handle) [])",
+          "used": true
+        },
+        {
+          "name": "grows",
+          "type": "after.core.counter = before.core.counter + 1",
+          "used": true
+        },
+        {
+          "name": "alignedAfter",
+          "type": "after.core.counter = after.core.values.length",
+          "used": true
+        },
+        {
+          "name": "forestSame",
+          "type": "after.core.representatives = before.core.representatives",
+          "used": true
+        },
+        {
+          "name": "pathsAfter",
+          "type": "Roots after.core.representatives roots",
+          "used": true
+        },
+        {
+          "name": "storageAfter",
+          "type": "StorageValid after.core",
+          "used": true
+        },
+        {
+          "name": "realizedAfter",
+          "type": "PendingRealized heap after.core",
+          "used": true
+        },
+        {
+          "name": "countsAfter",
+          "type": "EnumerationCanonicalWaiting.Correct roots after.core.values after.waiting",
+          "used": true
+        },
+        {
+          "name": "waitingSame",
+          "type": "after.waiting = before.waiting",
+          "used": true
+        },
+        {
+          "name": "_flagShape",
+          "type": "after.expandable = (fun (slot : Nat) => if slot = before.core.counter then flag else before.expandable slot)",
+          "used": false,
+          "reason": "Derived producer field retained but not consumed by the selected proof route.",
+          "Root_authored_binding": "_flagShape"
+        },
+        {
+          "name": "flagsAfter",
+          "type": "∀ (slot : Nat), SourcePruningEnumerationNativeIndex.candidate heap ((after.core.values[slot]?).getD .eliminated) = some (after.expandable slot)",
+          "used": true
+        }
+      ],
+      "skipped_fields": [
+        {
+          "name": "_allocationRaw",
+          "reason": "Derived producer field retained but not consumed by the selected proof route."
+        },
+        {
+          "name": "_flagShape",
+          "reason": "Derived producer field retained but not consumed by the selected proof route."
+        }
+      ]
+    },
+    {
+      "scope": "complete.node",
+      "api": "SourcePruningEnumerationCachedChild.complete heap before entry edges depth free scs roots coherent available closed storage realized paths counts flags bounded (derived nonterminal)",
+      "fields": [
+        {
+          "name": "_handle",
+          "type": "Nat",
+          "used": false,
+          "reason": "Derived producer field retained but not consumed by the selected proof route.",
+          "Root_authored_binding": "_handle"
+        },
+        {
+          "name": "action",
+          "type": "EnumerateM Symbol EnumGuard (Fragments.Fragment Symbol)",
+          "used": true
+        },
+        {
+          "name": "_allocatedCached",
+          "type": "EnumerationExpandableIndex.Cached Symbol EnumGuard",
+          "used": false,
+          "reason": "Derived producer field retained but not consumed by the selected proof route.",
+          "Root_authored_binding": "_allocatedCached"
+        },
+        {
+          "name": "after",
+          "type": "EnumerationExpandableIndex.Cached Symbol EnumGuard",
+          "used": true
+        },
+        {
+          "name": "fuel",
+          "type": "Nat",
+          "used": true
+        },
+        {
+          "name": "_encoded",
+          "type": "encodeNode (.node entry edges depth free) = some _handle",
+          "used": false,
+          "reason": "Derived producer field retained but not consumed by the selected proof route.",
+          "Root_authored_binding": "_encoded"
+        },
+        {
+          "name": "_decoded",
+          "type": "lookupNode heap _handle = some (.node entry edges depth free)",
+          "used": false,
+          "reason": "Derived producer field retained but not consumed by the selected proof route.",
+          "Root_authored_binding": "_decoded"
+        },
+        {
+          "name": "prepared",
+          "type": "SourcePruningEnumerationShallowChild.prepareChild scs (.node entry edges depth free) = some action",
+          "used": true
+        },
+        {
+          "name": "coreRaw",
+          "type": "ExceptT.run (action before.core) = [.ok (.hole before.core.counter, after.core)]",
+          "used": true
+        },
+        {
+          "name": "_nativeAllocated",
+          "type": "SourcePruningEnumerationCachedChild.allocate heap (some _handle) before = some (before.core.counter, _allocatedCached)",
+          "used": false,
+          "reason": "Derived producer field retained but not consumed by the selected proof route.",
+          "Root_authored_binding": "_nativeAllocated"
+        },
+        {
+          "name": "_allocatedShape",
+          "type": "_allocatedCached.core = EnumerationState.allocated (some _handle) before.core",
+          "used": false,
+          "reason": "Derived producer field retained but not consumed by the selected proof route.",
+          "Root_authored_binding": "_allocatedShape"
+        },
+        {
+          "name": "_allocatedStored",
+          "type": "_allocatedCached.core.values[before.core.counter]? = some (.unenumerated (some _handle) [])",
+          "used": false,
+          "reason": "Derived producer field retained but not consumed by the selected proof route.",
+          "Root_authored_binding": "_allocatedStored"
+        },
+        {
+          "name": "_allocatedStorage",
+          "type": "StorageValid _allocatedCached.core",
+          "used": false,
+          "reason": "Derived producer field retained but not consumed by the selected proof route.",
+          "Root_authored_binding": "_allocatedStorage"
+        },
+        {
+          "name": "_allocatedRealized",
+          "type": "PendingRealized heap _allocatedCached.core",
+          "used": false,
+          "reason": "Derived producer field retained but not consumed by the selected proof route.",
+          "Root_authored_binding": "_allocatedRealized"
+        },
+        {
+          "name": "_allocatedCounts",
+          "type": "EnumerationCanonicalWaiting.Correct roots _allocatedCached.core.values _allocatedCached.waiting",
+          "used": false,
+          "reason": "Derived producer field retained but not consumed by the selected proof route.",
+          "Root_authored_binding": "_allocatedCounts"
+        },
+        {
+          "name": "_allocatedFlags",
+          "type": "∀ (slot : Nat), SourcePruningEnumerationNativeIndex.candidate heap ((_allocatedCached.core.values[slot]?).getD .eliminated) = some (_allocatedCached.expandable slot)",
+          "used": false,
+          "reason": "Derived producer field retained but not consumed by the selected proof route.",
+          "Root_authored_binding": "_allocatedFlags"
+        },
+        {
+          "name": "_waitingSame",
+          "type": "_allocatedCached.waiting = before.waiting",
+          "used": false,
+          "reason": "Derived producer field retained but not consumed by the selected proof route.",
+          "Root_authored_binding": "_waitingSame"
+        },
+        {
+          "name": "_nativeRun",
+          "type": "∀ (extra : Nat), SourcePruningEnumerationCachedChild.writeSlot heap (fuel + extra) before.core.counter (.unenumerated (some _handle) scs) _allocatedCached = some after",
+          "used": false,
+          "reason": "Derived producer field retained but not consumed by the selected proof route.",
+          "Root_authored_binding": "_nativeRun"
+        },
+        {
+          "name": "prepareRun",
+          "type": "∀ (extra : Nat), SourcePruningEnumerationCachedChild.prepareOrdinary heap (fuel + extra) scs (.node entry edges depth free) before = some (.hole before.core.counter, after)",
+          "used": true
+        },
+        {
+          "name": "_afterShape",
+          "type": "after.core = {_allocatedCached.core with values := _allocatedCached.core.values.set before.core.counter (.unenumerated (some _handle) scs)}",
+          "used": false,
+          "reason": "Derived producer field retained but not consumed by the selected proof route.",
+          "Root_authored_binding": "_afterShape"
+        },
+        {
+          "name": "_afterSlot",
+          "type": "after.core.values[before.core.counter]? = some (.unenumerated (some _handle) scs)",
+          "used": false,
+          "reason": "Derived producer field retained but not consumed by the selected proof route.",
+          "Root_authored_binding": "_afterSlot"
+        },
+        {
+          "name": "grows",
+          "type": "after.core.counter = before.core.counter + 1",
+          "used": true
+        },
+        {
+          "name": "alignedAfter",
+          "type": "after.core.counter = after.core.values.length",
+          "used": true
+        },
+        {
+          "name": "forestSame",
+          "type": "after.core.representatives = before.core.representatives",
+          "used": true
+        },
+        {
+          "name": "pathsAfter",
+          "type": "Roots after.core.representatives roots",
+          "used": true
+        },
+        {
+          "name": "storageAfter",
+          "type": "StorageValid after.core",
+          "used": true
+        },
+        {
+          "name": "realizedAfter",
+          "type": "PendingRealized heap after.core",
+          "used": true
+        },
+        {
+          "name": "countsAfter",
+          "type": "EnumerationCanonicalWaiting.Correct roots after.core.values after.waiting",
+          "used": true
+        },
+        {
+          "name": "flagsAfter",
+          "type": "∀ (slot : Nat), SourcePruningEnumerationNativeIndex.candidate heap ((after.core.values[slot]?).getD .eliminated) = some (after.expandable slot)",
+          "used": true
+        },
+        {
+          "name": "_flagShape",
+          "type": "after.expandable = (fun (slot : Nat) => if slot = before.core.counter then true else before.expandable slot)",
+          "used": false,
+          "reason": "Derived producer field retained but not consumed by the selected proof route.",
+          "Root_authored_binding": "_flagShape"
+        },
+        {
+          "name": "_waitingCount",
+          "type": "after.waiting = EnumerationCanonicalWaiting.count roots 1 scs before.waiting",
+          "used": false,
+          "reason": "Derived producer field retained but not consumed by the selected proof route.",
+          "Root_authored_binding": "_waitingCount"
+        },
+        {
+          "name": "holeBound",
+          "type": "FragmentBound («Symbol» := Symbol) after.core.counter (.hole before.core.counter)",
+          "used": true
+        }
+      ],
+      "skipped_fields": [
+        {
+          "name": "_handle",
+          "reason": "Derived producer field retained but not consumed by the selected proof route."
+        },
+        {
+          "name": "_allocatedCached",
+          "reason": "Derived producer field retained but not consumed by the selected proof route."
+        },
+        {
+          "name": "_encoded",
+          "reason": "Derived producer field retained but not consumed by the selected proof route."
+        },
+        {
+          "name": "_decoded",
+          "reason": "Derived producer field retained but not consumed by the selected proof route."
+        },
+        {
+          "name": "_nativeAllocated",
+          "reason": "Derived producer field retained but not consumed by the selected proof route."
+        },
+        {
+          "name": "_allocatedShape",
+          "reason": "Derived producer field retained but not consumed by the selected proof route."
+        },
+        {
+          "name": "_allocatedStored",
+          "reason": "Derived producer field retained but not consumed by the selected proof route."
+        },
+        {
+          "name": "_allocatedStorage",
+          "reason": "Derived producer field retained but not consumed by the selected proof route."
+        },
+        {
+          "name": "_allocatedRealized",
+          "reason": "Derived producer field retained but not consumed by the selected proof route."
+        },
+        {
+          "name": "_allocatedCounts",
+          "reason": "Derived producer field retained but not consumed by the selected proof route."
+        },
+        {
+          "name": "_allocatedFlags",
+          "reason": "Derived producer field retained but not consumed by the selected proof route."
+        },
+        {
+          "name": "_waitingSame",
+          "reason": "Derived producer field retained but not consumed by the selected proof route."
+        },
+        {
+          "name": "_nativeRun",
+          "reason": "Derived producer field retained but not consumed by the selected proof route."
+        },
+        {
+          "name": "_afterShape",
+          "reason": "Derived producer field retained but not consumed by the selected proof route."
+        },
+        {
+          "name": "_afterSlot",
+          "reason": "Derived producer field retained but not consumed by the selected proof route."
+        },
+        {
+          "name": "_flagShape",
+          "reason": "Derived producer field retained but not consumed by the selected proof route."
+        },
+        {
+          "name": "_waitingCount",
+          "reason": "Derived producer field retained but not consumed by the selected proof route."
+        }
+      ]
+    },
+    {
+      "scope": "complete.union",
+      "api": "boundary_complete on SAME literal constructor and genuine inputs",
+      "fields": [
+        {
+          "name": "_handle",
+          "type": "Nat",
+          "used": false,
+          "reason": "Derived producer field retained but not consumed by the selected proof route.",
+          "Root_authored_binding": "_handle"
+        },
+        {
+          "name": "action",
+          "type": "EnumerateM Symbol EnumGuard (Fragments.Fragment Symbol)",
+          "used": true
+        },
+        {
+          "name": "after",
+          "type": "EnumerationExpandableIndex.Cached Symbol EnumGuard",
+          "used": true
+        },
+        {
+          "name": "_encoded",
+          "type": "encodeNode (.union entry members depth free) = some _handle",
+          "used": false,
+          "reason": "Derived producer field retained but not consumed by the selected proof route.",
+          "Root_authored_binding": "_encoded"
+        },
+        {
+          "name": "_decoded",
+          "type": "lookupNode heap _handle = some (.union entry members depth free)",
+          "used": false,
+          "reason": "Derived producer field retained but not consumed by the selected proof route.",
+          "Root_authored_binding": "_decoded"
+        },
+        {
+          "name": "prepared",
+          "type": "SourcePruningEnumerationShallowChild.prepareChild scs (.union entry members depth free) = some action",
+          "used": true
+        },
+        {
+          "name": "prepareRun",
+          "type": "∀ (fuel : Nat), prepareChild heap fuel scs (.union entry members depth free) before = some [(.hole before.core.counter, after)]",
+          "used": true
+        },
+        {
+          "name": "coreRaw",
+          "type": "ExceptT.run (action before.core) = [.ok (.hole before.core.counter, after.core)]",
+          "used": true
+        },
+        {
+          "name": "_shape",
+          "type": "after.core = EnumerationState.allocated (some _handle) before.core",
+          "used": false,
+          "reason": "Derived producer field retained but not consumed by the selected proof route.",
+          "Root_authored_binding": "_shape"
+        },
+        {
+          "name": "_stored",
+          "type": "after.core.values[before.core.counter]? = some (.unenumerated (some _handle) [])",
+          "used": false,
+          "reason": "Derived producer field retained but not consumed by the selected proof route.",
+          "Root_authored_binding": "_stored"
+        },
+        {
+          "name": "grows",
+          "type": "after.core.counter = before.core.counter + 1",
+          "used": true
+        },
+        {
+          "name": "alignedAfter",
+          "type": "after.core.counter = after.core.values.length",
+          "used": true
+        },
+        {
+          "name": "forestSame",
+          "type": "after.core.representatives = before.core.representatives",
+          "used": true
+        },
+        {
+          "name": "pathsAfter",
+          "type": "Roots after.core.representatives roots",
+          "used": true
+        },
+        {
+          "name": "storageAfter",
+          "type": "StorageValid after.core",
+          "used": true
+        },
+        {
+          "name": "realizedAfter",
+          "type": "PendingRealized heap after.core",
+          "used": true
+        },
+        {
+          "name": "countsAfter",
+          "type": "EnumerationCanonicalWaiting.Correct roots after.core.values after.waiting",
+          "used": true
+        },
+        {
+          "name": "_waitingSame",
+          "type": "after.waiting = before.waiting",
+          "used": false,
+          "reason": "Derived producer field retained but not consumed by the selected proof route.",
+          "Root_authored_binding": "_waitingSame"
+        },
+        {
+          "name": "_flagSame",
+          "type": "after.expandable = before.expandable",
+          "used": false,
+          "reason": "Derived producer field retained but not consumed by the selected proof route.",
+          "Root_authored_binding": "_flagSame"
+        },
+        {
+          "name": "flagsAfter",
+          "type": "∀ (slot : Nat), SourcePruningEnumerationNativeIndex.candidate heap ((after.core.values[slot]?).getD .eliminated) = some (after.expandable slot)",
+          "used": true
+        },
+        {
+          "name": "holeBound",
+          "type": "FragmentBound («Symbol» := Symbol) after.core.counter (.hole before.core.counter)",
+          "used": true
+        }
+      ],
+      "skipped_fields": [
+        {
+          "name": "_handle",
+          "reason": "Derived producer field retained but not consumed by the selected proof route."
+        },
+        {
+          "name": "_encoded",
+          "reason": "Derived producer field retained but not consumed by the selected proof route."
+        },
+        {
+          "name": "_decoded",
+          "reason": "Derived producer field retained but not consumed by the selected proof route."
+        },
+        {
+          "name": "_shape",
+          "reason": "Derived producer field retained but not consumed by the selected proof route."
+        },
+        {
+          "name": "_stored",
+          "reason": "Derived producer field retained but not consumed by the selected proof route."
+        },
+        {
+          "name": "_waitingSame",
+          "reason": "Derived producer field retained but not consumed by the selected proof route."
+        },
+        {
+          "name": "_flagSame",
+          "reason": "Derived producer field retained but not consumed by the selected proof route."
+        }
+      ]
+    },
+    {
+      "scope": "complete.mu",
+      "api": "boundary_complete on SAME literal constructor and genuine inputs",
+      "fields": [
+        {
+          "name": "_handle",
+          "type": "Nat",
+          "used": false,
+          "reason": "Derived producer field retained but not consumed by the selected proof route.",
+          "Root_authored_binding": "_handle"
+        },
+        {
+          "name": "action",
+          "type": "EnumerateM Symbol EnumGuard (Fragments.Fragment Symbol)",
+          "used": true
+        },
+        {
+          "name": "after",
+          "type": "EnumerationExpandableIndex.Cached Symbol EnumGuard",
+          "used": true
+        },
+        {
+          "name": "_encoded",
+          "type": "encodeNode (.mu entry body depthShape ordinaryShape) = some _handle",
+          "used": false,
+          "reason": "Derived producer field retained but not consumed by the selected proof route.",
+          "Root_authored_binding": "_encoded"
+        },
+        {
+          "name": "_decoded",
+          "type": "lookupNode heap _handle = some (.mu entry body depthShape ordinaryShape)",
+          "used": false,
+          "reason": "Derived producer field retained but not consumed by the selected proof route.",
+          "Root_authored_binding": "_decoded"
+        },
+        {
+          "name": "prepared",
+          "type": "SourcePruningEnumerationShallowChild.prepareChild scs (.mu entry body depthShape ordinaryShape) = some action",
+          "used": true
+        },
+        {
+          "name": "prepareRun",
+          "type": "∀ (fuel : Nat), prepareChild heap fuel scs (.mu entry body depthShape ordinaryShape) before = some [(.hole before.core.counter, after)]",
+          "used": true
+        },
+        {
+          "name": "coreRaw",
+          "type": "ExceptT.run (action before.core) = [.ok (.hole before.core.counter, after.core)]",
+          "used": true
+        },
+        {
+          "name": "_shape",
+          "type": "after.core = EnumerationState.allocated (some _handle) before.core",
+          "used": false,
+          "reason": "Derived producer field retained but not consumed by the selected proof route.",
+          "Root_authored_binding": "_shape"
+        },
+        {
+          "name": "_stored",
+          "type": "after.core.values[before.core.counter]? = some (.unenumerated (some _handle) [])",
+          "used": false,
+          "reason": "Derived producer field retained but not consumed by the selected proof route.",
+          "Root_authored_binding": "_stored"
+        },
+        {
+          "name": "grows",
+          "type": "after.core.counter = before.core.counter + 1",
+          "used": true
+        },
+        {
+          "name": "alignedAfter",
+          "type": "after.core.counter = after.core.values.length",
+          "used": true
+        },
+        {
+          "name": "forestSame",
+          "type": "after.core.representatives = before.core.representatives",
+          "used": true
+        },
+        {
+          "name": "pathsAfter",
+          "type": "Roots after.core.representatives roots",
+          "used": true
+        },
+        {
+          "name": "storageAfter",
+          "type": "StorageValid after.core",
+          "used": true
+        },
+        {
+          "name": "realizedAfter",
+          "type": "PendingRealized heap after.core",
+          "used": true
+        },
+        {
+          "name": "countsAfter",
+          "type": "EnumerationCanonicalWaiting.Correct roots after.core.values after.waiting",
+          "used": true
+        },
+        {
+          "name": "_waitingSame",
+          "type": "after.waiting = before.waiting",
+          "used": false,
+          "reason": "Derived producer field retained but not consumed by the selected proof route.",
+          "Root_authored_binding": "_waitingSame"
+        },
+        {
+          "name": "_flagSame",
+          "type": "after.expandable = before.expandable",
+          "used": false,
+          "reason": "Derived producer field retained but not consumed by the selected proof route.",
+          "Root_authored_binding": "_flagSame"
+        },
+        {
+          "name": "flagsAfter",
+          "type": "∀ (slot : Nat), SourcePruningEnumerationNativeIndex.candidate heap ((after.core.values[slot]?).getD .eliminated) = some (after.expandable slot)",
+          "used": true
+        },
+        {
+          "name": "holeBound",
+          "type": "FragmentBound («Symbol» := Symbol) after.core.counter (.hole before.core.counter)",
+          "used": true
+        }
+      ],
+      "skipped_fields": [
+        {
+          "name": "_handle",
+          "reason": "Derived producer field retained but not consumed by the selected proof route."
+        },
+        {
+          "name": "_encoded",
+          "reason": "Derived producer field retained but not consumed by the selected proof route."
+        },
+        {
+          "name": "_decoded",
+          "reason": "Derived producer field retained but not consumed by the selected proof route."
+        },
+        {
+          "name": "_shape",
+          "reason": "Derived producer field retained but not consumed by the selected proof route."
+        },
+        {
+          "name": "_stored",
+          "reason": "Derived producer field retained but not consumed by the selected proof route."
+        },
+        {
+          "name": "_waitingSame",
+          "reason": "Derived producer field retained but not consumed by the selected proof route."
+        },
+        {
+          "name": "_flagSame",
+          "reason": "Derived producer field retained but not consumed by the selected proof route."
+        }
+      ]
+    }
+  ],
+  "count": 10,
+  "field_count": 115,
+  "packet_sizes": [
+    4,
+    2,
+    2,
+    2,
+    5,
+    9,
+    17,
+    32,
+    21,
+    21
+  ],
+  "inline_eliminations": [],
+  "all_unused_fields_explicit": true
+}

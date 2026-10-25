@@ -1,0 +1,3 @@
+# CachedPrepare post-body scope amendment
+
+FINAL. This data amendment adds the three result-nonempty equality binders from the actual passing body. It also records that the unused Empty stable-fuel intro is named `extra`, rather than the planned `_extra`. The effective inventory has 293 entries. The original 290-entry owner, all 16 literal contracts, all mathematical types, nine case groups and compiler inputs remain unchanged. Rewriting `same` inside `wholeAbsent` changes a local hypothesis in place and introduces no binder. This is a static coverage correction, not a compiler failure or a proof change.

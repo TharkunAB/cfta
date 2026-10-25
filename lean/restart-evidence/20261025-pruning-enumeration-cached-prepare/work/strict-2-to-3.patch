@@ -1,0 +1,11 @@
+--- strict-2
++++ strict-3
+@@ -178,7 +178,7 @@
+   have flagFalse : flag = false := by
+     apply Option.some.inj
+     simpa only [SourcePruningEnumerationNativeIndex.candidate, decoded, Option.map_some,
+-      boundary, List.isEmpty_nil] using classified.symm
++      boundary, List.isEmpty_nil, Bool.true_and, Bool.not_true] using classified.symm
+   subst flag
+   have coreRaw : ExceptT.run (action before.core) =
+       [.ok (.hole before.core.counter, after.core)] := by
