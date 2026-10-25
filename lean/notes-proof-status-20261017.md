@@ -1,5 +1,59 @@
 # Proof status at 2026-10-18
 
+## Native cached ordered fold completion
+
+Current source: `SourcePruningEnumerationCachedFoldCompletion`.
+Proof: `92565168da3e28403ca9e6f06565581f8467efa3`. Main remains `74250bd889685da436cdbfe32ac4b5a0878ffd09`.
+The whole goal stays ACTIVE and incomplete. H6 remains strongest.
+
+The selected complete theorem derives common finite bounds for the existing
+ordered cached fold, including duplicates, equal IDs and optional payloads.
+Its inputs retain genuine Context/storage/pending realization/Roots/counts,
+all-Nat native flags, a pending target and pending-or-eliminated selected
+sources. Recursive Fold.Ranges is explicit; no successful continuation,
+desired raw stream, final cache or initial-only numeric admission is assumed.
+
+The same actual run at adequate common bounds returns zero or one cached
+row, exact encoded raw stream, Caller, saved queries and some after cache.
+It retains Post and final.query equality, counter, representatives, Roots,
+storage, realization, canonical waiting counts, the original waiting map and
+all-slot flags at the actual reached heap. The target and initial eliminated
+slots remain. Only completed singleton output eliminates selected sources
+distinct from target. Rejection retains its actual completed prefix; earlier
+query effects remain visible. The tail domain must be derived from actual
+branch equations at this endpoint, not from a cache certificate alone.
+One rich CachedDispatch.complete result per admitted head supplies the actual
+branch facts. Graph-free assimilated_pending and the concrete flags/waiting/
+core equalities identify the same optional adapter cache.
+
+One theorem, no new runtime definition/action/instance/helper/type/carrier
+and one structural List induction. Public head 42 lines, context 16, ten
+selected typed haves. Actual source review and the single frozen owner are
+bound: 135 payloads, 12 strings / 97 lines, 354 scopes, 11 packets / 92 fields
+and 11 cases; 18 whole sources, 30 cuts / 540 lines and 11 literal routes /
+17 project identities. Standard-library provenance remains separate.
+Source estimate 330–530, hard limit 800. The existing runtime remains; no fallback branch or original observation is replaced.
+
+Validation: Strict attempt 1 passes with a literal empty log under all linters and warnings as errors. No Lean attempt has failed. All twelve original strings, including context, the public head and ten typed haves, remain unchanged. All 354 typed positions, eleven packets with 92 fields, eleven case groups and the complete List induction hypothesis remain intact. No header, premise, binder, proof limit, helper, instance or monadic dictionary is added or changed. The source has 265 ordinary lines, below the selected 330 to 530 estimate and within hard cap 800; no padding was added. The installed build, complete public readback and aggregate Audit pass. The complete public signature occupies 77 output lines without display omissions. The older unused-inputs warning remains unchanged. No passing check was repeated. Seal and push results are recorded separately. All actual complete inputs, raw logs and cap receipts remain. Pre-body namespace qualification, fragment indentation, packet-location labels, callee-alias data and read-only locator diagnostics remain separate provenance. These preparations did not fail a selected compiler or seal check. Frozen usage metadata already marks the consumed rejected-source _completed as used; no amendment is required.
+Installed focused build: 1314 jobs; Audit: 3728 jobs and
+76467 theorem dependency checks. Actual public axioms: complete reports propext, Classical.choice and Quot.sound.
+Only actual reports bind these fields. The documents-1 ledger stays separate.
+Exactly 26 prior artifacts preserve the full 15149-byte summary and actual
+archive-1/local-publication-1/push-1 families; sealed peer is separate context.
+All 148916 baseline files/modes and nine document inverses remain guarded.
+No future seal/push outcome or Haskell change is asserted.
+
+All six Haskell handoffs stay first. Initial-only mixed numeric admission,
+changing guard-carrier/fourth-call resources, general arbitrary-fault cache
+laws, terminal/incoming integration, selector/partition/fallback, wrapper
+normalization, physical maps/machine integers, extraction, Safe/LiveRoots
+and the full driver remain open. H6 remains strongest: covered closed
+construction with valid cache/allocation history supports prescribed finite
+modeled node calls at derived bounds and the same finite trees for empty
+inherited payload under formal guard/solver semantics. Whole typing/pruning,
+concrete solver, runtime, resources and convergence remain open.
+
+
 ## Native cached ordered fold observations
 
 Current source: `SourcePruningEnumerationCachedFold`.
