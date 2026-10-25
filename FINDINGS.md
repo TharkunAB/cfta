@@ -70,6 +70,20 @@ Terminal parents retain the existing enumerateNode fallback boundary. Native
 children can still take their terminal dispatcher. No Haskell fix is needed.
 Details: lean/notes-current-pruning-enumeration-native-ordinary.md.
 
+### Indexed native narrowing and the full caller boundary
+
+Enumeration.hs:436 passes the full old suspended bucket to writeUVarValue as
+lost references and the full new bucket as gained references. Narrowing keeps
+that bucket. The new proof executes both folds and proves the canonical
+waiting map unchanged. It recomputes the target's native expandable flag.
+The actual narrowing producer now derives this indexed cache at its returned
+write endpoint. An unchanged handle keeps its framed read cache; Empty rejects.
+Full checked Caller, memo Context, recursion-check and callback composition
+remain separate. A native heap Keeps receipt is not that complete packet.
+These are proof boundaries. No new Haskell runtime defect or repair is found.
+External action: no patch is proposed for this source observation.
+Details: lean/notes-current-pruning-enumeration-indexed-narrowing.md.
+
 ### Native narrowing reference preservation
 
 The existing native narrowing theorem now retains incoming and global pending
@@ -231,6 +245,27 @@ TH/Generic extraction, valid-position build/read and source codec laws stay open
 
 
 
+
+## Actual native narrowing derives indexed caches
+
+Replacement and reads: `9d4de2db2`. Narrowing producer: `04a5ba6d0`.
+The goal stays ACTIVE.
+
+Actual narrowing now derives the complete native enumeration cache for each
+nonempty result. Equal handles keep the framed read cache. Changed handles
+retain the actual representative read and write. The full old bucket is
+removed and the full new bucket is added. Canonicality proves waiting-map
+identity. The target flag is recomputed from the new node. Ready, root paths,
+realization and reference history persist at the same written core.
+Empty still has no successful enumeration branch. Old producers and workers stay.
+
+Both new modules, Audit imports and installed public readback pass. Audit
+checks 76721 theorem dependencies. H6 remains the strongest end-to-end language
+result. Haskell is unchanged. Next: actual selection/recursion/callback/entry
+composition and the full checked Caller/memo Context producer for narrowing.
+The new theorem derives a native heap, not that complete Caller/Post packet.
+Fragment-hole history, extraction and whole-driver semantics remain open.
+Details: `lean/notes-current-pruning-enumeration-indexed-narrowing.md`.
 
 ## Native narrowing retains pending-reference history
 
