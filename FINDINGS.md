@@ -70,6 +70,22 @@ Terminal parents retain the existing enumerateNode fallback boundary. Native
 children can still take their terminal dispatcher. No Haskell fix is needed.
 Details: lean/notes-current-pruning-enumeration-native-ordinary.md.
 
+### Selected references and the actual callback boundary
+
+The formal same-cache selection theorem now derives incoming avoidance and
+per-receipt pending-reference history through ordinary expansion.
+Enumeration.hs:968 to 1004 also reads the selected value, runs native narrow,
+may replace its node, and accepts the Right oracle before entry at line 976.
+The ordered driver also has an activation refresh after callback acceptance.
+Those actual intermediate operations still need preservation proofs.
+The existing native action theorem exposes the changed-handle write with the
+same suspended bucket. An exact-state ReadOnlyOracle assumption is stronger
+than a callback that permits representative compression. Arbitrary callbacks
+do not automatically preserve the reference conditions.
+This is a formal correspondence gap. No new runtime defect or repair is found.
+External action: no patch is proposed for this source observation.
+Details: lean/notes-current-pruning-enumeration-selected-references.md.
+
 ### Native reference mutation order
 
 Assimilation rejects Empty before its target replacement and source elimination.
@@ -203,6 +219,27 @@ TH/Generic extraction, valid-position build/read and source codec laws stay open
 
 
 
+
+## Selected ordinary alternatives retain pending references
+
+Selection: `9f3674ba1`. Ordinary history: `519d62a80`.
+The goal stays ACTIVE.
+
+Actual pure selection now derives no incoming reference to its target at
+the same input cache. Actual ordinary entry transports initial global pending
+history and incoming avoidance. Every processed alternative retains pending
+history at its own returned cache and native heap. The selected completion
+theorem derives Ready and local pending inputs too. Existing producer inputs,
+numeric Ranges conditions and runtime worker bodies stay unchanged.
+
+All three strict modules, installed readback and Audit pass. The audit checks
+76712 theorem dependencies. H6 remains the strongest end-to-end language
+theorem. Haskell is unchanged. Next: carry these facts through actual reads,
+native narrowing and accepted callbacks before driver entry. The new selected
+theorem covers selection and entry at the same cache, without those operations
+between them. Fragment-hole history, extraction, terminal parents, parent
+normalization and whole-driver language semantics remain open.
+Details: `lean/notes-current-pruning-enumeration-selected-references.md`.
 
 ## Native suspended-reference history through captured finalization
 
