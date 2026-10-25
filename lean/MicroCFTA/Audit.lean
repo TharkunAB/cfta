@@ -1,3 +1,4 @@
+import MicroCFTA.SourcePruningEnumerationSelectedNarrow
 import MicroCFTA.SourcePruningEnumerationRecursion
 import MicroCFTA.SourcePruningEnumerationNarrowContext
 import MicroCFTA.SourcePruningEnumerationNarrowCache
