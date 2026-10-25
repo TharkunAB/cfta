@@ -294,6 +294,9 @@ theorem complete
         folded.core.values[source]? = some .eliminated) ∧
       (∀ (slot : Nat), slot ∉ recorded → folded.core.values[slot]? = before.core.values[slot]?) ∧
       (foldRows = [((), folded)] → Safe folded.core) ∧
+      (∀ (slot : Nat) (fragment : Fragments.Fragment Symbol),
+        folded.core.values[slot]? = some (.enumerated fragment) →
+        before.core.values[slot]? = some (.enumerated fragment)) ∧
       (∀ extraRepresentative extraNative P H, p ≤ P → h ≤ H →
         SourcePruningEnumerationTerminal.run checkEmpty (r + extraRepresentative) (n + extraNative) P H
           first rest before.waiting beforeCaller before.core incoming incomingScs memos.query =
@@ -316,6 +319,9 @@ theorem complete
       (∀ (held : Nat), IsRoot before.core.representatives held →
         Avoids before.core.representatives held (first :: rest) →
         EnumerationDriver.Protected held before.core resultCache.core) ∧
+      (∀ (slot : Nat) (fragment : Fragments.Fragment Symbol),
+        resultCache.core.values[slot]? = some (.enumerated fragment) →
+        before.core.values[slot]? = some (.enumerated fragment)) ∧
       (foldRows = [] → resultCache = folded) ∧
       (foldRows = [] → raw = [] ∧ afterCaller = foldCaller ∧ savedQueries = foldQueries ∧
         outer = folded.core ∧ final = foldFinal ∧ next = foldInventory) ∧
@@ -382,7 +388,7 @@ theorem complete
     prefixRoots, prefixCounts, joinedFlags, cachedFoldRun, foldRun, foldShape, foldPost,
     foldQuerySame, foldCounter, foldForest, foldPaths, foldStorage, foldRealized, foldedRoot,
     foldPending, foldCounts, foldWaiting, foldFlags, foldEliminated, foldCompleted,
-    foldedFrame, foldedSafe,
+    foldedFrame, foldedSafe, foldedOrigin,
     terminalRun, post, querySame, rejectedBranch, completedBranch⟩ :=
     SourcePruningEnumerationCachedTerminal.complete formulas solver inventory beforeCaller before
       checkEmpty first rest incoming incomingScs roots memos initial safe paths counts flags
@@ -396,12 +402,12 @@ theorem complete
       prefixRoots, prefixCounts, joinedFlags, cachedFoldRun, foldRun, .inl rfl, foldPost,
       foldQuerySame, foldCounter, foldForest, foldPaths, foldStorage, foldRealized, foldedRoot,
       foldPending, foldCounts, foldWaiting, foldFlags, foldEliminated, foldCompleted,
-      foldedFrame, foldedSafe,
+      foldedFrame, foldedSafe, foldedOrigin,
       terminalRun, post, querySame, ?_,
       (by simpa only [congrArg EnumerationState.State.counter joinedSame] using foldCounter), foldPaths,
       foldStorage, ?_, foldCounts, ?_, foldedFrame, ?_,
       (protects before.core folded.core roots first rest recorded winner paths recordedSame
-        winnerMember foldPaths foldedFrame), ?_, rejectedBranch, ?_⟩
+        winnerMember foldPaths foldedFrame), foldedOrigin, ?_, rejectedBranch, ?_⟩
     · intro extraRepresentative extraNative P H extraIndex enoughP enoughH
       rw [rawNil, callerSame, queriesSame, outerSame]
       simp only [run, ite_eq_right nonempty, prefixRun extraRepresentative,
@@ -468,18 +474,28 @@ theorem complete
           simpa only [afterSame, List.getElem?_set_ne (Ne.symm same), frame.values] using stored
         exact ((foldedSafe rfl).2 slot value oldStored).trans
           ((root_iff _ _ foldPaths slot).trans (root_iff _ _ afterPaths slot).symm)
+    have resultOrigin : ∀ (slot : Nat) (fragment : Fragments.Fragment Symbol),
+        after.core.values[slot]? = some (.enumerated fragment) →
+        before.core.values[slot]? = some (.enumerated fragment) := by
+      intro slot fragment stored
+      by_cases same : slot = winner
+      · subst slot
+        rw [afterStored] at stored
+        cases stored
+      · apply foldedOrigin slot fragment
+        simpa only [afterSame, List.getElem?_set_ne (Ne.symm same), frame.values] using stored
     refine ⟨r, n, p, h, incomingK, recorded, winner, joined, [((), folded)], foldCaller,
       foldQueries, foldFinal, foldInventory, folded, raw, afterCaller, outer, savedQueries,
       final, next, after, prefixRun, recordedSame, winnerMember, movedSame, joinedSame,
       joinedFlagsSame, prefixRoots, prefixCounts, joinedFlags, cachedFoldRun, foldRun,
       .inr rfl, foldPost, foldQuerySame, foldCounter, foldForest, foldPaths, foldStorage,
       foldRealized, foldedRoot, foldPending, foldCounts, foldWaiting, foldFlags, foldEliminated,
-      foldCompleted, foldedFrame, foldedSafe, terminalRun, post, querySame, ?_,
+      foldCompleted, foldedFrame, foldedSafe, foldedOrigin, terminalRun, post, querySame, ?_,
       (by simpa only [congrArg EnumerationState.State.counter joinedSame] using afterCounter.trans foldCounter),
       afterPaths, afterStorage, afterRealized, afterCounts, afterFlags, resultFrame,
       (fun _ => resultSafe),
       (protects before.core after.core roots first rest recorded winner paths recordedSame
-        winnerMember afterPaths resultFrame), ?_, rejectedBranch, ?_⟩
+        winnerMember afterPaths resultFrame), resultOrigin, ?_, rejectedBranch, ?_⟩
     · intro extraRepresentative extraNative P H extraIndex enoughP enoughH
       rw [outerRead, rawSame]
       simp only [run, ite_eq_right nonempty, prefixRun extraRepresentative,

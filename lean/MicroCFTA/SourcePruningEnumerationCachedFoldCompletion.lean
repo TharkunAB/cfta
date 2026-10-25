@@ -59,12 +59,15 @@ theorem complete
       (rows = [((), after)] → ∀ source ∈ sources, source ≠ target →
         after.core.values[source]? = some .eliminated) ∧
       (∀ (slot : Nat), slot ∉ sources → slot ≠ target →
-        after.core.values[slot]? = before.core.values[slot]?) := by
+        after.core.values[slot]? = before.core.values[slot]?) ∧
+      (∀ (slot : Nat) (fragment : Fragments.Fragment Symbol),
+        after.core.values[slot]? = some (.enumerated fragment) →
+        before.core.values[slot]? = some (.enumerated fragment)) := by
   induction sources generalizing inventory beforeCaller before memos with
   | nil =>
     refine ⟨0, 0, 0, [((), before)], beforeCaller, memos.query, memos, inventory, before,
       ?_, Post.refl initial, rfl, rfl, rfl, paths, storage, realized, counts, rfl,
-      flags, .inr rfl, targetPending, ?_, ?_, ?_⟩
+      flags, .inr rfl, targetPending, ?_, ?_, ?_, ?_⟩
     · intro extra P H _largeP _largeH
       rfl
     · intro slot oldEliminated
@@ -73,6 +76,8 @@ theorem complete
       cases member
     · intro _slot _outside _different
       rfl
+    · intro _slot _fragment stored
+      exact stored
   | cons source rest ih =>
     have slots : source = target ∨ before.core.values[source]? = some .eliminated ∨
         ∃ (sourceNode targetNode : Option Nat) (sourceScs targetScs : List EnumerationState.Suspended),
@@ -213,12 +218,28 @@ theorem complete
                 (.unenumerated merged (sourceScs ++ targetScs)) targetDifferent sourceDifferent
     rcases headFacts with ⟨headAdapted, headShape, headTarget, headSelected, headEliminated,
       headSource, headRejectedSame, headFrame⟩
+    have headOrigin : ∀ (slot : Nat) (fragment : Fragments.Fragment Symbol),
+        headAfter.core.values[slot]? = some (.enumerated fragment) →
+        before.core.values[slot]? = some (.enumerated fragment) := by
+      intro slot fragment stored
+      rcases headShape with rejected | completed
+      · simpa only [headRejectedSame rejected] using stored
+      · by_cases atTarget : slot = target
+        · subst slot
+          obtain ⟨node, scs, pendingStored⟩ := headTarget
+          rw [pendingStored] at stored
+          cases stored
+        · by_cases atSource : slot = source
+          · subst slot
+            rw [headSource atTarget completed] at stored
+            cases stored
+          · simpa only [headFrame slot atSource atTarget] using stored
     rcases headShape with headRejected | headCompleted
     · obtain rfl := (headRejectedSame headRejected).symm
       refine ⟨headFuel, headP, headH, [], headCaller, headQueries, headMemos, headInventory,
         before, ?_, headPost, headQuerySame, headCounter, headRepresentatives, headPaths,
         headStorage, headRealized, headCounts, headWaiting, headFlags, .inl rfl,
-        headTarget, headEliminated, ?_, ?_⟩
+        headTarget, headEliminated, ?_, ?_, ?_⟩
       · intro extra P H largeP largeH
         simp only [SourcePruningEnumerationCachedFold.run, SourcePruningEnumerationCachedAdapter.run,
           headRun extra P H largeP largeH, rawCached, headRejected, List.map_nil,
@@ -227,6 +248,8 @@ theorem complete
         cases completed
       · intro _slot _outside _different
         rfl
+      · intro _slot _fragment stored
+        exact stored
     ·
       have tailRanges : SourcePruningEnumerationFold.Ranges checkEmpty rest
           headCaller headAfter.core target headMemos.query := by
@@ -237,7 +260,7 @@ theorem complete
       obtain ⟨tailFuel, tailP, tailH, tailRows, tailCaller, tailQueries, tailMemos, tailInventory,
         tailAfter, tailRun, tailPost, tailQuerySame, tailCounter, tailRepresentatives, tailPaths,
         tailStorage, tailRealized, tailCounts, tailWaiting, tailFlags, tailShape, tailTarget,
-        tailEliminated, tailCompleted, tailFrame⟩ :=
+        tailEliminated, tailCompleted, tailFrame, tailOrigin⟩ :=
           ih headInventory headCaller headAfter headMemos headPost.context headStorage headRealized
             headPaths headCounts headFlags headTarget headSelected tailRanges
       have headAt : ∀ extra P H, max headP tailP ≤ P → max headH tailH ≤ H →
@@ -264,7 +287,7 @@ theorem complete
         tailQueries, tailMemos, tailInventory, tailAfter, ?_, headPost.trans tailPost,
         tailQuerySame, tailCounter.trans headCounter, tailRepresentatives.trans headRepresentatives,
         tailPaths, tailStorage, tailRealized, tailCounts, tailWaiting.trans headWaiting,
-        tailFlags, tailShape, tailTarget, ?_, ?_, ?_⟩
+        tailFlags, tailShape, tailTarget, ?_, ?_, ?_, ?_⟩
       · intro extra P H largeP largeH
         rw [SourcePruningEnumerationCachedFold.run, headAt extra P H largeP largeH]
         simp only [headCompleted, List.map_cons, List.map_nil]
@@ -285,5 +308,7 @@ theorem complete
           exact outside (List.mem_cons.mpr (.inl same))
         have tailOutside : slot ∉ rest := fun member => outside (List.mem_cons_of_mem source member)
         exact (tailFrame slot tailOutside different).trans (headFrame slot headDifferent different)
+      · intro slot fragment stored
+        exact headOrigin slot fragment (tailOrigin slot fragment stored)
 
 end MicroCFTA.SourcePruningEnumerationCachedFoldCompletion
