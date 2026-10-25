@@ -1,0 +1,118 @@
+{
+  "cases": [
+    {
+      "scope": "suspendMany_complete.tries",
+      "kind": "structural List induction",
+      "generalizing": "before and all five invariant premises introduced after induction",
+      "branches": [
+        {
+          "name": "nil",
+          "fields": []
+        },
+        {
+          "name": "cons",
+          "fields": [
+            {
+              "name": "trie",
+              "type": "EqualityTrie.Trie",
+              "used": true
+            },
+            {
+              "name": "rest",
+              "type": "List EqualityTrie.Trie",
+              "used": true
+            },
+            {
+              "name": "ih",
+              "type": "∀ (before : EnumerationExpandableIndex.Cached Symbol EnumGuard), StorageValid before.core → PendingRealized heap before.core → Roots before.core.representatives roots → EnumerationCanonicalWaiting.Correct roots before.core.values before.waiting → (∀ (slot : Nat), SourcePruningEnumerationNativeIndex.candidate heap ((before.core.values[slot]?).getD .eliminated) = some (before.expandable slot)) → ∃ after : EnumerationExpandableIndex.Cached Symbol EnumGuard, suspendMany heap rest before = some (suspendedVars before.core.counter rest, after) ∧ after.core = suspendedState rest.length before.core ∧ after.core.counter = before.core.counter + rest.length ∧ after.core.counter = after.core.values.length ∧ after.core.representatives = before.core.representatives ∧ Roots after.core.representatives roots ∧ StorageValid after.core ∧ PendingRealized heap after.core ∧ EnumerationCanonicalWaiting.Correct roots after.core.values after.waiting ∧ after.waiting = before.waiting ∧ after.expandable = before.expandable ∧ (∀ (slot : Nat), SourcePruningEnumerationNativeIndex.candidate heap ((after.core.values[slot]?).getD .eliminated) = some (after.expandable slot))",
+              "used": true
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "scope": "complete.allowed",
+      "kind": "by_cases allowed : arityAllows edge.children.length scs = true",
+      "branches": [
+        {
+          "name": "true",
+          "fields": [
+            {
+              "name": "allowed",
+              "type": "arityAllows edge.children.length scs = true",
+              "used": true
+            }
+          ]
+        },
+        {
+          "name": "false",
+          "fields": [
+            {
+              "name": "allowed",
+              "type": "¬ (arityAllows edge.children.length scs = true)",
+              "used": true
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "scope": "complete.projected",
+      "kind": "cases projected : SourcePruningEnumerationConstraint.project edge.entry.key.constraint",
+      "branches": [
+        {
+          "name": "none",
+          "fields": []
+        },
+        {
+          "name": "some",
+          "fields": [
+            {
+              "name": "pair",
+              "type": "List EqualityTrie.Trie × Option Constraint",
+              "used": true
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "count": 3,
+  "definition_patterns": [
+    {
+      "scope": "suspendMany.definition",
+      "nil": "[]",
+      "cons": "trie :: rest",
+      "before_type": "EnumerationExpandableIndex.Cached Symbol EnumGuard"
+    },
+    {
+      "scope": "prepare.definition",
+      "arity": "Boolean test; no named proof binder",
+      "project_none": "none",
+      "project_some": "(tries, residual)"
+    }
+  ],
+  "definition_callbacks": [
+    {
+      "scope": "suspendMany.definition",
+      "name": "allocation",
+      "type": "Nat × EnumerationExpandableIndex.Cached Symbol EnumGuard"
+    },
+    {
+      "scope": "suspendMany.definition",
+      "name": "result",
+      "type": "List EnumerationState.Suspended × EnumerationExpandableIndex.Cached Symbol EnumGuard"
+    },
+    {
+      "scope": "prepare.definition",
+      "name": "result",
+      "type": "List EnumerationState.Suspended × EnumerationExpandableIndex.Cached Symbol Constraint"
+    },
+    {
+      "scope": "prepare.definition",
+      "name": "indexed",
+      "type": "InternedConstructorTemplates.Value Symbol Constraint × Nat"
+    }
+  ]
+}

@@ -1,0 +1,9 @@
+let staged : List (InternedConstructorTemplates.Value Symbol Constraint ×
+          List EnumerationState.Suspended ×
+          Option (EnumerateM Symbol Constraint (Fragments.Fragment Symbol))) :=
+        edge.children.zipIdx.map (fun indexed =>
+          (indexed.1, descendScs indexed.2 scs ++
+            descendScs indexed.2 (suspendedVars before.core.counter tries),
+            SourcePruningEnumerationShallowChild.prepareChild (EnumGuard := Constraint)
+              (descendScs indexed.2 scs ++
+                descendScs indexed.2 (suspendedVars before.core.counter tries)) indexed.1))

@@ -1,0 +1,5 @@
+# CachedOwn declaration-only owner
+
+Root selected nine exact contracts: two definitions, two theorems, three typed haves and one typed proof let with a Root-authored selected initializer. The complete result also has two public header lets. The proof route has one finite List induction, five obtains / 51 fields, zero new instances or helper declarations. The source target is 160–280 ordinary lines; hard cap 400. All bodies and candidate execution remain Root-owned after independent reviews and the separate gate.
+
+The general suspension producer derives actual cached execution and exact suspendedState with storage, all pending realization, unchanged forest/Roots/waiting/whole flag function and outgoing all-Nat flags. The final producer retains false-arity raw rejection, projection absence, and same-action exact prefix raw singleton. Existing source producer supplies the raw action law. No new mapM syntax or List instance is needed. No child is executed and no residual is installed. Scope does not prove full native driver correspondence; H6 and the active goal remain unchanged.

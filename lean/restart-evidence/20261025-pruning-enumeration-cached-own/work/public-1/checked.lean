@@ -1,0 +1,11 @@
+import MicroCFTA.SourcePruningEnumerationCachedOwn
+set_option pp.deepTerms true
+set_option pp.maxSteps 1000000
+#check @MicroCFTA.SourcePruningEnumerationCachedOwn.suspendMany
+#print axioms MicroCFTA.SourcePruningEnumerationCachedOwn.suspendMany
+#check @MicroCFTA.SourcePruningEnumerationCachedOwn.prepare
+#print axioms MicroCFTA.SourcePruningEnumerationCachedOwn.prepare
+#check @MicroCFTA.SourcePruningEnumerationCachedOwn.suspendMany_complete
+#print axioms MicroCFTA.SourcePruningEnumerationCachedOwn.suspendMany_complete
+#check @MicroCFTA.SourcePruningEnumerationCachedOwn.complete
+#print axioms MicroCFTA.SourcePruningEnumerationCachedOwn.complete

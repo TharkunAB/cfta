@@ -1,0 +1,33 @@
+{
+  "inductions": [
+    {
+      "scope": "suspendMany_complete",
+      "on": "tries",
+      "syntax": "induction tries with",
+      "fixed": [
+        "heap",
+        "roots"
+      ],
+      "introduced_after_induction": [
+        "before",
+        "storage",
+        "realized",
+        "paths",
+        "counts",
+        "flags"
+      ],
+      "IH_type": "∀ (before : EnumerationExpandableIndex.Cached Symbol EnumGuard), StorageValid before.core → PendingRealized heap before.core → Roots before.core.representatives roots → EnumerationCanonicalWaiting.Correct roots before.core.values before.waiting → (∀ (slot : Nat), SourcePruningEnumerationNativeIndex.candidate heap ((before.core.values[slot]?).getD .eliminated) = some (before.expandable slot)) → ∃ after : EnumerationExpandableIndex.Cached Symbol EnumGuard, suspendMany heap rest before = some (suspendedVars before.core.counter rest, after) ∧ after.core = suspendedState rest.length before.core ∧ after.core.counter = before.core.counter + rest.length ∧ after.core.counter = after.core.values.length ∧ after.core.representatives = before.core.representatives ∧ Roots after.core.representatives roots ∧ StorageValid after.core ∧ PendingRealized heap after.core ∧ EnumerationCanonicalWaiting.Correct roots after.core.values after.waiting ∧ after.waiting = before.waiting ∧ after.expandable = before.expandable ∧ (∀ (slot : Nat), SourcePruningEnumerationNativeIndex.candidate heap ((after.core.values[slot]?).getD .eliminated) = some (after.expandable slot))",
+      "nil_domain": "before and all five initial invariants",
+      "cons_domain": "trie/rest/ih then before and all five initial invariants"
+    }
+  ],
+  "IHs": [
+    {
+      "scope": "suspendMany_complete.cons",
+      "name": "ih",
+      "type": "∀ (before : EnumerationExpandableIndex.Cached Symbol EnumGuard), StorageValid before.core → PendingRealized heap before.core → Roots before.core.representatives roots → EnumerationCanonicalWaiting.Correct roots before.core.values before.waiting → (∀ (slot : Nat), SourcePruningEnumerationNativeIndex.candidate heap ((before.core.values[slot]?).getD .eliminated) = some (before.expandable slot)) → ∃ after : EnumerationExpandableIndex.Cached Symbol EnumGuard, suspendMany heap rest before = some (suspendedVars before.core.counter rest, after) ∧ after.core = suspendedState rest.length before.core ∧ after.core.counter = before.core.counter + rest.length ∧ after.core.counter = after.core.values.length ∧ after.core.representatives = before.core.representatives ∧ Roots after.core.representatives roots ∧ StorageValid after.core ∧ PendingRealized heap after.core ∧ EnumerationCanonicalWaiting.Correct roots after.core.values after.waiting ∧ after.waiting = before.waiting ∧ after.expandable = before.expandable ∧ (∀ (slot : Nat), SourcePruningEnumerationNativeIndex.candidate heap ((after.core.values[slot]?).getD .eliminated) = some (after.expandable slot))"
+    }
+  ],
+  "induction_count": 1,
+  "IH_count": 1
+}

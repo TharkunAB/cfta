@@ -1,0 +1,21 @@
+/-- Derive the cached own-class traversal and the exact existing core endpoint. -/
+theorem suspendMany_complete
+    (heap : InternedConstructorTemplates.State Symbol NativeGuard)
+    (tries : List EqualityTrie.Trie) (roots : Nat → Nat) :
+    ∀ (before : EnumerationExpandableIndex.Cached Symbol EnumGuard),
+      StorageValid before.core → PendingRealized heap before.core →
+      Roots before.core.representatives roots →
+      EnumerationCanonicalWaiting.Correct roots before.core.values before.waiting →
+      (∀ (slot : Nat), SourcePruningEnumerationNativeIndex.candidate heap
+        ((before.core.values[slot]?).getD .eliminated) = some (before.expandable slot)) →
+      ∃ after : EnumerationExpandableIndex.Cached Symbol EnumGuard,
+        suspendMany heap tries before = some (suspendedVars before.core.counter tries, after) ∧
+        after.core = suspendedState tries.length before.core ∧
+        after.core.counter = before.core.counter + tries.length ∧
+        after.core.counter = after.core.values.length ∧
+        after.core.representatives = before.core.representatives ∧ Roots after.core.representatives roots ∧
+        StorageValid after.core ∧ PendingRealized heap after.core ∧
+        EnumerationCanonicalWaiting.Correct roots after.core.values after.waiting ∧
+        after.waiting = before.waiting ∧ after.expandable = before.expandable ∧
+        (∀ (slot : Nat), SourcePruningEnumerationNativeIndex.candidate heap
+          ((after.core.values[slot]?).getD .eliminated) = some (after.expandable slot))

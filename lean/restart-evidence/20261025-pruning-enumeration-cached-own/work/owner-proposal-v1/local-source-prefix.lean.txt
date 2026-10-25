@@ -1,0 +1,10 @@
+have sourcePrefix : ∃ action : EnumerateM Symbol Constraint (Symbol ×
+          List (InternedConstructorTemplates.Value Symbol Constraint × List EnumerationState.Suspended ×
+            Option (EnumerateM Symbol Constraint (Fragments.Fragment Symbol))) × Option Constraint),
+        SourcePruningEnumerationEdgePrefix.prepare scs edge = some action ∧
+        ExceptT.run (action before.core) =
+          [.ok ((edge.entry.key.symbol, staged, residual), suspendedState tries.length before.core)] ∧
+        (suspendedState tries.length before.core).counter = before.core.counter + tries.length ∧
+        (suspendedState tries.length before.core).counter =
+          (suspendedState tries.length before.core).values.length ∧
+        PendingRealized heap (suspendedState tries.length before.core)

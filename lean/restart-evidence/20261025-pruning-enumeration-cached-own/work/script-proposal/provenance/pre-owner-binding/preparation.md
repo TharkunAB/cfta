@@ -1,0 +1,5 @@
+# CachedOwn program draft
+
+UNFROZEN SOURCE ONLY. All five complete actual CachedPrepare bases are retained, including its final 247-line verifier with the separate documents-1 non-Lean ledger. Every source literal, owner pin/contract/body-gate check and other guard remains. Only current identities, exact prior-custody/source pins, the FINDINGS anchor and selected prose are adapted. No old-component repair acceptance is introduced.
+
+The nine selected fragments and actual source review are bound; final owner/schema controls remain pending. Future source counts, raw attempts/failures, axiom sets and publication results remain unbound. The selected absent-allocation/edge-prefix scope exports no child execution, residual installation or fabricated rejected cache endpoint. Exact bases, ten patches and both-direction Unicode recipes are retained. No selected program was parsed, imported, activated or executed. No mathematical/action/instance body, repository/Git/network or board change was made. Root reviews and activates after final owner and independent peer clearance.

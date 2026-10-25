@@ -1,0 +1,20 @@
+theorem prepare_complete (scs : List EnumerationState.Suspended)
+    (edge : InternedConstructorTemplates.EdgeValue Symbol Constraint)
+    (heap : InternedConstructorTemplates.State Symbol Constraint)
+    (before : EnumerationState.State Symbol Constraint) (realized : PendingRealized heap before)
+    (aligned : before.counter = before.values.length) :
+    if arityAllows edge.children.length scs then
+      match SourcePruningEnumerationConstraint.project edge.entry.key.constraint with
+      | none => prepare scs edge = none
+      | some (tries, residual) =>
+          let own : List EnumerationState.Suspended := suspendedVars before.counter tries
+          let staged := edge.children.zipIdx.map (fun indexed =>
+            (indexed.1, descendScs indexed.2 scs ++ descendScs indexed.2 own,
+              SourcePruningEnumerationShallowChild.prepareChild (EnumGuard := Constraint)
+                (descendScs indexed.2 scs ++ descendScs indexed.2 own) indexed.1))
+          ∃ action, prepare scs edge = some action ∧
+            action before = [.ok ((edge.entry.key.symbol, staged, residual), suspendedState tries.length before)] ∧
+            (suspendedState tries.length before).counter = before.counter + tries.length ∧
+            (suspendedState tries.length before).counter = (suspendedState tries.length before).values.length ∧
+            PendingRealized heap (suspendedState tries.length before)
+    else prepare scs edge = some reject

@@ -1,0 +1,10 @@
+/-- Allocate own classes and capture the existing ordered child actions. -/
+noncomputable def prepare
+    (heap : InternedConstructorTemplates.State Symbol Constraint)
+    (scs : List EnumerationState.Suspended)
+    (edge : InternedConstructorTemplates.EdgeValue Symbol Constraint)
+    (before : EnumerationExpandableIndex.Cached Symbol Constraint) :
+    Option (List ((Symbol ×
+      List (InternedConstructorTemplates.Value Symbol Constraint × List EnumerationState.Suspended ×
+        Option (EnumerateM Symbol Constraint (Fragments.Fragment Symbol))) × Option Constraint) ×
+      EnumerationExpandableIndex.Cached Symbol Constraint))

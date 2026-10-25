@@ -1,0 +1,211 @@
+{
+  "at": "2026-10-25T04:44:42.747794+01:00",
+  "module": "MicroCFTA.SourcePruningEnumerationCachedOwn",
+  "public_heads": [
+    "suspendMany",
+    "prepare",
+    "suspendMany_complete",
+    "complete"
+  ],
+  "kinds": [
+    "def",
+    "def",
+    "theorem",
+    "theorem"
+  ],
+  "local_haves": 3,
+  "proof_lets": 1,
+  "result_header_lets": 2,
+  "instances": 0,
+  "inductions": 1,
+  "new_types_predicates_helpers": 0,
+  "source_estimate": [
+    160,
+    280
+  ],
+  "hard_cap": 400,
+  "Root_authors_all_bodies": true,
+  "bodies_present": false,
+  "contract_count": 9,
+  "contract_lines": 105,
+  "contracts": {
+    "context.lean.txt": {
+      "bytes": 446,
+      "sha256": "f35ad8799c0bd5450aff5f82c3d07aee0529f9ef32bab966d54214f74ee21f88"
+    },
+    "suspend-many-header.lean.txt": {
+      "bytes": 340,
+      "sha256": "6a3d200e2e4a22c66b0d338a4f3b7cd8032bcbf3dc454583863ac090014ca07b"
+    },
+    "prepare-header.lean.txt": {
+      "bytes": 643,
+      "sha256": "738c9f3fb8a0a71e3eabee2bdb8b52ed2dad1e5efac075b2304911e936411177"
+    },
+    "suspend-many-complete-header.lean.txt": {
+      "bytes": 1566,
+      "sha256": "bfe9deef9fdcc58074cab5a309947cfa2d900e39049b9fa1b568a2d50374ca3f"
+    },
+    "complete-header.lean.txt": {
+      "bytes": 2997,
+      "sha256": "de1b6f7e5d6524ab607d180e8380b15e16618a8de65a6d84e25c2a98d4a72113"
+    },
+    "local-middle-flags-same.lean.txt": {
+      "bytes": 61,
+      "sha256": "b73784ef37319e47213629c13f7aafbe2e7f0f7ead79cd75af08b731556db9eb"
+    },
+    "local-core-same.lean.txt": {
+      "bytes": 78,
+      "sha256": "e0782b0f3375553cc3350cba24eaa1bb5b71c84a848dde45647de798dead274f"
+    },
+    "let-staged.lean.txt": {
+      "bytes": 598,
+      "sha256": "20c2cad9b1ccd64a3aae037c059ae4dc65ae6bf03ea26701a91f6bb58f40e3eb"
+    },
+    "local-source-prefix.lean.txt": {
+      "bytes": 808,
+      "sha256": "a59a061680872445fa72be8141f746409a9712e29579d6a6d2a0f1255635fbb8"
+    }
+  },
+  "definition_recipes": {
+    "suspendMany": "nil returns some([],before); cons calls CachedChild.allocate heap none before then recursively suspendMany onrest/actualallocationcache; prepend actualSuspended(trie,allocatedcounter) toreturnedownlist. Option bind/map only.",
+    "prepare": "arityfalse returns some[] beforeprojection; projectnone returnsnone; some(tries,residual) maps actualsuspendMany resultto singleton((symbol,children.zipIdx stagedSourceShallowActions usinginherited++derivedown, residual),actualcache). Nochildexecution."
+  },
+  "case_plan": [
+    "suspendMany_complete inductiontries; nil/cons trie rest ih with before storage realized paths counts flags introductions",
+    "complete by_cases allowed:arityAllows...=true",
+    "complete truebranch cases projected:Constraint.project... none/some pair; obtaintriesresidual"
+  ],
+  "obtain_packets": [
+    {
+      "scope": "suspendMany_complete.cons",
+      "names": [
+        "_flag",
+        "middle",
+        "_classified",
+        "nativeAllocated",
+        "_allocationRaw",
+        "middleShape",
+        "_middleStored",
+        "middleCounter",
+        "_middleAligned",
+        "middleForest",
+        "middlePaths",
+        "middleStorage",
+        "middleRealized",
+        "middleCounts",
+        "middleWaiting",
+        "_middleFlagShape",
+        "middleFlags"
+      ],
+      "from": "CachedPrepare.allocate_complete heap none before roots with vacuousrealizability, actualinputs"
+    },
+    {
+      "scope": "suspendMany_complete.cons.tail",
+      "names": [
+        "after",
+        "tailRun",
+        "tailShape",
+        "tailCounter",
+        "alignedAfter",
+        "forestSame",
+        "pathsAfter",
+        "storageAfter",
+        "realizedAfter",
+        "countsAfter",
+        "waitingSame",
+        "flagsSame",
+        "flagsAfter"
+      ],
+      "from": "ih middle middleStorage middleRealized middlePaths middleCounts middleFlags"
+    },
+    {
+      "scope": "complete.projected.some",
+      "names": [
+        "tries",
+        "residual"
+      ],
+      "from": "pair"
+    },
+    {
+      "scope": "complete.own",
+      "names": [
+        "after",
+        "ownRun",
+        "shape",
+        "grows",
+        "alignedAfter",
+        "forestSame",
+        "pathsAfter",
+        "storageAfter",
+        "realizedAfter",
+        "countsAfter",
+        "waitingSame",
+        "flagsSame",
+        "flagsAfter"
+      ],
+      "from": "suspendMany_complete heap tries roots before storage realized paths counts flags"
+    },
+    {
+      "scope": "complete.sourcePrefix",
+      "names": [
+        "action",
+        "prepared",
+        "observed",
+        "_counter",
+        "_aligned",
+        "_realized"
+      ],
+      "from": "sourcePrefix"
+    }
+  ],
+  "extra_callback_scopes": [
+    [
+      "suspendMany.definition",
+      "allocation",
+      "Nat \u00d7 EnumerationExpandableIndex.Cached Symbol EnumGuard"
+    ],
+    [
+      "suspendMany.definition",
+      "result",
+      "List EnumerationState.Suspended \u00d7 EnumerationExpandableIndex.Cached Symbol EnumGuard"
+    ],
+    [
+      "prepare.definition",
+      "result",
+      "List EnumerationState.Suspended \u00d7 EnumerationExpandableIndex.Cached Symbol Constraint"
+    ],
+    [
+      "prepare.definition",
+      "indexed",
+      "InternedConstructorTemplates.Value Symbol Constraint \u00d7 Nat"
+    ],
+    [
+      "complete.header.staged",
+      "indexed",
+      "InternedConstructorTemplates.Value Symbol Constraint \u00d7 Nat"
+    ],
+    [
+      "complete.proof.staged",
+      "indexed",
+      "InternedConstructorTemplates.Value Symbol Constraint \u00d7 Nat"
+    ],
+    [
+      "suspendMany_complete.noneRealizability",
+      "_handle",
+      "Nat"
+    ],
+    [
+      "suspendMany_complete.noneRealizability",
+      "impossible",
+      "(none : Option Nat) = some _handle"
+    ],
+    [
+      "suspendMany_complete.middleFlagsSame",
+      "allocation",
+      "Nat \u00d7 EnumerationExpandableIndex.Cached Symbol EnumGuard"
+    ]
+  ],
+  "noncomputable_public_heads": [
+    "prepare"
+  ]
+}

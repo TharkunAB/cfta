@@ -1,0 +1,62 @@
+/tmp/mcfta-pruning-enumeration-cached-own-20261025/strict-1/MicroCFTA/SourcePruningEnumerationCachedOwn.lean:140:11: error: unsolved goals
+case pos.none
+heap : InternedConstructorTemplates.State Symbol Constraint
+before : EnumerationExpandableIndex.Cached Symbol Constraint
+scs : List Suspended
+edge : InternedConstructorTemplates.EdgeValue Symbol Constraint
+roots : Nat → Nat
+storage : StorageValid before.core
+realized : PendingRealized heap before.core
+paths : Roots before.core.representatives roots
+counts : EnumerationCanonicalWaiting.Correct roots before.core.values before.waiting
+flags :
+  ∀ (slot : Nat),
+    SourcePruningEnumerationNativeIndex.candidate heap (before.core.values[slot]?.getD UVarValue.eliminated) =
+      some (before.expandable slot)
+allowed : arityAllows edge.children.length scs = true
+projected : SourcePruningEnumerationConstraint.project edge.entry.key.constraint = none
+⊢ True ∧ True
+/tmp/mcfta-pruning-enumeration-cached-own-20261025/strict-1/MicroCFTA/SourcePruningEnumerationCachedOwn.lean:167:8: error: Type mismatch: After simplification, term
+  SourcePruningEnumerationEdgePrefix.prepare_complete scs edge heap before.core realized storage.aligned
+ has type
+  @Exists
+    (EnumerateM Symbol Constraint
+      (Symbol ×
+        List
+            (InternedConstructorTemplates.Value Symbol Constraint ×
+              List Suspended × Option (EnumerateM Symbol Constraint (Fragments.Fragment Symbol))) ×
+          Option Constraint))
+    fun action =>
+    SourcePruningEnumerationEdgePrefix.prepare scs edge = some action ∧
+      action before.core =
+          [Except.ok
+              ((edge.entry.key.symbol,
+                  List.map
+                    (fun indexed =>
+                      (indexed.fst,
+                        descendScs indexed.snd scs ++ descendScs indexed.snd (suspendedVars before.core.counter tries),
+                        SourcePruningEnumerationShallowChild.prepareChild
+                          (descendScs indexed.snd scs ++
+                            descendScs indexed.snd (suspendedVars before.core.counter tries))
+                          indexed.fst))
+                    edge.children.zipIdx,
+                  residual),
+                suspendedState tries.length before.core)] ∧
+        (suspendedState tries.length before.core).counter = before.core.counter + tries.length ∧
+          (suspendedState tries.length before.core).counter = (suspendedState tries.length before.core).values.length ∧
+            PendingRealized heap (suspendedState tries.length before.core)
+but is expected to have type
+  @Exists
+    (EnumerateM Symbol Constraint
+      (Symbol ×
+        List
+            (InternedConstructorTemplates.Value Symbol Constraint ×
+              List Suspended × Option (EnumerateM Symbol Constraint (Fragments.Fragment Symbol))) ×
+          Option Constraint))
+    fun action =>
+    SourcePruningEnumerationEdgePrefix.prepare scs edge = some action ∧
+      (action before.core).run =
+          [Except.ok ((edge.entry.key.symbol, staged, residual), suspendedState tries.length before.core)] ∧
+        (suspendedState tries.length before.core).counter = before.core.counter + tries.length ∧
+          (suspendedState tries.length before.core).counter = (suspendedState tries.length before.core).values.length ∧
+            PendingRealized heap (suspendedState tries.length before.core)

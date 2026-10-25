@@ -1,0 +1,31 @@
+def count
+    (fuel : Nat) (forest : UnionFind.Forest) (change : Int)
+    (scs : List EnumerationState.Suspended) (waiting : EnumerationWaitingIndex.Waiting) :
+    Option EnumerationWaitingIndex.Waiting :=
+  match scs with
+  | [] => some waiting
+  | sc :: rest =>
+      (SourceUnionFindRoot.root fuel forest sc.var).bind fun representative =>
+        count fuel forest change rest (EnumerationWaitingIndex.bump change representative waiting)
+
+/-- Update the raw slot and remove lost counts before adding gained counts. -/
+def write
+    (heap : InternedConstructorTemplates.State Symbol NativeGuard)
+    (fuel target : Nat) (value : EnumerationState.UVarValue Symbol)
+    (gained lost : List EnumerationState.Suspended)
+    (before : EnumerationExpandableIndex.Cached Symbol EnumGuard) :
+    Option (EnumerationExpandableIndex.Cached Symbol EnumGuard) :=
+  (candidate heap value).bind fun flag =>
+    (count fuel before.core.representatives (-1) lost before.waiting).bind fun removed =>
+      (count fuel before.core.representatives 1 gained removed).bind fun saved =>
+        some ⟨{before.core with values := before.core.values.set target value},
+          fun other => if other = target then flag else before.expandable other, saved⟩
+
+/-- Finite parent paths give one bound for every change and waiting map. -/
+theorem count_complete
+    (forest : UnionFind.Forest) (roots : Nat → Nat)
+    (paths : Roots forest roots) (scs : List EnumerationState.Suspended) :
+    ∃ (fuel : Nat), ∀ (extra : Nat) (change : Int) (waiting : EnumerationWaitingIndex.Waiting),
+      count (fuel + extra) forest change scs waiting =
+        some (EnumerationCanonicalWaiting.count roots change scs waiting) := by
+  induction scs with

@@ -1,0 +1,20 @@
+--- strict-1-source
++++ strict-2-source
+@@ -138,7 +138,7 @@
+   · simp only [allowed, ↓reduceIte]
+     cases projected : SourcePruningEnumerationConstraint.project edge.entry.key.constraint with
+     | none =>
+-      simp only [prepare, SourcePruningEnumerationEdgePrefix.prepare, allowed, ↓reduceIte, projected]
++      simp [prepare, SourcePruningEnumerationEdgePrefix.prepare, allowed, projected]
+     | some pair =>
+       obtain ⟨tries, residual⟩ := pair
+       dsimp only
+@@ -164,7 +164,7 @@
+         (suspendedState tries.length before.core).counter =
+           (suspendedState tries.length before.core).values.length ∧
+         PendingRealized heap (suspendedState tries.length before.core) := by
+-        simpa only [allowed, ↓reduceIte, projected] using
++        simpa only [allowed, ↓reduceIte, projected, ExceptT.run, staged] using
+           SourcePruningEnumerationEdgePrefix.prepare_complete scs edge heap before.core
+             realized storage.aligned
+       obtain ⟨action, prepared, observed, _counter, _aligned, _realized⟩ := sourcePrefix

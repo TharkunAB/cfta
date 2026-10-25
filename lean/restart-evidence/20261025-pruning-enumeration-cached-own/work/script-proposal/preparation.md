@@ -1,0 +1,11 @@
+# CachedOwn five-program preparation
+
+FINAL SOURCE ONLY, ready for independent review. The five complete actual CachedPrepare bases are retained. The selected candidates contain 472 lines: 33 / 51 / 63 / 247 / 78. The 247-line verifier retains the exact documents-1 non-Lean cap ledger. Ten forward/inverse patches and all Unicode replacement spans reconstruct both directions as data. Whole identities are in candidate-identities.json.
+
+Only current family/module/baseline/backup identities, actual prior custody and source pins, the FINDINGS anchor, and selected prose change. All baseline blob/mode/ref/stash/worktree checks, nine document inverses, exact Audit prepend and separate audit record remain. Exact owner contracts equal the body gate and must occur once. Actual report/failure inventories, full public types and permitted actual axiom subsets, all six receipt artifacts, resource limits, complete manifest membership in HEAD and the singleton ordinary publication destination remain. No guard algorithm is weakened.
+
+Actual canonical owner V2 has 88 payloads / 90 files, nine STRING contracts / 105 lines, 133 scopes, five obtain packets / 51 fields, 13 sources, 24 cuts / 343 lines and five routes / 17 project identities. Its normalized public kinds are def / def / theorem / theorem; prepare is noncomputable. Zero instances and hard limit 400 fit the reader. Every owner payload, whole identity, cut, project import identity and exact selected string was checked as data. The complete V1 owner is already retained in the area and the recursive archive captures it. Metadata attachment corrections change no selected literal.
+
+The loop derives actual absent-node allocations and the same ordered core endpoint. The edge prefix retains false-arity rejection and projection absence. It does not execute children or install residual obligations. Templates retain validation placeholders, all six Haskell handoffs first, strongest H6 and the ACTIVE whole-goal boundary. Exactly 26 actual previous inputs and the separate sealed assessment peer remain bound.
+
+Pre-owner drafts and read-only locator/comparison diagnostics remain under provenance. No selected program was parsed, imported, activated or executed. No mathematical/action/instance body, repository/Git/network or board action was made. Root owns activation and execution after peer clearance.

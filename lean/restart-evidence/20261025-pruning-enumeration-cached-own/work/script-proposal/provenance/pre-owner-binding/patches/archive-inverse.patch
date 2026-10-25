@@ -1,0 +1,61 @@
+--- candidate/archive.py
++++ basis/archive.py
+@@ -6,12 +6,12 @@
+ from pathlib import Path
+ 
+ root = Path('/home/tritlo/Code/mcfta')
+-area = Path('/tmp/mcfta-pruning-enumeration-cached-own-20261025')
+-evidence = root / 'lean/restart-evidence/20261025-pruning-enumeration-cached-own'
++area = Path('/tmp/mcfta-pruning-enumeration-cached-prepare-20261025')
++evidence = root / 'lean/restart-evidence/20261025-pruning-enumeration-cached-prepare'
+ assert not evidence.exists()
+ custody = json.loads((area / 'prior-custody-index.json').read_text())
+ assert len(custody) == 26 and len({pin['target'] for pin in custody}) == 26
+-assert hashlib.sha256((area / 'prior-custody-index.json').read_bytes()).hexdigest() == 'dbc3a0dd5d1209007d2014d7fbc1d121fc9f3b1abed5a52992022e23850c82a2'
++assert hashlib.sha256((area / 'prior-custody-index.json').read_bytes()).hexdigest() == 'd9ac05a718f3945feda1cbc3893ada021c5a9ad33fcd653af109296db3efe3d9'
+ summary = json.loads((area / 'previous-publication/post-publication-summary.json').read_text())
+ assert [pin['source'] for pin in custody] == summary['next_custody_inputs']
+ for pin in custody:
+@@ -19,11 +19,11 @@
+     data = (area / 'previous-publication' / pin['target']).read_bytes()
+     assert len(data) == pin['bytes'] and hashlib.sha256(data).hexdigest() == pin['sha256']
+ assert {p.name for p in (area / 'previous-publication').iterdir()} == {pin['target'] for pin in custody}
+-assert Path('/tmp/mcfta-pruning-enumeration-cached-own-20261025-source-review.md').is_file()
++assert Path('/tmp/mcfta-pruning-enumeration-cached-prepare-20261025-source-review.md').is_file()
+ for args in [('diff', '--quiet'), ('diff', '--cached', '--quiet')]:
+     subprocess.run(['git', *args], cwd=root, check=True)
+ for name in ['declaration', 'model', 'public', 'document', 'seal-script', 'root']:
+-    assert Path('/tmp/mcfta-pruning-enumeration-cached-own-20261025-' + name + '-review.md').is_file()
++    assert Path('/tmp/mcfta-pruning-enumeration-cached-prepare-20261025-' + name + '-review.md').is_file()
+ evidence.mkdir()
+ for path in sorted(area.rglob('*')):
+     if not path.is_file():
+@@ -36,21 +36,21 @@
+         target.write_bytes(path.read_bytes())
+ inputs = evidence / 'inputs'
+ inputs.mkdir()
+-for pattern in ['mcfta-pruning-enumeration-cached-own-20261025-*']:
++for pattern in ['mcfta-pruning-enumeration-cached-prepare-20261025-*']:
+     for path in sorted(Path('/tmp').glob(pattern)):
+-        if path.is_file() and not path.name.startswith('mcfta-pruning-enumeration-cached-own-20261025-archive-1.'):
++        if path.is_file() and not path.name.startswith('mcfta-pruning-enumeration-cached-prepare-20261025-archive-1.'):
+             shutil.copyfile(path, inputs / path.name)
+-shutil.copytree('/tmp/mcfta-pruning-enumeration-cached-own-20261025-proposal', evidence / 'owner-proposal')
++shutil.copytree('/tmp/mcfta-pruning-enumeration-cached-prepare-20261025-proposal', evidence / 'owner-proposal')
+ prior = evidence / 'previous-publication'
+ prior.mkdir()
+ for pin in custody:
+     shutil.copyfile(area / 'previous-publication' / pin['target'], prior / pin['target'])
+ production = evidence / 'production-sources'
+ production.mkdir()
+-shutil.copyfile(root / 'lean/MicroCFTA/SourcePruningEnumerationCachedOwn.lean', production / 'SourcePruningEnumerationCachedOwn.lean')
+-shutil.copyfile(root / 'lean/notes-current-pruning-enumeration-cached-own.md', evidence / 'current-note.md')
+-shutil.copyfile('/tmp/mcfta-pruning-enumeration-cached-own-20261025-verify.py', evidence / 'verify-checkpoint.py')
+-(evidence / 'INDEX.md').write_text("# Native cached own-class prefix\n\nThe selected interface has suspendMany and noncomputable prepare definitions, plus suspendMany_complete and complete theorems. Root selected three typed haves, one staged proof let and two public result-header lets, with one list induction and no instances, new types, predicates, helpers or Graph carrier. The source estimate is 160–280 ordinary lines, hard limit 400. Nine exact selected fragments / 105 lines and the actual source review are retained. Final owner/schema binding remains pending; no source or compiler outcome is supplied by this template.\n\nThe own-class loop executes actual cached absent-node allocation once per projected trie occurrence, in original order with duplicates. Genuine inputs are StorageValid, every PendingRealized slot, current Roots, canonical waiting Correct and the full all-Nat native flag law. No heap coherence, decoded value, availability, closedness, trie-validity or successful-loop premise is required. Alignment and the all-Nat law derive false at each old fresh slot. The loop derives the actual cached endpoint, exact suspendedVars/suspendedState core, storage, realization, unchanged forest/Roots, waiting and the entire flag function.\n\nThe edge producer checks actual inherited arity before projection or allocation. False arity returns some [] and the existing core reject action, without an after-cache. Projection absence remains outer None and performs no allocation. Successful projection uses the computed trie list, allocates consecutive variables, captures children in zipIdx order with inherited descent followed by own descent, and returns the exact residual constraint. It matches the existing prepared action and raw core singleton through the same derived suspendedState endpoint. Child actions are captured, not executed. Returning Suspended values does not add waiting counts because their references have not been stored. No inherited-scs bound or child-bucket bound is claimed here.\n\nThe loop reuses the existing optional-node allocation producer, suspendMany_exact and EdgePrefix.prepare_complete. It adds no local Monad or LawfulMonad instance and no new core mapM law. No successful callback, desired future state, Graph classifier, changing-slot Cached.frame or extra inheritance replaces the actual execution. The equality accessor and class normalization remain noncomputable at this interface boundary.\n\nWork retains all 143834 baseline files/modes/refs/stashes/worktrees, nine exact document inverses, one Audit prepend and separate audit-addition.json. Complete actual failed inputs/raw logs, full public signatures/actual axiom subsets and all cap families remain. The existing separate non_lean_cap_attempts=['documents-1'] ledger is retained with its strict singleton assertion; six-artifact receipt checks remain unchanged. Exactly 26 prior CachedPrepare inputs retain archive-1/local-publication-1/push-1, canonical already sealed assessment and full 12613-byte summary. Its sealed peer remains separate context. Prior failures, metadata repair and documents ledger correction are prior facts, not current outcomes.\n\nForce-add every manifest path and SHA256SUMS, including ignored logs. Publication requires every sealed path in HEAD, exact filesystem/index/tree/modes and a singleton ordinary formalize destination. Future source/report counts, axiom sets, failures and publication outcomes remain unbound. No passing check, seal or push is predicted.\n\nCached child execution and reached interruption state, residual installation, same-before ordered alternatives, independent nonterminal fallback, current-resource admission, native maps/machine integers, extraction, configured selector order, Safe/LiveRoots, wrapper reconstruction and the full driver remain open. H6 stays strongest and the whole goal remains ACTIVE and incomplete. All six imported Haskell repair handoffs remain first in FINDINGS. No Haskell source change is claimed.\n")
++shutil.copyfile(root / 'lean/MicroCFTA/SourcePruningEnumerationCachedPrepare.lean', production / 'SourcePruningEnumerationCachedPrepare.lean')
++shutil.copyfile(root / 'lean/notes-current-pruning-enumeration-cached-prepare.md', evidence / 'current-note.md')
++shutil.copyfile('/tmp/mcfta-pruning-enumeration-cached-prepare-20261025-verify.py', evidence / 'verify-checkpoint.py')
++(evidence / 'INDEX.md').write_text("# Native cached child shape preparation\n\nThe selected interface has prepareChild and allocate_complete, boundary_complete and complete. There is one definition and three theorems, with 11 typed haves, no lets, instances, induction, new type or Graph carrier. The source estimate is 330–520 ordinary lines, hard limit 720. The frozen owner records 16 exact literal contracts / 124 lines, 290 scopes, 16 whole-source snapshots and 34 cuts / 534 lines, with five import routes through 20 project identities. All 16 new source literals must match the owner byte-exactly. The actual source review is bound. No proof or check outcome is supplied by these templates.\n\nGeneral cached allocation uses the actual optional-handle readback, available closed value when a handle is present, StorageValid, PendingRealized, current Roots, canonical waiting counts and the all-Nat native candidate flag invariant. The old counter slot is absent by alignment. Its genuine previous flag is false. This fact handles false classification without assuming a desired new flag law. Absent-node allocation has no some-handle realization obligation. Allocation inherits ancestry once and keeps waiting and the forest unchanged.\n\nFor nonterminal available closed Mu/Union, readback derives the handle and actual core action. The stored bucket is empty even when the input nonterminal bucket is nonempty. No full-scs write or second inheritance is added. Their fresh native flag is false and waiting remains unchanged. Ordinary nodes reuse CachedChild.complete with their genuine inherited-scs bounds and native full-scs write. The independent nonterminal test is not derived from storage bounds.\n\nEmpty returns some [] before allocation or terminal tests. No cache endpoint is claimed for that rejection. Reference remains model unsupported; native unresolved-reference errors are not equated with None. Missing decode, unsupported terminal buckets on nonempty shapes and insufficient ordinary-write fuel remain partiality. The producer derives a stable adequate bound and exact raw core rows. It does not assume successful callbacks, desired future states or Graph index laws.\n\nWork retains all 143150 baseline files/modes/refs/stashes/worktrees, nine exact document inverses, one Audit prepend, actual failed inputs/raw reports, full public signatures/actual axiom subsets and complete resource families. The separate audit-addition.json record remains required. Exactly 26 prior CachedChild inputs retain archive-1/local-publication-1/push-1, the canonical already sealed assessment and complete 13800-byte summary. Its sealed peer is separate context. Old four strict failures, exact header/type repairs and metadata overlays remain prior history, not current outcomes.\n\nForce-add every manifest path and SHA256SUMS, including ignored logs. Publication requires every sealed path in HEAD, exact filesystem/index/tree/modes and the singleton ordinary formalize destination. Only actual retained reports supply validation. No passing check, seal or push is predicted.\n\nWhole-edge cached sequencing, reached interrupted prefixes, own-class allocation, residual ordering and same-before branch alternatives remain open. Native maps/machine integers, configured selector order, Safe/LiveRoots, wrapper reconstruction and complete scheduler/driver correspondence remain open. H6 stays strongest and the whole goal remains ACTIVE and incomplete. All six imported Haskell repair handoffs remain first in FINDINGS. No Haskell source change is claimed.\n")
+ 
+ files = sorted(p for p in evidence.rglob('*') if p.is_file())
+ (evidence / 'SHA256SUMS').write_text(''.join(hashlib.sha256(p.read_bytes()).hexdigest() + '  ' + p.relative_to(evidence).as_posix() + '\n' for p in files))
