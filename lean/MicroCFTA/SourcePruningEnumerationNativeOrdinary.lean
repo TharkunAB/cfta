@@ -94,6 +94,8 @@ theorem complete
       entered.expandable = before.expandable ∧ entered.waiting = before.waiting ∧
       Post formulas solver next caller afterCaller final ∧ final.query = saved ∧
       (∀ receipt ∈ processed, SourcePruningEnumerationNativeBranchCompletion.Admitted uv receipt) ∧
+      (EnumerationReferences.PendingReferences before.core → EnumerationReferences.IncomingAvoid uv before.core →
+        ∀ receipt ∈ processed, SourcePruningEnumerationNativeBranchCompletion.Pending receipt) ∧
       (result = .complete processed afterCaller saved ∨ result = .stopped processed (some .unhandled)) ∧
       ((∀ edge ∈ edgesOf (.node parentEntry storedEdges depth free), arityAllows edge.children.length scs = true →
           SourcePruningEnumerationConstraint.project edge.entry.key.constraint ≠ none) →
@@ -118,20 +120,73 @@ theorem complete
     exact ranges e uv handle scs parentEntry storedEdges depth free entered.core
       (by simpa only [Nat.add_zero] using entryRun 0) nonterminal
   obtain ⟨r, n, p, h, k, processed, afterCaller, saved, final, next, result,
-    branches, post, querySame, admitted, shape, supported⟩ :=
+    branches, post, querySame, admitted, pendingHistory, shape, supported⟩ :=
     SourcePruningEnumerationNativeBranchCompletion.complete formulas solver inventory caller entered checkEmpty
       uv handle scs parentEntry storedEdges (edgesOf (.node parentEntry storedEdges depth free)) depth free roots memos
       initial enteredReady enteredStored decoded enteredRealized selected enteredPaths enteredCounts enteredFlags
       (retained scs pending) branchRanges
   refine ⟨e + r, n, p, h, k, entered, processed, afterCaller, saved, final, next, result,
-    ?_, stable, sameFlags, sameWaiting, post, querySame, admitted, shape, supported⟩
-  intro er en P H ek largeP largeH
-  have observed := entryRun (r + er)
-  have scanned := branches (e + er) en P H ek largeP largeH
-  have common : SourcePruningEnumerationNativeBranches.run checkEmpty (e + r + er) (n + en) P H (k + ek)
-      uv scs entered (edgesOf (.node parentEntry storedEdges depth free)) caller memos.query = result := by
-    simpa only [Nat.add_assoc, Nat.add_left_comm, Nat.add_comm] using scanned
-  simp only [Nat.add_assoc] at observed common ⊢
-  simp only [run, observed, nonterminal, Bool.false_eq_true, ite_false, frame, common]
+    ?_, stable, sameFlags, sameWaiting, post, querySame, admitted, ?_, shape, supported⟩
+  · intro er en P H ek largeP largeH
+    have observed := entryRun (r + er)
+    have scanned := branches (e + er) en P H ek largeP largeH
+    have common : SourcePruningEnumerationNativeBranches.run checkEmpty (e + r + er) (n + en) P H (k + ek)
+        uv scs entered (edgesOf (.node parentEntry storedEdges depth free)) caller memos.query = result := by
+      simpa only [Nat.add_assoc, Nat.add_left_comm, Nat.add_comm] using scanned
+    simp only [Nat.add_assoc] at observed common ⊢
+    simp only [run, observed, nonterminal, Bool.false_eq_true, ite_false, frame, common]
+  · intro history incoming
+    exact pendingHistory (EnumerationReferences.pending_read before.core entered.core stable history)
+      (EnumerationReferences.incoming_read uv before.core entered.core stable incoming)
+
+/-- Actual selection derives ready entry and pending-reference validity for every processed alternative. -/
+theorem selected_complete
+    (formulas : SourceGuards.Formulas FullSyntax.Formula)
+    (solver : SourceGuards.Entailment FullSyntax.Formula)
+    (inventory : Inventory) (caller : Caller width) (before : Cached) (checkEmpty : Bool)
+    (preference : List Nat → Option Nat) (uv handle : Nat) (scs : List Suspended)
+    (parentEntry : Cache.Interned InternedBinderProtocol.NodeKey)
+    (storedEdges : List (EdgeValue Symbol Constraint))
+    (depth : Nat) (free : List InternedBinderProtocol.Reference)
+    (edgesOf : Node → List (EdgeValue Symbol Constraint)) (roots : Nat → Nat) (memos : Memos)
+    (initial : Context formulas solver inventory caller memos)
+    (safe : Safe before.core)
+    (selection : EnumerationPureSelection.next preference before = .expand uv)
+    (stored : before.core.values[uv]? = some (.unenumerated (some handle) scs))
+    (decoded : lookupNode caller.checked.native.machine.heap handle = some (.node parentEntry storedEdges depth free))
+    (realized : PendingRealized caller.checked.native.machine.heap before.core)
+    (selected : ∀ edge ∈ edgesOf (.node parentEntry storedEdges depth free), edge ∈ storedEdges)
+    (paths : Roots before.core.representatives roots)
+    (counts : EnumerationCanonicalWaiting.Correct roots before.core.values before.waiting)
+    (flags : ∀ slot, SourcePruningEnumerationNativeIndex.candidate caller.checked.native.machine.heap
+      ((before.core.values[slot]?).getD .eliminated) = some (before.expandable slot))
+    (history : EnumerationReferences.PendingReferences before.core)
+    (nonterminal : scs.any (fun sc => EqualityTrie.isTerminal sc.trie) = false)
+    (ranges : Ranges checkEmpty uv edgesOf caller before memos.query) :
+    ∃ (r n p h k : Nat) (entered : Cached) (processed : List (Receipt width))
+      (afterCaller : Caller width) (saved : Queries) (final : Memos) (next : Inventory) (result : Result width),
+      (∀ er en P H ek, p ≤ P → h ≤ H →
+        run checkEmpty (r + er) (n + en) P H (k + ek) uv edgesOf caller before memos.query =
+          ([.ok ((uv, handle, scs, .node parentEntry storedEdges depth free), entered.core)], some result)) ∧
+      EnumerationDriver.RenderStable before.core entered.core ∧
+      entered.expandable = before.expandable ∧ entered.waiting = before.waiting ∧
+      Post formulas solver next caller afterCaller final ∧ final.query = saved ∧
+      (∀ receipt ∈ processed, SourcePruningEnumerationNativeBranchCompletion.Admitted uv receipt) ∧
+      (∀ receipt ∈ processed, SourcePruningEnumerationNativeBranchCompletion.Pending receipt) ∧
+      (result = .complete processed afterCaller saved ∨ result = .stopped processed (some .unhandled)) ∧
+      ((∀ edge ∈ edgesOf (.node parentEntry storedEdges depth free), arityAllows edge.children.length scs = true →
+          SourcePruningEnumerationConstraint.project edge.entry.key.constraint ≠ none) →
+        result = .complete processed afterCaller saved) := by
+  have ready := SourcePruningEnumerationSelection.ready caller.checked.native.machine.heap before preference uv
+    safe roots paths counts flags selection
+  have incoming := SourcePruningEnumerationSelection.incoming caller.checked.native.machine.heap before preference uv
+    safe roots paths counts flags selection
+  have pending := EnumerationReferences.pending_inputs before.core history uv (some handle) scs stored
+  obtain ⟨r, n, p, h, k, entered, processed, afterCaller, saved, final, next, result,
+    observed, stable, flagsSame, waitingSame, post, querySame, admitted, pendingHistory, shape, supported⟩ :=
+    complete formulas solver inventory caller before checkEmpty uv handle scs parentEntry storedEdges depth free
+      edgesOf roots memos initial ready stored decoded realized selected paths counts flags pending nonterminal ranges
+  exact ⟨r, n, p, h, k, entered, processed, afterCaller, saved, final, next, result,
+    observed, stable, flagsSame, waitingSame, post, querySame, admitted, pendingHistory history incoming, shape, supported⟩
 
 end MicroCFTA.SourcePruningEnumerationNativeOrdinary
