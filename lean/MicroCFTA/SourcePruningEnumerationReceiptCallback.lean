@@ -1,5 +1,6 @@
 import MicroCFTA.SourcePruningEnumerationNativeCacheFrame
 import MicroCFTA.SourcePruningCallbackCompletion
+import MicroCFTA.SourcePruningEnumerationAfterCallback
 
 namespace MicroCFTA.SourcePruningEnumerationReceiptCallback
 open EnumerationState EnumerationCorrectness EnumerationDriver EnumerationOrder EnumerationCompressionFrame
@@ -27,6 +28,7 @@ def Completes (graph : Graph Symbol Constraint) (templates : List (Template.Patt
             Pending (.complete fragment caller queries (EnumerationExpandableIndex.frame final after))) ∧
           (∀ preference, EnumerationPureSelection.next preference (EnumerationExpandableIndex.frame final after) =
             EnumerationPureSelection.next preference after) ∧
+          SourcePruningEnumerationAfterCallback.Follows graph templates fuel metadata uv fragment after result final ∧
           ∀ group ∈ result.2.pending, PendingBound final.counter group
   | _ => True
 
@@ -50,6 +52,8 @@ theorem completes (graph : Graph Symbol Constraint) (templates : List (Template.
         fragmentHistory_complete_frame before fragment caller queries after final frame history,
         fun pending => pending_complete_frame fragment caller queries after final frame pending,
         fun preference => selection_frame preference after final frame.counter,
+        SourcePruningEnumerationAfterCallback.follows graph templates fuel metadata uv fragment after result final
+          admitted.2.1.1.total success,
         finalBounded⟩
   | unhandled | rejected _ _ _ | stopped _ _ _ => trivial
 
