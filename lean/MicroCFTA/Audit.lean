@@ -1,3 +1,4 @@
+import MicroCFTA.SourcePruningEnumerationCachedFoldCompletion
 import MicroCFTA.SourcePruningEnumerationCachedFold
 import MicroCFTA.SourcePruningEnumerationCachedAdapter
 import MicroCFTA.SourcePruningEnumerationCachedDispatch
