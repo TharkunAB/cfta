@@ -1,0 +1,23 @@
+import MicroCFTA.SourcePruningEnumerationChildDispatch
+set_option pp.maxSteps 1000000
+set_option pp.deepTerms true
+#check MicroCFTA.SourcePruningEnumerationChildDispatch.observe
+#print axioms MicroCFTA.SourcePruningEnumerationChildDispatch.observe
+#check MicroCFTA.SourcePruningEnumerationChildDispatch.run
+#print axioms MicroCFTA.SourcePruningEnumerationChildDispatch.run
+#check MicroCFTA.SourcePruningEnumerationChildDispatch.erase
+#print axioms MicroCFTA.SourcePruningEnumerationChildDispatch.erase
+#check MicroCFTA.SourcePruningEnumerationChildDispatch.terminal
+#print axioms MicroCFTA.SourcePruningEnumerationChildDispatch.terminal
+#check MicroCFTA.SourcePruningEnumerationChildDispatch.empty
+#print axioms MicroCFTA.SourcePruningEnumerationChildDispatch.empty
+#check MicroCFTA.SourcePruningEnumerationChildDispatch.nonterminal_complete
+#print axioms MicroCFTA.SourcePruningEnumerationChildDispatch.nonterminal_complete
+#check MicroCFTA.SourcePruningEnumerationCachedFoldCompletion.complete
+#print axioms MicroCFTA.SourcePruningEnumerationCachedFoldCompletion.complete
+#check MicroCFTA.SourcePruningEnumerationCachedTerminal.complete
+#print axioms MicroCFTA.SourcePruningEnumerationCachedTerminal.complete
+#check MicroCFTA.SourcePruningEnumerationCachedTerminalAdapter.protects
+#print axioms MicroCFTA.SourcePruningEnumerationCachedTerminalAdapter.protects
+#check MicroCFTA.SourcePruningEnumerationCachedTerminalAdapter.complete
+#print axioms MicroCFTA.SourcePruningEnumerationCachedTerminalAdapter.complete
