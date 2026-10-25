@@ -1,5 +1,65 @@
 # cfta formal model
 
+## Native cached incoming-node completion
+
+Current source: `SourcePruningEnumerationCachedIncoming`.
+Proof: `9472b4e2e9348880ca652c92dbea1ea0463d4cde`. Main remains `74250bd889685da436cdbfe32ac4b5a0878ffd09`.
+The whole goal stays ACTIVE and incomplete. H6 remains strongest.
+
+One complete theorem derives the actual incoming-node read/run/write prefix
+and logical cached indexes at the same reached after-write heap/core.
+Inputs retain Context/storage/pending realization/Roots/counts/all-slot flags,
+a representative pending target, available closed incoming value, suspended
+variable bounds and genuine current conditional WordRanges. No future
+successful prefix, desired endpoint, final cache or callback is supplied.
+
+The full original Caller/query/Post/unfolding, replacement encode/decode,
+availability/closure and optional old-value receipt remain. An absent old
+value preserves incoming/Caller/memos/inventory; a present old value retains
+the actual query receipt, intersection language and false-flag endpoint.
+The native gained-only write uses incomingScs and lost=[], actual compressed
+read core and actual after-write core. It derives the occurrence-sensitive
+waiting update, Roots, all-slot flags and exact target boundary predicate.
+Counter and read representatives remain. Order and duplicates remain.
+
+This logical witness does not expose an executable cache in raw rejection.
+The runtime returns the earlier read endpoint. Replacement Empty executes
+write/inherit before raw []; the raw result carries no post-write cache.
+The existing runtime action is unchanged.
+
+One theorem, eight typed have heads, no definitions/lets/new instance declarations/induction/
+helpers/new types/carriers/Graph. Ten Root strings contain 107 lines: context
+17 and public head 80. Source estimate 180–320, hard limit 520.
+Actual source review and the frozen owner/schema are bound: 167 payloads /
+169 files, ten strings / 107 lines, 154 scopes, five packets / 50 fields and
+zero case groups; 27 whole sources, 33 cuts / 394 lines, 19 literal import
+edges and 27 project identities.
+The V2 context activates the existing public named Monad List dictionary
+SourcePruningEnumerationIncomingNode.incomingNodeMonadList. It declares no
+new instance and adds no dictionary body. The pre-body correction is not a
+compiler failure. Full V1 owners/programs and earlier drafts remain exact.
+
+
+Validation: Strict attempt 1 passes with a literal empty log under all linters and warnings as errors. No Lean attempt has failed. All ten selected strings, including context, the public head and eight typed haves, remain unchanged. All 154 typed positions and five packets with 50 fields remain intact. The V2 context activates one existing named Monad List dictionary. It adds no new instance declaration or dictionary body. No header, premise, binder, proof limit, helper, definition, induction, case split or proof let was added or changed. The source has 154 ordinary lines, below the selected 180 to 320 estimate and within hard cap 520; no padding was added. The installed build, complete public readback and aggregate Audit pass. The complete public signature occupies 197 output lines without display omissions. The older unused-inputs warning remains unchanged. No passing check was repeated. Seal and push results are recorded separately. All actual complete inputs, raw logs and cap receipts remain. The pre-body existing-instance activation is a source correction, not a compiler failure. Full V1 owner/programs and earlier drafts remain exact.
+Installed focused build: 1310 jobs; Audit: 3729 jobs and
+76468 theorem dependency checks. Actual public axioms: complete reports propext, Classical.choice and Quot.sound.
+Only actual reports bind these fields. The documents-1 ledger stays separate.
+Exactly 26 prior inputs preserve the FULL 16168-byte summary and actual
+archive-1/local-publication-1/push-1 families; sealed peer is separate context.
+All 149682 baseline files/modes and nine document inverses remain guarded.
+No future seal/push outcome or Haskell change is asserted.
+
+All six Haskell handoffs stay first. Terminal moved-waiting/mergedRoots,
+Safe/InputsPending admission, mixed-loop ranges/initial-only numeric bounds,
+arbitrary-fault cache recovery, selector/partition/fallback, wrapper
+normalization, physical maps/machine integers, extraction and full driver
+correspondence remain open. H6 stays strongest: covered closed construction
+with valid cache/allocation history supports prescribed finite modeled node
+calls at derived bounds and the same finite trees for empty inherited
+payload under formal guard/solver semantics. Whole typing/pruning, concrete
+solver, runtime, resources and convergence remain open.
+
+
 ## Native cached ordered fold completion
 
 Current source: `SourcePruningEnumerationCachedFoldCompletion`.
