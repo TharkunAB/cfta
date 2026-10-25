@@ -1,0 +1,18 @@
+canonicalEdges :: forall symbol. (Hashable symbol, Ord symbol, Typeable symbol) => Node symbol -> [Edge symbol]
+canonicalEdges = memoTypeableWith @symbol canonicalEdgesCache $ \n ->
+    let NodeId ident = nodeIdentity n in canonicalOrder n IntMap.! ident
+
+{- | The edges of each node in the order of 'runs': 'canonicalOrder' of the
+graph that the root reaches, then by the weights of 'runsBy', if any. A node
+that the enumeration builds gets its edges from 'canonicalEdges'.
+-}
+canonicalEdgesOf ::
+    (Hashable symbol, Ord symbol, Typeable symbol) =>
+    Maybe (Edge symbol -> Double) -> Node symbol -> Node symbol -> [Edge symbol]
+canonicalEdgesOf weights root = edgesOf
+  where
+    byWeights = maybe id byWeight weights
+    ordered = IntMap.map byWeights (canonicalOrder root)
+    edgesOf n =
+        let NodeId ident = nodeIdentity n
+         in fromMaybe (byWeights (canonicalEdges n)) (IntMap.lookup ident ordered)

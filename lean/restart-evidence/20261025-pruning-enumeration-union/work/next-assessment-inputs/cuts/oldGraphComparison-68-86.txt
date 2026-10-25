@@ -1,0 +1,19 @@
+def enumerateOutWith (graph : Graph Symbol Guard) (expand : NodeExpansion Symbol Guard)
+    (fuel uv : Nat) : EnumerateM Symbol Guard (Fragment Symbol) := do
+  match ← getValue (fuel + 1) uv with
+  | .unenumerated (some node) scs =>
+      let root ← representative (fuel + 1) uv
+      let ancestry := (← get).recursionAncestry root
+      modify fun state => {state with expansionAncestry := (
+        match graph.node node with
+        | .recursive _ => (recursionKey node scs :: ancestry).eraseDups
+        | _ => ancestry)}
+      let fragment ← expand scs
+        (match graph.node node with | .recursive body => body | _ => node)
+      modify fun state => {state with expansionAncestry := []}
+      setValue root (.enumerated fragment)
+      pure fragment
+  | _ => reject
+
+/-- List every candidate before blocked representatives are removed. -/
+def remaining (graph : Graph Symbol Guard) (state : State Symbol Guard) : List Nat :=

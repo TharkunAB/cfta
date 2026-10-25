@@ -1,0 +1,8 @@
+enumerateShallowHere ::
+    (Hashable symbol, Typeable symbol) =>
+    Seq SuspendedConstraint -> Node symbol -> EnumerateM symbol (TermFragment symbol)
+enumerateShallowHere scs n@(Node _)
+    | not (any (isTerminalPathTrie . scGetPathTrie) scs) = do
+        edgesOf <- gets _edgesOf
+        enumerateEdgeWith prepareShallowChild scs =<< branches (edgesOf n)
+enumerateShallowHere scs n = enumerateNode scs n

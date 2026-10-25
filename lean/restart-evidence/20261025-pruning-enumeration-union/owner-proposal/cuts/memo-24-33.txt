@@ -1,0 +1,10 @@
+/-- A head receipt records exposure before its constructor-only suffix. -/
+inductive HeadReads [DecidableEq (EdgeKey Symbol Guard)] :
+    {value : Value Symbol Guard} → {before : State Symbol Guard} → {result : Value Symbol Guard} →
+      {after : State Symbol Guard} → Head value before result after → Memos → Memos → Prop where
+  | read {fuel : Nat} {value result : Value Symbol Guard} {before middle after : State Symbol Guard}
+      {edges : List (EdgeValue Symbol Guard)}
+      {exposed : MergedFreshOrdinaryExposure.nodeEdges fuel value before = .done edges middle}
+      {rebuilt : run (makeNode edges) middle = (result, after)} {memos saved : Memos}
+      (calls : SourceEqualityQueryGlobalMemos.ExposureReads fuel value before memos saved) :
+      HeadReads (.read fuel edges middle exposed rebuilt) memos saved

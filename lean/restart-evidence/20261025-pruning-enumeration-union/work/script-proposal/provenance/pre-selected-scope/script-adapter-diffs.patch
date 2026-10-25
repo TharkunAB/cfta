@@ -1,0 +1,255 @@
+--- basis/check.py
++++ candidate/check.py
+@@ -2,7 +2,7 @@
+ from pathlib import Path
+ 
+ root = Path('/home/tritlo/Code/mcfta')
+-area = Path('/tmp/mcfta-pruning-enumeration-mu-20261025')
++area = Path('/tmp/mcfta-pruning-enumeration-union-20261025')
+ kind, attempt, *paths = sys.argv[1:]
+ target = area / attempt
+ target.mkdir()
+--- basis/documents.py
++++ candidate/documents.py
+@@ -4,8 +4,8 @@
+ from pathlib import Path
+ 
+ root = Path('/home/tritlo/Code/mcfta')
+-area = Path('/tmp/mcfta-pruning-enumeration-mu-20261025')
+-baseline = '6164bd12beb9ed620180b8b582249462bd8b705d'
++area = Path('/tmp/mcfta-pruning-enumeration-union-20261025')
++baseline = '75f2b914d97354ded741c33f70afd54cad067d29'
+ proof = subprocess.check_output(['git', 'rev-parse', 'HEAD'], cwd=root).decode().strip()
+ assert subprocess.check_output(['git', 'rev-list', '--parents', '-n', '1', proof], cwd=root).decode().split() == [proof, baseline]
+ checks = json.loads((area / 'build-summary.json').read_text())
+@@ -25,7 +25,7 @@
+ note = expand((area / 'current-note.md').read_text())
+ note = note.replace('Main: `74250bd889685da436cdbfe32ac4b5a0878ffd09`, incorporated.',
+     'Main: `74250bd889685da436cdbfe32ac4b5a0878ffd09`, incorporated.\nProof: `' + proof + '`.')
+-destination = root / 'lean/notes-current-pruning-enumeration-mu.md'
++destination = root / 'lean/notes-current-pruning-enumeration-union.md'
+ assert not destination.exists()
+ destination.write_text(note)
+ (area / 'current-note.md').write_text(note)
+@@ -39,7 +39,7 @@
+     path = root / name
+     before = path.read_text()
+     assert path.read_bytes() == subprocess.check_output(['git', 'show', baseline + ':' + name], cwd=root)
+-    position = before.index('## Captured-root expansion entry') if name == 'FINDINGS.md' else before.index('\n') + 1
++    position = before.index('## Memoized Mu caller preservation') if name == 'FINDINGS.md' else before.index('\n') + 1
+     after = before[:position] + prefix + before[position:]
+     path.write_text(after)
+     changes[name] = dict(insertion_character=position, inserted=prefix,
+@@ -47,5 +47,5 @@
+         after_sha256=hashlib.sha256(after.encode()).hexdigest())
+ (area / 'document-changes.json').write_text(json.dumps(changes, indent=2) + '\n')
+ (area / 'proof-commit.json').write_text(json.dumps(dict(commit=proof, baseline=baseline,
+-    paths=['lean/MicroCFTA/SourcePruningEnumerationMu.lean', 'lean/MicroCFTA/Audit.lean']), indent=2) + '\n')
++    paths=['lean/MicroCFTA/SourcePruningEnumerationUnion.lean', 'lean/MicroCFTA/Audit.lean']), indent=2) + '\n')
+ print(json.dumps(dict(documents=paths, note=str(destination), proof=proof)))
+--- basis/archive.py
++++ candidate/archive.py
+@@ -6,12 +6,12 @@
+ from pathlib import Path
+ 
+ root = Path('/home/tritlo/Code/mcfta')
+-area = Path('/tmp/mcfta-pruning-enumeration-mu-20261025')
+-evidence = root / 'lean/restart-evidence/20261025-pruning-enumeration-mu'
++area = Path('/tmp/mcfta-pruning-enumeration-union-20261025')
++evidence = root / 'lean/restart-evidence/20261025-pruning-enumeration-union'
+ assert not evidence.exists()
+ custody = json.loads((area / 'prior-custody-index.json').read_text())
+ assert len(custody) == 26 and len({pin['target'] for pin in custody}) == 26
+-assert hashlib.sha256((area / 'prior-custody-index.json').read_bytes()).hexdigest() == '4a00b17048eae33fd84acbea8ad24f83e06da787cff8897a0bab8b065fba9495'
++assert hashlib.sha256((area / 'prior-custody-index.json').read_bytes()).hexdigest() == '5667d52c463447a3fa7779c7b715151f88f4ef0b3f5385150eb67b047badfc71'
+ summary = json.loads((area / 'previous-publication/post-publication-summary.json').read_text())
+ assert [pin['source'] for pin in custody] == summary['next_custody_inputs']
+ for pin in custody:
+@@ -19,11 +19,11 @@
+     data = (area / 'previous-publication' / pin['target']).read_bytes()
+     assert len(data) == pin['bytes'] and hashlib.sha256(data).hexdigest() == pin['sha256']
+ assert {p.name for p in (area / 'previous-publication').iterdir()} == {pin['target'] for pin in custody}
+-assert Path('/tmp/mcfta-pruning-enumeration-mu-20261025-source-review.md').is_file()
++assert Path('/tmp/mcfta-pruning-enumeration-union-20261025-source-review.md').is_file()
+ for args in [('diff', '--quiet'), ('diff', '--cached', '--quiet')]:
+     subprocess.run(['git', *args], cwd=root, check=True)
+ for name in ['declaration', 'model', 'public', 'document', 'seal-script', 'root']:
+-    assert Path('/tmp/mcfta-pruning-enumeration-mu-20261025-' + name + '-review.md').is_file()
++    assert Path('/tmp/mcfta-pruning-enumeration-union-20261025-' + name + '-review.md').is_file()
+ evidence.mkdir()
+ for path in sorted(area.rglob('*')):
+     if not path.is_file():
+@@ -36,21 +36,21 @@
+         target.write_bytes(path.read_bytes())
+ inputs = evidence / 'inputs'
+ inputs.mkdir()
+-for pattern in ['mcfta-pruning-enumeration-mu-20261025-*']:
++for pattern in ['mcfta-pruning-enumeration-union-20261025-*']:
+     for path in sorted(Path('/tmp').glob(pattern)):
+-        if path.is_file() and not path.name.startswith('mcfta-pruning-enumeration-mu-20261025-archive-1.'):
++        if path.is_file() and not path.name.startswith('mcfta-pruning-enumeration-union-20261025-archive-1.'):
+             shutil.copyfile(path, inputs / path.name)
+-shutil.copytree('/tmp/mcfta-pruning-enumeration-mu-20261025-proposal', evidence / 'owner-proposal')
++shutil.copytree('/tmp/mcfta-pruning-enumeration-union-20261025-proposal', evidence / 'owner-proposal')
+ prior = evidence / 'previous-publication'
+ prior.mkdir()
+ for pin in custody:
+     shutil.copyfile(area / 'previous-publication' / pin['target'], prior / pin['target'])
+ production = evidence / 'production-sources'
+ production.mkdir()
+-shutil.copyfile(root / 'lean/MicroCFTA/SourcePruningEnumerationMu.lean', production / 'SourcePruningEnumerationMu.lean')
+-shutil.copyfile(root / 'lean/notes-current-pruning-enumeration-mu.md', evidence / 'current-note.md')
+-shutil.copyfile('/tmp/mcfta-pruning-enumeration-mu-20261025-verify.py', evidence / 'verify-checkpoint.py')
+-(evidence / 'INDEX.md').write_text('# Memoized Mu caller preservation\n\nThe selected module has one theorem complete about the existing memoized Mu unfolding action. It has zero new definitions, actions, instances, helpers, carriers, Graph parameters or inductions. Only complete EdgeKey equality is a typeclass premise. The selected source estimate is 100–220 ordinary lines, hard limit 320. The actual frozen owner records exact contracts and inventories.\n\nGenuine current Context, an available closed literal Mu and PendingRealized derive the same actual memoized unfolding result, native heap and saved globals, the underlying unfold equation and concrete Caller advance/advancePhysical endpoint. The full existing Post, equal query table, extending unfolding table, Available/closed result, independent finite-term language law and every pending slot in the unchanged enumeration state remain. No successful unfold, future readiness, desired result or Post is assumed. There is no ordinary/nonempty result promise. No enumeration intersection, callback, ancestry update or final store is part of this theorem. It does not cover the separate Union head-normalization branch.\n\nWork retains all 140084 baseline files/modes/refs/stashes/worktrees, nine exact document inverses, one Audit prepend, all actual failed inputs/raw reports, complete public signatures and actual axiom subsets, and complete six-artifact resource families. The separate audit-addition.json record remains required. Exactly 26 prior Entry inputs retain actual archive-2/local-publication-1/push-1 custody. Its failed archive-1 is already protected by the baseline. The sealed assessment and separate peer remain protected without item 27. Current owner revisions and failures are recorded only if they actually occur.\n\nForce-add every manifest path and SHA256SUMS, including ignored logs. Publication requires all sealed paths in HEAD, exact filesystem/index/tree/modes and a singleton ordinary formalize destination. Only actual retained reports supply validation. No passing check, seal or push is predicted.\n\nWrapper integration, Union normalization/reconstruction, native NodeId/key extraction, original flags/partition, cache-history integration, machine bounds, Safe/LiveRoots and full driver correspondence remain open. H6 stays strongest and the whole goal remains ACTIVE and incomplete. The optimized core and older proofs remain protected. All six Haskell repair handoffs remain first in FINDINGS. No Haskell source change is claimed.\n')
++shutil.copyfile(root / 'lean/MicroCFTA/SourcePruningEnumerationUnion.lean', production / 'SourcePruningEnumerationUnion.lean')
++shutil.copyfile(root / 'lean/notes-current-pruning-enumeration-union.md', evidence / 'current-note.md')
++shutil.copyfile('/tmp/mcfta-pruning-enumeration-union-20261025-verify.py', evidence / 'verify-checkpoint.py')
++(evidence / 'INDEX.md').write_text('# Union normalization caller preservation\n\nThe intended next composition derives the actual Union Head internally, then retains the actual saved-global receipt, full current Caller Post and every pending slot at the same endpoint. Exact public scope, owner and budget await Root selection. This predraft is not ready for activation.\n\nAll baseline, nine-document/Audit inverse, complete receipt/public type/actual axiom and publication guards remain. The immediate prior Mu custody uses archive-1/local-publication-1/push-1. Earlier Entry archive-2 and its failed archive-1 remain protected baseline history. No current failure or passing outcome is inherited.\n\nNo ordinary/nonempty result, successful Head/future Context premise, cross-fuel saved-global equality, new action or full wrapper completion is asserted. H6 stays strongest and the whole goal remains ACTIVE. All six Haskell repair handoffs remain first in FINDINGS.\n')
+ 
+ files = sorted(p for p in evidence.rglob('*') if p.is_file())
+ (evidence / 'SHA256SUMS').write_text(''.join(hashlib.sha256(p.read_bytes()).hexdigest() + '  ' + p.relative_to(evidence).as_posix() + '\n' for p in files))
+--- basis/verify.py
++++ candidate/verify.py
+@@ -1,4 +1,4 @@
+-"""Verify memoized Mu caller preservation and the preserved baseline."""
++"""Verify Union normalization caller preservation and the preserved baseline."""
+ import argparse
+ import gzip
+ import hashlib
+@@ -10,8 +10,8 @@
+ parser = argparse.ArgumentParser(description=__doc__)
+ parser.add_argument('--root', type=Path, required=True)
+ root = parser.parse_args().root.resolve()
+-here = root / 'lean/restart-evidence/20261025-pruning-enumeration-mu'
+-baseline = '6164bd12beb9ed620180b8b582249462bd8b705d'
++here = root / 'lean/restart-evidence/20261025-pruning-enumeration-union'
++baseline = '75f2b914d97354ded741c33f70afd54cad067d29'
+ main = '74250bd889685da436cdbfe32ac4b5a0878ffd09'
+ 
+ def sha(data):
+@@ -40,7 +40,7 @@
+     subprocess.run(['git', *args], cwd=root, check=True)
+ assert git('rev-list', '--parents', '-n', '1', proof).decode().split() == [proof, baseline]
+ assert set(git('diff-tree', '--no-commit-id', '--name-only', '-r', proof).decode().splitlines()) == {
+-    'lean/MicroCFTA/SourcePruningEnumerationMu.lean', 'lean/MicroCFTA/Audit.lean'}
++    'lean/MicroCFTA/SourcePruningEnumerationUnion.lean', 'lean/MicroCFTA/Audit.lean'}
+ tree = gzip.decompress((here / 'work/baseline-tree.txt.gz').read_bytes())
+ assert tree == git('ls-tree', '-r', '-z', baseline)
+ assert sha(tree) == load('work/baseline.json')['tree_sha256']
+@@ -70,14 +70,14 @@
+         changed.append(name)
+     elif name == 'lean/MicroCFTA/Audit.lean':
+         addition = audit_change['prefix'].encode()
+-        assert addition == b'import MicroCFTA.SourcePruningEnumerationMu\n'
++        assert addition == b'import MicroCFTA.SourcePruningEnumerationUnion\n'
+         assert sha(data) == audit_change['after_sha256'] and data.startswith(addition)
+         data = data[len(addition):]
+         assert sha(data) == audit_change['before_sha256']
+         changed.append(name)
+     assert hashlib.sha1(b'blob ' + str(len(data)).encode() + b'\0' + data).hexdigest() == blob, name
+     count += 1
+-assert count == 140084 and len(changed) == 10
++assert count == 140653 and len(changed) == 10
+ assert git('stash', 'list', '--format=%gd %H %s') == (here / 'work/baseline-stashes.txt').read_bytes()
+ worktrees = (here / 'work/baseline-worktrees.txt').read_bytes()
+ assert git('worktree', 'list', '--porcelain') == worktrees.replace(
+@@ -86,12 +86,12 @@
+     value, ref = line.split()
+     if ref not in ['refs/heads/formalize', 'refs/remotes/origin/formalize'] and not ref.startswith('refs/codex/turn-diffs/'):
+         assert git('rev-parse', ref).decode().strip() == value, ref
+-assert git('rev-parse', 'codex/backup-pruning-enumeration-mu-20261025-0213').decode().strip() == baseline
++assert git('rev-parse', 'codex/backup-pruning-enumeration-union-20261025-0239').decode().strip() == baseline
+ 
+ checks = load('work/build-summary.json')
+-source = (root / 'lean/MicroCFTA/SourcePruningEnumerationMu.lean').read_bytes()
+-assert source == (here / 'production-sources/SourcePruningEnumerationMu.lean').read_bytes()
+-assert source == (here / 'work' / checks['successful_source_attempt'] / 'MicroCFTA/SourcePruningEnumerationMu.lean').read_bytes()
++source = (root / 'lean/MicroCFTA/SourcePruningEnumerationUnion.lean').read_bytes()
++assert source == (here / 'production-sources/SourcePruningEnumerationUnion.lean').read_bytes()
++assert source == (here / 'work' / checks['successful_source_attempt'] / 'MicroCFTA/SourcePruningEnumerationUnion.lean').read_bytes()
+ assert sha(source) == load('work/installation.json')['source_sha256']
+ assert len(source.splitlines()) == checks['source_lines']
+ assert not re.search(rb'\b(?:sorry|admit|axiom|unsafe|set_option)\b', source)
+@@ -182,7 +182,7 @@
+ assert axioms == decls['axioms']
+ assert len(decls['theorems']) == sum(item['kind'] == 'theorem' for item in headers)
+ assert len(decls['definitions']) == sum(item['kind'] == 'def' for item in headers)
+-namespace = 'MicroCFTA.SourcePruningEnumerationMu.'
++namespace = 'MicroCFTA.SourcePruningEnumerationUnion.'
+ assert decls['definitions'] == [namespace + item['name'] for item in headers if item['kind'] == 'def']
+ assert decls['theorems'] == [namespace + item['name'] for item in headers if item['kind'] == 'theorem']
+ assert set(decls['definitions'] + decls['theorems']) == set(decls['declarations'])
+@@ -190,7 +190,7 @@
+     assert set(names) <= {'Classical.choice', 'Quot.sound', 'propext'}
+ failed_seals = checks['failed_seal_attempts']
+ receipt_stems = ['refresh-1', 'baseline-1'] + checks['attempts'] + failed_seals
+-prefix = 'mcfta-pruning-enumeration-mu-20261025-'
++prefix = 'mcfta-pruning-enumeration-union-20261025-'
+ expected_stems = {prefix + stem for stem in receipt_stems}
+ for suffix in ['limits.json', 'usage.json']:
+     paths = list((here / 'inputs').glob('*.' + suffix))
+@@ -205,16 +205,16 @@
+     usage = load('inputs/' + prefix + stem + '.usage.json')
+     assert 0 <= usage['age_seconds'] <= 600 and usage['remaining_percent'] > 1
+ for name in ['declaration', 'model', 'public', 'document', 'seal-script', 'root']:
+-    assert (here / 'inputs' / ('mcfta-pruning-enumeration-mu-20261025-' + name + '-review.md')).is_file()
+-assert (root / 'lean/notes-current-pruning-enumeration-mu.md').read_bytes() == (here / 'current-note.md').read_bytes()
+-findings = (root / 'FINDINGS.md').read_text().split('## Memoized Mu caller preservation', 1)[0]
++    assert (here / 'inputs' / ('mcfta-pruning-enumeration-union-20261025-' + name + '-review.md')).is_file()
++assert (root / 'lean/notes-current-pruning-enumeration-union.md').read_bytes() == (here / 'current-note.md').read_bytes()
++findings = (root / 'FINDINGS.md').read_text().split('## Union normalization caller preservation', 1)[0]
+ assert '## Haskell fix handoff for external work' in findings and findings.count('| Fixed by ') == 6
+ assert 'All six repairs are in the imported main history.' in findings
+ prior = load('previous-publication/remote-publication.json')
+ assert prior['status'] == 'PUSHED_AND_REMOTE_VERIFIED' and prior['remote_head'] == baseline
+ assert load('previous-publication/publication-spec.json')['head'] == baseline
+ custody = load('work/prior-custody-index.json')
+-assert sha((here / 'work/prior-custody-index.json').read_bytes()) == '4a00b17048eae33fd84acbea8ad24f83e06da787cff8897a0bab8b065fba9495'
++assert sha((here / 'work/prior-custody-index.json').read_bytes()) == '5667d52c463447a3fa7779c7b715151f88f4ef0b3f5385150eb67b047badfc71'
+ assert len(custody) == 26 and len({pin['target'] for pin in custody}) == 26
+ assert len({pin['source'] for pin in custody}) == 26
+ assert {p.name for p in (here / 'previous-publication').iterdir()} == {pin['target'] for pin in custody}
+@@ -222,8 +222,8 @@
+     assert not Path(pin['target']).is_absolute() and '..' not in Path(pin['target']).parts
+     data = (here / 'previous-publication' / pin['target']).read_bytes()
+     assert len(data) == pin['bytes'] and sha(data) == pin['sha256']
+-assessment = (here / 'previous-publication/mcfta-pruning-enumeration-entry-20261025-next-assessment.md').read_bytes()
+-assert sha(assessment) == '71d6abb8d839b7c40b2f6a46aaa4a00618ed8efad9a9519cf962f3c02f487047'
++assessment = (here / 'previous-publication/mcfta-pruning-enumeration-mu-20261025-next-assessment.md').read_bytes()
++assert sha(assessment) == '83d8f28cb766b4ea043a9d28f80ce49c976bdca87fa7ad915e7f51e0baf57835'
+ summary = load('previous-publication/post-publication-summary.json')
+ assert summary['head'] == baseline and summary['goal'] == 'ACTIVE_INCOMPLETE'
+ assert summary['component_status'] == 'PROVED_SEALED_PUSHED_REMOTE_VERIFIED'
+@@ -231,14 +231,14 @@
+ assert summary['next_assessment_is_currently_sealed'] is True
+ assert (root / summary['sealed_next_assessment_path']).read_bytes() == assessment
+ assessment_review = (here / 'work/script-proposal/context/prior-assessment-review.md').read_bytes()
+-assert sha(assessment_review) == '9b3a96b082ab9b35345c7abf4ab1e763b18ecf779ade77dbd898a636d8387245'
++assert sha(assessment_review) == '37979f2ec378b52729d0b37cb9e81a6ec3ddee354cf73f01909a842e90ea8007'
+ assert summary['next_assessment_review_is_currently_sealed'] is True
+ assert (root / summary['sealed_next_assessment_review_path']).read_bytes() == assessment_review
+-assert summary['seal_attempt'] == 'archive-2'
++assert summary['seal_attempt'] == 'archive-1'
+ assert [pin['source'] for pin in custody] == summary['next_custody_inputs']
+ assert summary['final_local_publication_attempt'] == 'local-publication-1'
+ assert summary['all_manifest_files_committed'] is True
+-assert sha((here / 'inputs/mcfta-pruning-enumeration-mu-20261025-source-review.md').read_bytes()) == '57ec57fdbdbe19f3d93fa3c57c24cb8ed051f61c49c4084ad19469e3119e4437'
++assert sha((here / 'inputs/mcfta-pruning-enumeration-union-20261025-source-review.md').read_bytes()) == 'SOURCE_REVIEW_SHA_PENDING'
+ 
+ print(json.dumps(dict(status='PASS', baseline=baseline, main=main, proof=proof,
+     baseline_files=count, unchanged_files=count - len(changed), exact_changed_files=changed,
+--- basis/publication.py
++++ candidate/publication.py
+@@ -5,9 +5,9 @@
+ from pathlib import Path
+ 
+ root = Path('/home/tritlo/Code/mcfta')
+-area = Path('/tmp/mcfta-pruning-enumeration-mu-20261025')
+-evidence = root / 'lean/restart-evidence/20261025-pruning-enumeration-mu'
+-previous = '6164bd12beb9ed620180b8b582249462bd8b705d'
++area = Path('/tmp/mcfta-pruning-enumeration-union-20261025')
++evidence = root / 'lean/restart-evidence/20261025-pruning-enumeration-union'
++previous = '75f2b914d97354ded741c33f70afd54cad067d29'
+ destination = 'git@github.com:TharkunAB/cfta.git'
+ 
+ def git(*args):

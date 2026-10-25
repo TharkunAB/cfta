@@ -1,0 +1,107 @@
+import MicroCFTA.SourceEqualityRequiredFuture
+import MicroCFTA.MergedFreshOrdinaryExposureLanguage
+import MicroCFTA.InternedFreshOrdinaryClosedCompletion
+
+/-!
+# Independent least-language preservation by actual head normalization
+
+A finite future table is a proof witness for the input root and every exposed
+child. Actual completed-read replay gives the same constructor alternatives
+there. Independent stored-value meaning has no cache parameter. The worker
+performs no additional table conversion.
+-/
+namespace MicroCFTA.SourceEqualityRequiredHeadLanguage
+open Cache Language InternedConstructorTemplates InternedProbeProvenance InternedRecordCoherence
+open InternedNestedFacts InternedNestedProvenance
+open SourceEqualityRequiredCache SourceEqualityRequiredHead SourceEqualityRequiredSemanticCache
+open InternedGuardedLanguage (meaning)
+
+/-- Actual head exposure and row-node reconstruction preserve the full independent guarded least language. -/
+theorem head_exact [DecidableEq (EdgeKey Symbol Guard)]
+    {value result : Value Symbol Guard} {before after : State Symbol Guard}
+    (trace : Head value before result after) (semantic : SemanticReady before)
+    (available : Available before value) (closed : value.free = []) :
+    ∀ holds ambient term, meaning holds ambient result term ↔ meaning holds ambient value term := by
+  have kept := trace.verified semantic.ready available closed
+  have afterSemantic := SourceEqualityRequiredSemanticCache.head trace semantic available closed
+  cases trace with
+  | read fuel edges middle exposed rebuilt =>
+      have checked := MergedFreshOrdinaryColdEffects.nodeEdges_verified fuel value before semantic.ready.semantic
+        semantic.ready.covered available closed
+      have middleSemantic : SourceRecursiveIntersectionSemanticHeap.SemanticHeap middle := by
+        simpa only [exposed, MergedSourceExposure.Result.state] using checked.semantic
+      have facts := middleSemantic.1.normal.facts
+      have resident := checked.edges edges middle exposed
+      have closedEdges := checked.closed edges middle exposed
+      have rebuiltChecked := InternedNestedFacts.node_verified edges middle facts resident
+      have growth : Grows middle after := by
+        simpa only [InternedNestedConstruction.work, InternedNestedConstruction.Outcome.state, rebuilt] using rebuiltChecked.growth
+      have history : Extends middle.nodes.issued after.nodes.issued := by
+        simpa only [InternedNestedConstruction.work, InternedNestedConstruction.Outcome.state, rebuilt] using rebuiltChecked.history
+      have inputs : SourceColdSharedRows.Inputs after (value :: edges.flatMap EdgeValue.children) := by
+        intro child member
+        rcases List.mem_cons.mp member with rfl | member
+        · exact ⟨kept.1.available _ available, closed⟩
+        · obtain ⟨edge, edgeIn, childIn⟩ := List.mem_flatMap.mp member
+          have childAvailable := facts.cached.edges edge.entry.key edge (resident edge edgeIn) child childIn
+          exact ⟨childAvailable.grows middle after growth history, closedEdges edge edgeIn child childIn⟩
+      obtain ⟨view, viewSemantic, futureGrowth, futureHistory, languages⟩ :=
+        SourceEqualityRequiredFuture.exact _ after afterSemantic inputs
+      have rootAvailable := (kept.1.available value available).grows after view futureGrowth futureHistory
+      have physical := MergedFreshOrdinaryExposureLanguage.nodeEdges_exact fuel value before semantic.ready.semantic
+        semantic.ready.covered available edges middle view exposed (grows_trans growth futureGrowth)
+        viewSemantic.ready.semantic viewSemantic.ready.covered rootAvailable closed
+      intro holds ambient term
+      have edgeExact (edge : EdgeValue Symbol Guard) (member : edge ∈ edges) (term : Term Symbol) :
+          MergedFreshOrdinaryGraph.EdgeAccepts view holds edge term ↔
+            MergedColdInterpretation.EdgeMeaning (meaning holds ambient) holds edge term := by
+        unfold MergedFreshOrdinaryGraph.EdgeAccepts MergedColdInterpretation.EdgeMeaning
+        apply exists_congr
+        intro terms
+        apply and_congr Iff.rfl
+        apply and_congr ?_ Iff.rfl
+        constructor
+        · intro runs
+          apply SourcePhysicalSharedRows.all₂_both_imp _ _ _ _ runs
+          intro child childIn subterm _ accepted
+          exact (languages child (List.mem_cons_of_mem _ (List.mem_flatMap.mpr ⟨edge, member, childIn⟩)) holds ambient subterm).mp accepted
+        · intro runs
+          apply SourcePhysicalSharedRows.all₂_both_imp _ _ _ _ runs
+          intro child childIn subterm _ accepted
+          exact (languages child (List.mem_cons_of_mem _ (List.mem_flatMap.mpr ⟨edge, member, childIn⟩)) holds ambient subterm).mpr accepted
+      have alternatives :
+          (∃ edge ∈ edges, MergedFreshOrdinaryGraph.EdgeAccepts view holds edge term) ↔
+            ∃ edge ∈ edges, MergedColdInterpretation.EdgeMeaning (meaning holds ambient) holds edge term := by
+        constructor
+        · rintro ⟨edge, member, accepted⟩
+          exact ⟨edge, member, (edgeExact edge member term).mp accepted⟩
+        · rintro ⟨edge, member, accepted⟩
+          exact ⟨edge, member, (edgeExact edge member term).mpr accepted⟩
+      have original := (languages value List.mem_cons_self holds ambient term).symm.trans
+        ((physical.2 holds term).trans alternatives)
+      have normalized := MergedColdInterpretation.makeNode_exact middle facts (meaning holds ambient) edges resident holds
+        (InternedGuardedLanguage.laws holds ambient) term
+      have actual : meaning holds ambient result term ↔
+          ∃ edge ∈ edges, MergedColdInterpretation.EdgeMeaning (meaning holds ambient) holds edge term := by
+        simpa only [rebuilt] using normalized
+      exact actual.trans original.symm
+
+/-- Original closed construction derives finite head normalization at its independent source language. -/
+theorem source [DecidableEq (EdgeKey Symbol Guard)] (expression : InternedNestedConstruction.Syntax Symbol Guard) :
+    ∃ value state result after,
+      InternedFreshOrdinaryConstruction.build expression [] empty = .done value state ∧
+      Head value state result after ∧ Keeps state after ∧ SemanticReady after ∧ result.free = [] ∧
+      ∀ holds ambient term, meaning holds ambient result term ↔ InternedGuardedSyntax.evaluate holds [] expression term := by
+  obtain ⟨value, state, built⟩ := InternedFreshOrdinaryClosedCompletion.closed_complete expression
+  have semantic := SourceEqualityRequiredSemanticCache.constructed expression value state built
+  have available := (InternedFreshOrdinaryFacts.closed_verified expression).result value state built
+  have closed := InternedFreshOrdinarySourceFreeNames.closed_free_empty expression value state built
+  obtain ⟨result, after, trace, keeps, _, resultClosed, _⟩ :=
+    SourceEqualityRequiredHead.complete value state semantic.ready available closed
+  refine ⟨value, state, result, after, built, trace, keeps,
+    SourceEqualityRequiredSemanticCache.head trace semantic available closed, resultClosed, ?_⟩
+  intro holds ambient term
+  simpa only [InternedGuardedExecution.closed_language expression value state built holds ambient] using
+    head_exact trace semantic available closed holds ambient term
+
+end MicroCFTA.SourceEqualityRequiredHeadLanguage

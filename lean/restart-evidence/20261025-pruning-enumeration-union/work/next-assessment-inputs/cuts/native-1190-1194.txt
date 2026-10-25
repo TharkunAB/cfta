@@ -1,0 +1,5 @@
+termsPruneUntil ost order narrow stop oracle n =
+    map fst $ flip allBranches (initEnumerationState (canonicalEdgesOf Nothing n) n) $ do
+        _ <- enumerateUntil' (Just stop) narrow enumerateShallowHere ost order oracle
+        rootTermFrag >>= expandPartialTermFrag
+

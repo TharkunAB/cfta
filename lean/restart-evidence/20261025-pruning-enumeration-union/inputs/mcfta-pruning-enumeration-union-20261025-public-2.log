@@ -1,0 +1,50 @@
+{"command": ["/home/tritlo/.elan/toolchains/leanprover--lean4---v4.34.1/bin/lean", "-R", "/tmp/mcfta-pruning-enumeration-union-20261025/public-2", "-DwarningAsError=true", "-Dlinter.all=true", "/tmp/mcfta-pruning-enumeration-union-20261025/public-2/checked.lean"], "exit_code": 0, "raw_bytes": 3726, "raw_sha256": "879801cf38f792c9dcf3b1f8752213bbb36abea8d662af2fcf67207ea9e942e1", "source_sha256": "99fcdae38e23d534721c71bbe7d9a2ef838fc40faa970aacc84be318b6b188f7"}
+@MicroCFTA.SourcePruningEnumerationUnion.complete : ∀ {width : Nat} {EnumGuard : Type}
+  [inst :
+    DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey MicroCFTA.SourcePruningTemplates.Symbol
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  (formulas : MicroCFTA.SourceGuards.Formulas MicroCFTA.FullSyntax.Formula)
+  (solver : MicroCFTA.SourceGuards.Entailment MicroCFTA.FullSyntax.Formula)
+  (inventory : MicroCFTA.SourceCurrentAllocatedNativeInventoryState.Inventory)
+  (beforeCaller : MicroCFTA.SourceCurrentAllocatedPartialState.State width)
+  (memos : MicroCFTA.EndpointMemoGateTrace.Memos)
+  (entry : MicroCFTA.Cache.Interned MicroCFTA.InternedBinderProtocol.NodeKey)
+  (members :
+    List
+      (MicroCFTA.InternedConstructorTemplates.Value MicroCFTA.SourcePruningTemplates.Symbol
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)))
+  (depth : Nat) (free : List MicroCFTA.InternedBinderProtocol.Reference)
+  (before : MicroCFTA.EnumerationState.State MicroCFTA.SourcePruningTemplates.Symbol EnumGuard),
+  MicroCFTA.SourceCurrentAllocatedPartialInvariant.Context formulas solver inventory beforeCaller memos →
+    MicroCFTA.InternedProbeProvenance.Available beforeCaller.checked.native.machine.heap
+        (MicroCFTA.InternedConstructorTemplates.Value.union entry members depth free) →
+      (MicroCFTA.InternedConstructorTemplates.Value.union entry members depth free).free = [] →
+        MicroCFTA.SourcePruningEnumerationObservation.PendingRealized beforeCaller.checked.native.machine.heap before →
+          ∃ result nextHeap saved afterCaller actual,
+            MicroCFTA.SourceCurrentRequiredQueryMemos.HeadReads actual memos saved ∧
+              afterCaller =
+                  MicroCFTA.SourceCurrentAllocatedPartialState.advance beforeCaller
+                    (MicroCFTA.SourceCurrentAllocatedQueryMemo.advancePhysical beforeCaller.checked
+                      { heap := nextHeap, equality := beforeCaller.checked.operations })
+                    beforeCaller.fourth beforeCaller.merge ∧
+                MicroCFTA.SourceCurrentAllocatedPartialInvariant.Post formulas solver inventory beforeCaller afterCaller
+                    saved ∧
+                  saved.query = memos.query ∧
+                    MicroCFTA.Cache.Extends memos.unfolding saved.unfolding ∧
+                      MicroCFTA.InternedProbeProvenance.Available nextHeap result ∧
+                        result.free = [] ∧
+                          MicroCFTA.SourceEqualityRequiredCache.Ordinary result ∧
+                            (∀
+                                (holds :
+                                  MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula →
+                                    MicroCFTA.Language.Term MicroCFTA.SourcePruningTemplates.Symbol → Bool)
+                                (ambient :
+                                  MicroCFTA.InternedGuardedLanguage.Env MicroCFTA.SourcePruningTemplates.Symbol)
+                                (term : MicroCFTA.Language.Term MicroCFTA.SourcePruningTemplates.Symbol),
+                                MicroCFTA.InternedGuardedLanguage.meaning holds ambient result term ↔
+                                  MicroCFTA.InternedGuardedLanguage.meaning holds ambient
+                                    (MicroCFTA.InternedConstructorTemplates.Value.union entry members depth free)
+                                    term) ∧
+                              MicroCFTA.SourcePruningEnumerationObservation.PendingRealized nextHeap before
+'MicroCFTA.SourcePruningEnumerationUnion.complete' depends on axioms: [propext, Classical.choice, Quot.sound]

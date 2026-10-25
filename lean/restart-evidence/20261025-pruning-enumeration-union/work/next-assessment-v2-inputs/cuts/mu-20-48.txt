@@ -1,0 +1,29 @@
+/-- One memoized outer Mu unfolding retains the actual checked caller and every pending slot. -/
+theorem complete [DecidableEq (EdgeKey Symbol Constraint)]
+    (formulas : SourceGuards.Formulas FullSyntax.Formula)
+    (solver : SourceGuards.Entailment FullSyntax.Formula)
+    (inventory : Inventory) (beforeCaller : Caller width) (memos : Memos)
+    (entry : Cache.Interned InternedBinderProtocol.NodeKey)
+    (body depth ordinary : Node)
+    (before : EnumerationState.State Symbol EnumGuard)
+    (initial : Context formulas solver inventory beforeCaller memos)
+    (available : Available beforeCaller.checked.native.machine.heap (.mu entry body depth ordinary))
+    (closed : (Value.mu entry body depth ordinary).free = [])
+    (realized : PendingRealized beforeCaller.checked.native.machine.heap before) :
+    ∃ (result : Node) (nextHeap : InternedConstructorTemplates.State Symbol Constraint)
+      (saved : Memos) (afterCaller : Caller width),
+      InternedFreshOrdinaryUnfoldMemo.run (.mu entry body depth ordinary) memos.unfolding
+        beforeCaller.checked.native.machine.heap = .done (result, saved.unfolding) nextHeap ∧
+      InternedFreshOrdinaryStoredSubstitution.unfold (.mu entry body depth ordinary)
+        beforeCaller.checked.native.machine.heap = .done result nextHeap ∧
+      afterCaller = SourceCurrentAllocatedPartialState.advance beforeCaller
+        (advancePhysical beforeCaller.checked ⟨nextHeap, beforeCaller.checked.operations⟩)
+        beforeCaller.fourth beforeCaller.merge ∧
+      Post formulas solver inventory beforeCaller afterCaller saved ∧
+      saved.query = memos.query ∧ Cache.Extends memos.unfolding saved.unfolding ∧
+      Available nextHeap result ∧ result.free = [] ∧
+      (∀ (holds : Constraint → Language.Term Symbol → Bool)
+        (ambient : InternedGuardedLanguage.Env Symbol) (term : Language.Term Symbol),
+        InternedGuardedLanguage.meaning holds ambient result term ↔
+          InternedGuardedLanguage.meaning holds ambient (.mu entry body depth ordinary) term) ∧
+      PendingRealized nextHeap before := by

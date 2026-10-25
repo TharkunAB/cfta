@@ -1,0 +1,40 @@
+{
+  "timestamp": "2026-10-25T02:59:49.080190+02:00",
+  "classification": "Source-only prose order correction; not a compiler/body failure",
+  "reason": "Guard independently observed reset occurs before current rawValue lookup. Root selected sibling V2 package/report and retained original V1 unchanged.",
+  "original_report": {
+    "path": "/tmp/mcfta-pruning-enumeration-union-20261025-next-assessment.md",
+    "bytes": 7141,
+    "sha256": "a5f84b51da12787c5f9a9437f4c094d2590fc40ddf188706a3a0f4e88cf81f56"
+  },
+  "revised_report": {
+    "path": "/tmp/mcfta-pruning-enumeration-union-20261025-next-assessment-v2.md",
+    "bytes": 7142,
+    "sha256": "223a8bbe24612119e218b895518ddeb8b1b9445e9fa785efe52ae68630ddab0f"
+  },
+  "before": "Finalize reads the CURRENT old payload at captured original uv′, which can differ from a terminal winner, then resets ancestry and writes that original slot.",
+  "after": "Finalize resets ancestry, then reads the CURRENT old payload at captured original uv′, which can differ from a terminal winner, and writes that original slot.",
+  "original_inputs": "/tmp/mcfta-pruning-enumeration-union-20261025/next-assessment-inputs",
+  "revised_inputs": "/tmp/mcfta-pruning-enumeration-union-20261025/next-assessment-v2-inputs",
+  "same_source_cut_inputs": true,
+  "original_payloads": 41,
+  "revised_payloads": 41,
+  "changed_payloads": [
+    "assessment-controls.json",
+    "report.md"
+  ],
+  "additional_changed_controls": [
+    "pins.json",
+    "FROZEN.json"
+  ],
+  "source": {
+    "path": "/home/tritlo/Code/mcfta/lean/MicroCFTA/SourcePruningEnumerationFinalize.lean",
+    "sha256": "fe0094a378427fdc618b3b5f95fd035336b1b974a168706141db3b9adb6b4ffb",
+    "start": 17,
+    "end": 21,
+    "cut_sha256": "0ee296700fe81cb1e4e0f4f55d7c2dcb2651443aad08bca757181714dc1a8be5",
+    "literal": "    EnumerateM Symbol EnumGuard (Fragments.Fragment Symbol) := do\n  modify fun state => {state with expansionAncestry := []}\n  let _old ← rawValue target\n  setValue target (.enumerated fragment)\n  pure fragment\n"
+  },
+  "no_source_header_type_body_premise_limit_or_check_changes": true,
+  "no_new_peer_or_compiler_outcome_claim": true
+}

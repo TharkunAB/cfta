@@ -1,0 +1,15 @@
+
+mutual
+theorem fragmentBound_mono (low high : Nat) (increase : low ≤ high) (fragment : Fragment Symbol)
+    (bounded : FragmentBound low fragment) : FragmentBound high fragment := by
+  cases fragment with
+  | hole uv => exact Nat.lt_of_lt_of_le bounded increase
+  | node symbol children => exact fragmentsBound_mono low high increase children bounded
+termination_by sizeOf fragment
+
+theorem fragmentsBound_mono (low high : Nat) (increase : low ≤ high) (children : List (Fragment Symbol))
+    (bounded : FragmentsBound low children) : FragmentsBound high children := by
+  cases children with
+  | nil => trivial
+  | cons child rest => exact ⟨fragmentBound_mono low high increase child bounded.1,
+      fragmentsBound_mono low high increase rest bounded.2⟩

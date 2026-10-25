@@ -1,0 +1,61 @@
+--- candidate/archive.py
++++ basis/archive.py
+@@ -6,12 +6,12 @@
+ from pathlib import Path
+ 
+ root = Path('/home/tritlo/Code/mcfta')
+-area = Path('/tmp/mcfta-pruning-enumeration-union-20261025')
+-evidence = root / 'lean/restart-evidence/20261025-pruning-enumeration-union'
++area = Path('/tmp/mcfta-pruning-enumeration-mu-20261025')
++evidence = root / 'lean/restart-evidence/20261025-pruning-enumeration-mu'
+ assert not evidence.exists()
+ custody = json.loads((area / 'prior-custody-index.json').read_text())
+ assert len(custody) == 26 and len({pin['target'] for pin in custody}) == 26
+-assert hashlib.sha256((area / 'prior-custody-index.json').read_bytes()).hexdigest() == '5667d52c463447a3fa7779c7b715151f88f4ef0b3f5385150eb67b047badfc71'
++assert hashlib.sha256((area / 'prior-custody-index.json').read_bytes()).hexdigest() == '4a00b17048eae33fd84acbea8ad24f83e06da787cff8897a0bab8b065fba9495'
+ summary = json.loads((area / 'previous-publication/post-publication-summary.json').read_text())
+ assert [pin['source'] for pin in custody] == summary['next_custody_inputs']
+ for pin in custody:
+@@ -19,11 +19,11 @@
+     data = (area / 'previous-publication' / pin['target']).read_bytes()
+     assert len(data) == pin['bytes'] and hashlib.sha256(data).hexdigest() == pin['sha256']
+ assert {p.name for p in (area / 'previous-publication').iterdir()} == {pin['target'] for pin in custody}
+-assert Path('/tmp/mcfta-pruning-enumeration-union-20261025-source-review.md').is_file()
++assert Path('/tmp/mcfta-pruning-enumeration-mu-20261025-source-review.md').is_file()
+ for args in [('diff', '--quiet'), ('diff', '--cached', '--quiet')]:
+     subprocess.run(['git', *args], cwd=root, check=True)
+ for name in ['declaration', 'model', 'public', 'document', 'seal-script', 'root']:
+-    assert Path('/tmp/mcfta-pruning-enumeration-union-20261025-' + name + '-review.md').is_file()
++    assert Path('/tmp/mcfta-pruning-enumeration-mu-20261025-' + name + '-review.md').is_file()
+ evidence.mkdir()
+ for path in sorted(area.rglob('*')):
+     if not path.is_file():
+@@ -36,21 +36,21 @@
+         target.write_bytes(path.read_bytes())
+ inputs = evidence / 'inputs'
+ inputs.mkdir()
+-for pattern in ['mcfta-pruning-enumeration-union-20261025-*']:
++for pattern in ['mcfta-pruning-enumeration-mu-20261025-*']:
+     for path in sorted(Path('/tmp').glob(pattern)):
+-        if path.is_file() and not path.name.startswith('mcfta-pruning-enumeration-union-20261025-archive-1.'):
++        if path.is_file() and not path.name.startswith('mcfta-pruning-enumeration-mu-20261025-archive-1.'):
+             shutil.copyfile(path, inputs / path.name)
+-shutil.copytree('/tmp/mcfta-pruning-enumeration-union-20261025-proposal', evidence / 'owner-proposal')
++shutil.copytree('/tmp/mcfta-pruning-enumeration-mu-20261025-proposal', evidence / 'owner-proposal')
+ prior = evidence / 'previous-publication'
+ prior.mkdir()
+ for pin in custody:
+     shutil.copyfile(area / 'previous-publication' / pin['target'], prior / pin['target'])
+ production = evidence / 'production-sources'
+ production.mkdir()
+-shutil.copyfile(root / 'lean/MicroCFTA/SourcePruningEnumerationUnion.lean', production / 'SourcePruningEnumerationUnion.lean')
+-shutil.copyfile(root / 'lean/notes-current-pruning-enumeration-union.md', evidence / 'current-note.md')
+-shutil.copyfile('/tmp/mcfta-pruning-enumeration-union-20261025-verify.py', evidence / 'verify-checkpoint.py')
+-(evidence / 'INDEX.md').write_text('# Union normalization caller preservation\n\nThe selected module has one theorem complete, zero new definitions, actions, instances, helpers, carriers, Graph parameters or inductions. Only complete EdgeKey equality is a typeclass premise. Four typed haves and three obtains with 17 fields are selected; two duplicate fields are unused. The source estimate is 100–220 ordinary lines, hard limit 320. The frozen owner records exact contracts and inventories.\n\nGenuine current Context, the same available closed literal Union and PendingRealized derive the actual Head internally. Its existing constructor retains a finite nodeEdges read and subsequent makeNode reconstruction at the actual intermediate and final heaps. Dependent HeadReads uses that SAME Head and retains the actual saved-global receipt. The concrete advanced Caller has the full existing Post, query equality and unfolding-table extension. The actual result is Available, closed and Ordinary, with independent finite-term language equivalence. Ordinary includes Empty; no nonempty result or later expansion success follows. Every pending slot remains realized in the unchanged enum state. No successful Head, future Context/Post, desired endpoint or Graph law is an input. No extra StorageValid input, cross-fuel saved-global equality or new executable global-normalization action is claimed.\n\nWork retains all 140653 baseline files/modes/refs/stashes/worktrees, nine exact document inverses, one Audit prepend, all actual failed inputs/raw reports, complete public signatures/actual axiom subsets and complete resource families. The separate audit-addition.json record remains required. Exactly 26 prior Mu inputs retain actual archive-1/local-publication-1/push-1 custody; the sealed assessment peer is separate context. Earlier Entry archive-2 and its failed archive-1 snapshot remain baseline history. No current failure or passing result is inherited.\n\nForce-add every manifest path and SHA256SUMS, including ignored logs. Publication requires all sealed paths in HEAD, exact filesystem/index/tree/modes and a singleton ordinary formalize destination. Only actual retained reports supply validation. No passing check, seal or push is predicted.\n\nInitial Context admission, native identity/set-order extraction, wrapper expansion/reset/final installation, cache-history integration, machine bounds, Safe/LiveRoots and full scheduler/driver correspondence remain open. H6 stays strongest and the whole goal remains ACTIVE and incomplete. The optimized core and older proofs remain protected. All six Haskell repair handoffs remain first in FINDINGS. No Haskell source change is claimed.\n')
++shutil.copyfile(root / 'lean/MicroCFTA/SourcePruningEnumerationMu.lean', production / 'SourcePruningEnumerationMu.lean')
++shutil.copyfile(root / 'lean/notes-current-pruning-enumeration-mu.md', evidence / 'current-note.md')
++shutil.copyfile('/tmp/mcfta-pruning-enumeration-mu-20261025-verify.py', evidence / 'verify-checkpoint.py')
++(evidence / 'INDEX.md').write_text('# Memoized Mu caller preservation\n\nThe selected module has one theorem complete about the existing memoized Mu unfolding action. It has zero new definitions, actions, instances, helpers, carriers, Graph parameters or inductions. Only complete EdgeKey equality is a typeclass premise. The selected source estimate is 100–220 ordinary lines, hard limit 320. The actual frozen owner records exact contracts and inventories.\n\nGenuine current Context, an available closed literal Mu and PendingRealized derive the same actual memoized unfolding result, native heap and saved globals, the underlying unfold equation and concrete Caller advance/advancePhysical endpoint. The full existing Post, equal query table, extending unfolding table, Available/closed result, independent finite-term language law and every pending slot in the unchanged enumeration state remain. No successful unfold, future readiness, desired result or Post is assumed. There is no ordinary/nonempty result promise. No enumeration intersection, callback, ancestry update or final store is part of this theorem. It does not cover the separate Union head-normalization branch.\n\nWork retains all 140084 baseline files/modes/refs/stashes/worktrees, nine exact document inverses, one Audit prepend, all actual failed inputs/raw reports, complete public signatures and actual axiom subsets, and complete six-artifact resource families. The separate audit-addition.json record remains required. Exactly 26 prior Entry inputs retain actual archive-2/local-publication-1/push-1 custody. Its failed archive-1 is already protected by the baseline. The sealed assessment and separate peer remain protected without item 27. Current owner revisions and failures are recorded only if they actually occur.\n\nForce-add every manifest path and SHA256SUMS, including ignored logs. Publication requires all sealed paths in HEAD, exact filesystem/index/tree/modes and a singleton ordinary formalize destination. Only actual retained reports supply validation. No passing check, seal or push is predicted.\n\nWrapper integration, Union normalization/reconstruction, native NodeId/key extraction, original flags/partition, cache-history integration, machine bounds, Safe/LiveRoots and full driver correspondence remain open. H6 stays strongest and the whole goal remains ACTIVE and incomplete. The optimized core and older proofs remain protected. All six Haskell repair handoffs remain first in FINDINGS. No Haskell source change is claimed.\n')
+ 
+ files = sorted(p for p in evidence.rglob('*') if p.is_file())
+ (evidence / 'SHA256SUMS').write_text(''.join(hashlib.sha256(p.read_bytes()).hexdigest() + '  ' + p.relative_to(evidence).as_posix() + '\n' for p in files))

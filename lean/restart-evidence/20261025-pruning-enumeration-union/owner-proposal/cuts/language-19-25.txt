@@ -1,0 +1,7 @@
+/-- Actual head exposure and row-node reconstruction preserve the full independent guarded least language. -/
+theorem head_exact [DecidableEq (EdgeKey Symbol Guard)]
+    {value result : Value Symbol Guard} {before after : State Symbol Guard}
+    (trace : Head value before result after) (semantic : SemanticReady before)
+    (available : Available before value) (closed : value.free = []) :
+    ∀ holds ambient term, meaning holds ambient result term ↔ meaning holds ambient value term := by
+  have kept := trace.verified semantic.ready available closed

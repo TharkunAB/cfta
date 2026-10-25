@@ -1,0 +1,9 @@
+theorem guard_storage (state : State Symbol Guard) (valid : StorageValid state)
+    (guard : Guard) (fragment : Fragment Symbol) (bounded : FragmentBound state.counter fragment) :
+    StorageValid {state with obligations := (guard, fragment) :: state.obligations} := by
+  refine ⟨valid.aligned, valid.total, valid.forest, valid.values, ?_⟩
+  intro obligation member
+  rcases List.mem_cons.mp member with same | old
+  · simpa [same] using bounded
+  · exact valid.guards obligation old
+
