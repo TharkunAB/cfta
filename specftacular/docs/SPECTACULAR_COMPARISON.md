@@ -332,6 +332,14 @@ xs ++ (xs ++ ys) == concat (scanl (++) xs [ys])
 concat (drop x [f y]) == (drop x >=> f) [y]
 ```
 
+Twee 2.7.1 checks the two sets, with 180 seconds for each goal. It proves
+147 of the 578 laws from the 1,413 laws with the fuel, and 31 of the 45 laws
+from the 1,946 laws of `2b2d9e562`. The first pass gives twee all the laws
+of the other run as axioms. The second pass, for the open goals, gives the
+axioms that SInE selects at depth 1 and the axioms over the constants of
+the goal. Twee shows none of the laws independent. The others stay open
+within the time limit.
+
 At 7-p4 on 12 cores, 39 completions run out of their fuel, against 41 at
 `b07337367`. Three laws over `[[[A]]]` still run over the allocation budget
 within the fuel: their pairs cost more than 8 MiB each. With `--speculate`,

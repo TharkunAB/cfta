@@ -29,6 +29,44 @@ The golden test suite compares the discovered laws with `test/golden/`.
 The package was imported from
 [`TharkunAB/specftacular` at `948a246`](https://github.com/TharkunAB/specftacular/tree/948a24694256758e53925d3bd498efe05f668f51).
 
+## Comparison with Spectacular
+
+This table gives a general idea of the cost of a search through phase 4.
+The [comparison](docs/SPECTACULAR_COMPARISON.md) gives the method, each
+phase, the memory, and the differences between the laws. All runs are on
+the same host: an AMD Ryzen 9 7950X with 24 logical CPUs for a WSL2 VM.
+
+- Spectacular: the ICST 2023 artifact, with GHC 8.10.7 and a limit of 60
+  seconds.
+- Specftacular: revision `8c44a0d9b`, with GHC 9.14.1. One core: the
+  defaults and a limit of 900 seconds. 12 cores:
+  `--parallel-tests 64 --speculate 64` and `+RTS -N12 -qn4 -A64m`, with no
+  limit.
+
+QuickSpec 2 does not run on this host in the comparison.
+
+| Signature | Size | Spectacular s | Spectacular laws | Specftacular, one core s | Specftacular, 12 cores s | Specftacular laws |
+| --- | ---: | ---: | ---: | ---: | ---: | ---: |
+| Lists | 7 | > 60 | — | 23.90 | 11.47 | 41 |
+| Octonions | 7 | 0.22 | 8 | 1.00 | 0.48 | 15 |
+| Regex | 7 | 5.84 | 42 | 51.68 | 34.12 | 60 |
+| ListMonad | 7 | 18.04 | 42 | 4.61 | 3.43 | 9 |
+| HugeLists | 3 | 0.64 | 33 | 2.54 | 1.43 | 46 |
+| HugeLists | 4 | 28.43 | 90 | 8.58 | 5.87 | 122 |
+| HugeLists | 5 | > 60 | — | 55.90 | 42.10 | 291 |
+| HugeLists | 6 | > 60 | — | 491.05 | 364.06 | 690 |
+| HugeLists | 7 | > 60 | — | > 900 | 3392.93 ᵈ | 1413 ᵈ |
+
+`ᵈ`: with `--type-depth 2 --recheck 2000`. Without the depth bound,
+phase 3 at size 7 does not finish.
+
+The limits are different, so a timeout of Spectacular does not show how
+long it takes. The law counts are not comparable between the two tools:
+the generators, the test cases and some definitions differ (for example,
+`usort` in HugeLists). A larger count is not a better result, because false
+and redundant equations also count. Specftacular tests each law on 1064
+cases, and HugeLists 7 tests each new law again on 2000 more.
+
 The flag `--tests N` sets the number of random cases (1000 by default). The
 search also uses eight separately seeded random cases, 40 integer-boundary
 and list cases, and 16 cases with two-element lists and a predicate that

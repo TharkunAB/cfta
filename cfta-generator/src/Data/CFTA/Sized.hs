@@ -39,7 +39,8 @@ every guard, so it needs no pruning: it is the exact route for a liquid
 automaton whose guards pruning did not discharge.
 'sized' gives the same sequence. It counts, ranks, and unranks with the count
 table when the automaton has no constraint and its rows are unambiguous.
-It uses the reference otherwise.
+It uses the reference otherwise. Bottom-up deterministic rows, as in an
+e-graph, are unambiguous, and a linear check finds them.
 -}
 module Data.CFTA.Sized (
     Sized,
@@ -62,6 +63,7 @@ import Data.List (elemIndex, genericDrop, genericIndex, genericLength, sortOn, t
 import qualified Data.Map.Lazy as LazyMap
 import qualified Data.Map.Strict as Map
 import Data.Maybe (listToMaybe)
+import qualified Data.Set as Set
 
 import qualified Data.CFTA as FTA
 import Data.CFTA.Constraint (Constraint, equalitiesHold, noConstraint, residual)
@@ -102,7 +104,7 @@ sized ::
     FTA.FTA state symbol Constraint -> Either SizedError (Sized symbol)
 sized automaton
     | all (all ((== noConstraint) . FTA.transitionConstraint)) (FTA.transitionTable automaton)
-    , unambiguousRows rows =
+    , bottomUpDeterministic rows || unambiguousRows rows =
         let index = Ordinary.tableIndex initial rows
             count = countAtSize index
             unrank size (ClassRank rank)
@@ -122,6 +124,18 @@ sized automaton
     initial = FTA.initialState automaton
     rows = Map.map (map void) $ sortedRows automaton
     everyClassRank (Cardinality total) = map ClassRank [0 .. total - 1]
+
+{- | Whether no two transitions of the rows have the same symbol and the same
+child states, as in an e-graph. Then each term reaches at most one state, by
+induction on the term. So two transitions of a state that accept one term
+have the same child states, and are the same transition: each term has at
+most one run, and the rows are unambiguous. The check is linear in the
+transitions. 'unambiguousRows' builds the product of each pair of states.
+-}
+bottomUpDeterministic :: (Ord state, Ord symbol) => Map.Map state [FTA.Transition state symbol ()] -> Bool
+bottomUpDeterministic rows = length keys == Set.size (Set.fromList keys)
+  where
+    keys = [(FTA.transitionSymbol t, FTA.transitionChildren t) | ts <- Map.elems rows, t <- ts]
 
 {- | Whether each term has at most one run in the rows.
 
