@@ -1,0 +1,84 @@
+{
+  "new_declarations": false,
+  "standing_symbols": {
+    "Symbol": "SourcePruningTemplates.Symbol",
+    "EnumGuard": "Type",
+    "NativeGuard": "Type",
+    "heap": "InternedConstructorTemplates.State Symbol NativeGuard",
+    "before": "EnumerationExpandableIndex.Cached Symbol EnumGuard",
+    "source target": "Nat",
+    "sourceNode targetNode merged": "Option Nat",
+    "sourceScs targetScs": "List EnumerationState.Suspended",
+    "roots": "Nat → Nat"
+  },
+  "reused_packets": [
+    {
+      "producer": "SourcePruningEnumerationFoldInvariants.assimilated_preserves",
+      "definition": "lean/MicroCFTA/SourcePruningEnumerationFoldInvariants.lean22–35",
+      "application_arguments": [
+        "before.core",
+        "source",
+        "target",
+        "sourceNode",
+        "targetNode",
+        "merged",
+        "sourceScs",
+        "targetScs",
+        "roots",
+        "before.waiting",
+        "storage",
+        "counts",
+        "sourceStored",
+        "targetStored",
+        "different"
+      ],
+      "input_types": {
+        "storage": "EnumerationCorrectness.StorageValid before.core",
+        "counts": "EnumerationCanonicalWaiting.Correct roots before.core.values before.waiting",
+        "sourceStored": "before.core.values[source]? = some (.unenumerated sourceNode sourceScs)",
+        "targetStored": "before.core.values[target]? = some (.unenumerated targetNode targetScs)",
+        "different": "target ≠ source"
+      },
+      "fields": [
+        {
+          "name": "afterStorage",
+          "type": "EnumerationCorrectness.StorageValid (EnumerationCorrectness.assimilated before.core target source (.unenumerated merged (sourceScs ++ targetScs)))"
+        },
+        {
+          "name": "afterCounts",
+          "type": "EnumerationCanonicalWaiting.Correct roots (EnumerationCorrectness.assimilated before.core target source (.unenumerated merged (sourceScs ++ targetScs))).values before.waiting"
+        }
+      ],
+      "field_count": 2
+    }
+  ],
+  "supplied_readiness_packet": {
+    "premise": "∀ (handle : Nat), merged = some handle → ∃ value : InternedConstructorTemplates.Value Symbol NativeGuard, SourcePruningEnumerationNodes.lookupNode heap handle = some value ∧ InternedProbeProvenance.Available heap value ∧ value.free = []",
+    "when": "Only when merged=somehandle; derived by applying the supplied actual readiness fact, not a successful execution premise.",
+    "fields": [
+      {
+        "name": "value",
+        "type": "InternedConstructorTemplates.Value Symbol NativeGuard"
+      },
+      {
+        "name": "decoded",
+        "type": "SourcePruningEnumerationNodes.lookupNode heap handle = some value"
+      },
+      {
+        "name": "available",
+        "type": "InternedProbeProvenance.Available heap value"
+      },
+      {
+        "name": "closed",
+        "type": "value.free = []"
+      }
+    ],
+    "field_count": 4
+  },
+  "deliberately_not_reused": {
+    "SourcePruningEnumerationWrites.write_available_realized": "Requires Coherent and re-derives an encoding from an input Value. Here the actual input is an already-readable optional handle, and direct stored lookup reasoning suffices.",
+    "SourcePruningEnumerationNativeIndex.count_complete": "Both gained and lost lists are empty for each assimilation write. No root traversal occurs.",
+    "SourcePruningEnumerationNativeIndex.gained_complete": "Different mutation: incoming gained references and inheritAncestry using expansionAncestry. Assimilation instead combines source and target recursion ancestry.",
+    "EnumerationPureSelection.assimilate_correct": "Graph/intersectValues premise does not establish native merged handle origin."
+  }
+}

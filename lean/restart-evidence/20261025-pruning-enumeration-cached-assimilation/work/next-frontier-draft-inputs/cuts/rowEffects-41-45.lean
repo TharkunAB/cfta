@@ -1,0 +1,5 @@
+structure Effects (before after : State Symbol Formula) : Prop where
+  keeps : Keeps before.heap after.heap
+  ready : Ready after
+  grows : SourceEqualityConstraintMemoAllocation.Grows before.equality after.equality
+

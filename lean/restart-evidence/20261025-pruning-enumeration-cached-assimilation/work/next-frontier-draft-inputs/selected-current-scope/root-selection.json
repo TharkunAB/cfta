@@ -1,0 +1,155 @@
+{
+  "at": "2026-10-25T07:01:55.873918+01:00",
+  "author": "Root",
+  "module": "MicroCFTA.SourcePruningEnumerationCachedAssimilation",
+  "heading": "Native cached assimilation mutation",
+  "public_heads": [
+    {
+      "name": "finish",
+      "kind": "def",
+      "file": "finish-header.lean.txt",
+      "attachment": " :=\n"
+    },
+    {
+      "name": "complete",
+      "kind": "theorem",
+      "file": "complete-header.lean.txt",
+      "attachment": " := by\n"
+    }
+  ],
+  "typed_haves": 5,
+  "proof_lets": 1,
+  "definition_lets": 1,
+  "public_result_lets": 0,
+  "instances": 0,
+  "inductions": 0,
+  "proof_case_groups": 6,
+  "new_helpers": [],
+  "new_types": [],
+  "new_predicates": [],
+  "new_carriers": [],
+  "soft_lines": [
+    190,
+    310
+  ],
+  "hard_cap": 460,
+  "Root_authors_all_bodies": true,
+  "source_review_sha256": "0dcb8f26a07ecdc72e2eed8002dbced3944092d475e3cef7b0542a00a11dcccb",
+  "contract_count": 10,
+  "contract_lines": 66,
+  "contracts": {
+    "context.lean.txt": {
+      "bytes": 447,
+      "sha256": "29a87ced04276a49deb48ce2c79ba7b6b193ab23da8e4ea81debf5d9b76d2e4a"
+    },
+    "finish-header.lean.txt": {
+      "bytes": 481,
+      "sha256": "7b60673229874219484af7bed1d482cd05dc337a82bc5cccd316a97439707769"
+    },
+    "complete-header.lean.txt": {
+      "bytes": 2801,
+      "sha256": "82ee3df1ced4a0b456a818d72b342187583a256d1cfc61d1aded31b660574822"
+    },
+    "local-source-inside.lean.txt": {
+      "bytes": 55,
+      "sha256": "cc8d2f4e0722290f75cc103f3636b9e5ddeb9414b9f80755b05d2a4bf020008f"
+    },
+    "local-target-inside.lean.txt": {
+      "bytes": 55,
+      "sha256": "7217482449a1a9bfe16ad2fd54a4c54c2fde99a480dab1c10438a4bc4056fac5"
+    },
+    "local-candidate-exists.lean.txt": {
+      "bytes": 167,
+      "sha256": "71cc748f5638cf0987e2c9eeb8a104891401d34e966a388a83afce994d98cf9f"
+    },
+    "local-final-realized.lean.txt": {
+      "bytes": 136,
+      "sha256": "5d18f0234b502c4e326becbdb77602497f90d0511e1dacb2d1554bba13cf8970"
+    },
+    "local-final-flags.lean.txt": {
+      "bytes": 339,
+      "sha256": "5ed408bad396e7770b093f5bd7a9f4432a7086bfe970c736a1804bc533585a4f"
+    },
+    "proof-let-after.lean.txt": {
+      "bytes": 64,
+      "sha256": "a497c628eaa3c0bba7d1f001ff305c4c81b7b4d6792904c62ee5f32e1e1eefef"
+    },
+    "definition-let-finished.lean.txt": {
+      "bytes": 67,
+      "sha256": "780fed631760f5e427dcea4cb4e52beb4125b5697fae6c469caaa6c164452f9c"
+    }
+  },
+  "local_attachments": {
+    "five_haves": {
+      "first_line_indent": 4,
+      "attachment": " := by\n",
+      "continuation_bytes_unchanged": true
+    },
+    "proof_let_after": {
+      "first_line_indent": 4,
+      "attachment": " :=\n",
+      "scope": "complete.nonempty"
+    },
+    "definition_let_finished": {
+      "first_line_indent": 8,
+      "attachment": " :=\n",
+      "scope": "finish.second_write.map"
+    }
+  },
+  "definition_recipe": "if merged=some0 then some([],before); else actual NativeIndex.write target newpending[][] before, bind actual second write source.eliminated[][], map second cache with let finished := frame of ancestry-only record update on actual second.core (source ancestry++target ancestry). Return([((),finished)],finished). No reconstructed old core bypasses the writes.",
+  "proof_let_recipe": "after := existing Cached constructor with assimilated before.core target source exactpending, nested flags source=false else target=flag else oldflag, before.waiting. This is the witness only; computation proof equates both real writes/ancestry to it.",
+  "proof_recipe": "by_cases empty. Rejection witnesses[]/before and initial invariants. Nonempty derives two bounds, candidateExists by cases merged (none false;some handle obtains value/decoded/_available/_closed from mergedRealized). Obtainflag/classified. ObtainafterStorage/afterCounts from existing FoldInvariant.assimilated_preserves. finalRealized and finalFlags split source,target,other actual lookups. Letafter witness. Exactallfuel worker computation uses emptycount reductions; rawfinishOptional singleton exact. Preserve counters/forest/Roots/storage/realized/counts/unchangedwaiting/allNatflags and actual source/target slots; sourceflagfalse/otherflagsunchanged. No traversalfuel,Coherent,Ready or callbacksuccess premise.",
+  "packets": {
+    "merged": [
+      "value",
+      "decoded",
+      "_available",
+      "_closed"
+    ],
+    "classification": [
+      "flag",
+      "classified"
+    ],
+    "storage_counts": [
+      "afterStorage",
+      "afterCounts"
+    ]
+  },
+  "selected_lexical_binders": {
+    "bound_callbacks": [
+      "bound",
+      "_elementEquality"
+    ],
+    "realized": [
+      "slot",
+      "node",
+      "scs",
+      "stored"
+    ],
+    "flags": [
+      "slot"
+    ],
+    "other_flags": [
+      "slot",
+      "notSource",
+      "notTarget"
+    ],
+    "stability": [
+      "fuel"
+    ],
+    "definition_callbacks": [
+      "targetAfter",
+      "sourceAfter",
+      "other"
+    ]
+  },
+  "planned_cases": [
+    "complete.empty:by_cases empty",
+    "candidateExists.merged:none|some handle",
+    "finalRealized.atSource:by_cases atSource",
+    "finalRealized.notSource.atTarget:by_cases atTarget",
+    "finalFlags.atSource:by_cases atSource",
+    "finalFlags.notSource.atTarget:by_cases atTarget"
+  ],
+  "prospective_naming_draft_preserved": "Two let headers had identical bytes. Definition local is now finished; proof local stays after. The complete first prospective package/selection is retained. No type or statement changed; no body/compiler attempt occurred."
+}

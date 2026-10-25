@@ -1,0 +1,84 @@
+MicroCFTA.SourcePruningEnumerationCachedAssimilation.finish : MicroCFTA.InternedConstructorTemplates.State
+    MicroCFTA.SourcePruningTemplates.Symbol (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) →
+  Nat →
+    Nat →
+      Nat →
+        Option Nat →
+          List MicroCFTA.EnumerationState.Suspended →
+            List MicroCFTA.EnumerationState.Suspended →
+              MicroCFTA.EnumerationExpandableIndex.Cached MicroCFTA.SourcePruningTemplates.Symbol
+                  (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) →
+                Option
+                  (List
+                      (Unit ×
+                        MicroCFTA.EnumerationExpandableIndex.Cached MicroCFTA.SourcePruningTemplates.Symbol
+                          (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)) ×
+                    MicroCFTA.EnumerationExpandableIndex.Cached MicroCFTA.SourcePruningTemplates.Symbol
+                      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+'MicroCFTA.SourcePruningEnumerationCachedAssimilation.finish' depends on axioms: [propext]
+MicroCFTA.SourcePruningEnumerationCachedAssimilation.complete : ∀
+  (heap :
+    MicroCFTA.InternedConstructorTemplates.State MicroCFTA.SourcePruningTemplates.Symbol
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+  (before :
+    MicroCFTA.EnumerationExpandableIndex.Cached MicroCFTA.SourcePruningTemplates.Symbol
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+  (source target : Nat) (sourceNode targetNode merged : Option Nat)
+  (sourceScs targetScs : List MicroCFTA.EnumerationState.Suspended) (roots : Nat → Nat),
+  MicroCFTA.EnumerationCorrectness.StorageValid before.core →
+    MicroCFTA.SourcePruningEnumerationObservation.PendingRealized heap before.core →
+      MicroCFTA.EnumerationSchedule.Roots before.core.representatives roots →
+        MicroCFTA.EnumerationCanonicalWaiting.Correct roots before.core.values before.waiting →
+          (∀ (slot : Nat),
+              MicroCFTA.SourcePruningEnumerationNativeIndex.candidate heap
+                  (before.core.values[slot]?.getD MicroCFTA.EnumerationState.UVarValue.eliminated) =
+                some (before.expandable slot)) →
+            before.core.values[source]? =
+                some (MicroCFTA.EnumerationState.UVarValue.unenumerated sourceNode sourceScs) →
+              before.core.values[target]? =
+                  some (MicroCFTA.EnumerationState.UVarValue.unenumerated targetNode targetScs) →
+                target ≠ source →
+                  (∀ (handle : Nat),
+                      merged = some handle →
+                        ∃ value,
+                          MicroCFTA.SourcePruningEnumerationNodes.lookupNode heap handle = some value ∧
+                            MicroCFTA.InternedProbeProvenance.Available heap value ∧ value.free = []) →
+                    ∃ rows after,
+                      (∀ (fuel : Nat),
+                          MicroCFTA.SourcePruningEnumerationCachedAssimilation.finish heap fuel source target merged
+                              sourceScs targetScs before =
+                            some (rows, after)) ∧
+                        (MicroCFTA.SourcePruningEnumerationDispatch.finishOptional source target merged sourceScs
+                                targetScs before.core).run =
+                            List.map (fun row => Except.ok (row.fst, row.snd.core)) rows ∧
+                          after.core.counter = before.core.counter ∧
+                            after.core.representatives = before.core.representatives ∧
+                              MicroCFTA.EnumerationSchedule.Roots after.core.representatives roots ∧
+                                MicroCFTA.EnumerationCorrectness.StorageValid after.core ∧
+                                  MicroCFTA.SourcePruningEnumerationObservation.PendingRealized heap after.core ∧
+                                    MicroCFTA.EnumerationCanonicalWaiting.Correct roots after.core.values
+                                        after.waiting ∧
+                                      after.waiting = before.waiting ∧
+                                        (∀ (slot : Nat),
+                                            MicroCFTA.SourcePruningEnumerationNativeIndex.candidate heap
+                                                (after.core.values[slot]?.getD
+                                                  MicroCFTA.EnumerationState.UVarValue.eliminated) =
+                                              some (after.expandable slot)) ∧
+                                          if merged = some 0 then rows = [] ∧ after = before
+                                          else
+                                            rows = [((), after)] ∧
+                                              after.core =
+                                                  MicroCFTA.EnumerationCorrectness.assimilated before.core target source
+                                                    (MicroCFTA.EnumerationState.UVarValue.unenumerated merged
+                                                      (sourceScs ++ targetScs)) ∧
+                                                after.core.values[source]? =
+                                                    some MicroCFTA.EnumerationState.UVarValue.eliminated ∧
+                                                  after.core.values[target]? =
+                                                      some
+                                                        (MicroCFTA.EnumerationState.UVarValue.unenumerated merged
+                                                          (sourceScs ++ targetScs)) ∧
+                                                    after.expandable source = false ∧
+                                                      ∀ (slot : Nat),
+                                                        slot ≠ source →
+                                                          slot ≠ target → after.expandable slot = before.expandable slot
+'MicroCFTA.SourcePruningEnumerationCachedAssimilation.complete' depends on axioms: [propext, Quot.sound]

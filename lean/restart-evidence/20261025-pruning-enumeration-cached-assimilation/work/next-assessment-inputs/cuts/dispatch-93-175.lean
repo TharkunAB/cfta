@@ -1,0 +1,83 @@
+theorem dispatch_complete
+    [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Constraint)] [DecidableEq Node]
+    (formulas : SourceGuards.Formulas FullSyntax.Formula)
+    (solver : SourceGuards.Entailment FullSyntax.Formula)
+    (inventory : Inventory) (beforeCaller : Caller width)
+    (before : EnumerationState.State Symbol EnumGuard)
+    (checkEmpty : Bool) (source target : Nat) (memos : Memos)
+    (initial : Context formulas solver inventory beforeCaller memos)
+    (realized : PendingRealized beforeCaller.checked.native.machine.heap before)
+    (slots : source = target ∨ before.values[source]? = some .eliminated ∨
+      ∃ (sourceNode targetNode : Option Nat) (sourceScs targetScs : List EnumerationState.Suspended),
+        before.values[source]? = some (.unenumerated sourceNode sourceScs) ∧
+        before.values[target]? = some (.unenumerated targetNode targetScs))
+    (ranges : if source = target then True else
+      match before.values[source]?, before.values[target]? with
+      | some (.unenumerated (some left) _), some (.unenumerated (some right) _) =>
+          match lookupNode beforeCaller.checked.native.machine.heap left,
+              lookupNode beforeCaller.checked.native.machine.heap right with
+          | some first, some second => SourceCurrentAllocatedNativeRequestBounds.WordRanges
+              (.code (SourceRecursiveIntersectionCode.requestNode IntersectionEmptyDomain.emptyDomain first second))
+              beforeCaller.checked
+          | _, _ => True
+      | _, _ => True) :
+    ∃ (fuel p h : Nat) (action : EnumerateM Symbol EnumGuard Unit)
+      (afterCaller : Caller width) (savedQueries : Queries) (final : Memos) (next : Inventory),
+      (∀ extra P H, p ≤ P → h ≤ H →
+        dispatch checkEmpty (fuel + extra) P H beforeCaller before source target memos.query =
+          (.ok (some action), afterCaller, savedQueries)) ∧
+      Post formulas solver next beforeCaller afterCaller final ∧ final.query = savedQueries ∧
+      PendingRealized afterCaller.checked.native.machine.heap before ∧
+      ((source = target ∨ before.values[source]? = some .eliminated) →
+        ExceptT.run (action before) = [.ok ((), before)] ∧
+        afterCaller = beforeCaller ∧ final = memos ∧ next = inventory) ∧
+      (source ≠ target → before.values[source]? ≠ some .eliminated →
+        ∃ (sourceNode targetNode merged : Option Nat) (sourceScs targetScs : List EnumerationState.Suspended),
+          before.values[source]? = some (.unenumerated sourceNode sourceScs) ∧
+          before.values[target]? = some (.unenumerated targetNode targetScs) ∧
+          ExceptT.run (action before) =
+            (if merged = some 0 then [] else
+              [.ok ((), assimilated before target source (.unenumerated merged (sourceScs ++ targetScs)))]) ∧
+          (merged ≠ some 0 →
+            (assimilated before target source (.unenumerated merged (sourceScs ++ targetScs))).values[target]? =
+              some (.unenumerated merged (sourceScs ++ targetScs)) ∧
+            (assimilated before target source (.unenumerated merged (sourceScs ++ targetScs))).values[source]? =
+              some .eliminated ∧
+            PendingRealized afterCaller.checked.native.machine.heap
+              (assimilated before target source (.unenumerated merged (sourceScs ++ targetScs)))) ∧
+          ((sourceNode = none ∨ targetNode = none) →
+            merged = sourceNode.orElse (fun _ => targetNode) ∧
+            afterCaller = beforeCaller ∧ final = memos ∧ next = inventory) ∧
+          (∀ leftHandle rightHandle, sourceNode = some leftHandle → targetNode = some rightHandle →
+            ∃ (left right query replacement : Node) (queried : Checked width) (handle : Nat),
+              lookupNode beforeCaller.checked.native.machine.heap leftHandle = some left ∧
+              lookupNode beforeCaller.checked.native.machine.heap rightHandle = some right ∧
+              next.source = beforeCaller.checked.native.machine.heap ∧ next.roots = inventory.roots ++ [left, right] ∧
+              SourceCurrentAllocatedTargetQuery.Receipt formulas solver next left right
+                beforeCaller.checked query queried memos ∧
+              merged = some handle ∧ encodeNode replacement = some handle ∧
+              lookupNode afterCaller.checked.native.machine.heap handle = some replacement ∧
+              Available afterCaller.checked.native.machine.heap replacement ∧ replacement.free = [] ∧
+              (∀ ambient term,
+                InternedGuardedLanguage.meaning (SourceEqualityPCSGuard.holds formulas solver) ambient replacement term ↔
+                  InternedGuardedLanguage.meaning (SourceEqualityPCSGuard.holds formulas solver) ambient left term ∧
+                  InternedGuardedLanguage.meaning (SourceEqualityPCSGuard.holds formulas solver) ambient right term) ∧
+              (checkEmpty = false → replacement = query ∧
+                afterCaller = SourceCurrentAllocatedPartialState.advance beforeCaller queried
+                  beforeCaller.fourth beforeCaller.merge ∧ final = memos) ∧
+              (checkEmpty = true → ∃ reached answer guardSaved,
+                SourceEndpointMemo.run query memos.query = (reached, guardSaved) ∧
+                SourceEndpointMemoCorrect.Checked queried.native.machine.heap memos.query
+                  (SourceCurrentEmptinessMerge.reaches query) (reached, guardSaved) ∧
+                (∀ P H, p ≤ P → h ≤ H →
+                  SourcePruningEnumerationEnabledEmpty.check P H query queried beforeCaller.fourth memos.query =
+                    (.done answer afterCaller.checked afterCaller.fourth, guardSaved)) ∧
+                savedQueries = guardSaved ∧ replacement = (if answer then .empty else query) ∧
+                (reached = false → answer = false ∧ afterCaller.checked = queried ∧
+                  afterCaller.fourth = beforeCaller.fourth ∧ final = {memos with query := guardSaved}) ∧
+                (reached = true →
+                  ∃ (reachedPhysical : SourceCurrentConjunctionRowsAllocation.State Symbol FullSyntax.Formula),
+                    afterCaller.checked = SourceCurrentAllocatedQueryMemo.advancePhysical queried reachedPhysical ∧
+                    ∃ actual : SourceCurrentConjunctionMemo.Call 1000 beforeCaller.fourth query
+                        (physical queried) answer reachedPhysical afterCaller.fourth,
+                      SourceCurrentConjunctionGlobalMemos.CallReads actual {memos with query := guardSaved} final)))) := by

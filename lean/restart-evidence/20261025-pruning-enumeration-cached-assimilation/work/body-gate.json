@@ -1,0 +1,63 @@
+{
+  "at": "2026-10-25T07:11:21.410615+01:00",
+  "author": "Root",
+  "frozen_sha256": "c73da1c90f888ef8dd662b656e85d3b26c91c7fd799c5d4e334d7ea5c85f5698",
+  "contracts": {
+    "context.lean.txt": "import MicroCFTA.SourcePruningEnumerationNativeIndex\nimport MicroCFTA.SourcePruningEnumerationFoldInvariants\n\nnamespace MicroCFTA.SourcePruningEnumerationCachedAssimilation\nopen EnumerationState EnumerationSchedule EnumerationCorrectness\nopen SourcePruningEnumerationNodes SourcePruningEnumerationObservation\nlocal notation \"Symbol\" => SourcePruningTemplates.Symbol\nlocal notation \"Constraint\" => SourceSymbolicIndex.Constraint FullSyntax.Formula\n",
+    "finish-header.lean.txt": "/-- Reject Empty or apply both native writes and then combine recursion ancestry. -/\ndef finish\n    (heap : InternedConstructorTemplates.State Symbol Constraint) (fuel source target : Nat)\n    (merged : Option Nat) (sourceScs targetScs : List EnumerationState.Suspended)\n    (before : EnumerationExpandableIndex.Cached Symbol Constraint) :\n    Option (List (Unit \u00d7 EnumerationExpandableIndex.Cached Symbol Constraint) \u00d7\n      EnumerationExpandableIndex.Cached Symbol Constraint)\n",
+    "complete-header.lean.txt": "/-- Derive exact cached assimilation and preserve each completed index and storage law. -/\ntheorem complete\n    (heap : InternedConstructorTemplates.State Symbol Constraint)\n    (before : EnumerationExpandableIndex.Cached Symbol Constraint) (source target : Nat)\n    (sourceNode targetNode merged : Option Nat)\n    (sourceScs targetScs : List EnumerationState.Suspended) (roots : Nat \u2192 Nat)\n    (storage : StorageValid before.core) (realized : PendingRealized heap before.core)\n    (paths : Roots before.core.representatives roots)\n    (counts : EnumerationCanonicalWaiting.Correct roots before.core.values before.waiting)\n    (flags : \u2200 (slot : Nat), SourcePruningEnumerationNativeIndex.candidate heap\n      ((before.core.values[slot]?).getD .eliminated) = some (before.expandable slot))\n    (sourceStored : before.core.values[source]? = some (.unenumerated sourceNode sourceScs))\n    (targetStored : before.core.values[target]? = some (.unenumerated targetNode targetScs))\n    (different : target \u2260 source)\n    (mergedRealized : \u2200 (handle : Nat), merged = some handle \u2192\n      \u2203 (value : InternedConstructorTemplates.Value Symbol Constraint),\n        lookupNode heap handle = some value \u2227 InternedProbeProvenance.Available heap value \u2227 value.free = []) :\n    \u2203 (rows : List (Unit \u00d7 EnumerationExpandableIndex.Cached Symbol Constraint))\n      (after : EnumerationExpandableIndex.Cached Symbol Constraint),\n      (\u2200 (fuel : Nat), finish heap fuel source target merged sourceScs targetScs before = some (rows, after)) \u2227\n      ExceptT.run (SourcePruningEnumerationDispatch.finishOptional (EnumGuard := Constraint)\n        source target merged sourceScs targetScs before.core) =\n          rows.map (fun row => .ok (row.1, row.2.core)) \u2227\n      after.core.counter = before.core.counter \u2227\n      after.core.representatives = before.core.representatives \u2227 Roots after.core.representatives roots \u2227\n      StorageValid after.core \u2227 PendingRealized heap after.core \u2227\n      EnumerationCanonicalWaiting.Correct roots after.core.values after.waiting \u2227\n      after.waiting = before.waiting \u2227\n      (\u2200 (slot : Nat), SourcePruningEnumerationNativeIndex.candidate heap\n        ((after.core.values[slot]?).getD .eliminated) = some (after.expandable slot)) \u2227\n      (if merged = some 0 then rows = [] \u2227 after = before else\n        rows = [((), after)] \u2227\n        after.core = assimilated before.core target source (.unenumerated merged (sourceScs ++ targetScs)) \u2227\n        after.core.values[source]? = some .eliminated \u2227\n        after.core.values[target]? = some (.unenumerated merged (sourceScs ++ targetScs)) \u2227\n        after.expandable source = false \u2227\n        (\u2200 (slot : Nat), slot \u2260 source \u2192 slot \u2260 target \u2192 after.expandable slot = before.expandable slot))\n",
+    "local-source-inside.lean.txt": "have sourceInside : source < before.core.values.length\n",
+    "local-target-inside.lean.txt": "have targetInside : target < before.core.values.length\n",
+    "local-candidate-exists.lean.txt": "have candidateExists : \u2203 (flag : Bool),\n      SourcePruningEnumerationNativeIndex.candidate heap\n        (.unenumerated merged (sourceScs ++ targetScs)) = some flag\n",
+    "local-final-realized.lean.txt": "have finalRealized : PendingRealized heap\n      (assimilated before.core target source (.unenumerated merged (sourceScs ++ targetScs)))\n",
+    "local-final-flags.lean.txt": "have finalFlags : \u2200 (slot : Nat),\n      SourcePruningEnumerationNativeIndex.candidate heap\n        (((assimilated before.core target source\n          (.unenumerated merged (sourceScs ++ targetScs))).values[slot]?).getD .eliminated) =\n        some (if slot = source then false else if slot = target then flag else before.expandable slot)\n",
+    "proof-let-after.lean.txt": "let after : EnumerationExpandableIndex.Cached Symbol Constraint\n",
+    "definition-let-finished.lean.txt": "let finished : EnumerationExpandableIndex.Cached Symbol Constraint\n"
+  },
+  "program_frozen_sha256": "1dd196f0cc4f3fd9c9233a87f3ad7914e2c32db2658a4e62539f9d8cfa709de4",
+  "declaration_review_sha256": "c63d2eba3051a61e28a87fe5e620a76eb44a8cfe3790be703912200e7243764f",
+  "seal_script_review_sha256": "f35672b499890b6f5e5293141540fe52582555d1f0dbbc7156b4435e5a896576",
+  "source_review_sha256": "0dcb8f26a07ecdc72e2eed8002dbced3944092d475e3cef7b0542a00a11dcccb",
+  "Root_read_and_accepts_all84types_8fields_6cases_217cuts_472programlines_finalprose_and_398spans10patches": true,
+  "all_source_types_premises_and_recipes_unchanged": true,
+  "body_not_authored_at_gate": true,
+  "body_author": "Root",
+  "instances": 0,
+  "typed_haves": 5,
+  "proof_lets": 1,
+  "definition_lets": 1,
+  "inductions": 0,
+  "hard_cap": 460,
+  "programs": {
+    "check": {
+      "path": "/tmp/mcfta-pruning-enumeration-cached-assimilation-20261025/script-proposal/candidate/check.py",
+      "bytes": 1647,
+      "lines": 33,
+      "sha256": "c3162671f612a75a2df9b3a28f46d9243029bdcdd4a5ac52701f68b5c1e6d8a1"
+    },
+    "documents": {
+      "path": "/tmp/mcfta-pruning-enumeration-cached-assimilation-20261025/script-proposal/candidate/documents.py",
+      "bytes": 2700,
+      "lines": 51,
+      "sha256": "5178f92b4597f9056d1fcd8473719f14c212ce797fe95bd3b73d3dd1b9e28ab1"
+    },
+    "archive": {
+      "path": "/tmp/mcfta-pruning-enumeration-cached-assimilation-20261025/script-proposal/candidate/archive.py",
+      "bytes": 7500,
+      "lines": 63,
+      "sha256": "333074197983003bedf5c15534cf53119fd58bbc3eee9e64b3e8b364c15136dd"
+    },
+    "verify": {
+      "path": "/tmp/mcfta-pruning-enumeration-cached-assimilation-20261025/script-proposal/candidate/verify.py",
+      "bytes": 15218,
+      "lines": 247,
+      "sha256": "bef467aff16c245b2ddfcd26f0fd4fa45a811b9a0c13001a481e0628bb64a5a3"
+    },
+    "publication": {
+      "path": "/tmp/mcfta-pruning-enumeration-cached-assimilation-20261025/script-proposal/candidate/publication.py",
+      "bytes": 4207,
+      "lines": 78,
+      "sha256": "c5f22ef6b93b2ea0e632444e5a79e75aabf7f52a83f82c4ac2f32c7366d57145"
+    }
+  }
+}

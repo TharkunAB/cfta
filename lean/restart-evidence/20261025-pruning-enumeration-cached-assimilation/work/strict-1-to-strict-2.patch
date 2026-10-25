@@ -1,0 +1,81 @@
+--- strict-1-input
++++ strict-2-input
+@@ -66,12 +66,12 @@
+   by_cases empty : merged = some 0
+   · refine ⟨[], before, ?_, ?_, rfl, rfl, paths, storage, realized, counts, rfl, flags, ?_⟩
+     · intro fuel
+-      simp only [finish, if_pos empty]
++      simp only [finish, ite_eq_left empty]
+     · change (if merged = some 0 then [] else
+         [Except.ok ((), assimilated before.core target source
+           (.unenumerated merged (sourceScs ++ targetScs)))]) = []
+-      rw [if_pos empty]
+-    · rw [if_pos empty]
++      rw [ite_eq_left empty]
++    · rw [ite_eq_left empty]
+       exact ⟨rfl, rfl⟩
+   ·
+     have sourceInside : source < before.core.values.length := by
+@@ -98,7 +98,10 @@
+       by_cases atSource : slot = source
+       · subst slot
+         simp only [assimilated,
+-          List.getElem?_set_self (by simpa only [List.length_set] using sourceInside)] at stored
++          List.getElem?_set_self
++            (l := before.core.values.set target (.unenumerated merged (sourceScs ++ targetScs)))
++            (a := (UVarValue.eliminated : UVarValue Symbol))
++            (by simpa only [List.length_set] using sourceInside)] at stored
+         cases stored
+       · by_cases atTarget : slot = target
+         · subst slot
+@@ -118,15 +121,18 @@
+       by_cases atSource : slot = source
+       · subst slot
+         simp only [assimilated,
+-          List.getElem?_set_self (by simpa only [List.length_set] using sourceInside),
+-          Option.getD_some, SourcePruningEnumerationNativeIndex.candidate, if_pos rfl]
++          List.getElem?_set_self
++            (l := before.core.values.set target (.unenumerated merged (sourceScs ++ targetScs)))
++            (a := (UVarValue.eliminated : UVarValue Symbol))
++            (by simpa only [List.length_set] using sourceInside),
++          Option.getD_some, SourcePruningEnumerationNativeIndex.candidate, ↓reduceIte]
+       · by_cases atTarget : slot = target
+         · subst slot
+           simpa only [assimilated, List.getElem?_set_ne (Ne.symm different),
+-            List.getElem?_set_self targetInside, Option.getD_some, if_neg different, if_pos rfl]
++            List.getElem?_set_self targetInside, Option.getD_some, ite_eq_right different, ↓reduceIte]
+             using classified
+         · simpa only [assimilated, List.getElem?_set_ne (Ne.symm atSource),
+-            List.getElem?_set_ne (Ne.symm atTarget), if_neg atSource, if_neg atTarget]
++            List.getElem?_set_ne (Ne.symm atTarget), ite_eq_right atSource, ite_eq_right atTarget]
+             using flags slot
+     let after : EnumerationExpandableIndex.Cached Symbol Constraint :=
+       ⟨assimilated before.core target source (.unenumerated merged (sourceScs ++ targetScs)),
+@@ -135,22 +141,21 @@
+     refine ⟨[((), after)], after, ?_, ?_, rfl, rfl, paths, afterStorage, finalRealized,
+       afterCounts, rfl, finalFlags, ?_⟩
+     · intro fuel
+-      simp only [finish, if_neg empty, SourcePruningEnumerationNativeIndex.write,
++      simp only [finish, ite_eq_right empty, SourcePruningEnumerationNativeIndex.write,
+         classified, SourcePruningEnumerationNativeIndex.count, Option.bind_some]
+       rfl
+     · change (if merged = some 0 then [] else
+         [Except.ok ((), assimilated before.core target source
+           (.unenumerated merged (sourceScs ++ targetScs)))]) = [Except.ok ((), after.core)]
+-      rw [if_neg empty]
+-      rfl
+-    · rw [if_neg empty]
++      rw [ite_eq_right empty]
++    · rw [ite_eq_right empty]
+       refine ⟨rfl, rfl, ?_, ?_, ?_, ?_⟩
+       · exact List.getElem?_set_self (by simpa only [List.length_set] using sourceInside)
+       · simpa only [after, assimilated, List.getElem?_set_ne (Ne.symm different)] using
+           (List.getElem?_set_self targetInside
+             (a := (UVarValue.unenumerated merged (sourceScs ++ targetScs) : UVarValue Symbol)))
+-      · simp only [after, if_pos rfl]
++      · simp only [after, ↓reduceIte]
+       · intro slot notSource notTarget
+-        simp only [after, if_neg notSource, if_neg notTarget]
++        simp only [after, ite_eq_right notSource, ite_eq_right notTarget]
+ 
+ end MicroCFTA.SourcePruningEnumerationCachedAssimilation

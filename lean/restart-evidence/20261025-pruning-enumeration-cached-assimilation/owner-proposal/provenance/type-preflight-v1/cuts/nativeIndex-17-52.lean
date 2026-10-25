@@ -1,0 +1,36 @@
+def candidate
+    (heap : InternedConstructorTemplates.State Symbol NativeGuard)
+    (value : EnumerationState.UVarValue Symbol) : Option Bool :=
+  match value with
+  | .unenumerated node scs =>
+      match node with
+      | none => some false
+      | some handle =>
+          (lookupNode heap handle).map fun decodedValue =>
+            !(MergedOrdinaryHeight.recursiveBoundary decodedValue && scs.isEmpty)
+  | .enumerated _ | .eliminated => some false
+
+/-- Count each occurrence at its current read-only representative. -/
+def count
+    (fuel : Nat) (forest : UnionFind.Forest) (change : Int)
+    (scs : List EnumerationState.Suspended) (waiting : EnumerationWaitingIndex.Waiting) :
+    Option EnumerationWaitingIndex.Waiting :=
+  match scs with
+  | [] => some waiting
+  | sc :: rest =>
+      (SourceUnionFindRoot.root fuel forest sc.var).bind fun representative =>
+        count fuel forest change rest (EnumerationWaitingIndex.bump change representative waiting)
+
+/-- Update the raw slot and remove lost counts before adding gained counts. -/
+def write
+    (heap : InternedConstructorTemplates.State Symbol NativeGuard)
+    (fuel target : Nat) (value : EnumerationState.UVarValue Symbol)
+    (gained lost : List EnumerationState.Suspended)
+    (before : EnumerationExpandableIndex.Cached Symbol EnumGuard) :
+    Option (EnumerationExpandableIndex.Cached Symbol EnumGuard) :=
+  (candidate heap value).bind fun flag =>
+    (count fuel before.core.representatives (-1) lost before.waiting).bind fun removed =>
+      (count fuel before.core.representatives 1 gained removed).bind fun saved =>
+        some ⟨{before.core with values := before.core.values.set target value},
+          fun other => if other = target then flag else before.expandable other, saved⟩
+

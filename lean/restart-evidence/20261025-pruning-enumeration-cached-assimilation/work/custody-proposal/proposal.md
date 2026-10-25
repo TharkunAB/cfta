@@ -1,0 +1,7 @@
+# CachedAssimilation prior custody
+
+[2026-10-25 06:56 CET] FINAL SOURCE/DATA ONLY. Exactly 26 actual prior CachedBranches post-seal inputs are copied in the original summary order. The first 18 are the complete six-artifact archive-1, local-publication-1 and push-1 families. Eight canonical tails follow. The full 13423-byte / 257-line summary remains byte-exact, including all historical diagnostics and scope qualifications. No alias or prior artifact is replaced.
+
+The index retains every original absolute source path, unique basename target, byte count and SHA256. Each source/copy pair is identical. The canonical assessment d1d29acb… is already sealed. Its complete peer cbb35b29… is also already sealed and copied as separate context, not a 27th custody input. Both external reports equal their existing sealed repository copies. The assessment's mutation-only recommendation does not select a new contract: actual native merged-handle origin and subsequent Keeps transport remain separate work.
+
+All existing refs, stashes and worktrees, including prunable entries, remain untouched. Earlier strict failures and namespace/prose/annotation history stay protected in the baseline and full summary. This new component has no inherited failure or successful future check. No selected program was parsed, imported, activated or executed. No mathematical/action/instance body, Git, network, board or repository mutation occurred. Root owns activation and execution after independent review.

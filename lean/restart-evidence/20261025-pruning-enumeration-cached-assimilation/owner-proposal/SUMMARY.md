@@ -1,0 +1,7 @@
+The owner preserves ten exact Root-selected fragments and all preflight history. It declares one computable finish and one all-fuel producer. It contains five typed haves, two typed let headers, three packets with eight fields and six proof case groups. It adds no instance, induction, helper, type, predicate or carrier.
+
+The action rejects the modeled Empty handle before writes. Otherwise it performs the actual empty-delta target write, the actual eliminated-source write, then changes only recursion ancestry on the second returned core. The raw comparison uses the existing Dispatch.finishOptional. The producer retains storage, pending realization, Roots, unchanged waiting and all natural-number native flags at the completed pair. It does not claim a count invariant after only the first write.
+
+All new scopes use the exact fixed Symbol and Constraint aliases. The two let files contain typed headers only. Their initializers remain Root-owned; controls retain Root's exact selected plaintext recipes. The optional merged handle has genuine lookup/availability/closure evidence. No query success, coherence, readiness, future range or desired endpoint premise is added. Native handle origin and full-driver correspondence remain separate.
+
+Root authors every body and initializer after independent reviews and a separate gate. No Lean body, compiler, parser, selected program, Git, network or board action was run for this owner. Source estimate190–310; hard cap460.

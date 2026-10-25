@@ -1,0 +1,27 @@
+{
+  "NativeIndex.candidate": {
+    "definition": "lean/MicroCFTA/SourcePruningEnumerationNativeIndex.lean17–26",
+    "type": "(heap : InternedConstructorTemplates.State Symbol NativeGuard) → EnumerationState.UVarValue Symbol → Option Bool",
+    "reading": "Pending None→somefalse; pending somehandle→lookup.map native Mu+Union boundary/scs classification; enumerated/eliminated→somefalse."
+  },
+  "NativeIndex.write": {
+    "definition": "lean/MicroCFTA/SourcePruningEnumerationNativeIndex.lean41–52",
+    "type": "(heap : InternedConstructorTemplates.State Symbol NativeGuard) → (fuel target : Nat) → EnumerationState.UVarValue Symbol → List EnumerationState.Suspended → List EnumerationState.Suspended → EnumerationExpandableIndex.Cached Symbol EnumGuard → Option (EnumerationExpandableIndex.Cached Symbol EnumGuard)",
+    "parameters": "gained then lost; remove lost before adding gained. Neither reads the old slot nor resolves the target representative. Actual pending reads provide target/source bounds separately."
+  },
+  "Dispatch.finishOptional": {
+    "definition": "lean/MicroCFTA/SourcePruningEnumerationDispatch.lean22–27",
+    "type": "(source target : Nat) → Option Nat → List EnumerationState.Suspended → List EnumerationState.Suspended → EnumerationState.EnumerateM Symbol EnumGuard Unit",
+    "comparison": "ExceptT.run (SourcePruningEnumerationDispatch.finishOptional (EnumGuard := EnumGuard) source target merged sourceScs targetScs before.core) = if merged = some 0 then [] else [.ok ((), EnumerationCorrectness.assimilated before.core target source (.unenumerated merged (sourceScs ++ targetScs)))]",
+    "status": "Existing definition reduces to this exact raw comparison; no new theorem/header supplied."
+  },
+  "EnumerationExpandableIndex.frame": {
+    "definition": "lean/MicroCFTA/EnumerationExpandableIndex.lean47–49",
+    "type": "EnumerationState.State Symbol EnumGuard → EnumerationExpandableIndex.Cached Symbol EnumGuard → EnumerationExpandableIndex.Cached Symbol EnumGuard",
+    "reading": "Replace only core; retain the exact already-computed flags and waiting map."
+  },
+  "List.getElem?_eq_some_iff": "theorem getElem?_eq_some_iff {l : List α} : l[i]? = some a ↔ ∃ h : i < l.length, l[i] = a",
+  "List.getElem?_set_self": "theorem getElem?_set_self {l : List α} {i : Nat} {a : α} (h : i < l.length) : (l.set i a)[i]? = some a",
+  "List.getElem?_set_ne": "theorem getElem?_set_ne {l : List α} {i j : Nat} (h : i ≠ j) {a : α} : (l.set i a)[j]? = l[j]?",
+  "CanonicalWaiting.assimilation_correct": "(roots : Nat → Nat) (values : List (EnumerationState.UVarValue Symbol)) (target source : Nat) (oldSource oldTarget merged : EnumerationState.UVarValue Symbol) (different : target ≠ source) (sourceRead : values[source]? = some oldSource) (targetRead : values[target]? = some oldTarget) (mergedRefs : EnumerationState.references merged = EnumerationState.references oldSource ++ EnumerationState.references oldTarget) (waiting : EnumerationWaitingIndex.Waiting) (correct : EnumerationCanonicalWaiting.Correct roots values waiting) → EnumerationCanonicalWaiting.Correct roots ((values.set target merged).set source .eliminated) waiting"
+}

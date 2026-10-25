@@ -1,0 +1,49 @@
+theorem pending_enabled_complete
+    [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Constraint)] [DecidableEq Node]
+    (formulas : SourceGuards.Formulas FullSyntax.Formula)
+    (solver : SourceGuards.Entailment FullSyntax.Formula)
+    (inventory : Inventory) (beforeCaller : Caller width)
+    (before : EnumerationState.State Symbol EnumGuard)
+    (source target sourceHandle targetHandle : Nat)
+    (sourceScs targetScs : List EnumerationState.Suspended)
+    (memos : Memos) (initial : Context formulas solver inventory beforeCaller memos)
+    (realized : PendingRealized beforeCaller.checked.native.machine.heap before)
+    (sourceStored : before.values[source]? = some (.unenumerated (some sourceHandle) sourceScs))
+    (targetStored : before.values[target]? = some (.unenumerated (some targetHandle) targetScs))
+    (ranges : match lookupNode beforeCaller.checked.native.machine.heap sourceHandle,
+        lookupNode beforeCaller.checked.native.machine.heap targetHandle with
+      | some left, some right => SourceCurrentAllocatedNativeRequestBounds.WordRanges
+          (.code (SourceRecursiveIntersectionCode.requestNode IntersectionEmptyDomain.emptyDomain left right)) beforeCaller.checked
+      | _, _ => True) :
+    ∃ (left right : Node) (next : Inventory) (query : Node) (queried : Checked width)
+      (reached answer : Bool) (guardSaved : Queries) (checkedAfter : Checked width)
+      (saved : Fourth) (final : Memos) (replacement : Node) (handle p h : Nat),
+      lookupNode beforeCaller.checked.native.machine.heap sourceHandle = some left ∧
+      lookupNode beforeCaller.checked.native.machine.heap targetHandle = some right ∧
+      next.source = beforeCaller.checked.native.machine.heap ∧ next.roots = inventory.roots ++ [left, right] ∧
+      SourceCurrentAllocatedTargetQuery.Receipt formulas solver next left right
+        beforeCaller.checked query queried memos ∧
+      SourceEndpointMemo.run query memos.query = (reached, guardSaved) ∧
+      SourceEndpointMemoCorrect.Checked queried.native.machine.heap memos.query (reaches query) (reached, guardSaved) ∧
+      (∀ P H, p ≤ P → h ≤ H →
+        check P H query queried beforeCaller.fourth memos.query = (.done answer checkedAfter saved, guardSaved)) ∧
+      Post formulas solver next beforeCaller
+        (SourceCurrentAllocatedPartialState.advance beforeCaller checkedAfter saved beforeCaller.merge) final ∧
+      (reached = false → answer = false ∧ checkedAfter = queried ∧ saved = beforeCaller.fourth ∧
+        final = {memos with query := guardSaved}) ∧
+      (reached = true →
+        ∃ reachedPhysical : SourceCurrentConjunctionRowsAllocation.State Symbol FullSyntax.Formula,
+          checkedAfter = advancePhysical queried reachedPhysical ∧
+          ∃ actual : SourceCurrentConjunctionMemo.Call 1000 beforeCaller.fourth query
+              (physical queried) answer reachedPhysical saved,
+            SourceCurrentConjunctionGlobalMemos.CallReads actual {memos with query := guardSaved} final) ∧
+      SourceCurrentEmptinessMemo.AnswerSound formulas solver query answer ∧
+      Cache.Extends memos.unfolding final.unfolding ∧ final.query = guardSaved ∧
+      replacement = (if answer then .empty else query) ∧
+      Available checkedAfter.native.machine.heap replacement ∧ replacement.free = [] ∧
+      encodeNode replacement = some handle ∧ lookupNode checkedAfter.native.machine.heap handle = some replacement ∧
+      PendingRealized checkedAfter.native.machine.heap before ∧
+      (∀ ambient term,
+        InternedGuardedLanguage.meaning (SourceEqualityPCSGuard.holds formulas solver) ambient replacement term ↔
+          InternedGuardedLanguage.meaning (SourceEqualityPCSGuard.holds formulas solver) ambient left term ∧
+          InternedGuardedLanguage.meaning (SourceEqualityPCSGuard.holds formulas solver) ambient right term) := by

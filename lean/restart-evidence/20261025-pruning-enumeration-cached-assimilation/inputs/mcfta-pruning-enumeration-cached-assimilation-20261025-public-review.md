@@ -1,0 +1,11 @@
+# CachedAssimilation public review
+
+[2026-10-25 07:18 CET] FINAL CLEAR. I read all 84 actual public output lines / 6279 bytes, both complete signatures and both axiom reports. Raw SHA256: `0f08503a9b944dbd967209c05370c3c5720d46b97025709465284e01d37f54d4`. The report records exit 0 under warnings as errors and all linters. The exact checked display input equals Public.lean and uses #check @ for both declarations. No display ellipsis or omitted signature appears.
+
+finish is the selected computable function with heap, fuel, source/target, optional merged handle, both suspended lists and the original cached state. Its output retains the optional pair of raw rows and an independent reached-prefix cache. complete has precisely the selected storage, realization, Roots, waiting counts, all-Nat flags, two pending raw-slot equations, distinctness and conditional present-handle lookup/Available/closed premises. There is no hidden Ready, Coherent, Graph, callback success or future range premise. All ten frozen source fragments remain unchanged.
+
+The output includes every-fuel execution, exact existing finishOptional raw equality, unchanged counter/forest, completed storage/realization/counts, identical waiting and all-Nat flags. Its Empty branch is rows = [] and after = before; that cache is not a returned raw row. Its other branch has the exact assimilated singleton core and source/target/other-slot results. Optional merged None remains distinct from a decode failure or raw rejection. This readback does not derive native intersection's merged handle or its language.
+
+Actual axioms are finish: [propext]; complete: [propext, Quot.sound]. Classical.choice is absent from both reports. The 161-line / 9999-byte source SHA256 `5b05402f3a36e17736d0ad62b8e75063bd6183bc7603794010459d236efb6e73` matches area, strict-2 and installed source. Strict and Lake olean artifacts are pinned separately; source equality does not assert binary equality.
+
+Strict-1's full failed input/log and exact body-only repair remain. Strict-2 has a literal empty successful log. Actual installed and Audit reports/log hashes agree: 1310 jobs; 3724 jobs and 76432 dependency checks. Only the unchanged older inputs warning remains. No check was run by this review. H6 is unchanged; seal/push and full-driver completion are not claimed.
