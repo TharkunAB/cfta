@@ -1,0 +1,385 @@
+{
+  "not_new_declarations": true,
+  "abbreviations": {
+    "oldHeap": "beforeCaller.checked.native.machine.heap",
+    "returnedHeap": "afterCaller.checked.native.machine.heap",
+    "Dispatch": "SourcePruningEnumerationDispatch",
+    "CachedAssimilation": "SourcePruningEnumerationCachedAssimilation",
+    "NativeIndex": "SourcePruningEnumerationNativeIndex",
+    "meaning": "InternedGuardedLanguage.meaning (SourceEqualityPCSGuard.holds formulas solver)",
+    "assimilatedCore": "assimilated before.core target source (.unenumerated merged (sourceScs ++ targetScs))"
+  },
+  "packets": {
+    "dispatch.outer": {
+      "existentials": [
+        {
+          "name": "fuel",
+          "type": "Nat"
+        },
+        {
+          "name": "p",
+          "type": "Nat"
+        },
+        {
+          "name": "h",
+          "type": "Nat"
+        },
+        {
+          "name": "action",
+          "type": "EnumerateM Symbol Constraint Unit"
+        },
+        {
+          "name": "afterCaller",
+          "type": "Caller width"
+        },
+        {
+          "name": "savedQueries",
+          "type": "Queries"
+        },
+        {
+          "name": "final",
+          "type": "Memos"
+        },
+        {
+          "name": "next",
+          "type": "Inventory"
+        }
+      ],
+      "conjuncts": [
+        {
+          "name": "stable",
+          "type": "∀ extra P H, p ≤ P → h ≤ H → Dispatch.dispatch checkEmpty (fuel + extra) P H beforeCaller before.core source target memos.query = (.ok (some action), afterCaller, savedQueries)"
+        },
+        {
+          "name": "post",
+          "type": "Post formulas solver next beforeCaller afterCaller final"
+        },
+        {
+          "name": "querySame",
+          "type": "final.query = savedQueries"
+        },
+        {
+          "name": "atReturned",
+          "type": "PendingRealized returnedHeap before.core"
+        },
+        {
+          "name": "noop",
+          "type": "See dispatch.noop"
+        },
+        {
+          "name": "live",
+          "type": "See dispatch.live"
+        }
+      ]
+    },
+    "dispatch.noop": {
+      "premise": "source = target ∨ before.core.values[source]? = some .eliminated",
+      "conjuncts": [
+        {
+          "name": "raw",
+          "type": "ExceptT.run (action before.core) = [.ok ((), before.core)]"
+        },
+        {
+          "name": "callerSame",
+          "type": "afterCaller = beforeCaller"
+        },
+        {
+          "name": "memosSame",
+          "type": "final = memos"
+        },
+        {
+          "name": "inventorySame",
+          "type": "next = inventory"
+        }
+      ]
+    },
+    "dispatch.live": {
+      "premises": [
+        "source ≠ target",
+        "before.core.values[source]? ≠ some .eliminated"
+      ],
+      "existentials": [
+        {
+          "name": "sourceNode",
+          "type": "Option Nat"
+        },
+        {
+          "name": "targetNode",
+          "type": "Option Nat"
+        },
+        {
+          "name": "merged",
+          "type": "Option Nat"
+        },
+        {
+          "name": "sourceScs",
+          "type": "List EnumerationState.Suspended"
+        },
+        {
+          "name": "targetScs",
+          "type": "List EnumerationState.Suspended"
+        }
+      ],
+      "conjuncts": [
+        {
+          "name": "sourceStored",
+          "type": "before.core.values[source]? = some (.unenumerated sourceNode sourceScs)"
+        },
+        {
+          "name": "targetStored",
+          "type": "before.core.values[target]? = some (.unenumerated targetNode targetScs)"
+        },
+        {
+          "name": "raw",
+          "type": "ExceptT.run (action before.core) = (if merged = some 0 then [] else [.ok ((), assimilated before.core target source (.unenumerated merged (sourceScs ++ targetScs)))])"
+        },
+        {
+          "name": "survived",
+          "type": "merged ≠ some 0 → targetStoredAfter ∧ sourceEliminatedAfter ∧ PendingRealized returnedHeap assimilatedCore"
+        },
+        {
+          "name": "optional",
+          "type": "(sourceNode = none ∨ targetNode = none) → merged = sourceNode.orElse (fun _ => targetNode) ∧ afterCaller = beforeCaller ∧ final = memos ∧ next = inventory"
+        },
+        {
+          "name": "present",
+          "type": "See dispatch.present"
+        }
+      ]
+    },
+    "dispatch.present": {
+      "quantifiers": [
+        {
+          "name": "leftHandle",
+          "type": "Nat"
+        },
+        {
+          "name": "rightHandle",
+          "type": "Nat"
+        }
+      ],
+      "premises": [
+        "sourceNode = some leftHandle",
+        "targetNode = some rightHandle"
+      ],
+      "existentials": [
+        {
+          "name": "left",
+          "type": "Node"
+        },
+        {
+          "name": "right",
+          "type": "Node"
+        },
+        {
+          "name": "query",
+          "type": "Node"
+        },
+        {
+          "name": "replacement",
+          "type": "Node"
+        },
+        {
+          "name": "queried",
+          "type": "Checked width"
+        },
+        {
+          "name": "handle",
+          "type": "Nat"
+        }
+      ],
+      "conjuncts": [
+        {
+          "name": "leftDecoded",
+          "type": "lookupNode oldHeap leftHandle = some left"
+        },
+        {
+          "name": "rightDecoded",
+          "type": "lookupNode oldHeap rightHandle = some right"
+        },
+        {
+          "name": "sourceSame",
+          "type": "next.source = oldHeap"
+        },
+        {
+          "name": "rootsSame",
+          "type": "next.roots = inventory.roots ++ [left, right]"
+        },
+        {
+          "name": "receipt",
+          "type": "SourceCurrentAllocatedTargetQuery.Receipt formulas solver next left right beforeCaller.checked query queried memos"
+        },
+        {
+          "name": "mergedSame",
+          "type": "merged = some handle"
+        },
+        {
+          "name": "encoded",
+          "type": "encodeNode replacement = some handle"
+        },
+        {
+          "name": "decoded",
+          "type": "lookupNode returnedHeap handle = some replacement"
+        },
+        {
+          "name": "available",
+          "type": "Available returnedHeap replacement"
+        },
+        {
+          "name": "closed",
+          "type": "replacement.free = []"
+        },
+        {
+          "name": "meaning",
+          "type": "∀ ambient term, meaning ambient replacement term ↔ meaning ambient left term ∧ meaning ambient right term"
+        },
+        {
+          "name": "disabled",
+          "type": "checkEmpty = false → replacement = query ∧ afterCaller = SourceCurrentAllocatedPartialState.advance beforeCaller queried beforeCaller.fourth beforeCaller.merge ∧ final = memos"
+        },
+        {
+          "name": "enabled",
+          "type": "See dispatch.enabled"
+        }
+      ]
+    },
+    "dispatch.enabled": {
+      "premise": "checkEmpty = true",
+      "existentials": [
+        {
+          "name": "reached",
+          "type": "Bool"
+        },
+        {
+          "name": "answer",
+          "type": "Bool"
+        },
+        {
+          "name": "guardSaved",
+          "type": "Queries"
+        }
+      ],
+      "conjuncts": [
+        {
+          "name": "guardRun",
+          "type": "SourceEndpointMemo.run query memos.query = (reached, guardSaved)"
+        },
+        {
+          "name": "guardChecked",
+          "type": "SourceEndpointMemoCorrect.Checked queried.native.machine.heap memos.query (SourceCurrentEmptinessMerge.reaches query) (reached, guardSaved)"
+        },
+        {
+          "name": "checkStable",
+          "type": "∀ P H, p ≤ P → h ≤ H → SourcePruningEnumerationEnabledEmpty.check P H query queried beforeCaller.fourth memos.query = (.done answer afterCaller.checked afterCaller.fourth, guardSaved)"
+        },
+        {
+          "name": "queriesSame",
+          "type": "savedQueries = guardSaved"
+        },
+        {
+          "name": "replacementSame",
+          "type": "replacement = (if answer then .empty else query)"
+        },
+        {
+          "name": "skipped",
+          "type": "reached = false → answer = false ∧ afterCaller.checked = queried ∧ afterCaller.fourth = beforeCaller.fourth ∧ final = {memos with query := guardSaved}"
+        },
+        {
+          "name": "performed",
+          "type": "reached = true → ∃ reachedPhysical : SourceCurrentConjunctionRowsAllocation.State Symbol FullSyntax.Formula, afterCaller.checked = SourceCurrentAllocatedQueryMemo.advancePhysical queried reachedPhysical ∧ ∃ actual : SourceCurrentConjunctionMemo.Call 1000 beforeCaller.fourth query (physical queried) answer reachedPhysical afterCaller.fourth, SourceCurrentConjunctionGlobalMemos.CallReads actual {memos with query := guardSaved} final"
+        }
+      ]
+    },
+    "mutation.outer": {
+      "existentials": [
+        {
+          "name": "rows",
+          "type": "List (Unit × EnumerationExpandableIndex.Cached Symbol Constraint)"
+        },
+        {
+          "name": "after",
+          "type": "EnumerationExpandableIndex.Cached Symbol Constraint"
+        }
+      ],
+      "conjuncts": [
+        {
+          "name": "everyFuel",
+          "type": "∀ cacheFuel : Nat, CachedAssimilation.finish returnedHeap cacheFuel source target merged sourceScs targetScs before = some (rows, after)"
+        },
+        {
+          "name": "raw",
+          "type": "ExceptT.run (Dispatch.finishOptional (EnumGuard := Constraint) source target merged sourceScs targetScs before.core) = rows.map (fun row => .ok (row.1, row.2.core))"
+        },
+        {
+          "name": "counter",
+          "type": "after.core.counter = before.core.counter"
+        },
+        {
+          "name": "forest",
+          "type": "after.core.representatives = before.core.representatives"
+        },
+        {
+          "name": "roots",
+          "type": "Roots after.core.representatives roots"
+        },
+        {
+          "name": "storage",
+          "type": "StorageValid after.core"
+        },
+        {
+          "name": "realized",
+          "type": "PendingRealized returnedHeap after.core"
+        },
+        {
+          "name": "counts",
+          "type": "EnumerationCanonicalWaiting.Correct roots after.core.values after.waiting"
+        },
+        {
+          "name": "waiting",
+          "type": "after.waiting = before.waiting"
+        },
+        {
+          "name": "flags",
+          "type": "∀ slot : Nat, NativeIndex.candidate returnedHeap ((after.core.values[slot]?).getD .eliminated) = some (after.expandable slot)"
+        },
+        {
+          "name": "shape",
+          "type": "if merged = some 0 then rows = [] ∧ after = before else rows = [((), after)] ∧ after.core = assimilatedCore ∧ sourceEliminatedAfter ∧ targetStoredAfter ∧ after.expandable source = false ∧ (∀ slot : Nat, slot ≠ source → slot ≠ target → after.expandable slot = before.expandable slot)"
+        }
+      ]
+    }
+  },
+  "counts": {
+    "dispatch.outer": {
+      "existential_count": 8,
+      "conjunct_count": 6,
+      "total": 14
+    },
+    "dispatch.noop": {
+      "existential_count": 0,
+      "conjunct_count": 4,
+      "total": 4
+    },
+    "dispatch.live": {
+      "existential_count": 5,
+      "conjunct_count": 6,
+      "total": 11
+    },
+    "dispatch.present": {
+      "existential_count": 6,
+      "conjunct_count": 13,
+      "total": 19
+    },
+    "dispatch.enabled": {
+      "existential_count": 3,
+      "conjunct_count": 7,
+      "total": 10
+    },
+    "mutation.outer": {
+      "existential_count": 2,
+      "conjunct_count": 11,
+      "total": 13
+    }
+  },
+  "authoritative_literal_types": "cuts/dispatch-93-175.lean.txt and cuts/assimilation-30-65.lean.txt; descriptive labels targetStoredAfter/sourceEliminatedAfter are not new predicates or declarations."
+}

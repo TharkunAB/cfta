@@ -1,0 +1,14 @@
+  by_cases same : source = target
+  · refine ⟨0, 0, 0, (fun state => [.ok ((), state)]), beforeCaller, memos.query, memos, inventory,
+      ?_, Post.refl initial, rfl, realized, ?_, ?_⟩
+    · intro extra P H enoughP enoughH
+      simp only [dispatch, ite_eq_left same, Id.run]; rfl
+    · intro noWork
+      exact ⟨rfl, rfl, rfl, rfl⟩
+    · intro different notEliminated
+      exact False.elim (different same)
+  by_cases eliminated : before.values[source]? = some .eliminated
+  · refine ⟨0, 0, 0, (fun state => [.ok ((), state)]), beforeCaller, memos.query, memos, inventory,
+      ?_, Post.refl initial, rfl, realized, ?_, ?_⟩
+    · intro extra P H enoughP enoughH
+      simp only [dispatch, ite_eq_right same, eliminated, Id.run]; rfl

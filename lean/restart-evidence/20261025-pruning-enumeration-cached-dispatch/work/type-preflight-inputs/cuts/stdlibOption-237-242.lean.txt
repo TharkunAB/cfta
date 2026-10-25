@@ -1,0 +1,6 @@
+@[always_inline, macro_inline] protected def orElse : Option α → (Unit → Option α) → Option α
+  | some a, _ => some a
+  | none,   b => b ()
+
+@[simp, grind =] theorem orElse_some : (some a).orElse b = some a := rfl
+@[simp, grind =] theorem orElse_none : none.orElse b = b () := rfl

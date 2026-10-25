@@ -1,0 +1,8 @@
+structure Inventory where
+  source : InternedConstructorTemplates.State Symbol Guard
+  facts : InternedNestedFacts.Facts source
+  roots : List (Value Symbol Guard)
+  originals : ∀ root ∈ roots, Original root
+  available : Values source roots
+  closed : ∀ root ∈ roots, root.free = []
+

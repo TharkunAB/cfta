@@ -1,0 +1,13 @@
+# CachedDispatch document review
+
+CLEAR. I read the whole rendered focused note, the complete common status prefix, all nine insertion records, the first Haskell handoff section and the actual documents-1 output. The note is 5512 bytes / 74 lines, SHA256 `a4cb23697f1d5eeb3dd007aedb9e97d90279ff264823d39681bf48434a4ff673`. The prefix is 4104 bytes / 53 lines, SHA256 `6dcb4422a9e7cf4143c4dfb8db67ce25b5a0f2e1e309c2c42e4f1a1c9afcea15`.
+
+All nine live document hashes match their records. Removing each exact inserted Unicode span reproduces the recorded before hash and the original Git blob at baseline `bb9e8d80b3fc9504a2211cdac5861de4f0a39adf`; modes remain 100644. All historical text in those files is exact. The focused note equals its area copy and has one final LF. The prefix has its intended blank paragraph. FINDINGS keeps all six Haskell repair rows and their full prior handoff before the new section; the new section precedes the prior assimilation section.
+
+Proof `b444d0e5cd094dcdcfe0768c6765244fbbc7b36b` has that baseline as its sole parent. Direct hash-verified object reads confirm exactly the new module and Audit changed. The recorded single Audit prepend reproduces its baseline blob. The 264 non-evidence Haskell files and strongest H6 source match their baseline blobs.
+
+The prose matches the exact source and actual retained reports: 206 source lines, six unchanged literals, no new definitions or instances, first strict attempt with a literal empty log, no failed Lean attempts, 1311 installed jobs, 3725 Audit jobs and 76433 dependency checks. The complete 262-line / 27018-byte public output reports exactly propext, Classical.choice and Quot.sound. The older inputs warning and read-only diagnostics are separated correctly. All seven actual cap families have complete six-artifact records, successful exits and exact 4 GiB/no-swap controls. The actual summary records documents-1 separately in its non-Lean ledger.
+
+The note retains genuine Context/slot/WordRanges inputs, one observed dispatcher completion, derived returned-heap flags/readiness, exact cached rows and original receipts/final tables. No-op, optional None, missing/decode None and Empty raw rejection remain distinct. Empty keeps the enum cache while earlier Caller effects can remain. False does not imply non-Empty. Runtime payload retention, general faults, Fold/terminal admission, physical/extracted runtime and full-driver gaps remain explicit. H6 stays strongest and the whole goal ACTIVE.
+
+No future seal or push success is asserted. This review ran no selected program, compiler, parser or Git command and changed no repository file. Exact inputs and inverse results are in the sibling document-review-inputs.json.

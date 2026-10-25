@@ -1,0 +1,20 @@
+    ∃ (rows : List (Unit × EnumerationExpandableIndex.Cached Symbol Constraint))
+      (after : EnumerationExpandableIndex.Cached Symbol Constraint),
+      (∀ (fuel : Nat), finish heap fuel source target merged sourceScs targetScs before = some (rows, after)) ∧
+      ExceptT.run (SourcePruningEnumerationDispatch.finishOptional (EnumGuard := Constraint)
+        source target merged sourceScs targetScs before.core) =
+          rows.map (fun row => .ok (row.1, row.2.core)) ∧
+      after.core.counter = before.core.counter ∧
+      after.core.representatives = before.core.representatives ∧ Roots after.core.representatives roots ∧
+      StorageValid after.core ∧ PendingRealized heap after.core ∧
+      EnumerationCanonicalWaiting.Correct roots after.core.values after.waiting ∧
+      after.waiting = before.waiting ∧
+      (∀ (slot : Nat), SourcePruningEnumerationNativeIndex.candidate heap
+        ((after.core.values[slot]?).getD .eliminated) = some (after.expandable slot)) ∧
+      (if merged = some 0 then rows = [] ∧ after = before else
+        rows = [((), after)] ∧
+        after.core = assimilated before.core target source (.unenumerated merged (sourceScs ++ targetScs)) ∧
+        after.core.values[source]? = some .eliminated ∧
+        after.core.values[target]? = some (.unenumerated merged (sourceScs ++ targetScs)) ∧
+        after.expandable source = false ∧
+        (∀ (slot : Nat), slot ≠ source → slot ≠ target → after.expandable slot = before.expandable slot)) := by

@@ -1,0 +1,1584 @@
+{
+  "entries": [
+    {
+      "scope": "complete.dispatch",
+      "name": "fuel",
+      "type": "Nat",
+      "used": true,
+      "kind": "obtain"
+    },
+    {
+      "scope": "complete.dispatch",
+      "name": "p",
+      "type": "Nat",
+      "used": true,
+      "kind": "obtain"
+    },
+    {
+      "scope": "complete.dispatch",
+      "name": "h",
+      "type": "Nat",
+      "used": true,
+      "kind": "obtain"
+    },
+    {
+      "scope": "complete.dispatch",
+      "name": "action",
+      "type": "EnumerateM Symbol Constraint Unit",
+      "used": true,
+      "kind": "obtain"
+    },
+    {
+      "scope": "complete.dispatch",
+      "name": "afterCaller",
+      "type": "Caller width",
+      "used": true,
+      "kind": "obtain"
+    },
+    {
+      "scope": "complete.dispatch",
+      "name": "savedQueries",
+      "type": "Queries",
+      "used": true,
+      "kind": "obtain"
+    },
+    {
+      "scope": "complete.dispatch",
+      "name": "final",
+      "type": "Memos",
+      "used": true,
+      "kind": "obtain"
+    },
+    {
+      "scope": "complete.dispatch",
+      "name": "next",
+      "type": "Inventory",
+      "used": true,
+      "kind": "obtain"
+    },
+    {
+      "scope": "complete.dispatch",
+      "name": "actual",
+      "type": "∀ extra P H, p ≤ P → h ≤ H → SourcePruningEnumerationDispatch.dispatch checkEmpty (fuel + extra) P H beforeCaller before.core source target memos.query = (.ok (some action), afterCaller, savedQueries)",
+      "used": true,
+      "kind": "obtain"
+    },
+    {
+      "scope": "complete.dispatch",
+      "name": "post",
+      "type": "Post formulas solver next beforeCaller afterCaller final",
+      "used": true,
+      "kind": "obtain"
+    },
+    {
+      "scope": "complete.dispatch",
+      "name": "savedSame",
+      "type": "final.query = savedQueries",
+      "used": true,
+      "kind": "obtain"
+    },
+    {
+      "scope": "complete.dispatch",
+      "name": "heapRealized",
+      "type": "PendingRealized afterCaller.checked.native.machine.heap before.core",
+      "used": true,
+      "kind": "obtain"
+    },
+    {
+      "scope": "complete.dispatch",
+      "name": "noOpResult",
+      "type": "(source = target ∨ before.core.values[source]? = some .eliminated) → (ExceptT.run (action before.core) = [.ok ((), before.core)]) ∧ (afterCaller = beforeCaller) ∧ (final = memos) ∧ (next = inventory)",
+      "used": true,
+      "kind": "obtain"
+    },
+    {
+      "scope": "complete.dispatch",
+      "name": "liveResult",
+      "type": "source ≠ target → before.core.values[source]? ≠ some .eliminated → ∃ (sourceNode : Option Nat) (targetNode : Option Nat) (merged : Option Nat) (sourceScs : List EnumerationState.Suspended) (targetScs : List EnumerationState.Suspended), (before.core.values[source]? = some (.unenumerated sourceNode sourceScs)) ∧ (before.core.values[target]? = some (.unenumerated targetNode targetScs)) ∧ (ExceptT.run (action before.core) = (if merged = some 0 then [] else [.ok ((), assimilated before.core target source (.unenumerated merged (sourceScs ++ targetScs)))])) ∧ (merged ≠ some 0 → (assimilated before.core target source (.unenumerated merged (sourceScs ++ targetScs))).values[target]? = some (.unenumerated merged (sourceScs ++ targetScs)) ∧ (assimilated before.core target source (.unenumerated merged (sourceScs ++ targetScs))).values[source]? = some .eliminated ∧ PendingRealized afterCaller.checked.native.machine.heap (assimilated before.core target source (.unenumerated merged (sourceScs ++ targetScs)))) ∧ ((sourceNode = none ∨ targetNode = none) → merged = sourceNode.orElse (fun _ => targetNode) ∧ afterCaller = beforeCaller ∧ final = memos ∧ next = inventory) ∧ (∀ (leftHandle rightHandle : Nat), sourceNode = some leftHandle → targetNode = some rightHandle → ∃ (left : Node) (right : Node) (query : Node) (replacement : Node) (queried : Checked width) (handle : Nat), (lookupNode beforeCaller.checked.native.machine.heap leftHandle = some left) ∧ (lookupNode beforeCaller.checked.native.machine.heap rightHandle = some right) ∧ (next.source = beforeCaller.checked.native.machine.heap) ∧ (next.roots = inventory.roots ++ [left, right]) ∧ (SourceCurrentAllocatedTargetQuery.Receipt formulas solver next left right beforeCaller.checked query queried memos) ∧ (merged = some handle) ∧ (encodeNode replacement = some handle) ∧ (lookupNode afterCaller.checked.native.machine.heap handle = some replacement) ∧ (Available afterCaller.checked.native.machine.heap replacement) ∧ (replacement.free = []) ∧ (∀ ambient term, InternedGuardedLanguage.meaning (SourceEqualityPCSGuard.holds formulas solver) ambient replacement term ↔ InternedGuardedLanguage.meaning (SourceEqualityPCSGuard.holds formulas solver) ambient left term ∧ InternedGuardedLanguage.meaning (SourceEqualityPCSGuard.holds formulas solver) ambient right term) ∧ (checkEmpty = false → replacement = query ∧ afterCaller = SourceCurrentAllocatedPartialState.advance beforeCaller queried beforeCaller.fourth beforeCaller.merge ∧ final = memos) ∧ (checkEmpty = true → ∃ (reached : Bool) (answer : Bool) (guardSaved : Queries), (SourceEndpointMemo.run query memos.query = (reached, guardSaved)) ∧ (SourceEndpointMemoCorrect.Checked queried.native.machine.heap memos.query (SourceCurrentEmptinessMerge.reaches query) (reached, guardSaved)) ∧ (∀ P H, p ≤ P → h ≤ H → SourcePruningEnumerationEnabledEmpty.check P H query queried beforeCaller.fourth memos.query = (.done answer afterCaller.checked afterCaller.fourth, guardSaved)) ∧ (savedQueries = guardSaved) ∧ (replacement = (if answer then .empty else query)) ∧ (reached = false → answer = false ∧ afterCaller.checked = queried ∧ afterCaller.fourth = beforeCaller.fourth ∧ final = {memos with query := guardSaved}) ∧ (reached = true → ∃ reachedPhysical : SourceCurrentConjunctionRowsAllocation.State Symbol FullSyntax.Formula, afterCaller.checked = SourceCurrentAllocatedQueryMemo.advancePhysical queried reachedPhysical ∧ ∃ actual : SourceCurrentConjunctionMemo.Call 1000 beforeCaller.fourth query (physical queried) answer reachedPhysical afterCaller.fourth, SourceCurrentConjunctionGlobalMemos.CallReads actual {memos with query := guardSaved} final)))",
+      "used": true,
+      "kind": "obtain"
+    },
+    {
+      "scope": "complete.noOp",
+      "name": "rawNoop",
+      "type": "ExceptT.run (action before.core) = [.ok ((), before.core)]",
+      "used": true,
+      "kind": "obtain"
+    },
+    {
+      "scope": "complete.noOp",
+      "name": "callerSame",
+      "type": "afterCaller = beforeCaller",
+      "used": true,
+      "kind": "obtain"
+    },
+    {
+      "scope": "complete.noOp",
+      "name": "finalSame",
+      "type": "final = memos",
+      "used": true,
+      "kind": "obtain"
+    },
+    {
+      "scope": "complete.noOp",
+      "name": "nextSame",
+      "type": "next = inventory",
+      "used": true,
+      "kind": "obtain"
+    },
+    {
+      "scope": "complete.live",
+      "name": "sourceNode",
+      "type": "Option Nat",
+      "used": true,
+      "kind": "obtain"
+    },
+    {
+      "scope": "complete.live",
+      "name": "targetNode",
+      "type": "Option Nat",
+      "used": true,
+      "kind": "obtain"
+    },
+    {
+      "scope": "complete.live",
+      "name": "merged",
+      "type": "Option Nat",
+      "used": true,
+      "kind": "obtain"
+    },
+    {
+      "scope": "complete.live",
+      "name": "sourceScs",
+      "type": "List EnumerationState.Suspended",
+      "used": true,
+      "kind": "obtain"
+    },
+    {
+      "scope": "complete.live",
+      "name": "targetScs",
+      "type": "List EnumerationState.Suspended",
+      "used": true,
+      "kind": "obtain"
+    },
+    {
+      "scope": "complete.live",
+      "name": "sourceStored",
+      "type": "before.core.values[source]? = some (.unenumerated sourceNode sourceScs)",
+      "used": true,
+      "kind": "obtain"
+    },
+    {
+      "scope": "complete.live",
+      "name": "targetStored",
+      "type": "before.core.values[target]? = some (.unenumerated targetNode targetScs)",
+      "used": true,
+      "kind": "obtain"
+    },
+    {
+      "scope": "complete.live",
+      "name": "rawSelected",
+      "type": "ExceptT.run (action before.core) = (if merged = some 0 then [] else [.ok ((), assimilated before.core target source (.unenumerated merged (sourceScs ++ targetScs)))])",
+      "used": true,
+      "kind": "obtain"
+    },
+    {
+      "scope": "complete.live",
+      "name": "_selectedResult",
+      "type": "merged ≠ some 0 → (assimilated before.core target source (.unenumerated merged (sourceScs ++ targetScs))).values[target]? = some (.unenumerated merged (sourceScs ++ targetScs)) ∧ (assimilated before.core target source (.unenumerated merged (sourceScs ++ targetScs))).values[source]? = some .eliminated ∧ PendingRealized afterCaller.checked.native.machine.heap (assimilated before.core target source (.unenumerated merged (sourceScs ++ targetScs)))",
+      "used": false,
+      "kind": "obtain",
+      "reason": "Retained producer field is deliberately not explicitly consumed; original public receipt is retained separately."
+    },
+    {
+      "scope": "complete.live",
+      "name": "optionalOrigin",
+      "type": "(sourceNode = none ∨ targetNode = none) → merged = sourceNode.orElse (fun _ => targetNode) ∧ afterCaller = beforeCaller ∧ final = memos ∧ next = inventory",
+      "used": true,
+      "kind": "obtain"
+    },
+    {
+      "scope": "complete.live",
+      "name": "queriedOrigin",
+      "type": "∀ (leftHandle rightHandle : Nat), sourceNode = some leftHandle → targetNode = some rightHandle → ∃ (left : Node) (right : Node) (query : Node) (replacement : Node) (queried : Checked width) (handle : Nat), (lookupNode beforeCaller.checked.native.machine.heap leftHandle = some left) ∧ (lookupNode beforeCaller.checked.native.machine.heap rightHandle = some right) ∧ (next.source = beforeCaller.checked.native.machine.heap) ∧ (next.roots = inventory.roots ++ [left, right]) ∧ (SourceCurrentAllocatedTargetQuery.Receipt formulas solver next left right beforeCaller.checked query queried memos) ∧ (merged = some handle) ∧ (encodeNode replacement = some handle) ∧ (lookupNode afterCaller.checked.native.machine.heap handle = some replacement) ∧ (Available afterCaller.checked.native.machine.heap replacement) ∧ (replacement.free = []) ∧ (∀ ambient term, InternedGuardedLanguage.meaning (SourceEqualityPCSGuard.holds formulas solver) ambient replacement term ↔ InternedGuardedLanguage.meaning (SourceEqualityPCSGuard.holds formulas solver) ambient left term ∧ InternedGuardedLanguage.meaning (SourceEqualityPCSGuard.holds formulas solver) ambient right term) ∧ (checkEmpty = false → replacement = query ∧ afterCaller = SourceCurrentAllocatedPartialState.advance beforeCaller queried beforeCaller.fourth beforeCaller.merge ∧ final = memos) ∧ (checkEmpty = true → ∃ (reached : Bool) (answer : Bool) (guardSaved : Queries), (SourceEndpointMemo.run query memos.query = (reached, guardSaved)) ∧ (SourceEndpointMemoCorrect.Checked queried.native.machine.heap memos.query (SourceCurrentEmptinessMerge.reaches query) (reached, guardSaved)) ∧ (∀ P H, p ≤ P → h ≤ H → SourcePruningEnumerationEnabledEmpty.check P H query queried beforeCaller.fourth memos.query = (.done answer afterCaller.checked afterCaller.fourth, guardSaved)) ∧ (savedQueries = guardSaved) ∧ (replacement = (if answer then .empty else query)) ∧ (reached = false → answer = false ∧ afterCaller.checked = queried ∧ afterCaller.fourth = beforeCaller.fourth ∧ final = {memos with query := guardSaved}) ∧ (reached = true → ∃ reachedPhysical : SourceCurrentConjunctionRowsAllocation.State Symbol FullSyntax.Formula, afterCaller.checked = SourceCurrentAllocatedQueryMemo.advancePhysical queried reachedPhysical ∧ ∃ actual : SourceCurrentConjunctionMemo.Call 1000 beforeCaller.fourth query (physical queried) answer reachedPhysical afterCaller.fourth, SourceCurrentConjunctionGlobalMemos.CallReads actual {memos with query := guardSaved} final))",
+      "used": true,
+      "kind": "obtain"
+    },
+    {
+      "scope": "complete.mergedRealized.sourceNone",
+      "name": "mergedSame",
+      "type": "merged = none.orElse (fun _ => targetNode)",
+      "used": true,
+      "kind": "obtain"
+    },
+    {
+      "scope": "complete.mergedRealized.sourceNone",
+      "name": "_optionalCaller",
+      "type": "afterCaller = beforeCaller",
+      "used": false,
+      "kind": "obtain",
+      "reason": "Retained producer field is deliberately not explicitly consumed; original public receipt is retained separately."
+    },
+    {
+      "scope": "complete.mergedRealized.sourceNone",
+      "name": "_optionalFinal",
+      "type": "final = memos",
+      "used": false,
+      "kind": "obtain",
+      "reason": "Retained producer field is deliberately not explicitly consumed; original public receipt is retained separately."
+    },
+    {
+      "scope": "complete.mergedRealized.sourceNone",
+      "name": "_optionalNext",
+      "type": "next = inventory",
+      "used": false,
+      "kind": "obtain",
+      "reason": "Retained producer field is deliberately not explicitly consumed; original public receipt is retained separately."
+    },
+    {
+      "scope": "complete.mergedRealized.sourceSome.targetNone",
+      "name": "mergedSame",
+      "type": "merged = (some leftHandle).orElse (fun _ => none)",
+      "used": true,
+      "kind": "obtain"
+    },
+    {
+      "scope": "complete.mergedRealized.sourceSome.targetNone",
+      "name": "_optionalCaller",
+      "type": "afterCaller = beforeCaller",
+      "used": false,
+      "kind": "obtain",
+      "reason": "Retained producer field is deliberately not explicitly consumed; original public receipt is retained separately."
+    },
+    {
+      "scope": "complete.mergedRealized.sourceSome.targetNone",
+      "name": "_optionalFinal",
+      "type": "final = memos",
+      "used": false,
+      "kind": "obtain",
+      "reason": "Retained producer field is deliberately not explicitly consumed; original public receipt is retained separately."
+    },
+    {
+      "scope": "complete.mergedRealized.sourceSome.targetNone",
+      "name": "_optionalNext",
+      "type": "next = inventory",
+      "used": false,
+      "kind": "obtain",
+      "reason": "Retained producer field is deliberately not explicitly consumed; original public receipt is retained separately."
+    },
+    {
+      "scope": "complete.mergedRealized.sourceSome.targetSome",
+      "name": "_left",
+      "type": "Node",
+      "used": false,
+      "kind": "obtain",
+      "reason": "Retained producer field is deliberately not explicitly consumed; original public receipt is retained separately."
+    },
+    {
+      "scope": "complete.mergedRealized.sourceSome.targetSome",
+      "name": "_right",
+      "type": "Node",
+      "used": false,
+      "kind": "obtain",
+      "reason": "Retained producer field is deliberately not explicitly consumed; original public receipt is retained separately."
+    },
+    {
+      "scope": "complete.mergedRealized.sourceSome.targetSome",
+      "name": "_query",
+      "type": "Node",
+      "used": false,
+      "kind": "obtain",
+      "reason": "Retained producer field is deliberately not explicitly consumed; original public receipt is retained separately."
+    },
+    {
+      "scope": "complete.mergedRealized.sourceSome.targetSome",
+      "name": "replacement",
+      "type": "Node",
+      "used": true,
+      "kind": "obtain"
+    },
+    {
+      "scope": "complete.mergedRealized.sourceSome.targetSome",
+      "name": "_queried",
+      "type": "Checked width",
+      "used": false,
+      "kind": "obtain",
+      "reason": "Retained producer field is deliberately not explicitly consumed; original public receipt is retained separately."
+    },
+    {
+      "scope": "complete.mergedRealized.sourceSome.targetSome",
+      "name": "_returnedHandle",
+      "type": "Nat",
+      "used": false,
+      "kind": "obtain",
+      "reason": "Retained producer field is deliberately not explicitly consumed; original public receipt is retained separately."
+    },
+    {
+      "scope": "complete.mergedRealized.sourceSome.targetSome",
+      "name": "_leftLookup",
+      "type": "lookupNode beforeCaller.checked.native.machine.heap leftHandle = some _left",
+      "used": false,
+      "kind": "obtain",
+      "reason": "Retained producer field is deliberately not explicitly consumed; original public receipt is retained separately."
+    },
+    {
+      "scope": "complete.mergedRealized.sourceSome.targetSome",
+      "name": "_rightLookup",
+      "type": "lookupNode beforeCaller.checked.native.machine.heap rightHandle = some _right",
+      "used": false,
+      "kind": "obtain",
+      "reason": "Retained producer field is deliberately not explicitly consumed; original public receipt is retained separately."
+    },
+    {
+      "scope": "complete.mergedRealized.sourceSome.targetSome",
+      "name": "_nextSource",
+      "type": "next.source = beforeCaller.checked.native.machine.heap",
+      "used": false,
+      "kind": "obtain",
+      "reason": "Retained producer field is deliberately not explicitly consumed; original public receipt is retained separately."
+    },
+    {
+      "scope": "complete.mergedRealized.sourceSome.targetSome",
+      "name": "_nextRoots",
+      "type": "next.roots = inventory.roots ++ [_left, _right]",
+      "used": false,
+      "kind": "obtain",
+      "reason": "Retained producer field is deliberately not explicitly consumed; original public receipt is retained separately."
+    },
+    {
+      "scope": "complete.mergedRealized.sourceSome.targetSome",
+      "name": "_receipt",
+      "type": "SourceCurrentAllocatedTargetQuery.Receipt formulas solver next _left _right beforeCaller.checked _query _queried memos",
+      "used": false,
+      "kind": "obtain",
+      "reason": "Retained producer field is deliberately not explicitly consumed; original public receipt is retained separately."
+    },
+    {
+      "scope": "complete.mergedRealized.sourceSome.targetSome",
+      "name": "mergedSame",
+      "type": "merged = some _returnedHandle",
+      "used": true,
+      "kind": "obtain"
+    },
+    {
+      "scope": "complete.mergedRealized.sourceSome.targetSome",
+      "name": "_encoded",
+      "type": "encodeNode replacement = some _returnedHandle",
+      "used": false,
+      "kind": "obtain",
+      "reason": "Retained producer field is deliberately not explicitly consumed; original public receipt is retained separately."
+    },
+    {
+      "scope": "complete.mergedRealized.sourceSome.targetSome",
+      "name": "decoded",
+      "type": "lookupNode afterCaller.checked.native.machine.heap _returnedHandle = some replacement",
+      "used": true,
+      "kind": "obtain"
+    },
+    {
+      "scope": "complete.mergedRealized.sourceSome.targetSome",
+      "name": "available",
+      "type": "Available afterCaller.checked.native.machine.heap replacement",
+      "used": true,
+      "kind": "obtain"
+    },
+    {
+      "scope": "complete.mergedRealized.sourceSome.targetSome",
+      "name": "closed",
+      "type": "replacement.free = []",
+      "used": true,
+      "kind": "obtain"
+    },
+    {
+      "scope": "complete.mergedRealized.sourceSome.targetSome",
+      "name": "_meaning",
+      "type": "∀ ambient term, InternedGuardedLanguage.meaning (SourceEqualityPCSGuard.holds formulas solver) ambient replacement term ↔ InternedGuardedLanguage.meaning (SourceEqualityPCSGuard.holds formulas solver) ambient _left term ∧ InternedGuardedLanguage.meaning (SourceEqualityPCSGuard.holds formulas solver) ambient _right term",
+      "used": false,
+      "kind": "obtain",
+      "reason": "Retained producer field is deliberately not explicitly consumed; original public receipt is retained separately."
+    },
+    {
+      "scope": "complete.mergedRealized.sourceSome.targetSome",
+      "name": "_disabled",
+      "type": "checkEmpty = false → replacement = _query ∧ afterCaller = SourceCurrentAllocatedPartialState.advance beforeCaller _queried beforeCaller.fourth beforeCaller.merge ∧ final = memos",
+      "used": false,
+      "kind": "obtain",
+      "reason": "Retained producer field is deliberately not explicitly consumed; original public receipt is retained separately."
+    },
+    {
+      "scope": "complete.mergedRealized.sourceSome.targetSome",
+      "name": "_enabled",
+      "type": "checkEmpty = true → ∃ (reached : Bool) (answer : Bool) (guardSaved : Queries), (SourceEndpointMemo.run _query memos.query = (reached, guardSaved)) ∧ (SourceEndpointMemoCorrect.Checked _queried.native.machine.heap memos.query (SourceCurrentEmptinessMerge.reaches _query) (reached, guardSaved)) ∧ (∀ P H, p ≤ P → h ≤ H → SourcePruningEnumerationEnabledEmpty.check P H _query _queried beforeCaller.fourth memos.query = (.done answer afterCaller.checked afterCaller.fourth, guardSaved)) ∧ (savedQueries = guardSaved) ∧ (replacement = (if answer then .empty else _query)) ∧ (reached = false → answer = false ∧ afterCaller.checked = _queried ∧ afterCaller.fourth = beforeCaller.fourth ∧ final = {memos with query := guardSaved}) ∧ (reached = true → ∃ reachedPhysical : SourceCurrentConjunctionRowsAllocation.State Symbol FullSyntax.Formula, afterCaller.checked = SourceCurrentAllocatedQueryMemo.advancePhysical _queried reachedPhysical ∧ ∃ actual : SourceCurrentConjunctionMemo.Call 1000 beforeCaller.fourth _query (physical _queried) answer reachedPhysical afterCaller.fourth, SourceCurrentConjunctionGlobalMemos.CallReads actual {memos with query := guardSaved} final)",
+      "used": false,
+      "kind": "obtain",
+      "reason": "Retained producer field is deliberately not explicitly consumed; original public receipt is retained separately."
+    },
+    {
+      "scope": "complete.live.cached",
+      "name": "rows",
+      "type": "List (Unit × EnumerationExpandableIndex.Cached Symbol Constraint)",
+      "used": true,
+      "kind": "obtain"
+    },
+    {
+      "scope": "complete.live.cached",
+      "name": "after",
+      "type": "EnumerationExpandableIndex.Cached Symbol Constraint",
+      "used": true,
+      "kind": "obtain"
+    },
+    {
+      "scope": "complete.live.cached",
+      "name": "computed",
+      "type": "∀ cacheFuel : Nat, SourcePruningEnumerationCachedAssimilation.finish afterCaller.checked.native.machine.heap cacheFuel source target merged sourceScs targetScs before = some (rows, after)",
+      "used": true,
+      "kind": "obtain"
+    },
+    {
+      "scope": "complete.live.cached",
+      "name": "rawCached",
+      "type": "ExceptT.run (SourcePruningEnumerationDispatch.finishOptional (EnumGuard := Constraint) source target merged sourceScs targetScs before.core) = rows.map (fun row => .ok (row.1, row.2.core))",
+      "used": true,
+      "kind": "obtain"
+    },
+    {
+      "scope": "complete.live.cached",
+      "name": "counterSame",
+      "type": "after.core.counter = before.core.counter",
+      "used": true,
+      "kind": "obtain"
+    },
+    {
+      "scope": "complete.live.cached",
+      "name": "forestSame",
+      "type": "after.core.representatives = before.core.representatives",
+      "used": true,
+      "kind": "obtain"
+    },
+    {
+      "scope": "complete.live.cached",
+      "name": "afterPaths",
+      "type": "Roots after.core.representatives roots",
+      "used": true,
+      "kind": "obtain"
+    },
+    {
+      "scope": "complete.live.cached",
+      "name": "afterStorage",
+      "type": "StorageValid after.core",
+      "used": true,
+      "kind": "obtain"
+    },
+    {
+      "scope": "complete.live.cached",
+      "name": "cacheRealized",
+      "type": "PendingRealized afterCaller.checked.native.machine.heap after.core",
+      "used": true,
+      "kind": "obtain"
+    },
+    {
+      "scope": "complete.live.cached",
+      "name": "afterCounts",
+      "type": "EnumerationCanonicalWaiting.Correct roots after.core.values after.waiting",
+      "used": true,
+      "kind": "obtain"
+    },
+    {
+      "scope": "complete.live.cached",
+      "name": "waitingSame",
+      "type": "after.waiting = before.waiting",
+      "used": true,
+      "kind": "obtain"
+    },
+    {
+      "scope": "complete.live.cached",
+      "name": "afterFlags",
+      "type": "∀ slot : Nat, SourcePruningEnumerationNativeIndex.candidate afterCaller.checked.native.machine.heap ((after.core.values[slot]?).getD .eliminated) = some (after.expandable slot)",
+      "used": true,
+      "kind": "obtain"
+    },
+    {
+      "scope": "complete.live.cached",
+      "name": "result",
+      "type": "if merged = some 0 then rows = [] ∧ after = before else rows = [((), after)] ∧ after.core = assimilated before.core target source (.unenumerated merged (sourceScs ++ targetScs)) ∧ after.core.values[source]? = some .eliminated ∧ after.core.values[target]? = some (.unenumerated merged (sourceScs ++ targetScs)) ∧ after.expandable source = false ∧ (∀ (slot : Nat), slot ≠ source → slot ≠ target → after.expandable slot = before.expandable slot)",
+      "used": true,
+      "kind": "obtain"
+    },
+    {
+      "scope": "context",
+      "name": "width",
+      "type": "Nat",
+      "used": true,
+      "kind": "binder"
+    },
+    {
+      "scope": "complete.public.typeclass",
+      "name": "(anonymous instance 1)",
+      "type": "DecidableEq Symbol",
+      "used": true,
+      "kind": "typeclass",
+      "Root_authored_binding": "[DecidableEq Symbol]",
+      "anonymous": true
+    },
+    {
+      "scope": "complete.public.typeclass",
+      "name": "(anonymous instance 2)",
+      "type": "DecidableEq (EdgeKey Symbol Constraint)",
+      "used": true,
+      "kind": "typeclass",
+      "Root_authored_binding": "[DecidableEq (EdgeKey Symbol Constraint)]",
+      "anonymous": true
+    },
+    {
+      "scope": "complete.public.typeclass",
+      "name": "(anonymous instance 3)",
+      "type": "DecidableEq Node",
+      "used": true,
+      "kind": "typeclass",
+      "Root_authored_binding": "[DecidableEq Node]",
+      "anonymous": true
+    },
+    {
+      "scope": "complete.public",
+      "name": "formulas",
+      "type": "SourceGuards.Formulas FullSyntax.Formula",
+      "used": true,
+      "kind": "binder"
+    },
+    {
+      "scope": "complete.public",
+      "name": "solver",
+      "type": "SourceGuards.Entailment FullSyntax.Formula",
+      "used": true,
+      "kind": "binder"
+    },
+    {
+      "scope": "complete.public",
+      "name": "inventory",
+      "type": "Inventory",
+      "used": true,
+      "kind": "binder"
+    },
+    {
+      "scope": "complete.public",
+      "name": "beforeCaller",
+      "type": "Caller width",
+      "used": true,
+      "kind": "binder"
+    },
+    {
+      "scope": "complete.public",
+      "name": "before",
+      "type": "EnumerationExpandableIndex.Cached Symbol Constraint",
+      "used": true,
+      "kind": "binder"
+    },
+    {
+      "scope": "complete.public",
+      "name": "checkEmpty",
+      "type": "Bool",
+      "used": true,
+      "kind": "binder"
+    },
+    {
+      "scope": "complete.public",
+      "name": "source",
+      "type": "Nat",
+      "used": true,
+      "kind": "binder"
+    },
+    {
+      "scope": "complete.public",
+      "name": "target",
+      "type": "Nat",
+      "used": true,
+      "kind": "binder"
+    },
+    {
+      "scope": "complete.public",
+      "name": "memos",
+      "type": "Memos",
+      "used": true,
+      "kind": "binder"
+    },
+    {
+      "scope": "complete.public",
+      "name": "roots",
+      "type": "Nat → Nat",
+      "used": true,
+      "kind": "binder"
+    },
+    {
+      "scope": "complete.public",
+      "name": "initial",
+      "type": "Context formulas solver inventory beforeCaller memos",
+      "used": true,
+      "kind": "binder"
+    },
+    {
+      "scope": "complete.public",
+      "name": "storage",
+      "type": "StorageValid before.core",
+      "used": true,
+      "kind": "binder"
+    },
+    {
+      "scope": "complete.public",
+      "name": "realized",
+      "type": "PendingRealized beforeCaller.checked.native.machine.heap before.core",
+      "used": true,
+      "kind": "binder"
+    },
+    {
+      "scope": "complete.public",
+      "name": "paths",
+      "type": "Roots before.core.representatives roots",
+      "used": true,
+      "kind": "binder"
+    },
+    {
+      "scope": "complete.public",
+      "name": "counts",
+      "type": "EnumerationCanonicalWaiting.Correct roots before.core.values before.waiting",
+      "used": true,
+      "kind": "binder"
+    },
+    {
+      "scope": "complete.public",
+      "name": "flags",
+      "type": "∀ (slot : Nat), SourcePruningEnumerationNativeIndex.candidate beforeCaller.checked.native.machine.heap ((before.core.values[slot]?).getD .eliminated) = some (before.expandable slot)",
+      "used": true,
+      "kind": "binder"
+    },
+    {
+      "scope": "complete.public",
+      "name": "slots",
+      "type": "source = target ∨ before.core.values[source]? = some .eliminated ∨ ∃ (sourceNode targetNode : Option Nat) (sourceScs targetScs : List EnumerationState.Suspended), before.core.values[source]? = some (.unenumerated sourceNode sourceScs) ∧ before.core.values[target]? = some (.unenumerated targetNode targetScs)",
+      "used": true,
+      "kind": "binder"
+    },
+    {
+      "scope": "complete.public",
+      "name": "ranges",
+      "type": "if source = target then True else match before.core.values[source]?, before.core.values[target]? with | some (.unenumerated (some left) _), some (.unenumerated (some right) _) => match lookupNode beforeCaller.checked.native.machine.heap left, lookupNode beforeCaller.checked.native.machine.heap right with | some first, some second => SourceCurrentAllocatedNativeRequestBounds.WordRanges (.code (SourceRecursiveIntersectionCode.requestNode IntersectionEmptyDomain.emptyDomain first second)) beforeCaller.checked | _, _ => True | _, _ => True",
+      "used": true,
+      "kind": "binder"
+    },
+    {
+      "scope": "complete.public.flags",
+      "name": "slot",
+      "type": "Nat",
+      "used": true,
+      "kind": "binder"
+    },
+    {
+      "scope": "complete.public.slots",
+      "name": "sourceNode",
+      "type": "Option Nat",
+      "used": true,
+      "kind": "binder"
+    },
+    {
+      "scope": "complete.public.slots",
+      "name": "targetNode",
+      "type": "Option Nat",
+      "used": true,
+      "kind": "binder"
+    },
+    {
+      "scope": "complete.public.slots",
+      "name": "sourceScs",
+      "type": "List EnumerationState.Suspended",
+      "used": true,
+      "kind": "binder"
+    },
+    {
+      "scope": "complete.public.slots",
+      "name": "targetScs",
+      "type": "List EnumerationState.Suspended",
+      "used": true,
+      "kind": "binder"
+    },
+    {
+      "scope": "complete.public.ranges.pattern",
+      "name": "left",
+      "type": "Nat",
+      "used": true,
+      "kind": "pattern_payload"
+    },
+    {
+      "scope": "complete.public.ranges.pattern",
+      "name": "right",
+      "type": "Nat",
+      "used": true,
+      "kind": "pattern_payload"
+    },
+    {
+      "scope": "complete.public.ranges.pattern",
+      "name": "first",
+      "type": "Node",
+      "used": true,
+      "kind": "pattern_payload"
+    },
+    {
+      "scope": "complete.public.ranges.pattern",
+      "name": "second",
+      "type": "Node",
+      "used": true,
+      "kind": "pattern_payload"
+    },
+    {
+      "scope": "complete.public.exists",
+      "name": "fuel",
+      "type": "Nat",
+      "used": true,
+      "kind": "binder"
+    },
+    {
+      "scope": "complete.public.exists",
+      "name": "p",
+      "type": "Nat",
+      "used": true,
+      "kind": "binder"
+    },
+    {
+      "scope": "complete.public.exists",
+      "name": "h",
+      "type": "Nat",
+      "used": true,
+      "kind": "binder"
+    },
+    {
+      "scope": "complete.public.exists",
+      "name": "action",
+      "type": "EnumerateM Symbol Constraint Unit",
+      "used": true,
+      "kind": "binder"
+    },
+    {
+      "scope": "complete.public.exists",
+      "name": "afterCaller",
+      "type": "Caller width",
+      "used": true,
+      "kind": "binder"
+    },
+    {
+      "scope": "complete.public.exists",
+      "name": "savedQueries",
+      "type": "Queries",
+      "used": true,
+      "kind": "binder"
+    },
+    {
+      "scope": "complete.public.exists",
+      "name": "final",
+      "type": "Memos",
+      "used": true,
+      "kind": "binder"
+    },
+    {
+      "scope": "complete.public.exists",
+      "name": "next",
+      "type": "Inventory",
+      "used": true,
+      "kind": "binder"
+    },
+    {
+      "scope": "complete.public.exists",
+      "name": "rows",
+      "type": "List (Unit × EnumerationExpandableIndex.Cached Symbol Constraint)",
+      "used": true,
+      "kind": "binder"
+    },
+    {
+      "scope": "complete.public.exists",
+      "name": "after",
+      "type": "EnumerationExpandableIndex.Cached Symbol Constraint",
+      "used": true,
+      "kind": "binder"
+    },
+    {
+      "scope": "complete.public.stable",
+      "name": "extra",
+      "type": "Nat",
+      "used": true,
+      "kind": "binder"
+    },
+    {
+      "scope": "complete.public.stable",
+      "name": "P",
+      "type": "Nat",
+      "used": true,
+      "kind": "binder"
+    },
+    {
+      "scope": "complete.public.stable",
+      "name": "H",
+      "type": "Nat",
+      "used": true,
+      "kind": "binder"
+    },
+    {
+      "scope": "complete.public.stable.arrows",
+      "name": "(anonymous P bound)",
+      "type": "p ≤ P",
+      "used": true,
+      "kind": "type_position",
+      "anonymous": true
+    },
+    {
+      "scope": "complete.public.stable.arrows",
+      "name": "(anonymous H bound)",
+      "type": "h ≤ H",
+      "used": true,
+      "kind": "type_position",
+      "anonymous": true
+    },
+    {
+      "scope": "complete.public.raw.map",
+      "name": "row",
+      "type": "Unit × EnumerationExpandableIndex.Cached Symbol Constraint",
+      "used": true,
+      "kind": "binder",
+      "anonymous": false
+    },
+    {
+      "scope": "complete.public.finalFlags",
+      "name": "slot",
+      "type": "Nat",
+      "used": true,
+      "kind": "binder",
+      "anonymous": false
+    },
+    {
+      "scope": "complete.public.noOp",
+      "name": "(anonymous no-op premise)",
+      "type": "source = target ∨ before.core.values[source]? = some .eliminated",
+      "used": true,
+      "kind": "type_position",
+      "anonymous": true
+    },
+    {
+      "scope": "complete.public.live.arrows",
+      "name": "(anonymous unequal)",
+      "type": "source ≠ target",
+      "used": true,
+      "kind": "type_position",
+      "anonymous": true
+    },
+    {
+      "scope": "complete.public.live.arrows",
+      "name": "(anonymous live)",
+      "type": "before.core.values[source]? ≠ some .eliminated",
+      "used": true,
+      "kind": "type_position",
+      "anonymous": true
+    },
+    {
+      "scope": "complete.public.live.exists",
+      "name": "sourceNode",
+      "type": "Option Nat",
+      "used": true,
+      "kind": "binder",
+      "anonymous": false
+    },
+    {
+      "scope": "complete.public.live.exists",
+      "name": "targetNode",
+      "type": "Option Nat",
+      "used": true,
+      "kind": "binder",
+      "anonymous": false
+    },
+    {
+      "scope": "complete.public.live.exists",
+      "name": "merged",
+      "type": "Option Nat",
+      "used": true,
+      "kind": "binder",
+      "anonymous": false
+    },
+    {
+      "scope": "complete.public.live.exists",
+      "name": "sourceScs",
+      "type": "List EnumerationState.Suspended",
+      "used": true,
+      "kind": "binder",
+      "anonymous": false
+    },
+    {
+      "scope": "complete.public.live.exists",
+      "name": "targetScs",
+      "type": "List EnumerationState.Suspended",
+      "used": true,
+      "kind": "binder",
+      "anonymous": false
+    },
+    {
+      "scope": "complete.public.live.computed",
+      "name": "cacheFuel",
+      "type": "Nat",
+      "used": true,
+      "kind": "binder",
+      "anonymous": false
+    },
+    {
+      "scope": "complete.public.live.otherFlags",
+      "name": "slot",
+      "type": "Nat",
+      "used": true,
+      "kind": "binder",
+      "anonymous": false
+    },
+    {
+      "scope": "complete.public.live.otherFlags",
+      "name": "(anonymous notSource)",
+      "type": "slot ≠ source",
+      "used": true,
+      "kind": "type_position",
+      "anonymous": true
+    },
+    {
+      "scope": "complete.public.live.otherFlags",
+      "name": "(anonymous notTarget)",
+      "type": "slot ≠ target",
+      "used": true,
+      "kind": "type_position",
+      "anonymous": true
+    },
+    {
+      "scope": "complete.public.live.optional",
+      "name": "(anonymous optional premise)",
+      "type": "sourceNode = none ∨ targetNode = none",
+      "used": true,
+      "kind": "type_position",
+      "anonymous": true
+    },
+    {
+      "scope": "complete.public.live.optional",
+      "name": "_",
+      "type": "Unit",
+      "used": false,
+      "kind": "binder",
+      "anonymous": true
+    },
+    {
+      "scope": "complete.public.live.queried",
+      "name": "leftHandle",
+      "type": "Nat",
+      "used": true,
+      "kind": "binder",
+      "anonymous": false
+    },
+    {
+      "scope": "complete.public.live.queried",
+      "name": "rightHandle",
+      "type": "Nat",
+      "used": true,
+      "kind": "binder",
+      "anonymous": false
+    },
+    {
+      "scope": "complete.public.live.queried",
+      "name": "(anonymous source handle)",
+      "type": "sourceNode = some leftHandle",
+      "used": true,
+      "kind": "type_position",
+      "anonymous": true
+    },
+    {
+      "scope": "complete.public.live.queried",
+      "name": "(anonymous target handle)",
+      "type": "targetNode = some rightHandle",
+      "used": true,
+      "kind": "type_position",
+      "anonymous": true
+    },
+    {
+      "scope": "complete.public.live.queried.exists",
+      "name": "left",
+      "type": "Node",
+      "used": true,
+      "kind": "binder",
+      "anonymous": false
+    },
+    {
+      "scope": "complete.public.live.queried.exists",
+      "name": "right",
+      "type": "Node",
+      "used": true,
+      "kind": "binder",
+      "anonymous": false
+    },
+    {
+      "scope": "complete.public.live.queried.exists",
+      "name": "query",
+      "type": "Node",
+      "used": true,
+      "kind": "binder",
+      "anonymous": false
+    },
+    {
+      "scope": "complete.public.live.queried.exists",
+      "name": "replacement",
+      "type": "Node",
+      "used": true,
+      "kind": "binder",
+      "anonymous": false
+    },
+    {
+      "scope": "complete.public.live.queried.exists",
+      "name": "queried",
+      "type": "Checked width",
+      "used": true,
+      "kind": "binder",
+      "anonymous": false
+    },
+    {
+      "scope": "complete.public.live.queried.exists",
+      "name": "handle",
+      "type": "Nat",
+      "used": true,
+      "kind": "binder",
+      "anonymous": false
+    },
+    {
+      "scope": "complete.public.live.queried.meaning",
+      "name": "ambient",
+      "type": "InternedGuardedLanguage.Env Symbol",
+      "used": true,
+      "kind": "binder",
+      "anonymous": false
+    },
+    {
+      "scope": "complete.public.live.queried.meaning",
+      "name": "term",
+      "type": "Language.Term Symbol",
+      "used": true,
+      "kind": "binder",
+      "anonymous": false
+    },
+    {
+      "scope": "complete.public.live.queried.disabled",
+      "name": "(anonymous disabled)",
+      "type": "checkEmpty = false",
+      "used": true,
+      "kind": "type_position",
+      "anonymous": true
+    },
+    {
+      "scope": "complete.public.live.queried.enabled",
+      "name": "(anonymous enabled)",
+      "type": "checkEmpty = true",
+      "used": true,
+      "kind": "type_position",
+      "anonymous": true
+    },
+    {
+      "scope": "complete.public.live.queried.enabled",
+      "name": "reached",
+      "type": "Bool",
+      "used": true,
+      "kind": "binder",
+      "anonymous": false
+    },
+    {
+      "scope": "complete.public.live.queried.enabled",
+      "name": "answer",
+      "type": "Bool",
+      "used": true,
+      "kind": "binder",
+      "anonymous": false
+    },
+    {
+      "scope": "complete.public.live.queried.enabled",
+      "name": "guardSaved",
+      "type": "Queries",
+      "used": true,
+      "kind": "binder",
+      "anonymous": false
+    },
+    {
+      "scope": "complete.public.live.queried.enabled.stable",
+      "name": "P",
+      "type": "Nat",
+      "used": true,
+      "kind": "binder",
+      "anonymous": false
+    },
+    {
+      "scope": "complete.public.live.queried.enabled.stable",
+      "name": "H",
+      "type": "Nat",
+      "used": true,
+      "kind": "binder",
+      "anonymous": false
+    },
+    {
+      "scope": "complete.public.live.queried.enabled.stable",
+      "name": "(anonymous P bound)",
+      "type": "p ≤ P",
+      "used": true,
+      "kind": "type_position",
+      "anonymous": true
+    },
+    {
+      "scope": "complete.public.live.queried.enabled.stable",
+      "name": "(anonymous H bound)",
+      "type": "h ≤ H",
+      "used": true,
+      "kind": "type_position",
+      "anonymous": true
+    },
+    {
+      "scope": "complete.public.live.queried.enabled.skipped",
+      "name": "(anonymous skipped)",
+      "type": "reached = false",
+      "used": true,
+      "kind": "type_position",
+      "anonymous": true
+    },
+    {
+      "scope": "complete.public.live.queried.enabled.performed",
+      "name": "(anonymous performed)",
+      "type": "reached = true",
+      "used": true,
+      "kind": "type_position",
+      "anonymous": true
+    },
+    {
+      "scope": "complete.public.live.queried.enabled.performed",
+      "name": "reachedPhysical",
+      "type": "SourceCurrentConjunctionRowsAllocation.State Symbol FullSyntax.Formula",
+      "used": true,
+      "kind": "binder",
+      "anonymous": false
+    },
+    {
+      "scope": "complete.public.live.queried.enabled.performed",
+      "name": "actual",
+      "type": "SourceCurrentConjunctionMemo.Call 1000 beforeCaller.fourth query (physical queried) answer reachedPhysical afterCaller.fourth",
+      "used": true,
+      "kind": "binder",
+      "anonymous": false
+    },
+    {
+      "scope": "complete.afterDispatch",
+      "name": "grownFlags",
+      "type": "∀ (slot : Nat), SourcePruningEnumerationNativeIndex.candidate afterCaller.checked.native.machine.heap ((before.core.values[slot]?).getD .eliminated) = some (before.expandable slot)",
+      "used": true,
+      "kind": "have"
+    },
+    {
+      "scope": "complete.live",
+      "name": "different",
+      "type": "source ≠ target",
+      "used": true,
+      "kind": "have"
+    },
+    {
+      "scope": "complete.live",
+      "name": "sourceLive",
+      "type": "before.core.values[source]? ≠ some .eliminated",
+      "used": true,
+      "kind": "have"
+    },
+    {
+      "scope": "complete.live",
+      "name": "mergedRealized",
+      "type": "∀ (handle : Nat), merged = some handle → ∃ (value : Node), lookupNode afterCaller.checked.native.machine.heap handle = some value ∧ Available afterCaller.checked.native.machine.heap value ∧ value.free = []",
+      "used": true,
+      "kind": "have"
+    },
+    {
+      "scope": "complete.grownFlags",
+      "name": "slot",
+      "type": "Nat",
+      "used": true,
+      "kind": "binder"
+    },
+    {
+      "scope": "complete.grownFlags",
+      "name": "slotValue",
+      "type": "EnumerationState.UVarValue Symbol",
+      "used": true,
+      "kind": "binder"
+    },
+    {
+      "scope": "complete.grownFlags",
+      "name": "slotValueSame",
+      "type": "((before.core.values[slot]?).getD .eliminated) = slotValue",
+      "used": false,
+      "kind": "binder",
+      "reason": "Root route reuses the existing NativeIndex pattern, where the generalized equation is cleared after transporting flags and goal."
+    },
+    {
+      "scope": "complete.grownFlags.enumerated",
+      "name": "_oldEnumerated",
+      "type": "Fragments.Fragment Symbol",
+      "used": false,
+      "kind": "constructor_payload"
+    },
+    {
+      "scope": "complete.grownFlags.unenumerated",
+      "name": "oldNode",
+      "type": "Option Nat",
+      "used": true,
+      "kind": "constructor_payload"
+    },
+    {
+      "scope": "complete.grownFlags.unenumerated",
+      "name": "oldScs",
+      "type": "List EnumerationState.Suspended",
+      "used": true,
+      "kind": "constructor_payload"
+    },
+    {
+      "scope": "complete.grownFlags.unenumerated.some",
+      "name": "oldHandle",
+      "type": "Nat",
+      "used": true,
+      "kind": "constructor_payload"
+    },
+    {
+      "scope": "complete.grownFlags.unenumerated.some.lookupNone",
+      "name": "oldLookup",
+      "type": "lookupNode beforeCaller.checked.native.machine.heap oldHandle = none",
+      "used": true,
+      "kind": "case_equation"
+    },
+    {
+      "scope": "complete.grownFlags.unenumerated.some.lookupSome",
+      "name": "oldValue",
+      "type": "Node",
+      "used": true,
+      "kind": "constructor_payload"
+    },
+    {
+      "scope": "complete.grownFlags.unenumerated.some.lookupSome",
+      "name": "oldLookup",
+      "type": "lookupNode beforeCaller.checked.native.machine.heap oldHandle = some oldValue",
+      "used": true,
+      "kind": "case_equation"
+    },
+    {
+      "scope": "complete.noOp.positive",
+      "name": "noOp",
+      "type": "source = target ∨ before.core.values[source]? = some .eliminated",
+      "used": true,
+      "kind": "case_hypothesis"
+    },
+    {
+      "scope": "complete.noOp.negative",
+      "name": "noOp",
+      "type": "¬ (source = target ∨ before.core.values[source]? = some .eliminated)",
+      "used": true,
+      "kind": "case_hypothesis"
+    },
+    {
+      "scope": "complete.noOp.finalNoOp",
+      "name": "_again",
+      "type": "source = target ∨ before.core.values[source]? = some .eliminated",
+      "used": false,
+      "kind": "binder"
+    },
+    {
+      "scope": "complete.noOp.finalLive",
+      "name": "unequal",
+      "type": "source ≠ target",
+      "used": true,
+      "kind": "binder"
+    },
+    {
+      "scope": "complete.noOp.finalLive",
+      "name": "live",
+      "type": "before.core.values[source]? ≠ some .eliminated",
+      "used": true,
+      "kind": "binder"
+    },
+    {
+      "scope": "complete.different",
+      "name": "sameId",
+      "type": "source = target",
+      "used": true,
+      "kind": "binder"
+    },
+    {
+      "scope": "complete.sourceLive",
+      "name": "eliminatedSource",
+      "type": "before.core.values[source]? = some .eliminated",
+      "used": true,
+      "kind": "binder"
+    },
+    {
+      "scope": "complete.mergedRealized",
+      "name": "handle",
+      "type": "Nat",
+      "used": true,
+      "kind": "binder"
+    },
+    {
+      "scope": "complete.mergedRealized",
+      "name": "chosen",
+      "type": "merged = some handle",
+      "used": true,
+      "kind": "binder"
+    },
+    {
+      "scope": "complete.mergedRealized.sourceSome",
+      "name": "leftHandle",
+      "type": "Nat",
+      "used": true,
+      "kind": "constructor_payload"
+    },
+    {
+      "scope": "complete.mergedRealized.sourceNone.targetSome",
+      "name": "rightHandle",
+      "type": "Nat",
+      "used": true,
+      "kind": "constructor_payload"
+    },
+    {
+      "scope": "complete.mergedRealized.sourceSome.targetSome",
+      "name": "rightHandle",
+      "type": "Nat",
+      "used": true,
+      "kind": "constructor_payload"
+    },
+    {
+      "scope": "complete.live.finalNoOp",
+      "name": "impossibleNoOp",
+      "type": "source = target ∨ before.core.values[source]? = some .eliminated",
+      "used": true,
+      "kind": "binder"
+    },
+    {
+      "scope": "complete.live.finalLive",
+      "name": "_unequal",
+      "type": "source ≠ target",
+      "used": false,
+      "kind": "binder"
+    },
+    {
+      "scope": "complete.live.finalLive",
+      "name": "_live",
+      "type": "before.core.values[source]? ≠ some .eliminated",
+      "used": false,
+      "kind": "binder"
+    },
+    {
+      "scope": "complete.dispatch.actual.type",
+      "name": "extra",
+      "type": "Nat",
+      "used": true,
+      "kind": "type_position"
+    },
+    {
+      "scope": "complete.dispatch.actual.type",
+      "name": "P",
+      "type": "Nat",
+      "used": true,
+      "kind": "type_position"
+    },
+    {
+      "scope": "complete.dispatch.actual.type",
+      "name": "H",
+      "type": "Nat",
+      "used": true,
+      "kind": "type_position"
+    },
+    {
+      "scope": "complete.live.cached.computed.type",
+      "name": "cacheFuel",
+      "type": "Nat",
+      "used": true,
+      "kind": "type_position"
+    },
+    {
+      "scope": "complete.dispatch.heapRealized.type",
+      "name": "slot",
+      "type": "Nat",
+      "used": true,
+      "kind": "type_position"
+    },
+    {
+      "scope": "complete.dispatch.heapRealized.type",
+      "name": "node",
+      "type": "Nat",
+      "used": true,
+      "kind": "type_position"
+    },
+    {
+      "scope": "complete.dispatch.heapRealized.type",
+      "name": "scs",
+      "type": "List EnumerationState.Suspended",
+      "used": true,
+      "kind": "type_position"
+    },
+    {
+      "scope": "complete.dispatch.heapRealized.type",
+      "name": "(anonymous stored)",
+      "type": "before.core.values[slot]? = some (.unenumerated (some node) scs)",
+      "used": true,
+      "kind": "type_position"
+    },
+    {
+      "scope": "complete.dispatch.heapRealized.type",
+      "name": "value",
+      "type": "Node",
+      "used": true,
+      "kind": "type_position"
+    },
+    {
+      "scope": "complete.live.cached.cacheRealized.type",
+      "name": "slot",
+      "type": "Nat",
+      "used": true,
+      "kind": "type_position"
+    },
+    {
+      "scope": "complete.live.cached.cacheRealized.type",
+      "name": "node",
+      "type": "Nat",
+      "used": true,
+      "kind": "type_position"
+    },
+    {
+      "scope": "complete.live.cached.cacheRealized.type",
+      "name": "scs",
+      "type": "List EnumerationState.Suspended",
+      "used": true,
+      "kind": "type_position"
+    },
+    {
+      "scope": "complete.live.cached.cacheRealized.type",
+      "name": "(anonymous stored)",
+      "type": "after.core.values[slot]? = some (.unenumerated (some node) scs)",
+      "used": true,
+      "kind": "type_position"
+    },
+    {
+      "scope": "complete.live.cached.cacheRealized.type",
+      "name": "value",
+      "type": "Node",
+      "used": true,
+      "kind": "type_position"
+    },
+    {
+      "scope": "complete.grownFlags.type",
+      "name": "slot",
+      "type": "Nat",
+      "used": true,
+      "kind": "type_position"
+    },
+    {
+      "scope": "complete.live.cached.afterFlags.type",
+      "name": "slot",
+      "type": "Nat",
+      "used": true,
+      "kind": "type_position"
+    },
+    {
+      "scope": "complete.mergedRealized.type",
+      "name": "handle",
+      "type": "Nat",
+      "used": true,
+      "kind": "type_position"
+    },
+    {
+      "scope": "complete.mergedRealized.type",
+      "name": "(anonymous chosen)",
+      "type": "merged = some handle",
+      "used": true,
+      "kind": "type_position",
+      "anonymous": true
+    },
+    {
+      "scope": "complete.mergedRealized.type",
+      "name": "value",
+      "type": "Node",
+      "used": true,
+      "kind": "type_position"
+    },
+    {
+      "scope": "complete.live.cached.rawCached.type",
+      "name": "row",
+      "type": "Unit × EnumerationExpandableIndex.Cached Symbol Constraint",
+      "used": true,
+      "kind": "type_position"
+    },
+    {
+      "scope": "complete.live.cached.result.otherFlags.type",
+      "name": "slot",
+      "type": "Nat",
+      "used": true,
+      "kind": "type_position"
+    },
+    {
+      "scope": "complete.mergedRealized.queryPacket._meaning.type",
+      "name": "ambient",
+      "type": "InternedGuardedLanguage.Env Symbol",
+      "used": true,
+      "kind": "type_position"
+    },
+    {
+      "scope": "complete.mergedRealized.queryPacket._meaning.type",
+      "name": "term",
+      "type": "Language.Term Symbol",
+      "used": true,
+      "kind": "type_position"
+    },
+    {
+      "scope": "complete.mergedRealized.queryPacket._enabled.type",
+      "name": "reached",
+      "type": "Bool",
+      "used": true,
+      "kind": "type_position"
+    },
+    {
+      "scope": "complete.mergedRealized.queryPacket._enabled.type",
+      "name": "answer",
+      "type": "Bool",
+      "used": true,
+      "kind": "type_position"
+    },
+    {
+      "scope": "complete.mergedRealized.queryPacket._enabled.type",
+      "name": "guardSaved",
+      "type": "Queries",
+      "used": true,
+      "kind": "type_position"
+    },
+    {
+      "scope": "complete.mergedRealized.queryPacket._enabled.type",
+      "name": "P",
+      "type": "Nat",
+      "used": true,
+      "kind": "type_position"
+    },
+    {
+      "scope": "complete.mergedRealized.queryPacket._enabled.type",
+      "name": "H",
+      "type": "Nat",
+      "used": true,
+      "kind": "type_position"
+    },
+    {
+      "scope": "complete.mergedRealized.queryPacket._enabled.type",
+      "name": "reachedPhysical",
+      "type": "SourceCurrentConjunctionRowsAllocation.State Symbol FullSyntax.Formula",
+      "used": true,
+      "kind": "type_position"
+    },
+    {
+      "scope": "complete.mergedRealized.queryPacket._enabled.type",
+      "name": "actual",
+      "type": "SourceCurrentConjunctionMemo.Call 1000 beforeCaller.fourth _query (physical _queried) answer reachedPhysical afterCaller.fourth",
+      "used": true,
+      "kind": "type_position"
+    }
+  ],
+  "count": 215,
+  "manual": true,
+  "policy": "Manual lexical and dependent type inventory. Anonymous type-position labels are not invented source identifiers. Whole packet types are explicit, not new aliases/predicates."
+}

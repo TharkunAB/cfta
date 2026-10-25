@@ -1,0 +1,592 @@
+{
+  "packets": [
+    {
+      "scope": "complete.dispatch",
+      "producer": "SourcePruningEnumerationDispatch.dispatch_complete formulas solver inventory beforeCaller before.core checkEmpty source target memos initial realized slots ranges",
+      "fields": [
+        {
+          "scope": "complete.dispatch",
+          "name": "fuel",
+          "type": "Nat",
+          "used": true,
+          "kind": "obtain"
+        },
+        {
+          "scope": "complete.dispatch",
+          "name": "p",
+          "type": "Nat",
+          "used": true,
+          "kind": "obtain"
+        },
+        {
+          "scope": "complete.dispatch",
+          "name": "h",
+          "type": "Nat",
+          "used": true,
+          "kind": "obtain"
+        },
+        {
+          "scope": "complete.dispatch",
+          "name": "action",
+          "type": "EnumerateM Symbol Constraint Unit",
+          "used": true,
+          "kind": "obtain"
+        },
+        {
+          "scope": "complete.dispatch",
+          "name": "afterCaller",
+          "type": "Caller width",
+          "used": true,
+          "kind": "obtain"
+        },
+        {
+          "scope": "complete.dispatch",
+          "name": "savedQueries",
+          "type": "Queries",
+          "used": true,
+          "kind": "obtain"
+        },
+        {
+          "scope": "complete.dispatch",
+          "name": "final",
+          "type": "Memos",
+          "used": true,
+          "kind": "obtain"
+        },
+        {
+          "scope": "complete.dispatch",
+          "name": "next",
+          "type": "Inventory",
+          "used": true,
+          "kind": "obtain"
+        },
+        {
+          "scope": "complete.dispatch",
+          "name": "actual",
+          "type": "∀ extra P H, p ≤ P → h ≤ H → SourcePruningEnumerationDispatch.dispatch checkEmpty (fuel + extra) P H beforeCaller before.core source target memos.query = (.ok (some action), afterCaller, savedQueries)",
+          "used": true,
+          "kind": "obtain"
+        },
+        {
+          "scope": "complete.dispatch",
+          "name": "post",
+          "type": "Post formulas solver next beforeCaller afterCaller final",
+          "used": true,
+          "kind": "obtain"
+        },
+        {
+          "scope": "complete.dispatch",
+          "name": "savedSame",
+          "type": "final.query = savedQueries",
+          "used": true,
+          "kind": "obtain"
+        },
+        {
+          "scope": "complete.dispatch",
+          "name": "heapRealized",
+          "type": "PendingRealized afterCaller.checked.native.machine.heap before.core",
+          "used": true,
+          "kind": "obtain"
+        },
+        {
+          "scope": "complete.dispatch",
+          "name": "noOpResult",
+          "type": "(source = target ∨ before.core.values[source]? = some .eliminated) → (ExceptT.run (action before.core) = [.ok ((), before.core)]) ∧ (afterCaller = beforeCaller) ∧ (final = memos) ∧ (next = inventory)",
+          "used": true,
+          "kind": "obtain"
+        },
+        {
+          "scope": "complete.dispatch",
+          "name": "liveResult",
+          "type": "source ≠ target → before.core.values[source]? ≠ some .eliminated → ∃ (sourceNode : Option Nat) (targetNode : Option Nat) (merged : Option Nat) (sourceScs : List EnumerationState.Suspended) (targetScs : List EnumerationState.Suspended), (before.core.values[source]? = some (.unenumerated sourceNode sourceScs)) ∧ (before.core.values[target]? = some (.unenumerated targetNode targetScs)) ∧ (ExceptT.run (action before.core) = (if merged = some 0 then [] else [.ok ((), assimilated before.core target source (.unenumerated merged (sourceScs ++ targetScs)))])) ∧ (merged ≠ some 0 → (assimilated before.core target source (.unenumerated merged (sourceScs ++ targetScs))).values[target]? = some (.unenumerated merged (sourceScs ++ targetScs)) ∧ (assimilated before.core target source (.unenumerated merged (sourceScs ++ targetScs))).values[source]? = some .eliminated ∧ PendingRealized afterCaller.checked.native.machine.heap (assimilated before.core target source (.unenumerated merged (sourceScs ++ targetScs)))) ∧ ((sourceNode = none ∨ targetNode = none) → merged = sourceNode.orElse (fun _ => targetNode) ∧ afterCaller = beforeCaller ∧ final = memos ∧ next = inventory) ∧ (∀ (leftHandle rightHandle : Nat), sourceNode = some leftHandle → targetNode = some rightHandle → ∃ (left : Node) (right : Node) (query : Node) (replacement : Node) (queried : Checked width) (handle : Nat), (lookupNode beforeCaller.checked.native.machine.heap leftHandle = some left) ∧ (lookupNode beforeCaller.checked.native.machine.heap rightHandle = some right) ∧ (next.source = beforeCaller.checked.native.machine.heap) ∧ (next.roots = inventory.roots ++ [left, right]) ∧ (SourceCurrentAllocatedTargetQuery.Receipt formulas solver next left right beforeCaller.checked query queried memos) ∧ (merged = some handle) ∧ (encodeNode replacement = some handle) ∧ (lookupNode afterCaller.checked.native.machine.heap handle = some replacement) ∧ (Available afterCaller.checked.native.machine.heap replacement) ∧ (replacement.free = []) ∧ (∀ ambient term, InternedGuardedLanguage.meaning (SourceEqualityPCSGuard.holds formulas solver) ambient replacement term ↔ InternedGuardedLanguage.meaning (SourceEqualityPCSGuard.holds formulas solver) ambient left term ∧ InternedGuardedLanguage.meaning (SourceEqualityPCSGuard.holds formulas solver) ambient right term) ∧ (checkEmpty = false → replacement = query ∧ afterCaller = SourceCurrentAllocatedPartialState.advance beforeCaller queried beforeCaller.fourth beforeCaller.merge ∧ final = memos) ∧ (checkEmpty = true → ∃ (reached : Bool) (answer : Bool) (guardSaved : Queries), (SourceEndpointMemo.run query memos.query = (reached, guardSaved)) ∧ (SourceEndpointMemoCorrect.Checked queried.native.machine.heap memos.query (SourceCurrentEmptinessMerge.reaches query) (reached, guardSaved)) ∧ (∀ P H, p ≤ P → h ≤ H → SourcePruningEnumerationEnabledEmpty.check P H query queried beforeCaller.fourth memos.query = (.done answer afterCaller.checked afterCaller.fourth, guardSaved)) ∧ (savedQueries = guardSaved) ∧ (replacement = (if answer then .empty else query)) ∧ (reached = false → answer = false ∧ afterCaller.checked = queried ∧ afterCaller.fourth = beforeCaller.fourth ∧ final = {memos with query := guardSaved}) ∧ (reached = true → ∃ reachedPhysical : SourceCurrentConjunctionRowsAllocation.State Symbol FullSyntax.Formula, afterCaller.checked = SourceCurrentAllocatedQueryMemo.advancePhysical queried reachedPhysical ∧ ∃ actual : SourceCurrentConjunctionMemo.Call 1000 beforeCaller.fourth query (physical queried) answer reachedPhysical afterCaller.fourth, SourceCurrentConjunctionGlobalMemos.CallReads actual {memos with query := guardSaved} final)))",
+          "used": true,
+          "kind": "obtain"
+        }
+      ],
+      "field_count": 14,
+      "skipped_fields": []
+    },
+    {
+      "scope": "complete.noOp",
+      "producer": "noOpResult noOp",
+      "fields": [
+        {
+          "scope": "complete.noOp",
+          "name": "rawNoop",
+          "type": "ExceptT.run (action before.core) = [.ok ((), before.core)]",
+          "used": true,
+          "kind": "obtain"
+        },
+        {
+          "scope": "complete.noOp",
+          "name": "callerSame",
+          "type": "afterCaller = beforeCaller",
+          "used": true,
+          "kind": "obtain"
+        },
+        {
+          "scope": "complete.noOp",
+          "name": "finalSame",
+          "type": "final = memos",
+          "used": true,
+          "kind": "obtain"
+        },
+        {
+          "scope": "complete.noOp",
+          "name": "nextSame",
+          "type": "next = inventory",
+          "used": true,
+          "kind": "obtain"
+        }
+      ],
+      "field_count": 4,
+      "skipped_fields": []
+    },
+    {
+      "scope": "complete.live",
+      "producer": "liveResult different sourceLive",
+      "fields": [
+        {
+          "scope": "complete.live",
+          "name": "sourceNode",
+          "type": "Option Nat",
+          "used": true,
+          "kind": "obtain"
+        },
+        {
+          "scope": "complete.live",
+          "name": "targetNode",
+          "type": "Option Nat",
+          "used": true,
+          "kind": "obtain"
+        },
+        {
+          "scope": "complete.live",
+          "name": "merged",
+          "type": "Option Nat",
+          "used": true,
+          "kind": "obtain"
+        },
+        {
+          "scope": "complete.live",
+          "name": "sourceScs",
+          "type": "List EnumerationState.Suspended",
+          "used": true,
+          "kind": "obtain"
+        },
+        {
+          "scope": "complete.live",
+          "name": "targetScs",
+          "type": "List EnumerationState.Suspended",
+          "used": true,
+          "kind": "obtain"
+        },
+        {
+          "scope": "complete.live",
+          "name": "sourceStored",
+          "type": "before.core.values[source]? = some (.unenumerated sourceNode sourceScs)",
+          "used": true,
+          "kind": "obtain"
+        },
+        {
+          "scope": "complete.live",
+          "name": "targetStored",
+          "type": "before.core.values[target]? = some (.unenumerated targetNode targetScs)",
+          "used": true,
+          "kind": "obtain"
+        },
+        {
+          "scope": "complete.live",
+          "name": "rawSelected",
+          "type": "ExceptT.run (action before.core) = (if merged = some 0 then [] else [.ok ((), assimilated before.core target source (.unenumerated merged (sourceScs ++ targetScs)))])",
+          "used": true,
+          "kind": "obtain"
+        },
+        {
+          "scope": "complete.live",
+          "name": "_selectedResult",
+          "type": "merged ≠ some 0 → (assimilated before.core target source (.unenumerated merged (sourceScs ++ targetScs))).values[target]? = some (.unenumerated merged (sourceScs ++ targetScs)) ∧ (assimilated before.core target source (.unenumerated merged (sourceScs ++ targetScs))).values[source]? = some .eliminated ∧ PendingRealized afterCaller.checked.native.machine.heap (assimilated before.core target source (.unenumerated merged (sourceScs ++ targetScs)))",
+          "used": false,
+          "kind": "obtain",
+          "reason": "Retained producer field is deliberately not explicitly consumed; original public receipt is retained separately."
+        },
+        {
+          "scope": "complete.live",
+          "name": "optionalOrigin",
+          "type": "(sourceNode = none ∨ targetNode = none) → merged = sourceNode.orElse (fun _ => targetNode) ∧ afterCaller = beforeCaller ∧ final = memos ∧ next = inventory",
+          "used": true,
+          "kind": "obtain"
+        },
+        {
+          "scope": "complete.live",
+          "name": "queriedOrigin",
+          "type": "∀ (leftHandle rightHandle : Nat), sourceNode = some leftHandle → targetNode = some rightHandle → ∃ (left : Node) (right : Node) (query : Node) (replacement : Node) (queried : Checked width) (handle : Nat), (lookupNode beforeCaller.checked.native.machine.heap leftHandle = some left) ∧ (lookupNode beforeCaller.checked.native.machine.heap rightHandle = some right) ∧ (next.source = beforeCaller.checked.native.machine.heap) ∧ (next.roots = inventory.roots ++ [left, right]) ∧ (SourceCurrentAllocatedTargetQuery.Receipt formulas solver next left right beforeCaller.checked query queried memos) ∧ (merged = some handle) ∧ (encodeNode replacement = some handle) ∧ (lookupNode afterCaller.checked.native.machine.heap handle = some replacement) ∧ (Available afterCaller.checked.native.machine.heap replacement) ∧ (replacement.free = []) ∧ (∀ ambient term, InternedGuardedLanguage.meaning (SourceEqualityPCSGuard.holds formulas solver) ambient replacement term ↔ InternedGuardedLanguage.meaning (SourceEqualityPCSGuard.holds formulas solver) ambient left term ∧ InternedGuardedLanguage.meaning (SourceEqualityPCSGuard.holds formulas solver) ambient right term) ∧ (checkEmpty = false → replacement = query ∧ afterCaller = SourceCurrentAllocatedPartialState.advance beforeCaller queried beforeCaller.fourth beforeCaller.merge ∧ final = memos) ∧ (checkEmpty = true → ∃ (reached : Bool) (answer : Bool) (guardSaved : Queries), (SourceEndpointMemo.run query memos.query = (reached, guardSaved)) ∧ (SourceEndpointMemoCorrect.Checked queried.native.machine.heap memos.query (SourceCurrentEmptinessMerge.reaches query) (reached, guardSaved)) ∧ (∀ P H, p ≤ P → h ≤ H → SourcePruningEnumerationEnabledEmpty.check P H query queried beforeCaller.fourth memos.query = (.done answer afterCaller.checked afterCaller.fourth, guardSaved)) ∧ (savedQueries = guardSaved) ∧ (replacement = (if answer then .empty else query)) ∧ (reached = false → answer = false ∧ afterCaller.checked = queried ∧ afterCaller.fourth = beforeCaller.fourth ∧ final = {memos with query := guardSaved}) ∧ (reached = true → ∃ reachedPhysical : SourceCurrentConjunctionRowsAllocation.State Symbol FullSyntax.Formula, afterCaller.checked = SourceCurrentAllocatedQueryMemo.advancePhysical queried reachedPhysical ∧ ∃ actual : SourceCurrentConjunctionMemo.Call 1000 beforeCaller.fourth query (physical queried) answer reachedPhysical afterCaller.fourth, SourceCurrentConjunctionGlobalMemos.CallReads actual {memos with query := guardSaved} final))",
+          "used": true,
+          "kind": "obtain"
+        }
+      ],
+      "field_count": 11,
+      "skipped_fields": [
+        "_selectedResult"
+      ]
+    },
+    {
+      "scope": "complete.mergedRealized.sourceNone",
+      "producer": "optionalOrigin after sourceNode = none",
+      "fields": [
+        {
+          "scope": "complete.mergedRealized.sourceNone",
+          "name": "mergedSame",
+          "type": "merged = none.orElse (fun _ => targetNode)",
+          "used": true,
+          "kind": "obtain"
+        },
+        {
+          "scope": "complete.mergedRealized.sourceNone",
+          "name": "_optionalCaller",
+          "type": "afterCaller = beforeCaller",
+          "used": false,
+          "kind": "obtain",
+          "reason": "Retained producer field is deliberately not explicitly consumed; original public receipt is retained separately."
+        },
+        {
+          "scope": "complete.mergedRealized.sourceNone",
+          "name": "_optionalFinal",
+          "type": "final = memos",
+          "used": false,
+          "kind": "obtain",
+          "reason": "Retained producer field is deliberately not explicitly consumed; original public receipt is retained separately."
+        },
+        {
+          "scope": "complete.mergedRealized.sourceNone",
+          "name": "_optionalNext",
+          "type": "next = inventory",
+          "used": false,
+          "kind": "obtain",
+          "reason": "Retained producer field is deliberately not explicitly consumed; original public receipt is retained separately."
+        }
+      ],
+      "field_count": 4,
+      "skipped_fields": [
+        "_optionalCaller",
+        "_optionalFinal",
+        "_optionalNext"
+      ]
+    },
+    {
+      "scope": "complete.mergedRealized.sourceSome.targetNone",
+      "producer": "optionalOrigin after sourceNode = some leftHandle and targetNode = none",
+      "fields": [
+        {
+          "scope": "complete.mergedRealized.sourceSome.targetNone",
+          "name": "mergedSame",
+          "type": "merged = (some leftHandle).orElse (fun _ => none)",
+          "used": true,
+          "kind": "obtain"
+        },
+        {
+          "scope": "complete.mergedRealized.sourceSome.targetNone",
+          "name": "_optionalCaller",
+          "type": "afterCaller = beforeCaller",
+          "used": false,
+          "kind": "obtain",
+          "reason": "Retained producer field is deliberately not explicitly consumed; original public receipt is retained separately."
+        },
+        {
+          "scope": "complete.mergedRealized.sourceSome.targetNone",
+          "name": "_optionalFinal",
+          "type": "final = memos",
+          "used": false,
+          "kind": "obtain",
+          "reason": "Retained producer field is deliberately not explicitly consumed; original public receipt is retained separately."
+        },
+        {
+          "scope": "complete.mergedRealized.sourceSome.targetNone",
+          "name": "_optionalNext",
+          "type": "next = inventory",
+          "used": false,
+          "kind": "obtain",
+          "reason": "Retained producer field is deliberately not explicitly consumed; original public receipt is retained separately."
+        }
+      ],
+      "field_count": 4,
+      "skipped_fields": [
+        "_optionalCaller",
+        "_optionalFinal",
+        "_optionalNext"
+      ]
+    },
+    {
+      "scope": "complete.mergedRealized.sourceSome.targetSome",
+      "producer": "queriedOrigin leftHandle rightHandle after both optional nodes = some",
+      "fields": [
+        {
+          "scope": "complete.mergedRealized.sourceSome.targetSome",
+          "name": "_left",
+          "type": "Node",
+          "used": false,
+          "kind": "obtain",
+          "reason": "Retained producer field is deliberately not explicitly consumed; original public receipt is retained separately."
+        },
+        {
+          "scope": "complete.mergedRealized.sourceSome.targetSome",
+          "name": "_right",
+          "type": "Node",
+          "used": false,
+          "kind": "obtain",
+          "reason": "Retained producer field is deliberately not explicitly consumed; original public receipt is retained separately."
+        },
+        {
+          "scope": "complete.mergedRealized.sourceSome.targetSome",
+          "name": "_query",
+          "type": "Node",
+          "used": false,
+          "kind": "obtain",
+          "reason": "Retained producer field is deliberately not explicitly consumed; original public receipt is retained separately."
+        },
+        {
+          "scope": "complete.mergedRealized.sourceSome.targetSome",
+          "name": "replacement",
+          "type": "Node",
+          "used": true,
+          "kind": "obtain"
+        },
+        {
+          "scope": "complete.mergedRealized.sourceSome.targetSome",
+          "name": "_queried",
+          "type": "Checked width",
+          "used": false,
+          "kind": "obtain",
+          "reason": "Retained producer field is deliberately not explicitly consumed; original public receipt is retained separately."
+        },
+        {
+          "scope": "complete.mergedRealized.sourceSome.targetSome",
+          "name": "_returnedHandle",
+          "type": "Nat",
+          "used": false,
+          "kind": "obtain",
+          "reason": "Retained producer field is deliberately not explicitly consumed; original public receipt is retained separately."
+        },
+        {
+          "scope": "complete.mergedRealized.sourceSome.targetSome",
+          "name": "_leftLookup",
+          "type": "lookupNode beforeCaller.checked.native.machine.heap leftHandle = some _left",
+          "used": false,
+          "kind": "obtain",
+          "reason": "Retained producer field is deliberately not explicitly consumed; original public receipt is retained separately."
+        },
+        {
+          "scope": "complete.mergedRealized.sourceSome.targetSome",
+          "name": "_rightLookup",
+          "type": "lookupNode beforeCaller.checked.native.machine.heap rightHandle = some _right",
+          "used": false,
+          "kind": "obtain",
+          "reason": "Retained producer field is deliberately not explicitly consumed; original public receipt is retained separately."
+        },
+        {
+          "scope": "complete.mergedRealized.sourceSome.targetSome",
+          "name": "_nextSource",
+          "type": "next.source = beforeCaller.checked.native.machine.heap",
+          "used": false,
+          "kind": "obtain",
+          "reason": "Retained producer field is deliberately not explicitly consumed; original public receipt is retained separately."
+        },
+        {
+          "scope": "complete.mergedRealized.sourceSome.targetSome",
+          "name": "_nextRoots",
+          "type": "next.roots = inventory.roots ++ [_left, _right]",
+          "used": false,
+          "kind": "obtain",
+          "reason": "Retained producer field is deliberately not explicitly consumed; original public receipt is retained separately."
+        },
+        {
+          "scope": "complete.mergedRealized.sourceSome.targetSome",
+          "name": "_receipt",
+          "type": "SourceCurrentAllocatedTargetQuery.Receipt formulas solver next _left _right beforeCaller.checked _query _queried memos",
+          "used": false,
+          "kind": "obtain",
+          "reason": "Retained producer field is deliberately not explicitly consumed; original public receipt is retained separately."
+        },
+        {
+          "scope": "complete.mergedRealized.sourceSome.targetSome",
+          "name": "mergedSame",
+          "type": "merged = some _returnedHandle",
+          "used": true,
+          "kind": "obtain"
+        },
+        {
+          "scope": "complete.mergedRealized.sourceSome.targetSome",
+          "name": "_encoded",
+          "type": "encodeNode replacement = some _returnedHandle",
+          "used": false,
+          "kind": "obtain",
+          "reason": "Retained producer field is deliberately not explicitly consumed; original public receipt is retained separately."
+        },
+        {
+          "scope": "complete.mergedRealized.sourceSome.targetSome",
+          "name": "decoded",
+          "type": "lookupNode afterCaller.checked.native.machine.heap _returnedHandle = some replacement",
+          "used": true,
+          "kind": "obtain"
+        },
+        {
+          "scope": "complete.mergedRealized.sourceSome.targetSome",
+          "name": "available",
+          "type": "Available afterCaller.checked.native.machine.heap replacement",
+          "used": true,
+          "kind": "obtain"
+        },
+        {
+          "scope": "complete.mergedRealized.sourceSome.targetSome",
+          "name": "closed",
+          "type": "replacement.free = []",
+          "used": true,
+          "kind": "obtain"
+        },
+        {
+          "scope": "complete.mergedRealized.sourceSome.targetSome",
+          "name": "_meaning",
+          "type": "∀ ambient term, InternedGuardedLanguage.meaning (SourceEqualityPCSGuard.holds formulas solver) ambient replacement term ↔ InternedGuardedLanguage.meaning (SourceEqualityPCSGuard.holds formulas solver) ambient _left term ∧ InternedGuardedLanguage.meaning (SourceEqualityPCSGuard.holds formulas solver) ambient _right term",
+          "used": false,
+          "kind": "obtain",
+          "reason": "Retained producer field is deliberately not explicitly consumed; original public receipt is retained separately."
+        },
+        {
+          "scope": "complete.mergedRealized.sourceSome.targetSome",
+          "name": "_disabled",
+          "type": "checkEmpty = false → replacement = _query ∧ afterCaller = SourceCurrentAllocatedPartialState.advance beforeCaller _queried beforeCaller.fourth beforeCaller.merge ∧ final = memos",
+          "used": false,
+          "kind": "obtain",
+          "reason": "Retained producer field is deliberately not explicitly consumed; original public receipt is retained separately."
+        },
+        {
+          "scope": "complete.mergedRealized.sourceSome.targetSome",
+          "name": "_enabled",
+          "type": "checkEmpty = true → ∃ (reached : Bool) (answer : Bool) (guardSaved : Queries), (SourceEndpointMemo.run _query memos.query = (reached, guardSaved)) ∧ (SourceEndpointMemoCorrect.Checked _queried.native.machine.heap memos.query (SourceCurrentEmptinessMerge.reaches _query) (reached, guardSaved)) ∧ (∀ P H, p ≤ P → h ≤ H → SourcePruningEnumerationEnabledEmpty.check P H _query _queried beforeCaller.fourth memos.query = (.done answer afterCaller.checked afterCaller.fourth, guardSaved)) ∧ (savedQueries = guardSaved) ∧ (replacement = (if answer then .empty else _query)) ∧ (reached = false → answer = false ∧ afterCaller.checked = _queried ∧ afterCaller.fourth = beforeCaller.fourth ∧ final = {memos with query := guardSaved}) ∧ (reached = true → ∃ reachedPhysical : SourceCurrentConjunctionRowsAllocation.State Symbol FullSyntax.Formula, afterCaller.checked = SourceCurrentAllocatedQueryMemo.advancePhysical _queried reachedPhysical ∧ ∃ actual : SourceCurrentConjunctionMemo.Call 1000 beforeCaller.fourth _query (physical _queried) answer reachedPhysical afterCaller.fourth, SourceCurrentConjunctionGlobalMemos.CallReads actual {memos with query := guardSaved} final)",
+          "used": false,
+          "kind": "obtain",
+          "reason": "Retained producer field is deliberately not explicitly consumed; original public receipt is retained separately."
+        }
+      ],
+      "field_count": 19,
+      "skipped_fields": [
+        "_left",
+        "_right",
+        "_query",
+        "_queried",
+        "_returnedHandle",
+        "_leftLookup",
+        "_rightLookup",
+        "_nextSource",
+        "_nextRoots",
+        "_receipt",
+        "_encoded",
+        "_meaning",
+        "_disabled",
+        "_enabled"
+      ]
+    },
+    {
+      "scope": "complete.live.cached",
+      "producer": "SourcePruningEnumerationCachedAssimilation.complete afterCaller.checked.native.machine.heap before source target sourceNode targetNode merged sourceScs targetScs roots storage heapRealized paths counts grownFlags sourceStored targetStored (Ne.symm different) mergedRealized",
+      "fields": [
+        {
+          "scope": "complete.live.cached",
+          "name": "rows",
+          "type": "List (Unit × EnumerationExpandableIndex.Cached Symbol Constraint)",
+          "used": true,
+          "kind": "obtain"
+        },
+        {
+          "scope": "complete.live.cached",
+          "name": "after",
+          "type": "EnumerationExpandableIndex.Cached Symbol Constraint",
+          "used": true,
+          "kind": "obtain"
+        },
+        {
+          "scope": "complete.live.cached",
+          "name": "computed",
+          "type": "∀ cacheFuel : Nat, SourcePruningEnumerationCachedAssimilation.finish afterCaller.checked.native.machine.heap cacheFuel source target merged sourceScs targetScs before = some (rows, after)",
+          "used": true,
+          "kind": "obtain"
+        },
+        {
+          "scope": "complete.live.cached",
+          "name": "rawCached",
+          "type": "ExceptT.run (SourcePruningEnumerationDispatch.finishOptional (EnumGuard := Constraint) source target merged sourceScs targetScs before.core) = rows.map (fun row => .ok (row.1, row.2.core))",
+          "used": true,
+          "kind": "obtain"
+        },
+        {
+          "scope": "complete.live.cached",
+          "name": "counterSame",
+          "type": "after.core.counter = before.core.counter",
+          "used": true,
+          "kind": "obtain"
+        },
+        {
+          "scope": "complete.live.cached",
+          "name": "forestSame",
+          "type": "after.core.representatives = before.core.representatives",
+          "used": true,
+          "kind": "obtain"
+        },
+        {
+          "scope": "complete.live.cached",
+          "name": "afterPaths",
+          "type": "Roots after.core.representatives roots",
+          "used": true,
+          "kind": "obtain"
+        },
+        {
+          "scope": "complete.live.cached",
+          "name": "afterStorage",
+          "type": "StorageValid after.core",
+          "used": true,
+          "kind": "obtain"
+        },
+        {
+          "scope": "complete.live.cached",
+          "name": "cacheRealized",
+          "type": "PendingRealized afterCaller.checked.native.machine.heap after.core",
+          "used": true,
+          "kind": "obtain"
+        },
+        {
+          "scope": "complete.live.cached",
+          "name": "afterCounts",
+          "type": "EnumerationCanonicalWaiting.Correct roots after.core.values after.waiting",
+          "used": true,
+          "kind": "obtain"
+        },
+        {
+          "scope": "complete.live.cached",
+          "name": "waitingSame",
+          "type": "after.waiting = before.waiting",
+          "used": true,
+          "kind": "obtain"
+        },
+        {
+          "scope": "complete.live.cached",
+          "name": "afterFlags",
+          "type": "∀ slot : Nat, SourcePruningEnumerationNativeIndex.candidate afterCaller.checked.native.machine.heap ((after.core.values[slot]?).getD .eliminated) = some (after.expandable slot)",
+          "used": true,
+          "kind": "obtain"
+        },
+        {
+          "scope": "complete.live.cached",
+          "name": "result",
+          "type": "if merged = some 0 then rows = [] ∧ after = before else rows = [((), after)] ∧ after.core = (assimilated before.core target source (.unenumerated merged (sourceScs ++ targetScs))) ∧ (assimilated before.core target source (.unenumerated merged (sourceScs ++ targetScs))).values[source]? = some .eliminated ∧ (assimilated before.core target source (.unenumerated merged (sourceScs ++ targetScs))).values[target]? = some (.unenumerated merged (sourceScs ++ targetScs)) ∧ after.expandable source = false ∧ (∀ slot : Nat, slot ≠ source → slot ≠ target → after.expandable slot = before.expandable slot)",
+          "used": true,
+          "kind": "obtain"
+        }
+      ],
+      "field_count": 13,
+      "skipped_fields": []
+    }
+  ],
+  "count": 7,
+  "field_count": 69,
+  "inline_fields": []
+}

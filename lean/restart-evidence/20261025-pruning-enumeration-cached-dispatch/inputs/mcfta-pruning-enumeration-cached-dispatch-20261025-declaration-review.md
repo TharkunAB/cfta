@@ -1,0 +1,18 @@
+[2026-10-25 07:46:59 CET] FINAL independent declaration CLEAR.
+
+I read the complete six Root-selected literal strings/126 lines, all215 manual scoped types, all seven packets/69 concrete fields, all seven case groups, four local-have types, insertion metadata, empty let/instance/IH inventories, schema, API plan and provenance. I independently checked the exact178-payload/180-file physical set, every pin, all21 live whole identities, all26 inclusive cuts/427 lines, and all34 literal import routes/35 project identities. The nested60-payload preflight and42-payload supplement remain byte-exact.
+
+Frozen owner: /tmp/mcfta-pruning-enumeration-cached-dispatch-20261025-proposal.
+FROZEN1396B SHA256 eb6ad5261e00b0375675e042107bfbc1ebb2fdf86c5b9084a400c4a27e86709c.
+pins28574B SHA256 b38c981a53a80ccc32a22f4eed25f361cc0cf3fb0c211c1053d88632d15bf5fb.
+Source review dac99d9b6074c5011983082fbe170ab22bdb7494f75bfbd1b71ee4b2a560842b is bound. Every contract equals its Root selection and prospective file, including the original full two-present receipt/language/disabled/enabled tail.
+
+The one-theorem route matches the live APIs. Dispatch.dispatch_complete is obtained once at before.core. Its complete14-field outer packet supplies the actual stable observation, returned Caller/query tables, Post and realization of the unchanged captured core at the returned heap. Lazy noops use its exact singleton and unchanged Caller/memos/inventory. They require no target read or native computation.
+
+The live11-field packet retains actual source/target stored equations, selected raw conditional and optional/two-present origins. Optional carries derive readiness from returned realization at those slots. The19-field two-present packet retains the original queried endpoint, returned replacement lookup/Available/closed, source/root inventory, Receipt, language statement and both flag branches. Its renamed dependent types consistently distinguish _query/_queried/_returnedHandle from replacement and afterCaller. The original queriedOrigin remains in the public result; explicitly skipped extraction fields do not discard that receipt.
+
+The four local have contracts suffice for the selected plan. grownFlags uses Post.effects.keeps and lookupNode_keeps at every Nat slot, following the existing NativeIndex local pattern. Cleared slotValueSame and anonymous enumerated payload are explicitly unused. different/sourceLive derive the live domain. mergedRealized provides the exact optional readiness premise. CachedAssimilation.complete then takes the symmetric inequality and returns its13-field packet at the same returned heap and initial Cached state. Every after.core projection, flag/cache type and raw-row map matches that producer. Empty has raw[] and a separate unchanged cache; it does not supply a successful enum row.
+
+The context resolves constructor EdgeKey, existing Type1 Caller/Checked and all inherited DecidableEq requirements through literal imports. No new List dictionary, instance, helper, carrier, predicate, induction or Graph assumption is required. Insertion metadata preserves selected continuation bytes. Current initial WordRanges remains explicit; no future Fold.Ranges, desired merged handle, successful continuation, closure inspection or repeated native query is introduced. The opaque-action runtime payload and arbitrary fault-path cache laws remain outside this declaration.
+
+This is source/type clearance only, with Root-owned bodies still absent. No compiler/parser, candidate program, Git/network/board or production mutation was run. Source/data-only identity checks do not predict elaboration or validation. The selected300–480 estimate/hard720 remains unchanged.

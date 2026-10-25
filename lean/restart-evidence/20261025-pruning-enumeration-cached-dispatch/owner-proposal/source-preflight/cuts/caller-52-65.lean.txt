@@ -1,0 +1,14 @@
+structure State (width : Nat) : Type 1 where
+  checked : Checked width
+  merge : MergeMemo
+  fourth : Fourth
+  nodeResults : FlatMemoThunk.State NodeKey NodeRequest Node
+  edgeResults : FlatMemoThunk.State EdgeKey EdgeRequest Edge
+
+/-- A fresh caller family clears only its two result tables. -/
+def initial (checked : Checked width) (merge : MergeMemo) (fourth : Fourth) : State width :=
+  ⟨checked, merge, fourth, FlatMemoThunk.empty, FlatMemoThunk.empty⟩
+
+/-- Current checked operations retain both caller result tables. -/
+def advance (before : State width) (checked : Checked width) (fourth : Fourth) (merge : MergeMemo) : State width :=
+  { before with checked := checked, merge := merge, fourth := fourth }

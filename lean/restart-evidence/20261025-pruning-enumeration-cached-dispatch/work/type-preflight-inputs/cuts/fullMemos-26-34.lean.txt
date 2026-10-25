@@ -1,0 +1,9 @@
+structure Memos where
+  unfolding : UMemo
+  query : SourceEndpointMemo.Memos
+
+/-- All three completed tables retain exact resident inputs and source answers. -/
+structure Valid [DecidableEq (EdgeKey Symbol Guard)] (heap : State Symbol Guard) (memos : Memos) : Prop where
+  unfolding : InternedFreshOrdinaryUnfoldMemo.Correct heap memos.unfolding
+  query : SourceEndpointMemo.Valid heap memos.query
+

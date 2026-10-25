@@ -1,0 +1,9 @@
+structure Memos where
+  descendants : Memo
+  predicate : SourceUnconstrainedMemo.Memo
+
+/-- Both memo families retain complete resident inputs and exact answers. -/
+structure Valid (heap : State Symbol Guard) (memos : Memos) : Prop where
+  descendants : Correct heap memos.descendants
+  predicate : SourceUnconstrainedMemo.Correct heap memos.predicate
+

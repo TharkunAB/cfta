@@ -1,0 +1,165 @@
+{
+  "groups": [
+    {
+      "scope": "complete.grownFlags.slotValue",
+      "kind": "cases",
+      "expression": "slotValue",
+      "branches": [
+        {
+          "constructor": "enumerated",
+          "fields": [
+            {
+              "name": "_oldEnumerated",
+              "type": "Fragments.Fragment Symbol",
+              "used": false
+            }
+          ]
+        },
+        {
+          "constructor": "eliminated",
+          "fields": []
+        },
+        {
+          "constructor": "unenumerated",
+          "fields": [
+            {
+              "name": "oldNode",
+              "type": "Option Nat",
+              "used": true
+            },
+            {
+              "name": "oldScs",
+              "type": "List EnumerationState.Suspended",
+              "used": true
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "scope": "complete.grownFlags.unenumerated.oldNode",
+      "kind": "cases",
+      "expression": "oldNode",
+      "branches": [
+        {
+          "constructor": "none",
+          "fields": []
+        },
+        {
+          "constructor": "some",
+          "fields": [
+            {
+              "name": "oldHandle",
+              "type": "Nat",
+              "used": true
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "scope": "complete.grownFlags.unenumerated.some.oldLookup",
+      "kind": "cases",
+      "expression": "lookupNode beforeCaller.checked.native.machine.heap oldHandle",
+      "equation": "oldLookup",
+      "branches": [
+        {
+          "constructor": "none",
+          "equation_type": "lookupNode beforeCaller.checked.native.machine.heap oldHandle = none",
+          "fields": []
+        },
+        {
+          "constructor": "some",
+          "equation_type": "lookupNode beforeCaller.checked.native.machine.heap oldHandle = some oldValue",
+          "fields": [
+            {
+              "name": "oldValue",
+              "type": "Node",
+              "used": true
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "scope": "complete.noOp",
+      "kind": "by_cases",
+      "expression": "source = target ∨ before.core.values[source]? = some .eliminated",
+      "hypothesis": "noOp",
+      "branches": [
+        {
+          "name": "positive",
+          "type": "source = target ∨ before.core.values[source]? = some .eliminated"
+        },
+        {
+          "name": "negative",
+          "type": "¬ (source = target ∨ before.core.values[source]? = some .eliminated)"
+        }
+      ]
+    },
+    {
+      "scope": "complete.mergedRealized.sourceNode",
+      "kind": "cases",
+      "expression": "sourceNode",
+      "branches": [
+        {
+          "constructor": "none",
+          "fields": []
+        },
+        {
+          "constructor": "some",
+          "fields": [
+            {
+              "name": "leftHandle",
+              "type": "Nat",
+              "used": true
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "scope": "complete.mergedRealized.sourceNone.targetNode",
+      "kind": "cases",
+      "expression": "targetNode",
+      "branches": [
+        {
+          "constructor": "none",
+          "fields": []
+        },
+        {
+          "constructor": "some",
+          "fields": [
+            {
+              "name": "rightHandle",
+              "type": "Nat",
+              "used": true
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "scope": "complete.mergedRealized.sourceSome.targetNode",
+      "kind": "cases",
+      "expression": "targetNode",
+      "branches": [
+        {
+          "constructor": "none",
+          "fields": []
+        },
+        {
+          "constructor": "some",
+          "fields": [
+            {
+              "name": "rightHandle",
+              "type": "Nat",
+              "used": true
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "count": 7
+}
