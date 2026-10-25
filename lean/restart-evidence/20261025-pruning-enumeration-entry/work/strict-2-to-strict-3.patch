@@ -1,0 +1,10 @@
+--- strict-2/SourcePruningEnumerationEntry.lean
++++ strict-3/SourcePruningEnumerationEntry.lean
+@@ -161,6 +161,7 @@
+         change enter heap (readFuel + captureFuel + extra) uv before = _
+         unfold enter
+         rw [bind_single _ _ before readAfter _ (by
++          change ExceptT.run (getValue (readFuel + captureFuel + extra) uv before) = _
+           simpa only [Nat.add_assoc] using readExact (captureFuel + extra))]
+         dsimp only
+         rw [bind_single _ _ readAfter compressed target (captureExact extra)]

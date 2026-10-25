@@ -1,0 +1,32 @@
+[2026-10-25 01:41:03 CEST] FINAL — CLEAR. Selected Entry source-route review. This is not declaration/body authorization.
+
+I read Root's selected enter/complete/context/instance headers and the concrete read, representative, storage, frame and pending-realization APIs. Root selected model decode failure .unresolvedReference, soft160–240/hard360, one local List Monad, no Lawful/global instance/helper/new carrier/induction. Root alone authors all bodies. The later owner review must bind its nine typed haves, two proof lets and six obtain packets separately.
+
+The action follows native enumerateOutUVarWith: actual getValue first; only pending Some proceeds; all other read constructors reject. It then captures representative AGAIN after that first compression, decodes the same handle and derives ancestry from that actual target. Mu AND retained Union use the original decoded value's recursive boundary. There is no callback, normalization or later winner substitution. Haskell's MonadFail explicitly uses empty, matching actual raw[] rejection rather than a missing-success inference.
+
+StorageValid.total supplies a finite path. findRoot_bounded plus uv<counter and SupplyAligned derive the actual root-slot bound. Thus the first concrete getValue singleton and compression Frame can be derived, not supplied. Only its actual pending-Some case invokes PendingRealized to derive same-handle lookup, Available and closure. Feed that derived observation to pending_reread_complete, invert the actual representative receipt and apply findRoot_moreFuel to both runs at a common sum bound. Their endpoints stay the same for every extra. Concrete action reduction must derive raw singleton or rejection; Success membership alone is insufficient.
+
+The public packet retains original-to-compressed Frame and the exact entered ancestry record. Updating expansionAncestry prevents a full entered Frame claim. Storage fields and values stay unchanged, so StorageValid and PendingRealized can be rebuilt directly. No IsRoot, Safe, selector eligibility, desired output, successful prefix or Graph oracle is needed. All current read variants are admitted. Missing decode is an existing model error outside the genuine realized domain, with no native error equivalence claim.
+
+The model key uses a Nat handle and canonical trie lists. Native NodeId/HashSet extraction remains open. Existing Mu-unfold/memo and closed Union exposure APIs retain their genuine heap/cache/history prerequisites; this entry stops before them. Actual expansion production, cache/flag initialization/history, physical IDs/indexes, machine admission, Safe/LiveRoots and full driver language remain open. H6 remains strongest and the whole goal stays active. No mathematical/action/instance body, compiler, parser, Git/network or reviewed program ran here.
+
+Selected header identities:
+- complete: `9f3c04c3baf2f00eb8810bf7530515d13d9f52f9952bcdc0182d63015fb25425`
+- enter: `9dfcb6be4f51de2d3fdcb2e341927799cde9b476f4fc6c9fda87714cc5454962`
+- context: `476c9d652bf7c3b7f6555c2280c7c9231af10ebec6c227efc82987846cf9324b`
+- local instance header: `d397a2ad7f0ed029f14d3ae9da6c001d9ea704cbaa5c41bb6616802cf040cfd8`
+
+Source identities: 10 whole sources, 21 inclusive cuts/258 lines. Hashes below identify data reads, not executable checks.
+
+| Whole source | SHA-256 | Inclusive cut and SHA-256 |
+|---|---|---|
+| `/home/tritlo/Code/mcfta/cfta/src/Data/CFTA/Enumeration.hs` | `949c484539483f0e646b069899be127a57f0897353b24b92e51a5d90654cec07` | 268–292: `420b5e59997b1a1d382855f689cb6d8fc78c1caf575df2ab2f92f3a1b79bcc99`<br>356–364: `9e7eb4ec30c1a17f0c237389ea1a3f888bc8472eb3855d1e3595c2e80e4bdc7c`<br>414–428: `cfbfc92eda8e0dac5ed3942131c5f9daf8c4d6ca70da0d27e85e118fe84cb5fc`<br>885–900: `b64f44d23cd0cf2abbf9ea80d2cbf7f7d5319d64a6b21ca0adcf19df9e942980` |
+| `/home/tritlo/Code/mcfta/lean/MicroCFTA/EnumerationState.lean` | `83a898b883ec7b52469bccd87e8afa4f7abb320e3c935bf48f3d80ad77003cc4` | 56–64: `d59b55cb9aa2acd0728dcd912fa51defc14c23cf07e587830720b2e39c50e3f8`<br>79–89: `3b8e423c48eaf41f955de2c734c24124db7a32e7a9b5a74c1a3478f5cfe5f1af`<br>106–124: `ba63fc2413db2c65bf388b0b1c302c139c0aedc502521feaa0a2d3688a6f3116` |
+| `/home/tritlo/Code/mcfta/lean/MicroCFTA/UnionFind.lean` | `3668867a41890e4721c301092a06c48d3bd757a8eede4b92340fe5db80119a14` | 159–163: `1a01eed9445be7c4b8e48ce7555b2b0c825ebdd4348b2aca8221c72573346f81`<br>180–184: `1fa3dced6015cf7b1a30d386eb7d4247d76a050ea1383bace9fa1dd164dcdb95` |
+| `/home/tritlo/Code/mcfta/lean/MicroCFTA/EnumerationCorrectness.lean` | `087b96d593bb42cea0b61b2742b43d4a41ce5a2d990e300c8d15700e2eb0672d` | 644–649: `71b935f49708388e5ab84a40b48342b9b120bb53f962688f3c713e8497293bdc`<br>875–882: `560ff9ba2b0bfe15b24dbc23183727d01afa3447acff5f0a88259328e118b1e4`<br>931–938: `e282ccef12aa21e2b8d2d70f2a0b39994bf585c7b04d81cae9e6cd96984e933a`<br>1017–1025: `e2e319286fcb39a4c6ec742c14daa9aa87b10567e7e9b3e2fae93adf3cb776fb` |
+| `/home/tritlo/Code/mcfta/lean/MicroCFTA/EnumerationCompressionFrame.lean` | `5b6e6a4b11c21b949874db500e23aa074fcdd4e0de683f46f33863113dc91375` | 20–49: `54fe70c0374a787946a571ba4f06351e63f542b8412caa0e7aff2a069c0d948b`<br>69–75: `aaed285d5cd70c2bb71e2f0dcb7a46196a44913410d946cdab0353061117b325` |
+| `/home/tritlo/Code/mcfta/lean/MicroCFTA/SourcePruningEnumerationObservation.lean` | `5a7b858adc4febb75621b9836053f308924c22d5fd7662741da61cbdab629bf4` | 19–26: `e2c14f6c8055a017bf2a1980bee54ea9ee02a05770c0a93bda80ce0b3a86f016`<br>45–54: `a6c5473363ae18efdd92de2be2d2e3cca6a1e8b4d46e642cd08be51836c461c7` |
+| `/home/tritlo/Code/mcfta/lean/MicroCFTA/SourcePruningEnumerationReread.lean` | `d98b2cedac2dcd040f4f0643bda09d7656932cd294b1721e2be9d80078895ea4` | 7–34: `310dfcd68e5e2773cafb967692fa4043c364ca8136d23a2a9d2b5e3c59c6011f` |
+| `/home/tritlo/Code/mcfta/lean/MicroCFTA/SourcePruningEnumerationNodes.lean` | `1fb4077739402c31ec48d4bfa8254ef9c1b7453601290dfcd1c0c0031eeee8a4` | 4–16: `7156970c7f26b8c621065757338dc564c036b47bfbb93abebcd8b2f06f8c02bd` |
+| `/home/tritlo/Code/mcfta/lean/MicroCFTA/MergedOrdinaryHeight.lean` | `278e40fc5846b6f8614e4bf1025b8c7711c03dbad7b298bcccc2f1442f47a636` | 88–92: `f0568413782035919526d85980f4382302b26b2fa2fb9250c5644184ae0e302e` |
+| `/home/tritlo/Code/mcfta/lean/MicroCFTA/EnumerationSchedule.lean` | `3e84f2059725b3c0392d4df005574fde2918290cb393c4be0d549a62ad4a4e45` | 54–65: `611d34a006585db31a7f1fd1dbe39b94f88db5acb3c3d5b5f8deaf45e088fa99` |

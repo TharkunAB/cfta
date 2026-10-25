@@ -1,0 +1,27 @@
+paths, independently of the executable lookup and compression code.
+-/
+
+namespace MicroCFTA.UnionFind
+
+/-- A parent pointer or root with its stored size. -/
+inductive Entry where
+  | parent (uv : Nat)
+  | root (size : Nat)
+deriving DecidableEq, Repr
+
+/-- A persistent finite-map interface. Missing variables are allowed. -/
+abbrev Forest := Nat → Option Entry
+
+/-- A missing variable denotes a singleton root. -/
+def read (forest : Forest) (uv : Nat) : Entry :=
+  (forest uv).getD (.root 1)
+
+/-- Replace one entry and retain every other entry. -/
+def put (forest : Forest) (uv : Nat) (entry : Entry) : Forest :=
+  fun other => if other = uv then some entry else forest other
+
+@[simp] theorem read_put_same (forest : Forest) (uv : Nat) (entry : Entry) :
+    read (put forest uv entry) uv = entry := by simp [read, put]
+
+@[simp] theorem read_put_other (forest : Forest) (uv other : Nat) (entry : Entry)
+    (different : other ≠ uv) : read (put forest uv entry) other = read forest other := by

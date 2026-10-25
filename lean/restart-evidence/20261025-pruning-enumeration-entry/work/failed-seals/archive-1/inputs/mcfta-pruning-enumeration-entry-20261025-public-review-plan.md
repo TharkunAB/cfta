@@ -1,0 +1,11 @@
+# Entry public-readback plan
+
+Timestamp: 2026-10-25 01:56:11 CEST. Source/data-only plan. Root owns display-source authorship, installation and execution. This is not the final public review.
+
+I read the complete 171-line source and both frozen public headers. All 15 literal contracts remain exact. The final source is 9076 bytes, SHA-256 7f09100d11c24ff225560b3c782d7eb4080f7dad082d9d4b9171cc787cc153b9. Strict3 has an actual exit-zero receipt and empty raw log. Earlier strict1/2 failures remain history; no installed/public/Audit result is inferred.
+
+Read back @MicroCFTA.SourcePruningEnumerationEntry.enter and @MicroCFTA.SourcePruningEnumerationEntry.complete, with one actual axiom report per declaration. The preceding display source uses pp.deepTerms and pp.maxSteps for output depth. Require complete output without ellipses; preserve any display failure and its exact input. Final review must read the whole successful output, verify the strict command/report/raw hashes and compare the actual installed source to this strict input. Record actual axiom subsets, including an empty set if reported; do not predict them.
+
+enter must retain the existing EnumerateM product and its heap/fuel/uv inputs. complete must require only StorageValid, allocated uv and PendingRealized beyond its state/heap parameters. Verify the derived stable first singleton and Frame. Its actual pending-Some branch must retain the second representative singleton, full pre-ancestry Frame, same handle/slot, Available/closed decoded value, literal ancestry update, stable actual entry singleton and storage/realization. All other read variants must give stable raw []. No desired endpoint/read success, Graph, IsRoot, selector or Safe premise may appear. No Frame across ancestry setup is promised.
+
+Missing decode stays a model error outside the realized domain. Expansion, normalization integration, native IDs/keys, cached-history integration, Safe/LiveRoots and full-driver/H6 gaps remain. Freeze the separate final public-review.md only after the actual successful readback; report later build/Audit results only from their receipts. No parser, compiler, prepared program, Git/network, activation or repository edit occurred here.

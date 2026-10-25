@@ -1,0 +1,9 @@
+/-- One actual bounded row exposure determines its returned unfolding table. -/
+theorem exposure_unique [DecidableEq (EdgeKey Symbol Guard)]
+    {fuel : Nat} {value : Value Symbol Guard} {heap : State Symbol Guard}
+    {memos first second : InternedFreshOrdinaryUnfoldMemo.Memo Symbol Guard}
+    (left : SourceEqualityExposureMemos.NodeEdgesReads fuel value heap memos first)
+    (right : SourceEqualityExposureMemos.NodeEdgesReads fuel value heap memos second) : first = second := by
+  cases value <;> cases left <;> cases right <;> try simp_all
+  case union.union.union => exact collect_unique (by assumption) (by assumption)
+  case mu.mu.mu =>

@@ -1,0 +1,9 @@
+/-- The actual representative read returns exactly the slot of its compressed representative. -/
+theorem getValue_success (fuel uv : Nat) (state after : State Symbol Guard) (value : UVarValue Symbol) :
+    Success (getValue fuel uv) state value after ↔
+      ∃ found, UnionFind.findRoot fuel state.representatives uv = some found ∧
+        state.values[found.representative]? = some value ∧ after = {state with representatives := found.forest} := by
+  cases lookup : UnionFind.findRoot fuel state.representatives uv with
+  | none =>
+      simp [Success, getValue, representative, lookup, rawValue, EnumerationState.failure, bind, get, getThe, MonadStateOf.get, set, pure,
+        StateT.bind, StateT.get, ExceptT.bind, ExceptT.pure, ExceptT.bindCont, ExceptT.mk, ExceptT.run]

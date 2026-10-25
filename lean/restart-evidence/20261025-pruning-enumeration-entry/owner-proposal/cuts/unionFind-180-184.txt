@@ -1,0 +1,5 @@
+/-- Additional execution fuel does not change a successful result. -/
+theorem findRoot_moreFuel (fuel extra : Nat) (forest : Forest) (uv : Nat) (found : Result)
+    (result : findRoot fuel forest uv = some found) :
+    findRoot (fuel + extra) forest uv = some found := by
+  induction fuel generalizing forest uv found with

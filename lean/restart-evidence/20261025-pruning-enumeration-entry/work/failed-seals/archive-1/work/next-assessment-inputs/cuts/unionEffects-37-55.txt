@@ -1,0 +1,19 @@
+/-- Every completed head read derives its actual open result and all physical heap effects. -/
+theorem head (property : Guard → Prop) [DecidableEq (EdgeKey Symbol Guard)]
+    {value result : Value Symbol Guard} {before after : State Symbol Guard}
+    (trace : SourceEqualityRequiredHead.Head value before result after)
+    (semantic : SemanticReady before) (costs : CostHeap before) (fields : Heap property before)
+    (available : Available before value) :
+    Keeps before after ∧ SemanticReady after ∧ CostHeap after ∧ Heap property after ∧ Available after result := by
+  cases trace with
+  | read fuel edges middle exposed rebuilt =>
+      have read := SourceEqualityExposureCosts.nodeEdges_verified fuel value before semantic costs available
+      have middleSemantic : SemanticReady middle := by simpa only [exposed, MergedSourceExposure.Result.state] using read.semantic
+      have middleCosts : CostHeap middle := by simpa only [exposed, MergedSourceExposure.Result.state] using read.costs
+      have first : Keeps before middle := by simpa only [exposed, MergedSourceExposure.Result.state] using read.keeps
+      have middleFields : Heap property middle := by
+        simpa only [exposed, MergedSourceExposure.Result.state] using
+          SourceCurrentOpenExposureFields.nodeEdges_heap property fuel value before semantic fields available
+      have checked := node_constructor property edges middle middleSemantic middleCosts middleFields (read.rows _ _ exposed)
+      have resultEffects : Keeps middle after ∧ SemanticReady after ∧ CostHeap after ∧
+          Heap property after ∧ Available after result := by simpa only [rebuilt] using checked

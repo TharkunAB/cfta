@@ -1,0 +1,38 @@
+--- strict-1/SourcePruningEnumerationEntry.lean
++++ strict-2/SourcePruningEnumerationEntry.lean
+@@ -25,9 +25,9 @@
+       | none => failure .unresolvedReference
+       | some decoded =>
+           modify fun state => {state with expansionAncestry :=
+-            if MergedOrdinaryHeight.recursiveBoundary decoded then
++            (if MergedOrdinaryHeight.recursiveBoundary decoded then
+               (recursionKey handle scs :: state.recursionAncestry target).eraseDups
+-            else state.recursionAncestry target}
++            else state.recursionAncestry target)}
+           pure (target, handle, scs, decoded)
+   | _ => reject
+ 
+@@ -81,10 +81,13 @@
+         (UnionFind.findRoot_moreFuel readFuel extra before.representatives uv firstFound firstRun))]
+     dsimp [rawValue, readAfter, get, getThe, MonadStateOf.get, bind, pure, StateT.bind,
+       StateT.pure, StateT.get, ExceptT.bind, ExceptT.pure, ExceptT.bindCont, ExceptT.mk]
++    simp only [List.flatMap_singleton, ExceptT.bindCont]
+     rw [stored]
+     rfl
+   have readSuccess : Success (getValue readFuel uv) before readValue readAfter := by
+-    simp only [Success, readExact 0, List.mem_singleton]
++    unfold Success
++    rw [← Nat.add_zero readFuel, readExact 0]
++    exact List.mem_singleton_self _
+   have readFrame : Frame before readAfter := by
+     exact (getValue_frame readFuel uv before readAfter readValue storage.total readSuccess).1
+   have readStorage : StorageValid readAfter := by
+@@ -147,7 +150,7 @@
+         intro slot node scs stored
+         apply realized slot node scs
+         simpa only [entered, fullFrame.values] using stored
+-      refine ⟨readFuel + captureFuel, _, readAfter, ?_, readFrame,
++      refine ⟨readFuel + captureFuel, .unenumerated (some handle) scs, readAfter, ?_, readFrame,
+         target, decoded, compressed, entered, fullFrame, ?_, storedCapture,
+         decodedLookup, available, closed, rfl, ?_, enteredStorage, enteredRealized⟩
+       · intro extra

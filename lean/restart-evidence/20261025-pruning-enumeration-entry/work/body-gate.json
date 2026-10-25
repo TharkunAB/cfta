@@ -1,0 +1,112 @@
+{
+  "status": "ACCEPTED_BEFORE_ANY_BODY_OR_ACTIVATION",
+  "accepted_at": "2026-10-25T01:53:08.102098+02:00",
+  "owner": "/tmp/mcfta-pruning-enumeration-entry-20261025-proposal",
+  "frozen_sha256": "0ca7a7cc6cc326e47521f4a52a8cbd1a09975709dcf87d176e2395180d62fbb5",
+  "pins_sha256": "baa783b3fcbb6dde3b4fe0e4e53ad50c9b8e531d9423a1ca456a487a5cc18fbf",
+  "contracts": {
+    "complete-header.lean.txt": "theorem complete\n    (heap : InternedConstructorTemplates.State Symbol NativeGuard)\n    (before : EnumerationState.State Symbol EnumGuard) (uv : Nat)\n    (storage : StorageValid before) (inside : uv < before.counter)\n    (realized : PendingRealized heap before) :\n    \u2203 (fuel : Nat) (readValue : EnumerationState.UVarValue Symbol)\n      (readAfter : EnumerationState.State Symbol EnumGuard),\n      (\u2200 (extra : Nat), ExceptT.run (getValue (fuel + extra) uv before) =\n        [.ok (readValue, readAfter)]) \u2227\n      Frame before readAfter \u2227\n      match readValue with\n      | .unenumerated (some handle) scs =>\n          \u2203 (target : Nat) (decoded : InternedConstructorTemplates.Value Symbol NativeGuard)\n            (compressed entered : EnumerationState.State Symbol EnumGuard),\n            Frame before compressed \u2227\n            (\u2200 (extra : Nat), ExceptT.run (representative (fuel + extra) uv readAfter) =\n              [.ok (target, compressed)]) \u2227\n            compressed.values[target]? = some (.unenumerated (some handle) scs) \u2227\n            lookupNode heap handle = some decoded \u2227\n            InternedProbeProvenance.Available heap decoded \u2227 decoded.free = [] \u2227\n            entered = {compressed with expansionAncestry :=\n              if MergedOrdinaryHeight.recursiveBoundary decoded then\n                (recursionKey handle scs :: compressed.recursionAncestry target).eraseDups\n              else compressed.recursionAncestry target} \u2227\n            (\u2200 (extra : Nat), ExceptT.run (enter heap (fuel + extra) uv before) =\n              [.ok ((target, handle, scs, decoded), entered)]) \u2227\n            StorageValid entered \u2227 PendingRealized heap entered\n      | _ => \u2200 (extra : Nat), ExceptT.run (enter heap (fuel + extra) uv before) = []\n",
+    "context.lean.txt": "import MicroCFTA.SourcePruningEnumerationObservation\nimport MicroCFTA.SourcePruningEnumerationReread\nimport MicroCFTA.MergedOrdinaryHeight\n\nnamespace MicroCFTA.SourcePruningEnumerationEntry\nopen EnumerationState EnumerationCorrectness EnumerationCompressionFrame\nopen SourcePruningEnumerationNodes SourcePruningEnumerationObservation\nlocal notation \"Symbol\" => SourcePruningTemplates.Symbol\nvariable {EnumGuard NativeGuard : Type}\n",
+    "enter-header.lean.txt": "def enter (heap : InternedConstructorTemplates.State Symbol NativeGuard)\n    (fuel uv : Nat) : EnumerateM Symbol EnumGuard\n      (Nat \u00d7 Nat \u00d7 List EnumerationState.Suspended \u00d7\n        InternedConstructorTemplates.Value Symbol NativeGuard)\n",
+    "instance-header.lean.txt": "local instance entryMonadList : Monad List\n",
+    "local-capture-exact.lean.txt": "have captureExact : \u2200 (extra : Nat),\n        ExceptT.run (representative (readFuel + captureFuel + extra) uv readAfter) =\n          [.ok (target, compressed)]\n",
+    "local-compressed-storage.lean.txt": "have compressedStorage : StorageValid compressed\n",
+    "local-entered-realized.lean.txt": "have enteredRealized : PendingRealized heap entered\n",
+    "local-entered-storage.lean.txt": "have enteredStorage : StorageValid entered\n",
+    "local-entered.lean.txt": "let entered : EnumerationState.State Symbol EnumGuard\n",
+    "local-first-inside.lean.txt": "have firstInside : firstFound.representative < before.values.length\n",
+    "local-read-after.lean.txt": "let readAfter : EnumerationState.State Symbol EnumGuard\n",
+    "local-read-exact.lean.txt": "have readExact : \u2200 (extra : Nat), ExceptT.run (getValue (readFuel + extra) uv before) =\n    [.ok (readValue, readAfter)]\n",
+    "local-read-frame.lean.txt": "have readFrame : Frame before readAfter\n",
+    "local-read-storage.lean.txt": "have readStorage : StorageValid readAfter\n",
+    "local-read-success.lean.txt": "have readSuccess : Success (getValue readFuel uv) before readValue readAfter\n"
+  },
+  "schema": {
+    "module": "MicroCFTA.SourcePruningEnumerationEntry",
+    "public_heads": [
+      {
+        "name": "enter",
+        "kind": "def",
+        "file": "enter-header.lean.txt",
+        "attachment": " :=\n"
+      },
+      {
+        "name": "complete",
+        "kind": "theorem",
+        "file": "complete-header.lean.txt",
+        "attachment": " := by\n"
+      }
+    ],
+    "public_head_order": [
+      "enter",
+      "complete"
+    ],
+    "contract_count": 15,
+    "contract_lines": 56,
+    "context_lines": 9,
+    "public_header_lines": 32,
+    "definition_count": 1,
+    "theorem_count": 1,
+    "proof_local_have_count": 9,
+    "proof_local_let_count": 2,
+    "definition_local_let_count": 0,
+    "new_types": [],
+    "new_carriers": [],
+    "new_predicates": [],
+    "helpers": [],
+    "local_instance_count": 1,
+    "global_instance_count": 0,
+    "LawfulMonad_count": 0,
+    "obtain_count": 6,
+    "obtain_field_count": 27,
+    "scoped_type_count": 91,
+    "induction_count": 0,
+    "IH_count": 0,
+    "source_count": 14,
+    "cut_count": 30,
+    "cut_lines": 411,
+    "route_count": 12,
+    "route_source_count": 23,
+    "target_source_lines": [
+      160,
+      240
+    ],
+    "proposed_hard_cap": 360,
+    "compiler_evidence": false,
+    "bodies_present": false
+  },
+  "script_frozen_sha256": "47332b6e27ec4cd0573ede2c66e2e9eecd819bfe1d1eec16e2b9335f4b735d15",
+  "scope_overlay_frozen_sha256": "48fb7ae70addac42414f12b199a20fedc100fb3bb080350daf147cdf97174f90",
+  "reviews": {
+    "setup": {
+      "path": "/tmp/mcfta-pruning-enumeration-entry-20261025-setup-review.md",
+      "sha256": "3c7d7fa73bb4dff94821aa8ef80ca15abcc5cd4ab0fd748ca5ead14951cae055"
+    },
+    "source": {
+      "path": "/tmp/mcfta-pruning-enumeration-entry-20261025-source-review.md",
+      "sha256": "e9f470eaeba1d21c02446ea8038922b5756ab0dcf747060ca977bbf92f93b3aa"
+    },
+    "declaration": {
+      "path": "/tmp/mcfta-pruning-enumeration-entry-20261025-declaration-review.md",
+      "sha256": "34ab45e2dd6a5cce915a7351561a3b5aa99b83c0906f7f31e0103093683018d8"
+    },
+    "seal-script": {
+      "path": "/tmp/mcfta-pruning-enumeration-entry-20261025-seal-script-review.md",
+      "sha256": "1f207444fea72be5af03e1b81120402829ae501b4c8e2f4bc5c79039d37555f2"
+    },
+    "metadata-amendment-scopes": {
+      "path": "/tmp/mcfta-pruning-enumeration-entry-20261025-metadata-amendment-scopes-review.md",
+      "sha256": "f58a7adbcda4514c805d6bb226d414dfb8a456b44c6b53ce6ab66ccac6543cf9"
+    }
+  },
+  "personal_review": "Root personally read all15literalcontracts56lines, all91originalscopes and exact2-row overlay/effective91,6packets27fields, all411cutlines, all471selectedscriptlines+both templates+finaldeltas. Verified104ownerpins/exact106files/14actualsources/30cuts/12routes23identities,55scriptpins/exact57files/5actualbases/361bidirectionalspans/10patches,4overlaypins/exact6files. Full H6 statement refreshed live. Actual refresh and baseline PASS terminal observed. Root authors every body.",
+  "source_budget": [
+    160,
+    240
+  ],
+  "hard_cap": 360,
+  "resolved_stale_script_display": "Historical PENDING_ROOT_SELECTION is display data. Actual owner/schema/gate proposed_hard_cap is360.",
+  "limits": "Lean4.34.1 default limits/all linters/warningsAsError; serial4GiBmax/high,swap0,five minutes; no new axiom.",
+  "activation": "not yet",
+  "bodies": "not yet"
+}

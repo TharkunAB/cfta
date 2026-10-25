@@ -1,0 +1,9 @@
+    {-# INLINE (<|>) #-}
+    EnumerateM m <|> EnumerateM n = EnumerateM $ \s success later -> m s success (n s success later)
+
+instance MonadPlus (EnumerateM symbol)
+
+-- | A failed pattern match ends the branch.
+instance MonadFail (EnumerateM symbol) where
+    {-# INLINE fail #-}
+    fail _ = empty

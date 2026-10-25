@@ -1,0 +1,3 @@
+# Entry pre-body scope overlay
+
+Prepared 2026-10-25T01:50:41.865837+02:00. This preserves the original frozen owner and all15 compiled literal headers. Exactly two scoped rows change in the effective inventory: remove the nonexistent named action readValue introduced by the proposed anonymous getValue match; add value : EnumerationState.UVarValue Symbol for the typed existential stored-witness proposition. The distinct public result readValue and stored witness readValue rows stay intact. Scope count remains91. Types, packets, actions, public statements, limits and all sources remain unchanged. Root selected both details before any body/gate/compiler. Required performs the independent peer review. No program/compiler/Git execution occurred here.

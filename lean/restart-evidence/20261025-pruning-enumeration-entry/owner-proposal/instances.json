@@ -1,0 +1,54 @@
+{
+  "local_instance_count": 1,
+  "global_instance_count": 0,
+  "LawfulMonad_count": 0,
+  "header": "instance-header.lean.txt",
+  "name": "entryMonadList",
+  "type": "Monad List",
+  "bodies_present": false,
+  "field_binders": [
+    {
+      "field": "pure",
+      "type": "{α : Type u} → α → List α",
+      "binders": [
+        {
+          "name": "α",
+          "type": "Type u"
+        },
+        {
+          "name": "value",
+          "type": "α"
+        }
+      ]
+    },
+    {
+      "field": "bind",
+      "type": "{α β : Type u} → List α → (α → List β) → List β",
+      "binders": [
+        {
+          "name": "α",
+          "type": "Type u"
+        },
+        {
+          "name": "β",
+          "type": "Type u"
+        },
+        {
+          "name": "values",
+          "type": "List α"
+        },
+        {
+          "name": "continuation",
+          "type": "α → List β"
+        }
+      ]
+    }
+  ],
+  "universe_binders": [
+    {
+      "name": "u",
+      "type": "Level"
+    }
+  ],
+  "reason": "enter uses the same singleton/flatMap List dictionary as the existing enumeration primitives. Root supplies the pure/bind fields after gate."
+}

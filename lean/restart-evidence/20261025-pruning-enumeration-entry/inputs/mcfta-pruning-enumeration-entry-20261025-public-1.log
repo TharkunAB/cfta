@@ -1,0 +1,50 @@
+{"command": ["/home/tritlo/.elan/toolchains/leanprover--lean4---v4.34.1/bin/lean", "-R", "/tmp/mcfta-pruning-enumeration-entry-20261025/public-1", "-DwarningAsError=true", "-Dlinter.all=true", "/tmp/mcfta-pruning-enumeration-entry-20261025/public-1/checked.lean"], "exit_code": 0, "raw_bytes": 3706, "raw_sha256": "72dba69edbcb68ef9196e71111635185cc572dbccb7a446625a6099319799a0e", "source_sha256": "6dcf07fb78ebe7dcb49c0acccb5674808a079f1a3024d59bf234ba2a75a6ddcc"}
+@MicroCFTA.SourcePruningEnumerationEntry.enter : {EnumGuard NativeGuard : Type} →
+  MicroCFTA.InternedConstructorTemplates.State MicroCFTA.SourcePruningTemplates.Symbol NativeGuard →
+    Nat →
+      Nat →
+        MicroCFTA.EnumerationState.EnumerateM MicroCFTA.SourcePruningTemplates.Symbol EnumGuard
+          (Nat ×
+            Nat ×
+              List MicroCFTA.EnumerationState.Suspended ×
+                MicroCFTA.InternedConstructorTemplates.Value MicroCFTA.SourcePruningTemplates.Symbol NativeGuard)
+'MicroCFTA.SourcePruningEnumerationEntry.enter' depends on axioms: [propext, Quot.sound]
+@MicroCFTA.SourcePruningEnumerationEntry.complete : ∀ {EnumGuard NativeGuard : Type}
+  (heap : MicroCFTA.InternedConstructorTemplates.State MicroCFTA.SourcePruningTemplates.Symbol NativeGuard)
+  (before : MicroCFTA.EnumerationState.State MicroCFTA.SourcePruningTemplates.Symbol EnumGuard) (uv : Nat),
+  MicroCFTA.EnumerationCorrectness.StorageValid before →
+    uv < before.counter →
+      MicroCFTA.SourcePruningEnumerationObservation.PendingRealized heap before →
+        ∃ fuel readValue readAfter,
+          (∀ (extra : Nat),
+              (MicroCFTA.EnumerationState.getValue (fuel + extra) uv before).run = [Except.ok (readValue, readAfter)]) ∧
+            MicroCFTA.EnumerationCompressionFrame.Frame before readAfter ∧
+              match readValue with
+              | MicroCFTA.EnumerationState.UVarValue.unenumerated (some handle) scs =>
+                ∃ target decoded compressed entered,
+                  MicroCFTA.EnumerationCompressionFrame.Frame before compressed ∧
+                    (∀ (extra : Nat),
+                        (MicroCFTA.EnumerationState.representative (fuel + extra) uv readAfter).run =
+                          [Except.ok (target, compressed)]) ∧
+                      compressed.values[target]? =
+                          some (MicroCFTA.EnumerationState.UVarValue.unenumerated (some handle) scs) ∧
+                        MicroCFTA.SourcePruningEnumerationNodes.lookupNode heap handle = some decoded ∧
+                          MicroCFTA.InternedProbeProvenance.Available heap decoded ∧
+                            decoded.free = [] ∧
+                              entered =
+                                  { counter := compressed.counter, representatives := compressed.representatives,
+                                    values := compressed.values, obligations := compressed.obligations,
+                                    recursionAncestry := compressed.recursionAncestry,
+                                    expansionAncestry :=
+                                      if MicroCFTA.MergedOrdinaryHeight.recursiveBoundary decoded = true then
+                                        (MicroCFTA.EnumerationState.recursionKey handle scs ::
+                                            compressed.recursionAncestry target).eraseDups
+                                      else compressed.recursionAncestry target } ∧
+                                (∀ (extra : Nat),
+                                    (MicroCFTA.SourcePruningEnumerationEntry.enter heap (fuel + extra) uv before).run =
+                                      [Except.ok ((target, handle, scs, decoded), entered)]) ∧
+                                  MicroCFTA.EnumerationCorrectness.StorageValid entered ∧
+                                    MicroCFTA.SourcePruningEnumerationObservation.PendingRealized heap entered
+              | x =>
+                ∀ (extra : Nat), (MicroCFTA.SourcePruningEnumerationEntry.enter heap (fuel + extra) uv before).run = []
+'MicroCFTA.SourcePruningEnumerationEntry.complete' depends on axioms: [propext, Quot.sound]

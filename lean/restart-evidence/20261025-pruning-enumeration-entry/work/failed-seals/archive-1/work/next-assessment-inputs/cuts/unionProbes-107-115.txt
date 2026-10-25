@@ -1,0 +1,9 @@
+/-- Actual head reconstruction introduces no additional Mu record. -/
+theorem head_heap [DecidableEq (EdgeKey Symbol Guard)]
+    {value result : Value Symbol Guard} {before after : State Symbol Guard}
+    (actual : SourceEqualityRequiredHead.Head value before result after)
+    (semantic : SemanticReady before) (available : Available before value) (probes : Heap before) : Heap after := by
+  cases actual with
+  | read fuel edges middle exposed rebuilt =>
+      have middleProbes := read_heap (.done fuel exposed) semantic available probes
+      simpa only [rebuilt] using InternedFreshOrdinaryProbeHeap.node edges middle middleProbes

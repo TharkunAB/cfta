@@ -1,0 +1,25 @@
+{- | The expansions of constrained recursive nodes that a UVar descends from,
+each as its 'recursionKey'.
+-}
+type RecursionAncestry = HashSet.HashSet RecursionKey
+
+{- | A recursive node with the paths suspended on it. Two expansions with one
+key differ only in their UVars.
+-}
+data RecursionKey = RecursionKey
+    { recursiveNode :: !NodeId
+    , suspendedTries :: !(HashSet.HashSet PathTrie)
+    }
+    deriving (Eq, Show)
+
+-- | Hash the two fields in order, as the hash of a pair does.
+instance Hashable RecursionKey where
+    hashWithSalt salt (RecursionKey node tries) = salt `hashWithSalt` node `hashWithSalt` tries
+
+-- | The key of a recursive node with its suspended constraints.
+recursionKey :: Node symbol -> Seq SuspendedConstraint -> RecursionKey
+recursionKey n scs =
+    RecursionKey
+        { recursiveNode = nodeIdentity n
+        , suspendedTries = HashSet.fromList $ map scGetPathTrie $ Foldable.toList scs
+        }

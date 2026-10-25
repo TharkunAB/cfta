@@ -1,0 +1,125 @@
+{"command": ["/home/tritlo/.elan/toolchains/leanprover--lean4---v4.34.1/bin/lean", "-o", "/tmp/mcfta-pruning-enumeration-entry-20261025/compiled/MicroCFTA/SourcePruningEnumerationEntry.olean", "-R", "/tmp/mcfta-pruning-enumeration-entry-20261025/strict-1", "-DwarningAsError=true", "-Dlinter.all=true", "/tmp/mcfta-pruning-enumeration-entry-20261025/strict-1/MicroCFTA/SourcePruningEnumerationEntry.lean"], "exit_code": 1, "raw_bytes": 7166, "raw_sha256": "13259e664cb8f2e451463924aef5242d8a02d0acd09f13f0d92641546e91e6f1", "source_sha256": "b13b43a3469e5dc272cf4691a3eb2a8de583ff3e596a364f6f146676e25c48b2"}
+/tmp/mcfta-pruning-enumeration-entry-20261025/strict-1/MicroCFTA/SourcePruningEnumerationEntry.lean:30:40: error: unexpected identifier; expected '}'
+/tmp/mcfta-pruning-enumeration-entry-20261025/strict-1/MicroCFTA/SourcePruningEnumerationEntry.lean:84:8: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  before.values[firstFound.representative]?
+in the target expression
+  List.flatMap
+      (ExceptT.bindCont fun __x =>
+        (match __x.fst.values[firstFound.representative]? with
+          | none => EnumerationState.failure Error.invalidSlot
+          | some value => StateT.pure value)
+          __x.snd)
+      [Except.ok
+          ({ counter := before.counter, representatives := firstFound.forest, values := before.values,
+              obligations := before.obligations, recursionAncestry := before.recursionAncestry,
+              expansionAncestry := before.expansionAncestry },
+            { counter := before.counter, representatives := firstFound.forest, values := before.values,
+              obligations := before.obligations, recursionAncestry := before.recursionAncestry,
+              expansionAncestry := before.expansionAncestry })] =
+    [Except.ok
+        (readValue,
+          { counter := before.counter, representatives := firstFound.forest, values := before.values,
+            obligations := before.obligations, recursionAncestry := before.recursionAncestry,
+            expansionAncestry := before.expansionAncestry })]
+
+EnumGuard NativeGuard : Type
+heap : InternedConstructorTemplates.State Symbol NativeGuard
+before : State Symbol EnumGuard
+uv : Nat
+storage : StorageValid before
+inside : uv < before.counter
+realized : PendingRealized heap before
+originalRoot originalSize : Nat
+path : UnionFind.Reaches before.representatives uv originalRoot originalSize
+readFuel : Nat
+firstFound : UnionFind.Result
+firstRun : UnionFind.findRoot readFuel before.representatives uv = some firstFound
+firstInside : firstFound.representative < before.values.length
+readValue : UVarValue Symbol
+stored : before.values[firstFound.representative]? = some readValue
+readAfter : State Symbol EnumGuard :=
+  { counter := before.counter, representatives := firstFound.forest, values := before.values,
+    obligations := before.obligations, recursionAncestry := before.recursionAncestry,
+    expansionAncestry := before.expansionAncestry }
+extra : Nat
+⊢ List.flatMap
+      (ExceptT.bindCont fun __x =>
+        (match __x.fst.values[firstFound.representative]? with
+          | none => EnumerationState.failure Error.invalidSlot
+          | some value => StateT.pure value)
+          __x.snd)
+      [Except.ok
+          ({ counter := before.counter, representatives := firstFound.forest, values := before.values,
+              obligations := before.obligations, recursionAncestry := before.recursionAncestry,
+              expansionAncestry := before.expansionAncestry },
+            { counter := before.counter, representatives := firstFound.forest, values := before.values,
+              obligations := before.obligations, recursionAncestry := before.recursionAncestry,
+              expansionAncestry := before.expansionAncestry })] =
+    [Except.ok
+        (readValue,
+          { counter := before.counter, representatives := firstFound.forest, values := before.values,
+            obligations := before.obligations, recursionAncestry := before.recursionAncestry,
+            expansionAncestry := before.expansionAncestry })]
+/tmp/mcfta-pruning-enumeration-entry-20261025/strict-1/MicroCFTA/SourcePruningEnumerationEntry.lean:86:82: error: unsolved goals
+EnumGuard NativeGuard : Type
+heap : InternedConstructorTemplates.State Symbol NativeGuard
+before : State Symbol EnumGuard
+uv : Nat
+storage : StorageValid before
+inside : uv < before.counter
+realized : PendingRealized heap before
+originalRoot originalSize : Nat
+path : UnionFind.Reaches before.representatives uv originalRoot originalSize
+readFuel : Nat
+firstFound : UnionFind.Result
+firstRun : UnionFind.findRoot readFuel before.representatives uv = some firstFound
+firstInside : firstFound.representative < before.values.length
+readValue : UVarValue Symbol
+stored : before.values[firstFound.representative]? = some readValue
+readAfter : State Symbol EnumGuard :=
+  { counter := before.counter, representatives := firstFound.forest, values := before.values,
+    obligations := before.obligations, recursionAncestry := before.recursionAncestry,
+    expansionAncestry := before.expansionAncestry }
+readExact : ∀ (extra : Nat), (getValue (readFuel + extra) uv before).run = [Except.ok (readValue, readAfter)]
+⊢ Except.ok (readValue, readAfter) ∈ (getValue readFuel uv before).run
+/tmp/mcfta-pruning-enumeration-entry-20261025/strict-1/MicroCFTA/SourcePruningEnumerationEntry.lean:150:13: error: Invalid `⟨...⟩` notation: The expected type
+  match ?m.767 with
+  | UVarValue.unenumerated (some handle) scs =>
+    ∃ target decoded compressed entered,
+      Frame before compressed ∧
+        (∀ (extra : Nat),
+            (representative (readFuel + captureFuel + extra) uv readAfter).run = [Except.ok (target, compressed)]) ∧
+          compressed.values[target]? = some (UVarValue.unenumerated (some handle) scs) ∧
+            lookupNode heap handle = some decoded ∧
+              InternedProbeProvenance.Available heap decoded ∧
+                decoded.free = [] ∧
+                  entered =
+                      { counter := compressed.counter, representatives := compressed.representatives,
+                        values := compressed.values, obligations := compressed.obligations,
+                        recursionAncestry := compressed.recursionAncestry,
+                        expansionAncestry :=
+                          if MergedOrdinaryHeight.recursiveBoundary decoded = true then
+                            (recursionKey handle scs :: compressed.recursionAncestry target).eraseDups
+                          else compressed.recursionAncestry target } ∧
+                    (∀ (extra : Nat),
+                        (enter heap (readFuel + captureFuel + extra) uv before).run =
+                          [Except.ok ((target, handle, scs, decoded), entered)]) ∧
+                      StorageValid entered ∧ PendingRealized heap entered
+  | x => ∀ (extra : Nat), (enter heap (readFuel + captureFuel + extra) uv before).run = []
+is not an inductive type
+
+Note: This notation can only be used when the expected type is an inductive type with a single constructor
+/tmp/mcfta-pruning-enumeration-entry-20261025/strict-1/MicroCFTA/SourcePruningEnumerationEntry.lean:87:24: error: This simp argument is unused:
+  readExact 0
+
+Hint: Omit it from the simp argument list.
+  [apply] simp only [Success, List.mem_singleton]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/tmp/mcfta-pruning-enumeration-entry-20261025/strict-1/MicroCFTA/SourcePruningEnumerationEntry.lean:87:37: error: This simp argument is unused:
+  List.mem_singleton
+
+Hint: Omit it from the simp argument list.
+  [apply] simp only [Success, readExact 0]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`

@@ -1,0 +1,15 @@
+/-- An actual source unfolding updates only its unfolding table and derives all returned memo coherence. -/
+theorem run_memos_of_unfold [DecidableEq (EdgeKey SourceSymbol SourceGuard)]
+    (input output : Value SourceSymbol SourceGuard) (before after : State SourceSymbol SourceGuard)
+    (actual : InternedFreshOrdinaryStoredSubstitution.unfold input before = .done output after)
+    (semantic : SemanticReady before) (costs : InternedFreshOrdinaryCostHeap.Heap before)
+    (available : Available before input) (memos : EndpointMemoGateTrace.Memos)
+    (valid : EndpointMemoGateTrace.Valid before memos) :
+    ∃ saved : EndpointMemoGateTrace.Memos,
+      InternedFreshOrdinaryUnfoldMemo.run input memos.unfolding before = .done (output, saved.unfolding) after ∧
+      saved.query = memos.query ∧ EndpointMemoGateTrace.Valid after saved ∧
+      Extends memos.unfolding saved.unfolding := by
+  obtain ⟨saved, receipt, coherent, retained, growth, history⟩ :=
+    run_of_unfold input output before after actual semantic costs available memos.unfolding valid.unfolding
+  exact ⟨{memos with unfolding := saved}, receipt, rfl,
+    ⟨coherent, SourceEndpointMemo.grows before after growth history memos.query valid.query⟩, retained⟩

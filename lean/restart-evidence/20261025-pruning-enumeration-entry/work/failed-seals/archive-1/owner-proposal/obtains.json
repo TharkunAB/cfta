@@ -1,0 +1,221 @@
+{
+  "packets": [
+    {
+      "scope": "complete.initialPath",
+      "api": "storage.total uv",
+      "fields": [
+        {
+          "name": "originalRoot",
+          "type": "Nat",
+          "used": false,
+          "reason": "Retained only in the finite path type; no separate proof term uses this witness."
+        },
+        {
+          "name": "originalSize",
+          "type": "Nat",
+          "used": false,
+          "reason": "Retained only in the finite path type; no separate proof term uses this witness."
+        },
+        {
+          "name": "path",
+          "type": "UnionFind.Reaches before.representatives uv originalRoot originalSize",
+          "used": true
+        }
+      ],
+      "skipped_fields": [
+        {
+          "name": "originalRoot",
+          "reason": "Retained only in the finite path type; no separate proof term uses this witness."
+        },
+        {
+          "name": "originalSize",
+          "reason": "Retained only in the finite path type; no separate proof term uses this witness."
+        }
+      ]
+    },
+    {
+      "scope": "complete.firstRoot",
+      "api": "UnionFind.findRoot_terminates path",
+      "fields": [
+        {
+          "name": "readFuel",
+          "type": "Nat",
+          "used": true
+        },
+        {
+          "name": "firstFound",
+          "type": "UnionFind.Result",
+          "used": true
+        },
+        {
+          "name": "firstRun",
+          "type": "UnionFind.findRoot readFuel before.representatives uv = some firstFound",
+          "used": true
+        }
+      ],
+      "skipped_fields": []
+    },
+    {
+      "scope": "complete.storedValue",
+      "api": "actual bounded getElem witness and List.getElem?_eq_getElem firstInside",
+      "fields": [
+        {
+          "name": "readValue",
+          "type": "EnumerationState.UVarValue Symbol",
+          "used": true
+        },
+        {
+          "name": "stored",
+          "type": "before.values[firstFound.representative]? = some readValue",
+          "used": true
+        }
+      ],
+      "skipped_fields": []
+    },
+    {
+      "scope": "complete.pendingSome.reread",
+      "api": "SourcePruningEnumerationReread.pending_reread_complete readFuel uv handle scs before readAfter readAfter storage.total readSuccess (Frame.refl readAfter)",
+      "fields": [
+        {
+          "name": "target",
+          "type": "Nat",
+          "used": true
+        },
+        {
+          "name": "size",
+          "type": "Nat",
+          "used": false,
+          "reason": "The packet retains its path size; the proof uses the exact representative run instead."
+        },
+        {
+          "name": "captureFuel",
+          "type": "Nat",
+          "used": true
+        },
+        {
+          "name": "compressed",
+          "type": "EnumerationState.State Symbol EnumGuard",
+          "used": true
+        },
+        {
+          "name": "firstFrame",
+          "type": "Frame before readAfter",
+          "used": false,
+          "reason": "readFrame already supplies the same first compression frame."
+        },
+        {
+          "name": "originalPath",
+          "type": "UnionFind.Reaches before.representatives uv target size",
+          "used": false,
+          "reason": "No path inversion is needed after the actual representative receipt is obtained."
+        },
+        {
+          "name": "captureSuccess",
+          "type": "Success (representative captureFuel uv) readAfter target compressed",
+          "used": true
+        },
+        {
+          "name": "rereadFrame",
+          "type": "Frame readAfter compressed",
+          "used": false,
+          "reason": "fullFrame supplies the original-to-compressed values and counter equalities."
+        },
+        {
+          "name": "fullFrame",
+          "type": "Frame before compressed",
+          "used": true
+        },
+        {
+          "name": "storedCapture",
+          "type": "compressed.values[target]? = some (.unenumerated (some handle) scs)",
+          "used": true
+        },
+        {
+          "name": "rootBound",
+          "type": "target < compressed.values.length",
+          "used": false,
+          "reason": "Storage transfer uses the original uv bound and actual root receipt, not this returned target bound."
+        }
+      ],
+      "skipped_fields": [
+        {
+          "name": "size",
+          "reason": "The packet retains its path size; the proof uses the exact representative run instead."
+        },
+        {
+          "name": "firstFrame",
+          "reason": "readFrame already supplies the same first compression frame."
+        },
+        {
+          "name": "originalPath",
+          "reason": "No path inversion is needed after the actual representative receipt is obtained."
+        },
+        {
+          "name": "rereadFrame",
+          "reason": "fullFrame supplies the original-to-compressed values and counter equalities."
+        },
+        {
+          "name": "rootBound",
+          "reason": "Storage transfer uses the original uv bound and actual root receipt, not this returned target bound."
+        }
+      ]
+    },
+    {
+      "scope": "complete.pendingSome.captureReceipt",
+      "api": "(EnumerationSchedule.representative_success captureFuel uv readAfter compressed target).mp captureSuccess",
+      "fields": [
+        {
+          "name": "captured",
+          "type": "UnionFind.Result",
+          "used": true
+        },
+        {
+          "name": "captureRun",
+          "type": "UnionFind.findRoot captureFuel readAfter.representatives uv = some captured",
+          "used": true
+        },
+        {
+          "name": "targetEq",
+          "type": "target = captured.representative",
+          "used": true
+        },
+        {
+          "name": "compressedEq",
+          "type": "compressed = {readAfter with representatives := captured.forest}",
+          "used": true
+        }
+      ],
+      "skipped_fields": []
+    },
+    {
+      "scope": "complete.pendingSome.realization",
+      "api": "realized target handle scs (storedCapture transported by fullFrame.values)",
+      "fields": [
+        {
+          "name": "decoded",
+          "type": "InternedConstructorTemplates.Value Symbol NativeGuard",
+          "used": true
+        },
+        {
+          "name": "decodedLookup",
+          "type": "lookupNode heap handle = some decoded",
+          "used": true
+        },
+        {
+          "name": "available",
+          "type": "InternedProbeProvenance.Available heap decoded",
+          "used": true
+        },
+        {
+          "name": "closed",
+          "type": "decoded.free = []",
+          "used": true
+        }
+      ],
+      "skipped_fields": []
+    }
+  ],
+  "count": 6,
+  "field_count": 27,
+  "inline_eliminations": []
+}

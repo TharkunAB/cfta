@@ -1,0 +1,49 @@
+@MicroCFTA.SourcePruningEnumerationEntry.enter : {EnumGuard NativeGuard : Type} →
+  MicroCFTA.InternedConstructorTemplates.State MicroCFTA.SourcePruningTemplates.Symbol NativeGuard →
+    Nat →
+      Nat →
+        MicroCFTA.EnumerationState.EnumerateM MicroCFTA.SourcePruningTemplates.Symbol EnumGuard
+          (Nat ×
+            Nat ×
+              List MicroCFTA.EnumerationState.Suspended ×
+                MicroCFTA.InternedConstructorTemplates.Value MicroCFTA.SourcePruningTemplates.Symbol NativeGuard)
+'MicroCFTA.SourcePruningEnumerationEntry.enter' depends on axioms: [propext, Quot.sound]
+@MicroCFTA.SourcePruningEnumerationEntry.complete : ∀ {EnumGuard NativeGuard : Type}
+  (heap : MicroCFTA.InternedConstructorTemplates.State MicroCFTA.SourcePruningTemplates.Symbol NativeGuard)
+  (before : MicroCFTA.EnumerationState.State MicroCFTA.SourcePruningTemplates.Symbol EnumGuard) (uv : Nat),
+  MicroCFTA.EnumerationCorrectness.StorageValid before →
+    uv < before.counter →
+      MicroCFTA.SourcePruningEnumerationObservation.PendingRealized heap before →
+        ∃ fuel readValue readAfter,
+          (∀ (extra : Nat),
+              (MicroCFTA.EnumerationState.getValue (fuel + extra) uv before).run = [Except.ok (readValue, readAfter)]) ∧
+            MicroCFTA.EnumerationCompressionFrame.Frame before readAfter ∧
+              match readValue with
+              | MicroCFTA.EnumerationState.UVarValue.unenumerated (some handle) scs =>
+                ∃ target decoded compressed entered,
+                  MicroCFTA.EnumerationCompressionFrame.Frame before compressed ∧
+                    (∀ (extra : Nat),
+                        (MicroCFTA.EnumerationState.representative (fuel + extra) uv readAfter).run =
+                          [Except.ok (target, compressed)]) ∧
+                      compressed.values[target]? =
+                          some (MicroCFTA.EnumerationState.UVarValue.unenumerated (some handle) scs) ∧
+                        MicroCFTA.SourcePruningEnumerationNodes.lookupNode heap handle = some decoded ∧
+                          MicroCFTA.InternedProbeProvenance.Available heap decoded ∧
+                            decoded.free = [] ∧
+                              entered =
+                                  { counter := compressed.counter, representatives := compressed.representatives,
+                                    values := compressed.values, obligations := compressed.obligations,
+                                    recursionAncestry := compressed.recursionAncestry,
+                                    expansionAncestry :=
+                                      if MicroCFTA.MergedOrdinaryHeight.recursiveBoundary decoded = true then
+                                        (MicroCFTA.EnumerationState.recursionKey handle scs ::
+                                            compressed.recursionAncestry target).eraseDups
+                                      else compressed.recursionAncestry target } ∧
+                                (∀ (extra : Nat),
+                                    (MicroCFTA.SourcePruningEnumerationEntry.enter heap (fuel + extra) uv before).run =
+                                      [Except.ok ((target, handle, scs, decoded), entered)]) ∧
+                                  MicroCFTA.EnumerationCorrectness.StorageValid entered ∧
+                                    MicroCFTA.SourcePruningEnumerationObservation.PendingRealized heap entered
+              | x =>
+                ∀ (extra : Nat), (MicroCFTA.SourcePruningEnumerationEntry.enter heap (fuel + extra) uv before).run = []
+'MicroCFTA.SourcePruningEnumerationEntry.complete' depends on axioms: [propext, Quot.sound]

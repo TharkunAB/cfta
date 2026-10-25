@@ -1,0 +1,86 @@
+{
+  "action_cases": [
+    {
+      "scope": "enter",
+      "scrutinee": "actual getValue fuel uv result",
+      "branches": [
+        ".unenumerated (some handle) scs",
+        "all other UVarValue variants -> raw rejection"
+      ]
+    },
+    {
+      "scope": "enter.pendingSome",
+      "scrutinee": "lookupNode heap handle",
+      "branches": [
+        "none -> failure .unresolvedReference",
+        "some decoded -> ancestry setup and product"
+      ]
+    },
+    {
+      "scope": "enter.pendingSome.ancestry",
+      "condition": "MergedOrdinaryHeight.recursiveBoundary decoded",
+      "representation": "computed Bool if, no proof case split required"
+    }
+  ],
+  "proof_cases": [
+    {
+      "scope": "complete",
+      "scrutinee": "readValue",
+      "branches": [
+        {
+          "constructor": "enumerated",
+          "fields": [
+            {
+              "name": "fragment",
+              "type": "Fragments.Fragment Symbol",
+              "used": false
+            }
+          ]
+        },
+        {
+          "constructor": "eliminated",
+          "fields": []
+        },
+        {
+          "constructor": "unenumerated",
+          "fields": [
+            {
+              "name": "node",
+              "type": "Option Nat",
+              "used": true
+            },
+            {
+              "name": "scs",
+              "type": "List EnumerationState.Suspended",
+              "used": true
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "scope": "complete.readValue.unenumerated",
+      "scrutinee": "node",
+      "branches": [
+        {
+          "constructor": "none",
+          "fields": []
+        },
+        {
+          "constructor": "some",
+          "fields": [
+            {
+              "name": "handle",
+              "type": "Nat",
+              "used": true
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "same_common_fuel": "readFuel + captureFuel in pendingSome; readFuel in each rejected branch",
+  "no_Value_constructor_cases": true,
+  "no_Bool_proof_cases": true,
+  "no_IH": true
+}

@@ -1,0 +1,9 @@
+/-- Actual head exposure derives all three coherent tables through its final constructor. -/
+theorem head_memos [DecidableEq (EdgeKey Symbol Guard)]
+    {value result : Value Symbol Guard} {before after : State Symbol Guard}
+    (trace : Head value before result after) (semantic : SemanticReady before) (costs : CostHeap before)
+    (available : Available before value) (memos : Memos) (valid : Valid before memos) :
+    ∃ saved, HeadReads trace memos saved ∧ Valid after saved ∧
+      Extends memos.unfolding saved.unfolding ∧ saved.query = memos.query := by
+  cases trace with
+  | read fuel edges middle exposed rebuilt =>
