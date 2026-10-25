@@ -358,6 +358,9 @@ capabilities. Neither changes a decision of the search.
   The first chunk in order that does not agree decides. A chunk stops when
   a chunk before it has found a difference.
 
+[ADR 8](../../docs/adr/0008-speculative-completion.md) has the decision for
+`--speculate`.
+
 These runs measure HugeLists 7-p4 (`--type-depth 2 --recheck 2000`) with
 `+RTS -N12 -qn4 -A64m` on 2026-10-25, one at a time, with the same 1,413
 laws in each row except the last.
