@@ -1,4 +1,5 @@
 import MicroCFTA.SourcePruningEnumerationOuter
+import MicroCFTA.EnumerationPendingReplacement
 
 namespace MicroCFTA.SourcePruningEnumerationAction
 open EnumerationState EnumerationCorrectness EnumerationCompressionFrame
@@ -62,6 +63,8 @@ theorem prepare_pending_complete
       encodeNode result = some newHandle ∧ lookupNode nextHeap newHandle = some result ∧
       lookupNode nextHeap oldHandle = some oldValue ∧
       Frame before readAfter ∧ PendingRealized nextHeap entry ∧
+      (EnumerationReferences.PendingReferences before → EnumerationReferences.PendingReferences entry) ∧
+      (∀ held, EnumerationReferences.IncomingAvoid held before → EnumerationReferences.IncomingAvoid held entry) ∧
       (result ≠ .empty → oldValue ≠ .empty) ∧
       (result = .empty → ∀ representativeFuel,
         prepare holeKey fits admits metadata nativeFuel representativeFuel uv oldHandle scs oldValue heap =
@@ -84,6 +87,8 @@ theorem prepare_pending_complete
           Success (setValue root (.unenumerated (some newHandle) scs)) rereadAfter () final ∧
           final = {rereadAfter with values := rereadAfter.values.set root (.unenumerated (some newHandle) scs)} ∧
           final.values[root]? = some (.unenumerated (some newHandle) scs) ∧ PendingRealized nextHeap final ∧
+          (EnumerationReferences.PendingReferences before → EnumerationReferences.PendingReferences final) ∧
+          (∀ held, EnumerationReferences.IncomingAvoid held before → EnumerationReferences.IncomingAvoid held final) ∧
           prepare (EnumGuard := EnumGuard) holeKey fits admits metadata nativeFuel rereadFuel uv oldHandle scs oldValue heap =
             .done (result, some (representative rereadFuel uv >>= fun selected =>
               setValue selected (.unenumerated (some newHandle) scs))) nextHeap ∧
@@ -98,7 +103,10 @@ theorem prepare_pending_complete
       heap before readAfter entry readFuel uv oldHandle scs ready realized total observed entered
   refine ⟨oldValue, result, nativeFuel, nextHeap, newHandle, oldDecoded, oldEncoded,
     oldAvailable, oldClosed, narrowed, stable, kept, resultAvailable, resultClosed,
-    newEncoded, newDecoded, oldRetained, firstFrame, entryRealized, survivingOld, ?_, ?_, ?_⟩
+    newEncoded, newDecoded, oldRetained, firstFrame, entryRealized,
+    EnumerationPendingReplacement.frame_pending before entry (firstFrame.trans entered),
+    (fun held => EnumerationPendingReplacement.frame_incoming held before entry (firstFrame.trans entered)),
+    survivingOld, ?_, ?_, ?_⟩
   · intro emptyResult representativeFuel
     refine ⟨?_, emptyBranch emptyResult⟩
     simp only [prepare, narrowed, emptyResult]
@@ -121,15 +129,22 @@ theorem prepare_pending_complete
         finalRealized, boundRun⟩ := changedBranch nonempty changedHandle
     refine ⟨root, size, rereadFuel, rereadAfter, final, rootPath, secondRead, secondFrame,
       wholeFrame, oldStored, bound, rereadRealized, written, finalShape, finalStored,
-      finalRealized, ?_, boundRun⟩
-    cases result with
-    | empty => exact False.elim (nonempty rfl)
-    | reference name => simp [encodeNode] at newEncoded
-    | node nodeEntry edges depth free =>
-        simp only [prepare, narrowed, encodeNode, Option.some.inj newEncoded, ite_eq_right changedHandle]
-    | union unionEntry members depth free =>
-        simp only [prepare, narrowed, encodeNode, Option.some.inj newEncoded, ite_eq_right changedHandle]
-    | mu muEntry body depthShape ordinaryShape =>
-        simp only [prepare, narrowed, encodeNode, Option.some.inj newEncoded, ite_eq_right changedHandle]
+      finalRealized, ?_, ?_, ?_, boundRun⟩
+    · intro history
+      exact EnumerationPendingReplacement.setValue_pending root (some oldHandle) (some newHandle) scs
+        rereadAfter final oldStored (EnumerationPendingReplacement.frame_pending before rereadAfter wholeFrame history) written
+    · intro held incoming
+      exact EnumerationPendingReplacement.setValue_incoming held root (some oldHandle) (some newHandle) scs
+        rereadAfter final oldStored
+        (EnumerationPendingReplacement.frame_incoming held before rereadAfter wholeFrame incoming) written
+    · cases result with
+      | empty => exact False.elim (nonempty rfl)
+      | reference name => simp [encodeNode] at newEncoded
+      | node nodeEntry edges depth free =>
+          simp only [prepare, narrowed, encodeNode, Option.some.inj newEncoded, ite_eq_right changedHandle]
+      | union unionEntry members depth free =>
+          simp only [prepare, narrowed, encodeNode, Option.some.inj newEncoded, ite_eq_right changedHandle]
+      | mu muEntry body depthShape ordinaryShape =>
+          simp only [prepare, narrowed, encodeNode, Option.some.inj newEncoded, ite_eq_right changedHandle]
 
 end MicroCFTA.SourcePruningEnumerationAction
