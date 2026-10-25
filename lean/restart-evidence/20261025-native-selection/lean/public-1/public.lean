@@ -1,0 +1,9 @@
+import MicroCFTA.SourcePruningEnumerationSelection
+#check MicroCFTA.SourcePruningEnumerationSelection.offered
+#print axioms MicroCFTA.SourcePruningEnumerationSelection.offered
+#check MicroCFTA.SourcePruningEnumerationSelection.unblocked_avoids
+#print axioms MicroCFTA.SourcePruningEnumerationSelection.unblocked_avoids
+#check MicroCFTA.SourcePruningEnumerationSelection.ready
+#print axioms MicroCFTA.SourcePruningEnumerationSelection.ready
+#check MicroCFTA.SourcePruningEnumerationSelection.realized
+#print axioms MicroCFTA.SourcePruningEnumerationSelection.realized
