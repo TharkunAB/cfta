@@ -34,7 +34,8 @@ theorem complete
       (∀ slot, SourcePruningEnumerationNativeIndex.candidate heap
         ((after.core.values[slot]?).getD .eliminated) = some (after.expandable slot)) ∧
       (∀ sc ∈ scs, sc.var < after.core.counter) ∧
-      (∀ bucket, InputsPending before.core bucket → InputsPending after.core bucket) := by
+      (∀ bucket, InputsPending before.core bucket → InputsPending after.core bucket) ∧
+      EnumerationDriver.RenderStable before.core after.core := by
   obtain ⟨fuel, readValue, readAfter, readRun, _readFrame, packet⟩ :=
     SourcePruningEnumerationEntry.complete heap before.core uv ready.safe.1 ready.inside realized
   have readSuccess : Success (getValue fuel uv) before.core readValue readAfter := by
@@ -89,11 +90,14 @@ theorem complete
     simpa only [values] using stored
   refine ⟨fuel, decoded, after, entryRun, decodedLookup, available, closed, counter, values,
     rfl, rfl, actualStored, afterReady, frame, afterPaths, enteredRealized, ?_, ?_,
-    safe.1.values _ (List.mem_of_getElem? actualStored), ?_⟩
+    safe.1.values _ (List.mem_of_getElem? actualStored), ?_, ?_⟩
   · simpa only [values, show after.waiting = before.waiting from rfl] using counts
   · simpa only [values, show after.expandable = before.expandable from rfl] using flags
   · intro bucket pending held fragment expanded sc member sameClass
     exact pending held fragment (by simpa only [values] using expanded) sc member
       ((classes held sc.var).mp sameClass)
+  · refine ⟨safe, counter, values, ?_, classes⟩
+    rw [show after.core = entered from rfl, ancestry]
+    exact fullFrame.obligations
 
 end MicroCFTA.SourcePruningEnumerationSelectedEntry
