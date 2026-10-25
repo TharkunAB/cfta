@@ -70,6 +70,21 @@ Terminal parents retain the existing enumerateNode fallback boundary. Native
 children can still take their terminal dispatcher. No Haskell fix is needed.
 Details: lean/notes-current-pruning-enumeration-native-ordinary.md.
 
+### Native ordinary alternatives retain their own caller receipts
+
+The selected model prefix now connects to admitted ordinary entry and scan
+at the actual narrowed Caller/cache. Each processed receipt has its own
+actual advance result, full prefix Caller Post and valid saved memos.
+The proof retains existing intermediate witnesses. It does not rerun a
+producer or substitute the aggregate final heap for a branch endpoint.
+The original completion interfaces retain their exact declaration types.
+Rendered Left callbacks must use those branch endpoints. Exact forcing and
+callback interleaving, fragment history and whole-driver semantics stay open.
+Initial-only machine-key admission needs a quantitative scheduler forecast.
+No new Haskell runtime defect or repair is found.
+External action: no patch is proposed for this source observation.
+Details: lean/notes-current-pruning-enumeration-selected-ordinary.md.
+
 ### Actual guard frames through narrowing and the Right callback
 
 A false native recursion guard can compress representatives between the
@@ -288,6 +303,29 @@ TH/Generic extraction, valid-position build/read and source codec laws stay open
 
 
 
+
+## Original selection reaches admitted ordinary expansion
+
+Per-receipt Caller/memos: `8d8693df7`. Selected composition: `82bfc44ff`.
+The goal stays ACTIVE.
+
+Original selection now connects through read, native guard, narrowing, pure
+Right callback and admitted ordinary entry/scan. The ordinary continuation
+uses the actual narrowed Caller/cache/memos. Each processed alternative now
+retains its actual advance endpoint and full prefix Post from the original
+Caller, plus its own cache and pending-reference certificate.
+Initial global pending history is a genuine input. Ordinary node shape,
+nonterminal bucket, selected narrowed rows and reached-state Ranges remain
+explicit conditions. Parked, Empty and unsupported outcomes stay exact.
+Both older completion interfaces retain their declaration types.
+
+All strict checks, public readback and Audit pass. Audit checks 76737
+dependencies. H6 remains the strongest end-to-end language result. Haskell
+is unchanged. Next: branch-endpoint Left callbacks, initial-only capacity
+forecasts, fragment-hole history and extraction. The serial scan does not
+establish arbitrary Haskell forcing or callback interleaving. Scheduler
+restart and whole-driver language semantics remain open.
+Details: `lean/notes-current-pruning-enumeration-selected-ordinary.md`.
 
 ## Original selection reaches native narrowing and the Right callback
 
