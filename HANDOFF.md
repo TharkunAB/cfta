@@ -1,5 +1,48 @@
 # cfta formalization restart handoff
 
+## Captured pending-slot branch admission
+
+Current source: `SourcePruningEnumerationAdmission`.
+Proof: `beeadea98efdd52e2116a48c2b9cc008698dec6b`. Main remains `74250bd889685da436cdbfe32ac4b5a0878ffd09`.
+The whole goal stays ACTIVE and incomplete. H6 remains strongest.
+
+One theorem derives the existing Entry.complete once from genuine Ready heap,
+initial StorageValid, allocated uv and all PendingRealized. The full actual
+read/capture/ancestry packet and stable entry singleton remain. The SAME stored
+pending slot derives inherited scs bounds at entered. No successful entry,
+unrelated arbitrary scs bound, future Context/Ranges or callback law is assumed.
+
+For decoded ordinary nodes under the actual nonterminal-scs test, every
+supplied ordered catalogue with stored-edge membership receives Storage.complete
+at the SAME entered state. Exact raw rows/flatten, order/duplicates, independent
+alternatives, arity[], missing projection and unsupported-child prefix states
+remain. Storage, alignment, all pending realization, present-fragment bounds
+and counter monotonicity remain. Other cases acquire no ordinary guarantee.
+No default selector, canonical extraction or full wrapper action is claimed.
+Zero new definitions/actions/types/predicates/carriers/Graph/instances/lets/
+inductions and three typed haves are selected. The frozen owner records 5
+literal contracts and 99 scopes. The actual source review is bound.
+
+Validation: Strict attempt 4 passes with a literal empty log under all linters and warnings as errors. All five literal contracts and the public header stay unchanged. No premise, local type or proof limit changed. The source has 127 lines, below the selected 150 to 260 estimate and hard limit 380; no padding was added. Three compiler failures remain: attempts 1 and 3 found the final proof-dependent match telescope mismatch; attempt 2 found an unsynthesized final exact hole. The exact body-only repairs retain every failed input and raw log. A separate post-failure, pre-revised-body metadata overlay adds 13 generated constructor payload scopes and a final case group. All 99 original scopes and four case groups remain; effective counts are 112 and five. The overlay records implicit specialization use and no direct named reference. The installed build, full public readback and aggregate Audit pass. All 112 public output lines retain the complete signature without display omissions. The older unused-variable warning remains unchanged. No passing check was repeated. No seal has failed. All complete resource receipts remain. Read-only locator diagnostics remain separate from compiler and seal failures.
+Installed focused build: 628 jobs; Audit: 3717 jobs and
+76342 theorem dependency checks. Actual public axioms: complete reports propext, Classical.choice and Quot.sound.
+All actual inputs, raw logs, repairs and resource receipts remain. Exactly 26
+prior Storage inputs retain archive-1/local-publication-1/push-1 and canonical
+next-assessment; its sealed peer stays separate. Older Union V1/V2 and alias-copy
+history remain protected baseline, not current proof/seal failures. No future
+passing seal or push is asserted.
+
+Native cached allocation/write indexes, configured selector extraction, wrapper
+normalization/reconstruction, current-resource admission, machine bounds and
+the full scheduler/driver remain open. Existing Mu/Union proofs are retained.
+All six imported Haskell repairs remain first in FINDINGS. No Haskell change
+is claimed. H6 still covers closed construction with valid cache/allocation
+history and any prescribed finite modeled node-call trace at derived bounds.
+Empty inherited payload preserves the same finite trees under formal
+guard/solver semantics. Full typing/pruning/native extraction/solver
+implementation/runtime/resources/convergence remain open.
+
+
 ## Ordinary branch storage admission
 
 Current source: `SourcePruningEnumerationStorage`.
