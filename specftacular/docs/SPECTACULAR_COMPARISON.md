@@ -1,12 +1,16 @@
 # Spectacular and Specftacular
 
-The matrix compares original Spectacular with Specftacular `2b2d9e562`. On
+The matrix compares original Spectacular with Specftacular `8c44a0d9b`. On
 one core, this revision completes 25 of 27 configurations within 900
-seconds. With `--enumerate-ahead` on 12 cores, it completes all 27,
-HugeLists 7-p3 and 7-p4 with `--type-depth 2 --recheck 2000`. Phase 4 now
-enumerates programs without their type annotations (see
-[Phase 4 programs](#phase-4-programs)), so HugeLists 6-p4 with the defaults
-completes in both modes. Original reference measurements remain unchanged.
+seconds. On 12 cores (`-N12 -qn4`, `--parallel-tests 64 --speculate 64`),
+it completes all 27, HugeLists 7-p3 and 7-p4 with
+`--type-depth 2 --recheck 2000`. The completion of a law stops after 2^15
+critical pairs (see [Completion fuel](#completion-fuel)), and on 12 cores
+the completions and the comparisons use the other capabilities (see
+[Parallel completion and tests](#parallel-completion-and-tests)), so
+HugeLists 7-p4 completes in 57 minutes. Phase 4 enumerates programs
+without their type annotations (see [Phase 4 programs](#phase-4-programs)),
+so HugeLists 6-p4 with the defaults completes in both modes. Original reference measurements remain unchanged.
 Sections that name an earlier revision describe that revision.
 
 The runtime compiles eligible rewrite templates into supported size/type
@@ -40,6 +44,8 @@ completed within 300 seconds. They are adopted completions, not new
 | --- | --- |
 | [Published Spectacular artifact](https://zenodo.org/records/7565003) | `00621f4f0f03e5d0afea3c730434a8842e473546` |
 | [Preceding child-part identifier change](https://github.com/TharkunAB/cfta/commit/f4ec36bd7b05c3478c92fbcb7e2e763bdad39e6b) | `f4ec36bd` |
+| Parallel completion and tests matrix (`improve/parallel-completion-tests`) | `8c44a0d9b` |
+| Completion fuel matrix (`improve/completion-fuel`) | `b07337367` |
 | Phase 4 programs matrix (`improve/phase4-programs`) | `2b2d9e562` |
 | [Preceding matrix](https://github.com/TharkunAB/cfta/tree/13424d8f9fbed3e564dd39793eef5a86e94e09c9/specftacular) | `13424d8f9` |
 | [Current bounds and Sequence matrix](https://github.com/TharkunAB/cfta/tree/cf1bee8f4017a6cd04a36d35bda31d1a6d40e78f/specftacular) | `cf1bee8f` |
@@ -87,9 +93,9 @@ below the requested 80 GB maximum. Machine activity can change during a
 run, so elapsed-time ratios do not isolate engine speed.
 
 The matrix covers the 27 Table I configurations. Original runs have a
-60-second limit. The Specftacular runs of `2b2d9e562` have a
-900-second limit on one core, and no limit that a run reaches with
-`--enumerate-ahead` (see Results). The paper used 3600 seconds. These
+60-second limit. The Specftacular runs of `8c44a0d9b` have a
+900-second limit on one core, and no limit that a run reaches on 12 cores
+(see Results). The paper used 3600 seconds. These
 different limits must remain explicit. A same-size later phase can be
 inferred after an earlier-phase timeout at the same limit. Such an entry
 has no independent cost or law-count measurement. No inference crosses
@@ -143,67 +149,76 @@ The original `T` means a 60-second timeout. A timeout has no final law
 count. HugeLists uses different `usort` definitions in the two
 implementations, so its outputs are not identical workloads.
 
-The Specftacular columns measure revision `2b2d9e562` of
-`improve/phase4-programs`, built at `-O2` with GHC 9.14.1. The runs ran
-one at a time through pueue in one 48 GiB cgroup on 2026-10-23, from 16:18
-to 22:25. Jobs of other users shared the host: the load average at the
-start of a run was 2.0 to 9.0 on one core and 1.5 to 12.3 with
-`--enumerate-ahead`, against 0.8 to 2.0 for `13424d8f9`. So the seconds
-are upper bounds, and the seconds of the two revisions do not compare
-exactly ([Phase 4 programs](#phase-4-programs) has runs in the same
-conditions). Except where `ᵈ` marks it, no run in this table uses
-`--recheck`, so a printed law can be false.
+The Specftacular columns measure revision `8c44a0d9b` of
+`improve/parallel-completion-tests`, built at `-O2` with GHC 9.14.1. The
+binaries came from an earlier commit with the same code and other
+comments. The completion of each law takes at most 2^15 critical pairs,
+the default (see [Completion fuel](#completion-fuel)). The runs ran one at
+a time through pueue in one 56 GiB cgroup on 2026-10-25 (CET): the
+one-core runs from 06:09 to 07:33, and the runs on 12 cores from 07:33 to
+08:58. No other job ran. The load average at the start of a run was 1.2 to
+3.5, and 1.3 to 5.3 on 12 cores, most of it from the run before. Except
+where `ᵈ` marks it, no run in this table uses `--recheck`, so a printed law
+can be false.
 
 - One core: the defaults, `+RTS -N1 -M14G`, and a 900-second limit. `T`
   is a timeout. A timeout skips the later phases of the same size
   (`T (inferred)`).
-- `--enumerate-ahead`: `+RTS -N12 -qg -A64m -M44G`, and no time limit
-  that a run reaches. Only phase 4 runs in parallel, so the small
-  configurations are not faster than on one core. The peak RSS includes
-  the twelve 64 MiB allocation areas. `ᵈ` marks a run with
+- 12 cores: `+RTS -N12 -qn4 -A64m -M52G`,
+  `--parallel-tests 64 --speculate 64`, without `--enumerate-ahead`, and
+  no time limit that a run reaches. Each phase enumerates the parts of a
+  bucket in parallel, a comparison tests its cases after the first 64 in
+  parallel, the completion of a law decides its critical pairs in
+  parallel, and four threads collect the garbage. The peak RSS includes the
+  twelve 64 MiB allocation areas. `ᵈ` marks a run with
   `--type-depth 2 --recheck 2000`: without the depth bound, phase 3 at
   size 7 does not finish, and without the recheck a false law stops the
   search (see below).
 
-| Signature | Size | Through phase | Original s (60 s limit) | Original MiB | Original laws | One core s (900 s limit) | One core MiB | One core laws | `--enumerate-ahead` s | `--enumerate-ahead` MiB | `--enumerate-ahead` laws |
+| Signature | Size | Through phase | Original s (60 s limit) | Original MiB | Original laws | One core s (900 s limit) | One core MiB | One core laws | 12 cores s | 12 cores MiB | 12 cores laws |
 | --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
-| Lists | 7 | 2 | 1.07 | 21.6 | 32 | 0.42 | 43.7 | 15 | 0.91 | 770.0 | 15 |
-| Lists | 7 | 3 | 18.11 | 70.8 | 73 | 9.62 | 1445.7 | 33 | 15.27 | 2296.8 | 33 |
-| Lists | 7 | 4 | T | 139.5 | — | 21.11 | 1491.4 | 41 | 23.47 | 2340.0 | 41 |
-| Octonions | 7 | 2 | 0.15 | 21.4 | 8 | 0.86 | 29.2 | 15 | 1.55 | 759.9 | 15 |
-| Octonions | 7 | 3 | 0.17 | 20.1 | 8 | 0.88 | 29.2 | 15 | 1.47 | 759.6 | 15 |
-| Octonions | 7 | 4 | 0.22 | 24.3 | 8 | 0.90 | 29.3 | 15 | 1.49 | 799.1 | 15 |
-| Regex | 7 | 2 | 3.06 | 18.7 | 42 | 46.50 | 56.7 | 60 | 59.07 | 775.8 | 60 |
-| Regex | 7 | 3 | 4.29 | 16.8 | 42 | 48.01 | 58.6 | 60 | 59.32 | 775.6 | 60 |
-| Regex | 7 | 4 | 5.84 | 17.1 | 42 | 49.45 | 57.5 | 60 | 60.67 | 819.2 | 60 |
-| ListMonad | 7 | 2 | 0.27 | 15.4 | 8 | 3.96 | 55.7 | 9 | 3.54 | 764.6 | 9 |
-| ListMonad | 7 | 3 | 0.46 | 22.3 | 8 | 4.10 | 62.6 | 9 | 3.65 | 764.8 | 9 |
-| ListMonad | 7 | 4 | 18.04 | 208.8 | 42 | 4.64 | 65.6 | 9 | 4.06 | 822.7 | 9 |
-| HugeLists | 3 | 2 | 0.07 | 12.1 | 22 | 0.21 | 56.7 | 28 | 0.44 | 499.2 | 28 |
-| HugeLists | 3 | 3 | 0.18 | 17.0 | 27 | 0.38 | 57.1 | 40 | 0.76 | 766.8 | 40 |
-| HugeLists | 3 | 4 | 0.64 | 30.7 | 33 | 2.54 | 677.7 | 46 | 2.90 | 1070.0 | 46 |
-| HugeLists | 4 | 2 | 0.20 | 14.3 | 37 | 0.80 | 75.1 | 46 | 1.22 | 782.8 | 46 |
-| HugeLists | 4 | 3 | 1.37 | 36.3 | 68 | 2.36 | 109.2 | 84 | 3.02 | 860.6 | 84 |
-| HugeLists | 4 | 4 | 28.43 | 122.7 | 90 | 8.35 | 952.0 | 122 | 8.68 | 1498.7 | 122 |
-| HugeLists | 5 | 2 | 0.88 | 23.2 | 66 | 7.92 | 237.2 | 92 | 7.64 | 940.1 | 92 |
-| HugeLists | 5 | 3 | 27.27 | 104.8 | 144 | 23.76 | 1449.9 | 197 | 24.35 | 1786.5 | 197 |
-| HugeLists | 5 | 4 | T | 165.1 | — | 58.09 | 2153.8 | 291 | 55.41 | 2624.4 | 291 |
-| HugeLists | 6 | 2 | 6.37 | 39.1 | 99 | 12.32 | 294.0 | 130 | 12.19 | 953.2 | 130 |
-| HugeLists | 6 | 3 | T | 305.6 | — | 107.46 | 1868.2 | 330 | 155.94 | 2497.1 | 330 |
-| HugeLists | 6 | 4 | T | 308.9 | — | 576.84 | 6478.5 | 690 | 594.93 | 6189.2 | 690 |
-| HugeLists | 7 | 2 | T | 60.2 | — | 88.22 | 1034.6 | 242 | 107.02 | 1441.5 | 242 |
-| HugeLists | 7 | 3 | T | 58.0 | — | T | 3231.6 | — | 1392.78 ᵈ | 7581.6 | 680 |
-| HugeLists | 7 | 4 | T | 55.6 | — | T (inferred) | — | — | 14081.20 ᵈ | 39487.4 | 1946 |
+| Lists | 7 | 2 | 1.07 | 21.6 | 32 | 0.45 | 43.9 | 15 | 0.57 | 817.9 | 15 |
+| Lists | 7 | 3 | 18.11 | 70.8 | 73 | 10.63 | 1563.7 | 33 | 5.96 | 2379.0 | 33 |
+| Lists | 7 | 4 | T | 139.5 | — | 23.90 | 1565.3 | 41 | 11.47 | 2381.4 | 41 |
+| Octonions | 7 | 2 | 0.15 | 21.4 | 8 | 1.00 | 29.1 | 15 | 0.46 | 808.0 | 15 |
+| Octonions | 7 | 3 | 0.17 | 20.1 | 8 | 0.94 | 29.4 | 15 | 0.49 | 802.4 | 15 |
+| Octonions | 7 | 4 | 0.22 | 24.3 | 8 | 1.00 | 29.1 | 15 | 0.48 | 804.5 | 15 |
+| Regex | 7 | 2 | 3.06 | 18.7 | 42 | 51.09 | 57.2 | 60 | 33.20 | 847.7 | 60 |
+| Regex | 7 | 3 | 4.29 | 16.8 | 42 | 50.76 | 59.3 | 60 | 32.95 | 842.0 | 60 |
+| Regex | 7 | 4 | 5.84 | 17.1 | 42 | 51.68 | 67.8 | 60 | 34.12 | 844.8 | 60 |
+| ListMonad | 7 | 2 | 0.27 | 15.4 | 8 | 4.42 | 57.9 | 9 | 2.65 | 818.7 | 9 |
+| ListMonad | 7 | 3 | 0.46 | 22.3 | 8 | 4.55 | 59.9 | 9 | 2.92 | 822.0 | 9 |
+| ListMonad | 7 | 4 | 18.04 | 208.8 | 42 | 4.61 | 65.2 | 9 | 3.43 | 833.9 | 9 |
+| HugeLists | 3 | 2 | 0.07 | 12.1 | 22 | 0.19 | 56.0 | 28 | 0.31 | 565.0 | 28 |
+| HugeLists | 3 | 3 | 0.18 | 17.0 | 27 | 0.33 | 56.7 | 40 | 0.49 | 800.4 | 40 |
+| HugeLists | 3 | 4 | 0.64 | 30.7 | 33 | 2.54 | 660.0 | 46 | 1.43 | 1074.7 | 46 |
+| HugeLists | 4 | 2 | 0.20 | 14.3 | 37 | 0.79 | 74.6 | 46 | 0.90 | 827.2 | 46 |
+| HugeLists | 4 | 3 | 1.37 | 36.3 | 68 | 2.50 | 159.7 | 84 | 2.22 | 907.6 | 84 |
+| HugeLists | 4 | 4 | 28.43 | 122.7 | 90 | 8.58 | 1010.8 | 122 | 5.87 | 1489.4 | 122 |
+| HugeLists | 5 | 2 | 0.88 | 23.2 | 66 | 7.96 | 220.5 | 92 | 7.31 | 989.6 | 92 |
+| HugeLists | 5 | 3 | 27.27 | 104.8 | 144 | 23.69 | 1442.7 | 197 | 19.16 | 1632.5 | 197 |
+| HugeLists | 5 | 4 | T | 165.1 | — | 55.90 | 2196.1 | 291 | 42.10 | 2724.7 | 291 |
+| HugeLists | 6 | 2 | 6.37 | 39.1 | 99 | 12.09 | 298.6 | 130 | 10.84 | 1020.2 | 130 |
+| HugeLists | 6 | 3 | T | 305.6 | — | 102.72 | 1847.3 | 330 | 93.23 | 2730.3 | 330 |
+| HugeLists | 6 | 4 | T | 308.9 | — | 491.05 | 6683.7 | 690 | 364.06 | 14669.5 | 690 |
+| HugeLists | 7 | 2 | T | 60.2 | — | 79.54 | 983.3 | 242 | 76.38 | 1645.4 | 242 |
+| HugeLists | 7 | 3 | T | 58.0 | — | T | 2931.4 | — | 916.93 ᵈ | 7763.7 | 691 |
+| HugeLists | 7 | 4 | T | 55.6 | — | T (inferred) | — | — | 3392.93 ᵈ | 30667.0 | 1413 |
 
 On one core, 25 of the 27 configurations complete within 900 seconds.
 HugeLists 7-p3 times out in phase 3, with 381 laws printed, and 7-p4 is
-inferred. With `--enumerate-ahead`, all 27 configurations complete. Each
-configuration that completed at `13424d8f9` finds the same number of laws,
-except HugeLists 7-p4 (see below).
+inferred. On 12 cores, all 27 configurations complete. Each configuration
+gives the same output as at `b07337367`, byte for byte, on one core and on
+12 cores, where `b07337367` ran without `--parallel-tests` and
+`--speculate`. At `b07337367`, the outputs were the same as at
+`2b2d9e562`, except HugeLists 7-p3 and 7-p4 on 12 cores, where completions
+run out of their fuel (see [Completion fuel](#completion-fuel)).
 
 HugeLists 6-p4 with the defaults completes in both modes, with 690 laws:
-in 577 seconds on one core, with a maximum residency of 2.3 GB, and in 595
-seconds with `--enumerate-ahead`. At `13424d8f9`, it timed out at 900
+in 491 seconds on one core, with a maximum residency of 2.3 GB, and in 364
+seconds on 12 cores, with a maximum residency of 5.0 GB. At `b07337367`,
+it took 486 and 477 seconds. At `2b2d9e562`, without the fuel, it took 577
+seconds on one core and 595 seconds with `--enumerate-ahead`. At `13424d8f9`, it timed out at 900
 seconds on one core, a longer one-core run exhausted a 14 GiB heap after
 1,668 seconds, and with `--enumerate-ahead` the RSS reached 47.8 GiB after
 2,601 seconds, at the cap of the cgroup. The memory grew in the completion
@@ -220,21 +235,37 @@ examines 65 terms and finds no law. 7-p3 then completes in 1,345 seconds
 with 444 laws, and 7-p4 in 2,377 seconds with the same 444 laws. With
 `--recheck 2000`, the recheck drops the law, so the two cells use it.
 
-HugeLists 7-p4 with `--enumerate-ahead` completes in 14,081 seconds (3.9
-hours), against 24,715 seconds at `13424d8f9` with a load of 5 to 10. It
-allocates 61 TB against 163 TB, and its CPU time is 35,088 seconds against
-115,443 seconds. Its maximum residency is 19.5 GB against 7.3 GB, and its
-peak RSS is 39.5 GiB against 20.9 GiB. The cause of the larger residency
-is not known yet. It finds 1,946 laws: the 1,945 laws of `13424d8f9` in
-the same order, and one more, law 1060,
-`length (drop x (scanl f x xs)) == length (drop x (snd y : xs))`. The
-completion of the law before it,
-`length (drop x (scanl f x xs)) == length (drop x (f x : xs))`, reaches
-the 4 GiB memory limit in this run, so the search keeps the law alone (82
-completion fallbacks against 81). At `13424d8f9`, that completion
-finished, and law 1060 did not appear. The limit measures the growth of
-the live heap of the process, which the twelve threads share, so it can
-differ between runs. In both runs, the recheck drops 249 laws.
+HugeLists 7-p4 on 12 cores completes in 3,393 seconds (57 minutes). At
+`b07337367`, it took 4,256 seconds under a load of 1.7 to 6.9. At
+`2b2d9e562`, with `--enumerate-ahead` and without the fuel, it took 14,081
+seconds, and 24,715 seconds at `13424d8f9`. It allocates 24.6 TB against
+22.7 TB at `b07337367` and 61 TB at `2b2d9e562`, and its CPU time is 16,191
+seconds against 13,233 and 35,088 seconds. Its maximum residency is
+12.0 GB, against 12.4 GB at `b07337367`, 19.5 GB at `2b2d9e562` and 7.3 GB
+at `13424d8f9`, and its peak RSS is 29.9 GiB. The cause of the larger
+residency is not known yet. It finds 1,413 laws against 1,946 at
+`2b2d9e562` ([Completion fuel](#completion-fuel) gives the difference), and
+the recheck drops 166 laws against 249. Five completions keep only the
+rules of their laws, over the allocation budget, against three at
+`b07337367` (see [Parallel completion and tests](#parallel-completion-and-tests)).
+
+At `b07337367`, other flags gave the same 1,413 laws. With
+`--enumerate-ahead`, background threads enumerate the parts of the next
+types of a size, and the parts stay until the size ends, so the live heap
+is larger and the collections take more time. Two runs with
+`--enumerate-ahead -qg` took 6,381 and 6,089 seconds. All runs use `-N12 -M44G` and `--type-depth 2 --recheck 2000`. The
+load was 1.7 to 6.9 during them, so the seconds are upper bounds.
+
+| Flags | Seconds | GC seconds (elapsed) | Maximum residency GB | Peak RSS GiB | Over the memory limit |
+| --- | ---: | ---: | ---: | ---: | ---: |
+| `--enumerate-ahead`, `-qg -A64m` | 6,381 | 2,765 | 18.4 | 38.3 | 3 |
+| `--enumerate-ahead`, `-qn4 -F3 -A64m` | 5,049 | 1,388 | 15.8 | 45.4 | 3 |
+| `-qg -A64m` | 5,159 | 1,293 | 11.8 | 28.9 | 0 |
+| `-qn4 -A64m` | 4,256 | 372 | 12.4 | 30.7 | 0 |
+
+Without `--enumerate-ahead`, the completions of the three laws over the
+memory limit run out of their fuel instead, so the background threads
+trigger the limit.
 
 The law counts differ from those of earlier revisions in some
 configurations, for example HugeLists 4-p4 (122 against 125 at
@@ -249,13 +280,122 @@ not RSS. The Specftacular columns below come from the one-core runs.
 
 | Signature, size, phase | Original allocation GiB | Specftacular allocation GiB | Original residency MiB | Specftacular residency MiB | Original GC CPU s | Specftacular GC CPU s |
 | --- | ---: | ---: | ---: | ---: | ---: | ---: |
-| Lists-7-p2 | 4.275 | 1.778 | 5.35 | 10.53 | 0.231 | 0.051 |
-| Octonions-7-p2 | 0.419 | 1.605 | 12.58 | 5.14 | 0.026 | 0.027 |
-| Regex-7-p2 | 17.185 | 349.064 | 4.47 | 13.91 | 0.474 | 1.554 |
-| ListMonad-7-p2 | 0.961 | 26.419 | 3.47 | 15.75 | 0.030 | 1.043 |
-| ListMonad-7-p4 | 52.501 | 27.670 | 72.02 | 21.89 | 7.004 | 1.203 |
-| HugeLists-4-p4 | 126.783 | 21.340 | 39.68 | 361.84 | 8.920 | 2.249 |
-| HugeLists-6-p2 | 24.723 | 49.882 | 17.60 | 106.22 | 1.246 | 1.825 |
+| Lists-7-p2 | 4.275 | 1.789 | 5.35 | 10.52 | 0.231 | 0.055 |
+| Octonions-7-p2 | 0.419 | 1.611 | 12.58 | 5.01 | 0.026 | 0.032 |
+| Regex-7-p2 | 17.185 | 348.338 | 4.47 | 15.01 | 0.474 | 1.710 |
+| ListMonad-7-p2 | 0.961 | 26.430 | 3.47 | 16.31 | 0.030 | 1.174 |
+| ListMonad-7-p4 | 52.501 | 27.686 | 72.02 | 21.17 | 7.004 | 1.179 |
+| HugeLists-4-p4 | 126.783 | 21.409 | 39.68 | 398.82 | 8.920 | 2.425 |
+| HugeLists-6-p2 | 24.723 | 50.148 | 17.60 | 106.90 | 1.246 | 1.796 |
+
+### Completion fuel
+
+The completion of a law takes the critical pairs of its rules from a queue.
+Since `b07337367`, it takes at most 2^15 = 32,768 pairs
+(`--completion-fuel 15`; `0` is no limit). When the fuel runs out, the law
+keeps the rules that its completion has derived. These rules follow from
+the laws, so the pruning stays sound, but they can prove fewer laws than
+the complete rules. The allocation budget of 256 GiB stays as a second
+limit. Before the fuel, a completion over the budget kept only the rules
+of its law. At HugeLists 7-p4 at `2b2d9e562`, 78 completions did so. They
+took 5,738 of the 7,559 seconds of the completion, and their work was
+lost. [ADR 7](../../docs/adr/0007-completion-fuel.md) has the decision.
+
+A pair costs about 1 MiB of allocation at HugeLists (0.4 to 2.2 MiB at
+6-p4), so the fuel stops a completion at about 32 GiB. A count of pairs
+does not depend on the allocation, so the fuel gives the same laws with
+each optimization and each number of capabilities.
+
+The fuel changes no output of the one-core configurations and of the
+bounded 6-p4 runs, although some of their completions run out of it (three
+at 6-p4 with the defaults). On 12 cores, it changes HugeLists
+7-p3 and 7-p4. At 7-p3, it adds 11 laws to the 680 of `2b2d9e562` and
+removes none. At 7-p4, the outputs agree up to law 344. 578 laws of
+`2b2d9e562` are not printed. They are consequences that the rewriting
+proves now. At `2b2d9e562`, the completion of
+`xs >>= f == concat (map f xs)` ran over the budget, so the law kept only
+its own rules, and these consequences were printed as new laws, for
+example:
+
+```haskell
+concat xss == xss >>= (++) []
+[] == xss >>= take 0
+xss >>= map f == map f (concat xss)
+```
+
+45 laws are printed only with the fuel. They are true consequences that a
+stopped completion does not derive, for example:
+
+```haskell
+[] == drop x (usort (take x xs))
+xs ++ (xs ++ ys) == concat (scanl (++) xs [ys])
+concat (drop x [f y]) == (drop x >=> f) [y]
+```
+
+At 7-p4 on 12 cores, 39 completions run out of their fuel, against 41 at
+`b07337367`. Three laws over `[[[A]]]` still run over the allocation budget
+within the fuel: their pairs cost more than 8 MiB each. With `--speculate`,
+two laws over `[[A]]` and `[[B]]` also run over the budget (see
+[Parallel completion and tests](#parallel-completion-and-tests)).
+
+### Parallel completion and tests
+
+At `b07337367`, the tests and the completions ran on the thread that
+tests. They took 1,610 of the 4,256 seconds of HugeLists 7-p4 on 12 cores,
+while the other capabilities waited. Two flags give them the other
+capabilities. Neither changes a decision of the search.
+
+- `--speculate N`: the completion of a law decides up to N critical pairs
+  of its queue in threads, under the rules of the moment, and takes the
+  decisions in order. A new equation changes the rules, so the pairs after
+  it go back to the queue. A decision depends only on the pair and the
+  rules, so the decisions are the same. The number of pairs in parallel
+  starts at 1 and doubles, up to N, after a step without a new equation.
+  After a new equation at position k, it becomes k + 1. At 1, the completion
+  decides the next pair on its own thread, with the cache of normal forms.
+- `--parallel-tests N`: a comparison at a leaf of a decision tree tests its
+  first N cases in order, and the others in one chunk for each capability.
+  The first chunk in order that does not agree decides. A chunk stops when
+  a chunk before it has found a difference.
+
+[ADR 8](../../docs/adr/0008-speculative-completion.md) has the decision for
+`--speculate`.
+
+These runs measure HugeLists 7-p4 (`--type-depth 2 --recheck 2000`) with
+`+RTS -N12 -qn4 -A64m` on 2026-10-25, one at a time, with the same 1,413
+laws in each row except the last.
+
+| Code and flags | Seconds | Completion seconds | GC seconds (elapsed) | Allocation TB | Peak RSS GiB |
+| --- | ---: | ---: | ---: | ---: | ---: |
+| `dad3b411b`: `b07337367` with the parts of phases 1 to 3 in parallel | 3,996 | 1,038 | 371 | 22.8 | 29.6 |
+| `--speculate 64`, a fixed window of 64 pairs | 4,659 | 1,724 | 434 | 44.2 | 30.6 |
+| `--speculate 64` | 3,583 | 633 | 389 | 24.2 | 30.7 |
+| `--parallel-tests 64 --speculate 64` | 3,378 | 632 | 495 | 24.6 | 30.0 |
+| `--parallel-tests 64 --speculate 64`, the pairs best first | 3,789 | 837 | 364 | 21.8 | 25.8 |
+
+The completion seconds add up the completions that allocate more than
+1 GiB. With a fixed window, a new equation came every few pairs in the
+large completions, and it discarded most of each batch. The adaptive
+window makes the completion 39 % faster. The decisions that it discards
+cost 6 % more allocation. The threads have no cache of normal forms, so a
+completion counts more allocation against its budget: two more laws run
+over it, and keep only their own rules. At this revision, the output does
+not change, but a completion near the budget can give other laws.
+
+The parallel tests save 205 more seconds, and the collections take 106 of
+them back. At HugeLists 6-p4, they raise the peak RSS from 5.5 to 14.3 GiB
+and the maximum residency from 2.3 to 5.0 GB, because twelve comparisons
+hold their values and their inputs at once. At 7-p4, phase 4 sets the
+peak, so the peak RSS does not grow.
+
+The last row takes the critical pairs in the order of the score of Twee
+(2 for each step from the law, the leaves of both sides, and 3 for each
+leaf of the larger side), not in the order that they come. At 6-p4, it
+gives the same 690 laws in the same order. At 7-p4, within the fuel, it
+leaves weaker rules: 52 completions run out of their fuel, and the run
+prints 1,826 laws. 458 of them are not in the output of the FIFO order, and
+45 laws of that output are not in it. So the queue stays FIFO. `+RTS -N16` on the 24 logical CPUs of the host (12 cores
+with two threads each) took 373 seconds at 6-p4, against 368 with `-N12`.
 
 ### Phase 4 programs
 
@@ -315,7 +455,7 @@ constructors and arrows. `--function-buckets` gives a bucket to each
 function type between two small data types of the signature.
 `--recheck N` tests each new law again on N random cases of sizes 1 to 8,
 and drops a law that one of them refutes. All rows use `--recheck 2000`.
-The 6-p4 and 7-p3 rows measure `2b2d9e562` on one core
+The 6-p4 and 7-p3 rows measure `8c44a0d9b` on one core
 (`+RTS -N1 -M14G`) with a 900-second limit, as in the main table, with the
 same load. On one core, 7-p4 is then inferred to time out. The next row
 is the 7-p4 run of the main table. The last two rows keep the earlier
@@ -325,24 +465,24 @@ their seconds are upper bounds.
 
 | Configuration | Options | Outcome | Seconds | Allocation GB | Peak RSS MiB | Laws | Dropped by recheck | Completion fallbacks |
 | --- | --- | --- | ---: | ---: | ---: | ---: | ---: | ---: |
-| HugeLists-6-p4 | none | complete | 613.1 | 2,257 | 6756.2 | 686 | 26 | 1 |
-| HugeLists-6-p4 | `--type-depth 2` | complete | 410.6 | 1,387 | 5743.4 | 671 | 22 | 0 |
-| HugeLists-6-p4 | `--type-depth 2 --function-buckets` | complete | 493.9 | 1,776 | 6762.6 | 705 | 22 | 0 |
-| HugeLists-7-p3 | `--type-depth 2` | T at 900 s | 900.8 | — | 5285.0 | 515 visible | 30 | 0 |
-| HugeLists-7-p3 | `--type-depth 2 --function-buckets` | T at 900 s | 900.9 | — | 5764.9 | 509 visible | 29 | 0 |
+| HugeLists-6-p4 | none | complete | 500.9 | 2,015 | 7211.3 | 686 | 26 | 0 |
+| HugeLists-6-p4 | `--type-depth 2` | complete | 361.1 | 1,366 | 6042.8 | 671 | 22 | 0 |
+| HugeLists-6-p4 | `--type-depth 2 --function-buckets` | complete | 487.4 | 1,927 | 6846.3 | 705 | 22 | 0 |
+| HugeLists-7-p3 | `--type-depth 2` | T at 900 s | 900.6 | — | 6019.6 | 584 visible | 55 | 0 |
+| HugeLists-7-p3 | `--type-depth 2 --function-buckets` | T at 900 s | 900.6 | — | 6112.6 | 510 visible | 30 | 0 |
 | HugeLists-7-p4 | `--type-depth 2` | T (inferred) | — | — | — | — | — | — |
-| HugeLists-7-p4 | `--type-depth 2 --enumerate-ahead`, `-N12`, `2b2d9e562` | complete | 14081.2 | 61,099 | 39487.4 | 1946 | 249 | 82 |
+| HugeLists-7-p4 | `--type-depth 2`, `-N12 -qn4 --parallel-tests 64 --speculate 64`, `8c44a0d9b` | complete | 3392.9 | 24,572 | 30667.0 | 1413 | 166 | 5 |
 | HugeLists-7-p4 | `--type-depth 2 --enumerate-ahead`, `-N12`, `5c168176d` | complete | 40449.7 | 300,080 | 29748.6 | 1945 | 249 | 81 |
 | HugeLists-7-p4 | `--type-depth 2 --enumerate-ahead --split 6`, `-N12`, `5c168176d` | complete | 20816.3 | 167,009 | 29929.1 | 1945 | 249 | 81 |
 
 At 6-p4, the laws are the same as at `5c168176d`: 671 with
 `--type-depth 2` and 705 with function buckets, with 22 dropped by recheck
-in both. The allocation is 1,387 and 1,776 GB, against 2,216 and 2,960 GB
+in both. The allocation is 1,366 and 1,927 GB, against 2,216 and 2,960 GB
 at `13424d8f9` and 2,337 and 3,130 GB at `5c168176d`. Without a bound,
-6-p4 with `--recheck 2000` now completes on one core, in 613 seconds with
-686 laws. 7-p3 with `--type-depth 2` prints 515 laws in 900 seconds against
-584 at `13424d8f9`: phase 3 takes most of the time at size 7, and the load
-average was 5 to 8 during the run.
+6-p4 with `--recheck 2000` now completes on one core, in 501 seconds with
+686 laws. 7-p3 with `--type-depth 2` prints 584 laws in 900 seconds, as at
+`13424d8f9`, against 515 at `2b2d9e562` under a load of 5 to 8: phase 3
+takes most of the time at size 7.
 At `5c168176d`, 7-p3 with `--type-depth 2` completed on one core in 1,185
 seconds with 680 laws, and with function buckets in 2,279 seconds with
 686 laws, under a load of 3 to 10.

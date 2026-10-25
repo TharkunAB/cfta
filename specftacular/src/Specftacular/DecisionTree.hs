@@ -16,7 +16,13 @@ module Specftacular.DecisionTree (
     size,
 ) where
 
+import Control.Concurrent (forkIO, getNumCapabilities, killThread)
+import Control.Concurrent.MVar (newEmptyMVar, putMVar, takeMVar)
+import Control.Exception (SomeException, mask, onException, throwIO, try)
+import Control.Monad (when)
+import Data.IORef (atomicModifyIORef', newIORef, readIORef)
 import qualified Data.Map.Strict as Map
+import Data.Maybe (isJust)
 import Specftacular.Types (Case (..), Sig, Term, TestCase, Value, VarVals, testCaseValues)
 
 {- | A term evaluator and the generators of its variables, or an evaluator
@@ -75,13 +81,17 @@ insert ::
     (TestCase -> Value) ->
     DecisionTree ->
     IO Inserted
-insert equal cases t eval = insertWith (const (const False)) equal cases t (PerCase eval)
+insert equal cases t eval = insertWith Nothing (const (const False)) equal cases t (PerCase eval)
 
 {- | Insert a term, but skip the test schedule when the predicate proves
 that it equals the representative. Branch comparisons still select the
 representative. New equalities still use the complete test schedule.
+With Just n, a comparison at a leaf tests the cases after the first n in
+parallel chunks, one for each capability. The first chunk in order that does
+not agree decides, so the result is the same as in order.
 -}
 insertWith ::
+    Maybe Int ->
     (Term -> Term -> Bool) ->
     (Value -> Value -> IO (Maybe Bool)) ->
     [Case] ->
@@ -89,7 +99,7 @@ insertWith ::
     Evaluator ->
     DecisionTree ->
     IO Inserted
-insertWith known equal cases t eval = go
+insertWith parallelAfter known equal cases t eval = go
   where
     go Empty = return (Distinct (Leaf t eval))
     go (Branch tc children) = find [] children
@@ -106,17 +116,63 @@ insertWith known equal cases t eval = go
                         <$> go sub
     go (Leaf y evalY)
         | known t y = return (EqualTo y)
-        | otherwise = compareCases cases
+        | Nothing <- parallelAfter = maybe (EqualTo y) decide <$> firstDifference (pure False) cases
+        | Just sequential <- parallelAfter = do
+            capabilities <- getNumCapabilities
+            let (first, rest) = splitAt sequential cases
+            prefix <- firstDifference (pure False) first
+            case prefix of
+                Just found -> pure (decide found)
+                Nothing
+                    | capabilities <= 1 || null rest -> maybe (EqualTo y) decide <$> firstDifference (pure False) rest
+                    | otherwise -> do
+                        -- A chunk stops when a chunk before it has found a
+                        -- difference, because its result cannot decide then.
+                        earliest <- newIORef (maxBound :: Int)
+                        let chunk i cs = do
+                                found <- firstDifference ((< i) <$> readIORef earliest) cs
+                                when (isJust found) $ atomicModifyIORef' earliest (\j -> (min i j, ()))
+                                pure found
+                        found <- inParallel (zipWith chunk [0 ..] (chunks capabilities rest))
+                        either throwIO (pure . maybe (EqualTo y) decide) (firstOf found)
       where
-        compareCases [] = return (EqualTo y)
-        compareCases (tc : rest) = do
-            let w = evaluateWith evalY tc
-                v = evaluateWith eval tc
-            e <- equal w v
-            case e of
-                Nothing -> return Untested
-                Just False -> return $ Distinct $ Branch tc [(w, Leaf y evalY), (v, Leaf t eval)]
-                Just True -> compareCases rest
+        -- The first case on which the two terms do not agree, with the values
+        -- that the comparison forced, unless the action stops it first.
+        firstDifference _ [] = pure Nothing
+        firstDifference stopped (tc : more) = do
+            stop <- stopped
+            if stop
+                then pure Nothing
+                else do
+                    let w = evaluateWith evalY tc
+                        v = evaluateWith eval tc
+                    e <- equal w v
+                    case e of
+                        Just True -> firstDifference stopped more
+                        _ -> pure (Just (tc, w, v, e))
+        decide (_, _, _, Nothing) = Untested
+        decide (tc, w, v, _) = Distinct $ Branch tc [(w, Leaf y evalY), (v, Leaf t eval)]
+        firstOf [] = Right Nothing
+        firstOf (Left exception : _) = Left exception
+        firstOf (Right Nothing : more) = firstOf more
+        firstOf (Right found : _) = Right found
+
+-- | Split a list into at most n chunks of about equal length, in order.
+chunks :: Int -> [a] -> [[a]]
+chunks n xs = go xs
+  where
+    size = max 1 ((length xs + n - 1) `div` n)
+    go [] = []
+    go ys = let (c, more) = splitAt size ys in c : go more
+
+-- | Run the actions in their own threads, and give their results in order. An exception of the caller stops them.
+inParallel :: [IO a] -> IO [Either SomeException a]
+inParallel actions = mask $ \restore -> do
+    started <-
+        mapM
+            (\action -> do var <- newEmptyMVar; thread <- forkIO (try (restore action) >>= putMVar var); pure (thread, var))
+            actions
+    restore (mapM (takeMVar . snd) started) `onException` mapM_ (killThread . fst) started
 
 -- | Evaluate on the values of a test case, or with a caller's case evaluator.
 evaluateWith :: Evaluator -> Case -> Value
