@@ -57,10 +57,9 @@ The matches of a pattern are the terms of the product of the e-graph
 automaton and the automaton of the pattern that satisfy the equality
 constraints of the pattern. 'ematchByIntersection' computes the matches by
 this definition, with 'FTA.intersectWith'. 'ematch' and the saturation
-explore the same product from a few roots, and compute the matches of each
-pair of an e-class and a node of a pattern once, so that the parents of an
-e-class share them. The test suite checks that the two give the same
-matches.
+explore the same product from a few roots, one run at a time, and check the
+equality constraints as they bind the variables. The test suite checks that
+the two give the same matches.
 -}
 module Data.CFTA.EGraph (
     -- * E-graphs
@@ -100,7 +99,6 @@ module Data.CFTA.EGraph (
 ) where
 
 import Control.Monad (foldM)
-import Control.Monad.State.Strict (evalState, get, modify')
 import qualified Data.HashMap.Strict as HashMap
 import qualified Data.HashSet as HashSet
 import Data.Hashable (Hashable (..))
@@ -384,10 +382,8 @@ data SortPattern s = SVar !String | SNode !s ![SortPattern s]
 -- A compiled sort pattern: the variables are numbers.
 data CSort s = CSVar !Int | CSNode !s ![CSort s]
 
-{- A compiled pattern. Each node has a number, for the memo of the
-matches, and the sort patterns of its e-class.
--}
-data CPat s f = CVar !Int ![CSort s] | CNode !Int !f ![CPat s f] ![CSort s]
+-- A compiled pattern: the variables are numbers, and each node has the sort patterns of its e-class.
+data CPat s f = CVar !Int ![CSort s] | CNode !f ![CPat s f] ![CSort s]
 
 {- | A rewrite rule: each instance of the left side is equal to the instance
 of the right side with the same variables. Build it with 'rule'.
@@ -401,8 +397,6 @@ data Rule s f = Rule
     {- ^ The symbol of each node of the left side, and the path to it from
     the root: the symbol, the arity, and the child index of each node above it.
     -}
-    , ruleNodes :: !Int
-    -- ^ The number of nodes of the left side.
     , ruleNames :: ![String]
     -- ^ The variables of the left side, by number.
     }
@@ -420,10 +414,10 @@ sort gets the sort of the matched e-class at the root, and no sort below it.
 -}
 rule :: (Hashable f) => Pattern s f -> Pattern s f -> Either RuleError (Rule s f)
 rule left right = do
-    let (l, nodes, vars, sortVars) = compileLeft left
+    let (l, vars, sortVars) = compileLeft left
     r <- compileRight vars sortVars right
     let symbols = HashSet.toList (HashSet.fromList (patternSymbols left))
-    pure (Rule l r symbols (anchorsOf l) nodes (map fst (sortOn snd (Map.toList vars))))
+    pure (Rule l r symbols (anchorsOf l) (map fst (sortOn snd (Map.toList vars))))
 
 {- | The rules of an equation: the direction from each side whose other side
 has no other variables.
@@ -440,24 +434,22 @@ anchorsOf :: CPat s f -> [(f, [(f, Int, Int)])]
 anchorsOf = go []
   where
     go _ (CVar _ _) = []
-    go above (CNode _ f kids _) = (f, reverse above) : concat [go ((f, length kids, k) : above) kid | (k, kid) <- zip [0 ..] kids]
+    go above (CNode f kids _) = (f, reverse above) : concat [go ((f, length kids, k) : above) kid | (k, kid) <- zip [0 ..] kids]
 
-{- Compile a left side: the pattern, the number of its nodes, and the
-numbers of its variables and sort variables.
--}
-compileLeft :: Pattern s f -> (CPat s f, Int, Map.Map String Int, Map.Map String Int)
-compileLeft p0 = let (c, (n, vs, ss)) = go [] p0 (0, Map.empty, Map.empty) in (c, n, vs, ss)
+-- Compile a left side: the pattern, and the numbers of its variables and sort variables.
+compileLeft :: Pattern s f -> (CPat s f, Map.Map String Int, Map.Map String Int)
+compileLeft p0 = let (c, (vs, ss)) = go [] p0 (Map.empty, Map.empty) in (c, vs, ss)
   where
     go sorts (PSorted sp p) st = let (sp', st') = goSort sp st in go (sp' : sorts) p st'
-    go sorts (PVar v) (n, vs, ss) = case Map.lookup v vs of
-        Just i -> (CVar i sorts, (n, vs, ss))
-        Nothing -> let i = Map.size vs in (CVar i sorts, (n, Map.insert v i vs, ss))
-    go sorts (PNode f ps) (n, vs, ss) =
-        let (cs, st') = foldl' (\(acc, st) p -> let (c, st1) = go [] p st in (acc ++ [c], st1)) ([], (n + 1, vs, ss)) ps
-         in (CNode n f cs sorts, st')
-    goSort (SVar v) (n, vs, ss) = case Map.lookup v ss of
-        Just i -> (CSVar i, (n, vs, ss))
-        Nothing -> let i = Map.size ss in (CSVar i, (n, vs, Map.insert v i ss))
+    go sorts (PVar v) (vs, ss) = case Map.lookup v vs of
+        Just i -> (CVar i sorts, (vs, ss))
+        Nothing -> let i = Map.size vs in (CVar i sorts, (Map.insert v i vs, ss))
+    go sorts (PNode f ps) st0 =
+        let (cs, st') = foldl' (\(acc, st) p -> let (c, st1) = go [] p st in (acc ++ [c], st1)) ([], st0) ps
+         in (CNode f cs sorts, st')
+    goSort (SVar v) (vs, ss) = case Map.lookup v ss of
+        Just i -> (CSVar i, (vs, ss))
+        Nothing -> let i = Map.size ss in (CSVar i, (vs, Map.insert v i ss))
     goSort (SNode s ps) st =
         let (cs, st') = foldl' (\(acc, st0) p -> let (c, st1) = goSort p st0 in (acc ++ [c], st1)) ([], st) ps
          in (CSNode s cs, st')
@@ -468,22 +460,12 @@ compileRight vars sortVars = go []
   where
     go sorts (PSorted sp p) = goSort sp >>= \sp' -> go (sp' : sorts) p
     go sorts (PVar v) = maybe (Left (UnboundVariable v)) (\i -> Right (CVar i sorts)) (Map.lookup v vars)
-    go sorts (PNode f ps) = (\cs -> CNode 0 f cs sorts) <$> traverse (go []) ps
+    go sorts (PNode f ps) = (\cs -> CNode f cs sorts) <$> traverse (go []) ps
     goSort (SVar v) = maybe (Left (UnboundSortVariable v)) (Right . CSVar) (Map.lookup v sortVars)
     goSort (SNode s ps) = CSNode s <$> traverse goSort ps
 
 -- | The e-classes of the variables and the sorts of the sort variables of a match.
 data Subst = Subst !(IntMap.IntMap ClassId) !(IntMap.IntMap Int)
-
--- | Join the substitutions of two parts of a pattern: a variable in both must have one e-class.
-joinSubst :: EGraph s f -> Subst -> Subst -> Maybe Subst
-joinSubst g (Subst a sa) (Subst b sb) = Subst <$> joinWith (equivalent g) a b <*> joinWith (==) sa sb
-  where
-    joinWith same x y =
-        foldM
-            (\m (k, v) -> maybe (Just (IntMap.insert k v m)) (\v' -> if same v v' then Just m else Nothing) (IntMap.lookup k m))
-            x
-            (IntMap.toList y)
 
 -- | Match the sort of an e-class, extending the sort variables.
 matchSort :: (Eq s) => EGraph s f -> CSort s -> Int -> IntMap.IntMap Int -> Maybe (IntMap.IntMap Int)
@@ -513,11 +495,10 @@ canonicalNodes :: (Hashable f) => EGraph s f -> Int -> [ENode f]
 canonicalNodes g i = maybe [] (HashSet.toList . HashSet.map (canon g) . classNodes) (IntMap.lookup i (classes g))
 
 {- | The matches of the left side of a rule in a region: the e-classes and
-their canonical e-nodes, closed under children. Each node of the left side
-matches each e-class once: the memo keeps the matches of each pair, and the
-parents of an e-class share them. This is the product of the e-graph
-automaton and the automaton of the pattern, with the states that have no run
-left out.
+their canonical e-nodes, closed under children. The match goes down from
+each root and carries one substitution, as in egg. This explores the
+product of the e-graph automaton and the automaton of the pattern, one run
+at a time (see 'ematchByIntersection').
 
 The roots to try come from the symbol of the left side with the fewest
 e-classes: from the e-classes with that symbol, the users of each e-class
@@ -528,8 +509,26 @@ head.
 matchRule ::
     (Eq s, Hashable f) =>
     EGraph s f -> IntMap.IntMap [ENode f] -> HashMap.HashMap f (Int, [ClassId]) -> Rule s f -> [(ClassId, Subst)]
-matchRule g region bySymbol r = evalState (concat <$> mapM (\c -> map ((,) c) <$> at c (ruleLeft r)) roots) IntMap.empty
+matchRule g region bySymbol r = [(c, m) | c <- roots, m <- down (ruleLeft r) c (Subst IntMap.empty IntMap.empty)]
   where
+    down (CVar v sorts) c (Subst vs ss) = case sortsFrom c sorts ss of
+        Nothing -> []
+        Just ss' -> case IntMap.lookup v vs of
+            Nothing -> [Subst (IntMap.insert v c vs) ss']
+            Just c' | equivalent g c c' -> [Subst vs ss']
+            _ -> []
+    down (CNode f kids sorts) c@(ClassId i) (Subst vs ss) = case sortsFrom c sorts ss of
+        Nothing -> []
+        Just ss' ->
+            [ m
+            | ENode _ f' cs <- IntMap.findWithDefault [] i region
+            , f' == f
+            , length cs == length kids
+            , m <- foldM (\acc (child, kid) -> down kid child acc) (Subst vs ss') (zip cs kids)
+            ]
+    sortsFrom (ClassId i) sorts ss = do
+        e <- IntMap.lookup i (classes g)
+        foldM (\b sp -> matchSort g sp (classSort e) b) ss sorts
     roots = case ruleAnchors r of
         [] -> map ClassId (IntMap.keys region)
         anchors ->
@@ -550,32 +549,6 @@ matchRule g region bySymbol r = evalState (concat <$> mapM (\c -> map ((,) c) <$
             , let ClassId j = find g owner
             , IntMap.member j region
             ]
-    sortsOf c sorts = do
-        ClassId i <- Just c
-        e <- IntMap.lookup i (classes g)
-        foldM (\b sp -> matchSort g sp (classSort e) b) IntMap.empty sorts
-    at c (CVar v sorts) = pure [Subst (IntMap.singleton v c) b | Just b <- [sortsOf c sorts]]
-    at c@(ClassId i) (CNode n f kids sorts) = do
-        memo <- get
-        let key = i * ruleNodes r + n
-        case IntMap.lookup key memo of
-            Just ms -> pure ms
-            Nothing -> do
-                ms <- case sortsOf c sorts of
-                    Nothing -> pure []
-                    Just b ->
-                        concat
-                            <$> sequence
-                                [ foldM
-                                    (\acc (child, kid) -> (\ks -> [s' | s0 <- acc, k <- ks, Just s' <- [joinSubst g s0 k]]) <$> at child kid)
-                                    [Subst IntMap.empty b]
-                                    (zip cs kids)
-                                | ENode _ f' cs <- IntMap.findWithDefault [] i region
-                                , f' == f
-                                , length cs == length kids
-                                ]
-                modify' (IntMap.insert key ms)
-                pure ms
 
 -- | The number of e-classes with each symbol in a region, and the e-classes in ascending order.
 symbolIndex :: (Hashable f) => IntMap.IntMap [ENode f] -> HashMap.HashMap f (Int, [ClassId])
@@ -604,7 +577,7 @@ instantiate :: (Hashable s, Hashable f) => Subst -> Int -> CPat s f -> EGraph s 
 instantiate (Subst vs ss) rootSort = go True
   where
     go _ (CVar v _) h = (\c -> (c, h)) <$> IntMap.lookup v vs
-    go top (CNode _ f kids sorts) h = do
+    go top (CNode f kids sorts) h = do
         (cs, h1) <- foldM (\(acc, h0) kid -> (\(c, h') -> (acc ++ [c], h')) <$> go False kid h0) ([], h) kids
         (k, h2) <- case sorts of
             sp : _ -> sortOfPattern sp h1
