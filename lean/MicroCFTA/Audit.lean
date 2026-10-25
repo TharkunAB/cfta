@@ -1,3 +1,4 @@
+import MicroCFTA.SourcePruningEnumerationCachedAssimilation
 import MicroCFTA.SourcePruningEnumerationCachedBranches
 import MicroCFTA.SourcePruningEnumerationCachedEdge
 import MicroCFTA.SourcePruningEnumerationCachedStages
