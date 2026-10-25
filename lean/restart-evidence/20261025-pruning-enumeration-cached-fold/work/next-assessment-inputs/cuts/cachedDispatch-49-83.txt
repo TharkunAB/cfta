@@ -1,0 +1,35 @@
+    ∃ (fuel p h : Nat) (action : EnumerateM Symbol Constraint Unit)
+      (afterCaller : Caller width) (savedQueries : Queries) (final : Memos) (next : Inventory)
+      (rows : List (Unit × EnumerationExpandableIndex.Cached Symbol Constraint))
+      (after : EnumerationExpandableIndex.Cached Symbol Constraint),
+      (∀ extra P H, p ≤ P → h ≤ H →
+        SourcePruningEnumerationDispatch.dispatch checkEmpty (fuel + extra) P H
+          beforeCaller before.core source target memos.query =
+          (.ok (some action), afterCaller, savedQueries)) ∧
+      Post formulas solver next beforeCaller afterCaller final ∧ final.query = savedQueries ∧
+      ExceptT.run (action before.core) = rows.map (fun row => .ok (row.1, row.2.core)) ∧
+      after.core.counter = before.core.counter ∧
+      after.core.representatives = before.core.representatives ∧ Roots after.core.representatives roots ∧
+      StorageValid after.core ∧ PendingRealized afterCaller.checked.native.machine.heap after.core ∧
+      EnumerationCanonicalWaiting.Correct roots after.core.values after.waiting ∧
+      after.waiting = before.waiting ∧
+      (∀ (slot : Nat), SourcePruningEnumerationNativeIndex.candidate
+        afterCaller.checked.native.machine.heap
+        ((after.core.values[slot]?).getD .eliminated) = some (after.expandable slot)) ∧
+      ((source = target ∨ before.core.values[source]? = some .eliminated) →
+        rows = [((), before)] ∧ after = before ∧
+        afterCaller = beforeCaller ∧ final = memos ∧ next = inventory) ∧
+      (source ≠ target → before.core.values[source]? ≠ some .eliminated →
+        ∃ (sourceNode targetNode merged : Option Nat) (sourceScs targetScs : List EnumerationState.Suspended),
+          before.core.values[source]? = some (.unenumerated sourceNode sourceScs) ∧
+          before.core.values[target]? = some (.unenumerated targetNode targetScs) ∧
+          (∀ (cacheFuel : Nat), SourcePruningEnumerationCachedAssimilation.finish
+            afterCaller.checked.native.machine.heap cacheFuel source target merged sourceScs targetScs before =
+              some (rows, after)) ∧
+          (if merged = some 0 then rows = [] ∧ after = before else
+            rows = [((), after)] ∧
+            after.core = assimilated before.core target source (.unenumerated merged (sourceScs ++ targetScs)) ∧
+            after.core.values[source]? = some .eliminated ∧
+            after.core.values[target]? = some (.unenumerated merged (sourceScs ++ targetScs)) ∧
+            after.expandable source = false ∧
+            (∀ (slot : Nat), slot ≠ source → slot ≠ target → after.expandable slot = before.expandable slot)) ∧

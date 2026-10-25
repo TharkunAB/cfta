@@ -1,0 +1,33 @@
+      · obtain ⟨targetAfterStored, sourceAfterStored, changedRealized⟩ := surviving empty
+        have changedFrame :
+          (∀ (slot : Nat), before.values[slot]? = some .eliminated →
+            (assimilated before target source (.unenumerated merged (sourceScs ++ targetScs))).values[slot]? = some .eliminated) ∧
+          (∀ remaining ∈ rest,
+            (assimilated before target source (.unenumerated merged (sourceScs ++ targetScs))).values[remaining]? = some .eliminated ∨
+              ∃ (node : Option Nat) (scs : List EnumerationState.Suspended),
+                (assimilated before target source (.unenumerated merged (sourceScs ++ targetScs))).values[remaining]? =
+                  some (.unenumerated node scs)) := by
+          constructor
+          · intro slot oldEliminated
+            by_cases atTarget : slot = target
+            · subst slot
+              rw [targetStored] at oldEliminated
+              cases oldEliminated
+            by_cases atSource : slot = source
+            · subst slot
+              exact sourceAfterStored
+            simpa only [assimilated, List.getElem?_set_ne (Ne.symm atSource),
+              List.getElem?_set_ne (Ne.symm atTarget)] using oldEliminated
+          · intro remaining member
+            by_cases remainingTarget : remaining = target
+            · subst remaining
+              exact .inr ⟨merged, sourceScs ++ targetScs, targetAfterStored⟩
+            by_cases remainingSource : remaining = source
+            · subst remaining
+              exact .inl sourceAfterStored
+            rcases selected remaining (by simp [member]) with oldEliminated | ⟨oldNode, oldScs, oldPending⟩
+            · exact .inl (by simpa only [assimilated, List.getElem?_set_ne (Ne.symm remainingSource),
+                List.getElem?_set_ne (Ne.symm remainingTarget)] using oldEliminated)
+            · exact .inr ⟨oldNode, oldScs, by
+                simpa only [assimilated, List.getElem?_set_ne (Ne.symm remainingSource),
+                  List.getElem?_set_ne (Ne.symm remainingTarget)] using oldPending⟩

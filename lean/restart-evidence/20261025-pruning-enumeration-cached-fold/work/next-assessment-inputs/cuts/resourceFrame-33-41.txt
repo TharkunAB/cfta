@@ -1,0 +1,9 @@
+structure Fits (profile : Profile) (state : Checked width) : Prop where
+  /-- The current node supply fits the forecast. -/
+  nodes : state.native.machine.heap.nodes.next ≤ profile.nodes
+  /-- The current edge supply fits the forecast. -/
+  edges : state.native.machine.heap.edges.next ≤ profile.edges
+  /-- The current domain supply fits the forecast. -/
+  domains : state.native.machine.domains.next ≤ profile.domains
+  /-- Every successful stored payload fits the causal mass bound. -/
+  stored : Stored profile.mass state.native.machine.heap

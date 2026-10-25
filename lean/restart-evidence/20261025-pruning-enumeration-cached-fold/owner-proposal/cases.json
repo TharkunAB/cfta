@@ -1,0 +1,345 @@
+{
+  "groups": [
+    {
+      "scope": "run.sources",
+      "kind": "match",
+      "expression": "sources",
+      "branches": [
+        {
+          "name": "nil",
+          "fields": []
+        },
+        {
+          "name": "cons",
+          "fields": [
+            {
+              "name": "source",
+              "type": "Nat",
+              "used": true
+            },
+            {
+              "name": "rest",
+              "type": "List Nat",
+              "used": true
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "scope": "run.adapter",
+      "kind": "match",
+      "expression": "the actual single CachedAdapter.run observation",
+      "branches": [
+        {
+          "name": "error",
+          "fields": [
+            {
+              "name": "fault",
+              "type": "SourceEqualityNativeDemand.Outcome width Node ⊕ SourceCurrentAllocatedConjunctionWorker.Outcome width",
+              "used": true
+            },
+            {
+              "name": "reachedCaller",
+              "type": "Caller width",
+              "used": true
+            },
+            {
+              "name": "savedQueries",
+              "type": "Queries",
+              "used": true
+            },
+            {
+              "name": "_",
+              "type": "Option (EnumerationExpandableIndex.Cached Symbol Constraint)",
+              "used": false,
+              "anonymous": true
+            }
+          ]
+        },
+        {
+          "name": "ok_none",
+          "fields": [
+            {
+              "name": "reachedCaller",
+              "type": "Caller width",
+              "used": true
+            },
+            {
+              "name": "savedQueries",
+              "type": "Queries",
+              "used": true
+            },
+            {
+              "name": "_",
+              "type": "Option (EnumerationExpandableIndex.Cached Symbol Constraint)",
+              "used": false,
+              "anonymous": true
+            }
+          ]
+        },
+        {
+          "name": "ok_some",
+          "fields": [
+            {
+              "name": "raw",
+              "type": "List (Except EnumerationState.Error (Unit × EnumerationState.State Symbol Constraint))",
+              "used": true
+            },
+            {
+              "name": "reachedCaller",
+              "type": "Caller width",
+              "used": true
+            },
+            {
+              "name": "savedQueries",
+              "type": "Queries",
+              "used": true
+            },
+            {
+              "name": "cache",
+              "type": "Option (EnumerationExpandableIndex.Cached Symbol Constraint)",
+              "used": true
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "scope": "run.raw",
+      "kind": "match",
+      "expression": "raw",
+      "branches": [
+        {
+          "name": "singleton_ok_unit_core",
+          "fields": [
+            {
+              "name": "core",
+              "type": "EnumerationState.State Symbol Constraint",
+              "used": true
+            }
+          ]
+        },
+        {
+          "name": "other",
+          "fields": [
+            {
+              "name": "other",
+              "type": "List (Except EnumerationState.Error (Unit × EnumerationState.State Symbol Constraint))",
+              "used": true
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "scope": "run.cache",
+      "kind": "match",
+      "expression": "cache",
+      "branches": [
+        {
+          "name": "none",
+          "fields": []
+        },
+        {
+          "name": "some",
+          "fields": [
+            {
+              "name": "recovered",
+              "type": "EnumerationExpandableIndex.Cached Symbol Constraint",
+              "used": true
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "scope": "erase.cons.dispatch.product",
+      "kind": "cases",
+      "expression": "SourcePruningEnumerationDispatch.dispatch checkEmpty nativeFuel p h beforeCaller before.core source target queries",
+      "equation": "dispatchResult",
+      "branches": [
+        {
+          "name": "Prod.mk",
+          "fields": [
+            {
+              "name": "outcome",
+              "type": "Except (SourceEqualityNativeDemand.Outcome width Node ⊕ SourceCurrentAllocatedConjunctionWorker.Outcome width) (Option (EnumerateM Symbol Constraint Unit))",
+              "used": true
+            },
+            {
+              "name": "saved",
+              "type": "Caller width × Queries",
+              "used": true
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "scope": "erase.cons.outcome",
+      "kind": "cases",
+      "expression": "outcome",
+      "branches": [
+        {
+          "name": "error",
+          "fields": [
+            {
+              "name": "fault",
+              "type": "SourceEqualityNativeDemand.Outcome width Node ⊕ SourceCurrentAllocatedConjunctionWorker.Outcome width",
+              "used": true
+            }
+          ]
+        },
+        {
+          "name": "ok",
+          "fields": [
+            {
+              "name": "returned",
+              "type": "Option (EnumerateM Symbol Constraint Unit)",
+              "used": true
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "scope": "erase.cons.returned",
+      "kind": "cases",
+      "expression": "returned",
+      "branches": [
+        {
+          "name": "none",
+          "fields": []
+        },
+        {
+          "name": "some",
+          "fields": [
+            {
+              "name": "action",
+              "type": "EnumerateM Symbol Constraint Unit",
+              "used": true
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "scope": "erase.cons.raw",
+      "kind": "cases",
+      "expression": "ExceptT.run (action before.core)",
+      "equation": "rawResult",
+      "branches": [
+        {
+          "name": "nil",
+          "fields": []
+        },
+        {
+          "name": "cons",
+          "fields": [
+            {
+              "name": "first",
+              "type": "Except EnumerationState.Error (Unit × EnumerationState.State Symbol Constraint)",
+              "used": true
+            },
+            {
+              "name": "tail",
+              "type": "List (Except EnumerationState.Error (Unit × EnumerationState.State Symbol Constraint))",
+              "used": true
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "scope": "erase.cons.first",
+      "kind": "cases",
+      "expression": "first",
+      "branches": [
+        {
+          "name": "error",
+          "fields": [
+            {
+              "name": "_rowError",
+              "type": "EnumerationState.Error",
+              "used": false
+            }
+          ]
+        },
+        {
+          "name": "ok",
+          "fields": [
+            {
+              "name": "value",
+              "type": "Unit × EnumerationState.State Symbol Constraint",
+              "used": true
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "scope": "erase.cons.valueUnit",
+      "kind": "cases",
+      "expression": "valueUnit",
+      "branches": [
+        {
+          "name": "unit",
+          "fields": []
+        }
+      ]
+    },
+    {
+      "scope": "erase.cons.tail",
+      "kind": "cases",
+      "expression": "tail",
+      "branches": [
+        {
+          "name": "nil",
+          "fields": []
+        },
+        {
+          "name": "cons",
+          "fields": [
+            {
+              "name": "_second",
+              "type": "Except EnumerationState.Error (Unit × EnumerationState.State Symbol Constraint)",
+              "used": false
+            },
+            {
+              "name": "_remaining",
+              "type": "List (Except EnumerationState.Error (Unit × EnumerationState.State Symbol Constraint))",
+              "used": false
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "scope": "erase.cons.receipt",
+      "kind": "cases",
+      "expression": "SourcePruningEnumerationCachedAdapter.adapt reachedCaller.checked.native.machine.heap before source target [.ok ((), core)]",
+      "equation": "receipt",
+      "branches": [
+        {
+          "name": "none",
+          "fields": []
+        },
+        {
+          "name": "some",
+          "fields": [
+            {
+              "name": "recovered",
+              "type": "EnumerationExpandableIndex.Cached Symbol Constraint",
+              "used": true
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "count": 12,
+  "runtime_groups": 4,
+  "proof_groups": 8,
+  "induction_branches_recorded_separately": "induction.json"
+}

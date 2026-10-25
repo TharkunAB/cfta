@@ -1,0 +1,45 @@
+{
+  "inductions": [
+    {
+      "theorem": "erase",
+      "on": "sources",
+      "generalizing": [
+        "beforeCaller",
+        "before",
+        "queries"
+      ],
+      "branches": [
+        {
+          "name": "nil",
+          "fields": []
+        },
+        {
+          "name": "cons",
+          "fields": [
+            {
+              "name": "source",
+              "type": "Nat"
+            },
+            {
+              "name": "rest",
+              "type": "List Nat"
+            },
+            {
+              "name": "ih",
+              "type": "∀ (beforeCaller : Caller width) (before : EnumerationExpandableIndex.Cached Symbol Constraint) (queries : Queries), (run checkEmpty nativeFuel p h rest beforeCaller before target queries).1 = SourcePruningEnumerationFold.run checkEmpty nativeFuel p h rest beforeCaller before.core target queries"
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "IHs": [
+    {
+      "scope": "erase.cons",
+      "name": "ih",
+      "type": "∀ (beforeCaller : Caller width) (before : EnumerationExpandableIndex.Cached Symbol Constraint) (queries : Queries), (run checkEmpty nativeFuel p h rest beforeCaller before target queries).1 = SourcePruningEnumerationFold.run checkEmpty nativeFuel p h rest beforeCaller before.core target queries"
+    }
+  ],
+  "induction_count": 1,
+  "IH_count": 1
+}

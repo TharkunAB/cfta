@@ -1,0 +1,12 @@
+theorem preserves
+    [DecidableEq Symbol] [DecidableEq (InternedConstructorTemplates.EdgeKey Symbol Constraint)] [DecidableEq Node]
+    (checkEmpty : Bool) (nativeFuel p h : Nat) (sources : List Nat)
+    (beforeCaller : Caller width) (before : EnumerationExpandableIndex.Cached Symbol Constraint)
+    (target : Nat) (queries : Queries) (roots : Nat → Nat)
+    (storage : EnumerationCorrectness.StorageValid before.core)
+    (counts : EnumerationCanonicalWaiting.Correct roots before.core.values before.waiting) :
+    EnumerationCorrectness.StorageValid
+      (run checkEmpty nativeFuel p h sources beforeCaller before target queries).1.2.2.2 ∧
+      EnumerationCanonicalWaiting.Correct roots
+        (run checkEmpty nativeFuel p h sources beforeCaller before target queries).1.2.2.2.values
+        before.waiting := by

@@ -1,0 +1,20 @@
+theorem complete (formulas : SourceGuards.Formulas FullSyntax.Formula) (solver : SourceGuards.Entailment FullSyntax.Formula)
+    (inventory : Inventory) (budget : Nat) (query : Value Symbol Guard) (before : Caller width)
+    (memos : Memos) (initial : Context formulas solver inventory before memos)
+    (frame : Frame formulas solver inventory before.checked) (profile : Profile) (fits : Fits profile before.checked)
+    (available : Available before.checked.native.machine.heap query) :
+    ∃ answer after saved,
+      SourceCurrentConjunctionMemo.Call budget before.fourth query (physical before.checked) answer after saved ∧
+      Frame formulas solver inventory (advancePhysical before.checked after) ∧
+      Post formulas solver inventory before (advance before (advancePhysical before.checked after) saved before.merge) memos ∧
+      Fits (forecast before.checked.native.machine.heap budget profile) (advancePhysical before.checked after) ∧
+      SourceCurrentEmptinessMemo.AnswerSound formulas solver query answer ∧
+      (advance before (advancePhysical before.checked after) saved before.merge).nodeResults = before.nodeResults ∧
+      (advance before (advancePhysical before.checked after) saved before.merge).edgeResults = before.edgeResults ∧
+      (advance before (advancePhysical before.checked after) saved before.merge).merge = before.merge ∧
+      (advance before (advancePhysical before.checked after) saved before.merge).fourth = saved ∧
+      (∀ work reader, SourceCurrentConjunctionWorklistResources.workerFuel
+          (SourceCurrentConjunctionGuardUniverse.guards before.checked.native.machine.heap) budget (scalar profile) ≤ work →
+        SourceCurrentConjunctionWorklistResources.readerFuel
+          (SourceCurrentConjunctionGuardUniverse.guards before.checked.native.machine.heap) budget (scalar profile) ≤ reader →
+        SourceCurrentConjunctionWorker.call work reader budget before.fourth query (physical before.checked) = .done (answer, saved) after) := by

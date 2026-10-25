@@ -1,0 +1,24 @@
+{
+  "at": "2026-10-25T09:10:06.597777+01:00",
+  "frozen_sha256": "70e28432d71a93e49ec2813d0779cca777180297f3e786c0aeb5b0da42b32896",
+  "pins_sha256": "a782eac525dca03f86e63324a89be710bd7b208310dcb0cab8d078900df8a92e",
+  "contracts": {
+    "context.lean": "import MicroCFTA.SourcePruningEnumerationCachedAdapter\nimport MicroCFTA.SourcePruningEnumerationFoldInvariants\n\nnamespace MicroCFTA.SourcePruningEnumerationCachedFold\nopen EnumerationState\nlocal notation \"Symbol\" => SourcePruningTemplates.Symbol\nlocal notation \"Constraint\" => SourceSymbolicIndex.Constraint FullSyntax.Formula\nlocal notation \"Node\" => InternedConstructorTemplates.Value Symbol Constraint\nlocal notation \"Caller\" => SourceCurrentAllocatedPartialState.State\nlocal notation \"Queries\" => SourceEndpointMemo.Memos\nvariable {width : Nat}\n",
+    "run.head": "noncomputable def run\n    [DecidableEq Symbol] [DecidableEq (InternedConstructorTemplates.EdgeKey Symbol Constraint)] [DecidableEq Node]\n    (checkEmpty : Bool) (nativeFuel p h : Nat) (sources : List Nat)\n    (beforeCaller : Caller width) (before : EnumerationExpandableIndex.Cached Symbol Constraint)\n    (target : Nat) (queries : Queries) :\n    ((Except (SourceEqualityNativeDemand.Outcome width Node \u2295\n      SourceCurrentAllocatedConjunctionWorker.Outcome width)\n      (Option (List (Except EnumerationState.Error (Unit \u00d7 EnumerationState.State Symbol Constraint))))) \u00d7\n      Caller width \u00d7 Queries \u00d7 EnumerationState.State Symbol Constraint) \u00d7\n      Option (EnumerationExpandableIndex.Cached Symbol Constraint) :=\n",
+    "erase.head": "theorem erase\n    [DecidableEq Symbol] [DecidableEq (InternedConstructorTemplates.EdgeKey Symbol Constraint)] [DecidableEq Node]\n    (checkEmpty : Bool) (nativeFuel p h : Nat) (sources : List Nat)\n    (beforeCaller : Caller width) (before : EnumerationExpandableIndex.Cached Symbol Constraint)\n    (target : Nat) (queries : Queries) :\n    (run checkEmpty nativeFuel p h sources beforeCaller before target queries).1 =\n      SourcePruningEnumerationFold.run checkEmpty nativeFuel p h sources\n        beforeCaller before.core target queries := by\n",
+    "preserves.head": "theorem preserves\n    [DecidableEq Symbol] [DecidableEq (InternedConstructorTemplates.EdgeKey Symbol Constraint)] [DecidableEq Node]\n    (checkEmpty : Bool) (nativeFuel p h : Nat) (sources : List Nat)\n    (beforeCaller : Caller width) (before : EnumerationExpandableIndex.Cached Symbol Constraint)\n    (target : Nat) (queries : Queries) (roots : Nat \u2192 Nat)\n    (storage : EnumerationCorrectness.StorageValid before.core)\n    (counts : EnumerationCanonicalWaiting.Correct roots before.core.values before.waiting) :\n    EnumerationCorrectness.StorageValid\n      (run checkEmpty nativeFuel p h sources beforeCaller before target queries).1.2.2.2 \u2227\n      EnumerationCanonicalWaiting.Correct roots\n        (run checkEmpty nativeFuel p h sources beforeCaller before target queries).1.2.2.2.values\n        before.waiting := by\n"
+  },
+  "program_FROZEN_sha256": "e291a9117f7f92e4436fda2c27d1ad1b59bea522513885a4c83110e6650cbe34",
+  "program_pins_sha256": "6a5134fa052cc7f7fd27332391245444d2815bdce283bbfb92090e3d7377f724",
+  "source_review_sha256": "25c62ad087cd7260dd2899c62fa1fd3878b09b93993511604d4ff5513ff8999c",
+  "reviews": {
+    "setup": "02386013f891ad8f50f89e7566ed589b59c6d3d46ea51f59655d55f543c3cd74",
+    "declaration": "9bfbbb74c70ea71f353f744072d129cf7bbfada713ec50a3257381be574fd324",
+    "seal-script": "ee1a31811201b3f35b6e6dbb1697bfd7f28d7d04f1ff76f805fa168366e868df"
+  },
+  "Root_full_owner_program_source_reads": true,
+  "Root_only_bodies": true,
+  "hard_cap": 320,
+  "scope": "Full bounded Fold erasure plus actual prefix storage/waiting preservation; no finite admitted completion/cache flag proof/H6 strengthening.",
+  "goal": "ACTIVE_INCOMPLETE"
+}

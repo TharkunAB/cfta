@@ -1,0 +1,16 @@
+The product type, usually written `α × β`. Product types are also called pair or tuple types.
+Elements of this type are pairs in which the first element is an `α` and the second element is a
+`β`.
+
+Products nest to the right, so `(x, y, z) : α × β × γ` is equivalent to `(x, (y, z)) : α × (β × γ)`.
+-/
+structure Prod (α : Type u) (β : Type v) where
+  /--
+  Constructs a pair. This is usually written `(x, y)` instead of `Prod.mk x y`.
+  -/
+  mk ::
+  /-- The first element of a pair. -/
+  fst : α
+  /-- The second element of a pair. -/
+  snd : β
+

@@ -1,0 +1,19 @@
+theorem reserved_succ_iff (bits : Nat) (profile : Profile) (count : Nat) :
+    Reserved bits profile (count + 1) ↔ Room bits profile ∧ Reserved bits (step profile) count := by
+  constructor
+  · intro reservation
+    exact ⟨reservation 0 (by omega), fun index less => reservation (index + 1) (by omega)⟩
+  · rintro ⟨room, reservation⟩ index less
+    cases index with
+    | zero => exact room
+    | succ index => exact reservation index (by omega)
+
+/-- A nonempty reservation supplies room for its first query. -/
+theorem Reserved.head {bits count : Nat} {profile : Profile}
+    (reservation : Reserved bits profile (count + 1)) : Room bits profile :=
+  ((reserved_succ_iff bits profile count).mp reservation).1
+
+/-- A nonempty reservation retains the remaining queries after one forecast. -/
+theorem Reserved.tail {bits count : Nat} {profile : Profile}
+    (reservation : Reserved bits profile (count + 1)) : Reserved bits (step profile) count :=
+  ((reserved_succ_iff bits profile count).mp reservation).2

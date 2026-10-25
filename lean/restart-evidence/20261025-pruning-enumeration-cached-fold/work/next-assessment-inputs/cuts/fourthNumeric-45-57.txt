@@ -1,0 +1,13 @@
+theorem of_call (formulas : SourceGuards.Formulas FullSyntax.Formula) (solver : SourceGuards.Entailment FullSyntax.Formula)
+    {inventory : Inventory} {before : Checked width} {after : Physical}
+    {budget : Nat} {memo saved : Memo} {query : Value Symbol Guard} {answer : Bool}
+    (actual : SourceCurrentConjunctionMemo.Call budget memo query (physical before) answer after saved)
+    (frame : Frame formulas solver inventory before) (available : Available before.native.machine.heap query)
+    (correct : SourceCurrentEmptinessMemo.Correct formulas solver before.native.machine.heap memo) :
+    Frame formulas solver inventory (advancePhysical before after) := by
+  have effects := SourceCurrentConjunctionClassScan.memo_effects formulas solver actual frame.ready available correct
+  have guards := SourceCurrentConjunctionGuard.call Plain actual
+    (SourceCurrentAllocatedConjunctionMemo.ready before frame.ready.good frame.ready.semantic frame.ready.costs)
+    available frame.context.guards
+  exact SourceCurrentConstrainedCapOperandFrame.advance frame effects.1
+    (SourceCurrentAllocatedQueryMemo.advance_extension before after effects.2.1) rfl rfl guards

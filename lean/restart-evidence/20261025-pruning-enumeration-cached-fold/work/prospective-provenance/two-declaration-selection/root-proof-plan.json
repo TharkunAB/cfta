@@ -1,0 +1,115 @@
+{
+  "at": "2026-10-25T08:49:42.167795+01:00",
+  "root_selected_before_bodies": true,
+  "declarations": [
+    "noncomputable def run",
+    "theorem erase"
+  ],
+  "selected_fragments": [
+    "run.head",
+    "erase.head"
+  ],
+  "definition_lets": [],
+  "proof_lets": [],
+  "haves": [],
+  "instances": [],
+  "new_helpers_types_carriers_predicates": false,
+  "induction": {
+    "on": "sources",
+    "generalizing": [
+      "beforeCaller",
+      "before",
+      "queries"
+    ],
+    "nil": "rfl",
+    "cons": [
+      "source",
+      "rest",
+      "ih"
+    ]
+  },
+  "runtime_case_groups": [
+    [
+      "sources:nil",
+      "source::rest"
+    ],
+    [
+      "Adapter.run:error fault reachedCaller savedQueries wildcard",
+      "ok none reachedCaller savedQueries wildcard",
+      "ok some raw reachedCaller savedQueries cache"
+    ],
+    [
+      "raw:singleton ok Unit core",
+      "other"
+    ],
+    [
+      "cache:none",
+      "some recovered"
+    ]
+  ],
+  "runtime_semantics": {
+    "one_adapter_per_visited_source": true,
+    "singleton_with_cache": "recurse on same rest/fuels/reachedCaller/savedQueries and existing EnumerationExpandableIndex.frame core recovered",
+    "singleton_without_cache": "existing original Fold.run exact rest/fuels/reachedCaller/core/savedQueries ONCE, cache None",
+    "fault_outer_none": "exact observation/reachedCaller/queries, current before.core, no cache",
+    "other_raw": "exact whole raw and current pre-step core, separate actual adapter cache",
+    "nil": "original singleton/currentCaller/queries/core, some before",
+    "no_runtime_core_equality": "frame makes actual core explicit",
+    "no_general_cache_law": "frame is not an arbitrary index-invariant theorem"
+  },
+  "proof_case_binders": {
+    "dispatchResult": "equation for actual original dispatch at before.core",
+    "dispatch_pair": [
+      "outcome",
+      "saved"
+    ],
+    "saved_pair": [
+      "reachedCaller",
+      "savedQueries"
+    ],
+    "outcome": [
+      "fault",
+      "returned"
+    ],
+    "returned": [
+      "action"
+    ],
+    "rawResult": "equation for ExceptT.run (action before.core)",
+    "raw": [
+      "first",
+      "tail"
+    ],
+    "first": [
+      "_rowError",
+      "value"
+    ],
+    "value_pair": [
+      "valueUnit",
+      "core"
+    ],
+    "valueUnit": "Unit cases",
+    "tail": [
+      "_second",
+      "_remaining"
+    ],
+    "receipt": "equation for adapt at reached heap with singleton core",
+    "receipt_some": [
+      "recovered"
+    ]
+  },
+  "rcases_packets": [
+    [
+      "reachedCaller",
+      "savedQueries"
+    ],
+    [
+      "valueUnit",
+      "core"
+    ]
+  ],
+  "proof_outline": "Induct on sources. Unfold one actual cached/original step and split the same actual dispatcher observation. Split its exact action raw list. Non-singletons agree definitionally. For singleton, split actual adapt receipt; None uses original suffix literally, Some uses ih at frame core recovered. No Context/Ranges/slot/readiness/success premise.",
+  "source_estimate": "100\u2013180",
+  "hard_cap": 300,
+  "goal": "ACTIVE_INCOMPLETE",
+  "strongest_combined_unchanged": "H6"
+}

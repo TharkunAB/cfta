@@ -1,0 +1,6 @@
+inductive Outcome (width : Nat) (Output : Type) : Type 1 where
+  | yielded (control : Control Output) (state : State width)
+  | done (value : Output) (state : State width)
+  | failed (failure : SourceRecursiveIntersectionKernel.Failure) (state : State width)
+  | constraintError (message : String) (state : State width)
+  | blocked (reason : Blocked) (control : Control Output) (state : State width)
