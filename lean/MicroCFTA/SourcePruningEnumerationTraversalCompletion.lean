@@ -29,7 +29,7 @@ def Ranges [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Constraint)] [Decid
         Ranges checkEmpty rest afterCaller after saved
 
 /-- Genuine admitted inputs derive a complete traversal or its first valid rejection. -/
-theorem complete
+theorem complete_with_fragments
     [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Constraint)] [DecidableEq Node]
     (formulas : SourceGuards.Formulas FullSyntax.Formula)
     (solver : SourceGuards.Entailment FullSyntax.Formula)
@@ -69,7 +69,11 @@ theorem complete
         EnumerationReferences.ReferencesAllowed allowed after.core) ∧
       (EnumerationReferences.PendingReferences before.core → EnumerationReferences.PendingReferences after.core) ∧
       (∀ fragment ∈ fragments, FragmentBound after.core.counter fragment) ∧
-      ((result = .complete fragments afterCaller savedQueries after ∧ Safe after.core) ∨
+      ((result = .complete fragments afterCaller savedQueries after ∧ Safe after.core ∧
+          ∀ fragment ∈ fragments, PendingFragment after.core fragment ∧
+            ∀ held, held < before.core.counter → IsRoot before.core.representatives held →
+              (∀ incoming bucket, (incoming, bucket) ∈ inputs → Avoids before.core.representatives held bucket) →
+              FragmentAvoid after.core.representatives held fragment) ∨
         ∃ outer waiting, result = .stopped fragments
           (.ok (some []), afterCaller, savedQueries, outer, waiting) (some after)) := by
   induction inputs generalizing inventory beforeCaller before roots memos with
@@ -77,7 +81,7 @@ theorem complete
       refine ⟨0, 0, 0, 0, 0, [], beforeCaller, before, memos.query, memos, inventory, roots,
         .complete [] beforeCaller memos.query before, ?_, Post.refl initial, rfl, Nat.le_refl _,
         paths, safe.1, realized, counts, flags, .refl _, ?_, ?_, (fun _ valid _ => valid),
-        (fun valid => valid), ?_, .inl ⟨rfl, safe⟩⟩
+        (fun valid => valid), ?_, .inl ⟨rfl, safe, by simp⟩⟩
       · intros; rfl
       · intro held fragment stored
         exact EnumerationDriver.Protected.refl held before.core (enumerated_root before.core safe held fragment stored).2
@@ -91,14 +95,14 @@ theorem complete
         middleRoots, outer, waiting, headRun, headPost, headQueries, growth, middlePaths,
         middleStorage, middleRealized, middleCounts, middleFlags, headOrigin, headProtected,
         headReferences, headPending, shape⟩ :=
-        SourcePruningEnumerationChildCompletion.complete formulas solver inventory beforeCaller before
+        SourcePruningEnumerationChildCompletion.complete_with_fragments formulas solver inventory beforeCaller before
           checkEmpty bucket incoming roots memos initial safe paths counts flags realized bounded pending available closed ranges.1
       have protects : ∀ held fragment, before.core.values[held]? = some (.enumerated fragment) →
           EnumerationDriver.Protected held before.core middle.core := by
         intro held fragment stored
         obtain ⟨inside, root⟩ := enumerated_root before.core safe held fragment stored
         exact headProtected held inside root (pending held fragment stored)
-      rcases shape with rejected | ⟨fragment, singleton, middleSafe, fragmentBound⟩
+      rcases shape with rejected | ⟨fragment, singleton, middleSafe, fragmentBound, fragmentPending, fragmentSeparate⟩
       · subst raw
         refine ⟨r, n, p, h, k, [], middleCaller, middle, middleQueries, middleMemos, middleInventory,
           middleRoots, .stopped [] (.ok (some []), middleCaller, middleQueries, outer, waiting) (some middle),
@@ -174,11 +178,85 @@ theorem complete
           rcases List.mem_cons.mp member with rfl | member
           · exact fragmentBound_mono _ _ tailGrowth _ fragmentBound
           · exact tailBounds child member
-        · rcases tailShape with ⟨completed, afterSafe⟩ | ⟨outer, waiting, stopped⟩
+        · rcases tailShape with ⟨completed, afterSafe, fragmentHistory⟩ | ⟨outer, waiting, stopped⟩
           · subst tailResult
-            exact .inl ⟨rfl, afterSafe⟩
+            refine .inl ⟨rfl, afterSafe, ?_⟩
+            intro child member
+            rcases List.mem_cons.mp member with rfl | member
+            · refine ⟨pendingFragment_preserved middle.core after.core middleSafe afterSafe tailGrowth
+                child fragmentBound fragmentPending tailOrigin tailProtected, ?_⟩
+              intro held inside root avoids
+              have first := headProtected held inside root (avoids incoming bucket (by simp))
+              have last := tailRootsProtected held (Nat.lt_of_lt_of_le inside growth) first.root (by
+                intro value retained member
+                exact first.avoids retained (avoids value retained (List.mem_cons_of_mem _ member)))
+              exact (fragmentAvoid_classes middle.core.representatives after.core.representatives held child
+                last.classes).mpr (fragmentSeparate held inside root (avoids incoming bucket (by simp)))
+            · obtain ⟨childPending, childSeparate⟩ := fragmentHistory child member
+              refine ⟨childPending, ?_⟩
+              intro held inside root avoids
+              have first := headProtected held inside root (avoids incoming bucket (by simp))
+              apply childSeparate held (Nat.lt_of_lt_of_le inside growth) first.root
+              intro value retained member
+              exact first.avoids retained (avoids value retained (List.mem_cons_of_mem _ member))
           · subst tailResult
             exact .inr ⟨outer, waiting, rfl⟩
+
+/-- The original completion interface retains its exact declaration type. -/
+theorem complete
+    [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Constraint)] [DecidableEq Node]
+    (formulas : SourceGuards.Formulas FullSyntax.Formula)
+    (solver : SourceGuards.Entailment FullSyntax.Formula)
+    (inventory : Inventory) (beforeCaller : Caller width) (before : Cached)
+    (checkEmpty : Bool) (inputs : List (Node × List Suspended))
+    (roots : Nat → Nat) (memos : Memos)
+    (initial : Context formulas solver inventory beforeCaller memos)
+    (safe : Safe before.core) (paths : Roots before.core.representatives roots)
+    (counts : EnumerationCanonicalWaiting.Correct roots before.core.values before.waiting)
+    (flags : ∀ slot, SourcePruningEnumerationNativeIndex.candidate beforeCaller.checked.native.machine.heap
+      ((before.core.values[slot]?).getD .eliminated) = some (before.expandable slot))
+    (realized : PendingRealized beforeCaller.checked.native.machine.heap before.core)
+    (genuine : ∀ incoming bucket, (incoming, bucket) ∈ inputs →
+      Available beforeCaller.checked.native.machine.heap incoming ∧ incoming.free = [] ∧
+      (∀ sc ∈ bucket, sc.var < before.core.counter) ∧ InputsPending before.core bucket)
+    (ranges : Ranges checkEmpty inputs beforeCaller before memos.query) :
+    ∃ (r n p h k : Nat) (fragments : List Fragment) (afterCaller : Caller width)
+      (after : Cached) (savedQueries : Queries) (final : Memos) (next : Inventory)
+      (afterRoots : Nat → Nat) (result : SourcePruningEnumerationChildTraversal.Result width),
+      (∀ extraRepresentative extraNative P H extraIndex, p ≤ P → h ≤ H →
+        SourcePruningEnumerationChildTraversal.run checkEmpty (r + extraRepresentative) (n + extraNative)
+          P H (k + extraIndex) inputs beforeCaller before memos.query = result) ∧
+      Post formulas solver next beforeCaller afterCaller final ∧ final.query = savedQueries ∧
+      before.core.counter ≤ after.core.counter ∧ Roots after.core.representatives afterRoots ∧
+      StorageValid after.core ∧ PendingRealized afterCaller.checked.native.machine.heap after.core ∧
+      EnumerationCanonicalWaiting.Correct afterRoots after.core.values after.waiting ∧
+      (∀ slot, SourcePruningEnumerationNativeIndex.candidate afterCaller.checked.native.machine.heap
+        ((after.core.values[slot]?).getD .eliminated) = some (after.expandable slot)) ∧
+      EnumeratedOrigin before.core after.core ∧
+      (∀ held fragment, before.core.values[held]? = some (.enumerated fragment) →
+        EnumerationDriver.Protected held before.core after.core) ∧
+      (∀ held, held < before.core.counter → IsRoot before.core.representatives held →
+        (∀ incoming bucket, (incoming, bucket) ∈ inputs → Avoids before.core.representatives held bucket) →
+        EnumerationDriver.Protected held before.core after.core) ∧
+      (∀ allowed, EnumerationReferences.ReferencesAllowed allowed before.core →
+        (∀ incoming bucket, (incoming, bucket) ∈ inputs → EnumerationReferences.InputsAllowed allowed bucket) →
+        EnumerationReferences.ReferencesAllowed allowed after.core) ∧
+      (EnumerationReferences.PendingReferences before.core → EnumerationReferences.PendingReferences after.core) ∧
+      (∀ fragment ∈ fragments, FragmentBound after.core.counter fragment) ∧
+      ((result = .complete fragments afterCaller savedQueries after ∧ Safe after.core) ∨
+        ∃ outer waiting, result = .stopped fragments
+          (.ok (some []), afterCaller, savedQueries, outer, waiting) (some after)) := by
+  obtain ⟨r, n, p, h, k, fragments, afterCaller, after, savedQueries, final, next, afterRoots, result,
+    running, post, queries, growth, afterPaths, storage, afterRealized, afterCounts, afterFlags,
+    origin, protects, rootsProtects, references, pendingHistory, bounds, shape⟩ :=
+    complete_with_fragments formulas solver inventory beforeCaller before checkEmpty inputs roots memos
+      initial safe paths counts flags realized genuine ranges
+  refine ⟨r, n, p, h, k, fragments, afterCaller, after, savedQueries, final, next, afterRoots, result,
+    running, post, queries, growth, afterPaths, storage, afterRealized, afterCounts, afterFlags,
+    origin, protects, rootsProtects, references, pendingHistory, bounds, ?_⟩
+  rcases shape with ⟨completed, afterSafe, _fragments⟩ | stopped
+  · exact .inl ⟨completed, afterSafe⟩
+  · exact .inr stopped
 
 /-- Enumerated origin and protected old roots retain every separate parent bucket. -/
 theorem retained_inputs (before after : EnumerationState.State Symbol Constraint) (scs : List Suspended)
