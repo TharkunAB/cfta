@@ -60,6 +60,25 @@ this definition, with 'FTA.intersectWith'. 'ematch' and the saturation
 explore the same product from a few roots, one run at a time, and check the
 equality constraints as they bind the variables. The test suite checks that
 the two give the same matches.
+
+= Saturation
+
+Each iteration of a saturation matches the rules, applies the matches, and
+rebuilds, as egg does. Three things make it cheaper than matching every rule
+at every e-class:
+
+* A rule starts at the e-classes of the symbol of its left side with the
+  fewest e-classes, and walks up through the users of each e-class to the
+  roots. In a curried encoding, every application has the same symbol, and
+  the head of the application decides.
+* Each e-class has the stamp of its last change. A match that passes no
+  e-class newer than the last run of its rule is old, and the rule applied it
+  then, so the rule finds only the new matches (semi-naive matching, as in
+  egglog). When few e-classes changed, the roots come from the paths up from
+  them.
+* An analysis is an evaluation of the e-graph automaton from the leaves up,
+  as 'analyse' computes it; a saturation keeps it up to date from the
+  e-classes that changed.
 -}
 module Data.CFTA.EGraph (
     -- * E-graphs
