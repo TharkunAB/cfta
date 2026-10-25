@@ -303,6 +303,8 @@ data Settings = Settings
     -- ^ The order of the rewriting (see 'searchTermOrder').
     , completionFuel :: Maybe Int
     -- ^ The critical pairs that the completion of one law may take (see 'addLaw').
+    , speculation :: Int
+    -- ^ The critical pairs that the completion decides in parallel threads (see 'addLaw').
     , completionAllocLimit :: Word64
     {- ^ The bytes that the completion of one law may allocate.
     ^ The bytes by which a bucket may grow the live heap.
@@ -404,6 +406,11 @@ data SearchOptions = SearchOptions
     (0: no limit). Then the law keeps the rules that its completion has
     (see 'addLaw').
     -}
+    , searchSpeculation :: Int
+    {- ^ The largest number of critical pairs that the completion of a law
+    decides in parallel threads (0: none; see 'addLaw'). The laws do not
+    change. It needs more than one capability (+RTS -N).
+    -}
     , searchRecheck :: Int
     {- ^ The number of extra test cases of small sizes on which a new law is
     tested again (0: no test). The search drops a law that one of them
@@ -473,6 +480,7 @@ defaultOptions size phase =
         , searchCompletionMemLimit = completionMemoryLimit
         , searchCompletionAllocLimit = completionBudget
         , searchCompletionFuel = completionFuelDefault
+        , searchSpeculation = 0
         , searchRecheck = 0
         , searchTests = 1000
         , searchChecked = False
@@ -511,6 +519,7 @@ parseOptions = O.execParser (O.info (options O.<**> O.helper) (O.fullDesc <> O.p
             <*> completionMemLimitOption
             <*> completionAllocLimitOption
             <*> completionFuelOption
+            <*> speculateOption
             <*> recheckOption
             <*> testsOption
             <*> O.switch (O.long "checked" <> O.help "Keep the types of the values, and test them at each application")
@@ -651,6 +660,14 @@ parseOptions = O.execParser (O.info (options O.<**> O.helper) (O.fullDesc <> O.p
                 <> O.help
                     "Stop the completion of a law after 2^K critical pairs, and keep the rules that it has (default 15, 32768 pairs; 0: no limit)"
             )
+    speculateOption =
+        O.option
+            O.auto
+            ( O.long "speculate"
+                <> O.metavar "N"
+                <> O.value 0
+                <> O.help "Decide up to N critical pairs of a completion in parallel threads (default 0: none; needs +RTS -N)"
+            )
     recheckOption =
         O.option
             O.auto
@@ -753,6 +770,7 @@ searchPhases
         , searchCompletionMemLimit = completionMemLimitSetting
         , searchCompletionAllocLimit = completionAllocLimitSetting
         , searchCompletionFuel = completionFuelSetting
+        , searchSpeculation = speculationSetting
         , searchRecheck = recheckSetting
         , searchTests = numTests
         , searchChecked = checked
@@ -832,6 +850,7 @@ searchPhases
                         , completionMemLimit = completionMemLimitSetting
                         , completionAllocLimit = completionAllocLimitSetting
                         , completionFuel = if completionFuelSetting > 0 then Just (2 ^ completionFuelSetting) else Nothing
+                        , speculation = speculationSetting
                         , recheckCount = recheckSetting
                         , lawSink = sink
                         , stopAfter = stopSetting
@@ -1058,7 +1077,7 @@ runPhase env@Settings{..} size skeletons stecta@StEcta{..}
                 boundedCompletion
                     env
                     lawText
-                    (addLaw completionFuel maxSize lawSig law (rewrite_rules s))
+                    (addLaw completionFuel speculation maxSize lawSig law (rewrite_rules s))
                     (addLawRules lawSig law (rewrite_rules s))
             return (laws ++ [lawText], s{law_count = n, rewrite_rules = rules})
     -- With a skeleton grammar, the variable types are closed under carrier
@@ -1565,7 +1584,7 @@ consider env@Settings{..} StEcta{..} lvl full_term s0
                         boundedCompletion
                             env
                             law_str
-                            (addLaw completionFuel maxSize lawSig law (rewrite_rules s))
+                            (addLaw completionFuel speculation maxSize lawSig law (rewrite_rules s))
                             (addLawRules lawSig law (rewrite_rules s))
             rules <-
                 if detailedDiagnostics
