@@ -1,0 +1,531 @@
+/tmp/mcfta-partial-completion-20261025/strict-partial-2/MicroCFTA/EnumerationPartialCompletion.lean:136:33: error: don't know how to synthesize implicit argument `p`
+  @Exists.intro (State Symbol Guard)
+    (fun after =>
+      Success (expandPartial graph (readFuel + 1) (Fragment.hole uv)) before ?m.827 after ∧ RenderStable before after)
+    resolved
+    ⟨(success_bind (getValue (readFuel + 1) uv)
+            (fun __do_lift =>
+              match __do_lift with
+              | UVarValue.enumerated fragment => expandPartial graph readFuel fragment
+              | UVarValue.unenumerated (some node) [] =>
+                match graph.node node with
+                | Node.recursive a => pure (Term.node PartialSymbol.truncated [])
+                | x => pure (Term.node (PartialSymbol.hole uv) [])
+              | x => pure (Term.node (PartialSymbol.hole uv) []))
+            before ?m.827 resolved).mpr
+        (Exists.intro (UVarValue.unenumerated (some node) [])
+          (Exists.intro resolved
+            ⟨readingAt (readFuel + 1)
+                (Decidable.byContradiction fun a =>
+                  expandPartial_complete._proof_1_5 level frontier depth uv readFuel a),
+              ?m.847⟩)),
+      readStable⟩
+context:
+Symbol Guard : Type
+graph : Graph Symbol Guard
+level : Nat → Nat
+frontier : Nat
+fragment : Fragment Symbol
+before✝ : State Symbol Guard
+safe✝ : Safe before✝
+stratified✝ : Stratified before✝ level frontier
+allocated✝ : FragmentBound before✝.counter fragment
+depth : Nat
+ih :
+  ∀ (m : Nat),
+    m < depth →
+      ∀ (fragment : Fragment Symbol) (before : State Symbol Guard),
+        Safe before →
+          Stratified before level frontier →
+            FragmentBound before.counter fragment →
+              (∀ (uv : Nat), HasHole fragment uv → frontier - level uv < m) →
+                ∃ fuel term after,
+                  Success (expandPartial graph fuel fragment) before term after ∧ RenderStable before after
+uv : Nat
+before : State Symbol Guard
+safe : Safe before
+stratified : Stratified before level frontier
+allocated : FragmentBound before.counter (Fragment.hole uv)
+bounded : ∀ (uv_1 : Nat), HasHole (Fragment.hole uv) uv_1 → frontier - level uv_1 < depth
+small : frontier - level uv < depth
+readFuel root : Nat
+resolved : State Symbol Guard
+readStable : RenderStable before resolved
+size : Nat
+path : UnionFind.Reaches before.representatives uv root size
+node : Nat
+reading : Success (getValue readFuel uv) before (UVarValue.unenumerated (some node) []) resolved
+stored : before.values[root]? = some (UVarValue.unenumerated (some node) [])
+readingAt :
+  ∀ (fuel : Nat), readFuel ≤ fuel → Success (getValue fuel uv) before (UVarValue.unenumerated (some node) []) resolved
+view : graph.node node = Node.empty
+⊢ State Symbol Guard → Prop
+/tmp/mcfta-partial-completion-20261025/strict-partial-2/MicroCFTA/EnumerationPartialCompletion.lean:136:33: error: don't know how to synthesize implicit argument `a`
+  @And.intro (Success (expandPartial graph (readFuel + 1) (Fragment.hole uv)) before ?m.827 resolved)
+    (RenderStable before resolved)
+    ((success_bind (getValue (readFuel + 1) uv)
+          (fun __do_lift =>
+            match __do_lift with
+            | UVarValue.enumerated fragment => expandPartial graph readFuel fragment
+            | UVarValue.unenumerated (some node) [] =>
+              match graph.node node with
+              | Node.recursive a => pure (Term.node PartialSymbol.truncated [])
+              | x => pure (Term.node (PartialSymbol.hole uv) [])
+            | x => pure (Term.node (PartialSymbol.hole uv) []))
+          before ?m.827 resolved).mpr
+      (Exists.intro (UVarValue.unenumerated (some node) [])
+        (Exists.intro resolved
+          ⟨readingAt (readFuel + 1)
+              (Decidable.byContradiction fun a => expandPartial_complete._proof_1_5 level frontier depth uv readFuel a),
+            ?m.847⟩)))
+    readStable
+context:
+Symbol Guard : Type
+graph : Graph Symbol Guard
+level : Nat → Nat
+frontier : Nat
+fragment : Fragment Symbol
+before✝ : State Symbol Guard
+safe✝ : Safe before✝
+stratified✝ : Stratified before✝ level frontier
+allocated✝ : FragmentBound before✝.counter fragment
+depth : Nat
+ih :
+  ∀ (m : Nat),
+    m < depth →
+      ∀ (fragment : Fragment Symbol) (before : State Symbol Guard),
+        Safe before →
+          Stratified before level frontier →
+            FragmentBound before.counter fragment →
+              (∀ (uv : Nat), HasHole fragment uv → frontier - level uv < m) →
+                ∃ fuel term after,
+                  Success (expandPartial graph fuel fragment) before term after ∧ RenderStable before after
+uv : Nat
+before : State Symbol Guard
+safe : Safe before
+stratified : Stratified before level frontier
+allocated : FragmentBound before.counter (Fragment.hole uv)
+bounded : ∀ (uv_1 : Nat), HasHole (Fragment.hole uv) uv_1 → frontier - level uv_1 < depth
+small : frontier - level uv < depth
+readFuel root : Nat
+resolved : State Symbol Guard
+readStable : RenderStable before resolved
+size : Nat
+path : UnionFind.Reaches before.representatives uv root size
+node : Nat
+reading : Success (getValue readFuel uv) before (UVarValue.unenumerated (some node) []) resolved
+stored : before.values[root]? = some (UVarValue.unenumerated (some node) [])
+readingAt :
+  ∀ (fuel : Nat), readFuel ≤ fuel → Success (getValue fuel uv) before (UVarValue.unenumerated (some node) []) resolved
+view : graph.node node = Node.empty
+⊢ Prop
+/tmp/mcfta-partial-completion-20261025/strict-partial-2/MicroCFTA/EnumerationPartialCompletion.lean:137:28: error: don't know how to synthesize implicit argument `b`
+  @Iff.mpr
+    (Success
+      (do
+        let __do_lift ← getValue (readFuel + 1) uv
+        match __do_lift with
+          | UVarValue.enumerated fragment => expandPartial graph readFuel fragment
+          | UVarValue.unenumerated (some node) [] =>
+            match graph.node node with
+            | Node.recursive a => pure (Term.node PartialSymbol.truncated [])
+            | x => pure (Term.node (PartialSymbol.hole uv) [])
+          | x => pure (Term.node (PartialSymbol.hole uv) []))
+      before ?m.827 resolved)
+    (∃ middle intermediate,
+      Success (getValue (readFuel + 1) uv) before middle intermediate ∧
+        Success
+          (match middle with
+          | UVarValue.enumerated fragment => expandPartial graph readFuel fragment
+          | UVarValue.unenumerated (some node) [] =>
+            match graph.node node with
+            | Node.recursive a => pure (Term.node PartialSymbol.truncated [])
+            | x => pure (Term.node (PartialSymbol.hole uv) [])
+          | x => pure (Term.node (PartialSymbol.hole uv) []))
+          intermediate ?m.827 resolved)
+    (success_bind (getValue (readFuel + 1) uv)
+      (fun __do_lift =>
+        match __do_lift with
+        | UVarValue.enumerated fragment => expandPartial graph readFuel fragment
+        | UVarValue.unenumerated (some node) [] =>
+          match graph.node node with
+          | Node.recursive a => pure (Term.node PartialSymbol.truncated [])
+          | x => pure (Term.node (PartialSymbol.hole uv) [])
+        | x => pure (Term.node (PartialSymbol.hole uv) []))
+      before ?m.827 resolved)
+    (Exists.intro (UVarValue.unenumerated (some node) [])
+      (Exists.intro resolved
+        ⟨readingAt (readFuel + 1)
+            (Decidable.byContradiction fun a => expandPartial_complete._proof_1_5 level frontier depth uv readFuel a),
+          ?m.847⟩))
+context:
+Symbol Guard : Type
+graph : Graph Symbol Guard
+level : Nat → Nat
+frontier : Nat
+fragment : Fragment Symbol
+before✝ : State Symbol Guard
+safe✝ : Safe before✝
+stratified✝ : Stratified before✝ level frontier
+allocated✝ : FragmentBound before✝.counter fragment
+depth : Nat
+ih :
+  ∀ (m : Nat),
+    m < depth →
+      ∀ (fragment : Fragment Symbol) (before : State Symbol Guard),
+        Safe before →
+          Stratified before level frontier →
+            FragmentBound before.counter fragment →
+              (∀ (uv : Nat), HasHole fragment uv → frontier - level uv < m) →
+                ∃ fuel term after,
+                  Success (expandPartial graph fuel fragment) before term after ∧ RenderStable before after
+uv : Nat
+before : State Symbol Guard
+safe : Safe before
+stratified : Stratified before level frontier
+allocated : FragmentBound before.counter (Fragment.hole uv)
+bounded : ∀ (uv_1 : Nat), HasHole (Fragment.hole uv) uv_1 → frontier - level uv_1 < depth
+small : frontier - level uv < depth
+readFuel root : Nat
+resolved : State Symbol Guard
+readStable : RenderStable before resolved
+size : Nat
+path : UnionFind.Reaches before.representatives uv root size
+node : Nat
+reading : Success (getValue readFuel uv) before (UVarValue.unenumerated (some node) []) resolved
+stored : before.values[root]? = some (UVarValue.unenumerated (some node) [])
+readingAt :
+  ∀ (fuel : Nat), readFuel ≤ fuel → Success (getValue fuel uv) before (UVarValue.unenumerated (some node) []) resolved
+view : graph.node node = Node.empty
+⊢ Prop
+/tmp/mcfta-partial-completion-20261025/strict-partial-2/MicroCFTA/EnumerationPartialCompletion.lean:137:28: error: don't know how to synthesize implicit argument `a`
+  @Iff.mpr
+    (Success
+      (do
+        let __do_lift ← getValue (readFuel + 1) uv
+        match __do_lift with
+          | UVarValue.enumerated fragment => expandPartial graph readFuel fragment
+          | UVarValue.unenumerated (some node) [] =>
+            match graph.node node with
+            | Node.recursive a => pure (Term.node PartialSymbol.truncated [])
+            | x => pure (Term.node (PartialSymbol.hole uv) [])
+          | x => pure (Term.node (PartialSymbol.hole uv) []))
+      before ?m.827 resolved)
+    (∃ middle intermediate,
+      Success (getValue (readFuel + 1) uv) before middle intermediate ∧
+        Success
+          (match middle with
+          | UVarValue.enumerated fragment => expandPartial graph readFuel fragment
+          | UVarValue.unenumerated (some node) [] =>
+            match graph.node node with
+            | Node.recursive a => pure (Term.node PartialSymbol.truncated [])
+            | x => pure (Term.node (PartialSymbol.hole uv) [])
+          | x => pure (Term.node (PartialSymbol.hole uv) []))
+          intermediate ?m.827 resolved)
+    (success_bind (getValue (readFuel + 1) uv)
+      (fun __do_lift =>
+        match __do_lift with
+        | UVarValue.enumerated fragment => expandPartial graph readFuel fragment
+        | UVarValue.unenumerated (some node) [] =>
+          match graph.node node with
+          | Node.recursive a => pure (Term.node PartialSymbol.truncated [])
+          | x => pure (Term.node (PartialSymbol.hole uv) [])
+        | x => pure (Term.node (PartialSymbol.hole uv) []))
+      before ?m.827 resolved)
+    (Exists.intro (UVarValue.unenumerated (some node) [])
+      (Exists.intro resolved
+        ⟨readingAt (readFuel + 1)
+            (Decidable.byContradiction fun a => expandPartial_complete._proof_1_5 level frontier depth uv readFuel a),
+          ?m.847⟩))
+context:
+Symbol Guard : Type
+graph : Graph Symbol Guard
+level : Nat → Nat
+frontier : Nat
+fragment : Fragment Symbol
+before✝ : State Symbol Guard
+safe✝ : Safe before✝
+stratified✝ : Stratified before✝ level frontier
+allocated✝ : FragmentBound before✝.counter fragment
+depth : Nat
+ih :
+  ∀ (m : Nat),
+    m < depth →
+      ∀ (fragment : Fragment Symbol) (before : State Symbol Guard),
+        Safe before →
+          Stratified before level frontier →
+            FragmentBound before.counter fragment →
+              (∀ (uv : Nat), HasHole fragment uv → frontier - level uv < m) →
+                ∃ fuel term after,
+                  Success (expandPartial graph fuel fragment) before term after ∧ RenderStable before after
+uv : Nat
+before : State Symbol Guard
+safe : Safe before
+stratified : Stratified before level frontier
+allocated : FragmentBound before.counter (Fragment.hole uv)
+bounded : ∀ (uv_1 : Nat), HasHole (Fragment.hole uv) uv_1 → frontier - level uv_1 < depth
+small : frontier - level uv < depth
+readFuel root : Nat
+resolved : State Symbol Guard
+readStable : RenderStable before resolved
+size : Nat
+path : UnionFind.Reaches before.representatives uv root size
+node : Nat
+reading : Success (getValue readFuel uv) before (UVarValue.unenumerated (some node) []) resolved
+stored : before.values[root]? = some (UVarValue.unenumerated (some node) [])
+readingAt :
+  ∀ (fuel : Nat), readFuel ≤ fuel → Success (getValue fuel uv) before (UVarValue.unenumerated (some node) []) resolved
+view : graph.node node = Node.empty
+⊢ Prop
+/tmp/mcfta-partial-completion-20261025/strict-partial-2/MicroCFTA/EnumerationPartialCompletion.lean:137:57: error: don't know how to synthesize implicit argument `p`
+  @Exists.intro (UVarValue Symbol)
+    (fun middle =>
+      ∃ intermediate,
+        Success (getValue (readFuel + 1) uv) before middle intermediate ∧
+          Success
+            (match middle with
+            | UVarValue.enumerated fragment => expandPartial graph readFuel fragment
+            | UVarValue.unenumerated (some node) [] =>
+              match graph.node node with
+              | Node.recursive a => pure (Term.node PartialSymbol.truncated [])
+              | x => pure (Term.node (PartialSymbol.hole uv) [])
+            | x => pure (Term.node (PartialSymbol.hole uv) []))
+            intermediate ?m.827 resolved)
+    (UVarValue.unenumerated (some node) [])
+    (Exists.intro resolved
+      ⟨readingAt (readFuel + 1)
+          (Decidable.byContradiction fun a => expandPartial_complete._proof_1_5 level frontier depth uv readFuel a),
+        ?m.847⟩)
+context:
+Symbol Guard : Type
+graph : Graph Symbol Guard
+level : Nat → Nat
+frontier : Nat
+fragment : Fragment Symbol
+before✝ : State Symbol Guard
+safe✝ : Safe before✝
+stratified✝ : Stratified before✝ level frontier
+allocated✝ : FragmentBound before✝.counter fragment
+depth : Nat
+ih :
+  ∀ (m : Nat),
+    m < depth →
+      ∀ (fragment : Fragment Symbol) (before : State Symbol Guard),
+        Safe before →
+          Stratified before level frontier →
+            FragmentBound before.counter fragment →
+              (∀ (uv : Nat), HasHole fragment uv → frontier - level uv < m) →
+                ∃ fuel term after,
+                  Success (expandPartial graph fuel fragment) before term after ∧ RenderStable before after
+uv : Nat
+before : State Symbol Guard
+safe : Safe before
+stratified : Stratified before level frontier
+allocated : FragmentBound before.counter (Fragment.hole uv)
+bounded : ∀ (uv_1 : Nat), HasHole (Fragment.hole uv) uv_1 → frontier - level uv_1 < depth
+small : frontier - level uv < depth
+readFuel root : Nat
+resolved : State Symbol Guard
+readStable : RenderStable before resolved
+size : Nat
+path : UnionFind.Reaches before.representatives uv root size
+node : Nat
+reading : Success (getValue readFuel uv) before (UVarValue.unenumerated (some node) []) resolved
+stored : before.values[root]? = some (UVarValue.unenumerated (some node) [])
+readingAt :
+  ∀ (fuel : Nat), readFuel ≤ fuel → Success (getValue fuel uv) before (UVarValue.unenumerated (some node) []) resolved
+view : graph.node node = Node.empty
+⊢ UVarValue Symbol → Prop
+/tmp/mcfta-partial-completion-20261025/strict-partial-2/MicroCFTA/EnumerationPartialCompletion.lean:137:57: error: don't know how to synthesize implicit argument `p`
+  @Exists.intro (State Symbol Guard)
+    (fun intermediate =>
+      Success (getValue (readFuel + 1) uv) before (UVarValue.unenumerated (some node) []) intermediate ∧
+        Success
+          (match UVarValue.unenumerated (some node) [] with
+          | UVarValue.enumerated fragment => expandPartial graph readFuel fragment
+          | UVarValue.unenumerated (some node) [] =>
+            match graph.node node with
+            | Node.recursive a => pure (Term.node PartialSymbol.truncated [])
+            | x => pure (Term.node (PartialSymbol.hole uv) [])
+          | x => pure (Term.node (PartialSymbol.hole uv) []))
+          intermediate ?m.827 resolved)
+    resolved
+    ⟨readingAt (readFuel + 1)
+        (Decidable.byContradiction fun a => expandPartial_complete._proof_1_5 level frontier depth uv readFuel a),
+      ?m.847⟩
+context:
+Symbol Guard : Type
+graph : Graph Symbol Guard
+level : Nat → Nat
+frontier : Nat
+fragment : Fragment Symbol
+before✝ : State Symbol Guard
+safe✝ : Safe before✝
+stratified✝ : Stratified before✝ level frontier
+allocated✝ : FragmentBound before✝.counter fragment
+depth : Nat
+ih :
+  ∀ (m : Nat),
+    m < depth →
+      ∀ (fragment : Fragment Symbol) (before : State Symbol Guard),
+        Safe before →
+          Stratified before level frontier →
+            FragmentBound before.counter fragment →
+              (∀ (uv : Nat), HasHole fragment uv → frontier - level uv < m) →
+                ∃ fuel term after,
+                  Success (expandPartial graph fuel fragment) before term after ∧ RenderStable before after
+uv : Nat
+before : State Symbol Guard
+safe : Safe before
+stratified : Stratified before level frontier
+allocated : FragmentBound before.counter (Fragment.hole uv)
+bounded : ∀ (uv_1 : Nat), HasHole (Fragment.hole uv) uv_1 → frontier - level uv_1 < depth
+small : frontier - level uv < depth
+readFuel root : Nat
+resolved : State Symbol Guard
+readStable : RenderStable before resolved
+size : Nat
+path : UnionFind.Reaches before.representatives uv root size
+node : Nat
+reading : Success (getValue readFuel uv) before (UVarValue.unenumerated (some node) []) resolved
+stored : before.values[root]? = some (UVarValue.unenumerated (some node) [])
+readingAt :
+  ∀ (fuel : Nat), readFuel ≤ fuel → Success (getValue fuel uv) before (UVarValue.unenumerated (some node) []) resolved
+view : graph.node node = Node.empty
+⊢ State Symbol Guard → Prop
+/tmp/mcfta-partial-completion-20261025/strict-partial-2/MicroCFTA/EnumerationPartialCompletion.lean:137:57: error: don't know how to synthesize implicit argument `b`
+  @And.intro (Success (getValue (readFuel + 1) uv) before (UVarValue.unenumerated (some node) []) resolved)
+    (Success
+      (match UVarValue.unenumerated (some node) [] with
+      | UVarValue.enumerated fragment => expandPartial graph readFuel fragment
+      | UVarValue.unenumerated (some node) [] =>
+        match graph.node node with
+        | Node.recursive a => pure (Term.node PartialSymbol.truncated [])
+        | x => pure (Term.node (PartialSymbol.hole uv) [])
+      | x => pure (Term.node (PartialSymbol.hole uv) []))
+      resolved ?m.827 resolved)
+    (readingAt (readFuel + 1)
+      (Decidable.byContradiction fun a => expandPartial_complete._proof_1_5 level frontier depth uv readFuel a))
+    ?m.847
+context:
+Symbol Guard : Type
+graph : Graph Symbol Guard
+level : Nat → Nat
+frontier : Nat
+fragment : Fragment Symbol
+before✝ : State Symbol Guard
+safe✝ : Safe before✝
+stratified✝ : Stratified before✝ level frontier
+allocated✝ : FragmentBound before✝.counter fragment
+depth : Nat
+ih :
+  ∀ (m : Nat),
+    m < depth →
+      ∀ (fragment : Fragment Symbol) (before : State Symbol Guard),
+        Safe before →
+          Stratified before level frontier →
+            FragmentBound before.counter fragment →
+              (∀ (uv : Nat), HasHole fragment uv → frontier - level uv < m) →
+                ∃ fuel term after,
+                  Success (expandPartial graph fuel fragment) before term after ∧ RenderStable before after
+uv : Nat
+before : State Symbol Guard
+safe : Safe before
+stratified : Stratified before level frontier
+allocated : FragmentBound before.counter (Fragment.hole uv)
+bounded : ∀ (uv_1 : Nat), HasHole (Fragment.hole uv) uv_1 → frontier - level uv_1 < depth
+small : frontier - level uv < depth
+readFuel root : Nat
+resolved : State Symbol Guard
+readStable : RenderStable before resolved
+size : Nat
+path : UnionFind.Reaches before.representatives uv root size
+node : Nat
+reading : Success (getValue readFuel uv) before (UVarValue.unenumerated (some node) []) resolved
+stored : before.values[root]? = some (UVarValue.unenumerated (some node) [])
+readingAt :
+  ∀ (fuel : Nat), readFuel ≤ fuel → Success (getValue fuel uv) before (UVarValue.unenumerated (some node) []) resolved
+view : graph.node node = Node.empty
+⊢ Prop
+/tmp/mcfta-partial-completion-20261025/strict-partial-2/MicroCFTA/EnumerationPartialCompletion.lean:137:48: error: don't know how to synthesize placeholder for argument `value`
+context:
+Symbol Guard : Type
+graph : Graph Symbol Guard
+level : Nat → Nat
+frontier : Nat
+fragment : Fragment Symbol
+before✝ : State Symbol Guard
+safe✝ : Safe before✝
+stratified✝ : Stratified before✝ level frontier
+allocated✝ : FragmentBound before✝.counter fragment
+depth : Nat
+ih :
+  ∀ (m : Nat),
+    m < depth →
+      ∀ (fragment : Fragment Symbol) (before : State Symbol Guard),
+        Safe before →
+          Stratified before level frontier →
+            FragmentBound before.counter fragment →
+              (∀ (uv : Nat), HasHole fragment uv → frontier - level uv < m) →
+                ∃ fuel term after,
+                  Success (expandPartial graph fuel fragment) before term after ∧ RenderStable before after
+uv : Nat
+before : State Symbol Guard
+safe : Safe before
+stratified : Stratified before level frontier
+allocated : FragmentBound before.counter (Fragment.hole uv)
+bounded : ∀ (uv_1 : Nat), HasHole (Fragment.hole uv) uv_1 → frontier - level uv_1 < depth
+small : frontier - level uv < depth
+readFuel root : Nat
+resolved : State Symbol Guard
+readStable : RenderStable before resolved
+size : Nat
+path : UnionFind.Reaches before.representatives uv root size
+node : Nat
+reading : Success (getValue readFuel uv) before (UVarValue.unenumerated (some node) []) resolved
+stored : before.values[root]? = some (UVarValue.unenumerated (some node) [])
+readingAt :
+  ∀ (fuel : Nat), readFuel ≤ fuel → Success (getValue fuel uv) before (UVarValue.unenumerated (some node) []) resolved
+view : graph.node node = Node.empty
+⊢ Term (PartialSymbol Symbol)
+/tmp/mcfta-partial-completion-20261025/strict-partial-2/MicroCFTA/EnumerationPartialCompletion.lean:136:48: error: don't know how to synthesize placeholder for argument `w`
+context:
+Symbol Guard : Type
+graph : Graph Symbol Guard
+level : Nat → Nat
+frontier : Nat
+fragment : Fragment Symbol
+before✝ : State Symbol Guard
+safe✝ : Safe before✝
+stratified✝ : Stratified before✝ level frontier
+allocated✝ : FragmentBound before✝.counter fragment
+depth : Nat
+ih :
+  ∀ (m : Nat),
+    m < depth →
+      ∀ (fragment : Fragment Symbol) (before : State Symbol Guard),
+        Safe before →
+          Stratified before level frontier →
+            FragmentBound before.counter fragment →
+              (∀ (uv : Nat), HasHole fragment uv → frontier - level uv < m) →
+                ∃ fuel term after,
+                  Success (expandPartial graph fuel fragment) before term after ∧ RenderStable before after
+uv : Nat
+before : State Symbol Guard
+safe : Safe before
+stratified : Stratified before level frontier
+allocated : FragmentBound before.counter (Fragment.hole uv)
+bounded : ∀ (uv_1 : Nat), HasHole (Fragment.hole uv) uv_1 → frontier - level uv_1 < depth
+small : frontier - level uv < depth
+readFuel root : Nat
+resolved : State Symbol Guard
+readStable : RenderStable before resolved
+size : Nat
+path : UnionFind.Reaches before.representatives uv root size
+node : Nat
+reading : Success (getValue readFuel uv) before (UVarValue.unenumerated (some node) []) resolved
+stored : before.values[root]? = some (UVarValue.unenumerated (some node) [])
+readingAt :
+  ∀ (fuel : Nat), readFuel ≤ fuel → Success (getValue fuel uv) before (UVarValue.unenumerated (some node) []) resolved
+view : graph.node node = Node.empty
+⊢ Term (PartialSymbol Symbol)

@@ -1,0 +1,18 @@
+import MicroCFTA.SourcePruningCallbackCompletion
+import MicroCFTA.SourceCurrentColdFiniteWarmCalls
+set_option pp.maxSteps 1000000
+set_option pp.deepTerms true
+#check MicroCFTA.EnumerationPartialCompletion.getValue_complete
+#print axioms MicroCFTA.EnumerationPartialCompletion.getValue_complete
+#check MicroCFTA.EnumerationPartialCompletion.expandPartial_complete
+#print axioms MicroCFTA.EnumerationPartialCompletion.expandPartial_complete
+#check MicroCFTA.SourcePruningResume.resume_complete
+#print axioms MicroCFTA.SourcePruningResume.resume_complete
+#check MicroCFTA.SourcePruningResume.resume_read
+#print axioms MicroCFTA.SourcePruningResume.resume_read
+#check MicroCFTA.SourcePruningOracle.oracle_inl_complete
+#print axioms MicroCFTA.SourcePruningOracle.oracle_inl_complete
+#check MicroCFTA.SourcePruningRecordTypes.recordTypes_inl_complete
+#print axioms MicroCFTA.SourcePruningRecordTypes.recordTypes_inl_complete
+#check MicroCFTA.SourceCurrentColdFiniteWarmCalls.constructed_node_calls
+#print axioms MicroCFTA.SourceCurrentColdFiniteWarmCalls.constructed_node_calls

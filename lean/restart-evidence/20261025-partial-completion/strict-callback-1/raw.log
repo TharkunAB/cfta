@@ -1,0 +1,38 @@
+/tmp/mcfta-partial-completion-20261025/strict-callback-1/MicroCFTA/SourcePruningCallbackCompletion.lean:47:72: error: unexpected identifier; expected '}'
+/tmp/mcfta-partial-completion-20261025/strict-callback-1/MicroCFTA/SourcePruningCallbackCompletion.lean:47:22: error: Application type mismatch: The argument
+  (observed.fst, ?m.213)
+has type
+  Bool × ?m.210
+of sort `Type (max 0 ?u.76)` but is expected to have type
+  ∃ result after,
+    Success (recordTypes graph (first :: rest) fuel metadata uv (Sum.inl fragment)) before result after ∧
+      RenderStable before after ∧ Frame before after ∧ Stratified after level frontier
+of sort `Prop` in the application
+  Exists.intro fuel (observed.fst, ?m.213)
+/tmp/mcfta-partial-completion-20261025/strict-callback-1/MicroCFTA/SourcePruningCallbackCompletion.lean:33:85: error: unsolved goals
+Guard Typing : Type
+graph : Graph Symbol Guard
+templates : List (Template.Pattern Symbol)
+level : Nat → Nat
+frontier : Nat
+metadata : Metadata Typing
+uv : Nat
+fragment : Fragment Symbol
+before : State Symbol Guard
+safe : Safe before
+stratified : Stratified before level frontier
+allocated : FragmentBound before.counter fragment
+bounded :
+  ∀ (group : Pending Symbol),
+    group ∈ metadata.pending → ∀ (entry : Template.Pattern Symbol × Nat), entry ∈ group → entry.snd < before.counter
+completed :
+  ∃ fuel result after,
+    Success (recordTypes graph templates fuel metadata uv (Sum.inl fragment)) before result after ∧
+      RenderStable before after ∧ Frame before after ∧ Stratified after level frontier
+⊢ ∃ fuel result after,
+    Success (recordTypes graph templates fuel metadata uv (Sum.inl fragment)) before result after ∧
+      RenderStable before after ∧
+        Frame before after ∧
+          Stratified after level frontier ∧
+            result.snd.types = updatedTypes metadata uv (Sum.inl fragment) ∧
+              result.snd.openHoles = metadata.openHoles ∧ result.snd.typing = metadata.typing

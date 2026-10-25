@@ -1,0 +1,415 @@
+diff --git a/lean/MicroCFTA/Audit.lean b/lean/MicroCFTA/Audit.lean
+index 1c11082fd..09bf72236 100644
+--- a/lean/MicroCFTA/Audit.lean
++++ b/lean/MicroCFTA/Audit.lean
+@@ -1,3 +1,4 @@
++import MicroCFTA.SourcePruningCallbackCompletion
+ import MicroCFTA.SourcePruningEnumerationSelectedOrdinary
+ import MicroCFTA.SourcePruningEnumerationSelectedNarrow
+ import MicroCFTA.SourcePruningEnumerationRecursion
+diff --git a/lean/MicroCFTA/EnumerationPartialCompletion.lean b/lean/MicroCFTA/EnumerationPartialCompletion.lean
+new file mode 100644
+index 000000000..d67da54f0
+--- /dev/null
++++ b/lean/MicroCFTA/EnumerationPartialCompletion.lean
+@@ -0,0 +1,178 @@
++import MicroCFTA.EnumerationPartialObservation
++import MicroCFTA.EnumerationOrder
++
++/-!
++# Finite partial rendering from fragment dependency levels
++
++Stored fragment references strictly increase their dependency level.
++Pending slots stop partial rendering. They need no completed graph value.
++-/
++
++namespace MicroCFTA.EnumerationPartialCompletion
++open Language Fragments EnumerationState EnumerationCorrectness EnumerationSchedule
++open EnumerationDriver EnumerationDependencies EnumerationOrder EnumerationReferences
++open EnumerationExecution EnumerationObservations EnumerationCompressionFrame
++
++local instance : Monad List where
++  pure value := [value]
++  bind values continuation := values.flatMap continuation
++
++local instance : LawfulMonad List where
++  map_const := rfl
++  id_map := by intro α xs; simp [Functor.map]
++  seqLeft_eq := by
++    intros
++    simp [SeqLeft.seqLeft, Seq.seq, Functor.map, List.flatMap_map, ← List.map_eq_flatMap]
++    simp only [List.map_const']
++  seqRight_eq := by
++    intros
++    simp only [SeqRight.seqRight, Seq.seq, Functor.map, List.flatMap_map]
++    simp
++  pure_seq := by intros; simp [Seq.seq, Functor.map, pure]
++  bind_pure_comp := by intros; simp [bind, pure, Functor.map, ← List.map_eq_flatMap]
++  bind_map := by intros; rfl
++  pure_bind := by intros; simp [pure, bind]
++  bind_assoc := by intros; exact List.flatMap_assoc
++
++/-- An allocated variable has a finite actual slot read with safe compression. -/
++theorem getValue_complete (before : State Symbol Guard) (safe : Safe before)
++    (uv : Nat) (inside : uv < before.counter) :
++    ∃ fuel root value after, Success (getValue fuel uv) before value after ∧
++      RenderStable before after ∧ before.values[root]? = some value ∧
++      ∃ size, UnionFind.Reaches before.representatives uv root size := by
++  obtain ⟨root, size, path⟩ := safe.1.total uv
++  have index : root < before.values.length := by
++    rw [← safe.1.aligned]
++    exact reaches_bounded before.representatives before.counter safe.1.forest path inside
++  let value := before.values[root]
++  have stored : before.values[root]? = some value := List.getElem?_eq_getElem index
++  obtain ⟨fuel, found, lookup⟩ := UnionFind.findRoot_terminates path
++  have rootSame := (UnionFind.reaches_unique
++    (UnionFind.findRoot_correct fuel before.representatives uv found lookup).1 path).1
++  let after := {before with representatives := found.forest}
++  have reading : Success (getValue fuel uv) before value after :=
++    (getValue_success fuel uv before after value).mpr
++      ⟨found, lookup, by simpa [rootSame] using stored, rfl⟩
++  exact ⟨fuel, root, value, after, reading,
++    (getValue_storage fuel uv before after value safe inside reading).1, stored, size, path⟩
++
++/-- Bounded partial rendering completes and retains safety, its full frame and dependency levels. -/
++theorem expandPartial_complete (graph : Graph Symbol Guard) (level : Nat → Nat)
++    (frontier : Nat) (fragment : Fragment Symbol) (before : State Symbol Guard)
++    (safe : Safe before) (stratified : Stratified before level frontier)
++    (allocated : FragmentBound before.counter fragment) :
++    ∃ fuel term after, Success (expandPartial graph fuel fragment) before term after ∧
++      RenderStable before after ∧ Frame before after ∧ Stratified after level frontier := by
++  have construct : ∀ depth, ∀ fragment (before : State Symbol Guard), Safe before →
++      Stratified before level frontier → FragmentBound before.counter fragment →
++      (∀ uv, HasHole fragment uv → frontier - level uv < depth) →
++      ∃ fuel term after, Success (expandPartial graph fuel fragment) before term after ∧
++        RenderStable before after := by
++    intro depth
++    induction depth using Nat.strongRecOn with
++    | ind depth ih =>
++        intro fragment
++        induction fragment using Fragment.rec
++          (motive_2 := fun fragments => ∀ (before : State Symbol Guard), Safe before →
++            Stratified before level frontier →
++            (∀ fragment ∈ fragments, FragmentBound before.counter fragment) →
++            (∀ fragment ∈ fragments, ∀ uv, HasHole fragment uv → frontier - level uv < depth) →
++            ∃ fuel terms after, Success (fragments.mapM (expandPartial graph fuel)) before terms after ∧
++              RenderStable before after) with
++        | hole uv =>
++            intro before safe stratified allocated bounded
++            have small := bounded uv (.hole uv)
++            obtain ⟨readFuel, root, value, resolved, reading, readStable, stored, size, path⟩ :=
++              getValue_complete before safe uv allocated
++            have readingAt : ∀ fuel, readFuel ≤ fuel →
++                Success (getValue fuel uv) before value resolved := by
++              intro fuel enough
++              obtain ⟨extra, rfl⟩ := Nat.exists_eq_add_of_le enough
++              exact getValue_moreFuel readFuel extra uv before value resolved reading
++            cases value with
++            | enumerated storedFragment =>
++                have sameLevel := stratified.classes uv root (UnionFind.sameClass_root path)
++                obtain ⟨rootBound, dependencies⟩ := stratified.expanded root storedFragment stored
++                have storedAllocated : FragmentBound resolved.counter storedFragment := by
++                  rw [readStable.counter]
++                  exact safe.1.values _ (List.mem_of_getElem? stored)
++                have storedBound : ∀ child, HasHole storedFragment child →
++                    frontier - level child < frontier - level uv := by
++                  intro child hole
++                  have higher := dependencies child hole
++                  omega
++                obtain ⟨renderFuel, term, after, rendering, renderedStable⟩ :=
++                  ih (frontier - level uv) small storedFragment resolved readStable.safe
++                    (stratified_read before resolved level frontier readStable stratified)
++                    storedAllocated storedBound
++                let fuel := readFuel + renderFuel
++                refine ⟨fuel + 1, term, after, ?_, readStable.trans renderedStable⟩
++                simp only [expandPartial]
++                apply (success_bind _ _ _ _ _).mpr
++                refine ⟨.enumerated storedFragment, resolved, readingAt (fuel + 1) (by dsimp [fuel]; omega), ?_⟩
++                simpa [fuel, Nat.add_comm] using
++                  expandPartial_moreFuel graph renderFuel readFuel storedFragment resolved term after rendering
++            | eliminated =>
++                exact ⟨readFuel + 1, .node (.hole uv) [], resolved,
++                  (success_bind _ _ _ _ _).mpr ⟨.eliminated, resolved,
++                    readingAt (readFuel + 1) (by omega), (success_pure _ _ _ _).mpr ⟨rfl, rfl⟩⟩,
++                  readStable⟩
++            | unenumerated node scs =>
++                cases node with
++                | none =>
++                    exact ⟨readFuel + 1, .node (.hole uv) [], resolved,
++                      (success_bind _ _ _ _ _).mpr ⟨.unenumerated none scs, resolved,
++                        readingAt (readFuel + 1) (by omega), (success_pure _ _ _ _).mpr ⟨rfl, rfl⟩⟩,
++                      readStable⟩
++                | some node =>
++                    cases scs with
++                    | cons first rest =>
++                        exact ⟨readFuel + 1, .node (.hole uv) [], resolved,
++                          (success_bind _ _ _ _ _).mpr ⟨.unenumerated (some node) (first :: rest), resolved,
++                            readingAt (readFuel + 1) (by omega), (success_pure _ _ _ _).mpr ⟨rfl, rfl⟩⟩,
++                          readStable⟩
++                    | nil =>
++                        refine ⟨readFuel + 1, (match graph.node node with
++                          | .recursive _ => .node .truncated []
++                          | _ => .node (.hole uv) []), resolved,
++                          (success_bind _ _ _ _ _).mpr ⟨.unenumerated (some node) [], resolved,
++                            readingAt (readFuel + 1) (by omega), ?_⟩, readStable⟩
++                        cases view : graph.node node <;> simp only [view] <;>
++                          exact (success_pure _ _ _ _).mpr ⟨rfl, rfl⟩
++        | node symbol children childIH =>
++            intro before safe stratified allocated bounded
++            obtain ⟨fuel, terms, after, traversal, stable⟩ := childIH before safe stratified
++              (fun child member => fragmentsBound_member before.counter children allocated child member)
++              (fun child member uv hole => bounded uv (.child symbol children child uv member hole))
++            exact ⟨fuel + 1, .node (.concrete symbol) terms, after,
++              (success_bind _ _ _ _ _).mpr ⟨terms, after, traversal,
++                (success_pure _ _ _ _).mpr ⟨rfl, rfl⟩⟩, stable⟩
++        | nil =>
++            rename_i before safe stratified allocated bounded
++            exact ⟨0, [], before, (success_pure _ _ _ _).mpr ⟨rfl, rfl⟩, .refl before safe⟩
++        | cons child children childIH childrenIH =>
++            rename_i before safe stratified allocated bounded
++            obtain ⟨firstFuel, term, middle, first, firstStable⟩ :=
++              childIH before safe stratified (allocated child (by simp)) (bounded child (by simp))
++            obtain ⟨restFuel, terms, after, continued, lastStable⟩ :=
++              childrenIH middle firstStable.safe
++                (stratified_read before middle level frontier firstStable stratified)
++                (fun fragment member => by rw [firstStable.counter]; exact allocated fragment (by simp [member]))
++                (fun fragment member => bounded fragment (by simp [member]))
++            refine ⟨firstFuel + restFuel, term :: terms, after, ?_, firstStable.trans lastStable⟩
++            rw [List.mapM_cons]
++            apply (success_bind _ _ _ _ _).mpr
++            refine ⟨term, middle, expandPartial_moreFuel graph firstFuel restFuel child before term middle first, ?_⟩
++            apply (success_bind _ _ _ _ _).mpr
++            refine ⟨terms, after, ?_, (success_pure _ _ _ _).mpr ⟨rfl, rfl⟩⟩
++            have more := retains_mapM _ _
++              (fun fragment => expandPartial_moreFuel graph restFuel firstFuel fragment)
++              children middle terms after continued
++            simpa [Nat.add_comm] using more
++  obtain ⟨fuel, term, after, rendering, stable⟩ := construct (frontier + 1) fragment before
++    safe stratified allocated (by intro uv _; omega)
++  exact ⟨fuel, term, after, rendering, stable,
++    expandPartial_frame graph fuel fragment before after term safe.1.total rendering,
++    stratified_read before after level frontier stable stratified⟩
++
++end MicroCFTA.EnumerationPartialCompletion
+diff --git a/lean/MicroCFTA/SourcePruningCallbackCompletion.lean b/lean/MicroCFTA/SourcePruningCallbackCompletion.lean
+new file mode 100644
+index 000000000..dca3d7ea5
+--- /dev/null
++++ b/lean/MicroCFTA/SourcePruningCallbackCompletion.lean
+@@ -0,0 +1,57 @@
++import MicroCFTA.SourcePruningRecordTypes
++
++/-!
++# Finite completion of the concrete fragment callback
++
++The input cache supplies fragment dependency levels and allocated references.
++The callback derives its rendering and every parked match read from those facts.
++-/
++
++namespace MicroCFTA.SourcePruningRecordTypes
++open Language Fragments EnumerationState EnumerationCorrectness EnumerationSchedule
++open EnumerationDriver EnumerationOrder EnumerationCompressionFrame
++open SourcePruningPartialMatch SourcePruningTemplates
++
++local instance callbackCompletionMonadList : Monad List where
++  pure value := [value]
++  bind values continuation := values.flatMap continuation
++
++variable {Guard Typing : Type}
++
++/-- The fragment callback completes with its actual metadata and a safe framed cache. -/
++theorem recordTypes_inl_complete (graph : Graph Symbol Guard)
++    (templates : List (Template.Pattern Symbol)) (level : Nat → Nat) (frontier : Nat)
++    (metadata : Metadata Typing) (uv : Nat) (fragment : Fragment Symbol)
++    (before : State Symbol Guard) (safe : Safe before)
++    (stratified : Stratified before level frontier)
++    (allocated : FragmentBound before.counter fragment)
++    (bounded : ∀ group ∈ metadata.pending, ∀ entry ∈ group, entry.2 < before.counter) :
++    ∃ fuel result after,
++      Success (recordTypes graph templates fuel metadata uv (.inl fragment)) before result after ∧
++      RenderStable before after ∧ Frame before after ∧ Stratified after level frontier ∧
++      result.2.types = updatedTypes metadata uv (.inl fragment) ∧
++      result.2.openHoles = metadata.openHoles ∧ result.2.typing = metadata.typing := by
++  have completed : ∃ fuel result after,
++      Success (recordTypes graph templates fuel metadata uv (.inl fragment)) before result after ∧
++      RenderStable before after ∧ Frame before after ∧ Stratified after level frontier := by
++    cases templates with
++    | nil =>
++        refine ⟨0, (false, {metadata with types := updatedTypes metadata uv (.inl fragment)}),
++          before, ?_, .refl before safe, .refl before, stratified⟩
++        rw [recordTypes_empty]
++        exact (success_pure _ _ _ _).mpr ⟨rfl, rfl⟩
++    | cons first rest =>
++        obtain ⟨fuel, observed, after, observation, stable, frame, ordered⟩ :=
++          SourcePruningOracle.oracle_inl_complete graph (first :: rest) level frontier metadata.pending
++            uv fragment before safe stratified allocated bounded
++        refine ⟨fuel, (observed.1, {metadata with pending := observed.2, types := updatedTypes metadata uv (.inl fragment)}),
++          after, ?_, stable, frame, ordered⟩
++        change Success (SourcePruningOracle.oracle graph (first :: rest) fuel metadata.pending uv (.inl fragment) >>= _)
++          before _ after
++        exact (success_bind _ _ _ _ _).mpr ⟨observed, after, observation,
++          (success_pure _ _ _ _).mpr ⟨rfl, rfl⟩⟩
++  obtain ⟨fuel, result, after, success, stable, frame, ordered⟩ := completed
++  exact ⟨fuel, result, after, success, stable, frame, ordered,
++    recordTypes_metadata graph templates fuel metadata uv (.inl fragment) before after result success⟩
++
++end MicroCFTA.SourcePruningRecordTypes
+diff --git a/lean/MicroCFTA/SourcePruningOracle.lean b/lean/MicroCFTA/SourcePruningOracle.lean
+index 350b659a4..a67c93423 100644
+--- a/lean/MicroCFTA/SourcePruningOracle.lean
++++ b/lean/MicroCFTA/SourcePruningOracle.lean
+@@ -2,6 +2,7 @@ import MicroCFTA.SourcePruningTemplates
+ import MicroCFTA.SourcePruningResume
+ import MicroCFTA.EnumerationPartialCongruence
+ import MicroCFTA.EnumerationPartialTransport
++import MicroCFTA.EnumerationPartialCompletion
+ 
+ /-!
+ # The concrete template pruning callback
+@@ -317,4 +318,81 @@ theorem oracle_transport (graph : Graph Symbol Guard) (templates : List (Templat
+         · simp only [oracle, ite_eq_right rejected, ite_eq_right skipped] at leftRead ⊢
+           exact observe_transport graph templates leftFuel pending uv fragment left right leftAfter result frame total leftRead
+ 
++/-- Bounded fragment history constructs the actual callback and every pending-group read. -/
++theorem oracle_inl_complete (graph : Graph Symbol Guard) (templates : List (Template.Pattern Symbol))
++    (level : Nat → Nat) (frontier : Nat) (pending : List (Pending Symbol))
++    (uv : Nat) (fragment : Fragment Symbol) (before : State Symbol Guard)
++    (safe : Safe before)
++    (stratified : EnumerationOrder.Stratified before level frontier)
++    (allocated : FragmentBound before.counter fragment)
++    (bounded : ∀ group ∈ pending, ∀ entry ∈ group, entry.2 < before.counter) :
++    ∃ fuel result after, Success (oracle graph templates fuel pending uv (.inl fragment)) before result after ∧
++      EnumerationDriver.RenderStable before after ∧ Frame before after ∧
++      EnumerationOrder.Stratified after level frontier := by
++  by_cases rejected : rejectEarly templates fragment = true
++  · refine ⟨0, (true, pending), before, ?_, .refl before safe, .refl before, stratified⟩
++    simp only [oracle, ite_eq_left rejected]
++    exact (success_pure _ _ _ _).mpr ⟨rfl, rfl⟩
++  · by_cases skipped : idle pending fragment = true
++    · refine ⟨0, (false, []), before, ?_, .refl before safe, .refl before, stratified⟩
++      simp only [oracle, ite_eq_right rejected, ite_eq_left skipped]
++      exact (success_pure _ _ _ _).mpr ⟨rfl, rfl⟩
++    · obtain ⟨renderFuel, term, middle, rendered, renderStable, _renderFrame, _renderStratified⟩ :=
++        EnumerationPartialCompletion.expandPartial_complete graph level frontier fragment before safe stratified allocated
++      have groups : ∀ (pending : List (Pending Symbol)) (previous : State Symbol Guard),
++          Safe previous →
++          (∀ group ∈ pending, ∀ entry ∈ group, entry.2 < previous.counter) →
++          ∃ fuel resumed after,
++            Success (pending.mapM (SourcePruningResume.resume fuel uv term)) previous resumed after ∧
++            EnumerationDriver.RenderStable previous after := by
++        intro pending
++        induction pending with
++        | nil =>
++            intro previous previousSafe _bounded
++            exact ⟨0, [], previous, (success_pure _ _ _ _).mpr ⟨rfl, rfl⟩, .refl previous previousSafe⟩
++        | cons first rest ih =>
++            intro previous previousSafe pendingBounded
++            obtain ⟨firstFuel, firstResult, reached, firstRead, _firstFrame⟩ :=
++              SourcePruningResume.resume_complete uv term first previous previousSafe.1.total
++            have firstStable := SourcePruningResume.resume_read firstFuel uv term first previous reached firstResult
++              previousSafe (pendingBounded first (by simp)) firstRead
++            obtain ⟨restFuel, resumed, after, restRead, restStable⟩ :=
++              ih reached firstStable.safe (by
++                intro group member entry present
++                rw [firstStable.counter]
++                exact pendingBounded group (List.mem_cons_of_mem first member) entry present)
++            refine ⟨firstFuel + restFuel, firstResult :: resumed, after, ?_, firstStable.trans restStable⟩
++            rw [List.mapM_cons]
++            apply (success_bind _ _ _ _ _).mpr
++            refine ⟨firstResult, reached,
++              SourcePruningResume.resume_moreFuel firstFuel restFuel uv term first previous firstResult reached firstRead, ?_⟩
++            apply (success_bind _ _ _ _ _).mpr
++            refine ⟨resumed, after, ?_, (success_pure _ _ _ _).mpr ⟨rfl, rfl⟩⟩
++            have raised := retains_mapM _ _
++              (fun group => SourcePruningResume.resume_moreFuel restFuel firstFuel uv term group)
++              rest reached resumed after restRead
++            simpa only [Nat.add_comm] using raised
++      obtain ⟨groupFuel, resumed, after, traversed, groupStable⟩ := groups pending middle renderStable.safe (by
++        intro group member entry present
++        rw [renderStable.counter]
++        exact bounded group member entry present)
++      let result := finishChecks resumed (startMatches templates term)
++      have observed : Success (observe graph templates (renderFuel + groupFuel) pending uv fragment)
++          before result after := by
++        unfold observe
++        apply (success_bind _ _ _ _ _).mpr
++        refine ⟨term, middle,
++          expandPartial_moreFuel graph renderFuel groupFuel fragment before term middle rendered, ?_⟩
++        apply (success_bind _ _ _ _ _).mpr
++        refine ⟨resumed, after, ?_, (success_pure _ _ _ _).mpr ⟨rfl, rfl⟩⟩
++        have raised := retains_mapM _ _
++          (fun group => SourcePruningResume.resume_moreFuel groupFuel renderFuel uv term group)
++          pending middle resumed after traversed
++        simpa only [Nat.add_comm] using raised
++      have stable := renderStable.trans groupStable
++      refine ⟨renderFuel + groupFuel, result, after, ?_, stable,
++        observe_frame graph templates (renderFuel + groupFuel) pending uv fragment before after result safe.1.total observed,
++        EnumerationOrder.stratified_read before after level frontier stable stratified⟩
++      simpa only [oracle, ite_eq_right rejected, ite_eq_right skipped] using observed
++
+ end MicroCFTA.SourcePruningOracle
+diff --git a/lean/MicroCFTA/SourcePruningResume.lean b/lean/MicroCFTA/SourcePruningResume.lean
+index 28b921818..4cf6cafb5 100644
+--- a/lean/MicroCFTA/SourcePruningResume.lean
++++ b/lean/MicroCFTA/SourcePruningResume.lean
+@@ -239,4 +239,60 @@ theorem resume_moreFuel (fuel extra current : Nat) (term : Term (PartialSymbol S
+     (retains_mapM _ _ (fun pendingPart => part_moreFuel fuel extra current term pendingPart) pending)
+     (fun _ => retains_refl _)
+ 
++/-- A total forest gives a finite resume and its actual complete compression frame. -/
++theorem resume_complete (current : Nat) (term : Term (PartialSymbol Symbol))
++    (pending : Pending Symbol) (before : State Symbol Guard)
++    (total : UnionFind.Total before.representatives) :
++    ∃ (fuel : Nat) (result : Option (Pending Symbol)) (after : State Symbol Guard),
++      Success (resume fuel current term pending) before result after ∧ Frame before after := by
++  have step : ∀ (pendingPart : Template.Pattern Symbol × Nat) (previous : State Symbol Guard),
++      UnionFind.Total previous.representatives →
++        ∃ (fuel : Nat) (result : Option (Pending Symbol)) (next : State Symbol Guard),
++          Success (part fuel current term pendingPart) previous result next ∧
++            UnionFind.Total next.representatives := by
++    intro pendingPart previous previousTotal
++    obtain ⟨fuel, root, next, reading, nextTotal⟩ :=
++      representative_terminates previous previousTotal pendingPart.2
++    refine ⟨fuel, (if root = current then matchPartial pendingPart.1 term else some [(pendingPart.1, root)]),
++      next, ?_, nextTotal⟩
++    exact (part_success fuel current term pendingPart previous next _).mpr ⟨root, reading, rfl⟩
++  obtain ⟨fuel, results, after, traversed, _afterTotal⟩ :=
++    mapM_terminates (fun fuel pendingPart => part fuel current term pendingPart)
++      (fun state : State Symbol Guard => UnionFind.Total state.representatives)
++      (fun fuel extra pendingPart => part_moreFuel fuel extra current term pendingPart)
++      step pending before total
++  let result := (results.mapM id : Option (List (Pending Symbol))).map (fun pieces => pieces.flatMap id)
++  have completed : Success (resume fuel current term pending) before result after := by
++    unfold resume
++    exact (success_bind _ _ _ _ _).mpr
++      ⟨results, after, traversed, (success_pure _ _ _ _).mpr ⟨rfl, rfl⟩⟩
++  exact ⟨fuel, result, after, completed, resume_frame fuel current term pending before after result total completed⟩
++
++/-- Resuming allocated parked references preserves safety and the rendering state. -/
++theorem resume_read (fuel current : Nat) (term : Term (PartialSymbol Symbol))
++    (pending : Pending Symbol) (before after : State Symbol Guard) (result : Option (Pending Symbol))
++    (safe : Safe before) (bounded : ∀ pendingPart ∈ pending, pendingPart.2 < before.counter)
++    (success : Success (resume fuel current term pending) before result after) :
++    EnumerationDriver.RenderStable before after := by
++  unfold resume at success
++  obtain ⟨results, middle, traversed, final⟩ := (success_bind _ _ _ _ _).mp success
++  have step : ∀ pendingPart ∈ pending, ∀ previous output next,
++      EnumerationDriver.RenderStable before previous →
++        Success (part fuel current term pendingPart) previous output next →
++          EnumerationDriver.RenderStable before next := by
++    intro pendingPart member previous output next previousStable reading
++    obtain ⟨root, representativeRead, _projected⟩ :=
++      (part_success fuel current term pendingPart previous next output).mp reading
++    have inside : pendingPart.2 < previous.counter := by
++      rw [previousStable.counter]
++      exact bounded pendingPart member
++    exact previousStable.trans (EnumerationReferences.representative_read fuel pendingPart.2 root previous next
++      previousStable.safe inside representativeRead)
++  have middleStable := mapM_invariant (part fuel current term)
++    (EnumerationDriver.RenderStable before) pending step before middle results
++      (EnumerationDriver.RenderStable.refl before safe) traversed
++  obtain ⟨_projected, same⟩ := (success_pure _ _ _ _).mp final
++  subst after
++  exact middleStable
++
+ end MicroCFTA.SourcePruningResume
