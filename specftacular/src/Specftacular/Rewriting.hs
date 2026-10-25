@@ -24,6 +24,9 @@ module Specftacular.Rewriting (
 ) where
 
 import Control.Applicative ((<|>))
+import Control.Concurrent (forkIO, killThread)
+import Control.Concurrent.MVar (newEmptyMVar, putMVar, takeMVar)
+import Control.Exception (SomeException, evaluate, mask, onException, throwIO, try)
 import Control.Monad (foldM, guard)
 import Data.CFTA.Symbol (Symbol (Symbol))
 import Data.CFTA.Template (Template (..))
@@ -35,6 +38,8 @@ import qualified Data.Map.Strict as Map
 import Data.Maybe (fromMaybe, isJust, isNothing)
 import Data.Ord (Down (..))
 import qualified Data.Text as T
+import System.IO.Unsafe (unsafePerformIO)
+import System.Mem (getAllocationCounter, setAllocationCounter)
 
 import Specftacular.Types
 
@@ -1000,10 +1005,20 @@ With a fuel, the completion takes at most that many critical pairs from its
 queue. Then it keeps the rules that it has. They follow from the laws, so
 they are sound, but they can prune less than the complete rules. The result
 also says whether the fuel ran out, and the number of pairs taken.
+
+With a window n > 1, the completion decides the next critical pairs of
+the queue in parallel threads, under the rules of the moment, and takes the
+decisions in order. A new equation changes the rules, so the pairs after it
+go back to the queue. A decision depends only on the pair and the rules, so
+the decisions are the same as without the window. The number of pairs in
+parallel starts at 1. It doubles, up to n, after a step without a new
+equation. After a new equation at position k, it becomes k + 1. At 1, the
+completion decides the next pair on its own thread, with the cache of
+normal forms.
 -}
-addLaw :: Maybe Int -> Int -> Sig -> Term -> Rules -> (Rules, Bool, Int)
-addLaw fuel maxSize gsig (Term "(==)" [_, l, r]) rules0 =
-    complete 0 HashMap.empty rules1 (concatMap (criticalPairsWith rules1) new) []
+addLaw :: Maybe Int -> Int -> Int -> Sig -> Term -> Rules -> (Rules, Bool, Int)
+addLaw fuel window maxSize gsig (Term "(==)" [_, l, r]) rules0 =
+    complete 1 0 HashMap.empty rules1 (concatMap (criticalPairsWith rules1) new) []
   where
     (new, rules1) = addEquation (toTemplate gsig l, toTemplate gsig r) rules0
     -- Program size does not bound type depth. This explicit budget depends
@@ -1020,20 +1035,21 @@ addLaw fuel maxSize gsig (Term "(==)" [_, l, r]) rules0 =
     -- The queue is the current list of critical pairs, then the later lists,
     -- newest first. A new list goes on the front of the later lists, so the
     -- queue is not walked again. Each list stays lazy. The order is FIFO.
-    complete taken _ rules [] [] = (rules, False, taken)
-    complete taken cache rules [] later = complete taken cache rules (concat (reverse later)) []
-    complete taken _ rules _ _ | Just taken == fuel = (rules, True, taken)
-    complete !taken !cache rules ((s, t) : queue) later
+    complete _ taken _ rules [] [] = (rules, False, taken)
+    complete w taken cache rules [] later = complete w taken cache rules (concat (reverse later)) []
+    complete _ taken _ rules _ _ | Just taken == fuel = (rules, True, taken)
+    complete w taken _ rules queue later | w > 1 = speculate w taken rules queue later
+    complete !w !taken !cache rules ((s, t) : queue) later
         -- The right normal form cannot change this rejection. Keep cache1
         -- because cache2 would force the right normal form.
-        | leaves s' > maxSize = complete (taken + 1) cache1 rules queue later
+        | leaves s' > maxSize = complete (grow w) (taken + 1) cache1 rules queue later
         | s' == t'
             || leaves t' > maxSize
             || not (withinDepth s' && withinDepth t')
             || subsumed rules (s', t')
             || groundJoinable rules (s', t') =
-            complete (taken + 1) cache2 rules queue later
-        | otherwise = complete (taken + 1) HashMap.empty rules' queue (concatMap (criticalPairsWith rules') new' : later)
+            complete (grow w) (taken + 1) cache2 rules queue later
+        | otherwise = complete 1 (taken + 1) HashMap.empty rules' queue (concatMap (criticalPairsWith rules') new' : later)
       where
         -- Normalize a critical pair only with decreases that hold for every
         -- type instance. Otherwise normalization can erase a general rule
@@ -1042,7 +1058,70 @@ addLaw fuel maxSize gsig (Term "(==)" [_, l, r]) rules0 =
         (s', cache1) = cachedNormalForm nf cache s
         (t', cache2) = cachedNormalForm nf cache1 t
         (new', rules') = addEquation (canonical (s', t')) rules
-addLaw _ _ _ _ rules = (rules, False, 0)
+    -- The decision of 'complete' for a pair: Nothing to drop it, or its
+    -- normal forms.
+    decide rules (s, t)
+        | leaves s' > maxSize = Nothing
+        | s' == t'
+            || leaves t' > maxSize
+            || not (withinDepth s' && withinDepth t')
+            || subsumed rules (s', t')
+            || groundJoinable rules (s', t') =
+            Nothing
+        | otherwise = Just (s', t')
+      where
+        nf = normalForm (independentGreater (rulesOrder rules)) rules
+        s' = nf s
+        t' = nf t
+    -- Take the decisions of the next pairs in order, up to the first new
+    -- equation.
+    speculate w taken rules queue later = go 0 (zip batch (decideInParallel (decide rules) batch))
+      where
+        (batch, rest, later') = nextPairs (maybe w (min w . subtract taken) fuel) queue later
+        go k [] = complete (grow w) (taken + k) HashMap.empty rules rest later'
+        go k ((_, Nothing) : more) = go (k + 1) more
+        go k ((_, Just pair) : more) =
+            let (new', rules') = addEquation (canonical pair) rules
+             in complete
+                    (k + 1)
+                    (taken + k + 1)
+                    HashMap.empty
+                    rules'
+                    (map fst more ++ rest)
+                    (concatMap (criticalPairsWith rules') new' : later')
+    -- The number of pairs in parallel after a step without a new equation.
+    grow w = if window > 1 then min window (2 * w) else w
+    -- The next n pairs in FIFO order, the rest of the queue, and the later
+    -- lists.
+    nextPairs n queue later = case splitAt n queue of
+        (batch, rest) | length batch == n || null later -> (batch, rest, later)
+        _ -> let (batch, rest) = splitAt n (queue ++ concat (reverse later)) in (batch, rest, [])
+addLaw _ _ _ _ _ rules = (rules, False, 0)
+
+{- | Evaluate a function on each element in its own thread, to weak head
+normal form. The allocation counter of the caller takes the allocation of
+the results up to the first 'Just', because the completion uses these
+results. An exception of the caller stops the threads.
+-}
+decideInParallel :: (a -> Maybe b) -> [a] -> [Maybe b]
+{-# NOINLINE decideInParallel #-}
+decideInParallel f xs = unsafePerformIO $ mask $ \restore -> do
+    started <-
+        mapM
+            (\x -> do var <- newEmptyMVar; thread <- forkIO (try (restore (measured (f x))) >>= putMVar var); pure (thread, var))
+            xs
+    results <- restore (mapM (takeMVar . snd) started) `onException` mapM_ (killThread . fst) started
+    decided <- either (throwIO :: SomeException -> IO a) pure (sequence results)
+    let (dropped, taken) = break (isJust . fst) decided
+    left <- getAllocationCounter
+    setAllocationCounter (left - sum (map snd (dropped ++ take 1 taken)))
+    pure (map fst decided)
+  where
+    measured y = do
+        before <- getAllocationCounter
+        result <- evaluate y
+        after <- getAllocationCounter
+        pure (result, before - after)
 
 -- | The rules of a law alone, without the rules of its critical pairs.
 addLawRules :: Sig -> Term -> Rules -> Rules
