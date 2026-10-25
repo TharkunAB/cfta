@@ -1,5 +1,25 @@
 # Proof status at 2026-10-18
 
+## Native narrowing retains pending-reference history
+
+Compression and replacement: `0ab9d22a9`. Producer: `111c8d8fb`.
+The goal stays ACTIVE.
+
+The existing native narrowing producer now returns incoming-reference and
+global pending-reference preservation on its actual entry and changed-handle
+final-state witnesses. Compression retains values and classes. A pending
+handle replacement retains the same suspended bucket. No new Safe premise,
+producer input or runtime body is added. The concrete typing callback already
+has a full frame receipt to which the new transport theorems apply.
+
+Both strict modules, installed public readback and Audit pass. The audit checks
+76716 theorem dependencies. H6 remains the strongest end-to-end language result.
+Haskell is unchanged. Next: the native indexed replacement adapter, then actual
+selection/read/narrow/callback/ordinary-entry composition. The new outputs
+alone do not preserve the changed node's expandable flag. Fragment-hole history,
+extraction, terminal parents and whole-driver semantics remain open.
+Details: `lean/notes-current-pruning-enumeration-narrow-references.md`.
+
 ## Selected ordinary alternatives retain pending references
 
 Selection: `9f3674ba1`. Ordinary history: `519d62a80`.

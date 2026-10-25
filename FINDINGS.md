@@ -70,6 +70,18 @@ Terminal parents retain the existing enumerateNode fallback boundary. Native
 children can still take their terminal dispatcher. No Haskell fix is needed.
 Details: lean/notes-current-pruning-enumeration-native-ordinary.md.
 
+### Native narrowing reference preservation
+
+The existing native narrowing theorem now retains incoming and global pending
+reference history through actual reads and the actual changed-handle write.
+The write keeps its suspended bucket. Generic full-frame transport also applies
+to the existing concrete typing callback receipt, including compression.
+The native indexed replacement and full selected-driver composition remain open.
+In particular, narrowing can change the expandable flag of the stored node.
+These are proof boundaries. No new Haskell runtime defect or repair is found.
+External action: no patch is proposed for this source observation.
+Details: lean/notes-current-pruning-enumeration-narrow-references.md.
+
 ### Selected references and the actual callback boundary
 
 The formal same-cache selection theorem now derives incoming avoidance and
@@ -219,6 +231,26 @@ TH/Generic extraction, valid-position build/read and source codec laws stay open
 
 
 
+
+## Native narrowing retains pending-reference history
+
+Compression and replacement: `0ab9d22a9`. Producer: `111c8d8fb`.
+The goal stays ACTIVE.
+
+The existing native narrowing producer now returns incoming-reference and
+global pending-reference preservation on its actual entry and changed-handle
+final-state witnesses. Compression retains values and classes. A pending
+handle replacement retains the same suspended bucket. No new Safe premise,
+producer input or runtime body is added. The concrete typing callback already
+has a full frame receipt to which the new transport theorems apply.
+
+Both strict modules, installed public readback and Audit pass. The audit checks
+76716 theorem dependencies. H6 remains the strongest end-to-end language result.
+Haskell is unchanged. Next: the native indexed replacement adapter, then actual
+selection/read/narrow/callback/ordinary-entry composition. The new outputs
+alone do not preserve the changed node's expandable flag. Fragment-hole history,
+extraction, terminal parents and whole-driver semantics remain open.
+Details: `lean/notes-current-pruning-enumeration-narrow-references.md`.
 
 ## Selected ordinary alternatives retain pending references
 

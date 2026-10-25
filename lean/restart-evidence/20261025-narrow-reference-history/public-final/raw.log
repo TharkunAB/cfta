@@ -1,0 +1,185 @@
+MicroCFTA.EnumerationPendingReplacement.frame_incoming {Symbol Guard : Type} (held : Nat)
+  (before after : MicroCFTA.EnumerationState.State Symbol Guard)
+  (frame : MicroCFTA.EnumerationCompressionFrame.Frame before after)
+  (incoming : MicroCFTA.EnumerationReferences.IncomingAvoid held before) :
+  MicroCFTA.EnumerationReferences.IncomingAvoid held after
+'MicroCFTA.EnumerationPendingReplacement.frame_incoming' depends on axioms: [propext, Quot.sound]
+MicroCFTA.EnumerationPendingReplacement.frame_pending {Symbol Guard : Type}
+  (before after : MicroCFTA.EnumerationState.State Symbol Guard)
+  (frame : MicroCFTA.EnumerationCompressionFrame.Frame before after)
+  (pending : MicroCFTA.EnumerationReferences.PendingReferences before) :
+  MicroCFTA.EnumerationReferences.PendingReferences after
+'MicroCFTA.EnumerationPendingReplacement.frame_pending' depends on axioms: [propext, Quot.sound]
+MicroCFTA.EnumerationPendingReplacement.setValue_incoming {Symbol Guard : Type} (held slot : Nat)
+  (oldNode newNode : Option Nat) (scs : List MicroCFTA.EnumerationState.Suspended)
+  (before after : MicroCFTA.EnumerationState.State Symbol Guard)
+  (stored : before.values[slot]? = some (MicroCFTA.EnumerationState.UVarValue.unenumerated oldNode scs))
+  (incoming : MicroCFTA.EnumerationReferences.IncomingAvoid held before)
+  (written :
+    MicroCFTA.EnumerationCorrectness.Success
+      (MicroCFTA.EnumerationState.setValue slot (MicroCFTA.EnumerationState.UVarValue.unenumerated newNode scs)) before
+      () after) :
+  MicroCFTA.EnumerationReferences.IncomingAvoid held after
+'MicroCFTA.EnumerationPendingReplacement.setValue_incoming' depends on axioms: [propext, Quot.sound]
+MicroCFTA.EnumerationPendingReplacement.setValue_pending {Symbol Guard : Type} (slot : Nat)
+  (oldNode newNode : Option Nat) (scs : List MicroCFTA.EnumerationState.Suspended)
+  (before after : MicroCFTA.EnumerationState.State Symbol Guard)
+  (stored : before.values[slot]? = some (MicroCFTA.EnumerationState.UVarValue.unenumerated oldNode scs))
+  (pending : MicroCFTA.EnumerationReferences.PendingReferences before)
+  (written :
+    MicroCFTA.EnumerationCorrectness.Success
+      (MicroCFTA.EnumerationState.setValue slot (MicroCFTA.EnumerationState.UVarValue.unenumerated newNode scs)) before
+      () after) :
+  MicroCFTA.EnumerationReferences.PendingReferences after
+'MicroCFTA.EnumerationPendingReplacement.setValue_pending' depends on axioms: [propext, Quot.sound]
+MicroCFTA.SourcePruningEnumerationAction.prepare {EnumGuard NativeGuard Typing Key : Type}
+  [DecidableEq (MicroCFTA.InternedConstructorTemplates.EdgeKey MicroCFTA.SourcePruningTemplates.Symbol NativeGuard)]
+  (holeKey : Typing → Nat → Key) (fits : Key → MicroCFTA.SourcePruningTemplates.Symbol → Bool)
+  (admits :
+    Key → MicroCFTA.InternedConstructorTemplates.Value MicroCFTA.SourcePruningTemplates.Symbol NativeGuard → Bool)
+  (metadata : MicroCFTA.SourcePruningRecordTypes.Metadata Typing) (nativeFuel representativeFuel uv oldHandle : Nat)
+  (scs : List MicroCFTA.EnumerationState.Suspended)
+  (oldValue : MicroCFTA.InternedConstructorTemplates.Value MicroCFTA.SourcePruningTemplates.Symbol NativeGuard)
+  (heap : MicroCFTA.InternedConstructorTemplates.State MicroCFTA.SourcePruningTemplates.Symbol NativeGuard) :
+  MicroCFTA.MergedSourceComparison.Result MicroCFTA.SourcePruningTemplates.Symbol NativeGuard
+    (MicroCFTA.InternedConstructorTemplates.Value MicroCFTA.SourcePruningTemplates.Symbol NativeGuard ×
+      Option (MicroCFTA.EnumerationState.EnumerateM MicroCFTA.SourcePruningTemplates.Symbol EnumGuard Unit))
+'MicroCFTA.SourcePruningEnumerationAction.prepare' depends on axioms: [propext, Classical.choice, Quot.sound]
+MicroCFTA.SourcePruningEnumerationAction.prepare_pending_complete {EnumGuard NativeGuard Typing Key : Type}
+  [DecidableEq (MicroCFTA.InternedConstructorTemplates.EdgeKey MicroCFTA.SourcePruningTemplates.Symbol NativeGuard)]
+  (holeKey : Typing → Nat → Key) (fits : Key → MicroCFTA.SourcePruningTemplates.Symbol → Bool)
+  (admits :
+    Key → MicroCFTA.InternedConstructorTemplates.Value MicroCFTA.SourcePruningTemplates.Symbol NativeGuard → Bool)
+  (metadata : MicroCFTA.SourcePruningRecordTypes.Metadata Typing)
+  (heap : MicroCFTA.InternedConstructorTemplates.State MicroCFTA.SourcePruningTemplates.Symbol NativeGuard)
+  (before readAfter entry : MicroCFTA.EnumerationState.State MicroCFTA.SourcePruningTemplates.Symbol EnumGuard)
+  (readFuel uv oldHandle : Nat) (scs : List MicroCFTA.EnumerationState.Suspended)
+  (ready : MicroCFTA.SourceEqualityRequiredCache.Ready heap)
+  (realized : MicroCFTA.SourcePruningEnumerationObservation.PendingRealized heap before)
+  (total : MicroCFTA.UnionFind.Total before.representatives)
+  (observed :
+    MicroCFTA.EnumerationCorrectness.Success (MicroCFTA.EnumerationState.getValue readFuel uv) before
+      (MicroCFTA.EnumerationState.UVarValue.unenumerated (some oldHandle) scs) readAfter)
+  (entered : MicroCFTA.EnumerationCompressionFrame.Frame readAfter entry) :
+  ∃ oldValue result nativeFuel nextHeap newHandle,
+    MicroCFTA.SourcePruningEnumerationNodes.lookupNode heap oldHandle = some oldValue ∧
+      MicroCFTA.SourcePruningEnumerationNodes.encodeNode oldValue = some oldHandle ∧
+        MicroCFTA.InternedProbeProvenance.Available heap oldValue ∧
+          oldValue.free = [] ∧
+            MicroCFTA.SourcePruningOuterNarrow.narrow holeKey fits admits metadata nativeFuel uv oldValue heap =
+                MicroCFTA.MergedSourceComparison.Result.done result nextHeap ∧
+              (∀ (extra : Nat),
+                  MicroCFTA.SourcePruningOuterNarrow.narrow holeKey fits admits metadata (nativeFuel + extra) uv
+                      oldValue heap =
+                    MicroCFTA.MergedSourceComparison.Result.done result nextHeap) ∧
+                MicroCFTA.SourceEqualityRequiredCache.Keeps heap nextHeap ∧
+                  MicroCFTA.InternedProbeProvenance.Available nextHeap result ∧
+                    result.free = [] ∧
+                      MicroCFTA.SourcePruningEnumerationNodes.encodeNode result = some newHandle ∧
+                        MicroCFTA.SourcePruningEnumerationNodes.lookupNode nextHeap newHandle = some result ∧
+                          MicroCFTA.SourcePruningEnumerationNodes.lookupNode nextHeap oldHandle = some oldValue ∧
+                            MicroCFTA.EnumerationCompressionFrame.Frame before readAfter ∧
+                              MicroCFTA.SourcePruningEnumerationObservation.PendingRealized nextHeap entry ∧
+                                (MicroCFTA.EnumerationReferences.PendingReferences before →
+                                    MicroCFTA.EnumerationReferences.PendingReferences entry) ∧
+                                  (∀ (held : Nat),
+                                      MicroCFTA.EnumerationReferences.IncomingAvoid held before →
+                                        MicroCFTA.EnumerationReferences.IncomingAvoid held entry) ∧
+                                    (result ≠ MicroCFTA.InternedConstructorTemplates.Value.empty →
+                                        oldValue ≠ MicroCFTA.InternedConstructorTemplates.Value.empty) ∧
+                                      (result = MicroCFTA.InternedConstructorTemplates.Value.empty →
+                                          ∀ (representativeFuel : Nat),
+                                            MicroCFTA.SourcePruningEnumerationAction.prepare holeKey fits admits
+                                                  metadata nativeFuel representativeFuel uv oldHandle scs oldValue
+                                                  heap =
+                                                MicroCFTA.MergedSourceComparison.Result.done
+                                                  (result, some MicroCFTA.EnumerationState.reject) nextHeap ∧
+                                              ¬∃ final,
+                                                  MicroCFTA.EnumerationCorrectness.Success
+                                                    MicroCFTA.EnumerationState.reject entry () final) ∧
+                                        (result ≠ MicroCFTA.InternedConstructorTemplates.Value.empty →
+                                            newHandle = oldHandle →
+                                              result = oldValue ∧
+                                                (∀ (representativeFuel : Nat),
+                                                    MicroCFTA.SourcePruningEnumerationAction.prepare holeKey fits admits
+                                                        metadata nativeFuel representativeFuel uv oldHandle scs oldValue
+                                                        heap =
+                                                      MicroCFTA.MergedSourceComparison.Result.done
+                                                        (result, some (pure ())) nextHeap) ∧
+                                                  MicroCFTA.EnumerationCorrectness.Success (pure ()) entry () entry) ∧
+                                          (result ≠ MicroCFTA.InternedConstructorTemplates.Value.empty →
+                                            newHandle ≠ oldHandle →
+                                              ∃ root size rereadFuel rereadAfter final,
+                                                MicroCFTA.UnionFind.Reaches before.representatives uv root size ∧
+                                                  MicroCFTA.EnumerationCorrectness.Success
+                                                      (MicroCFTA.EnumerationState.representative rereadFuel uv) entry
+                                                      root rereadAfter ∧
+                                                    MicroCFTA.EnumerationCompressionFrame.Frame entry rereadAfter ∧
+                                                      MicroCFTA.EnumerationCompressionFrame.Frame before rereadAfter ∧
+                                                        rereadAfter.values[root]? =
+                                                            some
+                                                              (MicroCFTA.EnumerationState.UVarValue.unenumerated
+                                                                (some oldHandle) scs) ∧
+                                                          root < rereadAfter.values.length ∧
+                                                            MicroCFTA.SourcePruningEnumerationObservation.PendingRealized
+                                                                nextHeap rereadAfter ∧
+                                                              MicroCFTA.EnumerationCorrectness.Success
+                                                                  (MicroCFTA.EnumerationState.setValue root
+                                                                    (MicroCFTA.EnumerationState.UVarValue.unenumerated
+                                                                      (some newHandle) scs))
+                                                                  rereadAfter () final ∧
+                                                                final =
+                                                                    { counter := rereadAfter.counter,
+                                                                      representatives := rereadAfter.representatives,
+                                                                      values :=
+                                                                        rereadAfter.values.set root
+                                                                          (MicroCFTA.EnumerationState.UVarValue.unenumerated
+                                                                            (some newHandle) scs),
+                                                                      obligations := rereadAfter.obligations,
+                                                                      recursionAncestry :=
+                                                                        rereadAfter.recursionAncestry,
+                                                                      expansionAncestry :=
+                                                                        rereadAfter.expansionAncestry } ∧
+                                                                  final.values[root]? =
+                                                                      some
+                                                                        (MicroCFTA.EnumerationState.UVarValue.unenumerated
+                                                                          (some newHandle) scs) ∧
+                                                                    MicroCFTA.SourcePruningEnumerationObservation.PendingRealized
+                                                                        nextHeap final ∧
+                                                                      (MicroCFTA.EnumerationReferences.PendingReferences
+                                                                            before →
+                                                                          MicroCFTA.EnumerationReferences.PendingReferences
+                                                                            final) ∧
+                                                                        (∀ (held : Nat),
+                                                                            MicroCFTA.EnumerationReferences.IncomingAvoid
+                                                                                held before →
+                                                                              MicroCFTA.EnumerationReferences.IncomingAvoid
+                                                                                held final) ∧
+                                                                          MicroCFTA.SourcePruningEnumerationAction.prepare
+                                                                                holeKey fits admits metadata nativeFuel
+                                                                                rereadFuel uv oldHandle scs oldValue
+                                                                                heap =
+                                                                              MicroCFTA.MergedSourceComparison.Result.done
+                                                                                (result,
+                                                                                  some do
+                                                                                    let selected ←
+                                                                                      MicroCFTA.EnumerationState.representative
+                                                                                          rereadFuel uv
+                                                                                    MicroCFTA.EnumerationState.setValue
+                                                                                        selected
+                                                                                        (MicroCFTA.EnumerationState.UVarValue.unenumerated
+                                                                                          (some newHandle) scs))
+                                                                                nextHeap ∧
+                                                                            MicroCFTA.EnumerationCorrectness.Success
+                                                                              (do
+                                                                                let selected ←
+                                                                                  MicroCFTA.EnumerationState.representative
+                                                                                      rereadFuel uv
+                                                                                MicroCFTA.EnumerationState.setValue
+                                                                                    selected
+                                                                                    (MicroCFTA.EnumerationState.UVarValue.unenumerated
+                                                                                      (some newHandle) scs))
+                                                                              entry () final)
+'MicroCFTA.SourcePruningEnumerationAction.prepare_pending_complete' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]

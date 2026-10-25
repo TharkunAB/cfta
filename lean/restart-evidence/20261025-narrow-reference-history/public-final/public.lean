@@ -1,0 +1,15 @@
+import MicroCFTA.SourcePruningEnumerationAction
+set_option pp.maxSteps 1000000
+set_option pp.deepTerms true
+#check MicroCFTA.EnumerationPendingReplacement.frame_incoming
+#print axioms MicroCFTA.EnumerationPendingReplacement.frame_incoming
+#check MicroCFTA.EnumerationPendingReplacement.frame_pending
+#print axioms MicroCFTA.EnumerationPendingReplacement.frame_pending
+#check MicroCFTA.EnumerationPendingReplacement.setValue_incoming
+#print axioms MicroCFTA.EnumerationPendingReplacement.setValue_incoming
+#check MicroCFTA.EnumerationPendingReplacement.setValue_pending
+#print axioms MicroCFTA.EnumerationPendingReplacement.setValue_pending
+#check MicroCFTA.SourcePruningEnumerationAction.prepare
+#print axioms MicroCFTA.SourcePruningEnumerationAction.prepare
+#check MicroCFTA.SourcePruningEnumerationAction.prepare_pending_complete
+#print axioms MicroCFTA.SourcePruningEnumerationAction.prepare_pending_complete
