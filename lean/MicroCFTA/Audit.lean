@@ -1,3 +1,4 @@
+import MicroCFTA.SourcePruningEnumerationCapturedEdge
 import MicroCFTA.SourcePruningEnumerationSelectedEdge
 import MicroCFTA.SourcePruningEnumerationTraversalCompletion
 import MicroCFTA.SourcePruningEnumerationChildTraversal
