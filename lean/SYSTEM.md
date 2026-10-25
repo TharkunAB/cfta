@@ -1,5 +1,33 @@
 # Constrained languages, indexing, and distributions
 
+## Selected ordinary receipts derive concrete fragment callbacks
+
+Native receipt history: `59706bb3f`. Prefix and callbacks: `0f8037add`.
+The goal stays ACTIVE.
+
+Every processed native alternative now retains completion-only fragment
+history at its own actual cache. Successful receipts retain allocation growth,
+pending hole targets and conditional frontier advancement. Ordinary entry and
+original selection transport that history through their actual reads, false
+recursion guard and pending-handle replacement. No producer input changes.
+
+The selected result now derives finite concrete Left callbacks for every
+completed receipt, from original dependency levels and parked-ID bounds.
+Each callback uses that receipt's cache and the supplied metadata. It returns
+safe framed storage, the exact type-position update and allocated pending IDs.
+Either pruning Boolean is allowed. Siblings use the same input metadata in
+the source; each callback output feeds its own recursive continuation.
+This proof does not execute callbacks inside the serial alternative scan.
+
+All six changed modules, public readback and Audit pass. Audit checks 76834
+dependencies. Six older public declaration types remain exact. H6 remains
+the strongest end-to-end language result. Haskell and Audit source stay exact.
+Next: retain the full native indexed-cache packet through actual callback
+reads, then model callback and recursive-continuation interleaving with shared
+native effects. Initial-only capacity, native Graph correspondence, scheduler
+restart, extraction and whole-driver language semantics remain open.
+Details: `lean/notes-current-pruning-enumeration-receipt-history.md`.
+
 ## Native captured edges preserve fragment dependency history
 
 Child and traversal history: `9c3091a3a`. Native finalization: `4b23cd411`.
