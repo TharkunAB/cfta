@@ -1,5 +1,73 @@
 # Proof status at 2026-10-18
 
+## Native cached terminal adapter
+
+Current source: `SourcePruningEnumerationCachedTerminalAdapter`.
+Proof: `37860fd5ba1d4f676d1959565023f800cf7f5037`. Main remains `74250bd889685da436cdbfe32ac4b5a0878ffd09`.
+The whole goal stays ACTIVE and incomplete. H6 remains proved and strongest.
+
+One noncomputable run definition and erase/complete theorems preserve the
+actual Terminal observation while attaching an optional cache. Direct Empty
+stops before Prefix. Otherwise Prefix and the ordered CachedFold run once.
+Original recorded order and duplicates remain; only waiting transfer uses
+canonical distinct nonwinner keys. Joined core, original flags and actual
+moved waiting form the existing prefix cache.
+
+Fold cache absence does not stop an original singleton continuation. Use
+original Incoming once when absent; otherwise frame the actual singleton
+core into the recovered cache and use IncomingCacheAdapter once. One typed
+incomingObserved let shares that observation. Fault/None/raw tags, errors,
+Caller, Queries, outer read and moved waiting remain exact. Only Unit success
+maps to the winner hole. No native query or mutation primitive is added.
+
+At every fixed bound erase recovers the full original Terminal five-tuple.
+Candidate presence outside admission is unverified. Direct Empty, fold nil
+and incoming Empty-after-write remain different stages. The admitted
+incoming cache keeps its write/inherit endpoint and gained waiting; framing
+it to the earlier outer read would remove that write. The winner hole is
+not the later captured-original-variable installation target.
+
+Nonempty complete consumes CachedTerminal.complete once. Fold rejection
+retains the same folded cache; completed folding derives actual read-slot
+facts and Empty handle 0 or uses singleton success. Both reuse the same
+mapped native-write receipt, without frame injectivity, a second completion
+producer, query rerun or count reproof. Full old semantic receipts and exact
+result-cache counter/roots/counts/flags/storage/realization remain. Genuine
+Context/Safe/InputsPending, bounded variables, realization, nonempty
+available closed incoming and current conditional Fold.Ranges/WordRanges
+remain; no desired success or final cache is supplied.
+
+Five haves, one definition let, no proof let/induction/new instance/helper/
+type/carrier/Graph. One existing terminalMonadList activation adds no
+dictionary body. Context 28 lines, public heads 181; ten strings 221 lines.
+Source estimate 400–700 ordinary lines, hard limit 1000.
+Actual source review and the single frozen owner/schema are bound: 255
+payloads / 257 files, ten exact strings / 221 lines, 457 typed positions,
+five packets / 96 fields and 28 case groups (eight runtime and twenty proof).
+It retains 37 whole sources including two separate standard-library
+provenance sources, 61 cuts / 889 lines, eighteen literal import edges and
+34 project identities.
+
+Validation: Strict attempt 4 passes with a literal empty log under all linters and warnings as errors. All three earlier complete inputs and raw logs remain. Body-only repairs reduce the existing generated row matchers, unfold the existing cache frame for erasure, use projected counter equalities and simplify the incoming receipt before conditional mapping. A display-only pp.all diagnostic remains in failed attempt 3; the final source removes it. Separate annotations retain the existing standard-library tactic definitions and two unused proof-input usage records. All ten selected strings, 457 typed positions, five packets with 96 fields, 28 case groups, five typed haves and one definition let remain. One existing named Monad List dictionary is activated; no new dictionary body, instance, helper, type or induction was added. The source has 425 ordinary lines, within the selected 400 to 700 estimate and hard cap 1000. The installed build, complete public readback and aggregate Audit pass. Public signatures have 664 output lines without display omissions. The older unused-inputs warning remains unchanged. No passing check was repeated. All actual complete inputs, raw logs and cap receipts remain. Seal and push results are recorded separately.
+Installed focused build: 1318 jobs; Audit: 3732 jobs and
+76521 theorem dependency checks. Actual public axioms: run, erase and complete each report propext, Classical.choice and Quot.sound.
+Only actual reports bind these fields. The documents-1 ledger stays separate.
+Exactly 26 prior inputs preserve FULL 17113-byte summary and actual
+publication families; the sealed peer stays separate context. All 152148
+baseline files/modes and nine document inverses remain guarded. No future
+seal/push outcome or Haskell/native extraction change is asserted.
+
+All six Haskell handoffs remain first. H6 stays strongest: covered closed
+construction with valid cache/allocation history supports prescribed finite
+modeled node calls at derived bounds and the same finite trees for empty
+inherited payload under formal guard/solver semantics. Initial-only mixed
+numeric admission, final Safe/LiveRoots, selector/partition/fallback, full
+captured-variable wrapper installation, physical maps/machine integers,
+extraction, whole typing/pruning, concrete solver, resources, convergence
+and full driver correspondence remain open.
+
+
+
 ## Native incoming cache adapter
 
 Current source: `SourcePruningEnumerationIncomingCacheAdapter`.
