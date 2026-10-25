@@ -61,8 +61,9 @@ import qualified Data.HashSet as HashSet
 import Data.Hashable (Hashable (..))
 import qualified Data.IntMap.Strict as IntMap
 import qualified Data.IntSet as IntSet
-import Data.List (sortOn)
+import Data.List (minimumBy, sortOn, (!?))
 import qualified Data.Map.Strict as Map
+import Data.Ord (comparing)
 
 import qualified Data.CFTA as FTA
 import Data.CFTA.Constraint (Constraint, noConstraint)
@@ -349,8 +350,10 @@ data Rule s f = Rule
     , ruleRight :: !(CPat s f)
     , ruleSymbols :: ![f]
     -- ^ The symbols of the left side, once each.
-    , ruleRoot :: !(Maybe f)
-    -- ^ The symbol at the root of the left side.
+    , ruleAnchors :: ![(f, [(f, Int, Int)])]
+    {- ^ The symbol of each node of the left side, and the path to it from
+    the root: the symbol, the arity, and the child index of each node above it.
+    -}
     , ruleNodes :: !Int
     -- ^ The number of nodes of the left side.
     , ruleNames :: ![String]
@@ -373,7 +376,7 @@ rule left right = do
     let (l, nodes, vars, sortVars) = compileLeft left
     r <- compileRight vars sortVars right
     let symbols = HashSet.toList (HashSet.fromList (patternSymbols left))
-    pure (Rule l r symbols (rootSymbol left) nodes (map fst (sortOn snd (Map.toList vars))))
+    pure (Rule l r symbols (anchorsOf l) nodes (map fst (sortOn snd (Map.toList vars))))
 
 {- | The rules of an equation: the direction from each side whose other side
 has no other variables.
@@ -386,10 +389,11 @@ patternSymbols (PVar _) = []
 patternSymbols (PNode f ps) = f : concatMap patternSymbols ps
 patternSymbols (PSorted _ p) = patternSymbols p
 
-rootSymbol :: Pattern s f -> Maybe f
-rootSymbol (PVar _) = Nothing
-rootSymbol (PNode f _) = Just f
-rootSymbol (PSorted _ p) = rootSymbol p
+anchorsOf :: CPat s f -> [(f, [(f, Int, Int)])]
+anchorsOf = go []
+  where
+    go _ (CVar _ _) = []
+    go above (CNode _ f kids _) = (f, reverse above) : concat [go ((f, length kids, k) : above) kid | (k, kid) <- zip [0 ..] kids]
 
 {- Compile a left side: the pattern, the number of its nodes, and the
 numbers of its variables and sort variables.
@@ -465,15 +469,40 @@ canonicalNodes g i = maybe [] (HashSet.toList . HashSet.map (canon g) . classNod
 their canonical e-nodes, closed under children. Each node of the left side
 matches each e-class once: the memo keeps the matches of each pair, and the
 parents of an e-class share them. This is the product of the e-graph
-automaton and the automaton of the pattern, explored from the e-classes with
-the root symbol, with the states that have no run left out.
+automaton and the automaton of the pattern, with the states that have no run
+left out.
+
+The roots to try come from the symbol of the left side with the fewest
+e-classes: from the e-classes with that symbol, the users of each e-class
+lead up the path of the symbol to the roots. In a curried encoding, where
+each application has the same symbol, this keeps the roots with the right
+head.
 -}
 matchRule ::
     (Eq s, Hashable f) =>
-    EGraph s f -> IntMap.IntMap [ENode f] -> HashMap.HashMap f [ClassId] -> Rule s f -> [(ClassId, Subst)]
+    EGraph s f -> IntMap.IntMap [ENode f] -> HashMap.HashMap f (Int, [ClassId]) -> Rule s f -> [(ClassId, Subst)]
 matchRule g region bySymbol r = evalState (concat <$> mapM (\c -> map ((,) c) <$> at c (ruleLeft r)) roots) IntMap.empty
   where
-    roots = maybe (map ClassId (IntMap.keys region)) (\f -> HashMap.lookupDefault [] f bySymbol) (ruleRoot r)
+    roots = case ruleAnchors r of
+        [] -> map ClassId (IntMap.keys region)
+        anchors ->
+            let (f, steps) = minimumBy (comparing (\(h, _) -> maybe 0 fst (HashMap.lookup h bySymbol))) anchors
+                start = IntSet.fromList [i | ClassId i <- maybe [] snd (HashMap.lookup f bySymbol)]
+             in map ClassId (IntSet.toAscList (foldr up start steps))
+    -- The e-classes with an e-node of the step whose child is in the set.
+    up (f, n, k) xs =
+        IntSet.fromList
+            [ j
+            | i <- IntSet.toList xs
+            , Just e <- [IntMap.lookup i (classes g)]
+            , (ENode _ f' cs, owner) <- classUsers e
+            , f' == f
+            , length cs == n
+            , Just child <- [cs !? k]
+            , find g child == ClassId i
+            , let ClassId j = find g owner
+            , IntMap.member j region
+            ]
     sortsOf c sorts = do
         ClassId i <- Just c
         e <- IntMap.lookup i (classes g)
@@ -501,12 +530,13 @@ matchRule g region bySymbol r = evalState (concat <$> mapM (\c -> map ((,) c) <$
                 modify' (IntMap.insert key ms)
                 pure ms
 
--- | The e-classes with each symbol in a region, in ascending order.
-symbolIndex :: (Hashable f) => IntMap.IntMap [ENode f] -> HashMap.HashMap f [ClassId]
+-- | The number of e-classes with each symbol in a region, and the e-classes in ascending order.
+symbolIndex :: (Hashable f) => IntMap.IntMap [ENode f] -> HashMap.HashMap f (Int, [ClassId])
 symbolIndex region =
-    HashMap.fromListWith
-        (flip (++))
-        [(f, [ClassId i]) | (i, ns) <- IntMap.toList region, f <- HashSet.toList (HashSet.fromList [f' | ENode _ f' _ <- ns])]
+    HashMap.map (\cs -> (length cs, cs)) $
+        HashMap.fromListWith
+            (flip (++))
+            [(f, [ClassId i]) | (i, ns) <- IntMap.toList region, f <- HashSet.toList (HashSet.fromList [f' | ENode _ f' _ <- ns])]
 
 {- | The matches of a pattern: the e-class of each instance, and the e-class
 of each variable.
