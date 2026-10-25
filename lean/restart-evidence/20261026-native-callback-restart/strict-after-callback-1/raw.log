@@ -1,0 +1,37 @@
+/tmp/mcfta-native-callback-restart-20261026/strict-after-callback-1/MicroCFTA/SourcePruningEnumerationAfterCallback.lean:45:15: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  (SourcePruningEnumerationRestart.run ?stop ?order ?metadata ?before
+      (EnumerationExpandableIndex.Cached.core ?before)).run
+in the target expression
+  Except.ok
+      ((result.snd,
+          SourcePruningEnumerationRestart.decision stop order result.snd
+            (EnumerationExpandableIndex.frame after before)),
+        after) ∈
+    (SourcePruningEnumerationRestart.run stop order result.snd (EnumerationExpandableIndex.frame after before)
+        after).run
+
+Typing : Type
+graph : Graph Symbol Constraint
+templates : List (Template.Pattern Symbol)
+stop : Option (Metadata Typing → Nat → Bool)
+order : Metadata Typing → List Nat → Option Nat
+fuel : Nat
+metadata : Metadata Typing
+uv : Nat
+fragment : Fragment
+before : Cached
+result : Bool × Metadata Typing
+after : State Symbol Constraint
+callback : Success (recordTypes graph templates fuel metadata uv (Sum.inl fragment)) before.core result after
+accepted : result.fst = false
+allowed :
+  SourcePruningEnumerationRestart.decision stop order result.snd (EnumerationExpandableIndex.frame after before) ≠
+    some Next.stuck
+⊢ Except.ok
+      ((result.snd,
+          SourcePruningEnumerationRestart.decision stop order result.snd
+            (EnumerationExpandableIndex.frame after before)),
+        after) ∈
+    (SourcePruningEnumerationRestart.run stop order result.snd (EnumerationExpandableIndex.frame after before)
+        after).run
+/tmp/mcfta-native-callback-restart-20261026/strict-after-callback-1/MicroCFTA/SourcePruningEnumerationAfterCallback.lean:90:36: error(lean.unknownIdentifier): Unknown identifier `reached`

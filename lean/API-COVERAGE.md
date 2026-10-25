@@ -1,5 +1,32 @@
 # Public API and source correspondence
 
+## Concrete callbacks and parked recursion reach source restart
+
+Callback composition: `3f02ddcef`. Parked restart: `6dff1a207`.
+The goal stays ACTIVE.
+
+An accepted concrete Left callback now reaches the actual stop/selection
+restart at its returned metadata and cache. A pruning result or stuck
+restart excludes all successful continuations. This does not assert an
+empty raw stream: callback fuel errors can remain. The existing selected
+ordinary producer inherits this output with its exact source unchanged.
+
+Original native selection also derives the repeated-recursion restart.
+Its actual clear write removes the full old bucket from waiting counts,
+disables the slot and retains the observed core. The producer derives
+sufficient index fuel. No future cache or continuation success is assumed.
+This branch retains metadata and dependency levels. It performs no narrowing
+or oracle call. The false guard result still awaits narrowing composition.
+
+Stop checks all remaining candidates, including blocked candidates, before
+selection. All five changed modules pass strict checks. Installed public
+readback and Audit pass; Audit checks 76876 dependencies. H6 remains the
+strongest end-to-end language theorem. Haskell source stays unchanged.
+Next: compose a complete selected step and its depth-first continuation
+with shared native effects. Initial-only capacity, native Graph correspondence,
+terminal/nonordinary fallback, extraction and whole-driver language semantics
+remain open. Details: `lean/notes-current-pruning-enumeration-callback-restart.md`.
+
 ## Concrete callbacks retain the native indexed cache
 
 Proof: `faec19a56`. The goal stays ACTIVE.

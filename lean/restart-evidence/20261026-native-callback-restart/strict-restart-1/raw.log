@@ -1,0 +1,57 @@
+/tmp/mcfta-native-callback-restart-20261026/strict-restart-1/MicroCFTA/SourcePruningEnumerationRestart.lean:45:45: error: unsolved goals
+case none
+Typing : Type
+order : Metadata Typing → List Nat → Option Nat
+metadata : Metadata Typing
+before : EnumerationExpandableIndex.Cached Symbol Constraint
+after : State Symbol Constraint
+counter : after.counter = before.core.counter
+⊢ some
+      (pickNext (order metadata)
+        (if (List.filter before.expandable (List.range before.core.counter)).isEmpty = true then none
+        else
+          some
+            (List.filter (fun uv => (before.waiting uv).isNone)
+              (List.filter before.expandable (List.range before.core.counter))))) =
+    some
+      (pickNext (order metadata)
+        (if (List.filter before.expandable (List.range before.core.counter)).isEmpty = true then none
+        else
+          some
+            (List.filter (fun uv => (before.waiting uv).isNone)
+              (List.filter before.expandable (List.range before.core.counter)))))
+
+case some
+Typing : Type
+order : Metadata Typing → List Nat → Option Nat
+metadata : Metadata Typing
+before : EnumerationExpandableIndex.Cached Symbol Constraint
+after : State Symbol Constraint
+counter : after.counter = before.core.counter
+val✝ : Metadata Typing → Nat → Bool
+⊢ (if
+        (!(List.filter before.expandable (List.range before.core.counter)).isEmpty &&
+            (List.filter before.expandable (List.range before.core.counter)).all (val✝ metadata)) =
+          true then
+      none
+    else
+      some
+        (pickNext (order metadata)
+          (if (List.filter before.expandable (List.range before.core.counter)).isEmpty = true then none
+          else
+            some
+              (List.filter (fun uv => (before.waiting uv).isNone)
+                (List.filter before.expandable (List.range before.core.counter)))))) =
+    if
+        (!(List.filter before.expandable (List.range before.core.counter)).isEmpty &&
+            (List.filter before.expandable (List.range before.core.counter)).all (val✝ metadata)) =
+          true then
+      none
+    else
+      some
+        (pickNext (order metadata)
+          (if (List.filter before.expandable (List.range before.core.counter)).isEmpty = true then none
+          else
+            some
+              (List.filter (fun uv => (before.waiting uv).isNone)
+                (List.filter before.expandable (List.range before.core.counter)))))

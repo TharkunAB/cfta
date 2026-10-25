@@ -1,0 +1,81 @@
+/tmp/mcfta-native-callback-restart-20261026/strict-after-callback-2/MicroCFTA/SourcePruningEnumerationAfterCallback.lean:37:66: error: unsolved goals
+Typing : Type
+graph : Graph Symbol Constraint
+templates : List (Template.Pattern Symbol)
+stop : Option (Metadata Typing → Nat → Bool)
+order : Metadata Typing → List Nat → Option Nat
+fuel : Nat
+metadata : Metadata Typing
+uv : Nat
+fragment : Fragment
+before : Cached
+result : Bool × Metadata Typing
+after : State Symbol Constraint
+callback : Success (recordTypes graph templates fuel metadata uv (Sum.inl fragment)) before.core result after
+accepted : result.fst = false
+allowed :
+  SourcePruningEnumerationRestart.decision stop order result.snd (EnumerationExpandableIndex.frame after before) ≠
+    some Next.stuck
+⊢ Except.ok
+      ((result.snd,
+          SourcePruningEnumerationRestart.decision stop order result.snd
+            (EnumerationExpandableIndex.frame after before)),
+        after) ∈
+    ExceptT.run
+      [Except.ok
+          ((result.snd,
+              SourcePruningEnumerationRestart.decision stop order result.snd
+                (EnumerationExpandableIndex.frame after before)),
+            after)]
+/tmp/mcfta-native-callback-restart-20261026/strict-after-callback-2/MicroCFTA/SourcePruningEnumerationAfterCallback.lean:78:107: error: unsolved goals
+case unit
+Typing : Type
+graph : Graph Symbol Constraint
+templates : List (Template.Pattern Symbol)
+stop : Option (Metadata Typing → Nat → Bool)
+order : Metadata Typing → List Nat → Option Nat
+fuel : Nat
+metadata : Metadata Typing
+uv : Nat
+fragment : Fragment
+before : Cached
+result : Bool × Metadata Typing
+after : State Symbol Constraint
+total : UnionFind.Total before.core.representatives
+callback : Success (recordTypes graph templates fuel metadata uv (Sum.inl fragment)) before.core result after
+stuck :
+  SourcePruningEnumerationRestart.decision stop order result.snd (EnumerationExpandableIndex.frame after before) =
+    some Next.stuck
+output : Metadata Typing × Option Next
+final : State Symbol Constraint
+observed :
+  Success
+    (do
+      let result ← recordTypes graph templates fuel metadata uv (Sum.inl fragment)
+      require !result.fst
+      let after ← get
+      SourcePruningEnumerationRestart.run stop order result.snd (EnumerationExpandableIndex.frame after before))
+    before.core output final
+reached : State Symbol Constraint
+frame : Frame after reached
+otherCallback : Success (recordTypes graph templates fuel metadata uv (Sum.inl fragment)) before.core result reached
+continued✝ :
+  Success
+    (do
+      require !result.fst
+      let after ← get
+      SourcePruningEnumerationRestart.run stop order result.snd (EnumerationExpandableIndex.frame after before))
+    reached output final
+continued :
+  Success
+    (do
+      let after ← get
+      SourcePruningEnumerationRestart.run stop order result.snd (EnumerationExpandableIndex.frame after before))
+    reached output final
+required : Success (require !result.fst) reached PUnit.unit reached
+reading : Success get reached reached reached
+stuckAfter :
+  SourcePruningEnumerationRestart.decision stop order result.snd (EnumerationExpandableIndex.frame reached before) =
+    some Next.stuck
+restarted : Except.ok (output, final) ∈ ExceptT.run []
+⊢ False
