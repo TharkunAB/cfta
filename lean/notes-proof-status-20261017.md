@@ -1,5 +1,57 @@
 # Proof status at 2026-10-18
 
+## Native cached ordinary child preparation
+
+Current source: `SourcePruningEnumerationCachedChild`.
+Proof: `16c8c9a276e80f6d966b2ba075eb20e16ab95369`. Main remains `74250bd889685da436cdbfe32ac4b5a0878ffd09`.
+The whole goal stays ACTIVE and incomplete. H6 remains strongest.
+
+Three definitions and two theorems connect actual native cached allocation,
+old raw-slot read and full-scs write. The producer derives the exact singleton
+of the existing prepareChild action at that same final core.
+Coherence/closed availability, StorageValid/PendingRealized, current Roots,
+exact waiting counts/classified flags and bounded scs are genuine inputs.
+The actual nonterminal-scs guard is independent; storage bounds do not imply it.
+The handle/readback is derived. No callback-success or final-index law is given.
+
+Allocation appends the empty-scs slot at the current counter, classifies its
+flag and inherits ancestry once. Its waiting counts remain unchanged. The raw
+write removes lost references before adding full gained scs at current roots,
+with source order and duplicates retained. No second inheritance is added.
+Matching intermediate/final cores and slots, storage/realization, classified
+flags/canonical counts, unchanged forest/Roots, counter growth and the returned
+fresh-hole bound remain. Graph allocation or changed-slot framing is not used
+as a native certificate. No full Safe/LiveRoots or cached whole-edge execution
+is claimed. Root selected 18 typed haves, one proof let, no instances or
+induction; source estimate 280–480 and hard limit 680. The frozen owner records
+25 original literal contracts and 139 original scopes. Separate annotations
+record 144 effective scopes and four case groups. Production retains 23
+literals byte-exact. The exact overlay corrects the complete header
+continuation and states the concrete Symbol parameter there and at local
+SlotBound. No premise, intended mathematical statement or hard limit changes.
+The actual source review is bound.
+
+Validation: Strict attempt 5 passes with a literal empty log under all linters and warnings as errors. Four failed compiler inputs remain: attempt 1 found helper layout, an unused simp argument and selected-header layout; attempts 2 and 3 retained the header parse error; attempt 4 exposed the standalone implicit Symbol hole. The exact repairs retain every failed source and complete raw log. The immutable original owner has 25 contracts. A separately reviewed exact overlay corrects two production literals: record continuation layout and explicit concrete Symbol at FragmentBound, plus the same annotation at local SlotBound. The other 23 literals remain byte-exact. No premise, intended mathematical result or proof limit changed. The unescaped named-argument proposal was corrected before execution and remains separate history. The source has 255 lines, below the 280 to 480 soft estimate and hard limit 680; no padding was added. Separate metadata supplements retain all 139 original scopes and three case groups, with 144 effective scopes and four groups. The installed build, full public readback and aggregate Audit pass. All 157 public output lines retain five complete signatures without display omissions. The older unused-variable warning remains unchanged. No passing check was repeated. No seal has failed. All complete resource receipts remain. Read-only locator and metadata diagnostics remain separate from compiler and seal failures.
+Installed focused build: 1311 jobs; Audit: 3718 jobs and
+76359 theorem dependency checks. Actual public axioms: allocate, writeSlot and prepareOrdinary report propext. allocate_node_flags and complete report propext and Quot.sound.
+All actual inputs, raw logs, repairs and resource receipts remain. Exactly 26
+prior Admission inputs retain archive-1/local-publication-1/push-1, canonical
+assessment and the complete 39372-byte summary, including optional Git
+whitespace diagnostics. Its sealed peer/nonterminal qualification stays
+separate. Prior Admission failures stay historical. All four current failed
+strict inputs and exact repairs remain. No future seal or push outcome is
+asserted.
+
+Cached staged prefixes/alternatives, native maps/machine bounds, selector order,
+current-resource admission, wrapper reconstruction and full driver remain open.
+All six imported Haskell repairs remain first in FINDINGS. No Haskell change
+is claimed. H6 still covers closed construction with valid cache/allocation
+history and any prescribed finite modeled node-call trace at derived bounds.
+Empty inherited payload preserves the same finite trees under formal
+guard/solver semantics. Full typing/pruning/native extraction/solver
+implementation/runtime/resources/convergence remain open.
+
+
 ## Captured pending-slot branch admission
 
 Current source: `SourcePruningEnumerationAdmission`.
