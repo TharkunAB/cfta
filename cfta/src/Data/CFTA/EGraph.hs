@@ -153,9 +153,10 @@ data EGraph s f = EGraph
     , classes :: !(IntMap.IntMap (EClass f))
     -- ^ The roots.
     , memo :: !(HashMap.HashMap (ENode f) ClassId)
-    -- ^ The canonical e-nodes, after 'rebuild'.
-    , nodeCount :: !Int
-    -- ^ The size of 'memo'. 'HashMap.size' walks the map.
+    {- ^ The e-class of each e-node. After 'rebuild', it has each canonical
+    e-node, and it can keep an earlier form of an e-node, which no canonical
+    lookup finds.
+    -}
     , classCount :: !Int
     -- ^ The size of 'classes'. 'IntMap.size' walks the map.
     , added :: !Int
@@ -168,7 +169,7 @@ data EGraph s f = EGraph
 
 -- | The e-graph without terms.
 emptyEGraph :: EGraph s f
-emptyEGraph = EGraph IntMap.empty IntMap.empty HashMap.empty 0 0 0 HashMap.empty IntMap.empty []
+emptyEGraph = EGraph IntMap.empty IntMap.empty HashMap.empty 0 0 HashMap.empty IntMap.empty []
 
 -- | The root of the e-class of an identity.
 find :: EGraph s f -> ClassId -> ClassId
@@ -220,7 +221,6 @@ addNode n0 g = case HashMap.lookup n (memo g) of
             , g
                 { classes = foldr (\(ClassId j) -> use j) (IntMap.insert i (EClass (HashSet.singleton n) [] 0 k) (classes g)) cs
                 , memo = HashMap.insert n c (memo g)
-                , nodeCount = nodeCount g + 1
                 , classCount = classCount g + 1
                 , added = added g + 1
                 }
@@ -309,18 +309,14 @@ rebuild g0 = case pending g0 of
                 -- them again in canonical form. A merge in 'step' can join
                 -- this e-class to another one, so the users of the other one
                 -- stay in the joined e-class.
-                (m1, n1) =
-                    foldl'
-                        (\(m, n) (u, _) -> if HashMap.member u m then (HashMap.delete u m, n - 1) else (m, n))
-                        (memo g, nodeCount g)
-                        users
-                g1 = g{memo = m1, nodeCount = n1, classes = IntMap.insert i' e{classUsers = [], classUserCount = 0} (classes g)}
+                m1 = foldl' (\m (u, _) -> HashMap.delete u m) (memo g) users
+                g1 = g{memo = m1, classes = IntMap.insert i' e{classUsers = [], classUserCount = 0} (classes g)}
                 (g2, seen) = foldl' step (g1, HashMap.empty) users
                 step (h, s) (u, owner) =
                     let u' = canon h u
                         h1 = case HashMap.lookup u' (memo h) of
                             Just other -> maybe h snd (union owner other h)
-                            Nothing -> h{memo = HashMap.insert u' (find h owner) (memo h), nodeCount = nodeCount h + 1}
+                            Nothing -> h{memo = HashMap.insert u' (find h owner) (memo h)}
                      in (h1, HashMap.insert u' (find h1 owner) s)
                 ClassId root = find g2 (ClassId i')
                 users' = HashMap.toList seen
@@ -338,9 +334,12 @@ rebuild g0 = case pending g0 of
 eClassCount :: EGraph s f -> Int
 eClassCount = classCount
 
--- | The number of e-nodes.
-eNodeCount :: EGraph s f -> Int
-eNodeCount = nodeCount
+{- | The number of e-nodes: the canonical e-nodes of all e-classes. It walks
+the e-graph. The memo can keep an earlier form of an e-node whose children
+merged twice, so its size is not the count.
+-}
+eNodeCount :: (Hashable f) => EGraph s f -> Int
+eNodeCount g = sum [HashSet.size (HashSet.map (canon g) (classNodes e)) | e <- IntMap.elems (classes g)]
 
 {- | The terms of an e-class, as an automaton whose states are e-classes.
 The sort of a term is the sort of its state. An error is a symbol with two

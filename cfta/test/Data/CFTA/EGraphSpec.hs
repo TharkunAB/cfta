@@ -100,9 +100,10 @@ spec = describe "Data.CFTA.EGraph" $ do
         property $
             forAll genGraph $ \graph -> forAll (oneof [genPattern 2, genAbstraction graph]) $ \p ->
                 let g = build graph in Set.fromList (ematch g p) === Set.fromList (ematchByIntersection g p)
-    it "holds the n! * Catalan(n - 1) terms of an AC sum of n variables" $
+    it "holds the n! * Catalan(n - 1) terms of an AC sum of n variables, in 3^n - 2^(n+1) + n + 1 e-nodes" $
         forM_ [(3, 12), (4, 120), (5, 1680)] $ \(n, count) -> do
             let (c, g) = addTerm (sumOf n) emptyEGraph
                 (g', report) = saturate (Limits 100 100000 0) acRules g
             reportStop report `shouldBe` Saturated
+            (eClassCount g', eNodeCount g') `shouldBe` (2 ^ n - 1, 3 ^ n - 2 ^ (n + 1) + n + 1)
             fmap (length . FTA.terms) (classAutomaton g' c) `shouldBe` Right count
