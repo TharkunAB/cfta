@@ -1,0 +1,208 @@
+/tmp/mcfta-child-completion-20261025/traversal-completion-strict-1/MicroCFTA/SourcePruningEnumerationTraversalCompletion.lean:126:8: error: unsolved goals
+case cons.inr.refine_1
+width : Nat
+inst✝² : DecidableEq Symbol
+inst✝¹ : DecidableEq (EdgeKey Symbol Constraint)
+inst✝ : DecidableEq Node
+formulas : SourceGuards.Formulas FullSyntax.Formula
+solver : SourceGuards.Entailment FullSyntax.Formula
+checkEmpty : Bool
+rest : List (Node × List Suspended)
+ih :
+  ∀ (inventory : Inventory) (beforeCaller : Caller width) (before : Cached) (roots : Nat → Nat) (memos : Memos),
+    Context formulas solver inventory beforeCaller memos →
+      Safe before.core →
+        Roots before.core.representatives roots →
+          EnumerationCanonicalWaiting.Correct roots before.core.values before.waiting →
+            (∀ (slot : Nat),
+                SourcePruningEnumerationNativeIndex.candidate beforeCaller.checked.native.machine.heap
+                    (before.core.values[slot]?.getD UVarValue.eliminated) =
+                  some (before.expandable slot)) →
+              PendingRealized beforeCaller.checked.native.machine.heap before.core →
+                (∀ (incoming : Node) (bucket : List Suspended),
+                    (incoming, bucket) ∈ rest →
+                      Available beforeCaller.checked.native.machine.heap incoming ∧
+                        incoming.free = [] ∧
+                          (∀ (sc : Suspended), sc ∈ bucket → sc.var < before.core.counter) ∧
+                            InputsPending before.core bucket) →
+                  Ranges checkEmpty rest beforeCaller before memos.query →
+                    ∃ r n p h k fragments afterCaller after savedQueries final next afterRoots result,
+                      (∀ (extraRepresentative extraNative P H extraIndex : Nat),
+                          p ≤ P →
+                            h ≤ H →
+                              SourcePruningEnumerationChildTraversal.run checkEmpty (r + extraRepresentative)
+                                  (n + extraNative) P H (k + extraIndex) rest beforeCaller before memos.query =
+                                result) ∧
+                        Post formulas solver next beforeCaller afterCaller final ∧
+                          final.query = savedQueries ∧
+                            before.core.counter ≤ after.core.counter ∧
+                              Roots after.core.representatives afterRoots ∧
+                                StorageValid after.core ∧
+                                  PendingRealized afterCaller.checked.native.machine.heap after.core ∧
+                                    EnumerationCanonicalWaiting.Correct afterRoots after.core.values after.waiting ∧
+                                      (∀ (slot : Nat),
+                                          SourcePruningEnumerationNativeIndex.candidate
+                                              afterCaller.checked.native.machine.heap ⋯ =
+                                            some (after.expandable slot)) ∧
+                                        EnumeratedOrigin before.core after.core ∧
+                                          (∀ (held : Nat), ⋯) ∧
+                                            (∀ (fragment : Fragment),
+                                                fragment ∈ fragments → FragmentBound after.core.counter fragment) ∧
+                                              ⋯
+inventory : Inventory
+beforeCaller : Caller width
+before : Cached
+roots : Nat → Nat
+memos : Memos
+initial : Context formulas solver inventory beforeCaller memos
+safe : Safe before.core
+paths : Roots before.core.representatives roots
+counts : EnumerationCanonicalWaiting.Correct roots before.core.values before.waiting
+flags :
+  ∀ (slot : Nat),
+    SourcePruningEnumerationNativeIndex.candidate beforeCaller.checked.native.machine.heap
+        (before.core.values[slot]?.getD UVarValue.eliminated) =
+      some (before.expandable slot)
+realized : PendingRealized beforeCaller.checked.native.machine.heap before.core
+incoming : Node
+bucket : List Suspended
+genuine :
+  ∀ (incoming_1 : Node) (bucket_1 : List Suspended),
+    (incoming_1, bucket_1) ∈ (incoming, bucket) :: rest →
+      Available beforeCaller.checked.native.machine.heap incoming_1 ∧
+        incoming_1.free = [] ∧
+          (∀ (sc : Suspended), sc ∈ bucket_1 → sc.var < before.core.counter) ∧ InputsPending before.core bucket_1
+ranges : Ranges checkEmpty ((incoming, bucket) :: rest) beforeCaller before memos.query
+available : Available beforeCaller.checked.native.machine.heap incoming
+closed : incoming.free = []
+bounded : ∀ (sc : Suspended), sc ∈ bucket → sc.var < before.core.counter
+pending : InputsPending before.core bucket
+r n p h k : Nat
+raw : List (Except Error (Fragment × EnumerationState.State Symbol Constraint))
+middleCaller : Caller width
+middle : Cached
+middleQueries : Queries
+middleMemos : Memos
+middleInventory : Inventory
+middleRoots : Nat → Nat
+outer : EnumerationState.State Symbol Constraint
+waiting : EnumerationWaitingIndex.Waiting
+headRun :
+  ∀ (extraRepresentative extraNative P H extraIndex : Nat),
+    p ≤ P →
+      h ≤ H →
+        SourcePruningEnumerationChildDispatch.run checkEmpty (r + extraRepresentative) (n + extraNative) P H
+            (k + extraIndex) bucket incoming beforeCaller before memos.query =
+          ((Except.ok (some raw), middleCaller, middleQueries, outer, waiting), some middle)
+headPost : Post formulas solver middleInventory beforeCaller middleCaller middleMemos
+headQueries : middleMemos.query = middleQueries
+growth : before.core.counter ≤ middle.core.counter
+middlePaths : Roots middle.core.representatives middleRoots
+middleStorage : StorageValid middle.core
+middleRealized : PendingRealized middleCaller.checked.native.machine.heap middle.core
+middleCounts : EnumerationCanonicalWaiting.Correct middleRoots middle.core.values middle.waiting
+middleFlags :
+  ∀ (slot : Nat),
+    SourcePruningEnumerationNativeIndex.candidate middleCaller.checked.native.machine.heap
+        (middle.core.values[slot]?.getD UVarValue.eliminated) =
+      some (middle.expandable slot)
+headOrigin : EnumeratedOrigin before.core middle.core
+headProtected :
+  ∀ (held : Nat),
+    held < before.core.counter →
+      IsRoot before.core.representatives held →
+        Avoids before.core.representatives held bucket → EnumerationDriver.Protected held before.core middle.core
+protects :
+  ∀ (held : Nat) (fragment : Fragment),
+    before.core.values[held]? = some (UVarValue.enumerated fragment) →
+      EnumerationDriver.Protected held before.core middle.core
+fragment : Fragment
+singleton : raw = [Except.ok (fragment, middle.core)]
+middleSafe : Safe middle.core
+fragmentBound : FragmentBound middle.core.counter fragment
+tailGenuine :
+  ∀ (value : Node) (bucket : List Suspended),
+    (value, bucket) ∈ rest →
+      Available middleCaller.checked.native.machine.heap value ∧
+        value.free = [] ∧
+          (∀ (sc : Suspended), sc ∈ bucket → sc.var < middle.core.counter) ∧ InputsPending middle.core bucket
+firstRun :
+  SourcePruningEnumerationChildDispatch.run checkEmpty r n p h k bucket incoming beforeCaller before memos.query =
+    ((Except.ok (some [Except.ok (fragment, middle.core)]), middleCaller, middleQueries, outer, waiting), some middle)
+tailRanges : Ranges checkEmpty rest middleCaller middle middleMemos.query
+tailR tailN tailP tailH tailK : Nat
+tailFragments : List Fragment
+afterCaller : Caller width
+after : Cached
+savedQueries : Queries
+final : Memos
+next : Inventory
+afterRoots : Nat → Nat
+tailResult : SourcePruningEnumerationChildTraversal.Result width
+tailRun :
+  ∀ (extraRepresentative extraNative P H extraIndex : Nat),
+    tailP ≤ P →
+      tailH ≤ H →
+        SourcePruningEnumerationChildTraversal.run checkEmpty (tailR + extraRepresentative) (tailN + extraNative) P H
+            (tailK + extraIndex) rest middleCaller middle middleMemos.query =
+          tailResult
+tailPost : Post formulas solver next middleCaller afterCaller final
+querySame : final.query = savedQueries
+tailGrowth : middle.core.counter ≤ after.core.counter
+afterPaths : Roots after.core.representatives afterRoots
+storage : StorageValid after.core
+afterRealized : PendingRealized afterCaller.checked.native.machine.heap after.core
+afterCounts : EnumerationCanonicalWaiting.Correct afterRoots after.core.values after.waiting
+afterFlags :
+  ∀ (slot : Nat),
+    SourcePruningEnumerationNativeIndex.candidate afterCaller.checked.native.machine.heap
+        (after.core.values[slot]?.getD UVarValue.eliminated) =
+      some (after.expandable slot)
+tailOrigin : EnumeratedOrigin middle.core after.core
+tailProtected :
+  ∀ (held : Nat) (fragment : Fragment),
+    middle.core.values[held]? = some (UVarValue.enumerated fragment) →
+      EnumerationDriver.Protected held middle.core after.core
+tailBounds : ∀ (fragment : Fragment), fragment ∈ tailFragments → FragmentBound after.core.counter fragment
+tailShape :
+  tailResult = SourcePruningEnumerationChildTraversal.Result.complete tailFragments afterCaller savedQueries after ∧
+      Safe after.core ∨
+    ∃ outer waiting,
+      tailResult =
+        SourcePruningEnumerationChildTraversal.Result.stopped tailFragments
+          (Except.ok (some []), afterCaller, savedQueries, outer, waiting) (some after)
+result : SourcePruningEnumerationChildTraversal.Result width :=
+  match tailResult, tailRun, tailShape with
+  | SourcePruningEnumerationChildTraversal.Result.complete fragments caller queries cache, tailRun, tailShape =>
+    SourcePruningEnumerationChildTraversal.Result.complete (fragment :: fragments) caller queries cache
+  | SourcePruningEnumerationChildTraversal.Result.stopped fragments observation candidate, tailRun, tailShape =>
+    SourcePruningEnumerationChildTraversal.Result.stopped (fragment :: fragments) observation candidate
+er en P H ek : Nat
+largeP : max p tailP ≤ P
+largeH : max h tailH ≤ H
+head :
+  SourcePruningEnumerationChildDispatch.run checkEmpty (r + (tailR + er)) (n + (tailN + en)) P H (k + (tailK + ek))
+      bucket incoming beforeCaller before memos.query =
+    ((Except.ok (some raw), middleCaller, middleQueries, outer, waiting), some middle)
+tail :
+  SourcePruningEnumerationChildTraversal.run checkEmpty (tailR + (r + er)) (tailN + (n + en)) P H (tailK + (k + ek))
+      rest middleCaller middle middleMemos.query =
+    tailResult
+headExact :
+  SourcePruningEnumerationChildDispatch.run checkEmpty (r + tailR + er) (n + tailN + en) P H (k + tailK + ek) bucket
+      incoming beforeCaller before memos.query =
+    ((Except.ok (some [Except.ok (fragment, middle.core)]), middleCaller, middleQueries, outer, waiting), some middle)
+tailExact :
+  SourcePruningEnumerationChildTraversal.run checkEmpty (r + tailR + er) (n + tailN + en) P H (k + tailK + ek) rest
+      middleCaller middle middleQueries =
+    tailResult
+⊢ (match tailResult with
+    | SourcePruningEnumerationChildTraversal.Result.complete fragments finalCaller finalQueries final =>
+      SourcePruningEnumerationChildTraversal.Result.complete (fragment :: fragments) finalCaller finalQueries final
+    | SourcePruningEnumerationChildTraversal.Result.stopped completedPrefix observation candidate =>
+      SourcePruningEnumerationChildTraversal.Result.stopped (fragment :: completedPrefix) observation candidate) =
+    match tailResult, tailRun, tailShape with
+    | SourcePruningEnumerationChildTraversal.Result.complete fragments caller queries cache, tailRun, tailShape =>
+      SourcePruningEnumerationChildTraversal.Result.complete (fragment :: fragments) caller queries cache
+    | SourcePruningEnumerationChildTraversal.Result.stopped fragments observation candidate, tailRun, tailShape =>
+      SourcePruningEnumerationChildTraversal.Result.stopped (fragment :: fragments) observation candidate

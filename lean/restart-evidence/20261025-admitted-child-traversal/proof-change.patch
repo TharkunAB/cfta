@@ -1,0 +1,434 @@
+diff --git a/lean/MicroCFTA/Audit.lean b/lean/MicroCFTA/Audit.lean
+index 03858c918..304c2bfba 100644
+--- a/lean/MicroCFTA/Audit.lean
++++ b/lean/MicroCFTA/Audit.lean
+@@ -1,3 +1,4 @@
++import MicroCFTA.SourcePruningEnumerationTraversalCompletion
+ import MicroCFTA.SourcePruningEnumerationChildTraversal
+ import MicroCFTA.SourcePruningEnumerationChildEffects
+ import MicroCFTA.SourcePruningEnumerationChildDispatch
+diff --git a/lean/MicroCFTA/SourcePruningEnumerationCachedTerminalAdapter.lean b/lean/MicroCFTA/SourcePruningEnumerationCachedTerminalAdapter.lean
+index 1f1fe5220..cfcdce2b3 100644
+--- a/lean/MicroCFTA/SourcePruningEnumerationCachedTerminalAdapter.lean
++++ b/lean/MicroCFTA/SourcePruningEnumerationCachedTerminalAdapter.lean
+@@ -298,6 +298,30 @@ theorem protects
+     · simp only [EnumerationCanonicalUnion.mergedRoots, fixed, ite_eq_right outside,
+         ite_eq_right selected]
+ 
++/-- Each reached terminal request fits the fixed mathematical machine width. -/
++def Ranges
++    [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Constraint)] [DecidableEq Node]
++    (checkEmpty : Bool) (first : Suspended) (rest : List Suspended)
++    (beforeCaller : Caller width) (before : EnumerationExpandableIndex.Cached Symbol Constraint)
++    (incoming : Node) (queries : Queries) : Prop :=
++  ∀ (prefixFuel : Nat) (recorded : List Nat) (winner : Nat)
++      (moved : EnumerationWaitingIndex.Waiting) (joined : EnumerationState.State Symbol Constraint),
++      ExceptT.run (SourcePruningEnumerationTerminalPrefix.run prefixFuel first rest before.waiting before.core) =
++        [.ok ((recorded, winner, moved), joined)] →
++      SourcePruningEnumerationFold.Ranges checkEmpty recorded beforeCaller joined winner queries ∧
++      ∀ (foldFuel P H : Nat) (foldCaller : Caller width)
++        (folded : EnumerationState.State Symbol Constraint) (foldQueries : Queries),
++        SourcePruningEnumerationFold.run checkEmpty foldFuel P H recorded beforeCaller joined winner queries =
++          (.ok (some [.ok ((), folded)]), foldCaller, foldQueries, folded) →
++        match folded.values[winner]? with
++        | some (.unenumerated (some oldHandle) _) =>
++            match lookupNode foldCaller.checked.native.machine.heap oldHandle with
++            | some old => SourceCurrentAllocatedNativeRequestBounds.WordRanges
++                (.code (SourceRecursiveIntersectionCode.requestNode IntersectionEmptyDomain.emptyDomain incoming old))
++                foldCaller.checked
++            | none => True
++        | _ => True
++
+ /-- Genuine admitted inputs produce the exact terminal observation and cache. -/
+ theorem complete
+     [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Constraint)] [DecidableEq Node]
+@@ -320,23 +344,7 @@ theorem complete
+     (nonempty : incoming ≠ .empty)
+     (available : Available beforeCaller.checked.native.machine.heap incoming) (closed : incoming.free = [])
+     (incomingBounded : ∀ sc ∈ incomingScs, sc.var < before.core.counter)
+-    (ranges : ∀ (prefixFuel : Nat) (recorded : List Nat) (winner : Nat)
+-      (moved : EnumerationWaitingIndex.Waiting) (joined : EnumerationState.State Symbol Constraint),
+-      ExceptT.run (SourcePruningEnumerationTerminalPrefix.run prefixFuel first rest before.waiting before.core) =
+-        [.ok ((recorded, winner, moved), joined)] →
+-      SourcePruningEnumerationFold.Ranges checkEmpty recorded beforeCaller joined winner memos.query ∧
+-      ∀ (foldFuel P H : Nat) (foldCaller : Caller width)
+-        (folded : EnumerationState.State Symbol Constraint) (foldQueries : Queries),
+-        SourcePruningEnumerationFold.run checkEmpty foldFuel P H recorded beforeCaller joined winner memos.query =
+-          (.ok (some [.ok ((), folded)]), foldCaller, foldQueries, folded) →
+-        match folded.values[winner]? with
+-        | some (.unenumerated (some oldHandle) _) =>
+-            match lookupNode foldCaller.checked.native.machine.heap oldHandle with
+-            | some old => SourceCurrentAllocatedNativeRequestBounds.WordRanges
+-                (.code (SourceRecursiveIntersectionCode.requestNode IntersectionEmptyDomain.emptyDomain incoming old))
+-                foldCaller.checked
+-            | none => True
+-        | _ => True) :
++    (ranges : Ranges checkEmpty first rest beforeCaller before incoming memos.query) :
+     ∃ (r n p h k : Nat) (recorded : List Nat) (winner : Nat)
+       (joined : EnumerationExpandableIndex.Cached Symbol Constraint)
+       (foldRows : List (Unit × EnumerationExpandableIndex.Cached Symbol Constraint))
+diff --git a/lean/MicroCFTA/SourcePruningEnumerationChildCompletion.lean b/lean/MicroCFTA/SourcePruningEnumerationChildCompletion.lean
+new file mode 100644
+index 000000000..4499b1f02
+--- /dev/null
++++ b/lean/MicroCFTA/SourcePruningEnumerationChildCompletion.lean
+@@ -0,0 +1,175 @@
++import MicroCFTA.SourcePruningEnumerationChildTraversal
++
++namespace MicroCFTA.SourcePruningEnumerationChildCompletion
++open EnumerationState EnumerationCorrectness EnumerationSchedule EnumerationDependencies
++open InternedConstructorTemplates InternedProbeProvenance
++open SourcePruningEnumerationNodes SourcePruningEnumerationObservation
++open SourceCurrentAllocatedNativeInventoryState (Inventory)
++open SourceCurrentAllocatedPartialInvariant (Context Post)
++local notation "Symbol" => SourcePruningTemplates.Symbol
++local notation "Constraint" => SourceSymbolicIndex.Constraint FullSyntax.Formula
++local notation "Node" => InternedConstructorTemplates.Value Symbol Constraint
++local notation "Caller" => SourceCurrentAllocatedPartialState.State
++local notation "Memos" => EndpointMemoGateTrace.Memos
++local notation "Queries" => SourceEndpointMemo.Memos
++local notation "Cached" => EnumerationExpandableIndex.Cached Symbol Constraint
++local notation "Fragment" => Fragments.Fragment Symbol
++local notation "Raw" => List (Except EnumerationState.Error (Fragment × EnumerationState.State Symbol Constraint))
++variable {width : Nat}
++
++/-- Only a nonempty terminal head requires numeric native-request admission. -/
++def Ranges [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Constraint)] [DecidableEq Node]
++    (checkEmpty : Bool) (bucket : List Suspended) (incoming : Node)
++    (caller : Caller width) (before : Cached) (queries : Queries) : Prop :=
++  incoming ≠ .empty → ∀ first rest descendants,
++    bucket.partition (fun sc => EqualityTrie.isTerminal sc.trie) = (first :: rest, descendants) →
++    SourcePruningEnumerationCachedTerminalAdapter.Ranges checkEmpty first rest caller before incoming queries
++
++private theorem partition_subsets (bucket : List Suspended) (first : Suspended)
++    (rest descendants : List Suspended)
++    (partitioned : bucket.partition (fun sc => EqualityTrie.isTerminal sc.trie) =
++      (first :: rest, descendants)) : (first :: rest) ⊆ bucket ∧ descendants ⊆ bucket := by
++  have terminal : bucket.filter (fun sc => EqualityTrie.isTerminal sc.trie) = first :: rest := by
++    simpa only [List.partition_eq_filter_filter] using congrArg Prod.fst partitioned
++  have other : bucket.filter (fun sc => !(EqualityTrie.isTerminal sc.trie)) = descendants := by
++    simpa only [List.partition_eq_filter_filter, Function.comp_def] using congrArg Prod.snd partitioned
++  exact ⟨fun _ member => (List.mem_filter.mp (terminal ▸ member)).1,
++    fun _ member => (List.mem_filter.mp (other ▸ member)).1⟩
++
++variable [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Constraint)] [DecidableEq Node]
++
++private theorem nonterminal_parameters
++    (checkEmpty : Bool) (r n p h k : Nat) (bucket : List Suspended) (incoming : Node)
++    (caller : Caller width) (before : Cached) (queries : Queries)
++    (nonempty : incoming ≠ .empty)
++    (partitioned : (bucket.partition (fun sc => EqualityTrie.isTerminal sc.trie)).1 = []) :
++    SourcePruningEnumerationChildDispatch.run checkEmpty r n p h k bucket incoming caller before queries =
++      SourcePruningEnumerationChildDispatch.run checkEmpty 0 0 0 0 k bucket incoming caller before queries := by
++  cases splitBucket : bucket.partition (fun sc => EqualityTrie.isTerminal sc.trie) with
++  | mk here descendants =>
++    have empty : here = [] := by simpa only [splitBucket] using partitioned
++    subst here
++    simp only [SourcePruningEnumerationChildDispatch.run, SourcePruningEnumerationChildDispatch.observe,
++      ite_eq_right nonempty, splitBucket]
++
++/-- Genuine admitted child inputs derive a stable singleton or a valid empty rejection. -/
++theorem complete
++    (formulas : SourceGuards.Formulas FullSyntax.Formula)
++    (solver : SourceGuards.Entailment FullSyntax.Formula)
++    (inventory : Inventory) (beforeCaller : Caller width) (before : Cached)
++    (checkEmpty : Bool) (bucket : List Suspended) (incoming : Node)
++    (roots : Nat → Nat) (memos : Memos)
++    (initial : Context formulas solver inventory beforeCaller memos)
++    (safe : Safe before.core) (paths : Roots before.core.representatives roots)
++    (counts : EnumerationCanonicalWaiting.Correct roots before.core.values before.waiting)
++    (flags : ∀ slot, SourcePruningEnumerationNativeIndex.candidate beforeCaller.checked.native.machine.heap
++      ((before.core.values[slot]?).getD .eliminated) = some (before.expandable slot))
++    (realized : PendingRealized beforeCaller.checked.native.machine.heap before.core)
++    (bounded : ∀ sc ∈ bucket, sc.var < before.core.counter)
++    (pending : InputsPending before.core bucket)
++    (available : Available beforeCaller.checked.native.machine.heap incoming) (closed : incoming.free = [])
++    (ranges : Ranges checkEmpty bucket incoming beforeCaller before memos.query) :
++    ∃ (r n p h k : Nat) (raw : Raw) (afterCaller : Caller width) (after : Cached)
++      (savedQueries : Queries) (final : Memos) (next : Inventory) (afterRoots : Nat → Nat)
++      (outer : EnumerationState.State Symbol Constraint) (waiting : EnumerationWaitingIndex.Waiting),
++      (∀ extraRepresentative extraNative P H extraIndex, p ≤ P → h ≤ H →
++        SourcePruningEnumerationChildDispatch.run checkEmpty (r + extraRepresentative) (n + extraNative)
++          P H (k + extraIndex) bucket incoming beforeCaller before memos.query =
++          ((.ok (some raw), afterCaller, savedQueries, outer, waiting), some after)) ∧
++      Post formulas solver next beforeCaller afterCaller final ∧ final.query = savedQueries ∧
++      before.core.counter ≤ after.core.counter ∧ Roots after.core.representatives afterRoots ∧
++      StorageValid after.core ∧ PendingRealized afterCaller.checked.native.machine.heap after.core ∧
++      EnumerationCanonicalWaiting.Correct afterRoots after.core.values after.waiting ∧
++      (∀ slot, SourcePruningEnumerationNativeIndex.candidate afterCaller.checked.native.machine.heap
++        ((after.core.values[slot]?).getD .eliminated) = some (after.expandable slot)) ∧
++      EnumeratedOrigin before.core after.core ∧
++      (∀ held, held < before.core.counter → IsRoot before.core.representatives held →
++        Avoids before.core.representatives held bucket → EnumerationDriver.Protected held before.core after.core) ∧
++      (raw = [] ∨ ∃ fragment, raw = [.ok (fragment, after.core)] ∧
++        Safe after.core ∧ FragmentBound after.core.counter fragment) := by
++  by_cases empty : incoming = .empty
++  · subst incoming
++    refine ⟨0, 0, 0, 0, 0, [], beforeCaller, before, memos.query, memos, inventory, roots,
++      before.core, before.waiting, ?_, Post.refl initial, rfl, Nat.le_refl _, paths, safe.1,
++      realized, counts, flags, .refl _, ?_, .inl rfl⟩
++    · intro er en P H ek _ _
++      exact SourcePruningEnumerationChildDispatch.empty checkEmpty _ _ _ _ _ _ _ _ _
++    · intro held _ root _
++      exact EnumerationDriver.Protected.refl held before.core root
++  · cases partitioned : bucket.partition (fun sc => EqualityTrie.isTerminal sc.trie) with
++    | mk here descendants =>
++      cases here with
++      | nil =>
++        have noHere : (bucket.partition (fun sc => EqualityTrie.isTerminal sc.trie)).1 = [] := by
++          rw [partitioned]
++        have noTerminal : bucket.any (fun sc => EqualityTrie.isTerminal sc.trie) = false := by
++          have filtered : bucket.filter (fun sc => EqualityTrie.isTerminal sc.trie) = [] := by
++            simpa only [List.partition_eq_filter_filter] using noHere
++          exact List.any_eq_false.mpr (List.filter_eq_nil_iff.mp filtered)
++        obtain ⟨action, k, after, prepared, rawRun, observed, grows, _aligned,
++          _forest, afterPaths, storage, afterRealized, afterCounts, afterFlags, bound⟩ :=
++          SourcePruningEnumerationChildDispatch.nonterminal_complete checkEmpty 0 0 0 0 bucket incoming
++            beforeCaller before memos.query roots initial.ready.semantic.ready.semantic.1.normal.facts.coherent
++            available closed empty safe.1 realized paths counts flags bounded noTerminal
++        have success : Success action before.core (.hole before.core.counter) after.core := by
++          rw [Success, rawRun]
++          simp
++        obtain ⟨afterSafe, origin, protects⟩ := SourcePruningEnumerationChildEffects.child
++          bucket incoming action before.core after.core _ safe bounded prepared success
++        refine ⟨0, 0, 0, 0, k, [.ok (.hole before.core.counter, after.core)], beforeCaller, after,
++          memos.query, memos, inventory, roots, before.core, before.waiting, ?_, Post.refl initial,
++          rfl, ?_, afterPaths, storage, afterRealized, afterCounts, afterFlags, origin, ?_,
++          .inr ⟨.hole before.core.counter, rfl, afterSafe, bound⟩⟩
++        · intro er en P H ek _ _
++          rw [nonterminal_parameters checkEmpty _ _ _ _ _ bucket incoming beforeCaller before memos.query empty noHere]
++          exact observed ek
++        · omega
++        · intro held inside root _
++          exact protects held inside root
++      | cons first rest =>
++        have subsets := partition_subsets bucket first rest descendants partitioned
++        have activeBounded : ∀ sc ∈ first :: rest, sc.var < before.core.counter :=
++          fun sc member => bounded sc (subsets.1 member)
++        have activePending : InputsPending before.core (first :: rest) := by
++          intro held fragment stored sc member
++          exact pending held fragment stored sc (subsets.1 member)
++        obtain ⟨r, n, p, h, k, recorded, winner, joined, foldRows, foldCaller, foldQueries,
++          foldFinal, foldInventory, folded, raw, afterCaller, outer, savedQueries, final, next, after,
++          _prefixRun, _recordedSame, _winnerMember, _movedSame, _joinedSame, _joinedFlagsSame,
++          _prefixRoots, _prefixCounts, _joinedFlags, _cachedFoldRun, _foldRun, foldShape, _foldPost,
++          _foldQuerySame, _foldCounter, _foldForest, _foldPaths, _foldStorage, _foldRealized, _foldedRoot,
++          _foldPending, _foldCounts, _foldWaiting, _foldFlags, _foldEliminated, _foldCompleted,
++          _foldedFrame, _foldedSafe, _foldedOrigin, _terminalRun, post, querySame, cacheRun,
++          counter, afterPaths, storage, afterRealized, afterCounts, afterFlags, _outside,
++          afterSafe, protects, origin, _rejectedCache, rejected, completed⟩ :=
++          SourcePruningEnumerationCachedTerminalAdapter.complete formulas solver inventory beforeCaller before
++            checkEmpty first rest incoming descendants roots memos initial safe paths counts flags
++            activeBounded activePending realized empty available closed
++            (fun sc member => bounded sc (subsets.2 member))
++            (ranges empty first rest descendants partitioned)
++        refine ⟨r, n, p, h, k, raw, afterCaller, after, savedQueries, final, next,
++          EnumerationCanonicalUnion.mergedRoots roots recorded winner, outer, joined.waiting,
++          ?_, post, querySame, ?_, afterPaths, storage, afterRealized, afterCounts, afterFlags, origin, ?_, ?_⟩
++        · intro er en P H ek largeP largeH
++          rw [SourcePruningEnumerationChildDispatch.terminal checkEmpty _ _ _ _ _ bucket incoming
++            beforeCaller before memos.query first rest descendants partitioned]
++          exact cacheRun er en P H ek largeP largeH
++        · omega
++        · intro held _ root avoids
++          exact protects held root (fun sc member => avoids sc (subsets.1 member))
++        · rcases foldShape with rejectedFold | completedFold
++          · exact .inl (rejected rejectedFold).1
++          · obtain ⟨incomingK, oldNode, oldScs, read, incomingAfter, replacement, handle,
++              afterSame, _outerSame, _readRun, _readFrame, _incomingRun, _writeRun,
++              _writeShape, _stored, _storage, _realized, _post, _unfolding, _writeCache,
++              _counter, _representatives, _paths, _counts, _waiting, _flags, _expandable,
++              rawSame, bound, _available, _closed, _encoded, _lookup, _unconstrained, _constrained⟩ :=
++              completed completedFold
++            subst incomingAfter
++            by_cases rejectedIncoming : replacement = .empty
++            · exact .inl (by simpa only [rejectedIncoming, ↓reduceIte] using rawSame)
++            · have singleton : raw = [.ok (.hole winner, after.core)] := by
++                simpa only [rejectedIncoming, ↓reduceIte] using rawSame
++              exact .inr ⟨.hole winner, singleton, afterSafe (by simp [singleton]), bound⟩
++
++end MicroCFTA.SourcePruningEnumerationChildCompletion
+diff --git a/lean/MicroCFTA/SourcePruningEnumerationTraversalCompletion.lean b/lean/MicroCFTA/SourcePruningEnumerationTraversalCompletion.lean
+new file mode 100644
+index 000000000..da5ef6f2a
+--- /dev/null
++++ b/lean/MicroCFTA/SourcePruningEnumerationTraversalCompletion.lean
+@@ -0,0 +1,178 @@
++import MicroCFTA.SourcePruningEnumerationChildCompletion
++
++namespace MicroCFTA.SourcePruningEnumerationTraversalCompletion
++open EnumerationState EnumerationCorrectness EnumerationSchedule EnumerationDependencies
++open InternedConstructorTemplates InternedProbeProvenance
++open SourcePruningEnumerationNodes SourcePruningEnumerationObservation
++open SourceCurrentAllocatedNativeInventoryState (Inventory)
++open SourceCurrentAllocatedPartialInvariant (Context Post)
++local notation "Symbol" => SourcePruningTemplates.Symbol
++local notation "Constraint" => SourceSymbolicIndex.Constraint FullSyntax.Formula
++local notation "Node" => InternedConstructorTemplates.Value Symbol Constraint
++local notation "Caller" => SourceCurrentAllocatedPartialState.State
++local notation "Memos" => EndpointMemoGateTrace.Memos
++local notation "Queries" => SourceEndpointMemo.Memos
++local notation "Cached" => EnumerationExpandableIndex.Cached Symbol Constraint
++local notation "Fragment" => Fragments.Fragment Symbol
++variable {width : Nat}
++
++/-- Numeric admission follows actual successful prefixes without assuming suffix completion. -/
++def Ranges [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Constraint)] [DecidableEq Node]
++    (checkEmpty : Bool) :
++    List (Node × List Suspended) → Caller width → Cached → Queries → Prop
++  | [], _, _, _ => True
++  | (incoming, bucket) :: rest, caller, before, queries =>
++      SourcePruningEnumerationChildCompletion.Ranges checkEmpty bucket incoming caller before queries ∧
++      ∀ r n p h k fragment afterCaller after saved outer waiting,
++        SourcePruningEnumerationChildDispatch.run checkEmpty r n p h k bucket incoming caller before queries =
++          ((.ok (some [.ok (fragment, after.core)]), afterCaller, saved, outer, waiting), some after) →
++        Ranges checkEmpty rest afterCaller after saved
++
++/-- Genuine admitted inputs derive a complete traversal or its first valid rejection. -/
++theorem complete
++    [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Constraint)] [DecidableEq Node]
++    (formulas : SourceGuards.Formulas FullSyntax.Formula)
++    (solver : SourceGuards.Entailment FullSyntax.Formula)
++    (inventory : Inventory) (beforeCaller : Caller width) (before : Cached)
++    (checkEmpty : Bool) (inputs : List (Node × List Suspended))
++    (roots : Nat → Nat) (memos : Memos)
++    (initial : Context formulas solver inventory beforeCaller memos)
++    (safe : Safe before.core) (paths : Roots before.core.representatives roots)
++    (counts : EnumerationCanonicalWaiting.Correct roots before.core.values before.waiting)
++    (flags : ∀ slot, SourcePruningEnumerationNativeIndex.candidate beforeCaller.checked.native.machine.heap
++      ((before.core.values[slot]?).getD .eliminated) = some (before.expandable slot))
++    (realized : PendingRealized beforeCaller.checked.native.machine.heap before.core)
++    (genuine : ∀ incoming bucket, (incoming, bucket) ∈ inputs →
++      Available beforeCaller.checked.native.machine.heap incoming ∧ incoming.free = [] ∧
++      (∀ sc ∈ bucket, sc.var < before.core.counter) ∧ InputsPending before.core bucket)
++    (ranges : Ranges checkEmpty inputs beforeCaller before memos.query) :
++    ∃ (r n p h k : Nat) (fragments : List Fragment) (afterCaller : Caller width)
++      (after : Cached) (savedQueries : Queries) (final : Memos) (next : Inventory)
++      (afterRoots : Nat → Nat) (result : SourcePruningEnumerationChildTraversal.Result width),
++      (∀ extraRepresentative extraNative P H extraIndex, p ≤ P → h ≤ H →
++        SourcePruningEnumerationChildTraversal.run checkEmpty (r + extraRepresentative) (n + extraNative)
++          P H (k + extraIndex) inputs beforeCaller before memos.query = result) ∧
++      Post formulas solver next beforeCaller afterCaller final ∧ final.query = savedQueries ∧
++      before.core.counter ≤ after.core.counter ∧ Roots after.core.representatives afterRoots ∧
++      StorageValid after.core ∧ PendingRealized afterCaller.checked.native.machine.heap after.core ∧
++      EnumerationCanonicalWaiting.Correct afterRoots after.core.values after.waiting ∧
++      (∀ slot, SourcePruningEnumerationNativeIndex.candidate afterCaller.checked.native.machine.heap
++        ((after.core.values[slot]?).getD .eliminated) = some (after.expandable slot)) ∧
++      EnumeratedOrigin before.core after.core ∧
++      (∀ held fragment, before.core.values[held]? = some (.enumerated fragment) →
++        EnumerationDriver.Protected held before.core after.core) ∧
++      (∀ held, held < before.core.counter → IsRoot before.core.representatives held →
++        (∀ incoming bucket, (incoming, bucket) ∈ inputs → Avoids before.core.representatives held bucket) →
++        EnumerationDriver.Protected held before.core after.core) ∧
++      (∀ fragment ∈ fragments, FragmentBound after.core.counter fragment) ∧
++      ((result = .complete fragments afterCaller savedQueries after ∧ Safe after.core) ∨
++        ∃ outer waiting, result = .stopped fragments
++          (.ok (some []), afterCaller, savedQueries, outer, waiting) (some after)) := by
++  induction inputs generalizing inventory beforeCaller before roots memos with
++  | nil =>
++      refine ⟨0, 0, 0, 0, 0, [], beforeCaller, before, memos.query, memos, inventory, roots,
++        .complete [] beforeCaller memos.query before, ?_, Post.refl initial, rfl, Nat.le_refl _,
++        paths, safe.1, realized, counts, flags, .refl _, ?_, ?_, ?_, .inl ⟨rfl, safe⟩⟩
++      · intros; rfl
++      · intro held fragment stored
++        exact EnumerationDriver.Protected.refl held before.core (enumerated_root before.core safe held fragment stored).2
++      · intro held _ root _
++        exact EnumerationDriver.Protected.refl held before.core root
++      · simp
++  | cons input rest ih =>
++      rcases input with ⟨incoming, bucket⟩
++      obtain ⟨available, closed, bounded, pending⟩ := genuine incoming bucket (by simp)
++      obtain ⟨r, n, p, h, k, raw, middleCaller, middle, middleQueries, middleMemos, middleInventory,
++        middleRoots, outer, waiting, headRun, headPost, headQueries, growth, middlePaths,
++        middleStorage, middleRealized, middleCounts, middleFlags, headOrigin, headProtected, shape⟩ :=
++        SourcePruningEnumerationChildCompletion.complete formulas solver inventory beforeCaller before
++          checkEmpty bucket incoming roots memos initial safe paths counts flags realized bounded pending available closed ranges.1
++      have protects : ∀ held fragment, before.core.values[held]? = some (.enumerated fragment) →
++          EnumerationDriver.Protected held before.core middle.core := by
++        intro held fragment stored
++        obtain ⟨inside, root⟩ := enumerated_root before.core safe held fragment stored
++        exact headProtected held inside root (pending held fragment stored)
++      rcases shape with rejected | ⟨fragment, singleton, middleSafe, fragmentBound⟩
++      · subst raw
++        refine ⟨r, n, p, h, k, [], middleCaller, middle, middleQueries, middleMemos, middleInventory,
++          middleRoots, .stopped [] (.ok (some []), middleCaller, middleQueries, outer, waiting) (some middle),
++          ?_, headPost, headQueries, growth, middlePaths, middleStorage, middleRealized, middleCounts,
++          middleFlags, headOrigin, protects, ?_, ?_, .inr ⟨outer, waiting, rfl⟩⟩
++        · intro er en P H ek largeP largeH
++          simp only [SourcePruningEnumerationChildTraversal.run, headRun er en P H ek largeP largeH]
++        · intro held inside root avoids
++          exact headProtected held inside root (avoids incoming bucket (by simp))
++        · simp
++      · have tailGenuine : ∀ value bucket, (value, bucket) ∈ rest →
++            Available middleCaller.checked.native.machine.heap value ∧ value.free = [] ∧
++            (∀ sc ∈ bucket, sc.var < middle.core.counter) ∧ InputsPending middle.core bucket := by
++          intro value retained member
++          obtain ⟨childAvailable, childClosed, childBounded, childPending⟩ :=
++            genuine value retained (List.mem_cons_of_mem _ member)
++          refine ⟨headPost.effects.keeps.available value childAvailable, childClosed,
++            fun sc member => Nat.lt_of_lt_of_le (childBounded sc member) growth, ?_⟩
++          intro held storedFragment stored
++          have old := headOrigin held storedFragment stored
++          exact (protects held storedFragment old).avoids retained (childPending held storedFragment old)
++        have firstRun := headRun 0 0 p h 0 (Nat.le_refl _) (Nat.le_refl _)
++        simp only [Nat.add_zero, singleton] at firstRun
++        have tailRanges : Ranges checkEmpty rest middleCaller middle middleMemos.query := by
++          rw [headQueries]
++          exact ranges.2 r n p h k fragment middleCaller middle middleQueries outer waiting firstRun
++        obtain ⟨tailR, tailN, tailP, tailH, tailK, tailFragments, afterCaller, after, savedQueries,
++          final, next, afterRoots, tailResult, tailRun, tailPost, querySame, tailGrowth, afterPaths,
++          storage, afterRealized, afterCounts, afterFlags, tailOrigin, tailProtected, tailRootsProtected,
++          tailBounds, tailShape⟩ :=
++          ih middleInventory middleCaller middle middleRoots middleMemos headPost.context middleSafe
++            middlePaths middleCounts middleFlags middleRealized tailGenuine tailRanges
++        let result : SourcePruningEnumerationChildTraversal.Result width := match tailResult with
++          | .complete fragments caller queries cache => .complete (fragment :: fragments) caller queries cache
++          | .stopped fragments observation candidate => .stopped (fragment :: fragments) observation candidate
++        refine ⟨r + tailR, n + tailN, max p tailP, max h tailH, k + tailK,
++          fragment :: tailFragments, afterCaller, after, savedQueries, final, next, afterRoots, result,
++          ?_, headPost.trans tailPost, querySame, Nat.le_trans growth tailGrowth, afterPaths,
++          storage, afterRealized, afterCounts, afterFlags, headOrigin.trans tailOrigin, ?_, ?_, ?_, ?_⟩
++        · intro er en P H ek largeP largeH
++          have head := headRun (tailR + er) (tailN + en) P H (tailK + ek)
++            (Nat.le_trans (Nat.le_max_left _ _) largeP) (Nat.le_trans (Nat.le_max_left _ _) largeH)
++          have tail := tailRun (r + er) (n + en) P H (k + ek)
++            (Nat.le_trans (Nat.le_max_right _ _) largeP) (Nat.le_trans (Nat.le_max_right _ _) largeH)
++          have headExact : SourcePruningEnumerationChildDispatch.run checkEmpty ((r + tailR) + er)
++              ((n + tailN) + en) P H ((k + tailK) + ek) bucket incoming beforeCaller before memos.query =
++              ((.ok (some [.ok (fragment, middle.core)]), middleCaller, middleQueries, outer, waiting), some middle) := by
++            simpa only [Nat.add_assoc, singleton] using head
++          have tailExact : SourcePruningEnumerationChildTraversal.run checkEmpty ((r + tailR) + er)
++              ((n + tailN) + en) P H ((k + tailK) + ek) rest middleCaller middle middleQueries = tailResult := by
++            simpa only [headQueries, Nat.add_assoc, Nat.add_comm, Nat.add_left_comm] using tail
++          simp only [SourcePruningEnumerationChildTraversal.run, headExact, tailExact, result]
++          cases tailResult <;> rfl
++        · intro held storedFragment stored
++          have first := protects held storedFragment stored
++          have middleStored : middle.core.values[held]? = some (.enumerated storedFragment) := first.value.trans stored
++          exact first.trans (tailProtected held storedFragment middleStored)
++        · intro held inside root avoids
++          have first := headProtected held inside root (avoids incoming bucket (by simp))
++          apply first.trans
++          apply tailRootsProtected held (Nat.lt_of_lt_of_le inside growth) first.root
++          intro value retained member
++          exact first.avoids retained (avoids value retained (List.mem_cons_of_mem _ member))
++        · intro child member
++          rcases List.mem_cons.mp member with rfl | member
++          · exact fragmentBound_mono _ _ tailGrowth _ fragmentBound
++          · exact tailBounds child member
++        · rcases tailShape with ⟨completed, afterSafe⟩ | ⟨outer, waiting, stopped⟩
++          · subst tailResult
++            exact .inl ⟨rfl, afterSafe⟩
++          · subst tailResult
++            exact .inr ⟨outer, waiting, rfl⟩
++
++/-- Enumerated origin and protected old roots retain every separate parent bucket. -/
++theorem retained_inputs (before after : EnumerationState.State Symbol Constraint) (scs : List Suspended)
++    (pending : InputsPending before scs) (origin : EnumeratedOrigin before after)
++    (protects : ∀ held fragment, before.values[held]? = some (.enumerated fragment) →
++      EnumerationDriver.Protected held before after) : InputsPending after scs := by
++  intro held fragment stored
++  have old := origin held fragment stored
++  exact (protects held fragment old).avoids scs (pending held fragment old)
++
++end MicroCFTA.SourcePruningEnumerationTraversalCompletion
