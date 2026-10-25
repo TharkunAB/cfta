@@ -843,12 +843,14 @@ runWith analysis limits rules goal g0 = go 0 IntMap.empty IntMap.empty IntMap.em
     -- give each e-class with a leaf its leaf, and repeat until no leaf is
     -- new. An e-class whose data changed gets the stamp of the iteration. In
     -- the first iteration, each e-class of the start can need its leaf.
-    settle first now known h = case analysis of
+    -- Each round has its own tick of the clock, so a round analyses only the
+    -- e-classes that changed after the round before it.
+    settle first tick known h = case analysis of
         Nothing -> (h, known)
         Just a ->
-            let fresh = [j | (j, e) <- IntMap.toList (classes h), classStamp e >= now]
+            let fresh = [j | (j, e) <- IntMap.toList (classes h), classStamp e >= tick]
                 (known', changed) = analyseFrom (analysisMake a) (analysisJoin a) h known fresh
-                stamped = h{classes = IntSet.foldr (IntMap.adjust (\e -> e{classStamp = now})) (classes h) changed}
+                stamped = h{classes = IntSet.foldr (IntMap.adjust (\e -> e{classStamp = tick})) (classes h) changed, clock = tick + 1}
                 candidates = if first then IntMap.keys known' else IntSet.toList changed
                 leaves =
                     [ (ClassId j, leaf)
@@ -863,7 +865,7 @@ runWith analysis limits rules goal g0 = go 0 IntMap.empty IntMap.empty IntMap.em
                             Just (u, h''') -> (h''', grew || u || added h'' /= added h')
                             Nothing -> (h'', grew || added h'' /= added h')
                 (withLeaves, grew') = foldl' addLeaf (stamped, False) leaves
-             in if grew' then settle False now known' (rebuild withLeaves) else (withLeaves, known')
+             in if grew' then settle False (tick + 1) known' (rebuild withLeaves) else (withLeaves, known')
     start = added g0
     size g = added g - start
     reached g = maybe False (uncurry (equivalent g)) goal
@@ -917,10 +919,10 @@ runWith analysis limits rules goal g0 = go 0 IntMap.empty IntMap.empty IntMap.em
              in case apply g False (concat [ms | (_, _, ms) <- results]) of
                     Left h ->
                         let (h', _) = settle (i == 0) now known (rebuild h)
-                         in (h'{clock = now + 1}, Report (i + 1) (size h') Equal)
+                         in (h'{clock = clock h' + 1}, Report (i + 1) (size h') Equal)
                     Right (g', changed) ->
                         let (settled, known') = settle (i == 0) now known (rebuild g')
-                            g'' = settled{clock = now + 1}
+                            g'' = settled{clock = clock settled + 1}
                          in if not changed && size g'' == size g
                                 then (g'', Report (i + 1) (size g'') (if reached g'' then Equal else Saturated))
                                 else go (i + 1) bans' ran' entered' known' g''
