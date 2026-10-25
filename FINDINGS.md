@@ -43,6 +43,23 @@ The formal gate soundness and exact API equality proofs are separate.
 Details: `lean/notes-current-sized-deterministic.md`.
 Evidence: `lean/restart-evidence/20261025-sized-deterministic`.
 
+### Native alternative state boundary
+
+Source inspection for the captured-slot proof confirms that each alternative
+restores its input EnumerationState. It does not restore native interners or
+memo tables. Enumeration.hs:328 defines pure CPS branching. Interned/Type.hs:453
+and line 510 define process-global interning caches and identity supplies.
+Interned/Cache.hs:169 and Interned/Memo.hs:91 use shared mutable tables.
+Rejected branches retain evaluated native effects too.
+
+The next native formal wrapper must restore the branch-local enumeration
+cache while accounting for shared native growth and memo effects. The lazy
+result list and cached result thunks leave forcing order explicit. Independent
+runs from one complete caller/query state do not reproduce that global history.
+This is a correspondence boundary. No Haskell runtime defect or repair is
+identified. External action: no patch is proposed for this source observation.
+Details: lean/notes-current-pruning-enumeration-captured-edge.md.
+
 ### Specftacular parallel completion follow-ups
 
 Main `9d4e4d584aa7a681f075790e98466afe7531838a` is imported.
@@ -163,6 +180,31 @@ TH/Generic extraction, valid-position build/read and source codec laws stay open
 
 
 
+
+## Native captured-slot edge finalization
+
+Finalization safety: `3197aaaa47cf0080e9097da1191f36947bb2fd5b`.
+Selected entry: `2bfd43cfe3e7001dbdec7adbae2c98b98a7d1ca7`.
+Captured edge: `736d95555def03b909a25d5b1a756270f95055dd`.
+The goal stays ACTIVE.
+
+Actual entry retains readiness and proves captured target identity.
+The separately composed captured-edge worker derives sufficient bounds
+for a supported edge and its original raw-slot write, or exact child rejection.
+Successful output resets expansion ancestry and retains Safe and all indexes.
+Rejection does not finalize or claim unconditional Safe. Enumerated origin
+and unchanged-value protection are restricted away from the new target.
+Inherited InputsPending is retained. Its original premise and conditional
+numeric admission remain. Readiness is required at the actual entry state.
+Oracle preservation, global PendingReferences and fragment acyclicity stay open.
+
+All three strict modules, installed readback and Audit pass. The audit checks
+76656 theorem dependencies. Haskell runtime and H6 are unchanged.
+H6 remains the strongest end-to-end result. Next: combine the entry and
+captured-edge steps into ordered alternatives. Restore enumeration input
+per branch, but account for shared native growth and query memo effects.
+The Haskell result list is lazy; exact forcing correspondence remains open.
+Details: `lean/notes-current-pruning-enumeration-captured-edge.md`.
 
 ## Native selected-edge admission and completion
 
