@@ -1,5 +1,59 @@
 # Current system claim
 
+## Native cached own-class prefix
+
+Current source: `SourcePruningEnumerationCachedOwn`.
+Proof: `f27f13d6b8d7bf1706aacc88979c4a8a8e08975a`. Main remains `74250bd889685da436cdbfe32ac4b5a0878ffd09`.
+The whole goal stays ACTIVE and incomplete. H6 remains strongest.
+
+The cached own-class loop executes actual absent-node allocation in computed
+trie order, including duplicates. StorageValid/PendingRealized, current Roots,
+canonical counts and the all-Nat native flag law are genuine inputs. Alignment
+derives the old fresh flag as false. No decoded-value, coherence, successful
+callback or desired-endpoint premise is introduced.
+
+The actual endpoint has consecutive suspendedVars and the exact suspendedState
+core, with storage, realization, unchanged forest/Roots, waiting and whole
+flag function. Returning Suspended values adds no stored references or counts.
+The edge prefix tests inherited arity first. False arity returns some [] and
+the existing reject action without an after-cache. Projection-none remains
+outer partiality. Successful projection retains actual tries, residual and
+zipIdx child order with inherited descent before own descent. The exact
+existing core raw singleton is derived. Children and residual installation
+are not executed here; no child-bucket bound is exported.
+
+Root selected two definitions (prepare noncomputable), two theorems, three
+haves, one proof let, two result-header lets and one list induction, with no
+instances, new types or Graph carrier. Source estimate 160–280, hard limit
+400. Nine exact selected fragments / 105 lines and the source review remain.
+The frozen V2 owner records 88 payloads, 133 scoped entries, 5 obtain packets
+with 51 fields, 13 whole sources and 24 cuts / 343 lines, plus 5 routes and
+17 project identities. All nine selected literals stay exact. The complete
+V1 owner remains preserved; V2 changes metadata attachment and indentation
+instructions only. This records no compiler outcome.
+
+Validation: Strict attempt 2 passes with a literal empty log under all linters and warnings as errors. The first failed source and complete 3409-byte raw log remain. Two body-only repairs close the reduced True conjunction and explicitly unfold ExceptT.run and the selected staged let for reuse of the existing producer. All nine exact literals, types, assumptions and limits stay unchanged. The source has 178 ordinary lines, within the selected 160 to 280 estimate and hard cap 400. The installed build, complete public readback and aggregate Audit pass. All 124 public output lines retain four complete signatures without display omissions. The older unused-variable warning remains unchanged. No passing check was repeated. No seal has failed. All actual complete resource receipts remain. Read-only setup and metadata diagnostics remain separate from compiler and seal failures.
+Installed focused build: 1315 jobs; Audit: 3720 jobs and
+76387 theorem dependency checks. Actual public axioms: suspendMany reports propext. prepare and complete report propext, Classical.choice and Quot.sound. suspendMany_complete reports propext and Quot.sound.
+All actual failed inputs, complete raw logs and cap receipts remain. The
+separate documents-1 non-Lean ledger is retained. Exactly 26 prior CachedPrepare
+inputs preserve archive-1/local-publication-1/push-1 and the full 12613-byte
+summary. Its sealed assessment and separate peer remain. Prior repairs stay
+historical; no future seal or push outcome is asserted.
+
+Cached child execution, reached interruption state, residual order, same-before
+alternatives, terminal fallback, native maps/machine integers, extraction,
+configured selector order, current-resource admission, Safe/LiveRoots,
+wrapper reconstruction and full driver remain open. All six Haskell repairs
+remain first in FINDINGS. No Haskell change is claimed. H6 still covers closed
+construction with valid cache/allocation history and any prescribed finite
+modeled node-call trace at derived bounds. Empty inherited payload preserves
+the same finite trees under formal guard/solver semantics. Full typing/pruning,
+solver implementation/runtime/resources/convergence remain open.
+
+The V2 inventory retains 133 planned scope entries. The equation-clause definition has no named tries argument; a separate annotation records that planned row as absent. The five structural V2 metadata edits affect three files. A fourth file adds a documentary provenance sentence. No selected literal or type changes.
+
+
 ## Native cached child shape preparation
 
 Current source: `SourcePruningEnumerationCachedPrepare`.
