@@ -1,0 +1,38 @@
+/tmp/mcfta-sized-deterministic-20261025/gate-strict-1/MicroCFTA/SourceSizedDeterministic.lean:51:63: error: Application type mismatch: The argument
+  firstMember
+has type
+  first ∈ second :: rest
+but is expected to have type
+  first ∈ rest
+in the application
+  And.intro firstMember
+/tmp/mcfta-sized-deterministic-20261025/gate-strict-1/MicroCFTA/SourceSizedDeterministic.lean:92:14: error(lean.unknownIdentifier): Unknown identifier `congrArg₂`
+/tmp/mcfta-sized-deterministic-20261025/gate-strict-1/MicroCFTA/SourceSizedDeterministic.lean:106:14: error(lean.unknownIdentifier): Unknown identifier `congrArg₂`
+/tmp/mcfta-sized-deterministic-20261025/gate-strict-1/MicroCFTA/SourceSizedDeterministic.lean:125:4: error: Tactic `subst` failed: did not find equation for eliminating 'rightTerms'
+
+case pos
+State Symbol : Type
+inst✝¹ : DecidableEq State
+inst✝ : DecidableEq Symbol
+rows : Automaton State Symbol
+states : List State
+support : ∀ (state : State) (edge : Edge State Symbol), edge ∈ rows state → state ∈ states
+passed : bottomUpDeterministic rows states = true
+state : State
+global : (List.map (fun entry => rowKey entry.snd) (ownedRows rows states)).Nodup
+flattened : (List.flatMap (fun state => List.map rowKey (rows state)) states).Nodup
+inside : state ∈ states
+localKeys : List.Pairwise (fun x1 x2 => x1 ≠ x2) (List.map rowKey (rows state))
+first second : Edge State Symbol
+different : rowKey first ≠ rowKey second
+term : Term Symbol
+leftTerms : List (Term Symbol)
+leftEq : term = Term.node first.label leftTerms
+leftRuns : All₂ (Accepts rows) first.children leftTerms
+right✝¹ : first.guard term = true
+rightTerms : List (Term Symbol)
+rightEq : term = Term.node second.label rightTerms
+rightRuns : All₂ (Accepts rows) second.children rightTerms
+right✝ : second.guard term = true
+same : first.label = second.label ∧ leftTerms = rightTerms
+⊢ False

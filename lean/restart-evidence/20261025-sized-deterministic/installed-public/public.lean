@@ -1,0 +1,33 @@
+import MicroCFTA.SourceSizedFiniteKeysRankEvaluation
+set_option pp.maxSteps 1000000
+set_option pp.deepTerms true
+#check MicroCFTA.SourceSizedDeterministic.bottomUpDeterministic
+#print axioms MicroCFTA.SourceSizedDeterministic.bottomUpDeterministic
+#check MicroCFTA.SourceSizedDeterministic.gate_keys
+#print axioms MicroCFTA.SourceSizedDeterministic.gate_keys
+#check MicroCFTA.SourceSizedDeterministic.accepted_state_unique
+#print axioms MicroCFTA.SourceSizedDeterministic.accepted_state_unique
+#check MicroCFTA.SourceSizedDeterministic.gate_disjoint
+#print axioms MicroCFTA.SourceSizedDeterministic.gate_disjoint
+#check MicroCFTA.SourceSizedDeterministic.gate_unique
+#print axioms MicroCFTA.SourceSizedDeterministic.gate_unique
+#check MicroCFTA.SourceSizedDispatcher.optimizedApi_eq_deterministic
+#print axioms MicroCFTA.SourceSizedDispatcher.optimizedApi_eq_deterministic
+#check MicroCFTA.SourceSizedDispatcher.sized
+#print axioms MicroCFTA.SourceSizedDispatcher.sized
+#check MicroCFTA.SourceSizedDispatcher.sized_eq_reference
+#print axioms MicroCFTA.SourceSizedDispatcher.sized_eq_reference
+#check MicroCFTA.SourceSizedPreprocessing.publicSized
+#print axioms MicroCFTA.SourceSizedPreprocessing.publicSized
+#check MicroCFTA.SourceSizedPreprocessing.publicSized_eq_reference
+#print axioms MicroCFTA.SourceSizedPreprocessing.publicSized_eq_reference
+#check MicroCFTA.SourceSizedFiniteKeysDispatch.raw_deterministic_unique
+#print axioms MicroCFTA.SourceSizedFiniteKeysDispatch.raw_deterministic_unique
+#check MicroCFTA.SourceSizedFiniteKeysDispatch.nativeSized
+#print axioms MicroCFTA.SourceSizedFiniteKeysDispatch.nativeSized
+#check MicroCFTA.SourceSizedFiniteKeysDispatch.nativeSized_eq
+#print axioms MicroCFTA.SourceSizedFiniteKeysDispatch.nativeSized_eq
+#check MicroCFTA.SourceSizedFiniteKeysDispatch.native_success
+#print axioms MicroCFTA.SourceSizedFiniteKeysDispatch.native_success
+#check MicroCFTA.SourceSizedFiniteKeysRankEvaluation.native_rank_laws
+#print axioms MicroCFTA.SourceSizedFiniteKeysRankEvaluation.native_rank_laws

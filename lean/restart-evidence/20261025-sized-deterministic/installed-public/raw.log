@@ -1,0 +1,170 @@
+MicroCFTA.SourceSizedDeterministic.bottomUpDeterministic {State Symbol : Type} [DecidableEq State] [DecidableEq Symbol]
+  (rows : MicroCFTA.Language.Automaton State Symbol) (states : List State) : Bool
+'MicroCFTA.SourceSizedDeterministic.bottomUpDeterministic' does not depend on any axioms
+MicroCFTA.SourceSizedDeterministic.gate_keys {State Symbol : Type} [DecidableEq State] [DecidableEq Symbol]
+  (rows : MicroCFTA.Language.Automaton State Symbol) (states : List State)
+  (passed : MicroCFTA.SourceSizedDeterministic.bottomUpDeterministic rows states = true) :
+  (List.map (fun entry => MicroCFTA.SourceSizedDeterministic.rowKey entry.snd)
+      (MicroCFTA.SourceSizedDeterministic.ownedRows rows states)).Nodup
+'MicroCFTA.SourceSizedDeterministic.gate_keys' depends on axioms: [propext, Classical.choice, Quot.sound]
+MicroCFTA.SourceSizedDeterministic.accepted_state_unique {State Symbol : Type} [DecidableEq State] [DecidableEq Symbol]
+  (rows : MicroCFTA.Language.Automaton State Symbol) (states : List State)
+  (support : ∀ (state : State) (edge : MicroCFTA.Language.Edge State Symbol), edge ∈ rows state → state ∈ states)
+  (passed : MicroCFTA.SourceSizedDeterministic.bottomUpDeterministic rows states = true)
+  (term : MicroCFTA.Language.Term Symbol) (first second : State) (left : MicroCFTA.Language.Accepts rows first term)
+  (right : MicroCFTA.Language.Accepts rows second term) : first = second
+'MicroCFTA.SourceSizedDeterministic.accepted_state_unique' depends on axioms: [propext, Classical.choice, Quot.sound]
+MicroCFTA.SourceSizedDeterministic.gate_disjoint {State Symbol : Type} [DecidableEq State] [DecidableEq Symbol]
+  (rows : MicroCFTA.Language.Automaton State Symbol) (states : List State)
+  (support : ∀ (state : State) (edge : MicroCFTA.Language.Edge State Symbol), edge ∈ rows state → state ∈ states)
+  (passed : MicroCFTA.SourceSizedDeterministic.bottomUpDeterministic rows states = true) (state : State) :
+  MicroCFTA.RecursiveUnambiguous.DisjointRows rows state
+'MicroCFTA.SourceSizedDeterministic.gate_disjoint' depends on axioms: [propext, Classical.choice, Quot.sound]
+MicroCFTA.SourceSizedDeterministic.gate_unique {State Symbol : Type} [DecidableEq State] [DecidableEq Symbol]
+  (rows : MicroCFTA.Language.Automaton State Symbol) (plain : MicroCFTA.Decoder.Plain rows) (states : List State)
+  (support : ∀ (state : State) (edge : MicroCFTA.Language.Edge State Symbol), edge ∈ rows state → state ∈ states)
+  (passed : MicroCFTA.SourceSizedDeterministic.bottomUpDeterministic rows states = true) :
+  MicroCFTA.SizedRank.Unambiguous rows
+'MicroCFTA.SourceSizedDeterministic.gate_unique' depends on axioms: [propext, Classical.choice, Quot.sound]
+MicroCFTA.SourceSizedDispatcher.optimizedApi_eq_deterministic {State Symbol : Type} [DecidableEq State]
+  [DecidableEq Symbol] (rows : MicroCFTA.Language.Automaton State Symbol) (plain : MicroCFTA.Decoder.Plain rows)
+  (states : List State)
+  (support : ∀ (state : State) (edge : MicroCFTA.Language.Edge State Symbol), edge ∈ rows state → state ∈ states)
+  (passed : MicroCFTA.SourceSizedDeterministic.bottomUpDeterministic rows states = true) (root : State) :
+  MicroCFTA.SourceSizedDispatcher.optimizedApi rows root = MicroCFTA.SourceSizedDispatcher.referenceApi rows root
+'MicroCFTA.SourceSizedDispatcher.optimizedApi_eq_deterministic' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+MicroCFTA.SourceSizedDispatcher.sized {State Formula : Type} [DecidableEq State] [DecidableEq Formula]
+  (rows :
+    State →
+      List
+        (MicroCFTA.SourceSizedDecided.Row State (MicroCFTA.SourceObservations.Label Formula)
+          (MicroCFTA.SourceSymbolicIndex.Constraint Formula)))
+  (states : List State) (complete : ∀ (state : State), state ∈ states) (root : State) :
+  Except Unit (MicroCFTA.SourceSizedDispatcher.Api (MicroCFTA.SourceObservations.Label Formula))
+'MicroCFTA.SourceSizedDispatcher.sized' depends on axioms: [propext, Classical.choice, Quot.sound]
+MicroCFTA.SourceSizedDispatcher.sized_eq_reference {State Formula : Type} [DecidableEq State] [DecidableEq Formula]
+  (rows :
+    State →
+      List
+        (MicroCFTA.SourceSizedDecided.Row State (MicroCFTA.SourceObservations.Label Formula)
+          (MicroCFTA.SourceSymbolicIndex.Constraint Formula)))
+  (states : List State) (complete : ∀ (state : State), state ∈ states) (root : State) :
+  MicroCFTA.SourceSizedDispatcher.sized rows states complete root =
+    MicroCFTA.SourceSizedDispatcher.reference rows states root
+'MicroCFTA.SourceSizedDispatcher.sized_eq_reference' depends on axioms: [propext, Classical.choice, Quot.sound]
+MicroCFTA.SourceSizedPreprocessing.publicSized {State Formula : Type} [DecidableEq State] [DecidableEq Formula]
+  [Ord (MicroCFTA.SourceObservations.Label Formula)]
+  (input :
+    MicroCFTA.SourceSizedPreprocessing.Input State (MicroCFTA.SourceObservations.Label Formula)
+      (MicroCFTA.SourceSymbolicIndex.Constraint Formula)) :
+  Except Unit (MicroCFTA.SourceSizedDispatcher.Api (MicroCFTA.SourceObservations.Label Formula))
+'MicroCFTA.SourceSizedPreprocessing.publicSized' depends on axioms: [propext, Classical.choice, Quot.sound]
+MicroCFTA.SourceSizedPreprocessing.publicSized_eq_reference {State Formula : Type} [DecidableEq State]
+  [DecidableEq Formula] [Ord (MicroCFTA.SourceObservations.Label Formula)]
+  (input :
+    MicroCFTA.SourceSizedPreprocessing.Input State (MicroCFTA.SourceObservations.Label Formula)
+      (MicroCFTA.SourceSymbolicIndex.Constraint Formula)) :
+  MicroCFTA.SourceSizedPreprocessing.publicSized input = MicroCFTA.SourceSizedPreprocessing.publicReference input
+'MicroCFTA.SourceSizedPreprocessing.publicSized_eq_reference' depends on axioms: [propext, Classical.choice, Quot.sound]
+MicroCFTA.SourceSizedFiniteKeysDispatch.raw_deterministic_unique {State Symbol Payload : Type} [DecidableEq State]
+  [Ord State] [DecidableEq Symbol] [Ord Symbol] [Std.TransOrd Symbol] [Std.LawfulEqOrd Symbol]
+  (table : MicroCFTA.SourceSizedFiniteKeys.Table State Symbol Payload) (root : State)
+  (valid :
+    MicroCFTA.FTAValidation.validateRows root (MicroCFTA.SourceSizedFiniteKeys.interpreted table fun x x_1 => true) =
+      Except.ok (MicroCFTA.SourceSizedFiniteKeys.interpreted table fun x x_1 => true))
+  (passed :
+    MicroCFTA.SourceSizedDeterministic.bottomUpDeterministic
+        (MicroCFTA.SourceSizedDispatcher.ordinaryRows (MicroCFTA.SourceSizedFiniteKeys.nativeSorted table root valid))
+        (MicroCFTA.SourceDenseRows.keys table) =
+      true) :
+  MicroCFTA.SizedRank.Unambiguous
+    (MicroCFTA.SourceSizedDispatcher.ordinaryRows (MicroCFTA.SourceSizedFiniteKeys.nativeSorted table root valid))
+'MicroCFTA.SourceSizedFiniteKeysDispatch.raw_deterministic_unique' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+MicroCFTA.SourceSizedFiniteKeysDispatch.nativeSized {Formula State : Type} [DecidableEq State] [Ord State]
+  [DecidableEq Formula] [Ord (MicroCFTA.SourceObservations.Label Formula)]
+  (table :
+    MicroCFTA.SourceSizedFiniteKeys.Table State (MicroCFTA.SourceObservations.Label Formula)
+      (MicroCFTA.SourceSymbolicIndex.Constraint Formula))
+  (root : State)
+  (valid :
+    MicroCFTA.FTAValidation.validateRows root (MicroCFTA.SourceSizedFiniteKeys.interpreted table fun x x_1 => true) =
+      Except.ok (MicroCFTA.SourceSizedFiniteKeys.interpreted table fun x x_1 => true)) :
+  Except Unit (MicroCFTA.SourceSizedDispatcher.Api (MicroCFTA.SourceObservations.Label Formula))
+'MicroCFTA.SourceSizedFiniteKeysDispatch.nativeSized' depends on axioms: [propext, Classical.choice, Quot.sound]
+MicroCFTA.SourceSizedFiniteKeysDispatch.nativeSized_eq {Formula State : Type} [DecidableEq State] [Ord State]
+  [DecidableEq Formula] [Ord (MicroCFTA.SourceObservations.Label Formula)]
+  [Std.TransOrd (MicroCFTA.SourceObservations.Label Formula)]
+  [Std.LawfulEqOrd (MicroCFTA.SourceObservations.Label Formula)]
+  (table :
+    MicroCFTA.SourceSizedFiniteKeys.Table State (MicroCFTA.SourceObservations.Label Formula)
+      (MicroCFTA.SourceSymbolicIndex.Constraint Formula))
+  (root : State)
+  (valid :
+    MicroCFTA.FTAValidation.validateRows root (MicroCFTA.SourceSizedFiniteKeys.interpreted table fun x x_1 => true) =
+      Except.ok (MicroCFTA.SourceSizedFiniteKeys.interpreted table fun x x_1 => true)) :
+  MicroCFTA.SourceSizedFiniteKeysDispatch.nativeSized table root valid =
+    MicroCFTA.SourceSizedPreprocessing.publicSized (MicroCFTA.SourceSizedFiniteKeys.input table root valid)
+'MicroCFTA.SourceSizedFiniteKeysDispatch.nativeSized_eq' depends on axioms: [propext, Classical.choice, Quot.sound]
+MicroCFTA.SourceSizedFiniteKeysDispatch.native_success {Formula State : Type} [DecidableEq State] [Ord State]
+  [DecidableEq Formula] [Ord (MicroCFTA.SourceObservations.Label Formula)]
+  [Std.TransOrd (MicroCFTA.SourceObservations.Label Formula)]
+  [Std.LawfulEqOrd (MicroCFTA.SourceObservations.Label Formula)]
+  (table :
+    MicroCFTA.SourceSizedFiniteKeys.Table State (MicroCFTA.SourceObservations.Label Formula)
+      (MicroCFTA.SourceSymbolicIndex.Constraint Formula))
+  (root : State)
+  (valid :
+    MicroCFTA.FTAValidation.validateRows root (MicroCFTA.SourceSizedFiniteKeys.interpreted table fun x x_1 => true) =
+      Except.ok (MicroCFTA.SourceSizedFiniteKeys.interpreted table fun x x_1 => true))
+  (api : MicroCFTA.SourceSizedDispatcher.Api (MicroCFTA.SourceObservations.Label Formula))
+  (success : MicroCFTA.SourceSizedFiniteKeysDispatch.nativeSized table root valid = Except.ok api) :
+  MicroCFTA.SourceSizedDispatcher.residualCheck (MicroCFTA.SourceSizedFiniteKeys.lookup table)
+        (MicroCFTA.SourceDenseRows.keys table) root =
+      true ∧
+    api =
+      MicroCFTA.SourceSizedDispatcher.referenceApi
+        (MicroCFTA.SourceSizedDispatcher.equalityRows (MicroCFTA.SourceSizedFiniteKeys.nativeSorted table root valid))
+        root
+'MicroCFTA.SourceSizedFiniteKeysDispatch.native_success' depends on axioms: [propext, Classical.choice, Quot.sound]
+MicroCFTA.SourceSizedFiniteKeysRankEvaluation.native_rank_laws {State : Type} [DecidableEq State] [Ord State]
+  {Formula : Type} [DecidableEq Formula] [Ord (MicroCFTA.SourceObservations.Label Formula)]
+  [Std.TransOrd (MicroCFTA.SourceObservations.Label Formula)]
+  [Std.LawfulEqOrd (MicroCFTA.SourceObservations.Label Formula)]
+  (table :
+    MicroCFTA.SourceSizedFiniteKeys.Table State (MicroCFTA.SourceObservations.Label Formula)
+      (MicroCFTA.SourceSymbolicIndex.Constraint Formula))
+  (root : State)
+  (valid :
+    MicroCFTA.FTAValidation.validateRows root (MicroCFTA.SourceSizedFiniteKeys.interpreted table fun x x_1 => true) =
+      Except.ok (MicroCFTA.SourceSizedFiniteKeys.interpreted table fun x x_1 => true))
+  (passed :
+    (MicroCFTA.SourceSizedDispatcher.plainCheck (MicroCFTA.SourceSizedFiniteKeys.lookup table)
+          (MicroCFTA.SourceDenseRows.keys table) &&
+        (MicroCFTA.SourceSizedDeterministic.bottomUpDeterministic
+            (MicroCFTA.SourceSizedDispatcher.ordinaryRows
+              (MicroCFTA.SourceSizedFiniteKeys.nativeSorted table root valid))
+            (MicroCFTA.SourceDenseRows.keys table) ||
+          MicroCFTA.SourceSizedFiniteKeysDispatch.unambiguous table root valid)) =
+      true)
+  (api : MicroCFTA.SourceSizedDispatcher.Api (MicroCFTA.SourceObservations.Label Formula))
+  (success : MicroCFTA.SourceSizedFiniteKeysDispatch.nativeSized table root valid = Except.ok api)
+  (term : MicroCFTA.Language.Term (MicroCFTA.SourceObservations.Label Formula)) :
+  MicroCFTA.TablePositionFiniteEvaluation.CountsEvaluation
+      (MicroCFTA.SourceSizedDispatcher.ordinaryRows (MicroCFTA.SourceSizedFiniteKeys.nativeSorted table root valid))
+      (MicroCFTA.SourceSizedFiniteKeysRankEvaluation.rankCounts table root valid term) ∧
+    MicroCFTA.TablePositionFiniteEvaluation.positionLookup
+          (MicroCFTA.SourceSizedFiniteKeysRankEvaluation.rankTable table root valid term) root =
+        api.rank term ∧
+      ∀ (size rank : Int),
+        Option.map (fun position => (Int.ofNat position.size, Int.ofNat position.rank))
+              (MicroCFTA.TablePositionFiniteEvaluation.positionLookup
+                (MicroCFTA.SourceSizedFiniteKeysRankEvaluation.rankTable table root valid term) root) =
+            some (size, rank) ↔
+          api.unrank size rank = some term
+'MicroCFTA.SourceSizedFiniteKeysRankEvaluation.native_rank_laws' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]

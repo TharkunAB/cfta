@@ -1,0 +1,58 @@
+/tmp/mcfta-sized-deterministic-20261025/raw-api-strict-1/MicroCFTA/SourceSizedFiniteKeysDispatchApi.lean:130:6: error: Tactic `assumption` failed
+
+Formula State : Type
+inst✝⁵ : DecidableEq State
+inst✝⁴ : Ord State
+inst✝³ : DecidableEq Formula
+inst✝² : Ord (Label Formula)
+inst✝¹ : Std.TransOrd (Label Formula)
+inst✝ : Std.LawfulEqOrd (Label Formula)
+table : Table State (Label Formula) (Constraint Formula)
+root : State
+valid :
+  FTAValidation.validateRows root (interpreted table fun x x_1 => true) =
+    Except.ok (interpreted table fun x x_1 => true)
+passed :
+  (plainCheck (lookup table) (keys table) &&
+      (SourceSizedDeterministic.bottomUpDeterministic (ordinaryRows (nativeSorted table root valid)) (keys table) ||
+        unambiguous table root valid)) =
+    true
+both :
+  plainCheck (lookup table) (keys table) = true ∧
+    (SourceSizedDeterministic.bottomUpDeterministic (ordinaryRows (nativeSorted table root valid)) (keys table) = true ∨
+      unambiguous table root valid = true)
+unique : Unambiguous (ordinaryRows (nativeSorted table root valid))
+⊢ plainCheck (lookup table) (keys table) = true
+/tmp/mcfta-sized-deterministic-20261025/raw-api-strict-1/MicroCFTA/SourceSizedFiniteKeysDispatchApi.lean:137:6: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  referenceApi (automaton (nativeSorted table root valid) fun x x_1 => true) root
+in the target expression
+  referenceApi (ordinaryRows (nativeSorted table root valid)) root =
+    referenceApi (equalityRows (nativeSorted table root valid)) root
+
+case isTrue
+Formula State : Type
+inst✝⁵ : DecidableEq State
+inst✝⁴ : Ord State
+inst✝³ : DecidableEq Formula
+inst✝² : Ord (Label Formula)
+inst✝¹ : Std.TransOrd (Label Formula)
+inst✝ : Std.LawfulEqOrd (Label Formula)
+table : Table State (Label Formula) (Constraint Formula)
+root : State
+valid :
+  FTAValidation.validateRows root (interpreted table fun x x_1 => true) =
+    Except.ok (interpreted table fun x x_1 => true)
+passed :
+  (plainCheck (lookup table) (keys table) &&
+      (SourceSizedDeterministic.bottomUpDeterministic (ordinaryRows (nativeSorted table root valid)) (keys table) ||
+        unambiguous table root valid)) =
+    true
+both :
+  plainCheck (lookup table) (keys table) = true ∧
+    (SourceSizedDeterministic.bottomUpDeterministic (ordinaryRows (nativeSorted table root valid)) (keys table) = true ∨
+      unambiguous table root valid = true)
+unique : Unambiguous (ordinaryRows (nativeSorted table root valid))
+plain : plainCheck (input table root valid).rows (input table root valid).states = true
+residual : residualCheck (lookup table) (keys table) root = true
+⊢ referenceApi (ordinaryRows (nativeSorted table root valid)) root =
+    referenceApi (equalityRows (nativeSorted table root valid)) root

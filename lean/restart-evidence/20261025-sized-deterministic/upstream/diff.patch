@@ -1,0 +1,132 @@
+diff --git a/cfta-generator/CHANGELOG.md b/cfta-generator/CHANGELOG.md
+index 5db92b3f5..6da87c033 100644
+--- a/cfta-generator/CHANGELOG.md
++++ b/cfta-generator/CHANGELOG.md
+@@ -132,7 +132,8 @@ tree automata of `cfta`, with QuickCheck integration.
+   and an empty class says nothing about later classes. `sizedReference`
+   builds each class from smaller ones; `sized` gives the same sequence with
+   the count table, read from the original rows, when the automaton has no
+-  constraint and no ambiguity. A guard
++  constraint and no ambiguity. A bottom-up deterministic automaton, such as
++  an e-graph, has no ambiguity, and a linear check finds it. A guard
+   beyond equality constraints is `ResidualGuard`. `sizedUpTo` builds the
+   classes up to a size bound with a solver that decides every guard on each
+   built term, so a liquid automaton has an exact route that needs no
+diff --git a/cfta-generator/src/Data/CFTA/Sized.hs b/cfta-generator/src/Data/CFTA/Sized.hs
+index 365bcb043..fd7f81e90 100644
+--- a/cfta-generator/src/Data/CFTA/Sized.hs
++++ b/cfta-generator/src/Data/CFTA/Sized.hs
+@@ -39,7 +39,8 @@ every guard, so it needs no pruning: it is the exact route for a liquid
+ automaton whose guards pruning did not discharge.
+ 'sized' gives the same sequence. It counts, ranks, and unranks with the count
+ table when the automaton has no constraint and its rows are unambiguous.
+-It uses the reference otherwise.
++It uses the reference otherwise. Bottom-up deterministic rows, as in an
++e-graph, are unambiguous, and a linear check finds them.
+ -}
+ module Data.CFTA.Sized (
+     Sized,
+@@ -62,6 +63,7 @@ import Data.List (elemIndex, genericDrop, genericIndex, genericLength, sortOn, t
+ import qualified Data.Map.Lazy as LazyMap
+ import qualified Data.Map.Strict as Map
+ import Data.Maybe (listToMaybe)
++import qualified Data.Set as Set
+ 
+ import qualified Data.CFTA as FTA
+ import Data.CFTA.Constraint (Constraint, equalitiesHold, noConstraint, residual)
+@@ -102,7 +104,7 @@ sized ::
+     FTA.FTA state symbol Constraint -> Either SizedError (Sized symbol)
+ sized automaton
+     | all (all ((== noConstraint) . FTA.transitionConstraint)) (FTA.transitionTable automaton)
+-    , unambiguousRows rows =
++    , bottomUpDeterministic rows || unambiguousRows rows =
+         let index = Ordinary.tableIndex initial rows
+             count = countAtSize index
+             unrank size (ClassRank rank)
+@@ -123,6 +125,18 @@ sized automaton
+     rows = Map.map (map void) $ sortedRows automaton
+     everyClassRank (Cardinality total) = map ClassRank [0 .. total - 1]
+ 
++{- | Whether no two transitions of the rows have the same symbol and the same
++child states, as in an e-graph. Then each term reaches at most one state, by
++induction on the term. So two transitions of a state that accept one term
++have the same child states, and are the same transition: each term has at
++most one run, and the rows are unambiguous. The check is linear in the
++transitions. 'unambiguousRows' builds the product of each pair of states.
++-}
++bottomUpDeterministic :: (Ord state, Ord symbol) => Map.Map state [FTA.Transition state symbol ()] -> Bool
++bottomUpDeterministic rows = length keys == Set.size (Set.fromList keys)
++  where
++    keys = [(FTA.transitionSymbol t, FTA.transitionChildren t) | ts <- Map.elems rows, t <- ts]
++
+ {- | Whether each term has at most one run in the rows.
+ 
+ The synchronous product accepts the common terms of each pair of states.
+diff --git a/specftacular/README.md b/specftacular/README.md
+index 08ecf6c1a..ad3ab4f3a 100644
+--- a/specftacular/README.md
++++ b/specftacular/README.md
+@@ -29,6 +29,44 @@ The golden test suite compares the discovered laws with `test/golden/`.
+ The package was imported from
+ [`TharkunAB/specftacular` at `948a246`](https://github.com/TharkunAB/specftacular/tree/948a24694256758e53925d3bd498efe05f668f51).
+ 
++## Comparison with Spectacular
++
++This table gives a general idea of the cost of a search through phase 4.
++The [comparison](docs/SPECTACULAR_COMPARISON.md) gives the method, each
++phase, the memory, and the differences between the laws. All runs are on
++the same host: an AMD Ryzen 9 7950X with 24 logical CPUs for a WSL2 VM.
++
++- Spectacular: the ICST 2023 artifact, with GHC 8.10.7 and a limit of 60
++  seconds.
++- Specftacular: revision `8c44a0d9b`, with GHC 9.14.1. One core: the
++  defaults and a limit of 900 seconds. 12 cores:
++  `--parallel-tests 64 --speculate 64` and `+RTS -N12 -qn4 -A64m`, with no
++  limit.
++
++QuickSpec 2 does not run on this host in the comparison.
++
++| Signature | Size | Spectacular s | Spectacular laws | Specftacular, one core s | Specftacular, 12 cores s | Specftacular laws |
++| --- | ---: | ---: | ---: | ---: | ---: | ---: |
++| Lists | 7 | > 60 | — | 23.90 | 11.47 | 41 |
++| Octonions | 7 | 0.22 | 8 | 1.00 | 0.48 | 15 |
++| Regex | 7 | 5.84 | 42 | 51.68 | 34.12 | 60 |
++| ListMonad | 7 | 18.04 | 42 | 4.61 | 3.43 | 9 |
++| HugeLists | 3 | 0.64 | 33 | 2.54 | 1.43 | 46 |
++| HugeLists | 4 | 28.43 | 90 | 8.58 | 5.87 | 122 |
++| HugeLists | 5 | > 60 | — | 55.90 | 42.10 | 291 |
++| HugeLists | 6 | > 60 | — | 491.05 | 364.06 | 690 |
++| HugeLists | 7 | > 60 | — | > 900 | 3392.93 ᵈ | 1413 ᵈ |
++
++`ᵈ`: with `--type-depth 2 --recheck 2000`. Without the depth bound,
++phase 3 at size 7 does not finish.
++
++The limits are different, so a timeout of Spectacular does not show how
++long it takes. The law counts are not comparable between the two tools:
++the generators, the test cases and some definitions differ (for example,
++`usort` in HugeLists). A larger count is not a better result, because false
++and redundant equations also count. Specftacular tests each law on 1064
++cases, and HugeLists 7 tests each new law again on 2000 more.
++
+ The flag `--tests N` sets the number of random cases (1000 by default). The
+ search also uses eight separately seeded random cases, 40 integer-boundary
+ and list cases, and 16 cases with two-element lists and a predicate that
+diff --git a/specftacular/docs/SPECTACULAR_COMPARISON.md b/specftacular/docs/SPECTACULAR_COMPARISON.md
+index cec845129..d1ed5f30c 100644
+--- a/specftacular/docs/SPECTACULAR_COMPARISON.md
++++ b/specftacular/docs/SPECTACULAR_COMPARISON.md
+@@ -332,6 +332,14 @@ xs ++ (xs ++ ys) == concat (scanl (++) xs [ys])
+ concat (drop x [f y]) == (drop x >=> f) [y]
+ ```
+ 
++Twee 2.7.1 checks the two sets, with 180 seconds for each goal. It proves
++147 of the 578 laws from the 1,413 laws with the fuel, and 31 of the 45 laws
++from the 1,946 laws of `2b2d9e562`. The first pass gives twee all the laws
++of the other run as axioms. The second pass, for the open goals, gives the
++axioms that SInE selects at depth 1 and the axioms over the constants of
++the goal. Twee shows none of the laws independent. The others stay open
++within the time limit.
++
+ At 7-p4 on 12 cores, 39 completions run out of their fuel, against 41 at
+ `b07337367`. Three laws over `[[[A]]]` still run over the allocation budget
+ within the fuel: their pairs cost more than 8 MiB each. With `--speculate`,

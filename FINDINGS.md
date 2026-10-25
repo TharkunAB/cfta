@@ -23,6 +23,26 @@ Upstream `f1f266ab4` has the same five files as local `07229ca7f3`.
 All six repairs are in the imported main history. General proofs remain
 separate. All earlier repair entries and evidence remain below.
 
+### Sized deterministic-key documentation repair
+
+Main `153e1a211b56dd78bd22f6b427fb78e673041d55` is imported.
+PR #177 adds the bottom-up deterministic shortcut before the product check.
+The gate counts every `(symbol, ordered child states)` occurrence globally.
+The no-constraint check remains required. Duplicate rows fail the shortcut.
+The existing native Sized suite passes: 11 examples and four properties
+with 300 cases each. No output defect is found in the new shortcut.
+
+The added module comment, helper comment and changelog call the check linear.
+The implementation builds an ordered `Data.Set` from arbitrary keys.
+That implementation does not establish the stated linear bound.
+Local repair `af6369a9e0ecd70acf4da1dffec45c32e6ce7b7b` removes this claim.
+It describes the key set and retains all executable Haskell expressions.
+Fourmolu and cabal-gild checks pass inside `nix-shell`.
+External action: apply this focused documentation commit to main.
+The formal gate soundness and exact API equality proofs are separate.
+Details: `lean/notes-current-sized-deterministic.md`.
+Evidence: `lean/restart-evidence/20261025-sized-deterministic`.
+
 ### Specftacular parallel completion follow-ups
 
 Main `9d4e4d584aa7a681f075790e98466afe7531838a` is imported.
@@ -143,6 +163,27 @@ TH/Generic extraction, valid-position build/read and source codec laws stay open
 
 
 
+
+## Deterministic Sized gate from main
+
+Main `153e1a211b56dd78bd22f6b427fb78e673041d55` is integrated.
+Gate proof: `cb59a931b06e54bf217fca7cd86f4d8a2cacb998`.
+Dispatcher and rank integration: `01882288bb037712665f5d134b3005d2cc717da3`.
+The goal stays ACTIVE.
+
+The executable global key-cardinality check derives state and run uniqueness.
+Public and raw finite-map dispatch now check it before the product gate.
+Both routes return exactly the reference query record and residual errors.
+This is extensional API equality. Physical set correctness, branch identity
+and cost are outside this proof. Original guard and validation limits remain.
+
+All five strict Lean checks, installed readback and Audit pass.
+The audit checks 76607 theorem dependencies. Native Sized: 11 examples pass,
+including four properties with 300 cases each. Formatting checks pass.
+The Haskell documentation correction is recorded first in root FINDINGS.
+H6 remains the strongest end-to-end result. Next: admitted ordered child
+traversal, then the residual and captured-slot final write.
+Details: `lean/notes-current-sized-deterministic.md`.
 
 ## Ordered native child traversal
 
