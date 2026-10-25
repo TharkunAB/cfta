@@ -1,5 +1,56 @@
 # Public API and source correspondence
 
+## Native cached ordered fold observations
+
+Current source: `SourcePruningEnumerationCachedFold`.
+Proof: `d89c2940677e2a6082c09da30d4533238fb1584a`. Main remains `74250bd889685da436cdbfe32ac4b5a0878ffd09`.
+The whole goal stays ACTIVE and incomplete. H6 remains strongest.
+
+run visits sources in original order, including duplicates. It observes one
+actual Adapter per visited head. An exact successful singleton with a cache
+recurses at the same fuels and reached Caller/queries, using the actual row
+core through EnumerationExpandableIndex.frame. With no cache, it calls the
+original Fold.run once on the exact remaining suffix and actual row core,
+then keeps its whole result and no cache. It does not repeat the head query.
+
+erase gives full bounded equality with original Fold.run: faults, outer
+None, complete raw lists, reached Caller, saved queries and the actual last
+prefix core. Raw [] retains the pre-step core and independent cache while
+prior Caller effects can remain. Unexpected raw shapes stay visible.
+preserves uses initial StorageValid and canonical waiting counts to derive
+those laws at the exact actual outer prefix core for every outcome, with
+the same roots function and original waiting map. No general cache-flag law,
+Context/Ranges, successful callback or desired final endpoint is assumed.
+Finite request admission, adequate bounds and general returned-cache laws
+remain separate. frame attaches the core; it does not prove index invariants.
+
+One definition, two theorems, no haves/lets/instances/helpers/newtypes/carriers
+and one structural List induction. Three public head fragments contain 30
+lines; source estimate 120–200, hard limit 320. Actual source review is bound;
+the single frozen owner/schema pins 61 payloads, four strings / 41 lines
+including context, 86 scopes, two packets / four fields and 12 cases;
+11 whole sources, 13 cuts / 192 lines, two edges / ten project identities.
+
+Validation: Strict attempt 1 passes with a literal empty log under all linters and warnings as errors. No Lean attempt has failed. All four original strings, including context, three public heads, 86 scoped type positions, two packets with four fields, 12 case groups and the complete List induction hypothesis remain unchanged. No header, premise, binder, proof limit, helper, instance or monadic dictionary is added or changed. The source has 120 ordinary lines, within the selected 120 to 200 estimate and hard cap 320. The installed build, complete public readback and aggregate Audit pass. All three complete public signatures occupy 84 output lines without display omissions. The older unused-inputs warning remains unchanged. No passing check was repeated. No seal has run. All actual complete inputs, raw logs and cap receipts remain. Earlier two-declaration selection, source-bound program drafts, separate preservation-source annotation, read-only locator diagnostics and the corrected review dispatch remain separate provenance. No selected check failed during those source/data preparations.
+Installed focused build: 1313 jobs; Audit: 3727 jobs and
+76464 theorem dependency checks. Actual public axioms: run, erase and preserves each report propext, Classical.choice and Quot.sound.
+Only actual reports bind these fields. The documents-1 ledger stays separate.
+Exactly 26 prior artifacts preserve the full 15562-byte summary and actual
+archive-1/local-publication-1/push-1 families; sealed peer is separate context.
+All 148407 baseline files/modes and nine document inverses remain guarded.
+No future seal/push outcome or Haskell change is asserted.
+
+All six Haskell handoffs stay first. No finite initial-only Fold admission,
+general cache-flag/index law, arbitrary fault cache invariant, terminal/incoming
+integration, selector/partition/fallback, wrapper normalization, physical
+maps/machine integers, extraction, Safe/LiveRoots or full-driver result is
+claimed. H6 remains strongest: covered closed construction with valid cache/
+allocation history supports prescribed finite modeled node calls at derived
+bounds and the same finite trees for empty inherited payload under formal
+guard/solver semantics. Whole typing/pruning, concrete solver, runtime,
+resources and convergence remain open.
+
+
 ## Native cached raw-row adapter
 
 Current source: `SourcePruningEnumerationCachedAdapter`.
