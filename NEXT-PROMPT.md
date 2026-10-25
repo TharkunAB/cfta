@@ -1,5 +1,57 @@
 Continue the cfta formalization in /home/tritlo/Code/mcfta.
 
+## Native cached assimilation mutation
+
+Current source: `SourcePruningEnumerationCachedAssimilation`.
+Proof: `3ca766f9974d1fb565c87cd9a8d7c8b7a550ccb2`. Main remains `74250bd889685da436cdbfe32ac4b5a0878ffd09`.
+The whole goal remains ACTIVE and incomplete. H6 remains strongest.
+
+The action rejects merged = some 0 before mutation, with no raw row and a
+separate unchanged prefix cache. Otherwise two actual empty-delta native
+writes store target pending sourceScs ++ targetScs, then eliminate raw source.
+A final record update combines recursion ancestry; expansion ancestry stays.
+No root/count traversal is needed, and the result holds for every fuel.
+
+Actual distinct pending-slot equations plus StorageValid derive the bounds.
+A present supplied merged handle needs actual lookup, Available and closed
+facts. Optional None makes that obligation vacuous. No Coherent, Ready, Graph,
+future Ranges, successful continuation or desired endpoint is assumed.
+
+The exact raw stream equals existing Dispatch.finishOptional. Success retains
+the assimilated core, source/target slots, counter/forest/Roots, storage and
+all pending realization. Empty gain/loss lists keep waiting unchanged. The
+count law holds at the completed pair, not the intermediate target write.
+Source flag is false, target is classified and all other flags stay unchanged.
+Merged None, outer decode failure and raw rejection remain distinct.
+
+Root selected one computable definition, one theorem, five haves, one proof
+let and one definition let, with no instance, induction or new helper/type.
+Ten literals / 66 lines remain. Source estimate 190–310, hard limit 460. The
+source review and frozen owner are bound: 120 payloads, 84 scopes, three
+obtain packets / eight fields, six case groups, 12 sources / 17 cuts / 217
+lines, nine project import routes and 14 defining identities.
+
+Validation: Strict attempt 2 passes with a literal empty log under all linters and warnings as errors. The earlier failed source and its complete 11456-byte raw log remain. Body-only repairs name current conditional lemmas, instantiate the nested source write explicitly, reduce reflexive conditionals and remove one redundant rfl. All ten original literals, types, premises and limits remain unchanged. No new helper, instance or monadic dictionary is added. The source has 161 ordinary lines, below the selected 190 to 310 estimate and within hard cap 460; no padding was added. The installed build, complete public readback and aggregate Audit pass. Both complete signatures occupy 84 public output lines without display omissions. The older unused-inputs warning remains unchanged. No passing check was repeated. No seal has failed. All actual failed inputs, complete raw logs and cap receipts remain. Read-only report-name lookups and source diagnostics stay separate from compiler and seal failures.
+Installed focused build: 1310 jobs; Audit: 3724 jobs and
+76432 theorem dependency checks. Actual public axioms: finish reports propext. complete reports propext and Quot.sound.
+All actual failed inputs, raw logs and cap receipts remain. The documents-1
+ledger stays separate. Exactly 26 prior CachedBranches inputs preserve the
+archive-1/local-publication-1/push-1 families and full 13423-byte summary,
+canonical assessment and separately sealed peer. No future seal/push claim
+is made. All six Haskell handoffs remain first. No Haskell change is claimed.
+
+The actual native intersection's merged-handle origin/language and Keeps
+flag transport remain open. Equal-ID/eliminated-source dispatcher no-ops,
+later cached Dispatch/Fold integration, terminal ranges, selector/partition/
+fallback, wrapper normalization/reconstruction, physical indexes, machine
+integers, extraction, Safe/LiveRoots and full driver remain separate. H6
+covers closed construction with valid cache/allocation history and any
+prescribed finite modeled node-call trace at derived bounds. Empty inherited
+payload preserves the same finite trees under formal guard/solver semantics.
+Full typing/pruning, solver implementation/runtime/resources/convergence
+remain open.
+
+
 ## Native cached same-before alternatives
 
 Current source: `SourcePruningEnumerationCachedBranches`.
