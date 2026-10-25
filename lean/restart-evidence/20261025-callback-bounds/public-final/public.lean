@@ -1,0 +1,30 @@
+import MicroCFTA.SourcePruningCallbackCompletion
+import MicroCFTA.SourceCurrentColdFiniteWarmCalls
+set_option pp.maxSteps 1000000
+set_option pp.deepTerms true
+#check MicroCFTA.EnumerationPartialBounds.termsBound_member
+#print axioms MicroCFTA.EnumerationPartialBounds.termsBound_member
+#check MicroCFTA.EnumerationPartialBounds.expandPartial_bounded
+#print axioms MicroCFTA.EnumerationPartialBounds.expandPartial_bounded
+#check MicroCFTA.SourcePruningPartialMatch.matchPartial_bounded
+#print axioms MicroCFTA.SourcePruningPartialMatch.matchPartial_bounded
+#check MicroCFTA.SourcePruningTemplates.programs_bounded
+#print axioms MicroCFTA.SourcePruningTemplates.programs_bounded
+#check MicroCFTA.SourcePruningTemplates.startMatches_bounded
+#print axioms MicroCFTA.SourcePruningTemplates.startMatches_bounded
+#check MicroCFTA.SourcePruningTemplates.finishChecks_bounded
+#print axioms MicroCFTA.SourcePruningTemplates.finishChecks_bounded
+#check MicroCFTA.SourcePruningResume.resume_bounded
+#print axioms MicroCFTA.SourcePruningResume.resume_bounded
+#check MicroCFTA.SourcePruningOracle.oracle_inl_bounded
+#print axioms MicroCFTA.SourcePruningOracle.oracle_inl_bounded
+#check MicroCFTA.SourcePruningRecordTypes.recordTypes_inl_bounded
+#print axioms MicroCFTA.SourcePruningRecordTypes.recordTypes_inl_bounded
+#check MicroCFTA.SourcePruningRecordTypes.recordTypes_inl_complete_bounded
+#print axioms MicroCFTA.SourcePruningRecordTypes.recordTypes_inl_complete_bounded
+#check MicroCFTA.SourcePruningOracle.oracle_inl_complete
+#print axioms MicroCFTA.SourcePruningOracle.oracle_inl_complete
+#check MicroCFTA.SourcePruningRecordTypes.recordTypes_inl_complete
+#print axioms MicroCFTA.SourcePruningRecordTypes.recordTypes_inl_complete
+#check MicroCFTA.SourceCurrentColdFiniteWarmCalls.constructed_node_calls
+#print axioms MicroCFTA.SourceCurrentColdFiniteWarmCalls.constructed_node_calls

@@ -1,0 +1,580 @@
+diff --git a/lean/MicroCFTA/EnumerationPartialBounds.lean b/lean/MicroCFTA/EnumerationPartialBounds.lean
+new file mode 100644
+index 000000000..007829e38
+--- /dev/null
++++ b/lean/MicroCFTA/EnumerationPartialBounds.lean
+@@ -0,0 +1,151 @@
++import MicroCFTA.EnumerationPartialObservation
++
++/-!
++# Allocated holes in partial renderings
++
++Successful partial rendering preserves storage safety. Every returned hole
++names a slot below the unchanged allocation counter.
++-/
++namespace MicroCFTA.EnumerationPartialBounds
++open Language Fragments EnumerationState EnumerationCorrectness EnumerationSchedule
++open EnumerationDriver EnumerationCompressionFrame EnumerationExecution
++
++variable {Symbol Guard : Type}
++
++local instance : Monad List where
++  pure value := [value]
++  bind values continuation := values.flatMap continuation
++
++local instance : LawfulMonad List where
++  map_const := rfl
++  id_map := by intro α xs; simp [Functor.map]
++  seqLeft_eq := by
++    intros
++    simp [SeqLeft.seqLeft, Seq.seq, Functor.map, List.flatMap_map, ← List.map_eq_flatMap]
++    simp only [List.map_const']
++  seqRight_eq := by
++    intros
++    simp only [SeqRight.seqRight, Seq.seq, Functor.map, List.flatMap_map]
++    simp
++  pure_seq := by intros; simp [Seq.seq, Functor.map, pure]
++  bind_pure_comp := by intros; simp [bind, pure, Functor.map, ← List.map_eq_flatMap]
++  bind_map := by intros; rfl
++  pure_bind := by intros; simp [pure, bind]
++  bind_assoc := by intros; exact List.flatMap_assoc
++
++mutual
++  /-- Every hole in a partial term names an allocated slot. -/
++  def TermBound (limit : Nat) : Term (PartialSymbol Symbol) → Prop
++    | .node symbol children =>
++        (match symbol with
++          | .hole uv => uv < limit
++          | _ => True) ∧ TermsBound limit children
++
++  /-- Every partial term in the list has allocated holes. -/
++  def TermsBound (limit : Nat) : List (Term (PartialSymbol Symbol)) → Prop
++    | [] => True
++    | child :: rest => TermBound limit child ∧ TermsBound limit rest
++end
++
++/-- A list bound also bounds each member. -/
++theorem termsBound_member (limit : Nat) (children : List (Term (PartialSymbol Symbol)))
++    (bounded : TermsBound limit children) (child : Term (PartialSymbol Symbol))
++    (member : child ∈ children) : TermBound limit child := by
++  induction children with
++  | nil => cases member
++  | cons first rest ih =>
++      rcases List.mem_cons.mp member with rfl | present
++      · exact bounded.1
++      · exact ih bounded.2 present
++
++/-- A successful partial render preserves safety and bounds every returned hole. -/
++theorem expandPartial_bounded (graph : Graph Symbol Guard) (fuel : Nat)
++    (fragment : Fragment Symbol) (before after : State Symbol Guard)
++    (term : Term (PartialSymbol Symbol)) (safe : Safe before)
++    (allocated : FragmentBound before.counter fragment)
++    (success : Success (expandPartial graph fuel fragment) before term after) :
++    RenderStable before after ∧ TermBound after.counter term := by
++  induction fuel generalizing fragment before after term with
++  | zero => exact (success_failure .fuelExhausted before after term success).elim
++  | succ fuel ih =>
++      cases fragment with
++      | node symbol children =>
++          change Success (children.mapM (expandPartial graph fuel) >>= fun terms =>
++            pure (.node (.concrete symbol) terms)) before term after at success
++          obtain ⟨terms, middle, traversed, final⟩ := (success_bind _ _ _ _ _).mp success
++          have traversal : ∀ (inputs : List (Fragment Symbol))
++              (initial last : State Symbol Guard) (outputs : List (Term (PartialSymbol Symbol))),
++              Safe initial → FragmentsBound initial.counter inputs →
++              Success (inputs.mapM (expandPartial graph fuel)) initial outputs last →
++              RenderStable initial last ∧ TermsBound last.counter outputs := by
++            intro inputs
++            induction inputs with
++            | nil =>
++                intro initial last outputs valid _bounded rendered
++                obtain ⟨rfl, rfl⟩ := (success_pure [] outputs initial last).mp rendered
++                exact ⟨.refl _ valid, trivial⟩
++            | cons input rest tailIH =>
++                intro initial last outputs valid bounded rendered
++                rw [List.mapM_cons] at rendered
++                obtain ⟨output, current, first, continued⟩ := (success_bind _ _ _ _ _).mp rendered
++                obtain ⟨firstStable, firstBound⟩ :=
++                  ih input initial current output valid bounded.1 first
++                obtain ⟨remaining, finished, restSuccess, finalPure⟩ :=
++                  (success_bind _ _ _ _ _).mp continued
++                have restBound : FragmentsBound current.counter rest := by
++                  rw [firstStable.counter]
++                  exact bounded.2
++                obtain ⟨lastStable, lastBound⟩ :=
++                  tailIH current finished remaining firstStable.safe restBound restSuccess
++                obtain ⟨rfl, rfl⟩ :=
++                  (success_pure (output :: remaining) outputs finished last).mp finalPure
++                refine ⟨firstStable.trans lastStable, ?_⟩
++                exact ⟨by rw [lastStable.counter]; exact firstBound, lastBound⟩
++          obtain ⟨stable, bounded⟩ := traversal children before middle terms safe allocated traversed
++          obtain ⟨rfl, rfl⟩ :=
++            (success_pure (.node (.concrete symbol) terms) term middle after).mp final
++          exact ⟨stable, trivial, bounded⟩
++      | hole uv =>
++          change Success (getValue (fuel + 1) uv >>= fun value => match value with
++            | .enumerated stored => expandPartial graph fuel stored
++            | .unenumerated (some node) [] => match graph.node node with
++              | .recursive _ => pure (.node .truncated [])
++              | _ => pure (.node (.hole uv) [])
++            | _ => pure (.node (.hole uv) [])) before term after at success
++          obtain ⟨value, middle, reading, final⟩ := (success_bind _ _ _ _ _).mp success
++          obtain ⟨readStable, valueBound⟩ :=
++            getValue_storage (fuel + 1) uv before middle value safe allocated reading
++          have holeBound : TermBound (Symbol := Symbol) middle.counter (.node (.hole uv) []) := by
++            refine ⟨?_, trivial⟩
++            rw [readStable.counter]
++            exact allocated
++          cases value with
++          | eliminated =>
++              obtain ⟨rfl, rfl⟩ := (success_pure _ term middle after).mp final
++              exact ⟨readStable, holeBound⟩
++          | enumerated stored =>
++              obtain ⟨stable, bounded⟩ :=
++                ih stored middle after term readStable.safe valueBound final
++              exact ⟨readStable.trans stable, bounded⟩
++          | unenumerated node scs =>
++              cases node with
++              | none =>
++                  obtain ⟨rfl, rfl⟩ := (success_pure _ term middle after).mp final
++                  exact ⟨readStable, holeBound⟩
++              | some node =>
++                  cases scs with
++                  | cons first rest =>
++                      obtain ⟨rfl, rfl⟩ := (success_pure _ term middle after).mp final
++                      exact ⟨readStable, holeBound⟩
++                  | nil =>
++                      cases view : graph.node node with
++                      | recursive body =>
++                          simp only [view] at final
++                          obtain ⟨rfl, rfl⟩ := (success_pure _ term middle after).mp final
++                          exact ⟨readStable, trivial, trivial⟩
++                      | empty | alternatives _ | unresolved _ =>
++                          simp only [view] at final
++                          obtain ⟨rfl, rfl⟩ := (success_pure _ term middle after).mp final
++                          exact ⟨readStable, holeBound⟩
++
++end MicroCFTA.EnumerationPartialBounds
+diff --git a/lean/MicroCFTA/SourcePruningCallbackCompletion.lean b/lean/MicroCFTA/SourcePruningCallbackCompletion.lean
+index dca3d7ea5..ecac0e1ba 100644
+--- a/lean/MicroCFTA/SourcePruningCallbackCompletion.lean
++++ b/lean/MicroCFTA/SourcePruningCallbackCompletion.lean
+@@ -54,4 +54,46 @@ theorem recordTypes_inl_complete (graph : Graph Symbol Guard)
+   exact ⟨fuel, result, after, success, stable, frame, ordered,
+     recordTypes_metadata graph templates fuel metadata uv (.inl fragment) before after result success⟩
+ 
++/-- A completed fragment event keeps every returned pending ID allocated. -/
++theorem recordTypes_inl_bounded (graph : Graph Symbol Guard)
++    (templates : List (Template.Pattern Symbol)) (fuel : Nat) (metadata : Metadata Typing)
++    (uv : Nat) (fragment : Fragment Symbol) (before after : State Symbol Guard)
++    (result : Bool × Metadata Typing) (safe : Safe before)
++    (allocated : FragmentBound before.counter fragment)
++    (bounded : ∀ group ∈ metadata.pending, PendingBound before.counter group)
++    (success : Success (recordTypes graph templates fuel metadata uv (.inl fragment)) before result after) :
++    ∀ group ∈ result.2.pending, PendingBound after.counter group := by
++  cases templates with
++  | nil =>
++      rw [recordTypes_empty] at success
++      obtain ⟨rfl, rfl⟩ := (success_pure _ result before after).mp success
++      exact bounded
++  | cons first rest =>
++      change Success (SourcePruningOracle.oracle graph (first :: rest) fuel metadata.pending uv (.inl fragment) >>= fun observed =>
++        pure (observed.1, {metadata with pending := observed.2, types := updatedTypes metadata uv (.inl fragment)}))
++        before result after at success
++      obtain ⟨observed, middle, observation, final⟩ := (success_bind _ _ _ _ _).mp success
++      obtain ⟨rfl, rfl⟩ := (success_pure _ result middle after).mp final
++      exact SourcePruningOracle.oracle_inl_bounded graph (first :: rest) fuel metadata.pending uv fragment
++        before after observed safe allocated bounded observation
++
++/-- Fragment callback completion also supplies the pending-ID bounds for its next call. -/
++theorem recordTypes_inl_complete_bounded (graph : Graph Symbol Guard)
++    (templates : List (Template.Pattern Symbol)) (level : Nat → Nat) (frontier : Nat)
++    (metadata : Metadata Typing) (uv : Nat) (fragment : Fragment Symbol)
++    (before : State Symbol Guard) (safe : Safe before)
++    (stratified : Stratified before level frontier)
++    (allocated : FragmentBound before.counter fragment)
++    (bounded : ∀ group ∈ metadata.pending, PendingBound before.counter group) :
++    ∃ fuel result after,
++      Success (recordTypes graph templates fuel metadata uv (.inl fragment)) before result after ∧
++      RenderStable before after ∧ Frame before after ∧ Stratified after level frontier ∧
++      result.2.types = updatedTypes metadata uv (.inl fragment) ∧
++      result.2.openHoles = metadata.openHoles ∧ result.2.typing = metadata.typing ∧
++      ∀ group ∈ result.2.pending, PendingBound after.counter group := by
++  obtain ⟨fuel, result, after, success, stable, frame, ordered, types, openHoles, typing⟩ :=
++    recordTypes_inl_complete graph templates level frontier metadata uv fragment before safe stratified allocated bounded
++  exact ⟨fuel, result, after, success, stable, frame, ordered, types, openHoles, typing,
++    recordTypes_inl_bounded graph templates fuel metadata uv fragment before after result safe allocated bounded success⟩
++
+ end MicroCFTA.SourcePruningRecordTypes
+diff --git a/lean/MicroCFTA/SourcePruningOracle.lean b/lean/MicroCFTA/SourcePruningOracle.lean
+index a67c93423..147a5d9eb 100644
+--- a/lean/MicroCFTA/SourcePruningOracle.lean
++++ b/lean/MicroCFTA/SourcePruningOracle.lean
+@@ -395,4 +395,65 @@ theorem oracle_inl_complete (graph : Graph Symbol Guard) (templates : List (Temp
+         EnumerationOrder.stratified_read before after level frontier stable stratified⟩
+       simpa only [oracle, ite_eq_right rejected, ite_eq_right skipped] using observed
+ 
++/-- A completed fragment callback returns only allocated pending references. -/
++theorem oracle_inl_bounded (graph : Graph Symbol Guard) (templates : List (Template.Pattern Symbol))
++    (fuel : Nat) (pending : List (Pending Symbol)) (uv : Nat) (fragment : Fragment Symbol)
++    (before after : State Symbol Guard) (result : Bool × List (Pending Symbol))
++    (safe : Safe before) (allocated : FragmentBound before.counter fragment)
++    (bounded : ∀ group ∈ pending, PendingBound before.counter group)
++    (success : Success (oracle graph templates fuel pending uv (.inl fragment)) before result after) :
++    ∀ group ∈ result.2, PendingBound after.counter group := by
++  by_cases rejected : rejectEarly templates fragment = true
++  · simp only [oracle, ite_eq_left rejected] at success
++    obtain ⟨rfl, rfl⟩ := (success_pure (true, pending) result before after).mp success
++    exact bounded
++  · by_cases skipped : idle pending fragment = true
++    · simp only [oracle, ite_eq_right rejected, ite_eq_left skipped] at success
++      obtain ⟨rfl, rfl⟩ := (success_pure (false, []) result before after).mp success
++      simp
++    · simp only [oracle, ite_eq_right rejected, ite_eq_right skipped] at success
++      unfold observe at success
++      obtain ⟨term, middle, rendered, continued⟩ := (success_bind _ _ _ _ _).mp success
++      obtain ⟨resumed, last, traversed, final⟩ := (success_bind _ _ _ _ _).mp continued
++      obtain ⟨renderStable, termBound⟩ :=
++        EnumerationPartialBounds.expandPartial_bounded graph fuel fragment before middle term safe allocated rendered
++      have groups : ∀ (pending : List (Pending Symbol)) (before after : State Symbol Guard)
++          (results : List (Option (Pending Symbol))), Safe before →
++          (∀ group ∈ pending, PendingBound before.counter group) →
++          EnumerationPartialBounds.TermBound before.counter term →
++          Success (pending.mapM (SourcePruningResume.resume fuel uv term)) before results after →
++          EnumerationDriver.RenderStable before after ∧
++            ∀ result ∈ results, ∀ group, result = some group → PendingBound after.counter group := by
++        intro pending
++        induction pending with
++        | nil =>
++            intro before after results safe _bounded _termBound success
++            obtain ⟨rfl, rfl⟩ := (success_pure [] results before after).mp success
++            exact ⟨.refl _ safe, by simp⟩
++        | cons first rest ih =>
++            intro before after results safe bounded termBound success
++            rw [List.mapM_cons] at success
++            obtain ⟨firstResult, reached, firstRead, continued⟩ := (success_bind _ _ _ _ _).mp success
++            obtain ⟨tailResults, last, restRead, final⟩ := (success_bind _ _ _ _ _).mp continued
++            obtain ⟨rfl, rfl⟩ := (success_pure (firstResult :: tailResults) results last after).mp final
++            have firstStable := SourcePruningResume.resume_read fuel uv term first before reached firstResult
++              safe (bounded first (by simp)) firstRead
++            have firstBound := SourcePruningResume.resume_bounded fuel uv term first before reached firstResult
++              safe (bounded first (by simp)) termBound firstRead
++            obtain ⟨lastStable, tailBound⟩ := ih reached after tailResults firstStable.safe
++              (by intro group member; rw [firstStable.counter]; exact bounded group (List.mem_cons_of_mem _ member))
++              (by simpa only [firstStable.counter] using termBound) restRead
++            refine ⟨firstStable.trans lastStable, ?_⟩
++            intro result member group same
++            rcases List.mem_cons.mp member with rfl | member
++            · rw [lastStable.counter]
++              exact firstBound group same
++            · exact tailBound result member group same
++      obtain ⟨groupStable, resultBounds⟩ := groups pending middle last resumed renderStable.safe
++        (by intro group member; rw [renderStable.counter]; exact bounded group member) termBound traversed
++      obtain ⟨rfl, rfl⟩ := (success_pure (finishChecks resumed (startMatches templates term)) result last after).mp final
++      exact finishChecks_bounded after.counter resumed (startMatches templates term)
++        (fun group member => resultBounds (some group) member group rfl)
++        (startMatches_bounded after.counter templates term (by simpa only [groupStable.counter] using termBound))
++
+ end MicroCFTA.SourcePruningOracle
+diff --git a/lean/MicroCFTA/SourcePruningPartialMatch.lean b/lean/MicroCFTA/SourcePruningPartialMatch.lean
+index 1f8622df2..125ef25e5 100644
+--- a/lean/MicroCFTA/SourcePruningPartialMatch.lean
++++ b/lean/MicroCFTA/SourcePruningPartialMatch.lean
+@@ -1,5 +1,6 @@
+ import MicroCFTA.Template
+ import MicroCFTA.EnumerationState
++import MicroCFTA.EnumerationPartialBounds
+ 
+ /-!
+ # Pure matching of partial pruning terms
+@@ -12,6 +13,10 @@ namespace MicroCFTA.SourcePruningPartialMatch
+ /-- The unresolved pieces of one template match. -/
+ abbrev Pending (Symbol : Type) := List (Template.Pattern Symbol × Nat)
+ 
++/-- Every parked match names an allocated variable. -/
++def PendingBound (limit : Nat) (pending : Pending Symbol) : Prop :=
++  ∀ entry ∈ pending, entry.2 < limit
++
+ mutual
+   /-- Match a partial term and collect the unresolved pieces in order. -/
+   def matchPartial [DecidableEq Symbol] (pattern : Template.Pattern Symbol)
+@@ -87,4 +92,82 @@ theorem matchPartial_truncated [DecidableEq Symbol] (pattern : Template.Pattern
+   | anyPrefix parts => cases parts <;> rfl
+   | «prefix» symbol parts => rfl
+ 
++/-- A successful partial match parks only holes from the bounded input term. -/
++theorem matchPartial_bounded [DecidableEq Symbol] (limit : Nat)
++    (pattern : Template.Pattern Symbol) (term : Language.Term (EnumerationState.PartialSymbol Symbol))
++    (pending : Pending Symbol) (bounded : EnumerationPartialBounds.TermBound limit term)
++    (matched : matchPartial pattern term = some pending) : PendingBound limit pending := by
++  induction term using Language.Term.rec
++    (motive_2 := fun children => ∀ (patterns : List (Template.Pattern Symbol)) (pending : Pending Symbol),
++      EnumerationPartialBounds.TermsBound limit children →
++      matchChildren patterns children = some pending → PendingBound limit pending)
++    generalizing pattern pending with
++  | node symbol children ih =>
++      cases symbol with
++      | concrete symbol =>
++          cases pattern with
++          | hole => simp_all [matchPartial, PendingBound]
++          | anyNode parts =>
++              simp only [matchPartial] at matched
++              split at matched
++              · exact ih parts pending bounded.2 matched
++              · cases matched
++          | node expected parts =>
++              simp only [matchPartial] at matched
++              split at matched
++              · split at matched
++                · exact ih parts pending bounded.2 matched
++                · cases matched
++              · cases matched
++          | anyPrefix parts =>
++              cases parts with
++              | nil => simp_all [matchPartial, PendingBound]
++              | cons part parts =>
++                  simp only [matchPartial] at matched
++                  split at matched
++                  · exact ih (part :: parts) pending bounded.2 matched
++                  · cases matched
++          | «prefix» expected parts =>
++              simp only [matchPartial] at matched
++              split at matched
++              · split at matched
++                · exact ih parts pending bounded.2 matched
++                · cases matched
++              · cases matched
++      | hole uv =>
++          cases children <;> cases pattern with
++          | anyPrefix parts =>
++              cases parts <;> simp_all [matchPartial, PendingBound,
++                EnumerationPartialBounds.TermBound, EnumerationPartialBounds.TermsBound] <;>
++                (subst pending; simp_all)
++          | hole | anyNode _ | node _ _ | «prefix» _ _ =>
++              simp_all [matchPartial, PendingBound,
++                EnumerationPartialBounds.TermBound, EnumerationPartialBounds.TermsBound] <;>
++                (subst pending; simp_all)
++      | truncated =>
++          cases pattern with
++          | anyPrefix parts => cases parts <;> simp_all [matchPartial, PendingBound]
++          | hole | anyNode _ | node _ _ | «prefix» _ _ => simp_all [matchPartial, PendingBound]
++  | nil =>
++      rename_i patterns pending _bounded matched
++      cases patterns <;> simp_all [matchChildren, PendingBound]
++  | cons child children first rest =>
++      rename_i patterns pending bounded matched
++      cases patterns with
++      | nil => simp_all [matchChildren, PendingBound]
++      | cons pattern patterns =>
++          cases firstFound : matchPartial pattern child with
++          | none => simp [matchChildren, firstFound] at matched
++          | some firstPending =>
++              cases restFound : matchChildren patterns children with
++              | none => simp [matchChildren, firstFound, restFound] at matched
++              | some restPending =>
++                  have same : firstPending ++ restPending = pending := by
++                    simpa [matchChildren, firstFound, restFound] using matched
++                  rw [← same]
++                  intro entry member
++                  rcases List.mem_append.mp member with inFirst | inRest
++                  · exact first pattern firstPending bounded.1 firstFound entry inFirst
++                  · exact rest patterns restPending bounded.2 restFound entry inRest
++
+ end MicroCFTA.SourcePruningPartialMatch
+diff --git a/lean/MicroCFTA/SourcePruningResume.lean b/lean/MicroCFTA/SourcePruningResume.lean
+index 4cf6cafb5..272b952a5 100644
+--- a/lean/MicroCFTA/SourcePruningResume.lean
++++ b/lean/MicroCFTA/SourcePruningResume.lean
+@@ -33,6 +33,34 @@ local instance pruningResumeLawfulMonadList : LawfulMonad List where
+   pure_bind := by intros; simp [pure, bind]
+   bind_assoc := by intros; exact List.flatMap_assoc
+ 
++private theorem sequenced_bounded (limit : Nat) (results : List (Option (Pending Symbol)))
++    (pieces : List (Pending Symbol))
++    (bounded : ∀ result ∈ results, ∀ pending, result = some pending → PendingBound limit pending)
++    (sequenced : (results.mapM id : Option (List (Pending Symbol))) = some pieces) :
++    PendingBound limit (pieces.flatMap id) := by
++  induction results generalizing pieces with
++  | nil =>
++      have same : pieces = [] := by simpa using sequenced.symm
++      subst pieces
++      simp [PendingBound]
++  | cons result rest ih =>
++      cases result with
++      | none => simp [List.mapM_cons] at sequenced
++      | some pending =>
++          cases restSequence : (rest.mapM id : Option (List (Pending Symbol))) with
++          | none => simp [List.mapM_cons, restSequence] at sequenced
++          | some restPieces =>
++              have same : pieces = pending :: restPieces := by
++                simpa [List.mapM_cons, restSequence] using sequenced.symm
++              subst pieces
++              have firstBound := bounded (some pending) (by simp) pending rfl
++              have restBound := ih restPieces (fun result member => bounded result (List.mem_cons_of_mem _ member)) restSequence
++              intro entry member
++              simp only [List.flatMap_cons, id_eq, List.mem_append] at member
++              rcases member with member | member
++              · exact firstBound entry member
++              · exact restBound entry member
++
+ variable {Symbol Guard : Type} [DecidableEq Symbol]
+ 
+ /-- Read one parked representative, then inspect the supplied partial term. -/
+@@ -295,4 +323,70 @@ theorem resume_read (fuel current : Nat) (term : Term (PartialSymbol Symbol))
+   subst after
+   exact middleStable
+ 
++private theorem parts_bounded (fuel current : Nat) (term : Term (PartialSymbol Symbol))
++    (pending : Pending Symbol) (before after : State Symbol Guard)
++    (results : List (Option (Pending Symbol))) (safe : Safe before)
++    (bounded : PendingBound before.counter pending)
++    (termBound : EnumerationPartialBounds.TermBound before.counter term)
++    (success : Success (pending.mapM (part fuel current term)) before results after) :
++    EnumerationDriver.RenderStable before after ∧
++      ∀ result ∈ results, ∀ resumed, result = some resumed → PendingBound after.counter resumed := by
++  induction pending generalizing before after results with
++  | nil =>
++      obtain ⟨rfl, rfl⟩ := (success_pure [] results before after).mp success
++      exact ⟨.refl _ safe, by simp⟩
++  | cons first rest ih =>
++      rw [List.mapM_cons] at success
++      obtain ⟨firstResult, middle, firstRead, continued⟩ := (success_bind _ _ _ _ _).mp success
++      obtain ⟨tailResults, last, restRead, final⟩ := (success_bind _ _ _ _ _).mp continued
++      obtain ⟨rfl, rfl⟩ := (success_pure (firstResult :: tailResults) results last after).mp final
++      obtain ⟨root, reading, projected⟩ := (part_success fuel current term first before middle firstResult).mp firstRead
++      have inside := bounded first (by simp)
++      have firstStable := EnumerationReferences.representative_read fuel first.2 root before middle safe inside reading
++      have rootInside : root < before.counter := by
++        obtain ⟨found, lookup, same, _state⟩ := (representative_success fuel first.2 before middle root).mp reading
++        rw [same]
++        exact reaches_bounded before.representatives before.counter safe.1.forest
++          (UnionFind.findRoot_correct fuel before.representatives first.2 found lookup).1 inside
++      have firstBound : ∀ resumed, firstResult = some resumed → PendingBound middle.counter resumed := by
++        intro resumed same
++        rw [projected] at same
++        split at same
++        · rw [firstStable.counter]
++          exact matchPartial_bounded before.counter first.1 term resumed termBound same
++        · have identical := Option.some.inj same
++          subst resumed
++          intro entry member
++          obtain rfl := List.mem_singleton.mp member
++          simpa only [firstStable.counter] using rootInside
++      obtain ⟨lastStable, tailBound⟩ := ih middle after tailResults firstStable.safe
++        (by intro entry member; rw [firstStable.counter]; exact bounded entry (List.mem_cons_of_mem first member))
++        (by simpa only [firstStable.counter] using termBound) restRead
++      refine ⟨firstStable.trans lastStable, ?_⟩
++      intro result member resumed same
++      rcases List.mem_cons.mp member with rfl | member
++      · rw [lastStable.counter]
++        exact firstBound resumed same
++      · exact tailBound result member resumed same
++
++/-- Successful resumption keeps every returned parked ID inside the allocation domain. -/
++theorem resume_bounded (fuel current : Nat) (term : Term (PartialSymbol Symbol))
++    (pending : Pending Symbol) (before after : State Symbol Guard) (result : Option (Pending Symbol))
++    (safe : Safe before) (bounded : PendingBound before.counter pending)
++    (termBound : EnumerationPartialBounds.TermBound before.counter term)
++    (success : Success (resume fuel current term pending) before result after) :
++    ∀ resumed, result = some resumed → PendingBound after.counter resumed := by
++  unfold resume at success
++  obtain ⟨results, middle, traversed, final⟩ := (success_bind _ _ _ _ _).mp success
++  obtain ⟨_stable, resultBounds⟩ := parts_bounded fuel current term pending before middle results safe bounded termBound traversed
++  obtain ⟨projected, rfl⟩ := (success_pure _ result middle after).mp final
++  intro resumed same
++  rw [projected] at same
++  cases sequenced : (results.mapM id : Option (List (Pending Symbol))) with
++  | none => simp [sequenced] at same
++  | some pieces =>
++      have identical : resumed = pieces.flatMap id := by simpa [sequenced] using same.symm
++      subst resumed
++      exact sequenced_bounded after.counter results pieces resultBounds sequenced
++
+ end MicroCFTA.SourcePruningResume
+diff --git a/lean/MicroCFTA/SourcePruningTemplates.lean b/lean/MicroCFTA/SourcePruningTemplates.lean
+index 963568997..7382abd7a 100644
+--- a/lean/MicroCFTA/SourcePruningTemplates.lean
++++ b/lean/MicroCFTA/SourcePruningTemplates.lean
+@@ -168,4 +168,82 @@ theorem finishChecks_nil : finishChecks [] [] = (false, []) := by
+ theorem order_nil (pending : List (Pending Symbol)) : order pending [] = none := by
+   rfl
+ 
++/-- Program selection retains the allocated-hole bound of the original partial term. -/
++theorem programs_bounded (limit : Nat) (term program : PartialTerm)
++    (bounded : EnumerationPartialBounds.TermBound limit term) (member : program ∈ programs term) :
++    EnumerationPartialBounds.TermBound limit program := by
++  induction term using Language.Term.rec
++    (motive_2 := fun children => ∀ child ∈ children, ∀ program,
++      EnumerationPartialBounds.TermBound limit child → program ∈ programs child →
++      EnumerationPartialBounds.TermBound limit program) generalizing program with
++  | node symbol children ih =>
++      cases symbol with
++      | hole uv => simp [programs] at member
++      | truncated => simp [programs] at member
++      | concrete symbol =>
++          cases children with
++          | nil => simp [programs] at member
++          | cons annotation children =>
++              cases children with
++              | nil => simp [programs] at member
++              | cons second children =>
++                  cases children with
++                  | nil =>
++                      simp only [programs] at member
++                      split at member
++                      · exact ih second (by simp) program
++                          (EnumerationPartialBounds.termsBound_member limit _ bounded.2 second (by simp)) member
++                      · simp at member
++                  | cons third children =>
++                      cases children with
++                      | nil => simp [programs] at member
++                      | cons fourth children =>
++                          cases children with
++                          | nil =>
++                              simp only [programs] at member
++                              split at member
++                              · rcases List.mem_cons.mp member with same | member
++                                · subst program
++                                  exact bounded
++                                · rcases List.mem_append.mp member with inFunction | inArgument
++                                  · exact ih third (by simp) program
++                                      (EnumerationPartialBounds.termsBound_member limit _ bounded.2 third (by simp)) inFunction
++                                  · exact ih fourth (by simp) program
++                                      (EnumerationPartialBounds.termsBound_member limit _ bounded.2 fourth (by simp)) inArgument
++                              · simp at member
++                          | cons fifth rest => simp [programs] at member
++  | nil =>
++      rename_i child member program bounded observed
++      cases member
++  | cons child children first rest =>
++      rename_i selected member program bounded observed
++      rcases List.mem_cons.mp member with same | member
++      · subst selected
++        exact first program bounded observed
++      · exact rest selected member program bounded observed
++
++/-- Every newly parked match inherits the allocated IDs of the selected program. -/
++theorem startMatches_bounded (limit : Nat) (templates : List (Template.Pattern Symbol))
++    (term : PartialTerm) (bounded : EnumerationPartialBounds.TermBound limit term) :
++    ∀ pending, some pending ∈ startMatches templates term → PendingBound limit pending := by
++  intro pending member
++  unfold startMatches at member
++  obtain ⟨program, selected, member⟩ := List.mem_flatMap.mp member
++  obtain ⟨pattern, _indexed, matched⟩ := List.mem_map.mp member
++  exact matchPartial_bounded limit pattern program pending
++    (programs_bounded limit term program bounded selected) matched
++
++/-- Combining match results retains the bound of every retained pending group. -/
++theorem finishChecks_bounded (limit : Nat) (resumed started : List (Option (Pending Symbol)))
++    (resumedBounded : ∀ pending, some pending ∈ resumed → PendingBound limit pending)
++    (startedBounded : ∀ pending, some pending ∈ started → PendingBound limit pending) :
++    ∀ group ∈ (finishChecks resumed started).2, PendingBound limit group := by
++  intro group member
++  change group ∈ ((resumed ++ started).filterMap id).filter (fun pending => !pending.isEmpty) at member
++  have retained := (List.mem_filter.mp member).1
++  obtain ⟨entry, listed, found⟩ := List.mem_filterMap.mp retained
++  have same : entry = some group := found
++  subst entry
++  exact (List.mem_append.mp listed).elim (resumedBounded group) (startedBounded group)
++
+ end MicroCFTA.SourcePruningTemplates

@@ -70,6 +70,20 @@ Terminal parents retain the existing enumerateNode fallback boundary. Native
 children can still take their terminal dispatcher. No Haskell fix is needed.
 Details: lean/notes-current-pruning-enumeration-native-ordinary.md.
 
+### Returned callback pending IDs stay allocated
+
+The modeled concrete Left callback now preserves the allocation bound for
+all pending IDs in its returned metadata. Rendering, new matches, resumed
+representatives and filtering retain this bound at the actual final cache.
+The theorem covers either rejection flag. The producer retains its original
+completion witness. All previous runtime expressions and interfaces stay.
+The previous output-pending-ID proof gap is closed. Native fragment levels,
+heap classification, callback interleaving and scheduler semantics stay open.
+This establishes a model invariant. It identifies no Haskell runtime defect.
+External action: no new patch is proposed. Keep the external Haskell repair
+table and the pending Sized documentation repair above.
+Details: lean/notes-current-pruning-enumeration-callback-bounds.md.
+
 ### Concrete callback completion and allocated parked IDs
 
 The modeled fragment callback now has a finite completion proof from actual
@@ -319,6 +333,29 @@ TH/Generic extraction, valid-position build/read and source codec laws stay open
 
 
 
+
+## Concrete callbacks preserve allocated pending IDs
+
+Rendering and match bounds: `3c1d159ff`. Callback result: `f6f7985dc`.
+The goal stays ACTIVE.
+
+The concrete Left callback now returns allocated IDs for every pending
+group in its actual metadata result. The proof covers rendered holes,
+selected programs, new matches, compressed parked representatives and
+final filtering. Bounds hold for accepted and rejected results alike.
+The strengthened producer uses the same completion witness and cache.
+The earlier completion interfaces and runtime workers stay unchanged.
+
+All six changed modules pass strict checking. Installed public readback
+and Audit pass. Audit checks 76809 dependencies. H6 remains the strongest
+end-to-end language result. Haskell and Audit source stay unchanged.
+Next: establish and preserve Stratified through native traversal, pending
+merges and final writes. Derive returned-hole targets at each endpoint.
+Then compose Left callbacks with actual branch caches, metadata and
+native Graph classifications. Initial-only numeric admission, scheduler
+restart, arbitrary forcing, extraction and whole-driver semantics remain.
+Bounds for all other metadata fields and machine Ints are not established.
+Details: `lean/notes-current-pruning-enumeration-callback-bounds.md`.
 
 ## Concrete fragment callbacks now have finite completion proofs
 
