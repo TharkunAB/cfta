@@ -92,6 +92,52 @@ TH/Generic extraction, valid-position build/read and source codec laws stay open
 
 
 
+
+## Native cached child shape preparation
+
+Current source: `SourcePruningEnumerationCachedPrepare`.
+Proof: `cc87f61e9b833a3d0b947662731573a98d0da645`. Main remains `74250bd889685da436cdbfe32ac4b5a0878ffd09`.
+The whole goal stays ACTIVE and incomplete. H6 remains strongest.
+
+One definition and three theorems cover actual native cached allocation and
+supported child shapes. Optional-handle readback, StorageValid/PendingRealized,
+current Roots, canonical waiting counts and the all-Nat native flag law are
+genuine inputs. Alignment derives the absent fresh slot and false old flag.
+No desired classifier result or callback-success law is supplied.
+
+Mu/Union retain an empty stored bucket, false fresh flag and unchanged waiting,
+with one inheritance and no ordinary full-scs write. Their actual nonterminal
+test is independent. Ordinary nodes reuse the existing full-scs theorem.
+Empty returns some [] before allocation or terminal tests and has no cache
+endpoint. Reference/native error, missing decode and model None stay distinct.
+The producer derives exact core rows and stable adequate fuel.
+
+Root selected 11 typed haves, no lets, instances, induction, types or Graph
+carrier; source estimate 330–520 and hard limit 720. The frozen owner records
+16 literal contracts / 124 lines and 290 scopes, 16 whole-source snapshots and
+34 cuts / 534 lines, plus five routes through 20 project identities. All 16
+new source literals must match the owner byte-exactly. The source review is
+bound.
+
+Validation: Strict attempt 3 passes with a literal empty log under all linters and warnings as errors. Both earlier failed inputs and complete raw logs remain. The body-only repairs add explicit list/Boolean reductions and use the existing alignment equality in the absent-slot arithmetic step. All 16 original literals and four public headers stay byte-exact. No premise, intended statement, local type or proof limit changes. The source has 306 lines, below the selected 330 to 520 estimate and within hard limit 720; no padding was added. A separate post-body metadata amendment adds three result proof binders and records the actual unused fuel-intro name. All 290 original scopes and nine case groups remain; the effective scope count is 293. The installed build, complete public readback and aggregate Audit pass. All 156 public output lines retain four complete signatures without display omissions. The older unused-variable warning remains unchanged. No passing check was repeated. No seal has failed. All complete resource receipts remain. Read-only locator diagnostics remain separate from compiler and seal failures.
+Installed focused build: 1312 jobs; Audit: 3719 jobs and
+76376 theorem dependency checks. Actual public axioms: prepareChild reports propext. allocate_complete, boundary_complete and complete each report propext and Quot.sound.
+All actual failed inputs, complete logs and resource receipts remain. Exactly
+26 prior CachedChild inputs retain archive-1/local-publication-1/push-1 and the
+full 13800-byte summary. Its already sealed assessment and separate sealed
+peer stay intact. Prior repairs remain historical. No future seal or push
+outcome is asserted.
+
+Whole-edge cached staging, reached interruption state, own-class allocation,
+residual order, same-before alternatives, configured selector order, native
+maps/machine integers, extraction, Safe/LiveRoots, wrapper reconstruction and
+full driver remain open. All six imported Haskell repairs remain first in
+FINDINGS. No Haskell change is claimed. H6 still covers closed construction
+with valid cache/allocation history and any prescribed finite modeled node-call
+trace at derived bounds. Empty inherited payload preserves the same finite
+trees under formal guard/solver semantics. Full typing/pruning/solver
+implementation/runtime/resources/convergence remain open.
+
 ## Native cached ordinary child preparation
 
 Current source: `SourcePruningEnumerationCachedChild`.
