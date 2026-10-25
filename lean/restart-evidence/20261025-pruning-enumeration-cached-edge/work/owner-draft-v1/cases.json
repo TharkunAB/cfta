@@ -1,0 +1,143 @@
+{
+  "cases": [
+    {
+      "scope": "complete.arity",
+      "kind": "by_cases allowed : arityAllows edge.children.length scs = true",
+      "branches": [
+        {
+          "name": "allowed",
+          "equation": "arityAllows edge.children.length scs = true"
+        },
+        {
+          "name": "rejected",
+          "equation": "¬ (arityAllows edge.children.length scs = true)"
+        }
+      ]
+    },
+    {
+      "scope": "complete.projected",
+      "kind": "cases projected : actual project",
+      "branches": [
+        {
+          "name": "none",
+          "fields": []
+        },
+        {
+          "name": "some",
+          "fields": [
+            {
+              "name": "pair",
+              "type": "List EqualityTrie.Trie × Option Constraint"
+            }
+          ],
+          "packet": "complete.projected_pair"
+        }
+      ]
+    },
+    {
+      "scope": "complete.childrenShape",
+      "kind": "rcases actual childrenShape",
+      "branches": [
+        {
+          "name": "emptyRows",
+          "packet": "complete.childrenShape.empty"
+        },
+        {
+          "name": "singleton",
+          "packet": "complete.childrenShape.singleton"
+        }
+      ]
+    },
+    {
+      "scope": "complete.result",
+      "kind": "cases result",
+      "branches": [
+        {
+          "name": "none",
+          "fields": []
+        },
+        {
+          "name": "some",
+          "fields": [
+            {
+              "name": "fragments",
+              "type": "List (Fragments.Fragment Symbol)"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "scope": "complete.inputsBounded.append",
+      "kind": "rcases List.mem_append.mp inside",
+      "branches": [
+        {
+          "name": "inherited",
+          "type": "sc ∈ descendScs indexed.2 scs"
+        },
+        {
+          "name": "own",
+          "type": "sc ∈ descendScs indexed.2 (suspendedVars before.core.counter tries)"
+        }
+      ]
+    },
+    {
+      "scope": "complete.storage.residual",
+      "kind": "cases residual in StorageValid proof",
+      "branches": [
+        {
+          "name": "none",
+          "fields": []
+        },
+        {
+          "name": "some",
+          "fields": [
+            {
+              "name": "guard",
+              "type": "Constraint"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "scope": "complete.raw.residual",
+      "kind": "cases residual in exact raw continuation proof",
+      "branches": [
+        {
+          "name": "none",
+          "fields": []
+        },
+        {
+          "name": "some",
+          "fields": [
+            {
+              "name": "guard",
+              "type": "Constraint"
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "count": 7,
+  "definition_patterns": [
+    {
+      "scope": "prepare.prefixes",
+      "patterns": [
+        "[]",
+        "[((symbol,staged,residual),middle)]",
+        "_ malformed"
+      ]
+    },
+    {
+      "scope": "prepare.children",
+      "patterns": [
+        "[]",
+        "[(none,last)]",
+        "[(some fragments,last)]",
+        "_ malformed"
+      ]
+    }
+  ]
+}

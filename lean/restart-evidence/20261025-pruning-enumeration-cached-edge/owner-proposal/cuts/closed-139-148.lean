@@ -1,0 +1,10 @@
+theorem node_children_closed (state : State Symbol Guard) (facts : Facts state)
+    (entry : Interned InternedBinderProtocol.NodeKey) (edges : List (EdgeValue Symbol Guard)) (depth free)
+    (available : Available state (.node entry edges depth free)) (closed : free = []) : ClosedEdges edges := by
+  intro edge member child included
+  apply List.eq_nil_iff_forall_not_mem.mpr
+  intro name named
+  have parent : name ∈ childFree (edges.flatMap EdgeValue.children) :=
+    (childFree_member _ name).mpr ⟨child, List.mem_flatMap.mpr ⟨edge, member, included⟩, named⟩
+  rw [← node_free state facts.coherent entry edges depth free available.resident, closed] at parent
+  cases parent

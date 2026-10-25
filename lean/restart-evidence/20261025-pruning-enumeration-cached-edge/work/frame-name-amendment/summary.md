@@ -1,0 +1,7 @@
+FINAL Root-selected two-literal namespace amendment.
+
+Strict 1 exposed the unknown constant EnumerationExpandableIndex.Cached.frame in the two finished let initializers. The existing defining source declares EnumerationExpandableIndex.frame at lines 47–49. Each Root-authored candidate replaces only that namespace. The full basis and candidate literals, two exact replacement records, forward and inverse patches and both original owner controls remain. All thirteen other contracts remain byte-exact.
+
+Both finished values retain their original Cached Symbol Constraint type, lexical scope, five-let total and 172-entry scope inventory. The record update, residual guard, payloads, first-line indentation, public headers, premises and limits remain unchanged. The effective contract dictionary and initializer/API metadata make this correction explicit. The original 90-payload owner remains immutable. The existing whole defining source and inclusive cut are retained. Strict-1 input, full raw log and report remain under the actual area and are hash-bound here.
+
+The independent pre-body reviews did not catch the invalid qualification. This amendment records the actual compiler obstruction. Root separately repairs the refine-layout body syntax. No mathematical/action/proof/instance body is authored or edited here; no parser, compiler, selected program, Git, network or board operation runs. Root must read and gate this exact amendment before using the corrected literals. No later check outcome is claimed.

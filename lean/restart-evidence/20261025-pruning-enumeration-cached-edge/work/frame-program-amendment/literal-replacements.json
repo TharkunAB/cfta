@@ -1,0 +1,238 @@
+{
+  "verify.py": {
+    "active_path": "/tmp/mcfta-pruning-enumeration-cached-edge-20261025-verify.py",
+    "basis_sha256": "23d4fc7938028f90436fcdd75218f6cf6eb3c359c405931b0317d773f9a58697",
+    "candidate_sha256": "331f1c3c33904009a1944e9be75bb47e989a2ecdfc4954a47ff2bfefc310c7b3",
+    "spans": [
+      {
+        "basis_start": 6353,
+        "basis_end": 6353,
+        "candidate_start": 6353,
+        "candidate_end": 7607,
+        "old": "",
+        "new": "amendment = here / 'work/frame-name-amendment'\nassert sha((amendment / 'FROZEN.json').read_bytes()) == '0680eaac4891543c3904f6d00119c0d4f00f6305997c7a9d3bcb25dd09952227'\nassert load('work/body-gate-frame-name.json')['frame_amendment_frozen_sha256'] == sha((amendment / 'FROZEN.json').read_bytes())\namendment_frozen = load('work/frame-name-amendment/FROZEN.json')\namendment_pins = load('work/frame-name-amendment/pins.json')\nassert len(amendment_pins) == amendment_frozen['pins_count'] == 18\nassert sha((amendment / 'pins.json').read_bytes()) == amendment_frozen['pins_sha256']\nassert {p.relative_to(amendment).as_posix() for p in amendment.rglob('*') if p.is_file()} == set(amendment_pins) | {'pins.json', 'FROZEN.json'}\nfor name, pin in amendment_pins.items():\n    assert not Path(name).is_absolute() and '..' not in Path(name).parts\n    data = (amendment / name).read_bytes()\n    assert len(data) == pin['bytes'] and sha(data) == pin['sha256']\neffective_contracts = load('work/frame-name-amendment/effective-contracts.json')\nassert set(effective_contracts) == set(contracts)\ncorrected = {'let-definition-finished.lean.txt', 'let-proof-finished.lean.txt'}\nassert {name for name in contracts if contracts[name] != effective_contracts[name]} == corrected\n"
+      },
+      {
+        "basis_start": 6526,
+        "basis_end": 6526,
+        "candidate_start": 7780,
+        "candidate_end": 8136,
+        "old": "",
+        "new": "expected = literal.replace('EnumerationExpandableIndex.Cached.frame', 'EnumerationExpandableIndex.frame') if name in corrected else literal\n    assert effective_contracts[name] == expected\n    if name in corrected:\n        assert (amendment / 'basis' / name).read_bytes() == data\n        assert (amendment / 'candidate' / name).read_text() == expected\n    "
+      },
+      {
+        "basis_start": 6544,
+        "basis_end": 6546,
+        "candidate_start": 8154,
+        "candidate_end": 8159,
+        "old": "li",
+        "new": "expec"
+      },
+      {
+        "basis_start": 6548,
+        "basis_end": 6551,
+        "candidate_start": 8161,
+        "candidate_end": 8162,
+        "old": "ral",
+        "new": "d"
+      },
+      {
+        "basis_start": 6570,
+        "basis_end": 6570,
+        "candidate_start": 8181,
+        "candidate_end": 8242,
+        "old": "",
+        "new": "\nassert 'EnumerationExpandableIndex.Cached.frame' not in text"
+      }
+    ]
+  },
+  "archive.py": {
+    "active_path": "/tmp/mcfta-pruning-enumeration-cached-edge-20261025-archive.py",
+    "basis_sha256": "301f2e30369a3c694d1de5387459baf8057fa76025c60255e5cbf9662b300f10",
+    "candidate_sha256": "18c3da60fece193d5c19c6c7d751f44a27c27d88701a7cd2b4e62592d2d5e1e2",
+    "spans": [
+      {
+        "basis_start": 3606,
+        "basis_end": 3618,
+        "candidate_start": 3606,
+        "candidate_end": 3610,
+        "old": "All 15 selec",
+        "new": "Thir"
+      },
+      {
+        "basis_start": 3620,
+        "basis_end": 3621,
+        "candidate_start": 3612,
+        "candidate_end": 3623,
+        "old": "d",
+        "new": "en original"
+      },
+      {
+        "basis_start": 3643,
+        "basis_end": 3643,
+        "candidate_start": 3645,
+        "candidate_end": 3829,
+        "old": "",
+        "new": ". A separately pinned two-literal namespace amendment corrects EnumerationExpandableIndex.Cached.frame to the existing EnumerationExpandableIndex.frame; all original owner bytes remain"
+      },
+      {
+        "basis_start": 4571,
+        "basis_end": 4572,
+        "candidate_start": 4757,
+        "candidate_end": 4763,
+        "old": "C",
+        "new": "Enumer"
+      },
+      {
+        "basis_start": 4573,
+        "basis_end": 4575,
+        "candidate_start": 4764,
+        "candidate_end": 4777,
+        "old": "ch",
+        "new": "tionExpandabl"
+      },
+      {
+        "basis_start": 4576,
+        "basis_end": 4576,
+        "candidate_start": 4778,
+        "candidate_end": 4780,
+        "old": "",
+        "new": "In"
+      },
+      {
+        "basis_start": 4577,
+        "basis_end": 4577,
+        "candidate_start": 4781,
+        "candidate_end": 4783,
+        "old": "",
+        "new": "ex"
+      }
+    ]
+  },
+  "current-note.md": {
+    "active_path": "/tmp/mcfta-pruning-enumeration-cached-edge-20261025/current-note.md",
+    "basis_sha256": "e78e8096e60e516e7d9aa41e126be8eba854c980b78537dc4fd6d61b630ffe74",
+    "candidate_sha256": "6350d8b0dff73f1f6cfcfea02204ad4a8eef2f2e0364b08682a7b289b590e416",
+    "spans": [
+      {
+        "basis_start": 739,
+        "basis_end": 751,
+        "candidate_start": 739,
+        "candidate_end": 743,
+        "old": "All 15 selec",
+        "new": "Thir"
+      },
+      {
+        "basis_start": 753,
+        "basis_end": 754,
+        "candidate_start": 745,
+        "candidate_end": 756,
+        "old": "d",
+        "new": "en original"
+      },
+      {
+        "basis_start": 776,
+        "basis_end": 776,
+        "candidate_start": 778,
+        "candidate_end": 907,
+        "old": "",
+        "new": ". A separate two-literal namespace amendment names the existing\nEnumerationExpandableIndex.frame. All original owner bytes remain"
+      },
+      {
+        "basis_start": 2753,
+        "basis_end": 2754,
+        "candidate_start": 2884,
+        "candidate_end": 2890,
+        "old": "C",
+        "new": "Enumer"
+      },
+      {
+        "basis_start": 2755,
+        "basis_end": 2757,
+        "candidate_start": 2891,
+        "candidate_end": 2904,
+        "old": "ch",
+        "new": "tionExpandabl"
+      },
+      {
+        "basis_start": 2758,
+        "basis_end": 2758,
+        "candidate_start": 2905,
+        "candidate_end": 2907,
+        "old": "",
+        "new": "In"
+      },
+      {
+        "basis_start": 2759,
+        "basis_end": 2759,
+        "candidate_start": 2908,
+        "candidate_end": 2910,
+        "old": "",
+        "new": "ex"
+      }
+    ]
+  },
+  "status-prefix.txt": {
+    "active_path": "/tmp/mcfta-pruning-enumeration-cached-edge-20261025/status-prefix.txt",
+    "basis_sha256": "d12164c622da531400530d97eb6765ca5af3015cf4211f292faa7a6424bcb7d1",
+    "candidate_sha256": "065267134b19e0bd2abb379d404b89cde59b02ad16069ec655815a6c88464bd3",
+    "spans": [
+      {
+        "basis_start": 1300,
+        "basis_end": 1301,
+        "candidate_start": 1300,
+        "candidate_end": 1306,
+        "old": "C",
+        "new": "Enumer"
+      },
+      {
+        "basis_start": 1302,
+        "basis_end": 1304,
+        "candidate_start": 1307,
+        "candidate_end": 1320,
+        "old": "ch",
+        "new": "tionExpandabl"
+      },
+      {
+        "basis_start": 1305,
+        "basis_end": 1305,
+        "candidate_start": 1321,
+        "candidate_end": 1323,
+        "old": "",
+        "new": "In"
+      },
+      {
+        "basis_start": 1306,
+        "basis_end": 1306,
+        "candidate_start": 1324,
+        "candidate_end": 1326,
+        "old": "",
+        "new": "ex"
+      },
+      {
+        "basis_start": 1841,
+        "basis_end": 1853,
+        "candidate_start": 1861,
+        "candidate_end": 1865,
+        "old": "All 15 selec",
+        "new": "Thir"
+      },
+      {
+        "basis_start": 1855,
+        "basis_end": 1856,
+        "candidate_start": 1867,
+        "candidate_end": 1878,
+        "old": "d",
+        "new": "en original"
+      },
+      {
+        "basis_start": 1878,
+        "basis_end": 1878,
+        "candidate_start": 1900,
+        "candidate_end": 2029,
+        "old": "",
+        "new": ". A separate two-literal namespace amendment names the existing\nEnumerationExpandableIndex.frame. All original owner bytes remain"
+      }
+    ]
+  }
+}

@@ -1,0 +1,49 @@
+{
+  "at": "2026-10-25T06:01:22.646138+01:00",
+  "author": "Root",
+  "status": "EXACT_SELECTED_BODIES_AUTHORIZED",
+  "frozen_sha256": "31de53c660c83a8368b46e31eaedb7426c3e0af0d0827213db1f95f826856b2e",
+  "script_frozen_sha256": "9170b79a08303069c9e8db88bbdb8d9cefdf9c550639871a3268a5dc39b1bf1d",
+  "template_amendment_frozen_sha256": "50e9528328b90b87c9744097766fb574021b475ec74b95d231be9ac0a4c36331",
+  "reviews": {
+    "declaration": "f202d9ccedd4a56152861dac961fc985d7f3e2f2f211ac3ed3dad558766b5e69",
+    "seal-script": "dc49e80bed38e237cac990b2f5af87889bf7d69285b369aa046a9fb793823c36"
+  },
+  "contracts": {
+    "prepare-header.lean.txt": "/-- Run the selected edge and record its residual after the children finish. -/\nnoncomputable def prepare\n    (heap : InternedConstructorTemplates.State Symbol Constraint) (fuel : Nat)\n    (scs : List EnumerationState.Suspended)\n    (edge : InternedConstructorTemplates.EdgeValue Symbol Constraint)\n    (before : EnumerationExpandableIndex.Cached Symbol Constraint) :\n    Option (List (Option (Fragments.Fragment Symbol) \u00d7\n      EnumerationExpandableIndex.Cached Symbol Constraint) \u00d7\n      EnumerationExpandableIndex.Cached Symbol Constraint)\n",
+    "local-children-closed.lean.txt": "have childrenClosed : \u2200 child \u2208 edge.children, child.free = []\n",
+    "let-proof-fragment.lean.txt": "let fragment : Fragments.Fragment Symbol :=\n            .node edge.entry.key.symbol fragments\n",
+    "let-inputs.lean.txt": "let inputs : List (InternedConstructorTemplates.Value Symbol Constraint \u00d7\n          List EnumerationState.Suspended) :=\n        edge.children.zipIdx.map (fun indexed =>\n          (indexed.1, descendScs indexed.2 scs ++\n            descendScs indexed.2 (suspendedVars before.core.counter tries)))\n",
+    "let-definition-fragment.lean.txt": "let fragment : Fragments.Fragment Symbol :=\n                .node symbol fragments\n",
+    "let-definition-finished.lean.txt": "let finished : EnumerationExpandableIndex.Cached Symbol Constraint :=\n                EnumerationExpandableIndex.Cached.frame\n                  {last.core with obligations :=\n                    match residual with\n                    | none => last.core.obligations\n                    | some guard => (guard, fragment) :: last.core.obligations} last\n",
+    "complete-header.lean.txt": "/-- Derive the selected edge outcome, its exact raw rows and its cache invariants. -/\ntheorem complete\n    (heap : InternedConstructorTemplates.State Symbol Constraint)\n    (parentEntry : Cache.Interned InternedBinderProtocol.NodeKey)\n    (edges : List (InternedConstructorTemplates.EdgeValue Symbol Constraint)) (depth : Nat)\n    (free : List InternedBinderProtocol.Reference)\n    (edge : InternedConstructorTemplates.EdgeValue Symbol Constraint)\n    (scs : List EnumerationState.Suspended) (roots : Nat \u2192 Nat)\n    (ready : SourceEqualityRequiredCache.Ready heap)\n    (parentAvailable : InternedProbeProvenance.Available heap (.node parentEntry edges depth free))\n    (parentClosed : free = []) (selected : edge \u2208 edges)\n    (before : EnumerationExpandableIndex.Cached Symbol Constraint)\n    (storage : StorageValid before.core) (realized : PendingRealized heap before.core)\n    (paths : Roots before.core.representatives roots)\n    (counts : EnumerationCanonicalWaiting.Correct roots before.core.values before.waiting)\n    (flags : \u2200 (slot : Nat), SourcePruningEnumerationNativeIndex.candidate heap\n      ((before.core.values[slot]?).getD .eliminated) = some (before.expandable slot))\n    (bounded : \u2200 sc \u2208 scs, sc.var < before.core.counter) :\n    \u2203 (fuel : Nat)\n      (outcome : Option (List (Option (Fragments.Fragment Symbol) \u00d7\n        EnumerationExpandableIndex.Cached Symbol Constraint) \u00d7\n        EnumerationExpandableIndex.Cached Symbol Constraint)),\n      (\u2200 (extra : Nat), prepare heap (fuel + extra) scs edge before = outcome) \u2227\n      (SourcePruningEnumerationEdgeTraversal.prepare scs edge = none \u2194 outcome = none) \u2227\n      (\u2200 (action : EnumerateM Symbol Constraint (Option (Fragments.Fragment Symbol))),\n        SourcePruningEnumerationEdgeTraversal.prepare scs edge = some action \u2192\n        \u2203 (rows : List (Option (Fragments.Fragment Symbol) \u00d7\n            EnumerationExpandableIndex.Cached Symbol Constraint))\n          (after : EnumerationExpandableIndex.Cached Symbol Constraint),\n          outcome = some (rows, after) \u2227\n          ExceptT.run (action before.core) = rows.map (fun row => .ok (row.1, row.2.core)) \u2227\n          before.core.counter \u2264 after.core.counter \u2227\n          after.core.counter = after.core.values.length \u2227\n          after.core.representatives = before.core.representatives \u2227 Roots after.core.representatives roots \u2227\n          StorageValid after.core \u2227 PendingRealized heap after.core \u2227\n          EnumerationCanonicalWaiting.Correct roots after.core.values after.waiting \u2227\n          (\u2200 (slot : Nat), SourcePruningEnumerationNativeIndex.candidate heap\n            ((after.core.values[slot]?).getD .eliminated) = some (after.expandable slot)) \u2227\n          (rows = [] \u2228 \u2203 result : Option (Fragments.Fragment Symbol),\n            rows = [(result, after)] \u2227\n            (\u2200 (fragment : Fragments.Fragment Symbol), result = some fragment \u2192\n              FragmentBound (\u00abSymbol\u00bb := Symbol) after.core.counter fragment)))\n",
+    "local-inputs-available.lean.txt": "have inputsAvailable : \u2200 input \u2208 inputs,\n        InternedProbeProvenance.Available heap input.1\n",
+    "local-children-available.lean.txt": "have childrenAvailable : \u2200 child \u2208 edge.children,\n        InternedProbeProvenance.Available heap child\n",
+    "local-node-bounded.lean.txt": "have nodeBound : FragmentBound (\u00abSymbol\u00bb := Symbol) childrenAfter.core.counter fragment\n",
+    "local-staged-same.lean.txt": "have stagedSame : inputs.map (fun input =>\n          (input.1, input.2, SourcePruningEnumerationShallowChild.prepareChild\n            (EnumGuard := Constraint) input.2 input.1)) =\n        edge.children.zipIdx.map (fun indexed =>\n          (indexed.1, descendScs indexed.2 scs ++\n            descendScs indexed.2 (suspendedVars before.core.counter tries),\n            SourcePruningEnumerationShallowChild.prepareChild (EnumGuard := Constraint)\n              (descendScs indexed.2 scs ++\n                descendScs indexed.2 (suspendedVars before.core.counter tries)) indexed.1))\n",
+    "let-proof-finished.lean.txt": "let finished : EnumerationExpandableIndex.Cached Symbol Constraint :=\n            EnumerationExpandableIndex.Cached.frame\n              {childrenAfter.core with obligations :=\n                match residual with\n                | none => childrenAfter.core.obligations\n                | some guard => (guard, fragment) :: childrenAfter.core.obligations} childrenAfter\n",
+    "local-inputs-closed.lean.txt": "have inputsClosed : \u2200 input \u2208 inputs, input.1.free = []\n",
+    "local-inputs-bounded.lean.txt": "have inputsBounded : \u2200 input \u2208 inputs, \u2200 sc \u2208 input.2,\n        sc.var < ownAfter.core.counter\n",
+    "context.lean.txt": "import MicroCFTA.SourcePruningEnumerationCachedOwn\nimport MicroCFTA.SourcePruningEnumerationCachedStages\n\nnamespace MicroCFTA.SourcePruningEnumerationCachedEdge\nopen EnumerationState EnumerationSchedule EnumerationCorrectness\nopen SourcePruningEnumerationObservation\nlocal notation \"Symbol\" => SourcePruningTemplates.Symbol\nlocal notation \"Constraint\" => SourceSymbolicIndex.Constraint FullSyntax.Formula\n"
+  },
+  "active_program_sha256": {
+    "check": "f6946d96f11c6de164e90ba3dbc7276c035f50c616abfcedc8ecffc5c8d70f7c",
+    "documents": "ad919729f904f73baec814b32a5469a065c993f37ff0abfcf3fc62ee169739ab",
+    "archive": "301f2e30369a3c694d1de5387459baf8057fa76025c60255e5cbf9662b300f10",
+    "verify": "23d4fc7938028f90436fcdd75218f6cf6eb3c359c405931b0317d773f9a58697",
+    "publication": "963a02b4527cc9ef85556e94f8efe4ba657dfa20cc90a112912cc071850aae90"
+  },
+  "template_sha256": {
+    "current-note.md": "e78e8096e60e516e7d9aa41e126be8eba854c980b78537dc4fd6d61b630ffe74",
+    "status-prefix.txt": "d12164c622da531400530d97eb6765ca5af3015cf4211f292faa7a6424bcb7d1"
+  },
+  "local_haves": 7,
+  "proof_lets": 3,
+  "definition_lets": 2,
+  "public_header_lets": 0,
+  "instances": 0,
+  "inductions": 0,
+  "hard_cap": 680,
+  "source_and_full_inventory_read": true,
+  "bodies_present_before_gate": false
+}

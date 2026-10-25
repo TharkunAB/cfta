@@ -1,0 +1,61 @@
+--- candidate/archive.py
++++ basis/archive.py
+@@ -6,12 +6,12 @@
+ from pathlib import Path
+ 
+ root = Path('/home/tritlo/Code/mcfta')
+-area = Path('/tmp/mcfta-pruning-enumeration-cached-edge-20261025')
+-evidence = root / 'lean/restart-evidence/20261025-pruning-enumeration-cached-edge'
++area = Path('/tmp/mcfta-pruning-enumeration-cached-stages-20261025')
++evidence = root / 'lean/restart-evidence/20261025-pruning-enumeration-cached-stages'
+ assert not evidence.exists()
+ custody = json.loads((area / 'prior-custody-index.json').read_text())
+ assert len(custody) == 26 and len({pin['target'] for pin in custody}) == 26
+-assert hashlib.sha256((area / 'prior-custody-index.json').read_bytes()).hexdigest() == 'CURRENT_CUSTODY_INDEX_SHA_PENDING'
++assert hashlib.sha256((area / 'prior-custody-index.json').read_bytes()).hexdigest() == '1f8e0be9957e060eadd4aa87eb2f721f7a1957c2b8a96173f69148bbc1d60f34'
+ summary = json.loads((area / 'previous-publication/post-publication-summary.json').read_text())
+ assert [pin['source'] for pin in custody] == summary['next_custody_inputs']
+ for pin in custody:
+@@ -19,11 +19,11 @@
+     data = (area / 'previous-publication' / pin['target']).read_bytes()
+     assert len(data) == pin['bytes'] and hashlib.sha256(data).hexdigest() == pin['sha256']
+ assert {p.name for p in (area / 'previous-publication').iterdir()} == {pin['target'] for pin in custody}
+-assert Path('/tmp/mcfta-pruning-enumeration-cached-edge-20261025-source-review.md').is_file()
++assert Path('/tmp/mcfta-pruning-enumeration-cached-stages-20261025-source-review.md').is_file()
+ for args in [('diff', '--quiet'), ('diff', '--cached', '--quiet')]:
+     subprocess.run(['git', *args], cwd=root, check=True)
+ for name in ['declaration', 'model', 'public', 'document', 'seal-script', 'root']:
+-    assert Path('/tmp/mcfta-pruning-enumeration-cached-edge-20261025-' + name + '-review.md').is_file()
++    assert Path('/tmp/mcfta-pruning-enumeration-cached-stages-20261025-' + name + '-review.md').is_file()
+ evidence.mkdir()
+ for path in sorted(area.rglob('*')):
+     if not path.is_file():
+@@ -36,21 +36,21 @@
+         target.write_bytes(path.read_bytes())
+ inputs = evidence / 'inputs'
+ inputs.mkdir()
+-for pattern in ['mcfta-pruning-enumeration-cached-edge-20261025-*']:
++for pattern in ['mcfta-pruning-enumeration-cached-stages-20261025-*']:
+     for path in sorted(Path('/tmp').glob(pattern)):
+-        if path.is_file() and not path.name.startswith('mcfta-pruning-enumeration-cached-edge-20261025-archive-1.'):
++        if path.is_file() and not path.name.startswith('mcfta-pruning-enumeration-cached-stages-20261025-archive-1.'):
+             shutil.copyfile(path, inputs / path.name)
+-shutil.copytree('/tmp/mcfta-pruning-enumeration-cached-edge-20261025-proposal', evidence / 'owner-proposal')
++shutil.copytree('/tmp/mcfta-pruning-enumeration-cached-stages-20261025-proposal', evidence / 'owner-proposal')
+ prior = evidence / 'previous-publication'
+ prior.mkdir()
+ for pin in custody:
+     shutil.copyfile(area / 'previous-publication' / pin['target'], prior / pin['target'])
+ production = evidence / 'production-sources'
+ production.mkdir()
+-shutil.copyfile(root / 'lean/MicroCFTA/SourcePruningEnumerationCachedEdge.lean', production / 'SourcePruningEnumerationCachedEdge.lean')
+-shutil.copyfile(root / 'lean/notes-current-pruning-enumeration-cached-edge.md', evidence / 'current-note.md')
+-shutil.copyfile('/tmp/mcfta-pruning-enumeration-cached-edge-20261025-verify.py', evidence / 'verify-checkpoint.py')
+-(evidence / 'INDEX.md').write_text("# Native cached selected-edge execution\n\nUNFROZEN source-only draft. Root has not selected the exact public interface, source premises or budget. The owner and source review remain unbound. This draft supplies no new mathematical or validation claim and must not be activated. Selected prose and literal templates will follow actual Root selection and frozen owner controls.\n\nThe proposal retains all 144967 baseline files/modes/refs/stashes/worktrees, nine exact document inverses, one Audit prepend and the separate audit-addition.json requirement. All actual failed inputs/raw logs, strict flags, full public signatures and actual permitted axiom subsets remain required. The separate documents-1 non-Lean cap ledger and every six-artifact resource family remain.\n\nPrior custody is exactly the 26 actual CachedStages publication inputs, including archive-1/local-publication-1/push-1 and the complete 12204-byte summary. Its canonical next assessment and separate sealed peer remain. The actual current custody index hash and source-review hash are deliberately unbound in this draft. No prior failure, owner revision or runtime count is inherited as a current outcome.\n\nForce-add every manifest path and SHA256SUMS, including ignored logs. Publication retains complete manifest membership in HEAD, exact filesystem/index/tree/modes, original ref/stash/worktree checks and the singleton ordinary formalize destination. Future attempts, source/public/build counts, actual axiom sets and seal/push outcomes remain unbound.\n\nAll six imported Haskell repair handoffs stay first in FINDINGS. H6 remains strongest and the whole goal remains ACTIVE and incomplete. No Haskell change, next proof, full driver, extraction or runtime result is supplied by this unselected draft.\n")
++shutil.copyfile(root / 'lean/MicroCFTA/SourcePruningEnumerationCachedStages.lean', production / 'SourcePruningEnumerationCachedStages.lean')
++shutil.copyfile(root / 'lean/notes-current-pruning-enumeration-cached-stages.md', evidence / 'current-note.md')
++shutil.copyfile('/tmp/mcfta-pruning-enumeration-cached-stages-20261025-verify.py', evidence / 'verify-checkpoint.py')
++(evidence / 'INDEX.md').write_text("# Native cached ordered child execution\n\nThe selected interface has one run definition and one complete finite producer, three typed haves, one proof let, one public result-header let and one structural list induction. It adds no instance, helper, new type, predicate or Graph carrier. The run definition uses equation clauses with newline-only attachment. The source estimate is 220–360 ordinary lines, hard limit 520. Seven exact selected fragments / 60 lines and the actual source review remain. The frozen owner records 103 payloads, 203 scoped entries, 9 obtain packets / 45 fields, 15 whole sources and 28 cuts / 487 lines, plus 5 routes / 22 project identities. All seven selected literals remain exact. Root preserved the earlier prospective naming draft before this owner freeze; those source controls supply no compiler or execution outcome.\n\nThe worker uses the actual ordered inputs mapped through existing ShallowChild.prepareChild, including duplicates. It inspects the same captured option before cached preparation. Captured None returns the successful unsupported singleton at the current completed-prefix cache and skips that child and suffix. Empty captures some reject and returns no raw row. The completed-prefix cache remains separate from those rows, so an earlier Empty does not falsely reach a later unsupported stage. No global nonterminal premise is supplied; the captured-some branch derives the existing child's conditional terminal guard.\n\nThe producer takes a coherent fixed heap, actual availability and closedness, StorageValid, all PendingRealized slots, current Roots, canonical waiting correctness, the all-Nat native flag law and genuine initial variable bounds for every input bucket. It derives an adequate finite common fuel and stable rows plus their independent completed-prefix cache for every larger fuel. It matches the exact existing runStaged raw stream for those same mapped actions, preserves storage/realization/forest/Roots/index correctness, and derives counter monotonicity/alignment and returned fragment bounds at the actual final counter. No callback-success law, desired state or future Ranges premise replaces execution.\n\nThis prefix-cache guarantee applies only at the derived adequate fuel. Outer None outside the fuel/codec domain carries no cache, and malformed intermediate row lists remain partial. None, unsupported singleton and Empty rejection are distinct. The producer reuses actual cached child results and raw bind laws; no new mapM law or local Monad/LawfulMonad instance is introduced. It does not install residual constraints or execute later same-before branch alternatives.\n\nWork retains all 144420 baseline files/modes/refs/stashes/worktrees, nine exact document inverses, one Audit prepend and separate audit-addition.json. Complete actual failed inputs/raw logs, full public signatures and actual axiom subsets remain. The existing non_lean_cap_attempts=['documents-1'] ledger and all six resource receipt artifacts remain. Exactly 26 prior CachedOwn inputs retain archive-1/local-publication-1/push-1 and the full 12301-byte summary. The canonical assessment is already sealed; its peer is separate context. All older owner, body and metadata history stays protected by the baseline, not treated as a current failure.\n\nForce-add every manifest path and SHA256SUMS, including ignored logs. Publication requires every sealed path in HEAD, exact filesystem/index/tree/modes and the singleton ordinary formalize destination. Future source/report counts, actual failures, axiom sets and publication outcomes remain unbound. No passing check, seal or push is predicted.\n\nResidual installation, full cached edge/alternative composition, native terminal fallback, canonical/weighted selector correspondence, maps/machine integers, extraction, Safe/LiveRoots, wrapper normalization/reconstruction and full driver remain open. H6 remains strongest and the whole goal remains ACTIVE and incomplete. All six imported Haskell repair handoffs remain first in FINDINGS. No Haskell source change is claimed.\n")
+ 
+ files = sorted(p for p in evidence.rglob('*') if p.is_file())
+ (evidence / 'SHA256SUMS').write_text(''.join(hashlib.sha256(p.read_bytes()).hexdigest() + '  ' + p.relative_to(evidence).as_posix() + '\n' for p in files))

@@ -1,0 +1,312 @@
+{"command": ["/home/tritlo/.elan/toolchains/leanprover--lean4---v4.34.1/bin/lean", "-o", "/tmp/mcfta-pruning-enumeration-cached-edge-20261025/strict-2/SourcePruningEnumerationCachedEdge.olean", "-R", "/tmp/mcfta-pruning-enumeration-cached-edge-20261025/strict-2", "-DwarningAsError=true", "-Dlinter.all=true", "/tmp/mcfta-pruning-enumeration-cached-edge-20261025/strict-2/MicroCFTA/SourcePruningEnumerationCachedEdge.lean"], "exit_code": 1, "raw_bytes": 16875, "raw_sha256": "531bfb3202a3ffda26c229d2e6b89580e573ea70893cd354fa2bccced260968c", "source_sha256": "049a4d7020a07efa6413713b0c97de4a415ec1383b3ce9bbea850d62264c9566"}
+/tmp/mcfta-pruning-enumeration-cached-edge-20261025/strict-2/MicroCFTA/SourcePruningEnumerationCachedEdge.lean:160:10: error: 'change' tactic failed, pattern
+  (SourcePruningEnumerationCachedStages.run heap (childFuel + extra) inputs ownAfter).bind ?m.981 = ?m.983
+is not definitionally equal to target
+  ((SourcePruningEnumerationCachedStages.run heap (childFuel + extra)
+          (List.map (fun stage => (stage.fst, stage.snd.fst))
+            (List.map
+              (fun indexed =>
+                (indexed.fst,
+                  descendScs indexed.snd scs ++ descendScs indexed.snd (suspendedVars before.core.counter tries),
+                  SourcePruningEnumerationShallowChild.prepareChild
+                    (descendScs indexed.snd scs ++ descendScs indexed.snd (suspendedVars before.core.counter tries))
+                    indexed.fst))
+              edge.children.zipIdx))
+          ownAfter).bind
+      fun result =>
+      match result.fst with
+      | [] => some ([], result.snd)
+      | [(none, last)] => some ([(none, last)], last)
+      | [(some fragments, last)] =>
+        some
+          ([(some (Fragments.Fragment.node edge.entry.key.symbol fragments),
+                EnumerationExpandableIndex.frame
+                  { counter := last.core.counter, representatives := last.core.representatives,
+                    values := last.core.values,
+                    obligations :=
+                      match residual with
+                      | none => last.core.obligations
+                      | some guard =>
+                        (guard, Fragments.Fragment.node edge.entry.key.symbol fragments) :: last.core.obligations,
+                    recursionAncestry := last.core.recursionAncestry, expansionAncestry := last.core.expansionAncestry }
+                  last)],
+            EnumerationExpandableIndex.frame
+              { counter := last.core.counter, representatives := last.core.representatives, values := last.core.values,
+                obligations :=
+                  match residual with
+                  | none => last.core.obligations
+                  | some guard =>
+                    (guard, Fragments.Fragment.node edge.entry.key.symbol fragments) :: last.core.obligations,
+                recursionAncestry := last.core.recursionAncestry, expansionAncestry := last.core.expansionAncestry }
+              last)
+      | x => none) =
+    some ([], childrenAfter)
+/tmp/mcfta-pruning-enumeration-cached-edge-20261025/strict-2/MicroCFTA/SourcePruningEnumerationCachedEdge.lean:181:12: error: 'change' tactic failed, pattern
+  (SourcePruningEnumerationCachedStages.run heap (childFuel + extra) inputs ownAfter).bind ?m.1128 = ?m.1130
+is not definitionally equal to target
+  ((SourcePruningEnumerationCachedStages.run heap (childFuel + extra)
+          (List.map (fun stage => (stage.fst, stage.snd.fst))
+            (List.map
+              (fun indexed =>
+                (indexed.fst,
+                  descendScs indexed.snd scs ++ descendScs indexed.snd (suspendedVars before.core.counter tries),
+                  SourcePruningEnumerationShallowChild.prepareChild
+                    (descendScs indexed.snd scs ++ descendScs indexed.snd (suspendedVars before.core.counter tries))
+                    indexed.fst))
+              edge.children.zipIdx))
+          ownAfter).bind
+      fun result =>
+      match result.fst with
+      | [] => some ([], result.snd)
+      | [(none, last)] => some ([(none, last)], last)
+      | [(some fragments, last)] =>
+        some
+          ([(some (Fragments.Fragment.node edge.entry.key.symbol fragments),
+                EnumerationExpandableIndex.frame
+                  { counter := last.core.counter, representatives := last.core.representatives,
+                    values := last.core.values,
+                    obligations :=
+                      match residual with
+                      | none => last.core.obligations
+                      | some guard =>
+                        (guard, Fragments.Fragment.node edge.entry.key.symbol fragments) :: last.core.obligations,
+                    recursionAncestry := last.core.recursionAncestry, expansionAncestry := last.core.expansionAncestry }
+                  last)],
+            EnumerationExpandableIndex.frame
+              { counter := last.core.counter, representatives := last.core.representatives, values := last.core.values,
+                obligations :=
+                  match residual with
+                  | none => last.core.obligations
+                  | some guard =>
+                    (guard, Fragments.Fragment.node edge.entry.key.symbol fragments) :: last.core.obligations,
+                recursionAncestry := last.core.recursionAncestry, expansionAncestry := last.core.expansionAncestry }
+              last)
+      | x => none) =
+    some ([(none, childrenAfter)], childrenAfter)
+/tmp/mcfta-pruning-enumeration-cached-edge-20261025/strict-2/MicroCFTA/SourcePruningEnumerationCachedEdge.lean:215:12: error: 'change' tactic failed, pattern
+  (SourcePruningEnumerationCachedStages.run heap (childFuel + extra) inputs ownAfter).bind ?m.1368 = ?m.1370
+is not definitionally equal to target
+  ((SourcePruningEnumerationCachedStages.run heap (childFuel + extra)
+          (List.map (fun stage => (stage.fst, stage.snd.fst))
+            (List.map
+              (fun indexed =>
+                (indexed.fst,
+                  descendScs indexed.snd scs ++ descendScs indexed.snd (suspendedVars before.core.counter tries),
+                  SourcePruningEnumerationShallowChild.prepareChild
+                    (descendScs indexed.snd scs ++ descendScs indexed.snd (suspendedVars before.core.counter tries))
+                    indexed.fst))
+              edge.children.zipIdx))
+          ownAfter).bind
+      fun result =>
+      match result.fst with
+      | [] => some ([], result.snd)
+      | [(none, last)] => some ([(none, last)], last)
+      | [(some fragments, last)] =>
+        some
+          ([(some (Fragments.Fragment.node edge.entry.key.symbol fragments),
+                EnumerationExpandableIndex.frame
+                  { counter := last.core.counter, representatives := last.core.representatives,
+                    values := last.core.values,
+                    obligations :=
+                      match residual with
+                      | none => last.core.obligations
+                      | some guard =>
+                        (guard, Fragments.Fragment.node edge.entry.key.symbol fragments) :: last.core.obligations,
+                    recursionAncestry := last.core.recursionAncestry, expansionAncestry := last.core.expansionAncestry }
+                  last)],
+            EnumerationExpandableIndex.frame
+              { counter := last.core.counter, representatives := last.core.representatives, values := last.core.values,
+                obligations :=
+                  match residual with
+                  | none => last.core.obligations
+                  | some guard =>
+                    (guard, Fragments.Fragment.node edge.entry.key.symbol fragments) :: last.core.obligations,
+                recursionAncestry := last.core.recursionAncestry, expansionAncestry := last.core.expansionAncestry }
+              last)
+      | x => none) =
+    some ([(some fragment, finished)], finished)
+/tmp/mcfta-pruning-enumeration-cached-edge-20261025/strict-2/MicroCFTA/SourcePruningEnumerationCachedEdge.lean:243:4: error: unsolved goals
+case neg.refine_1
+heap : InternedConstructorTemplates.State Symbol Constraint
+parentEntry : Cache.Interned InternedBinderProtocol.NodeKey
+edges : List (InternedConstructorTemplates.EdgeValue Symbol Constraint)
+depth : Nat
+free : List InternedBinderProtocol.Reference
+edge : InternedConstructorTemplates.EdgeValue Symbol Constraint
+scs : List Suspended
+roots : Nat → Nat
+ready : SourceEqualityRequiredCache.Ready heap
+parentAvailable :
+  InternedProbeProvenance.Available heap (InternedConstructorTemplates.Value.node parentEntry edges depth free)
+parentClosed : free = []
+selected : edge ∈ edges
+before : EnumerationExpandableIndex.Cached Symbol Constraint
+storage : StorageValid before.core
+realized : PendingRealized heap before.core
+paths : Roots before.core.representatives roots
+counts : EnumerationCanonicalWaiting.Correct roots before.core.values before.waiting
+flags :
+  ∀ (slot : Nat),
+    SourcePruningEnumerationNativeIndex.candidate heap (before.core.values[slot]?.getD UVarValue.eliminated) =
+      some (before.expandable slot)
+bounded : ∀ (sc : Suspended), sc ∈ scs → sc.var < before.core.counter
+allowed : ¬arityAllows edge.children.length scs = true
+extra : Nat
+⊢ ((if false = true then
+          match SourcePruningEnumerationConstraint.project edge.entry.key.constraint with
+          | none => none
+          | some (tries, residual) =>
+            Option.map
+              (fun result =>
+                [((edge.entry.key.symbol,
+                      List.map
+                        (fun indexed =>
+                          (indexed.fst, descendScs indexed.snd scs ++ descendScs indexed.snd result.fst,
+                            SourcePruningEnumerationShallowChild.prepareChild
+                              (descendScs indexed.snd scs ++ descendScs indexed.snd result.fst) indexed.fst))
+                        edge.children.zipIdx,
+                      residual),
+                    result.snd)])
+              (SourcePruningEnumerationCachedOwn.suspendMany heap tries before)
+        else some []).bind
+      fun prefixes =>
+      match prefixes with
+      | [] => some ([], before)
+      | [((symbol, staged, residual), middle)] =>
+        (SourcePruningEnumerationCachedStages.run heap (0 + extra)
+              (List.map (fun stage => (stage.fst, stage.snd.fst)) staged) middle).bind
+          fun result =>
+          match result.fst with
+          | [] => some ([], result.snd)
+          | [(none, last)] => some ([(none, last)], last)
+          | [(some fragments, last)] =>
+            some
+              ([(some (Fragments.Fragment.node symbol fragments),
+                    EnumerationExpandableIndex.frame
+                      { counter := last.core.counter, representatives := last.core.representatives,
+                        values := last.core.values,
+                        obligations :=
+                          match residual with
+                          | none => last.core.obligations
+                          | some guard => (guard, Fragments.Fragment.node symbol fragments) :: last.core.obligations,
+                        recursionAncestry := last.core.recursionAncestry,
+                        expansionAncestry := last.core.expansionAncestry }
+                      last)],
+                EnumerationExpandableIndex.frame
+                  { counter := last.core.counter, representatives := last.core.representatives,
+                    values := last.core.values,
+                    obligations :=
+                      match residual with
+                      | none => last.core.obligations
+                      | some guard => (guard, Fragments.Fragment.node symbol fragments) :: last.core.obligations,
+                    recursionAncestry := last.core.recursionAncestry, expansionAncestry := last.core.expansionAncestry }
+                  last)
+          | x => none
+      | x => none) =
+    some ([], before)
+/tmp/mcfta-pruning-enumeration-cached-edge-20261025/strict-2/MicroCFTA/SourcePruningEnumerationCachedEdge.lean:251:6: error: Tactic `subst` failed: did not find equation for eliminating 'action'
+
+case neg.refine_3
+heap : InternedConstructorTemplates.State Symbol Constraint
+parentEntry : Cache.Interned InternedBinderProtocol.NodeKey
+edges : List (InternedConstructorTemplates.EdgeValue Symbol Constraint)
+depth : Nat
+free : List InternedBinderProtocol.Reference
+edge : InternedConstructorTemplates.EdgeValue Symbol Constraint
+scs : List Suspended
+roots : Nat → Nat
+ready : SourceEqualityRequiredCache.Ready heap
+parentAvailable :
+  InternedProbeProvenance.Available heap (InternedConstructorTemplates.Value.node parentEntry edges depth free)
+parentClosed : free = []
+selected : edge ∈ edges
+before : EnumerationExpandableIndex.Cached Symbol Constraint
+storage : StorageValid before.core
+realized : PendingRealized heap before.core
+paths : Roots before.core.representatives roots
+counts : EnumerationCanonicalWaiting.Correct roots before.core.values before.waiting
+flags :
+  ∀ (slot : Nat),
+    SourcePruningEnumerationNativeIndex.candidate heap (before.core.values[slot]?.getD UVarValue.eliminated) =
+      some (before.expandable slot)
+bounded : ∀ (sc : Suspended), sc ∈ scs → sc.var < before.core.counter
+allowed : ¬arityAllows edge.children.length scs = true
+action : EnumerateM Symbol Constraint (Option (Fragments.Fragment Symbol))
+prepared :
+  (match
+      if false = true then
+        match SourcePruningEnumerationConstraint.project edge.entry.key.constraint with
+        | none => none
+        | some (tries, residual) =>
+          some do
+            let own ← List.mapM suspend tries
+            pure
+                (edge.entry.key.symbol,
+                  List.map
+                    (fun indexed =>
+                      (indexed.fst, descendScs indexed.snd scs ++ descendScs indexed.snd own,
+                        SourcePruningEnumerationShallowChild.prepareChild
+                          (descendScs indexed.snd scs ++ descendScs indexed.snd own) indexed.fst))
+                    edge.children.zipIdx,
+                  residual)
+      else some reject with
+    | none => none
+    | some prefixAction =>
+      some do
+        let packet ← prefixAction
+        let childrenResult ← SourcePruningEnumerationEdgeTraversal.runStaged packet.snd.fst
+        match childrenResult with
+          | none => pure none
+          | some fragments => do
+            recordResidual packet.snd.snd (Fragments.Fragment.node packet.fst fragments)
+            pure (some (Fragments.Fragment.node packet.fst fragments))) =
+    some action
+⊢ ∃ rows after,
+    some ([], before) = some (rows, after) ∧
+      (action before.core).run = List.map (fun row => Except.ok (row.fst, row.snd.core)) rows ∧
+        before.core.counter ≤ after.core.counter ∧
+          after.core.counter = after.core.values.length ∧
+            after.core.representatives = before.core.representatives ∧
+              Roots after.core.representatives roots ∧
+                StorageValid after.core ∧
+                  PendingRealized heap after.core ∧
+                    EnumerationCanonicalWaiting.Correct roots after.core.values after.waiting ∧
+                      (∀ (slot : Nat),
+                          SourcePruningEnumerationNativeIndex.candidate heap
+                              (after.core.values[slot]?.getD UVarValue.eliminated) =
+                            some (after.expandable slot)) ∧
+                        (rows = [] ∨
+                          ∃ result,
+                            rows = [(result, after)] ∧
+                              ∀ (fragment : Fragments.Fragment Symbol),
+                                result = some fragment → FragmentBound after.core.counter fragment)
+/tmp/mcfta-pruning-enumeration-cached-edge-20261025/strict-2/MicroCFTA/SourcePruningEnumerationCachedEdge.lean:244:78: error: This simp argument is unused:
+  ↓reduceIte
+
+Hint: Omit it from the simp argument list.
+  [apply] simp only [prepare, SourcePruningEnumerationCachedOwn.prepare, allowed, Option.bind_some]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/tmp/mcfta-pruning-enumeration-cached-edge-20261025/strict-2/MicroCFTA/SourcePruningEnumerationCachedEdge.lean:245:8: error: This simp argument is unused:
+  Option.bind_some
+
+Hint: Omit it from the simp argument list.
+  [apply] simp only [prepare, SourcePruningEnumerationCachedOwn.prepare, allowed, ↓reduceIte]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/tmp/mcfta-pruning-enumeration-cached-edge-20261025/strict-2/MicroCFTA/SourcePruningEnumerationCachedEdge.lean:250:61: error: This simp argument is unused:
+  ↓reduceIte
+
+Hint: Omit it from the simp argument list.
+  [apply] simp only [SourcePruningEnumerationEdgeTraversal.prepare, SourcePruningEnumerationEdgePrefix.prepare, allowed,
+    Option.some.injEq] at prepared
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/tmp/mcfta-pruning-enumeration-cached-edge-20261025/strict-2/MicroCFTA/SourcePruningEnumerationCachedEdge.lean:250:73: error: This simp argument is unused:
+  Option.some.injEq
+
+Hint: Omit it from the simp argument list.
+  [apply] simp only [SourcePruningEnumerationEdgeTraversal.prepare, SourcePruningEnumerationEdgePrefix.prepare, allowed,
+    ↓reduceIte] at prepared
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`

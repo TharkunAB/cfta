@@ -1,0 +1,9 @@
+/-- Run the selected edge and record its residual after the children finish. -/
+noncomputable def prepare
+    (heap : InternedConstructorTemplates.State Symbol Constraint) (fuel : Nat)
+    (scs : List EnumerationState.Suspended)
+    (edge : InternedConstructorTemplates.EdgeValue Symbol Constraint)
+    (before : EnumerationExpandableIndex.Cached Symbol Constraint) :
+    Option (List (Option (Fragments.Fragment Symbol) ×
+      EnumerationExpandableIndex.Cached Symbol Constraint) ×
+      EnumerationExpandableIndex.Cached Symbol Constraint)

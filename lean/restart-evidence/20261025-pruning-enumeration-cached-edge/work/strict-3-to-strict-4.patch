@@ -1,0 +1,13 @@
+--- strict-3
++++ strict-4
+@@ -215,7 +215,9 @@
+             change (SourcePruningEnumerationCachedStages.run heap (childFuel + extra) inputs ownAfter).bind _ = _
+             rw [childrenRun extra]
+             simp only [Option.bind_some, singletonRows]
+-            rfl
++            cases residual with
++            | none => rfl
++            | some _guard => rfl
+           · simp only [SourcePruningEnumerationEdgeTraversal.prepare, prefixPrepared,
+               reduceCtorEq, iff_self]
+           · intro action prepared

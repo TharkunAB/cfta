@@ -1,0 +1,42 @@
+--- strict-1
++++ strict-2
+@@ -29,7 +29,7 @@
+               let fragment : Fragments.Fragment Symbol :=
+                 .node symbol fragments
+               let finished : EnumerationExpandableIndex.Cached Symbol Constraint :=
+-                EnumerationExpandableIndex.Cached.frame
++                EnumerationExpandableIndex.frame
+                   {last.core with obligations :=
+                     match residual with
+                     | none => last.core.obligations
+@@ -201,7 +201,7 @@
+           let fragment : Fragments.Fragment Symbol :=
+             .node edge.entry.key.symbol fragments
+           let finished : EnumerationExpandableIndex.Cached Symbol Constraint :=
+-            EnumerationExpandableIndex.Cached.frame
++            EnumerationExpandableIndex.frame
+               {childrenAfter.core with obligations :=
+                 match residual with
+                 | none => childrenAfter.core.obligations
+@@ -222,8 +222,7 @@
+             simp only [SourcePruningEnumerationEdgeTraversal.prepare, prefixPrepared,
+               Option.some.injEq] at prepared
+             subst action
+-            refine ⟨[(some fragment, finished)], finished, rfl, ?_, (by dsimp only [finished,
+-              EnumerationExpandableIndex.Cached.frame]; omega), childrenAligned,
++            refine ⟨[(some fragment, finished)], finished, rfl, ?_, (by change before.core.counter ≤ childrenAfter.core.counter; omega), childrenAligned,
+               childrenForest.trans ownForest, childrenPaths, ?_, childrenRealized,
+               childrenCounts, childrenFlags, Or.inr ⟨some fragment, rfl, ?_⟩⟩
+             · rw [bind_single _ _ before.core ownAfter.core _ (by simpa only [ExceptT.run] using prefixRaw)]
+@@ -233,10 +232,7 @@
+               cases residual with
+               | none => rfl
+               | some guard =>
+-                simp only [recordResidual, bind, StateT.bind, ExceptT.bind, ExceptT.bindCont,
+-                  modify, modifyGet, MonadStateOf.modifyGet, StateT.modifyGet,
+-                  pure, StateT.pure, ExceptT.pure, ExceptT.mk, ExceptT.run,
+-                  List.map_cons, List.map_nil, finished, fragment, EnumerationExpandableIndex.Cached.frame]
++                rfl
+             · cases residual with
+               | none => exact childrenStorage
+               | some guard => exact guard_storage childrenAfter.core childrenStorage guard fragment nodeBound

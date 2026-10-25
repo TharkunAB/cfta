@@ -1,0 +1,37 @@
+--- candidate/verify.py
++++ basis/verify.py
+@@ -116,33 +116,11 @@
+     assert len(data) == pin['bytes'] and sha(data) == pin['sha256']
+ contracts = load('owner-proposal/contracts.json')
+ assert contracts == load('work/body-gate.json')['contracts']
+-amendment = here / 'work/frame-name-amendment'
+-assert sha((amendment / 'FROZEN.json').read_bytes()) == '0680eaac4891543c3904f6d00119c0d4f00f6305997c7a9d3bcb25dd09952227'
+-assert load('work/body-gate-frame-name.json')['frame_amendment_frozen_sha256'] == sha((amendment / 'FROZEN.json').read_bytes())
+-amendment_frozen = load('work/frame-name-amendment/FROZEN.json')
+-amendment_pins = load('work/frame-name-amendment/pins.json')
+-assert len(amendment_pins) == amendment_frozen['pins_count'] == 18
+-assert sha((amendment / 'pins.json').read_bytes()) == amendment_frozen['pins_sha256']
+-assert {p.relative_to(amendment).as_posix() for p in amendment.rglob('*') if p.is_file()} == set(amendment_pins) | {'pins.json', 'FROZEN.json'}
+-for name, pin in amendment_pins.items():
+-    assert not Path(name).is_absolute() and '..' not in Path(name).parts
+-    data = (amendment / name).read_bytes()
+-    assert len(data) == pin['bytes'] and sha(data) == pin['sha256']
+-effective_contracts = load('work/frame-name-amendment/effective-contracts.json')
+-assert set(effective_contracts) == set(contracts)
+-corrected = {'let-definition-finished.lean.txt', 'let-proof-finished.lean.txt'}
+-assert {name for name in contracts if contracts[name] != effective_contracts[name]} == corrected
+ for name, literal in contracts.items():
+     assert isinstance(literal, str)
+     data = (here / 'owner-proposal' / name).read_bytes()
+     assert data.decode() == literal
+-    expected = literal.replace('EnumerationExpandableIndex.Cached.frame', 'EnumerationExpandableIndex.frame') if name in corrected else literal
+-    assert effective_contracts[name] == expected
+-    if name in corrected:
+-        assert (amendment / 'basis' / name).read_bytes() == data
+-        assert (amendment / 'candidate' / name).read_text() == expected
+-    assert text.count(expected.rstrip('\n')) == 1
+-assert 'EnumerationExpandableIndex.Cached.frame' not in text
++    assert text.count(literal.rstrip('\n')) == 1
+ source_index = load('owner-proposal/source-index.json')
+ sources = source_index['sources']
+ assert len(sources) == frozen['source_count']

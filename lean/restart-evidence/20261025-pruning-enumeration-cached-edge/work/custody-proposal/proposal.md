@@ -1,0 +1,9 @@
+# CachedEdge prior custody proposal
+
+FINAL SOURCE ONLY. This package copies exactly the 26 actual inputs, in their original order, from the full 12204-byte CachedStages post-publication summary. The summary SHA256 is c6f3ecc7488427894e1b47305e8109d5199f61ff53e21520152934e2303c09a9. The inputs are three six-artifact archive/local-publication/push families and eight canonical tails. The index retains each exact absolute source, target basename, byte count and SHA256. No alias, cleanup or replacement name is introduced.
+
+The canonical next assessment remains one of the 26 inputs. Its already-sealed peer is retained separately under context and is not a 27th item. Both assessment and peer match their actual prior sealed copies. The full summary retains all prior failures, patches, metadata amendments, resource receipts, ref/stash/worktree history and publication state. Prior history is not a current CachedEdge outcome or failure.
+
+The full assessment and peer were read. They recommend composing the actual own-class prefix, ordered child stager and residual continuation at the same endpoint. Genuine parent Ready/availability/closure and stored-edge membership derive child facts; inherited scs bounds remain genuine inputs or come from the actual entered pending slot. Empty rejection, unsupported singleton and projection absence stay separate. Later alternatives each start at the same original cache. No new mathematical interface, body or future successful execution is selected here. H6 and the active whole-goal limits remain unchanged.
+
+Every exact copy, order and both sealed context identities were checked as data. No original file was overwritten. No selected program, compiler/parser, Git command, repository edit, network or board action was made. Root will read and install the frozen copies after independent review.

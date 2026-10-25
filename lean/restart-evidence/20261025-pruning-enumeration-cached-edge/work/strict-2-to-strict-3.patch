@@ -1,0 +1,47 @@
+--- strict-2
++++ strict-3
+@@ -156,7 +156,7 @@
+       · refine ⟨childFuel, some ([], childrenAfter), ?_, ?_, ?_⟩
+         · intro extra
+           rw [prepare, ownRun]
+-          simp only [Option.bind_some]
++          simp only [Option.bind_some, List.map_map]
+           change (SourcePruningEnumerationCachedStages.run heap (childFuel + extra) inputs ownAfter).bind _ = _
+           rw [childrenRun extra]
+           simp only [Option.bind_some, emptyRows]
+@@ -177,7 +177,7 @@
+           refine ⟨childFuel, some ([(none, childrenAfter)], childrenAfter), ?_, ?_, ?_⟩
+           · intro extra
+             rw [prepare, ownRun]
+-            simp only [Option.bind_some]
++            simp only [Option.bind_some, List.map_map]
+             change (SourcePruningEnumerationCachedStages.run heap (childFuel + extra) inputs ownAfter).bind _ = _
+             rw [childrenRun extra]
+             simp only [Option.bind_some, singletonRows]
+@@ -211,7 +211,7 @@
+           refine ⟨childFuel, some ([(some fragment, finished)], finished), ?_, ?_, ?_⟩
+           · intro extra
+             rw [prepare, ownRun]
+-            simp only [Option.bind_some]
++            simp only [Option.bind_some, List.map_map]
+             change (SourcePruningEnumerationCachedStages.run heap (childFuel + extra) inputs ownAfter).bind _ = _
+             rw [childrenRun extra]
+             simp only [Option.bind_some, singletonRows]
+@@ -241,13 +241,14 @@
+               exact nodeBound
+   · refine ⟨0, some ([], before), ?_, ?_, ?_⟩
+     · intro extra
+-      simp only [prepare, SourcePruningEnumerationCachedOwn.prepare, allowed, ↓reduceIte,
+-        Option.bind_some]
++      simp only [prepare, SourcePruningEnumerationCachedOwn.prepare, allowed, Bool.false_eq_true,
++        ↓reduceIte, Option.bind_some]
+     · simp only [SourcePruningEnumerationEdgeTraversal.prepare,
+         SourcePruningEnumerationEdgePrefix.prepare, allowed, ↓reduceIte, reduceCtorEq, iff_self]
+     · intro action prepared
+       simp only [SourcePruningEnumerationEdgeTraversal.prepare,
+-        SourcePruningEnumerationEdgePrefix.prepare, allowed, ↓reduceIte, Option.some.injEq] at prepared
++        SourcePruningEnumerationEdgePrefix.prepare, allowed, Bool.false_eq_true,
++        ↓reduceIte, Option.some.injEq] at prepared
+       subst action
+       refine ⟨[], before, rfl, ?_, Nat.le_refl _, storage.aligned, rfl, paths, storage,
+         realized, counts, flags, Or.inl rfl⟩

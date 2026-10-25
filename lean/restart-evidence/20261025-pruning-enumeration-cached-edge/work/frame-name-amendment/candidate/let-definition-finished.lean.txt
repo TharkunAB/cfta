@@ -1,0 +1,6 @@
+let finished : EnumerationExpandableIndex.Cached Symbol Constraint :=
+                EnumerationExpandableIndex.frame
+                  {last.core with obligations :=
+                    match residual with
+                    | none => last.core.obligations
+                    | some guard => (guard, fragment) :: last.core.obligations} last

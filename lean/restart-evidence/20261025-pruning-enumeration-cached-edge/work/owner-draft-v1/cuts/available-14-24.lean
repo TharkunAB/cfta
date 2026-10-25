@@ -1,0 +1,11 @@
+def children : Value Symbol Guard → List (Value Symbol Guard)
+  | .empty | .reference _ => []
+  | .node _ edges _ _ => edges.flatMap EdgeValue.children
+  | .union _ members _ _ => members
+  | .mu _ body depth ordinary => [body, depth, ordinary]
+
+/-- Actual source inputs retain their resident records and earlier reference reservations recursively. -/
+inductive Available (state : InternedConstructorTemplates.State Symbol Guard) : Value Symbol Guard → Prop where
+  | intro (value : Value Symbol Guard) (resident : Resident state value)
+      (issued : IssuedReferences state.nodes value)
+      (children : ∀ child ∈ children value, Available state child) : Available state value

@@ -1,0 +1,205 @@
+{"command": ["/home/tritlo/.elan/toolchains/leanprover--lean4---v4.34.1/bin/lean", "-o", "/tmp/mcfta-pruning-enumeration-cached-edge-20261025/strict-3/SourcePruningEnumerationCachedEdge.olean", "-R", "/tmp/mcfta-pruning-enumeration-cached-edge-20261025/strict-3", "-DwarningAsError=true", "-Dlinter.all=true", "/tmp/mcfta-pruning-enumeration-cached-edge-20261025/strict-3/MicroCFTA/SourcePruningEnumerationCachedEdge.lean"], "exit_code": 1, "raw_bytes": 10885, "raw_sha256": "9caea30a9b71a103180979a61c1ec3f1f8a46ee5ecb9d0ea14d8a1546bd85c16", "source_sha256": "9c327111bd2107bcb10821bde7d499fa1e716f73606bf46c23bccd6ce3daf391"}
+/tmp/mcfta-pruning-enumeration-cached-edge-20261025/strict-3/MicroCFTA/SourcePruningEnumerationCachedEdge.lean:218:12: error: Tactic `rfl` failed: The left-hand side
+  some
+    ([(some (Fragments.Fragment.node edge.entry.key.symbol fragments),
+          EnumerationExpandableIndex.frame
+            { counter := childrenAfter.core.counter, representatives := childrenAfter.core.representatives,
+              values := childrenAfter.core.values,
+              obligations :=
+                match residual with
+                | none => childrenAfter.core.obligations
+                | some guard =>
+                  (guard, Fragments.Fragment.node edge.entry.key.symbol fragments) :: childrenAfter.core.obligations,
+              recursionAncestry := childrenAfter.core.recursionAncestry,
+              expansionAncestry := childrenAfter.core.expansionAncestry }
+            childrenAfter)],
+      EnumerationExpandableIndex.frame
+        { counter := childrenAfter.core.counter, representatives := childrenAfter.core.representatives,
+          values := childrenAfter.core.values,
+          obligations :=
+            match residual with
+            | none => childrenAfter.core.obligations
+            | some guard =>
+              (guard, Fragments.Fragment.node edge.entry.key.symbol fragments) :: childrenAfter.core.obligations,
+          recursionAncestry := childrenAfter.core.recursionAncestry,
+          expansionAncestry := childrenAfter.core.expansionAncestry }
+        childrenAfter)
+is not definitionally equal to the right-hand side
+  some ([(some fragment, finished)], finished)
+
+case pos.some.inr.some.refine_1
+heap : InternedConstructorTemplates.State Symbol Constraint
+parentEntry : Cache.Interned InternedBinderProtocol.NodeKey
+edges : List (InternedConstructorTemplates.EdgeValue Symbol Constraint)
+depth : Nat
+free : List InternedBinderProtocol.Reference
+edge : InternedConstructorTemplates.EdgeValue Symbol Constraint
+scs : List Suspended
+roots : Nat → Nat
+ready : SourceEqualityRequiredCache.Ready heap
+parentAvailable :
+  InternedProbeProvenance.Available heap (InternedConstructorTemplates.Value.node parentEntry edges depth free)
+parentClosed : free = []
+selected : edge ∈ edges
+before : EnumerationExpandableIndex.Cached Symbol Constraint
+storage : StorageValid before.core
+realized : PendingRealized heap before.core
+paths : Roots before.core.representatives roots
+counts : EnumerationCanonicalWaiting.Correct roots before.core.values before.waiting
+flags :
+  ∀ (slot : Nat),
+    SourcePruningEnumerationNativeIndex.candidate heap (before.core.values[slot]?.getD UVarValue.eliminated) =
+      some (before.expandable slot)
+bounded : ∀ (sc : Suspended), sc ∈ scs → sc.var < before.core.counter
+allowed : arityAllows edge.children.length scs = true
+tries : List EqualityTrie.Trie
+residual : Option Constraint
+projected : SourcePruningEnumerationConstraint.project edge.entry.key.constraint = some (tries, residual)
+prefixAction :
+  EnumerateM Symbol Constraint
+    (Symbol ×
+      List
+          (InternedConstructorTemplates.Value Symbol Constraint ×
+            List Suspended × Option (EnumerateM Symbol Constraint (Fragments.Fragment Symbol))) ×
+        Option Constraint)
+ownAfter : EnumerationExpandableIndex.Cached Symbol Constraint
+prefixPrepared : SourcePruningEnumerationEdgePrefix.prepare scs edge = some prefixAction
+ownRun :
+  SourcePruningEnumerationCachedOwn.prepare heap scs edge before =
+    some
+      [((edge.entry.key.symbol,
+            List.map
+              (fun indexed =>
+                (indexed.fst,
+                  descendScs indexed.snd scs ++ descendScs indexed.snd (suspendedVars before.core.counter tries),
+                  SourcePruningEnumerationShallowChild.prepareChild
+                    (descendScs indexed.snd scs ++ descendScs indexed.snd (suspendedVars before.core.counter tries))
+                    indexed.fst))
+              edge.children.zipIdx,
+            residual),
+          ownAfter)]
+prefixRaw :
+  (prefixAction before.core).run =
+    [Except.ok
+        ((edge.entry.key.symbol,
+            List.map
+              (fun indexed =>
+                (indexed.fst,
+                  descendScs indexed.snd scs ++ descendScs indexed.snd (suspendedVars before.core.counter tries),
+                  SourcePruningEnumerationShallowChild.prepareChild
+                    (descendScs indexed.snd scs ++ descendScs indexed.snd (suspendedVars before.core.counter tries))
+                    indexed.fst))
+              edge.children.zipIdx,
+            residual),
+          ownAfter.core)]
+_ownCore : ownAfter.core = suspendedState tries.length before.core
+ownCounter : ownAfter.core.counter = before.core.counter + tries.length
+_ownAligned : ownAfter.core.counter = ownAfter.core.values.length
+ownForest : ownAfter.core.representatives = before.core.representatives
+ownPaths : Roots ownAfter.core.representatives roots
+ownStorage : StorageValid ownAfter.core
+ownRealized : PendingRealized heap ownAfter.core
+ownCounts : EnumerationCanonicalWaiting.Correct roots ownAfter.core.values ownAfter.waiting
+_ownWaiting : ownAfter.waiting = before.waiting
+_ownFlagsSame : ownAfter.expandable = before.expandable
+ownFlags :
+  ∀ (slot : Nat),
+    SourcePruningEnumerationNativeIndex.candidate heap (ownAfter.core.values[slot]?.getD UVarValue.eliminated) =
+      some (ownAfter.expandable slot)
+childrenAvailable :
+  ∀ (child : InternedConstructorTemplates.Value Symbol Constraint),
+    child ∈ edge.children → InternedProbeProvenance.Available heap child
+childrenClosed :
+  ∀ (child : InternedConstructorTemplates.Value Symbol Constraint), child ∈ edge.children → child.free = []
+inputs : List (InternedConstructorTemplates.Value Symbol Constraint × List Suspended) :=
+  List.map
+    (fun indexed =>
+      (indexed.fst, descendScs indexed.snd scs ++ descendScs indexed.snd (suspendedVars before.core.counter tries)))
+    edge.children.zipIdx
+inputsAvailable :
+  ∀ (input : InternedConstructorTemplates.Value Symbol Constraint × List Suspended),
+    input ∈ inputs → InternedProbeProvenance.Available heap input.fst
+inputsClosed :
+  ∀ (input : InternedConstructorTemplates.Value Symbol Constraint × List Suspended),
+    input ∈ inputs → input.fst.free = []
+inputsBounded :
+  ∀ (input : InternedConstructorTemplates.Value Symbol Constraint × List Suspended),
+    input ∈ inputs → ∀ (sc : Suspended), sc ∈ input.snd → sc.var < ownAfter.core.counter
+stagedSame :
+  List.map (fun input => (input.fst, input.snd, SourcePruningEnumerationShallowChild.prepareChild input.snd input.fst))
+      inputs =
+    List.map
+      (fun indexed =>
+        (indexed.fst, descendScs indexed.snd scs ++ descendScs indexed.snd (suspendedVars before.core.counter tries),
+          SourcePruningEnumerationShallowChild.prepareChild
+            (descendScs indexed.snd scs ++ descendScs indexed.snd (suspendedVars before.core.counter tries))
+            indexed.fst))
+      edge.children.zipIdx
+childFuel : Nat
+childrenRows : List (Option (List (Fragments.Fragment Symbol)) × EnumerationExpandableIndex.Cached Symbol Constraint)
+childrenAfter : EnumerationExpandableIndex.Cached Symbol Constraint
+childrenRun :
+  ∀ (extra : Nat),
+    SourcePruningEnumerationCachedStages.run heap (childFuel + extra) inputs ownAfter =
+      some (childrenRows, childrenAfter)
+childrenRaw :
+  (SourcePruningEnumerationEdgeTraversal.runStaged
+        (List.map
+          (fun input => (input.fst, input.snd, SourcePruningEnumerationShallowChild.prepareChild input.snd input.fst))
+          inputs)
+        ownAfter.core).run =
+    List.map (fun row => Except.ok (row.fst, row.snd.core)) childrenRows
+childGrows : ownAfter.core.counter ≤ childrenAfter.core.counter
+childrenAligned : childrenAfter.core.counter = childrenAfter.core.values.length
+childrenForest : childrenAfter.core.representatives = ownAfter.core.representatives
+childrenPaths : Roots childrenAfter.core.representatives roots
+childrenStorage : StorageValid childrenAfter.core
+childrenRealized : PendingRealized heap childrenAfter.core
+childrenCounts : EnumerationCanonicalWaiting.Correct roots childrenAfter.core.values childrenAfter.waiting
+childrenFlags :
+  ∀ (slot : Nat),
+    SourcePruningEnumerationNativeIndex.candidate heap (childrenAfter.core.values[slot]?.getD UVarValue.eliminated) =
+      some (childrenAfter.expandable slot)
+fragments : List (Fragments.Fragment Symbol)
+singletonRows : childrenRows = [(some fragments, childrenAfter)]
+fragmentBounds :
+  ∀ (fragments_1 : List (Fragments.Fragment Symbol)),
+    some fragments = some fragments_1 → FragmentsBound childrenAfter.core.counter fragments_1
+fragment : Fragments.Fragment Symbol := Fragments.Fragment.node edge.entry.key.symbol fragments
+finished : EnumerationExpandableIndex.Cached Symbol Constraint :=
+  EnumerationExpandableIndex.frame
+    (let __src := childrenAfter.core;
+    { counter := __src.counter, representatives := __src.representatives, values := __src.values,
+      obligations :=
+        match residual, projected, ownRun, prefixRaw with
+        | none, projected, ownRun, prefixRaw => childrenAfter.core.obligations
+        | some guard, projected, ownRun, prefixRaw => (guard, fragment) :: childrenAfter.core.obligations,
+      recursionAncestry := __src.recursionAncestry, expansionAncestry := __src.expansionAncestry })
+    childrenAfter
+nodeBound : FragmentBound childrenAfter.core.counter fragment
+extra : Nat
+⊢ some
+      ([(some (Fragments.Fragment.node edge.entry.key.symbol fragments),
+            EnumerationExpandableIndex.frame
+              { counter := childrenAfter.core.counter, representatives := childrenAfter.core.representatives,
+                values := childrenAfter.core.values,
+                obligations :=
+                  match residual with
+                  | none => childrenAfter.core.obligations
+                  | some guard =>
+                    (guard, Fragments.Fragment.node edge.entry.key.symbol fragments) :: childrenAfter.core.obligations,
+                recursionAncestry := childrenAfter.core.recursionAncestry,
+                expansionAncestry := childrenAfter.core.expansionAncestry }
+              childrenAfter)],
+        EnumerationExpandableIndex.frame
+          { counter := childrenAfter.core.counter, representatives := childrenAfter.core.representatives,
+            values := childrenAfter.core.values,
+            obligations :=
+              match residual with
+              | none => childrenAfter.core.obligations
+              | some guard =>
+                (guard, Fragments.Fragment.node edge.entry.key.symbol fragments) :: childrenAfter.core.obligations,
+            recursionAncestry := childrenAfter.core.recursionAncestry,
+            expansionAncestry := childrenAfter.core.expansionAncestry }
+          childrenAfter) =
+    some ([(some fragment, finished)], finished)

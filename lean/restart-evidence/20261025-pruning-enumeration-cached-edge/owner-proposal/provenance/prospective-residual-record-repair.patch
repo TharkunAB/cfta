@@ -1,0 +1,26 @@
+--- prospective-v1/let-definition-finished.lean.txt
++++ prospective-v2/let-definition-finished.lean.txt
+@@ -1,6 +1,6 @@
+ let finished : EnumerationExpandableIndex.Cached Symbol Constraint :=
+                 EnumerationExpandableIndex.Cached.frame
+-                  (match residual with
+-                  | none => last.core
+-                  | some guard => {last.core with obligations :=
+-                      (guard, fragment) :: last.core.obligations}) last
++                  {last.core with obligations :=
++                    match residual with
++                    | none => last.core.obligations
++                    | some guard => (guard, fragment) :: last.core.obligations} last
+--- prospective-v1/let-proof-finished.lean.txt
++++ prospective-v2/let-proof-finished.lean.txt
+@@ -1,6 +1,6 @@
+ let finished : EnumerationExpandableIndex.Cached Symbol Constraint :=
+             EnumerationExpandableIndex.Cached.frame
+-              (match residual with
+-              | none => childrenAfter.core
+-              | some guard => {childrenAfter.core with obligations :=
+-                  (guard, fragment) :: childrenAfter.core.obligations}) childrenAfter
++              {childrenAfter.core with obligations :=
++                match residual with
++                | none => childrenAfter.core.obligations
++                | some guard => (guard, fragment) :: childrenAfter.core.obligations} childrenAfter

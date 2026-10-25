@@ -1,0 +1,391 @@
+{
+  "packets": [
+    {
+      "scope": "complete.projected_pair",
+      "from": "actual projected some pair",
+      "fields": [
+        {
+          "scope": "complete.projected_pair",
+          "name": "tries",
+          "type": "List EqualityTrie.Trie",
+          "used": true,
+          "reason": "Consumed actual producer field."
+        },
+        {
+          "scope": "complete.projected_pair",
+          "name": "residual",
+          "type": "Option Constraint",
+          "used": true,
+          "reason": "Consumed actual producer field."
+        }
+      ],
+      "field_count": 2,
+      "skipped_fields": []
+    },
+    {
+      "scope": "complete.own",
+      "from": "SourcePruningEnumerationCachedOwn.complete in admitted/projected branch",
+      "fields": [
+        {
+          "scope": "complete.own",
+          "name": "prefixAction",
+          "type": "EnumerateM Symbol Constraint (Symbol × List (InternedConstructorTemplates.Value Symbol Constraint × List EnumerationState.Suspended × Option (EnumerateM Symbol Constraint (Fragments.Fragment Symbol))) × Option Constraint)",
+          "used": true,
+          "reason": "Consumed actual producer field."
+        },
+        {
+          "scope": "complete.own",
+          "name": "ownAfter",
+          "type": "EnumerationExpandableIndex.Cached Symbol Constraint",
+          "used": true,
+          "reason": "Consumed actual producer field."
+        },
+        {
+          "scope": "complete.own",
+          "name": "prefixPrepared",
+          "type": "SourcePruningEnumerationEdgePrefix.prepare scs edge = some prefixAction",
+          "used": true,
+          "reason": "Consumed actual producer field."
+        },
+        {
+          "scope": "complete.own",
+          "name": "ownRun",
+          "type": "SourcePruningEnumerationCachedOwn.prepare heap scs edge before = some [((edge.entry.key.symbol, edge.children.zipIdx.map (fun indexed => (indexed.1, descendScs indexed.2 scs ++ descendScs indexed.2 (suspendedVars before.core.counter tries), SourcePruningEnumerationShallowChild.prepareChild (EnumGuard := Constraint) (descendScs indexed.2 scs ++ descendScs indexed.2 (suspendedVars before.core.counter tries)) indexed.1)), residual), ownAfter)]",
+          "used": true,
+          "reason": "Consumed actual producer field."
+        },
+        {
+          "scope": "complete.own",
+          "name": "prefixRaw",
+          "type": "ExceptT.run (prefixAction before.core) = [.ok ((edge.entry.key.symbol, edge.children.zipIdx.map (fun indexed => (indexed.1, descendScs indexed.2 scs ++ descendScs indexed.2 (suspendedVars before.core.counter tries), SourcePruningEnumerationShallowChild.prepareChild (EnumGuard := Constraint) (descendScs indexed.2 scs ++ descendScs indexed.2 (suspendedVars before.core.counter tries)) indexed.1)), residual), ownAfter.core)]",
+          "used": true,
+          "reason": "Consumed actual producer field."
+        },
+        {
+          "scope": "complete.own",
+          "name": "_ownCore",
+          "type": "ownAfter.core = suspendedState tries.length before.core",
+          "used": false,
+          "reason": "Retained but deliberately unused selected producer field."
+        },
+        {
+          "scope": "complete.own",
+          "name": "ownCounter",
+          "type": "ownAfter.core.counter = before.core.counter + tries.length",
+          "used": true,
+          "reason": "Consumed actual producer field."
+        },
+        {
+          "scope": "complete.own",
+          "name": "_ownAligned",
+          "type": "ownAfter.core.counter = ownAfter.core.values.length",
+          "used": false,
+          "reason": "Retained but deliberately unused selected producer field."
+        },
+        {
+          "scope": "complete.own",
+          "name": "ownForest",
+          "type": "ownAfter.core.representatives = before.core.representatives",
+          "used": true,
+          "reason": "Consumed actual producer field."
+        },
+        {
+          "scope": "complete.own",
+          "name": "ownPaths",
+          "type": "Roots ownAfter.core.representatives roots",
+          "used": true,
+          "reason": "Consumed actual producer field."
+        },
+        {
+          "scope": "complete.own",
+          "name": "ownStorage",
+          "type": "StorageValid ownAfter.core",
+          "used": true,
+          "reason": "Consumed actual producer field."
+        },
+        {
+          "scope": "complete.own",
+          "name": "ownRealized",
+          "type": "PendingRealized heap ownAfter.core",
+          "used": true,
+          "reason": "Consumed actual producer field."
+        },
+        {
+          "scope": "complete.own",
+          "name": "ownCounts",
+          "type": "EnumerationCanonicalWaiting.Correct roots ownAfter.core.values ownAfter.waiting",
+          "used": true,
+          "reason": "Consumed actual producer field."
+        },
+        {
+          "scope": "complete.own",
+          "name": "_ownWaiting",
+          "type": "ownAfter.waiting = before.waiting",
+          "used": false,
+          "reason": "Retained but deliberately unused selected producer field."
+        },
+        {
+          "scope": "complete.own",
+          "name": "_ownFlagsSame",
+          "type": "ownAfter.expandable = before.expandable",
+          "used": false,
+          "reason": "Retained but deliberately unused selected producer field."
+        },
+        {
+          "scope": "complete.own",
+          "name": "ownFlags",
+          "type": "∀ (slot : Nat), SourcePruningEnumerationNativeIndex.candidate heap ((ownAfter.core.values[slot]?).getD .eliminated) = some (ownAfter.expandable slot)",
+          "used": true,
+          "reason": "Consumed actual producer field."
+        }
+      ],
+      "field_count": 16,
+      "skipped_fields": [
+        "_ownCore",
+        "_ownAligned",
+        "_ownWaiting",
+        "_ownFlagsSame"
+      ]
+    },
+    {
+      "scope": "complete.inputsAvailable.map",
+      "from": "List.mem_map.mp member",
+      "fields": [
+        {
+          "scope": "complete.inputsAvailable.map",
+          "name": "indexed",
+          "type": "InternedConstructorTemplates.Value Symbol Constraint × Nat",
+          "used": true,
+          "reason": "Consumed actual producer field."
+        },
+        {
+          "scope": "complete.inputsAvailable.map",
+          "name": "indexedMember",
+          "type": "indexed ∈ edge.children.zipIdx",
+          "used": true,
+          "reason": "Consumed actual producer field."
+        },
+        {
+          "scope": "complete.inputsAvailable.map",
+          "name": "inputSame",
+          "type": "(indexed.1, descendScs indexed.2 scs ++ descendScs indexed.2 (suspendedVars before.core.counter tries)) = input",
+          "used": true,
+          "reason": "Consumed actual producer field."
+        }
+      ],
+      "field_count": 3,
+      "skipped_fields": []
+    },
+    {
+      "scope": "complete.inputsClosed.map",
+      "from": "List.mem_map.mp member",
+      "fields": [
+        {
+          "scope": "complete.inputsClosed.map",
+          "name": "indexed",
+          "type": "InternedConstructorTemplates.Value Symbol Constraint × Nat",
+          "used": true,
+          "reason": "Consumed actual producer field."
+        },
+        {
+          "scope": "complete.inputsClosed.map",
+          "name": "indexedMember",
+          "type": "indexed ∈ edge.children.zipIdx",
+          "used": true,
+          "reason": "Consumed actual producer field."
+        },
+        {
+          "scope": "complete.inputsClosed.map",
+          "name": "inputSame",
+          "type": "(indexed.1, descendScs indexed.2 scs ++ descendScs indexed.2 (suspendedVars before.core.counter tries)) = input",
+          "used": true,
+          "reason": "Consumed actual producer field."
+        }
+      ],
+      "field_count": 3,
+      "skipped_fields": []
+    },
+    {
+      "scope": "complete.inputsBounded.map",
+      "from": "List.mem_map.mp member",
+      "fields": [
+        {
+          "scope": "complete.inputsBounded.map",
+          "name": "indexed",
+          "type": "InternedConstructorTemplates.Value Symbol Constraint × Nat",
+          "used": true,
+          "reason": "Consumed actual producer field."
+        },
+        {
+          "scope": "complete.inputsBounded.map",
+          "name": "indexedMember",
+          "type": "indexed ∈ edge.children.zipIdx",
+          "used": true,
+          "reason": "Consumed actual producer field."
+        },
+        {
+          "scope": "complete.inputsBounded.map",
+          "name": "inputSame",
+          "type": "(indexed.1, descendScs indexed.2 scs ++ descendScs indexed.2 (suspendedVars before.core.counter tries)) = input",
+          "used": true,
+          "reason": "Consumed actual producer field."
+        }
+      ],
+      "field_count": 3,
+      "skipped_fields": []
+    },
+    {
+      "scope": "complete.children",
+      "from": "SourcePruningEnumerationCachedStages.complete heap inputs roots genuine Ready coherence at ownAfter",
+      "fields": [
+        {
+          "scope": "complete.children",
+          "name": "childFuel",
+          "type": "Nat",
+          "used": true,
+          "reason": "Consumed actual producer field."
+        },
+        {
+          "scope": "complete.children",
+          "name": "childrenRows",
+          "type": "List (Option (List (Fragments.Fragment Symbol)) × EnumerationExpandableIndex.Cached Symbol Constraint)",
+          "used": true,
+          "reason": "Consumed actual producer field."
+        },
+        {
+          "scope": "complete.children",
+          "name": "childrenAfter",
+          "type": "EnumerationExpandableIndex.Cached Symbol Constraint",
+          "used": true,
+          "reason": "Consumed actual producer field."
+        },
+        {
+          "scope": "complete.children",
+          "name": "childrenRun",
+          "type": "∀ (extra : Nat), SourcePruningEnumerationCachedStages.run heap (childFuel + extra) inputs ownAfter = some (childrenRows, childrenAfter)",
+          "used": true,
+          "reason": "Consumed actual producer field."
+        },
+        {
+          "scope": "complete.children",
+          "name": "childrenRaw",
+          "type": "ExceptT.run (SourcePruningEnumerationEdgeTraversal.runStaged (inputs.map (fun input => (input.1, input.2, SourcePruningEnumerationShallowChild.prepareChild (EnumGuard := Constraint) input.2 input.1))) ownAfter.core) = childrenRows.map (fun row => .ok (row.1, row.2.core))",
+          "used": true,
+          "reason": "Consumed actual producer field."
+        },
+        {
+          "scope": "complete.children",
+          "name": "childGrows",
+          "type": "ownAfter.core.counter ≤ childrenAfter.core.counter",
+          "used": true,
+          "reason": "Consumed actual producer field."
+        },
+        {
+          "scope": "complete.children",
+          "name": "childrenAligned",
+          "type": "childrenAfter.core.counter = childrenAfter.core.values.length",
+          "used": true,
+          "reason": "Consumed actual producer field."
+        },
+        {
+          "scope": "complete.children",
+          "name": "childrenForest",
+          "type": "childrenAfter.core.representatives = ownAfter.core.representatives",
+          "used": true,
+          "reason": "Consumed actual producer field."
+        },
+        {
+          "scope": "complete.children",
+          "name": "childrenPaths",
+          "type": "Roots childrenAfter.core.representatives roots",
+          "used": true,
+          "reason": "Consumed actual producer field."
+        },
+        {
+          "scope": "complete.children",
+          "name": "childrenStorage",
+          "type": "StorageValid childrenAfter.core",
+          "used": true,
+          "reason": "Consumed actual producer field."
+        },
+        {
+          "scope": "complete.children",
+          "name": "childrenRealized",
+          "type": "PendingRealized heap childrenAfter.core",
+          "used": true,
+          "reason": "Consumed actual producer field."
+        },
+        {
+          "scope": "complete.children",
+          "name": "childrenCounts",
+          "type": "EnumerationCanonicalWaiting.Correct roots childrenAfter.core.values childrenAfter.waiting",
+          "used": true,
+          "reason": "Consumed actual producer field."
+        },
+        {
+          "scope": "complete.children",
+          "name": "childrenFlags",
+          "type": "∀ (slot : Nat), SourcePruningEnumerationNativeIndex.candidate heap ((childrenAfter.core.values[slot]?).getD .eliminated) = some (childrenAfter.expandable slot)",
+          "used": true,
+          "reason": "Consumed actual producer field."
+        },
+        {
+          "scope": "complete.children",
+          "name": "childrenShape",
+          "type": "childrenRows = [] ∨ ∃ result : Option (List (Fragments.Fragment Symbol)), childrenRows = [(result, childrenAfter)] ∧ (∀ (fragments : List (Fragments.Fragment Symbol)), result = some fragments → FragmentsBound («Symbol» := Symbol) childrenAfter.core.counter fragments)",
+          "used": true,
+          "reason": "Consumed actual producer field."
+        }
+      ],
+      "field_count": 14,
+      "skipped_fields": []
+    },
+    {
+      "scope": "complete.childrenShape.empty",
+      "from": "childrenShape.left",
+      "fields": [
+        {
+          "scope": "complete.childrenShape.empty",
+          "name": "emptyRows",
+          "type": "childrenRows = []",
+          "used": true,
+          "reason": "Consumed actual producer field."
+        }
+      ],
+      "field_count": 1,
+      "skipped_fields": []
+    },
+    {
+      "scope": "complete.childrenShape.singleton",
+      "from": "childrenShape.right",
+      "fields": [
+        {
+          "scope": "complete.childrenShape.singleton",
+          "name": "result",
+          "type": "Option (List (Fragments.Fragment Symbol))",
+          "used": true,
+          "reason": "Consumed actual producer field."
+        },
+        {
+          "scope": "complete.childrenShape.singleton",
+          "name": "singletonRows",
+          "type": "childrenRows = [(result, childrenAfter)]",
+          "used": true,
+          "reason": "Consumed actual producer field."
+        },
+        {
+          "scope": "complete.childrenShape.singleton",
+          "name": "fragmentBounds",
+          "type": "∀ (fragments : List (Fragments.Fragment Symbol)), result = some fragments → FragmentsBound («Symbol» := Symbol) childrenAfter.core.counter fragments",
+          "used": true,
+          "reason": "Consumed actual producer field."
+        }
+      ],
+      "field_count": 3,
+      "skipped_fields": []
+    }
+  ],
+  "count": 8,
+  "field_count": 45,
+  "inline_fields": []
+}
