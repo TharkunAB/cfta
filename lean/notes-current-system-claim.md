@@ -1,5 +1,46 @@
 # Current system claim
 
+## Union normalization caller preservation
+
+Current source: `SourcePruningEnumerationUnion`.
+Proof: `043968722d99de8a25cd98c9ed1d83786e35c7b1`. Main remains `74250bd889685da436cdbfe32ac4b5a0878ffd09`.
+The whole goal stays ACTIVE and incomplete. H6 remains strongest.
+
+One theorem derives the actual Union Head internally from genuine current
+Context, the same available closed Union and PendingRealized. No successful
+Head, future Context, desired result or Post is an input premise. Head retains
+the actual finite nodeEdges read and following makeNode reconstruction.
+
+The dependent HeadReads packet uses that SAME Head. It retains actual saved
+globals, the concrete advanced Caller and full existing Post, equal query table
+and extending unfolding table. The result is Available, closed and Ordinary,
+with independent finite-term language equivalence. Ordinary includes Empty;
+no nonempty result or later expansion success follows. The enum state stays
+fixed and every pending slot remains realized at the same derived native heap.
+No extra StorageValid premise or cross-fuel saved-memo equality is supplied.
+No new executable global-normalization action or full wrapper is claimed.
+
+Validation: The first strict proof check passes with a literal empty log under all linters and warnings as errors. All six literal contracts and the public header stay unchanged. No premise, local type or proof limit changed. The source has 93 lines, below the selected 100 to 220 estimate and within hard limit 320. The first public display check failed on the unsupported pp.width option. The second uses the previously verified display options and passes. Its failed input, complete raw log and exact display patch remain. No mathematical proof changed. The installed build, complete public readback and aggregate Audit pass. All 49 public output lines retain the full signature without display omissions. The older unused-variable warning remains unchanged. No passing check was repeated. No scope overlay or post-body presence annotation is needed. The separate HeadReads audits and note clarification distinguish a recovered matching bound from an independently supplied bound. Read-only locator diagnostics remain separate from compiler or cap failures. No seal has failed.
+Installed focused build: 1256 jobs; Audit: 3715 jobs and
+76327 theorem dependency checks. Actual public axioms: complete reports propext, Classical.choice and Quot.sound.
+All actual inputs, raw logs, exact repairs and resource receipts remain.
+Exactly 26 prior Mu publication inputs retain archive-1/local-publication-1/
+push-1. Its sealed assessment peer remains separate context. Earlier Entry
+archive-2 and its failed archive-1 remain protected baseline history.
+No future seal or push result is asserted.
+
+Initial Context admission, native identity/set-order extraction, wrapper
+expansion/reset/final installation, cache-history integration, machine bounds,
+Safe/LiveRoots and full scheduler/driver correspondence remain open. All six
+imported Haskell repair handoffs remain first in FINDINGS. No Haskell change
+is claimed. H6 still covers closed construction with a valid initial cache and
+allocation history and any prescribed finite number of actual modeled
+node-reduction calls at derived width/fuels. Empty inherited payload preserves
+the same finite trees under formal guard/solver semantics. Full typing/pruning/
+driver/native extraction/solver implementation/runtime/resources/convergence
+remain open.
+
+
 ## Memoized Mu caller preservation
 
 Current source: `SourcePruningEnumerationMu`.
