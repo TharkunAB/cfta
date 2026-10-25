@@ -1,0 +1,15 @@
+import MicroCFTA.SourcePruningEnumerationNativeOrdinary
+set_option pp.maxSteps 1000000
+set_option pp.deepTerms true
+#check MicroCFTA.SourcePruningEnumerationSelectedEntry.complete
+#print axioms MicroCFTA.SourcePruningEnumerationSelectedEntry.complete
+#check MicroCFTA.SourcePruningEnumerationNativeOrdinary.run
+#print axioms MicroCFTA.SourcePruningEnumerationNativeOrdinary.run
+#check MicroCFTA.SourcePruningEnumerationNativeOrdinary.entry_readback
+#print axioms MicroCFTA.SourcePruningEnumerationNativeOrdinary.entry_readback
+#check MicroCFTA.SourcePruningEnumerationNativeOrdinary.terminal
+#print axioms MicroCFTA.SourcePruningEnumerationNativeOrdinary.terminal
+#check MicroCFTA.SourcePruningEnumerationNativeOrdinary.Ranges
+#print axioms MicroCFTA.SourcePruningEnumerationNativeOrdinary.Ranges
+#check MicroCFTA.SourcePruningEnumerationNativeOrdinary.complete
+#print axioms MicroCFTA.SourcePruningEnumerationNativeOrdinary.complete
