@@ -4,7 +4,7 @@ module Data.CFTA.EGraphSpec (spec) where
 
 import Control.Monad (forM_)
 import qualified Data.Set as Set
-import Test.Hspec (Spec, describe, it, shouldBe)
+import Test.Hspec (Spec, describe, expectationFailure, it, shouldBe)
 import Test.QuickCheck (
     Gen,
     choose,
@@ -20,7 +20,11 @@ import Test.QuickCheck (
  )
 
 import qualified Data.CFTA as FTA
+import Data.CFTA.Constraint (equalitiesHold, equalityConstraint, noConstraint)
 import Data.CFTA.EGraph
+import Data.CFTA.Equality.Constraint (mkEqConstraints)
+import Data.CFTA.Index (Depth (..))
+import Data.CFTA.Path (path)
 import Data.CFTA.Term (Term, pattern Node)
 
 -- A term with a sort at each node, for 'addTermWith'.
@@ -130,6 +134,38 @@ spec = describe "Data.CFTA.EGraph" $ do
                             let shallow = take 20001 (takeWhile ((<= k) . termDepth) (FTA.terms automaton))
                              in length shallow <= 20000 ==> (k, termSize u, minimum (map termSize shallow)) === (k, k, k)
                         (e, a) -> counterexample (show (fmap fst e, either show (const "an automaton") a)) False
+    it "selects the terms of an e-class with an ECTA" $ do
+        -- Under distributivity and commutativity, the e-class of a * (b + c)
+        -- holds a*b + a*c. The ECTA accepts the sums whose two summands have
+        -- equal left factors: the paths [0, 0] and [1, 0] hold equal terms.
+        let x = PVar "x"
+            y = PVar "y"
+            z = PVar "z"
+            a .* b = PNode "*" [a, b]
+            a .+ b = PNode "+" [a, b]
+            rules = equation (x .* (y .+ z)) ((x .* y) .+ (x .* z)) ++ equation (x .+ y) (y .+ x) ++ equation (x .* y) (y .* x)
+            leaf s = Node s []
+            (c, g) = addTerm (Node "*" [leaf "a", Node "+" [leaf "b", leaf "c"]]) (emptyEGraph :: EGraph String String)
+            (g', _) = saturate (Limits 10 10000 0) rules g
+            anyTerm = [FTA.Transition f cs noConstraint | (f, cs) <- [("a", []), ("b", []), ("c", []), ("+", [2, 2]), ("*", [2, 2])]]
+            sharedFactor =
+                FTA.mkFTA
+                    (0 :: Int)
+                    [ (0, [FTA.Transition "+" [1, 1] (equalityConstraint (mkEqConstraints [[path [0, 0], path [1, 0]]]))])
+                    , (1, [FTA.Transition "*" [2, 2] noConstraint])
+                    , (2, anyTerm)
+                    ]
+        case (classAutomaton g' c, sharedFactor) of
+            (Right language, Right selection) -> case FTA.intersectWith (\f h -> if f == h then Just f else Nothing) (\_ k -> k) language selection of
+                Right both -> do
+                    found <- FTA.termsUpToM (\_ t u -> pure (equalitiesHold (FTA.transitionConstraint t) u)) (Depth 3) both
+                    Set.fromList found
+                        `shouldBe` Set.fromList
+                            [ Node "+" [Node "*" [leaf "a", leaf "b"], Node "*" [leaf "a", leaf "c"]]
+                            , Node "+" [Node "*" [leaf "a", leaf "c"], Node "*" [leaf "a", leaf "b"]]
+                            ]
+                Left err -> expectationFailure (show err)
+            _ -> expectationFailure "no automaton"
     it "holds the n! * Catalan(n - 1) terms of an AC sum of n variables, in 3^n - 2^(n+1) + n + 1 e-nodes" $
         forM_ [(3, 12), (4, 120), (5, 1680)] $ \(n, count) -> do
             let (c, g) = addTerm (sumOf n) emptyEGraph
