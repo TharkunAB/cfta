@@ -1,0 +1,47 @@
+{
+  "inductions": [
+    {
+      "theorem": "complete",
+      "on": "sources",
+      "generalizing": [
+        "inventory",
+        "beforeCaller",
+        "before",
+        "memos"
+      ],
+      "fixed": [
+        "width",
+        "formulas",
+        "solver",
+        "checkEmpty",
+        "target",
+        "roots",
+        "DecidableEq dictionaries"
+      ],
+      "nil": [],
+      "cons": [
+        {
+          "name": "source",
+          "type": "Nat"
+        },
+        {
+          "name": "rest",
+          "type": "List Nat"
+        },
+        {
+          "name": "ih",
+          "type": "∀ (inventory : Inventory) (beforeCaller : Caller width) (before : EnumerationExpandableIndex.Cached Symbol Constraint) (memos : Memos), Context formulas solver inventory beforeCaller memos → StorageValid before.core → PendingRealized beforeCaller.checked.native.machine.heap before.core → Roots before.core.representatives roots → EnumerationCanonicalWaiting.Correct roots before.core.values before.waiting → (∀ (slot : Nat), SourcePruningEnumerationNativeIndex.candidate beforeCaller.checked.native.machine.heap ((before.core.values[slot]?).getD .eliminated) = some (before.expandable slot)) → PendingAt before.core target → (∀ source ∈ rest, PendingOrEliminated before.core source) → SourcePruningEnumerationFold.Ranges checkEmpty rest beforeCaller before.core target memos.query → ∃ (fuel p h : Nat)\n      (rows : List (Unit × EnumerationExpandableIndex.Cached Symbol Constraint))\n      (afterCaller : Caller width) (savedQueries : Queries) (final : Memos) (next : Inventory)\n      (after : EnumerationExpandableIndex.Cached Symbol Constraint),\n      (∀ extra P H, p ≤ P → h ≤ H →\n        SourcePruningEnumerationCachedFold.run checkEmpty (fuel + extra) P H rest\n          beforeCaller before target memos.query =\n          ((.ok (some (rows.map (fun row => .ok (row.1, row.2.core)))),\n            afterCaller, savedQueries, after.core), some after)) ∧\n      Post formulas solver next beforeCaller afterCaller final ∧ final.query = savedQueries ∧\n      after.core.counter = before.core.counter ∧\n      after.core.representatives = before.core.representatives ∧ Roots after.core.representatives roots ∧\n      StorageValid after.core ∧ PendingRealized afterCaller.checked.native.machine.heap after.core ∧\n      EnumerationCanonicalWaiting.Correct roots after.core.values after.waiting ∧\n      after.waiting = before.waiting ∧\n      (∀ (slot : Nat), SourcePruningEnumerationNativeIndex.candidate\n        afterCaller.checked.native.machine.heap\n        ((after.core.values[slot]?).getD .eliminated) = some (after.expandable slot)) ∧\n      (rows = [] ∨ rows = [((), after)]) ∧ PendingAt after.core target ∧\n      (∀ (slot : Nat), before.core.values[slot]? = some .eliminated →\n        after.core.values[slot]? = some .eliminated) ∧\n      (rows = [((), after)] → ∀ source ∈ rest, source ≠ target →\n        after.core.values[source]? = some .eliminated)"
+        }
+      ]
+    }
+  ],
+  "IHs": [
+    {
+      "scope": "complete.cons",
+      "name": "ih",
+      "type": "∀ (inventory : Inventory) (beforeCaller : Caller width) (before : EnumerationExpandableIndex.Cached Symbol Constraint) (memos : Memos), Context formulas solver inventory beforeCaller memos → StorageValid before.core → PendingRealized beforeCaller.checked.native.machine.heap before.core → Roots before.core.representatives roots → EnumerationCanonicalWaiting.Correct roots before.core.values before.waiting → (∀ (slot : Nat), SourcePruningEnumerationNativeIndex.candidate beforeCaller.checked.native.machine.heap ((before.core.values[slot]?).getD .eliminated) = some (before.expandable slot)) → PendingAt before.core target → (∀ source ∈ rest, PendingOrEliminated before.core source) → SourcePruningEnumerationFold.Ranges checkEmpty rest beforeCaller before.core target memos.query → ∃ (fuel p h : Nat)\n      (rows : List (Unit × EnumerationExpandableIndex.Cached Symbol Constraint))\n      (afterCaller : Caller width) (savedQueries : Queries) (final : Memos) (next : Inventory)\n      (after : EnumerationExpandableIndex.Cached Symbol Constraint),\n      (∀ extra P H, p ≤ P → h ≤ H →\n        SourcePruningEnumerationCachedFold.run checkEmpty (fuel + extra) P H rest\n          beforeCaller before target memos.query =\n          ((.ok (some (rows.map (fun row => .ok (row.1, row.2.core)))),\n            afterCaller, savedQueries, after.core), some after)) ∧\n      Post formulas solver next beforeCaller afterCaller final ∧ final.query = savedQueries ∧\n      after.core.counter = before.core.counter ∧\n      after.core.representatives = before.core.representatives ∧ Roots after.core.representatives roots ∧\n      StorageValid after.core ∧ PendingRealized afterCaller.checked.native.machine.heap after.core ∧\n      EnumerationCanonicalWaiting.Correct roots after.core.values after.waiting ∧\n      after.waiting = before.waiting ∧\n      (∀ (slot : Nat), SourcePruningEnumerationNativeIndex.candidate\n        afterCaller.checked.native.machine.heap\n        ((after.core.values[slot]?).getD .eliminated) = some (after.expandable slot)) ∧\n      (rows = [] ∨ rows = [((), after)]) ∧ PendingAt after.core target ∧\n      (∀ (slot : Nat), before.core.values[slot]? = some .eliminated →\n        after.core.values[slot]? = some .eliminated) ∧\n      (rows = [((), after)] → ∀ source ∈ rest, source ≠ target →\n        after.core.values[source]? = some .eliminated)"
+    }
+  ],
+  "induction_count": 1,
+  "IH_count": 1
+}

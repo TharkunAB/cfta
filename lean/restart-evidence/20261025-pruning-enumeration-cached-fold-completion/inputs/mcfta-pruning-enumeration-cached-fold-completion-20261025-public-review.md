@@ -1,0 +1,13 @@
+[2026-10-25 10:07:49 CET] FINAL independent public readback review — CLEAR.
+
+I read all 77 lines of the actual public-1/raw.log. It contains one complete, unabridged signature for MicroCFTA.SourcePruningEnumerationCachedFoldCompletion.complete and its axiom declaration. There is no display omission. I compared every premise and result clause with the selected public header and the actual installed source. I did not execute Lean, a parser, a selected program, Git or network operations.
+
+The output is 5,814 bytes, SHA256 a24eab94784fe3502bd68655bfc015a4042885945386f9792f0b62b6875e99d6. The actual report records exit 0 and the matching output identity; report SHA256 e269e1d5cef995e525ecc49192567869208bb4601bdec116c7ac34f21b6d9426. Its checked.lean input is byte-identical to the retained Public.lean, SHA256 eccd13a5189896d4449ee8b94e43c6fe896e9402676b602cf4fafe85c34c9498. These are existing execution records, not checks run by this reviewer.
+
+The installed production source is byte-identical to the reviewed 265-line, 16,386-byte candidate, SHA256 11dd94aea48cbd4847724587c822afc570d5bf929d6c368fa1ad367a77ad04b0. All twelve original fragments still occur exactly once. The selected complete.head is 2,887 bytes, SHA256 bd3843396ec7e536c17fe58844014865e46130fc998c72a801f2d247a1605203. Owner FROZEN.json SHA256: 24350018f4978c3c41ca374a68e3d884f23e5103db03492c2cea6203c65283c0; pins.json SHA256: f657a564ea7afdad155b616374a96b3c0ff6e554288ad85ff9d6563bfaf03a16.
+
+The elaborated signature retains width and all three DecidableEq parameters. It requires the genuine Context, StorageValid, PendingRealized, Roots, canonical counts, all-Nat candidate flags, pending target, pending-or-eliminated selected sources and recursive Fold.Ranges. It does not replace these premises with a successful continuation premise.
+
+The result retains one common finite fuel and numeric ceilings, the exact cached-fold observation for every extra fuel and larger ceilings, the actual Caller/query/cache endpoints, full Post, fixed counter and representatives, storage and realization, canonical counts, unchanged waiting, all-slot native flags, rejection-or-singleton row shape, pending target and both elimination guarantees. Lean qualification and generated dictionary names do not change these clauses.
+
+The actual axiom set is exactly [propext, Classical.choice, Quot.sound]. No additional axiom appears. This theorem completes the admitted cached fold under its stated recursive ranges. It does not derive those ranges from initial Context alone, close the native runtime extraction or full-driver boundaries, or strengthen the whole-goal/H6 status. This review makes no later Audit, seal or publication claim.

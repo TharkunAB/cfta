@@ -1,0 +1,41 @@
+def adapt
+    (heap : InternedConstructorTemplates.State Symbol Constraint)
+    (before : EnumerationExpandableIndex.Cached Symbol Constraint) (source target : Nat)
+    (raw : List (Except EnumerationState.Error (Unit × EnumerationState.State Symbol Constraint))) :
+    Option (EnumerationExpandableIndex.Cached Symbol Constraint) :=
+  match raw with
+  | [] => some before
+  | [.ok ((), core)] =>
+      if source = target then some before else
+        match before.core.values[source]? with
+        | some .eliminated => some before
+        | _ =>
+            (core.values[target]?).bind fun value =>
+              (SourcePruningEnumerationNativeIndex.candidate heap value).map fun flag =>
+                ⟨core, (fun slot => if slot = source then false else
+                  if slot = target then flag else before.expandable slot), before.waiting⟩
+  | _ => none
+
+/-- Run dispatch and its captured action once, with a separate cache receipt. -/
+noncomputable def run
+    [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Constraint)] [DecidableEq Node]
+    (checkEmpty : Bool) (nativeFuel p h : Nat)
+    (beforeCaller : Caller width) (before : EnumerationExpandableIndex.Cached Symbol Constraint)
+    (source target : Nat) (queries : Queries) :
+    (Except (SourceEqualityNativeDemand.Outcome width Node ⊕
+      SourceCurrentAllocatedConjunctionWorker.Outcome width)
+      (Option (List (Except EnumerationState.Error (Unit × EnumerationState.State Symbol Constraint))))) ×
+      Caller width × Queries × Option (EnumerationExpandableIndex.Cached Symbol Constraint) :=
+  match SourcePruningEnumerationDispatch.dispatch checkEmpty nativeFuel p h
+      beforeCaller before.core source target queries with
+  | (.error fault, reachedCaller, savedQueries) =>
+      (.error fault, reachedCaller, savedQueries, none)
+  | (.ok none, reachedCaller, savedQueries) =>
+      (.ok none, reachedCaller, savedQueries, none)
+  | (.ok (some action), reachedCaller, savedQueries) =>
+      let raw : List (Except EnumerationState.Error (Unit × EnumerationState.State Symbol Constraint)) :=
+        ExceptT.run (action before.core)
+      (.ok (some raw), reachedCaller, savedQueries,
+        adapt reachedCaller.checked.native.machine.heap before source target raw)
+
+/-- Derive finite cached execution from the actual dispatcher completion. -/

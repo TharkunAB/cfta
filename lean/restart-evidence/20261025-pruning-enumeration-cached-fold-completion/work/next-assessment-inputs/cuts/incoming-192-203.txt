@@ -1,0 +1,12 @@
+      (∀ oldHandle, oldNode = some oldHandle →
+        ∃ (old query : Node) (queried : Checked width),
+          lookupNode beforeCaller.checked.native.machine.heap oldHandle = some old ∧
+          next.source = beforeCaller.checked.native.machine.heap ∧ next.roots = inventory.roots ++ [incoming, old] ∧
+          SourceCurrentAllocatedTargetQuery.Receipt formulas solver next incoming old beforeCaller.checked query queried memos ∧
+          (∀ ambient term,
+            InternedGuardedLanguage.meaning (SourceEqualityPCSGuard.holds formulas solver) ambient replacement term ↔
+              InternedGuardedLanguage.meaning (SourceEqualityPCSGuard.holds formulas solver) ambient incoming term ∧
+              InternedGuardedLanguage.meaning (SourceEqualityPCSGuard.holds formulas solver) ambient old term) ∧
+          (checkEmpty = false → replacement = query ∧
+            afterCaller = SourceCurrentAllocatedPartialState.advance beforeCaller queried beforeCaller.fourth beforeCaller.merge ∧
+            final = memos)) := by

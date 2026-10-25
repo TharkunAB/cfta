@@ -1,0 +1,5 @@
+/-- Concrete assimilation writes only its two designated slots. -/
+theorem assimilation_frame (state : State Symbol Guard) (target source root : Nat)
+    (merged : UVarValue Symbol) (targetOther : root ≠ target) (sourceOther : root ≠ source) :
+    (assimilated state target source merged).values[root]? = state.values[root]? := by
+  simp [assimilated, Ne.symm targetOther, Ne.symm sourceOther]

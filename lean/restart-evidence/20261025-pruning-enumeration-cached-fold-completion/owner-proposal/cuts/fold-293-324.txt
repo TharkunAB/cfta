@@ -1,0 +1,32 @@
+      have tailRanges : Ranges checkEmpty rest headCaller headAfter target headMemos.query := by
+        simpa only [headQuerySame, Nat.add_zero] using
+          ranges.2 headFuel headP headH action headCaller headQueries headAfter
+            (headRun 0 headP headH (Nat.le_refl _) (Nat.le_refl _)) headCompleted
+      obtain ⟨tailFuel, tailP, tailH, tailRaw, tailCaller, tailAfter, tailQueries, tailMemos, tailInventory,
+        tailRun, tailPost, tailQuerySame, tailRealized, tailShape, tailCompleted, tailEliminated,
+        tailLength, tailRepresentatives, tailCounter, tailObligations, tailExpansion, tailAncestry,
+        tailRejection⟩ := ih headInventory headCaller headAfter headMemos headPost.context
+          headRealized headTarget headSelected tailRanges
+      have headAt : ∀ extra P H, max headP tailP ≤ P → max headH tailH ≤ H →
+        SourcePruningEnumerationDispatch.dispatch checkEmpty (headFuel + tailFuel + extra) P H
+          beforeCaller before source target memos.query = (.ok (some action), headCaller, headQueries) := by
+        intro extra P H largeP largeH
+        simpa only [Nat.add_assoc] using headRun (tailFuel + extra) P H
+          (Nat.le_trans (Nat.le_max_left _ _) largeP) (Nat.le_trans (Nat.le_max_left _ _) largeH)
+      have tailAt : ∀ extra P H, max headP tailP ≤ P → max headH tailH ≤ H →
+        run checkEmpty (headFuel + tailFuel + extra) P H rest headCaller headAfter target headMemos.query =
+          (.ok (some tailRaw), tailCaller, tailQueries, tailAfter) := by
+        intro extra P H largeP largeH
+        simpa only [Nat.add_assoc, Nat.add_left_comm, Nat.add_comm] using tailRun (headFuel + extra) P H
+          (Nat.le_trans (Nat.le_max_right _ _) largeP) (Nat.le_trans (Nat.le_max_right _ _) largeH)
+      refine ⟨headFuel + tailFuel, max headP tailP, max headH tailH, tailRaw, tailCaller, tailAfter,
+        tailQueries, tailMemos, tailInventory, ?_, headPost.trans tailPost, tailQuerySame,
+        tailRealized, tailShape, ?_, ?_, tailLength.trans headLength, tailRepresentatives.trans headRepresentatives,
+        tailCounter.trans headCounter, tailObligations.trans headObligations, tailExpansion.trans headExpansion,
+        ?_, ?_⟩
+      · intro extra P H largeP largeH
+        rw [run, headAt extra P H largeP largeH]
+        dsimp only
+        rw [headCompleted]
+        rw [← headQuerySame]
+        exact tailAt extra P H largeP largeH

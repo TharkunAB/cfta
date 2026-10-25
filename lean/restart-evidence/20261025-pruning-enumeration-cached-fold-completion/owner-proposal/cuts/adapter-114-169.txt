@@ -1,0 +1,56 @@
+  have adapted :
+      adapt afterCaller.checked.native.machine.heap before source target
+        (rows.map (fun row => .ok (row.1, row.2.core))) = some after ∧
+      (rows = [] ∨ rows = [((), after)]) := by
+    by_cases sameId : source = target
+    · obtain ⟨rowsSame, afterSame, _callerSame, _finalSame, _nextSame⟩ := noOpResult (Or.inl sameId)
+      rw [rowsSame, afterSame]
+      refine ⟨?_, Or.inr rfl⟩
+      simp only [List.map_cons, List.map_nil, adapt, ite_eq_left sameId]
+    · by_cases sourceEliminated : before.core.values[source]? = some .eliminated
+      · obtain ⟨rowsSame, afterSame, _callerSame, _finalSame, _nextSame⟩ := noOpResult (Or.inr sourceEliminated)
+        rw [rowsSame, afterSame]
+        refine ⟨?_, Or.inr rfl⟩
+        simp only [List.map_cons, List.map_nil, adapt, ite_eq_right sameId, sourceEliminated]
+      · obtain ⟨_sourceNode, _targetNode, merged, sourceScs, targetScs, sourceStored,
+          _targetStored, _computed, selectedResult, _optionalOrigin, _queriedOrigin⟩ :=
+            liveResult sameId sourceEliminated
+        by_cases rejected : merged = some 0
+        · rw [ite_eq_left rejected] at selectedResult
+          obtain ⟨rowsSame, afterSame⟩ := selectedResult
+          rw [rowsSame, afterSame]
+          exact ⟨rfl, Or.inl rfl⟩
+        · rw [ite_eq_right rejected] at selectedResult
+          obtain ⟨rowsSame, _coreSame, _sourceAfter, targetAfter, sourceFlag, otherFlags⟩ := selectedResult
+          have classified : SourcePruningEnumerationNativeIndex.candidate
+              afterCaller.checked.native.machine.heap (.unenumerated merged (sourceScs ++ targetScs)) =
+                some (after.expandable target) := by
+            simpa only [targetAfter, Option.getD_some] using afterFlags target
+          have flagsSame :
+              (fun (slot : Nat) => if slot = source then false else
+                if slot = target then after.expandable target else before.expandable slot) =
+                  after.expandable := by
+            funext slot
+            by_cases sourceId : slot = source
+            · subst slot
+              simpa only [↓reduceIte] using sourceFlag.symm
+            · by_cases targetId : slot = target
+              · subst slot
+                simp only [ite_eq_right sourceId, ↓reduceIte]
+              · simp only [ite_eq_right sourceId, ite_eq_right targetId]
+                exact (otherFlags slot sourceId targetId).symm
+          have cacheSame :
+              (⟨after.core, (fun (slot : Nat) => if slot = source then false else
+                if slot = target then after.expandable target else before.expandable slot),
+                  before.waiting⟩ : EnumerationExpandableIndex.Cached Symbol Constraint) = after := by
+            rw [flagsSame, ←waitingSame]
+          refine ⟨?_, Or.inr rowsSame⟩
+          rw [rowsSame]
+          simp only [List.map_cons, List.map_nil, adapt, ite_eq_right sameId, sourceStored,
+            targetAfter, Option.bind_some, classified, Option.map_some]
+          exact congrArg some cacheSame
+  refine ⟨fuel, p, h, rows, afterCaller, savedQueries, final, next, after,
+    ?_, post, savedSame, counterSame, forestSame, afterPaths, afterStorage,
+    cacheRealized, afterCounts, waitingSame, afterFlags, adapted.2, noOpResult⟩
+  intro extra P H pBound hBound
+  simp only [run, actual extra P H pBound hBound, rawCached, adapted.1]

@@ -1,0 +1,346 @@
+{
+  "groups": [
+    {
+      "scope": "complete.sources",
+      "kind": "induction",
+      "expression": "sources",
+      "branches": [
+        {
+          "name": "nil",
+          "fields": []
+        },
+        {
+          "name": "cons",
+          "fields": [
+            {
+              "scope": "complete.sources.cons",
+              "name": "source",
+              "type": "Nat",
+              "used": true,
+              "kind": "case"
+            },
+            {
+              "scope": "complete.sources.cons",
+              "name": "rest",
+              "type": "List Nat",
+              "used": true,
+              "kind": "case"
+            },
+            {
+              "scope": "complete.sources.cons",
+              "name": "ih",
+              "type": "∀ (inventory : Inventory) (beforeCaller : Caller width) (before : EnumerationExpandableIndex.Cached Symbol Constraint) (memos : Memos), Context formulas solver inventory beforeCaller memos → StorageValid before.core → PendingRealized beforeCaller.checked.native.machine.heap before.core → Roots before.core.representatives roots → EnumerationCanonicalWaiting.Correct roots before.core.values before.waiting → (∀ (slot : Nat), SourcePruningEnumerationNativeIndex.candidate beforeCaller.checked.native.machine.heap ((before.core.values[slot]?).getD .eliminated) = some (before.expandable slot)) → PendingAt before.core target → (∀ source ∈ rest, PendingOrEliminated before.core source) → SourcePruningEnumerationFold.Ranges checkEmpty rest beforeCaller before.core target memos.query → ∃ (fuel p h : Nat)\n      (rows : List (Unit × EnumerationExpandableIndex.Cached Symbol Constraint))\n      (afterCaller : Caller width) (savedQueries : Queries) (final : Memos) (next : Inventory)\n      (after : EnumerationExpandableIndex.Cached Symbol Constraint),\n      (∀ extra P H, p ≤ P → h ≤ H →\n        SourcePruningEnumerationCachedFold.run checkEmpty (fuel + extra) P H rest\n          beforeCaller before target memos.query =\n          ((.ok (some (rows.map (fun row => .ok (row.1, row.2.core)))),\n            afterCaller, savedQueries, after.core), some after)) ∧\n      Post formulas solver next beforeCaller afterCaller final ∧ final.query = savedQueries ∧\n      after.core.counter = before.core.counter ∧\n      after.core.representatives = before.core.representatives ∧ Roots after.core.representatives roots ∧\n      StorageValid after.core ∧ PendingRealized afterCaller.checked.native.machine.heap after.core ∧\n      EnumerationCanonicalWaiting.Correct roots after.core.values after.waiting ∧\n      after.waiting = before.waiting ∧\n      (∀ (slot : Nat), SourcePruningEnumerationNativeIndex.candidate\n        afterCaller.checked.native.machine.heap\n        ((after.core.values[slot]?).getD .eliminated) = some (after.expandable slot)) ∧\n      (rows = [] ∨ rows = [((), after)]) ∧ PendingAt after.core target ∧\n      (∀ (slot : Nat), before.core.values[slot]? = some .eliminated →\n        after.core.values[slot]? = some .eliminated) ∧\n      (rows = [((), after)] → ∀ source ∈ rest, source ≠ target →\n        after.core.values[source]? = some .eliminated)",
+              "used": true,
+              "kind": "case"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "scope": "complete.cons.slots.selected",
+      "kind": "rcases",
+      "expression": "selected source head-member",
+      "branches": [
+        {
+          "name": "pending",
+          "fields": []
+        },
+        {
+          "name": "eliminated",
+          "fields": [
+            {
+              "scope": "complete.cons.slots.selected.eliminated",
+              "name": "eliminated",
+              "type": "before.core.values[source]? = some .eliminated",
+              "used": true,
+              "kind": "case"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "scope": "complete.cons.headFacts.sameId",
+      "kind": "by_cases",
+      "expression": "source = target",
+      "branches": [
+        {
+          "name": "positive",
+          "fields": [
+            {
+              "scope": "complete.cons.headFacts.sameId.positive",
+              "name": "sameId",
+              "type": "source = target",
+              "used": true,
+              "kind": "case"
+            }
+          ]
+        },
+        {
+          "name": "negative",
+          "fields": [
+            {
+              "scope": "complete.cons.headFacts.sameId.negative",
+              "name": "sameId",
+              "type": "¬ (source = target)",
+              "used": true,
+              "kind": "case"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "scope": "complete.cons.headFacts.sourceEliminated",
+      "kind": "by_cases",
+      "expression": "before.core.values[source]? = some .eliminated",
+      "branches": [
+        {
+          "name": "positive",
+          "fields": [
+            {
+              "scope": "complete.cons.headFacts.sourceEliminated.positive",
+              "name": "sourceEliminated",
+              "type": "before.core.values[source]? = some .eliminated",
+              "used": true,
+              "kind": "case"
+            }
+          ]
+        },
+        {
+          "name": "negative",
+          "fields": [
+            {
+              "scope": "complete.cons.headFacts.sourceEliminated.negative",
+              "name": "sourceEliminated",
+              "type": "¬ (before.core.values[source]? = some .eliminated)",
+              "used": true,
+              "kind": "case"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "scope": "complete.cons.headFacts.rejected",
+      "kind": "by_cases",
+      "expression": "merged = some 0",
+      "branches": [
+        {
+          "name": "positive",
+          "fields": [
+            {
+              "scope": "complete.cons.headFacts.rejected.positive",
+              "name": "rejected",
+              "type": "merged = some 0",
+              "used": true,
+              "kind": "case"
+            }
+          ]
+        },
+        {
+          "name": "negative",
+          "fields": [
+            {
+              "scope": "complete.cons.headFacts.rejected.negative",
+              "name": "rejected",
+              "type": "¬ (merged = some 0)",
+              "used": true,
+              "kind": "case"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "scope": "complete.cons.flagsSame.sourceId",
+      "kind": "by_cases",
+      "expression": "slot = source",
+      "branches": [
+        {
+          "name": "positive",
+          "fields": [
+            {
+              "scope": "complete.cons.flagsSame.sourceId.positive",
+              "name": "sourceId",
+              "type": "slot = source",
+              "used": true,
+              "kind": "case"
+            }
+          ]
+        },
+        {
+          "name": "negative",
+          "fields": [
+            {
+              "scope": "complete.cons.flagsSame.sourceId.negative",
+              "name": "sourceId",
+              "type": "¬ (slot = source)",
+              "used": true,
+              "kind": "case"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "scope": "complete.cons.flagsSame.targetId",
+      "kind": "by_cases",
+      "expression": "slot = target",
+      "branches": [
+        {
+          "name": "positive",
+          "fields": [
+            {
+              "scope": "complete.cons.flagsSame.targetId.positive",
+              "name": "targetId",
+              "type": "slot = target",
+              "used": true,
+              "kind": "case"
+            }
+          ]
+        },
+        {
+          "name": "negative",
+          "fields": [
+            {
+              "scope": "complete.cons.flagsSame.targetId.negative",
+              "name": "targetId",
+              "type": "¬ (slot = target)",
+              "used": true,
+              "kind": "case"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "scope": "complete.cons.headFacts.oldEliminated.atTarget",
+      "kind": "by_cases",
+      "expression": "slot = target",
+      "branches": [
+        {
+          "name": "positive",
+          "fields": [
+            {
+              "scope": "complete.cons.headFacts.oldEliminated.atTarget.positive",
+              "name": "atTarget",
+              "type": "slot = target",
+              "used": true,
+              "kind": "case"
+            }
+          ]
+        },
+        {
+          "name": "negative",
+          "fields": [
+            {
+              "scope": "complete.cons.headFacts.oldEliminated.atTarget.negative",
+              "name": "atTarget",
+              "type": "¬ (slot = target)",
+              "used": true,
+              "kind": "case"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "scope": "complete.cons.headFacts.oldEliminated.atSource",
+      "kind": "by_cases",
+      "expression": "slot = source",
+      "branches": [
+        {
+          "name": "positive",
+          "fields": [
+            {
+              "scope": "complete.cons.headFacts.oldEliminated.atSource.positive",
+              "name": "atSource",
+              "type": "slot = source",
+              "used": true,
+              "kind": "case"
+            }
+          ]
+        },
+        {
+          "name": "negative",
+          "fields": [
+            {
+              "scope": "complete.cons.headFacts.oldEliminated.atSource.negative",
+              "name": "atSource",
+              "type": "¬ (slot = source)",
+              "used": true,
+              "kind": "case"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "scope": "complete.cons.headShape",
+      "kind": "rcases",
+      "expression": "headShape",
+      "branches": [
+        {
+          "name": "rejected",
+          "fields": [
+            {
+              "scope": "complete.cons.headShape.rejected",
+              "name": "headRejected",
+              "type": "headRows = []",
+              "used": true,
+              "kind": "case"
+            }
+          ]
+        },
+        {
+          "name": "completed",
+          "fields": [
+            {
+              "scope": "complete.cons.headShape.completed",
+              "name": "headCompleted",
+              "type": "headRows = [((), headAfter)]",
+              "used": true,
+              "kind": "case"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "scope": "complete.cons.completed.member",
+      "kind": "rcases",
+      "expression": "List.mem_cons.mp member",
+      "branches": [
+        {
+          "name": "head",
+          "fields": [
+            {
+              "scope": "complete.cons.completed.member.head",
+              "name": "memberHead",
+              "type": "remaining = source",
+              "used": true,
+              "kind": "case"
+            }
+          ]
+        },
+        {
+          "name": "rest",
+          "fields": [
+            {
+              "scope": "complete.cons.completed.member.rest",
+              "name": "memberRest",
+              "type": "remaining ∈ rest",
+              "used": true,
+              "kind": "case"
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "count": 11,
+  "runtime_groups": 0,
+  "proof_groups": 11
+}

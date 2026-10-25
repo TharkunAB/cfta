@@ -1,0 +1,7 @@
+/-- A concrete slot stores a pending graph or equality variable. -/
+def PendingAt (state : State Symbol Guard) (uv : Nat) : Prop :=
+  ∃ node scs, state.values[uv]? = some (.unenumerated node scs)
+
+/-- A selected old slot is pending or has already been assimilated. -/
+def PendingOrEliminated (state : State Symbol Guard) (uv : Nat) : Prop :=
+  PendingAt state uv ∨ state.values[uv]? = some .eliminated

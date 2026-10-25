@@ -1,0 +1,11 @@
+--- source-bound/candidate/verify.py
++++ initial/candidate/verify.py
+@@ -239,7 +239,7 @@
+ assert [pin['source'] for pin in custody] == summary['next_custody_inputs']
+ assert summary['final_local_publication_attempt'] == 'local-publication-1'
+ assert summary['all_manifest_files_committed'] is True
+-assert sha((here / 'inputs/mcfta-pruning-enumeration-cached-fold-completion-20261025-source-review.md').read_bytes()) == 'bb936064bbb668c2469f86277825e1602efa7debe8d4f45e4ea8f7411e4d3601'
++assert sha((here / 'inputs/mcfta-pruning-enumeration-cached-fold-completion-20261025-source-review.md').read_bytes()) == 'SOURCE_REVIEW_PENDING_ACTUAL_SHA256'
+ 
+ print(json.dumps(dict(status='PASS', baseline=baseline, main=main, proof=proof,
+     baseline_files=count, unchanged_files=count - len(changed), exact_changed_files=changed,

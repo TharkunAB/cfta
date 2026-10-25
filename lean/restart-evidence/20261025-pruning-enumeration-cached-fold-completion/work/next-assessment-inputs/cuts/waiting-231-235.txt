@@ -1,0 +1,5 @@
+theorem moveMany_correct (target : Nat) (sources : List Nat) (roots : Nat → Nat)
+    (values : List (UVarValue Symbol)) (waiting : EnumerationWaitingIndex.Waiting)
+    (correct : Correct roots values waiting) :
+    Correct (sources.foldl (fun previous source => redirect target source previous) roots) values
+      (moveMany target sources waiting) := by

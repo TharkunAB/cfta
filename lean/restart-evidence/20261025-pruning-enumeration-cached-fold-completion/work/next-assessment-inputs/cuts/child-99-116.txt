@@ -1,0 +1,18 @@
+theorem complete
+    (heap : InternedConstructorTemplates.State Symbol NativeGuard)
+    (before : EnumerationExpandableIndex.Cached Symbol EnumGuard)
+    (entry : Cache.Interned InternedBinderProtocol.NodeKey)
+    (edges : List (InternedConstructorTemplates.EdgeValue Symbol NativeGuard))
+    (depth : Nat) (free : List InternedBinderProtocol.Reference)
+    (scs : List EnumerationState.Suspended) (roots : Nat → Nat)
+    (coherent : InternedRecordCoherence.Coherent heap)
+    (available : InternedProbeProvenance.Available heap (.node entry edges depth free))
+    (closed : free = [])
+    (storage : StorageValid before.core) (realized : PendingRealized heap before.core)
+    (paths : Roots before.core.representatives roots)
+    (counts : EnumerationCanonicalWaiting.Correct roots before.core.values before.waiting)
+    (flags : ∀ (slot : Nat),
+      SourcePruningEnumerationNativeIndex.candidate heap
+        ((before.core.values[slot]?).getD .eliminated) = some (before.expandable slot))
+    (bounded : ∀ sc ∈ scs, sc.var < before.core.counter)
+    (nonterminal : scs.any (fun sc => EqualityTrie.isTerminal sc.trie) = false) :

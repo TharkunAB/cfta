@@ -1,0 +1,200 @@
+{
+  "haves": [
+    "slots.head",
+    "headFacts.head",
+    "sourceInside.head",
+    "targetInside.head",
+    "classified.head",
+    "flagsSame.head",
+    "cacheSame.head",
+    "tailRanges.head",
+    "headAt.head",
+    "tailAt.head"
+  ],
+  "haves_count": 10,
+  "proof_lets": 0,
+  "definition_lets": 0,
+  "instances": 0,
+  "new_helpers_or_types": false,
+  "public_premises": "Root header exact; existing PendingAt/PendingOrEliminated directly, no Or-order conversion in this selected public interface.",
+  "induction": "one structural List induction generalizing inventory,beforeCaller,before,memos; root/checkEmpty/target/formulas/solver/width/dictionaries fixed",
+  "obtain_packets": [
+    {
+      "label": "rich_head",
+      "callee": "SourcePruningEnumerationCachedDispatch.complete",
+      "fields": [
+        "headFuel",
+        "headP",
+        "headH",
+        "action",
+        "headCaller",
+        "headQueries",
+        "headMemos",
+        "headInventory",
+        "headRows",
+        "headAfter",
+        "headRun",
+        "headPost",
+        "headQuerySame",
+        "rawCached",
+        "headCounter",
+        "headRepresentatives",
+        "headPaths",
+        "headStorage",
+        "headRealized",
+        "headCounts",
+        "headWaiting",
+        "headFlags",
+        "noOpResult",
+        "liveResult"
+      ]
+    },
+    {
+      "label": "slots_target",
+      "fields": [
+        "targetNode",
+        "targetScs",
+        "targetStored"
+      ],
+      "origin": "targetPending; no nil/no-op obtain",
+      "lexical_scope": "slots.head only"
+    },
+    {
+      "label": "selected_pending",
+      "fields": [
+        "sourceNode",
+        "sourceScs",
+        "sourceStored"
+      ],
+      "origin": "selected source head-member"
+    },
+    {
+      "label": "same_or_eliminated",
+      "fields": [
+        "rowsSame",
+        "afterSame",
+        "_callerSame",
+        "_finalSame",
+        "_nextSame"
+      ],
+      "origin": "noOpResult",
+      "actual_lexical_uses": [
+        "headFacts.sameId",
+        "headFacts.sourceEliminated"
+      ]
+    },
+    {
+      "label": "live",
+      "fields": [
+        "_sourceNode",
+        "_targetNode",
+        "merged",
+        "sourceScs",
+        "targetScs",
+        "sourceStored",
+        "targetStored",
+        "_computed",
+        "selectedResult",
+        "_optionalOrigin",
+        "_queriedOrigin"
+      ],
+      "origin": "liveResult sameId sourceEliminated"
+    },
+    {
+      "label": "rejection",
+      "fields": [
+        "rowsSame",
+        "afterSame"
+      ],
+      "origin": "selectedResult after merged=some0"
+    },
+    {
+      "label": "survival",
+      "fields": [
+        "rowsSame",
+        "coreSame",
+        "sourceAfter",
+        "targetAfter",
+        "sourceFlag",
+        "otherFlags"
+      ],
+      "origin": "selectedResult after merged\u2260some0"
+    },
+    {
+      "label": "shape",
+      "fields": [
+        "pendingTarget",
+        "keptSlots"
+      ],
+      "origin": "EnumerationCompleteness.assimilated_pending"
+    },
+    {
+      "label": "headFacts",
+      "fields": [
+        "headAdapted",
+        "headShape",
+        "headTarget",
+        "headSelected",
+        "headEliminated",
+        "headSource",
+        "headRejectedSame"
+      ]
+    },
+    {
+      "label": "tail",
+      "fields": [
+        "tailFuel",
+        "tailP",
+        "tailH",
+        "tailRows",
+        "tailCaller",
+        "tailQueries",
+        "tailMemos",
+        "tailInventory",
+        "tailAfter",
+        "tailRun",
+        "tailPost",
+        "tailQuerySame",
+        "tailCounter",
+        "tailRepresentatives",
+        "tailPaths",
+        "tailStorage",
+        "tailRealized",
+        "tailCounts",
+        "tailWaiting",
+        "tailFlags",
+        "tailShape",
+        "tailTarget",
+        "tailEliminated",
+        "tailCompleted"
+      ]
+    }
+  ],
+  "structural_cases": [
+    "List nil/cons(source,rest,ih)",
+    "headFacts by_cases sameId:source=target; sourceEliminated:before.core.values[source]?=some.eliminated; rejected:merged=some0",
+    "flagsSame funext slot; by_cases sourceId:slot=source,targetId:slot=target",
+    "headFacts old-eliminated intro slot oldEliminated; atTarget:slot=target,atSource:slot=source",
+    "headShape rcases headRejected|headCompleted",
+    "tail final membership rcases memberHead|memberRest"
+  ],
+  "ordinary_proof_binders": [
+    "nil stable extra P H _largeP _largeH",
+    "nil preserved slot oldEliminated",
+    "nil completed _completed source member _different",
+    "slots sourceSelected.pending(sourceNode,sourceScs,sourceStored)|eliminated",
+    "headFacts no-op remaining member; slot oldEliminated; different _completed; rejectedRows",
+    "sourceInside/targetInside List.getElem?_eq_some_iff.elim callbacks bound _elementEquality",
+    "headFacts live old-eliminated slot oldEliminated; head source _different _completed; rejection rejectedRows",
+    "flagsSame funext slot, sourceId,targetId",
+    "tailRanges uses ranges.2 and actual head dispatch/raw",
+    "headAt/tailAt extra P H largeP largeH",
+    "final stable extra P H largeP largeH; preserved slot oldEliminated; completed completed remaining member different"
+  ],
+  "map_callbacks": [
+    "public header row; headFacts.head row; headAt.head row; tailAt.head row; runtime uses existing definitions only"
+  ],
+  "source_estimate": "330\u2013530",
+  "hard_cap": 800,
+  "no_body_written": true
+}

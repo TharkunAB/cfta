@@ -1,0 +1,19 @@
+/-- Initial pending inputs and current bounds derive the complete terminal arm. -/
+theorem run_complete
+    [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Constraint)] [DecidableEq Node]
+    (formulas : SourceGuards.Formulas FullSyntax.Formula)
+    (solver : SourceGuards.Entailment FullSyntax.Formula)
+    (inventory : Inventory) (beforeCaller : Caller width)
+    (before : EnumerationState.State Symbol EnumGuard)
+    (checkEmpty : Bool) (first : EnumerationState.Suspended) (rest : List EnumerationState.Suspended)
+    (incoming : Node) (incomingScs : List EnumerationState.Suspended)
+    (waiting : EnumerationWaitingIndex.Waiting) (roots : Nat → Nat) (memos : Memos)
+    (initial : Context formulas solver inventory beforeCaller memos)
+    (safe : Safe before) (paths : Roots before.representatives roots)
+    (counts : EnumerationCanonicalWaiting.Correct roots before.values waiting)
+    (bounded : ∀ sc ∈ first :: rest, sc.var < before.counter)
+    (pending : InputsPending before (first :: rest))
+    (realized : PendingRealized beforeCaller.checked.native.machine.heap before)
+    (nonempty : incoming ≠ .empty)
+    (available : Available beforeCaller.checked.native.machine.heap incoming) (closed : incoming.free = [])
+    (incomingBounded : ∀ sc ∈ incomingScs, sc.var < before.counter)

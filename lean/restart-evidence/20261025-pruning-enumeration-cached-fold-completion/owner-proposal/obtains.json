@@ -1,0 +1,811 @@
+{
+  "packets": [
+    {
+      "scope": "complete.cons.slots.target",
+      "producer": "targetPending",
+      "fields": [
+        {
+          "scope": "complete.cons.slots.target",
+          "name": "targetNode",
+          "type": "Option Nat",
+          "used": true,
+          "kind": "obtain",
+          "type_only": false
+        },
+        {
+          "scope": "complete.cons.slots.target",
+          "name": "targetScs",
+          "type": "List EnumerationState.Suspended",
+          "used": true,
+          "kind": "obtain",
+          "type_only": false
+        },
+        {
+          "scope": "complete.cons.slots.target",
+          "name": "targetStored",
+          "type": "before.core.values[target]? = some (.unenumerated targetNode targetScs)",
+          "used": true,
+          "kind": "obtain",
+          "type_only": false
+        }
+      ]
+    },
+    {
+      "scope": "complete.cons.slots.selected.pending",
+      "producer": "selected source head-member",
+      "fields": [
+        {
+          "scope": "complete.cons.slots.selected.pending",
+          "name": "sourceNode",
+          "type": "Option Nat",
+          "used": true,
+          "kind": "obtain",
+          "type_only": false
+        },
+        {
+          "scope": "complete.cons.slots.selected.pending",
+          "name": "sourceScs",
+          "type": "List EnumerationState.Suspended",
+          "used": true,
+          "kind": "obtain",
+          "type_only": false
+        },
+        {
+          "scope": "complete.cons.slots.selected.pending",
+          "name": "sourceStored",
+          "type": "before.core.values[source]? = some (.unenumerated sourceNode sourceScs)",
+          "used": true,
+          "kind": "obtain",
+          "type_only": false
+        }
+      ]
+    },
+    {
+      "scope": "complete.cons.rich_head",
+      "producer": "SourcePruningEnumerationCachedDispatch.complete",
+      "fields": [
+        {
+          "scope": "complete.cons.rich_head",
+          "name": "headFuel",
+          "type": "Nat",
+          "used": true,
+          "kind": "obtain",
+          "type_only": false
+        },
+        {
+          "scope": "complete.cons.rich_head",
+          "name": "headP",
+          "type": "Nat",
+          "used": true,
+          "kind": "obtain",
+          "type_only": false
+        },
+        {
+          "scope": "complete.cons.rich_head",
+          "name": "headH",
+          "type": "Nat",
+          "used": true,
+          "kind": "obtain",
+          "type_only": false
+        },
+        {
+          "scope": "complete.cons.rich_head",
+          "name": "action",
+          "type": "EnumerateM Symbol Constraint Unit",
+          "used": true,
+          "kind": "obtain",
+          "type_only": false
+        },
+        {
+          "scope": "complete.cons.rich_head",
+          "name": "headCaller",
+          "type": "Caller width",
+          "used": true,
+          "kind": "obtain",
+          "type_only": false
+        },
+        {
+          "scope": "complete.cons.rich_head",
+          "name": "headQueries",
+          "type": "Queries",
+          "used": true,
+          "kind": "obtain",
+          "type_only": false
+        },
+        {
+          "scope": "complete.cons.rich_head",
+          "name": "headMemos",
+          "type": "Memos",
+          "used": true,
+          "kind": "obtain",
+          "type_only": false
+        },
+        {
+          "scope": "complete.cons.rich_head",
+          "name": "headInventory",
+          "type": "Inventory",
+          "used": true,
+          "kind": "obtain",
+          "type_only": false
+        },
+        {
+          "scope": "complete.cons.rich_head",
+          "name": "headRows",
+          "type": "List (Unit × EnumerationExpandableIndex.Cached Symbol Constraint)",
+          "used": true,
+          "kind": "obtain",
+          "type_only": false
+        },
+        {
+          "scope": "complete.cons.rich_head",
+          "name": "headAfter",
+          "type": "EnumerationExpandableIndex.Cached Symbol Constraint",
+          "used": true,
+          "kind": "obtain",
+          "type_only": false
+        },
+        {
+          "scope": "complete.cons.rich_head",
+          "name": "headRun",
+          "type": "∀ extra P H, headP ≤ P → headH ≤ H → SourcePruningEnumerationDispatch.dispatch checkEmpty (headFuel + extra) P H beforeCaller before.core source target memos.query = (.ok (some action), headCaller, headQueries)",
+          "used": true,
+          "kind": "obtain",
+          "type_only": false
+        },
+        {
+          "scope": "complete.cons.rich_head",
+          "name": "headPost",
+          "type": "Post formulas solver headInventory beforeCaller headCaller headMemos",
+          "used": true,
+          "kind": "obtain",
+          "type_only": false
+        },
+        {
+          "scope": "complete.cons.rich_head",
+          "name": "headQuerySame",
+          "type": "headMemos.query = headQueries",
+          "used": true,
+          "kind": "obtain",
+          "type_only": false
+        },
+        {
+          "scope": "complete.cons.rich_head",
+          "name": "rawCached",
+          "type": "ExceptT.run (action before.core) = headRows.map (fun row => .ok (row.1, row.2.core))",
+          "used": true,
+          "kind": "obtain",
+          "type_only": false
+        },
+        {
+          "scope": "complete.cons.rich_head",
+          "name": "headCounter",
+          "type": "headAfter.core.counter = before.core.counter",
+          "used": true,
+          "kind": "obtain",
+          "type_only": false
+        },
+        {
+          "scope": "complete.cons.rich_head",
+          "name": "headRepresentatives",
+          "type": "headAfter.core.representatives = before.core.representatives",
+          "used": true,
+          "kind": "obtain",
+          "type_only": false
+        },
+        {
+          "scope": "complete.cons.rich_head",
+          "name": "headPaths",
+          "type": "Roots headAfter.core.representatives roots",
+          "used": true,
+          "kind": "obtain",
+          "type_only": false
+        },
+        {
+          "scope": "complete.cons.rich_head",
+          "name": "headStorage",
+          "type": "StorageValid headAfter.core",
+          "used": true,
+          "kind": "obtain",
+          "type_only": false
+        },
+        {
+          "scope": "complete.cons.rich_head",
+          "name": "headRealized",
+          "type": "PendingRealized headCaller.checked.native.machine.heap headAfter.core",
+          "used": true,
+          "kind": "obtain",
+          "type_only": false
+        },
+        {
+          "scope": "complete.cons.rich_head",
+          "name": "headCounts",
+          "type": "EnumerationCanonicalWaiting.Correct roots headAfter.core.values headAfter.waiting",
+          "used": true,
+          "kind": "obtain",
+          "type_only": false
+        },
+        {
+          "scope": "complete.cons.rich_head",
+          "name": "headWaiting",
+          "type": "headAfter.waiting = before.waiting",
+          "used": true,
+          "kind": "obtain",
+          "type_only": false
+        },
+        {
+          "scope": "complete.cons.rich_head",
+          "name": "headFlags",
+          "type": "∀ (slot : Nat), SourcePruningEnumerationNativeIndex.candidate headCaller.checked.native.machine.heap ((headAfter.core.values[slot]?).getD .eliminated) = some (headAfter.expandable slot)",
+          "used": true,
+          "kind": "obtain",
+          "type_only": false
+        },
+        {
+          "scope": "complete.cons.rich_head",
+          "name": "noOpResult",
+          "type": "((source = target ∨ before.core.values[source]? = some .eliminated) →\n        headRows = [((), before)] ∧ headAfter = before ∧\n        headCaller = beforeCaller ∧ headMemos = memos ∧ headInventory = inventory)",
+          "used": true,
+          "kind": "obtain",
+          "type_only": false
+        },
+        {
+          "scope": "complete.cons.rich_head",
+          "name": "liveResult",
+          "type": "(source ≠ target → before.core.values[source]? ≠ some .eliminated →\n        ∃ (sourceNode targetNode merged : Option Nat) (sourceScs targetScs : List EnumerationState.Suspended),\n          before.core.values[source]? = some (.unenumerated sourceNode sourceScs) ∧\n          before.core.values[target]? = some (.unenumerated targetNode targetScs) ∧\n          (∀ (cacheFuel : Nat), SourcePruningEnumerationCachedAssimilation.finish\n            headCaller.checked.native.machine.heap cacheFuel source target merged sourceScs targetScs before =\n              some (headRows, headAfter)) ∧\n          (if merged = some 0 then headRows = [] ∧ headAfter = before else\n            headRows = [((), headAfter)] ∧\n            headAfter.core = assimilated before.core target source (.unenumerated merged (sourceScs ++ targetScs)) ∧\n            headAfter.core.values[source]? = some .eliminated ∧\n            headAfter.core.values[target]? = some (.unenumerated merged (sourceScs ++ targetScs)) ∧\n            headAfter.expandable source = false ∧\n            (∀ (slot : Nat), slot ≠ source → slot ≠ target → headAfter.expandable slot = before.expandable slot)) ∧\n          ((sourceNode = none ∨ targetNode = none) →\n            merged = sourceNode.orElse (fun _ => targetNode) ∧\n            headCaller = beforeCaller ∧ headMemos = memos ∧ headInventory = inventory) ∧\n          (∀ leftHandle rightHandle, sourceNode = some leftHandle → targetNode = some rightHandle →\n            ∃ (left right query replacement : Node) (queried : SourceEqualityNativeDemand.State width) (handle : Nat),\n              lookupNode beforeCaller.checked.native.machine.heap leftHandle = some left ∧\n              lookupNode beforeCaller.checked.native.machine.heap rightHandle = some right ∧\n              headInventory.source = beforeCaller.checked.native.machine.heap ∧ headInventory.roots = inventory.roots ++ [left, right] ∧\n              SourceCurrentAllocatedTargetQuery.Receipt formulas solver headInventory left right\n                beforeCaller.checked query queried memos ∧\n              merged = some handle ∧ encodeNode replacement = some handle ∧\n              lookupNode headCaller.checked.native.machine.heap handle = some replacement ∧\n              Available headCaller.checked.native.machine.heap replacement ∧ replacement.free = [] ∧\n              (∀ ambient term,\n                InternedGuardedLanguage.meaning (SourceEqualityPCSGuard.holds formulas solver) ambient replacement term ↔\n                  InternedGuardedLanguage.meaning (SourceEqualityPCSGuard.holds formulas solver) ambient left term ∧\n                  InternedGuardedLanguage.meaning (SourceEqualityPCSGuard.holds formulas solver) ambient right term) ∧\n              (checkEmpty = false → replacement = query ∧\n                headCaller = SourceCurrentAllocatedPartialState.advance beforeCaller queried\n                  beforeCaller.fourth beforeCaller.merge ∧ headMemos = memos) ∧\n              (checkEmpty = true → ∃ reached answer guardSaved,\n                SourceEndpointMemo.run query memos.query = (reached, guardSaved) ∧\n                SourceEndpointMemoCorrect.Checked queried.native.machine.heap memos.query\n                  (SourceCurrentEmptinessMerge.reaches query) (reached, guardSaved) ∧\n                (∀ P H, headP ≤ P → headH ≤ H →\n                  SourcePruningEnumerationEnabledEmpty.check P H query queried beforeCaller.fourth memos.query =\n                    (.done answer headCaller.checked headCaller.fourth, guardSaved)) ∧\n                headQueries = guardSaved ∧ replacement = (if answer then .empty else query) ∧\n                (reached = false → answer = false ∧ headCaller.checked = queried ∧\n                  headCaller.fourth = beforeCaller.fourth ∧ headMemos = {memos with query := guardSaved}) ∧\n                (reached = true →\n                  ∃ (reachedPhysical : SourceCurrentConjunctionRowsAllocation.State Symbol FullSyntax.Formula),\n                    headCaller.checked = SourceCurrentAllocatedQueryMemo.advancePhysical queried reachedPhysical ∧\n                    ∃ actual : SourceCurrentConjunctionMemo.Call 1000 beforeCaller.fourth query\n                        (SourceCurrentAllocatedNativeEffects.physical queried) answer reachedPhysical headCaller.fourth,\n                      SourceCurrentConjunctionGlobalMemos.CallReads actual {memos with query := guardSaved} headMemos))))",
+          "used": true,
+          "kind": "obtain",
+          "type_only": false
+        }
+      ]
+    },
+    {
+      "scope": "complete.cons.headFacts.sameId.noop",
+      "producer": "noOpResult",
+      "fields": [
+        {
+          "scope": "complete.cons.headFacts.sameId.noop",
+          "name": "rowsSame",
+          "type": "headRows = [((), before)]",
+          "used": true,
+          "kind": "obtain",
+          "type_only": false
+        },
+        {
+          "scope": "complete.cons.headFacts.sameId.noop",
+          "name": "afterSame",
+          "type": "headAfter = before",
+          "used": true,
+          "kind": "obtain",
+          "type_only": false
+        },
+        {
+          "scope": "complete.cons.headFacts.sameId.noop",
+          "name": "_callerSame",
+          "type": "headCaller = beforeCaller",
+          "used": false,
+          "kind": "obtain",
+          "type_only": true
+        },
+        {
+          "scope": "complete.cons.headFacts.sameId.noop",
+          "name": "_finalSame",
+          "type": "headMemos = memos",
+          "used": false,
+          "kind": "obtain",
+          "type_only": true
+        },
+        {
+          "scope": "complete.cons.headFacts.sameId.noop",
+          "name": "_nextSame",
+          "type": "headInventory = inventory",
+          "used": false,
+          "kind": "obtain",
+          "type_only": true
+        }
+      ]
+    },
+    {
+      "scope": "complete.cons.headFacts.sourceEliminated.noop",
+      "producer": "noOpResult",
+      "fields": [
+        {
+          "scope": "complete.cons.headFacts.sourceEliminated.noop",
+          "name": "rowsSame",
+          "type": "headRows = [((), before)]",
+          "used": true,
+          "kind": "obtain",
+          "type_only": false
+        },
+        {
+          "scope": "complete.cons.headFacts.sourceEliminated.noop",
+          "name": "afterSame",
+          "type": "headAfter = before",
+          "used": true,
+          "kind": "obtain",
+          "type_only": false
+        },
+        {
+          "scope": "complete.cons.headFacts.sourceEliminated.noop",
+          "name": "_callerSame",
+          "type": "headCaller = beforeCaller",
+          "used": false,
+          "kind": "obtain",
+          "type_only": true
+        },
+        {
+          "scope": "complete.cons.headFacts.sourceEliminated.noop",
+          "name": "_finalSame",
+          "type": "headMemos = memos",
+          "used": false,
+          "kind": "obtain",
+          "type_only": true
+        },
+        {
+          "scope": "complete.cons.headFacts.sourceEliminated.noop",
+          "name": "_nextSame",
+          "type": "headInventory = inventory",
+          "used": false,
+          "kind": "obtain",
+          "type_only": true
+        }
+      ]
+    },
+    {
+      "scope": "complete.cons.headFacts.live",
+      "producer": "liveResult sameId sourceEliminated",
+      "fields": [
+        {
+          "scope": "complete.cons.headFacts.live",
+          "name": "_sourceNode",
+          "type": "Option Nat",
+          "used": false,
+          "kind": "obtain",
+          "type_only": true
+        },
+        {
+          "scope": "complete.cons.headFacts.live",
+          "name": "_targetNode",
+          "type": "Option Nat",
+          "used": false,
+          "kind": "obtain",
+          "type_only": true
+        },
+        {
+          "scope": "complete.cons.headFacts.live",
+          "name": "merged",
+          "type": "Option Nat",
+          "used": true,
+          "kind": "obtain",
+          "type_only": false
+        },
+        {
+          "scope": "complete.cons.headFacts.live",
+          "name": "sourceScs",
+          "type": "List EnumerationState.Suspended",
+          "used": true,
+          "kind": "obtain",
+          "type_only": false
+        },
+        {
+          "scope": "complete.cons.headFacts.live",
+          "name": "targetScs",
+          "type": "List EnumerationState.Suspended",
+          "used": true,
+          "kind": "obtain",
+          "type_only": false
+        },
+        {
+          "scope": "complete.cons.headFacts.live",
+          "name": "sourceStored",
+          "type": "before.core.values[source]? = some (.unenumerated _sourceNode sourceScs)",
+          "used": true,
+          "kind": "obtain",
+          "type_only": false
+        },
+        {
+          "scope": "complete.cons.headFacts.live",
+          "name": "targetStored",
+          "type": "before.core.values[target]? = some (.unenumerated _targetNode targetScs)",
+          "used": true,
+          "kind": "obtain",
+          "type_only": false
+        },
+        {
+          "scope": "complete.cons.headFacts.live",
+          "name": "_computed",
+          "type": "∀ (cacheFuel : Nat), SourcePruningEnumerationCachedAssimilation.finish headCaller.checked.native.machine.heap cacheFuel source target merged sourceScs targetScs before = some (headRows, headAfter)",
+          "used": false,
+          "kind": "obtain",
+          "type_only": true
+        },
+        {
+          "scope": "complete.cons.headFacts.live",
+          "name": "selectedResult",
+          "type": "(if merged = some 0 then headRows = [] ∧ headAfter = before else\n            headRows = [((), headAfter)] ∧\n            headAfter.core = assimilated before.core target source (.unenumerated merged (sourceScs ++ targetScs)) ∧\n            headAfter.core.values[source]? = some .eliminated ∧\n            headAfter.core.values[target]? = some (.unenumerated merged (sourceScs ++ targetScs)) ∧\n            headAfter.expandable source = false ∧\n            (∀ (slot : Nat), slot ≠ source → slot ≠ target → headAfter.expandable slot = before.expandable slot))",
+          "used": true,
+          "kind": "obtain",
+          "type_only": false
+        },
+        {
+          "scope": "complete.cons.headFacts.live",
+          "name": "_optionalOrigin",
+          "type": "((_sourceNode = none ∨ _targetNode = none) →\n            merged = _sourceNode.orElse (fun _ => _targetNode) ∧\n            headCaller = beforeCaller ∧ headMemos = memos ∧ headInventory = inventory)",
+          "used": false,
+          "kind": "obtain",
+          "type_only": true
+        },
+        {
+          "scope": "complete.cons.headFacts.live",
+          "name": "_queriedOrigin",
+          "type": "(∀ leftHandle rightHandle, _sourceNode = some leftHandle → _targetNode = some rightHandle →\n            ∃ (left right query replacement : Node) (queried : SourceEqualityNativeDemand.State width) (handle : Nat),\n              lookupNode beforeCaller.checked.native.machine.heap leftHandle = some left ∧\n              lookupNode beforeCaller.checked.native.machine.heap rightHandle = some right ∧\n              headInventory.source = beforeCaller.checked.native.machine.heap ∧ headInventory.roots = inventory.roots ++ [left, right] ∧\n              SourceCurrentAllocatedTargetQuery.Receipt formulas solver headInventory left right\n                beforeCaller.checked query queried memos ∧\n              merged = some handle ∧ encodeNode replacement = some handle ∧\n              lookupNode headCaller.checked.native.machine.heap handle = some replacement ∧\n              Available headCaller.checked.native.machine.heap replacement ∧ replacement.free = [] ∧\n              (∀ ambient term,\n                InternedGuardedLanguage.meaning (SourceEqualityPCSGuard.holds formulas solver) ambient replacement term ↔\n                  InternedGuardedLanguage.meaning (SourceEqualityPCSGuard.holds formulas solver) ambient left term ∧\n                  InternedGuardedLanguage.meaning (SourceEqualityPCSGuard.holds formulas solver) ambient right term) ∧\n              (checkEmpty = false → replacement = query ∧\n                headCaller = SourceCurrentAllocatedPartialState.advance beforeCaller queried\n                  beforeCaller.fourth beforeCaller.merge ∧ headMemos = memos) ∧\n              (checkEmpty = true → ∃ reached answer guardSaved,\n                SourceEndpointMemo.run query memos.query = (reached, guardSaved) ∧\n                SourceEndpointMemoCorrect.Checked queried.native.machine.heap memos.query\n                  (SourceCurrentEmptinessMerge.reaches query) (reached, guardSaved) ∧\n                (∀ P H, headP ≤ P → headH ≤ H →\n                  SourcePruningEnumerationEnabledEmpty.check P H query queried beforeCaller.fourth memos.query =\n                    (.done answer headCaller.checked headCaller.fourth, guardSaved)) ∧\n                headQueries = guardSaved ∧ replacement = (if answer then .empty else query) ∧\n                (reached = false → answer = false ∧ headCaller.checked = queried ∧\n                  headCaller.fourth = beforeCaller.fourth ∧ headMemos = {memos with query := guardSaved}) ∧\n                (reached = true →\n                  ∃ (reachedPhysical : SourceCurrentConjunctionRowsAllocation.State Symbol FullSyntax.Formula),\n                    headCaller.checked = SourceCurrentAllocatedQueryMemo.advancePhysical queried reachedPhysical ∧\n                    ∃ actual : SourceCurrentConjunctionMemo.Call 1000 beforeCaller.fourth query\n                        (SourceCurrentAllocatedNativeEffects.physical queried) answer reachedPhysical headCaller.fourth,\n                      SourceCurrentConjunctionGlobalMemos.CallReads actual {memos with query := guardSaved} headMemos)))",
+          "used": false,
+          "kind": "obtain",
+          "type_only": true
+        }
+      ]
+    },
+    {
+      "scope": "complete.cons.headFacts.live.rejected",
+      "producer": "selectedResult with rejected",
+      "fields": [
+        {
+          "scope": "complete.cons.headFacts.live.rejected",
+          "name": "rowsSame",
+          "type": "headRows = []",
+          "used": true,
+          "kind": "obtain",
+          "type_only": false
+        },
+        {
+          "scope": "complete.cons.headFacts.live.rejected",
+          "name": "afterSame",
+          "type": "headAfter = before",
+          "used": true,
+          "kind": "obtain",
+          "type_only": false
+        }
+      ]
+    },
+    {
+      "scope": "complete.cons.headFacts.live.survives",
+      "producer": "selectedResult with rejected",
+      "fields": [
+        {
+          "scope": "complete.cons.headFacts.live.survives",
+          "name": "rowsSame",
+          "type": "headRows = [((), headAfter)]",
+          "used": true,
+          "kind": "obtain",
+          "type_only": false
+        },
+        {
+          "scope": "complete.cons.headFacts.live.survives",
+          "name": "coreSame",
+          "type": "headAfter.core = assimilated before.core target source (.unenumerated merged (sourceScs ++ targetScs))",
+          "used": true,
+          "kind": "obtain",
+          "type_only": false
+        },
+        {
+          "scope": "complete.cons.headFacts.live.survives",
+          "name": "sourceAfter",
+          "type": "headAfter.core.values[source]? = some .eliminated",
+          "used": true,
+          "kind": "obtain",
+          "type_only": false
+        },
+        {
+          "scope": "complete.cons.headFacts.live.survives",
+          "name": "targetAfter",
+          "type": "headAfter.core.values[target]? = some (.unenumerated merged (sourceScs ++ targetScs))",
+          "used": true,
+          "kind": "obtain",
+          "type_only": false
+        },
+        {
+          "scope": "complete.cons.headFacts.live.survives",
+          "name": "sourceFlag",
+          "type": "headAfter.expandable source = false",
+          "used": true,
+          "kind": "obtain",
+          "type_only": false
+        },
+        {
+          "scope": "complete.cons.headFacts.live.survives",
+          "name": "otherFlags",
+          "type": "∀ (slot : Nat), slot ≠ source → slot ≠ target → headAfter.expandable slot = before.expandable slot",
+          "used": true,
+          "kind": "obtain",
+          "type_only": false
+        }
+      ]
+    },
+    {
+      "scope": "complete.cons.headFacts.live.survives.shape",
+      "producer": "EnumerationCompleteness.assimilated_pending",
+      "fields": [
+        {
+          "scope": "complete.cons.headFacts.live.survives.shape",
+          "name": "pendingTarget",
+          "type": "PendingAt (assimilated before.core target source (.unenumerated merged (sourceScs ++ targetScs))) target",
+          "used": true,
+          "kind": "obtain",
+          "type_only": false
+        },
+        {
+          "scope": "complete.cons.headFacts.live.survives.shape",
+          "name": "keptSlots",
+          "type": "∀ uv, PendingOrEliminated before.core uv → PendingOrEliminated (assimilated before.core target source (.unenumerated merged (sourceScs ++ targetScs))) uv",
+          "used": true,
+          "kind": "obtain",
+          "type_only": false
+        }
+      ]
+    },
+    {
+      "scope": "complete.cons.headFacts.destruct",
+      "producer": "headFacts",
+      "fields": [
+        {
+          "scope": "complete.cons.headFacts.destruct",
+          "name": "headAdapted",
+          "type": "SourcePruningEnumerationCachedAdapter.adapt headCaller.checked.native.machine.heap before source target (headRows.map (fun row => .ok (row.1, row.2.core))) = some headAfter",
+          "used": true,
+          "kind": "obtain",
+          "type_only": false
+        },
+        {
+          "scope": "complete.cons.headFacts.destruct",
+          "name": "headShape",
+          "type": "headRows = [] ∨ headRows = [((), headAfter)]",
+          "used": true,
+          "kind": "obtain",
+          "type_only": false
+        },
+        {
+          "scope": "complete.cons.headFacts.destruct",
+          "name": "headTarget",
+          "type": "PendingAt headAfter.core target",
+          "used": true,
+          "kind": "obtain",
+          "type_only": false
+        },
+        {
+          "scope": "complete.cons.headFacts.destruct",
+          "name": "headSelected",
+          "type": "∀ remaining ∈ rest, PendingOrEliminated headAfter.core remaining",
+          "used": true,
+          "kind": "obtain",
+          "type_only": false
+        },
+        {
+          "scope": "complete.cons.headFacts.destruct",
+          "name": "headEliminated",
+          "type": "∀ (slot : Nat), before.core.values[slot]? = some .eliminated → headAfter.core.values[slot]? = some .eliminated",
+          "used": true,
+          "kind": "obtain",
+          "type_only": false
+        },
+        {
+          "scope": "complete.cons.headFacts.destruct",
+          "name": "headSource",
+          "type": "source ≠ target → headRows = [((), headAfter)] → headAfter.core.values[source]? = some .eliminated",
+          "used": true,
+          "kind": "obtain",
+          "type_only": false
+        },
+        {
+          "scope": "complete.cons.headFacts.destruct",
+          "name": "headRejectedSame",
+          "type": "headRows = [] → headAfter = before",
+          "used": true,
+          "kind": "obtain",
+          "type_only": false
+        }
+      ]
+    },
+    {
+      "scope": "complete.cons.completed.tail",
+      "producer": "ih",
+      "fields": [
+        {
+          "scope": "complete.cons.completed.tail",
+          "name": "tailFuel",
+          "type": "Nat",
+          "used": true,
+          "kind": "obtain",
+          "type_only": false
+        },
+        {
+          "scope": "complete.cons.completed.tail",
+          "name": "tailP",
+          "type": "Nat",
+          "used": true,
+          "kind": "obtain",
+          "type_only": false
+        },
+        {
+          "scope": "complete.cons.completed.tail",
+          "name": "tailH",
+          "type": "Nat",
+          "used": true,
+          "kind": "obtain",
+          "type_only": false
+        },
+        {
+          "scope": "complete.cons.completed.tail",
+          "name": "tailRows",
+          "type": "List (Unit × EnumerationExpandableIndex.Cached Symbol Constraint)",
+          "used": true,
+          "kind": "obtain",
+          "type_only": false
+        },
+        {
+          "scope": "complete.cons.completed.tail",
+          "name": "tailCaller",
+          "type": "Caller width",
+          "used": true,
+          "kind": "obtain",
+          "type_only": false
+        },
+        {
+          "scope": "complete.cons.completed.tail",
+          "name": "tailQueries",
+          "type": "Queries",
+          "used": true,
+          "kind": "obtain",
+          "type_only": false
+        },
+        {
+          "scope": "complete.cons.completed.tail",
+          "name": "tailMemos",
+          "type": "Memos",
+          "used": true,
+          "kind": "obtain",
+          "type_only": false
+        },
+        {
+          "scope": "complete.cons.completed.tail",
+          "name": "tailInventory",
+          "type": "Inventory",
+          "used": true,
+          "kind": "obtain",
+          "type_only": false
+        },
+        {
+          "scope": "complete.cons.completed.tail",
+          "name": "tailAfter",
+          "type": "EnumerationExpandableIndex.Cached Symbol Constraint",
+          "used": true,
+          "kind": "obtain",
+          "type_only": false
+        },
+        {
+          "scope": "complete.cons.completed.tail",
+          "name": "tailRun",
+          "type": "∀ extra P H, tailP ≤ P → tailH ≤ H → SourcePruningEnumerationCachedFold.run checkEmpty (tailFuel + extra) P H rest headCaller headAfter target headMemos.query = ((.ok (some (tailRows.map (fun row => .ok (row.1, row.2.core)))), tailCaller, tailQueries, tailAfter.core), some tailAfter)",
+          "used": true,
+          "kind": "obtain",
+          "type_only": false
+        },
+        {
+          "scope": "complete.cons.completed.tail",
+          "name": "tailPost",
+          "type": "Post formulas solver tailInventory headCaller tailCaller tailMemos",
+          "used": true,
+          "kind": "obtain",
+          "type_only": false
+        },
+        {
+          "scope": "complete.cons.completed.tail",
+          "name": "tailQuerySame",
+          "type": "tailMemos.query = tailQueries",
+          "used": true,
+          "kind": "obtain",
+          "type_only": false
+        },
+        {
+          "scope": "complete.cons.completed.tail",
+          "name": "tailCounter",
+          "type": "tailAfter.core.counter = headAfter.core.counter",
+          "used": true,
+          "kind": "obtain",
+          "type_only": false
+        },
+        {
+          "scope": "complete.cons.completed.tail",
+          "name": "tailRepresentatives",
+          "type": "tailAfter.core.representatives = headAfter.core.representatives",
+          "used": true,
+          "kind": "obtain",
+          "type_only": false
+        },
+        {
+          "scope": "complete.cons.completed.tail",
+          "name": "tailPaths",
+          "type": "Roots tailAfter.core.representatives roots",
+          "used": true,
+          "kind": "obtain",
+          "type_only": false
+        },
+        {
+          "scope": "complete.cons.completed.tail",
+          "name": "tailStorage",
+          "type": "StorageValid tailAfter.core",
+          "used": true,
+          "kind": "obtain",
+          "type_only": false
+        },
+        {
+          "scope": "complete.cons.completed.tail",
+          "name": "tailRealized",
+          "type": "PendingRealized tailCaller.checked.native.machine.heap tailAfter.core",
+          "used": true,
+          "kind": "obtain",
+          "type_only": false
+        },
+        {
+          "scope": "complete.cons.completed.tail",
+          "name": "tailCounts",
+          "type": "EnumerationCanonicalWaiting.Correct roots tailAfter.core.values tailAfter.waiting",
+          "used": true,
+          "kind": "obtain",
+          "type_only": false
+        },
+        {
+          "scope": "complete.cons.completed.tail",
+          "name": "tailWaiting",
+          "type": "tailAfter.waiting = headAfter.waiting",
+          "used": true,
+          "kind": "obtain",
+          "type_only": false
+        },
+        {
+          "scope": "complete.cons.completed.tail",
+          "name": "tailFlags",
+          "type": "∀ (slot : Nat), SourcePruningEnumerationNativeIndex.candidate tailCaller.checked.native.machine.heap ((tailAfter.core.values[slot]?).getD .eliminated) = some (tailAfter.expandable slot)",
+          "used": true,
+          "kind": "obtain",
+          "type_only": false
+        },
+        {
+          "scope": "complete.cons.completed.tail",
+          "name": "tailShape",
+          "type": "tailRows = [] ∨ tailRows = [((), tailAfter)]",
+          "used": true,
+          "kind": "obtain",
+          "type_only": false
+        },
+        {
+          "scope": "complete.cons.completed.tail",
+          "name": "tailTarget",
+          "type": "PendingAt tailAfter.core target",
+          "used": true,
+          "kind": "obtain",
+          "type_only": false
+        },
+        {
+          "scope": "complete.cons.completed.tail",
+          "name": "tailEliminated",
+          "type": "∀ (slot : Nat), headAfter.core.values[slot]? = some .eliminated → tailAfter.core.values[slot]? = some .eliminated",
+          "used": true,
+          "kind": "obtain",
+          "type_only": false
+        },
+        {
+          "scope": "complete.cons.completed.tail",
+          "name": "tailCompleted",
+          "type": "tailRows = [((), tailAfter)] → ∀ source ∈ rest, source ≠ target → tailAfter.core.values[source]? = some .eliminated",
+          "used": true,
+          "kind": "obtain",
+          "type_only": false
+        }
+      ]
+    }
+  ],
+  "count": 11,
+  "field_count": 92,
+  "nil_obtains": 0,
+  "target_pending_obtain_scope": "slots.head only",
+  "noOpResult_lexical_uses": 2
+}

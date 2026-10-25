@@ -1,0 +1,17 @@
+    (ranges : ∀ (prefixFuel : Nat) (recorded : List Nat) (winner : Nat)
+      (moved : EnumerationWaitingIndex.Waiting) (joined : EnumerationState.State Symbol EnumGuard),
+      ExceptT.run (SourcePruningEnumerationTerminalPrefix.run prefixFuel first rest waiting before) =
+        [.ok ((recorded, winner, moved), joined)] →
+      SourcePruningEnumerationFold.Ranges checkEmpty recorded beforeCaller joined winner memos.query ∧
+      ∀ (foldFuel P H : Nat) (foldCaller : Caller width)
+        (folded : EnumerationState.State Symbol EnumGuard) (foldQueries : Queries),
+        SourcePruningEnumerationFold.run checkEmpty foldFuel P H recorded beforeCaller joined winner memos.query =
+          (.ok (some [.ok ((), folded)]), foldCaller, foldQueries, folded) →
+        match folded.values[winner]? with
+        | some (.unenumerated (some oldHandle) _) =>
+            match lookupNode foldCaller.checked.native.machine.heap oldHandle with
+            | some old => SourceCurrentAllocatedNativeRequestBounds.WordRanges
+                (.code (SourceRecursiveIntersectionCode.requestNode IntersectionEmptyDomain.emptyDomain incoming old))
+                foldCaller.checked
+            | none => True
+        | _ => True) :

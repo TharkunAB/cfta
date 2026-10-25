@@ -1,0 +1,17 @@
+theorem assimilated_pending (state : State Symbol Guard) (target source : Nat) (node : Option Nat) (scs : List Suspended)
+    (different : target ≠ source) (targetInside : target < state.values.length) (sourceInside : source < state.values.length) :
+    PendingAt (assimilated state target source (.unenumerated node scs)) target ∧
+      ∀ uv, PendingOrEliminated state uv → PendingOrEliminated (assimilated state target source (.unenumerated node scs)) uv := by
+  refine ⟨⟨node, scs, by simp [assimilated, targetInside, Ne.symm different]⟩, ?_⟩
+  intro uv previous
+  by_cases atSource : uv = source
+  · subst uv
+    exact Or.inr (by simp [assimilated, sourceInside])
+  · by_cases atTarget : uv = target
+    · subst uv
+      exact Or.inl ⟨node, scs, by simp [assimilated, targetInside, Ne.symm different]⟩
+    · have same : (assimilated state target source (.unenumerated node scs)).values[uv]? = state.values[uv]? := by
+        simp [assimilated, Ne.symm atTarget, Ne.symm atSource]
+      rcases previous with ⟨oldNode, oldScs, stored⟩ | eliminated
+      · exact Or.inl ⟨oldNode, oldScs, same.trans stored⟩
+      · exact Or.inr (same.trans eliminated)

@@ -1,0 +1,61 @@
+--- basis/archive.py
++++ candidate/archive.py
+@@ -6,12 +6,12 @@
+ from pathlib import Path
+ 
+ root = Path('/home/tritlo/Code/mcfta')
+-area = Path('/tmp/mcfta-pruning-enumeration-cached-fold-20261025')
+-evidence = root / 'lean/restart-evidence/20261025-pruning-enumeration-cached-fold'
++area = Path('/tmp/mcfta-pruning-enumeration-cached-fold-completion-20261025')
++evidence = root / 'lean/restart-evidence/20261025-pruning-enumeration-cached-fold-completion'
+ assert not evidence.exists()
+ custody = json.loads((area / 'prior-custody-index.json').read_text())
+ assert len(custody) == 26 and len({pin['target'] for pin in custody}) == 26
+-assert hashlib.sha256((area / 'prior-custody-index.json').read_bytes()).hexdigest() == '1a97f7c56be81b7d1a0ab6bae3dbc0975d4f8349ca37eb80b61b43c99fa27ccf'
++assert hashlib.sha256((area / 'prior-custody-index.json').read_bytes()).hexdigest() == '1101937df686a179baa851015231bb922f89ada42e7ba90abad438bad3810405'
+ summary = json.loads((area / 'previous-publication/post-publication-summary.json').read_text())
+ assert [pin['source'] for pin in custody] == summary['next_custody_inputs']
+ for pin in custody:
+@@ -19,11 +19,11 @@
+     data = (area / 'previous-publication' / pin['target']).read_bytes()
+     assert len(data) == pin['bytes'] and hashlib.sha256(data).hexdigest() == pin['sha256']
+ assert {p.name for p in (area / 'previous-publication').iterdir()} == {pin['target'] for pin in custody}
+-assert Path('/tmp/mcfta-pruning-enumeration-cached-fold-20261025-source-review.md').is_file()
++assert Path('/tmp/mcfta-pruning-enumeration-cached-fold-completion-20261025-source-review.md').is_file()
+ for args in [('diff', '--quiet'), ('diff', '--cached', '--quiet')]:
+     subprocess.run(['git', *args], cwd=root, check=True)
+ for name in ['declaration', 'model', 'public', 'document', 'seal-script', 'root']:
+-    assert Path('/tmp/mcfta-pruning-enumeration-cached-fold-20261025-' + name + '-review.md').is_file()
++    assert Path('/tmp/mcfta-pruning-enumeration-cached-fold-completion-20261025-' + name + '-review.md').is_file()
+ evidence.mkdir()
+ for path in sorted(area.rglob('*')):
+     if not path.is_file():
+@@ -36,21 +36,21 @@
+         target.write_bytes(path.read_bytes())
+ inputs = evidence / 'inputs'
+ inputs.mkdir()
+-for pattern in ['mcfta-pruning-enumeration-cached-fold-20261025-*']:
++for pattern in ['mcfta-pruning-enumeration-cached-fold-completion-20261025-*']:
+     for path in sorted(Path('/tmp').glob(pattern)):
+-        if path.is_file() and not path.name.startswith('mcfta-pruning-enumeration-cached-fold-20261025-archive-1.'):
++        if path.is_file() and not path.name.startswith('mcfta-pruning-enumeration-cached-fold-completion-20261025-archive-1.'):
+             shutil.copyfile(path, inputs / path.name)
+-shutil.copytree('/tmp/mcfta-pruning-enumeration-cached-fold-20261025-proposal', evidence / 'owner-proposal')
++shutil.copytree('/tmp/mcfta-pruning-enumeration-cached-fold-completion-20261025-proposal', evidence / 'owner-proposal')
+ prior = evidence / 'previous-publication'
+ prior.mkdir()
+ for pin in custody:
+     shutil.copyfile(area / 'previous-publication' / pin['target'], prior / pin['target'])
+ production = evidence / 'production-sources'
+ production.mkdir()
+-shutil.copyfile(root / 'lean/MicroCFTA/SourcePruningEnumerationCachedFold.lean', production / 'SourcePruningEnumerationCachedFold.lean')
+-shutil.copyfile(root / 'lean/notes-current-pruning-enumeration-cached-fold.md', evidence / 'current-note.md')
+-shutil.copyfile('/tmp/mcfta-pruning-enumeration-cached-fold-20261025-verify.py', evidence / 'verify-checkpoint.py')
+-(evidence / 'INDEX.md').write_text("# Native cached ordered fold observations\n\nRoot selected noncomputable run and the erase/preserves theorems. Three public head fragments contain 30 lines. There are no haves, lets, instances, helpers, new types, predicates, carriers or Graph. The erasure proof uses one structural List induction. Source estimate 120–200 ordinary lines, hard limit 320. Actual source review and the single frozen owner/schema are bound. The owner pins 61 payloads, four literal strings / 41 lines including 11 context lines, 86 typed scopes, two packets / four fields and 12 case groups. It retains 11 whole sources, 13 cuts / 192 lines and two literal import edges / ten project identities. No validation outcome is claimed.\n\nrun observes the existing Adapter once for each visited source in original order, including duplicates. An exact successful singleton with a recovered cache recurses on the actual rest at the same fuels, reached Caller and saved queries, after EnumerationExpandableIndex.frame attaches the actual row core. A singleton without a cache calls the original Fold.run once on that exact remaining suffix, actual row core, reached Caller and saved queries at the same fuels. It returns the whole suffix observation and no cache. The head action is not repeated. No runtime state/cache equality test or new monadic dictionary is used.\n\nerase equates the full bounded outer observation with the existing Fold.run, including faults, outer None, the whole raw list, reached Caller, saved queries and the actual last prefix core. Raw [] keeps the pre-step core and independent cache while prior Caller effects can remain. Other raw shapes stay exact. preserves transfers existing FoldInvariants.run_preserves to this actual outer prefix core for every outcome. Its initial StorageValid and canonical waiting counts are genuine inputs; its result uses the same fixed roots function and original waiting map. No Context, Ranges, successful callback, desired endpoint, future cache law or numerical admission premise is added. This is bounded observation correspondence and state preservation, not finite admitted completion or a general flag/index theorem.\n\nAll 148407 baseline files/modes/refs/stashes/worktrees, nine exact document inverses, one Audit prepend and separate audit-addition.json remain guarded. Exactly 26 actual prior CachedAdapter artifacts retain order, the full 15562-byte summary, canonical assessment and separate sealed peer. Original owner literals must occur exactly once and equal the body gate. All failure/raw/public/axiom checks, six-artifact 4 GiB caps, documents-1 non-Lean ledger, manifest files in HEAD, exact files/index/tree/modes and singleton ordinary publication destination remain unchanged. Only the current owner is copied once; prior owner revisions remain protected by baseline and custody.\n\nH6 remains strongest and the whole goal ACTIVE; all six Haskell repair handoffs remain first. No Haskell extraction or full runtime/driver result is claimed. Finite initial-only request admission, general returned-cache flags/index laws, arbitrary fault cache laws, terminal/incoming composition, native selector/partition/fallback, wrappers, physical maps/machine integers, extraction and Safe/LiveRoots remain open. Actual check results, public axiom sets and seal/push outcomes remain unbound. The selected programs remain subject to independent review and Root's separate gate before activation.\n")
++shutil.copyfile(root / 'lean/MicroCFTA/SourcePruningEnumerationCachedFoldCompletion.lean', production / 'SourcePruningEnumerationCachedFoldCompletion.lean')
++shutil.copyfile(root / 'lean/notes-current-pruning-enumeration-cached-fold-completion.md', evidence / 'current-note.md')
++shutil.copyfile('/tmp/mcfta-pruning-enumeration-cached-fold-completion-20261025-verify.py', evidence / 'verify-checkpoint.py')
++(evidence / 'INDEX.md').write_text("# Native cached ordered fold completion\n\nRoot selected one theorem complete, with no new runtime definition, instance, helper, type, predicate, carrier or Graph. The public head contains 42 lines and context contains 16 lines. Root selected ten typed local haves and one structural List induction. Actual source review and the single frozen owner/schema are bound. The owner pins 135 payloads, 12 exact strings / 97 lines, 354 typed scopes, 11 packets / 92 fields, 11 case groups and one complete List induction hypothesis. It retains 18 whole sources including separate standard-library provenance, 30 cuts / 540 lines and 11 literal routes / 17 project identities. Source estimate 330–530 ordinary lines, hard limit 800. No validation outcome is claimed.\n\nThe selected local assembly uses one rich CachedDispatch.complete result at each admitted head. The Graph-free assimilated_pending lemma transports actual pending-slot shape; concrete source/target bounds and flags/waiting/core equalities identify the same optional adapter cache. Core projection alone is not treated as cache injectivity. The producer concerns the existing CachedFold.run. Genuine inputs are initial Context, StorageValid, pending realization, Roots, canonical waiting counts, all-Nat native flags, a pending target, pending-or-eliminated selected source slots and explicit recursive Fold.Ranges. It derives common finite fuel and worker/reader ceilings for the actual complete or first-rejected run. It does not supply a successful continuation, desired endpoint, final cache or initial-only numeric admission premise.\n\nThe returned raw list is the exact encoding of zero or one cached row, with the same actual Caller, saved queries, after.core and some after receipt. Post and final.query equality retain that endpoint. The result preserves counter, representatives, Roots, storage, pending realization, waiting counts, the original waiting map and all-slot native flags at the reached heap. It retains a pending target and all originally eliminated slots. Only the completed singleton conclusion eliminates every selected source distinct from target; the rejected empty stream retains its actual completed prefix. Equal IDs, duplicates and optional pending payloads remain in the genuine domain. Prior query effects on rejection remain visible.\n\nAll 148916 baseline files/modes/refs/stashes/worktrees, nine exact document inverses, one Audit prepend and separate audit-addition.json remain guarded. Exactly 26 actual prior CachedFold artifacts retain order, the full 15149-byte summary, canonical assessment and separate sealed peer. Original owner literals must occur exactly once and equal the body gate. All failure/raw/public/axiom checks, six-artifact 4 GiB caps, documents-1 non-Lean ledger, manifest files in HEAD, exact files/index/tree/modes and singleton ordinary publication destination remain unchanged. Only the current owner is copied once; earlier owner revisions and draft history remain protected by baseline and custody.\n\nH6 remains strongest and the whole goal ACTIVE; all six Haskell repair handoffs remain first. No Haskell extraction or full runtime/driver result is claimed. Initial-only mixed numeric admission, changing guard-carrier resources, general arbitrary-fault cache invariants, terminal/incoming integration, native selector/partition/fallback, wrappers, physical maps/machine integers, extraction and Safe/LiveRoots remain open. Actual check results, public axiom sets and seal/push outcomes remain unbound. Independent review and Root's separate gate precede activation.\n")
+ 
+ files = sorted(p for p in evidence.rglob('*') if p.is_file())
+ (evidence / 'SHA256SUMS').write_text(''.join(hashlib.sha256(p.read_bytes()).hexdigest() + '  ' + p.relative_to(evidence).as_posix() + '\n' for p in files))
