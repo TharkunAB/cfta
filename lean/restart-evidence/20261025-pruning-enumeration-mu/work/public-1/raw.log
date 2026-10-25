@@ -1,0 +1,52 @@
+@MicroCFTA.SourcePruningEnumerationMu.complete : ∀ {width : Nat} {EnumGuard : Type}
+  [inst :
+    DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey MicroCFTA.SourcePruningTemplates.Symbol
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  (formulas : MicroCFTA.SourceGuards.Formulas MicroCFTA.FullSyntax.Formula)
+  (solver : MicroCFTA.SourceGuards.Entailment MicroCFTA.FullSyntax.Formula)
+  (inventory : MicroCFTA.SourceCurrentAllocatedNativeInventoryState.Inventory)
+  (beforeCaller : MicroCFTA.SourceCurrentAllocatedPartialState.State width)
+  (memos : MicroCFTA.EndpointMemoGateTrace.Memos)
+  (entry : MicroCFTA.Cache.Interned MicroCFTA.InternedBinderProtocol.NodeKey)
+  (body depth ordinary :
+    MicroCFTA.InternedConstructorTemplates.Value MicroCFTA.SourcePruningTemplates.Symbol
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+  (before : MicroCFTA.EnumerationState.State MicroCFTA.SourcePruningTemplates.Symbol EnumGuard),
+  MicroCFTA.SourceCurrentAllocatedPartialInvariant.Context formulas solver inventory beforeCaller memos →
+    MicroCFTA.InternedProbeProvenance.Available beforeCaller.checked.native.machine.heap
+        (MicroCFTA.InternedConstructorTemplates.Value.mu entry body depth ordinary) →
+      (MicroCFTA.InternedConstructorTemplates.Value.mu entry body depth ordinary).free = [] →
+        MicroCFTA.SourcePruningEnumerationObservation.PendingRealized beforeCaller.checked.native.machine.heap before →
+          ∃ result nextHeap saved afterCaller,
+            MicroCFTA.InternedFreshOrdinaryUnfoldMemo.run
+                  (MicroCFTA.InternedConstructorTemplates.Value.mu entry body depth ordinary) memos.unfolding
+                  beforeCaller.checked.native.machine.heap =
+                MicroCFTA.InternedNestedConstruction.Outcome.done (result, saved.unfolding) nextHeap ∧
+              MicroCFTA.InternedFreshOrdinaryStoredSubstitution.unfold
+                    (MicroCFTA.InternedConstructorTemplates.Value.mu entry body depth ordinary)
+                    beforeCaller.checked.native.machine.heap =
+                  MicroCFTA.InternedNestedConstruction.Outcome.done result nextHeap ∧
+                afterCaller =
+                    MicroCFTA.SourceCurrentAllocatedPartialState.advance beforeCaller
+                      (MicroCFTA.SourceCurrentAllocatedQueryMemo.advancePhysical beforeCaller.checked
+                        { heap := nextHeap, equality := beforeCaller.checked.operations })
+                      beforeCaller.fourth beforeCaller.merge ∧
+                  MicroCFTA.SourceCurrentAllocatedPartialInvariant.Post formulas solver inventory beforeCaller
+                      afterCaller saved ∧
+                    saved.query = memos.query ∧
+                      MicroCFTA.Cache.Extends memos.unfolding saved.unfolding ∧
+                        MicroCFTA.InternedProbeProvenance.Available nextHeap result ∧
+                          result.free = [] ∧
+                            (∀
+                                (holds :
+                                  MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula →
+                                    MicroCFTA.Language.Term MicroCFTA.SourcePruningTemplates.Symbol → Bool)
+                                (ambient :
+                                  MicroCFTA.InternedGuardedLanguage.Env MicroCFTA.SourcePruningTemplates.Symbol)
+                                (term : MicroCFTA.Language.Term MicroCFTA.SourcePruningTemplates.Symbol),
+                                MicroCFTA.InternedGuardedLanguage.meaning holds ambient result term ↔
+                                  MicroCFTA.InternedGuardedLanguage.meaning holds ambient
+                                    (MicroCFTA.InternedConstructorTemplates.Value.mu entry body depth ordinary) term) ∧
+                              MicroCFTA.SourcePruningEnumerationObservation.PendingRealized nextHeap before
+'MicroCFTA.SourcePruningEnumerationMu.complete' depends on axioms: [propext, Classical.choice, Quot.sound]

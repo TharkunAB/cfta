@@ -1,0 +1,3 @@
+/-- Every stored edge key satisfies the source constraint invariant. -/
+def Heap (property : Guard → Prop) (state : State Symbol Guard) : Prop :=
+  ∀ key edge, state.edgeRecords key = some edge → property key.constraint

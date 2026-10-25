@@ -1,0 +1,25 @@
+[2026-10-25 02:29:15 CEST] FINAL — SOURCE/MODEL CLEAR for the actual Root-authored Mu body. This is static source/data review. I authored the declaration owner and inventories; Root authored every mathematical body. Guard supplied the independent declaration review. I did not execute Lean, a parser, a candidate or a reviewed script.
+
+I read all105 source lines, both actual strict reports, the complete10-line failed raw log, the exact12-line repair patch and repair manifest, the body gate, seven frozen contracts, all47 effective scopes, both producer packets/twelve fields and all four existing constructor scopes/nineteen fields. All seven literal fragments occur exactly once. The body has exactly the five selected typed haves and two obtains; it adds no let, action, helper, instance, case, induction, premise or limit. The anonymous key/value lambda parameters match the prebody usage overlay; found is consumed.
+
+The first existing producer derives the single-unfold result, nextHeap, actual equation, Keeps, semantic readiness, availability and full independent language law. The second consumes that DERIVED equation and initial global validity. Its memo equation retains the SAME result and heap, actual saved unfolding table, query-table equality and unfolding extension. These two equations do not require two runtime executions. No successful unfolding or future Context appears as an input.
+
+Costs, physical fields and filtered probes are derived at that same returned heap. Effects retains unchanged equality operations; advancedEffects identifies the literal checked endpoint. The direct Context constructor derives checked readiness, original-inventory admission, both warm caller families, merge storage/coverage, fourth correctness, ACTUAL returned globals and probes. The Post constructor retains physical effects and both completed-table histories. It invokes no private helper. Output closure uses the same unfolded equation. Fixed-enum PendingRealized uses the same Keeps with Frame.refl, preserving every pending handle without changing ancestry, storage or root data.
+
+Strict1 is retained as a genuine body simplification failure: the result used InternedFreshOrdinaryConstraintHeap.Heap while the goal used Fields. The only strict1→2 edit explicitly unfolds Fields and the two existing Heap definitions. Both Heap definitions quantify the same edgeRecords lookup and apply their predicate to key.constraint; their predicate binder names differ. The repair adds no theorem or mathematical assumption. The new source-only annotation-heaps supplement pins both complete sources, exact six definition lines and two literal import routes. Original owner, earlier API supplement, usage overlay and body gate remain unchanged.
+
+The actual strict2 report records exit0 and its raw log is literally empty; I verified those bytes, not reran the check. This report claims no installed/public/Audit/seal/push outcome. The theorem covers Mu normalization at genuine current Context only. It does not require ordinary/nonempty output or execute expansion, checked intersection, Union closure, ancestry reset or final storage. Native identity/extraction, initial caller admission and full driver remain open. H6 stays strongest and the whole goal remains active.
+
+
+| Evidence | Bytes | SHA-256 |
+|---|---:|---|
+| final source: `/tmp/mcfta-pruning-enumeration-mu-20261025/strict-2/MicroCFTA/SourcePruningEnumerationMu.lean` | 7273 | `959f3e81844bca38501d6dd040962fd84f9c6f8bc58845afd92862ecdcac8856` |
+| strict1 source: `/tmp/mcfta-pruning-enumeration-mu-20261025/strict-1/MicroCFTA/mcfta-pruning-enumeration-mu-20261025-candidate.lean` | 7149 | `cb0a6b63ad7f7d34f5aafe74c1d85da2a2ef1c3e2325e29149f282dafbe078d4` |
+| strict1 raw: `/tmp/mcfta-pruning-enumeration-mu-20261025/strict-1/raw.log` | 750 | `4476b9ab5f17fb25e87d3a5f4ccf5c5146a8afa347fb885206c689f4e3ff7f62` |
+| strict2 raw: `/tmp/mcfta-pruning-enumeration-mu-20261025/strict-2/raw.log` | 0 | `e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855` |
+| repair patch: `/tmp/mcfta-pruning-enumeration-mu-20261025/strict-1-to-2.patch` | 826 | `c71940fd63481590a585137fcffff80c99b13dec6229a42730035ebfd23fe720` |
+| body gate: `/tmp/mcfta-pruning-enumeration-mu-20261025/body-gate.json` | 7416 | `91d4de6b8757891da2a90700e0296659eace364b7663270391702a515edc85df` |
+| owner FROZEN: `/tmp/mcfta-pruning-enumeration-mu-20261025-proposal/FROZEN.json` | 1092 | `c7a3678fa8e09b747403d48ace706eba822ce4a50553531af69933d79df216e6` |
+| usage overlay: `/tmp/mcfta-pruning-enumeration-mu-20261025/metadata-amendment-fourth-retained/FROZEN.json` | 534 | `60db5a3624b08b349164fb9d1d053712d34b9391031fb1eb1321270251064759` |
+| grows API supplement: `/tmp/mcfta-pruning-enumeration-mu-20261025/source-supplement-grows-refl/FROZEN.json` | 530 | `43eb209d85a8fc95d6fe1bbb226ff7bfcb6abad90562c45f85dd515994954c76` |
+| annotation Heap supplement: `/tmp/mcfta-pruning-enumeration-mu-20261025/source-supplement-annotation-heaps/FROZEN.json` | 452 | `bfc9eb7da347964ec206d4a6e37c4f506d76dbf44a1198ed60687f31cac25f07` |

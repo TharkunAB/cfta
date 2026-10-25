@@ -1,0 +1,9 @@
+/-- Current checked advancement retains every legitimate warm caller cell. -/
+theorem Sound.advance {before : Caller width} (sound : Sound formulas solver before)
+    (checked : Checked width) (fourth : Fourth) (merge : MergeMemo)
+    (effects : SourceCurrentConjunctionRowsAllocation.Effects (physical before.checked) (physical checked)) :
+    Sound formulas solver (advance before checked fourth merge) :=
+  ⟨sound.valid.advance before checked fourth merge effects.grows.constraint_growth,
+    fun handle cell stored => (sound.nodes handle cell stored).grows formulas solver effects,
+    fun handle cell stored => (sound.edges handle cell stored).grows formulas solver effects⟩
+

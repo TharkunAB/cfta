@@ -1,0 +1,91 @@
+{
+  "status": "ACCEPTED_BEFORE_ANY_BODY_OR_ACTIVATION",
+  "accepted_at": "2026-10-25T00:26:02.695953+00:00",
+  "owner": "/tmp/mcfta-pruning-enumeration-mu-20261025-proposal",
+  "frozen_sha256": "c7a3678fa8e09b747403d48ace706eba822ce4a50553531af69933d79df216e6",
+  "pins_sha256": "4a435f7bf0d36288ba8ce4c2b1e4e0e5afb7711bef992b1cc7a83a641c5d4329",
+  "contracts": {
+    "complete-header.lean.txt": "/-- One memoized outer Mu unfolding retains the actual checked caller and every pending slot. -/\ntheorem complete [DecidableEq (EdgeKey Symbol Constraint)]\n    (formulas : SourceGuards.Formulas FullSyntax.Formula)\n    (solver : SourceGuards.Entailment FullSyntax.Formula)\n    (inventory : Inventory) (beforeCaller : Caller width) (memos : Memos)\n    (entry : Cache.Interned InternedBinderProtocol.NodeKey)\n    (body depth ordinary : Node)\n    (before : EnumerationState.State Symbol EnumGuard)\n    (initial : Context formulas solver inventory beforeCaller memos)\n    (available : Available beforeCaller.checked.native.machine.heap (.mu entry body depth ordinary))\n    (closed : (Value.mu entry body depth ordinary).free = [])\n    (realized : PendingRealized beforeCaller.checked.native.machine.heap before) :\n    \u2203 (result : Node) (nextHeap : InternedConstructorTemplates.State Symbol Constraint)\n      (saved : Memos) (afterCaller : Caller width),\n      InternedFreshOrdinaryUnfoldMemo.run (.mu entry body depth ordinary) memos.unfolding\n        beforeCaller.checked.native.machine.heap = .done (result, saved.unfolding) nextHeap \u2227\n      InternedFreshOrdinaryStoredSubstitution.unfold (.mu entry body depth ordinary)\n        beforeCaller.checked.native.machine.heap = .done result nextHeap \u2227\n      afterCaller = SourceCurrentAllocatedPartialState.advance beforeCaller\n        (advancePhysical beforeCaller.checked \u27e8nextHeap, beforeCaller.checked.operations\u27e9)\n        beforeCaller.fourth beforeCaller.merge \u2227\n      Post formulas solver inventory beforeCaller afterCaller saved \u2227\n      saved.query = memos.query \u2227 Cache.Extends memos.unfolding saved.unfolding \u2227\n      Available nextHeap result \u2227 result.free = [] \u2227\n      (\u2200 (holds : Constraint \u2192 Language.Term Symbol \u2192 Bool)\n        (ambient : InternedGuardedLanguage.Env Symbol) (term : Language.Term Symbol),\n        InternedGuardedLanguage.meaning holds ambient result term \u2194\n          InternedGuardedLanguage.meaning holds ambient (.mu entry body depth ordinary) term) \u2227\n      PendingRealized nextHeap before\n",
+    "context.lean.txt": "import MicroCFTA.SourceCurrentAllocatedPartialInvariant\nimport MicroCFTA.SourceQueryUnfoldMemo\nimport MicroCFTA.SourceEqualityOpenOrdinaryHead\nimport MicroCFTA.InternedFreshOrdinaryStoredConstraintHeap\nimport MicroCFTA.SourcePruningEnumerationObservation\n\nnamespace MicroCFTA.SourcePruningEnumerationMu\nopen InternedConstructorTemplates InternedProbeProvenance\nopen SourcePruningEnumerationObservation\nopen SourceCurrentAllocatedQueryMemo (advancePhysical)\nopen SourceCurrentAllocatedNativeInventoryState (Inventory)\nopen SourceCurrentAllocatedPartialInvariant (Context Post)\nlocal notation \"Symbol\" => SourcePruningTemplates.Symbol\nlocal notation \"Constraint\" => SourceSymbolicIndex.Constraint FullSyntax.Formula\nlocal notation \"Node\" => InternedConstructorTemplates.Value Symbol Constraint\nlocal notation \"Caller\" => SourceCurrentAllocatedPartialState.State\nlocal notation \"Memos\" => EndpointMemoGateTrace.Memos\nvariable {width : Nat} {EnumGuard : Type}\n",
+    "local-advanced-effects.lean.txt": "have advancedEffects : SourceCurrentConjunctionRowsAllocation.Effects\n    (SourceCurrentAllocatedNativeEffects.physical beforeCaller.checked)\n    (SourceCurrentAllocatedNativeEffects.physical\n      (advancePhysical beforeCaller.checked \u27e8nextHeap, beforeCaller.checked.operations\u27e9))\n",
+    "local-costs.lean.txt": "have costs : InternedFreshOrdinaryCostHeap.Heap nextHeap\n",
+    "local-effects.lean.txt": "have effects : SourceCurrentConjunctionRowsAllocation.Effects\n    (SourceCurrentAllocatedNativeEffects.physical beforeCaller.checked)\n    \u27e8nextHeap, beforeCaller.checked.operations\u27e9\n",
+    "local-fields.lean.txt": "have fields : SourceCurrentConjunctionEquality.Fields beforeCaller.checked.operations nextHeap\n",
+    "local-probes.lean.txt": "have probes : InternedFreshOrdinaryProbeHeap.Heap nextHeap\n"
+  },
+  "schema": {
+    "module": "MicroCFTA.SourcePruningEnumerationMu",
+    "public_heads": [
+      {
+        "name": "complete",
+        "kind": "theorem",
+        "file": "complete-header.lean.txt",
+        "attachment": " := by\n"
+      }
+    ],
+    "public_head_order": [
+      "complete"
+    ],
+    "contract_count": 7,
+    "contract_lines": 57,
+    "context_lines": 18,
+    "public_header_lines": 29,
+    "definition_count": 0,
+    "theorem_count": 1,
+    "proof_local_have_count": 5,
+    "proof_local_let_count": 0,
+    "definition_local_let_count": 0,
+    "new_types": [],
+    "new_carriers": [],
+    "new_predicates": [],
+    "helpers": [],
+    "local_instance_count": 0,
+    "global_instance_count": 0,
+    "LawfulMonad_count": 0,
+    "obtain_count": 2,
+    "obtain_field_count": 12,
+    "scoped_type_count": 47,
+    "constructor_scope_count": 4,
+    "constructor_field_count": 19,
+    "induction_count": 0,
+    "IH_count": 0,
+    "source_count": 24,
+    "cut_count": 28,
+    "cut_lines": 326,
+    "route_count": 21,
+    "route_source_count": 36,
+    "target_source_lines": [
+      100,
+      220
+    ],
+    "proposed_hard_cap": 320,
+    "compiler_evidence": false,
+    "bodies_present": false
+  },
+  "script_frozen_sha256": "24df45f2c50b2d55b4e129562b4675560e4ce63582de5de0c7c6b22affec9695",
+  "scope_overlay_frozen_sha256": "60db5a3624b08b349164fb9d1d053712d34b9391031fb1eb1321270251064759",
+  "api_supplement_frozen_sha256": "43eb209d85a8fc95d6fe1bbb226ff7bfcb6abad90562c45f85dd515994954c76",
+  "reviews": {
+    "source": {
+      "path": "/tmp/mcfta-pruning-enumeration-mu-20261025-source-review.md",
+      "sha256": "57ec57fdbdbe19f3d93fa3c57c24cb8ed051f61c49c4084ad19469e3119e4437"
+    },
+    "declaration": {
+      "path": "/tmp/mcfta-pruning-enumeration-mu-20261025-declaration-review.md",
+      "sha256": "21aa985bc43f8f37a81a531cce75fe52c232ebe9ab0073e96d8737902bb37904"
+    },
+    "seal-script": {
+      "path": "/tmp/mcfta-pruning-enumeration-mu-20261025-seal-script-review.md",
+      "sha256": "e7a46248f8ac599d34b6e137ec3c4948e1f0f6a121f4f38051f26479a6c4be78"
+    }
+  },
+  "personal_review": "Root personally read all7 literal contracts57lines,47original scopes and exact2row overlay/effective47,2packets12fields,4constructor scopes19fields,all326owner cutlines and additive grows_refl3lines,all471candidate scriptlines and both templates plus final literal deltas. Independently verified118owner pins/exact120files/24live wholes/28cuts/21routes36identities,91script pins/exact93files/5actual bases/292bidirectional spans/10patches,17supplement and4overlay pins and exact changes/importadjacencies. FullH6 statement read live. Actualrefresh and baseline PASS;140084files. Root authors every body.",
+  "source_budget": [
+    100,
+    220
+  ],
+  "hard_cap": 320,
+  "limits": "Lean4.34.1 defaultlimits/alllinters/warningsAsError;serial4GiBmax/high swap0 five minutes;no newaxiom.",
+  "activation": "not yet",
+  "bodies": "not yet"
+}

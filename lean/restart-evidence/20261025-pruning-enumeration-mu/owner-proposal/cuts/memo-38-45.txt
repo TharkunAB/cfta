@@ -1,0 +1,8 @@
+
+/-- Source memo execution returns a saved result or performs one actual repaired unfolding. -/
+def run [DecidableEq (EdgeKey Symbol Guard)] (input : Value Symbol Guard) (memo : Memo Symbol Guard)
+    (state : State Symbol Guard) : Outcome Symbol Guard (Value Symbol Guard × Memo Symbol Guard) :=
+  match memo input.referenceOf with
+  | some (_, output) => .done (output, memo) state
+  | none => (InternedFreshOrdinaryStoredSubstitution.unfold input state).bind fun output after =>
+      .done (output, insert memo input output) after

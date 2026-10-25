@@ -1,0 +1,9 @@
+/-- Actual head exposure retains open physical fields and the same operation state. -/
+theorem head_physical {before : SharedState width} {input exposed : Value Symbol Guard} {heap : HeapState}
+    (ready : Ready formulas solver inventory record originals base before)
+    (head : SourceEqualityRequiredHead.Head input before.checked.native.machine.heap exposed heap)
+    (available : Available before.checked.native.machine.heap input) :
+    Ready formulas solver inventory record originals base (advanceHeap before heap) ∧
+      Effects (physical before.checked) (physical (advanceHeap before heap).checked) ∧ Available heap exposed := by
+  have actual := SourceCurrentRequiredHeapEffects.head (FieldAvailable before.checked.operations) head
+    ready.checked.semantic ready.checked.costs ready.checked.good.fields available

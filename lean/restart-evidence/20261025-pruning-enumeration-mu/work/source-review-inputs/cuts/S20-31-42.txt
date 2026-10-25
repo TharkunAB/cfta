@@ -1,0 +1,12 @@
+/-- The initial checked invariants supply every physical conjunction premise. -/
+theorem ready (before : Checked width) (good : Good before)
+    (semantic : SemanticReady before.native.machine.heap) (costs : CostHeap before.native.machine.heap) :
+    Ready (physical before) := ⟨semantic, costs, good.operations, good.fields⟩
+
+/-- Actual returned physical effects retain validity of both native memo families. -/
+theorem advance_good (before : Checked width) (after : Physical) (good : Good before)
+    (effects : Effects (physical before) after) : Good (advancePhysical before after) := by
+  refine ⟨?_, effects.ready.semantic.ready, effects.ready.valid, effects.ready.fields⟩
+  exact SourceCurrentAllocatedNativePhysicalCache.advance_valid before.native good.native _
+    ⟨effects.ready.semantic.ready.semantic.1.normal.facts, good.native.machine.2⟩
+    (SourceCurrentAllocatedQueryMemo.advance_extension before after effects)

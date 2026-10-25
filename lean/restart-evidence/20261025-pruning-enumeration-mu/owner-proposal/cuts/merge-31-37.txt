@@ -1,0 +1,7 @@
+/-- Actual heap growth retains every original and completed result. -/
+theorem Stored.grows {before after : State Symbol Guard} {memo : Memo Symbol Guard}
+    (stored : Stored before memo) (keeps : Keeps before after) : Stored after memo := by
+  intro key entry found
+  obtain ⟨identity, original, result, closed⟩ := stored key entry found
+  exact ⟨identity, keeps.available _ original, keeps.available _ result, closed⟩
+

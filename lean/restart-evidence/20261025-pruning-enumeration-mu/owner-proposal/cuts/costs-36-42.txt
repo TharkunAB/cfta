@@ -1,0 +1,7 @@
+/-- Every repaired unfolding retains weighted records in its exact complete or pending cache. -/
+theorem unfold_cost_heap [DecidableEq (EdgeKey Symbol Guard)] (value : Value Symbol Guard)
+    (state : State Symbol Guard) (context : Context state captures)
+    (cached : InternedFreshOrdinaryDepthHeap.Heap state) (heap : InternedFreshOrdinaryCostHeap.Heap state)
+    (available : Available state value) : InternedFreshOrdinaryCostHeap.Heap (unfold value state).state := by
+  cases value with
+  | empty | reference | node | union => exact heap

@@ -1,0 +1,22 @@
+/-- A single actual unfolding completes on any available record and retains its open independent language. -/
+theorem unfold_complete [DecidableEq (EdgeKey Symbol Guard)] (value : Value Symbol Guard)
+    (before : State Symbol Guard) (semantic : SemanticReady before) (available : Available before value) :
+    ∃ result after, InternedFreshOrdinaryStoredSubstitution.unfold value before = .done result after ∧
+      Keeps before after ∧ SemanticReady after ∧ Available after result ∧
+      ∀ holds ambient term, meaning holds ambient result term ↔ meaning holds ambient value term := by
+  obtain ⟨result, after, done, context, decoded, covered, resultAvailable, growth, history⟩ :=
+    InternedFreshOrdinaryStoredSubstitution.unfold_complete_decoded value before semantic.ready.semantic.1
+      available semantic.ready.semantic.2 semantic.ready.covered
+  have depth := InternedStoredPlanBinderDepthProgress.unfold_heap value before semantic.ready.semantic.1
+    semantic.ready.semantic.2 semantic.ready.depth available
+  have guarded := InternedGuardedStoredExecution.unfold_checked value before semantic.ready.semantic.1
+    semantic.guarded available
+  have budget := InternedGuardedBudgetStoredExecution.unfold_heaps value before semantic.ready.semantic.1
+    semantic.budget semantic.ready.semantic.2 available
+  have ready : Ready after := ⟨⟨context, decoded⟩, covered, by simpa only [done, Outcome.state] using depth⟩
+  refine ⟨result, after, done, ⟨ready, growth, history⟩,
+    ⟨ready, ?_, ?_⟩, resultAvailable, ?_⟩
+  · simpa only [done, Outcome.state] using guarded.heap
+  · simpa only [done, Outcome.state] using budget.1
+  · intro holds ambient term
+    exact (congrFun (guarded.result result after done holds ambient) term).to_iff

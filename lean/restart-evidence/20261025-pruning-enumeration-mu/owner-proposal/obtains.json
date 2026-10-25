@@ -1,0 +1,81 @@
+{
+  "packets": [
+    {
+      "scope": "complete.unfold",
+      "api": "SourceEqualityOpenOrdinaryHead.unfold_complete (.mu entry body depth ordinary) beforeCaller.checked.native.machine.heap initial.ready.semantic available",
+      "fields": [
+        {
+          "name": "result",
+          "type": "InternedConstructorTemplates.Value Symbol Constraint",
+          "used": true
+        },
+        {
+          "name": "nextHeap",
+          "type": "InternedConstructorTemplates.State Symbol Constraint",
+          "used": true
+        },
+        {
+          "name": "unfolded",
+          "type": "InternedFreshOrdinaryStoredSubstitution.unfold (.mu entry body depth ordinary) beforeCaller.checked.native.machine.heap = .done result nextHeap",
+          "used": true
+        },
+        {
+          "name": "kept",
+          "type": "SourceEqualityRequiredCache.Keeps beforeCaller.checked.native.machine.heap nextHeap",
+          "used": true
+        },
+        {
+          "name": "semantic",
+          "type": "SourceEqualityRequiredSemanticCache.SemanticReady nextHeap",
+          "used": true
+        },
+        {
+          "name": "resultAvailable",
+          "type": "Available nextHeap result",
+          "used": true
+        },
+        {
+          "name": "language",
+          "type": "∀ (holds : Constraint → Language.Term Symbol → Bool) (ambient : InternedGuardedLanguage.Env Symbol) (term : Language.Term Symbol), InternedGuardedLanguage.meaning holds ambient result term ↔ InternedGuardedLanguage.meaning holds ambient (.mu entry body depth ordinary) term",
+          "used": true
+        }
+      ],
+      "skipped_fields": []
+    },
+    {
+      "scope": "complete.memo",
+      "api": "SourceQueryUnfoldMemo.run_memos_of_unfold (.mu entry body depth ordinary) result beforeCaller.checked.native.machine.heap nextHeap unfolded initial.ready.semantic initial.ready.costs available memos initial.globals",
+      "fields": [
+        {
+          "name": "saved",
+          "type": "EndpointMemoGateTrace.Memos",
+          "used": true
+        },
+        {
+          "name": "executed",
+          "type": "InternedFreshOrdinaryUnfoldMemo.run (.mu entry body depth ordinary) memos.unfolding beforeCaller.checked.native.machine.heap = .done (result, saved.unfolding) nextHeap",
+          "used": true
+        },
+        {
+          "name": "querySame",
+          "type": "saved.query = memos.query",
+          "used": true
+        },
+        {
+          "name": "globals",
+          "type": "EndpointMemoGateTrace.Valid nextHeap saved",
+          "used": true
+        },
+        {
+          "name": "retained",
+          "type": "Cache.Extends memos.unfolding saved.unfolding",
+          "used": true
+        }
+      ],
+      "skipped_fields": []
+    }
+  ],
+  "count": 2,
+  "field_count": 12,
+  "inline_eliminations": []
+}

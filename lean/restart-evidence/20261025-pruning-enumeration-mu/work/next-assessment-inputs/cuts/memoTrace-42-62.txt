@@ -1,0 +1,21 @@
+  | mu_unfold (fresh : entry.identity ∉ seen)
+      (actual : InternedFreshOrdinaryStoredSubstitution.unfold (.mu entry body depth ordinary) state = .done next after)
+      (called : InternedFreshOrdinaryUnfoldMemo.run (.mu entry body depth ordinary) memo state = .done (next, middleMemo) after)
+      (tail : CollectReads fuel after (entry.identity :: seen) (next :: rest) middleMemo saved) :
+      CollectReads (fuel + 1) state seen (.mu entry body depth ordinary :: rest) memo saved
+
+/-- A physical row read retains its first Mu call and its exact optional fallback. -/
+inductive NodeEdgesReads [DecidableEq (EdgeKey Symbol Guard)] :
+    Nat → Value Symbol Guard → State Symbol Guard → UMemo Symbol Guard → UMemo Symbol Guard → Prop where
+  | empty : NodeEdgesReads fuel .empty state memo memo
+  | reference : NodeEdgesReads fuel (.reference name) state memo memo
+  | node : NodeEdgesReads fuel (.node entry edges depth free) state memo memo
+  | union (read : CollectReads fuel state [] [.union entry members depth free] memo saved) :
+      NodeEdgesReads fuel (.union entry members depth free) state memo saved
+  | mu
+      (actual : InternedFreshOrdinaryStoredSubstitution.unfold (.mu entry body depth ordinary) state = .done next after)
+      (called : InternedFreshOrdinaryUnfoldMemo.run (.mu entry body depth ordinary) memo state = .done (next, middleMemo) after)
+      (rest : match next with
+        | .node .. => saved = middleMemo
+        | _ => CollectReads fuel after [] [.mu entry body depth ordinary] middleMemo saved) :
+      NodeEdgesReads fuel (.mu entry body depth ordinary) state memo saved

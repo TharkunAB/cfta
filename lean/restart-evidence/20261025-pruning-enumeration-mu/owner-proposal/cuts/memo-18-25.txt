@@ -1,0 +1,8 @@
+/-- The source memo keeps each queried record and its complete unfolding result. -/
+abbrev Memo (Symbol Guard : Type) := NodeRef → Option (Value Symbol Guard × Value Symbol Guard)
+
+/-- Every memo entry has exact canonical identity, provenance, and effect-free unfolding readback. -/
+def Correct [DecidableEq (EdgeKey Symbol Guard)] (state : State Symbol Guard) (memo : Memo Symbol Guard) : Prop :=
+  ∀ key input output, memo key = some (input, output) → input.referenceOf = key ∧
+    Available state input ∧ Available state output ∧
+    InternedFreshOrdinaryStoredSubstitution.unfold input state = .done output state

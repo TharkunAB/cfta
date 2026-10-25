@@ -1,0 +1,7 @@
+/-- Actual outer unfolding preserves filtered Mu probes without a completed unfolding premise. -/
+theorem unfold [DecidableEq (EdgeKey Symbol Guard)] (value : Value Symbol Guard)
+    (state : State Symbol Guard) (context : Context state []) (heap : Heap state) (available : Available state value) :
+    Heap (InternedFreshOrdinaryStoredSubstitution.unfold value state).state := by
+  cases value with
+  | empty | reference | node | union => exact heap
+  | mu entry body depth ordinary =>

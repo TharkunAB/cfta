@@ -1,0 +1,8 @@
+/-- Actual repaired unfolding retains every original edge constraint, including nested Mu reconstruction. -/
+theorem unfold_heap [DecidableEq (EdgeKey Symbol Guard)] (property : Guard → Prop) (value : Value Symbol Guard)
+    (state : State Symbol Guard) (facts : Facts state) (heap : Heap property state) (available : Available state value) :
+    Heap property (InternedFreshOrdinaryStoredSubstitution.unfold value state).state := by
+  cases value with
+  | empty | reference | node | union => exact heap
+  | mu entry body depth ordinary =>
+      exact execute_heap property body _ state facts heap (available.children body (by simp [children]))

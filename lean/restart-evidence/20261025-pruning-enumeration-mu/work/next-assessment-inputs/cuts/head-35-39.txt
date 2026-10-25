@@ -1,0 +1,5 @@
+theorem Head.unique [DecidableEq (EdgeKey Symbol Guard)]
+    {value first second : Value Symbol Guard} {before afterFirst afterSecond : State Symbol Guard}
+    (left : Head value before first afterFirst) (right : Head value before second afterSecond) :
+    first = second ∧ afterFirst = afterSecond := by
+  cases left with

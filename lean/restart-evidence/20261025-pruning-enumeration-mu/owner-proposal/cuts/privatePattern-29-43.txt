@@ -1,0 +1,15 @@
+omit [DecidableEq Symbol] [DecidableEq (Value Symbol Guard)] in
+private theorem advance_post
+    {formulas : SourceGuards.Formulas FullSyntax.Formula} {solver : SourceGuards.Entailment FullSyntax.Formula}
+    {inventory : Inventory} {before : Caller width} {memos : Memos}
+    (context : Context formulas solver inventory before memos) (checked : Checked width)
+    (ready : Ready checked) (admitted : At formulas solver inventory checked)
+    (effects : SourceCurrentConjunctionRowsAllocation.Effects (physical before.checked) (physical checked))
+    (probes : ProbeHeap checked.native.machine.heap) :
+    Post formulas solver inventory before (advance before checked before.fourth before.merge) memos := by
+  refine ⟨⟨ready, admitted, context.sound.advance formulas solver checked before.fourth before.merge effects,
+    context.stored.grows effects.keeps, context.covered, ?_, ?_, probes⟩, effects,
+    Cache.extends_refl _, fun _ _ found => found⟩
+  · exact SourceCurrentEmptinessMemo.grows formulas solver effects.keeps before.fourth context.correct
+  · exact SourceQueryUnfoldMemo.valid_grows _ _ context.ready.semantic effects.keeps memos context.globals
+
