@@ -105,6 +105,8 @@ theorem complete
         folded.core.values[slot]? = some .eliminated) ∧
       (foldRows = [((), folded)] → ∀ source ∈ recorded, source ≠ winner →
         folded.core.values[source]? = some .eliminated) ∧
+      (∀ (slot : Nat), slot ∉ recorded → folded.core.values[slot]? = before.core.values[slot]?) ∧
+      (foldRows = [((), folded)] → Safe folded.core) ∧
       (∀ extraRepresentative extraNative P H, p ≤ P → h ≤ H →
         SourcePruningEnumerationTerminal.run checkEmpty (r + extraRepresentative) (n + extraNative) P H
           first rest before.waiting beforeCaller before.core incoming incomingScs memos.query =
@@ -187,7 +189,7 @@ theorem complete
   obtain ⟨foldFuel, foldP, foldH, foldRows, foldCaller, foldQueries, foldFinal, foldInventory,
     folded, cachedFoldRun, foldPost, foldQuerySame, foldCounter, foldForest, foldPaths,
     foldStorage, foldRealized, foldCounts, foldWaiting, foldFlags, foldShape, foldPending,
-    foldEliminated, foldCompleted⟩ :=
+    foldEliminated, foldCompleted, foldFrame⟩ :=
     SourcePruningEnumerationCachedFoldCompletion.complete formulas solver inventory beforeCaller
       joinedCache recorded checkEmpty winner memos
       (EnumerationCanonicalUnion.mergedRoots roots recorded winner) initial joinedStorage
@@ -205,6 +207,52 @@ theorem complete
     exact congrArg Prod.fst (cachedFoldRun extra P H enoughP enoughH)
   have foldedRoot : IsRoot folded.core.representatives winner := by
     simpa only [foldForest] using joinedRoot
+  have foldedFrame : ∀ (slot : Nat), slot ∉ recorded →
+      folded.core.values[slot]? = before.core.values[slot]? := by
+    intro slot outside
+    have different : slot ≠ winner := fun same => outside (same ▸ winnerMember)
+    rw [foldFrame slot outside different]
+    exact congrArg (fun state => state.values[slot]?) joinedSame
+  have foldedSafe : foldRows = [((), folded)] → Safe folded.core := by
+    intro completed
+    refine ⟨foldStorage, ?_⟩
+    intro slot value stored
+    by_cases atWinner : slot = winner
+    · subst slot
+      obtain ⟨node, scs, pendingRead⟩ := foldPending
+      have valueSame : value = .unenumerated node scs := Option.some.inj (stored.symm.trans pendingRead)
+      exact ⟨fun _ => foldedRoot, fun _ => by simp only [valueSame, ne_eq, reduceCtorEq, not_false_eq_true]⟩
+    · by_cases selected : slot ∈ recorded
+      · have eliminated : value = .eliminated :=
+          Option.some.inj (stored.symm.trans (foldCompleted completed slot selected atWinner))
+        have fixed : roots slot = slot := by
+          rw [recordedSame] at selected
+          obtain ⟨sc, _member, named⟩ := List.mem_map.mp selected
+          simpa only [named] using EnumerationCanonicalUnion.roots_idempotent
+            before.core.representatives roots paths sc.var
+        have notRoot : ¬ IsRoot folded.core.representatives slot := by
+          intro root
+          have named := (root_iff _ _ foldPaths slot).mp root
+          simp only [EnumerationCanonicalUnion.mergedRoots, fixed, ite_eq_left selected] at named
+          exact atWinner named.symm
+        exact ⟨fun live => (live eliminated).elim, fun root => (notRoot root).elim⟩
+      · have originalStored : before.core.values[slot]? = some value := by
+          rw [← foldedFrame slot selected]
+          exact stored
+        constructor
+        · intro live
+          have originalRoot := (safe.2 slot value originalStored).mp live
+          have fixed := (root_iff _ roots paths slot).mp originalRoot
+          apply (root_iff _ _ foldPaths slot).mpr
+          simp only [EnumerationCanonicalUnion.mergedRoots, fixed, ite_eq_right selected]
+        · intro root
+          have named := (root_iff _ _ foldPaths slot).mp root
+          by_cases namedSelected : roots slot ∈ recorded
+          · simp only [EnumerationCanonicalUnion.mergedRoots, ite_eq_left namedSelected] at named
+            exact (atWinner named.symm).elim
+          · have fixed : roots slot = slot := by
+              simpa only [EnumerationCanonicalUnion.mergedRoots, ite_eq_right namedSelected] using named
+            exact (safe.2 slot value originalStored).mpr ((root_iff _ roots paths slot).mpr fixed)
   rcases foldShape with rejected | completed
   · subst foldRows
     refine ⟨prefixFuel, foldFuel, foldP, foldH, recorded, winner, joinedCache, [],
@@ -213,6 +261,7 @@ theorem complete
       joinedSame, rfl, prefixRoots, prefixCounts, joinedFlags, cachedFoldRun, foldRun, .inl rfl,
       foldPost, foldQuerySame, foldCounter, foldForest, foldPaths, foldStorage, foldRealized,
       foldedRoot, foldPending, foldCounts, foldWaiting, foldFlags, foldEliminated, foldCompleted,
+      foldedFrame, foldedSafe,
       ?_, foldPost, foldQuerySame, ?_, ?_⟩
     · intro extraRepresentative extraNative P H enoughP enoughH
       simp only [SourcePruningEnumerationTerminal.run, ite_eq_right nonempty,
@@ -257,7 +306,8 @@ theorem complete
       afterCaller, read, savedQueries, final, next, ?_, recordedSame, winnerMember, movedSame,
       joinedSame, rfl, prefixRoots, prefixCounts, joinedFlags, ?_, ?_, .inr rfl, foldPost,
       foldQuerySame, foldCounter, foldForest, foldPaths, foldStorage, foldRealized, foldedRoot,
-      foldPending, foldCounts, foldWaiting, foldFlags, foldEliminated, foldCompleted, ?_,
+      foldPending, foldCounts, foldWaiting, foldFlags, foldEliminated, foldCompleted,
+      foldedFrame, foldedSafe, ?_,
       foldPost.trans incomingPost, incomingQuerySame, ?_, ?_⟩
     · intro extra
       simpa only [Nat.add_assoc] using prefixRun (incomingR + extra)
