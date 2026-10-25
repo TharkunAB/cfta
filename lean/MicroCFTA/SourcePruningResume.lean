@@ -33,6 +33,34 @@ local instance pruningResumeLawfulMonadList : LawfulMonad List where
   pure_bind := by intros; simp [pure, bind]
   bind_assoc := by intros; exact List.flatMap_assoc
 
+private theorem sequenced_bounded (limit : Nat) (results : List (Option (Pending Symbol)))
+    (pieces : List (Pending Symbol))
+    (bounded : ∀ result ∈ results, ∀ pending, result = some pending → PendingBound limit pending)
+    (sequenced : (results.mapM id : Option (List (Pending Symbol))) = some pieces) :
+    PendingBound limit (pieces.flatMap id) := by
+  induction results generalizing pieces with
+  | nil =>
+      have same : pieces = [] := by simpa using sequenced.symm
+      subst pieces
+      simp [PendingBound]
+  | cons result rest ih =>
+      cases result with
+      | none => simp [List.mapM_cons] at sequenced
+      | some pending =>
+          cases restSequence : (rest.mapM id : Option (List (Pending Symbol))) with
+          | none => simp [List.mapM_cons, restSequence] at sequenced
+          | some restPieces =>
+              have same : pieces = pending :: restPieces := by
+                simpa [List.mapM_cons, restSequence] using sequenced.symm
+              subst pieces
+              have firstBound := bounded (some pending) (by simp) pending rfl
+              have restBound := ih restPieces (fun result member => bounded result (List.mem_cons_of_mem _ member)) restSequence
+              intro entry member
+              simp only [List.flatMap_cons, id_eq, List.mem_append] at member
+              rcases member with member | member
+              · exact firstBound entry member
+              · exact restBound entry member
+
 variable {Symbol Guard : Type} [DecidableEq Symbol]
 
 /-- Read one parked representative, then inspect the supplied partial term. -/
@@ -294,5 +322,71 @@ theorem resume_read (fuel current : Nat) (term : Term (PartialSymbol Symbol))
   obtain ⟨_projected, same⟩ := (success_pure _ _ _ _).mp final
   subst after
   exact middleStable
+
+private theorem parts_bounded (fuel current : Nat) (term : Term (PartialSymbol Symbol))
+    (pending : Pending Symbol) (before after : State Symbol Guard)
+    (results : List (Option (Pending Symbol))) (safe : Safe before)
+    (bounded : PendingBound before.counter pending)
+    (termBound : EnumerationPartialBounds.TermBound before.counter term)
+    (success : Success (pending.mapM (part fuel current term)) before results after) :
+    EnumerationDriver.RenderStable before after ∧
+      ∀ result ∈ results, ∀ resumed, result = some resumed → PendingBound after.counter resumed := by
+  induction pending generalizing before after results with
+  | nil =>
+      obtain ⟨rfl, rfl⟩ := (success_pure [] results before after).mp success
+      exact ⟨.refl _ safe, by simp⟩
+  | cons first rest ih =>
+      rw [List.mapM_cons] at success
+      obtain ⟨firstResult, middle, firstRead, continued⟩ := (success_bind _ _ _ _ _).mp success
+      obtain ⟨tailResults, last, restRead, final⟩ := (success_bind _ _ _ _ _).mp continued
+      obtain ⟨rfl, rfl⟩ := (success_pure (firstResult :: tailResults) results last after).mp final
+      obtain ⟨root, reading, projected⟩ := (part_success fuel current term first before middle firstResult).mp firstRead
+      have inside := bounded first (by simp)
+      have firstStable := EnumerationReferences.representative_read fuel first.2 root before middle safe inside reading
+      have rootInside : root < before.counter := by
+        obtain ⟨found, lookup, same, _state⟩ := (representative_success fuel first.2 before middle root).mp reading
+        rw [same]
+        exact reaches_bounded before.representatives before.counter safe.1.forest
+          (UnionFind.findRoot_correct fuel before.representatives first.2 found lookup).1 inside
+      have firstBound : ∀ resumed, firstResult = some resumed → PendingBound middle.counter resumed := by
+        intro resumed same
+        rw [projected] at same
+        split at same
+        · rw [firstStable.counter]
+          exact matchPartial_bounded before.counter first.1 term resumed termBound same
+        · have identical := Option.some.inj same
+          subst resumed
+          intro entry member
+          obtain rfl := List.mem_singleton.mp member
+          simpa only [firstStable.counter] using rootInside
+      obtain ⟨lastStable, tailBound⟩ := ih middle after tailResults firstStable.safe
+        (by intro entry member; rw [firstStable.counter]; exact bounded entry (List.mem_cons_of_mem first member))
+        (by simpa only [firstStable.counter] using termBound) restRead
+      refine ⟨firstStable.trans lastStable, ?_⟩
+      intro result member resumed same
+      rcases List.mem_cons.mp member with rfl | member
+      · rw [lastStable.counter]
+        exact firstBound resumed same
+      · exact tailBound result member resumed same
+
+/-- Successful resumption keeps every returned parked ID inside the allocation domain. -/
+theorem resume_bounded (fuel current : Nat) (term : Term (PartialSymbol Symbol))
+    (pending : Pending Symbol) (before after : State Symbol Guard) (result : Option (Pending Symbol))
+    (safe : Safe before) (bounded : PendingBound before.counter pending)
+    (termBound : EnumerationPartialBounds.TermBound before.counter term)
+    (success : Success (resume fuel current term pending) before result after) :
+    ∀ resumed, result = some resumed → PendingBound after.counter resumed := by
+  unfold resume at success
+  obtain ⟨results, middle, traversed, final⟩ := (success_bind _ _ _ _ _).mp success
+  obtain ⟨_stable, resultBounds⟩ := parts_bounded fuel current term pending before middle results safe bounded termBound traversed
+  obtain ⟨projected, rfl⟩ := (success_pure _ result middle after).mp final
+  intro resumed same
+  rw [projected] at same
+  cases sequenced : (results.mapM id : Option (List (Pending Symbol))) with
+  | none => simp [sequenced] at same
+  | some pieces =>
+      have identical : resumed = pieces.flatMap id := by simpa [sequenced] using same.symm
+      subst resumed
+      exact sequenced_bounded after.counter results pieces resultBounds sequenced
 
 end MicroCFTA.SourcePruningResume
