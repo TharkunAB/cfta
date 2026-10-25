@@ -1,0 +1,3 @@
+Data-only post-body scope annotation.
+
+The original 203-entry owner remains unchanged. The effective inventory retains those entries. It marks the two planned head-bound callback binders absent because the actual proof uses partial application. It marks the nil available, closed, and bounded premises unused. It appends the actual final result Option.map callback fragments. Its List (Fragments.Fragment Symbol) type is unchanged from the selected expression. The effective inventory has 204 entries, including two absent historical entries. All seven contracts and the 181-line passing source remain unchanged. This annotation records static source correlation. It is not a compiler failure or a source repair.

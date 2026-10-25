@@ -1,0 +1,210 @@
+{
+  "at": "2026-10-25T05:15:19.280698+01:00",
+  "module": "MicroCFTA.SourcePruningEnumerationCachedStages",
+  "public_heads": [
+    "run",
+    "complete"
+  ],
+  "kinds": [
+    "def",
+    "theorem"
+  ],
+  "local_haves": 3,
+  "proof_lets": 1,
+  "result_header_lets": 1,
+  "instances": 0,
+  "inductions": 1,
+  "new_types_predicates_helpers": 0,
+  "source_estimate": [
+    220,
+    360
+  ],
+  "hard_cap": 520,
+  "Root_authors_all_bodies": true,
+  "bodies_present": false,
+  "contract_count": 7,
+  "contract_lines": 60,
+  "contracts": {
+    "context.lean.txt": {
+      "bytes": 412,
+      "sha256": "869636b0a67fd52c080fd6a222fd99d318c765d4c73b1ba68288fdf69b035801"
+    },
+    "run-header.lean.txt": {
+      "bytes": 523,
+      "sha256": "4b25349fb8c74ba9b4d7a478d8bac897c478ef1fd7a613e8a9e70c0eed1e489b"
+    },
+    "complete-header.lean.txt": {
+      "bytes": 2517,
+      "sha256": "0b7d0ca7817d49788cc03dbf8758b5a01b3ad01ba25da0fd644cd445b460c88c"
+    },
+    "local-nonterminal.lean.txt": {
+      "bytes": 111,
+      "sha256": "6f6485182308b0fbaa7797790524cb7ea6721f0aaf7f9673bec650d216c4f720"
+    },
+    "local-same-action.lean.txt": {
+      "bytes": 38,
+      "sha256": "2c70a646e6fb53a2c534c759feda41a4148692cddaeaa145781de4a11be6b907"
+    },
+    "local-tail-bounded.lean.txt": {
+      "bytes": 100,
+      "sha256": "64e2c59e45744280b335da1b1a9f8abd2ba44d325afff61fcac4c70e75b41f16"
+    },
+    "let-lifted.lean.txt": {
+      "bytes": 271,
+      "sha256": "4e87c37c6acfb7072f470f10d77619eea33d56bad1d50844f2ec6eb8bfa591b3"
+    }
+  },
+  "insertions": {
+    "run": "equation clauses; newline attachment only",
+    "complete": " := by\n",
+    "local-nonterminal.lean.txt": {
+      "first_line_indent": 6,
+      "attachment": " := by\n"
+    },
+    "local-same-action.lean.txt": {
+      "first_line_indent": 6,
+      "attachment": " := by\n"
+    },
+    "local-tail-bounded.lean.txt": {
+      "first_line_indent": 8,
+      "attachment": " := by\n"
+    },
+    "let-lifted.lean.txt": {
+      "first_line_indent": 8,
+      "attachment": ""
+    }
+  },
+  "definition_recipe": "nil ->some([(some[],before)],before); cons(value,bucket) checks SAME actualShallowprepareChild: none->some([(none,before)],before); some _action -> CachedPrepare.prepareChild heap fuel bucket value before bind rows; []->some([],before); [(fragment,middle)]->recurse rest middle and map optional tails by fragment::, keep derived tailprefix; malformed otherlist ->None. Existing Option/list/product carriers only; no raw bind/pure expression and no new List instance.",
+  "proof_route": "One structural inputs induction, introduce before/storage/realized/paths/counts/flags/available/closed/bounded after induction. Nil and capturedNone immediate. CapturedSome derive conditionalnonterminal fromactualprepared byValue cases thenCachedPrepare.complete. sameAction matches actualcapturedaction. Emptyoutcome raw[] viaexistingrun_bind andchildraw, independentprefixbefore. Singletonmiddle applies IH withtailBounded andoutgoinginvariants; commonfuelheadFuel+tailFuel; rawcompositionbind_single thenrun_bind andderivedtailrow0/1; liftedmap rows; boundfreshheadhole atprefix withheadBound+grows.",
+  "case_plan": [
+    "inputs induction nil/cons input rest ih",
+    "prepared actualShallowprepareChild none/some action",
+    "nonterminal by_contra terminal thenValuecases empty/reference _name/node _entry _edges _depth _free/union _entry _members _depth _free/mu _entry _body _depthShape _ordinaryShape",
+    "headShape rcases empty/singleton",
+    "tailShape raw equality rcases empty/singleton",
+    "tailShape output shape rcases empty/singleton",
+    "outputbounds cases result none/some tailFragments"
+  ],
+  "obtain_packets": [
+    {
+      "scope": "complete.cons",
+      "names": [
+        "value",
+        "bucket"
+      ],
+      "from": "input"
+    },
+    {
+      "scope": "complete.some",
+      "names": [
+        "headAction",
+        "headFuel",
+        "childRows",
+        "headPrepared",
+        "headRun",
+        "headRaw",
+        "headShape"
+      ],
+      "from": "CachedPrepare.complete atactualheadbefore/genuineinputs/nonterminal"
+    },
+    {
+      "scope": "complete.some.empty",
+      "names": [
+        "_emptyValue",
+        "childEmpty"
+      ],
+      "from": "headShape.left"
+    },
+    {
+      "scope": "complete.some.singleton",
+      "names": [
+        "middle",
+        "_nonempty",
+        "childSingleton",
+        "middleCounter",
+        "_middleAligned",
+        "middleForest",
+        "middlePaths",
+        "middleStorage",
+        "middleRealized",
+        "middleCounts",
+        "middleFlags",
+        "headBound"
+      ],
+      "from": "headShape.right"
+    },
+    {
+      "scope": "complete.tail",
+      "names": [
+        "tailFuel",
+        "rows",
+        "prefix",
+        "tailRun",
+        "tailRaw",
+        "grows",
+        "alignedAfter",
+        "forestSame",
+        "pathsAfter",
+        "storageAfter",
+        "realizedAfter",
+        "countsAfter",
+        "flagsAfter",
+        "tailShape"
+      ],
+      "from": "IHactualmiddle/invariants/memberweakenings/tailBounded"
+    },
+    {
+      "scope": "complete.raw.tail.empty",
+      "names": [
+        "tailEmpty"
+      ],
+      "from": "tailShape.left"
+    },
+    {
+      "scope": "complete.raw.tail.singleton",
+      "names": [
+        "result",
+        "tailSingleton",
+        "_tailBound"
+      ],
+      "from": "tailShape.right"
+    },
+    {
+      "scope": "complete.shape.tail.empty",
+      "names": [
+        "tailEmpty"
+      ],
+      "from": "tailShape.left"
+    },
+    {
+      "scope": "complete.shape.tail.singleton",
+      "names": [
+        "result",
+        "tailSingleton",
+        "tailBound"
+      ],
+      "from": "tailShape.right"
+    }
+  ],
+  "extra_binders": [
+    "run.nil before:Cached",
+    "run.cons value:Value,bucket:ListSuspended,rest:Listinputs,before:Cached",
+    "run.capturedSome _action:EnumerateM Fragment unused",
+    "run.headcallback rows:List(Fragment\u00d7Cached)",
+    "run.singleton fragment:Fragment,middle:Cached",
+    "run.tailcallback result:List(Option(ListFragment)\u00d7Cached)\u00d7Cached",
+    "run.tailrows row:Option(ListFragment)\u00d7Cached; fragments:ListFragment",
+    "complete.header.staged input:Value\u00d7ListSuspended",
+    "complete.header.rawrow row:Option(ListFragment)\u00d7Cached",
+    "complete.nil.bound fragments:ListFragment,same:some[]=somefragments",
+    "complete.none.bound fragments:ListFragment,impossible:none=somefragments",
+    "nonterminal nonempty:value\u2260empty,terminal:\u00acbucket.anyterminal=false,sc:Suspended",
+    "tailBounded input:Value\u00d7ListSuspended,member:input\u2208rest,sc:Suspended,inside:sc\u2208input.2",
+    "complete.headbounded sc:Suspended,member:sc\u2208bucket",
+    "complete.tailavailable/closed input:Value\u00d7ListSuspended,member:input\u2208rest",
+    "lifted.row:Option(ListFragment)\u00d7Cached,fragments:ListFragment",
+    "complete.shape.bound fragments:ListFragment,same:result.map(holebefore::)=somefragments",
+    "complete.shape.some tailFragments:ListFragment"
+  ],
+  "domain_limit": "No outerNone/reached-prefix promise outside adequate derived fuel. No global nonterminal premise. No residual/nativefallback/branchdriver result."
+}

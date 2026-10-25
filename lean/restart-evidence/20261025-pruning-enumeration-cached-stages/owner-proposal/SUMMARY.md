@@ -1,0 +1,5 @@
+# CachedStages declaration-only owner
+
+Root selected seven literal contracts / 60 lines: run, complete, three typed haves and one typed proof let with Root-selected initializer. One public result let, one structural input-list induction, nine obtain packets / 45 fields and seven case groups are fully typed. There are no new instances, helpers, carriers, predicates or Graph inputs. The source target is 220–360 ordinary lines, hard cap 520. Root owns every body and execution after independent reviews and the separate gate.
+
+The selected result derives adequate stable execution, exact existing raw mapped-child stream, an independent completed-prefix cache with outgoing invariants, counter monotonicity and empty-or-singleton rows with fragment bounds. Captured None, Empty raw[] and outer cached partiality remain distinct. The public result binder after replaces the reserved prefix token before owner freeze; original prospective bytes are retained. No current or future proof/compiler outcome is claimed. Full driver, residual/alternative composition and native fallback remain open; H6 and the active goal are unchanged.

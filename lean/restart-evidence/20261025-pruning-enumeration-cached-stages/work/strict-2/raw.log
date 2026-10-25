@@ -1,0 +1,534 @@
+/tmp/mcfta-pruning-enumeration-cached-stages-20261025/strict-2/MicroCFTA/SourcePruningEnumerationCachedStages.lean:102:42: error: unsolved goals
+case node
+heap : InternedConstructorTemplates.State Symbol Constraint
+roots : Nat → Nat
+coherent : InternedRecordCoherence.Coherent heap
+rest : List (InternedConstructorTemplates.Value Symbol Constraint × List Suspended)
+ih :
+  ∀ (before : EnumerationExpandableIndex.Cached Symbol Constraint),
+    StorageValid before.core →
+      PendingRealized heap before.core →
+        Roots before.core.representatives roots →
+          EnumerationCanonicalWaiting.Correct roots before.core.values before.waiting →
+            (∀ (slot : Nat),
+                SourcePruningEnumerationNativeIndex.candidate heap
+                    (before.core.values[slot]?.getD UVarValue.eliminated) =
+                  some (before.expandable slot)) →
+              (∀ (input : InternedConstructorTemplates.Value Symbol Constraint × List Suspended),
+                  input ∈ rest → InternedProbeProvenance.Available heap input.fst) →
+                (∀ (input : InternedConstructorTemplates.Value Symbol Constraint × List Suspended),
+                    input ∈ rest → input.fst.free = []) →
+                  (∀ (input : InternedConstructorTemplates.Value Symbol Constraint × List Suspended),
+                      input ∈ rest → ∀ (sc : Suspended), sc ∈ input.snd → sc.var < before.core.counter) →
+                    let staged :=
+                      List.map
+                        (fun input =>
+                          (input.fst, input.snd, SourcePruningEnumerationShallowChild.prepareChild input.snd input.fst))
+                        rest;
+                    ∃ fuel rows after,
+                      (∀ (extra : Nat), run heap (fuel + extra) rest before = some (rows, after)) ∧
+                        (SourcePruningEnumerationEdgeTraversal.runStaged staged before.core).run =
+                            List.map (fun row => Except.ok (row.fst, row.snd.core)) rows ∧
+                          before.core.counter ≤ after.core.counter ∧
+                            after.core.counter = after.core.values.length ∧
+                              after.core.representatives = before.core.representatives ∧
+                                Roots after.core.representatives roots ∧
+                                  StorageValid after.core ∧
+                                    PendingRealized heap after.core ∧
+                                      EnumerationCanonicalWaiting.Correct roots after.core.values after.waiting ∧
+                                        (∀ (slot : Nat),
+                                            SourcePruningEnumerationNativeIndex.candidate heap
+                                                (after.core.values[slot]?.getD UVarValue.eliminated) =
+                                              some (after.expandable slot)) ∧
+                                          (rows = [] ∨
+                                            ∃ result,
+                                              rows = [(result, after)] ∧
+                                                ∀ (fragments : List (Fragments.Fragment Symbol)),
+                                                  result = some fragments → FragmentsBound after.core.counter fragments)
+before : EnumerationExpandableIndex.Cached Symbol Constraint
+storage : StorageValid before.core
+realized : PendingRealized heap before.core
+paths : Roots before.core.representatives roots
+counts : EnumerationCanonicalWaiting.Correct roots before.core.values before.waiting
+flags :
+  ∀ (slot : Nat),
+    SourcePruningEnumerationNativeIndex.candidate heap (before.core.values[slot]?.getD UVarValue.eliminated) =
+      some (before.expandable slot)
+bucket : List Suspended
+action : EnumerateM Symbol Constraint (Fragments.Fragment Symbol)
+terminal : ¬(bucket.any fun sc => EqualityTrie.isTerminal sc.trie) = false
+_entry : Cache.Interned InternedBinderProtocol.NodeKey
+_edges : List (InternedConstructorTemplates.EdgeValue Symbol Constraint)
+_depth : Nat
+_free : List InternedBinderProtocol.Reference
+available :
+  ∀ (input : InternedConstructorTemplates.Value Symbol Constraint × List Suspended),
+    input ∈ (InternedConstructorTemplates.Value.node _entry _edges _depth _free, bucket) :: rest →
+      InternedProbeProvenance.Available heap input.fst
+closed :
+  ∀ (input : InternedConstructorTemplates.Value Symbol Constraint × List Suspended),
+    input ∈ (InternedConstructorTemplates.Value.node _entry _edges _depth _free, bucket) :: rest → input.fst.free = []
+bounded :
+  ∀ (input : InternedConstructorTemplates.Value Symbol Constraint × List Suspended),
+    input ∈ (InternedConstructorTemplates.Value.node _entry _edges _depth _free, bucket) :: rest →
+      ∀ (sc : Suspended), sc ∈ input.snd → sc.var < before.core.counter
+nonempty : InternedConstructorTemplates.Value.node _entry _edges _depth _free ≠ InternedConstructorTemplates.Value.empty
+prepared : none = some action
+⊢ False
+/tmp/mcfta-pruning-enumeration-cached-stages-20261025/strict-2/MicroCFTA/SourcePruningEnumerationCachedStages.lean:105:45: error: unsolved goals
+case union
+heap : InternedConstructorTemplates.State Symbol Constraint
+roots : Nat → Nat
+coherent : InternedRecordCoherence.Coherent heap
+rest : List (InternedConstructorTemplates.Value Symbol Constraint × List Suspended)
+ih :
+  ∀ (before : EnumerationExpandableIndex.Cached Symbol Constraint),
+    StorageValid before.core →
+      PendingRealized heap before.core →
+        Roots before.core.representatives roots →
+          EnumerationCanonicalWaiting.Correct roots before.core.values before.waiting →
+            (∀ (slot : Nat),
+                SourcePruningEnumerationNativeIndex.candidate heap
+                    (before.core.values[slot]?.getD UVarValue.eliminated) =
+                  some (before.expandable slot)) →
+              (∀ (input : InternedConstructorTemplates.Value Symbol Constraint × List Suspended),
+                  input ∈ rest → InternedProbeProvenance.Available heap input.fst) →
+                (∀ (input : InternedConstructorTemplates.Value Symbol Constraint × List Suspended),
+                    input ∈ rest → input.fst.free = []) →
+                  (∀ (input : InternedConstructorTemplates.Value Symbol Constraint × List Suspended),
+                      input ∈ rest → ∀ (sc : Suspended), sc ∈ input.snd → sc.var < before.core.counter) →
+                    let staged :=
+                      List.map
+                        (fun input =>
+                          (input.fst, input.snd, SourcePruningEnumerationShallowChild.prepareChild input.snd input.fst))
+                        rest;
+                    ∃ fuel rows after,
+                      (∀ (extra : Nat), run heap (fuel + extra) rest before = some (rows, after)) ∧
+                        (SourcePruningEnumerationEdgeTraversal.runStaged staged before.core).run =
+                            List.map (fun row => Except.ok (row.fst, row.snd.core)) rows ∧
+                          before.core.counter ≤ after.core.counter ∧
+                            after.core.counter = after.core.values.length ∧
+                              after.core.representatives = before.core.representatives ∧
+                                Roots after.core.representatives roots ∧
+                                  StorageValid after.core ∧
+                                    PendingRealized heap after.core ∧
+                                      EnumerationCanonicalWaiting.Correct roots after.core.values after.waiting ∧
+                                        (∀ (slot : Nat),
+                                            SourcePruningEnumerationNativeIndex.candidate heap
+                                                (after.core.values[slot]?.getD UVarValue.eliminated) =
+                                              some (after.expandable slot)) ∧
+                                          (rows = [] ∨
+                                            ∃ result,
+                                              rows = [(result, after)] ∧
+                                                ∀ (fragments : List (Fragments.Fragment Symbol)),
+                                                  result = some fragments → FragmentsBound after.core.counter fragments)
+before : EnumerationExpandableIndex.Cached Symbol Constraint
+storage : StorageValid before.core
+realized : PendingRealized heap before.core
+paths : Roots before.core.representatives roots
+counts : EnumerationCanonicalWaiting.Correct roots before.core.values before.waiting
+flags :
+  ∀ (slot : Nat),
+    SourcePruningEnumerationNativeIndex.candidate heap (before.core.values[slot]?.getD UVarValue.eliminated) =
+      some (before.expandable slot)
+bucket : List Suspended
+action : EnumerateM Symbol Constraint (Fragments.Fragment Symbol)
+terminal : ¬(bucket.any fun sc => EqualityTrie.isTerminal sc.trie) = false
+_entry : Cache.Interned InternedBinderProtocol.NodeKey
+_members : List (InternedConstructorTemplates.Value Symbol Constraint)
+_depth : Nat
+_free : List InternedBinderProtocol.Reference
+available :
+  ∀ (input : InternedConstructorTemplates.Value Symbol Constraint × List Suspended),
+    input ∈ (InternedConstructorTemplates.Value.union _entry _members _depth _free, bucket) :: rest →
+      InternedProbeProvenance.Available heap input.fst
+closed :
+  ∀ (input : InternedConstructorTemplates.Value Symbol Constraint × List Suspended),
+    input ∈ (InternedConstructorTemplates.Value.union _entry _members _depth _free, bucket) :: rest →
+      input.fst.free = []
+bounded :
+  ∀ (input : InternedConstructorTemplates.Value Symbol Constraint × List Suspended),
+    input ∈ (InternedConstructorTemplates.Value.union _entry _members _depth _free, bucket) :: rest →
+      ∀ (sc : Suspended), sc ∈ input.snd → sc.var < before.core.counter
+nonempty :
+  InternedConstructorTemplates.Value.union _entry _members _depth _free ≠ InternedConstructorTemplates.Value.empty
+prepared : none = some action
+⊢ False
+/tmp/mcfta-pruning-enumeration-cached-stages-20261025/strict-2/MicroCFTA/SourcePruningEnumerationCachedStages.lean:108:53: error: unsolved goals
+case mu
+heap : InternedConstructorTemplates.State Symbol Constraint
+roots : Nat → Nat
+coherent : InternedRecordCoherence.Coherent heap
+rest : List (InternedConstructorTemplates.Value Symbol Constraint × List Suspended)
+ih :
+  ∀ (before : EnumerationExpandableIndex.Cached Symbol Constraint),
+    StorageValid before.core →
+      PendingRealized heap before.core →
+        Roots before.core.representatives roots →
+          EnumerationCanonicalWaiting.Correct roots before.core.values before.waiting →
+            (∀ (slot : Nat),
+                SourcePruningEnumerationNativeIndex.candidate heap
+                    (before.core.values[slot]?.getD UVarValue.eliminated) =
+                  some (before.expandable slot)) →
+              (∀ (input : InternedConstructorTemplates.Value Symbol Constraint × List Suspended),
+                  input ∈ rest → InternedProbeProvenance.Available heap input.fst) →
+                (∀ (input : InternedConstructorTemplates.Value Symbol Constraint × List Suspended),
+                    input ∈ rest → input.fst.free = []) →
+                  (∀ (input : InternedConstructorTemplates.Value Symbol Constraint × List Suspended),
+                      input ∈ rest → ∀ (sc : Suspended), sc ∈ input.snd → sc.var < before.core.counter) →
+                    let staged :=
+                      List.map
+                        (fun input =>
+                          (input.fst, input.snd, SourcePruningEnumerationShallowChild.prepareChild input.snd input.fst))
+                        rest;
+                    ∃ fuel rows after,
+                      (∀ (extra : Nat), run heap (fuel + extra) rest before = some (rows, after)) ∧
+                        (SourcePruningEnumerationEdgeTraversal.runStaged staged before.core).run =
+                            List.map (fun row => Except.ok (row.fst, row.snd.core)) rows ∧
+                          before.core.counter ≤ after.core.counter ∧
+                            after.core.counter = after.core.values.length ∧
+                              after.core.representatives = before.core.representatives ∧
+                                Roots after.core.representatives roots ∧
+                                  StorageValid after.core ∧
+                                    PendingRealized heap after.core ∧
+                                      EnumerationCanonicalWaiting.Correct roots after.core.values after.waiting ∧
+                                        (∀ (slot : Nat),
+                                            SourcePruningEnumerationNativeIndex.candidate heap
+                                                (after.core.values[slot]?.getD UVarValue.eliminated) =
+                                              some (after.expandable slot)) ∧
+                                          (rows = [] ∨
+                                            ∃ result,
+                                              rows = [(result, after)] ∧
+                                                ∀ (fragments : List (Fragments.Fragment Symbol)),
+                                                  result = some fragments → FragmentsBound after.core.counter fragments)
+before : EnumerationExpandableIndex.Cached Symbol Constraint
+storage : StorageValid before.core
+realized : PendingRealized heap before.core
+paths : Roots before.core.representatives roots
+counts : EnumerationCanonicalWaiting.Correct roots before.core.values before.waiting
+flags :
+  ∀ (slot : Nat),
+    SourcePruningEnumerationNativeIndex.candidate heap (before.core.values[slot]?.getD UVarValue.eliminated) =
+      some (before.expandable slot)
+bucket : List Suspended
+action : EnumerateM Symbol Constraint (Fragments.Fragment Symbol)
+terminal : ¬(bucket.any fun sc => EqualityTrie.isTerminal sc.trie) = false
+_entry : Cache.Interned InternedBinderProtocol.NodeKey
+_body _depthShape _ordinaryShape : InternedConstructorTemplates.Value Symbol Constraint
+available :
+  ∀ (input : InternedConstructorTemplates.Value Symbol Constraint × List Suspended),
+    input ∈ (InternedConstructorTemplates.Value.mu _entry _body _depthShape _ordinaryShape, bucket) :: rest →
+      InternedProbeProvenance.Available heap input.fst
+closed :
+  ∀ (input : InternedConstructorTemplates.Value Symbol Constraint × List Suspended),
+    input ∈ (InternedConstructorTemplates.Value.mu _entry _body _depthShape _ordinaryShape, bucket) :: rest →
+      input.fst.free = []
+bounded :
+  ∀ (input : InternedConstructorTemplates.Value Symbol Constraint × List Suspended),
+    input ∈ (InternedConstructorTemplates.Value.mu _entry _body _depthShape _ordinaryShape, bucket) :: rest →
+      ∀ (sc : Suspended), sc ∈ input.snd → sc.var < before.core.counter
+nonempty :
+  InternedConstructorTemplates.Value.mu _entry _body _depthShape _ordinaryShape ≠
+    InternedConstructorTemplates.Value.empty
+prepared : none = some action
+⊢ False
+/tmp/mcfta-pruning-enumeration-cached-stages-20261025/strict-2/MicroCFTA/SourcePruningEnumerationCachedStages.lean:157:16: error: Type mismatch: After simplification, term
+  headRaw
+ has type
+  @Eq (List (Except Error (Fragments.Fragment Symbol × State Symbol Constraint))) (action before.core).run
+    [Except.ok (Fragments.Fragment.hole before.core.counter, middle.core)]
+but is expected to have type
+  @Eq (ExceptT Error List (Fragments.Fragment Symbol × State Symbol Constraint)) (action before.core)
+    [Except.ok (Fragments.Fragment.hole before.core.counter, middle.core)]
+/tmp/mcfta-pruning-enumeration-cached-stages-20261025/strict-2/MicroCFTA/SourcePruningEnumerationCachedStages.lean:161:12: error: Tactic `rfl` failed: The left-hand side
+  List.flatMap
+    (fun result =>
+      match result with
+      | Except.error error => [Except.error error]
+      | Except.ok (value, after) =>
+        (pure (Option.map (fun tail => Fragments.Fragment.hole before.core.counter :: tail) value) after).run)
+    (List.map (fun row => Except.ok (row.fst, row.snd.core)) [])
+is not definitionally equal to the right-hand side
+  List.map (fun row => Except.ok (row.fst, row.snd.core)) lifted
+
+case cons.some.inr.refine_2.inl
+heap : InternedConstructorTemplates.State Symbol Constraint
+roots : Nat → Nat
+coherent : InternedRecordCoherence.Coherent heap
+rest : List (InternedConstructorTemplates.Value Symbol Constraint × List Suspended)
+ih :
+  ∀ (before : EnumerationExpandableIndex.Cached Symbol Constraint),
+    StorageValid before.core →
+      PendingRealized heap before.core →
+        Roots before.core.representatives roots →
+          EnumerationCanonicalWaiting.Correct roots before.core.values before.waiting →
+            (∀ (slot : Nat),
+                SourcePruningEnumerationNativeIndex.candidate heap
+                    (before.core.values[slot]?.getD UVarValue.eliminated) =
+                  some (before.expandable slot)) →
+              (∀ (input : InternedConstructorTemplates.Value Symbol Constraint × List Suspended),
+                  input ∈ rest → InternedProbeProvenance.Available heap input.fst) →
+                (∀ (input : InternedConstructorTemplates.Value Symbol Constraint × List Suspended),
+                    input ∈ rest → input.fst.free = []) →
+                  (∀ (input : InternedConstructorTemplates.Value Symbol Constraint × List Suspended),
+                      input ∈ rest → ∀ (sc : Suspended), sc ∈ input.snd → sc.var < before.core.counter) →
+                    let staged :=
+                      List.map
+                        (fun input =>
+                          (input.fst, input.snd, SourcePruningEnumerationShallowChild.prepareChild input.snd input.fst))
+                        rest;
+                    ∃ fuel rows after,
+                      (∀ (extra : Nat), run heap (fuel + extra) rest before = some (rows, after)) ∧
+                        (SourcePruningEnumerationEdgeTraversal.runStaged staged before.core).run =
+                            List.map (fun row => Except.ok (row.fst, row.snd.core)) rows ∧
+                          before.core.counter ≤ after.core.counter ∧
+                            after.core.counter = after.core.values.length ∧
+                              after.core.representatives = before.core.representatives ∧
+                                Roots after.core.representatives roots ∧
+                                  StorageValid after.core ∧
+                                    PendingRealized heap after.core ∧
+                                      EnumerationCanonicalWaiting.Correct roots after.core.values after.waiting ∧
+                                        (∀ (slot : Nat),
+                                            SourcePruningEnumerationNativeIndex.candidate heap
+                                                (after.core.values[slot]?.getD UVarValue.eliminated) =
+                                              some (after.expandable slot)) ∧
+                                          (rows = [] ∨
+                                            ∃ result,
+                                              rows = [(result, after)] ∧
+                                                ∀ (fragments : List (Fragments.Fragment Symbol)),
+                                                  result = some fragments → FragmentsBound after.core.counter fragments)
+before : EnumerationExpandableIndex.Cached Symbol Constraint
+storage : StorageValid before.core
+realized : PendingRealized heap before.core
+paths : Roots before.core.representatives roots
+counts : EnumerationCanonicalWaiting.Correct roots before.core.values before.waiting
+flags :
+  ∀ (slot : Nat),
+    SourcePruningEnumerationNativeIndex.candidate heap (before.core.values[slot]?.getD UVarValue.eliminated) =
+      some (before.expandable slot)
+value : InternedConstructorTemplates.Value Symbol Constraint
+bucket : List Suspended
+available :
+  ∀ (input : InternedConstructorTemplates.Value Symbol Constraint × List Suspended),
+    input ∈ (value, bucket) :: rest → InternedProbeProvenance.Available heap input.fst
+closed :
+  ∀ (input : InternedConstructorTemplates.Value Symbol Constraint × List Suspended),
+    input ∈ (value, bucket) :: rest → input.fst.free = []
+bounded :
+  ∀ (input : InternedConstructorTemplates.Value Symbol Constraint × List Suspended),
+    input ∈ (value, bucket) :: rest → ∀ (sc : Suspended), sc ∈ input.snd → sc.var < before.core.counter
+action : EnumerateM Symbol Constraint (Fragments.Fragment Symbol)
+prepared : SourcePruningEnumerationShallowChild.prepareChild bucket value = some action
+nonterminal :
+  value ≠ InternedConstructorTemplates.Value.empty → (bucket.any fun sc => EqualityTrie.isTerminal sc.trie) = false
+headAction : EnumerateM Symbol Constraint (Fragments.Fragment Symbol)
+headFuel : Nat
+childRows : List (Fragments.Fragment Symbol × EnumerationExpandableIndex.Cached Symbol Constraint)
+headPrepared : SourcePruningEnumerationShallowChild.prepareChild bucket value = some headAction
+headRun :
+  ∀ (extra : Nat),
+    SourcePruningEnumerationCachedPrepare.prepareChild heap (headFuel + extra) bucket value before = some childRows
+headRaw : (action before.core).run = List.map (fun result => Except.ok (result.fst, result.snd.core)) childRows
+sameAction : headAction = action
+middle : EnumerationExpandableIndex.Cached Symbol Constraint
+_nonempty : value ≠ InternedConstructorTemplates.Value.empty
+childSingleton : childRows = [(Fragments.Fragment.hole before.core.counter, middle)]
+middleCounter : middle.core.counter = before.core.counter + 1
+_middleAligned : middle.core.counter = middle.core.values.length
+middleForest : middle.core.representatives = before.core.representatives
+middlePaths : Roots middle.core.representatives roots
+middleStorage : StorageValid middle.core
+middleRealized : PendingRealized heap middle.core
+middleCounts : EnumerationCanonicalWaiting.Correct roots middle.core.values middle.waiting
+middleFlags :
+  ∀ (slot : Nat),
+    SourcePruningEnumerationNativeIndex.candidate heap (middle.core.values[slot]?.getD UVarValue.eliminated) =
+      some (middle.expandable slot)
+headBound : FragmentBound middle.core.counter (Fragments.Fragment.hole before.core.counter)
+tailBounded :
+  ∀ (input : InternedConstructorTemplates.Value Symbol Constraint × List Suspended),
+    input ∈ rest → ∀ (sc : Suspended), sc ∈ input.snd → sc.var < middle.core.counter
+tailFuel : Nat
+rows : List (Option (List (Fragments.Fragment Symbol)) × EnumerationExpandableIndex.Cached Symbol Constraint)
+after : EnumerationExpandableIndex.Cached Symbol Constraint
+tailRun : ∀ (extra : Nat), run heap (tailFuel + extra) rest middle = some (rows, after)
+tailRaw :
+  (SourcePruningEnumerationEdgeTraversal.runStaged
+        (List.map
+          (fun input => (input.fst, input.snd, SourcePruningEnumerationShallowChild.prepareChild input.snd input.fst))
+          rest)
+        middle.core).run =
+    List.map (fun row => Except.ok (row.fst, row.snd.core)) rows
+grows : middle.core.counter ≤ after.core.counter
+alignedAfter : after.core.counter = after.core.values.length
+forestSame : after.core.representatives = middle.core.representatives
+pathsAfter : Roots after.core.representatives roots
+storageAfter : StorageValid after.core
+realizedAfter : PendingRealized heap after.core
+countsAfter : EnumerationCanonicalWaiting.Correct roots after.core.values after.waiting
+flagsAfter :
+  ∀ (slot : Nat),
+    SourcePruningEnumerationNativeIndex.candidate heap (after.core.values[slot]?.getD UVarValue.eliminated) =
+      some (after.expandable slot)
+lifted : List (Option (List (Fragments.Fragment Symbol)) × EnumerationExpandableIndex.Cached Symbol Constraint) :=
+  List.map
+    (fun row =>
+      (Option.map (fun fragments => Fragments.Fragment.hole before.core.counter :: fragments) row.fst, row.snd))
+    rows
+tailEmpty : rows = []
+⊢ List.flatMap
+      (fun result =>
+        match result with
+        | Except.error error => [Except.error error]
+        | Except.ok (value, after) =>
+          (pure (Option.map (fun tail => Fragments.Fragment.hole before.core.counter :: tail) value) after).run)
+      (List.map (fun row => Except.ok (row.fst, row.snd.core)) []) =
+    List.map (fun row => Except.ok (row.fst, row.snd.core)) lifted
+/tmp/mcfta-pruning-enumeration-cached-stages-20261025/strict-2/MicroCFTA/SourcePruningEnumerationCachedStages.lean:163:12: error: Tactic `rfl` failed: The left-hand side
+  List.flatMap
+    (fun result =>
+      match result with
+      | Except.error error => [Except.error error]
+      | Except.ok (value, after) =>
+        (pure (Option.map (fun tail => Fragments.Fragment.hole before.core.counter :: tail) value) after).run)
+    (List.map (fun row => Except.ok (row.fst, row.snd.core)) [(result, after)])
+is not definitionally equal to the right-hand side
+  List.map (fun row => Except.ok (row.fst, row.snd.core)) lifted
+
+case cons.some.inr.refine_2.inr
+heap : InternedConstructorTemplates.State Symbol Constraint
+roots : Nat → Nat
+coherent : InternedRecordCoherence.Coherent heap
+rest : List (InternedConstructorTemplates.Value Symbol Constraint × List Suspended)
+ih :
+  ∀ (before : EnumerationExpandableIndex.Cached Symbol Constraint),
+    StorageValid before.core →
+      PendingRealized heap before.core →
+        Roots before.core.representatives roots →
+          EnumerationCanonicalWaiting.Correct roots before.core.values before.waiting →
+            (∀ (slot : Nat),
+                SourcePruningEnumerationNativeIndex.candidate heap
+                    (before.core.values[slot]?.getD UVarValue.eliminated) =
+                  some (before.expandable slot)) →
+              (∀ (input : InternedConstructorTemplates.Value Symbol Constraint × List Suspended),
+                  input ∈ rest → InternedProbeProvenance.Available heap input.fst) →
+                (∀ (input : InternedConstructorTemplates.Value Symbol Constraint × List Suspended),
+                    input ∈ rest → input.fst.free = []) →
+                  (∀ (input : InternedConstructorTemplates.Value Symbol Constraint × List Suspended),
+                      input ∈ rest → ∀ (sc : Suspended), sc ∈ input.snd → sc.var < before.core.counter) →
+                    let staged :=
+                      List.map
+                        (fun input =>
+                          (input.fst, input.snd, SourcePruningEnumerationShallowChild.prepareChild input.snd input.fst))
+                        rest;
+                    ∃ fuel rows after,
+                      (∀ (extra : Nat), run heap (fuel + extra) rest before = some (rows, after)) ∧
+                        (SourcePruningEnumerationEdgeTraversal.runStaged staged before.core).run =
+                            List.map (fun row => Except.ok (row.fst, row.snd.core)) rows ∧
+                          before.core.counter ≤ after.core.counter ∧
+                            after.core.counter = after.core.values.length ∧
+                              after.core.representatives = before.core.representatives ∧
+                                Roots after.core.representatives roots ∧
+                                  StorageValid after.core ∧
+                                    PendingRealized heap after.core ∧
+                                      EnumerationCanonicalWaiting.Correct roots after.core.values after.waiting ∧
+                                        (∀ (slot : Nat),
+                                            SourcePruningEnumerationNativeIndex.candidate heap
+                                                (after.core.values[slot]?.getD UVarValue.eliminated) =
+                                              some (after.expandable slot)) ∧
+                                          (rows = [] ∨
+                                            ∃ result,
+                                              rows = [(result, after)] ∧
+                                                ∀ (fragments : List (Fragments.Fragment Symbol)),
+                                                  result = some fragments → FragmentsBound after.core.counter fragments)
+before : EnumerationExpandableIndex.Cached Symbol Constraint
+storage : StorageValid before.core
+realized : PendingRealized heap before.core
+paths : Roots before.core.representatives roots
+counts : EnumerationCanonicalWaiting.Correct roots before.core.values before.waiting
+flags :
+  ∀ (slot : Nat),
+    SourcePruningEnumerationNativeIndex.candidate heap (before.core.values[slot]?.getD UVarValue.eliminated) =
+      some (before.expandable slot)
+value : InternedConstructorTemplates.Value Symbol Constraint
+bucket : List Suspended
+available :
+  ∀ (input : InternedConstructorTemplates.Value Symbol Constraint × List Suspended),
+    input ∈ (value, bucket) :: rest → InternedProbeProvenance.Available heap input.fst
+closed :
+  ∀ (input : InternedConstructorTemplates.Value Symbol Constraint × List Suspended),
+    input ∈ (value, bucket) :: rest → input.fst.free = []
+bounded :
+  ∀ (input : InternedConstructorTemplates.Value Symbol Constraint × List Suspended),
+    input ∈ (value, bucket) :: rest → ∀ (sc : Suspended), sc ∈ input.snd → sc.var < before.core.counter
+action : EnumerateM Symbol Constraint (Fragments.Fragment Symbol)
+prepared : SourcePruningEnumerationShallowChild.prepareChild bucket value = some action
+nonterminal :
+  value ≠ InternedConstructorTemplates.Value.empty → (bucket.any fun sc => EqualityTrie.isTerminal sc.trie) = false
+headAction : EnumerateM Symbol Constraint (Fragments.Fragment Symbol)
+headFuel : Nat
+childRows : List (Fragments.Fragment Symbol × EnumerationExpandableIndex.Cached Symbol Constraint)
+headPrepared : SourcePruningEnumerationShallowChild.prepareChild bucket value = some headAction
+headRun :
+  ∀ (extra : Nat),
+    SourcePruningEnumerationCachedPrepare.prepareChild heap (headFuel + extra) bucket value before = some childRows
+headRaw : (action before.core).run = List.map (fun result => Except.ok (result.fst, result.snd.core)) childRows
+sameAction : headAction = action
+middle : EnumerationExpandableIndex.Cached Symbol Constraint
+_nonempty : value ≠ InternedConstructorTemplates.Value.empty
+childSingleton : childRows = [(Fragments.Fragment.hole before.core.counter, middle)]
+middleCounter : middle.core.counter = before.core.counter + 1
+_middleAligned : middle.core.counter = middle.core.values.length
+middleForest : middle.core.representatives = before.core.representatives
+middlePaths : Roots middle.core.representatives roots
+middleStorage : StorageValid middle.core
+middleRealized : PendingRealized heap middle.core
+middleCounts : EnumerationCanonicalWaiting.Correct roots middle.core.values middle.waiting
+middleFlags :
+  ∀ (slot : Nat),
+    SourcePruningEnumerationNativeIndex.candidate heap (middle.core.values[slot]?.getD UVarValue.eliminated) =
+      some (middle.expandable slot)
+headBound : FragmentBound middle.core.counter (Fragments.Fragment.hole before.core.counter)
+tailBounded :
+  ∀ (input : InternedConstructorTemplates.Value Symbol Constraint × List Suspended),
+    input ∈ rest → ∀ (sc : Suspended), sc ∈ input.snd → sc.var < middle.core.counter
+tailFuel : Nat
+rows : List (Option (List (Fragments.Fragment Symbol)) × EnumerationExpandableIndex.Cached Symbol Constraint)
+after : EnumerationExpandableIndex.Cached Symbol Constraint
+tailRun : ∀ (extra : Nat), run heap (tailFuel + extra) rest middle = some (rows, after)
+tailRaw :
+  (SourcePruningEnumerationEdgeTraversal.runStaged
+        (List.map
+          (fun input => (input.fst, input.snd, SourcePruningEnumerationShallowChild.prepareChild input.snd input.fst))
+          rest)
+        middle.core).run =
+    List.map (fun row => Except.ok (row.fst, row.snd.core)) rows
+grows : middle.core.counter ≤ after.core.counter
+alignedAfter : after.core.counter = after.core.values.length
+forestSame : after.core.representatives = middle.core.representatives
+pathsAfter : Roots after.core.representatives roots
+storageAfter : StorageValid after.core
+realizedAfter : PendingRealized heap after.core
+countsAfter : EnumerationCanonicalWaiting.Correct roots after.core.values after.waiting
+flagsAfter :
+  ∀ (slot : Nat),
+    SourcePruningEnumerationNativeIndex.candidate heap (after.core.values[slot]?.getD UVarValue.eliminated) =
+      some (after.expandable slot)
+lifted : List (Option (List (Fragments.Fragment Symbol)) × EnumerationExpandableIndex.Cached Symbol Constraint) :=
+  List.map
+    (fun row =>
+      (Option.map (fun fragments => Fragments.Fragment.hole before.core.counter :: fragments) row.fst, row.snd))
+    rows
+result : Option (List (Fragments.Fragment Symbol))
+tailSingleton : rows = [(result, after)]
+_tailBound :
+  ∀ (fragments : List (Fragments.Fragment Symbol)),
+    result = some fragments → FragmentsBound after.core.counter fragments
+⊢ List.flatMap
+      (fun result =>
+        match result with
+        | Except.error error => [Except.error error]
+        | Except.ok (value, after) =>
+          (pure (Option.map (fun tail => Fragments.Fragment.hole before.core.counter :: tail) value) after).run)
+      (List.map (fun row => Except.ok (row.fst, row.snd.core)) [(result, after)]) =
+    List.map (fun row => Except.ok (row.fst, row.snd.core)) lifted

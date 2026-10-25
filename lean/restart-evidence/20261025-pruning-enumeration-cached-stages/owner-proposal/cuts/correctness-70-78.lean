@@ -1,0 +1,9 @@
+theorem bind_single (action : EnumerateM Symbol Guard α) (next : α → EnumerateM Symbol Guard β)
+    (before after : State Symbol Guard) (value : α)
+    (result : action before = [.ok (value, after)]) :
+    (action >>= next) before = next value after := by
+  change ExceptT.run ((action >>= next) before) = ExceptT.run (next value after)
+  rw [run_bind]
+  change (action before : List (Except Error (α × State Symbol Guard))).flatMap _ = _
+  rw [result]
+  simp

@@ -1,0 +1,35 @@
+/-- Derive stable cached execution and the exact existing raw child stream. -/
+theorem complete
+    (heap : InternedConstructorTemplates.State Symbol Constraint)
+    (inputs : List (InternedConstructorTemplates.Value Symbol Constraint × List EnumerationState.Suspended))
+    (roots : Nat → Nat) (coherent : InternedRecordCoherence.Coherent heap) :
+    ∀ (before : EnumerationExpandableIndex.Cached Symbol Constraint),
+      StorageValid before.core → PendingRealized heap before.core →
+      Roots before.core.representatives roots →
+      EnumerationCanonicalWaiting.Correct roots before.core.values before.waiting →
+      (∀ (slot : Nat), SourcePruningEnumerationNativeIndex.candidate heap
+        ((before.core.values[slot]?).getD .eliminated) = some (before.expandable slot)) →
+      (∀ input ∈ inputs, InternedProbeProvenance.Available heap input.1) →
+      (∀ input ∈ inputs, input.1.free = []) →
+      (∀ input ∈ inputs, ∀ sc ∈ input.2, sc.var < before.core.counter) →
+      let staged := inputs.map (fun input =>
+        (input.1, input.2, SourcePruningEnumerationShallowChild.prepareChild
+          (EnumGuard := Constraint) input.2 input.1))
+      ∃ (fuel : Nat)
+        (rows : List (Option (List (Fragments.Fragment Symbol)) ×
+          EnumerationExpandableIndex.Cached Symbol Constraint))
+        (prefix : EnumerationExpandableIndex.Cached Symbol Constraint),
+        (∀ (extra : Nat), run heap (fuel + extra) inputs before = some (rows, prefix)) ∧
+        ExceptT.run (SourcePruningEnumerationEdgeTraversal.runStaged staged before.core) =
+          rows.map (fun row => .ok (row.1, row.2.core)) ∧
+        before.core.counter ≤ prefix.core.counter ∧
+        prefix.core.counter = prefix.core.values.length ∧
+        prefix.core.representatives = before.core.representatives ∧ Roots prefix.core.representatives roots ∧
+        StorageValid prefix.core ∧ PendingRealized heap prefix.core ∧
+        EnumerationCanonicalWaiting.Correct roots prefix.core.values prefix.waiting ∧
+        (∀ (slot : Nat), SourcePruningEnumerationNativeIndex.candidate heap
+          ((prefix.core.values[slot]?).getD .eliminated) = some (prefix.expandable slot)) ∧
+        (rows = [] ∨ ∃ result : Option (List (Fragments.Fragment Symbol)),
+          rows = [(result, prefix)] ∧
+          (∀ (fragments : List (Fragments.Fragment Symbol)), result = some fragments →
+            FragmentsBound («Symbol» := Symbol) prefix.core.counter fragments))

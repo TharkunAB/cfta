@@ -1,0 +1,35 @@
+{
+  "at": "2026-10-25T05:26:54.222176+01:00",
+  "author": "Root",
+  "status": "EXACT_SELECTED_BODIES_AUTHORIZED",
+  "frozen_sha256": "e1f05c60a4a14763e72eb407da19f3f08a40aa94f1e3954f606831269d3f2d13",
+  "script_frozen_sha256": "b4cd829ffc5962a831eaaf41fe66b5c5ca58ab2ef7b83ad7089f4a539aeacf1f",
+  "reviews": {
+    "declaration": "99fec275338a6e3e8bb6b1b79ef7e6e0ca534726a7f7aa45f0d7d1cef1d10e30",
+    "seal-script": "aa48d52cb47f9b26a06e90dbba2995843df0ce72550f1c10b4cfe2d3a62ae038"
+  },
+  "contracts": {
+    "context.lean.txt": "import MicroCFTA.SourcePruningEnumerationCachedPrepare\nimport MicroCFTA.SourcePruningEnumerationEdgeTraversal\n\nnamespace MicroCFTA.SourcePruningEnumerationCachedStages\nopen EnumerationState EnumerationSchedule EnumerationCorrectness\nopen SourcePruningEnumerationObservation\nlocal notation \"Symbol\" => SourcePruningTemplates.Symbol\nlocal notation \"Constraint\" => SourceSymbolicIndex.Constraint FullSyntax.Formula\n",
+    "run-header.lean.txt": "/-- Run the actual prepared children and retain the completed-prefix cache. -/\ndef run\n    (heap : InternedConstructorTemplates.State Symbol Constraint) (fuel : Nat) :\n    List (InternedConstructorTemplates.Value Symbol Constraint \u00d7 List EnumerationState.Suspended) \u2192\n      EnumerationExpandableIndex.Cached Symbol Constraint \u2192\n      Option (List (Option (List (Fragments.Fragment Symbol)) \u00d7\n        EnumerationExpandableIndex.Cached Symbol Constraint) \u00d7\n        EnumerationExpandableIndex.Cached Symbol Constraint)\n",
+    "complete-header.lean.txt": "/-- Derive stable cached execution and the exact existing raw child stream. -/\ntheorem complete\n    (heap : InternedConstructorTemplates.State Symbol Constraint)\n    (inputs : List (InternedConstructorTemplates.Value Symbol Constraint \u00d7 List EnumerationState.Suspended))\n    (roots : Nat \u2192 Nat) (coherent : InternedRecordCoherence.Coherent heap) :\n    \u2200 (before : EnumerationExpandableIndex.Cached Symbol Constraint),\n      StorageValid before.core \u2192 PendingRealized heap before.core \u2192\n      Roots before.core.representatives roots \u2192\n      EnumerationCanonicalWaiting.Correct roots before.core.values before.waiting \u2192\n      (\u2200 (slot : Nat), SourcePruningEnumerationNativeIndex.candidate heap\n        ((before.core.values[slot]?).getD .eliminated) = some (before.expandable slot)) \u2192\n      (\u2200 input \u2208 inputs, InternedProbeProvenance.Available heap input.1) \u2192\n      (\u2200 input \u2208 inputs, input.1.free = []) \u2192\n      (\u2200 input \u2208 inputs, \u2200 sc \u2208 input.2, sc.var < before.core.counter) \u2192\n      let staged := inputs.map (fun input =>\n        (input.1, input.2, SourcePruningEnumerationShallowChild.prepareChild\n          (EnumGuard := Constraint) input.2 input.1))\n      \u2203 (fuel : Nat)\n        (rows : List (Option (List (Fragments.Fragment Symbol)) \u00d7\n          EnumerationExpandableIndex.Cached Symbol Constraint))\n        (after : EnumerationExpandableIndex.Cached Symbol Constraint),\n        (\u2200 (extra : Nat), run heap (fuel + extra) inputs before = some (rows, after)) \u2227\n        ExceptT.run (SourcePruningEnumerationEdgeTraversal.runStaged staged before.core) =\n          rows.map (fun row => .ok (row.1, row.2.core)) \u2227\n        before.core.counter \u2264 after.core.counter \u2227\n        after.core.counter = after.core.values.length \u2227\n        after.core.representatives = before.core.representatives \u2227 Roots after.core.representatives roots \u2227\n        StorageValid after.core \u2227 PendingRealized heap after.core \u2227\n        EnumerationCanonicalWaiting.Correct roots after.core.values after.waiting \u2227\n        (\u2200 (slot : Nat), SourcePruningEnumerationNativeIndex.candidate heap\n          ((after.core.values[slot]?).getD .eliminated) = some (after.expandable slot)) \u2227\n        (rows = [] \u2228 \u2203 result : Option (List (Fragments.Fragment Symbol)),\n          rows = [(result, after)] \u2227\n          (\u2200 (fragments : List (Fragments.Fragment Symbol)), result = some fragments \u2192\n            FragmentsBound (\u00abSymbol\u00bb := Symbol) after.core.counter fragments))\n",
+    "local-nonterminal.lean.txt": "have nonterminal : value \u2260 .empty \u2192\n        bucket.any (fun sc => EqualityTrie.isTerminal sc.trie) = false\n",
+    "local-same-action.lean.txt": "have sameAction : headAction = action\n",
+    "local-tail-bounded.lean.txt": "have tailBounded : \u2200 input \u2208 rest, \u2200 sc \u2208 input.2,\n            sc.var < middle.core.counter\n",
+    "let-lifted.lean.txt": "let lifted : List (Option (List (Fragments.Fragment Symbol)) \u00d7\n            EnumerationExpandableIndex.Cached Symbol Constraint) :=\n          rows.map (fun row =>\n            (row.1.map (fun fragments => Fragments.Fragment.hole before.core.counter :: fragments), row.2))\n"
+  },
+  "active_program_sha256": {
+    "check": "3102f2a6cb5e69c5b07b96fb5665301b595ef7edc5301f2f93bcb116f390dd85",
+    "documents": "83b2b3bacac2b68fc3602573b5b32b441e4193af6fa0000f0011818cceccc19f",
+    "archive": "54b3a922ac0da7246e46d934d2816f4078861acb88265c3e42291b26c61f870d",
+    "verify": "c6f4798b9546357bcbbd9a3980f41f6c91f92460b9f0f9ecbedfd503d51fc9af",
+    "publication": "251955342f7e5885448258246576176ce509c8a6e7b15a98bc76cd7de2c2ea4e"
+  },
+  "local_haves": 3,
+  "proof_lets": 1,
+  "public_header_lets": 1,
+  "instances": 0,
+  "inductions": 1,
+  "hard_cap": 520,
+  "source_and_full_inventory_read": true,
+  "bodies_present_before_gate": false
+}

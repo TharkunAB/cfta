@@ -1,0 +1,35 @@
+{
+  "inductions": [
+    {
+      "scope": "complete",
+      "on": "inputs",
+      "syntax": "induction inputs with",
+      "fixed": [
+        "heap",
+        "roots",
+        "coherent"
+      ],
+      "introduced_after_induction": [
+        "before",
+        "storage",
+        "realized",
+        "paths",
+        "counts",
+        "flags",
+        "available",
+        "closed",
+        "bounded"
+      ],
+      "IH_type": "∀ (before : EnumerationExpandableIndex.Cached Symbol Constraint), StorageValid before.core → PendingRealized heap before.core → Roots before.core.representatives roots → EnumerationCanonicalWaiting.Correct roots before.core.values before.waiting → (∀ (slot : Nat), SourcePruningEnumerationNativeIndex.candidate heap ((before.core.values[slot]?).getD .eliminated) = some (before.expandable slot)) → (∀ input ∈ rest, InternedProbeProvenance.Available heap input.1) → (∀ input ∈ rest, input.1.free = []) → (∀ input ∈ rest, ∀ sc ∈ input.2, sc.var < before.core.counter) → let staged := (rest.map (fun input => (input.1, input.2, SourcePruningEnumerationShallowChild.prepareChild (EnumGuard := Constraint) input.2 input.1))); ∃ (fuel : Nat) (rows : List (Option (List (Fragments.Fragment Symbol)) × EnumerationExpandableIndex.Cached Symbol Constraint)) (after : EnumerationExpandableIndex.Cached Symbol Constraint), (∀ (extra : Nat), run heap (fuel + extra) rest before = some (rows, after)) ∧ ExceptT.run (SourcePruningEnumerationEdgeTraversal.runStaged staged before.core) = rows.map (fun row => .ok (row.1, row.2.core)) ∧ before.core.counter ≤ after.core.counter ∧ after.core.counter = after.core.values.length ∧ after.core.representatives = before.core.representatives ∧ Roots after.core.representatives roots ∧ StorageValid after.core ∧ PendingRealized heap after.core ∧ EnumerationCanonicalWaiting.Correct roots after.core.values after.waiting ∧ (∀ (slot : Nat), SourcePruningEnumerationNativeIndex.candidate heap ((after.core.values[slot]?).getD .eliminated) = some (after.expandable slot)) ∧ (rows = [] ∨ ∃ result : Option (List (Fragments.Fragment Symbol)), rows = [(result, after)] ∧ (∀ (fragments : List (Fragments.Fragment Symbol)), result = some fragments → FragmentsBound («Symbol» := Symbol) after.core.counter fragments))"
+    }
+  ],
+  "IHs": [
+    {
+      "scope": "complete.cons",
+      "name": "ih",
+      "type": "∀ (before : EnumerationExpandableIndex.Cached Symbol Constraint), StorageValid before.core → PendingRealized heap before.core → Roots before.core.representatives roots → EnumerationCanonicalWaiting.Correct roots before.core.values before.waiting → (∀ (slot : Nat), SourcePruningEnumerationNativeIndex.candidate heap ((before.core.values[slot]?).getD .eliminated) = some (before.expandable slot)) → (∀ input ∈ rest, InternedProbeProvenance.Available heap input.1) → (∀ input ∈ rest, input.1.free = []) → (∀ input ∈ rest, ∀ sc ∈ input.2, sc.var < before.core.counter) → let staged := (rest.map (fun input => (input.1, input.2, SourcePruningEnumerationShallowChild.prepareChild (EnumGuard := Constraint) input.2 input.1))); ∃ (fuel : Nat) (rows : List (Option (List (Fragments.Fragment Symbol)) × EnumerationExpandableIndex.Cached Symbol Constraint)) (after : EnumerationExpandableIndex.Cached Symbol Constraint), (∀ (extra : Nat), run heap (fuel + extra) rest before = some (rows, after)) ∧ ExceptT.run (SourcePruningEnumerationEdgeTraversal.runStaged staged before.core) = rows.map (fun row => .ok (row.1, row.2.core)) ∧ before.core.counter ≤ after.core.counter ∧ after.core.counter = after.core.values.length ∧ after.core.representatives = before.core.representatives ∧ Roots after.core.representatives roots ∧ StorageValid after.core ∧ PendingRealized heap after.core ∧ EnumerationCanonicalWaiting.Correct roots after.core.values after.waiting ∧ (∀ (slot : Nat), SourcePruningEnumerationNativeIndex.candidate heap ((after.core.values[slot]?).getD .eliminated) = some (after.expandable slot)) ∧ (rows = [] ∨ ∃ result : Option (List (Fragments.Fragment Symbol)), rows = [(result, after)] ∧ (∀ (fragments : List (Fragments.Fragment Symbol)), result = some fragments → FragmentsBound («Symbol» := Symbol) after.core.counter fragments))"
+    }
+  ],
+  "induction_count": 1,
+  "IH_count": 1
+}

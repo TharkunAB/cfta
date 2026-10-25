@@ -1,0 +1,12 @@
+--- strict-1
++++ strict-2
+@@ -94,7 +94,8 @@
+       have nonterminal : value ≠ .empty →
+         bucket.any (fun sc => EqualityTrie.isTerminal sc.trie) = false := by
+         intro nonempty
+-        by_contra terminal
++        apply Classical.byContradiction
++        intro terminal
+         cases value with
+         | empty => exact nonempty rfl
+         | reference _name => cases prepared

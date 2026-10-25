@@ -1,0 +1,31 @@
+--- prospective-v1/complete-header
++++ prospective-v2/complete-header
+@@ -18,18 +18,18 @@
+       ∃ (fuel : Nat)
+         (rows : List (Option (List (Fragments.Fragment Symbol)) ×
+           EnumerationExpandableIndex.Cached Symbol Constraint))
+-        (prefix : EnumerationExpandableIndex.Cached Symbol Constraint),
+-        (∀ (extra : Nat), run heap (fuel + extra) inputs before = some (rows, prefix)) ∧
++        (after : EnumerationExpandableIndex.Cached Symbol Constraint),
++        (∀ (extra : Nat), run heap (fuel + extra) inputs before = some (rows, after)) ∧
+         ExceptT.run (SourcePruningEnumerationEdgeTraversal.runStaged staged before.core) =
+           rows.map (fun row => .ok (row.1, row.2.core)) ∧
+-        before.core.counter ≤ prefix.core.counter ∧
+-        prefix.core.counter = prefix.core.values.length ∧
+-        prefix.core.representatives = before.core.representatives ∧ Roots prefix.core.representatives roots ∧
+-        StorageValid prefix.core ∧ PendingRealized heap prefix.core ∧
+-        EnumerationCanonicalWaiting.Correct roots prefix.core.values prefix.waiting ∧
++        before.core.counter ≤ after.core.counter ∧
++        after.core.counter = after.core.values.length ∧
++        after.core.representatives = before.core.representatives ∧ Roots after.core.representatives roots ∧
++        StorageValid after.core ∧ PendingRealized heap after.core ∧
++        EnumerationCanonicalWaiting.Correct roots after.core.values after.waiting ∧
+         (∀ (slot : Nat), SourcePruningEnumerationNativeIndex.candidate heap
+-          ((prefix.core.values[slot]?).getD .eliminated) = some (prefix.expandable slot)) ∧
++          ((after.core.values[slot]?).getD .eliminated) = some (after.expandable slot)) ∧
+         (rows = [] ∨ ∃ result : Option (List (Fragments.Fragment Symbol)),
+-          rows = [(result, prefix)] ∧
++          rows = [(result, after)] ∧
+           (∀ (fragments : List (Fragments.Fragment Symbol)), result = some fragments →
+-            FragmentsBound («Symbol» := Symbol) prefix.core.counter fragments))
++            FragmentsBound («Symbol» := Symbol) after.core.counter fragments))

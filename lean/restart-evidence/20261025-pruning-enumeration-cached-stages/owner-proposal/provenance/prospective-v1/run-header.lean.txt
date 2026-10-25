@@ -1,0 +1,8 @@
+/-- Run the actual prepared children and retain the completed-prefix cache. -/
+def run
+    (heap : InternedConstructorTemplates.State Symbol Constraint) (fuel : Nat) :
+    List (InternedConstructorTemplates.Value Symbol Constraint × List EnumerationState.Suspended) →
+      EnumerationExpandableIndex.Cached Symbol Constraint →
+      Option (List (Option (List (Fragments.Fragment Symbol)) ×
+        EnumerationExpandableIndex.Cached Symbol Constraint) ×
+        EnumerationExpandableIndex.Cached Symbol Constraint)

@@ -1,0 +1,30 @@
+theorem complete
+    (heap : InternedConstructorTemplates.State Symbol NativeGuard)
+    (before : EnumerationExpandableIndex.Cached Symbol EnumGuard)
+    (value : InternedConstructorTemplates.Value Symbol NativeGuard)
+    (scs : List EnumerationState.Suspended) (roots : Nat → Nat)
+    (coherent : InternedRecordCoherence.Coherent heap)
+    (available : InternedProbeProvenance.Available heap value) (closed : value.free = [])
+    (storage : StorageValid before.core) (realized : PendingRealized heap before.core)
+    (paths : Roots before.core.representatives roots)
+    (counts : EnumerationCanonicalWaiting.Correct roots before.core.values before.waiting)
+    (flags : ∀ (slot : Nat), SourcePruningEnumerationNativeIndex.candidate heap
+      ((before.core.values[slot]?).getD .eliminated) = some (before.expandable slot))
+    (bounded : ∀ sc ∈ scs, sc.var < before.core.counter)
+    (nonterminal : value ≠ .empty → scs.any (fun sc => EqualityTrie.isTerminal sc.trie) = false) :
+    ∃ (action : EnumerateM Symbol EnumGuard (Fragments.Fragment Symbol)) (fuel : Nat)
+      (rows : List (Fragments.Fragment Symbol × EnumerationExpandableIndex.Cached Symbol EnumGuard)),
+      SourcePruningEnumerationShallowChild.prepareChild scs value = some action ∧
+      (∀ (extra : Nat), prepareChild heap (fuel + extra) scs value before = some rows) ∧
+      ExceptT.run (action before.core) = rows.map (fun result => .ok (result.1, result.2.core)) ∧
+      ((value = .empty ∧ rows = []) ∨
+        ∃ after : EnumerationExpandableIndex.Cached Symbol EnumGuard,
+          value ≠ .empty ∧ rows = [(.hole before.core.counter, after)] ∧
+          after.core.counter = before.core.counter + 1 ∧
+          after.core.counter = after.core.values.length ∧
+          after.core.representatives = before.core.representatives ∧ Roots after.core.representatives roots ∧
+          StorageValid after.core ∧ PendingRealized heap after.core ∧
+          EnumerationCanonicalWaiting.Correct roots after.core.values after.waiting ∧
+          (∀ (slot : Nat), SourcePruningEnumerationNativeIndex.candidate heap
+            ((after.core.values[slot]?).getD .eliminated) = some (after.expandable slot)) ∧
+          FragmentBound («Symbol» := Symbol) after.core.counter (.hole before.core.counter)) := by

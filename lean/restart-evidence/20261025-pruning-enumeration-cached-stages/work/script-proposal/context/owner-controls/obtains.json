@@ -1,0 +1,401 @@
+{
+  "packets": [
+    {
+      "scope": "complete.cons",
+      "from": "input",
+      "fields": [
+        {
+          "scope": "complete.cons",
+          "name": "value",
+          "type": "InternedConstructorTemplates.Value Symbol Constraint",
+          "used": true,
+          "reason": "Consumed actual packet field."
+        },
+        {
+          "scope": "complete.cons",
+          "name": "bucket",
+          "type": "List EnumerationState.Suspended",
+          "used": true,
+          "reason": "Consumed actual packet field."
+        }
+      ],
+      "field_count": 2,
+      "skipped_fields": []
+    },
+    {
+      "scope": "complete.some",
+      "from": "SourcePruningEnumerationCachedPrepare.complete heap before value bucket roots coherent (head Available) (head closed) storage realized paths counts flags (head bounded) nonterminal",
+      "fields": [
+        {
+          "scope": "complete.some",
+          "name": "headAction",
+          "type": "EnumerateM Symbol Constraint (Fragments.Fragment Symbol)",
+          "used": true,
+          "reason": "Consumed actual packet field."
+        },
+        {
+          "scope": "complete.some",
+          "name": "headFuel",
+          "type": "Nat",
+          "used": true,
+          "reason": "Consumed actual packet field."
+        },
+        {
+          "scope": "complete.some",
+          "name": "childRows",
+          "type": "List (Fragments.Fragment Symbol × EnumerationExpandableIndex.Cached Symbol Constraint)",
+          "used": true,
+          "reason": "Consumed actual packet field."
+        },
+        {
+          "scope": "complete.some",
+          "name": "headPrepared",
+          "type": "SourcePruningEnumerationShallowChild.prepareChild (EnumGuard := Constraint) bucket value = some headAction",
+          "used": true,
+          "reason": "Consumed actual packet field."
+        },
+        {
+          "scope": "complete.some",
+          "name": "headRun",
+          "type": "∀ (extra : Nat), SourcePruningEnumerationCachedPrepare.prepareChild heap (headFuel + extra) bucket value before = some childRows",
+          "used": true,
+          "reason": "Consumed actual packet field."
+        },
+        {
+          "scope": "complete.some",
+          "name": "headRaw",
+          "type": "ExceptT.run (headAction before.core) = childRows.map (fun result => .ok (result.1, result.2.core))",
+          "used": true,
+          "reason": "Consumed actual packet field."
+        },
+        {
+          "scope": "complete.some",
+          "name": "headShape",
+          "type": "(value = .empty ∧ childRows = []) ∨ ∃ middle : EnumerationExpandableIndex.Cached Symbol Constraint, value ≠ .empty ∧ childRows = [(.hole before.core.counter, middle)] ∧ middle.core.counter = before.core.counter + 1 ∧ middle.core.counter = middle.core.values.length ∧ middle.core.representatives = before.core.representatives ∧ Roots middle.core.representatives roots ∧ StorageValid middle.core ∧ PendingRealized heap middle.core ∧ EnumerationCanonicalWaiting.Correct roots middle.core.values middle.waiting ∧ (∀ (slot : Nat), SourcePruningEnumerationNativeIndex.candidate heap ((middle.core.values[slot]?).getD .eliminated) = some (middle.expandable slot)) ∧ FragmentBound («Symbol» := Symbol) middle.core.counter (.hole before.core.counter)",
+          "used": true,
+          "reason": "Consumed actual packet field."
+        }
+      ],
+      "field_count": 7,
+      "skipped_fields": []
+    },
+    {
+      "scope": "complete.some.empty",
+      "from": "headShape.left",
+      "fields": [
+        {
+          "scope": "complete.some.empty",
+          "name": "_emptyValue",
+          "type": "value = .empty",
+          "used": false,
+          "reason": "Retained but unused selected producer field."
+        },
+        {
+          "scope": "complete.some.empty",
+          "name": "childEmpty",
+          "type": "childRows = []",
+          "used": true,
+          "reason": "Consumed actual packet field."
+        }
+      ],
+      "field_count": 2,
+      "skipped_fields": [
+        "_emptyValue"
+      ]
+    },
+    {
+      "scope": "complete.some.singleton",
+      "from": "headShape.right",
+      "fields": [
+        {
+          "scope": "complete.some.singleton",
+          "name": "middle",
+          "type": "EnumerationExpandableIndex.Cached Symbol Constraint",
+          "used": true,
+          "reason": "Consumed actual packet field."
+        },
+        {
+          "scope": "complete.some.singleton",
+          "name": "_nonempty",
+          "type": "value ≠ .empty",
+          "used": false,
+          "reason": "Retained but unused selected producer field."
+        },
+        {
+          "scope": "complete.some.singleton",
+          "name": "childSingleton",
+          "type": "childRows = [(.hole before.core.counter, middle)]",
+          "used": true,
+          "reason": "Consumed actual packet field."
+        },
+        {
+          "scope": "complete.some.singleton",
+          "name": "middleCounter",
+          "type": "middle.core.counter = before.core.counter + 1",
+          "used": true,
+          "reason": "Consumed actual packet field."
+        },
+        {
+          "scope": "complete.some.singleton",
+          "name": "_middleAligned",
+          "type": "middle.core.counter = middle.core.values.length",
+          "used": false,
+          "reason": "Retained but unused selected producer field."
+        },
+        {
+          "scope": "complete.some.singleton",
+          "name": "middleForest",
+          "type": "middle.core.representatives = before.core.representatives",
+          "used": true,
+          "reason": "Consumed actual packet field."
+        },
+        {
+          "scope": "complete.some.singleton",
+          "name": "middlePaths",
+          "type": "Roots middle.core.representatives roots",
+          "used": true,
+          "reason": "Consumed actual packet field."
+        },
+        {
+          "scope": "complete.some.singleton",
+          "name": "middleStorage",
+          "type": "StorageValid middle.core",
+          "used": true,
+          "reason": "Consumed actual packet field."
+        },
+        {
+          "scope": "complete.some.singleton",
+          "name": "middleRealized",
+          "type": "PendingRealized heap middle.core",
+          "used": true,
+          "reason": "Consumed actual packet field."
+        },
+        {
+          "scope": "complete.some.singleton",
+          "name": "middleCounts",
+          "type": "EnumerationCanonicalWaiting.Correct roots middle.core.values middle.waiting",
+          "used": true,
+          "reason": "Consumed actual packet field."
+        },
+        {
+          "scope": "complete.some.singleton",
+          "name": "middleFlags",
+          "type": "∀ (slot : Nat), SourcePruningEnumerationNativeIndex.candidate heap ((middle.core.values[slot]?).getD .eliminated) = some (middle.expandable slot)",
+          "used": true,
+          "reason": "Consumed actual packet field."
+        },
+        {
+          "scope": "complete.some.singleton",
+          "name": "headBound",
+          "type": "FragmentBound («Symbol» := Symbol) middle.core.counter (.hole before.core.counter)",
+          "used": true,
+          "reason": "Consumed actual packet field."
+        }
+      ],
+      "field_count": 12,
+      "skipped_fields": [
+        "_nonempty",
+        "_middleAligned"
+      ]
+    },
+    {
+      "scope": "complete.tail",
+      "from": "ih middle middleStorage middleRealized middlePaths middleCounts middleFlags (tail Available) (tail closed) tailBounded",
+      "fields": [
+        {
+          "scope": "complete.tail",
+          "name": "tailFuel",
+          "type": "Nat",
+          "used": true,
+          "reason": "Consumed actual packet field."
+        },
+        {
+          "scope": "complete.tail",
+          "name": "rows",
+          "type": "List (Option (List (Fragments.Fragment Symbol)) × EnumerationExpandableIndex.Cached Symbol Constraint)",
+          "used": true,
+          "reason": "Consumed actual packet field."
+        },
+        {
+          "scope": "complete.tail",
+          "name": "after",
+          "type": "EnumerationExpandableIndex.Cached Symbol Constraint",
+          "used": true,
+          "reason": "Consumed actual packet field."
+        },
+        {
+          "scope": "complete.tail",
+          "name": "tailRun",
+          "type": "∀ (extra : Nat), run heap (tailFuel + extra) rest middle = some (rows, after)",
+          "used": true,
+          "reason": "Consumed actual packet field."
+        },
+        {
+          "scope": "complete.tail",
+          "name": "tailRaw",
+          "type": "ExceptT.run (SourcePruningEnumerationEdgeTraversal.runStaged (rest.map (fun input => (input.1, input.2, SourcePruningEnumerationShallowChild.prepareChild (EnumGuard := Constraint) input.2 input.1))) middle.core) = rows.map (fun row => .ok (row.1, row.2.core))",
+          "used": true,
+          "reason": "Consumed actual packet field."
+        },
+        {
+          "scope": "complete.tail",
+          "name": "grows",
+          "type": "middle.core.counter ≤ after.core.counter",
+          "used": true,
+          "reason": "Consumed actual packet field."
+        },
+        {
+          "scope": "complete.tail",
+          "name": "alignedAfter",
+          "type": "after.core.counter = after.core.values.length",
+          "used": true,
+          "reason": "Consumed actual packet field."
+        },
+        {
+          "scope": "complete.tail",
+          "name": "forestSame",
+          "type": "after.core.representatives = middle.core.representatives",
+          "used": true,
+          "reason": "Consumed actual packet field."
+        },
+        {
+          "scope": "complete.tail",
+          "name": "pathsAfter",
+          "type": "Roots after.core.representatives roots",
+          "used": true,
+          "reason": "Consumed actual packet field."
+        },
+        {
+          "scope": "complete.tail",
+          "name": "storageAfter",
+          "type": "StorageValid after.core",
+          "used": true,
+          "reason": "Consumed actual packet field."
+        },
+        {
+          "scope": "complete.tail",
+          "name": "realizedAfter",
+          "type": "PendingRealized heap after.core",
+          "used": true,
+          "reason": "Consumed actual packet field."
+        },
+        {
+          "scope": "complete.tail",
+          "name": "countsAfter",
+          "type": "EnumerationCanonicalWaiting.Correct roots after.core.values after.waiting",
+          "used": true,
+          "reason": "Consumed actual packet field."
+        },
+        {
+          "scope": "complete.tail",
+          "name": "flagsAfter",
+          "type": "∀ (slot : Nat), SourcePruningEnumerationNativeIndex.candidate heap ((after.core.values[slot]?).getD .eliminated) = some (after.expandable slot)",
+          "used": true,
+          "reason": "Consumed actual packet field."
+        },
+        {
+          "scope": "complete.tail",
+          "name": "tailShape",
+          "type": "rows = [] ∨ ∃ result : Option (List (Fragments.Fragment Symbol)), rows = [(result, after)] ∧ (∀ (fragments : List (Fragments.Fragment Symbol)), result = some fragments → FragmentsBound («Symbol» := Symbol) after.core.counter fragments)",
+          "used": true,
+          "reason": "Consumed actual packet field."
+        }
+      ],
+      "field_count": 14,
+      "skipped_fields": []
+    },
+    {
+      "scope": "complete.raw.tail.empty",
+      "from": "tailShape.left",
+      "fields": [
+        {
+          "scope": "complete.raw.tail.empty",
+          "name": "tailEmpty",
+          "type": "rows = []",
+          "used": true,
+          "reason": "Consumed actual packet field."
+        }
+      ],
+      "field_count": 1,
+      "skipped_fields": []
+    },
+    {
+      "scope": "complete.raw.tail.singleton",
+      "from": "tailShape.right",
+      "fields": [
+        {
+          "scope": "complete.raw.tail.singleton",
+          "name": "result",
+          "type": "Option (List (Fragments.Fragment Symbol))",
+          "used": true,
+          "reason": "Consumed actual packet field."
+        },
+        {
+          "scope": "complete.raw.tail.singleton",
+          "name": "tailSingleton",
+          "type": "rows = [(result, after)]",
+          "used": true,
+          "reason": "Consumed actual packet field."
+        },
+        {
+          "scope": "complete.raw.tail.singleton",
+          "name": "_tailBound",
+          "type": "∀ (fragments : List (Fragments.Fragment Symbol)), result = some fragments → FragmentsBound («Symbol» := Symbol) after.core.counter fragments",
+          "used": false,
+          "reason": "Retained but unused selected producer field."
+        }
+      ],
+      "field_count": 3,
+      "skipped_fields": [
+        "_tailBound"
+      ]
+    },
+    {
+      "scope": "complete.shape.tail.empty",
+      "from": "tailShape.left",
+      "fields": [
+        {
+          "scope": "complete.shape.tail.empty",
+          "name": "tailEmpty",
+          "type": "rows = []",
+          "used": true,
+          "reason": "Consumed actual packet field."
+        }
+      ],
+      "field_count": 1,
+      "skipped_fields": []
+    },
+    {
+      "scope": "complete.shape.tail.singleton",
+      "from": "tailShape.right",
+      "fields": [
+        {
+          "scope": "complete.shape.tail.singleton",
+          "name": "result",
+          "type": "Option (List (Fragments.Fragment Symbol))",
+          "used": true,
+          "reason": "Consumed actual packet field."
+        },
+        {
+          "scope": "complete.shape.tail.singleton",
+          "name": "tailSingleton",
+          "type": "rows = [(result, after)]",
+          "used": true,
+          "reason": "Consumed actual packet field."
+        },
+        {
+          "scope": "complete.shape.tail.singleton",
+          "name": "tailBound",
+          "type": "∀ (fragments : List (Fragments.Fragment Symbol)), result = some fragments → FragmentsBound («Symbol» := Symbol) after.core.counter fragments",
+          "used": true,
+          "reason": "Consumed actual packet field."
+        }
+      ],
+      "field_count": 3,
+      "skipped_fields": []
+    }
+  ],
+  "count": 9,
+  "field_count": 45,
+  "inline_fields": []
+}

@@ -1,0 +1,15 @@
+runsInterned ::
+    (Hashable symbol, Typeable symbol) =>
+    symbol -> Node symbol -> [(Term symbol, [(Constraint, Term symbol)])]
+runsInterned = runsFrom (const nodeEdges)
+
+-- | 'runs' with the order of the edges of each node, from the root.
+runsFrom ::
+    (Hashable symbol, Typeable symbol) =>
+    (Node symbol -> Node symbol -> [Edge symbol]) -> symbol -> Node symbol -> [(Term symbol, [(Constraint, Term symbol)])]
+runsFrom order recursionSymbol n =
+    map fst $ flip allBranches (initEnumerationState (order n) n) $ do
+        enumerateFully
+        term <- expandUVarWith recursionSymbol (intToUVar 0)
+        obligations <- gets _obligations
+        pending <- mapM (\(constraint, fragment) -> (constraint,) <$> expandTermFragWith recursionSymbol fragment) obligations

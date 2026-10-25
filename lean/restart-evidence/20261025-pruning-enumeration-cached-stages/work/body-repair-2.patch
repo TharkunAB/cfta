@@ -1,0 +1,29 @@
+--- strict-2
++++ strict-3
+@@ -102,12 +102,15 @@
+         | node _entry _edges _depth _free =>
+           simp only [SourcePruningEnumerationShallowChild.prepareChild,
+             Bool.of_not_eq_false terminal, ↓reduceIte] at prepared
++          cases prepared
+         | union _entry _members _depth _free =>
+           simp only [SourcePruningEnumerationShallowChild.prepareChild,
+             Bool.of_not_eq_false terminal, ↓reduceIte] at prepared
++          cases prepared
+         | mu _entry _body _depthShape _ordinaryShape =>
+           simp only [SourcePruningEnumerationShallowChild.prepareChild,
+             Bool.of_not_eq_false terminal, ↓reduceIte] at prepared
++          cases prepared
+       obtain ⟨headAction, headFuel, childRows, headPrepared, headRun, headRaw, headShape⟩ :=
+         SourcePruningEnumerationCachedPrepare.complete heap before value bucket roots coherent
+           (available _ (List.mem_cons_self ..)) (closed _ (List.mem_cons_self ..))
+@@ -154,8 +157,9 @@
+         · simp only [List.map_cons, prepared]
+           rw [SourcePruningEnumerationEdgeTraversal.runStaged]
+           rw [bind_single _ _ before.core middle.core (.hole before.core.counter)
+-            (by simpa only [childSingleton, List.map_cons, List.map_nil] using headRaw)]
++            (by simpa only [ExceptT.run, childSingleton, List.map_cons, List.map_nil] using headRaw)]
+           rw [run_bind, tailRaw]
++          dsimp only [lifted]
+           rcases tailShape with tailEmpty | ⟨result, tailSingleton, _tailBound⟩
+           · rw [tailEmpty]
+             rfl
