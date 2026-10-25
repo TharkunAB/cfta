@@ -98,6 +98,59 @@ TH/Generic extraction, valid-position build/read and source codec laws stay open
 
 
 
+
+## Native cached dispatcher completion
+
+Current source: `SourcePruningEnumerationCachedDispatch`.
+Proof: `b444d0e5cd094dcdcfe0768c6765244fbbc7b36b`. Main remains `74250bd889685da436cdbfe32ac4b5a0878ffd09`.
+The whole goal remains ACTIVE and incomplete. H6 remains strongest.
+
+One existing Dispatch.dispatch_complete supplies the SAME actual observation,
+returned Caller, queries, final memos, inventory, Post and branch packet.
+Post.effects.keeps derives grown-heap flags. Actual optional origins or the
+original two-present query receipt derive merged lookup/Available/closed.
+CachedAssimilation.complete consumes those facts at the SAME returned heap
+and captured enum core, with exact raw cached rows and endpoint invariants.
+
+Equal-ID/eliminated-source no-ops skip unused reads and preserve original
+Caller/memos/cache. Optional merged None, missing/decode None and raw rejection
+remain distinct. Empty returns no raw row with a separate pre-write enum
+cache; earlier Caller/memo effects remain. No endpoint is fabricated.
+
+Genuine initial Context, lazy slot domain, storage/realization/Roots/index
+laws and current WordRanges for one initial decoded request remain inputs.
+Context does not imply that bound; future Fold.Ranges is not substituted.
+The original TargetQuery.Receipt, intersection meaning, disabled native call,
+enabled guard/fourth-worker CallReads, saved queries and final tables remain.
+False keeps query, which may already be Empty. No native query repeats.
+
+Root selected one theorem, four haves and no new definition, let, instance
+declaration, induction or helper/type/carrier. Six literals / 126 lines
+remain. Source estimate 300–480, hard limit 720. The frozen owner pins
+178 payload files, 215 typed scopes, seven packets / 69 fields and seven
+case groups; 21 whole sources, 26 cuts / 427 lines, 34 routes / 35 project
+identities. The source review and owner/schema controls are bound.
+
+Validation: Strict attempt 1 passes with a literal empty log under all linters and warnings as errors. No Lean attempt has failed. All six original literals, 215 scoped types, seven packets with 69 fields, public types, premises and limits remain unchanged. No new helper, instance, monadic dictionary or proof limit is added. The source has 206 ordinary lines, below the selected 300 to 480 estimate and within hard cap 720; no padding was added. The installed build, complete public readback and aggregate Audit pass. The complete public signature occupies 262 output lines without display omissions. The older unused-inputs warning remains unchanged. No passing check was repeated. No seal has run. All actual complete raw logs and cap receipts remain. Read-only locators, metadata specialization and patch-label/count diagnostics stay separate from compiler and seal failures. Original frozen owners and source-bound drafts remain immutable.
+Installed focused build: 1311 jobs; Audit: 3725 jobs and
+76433 theorem dependency checks. Actual public axioms: complete reports propext, Classical.choice and Quot.sound.
+All actual failed inputs/raw logs/cap receipts remain. The documents-1 ledger
+stays separate. Exactly 26 prior CachedAssimilation inputs preserve the full
+13330-byte summary and archive-1/local-publication-1/push-1 families, canonical
+assessment and separate sealed peer. No future seal/push result is claimed.
+All six Haskell handoffs remain first. No Haskell change is claimed.
+
+The theorem is observational. Executable opaque-action payload retention or
+a justified raw-row adapter remains open. Arbitrary fault preservation,
+wider bounded observations, later Fold/terminal admission, native selector/
+partition/fallback, wrapper normalization/reconstruction, physical indexes,
+machine integers, extraction, Safe/LiveRoots and full driver remain open.
+H6 covers closed construction with valid cache/allocation history and any
+prescribed finite modeled node-call trace at derived bounds. Empty inherited
+payload preserves the same finite trees under formal guard/solver semantics.
+Full typing/pruning, solver implementation/runtime/resources/convergence
+remain open.
+
 ## Native cached assimilation mutation
 
 Current source: `SourcePruningEnumerationCachedAssimilation`.
