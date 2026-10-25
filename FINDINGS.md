@@ -70,6 +70,21 @@ Terminal parents retain the existing enumerateNode fallback boundary. Native
 children can still take their terminal dispatcher. No Haskell fix is needed.
 Details: lean/notes-current-pruning-enumeration-native-ordinary.md.
 
+### Concrete callbacks preserve native cache certificates
+
+The modeled concrete Left callback now returns the full indexed-cache
+certificate at its actual final cache. Safety comes from RenderStable.
+A separate compression frame retains root paths, stored values, ancestry,
+fragment targets and suspended-reference history. Frame alone is not used
+to infer safe storage. A fixed selection preference gives the same next
+selection after compression. Updated metadata can select another preference.
+The reframed completed receipt is an invariant certificate. It is not a new
+raw captured-edge execution receipt. Either callback Boolean is retained;
+a true pruning result makes no claim that the driver continues.
+No Haskell runtime defect or new repair is identified. External action:
+no new patch is proposed. Keep the repair table and Sized repair above.
+Details: lean/notes-current-pruning-enumeration-callback-cache.md.
+
 ### Selected receipts and concrete callback availability
 
 The selected ordinary model now retains fragment history and allocation
@@ -365,6 +380,29 @@ TH/Generic extraction, valid-position build/read and source codec laws stay open
 
 
 
+
+## Concrete callbacks retain the native indexed cache
+
+Proof: `faec19a56`. The goal stays ACTIVE.
+
+The concrete callback result now retains Admitted and FragmentHistory at
+its actual returned cache. Existing pending-reference history persists there.
+This includes actual root paths, realized native handles, canonical waiting
+counts, candidate flags, the captured fragment and dependency levels.
+Safety comes from the actual callback result, separately from its frame.
+No new input or callback execution is added. SelectedOrdinary stays exact
+and inherits the stronger completion output.
+
+For any fixed preference, pure next selection is unchanged by the callback's
+compression. Use the updated metadata's preference on both sides. The result
+does not equate scheduling preferences before and after metadata changes.
+All strict checks, public readback and Audit pass. Audit checks 76842
+dependencies. H6 remains the strongest end-to-end language theorem.
+Next: compose the actual callback Boolean with reject or scheduler restart,
+using its returned metadata and cache. Exact recursive-continuation/native
+effect interleaving, initial-only capacity, native Graph correspondence,
+extraction and whole-driver language semantics remain open.
+Details: `lean/notes-current-pruning-enumeration-callback-cache.md`.
 
 ## Selected ordinary receipts derive concrete fragment callbacks
 

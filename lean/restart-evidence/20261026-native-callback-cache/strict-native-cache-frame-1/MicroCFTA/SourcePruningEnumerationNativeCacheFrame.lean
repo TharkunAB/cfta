@@ -1,0 +1,75 @@
+import MicroCFTA.SourcePruningEnumerationNativeBranchCompletion
+import MicroCFTA.EnumerationPendingOrder
+import MicroCFTA.EnumerationPendingReplacement
+
+namespace MicroCFTA.SourcePruningEnumerationNativeBranchCompletion
+open EnumerationState EnumerationCorrectness EnumerationSchedule EnumerationDependencies
+open EnumerationCompressionFrame SourcePruningEnumerationObservation
+local notation "Symbol" => SourcePruningTemplates.Symbol
+local notation "Constraint" => SourceSymbolicIndex.Constraint FullSyntax.Formula
+local notation "Caller" => SourceCurrentAllocatedPartialState.State
+local notation "Queries" => SourceEndpointMemo.Memos
+local notation "Cached" => EnumerationExpandableIndex.Cached Symbol Constraint
+local notation "Fragment" => Fragments.Fragment Symbol
+variable {width : Nat}
+
+/-- A fixed preference selects the same next step after reads that keep the allocation counter. -/
+theorem selection_frame (preference : List Nat → Option Nat) (before : Cached)
+    (after : EnumerationState.State Symbol Constraint) (counter : after.counter = before.core.counter) :
+    EnumerationPureSelection.next preference (EnumerationExpandableIndex.frame after before) =
+      EnumerationPureSelection.next preference before := by
+  simp only [EnumerationPureSelection.next, EnumerationPureSelection.find,
+    EnumerationIndexSelection.candidates, EnumerationExpandableIndex.frame, counter]
+
+/-- An actual safe compressed cache retains native handles and both maintained indexes. -/
+theorem cacheValid_frame (caller : Caller width) (before : Cached)
+    (after : EnumerationState.State Symbol Constraint) (frame : Frame before.core after)
+    (safe : Safe after) (valid : CacheValid caller before) :
+    CacheValid caller (EnumerationExpandableIndex.frame after before) := by
+  obtain ⟨roots, paths, _storage, realized, counts, flags⟩ := valid
+  refine ⟨roots, ?_, safe.1, ?_, ?_, ?_⟩
+  · intro slot
+    obtain ⟨size, path⟩ := paths slot
+    exact ⟨size, (frame.reaches slot (roots slot) size).mpr path⟩
+  · intro slot node scs stored
+    exact realized slot node scs (by simpa only [EnumerationExpandableIndex.frame, frame.values] using stored)
+  · simpa only [EnumerationExpandableIndex.frame, frame.values] using counts
+  · simpa only [EnumerationExpandableIndex.frame, frame.values] using flags
+
+/-- A completed fragment retains its full native receipt certificate after safe callback reads. -/
+theorem admitted_complete_frame (uv : Nat) (fragment : Fragment) (caller : Caller width)
+    (queries : Queries) (before : Cached) (after : EnumerationState.State Symbol Constraint)
+    (frame : Frame before.core after) (safe : Safe after)
+    (admitted : Admitted uv (.complete fragment caller queries before)) :
+    Admitted uv (.complete fragment caller queries (EnumerationExpandableIndex.frame after before)) := by
+  obtain ⟨valid, _beforeSafe, allocated, stored, ancestry, size, path⟩ := admitted
+  refine ⟨cacheValid_frame caller before after frame safe valid, safe, ?_, ?_, ?_, size,
+    (frame.reaches uv uv size).mpr path⟩
+  · simpa only [EnumerationExpandableIndex.frame, frame.counter] using allocated
+  · simpa only [EnumerationExpandableIndex.frame, frame.values] using stored
+  · simpa only [EnumerationExpandableIndex.frame, frame.expansionAncestry] using ancestry
+
+/-- Callback compression retains allocation growth, pending targets and the fragment dependency order. -/
+theorem fragmentHistory_complete_frame (initial : EnumerationState.State Symbol Constraint)
+    (fragment : Fragment) (caller : Caller width) (queries : Queries) (before : Cached)
+    (after : EnumerationState.State Symbol Constraint) (frame : Frame before.core after)
+    (history : FragmentHistory initial (.complete fragment caller queries before)) :
+    FragmentHistory initial (.complete fragment caller queries (EnumerationExpandableIndex.frame after before)) := by
+  refine ⟨?_, ?_, ?_⟩
+  · simpa only [EnumerationExpandableIndex.frame, frame.counter] using history.1
+  · intro uv hole
+    obtain ⟨root, size, node, scs, path, stored⟩ := history.2.1 uv hole
+    refine ⟨root, size, node, scs, (frame.reaches uv root size).mpr path, ?_⟩
+    simpa only [EnumerationExpandableIndex.frame, frame.values] using stored
+  · intro level frontier ordered
+    obtain ⟨nextLevel, afterOrder⟩ := history.2.2 level frontier ordered
+    exact ⟨nextLevel, EnumerationOrder.frame_stratified before.core after frame nextLevel (frontier + 1) afterOrder⟩
+
+/-- Callback compression retains suspended-reference history at the same returned cache. -/
+theorem pending_complete_frame (fragment : Fragment) (caller : Caller width) (queries : Queries)
+    (before : Cached) (after : EnumerationState.State Symbol Constraint) (frame : Frame before.core after)
+    (history : Pending (.complete fragment caller queries before)) :
+    Pending (.complete fragment caller queries (EnumerationExpandableIndex.frame after before)) :=
+  EnumerationPendingReplacement.frame_pending before.core after frame history
+
+end MicroCFTA.SourcePruningEnumerationNativeBranchCompletion
