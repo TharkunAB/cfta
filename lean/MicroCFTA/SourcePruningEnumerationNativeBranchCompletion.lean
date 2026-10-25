@@ -127,6 +127,116 @@ private theorem head_complete
     rw [SourcePruningEnumerationCapturedEdge.run,
       SourcePruningEnumerationSelectedEdge.arity_rejected checkEmpty _ _ _ _ _ scs edge caller before memos.query rejected]
 
+/-- Each processed alternative retains its actual prefix Caller postcondition and query table. -/
+theorem complete_with_posts
+    (formulas : SourceGuards.Formulas FullSyntax.Formula)
+    (solver : SourceGuards.Entailment FullSyntax.Formula)
+    (inventory : Inventory) (caller : Caller width) (before : Cached) (checkEmpty : Bool)
+    (uv handle : Nat) (scs : List Suspended)
+    (parentEntry : Cache.Interned InternedBinderProtocol.NodeKey)
+    (storedEdges selectedEdges : List (EdgeValue Symbol Constraint))
+    (depth : Nat) (free : List InternedBinderProtocol.Reference) (roots : Nat → Nat) (memos : Memos)
+    (initial : Context formulas solver inventory caller memos)
+    (ready : EnumerationDriver.Ready uv before.core)
+    (stored : before.core.values[uv]? = some (.unenumerated (some handle) scs))
+    (decoded : lookupNode caller.checked.native.machine.heap handle = some (.node parentEntry storedEdges depth free))
+    (realized : PendingRealized caller.checked.native.machine.heap before.core)
+    (selected : ∀ edge ∈ selectedEdges, edge ∈ storedEdges)
+    (paths : Roots before.core.representatives roots)
+    (counts : EnumerationCanonicalWaiting.Correct roots before.core.values before.waiting)
+    (flags : ∀ slot, SourcePruningEnumerationNativeIndex.candidate caller.checked.native.machine.heap
+      ((before.core.values[slot]?).getD .eliminated) = some (before.expandable slot))
+    (pending : InputsPending before.core scs)
+    (ranges : Ranges checkEmpty uv scs before selectedEdges caller memos.query) :
+    ∃ (r n p h k : Nat) (processed : List (Receipt width)) (afterCaller : Caller width) (saved : Queries)
+      (final : Memos) (next : Inventory) (result : Result width),
+      (∀ er en P H ek, p ≤ P → h ≤ H →
+        SourcePruningEnumerationNativeBranches.run checkEmpty (r + er) (n + en) P H (k + ek)
+          uv scs before selectedEdges caller memos.query = result) ∧
+      Post formulas solver next caller afterCaller final ∧ final.query = saved ∧
+      (∀ receipt ∈ processed, Admitted uv receipt) ∧
+      (EnumerationReferences.PendingReferences before.core → EnumerationReferences.IncomingAvoid uv before.core →
+        ∀ receipt ∈ processed, Pending receipt) ∧
+      (∀ receipt ∈ processed,
+        ∃ (reached : Caller width) (savedQueries : Queries) (receiptInventory : Inventory) (receiptMemos : Memos),
+          advance receipt = some (reached, savedQueries) ∧
+          Post formulas solver receiptInventory caller reached receiptMemos ∧ receiptMemos.query = savedQueries) ∧
+      (result = .complete processed afterCaller saved ∨ result = .stopped processed (some .unhandled)) ∧
+      ((∀ edge ∈ selectedEdges, arityAllows edge.children.length scs = true →
+          SourcePruningEnumerationConstraint.project edge.entry.key.constraint ≠ none) →
+        result = .complete processed afterCaller saved) := by
+  induction selectedEdges generalizing inventory caller memos with
+  | nil =>
+      exact ⟨0, 0, 0, 0, 0, [], caller, memos.query, memos, inventory, .complete [] caller memos.query,
+        fun _ _ _ _ _ _ _ => rfl, Post.refl initial, rfl, by simp,
+        (by intro _ _ receipt member; cases member), (by intro receipt member; cases member), .inl rfl, fun _ => rfl⟩
+  | cons edge rest ih =>
+      obtain ⟨r, n, p, h, k, receipt, middleCaller, middleQueries, middleMemos, middleInventory,
+        headRun, headPost, headQueries, admitted, headPending, shape⟩ :=
+        head_complete formulas solver inventory caller before checkEmpty uv handle scs parentEntry storedEdges depth free
+          edge roots memos initial ready stored decoded realized (selected edge (by simp)) paths counts flags pending ranges.1
+      rcases shape with continued | ⟨unhandled, allowed, projected⟩
+      · have kept := headPost.effects.keeps
+        have middleRealized : PendingRealized middleCaller.checked.native.machine.heap before.core :=
+          realized_preserved _ _ before.core before.core realized (EnumerationCompressionFrame.Frame.refl _) kept
+        have middleFlags := SourcePruningEnumerationNativeGrowth.flags _ _ kept before flags
+        have tailRanges : Ranges checkEmpty uv scs before rest middleCaller middleMemos.query := by
+          rw [headQueries]
+          apply ranges.2 r n p h k receipt middleCaller middleQueries
+          · simpa only [Nat.add_zero] using headRun 0 0 p h 0 (Nat.le_refl _) (Nat.le_refl _)
+          · exact continued
+        obtain ⟨tr, tn, tp, th, tk, processed, afterCaller, saved, final, next, tailResult,
+          tailRun, tailPost, querySame, admittedTail, tailPending, tailPosts, tailShape, tailSupported⟩ :=
+          ih middleInventory middleCaller middleMemos headPost.context
+            (lookupNode_keeps _ _ kept handle _ decoded) middleRealized
+            (fun chosen member => selected chosen (List.mem_cons_of_mem _ member)) middleFlags tailRanges
+        let result : Result width := match (generalizing := false) tailResult with
+          | .complete receipts afterCaller saved => .complete (receipt :: receipts) afterCaller saved
+          | .stopped receipts current => .stopped (receipt :: receipts) current
+        refine ⟨r + tr, n + tn, max p tp, max h th, k + tk, receipt :: processed,
+          afterCaller, saved, final, next, result, ?_, headPost.trans tailPost, querySame, ?_, ?_, ?_, ?_, ?_⟩
+        · intro er en P H ek largeP largeH
+          have first := headRun (tr + er) (tn + en) P H (tk + ek)
+            (Nat.le_trans (Nat.le_max_left _ _) largeP) (Nat.le_trans (Nat.le_max_left _ _) largeH)
+          have last := tailRun (r + er) (n + en) P H (k + ek)
+            (Nat.le_trans (Nat.le_max_right _ _) largeP) (Nat.le_trans (Nat.le_max_right _ _) largeH)
+          have later : SourcePruningEnumerationNativeBranches.run checkEmpty (r + tr + er) (n + tn + en) P H
+              (k + tk + ek) uv scs before rest middleCaller middleMemos.query = tailResult := by
+            simpa only [Nat.add_assoc, Nat.add_left_comm, Nat.add_comm] using last
+          rw [headQueries] at later
+          simp only [Nat.add_assoc] at later
+          simp only [SourcePruningEnumerationNativeBranches.run, Nat.add_assoc, first, continued, later]
+          rfl
+        · intro current member
+          rcases List.mem_cons.mp member with same | member
+          · simpa only [same] using admitted
+          · exact admittedTail current member
+        · intro history incoming current member
+          rcases List.mem_cons.mp member with same | member
+          · simpa only [same] using headPending history incoming
+          · exact tailPending history incoming current member
+        · intro current member
+          rcases List.mem_cons.mp member with same | member
+          · subst current
+            exact ⟨middleCaller, middleQueries, middleInventory, middleMemos, continued, headPost, headQueries⟩
+          · obtain ⟨reached, savedQueries, receiptInventory, receiptMemos, reachedRun, receiptPost, receiptQueries⟩ :=
+              tailPosts current member
+            exact ⟨reached, savedQueries, receiptInventory, receiptMemos, reachedRun, headPost.trans receiptPost, receiptQueries⟩
+        · rcases tailShape with completed | stopped
+          · exact .inl (by simp only [result, completed])
+          · exact .inr (by simp only [result, stopped])
+        · intro supported
+          have finished := tailSupported (fun chosen member fits =>
+            supported chosen (List.mem_cons_of_mem _ member) fits)
+          simp only [result, finished]
+      · subst receipt
+        refine ⟨r, n, p, h, k, [], middleCaller, middleQueries, middleMemos, middleInventory,
+          .stopped [] (some .unhandled), ?_, headPost, headQueries, by simp,
+          (by intro _ _ current member; cases member), (by intro current member; cases member), .inr rfl, ?_⟩
+        · intro er en P H ek largeP largeH
+          simp only [SourcePruningEnumerationNativeBranches.run, headRun er en P H ek largeP largeH, advance]
+        · intro supported
+          exact (supported edge (by simp) allowed projected).elim
 /-- Genuine alternatives derive one serial scan, stopping only at unsupported preparation. -/
 theorem complete
     (formulas : SourceGuards.Formulas FullSyntax.Formula)
@@ -161,70 +271,11 @@ theorem complete
       ((∀ edge ∈ selectedEdges, arityAllows edge.children.length scs = true →
           SourcePruningEnumerationConstraint.project edge.entry.key.constraint ≠ none) →
         result = .complete processed afterCaller saved) := by
-  induction selectedEdges generalizing inventory caller memos with
-  | nil =>
-      exact ⟨0, 0, 0, 0, 0, [], caller, memos.query, memos, inventory, .complete [] caller memos.query,
-        fun _ _ _ _ _ _ _ => rfl, Post.refl initial, rfl, by simp,
-        (by intro _ _ receipt member; cases member), .inl rfl, fun _ => rfl⟩
-  | cons edge rest ih =>
-      obtain ⟨r, n, p, h, k, receipt, middleCaller, middleQueries, middleMemos, middleInventory,
-        headRun, headPost, headQueries, admitted, headPending, shape⟩ :=
-        head_complete formulas solver inventory caller before checkEmpty uv handle scs parentEntry storedEdges depth free
-          edge roots memos initial ready stored decoded realized (selected edge (by simp)) paths counts flags pending ranges.1
-      rcases shape with continued | ⟨unhandled, allowed, projected⟩
-      · have kept := headPost.effects.keeps
-        have middleRealized : PendingRealized middleCaller.checked.native.machine.heap before.core :=
-          realized_preserved _ _ before.core before.core realized (EnumerationCompressionFrame.Frame.refl _) kept
-        have middleFlags := SourcePruningEnumerationNativeGrowth.flags _ _ kept before flags
-        have tailRanges : Ranges checkEmpty uv scs before rest middleCaller middleMemos.query := by
-          rw [headQueries]
-          apply ranges.2 r n p h k receipt middleCaller middleQueries
-          · simpa only [Nat.add_zero] using headRun 0 0 p h 0 (Nat.le_refl _) (Nat.le_refl _)
-          · exact continued
-        obtain ⟨tr, tn, tp, th, tk, processed, afterCaller, saved, final, next, tailResult,
-          tailRun, tailPost, querySame, admittedTail, tailPending, tailShape, tailSupported⟩ :=
-          ih middleInventory middleCaller middleMemos headPost.context
-            (lookupNode_keeps _ _ kept handle _ decoded) middleRealized
-            (fun chosen member => selected chosen (List.mem_cons_of_mem _ member)) middleFlags tailRanges
-        let result : Result width := match (generalizing := false) tailResult with
-          | .complete receipts afterCaller saved => .complete (receipt :: receipts) afterCaller saved
-          | .stopped receipts current => .stopped (receipt :: receipts) current
-        refine ⟨r + tr, n + tn, max p tp, max h th, k + tk, receipt :: processed,
-          afterCaller, saved, final, next, result, ?_, headPost.trans tailPost, querySame, ?_, ?_, ?_, ?_⟩
-        · intro er en P H ek largeP largeH
-          have first := headRun (tr + er) (tn + en) P H (tk + ek)
-            (Nat.le_trans (Nat.le_max_left _ _) largeP) (Nat.le_trans (Nat.le_max_left _ _) largeH)
-          have last := tailRun (r + er) (n + en) P H (k + ek)
-            (Nat.le_trans (Nat.le_max_right _ _) largeP) (Nat.le_trans (Nat.le_max_right _ _) largeH)
-          have later : SourcePruningEnumerationNativeBranches.run checkEmpty (r + tr + er) (n + tn + en) P H
-              (k + tk + ek) uv scs before rest middleCaller middleMemos.query = tailResult := by
-            simpa only [Nat.add_assoc, Nat.add_left_comm, Nat.add_comm] using last
-          rw [headQueries] at later
-          simp only [Nat.add_assoc] at later
-          simp only [SourcePruningEnumerationNativeBranches.run, Nat.add_assoc, first, continued, later]
-          rfl
-        · intro current member
-          rcases List.mem_cons.mp member with same | member
-          · simpa only [same] using admitted
-          · exact admittedTail current member
-        · intro history incoming current member
-          rcases List.mem_cons.mp member with same | member
-          · simpa only [same] using headPending history incoming
-          · exact tailPending history incoming current member
-        · rcases tailShape with completed | stopped
-          · exact .inl (by simp only [result, completed])
-          · exact .inr (by simp only [result, stopped])
-        · intro supported
-          have finished := tailSupported (fun chosen member fits =>
-            supported chosen (List.mem_cons_of_mem _ member) fits)
-          simp only [result, finished]
-      · subst receipt
-        refine ⟨r, n, p, h, k, [], middleCaller, middleQueries, middleMemos, middleInventory,
-          .stopped [] (some .unhandled), ?_, headPost, headQueries, by simp,
-          (by intro _ _ current member; cases member), .inr rfl, ?_⟩
-        · intro er en P H ek largeP largeH
-          simp only [SourcePruningEnumerationNativeBranches.run, headRun er en P H ek largeP largeH, advance]
-        · intro supported
-          exact (supported edge (by simp) allowed projected).elim
+  obtain ⟨r, n, p, h, k, processed, afterCaller, saved, final, next, result,
+    run, post, query, admitted, history, _posts, shape, supported⟩ :=
+    complete_with_posts formulas solver inventory caller before checkEmpty uv handle scs parentEntry
+      storedEdges selectedEdges depth free roots memos initial ready stored decoded realized selected paths counts flags pending ranges
+  exact ⟨r, n, p, h, k, processed, afterCaller, saved, final, next, result,
+    run, post, query, admitted, history, shape, supported⟩
 
 end MicroCFTA.SourcePruningEnumerationNativeBranchCompletion
