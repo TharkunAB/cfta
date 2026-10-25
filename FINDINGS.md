@@ -23,6 +23,44 @@ Upstream `f1f266ab4` has the same five files as local `07229ca7f3`.
 All six repairs are in the imported main history. General proofs remain
 separate. All earlier repair entries and evidence remain below.
 
+### Specftacular parallel completion follow-ups
+
+Main `9d4e4d584aa7a681f075790e98466afe7531838a` is imported.
+It adds finite completion fuel, optional parallel tests and speculation.
+The default completion limit is 32768 consumed critical pairs. Zero is
+unlimited. These changes do not modify native CFTA enumeration or Lean.
+The six merged repairs in the table above remain unchanged.
+
+`specftacular/src/Specftacular/Rewriting.hs:1113` waits for every speculative
+worker. Line 1114 propagates every worker exception. The caller at lines
+1078 to 1091 consumes decisions only through the first new equation, then
+requeues all later pairs. Thus unused suffix work can raise an exception
+or delay the earlier result. The retained exact-helper reproducer confirms
+both cases. A serial prefix returns `Just ()`; a concurrent suffix error
+raises `discarded suffix`. A blocked suffix prevents that prefix from
+returning within 500 ms. These probes establish helper behavior. They do
+not establish a failure of actual completion on valid finite terms.
+
+Suggested external repair: consume results in input order through the first
+`Just`, propagate only demanded-prefix exceptions, and cancel remaining
+workers. Preserve every unconsumed pair for requeueing. If the current zip
+interface stays, pad cancelled suffix decisions with `Nothing`. Truncating
+the decision list alone would lose queued pairs. No repair is applied here.
+
+Two further source-level concerns remain unvalidated at runtime.
+`DecisionTree.hs:175` waits for all comparison chunks before selecting the
+first difference; cancellation checks occur only between comparisons.
+`Specftacular.hs:1357` discards enumeration worker identities and does not
+stop surviving workers on caller cancellation. The latter helper now runs
+in default phases 1 to 3. Public API liveness and worker cleanup need
+focused reproductions before an external repair is claimed.
+
+Evidence and both original and corrected public probe inputs are retained
+under `lean/restart-evidence/20261025-native-selection/upstream`.
+Goldens pass at one and two capabilities. The optional-flag comparison
+preserves the complete four-law mini-list sequence. Public exponents -1
+and 63 are rejected. No new suite or benchmark matrix was added.
+
 ### Generated scalar-view names ending in #
 
 The original cfta-th producer accepted legal MagicHash source names, then
@@ -105,6 +143,44 @@ TH/Generic extraction, valid-position build/read and source codec laws stay open
 
 
 
+
+## Native cached selection and upstream integration
+
+Current proof: `SourcePruningEnumerationSelection` at
+`805aa57cf3dc5df066010194ae74ef3396c222ec`.
+Main `9d4e4d584aa7a681f075790e98466afe7531838a` is merged at
+`eb52d43780d5b1f3b260bb51fbef86526d0e0830`. The goal stays ACTIVE.
+H6 remains the strongest end-to-end theorem.
+
+The actual pure cached selector now derives `EnumerationDriver.Ready`
+from native candidate flags, exact canonical waiting counts, root paths
+and `Safe`. No `Graph` correspondence premise is used. Selection gives an
+allocated candidate with no waiting entry. Exact counts separate its class
+from every stored pending reference. `PendingRealized` also derives its
+actual decoded, available, closed pending value. Empty remains eligible.
+Recursive boundaries require a nonempty suspended bucket. The result does
+not assert that the selected value is ordinary or nonempty.
+
+Strict Lean checking, installed public readback and the aggregate Audit
+pass. The audit checks 76525 theorems. All four new theorems use only the
+allowed standard axioms. The first failed strict input and its full log
+remain in `lean/restart-evidence/20261025-native-selection`.
+
+Upstream changes only Specftacular and its documents. Existing goldens pass
+at one and two capabilities. A public probe preserves all four mini-list
+laws with optional parallel tests and speculation. Invalid completion
+exponents -1 and 63 are rejected. Formatting checks pass. An exact-helper
+probe confirms unused speculative suffix exceptions and blocking. These
+are external repair follow-ups in `FINDINGS.md`; no Haskell repair is made.
+
+The next substantive gap is root protection through actual child expansion
+and final captured-slot installation. The native write-site audit suggests
+that stored pending buckets have no terminal constraint. Terminal child
+fallback must preserve the outer held root. This history property is not
+yet a global theorem. Arbitrary mixed calls, initial-only numeric admission,
+whole typing/pruning, extraction, concrete solver, resources, convergence
+and full Haskell correspondence remain open. Details and restart targets:
+`lean/notes-current-pruning-enumeration-selection.md`.
 
 ## Native cached terminal adapter
 
