@@ -1,0 +1,54 @@
+/tmp/mcfta-native-replacement-20261025/replacement-strict-4/MicroCFTA/SourcePruningEnumerationReplacement.lean:75:14: error: Tactic `subst` failed: invalid equality proof, it is not of the form (x = t) or (t = x)
+  some handle = some newHandle
+
+case inr
+EnumGuard NativeGuard : Type
+heap nextHeap : InternedConstructorTemplates.State Symbol NativeGuard
+kept : SourceEqualityRequiredCache.Keeps heap nextHeap
+before : EnumerationExpandableIndex.Cached Symbol EnumGuard
+after : EnumerationState.State Symbol EnumGuard
+target oldHandle newHandle : Nat
+scs : List Suspended
+value : Value Symbol NativeGuard
+roots : Nat → Nat
+safe : Safe before.core
+paths : Roots before.core.representatives roots
+stored : before.core.values[target]? = some (UVarValue.unenumerated (some oldHandle) scs)
+realized : PendingRealized heap before.core
+decoded : lookupNode nextHeap newHandle = some value
+available : Available nextHeap value
+closed : value.free = []
+counts : EnumerationCanonicalWaiting.Correct roots before.core.values before.waiting
+flags :
+  ∀ (slot : Nat),
+    SourcePruningEnumerationNativeIndex.candidate heap (before.core.values[slot]?.getD UVarValue.eliminated) =
+      some (before.expandable slot)
+written : Success (setValue target (UVarValue.unenumerated (some newHandle) scs)) before.core () after
+shape :
+  after =
+    { counter := before.core.counter, representatives := before.core.representatives,
+      values := before.core.values.set target (UVarValue.unenumerated (some newHandle) scs),
+      obligations := before.core.obligations, recursionAncestry := before.core.recursionAncestry,
+      expansionAncestry := before.core.expansionAncestry }
+inside : target < before.core.values.length
+root : IsRoot before.core.representatives target
+bounded : SlotBound before.core.counter (UVarValue.unenumerated (some newHandle) scs)
+afterSafe : Safe after
+grownFlags :
+  ∀ (slot : Nat),
+    SourcePruningEnumerationNativeIndex.candidate nextHeap (before.core.values[slot]?.getD UVarValue.eliminated) =
+      some (before.expandable slot)
+grownRealized : PendingRealized nextHeap before.core
+slot handle : Nat
+bucket : List Suspended
+read :
+  { counter := before.core.counter, representatives := before.core.representatives,
+          values := before.core.values.set target (UVarValue.unenumerated (some newHandle) scs),
+          obligations := before.core.obligations, recursionAncestry := before.core.recursionAncestry,
+          expansionAncestry := before.core.expansionAncestry }.values[slot]? =
+    some (UVarValue.unenumerated (some handle) bucket)
+fresh : UVarValue.unenumerated (some handle) bucket = UVarValue.unenumerated (some newHandle) scs
+left✝ : some handle = some newHandle
+right✝ : bucket = scs
+⊢ ∃ value, lookupNode nextHeap handle = some value ∧ Available nextHeap value ∧ value.free = []
+/tmp/mcfta-native-replacement-20261025/replacement-strict-4/MicroCFTA/SourcePruningEnumerationReplacement.lean:87:35: error: invalid occurrence of `·` notation, it must be surrounded by parentheses (e.g. `(· + 1)`)

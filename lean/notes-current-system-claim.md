@@ -1,5 +1,26 @@
 # Current system claim
 
+## Actual native narrowing derives indexed caches
+
+Replacement and reads: `9d4de2db2`. Narrowing producer: `04a5ba6d0`.
+The goal stays ACTIVE.
+
+Actual narrowing now derives the complete native enumeration cache for each
+nonempty result. Equal handles keep the framed read cache. Changed handles
+retain the actual representative read and write. The full old bucket is
+removed and the full new bucket is added. Canonicality proves waiting-map
+identity. The target flag is recomputed from the new node. Ready, root paths,
+realization and reference history persist at the same written core.
+Empty still has no successful enumeration branch. Old producers and workers stay.
+
+Both new modules, Audit imports and installed public readback pass. Audit
+checks 76721 theorem dependencies. H6 remains the strongest end-to-end language
+result. Haskell is unchanged. Next: actual selection/recursion/callback/entry
+composition and the full checked Caller/memo Context producer for narrowing.
+The new theorem derives a native heap, not that complete Caller/Post packet.
+Fragment-hole history, extraction and whole-driver semantics remain open.
+Details: `lean/notes-current-pruning-enumeration-indexed-narrowing.md`.
+
 ## Native narrowing retains pending-reference history
 
 Compression and replacement: `0ab9d22a9`. Producer: `111c8d8fb`.

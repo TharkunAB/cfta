@@ -1,0 +1,17 @@
+import MicroCFTA.SourcePruningEnumerationNarrowCache
+set_option pp.maxSteps 1000000
+set_option pp.deepTerms true
+#check MicroCFTA.SourcePruningEnumerationReplacement.count_cancel
+#print axioms MicroCFTA.SourcePruningEnumerationReplacement.count_cancel
+#check MicroCFTA.SourcePruningEnumerationReplacement.complete
+#print axioms MicroCFTA.SourcePruningEnumerationReplacement.complete
+#check MicroCFTA.SourcePruningEnumerationReplacement.after_read
+#print axioms MicroCFTA.SourcePruningEnumerationReplacement.after_read
+#check MicroCFTA.SourcePruningEnumerationNarrowCache.complete
+#print axioms MicroCFTA.SourcePruningEnumerationNarrowCache.complete
+#check MicroCFTA.SourcePruningEnumerationAction.prepare_pending_complete
+#print axioms MicroCFTA.SourcePruningEnumerationAction.prepare_pending_complete
+#check MicroCFTA.EnumerationPendingReplacement.frame_incoming
+#print axioms MicroCFTA.EnumerationPendingReplacement.frame_incoming
+#check MicroCFTA.SourcePruningRecordTypes.recordTypes_frame
+#print axioms MicroCFTA.SourcePruningRecordTypes.recordTypes_frame

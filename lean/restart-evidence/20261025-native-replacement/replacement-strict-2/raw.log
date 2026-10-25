@@ -1,0 +1,124 @@
+/tmp/mcfta-native-replacement-20261025/replacement-strict-2/MicroCFTA/SourcePruningEnumerationReplacement.lean:62:17: error: don't know how to synthesize implicit argument `Symbol`
+  @SlotBound ?m.221 before.core.counter (UVarValue.unenumerated (some newHandle) scs)
+context:
+EnumGuard NativeGuard : Type
+heap nextHeap : InternedConstructorTemplates.State Symbol NativeGuard
+kept : SourceEqualityRequiredCache.Keeps heap nextHeap
+before : EnumerationExpandableIndex.Cached Symbol EnumGuard
+after : EnumerationState.State Symbol EnumGuard
+target oldHandle newHandle : Nat
+scs : List Suspended
+value : Value Symbol NativeGuard
+roots : Nat → Nat
+safe : Safe before.core
+paths : Roots before.core.representatives roots
+stored : before.core.values[target]? = some (UVarValue.unenumerated (some oldHandle) scs)
+realized : PendingRealized heap before.core
+decoded : lookupNode nextHeap newHandle = some value
+available : Available nextHeap value
+closed : value.free = []
+counts : EnumerationCanonicalWaiting.Correct roots before.core.values before.waiting
+flags :
+  ∀ (slot : Nat),
+    SourcePruningEnumerationNativeIndex.candidate heap (before.core.values[slot]?.getD UVarValue.eliminated) =
+      some (before.expandable slot)
+written : Success (setValue target (UVarValue.unenumerated (some newHandle) scs)) before.core () after
+shape :
+  after =
+    { counter := before.core.counter, representatives := before.core.representatives,
+      values := before.core.values.set target (UVarValue.unenumerated (some newHandle) scs),
+      obligations := before.core.obligations, recursionAncestry := before.core.recursionAncestry,
+      expansionAncestry := before.core.expansionAncestry }
+inside : target < before.core.values.length
+root : IsRoot before.core.representatives target
+⊢ Type
+/tmp/mcfta-native-replacement-20261025/replacement-strict-2/MicroCFTA/SourcePruningEnumerationReplacement.lean:62:48: error: don't know how to synthesize implicit argument `Symbol`
+  @UVarValue.unenumerated ?m.221 (some newHandle) scs
+context:
+EnumGuard NativeGuard : Type
+heap nextHeap : InternedConstructorTemplates.State Symbol NativeGuard
+kept : SourceEqualityRequiredCache.Keeps heap nextHeap
+before : EnumerationExpandableIndex.Cached Symbol EnumGuard
+after : EnumerationState.State Symbol EnumGuard
+target oldHandle newHandle : Nat
+scs : List Suspended
+value : Value Symbol NativeGuard
+roots : Nat → Nat
+safe : Safe before.core
+paths : Roots before.core.representatives roots
+stored : before.core.values[target]? = some (UVarValue.unenumerated (some oldHandle) scs)
+realized : PendingRealized heap before.core
+decoded : lookupNode nextHeap newHandle = some value
+available : Available nextHeap value
+closed : value.free = []
+counts : EnumerationCanonicalWaiting.Correct roots before.core.values before.waiting
+flags :
+  ∀ (slot : Nat),
+    SourcePruningEnumerationNativeIndex.candidate heap (before.core.values[slot]?.getD UVarValue.eliminated) =
+      some (before.expandable slot)
+written : Success (setValue target (UVarValue.unenumerated (some newHandle) scs)) before.core () after
+shape :
+  after =
+    { counter := before.core.counter, representatives := before.core.representatives,
+      values := before.core.values.set target (UVarValue.unenumerated (some newHandle) scs),
+      obligations := before.core.obligations, recursionAncestry := before.core.recursionAncestry,
+      expansionAncestry := before.core.expansionAncestry }
+inside : target < before.core.values.length
+root : IsRoot before.core.representatives target
+⊢ Type
+/tmp/mcfta-native-replacement-20261025/replacement-strict-2/MicroCFTA/SourcePruningEnumerationReplacement.lean:57:121: error: unsolved goals
+EnumGuard NativeGuard : Type
+heap nextHeap : InternedConstructorTemplates.State Symbol NativeGuard
+kept : SourceEqualityRequiredCache.Keeps heap nextHeap
+before : EnumerationExpandableIndex.Cached Symbol EnumGuard
+after : EnumerationState.State Symbol EnumGuard
+target oldHandle newHandle : Nat
+scs : List Suspended
+value : Value Symbol NativeGuard
+roots : Nat → Nat
+safe : Safe before.core
+paths : Roots before.core.representatives roots
+stored : before.core.values[target]? = some (UVarValue.unenumerated (some oldHandle) scs)
+realized : PendingRealized heap before.core
+decoded : lookupNode nextHeap newHandle = some value
+available : Available nextHeap value
+closed : value.free = []
+counts : EnumerationCanonicalWaiting.Correct roots before.core.values before.waiting
+flags :
+  ∀ (slot : Nat),
+    SourcePruningEnumerationNativeIndex.candidate heap (before.core.values[slot]?.getD UVarValue.eliminated) =
+      some (before.expandable slot)
+written : Success (setValue target (UVarValue.unenumerated (some newHandle) scs)) before.core () after
+shape :
+  after =
+    { counter := before.core.counter, representatives := before.core.representatives,
+      values := before.core.values.set target (UVarValue.unenumerated (some newHandle) scs),
+      obligations := before.core.obligations, recursionAncestry := before.core.recursionAncestry,
+      expansionAncestry := before.core.expansionAncestry }
+inside : target < before.core.values.length
+root : IsRoot before.core.representatives target
+⊢ ∃ fuel cached,
+    (∀ (extra : Nat),
+        SourcePruningEnumerationNativeIndex.write nextHeap (fuel + extra) target
+            (UVarValue.unenumerated (some newHandle) scs) scs scs before =
+          some cached) ∧
+      cached.core = after ∧
+        cached.waiting = before.waiting ∧
+          (cached.expandable = fun slot =>
+              if slot = target then !(MergedOrdinaryHeight.recursiveBoundary value && scs.isEmpty)
+              else before.expandable slot) ∧
+            Safe after ∧
+              Roots after.representatives roots ∧
+                PendingRealized nextHeap after ∧
+                  after.values[target]? = some (UVarValue.unenumerated (some newHandle) scs) ∧
+                    EnumerationCanonicalWaiting.Correct roots after.values cached.waiting ∧
+                      (∀ (slot : Nat),
+                          SourcePruningEnumerationNativeIndex.candidate nextHeap
+                              (after.values[slot]?.getD UVarValue.eliminated) =
+                            some (cached.expandable slot)) ∧
+                        (EnumerationDriver.Ready target before.core → EnumerationDriver.Ready target after) ∧
+                          (EnumerationReferences.PendingReferences before.core →
+                              EnumerationReferences.PendingReferences after) ∧
+                            ∀ (held : Nat),
+                              EnumerationReferences.IncomingAvoid held before.core →
+                                EnumerationReferences.IncomingAvoid held after
