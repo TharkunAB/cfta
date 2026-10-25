@@ -108,10 +108,15 @@ theorem residualScan_perm [DecidableEq State]
 
 /-- A validated original graph has a complete finite state domain and raw constraints. -/
 structure Input (State Symbol Annotation : Type) where
+  /-- The state selected by public queries. -/
   root : State
+  /-- The finite carrier used by every source scan. -/
   states : List State
+  /-- Every carrier state occurs in the finite list. -/
   complete : ∀ state, state ∈ states
+  /-- Each carrier state occurs once. -/
   distinct : states.Nodup
+  /-- The original ordered and annotated transitions. -/
   rows : State → List (Row State Symbol Annotation)
 
 /-- Canonical refinement sees every original row before any trim or guard check. -/
@@ -170,8 +175,9 @@ noncomputable def publicReference [DecidableEq State] [DecidableEq Formula] [Ord
 /-- The source dispatcher scans original annotations before selecting either sorted worker. -/
 noncomputable def publicSized [DecidableEq State] [DecidableEq Formula] [Ord (Label Formula)]
     (input : Input State (Label Formula) (Constraint Formula)) : Except Unit (Api (Label Formula)) :=
-  if plainCheck input.rows input.states && SourceSizedDispatchGraph.unambiguousRows
-      (ordinaryRows (sortedRows input)) input.states input.complete then
+  if plainCheck input.rows input.states &&
+      (SourceSizedDeterministic.bottomUpDeterministic (ordinaryRows (sortedRows input)) input.states ||
+        SourceSizedDispatchGraph.unambiguousRows (ordinaryRows (sortedRows input)) input.states input.complete) then
     .ok (optimizedApi (ordinaryRows (sortedRows input)) input.root)
   else publicReference input
 

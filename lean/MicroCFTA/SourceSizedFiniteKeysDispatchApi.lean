@@ -3,7 +3,8 @@ import MicroCFTA.SourceSizedFiniteKeysDispatchScans
 /-!
 # Original-map Sized dispatch and query equality
 
-The actual finite key-pair minimum calculation supplies the optimized gate.
+The deterministic key check or finite key-pair minimum calculation supplies
+the optimized gate.
 Ordered row readback supplies each query sequence. These facts give exact
 public dispatch equality for arbitrary original state types.
 -/
@@ -41,25 +42,20 @@ theorem raw_unique [DecidableEq Symbol] [Ord Symbol] [Std.TransOrd Symbol] [Std.
 theorem optimized_of_unique [DecidableEq Alphabet]
     (rows : Automaton Carrier Alphabet) (plain : Decoder.Plain rows)
     (unique : SizedRank.Unambiguous rows) (root : Carrier) :
-    optimizedApi rows root = referenceApi rows root := by
-  have reference := SourceSizedReference.classes_eq_enumerate rows plain unique
-  change Api.mk _ _ _ _ = Api.mk _ _ _ _
-  congr 1
-  · funext size
-    rw [SourceSizedDispatch.terms_exact, reference_terms_toNat, reference]
-  · funext size
-    dsimp only [optimizedApi, referenceApi, SourceSizedQueries.countSigned]
-    rw [countAt_correct, reference_terms_toNat, reference]
-  · funext size rank
-    dsimp only [optimizedApi, referenceApi, SourceSizedQueries.unrankSigned]
-    rw [SourceSizedDispatch.select_exact, reference_terms_toNat, reference]
-    by_cases negative : rank < 0
-    · simp [negative, show ¬0 ≤ rank by omega]
-    · simp [negative, show 0 ≤ rank by omega]
-  · funext term
-    change TablePosition.positionsOf rows term root = _
-    rw [TablePosition.positionsOf_eq_termPosition rows plain unique, termPosition, ← reference]
-    rfl
+    optimizedApi rows root = referenceApi rows root :=
+  optimizedApi_of_unique rows plain unique root
+
+/-- The raw deterministic scan derives uniqueness on the original finite map keys. -/
+theorem raw_deterministic_unique [DecidableEq Symbol] [Ord Symbol]
+    [Std.TransOrd Symbol] [Std.LawfulEqOrd Symbol]
+    (table : SourceSizedFiniteKeys.Table State Symbol Payload) (root : State)
+    (valid : FTAValidation.validateRows root (interpreted table (fun _ _ => true)) =
+      .ok (interpreted table (fun _ _ => true)))
+    (passed : SourceSizedDeterministic.bottomUpDeterministic
+      (ordinaryRows (nativeSorted table root valid)) (keys table) = true) :
+    SizedRank.Unambiguous (ordinaryRows (nativeSorted table root valid)) :=
+  SourceSizedDeterministic.gate_unique _ (ordinary_plain _) (keys table)
+    (sorted_supported table root valid (fun _ _ => true)) passed
 
 /-- Canonical readback identifies the entire reference API, including signed queries. -/
 theorem referenceApi_eq [DecidableEq Symbol] [Ord Symbol] [Std.TransOrd Symbol] [Std.LawfulEqOrd Symbol]
@@ -98,9 +94,11 @@ noncomputable def nativeReference : Except Unit (Api (Label Formula)) :=
     .ok (referenceApi (equalityRows (nativeSorted table root valid)) root)
   else .error ()
 
-/-- The raw source dispatcher uses its original finite keys and actual product minimum table. -/
+/-- The raw source dispatcher checks deterministic keys before the product minimum table. -/
 noncomputable def nativeSized : Except Unit (Api (Label Formula)) :=
-  if plainCheck (lookup table) (keys table) && unambiguous table root valid then
+  if plainCheck (lookup table) (keys table) &&
+      (SourceSizedDeterministic.bottomUpDeterministic
+        (ordinaryRows (nativeSorted table root valid)) (keys table) || unambiguous table root valid) then
     .ok (optimizedApi (ordinaryRows (nativeSorted table root valid)) root)
   else nativeReference table root valid
 
@@ -113,21 +111,40 @@ theorem nativeReference_eq : nativeReference table root valid = publicReference 
     exact referenceApi_eq table root valid SourceSizedEqualities.constraintHolds
   · rfl
 
-/-- Actual raw-map dispatch has exactly the same branch result and complete query record. -/
+/-- Actual raw-map dispatch has the same complete query record and error as the public adapter. -/
 theorem nativeSized_eq : nativeSized table root valid = publicSized (input table root valid) := by
-  unfold nativeSized publicSized
-  rw [plain_eq table root valid, unambiguous_eq table root valid]
+  rw [publicSized_eq_reference, ← nativeReference_eq]
+  unfold nativeSized
   split
   · rename_i passed
-    have gate : unambiguous table root valid = true := by
-      rw [unambiguous_eq table root valid]
-      have both : plainCheck (input table root valid).rows (input table root valid).states = true ∧
-          SourceSizedDispatchGraph.unambiguousRows (ordinaryRows (sortedRows (input table root valid)))
-            (input table root valid).states (input table root valid).complete = true := by
-        simpa only [Bool.and_eq_true] using passed
-      exact both.2
-    exact congrArg Except.ok (optimizedApi_eq table root valid gate)
-  · exact nativeReference_eq table root valid
+    have both : plainCheck (lookup table) (keys table) = true ∧
+        (SourceSizedDeterministic.bottomUpDeterministic
+          (ordinaryRows (nativeSorted table root valid)) (keys table) = true ∨
+            unambiguous table root valid = true) := by
+      simpa only [Bool.and_eq_true, Bool.or_eq_true] using passed
+    have unique : SizedRank.Unambiguous (ordinaryRows (nativeSorted table root valid)) := by
+      rcases both.2 with deterministic | product
+      · exact raw_deterministic_unique table root valid deterministic
+      · exact raw_unique table root valid product
+    have plain : plainCheck (input table root valid).rows (input table root valid).states = true := by
+      rw [← plain_eq table root valid]
+      exact both.1
+    have residual : residualCheck (lookup table) (keys table) root = true := by
+      rw [residual_eq table root valid]
+      exact plain_residual _ _ (input table root valid).complete _ plain
+    rw [nativeReference, residual]
+    apply congrArg Except.ok
+    rw [optimized_of_unique _ (ordinary_plain _) unique]
+    change referenceApi (automaton (nativeSorted table root valid) (fun _ _ => true)) root =
+      referenceApi (automaton (nativeSorted table root valid) SourceSizedEqualities.constraintHolds) root
+    rw [referenceApi_eq table root valid (fun _ _ => true),
+      referenceApi_eq table root valid SourceSizedEqualities.constraintHolds]
+    change referenceApi (ordinaryRows (sortedRows (input table root valid))) _ =
+      referenceApi (equalityRows (sortedRows (input table root valid))) _
+    rw [checked_rows _ _ (input table root valid).complete (by
+      rwa [← plainCheck_perm (input table root valid).rows (sortedRows (input table root valid))
+        (fun state => (sortedRows_perm (input table root valid) state).symm)])]
+  · rfl
 
 /-- Every successful raw dispatch uses the original canonical distinct-term sequence. -/
 theorem native_success (api : Api (Label Formula))

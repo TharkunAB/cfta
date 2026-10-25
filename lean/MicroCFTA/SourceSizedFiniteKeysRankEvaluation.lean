@@ -15,7 +15,7 @@ open SourceSizedFiniteKeysDispatch SourceDenseRows TablePositionFiniteEvaluation
 open SourceObservations SourceSymbolicIndex
 
 variable {State Symbol Payload : Type} [DecidableEq State] [Ord State]
-  [DecidableEq Symbol] [Ord Symbol] [Std.TransOrd Symbol] [Std.LawfulEqOrd Symbol]
+  [DecidableEq Symbol] [Ord Symbol]
   (table : SourceSizedFiniteKeys.Table State Symbol Payload) (root : State)
   (valid : FTAValidation.validateRows root (interpreted table (fun _ _ => true)) =
     .ok (interpreted table (fun _ _ => true)))
@@ -28,7 +28,6 @@ noncomputable def rankCounts (term : Term Symbol) : List ((Nat × State) × Nat)
 noncomputable def rankTable (term : Term Symbol) : List (State × Option Position) :=
   evaluate (ordinaryRows (nativeSorted table root valid)) (rankCounts table root valid term) (keys table) term
 
-omit [Std.TransOrd Symbol] [Std.LawfulEqOrd Symbol] in
 /-- Every original-key rank query has finite count derivations and exact finite map readback. -/
 theorem raw_finite (term : Term Symbol) :
     CountsEvaluation (ordinaryRows (nativeSorted table root valid)) (rankCounts table root valid term) ∧
@@ -44,7 +43,9 @@ theorem native_rank_laws
     (table : SourceSizedFiniteKeys.Table State (Label Formula) (Constraint Formula)) (root : State)
     (valid : FTAValidation.validateRows root (interpreted table (fun _ _ => true)) =
       .ok (interpreted table (fun _ _ => true)))
-    (passed : (plainCheck (lookup table) (keys table) && unambiguous table root valid) = true)
+    (passed : (plainCheck (lookup table) (keys table) &&
+      (SourceSizedDeterministic.bottomUpDeterministic
+        (ordinaryRows (nativeSorted table root valid)) (keys table) || unambiguous table root valid)) = true)
     (api : Api (Label Formula)) (success : nativeSized table root valid = .ok api)
     (term : Term (Label Formula)) :
     CountsEvaluation (ordinaryRows (nativeSorted table root valid)) (rankCounts table root valid term) ∧
