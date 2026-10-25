@@ -1,5 +1,27 @@
 Continue the cfta formalization in /home/tritlo/Code/mcfta.
 
+## Original selection reaches native narrowing and the Right callback
+
+Framed replacement: `fc1e38a19`. Cache and Caller: `93d621a5c`.
+Selected composition: `5106259fa`. The goal stays ACTIVE.
+
+Original selection now derives the single pending read, native recursion
+guard and, on the false branch, narrowing's full Caller and indexed-cache
+result. The proof uses the actual guard frame and genuine endpoint Ready.
+The same fuel, native result heap, memos and enumeration endpoint persist.
+The concrete nonempty Right callback returns false and all original metadata
+at that same cache. Repeated recursion retains its actual parked receipt.
+No new selection, second initial read or early entry ancestry update occurs.
+The three older producer interfaces retain their exact types.
+
+All five strict checks pass on their first attempts. Public readback and
+Audit pass. Audit checks 76734 dependencies. H6 remains the strongest
+end-to-end language result. Haskell is unchanged. Next: compose ordinary
+entry/expansion at this reached Caller/cache with its actual numeric Ranges.
+Terminal/nonordinary outcomes, scheduler restart, the Left callback, fragment
+history, extraction and whole-driver language semantics remain open.
+Details: `lean/notes-current-pruning-enumeration-selected-narrow.md`.
+
 ## Selected reads and native recursion checks complete
 
 Clearing history and indexes: `0e9d54829`. Native prefix: `b13953d85`.

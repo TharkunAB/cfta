@@ -1,0 +1,34 @@
+/-- Actual value and representative reads retain the selected target before its indexed replacement. -/
+theorem after_read
+    (heap nextHeap : InternedConstructorTemplates.State Symbol NativeGuard)
+    (kept : SourceEqualityRequiredCache.Keeps heap nextHeap)
+    (before : EnumerationExpandableIndex.Cached Symbol EnumGuard)
+    (readAfter rereadAfter after : EnumerationState.State Symbol EnumGuard)
+    (readFuel rereadFuel uv root oldHandle newHandle : Nat) (scs : List Suspended)
+    (value : InternedConstructorTemplates.Value Symbol NativeGuard) (roots : Nat → Nat)
+    (ready : EnumerationDriver.Ready uv before.core)
+    (paths : Roots before.core.representatives roots)
+    (realized : PendingRealized heap before.core)
+    (decoded : lookupNode nextHeap newHandle = some value)
+    (available : Available nextHeap value) (closed : value.free = [])
+    (counts : EnumerationCanonicalWaiting.Correct roots before.core.values before.waiting)
+    (flags : ∀ slot, SourcePruningEnumerationNativeIndex.candidate heap
+      ((before.core.values[slot]?).getD .eliminated) = some (before.expandable slot))
+    (read : Success (getValue readFuel uv) before.core (.unenumerated (some oldHandle) scs) readAfter)
+    (reread : Success (representative rereadFuel uv) readAfter root rereadAfter)
+    (written : Success (setValue root (.unenumerated (some newHandle) scs)) rereadAfter () after) :
+    root = uv ∧ Frame before.core rereadAfter ∧
+    ∃ (fuel : Nat) (cached : EnumerationExpandableIndex.Cached Symbol EnumGuard),
+      (∀ extra, SourcePruningEnumerationNativeIndex.write nextHeap (fuel + extra) uv
+        (.unenumerated (some newHandle) scs) scs scs
+        (EnumerationExpandableIndex.frame rereadAfter before) = some cached) ∧
+      cached.core = after ∧ cached.waiting = before.waiting ∧
+      cached.expandable = (fun slot => if slot = uv then
+        !(MergedOrdinaryHeight.recursiveBoundary value && scs.isEmpty) else before.expandable slot) ∧
+      EnumerationDriver.Ready uv after ∧ Roots after.representatives roots ∧ PendingRealized nextHeap after ∧
+      after.values[uv]? = some (.unenumerated (some newHandle) scs) ∧
+      EnumerationCanonicalWaiting.Correct roots after.values cached.waiting ∧
+      (∀ slot, SourcePruningEnumerationNativeIndex.candidate nextHeap
+        ((after.values[slot]?).getD .eliminated) = some (cached.expandable slot)) ∧
+      (EnumerationReferences.PendingReferences before.core → EnumerationReferences.PendingReferences after) ∧
+      (∀ held, EnumerationReferences.IncomingAvoid held before.core → EnumerationReferences.IncomingAvoid held after)

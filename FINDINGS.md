@@ -70,6 +70,21 @@ Terminal parents retain the existing enumerateNode fallback boundary. Native
 children can still take their terminal dispatcher. No Haskell fix is needed.
 Details: lean/notes-current-pruning-enumeration-native-ordinary.md.
 
+### Actual guard frames through narrowing and the Right callback
+
+A false native recursion guard can compress representatives between the
+source's initial value read and narrowing's later representative reread.
+The cache and Caller producers now accept that actual frame and genuine
+endpoint Ready. Their original interfaces keep their exact declaration types.
+Original selection, one read, the native guard and narrowing now compose at
+the same result heap and cache. The concrete pre-expansion Right callback
+uses the new narrowed handle and retains all metadata and enumeration state.
+The repeated branch parks without narrowing. Empty rejects before the callback.
+Whole-driver semantics and arbitrary callback preservation remain open.
+No new Haskell runtime defect or repair is found.
+External action: no patch is proposed for this source observation.
+Details: lean/notes-current-pruning-enumeration-selected-narrow.md.
+
 ### Native repeated-recursion clearing and source order
 
 Enumeration.hs:993 reads the selected pending value before checking recursion.
@@ -273,6 +288,28 @@ TH/Generic extraction, valid-position build/read and source codec laws stay open
 
 
 
+
+## Original selection reaches native narrowing and the Right callback
+
+Framed replacement: `fc1e38a19`. Cache and Caller: `93d621a5c`.
+Selected composition: `5106259fa`. The goal stays ACTIVE.
+
+Original selection now derives the single pending read, native recursion
+guard and, on the false branch, narrowing's full Caller and indexed-cache
+result. The proof uses the actual guard frame and genuine endpoint Ready.
+The same fuel, native result heap, memos and enumeration endpoint persist.
+The concrete nonempty Right callback returns false and all original metadata
+at that same cache. Repeated recursion retains its actual parked receipt.
+No new selection, second initial read or early entry ancestry update occurs.
+The three older producer interfaces retain their exact types.
+
+All five strict checks pass on their first attempts. Public readback and
+Audit pass. Audit checks 76734 dependencies. H6 remains the strongest
+end-to-end language result. Haskell is unchanged. Next: compose ordinary
+entry/expansion at this reached Caller/cache with its actual numeric Ranges.
+Terminal/nonordinary outcomes, scheduler restart, the Left callback, fragment
+history, extraction and whole-driver language semantics remain open.
+Details: `lean/notes-current-pruning-enumeration-selected-narrow.md`.
 
 ## Selected reads and native recursion checks complete
 
