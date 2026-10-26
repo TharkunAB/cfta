@@ -1,0 +1,30 @@
+[2026-10-26 13:12 CET] FINAL CLEAR — cached nonterminal assignment semantics.
+
+Exact sources read:
+- SourcePruningEnumerationCachedPrepareLanguage.lean: 95 lines / 6,095 bytes; SHA256 364db1fd413bd0830578564078bb3b688999cc30a656af6b046cc9f00190bbe7.
+- SourcePruningEnumerationShallowChildLanguage.lean: 106 lines / 6,626 bytes; SHA256 bb062467377dff32b9e0535a027220b95a5d1584507a636eac0ccdcc007ca3fe.
+
+The first source equals strict-cached-prepare-2/MicroCFTA's source byte-for-byte. Retained report.json records that source hash, exit0 and 0 output bytes under Lean4.34.1/all linters/warningAsError. Report SHA256 d0b5646240524646a07176c2b7bcea128a01e375af095467f08b377a56ec76a8. raw.log is literal empty; SHA256 e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855. No check was rerun.
+
+Original contracts
+
+CachedPrepare.complete_semantics retains the entire original complete header/conclusion prefix after renaming: 2,317-byte original header / SHA256 b2451bc33b69d40d6e0c1ec2a8d02f112605cc612150124c0edd95b6eed783c2. It calls complete once (62–63) and returns the identical action/fuel/rows/prepared/stable/raw/shape receipts. Coherence, closed availability, StorageValid, realized slots, Roots, canonical counts, all-slot flags, suspended bounds and the original Empty-conditional nonterminal premise remain inputs.
+
+ShallowChild.prepareChild_complete_semantics likewise retains its full original header/output (trailing separator whitespace trimmed for comparison): 1,857 bytes / SHA256 7c5f938b5e86d75e538a2e668f74316369aed611496c57133ee3faef7acb4e94. It calls that original child producer once and adds a separate nonempty semantic capability using its own retained action/success/afterShape receipts. No new producer input or runtime definition is added.
+
+Actual row alignment
+
+The cached wrapper calls the shallow semantic helper only in the original nonempty singleton branch. The two prepared=some equations identify the exact action. Its success membership is then rewritten through the original cached coreRaw equation and exact singleton row shape, forcing semanticAfter=actual after.core. Thus the independent semantic witness is not assumed to be the returned cache. Only after this equality is established does the proof transfer Satisfies to/from the actual cached row. It makes no unsupported equality claim about the full cache metadata.
+
+Branch semantics
+
+For an ordinary .node, allocation_bucket_semantics combines actual fresh allocation and a concrete pending-slot write. Alignment makes the fresh counter index valid; the before domain, native handle meaning and every stored scs restriction are retained exactly. The helper's lookup receipt identifies this handle meaning with the actual native value.
+
+For Mu/Union the actual shallow action allocates only a pending native handle with bucket []. The semantic clause therefore omits incoming scs exactly as the source branch does; it does not claim that those incoming constraints were stored or executed. Closed references are impossible under the original closed premise. NativeGuard and EnumGuard remain independently generic and no Graph interpretation is supplied.
+
+For Empty, the cached producer's actual rows=[] gives no row witness, while meaning Empty=False makes the right-hand conjunction impossible. The shallow helper is not invoked here, so the wrapper retains the original ability to reject Empty before checking whether scs is terminal. Duplicate suspended entries retain their literal list behavior; no deduplication or stronger terminal claim appears.
+
+No concrete semantic obstruction found. The result interprets actual cached nonterminal rows under the unchanged native heap and their original admission. It does not add native-query effects, infer Safe beyond the old contract, certify a candidate outside admission, cover terminal fallback, or claim whole-driver/H6 progress beyond this assignment bridge.
+
+Other source identities: CachedPrepare 607a0ee4cdfbc857937373fb538b030cbd4f1b02f3317a2bc20a8fc932e26b56; ShallowChild 8210b17170fce05b31515e5f9b332799601fcfbc728263df6e2f53b917baed7c; PendingWriteLanguage 93a7f6066c56bef4323e7bc3e3f84cc07174dd11d9741173f8e627a9d8e3af01.
+Source reads, pure text comparison, hashes and this /tmp report only; no builds/compiler/parser/Git/runtime execution or repository edit.

@@ -1,0 +1,47 @@
+[2026-10-26 13:10 CET] FINAL SHALLOW CHILD SOURCE REVIEW: CLEAR
+
+Reviewed full repository source:
+/home/tritlo/Code/mcfta/lean/MicroCFTA/SourcePruningEnumerationShallowChildLanguage.lean
+106 lines. SHA256 bb062467377dff32b9e0535a027220b95a5d1584507a636eac0ccdcc007ca3fe
+
+allocation_bucket_semantics is a pure exact state theorem. The only structural
+input is counter=values.length. It first applies pending_write at the actual
+newly allocated slot, with its old same-handle empty bucket, incoming scs and
+trivial incoming domain. The actual allocated_slot receipt supplies the stored
+slot; representatives and obligations stay exact. allocation_semantics then
+reduces allocation itself. The final conjunction is precisely old Satisfies,
+node language at the original counter, and every incoming Suspended.Holds at
+that same assigned term. No Graph, final Satisfies, rank, Safe or future run is
+assumed. This theorem does not claim bounded references in an arbitrary scs.
+
+prepareChild_complete_semantics retains the exact entire original producer
+input header and original existential output as a text prefix. It calls
+prepareChild_complete once and retains encoded/decoded, Empty rejection, and
+the whole old successful packet. Its new branch witnesses come from that same
+completed receipt, with the actual prepareChild equation and Success attached.
+No second allocation or native query is run or postulated.
+
+Actual lookupNode at the original heap identifies the fresh handle's native
+meaning through handles_lookup. The native heap stays the same in this child
+worker. The ordinary .node case uses allocation_bucket_semantics and includes
+ALL incoming scs at the original fresh index. The .union and .mu cases use the
+actual allocated state and allocation_semantics, hence only add the native
+node domain: their old producer discards this incoming bucket. The new semantic
+conclusion explicitly uses [] for those cases. It does not falsely transfer
+ordinary node suspended restrictions into truncating Union/Mu branches.
+Empty preserves its old no-Success receipt. The .reference case is excluded by
+the existing closed free-list premise, not by an invented unsupported-branch
+assumption. No additional producer admission or typeclass was added.
+
+The independent native meaning is universally parameterized by holds and the
+ambient environment. Residual meaning and assignment are likewise output
+parameters. The result concerns exact local assignment restrictions; it does
+not claim recursive expansion, native/Graph correspondence, successful term
+extraction, full enumerator language completeness or stronger H6 coverage.
+
+Existing evidence inspected: strict-shallow-child-2's saved source is exactly
+the reviewed live source. Its report has the same source SHA and exit_code 0.
+Its actual raw.log is literally empty (0 bytes). Supporting live definitions
+were read: prepareChild/prepareChild_complete, pending_write, allocation_semantics,
+slot/Satisfies and native handles_lookup. No compiler, build, Git command or
+repository edit ran during this review. No blocker found.

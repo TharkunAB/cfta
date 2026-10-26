@@ -1,0 +1,94 @@
+[2026-10-26 13:07 CET] FINAL read-only child-boundary review
+
+Result
+The nonterminal Union/Mu omission matches the actual Haskell branch. It is an intentional truncation boundary, not a shallow-child translation error. A uniform full finite-assignment theorem that every incoming suspended bucket is enforced is false for this model branch. Keep that semantic limit explicit. No Haskell defect or fix request is established here.
+
+Reviewed checkpoint
+Root specified HEAD 9281eb7357da9c0912a18b670c4712ae5e4a1789. This review read live source and the retained next-semantic-obligation.txt; source hashes below identify the exact bytes. No Git operation was used to inspect the checkpoint, and no build/compiler/runtime experiment or repository edit was performed. Only this /tmp report was written.
+
+Exact source correspondence
+1. Haskell prepareShallowChild (cfta/src/Data/CFTA/Enumeration.hs:796-801) allocates and installs FULL scs only for ordinary Node with no terminal path trie. Its fallback calls enumerateNode.
+2. That fallback does NOT imply immediate expansion of Mu or InternedUnion. enumerateNode at lines717-722 first partitions terminal from descendant constraints. If the terminal partition is empty, Mu and InternedUnion each execute only addUVarValue (Just n). The scs parameter is not passed into that allocation. Ordinary Node instead expands its selected edge with enumerateEdge scs (lines723-725).
+3. addUVarValue creates UVarUnenumerated x Sequence.Empty (lines392-403). expandable excludes an unconstrained recursiveBoundary (line473), and recursiveBoundary includes BOTH InternedMu and InternedUnion (Interned/Type.hs:607-611). Thus the new boundary slot is not selected for unfolding merely because it was allocated.
+4. The formal ShallowChild.prepareChild at lines22-33 has exactly that split: after the nonterminal test and actual encoding, .node installs scs; .union/.mu return the allocated hole without a write. CachedPrepare.prepareChild:22-27 mirrors this with native indexes. Its boundary_complete:190-221 exports the exact pending(some handle,[]) fresh slot, unchanged waiting and unchanged expandable function, even if the incoming nonterminal scs is nonempty.
+5. ChildDispatch.observe/run:28-66 sends a nonempty terminal partition through the full Terminal/TerminalAdapter runtime instead. In that branch descendant constraints go into the actual incoming merge. The omitted-bucket finding concerns the NO-TERMINAL boundary branch; it must not be generalized to all Mu/Union inputs or to TerminalLanguage.
+6. ChildCompletion.complete_with_fragments:108-127 uses the exact nonterminal producer and derives safety/history from its actual action. It does not claim every original bucket entry Holds of the returned hole. Its current contract remains sound at this boundary.
+
+Declared truncation policy
+Haskell partial rendering maps an unenumerated boundary with empty scs to TruncatedRecursion (Enumeration.hs:1041-1046). Concrete rendering maps unenumerated recursiveBoundary to the supplied marker (1053-1059,1068-1074). The public terms documentation at1197-1207 states that enumeration stops at recursive binders, drops constraints whose paths descend into a truncated binder, and that a marker result is not evidence of nonempty language below it. A selected constrained boundary CAN be unfolded later through enumerateOutUVarWith:895-898, but that is not the fresh empty-scs branch examined here.
+
+The formalizer also records this exact policy: notes-current-pruning-enumeration-cached-prepare.md:28-32 explicitly says the incoming nonterminal bucket can be nonempty while the stored bucket remains empty, with false fresh native flag and unchanged waiting. The earlier concern therefore identifies a limit of a proposed STRONGER assignment theorem. It does not establish a missing implementation step in the current branch.
+
+A Union counterexample must respect constructors. createUnion flattens/removes empty/duplicate operands, returns a singleton directly, and converts an all-ordinary union into an ordinary Node (Interned/Type.hs:592-605). Do not use a fabricated singleton union of one ordinary leaf as an alleged source-generated Union. Genuine closed unions containing recursive operands remain explicit boundaries. A proper Mu suffices for the concrete model counterexample below and avoids this normalization issue.
+
+Minimal finite-assignment counterexample to the proposed uniform bucket theorem
+Use one alphabet symbol s. Let leaf=s[] and t=s[leaf]. Let v be a proper closed native Mu X.(s[] | s[X]) with true edge guards, constructed with the normal binder constructor. The binder variable occurs in its unary branch, so createMu does not erase it. Its independent least-language interpretation accepts leaf and then t (InternedGuardedLanguage.meaning:24-38; mu_unfold). Let h be its actual encoded/read-back handle.
+
+Choose this enumeration input:
+  before.counter = 1;
+  before.representatives = UnionFind.withInitialValues [0];
+  before.values = [.unenumerated none []];
+  before.obligations = [];
+  before.recursionAncestry = fun _ => [];
+  before.expansionAncestry = [].
+Choose bucket=[{trie := .branch [(0,.terminal)], var := 0}]. The trie is Valid and nonterminal; its sole represented path is [0], and the variable is bounded since0<1. All old slots are pending, so InputsPending has no enumerated slot to constrain and is satisfied. Take assignment uv=t for EVERY uv.
+
+The actual prepared boundary action is allocation followed by pure hole1. It returns after=allocated(some h)before, with values=[pending none [],pending(some h)[]]. Its native heap and Caller do not change. Every old restriction remains true. The only new domain restriction is that assignment1=t belongs to v, which is true. Thus Satisfies NativeLanguage.handles residualMeaning assignment after holds. There are no residual obligations. The constant assignment also satisfies every forest equation.
+
+But the dropped bucket requirement is false:
+  Suspended.Holds assignment (fill assignment (.hole1)) bucket[0]
+requires t.atPath[0]=some(assignment0)=some t. In fact t.atPath[0]=some leaf, and leaf!=t. The path EXISTS and its index fits the unary term; this is not an invalid-index or vacuous-path example. All safety, pending-reference and fragment-history facts can still hold. None implies this missing semantic equality.
+
+The same pattern applies to any genuine retained Union whose independent language accepts t, for example a closed union containing this proper Mu and a distinct ordinary operand. It is not necessary to posit a source-impossible all-ordinary Union.
+
+This is a source-reduced mathematical counterexample to the blanket FORMAL assignment implication, not a compiled Lean witness or an executed Haskell whole-driver example. In particular it does NOT show that Haskell returns the finite term t while falsely claiming its constraints. Haskell returns a truncation marker at this boundary and documents the missing check. A nonterminal descended bucket is not impossible by shape: a parent class with paths [0,0] and [1] produces [0] at child0 and a terminal entry at child1. No current Available/closed/InputsPending/history fact proves such a bucket empty at a boundary child.
+
+Smallest honest next theorem
+Keep the runtime and every existing completion interface unchanged. Add branch-specific assignment semantics to actual singleton receipts:
+- ordinary .node: the fresh pending slot retains the native incoming domain AND every original scs entry at fill assignment fragment;
+- nonterminal .mu/.union: the fresh pending slot retains the incoming native domain, with NO original scs predicate, because the actual stored bucket is[];
+- terminal partition present: use the proved full TerminalLanguage/adapter result, including its exact union equations and descendant restrictions;
+- Empty: actual raw[] rejection, with no accepted branch.
+
+For a full-bucket backward theorem, the minimal current support condition is ordinary .node in the nonterminal allocation branch, OR that every represented path in the boundary bucket is empty as a SET of obligations (forall sc in bucket, fromPathTrie sc.trie=[]). This last condition makes Holds vacuous; bucket=[] is the simpler practical gate. Do not confuse a trie representing the empty PATH [.terminal] with a trie representing NO paths [.empty]. A .terminal trie would take the other branch. State this support condition in the new semantic clause or as an explicit current-domain premise, not as an invented successful future callback.
+
+For whole finite-language correspondence, a current boundary-free reachable domain is the clean initial scope. A marker-aware theorem can cover actual truncated output, but must classify it as partial/unchecked and may not promise an accepting full completion below the marker. Existing domain semantics and rendering semantics differ there.
+
+Installing the full incoming scs on fresh Union/Mu slots would be a behavior change: it changes waiting counts, enables boundary expansion and changes callbacks/termination/truncation. It is not a small proof repair and would no longer match this Haskell branch without a coordinated runtime change. No such change is recommended or authorized by this review. Any future Haskell behavior request belongs in the existing FINDINGS handoff workflow; there is no verified defect to hand off now.
+
+Correction to the preceding note
+next-semantic-obligation.txt correctly identifies that safety/history do not prove the original bucket's Holds and that prepareShallowChild falls back to enumerateNode. Any reading that the fallback necessarily EXPANDS Union/Mu was incorrect. The actual enumerateNode branches and public truncation contract establish deliberate deferral with an empty bucket. Preserve the prior report as evidence and use this clarification for future scope statements. TerminalLanguage and H6 are unaffected. Whole finite-language enumeration remains unproved outside the supported branch semantics described above.
+
+Actual source identities
+lean/MicroCFTA/SourcePruningEnumerationShallowChild.lean
+  SHA256 8210b17170fce05b31515e5f9b332799601fcfbc728263df6e2f53b917baed7c
+lean/MicroCFTA/SourcePruningEnumerationCachedPrepare.lean
+  SHA256 607a0ee4cdfbc857937373fb538b030cbd4f1b02f3317a2bc20a8fc932e26b56
+lean/MicroCFTA/SourcePruningEnumerationChildDispatch.lean
+  SHA256 67880174034d9a1f39a6e57d3066833fa1cad67fd9b7d57102a39fffbfe066e1
+lean/MicroCFTA/SourcePruningEnumerationChildCompletion.lean
+  SHA256 0ae63614e44634a17d924e50b07e213abb01a9bbd0392e9157e47351ef1ad3ec
+lean/MicroCFTA/SourcePruningEnumerationChildEffects.lean
+  SHA256 27b3226aba55d8eadb744ccc4127698e926ea1b055521847957561b433e30451
+lean/MicroCFTA/SourcePruningEnumerationNativeIndex.lean
+  SHA256 13c8b37a63e950f4b26d2e9c927cc3108b50b3024b96b3be70a8a539f6f7f160
+lean/MicroCFTA/EnumerationState.lean
+  SHA256 83a898b883ec7b52469bccd87e8afa4f7abb320e3c935bf48f3d80ad77003cc4
+lean/MicroCFTA/EnumerationCorrectness.lean
+  SHA256 087b96d593bb42cea0b61b2742b43d4a41ce5a2d990e300c8d15700e2eb0672d
+lean/MicroCFTA/EqualityTrie.lean
+  SHA256 0cf7d0b98a7bbc24382fde259b3f9b71462c752c347ad6e7788b9e95b41e10d5
+lean/MicroCFTA/InternedGuardedLanguage.lean
+  SHA256 bb63b73b2f104e49e0cbbd76436a5936dae03ea358a3b5659b45b8f4aa109f2e
+lean/MicroCFTA/InternedConstructorTemplates.lean
+  SHA256 75aeb072ce0cfb7bc8bad40843184743281de8aeac1001c13ad941692d23e3f8
+lean/notes-current-pruning-enumeration-cached-prepare.md
+  SHA256 d1848c407cb817bddcf4bcde9b350113aa99f35cee8204635b5e813eb4d6d2b5
+lean/notes-current-pruning-enumeration-child-dispatch.md
+  SHA256 8726659f908c4ddba4119a3e0d0df7522d3841784e3bb5faba4246348988bbae
+cfta/src/Data/CFTA/Enumeration.hs
+  SHA256 949c484539483f0e646b069899be127a57f0897353b24b92e51a5d90654cec07
+cfta/src/Data/CFTA/Interned/Type.hs
+  SHA256 f79fbaf37d986569e572649e6779084a7e7c78429b0f82558de867418c690b77
+/tmp/mcfta-fold-language-20261026/next-semantic-obligation.txt
+  SHA256 7b2f783aabb732f1738ef38eecdf0488c31a2728ee6fb6c5f1970d580014d353
