@@ -79,6 +79,16 @@ at every e-class:
 * An analysis is an evaluation of the e-graph automaton from the leaves up,
   as 'analyse' computes it; a saturation keeps it up to date from the
   e-classes that changed.
+
+= Refinements
+
+Each term of an e-class has the same value, so a refinement of the value
+that one e-node gives holds for the whole e-class, and an analysis can meet
+the refinements of the e-nodes of an e-class. This is the model of egglog,
+in which an analysis is a function into a lattice with a merge. 'refines'
+makes a rule condition of it: the refinement of the e-class of a variable
+must imply a formula, and 'Data.CFTA.Refinement.Lattice.latticeImplies'
+decides the implication without a solver.
 -}
 module Data.CFTA.EGraph (
     -- * E-graphs
