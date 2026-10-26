@@ -1,0 +1,38 @@
+2026-10-26 06:03 CET
+FINAL DELTA REVIEW: CLEAR
+
+SourcePruningEnumerationCallbackZero.lean
+  SHA256 6efd7b2ccb06c61482293f15d95a20e06cc1650f1c0615251b0899bd4afd8ea3
+SourcePruningEnumerationReceiptHook.lean
+  SHA256 2a50cbe4eacbee2ac4e43ea1b9112f302ae06001c9cfe4d833bd0354314d791a
+SourcePruningEnumerationHookResources.lean
+  SHA256 bfebee13f6ab8130f0e8ea248b918e740dca0f292d970d77d0c67decec75eb56
+SourcePruningEnumerationOrdinaryHookResources.lean
+  SHA256 a37f6fc196bd9ce70f9a88a64401191b67d6b19fc6e18f9b6d6907c83c5944b8
+
+CallbackZero was compared with the exact strict-callback-zero-2 source at
+SHA256 d540cbc7d6aa5c36603c350232e3d7fa0e41f261a152e0c9cb49595c17fe72ae.
+Its only additions retain callback_complete's generic continueWith equation
+for every extra fuel and supply that existing actual.2.2 proof. All initial
+premises and earlier conclusions remain. The generic equation uses the same
+actual callback result, returned core, framed cache and restart decision.
+It rewrites the callback prefix for arbitrary recur/stop/order; it does not
+assert arbitrary continuation completion or resource preservation.
+
+ReceiptHook was compared with its exact strict-receipt-hook-2 source at
+SHA256 42ac75eda6d28a3b501a61b05cbde5d5a87ac9dd0dc82c5409bf1af15d9539a3.
+The sole change is (running extra).2.2 to (running extra).2.2.2. The new
+projection selects the same concrete zero-expansion hook equation after the
+added generic equation. The entire ReceiptHook statement remains unchanged.
+
+The main producer and ordinary-entry wrapper retain their exact previously
+reviewed hashes. Their current head producer uses the actual public
+head_complete_resources receipt. No runtime worker was changed. The prior
+semantic reviews remain valid: actual endpoint and full-memo provenance,
+captured sibling cache/metadata, output prefix resources, and explicit
+unsupported/exhausted stops. Scope remains zero recursive expansion.
+
+The existing strict-callback-zero-3 and strict-receipt-hook-3 reports were read.
+Both record exit 0 and their exact reviewed source hashes. Both actual raw logs
+are empty. These are Root-run checks; this review ran no compiler or build.
+Earlier review reports remain unchanged. Only this final review was written.

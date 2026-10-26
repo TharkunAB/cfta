@@ -1,0 +1,82 @@
+/tmp/mcfta-native-hook-resources-20261026/strict-continuation-head-1/MicroCFTA/SourcePruningEnumerationContinuationHead.lean:44:33: error: unsolved goals
+case rejected
+width : Nat
+Output : Type u
+Reason : Type v
+inst✝² : DecidableEq Symbol
+inst✝¹ : DecidableEq (EdgeKey Symbol Constraint)
+inst✝ : DecidableEq Node
+hook : Fragment → Caller width → Queries → Cached → HookResult Output Reason width
+checkEmpty : Bool
+r n p h k target : Nat
+scs : List Suspended
+before : Cached
+edge : EdgeValue Symbol Constraint
+rest : List (EdgeValue Symbol Constraint)
+caller middleCaller : Caller width
+queries middleQueries : Queries
+reached : Caller width
+saved : Queries
+after : Cached
+observed :
+  SourcePruningEnumerationCapturedEdge.run checkEmpty r n p h k target scs edge caller before queries =
+    some (SourcePruningEnumerationSelectedEdge.Result.rejected reached saved after)
+advanced :
+  SourcePruningEnumerationNativeBranches.advance
+      (SourcePruningEnumerationSelectedEdge.Result.rejected reached saved after) =
+    some (middleCaller, middleQueries)
+⊢ (match run hook checkEmpty r n p h k target scs before rest middleCaller middleQueries with
+    | Result.complete processed outputs finalCaller finalQueries =>
+      Result.complete (SourcePruningEnumerationSelectedEdge.Result.rejected reached saved after :: processed) outputs
+        finalCaller finalQueries
+    | Result.stopped processed outputs current =>
+      Result.stopped (SourcePruningEnumerationSelectedEdge.Result.rejected reached saved after :: processed) outputs
+        current) =
+    match run hook checkEmpty r n p h k target scs before rest middleCaller middleQueries with
+    | Result.complete processed outputs finalCaller finalQueries =>
+      Result.complete (SourcePruningEnumerationSelectedEdge.Result.rejected reached saved after :: processed) outputs
+        finalCaller finalQueries
+    | Result.stopped processed outputs current =>
+      Result.stopped (SourcePruningEnumerationSelectedEdge.Result.rejected reached saved after :: processed) outputs
+        current
+/tmp/mcfta-native-hook-resources-20261026/strict-continuation-head-1/MicroCFTA/SourcePruningEnumerationContinuationHead.lean:48:44: error: unsolved goals
+case stopped
+width : Nat
+Output : Type u
+Reason : Type v
+inst✝² : DecidableEq Symbol
+inst✝¹ : DecidableEq (EdgeKey Symbol Constraint)
+inst✝ : DecidableEq Node
+hook : Fragment → Caller width → Queries → Cached → HookResult Output Reason width
+checkEmpty : Bool
+r n p h k target : Nat
+scs : List Suspended
+before : Cached
+edge : EdgeValue Symbol Constraint
+rest : List (EdgeValue Symbol Constraint)
+caller middleCaller : Caller width
+queries middleQueries : Queries
+fragments : List Fragment
+observation : SourcePruningEnumerationChildDispatch.Observation width
+candidate : Option Cached
+observed :
+  SourcePruningEnumerationCapturedEdge.run checkEmpty r n p h k target scs edge caller before queries =
+    some (SourcePruningEnumerationSelectedEdge.Result.stopped fragments observation candidate)
+advanced :
+  SourcePruningEnumerationNativeBranches.advance
+      (SourcePruningEnumerationSelectedEdge.Result.stopped fragments observation candidate) =
+    some (middleCaller, middleQueries)
+⊢ (match run hook checkEmpty r n p h k target scs before rest middleCaller middleQueries with
+    | Result.complete processed outputs finalCaller finalQueries =>
+      Result.complete (SourcePruningEnumerationSelectedEdge.Result.stopped fragments observation candidate :: processed)
+        outputs finalCaller finalQueries
+    | Result.stopped processed outputs current =>
+      Result.stopped (SourcePruningEnumerationSelectedEdge.Result.stopped fragments observation candidate :: processed)
+        outputs current) =
+    match run hook checkEmpty r n p h k target scs before rest middleCaller middleQueries with
+    | Result.complete processed outputs finalCaller finalQueries =>
+      Result.complete (SourcePruningEnumerationSelectedEdge.Result.stopped fragments observation candidate :: processed)
+        outputs finalCaller finalQueries
+    | Result.stopped processed outputs current =>
+      Result.stopped (SourcePruningEnumerationSelectedEdge.Result.stopped fragments observation candidate :: processed)
+        outputs current

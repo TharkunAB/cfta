@@ -1,0 +1,443 @@
+/tmp/mcfta-native-hook-resources-20261026/strict-hook-1/MicroCFTA/SourcePruningEnumerationHookResources.lean:173:38: error(lean.unknownIdentifier): Unknown identifier `«HookResult».complete.inj`
+/tmp/mcfta-native-hook-resources-20261026/strict-hook-1/MicroCFTA/SourcePruningEnumerationHookResources.lean:173:38: error(lean.unknownIdentifier): Unknown identifier `«HookResult».complete.inj`
+/tmp/mcfta-native-hook-resources-20261026/strict-hook-1/MicroCFTA/SourcePruningEnumerationHookResources.lean:178:42: error: Application type mismatch: The argument
+  continuedAt
+has type
+  match receipt, headRun, admitted, headPending, headHistory, headAt, continued, advanced, receiptCertificate,
+    callbackRun, first, hooked with
+  | SourcePruningEnumerationSelectedEdge.Result.complete fragment actual saved after, headRun, admitted, headPending,
+    headHistory, headAt, continued, advanced, receiptCertificate, callbackRun, first, hooked =>
+    continueWith (resume holeKey fits admits graph templates checkEmpty edgesOf stop order w 0) graph templates stop
+        order w metadata uv fragment actual saved after =
+      SourcePruningEnumerationNativeContinuations.HookResult.complete headOutputs middleCaller middleMemos.query
+  | x, headRun, admitted, headPending, headHistory, headAt, continued, advanced, receiptCertificate, callbackRun, first,
+    hooked => advance receipt = some (middleCaller, middleMemos.query) ∧ headOutputs = []
+but is expected to have type
+  match receipt, first with
+  | SourcePruningEnumerationSelectedEdge.Result.complete fragment reached saved after, observed =>
+    continueWith (resume holeKey fits admits graph templates checkEmpty edgesOf stop order w 0) graph templates stop
+        order w metadata uv fragment reached saved after =
+      SourcePruningEnumerationNativeContinuations.HookResult.complete headOutputs middleCaller middleMemos.query
+  | x, observed => advance receipt = some (middleCaller, middleMemos.query) ∧ headOutputs = []
+in the application
+  SourcePruningEnumerationNativeContinuations.continued_head
+    (continueWith (resume holeKey fits admits graph templates checkEmpty edgesOf stop order w 0) graph templates stop
+      order w metadata uv)
+    checkEmpty w w w w w uv scs before edge rest caller middleCaller memos.query middleMemos.query receipt headOutputs
+    first continuedAt
+/tmp/mcfta-native-hook-resources-20261026/strict-hook-1/MicroCFTA/SourcePruningEnumerationHookResources.lean:182:14: error: Type mismatch
+  running
+has type
+  SourcePruningEnumerationNativeContinuations.run
+      (continueWith (resume holeKey fits admits graph templates checkEmpty edgesOf stop order w 0) graph templates stop
+        order w metadata uv)
+      checkEmpty w w w w w uv scs before (edge :: rest) caller memos.query =
+    match tailResult with
+    | SourcePruningEnumerationNativeContinuations.Result.complete processed later finalCaller finalQueries =>
+      SourcePruningEnumerationNativeContinuations.Result.complete (receipt :: processed) (headOutputs ++ later)
+        finalCaller finalQueries
+    | SourcePruningEnumerationNativeContinuations.Result.stopped processed later current =>
+      SourcePruningEnumerationNativeContinuations.Result.stopped (receipt :: processed) (headOutputs ++ later) current
+but is expected to have type
+  SourcePruningEnumerationNativeContinuations.run
+      (continueWith (resume holeKey fits admits graph templates checkEmpty edgesOf stop order (bound + extra) 0) graph
+        templates stop order (bound + extra) metadata uv)
+      checkEmpty (bound + extra) (bound + extra) (bound + extra) (bound + extra) (bound + extra) uv scs before
+      (edge :: rest) caller memos.query =
+    result
+/tmp/mcfta-native-hook-resources-20261026/strict-hook-1/MicroCFTA/SourcePruningEnumerationHookResources.lean:222:12: error: unsolved goals
+case cons.inl.stopped.refine_1
+Typing Key : Type
+bits : Nat
+inst✝² : DecidableEq Symbol
+inst✝¹ : DecidableEq (EdgeKey Symbol Constraint)
+inst✝ : DecidableEq Node
+holeKey : Typing → Nat → Key
+fits : Key → Symbol → Bool
+admits : Key → Node → Bool
+graph : Graph Symbol Constraint
+templates : List (Template.Pattern Symbol)
+checkEmpty : Bool
+edgesOf : Node → List (EdgeValue Symbol Constraint)
+stop : Option (SourcePruningRecordTypes.Metadata Typing → Nat → Bool)
+order : SourcePruningRecordTypes.Metadata Typing → List Nat → Option Nat
+metadata : SourcePruningRecordTypes.Metadata Typing
+formulas : SourceGuards.Formulas FullSyntax.Formula
+solver : SourceGuards.Entailment FullSyntax.Formula
+before : Cached
+uv handle : Nat
+scs : List Suspended
+parentEntry : Cache.Interned InternedBinderProtocol.NodeKey
+storedEdges : List (EdgeValue Symbol Constraint)
+depth : Nat
+free : List InternedBinderProtocol.Reference
+ready : EnumerationDriver.Ready uv before.core
+stored : before.core.values[uv]? = some (UVarValue.unenumerated (some handle) scs)
+incoming : EnumerationReferences.IncomingAvoid uv before.core
+edge : EdgeValue Symbol Constraint
+rest : List (EdgeValue Symbol Constraint)
+ih :
+  ∀ (seed : Seed) (inventory : Inventory) (caller : Caller (bits + 2)) (memos : Memos),
+    Packet formulas solver inventory caller memos metadata before →
+      lookupNode caller.checked.native.machine.heap handle = some (Value.node parentEntry storedEdges depth free) →
+        (∀ (edge : EdgeValue Symbol Constraint), edge ∈ rest → edge ∈ storedEdges) →
+          Fits seed.snd caller.checked →
+            Reserved bits seed (cost scs before.core.counter rest) →
+              Heap (fun guard => guard ∈ seed.fst) caller.checked.native.machine.heap →
+                ∃ bound processed outputs afterCaller next final result,
+                  (∀ (extra : Nat),
+                      SourcePruningEnumerationNativeContinuations.run
+                          (continueWith
+                            (resume holeKey fits admits graph templates checkEmpty edgesOf stop order (bound + extra) 0)
+                            graph templates stop order (bound + extra) metadata uv)
+                          checkEmpty (bound + extra) (bound + extra) (bound + extra) (bound + extra) (bound + extra) uv
+                          scs before rest caller memos.query =
+                        result) ∧
+                    Post formulas solver next caller afterCaller final ∧
+                      Packet formulas solver next afterCaller final metadata before ∧
+                        Fits (reservationAdvance seed (cost scs before.core.counter rest)).snd afterCaller.checked ∧
+                          Heap (fun guard => guard ∈ (reservationAdvance seed (cost scs before.core.counter rest)).fst)
+                              afterCaller.checked.native.machine.heap ∧
+                            (∀ (index : Nat) (receipt : Receipt (bits + 2)),
+                                processed[index]? = some receipt →
+                                  ReceiptAt formulas solver caller before uv seed scs rest index receipt) ∧
+                              (∀ (output : Output (bits + 2) Typing),
+                                  output ∈ outputs →
+                                    ∃ index,
+                                      index < rest.length ∧
+                                        OutputAt formulas solver caller before seed scs rest index output) ∧
+                                (result =
+                                    SourcePruningEnumerationNativeContinuations.Result.complete processed outputs
+                                      afterCaller final.query ∨
+                                  ∃ current,
+                                    result =
+                                        SourcePruningEnumerationNativeContinuations.Result.stopped processed outputs
+                                          current ∧
+                                      StoppedAt formulas solver caller before uv seed scs rest processed.length
+                                        afterCaller next final current)
+seed : Seed
+inventory : Inventory
+caller : Caller (bits + 2)
+memos : Memos
+packet : Packet formulas solver inventory caller memos metadata before
+decoded : lookupNode caller.checked.native.machine.heap handle = some (Value.node parentEntry storedEdges depth free)
+selected✝ : ∀ (edge_1 : EdgeValue Symbol Constraint), edge_1 ∈ edge :: rest → edge_1 ∈ storedEdges
+bounded : Fits seed.snd caller.checked
+reserved : Reserved bits seed (cost scs before.core.counter (edge :: rest))
+known : Heap (fun guard => guard ∈ seed.fst) caller.checked.native.machine.heap
+roots : Nat → Nat
+paths : Roots before.core.representatives roots
+_storage : EnumerationCorrectness.StorageValid before.core
+realized : PendingRealized caller.checked.native.machine.heap before.core
+counts : EnumerationCanonicalWaiting.Correct roots before.core.values before.waiting
+flags :
+  ∀ (slot : Nat),
+    SourcePruningEnumerationNativeIndex.candidate caller.checked.native.machine.heap
+        (before.core.values[slot]?.getD UVarValue.eliminated) =
+      some (before.expandable slot)
+pending : EnumerationDependencies.InputsPending before.core scs
+headReserved : Reserved bits seed (edgeCost scs before.core.counter edge)
+r n p h k : Nat
+middleCaller : Caller (bits + 2)
+middleQueries : SourceEndpointMemo.Memos
+middleMemos : Memos
+middleInventory : Inventory
+headPost : Post formulas solver middleInventory caller middleCaller middleMemos
+headQueries : middleMemos.query = middleQueries
+headFits : Fits (reservationAdvance seed (edgeCost scs before.core.counter edge)).snd middleCaller.checked
+headKnown :
+  Heap (fun guard => guard ∈ (reservationAdvance seed (edgeCost scs before.core.counter edge)).fst)
+    middleCaller.checked.native.machine.heap
+headBound : Nat := r + n + p + h + k
+wholeFits : Fits (reservationAdvance seed (cost scs before.core.counter (edge :: rest))).snd middleCaller.checked
+wholeKnown :
+  Heap (fun guard => guard ∈ (reservationAdvance seed (cost scs before.core.counter (edge :: rest))).fst)
+    middleCaller.checked.native.machine.heap
+callbackFuel : Nat
+fragment : Fragments.Fragment Symbol
+receiptCache : Cached
+selected : Nat
+updated : SourcePruningRecordTypes.Metadata Typing
+callbackCache : Cached
+callbackPacket : Packet formulas solver middleInventory middleCaller middleMemos updated callbackCache
+headRun :
+  ∀ (er en P H ek : Nat),
+    p ≤ P →
+      h ≤ H →
+        SourcePruningEnumerationCapturedEdge.run checkEmpty (r + er) (n + en) P H (k + ek) uv scs edge caller before
+            memos.query =
+          some
+            (SourcePruningEnumerationSelectedEdge.Result.complete fragment middleCaller middleMemos.query receiptCache)
+admitted :
+  SourcePruningEnumerationNativeBranchCompletion.Admitted uv
+    (SourcePruningEnumerationSelectedEdge.Result.complete fragment middleCaller middleMemos.query receiptCache)
+headPending :
+  EnumerationReferences.PendingReferences before.core →
+    EnumerationReferences.IncomingAvoid uv before.core →
+      SourcePruningEnumerationNativeBranchCompletion.Pending
+        (SourcePruningEnumerationSelectedEdge.Result.complete fragment middleCaller middleMemos.query receiptCache)
+headHistory :
+  SourcePruningEnumerationNativeBranchCompletion.FragmentHistory before.core
+    (SourcePruningEnumerationSelectedEdge.Result.complete fragment middleCaller middleMemos.query receiptCache)
+headAt :
+  ∀ (w : Nat),
+    headBound ≤ w →
+      SourcePruningEnumerationCapturedEdge.run checkEmpty w w w w w uv scs edge caller before memos.query =
+        some (SourcePruningEnumerationSelectedEdge.Result.complete fragment middleCaller middleMemos.query receiptCache)
+continued :
+  advance (SourcePruningEnumerationSelectedEdge.Result.complete fragment middleCaller middleMemos.query receiptCache) =
+    some (middleCaller, middleQueries)
+advanced :
+  advance (SourcePruningEnumerationSelectedEdge.Result.complete fragment middleCaller middleMemos.query receiptCache) =
+    some (middleCaller, middleMemos.query)
+receiptCertificate :
+  ReceiptAt formulas solver caller before uv seed scs (edge :: rest) 0
+    (SourcePruningEnumerationSelectedEdge.Result.complete fragment middleCaller middleMemos.query receiptCache)
+callbackRun :
+  ∀ (extra : Nat),
+    match SourcePruningEnumerationSelectedEdge.Result.complete fragment middleCaller middleMemos.query receiptCache with
+    | SourcePruningEnumerationSelectedEdge.Result.complete fragment actual saved after =>
+      continueWith (resume holeKey fits admits graph templates checkEmpty edgesOf stop order (callbackFuel + extra) 0)
+          graph templates stop order (callbackFuel + extra) metadata uv fragment actual saved after =
+        SourcePruningEnumerationNativeContinuations.HookResult.stopped []
+          (Failure.exhausted selected updated callbackCache) (some (middleCaller, middleMemos.query))
+    | x =>
+      SourcePruningEnumerationNativeContinuations.HookResult.stopped []
+          (Failure.exhausted selected updated callbackCache) (some (middleCaller, middleMemos.query)) =
+        SourcePruningEnumerationNativeContinuations.HookResult.complete [] middleCaller middleMemos.query
+bound : Nat := headBound + callbackFuel
+extra : Nat
+w : Nat := bound + extra
+hl : headBound ≤ w
+cl : callbackFuel ≤ w
+first :
+  SourcePruningEnumerationCapturedEdge.run checkEmpty w w w w w uv scs edge caller before memos.query =
+    some (SourcePruningEnumerationSelectedEdge.Result.complete fragment middleCaller middleMemos.query receiptCache)
+hooked :
+  match SourcePruningEnumerationSelectedEdge.Result.complete fragment middleCaller middleMemos.query receiptCache with
+  | SourcePruningEnumerationSelectedEdge.Result.complete fragment actual saved after =>
+    continueWith (resume holeKey fits admits graph templates checkEmpty edgesOf stop order w 0) graph templates stop
+        order w metadata uv fragment actual saved after =
+      SourcePruningEnumerationNativeContinuations.HookResult.stopped []
+        (Failure.exhausted selected updated callbackCache) (some (middleCaller, middleMemos.query))
+  | x =>
+    SourcePruningEnumerationNativeContinuations.HookResult.stopped [] (Failure.exhausted selected updated callbackCache)
+        (some (middleCaller, middleMemos.query)) =
+      SourcePruningEnumerationNativeContinuations.HookResult.complete [] middleCaller middleMemos.query
+⊢ (match
+      SourcePruningEnumerationCapturedEdge.run checkEmpty (bound + extra) (bound + extra) (bound + extra)
+        (bound + extra) (bound + extra) uv scs edge caller before memos.query with
+    | none =>
+      SourcePruningEnumerationNativeContinuations.Result.stopped [] []
+        (SourcePruningEnumerationNativeContinuations.Stop.edge none)
+    | some receipt =>
+      match receipt with
+      | SourcePruningEnumerationSelectedEdge.Result.complete fragment reached saved after =>
+        match
+          continueWith (resume holeKey fits admits graph templates checkEmpty edgesOf stop order (bound + extra) 0)
+            graph templates stop order (bound + extra) metadata uv fragment reached saved after with
+        | SourcePruningEnumerationNativeContinuations.HookResult.stopped outputs reason endpoint =>
+          SourcePruningEnumerationNativeContinuations.Result.stopped [] outputs
+            (SourcePruningEnumerationNativeContinuations.Stop.continuation receipt reason endpoint)
+        | SourcePruningEnumerationNativeContinuations.HookResult.complete outputs middleCaller middleQueries =>
+          match
+            SourcePruningEnumerationNativeContinuations.run
+              (continueWith (resume holeKey fits admits graph templates checkEmpty edgesOf stop order (bound + extra) 0)
+                graph templates stop order (bound + extra) metadata uv)
+              checkEmpty (bound + extra) (bound + extra) (bound + extra) (bound + extra) (bound + extra) uv scs before
+              rest middleCaller middleQueries with
+          | SourcePruningEnumerationNativeContinuations.Result.complete processed later finalCaller finalQueries =>
+            SourcePruningEnumerationNativeContinuations.Result.complete (receipt :: processed) (outputs ++ later)
+              finalCaller finalQueries
+          | SourcePruningEnumerationNativeContinuations.Result.stopped processed later current =>
+            SourcePruningEnumerationNativeContinuations.Result.stopped (receipt :: processed) (outputs ++ later) current
+      | other =>
+        match advance other with
+        | none =>
+          SourcePruningEnumerationNativeContinuations.Result.stopped [] []
+            (SourcePruningEnumerationNativeContinuations.Stop.edge (some other))
+        | some (middleCaller, middleQueries) =>
+          match
+            SourcePruningEnumerationNativeContinuations.run
+              (continueWith (resume holeKey fits admits graph templates checkEmpty edgesOf stop order (bound + extra) 0)
+                graph templates stop order (bound + extra) metadata uv)
+              checkEmpty (bound + extra) (bound + extra) (bound + extra) (bound + extra) (bound + extra) uv scs before
+              rest middleCaller middleQueries with
+          | SourcePruningEnumerationNativeContinuations.Result.complete processed outputs finalCaller finalQueries =>
+            SourcePruningEnumerationNativeContinuations.Result.complete (other :: processed) outputs finalCaller
+              finalQueries
+          | SourcePruningEnumerationNativeContinuations.Result.stopped processed outputs current =>
+            SourcePruningEnumerationNativeContinuations.Result.stopped (other :: processed) outputs current) =
+    SourcePruningEnumerationNativeContinuations.Result.stopped [] []
+      (SourcePruningEnumerationNativeContinuations.Stop.continuation
+        (SourcePruningEnumerationSelectedEdge.Result.complete fragment middleCaller middleMemos.query receiptCache)
+        (Failure.exhausted selected updated callbackCache) (some (middleCaller, middleMemos.query)))
+/tmp/mcfta-native-hook-resources-20261026/strict-hook-1/MicroCFTA/SourcePruningEnumerationHookResources.lean:242:109: error: Invalid simp theorem: Expected a proposition, but found
+  (x_0 : Nat) → Receipt x_0 → Option (Caller x_0 × SourceEndpointMemo.Memos)
+/tmp/mcfta-native-hook-resources-20261026/strict-hook-1/MicroCFTA/SourcePruningEnumerationHookResources.lean:241:8: error: unsolved goals
+case cons.inr.refine_1
+Typing Key : Type
+bits : Nat
+inst✝² : DecidableEq Symbol
+inst✝¹ : DecidableEq (EdgeKey Symbol Constraint)
+inst✝ : DecidableEq Node
+holeKey : Typing → Nat → Key
+fits : Key → Symbol → Bool
+admits : Key → Node → Bool
+graph : Graph Symbol Constraint
+templates : List (Template.Pattern Symbol)
+checkEmpty : Bool
+edgesOf : Node → List (EdgeValue Symbol Constraint)
+stop : Option (SourcePruningRecordTypes.Metadata Typing → Nat → Bool)
+order : SourcePruningRecordTypes.Metadata Typing → List Nat → Option Nat
+metadata : SourcePruningRecordTypes.Metadata Typing
+formulas : SourceGuards.Formulas FullSyntax.Formula
+solver : SourceGuards.Entailment FullSyntax.Formula
+before : Cached
+uv handle : Nat
+scs : List Suspended
+parentEntry : Cache.Interned InternedBinderProtocol.NodeKey
+storedEdges : List (EdgeValue Symbol Constraint)
+depth : Nat
+free : List InternedBinderProtocol.Reference
+ready : EnumerationDriver.Ready uv before.core
+stored : before.core.values[uv]? = some (UVarValue.unenumerated (some handle) scs)
+incoming : EnumerationReferences.IncomingAvoid uv before.core
+edge : EdgeValue Symbol Constraint
+rest : List (EdgeValue Symbol Constraint)
+ih :
+  ∀ (seed : Seed) (inventory : Inventory) (caller : Caller (bits + 2)) (memos : Memos),
+    Packet formulas solver inventory caller memos metadata before →
+      lookupNode caller.checked.native.machine.heap handle = some (Value.node parentEntry storedEdges depth free) →
+        (∀ (edge : EdgeValue Symbol Constraint), edge ∈ rest → edge ∈ storedEdges) →
+          Fits seed.snd caller.checked →
+            Reserved bits seed (cost scs before.core.counter rest) →
+              Heap (fun guard => guard ∈ seed.fst) caller.checked.native.machine.heap →
+                ∃ bound processed outputs afterCaller next final result,
+                  (∀ (extra : Nat),
+                      SourcePruningEnumerationNativeContinuations.run
+                          (continueWith
+                            (resume holeKey fits admits graph templates checkEmpty edgesOf stop order (bound + extra) 0)
+                            graph templates stop order (bound + extra) metadata uv)
+                          checkEmpty (bound + extra) (bound + extra) (bound + extra) (bound + extra) (bound + extra) uv
+                          scs before rest caller memos.query =
+                        result) ∧
+                    Post formulas solver next caller afterCaller final ∧
+                      Packet formulas solver next afterCaller final metadata before ∧
+                        Fits (reservationAdvance seed (cost scs before.core.counter rest)).snd afterCaller.checked ∧
+                          Heap (fun guard => guard ∈ (reservationAdvance seed (cost scs before.core.counter rest)).fst)
+                              afterCaller.checked.native.machine.heap ∧
+                            (∀ (index : Nat) (receipt : Receipt (bits + 2)),
+                                processed[index]? = some receipt →
+                                  ReceiptAt formulas solver caller before uv seed scs rest index receipt) ∧
+                              (∀ (output : Output (bits + 2) Typing),
+                                  output ∈ outputs →
+                                    ∃ index,
+                                      index < rest.length ∧
+                                        OutputAt formulas solver caller before seed scs rest index output) ∧
+                                (result =
+                                    SourcePruningEnumerationNativeContinuations.Result.complete processed outputs
+                                      afterCaller final.query ∨
+                                  ∃ current,
+                                    result =
+                                        SourcePruningEnumerationNativeContinuations.Result.stopped processed outputs
+                                          current ∧
+                                      StoppedAt formulas solver caller before uv seed scs rest processed.length
+                                        afterCaller next final current)
+seed : Seed
+inventory : Inventory
+caller : Caller (bits + 2)
+memos : Memos
+packet : Packet formulas solver inventory caller memos metadata before
+decoded : lookupNode caller.checked.native.machine.heap handle = some (Value.node parentEntry storedEdges depth free)
+selected : ∀ (edge_1 : EdgeValue Symbol Constraint), edge_1 ∈ edge :: rest → edge_1 ∈ storedEdges
+bounded : Fits seed.snd caller.checked
+reserved : Reserved bits seed (cost scs before.core.counter (edge :: rest))
+known : Heap (fun guard => guard ∈ seed.fst) caller.checked.native.machine.heap
+roots : Nat → Nat
+paths : Roots before.core.representatives roots
+_storage : EnumerationCorrectness.StorageValid before.core
+realized : PendingRealized caller.checked.native.machine.heap before.core
+counts : EnumerationCanonicalWaiting.Correct roots before.core.values before.waiting
+flags :
+  ∀ (slot : Nat),
+    SourcePruningEnumerationNativeIndex.candidate caller.checked.native.machine.heap
+        (before.core.values[slot]?.getD UVarValue.eliminated) =
+      some (before.expandable slot)
+pending : EnumerationDependencies.InputsPending before.core scs
+headReserved : Reserved bits seed (edgeCost scs before.core.counter edge)
+r n p h k : Nat
+middleCaller : Caller (bits + 2)
+middleQueries : SourceEndpointMemo.Memos
+middleMemos : Memos
+middleInventory : Inventory
+headPost : Post formulas solver middleInventory caller middleCaller middleMemos
+headQueries : middleMemos.query = middleQueries
+headFits : Fits (reservationAdvance seed (edgeCost scs before.core.counter edge)).snd middleCaller.checked
+headKnown :
+  Heap (fun guard => guard ∈ (reservationAdvance seed (edgeCost scs before.core.counter edge)).fst)
+    middleCaller.checked.native.machine.heap
+headBound : Nat := r + n + p + h + k
+wholeFits : Fits (reservationAdvance seed (cost scs before.core.counter (edge :: rest))).snd middleCaller.checked
+wholeKnown :
+  Heap (fun guard => guard ∈ (reservationAdvance seed (cost scs before.core.counter (edge :: rest))).fst)
+    middleCaller.checked.native.machine.heap
+_allowed : arityAllows edge.children.length scs = true
+_projected : SourcePruningEnumerationConstraint.project edge.entry.key.constraint = none
+headRun :
+  ∀ (er en P H ek : Nat),
+    p ≤ P →
+      h ≤ H →
+        SourcePruningEnumerationCapturedEdge.run checkEmpty (r + er) (n + en) P H (k + ek) uv scs edge caller before
+            memos.query =
+          some SourcePruningEnumerationSelectedEdge.Result.unhandled
+admitted :
+  SourcePruningEnumerationNativeBranchCompletion.Admitted uv SourcePruningEnumerationSelectedEdge.Result.unhandled
+headPending :
+  EnumerationReferences.PendingReferences before.core →
+    EnumerationReferences.IncomingAvoid uv before.core →
+      SourcePruningEnumerationNativeBranchCompletion.Pending SourcePruningEnumerationSelectedEdge.Result.unhandled
+headHistory :
+  SourcePruningEnumerationNativeBranchCompletion.FragmentHistory before.core
+    SourcePruningEnumerationSelectedEdge.Result.unhandled
+headAt :
+  ∀ (w : Nat),
+    headBound ≤ w →
+      SourcePruningEnumerationCapturedEdge.run checkEmpty w w w w w uv scs edge caller before memos.query =
+        some SourcePruningEnumerationSelectedEdge.Result.unhandled
+extra : Nat
+⊢ (match advance SourcePruningEnumerationSelectedEdge.Result.unhandled with
+    | none =>
+      SourcePruningEnumerationNativeContinuations.Result.stopped [] []
+        (SourcePruningEnumerationNativeContinuations.Stop.edge
+          (some SourcePruningEnumerationSelectedEdge.Result.unhandled))
+    | some (middleCaller, middleQueries) =>
+      match
+        SourcePruningEnumerationNativeContinuations.run
+          (continueWith (resume holeKey fits admits graph templates checkEmpty edgesOf stop order (headBound + extra) 0)
+            graph templates stop order (headBound + extra) metadata uv)
+          checkEmpty (headBound + extra) (headBound + extra) (headBound + extra) (headBound + extra) (headBound + extra)
+          uv scs before rest middleCaller middleQueries with
+      | SourcePruningEnumerationNativeContinuations.Result.complete processed outputs finalCaller finalQueries =>
+        SourcePruningEnumerationNativeContinuations.Result.complete
+          (SourcePruningEnumerationSelectedEdge.Result.unhandled :: processed) outputs finalCaller finalQueries
+      | SourcePruningEnumerationNativeContinuations.Result.stopped processed outputs current =>
+        SourcePruningEnumerationNativeContinuations.Result.stopped
+          (SourcePruningEnumerationSelectedEdge.Result.unhandled :: processed) outputs current) =
+    SourcePruningEnumerationNativeContinuations.Result.stopped [] []
+      (SourcePruningEnumerationNativeContinuations.Stop.edge
+        (some SourcePruningEnumerationSelectedEdge.Result.unhandled))
+/tmp/mcfta-native-hook-resources-20261026/strict-hook-1/MicroCFTA/SourcePruningEnumerationHookResources.lean:229:74: error: This simp argument is unused:
+  first
+
+Hint: Omit it from the simp argument list.
+  [apply] simp only [SourcePruningEnumerationNativeContinuations.run, hooked]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/tmp/mcfta-native-hook-resources-20261026/strict-hook-1/MicroCFTA/SourcePruningEnumerationHookResources.lean:229:81: error: This simp argument is unused:
+  hooked
+
+Hint: Omit it from the simp argument list.
+  [apply] simp only [SourcePruningEnumerationNativeContinuations.run, first]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
