@@ -1,0 +1,1109 @@
+MicroCFTA.SourcePruningEnumerationChildCompletion.partition_subsets (bucket : List MicroCFTA.EnumerationState.Suspended)
+  (first : MicroCFTA.EnumerationState.Suspended) (rest descendants : List MicroCFTA.EnumerationState.Suspended)
+  (partitioned :
+    List.partition (fun sc => MicroCFTA.EqualityTrie.isTerminal sc.trie) bucket = (first :: rest, descendants)) :
+  first :: rest ⊆ bucket ∧ descendants ⊆ bucket
+'MicroCFTA.SourcePruningEnumerationChildCompletion.partition_subsets' depends on axioms: [propext]
+MicroCFTA.SourcePruningEnumerationChildCompletion.terminal_length_le
+  (bucket : List MicroCFTA.EnumerationState.Suspended) (first : MicroCFTA.EnumerationState.Suspended)
+  (rest descendants : List MicroCFTA.EnumerationState.Suspended)
+  (partitioned :
+    List.partition (fun sc => MicroCFTA.EqualityTrie.isTerminal sc.trie) bucket = (first :: rest, descendants)) :
+  (first :: rest).length ≤ bucket.length
+'MicroCFTA.SourcePruningEnumerationChildCompletion.terminal_length_le' depends on axioms: [propext]
+MicroCFTA.SourcePruningEnumerationChildCompletion.initial_ranges {bits : Nat}
+  [DecidableEq MicroCFTA.SourcePruningTemplates.Symbol]
+  [DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey MicroCFTA.SourcePruningTemplates.Symbol
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  [DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.Value MicroCFTA.SourcePruningTemplates.Symbol
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  (seed : MicroCFTA.SourcePruningEnumerationIncomingReservation.Seed)
+  (formulas : MicroCFTA.SourceGuards.Formulas MicroCFTA.FullSyntax.Formula)
+  (solver : MicroCFTA.SourceGuards.Entailment MicroCFTA.FullSyntax.Formula)
+  (inventory : MicroCFTA.SourceCurrentAllocatedNativeInventoryState.Inventory)
+  (beforeCaller : MicroCFTA.SourceCurrentAllocatedPartialState.State (bits + 2))
+  (before :
+    MicroCFTA.EnumerationExpandableIndex.Cached MicroCFTA.SourcePruningTemplates.Symbol
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+  (checkEmpty : Bool) (bucket : List MicroCFTA.EnumerationState.Suspended)
+  (incoming :
+    MicroCFTA.InternedConstructorTemplates.Value MicroCFTA.SourcePruningTemplates.Symbol
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+  (roots : Nat → Nat) (memos : MicroCFTA.EndpointMemoGateTrace.Memos)
+  (initial : MicroCFTA.SourceCurrentAllocatedPartialInvariant.Context formulas solver inventory beforeCaller memos)
+  (safe : MicroCFTA.EnumerationSchedule.Safe before.core)
+  (paths : MicroCFTA.EnumerationSchedule.Roots before.core.representatives roots)
+  (counts : MicroCFTA.EnumerationCanonicalWaiting.Correct roots before.core.values before.waiting)
+  (bounded : ∀ (sc : MicroCFTA.EnumerationState.Suspended), sc ∈ bucket → sc.var < before.core.counter)
+  (pending : MicroCFTA.EnumerationDependencies.InputsPending before.core bucket)
+  (realized :
+    MicroCFTA.SourcePruningEnumerationObservation.PendingRealized beforeCaller.checked.native.machine.heap before.core)
+  (available : MicroCFTA.InternedProbeProvenance.Available beforeCaller.checked.native.machine.heap incoming)
+  (closed : incoming.free = [])
+  (fits : MicroCFTA.SourceCurrentConstrainedCapGeneratedQueryResources.Fits seed.snd beforeCaller.checked)
+  (reserved : MicroCFTA.SourcePruningEnumerationIncomingReservation.Reserved bits seed (bucket.length + 1))
+  (known :
+    MicroCFTA.SourceEqualityAnnotationHeap.Heap (fun guard => guard ∈ seed.fst)
+      beforeCaller.checked.native.machine.heap) :
+  MicroCFTA.SourcePruningEnumerationChildCompletion.Ranges checkEmpty bucket incoming beforeCaller before memos.query
+'MicroCFTA.SourcePruningEnumerationChildCompletion.initial_ranges' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+MicroCFTA.SourcePruningEnumerationTerminal.observed_resources {EnumGuard : Type} {bits : Nat}
+  [DecidableEq MicroCFTA.SourcePruningTemplates.Symbol]
+  [DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey MicroCFTA.SourcePruningTemplates.Symbol
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  [DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.Value MicroCFTA.SourcePruningTemplates.Symbol
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  (seed : MicroCFTA.SourcePruningEnumerationIncomingReservation.Seed)
+  (formulas : MicroCFTA.SourceGuards.Formulas MicroCFTA.FullSyntax.Formula)
+  (solver : MicroCFTA.SourceGuards.Entailment MicroCFTA.FullSyntax.Formula)
+  (inventory : MicroCFTA.SourceCurrentAllocatedNativeInventoryState.Inventory)
+  (beforeCaller : MicroCFTA.SourceCurrentAllocatedPartialState.State (bits + 2))
+  (before : MicroCFTA.EnumerationState.State MicroCFTA.SourcePruningTemplates.Symbol EnumGuard) (checkEmpty : Bool)
+  (r n p h : Nat) (first : MicroCFTA.EnumerationState.Suspended) (rest : List MicroCFTA.EnumerationState.Suspended)
+  (waiting : MicroCFTA.EnumerationWaitingIndex.Waiting)
+  (incoming :
+    MicroCFTA.InternedConstructorTemplates.Value MicroCFTA.SourcePruningTemplates.Symbol
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+  (incomingScs : List MicroCFTA.EnumerationState.Suspended) (roots : Nat → Nat)
+  (memos : MicroCFTA.EndpointMemoGateTrace.Memos)
+  (initial : MicroCFTA.SourceCurrentAllocatedPartialInvariant.Context formulas solver inventory beforeCaller memos)
+  (safe : MicroCFTA.EnumerationSchedule.Safe before)
+  (paths : MicroCFTA.EnumerationSchedule.Roots before.representatives roots)
+  (counts : MicroCFTA.EnumerationCanonicalWaiting.Correct roots before.values waiting)
+  (bounded : ∀ (sc : MicroCFTA.EnumerationState.Suspended), sc ∈ first :: rest → sc.var < before.counter)
+  (pending : MicroCFTA.EnumerationDependencies.InputsPending before (first :: rest))
+  (realized :
+    MicroCFTA.SourcePruningEnumerationObservation.PendingRealized beforeCaller.checked.native.machine.heap before)
+  (available : MicroCFTA.InternedProbeProvenance.Available beforeCaller.checked.native.machine.heap incoming)
+  (closed : incoming.free = [])
+  (fits : MicroCFTA.SourceCurrentConstrainedCapGeneratedQueryResources.Fits seed.snd beforeCaller.checked)
+  (reserved : MicroCFTA.SourcePruningEnumerationIncomingReservation.Reserved bits seed ((first :: rest).length + 1))
+  (known :
+    MicroCFTA.SourceEqualityAnnotationHeap.Heap (fun guard => guard ∈ seed.fst)
+      beforeCaller.checked.native.machine.heap)
+  {result :
+    Option
+      (List
+        (Except MicroCFTA.EnumerationState.Error
+          (MicroCFTA.Fragments.Fragment MicroCFTA.SourcePruningTemplates.Symbol ×
+            MicroCFTA.EnumerationState.State MicroCFTA.SourcePruningTemplates.Symbol EnumGuard)))}
+  {afterCaller : MicroCFTA.SourceCurrentAllocatedPartialState.State (bits + 2)}
+  {savedQueries : MicroCFTA.SourceEndpointMemo.Memos}
+  {outer : MicroCFTA.EnumerationState.State MicroCFTA.SourcePruningTemplates.Symbol EnumGuard}
+  {afterWaiting : MicroCFTA.EnumerationWaitingIndex.Waiting}
+  (observed :
+    MicroCFTA.SourcePruningEnumerationTerminal.run checkEmpty r n p h first rest waiting beforeCaller before incoming
+        incomingScs memos.query =
+      (Except.ok result, afterCaller, savedQueries, outer, afterWaiting)) :
+  MicroCFTA.SourceCurrentConstrainedCapGeneratedQueryResources.Fits
+      (MicroCFTA.SourcePruningEnumerationIncomingReservation.advance seed ((first :: rest).length + 1)).snd
+      afterCaller.checked ∧
+    MicroCFTA.SourceEqualityAnnotationHeap.Heap
+      (fun guard =>
+        guard ∈ (MicroCFTA.SourcePruningEnumerationIncomingReservation.advance seed ((first :: rest).length + 1)).fst)
+      afterCaller.checked.native.machine.heap
+'MicroCFTA.SourcePruningEnumerationTerminal.observed_resources' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+MicroCFTA.SourcePruningEnumerationChildDispatch.observed_resources {bits : Nat}
+  [DecidableEq MicroCFTA.SourcePruningTemplates.Symbol]
+  [DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey MicroCFTA.SourcePruningTemplates.Symbol
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  [DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.Value MicroCFTA.SourcePruningTemplates.Symbol
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  (seed : MicroCFTA.SourcePruningEnumerationIncomingReservation.Seed)
+  (formulas : MicroCFTA.SourceGuards.Formulas MicroCFTA.FullSyntax.Formula)
+  (solver : MicroCFTA.SourceGuards.Entailment MicroCFTA.FullSyntax.Formula)
+  (inventory : MicroCFTA.SourceCurrentAllocatedNativeInventoryState.Inventory)
+  (beforeCaller : MicroCFTA.SourceCurrentAllocatedPartialState.State (bits + 2))
+  (before :
+    MicroCFTA.EnumerationExpandableIndex.Cached MicroCFTA.SourcePruningTemplates.Symbol
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+  (checkEmpty : Bool) (r n p h k : Nat) (bucket : List MicroCFTA.EnumerationState.Suspended)
+  (incoming :
+    MicroCFTA.InternedConstructorTemplates.Value MicroCFTA.SourcePruningTemplates.Symbol
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+  (roots : Nat → Nat) (memos : MicroCFTA.EndpointMemoGateTrace.Memos)
+  (initial : MicroCFTA.SourceCurrentAllocatedPartialInvariant.Context formulas solver inventory beforeCaller memos)
+  (safe : MicroCFTA.EnumerationSchedule.Safe before.core)
+  (paths : MicroCFTA.EnumerationSchedule.Roots before.core.representatives roots)
+  (counts : MicroCFTA.EnumerationCanonicalWaiting.Correct roots before.core.values before.waiting)
+  (realized :
+    MicroCFTA.SourcePruningEnumerationObservation.PendingRealized beforeCaller.checked.native.machine.heap before.core)
+  (bounded : ∀ (sc : MicroCFTA.EnumerationState.Suspended), sc ∈ bucket → sc.var < before.core.counter)
+  (pending : MicroCFTA.EnumerationDependencies.InputsPending before.core bucket)
+  (available : MicroCFTA.InternedProbeProvenance.Available beforeCaller.checked.native.machine.heap incoming)
+  (closed : incoming.free = [])
+  (fits : MicroCFTA.SourceCurrentConstrainedCapGeneratedQueryResources.Fits seed.snd beforeCaller.checked)
+  (reserved : MicroCFTA.SourcePruningEnumerationIncomingReservation.Reserved bits seed (bucket.length + 1))
+  (known :
+    MicroCFTA.SourceEqualityAnnotationHeap.Heap (fun guard => guard ∈ seed.fst)
+      beforeCaller.checked.native.machine.heap)
+  {result :
+    Option
+      (List
+        (Except MicroCFTA.EnumerationState.Error
+          (MicroCFTA.Fragments.Fragment MicroCFTA.SourcePruningTemplates.Symbol ×
+            MicroCFTA.EnumerationState.State MicroCFTA.SourcePruningTemplates.Symbol
+              (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))))}
+  {afterCaller : MicroCFTA.SourceCurrentAllocatedPartialState.State (bits + 2)}
+  {savedQueries : MicroCFTA.SourceEndpointMemo.Memos}
+  {outer :
+    MicroCFTA.EnumerationState.State MicroCFTA.SourcePruningTemplates.Symbol
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)}
+  {moved : MicroCFTA.EnumerationWaitingIndex.Waiting}
+  {cache :
+    Option
+      (MicroCFTA.EnumerationExpandableIndex.Cached MicroCFTA.SourcePruningTemplates.Symbol
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))}
+  (observed :
+    MicroCFTA.SourcePruningEnumerationChildDispatch.run checkEmpty r n p h k bucket incoming beforeCaller before
+        memos.query =
+      ((Except.ok result, afterCaller, savedQueries, outer, moved), cache)) :
+  MicroCFTA.SourceCurrentConstrainedCapGeneratedQueryResources.Fits
+      (MicroCFTA.SourcePruningEnumerationIncomingReservation.advance seed (bucket.length + 1)).snd afterCaller.checked ∧
+    MicroCFTA.SourceEqualityAnnotationHeap.Heap
+      (fun guard =>
+        guard ∈ (MicroCFTA.SourcePruningEnumerationIncomingReservation.advance seed (bucket.length + 1)).fst)
+      afterCaller.checked.native.machine.heap
+'MicroCFTA.SourcePruningEnumerationChildDispatch.observed_resources' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+MicroCFTA.SourcePruningEnumerationChildCompletion.complete_with_fragments_resources {bits : Nat}
+  [DecidableEq MicroCFTA.SourcePruningTemplates.Symbol]
+  [DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey MicroCFTA.SourcePruningTemplates.Symbol
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  [DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.Value MicroCFTA.SourcePruningTemplates.Symbol
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  (seed : MicroCFTA.SourcePruningEnumerationIncomingReservation.Seed)
+  (formulas : MicroCFTA.SourceGuards.Formulas MicroCFTA.FullSyntax.Formula)
+  (solver : MicroCFTA.SourceGuards.Entailment MicroCFTA.FullSyntax.Formula)
+  (inventory : MicroCFTA.SourceCurrentAllocatedNativeInventoryState.Inventory)
+  (beforeCaller : MicroCFTA.SourceCurrentAllocatedPartialState.State (bits + 2))
+  (before :
+    MicroCFTA.EnumerationExpandableIndex.Cached MicroCFTA.SourcePruningTemplates.Symbol
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+  (checkEmpty : Bool) (bucket : List MicroCFTA.EnumerationState.Suspended)
+  (incoming :
+    MicroCFTA.InternedConstructorTemplates.Value MicroCFTA.SourcePruningTemplates.Symbol
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+  (roots : Nat → Nat) (memos : MicroCFTA.EndpointMemoGateTrace.Memos)
+  (initial : MicroCFTA.SourceCurrentAllocatedPartialInvariant.Context formulas solver inventory beforeCaller memos)
+  (safe : MicroCFTA.EnumerationSchedule.Safe before.core)
+  (paths : MicroCFTA.EnumerationSchedule.Roots before.core.representatives roots)
+  (counts : MicroCFTA.EnumerationCanonicalWaiting.Correct roots before.core.values before.waiting)
+  (flags :
+    ∀ (slot : Nat),
+      MicroCFTA.SourcePruningEnumerationNativeIndex.candidate beforeCaller.checked.native.machine.heap
+          (before.core.values[slot]?.getD MicroCFTA.EnumerationState.UVarValue.eliminated) =
+        some (before.expandable slot))
+  (realized :
+    MicroCFTA.SourcePruningEnumerationObservation.PendingRealized beforeCaller.checked.native.machine.heap before.core)
+  (bounded : ∀ (sc : MicroCFTA.EnumerationState.Suspended), sc ∈ bucket → sc.var < before.core.counter)
+  (pending : MicroCFTA.EnumerationDependencies.InputsPending before.core bucket)
+  (available : MicroCFTA.InternedProbeProvenance.Available beforeCaller.checked.native.machine.heap incoming)
+  (closed : incoming.free = [])
+  (fits : MicroCFTA.SourceCurrentConstrainedCapGeneratedQueryResources.Fits seed.snd beforeCaller.checked)
+  (reserved : MicroCFTA.SourcePruningEnumerationIncomingReservation.Reserved bits seed (bucket.length + 1))
+  (known :
+    MicroCFTA.SourceEqualityAnnotationHeap.Heap (fun guard => guard ∈ seed.fst)
+      beforeCaller.checked.native.machine.heap) :
+  ∃ r n p h k raw afterCaller after savedQueries final next afterRoots outer waiting,
+    (∀ (extraRepresentative extraNative P H extraIndex : Nat),
+        p ≤ P →
+          h ≤ H →
+            MicroCFTA.SourcePruningEnumerationChildDispatch.run checkEmpty (r + extraRepresentative) (n + extraNative) P
+                H (k + extraIndex) bucket incoming beforeCaller before memos.query =
+              ((Except.ok (some raw), afterCaller, savedQueries, outer, waiting), some after)) ∧
+      MicroCFTA.SourceCurrentAllocatedPartialInvariant.Post formulas solver next beforeCaller afterCaller final ∧
+        final.query = savedQueries ∧
+          before.core.counter ≤ after.core.counter ∧
+            MicroCFTA.EnumerationSchedule.Roots after.core.representatives afterRoots ∧
+              MicroCFTA.EnumerationCorrectness.StorageValid after.core ∧
+                MicroCFTA.SourcePruningEnumerationObservation.PendingRealized afterCaller.checked.native.machine.heap
+                    after.core ∧
+                  MicroCFTA.EnumerationCanonicalWaiting.Correct afterRoots after.core.values after.waiting ∧
+                    (∀ (slot : Nat),
+                        MicroCFTA.SourcePruningEnumerationNativeIndex.candidate afterCaller.checked.native.machine.heap
+                            (after.core.values[slot]?.getD MicroCFTA.EnumerationState.UVarValue.eliminated) =
+                          some (after.expandable slot)) ∧
+                      MicroCFTA.EnumerationDependencies.EnumeratedOrigin before.core after.core ∧
+                        (∀ (held : Nat),
+                            held < before.core.counter →
+                              MicroCFTA.EnumerationSchedule.IsRoot before.core.representatives held →
+                                MicroCFTA.EnumerationCorrectness.Avoids before.core.representatives held bucket →
+                                  MicroCFTA.EnumerationDriver.Protected held before.core after.core) ∧
+                          (∀ (allowed : Nat → Prop),
+                              MicroCFTA.EnumerationReferences.ReferencesAllowed allowed before.core →
+                                MicroCFTA.EnumerationReferences.InputsAllowed allowed bucket →
+                                  MicroCFTA.EnumerationReferences.ReferencesAllowed allowed after.core) ∧
+                            (MicroCFTA.EnumerationReferences.PendingReferences before.core →
+                                MicroCFTA.EnumerationReferences.PendingReferences after.core) ∧
+                              (raw = [] ∨
+                                  ∃ fragment,
+                                    raw = [Except.ok (fragment, after.core)] ∧
+                                      MicroCFTA.EnumerationSchedule.Safe after.core ∧
+                                        MicroCFTA.EnumerationCorrectness.FragmentBound after.core.counter fragment ∧
+                                          MicroCFTA.EnumerationDependencies.PendingFragment after.core fragment ∧
+                                            ∀ (held : Nat),
+                                              held < before.core.counter →
+                                                MicroCFTA.EnumerationSchedule.IsRoot before.core.representatives held →
+                                                  MicroCFTA.EnumerationCorrectness.Avoids before.core.representatives
+                                                      held bucket →
+                                                    MicroCFTA.EnumerationDependencies.FragmentAvoid
+                                                      after.core.representatives held fragment) ∧
+                                MicroCFTA.SourceCurrentConstrainedCapGeneratedQueryResources.Fits
+                                    (MicroCFTA.SourcePruningEnumerationIncomingReservation.advance seed
+                                        (bucket.length + 1)).snd
+                                    afterCaller.checked ∧
+                                  MicroCFTA.SourceEqualityAnnotationHeap.Heap
+                                    (fun guard =>
+                                      guard ∈
+                                        (MicroCFTA.SourcePruningEnumerationIncomingReservation.advance seed
+                                            (bucket.length + 1)).fst)
+                                    afterCaller.checked.native.machine.heap
+'MicroCFTA.SourcePruningEnumerationChildCompletion.complete_with_fragments_resources' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+MicroCFTA.SourcePruningEnumerationChildCompletion.complete_resources {bits : Nat}
+  [DecidableEq MicroCFTA.SourcePruningTemplates.Symbol]
+  [DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey MicroCFTA.SourcePruningTemplates.Symbol
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  [DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.Value MicroCFTA.SourcePruningTemplates.Symbol
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  (seed : MicroCFTA.SourcePruningEnumerationIncomingReservation.Seed)
+  (formulas : MicroCFTA.SourceGuards.Formulas MicroCFTA.FullSyntax.Formula)
+  (solver : MicroCFTA.SourceGuards.Entailment MicroCFTA.FullSyntax.Formula)
+  (inventory : MicroCFTA.SourceCurrentAllocatedNativeInventoryState.Inventory)
+  (beforeCaller : MicroCFTA.SourceCurrentAllocatedPartialState.State (bits + 2))
+  (before :
+    MicroCFTA.EnumerationExpandableIndex.Cached MicroCFTA.SourcePruningTemplates.Symbol
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+  (checkEmpty : Bool) (bucket : List MicroCFTA.EnumerationState.Suspended)
+  (incoming :
+    MicroCFTA.InternedConstructorTemplates.Value MicroCFTA.SourcePruningTemplates.Symbol
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+  (roots : Nat → Nat) (memos : MicroCFTA.EndpointMemoGateTrace.Memos)
+  (initial : MicroCFTA.SourceCurrentAllocatedPartialInvariant.Context formulas solver inventory beforeCaller memos)
+  (safe : MicroCFTA.EnumerationSchedule.Safe before.core)
+  (paths : MicroCFTA.EnumerationSchedule.Roots before.core.representatives roots)
+  (counts : MicroCFTA.EnumerationCanonicalWaiting.Correct roots before.core.values before.waiting)
+  (flags :
+    ∀ (slot : Nat),
+      MicroCFTA.SourcePruningEnumerationNativeIndex.candidate beforeCaller.checked.native.machine.heap
+          (before.core.values[slot]?.getD MicroCFTA.EnumerationState.UVarValue.eliminated) =
+        some (before.expandable slot))
+  (realized :
+    MicroCFTA.SourcePruningEnumerationObservation.PendingRealized beforeCaller.checked.native.machine.heap before.core)
+  (bounded : ∀ (sc : MicroCFTA.EnumerationState.Suspended), sc ∈ bucket → sc.var < before.core.counter)
+  (pending : MicroCFTA.EnumerationDependencies.InputsPending before.core bucket)
+  (available : MicroCFTA.InternedProbeProvenance.Available beforeCaller.checked.native.machine.heap incoming)
+  (closed : incoming.free = [])
+  (fits : MicroCFTA.SourceCurrentConstrainedCapGeneratedQueryResources.Fits seed.snd beforeCaller.checked)
+  (reserved : MicroCFTA.SourcePruningEnumerationIncomingReservation.Reserved bits seed (bucket.length + 1))
+  (known :
+    MicroCFTA.SourceEqualityAnnotationHeap.Heap (fun guard => guard ∈ seed.fst)
+      beforeCaller.checked.native.machine.heap) :
+  ∃ r n p h k raw afterCaller after savedQueries final next afterRoots outer waiting,
+    (∀ (extraRepresentative extraNative P H extraIndex : Nat),
+        p ≤ P →
+          h ≤ H →
+            MicroCFTA.SourcePruningEnumerationChildDispatch.run checkEmpty (r + extraRepresentative) (n + extraNative) P
+                H (k + extraIndex) bucket incoming beforeCaller before memos.query =
+              ((Except.ok (some raw), afterCaller, savedQueries, outer, waiting), some after)) ∧
+      MicroCFTA.SourceCurrentAllocatedPartialInvariant.Post formulas solver next beforeCaller afterCaller final ∧
+        final.query = savedQueries ∧
+          before.core.counter ≤ after.core.counter ∧
+            MicroCFTA.EnumerationSchedule.Roots after.core.representatives afterRoots ∧
+              MicroCFTA.EnumerationCorrectness.StorageValid after.core ∧
+                MicroCFTA.SourcePruningEnumerationObservation.PendingRealized afterCaller.checked.native.machine.heap
+                    after.core ∧
+                  MicroCFTA.EnumerationCanonicalWaiting.Correct afterRoots after.core.values after.waiting ∧
+                    (∀ (slot : Nat),
+                        MicroCFTA.SourcePruningEnumerationNativeIndex.candidate afterCaller.checked.native.machine.heap
+                            (after.core.values[slot]?.getD MicroCFTA.EnumerationState.UVarValue.eliminated) =
+                          some (after.expandable slot)) ∧
+                      MicroCFTA.EnumerationDependencies.EnumeratedOrigin before.core after.core ∧
+                        (∀ (held : Nat),
+                            held < before.core.counter →
+                              MicroCFTA.EnumerationSchedule.IsRoot before.core.representatives held →
+                                MicroCFTA.EnumerationCorrectness.Avoids before.core.representatives held bucket →
+                                  MicroCFTA.EnumerationDriver.Protected held before.core after.core) ∧
+                          (∀ (allowed : Nat → Prop),
+                              MicroCFTA.EnumerationReferences.ReferencesAllowed allowed before.core →
+                                MicroCFTA.EnumerationReferences.InputsAllowed allowed bucket →
+                                  MicroCFTA.EnumerationReferences.ReferencesAllowed allowed after.core) ∧
+                            (MicroCFTA.EnumerationReferences.PendingReferences before.core →
+                                MicroCFTA.EnumerationReferences.PendingReferences after.core) ∧
+                              (raw = [] ∨
+                                  ∃ fragment,
+                                    raw = [Except.ok (fragment, after.core)] ∧
+                                      MicroCFTA.EnumerationSchedule.Safe after.core ∧
+                                        MicroCFTA.EnumerationCorrectness.FragmentBound after.core.counter fragment) ∧
+                                MicroCFTA.SourceCurrentConstrainedCapGeneratedQueryResources.Fits
+                                    (MicroCFTA.SourcePruningEnumerationIncomingReservation.advance seed
+                                        (bucket.length + 1)).snd
+                                    afterCaller.checked ∧
+                                  MicroCFTA.SourceEqualityAnnotationHeap.Heap
+                                    (fun guard =>
+                                      guard ∈
+                                        (MicroCFTA.SourcePruningEnumerationIncomingReservation.advance seed
+                                            (bucket.length + 1)).fst)
+                                    afterCaller.checked.native.machine.heap
+'MicroCFTA.SourcePruningEnumerationChildCompletion.complete_resources' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+MicroCFTA.SourcePruningEnumerationChildCompletion.complete_with_fragments {width : Nat}
+  [DecidableEq MicroCFTA.SourcePruningTemplates.Symbol]
+  [DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey MicroCFTA.SourcePruningTemplates.Symbol
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  [DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.Value MicroCFTA.SourcePruningTemplates.Symbol
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  (formulas : MicroCFTA.SourceGuards.Formulas MicroCFTA.FullSyntax.Formula)
+  (solver : MicroCFTA.SourceGuards.Entailment MicroCFTA.FullSyntax.Formula)
+  (inventory : MicroCFTA.SourceCurrentAllocatedNativeInventoryState.Inventory)
+  (beforeCaller : MicroCFTA.SourceCurrentAllocatedPartialState.State width)
+  (before :
+    MicroCFTA.EnumerationExpandableIndex.Cached MicroCFTA.SourcePruningTemplates.Symbol
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+  (checkEmpty : Bool) (bucket : List MicroCFTA.EnumerationState.Suspended)
+  (incoming :
+    MicroCFTA.InternedConstructorTemplates.Value MicroCFTA.SourcePruningTemplates.Symbol
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+  (roots : Nat → Nat) (memos : MicroCFTA.EndpointMemoGateTrace.Memos)
+  (initial : MicroCFTA.SourceCurrentAllocatedPartialInvariant.Context formulas solver inventory beforeCaller memos)
+  (safe : MicroCFTA.EnumerationSchedule.Safe before.core)
+  (paths : MicroCFTA.EnumerationSchedule.Roots before.core.representatives roots)
+  (counts : MicroCFTA.EnumerationCanonicalWaiting.Correct roots before.core.values before.waiting)
+  (flags :
+    ∀ (slot : Nat),
+      MicroCFTA.SourcePruningEnumerationNativeIndex.candidate beforeCaller.checked.native.machine.heap
+          (before.core.values[slot]?.getD MicroCFTA.EnumerationState.UVarValue.eliminated) =
+        some (before.expandable slot))
+  (realized :
+    MicroCFTA.SourcePruningEnumerationObservation.PendingRealized beforeCaller.checked.native.machine.heap before.core)
+  (bounded : ∀ (sc : MicroCFTA.EnumerationState.Suspended), sc ∈ bucket → sc.var < before.core.counter)
+  (pending : MicroCFTA.EnumerationDependencies.InputsPending before.core bucket)
+  (available : MicroCFTA.InternedProbeProvenance.Available beforeCaller.checked.native.machine.heap incoming)
+  (closed : incoming.free = [])
+  (ranges :
+    MicroCFTA.SourcePruningEnumerationChildCompletion.Ranges checkEmpty bucket incoming beforeCaller before
+      memos.query) :
+  ∃ r n p h k raw afterCaller after savedQueries final next afterRoots outer waiting,
+    (∀ (extraRepresentative extraNative P H extraIndex : Nat),
+        p ≤ P →
+          h ≤ H →
+            MicroCFTA.SourcePruningEnumerationChildDispatch.run checkEmpty (r + extraRepresentative) (n + extraNative) P
+                H (k + extraIndex) bucket incoming beforeCaller before memos.query =
+              ((Except.ok (some raw), afterCaller, savedQueries, outer, waiting), some after)) ∧
+      MicroCFTA.SourceCurrentAllocatedPartialInvariant.Post formulas solver next beforeCaller afterCaller final ∧
+        final.query = savedQueries ∧
+          before.core.counter ≤ after.core.counter ∧
+            MicroCFTA.EnumerationSchedule.Roots after.core.representatives afterRoots ∧
+              MicroCFTA.EnumerationCorrectness.StorageValid after.core ∧
+                MicroCFTA.SourcePruningEnumerationObservation.PendingRealized afterCaller.checked.native.machine.heap
+                    after.core ∧
+                  MicroCFTA.EnumerationCanonicalWaiting.Correct afterRoots after.core.values after.waiting ∧
+                    (∀ (slot : Nat),
+                        MicroCFTA.SourcePruningEnumerationNativeIndex.candidate afterCaller.checked.native.machine.heap
+                            (after.core.values[slot]?.getD MicroCFTA.EnumerationState.UVarValue.eliminated) =
+                          some (after.expandable slot)) ∧
+                      MicroCFTA.EnumerationDependencies.EnumeratedOrigin before.core after.core ∧
+                        (∀ (held : Nat),
+                            held < before.core.counter →
+                              MicroCFTA.EnumerationSchedule.IsRoot before.core.representatives held →
+                                MicroCFTA.EnumerationCorrectness.Avoids before.core.representatives held bucket →
+                                  MicroCFTA.EnumerationDriver.Protected held before.core after.core) ∧
+                          (∀ (allowed : Nat → Prop),
+                              MicroCFTA.EnumerationReferences.ReferencesAllowed allowed before.core →
+                                MicroCFTA.EnumerationReferences.InputsAllowed allowed bucket →
+                                  MicroCFTA.EnumerationReferences.ReferencesAllowed allowed after.core) ∧
+                            (MicroCFTA.EnumerationReferences.PendingReferences before.core →
+                                MicroCFTA.EnumerationReferences.PendingReferences after.core) ∧
+                              (raw = [] ∨
+                                ∃ fragment,
+                                  raw = [Except.ok (fragment, after.core)] ∧
+                                    MicroCFTA.EnumerationSchedule.Safe after.core ∧
+                                      MicroCFTA.EnumerationCorrectness.FragmentBound after.core.counter fragment ∧
+                                        MicroCFTA.EnumerationDependencies.PendingFragment after.core fragment ∧
+                                          ∀ (held : Nat),
+                                            held < before.core.counter →
+                                              MicroCFTA.EnumerationSchedule.IsRoot before.core.representatives held →
+                                                MicroCFTA.EnumerationCorrectness.Avoids before.core.representatives held
+                                                    bucket →
+                                                  MicroCFTA.EnumerationDependencies.FragmentAvoid
+                                                    after.core.representatives held fragment)
+'MicroCFTA.SourcePruningEnumerationChildCompletion.complete_with_fragments' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+MicroCFTA.SourcePruningEnumerationChildCompletion.complete {width : Nat}
+  [DecidableEq MicroCFTA.SourcePruningTemplates.Symbol]
+  [DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey MicroCFTA.SourcePruningTemplates.Symbol
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  [DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.Value MicroCFTA.SourcePruningTemplates.Symbol
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  (formulas : MicroCFTA.SourceGuards.Formulas MicroCFTA.FullSyntax.Formula)
+  (solver : MicroCFTA.SourceGuards.Entailment MicroCFTA.FullSyntax.Formula)
+  (inventory : MicroCFTA.SourceCurrentAllocatedNativeInventoryState.Inventory)
+  (beforeCaller : MicroCFTA.SourceCurrentAllocatedPartialState.State width)
+  (before :
+    MicroCFTA.EnumerationExpandableIndex.Cached MicroCFTA.SourcePruningTemplates.Symbol
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+  (checkEmpty : Bool) (bucket : List MicroCFTA.EnumerationState.Suspended)
+  (incoming :
+    MicroCFTA.InternedConstructorTemplates.Value MicroCFTA.SourcePruningTemplates.Symbol
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+  (roots : Nat → Nat) (memos : MicroCFTA.EndpointMemoGateTrace.Memos)
+  (initial : MicroCFTA.SourceCurrentAllocatedPartialInvariant.Context formulas solver inventory beforeCaller memos)
+  (safe : MicroCFTA.EnumerationSchedule.Safe before.core)
+  (paths : MicroCFTA.EnumerationSchedule.Roots before.core.representatives roots)
+  (counts : MicroCFTA.EnumerationCanonicalWaiting.Correct roots before.core.values before.waiting)
+  (flags :
+    ∀ (slot : Nat),
+      MicroCFTA.SourcePruningEnumerationNativeIndex.candidate beforeCaller.checked.native.machine.heap
+          (before.core.values[slot]?.getD MicroCFTA.EnumerationState.UVarValue.eliminated) =
+        some (before.expandable slot))
+  (realized :
+    MicroCFTA.SourcePruningEnumerationObservation.PendingRealized beforeCaller.checked.native.machine.heap before.core)
+  (bounded : ∀ (sc : MicroCFTA.EnumerationState.Suspended), sc ∈ bucket → sc.var < before.core.counter)
+  (pending : MicroCFTA.EnumerationDependencies.InputsPending before.core bucket)
+  (available : MicroCFTA.InternedProbeProvenance.Available beforeCaller.checked.native.machine.heap incoming)
+  (closed : incoming.free = [])
+  (ranges :
+    MicroCFTA.SourcePruningEnumerationChildCompletion.Ranges checkEmpty bucket incoming beforeCaller before
+      memos.query) :
+  ∃ r n p h k raw afterCaller after savedQueries final next afterRoots outer waiting,
+    (∀ (extraRepresentative extraNative P H extraIndex : Nat),
+        p ≤ P →
+          h ≤ H →
+            MicroCFTA.SourcePruningEnumerationChildDispatch.run checkEmpty (r + extraRepresentative) (n + extraNative) P
+                H (k + extraIndex) bucket incoming beforeCaller before memos.query =
+              ((Except.ok (some raw), afterCaller, savedQueries, outer, waiting), some after)) ∧
+      MicroCFTA.SourceCurrentAllocatedPartialInvariant.Post formulas solver next beforeCaller afterCaller final ∧
+        final.query = savedQueries ∧
+          before.core.counter ≤ after.core.counter ∧
+            MicroCFTA.EnumerationSchedule.Roots after.core.representatives afterRoots ∧
+              MicroCFTA.EnumerationCorrectness.StorageValid after.core ∧
+                MicroCFTA.SourcePruningEnumerationObservation.PendingRealized afterCaller.checked.native.machine.heap
+                    after.core ∧
+                  MicroCFTA.EnumerationCanonicalWaiting.Correct afterRoots after.core.values after.waiting ∧
+                    (∀ (slot : Nat),
+                        MicroCFTA.SourcePruningEnumerationNativeIndex.candidate afterCaller.checked.native.machine.heap
+                            (after.core.values[slot]?.getD MicroCFTA.EnumerationState.UVarValue.eliminated) =
+                          some (after.expandable slot)) ∧
+                      MicroCFTA.EnumerationDependencies.EnumeratedOrigin before.core after.core ∧
+                        (∀ (held : Nat),
+                            held < before.core.counter →
+                              MicroCFTA.EnumerationSchedule.IsRoot before.core.representatives held →
+                                MicroCFTA.EnumerationCorrectness.Avoids before.core.representatives held bucket →
+                                  MicroCFTA.EnumerationDriver.Protected held before.core after.core) ∧
+                          (∀ (allowed : Nat → Prop),
+                              MicroCFTA.EnumerationReferences.ReferencesAllowed allowed before.core →
+                                MicroCFTA.EnumerationReferences.InputsAllowed allowed bucket →
+                                  MicroCFTA.EnumerationReferences.ReferencesAllowed allowed after.core) ∧
+                            (MicroCFTA.EnumerationReferences.PendingReferences before.core →
+                                MicroCFTA.EnumerationReferences.PendingReferences after.core) ∧
+                              (raw = [] ∨
+                                ∃ fragment,
+                                  raw = [Except.ok (fragment, after.core)] ∧
+                                    MicroCFTA.EnumerationSchedule.Safe after.core ∧
+                                      MicroCFTA.EnumerationCorrectness.FragmentBound after.core.counter fragment)
+'MicroCFTA.SourcePruningEnumerationChildCompletion.complete' depends on axioms: [propext, Classical.choice, Quot.sound]
+MicroCFTA.SourcePruningEnumerationChildDispatch.erase {width : Nat}
+  [DecidableEq MicroCFTA.SourcePruningTemplates.Symbol]
+  [DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey MicroCFTA.SourcePruningTemplates.Symbol
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  [DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.Value MicroCFTA.SourcePruningTemplates.Symbol
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  (checkEmpty : Bool) (representativeFuel nativeFuel p h indexFuel : Nat)
+  (scs : List MicroCFTA.EnumerationState.Suspended)
+  (incoming :
+    MicroCFTA.InternedConstructorTemplates.Value MicroCFTA.SourcePruningTemplates.Symbol
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+  (beforeCaller : MicroCFTA.SourceCurrentAllocatedPartialState.State width)
+  (before :
+    MicroCFTA.EnumerationExpandableIndex.Cached MicroCFTA.SourcePruningTemplates.Symbol
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+  (queries : MicroCFTA.SourceEndpointMemo.Memos) :
+  (MicroCFTA.SourcePruningEnumerationChildDispatch.run checkEmpty representativeFuel nativeFuel p h indexFuel scs
+        incoming beforeCaller before queries).fst =
+    MicroCFTA.SourcePruningEnumerationChildDispatch.observe checkEmpty representativeFuel nativeFuel p h scs incoming
+      beforeCaller before.core before.waiting queries
+'MicroCFTA.SourcePruningEnumerationChildDispatch.erase' depends on axioms: [propext, Classical.choice, Quot.sound]
+MicroCFTA.SourcePruningEnumerationChildDispatch.empty {width : Nat}
+  [DecidableEq MicroCFTA.SourcePruningTemplates.Symbol]
+  [DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey MicroCFTA.SourcePruningTemplates.Symbol
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  [DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.Value MicroCFTA.SourcePruningTemplates.Symbol
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  (checkEmpty : Bool) (representativeFuel nativeFuel p h indexFuel : Nat)
+  (scs : List MicroCFTA.EnumerationState.Suspended)
+  (beforeCaller : MicroCFTA.SourceCurrentAllocatedPartialState.State width)
+  (before :
+    MicroCFTA.EnumerationExpandableIndex.Cached MicroCFTA.SourcePruningTemplates.Symbol
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+  (queries : MicroCFTA.SourceEndpointMemo.Memos) :
+  MicroCFTA.SourcePruningEnumerationChildDispatch.run checkEmpty representativeFuel nativeFuel p h indexFuel scs
+      MicroCFTA.InternedConstructorTemplates.Value.empty beforeCaller before queries =
+    ((Except.ok (some []), beforeCaller, queries, before.core, before.waiting), some before)
+'MicroCFTA.SourcePruningEnumerationChildDispatch.empty' depends on axioms: [propext, Classical.choice, Quot.sound]
+MicroCFTA.SourcePruningEnumerationChildDispatch.nonterminal_complete {width : Nat}
+  [DecidableEq MicroCFTA.SourcePruningTemplates.Symbol]
+  [DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey MicroCFTA.SourcePruningTemplates.Symbol
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  [DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.Value MicroCFTA.SourcePruningTemplates.Symbol
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  (checkEmpty : Bool) (representativeFuel nativeFuel p h : Nat) (scs : List MicroCFTA.EnumerationState.Suspended)
+  (incoming :
+    MicroCFTA.InternedConstructorTemplates.Value MicroCFTA.SourcePruningTemplates.Symbol
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+  (beforeCaller : MicroCFTA.SourceCurrentAllocatedPartialState.State width)
+  (before :
+    MicroCFTA.EnumerationExpandableIndex.Cached MicroCFTA.SourcePruningTemplates.Symbol
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+  (queries : MicroCFTA.SourceEndpointMemo.Memos) (roots : Nat → Nat)
+  (coherent : MicroCFTA.InternedRecordCoherence.Coherent beforeCaller.checked.native.machine.heap)
+  (available : MicroCFTA.InternedProbeProvenance.Available beforeCaller.checked.native.machine.heap incoming)
+  (closed : incoming.free = []) (nonempty : incoming ≠ MicroCFTA.InternedConstructorTemplates.Value.empty)
+  (storage : MicroCFTA.EnumerationCorrectness.StorageValid before.core)
+  (realized :
+    MicroCFTA.SourcePruningEnumerationObservation.PendingRealized beforeCaller.checked.native.machine.heap before.core)
+  (paths : MicroCFTA.EnumerationSchedule.Roots before.core.representatives roots)
+  (counts : MicroCFTA.EnumerationCanonicalWaiting.Correct roots before.core.values before.waiting)
+  (flags :
+    ∀ (slot : Nat),
+      MicroCFTA.SourcePruningEnumerationNativeIndex.candidate beforeCaller.checked.native.machine.heap
+          (before.core.values[slot]?.getD MicroCFTA.EnumerationState.UVarValue.eliminated) =
+        some (before.expandable slot))
+  (bounded : ∀ (sc : MicroCFTA.EnumerationState.Suspended), sc ∈ scs → sc.var < before.core.counter)
+  (nonterminal : (scs.any fun sc => MicroCFTA.EqualityTrie.isTerminal sc.trie) = false) :
+  ∃ action fuel after,
+    MicroCFTA.SourcePruningEnumerationShallowChild.prepareChild scs incoming = some action ∧
+      (action before.core).run = [Except.ok (MicroCFTA.Fragments.Fragment.hole before.core.counter, after.core)] ∧
+        (∀ (extra : Nat),
+            MicroCFTA.SourcePruningEnumerationChildDispatch.run checkEmpty representativeFuel nativeFuel p h
+                (fuel + extra) scs incoming beforeCaller before queries =
+              ((Except.ok (some [Except.ok (MicroCFTA.Fragments.Fragment.hole before.core.counter, after.core)]),
+                  beforeCaller, queries, before.core, before.waiting),
+                some after)) ∧
+          after.core.counter = before.core.counter + 1 ∧
+            after.core.counter = after.core.values.length ∧
+              after.core.representatives = before.core.representatives ∧
+                MicroCFTA.EnumerationSchedule.Roots after.core.representatives roots ∧
+                  MicroCFTA.EnumerationCorrectness.StorageValid after.core ∧
+                    MicroCFTA.SourcePruningEnumerationObservation.PendingRealized
+                        beforeCaller.checked.native.machine.heap after.core ∧
+                      MicroCFTA.EnumerationCanonicalWaiting.Correct roots after.core.values after.waiting ∧
+                        (∀ (slot : Nat),
+                            MicroCFTA.SourcePruningEnumerationNativeIndex.candidate
+                                beforeCaller.checked.native.machine.heap
+                                (after.core.values[slot]?.getD MicroCFTA.EnumerationState.UVarValue.eliminated) =
+                              some (after.expandable slot)) ∧
+                          MicroCFTA.EnumerationCorrectness.FragmentBound after.core.counter
+                            (MicroCFTA.Fragments.Fragment.hole before.core.counter)
+'MicroCFTA.SourcePruningEnumerationChildDispatch.nonterminal_complete' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+MicroCFTA.SourcePruningEnumerationChildCompletion.Ranges {width : Nat}
+  [DecidableEq MicroCFTA.SourcePruningTemplates.Symbol]
+  [DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey MicroCFTA.SourcePruningTemplates.Symbol
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  [DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.Value MicroCFTA.SourcePruningTemplates.Symbol
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  (checkEmpty : Bool) (bucket : List MicroCFTA.EnumerationState.Suspended)
+  (incoming :
+    MicroCFTA.InternedConstructorTemplates.Value MicroCFTA.SourcePruningTemplates.Symbol
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+  (caller : MicroCFTA.SourceCurrentAllocatedPartialState.State width)
+  (before :
+    MicroCFTA.EnumerationExpandableIndex.Cached MicroCFTA.SourcePruningTemplates.Symbol
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+  (queries : MicroCFTA.SourceEndpointMemo.Memos) : Prop
+'MicroCFTA.SourcePruningEnumerationChildCompletion.Ranges' depends on axioms: [propext, Classical.choice, Quot.sound]
+MicroCFTA.SourcePruningEnumerationIncomingReservation.reserved_computed
+  (seed : MicroCFTA.SourcePruningEnumerationIncomingReservation.Seed) (count : Nat) :
+  MicroCFTA.SourcePruningEnumerationIncomingReservation.Reserved
+    (MicroCFTA.SourceCurrentParentInitialRoom.roomBits
+      (MicroCFTA.SourcePruningEnumerationIncomingReservation.advance seed count).snd)
+    seed count
+'MicroCFTA.SourcePruningEnumerationIncomingReservation.reserved_computed' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+MicroCFTA.SourceCurrentAllocatedPartialInvariant.Post
+  [DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  {width : Nat} (formulas : MicroCFTA.SourceGuards.Formulas MicroCFTA.FullSyntax.Formula)
+  (solver : MicroCFTA.SourceGuards.Entailment MicroCFTA.FullSyntax.Formula)
+  (next : MicroCFTA.SourceCurrentAllocatedNativeInventoryState.Inventory)
+  (before after : MicroCFTA.SourceCurrentAllocatedPartialState.State width)
+  (final : MicroCFTA.EndpointMemoGateTrace.Memos) : Prop
+'MicroCFTA.SourceCurrentAllocatedPartialInvariant.Post' depends on axioms: [propext, Classical.choice, Quot.sound]
+MicroCFTA.SourcePruningEnumerationNativeBranchCompletion.CacheValid {width : Nat}
+  (caller : MicroCFTA.SourceCurrentAllocatedPartialState.State width)
+  (after :
+    MicroCFTA.EnumerationExpandableIndex.Cached MicroCFTA.SourcePruningTemplates.Symbol
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)) :
+  Prop
+'MicroCFTA.SourcePruningEnumerationNativeBranchCompletion.CacheValid' depends on axioms: [propext]
+MicroCFTA.SourcePruningEnumerationRecursive.callback_prefix_complete {Typing Key : Type} {width : Nat}
+  [DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey MicroCFTA.SourcePruningTemplates.Symbol
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  (formulas : MicroCFTA.SourceGuards.Formulas MicroCFTA.FullSyntax.Formula)
+  (solver : MicroCFTA.SourceGuards.Entailment MicroCFTA.FullSyntax.Formula)
+  (inventory : MicroCFTA.SourceCurrentAllocatedNativeInventoryState.Inventory)
+  (graph :
+    MicroCFTA.EnumerationState.Graph MicroCFTA.SourcePruningTemplates.Symbol
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+  (templates : List (MicroCFTA.Template.Pattern MicroCFTA.SourcePruningTemplates.Symbol))
+  (metadata : MicroCFTA.SourcePruningRecordTypes.Metadata Typing) (uv : Nat)
+  (fragment : MicroCFTA.Fragments.Fragment MicroCFTA.SourcePruningTemplates.Symbol)
+  (caller : MicroCFTA.SourceCurrentAllocatedPartialState.State width) (memos : MicroCFTA.EndpointMemoGateTrace.Memos)
+  (before :
+    MicroCFTA.EnumerationExpandableIndex.Cached MicroCFTA.SourcePruningTemplates.Symbol
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+  [DecidableEq MicroCFTA.SourcePruningTemplates.Symbol]
+  [DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.Value MicroCFTA.SourcePruningTemplates.Symbol
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  (holeKey : Typing → Nat → Key) (fits : Key → MicroCFTA.SourcePruningTemplates.Symbol → Bool)
+  (admits :
+    Key →
+      MicroCFTA.InternedConstructorTemplates.Value MicroCFTA.SourcePruningTemplates.Symbol
+          (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) →
+        Bool)
+  (checkEmpty : Bool)
+  (edgesOf :
+    MicroCFTA.InternedConstructorTemplates.Value MicroCFTA.SourcePruningTemplates.Symbol
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) →
+      List
+        (MicroCFTA.InternedConstructorTemplates.EdgeValue MicroCFTA.SourcePruningTemplates.Symbol
+          (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)))
+  (stop : Option (MicroCFTA.SourcePruningRecordTypes.Metadata Typing → Nat → Bool))
+  (order : MicroCFTA.SourcePruningRecordTypes.Metadata Typing → List Nat → Option Nat)
+  (packet : MicroCFTA.SourcePruningEnumerationRecursive.Packet formulas solver inventory caller memos metadata before)
+  (allocated : MicroCFTA.EnumerationCorrectness.FragmentBound before.core.counter fragment) :
+  ∃ fuel result after,
+    MicroCFTA.SourcePruningEnumerationRecursive.Packet formulas solver inventory caller memos result.snd
+        (MicroCFTA.EnumerationExpandableIndex.frame after before) ∧
+      MicroCFTA.EnumerationDriver.RenderStable before.core after ∧
+        MicroCFTA.EnumerationCompressionFrame.Frame before.core after ∧
+          result.snd.types = MicroCFTA.SourcePruningRecordTypes.updatedTypes metadata uv (Sum.inl fragment) ∧
+            result.snd.openHoles = metadata.openHoles ∧
+              result.snd.typing = metadata.typing ∧
+                ∀ (extra : Nat),
+                  MicroCFTA.EnumerationCorrectness.Success
+                      (MicroCFTA.SourcePruningRecordTypes.recordTypes graph templates (fuel + extra) metadata uv
+                        (Sum.inl fragment))
+                      before.core result after ∧
+                    (MicroCFTA.SourcePruningRecordTypes.recordTypes graph templates (fuel + extra) metadata uv
+                            (Sum.inl fragment) before.core).run =
+                        [Except.ok (result, after)] ∧
+                      (∀
+                          (recur :
+                            MicroCFTA.SourcePruningRecordTypes.Metadata Typing →
+                              MicroCFTA.SourceCurrentAllocatedPartialState.State width →
+                                MicroCFTA.SourceEndpointMemo.Memos →
+                                  MicroCFTA.EnumerationExpandableIndex.Cached MicroCFTA.SourcePruningTemplates.Symbol
+                                      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) →
+                                    Option MicroCFTA.EnumerationState.Next →
+                                      MicroCFTA.SourcePruningEnumerationNativeContinuations.HookResult
+                                        (MicroCFTA.SourcePruningEnumerationRecursive.Output width Typing)
+                                        (MicroCFTA.SourcePruningEnumerationRecursive.Failure width Typing) width),
+                          MicroCFTA.SourcePruningEnumerationRecursive.continueWith recur graph templates stop order
+                              (fuel + extra) metadata uv fragment caller memos.query before =
+                            if result.fst = true then
+                              MicroCFTA.SourcePruningEnumerationNativeContinuations.HookResult.complete [] caller
+                                memos.query
+                            else
+                              recur result.snd caller memos.query
+                                (MicroCFTA.EnumerationExpandableIndex.frame after before)
+                                (MicroCFTA.SourcePruningEnumerationRestart.decision stop order result.snd
+                                  (MicroCFTA.EnumerationExpandableIndex.frame after before))) ∧
+                        (result.fst = false →
+                          ∀ (selected : Nat),
+                            MicroCFTA.SourcePruningEnumerationRestart.decision stop order result.snd
+                                  (MicroCFTA.EnumerationExpandableIndex.frame after before) =
+                                some (MicroCFTA.EnumerationState.Next.expand selected) →
+                              MicroCFTA.SourcePruningEnumerationSelectedStep.PrefixValid holeKey fits admits graph
+                                templates checkEmpty edgesOf stop order result.snd formulas solver inventory
+                                (fuel + extra) selected caller (MicroCFTA.EnumerationExpandableIndex.frame after before)
+                                memos
+                                (MicroCFTA.SourcePruningEnumerationSelectedStep.runPrefix holeKey fits admits graph
+                                  templates stop order result.snd (fuel + extra) (fuel + extra) (fuel + extra)
+                                  (fuel + extra) (fuel + extra) (fuel + extra) selected caller
+                                  (MicroCFTA.EnumerationExpandableIndex.frame after before) memos.query))
+'MicroCFTA.SourcePruningEnumerationRecursive.callback_prefix_complete' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+MicroCFTA.SourceCurrentAllocatedNativeWordBoundary.witness :
+  ∃ source sourceHeap value original start finish,
+    MicroCFTA.InternedFreshOrdinaryConstruction.build source [] MicroCFTA.InternedConstructorTemplates.empty =
+        MicroCFTA.InternedNestedConstruction.Outcome.done value sourceHeap ∧
+      MicroCFTA.InternedNestedFacts.Facts sourceHeap ∧
+        value.free = [] ∧
+          value.referenceOf = MicroCFTA.InternedBinderProtocol.NodeRef.node 1 ∧
+            original =
+                { domain := MicroCFTA.IntersectionEmptyDomain.emptyDomain,
+                  left := MicroCFTA.InternedConstructorTemplates.Value.empty, right := value } ∧
+              start.native =
+                  MicroCFTA.SourceRecursiveIntersectionThunks.initial 2
+                    { heap := sourceHeap, domains := MicroCFTA.Cache.emptyState } ∧
+                MicroCFTA.SourceCurrentAllocatedNativePhysicalCache.Valid start.native ∧
+                  MicroCFTA.SourceEqualityConstraintMemoAllocation.Valid start.operations ∧
+                    MicroCFTA.SourceRecursiveIntersectionThunks.NodeReady start.native.machine original ∧
+                      (∃ actualKey,
+                          MicroCFTA.SourceRecursiveIntersectionMemo.requestKey 2 original.domain original.left
+                              original.right =
+                            some actualKey) ∧
+                        ¬MicroCFTA.SourceRecursiveIntersectionMemo.KeySafe 2 original.domain original.left
+                              original.right ∧
+                          MicroCFTA.SourceEqualityNativeDemand.execute 4
+                                (MicroCFTA.SourceEqualityNativeDemand.Control.code
+                                  (MicroCFTA.SourceRecursiveIntersectionCode.Code.node original
+                                    MicroCFTA.SourceRecursiveIntersectionCode.Code.pure))
+                                start =
+                              MicroCFTA.SourceEqualityNativeDemand.Outcome.done
+                                MicroCFTA.InternedConstructorTemplates.Value.empty finish ∧
+                            ¬MicroCFTA.SourceCurrentAllocatedNativeRequestBounds.Words 2
+                                  (MicroCFTA.SourceEqualityNativeDemand.Control.code
+                                    (MicroCFTA.SourceRecursiveIntersectionCode.Code.node original
+                                      MicroCFTA.SourceRecursiveIntersectionCode.Code.pure)) ∧
+                              ¬MicroCFTA.SourceCurrentAllocatedNativePhysicalExecution.Inputs
+                                    (MicroCFTA.SourceEqualityNativeDemand.Control.code
+                                      (MicroCFTA.SourceRecursiveIntersectionCode.Code.node original
+                                        MicroCFTA.SourceRecursiveIntersectionCode.Code.pure))
+                                    start ∧
+                                ¬∃ fuel,
+                                    MicroCFTA.SourceCurrentAllocatedNativePhysicalTraceCompletion.Trace fuel
+                                      (MicroCFTA.SourceEqualityNativeDemand.Control.code
+                                        (MicroCFTA.SourceRecursiveIntersectionCode.Code.node original
+                                          MicroCFTA.SourceRecursiveIntersectionCode.Code.pure))
+                                      start
+                                      (MicroCFTA.SourceEqualityNativeDemand.Control.code
+                                        (MicroCFTA.SourceRecursiveIntersectionCode.Code.pure
+                                          MicroCFTA.InternedConstructorTemplates.Value.empty))
+                                      finish
+'MicroCFTA.SourceCurrentAllocatedNativeWordBoundary.witness' depends on axioms: [propext, Classical.choice, Quot.sound]
+MicroCFTA.SourceCurrentColdFiniteWarmCalls.constructed_node_calls
+  [DecidableEq (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)]
+  [DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  [DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  (formulas : MicroCFTA.SourceGuards.Formulas MicroCFTA.FullSyntax.Formula)
+  (solver : MicroCFTA.SourceGuards.Entailment MicroCFTA.FullSyntax.Formula)
+  {initial finalCache : MicroCFTA.Cache.State MicroCFTA.SourceEqualityPartialConstraintKey.Key}
+  {originals : List (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)}
+  (history : MicroCFTA.SourceEqualityOriginalAllocationHistory.History initial finalCache originals)
+  (valid : MicroCFTA.Cache.Valid initial)
+  (expression :
+    MicroCFTA.InternedNestedConstruction.Syntax (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+  (covered :
+    ∀ (guard : MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula),
+      guard ∈ MicroCFTA.SourceEqualityConstraintOrigins.guards expression → guard ∈ originals)
+  (budget rounds : Nat) :
+  ∃ value heap _built,
+    have seed :=
+      (MicroCFTA.SourceEqualityConstraintOrigins.guards expression,
+        { nodes := heap.nodes.next, edges := heap.edges.next, domains := 0,
+          mass := MicroCFTA.InternedValueMassHeap.initialBound heap });
+    have bits :=
+      MicroCFTA.SourceCurrentParentInitialRoom.roomBits
+        (MicroCFTA.SourceCurrentFiniteRoundForecast.stage budget seed rounds).snd;
+    have fuels := MicroCFTA.SourceCurrentFiniteRoundForecast.fuelBounds budget rounds seed;
+    have inherited := MicroCFTA.SourceCurrentAllocatedPartialInitialization.emptyValue finalCache;
+    have before := MicroCFTA.SourceCurrentAllocatedPartialInitialization.caller (bits + 2) finalCache heap;
+    ∃ trace,
+      trace 0 = (value, before) ∧
+        (∀ (index : Fin rounds),
+            MicroCFTA.SourceCurrentAllocatedPartialWorker.nodeCall fuels.fst fuels.snd fuels.snd fuels.snd fuels.snd
+                fuels.snd fuels.snd fuels.snd fuels.snd fuels.snd budget
+                { inherited := inherited, value := (trace index.castSucc).fst } (trace index.castSucc).snd =
+              MicroCFTA.SourceCurrentAllocatedPartialWorker.Outcome.done (trace index.succ).fst
+                (trace index.succ).snd) ∧
+          MicroCFTA.InternedProbeProvenance.Available (trace (Fin.last rounds)).snd.checked.native.machine.heap
+              (trace (Fin.last rounds)).fst ∧
+            ∀
+              (ambient :
+                MicroCFTA.InternedGuardedLanguage.Env (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula))
+              (term : MicroCFTA.Language.Term (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)),
+              MicroCFTA.InternedGuardedLanguage.meaning (MicroCFTA.SourceEqualityPCSGuard.holds formulas solver) ambient
+                  value term ↔
+                MicroCFTA.InternedGuardedLanguage.meaning (MicroCFTA.SourceEqualityPCSGuard.holds formulas solver)
+                  ambient (trace (Fin.last rounds)).fst term
+'MicroCFTA.SourceCurrentColdFiniteWarmCalls.constructed_node_calls' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+def MicroCFTA.SourcePruningEnumerationTerminal.run : {EnumGuard : Type} →
+  {width : Nat} →
+    [DecidableEq MicroCFTA.SourcePruningTemplates.Symbol] →
+      [DecidableEq
+            (MicroCFTA.InternedConstructorTemplates.EdgeKey MicroCFTA.SourcePruningTemplates.Symbol
+              (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))] →
+        [DecidableEq
+              (MicroCFTA.InternedConstructorTemplates.Value MicroCFTA.SourcePruningTemplates.Symbol
+                (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))] →
+          Bool →
+            Nat →
+              Nat →
+                Nat →
+                  Nat →
+                    MicroCFTA.EnumerationState.Suspended →
+                      List MicroCFTA.EnumerationState.Suspended →
+                        MicroCFTA.EnumerationWaitingIndex.Waiting →
+                          MicroCFTA.SourceCurrentAllocatedPartialState.State width →
+                            MicroCFTA.EnumerationState.State MicroCFTA.SourcePruningTemplates.Symbol EnumGuard →
+                              MicroCFTA.InternedConstructorTemplates.Value MicroCFTA.SourcePruningTemplates.Symbol
+                                  (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) →
+                                List MicroCFTA.EnumerationState.Suspended →
+                                  MicroCFTA.SourceEndpointMemo.Memos →
+                                    Except
+                                        (List
+                                            (Except MicroCFTA.EnumerationState.Error
+                                              ((List Nat × Nat × MicroCFTA.EnumerationWaitingIndex.Waiting) ×
+                                                MicroCFTA.EnumerationState.State MicroCFTA.SourcePruningTemplates.Symbol
+                                                  EnumGuard)) ⊕
+                                          (MicroCFTA.SourceEqualityNativeDemand.Outcome width
+                                                (MicroCFTA.InternedConstructorTemplates.Value
+                                                  MicroCFTA.SourcePruningTemplates.Symbol
+                                                  (MicroCFTA.SourceSymbolicIndex.Constraint
+                                                    MicroCFTA.FullSyntax.Formula)) ⊕
+                                              MicroCFTA.SourceCurrentAllocatedConjunctionWorker.Outcome width) ⊕
+                                            List
+                                              (Except MicroCFTA.EnumerationState.Error
+                                                (Unit ×
+                                                  MicroCFTA.EnumerationState.State
+                                                    MicroCFTA.SourcePruningTemplates.Symbol EnumGuard)))
+                                        (Option
+                                          (List
+                                            (Except MicroCFTA.EnumerationState.Error
+                                              (MicroCFTA.Fragments.Fragment MicroCFTA.SourcePruningTemplates.Symbol ×
+                                                MicroCFTA.EnumerationState.State MicroCFTA.SourcePruningTemplates.Symbol
+                                                  EnumGuard)))) ×
+                                      MicroCFTA.SourceCurrentAllocatedPartialState.State width ×
+                                        MicroCFTA.SourceEndpointMemo.Memos ×
+                                          MicroCFTA.EnumerationState.State MicroCFTA.SourcePruningTemplates.Symbol
+                                              EnumGuard ×
+                                            MicroCFTA.EnumerationWaitingIndex.Waiting :=
+fun {EnumGuard} {width} [DecidableEq MicroCFTA.SourcePruningTemplates.Symbol]
+    [DecidableEq
+        (MicroCFTA.InternedConstructorTemplates.EdgeKey MicroCFTA.SourcePruningTemplates.Symbol
+          (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+    [DecidableEq
+        (MicroCFTA.InternedConstructorTemplates.Value MicroCFTA.SourcePruningTemplates.Symbol
+          (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+    checkEmpty representativeFuel nativeFuel p h first rest waiting beforeCaller before incoming incomingScs queries =>
+  if incoming = MicroCFTA.InternedConstructorTemplates.Value.empty then
+    (Except.ok (some []), beforeCaller, queries, before, waiting)
+  else
+    match (MicroCFTA.SourcePruningEnumerationTerminalPrefix.run representativeFuel first rest waiting before).run with
+    | [Except.ok ((recorded, winner, moved), joined)] =>
+      match
+        MicroCFTA.SourcePruningEnumerationFold.run checkEmpty nativeFuel p h recorded beforeCaller joined winner
+          queries with
+      | (foldResult, foldCaller, foldQueries, foldOuter) =>
+        match foldResult with
+        | Except.error foldFault =>
+          (Except.error (Sum.inr (Sum.inl foldFault)), foldCaller, foldQueries, foldOuter, moved)
+        | Except.ok none => (Except.ok none, foldCaller, foldQueries, foldOuter, moved)
+        | Except.ok (some foldRaw) =>
+          match foldRaw with
+          | [] => (Except.ok (some []), foldCaller, foldQueries, foldOuter, moved)
+          | [Except.ok (PUnit.unit, folded)] =>
+            match
+              MicroCFTA.SourcePruningEnumerationIncomingNode.run checkEmpty representativeFuel nativeFuel p h foldCaller
+                folded winner incoming incomingScs foldQueries with
+            | (incomingResult, afterCaller, savedQueries, read) =>
+              match incomingResult with
+              | Except.error incomingFault =>
+                (Except.error (Sum.inr (Sum.inl incomingFault)), afterCaller, savedQueries, read, moved)
+              | Except.ok none => (Except.ok none, afterCaller, savedQueries, read, moved)
+              | Except.ok (some incomingRaw) =>
+                (Except.ok
+                    (some
+                      (List.map
+                        (fun row =>
+                          match row with
+                          | Except.error error => Except.error error
+                          | Except.ok result => Except.ok (MicroCFTA.Fragments.Fragment.hole winner, result.snd))
+                        incomingRaw)),
+                  afterCaller, savedQueries, read, moved)
+          | stoppedRaw => (Except.error (Sum.inr (Sum.inr stoppedRaw)), foldCaller, foldQueries, foldOuter, moved)
+    | prefixRaw => (Except.error (Sum.inl prefixRaw), beforeCaller, queries, before, waiting)
+def MicroCFTA.SourcePruningEnumerationChildDispatch.run : {width : Nat} →
+  [DecidableEq MicroCFTA.SourcePruningTemplates.Symbol] →
+    [DecidableEq
+          (MicroCFTA.InternedConstructorTemplates.EdgeKey MicroCFTA.SourcePruningTemplates.Symbol
+            (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))] →
+      [DecidableEq
+            (MicroCFTA.InternedConstructorTemplates.Value MicroCFTA.SourcePruningTemplates.Symbol
+              (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))] →
+        Bool →
+          Nat →
+            Nat →
+              Nat →
+                Nat →
+                  Nat →
+                    List MicroCFTA.EnumerationState.Suspended →
+                      MicroCFTA.InternedConstructorTemplates.Value MicroCFTA.SourcePruningTemplates.Symbol
+                          (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) →
+                        MicroCFTA.SourceCurrentAllocatedPartialState.State width →
+                          MicroCFTA.EnumerationExpandableIndex.Cached MicroCFTA.SourcePruningTemplates.Symbol
+                              (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) →
+                            MicroCFTA.SourceEndpointMemo.Memos →
+                              MicroCFTA.SourcePruningEnumerationChildDispatch.Observation width ×
+                                Option
+                                  (MicroCFTA.EnumerationExpandableIndex.Cached MicroCFTA.SourcePruningTemplates.Symbol
+                                    (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)) :=
+fun {width} [DecidableEq MicroCFTA.SourcePruningTemplates.Symbol]
+    [DecidableEq
+        (MicroCFTA.InternedConstructorTemplates.EdgeKey MicroCFTA.SourcePruningTemplates.Symbol
+          (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+    [DecidableEq
+        (MicroCFTA.InternedConstructorTemplates.Value MicroCFTA.SourcePruningTemplates.Symbol
+          (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+    checkEmpty representativeFuel nativeFuel p h indexFuel scs incoming beforeCaller before queries =>
+  if incoming = MicroCFTA.InternedConstructorTemplates.Value.empty then
+    ((Except.ok (some []), beforeCaller, queries, before.core, before.waiting), some before)
+  else
+    match List.partition (fun sc => MicroCFTA.EqualityTrie.isTerminal sc.trie) scs with
+    | ([], snd) =>
+      (MicroCFTA.SourcePruningEnumerationChildDispatch.observe checkEmpty representativeFuel nativeFuel p h scs incoming
+          beforeCaller before.core before.waiting queries,
+        match
+          MicroCFTA.SourcePruningEnumerationCachedPrepare.prepareChild beforeCaller.checked.native.machine.heap
+            indexFuel scs incoming before with
+        | some [] => some before
+        | some [(fst, after)] => some after
+        | x => none)
+    | (first :: rest, descendants) =>
+      MicroCFTA.SourcePruningEnumerationCachedTerminalAdapter.run checkEmpty representativeFuel nativeFuel p h indexFuel
+        first rest beforeCaller before incoming descendants queries
+def MicroCFTA.SourcePruningEnumerationChildDispatch.observe : {width : Nat} →
+  [DecidableEq MicroCFTA.SourcePruningTemplates.Symbol] →
+    [DecidableEq
+          (MicroCFTA.InternedConstructorTemplates.EdgeKey MicroCFTA.SourcePruningTemplates.Symbol
+            (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))] →
+      [DecidableEq
+            (MicroCFTA.InternedConstructorTemplates.Value MicroCFTA.SourcePruningTemplates.Symbol
+              (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))] →
+        Bool →
+          Nat →
+            Nat →
+              Nat →
+                Nat →
+                  List MicroCFTA.EnumerationState.Suspended →
+                    MicroCFTA.InternedConstructorTemplates.Value MicroCFTA.SourcePruningTemplates.Symbol
+                        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) →
+                      MicroCFTA.SourceCurrentAllocatedPartialState.State width →
+                        MicroCFTA.EnumerationState.State MicroCFTA.SourcePruningTemplates.Symbol
+                            (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) →
+                          MicroCFTA.EnumerationWaitingIndex.Waiting →
+                            MicroCFTA.SourceEndpointMemo.Memos →
+                              MicroCFTA.SourcePruningEnumerationChildDispatch.Observation width :=
+fun {width} [DecidableEq MicroCFTA.SourcePruningTemplates.Symbol]
+    [DecidableEq
+        (MicroCFTA.InternedConstructorTemplates.EdgeKey MicroCFTA.SourcePruningTemplates.Symbol
+          (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+    [DecidableEq
+        (MicroCFTA.InternedConstructorTemplates.Value MicroCFTA.SourcePruningTemplates.Symbol
+          (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+    checkEmpty representativeFuel nativeFuel p h scs incoming beforeCaller before waiting queries =>
+  if incoming = MicroCFTA.InternedConstructorTemplates.Value.empty then
+    (Except.ok (some []), beforeCaller, queries, before, waiting)
+  else
+    match List.partition (fun sc => MicroCFTA.EqualityTrie.isTerminal sc.trie) scs with
+    | ([], snd) =>
+      match MicroCFTA.SourcePruningEnumerationShallowChild.prepareChild scs incoming with
+      | none => (Except.ok none, beforeCaller, queries, before, waiting)
+      | some action => (Except.ok (some (action before).run), beforeCaller, queries, before, waiting)
+    | (first :: rest, descendants) =>
+      MicroCFTA.SourcePruningEnumerationTerminal.run checkEmpty representativeFuel nativeFuel p h first rest waiting
+        beforeCaller before incoming descendants queries
+def MicroCFTA.SourcePruningEnumerationChildCompletion.Ranges : {width : Nat} →
+  [DecidableEq MicroCFTA.SourcePruningTemplates.Symbol] →
+    [DecidableEq
+          (MicroCFTA.InternedConstructorTemplates.EdgeKey MicroCFTA.SourcePruningTemplates.Symbol
+            (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))] →
+      [DecidableEq
+            (MicroCFTA.InternedConstructorTemplates.Value MicroCFTA.SourcePruningTemplates.Symbol
+              (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))] →
+        Bool →
+          List MicroCFTA.EnumerationState.Suspended →
+            MicroCFTA.InternedConstructorTemplates.Value MicroCFTA.SourcePruningTemplates.Symbol
+                (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) →
+              MicroCFTA.SourceCurrentAllocatedPartialState.State width →
+                MicroCFTA.EnumerationExpandableIndex.Cached MicroCFTA.SourcePruningTemplates.Symbol
+                    (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) →
+                  MicroCFTA.SourceEndpointMemo.Memos → Prop :=
+fun {width} [DecidableEq MicroCFTA.SourcePruningTemplates.Symbol]
+    [DecidableEq
+        (MicroCFTA.InternedConstructorTemplates.EdgeKey MicroCFTA.SourcePruningTemplates.Symbol
+          (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+    [DecidableEq
+        (MicroCFTA.InternedConstructorTemplates.Value MicroCFTA.SourcePruningTemplates.Symbol
+          (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+    checkEmpty bucket incoming caller before queries =>
+  incoming ≠ MicroCFTA.InternedConstructorTemplates.Value.empty →
+    ∀ (first : MicroCFTA.EnumerationState.Suspended) (rest descendants : List MicroCFTA.EnumerationState.Suspended),
+      List.partition (fun sc => MicroCFTA.EqualityTrie.isTerminal sc.trie) bucket = (first :: rest, descendants) →
+        MicroCFTA.SourcePruningEnumerationCachedTerminalAdapter.Ranges checkEmpty first rest caller before incoming
+          queries
+def MicroCFTA.SourcePruningEnumerationIncomingReservation.advance : MicroCFTA.SourcePruningEnumerationIncomingReservation.Seed →
+  Nat → MicroCFTA.SourcePruningEnumerationIncomingReservation.Seed :=
+fun seed x =>
+  Nat.brecOn (motive := fun x =>
+    MicroCFTA.SourcePruningEnumerationIncomingReservation.Seed →
+      MicroCFTA.SourcePruningEnumerationIncomingReservation.Seed)
+    x MicroCFTA.SourcePruningEnumerationIncomingReservation.advance._f seed
+structure MicroCFTA.SourceCurrentConstrainedCapGeneratedQueryResources.Fits {width : Nat}
+  (profile : MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile)
+  (state : MicroCFTA.SourceEqualityNativeDemand.State width) : Prop
+number of parameters: 3
+fields:
+  MicroCFTA.SourceCurrentConstrainedCapGeneratedQueryResources.Fits.nodes : state.native.machine.heap.nodes.next ≤
+      profile.nodes
+  MicroCFTA.SourceCurrentConstrainedCapGeneratedQueryResources.Fits.edges : state.native.machine.heap.edges.next ≤
+      profile.edges
+  MicroCFTA.SourceCurrentConstrainedCapGeneratedQueryResources.Fits.domains : state.native.machine.domains.next ≤
+      profile.domains
+  MicroCFTA.SourceCurrentConstrainedCapGeneratedQueryResources.Fits.stored : MicroCFTA.InternedValueMassHeap.Stored
+      profile.mass state.native.machine.heap
+constructor:
+  MicroCFTA.SourceCurrentConstrainedCapGeneratedQueryResources.Fits.mk {width : Nat}
+    {profile : MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile}
+    {state : MicroCFTA.SourceEqualityNativeDemand.State width}
+    (nodes : state.native.machine.heap.nodes.next ≤ profile.nodes)
+    (edges : state.native.machine.heap.edges.next ≤ profile.edges)
+    (domains : state.native.machine.domains.next ≤ profile.domains)
+    (stored : MicroCFTA.InternedValueMassHeap.Stored profile.mass state.native.machine.heap) :
+    MicroCFTA.SourceCurrentConstrainedCapGeneratedQueryResources.Fits profile state

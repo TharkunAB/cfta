@@ -1,0 +1,577 @@
+diff --git a/lean/MicroCFTA/Audit.lean b/lean/MicroCFTA/Audit.lean
+index 7746dd4ca..eec19f04a 100644
+--- a/lean/MicroCFTA/Audit.lean
++++ b/lean/MicroCFTA/Audit.lean
+@@ -17,6 +17,7 @@ import MicroCFTA.SourcePruningEnumerationCachedIncomingResources
+ import MicroCFTA.SourcePruningEnumerationCachedFoldResources
+ import MicroCFTA.SourcePruningEnumerationCachedTerminalResources
+ import MicroCFTA.SourcePruningEnumerationCachedTerminalAdapterResources
++import MicroCFTA.SourcePruningEnumerationChildResources
+ import MicroCFTA.SourceCurrentAllocatedNativeWordBoundary
+ import MicroCFTA.SourcePruningEnumerationSelectedNarrow
+ import MicroCFTA.SourcePruningEnumerationRecursion
+diff --git a/lean/MicroCFTA/SourcePruningEnumerationChildAdmission.lean b/lean/MicroCFTA/SourcePruningEnumerationChildAdmission.lean
+new file mode 100644
+index 000000000..3ee89b662
+--- /dev/null
++++ b/lean/MicroCFTA/SourcePruningEnumerationChildAdmission.lean
+@@ -0,0 +1,83 @@
++import MicroCFTA.SourcePruningEnumerationChildCompletion
++import MicroCFTA.SourcePruningEnumerationTerminalAdmission
++
++/-!
++# Original resource admission for native child completion
++
++The terminal partition contains only inputs from the original bucket.
++Its length bounds the terminal reservation by the original reservation.
++Empty inputs and partitions without terminal inputs require no request ranges.
++-/
++namespace MicroCFTA.SourcePruningEnumerationChildCompletion
++open EnumerationState EnumerationCorrectness EnumerationSchedule EnumerationDependencies
++open InternedConstructorTemplates InternedProbeProvenance
++open SourcePruningEnumerationNodes SourcePruningEnumerationObservation
++open SourceCurrentAllocatedNativeInventoryState (Inventory)
++open SourceCurrentAllocatedPartialInvariant (Context)
++open SourcePruningEnumerationIncomingReservation (Seed Reserved)
++open SourceCurrentConstrainedCapGeneratedQueryResources (Fits)
++local notation "Symbol" => SourcePruningTemplates.Symbol
++local notation "Constraint" => SourceSymbolicIndex.Constraint FullSyntax.Formula
++local notation "Node" => Value Symbol Constraint
++local notation "Caller" => SourceCurrentAllocatedPartialState.State
++local notation "Memos" => EndpointMemoGateTrace.Memos
++local notation "Cached" => EnumerationExpandableIndex.Cached Symbol Constraint
++local notation "Heap" => SourceEqualityAnnotationHeap.Heap
++variable {bits : Nat}
++
++/-- Both parts of the terminal partition contain only original inputs. -/
++theorem partition_subsets (bucket : List Suspended) (first : Suspended)
++    (rest descendants : List Suspended)
++    (partitioned : bucket.partition (fun sc => EqualityTrie.isTerminal sc.trie) =
++      (first :: rest, descendants)) : (first :: rest) ⊆ bucket ∧ descendants ⊆ bucket := by
++  have terminal : bucket.filter (fun sc => EqualityTrie.isTerminal sc.trie) = first :: rest := by
++    simpa only [List.partition_eq_filter_filter] using congrArg Prod.fst partitioned
++  have other : bucket.filter (fun sc => !(EqualityTrie.isTerminal sc.trie)) = descendants := by
++    simpa only [List.partition_eq_filter_filter, Function.comp_def] using congrArg Prod.snd partitioned
++  exact ⟨fun _ member => (List.mem_filter.mp (terminal ▸ member)).1,
++    fun _ member => (List.mem_filter.mp (other ▸ member)).1⟩
++
++/-- The terminal partition has no more inputs than the original bucket. -/
++theorem terminal_length_le (bucket : List Suspended) (first : Suspended)
++    (rest descendants : List Suspended)
++    (partitioned : bucket.partition (fun sc => EqualityTrie.isTerminal sc.trie) =
++      (first :: rest, descendants)) : (first :: rest).length ≤ bucket.length := by
++  have terminal : bucket.filter (fun sc => EqualityTrie.isTerminal sc.trie) = first :: rest := by
++    simpa only [List.partition_eq_filter_filter] using congrArg Prod.fst partitioned
++  rw [← terminal]
++  exact List.length_filter_le _ _
++
++/-- Current child inputs and an original mixed reservation derive all child ranges. -/
++theorem initial_ranges
++    [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Constraint)] [DecidableEq Node]
++    (seed : Seed)
++    (formulas : SourceGuards.Formulas FullSyntax.Formula)
++    (solver : SourceGuards.Entailment FullSyntax.Formula)
++    (inventory : Inventory) (beforeCaller : Caller (bits + 2)) (before : Cached)
++    (checkEmpty : Bool) (bucket : List Suspended) (incoming : Node)
++    (roots : Nat → Nat) (memos : Memos)
++    (initial : Context formulas solver inventory beforeCaller memos)
++    (safe : Safe before.core) (paths : Roots before.core.representatives roots)
++    (counts : EnumerationCanonicalWaiting.Correct roots before.core.values before.waiting)
++    (bounded : ∀ sc ∈ bucket, sc.var < before.core.counter)
++    (pending : InputsPending before.core bucket)
++    (realized : PendingRealized beforeCaller.checked.native.machine.heap before.core)
++    (available : Available beforeCaller.checked.native.machine.heap incoming) (closed : incoming.free = [])
++    (fits : Fits seed.2 beforeCaller.checked)
++    (reserved : Reserved bits seed (bucket.length + 1))
++    (known : Heap (fun guard => guard ∈ seed.1) beforeCaller.checked.native.machine.heap) :
++    Ranges checkEmpty bucket incoming beforeCaller before memos.query := by
++  intro _nonempty first rest descendants partitioned
++  have subsets := partition_subsets bucket first rest descendants partitioned
++  have activeBounded : ∀ sc ∈ first :: rest, sc.var < before.core.counter :=
++    fun sc member => bounded sc (subsets.1 member)
++  have activePending : InputsPending before.core (first :: rest) := by
++    intro held fragment stored sc member
++    exact pending held fragment stored sc (subsets.1 member)
++  have activeReserved : Reserved bits seed ((first :: rest).length + 1) :=
++    reserved.prefix (Nat.add_le_add_right (terminal_length_le bucket first rest descendants partitioned) 1)
++  exact SourcePruningEnumerationCachedTerminalAdapter.initial_ranges seed formulas solver inventory
++    beforeCaller before checkEmpty first rest incoming roots memos initial safe paths counts
++    activeBounded activePending realized available closed fits activeReserved known
++
++end MicroCFTA.SourcePruningEnumerationChildCompletion
+diff --git a/lean/MicroCFTA/SourcePruningEnumerationChildObservedResources.lean b/lean/MicroCFTA/SourcePruningEnumerationChildObservedResources.lean
+new file mode 100644
+index 000000000..44b55d9d6
+--- /dev/null
++++ b/lean/MicroCFTA/SourcePruningEnumerationChildObservedResources.lean
+@@ -0,0 +1,115 @@
++import MicroCFTA.SourcePruningEnumerationChildAdmission
++import MicroCFTA.SourcePruningEnumerationTerminalObservedResources
++
++/-!
++# Original resources at actual child returns
++
++The observation retains its caller even when its cache candidate is absent.
++Empty and nonterminal branches leave that caller unchanged.
++The terminal partition uses a prefix of the original mixed reservation.
++-/
++namespace MicroCFTA.SourcePruningEnumerationChildDispatch
++open EnumerationState EnumerationCorrectness EnumerationSchedule EnumerationDependencies
++open InternedConstructorTemplates InternedProbeProvenance
++open SourcePruningEnumerationNodes SourcePruningEnumerationObservation
++open SourceCurrentAllocatedNativeInventoryState (Inventory)
++open SourceCurrentAllocatedPartialInvariant (Context)
++open SourcePruningEnumerationIncomingReservation (Seed advance Reserved)
++open SourceCurrentConstrainedCapGeneratedQueryResources (Fits)
++local notation "Symbol" => SourcePruningTemplates.Symbol
++local notation "Constraint" => SourceSymbolicIndex.Constraint FullSyntax.Formula
++local notation "Node" => Value Symbol Constraint
++local notation "Caller" => SourceCurrentAllocatedPartialState.State
++local notation "Memos" => EndpointMemoGateTrace.Memos
++local notation "Queries" => SourceEndpointMemo.Memos
++local notation "Cached" => EnumerationExpandableIndex.Cached Symbol Constraint
++local notation "Heap" => SourceEqualityAnnotationHeap.Heap
++local notation "TerminalRaw" => List (Except EnumerationState.Error
++  (Fragments.Fragment Symbol × EnumerationState.State Symbol Constraint))
++variable {bits : Nat}
++
++/-- Original current resources bound the caller at every actual outer successful child return. -/
++theorem observed_resources
++    [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Constraint)] [DecidableEq Node]
++    (seed : Seed)
++    (formulas : SourceGuards.Formulas FullSyntax.Formula)
++    (solver : SourceGuards.Entailment FullSyntax.Formula)
++    (inventory : Inventory) (beforeCaller : Caller (bits + 2)) (before : Cached)
++    (checkEmpty : Bool) (r n p h k : Nat) (bucket : List Suspended) (incoming : Node)
++    (roots : Nat → Nat) (memos : Memos)
++    (initial : Context formulas solver inventory beforeCaller memos)
++    (safe : Safe before.core) (paths : Roots before.core.representatives roots)
++    (counts : EnumerationCanonicalWaiting.Correct roots before.core.values before.waiting)
++    (realized : PendingRealized beforeCaller.checked.native.machine.heap before.core)
++    (bounded : ∀ sc ∈ bucket, sc.var < before.core.counter)
++    (pending : InputsPending before.core bucket)
++    (available : Available beforeCaller.checked.native.machine.heap incoming) (closed : incoming.free = [])
++    (fits : Fits seed.2 beforeCaller.checked)
++    (reserved : Reserved bits seed (bucket.length + 1))
++    (known : Heap (fun guard => guard ∈ seed.1) beforeCaller.checked.native.machine.heap)
++    {result : Option TerminalRaw} {afterCaller : Caller (bits + 2)} {savedQueries : Queries}
++    {outer : EnumerationState.State Symbol Constraint} {moved : EnumerationWaitingIndex.Waiting}
++    {cache : Option Cached}
++    (observed : run checkEmpty r n p h k bucket incoming beforeCaller before memos.query =
++      ((.ok result, afterCaller, savedQueries, outer, moved), cache)) :
++    Fits (advance seed (bucket.length + 1)).2 afterCaller.checked ∧
++      Heap (fun guard => guard ∈ (advance seed (bucket.length + 1)).1)
++        afterCaller.checked.native.machine.heap := by
++  have original : observe checkEmpty r n p h bucket incoming beforeCaller before.core
++      before.waiting memos.query = (.ok result, afterCaller, savedQueries, outer, moved) := by
++    rw [← erase checkEmpty r n p h k bucket incoming beforeCaller before memos.query]
++    exact congrArg Prod.fst observed
++  have unchanged : Fits (advance seed (bucket.length + 1)).2 beforeCaller.checked ∧
++      Heap (fun guard => guard ∈ (advance seed (bucket.length + 1)).1)
++        beforeCaller.checked.native.machine.heap := by
++    refine ⟨fits.mono (SourcePruningEnumerationIncomingReservation.advance_profile_ge seed _), ?_⟩
++    intro key edge found
++    exact SourcePruningEnumerationIncomingReservation.advance_alphabet_ge seed _ (known key edge found)
++  by_cases empty : incoming = .empty
++  · simp only [observe, ite_eq_left empty] at original
++    have callerSame := congrArg (fun output => output.2.1) original
++    dsimp only at callerSame
++    rw [← callerSame]
++    exact unchanged
++  · cases partitioned : bucket.partition (fun sc => EqualityTrie.isTerminal sc.trie) with
++    | mk here descendants =>
++      cases here with
++      | nil =>
++        cases prepared : SourcePruningEnumerationShallowChild.prepareChild
++            (EnumGuard := Constraint) bucket incoming <;>
++          simp only [observe, ite_eq_right empty, partitioned, prepared] at original
++        all_goals
++          have callerSame := congrArg (fun output => output.2.1) original
++          dsimp only at callerSame
++          rw [← callerSame]
++          exact unchanged
++      | cons first rest =>
++        have subsets := SourcePruningEnumerationChildCompletion.partition_subsets
++          bucket first rest descendants partitioned
++        have activeBounded : ∀ sc ∈ first :: rest, sc.var < before.core.counter :=
++          fun sc member => bounded sc (subsets.1 member)
++        have activePending : InputsPending before.core (first :: rest) := by
++          intro held fragment stored sc member
++          exact pending held fragment stored sc (subsets.1 member)
++        have lengthBound := SourcePruningEnumerationChildCompletion.terminal_length_le
++          bucket first rest descendants partitioned
++        have reservation : Reserved bits seed ((first :: rest).length + 1) :=
++          reserved.prefix (by omega)
++        have actualTerminal : SourcePruningEnumerationTerminal.run checkEmpty r n p h first rest
++            before.waiting beforeCaller before.core incoming descendants memos.query =
++            (.ok result, afterCaller, savedQueries, outer, moved) := by
++          simpa only [observe, ite_eq_right empty, partitioned] using original
++        have terminalBounds := SourcePruningEnumerationTerminal.observed_resources seed formulas solver inventory
++          beforeCaller before.core checkEmpty r n p h first rest before.waiting incoming descendants roots memos
++          initial safe paths counts activeBounded activePending realized available closed fits reservation known
++          actualTerminal
++        have countBound : (first :: rest).length + 1 ≤ bucket.length + 1 := by omega
++        refine ⟨terminalBounds.1.mono
++          (SourcePruningEnumerationIncomingReservation.advance_count_profile_mono seed countBound), ?_⟩
++        obtain ⟨extra, countSame⟩ := Nat.exists_eq_add_of_le countBound
++        rw [countSame, SourcePruningEnumerationIncomingReservation.advance_add]
++        intro key edge found
++        exact SourcePruningEnumerationIncomingReservation.advance_alphabet_ge
++          (advance seed ((first :: rest).length + 1)) extra (terminalBounds.2 key edge found)
++
++end MicroCFTA.SourcePruningEnumerationChildDispatch
+diff --git a/lean/MicroCFTA/SourcePruningEnumerationChildResources.lean b/lean/MicroCFTA/SourcePruningEnumerationChildResources.lean
+new file mode 100644
+index 000000000..672fdf922
+--- /dev/null
++++ b/lean/MicroCFTA/SourcePruningEnumerationChildResources.lean
+@@ -0,0 +1,153 @@
++import MicroCFTA.SourcePruningEnumerationChildObservedResources
++import MicroCFTA.SourcePruningEnumerationChildCompletion
++
++/-!
++# Original resource completion for every child route
++
++The original bucket bounds terminal admission. The same actual raw return
++retains every earlier fragment, cache and history receipt with resource
++bounds at its returned native caller. Empty and nonterminal routes retain
++that caller and fit the conservative original schedule.
++-/
++namespace MicroCFTA.SourcePruningEnumerationChildCompletion
++open EnumerationState EnumerationCorrectness EnumerationSchedule EnumerationDependencies
++open InternedConstructorTemplates InternedProbeProvenance
++open SourcePruningEnumerationNodes SourcePruningEnumerationObservation
++open SourceCurrentAllocatedNativeInventoryState (Inventory)
++open SourceCurrentAllocatedPartialInvariant (Context Post)
++open SourcePruningEnumerationIncomingReservation (Seed advance Reserved)
++open SourceCurrentConstrainedCapGeneratedQueryResources (Fits)
++local notation "Symbol" => SourcePruningTemplates.Symbol
++local notation "Constraint" => SourceSymbolicIndex.Constraint FullSyntax.Formula
++local notation "Node" => Value Symbol Constraint
++local notation "Caller" => SourceCurrentAllocatedPartialState.State
++local notation "Memos" => EndpointMemoGateTrace.Memos
++local notation "Queries" => SourceEndpointMemo.Memos
++local notation "Cached" => EnumerationExpandableIndex.Cached Symbol Constraint
++local notation "Fragment" => Fragments.Fragment Symbol
++local notation "Raw" => List (Except EnumerationState.Error (Fragment × EnumerationState.State Symbol Constraint))
++local notation "Heap" => SourceEqualityAnnotationHeap.Heap
++variable {bits : Nat}
++variable [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Constraint)] [DecidableEq Node]
++
++/-- Original resources construct the full child fragment packet at its actual returned caller. -/
++theorem complete_with_fragments_resources
++    (seed : Seed)
++    (formulas : SourceGuards.Formulas FullSyntax.Formula)
++    (solver : SourceGuards.Entailment FullSyntax.Formula)
++    (inventory : Inventory) (beforeCaller : Caller (bits + 2)) (before : Cached)
++    (checkEmpty : Bool) (bucket : List Suspended) (incoming : Node)
++    (roots : Nat → Nat) (memos : Memos)
++    (initial : Context formulas solver inventory beforeCaller memos)
++    (safe : Safe before.core) (paths : Roots before.core.representatives roots)
++    (counts : EnumerationCanonicalWaiting.Correct roots before.core.values before.waiting)
++    (flags : ∀ slot, SourcePruningEnumerationNativeIndex.candidate beforeCaller.checked.native.machine.heap
++      ((before.core.values[slot]?).getD .eliminated) = some (before.expandable slot))
++    (realized : PendingRealized beforeCaller.checked.native.machine.heap before.core)
++    (bounded : ∀ sc ∈ bucket, sc.var < before.core.counter)
++    (pending : InputsPending before.core bucket)
++    (available : Available beforeCaller.checked.native.machine.heap incoming) (closed : incoming.free = [])
++    (fits : Fits seed.2 beforeCaller.checked)
++    (reserved : Reserved bits seed (bucket.length + 1))
++    (known : Heap (fun guard => guard ∈ seed.1) beforeCaller.checked.native.machine.heap) :
++    ∃ (r n p h k : Nat) (raw : Raw) (afterCaller : Caller (bits + 2)) (after : Cached)
++      (savedQueries : Queries) (final : Memos) (next : Inventory) (afterRoots : Nat → Nat)
++      (outer : EnumerationState.State Symbol Constraint) (waiting : EnumerationWaitingIndex.Waiting),
++      (∀ extraRepresentative extraNative P H extraIndex, p ≤ P → h ≤ H →
++        SourcePruningEnumerationChildDispatch.run checkEmpty (r + extraRepresentative) (n + extraNative)
++          P H (k + extraIndex) bucket incoming beforeCaller before memos.query =
++          ((.ok (some raw), afterCaller, savedQueries, outer, waiting), some after)) ∧
++      Post formulas solver next beforeCaller afterCaller final ∧ final.query = savedQueries ∧
++      before.core.counter ≤ after.core.counter ∧ Roots after.core.representatives afterRoots ∧
++      StorageValid after.core ∧ PendingRealized afterCaller.checked.native.machine.heap after.core ∧
++      EnumerationCanonicalWaiting.Correct afterRoots after.core.values after.waiting ∧
++      (∀ slot, SourcePruningEnumerationNativeIndex.candidate afterCaller.checked.native.machine.heap
++        ((after.core.values[slot]?).getD .eliminated) = some (after.expandable slot)) ∧
++      EnumeratedOrigin before.core after.core ∧
++      (∀ held, held < before.core.counter → IsRoot before.core.representatives held →
++        Avoids before.core.representatives held bucket → EnumerationDriver.Protected held before.core after.core) ∧
++      (∀ allowed, EnumerationReferences.ReferencesAllowed allowed before.core →
++        EnumerationReferences.InputsAllowed allowed bucket →
++        EnumerationReferences.ReferencesAllowed allowed after.core) ∧
++      (EnumerationReferences.PendingReferences before.core → EnumerationReferences.PendingReferences after.core) ∧
++      (raw = [] ∨ ∃ fragment, raw = [.ok (fragment, after.core)] ∧
++        Safe after.core ∧ FragmentBound after.core.counter fragment ∧
++        PendingFragment after.core fragment ∧
++        ∀ held, held < before.core.counter → IsRoot before.core.representatives held →
++          Avoids before.core.representatives held bucket →
++          FragmentAvoid after.core.representatives held fragment) ∧
++      Fits (advance seed (bucket.length + 1)).2 afterCaller.checked ∧
++      Heap (fun guard => guard ∈ (advance seed (bucket.length + 1)).1) afterCaller.checked.native.machine.heap := by
++  have ranges := initial_ranges seed formulas solver inventory beforeCaller before checkEmpty bucket incoming roots memos
++    initial safe paths counts bounded pending realized available closed fits reserved known
++  obtain ⟨r, n, p, h, k, raw, afterCaller, after, savedQueries, final, next, afterRoots, outer, waiting,
++    observed, post, querySame, growth, afterPaths, storage, afterRealized, afterCounts, afterFlags,
++    origin, protects, references, history, shape⟩ :=
++    complete_with_fragments formulas solver inventory beforeCaller before checkEmpty bucket incoming
++      roots memos initial safe paths counts flags realized bounded pending available closed ranges
++  have actual := observed 0 0 p h 0 (Nat.le_refl _) (Nat.le_refl _)
++  simp only [Nat.add_zero] at actual
++  have resources := SourcePruningEnumerationChildDispatch.observed_resources seed formulas solver inventory
++    beforeCaller before checkEmpty r n p h k bucket incoming roots memos initial safe paths counts realized
++    bounded pending available closed fits reserved known actual
++  exact ⟨r, n, p, h, k, raw, afterCaller, after, savedQueries, final, next, afterRoots, outer, waiting,
++    observed, post, querySame, growth, afterPaths, storage, afterRealized, afterCounts, afterFlags,
++    origin, protects, references, history, shape, resources.1, resources.2⟩
++
++/-- Original resources construct the complete earlier child packet and its returned bounds. -/
++theorem complete_resources
++    (seed : Seed)
++    (formulas : SourceGuards.Formulas FullSyntax.Formula)
++    (solver : SourceGuards.Entailment FullSyntax.Formula)
++    (inventory : Inventory) (beforeCaller : Caller (bits + 2)) (before : Cached)
++    (checkEmpty : Bool) (bucket : List Suspended) (incoming : Node)
++    (roots : Nat → Nat) (memos : Memos)
++    (initial : Context formulas solver inventory beforeCaller memos)
++    (safe : Safe before.core) (paths : Roots before.core.representatives roots)
++    (counts : EnumerationCanonicalWaiting.Correct roots before.core.values before.waiting)
++    (flags : ∀ slot, SourcePruningEnumerationNativeIndex.candidate beforeCaller.checked.native.machine.heap
++      ((before.core.values[slot]?).getD .eliminated) = some (before.expandable slot))
++    (realized : PendingRealized beforeCaller.checked.native.machine.heap before.core)
++    (bounded : ∀ sc ∈ bucket, sc.var < before.core.counter)
++    (pending : InputsPending before.core bucket)
++    (available : Available beforeCaller.checked.native.machine.heap incoming) (closed : incoming.free = [])
++    (fits : Fits seed.2 beforeCaller.checked)
++    (reserved : Reserved bits seed (bucket.length + 1))
++    (known : Heap (fun guard => guard ∈ seed.1) beforeCaller.checked.native.machine.heap) :
++    ∃ (r n p h k : Nat) (raw : Raw) (afterCaller : Caller (bits + 2)) (after : Cached)
++      (savedQueries : Queries) (final : Memos) (next : Inventory) (afterRoots : Nat → Nat)
++      (outer : EnumerationState.State Symbol Constraint) (waiting : EnumerationWaitingIndex.Waiting),
++      (∀ extraRepresentative extraNative P H extraIndex, p ≤ P → h ≤ H →
++        SourcePruningEnumerationChildDispatch.run checkEmpty (r + extraRepresentative) (n + extraNative)
++          P H (k + extraIndex) bucket incoming beforeCaller before memos.query =
++          ((.ok (some raw), afterCaller, savedQueries, outer, waiting), some after)) ∧
++      Post formulas solver next beforeCaller afterCaller final ∧ final.query = savedQueries ∧
++      before.core.counter ≤ after.core.counter ∧ Roots after.core.representatives afterRoots ∧
++      StorageValid after.core ∧ PendingRealized afterCaller.checked.native.machine.heap after.core ∧
++      EnumerationCanonicalWaiting.Correct afterRoots after.core.values after.waiting ∧
++      (∀ slot, SourcePruningEnumerationNativeIndex.candidate afterCaller.checked.native.machine.heap
++        ((after.core.values[slot]?).getD .eliminated) = some (after.expandable slot)) ∧
++      EnumeratedOrigin before.core after.core ∧
++      (∀ held, held < before.core.counter → IsRoot before.core.representatives held →
++        Avoids before.core.representatives held bucket → EnumerationDriver.Protected held before.core after.core) ∧
++      (∀ allowed, EnumerationReferences.ReferencesAllowed allowed before.core →
++        EnumerationReferences.InputsAllowed allowed bucket →
++        EnumerationReferences.ReferencesAllowed allowed after.core) ∧
++      (EnumerationReferences.PendingReferences before.core → EnumerationReferences.PendingReferences after.core) ∧
++      (raw = [] ∨ ∃ fragment, raw = [.ok (fragment, after.core)] ∧
++        Safe after.core ∧ FragmentBound after.core.counter fragment) ∧
++      Fits (advance seed (bucket.length + 1)).2 afterCaller.checked ∧
++      Heap (fun guard => guard ∈ (advance seed (bucket.length + 1)).1) afterCaller.checked.native.machine.heap := by
++  obtain ⟨r, n, p, h, k, raw, afterCaller, after, savedQueries, final, next, afterRoots, outer, waiting,
++    observed, post, querySame, growth, afterPaths, storage, afterRealized, afterCounts, afterFlags,
++    origin, protects, references, history, shape, returnedFits, returnedKnown⟩ :=
++    complete_with_fragments_resources seed formulas solver inventory beforeCaller before checkEmpty bucket incoming
++      roots memos initial safe paths counts flags realized bounded pending available closed fits reserved known
++  refine ⟨r, n, p, h, k, raw, afterCaller, after, savedQueries, final, next, afterRoots, outer, waiting,
++    observed, post, querySame, growth, afterPaths, storage, afterRealized, afterCounts, afterFlags,
++    origin, protects, references, history, ?_, returnedFits, returnedKnown⟩
++  rcases shape with rejected | ⟨fragment, singleton, afterSafe, bound, _pending, _separate⟩
++  · exact .inl rejected
++  · exact .inr ⟨fragment, singleton, afterSafe, bound⟩
++
++end MicroCFTA.SourcePruningEnumerationChildCompletion
+diff --git a/lean/MicroCFTA/SourcePruningEnumerationTerminalObservedResources.lean b/lean/MicroCFTA/SourcePruningEnumerationTerminalObservedResources.lean
+new file mode 100644
+index 000000000..77f135e20
+--- /dev/null
++++ b/lean/MicroCFTA/SourcePruningEnumerationTerminalObservedResources.lean
+@@ -0,0 +1,190 @@
++import MicroCFTA.SourcePruningEnumerationTerminalAdmission
++
++/-!
++# Resources at actual terminal returns
++
++The original mixed reservation bounds the caller at every outer successful
++terminal observation. Unsupported results and raw rejection retain their
++actual native effects. Outer errors remain separate observations.
++-/
++namespace MicroCFTA.SourcePruningEnumerationTerminal
++open EnumerationState EnumerationCorrectness EnumerationSchedule EnumerationDependencies
++open EnumerationCompleteness InternedConstructorTemplates InternedProbeProvenance
++open SourcePruningEnumerationNodes SourcePruningEnumerationObservation
++open SourceCurrentAllocatedNativeInventoryState (Inventory)
++open SourceCurrentAllocatedPartialInvariant (Context)
++open SourcePruningEnumerationIncomingReservation (Seed step advance Reserved)
++open SourceCurrentConstrainedCapGeneratedQueryResources (Fits)
++local notation "Symbol" => SourcePruningTemplates.Symbol
++local notation "Constraint" => SourceSymbolicIndex.Constraint FullSyntax.Formula
++local notation "Node" => Value Symbol Constraint
++local notation "Caller" => SourceCurrentAllocatedPartialState.State
++local notation "Memos" => EndpointMemoGateTrace.Memos
++local notation "Queries" => SourceEndpointMemo.Memos
++local notation "Heap" => SourceEqualityAnnotationHeap.Heap
++variable {EnumGuard : Type} {bits : Nat}
++local notation "Core" => EnumerationState.State Symbol EnumGuard
++local notation "TerminalRaw" => List (Except EnumerationState.Error (Fragments.Fragment Symbol × Core))
++
++/-- Original current facts bound the caller of every outer successful terminal observation. -/
++theorem observed_resources
++    [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Constraint)] [DecidableEq Node]
++    (seed : Seed)
++    (formulas : SourceGuards.Formulas FullSyntax.Formula)
++    (solver : SourceGuards.Entailment FullSyntax.Formula)
++    (inventory : Inventory) (beforeCaller : Caller (bits + 2)) (before : Core)
++    (checkEmpty : Bool) (r n p h : Nat) (first : Suspended) (rest : List Suspended)
++    (waiting : EnumerationWaitingIndex.Waiting) (incoming : Node) (incomingScs : List Suspended)
++    (roots : Nat → Nat) (memos : Memos)
++    (initial : Context formulas solver inventory beforeCaller memos)
++    (safe : Safe before) (paths : Roots before.representatives roots)
++    (counts : EnumerationCanonicalWaiting.Correct roots before.values waiting)
++    (bounded : ∀ sc ∈ first :: rest, sc.var < before.counter)
++    (pending : InputsPending before (first :: rest))
++    (realized : PendingRealized beforeCaller.checked.native.machine.heap before)
++    (available : Available beforeCaller.checked.native.machine.heap incoming) (closed : incoming.free = [])
++    (fits : Fits seed.2 beforeCaller.checked)
++    (reserved : Reserved bits seed ((first :: rest).length + 1))
++    (known : Heap (fun guard => guard ∈ seed.1) beforeCaller.checked.native.machine.heap)
++    {result : Option TerminalRaw} {afterCaller : Caller (bits + 2)}
++    {savedQueries : Queries} {outer : Core} {afterWaiting : EnumerationWaitingIndex.Waiting}
++    (observed : run checkEmpty r n p h first rest waiting beforeCaller before incoming incomingScs memos.query =
++      (.ok result, afterCaller, savedQueries, outer, afterWaiting)) :
++    Fits (advance seed ((first :: rest).length + 1)).2 afterCaller.checked ∧
++      Heap (fun guard => guard ∈ (advance seed ((first :: rest).length + 1)).1)
++        afterCaller.checked.native.machine.heap := by
++  rw [run] at observed
++  by_cases empty : incoming = .empty
++  · simp only [ite_eq_left empty] at observed
++    have callerSame := congrArg (fun output => output.2.1) observed
++    dsimp only at callerSame
++    rw [← callerSame]
++    refine ⟨fits.mono (SourcePruningEnumerationIncomingReservation.advance_profile_ge seed _), ?_⟩
++    intro key edge found
++    exact SourcePruningEnumerationIncomingReservation.advance_alphabet_ge seed _ (known key edge found)
++  · simp only [ite_eq_right empty] at observed
++    cases prefixObserved : ExceptT.run (SourcePruningEnumerationTerminalPrefix.run r first rest waiting before) with
++    | nil =>
++        simp only [prefixObserved] at observed
++        cases observed
++    | cons prefixEntry prefixTail =>
++        cases prefixEntry with
++        | error fault =>
++            simp only [prefixObserved] at observed
++            cases observed
++        | ok prefixResult =>
++            rcases prefixResult with ⟨⟨recorded, winner, moved⟩, joined⟩
++            cases prefixTail with
++            | cons second remaining =>
++                simp only [prefixObserved] at observed
++                cases observed
++            | nil =>
++                simp only [prefixObserved] at observed
++                obtain ⟨recordedSame, joinedRealized, winnerPending, recordedPending⟩ :=
++                  SourcePruningEnumerationCachedTerminalAdapter.observed_prefix
++                    beforeCaller.checked.native.machine.heap before first rest waiting roots
++                    paths counts safe bounded pending realized prefixObserved
++                have countSame : recorded.length = (first :: rest).length := by
++                  rw [recordedSame, List.length_map]
++                have foldReservation : Reserved bits seed recorded.length :=
++                  reserved.prefix (by rw [countSame]; omega)
++                have selected : ∀ source ∈ recorded, PendingOrEliminated joined source :=
++                  fun source member => .inl (recordedPending source member)
++                rcases foldObserved : SourcePruningEnumerationFold.run checkEmpty n p h recorded
++                    beforeCaller joined winner memos.query with
++                  ⟨foldOutcome, foldCaller, foldQueries, foldOuter⟩
++                cases foldOutcome with
++                | error fault =>
++                    simp only [foldObserved] at observed
++                    cases observed
++                | ok possible =>
++                    have foldBounds := SourcePruningEnumerationFold.observed_resources seed formulas solver inventory
++                      beforeCaller joined recorded checkEmpty n p h winner memos initial joinedRealized
++                      winnerPending selected fits foldReservation known foldObserved
++                    have finalSeed : advance seed ((first :: rest).length + 1) =
++                        step (advance seed recorded.length) := by
++                      rw [← countSame, SourcePruningEnumerationIncomingReservation.advance_add]
++                      rfl
++                    have padded : Fits (advance seed ((first :: rest).length + 1)).2 foldCaller.checked ∧
++                        Heap (fun guard => guard ∈ (advance seed ((first :: rest).length + 1)).1)
++                          foldCaller.checked.native.machine.heap := by
++                      rw [finalSeed]
++                      refine ⟨foldBounds.1.mono
++                        (SourcePruningEnumerationIncomingReservation.step_profile_ge (advance seed recorded.length)), ?_⟩
++                      intro key edge found
++                      exact SourcePruningEnumerationIncomingReservation.step_alphabet_ge
++                        (advance seed recorded.length) (foldBounds.2 key edge found)
++                    cases possible with
++                    | none =>
++                        simp only [foldObserved] at observed
++                        have callerSame := congrArg (fun output => output.2.1) observed
++                        dsimp only at callerSame
++                        rw [← callerSame]
++                        exact padded
++                    | some foldRaw =>
++                        cases foldRaw with
++                        | nil =>
++                            simp only [foldObserved] at observed
++                            have callerSame := congrArg (fun output => output.2.1) observed
++                            dsimp only at callerSame
++                            rw [← callerSame]
++                            exact padded
++                        | cons firstRow tail =>
++                            cases firstRow with
++                            | error fault =>
++                                simp only [foldObserved] at observed
++                                cases observed
++                            | ok row =>
++                                rcases row with ⟨token, folded⟩
++                                cases token
++                                cases tail with
++                                | cons second remaining =>
++                                    simp only [foldObserved] at observed
++                                    cases observed
++                                | nil =>
++                                    simp only [foldObserved] at observed
++                                    have foldRanges := SourcePruningEnumerationFold.initial_ranges seed
++                                      formulas solver inventory beforeCaller joined recorded checkEmpty winner memos
++                                      initial joinedRealized winnerPending selected fits foldReservation known
++                                    obtain ⟨fuel, lowP, lowH, raw, actualCaller, actualCore, actualQueries,
++                                      final, next, stable, post, querySame, finalRealized, shape,
++                                      _completed, _eliminated, _length, _forest, _counter, _obligations,
++                                      _expansion, _ancestry, _rejection⟩ :=
++                                      SourcePruningEnumerationFold.run_complete formulas solver inventory
++                                        beforeCaller joined recorded checkEmpty winner memos initial joinedRealized
++                                        winnerPending (fun source member => .inr (recordedPending source member)) foldRanges
++                                    have actual := stable 0 lowP lowH (Nat.le_refl _) (Nat.le_refl _)
++                                    simp only [Nat.add_zero] at actual
++                                    obtain ⟨rawSame, callerSame, queriesSame, _outerSame⟩ :=
++                                      SourcePruningEnumerationFold.ok_unique checkEmpty actual foldObserved
++                                    subst actualCaller
++                                    rw [queriesSame] at querySame
++                                    have rawSame := Option.some.inj rawSame
++                                    have coreSame : actualCore = folded := by
++                                      rcases shape with rejected | completed
++                                      · rw [rejected] at rawSame
++                                        cases rawSame
++                                      · have pairSame := Except.ok.inj (List.cons.inj (completed.symm.trans rawSame)).1
++                                        exact (Prod.mk.inj pairSame).2
++                                    rw [coreSame] at finalRealized
++                                    rcases incomingObserved : SourcePruningEnumerationIncomingNode.run checkEmpty r n p h
++                                        foldCaller folded winner incoming incomingScs foldQueries with
++                                      ⟨incomingOutcome, reachedCaller, reachedQueries, read⟩
++                                    cases incomingOutcome with
++                                    | error fault =>
++                                        simp only [incomingObserved] at observed
++                                        cases observed
++                                    | ok incomingRaw =>
++                                        have incomingBounds := SourcePruningEnumerationIncomingNode.observed_resources
++                                          (advance seed recorded.length).1 (advance seed recorded.length).2
++                                          formulas solver next foldCaller folded checkEmpty r n p h winner incoming
++                                          incomingScs final post.context finalRealized
++                                          (post.effects.keeps.available incoming available) closed foldBounds.1
++                                          (reserved recorded.length (by rw [countSame]; omega)) foldBounds.2
++                                          (by simpa only [querySame] using incomingObserved)
++                                        cases incomingRaw <;> simp only [incomingObserved] at observed <;>
++                                          have callerSame := congrArg (fun output => output.2.1) observed <;>
++                                          dsimp only at callerSame <;>
++                                          rw [← callerSame, finalSeed] <;> exact incomingBounds
++
++end MicroCFTA.SourcePruningEnumerationTerminal
