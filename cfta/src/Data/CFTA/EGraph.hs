@@ -690,12 +690,12 @@ matchRule g region bySymbol stampOf since changed r =
             , IntMap.member j region
             ]
 
--- | The number of e-classes with each symbol in a region, and the e-classes in ascending order.
+-- | The number of e-classes with each symbol in a region, and the e-classes.
 symbolIndex :: (Hashable f) => IntMap.IntMap [ENode f] -> HashMap.HashMap f (Int, [ClassId])
 symbolIndex region =
     HashMap.map (\cs -> (length cs, cs)) $
         HashMap.fromListWith
-            (flip (++))
+            (++)
             [(f, [ClassId i]) | (i, ns) <- IntMap.toList region, f <- HashSet.toList (HashSet.fromList [f' | ENode _ f' _ <- ns])]
 
 {- | The matches of a pattern: the e-class of each instance, and the e-class
