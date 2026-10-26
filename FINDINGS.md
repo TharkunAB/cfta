@@ -70,6 +70,25 @@ Terminal parents retain the existing enumerateNode fallback boundary. Native
 children can still take their terminal dispatcher. No Haskell fix is needed.
 Details: lean/notes-current-pruning-enumeration-native-ordinary.md.
 
+### Original forecasts admit ordinary scans after narrowing
+
+The formal resource forecast now uses original heap, guard-alphabet and
+cache data. It supplies scan admission at each actual retained narrowing
+cache. The actual ordinary callback scan also accepts an original forecast.
+Both producers retain their entire earlier conclusions.
+
+The selector needs a length law as well as stored-edge membership. Membership
+alone permits repeated rows. The proof counts every selected occurrence.
+Stored payload mass does not measure guards; the separate original guard
+alphabet bounds projected equality classes. These are formal interface
+requirements. No Haskell output defect is established by these observations.
+
+External Haskell action: no new runtime defect or repair was established.
+No Haskell source changed. Keep all six merged repairs and pending Sized
+module-documentation repair `af6369a9e`. The canonical edge-selector
+correspondence remains a proof obligation. Details:
+`lean/notes-current-pruning-enumeration-original-forecast.md`.
+
 ### Actual ordinary scans run rendered callbacks
 
 The formal ordinary-entry producer now runs each completed edge's concrete
@@ -709,6 +728,41 @@ TH/Generic extraction, valid-position build/read and source codec laws stay open
 
 
 
+
+## Original forecasts now admit scans after actual narrowing
+
+Cost bounds: `0958827bf`. Prefix admission: `2e83249ea`.
+Actual ordinary forecast: `3c15e834a`. The goal stays ACTIVE.
+H6 remains the strongest end-to-end language theorem.
+
+The original numeric profile bounds stored row and child counts. The original
+finite guard alphabet bounds projected equality classes. The original cache
+bounds inherited suspended buckets. A selector must retain stored edges and
+must not increase their count. Membership alone permits repeated edges and
+cannot establish the count bound. Every selected occurrence remains counted.
+
+One reservation fixed before narrowing now supplies the exact ordinary scan
+reservation at each actual retained prefix cache. The current-Packet producer
+retains the ENTIRE earlier prefix result. It adds Ready, actual stored and
+decoded payloads, full Post and memos, IncomingAvoid, pending inputs and the
+original bucket bound. The ordinary forecast producer retains its ENTIRE
+earlier actual callback-aware scan result and adds final forecast resources.
+No future range, successful execution or heap endpoint is a producer premise.
+
+All seven changed sources pass strict checks. Aggregate Audit passes 3837
+jobs and checks 77397 theorem dependencies. Installed readback covers 23
+public declarations and 19 full definitions or structures. H6, older APIs,
+runtime workers and Haskell remain unchanged. Main remains at `153e1a211`.
+FINDINGS keeps all six merged Haskell fixes and the pending Sized doc repair.
+
+The prefix producer gives a common prefix fuel and derived scan admission.
+It does not yet execute one positive-depth resume with a common prefix-plus-
+scan fuel. The ordinary producer still requires an actual ordinary parent
+and a nonterminal bucket. Next prove that composed execution, then reserve
+deeper recursive subtrees before later siblings. Whole recursive capacity
+and language, terminal outer fallback, native Graph correspondence, extraction
+and arbitrary lazy demand remain open. Details:
+`lean/notes-current-pruning-enumeration-original-forecast.md`.
 
 ## Actual ordinary scans now run rendered callbacks
 
