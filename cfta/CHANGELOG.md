@@ -8,6 +8,9 @@ Before release, the package was called `microcfta`.
   references. Reuse that same probe choice when matching a Mu. This avoids
   a pending interning lookup in a closed nested constructor expression.
 
+- Template exclusion computes the copies of an edge once for each wanted
+  and unwanted parts, symbol, and child shapes. On Specftacular's HugeLists
+  6-p4 this cut 3.8% of allocation and time, with the same laws.
 - `Data.CFTA.replaceRows` applies row replacements and deletions to an
   existing explicit automaton. It shares unchanged rows and validates the
   complete result after the batch. The original automaton stays unchanged.
