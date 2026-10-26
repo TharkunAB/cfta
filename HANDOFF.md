@@ -1,5 +1,38 @@
 # cfta formalization restart handoff
 
+## Cached incoming and native assimilation now have assignment semantics
+
+Assimilation and actual terminal unions: `1801f54a5`.
+Cached incoming and actual dispatcher: `a0ea22b12`.
+The goal stays ACTIVE. H6 remains the strongest end-to-end language theorem.
+Main `6c080537a` remains imported. All earlier Haskell repairs remain merged.
+
+The cached incoming adapter now has exact logical and returned-branch
+assignment semantics at its actual native endpoint. The actual dispatcher
+preserves complete assignments when source and target share a union-find
+class. It covers no-op, missing optional nodes, checked native conjunction
+and Empty rejection. Both wrappers retain the full old producer result and
+call that producer once. No original admission premise changes.
+
+The actual terminal prefix derives every recorded source's shared class
+with the winner. Its exact language adds the listed assignment equalities.
+The graph-free assimilation lemma retains both domains and suspended lists
+when it eliminates the source. It derives term equality in both directions
+from the satisfying forest. Native growth is restricted to used old handles.
+
+All five new modules and Audit pass strict checks. Aggregate Audit passes
+3909 jobs and checks 77814 theorem dependencies. Installed readback covers
+6 declarations with only permitted axioms. H6, all earlier Lean sources
+except Audit imports, runtime and Haskell remain unchanged. Every finite
+recursive capacity still has original resource bounds.
+
+Next prove assignment semantics through the WHOLE actual native fold,
+including its first rejection and each reached native heap. Then compose
+the terminal prefix, fold and incoming step. Preserve the union equations.
+Whole-enumerator language, selector coverage, partial stop outputs, unsupported
+fallback, concrete solver and Haskell correspondence remain open.
+Details: `lean/notes-current-pruning-cached-assimilation.md`. FINDINGS has Haskell status.
+
 ## Actual incoming-node branches now have exact assignment meaning
 
 Native handle and pending-write semantics: `c0ebbe6eb`.
