@@ -1,5 +1,38 @@
 # Constrained languages, indexing, and distributions
 
+## An original reservation now derives an actual edge and recursive callback
+
+Reservation: `8cced4ee6`. Concrete head: `fd55485d2`.
+The goal stays ACTIVE. H6 remains the strongest end-to-end language theorem.
+Main `6c080537a` remains imported. All earlier Haskell repairs remain merged.
+
+The original Packet, native profile, finite guard carrier, captured mass
+and inherited length derive an actual edge receipt and its depth-one callback.
+One common work bound gives the same result at every larger fuel. The two
+reserved phases pay the edge, then narrowing and the callback expansion.
+Room at the final original forecast supplies both reservations. The forecast
+also computes a mathematical width. No future cache or success is a premise.
+
+A completed callback supplies the actual returned native caller and full
+memos for the next sibling. The sibling retains the captured enumeration
+cache and metadata. Each output keeps its own resource certificate. Arbitrary
+stopped outputs, reasons and optional endpoints remain in OutcomeResources.
+The head and callback wrappers retain their entire earlier output contracts.
+Each calls its earlier producer once. Rejection receives no Safe conclusion.
+
+All six new modules and Audit pass strict checks. Aggregate Audit passes
+3874 jobs and checks 77624 theorem dependencies. Installed readback covers
+25 declarations and 15 full definitions or structures. Only permitted
+axioms occur. H6, earlier APIs, runtime workers and Haskell remain unchanged.
+FINDINGS records that no new Haskell defect or repair was established.
+
+Next compose the stage across the complete ordered sibling scan. Its schedule
+must pay each full callback before the next sibling and retain that subtree's
+actual native effects. Then connect the complete depth-two driver and prove
+general finite recursive capacity. Whole-enumerator language and Haskell
+correspondence remain open. Details:
+`lean/notes-current-pruning-outer-callback-reservation.md`.
+
 ## Original cache bounds now cover actual traversals and captured edges
 
 Traversal: `987b7fe05`. Edge and final write: `a5ee4b9f0`.
