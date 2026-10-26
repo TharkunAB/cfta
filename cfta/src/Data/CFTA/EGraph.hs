@@ -591,10 +591,12 @@ rebuild = go IntSet.empty IntSet.empty
         -- Each transition that rebuild touched has roots as children and
         -- occurs once in its row, so that the table is a valid automaton.
         [] ->
-            let roots = IntSet.fromList [r | i <- IntSet.toList dirty, let ClassId r = find g0 (ClassId i), IntMap.member r (classes g0)]
+            let roots = IntSet.fromList [r | i <- IntSet.toList dirty, let ClassId r = find g0 (ClassId i)]
                 joinedRoots = IntSet.map (\i -> let ClassId r = find g0 (ClassId i) in r) joined
-                tidy table r = IntMap.adjust (\e -> e{classRow = tidyRow g0 (IntSet.member r joinedRoots) (classRow e)}) r table
-             in g0{classes = IntSet.foldl' tidy (classes g0) roots}
+                tidy r e _ = Just e{classRow = tidyRow g0 (IntSet.member r joinedRoots) (classRow e)}
+             in -- One merge of the e-classes with the roots to tidy. The other
+                -- subtrees of the e-classes stay shared.
+                g0{classes = IntMap.mergeWithKey tidy id (const IntMap.empty) (classes g0) (IntMap.fromSet (const ()) roots)}
         todo ->
             let merged = IntSet.fromList [i | c <- todo, let ClassId i = find g0 c]
                 (g', owners) = foldl' (\(h, o) i -> repair h o i) (g0{pending = []}, IntSet.empty) (IntSet.toList merged)
