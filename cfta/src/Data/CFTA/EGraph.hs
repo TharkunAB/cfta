@@ -18,6 +18,40 @@ hash-consed as well, and they never merge. egglog has sorts in the same way.
 
 The e-graph is a persistent value, so a caller can keep an old version.
 
+= Example
+
+The smallest term that a term equals under some rules, and whether the
+rules make two terms equal. With @OverloadedStrings@, a string is a
+pattern variable. A language without sorts has the sort type @()@.
+
+> data Op = Add | Mul | One | Var String
+>     deriving (Eq, Ord, Show, Generic, Hashable)
+>
+> rules :: [Rule () Op]
+> rules =
+>     equation (add "x" "y") (add "y" "x")
+>         ++ equation (mul "x" (add "y" "z")) (add (mul "x" "y") (mul "x" "z"))
+>         ++ [rewrite (mul "x" (PNode One [])) "x"]
+>   where
+>     add a b = PNode Add [a, b]
+>     mul a b = PNode Mul [a, b]
+>
+> smallest :: Term Op -> Maybe (Int, Term Op)
+> smallest t =
+>     let (c, g) = addTerm t (emptyEGraph :: EGraph () Op)
+>         (g', _) = saturate defaultLimits rules g
+>      in extract (\_ sizes -> 1 + sum sizes) g' c
+>
+> equalUnder :: Term Op -> Term Op -> Bool
+> equalUnder a b =
+>     let (ca, g1) = addTerm a (emptyEGraph :: EGraph () Op)
+>         (cb, g2) = addTerm b g1
+>      in reportStop (snd (saturateUntilEqual defaultLimits rules ca cb g2)) == Equal
+
+A rule can have a condition on an e-class analysis ('saturateWith'), such as
+@holds "x" (/= Just 0)@ for constant folding, and 'addTermWith' adds terms
+with sorts, such as typed terms.
+
 = E-graphs are tree automata
 
 An e-graph is a bottom-up deterministic tree automaton (Pollock and Haan, in
@@ -97,6 +131,8 @@ module Data.CFTA.EGraph (
     emptyEGraph,
     addTerm,
     addTermWith,
+    lookupTerm,
+    lookupTermWith,
     find,
     equivalent,
     merge,
@@ -358,6 +394,26 @@ addNode n0 g = case HashMap.lookup n (memo g) of
             )
   where
     n = canon g n0
+
+-- | The e-class of a term without sorts, when the e-graph has the term.
+lookupTerm :: (Hashable f) => Term f -> EGraph s f -> Maybe ClassId
+lookupTerm (Node f ts) g = do
+    cs <- traverse (`lookupTerm` g) ts
+    find g <$> HashMap.lookup (canon g (ENode 0 f cs)) (memo g)
+
+{- | The e-class of a term of any type, when the e-graph has the term. The
+function is the function of 'addTermWith'.
+-}
+lookupTermWith :: (Hashable s, Hashable f) => (t -> (Maybe (Term s), f, [t])) -> t -> EGraph s f -> Maybe ClassId
+lookupTermWith view t g = do
+    let (sort, f, ts) = view t
+    cs <- traverse (\u -> lookupTermWith view u g) ts
+    k <- maybe (Just 0) sortIdentity sort
+    find g <$> HashMap.lookup (canon g (ENode k f cs)) (memo g)
+  where
+    sortIdentity (Node s us) = do
+        ks <- traverse sortIdentity us
+        HashMap.lookup (SortNode s ks) (sortIds g)
 
 -- | Add a term without sorts, and give its e-class.
 addTerm :: (Hashable f) => Term f -> EGraph s f -> (ClassId, EGraph s f)
