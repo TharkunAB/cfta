@@ -246,6 +246,40 @@ spec = describe "Data.CFTA.EGraph" $ do
                 (five, g') = addTerm (Node (Lit 5) []) g
                 (g'', _) = saturateWith (Saturation (Limits 10 1000 0) (Just refinements) Nothing) [] g'
             equivalent g'' c five `shouldBe` True
+        it "reaches a goal that needs the analysis, and does not reach it without the analysis" $ do
+            let (c, g) = addTerm (Node Quotient [succLen, succLen]) (emptyEGraph :: EGraph () Arith)
+                (one, g') = addTerm (Node (Lit 1) []) g
+                stop analysis = reportStop (snd (saturateWith (Saturation (Limits 10 1000 0) analysis (Just (c, one))) [(divide, nonzero "x")] g'))
+            (stop (Just refinements), stop Nothing) `shouldBe` (Equal, Saturated)
+    it "applies a rule only to the matches that its condition accepts" $ do
+        let leaf s = Node s []
+            (same, g1) = addTerm (Node "f" [leaf "a", leaf "a"]) (emptyEGraph :: EGraph () String)
+            (other, g2) = addTerm (Node "f" [leaf "a", leaf "b"]) g1
+            (c, g3) = addTerm (leaf "c") g2
+            toC condition =
+                let (g', _) = saturateWith defaultSaturation [(rewrite (PNode "f" [PVar "x", PVar "y"]) (PNode "c" []), condition)] g3
+                 in (equivalent g' same c, equivalent g' other c)
+        toC mempty `shouldBe` (True, True)
+        toC (different "x" "y") `shouldBe` (False, True)
+        toC (different "x" "y" <> different "y" "x") `shouldBe` (False, True)
+        -- The rule has no variable z, so a condition on z is false.
+        toC (different "x" "y" <> different "x" "z") `shouldBe` (False, False)
+    it "finds the e-class of a term without adding it, also through a merge" $ do
+        let leaf s = Node s []
+            (c, g1) = addTerm (Node "f" [leaf "a"]) (emptyEGraph :: EGraph () String)
+            (b, g2) = addTerm (leaf "b") g1
+            -- The e-graph has a, so adding it again gives its e-class.
+            (a, _) = addTerm (leaf "a") g2
+            merged = fromMaybe g2 (merge a b g2)
+        (lookupTerm (Node "f" [leaf "a"]) g2, lookupTerm (Node "f" [leaf "b"]) g2) `shouldBe` (Just c, Nothing)
+        lookupTerm (Node "f" [leaf "b"]) merged `shouldBe` Just (find merged c)
+    it "does not stop while a rule with too many matches sits out" $
+        -- With a match limit of 10, the rules of the AC sums sit out often.
+        forM_ [4, 5, 6] $ \n -> do
+            let (_, g) = addTerm (sumOf n) emptyEGraph
+                (g', report) = saturate (Limits 100 100000 10) acRules g
+            reportStop report `shouldBe` Saturated
+            (eClassCount g', eNodeCount g') `shouldBe` (2 ^ n - 1, 3 ^ n - 2 ^ (n + 1) + n + 1)
     it "holds the n! * Catalan(n - 1) terms of an AC sum of n variables, in 3^n - 2^(n+1) + n + 1 e-nodes" $
         forM_ [(3, 12), (4, 120), (5, 1680)] $ \(n, count) -> do
             let (c, g) = addTerm (sumOf n) emptyEGraph
