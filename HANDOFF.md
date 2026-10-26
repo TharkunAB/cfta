@@ -1,5 +1,36 @@
 # cfta formalization restart handoff
 
+## Native query histories retain their original resource reservation
+
+Caller resources: `69abb7423`. Captured packet histories: `c7b7fc5aa`.
+The goal stays ACTIVE. H6 remains the strongest end-to-end language theorem.
+
+The current outer Context, a numeric Fits profile and entry Room now construct
+one closed native query with a computed instruction bound. Its exact return
+retains the entire target Receipt, outer Post and next resource profile.
+No stronger joint Frame or future successful action is an input. A supplied
+raw return receives the same facts at its exact value and full checked state.
+
+For a recorded sequence of consecutive target queries, one original numeric
+reservation supplies every entry. The actual final caller retains the full
+Post, SAME captured enumeration cache and metadata, and the advanced profile.
+An observed prefix retains the original unused reservation for later queries.
+No future room is added at that endpoint. The one-query producer constructs
+its return; the history theorem observes completed queries and proves their
+preservation. It does not construct or complete the recursive driver.
+
+The largest integration gap is the actual recursive execution between query
+calls. Derive its resource costs for allocations and emptiness checks. Carry
+the packet through concrete callbacks and whole subtrees. Then derive the
+reservation for later siblings from the original input. QueryHistory alone
+does not model those intervening effects or a whole native alternative fold.
+Whole-driver language, terminal fallback, Graph correspondence, extraction
+and arbitrary lazy demand remain open. No Haskell file changes in this step.
+
+Both new modules and Audit pass strict checks. Public readback covers 17
+declarations and four full definitions. Audit checks 77147 theorem dependencies.
+Details: `lean/notes-current-pruning-enumeration-caller-resources.md`.
+
 ## Native observations retain checked traces and explicit initial room
 
 Recorded word checks: `da28d95e2`. Initial-room receipts: `1d8cdc3a7`.
