@@ -3,9 +3,13 @@
 Mutable union-find, as in @Data.Equivalence.Monad@, can be faster overall,
 but enumeration branches in the list monad need a structure that can be copied
 and backtracked cheaply. This module stores parent pointers in an 'IntMap' and
-returns updated structures from 'union'. A union points each member of the
-smaller set at the representative of the larger set, so the parent of a
-variable is always its representative and 'root' takes one lookup.
+returns updated structures from 'union'. It is the linked-list
+representation of disjoint sets with the weighted-union heuristic (Cormen et
+al., Introduction to Algorithms): the representative of a set holds the size
+and the members of the set, and a union points each member of the smaller
+set at the representative of the larger set. So the parent of a variable is
+always its representative, 'root' takes one lookup, and n unions point
+O(n log n) members in all.
 
 In a constrained enumeration of 20,000 terms of the typed-expression ECTA,
 'find' takes 1.7% of the instructions, and all operations of @containers@
@@ -29,6 +33,8 @@ module Data.CFTA.Internal.UnionFind (
 
 import Data.IntMap.Strict (IntMap)
 import qualified Data.IntMap.Strict as IntMap
+import Data.IntSet (IntSet)
+import qualified Data.IntSet as IntSet
 
 ----------------------------------------------------------
 
@@ -72,9 +78,10 @@ intToUVar = UVar
 
 A 'Parent' points to the representative of the set of the variable. A
 'Root' is the representative of its set and holds the size of the set and
-its other members.
+the set: the integer ids of its members, the representative too. 'IntSet.size'
+walks the set, so the size is a field.
 -}
-data Entry = Parent !UVar | Root !Int ![UVar]
+data Entry = Parent !UVar | Root !Int !IntSet
     deriving (Eq, Ord, Show)
 
 -- | Persistent union-find forest, keyed by the integer id of a variable.
@@ -83,7 +90,7 @@ newtype UnionFind = UnionFind {getUnionFindMap :: IntMap Entry}
 
 -- | Forest containing each supplied variable as a singleton set.
 withInitialValues :: [UVar] -> UnionFind
-withInitialValues uvs = UnionFind $ IntMap.fromList $ map ((,Root 1 []) . uvarToInt) uvs
+withInitialValues uvs = UnionFind $ IntMap.fromList [(i, Root 1 (IntSet.singleton i)) | i <- map uvarToInt uvs]
 
 ---------------------------
 -------- Union-find operations
@@ -103,19 +110,20 @@ representative of the merged class: the representative of the larger class.
 -}
 unionRoots :: UVar -> UVar -> UnionFind -> (UVar, UnionFind)
 unionRoots r1 r2 (UnionFind m) =
-    let (big, bigSize, bigMembers, small, smallSize, smallMembers) =
-            if s1 < s2 then (r2, s2, ms2, r1, s1, ms1) else (r1, s1, ms1, r2, s2, ms2)
+    let (big, bigSize, bigSet, smallSize, smallSet) =
+            if s1 < s2 then (r2, s2, set2, s1, set1) else (r1, s1, set1, s2, set2)
         -- Each member of the smaller set now points at the new representative.
-        pointed = foldl' (\acc v -> IntMap.insert (uvarToInt v) (Parent big) acc) m (small : smallMembers)
+        pointed = IntSet.foldl' (\acc v -> IntMap.insert v (Parent big) acc) m smallSet
      in ( big
-        , UnionFind (IntMap.insert (uvarToInt big) (Root (bigSize + smallSize) (small : smallMembers ++ bigMembers)) pointed)
+        , UnionFind (IntMap.insert (uvarToInt big) (Root (bigSize + smallSize) (IntSet.union smallSet bigSet)) pointed)
         )
   where
-    (s1, ms1) = entryOf r1
-    (s2, ms2) = entryOf r2
+    (s1, set1) = entryOf r1
+    (s2, set2) = entryOf r2
+    -- A variable without an entry is the representative of its own set.
     entryOf r = case IntMap.lookup (uvarToInt r) m of
-        Just (Root size members) -> (size, members)
-        _ -> (1, [])
+        Just (Root size set) -> (size, set)
+        _ -> (1, IntSet.singleton (uvarToInt r))
 
 -- | Find a variable's representative. The forest stays the same.
 find :: UVar -> UnionFind -> (UVar, UnionFind)
