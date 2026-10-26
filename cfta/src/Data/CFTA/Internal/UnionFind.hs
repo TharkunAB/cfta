@@ -22,6 +22,7 @@ module Data.CFTA.Internal.UnionFind (
     union,
     find,
     root,
+    flatten,
 ) where
 
 import Control.Monad (when)
@@ -135,3 +136,13 @@ root :: UVar -> UnionFind -> UVar
 root uv (UnionFind m) = case IntMap.lookup (uvarToInt uv) m of
     Just (Parent p) -> root p (UnionFind m)
     _ -> uv
+
+{- | Point each variable at the representative of its set, so that 'root'
+takes at most one step until the next 'union'. A structure that reads
+'root' often, such as an e-graph, flattens after a batch of unions.
+-}
+flatten :: UnionFind -> UnionFind
+flatten uf@(UnionFind m) = UnionFind (IntMap.mapWithKey point m)
+  where
+    point i (Parent _) = Parent (root (UVar i) uf)
+    point _ entry = entry

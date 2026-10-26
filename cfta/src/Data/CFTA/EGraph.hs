@@ -487,7 +487,8 @@ become the same e-node.
 -}
 rebuild :: (Hashable f) => EGraph s f -> EGraph s f
 rebuild g0 = case pending g0 of
-    [] -> g0
+    -- Each identity points at its root, so that 'find' takes one step.
+    [] -> g0{unionFind = UnionFind.flatten (unionFind g0)}
     todo ->
         rebuild (foldl' repair g0{pending = []} (IntSet.toList (IntSet.fromList [i | c <- todo, let ClassId i = find g0 c])))
   where
