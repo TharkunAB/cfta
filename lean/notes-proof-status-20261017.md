@@ -1,5 +1,42 @@
 # Proof status at 2026-10-18
 
+## Original reservations now cover native alternatives and receipt packets
+
+Alternative resources: `cb5080ce0`. Recursive receipt packets: `4f11446e1`.
+The goal stays ACTIVE. H6 remains the strongest end-to-end language theorem.
+
+One original mixed reservation now constructs the complete ordered native
+alternative scan. Arity rejection and unsupported projection cost zero.
+Supported projections use the original selected-edge child cost. The sum
+counts duplicate alternatives. Native queries and enabled Empty allocation
+remain included. No future range or successful action is an initial premise.
+
+Every alternative restores the SAME captured enumeration cache. Actual native
+caller and full query effects pass to the next alternative, including valid
+child rejection. All three earlier scan conclusions remain intact. The full
+producer adds final Fits/carrier and exact per-receipt bounds at the cost of
+selectedEdges.take(index+1). Unsupported preparation retains its explicit stop.
+Unused suffix forecasts do not assert execution.
+
+The packet wrapper retains that ENTIRE strengthened result. Given an original
+recursive Packet and IncomingAvoid, each completed receipt derives its own
+restart Packet and the original captured-cache Packet at the SAME receipt
+caller and full saved memos. This conditional output adds no producer premise.
+Rejected receipts receive no Safe packet. Final Fits gives no next-query Room.
+
+Both new modules and Audit pass strict checks. Installed public readback covers
+17 declarations and nine full definitions. Audit checks 77323 theorem
+dependencies. All three old output packets and the entire 2214-character
+strengthened resource packet compare exactly after width specialization.
+Runtime workers, older interfaces, H6 and Haskell remain unchanged. Main
+remains imported at `153e1a211`. FINDINGS records no new Haskell fix.
+
+Next reserve the hook-aware scan through actual callback and recursive subtree
+returns before the next sibling. The shallow scan does not run those hooks.
+Whole recursive capacity, whole-driver language, terminal outer fallback,
+native Graph correspondence, extraction and arbitrary lazy demand remain open.
+Details: `lean/notes-current-pruning-enumeration-alternative-resources.md`.
+
 ## Original reservations now cover selected edges and captured-slot writes
 
 Ordered child traversal: `ea5fd02f6`. Selected-edge resources: `e0b3789d7`.
