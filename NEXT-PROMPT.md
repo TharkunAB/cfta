@@ -1,5 +1,44 @@
 Continue the cfta formalization in /home/tritlo/Code/mcfta.
 
+## Original reservations now cover selected edges and captured-slot writes
+
+Ordered child traversal: `ea5fd02f6`. Selected-edge resources: `e0b3789d7`.
+Captured-slot resources: `b1594bdf3`. The goal stays ACTIVE.
+H6 remains the strongest end-to-end language theorem.
+
+One original mixed reservation now constructs the full ordered child traversal,
+a supported selected edge and its captured-slot write. The cost sums each
+original bucket.length+1. Actual selected-edge buckets include inherited
+inputs and freshly projected own-class descents. Order and duplicates remain.
+Both native queries and optional enabled Empty allocation are charged.
+
+Every reached child supplies the next actual caller, cache and saved memos.
+Current Post, counter growth, enumerated origins and protected roots supply
+the genuine suffix facts. Rejection keeps its reached effects and pads the
+unused forecast without running the suffix. Own-class allocation, residual
+recording and captured-slot finalization retain the native caller.
+
+All SIX earlier output packets remain intact. This includes full Post, memos,
+cache and index facts, fragments, protected slots, pending references, exact
+captured writes, ancestry reset and successful stratification advance.
+Safe stays conditional on completion. Final Fits does not supply next-query
+Room. No future range or success is an initial premise. Direct producer
+induction does not assert the old universally quantified traversal Ranges.
+
+All three new modules and Audit pass strict checks. Installed public readback
+covers 21 declarations and eight full definitions. Audit checks 77309 theorem
+dependencies. Exact old-output comparisons retain 2579/2231 traversal,
+2088/1846 selected-edge and 2151/1937 captured-slot characters after width
+specialization. Runtime workers, older interfaces, H6 and Haskell stay
+unchanged. Main remains imported at `153e1a211`. FINDINGS records no new fix.
+
+Next carry original resources through successive native alternatives. Then
+cover concrete callbacks, whole recursive subtrees and later siblings at
+actual post-subtree endpoints. Supported arity and projected annotation gates
+remain. Whole-driver language, terminal outer fallback, native Graph
+correspondence, extraction and arbitrary lazy demand remain open. Details:
+`lean/notes-current-pruning-enumeration-traversal-resources.md`.
+
 ## Original reservations now construct the complete child packet
 
 Child admission: `34bb0adad`. Actual terminal bounds: `63c6f0262`.
