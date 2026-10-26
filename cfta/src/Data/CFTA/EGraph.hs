@@ -340,18 +340,20 @@ rebuild g0 = case pending g0 of
         Nothing -> g
         Just e ->
             let users = classUsers e
-                -- Take the users out of the e-class and the memo, then add
-                -- them again in canonical form. A merge in 'step' can join
-                -- this e-class to another one, so the users of the other one
-                -- stay in the joined e-class.
-                m1 = foldl' (\m (u, _) -> HashMap.delete u m) (memo g) users
-                g1 = g{memo = m1, classes = IntMap.insert i' e{classUsers = [], classUserCount = 0} (classes g)}
+                -- Take the users out of the e-class, then add them again in
+                -- canonical form. A user whose form changes leaves the memo;
+                -- a user whose form stays keeps its entry, whose e-class is
+                -- the e-class of the user. A merge in 'step' can join this
+                -- e-class to another one, so the users of the other one stay
+                -- in the joined e-class.
+                g1 = g{classes = IntMap.insert i' e{classUsers = [], classUserCount = 0} (classes g)}
                 (g2, seen) = foldl' step (g1, HashMap.empty) users
                 step (h, s) (u, owner) =
                     let u' = canon h u
-                        h1 = case HashMap.lookup u' (memo h) of
-                            Just other -> maybe h snd (union owner other h)
-                            Nothing -> h{memo = HashMap.insert u' (find h owner) (memo h)}
+                        m = if u' == u then memo h else HashMap.delete u (memo h)
+                        h1 = case HashMap.lookup u' m of
+                            Just other -> maybe h{memo = m} snd (union owner other h{memo = m})
+                            Nothing -> h{memo = HashMap.insert u' (find h owner) m}
                      in (h1, HashMap.insert u' (find h1 owner) s)
                 ClassId root = find g2 (ClassId i')
                 users' = HashMap.toList seen
