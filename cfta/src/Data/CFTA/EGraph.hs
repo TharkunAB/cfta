@@ -1158,7 +1158,27 @@ runWith analysis limits rules goal g0 = go 0 IntMap.empty IntMap.empty IntMap.em
                 changedSince t = Map.findWithDefault IntSet.empty t changedSets
                 present = HashSet.fromList [f | ns <- IntMap.elems region, ENode _ f _ <- ns]
                 bySymbol = symbolIndex region
-                dataOf c = let ClassId j = find g c in IntMap.lookup j known
+                dataIn h cur c = let ClassId j = find h c in IntMap.lookup j cur
+                -- As egg does, the data of an e-node that an instance adds
+                -- comes from its children when it is added, and a merge
+                -- merges the data of its two e-classes, so that a condition
+                -- sees them in the same iteration. The data of the users of
+                -- an e-class follows after the iteration.
+                madeIn h0 h cur = case analysis of
+                    Just a@Analysis{} -> foldl' (makeOne a h) cur [added h0 .. added h - 1]
+                    Nothing -> cur
+                makeOne a h cur j = case IntMap.lookup j (classes h) of
+                    Just e
+                        | [ENode _ f cs] <- HashSet.toList (classNodes e)
+                        , Just ds <- traverse (dataIn h cur) cs ->
+                            IntMap.insert j (analysisMake a f ds) cur
+                    _ -> cur
+                mergedIn h h' c c' cur = case (analysis, dataIn h cur c, dataIn h cur c') of
+                    (Just a@Analysis{}, Just x, Just y) -> IntMap.insert (root h' c) (analysisMerge a x y) cur
+                    (_, Just x, Nothing) -> IntMap.insert (root h' c) x cur
+                    (_, Nothing, Just y) -> IntMap.insert (root h' c) y cur
+                    _ -> cur
+                root h c = let ClassId j = find h c in j
                 -- The ban of a rule, the rule if it ran, and its matches.
                 search (k, (r, condition))
                     | not (all (`HashSet.member` present) (ruleSymbols r)) = (Nothing, Just k, [])
@@ -1175,18 +1195,23 @@ runWith analysis limits rules goal g0 = go 0 IntMap.empty IntMap.empty IntMap.em
                 ran' = foldl' (\m k -> IntMap.insert k now m) ran [k | (_, Just k, _) <- results]
                 -- Stop as soon as a merge makes the two e-classes one, and
                 -- when the e-nodes reach the limit.
-                apply h changed [] = Right (h, changed)
-                apply h changed _ | size h > limitNodes limits = Right (h, changed)
-                apply h changed ((c, m@(Subst vs _), r, condition) : rest)
+                apply h _ changed [] = Right (h, changed)
+                apply h _ changed _ | size h > limitNodes limits = Right (h, changed)
+                apply h cur changed ((c, m@(Subst vs _), r, condition) : rest)
                     | Condition check <- condition
-                    , not (check h dataOf (\v -> elemIndex v (ruleNames r) >>= (`IntMap.lookup` vs))) =
-                        apply h changed rest
+                    , not (check h (dataIn h cur) (\v -> elemIndex v (ruleNames r) >>= (`IntMap.lookup` vs))) =
+                        apply h cur changed rest
                     | otherwise = case instantiate m (sortId h c) (ruleRight r) h of
-                        Nothing -> apply h changed rest
-                        Just (c', h') -> case union c c' h' of
-                            Nothing -> apply h' changed rest
-                            Just (u, h'') -> if u && reached h'' then Left h'' else apply h'' (changed || u) rest
-             in case apply g False (concat [ms | (_, _, ms) <- results]) of
+                        Nothing -> apply h cur changed rest
+                        Just (c', h') ->
+                            let cur' = madeIn h h' cur
+                             in case union c c' h' of
+                                    Nothing -> apply h' cur' changed rest
+                                    Just (u, h'') ->
+                                        if u && reached h''
+                                            then Left h''
+                                            else apply h'' (if u then mergedIn h' h'' c c' cur' else cur') (changed || u) rest
+             in case apply g known False (concat [ms | (_, _, ms) <- results]) of
                     Left h ->
                         let (h', _) = settle (i == 0) now known (rebuild h)
                          in (h'{clock = clock h' + 1}, Report (i + 1) (size h') Equal)
