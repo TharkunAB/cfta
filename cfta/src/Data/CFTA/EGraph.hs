@@ -57,7 +57,8 @@ adds terms with sorts, such as typed terms.
 
 An e-graph is a bottom-up deterministic tree automaton (Pollock and Haan, in
 Wang et al., "E-Graphs, VSAs, and Tree Automata: a Rosetta Stone", EGRAPHS
-2022):
+2022; Suciu, Wang and Zhang, "Semantic Foundations of Equality Saturation",
+ICDT 2025):
 
 * An e-class is a state.
 * An e-node @f(c1, ..., cn)@ of the e-class @c@ is a transition

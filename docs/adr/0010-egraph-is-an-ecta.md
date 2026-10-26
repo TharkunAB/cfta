@@ -4,13 +4,16 @@
 
 ECTAs generalize e-graphs as representations of sets of terms: the language
 of an e-class is the language of a state of a bottom-up deterministic tree
-automaton, and an ECTA adds equality constraints to the transitions. The
-e-graph of ADR 9 used this only at its edges. It kept its own union-find and
-its own sets of e-nodes, and built an automaton from them to count terms or
-to match by intersection. cfta already has the parts of an e-graph that an
-automaton does not have: the explicit ECTA, `FTA state symbol Constraint`,
-has nominal states and a constraint on each transition, and the enumeration
-of an ECTA has a union-find for its equalities.
+automaton, and an ECTA adds equality constraints to the transitions. Suciu,
+Wang and Zhang (ICDT 2025) take this as the definition: an e-graph is a
+deterministic and reachable tree automaton, and rebuilding is its congruence
+closure. The e-graph of ADR 9 used this only at its edges. It kept its own
+union-find and its own sets of e-nodes, and built an automaton from them to
+count terms or to match by intersection. cfta already has the parts of an
+e-graph that an automaton does not have: the explicit ECTA,
+`FTA state symbol Constraint`, has nominal states and a constraint on each
+transition, and the enumeration of an ECTA has a union-find for its
+equalities.
 
 ## Decision
 
@@ -79,3 +82,15 @@ e-node with a constraint is in the e-class of its plain form.
   or minimizing an FTA with the union-find and the hash-cons), stays open.
 - Speed against hegg is not the aim of this change; the cost above is the
   start for that work.
+- The union-find is the linked-list representation of disjoint sets with
+  the weighted-union heuristic (Cormen et al., Introduction to Algorithms):
+  each member points at the representative, and a union relabels the
+  smaller set. So a lookup of a representative is one step, and n unions
+  relabel O(n log n) members in all.
+- egg makes the e-nodes of every e-class canonical and removes duplicates
+  in each rebuild. This rebuild touches only the rows that can change.
+- Relational e-matching (Zhang et al., POPL 2022) reads the e-nodes of each
+  symbol as a relation and answers a pattern as a conjunctive query with a
+  worst-case optimal join. The rows of the store, by symbol, are those
+  relations. The matcher here is a backtracking search down the pattern, as
+  egg's is, and it starts at the e-classes of the rarest symbol.
