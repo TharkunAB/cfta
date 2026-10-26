@@ -70,6 +70,23 @@ Terminal parents retain the existing enumerateNode fallback boundary. Native
 children can still take their terminal dispatcher. No Haskell fix is needed.
 Details: lean/notes-current-pruning-enumeration-native-ordinary.md.
 
+### Original resources cover actual narrowing and callback prefixes
+
+The actual row exposure and filtered node rebuild now fit an original numeric
+profile. Filtering keeps whole original edges and adds no guard. Mu and type
+skips retain the input heap. Empty rejection retains its actual native heap.
+A recursive Packet derives the earlier prefix certificate, resource bounds
+and packet at the actual retained cache. The concrete callback keeps its
+native caller and full memos. Its next accepted prefix has the same bounds.
+
+These results retain the complete earlier prefix and callback conclusions.
+They do not execute recursive subtrees or later hooked siblings. Arbitrary
+failed-fuel heaps remain outside the successful narrowing observer.
+External Haskell action: no new runtime defect or repair was established.
+No Haskell source changed. Keep all six merged repairs and the pending Sized
+documentation repair `af6369a9e`. Details:
+`lean/notes-current-pruning-enumeration-prefix-resources.md`.
+
 ### Original resources cover native alternatives and receipt packets
 
 The ordered native alternative scan now derives completion from current facts
@@ -675,6 +692,41 @@ TH/Generic extraction, valid-position build/read and source codec laws stay open
 
 
 
+
+## Original resources now cover actual narrowing and callback prefixes
+
+Narrowing resources: `f77dbe539`. Prefix resources: `4faaa1cd8`.
+Callback composition: `63249e5c1`. The goal stays ACTIVE.
+H6 remains the strongest end-to-end language theorem.
+
+The original numeric profile bounds the actual closed row exposure and
+filtered node construction. The original guard predicate stays valid.
+Mu and type-position skips retain the input heap. The prefix producer derives
+sufficient fuel and adds Fits and the guard carrier at its actual returned
+caller. Empty rejection retains its native allocations and resource bound.
+
+A current recursive Packet now derives the full earlier PrefixValid output,
+resources and the recursive packet at each retained cache's actual caller.
+The callback producer retains its ENTIRE earlier conclusion. It adds resources
+and a packet at the next accepted selected prefix with the same common fuel.
+Full Post memos remain distinct from query equality. No future successful
+run, endpoint or capacity is an initial premise. Final Fits supplies no Room.
+
+All three new modules and Audit pass strict checks. Aggregate Audit passes
+3825 jobs and checks 77331 theorem dependencies. Installed readback covers
+11 declarations and eight full definitions. Exact output comparisons retain
+406 prefix and 1390 callback characters after name/whitespace normalization.
+Runtime workers, older interfaces, H6 and Haskell remain unchanged. Main
+remains imported at `153e1a211`. FINDINGS records no new Haskell fix.
+
+Next cover an actual hook-aware ordinary scan with the rendered callback and
+resume at depth zero. Keep explicit exhaustion and unsupported stops. Then
+reserve deeper recursive subtrees before processing later siblings at their
+actual returned callers. PrefixValid.finish is a certificate expression; the
+recursive worker does not execute it. Whole recursive capacity and language,
+terminal outer fallback, native Graph correspondence, extraction and arbitrary
+lazy demand remain open. Details:
+`lean/notes-current-pruning-enumeration-prefix-resources.md`.
 
 ## Original reservations now cover native alternatives and receipt packets
 
