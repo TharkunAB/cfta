@@ -590,7 +590,7 @@ rebuild = go IntSet.empty
             let g1 = g0
                 roots = IntSet.fromList [r | i <- IntSet.toList dirty, let ClassId r = find g1 (ClassId i), IntMap.member r (classes g1)]
                 tidy table r = IntMap.adjust (dedupe . map canonical) r table
-                canonical t = (transitionOf (canon g1 (nodeOf t))){FTA.transitionConstraint = FTA.transitionConstraint t}
+                canonical t = t{FTA.transitionChildren = map (find g1) (FTA.transitionChildren t)}
              in g1{transitions = IntSet.foldl' tidy (transitions g1) roots}
         todo ->
             let merged = IntSet.fromList [i | c <- todo, let ClassId i = find g0 c]
@@ -598,11 +598,16 @@ rebuild = go IntSet.empty
                     IntSet.fromList
                         [j | i <- IntSet.toList merged, Just e <- [IntMap.lookup i (classes g0)], (_, ClassId j) <- classUsers e]
              in go (IntSet.unions [dirty, merged, owners]) (foldl' repair g0{pending = []} (IntSet.toList merged))
-    -- The transitions once each, in their first order.
-    dedupe = reverse . snd . foldl' keep (HashSet.empty, [])
-    keep (seen, kept) t =
-        let key = (nodeOf t, FTA.transitionConstraint t)
-         in if HashSet.member key seen then (seen, kept) else (HashSet.insert key seen, t : kept)
+    -- The transitions once each, in their first order: a plain transition
+    -- by its e-node, and a transition with a constraint, which is rare, by
+    -- comparison with the kept ones.
+    dedupe row@[_] = row
+    dedupe row = reverse (snd (foldl' keep (HashSet.empty, []) row))
+    keep (seen, kept) t
+        | FTA.transitionConstraint t == noConstraint =
+            let n = nodeOf t in if HashSet.member n seen then (seen, kept) else (HashSet.insert n seen, t : kept)
+        | t `elem` kept = (seen, kept)
+        | otherwise = (seen, t : kept)
     repair g i = case IntMap.lookup i' (classes g) of
         Nothing -> g
         Just e ->
