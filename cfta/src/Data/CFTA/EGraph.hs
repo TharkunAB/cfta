@@ -399,10 +399,8 @@ addNode n0 g = case HashMap.lookup n (memo g) of
     n = canon g n0
 
 -- | The e-class of a term without sorts, when the e-graph has the term.
-lookupTerm :: (Hashable f) => Term f -> EGraph s f -> Maybe ClassId
-lookupTerm (Node f ts) g = do
-    cs <- traverse (`lookupTerm` g) ts
-    find g <$> HashMap.lookup (canon g (ENode 0 f cs)) (memo g)
+lookupTerm :: (Hashable s, Hashable f) => Term f -> EGraph s f -> Maybe ClassId
+lookupTerm = lookupTermWith withoutSort
 
 {- | The e-class of a term of any type, when the e-graph has the term. The
 function is the function of 'addTermWith'.
@@ -419,10 +417,12 @@ lookupTermWith view t g = do
         HashMap.lookup (SortNode s ks) (sortIds g)
 
 -- | Add a term without sorts, and give its e-class.
-addTerm :: (Hashable f) => Term f -> EGraph s f -> (ClassId, EGraph s f)
-addTerm (Node f ts) g0 =
-    let (cs, g1) = foldr (\t (acc, h) -> let (c, h') = addTerm t h in (c : acc, h')) ([], g0) ts
-     in addNode (ENode 0 f cs) g1
+addTerm :: (Hashable s, Hashable f) => Term f -> EGraph s f -> (ClassId, EGraph s f)
+addTerm = addTermWith withoutSort
+
+-- | The view of 'addTermWith' for a term without sorts.
+withoutSort :: Term f -> (Maybe (Term s), f, [Term f])
+withoutSort (Node f ts) = (Nothing, f, ts)
 
 {- | Add a term of any type, and give its e-class. The function gives the
 sort, the symbol, and the children of a term. For example, a term whose
