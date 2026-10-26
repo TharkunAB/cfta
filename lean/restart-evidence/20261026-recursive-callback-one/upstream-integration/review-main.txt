@@ -1,0 +1,54 @@
+[2026-10-26 07:37 CET]
+Independent upstream integration source review: CLEAR. No correctness blocker found in the memo or changelog resolution.
+
+Scope and source equivalence
+
+I read the complete upstream.patch and the affected Template.refine and edgeCopiesWith definitions, prepared-catalog representation, memo implementation and cache insertion code. The patch compares upstream main 153e1a211 to 6c080537a1a758cd4c4d9b6583c3470024b96850. The integration area's base.txt is the local pre-merge base bb0b4772b0e2b1b0b26dd64d01e6d1a5686142ce; those are different roles. integration.json records merge 843c4f8910d42ee7ef9a746c8470789807ad87c8.
+
+The working Template source and retained Template.hs snapshot are byte-equal. Computing Git-format blob hashes from file bytes, without a Git command, gives 86571e26115d97debd070e6c61dfd3245f8c7aef, exactly the new upstream Template blob. Reversing only the added local memo/comment and the changed call site in memory gives the patch's old Template blob f45f0ca28. Thus the runtime source delta is exactly the stated memoization change.
+
+The working Sized.hs blob is 568428e25e9f6c84a4cd597765919bafe86af682 and the generator changelog blob is afde5f7ee17392c489cc875fc440ea44b56ef4ab. Both match the upstream patch's after blobs. The Sized change corrects the claimed complexity of the deterministic-row check: it builds an ordered set of transition keys. It changes comments only. Root's retained integration record separately states that this repair equals the prior local repair af6369a9e; I did not run a historical Git comparison.
+
+The cfta changelog conflict snapshot contains the local recursive-probe repair and the upstream template-memo entry. Removing only the conflict marker lines while retaining both sides reproduces the complete current cfta/CHANGELOG.md byte-for-byte. The retained changelog snapshot also equals that result. No entry or unchanged suffix was lost.
+
+Memo key completeness
+
+edgeCopiesWith is a pure function of original, childParts, wanted parts, unwanted parts, root symbol and the full ordered child-shape list. The memo key contains exactly the four varying arguments. original and childrenOf are fixed in the refine closure. The call passes wanted' and nubOrd unwanted exactly as the old direct call did. It keeps shape order and duplicates. It performs no new sorting, canonicalization, template filtering or split pruning.
+
+Edge identity, constraint and full child-node identities are correctly absent from the key. edgeCopiesWith does not inspect them. The caller still applies the returned obligation lists to each actual edge's actual children and retains that edge through setChildren, including its constraint. Different edges with the same parts, root symbol and child shapes can share split computation without sharing their children or constraint payloads.
+
+PreparedTemplate equality, order and hash use catalog identifiers. This is sound within one catalog, where equal identifiers name equal structural parts. The new memo is inside the same refine application that captures originalTemplate and preparedChildren for that catalog. It is not a top-level TypeableMemoCache shared by unrelated exclusions. No cross-catalog identifier alias is introduced.
+
+Lifetime, purity and strictness
+
+memo allocates a private table for the evaluated function application. exclude keeps one refined closure for its prepared catalog, so walk and copiesOf share tables across that exclusion's recursive work and repeated uses of the retained exclusion function. The table does not evict. Keys and split results remain reachable while the function or retained computations keep that table alive. The new table can retain more shape and obligation data than the old walk-only memo. This is a real allocation tradeoff, not a new process-wide catalog registry.
+
+The existing cache uses hash-map key equality, so a hash collision does not identify different keys. Atomic insertion keeps the first lazy value. Concurrent duplicate computation can occur but both computations call the same pure edgeCopiesWith function. No IO-dependent callback, mutable solver result, native enumeration state or changing environment is read by that function. The cache implementation is unchanged.
+
+Hashing the key can demand the full child-shape lists earlier than the old edgeCopiesWith call did. That call could reject some wanted root parts before inspecting all shapes. On the intended total finite templates and valid finite interned graph representation, this adds exposure/hashing work and can retain more data; it does not change the computed split lists. This review does not claim identical lazy forcing, behavior on bottom/invalid open graphs, or a universal speedup. The changelog's 3.8% HugeLists measurement is an upstream historical claim. The retained integration tests do not independently measure that workload.
+
+Actual validation and its limits
+
+I read both complete native raw logs, the format log and the aggregate Audit log, and checked report hashes against the raw bytes. The first native command rebuilt Template but selected zero examples because its match expression was too narrow. Its successful process exit is not test coverage. The corrected command used --match=templates and seed 20261026 under N1. It ran 26 examples with zero failures, including exactly 14 property results of 100 cases each.
+
+The selected properties compare finite ECTA/template results with direct term filtering, interned and explicit-state views, matching/exclusion partition, run counts and absence of new ambiguity. The selected examples also cover exact versus prefix arity, equality constraints, typed symbols, a large family of prefixes and recursive anywhere exclusion. Several of these cases test APIs outside the changed root-exclusion memo, so 26 is the suite-selection denominator, not 26 direct cache-hit tests. Random finite ECTA generators use small sizes. The logs do not establish exhaustive collision/catalog tests, multicore stress, arbitrary recursive cutoff stream equality, all Haskell tests, or a performance matrix.
+
+The format command passed fourmolu checks on Template.hs and Sized.hs and cabal-gild checks on both packages. cabal-gild emitted only its deprecated --input option warning. The aggregate Lean Audit now has terminal exit zero, 3847 jobs and 77451 checked theorem dependencies. Its existing inputs-name warning remains. No Lean source changed in this integration. That Audit is compatibility evidence; it is not a new formal proof of the Haskell memo implementation, runtime costs, extraction, or stronger H6 scope.
+
+No build, formatter, Git command, repository mutation or publication action was performed for this review.
+
+Exact source controls
+
+/home/tritlo/Code/mcfta/cfta/src/Data/CFTA/Template.hs: 34506 bytes; SHA256 b6dc07e834899368f663c2322a34864d6b65f4681734cdd4b4d6270483d5232c; Git-format blob SHA1 86571e26115d97debd070e6c61dfd3245f8c7aef
+/home/tritlo/Code/mcfta/cfta/src/Data/CFTA/Interned/Memo.hs: 5024 bytes; SHA256 d96792d8007b9c925f7f524a36570f2d25b1496987b7aada043157c7d120ce58; Git-format blob SHA1 0237c1845c44b6d97aa15b0b899742300b090683
+/home/tritlo/Code/mcfta/cfta/src/Data/CFTA/Interned/Cache.hs: 9915 bytes; SHA256 0c400346eab744d813441071334bc789a7d8a57d4f9950e7db40412356c6ef05; Git-format blob SHA1 f1d892f7758742cad6acebef2d9bc7737d9443e6
+/home/tritlo/Code/mcfta/cfta-generator/src/Data/CFTA/Sized.hs: 14498 bytes; SHA256 c8e142ff4ad79e7543d0391a98f1ce31c7a0deb40c5517639132e9b4937f2ab9; Git-format blob SHA1 568428e25e9f6c84a4cd597765919bafe86af682
+/home/tritlo/Code/mcfta/cfta-generator/CHANGELOG.md: 19778 bytes; SHA256 bd9febd2bb2541027596225a950bea217ab47cb5c2aa8bce49ac79e4caedd879; Git-format blob SHA1 afde5f7ee17392c489cc875fc440ea44b56ef4ab
+/home/tritlo/Code/mcfta/cfta/CHANGELOG.md: 23593 bytes; SHA256 8ecb5bcfef1164867db4e4fa096c3fb19e3f21bf9fe1a838555998fd4451c628; Git-format blob SHA1 6ef5d427231812c88ceefc44858ffa1c23267f27
+
+Retained raw controls
+
+templates-native-1: actual terminal exit 0; raw 1297 bytes; SHA256 0ce806a495c797f6c6fddca1ba8e566786e43b05d7b389f0e5937e006736865f
+templates-native-2: actual terminal exit 0; raw 3295 bytes; SHA256 5933645e7047f04400e236b0dbc14537fe630a3175c274cac0672d8821f58321
+format-1: actual terminal exit 0; raw 190 bytes; SHA256 dd4b668ab02ba642a61f38af3dc00dbbb392db04b60880a35bd9ca2bcd3ccdb7
+aggregate-audit-1: actual terminal exit 0; raw 612 bytes; SHA256 d516ac03cf7ca79da4aed4b35d58fc5ffab057a94440b327ab025e0117cfd997

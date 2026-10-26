@@ -1,5 +1,43 @@
 # cfta formal model
 
+## Main is current and callbacks now execute one recursive expansion
+
+Main `6c080537a` is imported by `843c4f891`.
+Exact suspended mass: `66ede4c3c`. Actual callback: `697f1fce6`.
+The goal stays ACTIVE. H6 remains the strongest end-to-end language theorem.
+
+Main adds a memo for template edge copies. Its key retains all varying
+arguments. The existing native template tests pass 26 examples, including
+14 properties with 100 cases each. The Sized documentation repair is now
+merged in PR #178 at `70a8a67dc`. Upstream `aef8ff730` matches local
+`af6369a9e` exactly. No external patch remains for that repair.
+
+The actual fragment callback now records its result and executes the real
+depth-one recursive driver at one common work bound and every larger fuel.
+Its full earlier callback certificate remains available for arbitrary
+continuations. The reservation is computed from the current callback-input
+cache. Exact stored-slot equality transports it to the returned cache.
+No future success, resource bound or callback result is an initial premise.
+
+Distinct pending-slot assimilation preserves total suspended mass, including
+duplicates. Incoming replacement adds exactly incoming.length. A completed
+subtree retains the same captured sibling cache and metadata at its actual
+returned native caller and full memos. General finish retains arbitrary
+stopped outputs and nested reasons. Absent endpoints remain absent.
+
+All three new sources and Audit pass strict checks. Aggregate Audit passes
+3850 jobs and checks 77474 theorem dependencies. Installed readback covers
+11 declarations and 12 full definitions or structures. H6, earlier APIs and
+runtime workers remain unchanged. Only the imported Haskell memo changes.
+FINDINGS retains all earlier repairs and marks the Sized repair as merged.
+
+Next derive numeric counter and pending-bucket bounds from actual completed
+child and edge producers. These bounds must come from the outer captured
+cache. Then reserve subtree work before each next sibling. The old edge-only
+cost does not pay that work. The complete depth-two scan, general finite
+recursive capacity, whole-enumerator language and Haskell correspondence
+remain open. Details: `lean/notes-current-pruning-recursive-callback.md`.
+
 ## The actual recursive driver now has a depth-one resource theorem
 
 Outcome certificates: `4e88eecaa`. Prefix phases: `4cf91e299`.

@@ -1,0 +1,79 @@
+[2026-10-26 07:32 CET] Bounded source analysis: recursive receipt-cache growth and captured siblings.
+
+Result. Original enum counter C and total suspended-bucket length B are sufficient shape inputs for a useful next bound. Existing actual producers expose the needed allocation/write equations, but do not export these upper bounds. Packet and FragmentHistory alone cannot imply them. Actual native Post already transports admission for the unchanged captured sibling cache. This review ran no builds, compiler, Git, network, or executable checks and made no repository changes. The bounds below are proposed proof obligations, not newly checked Lean results.
+
+1. Definitions and existing facts
+
+Let B(s) be SourcePruningEnumerationPrefixAdmission.suspendedBound s (PrefixAdmission.lean:24-28): sum the lengths of ALL .unenumerated buckets in s.values; count duplicates. Its private stored_length_le (30-48) derives scs.length <= B(s) from one actual stored pending slot. narrowed_admission (70 onward; result 101-106) exports an original bucket-length bound and unchanged counter for an actual retained narrowing cache.
+
+CachedOwn.suspendMany_complete (CachedOwn.lean:46-65) exports the exact suspendedState shape and counter increase tries.length. complete (99-134) exports the same equation for the actual own-class prefix. All new slots contain .unenumerated none [], so this operation leaves B unchanged.
+
+ChildDispatch.nonterminal_complete (ChildDispatch.lean:164-200) exports counter_after=counter_before+1. CachedPrepare.complete (289 onward) splits ordinary allocation/full-bucket write from Mu/Union allocation with empty bucket. allocate_complete (90-119) gives the exact allocated state. An ordinary child adds its input bucket; Mu/Union add zero bucket mass. Empty rejects without allocation (ChildCompletion.lean:99-107).
+
+TerminalPrefix.run_complete (TerminalPrefix.lean:52-79) changes only representatives. CachedFoldCompletion.complete (20-65) exports unchanged counter and exact outside-slot frame. CachedAssimilation.complete (30-65) has the stronger actual state equation needed for a mass proof: for distinct source/target, concatenate sourceScs++targetScs at target and eliminate source; rejection returns before. This preserves B exactly, including repeated source IDs across the fold: self-source and previously eliminated source are no-ops. A duplicate-aware list fold is required; replacing recorded with a set is unnecessary and would change the source accounting.
+
+CachedIncoming.complete (CachedIncoming.lean:53-79) exports the actual write after a compression Frame: replace oldScs by incomingScs++oldScs, preserve counter. Thus B grows by exactly incomingScs.length. This also covers the logical after-write Empty rejection cache; it does not equate that cache with the outer runtime read endpoint. CachedTerminalAdapter.complete exports resultCache.counter=before.counter at line410 and retains the joined/fold/write receipts (357-409).
+
+Finalize.complete (Finalize.lean:63-70) replaces the captured pending slot with an enumerated fragment and clears ancestry. It preserves counter and decreases B. SelectedEdge.finish (SelectedEdge.lean:33-37) only records obligations and preserves both measures.
+
+2. Smallest missing numeric result and composition
+
+First prove list-weight laws for the EXISTING B definition: Frame preserves B; appending an empty pending slot preserves B; a stored pending-slot replacement adds the difference of bucket lengths; a distinct-slot assimilated update preserves B; writing an enumerated value does not increase B. A balanced sum equation avoids truncated Nat subtraction in the replacement lemma.
+
+Use the actual existing producer witnesses to obtain a child receipt bound:
+  counter(after) <= counter(before)+1
+  B(after) <= B(before)+bucket.length.
+It should include valid raw-empty returned caches. It must not add Safe for rejected caches. Terminal fold conservation and incoming descendants.length<=bucket.length give the terminal case. Existing terminal and fold public packets alone do not bound final target bucket length; the proof must use the actual assimilation/write equations or a new observer lemma proved from that execution.
+
+Induct TraversalCompletion over its actual ordered children. For inputs=[(node_i,bucket_i)], the useful result is:
+  counter(after) <= counter(before)+inputs.length
+  B(after) <= B(before)+sum_i bucket_i.length.
+The original child inputs remain fixed across the suffix. This is compatible with the current genuine pending/protection transport. No recursive subtree is executed inside this shallow child traversal.
+
+For one completed captured edge, let T=tries.length, A=edge.children.length and S=scs.length at the captured input. The original-only bounds are:
+  counter(receiptCache) <= C+T+A
+  B(receiptCache) <= B+A*(S+T).
+CostBounds.descend_length_le and suspended_length (CostBounds.lean:16-27), then its child-bucket argument (47-65), derive every bucket length <=S+T. Own allocation adds T slots but zero mass; finalization only reduces mass. These are conservative bounds; subtracting the finalized parent bucket is optional.
+
+OriginalForecast.cost_le (OriginalForecast.lean:26-56) already supplies T<=GuardWidth.width alphabet and A<=scalar profile from current Fits/Heap/Available/Linked and actual selected membership. Hence at the ordinary entered cache one can use:
+  Cnext = C + GuardWidth.width alphabet + scalar profile
+  Bnext = B + scalar profile*(B + GuardWidth.width alphabet),
+since the selected stored S<=B. For a forecast from BEFORE narrowing, also export B(retained prefix)<=B(original) from its exact same-bucket replacement/clear receipts; current narrowed_admission exports only the selected S bound and counter equality. NarrowAdapter.adapt_core (21-36) retains the exact observed core; NarrowContext's actual write shape replaces the same scs. ParkedRestart clears scs to [], and callback Frame.values/counter preserve both measures.
+
+C and B must remain original input data. Native Fits does not bound arbitrarily many enumeration-only .none allocations. Counter alone does not bound a bucket with arbitrarily many repeated suspended entries. SlotBound limits IDs, not multiplicity. No theorem should infer either numeric upper bound from CacheValid, Safe, FragmentHistory, or native profile alone.
+
+3. Captured siblings after a recursive subtree
+
+NativeContinuations.run (NativeContinuations.lean:44-71) restores the SAME captured before cache and the hook's fixed original sibling metadata. It threads the ACTUAL returned native Caller and queries from the hook. Therefore a subtree's enlarged enum cache is not a sibling input and its counter/B must not be summed into the captured sibling cache.
+
+NativeCacheGrowth.cacheValid_keeps/cacheValid_post (11-39) preserve CacheValid for that exact unchanged cache via NativeGrowth.flags and Observation.realized_preserved with Frame.refl. RecursivePacket.captured_post (40-48) preserves its entire Packet at the actual Post's returned caller, inventory and FULL Memos. The unchanged cache preserves Safe, PendingReferences, dependency order, metadata ID bounds, Ready/stored equations, IncomingAvoid, counter and B. The parent decoded node/selected edge list persists by lookupNode_keeps; the arity and projection data remain those of the captured node. No Graph correspondence is used.
+
+NativeBranchPackets.complete_with_packets (93-139) already distinguishes the completed receipt's own Packet from the captured-before Packet at its own full Post endpoint. HookResources' zero-depth suffix (140-147) applies captured_post and lookupNode_keeps at the actual head Post. A positive-depth hook needs the same construction from its ACTUAL aggregate subtree Post, composing it with the completed-edge Post first. OutputResources for an earlier emitted output is not a substitute for that aggregate endpoint. Query equality alone must not identify different full Memos.
+
+This preserves logical/cache admission, not numeric capacity automatically. The subtree must return Fits and a guard carrier at its actual native endpoint, and the outer schedule must pay its work before the next sibling. The old zero-depth edge schedule is insufficient for positive recursive native effects. A reservation based on the original depth and C/B/profile/alphabet recurrence is the missing resource composition. Each returned-cache recursion needs the Cnext/Bnext receipt bounds above; each sibling restores the old C/B but starts from the actual larger native profile/carrier. Stops with no endpoint do not execute a sibling; no Post or cache validity should be invented for failed raw/native observations.
+
+Recommended next unit: add actual scalar child/traversal/captured-edge bounds while retaining the same completion witnesses, then carry those bounds beside Packet into a depth induction. Keep FragmentHistory's existing pending/rank contract and old completion types available by projection. There is no need to add a future successful subtree or final cache bound as an admission premise.
+
+Current bounded-source identities (SHA256):
+SourcePruningEnumerationPrefixAdmission.lean 54c3d88b3258711c7071a02b41d441c9ca90aec53969f079ac46460f987c1792
+SourcePruningEnumerationCachedOwn.lean d49764d023e43982840f78e44a1a346b524d2cf4b3c8faecca523e60116e85e5
+SourcePruningEnumerationCachedPrepare.lean 607a0ee4cdfbc857937373fb538b030cbd4f1b02f3317a2bc20a8fc932e26b56
+SourcePruningEnumerationChildDispatch.lean 67880174034d9a1f39a6e57d3066833fa1cad67fd9b7d57102a39fffbfe066e1
+SourcePruningEnumerationChildCompletion.lean 0ae63614e44634a17d924e50b07e213abb01a9bbd0392e9157e47351ef1ad3ec
+SourcePruningEnumerationTerminalPrefix.lean bc975e650b8ee6cecba75605107cbf2ad458e02137854994d91541b4b63d9b30
+SourcePruningEnumerationCachedAssimilation.lean 5b05402f3a36e17736d0ad62b8e75063bd6183bc7603794010459d236efb6e73
+SourcePruningEnumerationCachedFoldCompletion.lean 3ed39e7c6d57378f4271867ca29ef7774ac306c8dcb3443ed2619c8d71e155fe
+SourcePruningEnumerationCachedIncoming.lean 22987eec115232b57f34883382c81f6539e053517f3c6c88dc1e11461a2f88e6
+SourcePruningEnumerationCachedTerminalAdapter.lean c0766199a04d66217e941d10050ac0b5d584297fecb49e458a3fe6061b18eefb
+SourcePruningEnumerationTraversalCompletion.lean 5b7b3d42ef5594c14a31a513851bb2e1b1c53386cf566e4f8d42346d9d847010
+SourcePruningEnumerationCostBounds.lean 7dc5f21ca1d2c2b67bc1d25d55d21b9aa41220494010ebc67b82517d3971a199
+SourcePruningEnumerationCapturedEdge.lean bf27ba6567436f49a3cb139812dc1a8c8993a98e7de5f2060e4ba29a7dc8ff05
+SourcePruningEnumerationNativeBranchCompletion.lean 90b8b92ce2ee998fe0d04f59397d7bfa7d47da7d00ae23510c5aeea5eac831a2
+SourcePruningEnumerationNativeCacheGrowth.lean eb6dcad7c1eba8e7faca07c6fc8ced10a5e73e0dfaf7f535b7a9e79aab04243c
+SourcePruningEnumerationRecursivePacket.lean a4b24cb62806bda0f1b9a5f02b95650637b9e8e3c274f2f508438927915ad837
+SourcePruningEnumerationNativeBranchPackets.lean 035825a4ca7a2e1c1dee5e09cde86233d6cce6e44afe0ba78f55274e7149f551
+SourcePruningEnumerationNativeContinuations.lean 108bb3652bfc67fa341ab22bdc83940eb59e96b5a19501dd84d7ebe6b3efbdc8
+SourcePruningEnumerationHookResources.lean bfebee13f6ab8130f0e8ea248b918e740dca0f292d970d77d0c67decec75eb56
+SourcePruningEnumerationOriginalForecast.lean a8a8c6364548d4adc35484caef13002991cd1242e59d345ca81480e43018f63c
+SourcePruningEnumerationCallbackZero.lean 6efd7b2ccb06c61482293f15d95a20e06cc1650f1c0615251b0899bd4afd8ea3
+EnumerationCompressionFrame.lean 5b6e6a4b11c21b949874db500e23aa074fcdd4e0de683f46f33863113dc91375

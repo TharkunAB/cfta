@@ -1,0 +1,18 @@
+[2026-10-26 07:44 CET] FINAL bounded source review: CLEAR.
+
+Reviewed source: /home/tritlo/Code/mcfta/lean/MicroCFTA/SourcePruningEnumerationSuspendedMass.lean
+SHA256 7468938f33cfd2d15b3947c052872d4b773e0b4f1b8684e24f24924f3daf5ab1.
+
+I read the complete combined source and compared it with the original 83-line draft. The scalar proofs are unchanged. The incoming record update is on one line; its intended type is unchanged. The module now imports ExpansionAdmission and adds three exact equality transports.
+
+assimilated_mass uses the actual EnumerationCorrectness.assimilated update. Its source and target both have stored unenumerated receipts. The target != source hypothesis has the correct direction for List.getElem?_set_ne: writing target preserves the old source receipt. The target write adds sourceScs.length, and eliminating source removes that exact amount. No occurrence is deduplicated, including repeated entries within either bucket. The lemma makes no self-assimilation claim. That case must use the dispatch no-op branch.
+
+incoming_mass retains oldScs and adds exactly incomingScs.length. The supplied stored receipt ensures that the target exists. It permits any replacement node handle and does not infer Safe, a successful native query, or a returned runtime cache. An actual incoming after-write/Empty-rejection cache can use the equation after rewriting its exact write receipt. The outer read endpoint remains separate.
+
+suspendedBound_values needs only exact equality of the entire values list. count_values uses the same original seed and the existing ExpansionAdmission.count definition, which depends on the cache only through suspendedBound. It therefore needs no counter equality. reserved_values rewrites that exact count and retains the original reservation, seed and width. It does not claim alphabet/profile monotonicity or reservation transport to a different native seed.
+
+For an actual recordTypes callback, its Frame.values supplies the required equality. Frame.counter separately retains pending-ID bounds. The new transport lemmas do not derive Safe from Frame, and they do not establish child/captured-edge mass bounds or recursive capacity by themselves. Their scope is scalar conservation and unchanged-values reservation transport.
+
+Evidence read without rerunning checks: strict-suspended-mass-2/report.json records exit 0, warningAsError=true and linter.all=true; raw.log is literally empty. The live source equals its checked snapshot. Report SHA256 9a47df6c40202ecd1e36a217d67fc7c161f6a926f2490141469a0f85feb4ca3a. Root owns those checks. No builds, Git commands or repository edits were performed for this review.
+
+The earlier growth analysis remains unchanged at /tmp/mcfta-recursive-cache-growth-analysis.txt, SHA256 95e079db33f52d3f5f6db253574ac5ce1e9116ae48132972855e96dcae530707. The original draft also remains unchanged under /tmp/mcfta-recursive-cache-growth-proposal.

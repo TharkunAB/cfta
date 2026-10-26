@@ -1,0 +1,94 @@
+[2026-10-26 07:30 CET]
+Bounded design review: recursive callbacks before later native siblings
+
+Result
+
+The existing runtime already performs the required interleaving. The missing proof is a positive-depth version of the hook scan certificate, with a general stopped-endpoint relation and a resource schedule that also charges recursive work. The next smallest implementation is callback_one_complete_resources. It can reuse the current RunOne theorem without an initial premise about a future callback state.
+
+Actual source semantics
+
+NativeContinuations.run calls CapturedEdge.run for one head. A complete receipt invokes the hook. Only a complete hook result supplies the native Caller/query pair for the suffix. A stopped hook retains its outputs, exact reason and endpoint option and stops before the suffix. A rejected/stopped-but-continuable edge runs no hook and continues with empty head outputs. The captured enumeration cache passed to each edge remains the original before. The hook closes over the original sibling metadata.
+
+This matches cfta/src/Data/CFTA/Enumeration.hs:975-981. continue ost' obtains each alternative fragment, calls oracle ost', then recursively enumerates with the resulting ost''. Each sibling starts its callback with the same captured ost'. There is no required metadata fold between siblings. The actual native Caller and query effects still pass from the completed hook to the next sibling.
+
+Minimal completed-hook contract
+
+Use Recursive.OutcomeResources rather than the equalities in receipt_zero_complete. A positive-depth complete hook can change the native Caller and query table. It can also emit several outputs. From an actual complete outcome obtain:
+
+  exists reached next final,
+    Post formulas solver next edgeCaller reached final
+    and Fits finalSeed.2 reached.checked
+    and Heap (member finalSeed.1) reached.heap
+    and actualHookCaller = reached
+    and actualHookQueries = final.query
+    and every emitted output has OutputResources formulas solver edgeCaller finalSeed.
+
+Compose headPost with this hookPost. Pass reached and final.query to the actual suffix. Pass the complete final memo record and next inventory to the suffix proof. Do not substitute the hook query table for the complete memo record. Preserve the head receipt certificate at the head's earlier edgeCaller/edgeQueries endpoint.
+
+The exact captured-cache restoration is already available:
+
+  Recursive.captured_post originalPacket (headPost.trans hookPost)
+    : Packet formulas solver next reached final originalMetadata capturedBefore.
+
+This keeps the captured core, indexes, pending history, dependency order and original sibling metadata. Its CacheValid transport uses actual native Keeps from Post. It does not frame a recursively modified core with old indexes, recover Safe from Frame, or copy a child's result cache into the next sibling. Existing lookupNode_keeps transports the original stored-node decode to reached. Original Ready, storage and IncomingAvoid concern the unchanged captured cache and remain valid.
+
+The runtime equation can reuse NativeContinuations.continued_head. Recursive.completed_head already states the complete head/callback/recursive/suffix equation. These are execution equations with actual observations; they are not independent finite-completion admission hypotheses.
+
+General stopped certificate
+
+Current HookCertificates.StoppedAt allows only an unhandled edge or a complete edge whose hook stops immediately with exhausted, no outputs and Some(the head Caller/query pair). That is correct for zero depth and is insufficient at positive depth. A recursive hook may emit outputs before stopping, carry any nested Failure (selected, ordinary, alternatives or exhausted), reach a later Caller, or have endpoint=None after an unsupported descendant.
+
+The minimal relation needed by a general finish helper is:
+
+  def StopEndpoint (reached : Caller width) (final : Memos) (current : Stop (Failure width Typing) width) : Prop :=
+    Recursive.endpoint current = none or
+    Recursive.endpoint current = some (reached, final.query).
+
+Its arguments are the same aggregate witnesses returned by the scan producer. The full current Stop value retains the exact nested reason, current receipt and optional endpoint. An absent runtime endpoint stays absent. The aggregate Post can still describe the last proven native prefix; it must not be presented as a runtime endpoint when the option is None.
+
+For explicit receipt provenance, append a conditional field for current=.continuation receipt reason endpoint: receipt is the actual complete head receipt, with its own pre-hook receipt certificate. Retain the general StopEndpoint relation and all output certificates separately. Do not require reason=.exhausted, outputs=[], endpoint=Some, or equality between the earlier edge Caller and later hook Caller. Existing StoppedAt can remain as a zero-depth specialization. A new finish_resources_general can use the same existing aggregate Post/Fits/Heap and output certificates plus complete-or-stopped shape with StopEndpoint. This avoids changing the legacy theorem.
+
+Indexed resources
+
+ReceiptAt and OutputAt currently use advance seed (cost scs capturedCounter (selectedEdges.take(index+1))). This budget accounts only for native edge work. It does not account for a positive recursive subtree between two siblings. Keeping that expression unchanged would undercharge the next sibling and recursive outputs.
+
+The new scan needs two resource checkpoints per original edge index:
+
+  edgeSeed index: after the edge, before its callback/subtree;
+  hookSeed index: after the hook/subtree, before the next sibling.
+
+A processed receipt keeps its logical/Post certificate and Fits/Heap at edgeSeed index. Every output emitted by that hook keeps its own Post/full-memo/Packet certificate and Fits/Heap at hookSeed index, or a larger common ceiling proved monotone. The next sibling starts at hookSeed index. If the hook stops, its current head is not in processed; its receipt checkpoint index is processed.length, and its aggregate resources include all work of that stopping hook. Earlier outputs remain at their own endpoints. One outer edge can emit many recursive outputs.
+
+These checkpoints must come from a pure original depth-aware forecast, not a list of successful future callers supplied as a premise. A possible recurrence starts each edge at the previous hook ceiling, advances by that edge's existing exact cost, then applies a depth-decreasing recursive envelope. An initial reservation must cover that recurrence. It is not enough to reserve the old edge-only cost and pad it after seeing future states.
+
+Smallest next implementation
+
+Add only a callback-one resource producer, with the same current inputs as callback_zero_complete_resources plus the existing selector laws and Reserved bits (ExpansionAdmission.narrowSeed seed) (ExpansionAdmission.count seed before.core). Here before is the current callback input cache and fragment is already allocated there. Target:
+
+  exists bound outcome,
+    (forall extra, continueWith (resume ... (bound+extra) 1)
+      graph templates stop order (bound+extra) metadata uv fragment caller memos.query before = outcome)
+    and OutcomeResources formulas solver caller
+      (advance (narrowSeed seed) (count seed before.core)) outcome.
+
+Call callback_complete once. It derives the actual result, callback core, complete returned Packet and exact singleton raw execution. Its Frame preserves values and counter. Therefore PrefixAdmission.suspendedBound callbackCache.core equals suspendedBound before.core, and ExpansionAdmission.count seed callbackCache.core equals count seed before.core. The existing reservation rewrites directly to the actual callback-returned cache. No reservation about a future callback state is an extra input.
+
+For prune=true, return actual complete[] with Post.refl and resource padding. For prune=false, call run_one_complete_resources once at the derived returned metadata/cache, unchanged native Caller and full memos. Combine the callback and RunOne work bounds by addition, using callback_complete's exact continuation equation. Keep the resulting OutcomeResources and all actual output witnesses unchanged.
+
+A receipt-one wrapper can derive this callback Packet from the same actual head receipt via receipt_packet. Its local input reservation may legitimately describe that current receipt cache. That alone does not prove an original-input depth-two sibling scan. The remaining global obligation is to derive a resource/bucket bound for each actual completed edge cache from original captured data. Current FragmentHistory gives allocation growth, pending fragment provenance and Stratified transport; CacheValid/Safe give ID and index correctness. They do not export a bound on the sum of every returned stored pending bucket length. Prove that producer-facing mass bound from actual child allocation, full bucket writes and terminal moves, then use it in the depth-aware envelope. Do not assume a future successful callback or future Reserved at the main producer boundary.
+
+Scope
+
+This path gives finite bounded recursion with explicit stops. A general depth theorem still need not establish unbounded driver termination, language completeness or H6 strengthening. No source, runtime, build or Git changes were made for this review.
+
+Read source identities
+
+/home/tritlo/Code/mcfta/lean/MicroCFTA/SourcePruningEnumerationHookResources.lean: SHA256 bfebee13f6ab8130f0e8ea248b918e740dca0f292d970d77d0c67decec75eb56
+/home/tritlo/Code/mcfta/lean/MicroCFTA/SourcePruningEnumerationHookCertificates.lean: SHA256 d725e1600d22e18005ede3ac831fb089b7dda71d304ff481cb5eed4a91f06e43
+/home/tritlo/Code/mcfta/lean/MicroCFTA/SourcePruningEnumerationOutcomeResources.lean: SHA256 30a064bd64d21d8b232ae1f93db8ed3f541c90d2fcbbe54f0007130378b49375
+/home/tritlo/Code/mcfta/lean/MicroCFTA/SourcePruningEnumerationRunOneResources.lean: SHA256 439470ea71ff86cb1882108f968b8f347982e9be0d4ff63dab92dbe1284f819e
+/home/tritlo/Code/mcfta/lean/MicroCFTA/SourcePruningEnumerationRecursivePacket.lean: SHA256 a4b24cb62806bda0f1b9a5f02b95650637b9e8e3c274f2f508438927915ad837
+/home/tritlo/Code/mcfta/lean/MicroCFTA/SourcePruningEnumerationRecursiveCallback.lean: SHA256 6967beebbc520c475907d603125660d4894e246aae06b03a265382e4c431ef6e
+/home/tritlo/Code/mcfta/lean/MicroCFTA/SourcePruningEnumerationNativeContinuations.lean: SHA256 108bb3652bfc67fa341ab22bdc83940eb59e96b5a19501dd84d7ebe6b3efbdc8
+/home/tritlo/Code/mcfta/lean/MicroCFTA/SourcePruningEnumerationRecursiveEquations.lean: SHA256 16df59d345d3bfae391cd9faf549c0ee6a8d74d380061076bbb6f046b00f3370
+/home/tritlo/Code/mcfta/cfta/src/Data/CFTA/Enumeration.hs: SHA256 949c484539483f0e646b069899be127a57f0897353b24b92e51a5d90654cec07
