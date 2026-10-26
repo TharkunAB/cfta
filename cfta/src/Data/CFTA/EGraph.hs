@@ -673,12 +673,13 @@ analyseFrom make combine g known0 todo = go IntSet.empty known0 (map Whole (IntS
     go changed known [] = (known, changed)
     go changed known (task : rest) = case task of
         Whole i
-            | IntMap.member i (classes g) -> step i (nodesAt g i)
+            | IntMap.member i (classes g) ->
+                step i [(f, cs) | FTA.Transition (ESymbol _ f) cs _ <- IntMap.findWithDefault [] i (transitions g)]
             | otherwise -> go changed known rest
-        Use u owner -> let ClassId i = find g owner in step i [u]
+        Use (ENode _ f cs) owner -> let ClassId i = find g owner in step i [(f, cs)]
       where
         dataOf c = let ClassId j = find g c in IntMap.lookup j known
-        step i nodes = case [make f ds | ENode _ f cs <- nodes, Just ds <- [traverse dataOf cs]] of
+        step i nodes = case [make f ds | (f, cs) <- nodes, Just ds <- [traverse dataOf cs]] of
             [] -> go changed known rest
             v : vs ->
                 let old = IntMap.lookup i known
