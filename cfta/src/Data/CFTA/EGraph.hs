@@ -708,7 +708,7 @@ the e-graph. The memo can keep an earlier form of an e-node whose children
 merged twice, so its size is not the count.
 -}
 eNodeCount :: (Hashable f) => EGraph s f -> Int
-eNodeCount g = sum [HashSet.size (HashSet.fromList (map (canon g) (nodesAt g i))) | i <- IntMap.keys (classes g)]
+eNodeCount g = sum [HashSet.size (HashSet.fromList (nodesAt g i)) | i <- IntMap.keys (classes g)]
 
 {- | The terms of an e-class, as an automaton whose states are e-classes.
 The sort of a term is the sort of its state. An error is a symbol with two
@@ -872,7 +872,7 @@ matchSort g (CSNode s ps) k b = case IntMap.lookup k (sortNodes g) of
     children _ _ _ = Nothing
 
 -- | The canonical e-nodes of the e-classes that some e-classes reach through their children.
-reach :: (Hashable f) => EGraph s f -> [ClassId] -> IntMap.IntMap [ENode f]
+reach :: EGraph s f -> [ClassId] -> IntMap.IntMap [ENode f]
 reach g = go IntMap.empty
   where
     go seen [] = seen
@@ -883,8 +883,12 @@ reach g = go IntMap.empty
         ClassId i = find g c0
         ns = canonicalNodes g i
 
-canonicalNodes :: (Hashable f) => EGraph s f -> Int -> [ENode f]
-canonicalNodes g i = HashSet.toList (HashSet.fromList (map (canon g) (nodesAt g i)))
+{- | The e-nodes of a root. After each operation that this module exports,
+each row has roots as children and each e-node once, so the row is the
+answer.
+-}
+canonicalNodes :: EGraph s f -> Int -> [ENode f]
+canonicalNodes = nodesAt
 
 {- | The matches of the left side of a rule in a region: the e-classes and
 their canonical e-nodes, closed under children. The match goes down from
@@ -1178,7 +1182,7 @@ eClasses :: EGraph s f -> [ClassId]
 eClasses = map ClassId . IntMap.keys . classes
 
 -- | The canonical e-nodes of an e-class: the symbol and the e-classes of the children of each.
-eNodesOf :: (Hashable f) => EGraph s f -> ClassId -> [(f, [ClassId])]
+eNodesOf :: EGraph s f -> ClassId -> [(f, [ClassId])]
 eNodesOf g c = let ClassId i = find g c in [(f, cs) | ENode _ f cs <- canonicalNodes g i]
 
 {- | Apply the rules to the e-classes that two e-classes reach, until the two
