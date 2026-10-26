@@ -973,11 +973,14 @@ matchRule g region bySymbol stampOf since changed r =
     seen (ClassId i) fresh = fresh || stampOf i >= since
     -- The matches of a pattern at an e-class go to the continuation, in
     -- front of the rest, so that no list of the matches of a part is made.
+    -- Each e-class here is a root: a root of the region, or a child in a
+    -- row, which is a root after each exported operation. So two e-classes
+    -- are equal when their identities are equal.
     down (CVar v sorts) c (Subst vs ss, fresh) k rest = case sortsFrom c sorts ss of
         Nothing -> rest
         Just ss' -> case IntMap.lookup v vs of
             Nothing -> k (Subst (IntMap.insert v c vs) ss', seen c fresh) rest
-            Just c' | equivalent g c c' -> k (Subst vs ss', seen c fresh) rest
+            Just c' | c' == c -> k (Subst vs ss', seen c fresh) rest
             _ -> rest
     down (CNode f kids sorts) c@(ClassId i) (Subst vs ss, fresh) k rest = case sortsFrom c sorts ss of
         Nothing -> rest
