@@ -286,14 +286,6 @@ nodeChild n k = case n of
     ENodeN _ _ cs -> cs !? k
     _ -> Nothing
 
--- | The children of an e-node in front of a list.
-childrenOnto :: ENode f -> [ClassId] -> [ClassId]
-childrenOnto n rest = case n of
-    ENode0 _ _ -> rest
-    ENode1 _ _ a -> ClassId a : rest
-    ENode2 _ _ a b -> ClassId a : ClassId b : rest
-    ENodeN _ _ cs -> cs ++ rest
-
 -- | The number of children of an e-node.
 nodeArity :: ENode f -> Int
 nodeArity = \case
@@ -905,17 +897,17 @@ matchSort g (CSNode s ps) k b = case IntMap.lookup k (sortNodes g) of
     children [] [] acc = Just acc
     children _ _ _ = Nothing
 
--- | The canonical e-nodes of the e-classes that some e-classes reach through their children.
-reach :: EGraph s f -> [ClassId] -> IntMap.IntMap [ENode f]
+-- | The rows of the e-classes that some e-classes reach through their children.
+reach :: EGraph s f -> [ClassId] -> IntMap.IntMap [FTA.Transition ClassId (ESymbol f) Constraint]
 reach g = go IntMap.empty
   where
     go seen [] = seen
     go seen (c0 : rest)
         | IntMap.member i seen = go seen rest
-        | otherwise = go (IntMap.insert i ns seen) (foldr childrenOnto rest ns)
+        | otherwise = go (IntMap.insert i row seen) (foldr (\t more -> FTA.transitionChildren t ++ more) rest row)
       where
         ClassId i = find g c0
-        ns = canonicalNodes g i
+        row = IntMap.findWithDefault [] i (transitions g)
 
 {- | The e-nodes of a root. After each operation that this module exports,
 each row has roots as children and each e-node once, so the row is the
@@ -939,7 +931,7 @@ head.
 matchRule ::
     (Eq s, Hashable f) =>
     EGraph s f ->
-    IntMap.IntMap [ENode f] ->
+    IntMap.IntMap [FTA.Transition ClassId (ESymbol f) Constraint] ->
     HashMap.HashMap f (Int, [ClassId]) ->
     (Int -> Int) ->
     Int ->
@@ -977,16 +969,10 @@ matchRule g region bySymbol stampOf since changed r =
                 children _ _ m more = k m more
                 start = (Subst vs ss', seen c fresh)
              in foldr
-                    ( \n more ->
-                        if nodeSymbol n /= f
-                            then more
-                            else -- The children of the common arities, without a list.
-                                case (n, kids) of
-                                    (ENode0 _ _, []) -> k start more
-                                    (ENode1 _ _ a, [p]) -> down p (ClassId a) start k more
-                                    (ENode2 _ _ a b, [p, q]) -> down p (ClassId a) start (\m more' -> down q (ClassId b) m k more') more
-                                    (ENodeN _ _ cs, _) | sameLength cs kids -> children cs kids start more
-                                    _ -> more
+                    ( \t more ->
+                        let ESymbol _ f' = FTA.transitionSymbol t
+                            cs = FTA.transitionChildren t
+                         in if f' == f && sameLength cs kids then children cs kids start more else more
                     )
                     rest
                     (IntMap.findWithDefault [] i region)
@@ -1023,12 +1009,16 @@ matchRule g region bySymbol stampOf since changed r =
             ]
 
 -- | The number of e-classes with each symbol in a region, and the e-classes.
-symbolIndex :: (Hashable f) => IntMap.IntMap [ENode f] -> HashMap.HashMap f (Int, [ClassId])
+symbolIndex ::
+    (Hashable f) => IntMap.IntMap [FTA.Transition ClassId (ESymbol f) Constraint] -> HashMap.HashMap f (Int, [ClassId])
 symbolIndex region =
     HashMap.map (\cs -> (length cs, cs)) $
         HashMap.fromListWith
             (++)
-            [(f, [ClassId i]) | (i, ns) <- IntMap.toList region, f <- HashSet.toList (HashSet.fromList [f' | ENode _ f' _ <- ns])]
+            [ (f, [ClassId i])
+            | (i, ns) <- IntMap.toList region
+            , f <- HashSet.toList (HashSet.fromList [f' | FTA.Transition (ESymbol _ f') _ _ <- ns])
+            ]
 
 {- | The matches of a pattern: the e-class of each instance, and the e-class
 of each variable.
@@ -1037,7 +1027,7 @@ ematch :: (Eq s, Hashable f) => EGraph s f -> Pattern s f -> [(ClassId, Map.Map 
 ematch g p = case rule p p of
     Left _ -> []
     Right r ->
-        let region = IntMap.mapWithKey (\i _ -> canonicalNodes g i) (classes g)
+        let region = transitions g
          in [ (c, Map.fromList [(v, vs IntMap.! i) | (i, v) <- zip [0 ..] (ruleNames r)])
             | (c, Subst vs _) <- matchRule g region (symbolIndex region) (const 0) minBound Nothing r
             ]
@@ -1288,7 +1278,7 @@ runWith analysis limits rules goal g0 = go 0 IntMap.empty IntMap.empty IntMap.em
         | size g > limitNodes limits = (g, Report i (size g) NodeLimit)
         | otherwise =
             let region = case goal of
-                    Nothing -> IntMap.mapWithKey (\j _ -> canonicalNodes g j) (classes g)
+                    Nothing -> transitions g
                     Just (a, b) -> reach g [a, b]
                 now = clock g
                 entered' = case goal of
@@ -1298,7 +1288,7 @@ runWith analysis limits rules goal g0 = go 0 IntMap.empty IntMap.empty IntMap.em
                 -- The e-classes that changed since a clock, once for each clock.
                 changedSets = Map.fromList [(t, IntSet.fromList [j | j <- IntMap.keys region, stampOf j >= t]) | t <- nubOrd (IntMap.elems ran)]
                 changedSince t = Map.findWithDefault IntSet.empty t changedSets
-                present = HashSet.fromList [f | ns <- IntMap.elems region, ENode _ f _ <- ns]
+                present = HashSet.fromList [f | ns <- IntMap.elems region, FTA.Transition (ESymbol _ f) _ _ <- ns]
                 bySymbol = symbolIndex region
                 dataIn h cur c = let ClassId j = find h c in IntMap.lookup j cur
                 -- As egg does, the data of an e-node that an instance adds
