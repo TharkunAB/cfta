@@ -156,12 +156,52 @@ data SortNode s = SortNode !s ![Int]
 instance (Hashable s) => Hashable (SortNode s) where
     hashWithSalt salt (SortNode s ks) = salt `hashWithSalt` s `hashWithSalt` ks
 
--- | An e-node: the identity of its sort, its symbol, and the e-classes of its children.
-data ENode f = ENode !Int !f ![ClassId]
+{- | An e-node: the identity of its sort, its symbol, and the e-classes of its
+children. An e-node with at most two children keeps them unboxed in one
+object, so that a key of the memo is small and a lookup follows no list.
+'ENode' builds and matches an e-node of any arity.
+-}
+data ENode f
+    = ENode0 !Int !f
+    | ENode1 !Int !f !Int
+    | ENode2 !Int !f !Int !Int
+    | ENodeN !Int !f ![ClassId]
     deriving (Eq)
 
+-- | An e-node as its sort, its symbol, and the list of its children.
+pattern ENode :: Int -> f -> [ClassId] -> ENode f
+pattern ENode k f cs <- (viewENode -> (k, f, cs))
+  where
+    ENode k f cs = case cs of
+        [] -> ENode0 k f
+        [ClassId a] -> ENode1 k f a
+        [ClassId a, ClassId b] -> ENode2 k f a b
+        _ -> ENodeN k f cs
+
+{-# COMPLETE ENode #-}
+
+viewENode :: ENode f -> (Int, f, [ClassId])
+viewENode = \case
+    ENode0 k f -> (k, f, [])
+    ENode1 k f a -> (k, f, [ClassId a])
+    ENode2 k f a b -> (k, f, [ClassId a, ClassId b])
+    ENodeN k f cs -> (k, f, cs)
+{-# INLINE viewENode #-}
+
+-- | The symbol of an e-node, without the list of its children.
+nodeSymbol :: ENode f -> f
+nodeSymbol = \case
+    ENode0 _ f -> f
+    ENode1 _ f _ -> f
+    ENode2 _ f _ _ -> f
+    ENodeN _ f _ -> f
+
 instance (Hashable f) => Hashable (ENode f) where
-    hashWithSalt salt (ENode k f cs) = salt `hashWithSalt` k `hashWithSalt` f `hashWithSalt` cs
+    hashWithSalt salt = \case
+        ENode0 k f -> salt `hashWithSalt` k `hashWithSalt` f
+        ENode1 k f a -> salt `hashWithSalt` k `hashWithSalt` f `hashWithSalt` a
+        ENode2 k f a b -> salt `hashWithSalt` k `hashWithSalt` f `hashWithSalt` a `hashWithSalt` b
+        ENodeN k f cs -> salt `hashWithSalt` k `hashWithSalt` f `hashWithSalt` cs
 
 {- | An e-class. Its e-nodes can have children that are not roots; 'canon'
 replaces them. Its users are the e-nodes that have the e-class as a child,
@@ -219,8 +259,13 @@ equivalent :: EGraph s f -> ClassId -> ClassId -> Bool
 equivalent g a b = find g a == find g b
 
 canon :: EGraph s f -> ENode f -> ENode f
-canon g (ENode k f cs) = ENode k f (roots cs)
+canon g = \case
+    n@(ENode0 _ _) -> n
+    ENode1 k f a -> ENode1 k f (root a)
+    ENode2 k f a b -> ENode2 k f (root a) (root b)
+    ENodeN k f cs -> ENodeN k f (roots cs)
   where
+    root i = let ClassId r = find g (ClassId i) in r
     -- Each root is evaluated, so that a key of the memo holds no thunks.
     roots [] = []
     roots (c : rest) = let !r = find g c; !rs = roots rest in r : rs
@@ -672,7 +717,12 @@ matchRule g region bySymbol stampOf since changed r =
             let children (child : cs) (kid : ks) m more = down kid child m (\m' more' -> children cs ks m' more') more
                 children _ _ m more = k m more
              in foldr
-                    ( \(ENode _ f' cs) more -> if f' == f && sameLength cs kids then children cs kids (Subst vs ss', seen c fresh) more else more
+                    ( \n more ->
+                        if nodeSymbol n /= f
+                            then more
+                            else case n of
+                                ENode _ _ cs | sameLength cs kids -> children cs kids (Subst vs ss', seen c fresh) more
+                                _ -> more
                     )
                     rest
                     (IntMap.findWithDefault [] i region)
@@ -699,8 +749,9 @@ matchRule g region bySymbol stampOf since changed r =
             [ j
             | i <- IntSet.toList xs
             , Just e <- [IntMap.lookup i (classes g)]
-            , (ENode _ f' cs, owner) <- classUsers e
-            , f' == f
+            , (u, owner) <- classUsers e
+            , nodeSymbol u == f
+            , ENode _ _ cs <- [u]
             , length cs == n
             , Just child <- [cs !? k]
             , find g child == ClassId i
