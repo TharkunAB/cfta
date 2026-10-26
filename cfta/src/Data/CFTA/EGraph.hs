@@ -988,7 +988,7 @@ data Analysis f d = Analysis
 {- | The condition of a rule on a match. 'Condition' gives it from the
 e-graph, the data of each e-class, and the e-class of each variable of the
 rule. Conditions combine with '<>', which requires both, and 'mempty' is no
-condition:
+condition. A condition on a variable that the rule does not have is false:
 
 > holds "x" (/= Just 0) <> different "x" "y"
 -}
