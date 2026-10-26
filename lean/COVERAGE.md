@@ -1,5 +1,36 @@
 # Full formalization coverage
 
+## Concrete callbacks derive the next prefix packet and common work fuel
+
+Receipt and packet: `b19f57ac0`. Prefix transport: `4d352a3e2`.
+Common callback/restart fuel: `765a826ae`. The goal stays ACTIVE.
+
+The current recursive packet and allocated fragment now derive one callback
+result and returned cache for every larger callback fuel. The actual concrete
+continuation uses that exact result. One common work bound supports both
+the callback and its next accepted selected prefix at the returned metadata,
+cache and native endpoint. No future successful callback or recursive result
+is a producer input. The full earlier prefix capability remains present.
+
+Existing completed native receipts derive the packet before the callback.
+Every retained prefix cache carries it at its actual Caller and full memos.
+Actual native Post transports the SAME captured cache for sibling restoration.
+Safe callback transport uses returned safety, not Frame alone. Receipt fuel
+stability retains all older cache, history, metadata and pending-ID outputs.
+
+All four new modules and Audit pass strict checking. Installed public readback
+covers 22 declarations and three full definitions. Audit checks 77088 theorem
+dependencies. Earlier runtime and completion interfaces remain exact. H6 stays
+the strongest end-to-end language theorem. The goal is not complete.
+
+Next: prove range-free preservation for actual native done observations,
+then continuable captured edges and whole recursive results. Retain a Post
+for the final native endpoint and separate Posts at every output's own
+endpoint. Derive capacity at the actual recursive sibling endpoints. The old
+legacy Ranges does not supply it. Full language, terminal fallback, native
+Graph correspondence, extraction and lazy demand remain open. Haskell stays
+unchanged. Details: `lean/notes-current-pruning-enumeration-recursive-packet.md`.
+
 ## One common fuel derives the selected-prefix invariant
 
 Action and order history: `ba1111d0e`. Common prefix fuel: `20e48f6a8`.

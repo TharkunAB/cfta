@@ -70,6 +70,23 @@ Terminal parents retain the existing enumerateNode fallback boundary. Native
 children can still take their terminal dispatcher. No Haskell fix is needed.
 Details: lean/notes-current-pruning-enumeration-native-ordinary.md.
 
+### Concrete callback invariants and next-prefix fuel
+
+The formal concrete Left callback now derives its returned safety, pending
+references, indexed-cache validity, dependency order and pending-ID bounds
+from its current packet and allocated fragment. Larger fuel retains its
+exact metadata, core and singleton raw result. One common work bound also
+supports its next accepted selected prefix at that actual returned cache.
+This does not assert that its recursive subtree or next sibling completes.
+
+The captured sibling cache has a separate transport theorem through actual
+native Post. Output caches retain their own emission endpoints. The remaining
+native preservation proof must analyse actual successful observations without
+assuming future range or success receipts. Machine capacity across recursive
+siblings remains open. No Haskell defect or repair is identified. External
+action: no new patch. Keep the pending Sized documentation repair above.
+Details: `lean/notes-current-pruning-enumeration-recursive-packet.md`.
+
 ### Common prefix fuel and captured-cache transport
 
 The actual restart expansion now derives common prefix fuel from the current
@@ -467,6 +484,37 @@ TH/Generic extraction, valid-position build/read and source codec laws stay open
 
 
 
+
+## Concrete callbacks derive the next prefix packet and common work fuel
+
+Receipt and packet: `b19f57ac0`. Prefix transport: `4d352a3e2`.
+Common callback/restart fuel: `765a826ae`. The goal stays ACTIVE.
+
+The current recursive packet and allocated fragment now derive one callback
+result and returned cache for every larger callback fuel. The actual concrete
+continuation uses that exact result. One common work bound supports both
+the callback and its next accepted selected prefix at the returned metadata,
+cache and native endpoint. No future successful callback or recursive result
+is a producer input. The full earlier prefix capability remains present.
+
+Existing completed native receipts derive the packet before the callback.
+Every retained prefix cache carries it at its actual Caller and full memos.
+Actual native Post transports the SAME captured cache for sibling restoration.
+Safe callback transport uses returned safety, not Frame alone. Receipt fuel
+stability retains all older cache, history, metadata and pending-ID outputs.
+
+All four new modules and Audit pass strict checking. Installed public readback
+covers 22 declarations and three full definitions. Audit checks 77088 theorem
+dependencies. Earlier runtime and completion interfaces remain exact. H6 stays
+the strongest end-to-end language theorem. The goal is not complete.
+
+Next: prove range-free preservation for actual native done observations,
+then continuable captured edges and whole recursive results. Retain a Post
+for the final native endpoint and separate Posts at every output's own
+endpoint. Derive capacity at the actual recursive sibling endpoints. The old
+legacy Ranges does not supply it. Full language, terminal fallback, native
+Graph correspondence, extraction and lazy demand remain open. Haskell stays
+unchanged. Details: `lean/notes-current-pruning-enumeration-recursive-packet.md`.
 
 ## One common fuel derives the selected-prefix invariant
 
