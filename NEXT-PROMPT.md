@@ -1,5 +1,40 @@
 Continue the cfta formalization in /home/tritlo/Code/mcfta.
 
+## Original cache bounds now cover actual traversals and captured edges
+
+Traversal: `987b7fe05`. Edge and final write: `a5ee4b9f0`.
+The goal stays ACTIVE. H6 remains the strongest end-to-end language theorem.
+Main `6c080537a` remains imported. All earlier Haskell repairs remain merged.
+
+The actual traversal and edge bounds now come from the original outer cache.
+For counter C, suspended mass B, own-class count T, child count A and inherited
+bucket length L, the returned captured-edge cache has counter <= C + T + A
+and mass <= B + A * (L + T). Complete and actual stopped caches are covered.
+The final captured-slot write keeps the counter and cannot add pending mass.
+Missing caches and unhandled results remain explicit.
+
+The child upper bound no longer needs alignment. Nonnegative slot replacement
+adds at most the incoming bucket length. This permits direct structural
+traversal observers without Safe, range or completion premises. The full
+traversal, selected-edge and captured-edge resource producers each retain
+EVERY earlier conclusion. Each old producer runs once. The bounds apply to
+that same derived result. Rejection still supplies no Safe claim.
+
+All eleven new proof modules and Audit pass strict checks. Aggregate Audit
+passes 3868 jobs and checks 77590 theorem dependencies. Installed readback
+covers 21 declarations and 12 full worker definitions. Only the permitted
+axioms occur. H6, earlier APIs, runtime workers and Haskell remain unchanged.
+FINDINGS records that no new Haskell defect or repair was established.
+
+Next derive a conservative recursive reservation from the original outer
+seed and these actual edge bounds. Pay the complete callback subtree before
+each next sibling. Thread its actual reached native caller and full memos.
+Restore only the captured enumeration cache and metadata. The earlier
+edge-only cost does not pay recursive subtree work. Complete depth-two scans,
+general finite recursive capacity, whole-enumerator language and Haskell
+correspondence remain open. Details:
+`lean/notes-current-pruning-edge-cache-bounds.md`.
+
 ## Actual child cache growth now follows from original inputs
 
 Scalar components: `8a071943e`. Complete child: `5efdddd98`.
