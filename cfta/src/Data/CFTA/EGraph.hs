@@ -520,29 +520,32 @@ rebuild g0 = case pending g0 of
       where
         ClassId i' = find g (ClassId i)
 
-{- | An e-class analysis: for each e-class, the join of the data of its
+{- | An e-class analysis: for each e-class, the merge of the data of its
 e-nodes. The data of an e-node comes from its symbol and the data of its
 children. This is the least fixed point of an evaluation of the e-graph
 automaton from the leaves up, as cfta computes the productive states of an
 automaton: an e-class whose e-nodes all need an e-class without data has no
-data. The join must be associative, commutative, and idempotent, and must
-have no infinite ascending chain, so that the fixed point exists.
+data. The merge must be associative, commutative, and idempotent, and must
+change the data of an e-class only finitely often, so that the fixed point
+exists: for example the join of a lattice without infinite ascending
+chains, or, for a refinement, the meet of a lattice without infinite
+descending chains.
 -}
 analyse :: (Eq d) => (f -> [d] -> d) -> (d -> d -> d) -> EGraph s f -> ClassId -> Maybe d
-analyse make join g = \c -> let ClassId i = find g c in IntMap.lookup i known
+analyse make combine g = \c -> let ClassId i = find g c in IntMap.lookup i known
   where
-    known = fst (analyseFrom make join g IntMap.empty (IntMap.keys (classes g)))
+    known = fst (analyseFrom make combine g IntMap.empty (IntMap.keys (classes g)))
 
 {- | The fixed point of an analysis from a table of the data of e-classes and
 a worklist of the e-classes whose data can change, and the e-classes whose
-data changed. Each e-class of the worklist gets the join of the data of its
+data changed. Each e-class of the worklist gets the merge of the data of its
 e-nodes whose children have data, and of its earlier data. A change of an
 e-class sends only its users, e-node by e-node, to the worklist, as egg does:
 the data only grows, so the other e-nodes give nothing new.
 -}
 analyseFrom ::
     (Eq d) => (f -> [d] -> d) -> (d -> d -> d) -> EGraph s f -> IntMap.IntMap d -> [Int] -> (IntMap.IntMap d, IntSet.IntSet)
-analyseFrom make join g known0 todo = go IntSet.empty known0 (map Whole (IntSet.toAscList (IntSet.fromList roots)))
+analyseFrom make combine g known0 todo = go IntSet.empty known0 (map Whole (IntSet.toAscList (IntSet.fromList roots)))
   where
     roots = [r | i <- todo, let ClassId r = find g (ClassId i)]
     go changed known [] = (known, changed)
@@ -555,7 +558,7 @@ analyseFrom make join g known0 todo = go IntSet.empty known0 (map Whole (IntSet.
             [] -> go changed known rest
             v : vs ->
                 let old = IntMap.lookup i known
-                    new' = foldl' join (maybe v (`join` v) old) vs
+                    new' = foldl' combine (maybe v (`combine` v) old) vs
                  in if Just new' == old
                         then go changed known rest
                         else
@@ -970,13 +973,15 @@ saturate :: (Hashable s, Hashable f) => Limits -> [Rule s f] -> EGraph s f -> (E
 saturate limits rules = run limits rules Nothing
 
 {- | An e-class analysis for a saturation, as in egg: the data of an e-node
-from its symbol and the data of its children, the join of the data of the
-e-nodes of one e-class, and a leaf that an e-class with some data equals,
-such as the constant that the data is (the constant folding of egg).
+from its symbol and the data of its children ('analysisMake'), the merge of
+the data of the e-nodes of one e-class ('analysisMerge', the @merge@ of egg
+and egglog), and a leaf that an e-class with some data equals
+('analysisLeaf'), such as the constant that the data is (the constant
+folding of egg).
 -}
 data Analysis f d = Analysis
     { analysisMake :: f -> [d] -> d
-    , analysisJoin :: d -> d -> d
+    , analysisMerge :: d -> d -> d
     , analysisLeaf :: d -> Maybe f
     }
 
@@ -1071,7 +1076,7 @@ runWith analysis limits rules goal g0 = go 0 IntMap.empty IntMap.empty IntMap.em
     known0 =
         maybe
             IntMap.empty
-            (\a -> fst (analyseFrom (analysisMake a) (analysisJoin a) g1 IntMap.empty (IntMap.keys (classes g1))))
+            (\a -> fst (analyseFrom (analysisMake a) (analysisMerge a) g1 IntMap.empty (IntMap.keys (classes g1))))
             analysis
     -- After an iteration: update the data from the e-classes that changed,
     -- give each e-class with a leaf its leaf, and repeat until no leaf is
@@ -1083,7 +1088,7 @@ runWith analysis limits rules goal g0 = go 0 IntMap.empty IntMap.empty IntMap.em
         Nothing -> (h, known)
         Just a ->
             let fresh = [j | (j, e) <- IntMap.toList (classes h), classStamp e >= tick]
-                (known', changed) = analyseFrom (analysisMake a) (analysisJoin a) h known fresh
+                (known', changed) = analyseFrom (analysisMake a) (analysisMerge a) h known fresh
                 stamped = h{classes = IntSet.foldr (IntMap.adjust (\e -> e{classStamp = tick})) (classes h) changed, clock = tick + 1}
                 candidates = if first then IntMap.keys known' else IntSet.toList changed
                 leaves =
