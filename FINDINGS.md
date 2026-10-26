@@ -71,6 +71,24 @@ Terminal parents retain the existing enumerateNode fallback boundary. Native
 children can still take their terminal dispatcher. No Haskell fix is needed.
 Details: lean/notes-current-pruning-enumeration-native-ordinary.md.
 
+### Native child dispatcher and ordered traversal language
+
+The actual native child dispatcher and stable complete ordered traversal now
+have exact local assignment semantics. Terminal and ordinary child routes
+retain their full original suspended buckets. Nonterminal Mu/InternedUnion
+routes retain the actual source empty bucket. No runtime behavior changes.
+The result relates fixed complete assignments and actual returned fragments.
+It does not prove that partial marker output has a full accepted completion.
+
+No Haskell source changed. No new Haskell defect or repair was established.
+External action: no additional patch. Retain all six earlier merged repairs,
+the merged Sized documentation repair in PR #178 and all historical repros.
+Keep the pending parallel-decision suffix-exception and cancellation findings.
+Arbitrary lazy demand and shared global caches remain correspondence work.
+Any future verified Haskell repair must be recorded in this handoff too.
+Details: `lean/notes-current-pruning-child-dispatch-language.md`.
+Evidence: `lean/restart-evidence/20261026-child-dispatch-language`.
+
 ### Cached terminal, fresh child language and recursive-boundary scope
 
 No Haskell source changed. No new Haskell defect or repair was established.
@@ -931,6 +949,42 @@ TH/Generic extraction, valid-position build/read and source codec laws stay open
 
 
 
+
+## Actual child dispatch and ordered traversal now have exact assignment language
+
+Actual child dispatcher: `76346beab`.
+Actual ordered traversal: `ce40278f6`.
+The goal stays ACTIVE. H6 remains the strongest end-to-end language theorem.
+Main `6c080537a` remains imported. All earlier Haskell repairs remain merged.
+
+Every actual successful child row now has exact assignment semantics through
+the original dispatcher. The terminal partition retains the full original
+bucket at the actual union winner. Ordinary fresh slots retain their full
+bucket. Nonterminal Union/Mu slots retain their source empty-bucket behavior.
+Empty rejection supplies no row. Original admission and history remain intact.
+
+An actual stable COMPLETE ordered child traversal now has an exact assignment
+equivalence. Its final state satisfies a fixed assignment exactly when the
+original state and every actual filled child fragment satisfy their native
+domains and effective suspended buckets, in the original input order. The
+proof uses each child's current Caller, cache, query and full memo context.
+It derives the actual suffix at common bounds. It assumes no future semantic
+callback and no arbitrary low-fuel uniqueness. Stopped outcomes retain their
+old partial-prefix receipts; no full traversal language is claimed for them.
+
+All five new modules and Audit pass strict checks. Aggregate Audit passes
+3924 jobs and checks 77845 theorem dependencies. Installed readback covers
+5 declarations with only permitted axioms. Both completion wrappers retain
+the entire old result and call their old producer once. H6, prior Lean sources
+except Audit imports, runtime and Haskell stay unchanged.
+
+Next connect own-class suspension, ordered child meaning and the recorded
+residual to actual selected-edge meaning. Then prove captured-slot writes
+and rendering. Keep the recursive truncation and full finite-term scopes
+explicit. Whole-enumerator language, selector coverage, partial stops,
+unsupported fallback and Haskell correspondence remain open.
+Details: `lean/notes-current-pruning-child-dispatch-language.md`.
+FINDINGS records current Haskell status and the recursive-boundary scope.
 
 ## Cached terminal and fresh child rows now have exact assignment language
 
