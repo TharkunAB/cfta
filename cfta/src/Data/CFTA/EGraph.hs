@@ -987,8 +987,15 @@ matchRule g region bySymbol stampOf since changed r =
              in foldr
                     ( \t more ->
                         let ESymbol _ f' = FTA.transitionSymbol t
-                            cs = FTA.transitionChildren t
-                         in if f' == f && sameLength cs kids then children cs kids start more else more
+                         in if f' /= f
+                                then more
+                                else -- The common arities without a walk of the lengths.
+                                    case (FTA.transitionChildren t, kids) of
+                                        ([], []) -> k start more
+                                        ([a], [p]) -> down p a start k more
+                                        ([a, b], [p, q]) -> down p a start (\m more' -> down q b m k more') more
+                                        (cs, _) | sameLength cs kids -> children cs kids start more
+                                        _ -> more
                     )
                     rest
                     (IntMap.findWithDefault [] i region)
