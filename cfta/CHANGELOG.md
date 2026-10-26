@@ -12,7 +12,7 @@ Before release, the package was called `microcfta`.
   gives the automaton of the terms of an e-class, and `ematchByIntersection`
   is the definition of a match as the terms of a product automaton with
   equality constraints. On saturated AC sums of 8 to 10 variables it builds
-  the same e-graphs as hegg 0.6 and allocates less than half as much.
+  the same e-graphs as hegg 0.6 and allocates a quarter to a third as much.
 - `Data.CFTA.replaceRows` applies row replacements and deletions to an
   existing explicit automaton. It shares unchanged rows and validates the
   complete result after the batch. The original automaton stays unchanged.
