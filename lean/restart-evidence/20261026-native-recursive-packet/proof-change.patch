@@ -1,0 +1,383 @@
+diff --git a/lean/MicroCFTA/Audit.lean b/lean/MicroCFTA/Audit.lean
+index 27c78c286..091c90230 100644
+--- a/lean/MicroCFTA/Audit.lean
++++ b/lean/MicroCFTA/Audit.lean
+@@ -7,6 +7,8 @@ import MicroCFTA.SourcePruningAfterCallbackExact
+ import MicroCFTA.SourcePruningEnumerationRecursiveEquations
+ import MicroCFTA.SourcePruningEnumerationPrefixPacket
+ import MicroCFTA.SourcePruningEnumerationNativeCacheGrowth
++import MicroCFTA.SourcePruningEnumerationRecursiveCallback
++import MicroCFTA.SourcePruningEnumerationReceiptCallbackFuel
+ import MicroCFTA.SourcePruningEnumerationSelectedNarrow
+ import MicroCFTA.SourcePruningEnumerationRecursion
+ import MicroCFTA.SourcePruningEnumerationNarrowContext
+diff --git a/lean/MicroCFTA/SourcePruningEnumerationReceiptCallbackFuel.lean b/lean/MicroCFTA/SourcePruningEnumerationReceiptCallbackFuel.lean
+new file mode 100644
+index 000000000..3265c5bdd
+--- /dev/null
++++ b/lean/MicroCFTA/SourcePruningEnumerationReceiptCallbackFuel.lean
+@@ -0,0 +1,64 @@
++import MicroCFTA.SourcePruningEnumerationReceiptCallback
++import MicroCFTA.SourcePruningCallbackExact
++
++namespace MicroCFTA.SourcePruningEnumerationReceiptCallbackFuel
++open EnumerationState EnumerationCorrectness EnumerationDriver EnumerationOrder EnumerationCompressionFrame
++open SourcePruningEnumerationNativeBranchCompletion SourcePruningRecordTypes SourcePruningPartialMatch
++local notation "Symbol" => SourcePruningTemplates.Symbol
++local notation "Constraint" => SourceSymbolicIndex.Constraint FullSyntax.Formula
++local notation "Receipt" => SourcePruningEnumerationSelectedEdge.Result
++variable {Typing : Type} {width : Nat}
++
++/-- One admitted receipt derives the same callback result and cache at every sufficient fuel. -/
++theorem completes (graph : Graph Symbol Constraint) (templates : List (Template.Pattern Symbol))
++    (metadata : Metadata Typing) (uv : Nat) (before : EnumerationState.State Symbol Constraint)
++    (receipt : Receipt width) (admitted : Admitted uv receipt) (history : FragmentHistory before receipt) :
++    match receipt with
++    | .complete fragment caller queries after =>
++        ∀ level frontier, Stratified before level frontier →
++          (∀ group ∈ metadata.pending, PendingBound before.counter group) →
++          ∃ nextLevel fuel result final,
++            (∀ extra,
++              Success (recordTypes graph templates (fuel + extra) metadata uv (.inl fragment)) after.core result final ∧
++              ExceptT.run (recordTypes graph templates (fuel + extra) metadata uv (.inl fragment) after.core) =
++                [.ok (result, final)]) ∧
++            RenderStable after.core final ∧ Frame after.core final ∧ Stratified final nextLevel (frontier + 1) ∧
++            result.2.types = updatedTypes metadata uv (.inl fragment) ∧
++            result.2.openHoles = metadata.openHoles ∧ result.2.typing = metadata.typing ∧
++            Admitted uv (.complete fragment caller queries (EnumerationExpandableIndex.frame final after)) ∧
++            FragmentHistory before (.complete fragment caller queries (EnumerationExpandableIndex.frame final after)) ∧
++            (Pending (.complete fragment caller queries after) →
++              Pending (.complete fragment caller queries (EnumerationExpandableIndex.frame final after))) ∧
++            (∀ preference, EnumerationPureSelection.next preference (EnumerationExpandableIndex.frame final after) =
++              EnumerationPureSelection.next preference after) ∧
++            (∀ extra, SourcePruningEnumerationAfterCallback.Follows graph templates (fuel + extra)
++              metadata uv fragment after result final) ∧
++            ∀ group ∈ result.2.pending, PendingBound final.counter group
++    | _ => True := by
++  cases receipt with
++  | complete fragment caller queries after =>
++      intro level frontier ordered bounded
++      obtain ⟨nextLevel, afterOrder⟩ := history.2.2 level frontier ordered
++      have afterBounded : ∀ group ∈ metadata.pending, PendingBound after.core.counter group := by
++        intro group member entry listed
++        exact Nat.lt_of_lt_of_le (bounded group member entry listed) history.1
++      obtain ⟨fuel, result, final, success, stable, frame, finalOrder, types, holes, typing, finalBounded⟩ :=
++        recordTypes_inl_complete_bounded graph templates nextLevel (frontier + 1) metadata uv fragment
++          after.core admitted.2.1 afterOrder admitted.2.2.1 afterBounded
++      have more (extra : Nat) :
++          Success (recordTypes graph templates (fuel + extra) metadata uv (.inl fragment)) after.core result final :=
++        recordTypes_moreFuel graph templates fuel extra metadata uv (.inl fragment) after.core result final success
++      refine ⟨nextLevel, fuel, result, final, ?_, stable, frame, finalOrder, types, holes, typing,
++        admitted_complete_frame uv fragment caller queries after final frame stable.safe admitted,
++        fragmentHistory_complete_frame before fragment caller queries after final frame history,
++        (fun pending => pending_complete_frame fragment caller queries after final frame pending),
++        (fun preference => selection_frame preference after final frame.counter), ?_, finalBounded⟩
++      · intro extra
++        exact ⟨more extra, SourcePruningCallbackExact.recordTypes_exact graph templates (fuel + extra)
++          metadata uv (.inl fragment) after.core final result (more extra)⟩
++      · intro extra
++        exact SourcePruningEnumerationAfterCallback.follows graph templates (fuel + extra)
++          metadata uv fragment after result final admitted.2.1.1.total (more extra)
++  | unhandled | rejected _ _ _ | stopped _ _ _ => trivial
++
++end MicroCFTA.SourcePruningEnumerationReceiptCallbackFuel
+diff --git a/lean/MicroCFTA/SourcePruningEnumerationRecursiveCallback.lean b/lean/MicroCFTA/SourcePruningEnumerationRecursiveCallback.lean
+new file mode 100644
+index 000000000..2043d27a5
+--- /dev/null
++++ b/lean/MicroCFTA/SourcePruningEnumerationRecursiveCallback.lean
+@@ -0,0 +1,110 @@
++import MicroCFTA.SourcePruningEnumerationRecursivePrefix
++import MicroCFTA.SourcePruningEnumerationRecursiveEquations
++import MicroCFTA.SourcePruningCallbackCompletion
++
++namespace MicroCFTA.SourcePruningEnumerationRecursive
++open EnumerationState EnumerationCorrectness EnumerationDriver EnumerationOrder EnumerationCompressionFrame
++open SourceCurrentAllocatedNativeInventoryState (Inventory)
++open SourcePruningRecordTypes SourcePruningPartialMatch
++local notation "Symbol" => SourcePruningTemplates.Symbol
++local notation "Constraint" => SourceSymbolicIndex.Constraint FullSyntax.Formula
++local notation "Node" => InternedConstructorTemplates.Value Symbol Constraint
++local notation "Fragment" => Fragments.Fragment Symbol
++local notation "Caller" => SourceCurrentAllocatedPartialState.State
++local notation "Queries" => SourceEndpointMemo.Memos
++local notation "Memos" => EndpointMemoGateTrace.Memos
++local notation "Cached" => EnumerationExpandableIndex.Cached Symbol Constraint
++local notation "Core" => EnumerationState.State Symbol Constraint
++variable {Typing Key : Type} {width : Nat}
++variable [DecidableEq (InternedConstructorTemplates.EdgeKey Symbol Constraint)]
++variable (formulas : SourceGuards.Formulas FullSyntax.Formula)
++variable (solver : SourceGuards.Entailment FullSyntax.Formula) (inventory : Inventory)
++variable (graph : Graph Symbol Constraint) (templates : List (Template.Pattern Symbol))
++variable (metadata : Metadata Typing) (uv : Nat) (fragment : Fragment)
++variable (caller : Caller width) (memos : Memos) (before : Cached)
++local notation "Result" => SourcePruningEnumerationNativeContinuations.HookResult
++  (Output width Typing) (Failure width Typing) width
++
++/-- Current callback invariants derive its exact result, returned packet and concrete continuation. -/
++theorem callback_complete (packet : Packet formulas solver inventory caller memos metadata before)
++    (allocated : FragmentBound before.core.counter fragment) :
++    ∃ fuel result after,
++      Packet formulas solver inventory caller memos result.2 (EnumerationExpandableIndex.frame after before) ∧
++      RenderStable before.core after ∧ Frame before.core after ∧
++      result.2.types = updatedTypes metadata uv (.inl fragment) ∧
++      result.2.openHoles = metadata.openHoles ∧ result.2.typing = metadata.typing ∧
++      ∀ extra,
++        Success (recordTypes graph templates (fuel + extra) metadata uv (.inl fragment)) before.core result after ∧
++        ExceptT.run (recordTypes graph templates (fuel + extra) metadata uv (.inl fragment) before.core) =
++          [.ok (result, after)] ∧
++        ∀ (recur : Metadata Typing → Caller width → Queries → Cached → Option Next → Result) stop order,
++          continueWith recur graph templates stop order (fuel + extra) metadata uv fragment caller memos.query before =
++            if result.1 then .complete [] caller memos.query
++            else recur result.2 caller memos.query (EnumerationExpandableIndex.frame after before)
++              (SourcePruningEnumerationRestart.decision stop order result.2
++                (EnumerationExpandableIndex.frame after before)) := by
++  obtain ⟨level, frontier, ordered⟩ := packet.ordered
++  obtain ⟨fuel, result, after, success, stable, frame, afterOrder, types, holes, typing, bounded⟩ :=
++    recordTypes_inl_complete_bounded graph templates level frontier metadata uv fragment before.core
++      packet.safe ordered allocated packet.bounded
++  refine ⟨fuel, result, after,
++    callback_frame packet result.2 after stable.safe frame ⟨level, frontier, afterOrder⟩ bounded,
++    stable, frame, types, holes, typing, ?_⟩
++  intro extra
++  have more := recordTypes_moreFuel graph templates fuel extra metadata uv (.inl fragment)
++    before.core result after success
++  refine ⟨more, SourcePruningCallbackExact.recordTypes_exact graph templates (fuel + extra) metadata uv
++    (.inl fragment) before.core after result more, ?_⟩
++  intro recur stop order
++  exact continueWith_exact recur graph templates stop order (fuel + extra) metadata uv fragment
++    caller memos.query before result after more
++
++variable [DecidableEq Symbol] [DecidableEq Node]
++
++/-- One work bound supports the actual callback and its next accepted selected prefix. -/
++theorem callback_prefix_complete
++    (holeKey : Typing → Nat → Key) (fits : Key → Symbol → Bool) (admits : Key → Node → Bool)
++    (checkEmpty : Bool) (edgesOf : Node → List (InternedConstructorTemplates.EdgeValue Symbol Constraint))
++    (stop : Option (Metadata Typing → Nat → Bool)) (order : Metadata Typing → List Nat → Option Nat)
++    (packet : Packet formulas solver inventory caller memos metadata before)
++    (allocated : FragmentBound before.core.counter fragment) :
++    ∃ fuel result after,
++      Packet formulas solver inventory caller memos result.2 (EnumerationExpandableIndex.frame after before) ∧
++      RenderStable before.core after ∧ Frame before.core after ∧
++      result.2.types = updatedTypes metadata uv (.inl fragment) ∧
++      result.2.openHoles = metadata.openHoles ∧ result.2.typing = metadata.typing ∧
++      ∀ extra,
++        Success (recordTypes graph templates (fuel + extra) metadata uv (.inl fragment)) before.core result after ∧
++        ExceptT.run (recordTypes graph templates (fuel + extra) metadata uv (.inl fragment) before.core) =
++          [.ok (result, after)] ∧
++        (∀ recur : Metadata Typing → Caller width → Queries → Cached → Option Next → Result,
++          continueWith recur graph templates stop order (fuel + extra) metadata uv fragment caller memos.query before =
++            if result.1 then .complete [] caller memos.query
++            else recur result.2 caller memos.query (EnumerationExpandableIndex.frame after before)
++              (SourcePruningEnumerationRestart.decision stop order result.2
++                (EnumerationExpandableIndex.frame after before))) ∧
++        (result.1 = false → ∀ selected,
++          SourcePruningEnumerationRestart.decision stop order result.2
++              (EnumerationExpandableIndex.frame after before) = some (.expand selected) →
++          SourcePruningEnumerationSelectedStep.PrefixValid holeKey fits admits graph templates checkEmpty edgesOf
++            stop order result.2 formulas solver inventory (fuel + extra) selected caller
++            (EnumerationExpandableIndex.frame after before) memos
++            (SourcePruningEnumerationSelectedStep.runPrefix holeKey fits admits graph templates stop order result.2
++              (fuel + extra) (fuel + extra) (fuel + extra) (fuel + extra) (fuel + extra) (fuel + extra)
++              selected caller (EnumerationExpandableIndex.frame after before) memos.query)) := by
++  obtain ⟨callbackFuel, result, after, returned, stable, frame, types, holes, typing, callback⟩ :=
++    callback_complete formulas solver inventory graph templates metadata uv fragment caller memos before packet allocated
++  obtain ⟨prefixFuel, prefixReady⟩ := packet_prefix_complete holeKey fits admits graph templates checkEmpty edgesOf
++    stop order result.2 formulas solver inventory caller memos (EnumerationExpandableIndex.frame after before) returned
++  refine ⟨callbackFuel + prefixFuel, result, after, returned, stable, frame, types, holes, typing, ?_⟩
++  intro extra
++  have actual := callback (prefixFuel + extra)
++  rw [← Nat.add_assoc] at actual
++  refine ⟨actual.1, actual.2.1, (fun recur => actual.2.2 recur stop order), ?_⟩
++  intro _accepted selected chosen
++  have ready := prefixReady (callbackFuel + extra) selected chosen
++  have same : prefixFuel + (callbackFuel + extra) = callbackFuel + prefixFuel + extra := by omega
++  rw [same] at ready
++  exact ready
++
++end MicroCFTA.SourcePruningEnumerationRecursive
+diff --git a/lean/MicroCFTA/SourcePruningEnumerationRecursivePacket.lean b/lean/MicroCFTA/SourcePruningEnumerationRecursivePacket.lean
+new file mode 100644
+index 000000000..83d1231a7
+--- /dev/null
++++ b/lean/MicroCFTA/SourcePruningEnumerationRecursivePacket.lean
+@@ -0,0 +1,79 @@
++import MicroCFTA.SourcePruningEnumerationNativeCacheGrowth
++import MicroCFTA.SourcePruningEnumerationNativeCacheFrame
++import MicroCFTA.SourcePruningRecordTypes
++
++namespace MicroCFTA.SourcePruningEnumerationRecursive
++open InternedConstructorTemplates
++open SourceCurrentAllocatedPartialInvariant (Context Post)
++open SourcePruningEnumerationNativeBranchCompletion (CacheValid)
++local notation "Symbol" => SourcePruningTemplates.Symbol
++local notation "Constraint" => SourceSymbolicIndex.Constraint FullSyntax.Formula
++local notation "Caller" => SourceCurrentAllocatedPartialState.State
++local notation "Memos" => EndpointMemoGateTrace.Memos
++local notation "Metadata" => SourcePruningRecordTypes.Metadata
++local notation "Cached" => EnumerationExpandableIndex.Cached Symbol Constraint
++local notation "Core" => EnumerationState.State Symbol Constraint
++local notation "Inventory" => SourceCurrentAllocatedNativeInventoryState.Inventory
++variable {Typing : Type} {width : Nat}
++variable [DecidableEq (EdgeKey Symbol Constraint)]
++
++/-- A recursive restart retains the native context, cache invariants and allocated pending IDs. -/
++structure Packet (formulas : SourceGuards.Formulas FullSyntax.Formula)
++    (solver : SourceGuards.Entailment FullSyntax.Formula) (inventory : Inventory)
++    (caller : Caller width) (memos : Memos) (metadata : Metadata Typing) (before : Cached) : Prop where
++  /-- The native caller satisfies the context at the full memo state. -/
++  context : Context formulas solver inventory caller memos
++  /-- The enumeration core has safe storage and live roots. -/
++  safe : EnumerationSchedule.Safe before.core
++  /-- Suspended references avoid every enumerated class. -/
++  pending : EnumerationReferences.PendingReferences before.core
++  /-- The captured cache retains native handles and both indexes. -/
++  valid : CacheValid caller before
++  /-- Stored fragments admit dependency levels below a finite frontier. -/
++  ordered : ∃ level frontier, EnumerationOrder.Stratified before.core level frontier
++  /-- Every pending template entry names an allocated variable. -/
++  bounded : ∀ group ∈ metadata.pending, SourcePruningPartialMatch.PendingBound before.core.counter group
++
++variable {formulas : SourceGuards.Formulas FullSyntax.Formula}
++  {solver : SourceGuards.Entailment FullSyntax.Formula} {inventory next : Inventory}
++  {caller nextCaller : Caller width} {memos final : Memos}
++  {metadata : Metadata Typing} {before : Cached}
++
++/-- Actual native effects preserve the same captured cache and enumeration metadata. -/
++theorem captured_post (packet : Packet formulas solver inventory caller memos metadata before)
++    (post : Post formulas solver next caller nextCaller final) :
++    Packet formulas solver next nextCaller final metadata before :=
++  ⟨post.context, packet.safe, packet.pending,
++    SourcePruningEnumerationNativeBranchCompletion.cacheValid_post caller nextCaller before packet.valid post,
++    packet.ordered, packet.bounded⟩
++
++/-- Safe callback reads transport the packet to their returned core and metadata. -/
++theorem callback_frame (packet : Packet formulas solver inventory caller memos metadata before)
++    (updated : Metadata Typing) (after : Core) (safe : EnumerationSchedule.Safe after)
++    (frame : EnumerationCompressionFrame.Frame before.core after)
++    (ordered : ∃ level frontier, EnumerationOrder.Stratified after level frontier)
++    (bounded : ∀ group ∈ updated.pending, SourcePruningPartialMatch.PendingBound after.counter group) :
++    Packet formulas solver inventory caller memos updated (EnumerationExpandableIndex.frame after before) := by
++  refine ⟨packet.context, safe, ?_,
++    SourcePruningEnumerationNativeBranchCompletion.cacheValid_frame caller before after frame safe packet.valid,
++    ordered, bounded⟩
++  exact EnumerationPendingReplacement.frame_pending before.core after frame packet.pending
++
++/-- An actual completed receipt derives the restart packet before callback execution. -/
++theorem receipt_packet (originalCore : Core) (target : Nat) (fragment : Fragments.Fragment Symbol)
++    (after : Cached) (level : Nat → Nat) (frontier : Nat)
++    (context : Context formulas solver inventory caller memos)
++    (admitted : SourcePruningEnumerationNativeBranchCompletion.Admitted target
++      (.complete fragment caller memos.query after))
++    (history : SourcePruningEnumerationNativeBranchCompletion.FragmentHistory originalCore
++      (.complete fragment caller memos.query after))
++    (pending : EnumerationReferences.PendingReferences after.core)
++    (ordered : EnumerationOrder.Stratified originalCore level frontier)
++    (bounded : ∀ group ∈ metadata.pending, SourcePruningPartialMatch.PendingBound originalCore.counter group) :
++    Packet formulas solver inventory caller memos metadata after := by
++  obtain ⟨nextLevel, afterOrder⟩ := history.2.2 level frontier ordered
++  refine ⟨context, admitted.2.1, pending, admitted.1, ⟨nextLevel, frontier + 1, afterOrder⟩, ?_⟩
++  intro group member entry listed
++  exact Nat.lt_of_lt_of_le (bounded group member entry listed) history.1
++
++end MicroCFTA.SourcePruningEnumerationRecursive
+diff --git a/lean/MicroCFTA/SourcePruningEnumerationRecursivePrefix.lean b/lean/MicroCFTA/SourcePruningEnumerationRecursivePrefix.lean
+new file mode 100644
+index 000000000..94a0e83c0
+--- /dev/null
++++ b/lean/MicroCFTA/SourcePruningEnumerationRecursivePrefix.lean
+@@ -0,0 +1,93 @@
++import MicroCFTA.SourcePruningEnumerationRecursivePacket
++import MicroCFTA.SourcePruningEnumerationPrefixPacket
++
++namespace MicroCFTA.SourcePruningEnumerationRecursive
++open EnumerationState EnumerationSchedule InternedConstructorTemplates
++open SourceCurrentAllocatedPartialInvariant (Post)
++open SourceCurrentAllocatedNativeInventoryState (Inventory)
++local notation "Symbol" => SourcePruningTemplates.Symbol
++local notation "Constraint" => SourceSymbolicIndex.Constraint FullSyntax.Formula
++local notation "Node" => Value Symbol Constraint
++local notation "Caller" => SourceCurrentAllocatedPartialState.State
++local notation "Memos" => EndpointMemoGateTrace.Memos
++local notation "Metadata" => SourcePruningRecordTypes.Metadata
++local notation "Cached" => EnumerationExpandableIndex.Cached Symbol Constraint
++variable {Typing Key : Type} {width : Nat}
++variable [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Constraint)] [DecidableEq Node]
++variable (holeKey : Typing → Nat → Key) (fits : Key → Symbol → Bool) (admits : Key → Node → Bool)
++variable (graph : Graph Symbol Constraint) (templates : List (Template.Pattern Symbol))
++variable (checkEmpty : Bool) (edgesOf : Node → List (EdgeValue Symbol Constraint))
++variable (stop : Option (Metadata Typing → Nat → Bool))
++variable (order : Metadata Typing → List Nat → Option Nat) (metadata : Metadata Typing)
++variable (formulas : SourceGuards.Formulas FullSyntax.Formula)
++variable (solver : SourceGuards.Entailment FullSyntax.Formula) (inventory : Inventory)
++variable (fuel uv : Nat) (caller : Caller width) (memos : Memos) (before : Cached)
++
++/-- Every retained prefix cache carries the recursive packet at its actual native endpoint. -/
++theorem prefix_packet (packet : Packet formulas solver inventory caller memos metadata before)
++    (observed : SourcePruningEnumerationSelectedStep.Result width Typing)
++    (valid : SourcePruningEnumerationSelectedStep.PrefixValid holeKey fits admits graph templates
++      checkEmpty edgesOf stop order metadata formulas solver inventory fuel uv caller before memos observed) :
++    match observed with
++    | .parked _ (some after) _ => Packet formulas solver inventory caller memos metadata after
++    | .narrowed _ _ reached queries _ (some after) _ _ =>
++        ∃ final, Post formulas solver inventory caller reached final ∧ final.query = queries ∧
++          Packet formulas solver inventory reached final metadata after
++    | _ => True := by
++  have cached := SourcePruningEnumerationPrefixPacket.prefix_cache_valid holeKey fits admits graph templates
++    checkEmpty edgesOf stop order metadata formulas solver inventory fuel uv caller before memos observed valid
++  have native := SourcePruningEnumerationPrefixPacket.prefix_context holeKey fits admits graph templates
++    checkEmpty edgesOf stop order metadata formulas solver inventory fuel uv caller before memos observed valid
++  cases observed with
++  | stopped _ _ => trivial
++  | parked checked candidate raw =>
++      cases candidate with
++      | none => trivial
++      | some after =>
++          obtain ⟨cacheValid, safe, pending, counter, ordered⟩ := cached
++          refine ⟨packet.context, safe, pending, cacheValid, ?_, ?_⟩
++          · obtain ⟨level, frontier, initial⟩ := packet.ordered
++            exact ⟨level, frontier, ordered level frontier initial⟩
++          · simpa only [counter] using packet.bounded
++  | narrowed checked prepared reached queries action candidate right ordinary =>
++      cases candidate with
++      | none => trivial
++      | some after =>
++          obtain ⟨cacheValid, safe, pending, counter, ordered⟩ := cached
++          obtain ⟨final, post, saved⟩ := native
++          refine ⟨final, post, saved, post.context, safe, pending, cacheValid, ?_, ?_⟩
++          · obtain ⟨level, frontier, initial⟩ := packet.ordered
++            exact ⟨level, frontier, ordered level frontier initial⟩
++          · simpa only [counter] using packet.bounded
++
++/-- A current packet derives one common prefix fuel for its actual expansion decision. -/
++theorem packet_prefix_complete (packet : Packet formulas solver inventory caller memos metadata before) :
++    ∃ bound, ∀ extra selected,
++      SourcePruningEnumerationRestart.decision stop order metadata before = some (.expand selected) →
++      SourcePruningEnumerationSelectedStep.PrefixValid holeKey fits admits graph templates checkEmpty edgesOf
++        stop order metadata formulas solver inventory (bound + extra) selected caller before memos
++        (SourcePruningEnumerationSelectedStep.runPrefix holeKey fits admits graph templates stop order metadata
++          (bound + extra) (bound + extra) (bound + extra) (bound + extra) (bound + extra) (bound + extra)
++          selected caller before memos.query) := by
++  cases chosen : SourcePruningEnumerationRestart.decision stop order metadata before with
++  | none =>
++      refine ⟨0, ?_⟩
++      intro _extra selected picked
++      cases picked
++  | some next =>
++      cases next with
++      | done | stuck =>
++          refine ⟨0, ?_⟩
++          intro _extra selected picked
++          cases picked
++      | expand selected =>
++          obtain ⟨bound, completed⟩ := SourcePruningEnumerationSelectedStep.restart_prefix_complete
++            holeKey fits admits graph templates checkEmpty edgesOf stop order metadata formulas solver inventory
++            caller memos before selected packet.context packet.safe packet.pending packet.valid chosen
++          refine ⟨bound, ?_⟩
++          intro extra target picked
++          have same := Option.some.inj picked
++          cases same
++          exact completed extra
++
++end MicroCFTA.SourcePruningEnumerationRecursive
