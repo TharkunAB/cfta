@@ -82,9 +82,10 @@ Wilf, and Feat (ranking).
   equal to the instance of the right side.
 - **Equality saturation**: the application of rules to an e-graph until no
   rule changes it, or a limit stops it.
-- **E-class analysis**: data for each e-class from the data of its e-nodes, a
-  bottom-up evaluation of the automaton of the e-graph. A **condition** of a
-  rule reads it.
+- **E-class analysis**: data for each e-class, the merge of the data of its
+  e-nodes, a bottom-up evaluation of the automaton of the e-graph. A
+  **condition** of a rule reads it. A refinement of the value is such data,
+  and its merge is the meet, because the terms of an e-class have one value.
 - **Stamp**: the iteration of the last change of an e-class. **Semi-naive
   matching** finds only the matches through e-classes with a stamp after the
   last run of the rule.
