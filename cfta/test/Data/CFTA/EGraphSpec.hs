@@ -5,7 +5,7 @@ module Data.CFTA.EGraphSpec (spec) where
 import Control.Monad (forM_)
 import Data.Functor.Identity (runIdentity)
 import qualified Data.Map.Strict as Map
-import Data.Maybe (fromMaybe)
+import Data.Maybe (fromMaybe, listToMaybe)
 import qualified Data.Set as Set
 import Test.Hspec (Spec, describe, expectationFailure, it, shouldBe)
 import Test.QuickCheck (
@@ -283,9 +283,37 @@ spec = describe "Data.CFTA.EGraph" $ do
             (g4, _) = saturate defaultLimits [rewrite (PNode "f" [PVar "x", PVar "y"]) (PNode "g" [PVar "y", PVar "x"])] g3
             -- The plain form is in the same e-class, and accepts all four pairs.
             (c', g5) = addTerm (fOf "a" "b") g3
+            -- The terms by cost: the same terms, each once, also when the
+            -- plain form and the e-node with the constraint share a row.
+            byCost g = map snd (termsByCost (\_ ks -> 1 + sum ks :: Int) g c)
         language g3 `shouldBe` Set.fromList [fOf "a" "a", fOf "b" "b"]
         Set.size (language g4) `shouldBe` 6
         (find g5 c' == find g5 c, Set.size (language g5)) `shouldBe` (True, 4)
+        forM_ [g3, g4, g5] $ \g -> (Set.fromList (byCost g), length (byCost g)) `shouldBe` (language g, Set.size (language g))
+    describe "terms by cost" $ do
+        let size _ children = 1 + sum children :: Int
+        it "lists the n! * Catalan(n - 1) terms of an AC sum, each once, at the size of the sum" $
+            forM_ [(3, 12), (4, 120), (5, 1680)] $ \(n, count) -> do
+                let (c, g) = addTerm (sumOf n) emptyEGraph
+                    (g', _) = saturate (Limits 100 100000 0) acRules g
+                    found = termsByCost size g' c
+                (length found, Set.size (Set.fromList (map snd found)), all ((== 2 * n - 1) . fst) found)
+                    `shouldBe` (count, count, True)
+        it "begins with a term of the cost of the extraction" $
+            property $
+                forAll genGraph $ \graph@(Graph terms _) -> forAll (elements terms) $ \t ->
+                    let g = build graph
+                        (c, _) = addTermWith (\(Sorted s f ts) -> (s, f, ts)) t g
+                     in fmap fst (listToMaybe (termsByCost size g c)) === fmap fst (extract size g c)
+        it "lists the infinite language of a cyclic e-class in the order of the cost" $ do
+            -- x * 1 = x puts x * 1 in the e-class of x, so the e-class is a cycle.
+            let leaf s = Node s []
+                (c, g) = addTerm (leaf "x") (emptyEGraph :: EGraph () String)
+                (_, g1) = addTerm (Node "*" [leaf "x", leaf "1"]) g
+                (g', _) = saturate defaultLimits [rewrite (PNode "*" [PVar "y", PNode "1" []]) (PVar "y")] g1
+                times t = Node "*" [t, leaf "1"]
+            take 4 (termsByCost size g' c)
+                `shouldBe` [(1, leaf "x"), (3, times (leaf "x")), (5, times (times (leaf "x"))), (7, times (times (times (leaf "x"))))]
     it "finds the e-class of a term without adding it, also through a merge" $ do
         let leaf s = Node s []
             (c, g1) = addTerm (Node "f" [leaf "a"]) (emptyEGraph :: EGraph () String)

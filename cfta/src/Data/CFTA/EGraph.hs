@@ -168,6 +168,7 @@ module Data.CFTA.EGraph (
     classAutomatonWith,
     analyse,
     extract,
+    termsByCost,
 
     -- * Patterns and rules
     Pattern (..),
@@ -220,6 +221,7 @@ import qualified Data.CFTA as FTA
 import Data.CFTA.Constraint (Constraint, equalitiesHold, equalityConstraint, noConstraint)
 import Data.CFTA.Equality.Constraint (mkEqConstraints)
 import Data.CFTA.Formula (Formula)
+import Data.CFTA.Internal.Tree (termsByCostBy)
 import Data.CFTA.Internal.UnionFind (UnionFind, intToUVar, uvarToInt)
 import qualified Data.CFTA.Internal.UnionFind as UnionFind
 import Data.CFTA.Path (ChildIndex (..), path)
@@ -749,6 +751,38 @@ extract cost g c0 = do
             , Just term <- [Node f <$> traverse (build . find g) cs]
             , equalitiesHold (FTA.transitionConstraint t) term
             ]
+
+{- | The terms of an e-class in the order of a cost, cheapest first, each with
+its cost, produced lazily: 'FTA.termsByCost' on the rows of the store, with
+the least costs of 'extract'. So the first term has the cost of 'extract'.
+The cost must not decrease when the cost of a child grows, and it must be
+at least the cost of each child. Then the costs of the list never decrease,
+also for a cyclic e-class, whose list is infinite. The terms have no sorts,
+as for 'extract'. The automaton of an e-graph is deterministic, so a term
+comes once when the e-graph has no sorts; e-nodes that differ only in the
+sorts of their children give a term once for each. An e-node with a
+constraint gives only the terms that satisfy the constraint, and its plain
+form in the same e-class gives all of them.
+-}
+termsByCost :: (Ord c, Eq f) => (f -> [c] -> c) -> EGraph s f -> ClassId -> [(c, Term f)]
+termsByCost cost g c =
+    termsByCostBy
+        rowOf
+        FTA.transitionSymbol
+        FTA.transitionChildren
+        (equalitiesHold . FTA.transitionConstraint)
+        cost
+        (analyse cost min g)
+        (find g c)
+  where
+    -- A transition with a constraint whose plain form is in its row gives no
+    -- term that the plain form does not give.
+    rowOf (ClassId i)
+        | constrained g =
+            [t | t <- row, FTA.transitionConstraint t == noConstraint || notElem t{FTA.transitionConstraint = noConstraint} row]
+        | otherwise = row
+      where
+        row = rowAt g i
 
 -- | The number of e-classes.
 eClassCount :: EGraph s f -> Int
