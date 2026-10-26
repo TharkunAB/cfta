@@ -1,0 +1,83 @@
+import MicroCFTA.SourcePruningEnumerationChildCompletion
+import MicroCFTA.SourcePruningEnumerationTerminalAdmission
+
+/-!
+# Original resource admission for native child completion
+
+The terminal partition contains only inputs from the original bucket.
+Its length bounds the terminal reservation by the original reservation.
+Empty inputs and partitions without terminal inputs require no request ranges.
+-/
+namespace MicroCFTA.SourcePruningEnumerationChildCompletion
+open EnumerationState EnumerationCorrectness EnumerationSchedule EnumerationDependencies
+open InternedConstructorTemplates InternedProbeProvenance
+open SourcePruningEnumerationNodes SourcePruningEnumerationObservation
+open SourceCurrentAllocatedNativeInventoryState (Inventory)
+open SourceCurrentAllocatedPartialInvariant (Context)
+open SourcePruningEnumerationIncomingReservation (Seed Reserved)
+open SourceCurrentConstrainedCapGeneratedQueryResources (Fits)
+local notation "Symbol" => SourcePruningTemplates.Symbol
+local notation "Constraint" => SourceSymbolicIndex.Constraint FullSyntax.Formula
+local notation "Node" => Value Symbol Constraint
+local notation "Caller" => SourceCurrentAllocatedPartialState.State
+local notation "Memos" => EndpointMemoGateTrace.Memos
+local notation "Cached" => EnumerationExpandableIndex.Cached Symbol Constraint
+local notation "Heap" => SourceEqualityAnnotationHeap.Heap
+variable {bits : Nat}
+
+/-- Both parts of the terminal partition contain only original inputs. -/
+theorem partition_subsets (bucket : List Suspended) (first : Suspended)
+    (rest descendants : List Suspended)
+    (partitioned : bucket.partition (fun sc => EqualityTrie.isTerminal sc.trie) =
+      (first :: rest, descendants)) : (first :: rest) ⊆ bucket ∧ descendants ⊆ bucket := by
+  have terminal : bucket.filter (fun sc => EqualityTrie.isTerminal sc.trie) = first :: rest := by
+    simpa only [List.partition_eq_filter_filter] using congrArg Prod.fst partitioned
+  have other : bucket.filter (fun sc => !(EqualityTrie.isTerminal sc.trie)) = descendants := by
+    simpa only [List.partition_eq_filter_filter, Function.comp_def] using congrArg Prod.snd partitioned
+  exact ⟨fun _ member => (List.mem_filter.mp (terminal ▸ member)).1,
+    fun _ member => (List.mem_filter.mp (other ▸ member)).1⟩
+
+/-- The terminal partition has no more inputs than the original bucket. -/
+theorem terminal_length_le (bucket : List Suspended) (first : Suspended)
+    (rest descendants : List Suspended)
+    (partitioned : bucket.partition (fun sc => EqualityTrie.isTerminal sc.trie) =
+      (first :: rest, descendants)) : (first :: rest).length ≤ bucket.length := by
+  have terminal : bucket.filter (fun sc => EqualityTrie.isTerminal sc.trie) = first :: rest := by
+    simpa only [List.partition_eq_filter_filter] using congrArg Prod.fst partitioned
+  rw [← terminal]
+  exact List.length_filter_le _ _
+
+/-- Current child inputs and an original mixed reservation derive all child ranges. -/
+theorem initial_ranges
+    [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Constraint)] [DecidableEq Node]
+    (seed : Seed)
+    (formulas : SourceGuards.Formulas FullSyntax.Formula)
+    (solver : SourceGuards.Entailment FullSyntax.Formula)
+    (inventory : Inventory) (beforeCaller : Caller (bits + 2)) (before : Cached)
+    (checkEmpty : Bool) (bucket : List Suspended) (incoming : Node)
+    (roots : Nat → Nat) (memos : Memos)
+    (initial : Context formulas solver inventory beforeCaller memos)
+    (safe : Safe before.core) (paths : Roots before.core.representatives roots)
+    (counts : EnumerationCanonicalWaiting.Correct roots before.core.values before.waiting)
+    (bounded : ∀ sc ∈ bucket, sc.var < before.core.counter)
+    (pending : InputsPending before.core bucket)
+    (realized : PendingRealized beforeCaller.checked.native.machine.heap before.core)
+    (available : Available beforeCaller.checked.native.machine.heap incoming) (closed : incoming.free = [])
+    (fits : Fits seed.2 beforeCaller.checked)
+    (reserved : Reserved bits seed (bucket.length + 1))
+    (known : Heap (fun guard => guard ∈ seed.1) beforeCaller.checked.native.machine.heap) :
+    Ranges checkEmpty bucket incoming beforeCaller before memos.query := by
+  intro _nonempty first rest descendants partitioned
+  have subsets := partition_subsets bucket first rest descendants partitioned
+  have activeBounded : ∀ sc ∈ first :: rest, sc.var < before.core.counter :=
+    fun sc member => bounded sc (subsets.1 member)
+  have activePending : InputsPending before.core (first :: rest) := by
+    intro held fragment stored sc member
+    exact pending held fragment stored sc (subsets.1 member)
+  have activeReserved : Reserved bits seed ((first :: rest).length + 1) :=
+    reserved.prefix (Nat.add_le_add_right (terminal_length_le bucket first rest descendants partitioned) 1)
+  exact SourcePruningEnumerationCachedTerminalAdapter.initial_ranges seed formulas solver inventory
+    beforeCaller before checkEmpty first rest incoming roots memos initial safe paths counts
+    activeBounded activePending realized available closed fits activeReserved known
+
+end MicroCFTA.SourcePruningEnumerationChildCompletion
