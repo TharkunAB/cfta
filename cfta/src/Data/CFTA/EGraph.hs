@@ -67,24 +67,44 @@ Wang et al., "E-Graphs, VSAs, and Tree Automata: a Rosetta Stone", EGRAPHS
 * Rebuilding keeps the automaton deterministic after a merge: when two
   transitions become the same, their states merge. This is the congruence.
 
-So the terms of an e-class are the language of its state. 'classAutomaton'
-gives this automaton, and "Data.CFTA.Sized" in @cfta-generator@ counts,
-lists, ranks, unranks, and samples the terms. A general FTA has no
-hash-cons: two transitions with one left side can have two states. A
+So the terms of an e-class are the language of its state. A general FTA has
+no hash-cons: two transitions with one left side can have two states. A
 version space algebra is an acyclic FTA.
 
 An ECTA (Koppel et al., ICFP 2022) adds equality constraints to the
 transitions of an FTA: the subterms at some paths must be equal. With
 equality constraints, an automaton describes some sets of terms with far
 fewer states, and some infinite sets that no FTA describes, such as the
-terms @f(t, t)@. Equality constraints occur here in two places:
+terms @f(t, t)@.
 
-* A pattern in which a variable occurs twice, such as @x + x@, accepts the
-  terms whose subterms at the two paths of @x@ are equal.
-* An ECTA of typed terms puts the type of a term in a child, and equality
-  constraints make the types agree. A sorted e-graph keeps the sort in the
-  e-node instead. A sort variable that occurs twice in a pattern is an
-  equality constraint between the paths of the sorts.
+= The e-graph is an ECTA with a union-find
+
+This module keeps an e-graph as an ECTA of cfta, 'FTA.FTA' with a
+'Constraint' on each transition, and adds what the automaton does not have:
+
+* The automaton is the store. Each root e-class is a state, and its e-nodes
+  are the transitions of the state. The sort of an e-node is in the symbol
+  of its transition. After 'rebuild', each child of a transition is a root,
+  so the table is the table of a valid automaton, and 'classAutomaton' is
+  that automaton trimmed from the state of an e-class, without a copy.
+  "Data.CFTA.Sized" in @cfta-generator@ counts, lists, ranks, unranks, and
+  samples its terms.
+* The union-find is the union-find of cfta that the enumeration of an ECTA
+  uses for its equalities ("Data.CFTA.Internal.UnionFind"). A merge is a
+  union of two states, and their rows join.
+* The hash-cons is the inverse of the transitions: from the left side of a
+  transition to its state. It keeps the automaton deterministic, and
+  'rebuild' restores the determinism after merges. This is the congruence.
+
+An e-node can have an equality constraint on its transition, as in an ECTA
+('addConstrained'). The terms of an e-class are equal to each other, so a
+constraint does not change which e-classes are equal: the hash-cons, the
+users, and the matcher see the plain form of the e-node. The constraint
+changes which terms the e-class has. Equality constraints also occur in
+patterns: a pattern in which a variable occurs twice, such as @x + x@,
+accepts the terms whose subterms at the two paths of @x@ are equal, and a
+sort variable that occurs twice is an equality constraint between the paths
+of the sorts.
 
 = E-matching is an intersection
 
