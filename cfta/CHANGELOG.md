@@ -4,6 +4,15 @@
 
 Before release, the package was called `microcfta`.
 
+- `Data.CFTA.EGraph` is a sorted e-graph for any language of terms, as in
+  egglog: each e-class has an optional sort that never merges. It has rules
+  with sort patterns, a top-down matcher that starts at the rarest symbol,
+  semi-naive matching, `saturate`, `saturateUntilEqual`, and `saturateWith`
+  with an e-class analysis and a condition for each rule. `classAutomaton`
+  gives the automaton of the terms of an e-class, and `ematchByIntersection`
+  is the definition of a match as the terms of a product automaton with
+  equality constraints. On saturated AC sums of 8 to 10 variables it builds
+  the same e-graphs as hegg 0.6 and allocates less than half as much.
 - `Data.CFTA.replaceRows` applies row replacements and deletions to an
   existing explicit automaton. It shares unchanged rows and validates the
   complete result after the batch. The original automaton stays unchanged.
