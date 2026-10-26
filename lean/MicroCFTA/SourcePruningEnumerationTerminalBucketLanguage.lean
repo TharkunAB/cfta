@@ -1,0 +1,82 @@
+import MicroCFTA.EnumerationSemantics
+
+/-!
+# Suspended restrictions of the actual terminal partition
+
+A satisfying original forest equates each variable with its selected root.
+The recorded winner therefore denotes the common terminal value.
+The helper retains every original bucket entry, including duplicates.
+-/
+namespace MicroCFTA.SourcePruningEnumerationTerminalBucketLanguage
+open Language EnumerationState EnumerationCorrectness EnumerationSchedule
+variable {Symbol EnumGuard : Type}
+
+/-- Replace terminal union equations and descendant restrictions by the complete original bucket. -/
+theorem restrictions_iff
+    (language : NodeLanguage Symbol) (meaning : EnumGuard → Term Symbol → Prop)
+    (assignment : Nat → Term Symbol) (before : EnumerationState.State Symbol EnumGuard)
+    (bucket : List Suspended) (first : Suspended) (rest descendants : List Suspended)
+    (roots : Nat → Nat) (recorded : List Nat) (winner : Nat)
+    (incomingDomain : Term Symbol → Prop)
+    (paths : Roots before.representatives roots)
+    (recordedSame : recorded = (first :: rest).map (fun sc => roots sc.var))
+    (winnerMember : winner ∈ recorded)
+    (partitioned : bucket.partition (fun sc => EqualityTrie.isTerminal sc.trie) =
+      (first :: rest, descendants)) :
+    ((Satisfies language meaning assignment before ∧
+        ∀ sc ∈ rest, assignment first.var = assignment sc.var) ∧
+      incomingDomain (assignment winner) ∧
+      ∀ sc ∈ descendants, Suspended.Holds assignment (assignment winner) sc) ↔
+    Satisfies language meaning assignment before ∧ incomingDomain (assignment winner) ∧
+      ∀ sc ∈ bucket, Suspended.Holds assignment (assignment winner) sc := by
+  have terminal : bucket.filter (fun sc => EqualityTrie.isTerminal sc.trie) = first :: rest := by
+    simpa only [List.partition_eq_filter_filter] using congrArg Prod.fst partitioned
+  have below : bucket.filter (fun sc => !(EqualityTrie.isTerminal sc.trie)) = descendants := by
+    simpa only [List.partition_eq_filter_filter, Function.comp_def] using congrArg Prod.snd partitioned
+  have rootAssignment (satisfied : Satisfies language meaning assignment before) (uv : Nat) :
+      assignment (roots uv) = assignment uv := by
+    obtain ⟨size, path⟩ := paths uv
+    exact (satisfied.1.1 uv (roots uv)
+      ⟨roots uv, size, path, .root (UnionFind.reaches_terminal path)⟩).symm
+  constructor
+  · rintro ⟨⟨satisfied, equal⟩, incoming, belowHolds⟩
+    have equalHere : ∀ sc ∈ first :: rest, assignment first.var = assignment sc.var := by
+      intro sc member
+      rcases List.mem_cons.mp member with same | member
+      · subst sc
+        rfl
+      · exact equal sc member
+    have winnerFirst : assignment winner = assignment first.var := by
+      rw [recordedSame] at winnerMember
+      obtain ⟨chosen, member, chosenRoot⟩ := List.mem_map.mp winnerMember
+      rw [← chosenRoot, rootAssignment satisfied chosen.var]
+      exact (equalHere chosen member).symm
+    refine ⟨satisfied, incoming, ?_⟩
+    intro sc member
+    cases atTerminal : EqualityTrie.isTerminal sc.trie with
+    | true =>
+        have selected : sc ∈ first :: rest := by
+          rw [← terminal]
+          exact List.mem_filter.mpr ⟨member, atTerminal⟩
+        apply (EnumerationSemantics.terminal_holds assignment (assignment winner) sc atTerminal).mpr
+        exact winnerFirst.trans (equalHere sc selected)
+    | false =>
+        apply belowHolds sc
+        rw [← below]
+        exact List.mem_filter.mpr ⟨member, by simp only [atTerminal, Bool.not_false]⟩
+  · rintro ⟨satisfied, incoming, allHolds⟩
+    have equalHere : ∀ sc ∈ first :: rest, assignment winner = assignment sc.var := by
+      intro sc member
+      rw [← terminal] at member
+      obtain ⟨present, atTerminal⟩ := List.mem_filter.mp member
+      exact (EnumerationSemantics.terminal_holds assignment (assignment winner) sc atTerminal).mp
+        (allHolds sc present)
+    refine ⟨⟨satisfied, ?_⟩, incoming, ?_⟩
+    · intro sc member
+      exact (equalHere first List.mem_cons_self).symm.trans
+        (equalHere sc (List.mem_cons_of_mem first member))
+    · intro sc member
+      rw [← below] at member
+      exact allHolds sc (List.mem_filter.mp member).1
+
+end MicroCFTA.SourcePruningEnumerationTerminalBucketLanguage
