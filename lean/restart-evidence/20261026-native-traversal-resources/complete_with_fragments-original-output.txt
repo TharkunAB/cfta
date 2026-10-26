@@ -1,0 +1,30 @@
+    ∃ (r n p h k : Nat) (fragments : List Fragment) (afterCaller : Caller (bits + 2))
+      (after : Cached) (savedQueries : Queries) (final : Memos) (next : Inventory)
+      (afterRoots : Nat → Nat) (result : SourcePruningEnumerationChildTraversal.Result (bits + 2)),
+      (∀ extraRepresentative extraNative P H extraIndex, p ≤ P → h ≤ H →
+        SourcePruningEnumerationChildTraversal.run checkEmpty (r + extraRepresentative) (n + extraNative)
+          P H (k + extraIndex) inputs beforeCaller before memos.query = result) ∧
+      Post formulas solver next beforeCaller afterCaller final ∧ final.query = savedQueries ∧
+      before.core.counter ≤ after.core.counter ∧ Roots after.core.representatives afterRoots ∧
+      StorageValid after.core ∧ PendingRealized afterCaller.checked.native.machine.heap after.core ∧
+      EnumerationCanonicalWaiting.Correct afterRoots after.core.values after.waiting ∧
+      (∀ slot, SourcePruningEnumerationNativeIndex.candidate afterCaller.checked.native.machine.heap
+        ((after.core.values[slot]?).getD .eliminated) = some (after.expandable slot)) ∧
+      EnumeratedOrigin before.core after.core ∧
+      (∀ held fragment, before.core.values[held]? = some (.enumerated fragment) →
+        EnumerationDriver.Protected held before.core after.core) ∧
+      (∀ held, held < before.core.counter → IsRoot before.core.representatives held →
+        (∀ incoming bucket, (incoming, bucket) ∈ inputs → Avoids before.core.representatives held bucket) →
+        EnumerationDriver.Protected held before.core after.core) ∧
+      (∀ allowed, EnumerationReferences.ReferencesAllowed allowed before.core →
+        (∀ incoming bucket, (incoming, bucket) ∈ inputs → EnumerationReferences.InputsAllowed allowed bucket) →
+        EnumerationReferences.ReferencesAllowed allowed after.core) ∧
+      (EnumerationReferences.PendingReferences before.core → EnumerationReferences.PendingReferences after.core) ∧
+      (∀ fragment ∈ fragments, FragmentBound after.core.counter fragment) ∧
+      ((result = .complete fragments afterCaller savedQueries after ∧ Safe after.core ∧
+          ∀ fragment ∈ fragments, PendingFragment after.core fragment ∧
+            ∀ held, held < before.core.counter → IsRoot before.core.representatives held →
+              (∀ incoming bucket, (incoming, bucket) ∈ inputs → Avoids before.core.representatives held bucket) →
+              FragmentAvoid after.core.representatives held fragment) ∨
+        ∃ outer waiting, result = .stopped fragments
+          (.ok (some []), afterCaller, savedQueries, outer, waiting) (some after))
