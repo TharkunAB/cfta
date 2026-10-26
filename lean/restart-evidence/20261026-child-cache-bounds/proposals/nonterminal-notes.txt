@@ -1,0 +1,38 @@
+2026-10-26 08:54 CET
+Draft only. No Lean builds, repository edits or Git operations.
+
+Draft SourcePruningEnumerationNonterminalCacheBounds.lean
+SHA256 54bbcbb8ad822f9b59a6537b42d33938de311bbceba5e357a9953e5fe1955d54
+
+Exact source identities read
+CachedPrepare 607a0ee4cdfbc857937373fb538b030cbd4f1b02f3317a2bc20a8fc932e26b56
+CachedChild e58ee8a8ed76116afb51e7276096a3ae3169239e228fda0948ecaf50136fa15d
+NativeIndex 13c8b37a63e950f4b26d2e9c927cc3108b50b3024b96b3be70a8a539f6f7f160
+ChildDispatch 67880174034d9a1f39a6e57d3066833fa1cad67fd9b7d57102a39fffbfe066e1
+SuspendedMass 7468938f33cfd2d15b3947c052872d4b773e0b4f1b8684e24f24924f3daf5ab1
+EnumerationState 83a898b883ec7b52469bccd87e8afa4f7abb320e3c935bf48f3d80ad77003cc4
+
+API and scope
+CachedPrepare.allocated_mass: allocation appends an empty bucket, so mass is unchanged.
+CachedPrepare.singleton_counter_mass: actual prepareChild=some[(fragment,after)] plus
+initial before.counter=before.values.length gives counter+1 and exact mass increase
+(match input value with node=>scs.length | _=>0).
+CachedPrepare.singleton_counter_mass_le: same actual observation gives universal
+mass<=before+scs.length. Mu and Union ignore the incoming nonterminal bucket and
+store [], so the universal exact +scs.length claim would be false.
+ChildDispatch.empty_cached: actual run on Empty returns raw some[] and exactly
+Some before at the unchanged Caller/query/core/waiting endpoint.
+
+The singleton observer needs only initial alignment and the literal actual cache
+equation. It has no heap coherence, desired endpoint, future resource range,
+callback success or native-query success premise. Existing genuine completion
+producers can supply its actual cache equation as an output; it is not an added
+future-success admission condition. Counter+1 follows the actual allocation and
+NativeIndex.write core. Ordinary mass uses allocated_slot at initial alignment,
+then existing SuspendedMass.incoming_mass with old bucket [] and incoming scs.
+Duplicate suspended entries remain counted in scs.length.
+
+To use it inside the nonterminal ChildDispatch arm, unpack the actual cached
+prepareChild match. A successful singleton sidecar uses this exact observer.
+The Empty-first arm uses empty_cached; Reference or partiality produces no
+claimed successful cache. Terminal fallback is outside this observer's scope.

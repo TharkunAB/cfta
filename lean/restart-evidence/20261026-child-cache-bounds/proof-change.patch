@@ -1,0 +1,964 @@
+diff --git a/lean/MicroCFTA/Audit.lean b/lean/MicroCFTA/Audit.lean
+index 27baf2199..5a19bd1d6 100644
+--- a/lean/MicroCFTA/Audit.lean
++++ b/lean/MicroCFTA/Audit.lean
+@@ -1,3 +1,10 @@
++import MicroCFTA.SourcePruningEnumerationFoldCacheBounds
++import MicroCFTA.SourcePruningEnumerationTerminalPrefixBounds
++import MicroCFTA.SourcePruningEnumerationNonterminalCacheBounds
++import MicroCFTA.SourcePruningEnumerationIncomingMass
++import MicroCFTA.SourcePruningEnumerationTerminalCacheBounds
++import MicroCFTA.SourcePruningEnumerationChildCacheBounds
++import MicroCFTA.SourcePruningEnumerationChildBoundedResources
+ import MicroCFTA.SourcePruningCallbackCompletion
+ import MicroCFTA.SourcePruningEnumerationSelectedOrdinary
+ import MicroCFTA.SourcePruningEnumerationParkedRestart
+diff --git a/lean/MicroCFTA/SourcePruningEnumerationFoldCacheBounds.lean b/lean/MicroCFTA/SourcePruningEnumerationFoldCacheBounds.lean
+new file mode 100644
+index 000000000..91981e677
+--- /dev/null
++++ b/lean/MicroCFTA/SourcePruningEnumerationFoldCacheBounds.lean
+@@ -0,0 +1,231 @@
++import MicroCFTA.SourcePruningEnumerationCachedFold
++import MicroCFTA.SourcePruningEnumerationDispatchShape
++import MicroCFTA.SourcePruningEnumerationSuspendedMass
++
++/-!
++# Scalar cache bounds at actual terminal fold observations
++
++An actual dispatch singleton keeps its input or assimilates two pending slots.
++Both cases preserve the counter and total suspended mass. A rejected action
++retains the current fold prefix. These observers require no future admission.
++-/
++namespace MicroCFTA.SourcePruningEnumerationFold
++open EnumerationState EnumerationCorrectness InternedConstructorTemplates
++open SourcePruningEnumerationPrefixAdmission (suspendedBound)
++local notation "Symbol" => SourcePruningTemplates.Symbol
++local notation "Constraint" => SourceSymbolicIndex.Constraint FullSyntax.Formula
++local notation "Node" => Value Symbol Constraint
++local notation "Caller" => SourceCurrentAllocatedPartialState.State
++local notation "Queries" => SourceEndpointMemo.Memos
++local notation "Core" => EnumerationState.State Symbol Constraint
++local notation "Raw" => List (Except EnumerationState.Error (Unit × Core))
++variable {width : Nat}
++local notation "Observation" => Except
++  (SourceEqualityNativeDemand.Outcome width Node ⊕ SourceCurrentAllocatedConjunctionWorker.Outcome width)
++  (Option Raw)
++variable [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Constraint)] [DecidableEq Node]
++
++/-- An actual dispatch singleton preserves the counter and every suspended occurrence. -/
++theorem dispatch_counter_mass
++    (checkEmpty : Bool) (nativeFuel p h : Nat) (beforeCaller : Caller width) (before : Core)
++    (source target : Nat) (queries : Queries) (action : EnumerateM Symbol Constraint Unit)
++    (afterCaller : Caller width) (savedQueries : Queries) (after : Core)
++    (selected : SourcePruningEnumerationDispatch.dispatch checkEmpty nativeFuel p h
++      beforeCaller before source target queries = (.ok (some action), afterCaller, savedQueries))
++    (completed : ExceptT.run (action before) = [.ok ((), after)]) :
++    after.counter = before.counter ∧ suspendedBound after = suspendedBound before := by
++  rcases SourcePruningEnumerationDispatchShape.singleton checkEmpty nativeFuel p h
++    beforeCaller before source target queries action afterCaller savedQueries after selected completed with
++    rfl | ⟨different, sourceNode, targetNode, merged, sourceScs, targetScs, sourceStored, targetStored, rfl⟩
++  · exact ⟨rfl, rfl⟩
++  · exact ⟨rfl, SourcePruningEnumerationSuspendedMass.assimilated_mass before source target
++      sourceNode targetNode merged sourceScs targetScs sourceStored targetStored (Ne.symm different)⟩
++
++/-- The raw singleton core is the exact returned outer fold core. -/
++theorem singleton_core
++    (checkEmpty : Bool) (nativeFuel p h : Nat) (sources : List Nat)
++    (beforeCaller : Caller width) (before : Core) (target : Nat) (queries : Queries)
++    (returned : Core) (afterCaller : Caller width) (savedQueries : Queries) (outer : Core)
++    (observed : run checkEmpty nativeFuel p h sources beforeCaller before target queries =
++      (.ok (some [.ok ((), returned)]), afterCaller, savedQueries, outer)) :
++    returned = outer := by
++  induction sources generalizing beforeCaller before queries with
++  | nil =>
++    simp only [run, Prod.mk.injEq, Except.ok.injEq, Option.some.injEq,
++      List.cons.injEq, and_true, true_and] at observed
++    rcases observed with ⟨rfl, _callerSame, _querySame, rfl⟩
++    rfl
++  | cons source rest ih =>
++    rcases dispatchObserved : SourcePruningEnumerationDispatch.dispatch checkEmpty nativeFuel p h
++        beforeCaller before source target queries with ⟨dispatchResult, reachedCaller, saved⟩
++    cases dispatchResult with
++    | error fault => simp only [run, dispatchObserved] at observed; cases observed
++    | ok possible =>
++      cases possible with
++      | none => simp only [run, dispatchObserved] at observed; cases observed
++      | some action =>
++        cases rawObserved : ExceptT.run (action before) with
++        | nil => simp only [run, dispatchObserved, rawObserved] at observed; cases observed
++        | cons first tail =>
++          cases first with
++          | error fault => simp only [run, dispatchObserved, rawObserved] at observed; cases observed
++          | ok pair =>
++            rcases pair with ⟨valueUnit, middle⟩
++            cases valueUnit
++            cases tail with
++            | cons second remaining =>
++              simp only [run, dispatchObserved, rawObserved] at observed
++              cases observed
++            | nil =>
++              simp only [run, dispatchObserved, rawObserved] at observed
++              exact ih reachedCaller middle saved observed
++
++/-- Every actual returned fold prefix preserves counter and suspended mass, for every result tag. -/
++theorem observed_counter_mass
++    (checkEmpty : Bool) (nativeFuel p h : Nat) (sources : List Nat)
++    (beforeCaller : Caller width) (before : Core) (target : Nat) (queries : Queries)
++    (result : Observation) (afterCaller : Caller width) (savedQueries : Queries) (after : Core)
++    (observed : run checkEmpty nativeFuel p h sources beforeCaller before target queries =
++      (result, afterCaller, savedQueries, after)) :
++    after.counter = before.counter ∧ suspendedBound after = suspendedBound before := by
++  induction sources generalizing beforeCaller before queries with
++  | nil =>
++      simp only [run, Prod.mk.injEq] at observed
++      rcases observed with ⟨rfl, rfl, rfl, rfl⟩
++      exact ⟨rfl, rfl⟩
++  | cons source rest ih =>
++      rcases dispatchObserved : SourcePruningEnumerationDispatch.dispatch checkEmpty nativeFuel p h
++        beforeCaller before source target queries with ⟨dispatchResult, reachedCaller, saved⟩
++      cases dispatchResult with
++      | error fault =>
++          simp only [run, dispatchObserved, Prod.mk.injEq] at observed
++          rcases observed with ⟨rfl, rfl, rfl, rfl⟩
++          exact ⟨rfl, rfl⟩
++      | ok possible =>
++          cases possible with
++          | none =>
++              simp only [run, dispatchObserved, Prod.mk.injEq] at observed
++              rcases observed with ⟨rfl, rfl, rfl, rfl⟩
++              exact ⟨rfl, rfl⟩
++          | some action =>
++              cases rawObserved : ExceptT.run (action before) with
++              | nil =>
++                  simp only [run, dispatchObserved, rawObserved, Prod.mk.injEq] at observed
++                  rcases observed with ⟨rfl, rfl, rfl, rfl⟩
++                  exact ⟨rfl, rfl⟩
++              | cons first tail =>
++                  cases first with
++                  | error error =>
++                      simp only [run, dispatchObserved, rawObserved, Prod.mk.injEq] at observed
++                      rcases observed with ⟨rfl, rfl, rfl, rfl⟩
++                      exact ⟨rfl, rfl⟩
++                  | ok pair =>
++                      rcases pair with ⟨valueUnit, middle⟩
++                      cases valueUnit
++                      cases tail with
++                      | nil =>
++                          have headBounds := dispatch_counter_mass checkEmpty nativeFuel p h beforeCaller
++                            before source target queries action reachedCaller saved middle dispatchObserved rawObserved
++                          simp only [run, dispatchObserved, rawObserved] at observed
++                          have tailBounds := ih reachedCaller middle saved observed
++                          exact ⟨tailBounds.1.trans headBounds.1, tailBounds.2.trans headBounds.2⟩
++                      | cons second remaining =>
++                          simp only [run, dispatchObserved, rawObserved, Prod.mk.injEq] at observed
++                          rcases observed with ⟨rfl, rfl, rfl, rfl⟩
++                          exact ⟨rfl, rfl⟩
++
++end MicroCFTA.SourcePruningEnumerationFold
++
++namespace MicroCFTA.SourcePruningEnumerationCachedFold
++open EnumerationState InternedConstructorTemplates
++open SourcePruningEnumerationPrefixAdmission (suspendedBound)
++local notation "Symbol" => SourcePruningTemplates.Symbol
++local notation "Constraint" => SourceSymbolicIndex.Constraint FullSyntax.Formula
++local notation "Node" => Value Symbol Constraint
++local notation "Caller" => SourceCurrentAllocatedPartialState.State
++local notation "Queries" => SourceEndpointMemo.Memos
++local notation "Core" => EnumerationState.State Symbol Constraint
++local notation "Cached" => EnumerationExpandableIndex.Cached Symbol Constraint
++local notation "Raw" => List (Except EnumerationState.Error (Unit × Core))
++variable {width : Nat}
++variable [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Constraint)] [DecidableEq Node]
++
++/-- An actual returned cache preserves the original counter and suspended mass, including raw rejection. -/
++theorem observed_cache_bounds
++    (checkEmpty : Bool) (nativeFuel p h : Nat) (sources : List Nat)
++    (beforeCaller : Caller width) (before : Cached) (target : Nat) (queries : Queries)
++    (after : Cached)
++    (observed : (run checkEmpty nativeFuel p h sources beforeCaller before target queries).2 = some after) :
++    after.core.counter = before.core.counter ∧ suspendedBound after.core = suspendedBound before.core := by
++  induction sources generalizing beforeCaller before queries with
++  | nil =>
++      simp only [run, Option.some.injEq] at observed
++      subst after
++      exact ⟨rfl, rfl⟩
++  | cons source rest ih =>
++      rcases dispatchObserved : SourcePruningEnumerationDispatch.dispatch checkEmpty nativeFuel p h
++        beforeCaller before.core source target queries with ⟨dispatchResult, reachedCaller, saved⟩
++      cases dispatchResult with
++      | error fault =>
++          simp only [run, SourcePruningEnumerationCachedAdapter.run, dispatchObserved] at observed
++          cases observed
++      | ok possible =>
++          cases possible with
++          | none =>
++              simp only [run, SourcePruningEnumerationCachedAdapter.run, dispatchObserved] at observed
++              cases observed
++          | some action =>
++              cases rawObserved : ExceptT.run (action before.core) with
++              | nil =>
++                  simp only [run, SourcePruningEnumerationCachedAdapter.run, dispatchObserved,
++                    rawObserved, SourcePruningEnumerationCachedAdapter.adapt, Option.some.injEq] at observed
++                  subst after
++                  exact ⟨rfl, rfl⟩
++              | cons first tail =>
++                  cases first with
++                  | error error =>
++                      simp only [run, SourcePruningEnumerationCachedAdapter.run, dispatchObserved,
++                        rawObserved, SourcePruningEnumerationCachedAdapter.adapt] at observed
++                      cases observed
++                  | ok pair =>
++                      rcases pair with ⟨valueUnit, middle⟩
++                      cases valueUnit
++                      cases tail with
++                      | nil =>
++                          have headBounds := SourcePruningEnumerationFold.dispatch_counter_mass
++                            checkEmpty nativeFuel p h beforeCaller before.core source target queries action
++                            reachedCaller saved middle dispatchObserved rawObserved
++                          cases cacheObserved : SourcePruningEnumerationCachedAdapter.adapt
++                              reachedCaller.checked.native.machine.heap before source target [.ok ((), middle)] with
++                          | none =>
++                              simp only [run, SourcePruningEnumerationCachedAdapter.run, dispatchObserved,
++                                rawObserved, cacheObserved] at observed
++                              cases observed
++                          | some recovered =>
++                              simp only [run, SourcePruningEnumerationCachedAdapter.run, dispatchObserved,
++                                rawObserved, cacheObserved] at observed
++                              have tailBounds := ih reachedCaller (EnumerationExpandableIndex.frame middle recovered) saved observed
++                              exact ⟨tailBounds.1.trans headBounds.1, tailBounds.2.trans headBounds.2⟩
++                      | cons second remaining =>
++                          simp only [run, SourcePruningEnumerationCachedAdapter.run, dispatchObserved,
++                            rawObserved, SourcePruningEnumerationCachedAdapter.adapt] at observed
++                          cases observed
++
++/-- A full actual successful observation retains both scalar bounds at its outer prefix and returned cache. -/
++theorem observed_bounds
++    (checkEmpty : Bool) (nativeFuel p h : Nat) (sources : List Nat)
++    (beforeCaller : Caller width) (before : Cached) (target : Nat) (queries : Queries)
++    (raw : Raw) (afterCaller : Caller width) (savedQueries : Queries) (outer : Core) (after : Cached)
++    (observed : run checkEmpty nativeFuel p h sources beforeCaller before target queries =
++      ((.ok (some raw), afterCaller, savedQueries, outer), some after)) :
++    outer.counter = before.core.counter ∧ suspendedBound outer = suspendedBound before.core ∧
++    after.core.counter = before.core.counter ∧ suspendedBound after.core = suspendedBound before.core := by
++  have erased := erase checkEmpty nativeFuel p h sources beforeCaller before target queries
++  rw [observed] at erased
++  have outerBounds := SourcePruningEnumerationFold.observed_counter_mass checkEmpty nativeFuel p h
++    sources beforeCaller before.core target queries (.ok (some raw)) afterCaller savedQueries outer erased.symm
++  have cacheBounds := observed_cache_bounds checkEmpty nativeFuel p h sources beforeCaller before target queries
++    after (by rw [observed])
++  exact ⟨outerBounds.1, outerBounds.2, cacheBounds.1, cacheBounds.2⟩
++
++end MicroCFTA.SourcePruningEnumerationCachedFold
+diff --git a/lean/MicroCFTA/SourcePruningEnumerationTerminalPrefixBounds.lean b/lean/MicroCFTA/SourcePruningEnumerationTerminalPrefixBounds.lean
+new file mode 100644
+index 000000000..1c77e66c5
+--- /dev/null
++++ b/lean/MicroCFTA/SourcePruningEnumerationTerminalPrefixBounds.lean
+@@ -0,0 +1,69 @@
++import MicroCFTA.SourcePruningEnumerationTerminalPrefix
++import MicroCFTA.SourcePruningEnumerationSuspendedMass
++
++/-!
++# Scalar bounds for the actual terminal prefix
++
++Representative lookup and class union change only the forest. Every actual
++successful prefix therefore preserves the counter and suspended mass.
++-/
++namespace MicroCFTA.SourcePruningEnumerationTerminalPrefix
++open EnumerationState EnumerationCorrectness EnumerationSchedule
++open SourcePruningEnumerationPrefixAdmission (suspendedBound)
++local notation "Symbol" => SourcePruningTemplates.Symbol
++local notation "Constraint" => SourceSymbolicIndex.Constraint FullSyntax.Formula
++local notation "Core" => EnumerationState.State Symbol Constraint
++attribute [local instance] terminalPrefixMonadList
++
++/-- Every actual successful prefix changes only the representative forest. -/
++theorem success_frame
++    (fuel : Nat) (first : Suspended) (rest : List Suspended)
++    (waiting : EnumerationWaitingIndex.Waiting) (before after : Core)
++    (result : List Nat × Nat × EnumerationWaitingIndex.Waiting)
++    (completed : Success (run fuel first rest waiting) before result after) :
++    after = {before with representatives := after.representatives} := by
++  simp only [run] at completed
++  obtain ⟨recorded, scanned, scan, continued⟩ := (success_bind _ _ _ _ _).mp completed
++  obtain ⟨ignored, united, unions, continued⟩ := (success_bind _ _ _ _ _).mp continued
++  cases ignored
++  obtain ⟨winner, resolved, resolution, finished⟩ := (success_bind _ _ _ _ _).mp continued
++  obtain ⟨_resultSame, stateSame⟩ := (success_pure _ result resolved after).mp finished
++  have scanFrame : scanned = {before with representatives := scanned.representatives} := by
++    apply mapM_invariant (fun (sc : Suspended) => representative fuel sc.var)
++      (fun current => current = {before with representatives := current.representatives})
++      (first :: rest) ?_ before scanned recorded rfl scan
++    intro sc _member current root next previous success
++    obtain ⟨found, _lookup, _rootSame, nextSame⟩ :=
++      (representative_success fuel sc.var current next root).mp success
++    rw [nextSame]
++    exact congrArg (fun state : Core => {state with representatives := found.forest}) previous
++  have unionFrame : united = {before with representatives := united.representatives} := by
++    apply forM_invariant (fun (sc : Suspended) => unionVariables fuel first.var sc.var)
++      (fun current => current = {before with representatives := current.representatives})
++      rest ?_ scanned united scanFrame unions
++    intro sc _member current next previous success
++    obtain ⟨forest, _lookup, nextSame⟩ :=
++      (unionVariables_success fuel first.var sc.var current next).mp success
++    rw [nextSame]
++    exact congrArg (fun state : Core => {state with representatives := forest}) previous
++  obtain ⟨found, _lookup, _rootSame, resolvedSame⟩ :=
++    (representative_success fuel first.var united resolved winner).mp resolution
++  rw [stateSame, resolvedSame]
++  exact congrArg (fun state : Core => {state with representatives := found.forest}) unionFrame
++
++/-- An actual singleton prefix retains the original counter and all suspended occurrences. -/
++theorem observed_counter_mass
++    (fuel : Nat) (first : Suspended) (rest : List Suspended)
++    (waiting : EnumerationWaitingIndex.Waiting) (before after : Core)
++    (result : List Nat × Nat × EnumerationWaitingIndex.Waiting)
++    (observed : ExceptT.run (run fuel first rest waiting before) = [.ok (result, after)]) :
++    after.counter = before.counter ∧ suspendedBound after = suspendedBound before := by
++  have completed : Success (run fuel first rest waiting) before result after := by
++    simp only [Success, observed, List.mem_singleton]
++  have frame := success_frame fuel first rest waiting before after result completed
++  have counterSame := congrArg (fun state : Core => state.counter) frame
++  have valuesSame := congrArg (fun state : Core => state.values) frame
++  exact ⟨counterSame, SourcePruningEnumerationPrefixAdmission.suspendedBound_values
++    before after valuesSame⟩
++
++end MicroCFTA.SourcePruningEnumerationTerminalPrefix
+diff --git a/lean/MicroCFTA/SourcePruningEnumerationNonterminalCacheBounds.lean b/lean/MicroCFTA/SourcePruningEnumerationNonterminalCacheBounds.lean
+new file mode 100644
+index 000000000..3bf292294
+--- /dev/null
++++ b/lean/MicroCFTA/SourcePruningEnumerationNonterminalCacheBounds.lean
+@@ -0,0 +1,116 @@
++import MicroCFTA.SourcePruningEnumerationChildDispatch
++import MicroCFTA.SourcePruningEnumerationSuspendedMass
++
++/-!
++# Counter and suspended mass of actual cached nonterminal children
++
++Ordinary nodes store the complete incoming bucket. Mu and Union allocate
++with an empty bucket. Every successful singleton allocates one slot.
++Empty rejects before allocation and retains the input cache.
++-/
++namespace MicroCFTA.SourcePruningEnumerationCachedPrepare
++open EnumerationState
++open SourcePruningEnumerationNodes
++open SourcePruningEnumerationPrefixAdmission (suspendedBound)
++local notation "Symbol" => SourcePruningTemplates.Symbol
++local notation "Constraint" => SourceSymbolicIndex.Constraint FullSyntax.Formula
++local notation "Node" => InternedConstructorTemplates.Value Symbol Constraint
++local notation "Core" => EnumerationState.State Symbol Constraint
++local notation "Cached" => EnumerationExpandableIndex.Cached Symbol Constraint
++
++/-- Allocation appends one empty bucket and retains the entire original suspended mass. -/
++theorem allocated_mass (node : Option Nat) (before : Core) :
++    suspendedBound (allocated node before) = suspendedBound before := by
++  simp only [suspendedBound, allocated, List.map_append, List.map_cons, List.map_nil,
++    List.sum_append, List.sum_cons, List.sum_nil, List.length_nil, Nat.add_zero]
++
++/-- An actual singleton cache has its exact shape-dependent mass and one fresh slot. -/
++theorem singleton_counter_mass
++    (heap : InternedConstructorTemplates.State Symbol Constraint) (fuel : Nat)
++    (scs : List Suspended) (value : Node) (before after : Cached)
++    (fragment : Fragments.Fragment Symbol)
++    (aligned : before.core.counter = before.core.values.length)
++    (cached : prepareChild heap fuel scs value before = some [(fragment, after)]) :
++    after.core.counter = before.core.counter + 1 ∧
++      suspendedBound after.core = suspendedBound before.core +
++        (match value with | .node .. => scs.length | _ => 0) := by
++  cases value with
++  | empty => simp [prepareChild] at cached
++  | reference name => simp [prepareChild] at cached
++  | node entry edges depth free =>
++      by_cases terminal : scs.any (fun sc => EqualityTrie.isTerminal sc.trie) = true
++      · simp [prepareChild, SourcePruningEnumerationCachedChild.prepareOrdinary, terminal] at cached
++      simp only [prepareChild, Option.map_eq_some_iff] at cached
++      obtain ⟨result, prepared, rowsSame⟩ := cached
++      have resultSame : result = (fragment, after) := (List.cons.inj rowsSame).1
++      subst result
++      simp only [SourcePruningEnumerationCachedChild.prepareOrdinary, terminal, Bool.false_eq_true,
++        ↓reduceIte, encodeNode, Option.bind_some, Option.bind_eq_some_iff,
++        Option.map_eq_some_iff] at prepared
++      obtain ⟨allocation, nativeAllocated, writtenAfter, written, pairSame⟩ := prepared
++      have afterSame : writtenAfter = after := (Prod.mk.inj pairSame).2
++      subst writtenAfter
++      simp only [SourcePruningEnumerationCachedChild.allocate, Option.map_eq_some_iff] at nativeAllocated
++      obtain ⟨flag, _classified, allocationSame⟩ := nativeAllocated
++      subst allocation
++      simp only [SourcePruningEnumerationCachedChild.writeSlot, Option.bind_eq_some_iff] at written
++      obtain ⟨old, _stored, nativeWritten⟩ := written
++      simp only [SourcePruningEnumerationNativeIndex.write, Option.bind_eq_some_iff,
++        Option.some.injEq] at nativeWritten
++      obtain ⟨afterFlag, _afterClassified, removed, _removedCounts, saved, _savedCounts, afterSame⟩ := nativeWritten
++      subst after
++      refine ⟨rfl, ?_⟩
++      have mass := SourcePruningEnumerationSuspendedMass.incoming_mass
++        (allocated (some (entry.identity + 1)) before.core) before.core.counter
++        (some (entry.identity + 1)) (some (entry.identity + 1)) scs []
++        (allocated_slot (some (entry.identity + 1)) before.core aligned)
++      simpa only [List.append_nil, allocated_mass] using mass
++  | union entry _ _ _ | mu entry _ _ _ =>
++      by_cases terminal : scs.any (fun sc => EqualityTrie.isTerminal sc.trie) = true
++      · simp [prepareChild, terminal] at cached
++      simp only [prepareChild, terminal, Bool.false_eq_true, ↓reduceIte, encodeNode,
++        Option.bind_some, Option.map_eq_some_iff] at cached
++      obtain ⟨allocation, nativeAllocated, rowsSame⟩ := cached
++      simp only [SourcePruningEnumerationCachedChild.allocate, Option.map_eq_some_iff] at nativeAllocated
++      obtain ⟨flag, _classified, allocationSame⟩ := nativeAllocated
++      subst allocation
++      have afterSame := (Prod.mk.inj (List.cons.inj rowsSame).1).2
++      subst after
++      exact ⟨rfl, by simpa only [Nat.add_zero] using allocated_mass (some (entry.identity + 1)) before.core⟩
++
++/-- Every actual successful singleton adds at most the complete incoming bucket length. -/
++theorem singleton_counter_mass_le
++    (heap : InternedConstructorTemplates.State Symbol Constraint) (fuel : Nat)
++    (scs : List Suspended) (value : Node) (before after : Cached)
++    (fragment : Fragments.Fragment Symbol)
++    (aligned : before.core.counter = before.core.values.length)
++    (cached : prepareChild heap fuel scs value before = some [(fragment, after)]) :
++    after.core.counter = before.core.counter + 1 ∧
++      suspendedBound after.core ≤ suspendedBound before.core + scs.length := by
++  obtain ⟨counter, mass⟩ := singleton_counter_mass heap fuel scs value before after fragment aligned cached
++  refine ⟨counter, ?_⟩
++  rw [mass]
++  cases value <;> simp only [Nat.add_zero] <;> omega
++
++end MicroCFTA.SourcePruningEnumerationCachedPrepare
++
++namespace MicroCFTA.SourcePruningEnumerationChildDispatch
++open EnumerationState InternedConstructorTemplates
++local notation "Symbol" => SourcePruningTemplates.Symbol
++local notation "Constraint" => SourceSymbolicIndex.Constraint FullSyntax.Formula
++local notation "Node" => Value Symbol Constraint
++local notation "Caller" => SourceCurrentAllocatedPartialState.State
++local notation "Queries" => SourceEndpointMemo.Memos
++local notation "Cached" => EnumerationExpandableIndex.Cached Symbol Constraint
++variable {width : Nat}
++variable [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Constraint)] [DecidableEq Node]
++
++/-- Empty rejects at the original native endpoint and retains exactly the input cache. -/
++theorem empty_cached
++    (checkEmpty : Bool) (r n p h k : Nat) (scs : List Suspended)
++    (caller : Caller width) (before : Cached) (queries : Queries) :
++    run checkEmpty r n p h k scs .empty caller before queries =
++      ((.ok (some []), caller, queries, before.core, before.waiting), some before) := by
++  simp [run]
++
++end MicroCFTA.SourcePruningEnumerationChildDispatch
+diff --git a/lean/MicroCFTA/SourcePruningEnumerationIncomingMass.lean b/lean/MicroCFTA/SourcePruningEnumerationIncomingMass.lean
+new file mode 100644
+index 000000000..b7ff3d797
+--- /dev/null
++++ b/lean/MicroCFTA/SourcePruningEnumerationIncomingMass.lean
+@@ -0,0 +1,206 @@
++import MicroCFTA.SourcePruningEnumerationIncomingCacheAdapter
++import MicroCFTA.SourcePruningEnumerationSuspendedMass
++
++/-!
++# Suspended mass at actual incoming observations
++
++The original action returns its read core separately from its raw rows.
++A successful row or recovered Empty cache retains the completed write.
++These numerical bounds assert no safety or native postcondition.
++-/
++namespace MicroCFTA.SourcePruningEnumerationIncomingNode
++open EnumerationState InternedConstructorTemplates
++open SourcePruningEnumerationPrefixAdmission (suspendedBound suspendedBound_values)
++open SourcePruningEnumerationSuspendedMass (incoming_mass)
++local notation "Symbol" => SourcePruningTemplates.Symbol
++local notation "Constraint" => SourceSymbolicIndex.Constraint FullSyntax.Formula
++local notation "Node" => Value Symbol Constraint
++local notation "Core" => EnumerationState.State Symbol Constraint
++local notation "Caller" => SourceCurrentAllocatedPartialState.State
++local notation "Queries" => SourceEndpointMemo.Memos
++local notation "Raw" => List (Except EnumerationState.Error (Unit × Core))
++attribute [local instance] SourcePruningEnumerationIncomingNode.incomingNodeMonadList
++
++private theorem finish_singleton_mass
++    {before returned : Core} {target handle : Nat} {oldNode : Option Nat}
++    {incomingScs oldScs : List Suspended} {replacement : Node}
++    (stored : before.values[target]? = some (.unenumerated oldNode oldScs))
++    (observed : ExceptT.run (finish target handle incomingScs oldScs replacement before) =
++      [.ok ((), returned)]) :
++    returned.counter = before.counter ∧
++      suspendedBound returned = suspendedBound before + incomingScs.length := by
++  let written : Core :=
++    {before with
++      values := before.values.set target (.unenumerated (some handle) (incomingScs ++ oldScs))
++      recursionAncestry := fun other => if other = target then
++        (before.expansionAncestry ++ before.recursionAncestry target).eraseDups
++        else before.recursionAncestry other}
++  have rawRun : ExceptT.run (finish target handle incomingScs oldScs replacement before) =
++      match replacement with
++      | .empty => []
++      | _ => [.ok ((), written)] := by
++    cases replacement <;> rfl
++  rw [rawRun] at observed
++  have coreSame : written = returned := by
++    split at observed
++    · cases observed
++    · exact (Prod.mk.inj (Except.ok.inj (List.cons.inj observed).1)).2
++  rw [← coreSame]
++  exact ⟨rfl, incoming_mass before target oldNode (some handle) incomingScs oldScs stored⟩
++
++private theorem finish_reply_mass
++    {Fault : Type _} {before returned : Core} {target handle : Nat} {oldNode : Option Nat}
++    {incomingScs oldScs : List Suspended} {replacement : Node}
++    (stored : before.values[target]? = some (.unenumerated oldNode oldScs))
++    (observed : (Except.ok (some (ExceptT.run
++        (finish target handle incomingScs oldScs replacement before))) : Except Fault (Option Raw)) =
++      .ok (some [.ok ((), returned)])) :
++    returned.counter = before.counter ∧
++      suspendedBound returned = suspendedBound before + incomingScs.length :=
++  finish_singleton_mass stored (Option.some.inj (Except.ok.inj observed))
++
++variable {width : Nat}
++variable [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Constraint)] [DecidableEq Node]
++
++/-- Every observed read retains the original values and counter, including errors and unsupported results. -/
++theorem run_mass
++    (checkEmpty : Bool) (r n p h : Nat) (caller : Caller width) (before : Core)
++    (target : Nat) (incoming : Node) (incomingScs : List Suspended) (queries : Queries) :
++    (run checkEmpty r n p h caller before target incoming incomingScs queries).2.2.2.counter = before.counter ∧
++      (run checkEmpty r n p h caller before target incoming incomingScs queries).2.2.2.values = before.values ∧
++      ∀ returned, (run checkEmpty r n p h caller before target incoming incomingScs queries).1 =
++        .ok (some [.ok ((), returned)]) →
++        returned.counter = before.counter ∧
++          suspendedBound returned = suspendedBound before + incomingScs.length := by
++  generalize observedEq : run checkEmpty r n p h caller before target incoming incomingScs queries = observed
++  obtain ⟨result, reachedCaller, savedQueries, read⟩ := observed
++  dsimp only
++  unfold run at observedEq
++  split at observedEq
++  next =>
++    simp only [Prod.mk.injEq] at observedEq
++    rcases observedEq with ⟨rfl, rfl, rfl, rfl⟩
++    refine ⟨rfl, rfl, ?_⟩
++    intro returned singleton
++    simp at singleton
++  next =>
++    repeat' first
++      | (simp only [Prod.mk.injEq] at observedEq
++         rcases observedEq with ⟨rfl, rfl, rfl, rfl⟩
++         refine ⟨rfl, rfl, ?_⟩
++         intro returned singleton
++         solve
++         | simp at singleton
++         | have mass := finish_reply_mass (by assumption) singleton
++           exact mass)
++      | split at observedEq
++      | (dsimp only at observedEq; split at observedEq)
++
++end MicroCFTA.SourcePruningEnumerationIncomingNode
++
++namespace MicroCFTA.SourcePruningEnumerationIncomingCacheAdapter
++open EnumerationState InternedConstructorTemplates
++open SourcePruningEnumerationPrefixAdmission (suspendedBound suspendedBound_values)
++open SourcePruningEnumerationSuspendedMass (incoming_mass)
++local notation "Symbol" => SourcePruningTemplates.Symbol
++local notation "Constraint" => SourceSymbolicIndex.Constraint FullSyntax.Formula
++local notation "Node" => Value Symbol Constraint
++local notation "Core" => EnumerationState.State Symbol Constraint
++local notation "Caller" => SourceCurrentAllocatedPartialState.State
++local notation "Queries" => SourceEndpointMemo.Memos
++local notation "Cached" => EnumerationExpandableIndex.Cached Symbol Constraint
++local notation "Raw" => List (Except EnumerationState.Error (Unit × Core))
++
++private theorem adapt_mass
++    {heap : InternedConstructorTemplates.State Symbol Constraint} {indexFuel target : Nat}
++    {incomingScs : List Suspended} {before after : Cached} {read : Core} {raw : Raw}
++    (readCounter : read.counter = before.core.counter)
++    (readValues : read.values = before.core.values)
++    (rows : ∀ returned, raw = [.ok ((), returned)] →
++      returned.counter = before.core.counter ∧
++        suspendedBound returned = suspendedBound before.core + incomingScs.length)
++    (adapted : adapt heap indexFuel target incomingScs before read raw = some after) :
++    after.core.counter = before.core.counter ∧
++      suspendedBound after.core = suspendedBound before.core + incomingScs.length := by
++  cases raw with
++  | nil =>
++      simp only [adapt] at adapted
++      split at adapted
++      · rename_i oldNode oldScs stored
++        simp only [Option.map_eq_some_iff] at adapted
++        obtain ⟨written, _written, same⟩ := adapted
++        subst after
++        have mass := incoming_mass read target oldNode (some 0) incomingScs oldScs stored
++        have original := suspendedBound_values before.core read readValues
++        exact ⟨readCounter, mass.trans
++          (congrArg (fun bound => bound + incomingScs.length) original)⟩
++      · cases adapted
++  | cons row rest =>
++      cases row with
++      | error fault => simp only [adapt] at adapted; cases adapted
++      | ok payload =>
++          obtain ⟨⟨⟩, returned⟩ := payload
++          cases rest with
++          | nil =>
++              have coreSame := adapt_singleton_core heap indexFuel target incomingScs
++                before after read returned adapted
++              simpa only [coreSame] using rows returned rfl
++          | cons next later => simp only [adapt] at adapted; cases adapted
++
++variable {width : Nat}
++variable [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Constraint)] [DecidableEq Node]
++
++/-- Every attached cache has exact incoming mass, including a recovered Empty rejection. -/
++theorem observed_cache_bounds
++    (checkEmpty : Bool) (r n p h k : Nat) (caller : Caller width) (before : Cached)
++    (target : Nat) (incoming : Node) (incomingScs : List Suspended) (queries : Queries)
++    (after : Cached)
++    (candidate : (run checkEmpty r n p h k caller before target incoming incomingScs queries).2 = some after) :
++    after.core.counter = before.core.counter ∧
++      suspendedBound after.core = suspendedBound before.core + incomingScs.length := by
++  have fields := SourcePruningEnumerationIncomingNode.run_mass
++    checkEmpty r n p h caller before.core target incoming incomingScs queries
++  unfold run at candidate
++  generalize original : SourcePruningEnumerationIncomingNode.run checkEmpty r n p h
++    caller before.core target incoming incomingScs queries = observed at fields candidate
++  obtain ⟨result, reached, saved, read⟩ := observed
++  dsimp only at fields candidate
++  cases result with
++  | error fault => cases candidate
++  | ok payload =>
++      cases payload with
++      | none => cases candidate
++      | some raw =>
++          apply adapt_mass fields.1 fields.2.1 ?_ candidate
++          intro returned rawSame
++          exact fields.2.2 returned (by rw [rawSame])
++
++end MicroCFTA.SourcePruningEnumerationIncomingCacheAdapter
++
++namespace MicroCFTA.SourcePruningEnumerationCachedIncoming
++open EnumerationState
++open SourcePruningEnumerationPrefixAdmission (suspendedBound suspendedBound_values)
++local notation "Symbol" => SourcePruningTemplates.Symbol
++local notation "Constraint" => SourceSymbolicIndex.Constraint FullSyntax.Formula
++local notation "Core" => EnumerationState.State Symbol Constraint
++
++/-- The actual completed write has exact incoming mass even when its raw continuation rejects. -/
++theorem written_mass
++    (before read after : Core) (target handle : Nat) (oldNode : Option Nat)
++    (incomingScs oldScs : List Suspended)
++    (frame : EnumerationCompressionFrame.Frame before read)
++    (stored : read.values[target]? = some (.unenumerated oldNode oldScs))
++    (shape : after = {read with
++      values := read.values.set target (.unenumerated (some handle) (incomingScs ++ oldScs))
++      recursionAncestry := fun other => if other = target then
++        (read.expansionAncestry ++ read.recursionAncestry target).eraseDups
++        else read.recursionAncestry other}) :
++    after.counter = before.counter ∧
++      suspendedBound after = suspendedBound before + incomingScs.length := by
++  rw [shape]
++  exact ⟨frame.counter,
++    (SourcePruningEnumerationSuspendedMass.incoming_mass read target oldNode (some handle)
++      incomingScs oldScs stored).trans (congrArg (fun bound => bound + incomingScs.length)
++        (suspendedBound_values before read frame.values))⟩
++
++end MicroCFTA.SourcePruningEnumerationCachedIncoming
+diff --git a/lean/MicroCFTA/SourcePruningEnumerationTerminalCacheBounds.lean b/lean/MicroCFTA/SourcePruningEnumerationTerminalCacheBounds.lean
+new file mode 100644
+index 000000000..1e7092d75
+--- /dev/null
++++ b/lean/MicroCFTA/SourcePruningEnumerationTerminalCacheBounds.lean
+@@ -0,0 +1,119 @@
++import MicroCFTA.SourcePruningEnumerationFoldCacheBounds
++import MicroCFTA.SourcePruningEnumerationTerminalPrefixBounds
++import MicroCFTA.SourcePruningEnumerationIncomingMass
++
++/-!
++# Scalar bounds for actual terminal cache returns
++
++The terminal prefix and source fold preserve suspended mass. The incoming
++write adds its own bucket. Rejected folds retain their actual prefix cache.
++-/
++namespace MicroCFTA.SourcePruningEnumerationCachedTerminalAdapter
++open EnumerationState EnumerationCorrectness InternedConstructorTemplates
++open SourcePruningEnumerationPrefixAdmission (suspendedBound)
++local notation "Symbol" => SourcePruningTemplates.Symbol
++local notation "Constraint" => SourceSymbolicIndex.Constraint FullSyntax.Formula
++local notation "Node" => Value Symbol Constraint
++local notation "Caller" => SourceCurrentAllocatedPartialState.State
++local notation "Queries" => SourceEndpointMemo.Memos
++local notation "Core" => EnumerationState.State Symbol Constraint
++local notation "Cached" => EnumerationExpandableIndex.Cached Symbol Constraint
++variable {width : Nat}
++variable [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Constraint)] [DecidableEq Node]
++
++/-- Every actual returned terminal cache retains its counter and adds at most the incoming bucket. -/
++theorem observed_cache_bounds
++    (checkEmpty : Bool) (r n p h k : Nat) (first : Suspended) (rest : List Suspended)
++    (beforeCaller : Caller width) (before : Cached) (incoming : Node)
++    (incomingScs : List Suspended) (queries : Queries) (after : Cached)
++    (observed : (run checkEmpty r n p h k first rest beforeCaller before
++      incoming incomingScs queries).2 = some after) :
++    after.core.counter = before.core.counter ∧
++      suspendedBound after.core ≤ suspendedBound before.core + incomingScs.length := by
++  by_cases empty : incoming = .empty
++  · simp only [run, ite_eq_left empty, Option.some.injEq] at observed
++    subst after
++    exact ⟨rfl, Nat.le_add_right _ _⟩
++  · cases prefixObserved : ExceptT.run (SourcePruningEnumerationTerminalPrefix.run
++        r first rest before.waiting before.core) with
++    | nil => simp only [run, ite_eq_right empty, prefixObserved] at observed; cases observed
++    | cons prefixEntry prefixTail =>
++      cases prefixEntry with
++      | error fault => simp only [run, ite_eq_right empty, prefixObserved] at observed; cases observed
++      | ok prefixResult =>
++        rcases prefixResult with ⟨⟨recorded, winner, moved⟩, joined⟩
++        cases prefixTail with
++        | cons second remaining =>
++          simp only [run, ite_eq_right empty, prefixObserved] at observed
++          cases observed
++        | nil =>
++          have prefixBounds := SourcePruningEnumerationTerminalPrefix.observed_counter_mass
++            r first rest before.waiting before.core joined (recorded, winner, moved) prefixObserved
++          rcases foldObserved : SourcePruningEnumerationCachedFold.run checkEmpty n p h recorded
++              beforeCaller ⟨joined, before.expandable, moved⟩ winner queries with
++            ⟨⟨foldOutcome, foldCaller, foldQueries, foldOuter⟩, foldCache⟩
++          simp only [run, ite_eq_right empty, prefixObserved, foldObserved] at observed
++          cases foldOutcome with
++          | error fault => cases observed
++          | ok possible =>
++            cases possible with
++            | none => cases observed
++            | some foldRaw =>
++              cases foldRaw with
++              | nil =>
++                have foldBounds := SourcePruningEnumerationCachedFold.observed_cache_bounds
++                  checkEmpty n p h recorded beforeCaller ⟨joined, before.expandable, moved⟩
++                  winner queries after (by rw [foldObserved]; exact observed)
++                exact ⟨foldBounds.1.trans prefixBounds.1, by
++                  rw [foldBounds.2, prefixBounds.2]
++                  exact Nat.le_add_right _ _⟩
++              | cons foldEntry foldTail =>
++                cases foldEntry with
++                | error fault => cases observed
++                | ok foldPair =>
++                  rcases foldPair with ⟨foldUnit, folded⟩
++                  cases foldUnit
++                  cases foldTail with
++                  | cons second remaining => cases observed
++                  | nil =>
++                    have erased := SourcePruningEnumerationCachedFold.erase checkEmpty n p h recorded
++                      beforeCaller ⟨joined, before.expandable, moved⟩ winner queries
++                    rw [foldObserved] at erased
++                    have foldedSame := SourcePruningEnumerationFold.singleton_core
++                      checkEmpty n p h recorded beforeCaller joined winner queries
++                      folded foldCaller foldQueries foldOuter erased.symm
++                    have foldBounds := SourcePruningEnumerationFold.observed_counter_mass
++                      checkEmpty n p h recorded beforeCaller joined winner queries
++                      (.ok (some [.ok ((), folded)])) foldCaller foldQueries foldOuter erased.symm
++                    cases foldCache with
++                    | none =>
++                      dsimp only at observed
++                      rcases incomingObserved : SourcePruningEnumerationIncomingNode.run
++                          checkEmpty r n p h foldCaller folded winner incoming incomingScs foldQueries with
++                        ⟨incomingOutcome, reachedCaller, savedQueries, read⟩
++                      cases incomingOutcome with
++                      | error fault => simp only [incomingObserved] at observed; cases observed
++                      | ok possible =>
++                        cases possible <;> simp only [incomingObserved] at observed <;> cases observed
++                    | some recovered =>
++                      dsimp only at observed
++                      rcases incomingObserved : SourcePruningEnumerationIncomingCacheAdapter.run
++                          checkEmpty r n p h k foldCaller (EnumerationExpandableIndex.frame folded recovered)
++                          winner incoming incomingScs foldQueries with
++                        ⟨⟨incomingOutcome, reachedCaller, savedQueries, read⟩, incomingCache⟩
++                      cases incomingOutcome with
++                      | error fault => simp only [incomingObserved] at observed; cases observed
++                      | ok possible =>
++                        cases possible with
++                        | none => simp only [incomingObserved] at observed; cases observed
++                        | some raw =>
++                          simp only [incomingObserved] at observed
++                          have incomingBounds := SourcePruningEnumerationIncomingCacheAdapter.observed_cache_bounds
++                            checkEmpty r n p h k foldCaller (EnumerationExpandableIndex.frame folded recovered)
++                            winner incoming incomingScs foldQueries after
++                            (by rw [incomingObserved]; exact observed)
++                          dsimp only [EnumerationExpandableIndex.frame] at incomingBounds
++                          rw [foldedSame, foldBounds.1, foldBounds.2, prefixBounds.1, prefixBounds.2] at incomingBounds
++                          exact ⟨incomingBounds.1, Nat.le_of_eq incomingBounds.2⟩
++
++end MicroCFTA.SourcePruningEnumerationCachedTerminalAdapter
+diff --git a/lean/MicroCFTA/SourcePruningEnumerationChildCacheBounds.lean b/lean/MicroCFTA/SourcePruningEnumerationChildCacheBounds.lean
+new file mode 100644
+index 000000000..9e9e4b4c2
+--- /dev/null
++++ b/lean/MicroCFTA/SourcePruningEnumerationChildCacheBounds.lean
+@@ -0,0 +1,70 @@
++import MicroCFTA.SourcePruningEnumerationNonterminalCacheBounds
++import MicroCFTA.SourcePruningEnumerationTerminalCacheBounds
++
++/-!
++# Original scalar bounds for actual child caches
++
++Every child adds at most one slot and its original incoming bucket length.
++The bounds apply to the actual attached cache, including valid rejection.
++-/
++namespace MicroCFTA.SourcePruningEnumerationChildDispatch
++open EnumerationState InternedConstructorTemplates
++open SourcePruningEnumerationPrefixAdmission (suspendedBound)
++local notation "Symbol" => SourcePruningTemplates.Symbol
++local notation "Constraint" => SourceSymbolicIndex.Constraint FullSyntax.Formula
++local notation "Node" => Value Symbol Constraint
++local notation "Caller" => SourceCurrentAllocatedPartialState.State
++local notation "Queries" => SourceEndpointMemo.Memos
++local notation "Cached" => EnumerationExpandableIndex.Cached Symbol Constraint
++variable {width : Nat}
++variable [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Constraint)] [DecidableEq Node]
++
++/-- Actual child cache growth is bounded by its original counter and bucket length. -/
++theorem observed_cache_bounds
++    (checkEmpty : Bool) (r n p h k : Nat) (scs : List Suspended) (incoming : Node)
++    (caller : Caller width) (before : Cached) (queries : Queries) (after : Cached)
++    (aligned : before.core.counter = before.core.values.length)
++    (observed : (run checkEmpty r n p h k scs incoming caller before queries).2 = some after) :
++    after.core.counter ≤ before.core.counter + 1 ∧
++      suspendedBound after.core ≤ suspendedBound before.core + scs.length := by
++  by_cases empty : incoming = .empty
++  · simp only [run, ite_eq_left empty, Option.some.injEq] at observed
++    subst after
++    exact ⟨Nat.le_succ _, Nat.le_add_right _ _⟩
++  · cases partitioned : scs.partition (fun sc => EqualityTrie.isTerminal sc.trie) with
++    | mk here descendants =>
++      cases here with
++      | nil =>
++        simp only [run, ite_eq_right empty, partitioned] at observed
++        cases prepared : SourcePruningEnumerationCachedPrepare.prepareChild
++            caller.checked.native.machine.heap k scs incoming before with
++        | none => simp only [prepared] at observed; cases observed
++        | some rows =>
++          cases rows with
++          | nil =>
++            simp only [prepared, Option.some.injEq] at observed
++            subst after
++            exact ⟨Nat.le_succ _, Nat.le_add_right _ _⟩
++          | cons row rest =>
++            rcases row with ⟨fragment, returned⟩
++            cases rest with
++            | cons second remaining => simp only [prepared] at observed; cases observed
++            | nil =>
++              simp only [prepared, Option.some.injEq] at observed
++              subst after
++              have bounds := SourcePruningEnumerationCachedPrepare.singleton_counter_mass_le
++                caller.checked.native.machine.heap k scs incoming before returned fragment aligned prepared
++              exact ⟨Nat.le_of_eq bounds.1, bounds.2⟩
++      | cons first rest =>
++        have bounds := SourcePruningEnumerationCachedTerminalAdapter.observed_cache_bounds
++          checkEmpty r n p h k first rest caller before incoming descendants queries after
++          (by simpa only [run, ite_eq_right empty, partitioned] using observed)
++        have partitionSecond := congrArg Prod.snd partitioned
++        simp only [List.partition_eq_filter_filter] at partitionSecond
++        have descendantsBound : descendants.length ≤ scs.length := by
++          rw [← partitionSecond]
++          exact List.length_filter_le _ _
++        exact ⟨by rw [bounds.1]; exact Nat.le_succ _,
++          Nat.le_trans bounds.2 (Nat.add_le_add_left descendantsBound _)⟩
++
++end MicroCFTA.SourcePruningEnumerationChildDispatch
+diff --git a/lean/MicroCFTA/SourcePruningEnumerationChildBoundedResources.lean b/lean/MicroCFTA/SourcePruningEnumerationChildBoundedResources.lean
+new file mode 100644
+index 000000000..2a86c33f1
+--- /dev/null
++++ b/lean/MicroCFTA/SourcePruningEnumerationChildBoundedResources.lean
+@@ -0,0 +1,96 @@
++import MicroCFTA.SourcePruningEnumerationChildResources
++import MicroCFTA.SourcePruningEnumerationChildCacheBounds
++
++/-!
++# Original scalar bounds for complete child packets
++
++The original child producer runs once. Its entire result remains available.
++The same actual returned cache adds at most one slot and the input bucket.
++-/
++namespace MicroCFTA.SourcePruningEnumerationChildCompletion
++open EnumerationState EnumerationCorrectness EnumerationSchedule EnumerationDependencies
++open InternedConstructorTemplates InternedProbeProvenance
++open SourcePruningEnumerationNodes SourcePruningEnumerationObservation
++open SourceCurrentAllocatedNativeInventoryState (Inventory)
++open SourceCurrentAllocatedPartialInvariant (Context Post)
++open SourcePruningEnumerationIncomingReservation (Seed advance Reserved)
++open SourceCurrentConstrainedCapGeneratedQueryResources (Fits)
++local notation "Symbol" => SourcePruningTemplates.Symbol
++local notation "Constraint" => SourceSymbolicIndex.Constraint FullSyntax.Formula
++local notation "Node" => Value Symbol Constraint
++local notation "Caller" => SourceCurrentAllocatedPartialState.State
++local notation "Memos" => EndpointMemoGateTrace.Memos
++local notation "Queries" => SourceEndpointMemo.Memos
++local notation "Cached" => EnumerationExpandableIndex.Cached Symbol Constraint
++local notation "Fragment" => Fragments.Fragment Symbol
++local notation "Raw" => List (Except EnumerationState.Error (Fragment × EnumerationState.State Symbol Constraint))
++local notation "Heap" => SourceEqualityAnnotationHeap.Heap
++variable {bits : Nat}
++variable [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Constraint)] [DecidableEq Node]
++
++/-- Original resources produce the full earlier child result and its original scalar bounds. -/
++theorem complete_with_fragments_cache_bounds
++    (seed : Seed)
++    (formulas : SourceGuards.Formulas FullSyntax.Formula)
++    (solver : SourceGuards.Entailment FullSyntax.Formula)
++    (inventory : Inventory) (beforeCaller : Caller (bits + 2)) (before : Cached)
++    (checkEmpty : Bool) (bucket : List Suspended) (incoming : Node)
++    (roots : Nat → Nat) (memos : Memos)
++    (initial : Context formulas solver inventory beforeCaller memos)
++    (safe : Safe before.core) (paths : Roots before.core.representatives roots)
++    (counts : EnumerationCanonicalWaiting.Correct roots before.core.values before.waiting)
++    (flags : ∀ slot, SourcePruningEnumerationNativeIndex.candidate beforeCaller.checked.native.machine.heap
++      ((before.core.values[slot]?).getD .eliminated) = some (before.expandable slot))
++    (realized : PendingRealized beforeCaller.checked.native.machine.heap before.core)
++    (bounded : ∀ sc ∈ bucket, sc.var < before.core.counter)
++    (pending : InputsPending before.core bucket)
++    (available : Available beforeCaller.checked.native.machine.heap incoming) (closed : incoming.free = [])
++    (fits : Fits seed.2 beforeCaller.checked)
++    (reserved : Reserved bits seed (bucket.length + 1))
++    (known : Heap (fun guard => guard ∈ seed.1) beforeCaller.checked.native.machine.heap) :
++    ∃ (r n p h k : Nat) (raw : Raw) (afterCaller : Caller (bits + 2)) (after : Cached)
++      (savedQueries : Queries) (final : Memos) (next : Inventory) (afterRoots : Nat → Nat)
++      (outer : EnumerationState.State Symbol Constraint) (waiting : EnumerationWaitingIndex.Waiting),
++      (∀ extraRepresentative extraNative P H extraIndex, p ≤ P → h ≤ H →
++        SourcePruningEnumerationChildDispatch.run checkEmpty (r + extraRepresentative) (n + extraNative)
++          P H (k + extraIndex) bucket incoming beforeCaller before memos.query =
++          ((.ok (some raw), afterCaller, savedQueries, outer, waiting), some after)) ∧
++      Post formulas solver next beforeCaller afterCaller final ∧ final.query = savedQueries ∧
++      before.core.counter ≤ after.core.counter ∧ Roots after.core.representatives afterRoots ∧
++      StorageValid after.core ∧ PendingRealized afterCaller.checked.native.machine.heap after.core ∧
++      EnumerationCanonicalWaiting.Correct afterRoots after.core.values after.waiting ∧
++      (∀ slot, SourcePruningEnumerationNativeIndex.candidate afterCaller.checked.native.machine.heap
++        ((after.core.values[slot]?).getD .eliminated) = some (after.expandable slot)) ∧
++      EnumeratedOrigin before.core after.core ∧
++      (∀ held, held < before.core.counter → IsRoot before.core.representatives held →
++        Avoids before.core.representatives held bucket → EnumerationDriver.Protected held before.core after.core) ∧
++      (∀ allowed, EnumerationReferences.ReferencesAllowed allowed before.core →
++        EnumerationReferences.InputsAllowed allowed bucket →
++        EnumerationReferences.ReferencesAllowed allowed after.core) ∧
++      (EnumerationReferences.PendingReferences before.core → EnumerationReferences.PendingReferences after.core) ∧
++      (raw = [] ∨ ∃ fragment, raw = [.ok (fragment, after.core)] ∧
++        Safe after.core ∧ FragmentBound after.core.counter fragment ∧
++        PendingFragment after.core fragment ∧
++        ∀ held, held < before.core.counter → IsRoot before.core.representatives held →
++          Avoids before.core.representatives held bucket →
++          FragmentAvoid after.core.representatives held fragment) ∧
++      Fits (advance seed (bucket.length + 1)).2 afterCaller.checked ∧
++      Heap (fun guard => guard ∈ (advance seed (bucket.length + 1)).1) afterCaller.checked.native.machine.heap ∧
++      after.core.counter ≤ before.core.counter + 1 ∧
++      SourcePruningEnumerationPrefixAdmission.suspendedBound after.core ≤
++        SourcePruningEnumerationPrefixAdmission.suspendedBound before.core + bucket.length := by
++  obtain ⟨r, n, p, h, k, raw, afterCaller, after, savedQueries, final, next, afterRoots, outer, waiting,
++    observed, post, querySame, growth, afterPaths, storage, afterRealized, afterCounts, afterFlags,
++    origin, protects, references, history, shape, fitsAfter, knownAfter⟩ :=
++    complete_with_fragments_resources seed formulas solver inventory beforeCaller before checkEmpty bucket incoming
++      roots memos initial safe paths counts flags realized bounded pending available closed fits reserved known
++  have actual := observed 0 0 p h 0 (Nat.le_refl _) (Nat.le_refl _)
++  simp only [Nat.add_zero] at actual
++  have bounds := SourcePruningEnumerationChildDispatch.observed_cache_bounds
++    checkEmpty r n p h k bucket incoming beforeCaller before memos.query after safe.1.aligned
++    (congrArg Prod.snd actual)
++  exact ⟨r, n, p, h, k, raw, afterCaller, after, savedQueries, final, next, afterRoots, outer, waiting,
++    observed, post, querySame, growth, afterPaths, storage, afterRealized, afterCounts, afterFlags,
++    origin, protects, references, history, shape, fitsAfter, knownAfter, bounds.1, bounds.2⟩
++
++end MicroCFTA.SourcePruningEnumerationChildCompletion

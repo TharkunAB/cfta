@@ -1,0 +1,19 @@
+[2026-10-26 08:50 CET] Draft notes: actual fold counter and suspended mass.
+
+Draft: /tmp/mcfta-recursive-cache-growth-proposal/SourcePruningEnumerationFoldCacheBounds.lean
+SHA256 fc247ceb8bc111ed7ecdbc5149e7a0bb3ed6c6211a68195199b82f01a9d873e6.
+No builds, compiler, Git, network or repository edits were performed. This draft is unverified until Root's serial check. It is held immutable after delivery.
+
+Existing defining APIs were read first: CachedFold.run/erase, CachedAdapter.run/adapt, DispatchShape.singleton, Fold.run, FoldInvariants.run_preserves, and SuspendedMass.assimilated_mass. The observer does not use CachedFoldCompletion or call any completion producer. Native Context, realized/pending inputs and ranges are unnecessary for this scalar property because the actual runtime shape already restricts the enum writes.
+
+Public interfaces:
+1. Fold.dispatch_counter_mass takes the actual dispatch equation selecting one action and the actual action singleton at the SAME before.core. It returns after.counter=before.counter and suspendedBound after=suspendedBound before. DispatchShape.singleton supplies identity or the two original pending-slot receipts and the distinct-slot assimilation equation. Ne.symm converts source!=target to the target!=source orientation required by assimilated_mass. This covers both finishOptional and queried Assimilation.finish branches of the actual dispatcher.
+2. Fold.observed_counter_mass takes the FULL actual Fold.run observation (arbitrary result tag, actual caller, queries and outer core). It returns exact counter and mass equality for that outer core. Induction follows actual source order. Only a successful raw singleton advances the enum core; the other rows retain the current prefix. Native errors and missing encoded actions retain their actual caller and raw observation; no native validity is inferred.
+3. CachedFold.observed_cache_bounds takes the actual cache projection = some after. It returns exact counter and mass equality for that returned cache. Raw [] attaches the current captured cache. A raw singleton recurses only through the actual recovered cache reframed to the actual raw core. A missing cache enters uncached fallback and cannot yield cacheSome later. Malformed raw streams attach no cache. No default cache is inserted.
+4. CachedFold.observed_bounds takes the full successful tuple ((.ok(some raw),afterCaller,savedQueries,outer),some after). It returns the outer counter/mass equalities and the cache counter/mass equalities. CachedFold.erase supplies the SAME actual uncached observation; it does not rerun native work.
+
+The statements preserve exact observed caller, query, raw, outer-core and cache witnesses. They do not assert cache.core=outer; only their scalar equalities are needed here. They do not conflate the terminal IncomingNode outer read core with a logical after-write cache. Raw-empty fold rejection is covered by actual-prefix conservation, not by Safe. Exact equality implies the requested non-increase bound directly.
+
+Dependencies: the existing strict-checked SuspendedMass module (7468938f33cfd2d15b3947c052872d4b773e0b4f1b8684e24f24924f3daf5ab1) is required, plus CachedFold and DispatchShape. No new mathematical dependency is missing. Proof reductions may need local elaboration fixes in Root's serial check; no admitted theorem or future success/range/cache hypothesis appears in the draft.
+
+The earlier analysis remains at /tmp/mcfta-recursive-cache-growth-analysis.txt. The older 83-line scalar draft remains separate and unchanged. This draft does not yet prove terminal incoming mass growth, child/traversal allocation upper bounds, or a full recursive reservation theorem.
