@@ -86,6 +86,150 @@ theorem prepared_singleton
 
 variable [DecidableEq Symbol] [DecidableEq Node]
 
+/-- Factoring the prefix preserves the entire original observation at every input and bound. -/
+theorem run_eq_legacy
+    (readFuel checkFuel nativeFuel representativeFuel indexFuel callbackFuel r n p h k uv : Nat)
+    (caller : Caller width) (before : Cached) (queries : Queries) :
+    run holeKey fits admits graph templates checkEmpty edgesOf stop order metadata
+      readFuel checkFuel nativeFuel representativeFuel indexFuel callbackFuel r n p h k uv caller before queries =
+    (let read := ExceptT.run (getValue readFuel uv before.core)
+     match read with
+     | [.ok (.unenumerated (some oldHandle) scs, readAfter)] =>
+         let check := ExceptT.run (SourcePruningEnumerationRecursion.checkRepeated
+           caller.checked.native.machine.heap checkFuel uv oldHandle scs readAfter)
+         match check with
+         | [.ok (true, checked)] =>
+             let candidate := SourcePruningEnumerationParkedRestart.adapt
+               caller.checked.native.machine.heap indexFuel uv oldHandle scs before checked
+             .parked checked candidate (candidate.map fun parked =>
+               ExceptT.run (SourcePruningEnumerationRestart.run stop order metadata parked checked))
+         | [.ok (false, checked)] =>
+             match lookupNode caller.checked.native.machine.heap oldHandle with
+             | none => .stopped read (some check)
+             | some oldValue =>
+                 let prepared := SourcePruningEnumerationAction.prepare holeKey fits admits metadata nativeFuel
+                   representativeFuel uv oldHandle scs oldValue caller.checked.native.machine.heap
+                 let reached := SourceCurrentAllocatedPartialState.advance caller
+                   (advancePhysical caller.checked ⟨prepared.state, caller.checked.operations⟩) caller.fourth caller.merge
+                 match prepared with
+                 | .failed _fault _heap => .narrowed checked prepared reached queries none none none none
+                 | .done (_value, none) _heap => .narrowed checked prepared reached queries none none none none
+                 | .done (value, some action) heap =>
+                     let raw := ExceptT.run (action checked)
+                     match raw with
+                     | [.ok ((), observed)] =>
+                         match encodeNode value with
+                         | none => .narrowed checked prepared reached queries (some raw) none none none
+                         | some newHandle =>
+                             let candidate := SourcePruningEnumerationNarrowAdapter.adapt heap indexFuel
+                               uv oldHandle newHandle scs before observed
+                             match candidate with
+                             | none => .narrowed checked prepared reached queries (some raw) none none none
+                             | some attached =>
+                                 let right := ExceptT.run (SourcePruningRecordTypes.recordTypes
+                                   graph templates callbackFuel metadata uv (.inr newHandle) attached.core)
+                                 match right with
+                                 | [.ok ((false, _updated), callbackCore)] =>
+                                     let after := EnumerationExpandableIndex.frame callbackCore attached
+                                     .narrowed checked prepared reached queries (some raw) (some after) (some right)
+                                       (some (SourcePruningEnumerationNativeOrdinary.run
+                                         checkEmpty r n p h k uv edgesOf reached after queries))
+                                 | _ => .narrowed checked prepared reached queries (some raw) (some attached) (some right) none
+                     | _ => .narrowed checked prepared reached queries (some raw) none none none
+         | _ => .stopped read (some check)
+     | _ => .stopped read none) := by
+  unfold run runPrefix
+  dsimp only
+  generalize ExceptT.run (getValue readFuel uv before.core) = read
+  cases read with
+  | nil => rfl
+  | cons first rest =>
+      cases rest with
+      | cons _ _ =>
+          cases first with
+          | error _ => rfl
+          | ok pair =>
+              obtain ⟨value, _readAfter⟩ := pair
+              cases value with
+              | eliminated | enumerated _ => rfl
+              | unenumerated handle _ => cases handle <;> rfl
+      | nil =>
+          cases first with
+          | error _ => rfl
+          | ok pair =>
+              obtain ⟨value, readAfter⟩ := pair
+              cases value with
+              | eliminated | enumerated _ => rfl
+              | unenumerated handle scs =>
+                  cases handle with
+                  | none => rfl
+                  | some oldHandle =>
+                      dsimp only
+                      generalize ExceptT.run (SourcePruningEnumerationRecursion.checkRepeated
+                        caller.checked.native.machine.heap checkFuel uv oldHandle scs readAfter) = check
+                      cases check with
+                      | nil => rfl
+                      | cons first rest =>
+                          cases rest with
+                          | cons _ _ =>
+                              cases first with
+                              | error _ => rfl
+                              | ok pair =>
+                                  obtain ⟨repeated, _checked⟩ := pair
+                                  cases repeated <;> rfl
+                          | nil =>
+                              cases first with
+                              | error _ => rfl
+                              | ok pair =>
+                                  obtain ⟨repeated, checked⟩ := pair
+                                  cases repeated with
+                                  | true => rfl
+                                  | false =>
+                                      cases lookupNode caller.checked.native.machine.heap oldHandle with
+                                      | none => rfl
+                                      | some oldValue =>
+                                          dsimp only
+                                          generalize SourcePruningEnumerationAction.prepare holeKey fits admits metadata
+                                            nativeFuel representativeFuel uv oldHandle scs oldValue
+                                            caller.checked.native.machine.heap = prepared
+                                          cases prepared with
+                                          | failed _ _ => rfl
+                                          | done pair heap =>
+                                              obtain ⟨value, action⟩ := pair
+                                              cases action with
+                                              | none => rfl
+                                              | some action =>
+                                                  dsimp only
+                                                  generalize ExceptT.run (action checked) = raw
+                                                  cases raw with
+                                                  | nil => rfl
+                                                  | cons first rest =>
+                                                      cases rest with
+                                                      | cons _ _ =>
+                                                          cases first with
+                                                          | error _ => rfl
+                                                          | ok pair =>
+                                                              obtain ⟨token, _observed⟩ := pair
+                                                              cases token
+                                                              rfl
+                                                      | nil =>
+                                                          cases first with
+                                                          | error _ => rfl
+                                                          | ok pair =>
+                                                              obtain ⟨token, observed⟩ := pair
+                                                              cases token
+                                                              dsimp only
+                                                              cases encodeNode value with
+                                                              | none => rfl
+                                                              | some newHandle =>
+                                                                  dsimp only
+                                                                  cases SourcePruningEnumerationNarrowAdapter.adapt heap
+                                                                    indexFuel uv oldHandle newHandle scs before observed with
+                                                                  | none => rfl
+                                                                  | some attached =>
+                                                                      rw [SourcePruningRecordTypes.recordTypes_inr]
+                                                                      rfl
+
 /-- The actual repeated check executes only the indexed parked restart. -/
 theorem run_parked
     (readFuel checkFuel nativeFuel representativeFuel indexFuel callbackFuel r n p h k uv oldHandle : Nat)
@@ -101,7 +245,7 @@ theorem run_parked
       readFuel checkFuel nativeFuel representativeFuel indexFuel callbackFuel r n p h k uv caller before queries =
       .parked checked (some parked)
         (some (ExceptT.run (SourcePruningEnumerationRestart.run stop order metadata parked checked))) := by
-  simp only [run, read, check, adapted, Option.map_some]
+  simp only [run, runPrefix, read, check, adapted, Option.map_some, finish]
 
 /-- Empty narrowing retains the reached caller and rejects before later callbacks. -/
 theorem run_empty
@@ -122,7 +266,7 @@ theorem run_empty
         (SourceCurrentAllocatedPartialState.advance caller
           (advancePhysical caller.checked ⟨heap, caller.checked.operations⟩) caller.fourth caller.merge)
         queries (some []) none none none := by
-  simp only [run, read, check, decoded, prepared]
+  simp only [run, runPrefix, read, check, decoded, prepared, finish]
   rfl
 
 /-- A successful actual action and attached cache reach the concrete Right callback and ordinary worker. -/
@@ -157,7 +301,7 @@ theorem run_narrowed
       (.inr newHandle) after.core) = [.ok ((false, metadata), after.core)] := by
     rw [SourcePruningRecordTypes.recordTypes_inr]
     rfl
-  simp only [run, read, check, decoded, prepared, raw, encoded, adapted, right]
+  simp only [run, runPrefix, read, check, decoded, prepared, raw, encoded, adapted, right, finish]
   rfl
 
 /-- Admit only reached parked or nonempty caches; retain Empty rejection and bounded ordinary observations. -/
