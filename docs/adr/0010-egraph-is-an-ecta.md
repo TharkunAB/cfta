@@ -19,15 +19,15 @@ equalities.
 
 The store of `Data.CFTA.EGraph` is the transition table of an explicit ECTA.
 Each root e-class is a state, and its e-nodes are the transitions of the
-state, with the sort in the symbol. Merges use the union-find of the ECTA
-enumeration, `Data.CFTA.Internal.UnionFind`. `rebuild` restores the
-determinism of the automaton, which is the congruence, and leaves a valid
-automaton, so `classAutomaton` is the automaton with the rows that a state
-reaches. An
-e-node can have an equality constraint on its transition (`addConstrained`).
-A constraint restricts the terms of an e-class, not its equalities: the
-hash-cons, the users and the matcher see the plain form of an e-node, and an
-e-node with a constraint is in the e-class of its plain form.
+state; the sort of an e-node is the sort of its state. Merges use the
+union-find of the ECTA enumeration, `Data.CFTA.Internal.UnionFind`.
+`rebuild` restores the determinism of the automaton, which is the
+congruence, and leaves a valid automaton, so `classAutomaton` is the
+automaton with the rows that a state reaches. An e-node can have an equality
+constraint on its transition (`addConstrained`). A constraint restricts the
+terms of an e-class, not its equalities: the hash-cons, the users and the
+matcher see the plain form of an e-node, and an e-node with a constraint is
+in the e-class of its plain form.
 
 ## Why
 
@@ -46,24 +46,38 @@ e-node with a constraint is in the e-class of its plain form.
 
 - The e-graphs are the same: the AC sums, hegg's math rules at each
   iteration, and the output of HugeLists 5-p4 `--egraph extra`. Against the
-  e-graph of ADR 9, in cachegrind instructions: +2.1 % on the AC sum of 9
-  variables, and −4.5 % (t3) and +4.9 % (t4) on hegg's math rules after 6
-  iterations; 5-p4 `--egraph extra` allocates 0.1 % more. The first version
-  of the store cost +29 % to +68 %. These changes brought the cost back:
+  e-graph of ADR 9, in cachegrind instructions: +1.2 % on the AC sum of 9
+  variables, and −9.0 % (t3) and −0.1 % (t4) on hegg's math rules after 6
+  iterations; 5-p4 `--egraph extra` allocates 0.1 % more. At 6-p4
+  `--egraph extra`, the laws and the proofs are the same, and the store
+  allocates 1.3 % less. The first version of the store cost +29 % to
+  +68 %. These changes brought the cost back:
   - The union-find of cfta points each member of the smaller set at the new
-    representative on a union, so `root` is one lookup.
+    representative on a union, so `root` is one lookup. `unionRoots` merges
+    two representatives and gives the new one, so a merge looks up each
+    entry once.
   - Each e-class record holds its row, so the map of the e-classes is the
-    table, and a merge or a new e-node changes one map.
-  - A merge copies the shorter of the two lists of users and of the two
-    rows.
+    table, and a merge or a new e-node changes one map. A transition has
+    the symbol of its e-node, and the sort is the sort of the state.
+  - Repair compares the children of a user with their roots, and makes a
+    new e-node only for a user whose form changes (−4.4 % on t4).
+  - A merge copies the shorter list of users and the row of the smaller
+    set. Against a copy of the shorter row, found by a walk of the lengths,
+    this is −3.0 % on AC and +1.8 % on t4; the difference is in the
+    garbage collector (`evacuate`).
   - The matcher reads the rows of the store, so the snapshot of an
-    iteration without a goal is the table itself.
+    iteration without a goal is the table itself, and it compares the
+    identities of two roots for a variable that occurs twice.
   - Rebuild tidies only the rows that can have a child that is not a root
     or a transition twice: the rows of the merged e-classes and of the users
-    whose form changed.
+    whose form changed, in one merge of the e-classes with those roots.
   - The matcher matches the children of arities 0 to 2 without a walk of
     the lengths. This change costs +1.2 % of allocation on 5-p4 and saves
     2.1 % of instructions on AC and 2.3 % on t4.
+- What stays of the cost is mostly in `union`: the union-find of cfta keeps
+  the size and the members of a set in the entry of its representative, so
+  a union inserts that entry and looks up two entries, which a map of
+  parents alone does not.
 - `classAutomaton` gives the rows of the table that the state of an e-class
   reaches as an `FTA`.
 - The e-nodes of the hash-cons and of the users stay compact: an e-node with
