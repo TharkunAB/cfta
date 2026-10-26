@@ -130,7 +130,9 @@ module Data.CFTA.EGraph (
 
     -- * Analyses and conditions in a saturation
     Analysis (..),
-    Condition,
+    Condition (..),
+    holds,
+    different,
     refines,
     saturateWith,
     eClasses,
@@ -906,10 +908,32 @@ data Analysis f d = Analysis
     , analysisLeaf :: d -> Maybe f
     }
 
-{- | The condition of a rule on a match: the e-graph, the data of each
-e-class, and the e-class of each variable of the rule.
+{- | The condition of a rule on a match. 'Condition' gives it from the
+e-graph, the data of each e-class, and the e-class of each variable of the
+rule. Conditions combine with '<>', which requires both, and 'mempty' is no
+condition:
+
+> holds "x" (/= Just 0) <> different "x" "y"
 -}
-type Condition s f d = EGraph s f -> (ClassId -> Maybe d) -> (String -> Maybe ClassId) -> Bool
+newtype Condition s f d = Condition (EGraph s f -> (ClassId -> Maybe d) -> (String -> Maybe ClassId) -> Bool)
+
+instance Semigroup (Condition s f d) where
+    Condition p <> Condition q = Condition (\g dataOf var -> p g dataOf var && q g dataOf var)
+
+instance Monoid (Condition s f d) where
+    mempty = Condition (\_ _ _ -> True)
+
+{- | The condition that the data of the e-class of a variable satisfies a
+predicate. An e-class without data does not satisfy it.
+-}
+holds :: String -> (d -> Bool) -> Condition s f d
+holds x p = Condition (\_ dataOf var -> maybe False p (var x >>= dataOf))
+
+-- | The condition that two variables are in different e-classes.
+different :: String -> String -> Condition s f d
+different x y = Condition $ \g _ var -> case (var x, var y) of
+    (Just a, Just b) -> not (equivalent g a b)
+    _ -> False
 
 {- | The condition that the refinement of the e-class of a variable implies a
 formula about its value, 'Data.CFTA.Symbol.valueName'. The analysis gives the
@@ -924,9 +948,7 @@ the rule @x / x = 1@ with the condition that @x@ is not zero:
 > refines latticeImplies refinementOf "x" (Atom Ne (Var (Name (Text.pack valueName))) (Lit 0))
 -}
 refines :: (Formula -> Formula -> Verdict) -> (d -> Formula) -> String -> Formula -> Condition s f d
-refines implies refinementOf x goal _ dataOf var = case var x >>= dataOf of
-    Just d -> implies (refinementOf d) goal == Yes
-    Nothing -> False
+refines implies refinementOf x goal = holds x (\d -> implies (refinementOf d) goal == Yes)
 
 {- | 'saturate' with an analysis, and a condition for each rule. The data of
 each e-class is the fixed point of 'analyse', kept up to date after each
@@ -960,7 +982,7 @@ saturateUntilEqual limits rules a b = run limits rules (Just (a, b))
 
 run ::
     (Hashable s, Hashable f) => Limits -> [Rule s f] -> Maybe (ClassId, ClassId) -> EGraph s f -> (EGraph s f, Report)
-run limits rules = runWith (Nothing :: Maybe (Analysis f ())) limits [(r, \_ _ _ -> True) | r <- rules]
+run limits rules = runWith (Nothing :: Maybe (Analysis f ())) limits [(r, mempty) | r <- rules]
 
 runWith ::
     (Hashable s, Hashable f, Eq d) =>
@@ -1050,7 +1072,9 @@ runWith analysis limits rules goal g0 = go 0 IntMap.empty IntMap.empty IntMap.em
                 apply h changed [] = Right (h, changed)
                 apply h changed _ | size h > limitNodes limits = Right (h, changed)
                 apply h changed ((c, m@(Subst vs _), r, condition) : rest)
-                    | not (condition h dataOf (\v -> elemIndex v (ruleNames r) >>= (`IntMap.lookup` vs))) = apply h changed rest
+                    | Condition check <- condition
+                    , not (check h dataOf (\v -> elemIndex v (ruleNames r) >>= (`IntMap.lookup` vs))) =
+                        apply h changed rest
                     | otherwise = case instantiate m (sortId h c) (ruleRight r) h of
                         Nothing -> apply h changed rest
                         Just (c', h') -> case union c c' h' of
