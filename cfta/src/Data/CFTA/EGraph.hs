@@ -546,16 +546,18 @@ union a b g
                     iBig = uvarToInt bigVar
                     big = ClassId iBig
                     (iSmall, eBig, eSmall) = if iBig == ia then (ib, ea, eb) else (ia, eb, ea)
-                    -- The root comes from the sizes of the sets, so each join
-                    -- copies the shorter list.
+                    -- A join copies the shorter list of users, by their counts,
+                    -- and the row of the smaller set. Each identity made one
+                    -- transition, so the size of a set bounds its row, but
+                    -- for the transitions with a constraint that
+                    -- 'withTransition' adds.
                     users =
                         if classUserCount eSmall <= classUserCount eBig
                             then classUsers eSmall ++ classUsers eBig
                             else classUsers eBig ++ classUsers eSmall
-                    (rowSmall, rowBig) = (classRow eSmall, classRow eBig)
                     joined =
                         EClass
-                            (if notLonger rowSmall rowBig then rowSmall ++ rowBig else rowBig ++ rowSmall)
+                            (classRow eSmall ++ classRow eBig)
                             users
                             (classUserCount eSmall + classUserCount eBig)
                             (classSort eBig)
@@ -573,9 +575,6 @@ union a b g
   where
     ra@(ClassId ia) = find g a
     rb@(ClassId ib) = find g b
-    -- Whether the first list is at most as long as the second, in the time of the shorter.
-    notLonger (_ : xs) (_ : ys) = notLonger xs ys
-    notLonger xs _ = null xs
 
 {- | Restore the congruence after 'union', as egg does: make the users of
 each changed e-class canonical, and merge the e-classes of users that
