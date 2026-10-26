@@ -598,8 +598,12 @@ matchSort _ (CSVar v) k b
         Just k' | k' == k -> Just b
         _ -> Nothing
 matchSort g (CSNode s ps) k b = case IntMap.lookup k (sortNodes g) of
-    Just (SortNode s' ks) | s == s' && length ks == length ps -> foldM (\acc (p, k') -> matchSort g p k' acc) b (zip ps ks)
+    Just (SortNode s' ks) | s == s' -> children ps ks b
     _ -> Nothing
+  where
+    children (p : ps') (k' : ks') acc = matchSort g p k' acc >>= children ps' ks'
+    children [] [] acc = Just acc
+    children _ _ _ = Nothing
 
 -- | The canonical e-nodes of the e-classes that some e-classes reach through their children.
 reach :: (Hashable f) => EGraph s f -> [ClassId] -> IntMap.IntMap [ENode f]
