@@ -1,0 +1,38 @@
+[2026-10-26 12:18 CET] Actual terminal unions and the next assimilation language bridge. Read-only source review; no builds, Git actions or repository edits.
+
+Strongest existing producer receipt
+SourcePruningEnumerationTerminalPrefix.run_complete:46-79 exports the SAME stable prefix singleton, the actual representative scan, actual union loop and actual winner read. It also exports:
+  recorded = (first::rest).map (fun sc => roots sc.var)
+  winner in recorded; roots winner = winner
+  Roots joined.representatives (EnumerationCanonicalUnion.mergedRoots roots recorded winner)
+  joined = {before with representatives := joined.representatives}
+  StorageValid joined; PendingRealized heap joined; pending slots for every recorded source.
+These are sufficient to derive SameClass joined.representatives source winner for every source in recorded. No Safe joined premise is needed or implied. The intermediate joined state still stores old source payloads even though its classes have been merged.
+
+Exact root derivation
+For source in recorded, recorded's map equation yields source=roots sc.var. EnumerationCanonicalUnion.roots_idempotent:27, applied to the original paths, gives roots source=source. Therefore mergedRoots roots recorded winner source=winner. The exported winner-fixed equation gives mergedRoots roots recorded winner winner=winner. Obtain each actual path from the exported joined Roots receipt, then apply UnionFind.sameClass_iff_roots to these two paths and equality of their named representatives. This avoids manual equality of the path sizes.
+SourcePruningEnumerationFold.run processes recorded itself, including duplicates and winner noops. Do not substitute the filtered/canonical key list: that list only transfers waiting buckets. Fold.run_complete retains after.representatives=before.representatives. Thus every later actual dispatch source and target=winner still has the same-class relation. Its inductive step and exact raw singleton expose the actual intermediate core; assimilation changes values and ancestry, not representatives. Native query/check effects change Caller but do not change these enumeration classes.
+
+Meanings across union
+Representative scans and winner reads preserve assignment meaning. The union loop ADDS equalities. Its correct exact statement for any fixed node language, residualMeaning and assignment is:
+  Satisfies language residualMeaning assignment joined iff
+    Satisfies language residualMeaning assignment before and
+    forall sc in rest, assignment first.var = assignment sc.var.
+This follows from the actual scan/union/winner receipts already exported by run_complete, representative_semantics and union_semantics in EnumerationCorrectness:164/180, and induction on the actual union loop. Original storage.total supplies Total and actual union execution preserves it. No desired final Satisfies proposition is an admission input. Native heap is unchanged by this prefix, and the literal stored source/target payloads and obligations are unchanged.
+Do not claim unconditional assignment preservation for the union prefix. The consumed terminal requirements explain the added equalities: EnumerationState.terminal_requirement:454 identifies a terminal suspended requirement with equality to its assigned variable. The terminal child result's hole winner relates the current term to that joined class.
+
+Smallest composition
+First add a wrapper around TerminalPrefix.run_complete that calls it once, retains its entire old output, and appends (a) every recorded source is SameClass with winner and (b) the exact union assignment equivalence above. These are derived from existing receipts and inputs.
+Next preserve the full Dispatch.dispatch_complete packet and append semantic outputs for its actual raw action. A successful active assimilation preserves Satisfies at the actual new native heap under the actual same-class relation. The relation supplies assignment source=assignment target separately in each implication from that side's forest satisfaction. Optional-node branches and lazy noops remain included. For merged=some0, prove the satisfying pre-state impossible; the dispatcher rejects BEFORE either write. Its actual reached native Caller/Post still remain. This differs from IncomingNode's logical post-write Empty witness.
+Then wrap the existing Fold.run_complete once or strengthen its existing induction. Thread exact current native Post/full memos and realization. Each successful head preserves assignment meaning; a rejecting head makes the original satisfying state impossible. The fold's representative equality carries the original same-class facts to every head. The actual rejection receipt already records the completed prefix and rejecting action. Finally compose the checked IncomingNode.run_complete_semantics at the same actual folded endpoint. This does not require a supplied future successful action or new original semantic premise.
+
+Graph-free reuse and its limit
+Fragments.assimilate_correct:155 is graph-free. It proves heapSatisfies preservation from an actual abstract assimilate equation and equal assigned target/source terms. Fragments.openSlot_congr:127 directly transports pending restrictions between those equal assigned terms. EnumerationCorrectness.assimilation_semantics:299 lifts the former through heap_set but uses Graph IntersectionCorrect to obtain a structural merged-slot intersection equation.
+A native helper with only permits(merged.map language) iff permits(source.map language) AND permits(target.map language) cannot always produce that structural Slot equation: merged=None and some True can be semantically equal but have different Option constructors. Do not add a native option-shape premise merely to force that equality. Guard was notified and is using the existing short two-slot elimination proof pattern with semantic local equivalence. SameClass and each direction's forest satisfaction supply assignment equality. This keeps the helper graph-free and needs no satisfying final assignment input.
+
+Source controls
+TerminalPrefix SHA256 bc975e650b8ee6cecba75605107cbf2ad458e02137854994d91541b4b63d9b30
+Fold SHA256 0a5ae94315af7024fc4cc80bcc00163996fceaf95568969df73401fea9c2db16
+CanonicalUnion SHA256 b76617ea7f0fb0ba74b78125f9c2232302e7513d378ddbfa8deef0fea9cf8bd6
+Fragments SHA256 a182ef3932d50a660878e33b201e415b22bf9c26eaacfb0f4bcbaad431ba9f07
+EnumerationCorrectness SHA256 087b96d593bb42cea0b61b2742b43d4a41ce5a2d990e300c8d15700e2eb0672d

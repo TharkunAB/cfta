@@ -1,0 +1,20 @@
+[2026-10-26 12:28 CET] FINAL independent read-only review: CLEAR
+
+Source: lean/MicroCFTA/SourcePruningEnumerationDispatchObservedLanguage.lean
+SHA256 264206566707010d8b748d2cc6c903f10e11fb8efc12a5594cc4c14dfbe531db
+
+The complete source was read. The retained strict-observed-2/report.json records exit_code=0 with Lean 4.34.1, warningAsError=true and linter.all=true. Its source digest equals the reviewed source; the retained strict input is byte-identical. raw.log is exactly empty (SHA256 e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855). No compiler, build, Git operation, or repository edit was performed during this review.
+
+observed_semantics calls dispatch_complete_semantics exactly once. It obtains a canonical successful dispatcher observation from stable 0 minimumP minimumH and reflexive p/h bounds. It then calls DispatchUnique.ok_unique with the ACTUAL observed equation first and the canonical equation second. Consequently actionsSame has type some action=some canonical, callerSame identifies reachedCaller with canonical afterCaller, and queriesSame identifies savedQueries with canonical returnedQueries. Option.some.inj identifies the complete captured actions, not merely their successful members.
+
+The query equality orientation is correct. querySame is final.query=returnedQueries; queriesSame is savedQueries=returnedQueries. Thus querySame.trans queriesSame.symm proves final.query=savedQueries. The exact canonical Post, complete final memo witness and PendingRealized at the reached native heap are retained after substitution. Query equality does not replace or identify the full memo record.
+
+The observation premise is an equality for an actual ordinary execution of dispatch. It assumes no Satisfies conclusion, desired assignment, later callback success, future heap, or final Post. This is an observation theorem; it does not claim that arbitrary input bounds produce a successful dispatch. The original current Context, realization, slot classification and request WordRanges remain explicit. The semantic clause separately requires CURRENT SameClass before.representatives source target, for every ambient environment, residual interpretation and assignment. That relation is not inferred from successful dispatch alone.
+
+Exact action and caller alignment transport the raw-list language equivalence to the actual observed action and native endpoint. Empty raw rejection is included by the existential membership statement; no fictitious successful row or Safe rejected cache is introduced. Outer errors and outer None are outside this theorem's explicit observed premise. No runtime definition, old declaration, fuel bound, or native query is changed.
+
+This theorem supplies the exact per-head semantic observation needed by a later actual Fold induction. It does not itself prove fold/terminal semantics, scheduler correspondence, unbounded termination, H6 strengthening, or extraction correctness.
+
+Dependencies checked against actual defining signatures:
+DispatchUnique SHA256 b5d9f4c0199e38f5d289075e904f896573a317d203c67840d9c0b46a3115c330
+DispatchLanguage SHA256 863db7fb27a696264a3ac183f9f3b1813215d4f6da958b6e770faf45a6dd49df

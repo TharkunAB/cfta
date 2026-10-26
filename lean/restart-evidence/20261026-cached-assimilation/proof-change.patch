@@ -1,0 +1,818 @@
+diff --git a/lean/MicroCFTA/Audit.lean b/lean/MicroCFTA/Audit.lean
+index a920de000..99aeb342b 100644
+--- a/lean/MicroCFTA/Audit.lean
++++ b/lean/MicroCFTA/Audit.lean
+@@ -1,3 +1,8 @@
++import MicroCFTA.SourcePruningEnumerationAssimilationLanguage
++import MicroCFTA.SourcePruningEnumerationTerminalPrefixLanguage
++import MicroCFTA.SourcePruningEnumerationIncomingCacheLanguage
++import MicroCFTA.SourcePruningEnumerationDispatchLanguage
++import MicroCFTA.SourcePruningEnumerationDispatchObservedLanguage
+ import MicroCFTA.SourcePruningEnumerationNativeLanguage
+ import MicroCFTA.SourcePruningEnumerationPendingWriteLanguage
+ import MicroCFTA.SourcePruningEnumerationIncomingNodeLanguage
+diff --git a/lean/MicroCFTA/SourcePruningEnumerationAssimilationLanguage.lean b/lean/MicroCFTA/SourcePruningEnumerationAssimilationLanguage.lean
+new file mode 100644
+index 000000000..bdbe865ae
+--- /dev/null
++++ b/lean/MicroCFTA/SourcePruningEnumerationAssimilationLanguage.lean
+@@ -0,0 +1,105 @@
++import MicroCFTA.EnumerationCorrectness
++
++/-!
++# Assignment meaning of a concrete two-slot assimilation
++
++The target receives both pending domains and both suspended lists.
++The source then becomes eliminated. The forest already relates the two
++variables. Each direction derives their assigned-term equality from its
++own forest satisfaction. No graph operation or final solution is an input.
++-/
++namespace MicroCFTA.SourcePruningEnumerationAssimilationLanguage
++open Language Fragments EnumerationState EnumerationCorrectness
++variable {Symbol EnumGuard : Type}
++
++/-- Assimilation preserves assignments when the forest already equates its distinct pending slots. -/
++theorem assimilated_semantics
++    (language : NodeLanguage Symbol) (meaning : EnumGuard → Term Symbol → Prop)
++    (assignment : Nat → Term Symbol) (before : State Symbol EnumGuard)
++    (source target : Nat) (sourceNode targetNode merged : Option Nat)
++    (sourceScs targetScs : List Suspended)
++    (sourceStored : before.values[source]? = some (.unenumerated sourceNode sourceScs))
++    (targetStored : before.values[target]? = some (.unenumerated targetNode targetScs))
++    (different : source ≠ target)
++    (sameClass : UnionFind.SameClass before.representatives source target)
++    (replacement : ∀ term, permits (merged.map language) term ↔
++      permits (sourceNode.map language) term ∧ permits (targetNode.map language) term) :
++    Satisfies language meaning assignment
++      (assimilated before target source (.unenumerated merged (sourceScs ++ targetScs))) ↔
++    Satisfies language meaning assignment before := by
++  have sourceBound : source < before.values.length := (List.getElem?_eq_some_iff.mp sourceStored).1
++  have targetBound : target < before.values.length := (List.getElem?_eq_some_iff.mp targetStored).1
++  have sourceAfter : source < (before.values.set target
++      (.unenumerated merged (sourceScs ++ targetScs))).length := by
++    simpa only [List.length_set] using sourceBound
++  have sourceHeap : heap language before.values source = slot language (.unenumerated sourceNode sourceScs) := by
++    simp only [heap, sourceStored, Option.getD_some]
++  have targetHeap : heap language before.values target = slot language (.unenumerated targetNode targetScs) := by
++    simp only [heap, targetStored, Option.getD_some]
++  have pendingMeaning (uv : Nat) (node : Option Nat) (scs : List Suspended) :
++      slotSatisfies assignment uv (slot language (.unenumerated node scs)) ↔
++        permits (node.map language) (assignment uv) ∧
++          ∀ sc ∈ scs, Suspended.Holds assignment (assignment uv) sc := by
++    simp only [slot, slotSatisfies, List.forall_mem_map]
++  have localMeaning (equal : assignment source = assignment target) :
++      slotSatisfies assignment target (slot language (.unenumerated merged (sourceScs ++ targetScs))) ↔
++        slotSatisfies assignment source (slot language (.unenumerated sourceNode sourceScs)) ∧
++          slotSatisfies assignment target (slot language (.unenumerated targetNode targetScs)) := by
++    rw [pendingMeaning, pendingMeaning, pendingMeaning, equal, replacement]
++    constructor
++    · rintro ⟨⟨sourceDomain, targetDomain⟩, suspended⟩
++      exact ⟨⟨sourceDomain, fun sc member => suspended sc (List.mem_append.mpr (Or.inl member))⟩,
++        targetDomain, fun sc member => suspended sc (List.mem_append.mpr (Or.inr member))⟩
++    · rintro ⟨⟨sourceDomain, sourceSuspended⟩, targetDomain, targetSuspended⟩
++      refine ⟨⟨sourceDomain, targetDomain⟩, ?_⟩
++      intro sc member
++      rcases List.mem_append.mp member with atSource | atTarget
++      · exact sourceSuspended sc atSource
++      · exact targetSuspended sc atTarget
++  have updatedHeap :
++      heap language (assimilated before target source
++        (.unenumerated merged (sourceScs ++ targetScs))).values =
++      setSlot (setSlot (heap language before.values) target
++        (slot language (.unenumerated merged (sourceScs ++ targetScs)))) source .eliminated := by
++    simp only [assimilated, heap_set language _ source .eliminated sourceAfter,
++      heap_set language _ target _ targetBound, slot]
++  have heapMeaning (equal : assignment source = assignment target) :
++      heapSatisfies (heap language (assimilated before target source
++        (.unenumerated merged (sourceScs ++ targetScs))).values) assignment ↔
++      heapSatisfies (heap language before.values) assignment := by
++    rw [updatedHeap]
++    constructor
++    · intro afterHeap uv
++      have mergedHolds : slotSatisfies assignment target
++          (slot language (.unenumerated merged (sourceScs ++ targetScs))) := by
++        simpa [setSlot, Ne.symm different] using afterHeap target
++      obtain ⟨sourceHolds, targetHolds⟩ := (localMeaning equal).mp mergedHolds
++      by_cases atSource : uv = source
++      · subst uv
++        rw [sourceHeap]
++        exact sourceHolds
++      · by_cases atTarget : uv = target
++        · subst uv
++          rw [targetHeap]
++          exact targetHolds
++        · simpa only [setSlot, ite_eq_right atSource, ite_eq_right atTarget] using afterHeap uv
++    · intro beforeHeap uv
++      by_cases atSource : uv = source
++      · subst uv
++        simp [setSlot, slotSatisfies]
++      · by_cases atTarget : uv = target
++        · subst uv
++          simp only [setSlot, ite_eq_right (Ne.symm different)]
++          apply (localMeaning equal).mpr
++          exact ⟨by simpa only [sourceHeap] using beforeHeap source,
++            by simpa only [targetHeap] using beforeHeap target⟩
++        · simpa only [setSlot, ite_eq_right atSource, ite_eq_right atTarget] using beforeHeap uv
++  constructor
++  · intro satisfied
++    have equal : assignment source = assignment target := satisfied.1.1 source target sameClass
++    exact ⟨⟨satisfied.1.1, (heapMeaning equal).mp satisfied.1.2⟩, satisfied.2⟩
++  · intro satisfied
++    have equal : assignment source = assignment target := satisfied.1.1 source target sameClass
++    exact ⟨⟨satisfied.1.1, (heapMeaning equal).mpr satisfied.1.2⟩, satisfied.2⟩
++
++end MicroCFTA.SourcePruningEnumerationAssimilationLanguage
+diff --git a/lean/MicroCFTA/SourcePruningEnumerationTerminalPrefixLanguage.lean b/lean/MicroCFTA/SourcePruningEnumerationTerminalPrefixLanguage.lean
+new file mode 100644
+index 000000000..b20f2b32f
+--- /dev/null
++++ b/lean/MicroCFTA/SourcePruningEnumerationTerminalPrefixLanguage.lean
+@@ -0,0 +1,103 @@
++import MicroCFTA.SourcePruningEnumerationTerminalPrefix
++import MicroCFTA.EnumerationSemantics
++
++/-!
++# Exact assignments and joined classes of the actual terminal prefix
++
++The original prefix runs once. Its complete receipt remains available.
++Its actual root paths equate every recorded source with the winner.
++Its actual union loop adds exactly the requested assignment equations.
++-/
++namespace MicroCFTA.SourcePruningEnumerationTerminalPrefix
++open EnumerationState EnumerationCorrectness EnumerationSchedule EnumerationExecution
++open EnumerationCompleteness EnumerationDependencies
++open SourcePruningEnumerationObservation
++local notation "Symbol" => SourcePruningTemplates.Symbol
++variable {EnumGuard NativeGuard : Type}
++
++attribute [local instance] terminalPrefixMonadList terminalPrefixLawfulMonadList
++
++/-- The actual prefix supplies the class equality and exact assignments used by assimilation. -/
++theorem run_complete_semantics
++    (heap : InternedConstructorTemplates.State Symbol NativeGuard)
++    (before : EnumerationState.State Symbol EnumGuard)
++    (first : EnumerationState.Suspended) (rest : List EnumerationState.Suspended)
++    (waiting : EnumerationWaitingIndex.Waiting) (roots : Nat → Nat)
++    (paths : Roots before.representatives roots)
++    (counts : EnumerationCanonicalWaiting.Correct roots before.values waiting)
++    (safe : Safe before)
++    (bounded : ∀ sc ∈ first :: rest, sc.var < before.counter)
++    (pending : InputsPending before (first :: rest))
++    (realized : PendingRealized heap before) :
++    ∃ (fuel : Nat) (recorded : List Nat) (winner : Nat) (saved : EnumerationWaitingIndex.Waiting)
++      (scanned united after : EnumerationState.State Symbol EnumGuard),
++      (∀ (extra : Nat), ExceptT.run (run (fuel + extra) first rest waiting before) =
++        [.ok ((recorded, winner, saved), after)]) ∧
++      (∀ (extra : Nat), ExceptT.run (((first :: rest).mapM fun sc =>
++        representative (fuel + extra) sc.var) before) = [.ok (recorded, scanned)]) ∧
++      (∀ (extra : Nat), ExceptT.run ((rest.forM fun sc =>
++        unionVariables (fuel + extra) first.var sc.var) scanned) = [.ok ((), united)]) ∧
++      (∀ (extra : Nat), ExceptT.run (representative (fuel + extra) first.var united) = [.ok (winner, after)]) ∧
++      recorded = (first :: rest).map (fun sc => roots sc.var) ∧
++      saved = EnumerationCanonicalWaiting.moveMany winner
++        (EnumerationBuilderCaches.canonicalIds (recorded.filter (fun key => key != winner))) waiting ∧
++      winner ∈ recorded ∧ roots winner = winner ∧
++      Roots after.representatives (EnumerationCanonicalUnion.mergedRoots roots recorded winner) ∧
++      EnumerationCanonicalWaiting.Correct (EnumerationCanonicalUnion.mergedRoots roots recorded winner)
++        after.values saved ∧
++      after = {before with representatives := after.representatives} ∧
++      StorageValid after ∧ PendingRealized heap after ∧ PendingAt after winner ∧
++      (∀ (source : Nat), source ∈ recorded → PendingAt after source) ∧
++      (EnumerationBuilderCaches.canonicalIds (recorded.filter (fun key => key != winner))).Nodup ∧
++      (EnumerationBuilderCaches.canonicalIds (recorded.filter (fun key => key != winner))).Pairwise (· ≤ ·) ∧
++      (∀ (key : Nat), key ∈ EnumerationBuilderCaches.canonicalIds (recorded.filter (fun key => key != winner)) ↔
++        key ∈ recorded ∧ key ≠ winner) ∧
++      (∀ source ∈ recorded, UnionFind.SameClass after.representatives source winner) ∧
++      ∀ (language : NodeLanguage Symbol) (meaning : EnumGuard → Language.Term Symbol → Prop)
++        (assignment : Nat → Language.Term Symbol),
++        Satisfies language meaning assignment after ↔ Satisfies language meaning assignment before ∧
++          ∀ sc ∈ rest, assignment first.var = assignment sc.var := by
++  obtain ⟨fuel, recorded, winner, saved, scanned, united, after, running, scanning, unions, resolution,
++    recordedSame, savedSame, winnerMember, winnerFixed, afterPaths, afterCounts, afterSame,
++    afterStorage, afterRealized, winnerPending, sourcesPending, distinct, ordered, keys⟩ :=
++    run_complete heap before first rest waiting roots paths counts safe bounded pending realized
++  refine ⟨fuel, recorded, winner, saved, scanned, united, after, running, scanning, unions, resolution,
++    recordedSame, savedSame, winnerMember, winnerFixed, afterPaths, afterCounts, afterSame,
++    afterStorage, afterRealized, winnerPending, sourcesPending, distinct, ordered, keys, ?_, ?_⟩
++  · intro source member
++    have sourceFixed : roots source = source := by
++      rw [recordedSame] at member
++      obtain ⟨sc, _present, rfl⟩ := List.mem_map.mp member
++      exact EnumerationCanonicalUnion.roots_idempotent before.representatives roots paths sc.var
++    have sourceSelected : roots source ∈ recorded := by simpa only [sourceFixed] using member
++    have winnerSelected : roots winner ∈ recorded := by simpa only [winnerFixed] using winnerMember
++    apply (class_iff after.representatives
++      (EnumerationCanonicalUnion.mergedRoots roots recorded winner) afterPaths source winner).mpr
++    simp only [EnumerationCanonicalUnion.mergedRoots, ite_eq_left sourceSelected, ite_eq_left winnerSelected]
++  · intro language meaning assignment
++    have scanSuccess : Success ((first :: rest).mapM fun sc => representative fuel sc.var)
++        before recorded scanned := by
++      have actual := scanning 0
++      simp only [Nat.add_zero] at actual
++      rw [Success, actual]
++      exact List.mem_singleton_self _
++    have unionSuccess : Success (rest.forM fun sc => unionVariables fuel first.var sc.var)
++        scanned () united := by
++      have actual := unions 0
++      simp only [Nat.add_zero] at actual
++      rw [Success, actual]
++      exact List.mem_singleton_self _
++    have rootSuccess : Success (representative fuel first.var) united winner after := by
++      have actual := resolution 0
++      simp only [Nat.add_zero] at actual
++      rw [Success, actual]
++      exact List.mem_singleton_self _
++    obtain ⟨scannedTotal, scanMeaning⟩ := EnumerationSemantics.representatives_assignment
++      language meaning assignment fuel (first :: rest) before scanned recorded safe.1.total scanSuccess
++    obtain ⟨unitedTotal, unionMeaning⟩ := EnumerationSemantics.terminal_unions_assignment
++      language meaning assignment fuel first.var rest scanned united scannedTotal unionSuccess
++    have rootMeaning := (EnumerationSemantics.representative_assignment language meaning assignment
++      fuel first.var winner united after unitedTotal rootSuccess).2
++    exact rootMeaning.trans (unionMeaning.trans (and_congr_left fun _ => scanMeaning))
++
++end MicroCFTA.SourcePruningEnumerationTerminalPrefix
+diff --git a/lean/MicroCFTA/SourcePruningEnumerationIncomingCacheLanguage.lean b/lean/MicroCFTA/SourcePruningEnumerationIncomingCacheLanguage.lean
+new file mode 100644
+index 000000000..e93bf9c0a
+--- /dev/null
++++ b/lean/MicroCFTA/SourcePruningEnumerationIncomingCacheLanguage.lean
+@@ -0,0 +1,260 @@
++import MicroCFTA.SourcePruningEnumerationIncomingCacheAdapter
++import MicroCFTA.SourcePruningEnumerationNativeLanguage
++import MicroCFTA.SourcePruningEnumerationPendingWriteLanguage
++
++/-!
++# Assignment meaning of the actual incoming cache adapter
++
++The original producer runs once. Its full receipt remains available.
++The Empty candidate denotes the logical write. The runtime branch list stays empty.
++A nonempty branch contains the same written core as the attached cache.
++-/
++namespace MicroCFTA.SourcePruningEnumerationIncomingCacheAdapter
++open EnumerationState EnumerationSchedule EnumerationCorrectness
++open EnumerationExecution EnumerationCompressionFrame
++open InternedConstructorTemplates InternedProbeProvenance
++open SourcePruningEnumerationNodes SourcePruningEnumerationObservation
++open SourceCurrentAllocatedNativeInventoryState (Inventory)
++open SourceCurrentAllocatedPartialInvariant (Context Post)
++local notation "Symbol" => SourcePruningTemplates.Symbol
++local notation "Constraint" => SourceSymbolicIndex.Constraint FullSyntax.Formula
++local notation "Node" => InternedConstructorTemplates.Value Symbol Constraint
++local notation "Checked" => SourceEqualityNativeDemand.State
++local notation "Caller" => SourceCurrentAllocatedPartialState.State
++local notation "Memos" => EndpointMemoGateTrace.Memos
++local notation "Queries" => SourceEndpointMemo.Memos
++local notation "Raw" => List (Except EnumerationState.Error
++  (Unit × EnumerationState.State Symbol Constraint))
++variable {width : Nat}
++attribute [local instance] SourcePruningEnumerationIncomingNode.incomingNodeMonadList
++
++/-- Retain every cache receipt and interpret the logical core and actual branch list. -/
++theorem complete_semantics
++    [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Constraint)] [DecidableEq Node]
++    (formulas : SourceGuards.Formulas FullSyntax.Formula)
++    (solver : SourceGuards.Entailment FullSyntax.Formula)
++    (inventory : Inventory) (beforeCaller : Caller width)
++    (before : EnumerationExpandableIndex.Cached Symbol Constraint)
++    (checkEmpty : Bool) (target : Nat) (incoming : Node)
++    (incomingScs : List EnumerationState.Suspended) (memos : Memos) (roots : Nat → Nat)
++    (initial : Context formulas solver inventory beforeCaller memos)
++    (storage : StorageValid before.core)
++    (realized : PendingRealized beforeCaller.checked.native.machine.heap before.core)
++    (paths : Roots before.core.representatives roots)
++    (counts : EnumerationCanonicalWaiting.Correct roots before.core.values before.waiting)
++    (flags : ∀ (slot : Nat), SourcePruningEnumerationNativeIndex.candidate
++      beforeCaller.checked.native.machine.heap
++      ((before.core.values[slot]?).getD .eliminated) = some (before.expandable slot))
++    (root : IsRoot before.core.representatives target)
++    (pending : EnumerationCompleteness.PendingAt before.core target)
++    (available : Available beforeCaller.checked.native.machine.heap incoming) (closed : incoming.free = [])
++    (bounded : ∀ sc ∈ incomingScs, sc.var < before.core.counter)
++    (ranges : match before.core.values[target]? with
++      | some (.unenumerated (some oldHandle) _) =>
++          match lookupNode beforeCaller.checked.native.machine.heap oldHandle with
++          | some old => SourceCurrentAllocatedNativeRequestBounds.WordRanges
++              (.code (SourceRecursiveIntersectionCode.requestNode IntersectionEmptyDomain.emptyDomain incoming old))
++              beforeCaller.checked
++          | none => True
++      | _ => True) :
++    ∃ (r n p h k : Nat) (oldNode : Option Nat) (oldScs : List EnumerationState.Suspended)
++      (read : EnumerationState.State Symbol Constraint) (afterCaller : Caller width)
++      (savedQueries : Queries) (final : Memos) (next : Inventory) (replacement : Node) (handle : Nat)
++      (after : EnumerationExpandableIndex.Cached Symbol Constraint),
++      (∀ extra, ExceptT.run (getValue (r + extra) target before.core) =
++        [.ok (.unenumerated oldNode oldScs, read)]) ∧
++      EnumerationCompressionFrame.Frame before.core read ∧
++      (∀ extra extraNative P H, p ≤ P → h ≤ H →
++        SourcePruningEnumerationIncomingNode.run checkEmpty (r + extra) (n + extraNative) P H
++          beforeCaller before.core target incoming incomingScs memos.query =
++          (.ok (some (if replacement = .empty then [] else [.ok ((), after.core)])),
++            afterCaller, savedQueries, read)) ∧
++      ExceptT.run ((do
++        setValue target (.unenumerated (some handle) (incomingScs ++ oldScs))
++        inheritAncestry target) read) = [.ok ((), after.core)] ∧
++      after.core = {read with
++        values := read.values.set target (.unenumerated (some handle) (incomingScs ++ oldScs))
++        recursionAncestry := fun other => if other = target then
++          (read.expansionAncestry ++ read.recursionAncestry target).eraseDups else read.recursionAncestry other} ∧
++      after.core.values[target]? = some (.unenumerated (some handle) (incomingScs ++ oldScs)) ∧
++      StorageValid after.core ∧ PendingRealized afterCaller.checked.native.machine.heap after.core ∧
++      Post formulas solver next beforeCaller afterCaller final ∧ final.query = savedQueries ∧
++      Cache.Extends memos.unfolding final.unfolding ∧
++      Available afterCaller.checked.native.machine.heap replacement ∧ replacement.free = [] ∧
++      encodeNode replacement = some handle ∧ lookupNode afterCaller.checked.native.machine.heap handle = some replacement ∧
++      (∀ extra, (SourcePruningEnumerationNativeIndex.write afterCaller.checked.native.machine.heap
++        (k + extra) target (.unenumerated (some handle) (incomingScs ++ oldScs)) incomingScs []
++        (EnumerationExpandableIndex.frame read before)).map (EnumerationExpandableIndex.frame after.core) = some after) ∧
++      (∀ extraIndex, adapt afterCaller.checked.native.machine.heap (k + extraIndex) target
++        incomingScs before read (if replacement = .empty then [] else [.ok ((), after.core)]) = some after) ∧
++      (∀ extra extraNative P H extraIndex, p ≤ P → h ≤ H →
++        run checkEmpty (r + extra) (n + extraNative) P H (k + extraIndex)
++          beforeCaller before target incoming incomingScs memos.query =
++          ((.ok (some (if replacement = .empty then [] else [.ok ((), after.core)])),
++            afterCaller, savedQueries, read), some after)) ∧
++      after.core.counter = before.core.counter ∧ after.core.representatives = read.representatives ∧
++      Roots after.core.representatives roots ∧
++      EnumerationCanonicalWaiting.Correct roots after.core.values after.waiting ∧
++      after.waiting = EnumerationCanonicalWaiting.count roots 1 incomingScs before.waiting ∧
++      (∀ (slot : Nat), SourcePruningEnumerationNativeIndex.candidate
++        afterCaller.checked.native.machine.heap
++        ((after.core.values[slot]?).getD .eliminated) = some (after.expandable slot)) ∧
++      after.expandable = (fun slot => if slot = target then
++        !(MergedOrdinaryHeight.recursiveBoundary replacement && (incomingScs ++ oldScs).isEmpty)
++        else before.expandable slot) ∧
++      (oldNode = none → replacement = incoming ∧ afterCaller = beforeCaller ∧
++        savedQueries = memos.query ∧ final = memos ∧ next = inventory) ∧
++      (∀ oldHandle, oldNode = some oldHandle →
++        ∃ (old query : Node) (queried : Checked width),
++          lookupNode beforeCaller.checked.native.machine.heap oldHandle = some old ∧
++          next.source = beforeCaller.checked.native.machine.heap ∧ next.roots = inventory.roots ++ [incoming, old] ∧
++          SourceCurrentAllocatedTargetQuery.Receipt formulas solver next incoming old beforeCaller.checked query queried memos ∧
++          (∀ ambient term,
++            InternedGuardedLanguage.meaning (SourceEqualityPCSGuard.holds formulas solver) ambient replacement term ↔
++              InternedGuardedLanguage.meaning (SourceEqualityPCSGuard.holds formulas solver) ambient incoming term ∧
++              InternedGuardedLanguage.meaning (SourceEqualityPCSGuard.holds formulas solver) ambient old term) ∧
++          (checkEmpty = false → replacement = query ∧
++            afterCaller = SourceCurrentAllocatedPartialState.advance beforeCaller queried beforeCaller.fourth beforeCaller.merge ∧
++            final = memos)) ∧
++      (∀ (ambient : InternedGuardedLanguage.Env Symbol)
++        (residualMeaning : Constraint → Language.Term Symbol → Prop)
++        (assignment : Nat → Language.Term Symbol),
++        Satisfies
++          (SourcePruningEnumerationNativeLanguage.handles (SourceEqualityPCSGuard.holds formulas solver)
++            ambient afterCaller.checked.native.machine.heap) residualMeaning assignment after.core ↔
++        Satisfies
++          (SourcePruningEnumerationNativeLanguage.handles (SourceEqualityPCSGuard.holds formulas solver)
++            ambient beforeCaller.checked.native.machine.heap) residualMeaning assignment before.core ∧
++          InternedGuardedLanguage.meaning (SourceEqualityPCSGuard.holds formulas solver)
++            ambient incoming (assignment target) ∧
++          ∀ sc ∈ incomingScs, EnumerationState.Suspended.Holds assignment (assignment target) sc) ∧
++      ∀ (ambient : InternedGuardedLanguage.Env Symbol)
++        (residualMeaning : Constraint → Language.Term Symbol → Prop)
++        (assignment : Nat → Language.Term Symbol),
++        (∃ output : EnumerationState.State Symbol Constraint,
++          Except.ok ((), output) ∈
++            (if replacement = .empty then [] else [.ok ((), after.core)] : Raw) ∧
++          Satisfies
++            (SourcePruningEnumerationNativeLanguage.handles (SourceEqualityPCSGuard.holds formulas solver)
++              ambient afterCaller.checked.native.machine.heap) residualMeaning assignment output) ↔
++        Satisfies
++          (SourcePruningEnumerationNativeLanguage.handles (SourceEqualityPCSGuard.holds formulas solver)
++            ambient beforeCaller.checked.native.machine.heap) residualMeaning assignment before.core ∧
++          InternedGuardedLanguage.meaning (SourceEqualityPCSGuard.holds formulas solver)
++            ambient incoming (assignment target) ∧
++          ∀ sc ∈ incomingScs, EnumerationState.Suspended.Holds assignment (assignment target) sc := by
++  obtain ⟨r, n, p, h, k, oldNode, oldScs, read, afterCaller, savedQueries, final, next,
++    replacement, handle, after, reading, frame, originalRun, writePrefix, afterSame, afterStored,
++    afterStorage, afterRealized, post, querySame, unfolding, replacementAvailable,
++    replacementClosed, encoded, decoded, cacheRun, adapted, wrapperRun, afterCounter,
++    afterRepresentatives, afterPaths, afterCounts, waiting, flagsAfter, expandableAfter,
++    optional, present⟩ :=
++      complete formulas solver inventory beforeCaller before checkEmpty target incoming incomingScs
++        memos roots initial storage realized paths counts flags root pending available closed bounded ranges
++  have readSuccess : Success (getValue r target) before.core (.unenumerated oldNode oldScs) read := by
++    have actual := reading 0
++    simp only [Nat.add_zero] at actual
++    rw [Success, actual]
++    exact List.mem_singleton_self _
++  obtain ⟨_, found, _size, beforePath, _, oldStored⟩ :=
++    getValue_frame r target before.core read (.unenumerated oldNode oldScs) storage.total readSuccess
++  obtain ⟨_rootSize, rootPath⟩ := root
++  have foundSame : found = target := (UnionFind.reaches_unique beforePath rootPath).1
++  have beforeStored : before.core.values[target]? = some (.unenumerated oldNode oldScs) := by
++    simpa only [foundSame] using oldStored
++  have readStored : read.values[target]? = some (.unenumerated oldNode oldScs) := by
++    simpa only [frame.values] using beforeStored
++  have logical : ∀ (ambient : InternedGuardedLanguage.Env Symbol)
++      (residualMeaning : Constraint → Language.Term Symbol → Prop)
++      (assignment : Nat → Language.Term Symbol),
++      Satisfies
++        (SourcePruningEnumerationNativeLanguage.handles (SourceEqualityPCSGuard.holds formulas solver)
++          ambient afterCaller.checked.native.machine.heap) residualMeaning assignment after.core ↔
++      Satisfies
++        (SourcePruningEnumerationNativeLanguage.handles (SourceEqualityPCSGuard.holds formulas solver)
++          ambient beforeCaller.checked.native.machine.heap) residualMeaning assignment before.core ∧
++        InternedGuardedLanguage.meaning (SourceEqualityPCSGuard.holds formulas solver)
++          ambient incoming (assignment target) ∧
++        ∀ sc ∈ incomingScs, EnumerationState.Suspended.Holds assignment (assignment target) sc := by
++    intro ambient residualMeaning assignment
++    have replacementMeaning : ∀ term,
++        SourcePruningEnumerationNativeLanguage.handles (SourceEqualityPCSGuard.holds formulas solver)
++          ambient afterCaller.checked.native.machine.heap handle term ↔
++        InternedGuardedLanguage.meaning (SourceEqualityPCSGuard.holds formulas solver) ambient incoming term ∧
++          Fragments.permits
++            (oldNode.map (SourcePruningEnumerationNativeLanguage.handles
++              (SourceEqualityPCSGuard.holds formulas solver) ambient afterCaller.checked.native.machine.heap)) term := by
++      intro term
++      rw [SourcePruningEnumerationNativeLanguage.handles_lookup _ _ _ _ _ _ decoded]
++      cases oldCase : oldNode with
++      | none =>
++          obtain ⟨same, _⟩ := optional oldCase
++          simp only [Option.map_none, Fragments.permits, same, and_true]
++      | some oldHandle =>
++          obtain ⟨old, _queryNode, _queried, oldDecoded, _, _, _, exactMeaning, _⟩ := present oldHandle oldCase
++          have keptDecoded := lookupNode_keeps beforeCaller.checked.native.machine.heap
++            afterCaller.checked.native.machine.heap post.effects.keeps oldHandle old oldDecoded
++          simpa only [oldCase, Option.map_some, Fragments.permits,
++            SourcePruningEnumerationNativeLanguage.handles_lookup _ _ _ _ _ _ keptDecoded] using
++              exactMeaning ambient term
++    have writeMeaning := SourcePruningEnumerationPendingWriteLanguage.pending_write
++      (SourcePruningEnumerationNativeLanguage.handles (SourceEqualityPCSGuard.holds formulas solver)
++        ambient afterCaller.checked.native.machine.heap) residualMeaning assignment read after.core target handle
++      oldNode oldScs incomingScs
++      (InternedGuardedLanguage.meaning (SourceEqualityPCSGuard.holds formulas solver) ambient incoming)
++      readStored (by rw [afterSame]) (by rw [afterSame]) (by rw [afterSame]) replacementMeaning
++    have readMeaning := SourcePruningEnumerationNativeLanguage.satisfies_keeps_frame
++      (SourceEqualityPCSGuard.holds formulas solver) ambient beforeCaller.checked.native.machine.heap
++      afterCaller.checked.native.machine.heap before.core read residualMeaning assignment realized frame post.effects.keeps
++    exact writeMeaning.trans (and_congr_left fun _ => readMeaning)
++  refine ⟨r, n, p, h, k, oldNode, oldScs, read, afterCaller, savedQueries, final, next,
++    replacement, handle, after, reading, frame, originalRun, writePrefix, afterSame, afterStored,
++    afterStorage, afterRealized, post, querySame, unfolding, replacementAvailable,
++    replacementClosed, encoded, decoded, cacheRun, adapted, wrapperRun, afterCounter,
++    afterRepresentatives, afterPaths, afterCounts, waiting, flagsAfter, expandableAfter,
++    optional, present, logical, ?_⟩
++  intro ambient residualMeaning assignment
++  have replacementHolds
++      (satisfied : Satisfies
++        (SourcePruningEnumerationNativeLanguage.handles (SourceEqualityPCSGuard.holds formulas solver)
++          ambient afterCaller.checked.native.machine.heap) residualMeaning assignment after.core) :
++      InternedGuardedLanguage.meaning (SourceEqualityPCSGuard.holds formulas solver)
++        ambient replacement (assignment target) := by
++    have atSlot := satisfied.1.2 target
++    change Fragments.slotSatisfies assignment target
++      (slot (SourcePruningEnumerationNativeLanguage.handles (SourceEqualityPCSGuard.holds formulas solver)
++        ambient afterCaller.checked.native.machine.heap)
++          ((after.core.values[target]?).getD .eliminated)) at atSlot
++    rw [afterStored] at atSlot
++    change (SourcePruningEnumerationNativeLanguage.handles (SourceEqualityPCSGuard.holds formulas solver)
++      ambient afterCaller.checked.native.machine.heap handle (assignment target) ∧ _) at atSlot
++    exact (SourcePruningEnumerationNativeLanguage.handles_lookup _ _ _ _ _ _ decoded).mp atSlot.1
++  have rawLogical :
++      (∃ output : EnumerationState.State Symbol Constraint,
++        Except.ok ((), output) ∈
++          (if replacement = .empty then [] else [.ok ((), after.core)] : Raw) ∧
++        Satisfies
++          (SourcePruningEnumerationNativeLanguage.handles (SourceEqualityPCSGuard.holds formulas solver)
++            ambient afterCaller.checked.native.machine.heap) residualMeaning assignment output) ↔
++      Satisfies
++        (SourcePruningEnumerationNativeLanguage.handles (SourceEqualityPCSGuard.holds formulas solver)
++          ambient afterCaller.checked.native.machine.heap) residualMeaning assignment after.core := by
++    by_cases empty : replacement = .empty
++    · constructor
++      · rintro ⟨output, member, _satisfied⟩
++        simp only [ite_eq_left empty, List.not_mem_nil] at member
++      · intro satisfied
++        have impossible := replacementHolds satisfied
++        rw [empty, InternedGuardedLanguage.meaning] at impossible
++        exact False.elim impossible
++    · rw [ite_eq_right empty]
++      constructor
++      · rintro ⟨output, member, satisfied⟩
++        have pairSame : ((), output) = ((), after.core) := Except.ok.inj (List.mem_singleton.mp member)
++        have outputSame : output = after.core := congrArg Prod.snd pairSame
++        simpa only [outputSame] using satisfied
++      · intro satisfied
++        exact ⟨after.core, List.mem_singleton_self _, satisfied⟩
++  exact rawLogical.trans (logical ambient residualMeaning assignment)
++
++end MicroCFTA.SourcePruningEnumerationIncomingCacheAdapter
+diff --git a/lean/MicroCFTA/SourcePruningEnumerationDispatchLanguage.lean b/lean/MicroCFTA/SourcePruningEnumerationDispatchLanguage.lean
+new file mode 100644
+index 000000000..db435bf5c
+--- /dev/null
++++ b/lean/MicroCFTA/SourcePruningEnumerationDispatchLanguage.lean
+@@ -0,0 +1,231 @@
++import MicroCFTA.SourcePruningEnumerationDispatch
++import MicroCFTA.SourcePruningEnumerationNativeLanguage
++import MicroCFTA.SourcePruningEnumerationAssimilationLanguage
++
++/-!
++# Assignment meaning of the actual pending-slot dispatcher
++
++The original producer runs once. Its full receipt remains available.
++The semantic clause requires the original forest to equate source and target.
++The Empty branch rejects every complete assignment. A nonempty branch retains it.
++-/
++namespace MicroCFTA.SourcePruningEnumerationDispatch
++open EnumerationState EnumerationCorrectness
++open InternedConstructorTemplates InternedProbeProvenance
++open SourcePruningEnumerationNodes SourcePruningEnumerationObservation
++open SourceCurrentAllocatedNativeInventoryState (Inventory)
++open SourceCurrentAllocatedPartialInvariant (Context Post)
++open SourceCurrentAllocatedNativeEffects (physical)
++local notation "Symbol" => SourcePruningTemplates.Symbol
++local notation "Constraint" => SourceSymbolicIndex.Constraint FullSyntax.Formula
++local notation "Node" => InternedConstructorTemplates.Value Symbol Constraint
++local notation "Checked" => SourceEqualityNativeDemand.State
++local notation "Caller" => SourceCurrentAllocatedPartialState.State
++local notation "Memos" => EndpointMemoGateTrace.Memos
++local notation "Queries" => SourceEndpointMemo.Memos
++variable {EnumGuard : Type} {width : Nat}
++
++/-- Retain every dispatcher receipt and interpret its actual branch list under the original class equality. -/
++theorem dispatch_complete_semantics
++    [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Constraint)] [DecidableEq Node]
++    (formulas : SourceGuards.Formulas FullSyntax.Formula)
++    (solver : SourceGuards.Entailment FullSyntax.Formula)
++    (inventory : Inventory) (beforeCaller : Caller width)
++    (before : EnumerationState.State Symbol EnumGuard)
++    (checkEmpty : Bool) (source target : Nat) (memos : Memos)
++    (initial : Context formulas solver inventory beforeCaller memos)
++    (realized : PendingRealized beforeCaller.checked.native.machine.heap before)
++    (slots : source = target ∨ before.values[source]? = some .eliminated ∨
++      ∃ (sourceNode targetNode : Option Nat) (sourceScs targetScs : List EnumerationState.Suspended),
++        before.values[source]? = some (.unenumerated sourceNode sourceScs) ∧
++        before.values[target]? = some (.unenumerated targetNode targetScs))
++    (ranges : if source = target then True else
++      match before.values[source]?, before.values[target]? with
++      | some (.unenumerated (some left) _), some (.unenumerated (some right) _) =>
++          match lookupNode beforeCaller.checked.native.machine.heap left,
++              lookupNode beforeCaller.checked.native.machine.heap right with
++          | some first, some second => SourceCurrentAllocatedNativeRequestBounds.WordRanges
++              (.code (SourceRecursiveIntersectionCode.requestNode IntersectionEmptyDomain.emptyDomain first second))
++              beforeCaller.checked
++          | _, _ => True
++      | _, _ => True) :
++    ∃ (fuel p h : Nat) (action : EnumerateM Symbol EnumGuard Unit)
++      (afterCaller : Caller width) (savedQueries : Queries) (final : Memos) (next : Inventory),
++      (∀ extra P H, p ≤ P → h ≤ H →
++        dispatch checkEmpty (fuel + extra) P H beforeCaller before source target memos.query =
++          (.ok (some action), afterCaller, savedQueries)) ∧
++      Post formulas solver next beforeCaller afterCaller final ∧ final.query = savedQueries ∧
++      PendingRealized afterCaller.checked.native.machine.heap before ∧
++      ((source = target ∨ before.values[source]? = some .eliminated) →
++        ExceptT.run (action before) = [.ok ((), before)] ∧
++        afterCaller = beforeCaller ∧ final = memos ∧ next = inventory) ∧
++      (source ≠ target → before.values[source]? ≠ some .eliminated →
++        ∃ (sourceNode targetNode merged : Option Nat) (sourceScs targetScs : List EnumerationState.Suspended),
++          before.values[source]? = some (.unenumerated sourceNode sourceScs) ∧
++          before.values[target]? = some (.unenumerated targetNode targetScs) ∧
++          ExceptT.run (action before) =
++            (if merged = some 0 then [] else
++              [.ok ((), assimilated before target source (.unenumerated merged (sourceScs ++ targetScs)))]) ∧
++          (merged ≠ some 0 →
++            (assimilated before target source (.unenumerated merged (sourceScs ++ targetScs))).values[target]? =
++              some (.unenumerated merged (sourceScs ++ targetScs)) ∧
++            (assimilated before target source (.unenumerated merged (sourceScs ++ targetScs))).values[source]? =
++              some .eliminated ∧
++            PendingRealized afterCaller.checked.native.machine.heap
++              (assimilated before target source (.unenumerated merged (sourceScs ++ targetScs)))) ∧
++          ((sourceNode = none ∨ targetNode = none) →
++            merged = sourceNode.orElse (fun _ => targetNode) ∧
++            afterCaller = beforeCaller ∧ final = memos ∧ next = inventory) ∧
++          (∀ leftHandle rightHandle, sourceNode = some leftHandle → targetNode = some rightHandle →
++            ∃ (left right query replacement : Node) (queried : Checked width) (handle : Nat),
++              lookupNode beforeCaller.checked.native.machine.heap leftHandle = some left ∧
++              lookupNode beforeCaller.checked.native.machine.heap rightHandle = some right ∧
++              next.source = beforeCaller.checked.native.machine.heap ∧ next.roots = inventory.roots ++ [left, right] ∧
++              SourceCurrentAllocatedTargetQuery.Receipt formulas solver next left right
++                beforeCaller.checked query queried memos ∧
++              merged = some handle ∧ encodeNode replacement = some handle ∧
++              lookupNode afterCaller.checked.native.machine.heap handle = some replacement ∧
++              Available afterCaller.checked.native.machine.heap replacement ∧ replacement.free = [] ∧
++              (∀ ambient term,
++                InternedGuardedLanguage.meaning (SourceEqualityPCSGuard.holds formulas solver) ambient replacement term ↔
++                  InternedGuardedLanguage.meaning (SourceEqualityPCSGuard.holds formulas solver) ambient left term ∧
++                  InternedGuardedLanguage.meaning (SourceEqualityPCSGuard.holds formulas solver) ambient right term) ∧
++              (checkEmpty = false → replacement = query ∧
++                afterCaller = SourceCurrentAllocatedPartialState.advance beforeCaller queried
++                  beforeCaller.fourth beforeCaller.merge ∧ final = memos) ∧
++              (checkEmpty = true → ∃ reached answer guardSaved,
++                SourceEndpointMemo.run query memos.query = (reached, guardSaved) ∧
++                SourceEndpointMemoCorrect.Checked queried.native.machine.heap memos.query
++                  (SourceCurrentEmptinessMerge.reaches query) (reached, guardSaved) ∧
++                (∀ P H, p ≤ P → h ≤ H →
++                  SourcePruningEnumerationEnabledEmpty.check P H query queried beforeCaller.fourth memos.query =
++                    (.done answer afterCaller.checked afterCaller.fourth, guardSaved)) ∧
++                savedQueries = guardSaved ∧ replacement = (if answer then .empty else query) ∧
++                (reached = false → answer = false ∧ afterCaller.checked = queried ∧
++                  afterCaller.fourth = beforeCaller.fourth ∧ final = {memos with query := guardSaved}) ∧
++                (reached = true →
++                  ∃ (reachedPhysical : SourceCurrentConjunctionRowsAllocation.State Symbol FullSyntax.Formula),
++                    afterCaller.checked = SourceCurrentAllocatedQueryMemo.advancePhysical queried reachedPhysical ∧
++                    ∃ actual : SourceCurrentConjunctionMemo.Call 1000 beforeCaller.fourth query
++                        (physical queried) answer reachedPhysical afterCaller.fourth,
++                      SourceCurrentConjunctionGlobalMemos.CallReads actual {memos with query := guardSaved} final)))) ∧
++      ∀ (ambient : InternedGuardedLanguage.Env Symbol)
++        (residualMeaning : EnumGuard → Language.Term Symbol → Prop)
++        (assignment : Nat → Language.Term Symbol),
++        UnionFind.SameClass before.representatives source target →
++          ((∃ after : EnumerationState.State Symbol EnumGuard,
++            Except.ok ((), after) ∈ ExceptT.run (action before) ∧
++            Satisfies
++              (SourcePruningEnumerationNativeLanguage.handles (SourceEqualityPCSGuard.holds formulas solver)
++                ambient afterCaller.checked.native.machine.heap) residualMeaning assignment after) ↔
++          Satisfies
++            (SourcePruningEnumerationNativeLanguage.handles (SourceEqualityPCSGuard.holds formulas solver)
++              ambient beforeCaller.checked.native.machine.heap) residualMeaning assignment before) := by
++  obtain ⟨fuel, p, h, action, afterCaller, savedQueries, final, next,
++    running, post, querySame, afterRealized, noop, live⟩ :=
++      dispatch_complete formulas solver inventory beforeCaller before checkEmpty source target memos
++        initial realized slots ranges
++  refine ⟨fuel, p, h, action, afterCaller, savedQueries, final, next,
++    running, post, querySame, afterRealized, noop, live, ?_⟩
++  intro ambient residualMeaning assignment sameClass
++  by_cases noWork : source = target ∨ before.values[source]? = some .eliminated
++  · obtain ⟨raw, callerSame, _finalSame, _nextSame⟩ := noop noWork
++    rw [raw, callerSame]
++    constructor
++    · rintro ⟨after, member, satisfied⟩
++      have pairSame : ((), after) = ((), before) := Except.ok.inj (List.mem_singleton.mp member)
++      have afterSame : after = before := congrArg Prod.snd pairSame
++      simpa only [afterSame] using satisfied
++    · intro satisfied
++      exact ⟨before, List.mem_singleton_self _, satisfied⟩
++  · have different : source ≠ target := fun same => noWork (.inl same)
++    have notEliminated : before.values[source]? ≠ some .eliminated := fun same => noWork (.inr same)
++    obtain ⟨sourceNode, targetNode, merged, sourceScs, targetScs,
++      sourceStored, targetStored, actionRaw, _survives, optional, present⟩ := live different notEliminated
++    let language : NodeLanguage Symbol :=
++      SourcePruningEnumerationNativeLanguage.handles (SourceEqualityPCSGuard.holds formulas solver)
++        ambient afterCaller.checked.native.machine.heap
++    have replacementPermits : ∀ term,
++        Fragments.permits (merged.map language) term ↔
++          Fragments.permits (sourceNode.map language) term ∧
++          Fragments.permits (targetNode.map language) term := by
++      intro term
++      cases sourceNode with
++      | none =>
++          obtain ⟨carried, _callerSame, _finalSame, _nextSame⟩ := optional (.inl rfl)
++          simp only [Option.orElse_none] at carried
++          simp only [carried, Option.map_none, Fragments.permits, true_and]
++      | some leftHandle =>
++          cases targetNode with
++          | none =>
++              obtain ⟨carried, _callerSame, _finalSame, _nextSame⟩ := optional (.inr rfl)
++              simp only [Option.orElse_some] at carried
++              simp only [carried, Option.map_none, Fragments.permits, and_true]
++          | some rightHandle =>
++              obtain ⟨left, right, _queryNode, replacement, _queried, handle,
++                leftDecoded, rightDecoded, _nextSource, _nextRoots, _receipt,
++                mergedSame, _encoded, decoded, _available, _closed, exactMeaning,
++                _disabled, _enabled⟩ := present leftHandle rightHandle rfl rfl
++              have leftKept := lookupNode_keeps beforeCaller.checked.native.machine.heap
++                afterCaller.checked.native.machine.heap post.effects.keeps leftHandle left leftDecoded
++              have rightKept := lookupNode_keeps beforeCaller.checked.native.machine.heap
++                afterCaller.checked.native.machine.heap post.effects.keeps rightHandle right rightDecoded
++              simpa only [mergedSame, Option.map_some, Fragments.permits, language,
++                SourcePruningEnumerationNativeLanguage.handles_lookup _ _ _ _ _ _ decoded,
++                SourcePruningEnumerationNativeLanguage.handles_lookup _ _ _ _ _ _ leftKept,
++                SourcePruningEnumerationNativeLanguage.handles_lookup _ _ _ _ _ _ rightKept] using
++                  exactMeaning ambient term
++    have logical := SourcePruningEnumerationAssimilationLanguage.assimilated_semantics
++      language residualMeaning assignment before source target sourceNode targetNode merged
++      sourceScs targetScs sourceStored targetStored different sameClass replacementPermits
++    have oldMeaning := SourcePruningEnumerationNativeLanguage.satisfies_keeps
++      (SourceEqualityPCSGuard.holds formulas solver) ambient beforeCaller.checked.native.machine.heap
++      afterCaller.checked.native.machine.heap before residualMeaning assignment realized post.effects.keeps
++    have targetInside : target < before.values.length := (List.getElem?_eq_some_iff.mp targetStored).1
++    have targetWritten :
++        (assimilated before target source (.unenumerated merged (sourceScs ++ targetScs))).values[target]? =
++          some (.unenumerated merged (sourceScs ++ targetScs)) := by
++      simpa only [assimilated, List.getElem?_set_ne different] using
++        (List.getElem?_set_self (a := UVarValue.unenumerated merged (sourceScs ++ targetScs)) targetInside)
++    have rawLogical :
++        (∃ after : EnumerationState.State Symbol EnumGuard,
++          Except.ok ((), after) ∈ ExceptT.run (action before) ∧
++          Satisfies language residualMeaning assignment after) ↔
++        Satisfies language residualMeaning assignment
++          (assimilated before target source (.unenumerated merged (sourceScs ++ targetScs))) := by
++      rw [actionRaw]
++      by_cases empty : merged = some 0
++      · constructor
++        · rintro ⟨after, member, _satisfied⟩
++          simp only [ite_eq_left empty, List.not_mem_nil] at member
++        · intro satisfied
++          have atSlot := satisfied.1.2 target
++          change Fragments.slotSatisfies assignment target
++            (slot language
++              (((assimilated before target source
++                (.unenumerated merged (sourceScs ++ targetScs))).values[target]?).getD .eliminated)) at atSlot
++          rw [targetWritten] at atSlot
++          change (Fragments.permits (merged.map language) (assignment target) ∧ _) at atSlot
++          have holdsZero : language 0 (assignment target) := by
++            simpa only [empty, Option.map_some, Fragments.permits] using atSlot.1
++          have impossible :=
++            (SourcePruningEnumerationNativeLanguage.handles_lookup
++              (SourceEqualityPCSGuard.holds formulas solver) ambient
++              afterCaller.checked.native.machine.heap 0 .empty (assignment target) rfl).mp holdsZero
++          rw [InternedGuardedLanguage.meaning] at impossible
++          exact False.elim impossible
++      · rw [ite_eq_right empty]
++        constructor
++        · rintro ⟨after, member, satisfied⟩
++          have pairSame : ((), after) = ((), assimilated before target source
++              (.unenumerated merged (sourceScs ++ targetScs))) :=
++            Except.ok.inj (List.mem_singleton.mp member)
++          have afterSame : after = assimilated before target source
++              (.unenumerated merged (sourceScs ++ targetScs)) := congrArg Prod.snd pairSame
++          simpa only [afterSame] using satisfied
++        · intro satisfied
++          exact ⟨assimilated before target source (.unenumerated merged (sourceScs ++ targetScs)),
++            List.mem_singleton_self _, satisfied⟩
++    exact rawLogical.trans (logical.trans oldMeaning)
++
++end MicroCFTA.SourcePruningEnumerationDispatch
+diff --git a/lean/MicroCFTA/SourcePruningEnumerationDispatchObservedLanguage.lean b/lean/MicroCFTA/SourcePruningEnumerationDispatchObservedLanguage.lean
+new file mode 100644
+index 000000000..2ab8b6536
+--- /dev/null
++++ b/lean/MicroCFTA/SourcePruningEnumerationDispatchObservedLanguage.lean
+@@ -0,0 +1,76 @@
++import MicroCFTA.SourcePruningEnumerationDispatchLanguage
++import MicroCFTA.SourcePruningEnumerationDispatchUnique
++
++/-! The actual successful observation retains the canonical native and assignment receipts. -/
++namespace MicroCFTA.SourcePruningEnumerationDispatch
++open EnumerationState EnumerationCorrectness InternedConstructorTemplates InternedProbeProvenance
++open SourcePruningEnumerationNodes SourcePruningEnumerationObservation
++open SourceCurrentAllocatedNativeInventoryState (Inventory)
++open SourceCurrentAllocatedPartialInvariant (Context Post)
++local notation "Symbol" => SourcePruningTemplates.Symbol
++local notation "Constraint" => SourceSymbolicIndex.Constraint FullSyntax.Formula
++local notation "Node" => InternedConstructorTemplates.Value Symbol Constraint
++local notation "Caller" => SourceCurrentAllocatedPartialState.State
++local notation "Memos" => EndpointMemoGateTrace.Memos
++local notation "Queries" => SourceEndpointMemo.Memos
++variable {EnumGuard : Type} {width : Nat}
++
++/-- Transport one canonical semantic receipt to the same actual successful dispatcher observation. -/
++theorem observed_semantics
++    [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Constraint)] [DecidableEq Node]
++    (formulas : SourceGuards.Formulas FullSyntax.Formula)
++    (solver : SourceGuards.Entailment FullSyntax.Formula)
++    (inventory : Inventory) (beforeCaller : Caller width)
++    (before : EnumerationState.State Symbol EnumGuard)
++    (checkEmpty : Bool) (source target : Nat) (memos : Memos)
++    (initial : Context formulas solver inventory beforeCaller memos)
++    (realized : PendingRealized beforeCaller.checked.native.machine.heap before)
++    (slots : source = target ∨ before.values[source]? = some .eliminated ∨
++      ∃ (sourceNode targetNode : Option Nat) (sourceScs targetScs : List EnumerationState.Suspended),
++        before.values[source]? = some (.unenumerated sourceNode sourceScs) ∧
++        before.values[target]? = some (.unenumerated targetNode targetScs))
++    (ranges : if source = target then True else
++      match before.values[source]?, before.values[target]? with
++      | some (.unenumerated (some left) _), some (.unenumerated (some right) _) =>
++          match lookupNode beforeCaller.checked.native.machine.heap left,
++              lookupNode beforeCaller.checked.native.machine.heap right with
++          | some first, some second => SourceCurrentAllocatedNativeRequestBounds.WordRanges
++              (.code (SourceRecursiveIntersectionCode.requestNode IntersectionEmptyDomain.emptyDomain first second))
++              beforeCaller.checked
++          | _, _ => True
++      | _, _ => True)
++    {n p h : Nat} {action : EnumerateM Symbol EnumGuard Unit}
++    {reachedCaller : Caller width} {savedQueries : Queries}
++    (observed : dispatch checkEmpty n p h beforeCaller before source target memos.query =
++      (.ok (some action), reachedCaller, savedQueries)) :
++    ∃ (next : Inventory) (final : Memos),
++      Post formulas solver next beforeCaller reachedCaller final ∧ final.query = savedQueries ∧
++      PendingRealized reachedCaller.checked.native.machine.heap before ∧
++      ∀ (ambient : InternedGuardedLanguage.Env Symbol)
++        (residualMeaning : EnumGuard → Language.Term Symbol → Prop)
++        (assignment : Nat → Language.Term Symbol),
++        UnionFind.SameClass before.representatives source target →
++          ((∃ after : EnumerationState.State Symbol EnumGuard,
++            Except.ok ((), after) ∈ ExceptT.run (action before) ∧
++            Satisfies
++              (SourcePruningEnumerationNativeLanguage.handles (SourceEqualityPCSGuard.holds formulas solver)
++                ambient reachedCaller.checked.native.machine.heap) residualMeaning assignment after) ↔
++          Satisfies
++            (SourcePruningEnumerationNativeLanguage.handles (SourceEqualityPCSGuard.holds formulas solver)
++              ambient beforeCaller.checked.native.machine.heap) residualMeaning assignment before) := by
++  obtain ⟨fuel, minimumP, minimumH, canonical, afterCaller, returnedQueries, final, next,
++    stable, post, querySame, afterRealized, _noop, _live, semantic⟩ :=
++      dispatch_complete_semantics formulas solver inventory beforeCaller before checkEmpty source target memos
++        initial realized slots ranges
++  have canonicalObserved : dispatch checkEmpty fuel minimumP minimumH
++      beforeCaller before source target memos.query =
++      (.ok (some canonical), afterCaller, returnedQueries) := by
++    simpa only [Nat.add_zero] using
++      stable 0 minimumP minimumH (Nat.le_refl minimumP) (Nat.le_refl minimumH)
++  obtain ⟨actionsSame, callerSame, queriesSame⟩ := ok_unique checkEmpty observed canonicalObserved
++  have actionSame : action = canonical := Option.some.inj actionsSame
++  subst canonical
++  subst afterCaller
++  exact ⟨next, final, post, querySame.trans queriesSame.symm, afterRealized, semantic⟩
++
++end MicroCFTA.SourcePruningEnumerationDispatch
