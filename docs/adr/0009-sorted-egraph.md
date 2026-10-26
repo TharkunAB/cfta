@@ -49,8 +49,11 @@ default).
 - On the same e-graphs, the engine allocates less than half of what hegg 0.6
   does, in about half its time, on AC sums of 8 to 10 variables saturated.
   On hegg's own math rules, which need conditions and constant folding, it
-  builds the same e-graphs as hegg in the first iterations, and allocates
-  less at every size.
+  builds the same e-graphs as hegg in the first iterations, allocates less at
+  every size, and takes 0.64 s against 1.80 s on the largest case. The
+  analysis there propagates a change through the e-nodes that use the
+  e-class, as egg does; recomputing the whole e-class took three times as
+  long.
 
 ## Consequences
 
