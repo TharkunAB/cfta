@@ -1,0 +1,31 @@
+2026-10-26 10:19 CET
+Draft: SourcePruningEnumerationNativeBranchBoundedResources.lean
+SHA256 5778912b55b5d2a2e9d85de266d2952f5900ec62c4a8c8faf1ec03a469b8ffd7
+
+Exact live source inputs read
+CapturedEdgeScalarBounds ab2d0503d0a10ef291d4f4b9c38d01633195d5b6a9bbe0e35c691567918cebe5
+NativeBranchResources c2e39a5adde1673ebc7277e21fd5261cb2d1533026a2634a4f673fe48309d93c
+
+The pure HeadCacheBounds predicate retains bounds for complete/rejected caches
+and every actual Some stopped candidate. It claims no cache for unhandled.
+The counter ceiling is C+T+A. The mass ceiling is B+A*(L+T), with C and B from
+the captured input, L=scs.length, A the original arity ceiling, and T the original
+projection-width ceiling. Duplicate buckets remain counted by the actual mass.
+
+observed_head_cache_bounds consumes a literal actual CapturedEdge.run receipt,
+edge.children.length<=A and an upper bound for every actual projected tries list.
+False arity returns the original cache. Projection None returns unhandled.
+Supported projection uses CapturedEdge.observed_scalar_bounds and monotonicity
+of addition and multiplication. It adds no root, safety, future cache or native
+Post assumption.
+
+head_complete_cache_bounds keeps all original head_complete_resources inputs
+in their original order, followed by A/T and the two original edge-width bounds.
+The entire original existential output was compared as source text and remains
+byte-for-byte unchanged before the appended HeadCacheBounds conjunction.
+The proof calls head_complete_resources exactly once. It derives the new property
+from running 0 0 p h 0 at the same produced receipt and does not rerun a producer.
+For a completed receipt, HeadCacheBounds reduces directly to its two cache bounds.
+
+This is a /tmp proof draft. No Lean builds, repository edits, Git or network
+operations were performed. The existing runtime and H6 scope remain unchanged.

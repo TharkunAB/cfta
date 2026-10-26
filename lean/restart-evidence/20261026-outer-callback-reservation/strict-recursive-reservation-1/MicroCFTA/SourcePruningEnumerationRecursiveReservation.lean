@@ -1,0 +1,220 @@
+import MicroCFTA.SourcePruningEnumerationMassForecast
+import MicroCFTA.SourcePruningEnumerationNativeBranchBoundedResources
+
+/-!
+# Original reservations for one edge and its recursive callback
+
+The edge uses the current scheduled seed. Its actual cache mass is bounded
+by the captured mass and original inherited bucket length. The callback
+then pays for narrowing and one recursive expansion. The next sibling uses
+the resulting seed and the same captured mass and inherited length bounds.
+-/
+namespace MicroCFTA.SourcePruningEnumerationRecursiveReservation
+open EnumerationState InternedConstructorTemplates InternedProbeProvenance
+open SourceCurrentAllocatedNativeResourceForecast (Le Room)
+open SourceCurrentConstrainedCapGeneratedQueryResources (Fits)
+open SourcePruningEnumerationIncomingReservation (Seed)
+local notation "Symbol" => SourcePruningTemplates.Symbol
+local notation "Constraint" => SourceSymbolicIndex.Constraint FullSyntax.Formula
+local notation "Node" => Value Symbol Constraint
+local notation "Core" => EnumerationState.State Symbol Constraint
+local notation "Cached" => EnumerationExpandableIndex.Cached Symbol Constraint
+local notation "Caller" => SourceCurrentAllocatedPartialState.State
+local notation "Memos" => EndpointMemoGateTrace.Memos
+local notation "Metadata" => SourcePruningRecordTypes.Metadata
+local notation "Heap" => SourceEqualityAnnotationHeap.Heap
+local notation "scalar" => SourceCurrentConstrainedCapTargetForecast.scalar
+local notation "guardWidth" => SourcePruningEnumerationGuardWidth.width
+local notation "headProfile" => SourceCurrentConstrainedCapEditForecast.headProfile
+local notation "advance" => SourcePruningEnumerationIncomingReservation.advance
+local notation "suspendedBound" => SourcePruningEnumerationPrefixAdmission.suspendedBound
+
+/-- The current seed bounds one original edge's complete mixed-query cost. -/
+noncomputable def edgeCount (seed : Seed) (inherited : Nat) : Nat :=
+  scalar seed.2 * (inherited + guardWidth seed.1 + 1)
+
+/-- The edge phase precedes the callback phase. -/
+noncomputable def afterHead (seed : Seed) (inherited : Nat) : Seed :=
+  advance seed (edgeCount seed inherited)
+
+/-- Each sibling starts from the same captured mass and inherited bucket. -/
+noncomputable def massCeil (seed : Seed) (capturedMass inherited : Nat) : Nat :=
+  capturedMass + scalar seed.2 * (inherited + guardWidth seed.1)
+
+/-- The callback's depth-one scan is bounded before its actual cache exists. -/
+noncomputable def callbackCount (seed : Seed) (capturedMass inherited : Nat) : Nat :=
+  SourcePruningEnumerationOriginalForecast.count ((afterHead seed inherited).1, headProfile (afterHead seed inherited).2)
+    (massCeil seed capturedMass inherited)
+
+/-- Narrowing changes the profile before the callback's mixed-query schedule. -/
+noncomputable def afterHook (seed : Seed) (capturedMass inherited : Nat) : Seed :=
+  advance ((afterHead seed inherited).1, headProfile (afterHead seed inherited).2) (callbackCount seed capturedMass inherited)
+
+/-- Current reservations cover the edge and the subsequent callback separately. -/
+def Reserved (bits : Nat) (seed : Seed) (capturedMass inherited : Nat) : Prop :=
+  SourcePruningEnumerationIncomingReservation.Reserved bits seed (edgeCount seed inherited) ∧
+    SourcePruningEnumerationIncomingReservation.Reserved bits ((afterHead seed inherited).1, headProfile (afterHead seed inherited).2)
+      (callbackCount seed capturedMass inherited)
+
+/-- A longer inherited bound retains the current edge-count bound. -/
+theorem edgeCount_mono (seed : Seed) {first last : Nat} (lengths : first ≤ last) :
+    edgeCount seed first ≤ edgeCount seed last :=
+  Nat.mul_le_mul_left _ (Nat.add_le_add_right (Nat.add_le_add_right lengths _) 1)
+
+/-- Larger original scalar inputs retain the receipt mass ceiling at the same seed. -/
+theorem massCeil_mono (seed : Seed) {firstMass lastMass firstLength lastLength : Nat}
+    (masses : firstMass ≤ lastMass) (lengths : firstLength ≤ lastLength) :
+    massCeil seed firstMass firstLength ≤ massCeil seed lastMass lastLength :=
+  Nat.add_le_add masses (Nat.mul_le_mul_left _ (Nat.add_le_add_right lengths _))
+
+/-- The edge phase retains every original numeric and guard bound. -/
+theorem afterHead_ge (seed : Seed) (inherited : Nat) :
+    Le seed.2 (afterHead seed inherited).2 ∧ seed.1 ⊆ (afterHead seed inherited).1 :=
+  ⟨SourcePruningEnumerationIncomingReservation.advance_profile_ge seed (edgeCount seed inherited),
+    SourcePruningEnumerationIncomingReservation.advance_alphabet_ge seed (edgeCount seed inherited)⟩
+
+/-- The callback phase retains the full edge-phase bounds. -/
+theorem afterHead_le_afterHook (seed : Seed) (capturedMass inherited : Nat) :
+    Le (afterHead seed inherited).2 (afterHook seed capturedMass inherited).2 ∧
+      (afterHead seed inherited).1 ⊆ (afterHook seed capturedMass inherited).1 :=
+  ⟨(SourceCurrentConstrainedCapEditForecast.headProfile_ge (afterHead seed inherited).2).trans
+      (SourcePruningEnumerationIncomingReservation.advance_profile_ge
+        ((afterHead seed inherited).1, headProfile (afterHead seed inherited).2) (callbackCount seed capturedMass inherited)),
+    SourcePruningEnumerationIncomingReservation.advance_alphabet_ge
+      ((afterHead seed inherited).1, headProfile (afterHead seed inherited).2) (callbackCount seed capturedMass inherited)⟩
+
+/-- A completed stage retains every earlier bound for a stopped path or the next sibling. -/
+theorem afterHook_ge (seed : Seed) (capturedMass inherited : Nat) :
+    Le seed.2 (afterHook seed capturedMass inherited).2 ∧
+      seed.1 ⊆ (afterHook seed capturedMass inherited).1 :=
+  ⟨(afterHead_ge seed inherited).1.trans (afterHead_le_afterHook seed capturedMass inherited).1,
+    fun _ member => (afterHead_le_afterHook seed capturedMass inherited).2
+      ((afterHead_ge seed inherited).2 member)⟩
+
+/-- An actual shorter edge schedule fits the planned edge endpoint. -/
+theorem head_padding (seed : Seed) (inherited actualCost : Nat)
+    (bounded : actualCost ≤ edgeCount seed inherited) :
+    Le (advance seed actualCost).2 (afterHead seed inherited).2 ∧
+      (advance seed actualCost).1 ⊆ (afterHead seed inherited).1 :=
+  ⟨SourcePruningEnumerationIncomingReservation.advance_count_profile_mono seed bounded,
+    SourcePruningEnumerationIncomingReservation.advance_count_alphabet_mono seed bounded⟩
+
+/-- A mass bound at the actual receipt bounds its depth-one callback count. -/
+theorem callback_count_le (seed : Seed) (capturedMass inherited : Nat) (receipt : Core)
+    (bounded : suspendedBound receipt ≤ massCeil seed capturedMass inherited) :
+    SourcePruningEnumerationExpansionAdmission.count (afterHead seed inherited) receipt ≤
+      callbackCount seed capturedMass inherited := by
+  change SourcePruningEnumerationOriginalForecast.count
+      ((afterHead seed inherited).1, headProfile (afterHead seed inherited).2) (suspendedBound receipt) ≤
+    SourcePruningEnumerationOriginalForecast.count
+      ((afterHead seed inherited).1, headProfile (afterHead seed inherited).2) (massCeil seed capturedMass inherited)
+  exact SourcePruningEnumerationOriginalForecast.count_mono _ bounded
+
+/-- A shorter callback schedule fits the same planned callback endpoint. -/
+theorem callback_padding (seed : Seed) (capturedMass inherited actualCost : Nat)
+    (bounded : actualCost ≤ callbackCount seed capturedMass inherited) :
+    Le (advance ((afterHead seed inherited).1, headProfile (afterHead seed inherited).2) actualCost).2
+        (afterHook seed capturedMass inherited).2 ∧
+      (advance ((afterHead seed inherited).1, headProfile (afterHead seed inherited).2) actualCost).1 ⊆
+        (afterHook seed capturedMass inherited).1 :=
+  ⟨SourcePruningEnumerationIncomingReservation.advance_count_profile_mono
+      ((afterHead seed inherited).1, headProfile (afterHead seed inherited).2) bounded,
+    SourcePruningEnumerationIncomingReservation.advance_count_alphabet_mono
+      ((afterHead seed inherited).1, headProfile (afterHead seed inherited).2) bounded⟩
+
+/-- The planned edge reservation covers its actual smaller cost. -/
+theorem Reserved.edge {bits inherited capturedMass actualCost : Nat} {seed : Seed}
+    (reserved : Reserved bits seed capturedMass inherited)
+    (bounded : actualCost ≤ edgeCount seed inherited) :
+    SourcePruningEnumerationIncomingReservation.Reserved bits seed actualCost :=
+  reserved.1.prefix bounded
+
+/-- The original pair of reservations covers the actual receipt's callback. -/
+theorem Reserved.callback {bits inherited capturedMass : Nat} {seed : Seed}
+    (reserved : Reserved bits seed capturedMass inherited) (receipt : Core)
+    (bounded : suspendedBound receipt ≤ massCeil seed capturedMass inherited) :
+    SourcePruningEnumerationIncomingReservation.Reserved bits ((afterHead seed inherited).1, headProfile (afterHead seed inherited).2)
+      (SourcePruningEnumerationExpansionAdmission.count (afterHead seed inherited) receipt) :=
+  reserved.2.prefix (callback_count_le seed capturedMass inherited receipt bounded)
+
+/-- Room at the original final forecast supplies both phase reservations. -/
+theorem reserved_of_final_room (bits : Nat) (seed : Seed) (capturedMass inherited : Nat)
+    (room : Room bits (afterHook seed capturedMass inherited).2) :
+    Reserved bits seed capturedMass inherited :=
+  ⟨SourcePruningEnumerationIncomingReservation.reserved_of_final_room bits seed
+      (edgeCount seed inherited) (room.mono (afterHead_le_afterHook seed capturedMass inherited).1),
+    SourcePruningEnumerationIncomingReservation.reserved_of_final_room bits
+      ((afterHead seed inherited).1, headProfile (afterHead seed inherited).2) (callbackCount seed capturedMass inherited) room⟩
+
+/-- The original finite forecast computes a mathematical width for both phases. -/
+theorem reserved_computed (seed : Seed) (capturedMass inherited : Nat) :
+    Reserved (SourceCurrentParentInitialRoom.roomBits (afterHook seed capturedMass inherited).2)
+      seed capturedMass inherited :=
+  reserved_of_final_room _ seed capturedMass inherited (SourceCurrentParentInitialRoom.room_computed _)
+
+/-- Current child and projection bounds pay one actual edge at its original inherited length. -/
+theorem edge_cost_le (seed : Seed) (inherited : Nat) (scs : List Suspended) (start : Nat)
+    (edge : EdgeValue Symbol Constraint)
+    (children : edge.children.length ≤ scalar seed.2)
+    (own : ∀ tries residual,
+      SourcePruningEnumerationConstraint.project edge.entry.key.constraint = some (tries, residual) →
+      tries.length ≤ guardWidth seed.1)
+    (length : scs.length ≤ inherited) :
+    SourcePruningEnumerationNativeBranchCompletion.edgeCost scs start edge ≤ edgeCount seed inherited := by
+  have actual := SourcePruningEnumerationCostBounds.edge_cost_le scs start edge
+    (scalar seed.2) (guardWidth seed.1) children own
+  exact Nat.le_trans actual
+    (Nat.mul_le_mul_left _ (Nat.add_le_add_right (Nat.add_le_add_right length _) 1))
+
+/-- An actual completed head fits the mass ceiling fixed from the captured input.
+-/
+theorem head_mass_le {width : Nat} (seed : Seed) (capturedMass inherited : Nat)
+    (before : Cached) (scs : List Suspended)
+    (receipt : SourcePruningEnumerationSelectedEdge.Result width)
+    (initial : suspendedBound before.core ≤ capturedMass)
+    (length : scs.length ≤ inherited)
+    (actual : SourcePruningEnumerationNativeBranchCompletion.HeadCacheBounds before scs
+      (scalar seed.2) (guardWidth seed.1) receipt) :
+    match receipt with
+    | .complete _ _ _ after => suspendedBound after.core ≤ massCeil seed capturedMass inherited
+    | _ => True := by
+  cases receipt with
+  | complete fragment caller queries after =>
+      exact Nat.le_trans actual.2 (Nat.add_le_add initial
+        (Nat.mul_le_mul_left _ (Nat.add_le_add_right length _)))
+  | unhandled | rejected _ _ _ | stopped _ _ _ => trivial
+
+variable {Typing : Type} {width : Nat}
+variable [DecidableEq (EdgeKey Symbol Constraint)]
+
+/-- A current packet and its current heap bounds derive each selected edge's shape bounds. -/
+theorem edge_shape_from_packet
+    (seed : Seed)
+    (formulas : SourceGuards.Formulas FullSyntax.Formula)
+    (solver : SourceGuards.Entailment FullSyntax.Formula)
+    (inventory : SourceCurrentAllocatedNativeInventoryState.Inventory)
+    (caller : Caller width) (memos : Memos) (metadata : Metadata Typing) (before : Cached)
+    (packet : SourcePruningEnumerationRecursive.Packet formulas solver inventory caller memos metadata before)
+    (bounded : Fits seed.2 caller.checked)
+    (known : Heap (fun guard => guard ∈ seed.1) caller.checked.native.machine.heap)
+    (entry : Cache.Interned InternedBinderProtocol.NodeKey)
+    (rows : List (EdgeValue Symbol Constraint)) (depth : Nat) (free : List InternedBinderProtocol.Reference)
+    (available : Available caller.checked.native.machine.heap (.node entry rows depth free))
+    (edge : EdgeValue Symbol Constraint) (selected : edge ∈ rows) :
+    edge.children.length ≤ scalar seed.2 ∧
+      ∀ tries residual,
+        SourcePruningEnumerationConstraint.project edge.entry.key.constraint = some (tries, residual) →
+        tries.length ≤ guardWidth seed.1 := by
+  have resident : InternedEdgeResidency.EdgeResident caller.checked.native.machine.heap edge :=
+    InternedEdgeResidency.resident_edges caller.checked.native.machine.heap
+      packet.context.ready.semantic.ready.semantic.1.normal.facts.linked _ available.resident edge selected
+  have heapFits : SourceCurrentConstrainedCapRequiredResources.HeapFits seed.2
+      caller.checked.native.machine.heap :=
+    SourceCurrentConstrainedCapRequiredResources.of_checked
+      (profile := seed.2) (before := caller.checked) bounded
+  refine ⟨SourceCurrentConstrainedCapRequiredResources.edge_width heapFits edge resident, ?_⟩
+  intro tries residual projected
+  exact SourcePruningEnumerationGuardWidth.project_le seed.1 edge.entry.key.constraint tries residual
+    (known edge.entry.key edge resident) projected
+
+end MicroCFTA.SourcePruningEnumerationRecursiveReservation
