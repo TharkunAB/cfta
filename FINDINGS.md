@@ -70,6 +70,29 @@ Terminal parents retain the existing enumerateNode fallback boundary. Native
 children can still take their terminal dispatcher. No Haskell fix is needed.
 Details: lean/notes-current-pruning-enumeration-native-ordinary.md.
 
+### Native query reservation preservation and the remaining driver gap
+
+The new proof uses the existing current outer Context. A numeric profile
+already includes a stored-payload mass bound. Initial Room constructs one
+closed native query. Its literal returned state retains the full target
+Receipt, outer Post and one-step counter and payload bounds. No stronger
+joint Frame is required. Completed-run uniqueness verifies the same bounds
+for an actual supplied raw return. Bare raw success still does not certify
+numeric safety; retain the previous width-2 boundary witness.
+
+A finite history of consecutive native target queries now retains the SAME
+captured enumeration cache and metadata. One original reservation supplies
+all query entries and any unused suffix at the actual returned caller.
+This history keeps fourth, merge and global memos fixed. It does not cover
+intervening allocations, enabled emptiness checks, callback cache changes or
+recursive control flow. Do not report a whole-driver capacity result yet.
+
+External Haskell action: no new runtime defect or repair was established.
+No Haskell source changed. Retain the pending Sized complexity-documentation
+repair `af6369a9e` and the earlier merged fixes listed above. The remaining
+work here is Lean integration and resource accounting. Details:
+`lean/notes-current-pruning-enumeration-caller-resources.md`.
+
 ### Native numeric admission and raw successful observations
 
 The finite-width native model converts memo keys without checking KeySafe
@@ -505,6 +528,37 @@ TH/Generic extraction, valid-position build/read and source codec laws stay open
 
 
 
+
+## Native query histories retain their original resource reservation
+
+Caller resources: `69abb7423`. Captured packet histories: `c7b7fc5aa`.
+The goal stays ACTIVE. H6 remains the strongest end-to-end language theorem.
+
+The current outer Context, a numeric Fits profile and entry Room now construct
+one closed native query with a computed instruction bound. Its exact return
+retains the entire target Receipt, outer Post and next resource profile.
+No stronger joint Frame or future successful action is an input. A supplied
+raw return receives the same facts at its exact value and full checked state.
+
+For a recorded sequence of consecutive target queries, one original numeric
+reservation supplies every entry. The actual final caller retains the full
+Post, SAME captured enumeration cache and metadata, and the advanced profile.
+An observed prefix retains the original unused reservation for later queries.
+No future room is added at that endpoint. The one-query producer constructs
+its return; the history theorem observes completed queries and proves their
+preservation. It does not construct or complete the recursive driver.
+
+The largest integration gap is the actual recursive execution between query
+calls. Derive its resource costs for allocations and emptiness checks. Carry
+the packet through concrete callbacks and whole subtrees. Then derive the
+reservation for later siblings from the original input. QueryHistory alone
+does not model those intervening effects or a whole native alternative fold.
+Whole-driver language, terminal fallback, Graph correspondence, extraction
+and arbitrary lazy demand remain open. No Haskell file changes in this step.
+
+Both new modules and Audit pass strict checks. Public readback covers 17
+declarations and four full definitions. Audit checks 77147 theorem dependencies.
+Details: `lean/notes-current-pruning-enumeration-caller-resources.md`.
 
 ## Native observations retain checked traces and explicit initial room
 

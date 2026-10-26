@@ -1,0 +1,232 @@
+diff --git a/lean/MicroCFTA/Audit.lean b/lean/MicroCFTA/Audit.lean
+index c3a1311fe..7a6d10029 100644
+--- a/lean/MicroCFTA/Audit.lean
++++ b/lean/MicroCFTA/Audit.lean
+@@ -10,6 +10,7 @@ import MicroCFTA.SourcePruningEnumerationNativeCacheGrowth
+ import MicroCFTA.SourcePruningEnumerationRecursiveCallback
+ import MicroCFTA.SourcePruningEnumerationReceiptCallbackFuel
+ import MicroCFTA.SourceCurrentAllocatedTargetCallerObserved
++import MicroCFTA.SourcePruningEnumerationRecursiveResources
+ import MicroCFTA.SourceCurrentAllocatedNativeWordBoundary
+ import MicroCFTA.SourcePruningEnumerationSelectedNarrow
+ import MicroCFTA.SourcePruningEnumerationRecursion
+diff --git a/lean/MicroCFTA/SourceCurrentAllocatedTargetCallerResources.lean b/lean/MicroCFTA/SourceCurrentAllocatedTargetCallerResources.lean
+new file mode 100644
+index 000000000..a117db8f9
+--- /dev/null
++++ b/lean/MicroCFTA/SourceCurrentAllocatedTargetCallerResources.lean
+@@ -0,0 +1,100 @@
++import MicroCFTA.SourceCurrentAllocatedTargetCallerObserved
++import MicroCFTA.SourceCurrentConstrainedCapGeneratedQueryResources
++
++/-!
++# Initial resources for the current target caller
++
++The current caller context and numeric profile construct one closed query.
++The same return retains the complete target receipt, caller postcondition
++and next resource profile. No joint query Frame is required.
++-/
++namespace MicroCFTA.SourceCurrentAllocatedTargetQuery
++open InternedConstructorTemplates InternedProbeProvenance SourceRecursiveIntersectionCode
++open SourceCurrentAllocatedNativeInventoryState (Inventory)
++open SourceCurrentAllocatedPartialInvariant (Context Post)
++open SourceCurrentAllocatedNativeResourceForecast (Profile Room step)
++open SourceCurrentConstrainedCapGeneratedQueryResources (Fits)
++local notation "Symbol" => SourceObservations.Label FullSyntax.Formula
++local notation "Guard" => SourceSymbolicIndex.Constraint FullSyntax.Formula
++local notation "Caller" => SourceCurrentAllocatedPartialState.State
++local notation "Checked" => SourceEqualityNativeDemand.State
++local notation "Memos" => EndpointMemoGateTrace.Memos
++local notation "instructionBound" => SourceCurrentAllocatedNativeComputedBudget.instructionBound
++local notation "massAfter" => SourceCurrentAllocatedRecursiveMassTrace.massAfter
++variable {bits : Nat} [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)]
++
++/-- Initial caller facts construct the exact query return and its next resource profile. -/
++theorem finite_caller_resources (profile : Profile)
++    (formulas : SourceGuards.Formulas FullSyntax.Formula) (solver : SourceGuards.Entailment FullSyntax.Formula)
++    (inventory : Inventory) (before : Caller (bits + 2)) (left right : Value Symbol Guard) (memos : Memos)
++    (initial : Context formulas solver inventory before memos)
++    (fits : Fits profile before.checked) (room : Room bits profile)
++    (leftAvailable : Available before.checked.native.machine.heap left)
++    (rightAvailable : Available before.checked.native.machine.heap right)
++    (leftClosed : left.free = []) (rightClosed : right.free = []) :
++    ∃ next value after,
++      next.source = before.checked.native.machine.heap ∧ next.roots = inventory.roots ++ [left, right] ∧
++      Receipt formulas solver next left right before.checked value after memos ∧
++      Post formulas solver next before
++        (SourceCurrentAllocatedPartialState.advance before after before.fourth before.merge) memos ∧
++      SourceEqualityNativeDemand.execute (instructionBound profile.nodes profile.edges profile.mass + 1)
++        (.code (requestNode IntersectionEmptyDomain.emptyDomain left right)) before.checked = .done value after ∧
++      Fits (step profile) after ∧
++      InternedValueMass.value value ≤ massAfter (instructionBound profile.nodes profile.edges profile.mass) profile.mass := by
++  have actualRoom := fits.room room
++  have leftOriginal := SourceRecursiveIntersectionOriginalOutput.closed_original left
++    before.checked.native.machine.heap initial.ready.good.native.machine.1.coherent leftAvailable leftClosed
++  have rightOriginal := SourceRecursiveIntersectionOriginalOutput.closed_original right
++    before.checked.native.machine.heap initial.ready.good.native.machine.1.coherent rightAvailable rightClosed
++  obtain ⟨fuel, value, after, physical, _idle, count, _done, stored, mass, nodes, edges, domains⟩ :=
++    SourceCurrentAllocatedNativeComputedBudget.initial bits (SourceEqualityPCSGuard.holds formulas solver)
++      before.checked initial.ready.good initial.ready.semantic initial.ready.idle left right
++      leftOriginal rightOriginal leftAvailable rightAvailable leftClosed rightClosed fits.stored
++      actualRoom.1 actualRoom.2.1 actualRoom.2.2
++  have actual : Step left right before.checked value after := .run physical.trace
++  obtain ⟨next, source, roots, receipt, post⟩ := actual.caller_post initial
++    leftAvailable rightAvailable leftClosed rightClosed
++  have larger := SourceCurrentAllocatedNativeComputedBudget.instructionBound_mono
++    fits.nodes fits.edges (Nat.le_refl profile.mass)
++  have total := Nat.le_trans count larger
++  have done := SourceEqualityNativeDemand.done_stable (fuel + 1)
++    (instructionBound profile.nodes profile.edges profile.mass - fuel)
++    (.code (requestNode IntersectionEmptyDomain.emptyDomain left right)) before.checked after value physical.done
++  have sameFuel : fuel + 1 + (instructionBound profile.nodes profile.edges profile.mass - fuel) =
++      instructionBound profile.nodes profile.edges profile.mass + 1 := by omega
++  rw [sameFuel] at done
++  have massBound := SourceCurrentAllocatedRecursiveMassMonotone.massAfter_count_mono larger profile.mass
++  have credits := SourceCurrentAllocatedRecursiveMassMonotone.credit_count_mono larger profile.mass
++  refine ⟨next, value, after, source, roots, receipt, post, done, ?_, Nat.le_trans mass massBound⟩
++  exact ⟨Nat.le_trans nodes (Nat.add_le_add fits.nodes credits),
++    Nat.le_trans edges (Nat.add_le_add fits.edges credits),
++    Nat.le_trans domains (Nat.add_le_add fits.domains larger), stored.mono massBound⟩
++
++/-- Every successful raw return has the same caller laws and resource bounds at its full state. -/
++theorem raw_done_caller_resources (profile : Profile) (fuel : Nat)
++    (formulas : SourceGuards.Formulas FullSyntax.Formula) (solver : SourceGuards.Entailment FullSyntax.Formula)
++    (inventory : Inventory) (before : Caller (bits + 2)) (after : Checked (bits + 2))
++    (left right value : Value Symbol Guard) (memos : Memos)
++    (initial : Context formulas solver inventory before memos)
++    (fits : Fits profile before.checked) (room : Room bits profile)
++    (leftAvailable : Available before.checked.native.machine.heap left)
++    (rightAvailable : Available before.checked.native.machine.heap right)
++    (leftClosed : left.free = []) (rightClosed : right.free = [])
++    (done : SourceEqualityNativeDemand.execute fuel
++      (.code (requestNode IntersectionEmptyDomain.emptyDomain left right)) before.checked = .done value after) :
++    ∃ next,
++      next.source = before.checked.native.machine.heap ∧ next.roots = inventory.roots ++ [left, right] ∧
++      Receipt formulas solver next left right before.checked value after memos ∧
++      Post formulas solver next before
++        (SourceCurrentAllocatedPartialState.advance before after before.fourth before.merge) memos ∧
++      Fits (step profile) after ∧
++      InternedValueMass.value value ≤ massAfter (instructionBound profile.nodes profile.edges profile.mass) profile.mass := by
++  obtain ⟨next, result, reached, source, roots, receipt, post, produced, bounded, mass⟩ :=
++    finite_caller_resources profile formulas solver inventory before left right memos initial fits room
++      leftAvailable rightAvailable leftClosed rightClosed
++  obtain ⟨rfl, rfl⟩ := SourceCurrentAllocatedNativeColdClosedExact.completed_unique
++    fuel (instructionBound profile.nodes profile.edges profile.mass + 1) _ before.checked
++      after reached value result done produced
++  exact ⟨next, source, roots, receipt, post, bounded, mass⟩
++
++end MicroCFTA.SourceCurrentAllocatedTargetQuery
+diff --git a/lean/MicroCFTA/SourcePruningEnumerationRecursiveResources.lean b/lean/MicroCFTA/SourcePruningEnumerationRecursiveResources.lean
+new file mode 100644
+index 000000000..389ac326a
+--- /dev/null
++++ b/lean/MicroCFTA/SourcePruningEnumerationRecursiveResources.lean
+@@ -0,0 +1,108 @@
++import MicroCFTA.SourcePruningEnumerationRecursivePacket
++import MicroCFTA.SourceCurrentAllocatedTargetCallerResources
++
++/-!
++# Native query resources for the captured recursive packet
++
++One query constructs its returned packet from current facts. A completed
++query history uses one reservation from its original profile. The history
++records actual native queries. It does not execute the recursive driver.
++-/
++namespace MicroCFTA.SourcePruningEnumerationRecursive
++open InternedConstructorTemplates InternedProbeProvenance SourceRecursiveIntersectionCode
++open SourceCurrentAllocatedPartialInvariant (Post)
++open SourceCurrentAllocatedNativeResourceForecast (Profile Reserved step advance)
++open SourceCurrentConstrainedCapGeneratedQueryResources (Fits)
++local notation "Symbol" => SourcePruningTemplates.Symbol
++local notation "Constraint" => SourceSymbolicIndex.Constraint FullSyntax.Formula
++local notation "Caller" => SourceCurrentAllocatedPartialState.State
++local notation "Checked" => SourceEqualityNativeDemand.State
++local notation "Inventory" => SourceCurrentAllocatedNativeInventoryState.Inventory
++local notation "Memos" => EndpointMemoGateTrace.Memos
++local notation "Metadata" => SourcePruningRecordTypes.Metadata
++local notation "Cached" => EnumerationExpandableIndex.Cached Symbol Constraint
++local notation "instructionBound" => SourceCurrentAllocatedNativeComputedBudget.instructionBound
++variable {Typing : Type} {bits : Nat} [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Constraint)]
++
++/-- Initial reservation constructs one query and retains the captured packet for later queries. -/
++theorem query_complete (count : Nat) (profile : Profile)
++    (formulas : SourceGuards.Formulas FullSyntax.Formula) (solver : SourceGuards.Entailment FullSyntax.Formula)
++    (inventory : Inventory) (caller : Caller (bits + 2)) (memos : Memos)
++    (metadata : Metadata Typing) (before : Cached) (left right : Value Symbol Constraint)
++    (packet : Packet formulas solver inventory caller memos metadata before)
++    (fits : Fits profile caller.checked) (reserved : Reserved bits profile (count + 1))
++    (leftAvailable : Available caller.checked.native.machine.heap left)
++    (rightAvailable : Available caller.checked.native.machine.heap right)
++    (leftClosed : left.free = []) (rightClosed : right.free = []) :
++    ∃ next value after,
++      next.source = caller.checked.native.machine.heap ∧ next.roots = inventory.roots ++ [left, right] ∧
++      SourceCurrentAllocatedTargetQuery.Receipt formulas solver next left right caller.checked value after memos ∧
++      Post formulas solver next caller
++        (SourceCurrentAllocatedPartialState.advance caller after caller.fourth caller.merge) memos ∧
++      Packet formulas solver next
++        (SourceCurrentAllocatedPartialState.advance caller after caller.fourth caller.merge) memos metadata before ∧
++      SourceEqualityNativeDemand.execute (instructionBound profile.nodes profile.edges profile.mass + 1)
++        (.code (requestNode IntersectionEmptyDomain.emptyDomain left right)) caller.checked = .done value after ∧
++      Fits (step profile) after ∧ Reserved bits (step profile) count := by
++  obtain ⟨next, value, after, source, roots, receipt, post, done, bounded, _mass⟩ :=
++    SourceCurrentAllocatedTargetQuery.finite_caller_resources profile formulas solver inventory caller
++      left right memos packet.context fits reserved.head leftAvailable rightAvailable leftClosed rightClosed
++  exact ⟨next, value, after, source, roots, receipt, post, captured_post packet post,
++    done, bounded, reserved.tail⟩
++
++/-- A finite sequence records complete native query returns at their literal caller states. -/
++inductive QueryHistory : Nat → Caller (bits + 2) → Caller (bits + 2) → Prop where
++  /-- An empty query history retains its caller. -/
++  | nil (caller : Caller (bits + 2)) : QueryHistory 0 caller caller
++  /-- The next query starts at the complete returned caller of its predecessor. -/
++  | cons {count fuel : Nat} {caller final : Caller (bits + 2)} {after : Checked (bits + 2)}
++      {left right value : Value Symbol Constraint}
++      (leftAvailable : Available caller.checked.native.machine.heap left)
++      (rightAvailable : Available caller.checked.native.machine.heap right)
++      (leftClosed : left.free = []) (rightClosed : right.free = [])
++      (done : SourceEqualityNativeDemand.execute fuel
++        (.code (requestNode IntersectionEmptyDomain.emptyDomain left right)) caller.checked = .done value after)
++      (rest : QueryHistory count
++        (SourceCurrentAllocatedPartialState.advance caller after caller.fourth caller.merge) final) :
++      QueryHistory (count + 1) caller final
++
++/-- One original reservation preserves the full captured packet across every recorded query. -/
++theorem query_history_resources
++    (formulas : SourceGuards.Formulas FullSyntax.Formula) (solver : SourceGuards.Entailment FullSyntax.Formula)
++    (metadata : Metadata Typing) (before : Cached) (memos : Memos)
++    {count : Nat} {caller final : Caller (bits + 2)} (history : QueryHistory count caller final)
++    (inventory : Inventory) (profile : Profile)
++    (packet : Packet formulas solver inventory caller memos metadata before)
++    (fits : Fits profile caller.checked) (reserved : Reserved bits profile count) :
++    ∃ next, Post formulas solver next caller final memos ∧
++      Packet formulas solver next final memos metadata before ∧ Fits (advance profile count) final.checked := by
++  induction history generalizing inventory profile with
++  | nil => exact ⟨inventory, Post.refl packet.context, packet, fits⟩
++  | @cons count fuel caller final after left right value leftAvailable rightAvailable leftClosed rightClosed done rest ih =>
++      obtain ⟨middle, _source, _roots, _receipt, post, bounded, _mass⟩ :=
++        SourceCurrentAllocatedTargetQuery.raw_done_caller_resources profile fuel formulas solver inventory
++          caller after left right value memos packet.context fits reserved.head
++          leftAvailable rightAvailable leftClosed rightClosed done
++      obtain ⟨next, finalPost, finalPacket, finalFits⟩ :=
++        ih middle (step profile) (captured_post packet post) bounded reserved.tail
++      exact ⟨next, post.trans finalPost, finalPacket, finalFits⟩
++
++/-- An observed query prefix retains the original reservation for later native queries. -/
++theorem query_history_reserved
++    (formulas : SourceGuards.Formulas FullSyntax.Formula) (solver : SourceGuards.Entailment FullSyntax.Formula)
++    (metadata : Metadata Typing) (before : Cached) (memos : Memos)
++    {count : Nat} {caller final : Caller (bits + 2)} (history : QueryHistory count caller final)
++    (inventory : Inventory) (profile : Profile) (remaining : Nat)
++    (packet : Packet formulas solver inventory caller memos metadata before)
++    (fits : Fits profile caller.checked) (reserved : Reserved bits profile (count + remaining)) :
++    ∃ next, Post formulas solver next caller final memos ∧
++      Packet formulas solver next final memos metadata before ∧ Fits (advance profile count) final.checked ∧
++      Reserved bits (advance profile count) remaining := by
++  obtain ⟨next, post, returned, bounded⟩ := query_history_resources formulas solver metadata before memos
++    history inventory profile packet fits (reserved.prefix (by omega))
++  refine ⟨next, post, returned, bounded, ?_⟩
++  intro index less
++  have room := reserved (count + index) (by omega)
++  simpa only [SourceCurrentAllocatedNativeResourceForecast.advance_add] using room
++
++end MicroCFTA.SourcePruningEnumerationRecursive

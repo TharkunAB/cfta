@@ -1,0 +1,25 @@
+Independent review of the caller and recursive query resource proofs.
+Reviewer: required_memos, read-only. No builds or Git operations.
+
+Reviewed caller SHA256 1fe715e3ff2bb1843f66990bc71fb638736b8d4868b73ce6758472c381e7ada7.
+Reviewed recursive initial SHA256 11c6da71bf03a20e23bdeb7e980ba2a8b315b8e60c084cdc2b0cf3c25651975b.
+The final recursive source adds query_history_reserved. That wrapper was
+strictly checked after this review; it was not part of the independent review.
+
+No blocker found. The complete target Receipt, caller Post, computed execution
+and numeric return use the same value and full checked state. Instruction,
+credit and mass monotonicity justify the profile upgrade. Raw observations
+use exact completed-run uniqueness. History induction consumes the original
+reservation with head and tail, then composes actual Posts. It preserves the
+same captured cache and metadata. No stronger joint Frame is required.
+
+Scope limit: QueryHistory records completed consecutive target queries. It
+does not execute the recursive driver. Its outer fourth, merge and global
+memos stay fixed. Intervening allocations, emptiness checks, callbacks, cache
+changes and recursive control flow require separate resource transport.
+A query-count reservation is not yet a whole-driver reservation.
+
+Final read-only review confirms recursive SHA256 4e75c4498e422f95819604d52441991920177e18d8830405ba830299a2e2a1ec.
+query_history_reserved is clear. It retains the exact prefix Post, Packet and
+Fits endpoint and derives every unused reservation entry by advance_add.
+It introduces no future room or driver-completion premise. No blocker.
