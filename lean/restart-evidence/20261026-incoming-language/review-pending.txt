@@ -1,0 +1,13 @@
+[2026-10-26 12:07 CET] Bounded source review: CLEAR.
+
+Source: /home/tritlo/Code/mcfta/lean/MicroCFTA/SourcePruningEnumerationPendingWriteLanguage.lean
+SHA256: 93a7f6066c56bef4323e7bc3e3f84cc07174dd11d9741173f8e627a9d8e3af01
+Original /tmp draft e33487aa4ba193881e0d7e0cba5cf3d8ed601ba9d1659c5c09ad11ba381dcba4 remains unchanged.
+
+The exact same assignment and uv occur on both sides. The actual stored pending-slot receipt derives uv < values.length. The endpoint hypotheses preserve representatives and residual obligations and fix the exact List.set write with incomingScs ++ oldScs. No equality of unrelated native heaps or Graph interpretation is assumed. The local replacement hypothesis describes only the new handle's domain as incomingDomain intersected with the old optional domain. The proof retains the old pending domain and ALL old suspended constraints inside the original Satisfies; it adds exactly the incoming domain and incoming suspended constraints. List membership retains duplicate occurrences. It does not require unique suspended variables or a root/counter premise.
+
+The direct heap_set proof handles uv separately and preserves every other slot. Recombination retains the same forest-satisfaction and residual-guard clauses. Counter and ancestry are unrestricted because Satisfies does not inspect them. No final Satisfies, Safe, desired language, or whole successful execution is a premise. This is a pure logical write theorem; native read/frame and native-language transport are separate actual receipt obligations.
+
+Compared with the original draft, only two simplifier invocations changed at the self slot: simpa [setSlot] and simp only [setSlot]. The complete theorem header/conclusion and mathematical argument are unchanged. Existing Root strict-pending-2/report.json records exit0 with warning-as-error/all-linters, literal-empty raw, and 93a7f6066c56bef4323e7bc3e3f84cc07174dd11d9741173f8e627a9d8e3af01. Its checked snapshot matches the current source. No compiler, build, Git operation or repository edit was run by this review.
+
+Minimal raw helper: actual raw row membership with a satisfying returned core is equivalent to Satisfies at the logical after core, for raw = if replacement = Empty then [] else [.ok ((), after)]. In the Empty branch, stored pending handle + actual decoded replacement make the local slot predicate imply meaning Empty, which is False. In the nonempty branch, membership identifies output = after. This removes the rejected branch only semantically; it never claims that raw [] contains the logical written core. The proposed IncomingBranchesLanguage wrapper proves this local helper inline and then composes the existing logical semantics, so no new premise/helper module is necessary.

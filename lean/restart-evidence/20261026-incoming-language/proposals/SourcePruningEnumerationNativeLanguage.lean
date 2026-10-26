@@ -1,0 +1,148 @@
+import MicroCFTA.SourcePruningEnumerationObservation
+import MicroCFTA.InternedGuardedLanguage
+
+/-!
+# Assignment meaning from actual native handle readback
+
+Each handle denotes the independent meaning of its actual stored value.
+Native growth retains that meaning for the handles used by realized slots.
+An enumeration frame retains the same complete assignments. These results
+do not infer safety or identify a graph interpretation with the native heap.
+-/
+namespace MicroCFTA.SourcePruningEnumerationNativeLanguage
+open Language EnumerationState EnumerationCorrectness EnumerationCompressionFrame
+open SourcePruningEnumerationNodes SourcePruningEnumerationObservation
+local notation "Symbol" => SourcePruningTemplates.Symbol
+variable {NativeGuard EnumGuard : Type}
+
+/-- A native handle denotes the independent guarded meaning of its actual readback. -/
+def handles (holds : NativeGuard → Term Symbol → Bool)
+    (ambient : InternedGuardedLanguage.Env Symbol)
+    (heap : InternedConstructorTemplates.State Symbol NativeGuard) : NodeLanguage Symbol :=
+  fun handle term => ∃ value, lookupNode heap handle = some value ∧
+    InternedGuardedLanguage.meaning holds ambient value term
+
+/-- An actual handle readback determines its complete native language. -/
+theorem handles_lookup
+    (holds : NativeGuard → Term Symbol → Bool) (ambient : InternedGuardedLanguage.Env Symbol)
+    (heap : InternedConstructorTemplates.State Symbol NativeGuard)
+    (handle : Nat) (value : InternedConstructorTemplates.Value Symbol NativeGuard) (term : Term Symbol)
+    (decoded : lookupNode heap handle = some value) :
+    handles holds ambient heap handle term ↔ InternedGuardedLanguage.meaning holds ambient value term := by
+  constructor
+  · rintro ⟨actual, found, accepted⟩
+    have same : actual = value := Option.some.inj (found.symm.trans decoded)
+    simpa only [same] using accepted
+  · intro accepted
+    exact ⟨value, decoded, accepted⟩
+
+/-- Native growth retains a handle's language when that handle already has an actual readback. -/
+theorem handles_keeps
+    (holds : NativeGuard → Term Symbol → Bool) (ambient : InternedGuardedLanguage.Env Symbol)
+    (beforeHeap afterHeap : InternedConstructorTemplates.State Symbol NativeGuard)
+    (handle : Nat) (value : InternedConstructorTemplates.Value Symbol NativeGuard) (term : Term Symbol)
+    (decoded : lookupNode beforeHeap handle = some value)
+    (kept : SourceEqualityRequiredCache.Keeps beforeHeap afterHeap) :
+    handles holds ambient afterHeap handle term ↔ handles holds ambient beforeHeap handle term :=
+  (handles_lookup holds ambient afterHeap handle value term
+    (lookupNode_keeps beforeHeap afterHeap kept handle value decoded)).trans
+    (handles_lookup holds ambient beforeHeap handle value term decoded).symm
+
+/-- Native growth retains the available closed readback of every used pending handle. -/
+theorem realized_keeps
+    (beforeHeap afterHeap : InternedConstructorTemplates.State Symbol NativeGuard)
+    (state : EnumerationState.State Symbol EnumGuard)
+    (realized : PendingRealized beforeHeap state)
+    (kept : SourceEqualityRequiredCache.Keeps beforeHeap afterHeap) :
+    PendingRealized afterHeap state :=
+  realized_preserved beforeHeap afterHeap state state realized (Frame.refl state) kept
+
+/-- Every actual old stored slot has the same interpreted domain after native growth. -/
+theorem slot_keeps
+    (holds : NativeGuard → Term Symbol → Bool) (ambient : InternedGuardedLanguage.Env Symbol)
+    (beforeHeap afterHeap : InternedConstructorTemplates.State Symbol NativeGuard)
+    (state : EnumerationState.State Symbol EnumGuard) (uv : Nat) (value : UVarValue Symbol)
+    (stored : state.values[uv]? = some value)
+    (realized : PendingRealized beforeHeap state)
+    (kept : SourceEqualityRequiredCache.Keeps beforeHeap afterHeap) :
+    slot (handles holds ambient afterHeap) value = slot (handles holds ambient beforeHeap) value := by
+  cases value with
+  | enumerated _ | eliminated => rfl
+  | unenumerated node scs =>
+      cases node with
+      | none => rfl
+      | some handle =>
+          obtain ⟨actual, decoded, _available, _closed⟩ := realized uv handle scs stored
+          have same : handles holds ambient afterHeap handle = handles holds ambient beforeHeap handle := by
+            funext term
+            exact propext (handles_keeps holds ambient beforeHeap afterHeap handle actual term decoded kept)
+          simp only [slot, Option.map_some, same]
+
+/-- The interpreted slot heap is unchanged for the same realized enumeration state. -/
+theorem heap_keeps
+    (holds : NativeGuard → Term Symbol → Bool) (ambient : InternedGuardedLanguage.Env Symbol)
+    (beforeHeap afterHeap : InternedConstructorTemplates.State Symbol NativeGuard)
+    (state : EnumerationState.State Symbol EnumGuard)
+    (realized : PendingRealized beforeHeap state)
+    (kept : SourceEqualityRequiredCache.Keeps beforeHeap afterHeap) :
+    heap (handles holds ambient afterHeap) state.values = heap (handles holds ambient beforeHeap) state.values := by
+  funext uv
+  unfold heap
+  cases stored : state.values[uv]? with
+  | none => rfl
+  | some value => exact slot_keeps holds ambient beforeHeap afterHeap state uv value stored realized kept
+
+/-- Complete assignment meaning is unchanged for the old realized state under native growth. -/
+theorem satisfies_keeps
+    (holds : NativeGuard → Term Symbol → Bool) (ambient : InternedGuardedLanguage.Env Symbol)
+    (beforeHeap afterHeap : InternedConstructorTemplates.State Symbol NativeGuard)
+    (state : EnumerationState.State Symbol EnumGuard)
+    (residualMeaning : EnumGuard → Term Symbol → Prop) (assignment : Nat → Term Symbol)
+    (realized : PendingRealized beforeHeap state)
+    (kept : SourceEqualityRequiredCache.Keeps beforeHeap afterHeap) :
+    Satisfies (handles holds ambient afterHeap) residualMeaning assignment state ↔
+      Satisfies (handles holds ambient beforeHeap) residualMeaning assignment state := by
+  unfold Satisfies
+  rw [heap_keeps holds ambient beforeHeap afterHeap state realized kept]
+
+/-- An enumeration frame retains the exact finite equivalence classes without a safety premise. -/
+theorem frame_sameClass (before after : EnumerationState.State Symbol EnumGuard)
+    (frame : Frame before after) (left right : Nat) :
+    UnionFind.SameClass after.representatives left right ↔
+      UnionFind.SameClass before.representatives left right := by
+  constructor
+  · rintro ⟨root, size, leftPath, rightPath⟩
+    exact ⟨root, size, (frame.reaches left root size).mp leftPath,
+      (frame.reaches right root size).mp rightPath⟩
+  · rintro ⟨root, size, leftPath, rightPath⟩
+    exact ⟨root, size, (frame.reaches left root size).mpr leftPath,
+      (frame.reaches right root size).mpr rightPath⟩
+
+/-- A frame retains every complete assignment for any fixed node and residual languages. -/
+theorem satisfies_frame (language : NodeLanguage Symbol)
+    (residualMeaning : EnumGuard → Term Symbol → Prop) (assignment : Nat → Term Symbol)
+    (before after : EnumerationState.State Symbol EnumGuard) (frame : Frame before after) :
+    Satisfies language residualMeaning assignment after ↔ Satisfies language residualMeaning assignment before := by
+  have forestSame : UnionFind.Satisfies after.representatives assignment ↔
+      UnionFind.Satisfies before.representatives assignment := by
+    constructor
+    · intro satisfied left right related
+      exact satisfied left right ((frame_sameClass before after frame left right).mpr related)
+    · intro satisfied left right related
+      exact satisfied left right ((frame_sameClass before after frame left right).mp related)
+  simp only [Satisfies, Fragments.stateSatisfies, frame.values, frame.obligations, forestSame]
+
+/-- Actual native growth and an enumeration frame retain the same complete assignments. -/
+theorem satisfies_keeps_frame
+    (holds : NativeGuard → Term Symbol → Bool) (ambient : InternedGuardedLanguage.Env Symbol)
+    (beforeHeap afterHeap : InternedConstructorTemplates.State Symbol NativeGuard)
+    (before after : EnumerationState.State Symbol EnumGuard)
+    (residualMeaning : EnumGuard → Term Symbol → Prop) (assignment : Nat → Term Symbol)
+    (realized : PendingRealized beforeHeap before) (frame : Frame before after)
+    (kept : SourceEqualityRequiredCache.Keeps beforeHeap afterHeap) :
+    Satisfies (handles holds ambient afterHeap) residualMeaning assignment after ↔
+      Satisfies (handles holds ambient beforeHeap) residualMeaning assignment before :=
+  (satisfies_frame (handles holds ambient afterHeap) residualMeaning assignment before after frame).trans
+    (satisfies_keeps holds ambient beforeHeap afterHeap before residualMeaning assignment realized kept)
+
+end MicroCFTA.SourcePruningEnumerationNativeLanguage

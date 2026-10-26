@@ -1,0 +1,604 @@
+diff --git a/lean/MicroCFTA/Audit.lean b/lean/MicroCFTA/Audit.lean
+index 5a5632085..a920de000 100644
+--- a/lean/MicroCFTA/Audit.lean
++++ b/lean/MicroCFTA/Audit.lean
+@@ -1,3 +1,7 @@
++import MicroCFTA.SourcePruningEnumerationNativeLanguage
++import MicroCFTA.SourcePruningEnumerationPendingWriteLanguage
++import MicroCFTA.SourcePruningEnumerationIncomingNodeLanguage
++import MicroCFTA.SourcePruningEnumerationIncomingBranchesLanguage
+ import MicroCFTA.SourcePruningEnumerationFiniteReservation
+ import MicroCFTA.SourcePruningEnumerationFiniteContract
+ import MicroCFTA.SourcePruningEnumerationFiniteCallbackResources
+diff --git a/lean/MicroCFTA/SourcePruningEnumerationNativeLanguage.lean b/lean/MicroCFTA/SourcePruningEnumerationNativeLanguage.lean
+new file mode 100644
+index 000000000..d202bc256
+--- /dev/null
++++ b/lean/MicroCFTA/SourcePruningEnumerationNativeLanguage.lean
+@@ -0,0 +1,139 @@
++import MicroCFTA.SourcePruningEnumerationObservation
++import MicroCFTA.InternedGuardedLanguage
++
++/-!
++# Assignment meaning from actual native handle readback
++
++Each handle denotes the independent meaning of its actual stored value.
++Native growth retains that meaning for the handles used by realized slots.
++An enumeration frame retains the same complete assignments. These results
++do not infer safety or identify a graph interpretation with the native heap.
++-/
++namespace MicroCFTA.SourcePruningEnumerationNativeLanguage
++open Language EnumerationState EnumerationCorrectness EnumerationCompressionFrame
++open SourcePruningEnumerationNodes SourcePruningEnumerationObservation
++local notation "Symbol" => SourcePruningTemplates.Symbol
++variable {NativeGuard EnumGuard : Type}
++
++/-- A native handle denotes the independent guarded meaning of its actual readback. -/
++def handles (holds : NativeGuard → Term Symbol → Bool)
++    (ambient : InternedGuardedLanguage.Env Symbol)
++    (heap : InternedConstructorTemplates.State Symbol NativeGuard) : NodeLanguage Symbol :=
++  fun handle term => ∃ value, lookupNode heap handle = some value ∧
++    InternedGuardedLanguage.meaning holds ambient value term
++
++/-- An actual handle readback determines its complete native language. -/
++theorem handles_lookup
++    (holds : NativeGuard → Term Symbol → Bool) (ambient : InternedGuardedLanguage.Env Symbol)
++    (heap : InternedConstructorTemplates.State Symbol NativeGuard)
++    (handle : Nat) (value : InternedConstructorTemplates.Value Symbol NativeGuard) (term : Term Symbol)
++    (decoded : lookupNode heap handle = some value) :
++    handles holds ambient heap handle term ↔ InternedGuardedLanguage.meaning holds ambient value term := by
++  constructor
++  · rintro ⟨actual, found, accepted⟩
++    have same : actual = value := Option.some.inj (found.symm.trans decoded)
++    simpa only [same] using accepted
++  · intro accepted
++    exact ⟨value, decoded, accepted⟩
++
++/-- Native growth retains a handle's language when that handle already has an actual readback. -/
++theorem handles_keeps
++    (holds : NativeGuard → Term Symbol → Bool) (ambient : InternedGuardedLanguage.Env Symbol)
++    (beforeHeap afterHeap : InternedConstructorTemplates.State Symbol NativeGuard)
++    (handle : Nat) (value : InternedConstructorTemplates.Value Symbol NativeGuard) (term : Term Symbol)
++    (decoded : lookupNode beforeHeap handle = some value)
++    (kept : SourceEqualityRequiredCache.Keeps beforeHeap afterHeap) :
++    handles holds ambient afterHeap handle term ↔ handles holds ambient beforeHeap handle term :=
++  (handles_lookup holds ambient afterHeap handle value term
++    (lookupNode_keeps beforeHeap afterHeap kept handle value decoded)).trans
++    (handles_lookup holds ambient beforeHeap handle value term decoded).symm
++
++/-- Every actual old stored slot has the same interpreted domain after native growth. -/
++theorem slot_keeps
++    (holds : NativeGuard → Term Symbol → Bool) (ambient : InternedGuardedLanguage.Env Symbol)
++    (beforeHeap afterHeap : InternedConstructorTemplates.State Symbol NativeGuard)
++    (state : EnumerationState.State Symbol EnumGuard) (uv : Nat) (value : UVarValue Symbol)
++    (stored : state.values[uv]? = some value)
++    (realized : PendingRealized beforeHeap state)
++    (kept : SourceEqualityRequiredCache.Keeps beforeHeap afterHeap) :
++    slot (handles holds ambient afterHeap) value = slot (handles holds ambient beforeHeap) value := by
++  cases value with
++  | enumerated _ | eliminated => rfl
++  | unenumerated node scs =>
++      cases node with
++      | none => rfl
++      | some handle =>
++          obtain ⟨actual, decoded, _available, _closed⟩ := realized uv handle scs stored
++          have same : handles holds ambient afterHeap handle = handles holds ambient beforeHeap handle := by
++            funext term
++            exact propext (handles_keeps holds ambient beforeHeap afterHeap handle actual term decoded kept)
++          simp only [slot, Option.map_some, same]
++
++/-- The interpreted slot heap is unchanged for the same realized enumeration state. -/
++theorem heap_keeps
++    (holds : NativeGuard → Term Symbol → Bool) (ambient : InternedGuardedLanguage.Env Symbol)
++    (beforeHeap afterHeap : InternedConstructorTemplates.State Symbol NativeGuard)
++    (state : EnumerationState.State Symbol EnumGuard)
++    (realized : PendingRealized beforeHeap state)
++    (kept : SourceEqualityRequiredCache.Keeps beforeHeap afterHeap) :
++    heap (handles holds ambient afterHeap) state.values = heap (handles holds ambient beforeHeap) state.values := by
++  funext uv
++  unfold heap
++  cases stored : state.values[uv]? with
++  | none => rfl
++  | some value => exact slot_keeps holds ambient beforeHeap afterHeap state uv value stored realized kept
++
++/-- Complete assignment meaning is unchanged for the old realized state under native growth. -/
++theorem satisfies_keeps
++    (holds : NativeGuard → Term Symbol → Bool) (ambient : InternedGuardedLanguage.Env Symbol)
++    (beforeHeap afterHeap : InternedConstructorTemplates.State Symbol NativeGuard)
++    (state : EnumerationState.State Symbol EnumGuard)
++    (residualMeaning : EnumGuard → Term Symbol → Prop) (assignment : Nat → Term Symbol)
++    (realized : PendingRealized beforeHeap state)
++    (kept : SourceEqualityRequiredCache.Keeps beforeHeap afterHeap) :
++    Satisfies (handles holds ambient afterHeap) residualMeaning assignment state ↔
++      Satisfies (handles holds ambient beforeHeap) residualMeaning assignment state := by
++  unfold Satisfies
++  rw [heap_keeps holds ambient beforeHeap afterHeap state realized kept]
++
++/-- An enumeration frame retains the exact finite equivalence classes without a safety premise. -/
++theorem frame_sameClass (before after : EnumerationState.State Symbol EnumGuard)
++    (frame : Frame before after) (left right : Nat) :
++    UnionFind.SameClass after.representatives left right ↔
++      UnionFind.SameClass before.representatives left right := by
++  constructor
++  · rintro ⟨root, size, leftPath, rightPath⟩
++    exact ⟨root, size, (frame.reaches left root size).mp leftPath,
++      (frame.reaches right root size).mp rightPath⟩
++  · rintro ⟨root, size, leftPath, rightPath⟩
++    exact ⟨root, size, (frame.reaches left root size).mpr leftPath,
++      (frame.reaches right root size).mpr rightPath⟩
++
++/-- A frame retains every complete assignment for any fixed node and residual languages. -/
++theorem satisfies_frame (language : NodeLanguage Symbol)
++    (residualMeaning : EnumGuard → Term Symbol → Prop) (assignment : Nat → Term Symbol)
++    (before after : EnumerationState.State Symbol EnumGuard) (frame : Frame before after) :
++    Satisfies language residualMeaning assignment after ↔ Satisfies language residualMeaning assignment before := by
++  have forestSame : UnionFind.Satisfies after.representatives assignment ↔
++      UnionFind.Satisfies before.representatives assignment := by
++    constructor
++    · intro satisfied left right related
++      exact satisfied left right ((frame_sameClass before after frame left right).mpr related)
++    · intro satisfied left right related
++      exact satisfied left right ((frame_sameClass before after frame left right).mp related)
++  simp only [Satisfies, Fragments.stateSatisfies, frame.values, frame.obligations, forestSame]
++
++/-- Actual native growth and an enumeration frame retain the same complete assignments. -/
++theorem satisfies_keeps_frame
++    (holds : NativeGuard → Term Symbol → Bool) (ambient : InternedGuardedLanguage.Env Symbol)
++    (beforeHeap afterHeap : InternedConstructorTemplates.State Symbol NativeGuard)
++    (before after : EnumerationState.State Symbol EnumGuard)
++    (residualMeaning : EnumGuard → Term Symbol → Prop) (assignment : Nat → Term Symbol)
++    (realized : PendingRealized beforeHeap before) (frame : Frame before after)
++    (kept : SourceEqualityRequiredCache.Keeps beforeHeap afterHeap) :
++    Satisfies (handles holds ambient afterHeap) residualMeaning assignment after ↔
++      Satisfies (handles holds ambient beforeHeap) residualMeaning assignment before :=
++  (satisfies_frame (handles holds ambient afterHeap) residualMeaning assignment before after frame).trans
++    (satisfies_keeps holds ambient beforeHeap afterHeap before residualMeaning assignment realized kept)
++
++end MicroCFTA.SourcePruningEnumerationNativeLanguage
+diff --git a/lean/MicroCFTA/SourcePruningEnumerationPendingWriteLanguage.lean b/lean/MicroCFTA/SourcePruningEnumerationPendingWriteLanguage.lean
+new file mode 100644
+index 000000000..e4e3f0aea
+--- /dev/null
++++ b/lean/MicroCFTA/SourcePruningEnumerationPendingWriteLanguage.lean
+@@ -0,0 +1,94 @@
++import MicroCFTA.EnumerationCorrectness
++
++/-!
++# Assignment meaning of a concrete pending-slot write
++
++The replacement adds one incoming domain and its suspended constraints.
++The local language equivalence describes only the replacement handle.
++The forest, other slots and residual obligations retain their exact values.
++No graph operation or satisfying final assignment is an input.
++-/
++namespace MicroCFTA.SourcePruningEnumerationPendingWriteLanguage
++open Language Fragments EnumerationState EnumerationCorrectness
++variable {Symbol EnumGuard : Type}
++
++/-- A concrete pending write adds exactly its incoming domain and suspended constraints. -/
++theorem pending_write
++    (language : NodeLanguage Symbol) (meaning : EnumGuard → Term Symbol → Prop)
++    (assignment : Nat → Term Symbol) (before after : State Symbol EnumGuard)
++    (uv newHandle : Nat) (oldNode : Option Nat) (oldScs incomingScs : List Suspended)
++    (incomingDomain : Term Symbol → Prop)
++    (stored : before.values[uv]? = some (.unenumerated oldNode oldScs))
++    (representatives : after.representatives = before.representatives)
++    (values : after.values = before.values.set uv (.unenumerated (some newHandle) (incomingScs ++ oldScs)))
++    (obligations : after.obligations = before.obligations)
++    (replacement : ∀ term, language newHandle term ↔
++      incomingDomain term ∧ permits (oldNode.map language) term) :
++    Satisfies language meaning assignment after ↔
++      Satisfies language meaning assignment before ∧ incomingDomain (assignment uv) ∧
++        ∀ sc ∈ incomingScs, Suspended.Holds assignment (assignment uv) sc := by
++  have bound : uv < before.values.length := (List.getElem?_eq_some_iff.mp stored).1
++  have oldSlot : heap language before.values uv = slot language (.unenumerated oldNode oldScs) := by
++    simp only [heap, stored, Option.getD_some]
++  have pendingMeaning (node : Option Nat) (scs : List Suspended) :
++      slotSatisfies assignment uv (slot language (.unenumerated node scs)) ↔
++        permits (node.map language) (assignment uv) ∧
++          ∀ sc ∈ scs, Suspended.Holds assignment (assignment uv) sc := by
++    simp only [slot, slotSatisfies, List.forall_mem_map]
++  have localMeaning :
++      slotSatisfies assignment uv (slot language (.unenumerated (some newHandle) (incomingScs ++ oldScs))) ↔
++        slotSatisfies assignment uv (slot language (.unenumerated oldNode oldScs)) ∧
++          incomingDomain (assignment uv) ∧
++            ∀ sc ∈ incomingScs, Suspended.Holds assignment (assignment uv) sc := by
++    rw [pendingMeaning, pendingMeaning]
++    change (language newHandle (assignment uv) ∧
++        ∀ sc ∈ incomingScs ++ oldScs, Suspended.Holds assignment (assignment uv) sc) ↔
++      (permits (oldNode.map language) (assignment uv) ∧
++        ∀ sc ∈ oldScs, Suspended.Holds assignment (assignment uv) sc) ∧
++      incomingDomain (assignment uv) ∧
++        ∀ sc ∈ incomingScs, Suspended.Holds assignment (assignment uv) sc
++    constructor
++    · rintro ⟨domain, suspended⟩
++      obtain ⟨incoming, old⟩ := (replacement (assignment uv)).mp domain
++      exact ⟨⟨old, fun sc member => suspended sc (List.mem_append.mpr (Or.inr member))⟩,
++        incoming, fun sc member => suspended sc (List.mem_append.mpr (Or.inl member))⟩
++    · rintro ⟨⟨old, previous⟩, incoming, added⟩
++      refine ⟨(replacement (assignment uv)).mpr ⟨incoming, old⟩, ?_⟩
++      intro sc member
++      rcases List.mem_append.mp member with current | earlier
++      · exact added sc current
++      · exact previous sc earlier
++  have heapMeaning :
++      heapSatisfies (heap language after.values) assignment ↔
++        heapSatisfies (heap language before.values) assignment ∧ incomingDomain (assignment uv) ∧
++          ∀ sc ∈ incomingScs, Suspended.Holds assignment (assignment uv) sc := by
++    rw [values, heap_set language before.values uv _ bound]
++    constructor
++    · intro afterHeap
++      have updated : slotSatisfies assignment uv
++          (slot language (.unenumerated (some newHandle) (incomingScs ++ oldScs))) := by
++        simpa [setSlot] using afterHeap uv
++      obtain ⟨previous, incoming, added⟩ := localMeaning.mp updated
++      refine ⟨?_, incoming, added⟩
++      intro other
++      by_cases same : other = uv
++      · subst other
++        rw [oldSlot]
++        exact previous
++      · simpa only [setSlot, ite_eq_right same] using afterHeap other
++    · rintro ⟨beforeHeap, incoming, added⟩ other
++      by_cases same : other = uv
++      · subst other
++        simp only [setSlot]
++        apply localMeaning.mpr
++        exact ⟨by simpa only [oldSlot] using beforeHeap uv, incoming, added⟩
++      · simpa only [setSlot, ite_eq_right same] using beforeHeap other
++  simp only [Satisfies, Fragments.stateSatisfies, representatives, obligations]
++  rw [heapMeaning]
++  constructor
++  · rintro ⟨⟨forest, previous, incoming, added⟩, guarded⟩
++    exact ⟨⟨⟨forest, previous⟩, guarded⟩, incoming, added⟩
++  · rintro ⟨⟨⟨forest, previous⟩, guarded⟩, incoming, added⟩
++    exact ⟨⟨forest, previous, incoming, added⟩, guarded⟩
++
++end MicroCFTA.SourcePruningEnumerationPendingWriteLanguage
+diff --git a/lean/MicroCFTA/SourcePruningEnumerationIncomingNodeLanguage.lean b/lean/MicroCFTA/SourcePruningEnumerationIncomingNodeLanguage.lean
+new file mode 100644
+index 000000000..1ae3ee9b2
+--- /dev/null
++++ b/lean/MicroCFTA/SourcePruningEnumerationIncomingNodeLanguage.lean
+@@ -0,0 +1,161 @@
++import MicroCFTA.SourcePruningEnumerationIncomingNode
++import MicroCFTA.SourcePruningEnumerationNativeLanguage
++import MicroCFTA.SourcePruningEnumerationPendingWriteLanguage
++
++/-!
++# Exact assignment meaning of the actual incoming-node update
++
++The producer runs once. Its complete original receipt is retained.
++The logical write adds the incoming node and its suspended constraints.
++An Empty replacement still has a logical receipt. The actual runtime
++returns an empty branch list in that case.
++-/
++namespace MicroCFTA.SourcePruningEnumerationIncomingNode
++open EnumerationState EnumerationCorrectness EnumerationSchedule EnumerationExecution
++open EnumerationCompressionFrame
++open InternedConstructorTemplates InternedProbeProvenance
++open SourcePruningEnumerationNodes SourcePruningEnumerationObservation SourcePruningEnumerationWrites
++open SourceCurrentAllocatedNativeInventoryState (Inventory)
++open SourceCurrentAllocatedPartialInvariant (Context Post)
++open SourceCurrentAllocatedNativeEffects (physical)
++open SourceCurrentAllocatedQueryMemo (advancePhysical)
++local notation "Symbol" => SourcePruningTemplates.Symbol
++local notation "Constraint" => SourceSymbolicIndex.Constraint FullSyntax.Formula
++local notation "Node" => InternedConstructorTemplates.Value Symbol Constraint
++local notation "Checked" => SourceEqualityNativeDemand.State
++local notation "Caller" => SourceCurrentAllocatedPartialState.State
++local notation "Memos" => EndpointMemoGateTrace.Memos
++local notation "Fourth" => SourceCurrentEmptinessMemo.Memo
++local notation "Queries" => SourceEndpointMemo.Memos
++variable {EnumGuard : Type} {width : Nat}
++
++attribute [local instance] SourcePruningEnumerationIncomingNode.incomingNodeMonadList
++
++/-- The actual incoming producer retains every receipt and proves exact logical assignment meaning. -/
++theorem run_complete_semantics
++    [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Constraint)] [DecidableEq Node]
++    (formulas : SourceGuards.Formulas FullSyntax.Formula)
++    (solver : SourceGuards.Entailment FullSyntax.Formula)
++    (inventory : Inventory) (beforeCaller : Caller width)
++    (before : EnumerationState.State Symbol EnumGuard)
++    (checkEmpty : Bool) (uv : Nat) (incoming : Node)
++    (incomingScs : List EnumerationState.Suspended) (memos : Memos)
++    (initial : Context formulas solver inventory beforeCaller memos)
++    (realized : PendingRealized beforeCaller.checked.native.machine.heap before)
++    (storage : StorageValid before) (root : EnumerationSchedule.IsRoot before.representatives uv)
++    (pending : EnumerationCompleteness.PendingAt before uv)
++    (available : Available beforeCaller.checked.native.machine.heap incoming) (closed : incoming.free = [])
++    (bounded : ∀ sc ∈ incomingScs, sc.var < before.counter)
++    (ranges : match before.values[uv]? with
++      | some (.unenumerated (some oldHandle) _) =>
++          match lookupNode beforeCaller.checked.native.machine.heap oldHandle with
++          | some old => SourceCurrentAllocatedNativeRequestBounds.WordRanges
++              (.code (SourceRecursiveIntersectionCode.requestNode IntersectionEmptyDomain.emptyDomain incoming old))
++              beforeCaller.checked
++          | none => True
++      | _ => True) :
++    ∃ (r n p h : Nat) (oldNode : Option Nat) (oldScs : List EnumerationState.Suspended)
++      (read after : EnumerationState.State Symbol EnumGuard) (afterCaller : Caller width)
++      (savedQueries : Queries) (final : Memos) (next : Inventory) (replacement : Node) (handle : Nat),
++      (∀ extra, ExceptT.run (getValue (r + extra) uv before) =
++        [.ok (.unenumerated oldNode oldScs, read)]) ∧
++      EnumerationCompressionFrame.Frame before read ∧
++      (∀ extra extraNative P H, p ≤ P → h ≤ H →
++        run checkEmpty (r + extra) (n + extraNative) P H beforeCaller before uv incoming incomingScs memos.query =
++          (.ok (some (if replacement = .empty then [] else [.ok ((), after)])),
++            afterCaller, savedQueries, read)) ∧
++      ExceptT.run ((do
++        setValue uv (.unenumerated (some handle) (incomingScs ++ oldScs))
++        inheritAncestry uv) read) = [.ok ((), after)] ∧
++      after = {read with
++        values := read.values.set uv (.unenumerated (some handle) (incomingScs ++ oldScs))
++        recursionAncestry := fun other => if other = uv then
++          (read.expansionAncestry ++ read.recursionAncestry uv).eraseDups else read.recursionAncestry other} ∧
++      after.values[uv]? = some (.unenumerated (some handle) (incomingScs ++ oldScs)) ∧
++      StorageValid after ∧ PendingRealized afterCaller.checked.native.machine.heap after ∧
++      Post formulas solver next beforeCaller afterCaller final ∧ final.query = savedQueries ∧
++      Cache.Extends memos.unfolding final.unfolding ∧
++      Available afterCaller.checked.native.machine.heap replacement ∧ replacement.free = [] ∧
++      encodeNode replacement = some handle ∧ lookupNode afterCaller.checked.native.machine.heap handle = some replacement ∧
++      (oldNode = none → replacement = incoming ∧ afterCaller = beforeCaller ∧
++        savedQueries = memos.query ∧ final = memos ∧ next = inventory) ∧
++      (∀ oldHandle, oldNode = some oldHandle →
++        ∃ (old query : Node) (queried : Checked width),
++          lookupNode beforeCaller.checked.native.machine.heap oldHandle = some old ∧
++          next.source = beforeCaller.checked.native.machine.heap ∧ next.roots = inventory.roots ++ [incoming, old] ∧
++          SourceCurrentAllocatedTargetQuery.Receipt formulas solver next incoming old beforeCaller.checked query queried memos ∧
++          (∀ ambient term,
++            InternedGuardedLanguage.meaning (SourceEqualityPCSGuard.holds formulas solver) ambient replacement term ↔
++              InternedGuardedLanguage.meaning (SourceEqualityPCSGuard.holds formulas solver) ambient incoming term ∧
++              InternedGuardedLanguage.meaning (SourceEqualityPCSGuard.holds formulas solver) ambient old term) ∧
++          (checkEmpty = false → replacement = query ∧
++            afterCaller = SourceCurrentAllocatedPartialState.advance beforeCaller queried beforeCaller.fourth beforeCaller.merge ∧
++            final = memos)) ∧
++      ∀ (ambient : InternedGuardedLanguage.Env Symbol)
++        (residualMeaning : EnumGuard → Language.Term Symbol → Prop)
++        (assignment : Nat → Language.Term Symbol),
++        Satisfies
++          (SourcePruningEnumerationNativeLanguage.handles (SourceEqualityPCSGuard.holds formulas solver)
++            ambient afterCaller.checked.native.machine.heap) residualMeaning assignment after ↔
++        Satisfies
++          (SourcePruningEnumerationNativeLanguage.handles (SourceEqualityPCSGuard.holds formulas solver)
++            ambient beforeCaller.checked.native.machine.heap) residualMeaning assignment before ∧
++          InternedGuardedLanguage.meaning (SourceEqualityPCSGuard.holds formulas solver)
++            ambient incoming (assignment uv) ∧
++          ∀ sc ∈ incomingScs, EnumerationState.Suspended.Holds assignment (assignment uv) sc := by
++  obtain ⟨r, n, p, h, oldNode, oldScs, read, after, afterCaller, savedQueries, final, next,
++    replacement, handle, reading, frame, running, writing, afterSame, stored, afterStorage,
++    afterRealized, post, query, unfolding, replacementAvailable, replacementClosed, encoded,
++    decoded, noOld, hasOld⟩ :=
++    run_complete formulas solver inventory beforeCaller before checkEmpty uv incoming incomingScs memos
++      initial realized storage root pending available closed bounded ranges
++  refine ⟨r, n, p, h, oldNode, oldScs, read, after, afterCaller, savedQueries, final, next,
++    replacement, handle, reading, frame, running, writing, afterSame, stored, afterStorage,
++    afterRealized, post, query, unfolding, replacementAvailable, replacementClosed, encoded,
++    decoded, noOld, hasOld, ?_⟩
++  intro ambient residualMeaning assignment
++  have readSuccess : Success (getValue r uv) before (.unenumerated oldNode oldScs) read := by
++    have actual := reading 0
++    simp only [Nat.add_zero] at actual
++    rw [Success, actual]
++    exact List.mem_singleton_self _
++  obtain ⟨_, found, _size, beforePath, _, oldStored⟩ :=
++    getValue_frame r uv before read (.unenumerated oldNode oldScs) storage.total readSuccess
++  obtain ⟨_rootSize, rootPath⟩ := root
++  have foundSame : found = uv := (UnionFind.reaches_unique beforePath rootPath).1
++  have beforeStored : before.values[uv]? = some (.unenumerated oldNode oldScs) := by
++    simpa only [foundSame] using oldStored
++  have readStored : read.values[uv]? = some (.unenumerated oldNode oldScs) := by
++    simpa only [frame.values] using beforeStored
++  have replacementMeaning : ∀ term,
++      SourcePruningEnumerationNativeLanguage.handles (SourceEqualityPCSGuard.holds formulas solver)
++        ambient afterCaller.checked.native.machine.heap handle term ↔
++      InternedGuardedLanguage.meaning (SourceEqualityPCSGuard.holds formulas solver) ambient incoming term ∧
++        Fragments.permits
++          (oldNode.map (SourcePruningEnumerationNativeLanguage.handles
++            (SourceEqualityPCSGuard.holds formulas solver) ambient afterCaller.checked.native.machine.heap)) term := by
++    intro term
++    rw [SourcePruningEnumerationNativeLanguage.handles_lookup _ _ _ _ _ _ decoded]
++    cases oldCase : oldNode with
++    | none =>
++        obtain ⟨same, _⟩ := noOld oldCase
++        simp only [Option.map_none, Fragments.permits, same, and_true]
++    | some oldHandle =>
++        obtain ⟨old, _queryNode, _queried, oldDecoded, _, _, _, exactMeaning, _⟩ := hasOld oldHandle oldCase
++        have keptDecoded := lookupNode_keeps beforeCaller.checked.native.machine.heap
++          afterCaller.checked.native.machine.heap post.effects.keeps oldHandle old oldDecoded
++        simpa only [oldCase, Option.map_some, Fragments.permits,
++          SourcePruningEnumerationNativeLanguage.handles_lookup _ _ _ _ _ _ keptDecoded] using
++          exactMeaning ambient term
++  have writeMeaning := SourcePruningEnumerationPendingWriteLanguage.pending_write
++    (SourcePruningEnumerationNativeLanguage.handles (SourceEqualityPCSGuard.holds formulas solver)
++      ambient afterCaller.checked.native.machine.heap) residualMeaning assignment read after uv handle
++    oldNode oldScs incomingScs
++    (InternedGuardedLanguage.meaning (SourceEqualityPCSGuard.holds formulas solver) ambient incoming)
++    readStored (by rw [afterSame]) (by rw [afterSame]) (by rw [afterSame]) replacementMeaning
++  have readMeaning := SourcePruningEnumerationNativeLanguage.satisfies_keeps_frame
++    (SourceEqualityPCSGuard.holds formulas solver) ambient beforeCaller.checked.native.machine.heap
++    afterCaller.checked.native.machine.heap before read residualMeaning assignment realized frame post.effects.keeps
++  exact writeMeaning.trans (and_congr_left fun _ => readMeaning)
++
++end MicroCFTA.SourcePruningEnumerationIncomingNode
+diff --git a/lean/MicroCFTA/SourcePruningEnumerationIncomingBranchesLanguage.lean b/lean/MicroCFTA/SourcePruningEnumerationIncomingBranchesLanguage.lean
+new file mode 100644
+index 000000000..0ced40b36
+--- /dev/null
++++ b/lean/MicroCFTA/SourcePruningEnumerationIncomingBranchesLanguage.lean
+@@ -0,0 +1,174 @@
++import MicroCFTA.SourcePruningEnumerationIncomingNodeLanguage
++
++/-!
++# Complete assignments represented by actual incoming branches
++
++The original producer runs once. Its full logical receipt remains available.
++The actual Empty branch has no satisfying assignment at the written slot.
++A nonempty raw singleton retains the same logical written core.
++-/
++namespace MicroCFTA.SourcePruningEnumerationIncomingNode
++open EnumerationState EnumerationCorrectness EnumerationSchedule EnumerationExecution
++open EnumerationCompressionFrame
++open InternedConstructorTemplates InternedProbeProvenance
++open SourcePruningEnumerationNodes SourcePruningEnumerationObservation SourcePruningEnumerationWrites
++open SourceCurrentAllocatedNativeInventoryState (Inventory)
++open SourceCurrentAllocatedPartialInvariant (Context Post)
++open SourceCurrentAllocatedNativeEffects (physical)
++open SourceCurrentAllocatedQueryMemo (advancePhysical)
++local notation "Symbol" => SourcePruningTemplates.Symbol
++local notation "Constraint" => SourceSymbolicIndex.Constraint FullSyntax.Formula
++local notation "Node" => InternedConstructorTemplates.Value Symbol Constraint
++local notation "Checked" => SourceEqualityNativeDemand.State
++local notation "Caller" => SourceCurrentAllocatedPartialState.State
++local notation "Memos" => EndpointMemoGateTrace.Memos
++local notation "Fourth" => SourceCurrentEmptinessMemo.Memo
++local notation "Queries" => SourceEndpointMemo.Memos
++variable {EnumGuard : Type} {width : Nat}
++
++attribute [local instance] SourcePruningEnumerationIncomingNode.incomingNodeMonadList
++
++/-- Retain every incoming receipt and interpret the actual rejecting or singleton branch list. -/
++theorem run_complete_branches
++    [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Constraint)] [DecidableEq Node]
++    (formulas : SourceGuards.Formulas FullSyntax.Formula)
++    (solver : SourceGuards.Entailment FullSyntax.Formula)
++    (inventory : Inventory) (beforeCaller : Caller width)
++    (before : EnumerationState.State Symbol EnumGuard)
++    (checkEmpty : Bool) (uv : Nat) (incoming : Node)
++    (incomingScs : List EnumerationState.Suspended) (memos : Memos)
++    (initial : Context formulas solver inventory beforeCaller memos)
++    (realized : PendingRealized beforeCaller.checked.native.machine.heap before)
++    (storage : StorageValid before) (root : EnumerationSchedule.IsRoot before.representatives uv)
++    (pending : EnumerationCompleteness.PendingAt before uv)
++    (available : Available beforeCaller.checked.native.machine.heap incoming) (closed : incoming.free = [])
++    (bounded : ∀ sc ∈ incomingScs, sc.var < before.counter)
++    (ranges : match before.values[uv]? with
++      | some (.unenumerated (some oldHandle) _) =>
++          match lookupNode beforeCaller.checked.native.machine.heap oldHandle with
++          | some old => SourceCurrentAllocatedNativeRequestBounds.WordRanges
++              (.code (SourceRecursiveIntersectionCode.requestNode IntersectionEmptyDomain.emptyDomain incoming old))
++              beforeCaller.checked
++          | none => True
++      | _ => True) :
++    ∃ (r n p h : Nat) (oldNode : Option Nat) (oldScs : List EnumerationState.Suspended)
++      (read after : EnumerationState.State Symbol EnumGuard) (afterCaller : Caller width)
++      (savedQueries : Queries) (final : Memos) (next : Inventory) (replacement : Node) (handle : Nat),
++      (∀ extra, ExceptT.run (getValue (r + extra) uv before) =
++        [.ok (.unenumerated oldNode oldScs, read)]) ∧
++      EnumerationCompressionFrame.Frame before read ∧
++      (∀ extra extraNative P H, p ≤ P → h ≤ H →
++        run checkEmpty (r + extra) (n + extraNative) P H beforeCaller before uv incoming incomingScs memos.query =
++          (.ok (some (if replacement = .empty then [] else [.ok ((), after)])),
++            afterCaller, savedQueries, read)) ∧
++      ExceptT.run ((do
++        setValue uv (.unenumerated (some handle) (incomingScs ++ oldScs))
++        inheritAncestry uv) read) = [.ok ((), after)] ∧
++      after = {read with
++        values := read.values.set uv (.unenumerated (some handle) (incomingScs ++ oldScs))
++        recursionAncestry := fun other => if other = uv then
++          (read.expansionAncestry ++ read.recursionAncestry uv).eraseDups else read.recursionAncestry other} ∧
++      after.values[uv]? = some (.unenumerated (some handle) (incomingScs ++ oldScs)) ∧
++      StorageValid after ∧ PendingRealized afterCaller.checked.native.machine.heap after ∧
++      Post formulas solver next beforeCaller afterCaller final ∧ final.query = savedQueries ∧
++      Cache.Extends memos.unfolding final.unfolding ∧
++      Available afterCaller.checked.native.machine.heap replacement ∧ replacement.free = [] ∧
++      encodeNode replacement = some handle ∧ lookupNode afterCaller.checked.native.machine.heap handle = some replacement ∧
++      (oldNode = none → replacement = incoming ∧ afterCaller = beforeCaller ∧
++        savedQueries = memos.query ∧ final = memos ∧ next = inventory) ∧
++      (∀ oldHandle, oldNode = some oldHandle →
++        ∃ (old query : Node) (queried : Checked width),
++          lookupNode beforeCaller.checked.native.machine.heap oldHandle = some old ∧
++          next.source = beforeCaller.checked.native.machine.heap ∧ next.roots = inventory.roots ++ [incoming, old] ∧
++          SourceCurrentAllocatedTargetQuery.Receipt formulas solver next incoming old beforeCaller.checked query queried memos ∧
++          (∀ ambient term,
++            InternedGuardedLanguage.meaning (SourceEqualityPCSGuard.holds formulas solver) ambient replacement term ↔
++              InternedGuardedLanguage.meaning (SourceEqualityPCSGuard.holds formulas solver) ambient incoming term ∧
++              InternedGuardedLanguage.meaning (SourceEqualityPCSGuard.holds formulas solver) ambient old term) ∧
++          (checkEmpty = false → replacement = query ∧
++            afterCaller = SourceCurrentAllocatedPartialState.advance beforeCaller queried beforeCaller.fourth beforeCaller.merge ∧
++            final = memos)) ∧
++      (∀ (ambient : InternedGuardedLanguage.Env Symbol)
++        (residualMeaning : EnumGuard → Language.Term Symbol → Prop)
++        (assignment : Nat → Language.Term Symbol),
++        Satisfies
++          (SourcePruningEnumerationNativeLanguage.handles (SourceEqualityPCSGuard.holds formulas solver)
++            ambient afterCaller.checked.native.machine.heap) residualMeaning assignment after ↔
++        Satisfies
++          (SourcePruningEnumerationNativeLanguage.handles (SourceEqualityPCSGuard.holds formulas solver)
++            ambient beforeCaller.checked.native.machine.heap) residualMeaning assignment before ∧
++          InternedGuardedLanguage.meaning (SourceEqualityPCSGuard.holds formulas solver)
++            ambient incoming (assignment uv) ∧
++          ∀ sc ∈ incomingScs, EnumerationState.Suspended.Holds assignment (assignment uv) sc) ∧
++      ∀ (ambient : InternedGuardedLanguage.Env Symbol)
++        (residualMeaning : EnumGuard → Language.Term Symbol → Prop)
++        (assignment : Nat → Language.Term Symbol),
++        (∃ output : EnumerationState.State Symbol EnumGuard,
++          Except.ok ((), output) ∈
++            (if replacement = .empty then [] else [.ok ((), after)] :
++              List (Except EnumerationState.Error (Unit × EnumerationState.State Symbol EnumGuard))) ∧
++          Satisfies
++            (SourcePruningEnumerationNativeLanguage.handles (SourceEqualityPCSGuard.holds formulas solver)
++              ambient afterCaller.checked.native.machine.heap) residualMeaning assignment output) ↔
++        Satisfies
++          (SourcePruningEnumerationNativeLanguage.handles (SourceEqualityPCSGuard.holds formulas solver)
++            ambient beforeCaller.checked.native.machine.heap) residualMeaning assignment before ∧
++          InternedGuardedLanguage.meaning (SourceEqualityPCSGuard.holds formulas solver)
++            ambient incoming (assignment uv) ∧
++          ∀ sc ∈ incomingScs, EnumerationState.Suspended.Holds assignment (assignment uv) sc := by
++  obtain ⟨r, n, p, h, oldNode, oldScs, read, after, afterCaller, savedQueries, final, next,
++    replacement, handle, reading, frame, running, writing, afterSame, stored, afterStorage,
++    afterRealized, post, query, unfolding, replacementAvailable, replacementClosed, encoded,
++    decoded, noOld, hasOld, logical⟩ :=
++    run_complete_semantics formulas solver inventory beforeCaller before checkEmpty uv incoming incomingScs memos
++      initial realized storage root pending available closed bounded ranges
++  refine ⟨r, n, p, h, oldNode, oldScs, read, after, afterCaller, savedQueries, final, next,
++    replacement, handle, reading, frame, running, writing, afterSame, stored, afterStorage,
++    afterRealized, post, query, unfolding, replacementAvailable, replacementClosed, encoded,
++    decoded, noOld, hasOld, logical, ?_⟩
++  intro ambient residualMeaning assignment
++  have replacementHolds
++      (satisfied : Satisfies
++        (SourcePruningEnumerationNativeLanguage.handles (SourceEqualityPCSGuard.holds formulas solver)
++          ambient afterCaller.checked.native.machine.heap) residualMeaning assignment after) :
++      InternedGuardedLanguage.meaning (SourceEqualityPCSGuard.holds formulas solver)
++        ambient replacement (assignment uv) := by
++    have atSlot := satisfied.1.2 uv
++    change Fragments.slotSatisfies assignment uv
++      (slot (SourcePruningEnumerationNativeLanguage.handles (SourceEqualityPCSGuard.holds formulas solver)
++        ambient afterCaller.checked.native.machine.heap)
++          ((after.values[uv]?).getD .eliminated)) at atSlot
++    rw [stored] at atSlot
++    change (SourcePruningEnumerationNativeLanguage.handles (SourceEqualityPCSGuard.holds formulas solver)
++      ambient afterCaller.checked.native.machine.heap handle (assignment uv) ∧ _) at atSlot
++    exact (SourcePruningEnumerationNativeLanguage.handles_lookup _ _ _ _ _ _ decoded).mp atSlot.1
++  have rawLogical :
++      (∃ output : EnumerationState.State Symbol EnumGuard,
++        Except.ok ((), output) ∈
++          (if replacement = .empty then [] else [.ok ((), after)] :
++            List (Except EnumerationState.Error (Unit × EnumerationState.State Symbol EnumGuard))) ∧
++        Satisfies
++          (SourcePruningEnumerationNativeLanguage.handles (SourceEqualityPCSGuard.holds formulas solver)
++            ambient afterCaller.checked.native.machine.heap) residualMeaning assignment output) ↔
++      Satisfies
++        (SourcePruningEnumerationNativeLanguage.handles (SourceEqualityPCSGuard.holds formulas solver)
++          ambient afterCaller.checked.native.machine.heap) residualMeaning assignment after := by
++    by_cases empty : replacement = .empty
++    · constructor
++      · rintro ⟨output, member, _satisfied⟩
++        simp only [ite_eq_left empty, List.not_mem_nil] at member
++      · intro satisfied
++        have impossible := replacementHolds satisfied
++        rw [empty, InternedGuardedLanguage.meaning] at impossible
++        exact False.elim impossible
++    · rw [ite_eq_right empty]
++      constructor
++      · rintro ⟨output, member, satisfied⟩
++        have pairSame : ((), output) = ((), after) := Except.ok.inj (List.mem_singleton.mp member)
++        have outputSame : output = after := congrArg Prod.snd pairSame
++        simpa only [outputSame] using satisfied
++      · intro satisfied
++        exact ⟨after, List.mem_singleton_self _, satisfied⟩
++  exact rawLogical.trans (logical ambient residualMeaning assignment)
++
++end MicroCFTA.SourcePruningEnumerationIncomingNode

@@ -1,0 +1,42 @@
+[2026-10-26 12:00 CET] Same-witness incoming language wrapper: no source-level obstruction found. Read-only review; no builds, Git actions or repository edits.
+
+Use the SAME run_complete witnesses
+SourcePruningEnumerationIncomingNode.run_complete:145-202 exports readRun at every r+extra and Frame before read. Derive the missing read slot without another producer:
+
+  have readZero : ExceptT.run (getValue r uv before) =
+      [.ok (.unenumerated oldNode oldScs, read)] := by
+    simpa only [Nat.add_zero] using readRun 0
+  have readSuccess : Success (getValue r uv) before
+      (.unenumerated oldNode oldScs) read := by
+    rw [Success, readZero]
+    exact List.mem_singleton_self _
+  obtain ⟨_readFrame, found, size, beforePath, _afterPath, oldStored⟩ :=
+    EnumerationCompressionFrame.getValue_frame r uv before read
+      (.unenumerated oldNode oldScs) storage.total readSuccess
+  obtain ⟨rootSize, rootPath⟩ := root
+  have foundEq : found = uv := (UnionFind.reaches_unique beforePath rootPath).1
+  have beforeStored : before.values[uv]? = some (.unenumerated oldNode oldScs) := by
+    simpa only [foundEq] using oldStored
+  have readStored : read.values[uv]? = some (.unenumerated oldNode oldScs) := by
+    simpa only [frame.values] using beforeStored
+
+getValue_frame is EnumerationCompressionFrame:78-88. IsRoot is exactly an existential Reaches uv uv path (EnumerationSchedule:273). reaches_unique returns representative equality as its first component (UnionFind:52). Alternatively getValue_success:1018 plus findRoot_correct gives the original slot without Total. The existing storage.total makes getValue_frame shortest.
+
+Read and frame semantics
+EnumerationFrame.getValue_assignment:508-513 already gives exact Satisfies(read) iff Satisfies(before) for every fixed NodeLanguage, arbitrary EnumGuard residualMeaning and assignment from this actual readSuccess plus storage.total. No graph premise is needed.
+A supplied complete Frame also gives generic Satisfies equivalence directly: UnionFind.SameClass:224 is an existential pair of Reaches paths. Rewrite both paths with frame.reaches. Then frame.values and frame.obligations preserve the heap and residual guards. This generic implication needs no Safe or Total premise once the Frame is supplied. Frame itself must not be used to infer Safe.
+
+Native heap transport
+Post.effects.keeps points from the actual original caller heap to the actual returned caller heap. lookupNode_keeps:51 preserves each successful lookup, including handle0. Keeps does not imply NativeLanguage equality for every Nat: newly allocated handles can obtain meanings. Use PendingRealized to obtain successful lookups for each stored pending handle, then preserve those exact values. SourcePruningEnumerationObservation.realized_preserved:45 combines the actual Frame before->read with native Keeps and yields finalHeap realization of that same read state. Available.grows also needs kept.growth and kept.history, as this helper already does. Stored values determine all payload-language uses; enumerated fragments and eliminated slots do not consult NodeLanguage.
+InternedGuardedLanguage.meaning:24 interprets the returned Value and the same ambient environment; it does not inspect the mutable native heap. Preserved decoded values therefore retain their meanings. The existing some-oldHandle branch already exports replacement meaning iff incoming meaning AND old meaning for every ambient and term. The none branch exports replacement=incoming and unchanged caller/full memos. No encoding injectivity or new query execution is required.
+
+Guard and result scope
+The enumeration state is State Symbol EnumGuard, while stored native Node values use the fixed Constraint type. Keep residualMeaning : EnumGuard -> Term Symbol -> Prop arbitrary. The write and inheritAncestry do not change obligations. Do not identify residualMeaning with the native PCS guard interpretation merely because both predicates occur in the final statement.
+The intended equivalence also retains the incoming suspended requirements: at assignment uv, require every incomingScs Suspended.Holds predicate, in addition to the incoming node meaning and the entire original Satisfies predicate. The final bucket is incomingScs++oldScs; it preserves all old requirements and duplicates.
+The logical after witness exists even for replacement Empty and raw[]. Runtime run returns the read endpoint separately; raw[] does not return the logical post-write core. State the equivalence for the SAME exported logical after and actual afterCaller heap. Keep the entire original result packet, query/unfolding/full-memo fields and rejection distinction. This local result does not prove whole-driver language correspondence or strengthen H6.
+
+Current source controls
+IncomingNode SHA256 ff3a4fa83ad6f3368a1141cf6b908f5d1e5a56d500b4efc3c480d2b263b508c4
+CompressionFrame SHA256 5b6e6a4b11c21b949874db500e23aa074fcdd4e0de683f46f33863113dc91375
+EnumerationFrame SHA256 24c07ac2cb167e47767ba1abf4e36f7ccc0b0c4655e09c41d20669e308bd75b4
+Observation SHA256 5a7b858adc4febb75621b9836053f308924c22d5fd7662741da61cbdab629bf4

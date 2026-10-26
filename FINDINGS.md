@@ -71,6 +71,23 @@ Terminal parents retain the existing enumerateNode fallback boundary. Native
 children can still take their terminal dispatcher. No Haskell fix is needed.
 Details: lean/notes-current-pruning-enumeration-native-ordinary.md.
 
+### Incoming-node assignment language and Haskell status
+
+The actual native incoming producer now has exact assignment semantics for
+its logical write and returned branch list. An Empty replacement has no
+satisfying assignment at the written slot. Native effects
+remain at their actual reached endpoint. The runtime code is unchanged.
+
+No Haskell source changed. No new Haskell defect or repair was established.
+External action: no additional patch. Retain all six earlier merged repairs,
+the merged Sized documentation repair in PR #178 and all historical repros.
+Keep the pending parallel-decision suffix-exception and cancellation findings.
+The formal native worker still chooses serial forcing. Arbitrary Haskell
+lazy demand and shared global caches remain correspondence obligations.
+The formal assimilation step still needs an assignment-equality argument
+from actual union paths. This is a proof obligation, not a reported defect.
+Details: `lean/notes-current-pruning-incoming-language.md`.
+
 ### Finite recursive resources and Haskell status
 
 The formal resource theorem now covers any chosen finite recursive capacity.
@@ -856,6 +873,39 @@ TH/Generic extraction, valid-position build/read and source codec laws stay open
 
 
 
+
+## Actual incoming-node branches now have exact assignment meaning
+
+Native handle and pending-write semantics: `c0ebbe6eb`.
+Actual incoming producer and branch language: `b71b084f2`.
+The goal stays ACTIVE. H6 remains the strongest end-to-end language theorem.
+Main `6c080537a` remains imported. All earlier Haskell repairs remain merged.
+
+The original incoming-node admission now derives exact complete-assignment
+meaning at the actual returned native heap. A returned branch accepts an
+assignment exactly when the original state, incoming node and incoming
+suspended constraints accept it. All old suspended constraints, aliases and
+residual guards retain their meaning. Empty rejection has no accepted
+assignment. Its logical write receipt remains separate from runtime raw [].
+
+Both wrappers retain the ENTIRE earlier producer result and call their
+producer once. No final satisfaction, desired language equality, fake Graph
+interpretation or new input premise is admitted. Native growth is compared
+only for handles actually read from realized old slots. The enumeration
+guard type remains independent from the native constraint type.
+
+All four new modules and Audit pass strict checks. Aggregate Audit passes
+3904 jobs and checks 77804 theorem dependencies. Installed readback covers
+13 declarations and one full definition. Only permitted axioms occur.
+H6, all earlier Lean sources except Audit imports, runtime and Haskell remain
+unchanged. Every finite recursive capacity still has original resource bounds.
+
+Whole-enumerator language soundness and completeness remain open. Next lift
+these semantics through the actual cached adapter and pending assimilation.
+Assimilation must derive assignment equality from actual union paths before
+it removes the source restriction. Selector coverage, partial stop outputs,
+unsupported fallback, concrete solver and Haskell correspondence remain open.
+Details: `lean/notes-current-pruning-incoming-language.md`. FINDINGS has Haskell status.
 
 ## Every finite recursive capacity now has original resource bounds
 
