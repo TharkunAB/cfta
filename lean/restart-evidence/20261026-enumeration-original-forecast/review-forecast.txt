@@ -1,0 +1,69 @@
+2026-10-26 06:23 CET
+FINAL SOURCE REVIEW: CLEAR
+
+Reviewed source hashes:
+SourcePruningEnumerationGuardWidth.lean
+  463f3d2e20913c74910e782d040f31b4c9244710b878ba5877956e2abaf0cf45
+SourcePruningEnumerationCostBounds.lean
+  7dc5f21ca1d2c2b67bc1d25d55d21b9aa41220494010ebc67b82517d3971a199
+SourcePruningEnumerationOriginalForecast.lean
+  a8a8c6364548d4adc35484caef13002991cd1242e59d345ca81480e43018f63c
+SourcePruningEnumerationOrdinaryForecastResources.lean
+  d2d6c0fccfee051f78a8ef92417e47f934c5afc650c3fce1b57d7e9676593bf2
+
+GuardWidth computes a finite sum from the supplied original guard alphabet.
+Membership and the actual successful Constraint.project equation derive the
+returned tries length. No bound on a future projection is an input. Unsupported
+projections contribute zero only to this numeric measure. They remain explicit
+unsupported stops in the execution theorem. This file matches the earlier
+/tmp proposal exactly; the composition review also checked its actual use.
+
+CostBounds follows the actual child lists. Descending a bucket applies map and
+filter, so its length cannot increase. suspendedVars has exactly tries.length
+entries, independently of the starting allocator. Each child therefore costs
+at most inherited length plus own width plus one mixed step. The sum counts
+every child and selected-row occurrence, including duplicates. Arity rejection
+and unsupported projection have zero query cost. No new correctness or
+successful-execution claim follows merely from these numeric bounds.
+
+OriginalForecast.count is computed before execution:
+  scalar(profile) * scalar(profile) * (inherited + GuardWidth.width(alphabet) + 1).
+Its proof uses current HeapFits, original guard carrier, linked records and the
+actual available ordinary node. node_width bounds stored rows. resident_edges
+and edge_width bound the actual selected edge children. Physical edge residency
+also derives guard membership for project_le. Stored structural mass does not
+measure guard equality payloads; the separate finite alphabet supplies that
+missing bound correctly.
+
+The selector hypotheses include both stored-edge membership and
+selected.length <= stored.length. The latter is essential: membership alone
+permits arbitrary duplicate occurrences. An explicit initial scs.length bound
+supplies inherited. These are genuine current-input laws. No future heap rows,
+caller state, successful callback or exact returned resource receipt is assumed.
+
+OrdinaryForecastResources derives availability from the original Packet's
+PendingRealized receipt at the same stored handle. Lookup uniqueness identifies
+the same decoded node. Initial Context supplies linked heap records. It derives
+the exact cost bound before calling ordinary_zero_complete_resources once,
+using Reserved.prefix. No second completion producer or runtime scan is added.
+
+The complete earlier ordinary output component was compared as source data.
+It is byte-identical after removal of the new outer grouping parentheses. This
+includes actual entry and wrapper/scan equations at the common bound, the actual
+entered-cache Packet, full final Post and captured Packet, exact-cost resources,
+every ReceiptAt and OutputAt, and the completed/stopped shape with StoppedAt.
+Ancestry changes still use the previously reviewed RenderStable route.
+
+The only added outputs are the exact cost inequality and final Fits/guard
+carrier at the complete original count. They enlarge the same fixed reservation
+schedule through advance_count_profile_mono and advance_alphabet_ge. They do
+not run an unused suffix, change an endpoint, or replace each certificate's own
+prefix by the final endpoint. Rejection, unsupported and expansion-exhaustion
+boundaries remain unchanged. Scope is an ordinary scan with zero recursive
+expansion; no whole-driver or deeper recursive completion is claimed.
+
+The existing strict-guard-1, strict-cost-2, strict-original-2 and
+strict-ordinary-forecast-1 reports were read. All record exit 0, zero output bytes
+and the exact source hashes above. Root ran those checks. This review performed
+no build, compiler invocation, Git operation or repository edit. Only this
+review report was written.
