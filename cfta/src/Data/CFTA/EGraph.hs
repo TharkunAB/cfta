@@ -952,8 +952,18 @@ runWith analysis limits rules goal g0 = go 0 IntMap.empty IntMap.empty IntMap.em
                     Right (g', changed) ->
                         let (settled, known') = settle (i == 0) now known (rebuild g')
                             g'' = settled{clock = clock settled + 1}
+                            banned = [until' | (_, until', _) <- IntMap.elems bans', until' > i + 1]
+                            -- A banned rule can still apply, so an iteration that
+                            -- changes nothing does not saturate while a ban lasts.
+                            -- The bans move forward until the first one ends, as in
+                            -- egg's BackoffScheduler.
+                            shift = minimum banned - (i + 1)
+                            moved = IntMap.map (\(l, u, b) -> if u > i + 1 then (l, u - shift, b) else (l, u, b)) bans'
                          in if not changed && size g'' == size g
-                                then (g'', Report (i + 1) (size g'') (if reached g'' then Equal else Saturated))
+                                then
+                                    if null banned
+                                        then (g'', Report (i + 1) (size g'') (if reached g'' then Equal else Saturated))
+                                        else go (i + 1) moved ran' entered' known' g''
                                 else go (i + 1) bans' ran' entered' known' g''
     sortId h c = let ClassId j = find h c in maybe 0 classSort (IntMap.lookup j (classes h))
 
