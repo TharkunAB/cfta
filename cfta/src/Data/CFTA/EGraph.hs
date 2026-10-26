@@ -132,6 +132,7 @@ module Data.CFTA.EGraph (
     emptyEGraph,
     addTerm,
     addTermWith,
+    addConstrained,
     lookupTerm,
     lookupTermWith,
     find,
@@ -348,11 +349,14 @@ data EGraph s f = EGraph
     -- ^ The roots whose users 'rebuild' must make canonical.
     , clock :: !Int
     -- ^ The iteration of the saturation, for the stamps of the e-classes.
+    , constrained :: !Bool
+    -- ^ Whether a transition has an equality constraint ('addConstrained').
     }
 
 -- | The e-graph without terms.
 emptyEGraph :: EGraph s f
-emptyEGraph = EGraph (UnionFind.withInitialValues []) Map.empty IntMap.empty HashMap.empty 0 0 HashMap.empty IntMap.empty [] 0
+emptyEGraph =
+    EGraph (UnionFind.withInitialValues []) Map.empty IntMap.empty HashMap.empty 0 0 HashMap.empty IntMap.empty [] 0 False
 
 -- | The root of the e-class of an identity.
 find :: EGraph s f -> ClassId -> ClassId
@@ -402,7 +406,7 @@ sortOf g c = lookupClass g c >>= sortTerm g . classSort
 -- | Add an e-node, and give its e-class.
 addNode :: (Hashable f) => ENode f -> EGraph s f -> (ClassId, EGraph s f)
 addNode n0 g = case HashMap.lookup n (memo g) of
-    Just c -> (find g c, g)
+    Just c -> (find g c, if constrained g then withTransition (find g c) (transitionOf n) g else g)
     Nothing ->
         let c@(ClassId i) = ClassId (added g)
             ENode k _ cs = n
@@ -418,6 +422,38 @@ addNode n0 g = case HashMap.lookup n (memo g) of
             )
   where
     n = canon g n0
+
+{- | The e-graph with a transition in the row of a root, unless the row has
+it or the plain form of it, which accepts more terms.
+-}
+withTransition :: (Eq f) => ClassId -> FTA.Transition ClassId (ESymbol f) Constraint -> EGraph s f -> EGraph s f
+withTransition c t g
+    | any (\u -> u == t || u == plain) row = g
+    | otherwise = g{transitions = Map.insert c (row ++ [t]) (transitions g)}
+  where
+    row = Map.findWithDefault [] c (transitions g)
+    plain = t{FTA.transitionConstraint = noConstraint}
+
+{- | Add an e-node whose terms satisfy an equality constraint, as a
+transition of an ECTA does, and give its e-class. The e-node has no sort,
+and its children are e-classes of the e-graph. Each term of an e-class
+equals the others, so a constraint does not change which e-classes are
+equal: the e-node is in the e-class of its plain form, and rules match it as
+they match its plain form. The constraint changes the terms of the e-class,
+which 'classAutomaton' gives with the constraint, until the plain form is
+added, which accepts more terms.
+-}
+addConstrained :: (Hashable f) => Constraint -> f -> [ClassId] -> EGraph s f -> (ClassId, EGraph s f)
+addConstrained constraint f cs g0
+    | constraint == noConstraint = addNode (ENode 0 f cs) g0
+    | otherwise = case HashMap.lookup n (memo g0) of
+        Just c -> (find g0 c, withTransition (find g0 c) t g0{constrained = True})
+        Nothing ->
+            let (c, g1) = addNode n g0
+             in (c, g1{transitions = Map.insert c [t] (transitions g1), constrained = True})
+  where
+    n = canon g0 (ENode 0 f cs)
+    t = (transitionOf n){FTA.transitionConstraint = constraint}
 
 -- | The e-class of a term without sorts, when the e-graph has the term.
 lookupTerm :: (Hashable s, Hashable f) => Term f -> EGraph s f -> Maybe ClassId
@@ -521,7 +557,8 @@ rebuild = go IntSet.empty
         [] ->
             let g1 = g0{unionFind = UnionFind.flatten (unionFind g0)}
                 roots = IntSet.fromList [r | i <- IntSet.toList dirty, let ClassId r = find g1 (ClassId i), IntMap.member r (classes g1)]
-                tidy table r = Map.adjust (map transitionOf . dedupe . map (canon g1 . nodeOf)) (ClassId r) table
+                tidy table r = Map.adjust (dedupe . map canonical) (ClassId r) table
+                canonical t = (transitionOf (canon g1 (nodeOf t))){FTA.transitionConstraint = FTA.transitionConstraint t}
              in g1{transitions = IntSet.foldl' tidy (transitions g1) roots}
         todo ->
             let merged = IntSet.fromList [i | c <- todo, let ClassId i = find g0 c]
@@ -529,13 +566,11 @@ rebuild = go IntSet.empty
                     IntSet.fromList
                         [j | i <- IntSet.toList merged, Just e <- [IntMap.lookup i (classes g0)], (_, ClassId j) <- classUsers e]
              in go (IntSet.unions [dirty, merged, owners]) (foldl' repair g0{pending = []} (IntSet.toList merged))
-    -- The e-nodes once each, in their first order.
-    dedupe =
-        snd
-            . foldr
-                (\n (seen, kept) -> if HashSet.member n seen then (seen, kept) else (HashSet.insert n seen, n : kept))
-                (HashSet.empty, [])
-            . reverse
+    -- The transitions once each, in their first order.
+    dedupe = reverse . snd . foldl' keep (HashSet.empty, [])
+    keep (seen, kept) t =
+        let key = (nodeOf t, FTA.transitionConstraint t)
+         in if HashSet.member key seen then (seen, kept) else (HashSet.insert key seen, t : kept)
     repair g i = case IntMap.lookup i' (classes g) of
         Nothing -> g
         Just e ->
@@ -623,21 +658,27 @@ data Task f = Whole !Int | Use !(ENode f) !ClassId
 comes from its symbol and the costs of its children, and must be greater
 than each of them, as @1 + sum@ is, so that the cheapest term is finite.
 -}
-extract :: (Ord c) => (f -> [c] -> c) -> EGraph s f -> ClassId -> Maybe (c, Term f)
+extract :: (Ord c, Eq f) => (f -> [c] -> c) -> EGraph s f -> ClassId -> Maybe (c, Term f)
 extract cost g c0 = do
     (k, _) <- best (find g c0)
-    t <- build (find g c0)
-    Just (k, t)
+    term <- build (find g c0)
+    Just (k, term)
   where
     costOf = analyse cost min g
     best c = do
         k <- costOf c
-        let ClassId j = find g c
-        node <- listToMaybe [n | n@(ENode _ f cs) <- nodesAt g j, Just ks <- [traverse costOf cs], cost f ks == k]
-        Just (k, node)
+        let row = Map.findWithDefault [] (find g c) (transitions g)
+        Just (k, [t | t <- row, let ENode _ f cs = nodeOf t, Just ks <- [traverse costOf cs], cost f ks == k])
+    -- The term of the first cheapest transition whose constraint the term satisfies.
     build c = do
-        (_, ENode _ f cs) <- best c
-        Node f <$> traverse (build . find g) cs
+        (_, candidates) <- best c
+        listToMaybe
+            [ term
+            | t <- candidates
+            , let ENode _ f cs = nodeOf t
+            , Just term <- [Node f <$> traverse (build . find g) cs]
+            , equalitiesHold (FTA.transitionConstraint t) term
+            ]
 
 -- | The number of e-classes.
 eClassCount :: EGraph s f -> Int

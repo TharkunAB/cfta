@@ -3,6 +3,7 @@
 module Data.CFTA.EGraphSpec (spec) where
 
 import Control.Monad (forM_)
+import Data.Functor.Identity (runIdentity)
 import qualified Data.Map.Strict as Map
 import Data.Maybe (fromMaybe)
 import qualified Data.Set as Set
@@ -264,6 +265,27 @@ spec = describe "Data.CFTA.EGraph" $ do
         toC (different "x" "y" <> different "y" "x") `shouldBe` (False, True)
         -- The rule has no variable z, so a condition on z is false.
         toC (different "x" "y" <> different "x" "z") `shouldBe` (False, False)
+    it "keeps an e-class with an equality-constrained e-node to the terms that satisfy the constraint" $ do
+        let leaf s = Node s []
+            fOf x y = Node "f" [leaf x, leaf y]
+            (a, g1) = addTerm (leaf "a") (emptyEGraph :: EGraph () String)
+            (b, g2) = addTerm (leaf "b") g1
+            -- One e-class holds a and b, so the plain e-node f(x, y) of it has four terms.
+            ab = fromMaybe g2 (merge a b g2)
+            sameChildren = equalityConstraint (mkEqConstraints [[path [0], path [1]]])
+            (c, g3) = addConstrained sameChildren "f" [a, a] ab
+            language g = case classAutomaton g c of
+                Right automaton ->
+                    Set.fromList
+                        (runIdentity (FTA.termsUpToM (\_ t term -> pure (equalitiesHold (FTA.transitionConstraint t) term)) (Depth 2) automaton))
+                Left _ -> Set.empty
+            -- A rule matches the e-node as it matches its plain form.
+            (g4, _) = saturate defaultLimits [rewrite (PNode "f" [PVar "x", PVar "y"]) (PNode "g" [PVar "y", PVar "x"])] g3
+            -- The plain form is in the same e-class, and accepts all four pairs.
+            (c', g5) = addTerm (fOf "a" "b") g3
+        language g3 `shouldBe` Set.fromList [fOf "a" "a", fOf "b" "b"]
+        Set.size (language g4) `shouldBe` 6
+        (find g5 c' == find g5 c, Set.size (language g5)) `shouldBe` (True, 4)
     it "finds the e-class of a term without adding it, also through a merge" $ do
         let leaf s = Node s []
             (c, g1) = addTerm (Node "f" [leaf "a"]) (emptyEGraph :: EGraph () String)
