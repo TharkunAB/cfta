@@ -196,6 +196,24 @@ nodeSymbol = \case
     ENode2 _ f _ _ -> f
     ENodeN _ f _ -> f
 
+-- | The child of an e-node at an index, without the list of its children.
+nodeChild :: ENode f -> Int -> Maybe ClassId
+nodeChild n k = case n of
+    ENode1 _ _ a | k == 0 -> Just (ClassId a)
+    ENode2 _ _ a b
+        | k == 0 -> Just (ClassId a)
+        | k == 1 -> Just (ClassId b)
+    ENodeN _ _ cs -> cs !? k
+    _ -> Nothing
+
+-- | The number of children of an e-node.
+nodeArity :: ENode f -> Int
+nodeArity = \case
+    ENode0 _ _ -> 0
+    ENode1{} -> 1
+    ENode2{} -> 2
+    ENodeN _ _ cs -> length cs
+
 instance (Hashable f) => Hashable (ENode f) where
     hashWithSalt salt = \case
         ENode0 k f -> salt `hashWithSalt` k `hashWithSalt` f
@@ -716,13 +734,18 @@ matchRule g region bySymbol stampOf since changed r =
         Just ss' ->
             let children (child : cs) (kid : ks) m more = down kid child m (\m' more' -> children cs ks m' more') more
                 children _ _ m more = k m more
+                start = (Subst vs ss', seen c fresh)
              in foldr
                     ( \n more ->
                         if nodeSymbol n /= f
                             then more
-                            else case n of
-                                ENode _ _ cs | sameLength cs kids -> children cs kids (Subst vs ss', seen c fresh) more
-                                _ -> more
+                            else -- The children of the common arities, without a list.
+                                case (n, kids) of
+                                    (ENode0 _ _, []) -> k start more
+                                    (ENode1 _ _ a, [p]) -> down p (ClassId a) start k more
+                                    (ENode2 _ _ a b, [p, q]) -> down p (ClassId a) start (\m more' -> down q (ClassId b) m k more') more
+                                    (ENodeN _ _ cs, _) | sameLength cs kids -> children cs kids start more
+                                    _ -> more
                     )
                     rest
                     (IntMap.findWithDefault [] i region)
@@ -751,9 +774,8 @@ matchRule g region bySymbol stampOf since changed r =
             , Just e <- [IntMap.lookup i (classes g)]
             , (u, owner) <- classUsers e
             , nodeSymbol u == f
-            , ENode _ _ cs <- [u]
-            , length cs == n
-            , Just child <- [cs !? k]
+            , nodeArity u == n
+            , Just child <- [nodeChild u k]
             , find g child == ClassId i
             , let ClassId j = find g owner
             , IntMap.member j region
