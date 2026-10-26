@@ -70,6 +70,29 @@ Terminal parents retain the existing enumerateNode fallback boundary. Native
 children can still take their terminal dispatcher. No Haskell fix is needed.
 Details: lean/notes-current-pruning-enumeration-native-ordinary.md.
 
+### Original resources cover the terminal fold and its later incoming query
+
+The covered nonempty terminal path now derives all earlier range obligations
+from current invariants and an original mixed reservation. The original
+bucket length counts every recorded root, including duplicates and no-ops.
+One extra step covers the incoming query after the fold. Optional enabled
+Empty allocation remains included. No future range or success is admitted.
+
+The post-union pre-fold core need not be Safe. The proof uses its actual
+pending and realized facts. Actual prefix and fold uniqueness identify the
+complete returned states. Full Post and realization at the fold endpoint
+supply the following incoming admission. Both old completion packets remain.
+
+A rejected fold keeps native effects from its completed prefix and rejecting
+step. It does not run the incoming query. Incoming Empty rejection keeps
+its actual caller and earlier cache certificate. Safe remains conditional on
+nonempty raw output. Final numeric Fits does not reserve a following query.
+
+External Haskell action: no new runtime defect or repair was established.
+No Haskell source changed. Retain all six merged-fix entries and the pending
+Sized documentation repair `af6369a9e`. Details:
+`lean/notes-current-pruning-enumeration-terminal-resources.md`.
+
 ### Original resources cover every actual cached-fold entry
 
 The complete ordered cached fold now derives its old future-universal range
@@ -590,6 +613,43 @@ TH/Generic extraction, valid-position build/read and source codec laws stay open
 
 
 
+
+## Original reservations now cover terminal joins and incoming writes
+
+Prefix uniqueness: `6bbbe0505`. Fold uniqueness: `59535ea23`.
+Terminal admission: `7cc542b51`. Full terminal resources: `749a74c6b`.
+Full cached adapter resources: `ca79a47bc`. The goal stays ACTIVE.
+
+The covered nonempty terminal path now derives its ENTIRE old future-range
+condition from current invariants and one original mixed reservation. The
+original bucket length reserves the ordered fold, including duplicate roots
+and no-op entries. One extra step reserves the incoming query after the fold.
+Both native queries and enabled Empty-check constructor allocation are charged.
+
+Actual prefix and fold uniqueness identify their complete returned states
+across successful fuel bounds. The post-union joined core need not be Safe.
+Its established pending and realized facts supply fold entry instead. Full
+Post and realization at the actual fold return supply the incoming admission.
+
+Both completion wrappers retain their ENTIRE old conclusions and add Fits
+and guard carriers at the SAME fold and final native callers. Fold rejection
+keeps prefix and rejecting native effects, without incoming execution. Incoming
+Empty rejection keeps the returned caller and the existing cache receipt.
+Safe remains conditional on nonempty raw output. No future range or successful
+action is a producer input. Final Fits gives no Room for a following query.
+
+All five new modules and Audit pass strict checks. Public readback covers
+20 declarations and six full definitions. Audit checks 77268 dependencies.
+Exact old output comparisons retain 9060 and 10982 characters after width
+specialization. Runtime workers, older interfaces, H6 and Haskell remain
+unchanged. Main remains imported at `153e1a211`. FINDINGS records no new fix.
+
+H6 remains the strongest end-to-end language theorem. Next derive the complete
+child dispatcher admission from the original bucket bound, then cover selected
+edges, callbacks, whole recursive subtrees and later siblings. Whole-driver
+language, terminal outer fallback, native Graph correspondence, extraction and
+arbitrary lazy demand remain open. Details:
+`lean/notes-current-pruning-enumeration-terminal-resources.md`.
 
 ## Original mixed reservations now construct the complete cached fold
 
