@@ -1,0 +1,85 @@
+/tmp/mcfta-native-recursive-hooks-20261026/strict-selected-prefix-2/MicroCFTA/SourcePruningEnumerationSelectedStep.lean:107:19: error: unsolved goals
+case h_1
+Typing Key : Type
+width : Nat
+inst✝ : DecidableEq (EdgeKey Symbol Constraint)
+holeKey : Typing → Nat → Key
+fits : Key → Symbol → Bool
+admits : Key → Node → Bool
+graph : Graph Symbol Constraint
+templates : List (Template.Pattern Symbol)
+stop : Option (Metadata Typing → Nat → Bool)
+order : Metadata Typing → List Nat → Option Nat
+metadata : Metadata Typing
+readFuel checkFuel nativeFuel representativeFuel indexFuel callbackFuel uv : Nat
+caller : Caller width
+before : Cached
+queries : Queries
+x✝ : Result width Typing
+checked✝ : Core
+prepared✝ : Prepared
+caller✝ : Caller width
+queries✝ : Queries
+action✝ : Option (List (Except Error (Unit × Core)))
+candidate✝ : Option Cached
+right✝ : Option (List (Except Error ((Bool × Metadata Typing) × Core)))
+ordinary✝ :
+  Option
+    (List (Except Error ((Nat × Nat × List Suspended × Node) × Core)) ×
+      Option (SourcePruningEnumerationNativeBranches.Result width))
+heq✝ :
+  (have read := (getValue readFuel uv before.core).run;
+    match read with
+    | [Except.ok (UVarValue.unenumerated (some oldHandle) scs, readAfter)] =>
+      have check :=
+        (SourcePruningEnumerationRecursion.checkRepeated caller.checked.native.machine.heap checkFuel uv oldHandle scs
+            readAfter).run;
+      match check with
+      | [Except.ok (true, checked)] =>
+        have candidate :=
+          SourcePruningEnumerationParkedRestart.adapt caller.checked.native.machine.heap indexFuel uv oldHandle scs
+            before checked;
+        Result.parked checked candidate
+          (Option.map (fun parked => (SourcePruningEnumerationRestart.run stop order metadata parked checked).run)
+            candidate)
+      | [Except.ok (false, checked)] =>
+        match lookupNode caller.checked.native.machine.heap oldHandle with
+        | none => Result.stopped read (some check)
+        | some oldValue =>
+          have prepared :=
+            SourcePruningEnumerationAction.prepare holeKey fits admits metadata nativeFuel representativeFuel uv
+              oldHandle scs oldValue caller.checked.native.machine.heap;
+          have reached :=
+            SourceCurrentAllocatedPartialState.advance caller
+              (advancePhysical caller.checked { heap := prepared.state, equality := caller.checked.operations })
+              caller.fourth caller.merge;
+          match prepared with
+          | MergedSourceComparison.Result.failed _fault _heap =>
+            Result.narrowed checked prepared reached queries none none none none
+          | MergedSourceComparison.Result.done (_value, none) _heap =>
+            Result.narrowed checked prepared reached queries none none none none
+          | MergedSourceComparison.Result.done (value, some action) heap =>
+            have raw := (action checked).run;
+            match raw with
+            | [Except.ok (PUnit.unit, observed)] =>
+              match encodeNode value with
+              | none => Result.narrowed checked prepared reached queries (some raw) none none none
+              | some newHandle =>
+                have candidate :=
+                  SourcePruningEnumerationNarrowAdapter.adapt heap indexFuel uv oldHandle newHandle scs before observed;
+                match candidate with
+                | none => Result.narrowed checked prepared reached queries (some raw) none none none
+                | some attached =>
+                  have right :=
+                    (SourcePruningRecordTypes.recordTypes graph templates callbackFuel metadata uv (Sum.inr newHandle)
+                        attached.core).run;
+                  match right with
+                  | [Except.ok ((false, _updated), callbackCore)] =>
+                    have after := EnumerationExpandableIndex.frame callbackCore attached;
+                    Result.narrowed checked prepared reached queries (some raw) (some after) (some right) none
+                  | x => Result.narrowed checked prepared reached queries (some raw) (some attached) (some right) none
+            | x => Result.narrowed checked prepared reached queries (some raw) none none none
+      | x => Result.stopped read (some check)
+    | x => Result.stopped read none) =
+    Result.narrowed checked✝ prepared✝ caller✝ queries✝ action✝ candidate✝ right✝ ordinary✝
+⊢ ordinary✝ = none

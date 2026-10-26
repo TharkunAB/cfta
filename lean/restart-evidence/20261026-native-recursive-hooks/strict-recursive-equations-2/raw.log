@@ -1,0 +1,127 @@
+/tmp/mcfta-native-recursive-hooks-20261026/strict-recursive-equations-2/MicroCFTA/SourcePruningEnumerationRecursiveEquations.lean:113:2: error: Tactic `apply` failed: could not unify the conclusion of `SourcePruningEnumerationNativeContinuations.completed_head
+  (continueWith (resume holeKey fits admits graph templates checkEmpty edgesOf stop order workFuel recursiveFuel) graph
+    templates stop order workFuel metadata uv)
+  checkEmpty r n p h k target scs before edge rest caller reached middleCaller queries saved middleQueries fragment
+  after outputs head`
+  SourcePruningEnumerationNativeContinuations.run
+      (continueWith (resume holeKey fits admits graph templates checkEmpty edgesOf stop order workFuel recursiveFuel)
+        graph templates stop order workFuel metadata uv)
+      checkEmpty r n p h k target scs before (edge :: rest) caller queries =
+    match
+      SourcePruningEnumerationNativeContinuations.run
+        (continueWith (resume holeKey fits admits graph templates checkEmpty edgesOf stop order workFuel recursiveFuel)
+          graph templates stop order workFuel metadata uv)
+        checkEmpty r n p h k target scs before rest middleCaller middleQueries with
+    | SourcePruningEnumerationNativeContinuations.Result.complete processed later finalCaller finalQueries =>
+      SourcePruningEnumerationNativeContinuations.Result.complete
+        (SourcePruningEnumerationSelectedEdge.Result.complete fragment reached saved after :: processed)
+        (outputs ++ later) finalCaller finalQueries
+    | SourcePruningEnumerationNativeContinuations.Result.stopped processed later current =>
+      SourcePruningEnumerationNativeContinuations.Result.stopped
+        (SourcePruningEnumerationSelectedEdge.Result.complete fragment reached saved after :: processed)
+        (outputs ++ later) current
+with the goal
+  SourcePruningEnumerationNativeContinuations.run
+      (continueWith (resume holeKey fits admits graph templates checkEmpty edgesOf stop order workFuel recursiveFuel)
+        graph templates stop order workFuel metadata uv)
+      checkEmpty r n p h k target scs before (edge :: rest) caller queries =
+    match
+      SourcePruningEnumerationNativeContinuations.run
+        (continueWith (resume holeKey fits admits graph templates checkEmpty edgesOf stop order workFuel recursiveFuel)
+          graph templates stop order workFuel metadata uv)
+        checkEmpty r n p h k target scs before rest middleCaller middleQueries with
+    | SourcePruningEnumerationNativeContinuations.Result.complete processed later finalCaller finalQueries =>
+      SourcePruningEnumerationNativeContinuations.Result.complete
+        (SourcePruningEnumerationSelectedEdge.Result.complete fragment reached saved after :: processed)
+        (outputs ++ later) finalCaller finalQueries
+    | SourcePruningEnumerationNativeContinuations.Result.stopped processed later current =>
+      SourcePruningEnumerationNativeContinuations.Result.stopped
+        (SourcePruningEnumerationSelectedEdge.Result.complete fragment reached saved after :: processed)
+        (outputs ++ later) current
+
+Note: The full type of `SourcePruningEnumerationNativeContinuations.completed_head
+  (continueWith (resume holeKey fits admits graph templates checkEmpty edgesOf stop order workFuel recursiveFuel) graph
+    templates stop order workFuel metadata uv)
+  checkEmpty r n p h k target scs before edge rest caller reached middleCaller queries saved middleQueries fragment
+  after outputs head` is
+  continueWith (resume holeKey fits admits graph templates checkEmpty edgesOf stop order workFuel recursiveFuel) graph
+        templates stop order workFuel metadata uv fragment reached saved after =
+      SourcePruningEnumerationNativeContinuations.HookResult.complete outputs middleCaller middleQueries →
+    SourcePruningEnumerationNativeContinuations.run
+        (continueWith (resume holeKey fits admits graph templates checkEmpty edgesOf stop order workFuel recursiveFuel)
+          graph templates stop order workFuel metadata uv)
+        checkEmpty r n p h k target scs before (edge :: rest) caller queries =
+      match
+        SourcePruningEnumerationNativeContinuations.run
+          (continueWith
+            (resume holeKey fits admits graph templates checkEmpty edgesOf stop order workFuel recursiveFuel) graph
+            templates stop order workFuel metadata uv)
+          checkEmpty r n p h k target scs before rest middleCaller middleQueries with
+      | SourcePruningEnumerationNativeContinuations.Result.complete processed later finalCaller finalQueries =>
+        SourcePruningEnumerationNativeContinuations.Result.complete
+          (SourcePruningEnumerationSelectedEdge.Result.complete fragment reached saved after :: processed)
+          (outputs ++ later) finalCaller finalQueries
+      | SourcePruningEnumerationNativeContinuations.Result.stopped processed later current =>
+        SourcePruningEnumerationNativeContinuations.Result.stopped
+          (SourcePruningEnumerationSelectedEdge.Result.complete fragment reached saved after :: processed)
+          (outputs ++ later) current
+
+Typing Key : Type
+width : Nat
+inst✝² : DecidableEq Symbol
+inst✝¹ : DecidableEq (EdgeKey Symbol Constraint)
+inst✝ : DecidableEq Node
+holeKey : Typing → Nat → Key
+fits : Key → Symbol → Bool
+admits : Key → Node → Bool
+graph : Graph Symbol Constraint
+templates : List (Template.Pattern Symbol)
+checkEmpty : Bool
+edgesOf : Node → List (EdgeValue Symbol Constraint)
+stop : Option (Metadata Typing → Nat → Bool)
+order : Metadata Typing → List Nat → Option Nat
+workFuel recursiveFuel : Nat
+metadata : Metadata Typing
+caller : Caller width
+queries : Queries
+before : Cached
+uv target r n p h k : Nat
+scs : List Suspended
+edge : EdgeValue Symbol Constraint
+rest : List (EdgeValue Symbol Constraint)
+fragment : Fragment
+reached middleCaller : Caller width
+saved middleQueries : Queries
+after : Cached
+callbackCore : Core
+updated : Metadata Typing
+outputs : List (Output width Typing)
+head :
+  SourcePruningEnumerationCapturedEdge.run checkEmpty r n p h k target scs edge caller before queries =
+    some (SourcePruningEnumerationSelectedEdge.Result.complete fragment reached saved after)
+callback :
+  Success (SourcePruningRecordTypes.recordTypes graph templates workFuel metadata uv (Sum.inl fragment)) after.core
+    (false, updated) callbackCore
+continued :
+  resume holeKey fits admits graph templates checkEmpty edgesOf stop order workFuel recursiveFuel updated reached saved
+      (EnumerationExpandableIndex.frame callbackCore after)
+      (SourcePruningEnumerationRestart.decision stop order updated
+        (EnumerationExpandableIndex.frame callbackCore after)) =
+    SourcePruningEnumerationNativeContinuations.HookResult.complete outputs middleCaller middleQueries
+⊢ SourcePruningEnumerationNativeContinuations.run
+      (continueWith (resume holeKey fits admits graph templates checkEmpty edgesOf stop order workFuel recursiveFuel)
+        graph templates stop order workFuel metadata uv)
+      checkEmpty r n p h k target scs before (edge :: rest) caller queries =
+    match
+      SourcePruningEnumerationNativeContinuations.run
+        (continueWith (resume holeKey fits admits graph templates checkEmpty edgesOf stop order workFuel recursiveFuel)
+          graph templates stop order workFuel metadata uv)
+        checkEmpty r n p h k target scs before rest middleCaller middleQueries with
+    | SourcePruningEnumerationNativeContinuations.Result.complete processed later finalCaller finalQueries =>
+      SourcePruningEnumerationNativeContinuations.Result.complete
+        (SourcePruningEnumerationSelectedEdge.Result.complete fragment reached saved after :: processed)
+        (outputs ++ later) finalCaller finalQueries
+    | SourcePruningEnumerationNativeContinuations.Result.stopped processed later current =>
+      SourcePruningEnumerationNativeContinuations.Result.stopped
+        (SourcePruningEnumerationSelectedEdge.Result.complete fragment reached saved after :: processed)
+        (outputs ++ later) current

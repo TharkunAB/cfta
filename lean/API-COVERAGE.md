@@ -1,5 +1,37 @@
 # Public API and source correspondence
 
+## Concrete recursive callbacks precede native siblings
+
+Callback exactness: `231b4a5ae`. Prefix separation: `ed303a16b`.
+Ordinary continuation entry: `e9c702f0d`. Recursive worker: `359bddbb4`.
+The goal stays ACTIVE.
+
+The new bounded worker executes actual selected prefixes, concrete Left
+callbacks and recursive restarts inside the native alternative fold.
+Each recursive continuation finishes before the next sibling starts at its
+returned native Caller and Queries. Siblings retain their captured metadata,
+enumeration cache and remaining depth. Every emitted result retains its own
+cache and emission-time native endpoint. Errors and unsupported cases stay
+explicit. Terminal and nonordinary outer parents still need their fallback.
+
+Actual successful partial rendering and concrete callbacks have exact
+singleton raw results, without Safe or Total premises. The same callback
+receipt now proves exact raw pruning or restart. Arbitrary fuel errors are
+not converted to rejection. The concrete sibling equation retains both
+completed and stopped suffixes. It assumes that recursive continuation's
+actual result; it does not prove recursive completion from initial inputs.
+
+The old selected-step runtime, Result, Valid and completion interfaces stay
+exact. An all-input, all-bound theorem equates the factored worker with the
+original body. All ten changed modules pass strict checks. Installed public
+readback covers 28 declarations. Audit checks 77042 dependencies.
+H6 remains the strongest end-to-end language theorem. Next: derive a uniform
+prefix invariant packet and preserve it through finite recursive histories,
+then derive fuel and native capacity from the initial inputs. Native Graph
+correspondence, lazy forcing, extraction and whole-driver language semantics
+remain open. Haskell stays unchanged. Details:
+`lean/notes-current-pruning-enumeration-recursive-hooks.md`.
+
 ## One selected worker joins recursion, narrowing and ordinary expansion
 
 Narrow adapter: `01a2f779f`. Continuation fold: `80968dad4`.

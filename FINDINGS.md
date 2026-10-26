@@ -70,6 +70,29 @@ Terminal parents retain the existing enumerateNode fallback boundary. Native
 children can still take their terminal dispatcher. No Haskell fix is needed.
 Details: lean/notes-current-pruning-enumeration-native-ordinary.md.
 
+### Concrete recursive callbacks and native sibling order
+
+The bounded ordinary driver now runs the concrete recordTypes Left callback
+and its recursive restart before the next native alternative. This follows
+Enumeration.hs:975-980. Each sibling retains the same Right-returned metadata
+and captured enumeration input. Native Caller and Queries include evaluated
+recursive effects before the sibling. Repeated recursion consumes its actual
+parked restart observation. It does not repeat its read, check or decision.
+
+The raw pruning theorem uses the SAME actual callback receipt. Success now
+implies its exact singleton raw row. No Safe or Total premise is required.
+This closes the earlier raw-stream distinction for that successful action.
+An unsuccessful bounded callback can still contain a fuel error. The worker
+retains errors and unsupported observations as explicit stops.
+
+Each output records its own enumeration cache and native endpoint. This does
+not establish its validity at a later sibling's final heap. The recursive
+cache invariant, initial-only capacity and full language proof remain open.
+Terminal/nonordinary fallback and arbitrary lazy demand also remain open.
+No Haskell defect or repair is identified. External action: no new patch.
+Keep the existing Sized documentation repair action above.
+Details: `lean/notes-current-pruning-enumeration-recursive-hooks.md`.
+
 ### Combined selected steps retain actual native effects
 
 The selected-step model now runs one actual read/check prefix and its
@@ -426,6 +449,38 @@ TH/Generic extraction, valid-position build/read and source codec laws stay open
 
 
 
+
+## Concrete recursive callbacks precede native siblings
+
+Callback exactness: `231b4a5ae`. Prefix separation: `ed303a16b`.
+Ordinary continuation entry: `e9c702f0d`. Recursive worker: `359bddbb4`.
+The goal stays ACTIVE.
+
+The new bounded worker executes actual selected prefixes, concrete Left
+callbacks and recursive restarts inside the native alternative fold.
+Each recursive continuation finishes before the next sibling starts at its
+returned native Caller and Queries. Siblings retain their captured metadata,
+enumeration cache and remaining depth. Every emitted result retains its own
+cache and emission-time native endpoint. Errors and unsupported cases stay
+explicit. Terminal and nonordinary outer parents still need their fallback.
+
+Actual successful partial rendering and concrete callbacks have exact
+singleton raw results, without Safe or Total premises. The same callback
+receipt now proves exact raw pruning or restart. Arbitrary fuel errors are
+not converted to rejection. The concrete sibling equation retains both
+completed and stopped suffixes. It assumes that recursive continuation's
+actual result; it does not prove recursive completion from initial inputs.
+
+The old selected-step runtime, Result, Valid and completion interfaces stay
+exact. An all-input, all-bound theorem equates the factored worker with the
+original body. All ten changed modules pass strict checks. Installed public
+readback covers 28 declarations. Audit checks 77042 dependencies.
+H6 remains the strongest end-to-end language theorem. Next: derive a uniform
+prefix invariant packet and preserve it through finite recursive histories,
+then derive fuel and native capacity from the initial inputs. Native Graph
+correspondence, lazy forcing, extraction and whole-driver language semantics
+remain open. Haskell stays unchanged. Details:
+`lean/notes-current-pruning-enumeration-recursive-hooks.md`.
 
 ## One selected worker joins recursion, narrowing and ordinary expansion
 

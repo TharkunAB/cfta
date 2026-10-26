@@ -1,0 +1,90 @@
+/tmp/mcfta-native-recursive-hooks-20261026/strict-ordinary-hooks-1/MicroCFTA/SourcePruningEnumerationNativeOrdinaryContinuations.lean:59:119: error: unsolved goals
+width : Nat
+Output Reason : Type
+inst✝² : DecidableEq Symbol
+inst✝¹ : DecidableEq (EdgeKey Symbol Constraint)
+inst✝ : DecidableEq Node
+hook :
+  Fragment →
+    Caller width → Queries → Cached → SourcePruningEnumerationNativeContinuations.HookResult Output Reason width
+checkEmpty : Bool
+r n p h k uv target handle : Nat
+scs : List Suspended
+entry : Cache.Interned InternedBinderProtocol.NodeKey
+edges : List (EdgeValue Symbol Constraint)
+depth : Nat
+free : List InternedBinderProtocol.Reference
+edgesOf : Node → List (EdgeValue Symbol Constraint)
+caller : Caller width
+before : Cached
+queries : Queries
+after : EnumerationState.State Symbol Constraint
+observed :
+  (SourcePruningEnumerationEntry.enter caller.checked.native.machine.heap r uv before.core).run =
+    [Except.ok ((target, handle, scs, Value.node entry edges depth free), after)]
+nonterminal : (scs.any fun sc => EqualityTrie.isTerminal sc.trie) = false
+⊢ ([Except.ok ((target, handle, scs, Value.node entry edges depth free), after)],
+      if False then none
+      else
+        some
+          (SourcePruningEnumerationNativeContinuations.run hook checkEmpty r n p h k target scs
+            (EnumerationExpandableIndex.frame after before) (edgesOf (Value.node entry edges depth free)) caller
+            queries)) =
+    ([Except.ok ((target, handle, scs, Value.node entry edges depth free), after)],
+      some
+        (SourcePruningEnumerationNativeContinuations.run hook checkEmpty r n p h k target scs
+          (EnumerationExpandableIndex.frame after before) (edgesOf (Value.node entry edges depth free)) caller queries))
+/tmp/mcfta-native-recursive-hooks-20261026/strict-ordinary-hooks-1/MicroCFTA/SourcePruningEnumerationNativeOrdinaryContinuations.lean:60:61: error: This simp argument is unused:
+  ite_eq_right
+
+Hint: Omit it from the simp argument list.
+  [apply] simp only [run, observed, nonterminal, Bool.false_eq_true]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/tmp/mcfta-native-recursive-hooks-20261026/strict-ordinary-hooks-1/MicroCFTA/SourcePruningEnumerationNativeOrdinaryContinuations.lean:73:2: error: Tactic `split` failed: Could not split an `if` or `match` expression in the goal
+
+Hint: Use `set_option trace.split.failure true` to display additional diagnostic information
+
+width : Nat
+Output Reason : Type
+inst✝² : DecidableEq Symbol
+inst✝¹ : DecidableEq (EdgeKey Symbol Constraint)
+inst✝ : DecidableEq Node
+checkEmpty : Bool
+r n p h k uv : Nat
+edgesOf : Node → List (EdgeValue Symbol Constraint)
+caller : Caller width
+before : Cached
+queries : Queries
+⊢ (have raw := (SourcePruningEnumerationEntry.enter caller.checked.native.machine.heap r uv before.core).run;
+    (raw,
+      match raw with
+      | [Except.ok ((target, _handle, scs, parent@h_1:(Value.node entry edges depth free)), entered)] =>
+        if (scs.any fun sc => EqualityTrie.isTerminal sc.trie) = true then none
+        else
+          some
+            (SourcePruningEnumerationNativeContinuations.run SourcePruningEnumerationNativeContinuations.identityHook
+              checkEmpty r n p h k target scs (EnumerationExpandableIndex.frame entered before) (edgesOf parent) caller
+              queries)
+      | x => none)) =
+    ((have raw := (SourcePruningEnumerationEntry.enter caller.checked.native.machine.heap r uv before.core).run;
+        (raw,
+          match raw with
+          | [Except.ok ((target, _handle, scs, parent@h_1:(Value.node entry edges depth free)), entered)] =>
+            if (scs.any fun sc => EqualityTrie.isTerminal sc.trie) = true then none
+            else
+              some
+                (SourcePruningEnumerationNativeBranches.run checkEmpty r n p h k target scs
+                  (EnumerationExpandableIndex.frame entered before) (edgesOf parent) caller queries)
+          | x => none)).fst,
+      Option.map SourcePruningEnumerationNativeContinuations.ofBranches
+        (have raw := (SourcePruningEnumerationEntry.enter caller.checked.native.machine.heap r uv before.core).run;
+          (raw,
+            match raw with
+            | [Except.ok ((target, _handle, scs, parent@h_1:(Value.node entry edges depth free)), entered)] =>
+              if (scs.any fun sc => EqualityTrie.isTerminal sc.trie) = true then none
+              else
+                some
+                  (SourcePruningEnumerationNativeBranches.run checkEmpty r n p h k target scs
+                    (EnumerationExpandableIndex.frame entered before) (edgesOf parent) caller queries)
+            | x => none)).snd)

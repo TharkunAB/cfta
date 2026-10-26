@@ -1,0 +1,254 @@
+/tmp/mcfta-native-recursive-hooks-20261026/strict-selected-prefix-4/MicroCFTA/SourcePruningEnumerationSelectedStep.lean:193:76: error: Tactic `rfl` failed: The left-hand side
+  fun (checked : Core) prepared caller queries action candidate right ordinary => ordinary = none
+is not definitionally equal to the right-hand side
+  fun (x : Result width Typing) => True
+
+case cons.nil.ok.unenumerated.some.cons.nil.ok.false.some.done.some.cons.nil.ok.unit.some.none
+Typing Key : Type
+width : Nat
+inst✝ : DecidableEq (EdgeKey Symbol Constraint)
+holeKey : Typing → Nat → Key
+fits : Key → Symbol → Bool
+admits : Key → Node → Bool
+graph : Graph Symbol Constraint
+templates : List (Template.Pattern Symbol)
+stop : Option (Metadata Typing → Nat → Bool)
+order : Metadata Typing → List Nat → Option Nat
+metadata : Metadata Typing
+readFuel checkFuel nativeFuel representativeFuel indexFuel callbackFuel uv : Nat
+caller : Caller width
+before : Cached
+queries : Queries
+readAfter : Core
+scs : List Suspended
+oldHandle : Nat
+checked : Core
+oldValue : Node
+heap : InternedConstructorTemplates.State Symbol Constraint
+value : Node
+action : EnumerateM Symbol Constraint Unit
+observed : Core
+newHandle : Nat
+⊢ match
+    match [Except.ok (PUnit.unit, observed)] with
+    | [Except.ok (PUnit.unit, observed_1)] =>
+      match some newHandle with
+      | none =>
+        Result.narrowed checked (MergedSourceComparison.Result.done (value, some action) heap)
+          (SourceCurrentAllocatedPartialState.advance caller
+            (advancePhysical caller.checked
+              { heap := (MergedSourceComparison.Result.done (value, some action) heap).state,
+                equality := caller.checked.operations })
+            caller.fourth caller.merge)
+          queries (some [Except.ok (PUnit.unit, observed)]) none none none
+      | some newHandle =>
+        match
+          SourcePruningEnumerationNarrowAdapter.adapt heap indexFuel uv oldHandle newHandle scs before observed_1 with
+        | none =>
+          Result.narrowed checked (MergedSourceComparison.Result.done (value, some action) heap)
+            (SourceCurrentAllocatedPartialState.advance caller
+              (advancePhysical caller.checked
+                { heap := (MergedSourceComparison.Result.done (value, some action) heap).state,
+                  equality := caller.checked.operations })
+              caller.fourth caller.merge)
+            queries (some [Except.ok (PUnit.unit, observed)]) none none none
+        | some attached =>
+          match
+            (SourcePruningRecordTypes.recordTypes graph templates callbackFuel metadata uv (Sum.inr newHandle)
+                attached.core).run with
+          | [Except.ok ((false, _updated), callbackCore)] =>
+            Result.narrowed checked (MergedSourceComparison.Result.done (value, some action) heap)
+              (SourceCurrentAllocatedPartialState.advance caller
+                (advancePhysical caller.checked
+                  { heap := (MergedSourceComparison.Result.done (value, some action) heap).state,
+                    equality := caller.checked.operations })
+                caller.fourth caller.merge)
+              queries (some [Except.ok (PUnit.unit, observed)])
+              (some (EnumerationExpandableIndex.frame callbackCore attached))
+              (some
+                (SourcePruningRecordTypes.recordTypes graph templates callbackFuel metadata uv (Sum.inr newHandle)
+                    attached.core).run)
+              none
+          | x =>
+            Result.narrowed checked (MergedSourceComparison.Result.done (value, some action) heap)
+              (SourceCurrentAllocatedPartialState.advance caller
+                (advancePhysical caller.checked
+                  { heap := (MergedSourceComparison.Result.done (value, some action) heap).state,
+                    equality := caller.checked.operations })
+                caller.fourth caller.merge)
+              queries (some [Except.ok (PUnit.unit, observed)]) (some attached)
+              (some
+                (SourcePruningRecordTypes.recordTypes graph templates callbackFuel metadata uv (Sum.inr newHandle)
+                    attached.core).run)
+              none
+    | x =>
+      Result.narrowed checked (MergedSourceComparison.Result.done (value, some action) heap)
+        (SourceCurrentAllocatedPartialState.advance caller
+          (advancePhysical caller.checked
+            { heap := (MergedSourceComparison.Result.done (value, some action) heap).state,
+              equality := caller.checked.operations })
+          caller.fourth caller.merge)
+        queries (some [Except.ok (PUnit.unit, observed)]) none none none with
+  | Result.narrowed checked prepared caller queries action candidate right ordinary => ordinary = none
+  | x => True
+/tmp/mcfta-native-recursive-hooks-20261026/strict-selected-prefix-4/MicroCFTA/SourcePruningEnumerationSelectedStep.lean:195:74: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  SourcePruningRecordTypes.recordTypes ?graph ?templates ?fuel ?metadata ?uv (Sum.inr ?node)
+in the target expression
+  match
+    match [Except.ok (PUnit.unit, observed)] with
+    | [Except.ok (PUnit.unit, observed_1)] =>
+      match some newHandle with
+      | none =>
+        Result.narrowed checked (MergedSourceComparison.Result.done (value, some action) heap)
+          (SourceCurrentAllocatedPartialState.advance caller
+            (advancePhysical caller.checked
+              { heap := (MergedSourceComparison.Result.done (value, some action) heap).state,
+                equality := caller.checked.operations })
+            caller.fourth caller.merge)
+          queries (some [Except.ok (PUnit.unit, observed)]) none none none
+      | some newHandle =>
+        match
+          SourcePruningEnumerationNarrowAdapter.adapt heap indexFuel uv oldHandle newHandle scs before observed_1 with
+        | none =>
+          Result.narrowed checked (MergedSourceComparison.Result.done (value, some action) heap)
+            (SourceCurrentAllocatedPartialState.advance caller
+              (advancePhysical caller.checked
+                { heap := (MergedSourceComparison.Result.done (value, some action) heap).state,
+                  equality := caller.checked.operations })
+              caller.fourth caller.merge)
+            queries (some [Except.ok (PUnit.unit, observed)]) none none none
+        | some attached =>
+          match
+            (SourcePruningRecordTypes.recordTypes graph templates callbackFuel metadata uv (Sum.inr newHandle)
+                attached.core).run with
+          | [Except.ok ((false, _updated), callbackCore)] =>
+            Result.narrowed checked (MergedSourceComparison.Result.done (value, some action) heap)
+              (SourceCurrentAllocatedPartialState.advance caller
+                (advancePhysical caller.checked
+                  { heap := (MergedSourceComparison.Result.done (value, some action) heap).state,
+                    equality := caller.checked.operations })
+                caller.fourth caller.merge)
+              queries (some [Except.ok (PUnit.unit, observed)])
+              (some (EnumerationExpandableIndex.frame callbackCore attached))
+              (some
+                (SourcePruningRecordTypes.recordTypes graph templates callbackFuel metadata uv (Sum.inr newHandle)
+                    attached.core).run)
+              none
+          | x =>
+            Result.narrowed checked (MergedSourceComparison.Result.done (value, some action) heap)
+              (SourceCurrentAllocatedPartialState.advance caller
+                (advancePhysical caller.checked
+                  { heap := (MergedSourceComparison.Result.done (value, some action) heap).state,
+                    equality := caller.checked.operations })
+                caller.fourth caller.merge)
+              queries (some [Except.ok (PUnit.unit, observed)]) (some attached)
+              (some
+                (SourcePruningRecordTypes.recordTypes graph templates callbackFuel metadata uv (Sum.inr newHandle)
+                    attached.core).run)
+              none
+    | x =>
+      Result.narrowed checked (MergedSourceComparison.Result.done (value, some action) heap)
+        (SourceCurrentAllocatedPartialState.advance caller
+          (advancePhysical caller.checked
+            { heap := (MergedSourceComparison.Result.done (value, some action) heap).state,
+              equality := caller.checked.operations })
+          caller.fourth caller.merge)
+        queries (some [Except.ok (PUnit.unit, observed)]) none none none with
+  | Result.narrowed checked prepared caller queries action candidate right ordinary => ordinary = none
+  | x => True
+
+case cons.nil.ok.unenumerated.some.cons.nil.ok.false.some.done.some.cons.nil.ok.unit.some.some
+Typing Key : Type
+width : Nat
+inst✝ : DecidableEq (EdgeKey Symbol Constraint)
+holeKey : Typing → Nat → Key
+fits : Key → Symbol → Bool
+admits : Key → Node → Bool
+graph : Graph Symbol Constraint
+templates : List (Template.Pattern Symbol)
+stop : Option (Metadata Typing → Nat → Bool)
+order : Metadata Typing → List Nat → Option Nat
+metadata : Metadata Typing
+readFuel checkFuel nativeFuel representativeFuel indexFuel callbackFuel uv : Nat
+caller : Caller width
+before : Cached
+queries : Queries
+readAfter : Core
+scs : List Suspended
+oldHandle : Nat
+checked : Core
+oldValue : Node
+heap : InternedConstructorTemplates.State Symbol Constraint
+value : Node
+action : EnumerateM Symbol Constraint Unit
+observed : Core
+newHandle : Nat
+attached : Cached
+⊢ match
+    match [Except.ok (PUnit.unit, observed)] with
+    | [Except.ok (PUnit.unit, observed_1)] =>
+      match some newHandle with
+      | none =>
+        Result.narrowed checked (MergedSourceComparison.Result.done (value, some action) heap)
+          (SourceCurrentAllocatedPartialState.advance caller
+            (advancePhysical caller.checked
+              { heap := (MergedSourceComparison.Result.done (value, some action) heap).state,
+                equality := caller.checked.operations })
+            caller.fourth caller.merge)
+          queries (some [Except.ok (PUnit.unit, observed)]) none none none
+      | some newHandle =>
+        match
+          SourcePruningEnumerationNarrowAdapter.adapt heap indexFuel uv oldHandle newHandle scs before observed_1 with
+        | none =>
+          Result.narrowed checked (MergedSourceComparison.Result.done (value, some action) heap)
+            (SourceCurrentAllocatedPartialState.advance caller
+              (advancePhysical caller.checked
+                { heap := (MergedSourceComparison.Result.done (value, some action) heap).state,
+                  equality := caller.checked.operations })
+              caller.fourth caller.merge)
+            queries (some [Except.ok (PUnit.unit, observed)]) none none none
+        | some attached =>
+          match
+            (SourcePruningRecordTypes.recordTypes graph templates callbackFuel metadata uv (Sum.inr newHandle)
+                attached.core).run with
+          | [Except.ok ((false, _updated), callbackCore)] =>
+            Result.narrowed checked (MergedSourceComparison.Result.done (value, some action) heap)
+              (SourceCurrentAllocatedPartialState.advance caller
+                (advancePhysical caller.checked
+                  { heap := (MergedSourceComparison.Result.done (value, some action) heap).state,
+                    equality := caller.checked.operations })
+                caller.fourth caller.merge)
+              queries (some [Except.ok (PUnit.unit, observed)])
+              (some (EnumerationExpandableIndex.frame callbackCore attached))
+              (some
+                (SourcePruningRecordTypes.recordTypes graph templates callbackFuel metadata uv (Sum.inr newHandle)
+                    attached.core).run)
+              none
+          | x =>
+            Result.narrowed checked (MergedSourceComparison.Result.done (value, some action) heap)
+              (SourceCurrentAllocatedPartialState.advance caller
+                (advancePhysical caller.checked
+                  { heap := (MergedSourceComparison.Result.done (value, some action) heap).state,
+                    equality := caller.checked.operations })
+                caller.fourth caller.merge)
+              queries (some [Except.ok (PUnit.unit, observed)]) (some attached)
+              (some
+                (SourcePruningRecordTypes.recordTypes graph templates callbackFuel metadata uv (Sum.inr newHandle)
+                    attached.core).run)
+              none
+    | x =>
+      Result.narrowed checked (MergedSourceComparison.Result.done (value, some action) heap)
+        (SourceCurrentAllocatedPartialState.advance caller
+          (advancePhysical caller.checked
+            { heap := (MergedSourceComparison.Result.done (value, some action) heap).state,
+              equality := caller.checked.operations })
+          caller.fourth caller.merge)
+        queries (some [Except.ok (PUnit.unit, observed)]) none none none with
+  | Result.narrowed checked prepared caller queries action candidate right ordinary => ordinary = none
+  | x => True
+/tmp/mcfta-native-recursive-hooks-20261026/strict-selected-prefix-4/MicroCFTA/SourcePruningEnumerationSelectedStep.lean:179:70: error: Local variable 'unit' resembles constructor 'PUnit.unit' - write '.unit' (with a dot) or 'PUnit.unit' to use the constructor.
+
+Note: This linter can be disabled with `set_option linter.constructorNameAsVariable false`
+/tmp/mcfta-native-recursive-hooks-20261026/strict-selected-prefix-4/MicroCFTA/SourcePruningEnumerationSelectedStep.lean:186:70: error: Local variable 'unit' resembles constructor 'PUnit.unit' - write '.unit' (with a dot) or 'PUnit.unit' to use the constructor.
+
+Note: This linter can be disabled with `set_option linter.constructorNameAsVariable false`

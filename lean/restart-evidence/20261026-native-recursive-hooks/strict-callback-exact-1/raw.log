@@ -1,0 +1,80 @@
+/tmp/mcfta-native-recursive-hooks-20261026/strict-callback-exact-1/MicroCFTA/SourcePruningCallbackExact.lean:60:6: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  (List.mapM
+        (fun entry => do
+          let root ← representative fuel entry.snd
+          pure (if root = current then matchPartial entry.fst term else some [(entry.fst, root)]))
+        pending >>=
+      ?m.110)
+    before
+in the target expression
+  ((List.mapM (MicroCFTA.SourcePruningResume.part✝ fuel current term) pending >>= fun results =>
+          pure (Option.map (fun pieces => List.flatMap id pieces) (List.mapM id results)))
+        before).run =
+    [Except.ok (result, after)]
+
+S G : Type
+inst✝ : DecidableEq S
+fuel current : Nat
+term : Term (PartialSymbol S)
+pending : Pending S
+before after : State S G
+result : Option (Pending S)
+success :
+  Success
+    (do
+      let results ← List.mapM (MicroCFTA.SourcePruningResume.part✝ fuel current term) pending
+      pure (Option.map (fun pieces => List.flatMap id pieces) (List.mapM id results)))
+    before result after
+results : List (Option (Pending S))
+middle : State S G
+traversed : Success (List.mapM (MicroCFTA.SourcePruningResume.part✝ fuel current term) pending) before results middle
+finished : Success (pure (Option.map (fun pieces => List.flatMap id pieces) (List.mapM id results))) middle result after
+exactParts :
+  (List.mapM
+        (fun entry => do
+          let root ← representative fuel entry.snd
+          pure (if root = current then matchPartial entry.fst term else some [(entry.fst, root)]))
+        pending before).run =
+    [Except.ok (results, middle)]
+⊢ ((List.mapM (MicroCFTA.SourcePruningResume.part✝ fuel current term) pending >>= fun results =>
+          pure (Option.map (fun pieces => List.flatMap id pieces) (List.mapM id results)))
+        before).run =
+    [Except.ok (result, after)]
+/tmp/mcfta-native-recursive-hooks-20261026/strict-callback-exact-1/MicroCFTA/SourcePruningCallbackExact.lean:80:12: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  if Sum.inl fragment = Sum.inr val✝ then ?m.125 else ?m.126
+in the target expression
+  ((if rejectEarly templates fragment = true then pure (true, pending)
+        else
+          if MicroCFTA.SourcePruningOracle.idle✝ pending fragment = true then pure (false, [])
+          else MicroCFTA.SourcePruningOracle.observe✝ graph templates fuel pending uv fragment)
+        before).run =
+    [Except.ok (result, after)]
+
+case h_1
+Guard : Type
+graph : Graph Symbol Guard
+templates : List (Template.Pattern Symbol)
+fuel : Nat
+pending : List (Pending Symbol)
+uv : Nat
+before after : State Symbol Guard
+result : Bool × List (Pending Symbol)
+fragment : Fragment Symbol
+input✝ : Fragment Symbol ⊕ Nat
+val✝ : Nat
+early : Sum.inl fragment = Sum.inr val✝
+success : Success (pure (false, pending)) before result after
+⊢ ((if rejectEarly templates fragment = true then pure (true, pending)
+        else
+          if MicroCFTA.SourcePruningOracle.idle✝ pending fragment = true then pure (false, [])
+          else MicroCFTA.SourcePruningOracle.observe✝ graph templates fuel pending uv fragment)
+        before).run =
+    [Except.ok (result, after)]
+/tmp/mcfta-native-recursive-hooks-20261026/strict-callback-exact-1/MicroCFTA/SourcePruningCallbackExact.lean:83:25: error: Application type mismatch: The argument
+  notEarly
+has type
+  Sum.inl fragment = Sum.inl fragment✝
+but is expected to have type
+  ¬?m.128
+in the application
+  @ite_eq_right ?m.128 ?m.129 notEarly

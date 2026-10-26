@@ -1,0 +1,417 @@
+/tmp/mcfta-native-recursive-hooks-20261026/strict-selected-prefix-3/MicroCFTA/SourcePruningEnumerationSelectedStep.lean:168:71: error: unexpected token ')'; expected rcasesPat
+/tmp/mcfta-native-recursive-hooks-20261026/strict-selected-prefix-3/MicroCFTA/SourcePruningEnumerationSelectedStep.lean:115:20: error: Tactic `assumption` failed
+
+case cons.cons
+Typing Key : Type
+width : Nat
+inst✝ : DecidableEq (EdgeKey Symbol Constraint)
+holeKey : Typing → Nat → Key
+fits : Key → Symbol → Bool
+admits : Key → Node → Bool
+graph : Graph Symbol Constraint
+templates : List (Template.Pattern Symbol)
+stop : Option (Metadata Typing → Nat → Bool)
+order : Metadata Typing → List Nat → Option Nat
+metadata : Metadata Typing
+readFuel checkFuel nativeFuel representativeFuel indexFuel callbackFuel uv : Nat
+caller : Caller width
+before : Cached
+queries : Queries
+first head✝ : Except Error (UVarValue Symbol × Core)
+tail✝ : List (Except Error (UVarValue Symbol × Core))
+⊢ match
+    match first :: head✝ :: tail✝ with
+    | [Except.ok (UVarValue.unenumerated (some oldHandle) scs, readAfter)] =>
+      match
+        (SourcePruningEnumerationRecursion.checkRepeated caller.checked.native.machine.heap checkFuel uv oldHandle scs
+            readAfter).run with
+      | [Except.ok (true, checked)] =>
+        Result.parked checked
+          (SourcePruningEnumerationParkedRestart.adapt caller.checked.native.machine.heap indexFuel uv oldHandle scs
+            before checked)
+          (Option.map (fun parked => (SourcePruningEnumerationRestart.run stop order metadata parked checked).run)
+            (SourcePruningEnumerationParkedRestart.adapt caller.checked.native.machine.heap indexFuel uv oldHandle scs
+              before checked))
+      | [Except.ok (false, checked)] =>
+        match lookupNode caller.checked.native.machine.heap oldHandle with
+        | none =>
+          Result.stopped (first :: head✝ :: tail✝)
+            (some
+              (SourcePruningEnumerationRecursion.checkRepeated caller.checked.native.machine.heap checkFuel uv oldHandle
+                  scs readAfter).run)
+        | some oldValue =>
+          match
+            SourcePruningEnumerationAction.prepare holeKey fits admits metadata nativeFuel representativeFuel uv
+              oldHandle scs oldValue caller.checked.native.machine.heap with
+          | MergedSourceComparison.Result.failed _fault _heap =>
+            Result.narrowed checked
+              (SourcePruningEnumerationAction.prepare holeKey fits admits metadata nativeFuel representativeFuel uv
+                oldHandle scs oldValue caller.checked.native.machine.heap)
+              (SourceCurrentAllocatedPartialState.advance caller
+                (advancePhysical caller.checked
+                  {
+                    heap :=
+                      (SourcePruningEnumerationAction.prepare holeKey fits admits metadata nativeFuel representativeFuel
+                          uv oldHandle scs oldValue caller.checked.native.machine.heap).state,
+                    equality := caller.checked.operations })
+                caller.fourth caller.merge)
+              queries none none none none
+          | MergedSourceComparison.Result.done (_value, none) _heap =>
+            Result.narrowed checked
+              (SourcePruningEnumerationAction.prepare holeKey fits admits metadata nativeFuel representativeFuel uv
+                oldHandle scs oldValue caller.checked.native.machine.heap)
+              (SourceCurrentAllocatedPartialState.advance caller
+                (advancePhysical caller.checked
+                  {
+                    heap :=
+                      (SourcePruningEnumerationAction.prepare holeKey fits admits metadata nativeFuel representativeFuel
+                          uv oldHandle scs oldValue caller.checked.native.machine.heap).state,
+                    equality := caller.checked.operations })
+                caller.fourth caller.merge)
+              queries none none none none
+          | MergedSourceComparison.Result.done (value, some action) heap =>
+            match (action checked).run with
+            | [Except.ok (PUnit.unit, observed)] =>
+              match encodeNode value with
+              | none =>
+                Result.narrowed checked
+                  (SourcePruningEnumerationAction.prepare holeKey fits admits metadata nativeFuel representativeFuel uv
+                    oldHandle scs oldValue caller.checked.native.machine.heap)
+                  (SourceCurrentAllocatedPartialState.advance caller
+                    (advancePhysical caller.checked
+                      {
+                        heap :=
+                          (SourcePruningEnumerationAction.prepare holeKey fits admits metadata nativeFuel
+                              representativeFuel uv oldHandle scs oldValue caller.checked.native.machine.heap).state,
+                        equality := caller.checked.operations })
+                    caller.fourth caller.merge)
+                  queries (some (action checked).run) none none none
+              | some newHandle =>
+                match
+                  SourcePruningEnumerationNarrowAdapter.adapt heap indexFuel uv oldHandle newHandle scs before
+                    observed with
+                | none =>
+                  Result.narrowed checked
+                    (SourcePruningEnumerationAction.prepare holeKey fits admits metadata nativeFuel representativeFuel
+                      uv oldHandle scs oldValue caller.checked.native.machine.heap)
+                    (SourceCurrentAllocatedPartialState.advance caller
+                      (advancePhysical caller.checked
+                        {
+                          heap :=
+                            (SourcePruningEnumerationAction.prepare holeKey fits admits metadata nativeFuel
+                                representativeFuel uv oldHandle scs oldValue caller.checked.native.machine.heap).state,
+                          equality := caller.checked.operations })
+                      caller.fourth caller.merge)
+                    queries (some (action checked).run) none none none
+                | some attached =>
+                  match
+                    (SourcePruningRecordTypes.recordTypes graph templates callbackFuel metadata uv (Sum.inr newHandle)
+                        attached.core).run with
+                  | [Except.ok ((false, _updated), callbackCore)] =>
+                    Result.narrowed checked
+                      (SourcePruningEnumerationAction.prepare holeKey fits admits metadata nativeFuel representativeFuel
+                        uv oldHandle scs oldValue caller.checked.native.machine.heap)
+                      (SourceCurrentAllocatedPartialState.advance caller
+                        (advancePhysical caller.checked
+                          {
+                            heap :=
+                              (SourcePruningEnumerationAction.prepare holeKey fits admits metadata nativeFuel
+                                  representativeFuel uv oldHandle scs oldValue
+                                  caller.checked.native.machine.heap).state,
+                            equality := caller.checked.operations })
+                        caller.fourth caller.merge)
+                      queries (some (action checked).run)
+                      (some (EnumerationExpandableIndex.frame callbackCore attached))
+                      (some
+                        (SourcePruningRecordTypes.recordTypes graph templates callbackFuel metadata uv
+                            (Sum.inr newHandle) attached.core).run)
+                      none
+                  | x =>
+                    Result.narrowed checked
+                      (SourcePruningEnumerationAction.prepare holeKey fits admits metadata nativeFuel representativeFuel
+                        uv oldHandle scs oldValue caller.checked.native.machine.heap)
+                      (SourceCurrentAllocatedPartialState.advance caller
+                        (advancePhysical caller.checked
+                          {
+                            heap :=
+                              (SourcePruningEnumerationAction.prepare holeKey fits admits metadata nativeFuel
+                                  representativeFuel uv oldHandle scs oldValue
+                                  caller.checked.native.machine.heap).state,
+                            equality := caller.checked.operations })
+                        caller.fourth caller.merge)
+                      queries (some (action checked).run) (some attached)
+                      (some
+                        (SourcePruningRecordTypes.recordTypes graph templates callbackFuel metadata uv
+                            (Sum.inr newHandle) attached.core).run)
+                      none
+            | x =>
+              Result.narrowed checked
+                (SourcePruningEnumerationAction.prepare holeKey fits admits metadata nativeFuel representativeFuel uv
+                  oldHandle scs oldValue caller.checked.native.machine.heap)
+                (SourceCurrentAllocatedPartialState.advance caller
+                  (advancePhysical caller.checked
+                    {
+                      heap :=
+                        (SourcePruningEnumerationAction.prepare holeKey fits admits metadata nativeFuel
+                            representativeFuel uv oldHandle scs oldValue caller.checked.native.machine.heap).state,
+                      equality := caller.checked.operations })
+                  caller.fourth caller.merge)
+                queries (some (action checked).run) none none none
+      | x =>
+        Result.stopped (first :: head✝ :: tail✝)
+          (some
+            (SourcePruningEnumerationRecursion.checkRepeated caller.checked.native.machine.heap checkFuel uv oldHandle
+                scs readAfter).run)
+    | x => Result.stopped (first :: head✝ :: tail✝) none with
+  | Result.narrowed checked prepared caller queries action candidate right ordinary => ordinary = none
+  | x => True
+/tmp/mcfta-native-recursive-hooks-20261026/strict-selected-prefix-3/MicroCFTA/SourcePruningEnumerationSelectedStep.lean:134:40: error: Tactic `assumption` failed
+
+case cons.nil.ok.unenumerated.some.cons.cons
+Typing Key : Type
+width : Nat
+inst✝ : DecidableEq (EdgeKey Symbol Constraint)
+holeKey : Typing → Nat → Key
+fits : Key → Symbol → Bool
+admits : Key → Node → Bool
+graph : Graph Symbol Constraint
+templates : List (Template.Pattern Symbol)
+stop : Option (Metadata Typing → Nat → Bool)
+order : Metadata Typing → List Nat → Option Nat
+metadata : Metadata Typing
+readFuel checkFuel nativeFuel representativeFuel indexFuel callbackFuel uv : Nat
+caller : Caller width
+before : Cached
+queries : Queries
+readAfter : Core
+scs : List Suspended
+oldHandle : Nat
+first head✝ : Except Error (Bool × Core)
+tail✝ : List (Except Error (Bool × Core))
+⊢ match
+    match first :: head✝ :: tail✝ with
+    | [Except.ok (true, checked)] =>
+      Result.parked checked
+        (SourcePruningEnumerationParkedRestart.adapt caller.checked.native.machine.heap indexFuel uv oldHandle scs
+          before checked)
+        (Option.map (fun parked => (SourcePruningEnumerationRestart.run stop order metadata parked checked).run)
+          (SourcePruningEnumerationParkedRestart.adapt caller.checked.native.machine.heap indexFuel uv oldHandle scs
+            before checked))
+    | [Except.ok (false, checked)] =>
+      match lookupNode caller.checked.native.machine.heap oldHandle with
+      | none =>
+        Result.stopped [Except.ok (UVarValue.unenumerated (some oldHandle) scs, readAfter)]
+          (some (first :: head✝ :: tail✝))
+      | some oldValue =>
+        match
+          SourcePruningEnumerationAction.prepare holeKey fits admits metadata nativeFuel representativeFuel uv oldHandle
+            scs oldValue caller.checked.native.machine.heap with
+        | MergedSourceComparison.Result.failed _fault _heap =>
+          Result.narrowed checked
+            (SourcePruningEnumerationAction.prepare holeKey fits admits metadata nativeFuel representativeFuel uv
+              oldHandle scs oldValue caller.checked.native.machine.heap)
+            (SourceCurrentAllocatedPartialState.advance caller
+              (advancePhysical caller.checked
+                {
+                  heap :=
+                    (SourcePruningEnumerationAction.prepare holeKey fits admits metadata nativeFuel representativeFuel
+                        uv oldHandle scs oldValue caller.checked.native.machine.heap).state,
+                  equality := caller.checked.operations })
+              caller.fourth caller.merge)
+            queries none none none none
+        | MergedSourceComparison.Result.done (_value, none) _heap =>
+          Result.narrowed checked
+            (SourcePruningEnumerationAction.prepare holeKey fits admits metadata nativeFuel representativeFuel uv
+              oldHandle scs oldValue caller.checked.native.machine.heap)
+            (SourceCurrentAllocatedPartialState.advance caller
+              (advancePhysical caller.checked
+                {
+                  heap :=
+                    (SourcePruningEnumerationAction.prepare holeKey fits admits metadata nativeFuel representativeFuel
+                        uv oldHandle scs oldValue caller.checked.native.machine.heap).state,
+                  equality := caller.checked.operations })
+              caller.fourth caller.merge)
+            queries none none none none
+        | MergedSourceComparison.Result.done (value, some action) heap =>
+          match (action checked).run with
+          | [Except.ok (PUnit.unit, observed)] =>
+            match encodeNode value with
+            | none =>
+              Result.narrowed checked
+                (SourcePruningEnumerationAction.prepare holeKey fits admits metadata nativeFuel representativeFuel uv
+                  oldHandle scs oldValue caller.checked.native.machine.heap)
+                (SourceCurrentAllocatedPartialState.advance caller
+                  (advancePhysical caller.checked
+                    {
+                      heap :=
+                        (SourcePruningEnumerationAction.prepare holeKey fits admits metadata nativeFuel
+                            representativeFuel uv oldHandle scs oldValue caller.checked.native.machine.heap).state,
+                      equality := caller.checked.operations })
+                  caller.fourth caller.merge)
+                queries (some (action checked).run) none none none
+            | some newHandle =>
+              match
+                SourcePruningEnumerationNarrowAdapter.adapt heap indexFuel uv oldHandle newHandle scs before
+                  observed with
+              | none =>
+                Result.narrowed checked
+                  (SourcePruningEnumerationAction.prepare holeKey fits admits metadata nativeFuel representativeFuel uv
+                    oldHandle scs oldValue caller.checked.native.machine.heap)
+                  (SourceCurrentAllocatedPartialState.advance caller
+                    (advancePhysical caller.checked
+                      {
+                        heap :=
+                          (SourcePruningEnumerationAction.prepare holeKey fits admits metadata nativeFuel
+                              representativeFuel uv oldHandle scs oldValue caller.checked.native.machine.heap).state,
+                        equality := caller.checked.operations })
+                    caller.fourth caller.merge)
+                  queries (some (action checked).run) none none none
+              | some attached =>
+                match
+                  (SourcePruningRecordTypes.recordTypes graph templates callbackFuel metadata uv (Sum.inr newHandle)
+                      attached.core).run with
+                | [Except.ok ((false, _updated), callbackCore)] =>
+                  Result.narrowed checked
+                    (SourcePruningEnumerationAction.prepare holeKey fits admits metadata nativeFuel representativeFuel
+                      uv oldHandle scs oldValue caller.checked.native.machine.heap)
+                    (SourceCurrentAllocatedPartialState.advance caller
+                      (advancePhysical caller.checked
+                        {
+                          heap :=
+                            (SourcePruningEnumerationAction.prepare holeKey fits admits metadata nativeFuel
+                                representativeFuel uv oldHandle scs oldValue caller.checked.native.machine.heap).state,
+                          equality := caller.checked.operations })
+                      caller.fourth caller.merge)
+                    queries (some (action checked).run) (some (EnumerationExpandableIndex.frame callbackCore attached))
+                    (some
+                      (SourcePruningRecordTypes.recordTypes graph templates callbackFuel metadata uv (Sum.inr newHandle)
+                          attached.core).run)
+                    none
+                | x =>
+                  Result.narrowed checked
+                    (SourcePruningEnumerationAction.prepare holeKey fits admits metadata nativeFuel representativeFuel
+                      uv oldHandle scs oldValue caller.checked.native.machine.heap)
+                    (SourceCurrentAllocatedPartialState.advance caller
+                      (advancePhysical caller.checked
+                        {
+                          heap :=
+                            (SourcePruningEnumerationAction.prepare holeKey fits admits metadata nativeFuel
+                                representativeFuel uv oldHandle scs oldValue caller.checked.native.machine.heap).state,
+                          equality := caller.checked.operations })
+                      caller.fourth caller.merge)
+                    queries (some (action checked).run) (some attached)
+                    (some
+                      (SourcePruningRecordTypes.recordTypes graph templates callbackFuel metadata uv (Sum.inr newHandle)
+                          attached.core).run)
+                    none
+          | x =>
+            Result.narrowed checked
+              (SourcePruningEnumerationAction.prepare holeKey fits admits metadata nativeFuel representativeFuel uv
+                oldHandle scs oldValue caller.checked.native.machine.heap)
+              (SourceCurrentAllocatedPartialState.advance caller
+                (advancePhysical caller.checked
+                  {
+                    heap :=
+                      (SourcePruningEnumerationAction.prepare holeKey fits admits metadata nativeFuel representativeFuel
+                          uv oldHandle scs oldValue caller.checked.native.machine.heap).state,
+                    equality := caller.checked.operations })
+                caller.fourth caller.merge)
+              queries (some (action checked).run) none none none
+    | x =>
+      Result.stopped [Except.ok (UVarValue.unenumerated (some oldHandle) scs, readAfter)]
+        (some (first :: head✝ :: tail✝)) with
+  | Result.narrowed checked prepared caller queries action candidate right ordinary => ordinary = none
+  | x => True
+/tmp/mcfta-native-recursive-hooks-20261026/strict-selected-prefix-3/MicroCFTA/SourcePruningEnumerationSelectedStep.lean:163:68: error: Tactic `rfl` failed: The left-hand side
+  fun (checked : Core) prepared caller queries action candidate right ordinary => ordinary = none
+is not definitionally equal to the right-hand side
+  fun (x : Result width Typing) => True
+
+case cons.nil.ok.unenumerated.some.cons.nil.ok.false.some.done.some.cons.cons
+Typing Key : Type
+width : Nat
+inst✝ : DecidableEq (EdgeKey Symbol Constraint)
+holeKey : Typing → Nat → Key
+fits : Key → Symbol → Bool
+admits : Key → Node → Bool
+graph : Graph Symbol Constraint
+templates : List (Template.Pattern Symbol)
+stop : Option (Metadata Typing → Nat → Bool)
+order : Metadata Typing → List Nat → Option Nat
+metadata : Metadata Typing
+readFuel checkFuel nativeFuel representativeFuel indexFuel callbackFuel uv : Nat
+caller : Caller width
+before : Cached
+queries : Queries
+readAfter : Core
+scs : List Suspended
+oldHandle : Nat
+checked : Core
+oldValue : Node
+heap : InternedConstructorTemplates.State Symbol Constraint
+value : Node
+action : EnumerateM Symbol Constraint Unit
+first head✝ : Except Error (Unit × Core)
+tail✝ : List (Except Error (Unit × Core))
+⊢ match
+    match first :: head✝ :: tail✝ with
+    | [Except.ok (PUnit.unit, observed)] =>
+      match encodeNode value with
+      | none =>
+        Result.narrowed checked (MergedSourceComparison.Result.done (value, some action) heap)
+          (SourceCurrentAllocatedPartialState.advance caller
+            (advancePhysical caller.checked
+              { heap := (MergedSourceComparison.Result.done (value, some action) heap).state,
+                equality := caller.checked.operations })
+            caller.fourth caller.merge)
+          queries (some (first :: head✝ :: tail✝)) none none none
+      | some newHandle =>
+        match SourcePruningEnumerationNarrowAdapter.adapt heap indexFuel uv oldHandle newHandle scs before observed with
+        | none =>
+          Result.narrowed checked (MergedSourceComparison.Result.done (value, some action) heap)
+            (SourceCurrentAllocatedPartialState.advance caller
+              (advancePhysical caller.checked
+                { heap := (MergedSourceComparison.Result.done (value, some action) heap).state,
+                  equality := caller.checked.operations })
+              caller.fourth caller.merge)
+            queries (some (first :: head✝ :: tail✝)) none none none
+        | some attached =>
+          match
+            (SourcePruningRecordTypes.recordTypes graph templates callbackFuel metadata uv (Sum.inr newHandle)
+                attached.core).run with
+          | [Except.ok ((false, _updated), callbackCore)] =>
+            Result.narrowed checked (MergedSourceComparison.Result.done (value, some action) heap)
+              (SourceCurrentAllocatedPartialState.advance caller
+                (advancePhysical caller.checked
+                  { heap := (MergedSourceComparison.Result.done (value, some action) heap).state,
+                    equality := caller.checked.operations })
+                caller.fourth caller.merge)
+              queries (some (first :: head✝ :: tail✝)) (some (EnumerationExpandableIndex.frame callbackCore attached))
+              (some
+                (SourcePruningRecordTypes.recordTypes graph templates callbackFuel metadata uv (Sum.inr newHandle)
+                    attached.core).run)
+              none
+          | x =>
+            Result.narrowed checked (MergedSourceComparison.Result.done (value, some action) heap)
+              (SourceCurrentAllocatedPartialState.advance caller
+                (advancePhysical caller.checked
+                  { heap := (MergedSourceComparison.Result.done (value, some action) heap).state,
+                    equality := caller.checked.operations })
+                caller.fourth caller.merge)
+              queries (some (first :: head✝ :: tail✝)) (some attached)
+              (some
+                (SourcePruningRecordTypes.recordTypes graph templates callbackFuel metadata uv (Sum.inr newHandle)
+                    attached.core).run)
+              none
+    | x =>
+      Result.narrowed checked (MergedSourceComparison.Result.done (value, some action) heap)
+        (SourceCurrentAllocatedPartialState.advance caller
+          (advancePhysical caller.checked
+            { heap := (MergedSourceComparison.Result.done (value, some action) heap).state,
+              equality := caller.checked.operations })
+          caller.fourth caller.merge)
+        queries (some (first :: head✝ :: tail✝)) none none none with
+  | Result.narrowed checked prepared caller queries action candidate right ordinary => ordinary = none
+  | x => True
+/tmp/mcfta-native-recursive-hooks-20261026/strict-selected-prefix-3/MicroCFTA/SourcePruningEnumerationSelectedStep.lean:168:62: error: Unexpected syntax
+  failed to pretty print term (use 'set_option pp.rawOnError true' for raw representation)

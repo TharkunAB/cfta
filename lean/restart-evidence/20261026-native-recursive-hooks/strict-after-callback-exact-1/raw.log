@@ -1,0 +1,56 @@
+/tmp/mcfta-native-recursive-hooks-20261026/strict-after-callback-exact-1/MicroCFTA/SourcePruningAfterCallbackExact.lean:31:19: error: Tactic `rfl` failed: The left-hand side
+  (((require !(false, updated).fst) >>= fun __r => do
+        let after ← get
+        SourcePruningEnumerationRestart.run stop order (false, updated).snd
+            (EnumerationExpandableIndex.frame after before))
+      after).run
+is not definitionally equal to the right-hand side
+  if (false, updated).fst = true then []
+  else
+    if
+        SourcePruningEnumerationRestart.decision stop order (false, updated).snd
+            (EnumerationExpandableIndex.frame after before) =
+          some Next.stuck then
+      []
+    else
+      [Except.ok
+          (((false, updated).snd,
+              SourcePruningEnumerationRestart.decision stop order (false, updated).snd
+                (EnumerationExpandableIndex.frame after before)),
+            after)]
+
+case false
+Typing : Type
+graph : Graph Symbol Constraint
+templates : List (Template.Pattern Symbol)
+stop : Option (Metadata Typing → Nat → Bool)
+order : Metadata Typing → List Nat → Option Nat
+fuel : Nat
+metadata : Metadata Typing
+uv : Nat
+fragment : Fragment
+before : Cached
+after : State Symbol Constraint
+updated : Metadata Typing
+callback : Success (recordTypes graph templates fuel metadata uv (Sum.inl fragment)) before.core (false, updated) after
+exactCallback :
+  (recordTypes graph templates fuel metadata uv (Sum.inl fragment) before.core).run =
+    [Except.ok ((false, updated), after)]
+⊢ (((require !(false, updated).fst) >>= fun __r => do
+          let after ← get
+          SourcePruningEnumerationRestart.run stop order (false, updated).snd
+              (EnumerationExpandableIndex.frame after before))
+        after).run =
+    if (false, updated).fst = true then []
+    else
+      if
+          SourcePruningEnumerationRestart.decision stop order (false, updated).snd
+              (EnumerationExpandableIndex.frame after before) =
+            some Next.stuck then
+        []
+      else
+        [Except.ok
+            (((false, updated).snd,
+                SourcePruningEnumerationRestart.decision stop order (false, updated).snd
+                  (EnumerationExpandableIndex.frame after before)),
+              after)]
