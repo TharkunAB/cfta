@@ -128,12 +128,13 @@ module Data.CFTA.EGraph (
 
 import Control.Monad (foldM)
 import Data.Containers.ListUtils (nubOrd)
+import Data.Either (rights)
 import qualified Data.HashMap.Strict as HashMap
 import qualified Data.HashSet as HashSet
 import Data.Hashable (Hashable (..))
 import qualified Data.IntMap.Strict as IntMap
 import qualified Data.IntSet as IntSet
-import Data.List (minimumBy, sortOn, (!?))
+import Data.List (elemIndex, minimumBy, sortOn, (!?))
 import qualified Data.Map.Strict as Map
 import Data.Maybe (isJust, listToMaybe)
 import Data.Ord (comparing)
@@ -373,7 +374,9 @@ data. The join must be associative, commutative, and idempotent, and must
 have no infinite ascending chain, so that the fixed point exists.
 -}
 analyse :: (Eq d) => (f -> [d] -> d) -> (d -> d -> d) -> EGraph s f -> ClassId -> Maybe d
-analyse make join g = \c -> let ClassId i = find g c in IntMap.lookup i (fst (analyseFrom make join g IntMap.empty (IntMap.keys (classes g))))
+analyse make join g = \c -> let ClassId i = find g c in IntMap.lookup i known
+  where
+    known = fst (analyseFrom make join g IntMap.empty (IntMap.keys (classes g)))
 
 {- | The fixed point of an analysis from a table of the data of e-classes and
 a worklist of the e-classes whose data can change, and the e-classes whose
@@ -526,7 +529,7 @@ rule left right = do
 has no other variables.
 -}
 equation :: (Hashable f) => Pattern s f -> Pattern s f -> [Rule s f]
-equation a b = [r | Right r <- [rule a b, rule b a]]
+equation a b = rights [rule a b, rule b a]
 
 patternSymbols :: Pattern s f -> [f]
 patternSymbols (PVar _) = []
@@ -908,7 +911,7 @@ runWith analysis limits rules goal g0 = go 0 IntMap.empty IntMap.empty IntMap.em
                 apply h changed [] = Right (h, changed)
                 apply h changed _ | size h > limitNodes limits = Right (h, changed)
                 apply h changed ((c, m@(Subst vs _), r, condition) : rest)
-                    | not (condition h dataOf (\v -> lookup v (zip (ruleNames r) [0 ..]) >>= (`IntMap.lookup` vs))) = apply h changed rest
+                    | not (condition h dataOf (\v -> elemIndex v (ruleNames r) >>= (`IntMap.lookup` vs))) = apply h changed rest
                     | otherwise = case instantiate m (sortId h c) (ruleRight r) h of
                         Nothing -> apply h changed rest
                         Just (c', h') -> case union c c' h' of

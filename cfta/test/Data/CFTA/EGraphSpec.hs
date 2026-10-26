@@ -3,6 +3,7 @@
 module Data.CFTA.EGraphSpec (spec) where
 
 import Control.Monad (forM_)
+import Data.Maybe (fromMaybe)
 import qualified Data.Set as Set
 import Test.Hspec (Spec, describe, expectationFailure, it, shouldBe)
 import Test.QuickCheck (
@@ -66,7 +67,7 @@ genGraph = do
 
 -- The e-graph of the terms, after the merges of terms with one sort.
 build :: Graph -> EGraph String String
-build (Graph terms pairs) = foldl (\g (a, b) -> maybe g id (merge (ids !! a) (ids !! b) g)) g0 pairs
+build (Graph terms pairs) = foldl (\g (a, b) -> fromMaybe g (merge (ids !! a) (ids !! b) g)) g0 pairs
   where
     (ids, g0) = foldl (\(acc, g) t -> let (c, g') = addTermWith view t g in (acc ++ [c], g')) ([], emptyEGraph) terms
     view (Sorted sort f ts) = (sort, f, ts)
@@ -100,7 +101,7 @@ genAbstraction graph@(Graph terms _) = elements terms >>= go
         let (c, _) = addTermWith (\(Sorted s h us) -> (s, h, us)) t g
         frequency
             [ (1, pure (PVar (show (find g c))))
-            , (2, PNode f <$> traverse go ts >>= annotate sort)
+            , (2, traverse go ts >>= annotate sort . PNode f)
             ]
     annotate sort p = case sort of
         Nothing -> pure p
