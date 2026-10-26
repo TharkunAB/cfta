@@ -1,5 +1,35 @@
 # Full formalization coverage
 
+## One selected worker joins recursion, narrowing and ordinary expansion
+
+Narrow adapter: `01a2f779f`. Continuation fold: `80968dad4`.
+Selected worker: `38a2df471`. Receipt posts: `549061e9f`.
+The goal stays ACTIVE.
+
+One actual worker now reads and checks once. Repeated recursion rebuilds
+indexes and restarts. A false guard runs actual narrowing, its pending-slot
+action, the concrete Right callback and the ordinary dispatcher. Empty
+retains its actual native effects and rejects before Right. Errors and
+terminal/nonordinary observations remain explicit.
+
+The completion theorem consumes one original selected-ordinary producer.
+It derives sufficient prefix and index fuel. Under the existing ordinary
+shape, edge-membership and reached numeric-range conditions, it derives
+adequate ordinary bounds for the SAME full worker and prefix observations.
+Each receipt retains its own native Post, pending history, fragment history
+and concrete Left callback capability. No future cache or success is assumed.
+
+A separate continuation fold executes the supplied hook before the next
+sibling and threads its returned native endpoint. The captured enumeration
+input stays fixed. An identity hook gives exactly the old fold's result.
+This hook is not yet the concrete callback and recursive driver.
+All five changed modules pass strict checks. Public readback and Audit pass;
+Audit checks 76960 dependencies. H6 remains the strongest end-to-end language
+theorem. Next: wire actual callbacks and recursive selected steps into that
+fold. Initial-only capacity, native Graph correspondence, terminal fallback,
+extraction and whole-driver language semantics remain open.
+Details: `lean/notes-current-pruning-enumeration-selected-step.md`.
+
 ## Concrete callbacks and parked recursion reach source restart
 
 Callback composition: `3f02ddcef`. Parked restart: `6dff1a207`.

@@ -1,0 +1,94 @@
+/tmp/mcfta-native-selected-step-20261026/strict-native-continuations-2/MicroCFTA/SourcePruningEnumerationNativeContinuations.lean:158:22: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  run identityHook checkEmpty r n p h k target scs before rest reached saved
+in the target expression
+  (match some (reached, saved) with
+    | none =>
+      Result.stopped [] []
+        (Stop.edge (some (SourcePruningEnumerationSelectedEdge.Result.stopped fragments observation candidate)))
+    | some (middleCaller, middleQueries) =>
+      match run identityHook checkEmpty r n p h k target scs before rest middleCaller middleQueries with
+      | Result.complete processed outputs finalCaller finalQueries =>
+        Result.complete
+          (SourcePruningEnumerationSelectedEdge.Result.stopped fragments observation candidate :: processed) outputs
+          finalCaller finalQueries
+      | Result.stopped processed outputs current =>
+        Result.stopped
+          (SourcePruningEnumerationSelectedEdge.Result.stopped fragments observation candidate :: processed) outputs
+          current) =
+    ofBranches
+      (match some (reached, saved) with
+      | none =>
+        SourcePruningEnumerationNativeBranches.Result.stopped []
+          (some (SourcePruningEnumerationSelectedEdge.Result.stopped fragments observation candidate))
+      | some (middleCaller, middleQueries) =>
+        match
+          SourcePruningEnumerationNativeBranches.run checkEmpty r n p h k target scs before rest middleCaller
+            middleQueries with
+        | SourcePruningEnumerationNativeBranches.Result.complete processed afterCaller saved =>
+          SourcePruningEnumerationNativeBranches.Result.complete
+            (SourcePruningEnumerationSelectedEdge.Result.stopped fragments observation candidate :: processed)
+            afterCaller saved
+        | SourcePruningEnumerationNativeBranches.Result.stopped processed current =>
+          SourcePruningEnumerationNativeBranches.Result.stopped
+            (SourcePruningEnumerationSelectedEdge.Result.stopped fragments observation candidate :: processed) current)
+
+case cons.some.stopped.some
+width : Nat
+Output Reason : Type
+inst✝² : DecidableEq Symbol
+inst✝¹ : DecidableEq (EdgeKey Symbol Constraint)
+inst✝ : DecidableEq Node
+checkEmpty : Bool
+r n p h k target : Nat
+scs : List Suspended
+before : Cached
+edge : EdgeValue Symbol Constraint
+rest : List (EdgeValue Symbol Constraint)
+ih :
+  ∀ (caller : Caller width) (queries : Queries),
+    run identityHook checkEmpty r n p h k target scs before rest caller queries =
+      ofBranches (SourcePruningEnumerationNativeBranches.run checkEmpty r n p h k target scs before rest caller queries)
+caller : Caller width
+queries : Queries
+fragments : List Fragment
+observation : SourcePruningEnumerationChildDispatch.Observation width
+candidate : Option Cached
+observed :
+  SourcePruningEnumerationCapturedEdge.run checkEmpty r n p h k target scs edge caller before queries =
+    some (SourcePruningEnumerationSelectedEdge.Result.stopped fragments observation candidate)
+reached : Caller width
+saved : Queries
+advanced :
+  SourcePruningEnumerationNativeBranches.advance
+      (SourcePruningEnumerationSelectedEdge.Result.stopped fragments observation candidate) =
+    some (reached, saved)
+⊢ (match some (reached, saved) with
+    | none =>
+      Result.stopped [] []
+        (Stop.edge (some (SourcePruningEnumerationSelectedEdge.Result.stopped fragments observation candidate)))
+    | some (middleCaller, middleQueries) =>
+      match run identityHook checkEmpty r n p h k target scs before rest middleCaller middleQueries with
+      | Result.complete processed outputs finalCaller finalQueries =>
+        Result.complete
+          (SourcePruningEnumerationSelectedEdge.Result.stopped fragments observation candidate :: processed) outputs
+          finalCaller finalQueries
+      | Result.stopped processed outputs current =>
+        Result.stopped
+          (SourcePruningEnumerationSelectedEdge.Result.stopped fragments observation candidate :: processed) outputs
+          current) =
+    ofBranches
+      (match some (reached, saved) with
+      | none =>
+        SourcePruningEnumerationNativeBranches.Result.stopped []
+          (some (SourcePruningEnumerationSelectedEdge.Result.stopped fragments observation candidate))
+      | some (middleCaller, middleQueries) =>
+        match
+          SourcePruningEnumerationNativeBranches.run checkEmpty r n p h k target scs before rest middleCaller
+            middleQueries with
+        | SourcePruningEnumerationNativeBranches.Result.complete processed afterCaller saved =>
+          SourcePruningEnumerationNativeBranches.Result.complete
+            (SourcePruningEnumerationSelectedEdge.Result.stopped fragments observation candidate :: processed)
+            afterCaller saved
+        | SourcePruningEnumerationNativeBranches.Result.stopped processed current =>
+          SourcePruningEnumerationNativeBranches.Result.stopped
+            (SourcePruningEnumerationSelectedEdge.Result.stopped fragments observation candidate :: processed) current)

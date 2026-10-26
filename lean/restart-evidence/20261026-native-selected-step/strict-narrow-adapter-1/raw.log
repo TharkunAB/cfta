@@ -1,0 +1,51 @@
+/tmp/mcfta-native-selected-step-20261026/strict-narrow-adapter-1/MicroCFTA/SourcePruningEnumerationNarrowAdapter.lean:56:8: error: `if_neg` has been deprecated: Use `ite_eq_right` instead
+/tmp/mcfta-native-selected-step-20261026/strict-narrow-adapter-1/MicroCFTA/SourcePruningEnumerationNarrowAdapter.lean:54:111: error: unsolved goals
+EnumGuard NativeGuard : Type
+heap : InternedConstructorTemplates.State Symbol NativeGuard
+fuel uv oldHandle newHandle : Nat
+scs : List Suspended
+before after : EnumerationExpandableIndex.Cached Symbol EnumGuard
+resolved observed : EnumerationState.State Symbol EnumGuard
+different : newHandle ≠ oldHandle
+written : Success (setValue uv (UVarValue.unenumerated (some newHandle) scs)) resolved () observed
+indexed :
+  SourcePruningEnumerationNativeIndex.write heap fuel uv (UVarValue.unenumerated (some newHandle) scs) scs scs
+      (EnumerationExpandableIndex.frame resolved before) =
+    some after
+core : after.core = observed
+shape :
+  observed =
+    { counter := resolved.counter, representatives := resolved.representatives,
+      values := resolved.values.set uv (UVarValue.unenumerated (some newHandle) scs),
+      obligations := resolved.obligations, recursionAncestry := resolved.recursionAncestry,
+      expansionAncestry := resolved.expansionAncestry }
+forest : observed.representatives = resolved.representatives
+⊢ Option.map (EnumerationExpandableIndex.frame observed)
+      ((SourcePruningEnumerationNativeIndex.candidate heap (UVarValue.unenumerated (some newHandle) scs)).bind
+        fun flag =>
+        (SourcePruningEnumerationNativeIndex.count fuel resolved.representatives (-1) scs before.waiting).bind
+          fun removed =>
+          (SourcePruningEnumerationNativeIndex.count fuel resolved.representatives 1 scs removed).bind fun saved =>
+            some
+              {
+                core :=
+                  { counter := observed.counter, representatives := resolved.representatives,
+                    values := observed.values.set uv (UVarValue.unenumerated (some newHandle) scs),
+                    obligations := observed.obligations, recursionAncestry := observed.recursionAncestry,
+                    expansionAncestry := observed.expansionAncestry },
+                expandable := fun other => if other = uv then flag else before.expandable other, waiting := saved }) =
+    Option.map (EnumerationExpandableIndex.frame observed)
+      ((SourcePruningEnumerationNativeIndex.candidate heap (UVarValue.unenumerated (some newHandle) scs)).bind
+        fun flag =>
+        (SourcePruningEnumerationNativeIndex.count fuel resolved.representatives (-1) scs before.waiting).bind
+          fun removed =>
+          (SourcePruningEnumerationNativeIndex.count fuel resolved.representatives 1 scs removed).bind fun saved =>
+            some
+              {
+                core :=
+                  { counter := resolved.counter, representatives := resolved.representatives,
+                    values := resolved.values.set uv (UVarValue.unenumerated (some newHandle) scs),
+                    obligations := resolved.obligations, recursionAncestry := resolved.recursionAncestry,
+                    expansionAncestry := resolved.expansionAncestry },
+                expandable := fun other => if other = uv then flag else before.expandable other, waiting := saved })
+/tmp/mcfta-native-selected-step-20261026/strict-narrow-adapter-1/MicroCFTA/SourcePruningEnumerationNarrowAdapter.lean:81:15: error: `if_pos` has been deprecated: Use `ite_eq_left` instead
