@@ -70,6 +70,28 @@ Terminal parents retain the existing enumerateNode fallback boundary. Native
 children can still take their terminal dispatcher. No Haskell fix is needed.
 Details: lean/notes-current-pruning-enumeration-native-ordinary.md.
 
+### Incoming resource forecasts include enabled emptiness allocation
+
+The actual enabled emptiness worker can allocate constructor nodes and edges.
+It retains native memo cells and the domain supply, but not the constructor
+heap. A bound that covers only the preceding native intersection is too weak.
+The formal stored-payload mass metric also ignores guard data. It does not
+bound the equality-class and path shapes used by the emptiness projection.
+
+The new incoming producer derives the native trace's instruction ceiling and
+guard carrier from original current facts. That carrier and the one-query
+profile reserve the same actual Call 1000 and its constructor allocations.
+The final returned state keeps all prior query, replacement, Post, memo and
+language receipts plus final numeric and guard bounds. No returned heap is
+used to define the combined initial forecast. Room at the next query and
+whole recursive completion remain separate proof obligations.
+
+External Haskell action: no new runtime defect or repair was established.
+No Haskell source changed. Retain the pending Sized documentation repair
+`af6369a9e` and all earlier merged-fix entries. These observations identify
+formal resource obligations. They do not propose an execution change.
+Details: `lean/notes-current-pruning-enumeration-incoming-resources.md`.
+
 ### Native query reservation preservation and the remaining driver gap
 
 The new proof uses the existing current outer Context. A numeric profile
@@ -528,6 +550,41 @@ TH/Generic extraction, valid-position build/read and source codec laws stay open
 
 
 
+
+## Original inputs bound incoming intersections and enabled Empty checks
+
+Native fuel and guards: `09a56b94c`. Actual worker resources: `d9c82653a`.
+Combined incoming producer: `eec8b10bb`. The goal stays ACTIVE.
+
+The actual incoming intersection and its optional enabled emptiness phase
+now have resource bounds from the ORIGINAL caller, numeric profile and guard
+alphabet. The final checked state retains the entire earlier completion
+packet: query and replacement language, readback, full Post, saved memos,
+actual global reads and exact disabled/skipped/performed observations.
+The producer also returns computed native and both worker fuel ceilings,
+query Fits, final Fits and the predicted guard carrier. No future range,
+successful callback, joint Frame or returned-heap forecast is an input.
+
+The emptiness worker can allocate constructor records. Its full allocation
+cost is charged to the combined forecast. Stored payload mass does not bound
+guard equality classes or paths. The recorded native trace therefore derives
+a guard alphabet from the original profile BEFORE the emptiness forecast.
+The fixed 1000-admission budget follows the actual enabled source check.
+The final resource bound is Fits. It does not assert Room for another query.
+
+All three new modules and Audit pass strict checks. Public readback covers
+19 declarations and four full definitions. Audit checks 77156 dependencies.
+A byte comparison retains all 2992 characters of the earlier IncomingQuery
+output proposition after width specialization. Runtime workers and older
+interfaces stay unchanged. Main remains imported at `153e1a211`.
+
+H6 remains the strongest end-to-end language theorem. Next propagate the
+combined packet through actual IncomingNode and CachedIncoming writes and
+terminal folds. Then reserve full child/edge execution, callbacks, recursive
+subtrees and later siblings from the original input. Whole-driver language,
+terminal fallback, Graph correspondence, extraction and arbitrary lazy demand
+remain open. No Haskell source changed. Details:
+`lean/notes-current-pruning-enumeration-incoming-resources.md`.
 
 ## Native query histories retain their original resource reservation
 
