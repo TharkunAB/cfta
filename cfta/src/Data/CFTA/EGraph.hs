@@ -206,6 +206,14 @@ nodeChild n k = case n of
     ENodeN _ _ cs -> cs !? k
     _ -> Nothing
 
+-- | The children of an e-node in front of a list.
+childrenOnto :: ENode f -> [ClassId] -> [ClassId]
+childrenOnto n rest = case n of
+    ENode0 _ _ -> rest
+    ENode1 _ _ a -> ClassId a : rest
+    ENode2 _ _ a b -> ClassId a : ClassId b : rest
+    ENodeN _ _ cs -> cs ++ rest
+
 -- | The number of children of an e-node.
 nodeArity :: ENode f -> Int
 nodeArity = \case
@@ -540,7 +548,7 @@ classAutomatonWith label g c0 = FTA.mkFTA root (go IntSet.empty [root])
         | otherwise =
             let nodes = maybe [] (map (canon g) . HashSet.toList . classNodes) (IntMap.lookup i (classes g))
                 row = [FTA.Transition (label (sortTerm g k) f) cs noConstraint | ENode k f cs <- nodes]
-             in (c, row) : go (IntSet.insert i seen) (concat [cs | ENode _ _ cs <- nodes] ++ rest)
+             in (c, row) : go (IntSet.insert i seen) (foldr childrenOnto rest nodes)
 
 {- | A pattern: a variable, a symbol with the patterns of its children, or a
 pattern whose e-class has a sort. A variable that occurs twice matches one
@@ -675,7 +683,7 @@ reach g = go IntMap.empty
     go seen [] = seen
     go seen (c0 : rest)
         | IntMap.member i seen = go seen rest
-        | otherwise = go (IntMap.insert i ns seen) (concat [cs | ENode _ _ cs <- ns] ++ rest)
+        | otherwise = go (IntMap.insert i ns seen) (foldr childrenOnto rest ns)
       where
         ClassId i = find g c0
         ns = canonicalNodes g i
