@@ -585,7 +585,8 @@ rebuild :: (Hashable f) => EGraph s f -> EGraph s f
 rebuild = go IntSet.empty IntSet.empty
   where
     -- dirty: the e-classes whose transitions can have a child that is not a
-    -- root: the merged e-classes and the e-classes of their users. joined:
+    -- root: the merged e-classes, and the e-classes of the users whose form
+    -- changed; a user whose form stays has the same form in its row. joined:
     -- the merged e-classes, whose rows a merge joined.
     go dirty joined g0 = case pending g0 of
         -- Each transition that rebuild touched has roots as children and
@@ -597,13 +598,8 @@ rebuild = go IntSet.empty IntSet.empty
              in g0{transitions = IntSet.foldl' tidy (transitions g0) roots}
         todo ->
             let merged = IntSet.fromList [i | c <- todo, let ClassId i = find g0 c]
-                owners =
-                    IntSet.fromList
-                        [j | i <- IntSet.toList merged, Just e <- [IntMap.lookup i (classes g0)], (_, ClassId j) <- classUsers e]
-             in go
-                    (IntSet.unions [dirty, merged, owners])
-                    (IntSet.union joined merged)
-                    (foldl' repair g0{pending = []} (IntSet.toList merged))
+                (g', owners) = foldl' (\(h, o) i -> repair h o i) (g0{pending = []}, IntSet.empty) (IntSet.toList merged)
+             in go (IntSet.unions [dirty, merged, owners]) (IntSet.union joined merged) g'
     -- A row with roots as children. A transition whose children are roots
     -- stays as it is, and only a joined row or a row with a changed
     -- transition can have a transition twice.
@@ -625,8 +621,8 @@ rebuild = go IntSet.empty IntSet.empty
             let n = nodeOf t in if HashSet.member n seen then (seen, kept) else (HashSet.insert n seen, t : kept)
         | t `elem` kept = (seen, kept)
         | otherwise = (seen, t : kept)
-    repair g i = case IntMap.lookup i' (classes g) of
-        Nothing -> g
+    repair g owners0 i = case IntMap.lookup i' (classes g) of
+        Nothing -> (g, owners0)
         Just e ->
             let users = classUsers e
                 -- Take the users out of the e-class, then add them again in
@@ -636,23 +632,25 @@ rebuild = go IntSet.empty IntSet.empty
                 -- e-class to another one, so the users of the other one stay
                 -- in the joined e-class.
                 g1 = g{classes = IntMap.insert i' e{classUsers = [], classUserCount = 0} (classes g)}
-                (g2, seen) = foldl' step (g1, HashMap.empty) users
-                step (h, s) (u, owner) =
+                Repaired g2 seen owners = foldl' step (Repaired g1 HashMap.empty owners0) users
+                step (Repaired h s o) (u, owner@(ClassId j)) =
                     let u' = canon h u
                         m = if u' == u then memo h else HashMap.delete u (memo h)
                         h1 = case HashMap.lookup u' m of
                             Just other -> maybe h{memo = m} snd (union owner other h{memo = m})
                             Nothing -> h{memo = HashMap.insert u' (find h owner) m}
-                     in (h1, HashMap.insert u' (find h1 owner) s)
+                     in Repaired h1 (HashMap.insert u' (find h1 owner) s) (if u' == u then o else IntSet.insert j o)
                 ClassId root = find g2 (ClassId i')
                 users' = HashMap.toList seen
-             in g2
+             in ( g2
                     { classes =
                         IntMap.adjust
                             (\e' -> e'{classUsers = users' ++ classUsers e', classUserCount = length users' + classUserCount e'})
                             root
                             (classes g2)
                     }
+                , owners
+                )
       where
         ClassId i' = find g (ClassId i)
 
@@ -705,6 +703,9 @@ analyseFrom make combine g known0 todo = go IntSet.empty known0 (map Whole (IntS
                             -- e-class can get new data.
                             let more = maybe [] (\e -> [Use u o | (u, o) <- classUsers e]) (IntMap.lookup i (classes g))
                              in go (IntSet.insert i changed) (IntMap.insert i new' known) (more ++ rest)
+
+-- The state of a repair in 'rebuild': the e-graph, the users in canonical form, and the e-classes of the users whose form changed.
+data Repaired s f = Repaired !(EGraph s f) !(HashMap.HashMap (ENode f) ClassId) !IntSet.IntSet
 
 -- A task of 'analyseFrom': an e-class from all its e-nodes, or one e-node of an e-class.
 data Task f = Whole !Int | Use !(ENode f) !ClassId
