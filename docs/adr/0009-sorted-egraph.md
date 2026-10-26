@@ -75,9 +75,14 @@ default).
   query matched the history that it reaches and used its e-node limit on
   matches that earlier queries left. Semi-naive matching is the base for a
   second try.
-- A condition sees the data at the start of its iteration, and hegg's sees
-  the data when the match applies, so the two can differ after some
-  iterations.
+- A condition sees the data when its match applies, as in egg and hegg. On
+  hegg's math rules the two engines still build different e-graphs after
+  iteration 3 or 4. One cause is the merge of hegg's test analysis, in
+  which an unknown constant absorbs a known one: hegg adds a constant leaf
+  while the data of an e-class is a constant for a moment, and the fixed
+  point here never has that data. With a merge in which the known constant
+  wins, as in egg, the first difference of t1 goes away; the later ones are
+  not explained.
 
 ## Discussion points
 

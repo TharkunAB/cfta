@@ -1059,10 +1059,12 @@ defaultSaturation :: Saturation f d
 defaultSaturation = Saturation defaultLimits Nothing Nothing
 
 {- | 'saturate' with the options of a 'Saturation' and a condition for each
-rule. A condition sees the data of the analysis at the start of the
-iteration and the e-graph when its match applies. An e-class whose data
-changes counts as changed for the matching of only the changed e-classes, so
-a condition that failed is tried again.
+rule. A condition sees the e-graph and the data of the analysis when its
+match applies: as in egg, an added e-node gets its data from its children,
+and a merge merges the data of its two e-classes. The data of the users of
+an e-class follows after the iteration. An e-class whose data changes counts
+as changed for the matching of only the changed e-classes, so a condition
+that failed is tried again.
 -}
 saturateWith ::
     (Hashable s, Hashable f) =>
