@@ -1,0 +1,21 @@
+[2026-10-26 13:28 CET] FINAL CLEAR — terminal bucket equivalence source/report review.
+
+Installed SourcePruningEnumerationTerminalBucketLanguage.lean: 82 lines / 4,333 bytes; SHA256 12e634ea48e540c29615e2f1d9e2669ad0847f2a89ed8308e4b1b5e73a34b6e9. It is byte-identical to strict-terminal-bucket-1/MicroCFTA source and the original /tmp draft.
+
+Retained strict-terminal-bucket-1/report.json: SHA256 01eec24e2aee7a3415ade89a6146d1d29155be6a987a0909576f5e9791b86d83; records matching source, exit0, output bytes0, Lean4.34.1, all linters and warningAsError, 4GiB memory/swap0. raw.log is literal empty, SHA256 e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855. These are retained Root checks; no check was rerun here.
+
+Exact semantic scope
+
+The helper is generic in Symbol, enum guard, NodeLanguage, residual meaning, assignment and incomingDomain. It compares the original terminal RHS—before Satisfies plus first/rest equations, incomingDomain at assignment winner and descendant Holds—with before Satisfies plus that same incomingDomain and every original bucket Holds. Its explicit structural inputs are actual original Roots, recorded root-map equality, winner membership and exact Bool partition. It adds no desired Satisfies hypothesis outside the iff and no new native-producer admission.
+
+Roots/winner review
+
+rootAssignment constructs a finite SameClass witness from paths uv and the reached root's terminal path. Only forest satisfaction obtained from the local Satisfies conjunct gives assignment(roots uv)=assignment uv. Forward winnerFirst then uses actual mapped winner membership to choose a terminal-bucket entry, its root assignment equality, and the first/rest equations. It derives equality of assigned terms; it does not assume that numeric winner equals first.var or that arbitrary assignments respect roots.
+
+Bucket review
+
+The two exact filter equations come directly from the given partition's projections. Every terminal filter member satisfies isTerminal=true. Existing EnumerationSemantics.terminal_holds identifies its full Holds requirement with term=assignment sc.var, because this Bool test selects exactly Trie.terminal. Forward proof uses winnerFirst to supply those equalities and preserves descendant Holds directly. Reverse proof obtains first/rest equations from the two terminal Holds equalities, and restricts original all-bucket Holds to descendants. No trie validity, graph correspondence, incoming node interpretation, state mutation or extra numeric resource condition is needed.
+
+The same winner and incomingDomain are retained on both sides. List members are used literally, including duplicate suspended entries; there is no deduplication, root-map injectivity or guard-width monotonicity assumption. The result adds no Safe, runtime-cache, progress, whole-driver completeness or H6 claim.
+
+No concrete semantic obstruction found. Full final source and defining root/Satisfies/terminal-Holds APIs were read. Only file reads, hashes and this /tmp report were used; no compiler/parser/build/Git/runtime execution or repository edit.

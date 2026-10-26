@@ -1,0 +1,76 @@
+[2026-10-26 13:29 CET] CHILD STABLE LANGUAGE DRAFT NOTES
+
+File: drafts/SourcePruningEnumerationChildStableLanguage.lean
+Namespace: MicroCFTA.SourcePruningEnumerationChildCompletion
+Theorem: stable_semantics
+265 lines / 18210 bytes.
+SHA256 69a8d8ce835c52b34d529e2a419383d2ccb8cc881da43c505c08ce7fdcfd5c50
+
+Public interface
+
+The initial arguments are text-identical to complete_with_fragments, with its
+existing DecidableEq instances supplied in the same section. Additional implicit
+witnesses are {r n p h k raw afterCaller after savedQueries outer waiting}.
+The explicit observed argument is exactly the original stable ChildDispatch.run
+family. It uses the original full memos.query and actual returned Caller/cache.
+
+The result uses Root's requested order: ambient, residualMeaning, assignment,
+fragment, output, then actual .ok(fragment,output) membership. It is the Iff
+between Satisfies at that actual output and original Satisfies plus the incoming
+meaning at fill assignment fragment and every effective-bucket Holds. The bucket
+expression is inline: .node keeps bucket; all other constructors keep bucket
+iff bucket.any isTerminal, otherwise []. No additional definition or typeclass
+was added. There is no desired final language or mass premise.
+
+Proof routes
+
+Empty input: project the supplied actual run equation and derive raw=[]. Every
+successful membership is impossible. No cache language is claimed on rejection.
+
+Nonterminal partition: derive bucket.any=false from the actual partition.
+Invoke CachedPrepare.complete_semantics once at the genuine original state.
+Its canonical nonempty rows are a singleton at the fresh original counter.
+Compare the supplied actual run at index k+indexFuel with the canonical cached
+producer at indexFuel+k. Representative/native/optional fuel does not affect
+this route. Exact ChildDispatch.run/observe reductions identify raw, whole
+Caller, Queries, outer, waiting and cache. The canonical row language then gives
+the claimed Iff for each actual member. Ordinary nodes retain all bucket items;
+Mu/Union use the old shallow action's [] bucket. Closed reference cases remain
+excluded by the canonical producer. No arbitrary action uniqueness is assumed.
+
+Terminal partition: derive actual terminal/descendant subsets and any=true.
+Invoke CachedTerminalAdapter.complete_semantics once with the derived current
+bounded/pending terminal input and original descendant bound/ranges. Compare
+actual and canonical ChildDispatch.run at summed r/n/k and max p/h. All raw,
+Caller, query, outer, waiting and cache fields agree at the same execution.
+The original cached fold shape and completed-branch raw equation show that any
+successful member must be the singleton (.hole winner, logical written core).
+Fold raw rejection and Empty incoming rejection cannot have that member.
+
+The canonical terminal existential branch Iff is converted to the per-row Iff
+using that exact singleton; no acceptance of resultCache is substituted. The
+TerminalBucketLanguage.restrictions_iff helper replaces the terminal rest
+assignment equations plus descendant constraints with every original bucket
+Holds at the retained winner. Its original Roots/recorded/winner facts come
+from the same canonical packet. The actual fragment equation converts this
+winner term to fill assignment fragment. Duplicate bucket entries are retained.
+
+Source self-checks
+
+The entire original initial parameter text matches exactly. The source has one
+CachedPrepare language producer call and one cached-terminal language producer
+call in their disjoint branches. It has one terminal bucket helper call, no old
+ChildCompletion producer call, and no sorry/admit. Terminal cached packet
+unpacking follows its 21 witnesses and 48 outputs (47 original plus semantics).
+The completed raw-shape extraction follows its seven witnesses and twenty
+fields before rawShape; the remaining original fields stay unused locally.
+
+The draft imports actual ChildCompletion, CachedTerminalLanguage,
+CachedPrepareLanguage and TerminalBucketLanguage modules directly. Arity's
+final helper at 12e634ea48e540c29615e2f1d9e2669ad0847f2a89ed8308e4b1b5e73a34b6e9
+was read; the helper call matches its exact argument order. Arity was cued for
+independent source review of this final immutable draft.
+
+No Lean parser/compiler/build/Git command or repository edit ran. This remains
+an unchecked source draft until Root's serial strict checks. Root may correct
+elaboration or simplifier issues in the repository while preserving this draft.

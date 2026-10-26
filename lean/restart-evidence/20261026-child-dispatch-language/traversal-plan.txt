@@ -1,0 +1,58 @@
+2026-10-26 13:32 CET
+
+Stable complete traversal language draft
+
+Draft: drafts/SourcePruningEnumerationTraversalStableLanguage.lean
+207 lines, 14017 bytes
+SHA256 f672e36a2f38fe97846dfea4838a4c26b69b2434e6180456b6c5cdf08bc2586e
+
+The public theorem stable_complete_semantics uses the exact admission inputs of
+TraversalCompletion.complete_with_fragments. It adds an observation of the actual
+stable complete traversal family. It proves a full Satisfies equivalence with
+the original Satisfies predicate and an ordered All2 relation between the input
+nodes and the actual returned fragments. Each relation requires the native
+meaning of the input node and Holds for its effective suspended bucket.
+
+The effective bucket is the full bucket for ordinary nodes or a terminal bucket.
+It is empty for a nonterminal Mu or Union input. This matches ChildDispatch and
+the shallow preparation action. The theorem does not replace this condition by
+the full input bucket.
+
+The proof follows the actual input list. At each head it calls the existing
+ChildCompletion.complete_with_fragments producer once. This gives the exact
+head caller, query memo, cache, full Post, Safe on the successful singleton,
+current waiting/index facts, and pending history. These facts derive the tail
+admission exactly as in the existing traversal producer. A raw-empty head is
+incompatible with the supplied complete traversal family.
+
+The private complete_tail lemma only decomposes an actual runtime equation.
+For the successful head, sums synchronize the representative, native and index
+fuel bounds. Maxima synchronize the two worker bounds. The resulting exact
+head and complete traversal equations derive the actual stable suffix family
+at the same reached caller, query memo and post-write cache. No uniqueness of
+arbitrary successful low-fuel observations is assumed.
+
+ChildCompletion.stable_semantics gives the exact head equivalence. The tail
+induction gives Satisfies at that same head endpoint. Their composition gives
+the full traversal equivalence. The native meaning in the input relation is
+the meaning of the immutable input Value. It has no mutable-heap parameter.
+Fragments.fill and Suspended.Holds also have no mutable-heap parameter. Thus
+the relation does not require an invalid global handle-language equality or a
+separate suffix transport premise.
+
+The draft proves semantics only for an actual stable complete result. It adds
+no runtime code, no future semantic-step callback, and no final Context input.
+It does not claim Safe for a rejected cache. Root's completion wrapper can
+retain the entire old traversal output and append this conditional equivalence.
+This draft has not been compiled. Root owns strict checking and installation.
+
+Read source identities:
+TraversalCompletion.lean
+  5b7b3d42ef5594c14a31a513851bb2e1b1c53386cf566e4f8d42346d9d847010
+ChildTraversal.lean
+  3129a79c0ef884ac83a585b91e44c516f78a9c53a4b23088e1a6597fc0a823ee
+ChildStableLanguage draft supplied by Guard
+  69a8d8ce835c52b34d529e2a419383d2ccb8cc881da43c505c08ce7fdcfd5c50
+The installed ChildStableLanguage was changing under Root's serial checks at
+the final read. The imported public API matches the supplied draft. Root must
+bind its final strict-checked source identity with the traversal check.
