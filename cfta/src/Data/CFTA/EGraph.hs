@@ -116,6 +116,7 @@ module Data.CFTA.EGraph (
     Rule,
     RuleError (..),
     rule,
+    rewrite,
     equation,
     ematch,
     ematchByIntersection,
@@ -151,6 +152,8 @@ import Data.List (elemIndex, minimumBy, sortOn, (!?))
 import qualified Data.Map.Strict as Map
 import Data.Maybe (fromMaybe, isJust, listToMaybe)
 import Data.Ord (comparing)
+import Data.String (IsString (..))
+import GHC.Stack (HasCallStack)
 
 import qualified Data.CFTA as FTA
 import Data.CFTA.Constraint (Constraint, equalitiesHold, equalityConstraint, noConstraint)
@@ -575,6 +578,10 @@ data Pattern s f
     | PSorted !(SortPattern s) !(Pattern s f)
     deriving (Eq, Show)
 
+-- | A string literal is a variable, so that @PNode Add ["x", "y"]@ is a pattern.
+instance IsString (Pattern s f) where
+    fromString = PVar
+
 -- | A pattern of a sort: a sort variable, or a sort symbol with the patterns of its children.
 data SortPattern s = SVar !String | SNode !s ![SortPattern s]
     deriving (Eq, Show)
@@ -621,8 +628,17 @@ rule left right = do
     let symbols = HashSet.toList (HashSet.fromList (patternSymbols left))
     pure (Rule l r symbols (anchorsOf l) (pathsOf l) (map fst (sortOn snd (Map.toList vars))))
 
+{- | A rule from a left and a right side, as 'rule' makes it, for a rule that
+the program states. It fails with the 'RuleError' when the right side has a
+variable or a sort variable that the left side does not have.
+-}
+rewrite :: (HasCallStack, Hashable f) => Pattern s f -> Pattern s f -> Rule s f
+rewrite left right = either (\e -> error ("Data.CFTA.EGraph.rewrite: " ++ show e)) id (rule left right)
+
 {- | The rules of an equation: the direction from each side whose other side
-has no other variables.
+has no other variables. It is empty when each side has a variable that the
+other does not have, as in @f x = f y@, so that an equation that a program
+finds, such as a law of Specftacular, can give no rule.
 -}
 equation :: (Hashable f) => Pattern s f -> Pattern s f -> [Rule s f]
 equation a b = rights [rule a b, rule b a]
