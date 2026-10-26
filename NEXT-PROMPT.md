@@ -1,5 +1,40 @@
 Continue the cfta formalization in /home/tritlo/Code/mcfta.
 
+## Original reservations now construct the complete child packet
+
+Child admission: `34bb0adad`. Actual terminal bounds: `63c6f0262`.
+Actual child bounds: `6be66d8cf`. Full child resources: `550706b81`.
+The goal stays ACTIVE. H6 remains the strongest end-to-end language theorem.
+
+Current invariants and one original bucket.length+1 reservation now construct
+both complete child packets. The literal terminal partition preserves order
+and duplicate entries. Its length fits the original reservation. Empty and
+nonterminal routes retain the native caller and fit conservative bounds.
+The reservation includes native queries and optional enabled Empty allocation.
+No future range, successful action or cache receipt is a producer input.
+
+Both earlier child conclusions remain intact. They include actual stable
+execution, full Post, memos, cache and index facts, protected slots, references,
+pending history and conditional fragment guarantees. The new bounds concern
+the SAME actual returned native caller. Observers cover every outer .ok shape,
+including none, rejection, inner errors and an absent cache candidate. Outer
+errors stay separate. Safe remains conditional on successful singleton output.
+Final Fits does not supply Room for a later query.
+
+All four new modules and Audit pass strict checks. Installed public readback
+covers 19 declarations and six full definitions. Audit checks 77292 theorem
+dependencies. Exact comparisons retain all 2162 and 1903 characters of the old
+child output packets after width specialization. Runtime workers, older
+interfaces, H6 and Haskell remain unchanged. Main remains imported at
+`153e1a211`. FINDINGS records no new Haskell defect or repair.
+
+Next reserve successive actual children of selected edges, including their
+projected guard inputs. Then cover concrete callbacks, whole recursive
+subtrees and later siblings at their actual native endpoints. Whole-driver
+language, terminal outer fallback, native Graph correspondence, extraction
+and arbitrary lazy demand remain open. Details:
+`lean/notes-current-pruning-enumeration-child-resources.md`.
+
 ## Original reservations now cover terminal joins and incoming writes
 
 Prefix uniqueness: `6bbbe0505`. Fold uniqueness: `59535ea23`.
