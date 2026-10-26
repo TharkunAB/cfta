@@ -234,7 +234,7 @@ spec = describe "Data.CFTA.EGraph" $ do
             same lhs =
                 let (c, g) = addTerm lhs (emptyEGraph :: EGraph () Arith)
                     (one, g') = addTerm (Node (Lit 1) []) g
-                    (g'', _) = saturateWith refinements (Limits 10 1000 0) [(divide, nonzero "x")] g'
+                    (g'', _) = saturateWith (Saturation (Limits 10 1000 0) (Just refinements) Nothing) [(divide, nonzero "x")] g'
                  in equivalent g'' c one
             succLen = Node Plus [Node (Len "xs") [], Node (Lit 1) []]
         it "rewrites x / x to 1 when the refinement of x excludes 0" $
@@ -244,7 +244,7 @@ spec = describe "Data.CFTA.EGraph" $ do
         it "folds a constant into its literal" $ do
             let (c, g) = addTerm (Node Plus [Node (Lit 2) [], Node (Lit 3) []]) (emptyEGraph :: EGraph () Arith)
                 (five, g') = addTerm (Node (Lit 5) []) g
-                (g'', _) = saturateWith refinements (Limits 10 1000 0) [] g'
+                (g'', _) = saturateWith (Saturation (Limits 10 1000 0) (Just refinements) Nothing) [] g'
             equivalent g'' c five `shouldBe` True
     it "holds the n! * Catalan(n - 1) terms of an AC sum of n variables, in 3^n - 2^(n+1) + n + 1 e-nodes" $
         forM_ [(3, 12), (4, 120), (5, 1680)] $ \(n, count) -> do

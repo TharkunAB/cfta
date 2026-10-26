@@ -22,6 +22,8 @@ Before release, the package was called `microcfta`.
   Conditions are a monoid (`holds`, `different`), a string
   literal is a pattern variable, `rewrite` fails loudly on a stated rule,
   and `lookupTerm` finds the e-class of a term without adding it.
+  `saturateWith` takes a `Saturation`: the limits, an analysis, and two
+  e-classes to make equal, in any combination.
 - Template exclusion computes the copies of an edge once for each wanted
   and unwanted parts, symbol, and child shapes. On Specftacular's HugeLists
   6-p4 this cut 3.8% of allocation and time, with the same laws.

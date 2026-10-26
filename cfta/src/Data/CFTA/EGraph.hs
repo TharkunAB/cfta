@@ -48,9 +48,10 @@ pattern variable. A language without sorts has the sort type @()@.
 >         (cb, g2) = addTerm b g1
 >      in reportStop (snd (saturateUntilEqual defaultLimits rules ca cb g2)) == Equal
 
-A rule can have a condition on an e-class analysis ('saturateWith'), such as
-@holds "x" (/= Just 0)@ for constant folding, and 'addTermWith' adds terms
-with sorts, such as typed terms.
+'saturateWith' takes a 'Saturation': an e-class analysis, such as constant
+folding, on whose data a rule can have a condition such as
+@holds "x" (/= Just 0)@, and two e-classes to make equal. 'addTermWith'
+adds terms with sorts, such as typed terms.
 
 = E-graphs are tree automata
 
@@ -165,7 +166,9 @@ module Data.CFTA.EGraph (
     saturate,
     saturateUntilEqual,
 
-    -- * Analyses and conditions in a saturation
+    -- * Analyses, conditions, and goals in a saturation
+    Saturation (..),
+    defaultSaturation,
     Analysis (..),
     Condition (..),
     holds,
@@ -1027,18 +1030,39 @@ the rule @x / x = 1@ with the condition that @x@ is not zero:
 refines :: (Formula -> Formula -> Verdict) -> (d -> Formula) -> String -> Formula -> Condition s f d
 refines implies refinementOf x goal = holds x (\d -> implies (refinementOf d) goal == Yes)
 
-{- | 'saturate' with an analysis, and a condition for each rule. The data of
-each e-class is the fixed point of 'analyse', kept up to date after each
-iteration from the e-classes that changed, and each e-class with a leaf gets
-it, as hegg does in its rebuild. A condition sees the data at the start of
-the iteration and the e-graph when its match applies. An e-class whose data
+{- | How 'saturateWith' runs: its limits, an e-class analysis, and two
+e-classes to make equal. Change 'defaultSaturation' with the fields:
+
+> defaultSaturation {saturationAnalysis = Just constants, saturationGoal = Just (a, b)}
+-}
+data Saturation f d = Saturation
+    { saturationLimits :: !Limits
+    , saturationAnalysis :: !(Maybe (Analysis f d))
+    {- ^ The data of each e-class is the fixed point of 'analyse', kept up to
+    date after each iteration from the e-classes that changed, and each
+    e-class with a leaf gets it, as hegg does in its rebuild.
+    -}
+    , saturationGoal :: !(Maybe (ClassId, ClassId))
+    {- ^ Two e-classes: the saturation matches only the e-classes that they
+    reach, and stops with 'Equal' when they are one e-class, as
+    'saturateUntilEqual' does.
+    -}
+    }
+
+-- | The limits of egg, no analysis, and no goal.
+defaultSaturation :: Saturation f d
+defaultSaturation = Saturation defaultLimits Nothing Nothing
+
+{- | 'saturate' with the options of a 'Saturation' and a condition for each
+rule. A condition sees the data of the analysis at the start of the
+iteration and the e-graph when its match applies. An e-class whose data
 changes counts as changed for the matching of only the changed e-classes, so
 a condition that failed is tried again.
 -}
 saturateWith ::
     (Hashable s, Hashable f, Eq d) =>
-    Analysis f d -> Limits -> [(Rule s f, Condition s f d)] -> EGraph s f -> (EGraph s f, Report)
-saturateWith analysis limits rules = runWith (Just analysis) limits rules Nothing
+    Saturation f d -> [(Rule s f, Condition s f d)] -> EGraph s f -> (EGraph s f, Report)
+saturateWith (Saturation limits analysis goal) rules = runWith analysis limits rules goal
 
 -- | The roots of the e-classes.
 eClasses :: EGraph s f -> [ClassId]
