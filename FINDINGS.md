@@ -71,6 +71,20 @@ Terminal parents retain the existing enumerateNode fallback boundary. Native
 children can still take their terminal dispatcher. No Haskell fix is needed.
 Details: lean/notes-current-pruning-enumeration-native-ordinary.md.
 
+### Actual child cache bounds and external Haskell status
+
+The formal child producer now adds at most one slot and at most the original
+bucket length in suspended mass. It retains its entire earlier certificate
+and its actual returned cache. Raw rejection does not imply safety.
+
+Source inspection distinguishes ordinary allocation from Mu and union
+allocation. The latter store an empty bucket. The universal mass statement
+uses an upper bound. No Haskell runtime defect follows from this distinction.
+No Haskell source changed. No new repair or external patch is proposed.
+All six earlier runtime or documentation repairs remain merged. The Sized
+documentation repair is also merged in PR #178. Keep all historical evidence.
+Details: `lean/notes-current-pruning-child-cache-bounds.md`.
+
 ### Main template memo and positive recursive callbacks
 
 Main `6c080537a` is imported. Template.refine now memoizes its pure edge-copy
@@ -763,6 +777,41 @@ TH/Generic extraction, valid-position build/read and source codec laws stay open
 
 
 
+
+## Actual child cache growth now follows from original inputs
+
+Scalar components: `8a071943e`. Complete child: `5efdddd98`.
+The goal stays ACTIVE. H6 remains the strongest end-to-end language theorem.
+Main `6c080537a` remains imported. All earlier Haskell repairs remain merged.
+
+The full child resource producer now retains its entire earlier result and
+adds numeric bounds on the SAME actual returned cache. Its counter grows
+by at most one. Its total suspended mass grows by at most bucket.length.
+The producer uses the original Packet facts and reservation. It calls the
+earlier child producer once. No future cache bound, successful suffix or
+range is an initial premise. Valid rejection still supplies no Safe claim.
+
+Actual dispatch singletons, all outer fold result tags and attached fold
+caches preserve counter and suspended mass exactly. The terminal prefix
+changes only the forest. Incoming outer reads preserve values and counter.
+An attached incoming cache adds exactly incomingScs.length, including the
+reconstructed Empty write. Ordinary children add the whole incoming bucket.
+Mu and union children allocate an empty bucket. Empty retains the input.
+The universal child mass statement is therefore an upper bound.
+
+Seven new proof modules and Audit pass strict checks. Aggregate Audit passes
+3857 jobs and checks 77543 theorem dependencies. Installed readback covers
+18 declarations and 11 full worker definitions. Only the permitted axioms
+occur. H6, earlier APIs, runtime workers and Haskell remain unchanged.
+No new Haskell defect or repair was established. FINDINGS records this status.
+
+Next lift the actual child bounds through complete and rejected child
+traversals. Derive edge counter and mass bounds from the original outer
+cache, including own-class allocation and final target writes. Then reserve
+full recursive subtree work before each next sibling and thread the actual
+post-subtree caller and full memos. General finite recursive capacity,
+whole-enumerator language and Haskell correspondence remain open. Details:
+`lean/notes-current-pruning-child-cache-bounds.md`.
 
 ## Main is current and callbacks now execute one recursive expansion
 
