@@ -1,5 +1,37 @@
 # Full formalization coverage
 
+## The full ordered scan now has original resources for recursive callbacks
+
+Schedule and certificates: `f4b468ad8`. Actual scan: `498d9477e`.
+The goal stays ACTIVE. H6 remains the strongest end-to-end language theorem.
+Main `6c080537a` remains imported. All earlier Haskell repairs remain merged.
+
+The original Packet, profile, finite guard carrier, captured mass and inherited
+length now derive the COMPLETE actual ordered sibling scan with depth-one
+callbacks. One common work bound gives the same complete or explicit stopped
+result at every larger fuel. The original schedule pays each edge and its
+callback before the next sibling. Final forecast Room supplies the whole
+reservation and computes one mathematical width. No future result is assumed.
+
+Each suffix starts at the actual callback caller and full memos. It restores
+the captured enumeration cache and metadata. Each receipt keeps its own head
+stage; each output keeps its own callback stage and cache. Arbitrary stopped
+output lists retain their exact hook suffix, nested reason and optional
+endpoint. The finish wrapper retains EVERY earlier scan conclusion and adds
+resources for the exact finished result. It calls the scan producer once.
+
+All four new modules and Audit pass strict checks. Aggregate Audit passes
+3878 jobs and checks 77657 theorem dependencies. Installed readback covers
+20 declarations and 14 full definitions or structures. Only permitted axioms
+occur. H6, earlier APIs, runtime workers and Haskell remain unchanged.
+FINDINGS records that no new Haskell defect or repair was established.
+
+Next lift this scan through actual ordinary entry and the original narrowed
+prefix. Reserve a row-count ceiling before the selected rows exist. Complete
+the depth-two driver, including parked restarts and fallback routes. General
+finite recursive capacity, whole-enumerator language and Haskell correspondence
+remain open. Details: `lean/notes-current-pruning-positive-sibling-scan.md`.
+
 ## An original reservation now derives an actual edge and recursive callback
 
 Reservation: `8cced4ee6`. Concrete head: `fd55485d2`.
