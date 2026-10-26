@@ -3,6 +3,7 @@
 module Data.CFTA.EGraphSpec (spec) where
 
 import Control.Monad (forM_)
+import qualified Data.Map.Strict as Map
 import Data.Maybe (fromMaybe)
 import qualified Data.Set as Set
 import Test.Hspec (Spec, describe, expectationFailure, it, shouldBe)
@@ -17,7 +18,6 @@ import Test.QuickCheck (
     property,
     vectorOf,
     (===),
-    (==>),
  )
 
 import qualified Data.CFTA as FTA
@@ -111,9 +111,24 @@ genAbstraction graph@(Graph terms _) = elements terms >>= go
 termSize :: Term String -> Int
 termSize (Node _ ts) = 1 + sum (map termSize ts)
 
-termDepth :: Term String -> Int
-termDepth (Node _ []) = 0
-termDepth (Node _ ts) = 1 + maximum (map termDepth ts)
+{- | The least size of a term of the initial state of an automaton: the least
+fixed point of the sizes that its transitions give. A cyclic automaton has
+too many terms of each depth to list.
+-}
+leastSize :: (Ord state) => FTA.FTA state symbol constraint -> Maybe Int
+leastSize automaton = Map.lookup (FTA.initialState automaton) (go Map.empty)
+  where
+    go sizes =
+        let sizes' =
+                Map.fromList
+                    [ (q, minimum ks)
+                    | q <- FTA.states automaton
+                    , let ks =
+                            [ 1 + sum cs | t <- FTA.transitionsFrom automaton q, Just cs <- [traverse (`Map.lookup` sizes) (FTA.transitionChildren t)]
+                            ]
+                    , not (null ks)
+                    ]
+         in if sizes' == sizes then sizes else go sizes'
 
 -- An integer language with the length of a list: a literal, a variable, a length, a sum, and a quotient.
 data Arith = Lit Integer | Var String | Len String | Plus | Quotient
@@ -191,10 +206,7 @@ spec = describe "Data.CFTA.EGraph" $ do
                 let g = build graph
                     (c, _) = addTermWith (\(Sorted s f ts) -> (s, f, ts)) t g
                  in case (extract (\_ ks -> 1 + sum ks) g c, classAutomaton g c) of
-                        (Just (k, u), Right automaton) ->
-                            -- The terms of depth at most k, which hold every term of size k.
-                            let shallow = take 20001 (takeWhile ((<= k) . termDepth) (FTA.terms automaton))
-                             in length shallow <= 20000 ==> (k, termSize u, minimum (map termSize shallow)) === (k, k, k)
+                        (Just (k, u), Right automaton) -> (k, termSize u, leastSize automaton) === (k, k, Just k)
                         (e, a) -> counterexample (show (fmap fst e, either show (const "an automaton") a)) False
     it "selects the terms of an e-class with an ECTA" $ do
         -- Under distributivity and commutativity, the e-class of a * (b + c)
