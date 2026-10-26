@@ -571,11 +571,10 @@ rebuild = go IntSet.empty
     -- dirty: the e-classes whose transitions can have a child that is not a
     -- root: the merged e-classes and the e-classes of their users.
     go dirty g0 = case pending g0 of
-        -- Each identity points at its root, so that 'find' takes one step,
-        -- and each transition that rebuild touched has roots as children
-        -- and occurs once in its row, so that the table is a valid automaton.
+        -- Each transition that rebuild touched has roots as children and
+        -- occurs once in its row, so that the table is a valid automaton.
         [] ->
-            let g1 = g0{unionFind = UnionFind.flatten (unionFind g0)}
+            let g1 = g0
                 roots = IntSet.fromList [r | i <- IntSet.toList dirty, let ClassId r = find g1 (ClassId i), IntMap.member r (classes g1)]
                 tidy table r = Map.adjust (dedupe . map canonical) (ClassId r) table
                 canonical t = (transitionOf (canon g1 (nodeOf t))){FTA.transitionConstraint = FTA.transitionConstraint t}

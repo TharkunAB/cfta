@@ -3,7 +3,9 @@
 Mutable union-find, as in @Data.Equivalence.Monad@, can be faster overall,
 but enumeration branches in the list monad need a structure that can be copied
 and backtracked cheaply. This module stores parent pointers in an 'IntMap' and
-returns updated structures from 'find' and 'union'.
+returns updated structures from 'union'. A union points each member of the
+smaller set at the representative of the larger set, so the parent of a
+variable is always its representative and 'root' takes one lookup.
 
 In a constrained enumeration of 20,000 terms of the typed-expression ECTA,
 'find' takes 1.7% of the instructions, and all operations of @containers@
@@ -22,11 +24,8 @@ module Data.CFTA.Internal.UnionFind (
     union,
     find,
     root,
-    flatten,
 ) where
 
-import Control.Monad (when)
-import Control.Monad.State.Strict (State, execState, get, modify', put, runState)
 import Data.IntMap.Strict (IntMap)
 import qualified Data.IntMap.Strict as IntMap
 
@@ -70,10 +69,11 @@ intToUVar = UVar
 
 {- | What the forest stores for one variable.
 
-A 'Parent' points to the next variable towards the root. A 'Root' is the
-representative of its set and holds the size of the set.
+A 'Parent' points to the representative of the set of the variable. A
+'Root' is the representative of its set and holds the size of the set and
+its other members.
 -}
-data Entry = Parent !UVar | Root !Int
+data Entry = Parent !UVar | Root !Int ![UVar]
     deriving (Eq, Ord, Show)
 
 -- | Persistent union-find forest, keyed by the integer id of a variable.
@@ -82,67 +82,37 @@ newtype UnionFind = UnionFind {getUnionFindMap :: IntMap Entry}
 
 -- | Forest containing each supplied variable as a singleton set.
 withInitialValues :: [UVar] -> UnionFind
-withInitialValues uvs = UnionFind $ IntMap.fromList $ map ((,Root 1) . uvarToInt) uvs
+withInitialValues uvs = UnionFind $ IntMap.fromList $ map ((,Root 1 []) . uvarToInt) uvs
 
 ---------------------------
 -------- Union-find operations
 ---------------------------
 
--- | Store the entry of a variable.
-setEntry :: UVar -> Entry -> UnionFind -> UnionFind
-setEntry uv e (UnionFind m) = UnionFind (IntMap.insert (uvarToInt uv) e m)
-
 -- | Merge the two variable classes, preferring the larger class as root.
 union :: UVar -> UVar -> UnionFind -> UnionFind
-union uv1 uv2 uf = flip execState uf $ do
-    (uv1Rep, uv1Size) <- findRoot uv1
-    (uv2Rep, uv2Size) <- findRoot uv2
-    if uv1Rep == uv2Rep
-        then
-            return ()
-        else
-            if uv1Size < uv2Size
-                then do
-                    modify' (setEntry uv1Rep (Parent uv2Rep))
-                    modify' (setEntry uv2Rep (Root (uv1Size + uv2Size)))
-                else do
-                    modify' (setEntry uv2Rep (Parent uv1Rep))
-                    modify' (setEntry uv1Rep (Root (uv1Size + uv2Size)))
+union uv1 uv2 uf@(UnionFind m)
+    | r1 == r2 = uf
+    | otherwise =
+        let (big, bigSize, bigMembers, small, smallSize, smallMembers) =
+                if s1 < s2 then (r2, s2, ms2, r1, s1, ms1) else (r1, s1, ms1, r2, s2, ms2)
+            -- Each member of the smaller set now points at the new representative.
+            pointed = foldl' (\acc v -> IntMap.insert (uvarToInt v) (Parent big) acc) m (small : smallMembers)
+         in UnionFind (IntMap.insert (uvarToInt big) (Root (bigSize + smallSize) (small : smallMembers ++ bigMembers)) pointed)
+  where
+    (r1, s1, ms1) = rootEntry uv1
+    (r2, s2, ms2) = rootEntry uv2
+    rootEntry uv =
+        let r = root uv uf
+         in case IntMap.lookup (uvarToInt r) m of
+                Just (Root size members) -> (r, size, members)
+                _ -> (r, 1, [])
 
--- | Find the representative of a variable and the size of its set.
-findRoot :: UVar -> State UnionFind (UVar, Int)
-findRoot uv = do
-    m <- get
-    case IntMap.lookup (uvarToInt uv) (getUnionFindMap m) of
-        Nothing -> put (setEntry uv (Root 1) m) >> return (uv, 1)
-        Just (Root size) -> return (uv, size)
-        Just (Parent p) -> do
-            (rep, size) <- findRoot p
-            -- Compress against the state the recursive call left behind,
-            -- not against @m@: the rest of the chain was compressed there,
-            -- and rebuilding from @m@ would discard it. A variable whose
-            -- parent is the root already has its entry.
-            when (p /= rep) $ modify' (setEntry uv (Parent rep))
-            return (rep, size)
-
--- | Find a variable's representative and return the path-compressed forest.
+-- | Find a variable's representative. The forest stays the same.
 find :: UVar -> UnionFind -> (UVar, UnionFind)
-find uv = runState (fst <$> findRoot uv)
+find uv uf = (root uv uf, uf)
 
-{- | The representative of a variable, as 'find' gives it, without the path
-compression: for a reader that cannot write the structure back.
--}
+-- | The representative of a variable: its parent, or the variable itself when it has none.
 root :: UVar -> UnionFind -> UVar
 root uv (UnionFind m) = case IntMap.lookup (uvarToInt uv) m of
-    Just (Parent p) -> root p (UnionFind m)
+    Just (Parent p) -> p
     _ -> uv
-
-{- | Point each variable at the representative of its set, so that 'root'
-takes at most one step until the next 'union'. A structure that reads
-'root' often, such as an e-graph, flattens after a batch of unions.
--}
-flatten :: UnionFind -> UnionFind
-flatten uf@(UnionFind m) = UnionFind (IntMap.mapWithKey point m)
-  where
-    point i (Parent _) = Parent (root (UVar i) uf)
-    point _ entry = entry
