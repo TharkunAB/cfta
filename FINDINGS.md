@@ -71,6 +71,31 @@ Terminal parents retain the existing enumerateNode fallback boundary. Native
 children can still take their terminal dispatcher. No Haskell fix is needed.
 Details: lean/notes-current-pruning-enumeration-native-ordinary.md.
 
+### Cached terminal, fresh child language and recursive-boundary scope
+
+No Haskell source changed. No new Haskell defect or repair was established.
+The actual cached terminal adapter and fresh child rows now have exact local
+assignment semantics. Ordinary child slots store the full suspended bucket.
+Mu and InternedUnion slots with no terminal entry store an empty bucket.
+This omission matches enumerateNode and the documented truncation behavior.
+It is not a missing shallow-child write in the translation.
+
+The public terms documentation says that constraints below a truncated binder
+are dropped. Marker output does not prove nonempty finite language below it.
+A full-bucket assignment theorem therefore needs a restricted domain or an
+explicit partial-output statement. The source review gives a reduced Mu
+counterexample to the blanket claim. It is not a compiled Lean witness or
+an executed Haskell whole-driver counterexample. Existing terminal-language
+and H6 theorems remain valid. Do not install the bucket on boundary slots as
+a proof-only repair. That changes waiting, expansion and truncation behavior.
+
+External action: no additional patch. Retain all six earlier merged repairs,
+the merged Sized documentation repair in PR #178 and all historical repros.
+Keep the pending parallel-decision suffix-exception and cancellation findings.
+Arbitrary lazy demand and shared global caches remain correspondence work.
+Details: `lean/notes-current-pruning-cached-terminal-language.md`.
+Evidence: `lean/restart-evidence/20261026-cached-terminal-language`.
+
 ### Whole native fold, terminal language and Haskell status
 
 The formal full native fold now preserves assignments already equated by
@@ -906,6 +931,41 @@ TH/Generic extraction, valid-position build/read and source codec laws stay open
 
 
 
+
+## Cached terminal and fresh child rows now have exact assignment language
+
+Actual cached terminal: `7211191a4`.
+Actual fresh child rows: `e32b9f062`.
+The goal stays ACTIVE. H6 remains the strongest end-to-end language theorem.
+Main `6c080537a` remains imported. All earlier Haskell repairs remain merged.
+
+The actual cached terminal adapter now retains its full old receipt and adds
+exact assignment semantics for its returned raw rows. It uses the actual
+union winner, original state and reached native heap. The requested union
+equations, incoming native domain and incoming suspended constraints remain
+explicit. A rejected branch has no accepted row. Its attached cache remains
+separate from branch acceptance. The original admission stays unchanged.
+
+Actual cached nonterminal child rows also have exact assignment meaning.
+An ordinary child adds its native domain and full suspended bucket at the
+fresh hole. Union and Mu children add their native domain and store no bucket.
+This matches Haskell's documented recursion truncation. It is not a new
+Haskell defect. A uniform full-bucket finite-assignment claim would be false
+at these boundaries. Empty input has no accepted child row.
+
+All four new modules and Audit pass strict checks. Aggregate Audit passes
+3919 jobs and checks 77829 theorem dependencies. Installed readback covers
+5 declarations with only permitted axioms. Three completion wrappers retain
+the entire old result and call their producer once. H6, all prior Lean sources
+except Audit imports, runtime and Haskell stay unchanged.
+
+Next compose the actual child dispatcher, ordered child traversal and selected
+edge language at their own native endpoints. Then prove captured-slot writes
+and rendering. State the boundary-free or partial-output scope explicitly.
+Whole-enumerator language, selector coverage, partial stops, unsupported
+fallback and Haskell correspondence remain open.
+Details: `lean/notes-current-pruning-cached-terminal-language.md`.
+FINDINGS records the recursive-boundary scope and current Haskell status.
 
 ## The whole native fold and terminal arm now have exact assignment language
 
