@@ -46,19 +46,21 @@ default).
 - Semi-naive matching skips the matches that the rule already applied: an
   AC sum of 9 variables allocates 24 % less, 10 variables 13 % less. At 5-p4,
   where each query saturates for a few iterations, it costs 0.4 %.
-- On the same e-graphs, the engine allocates less than half of what hegg 0.6
-  does, in a third to a half of its time, on AC sums of 8 to 10 variables
-  saturated. On hegg's own math rules, which need conditions and constant
-  folding, it builds the same e-graphs as hegg in the first iterations, and
-  it allocates less and takes less time at every size: 0.50 to 0.63 s
-  against 1.66 to 1.95 s on the largest case. The analysis there propagates
-  a change through the e-nodes that use the e-class, as egg does;
+- On the same e-graphs, the engine allocates a quarter to a third of what
+  hegg 0.6 does, and takes 31 % to 56 % of its time, on AC sums of 8 to 10
+  variables saturated. On hegg's own math rules, which need conditions and
+  constant folding, it builds the same e-graphs as hegg in the first
+  iterations, and it allocates less and takes less time at every size: 0.50
+  to 0.63 s against 1.72 to 1.74 s on the largest case. The analysis there
+  propagates a change through the e-nodes that use the e-class, as egg does;
   recomputing the whole e-class took three times as long.
+- The matcher passes each match to a continuation. The list monad made a
+  list of the matches of each part of a pattern, and the AC sums allocated
+  25 % more with it.
 - A merge points each identity of the smaller e-class at the new root, so
-  `find` takes one lookup, and rebuild keeps the memo entry of a user whose
-  form does not change. Together they cut 15 % of the instructions and of
-  the allocation on hegg's t3 rules after 6 iterations, where `find` and
-  the memo took the most time, and 6 % and 7 % on t4.
+  `find` takes one lookup. The children of an e-node are evaluated roots,
+  so that a key of the memo has no thunks. These and smaller changes took
+  the AC sum of 9 variables from 3.49 GB to 2.23 GB.
 
 ## Consequences
 
