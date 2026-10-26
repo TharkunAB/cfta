@@ -1,0 +1,521 @@
+diff --git a/lean/MicroCFTA/Audit.lean b/lean/MicroCFTA/Audit.lean
+index e62a2a7b9..8d846fe55 100644
+--- a/lean/MicroCFTA/Audit.lean
++++ b/lean/MicroCFTA/Audit.lean
+@@ -13,6 +13,7 @@ import MicroCFTA.SourceCurrentAllocatedTargetCallerObserved
+ import MicroCFTA.SourcePruningEnumerationRecursiveResources
+ import MicroCFTA.SourceCurrentAllocatedConjunctionWorkerResources
+ import MicroCFTA.SourcePruningEnumerationIncomingQueryResources
++import MicroCFTA.SourcePruningEnumerationCachedIncomingResources
+ import MicroCFTA.SourceCurrentAllocatedNativeWordBoundary
+ import MicroCFTA.SourcePruningEnumerationSelectedNarrow
+ import MicroCFTA.SourcePruningEnumerationRecursion
+diff --git a/lean/MicroCFTA/SourcePruningEnumerationCachedIncomingResources.lean b/lean/MicroCFTA/SourcePruningEnumerationCachedIncomingResources.lean
+new file mode 100644
+index 000000000..ccf30c940
+--- /dev/null
++++ b/lean/MicroCFTA/SourcePruningEnumerationCachedIncomingResources.lean
+@@ -0,0 +1,130 @@
++import MicroCFTA.SourcePruningEnumerationCachedIncoming
++import MicroCFTA.SourcePruningEnumerationIncomingNodeResources
++
++/-!
++# Initial resources for the cached incoming action
++
++The existing producer supplies every cache and language receipt.
++Its same actual observation supplies the final resource and guard bounds.
++The input profile and alphabet determine both bounds before execution.
++-/
++namespace MicroCFTA.SourcePruningEnumerationCachedIncoming
++open EnumerationState EnumerationSchedule EnumerationCorrectness
++open InternedConstructorTemplates InternedProbeProvenance
++open SourcePruningEnumerationNodes SourcePruningEnumerationObservation
++open SourceCurrentAllocatedNativeInventoryState (Inventory)
++open SourceCurrentAllocatedPartialInvariant (Context Post)
++open SourceCurrentAllocatedNativeResourceForecast (Profile Room)
++open SourceCurrentConstrainedCapGeneratedQueryResources (Fits)
++local notation "Symbol" => SourcePruningTemplates.Symbol
++local notation "Constraint" => SourceSymbolicIndex.Constraint FullSyntax.Formula
++local notation "Node" => InternedConstructorTemplates.Value Symbol Constraint
++local notation "Checked" => SourceEqualityNativeDemand.State
++local notation "Caller" => SourceCurrentAllocatedPartialState.State
++local notation "Memos" => EndpointMemoGateTrace.Memos
++local notation "Queries" => SourceEndpointMemo.Memos
++local notation "Heap" => SourceEqualityAnnotationHeap.Heap
++variable {bits : Nat}
++attribute [local instance] SourcePruningEnumerationIncomingNode.incomingNodeMonadList
++
++/-- Initial bounds construct the full cached incoming packet and its final resources. -/
++theorem complete_resources
++    [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Constraint)] [DecidableEq Node]
++    (alphabet : List Constraint) (profile : Profile)
++    (formulas : SourceGuards.Formulas FullSyntax.Formula)
++    (solver : SourceGuards.Entailment FullSyntax.Formula)
++    (inventory : Inventory) (beforeCaller : Caller (bits + 2))
++    (before : EnumerationExpandableIndex.Cached Symbol Constraint)
++    (checkEmpty : Bool) (target : Nat) (incoming : Node)
++    (incomingScs : List EnumerationState.Suspended) (memos : Memos) (roots : Nat → Nat)
++    (initial : Context formulas solver inventory beforeCaller memos)
++    (storage : StorageValid before.core)
++    (realized : PendingRealized beforeCaller.checked.native.machine.heap before.core)
++    (paths : Roots before.core.representatives roots)
++    (counts : EnumerationCanonicalWaiting.Correct roots before.core.values before.waiting)
++    (flags : ∀ (slot : Nat), SourcePruningEnumerationNativeIndex.candidate
++      beforeCaller.checked.native.machine.heap
++      ((before.core.values[slot]?).getD .eliminated) = some (before.expandable slot))
++    (root : IsRoot before.core.representatives target)
++    (pending : EnumerationCompleteness.PendingAt before.core target)
++    (available : Available beforeCaller.checked.native.machine.heap incoming) (closed : incoming.free = [])
++    (bounded : ∀ sc ∈ incomingScs, sc.var < before.core.counter)
++    (fits : Fits profile beforeCaller.checked) (room : Room bits profile)
++    (known : Heap (fun guard => guard ∈ alphabet) beforeCaller.checked.native.machine.heap) :
++    ∃ (r n p h k : Nat) (oldNode : Option Nat) (oldScs : List EnumerationState.Suspended)
++      (read : EnumerationState.State Symbol Constraint) (afterCaller : Caller (bits + 2))
++      (savedQueries : Queries) (final : Memos) (next : Inventory) (replacement : Node) (handle : Nat)
++      (after : EnumerationExpandableIndex.Cached Symbol Constraint),
++      (∀ extra, ExceptT.run (getValue (r + extra) target before.core) =
++        [.ok (.unenumerated oldNode oldScs, read)]) ∧
++      EnumerationCompressionFrame.Frame before.core read ∧
++      (∀ extra extraNative P H, p ≤ P → h ≤ H →
++        SourcePruningEnumerationIncomingNode.run checkEmpty (r + extra) (n + extraNative) P H
++          beforeCaller before.core target incoming incomingScs memos.query =
++          (.ok (some (if replacement = .empty then [] else [.ok ((), after.core)])),
++            afterCaller, savedQueries, read)) ∧
++      ExceptT.run ((do
++        setValue target (.unenumerated (some handle) (incomingScs ++ oldScs))
++        inheritAncestry target) read) = [.ok ((), after.core)] ∧
++      after.core = {read with
++        values := read.values.set target (.unenumerated (some handle) (incomingScs ++ oldScs))
++        recursionAncestry := fun other => if other = target then
++          (read.expansionAncestry ++ read.recursionAncestry target).eraseDups else read.recursionAncestry other} ∧
++      after.core.values[target]? = some (.unenumerated (some handle) (incomingScs ++ oldScs)) ∧
++      StorageValid after.core ∧ PendingRealized afterCaller.checked.native.machine.heap after.core ∧
++      Post formulas solver next beforeCaller afterCaller final ∧ final.query = savedQueries ∧
++      Cache.Extends memos.unfolding final.unfolding ∧
++      Available afterCaller.checked.native.machine.heap replacement ∧ replacement.free = [] ∧
++      encodeNode replacement = some handle ∧ lookupNode afterCaller.checked.native.machine.heap handle = some replacement ∧
++      (∀ extra, (SourcePruningEnumerationNativeIndex.write afterCaller.checked.native.machine.heap
++        (k + extra) target (.unenumerated (some handle) (incomingScs ++ oldScs)) incomingScs []
++        (EnumerationExpandableIndex.frame read before)).map (EnumerationExpandableIndex.frame after.core) = some after) ∧
++      after.core.counter = before.core.counter ∧ after.core.representatives = read.representatives ∧
++      Roots after.core.representatives roots ∧
++      EnumerationCanonicalWaiting.Correct roots after.core.values after.waiting ∧
++      after.waiting = EnumerationCanonicalWaiting.count roots 1 incomingScs before.waiting ∧
++      (∀ (slot : Nat), SourcePruningEnumerationNativeIndex.candidate
++        afterCaller.checked.native.machine.heap
++        ((after.core.values[slot]?).getD .eliminated) = some (after.expandable slot)) ∧
++      after.expandable = (fun slot => if slot = target then
++        !(MergedOrdinaryHeight.recursiveBoundary replacement && (incomingScs ++ oldScs).isEmpty)
++        else before.expandable slot) ∧
++      (oldNode = none → replacement = incoming ∧ afterCaller = beforeCaller ∧
++        savedQueries = memos.query ∧ final = memos ∧ next = inventory) ∧
++      (∀ oldHandle, oldNode = some oldHandle →
++        ∃ (old query : Node) (queried : Checked (bits + 2)),
++          lookupNode beforeCaller.checked.native.machine.heap oldHandle = some old ∧
++          next.source = beforeCaller.checked.native.machine.heap ∧ next.roots = inventory.roots ++ [incoming, old] ∧
++          SourceCurrentAllocatedTargetQuery.Receipt formulas solver next incoming old beforeCaller.checked query queried memos ∧
++          (∀ ambient term,
++            InternedGuardedLanguage.meaning (SourceEqualityPCSGuard.holds formulas solver) ambient replacement term ↔
++              InternedGuardedLanguage.meaning (SourceEqualityPCSGuard.holds formulas solver) ambient incoming term ∧
++              InternedGuardedLanguage.meaning (SourceEqualityPCSGuard.holds formulas solver) ambient old term) ∧
++          (checkEmpty = false → replacement = query ∧
++            afterCaller = SourceCurrentAllocatedPartialState.advance beforeCaller queried beforeCaller.fourth beforeCaller.merge ∧
++            final = memos)) ∧
++      Fits (SourcePruningEnumerationIncomingQuery.forecast alphabet profile) afterCaller.checked ∧
++      Heap (fun guard => guard ∈ SourceCurrentGeneratedQueryGuardResources.forecast alphabet profile)
++        afterCaller.checked.native.machine.heap := by
++  have ranges := SourcePruningEnumerationIncomingNode.initial_ranges profile beforeCaller before.core
++    target incoming initial.ready realized available closed fits room
++  obtain ⟨r, n, p, h, k, oldNode, oldScs, read, afterCaller, savedQueries, final, next,
++    replacement, handle, after, reading, frame, originalRun, writePrefix, afterSame, afterStored,
++    afterStorage, afterRealized, post, querySame, unfolding, replacementAvailable,
++    replacementClosed, encoded, decoded, cacheRun, afterCounter, afterRepresentatives,
++    afterPaths, afterCounts, waiting, flagsAfter, expandableAfter, optional, present⟩ :=
++    complete formulas solver inventory beforeCaller before checkEmpty target incoming incomingScs memos roots
++      initial storage realized paths counts flags root pending available closed bounded ranges
++  have observed := originalRun 0 0 p h (Nat.le_refl _) (Nat.le_refl _)
++  simp only [Nat.add_zero] at observed
++  have resources := SourcePruningEnumerationIncomingNode.observed_resources alphabet profile formulas solver
++    inventory beforeCaller before.core checkEmpty r n p h target incoming incomingScs memos
++      initial realized available closed fits room known observed
++  exact ⟨r, n, p, h, k, oldNode, oldScs, read, afterCaller, savedQueries, final, next,
++    replacement, handle, after, reading, frame, originalRun, writePrefix, afterSame, afterStored,
++    afterStorage, afterRealized, post, querySame, unfolding, replacementAvailable,
++    replacementClosed, encoded, decoded, cacheRun, afterCounter, afterRepresentatives,
++    afterPaths, afterCounts, waiting, flagsAfter, expandableAfter, optional, present,
++    resources.1, resources.2⟩
++
++end MicroCFTA.SourcePruningEnumerationCachedIncoming
+diff --git a/lean/MicroCFTA/SourcePruningEnumerationIncomingNodeResources.lean b/lean/MicroCFTA/SourcePruningEnumerationIncomingNodeResources.lean
+new file mode 100644
+index 000000000..2ef142e58
+--- /dev/null
++++ b/lean/MicroCFTA/SourcePruningEnumerationIncomingNodeResources.lean
+@@ -0,0 +1,239 @@
++import MicroCFTA.SourcePruningEnumerationIncomingNode
++import MicroCFTA.SourcePruningEnumerationIncomingObservedResources
++
++/-!
++# Original resources through actual incoming writes
++
++The current realized slots derive native admission. Literal successful
++incoming observations retain the numeric and guard forecast at their own
++returned caller. Empty rejection retains its completed native effects.
++-/
++namespace MicroCFTA.SourcePruningEnumerationIncomingNode
++open EnumerationState EnumerationCorrectness EnumerationSchedule
++open InternedConstructorTemplates InternedProbeProvenance
++open SourcePruningEnumerationNodes SourcePruningEnumerationObservation
++open SourceCurrentAllocatedNativeInventoryState (Inventory)
++open SourceCurrentAllocatedPartialInvariant (Context Post)
++open SourceCurrentAllocatedNativeResourceForecast (Profile Room)
++open SourceCurrentConstrainedCapGeneratedQueryResources (Fits)
++local notation "Symbol" => SourcePruningTemplates.Symbol
++local notation "Constraint" => SourceSymbolicIndex.Constraint FullSyntax.Formula
++local notation "Node" => Value Symbol Constraint
++variable {EnumGuard : Type} {bits : Nat}
++local notation "Caller" => SourceCurrentAllocatedPartialState.State
++local notation "Core" => EnumerationState.State Symbol EnumGuard
++local notation "Memos" => EndpointMemoGateTrace.Memos
++local notation "Queries" => SourceEndpointMemo.Memos
++local notation "Heap" => SourceEqualityAnnotationHeap.Heap
++local notation "forecast" => SourcePruningEnumerationIncomingQuery.forecast
++local notation "queryAlphabet" => SourceCurrentGeneratedQueryGuardResources.forecast
++variable [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Constraint)]
++attribute [local instance] SourcePruningEnumerationIncomingNode.incomingNodeMonadList
++
++/-- Realized current slots and original numeric room derive the old native admission predicate. -/
++theorem initial_ranges (profile : Profile) (beforeCaller : Caller (bits + 2)) (before : Core)
++    (uv : Nat) (incoming : Node) (ready : SourceCurrentConjunctionClassScan.Ready beforeCaller.checked)
++    (realized : PendingRealized beforeCaller.checked.native.machine.heap before)
++    (available : Available beforeCaller.checked.native.machine.heap incoming) (closed : incoming.free = [])
++    (fits : Fits profile beforeCaller.checked) (room : Room bits profile) :
++    match before.values[uv]? with
++    | some (.unenumerated (some oldHandle) _) =>
++        match lookupNode beforeCaller.checked.native.machine.heap oldHandle with
++        | some old => SourceCurrentAllocatedNativeRequestBounds.WordRanges
++            (.code (SourceRecursiveIntersectionCode.requestNode IntersectionEmptyDomain.emptyDomain incoming old))
++            beforeCaller.checked
++        | none => True
++    | _ => True := by
++  cases stored : before.values[uv]? with
++  | none => trivial
++  | some value =>
++      cases value with
++      | eliminated | enumerated => trivial
++      | unenumerated oldNode oldScs =>
++          cases oldNode with
++          | none => trivial
++          | some oldHandle =>
++              cases decoded : lookupNode beforeCaller.checked.native.machine.heap oldHandle with
++              | none => simp only [decoded]
++              | some old =>
++                  obtain ⟨value, found, resident, oldClosed⟩ := realized uv oldHandle oldScs stored
++                  have same := Option.some.inj (found.symm.trans decoded)
++                  subst value
++                  have actualRoom := fits.room room
++                  have leftOriginal := SourceRecursiveIntersectionOriginalOutput.closed_original incoming
++                    beforeCaller.checked.native.machine.heap ready.good.native.machine.1.coherent available closed
++                  have rightOriginal := SourceRecursiveIntersectionOriginalOutput.closed_original old
++                    beforeCaller.checked.native.machine.heap ready.good.native.machine.1.coherent resident oldClosed
++                  simpa only [decoded] using (SourceCurrentAllocatedRecursiveWarmInitialRanges.warm_initial_ranges bits beforeCaller.checked
++                    ready.good ready.semantic incoming old leftOriginal rightOriginal available resident
++                    actualRoom.1 actualRoom.2.1 actualRoom.2.2).1
++
++variable [DecidableEq Node]
++
++/-- Literal successful incoming observations retain resources even when the raw branch rejects. -/
++theorem observed_resources (alphabet : List Constraint) (profile : Profile)
++    (formulas : SourceGuards.Formulas FullSyntax.Formula) (solver : SourceGuards.Entailment FullSyntax.Formula)
++    (inventory : Inventory) (beforeCaller : Caller (bits + 2)) (before : Core)
++    (checkEmpty : Bool) (r n p h uv : Nat) (incoming : Node) (incomingScs : List EnumerationState.Suspended)
++    (memos : Memos) (initial : Context formulas solver inventory beforeCaller memos)
++    (realized : PendingRealized beforeCaller.checked.native.machine.heap before)
++    (available : Available beforeCaller.checked.native.machine.heap incoming) (closed : incoming.free = [])
++    (fits : Fits profile beforeCaller.checked) (room : Room bits profile)
++    (known : Heap (fun guard => guard ∈ alphabet) beforeCaller.checked.native.machine.heap)
++    {result : Option (List (Except EnumerationState.Error (Unit × Core)))}
++    {afterCaller : Caller (bits + 2)} {savedQueries : Queries} {read : Core}
++    (observed : run checkEmpty r n p h beforeCaller before uv incoming incomingScs memos.query =
++      (.ok result, afterCaller, savedQueries, read)) :
++    Fits (forecast alphabet profile) afterCaller.checked ∧
++      Heap (fun guard => guard ∈ queryAlphabet alphabet profile) afterCaller.checked.native.machine.heap := by
++  have unchanged : Fits (forecast alphabet profile) beforeCaller.checked ∧
++      Heap (fun guard => guard ∈ queryAlphabet alphabet profile) beforeCaller.checked.native.machine.heap := by
++    refine ⟨fits.mono (SourcePruningEnumerationIncomingQuery.forecast_ge alphabet profile), ?_⟩
++    intro key edge found
++    exact SourceCurrentGeneratedQueryGuardResources.forecast_ge alphabet profile (known key edge found)
++  rw [run] at observed
++  cases foundEq : UnionFind.findRoot r before.representatives uv with
++  | none =>
++      simp only [foundEq] at observed
++      have same := congrArg (fun output => output.2.1) observed
++      dsimp only at same
++      rw [← same]
++      exact unchanged
++  | some found =>
++      simp only [foundEq] at observed
++      cases stored : before.values[found.representative]? with
++      | none =>
++          simp only [stored] at observed
++          have same := congrArg (fun output => output.2.1) observed
++          dsimp only at same
++          rw [← same]
++          exact unchanged
++      | some value =>
++          cases value with
++          | eliminated | enumerated =>
++              simp only [stored] at observed
++              have same := congrArg (fun output => output.2.1) observed
++              dsimp only at same
++              rw [← same]
++              exact unchanged
++          | unenumerated oldNode oldScs =>
++              simp only [stored] at observed
++              cases oldNode with
++              | none =>
++                  cases encoded : encodeNode incoming <;> simp only [encoded] at observed <;>
++                    have same := congrArg (fun output => output.2.1) observed <;>
++                    dsimp only at same <;>
++                    rw [← same] <;> exact unchanged
++              | some oldHandle =>
++                  cases decoded : lookupNode beforeCaller.checked.native.machine.heap oldHandle with
++                  | none =>
++                      simp only [decoded] at observed
++                      have same := congrArg (fun output => output.2.1) observed
++                      dsimp only at same
++                      rw [← same]
++                      exact unchanged
++                  | some old =>
++                      obtain ⟨value, found, resident, oldClosed⟩ := realized _ oldHandle oldScs stored
++                      have same := Option.some.inj (found.symm.trans decoded)
++                      subst value
++                      simp only [decoded] at observed
++                      cases native : SourceEqualityNativeDemand.execute n
++                          (.code (SourceRecursiveIntersectionCode.requestNode IntersectionEmptyDomain.emptyDomain incoming old))
++                          beforeCaller.checked with
++                      | yielded | failed | constraintError | blocked =>
++                          simp only [native] at observed
++                          cases observed
++                      | done query queried =>
++                          simp only [native] at observed
++                          cases phase : (if checkEmpty then
++                              SourcePruningEnumerationEnabledEmpty.check p h query queried beforeCaller.fourth memos.query
++                              else (.done false queried beforeCaller.fourth, memos.query)) with
++                          | mk outcome queries =>
++                              simp only [phase] at observed
++                              cases outcome with
++                              | failed => cases observed
++                              | done answer checkedAfter saved =>
++                                  have bounded := SourcePruningEnumerationIncomingQuery.raw_done_resources
++                                    alphabet profile formulas solver inventory beforeCaller incoming old checkEmpty memos
++                                    initial available resident closed oldClosed fits room known native phase
++                                  cases encoded : encodeNode (if answer then .empty else query) <;>
++                                    simp only [encoded, SourceCurrentAllocatedConjunctionWorker.Outcome.state,
++                                      SourceCurrentAllocatedConjunctionWorker.Outcome.memo] at observed <;>
++                                    have same := congrArg (fun output => output.2.1) observed <;>
++                                    dsimp only at same <;>
++                                    rw [← same] <;> exact bounded
++
++/-- Original facts construct the complete incoming write and retain its returned resources. -/
++theorem run_complete_resources
++    (alphabet : List Constraint) (profile : Profile)
++    (formulas : SourceGuards.Formulas FullSyntax.Formula)
++    (solver : SourceGuards.Entailment FullSyntax.Formula)
++    (inventory : Inventory) (beforeCaller : Caller (bits + 2))
++    (before : EnumerationState.State Symbol EnumGuard)
++    (checkEmpty : Bool) (uv : Nat) (incoming : Node)
++    (incomingScs : List EnumerationState.Suspended) (memos : Memos)
++    (initial : Context formulas solver inventory beforeCaller memos)
++    (realized : PendingRealized beforeCaller.checked.native.machine.heap before)
++    (storage : StorageValid before) (root : EnumerationSchedule.IsRoot before.representatives uv)
++    (pending : EnumerationCompleteness.PendingAt before uv)
++    (available : Available beforeCaller.checked.native.machine.heap incoming) (closed : incoming.free = [])
++    (bounded : ∀ sc ∈ incomingScs, sc.var < before.counter)
++    (fits : Fits profile beforeCaller.checked) (room : Room bits profile)
++    (known : Heap (fun guard => guard ∈ alphabet) beforeCaller.checked.native.machine.heap) :
++    ∃ (r n p h : Nat) (oldNode : Option Nat) (oldScs : List EnumerationState.Suspended)
++      (read after : EnumerationState.State Symbol EnumGuard) (afterCaller : Caller (bits + 2))
++      (savedQueries : Queries) (final : Memos) (next : Inventory) (replacement : Node) (handle : Nat),
++      (∀ extra, ExceptT.run (getValue (r + extra) uv before) =
++        [.ok (.unenumerated oldNode oldScs, read)]) ∧
++      EnumerationCompressionFrame.Frame before read ∧
++      (∀ extra extraNative P H, p ≤ P → h ≤ H →
++        run checkEmpty (r + extra) (n + extraNative) P H beforeCaller before uv incoming incomingScs memos.query =
++          (.ok (some (if replacement = .empty then [] else [.ok ((), after)])),
++            afterCaller, savedQueries, read)) ∧
++      ExceptT.run ((do
++        setValue uv (.unenumerated (some handle) (incomingScs ++ oldScs))
++        inheritAncestry uv) read) = [.ok ((), after)] ∧
++      after = {read with
++        values := read.values.set uv (.unenumerated (some handle) (incomingScs ++ oldScs))
++        recursionAncestry := fun other => if other = uv then
++          (read.expansionAncestry ++ read.recursionAncestry uv).eraseDups else read.recursionAncestry other} ∧
++      after.values[uv]? = some (.unenumerated (some handle) (incomingScs ++ oldScs)) ∧
++      StorageValid after ∧ PendingRealized afterCaller.checked.native.machine.heap after ∧
++      Post formulas solver next beforeCaller afterCaller final ∧ final.query = savedQueries ∧
++      Cache.Extends memos.unfolding final.unfolding ∧
++      Available afterCaller.checked.native.machine.heap replacement ∧ replacement.free = [] ∧
++      encodeNode replacement = some handle ∧ lookupNode afterCaller.checked.native.machine.heap handle = some replacement ∧
++      (oldNode = none → replacement = incoming ∧ afterCaller = beforeCaller ∧
++        savedQueries = memos.query ∧ final = memos ∧ next = inventory) ∧
++      (∀ oldHandle, oldNode = some oldHandle →
++        ∃ (old query : Node) (queried : SourceEqualityNativeDemand.State (bits + 2)),
++          lookupNode beforeCaller.checked.native.machine.heap oldHandle = some old ∧
++          next.source = beforeCaller.checked.native.machine.heap ∧ next.roots = inventory.roots ++ [incoming, old] ∧
++          SourceCurrentAllocatedTargetQuery.Receipt formulas solver next incoming old beforeCaller.checked query queried memos ∧
++          (∀ ambient term,
++            InternedGuardedLanguage.meaning (SourceEqualityPCSGuard.holds formulas solver) ambient replacement term ↔
++              InternedGuardedLanguage.meaning (SourceEqualityPCSGuard.holds formulas solver) ambient incoming term ∧
++              InternedGuardedLanguage.meaning (SourceEqualityPCSGuard.holds formulas solver) ambient old term) ∧
++          (checkEmpty = false → replacement = query ∧
++            afterCaller = SourceCurrentAllocatedPartialState.advance beforeCaller queried beforeCaller.fourth beforeCaller.merge ∧
++            final = memos)) ∧
++      Fits (forecast alphabet profile) afterCaller.checked ∧
++      Heap (fun guard => guard ∈ queryAlphabet alphabet profile) afterCaller.checked.native.machine.heap := by
++  have ranges := initial_ranges profile beforeCaller before uv incoming initial.ready realized available closed fits room
++  obtain ⟨r, n, p, h, oldNode, oldScs, read, after, afterCaller, savedQueries, final, next,
++    replacement, handle, reading, frame, originalRun, writePrefix, coreSame, storedAfter,
++    afterStorage, afterRealized, post, querySame, unfolding, replacementAvailable,
++    replacementClosed, encoded, decoded, optional, present⟩ :=
++    run_complete formulas solver inventory beforeCaller before checkEmpty uv incoming incomingScs memos
++      initial realized storage root pending available closed bounded ranges
++  have actual : run checkEmpty r n p h beforeCaller before uv incoming incomingScs memos.query =
++      (.ok (some (if replacement = .empty then [] else [.ok ((), after)])), afterCaller, savedQueries, read) := by
++    simpa only [Nat.add_zero] using originalRun 0 0 p h (Nat.le_refl _) (Nat.le_refl _)
++  have resources := observed_resources alphabet profile formulas solver inventory beforeCaller before
++    checkEmpty r n p h uv incoming incomingScs memos initial realized available closed fits room known actual
++  exact ⟨r, n, p, h, oldNode, oldScs, read, after, afterCaller, savedQueries, final, next,
++    replacement, handle, reading, frame, originalRun, writePrefix, coreSame, storedAfter,
++    afterStorage, afterRealized, post, querySame, unfolding, replacementAvailable,
++    replacementClosed, encoded, decoded, optional, present, resources.1, resources.2⟩
++
++end MicroCFTA.SourcePruningEnumerationIncomingNode
+diff --git a/lean/MicroCFTA/SourcePruningEnumerationIncomingObservedResources.lean b/lean/MicroCFTA/SourcePruningEnumerationIncomingObservedResources.lean
+new file mode 100644
+index 000000000..13d5ccc6c
+--- /dev/null
++++ b/lean/MicroCFTA/SourcePruningEnumerationIncomingObservedResources.lean
+@@ -0,0 +1,122 @@
++import MicroCFTA.SourcePruningEnumerationIncomingQueryResources
++import MicroCFTA.SourceCurrentAllocatedConjunctionWorkerActual
++
++/-!
++# Resources at observed incoming-query returns
++
++Successful optional checks agree on their Boolean, complete checked state,
++fourth memo and query memo. The initial resource producer therefore bounds
++the same states returned by supplied literal successful executions.
++-/
++namespace MicroCFTA.SourcePruningEnumerationEnabledEmpty
++open InternedConstructorTemplates
++local notation "Symbol" => SourcePruningTemplates.Symbol
++local notation "Constraint" => SourceSymbolicIndex.Constraint FullSyntax.Formula
++local notation "Node" => Value Symbol Constraint
++local notation "Checked" => SourceEqualityNativeDemand.State
++local notation "Fourth" => SourceCurrentEmptinessMemo.Memo
++local notation "Queries" => SourceEndpointMemo.Memos
++variable {width : Nat}
++variable [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Constraint)] [DecidableEq Node]
++
++/-- Successful optional checks identify every returned field at any successful bounds. -/
++theorem optional_done_unique (flag : Bool)
++    {p h P H : Nat} {query : Node} {before after later : Checked width}
++    {memo saved current : Fourth} {queries firstQueries secondQueries : Queries}
++    {answer other : Bool}
++    (one : (if flag then check p h query before memo queries else (.done false before memo, queries)) =
++      (.done answer after saved, firstQueries))
++    (two : (if flag then check P H query before memo queries else (.done false before memo, queries)) =
++      (.done other later current, secondQueries)) :
++    answer = other ∧ after = later ∧ saved = current ∧ firstQueries = secondQueries := by
++  cases flag with
++  | false =>
++      simp only [Bool.false_eq_true, ↓reduceIte] at one two
++      obtain ⟨outcomes, sameQueries⟩ := Prod.mk.inj (one.symm.trans two)
++      obtain ⟨sameAnswer, sameState, sameMemo⟩ :=
++        SourceCurrentAllocatedConjunctionWorker.Outcome.done.inj outcomes
++      exact ⟨sameAnswer, sameState, sameMemo, sameQueries⟩
++  | true =>
++      cases observed : SourceEndpointMemo.run query queries with
++      | mk reached querySaved =>
++          cases reached with
++          | false =>
++              simp only [↓reduceIte, check, observed, Bool.false_eq_true] at one two
++              obtain ⟨outcomes, sameQueries⟩ := Prod.mk.inj (one.symm.trans two)
++              obtain ⟨sameAnswer, sameState, sameMemo⟩ :=
++                SourceCurrentAllocatedConjunctionWorker.Outcome.done.inj outcomes
++              exact ⟨sameAnswer, sameState, sameMemo, sameQueries⟩
++          | true =>
++              simp only [↓reduceIte, check, observed] at one two
++              have first := (Prod.mk.inj one).1
++              have second := (Prod.mk.inj two).1
++              obtain ⟨sameAnswer, sameState, sameMemo⟩ :=
++                SourceCurrentAllocatedConjunctionWorkerActual.call_done_unique first second
++              exact ⟨sameAnswer, sameState, sameMemo,
++                (Prod.mk.inj one).2.symm.trans (Prod.mk.inj two).2⟩
++
++end MicroCFTA.SourcePruningEnumerationEnabledEmpty
++
++namespace MicroCFTA.SourcePruningEnumerationIncomingQuery
++open InternedConstructorTemplates InternedProbeProvenance
++open SourceCurrentAllocatedNativeInventoryState (Inventory)
++open SourceCurrentAllocatedPartialInvariant (Context)
++open SourceCurrentAllocatedNativeResourceForecast (Profile Room)
++open SourceCurrentConstrainedCapGeneratedQueryResources (Fits)
++local notation "Symbol" => SourcePruningTemplates.Symbol
++local notation "Constraint" => SourceSymbolicIndex.Constraint FullSyntax.Formula
++local notation "Node" => Value Symbol Constraint
++local notation "Checked" => SourceEqualityNativeDemand.State
++local notation "Caller" => SourceCurrentAllocatedPartialState.State
++local notation "Memos" => EndpointMemoGateTrace.Memos
++local notation "Fourth" => SourceCurrentEmptinessMemo.Memo
++local notation "Queries" => SourceEndpointMemo.Memos
++local notation "Heap" => SourceEqualityAnnotationHeap.Heap
++variable {bits : Nat}
++
++/-- Initial resources bound the exact states returned by a successful query and optional check. -/
++theorem raw_done_resources
++    [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Constraint)] [DecidableEq Node]
++    (alphabet : List Constraint) (profile : Profile)
++    (formulas : SourceGuards.Formulas FullSyntax.Formula)
++    (solver : SourceGuards.Entailment FullSyntax.Formula)
++    (inventory : Inventory) (beforeCaller : Caller (bits + 2))
++    (left right : Node) (checkEmpty : Bool) (memos : Memos)
++    (initial : Context formulas solver inventory beforeCaller memos)
++    (leftAvailable : Available beforeCaller.checked.native.machine.heap left)
++    (rightAvailable : Available beforeCaller.checked.native.machine.heap right)
++    (leftClosed : left.free = []) (rightClosed : right.free = [])
++    (fits : Fits profile beforeCaller.checked) (room : Room bits profile)
++    (known : Heap (fun guard => guard ∈ alphabet) beforeCaller.checked.native.machine.heap)
++    {fuel p h : Nat} {query : Node} {queried checkedAfter : Checked (bits + 2)}
++    {answer : Bool} {saved : Fourth} {queries : Queries}
++    (native : SourceEqualityNativeDemand.execute fuel
++      (.code (SourceRecursiveIntersectionCode.requestNode IntersectionEmptyDomain.emptyDomain left right))
++      beforeCaller.checked = .done query queried)
++    (phase : (if checkEmpty then
++      SourcePruningEnumerationEnabledEmpty.check p h query queried beforeCaller.fourth memos.query
++      else (.done false queried beforeCaller.fourth, memos.query)) =
++        (.done answer checkedAfter saved, queries)) :
++    Fits (forecast alphabet profile) checkedAfter ∧
++      Heap (fun guard => guard ∈ SourceCurrentGeneratedQueryGuardResources.forecast alphabet profile)
++        checkedAfter.native.machine.heap := by
++  obtain ⟨_next, result, reached, producedAnswer, finish, workerSaved, _final, savedQueries,
++    _replacement, _handle, n, P, H, _source, _roots, _receipt, producedNative, producedPhase,
++    _post, _querySame, _unfolding, _sound, _replacementSame, _available, _closed, _encoded,
++    _decoded, _meaning, _disabled, _enabled, _queryFits, returnedFits, returnedCarrier,
++    _fuelSame, _pSame, _hSame⟩ :=
++    complete_resources alphabet profile formulas solver inventory beforeCaller left right checkEmpty memos
++      initial leftAvailable rightAvailable leftClosed rightClosed fits room known
++  have produced : SourceEqualityNativeDemand.execute n
++      (.code (SourceRecursiveIntersectionCode.requestNode IntersectionEmptyDomain.emptyDomain left right))
++      beforeCaller.checked = .done result reached := by
++    simpa only [Nat.add_zero] using producedNative 0
++  obtain ⟨rfl, rfl⟩ := SourceCurrentAllocatedNativeColdClosedExact.completed_unique fuel n _
++    beforeCaller.checked queried reached query result native produced
++  obtain ⟨_sameAnswer, sameState, _sameMemo, _sameQueries⟩ :=
++    SourcePruningEnumerationEnabledEmpty.optional_done_unique checkEmpty phase
++      (producedPhase P H (Nat.le_refl _) (Nat.le_refl _))
++  rw [sameState]
++  exact ⟨returnedFits, returnedCarrier⟩
++
++end MicroCFTA.SourcePruningEnumerationIncomingQuery

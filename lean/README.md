@@ -1,5 +1,39 @@
 # cfta formal model
 
+## Initial resources now cover incoming writes and their cached index
+
+Exact observations: `b61b9fda9`. Incoming writes: `fbb3097d5`.
+Cached incoming completion: `f9e109244`. The goal stays ACTIVE.
+
+Current Context, realized slots, a numeric Fits profile, explicit entry Room
+and a guard alphabet now construct the complete incoming write and cached
+index packets. The SAME returned caller retains the combined incoming-query
+and optional-Empty resource forecast. The two producers retain their ENTIRE
+old output propositions after width specialization: readback, actual native
+query, logical write prefix, Post, memos, intersection language, storage,
+pending realization, waiting counts and native expandable-index updates.
+No future range or successful action is an initial premise.
+
+The observation theorem covers every outer .ok result, including none,
+raw [] and inner errors. Outer .error stays separate. Empty rejection retains
+its actual native caller effects. Its logical post-write cache certificate
+does not assert a successful raw row or Safe at that rejected cache.
+The final resource bound is Fits. It does not assert Room for another query.
+
+All three new modules and Audit pass strict checks. Installed public readback
+covers 17 declarations and three full definitions. Audit checks 77179 theorem
+dependencies. Exact old output comparisons retain 2935 and 4140 characters.
+Runtime workers, older interfaces and H6 remain unchanged. Main remains
+imported at `153e1a211`. No Haskell source changed or new defect was found.
+
+H6 remains the strongest end-to-end language theorem. Next carry original
+resources through the actual cached terminal fold. Its future-universal
+Fold.Ranges still needs an initial reservation for mixed native and Empty
+allocation. Then cover selected edges, callbacks, whole recursive subtrees
+and later siblings. Whole-driver language, terminal fallback, native Graph
+correspondence, extraction and arbitrary lazy demand remain open. Details:
+`lean/notes-current-pruning-enumeration-incoming-write-resources.md`.
+
 ## Original inputs bound incoming intersections and enabled Empty checks
 
 Native fuel and guards: `09a56b94c`. Actual worker resources: `d9c82653a`.
