@@ -1,0 +1,29 @@
+[2026-10-26 11:48 CET] Read-only next language obligation. No proof or completion claim.
+
+Next meaningful proof: lift SAME actual native IncomingNode completion to assignment semantics of its logical written enumeration core. Do not add another resource certificate or assume a Graph describes the native heap.
+
+Existing usable facts:
+1. IncomingNode.run_complete (SourcePruningEnumerationIncomingNode.lean:145): actual read/frame at 170-172, full runtime at 173-176, logical write/ancestry and stored result at 177-184, Post at 186, unchanged-caller no-old-node branch at 190-191, and the actual replacement intersection-language equivalence at 192-200. IncomingQuery.complete (SourcePruningEnumerationIncomingQuery.lean:22, especially 52-59) already retains sound optional-Empty replacement and exact meaning.
+2. SourcePruningEnumerationNodes.lookupNode_keeps (:51) transports each old concrete handle through actual Post.effects.keeps. Observation.PendingRealized (:19) supplies lookup, Available and closedness for every old pending handle; it is a representation invariant, not a language relation.
+3. EnumerationCorrectness.slot/heap/Satisfies (:126/:133/:142), heap_set (:190), and Fragments.mergeInto_correct (Fragments.lean:239) express the graph-free heap-write semantics. EnumerationCorrectness.mergeNode_semantics (:349-394) is the exact proof pattern, but its fixed Graph.intersect premise cannot simply be instantiated for a growing native heap. EnumerationSemantics.recordResidual_assignment (:393) already handles retained guards.
+
+Proposed exact small result, schematic only:
+Let L_heap(handle,term) mean there exists a concrete value read by lookupNode heap handle whose InternedGuardedLanguage.meaning holds for term. Fix ambient environment and use the PCS Boolean hold predicate as a Prop by equality to true. For the SAME witnesses from IncomingNode.run_complete, derive
+  Satisfies L_after guardMeaning assignment logicalAfter
+    iff Satisfies L_before guardMeaning assignment before
+        and meaning incoming (assignment uv)
+        and forall sc in incomingScs, Suspended.Holds assignment (assignment uv) sc.
+Use actual initial root/pending/storage/realization/Context facts; no final Satisfies, successful write, final language equivalence, or new Graph correspondence is an admission. Reuse the existing producer once. Its no-old-handle case is direct. Its present-handle case uses the returned replacement-language receipt. Keep the existing representative/read frame and actual unchanged obligations. Transport old pending-handle meanings through Keeps. This proof adds the missing semantic content of the actual native slot write.
+
+Important scope: logicalAfter is the returned write receipt, not the runtime outer core. IncomingNode.run_complete:173-180 explicitly separates them; admitted Empty can return raw [] while the logical replacement is Empty/handle0. No rejected runtime continuation should be inferred. This theorem would directly support native dispatch assimilation, terminal fold language, then captured-edge backward semantics.
+
+The later whole-driver target should quantify EACH actual emitted output: Satisfies at that output's OWN native heap/cache implies Satisfies at the original heap/cache. Use Recursive.run's literal equation and depth/list induction, with corresponding native captured-edge backward semantics. Do not substitute the aggregate final caller for an earlier output's caller. EnumerationSemantics.enumeration_backward (:476), EnumerationSoundness.enumerateFully_backward (:86), and EnumerationFrame.neutralize (:37 and following) give established proof patterns; they currently concern the graph driver, not Recursive.run. RenderStable assignment equivalence is already EnumerationSoundness.renderStable_assignment (:163).
+
+Missing before unconditional language/exact enumeration:
+- Packet (RecursivePacket.lean:22-39) has Safe, PendingReferences, native cache validity, Stratified and bounded metadata, but no assignment/denotation preservation. FiniteContract.Complete (:28-48) and FiniteResources.run_finite_complete_resources (:55-78) add stable actual outcomes/resources, not that semantic invariant.
+- Initial stop can emit unfinished metadata; done is separate (Recursive.lean:88-90). Thus complete Outcome is not by itself a closed accepted term. Assignment.stratified_assignment (:80) also needs every remaining pending slot to be neutral; ordered alone is insufficient.
+- Current selector membership/length laws admit edgesOf=[] for every parent. They cannot prove language completeness. Arbitrary stop and type filters need their appropriate language-preservation/admission laws for completeness. No such law is required merely for subset soundness.
+- Positive depth still retains selected terminal/nonordinary fallback as explicit stopped .ordinary (Recursive.lean:102-112). Increasing work fuel or depth cannot remove an unsupported route. A capacity-adequacy theorem needs a genuine supported semantic domain/progress measure, not a future successful run premise.
+- EnumerationLanguage.runs_uniform_height_bound (:100) is for graph runs under CompleteGraph/IntersectionCorrect; it does not automatically give a bound for the native recursive worker. H6 remains SourceCurrentColdFiniteWarmCalls.constructed_node_calls. No H6 or full-Haskell language upgrade follows here.
+
+All source references are relative to /home/tritlo/Code/mcfta/lean/MicroCFTA/. No builds, Git, network, board, or repository changes were run. Current status text still described depth two; this note uses the live finite driver sources and makes no final-check/publication claim.

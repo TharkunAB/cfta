@@ -1,0 +1,47 @@
+from pathlib import Path
+root=Path('/home/tritlo/Code/mcfta/lean/MicroCFTA')
+s=(root/'SourcePruningEnumerationTwoExpansionResources.lean').read_text()
+s=s.replace('SourcePruningEnumerationParkedTwoResources','SourcePruningEnumerationFiniteParkedResources').replace('SourcePruningEnumerationOrdinaryOneForecastResources','SourcePruningEnumerationFiniteOrdinaryForecastResources')
+s=s.replace('SourcePruningEnumerationTwoExpansionForecast.final','SourcePruningEnumerationFiniteReservation.final')
+s=s.replace('SourcePruningEnumerationRecursiveReservation.afterHook','SourcePruningEnumerationFiniteReservation.step')
+s=s.replace('# Two actual recursive expansions under an original reservation','# A positive finite recursive depth under an original reservation')
+s=s.replace('depth-one callbacks','smaller-depth callbacks').replace('recursive depth two','a positive recursive depth').replace('selected_two_complete_resources','selected_finite_complete_resources')
+s=s.replace('(solver : SourceGuards.Entailment FullSyntax.Formula) (inventory : Inventory)', '''(solver : SourceGuards.Entailment FullSyntax.Formula) (recursiveFuel : Nat)
+    (recursive : Complete (bits := bits) holeKey fits admits graph templates checkEmpty edgesOf stop order
+      formulas solver recursiveFuel) (inventory : Inventory)''')
+s=s.replace('(uv : Nat) (seed : Seed)', '(uv : Nat) (seed : Seed) (ceiling : Nat)')
+s=s.replace('(reserved : SourcePruningEnumerationTwoExpansionForecast.Reserved bits seed before.core)', '''(initialMass : mass before.core ≤ ceiling)
+    (reserved : SourcePruningEnumerationFiniteReservation.Reserved bits (recursiveFuel + 1) seed ceiling)''')
+s=s.replace('(bound + extra) 2\n', '(bound + extra) (recursiveFuel + 1)\n').replace('(Forecast seed before.core)', '(Forecast (recursiveFuel + 1) seed ceiling)')
+s=s.replace('let start := SourcePruningEnumerationTwoExpansionForecast.start seed','let start := SourcePruningEnumerationExpansionAdmission.narrowSeed seed').replace('let inherited := mass before.core','let inherited := ceiling')
+s=s.replace('SourcePruningEnumerationSiblingReservation.stage_ge\n    start inherited inherited (SourcePruningEnumerationTwoExpansionForecast.rows seed)', 'SourcePruningEnumerationFiniteReservation.stage_ge\n    recursiveFuel start inherited inherited (SourcePruningEnumerationFiniteReservation.rows seed)')
+s=s.replace('parked_two_complete_resources','parked_finite_complete_resources')
+s=s.replace('checkEmpty edgesOf stop order formulas solver inventory\n      caller memos before metadata prefixFuel uv checked seed packet bounded known\n      selectionMembers selectionLength reserved phase','checkEmpty edgesOf stop order formulas solver recursiveFuel recursive inventory\n      caller memos before metadata prefixFuel uv checked seed ceiling packet bounded known\n      selectionMembers selectionLength initialMass reserved phase')
+s=s.replace('''      have currentMass : mass after.core ≤ inherited :=
+        SourcePruningEnumerationPrefixMass.retained_le holeKey fits admits graph templates checkEmpty edgesOf
+          stop order metadata formulas solver inventory (prefixFuel + 0) uv caller memos before packet _ valid prefixAt''','''      have currentMass : mass after.core ≤ inherited :=
+        Nat.le_trans (SourcePruningEnumerationPrefixMass.retained_le holeKey fits admits graph templates checkEmpty edgesOf
+          stop order metadata formulas solver inventory (prefixFuel + 0) uv caller memos before packet _ valid prefixAt)
+          initialMass
+      have inheritedBound : scs.length ≤ inherited := Nat.le_trans lengths initialMass''')
+s=s.replace('ordinary_one_complete_forecast','ordinary_finite_complete_forecast')
+s=s.replace('checkEmpty edgesOf stop order metadata start formulas solver inventory','checkEmpty edgesOf stop order metadata recursiveFuel start formulas solver recursive inventory')
+s=s.replace('selectionMembers selectionLength inherited inherited currentMass lengths reserved', 'selectionMembers selectionLength inherited inherited currentMass inheritedBound reserved.scan')
+s=s.replace('prefixFuel scanFuel 1 uv', 'prefixFuel scanFuel recursiveFuel uv')
+s=s.replace('(prefixFuel + entryFuel + extra) 1)', '(prefixFuel + entryFuel + extra) recursiveFuel)')
+(root/'SourcePruningEnumerationFiniteExpansionResources.lean').write_text(s)
+s=(root/'SourcePruningEnumerationRunTwoResources.lean').read_text()
+s=s.replace('SourcePruningEnumerationTwoExpansionResources','SourcePruningEnumerationFiniteExpansionResources')
+s=s.replace('# The actual recursive driver at depth two','# The actual recursive driver at positive finite depth').replace('depth-two driver','positive-depth driver')
+s=s.replace('run_two_complete_resources','run_finite_succ_complete_resources').replace('selected_two_complete_resources','selected_finite_complete_resources')
+s=s.replace('(solver : SourceGuards.Entailment FullSyntax.Formula) (inventory : Inventory)', '''(solver : SourceGuards.Entailment FullSyntax.Formula) (recursiveFuel : Nat)
+    (recursive : Complete (bits := bits) holeKey fits admits graph templates checkEmpty edgesOf stop order
+      formulas solver recursiveFuel) (inventory : Inventory)''')
+s=s.replace('(seed : Seed)\n', '(seed : Seed) (ceiling : Nat)\n')
+s=s.replace('(reserved : SourcePruningEnumerationTwoExpansionForecast.Reserved bits seed before.core)', '''(initialMass : SourcePruningEnumerationPrefixAdmission.suspendedBound before.core ≤ ceiling)
+    (reserved : SourcePruningEnumerationFiniteReservation.Reserved bits (recursiveFuel + 1) seed ceiling)''')
+s=s.replace('(bound + extra) 2\n', '(bound + extra) (recursiveFuel + 1)\n')
+s=s.replace('(SourcePruningEnumerationTwoExpansionForecast.final seed before.core)', '(SourcePruningEnumerationFiniteReservation.final (recursiveFuel + 1) seed ceiling)')
+s=s.replace('checkEmpty edgesOf stop order formulas solver inventory\n      caller memos before metadata uv seed packet bounded known selectionMembers selectionLength reserved chosen', 'checkEmpty edgesOf stop order formulas solver recursiveFuel recursive inventory\n      caller memos before metadata uv seed ceiling packet bounded known selectionMembers selectionLength initialMass reserved chosen')
+s=s.replace('SourcePruningEnumerationTwoExpansionForecast.final_ge seed before.core', 'SourcePruningEnumerationFiniteReservation.final_ge (recursiveFuel + 1) seed ceiling')
+(root/'SourcePruningEnumerationFiniteRunStep.lean').write_text(s)
