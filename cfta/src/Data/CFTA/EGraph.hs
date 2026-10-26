@@ -136,7 +136,7 @@ import qualified Data.IntMap.Strict as IntMap
 import qualified Data.IntSet as IntSet
 import Data.List (elemIndex, minimumBy, sortOn, (!?))
 import qualified Data.Map.Strict as Map
-import Data.Maybe (isJust, listToMaybe)
+import Data.Maybe (fromMaybe, isJust, listToMaybe)
 import Data.Ord (comparing)
 
 import qualified Data.CFTA as FTA
@@ -174,6 +174,8 @@ data EClass f = EClass
     , classSort :: !Int
     , classStamp :: !Int
     -- ^ The 'clock' of the last change: a new e-node or a merge.
+    , classMembers :: ![Int]
+    -- ^ The identities other than the root that are in the e-class.
     }
 
 {- | An e-graph of terms over the symbols @f@, with sorts over the sort
@@ -205,11 +207,12 @@ data EGraph s f = EGraph
 emptyEGraph :: EGraph s f
 emptyEGraph = EGraph IntMap.empty IntMap.empty HashMap.empty 0 0 HashMap.empty IntMap.empty [] 0
 
--- | The root of the e-class of an identity.
+{- | The root of the e-class of an identity. A merge makes the root the
+parent of each identity of the smaller e-class, so the parent of an identity
+is its root.
+-}
 find :: EGraph s f -> ClassId -> ClassId
-find g c@(ClassId i) = case IntMap.lookup i (parents g) of
-    Just p -> find g p
-    Nothing -> c
+find g c@(ClassId i) = fromMaybe c (IntMap.lookup i (parents g))
 
 -- | Whether two identities are in one e-class.
 equivalent :: EGraph s f -> ClassId -> ClassId -> Bool
@@ -253,7 +256,8 @@ addNode n0 g = case HashMap.lookup n (memo g) of
             use = IntMap.adjust (\e -> e{classUsers = (n, c) : classUsers e, classUserCount = classUserCount e + 1})
          in ( c
             , g
-                { classes = foldr (\(ClassId j) -> use j) (IntMap.insert i (EClass (HashSet.singleton n) [] 0 k (clock g)) (classes g)) cs
+                { classes =
+                    foldr (\(ClassId j) -> use j) (IntMap.insert i (EClass (HashSet.singleton n) [] 0 k (clock g) []) (classes g)) cs
                 , memo = HashMap.insert n c (memo g)
                 , classCount = classCount g + 1
                 , added = added g + 1
@@ -311,10 +315,11 @@ union a b g
                             (classUserCount eSmall + classUserCount eBig)
                             (classSort eBig)
                             (clock g)
+                            (iSmall : classMembers eSmall ++ classMembers eBig)
                  in Just
                         ( True
                         , g
-                            { parents = IntMap.insert iSmall big (parents g)
+                            { parents = foldl' (\p m -> IntMap.insert m big p) (parents g) (iSmall : classMembers eSmall)
                             , classes = IntMap.insert iBig joined (IntMap.delete iSmall (classes g))
                             , classCount = classCount g - 1
                             , pending = big : pending g
@@ -331,8 +336,7 @@ become the same e-node.
 -}
 rebuild :: (Hashable f) => EGraph s f -> EGraph s f
 rebuild g0 = case pending g0 of
-    -- Point each e-class at its root, so that 'find' takes one step.
-    [] -> g0{parents = IntMap.map (find g0) (parents g0)}
+    [] -> g0
     todo ->
         rebuild (foldl' repair g0{pending = []} (IntSet.toList (IntSet.fromList [i | c <- todo, let ClassId i = find g0 c])))
   where
