@@ -1,0 +1,214 @@
+/tmp/mcfta-native-incoming-resources-20261026/strict-incoming-resources-1/MicroCFTA/SourcePruningEnumerationIncomingQueryResources.lean:163:106: error: unexpected token '('; expected ')', ',' or ':'
+/tmp/mcfta-native-incoming-resources-20261026/strict-incoming-resources-1/MicroCFTA/SourcePruningEnumerationIncomingQueryResources.lean:145:23: error(lean.unknownIdentifier): Unknown constant `Bool.true_eq_true`
+/tmp/mcfta-native-incoming-resources-20261026/strict-incoming-resources-1/MicroCFTA/SourcePruningEnumerationIncomingQueryResources.lean:157:15: error: maximum recursion depth has been reached
+use `set_option maxRecDepth <num>` to increase limit
+use `set_option diagnostics true` to get diagnostic information
+/tmp/mcfta-native-incoming-resources-20261026/strict-incoming-resources-1/MicroCFTA/SourcePruningEnumerationIncomingQueryResources.lean:99:86: error: unsolved goals
+bits : Nat
+inst✝² : DecidableEq Symbol
+inst✝¹ : DecidableEq (EdgeKey Symbol Constraint)
+inst✝ : DecidableEq Node
+alphabet : List Constraint
+profile : Profile
+formulas : SourceGuards.Formulas FullSyntax.Formula
+solver : SourceGuards.Entailment FullSyntax.Formula
+inventory : Inventory
+beforeCaller : Caller (bits + 2)
+left right : Node
+checkEmpty : Bool
+memos : Memos
+initial : Context formulas solver inventory beforeCaller memos
+leftAvailable : Available beforeCaller.checked.native.machine.heap left
+rightAvailable : Available beforeCaller.checked.native.machine.heap right
+leftClosed : left.free = []
+rightClosed : right.free = []
+fits : Fits profile beforeCaller.checked
+room : Room bits profile
+known : Heap (fun guard => guard ∈ alphabet) beforeCaller.checked.native.machine.heap
+actualRoom :
+  beforeCaller.checked.native.machine.heap.nodes.next < 2 ^ bits ∧
+    beforeCaller.checked.native.machine.heap.edges.next ≤ 2 ^ (bits + 2) ∧
+      beforeCaller.checked.native.machine.domains.next +
+          2 ^
+            (beforeCaller.checked.native.machine.heap.nodes.next +
+              beforeCaller.checked.native.machine.heap.nodes.next *
+                beforeCaller.checked.native.machine.heap.nodes.next) <
+        2 ^ (bits + 1)
+leftOriginal : SourceRecursiveIntersectionInputView.Original left
+rightOriginal : SourceRecursiveIntersectionInputView.Original right
+ranges :
+  SourceCurrentAllocatedNativeRequestBounds.WordRanges
+      (SourceEqualityNativeDemand.Control.code
+        (SourceRecursiveIntersectionCode.requestNode IntersectionEmptyDomain.emptyDomain left right))
+      beforeCaller.checked ∧
+    SourceCurrentAllocatedNativeDomainTrace.Prefixes
+      (SourceRecursiveIntersectionSourceInventory.domains beforeCaller.checked.native.machine.heap)
+      (SourceEqualityNativeDemand.Control.code
+        (SourceRecursiveIntersectionCode.requestNode IntersectionEmptyDomain.emptyDomain left right))
+      beforeCaller.checked
+next : Inventory
+query : Node
+queried : Checked (bits + 2)
+answer : Bool
+checkedAfter : Checked (bits + 2)
+saved : Fourth
+final : Memos
+queries : Queries
+replacement : Node
+handle oldFuel _oldP _oldH : Nat
+source : next.source = beforeCaller.checked.native.machine.heap
+roots : next.roots = inventory.roots ++ [left, right]
+receipt :
+  SourceCurrentAllocatedTargetQuery.Receipt formulas solver next left right beforeCaller.checked query queried memos
+native :
+  ∀ (extra : Nat),
+    SourceEqualityNativeDemand.execute (oldFuel + extra)
+        (SourceEqualityNativeDemand.Control.code
+          (SourceRecursiveIntersectionCode.requestNode IntersectionEmptyDomain.emptyDomain left right))
+        beforeCaller.checked =
+      SourceEqualityNativeDemand.Outcome.done query queried
+_phase :
+  ∀ (P H : Nat),
+    _oldP ≤ P →
+      _oldH ≤ H →
+        (if checkEmpty = true then
+            SourcePruningEnumerationEnabledEmpty.check P H query queried beforeCaller.fourth memos.query
+          else (SourceCurrentAllocatedConjunctionWorker.Outcome.done false queried beforeCaller.fourth, memos.query)) =
+          (SourceCurrentAllocatedConjunctionWorker.Outcome.done answer checkedAfter saved, queries)
+post :
+  Post formulas solver next beforeCaller
+    (SourceCurrentAllocatedPartialState.advance beforeCaller checkedAfter saved beforeCaller.merge) final
+querySame : final.query = queries
+unfolding : Extends memos.unfolding final.unfolding
+sound : SourceCurrentEmptinessMemo.AnswerSound formulas solver query answer
+replacementEq : replacement = if answer = true then Value.empty else query
+available : Available checkedAfter.native.machine.heap replacement
+closed : replacement.free = []
+encoded : encodeNode replacement = some handle
+decoded : lookupNode checkedAfter.native.machine.heap handle = some replacement
+meaning :
+  ∀ (ambient : InternedGuardedLanguage.Env (SourceObservations.Label FullSyntax.Formula))
+    (term : Language.Term (SourceObservations.Label FullSyntax.Formula)),
+    InternedGuardedLanguage.meaning (SourceEqualityPCSGuard.holds formulas solver) ambient replacement term ↔
+      InternedGuardedLanguage.meaning (SourceEqualityPCSGuard.holds formulas solver) ambient left term ∧
+        InternedGuardedLanguage.meaning (SourceEqualityPCSGuard.holds formulas solver) ambient right term
+disabled :
+  checkEmpty = false →
+    answer = false ∧
+      replacement = query ∧ checkedAfter = queried ∧ saved = beforeCaller.fourth ∧ queries = memos.query ∧ final = memos
+enabled :
+  checkEmpty = true →
+    ∃ reached,
+      SourceEndpointMemo.run query memos.query = (reached, queries) ∧
+        SourceEndpointMemoCorrect.Checked queried.native.machine.heap memos.query (reaches query) (reached, queries) ∧
+          (reached = false →
+              answer = false ∧
+                checkedAfter = queried ∧
+                  saved = beforeCaller.fourth ∧ final = { unfolding := memos.unfolding, query := queries }) ∧
+            (reached = true →
+              ∃ reachedPhysical,
+                checkedAfter = advancePhysical queried reachedPhysical ∧
+                  ∃ actual,
+                    SourceCurrentConjunctionGlobalMemos.CallReads actual
+                      { unfolding := memos.unfolding, query := queries } final)
+done :
+  SourceEqualityNativeDemand.execute oldFuel
+      (SourceEqualityNativeDemand.Control.code
+        (SourceRecursiveIntersectionCode.requestNode IntersectionEmptyDomain.emptyDomain left right))
+      beforeCaller.checked =
+    SourceEqualityNativeDemand.Outcome.done query queried
+_next : Inventory
+_source : _next.source = beforeCaller.checked.native.machine.heap
+_roots : _next.roots = inventory.roots ++ [left, right]
+_receipt :
+  SourceCurrentAllocatedTargetQuery.Receipt formulas solver _next left right beforeCaller.checked query queried memos
+_post :
+  Post formulas solver _next beforeCaller
+    (SourceCurrentAllocatedPartialState.advance beforeCaller queried beforeCaller.fourth beforeCaller.merge) memos
+queryFits : Fits (step profile) queried
+_mass :
+  InternedValueMass.value query ≤
+    SourceCurrentAllocatedRecursiveMassTrace.massAfter (instructionBound profile.nodes profile.edges profile.mass)
+      profile.mass
+queryCarrier : Heap (fun guard => guard ∈ queryAlphabet alphabet profile) queried.native.machine.heap
+computed :
+  SourceEqualityNativeDemand.execute (instructionBound profile.nodes profile.edges profile.mass + 1)
+      (SourceEqualityNativeDemand.Control.code
+        (SourceRecursiveIntersectionCode.requestNode IntersectionEmptyDomain.emptyDomain left right))
+      beforeCaller.checked =
+    SourceEqualityNativeDemand.Outcome.done query queried
+alphabetAfter : List Constraint := queryAlphabet alphabet profile
+p : Nat := workerFuel alphabetAfter 1000 (scalar (step profile))
+h : Nat := readerFuel alphabetAfter 1000 (scalar (step profile))
+finalData :
+  Fits (forecast alphabet profile) checkedAfter ∧
+    Heap (fun guard => guard ∈ alphabetAfter) checkedAfter.native.machine.heap ∧
+      ∀ (P H : Nat),
+        p ≤ P →
+          h ≤ H →
+            (if checkEmpty = true then
+                SourcePruningEnumerationEnabledEmpty.check P H query queried beforeCaller.fourth memos.query
+              else
+                (SourceCurrentAllocatedConjunctionWorker.Outcome.done false queried beforeCaller.fourth, memos.query)) =
+              (SourceCurrentAllocatedConjunctionWorker.Outcome.done answer checkedAfter saved, queries)
+⊢ ∃ next query queried answer checkedAfter saved final queries replacement handle fuel p h,
+    next.source = beforeCaller.checked.native.machine.heap ∧
+      next.roots = inventory.roots ++ [left, right] ∧
+        SourceCurrentAllocatedTargetQuery.Receipt formulas solver next left right beforeCaller.checked query queried
+            memos ∧
+          (∀ (extra : Nat),
+              SourceEqualityNativeDemand.execute (fuel + extra)
+                  (SourceEqualityNativeDemand.Control.code
+                    (SourceRecursiveIntersectionCode.requestNode IntersectionEmptyDomain.emptyDomain left right))
+                  beforeCaller.checked =
+                SourceEqualityNativeDemand.Outcome.done query queried) ∧
+            (∀ (P H : Nat),
+                p ≤ P →
+                  h ≤ H →
+                    (if checkEmpty = true then
+                        SourcePruningEnumerationEnabledEmpty.check P H query queried beforeCaller.fourth memos.query
+                      else
+                        (SourceCurrentAllocatedConjunctionWorker.Outcome.done false queried beforeCaller.fourth,
+                          memos.query)) =
+                      (SourceCurrentAllocatedConjunctionWorker.Outcome.done answer checkedAfter saved, queries)) ∧
+              Post formulas solver next beforeCaller
+                  (SourceCurrentAllocatedPartialState.advance beforeCaller checkedAfter saved beforeCaller.merge)
+                  final ∧
+                final.query = queries ∧
+                  Extends memos.unfolding final.unfolding ∧
+                    SourceCurrentEmptinessMemo.AnswerSound formulas solver query answer ∧
+                      (replacement = if answer = true then Value.empty else query) ∧
+                        Available checkedAfter.native.machine.heap replacement ∧
+                          replacement.free = [] ∧
+                            encodeNode replacement = some handle ∧
+                              lookupNode checkedAfter.native.machine.heap handle = some replacement ∧
+                                (∀ (ambient : InternedGuardedLanguage.Env (SourceObservations.Label FullSyntax.Formula))
+                                    (term : Language.Term (SourceObservations.Label FullSyntax.Formula)),
+                                    InternedGuardedLanguage.meaning (SourceEqualityPCSGuard.holds formulas solver)
+                                        ambient replacement term ↔
+                                      InternedGuardedLanguage.meaning (SourceEqualityPCSGuard.holds formulas solver)
+                                          ambient left term ∧
+                                        InternedGuardedLanguage.meaning (SourceEqualityPCSGuard.holds formulas solver)
+                                          ambient right term) ∧
+                                  (checkEmpty = false →
+                                      answer = false ∧
+                                        replacement = query ∧
+                                          checkedAfter = queried ∧
+                                            saved = beforeCaller.fourth ∧ queries = memos.query ∧ final = memos) ∧
+                                    (checkEmpty = true →
+                                        ∃ reached,
+                                          SourceEndpointMemo.run query memos.query = (reached, queries) ∧
+                                            SourceEndpointMemoCorrect.Checked queried.native.machine.heap memos.query
+                                                (reaches query) (reached, queries) ∧
+                                              (reached = false → ⋯) ∧ (reached = true → ⋯)) ∧
+                                      Fits (step profile) queried ∧
+                                        Fits (forecast alphabet profile) checkedAfter ∧
+                                          Heap (fun guard => guard ∈ queryAlphabet alphabet profile)
+                                              checkedAfter.native.machine.heap ∧
+                                            fuel = instructionBound profile.nodes profile.edges profile.mass + 1 ∧
+                                              p =
+                                                  workerFuel (queryAlphabet alphabet profile) 1000
+                                                    (scalar (step profile)) ∧
+                                                h =
+                                                  readerFuel (queryAlphabet alphabet profile) 1000
+                                                    (scalar (step profile))

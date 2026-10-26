@@ -1,5 +1,40 @@
 # Constrained languages, indexing, and distributions
 
+## Original inputs bound incoming intersections and enabled Empty checks
+
+Native fuel and guards: `09a56b94c`. Actual worker resources: `d9c82653a`.
+Combined incoming producer: `eec8b10bb`. The goal stays ACTIVE.
+
+The actual incoming intersection and its optional enabled emptiness phase
+now have resource bounds from the ORIGINAL caller, numeric profile and guard
+alphabet. The final checked state retains the entire earlier completion
+packet: query and replacement language, readback, full Post, saved memos,
+actual global reads and exact disabled/skipped/performed observations.
+The producer also returns computed native and both worker fuel ceilings,
+query Fits, final Fits and the predicted guard carrier. No future range,
+successful callback, joint Frame or returned-heap forecast is an input.
+
+The emptiness worker can allocate constructor records. Its full allocation
+cost is charged to the combined forecast. Stored payload mass does not bound
+guard equality classes or paths. The recorded native trace therefore derives
+a guard alphabet from the original profile BEFORE the emptiness forecast.
+The fixed 1000-admission budget follows the actual enabled source check.
+The final resource bound is Fits. It does not assert Room for another query.
+
+All three new modules and Audit pass strict checks. Public readback covers
+19 declarations and four full definitions. Audit checks 77156 dependencies.
+A byte comparison retains all 2992 characters of the earlier IncomingQuery
+output proposition after width specialization. Runtime workers and older
+interfaces stay unchanged. Main remains imported at `153e1a211`.
+
+H6 remains the strongest end-to-end language theorem. Next propagate the
+combined packet through actual IncomingNode and CachedIncoming writes and
+terminal folds. Then reserve full child/edge execution, callbacks, recursive
+subtrees and later siblings from the original input. Whole-driver language,
+terminal fallback, Graph correspondence, extraction and arbitrary lazy demand
+remain open. No Haskell source changed. Details:
+`lean/notes-current-pruning-enumeration-incoming-resources.md`.
+
 ## Native query histories retain their original resource reservation
 
 Caller resources: `69abb7423`. Captured packet histories: `c7b7fc5aa`.

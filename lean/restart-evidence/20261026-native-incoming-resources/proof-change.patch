@@ -1,0 +1,414 @@
+diff --git a/lean/MicroCFTA/Audit.lean b/lean/MicroCFTA/Audit.lean
+index 7a6d10029..e62a2a7b9 100644
+--- a/lean/MicroCFTA/Audit.lean
++++ b/lean/MicroCFTA/Audit.lean
+@@ -11,6 +11,8 @@ import MicroCFTA.SourcePruningEnumerationRecursiveCallback
+ import MicroCFTA.SourcePruningEnumerationReceiptCallbackFuel
+ import MicroCFTA.SourceCurrentAllocatedTargetCallerObserved
+ import MicroCFTA.SourcePruningEnumerationRecursiveResources
++import MicroCFTA.SourceCurrentAllocatedConjunctionWorkerResources
++import MicroCFTA.SourcePruningEnumerationIncomingQueryResources
+ import MicroCFTA.SourceCurrentAllocatedNativeWordBoundary
+ import MicroCFTA.SourcePruningEnumerationSelectedNarrow
+ import MicroCFTA.SourcePruningEnumerationRecursion
+diff --git a/lean/MicroCFTA/SourceCurrentAllocatedConjunctionWorkerResources.lean b/lean/MicroCFTA/SourceCurrentAllocatedConjunctionWorkerResources.lean
+new file mode 100644
+index 000000000..d85d0bad3
+--- /dev/null
++++ b/lean/MicroCFTA/SourceCurrentAllocatedConjunctionWorkerResources.lean
+@@ -0,0 +1,100 @@
++import MicroCFTA.SourceCurrentAllocatedConjunctionWorkerActual
++import MicroCFTA.SourceCurrentConjunctionCallerNumeric
++
++/-!
++# Numeric resources for the actual conjunction worker
++
++The current entry heap supplies the finite guard carrier.
++The same actual call retains its full caller and computed resource bounds.
++The constructor heap can grow. The native tables and domain cache stay exact.
++The forecast does not bound guard data from an earlier query entry.
++-/
++namespace MicroCFTA.SourceCurrentAllocatedConjunctionWorkerActual
++open Cache InternedConstructorTemplates InternedProbeProvenance
++open SourceCurrentAllocatedNativeEffects (physical)
++open SourceCurrentAllocatedQueryMemo (advancePhysical)
++open SourceCurrentAllocatedNativeInventoryState (Inventory)
++open SourceCurrentAllocatedPartialInvariant (Context Post)
++open SourceCurrentAllocatedNativeResourceForecast (Profile)
++open SourceCurrentConstrainedCapGeneratedQueryResources (Fits)
++open SourceCurrentConstrainedCapTargetForecast (scalar)
++open SourceCurrentAllocatedConjunctionWorker
++local notation "Symbol" => SourceObservations.Label FullSyntax.Formula
++local notation "Guard" => SourceSymbolicIndex.Constraint FullSyntax.Formula
++local notation "Checked" => SourceEqualityNativeDemand.State
++local notation "Caller" => SourceCurrentAllocatedPartialState.State
++local notation "Physical" => SourceCurrentConjunctionRowsAllocation.State Symbol FullSyntax.Formula
++local notation "Memo" => SourceCurrentEmptinessMemo.Memo
++local notation "Memos" => EndpointMemoGateTrace.Memos
++local notation "Call" => SourceCurrentConjunctionMemo.Call
++local notation "CallReads" => SourceCurrentConjunctionGlobalMemos.CallReads
++local notation "forecast" => SourceCurrentConjunctionCallerNumeric.forecast
++local notation "guards" => SourceCurrentConjunctionGuardUniverse.guards
++local notation "workerFuel" => SourceCurrentConjunctionWorklistResources.workerFuel
++local notation "readerFuel" => SourceCurrentConjunctionWorklistResources.readerFuel
++variable [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)] [DecidableEq (Value Symbol Guard)] {width : Nat}
++variable (formulas : SourceGuards.Formulas FullSyntax.Formula) (solver : SourceGuards.Entailment FullSyntax.Formula)
++
++/-- Current caller facts produce one call, its full receipts, and computed stable bounds. -/
++theorem finite_resources {inventory : Inventory} {before : Caller width}
++    {query : Value Symbol Guard} {memos : Memos}
++    (budget : Nat) (profile : Profile) (initial : Context formulas solver inventory before memos)
++    (fits : Fits profile before.checked) (available : Available before.checked.native.machine.heap query) :
++    ∃ (answer : Bool) (reached : Physical) (saved : Memo) (final : Memos),
++      ∃ actual : Call budget before.fourth query (physical before.checked) answer reached saved,
++        CallReads actual memos final ∧
++        Post formulas solver inventory before
++          (SourceCurrentAllocatedPartialState.advance before (advancePhysical before.checked reached) saved before.merge) final ∧
++        SourceCurrentEmptinessMemo.AnswerSound formulas solver query answer ∧
++        Available reached.heap query ∧ Extends memos.unfolding final.unfolding ∧ final.query = memos.query ∧
++        Fits (forecast before.checked.native.machine.heap budget profile) (advancePhysical before.checked reached) ∧
++        (∀ work reader,
++          workerFuel (guards before.checked.native.machine.heap) budget (scalar profile) ≤ work →
++          readerFuel (guards before.checked.native.machine.heap) budget (scalar profile) ≤ reader →
++          call work reader budget query before.checked before.fourth =
++            .done answer (advancePhysical before.checked reached) saved) := by
++  obtain ⟨answer, reached, saved, final, actual, reads, post, sound, returnedAvailable, unfolding, querySame⟩ :=
++    SourceCurrentAllocatedConjunctionCaller.finite formulas solver budget initial available
++  have ready := SourceCurrentAllocatedConjunctionMemo.ready before.checked initial.ready.good
++    initial.ready.semantic initial.ready.costs
++  have scalarFits := (SourceCurrentConstrainedCapRequiredResources.of_checked fits).scalar_fits
++  have numeric := SourceCurrentConjunctionNumeric.call_bound actual (scalar profile) ready available scalarFits
++  refine ⟨answer, reached, saved, final, actual, reads, post, sound, returnedAvailable, unfolding, querySame, ?_, ?_⟩
++  · exact ⟨numeric.1.nodes, numeric.1.edges, fits.domains, numeric.1.stored⟩
++  · intro work reader enoughWork enoughRead
++    exact call_lift (numeric.2 work reader enoughWork enoughRead)
++
++/-- A supplied success retains its literal endpoint and the same current-entry forecast. -/
++theorem raw_done_resources {inventory : Inventory} {p h budget : Nat}
++    {before : Caller width} {after : Checked width} {query : Value Symbol Guard}
++    {answer : Bool} {saved : Memo} {memos : Memos}
++    (profile : Profile) (initial : Context formulas solver inventory before memos)
++    (fits : Fits profile before.checked) (available : Available before.checked.native.machine.heap query)
++    (done : call p h budget query before.checked before.fourth = .done answer after saved) :
++    ∃ reached final, after = advancePhysical before.checked reached ∧
++      ∃ actual : Call budget before.fourth query (physical before.checked) answer reached saved,
++        CallReads actual memos final ∧
++        Post formulas solver inventory before
++          (SourceCurrentAllocatedPartialState.advance before after saved before.merge) final ∧
++        SourceCurrentEmptinessMemo.AnswerSound formulas solver query answer ∧
++        Available after.native.machine.heap query ∧ Extends memos.unfolding final.unfolding ∧ final.query = memos.query ∧
++        Fits (forecast before.checked.native.machine.heap budget profile) after ∧
++        (∀ work reader,
++          workerFuel (guards before.checked.native.machine.heap) budget (scalar profile) ≤ work →
++          readerFuel (guards before.checked.native.machine.heap) budget (scalar profile) ≤ reader →
++          call work reader budget query before.checked before.fourth = .done answer after saved) := by
++  obtain ⟨reached, final, same, actual, reads, post, sound, returnedAvailable, unfolding, querySame⟩ :=
++    verified formulas solver initial available done
++  have ready := SourceCurrentAllocatedConjunctionMemo.ready before.checked initial.ready.good
++    initial.ready.semantic initial.ready.costs
++  have scalarFits := (SourceCurrentConstrainedCapRequiredResources.of_checked fits).scalar_fits
++  have numeric := SourceCurrentConjunctionNumeric.call_bound actual (scalar profile) ready available scalarFits
++  have returned : Fits (forecast before.checked.native.machine.heap budget profile)
++      (advancePhysical before.checked reached) :=
++    ⟨numeric.1.nodes, numeric.1.edges, fits.domains, numeric.1.stored⟩
++  refine ⟨reached, final, same, actual, reads, post, sound, returnedAvailable, unfolding, querySame, ?_, ?_⟩
++  · simpa only [same] using returned
++  · intro work reader enoughWork enoughRead
++    simpa only [same] using call_lift (numeric.2 work reader enoughWork enoughRead)
++
++end MicroCFTA.SourceCurrentAllocatedConjunctionWorkerActual
+diff --git a/lean/MicroCFTA/SourceCurrentAllocatedTargetCallerGuardResources.lean b/lean/MicroCFTA/SourceCurrentAllocatedTargetCallerGuardResources.lean
+new file mode 100644
+index 000000000..84ee8b89c
+--- /dev/null
++++ b/lean/MicroCFTA/SourceCurrentAllocatedTargetCallerGuardResources.lean
+@@ -0,0 +1,93 @@
++import MicroCFTA.SourceCurrentAllocatedTargetCallerResources
++import MicroCFTA.SourceCurrentGeneratedQueryGuardResources
++
++/-!
++# Initial guard forecasts for actual target steps
++
++The same recorded physical trace has an instruction bound from its entry
++profile. This bound gives an explicit execution ceiling and a finite guard
++carrier at the returned heap. An existing step needs no additional Room
++or joint Frame premise.
++-/
++namespace MicroCFTA.SourceCurrentAllocatedTargetQuery
++open Cache InternedConstructorTemplates InternedProbeProvenance
++open SourceRecursiveIntersectionKernel SourceRecursiveIntersectionThunks SourceRecursiveIntersectionCode
++open SourceRecursiveIntersectionInputView IntersectSchedule SourceEqualityNativeDemand
++open SourceCurrentConjunctionClassScan (Ready)
++open SourceCurrentAllocatedNativeResourceForecast (Profile)
++open SourceCurrentConstrainedCapGeneratedQueryResources (Fits)
++open SourceCurrentAllocatedNativePhysicalTraceCompletion (Trace)
++local notation "Symbol" => SourceObservations.Label FullSyntax.Formula
++local notation "Guard" => SourceSymbolicIndex.Constraint FullSyntax.Formula
++local notation "Checked" => SourceEqualityNativeDemand.State
++local notation "Heap" => SourceEqualityAnnotationHeap.Heap
++local notation "instructionBound" => SourceCurrentAllocatedNativeComputedBudget.instructionBound
++variable {width fuel : Nat} {left right value : Value Symbol Guard} {before after : Checked width}
++variable [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)]
++
++private theorem trace_count (profile : Profile)
++    (actual : Trace fuel (.code (requestNode IntersectionEmptyDomain.emptyDomain left right)) before
++      (.code (.pure value)) after)
++    (ready : Ready before) (fits : Fits profile before)
++    (leftAvailable : Available before.native.machine.heap left)
++    (rightAvailable : Available before.native.machine.heap right)
++    (leftClosed : left.free = []) (rightClosed : right.free = []) :
++    fuel ≤ instructionBound profile.nodes profile.edges profile.mass := by
++  let source := before.native.machine.heap
++  let holds : Guard → Language.Term Symbol → Bool := fun _ _ => true
++  let request : NodeRequest Symbol Guard := ⟨IntersectionEmptyDomain.emptyDomain, left, right⟩
++  have facts := ready.good.native.machine.1
++  have leftOriginal := SourceRecursiveIntersectionOriginalOutput.closed_original left source
++    facts.coherent leftAvailable leftClosed
++  have rightOriginal := SourceRecursiveIntersectionOriginalOutput.closed_original right source
++    facts.coherent rightAvailable rightClosed
++  have complete := SourceRecursiveIntersectionRequestProgress.initial_complete source facts holds left right
++    leftOriginal rightOriginal leftAvailable rightAvailable leftClosed rightClosed
++  have scope := initial_scope source left right leftOriginal rightOriginal leftAvailable rightAvailable
++  have requestReady : NodeReady before.native.machine request :=
++    ⟨empty_domain _, leftAvailable, rightAvailable⟩
++  have count := SourceCurrentAllocatedNativeInstructionTrace.node_prefix source facts holds request scope complete
++    actual ready.good requestReady (grows_refl _) (extends_refl _)
++  have initialCount := SourceCurrentAllocatedNativeComputedBudget.nodeBudget_le source facts holds left right
++    leftOriginal rightOriginal leftAvailable rightAvailable leftClosed rightClosed fits.stored
++  have larger := SourceCurrentAllocatedNativeComputedBudget.instructionBound_mono
++    fits.nodes fits.edges (Nat.le_refl profile.mass)
++  exact Nat.le_trans (Nat.le_trans count initialCount) larger
++
++/-- An actual target step returns at the explicit instruction ceiling of its initial profile. -/
++theorem Step.done_profile (profile : Profile) (actual : Step left right before value after)
++    (ready : Ready before) (fits : Fits profile before)
++    (leftAvailable : Available before.native.machine.heap left)
++    (rightAvailable : Available before.native.machine.heap right)
++    (leftClosed : left.free = []) (rightClosed : right.free = []) :
++    execute (instructionBound profile.nodes profile.edges profile.mass + 1)
++      (.code (requestNode IntersectionEmptyDomain.emptyDomain left right)) before = .done value after := by
++  cases actual with
++  | @run count trace =>
++      have bounded := trace_count profile trace ready fits leftAvailable rightAvailable leftClosed rightClosed
++      have done := trace_done count _ before after value trace.steps
++      have stable := done_stable (count + 1)
++        (instructionBound profile.nodes profile.edges profile.mass - count) _ before after value done
++      have same : count + 1 + (instructionBound profile.nodes profile.edges profile.mass - count) =
++          instructionBound profile.nodes profile.edges profile.mass + 1 := by omega
++      rw [same] at stable
++      exact stable
++
++/-- The same target step bounds every returned guard by the original alphabet and profile. -/
++theorem Step.guard_forecast (alphabet : List Guard) (profile : Profile)
++    (actual : Step left right before value after)
++    (ready : Ready before) (fits : Fits profile before)
++    (leftAvailable : Available before.native.machine.heap left)
++    (rightAvailable : Available before.native.machine.heap right)
++    (leftClosed : left.free = []) (rightClosed : right.free = [])
++    (known : Heap (fun guard => guard ∈ alphabet) before.native.machine.heap) :
++    Heap (fun guard => guard ∈ SourceCurrentGeneratedQueryGuardResources.forecast alphabet profile)
++      after.native.machine.heap := by
++  cases actual with
++  | run trace =>
++      have count := trace_count profile trace ready fits leftAvailable rightAvailable leftClosed rightClosed
++      exact (SourceCurrentNativeGuardTrace.bounded alphabet
++        (instructionBound profile.nodes profile.edges profile.mass) trace ready.good
++        (fun _ => trivial) known (fun _ => trivial) count).1
++
++end MicroCFTA.SourceCurrentAllocatedTargetQuery
+diff --git a/lean/MicroCFTA/SourcePruningEnumerationIncomingQueryResources.lean b/lean/MicroCFTA/SourcePruningEnumerationIncomingQueryResources.lean
+new file mode 100644
+index 000000000..f76813374
+--- /dev/null
++++ b/lean/MicroCFTA/SourcePruningEnumerationIncomingQueryResources.lean
+@@ -0,0 +1,190 @@
++import MicroCFTA.SourcePruningEnumerationIncomingQuery
++import MicroCFTA.SourceCurrentAllocatedTargetCallerGuardResources
++import MicroCFTA.SourceCurrentConjunctionAlphabetBounds
++
++/-!
++# Initial resources for the actual incoming intersection and Empty check
++
++The original profile and guard alphabet bound the native intersection and
++its enabled emptiness phase. The same returned replacement retains every
++existing query, memo and language receipt. No future numeric room is given.
++-/
++namespace MicroCFTA.SourcePruningEnumerationIncomingQuery
++open Cache InternedConstructorTemplates InternedProbeProvenance
++open SourcePruningEnumerationNodes SourcePruningEnumerationObservation
++open SourceCurrentAllocatedNativeEffects (physical)
++open SourceCurrentAllocatedQueryMemo (advancePhysical)
++open SourceCurrentAllocatedNativeInventoryState (Inventory)
++open SourceCurrentAllocatedPartialInvariant (Context Post)
++open SourceCurrentAllocatedNativeResourceForecast (Profile Room step)
++open SourceCurrentConstrainedCapGeneratedQueryResources (Fits)
++local notation "Symbol" => SourcePruningTemplates.Symbol
++local notation "Constraint" => SourceSymbolicIndex.Constraint FullSyntax.Formula
++local notation "Node" => InternedConstructorTemplates.Value Symbol Constraint
++local notation "Checked" => SourceEqualityNativeDemand.State
++local notation "Caller" => SourceCurrentAllocatedPartialState.State
++local notation "Memos" => EndpointMemoGateTrace.Memos
++local notation "Fourth" => SourceCurrentEmptinessMemo.Memo
++local notation "Queries" => SourceEndpointMemo.Memos
++local notation "Heap" => SourceEqualityAnnotationHeap.Heap
++local notation "reaches" => SourceEndpointReachability.reaches SourceMemoGate.unconstrained
++local notation "queryAlphabet" => SourceCurrentGeneratedQueryGuardResources.forecast
++local notation "scalar" => SourceCurrentConstrainedCapTargetForecast.scalar
++local notation "instructionBound" => SourceCurrentAllocatedNativeComputedBudget.instructionBound
++local notation "workerFuel" => SourceCurrentConjunctionWorklistResources.workerFuel
++local notation "readerFuel" => SourceCurrentConjunctionWorklistResources.readerFuel
++variable {bits : Nat}
++
++/-- Initial guard and numeric bounds reserve the query and its optional constructor allocations. -/
++noncomputable def forecast (alphabet : List Constraint) (profile : Profile) : Profile :=
++  SourceCurrentConjunctionAlphabetBounds.callerForecast (queryAlphabet alphabet profile) 1000 (step profile)
++
++/-- The combined forecast retains every original numeric component. -/
++theorem forecast_ge (alphabet : List Constraint) (profile : Profile) :
++    SourceCurrentAllocatedNativeResourceForecast.Le profile (forecast alphabet profile) :=
++  (SourceCurrentAllocatedNativeResourceForecast.step_ge profile).trans
++    (SourceCurrentConjunctionAlphabetBounds.callerForecast_ge _ _ _)
++
++private theorem checked_fits (alphabet : List Constraint) (budget : Nat) (profile : Profile)
++    {before : Checked (bits + 2)}
++    {after : SourceCurrentConjunctionRowsAllocation.State Symbol FullSyntax.Formula}
++    (initial : Fits profile before)
++    (bounded : SourceCurrentMemoMergeResourceControl.Fits
++      (SourceCurrentConjunctionWorklistResources.forecast alphabet budget (scalar profile)) after.heap) :
++    Fits (SourceCurrentConjunctionAlphabetBounds.callerForecast alphabet budget profile) (advancePhysical before after) :=
++  ⟨bounded.nodes, bounded.edges, initial.domains, bounded.stored⟩
++
++/-- Original current facts construct the complete incoming packet and its final resources. -/
++theorem complete_resources
++    [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Constraint)] [DecidableEq Node]
++    (alphabet : List Constraint) (profile : Profile)
++    (formulas : SourceGuards.Formulas FullSyntax.Formula)
++    (solver : SourceGuards.Entailment FullSyntax.Formula)
++    (inventory : Inventory) (beforeCaller : Caller (bits + 2))
++    (left right : Node) (checkEmpty : Bool) (memos : Memos)
++    (initial : Context formulas solver inventory beforeCaller memos)
++    (leftAvailable : Available beforeCaller.checked.native.machine.heap left)
++    (rightAvailable : Available beforeCaller.checked.native.machine.heap right)
++    (leftClosed : left.free = []) (rightClosed : right.free = [])
++    (fits : Fits profile beforeCaller.checked) (room : Room bits profile)
++    (known : Heap (fun guard => guard ∈ alphabet) beforeCaller.checked.native.machine.heap) :
++    ∃ (next : Inventory) (query : Node) (queried : Checked (bits + 2))
++      (answer : Bool) (checkedAfter : Checked (bits + 2)) (saved : Fourth)
++      (final : Memos) (queries : Queries) (replacement : Node) (handle fuel p h : Nat),
++      next.source = beforeCaller.checked.native.machine.heap ∧ next.roots = inventory.roots ++ [left, right] ∧
++      SourceCurrentAllocatedTargetQuery.Receipt formulas solver next left right
++        beforeCaller.checked query queried memos ∧
++      (∀ extra, SourceEqualityNativeDemand.execute (fuel + extra)
++        (.code (SourceRecursiveIntersectionCode.requestNode IntersectionEmptyDomain.emptyDomain left right))
++        beforeCaller.checked = .done query queried) ∧
++      (∀ P H, p ≤ P → h ≤ H →
++        (if checkEmpty then
++          SourcePruningEnumerationEnabledEmpty.check P H query queried beforeCaller.fourth memos.query
++        else (.done false queried beforeCaller.fourth, memos.query)) =
++          (.done answer checkedAfter saved, queries)) ∧
++      Post formulas solver next beforeCaller
++        (SourceCurrentAllocatedPartialState.advance beforeCaller checkedAfter saved beforeCaller.merge) final ∧
++      final.query = queries ∧ Cache.Extends memos.unfolding final.unfolding ∧
++      SourceCurrentEmptinessMemo.AnswerSound formulas solver query answer ∧
++      replacement = (if answer then .empty else query) ∧
++      Available checkedAfter.native.machine.heap replacement ∧ replacement.free = [] ∧
++      encodeNode replacement = some handle ∧ lookupNode checkedAfter.native.machine.heap handle = some replacement ∧
++      (∀ ambient term,
++        InternedGuardedLanguage.meaning (SourceEqualityPCSGuard.holds formulas solver) ambient replacement term ↔
++          InternedGuardedLanguage.meaning (SourceEqualityPCSGuard.holds formulas solver) ambient left term ∧
++          InternedGuardedLanguage.meaning (SourceEqualityPCSGuard.holds formulas solver) ambient right term) ∧
++      (checkEmpty = false → answer = false ∧ replacement = query ∧ checkedAfter = queried ∧
++        saved = beforeCaller.fourth ∧ queries = memos.query ∧ final = memos) ∧
++      (checkEmpty = true → ∃ reached,
++        SourceEndpointMemo.run query memos.query = (reached, queries) ∧
++        SourceEndpointMemoCorrect.Checked queried.native.machine.heap memos.query
++          (SourceEndpointReachability.reaches SourceMemoGate.unconstrained query) (reached, queries) ∧
++        (reached = false → answer = false ∧ checkedAfter = queried ∧ saved = beforeCaller.fourth ∧
++          final = {memos with query := queries}) ∧
++        (reached = true →
++          ∃ reachedPhysical : SourceCurrentConjunctionRowsAllocation.State Symbol FullSyntax.Formula,
++            checkedAfter = advancePhysical queried reachedPhysical ∧
++            ∃ actual : SourceCurrentConjunctionMemo.Call 1000 beforeCaller.fourth query
++                (physical queried) answer reachedPhysical saved,
++              SourceCurrentConjunctionGlobalMemos.CallReads actual {memos with query := queries} final)) ∧
++      Fits (step profile) queried ∧ Fits (forecast alphabet profile) checkedAfter ∧
++      Heap (fun guard => guard ∈ queryAlphabet alphabet profile) checkedAfter.native.machine.heap ∧
++      fuel = instructionBound profile.nodes profile.edges profile.mass + 1 ∧
++      p = workerFuel (queryAlphabet alphabet profile) 1000 (scalar (step profile)) ∧
++      h = readerFuel (queryAlphabet alphabet profile) 1000 (scalar (step profile)) := by
++  have actualRoom := fits.room room
++  have leftOriginal := SourceRecursiveIntersectionOriginalOutput.closed_original left
++    beforeCaller.checked.native.machine.heap initial.ready.good.native.machine.1.coherent leftAvailable leftClosed
++  have rightOriginal := SourceRecursiveIntersectionOriginalOutput.closed_original right
++    beforeCaller.checked.native.machine.heap initial.ready.good.native.machine.1.coherent rightAvailable rightClosed
++  have ranges := SourceCurrentAllocatedRecursiveWarmInitialRanges.warm_initial_ranges bits beforeCaller.checked
++    initial.ready.good initial.ready.semantic left right leftOriginal rightOriginal leftAvailable rightAvailable
++    actualRoom.1 actualRoom.2.1 actualRoom.2.2
++  obtain ⟨next, query, queried, answer, checkedAfter, saved, final, queries, replacement, handle,
++    oldFuel, _oldP, _oldH, source, roots, receipt, native, _phase, post, querySame, unfolding,
++    sound, replacementEq, available, closed, encoded, decoded, meaning, disabled, enabled⟩ :=
++    complete formulas solver inventory beforeCaller left right checkEmpty memos initial
++      leftAvailable rightAvailable leftClosed rightClosed ranges.1
++  have done : SourceEqualityNativeDemand.execute oldFuel
++      (.code (SourceRecursiveIntersectionCode.requestNode IntersectionEmptyDomain.emptyDomain left right))
++      beforeCaller.checked = .done query queried := by
++    simpa only [Nat.add_zero] using native 0
++  obtain ⟨_next, _source, _roots, _receipt, _post, queryFits, _mass⟩ :=
++    SourceCurrentAllocatedTargetQuery.raw_done_caller_resources profile oldFuel formulas solver inventory
++      beforeCaller queried left right query memos initial fits room leftAvailable rightAvailable leftClosed rightClosed done
++  have queryCarrier := receipt.actual.guard_forecast alphabet profile initial.ready fits
++    leftAvailable rightAvailable leftClosed rightClosed known
++  have computed := receipt.actual.done_profile profile initial.ready fits
++    leftAvailable rightAvailable leftClosed rightClosed
++  let alphabetAfter := queryAlphabet alphabet profile
++  let p := workerFuel alphabetAfter 1000 (scalar (step profile))
++  let h := readerFuel alphabetAfter 1000 (scalar (step profile))
++  have finalData : Fits (forecast alphabet profile) checkedAfter ∧
++      Heap (fun guard => guard ∈ alphabetAfter) checkedAfter.native.machine.heap ∧
++      (∀ P H, p ≤ P → h ≤ H →
++        (if checkEmpty then SourcePruningEnumerationEnabledEmpty.check P H query queried beforeCaller.fourth memos.query
++          else (.done false queried beforeCaller.fourth, memos.query)) = (.done answer checkedAfter saved, queries)) := by
++    cases checkEmpty with
++    | false =>
++        obtain ⟨rfl, _same, rfl, rfl, rfl, _final⟩ := disabled rfl
++        refine ⟨queryFits.mono (SourceCurrentConjunctionAlphabetBounds.callerForecast_ge _ _ _), queryCarrier, ?_⟩
++        intro P H _enoughP _enoughH
++        simp only [Bool.false_eq_true, ↓reduceIte]
++    | true =>
++        obtain ⟨reached, guardRun, _guardChecked, skipped, performed⟩ := enabled rfl
++        cases reached with
++        | false =>
++            obtain ⟨rfl, rfl, rfl, _final⟩ := skipped rfl
++            refine ⟨queryFits.mono (SourceCurrentConjunctionAlphabetBounds.callerForecast_ge _ _ _), queryCarrier, ?_⟩
++            intro P H _enoughP _enoughH
++            simp only [↓reduceIte, SourcePruningEnumerationEnabledEmpty.check,
++              guardRun, Bool.false_eq_true]
++        | true =>
++            obtain ⟨reachedPhysical, same, actual, _reads⟩ := performed rfl
++            have ready := SourceCurrentAllocatedConjunctionMemo.ready queried receipt.ready.good
++              receipt.ready.semantic receipt.ready.costs
++            have scalarFits := (SourceCurrentConstrainedCapRequiredResources.of_checked queryFits).scalar_fits
++            have numeric := SourceCurrentConjunctionAlphabetBounds.call_bound alphabetAfter actual
++              (scalar (step profile)) ready receipt.available scalarFits queryCarrier
++            have carrier := SourceCurrentConjunctionAlphabetBounds.call_carrier alphabetAfter actual
++              ready receipt.available queryCarrier
++            have bounded : Fits (forecast alphabet profile) (advancePhysical queried reachedPhysical) :=
++              checked_fits alphabetAfter 1000 (step profile) queryFits numeric.1
++            refine ⟨?_, ?_, ?_⟩
++            · simpa only [same] using bounded
++            · simpa only [same, SourceCurrentAllocatedQueryMemo.advancePhysical,
++                SourceRecursiveIntersectionThunks.advance] using carrier
++            · intro P H enoughP enoughH
++              simp only [↓reduceIte, SourcePruningEnumerationEnabledEmpty.check, guardRun]
++              apply Prod.ext
++              · simpa only [same] using
++                  (SourceCurrentAllocatedConjunctionWorker.call_lift (numeric.2 P H enoughP enoughH))
++              · rfl
++  refine ⟨next, query, queried, answer, checkedAfter, saved, final, queries, replacement, handle,
++    instructionBound profile.nodes profile.edges profile.mass + 1, p, h, source, roots, receipt,
++    ?_, finalData.2.2, post, querySame, unfolding, sound, replacementEq, available, closed,
++    encoded, decoded, meaning, disabled, enabled, queryFits, finalData.1, finalData.2.1, rfl, rfl, rfl⟩
++  intro extra
++  exact SourceEqualityNativeDemand.done_stable _ extra _ beforeCaller.checked queried query computed
++
++end MicroCFTA.SourcePruningEnumerationIncomingQuery
