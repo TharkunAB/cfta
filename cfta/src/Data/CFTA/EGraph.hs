@@ -219,7 +219,11 @@ equivalent :: EGraph s f -> ClassId -> ClassId -> Bool
 equivalent g a b = find g a == find g b
 
 canon :: EGraph s f -> ENode f -> ENode f
-canon g (ENode k f cs) = ENode k f (map (find g) cs)
+canon g (ENode k f cs) = ENode k f (roots cs)
+  where
+    -- Each root is evaluated, so that a key of the memo holds no thunks.
+    roots [] = []
+    roots (c : rest) = let !r = find g c; !rs = roots rest in r : rs
 
 lookupClass :: EGraph s f -> ClassId -> Maybe (EClass f)
 lookupClass g c = let ClassId i = find g c in IntMap.lookup i (classes g)
