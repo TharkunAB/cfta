@@ -377,39 +377,37 @@ analyse make join g = \c -> let ClassId i = find g c in IntMap.lookup i (fst (an
 
 {- | The fixed point of an analysis from a table of the data of e-classes and
 a worklist of the e-classes whose data can change, and the e-classes whose
-data changed. Each e-class gets the join of the data of its e-nodes whose
-children have data, and of its earlier data; a change sends its users to the
-worklist.
+data changed. Each e-class of the worklist gets the join of the data of its
+e-nodes whose children have data, and of its earlier data. A change of an
+e-class sends only its users, e-node by e-node, to the worklist, as egg does:
+the data only grows, so the other e-nodes give nothing new.
 -}
 analyseFrom ::
     (Eq d) => (f -> [d] -> d) -> (d -> d -> d) -> EGraph s f -> IntMap.IntMap d -> [Int] -> (IntMap.IntMap d, IntSet.IntSet)
-analyseFrom make join g known0 todo = go IntSet.empty known0 (IntSet.fromList [r | i <- todo, let ClassId r = find g (ClassId i)])
+analyseFrom make join g known0 todo = go IntSet.empty known0 (map Whole (IntSet.toAscList (IntSet.fromList roots)))
   where
-    -- The worklist is a set, so an e-class waits once, and the oldest
-    -- e-class, which is often a child of the others, comes first.
-    go changed known pending = case IntSet.minView pending of
-        Nothing -> (known, changed)
-        Just (i, rest) -> case IntMap.lookup i (classes g) of
-            Nothing -> go changed known rest
-            Just e ->
-                let values =
-                        [ make f ds
-                        | ENode _ f cs <- HashSet.toList (classNodes e)
-                        , Just ds <- [traverse (\c -> let ClassId j = find g c in IntMap.lookup j known) cs]
-                        ]
-                 in case values of
-                        [] -> go changed known rest
-                        v : vs ->
-                            let new = foldl' join v vs
-                                old = IntMap.lookup i known
-                                new' = maybe new (join new) old
-                             in if Just new' == old
-                                    then go changed known rest
-                                    else
-                                        go
-                                            (IntSet.insert i changed)
-                                            (IntMap.insert i new' known)
-                                            (foldl' (\p (_, owner) -> let ClassId j = find g owner in IntSet.insert j p) rest (classUsers e))
+    roots = [r | i <- todo, let ClassId r = find g (ClassId i)]
+    go changed known [] = (known, changed)
+    go changed known (task : rest) = case task of
+        Whole i -> maybe (go changed known rest) (step i . HashSet.toList . classNodes) (IntMap.lookup i (classes g))
+        Use u owner -> let ClassId i = find g owner in step i [u]
+      where
+        dataOf c = let ClassId j = find g c in IntMap.lookup j known
+        step i nodes = case [make f ds | ENode _ f cs <- nodes, Just ds <- [traverse dataOf cs]] of
+            [] -> go changed known rest
+            v : vs ->
+                let old = IntMap.lookup i known
+                    new' = foldl' join (maybe v (`join` v) old) vs
+                 in if Just new' == old
+                        then go changed known rest
+                        else
+                            -- The data only grows, so only the users of the
+                            -- e-class can get new data.
+                            let more = maybe [] (\e -> [Use u o | (u, o) <- classUsers e]) (IntMap.lookup i (classes g))
+                             in go (IntSet.insert i changed) (IntMap.insert i new' known) (more ++ rest)
+
+-- A task of 'analyseFrom': an e-class from all its e-nodes, or one e-node of an e-class.
+data Task f = Whole !Int | Use !(ENode f) !ClassId
 
 {- | The cheapest term of an e-class, with its cost. The cost of a term
 comes from its symbol and the costs of its children, and must be greater
