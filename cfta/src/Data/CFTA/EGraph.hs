@@ -85,11 +85,12 @@ This module keeps an e-graph as an ECTA of cfta, 'FTA.FTA' with a
 
 * The automaton is the store. Each root e-class is a state, and its e-nodes
   are the transitions of the state. The sort of an e-node is the sort of
-  its state: two e-classes of different sorts do not merge. After 'rebuild', each child of a transition is a root,
-  so the table is the table of a valid automaton, and 'classAutomaton' is
-  that automaton with the rows that the state of an e-class reaches.
-  "Data.CFTA.Sized" in @cfta-generator@ counts, lists, ranks, unranks, and
-  samples its terms.
+  its state: two e-classes of different sorts do not merge. After
+  'rebuild', each child of a transition is a root, so the table is the
+  table of a valid automaton, and 'classAutomaton' is that automaton with
+  the rows that the state of an e-class reaches. "Data.CFTA.Sized" in
+  @cfta-generator@ counts, lists, ranks, unranks, and samples its terms,
+  and 'termsByCost' lists them in the order of a cost.
 * The union-find is the union-find of cfta that the enumeration of an ECTA
   uses for its equalities ("Data.CFTA.Internal.UnionFind"). A merge is a
   union of two states, and their rows join.

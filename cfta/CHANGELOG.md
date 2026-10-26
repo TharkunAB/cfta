@@ -29,6 +29,12 @@ Before release, the package was called `microcfta`.
   Merges use the union-find of the ECTA enumeration, `addConstrained` adds
   an e-node with an equality constraint, and `classAutomaton` gives the rows
   that the state of an e-class reaches.
+- `Data.CFTA.termsByCost` lists the terms of an automaton in the order of a
+  cost, cheapest first, also the infinite language of a cyclic automaton.
+  It is a best-first search over partial terms whose holes count the least
+  cost of their states, as Knuth's generalization of Dijkstra's algorithm.
+  `Data.CFTA.EGraph.termsByCost` lists the terms of an e-class this way,
+  from the rows of the store; its first term has the cost of `extract`.
 - The union-find of the ECTA enumeration points each member of the smaller
   set at the new representative on a union, so `root` is one lookup. The
   representative holds the size of its set and the set as an `IntSet`.
