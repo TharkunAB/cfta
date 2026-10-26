@@ -1,5 +1,37 @@
 # Proof status at 2026-10-18
 
+## Native observations retain checked traces and explicit initial room
+
+Recorded word checks: `da28d95e2`. Initial-room receipts: `1d8cdc3a7`.
+Positive-width boundary: `769fe467b`. The goal stays ACTIVE.
+
+A completed physical Trace already records each instruction's input checks.
+It now derives WordRanges for every actual execution prefix. An existing
+target Step therefore derives the complete target receipt and outer Caller
+Post without a separate range premise. No raw-success-to-trace lift is claimed.
+
+For raw execution, current readiness, inventory, closed available operands
+and explicit initial node/edge/domain room derive the complete target receipt.
+A supplied raw return is matched at its exact value and full checked state.
+Its outer postcondition retains all Context fields and both outer memo tables.
+The producer assumes no future trace, cache, result or range receipt.
+
+A width-2 counterexample has a closed available operand, valid empty physical
+tables and valid operations. It returns Empty despite an unsafe encoded key.
+Words and Inputs fail; no rich checked Trace exists. The witness makes no
+semantic Ready, At, full Good or Caller Context claim. This corrects the
+earlier bare range-free raw-success target. It establishes no Haskell defect.
+
+All five new modules and Audit pass strict checking. Public readback covers
+20 declarations and both complete Step/Trace definitions. Audit checks 77138
+theorem dependencies. Earlier runtime and proof interfaces stay unchanged.
+H6 remains the strongest end-to-end language theorem. Next: use initial-room
+admission for native edge preservation, then derive and retain enough room
+from the original input across callbacks, recursive subtrees and siblings.
+Whole-driver language, terminal fallback, Graph correspondence, extraction
+and arbitrary lazy demand remain open. Haskell stays unchanged. Details:
+`lean/notes-current-pruning-enumeration-observed-words.md`.
+
 ## Concrete callbacks derive the next prefix packet and common work fuel
 
 Receipt and packet: `b19f57ac0`. Prefix transport: `4d352a3e2`.
