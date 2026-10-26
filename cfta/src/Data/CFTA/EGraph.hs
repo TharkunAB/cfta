@@ -542,8 +542,8 @@ union a b g
             | classSort ea /= classSort eb -> Nothing
             | otherwise ->
                 -- The union-find chooses the root, by the sizes of the e-classes.
-                let unionFind' = UnionFind.union (intToUVar ia) (intToUVar ib) (unionFind g)
-                    iBig = uvarToInt (UnionFind.root (intToUVar ia) unionFind')
+                let (bigVar, unionFind') = UnionFind.unionRoots (intToUVar ia) (intToUVar ib) (unionFind g)
+                    iBig = uvarToInt bigVar
                     big = ClassId iBig
                     (iSmall, eBig, eSmall) = if iBig == ia then (ib, ea, eb) else (ia, eb, ea)
                     -- The root comes from the sizes of the sets, so each join

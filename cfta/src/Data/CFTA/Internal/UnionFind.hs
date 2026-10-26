@@ -22,6 +22,7 @@ module Data.CFTA.Internal.UnionFind (
     UnionFind,
     withInitialValues,
     union,
+    unionRoots,
     find,
     root,
 ) where
@@ -90,22 +91,31 @@ withInitialValues uvs = UnionFind $ IntMap.fromList $ map ((,Root 1 []) . uvarTo
 
 -- | Merge the two variable classes, preferring the larger class as root.
 union :: UVar -> UVar -> UnionFind -> UnionFind
-union uv1 uv2 uf@(UnionFind m)
+union uv1 uv2 uf
     | r1 == r2 = uf
-    | otherwise =
-        let (big, bigSize, bigMembers, small, smallSize, smallMembers) =
-                if s1 < s2 then (r2, s2, ms2, r1, s1, ms1) else (r1, s1, ms1, r2, s2, ms2)
-            -- Each member of the smaller set now points at the new representative.
-            pointed = foldl' (\acc v -> IntMap.insert (uvarToInt v) (Parent big) acc) m (small : smallMembers)
-         in UnionFind (IntMap.insert (uvarToInt big) (Root (bigSize + smallSize) (small : smallMembers ++ bigMembers)) pointed)
+    | otherwise = snd (unionRoots r1 r2 uf)
   where
-    (r1, s1, ms1) = rootEntry uv1
-    (r2, s2, ms2) = rootEntry uv2
-    rootEntry uv =
-        let r = root uv uf
-         in case IntMap.lookup (uvarToInt r) m of
-                Just (Root size members) -> (r, size, members)
-                _ -> (r, 1, [])
+    r1 = root uv1 uf
+    r2 = root uv2 uf
+
+{- | Merge the classes of two different representatives, and give the
+representative of the merged class: the representative of the larger class.
+-}
+unionRoots :: UVar -> UVar -> UnionFind -> (UVar, UnionFind)
+unionRoots r1 r2 (UnionFind m) =
+    let (big, bigSize, bigMembers, small, smallSize, smallMembers) =
+            if s1 < s2 then (r2, s2, ms2, r1, s1, ms1) else (r1, s1, ms1, r2, s2, ms2)
+        -- Each member of the smaller set now points at the new representative.
+        pointed = foldl' (\acc v -> IntMap.insert (uvarToInt v) (Parent big) acc) m (small : smallMembers)
+     in ( big
+        , UnionFind (IntMap.insert (uvarToInt big) (Root (bigSize + smallSize) (small : smallMembers ++ bigMembers)) pointed)
+        )
+  where
+    (s1, ms1) = entryOf r1
+    (s2, ms2) = entryOf r2
+    entryOf r = case IntMap.lookup (uvarToInt r) m of
+        Just (Root size members) -> (size, members)
+        _ -> (1, [])
 
 -- | Find a variable's representative. The forest stays the same.
 find :: UVar -> UnionFind -> (UVar, UnionFind)
