@@ -10,17 +10,18 @@ local notation "Caller" => SourceCurrentAllocatedPartialState.State
 local notation "Queries" => SourceEndpointMemo.Memos
 local notation "Cached" => EnumerationExpandableIndex.Cached Symbol Constraint
 local notation "Receipt" => SourcePruningEnumerationSelectedEdge.Result
-variable {width : Nat} {Output Reason : Type}
+universe u v
+variable {width : Nat} {Output : Type u} {Reason : Type v}
 
 /-- A completed continuation supplies the native endpoint for the next alternative. -/
-inductive HookResult (Output Reason : Type) (width : Nat) where
+inductive HookResult (Output : Type u) (Reason : Type v) (width : Nat) where
   /-- Empty output includes normal pruning and a stuck restart. -/
   | complete (outputs : List Output) (caller : Caller width) (queries : Queries)
   /-- Keep the explicit stop reason and any actual reached native endpoint. -/
   | stopped (outputs : List Output) (reason : Reason) (reached : Option (Caller width × Queries))
 
 /-- Keep the exact edge receipt or continuation stop without inventing an endpoint. -/
-inductive Stop (Reason : Type) (width : Nat) where
+inductive Stop (Reason : Type v) (width : Nat) where
   /-- A missing or noncontinuable edge stops before the hook and the suffix. -/
   | edge (current : Option (Receipt width))
   /-- A stopped hook retains its actual completed edge receipt. -/
@@ -28,7 +29,7 @@ inductive Stop (Reason : Type) (width : Nat) where
       (reached : Option (Caller width × Queries))
 
 /-- Retain ordered edge receipts, continuation outputs and the exact stopping context. -/
-inductive Result (Output Reason : Type) (width : Nat) where
+inductive Result (Output : Type u) (Reason : Type v) (width : Nat) where
   /-- Every edge and invoked continuation completed. -/
   | complete (processed : List (Receipt width)) (outputs : List Output)
       (caller : Caller width) (queries : Queries)
