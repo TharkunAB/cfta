@@ -223,6 +223,13 @@ def Valid
                           some outcome))) ∧
                   Post formulas solver next caller lastCaller last ∧ last.query = saved ∧
                   (∀ receipt ∈ processed, SourcePruningEnumerationNativeBranchCompletion.Admitted uv receipt) ∧
+                  (∀ receipt ∈ processed, SourcePruningEnumerationNativeBranchCompletion.Pending receipt) ∧
+                  (∀ receipt ∈ processed,
+                    ∃ (reached : Caller width) (savedQueries : Queries)
+                      (receiptInventory : Inventory) (receiptMemos : Memos),
+                      SourcePruningEnumerationNativeBranches.advance receipt = some (reached, savedQueries) ∧
+                      Post formulas solver receiptInventory caller reached receiptMemos ∧
+                      receiptMemos.query = savedQueries) ∧
                   (∀ receipt ∈ processed, SourcePruningEnumerationNativeBranchCompletion.FragmentHistory before.core receipt) ∧
                   (∀ receipt ∈ processed,
                     SourcePruningEnumerationReceiptCallback.Completes graph templates metadata uv before.core receipt) ∧
@@ -312,10 +319,10 @@ theorem complete
         intro parentEntry storedEdges depth free parent nonterminal selected ranges
         obtain ⟨R, N, P, H, K, entered, processed, lastCaller, saved, last, next, outcome,
           ordinaryRun, _render, _sameFlags, _sameWaiting, lastPost, lastQuery, admitted,
-          _history, _receiptPosts, fragments, callbacks, outcomeShape, supported⟩ :=
+          history, receiptPosts, fragments, callbacks, outcomeShape, supported⟩ :=
           ordinary parentEntry storedEdges depth free parent nonterminal selected (by simpa only [query] using ranges)
         refine ⟨R, N, P, H, K, entered, processed, lastCaller, saved, last, next, outcome,
-          ?_, lastPost, lastQuery, admitted, fragments, callbacks, outcomeShape, supported⟩
+          ?_, lastPost, lastQuery, admitted, history, receiptPosts, fragments, callbacks, outcomeShape, supported⟩
         intro ordinaryReadExtra ordinaryNativeExtra ep eh ek
         rw [run_narrowed holeKey fits admits graph templates checkEmpty edgesOf stop order metadata
           (readFuel + er) (checkFuel + ec) nativeFuel representativeFuel (indexFuel + ei) callbackFuel
