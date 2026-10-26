@@ -1175,11 +1175,13 @@ runWith analysis limits rules goal g0 = go 0 IntMap.empty IntMap.empty IntMap.em
                         , Just ds <- traverse (dataIn h cur) cs ->
                             IntMap.insert j (analysisMake a f ds) cur
                     _ -> cur
-                mergedIn h h' c c' cur = case (analysis, dataIn h cur c, dataIn h cur c') of
-                    (Just a@Analysis{}, Just x, Just y) -> IntMap.insert (root h' c) (analysisMerge a x y) cur
-                    (_, Just x, Nothing) -> IntMap.insert (root h' c) x cur
-                    (_, Nothing, Just y) -> IntMap.insert (root h' c) y cur
-                    _ -> cur
+                mergedIn h h' c c' cur = case analysis of
+                    Nothing -> cur
+                    Just a@Analysis{} -> case (dataIn h cur c, dataIn h cur c') of
+                        (Just x, Just y) -> IntMap.insert (root h' c) (analysisMerge a x y) cur
+                        (Just x, Nothing) -> IntMap.insert (root h' c) x cur
+                        (Nothing, Just y) -> IntMap.insert (root h' c) y cur
+                        _ -> cur
                 root h c = let ClassId j = find h c in j
                 -- The ban of a rule, the rule if it ran, and its matches.
                 search (k, (r, condition))
@@ -1199,20 +1201,19 @@ runWith analysis limits rules goal g0 = go 0 IntMap.empty IntMap.empty IntMap.em
                 -- when the e-nodes reach the limit.
                 apply h _ changed [] = Right (h, changed)
                 apply h _ changed _ | size h > limitNodes limits = Right (h, changed)
-                apply h cur changed ((c, m@(Subst vs _), r, condition) : rest)
+                apply h !cur changed ((c, m@(Subst vs _), r, condition) : rest)
                     | Condition check <- condition
                     , not (check h (dataIn h cur) (\v -> elemIndex v (ruleNames r) >>= (`IntMap.lookup` vs))) =
                         apply h cur changed rest
                     | otherwise = case instantiate m (sortId h c) (ruleRight r) h of
                         Nothing -> apply h cur changed rest
                         Just (c', h') ->
-                            let cur' = madeIn h h' cur
+                            let !cur' = madeIn h h' cur
                              in case union c c' h' of
                                     Nothing -> apply h' cur' changed rest
                                     Just (u, h'') ->
-                                        if u && reached h''
-                                            then Left h''
-                                            else apply h'' (if u then mergedIn h' h'' c c' cur' else cur') (changed || u) rest
+                                        let !cur'' = if u then mergedIn h' h'' c c' cur' else cur'
+                                         in if u && reached h'' then Left h'' else apply h'' cur'' (changed || u) rest
              in case apply g known False (concat [ms | (_, _, ms) <- results]) of
                     Left h ->
                         let (h', _) = settle (i == 0) now known (rebuild h)
