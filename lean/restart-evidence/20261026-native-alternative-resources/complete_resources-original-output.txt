@@ -1,0 +1,13 @@
+    ∃ (r n p h k : Nat) (processed : List (Receipt (bits + 2))) (afterCaller : Caller (bits + 2)) (saved : Queries)
+      (final : Memos) (next : Inventory) (result : Result (bits + 2)),
+      (∀ er en P H ek, p ≤ P → h ≤ H →
+        SourcePruningEnumerationNativeBranches.run checkEmpty (r + er) (n + en) P H (k + ek)
+          uv scs before selectedEdges caller memos.query = result) ∧
+      Post formulas solver next caller afterCaller final ∧ final.query = saved ∧
+      (∀ receipt ∈ processed, Admitted uv receipt) ∧
+      (EnumerationReferences.PendingReferences before.core → EnumerationReferences.IncomingAvoid uv before.core →
+        ∀ receipt ∈ processed, Pending receipt) ∧
+      (result = .complete processed afterCaller saved ∨ result = .stopped processed (some .unhandled)) ∧
+      ((∀ edge ∈ selectedEdges, arityAllows edge.children.length scs = true →
+          SourcePruningEnumerationConstraint.project edge.entry.key.constraint ≠ none) →
+        result = .complete processed afterCaller saved)

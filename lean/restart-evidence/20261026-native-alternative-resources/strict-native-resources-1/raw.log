@@ -1,0 +1,232 @@
+/tmp/mcfta-native-alternative-resources-20261026/strict-native-resources-1/MicroCFTA/SourcePruningEnumerationNativeBranchResources.lean:249:10: error: Tactic `rfl` failed: The left-hand side
+  match tailResult with
+  | SourcePruningEnumerationNativeBranches.Result.complete processed afterCaller saved =>
+    SourcePruningEnumerationNativeBranches.Result.complete (receipt :: processed) afterCaller saved
+  | SourcePruningEnumerationNativeBranches.Result.stopped processed current =>
+    SourcePruningEnumerationNativeBranches.Result.stopped (receipt :: processed) current
+is not definitionally equal to the right-hand side
+  result
+
+case cons.inl.refine_1
+bits : Nat
+inst✝² : DecidableEq Symbol
+inst✝¹ : DecidableEq (EdgeKey Symbol Constraint)
+inst✝ : DecidableEq Node
+formulas : SourceGuards.Formulas FullSyntax.Formula
+solver : SourceGuards.Entailment FullSyntax.Formula
+before : Cached
+checkEmpty : Bool
+uv handle : Nat
+scs : List Suspended
+parentEntry : Cache.Interned InternedBinderProtocol.NodeKey
+storedEdges : List (EdgeValue Symbol Constraint)
+depth : Nat
+free : List InternedBinderProtocol.Reference
+roots : Nat → Nat
+ready : EnumerationDriver.Ready uv before.core
+stored : before.core.values[uv]? = some (UVarValue.unenumerated (some handle) scs)
+paths : Roots before.core.representatives roots
+counts : EnumerationCanonicalWaiting.Correct roots before.core.values before.waiting
+pending : InputsPending before.core scs
+edge : EdgeValue Symbol Constraint
+rest : List (EdgeValue Symbol Constraint)
+ih :
+  ∀ (seed : Seed) (inventory : Inventory) (caller : Caller (bits + 2)) (memos : Memos),
+    Context formulas solver inventory caller memos →
+      lookupNode caller.checked.native.machine.heap handle = some (Value.node parentEntry storedEdges depth free) →
+        PendingRealized caller.checked.native.machine.heap before.core →
+          (∀ (edge : EdgeValue Symbol Constraint), edge ∈ rest → edge ∈ storedEdges) →
+            (∀ (slot : Nat),
+                SourcePruningEnumerationNativeIndex.candidate caller.checked.native.machine.heap
+                    (before.core.values[slot]?.getD UVarValue.eliminated) =
+                  some (before.expandable slot)) →
+              Fits seed.snd caller.checked →
+                Reserved bits seed (cost scs before.core.counter rest) →
+                  Heap (fun guard => guard ∈ seed.fst) caller.checked.native.machine.heap →
+                    ∃ r n p h k processed afterCaller saved final next result,
+                      (∀ (er en P H ek : Nat),
+                          p ≤ P →
+                            h ≤ H →
+                              SourcePruningEnumerationNativeBranches.run checkEmpty (r + er) (n + en) P H (k + ek) uv
+                                  scs before rest caller memos.query =
+                                result) ∧
+                        Post formulas solver next caller afterCaller final ∧
+                          final.query = saved ∧
+                            (∀ (receipt : Receipt (bits + 2)), receipt ∈ processed → Admitted uv receipt) ∧
+                              (EnumerationReferences.PendingReferences before.core →
+                                  EnumerationReferences.IncomingAvoid uv before.core →
+                                    ∀ (receipt : Receipt (bits + 2)), receipt ∈ processed → Pending receipt) ∧
+                                (∀ (receipt : Receipt (bits + 2)),
+                                    receipt ∈ processed → ∃ reached savedQueries receiptInventory receiptMemos, ⋯ ∧ ⋯) ∧
+                                  (∀ (receipt : Receipt (bits + 2)),
+                                      receipt ∈ processed → FragmentHistory before.core receipt) ∧
+                                    (result =
+                                          SourcePruningEnumerationNativeBranches.Result.complete processed afterCaller
+                                            saved ∨
+                                        result =
+                                          SourcePruningEnumerationNativeBranches.Result.stopped processed
+                                            (some SourcePruningEnumerationSelectedEdge.Result.unhandled)) ∧
+                                      ((∀ (edge : EdgeValue Symbol Constraint),
+                                            edge ∈ rest →
+                                              arityAllows edge.children.length scs = true →
+                                                SourcePruningEnumerationConstraint.project edge.entry.key.constraint ≠
+                                                  none) →
+                                          result =
+                                            SourcePruningEnumerationNativeBranches.Result.complete processed afterCaller
+                                              saved) ∧
+                                        Fits (reservationAdvance seed (cost scs before.core.counter rest)).snd
+                                            afterCaller.checked ∧
+                                          Heap
+                                              (fun guard =>
+                                                guard ∈
+                                                  (reservationAdvance seed (cost scs before.core.counter rest)).fst)
+                                              afterCaller.checked.native.machine.heap ∧
+                                            ∀ (index : Nat) (receipt : Receipt (bits + 2)),
+                                              processed[index]? = some receipt → ∃ reached, Exists ⋯
+seed : Seed
+inventory : Inventory
+caller : Caller (bits + 2)
+memos : Memos
+initial : Context formulas solver inventory caller memos
+decoded : lookupNode caller.checked.native.machine.heap handle = some (Value.node parentEntry storedEdges depth free)
+realized : PendingRealized caller.checked.native.machine.heap before.core
+selected : ∀ (edge_1 : EdgeValue Symbol Constraint), edge_1 ∈ edge :: rest → edge_1 ∈ storedEdges
+flags :
+  ∀ (slot : Nat),
+    SourcePruningEnumerationNativeIndex.candidate caller.checked.native.machine.heap
+        (before.core.values[slot]?.getD UVarValue.eliminated) =
+      some (before.expandable slot)
+fits : Fits seed.snd caller.checked
+reserved : Reserved bits seed (cost scs before.core.counter (edge :: rest))
+known : Heap (fun guard => guard ∈ seed.fst) caller.checked.native.machine.heap
+headReserved : Reserved bits seed (edgeCost scs before.core.counter edge)
+r n p h k : Nat
+receipt : Receipt (bits + 2)
+middleCaller : Caller (bits + 2)
+middleQueries : Queries
+middleMemos : Memos
+middleInventory : Inventory
+headRun :
+  ∀ (er en P H ek : Nat),
+    p ≤ P →
+      h ≤ H →
+        SourcePruningEnumerationCapturedEdge.run checkEmpty (r + er) (n + en) P H (k + ek) uv scs edge caller before
+            memos.query =
+          some receipt
+headPost : Post formulas solver middleInventory caller middleCaller middleMemos
+headQueries : middleMemos.query = middleQueries
+admitted : Admitted uv receipt
+headPending :
+  EnumerationReferences.PendingReferences before.core →
+    EnumerationReferences.IncomingAvoid uv before.core → Pending receipt
+headHistory : FragmentHistory before.core receipt
+headFits : Fits (reservationAdvance seed (edgeCost scs before.core.counter edge)).snd middleCaller.checked
+headKnown :
+  Heap (fun guard => guard ∈ (reservationAdvance seed (edgeCost scs before.core.counter edge)).fst)
+    middleCaller.checked.native.machine.heap
+continued : advance receipt = some (middleCaller, middleQueries)
+kept :
+  SourceEqualityRequiredCache.Keeps (SourceCurrentAllocatedNativeEffects.physical caller.checked).heap
+    (SourceCurrentAllocatedNativeEffects.physical middleCaller.checked).heap
+middleRealized : PendingRealized middleCaller.checked.native.machine.heap before.core
+middleFlags :
+  ∀ (slot : Nat),
+    SourcePruningEnumerationNativeIndex.candidate
+        (SourceCurrentAllocatedNativeEffects.physical middleCaller.checked).heap
+        (before.core.values[slot]?.getD UVarValue.eliminated) =
+      some (before.expandable slot)
+tailReserved :
+  Reserved bits (reservationAdvance seed (edgeCost scs before.core.counter edge)) (cost scs before.core.counter rest)
+tr tn tp th tk : Nat
+processed : List (Receipt (bits + 2))
+afterCaller : Caller (bits + 2)
+saved : Queries
+final : Memos
+next : Inventory
+tailResult : Result (bits + 2)
+tailRun :
+  ∀ (er en P H ek : Nat),
+    tp ≤ P →
+      th ≤ H →
+        SourcePruningEnumerationNativeBranches.run checkEmpty (tr + er) (tn + en) P H (tk + ek) uv scs before rest
+            middleCaller middleMemos.query =
+          tailResult
+tailPost : Post formulas solver next middleCaller afterCaller final
+querySame : final.query = saved
+admittedTail : ∀ (receipt : Receipt (bits + 2)), receipt ∈ processed → Admitted uv receipt
+tailPending :
+  EnumerationReferences.PendingReferences before.core →
+    EnumerationReferences.IncomingAvoid uv before.core →
+      ∀ (receipt : Receipt (bits + 2)), receipt ∈ processed → Pending receipt
+tailPosts :
+  ∀ (receipt : Receipt (bits + 2)),
+    receipt ∈ processed →
+      ∃ reached savedQueries receiptInventory receiptMemos,
+        advance receipt = some (reached, savedQueries) ∧
+          Post formulas solver receiptInventory middleCaller reached receiptMemos ∧ receiptMemos.query = savedQueries
+tailHistory : ∀ (receipt : Receipt (bits + 2)), receipt ∈ processed → FragmentHistory before.core receipt
+tailShape :
+  tailResult = SourcePruningEnumerationNativeBranches.Result.complete processed afterCaller saved ∨
+    tailResult =
+      SourcePruningEnumerationNativeBranches.Result.stopped processed
+        (some SourcePruningEnumerationSelectedEdge.Result.unhandled)
+tailSupported :
+  (∀ (edge : EdgeValue Symbol Constraint),
+      edge ∈ rest →
+        arityAllows edge.children.length scs = true →
+          SourcePruningEnumerationConstraint.project edge.entry.key.constraint ≠ none) →
+    tailResult = SourcePruningEnumerationNativeBranches.Result.complete processed afterCaller saved
+tailFits :
+  Fits
+    (reservationAdvance (reservationAdvance seed (edgeCost scs before.core.counter edge))
+        (cost scs before.core.counter rest)).snd
+    afterCaller.checked
+tailKnown :
+  Heap
+    (fun guard =>
+      guard ∈
+        (reservationAdvance (reservationAdvance seed (edgeCost scs before.core.counter edge))
+            (cost scs before.core.counter rest)).fst)
+    afterCaller.checked.native.machine.heap
+tailResources :
+  ∀ (index : Nat) (receipt : Receipt (bits + 2)),
+    processed[index]? = some receipt →
+      ∃ reached savedQueries,
+        advance receipt = some (reached, savedQueries) ∧
+          Fits
+              (reservationAdvance (reservationAdvance seed (edgeCost scs before.core.counter edge))
+                  (cost scs before.core.counter (List.take (index + 1) rest))).snd
+              reached.checked ∧
+            Heap
+              (fun guard =>
+                guard ∈
+                  (reservationAdvance (reservationAdvance seed (edgeCost scs before.core.counter edge))
+                      (cost scs before.core.counter (List.take (index + 1) rest))).fst)
+              reached.checked.native.machine.heap
+result : Result (bits + 2) :=
+  match tailResult with
+  | SourcePruningEnumerationNativeBranches.Result.complete receipts afterCaller saved =>
+    SourcePruningEnumerationNativeBranches.Result.complete (receipt :: receipts) afterCaller saved
+  | SourcePruningEnumerationNativeBranches.Result.stopped receipts current =>
+    SourcePruningEnumerationNativeBranches.Result.stopped (receipt :: receipts) current
+er en P H ek : Nat
+largeP : max p tp ≤ P
+largeH : max h th ≤ H
+first :
+  SourcePruningEnumerationCapturedEdge.run checkEmpty (r + (tr + er)) (n + (tn + en)) P H (k + (tk + ek)) uv scs edge
+      caller before memos.query =
+    some receipt
+last :
+  SourcePruningEnumerationNativeBranches.run checkEmpty (tr + (r + er)) (tn + (n + en)) P H (tk + (k + ek)) uv scs
+      before rest middleCaller middleMemos.query =
+    tailResult
+later :
+  SourcePruningEnumerationNativeBranches.run checkEmpty (r + (tr + er)) (n + (tn + en)) P H (k + (tk + ek)) uv scs
+      before rest middleCaller middleQueries =
+    tailResult
+⊢ (match tailResult with
+    | SourcePruningEnumerationNativeBranches.Result.complete processed afterCaller saved =>
+      SourcePruningEnumerationNativeBranches.Result.complete (receipt :: processed) afterCaller saved
+    | SourcePruningEnumerationNativeBranches.Result.stopped processed current =>
+      SourcePruningEnumerationNativeBranches.Result.stopped (receipt :: processed) current) =
+    result
