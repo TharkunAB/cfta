@@ -259,6 +259,9 @@ refine ::
 refine original childrenOf = \wanted unwanted node -> walk (wanted, unwanted, node)
   where
     walk = memo walk'
+    -- The copies of an edge depend only on the parts, the symbol, and the
+    -- shapes of the children, which many edges share.
+    copiesOf = memo (\(wanted', unwanted', symbol, shapes) -> edgeCopiesWith original childrenOf wanted' unwanted' symbol shapes)
     walk' (wanted, unwanted, node)
         | any (trivial . original) unwanted = EmptyNode
         | null wanted' && null unwanted = node
@@ -270,8 +273,7 @@ refine original childrenOf = \wanted unwanted node -> walk (wanted, unwanted, no
                 Node
                     [ setChildren edge (zipWith (\(wanted'', unwanted') child -> walk (wanted'', unwanted', child)) parts (edgeChildren edge))
                     | edge <- edges
-                    , parts <-
-                        edgeCopiesWith original childrenOf wanted' (nubOrd unwanted) (edgeSymbol edge) (map shapesOf (edgeChildren edge))
+                    , parts <- copiesOf (wanted', nubOrd unwanted, edgeSymbol edge, map shapesOf (edgeChildren edge))
                     ]
             Rec _ -> error "exclude: unexpected free recursive reference"
       where
