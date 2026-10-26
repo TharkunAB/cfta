@@ -1,5 +1,41 @@
 Continue the cfta formalization in /home/tritlo/Code/mcfta.
 
+## Every finite recursive capacity now has original resource bounds
+
+Reservation and induction contract: `bc6c65dad`.
+Callbacks and full scan: `15e2927e3`.
+Actual driver and depth induction: `3fbc4932f`.
+The goal stays ACTIVE. H6 remains the strongest end-to-end language theorem.
+Main `6c080537a` remains imported. All earlier Haskell repairs remain merged.
+
+For ANY chosen finite recursive capacity, the original Packet, numeric
+profile, finite guard carrier, selector laws, mass ceiling and reservation
+now derive the COMPLETE actual bounded driver. One common work bound gives
+the SAME complete or explicit stopped result at every larger work fuel.
+Depth induction discharges the smaller-depth Complete premise. No recursive
+completion, future result, successful callback or reached range is an input
+to the public run_finite_complete_resources theorem.
+
+The original recursive forecast pays narrowing, each edge and its full
+smaller-depth callback before the next sibling. Its final Room supplies
+all nested reservations and computes one mathematical width. Every output
+keeps its own cache, native endpoint, full memos and resource certificate.
+Parked restart, Empty rejection, fallback and nested stops remain explicit.
+
+All fourteen new modules and Audit pass strict checks. Aggregate Audit passes
+3900 jobs and checks 77791 theorem dependencies. Installed readback covers
+55 declarations and 25 full definitions or structures. Only permitted
+axioms occur. All earlier Lean sources except Audit's added imports remain
+unchanged. H6, runtime workers and Haskell remain unchanged.
+
+Whole-enumerator language soundness and completeness remain open. The next
+semantic proof is the actual native incoming-node logical write. Completeness
+also needs selector coverage and an appropriate output contract. Current
+selector laws permit an empty selection; stop can return partial metadata;
+selected terminal and nonordinary fallback can remain unsupported. These
+facts prevent a general language claim from the resource theorem alone.
+Details: `lean/notes-current-pruning-finite-depth.md`. FINDINGS has Haskell status.
+
 ## The complete depth-two driver now has an original resource envelope
 
 Entry, prefix mass and reservation: `303fd9509`.
