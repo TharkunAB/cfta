@@ -639,27 +639,41 @@ matchRule ::
     Rule s f ->
     [(ClassId, Subst)]
 matchRule g region bySymbol stampOf since changed r =
-    [(c, m) | c <- roots, (m, True) <- down (ruleLeft r) c (Subst IntMap.empty IntMap.empty, since == minBound)]
+    foldr
+        ( \c rest ->
+            down
+                (ruleLeft r)
+                c
+                (Subst IntMap.empty IntMap.empty, since == minBound)
+                (\(m, fresh) more -> if fresh then (c, m) : more else more)
+                rest
+        )
+        []
+        roots
   where
     -- A match is new when it passes an e-class that changed since the rule
     -- last ran; the rule applied the other matches then.
     seen (ClassId i) fresh = fresh || stampOf i >= since
-    down (CVar v sorts) c (Subst vs ss, fresh) = case sortsFrom c sorts ss of
-        Nothing -> []
+    -- The matches of a pattern at an e-class go to the continuation, in
+    -- front of the rest, so that no list of the matches of a part is made.
+    down (CVar v sorts) c (Subst vs ss, fresh) k rest = case sortsFrom c sorts ss of
+        Nothing -> rest
         Just ss' -> case IntMap.lookup v vs of
-            Nothing -> [(Subst (IntMap.insert v c vs) ss', seen c fresh)]
-            Just c' | equivalent g c c' -> [(Subst vs ss', seen c fresh)]
-            _ -> []
-    down (CNode f kids sorts) c@(ClassId i) (Subst vs ss, fresh) = case sortsFrom c sorts ss of
-        Nothing -> []
+            Nothing -> k (Subst (IntMap.insert v c vs) ss', seen c fresh) rest
+            Just c' | equivalent g c c' -> k (Subst vs ss', seen c fresh) rest
+            _ -> rest
+    down (CNode f kids sorts) c@(ClassId i) (Subst vs ss, fresh) k rest = case sortsFrom c sorts ss of
+        Nothing -> rest
         Just ss' ->
-            let arity = length kids
-             in [ m
-                | ENode _ f' cs <- IntMap.findWithDefault [] i region
-                , f' == f
-                , length cs == arity
-                , m <- foldM (\acc (child, kid) -> down kid child acc) (Subst vs ss', seen c fresh) (zip cs kids)
-                ]
+            let children (child : cs) (kid : ks) m more = down kid child m (\m' more' -> children cs ks m' more') more
+                children _ _ m more = k m more
+             in foldr
+                    ( \(ENode _ f' cs) more -> if f' == f && sameLength cs kids then children cs kids (Subst vs ss', seen c fresh) more else more
+                    )
+                    rest
+                    (IntMap.findWithDefault [] i region)
+    sameLength (_ : as) (_ : bs) = sameLength as bs
+    sameLength as bs = null as && null bs
     sortsFrom _ [] ss = Just ss
     sortsFrom (ClassId i) sorts ss = do
         e <- IntMap.lookup i (classes g)
