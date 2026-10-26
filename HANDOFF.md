@@ -1,5 +1,43 @@
 # cfta formalization restart handoff
 
+## Actual ordinary scans now run rendered callbacks
+
+Head producer: `61d03caff`. Callback and head equations: `12aff46ab`.
+Receipt certificates: `fde54e32a`. Actual scan: `1f72cfe5c`.
+Ordinary entry: `aedbb6640`. The goal stays ACTIVE.
+H6 remains the strongest end-to-end language theorem.
+
+Initial current Packet, IncomingAvoid and one original mixed reservation now
+derive the actual ordinary entry and ordered scan with concrete rendered
+callbacks. The callback runs before each next sibling. The restart uses zero
+recursive fuel. A new expansion returns the exact exhausted stop. Normal
+pruning, stuck, stop and done retain their actual source result shapes.
+
+Each sibling restores the captured enumeration cache and metadata. Actual
+native effects and full memos pass forward. Rejected edges retain their native
+effects. Each processed receipt and emitted output keeps its own full Post,
+cache packet where applicable, and original edge-prefix Fits/carrier. The
+current receipt whose hook exhausts stays outside processed and receives its
+own certificate at processed.length. Unsupported stops encode no endpoint.
+The final native Post and captured Packet stay separate from output Posts.
+
+The ordinary wrapper retains the ENTIRE scan output. The callback producer
+retains the ENTIRE earlier callback output, including its generic continuation
+equation. No future success, range, callback or subtree is a producer input.
+All changed sources pass strict checks. Aggregate Audit passes 3831 jobs and
+checks 77360 theorem dependencies. Installed readback covers 14 declarations
+and 13 full definitions. H6, runtime workers and Haskell remain unchanged.
+The earlier private head theorem is public; its type and proof are unchanged.
+Main remains imported at `153e1a211`. FINDINGS records no new Haskell fix.
+
+Next derive an original forecast for a full selected expansion. Compose the
+actual narrowing prefix with this ordinary scan. Its row, child and suspended
+input counts must be bounded before the narrowed caller exists. Then reserve
+complete deeper subtrees before later siblings. Whole recursive capacity and
+language, terminal outer fallback, native Graph correspondence, extraction
+and arbitrary lazy demand remain open. Details:
+`lean/notes-current-pruning-enumeration-hook-resources.md`.
+
 ## Original resources now cover actual narrowing and callback prefixes
 
 Narrowing resources: `f77dbe539`. Prefix resources: `4faaa1cd8`.
