@@ -1,0 +1,97 @@
+import MicroCFTA.SourcePruningEnumerationParkedRestart
+import MicroCFTA.SourcePruningEnumerationNarrowAdapter
+import MicroCFTA.SourcePruningEnumerationNativeOrdinary
+import MicroCFTA.SourcePruningEnumerationAction
+import MicroCFTA.SourcePruningRecordTypes
+
+namespace MicroCFTA.SourcePruningEnumerationSelectedStep
+open EnumerationState InternedConstructorTemplates
+open SourcePruningEnumerationNodes
+open SourceCurrentAllocatedQueryMemo (advancePhysical)
+local notation "Symbol" => SourcePruningTemplates.Symbol
+local notation "Constraint" => SourceSymbolicIndex.Constraint FullSyntax.Formula
+local notation "Node" => Value Symbol Constraint
+local notation "Core" => EnumerationState.State Symbol Constraint
+local notation "Cached" => EnumerationExpandableIndex.Cached Symbol Constraint
+local notation "Caller" => SourceCurrentAllocatedPartialState.State
+local notation "Queries" => SourceEndpointMemo.Memos
+local notation "Metadata" => SourcePruningRecordTypes.Metadata
+local notation "ReadRaw" => List (Except EnumerationState.Error (UVarValue Symbol × Core))
+local notation "CheckRaw" => List (Except EnumerationState.Error (Bool × Core))
+local notation "ActionRaw" => List (Except EnumerationState.Error (Unit × Core))
+local notation "Prepared" => MergedSourceComparison.Result Symbol Constraint (Node × Option (EnumerateM Symbol Constraint Unit))
+local notation "OrdinaryRaw" => List (Except EnumerationState.Error ((Nat × Nat × List Suspended × Node) × Core))
+
+/-- Retain the actual observations of a selected source step without asserting recursive completion. -/
+inductive Result (width : Nat) (Typing : Type) where
+  /-- Entry or recursion checking does not supply the supported pending singleton. -/
+  | stopped (read : ReadRaw) (checked : Option CheckRaw)
+  /-- Repeated recursion retains its checked core and optional indexed restart observation. -/
+  | parked (checked : Core) (candidate : Option Cached)
+      (raw : Option (List (Except EnumerationState.Error ((Metadata Typing × Option Next) × Core))))
+  /-- Narrowing retains its actual caller, action and each reached continuation stage. -/
+  | narrowed (checked : Core) (prepared : Prepared) (caller : Caller width) (queries : Queries)
+      (action : Option ActionRaw) (candidate : Option Cached)
+      (right : Option (List (Except EnumerationState.Error ((Bool × Metadata Typing) × Core))))
+      (ordinary : Option (OrdinaryRaw × Option (SourcePruningEnumerationNativeBranches.Result width)))
+
+variable {Typing Key : Type} {width : Nat}
+variable [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Constraint)] [DecidableEq Node]
+
+/-- Observe one read and recursion check, then execute only the actual selected continuation. -/
+noncomputable def run
+    (holeKey : Typing → Nat → Key) (fits : Key → Symbol → Bool) (admits : Key → Node → Bool)
+    (graph : Graph Symbol Constraint) (templates : List (Template.Pattern Symbol))
+    (checkEmpty : Bool) (edgesOf : Node → List (EdgeValue Symbol Constraint))
+    (stop : Option (Metadata Typing → Nat → Bool))
+    (order : Metadata Typing → List Nat → Option Nat) (metadata : Metadata Typing)
+    (readFuel checkFuel nativeFuel representativeFuel indexFuel callbackFuel r n p h k uv : Nat)
+    (caller : Caller width) (before : Cached) (queries : Queries) : Result width Typing :=
+  let read := ExceptT.run (getValue readFuel uv before.core)
+  match read with
+  | [.ok (.unenumerated (some oldHandle) scs, readAfter)] =>
+      let check := ExceptT.run (SourcePruningEnumerationRecursion.checkRepeated
+        caller.checked.native.machine.heap checkFuel uv oldHandle scs readAfter)
+      match check with
+      | [.ok (true, checked)] =>
+          let candidate := SourcePruningEnumerationParkedRestart.adapt
+            caller.checked.native.machine.heap indexFuel uv oldHandle scs before checked
+          .parked checked candidate (candidate.map fun parked =>
+            ExceptT.run (SourcePruningEnumerationRestart.run stop order metadata parked checked))
+      | [.ok (false, checked)] =>
+          match lookupNode caller.checked.native.machine.heap oldHandle with
+          | none => .stopped read (some check)
+          | some oldValue =>
+              let prepared := SourcePruningEnumerationAction.prepare holeKey fits admits metadata nativeFuel
+                representativeFuel uv oldHandle scs oldValue caller.checked.native.machine.heap
+              let reached := SourceCurrentAllocatedPartialState.advance caller
+                (advancePhysical caller.checked ⟨prepared.state, caller.checked.operations⟩) caller.fourth caller.merge
+              match prepared with
+              | .failed _fault _heap => .narrowed checked prepared reached queries none none none none
+              | .done (_value, none) _heap => .narrowed checked prepared reached queries none none none none
+              | .done (value, some action) heap =>
+                  let raw := ExceptT.run (action checked)
+                  match raw with
+                  | [.ok ((), observed)] =>
+                      match encodeNode value with
+                      | none => .narrowed checked prepared reached queries (some raw) none none none
+                      | some newHandle =>
+                          let candidate := SourcePruningEnumerationNarrowAdapter.adapt heap indexFuel
+                            uv oldHandle newHandle scs before observed
+                          match candidate with
+                          | none => .narrowed checked prepared reached queries (some raw) none none none
+                          | some attached =>
+                              let right := ExceptT.run (SourcePruningRecordTypes.recordTypes
+                                graph templates callbackFuel metadata uv (.inr newHandle) attached.core)
+                              match right with
+                              | [.ok ((false, _updated), callbackCore)] =>
+                                  let after := EnumerationExpandableIndex.frame callbackCore attached
+                                  .narrowed checked prepared reached queries (some raw) (some after) (some right)
+                                    (some (SourcePruningEnumerationNativeOrdinary.run
+                                      checkEmpty r n p h k uv edgesOf reached after queries))
+                              | _ => .narrowed checked prepared reached queries (some raw) (some attached) (some right) none
+                  | _ => .narrowed checked prepared reached queries (some raw) none none none
+      | _ => .stopped read (some check)
+  | _ => .stopped read none
+
+end MicroCFTA.SourcePruningEnumerationSelectedStep
