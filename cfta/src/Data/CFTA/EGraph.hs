@@ -189,7 +189,7 @@ import qualified Data.IntMap.Strict as IntMap
 import qualified Data.IntSet as IntSet
 import Data.List (elemIndex, minimumBy, sortOn, (!?))
 import qualified Data.Map.Strict as Map
-import Data.Maybe (fromMaybe, isJust, listToMaybe)
+import Data.Maybe (isJust, listToMaybe)
 import Data.Ord (comparing)
 import Data.String (IsString (..))
 import GHC.Stack (HasCallStack)
@@ -198,6 +198,8 @@ import qualified Data.CFTA as FTA
 import Data.CFTA.Constraint (Constraint, equalitiesHold, equalityConstraint, noConstraint)
 import Data.CFTA.Equality.Constraint (mkEqConstraints)
 import Data.CFTA.Formula (Formula)
+import Data.CFTA.Internal.UnionFind (UnionFind, intToUVar, uvarToInt)
+import qualified Data.CFTA.Internal.UnionFind as UnionFind
 import Data.CFTA.Path (ChildIndex (..), path)
 import Data.CFTA.Refinement.Verdict (Verdict (..))
 import Data.CFTA.Term (Term, pattern Node)
@@ -297,16 +299,16 @@ data EClass f = EClass
     , classSort :: !Int
     , classStamp :: !Int
     -- ^ The 'clock' of the last change: a new e-node or a merge.
-    , classMembers :: ![Int]
-    -- ^ The identities other than the root that are in the e-class.
     }
 
 {- | An e-graph of terms over the symbols @f@, with sorts over the sort
 symbols @s@.
 -}
 data EGraph s f = EGraph
-    { parents :: !(IntMap.IntMap ClassId)
-    -- ^ The parent of each e-class that is not a root.
+    { unionFind :: !UnionFind
+    {- ^ The e-classes of the identities: the union-find of cfta that the
+    enumeration of an ECTA uses for its equalities.
+    -}
     , classes :: !(IntMap.IntMap (EClass f))
     -- ^ The roots.
     , memo :: !(HashMap.HashMap (ENode f) ClassId)
@@ -328,14 +330,11 @@ data EGraph s f = EGraph
 
 -- | The e-graph without terms.
 emptyEGraph :: EGraph s f
-emptyEGraph = EGraph IntMap.empty IntMap.empty HashMap.empty 0 0 HashMap.empty IntMap.empty [] 0
+emptyEGraph = EGraph (UnionFind.withInitialValues []) IntMap.empty HashMap.empty 0 0 HashMap.empty IntMap.empty [] 0
 
-{- | The root of the e-class of an identity. A merge makes the root the
-parent of each identity of the smaller e-class, so the parent of an identity
-is its root.
--}
+-- | The root of the e-class of an identity.
 find :: EGraph s f -> ClassId -> ClassId
-find g c@(ClassId i) = fromMaybe c (IntMap.lookup i (parents g))
+find g (ClassId i) = ClassId (uvarToInt (UnionFind.root (intToUVar i) (unionFind g)))
 
 -- | Whether two identities are in one e-class.
 equivalent :: EGraph s f -> ClassId -> ClassId -> Bool
@@ -389,7 +388,7 @@ addNode n0 g = case HashMap.lookup n (memo g) of
          in ( c
             , g
                 { classes =
-                    foldr (\(ClassId j) -> use j) (IntMap.insert i (EClass (HashSet.singleton n) [] 0 k (clock g) []) (classes g)) cs
+                    foldr (\(ClassId j) -> use j) (IntMap.insert i (EClass (HashSet.singleton n) [] 0 k (clock g)) (classes g)) cs
                 , memo = HashMap.insert n c (memo g)
                 , classCount = classCount g + 1
                 , added = added g + 1
@@ -456,10 +455,11 @@ union a b g
         (Just ea, Just eb)
             | classSort ea /= classSort eb -> Nothing
             | otherwise ->
-                let (big, small, eBig, eSmall) =
-                        if classUserCount ea >= classUserCount eb then (ra, rb, ea, eb) else (rb, ra, eb, ea)
-                    ClassId iBig = big
-                    ClassId iSmall = small
+                -- The union-find chooses the root, by the sizes of the e-classes.
+                let unionFind' = UnionFind.union (intToUVar ia) (intToUVar ib) (unionFind g)
+                    iBig = uvarToInt (UnionFind.root (intToUVar ia) unionFind')
+                    big = ClassId iBig
+                    (iSmall, eBig, eSmall) = if iBig == ia then (ib, ea, eb) else (ia, eb, ea)
                     joined =
                         EClass
                             (HashSet.union (classNodes eSmall) (classNodes eBig))
@@ -467,11 +467,10 @@ union a b g
                             (classUserCount eSmall + classUserCount eBig)
                             (classSort eBig)
                             (clock g)
-                            (iSmall : classMembers eSmall ++ classMembers eBig)
                  in Just
                         ( True
                         , g
-                            { parents = foldl' (\p m -> IntMap.insert m big p) (parents g) (iSmall : classMembers eSmall)
+                            { unionFind = unionFind'
                             , classes = IntMap.insert iBig joined (IntMap.delete iSmall (classes g))
                             , classCount = classCount g - 1
                             , pending = big : pending g
