@@ -7,8 +7,8 @@ of an e-class is the language of a state of a bottom-up deterministic tree
 automaton, and an ECTA adds equality constraints to the transitions. Suciu,
 Wang and Zhang (ICDT 2025) take this as the definition: an e-graph is a
 deterministic and reachable tree automaton, and rebuilding is its congruence
-closure. The e-graph of ADR 9 used this only at its edges. It kept its own
-union-find and its own sets of e-nodes, and built an automaton from them to
+closure. A dedicated e-graph uses this only at its edges: it keeps its own
+union-find and its own sets of e-nodes, and builds an automaton from them to
 count terms or to match by intersection. cfta already has the parts of an
 e-graph that an automaton does not have: the explicit ECTA,
 `FTA state symbol Constraint`, has nominal states and a constraint on each
@@ -44,65 +44,48 @@ in the e-class of its plain form.
 
 ## Consequences
 
-- The e-graphs are the same: the AC sums, hegg's math rules at each
-  iteration, and the output of HugeLists 5-p4 `--egraph extra`. Against the
-  e-graph of ADR 9, in cachegrind instructions: +0.2 % on the AC sum of 9
-  variables, and −10.1 % (t3) and +0.8 % (t4) on hegg's math rules after 6
-  iterations; 5-p4 `--egraph extra` allocates 0.1 % more. At 6-p4
-  `--egraph extra`, the laws and the proofs are the same, and the store
-  allocates 1.3 % less. The first version of the store cost +29 % to
-  +68 %. These changes brought the cost back:
-  - The union-find of cfta points each member of the smaller set at the new
-    representative on a union, so `root` is one lookup. The representative
-    holds the size of its set and the set, an `IntSet` of the ids of the
-    members. `unionRoots` merges two representatives and gives the new one,
-    so a merge looks up each entry once.
+- Against a dedicated store with its own map of parents and its own sets of
+  e-nodes, the e-graphs are the same, and the cost is about the same: in
+  cachegrind instructions, +0.2 % on the AC sum of 9 variables, and −10.1 %
+  (t3) and +0.8 % (t4) on hegg's math rules after 6 iterations. HugeLists
+  `--egraph extra` allocates 0.1 % more at 5-p4 and 1.3 % less at 6-p4, with
+  the same laws and proofs.
+- The cost rests on these parts of the design:
+  - The union-find is the linked-list representation of disjoint sets with
+    the weighted-union heuristic (Cormen et al., Introduction to
+    Algorithms): each member points at its representative, and the
+    representative holds the size of its set and the set as an `IntSet`.
+    So `root` is one lookup, and n unions point O(n log n) members in all.
+    `unionRoots` merges two representatives and gives the new one.
   - Each e-class record holds its row, so the map of the e-classes is the
-    table, and a merge or a new e-node changes one map. A transition has
-    the symbol of its e-node, and the sort is the sort of the state.
-  - Repair compares the children of a user with their roots, and makes a
-    new e-node only for a user whose form changes (−4.4 % on t4).
-  - A merge copies the shorter list of users and the row of the smaller
-    set. Against a copy of the shorter row, found by a walk of the lengths,
-    this is −3.0 % on AC and +1.8 % on t4; the difference is in the
-    garbage collector (`evacuate`).
-  - The matcher reads the rows of the store, so the snapshot of an
-    iteration without a goal is the table itself, and it compares the
-    identities of two roots for a variable that occurs twice.
-  - Rebuild tidies only the rows that can have a child that is not a root
-    or a transition twice: the rows of the merged e-classes and of the users
-    whose form changed, in one merge of the e-classes with those roots.
-  - The matcher matches the children of arities 0 to 2 without a walk of
-    the lengths. This change costs +1.2 % of allocation on 5-p4 and saves
-    2.1 % of instructions on AC and 2.3 % on t4.
-- What stays of the cost is mostly in `union`: the union-find of cfta keeps
-  the size and the members of a set in the entry of its representative, so
-  a union inserts that entry and looks up two entries, which a map of
-  parents alone does not.
+    transition table. A transition has the symbol of its e-node, and the
+    sort is the sort of its state.
+  - Rebuild makes canonical only the rows that can change: the rows of the
+    merged e-classes, and of the e-classes of the users whose children
+    changed.
+  - The matcher reads the rows, so the snapshot of an iteration without a
+    goal is the table itself.
+- Most of what stays of the cost is in `union`: the entry of a
+  representative holds the size and the set, so a union writes that entry,
+  which a map of parents alone does not.
+- The ECTA enumeration shares the union-find: on the standard cells, it is
+  within 0.05 % of instructions, and `enumeration-speed 1` is +0.44 %, with
+  the same checksums.
 - `classAutomaton` gives the rows of the table that the state of an e-class
   reaches as an `FTA`.
 - The e-nodes of the hash-cons and of the users stay compact: an e-node with
   at most two children keeps them unboxed.
 - An e-node whose constraint no term satisfies leaves its e-class without
   terms when it is the only e-node of the e-class.
-- Two other forms of the union-find are not in the history: a separate map
-  of the members of each set (+9 % on AC), and a list of the members in
-  place of the set (against the set: +1.0 % on AC, +1.1 % on t3, −0.9 % on
-  t4, and the same standard cells). A union points each member of the
-  smaller set at the new root, so it walks the members in each form. The
-  set is the notion of the scheme, so it stays.
 
 ## Discussion points
 
 - The other direction, cfta operations on the e-graph engine (determinizing
   or minimizing an FTA with the union-find and the hash-cons), stays open.
-- Speed against hegg is not the aim of this change; the cost above is the
-  start for that work.
-- The union-find is the linked-list representation of disjoint sets with
-  the weighted-union heuristic (Cormen et al., Introduction to Algorithms):
-  each member points at the representative, and a union relabels the
-  smaller set. So a lookup of a representative is one step, and n unions
-  relabel O(n log n) members in all.
+- Speed against hegg is not the aim of this decision.
+- A list of the members in place of the `IntSet` costs about the same
+  (+1.0 % on AC, +1.1 % on t3, −0.9 % on t4); the set is the notion of the
+  scheme. A separate map of the members of each set costs +9 % on AC.
 - egg makes the e-nodes of every e-class canonical and removes duplicates
   in each rebuild. This rebuild touches only the rows that can change.
 - Relational e-matching (Zhang et al., POPL 2022) reads the e-nodes of each

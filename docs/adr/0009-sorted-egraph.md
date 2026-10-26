@@ -38,11 +38,10 @@ default).
 
 ## Why
 
-- An untyped e-graph with guards leaves the encoding of types to each user;
-  Specftacular had its own engine for this reason.
+- An untyped e-graph with guards leaves the encoding of types to each user.
 - With one symbol for each application, as in a curried encoding, the root
-  symbol does not select roots; the rarest symbol does (245 to 226 GB at
-  HugeLists 5-p4 `--egraph extra`).
+  symbol does not select roots; the rarest symbol does (226 GB against
+  245 GB at HugeLists 5-p4 `--egraph extra`).
 - Semi-naive matching skips the matches that the rule already applied: an
   AC sum of 9 variables allocates 24 % less, 10 variables 13 % less. At 5-p4,
   where each query saturates for a few iterations, it costs 0.4 %.
@@ -54,29 +53,26 @@ default).
   0.50 to 0.63 s against 1.72 to 1.74 s for t4 after 6 iterations, where the
   two e-graphs are within 2 %. The analysis there
   propagates a change through the e-nodes that use the e-class, as egg does;
-  recomputing the whole e-class took three times as long.
-- The matcher passes each match to a continuation. The list monad made a
-  list of the matches of each part of a pattern, and the AC sums allocated
+  recomputing the whole e-class takes three times as long.
+- The matcher passes each match to a continuation. A list monad makes a
+  list of the matches of each part of a pattern, and the AC sums allocate
   25 % more with it.
-- A merge points each identity of the smaller e-class at the new root, so
-  `find` takes one lookup. The children of an e-node are evaluated roots,
-  so that a key of the memo has no thunks. These and smaller changes took
-  the AC sum of 9 variables from 3.49 GB to 2.23 GB.
+- The children of an e-node are evaluated roots, so that a key of the memo
+  has no thunks.
 
 ## Consequences
 
-- HugeLists 5-p4 `--egraph extra` prints the 286 laws of the earlier engine
-  and proves the same 6; off allocates 176.8 GB, as before.
+- HugeLists 5-p4 `--egraph extra` prints 286 laws, against 291 off, and the
+  e-graph proves 6.
 - The e-node limit stops a saturation at a point that depends on the order
   of the matches, so a change of that order can change which laws the
   e-graph proves.
 - Each Specftacular query has its own e-graph. One e-graph for all queries,
-  with matching of all e-classes, gave 1 proof for 855 GB at 5-p4: each
-  query matched the history that it reaches and used its e-node limit on
-  matches that earlier queries left. Semi-naive matching is the base for a
-  second try.
+  with matching of all e-classes, gives 1 proof for 855 GB at 5-p4: each
+  query matches the history that it reaches and uses its e-node limit on
+  matches that earlier queries left.
 - A condition sees the data when its match applies, as in egg and hegg. On
-  hegg's math rules the two engines still build different e-graphs after
+  hegg's math rules the two engines build different e-graphs after
   iteration 3 or 4. One cause is the merge of hegg's test analysis, in
   which an unknown constant absorbs a known one: hegg adds a constant leaf
   while the data of an e-class is a constant for a moment, and the fixed
@@ -89,8 +85,6 @@ default).
 - A memo of the matches of each pair of an e-class and a pattern node lets
   parents share matches, but costs more than it saves: AC sum of 8
   variables, 887 MB against 842 MB top-down; 5-p4, 226.0 GB against 218.4 GB.
-- Keeping the e-nodes of each e-class canonical in rebuild, instead of when
-  matching, allocates 1 to 2 % more in all the measurements.
 - hegg matches over its memo, so the e-nodes that its constant folding prunes
   from an e-class still match, and its pruning changes only its counts. This
   module does not prune.
