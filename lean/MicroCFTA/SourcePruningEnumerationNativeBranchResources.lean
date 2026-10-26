@@ -46,7 +46,8 @@ noncomputable def cost (scs : List Suspended) (start : Nat) : List (EdgeValue Sy
 
 variable [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Constraint)] [DecidableEq Node]
 
-private theorem head_complete_resources
+/-- Original resources derive one actual native alternative and its complete receipt. -/
+theorem head_complete_resources
     (seed : Seed)
     (formulas : SourceGuards.Formulas FullSyntax.Formula)
     (solver : SourceGuards.Entailment FullSyntax.Formula)
