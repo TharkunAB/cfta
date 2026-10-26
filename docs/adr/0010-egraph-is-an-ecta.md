@@ -19,7 +19,8 @@ Each root e-class is a state, and its e-nodes are the transitions of the
 state, with the sort in the symbol. Merges use the union-find of the ECTA
 enumeration, `Data.CFTA.Internal.UnionFind`. `rebuild` restores the
 determinism of the automaton, which is the congruence, and leaves a valid
-automaton, so `classAutomaton` is the automaton trimmed from a state. An
+automaton, so `classAutomaton` is the automaton with the rows that a state
+reaches. An
 e-node can have an equality constraint on its transition (`addConstrained`).
 A constraint restricts the terms of an e-class, not its equalities: the
 hash-cons, the users and the matcher see the plain form of an e-node, and an
@@ -50,9 +51,10 @@ e-node with a constraint is in the e-class of its plain form.
   transitions, a row is a lookup in a `Map`, and rebuild makes the rows that
   it touches canonical. The union-find adds about 10 % on AC. These are the
   starting points for the speed of the e-graph.
-- `Data.CFTA` gives `unsafeFromRows`, an automaton without the checks of
-  `mkFTA`, for a structure that keeps its rows valid. The union-find gives
-  `flatten`, which points each variable at its representative.
+- The table is keyed by an `IntMap` of the identities of the roots, and
+  `classAutomaton` gives its reached rows as an `FTA`. The union-find of
+  cfta points each member of the smaller set at the new representative on a
+  union, so `root` is one lookup for the e-graph and the enumeration.
 - The matcher still reads a snapshot of compact e-nodes for each iteration;
   the store is the authority.
 - An e-node whose constraint no term satisfies leaves its e-class without

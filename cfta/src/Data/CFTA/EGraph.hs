@@ -86,7 +86,7 @@ This module keeps an e-graph as an ECTA of cfta, 'FTA.FTA' with a
   are the transitions of the state. The sort of an e-node is in the symbol
   of its transition. After 'rebuild', each child of a transition is a root,
   so the table is the table of a valid automaton, and 'classAutomaton' is
-  that automaton trimmed from the state of an e-class, without a copy.
+  that automaton with the rows that the state of an e-class reaches.
   "Data.CFTA.Sized" in @cfta-generator@ counts, lists, ranks, unranks, and
   samples its terms.
 * The union-find is the union-find of cfta that the enumeration of an ECTA
@@ -325,7 +325,7 @@ nodeOf (FTA.Transition (ESymbol k f) cs _) = ENode k f cs
 
 -- | The e-nodes of a root, from the automaton of the e-graph.
 nodesAt :: EGraph s f -> Int -> [ENode f]
-nodesAt g i = map nodeOf (Map.findWithDefault [] (ClassId i) (transitions g))
+nodesAt g i = map nodeOf (IntMap.findWithDefault [] i (transitions g))
 
 {- | What an e-graph keeps for an e-class besides its transitions: its users,
 the e-nodes that have the e-class as a child, with their e-classes, its
@@ -347,10 +347,11 @@ data EGraph s f = EGraph
     {- ^ The e-classes of the identities: the union-find of cfta that the
     enumeration of an ECTA uses for its equalities.
     -}
-    , transitions :: !(Map.Map ClassId [FTA.Transition ClassId (ESymbol f) Constraint])
-    {- ^ The automaton of the e-graph: for each root, its e-nodes as the
-    transitions of its state. After 'rebuild', each child is a root, so the
-    table is the table of a valid automaton ('FTA.unsafeFromRows').
+    , transitions :: !(IntMap.IntMap [FTA.Transition ClassId (ESymbol f) Constraint])
+    {- ^ The transition table of the automaton of the e-graph, by the
+    identity of each root: its e-nodes as the transitions of its state.
+    After 'rebuild', each child is a root, so the rows are the rows of a
+    valid automaton.
     -}
     , classes :: !(IntMap.IntMap (EClass f))
     -- ^ The roots.
@@ -376,7 +377,18 @@ data EGraph s f = EGraph
 -- | The e-graph without terms.
 emptyEGraph :: EGraph s f
 emptyEGraph =
-    EGraph (UnionFind.withInitialValues []) Map.empty IntMap.empty HashMap.empty 0 0 HashMap.empty IntMap.empty [] 0 False
+    EGraph
+        (UnionFind.withInitialValues [])
+        IntMap.empty
+        IntMap.empty
+        HashMap.empty
+        0
+        0
+        HashMap.empty
+        IntMap.empty
+        []
+        0
+        False
 
 -- | The root of the e-class of an identity.
 find :: EGraph s f -> ClassId -> ClassId
@@ -434,7 +446,7 @@ addNode n0 g = case HashMap.lookup n (memo g) of
          in ( c
             , g
                 { classes = foldr (\(ClassId j) -> use j) (IntMap.insert i (EClass [] 0 k (clock g)) (classes g)) cs
-                , transitions = Map.insert c [transitionOf n] (transitions g)
+                , transitions = IntMap.insert i [transitionOf n] (transitions g)
                 , memo = HashMap.insert n c (memo g)
                 , classCount = classCount g + 1
                 , added = added g + 1
@@ -449,9 +461,10 @@ it or the plain form of it, which accepts more terms.
 withTransition :: (Eq f) => ClassId -> FTA.Transition ClassId (ESymbol f) Constraint -> EGraph s f -> EGraph s f
 withTransition c t g
     | any (\u -> u == t || u == plain) row = g
-    | otherwise = g{transitions = Map.insert c (row ++ [t]) (transitions g)}
+    | otherwise = g{transitions = IntMap.insert i (row ++ [t]) (transitions g)}
   where
-    row = Map.findWithDefault [] c (transitions g)
+    ClassId i = c
+    row = IntMap.findWithDefault [] i (transitions g)
     plain = t{FTA.transitionConstraint = noConstraint}
 
 {- | Add an e-node whose terms satisfy an equality constraint, as a
@@ -470,7 +483,7 @@ addConstrained constraint f cs g0
         Just c -> (find g0 c, withTransition (find g0 c) t g0{constrained = True})
         Nothing ->
             let (c, g1) = addNode n g0
-             in (c, g1{transitions = Map.insert c [t] (transitions g1), constrained = True})
+             in (c, g1{transitions = IntMap.insert (let ClassId i = c in i) [t] (transitions g1), constrained = True})
   where
     n = canon g0 (ENode 0 f cs)
     t = (transitionOf n){FTA.transitionConstraint = constraint}
@@ -549,8 +562,8 @@ union a b g
                         , g
                             { unionFind = unionFind'
                             , transitions =
-                                let rowOf j = Map.findWithDefault [] (ClassId j) (transitions g)
-                                 in Map.insert big (rowOf iSmall ++ rowOf iBig) (Map.delete (ClassId iSmall) (transitions g))
+                                let rowOf j = IntMap.findWithDefault [] j (transitions g)
+                                 in IntMap.insert iBig (rowOf iSmall ++ rowOf iBig) (IntMap.delete iSmall (transitions g))
                             , classes = IntMap.insert iBig joined (IntMap.delete iSmall (classes g))
                             , classCount = classCount g - 1
                             , pending = big : pending g
@@ -576,7 +589,7 @@ rebuild = go IntSet.empty
         [] ->
             let g1 = g0
                 roots = IntSet.fromList [r | i <- IntSet.toList dirty, let ClassId r = find g1 (ClassId i), IntMap.member r (classes g1)]
-                tidy table r = Map.adjust (dedupe . map canonical) (ClassId r) table
+                tidy table r = IntMap.adjust (dedupe . map canonical) r table
                 canonical t = (transitionOf (canon g1 (nodeOf t))){FTA.transitionConstraint = FTA.transitionConstraint t}
              in g1{transitions = IntSet.foldl' tidy (transitions g1) roots}
         todo ->
@@ -686,7 +699,7 @@ extract cost g c0 = do
     costOf = analyse cost min g
     best c = do
         k <- costOf c
-        let row = Map.findWithDefault [] (find g c) (transitions g)
+        let row = let ClassId j = find g c in IntMap.findWithDefault [] j (transitions g)
         Just (k, [t | t <- row, let ENode _ f cs = nodeOf t, Just ks <- [traverse costOf cs], cost f ks == k])
     -- The term of the first cheapest transition whose constraint the term satisfies.
     build c = do
@@ -724,12 +737,17 @@ classAutomatonWith ::
     EGraph s f ->
     ClassId ->
     Either (FTA.FTAError ClassId g) (FTA.FTA ClassId g Constraint)
-classAutomatonWith label g c0 = FTA.mkFTA root [(c, map relabel row) | (c, row) <- Map.toList (FTA.transitionTable reached)]
+classAutomatonWith label g c0 = FTA.mkFTA root (go IntSet.empty [root])
   where
     root = find g c0
-    -- The automaton of the e-graph from the state of the e-class, without the
-    -- states that it does not reach.
-    reached = FTA.trim (FTA.unsafeFromRows root (transitions g))
+    -- The rows of the automaton of the e-graph that the state of the e-class
+    -- reaches, as 'FTA.trim' keeps them.
+    go _ [] = []
+    go seen (c@(ClassId i) : rest)
+        | IntSet.member i seen = go seen rest
+        | otherwise =
+            let row = IntMap.findWithDefault [] i (transitions g)
+             in (c, map relabel row) : go (IntSet.insert i seen) ([d | t <- row, d <- FTA.transitionChildren t] ++ rest)
     relabel (FTA.Transition (ESymbol k f) cs constraint) = FTA.Transition (label (sortTerm g k) f) cs constraint
 
 {- | A pattern: a variable, a symbol with the patterns of its children, or a

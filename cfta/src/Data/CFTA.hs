@@ -22,7 +22,6 @@ module Data.CFTA (
     initialState,
     transitionTable,
     mkFTA,
-    unsafeFromRows,
     replaceRows,
     fromTerms,
     states,
@@ -149,16 +148,6 @@ mkFTA ::
     [(state, [Transition state symbol constraint])] ->
     Either (FTAError state symbol) (FTA state symbol constraint)
 mkFTA initial rows = validateFTA $ FTA initial $ Map.fromListWith (flip (<>)) rows
-
-{- | An automaton from an initial state and its rows, without the checks of
-'mkFTA'. The caller keeps the automaton valid: the initial state and each
-child state have a row, and each symbol has one arity. A structure that
-changes its rows one at a time and is valid again after each batch of
-changes, such as the automaton of an e-graph after a rebuild, gives its
-automata with it.
--}
-unsafeFromRows :: state -> Map state [Transition state symbol constraint] -> FTA state symbol constraint
-unsafeFromRows = FTA
 
 {- | Replace or remove rows in one batch. A 'Just' row adds or replaces its
 state. 'Nothing' removes a state; removing a missing state has no effect.
