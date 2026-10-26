@@ -288,13 +288,30 @@ instance (Hashable f) => Hashable (ENode f) where
         ENode2 k f a b -> salt `hashWithSalt` k `hashWithSalt` f `hashWithSalt` a `hashWithSalt` b
         ENodeN k f cs -> salt `hashWithSalt` k `hashWithSalt` f `hashWithSalt` cs
 
-{- | An e-class. Its e-nodes can have children that are not roots; 'canon'
-replaces them. Its users are the e-nodes that have the e-class as a child,
-with their e-classes.
+{- | The symbol of a transition of the automaton of an e-graph: the identity
+of the sort of the e-node, and its symbol.
+-}
+data ESymbol f = ESymbol !Int !f
+    deriving (Eq, Ord, Show)
+
+-- | An e-node as a transition of the automaton of an e-graph.
+transitionOf :: ENode f -> FTA.Transition ClassId (ESymbol f) Constraint
+transitionOf (ENode k f cs) = FTA.Transition (ESymbol k f) cs noConstraint
+
+-- | A transition of the automaton of an e-graph as an e-node.
+nodeOf :: FTA.Transition ClassId (ESymbol f) Constraint -> ENode f
+nodeOf (FTA.Transition (ESymbol k f) cs _) = ENode k f cs
+
+-- | The e-nodes of a root, from the automaton of the e-graph.
+nodesAt :: EGraph s f -> Int -> [ENode f]
+nodesAt g i = map nodeOf (Map.findWithDefault [] (ClassId i) (transitions g))
+
+{- | What an e-graph keeps for an e-class besides its transitions: its users,
+the e-nodes that have the e-class as a child, with their e-classes, its
+sort, and its stamp.
 -}
 data EClass f = EClass
-    { classNodes :: !(HashSet.HashSet (ENode f))
-    , classUsers :: ![(ENode f, ClassId)]
+    { classUsers :: ![(ENode f, ClassId)]
     , classUserCount :: !Int
     , classSort :: !Int
     , classStamp :: !Int
@@ -308,6 +325,11 @@ data EGraph s f = EGraph
     { unionFind :: !UnionFind
     {- ^ The e-classes of the identities: the union-find of cfta that the
     enumeration of an ECTA uses for its equalities.
+    -}
+    , transitions :: !(Map.Map ClassId [FTA.Transition ClassId (ESymbol f) Constraint])
+    {- ^ The automaton of the e-graph: for each root, its e-nodes as the
+    transitions of its state. After 'rebuild', each child is a root, so the
+    table is the table of a valid automaton ('FTA.unsafeFromRows').
     -}
     , classes :: !(IntMap.IntMap (EClass f))
     -- ^ The roots.
@@ -330,7 +352,7 @@ data EGraph s f = EGraph
 
 -- | The e-graph without terms.
 emptyEGraph :: EGraph s f
-emptyEGraph = EGraph (UnionFind.withInitialValues []) IntMap.empty HashMap.empty 0 0 HashMap.empty IntMap.empty [] 0
+emptyEGraph = EGraph (UnionFind.withInitialValues []) Map.empty IntMap.empty HashMap.empty 0 0 HashMap.empty IntMap.empty [] 0
 
 -- | The root of the e-class of an identity.
 find :: EGraph s f -> ClassId -> ClassId
@@ -387,8 +409,8 @@ addNode n0 g = case HashMap.lookup n (memo g) of
             use = IntMap.adjust (\e -> e{classUsers = (n, c) : classUsers e, classUserCount = classUserCount e + 1})
          in ( c
             , g
-                { classes =
-                    foldr (\(ClassId j) -> use j) (IntMap.insert i (EClass (HashSet.singleton n) [] 0 k (clock g)) (classes g)) cs
+                { classes = foldr (\(ClassId j) -> use j) (IntMap.insert i (EClass [] 0 k (clock g)) (classes g)) cs
+                , transitions = Map.insert c [transitionOf n] (transitions g)
                 , memo = HashMap.insert n c (memo g)
                 , classCount = classCount g + 1
                 , added = added g + 1
@@ -448,7 +470,7 @@ merge a b g = case union a b g of
 {- | Merge two e-classes. The congruence waits for 'rebuild'. Nothing when
 their sorts differ; True when they were two e-classes.
 -}
-union :: (Hashable f) => ClassId -> ClassId -> EGraph s f -> Maybe (Bool, EGraph s f)
+union :: ClassId -> ClassId -> EGraph s f -> Maybe (Bool, EGraph s f)
 union a b g
     | ra == rb = Just (False, g)
     | otherwise = case (IntMap.lookup ia (classes g), IntMap.lookup ib (classes g)) of
@@ -462,7 +484,6 @@ union a b g
                     (iSmall, eBig, eSmall) = if iBig == ia then (ib, ea, eb) else (ia, eb, ea)
                     joined =
                         EClass
-                            (HashSet.union (classNodes eSmall) (classNodes eBig))
                             (classUsers eSmall ++ classUsers eBig)
                             (classUserCount eSmall + classUserCount eBig)
                             (classSort eBig)
@@ -471,6 +492,9 @@ union a b g
                         ( True
                         , g
                             { unionFind = unionFind'
+                            , transitions =
+                                let rowOf j = Map.findWithDefault [] (ClassId j) (transitions g)
+                                 in Map.insert big (rowOf iSmall ++ rowOf iBig) (Map.delete (ClassId iSmall) (transitions g))
                             , classes = IntMap.insert iBig joined (IntMap.delete iSmall (classes g))
                             , classCount = classCount g - 1
                             , pending = big : pending g
@@ -486,12 +510,32 @@ each changed e-class canonical, and merge the e-classes of users that
 become the same e-node.
 -}
 rebuild :: (Hashable f) => EGraph s f -> EGraph s f
-rebuild g0 = case pending g0 of
-    -- Each identity points at its root, so that 'find' takes one step.
-    [] -> g0{unionFind = UnionFind.flatten (unionFind g0)}
-    todo ->
-        rebuild (foldl' repair g0{pending = []} (IntSet.toList (IntSet.fromList [i | c <- todo, let ClassId i = find g0 c])))
+rebuild = go IntSet.empty
   where
+    -- dirty: the e-classes whose transitions can have a child that is not a
+    -- root: the merged e-classes and the e-classes of their users.
+    go dirty g0 = case pending g0 of
+        -- Each identity points at its root, so that 'find' takes one step,
+        -- and each transition that rebuild touched has roots as children
+        -- and occurs once in its row, so that the table is a valid automaton.
+        [] ->
+            let g1 = g0{unionFind = UnionFind.flatten (unionFind g0)}
+                roots = IntSet.fromList [r | i <- IntSet.toList dirty, let ClassId r = find g1 (ClassId i), IntMap.member r (classes g1)]
+                tidy table r = Map.adjust (map transitionOf . dedupe . map (canon g1 . nodeOf)) (ClassId r) table
+             in g1{transitions = IntSet.foldl' tidy (transitions g1) roots}
+        todo ->
+            let merged = IntSet.fromList [i | c <- todo, let ClassId i = find g0 c]
+                owners =
+                    IntSet.fromList
+                        [j | i <- IntSet.toList merged, Just e <- [IntMap.lookup i (classes g0)], (_, ClassId j) <- classUsers e]
+             in go (IntSet.unions [dirty, merged, owners]) (foldl' repair g0{pending = []} (IntSet.toList merged))
+    -- The e-nodes once each, in their first order.
+    dedupe =
+        snd
+            . foldr
+                (\n (seen, kept) -> if HashSet.member n seen then (seen, kept) else (HashSet.insert n seen, n : kept))
+                (HashSet.empty, [])
+            . reverse
     repair g i = case IntMap.lookup i' (classes g) of
         Nothing -> g
         Just e ->
@@ -553,7 +597,9 @@ analyseFrom make combine g known0 todo = go IntSet.empty known0 (map Whole (IntS
     roots = [r | i <- todo, let ClassId r = find g (ClassId i)]
     go changed known [] = (known, changed)
     go changed known (task : rest) = case task of
-        Whole i -> maybe (go changed known rest) (step i . HashSet.toList . classNodes) (IntMap.lookup i (classes g))
+        Whole i
+            | IntMap.member i (classes g) -> step i (nodesAt g i)
+            | otherwise -> go changed known rest
         Use u owner -> let ClassId i = find g owner in step i [u]
       where
         dataOf c = let ClassId j = find g c in IntMap.lookup j known
@@ -586,9 +632,8 @@ extract cost g c0 = do
     costOf = analyse cost min g
     best c = do
         k <- costOf c
-        e <- let ClassId i = find g c in IntMap.lookup i (classes g)
-        node <-
-            listToMaybe [n | n@(ENode _ f cs) <- HashSet.toList (classNodes e), Just ks <- [traverse costOf cs], cost f ks == k]
+        let ClassId j = find g c
+        node <- listToMaybe [n | n@(ENode _ f cs) <- nodesAt g j, Just ks <- [traverse costOf cs], cost f ks == k]
         Just (k, node)
     build c = do
         (_, ENode _ f cs) <- best c
@@ -603,7 +648,7 @@ the e-graph. The memo can keep an earlier form of an e-node whose children
 merged twice, so its size is not the count.
 -}
 eNodeCount :: (Hashable f) => EGraph s f -> Int
-eNodeCount g = sum [HashSet.size (HashSet.map (canon g) (classNodes e)) | e <- IntMap.elems (classes g)]
+eNodeCount g = sum [HashSet.size (HashSet.fromList (map (canon g) (nodesAt g i))) | i <- IntMap.keys (classes g)]
 
 {- | The terms of an e-class, as an automaton whose states are e-classes.
 The sort of a term is the sort of its state. An error is a symbol with two
@@ -619,16 +664,13 @@ classAutomatonWith ::
     EGraph s f ->
     ClassId ->
     Either (FTA.FTAError ClassId g) (FTA.FTA ClassId g Constraint)
-classAutomatonWith label g c0 = FTA.mkFTA root (go IntSet.empty [root])
+classAutomatonWith label g c0 = FTA.mkFTA root [(c, map relabel row) | (c, row) <- Map.toList (FTA.transitionTable reached)]
   where
     root = find g c0
-    go _ [] = []
-    go seen (c@(ClassId i) : rest)
-        | IntSet.member i seen = go seen rest
-        | otherwise =
-            let nodes = maybe [] (map (canon g) . HashSet.toList . classNodes) (IntMap.lookup i (classes g))
-                row = [FTA.Transition (label (sortTerm g k) f) cs noConstraint | ENode k f cs <- nodes]
-             in (c, row) : go (IntSet.insert i seen) (foldr childrenOnto rest nodes)
+    -- The automaton of the e-graph from the state of the e-class, without the
+    -- states that it does not reach.
+    reached = FTA.trim (FTA.unsafeFromRows root (transitions g))
+    relabel (FTA.Transition (ESymbol k f) cs constraint) = FTA.Transition (label (sortTerm g k) f) cs constraint
 
 {- | A pattern: a variable, a symbol with the patterns of its children, or a
 pattern whose e-class has a sort. A variable that occurs twice matches one
@@ -782,7 +824,7 @@ reach g = go IntMap.empty
         ns = canonicalNodes g i
 
 canonicalNodes :: (Hashable f) => EGraph s f -> Int -> [ENode f]
-canonicalNodes g i = maybe [] (HashSet.toList . HashSet.map (canon g) . classNodes) (IntMap.lookup i (classes g))
+canonicalNodes g i = HashSet.toList (HashSet.fromList (map (canon g) (nodesAt g i)))
 
 {- | The matches of the left side of a rule in a region: the e-classes and
 their canonical e-nodes, closed under children. The match goes down from
@@ -1169,10 +1211,9 @@ runWith analysis limits rules goal g0 = go 0 IntMap.empty IntMap.empty IntMap.em
                 madeIn h0 h cur = case analysis of
                     Just a@Analysis{} -> foldl' (makeOne a h) cur [added h0 .. added h - 1]
                     Nothing -> cur
-                makeOne a h cur j = case IntMap.lookup j (classes h) of
-                    Just e
-                        | [ENode _ f cs] <- HashSet.toList (classNodes e)
-                        , Just ds <- traverse (dataIn h cur) cs ->
+                makeOne a h cur j = case nodesAt h j of
+                    [ENode _ f cs]
+                        | Just ds <- traverse (dataIn h cur) cs ->
                             IntMap.insert j (analysisMake a f ds) cur
                     _ -> cur
                 mergedIn h h' c c' cur = case analysis of
