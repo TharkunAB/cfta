@@ -317,14 +317,23 @@ nodeOf (FTA.Transition (ESymbol k f) cs _) = ENode k f cs
 
 -- | The e-nodes of a root, from the automaton of the e-graph.
 nodesAt :: EGraph s f -> Int -> [ENode f]
-nodesAt g i = map nodeOf (IntMap.findWithDefault [] i (transitions g))
+nodesAt g i = map nodeOf (rowAt g i)
 
-{- | What an e-graph keeps for an e-class besides its transitions: its users,
-the e-nodes that have the e-class as a child, with their e-classes, its
-sort, and its stamp.
+-- | The transitions of a root, or none for an identity that is not a root.
+rowAt :: EGraph s f -> Int -> [FTA.Transition ClassId (ESymbol f) Constraint]
+rowAt g i = maybe [] classRow (IntMap.lookup i (classes g))
+
+{- | What an e-graph keeps for an e-class: its transitions, its users, the
+e-nodes that have the e-class as a child, with their e-classes, its sort,
+and its stamp.
 -}
 data EClass f = EClass
-    { classUsers :: ![(ENode f, ClassId)]
+    { classRow :: ![FTA.Transition ClassId (ESymbol f) Constraint]
+    {- ^ The e-nodes of the e-class as the transitions of its state, in
+    the automaton of the e-graph. After 'rebuild', each child is a root, so
+    the rows are the rows of a valid automaton.
+    -}
+    , classUsers :: ![(ENode f, ClassId)]
     , classUserCount :: !Int
     , classSort :: !Int
     , classStamp :: !Int
@@ -339,14 +348,10 @@ data EGraph s f = EGraph
     {- ^ The e-classes of the identities: the union-find of cfta that the
     enumeration of an ECTA uses for its equalities.
     -}
-    , transitions :: !(IntMap.IntMap [FTA.Transition ClassId (ESymbol f) Constraint])
-    {- ^ The transition table of the automaton of the e-graph, by the
-    identity of each root: its e-nodes as the transitions of its state.
-    After 'rebuild', each child is a root, so the rows are the rows of a
-    valid automaton.
-    -}
     , classes :: !(IntMap.IntMap (EClass f))
-    -- ^ The roots.
+    {- ^ The roots. With the rows of the e-classes, it is the transition
+    table of the automaton of the e-graph.
+    -}
     , memo :: !(HashMap.HashMap (ENode f) ClassId)
     {- ^ The e-class of each e-node. After 'rebuild', it has each canonical
     e-node, and it can keep an earlier form of an e-node, which no canonical
@@ -371,7 +376,6 @@ emptyEGraph :: EGraph s f
 emptyEGraph =
     EGraph
         (UnionFind.withInitialValues [])
-        IntMap.empty
         IntMap.empty
         HashMap.empty
         0
@@ -437,8 +441,7 @@ addNode n0 g = case HashMap.lookup n (memo g) of
             use = IntMap.adjust (\e -> e{classUsers = (n, c) : classUsers e, classUserCount = classUserCount e + 1})
          in ( c
             , g
-                { classes = foldr (\(ClassId j) -> use j) (IntMap.insert i (EClass [] 0 k (clock g)) (classes g)) cs
-                , transitions = IntMap.insert i [transitionOf n] (transitions g)
+                { classes = foldr (\(ClassId j) -> use j) (IntMap.insert i (EClass [transitionOf n] [] 0 k (clock g)) (classes g)) cs
                 , memo = HashMap.insert n c (memo g)
                 , classCount = classCount g + 1
                 , added = added g + 1
@@ -453,10 +456,10 @@ it or the plain form of it, which accepts more terms.
 withTransition :: (Eq f) => ClassId -> FTA.Transition ClassId (ESymbol f) Constraint -> EGraph s f -> EGraph s f
 withTransition c t g
     | any (\u -> u == t || u == plain) row = g
-    | otherwise = g{transitions = IntMap.insert i (row ++ [t]) (transitions g)}
+    | otherwise = g{classes = IntMap.adjust (\e -> e{classRow = row ++ [t]}) i (classes g)}
   where
     ClassId i = c
-    row = IntMap.findWithDefault [] i (transitions g)
+    row = rowAt g i
     plain = t{FTA.transitionConstraint = noConstraint}
 
 {- | Add an e-node whose terms satisfy an equality constraint, as a
@@ -475,7 +478,7 @@ addConstrained constraint f cs g0
         Just c -> (find g0 c, withTransition (find g0 c) t g0{constrained = True})
         Nothing ->
             let (c, g1) = addNode n g0
-             in (c, g1{transitions = IntMap.insert (let ClassId i = c in i) [t] (transitions g1), constrained = True})
+             in (c, g1{classes = IntMap.adjust (\e -> e{classRow = [t]}) (let ClassId i = c in i) (classes g1), constrained = True})
   where
     n = canon g0 (ENode 0 f cs)
     t = (transitionOf n){FTA.transitionConstraint = constraint}
@@ -549,8 +552,10 @@ union a b g
                         if classUserCount eSmall <= classUserCount eBig
                             then classUsers eSmall ++ classUsers eBig
                             else classUsers eBig ++ classUsers eSmall
+                    (rowSmall, rowBig) = (classRow eSmall, classRow eBig)
                     joined =
                         EClass
+                            (if notLonger rowSmall rowBig then rowSmall ++ rowBig else rowBig ++ rowSmall)
                             users
                             (classUserCount eSmall + classUserCount eBig)
                             (classSort eBig)
@@ -559,11 +564,6 @@ union a b g
                         ( True
                         , g
                             { unionFind = unionFind'
-                            , transitions =
-                                let rowOf j = IntMap.findWithDefault [] j (transitions g)
-                                    (rowSmall, rowBig) = (rowOf iSmall, rowOf iBig)
-                                    row = if notLonger rowSmall rowBig then rowSmall ++ rowBig else rowBig ++ rowSmall
-                                 in IntMap.insert iBig row (IntMap.delete iSmall (transitions g))
                             , classes = IntMap.insert iBig joined (IntMap.delete iSmall (classes g))
                             , classCount = classCount g - 1
                             , pending = big : pending g
@@ -594,8 +594,8 @@ rebuild = go IntSet.empty IntSet.empty
         [] ->
             let roots = IntSet.fromList [r | i <- IntSet.toList dirty, let ClassId r = find g0 (ClassId i), IntMap.member r (classes g0)]
                 joinedRoots = IntSet.map (\i -> let ClassId r = find g0 (ClassId i) in r) joined
-                tidy table r = IntMap.adjust (tidyRow g0 (IntSet.member r joinedRoots)) r table
-             in g0{transitions = IntSet.foldl' tidy (transitions g0) roots}
+                tidy table r = IntMap.adjust (\e -> e{classRow = tidyRow g0 (IntSet.member r joinedRoots) (classRow e)}) r table
+             in g0{classes = IntSet.foldl' tidy (classes g0) roots}
         todo ->
             let merged = IntSet.fromList [i | c <- todo, let ClassId i = find g0 c]
                 (g', owners) = foldl' (\(h, o) i -> repair h o i) (g0{pending = []}, IntSet.empty) (IntSet.toList merged)
@@ -686,7 +686,7 @@ analyseFrom make combine g known0 todo = go IntSet.empty known0 (map Whole (IntS
     go changed known (task : rest) = case task of
         Whole i
             | IntMap.member i (classes g) ->
-                step i [(f, cs) | FTA.Transition (ESymbol _ f) cs _ <- IntMap.findWithDefault [] i (transitions g)]
+                step i [(f, cs) | FTA.Transition (ESymbol _ f) cs _ <- rowAt g i]
             | otherwise -> go changed known rest
         Use (ENode _ f cs) owner -> let ClassId i = find g owner in step i [(f, cs)]
       where
@@ -723,7 +723,7 @@ extract cost g c0 = do
     costOf = analyse cost min g
     best c = do
         k <- costOf c
-        let row = let ClassId j = find g c in IntMap.findWithDefault [] j (transitions g)
+        let row = let ClassId j = find g c in rowAt g j
         Just (k, [t | t <- row, let ENode _ f cs = nodeOf t, Just ks <- [traverse costOf cs], cost f ks == k])
     -- The term of the first cheapest transition whose constraint the term satisfies.
     build c = do
@@ -770,7 +770,7 @@ classAutomatonWith label g c0 = FTA.mkFTA root (go IntSet.empty [root])
     go seen (c@(ClassId i) : rest)
         | IntSet.member i seen = go seen rest
         | otherwise =
-            let row = IntMap.findWithDefault [] i (transitions g)
+            let row = rowAt g i
              in (c, map relabel row) : go (IntSet.insert i seen) ([d | t <- row, d <- FTA.transitionChildren t] ++ rest)
     relabel (FTA.Transition (ESymbol k f) cs constraint) = FTA.Transition (label (sortTerm g k) f) cs constraint
 
@@ -913,17 +913,18 @@ matchSort g (CSNode s ps) k b = case IntMap.lookup k (sortNodes g) of
     children [] [] acc = Just acc
     children _ _ _ = Nothing
 
--- | The rows of the e-classes that some e-classes reach through their children.
-reach :: EGraph s f -> [ClassId] -> IntMap.IntMap [FTA.Transition ClassId (ESymbol f) Constraint]
+-- | The e-classes that some e-classes reach through their children.
+reach :: EGraph s f -> [ClassId] -> IntMap.IntMap (EClass f)
 reach g = go IntMap.empty
   where
     go seen [] = seen
     go seen (c0 : rest)
         | IntMap.member i seen = go seen rest
-        | otherwise = go (IntMap.insert i row seen) (foldr (\t more -> FTA.transitionChildren t ++ more) rest row)
+        | otherwise = case IntMap.lookup i (classes g) of
+            Nothing -> go seen rest
+            Just e -> go (IntMap.insert i e seen) (foldr (\t more -> FTA.transitionChildren t ++ more) rest (classRow e))
       where
         ClassId i = find g c0
-        row = IntMap.findWithDefault [] i (transitions g)
 
 {- | The e-nodes of a root. After each operation that this module exports,
 each row has roots as children and each e-node once, so the row is the
@@ -947,7 +948,7 @@ head.
 matchRule ::
     (Eq s, Hashable f) =>
     EGraph s f ->
-    IntMap.IntMap [FTA.Transition ClassId (ESymbol f) Constraint] ->
+    IntMap.IntMap (EClass f) ->
     HashMap.HashMap f (Int, [ClassId]) ->
     (Int -> Int) ->
     Int ->
@@ -998,7 +999,7 @@ matchRule g region bySymbol stampOf since changed r =
                                         _ -> more
                     )
                     rest
-                    (IntMap.findWithDefault [] i region)
+                    (maybe [] classRow (IntMap.lookup i region))
     sameLength (_ : as) (_ : bs) = sameLength as bs
     sameLength as bs = null as && null bs
     sortsFrom _ [] ss = Just ss
@@ -1033,14 +1034,14 @@ matchRule g region bySymbol stampOf since changed r =
 
 -- | The number of e-classes with each symbol in a region, and the e-classes.
 symbolIndex ::
-    (Hashable f) => IntMap.IntMap [FTA.Transition ClassId (ESymbol f) Constraint] -> HashMap.HashMap f (Int, [ClassId])
+    (Hashable f) => IntMap.IntMap (EClass f) -> HashMap.HashMap f (Int, [ClassId])
 symbolIndex region =
     HashMap.map (\cs -> (length cs, cs)) $
         HashMap.fromListWith
             (++)
             [ (f, [ClassId i])
-            | (i, ns) <- IntMap.toList region
-            , f <- HashSet.toList (HashSet.fromList [f' | FTA.Transition (ESymbol _ f') _ _ <- ns])
+            | (i, e) <- IntMap.toList region
+            , f <- HashSet.toList (HashSet.fromList [f' | FTA.Transition (ESymbol _ f') _ _ <- classRow e])
             ]
 
 {- | The matches of a pattern: the e-class of each instance, and the e-class
@@ -1050,7 +1051,7 @@ ematch :: (Eq s, Hashable f) => EGraph s f -> Pattern s f -> [(ClassId, Map.Map 
 ematch g p = case rule p p of
     Left _ -> []
     Right r ->
-        let region = transitions g
+        let region = classes g
          in [ (c, Map.fromList [(v, vs IntMap.! i) | (i, v) <- zip [0 ..] (ruleNames r)])
             | (c, Subst vs _) <- matchRule g region (symbolIndex region) (const 0) minBound Nothing r
             ]
@@ -1301,7 +1302,7 @@ runWith analysis limits rules goal g0 = go 0 IntMap.empty IntMap.empty IntMap.em
         | size g > limitNodes limits = (g, Report i (size g) NodeLimit)
         | otherwise =
             let region = case goal of
-                    Nothing -> transitions g
+                    Nothing -> classes g
                     Just (a, b) -> reach g [a, b]
                 now = clock g
                 entered' = case goal of
@@ -1311,7 +1312,7 @@ runWith analysis limits rules goal g0 = go 0 IntMap.empty IntMap.empty IntMap.em
                 -- The e-classes that changed since a clock, once for each clock.
                 changedSets = Map.fromList [(t, IntSet.fromList [j | j <- IntMap.keys region, stampOf j >= t]) | t <- nubOrd (IntMap.elems ran)]
                 changedSince t = Map.findWithDefault IntSet.empty t changedSets
-                present = HashSet.fromList [f | ns <- IntMap.elems region, FTA.Transition (ESymbol _ f) _ _ <- ns]
+                present = HashSet.fromList [f | e <- IntMap.elems region, FTA.Transition (ESymbol _ f) _ _ <- classRow e]
                 bySymbol = symbolIndex region
                 dataIn h cur c = let ClassId j = find h c in IntMap.lookup j cur
                 -- As egg does, the data of an e-node that an instance adds
