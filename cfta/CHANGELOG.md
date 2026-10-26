@@ -24,6 +24,13 @@ Before release, the package was called `microcfta`.
   and `lookupTerm` finds the e-class of a term without adding it.
   `saturateWith` takes a `Saturation`: the limits, an analysis, and two
   e-classes to make equal, in any combination.
+  The store of the e-graph is the transition table of an ECTA: each root
+  e-class is a state and its e-nodes are the transitions of the state.
+  Merges use the union-find of the ECTA enumeration, `addConstrained` adds
+  an e-node with an equality constraint, and `classAutomaton` gives the rows
+  that the state of an e-class reaches.
+- The union-find of the ECTA enumeration points each member of the smaller
+  set at the new representative on a union, so `root` is one lookup.
 - Template exclusion computes the copies of an edge once for each wanted
   and unwanted parts, symbol, and child shapes. On Specftacular's HugeLists
   6-p4 this cut 3.8% of allocation and time, with the same laws.
