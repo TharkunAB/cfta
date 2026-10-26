@@ -406,6 +406,22 @@ canon g = \case
     roots [] = []
     roots (c : rest) = let !r = find g c; !rs = roots rest in r : rs
 
+{- | The canonical form of an e-node whose form changes, or Nothing when
+each child is a root. It compares the children only, and makes no e-node
+for a canonical one.
+-}
+recanon :: EGraph s f -> ENode f -> Maybe (ENode f)
+recanon g = \case
+    ENode0 _ _ -> Nothing
+    ENode1 k f a -> let !a' = root a in if a' == a then Nothing else Just (ENode1 k f a')
+    ENode2 k f a b ->
+        let !a' = root a
+            !b' = root b
+         in if a' == a && b' == b then Nothing else Just (ENode2 k f a' b')
+    n@(ENodeN _ _ cs) -> if all (\c -> find g c == c) cs then Nothing else Just (canon g n)
+  where
+    root i = let ClassId r = find g (ClassId i) in r
+
 lookupClass :: EGraph s f -> ClassId -> Maybe (EClass f)
 lookupClass g c = let ClassId i = find g c in IntMap.lookup i (classes g)
 
@@ -635,12 +651,12 @@ rebuild = go IntSet.empty IntSet.empty
                 g1 = g{classes = IntMap.insert i' e{classUsers = [], classUserCount = 0} (classes g)}
                 Repaired g2 seen owners = foldl' step (Repaired g1 HashMap.empty owners0) users
                 step (Repaired h s o) (u, owner@(ClassId j)) =
-                    let u' = canon h u
-                        m = if u' == u then memo h else HashMap.delete u (memo h)
+                    let (u', formChanged) = maybe (u, False) (,True) (recanon h u)
+                        m = if formChanged then HashMap.delete u (memo h) else memo h
                         h1 = case HashMap.lookup u' m of
                             Just other -> maybe h{memo = m} snd (union owner other h{memo = m})
                             Nothing -> h{memo = HashMap.insert u' (find h owner) m}
-                     in Repaired h1 (HashMap.insert u' (find h1 owner) s) (if u' == u then o else IntSet.insert j o)
+                     in Repaired h1 (HashMap.insert u' (find h1 owner) s) (if formChanged then IntSet.insert j o else o)
                 ClassId root = find g2 (ClassId i')
                 users' = HashMap.toList seen
              in ( g2
