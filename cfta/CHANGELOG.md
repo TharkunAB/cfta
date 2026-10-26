@@ -30,7 +30,8 @@ Before release, the package was called `microcfta`.
   an e-node with an equality constraint, and `classAutomaton` gives the rows
   that the state of an e-class reaches.
 - The union-find of the ECTA enumeration points each member of the smaller
-  set at the new representative on a union, so `root` is one lookup.
+  set at the new representative on a union, so `root` is one lookup. The
+  representative holds the size of its set and the set as an `IntSet`.
 - Template exclusion computes the copies of an edge once for each wanted
   and unwanted parts, symbol, and child shapes. On Specftacular's HugeLists
   6-p4 this cut 3.8% of allocation and time, with the same laws.

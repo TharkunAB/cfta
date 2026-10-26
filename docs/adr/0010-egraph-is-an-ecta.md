@@ -46,16 +46,17 @@ in the e-class of its plain form.
 
 - The e-graphs are the same: the AC sums, hegg's math rules at each
   iteration, and the output of HugeLists 5-p4 `--egraph extra`. Against the
-  e-graph of ADR 9, in cachegrind instructions: +1.2 % on the AC sum of 9
-  variables, and −9.0 % (t3) and −0.1 % (t4) on hegg's math rules after 6
+  e-graph of ADR 9, in cachegrind instructions: +0.2 % on the AC sum of 9
+  variables, and −10.1 % (t3) and +0.8 % (t4) on hegg's math rules after 6
   iterations; 5-p4 `--egraph extra` allocates 0.1 % more. At 6-p4
   `--egraph extra`, the laws and the proofs are the same, and the store
   allocates 1.3 % less. The first version of the store cost +29 % to
   +68 %. These changes brought the cost back:
   - The union-find of cfta points each member of the smaller set at the new
-    representative on a union, so `root` is one lookup. `unionRoots` merges
-    two representatives and gives the new one, so a merge looks up each
-    entry once.
+    representative on a union, so `root` is one lookup. The representative
+    holds the size of its set and the set, an `IntSet` of the ids of the
+    members. `unionRoots` merges two representatives and gives the new one,
+    so a merge looks up each entry once.
   - Each e-class record holds its row, so the map of the e-classes is the
     table, and a merge or a new e-node changes one map. A transition has
     the symbol of its e-node, and the sort is the sort of the state.
@@ -84,11 +85,12 @@ in the e-class of its plain form.
   at most two children keeps them unboxed.
 - An e-node whose constraint no term satisfies leaves its e-class without
   terms when it is the only e-node of the e-class.
-- Two other union-finds are not in the history: one with a separate map of
-  the members of each set (+9 % on AC), and one with an `IntSet` of the
-  members in place of the list (+1.0 % on AC and t3, −1.1 % on t4, the same
-  on the standard cells). A union points each member of the smaller set at
-  the new root, so it walks the members in each version.
+- Two other forms of the union-find are not in the history: a separate map
+  of the members of each set (+9 % on AC), and a list of the members in
+  place of the set (against the set: +1.0 % on AC, +1.1 % on t3, −0.9 % on
+  t4, and the same standard cells). A union points each member of the
+  smaller set at the new root, so it walks the members in each form. The
+  set is the notion of the scheme, so it stays.
 
 ## Discussion points
 
