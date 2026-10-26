@@ -551,9 +551,15 @@ union a b g
                     iBig = uvarToInt (UnionFind.root (intToUVar ia) unionFind')
                     big = ClassId iBig
                     (iSmall, eBig, eSmall) = if iBig == ia then (ib, ea, eb) else (ia, eb, ea)
+                    -- The root comes from the sizes of the sets, so each join
+                    -- copies the shorter list.
+                    users =
+                        if classUserCount eSmall <= classUserCount eBig
+                            then classUsers eSmall ++ classUsers eBig
+                            else classUsers eBig ++ classUsers eSmall
                     joined =
                         EClass
-                            (classUsers eSmall ++ classUsers eBig)
+                            users
                             (classUserCount eSmall + classUserCount eBig)
                             (classSort eBig)
                             (clock g)
@@ -563,7 +569,9 @@ union a b g
                             { unionFind = unionFind'
                             , transitions =
                                 let rowOf j = IntMap.findWithDefault [] j (transitions g)
-                                 in IntMap.insert iBig (rowOf iSmall ++ rowOf iBig) (IntMap.delete iSmall (transitions g))
+                                    (rowSmall, rowBig) = (rowOf iSmall, rowOf iBig)
+                                    row = if notLonger rowSmall rowBig then rowSmall ++ rowBig else rowBig ++ rowSmall
+                                 in IntMap.insert iBig row (IntMap.delete iSmall (transitions g))
                             , classes = IntMap.insert iBig joined (IntMap.delete iSmall (classes g))
                             , classCount = classCount g - 1
                             , pending = big : pending g
@@ -573,6 +581,9 @@ union a b g
   where
     ra@(ClassId ia) = find g a
     rb@(ClassId ib) = find g b
+    -- Whether the first list is at most as long as the second, in the time of the shorter.
+    notLonger (_ : xs) (_ : ys) = notLonger xs ys
+    notLonger xs _ = null xs
 
 {- | Restore the congruence after 'union', as egg does: make the users of
 each changed e-class canonical, and merge the e-classes of users that
