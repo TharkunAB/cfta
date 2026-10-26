@@ -982,11 +982,16 @@ and egglog), and a leaf that an e-class with some data equals
 ('analysisLeaf'), such as the constant that the data is (the constant
 folding of egg).
 -}
-data Analysis f d = Analysis
-    { analysisMake :: f -> [d] -> d
-    , analysisMerge :: d -> d -> d
-    , analysisLeaf :: d -> Maybe f
-    }
+data Analysis f d where
+    -- The equality of the data, so that a saturation without an analysis
+    -- needs no type of data.
+    Analysis ::
+        (Eq d) =>
+        { analysisMake :: f -> [d] -> d
+        , analysisMerge :: d -> d -> d
+        , analysisLeaf :: d -> Maybe f
+        } ->
+        Analysis f d
 
 {- | The condition of a rule on a match. 'Condition' gives it from the
 e-graph, the data of each e-class, and the e-class of each variable of the
@@ -1060,7 +1065,7 @@ changes counts as changed for the matching of only the changed e-classes, so
 a condition that failed is tried again.
 -}
 saturateWith ::
-    (Hashable s, Hashable f, Eq d) =>
+    (Hashable s, Hashable f) =>
     Saturation f d -> [(Rule s f, Condition s f d)] -> EGraph s f -> (EGraph s f, Report)
 saturateWith (Saturation limits analysis goal) rules = runWith analysis limits rules goal
 
@@ -1086,7 +1091,7 @@ run ::
 run limits rules = runWith (Nothing :: Maybe (Analysis f ())) limits [(r, mempty) | r <- rules]
 
 runWith ::
-    (Hashable s, Hashable f, Eq d) =>
+    (Hashable s, Hashable f) =>
     Maybe (Analysis f d) ->
     Limits ->
     [(Rule s f, Condition s f d)] ->
@@ -1100,7 +1105,7 @@ runWith analysis limits rules goal g0 = go 0 IntMap.empty IntMap.empty IntMap.em
     known0 =
         maybe
             IntMap.empty
-            (\a -> fst (analyseFrom (analysisMake a) (analysisMerge a) g1 IntMap.empty (IntMap.keys (classes g1))))
+            (\a@Analysis{} -> fst (analyseFrom (analysisMake a) (analysisMerge a) g1 IntMap.empty (IntMap.keys (classes g1))))
             analysis
     -- After an iteration: update the data from the e-classes that changed,
     -- give each e-class with a leaf its leaf, and repeat until no leaf is
@@ -1110,7 +1115,7 @@ runWith analysis limits rules goal g0 = go 0 IntMap.empty IntMap.empty IntMap.em
     -- e-classes that changed after the round before it.
     settle first tick known h = case analysis of
         Nothing -> (h, known)
-        Just a ->
+        Just a@Analysis{} ->
             let fresh = [j | (j, e) <- IntMap.toList (classes h), classStamp e >= tick]
                 (known', changed) = analyseFrom (analysisMake a) (analysisMerge a) h known fresh
                 stamped = h{classes = IntSet.foldr (IntMap.adjust (\e -> e{classStamp = tick})) (classes h) changed, clock = tick + 1}
