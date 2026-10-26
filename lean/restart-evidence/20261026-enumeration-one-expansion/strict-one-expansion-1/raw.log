@@ -1,0 +1,1776 @@
+/tmp/mcfta-enumeration-one-expansion-20261026/strict-one-expansion-1/MicroCFTA/SourcePruningEnumerationOneExpansionResources.lean:107:6: error: don't know how to synthesize implicit argument `p`
+  @Exists.intro (Caller (bits + 2))
+    (fun reached_1 =>
+      ∃ next final,
+        Post formulas solver next caller reached_1 final ∧
+          Fits start.snd reached_1.checked ∧
+            Heap (fun guard => guard ∈ start.fst) reached_1.checked.native.machine.heap ∧
+              match SourcePruningEnumerationNativeContinuations.HookResult.complete [] reached memos.query with
+              | SourcePruningEnumerationNativeContinuations.HookResult.complete outputs caller_1 queries =>
+                caller_1 = reached_1 ∧
+                  queries = final.query ∧
+                    ∀ (output : Output (bits + 2) ?m.501),
+                      output ∈ outputs → OutputResources formulas solver caller start output
+              | SourcePruningEnumerationNativeContinuations.HookResult.stopped outputs reason endpoint =>
+                (endpoint = none ∨ endpoint = some (reached_1, final.query)) ∧
+                  ∀ (output : Output (bits + 2) ?m.501),
+                    output ∈ outputs → OutputResources formulas solver caller start output)
+    reached
+    (Exists.intro inventory
+      (Exists.intro final
+        ⟨post,
+          ⟨resources.left,
+            ⟨resources.right, ⟨rfl, ⟨Eq.symm query, fun x member => False.elim (List.not_mem_nil member)⟩⟩⟩⟩⟩))
+context:
+Typing Key : Type
+bits : Nat
+inst✝² : DecidableEq Symbol
+inst✝¹ : DecidableEq (EdgeKey Symbol Constraint)
+inst✝ : DecidableEq Node
+holeKey : Typing → Nat → Key
+fits : Key → Symbol → Bool
+admits : Key → Node → Bool
+graph : Graph Symbol Constraint
+templates : List (Template.Pattern Symbol)
+checkEmpty : Bool
+edgesOf : Node → List (EdgeValue Symbol Constraint)
+stop : Option (Metadata Typing → Nat → Bool)
+order : Metadata Typing → List Nat → Option Nat
+formulas : SourceGuards.Formulas FullSyntax.Formula
+solver : SourceGuards.Entailment FullSyntax.Formula
+inventory : Inventory
+caller : Caller (bits + 2)
+memos : Memos
+before : Cached
+metadata : Metadata Typing
+uv : Nat
+seed : Seed
+packet : Packet formulas solver inventory caller memos metadata before
+bounded : Fits seed.snd caller.checked
+known : Heap (fun guard => guard ∈ seed.fst) caller.checked.native.machine.heap
+selectionMembers :
+  ∀ (entry : Cache.Interned InternedBinderProtocol.NodeKey) (rows : List (EdgeValue Symbol Constraint)) (depth : Nat)
+    (free : List InternedBinderProtocol.Reference) (edge : EdgeValue Symbol Constraint),
+    edge ∈ edgesOf (Value.node entry rows depth free) → edge ∈ rows
+selectionLength :
+  ∀ (entry : Cache.Interned InternedBinderProtocol.NodeKey) (rows : List (EdgeValue Symbol Constraint)) (depth : Nat)
+    (free : List InternedBinderProtocol.Reference), (edgesOf (Value.node entry rows depth free)).length ≤ rows.length
+chosen : SourcePruningEnumerationRestart.decision stop order metadata before = some (Next.expand uv)
+start : Seed := ⋯
+inherited : Nat := ⋯
+count : Nat := ⋯
+envelope : Seed := ⋯
+reserved : Reserved bits start count
+enlarged : Le seed.snd envelope.snd
+retained : seed.fst ⊆ envelope.fst
+selection : EnumerationPureSelection.next (order metadata) before = Next.expand uv
+roots : Nat → Nat
+paths : Roots before.core.representatives roots
+_storage : StorageValid before.core
+realized : SourcePruningEnumerationObservation.PendingRealized caller.checked.native.machine.heap before.core
+counts : EnumerationCanonicalWaiting.Correct roots before.core.values before.waiting
+flags :
+  ∀ (slot : Nat),
+    SourcePruningEnumerationNativeIndex.candidate caller.checked.native.machine.heap
+        (before.core.values[slot]?.getD UVarValue.eliminated) =
+      some (before.expandable slot)
+prefixFuel : Nat
+checked : EnumerationState.State Symbol Constraint
+heap : InternedConstructorTemplates.State Symbol Constraint
+phase :
+  ∀ (extra : Nat),
+    runPrefix holeKey fits admits graph templates stop order metadata (prefixFuel + extra) (prefixFuel + extra)
+          (prefixFuel + extra) (prefixFuel + extra) (prefixFuel + extra) (prefixFuel + extra) uv caller before
+          memos.query =
+        SourcePruningEnumerationSelectedStep.Result.narrowed checked
+          (MergedSourceComparison.Result.done (Value.empty, some reject) heap)
+          (SourceCurrentAllocatedPartialState.advance caller
+            (SourceCurrentAllocatedQueryMemo.advancePhysical caller.checked
+              { heap := heap, equality := caller.checked.operations })
+            caller.fourth caller.merge)
+          memos.query (some []) none none none ∧
+      SourcePruningEnumerationSelectedStep.PrefixValid holeKey fits admits graph templates checkEmpty edgesOf stop order
+        metadata formulas solver inventory (prefixFuel + extra) uv caller before memos
+        (runPrefix holeKey fits admits graph templates stop order metadata (prefixFuel + extra) (prefixFuel + extra)
+          (prefixFuel + extra) (prefixFuel + extra) (prefixFuel + extra) (prefixFuel + extra) uv caller before
+          memos.query)
+reached : Caller (bits + 2) := ⋯
+valid :
+  SourcePruningEnumerationSelectedStep.PrefixValid holeKey fits admits graph templates checkEmpty edgesOf stop order
+    metadata formulas solver inventory (prefixFuel + 0) uv caller before memos
+    (SourcePruningEnumerationSelectedStep.Result.narrowed checked
+      (MergedSourceComparison.Result.done (Value.empty, some reject) heap)
+      (SourceCurrentAllocatedPartialState.advance caller
+        (SourceCurrentAllocatedQueryMemo.advancePhysical caller.checked
+          { heap := heap, equality := caller.checked.operations })
+        caller.fourth caller.merge)
+      memos.query (some []) none none none)
+resources :
+  SourcePruningEnumerationSelectedStep.Resources seed.snd (fun guard => guard ∈ seed.fst) caller
+    (SourcePruningEnumerationSelectedStep.Result.narrowed checked
+      (MergedSourceComparison.Result.done (Value.empty, some reject) heap)
+      (SourceCurrentAllocatedPartialState.advance caller
+        (SourceCurrentAllocatedQueryMemo.advancePhysical caller.checked
+          { heap := heap, equality := caller.checked.operations })
+        caller.fourth caller.merge)
+      memos.query (some []) none none none)
+final : Memos
+post :
+  Post formulas solver inventory caller
+    (SourceCurrentAllocatedPartialState.advance caller
+      (SourceCurrentAllocatedQueryMemo.advancePhysical caller.checked
+        { heap := heap, equality := caller.checked.operations })
+      caller.fourth caller.merge)
+    final
+query : final.query = memos.query
+⊢ Caller (bits + 2) → Prop
+/tmp/mcfta-enumeration-one-expansion-20261026/strict-one-expansion-1/MicroCFTA/SourcePruningEnumerationOneExpansionResources.lean:107:6: error: don't know how to synthesize implicit argument `p`
+  @Exists.intro Inventory
+    (fun next =>
+      ∃ final,
+        Post formulas solver next caller reached final ∧
+          Fits start.snd reached.checked ∧
+            Heap (fun guard => guard ∈ start.fst) reached.checked.native.machine.heap ∧
+              match SourcePruningEnumerationNativeContinuations.HookResult.complete [] reached memos.query with
+              | SourcePruningEnumerationNativeContinuations.HookResult.complete outputs caller_1 queries =>
+                caller_1 = reached ∧
+                  queries = final.query ∧
+                    ∀ (output : Output (bits + 2) ?m.501),
+                      output ∈ outputs → OutputResources formulas solver caller start output
+              | SourcePruningEnumerationNativeContinuations.HookResult.stopped outputs reason endpoint =>
+                (endpoint = none ∨ endpoint = some (reached, final.query)) ∧
+                  ∀ (output : Output (bits + 2) ?m.501),
+                    output ∈ outputs → OutputResources formulas solver caller start output)
+    inventory
+    (Exists.intro final
+      ⟨post,
+        ⟨resources.left,
+          ⟨resources.right, ⟨rfl, ⟨Eq.symm query, fun x member => False.elim (List.not_mem_nil member)⟩⟩⟩⟩⟩)
+context:
+Typing Key : Type
+bits : Nat
+inst✝² : DecidableEq Symbol
+inst✝¹ : DecidableEq (EdgeKey Symbol Constraint)
+inst✝ : DecidableEq Node
+holeKey : Typing → Nat → Key
+fits : Key → Symbol → Bool
+admits : Key → Node → Bool
+graph : Graph Symbol Constraint
+templates : List (Template.Pattern Symbol)
+checkEmpty : Bool
+edgesOf : Node → List (EdgeValue Symbol Constraint)
+stop : Option (Metadata Typing → Nat → Bool)
+order : Metadata Typing → List Nat → Option Nat
+formulas : SourceGuards.Formulas FullSyntax.Formula
+solver : SourceGuards.Entailment FullSyntax.Formula
+inventory : Inventory
+caller : Caller (bits + 2)
+memos : Memos
+before : Cached
+metadata : Metadata Typing
+uv : Nat
+seed : Seed
+packet : Packet formulas solver inventory caller memos metadata before
+bounded : Fits seed.snd caller.checked
+known : Heap (fun guard => guard ∈ seed.fst) caller.checked.native.machine.heap
+selectionMembers :
+  ∀ (entry : Cache.Interned InternedBinderProtocol.NodeKey) (rows : List (EdgeValue Symbol Constraint)) (depth : Nat)
+    (free : List InternedBinderProtocol.Reference) (edge : EdgeValue Symbol Constraint),
+    edge ∈ edgesOf (Value.node entry rows depth free) → edge ∈ rows
+selectionLength :
+  ∀ (entry : Cache.Interned InternedBinderProtocol.NodeKey) (rows : List (EdgeValue Symbol Constraint)) (depth : Nat)
+    (free : List InternedBinderProtocol.Reference), (edgesOf (Value.node entry rows depth free)).length ≤ rows.length
+chosen : SourcePruningEnumerationRestart.decision stop order metadata before = some (Next.expand uv)
+start : Seed := ⋯
+inherited : Nat := ⋯
+count : Nat := ⋯
+envelope : Seed := ⋯
+reserved : Reserved bits start count
+enlarged : Le seed.snd envelope.snd
+retained : seed.fst ⊆ envelope.fst
+selection : EnumerationPureSelection.next (order metadata) before = Next.expand uv
+roots : Nat → Nat
+paths : Roots before.core.representatives roots
+_storage : StorageValid before.core
+realized : SourcePruningEnumerationObservation.PendingRealized caller.checked.native.machine.heap before.core
+counts : EnumerationCanonicalWaiting.Correct roots before.core.values before.waiting
+flags :
+  ∀ (slot : Nat),
+    SourcePruningEnumerationNativeIndex.candidate caller.checked.native.machine.heap
+        (before.core.values[slot]?.getD UVarValue.eliminated) =
+      some (before.expandable slot)
+prefixFuel : Nat
+checked : EnumerationState.State Symbol Constraint
+heap : InternedConstructorTemplates.State Symbol Constraint
+phase :
+  ∀ (extra : Nat),
+    runPrefix holeKey fits admits graph templates stop order metadata (prefixFuel + extra) (prefixFuel + extra)
+          (prefixFuel + extra) (prefixFuel + extra) (prefixFuel + extra) (prefixFuel + extra) uv caller before
+          memos.query =
+        SourcePruningEnumerationSelectedStep.Result.narrowed checked
+          (MergedSourceComparison.Result.done (Value.empty, some reject) heap)
+          (SourceCurrentAllocatedPartialState.advance caller
+            (SourceCurrentAllocatedQueryMemo.advancePhysical caller.checked
+              { heap := heap, equality := caller.checked.operations })
+            caller.fourth caller.merge)
+          memos.query (some []) none none none ∧
+      SourcePruningEnumerationSelectedStep.PrefixValid holeKey fits admits graph templates checkEmpty edgesOf stop order
+        metadata formulas solver inventory (prefixFuel + extra) uv caller before memos
+        (runPrefix holeKey fits admits graph templates stop order metadata (prefixFuel + extra) (prefixFuel + extra)
+          (prefixFuel + extra) (prefixFuel + extra) (prefixFuel + extra) (prefixFuel + extra) uv caller before
+          memos.query)
+reached : Caller (bits + 2) := ⋯
+valid :
+  SourcePruningEnumerationSelectedStep.PrefixValid holeKey fits admits graph templates checkEmpty edgesOf stop order
+    metadata formulas solver inventory (prefixFuel + 0) uv caller before memos
+    (SourcePruningEnumerationSelectedStep.Result.narrowed checked
+      (MergedSourceComparison.Result.done (Value.empty, some reject) heap)
+      (SourceCurrentAllocatedPartialState.advance caller
+        (SourceCurrentAllocatedQueryMemo.advancePhysical caller.checked
+          { heap := heap, equality := caller.checked.operations })
+        caller.fourth caller.merge)
+      memos.query (some []) none none none)
+resources :
+  SourcePruningEnumerationSelectedStep.Resources seed.snd (fun guard => guard ∈ seed.fst) caller
+    (SourcePruningEnumerationSelectedStep.Result.narrowed checked
+      (MergedSourceComparison.Result.done (Value.empty, some reject) heap)
+      (SourceCurrentAllocatedPartialState.advance caller
+        (SourceCurrentAllocatedQueryMemo.advancePhysical caller.checked
+          { heap := heap, equality := caller.checked.operations })
+        caller.fourth caller.merge)
+      memos.query (some []) none none none)
+final : Memos
+post :
+  Post formulas solver inventory caller
+    (SourceCurrentAllocatedPartialState.advance caller
+      (SourceCurrentAllocatedQueryMemo.advancePhysical caller.checked
+        { heap := heap, equality := caller.checked.operations })
+      caller.fourth caller.merge)
+    final
+query : final.query = memos.query
+⊢ Inventory → Prop
+/tmp/mcfta-enumeration-one-expansion-20261026/strict-one-expansion-1/MicroCFTA/SourcePruningEnumerationOneExpansionResources.lean:107:6: error: don't know how to synthesize implicit argument `p`
+  @Exists.intro Memos
+    (fun final =>
+      Post formulas solver inventory caller reached final ∧
+        Fits start.snd reached.checked ∧
+          Heap (fun guard => guard ∈ start.fst) reached.checked.native.machine.heap ∧
+            match SourcePruningEnumerationNativeContinuations.HookResult.complete [] reached memos.query with
+            | SourcePruningEnumerationNativeContinuations.HookResult.complete outputs caller_1 queries =>
+              caller_1 = reached ∧
+                queries = final.query ∧
+                  ∀ (output : Output (bits + 2) ?m.501),
+                    output ∈ outputs → OutputResources formulas solver caller start output
+            | SourcePruningEnumerationNativeContinuations.HookResult.stopped outputs reason endpoint =>
+              (endpoint = none ∨ endpoint = some (reached, final.query)) ∧
+                ∀ (output : Output (bits + 2) ?m.501),
+                  output ∈ outputs → OutputResources formulas solver caller start output)
+    final
+    ⟨post,
+      ⟨resources.left, ⟨resources.right, ⟨rfl, ⟨Eq.symm query, fun x member => False.elim (List.not_mem_nil member)⟩⟩⟩⟩⟩
+context:
+Typing Key : Type
+bits : Nat
+inst✝² : DecidableEq Symbol
+inst✝¹ : DecidableEq (EdgeKey Symbol Constraint)
+inst✝ : DecidableEq Node
+holeKey : Typing → Nat → Key
+fits : Key → Symbol → Bool
+admits : Key → Node → Bool
+graph : Graph Symbol Constraint
+templates : List (Template.Pattern Symbol)
+checkEmpty : Bool
+edgesOf : Node → List (EdgeValue Symbol Constraint)
+stop : Option (Metadata Typing → Nat → Bool)
+order : Metadata Typing → List Nat → Option Nat
+formulas : SourceGuards.Formulas FullSyntax.Formula
+solver : SourceGuards.Entailment FullSyntax.Formula
+inventory : Inventory
+caller : Caller (bits + 2)
+memos : Memos
+before : Cached
+metadata : Metadata Typing
+uv : Nat
+seed : Seed
+packet : Packet formulas solver inventory caller memos metadata before
+bounded : Fits seed.snd caller.checked
+known : Heap (fun guard => guard ∈ seed.fst) caller.checked.native.machine.heap
+selectionMembers :
+  ∀ (entry : Cache.Interned InternedBinderProtocol.NodeKey) (rows : List (EdgeValue Symbol Constraint)) (depth : Nat)
+    (free : List InternedBinderProtocol.Reference) (edge : EdgeValue Symbol Constraint),
+    edge ∈ edgesOf (Value.node entry rows depth free) → edge ∈ rows
+selectionLength :
+  ∀ (entry : Cache.Interned InternedBinderProtocol.NodeKey) (rows : List (EdgeValue Symbol Constraint)) (depth : Nat)
+    (free : List InternedBinderProtocol.Reference), (edgesOf (Value.node entry rows depth free)).length ≤ rows.length
+chosen : SourcePruningEnumerationRestart.decision stop order metadata before = some (Next.expand uv)
+start : Seed := ⋯
+inherited : Nat := ⋯
+count : Nat := ⋯
+envelope : Seed := ⋯
+reserved : Reserved bits start count
+enlarged : Le seed.snd envelope.snd
+retained : seed.fst ⊆ envelope.fst
+selection : EnumerationPureSelection.next (order metadata) before = Next.expand uv
+roots : Nat → Nat
+paths : Roots before.core.representatives roots
+_storage : StorageValid before.core
+realized : SourcePruningEnumerationObservation.PendingRealized caller.checked.native.machine.heap before.core
+counts : EnumerationCanonicalWaiting.Correct roots before.core.values before.waiting
+flags :
+  ∀ (slot : Nat),
+    SourcePruningEnumerationNativeIndex.candidate caller.checked.native.machine.heap
+        (before.core.values[slot]?.getD UVarValue.eliminated) =
+      some (before.expandable slot)
+prefixFuel : Nat
+checked : EnumerationState.State Symbol Constraint
+heap : InternedConstructorTemplates.State Symbol Constraint
+phase :
+  ∀ (extra : Nat),
+    runPrefix holeKey fits admits graph templates stop order metadata (prefixFuel + extra) (prefixFuel + extra)
+          (prefixFuel + extra) (prefixFuel + extra) (prefixFuel + extra) (prefixFuel + extra) uv caller before
+          memos.query =
+        SourcePruningEnumerationSelectedStep.Result.narrowed checked
+          (MergedSourceComparison.Result.done (Value.empty, some reject) heap)
+          (SourceCurrentAllocatedPartialState.advance caller
+            (SourceCurrentAllocatedQueryMemo.advancePhysical caller.checked
+              { heap := heap, equality := caller.checked.operations })
+            caller.fourth caller.merge)
+          memos.query (some []) none none none ∧
+      SourcePruningEnumerationSelectedStep.PrefixValid holeKey fits admits graph templates checkEmpty edgesOf stop order
+        metadata formulas solver inventory (prefixFuel + extra) uv caller before memos
+        (runPrefix holeKey fits admits graph templates stop order metadata (prefixFuel + extra) (prefixFuel + extra)
+          (prefixFuel + extra) (prefixFuel + extra) (prefixFuel + extra) (prefixFuel + extra) uv caller before
+          memos.query)
+reached : Caller (bits + 2) := ⋯
+valid :
+  SourcePruningEnumerationSelectedStep.PrefixValid holeKey fits admits graph templates checkEmpty edgesOf stop order
+    metadata formulas solver inventory (prefixFuel + 0) uv caller before memos
+    (SourcePruningEnumerationSelectedStep.Result.narrowed checked
+      (MergedSourceComparison.Result.done (Value.empty, some reject) heap)
+      (SourceCurrentAllocatedPartialState.advance caller
+        (SourceCurrentAllocatedQueryMemo.advancePhysical caller.checked
+          { heap := heap, equality := caller.checked.operations })
+        caller.fourth caller.merge)
+      memos.query (some []) none none none)
+resources :
+  SourcePruningEnumerationSelectedStep.Resources seed.snd (fun guard => guard ∈ seed.fst) caller
+    (SourcePruningEnumerationSelectedStep.Result.narrowed checked
+      (MergedSourceComparison.Result.done (Value.empty, some reject) heap)
+      (SourceCurrentAllocatedPartialState.advance caller
+        (SourceCurrentAllocatedQueryMemo.advancePhysical caller.checked
+          { heap := heap, equality := caller.checked.operations })
+        caller.fourth caller.merge)
+      memos.query (some []) none none none)
+final : Memos
+post :
+  Post formulas solver inventory caller
+    (SourceCurrentAllocatedPartialState.advance caller
+      (SourceCurrentAllocatedQueryMemo.advancePhysical caller.checked
+        { heap := heap, equality := caller.checked.operations })
+      caller.fourth caller.merge)
+    final
+query : final.query = memos.query
+⊢ Memos → Prop
+/tmp/mcfta-enumeration-one-expansion-20261026/strict-one-expansion-1/MicroCFTA/SourcePruningEnumerationOneExpansionResources.lean:107:6: error: don't know how to synthesize implicit argument `b`
+  @And.intro (Post formulas solver inventory caller reached final)
+    (Fits start.snd reached.checked ∧
+      Heap (fun guard => guard ∈ start.fst) reached.checked.native.machine.heap ∧
+        match SourcePruningEnumerationNativeContinuations.HookResult.complete [] reached memos.query with
+        | SourcePruningEnumerationNativeContinuations.HookResult.complete outputs caller_1 queries =>
+          caller_1 = reached ∧
+            queries = final.query ∧
+              ∀ (output : Output (bits + 2) ?m.501),
+                output ∈ outputs → OutputResources formulas solver caller start output
+        | SourcePruningEnumerationNativeContinuations.HookResult.stopped outputs reason endpoint =>
+          (endpoint = none ∨ endpoint = some (reached, final.query)) ∧
+            ∀ (output : Output (bits + 2) ?m.501),
+              output ∈ outputs → OutputResources formulas solver caller start output)
+    post
+    ⟨resources.left, ⟨resources.right, ⟨rfl, ⟨Eq.symm query, fun x member => False.elim (List.not_mem_nil member)⟩⟩⟩⟩
+context:
+Typing Key : Type
+bits : Nat
+inst✝² : DecidableEq Symbol
+inst✝¹ : DecidableEq (EdgeKey Symbol Constraint)
+inst✝ : DecidableEq Node
+holeKey : Typing → Nat → Key
+fits : Key → Symbol → Bool
+admits : Key → Node → Bool
+graph : Graph Symbol Constraint
+templates : List (Template.Pattern Symbol)
+checkEmpty : Bool
+edgesOf : Node → List (EdgeValue Symbol Constraint)
+stop : Option (Metadata Typing → Nat → Bool)
+order : Metadata Typing → List Nat → Option Nat
+formulas : SourceGuards.Formulas FullSyntax.Formula
+solver : SourceGuards.Entailment FullSyntax.Formula
+inventory : Inventory
+caller : Caller (bits + 2)
+memos : Memos
+before : Cached
+metadata : Metadata Typing
+uv : Nat
+seed : Seed
+packet : Packet formulas solver inventory caller memos metadata before
+bounded : Fits seed.snd caller.checked
+known : Heap (fun guard => guard ∈ seed.fst) caller.checked.native.machine.heap
+selectionMembers :
+  ∀ (entry : Cache.Interned InternedBinderProtocol.NodeKey) (rows : List (EdgeValue Symbol Constraint)) (depth : Nat)
+    (free : List InternedBinderProtocol.Reference) (edge : EdgeValue Symbol Constraint),
+    edge ∈ edgesOf (Value.node entry rows depth free) → edge ∈ rows
+selectionLength :
+  ∀ (entry : Cache.Interned InternedBinderProtocol.NodeKey) (rows : List (EdgeValue Symbol Constraint)) (depth : Nat)
+    (free : List InternedBinderProtocol.Reference), (edgesOf (Value.node entry rows depth free)).length ≤ rows.length
+chosen : SourcePruningEnumerationRestart.decision stop order metadata before = some (Next.expand uv)
+start : Seed := ⋯
+inherited : Nat := ⋯
+count : Nat := ⋯
+envelope : Seed := ⋯
+reserved : Reserved bits start count
+enlarged : Le seed.snd envelope.snd
+retained : seed.fst ⊆ envelope.fst
+selection : EnumerationPureSelection.next (order metadata) before = Next.expand uv
+roots : Nat → Nat
+paths : Roots before.core.representatives roots
+_storage : StorageValid before.core
+realized : SourcePruningEnumerationObservation.PendingRealized caller.checked.native.machine.heap before.core
+counts : EnumerationCanonicalWaiting.Correct roots before.core.values before.waiting
+flags :
+  ∀ (slot : Nat),
+    SourcePruningEnumerationNativeIndex.candidate caller.checked.native.machine.heap
+        (before.core.values[slot]?.getD UVarValue.eliminated) =
+      some (before.expandable slot)
+prefixFuel : Nat
+checked : EnumerationState.State Symbol Constraint
+heap : InternedConstructorTemplates.State Symbol Constraint
+phase :
+  ∀ (extra : Nat),
+    runPrefix holeKey fits admits graph templates stop order metadata (prefixFuel + extra) (prefixFuel + extra)
+          (prefixFuel + extra) (prefixFuel + extra) (prefixFuel + extra) (prefixFuel + extra) uv caller before
+          memos.query =
+        SourcePruningEnumerationSelectedStep.Result.narrowed checked
+          (MergedSourceComparison.Result.done (Value.empty, some reject) heap)
+          (SourceCurrentAllocatedPartialState.advance caller
+            (SourceCurrentAllocatedQueryMemo.advancePhysical caller.checked
+              { heap := heap, equality := caller.checked.operations })
+            caller.fourth caller.merge)
+          memos.query (some []) none none none ∧
+      SourcePruningEnumerationSelectedStep.PrefixValid holeKey fits admits graph templates checkEmpty edgesOf stop order
+        metadata formulas solver inventory (prefixFuel + extra) uv caller before memos
+        (runPrefix holeKey fits admits graph templates stop order metadata (prefixFuel + extra) (prefixFuel + extra)
+          (prefixFuel + extra) (prefixFuel + extra) (prefixFuel + extra) (prefixFuel + extra) uv caller before
+          memos.query)
+reached : Caller (bits + 2) := ⋯
+valid :
+  SourcePruningEnumerationSelectedStep.PrefixValid holeKey fits admits graph templates checkEmpty edgesOf stop order
+    metadata formulas solver inventory (prefixFuel + 0) uv caller before memos
+    (SourcePruningEnumerationSelectedStep.Result.narrowed checked
+      (MergedSourceComparison.Result.done (Value.empty, some reject) heap)
+      (SourceCurrentAllocatedPartialState.advance caller
+        (SourceCurrentAllocatedQueryMemo.advancePhysical caller.checked
+          { heap := heap, equality := caller.checked.operations })
+        caller.fourth caller.merge)
+      memos.query (some []) none none none)
+resources :
+  SourcePruningEnumerationSelectedStep.Resources seed.snd (fun guard => guard ∈ seed.fst) caller
+    (SourcePruningEnumerationSelectedStep.Result.narrowed checked
+      (MergedSourceComparison.Result.done (Value.empty, some reject) heap)
+      (SourceCurrentAllocatedPartialState.advance caller
+        (SourceCurrentAllocatedQueryMemo.advancePhysical caller.checked
+          { heap := heap, equality := caller.checked.operations })
+        caller.fourth caller.merge)
+      memos.query (some []) none none none)
+final : Memos
+post :
+  Post formulas solver inventory caller
+    (SourceCurrentAllocatedPartialState.advance caller
+      (SourceCurrentAllocatedQueryMemo.advancePhysical caller.checked
+        { heap := heap, equality := caller.checked.operations })
+      caller.fourth caller.merge)
+    final
+query : final.query = memos.query
+⊢ Prop
+/tmp/mcfta-enumeration-one-expansion-20261026/strict-one-expansion-1/MicroCFTA/SourcePruningEnumerationOneExpansionResources.lean:107:6: error: don't know how to synthesize implicit argument `b`
+  @And.intro (Fits start.snd reached.checked)
+    (Heap (fun guard => guard ∈ start.fst) reached.checked.native.machine.heap ∧
+      match SourcePruningEnumerationNativeContinuations.HookResult.complete [] reached memos.query with
+      | SourcePruningEnumerationNativeContinuations.HookResult.complete outputs caller_1 queries =>
+        caller_1 = reached ∧
+          queries = final.query ∧
+            ∀ (output : Output (bits + 2) ?m.501),
+              output ∈ outputs → OutputResources formulas solver caller start output
+      | SourcePruningEnumerationNativeContinuations.HookResult.stopped outputs reason endpoint =>
+        (endpoint = none ∨ endpoint = some (reached, final.query)) ∧
+          ∀ (output : Output (bits + 2) ?m.501), output ∈ outputs → OutputResources formulas solver caller start output)
+    resources.left ⟨resources.right, ⟨rfl, ⟨Eq.symm query, fun x member => False.elim (List.not_mem_nil member)⟩⟩⟩
+context:
+Typing Key : Type
+bits : Nat
+inst✝² : DecidableEq Symbol
+inst✝¹ : DecidableEq (EdgeKey Symbol Constraint)
+inst✝ : DecidableEq Node
+holeKey : Typing → Nat → Key
+fits : Key → Symbol → Bool
+admits : Key → Node → Bool
+graph : Graph Symbol Constraint
+templates : List (Template.Pattern Symbol)
+checkEmpty : Bool
+edgesOf : Node → List (EdgeValue Symbol Constraint)
+stop : Option (Metadata Typing → Nat → Bool)
+order : Metadata Typing → List Nat → Option Nat
+formulas : SourceGuards.Formulas FullSyntax.Formula
+solver : SourceGuards.Entailment FullSyntax.Formula
+inventory : Inventory
+caller : Caller (bits + 2)
+memos : Memos
+before : Cached
+metadata : Metadata Typing
+uv : Nat
+seed : Seed
+packet : Packet formulas solver inventory caller memos metadata before
+bounded : Fits seed.snd caller.checked
+known : Heap (fun guard => guard ∈ seed.fst) caller.checked.native.machine.heap
+selectionMembers :
+  ∀ (entry : Cache.Interned InternedBinderProtocol.NodeKey) (rows : List (EdgeValue Symbol Constraint)) (depth : Nat)
+    (free : List InternedBinderProtocol.Reference) (edge : EdgeValue Symbol Constraint),
+    edge ∈ edgesOf (Value.node entry rows depth free) → edge ∈ rows
+selectionLength :
+  ∀ (entry : Cache.Interned InternedBinderProtocol.NodeKey) (rows : List (EdgeValue Symbol Constraint)) (depth : Nat)
+    (free : List InternedBinderProtocol.Reference), (edgesOf (Value.node entry rows depth free)).length ≤ rows.length
+chosen : SourcePruningEnumerationRestart.decision stop order metadata before = some (Next.expand uv)
+start : Seed := ⋯
+inherited : Nat := ⋯
+count : Nat := ⋯
+envelope : Seed := ⋯
+reserved : Reserved bits start count
+enlarged : Le seed.snd envelope.snd
+retained : seed.fst ⊆ envelope.fst
+selection : EnumerationPureSelection.next (order metadata) before = Next.expand uv
+roots : Nat → Nat
+paths : Roots before.core.representatives roots
+_storage : StorageValid before.core
+realized : SourcePruningEnumerationObservation.PendingRealized caller.checked.native.machine.heap before.core
+counts : EnumerationCanonicalWaiting.Correct roots before.core.values before.waiting
+flags :
+  ∀ (slot : Nat),
+    SourcePruningEnumerationNativeIndex.candidate caller.checked.native.machine.heap
+        (before.core.values[slot]?.getD UVarValue.eliminated) =
+      some (before.expandable slot)
+prefixFuel : Nat
+checked : EnumerationState.State Symbol Constraint
+heap : InternedConstructorTemplates.State Symbol Constraint
+phase :
+  ∀ (extra : Nat),
+    runPrefix holeKey fits admits graph templates stop order metadata (prefixFuel + extra) (prefixFuel + extra)
+          (prefixFuel + extra) (prefixFuel + extra) (prefixFuel + extra) (prefixFuel + extra) uv caller before
+          memos.query =
+        SourcePruningEnumerationSelectedStep.Result.narrowed checked
+          (MergedSourceComparison.Result.done (Value.empty, some reject) heap)
+          (SourceCurrentAllocatedPartialState.advance caller
+            (SourceCurrentAllocatedQueryMemo.advancePhysical caller.checked
+              { heap := heap, equality := caller.checked.operations })
+            caller.fourth caller.merge)
+          memos.query (some []) none none none ∧
+      SourcePruningEnumerationSelectedStep.PrefixValid holeKey fits admits graph templates checkEmpty edgesOf stop order
+        metadata formulas solver inventory (prefixFuel + extra) uv caller before memos
+        (runPrefix holeKey fits admits graph templates stop order metadata (prefixFuel + extra) (prefixFuel + extra)
+          (prefixFuel + extra) (prefixFuel + extra) (prefixFuel + extra) (prefixFuel + extra) uv caller before
+          memos.query)
+reached : Caller (bits + 2) := ⋯
+valid :
+  SourcePruningEnumerationSelectedStep.PrefixValid holeKey fits admits graph templates checkEmpty edgesOf stop order
+    metadata formulas solver inventory (prefixFuel + 0) uv caller before memos
+    (SourcePruningEnumerationSelectedStep.Result.narrowed checked
+      (MergedSourceComparison.Result.done (Value.empty, some reject) heap)
+      (SourceCurrentAllocatedPartialState.advance caller
+        (SourceCurrentAllocatedQueryMemo.advancePhysical caller.checked
+          { heap := heap, equality := caller.checked.operations })
+        caller.fourth caller.merge)
+      memos.query (some []) none none none)
+resources :
+  SourcePruningEnumerationSelectedStep.Resources seed.snd (fun guard => guard ∈ seed.fst) caller
+    (SourcePruningEnumerationSelectedStep.Result.narrowed checked
+      (MergedSourceComparison.Result.done (Value.empty, some reject) heap)
+      (SourceCurrentAllocatedPartialState.advance caller
+        (SourceCurrentAllocatedQueryMemo.advancePhysical caller.checked
+          { heap := heap, equality := caller.checked.operations })
+        caller.fourth caller.merge)
+      memos.query (some []) none none none)
+final : Memos
+post :
+  Post formulas solver inventory caller
+    (SourceCurrentAllocatedPartialState.advance caller
+      (SourceCurrentAllocatedQueryMemo.advancePhysical caller.checked
+        { heap := heap, equality := caller.checked.operations })
+      caller.fourth caller.merge)
+    final
+query : final.query = memos.query
+⊢ Prop
+/tmp/mcfta-enumeration-one-expansion-20261026/strict-one-expansion-1/MicroCFTA/SourcePruningEnumerationOneExpansionResources.lean:107:6: error: don't know how to synthesize implicit argument `b`
+  @And.intro (Heap (fun guard => guard ∈ start.fst) reached.checked.native.machine.heap)
+    (match SourcePruningEnumerationNativeContinuations.HookResult.complete [] reached memos.query with
+    | SourcePruningEnumerationNativeContinuations.HookResult.complete outputs caller_1 queries =>
+      caller_1 = reached ∧
+        queries = final.query ∧
+          ∀ (output : Output (bits + 2) ?m.501), output ∈ outputs → OutputResources formulas solver caller start output
+    | SourcePruningEnumerationNativeContinuations.HookResult.stopped outputs reason endpoint =>
+      (endpoint = none ∨ endpoint = some (reached, final.query)) ∧
+        ∀ (output : Output (bits + 2) ?m.501), output ∈ outputs → OutputResources formulas solver caller start output)
+    resources.right ⟨rfl, ⟨Eq.symm query, fun x member => False.elim (List.not_mem_nil member)⟩⟩
+context:
+Typing Key : Type
+bits : Nat
+inst✝² : DecidableEq Symbol
+inst✝¹ : DecidableEq (EdgeKey Symbol Constraint)
+inst✝ : DecidableEq Node
+holeKey : Typing → Nat → Key
+fits : Key → Symbol → Bool
+admits : Key → Node → Bool
+graph : Graph Symbol Constraint
+templates : List (Template.Pattern Symbol)
+checkEmpty : Bool
+edgesOf : Node → List (EdgeValue Symbol Constraint)
+stop : Option (Metadata Typing → Nat → Bool)
+order : Metadata Typing → List Nat → Option Nat
+formulas : SourceGuards.Formulas FullSyntax.Formula
+solver : SourceGuards.Entailment FullSyntax.Formula
+inventory : Inventory
+caller : Caller (bits + 2)
+memos : Memos
+before : Cached
+metadata : Metadata Typing
+uv : Nat
+seed : Seed
+packet : Packet formulas solver inventory caller memos metadata before
+bounded : Fits seed.snd caller.checked
+known : Heap (fun guard => guard ∈ seed.fst) caller.checked.native.machine.heap
+selectionMembers :
+  ∀ (entry : Cache.Interned InternedBinderProtocol.NodeKey) (rows : List (EdgeValue Symbol Constraint)) (depth : Nat)
+    (free : List InternedBinderProtocol.Reference) (edge : EdgeValue Symbol Constraint),
+    edge ∈ edgesOf (Value.node entry rows depth free) → edge ∈ rows
+selectionLength :
+  ∀ (entry : Cache.Interned InternedBinderProtocol.NodeKey) (rows : List (EdgeValue Symbol Constraint)) (depth : Nat)
+    (free : List InternedBinderProtocol.Reference), (edgesOf (Value.node entry rows depth free)).length ≤ rows.length
+chosen : SourcePruningEnumerationRestart.decision stop order metadata before = some (Next.expand uv)
+start : Seed := ⋯
+inherited : Nat := ⋯
+count : Nat := ⋯
+envelope : Seed := ⋯
+reserved : Reserved bits start count
+enlarged : Le seed.snd envelope.snd
+retained : seed.fst ⊆ envelope.fst
+selection : EnumerationPureSelection.next (order metadata) before = Next.expand uv
+roots : Nat → Nat
+paths : Roots before.core.representatives roots
+_storage : StorageValid before.core
+realized : SourcePruningEnumerationObservation.PendingRealized caller.checked.native.machine.heap before.core
+counts : EnumerationCanonicalWaiting.Correct roots before.core.values before.waiting
+flags :
+  ∀ (slot : Nat),
+    SourcePruningEnumerationNativeIndex.candidate caller.checked.native.machine.heap
+        (before.core.values[slot]?.getD UVarValue.eliminated) =
+      some (before.expandable slot)
+prefixFuel : Nat
+checked : EnumerationState.State Symbol Constraint
+heap : InternedConstructorTemplates.State Symbol Constraint
+phase :
+  ∀ (extra : Nat),
+    runPrefix holeKey fits admits graph templates stop order metadata (prefixFuel + extra) (prefixFuel + extra)
+          (prefixFuel + extra) (prefixFuel + extra) (prefixFuel + extra) (prefixFuel + extra) uv caller before
+          memos.query =
+        SourcePruningEnumerationSelectedStep.Result.narrowed checked
+          (MergedSourceComparison.Result.done (Value.empty, some reject) heap)
+          (SourceCurrentAllocatedPartialState.advance caller
+            (SourceCurrentAllocatedQueryMemo.advancePhysical caller.checked
+              { heap := heap, equality := caller.checked.operations })
+            caller.fourth caller.merge)
+          memos.query (some []) none none none ∧
+      SourcePruningEnumerationSelectedStep.PrefixValid holeKey fits admits graph templates checkEmpty edgesOf stop order
+        metadata formulas solver inventory (prefixFuel + extra) uv caller before memos
+        (runPrefix holeKey fits admits graph templates stop order metadata (prefixFuel + extra) (prefixFuel + extra)
+          (prefixFuel + extra) (prefixFuel + extra) (prefixFuel + extra) (prefixFuel + extra) uv caller before
+          memos.query)
+reached : Caller (bits + 2) := ⋯
+valid :
+  SourcePruningEnumerationSelectedStep.PrefixValid holeKey fits admits graph templates checkEmpty edgesOf stop order
+    metadata formulas solver inventory (prefixFuel + 0) uv caller before memos
+    (SourcePruningEnumerationSelectedStep.Result.narrowed checked
+      (MergedSourceComparison.Result.done (Value.empty, some reject) heap)
+      (SourceCurrentAllocatedPartialState.advance caller
+        (SourceCurrentAllocatedQueryMemo.advancePhysical caller.checked
+          { heap := heap, equality := caller.checked.operations })
+        caller.fourth caller.merge)
+      memos.query (some []) none none none)
+resources :
+  SourcePruningEnumerationSelectedStep.Resources seed.snd (fun guard => guard ∈ seed.fst) caller
+    (SourcePruningEnumerationSelectedStep.Result.narrowed checked
+      (MergedSourceComparison.Result.done (Value.empty, some reject) heap)
+      (SourceCurrentAllocatedPartialState.advance caller
+        (SourceCurrentAllocatedQueryMemo.advancePhysical caller.checked
+          { heap := heap, equality := caller.checked.operations })
+        caller.fourth caller.merge)
+      memos.query (some []) none none none)
+final : Memos
+post :
+  Post formulas solver inventory caller
+    (SourceCurrentAllocatedPartialState.advance caller
+      (SourceCurrentAllocatedQueryMemo.advancePhysical caller.checked
+        { heap := heap, equality := caller.checked.operations })
+      caller.fourth caller.merge)
+    final
+query : final.query = memos.query
+⊢ Prop
+/tmp/mcfta-enumeration-one-expansion-20261026/strict-one-expansion-1/MicroCFTA/SourcePruningEnumerationOneExpansionResources.lean:107:6: error: don't know how to synthesize implicit argument `b`
+  @And.intro (reached = reached)
+    (memos.query = final.query ∧
+      ∀ (output : Output (bits + 2) ?m.501), output ∈ [] → OutputResources formulas solver caller start output)
+    rfl ⟨Eq.symm query, fun x member => False.elim (List.not_mem_nil member)⟩
+context:
+Typing Key : Type
+bits : Nat
+inst✝² : DecidableEq Symbol
+inst✝¹ : DecidableEq (EdgeKey Symbol Constraint)
+inst✝ : DecidableEq Node
+holeKey : Typing → Nat → Key
+fits : Key → Symbol → Bool
+admits : Key → Node → Bool
+graph : Graph Symbol Constraint
+templates : List (Template.Pattern Symbol)
+checkEmpty : Bool
+edgesOf : Node → List (EdgeValue Symbol Constraint)
+stop : Option (Metadata Typing → Nat → Bool)
+order : Metadata Typing → List Nat → Option Nat
+formulas : SourceGuards.Formulas FullSyntax.Formula
+solver : SourceGuards.Entailment FullSyntax.Formula
+inventory : Inventory
+caller : Caller (bits + 2)
+memos : Memos
+before : Cached
+metadata : Metadata Typing
+uv : Nat
+seed : Seed
+packet : Packet formulas solver inventory caller memos metadata before
+bounded : Fits seed.snd caller.checked
+known : Heap (fun guard => guard ∈ seed.fst) caller.checked.native.machine.heap
+selectionMembers :
+  ∀ (entry : Cache.Interned InternedBinderProtocol.NodeKey) (rows : List (EdgeValue Symbol Constraint)) (depth : Nat)
+    (free : List InternedBinderProtocol.Reference) (edge : EdgeValue Symbol Constraint),
+    edge ∈ edgesOf (Value.node entry rows depth free) → edge ∈ rows
+selectionLength :
+  ∀ (entry : Cache.Interned InternedBinderProtocol.NodeKey) (rows : List (EdgeValue Symbol Constraint)) (depth : Nat)
+    (free : List InternedBinderProtocol.Reference), (edgesOf (Value.node entry rows depth free)).length ≤ rows.length
+chosen : SourcePruningEnumerationRestart.decision stop order metadata before = some (Next.expand uv)
+start : Seed := ⋯
+inherited : Nat := ⋯
+count : Nat := ⋯
+envelope : Seed := ⋯
+reserved : Reserved bits start count
+enlarged : Le seed.snd envelope.snd
+retained : seed.fst ⊆ envelope.fst
+selection : EnumerationPureSelection.next (order metadata) before = Next.expand uv
+roots : Nat → Nat
+paths : Roots before.core.representatives roots
+_storage : StorageValid before.core
+realized : SourcePruningEnumerationObservation.PendingRealized caller.checked.native.machine.heap before.core
+counts : EnumerationCanonicalWaiting.Correct roots before.core.values before.waiting
+flags :
+  ∀ (slot : Nat),
+    SourcePruningEnumerationNativeIndex.candidate caller.checked.native.machine.heap
+        (before.core.values[slot]?.getD UVarValue.eliminated) =
+      some (before.expandable slot)
+prefixFuel : Nat
+checked : EnumerationState.State Symbol Constraint
+heap : InternedConstructorTemplates.State Symbol Constraint
+phase :
+  ∀ (extra : Nat),
+    runPrefix holeKey fits admits graph templates stop order metadata (prefixFuel + extra) (prefixFuel + extra)
+          (prefixFuel + extra) (prefixFuel + extra) (prefixFuel + extra) (prefixFuel + extra) uv caller before
+          memos.query =
+        SourcePruningEnumerationSelectedStep.Result.narrowed checked
+          (MergedSourceComparison.Result.done (Value.empty, some reject) heap)
+          (SourceCurrentAllocatedPartialState.advance caller
+            (SourceCurrentAllocatedQueryMemo.advancePhysical caller.checked
+              { heap := heap, equality := caller.checked.operations })
+            caller.fourth caller.merge)
+          memos.query (some []) none none none ∧
+      SourcePruningEnumerationSelectedStep.PrefixValid holeKey fits admits graph templates checkEmpty edgesOf stop order
+        metadata formulas solver inventory (prefixFuel + extra) uv caller before memos
+        (runPrefix holeKey fits admits graph templates stop order metadata (prefixFuel + extra) (prefixFuel + extra)
+          (prefixFuel + extra) (prefixFuel + extra) (prefixFuel + extra) (prefixFuel + extra) uv caller before
+          memos.query)
+reached : Caller (bits + 2) := ⋯
+valid :
+  SourcePruningEnumerationSelectedStep.PrefixValid holeKey fits admits graph templates checkEmpty edgesOf stop order
+    metadata formulas solver inventory (prefixFuel + 0) uv caller before memos
+    (SourcePruningEnumerationSelectedStep.Result.narrowed checked
+      (MergedSourceComparison.Result.done (Value.empty, some reject) heap)
+      (SourceCurrentAllocatedPartialState.advance caller
+        (SourceCurrentAllocatedQueryMemo.advancePhysical caller.checked
+          { heap := heap, equality := caller.checked.operations })
+        caller.fourth caller.merge)
+      memos.query (some []) none none none)
+resources :
+  SourcePruningEnumerationSelectedStep.Resources seed.snd (fun guard => guard ∈ seed.fst) caller
+    (SourcePruningEnumerationSelectedStep.Result.narrowed checked
+      (MergedSourceComparison.Result.done (Value.empty, some reject) heap)
+      (SourceCurrentAllocatedPartialState.advance caller
+        (SourceCurrentAllocatedQueryMemo.advancePhysical caller.checked
+          { heap := heap, equality := caller.checked.operations })
+        caller.fourth caller.merge)
+      memos.query (some []) none none none)
+final : Memos
+post :
+  Post formulas solver inventory caller
+    (SourceCurrentAllocatedPartialState.advance caller
+      (SourceCurrentAllocatedQueryMemo.advancePhysical caller.checked
+        { heap := heap, equality := caller.checked.operations })
+      caller.fourth caller.merge)
+    final
+query : final.query = memos.query
+⊢ Prop
+/tmp/mcfta-enumeration-one-expansion-20261026/strict-one-expansion-1/MicroCFTA/SourcePruningEnumerationOneExpansionResources.lean:107:6: error: don't know how to synthesize implicit argument `b`
+  @And.intro (memos.query = final.query)
+    (∀ (output : Output (bits + 2) ?m.501), output ∈ [] → OutputResources formulas solver caller start output)
+    (Eq.symm query) fun x member => False.elim (List.not_mem_nil member)
+context:
+Typing Key : Type
+bits : Nat
+inst✝² : DecidableEq Symbol
+inst✝¹ : DecidableEq (EdgeKey Symbol Constraint)
+inst✝ : DecidableEq Node
+holeKey : Typing → Nat → Key
+fits : Key → Symbol → Bool
+admits : Key → Node → Bool
+graph : Graph Symbol Constraint
+templates : List (Template.Pattern Symbol)
+checkEmpty : Bool
+edgesOf : Node → List (EdgeValue Symbol Constraint)
+stop : Option (Metadata Typing → Nat → Bool)
+order : Metadata Typing → List Nat → Option Nat
+formulas : SourceGuards.Formulas FullSyntax.Formula
+solver : SourceGuards.Entailment FullSyntax.Formula
+inventory : Inventory
+caller : Caller (bits + 2)
+memos : Memos
+before : Cached
+metadata : Metadata Typing
+uv : Nat
+seed : Seed
+packet : Packet formulas solver inventory caller memos metadata before
+bounded : Fits seed.snd caller.checked
+known : Heap (fun guard => guard ∈ seed.fst) caller.checked.native.machine.heap
+selectionMembers :
+  ∀ (entry : Cache.Interned InternedBinderProtocol.NodeKey) (rows : List (EdgeValue Symbol Constraint)) (depth : Nat)
+    (free : List InternedBinderProtocol.Reference) (edge : EdgeValue Symbol Constraint),
+    edge ∈ edgesOf (Value.node entry rows depth free) → edge ∈ rows
+selectionLength :
+  ∀ (entry : Cache.Interned InternedBinderProtocol.NodeKey) (rows : List (EdgeValue Symbol Constraint)) (depth : Nat)
+    (free : List InternedBinderProtocol.Reference), (edgesOf (Value.node entry rows depth free)).length ≤ rows.length
+chosen : SourcePruningEnumerationRestart.decision stop order metadata before = some (Next.expand uv)
+start : Seed := ⋯
+inherited : Nat := ⋯
+count : Nat := ⋯
+envelope : Seed := ⋯
+reserved : Reserved bits start count
+enlarged : Le seed.snd envelope.snd
+retained : seed.fst ⊆ envelope.fst
+selection : EnumerationPureSelection.next (order metadata) before = Next.expand uv
+roots : Nat → Nat
+paths : Roots before.core.representatives roots
+_storage : StorageValid before.core
+realized : SourcePruningEnumerationObservation.PendingRealized caller.checked.native.machine.heap before.core
+counts : EnumerationCanonicalWaiting.Correct roots before.core.values before.waiting
+flags :
+  ∀ (slot : Nat),
+    SourcePruningEnumerationNativeIndex.candidate caller.checked.native.machine.heap
+        (before.core.values[slot]?.getD UVarValue.eliminated) =
+      some (before.expandable slot)
+prefixFuel : Nat
+checked : EnumerationState.State Symbol Constraint
+heap : InternedConstructorTemplates.State Symbol Constraint
+phase :
+  ∀ (extra : Nat),
+    runPrefix holeKey fits admits graph templates stop order metadata (prefixFuel + extra) (prefixFuel + extra)
+          (prefixFuel + extra) (prefixFuel + extra) (prefixFuel + extra) (prefixFuel + extra) uv caller before
+          memos.query =
+        SourcePruningEnumerationSelectedStep.Result.narrowed checked
+          (MergedSourceComparison.Result.done (Value.empty, some reject) heap)
+          (SourceCurrentAllocatedPartialState.advance caller
+            (SourceCurrentAllocatedQueryMemo.advancePhysical caller.checked
+              { heap := heap, equality := caller.checked.operations })
+            caller.fourth caller.merge)
+          memos.query (some []) none none none ∧
+      SourcePruningEnumerationSelectedStep.PrefixValid holeKey fits admits graph templates checkEmpty edgesOf stop order
+        metadata formulas solver inventory (prefixFuel + extra) uv caller before memos
+        (runPrefix holeKey fits admits graph templates stop order metadata (prefixFuel + extra) (prefixFuel + extra)
+          (prefixFuel + extra) (prefixFuel + extra) (prefixFuel + extra) (prefixFuel + extra) uv caller before
+          memos.query)
+reached : Caller (bits + 2) := ⋯
+valid :
+  SourcePruningEnumerationSelectedStep.PrefixValid holeKey fits admits graph templates checkEmpty edgesOf stop order
+    metadata formulas solver inventory (prefixFuel + 0) uv caller before memos
+    (SourcePruningEnumerationSelectedStep.Result.narrowed checked
+      (MergedSourceComparison.Result.done (Value.empty, some reject) heap)
+      (SourceCurrentAllocatedPartialState.advance caller
+        (SourceCurrentAllocatedQueryMemo.advancePhysical caller.checked
+          { heap := heap, equality := caller.checked.operations })
+        caller.fourth caller.merge)
+      memos.query (some []) none none none)
+resources :
+  SourcePruningEnumerationSelectedStep.Resources seed.snd (fun guard => guard ∈ seed.fst) caller
+    (SourcePruningEnumerationSelectedStep.Result.narrowed checked
+      (MergedSourceComparison.Result.done (Value.empty, some reject) heap)
+      (SourceCurrentAllocatedPartialState.advance caller
+        (SourceCurrentAllocatedQueryMemo.advancePhysical caller.checked
+          { heap := heap, equality := caller.checked.operations })
+        caller.fourth caller.merge)
+      memos.query (some []) none none none)
+final : Memos
+post :
+  Post formulas solver inventory caller
+    (SourceCurrentAllocatedPartialState.advance caller
+      (SourceCurrentAllocatedQueryMemo.advancePhysical caller.checked
+        { heap := heap, equality := caller.checked.operations })
+      caller.fourth caller.merge)
+    final
+query : final.query = memos.query
+⊢ Prop
+/tmp/mcfta-enumeration-one-expansion-20261026/strict-one-expansion-1/MicroCFTA/SourcePruningEnumerationOneExpansionResources.lean:108:24: error: don't know how to synthesize implicit argument `C`
+  @False.elim (OutputResources formulas solver caller start x✝) (List.not_mem_nil member)
+context:
+Typing Key : Type
+bits : Nat
+inst✝² : DecidableEq Symbol
+inst✝¹ : DecidableEq (EdgeKey Symbol Constraint)
+inst✝ : DecidableEq Node
+holeKey : Typing → Nat → Key
+fits : Key → Symbol → Bool
+admits : Key → Node → Bool
+graph : Graph Symbol Constraint
+templates : List (Template.Pattern Symbol)
+checkEmpty : Bool
+edgesOf : Node → List (EdgeValue Symbol Constraint)
+stop : Option (Metadata Typing → Nat → Bool)
+order : Metadata Typing → List Nat → Option Nat
+formulas : SourceGuards.Formulas FullSyntax.Formula
+solver : SourceGuards.Entailment FullSyntax.Formula
+inventory : Inventory
+caller : Caller (bits + 2)
+memos : Memos
+before : Cached
+metadata : Metadata Typing
+uv : Nat
+seed : Seed
+packet : Packet formulas solver inventory caller memos metadata before
+bounded : Fits seed.snd caller.checked
+known : Heap (fun guard => guard ∈ seed.fst) caller.checked.native.machine.heap
+selectionMembers :
+  ∀ (entry : Cache.Interned InternedBinderProtocol.NodeKey) (rows : List (EdgeValue Symbol Constraint)) (depth : Nat)
+    (free : List InternedBinderProtocol.Reference) (edge : EdgeValue Symbol Constraint),
+    edge ∈ edgesOf (Value.node entry rows depth free) → edge ∈ rows
+selectionLength :
+  ∀ (entry : Cache.Interned InternedBinderProtocol.NodeKey) (rows : List (EdgeValue Symbol Constraint)) (depth : Nat)
+    (free : List InternedBinderProtocol.Reference), (edgesOf (Value.node entry rows depth free)).length ≤ rows.length
+chosen : SourcePruningEnumerationRestart.decision stop order metadata before = some (Next.expand uv)
+start : Seed := ⋯
+inherited : Nat := ⋯
+count : Nat := ⋯
+envelope : Seed := ⋯
+reserved : Reserved bits start count
+enlarged : Le seed.snd envelope.snd
+retained : seed.fst ⊆ envelope.fst
+selection : EnumerationPureSelection.next (order metadata) before = Next.expand uv
+roots : Nat → Nat
+paths : Roots before.core.representatives roots
+_storage : StorageValid before.core
+realized : SourcePruningEnumerationObservation.PendingRealized caller.checked.native.machine.heap before.core
+counts : EnumerationCanonicalWaiting.Correct roots before.core.values before.waiting
+flags :
+  ∀ (slot : Nat),
+    SourcePruningEnumerationNativeIndex.candidate caller.checked.native.machine.heap
+        (before.core.values[slot]?.getD UVarValue.eliminated) =
+      some (before.expandable slot)
+prefixFuel : Nat
+checked : EnumerationState.State Symbol Constraint
+heap : InternedConstructorTemplates.State Symbol Constraint
+phase :
+  ∀ (extra : Nat),
+    runPrefix holeKey fits admits graph templates stop order metadata (prefixFuel + extra) (prefixFuel + extra)
+          (prefixFuel + extra) (prefixFuel + extra) (prefixFuel + extra) (prefixFuel + extra) uv caller before
+          memos.query =
+        SourcePruningEnumerationSelectedStep.Result.narrowed checked
+          (MergedSourceComparison.Result.done (Value.empty, some reject) heap)
+          (SourceCurrentAllocatedPartialState.advance caller
+            (SourceCurrentAllocatedQueryMemo.advancePhysical caller.checked
+              { heap := heap, equality := caller.checked.operations })
+            caller.fourth caller.merge)
+          memos.query (some []) none none none ∧
+      SourcePruningEnumerationSelectedStep.PrefixValid holeKey fits admits graph templates checkEmpty edgesOf stop order
+        metadata formulas solver inventory (prefixFuel + extra) uv caller before memos
+        (runPrefix holeKey fits admits graph templates stop order metadata (prefixFuel + extra) (prefixFuel + extra)
+          (prefixFuel + extra) (prefixFuel + extra) (prefixFuel + extra) (prefixFuel + extra) uv caller before
+          memos.query)
+reached : Caller (bits + 2) := ⋯
+valid :
+  SourcePruningEnumerationSelectedStep.PrefixValid holeKey fits admits graph templates checkEmpty edgesOf stop order
+    metadata formulas solver inventory (prefixFuel + 0) uv caller before memos
+    (SourcePruningEnumerationSelectedStep.Result.narrowed checked
+      (MergedSourceComparison.Result.done (Value.empty, some reject) heap)
+      (SourceCurrentAllocatedPartialState.advance caller
+        (SourceCurrentAllocatedQueryMemo.advancePhysical caller.checked
+          { heap := heap, equality := caller.checked.operations })
+        caller.fourth caller.merge)
+      memos.query (some []) none none none)
+resources :
+  SourcePruningEnumerationSelectedStep.Resources seed.snd (fun guard => guard ∈ seed.fst) caller
+    (SourcePruningEnumerationSelectedStep.Result.narrowed checked
+      (MergedSourceComparison.Result.done (Value.empty, some reject) heap)
+      (SourceCurrentAllocatedPartialState.advance caller
+        (SourceCurrentAllocatedQueryMemo.advancePhysical caller.checked
+          { heap := heap, equality := caller.checked.operations })
+        caller.fourth caller.merge)
+      memos.query (some []) none none none)
+final : Memos
+post :
+  Post formulas solver inventory caller
+    (SourceCurrentAllocatedPartialState.advance caller
+      (SourceCurrentAllocatedQueryMemo.advancePhysical caller.checked
+        { heap := heap, equality := caller.checked.operations })
+      caller.fourth caller.merge)
+    final
+query : final.query = memos.query
+x✝ : Output (bits + 2) ?m.501
+member : x✝ ∈ []
+⊢ Prop
+/tmp/mcfta-enumeration-one-expansion-20261026/strict-one-expansion-1/MicroCFTA/SourcePruningEnumerationOneExpansionResources.lean:108:36: error: don't know how to synthesize implicit argument `α`
+  @List.not_mem_nil (Output (bits + 2) ?m.501) x✝ member
+context:
+Typing Key : Type
+bits : Nat
+inst✝² : DecidableEq Symbol
+inst✝¹ : DecidableEq (EdgeKey Symbol Constraint)
+inst✝ : DecidableEq Node
+holeKey : Typing → Nat → Key
+fits : Key → Symbol → Bool
+admits : Key → Node → Bool
+graph : Graph Symbol Constraint
+templates : List (Template.Pattern Symbol)
+checkEmpty : Bool
+edgesOf : Node → List (EdgeValue Symbol Constraint)
+stop : Option (Metadata Typing → Nat → Bool)
+order : Metadata Typing → List Nat → Option Nat
+formulas : SourceGuards.Formulas FullSyntax.Formula
+solver : SourceGuards.Entailment FullSyntax.Formula
+inventory : Inventory
+caller : Caller (bits + 2)
+memos : Memos
+before : Cached
+metadata : Metadata Typing
+uv : Nat
+seed : Seed
+packet : Packet formulas solver inventory caller memos metadata before
+bounded : Fits seed.snd caller.checked
+known : Heap (fun guard => guard ∈ seed.fst) caller.checked.native.machine.heap
+selectionMembers :
+  ∀ (entry : Cache.Interned InternedBinderProtocol.NodeKey) (rows : List (EdgeValue Symbol Constraint)) (depth : Nat)
+    (free : List InternedBinderProtocol.Reference) (edge : EdgeValue Symbol Constraint),
+    edge ∈ edgesOf (Value.node entry rows depth free) → edge ∈ rows
+selectionLength :
+  ∀ (entry : Cache.Interned InternedBinderProtocol.NodeKey) (rows : List (EdgeValue Symbol Constraint)) (depth : Nat)
+    (free : List InternedBinderProtocol.Reference), (edgesOf (Value.node entry rows depth free)).length ≤ rows.length
+chosen : SourcePruningEnumerationRestart.decision stop order metadata before = some (Next.expand uv)
+start : Seed := ⋯
+inherited : Nat := ⋯
+count : Nat := ⋯
+envelope : Seed := ⋯
+reserved : Reserved bits start count
+enlarged : Le seed.snd envelope.snd
+retained : seed.fst ⊆ envelope.fst
+selection : EnumerationPureSelection.next (order metadata) before = Next.expand uv
+roots : Nat → Nat
+paths : Roots before.core.representatives roots
+_storage : StorageValid before.core
+realized : SourcePruningEnumerationObservation.PendingRealized caller.checked.native.machine.heap before.core
+counts : EnumerationCanonicalWaiting.Correct roots before.core.values before.waiting
+flags :
+  ∀ (slot : Nat),
+    SourcePruningEnumerationNativeIndex.candidate caller.checked.native.machine.heap
+        (before.core.values[slot]?.getD UVarValue.eliminated) =
+      some (before.expandable slot)
+prefixFuel : Nat
+checked : EnumerationState.State Symbol Constraint
+heap : InternedConstructorTemplates.State Symbol Constraint
+phase :
+  ∀ (extra : Nat),
+    runPrefix holeKey fits admits graph templates stop order metadata (prefixFuel + extra) (prefixFuel + extra)
+          (prefixFuel + extra) (prefixFuel + extra) (prefixFuel + extra) (prefixFuel + extra) uv caller before
+          memos.query =
+        SourcePruningEnumerationSelectedStep.Result.narrowed checked
+          (MergedSourceComparison.Result.done (Value.empty, some reject) heap)
+          (SourceCurrentAllocatedPartialState.advance caller
+            (SourceCurrentAllocatedQueryMemo.advancePhysical caller.checked
+              { heap := heap, equality := caller.checked.operations })
+            caller.fourth caller.merge)
+          memos.query (some []) none none none ∧
+      SourcePruningEnumerationSelectedStep.PrefixValid holeKey fits admits graph templates checkEmpty edgesOf stop order
+        metadata formulas solver inventory (prefixFuel + extra) uv caller before memos
+        (runPrefix holeKey fits admits graph templates stop order metadata (prefixFuel + extra) (prefixFuel + extra)
+          (prefixFuel + extra) (prefixFuel + extra) (prefixFuel + extra) (prefixFuel + extra) uv caller before
+          memos.query)
+reached : Caller (bits + 2) := ⋯
+valid :
+  SourcePruningEnumerationSelectedStep.PrefixValid holeKey fits admits graph templates checkEmpty edgesOf stop order
+    metadata formulas solver inventory (prefixFuel + 0) uv caller before memos
+    (SourcePruningEnumerationSelectedStep.Result.narrowed checked
+      (MergedSourceComparison.Result.done (Value.empty, some reject) heap)
+      (SourceCurrentAllocatedPartialState.advance caller
+        (SourceCurrentAllocatedQueryMemo.advancePhysical caller.checked
+          { heap := heap, equality := caller.checked.operations })
+        caller.fourth caller.merge)
+      memos.query (some []) none none none)
+resources :
+  SourcePruningEnumerationSelectedStep.Resources seed.snd (fun guard => guard ∈ seed.fst) caller
+    (SourcePruningEnumerationSelectedStep.Result.narrowed checked
+      (MergedSourceComparison.Result.done (Value.empty, some reject) heap)
+      (SourceCurrentAllocatedPartialState.advance caller
+        (SourceCurrentAllocatedQueryMemo.advancePhysical caller.checked
+          { heap := heap, equality := caller.checked.operations })
+        caller.fourth caller.merge)
+      memos.query (some []) none none none)
+final : Memos
+post :
+  Post formulas solver inventory caller
+    (SourceCurrentAllocatedPartialState.advance caller
+      (SourceCurrentAllocatedQueryMemo.advancePhysical caller.checked
+        { heap := heap, equality := caller.checked.operations })
+      caller.fourth caller.merge)
+    final
+query : final.query = memos.query
+x✝ : Output (bits + 2) ?m.501
+member : x✝ ∈ []
+⊢ Type 1
+/tmp/mcfta-enumeration-one-expansion-20261026/strict-one-expansion-1/MicroCFTA/SourcePruningEnumerationOneExpansionResources.lean:108:14: error(lean.inferBinderTypeFailed): Failed to infer type of binder `member`
+/tmp/mcfta-enumeration-one-expansion-20261026/strict-one-expansion-1/MicroCFTA/SourcePruningEnumerationOneExpansionResources.lean:108:12: error(lean.inferBinderTypeFailed): Failed to infer binder type
+/tmp/mcfta-enumeration-one-expansion-20261026/strict-one-expansion-1/MicroCFTA/SourcePruningEnumerationOneExpansionResources.lean:106:23: error: don't know how to synthesize implicit argument `Typing`
+  @OutcomeResources ?m.501 (bits + 2) inst✝¹ formulas solver caller start
+    (SourcePruningEnumerationNativeContinuations.HookResult.complete [] reached memos.query)
+context:
+Typing Key : Type
+bits : Nat
+inst✝² : DecidableEq Symbol
+inst✝¹ : DecidableEq (EdgeKey Symbol Constraint)
+inst✝ : DecidableEq Node
+holeKey : Typing → Nat → Key
+fits : Key → Symbol → Bool
+admits : Key → Node → Bool
+graph : Graph Symbol Constraint
+templates : List (Template.Pattern Symbol)
+checkEmpty : Bool
+edgesOf : Node → List (EdgeValue Symbol Constraint)
+stop : Option (Metadata Typing → Nat → Bool)
+order : Metadata Typing → List Nat → Option Nat
+formulas : SourceGuards.Formulas FullSyntax.Formula
+solver : SourceGuards.Entailment FullSyntax.Formula
+inventory : Inventory
+caller : Caller (bits + 2)
+memos : Memos
+before : Cached
+metadata : Metadata Typing
+uv : Nat
+seed : Seed
+packet : Packet formulas solver inventory caller memos metadata before
+bounded : Fits seed.snd caller.checked
+known : Heap (fun guard => guard ∈ seed.fst) caller.checked.native.machine.heap
+selectionMembers :
+  ∀ (entry : Cache.Interned InternedBinderProtocol.NodeKey) (rows : List (EdgeValue Symbol Constraint)) (depth : Nat)
+    (free : List InternedBinderProtocol.Reference) (edge : EdgeValue Symbol Constraint),
+    edge ∈ edgesOf (Value.node entry rows depth free) → edge ∈ rows
+selectionLength :
+  ∀ (entry : Cache.Interned InternedBinderProtocol.NodeKey) (rows : List (EdgeValue Symbol Constraint)) (depth : Nat)
+    (free : List InternedBinderProtocol.Reference), (edgesOf (Value.node entry rows depth free)).length ≤ rows.length
+chosen : SourcePruningEnumerationRestart.decision stop order metadata before = some (Next.expand uv)
+start : Seed := ⋯
+inherited : Nat := ⋯
+count : Nat := ⋯
+envelope : Seed := ⋯
+reserved : Reserved bits start count
+enlarged : Le seed.snd envelope.snd
+retained : seed.fst ⊆ envelope.fst
+selection : EnumerationPureSelection.next (order metadata) before = Next.expand uv
+roots : Nat → Nat
+paths : Roots before.core.representatives roots
+_storage : StorageValid before.core
+realized : SourcePruningEnumerationObservation.PendingRealized caller.checked.native.machine.heap before.core
+counts : EnumerationCanonicalWaiting.Correct roots before.core.values before.waiting
+flags :
+  ∀ (slot : Nat),
+    SourcePruningEnumerationNativeIndex.candidate caller.checked.native.machine.heap
+        (before.core.values[slot]?.getD UVarValue.eliminated) =
+      some (before.expandable slot)
+prefixFuel : Nat
+checked : EnumerationState.State Symbol Constraint
+heap : InternedConstructorTemplates.State Symbol Constraint
+phase :
+  ∀ (extra : Nat),
+    runPrefix holeKey fits admits graph templates stop order metadata (prefixFuel + extra) (prefixFuel + extra)
+          (prefixFuel + extra) (prefixFuel + extra) (prefixFuel + extra) (prefixFuel + extra) uv caller before
+          memos.query =
+        SourcePruningEnumerationSelectedStep.Result.narrowed checked
+          (MergedSourceComparison.Result.done (Value.empty, some reject) heap)
+          (SourceCurrentAllocatedPartialState.advance caller
+            (SourceCurrentAllocatedQueryMemo.advancePhysical caller.checked
+              { heap := heap, equality := caller.checked.operations })
+            caller.fourth caller.merge)
+          memos.query (some []) none none none ∧
+      SourcePruningEnumerationSelectedStep.PrefixValid holeKey fits admits graph templates checkEmpty edgesOf stop order
+        metadata formulas solver inventory (prefixFuel + extra) uv caller before memos
+        (runPrefix holeKey fits admits graph templates stop order metadata (prefixFuel + extra) (prefixFuel + extra)
+          (prefixFuel + extra) (prefixFuel + extra) (prefixFuel + extra) (prefixFuel + extra) uv caller before
+          memos.query)
+reached : Caller (bits + 2) := ⋯
+valid :
+  SourcePruningEnumerationSelectedStep.PrefixValid holeKey fits admits graph templates checkEmpty edgesOf stop order
+    metadata formulas solver inventory (prefixFuel + 0) uv caller before memos
+    (SourcePruningEnumerationSelectedStep.Result.narrowed checked
+      (MergedSourceComparison.Result.done (Value.empty, some reject) heap)
+      (SourceCurrentAllocatedPartialState.advance caller
+        (SourceCurrentAllocatedQueryMemo.advancePhysical caller.checked
+          { heap := heap, equality := caller.checked.operations })
+        caller.fourth caller.merge)
+      memos.query (some []) none none none)
+resources :
+  SourcePruningEnumerationSelectedStep.Resources seed.snd (fun guard => guard ∈ seed.fst) caller
+    (SourcePruningEnumerationSelectedStep.Result.narrowed checked
+      (MergedSourceComparison.Result.done (Value.empty, some reject) heap)
+      (SourceCurrentAllocatedPartialState.advance caller
+        (SourceCurrentAllocatedQueryMemo.advancePhysical caller.checked
+          { heap := heap, equality := caller.checked.operations })
+        caller.fourth caller.merge)
+      memos.query (some []) none none none)
+final : Memos
+post :
+  Post formulas solver inventory caller
+    (SourceCurrentAllocatedPartialState.advance caller
+      (SourceCurrentAllocatedQueryMemo.advancePhysical caller.checked
+        { heap := heap, equality := caller.checked.operations })
+      caller.fourth caller.merge)
+    final
+query : final.query = memos.query
+⊢ Type
+/tmp/mcfta-enumeration-one-expansion-20261026/strict-one-expansion-1/MicroCFTA/SourcePruningEnumerationOneExpansionResources.lean:106:70: error: don't know how to synthesize implicit argument `Reason`
+  @SourcePruningEnumerationNativeContinuations.HookResult.complete (Output (bits + 2) ?m.501)
+    (Failure (bits + 2) ?m.501) (bits + 2) [] reached memos.query
+context:
+Typing Key : Type
+bits : Nat
+inst✝² : DecidableEq Symbol
+inst✝¹ : DecidableEq (EdgeKey Symbol Constraint)
+inst✝ : DecidableEq Node
+holeKey : Typing → Nat → Key
+fits : Key → Symbol → Bool
+admits : Key → Node → Bool
+graph : Graph Symbol Constraint
+templates : List (Template.Pattern Symbol)
+checkEmpty : Bool
+edgesOf : Node → List (EdgeValue Symbol Constraint)
+stop : Option (Metadata Typing → Nat → Bool)
+order : Metadata Typing → List Nat → Option Nat
+formulas : SourceGuards.Formulas FullSyntax.Formula
+solver : SourceGuards.Entailment FullSyntax.Formula
+inventory : Inventory
+caller : Caller (bits + 2)
+memos : Memos
+before : Cached
+metadata : Metadata Typing
+uv : Nat
+seed : Seed
+packet : Packet formulas solver inventory caller memos metadata before
+bounded : Fits seed.snd caller.checked
+known : Heap (fun guard => guard ∈ seed.fst) caller.checked.native.machine.heap
+selectionMembers :
+  ∀ (entry : Cache.Interned InternedBinderProtocol.NodeKey) (rows : List (EdgeValue Symbol Constraint)) (depth : Nat)
+    (free : List InternedBinderProtocol.Reference) (edge : EdgeValue Symbol Constraint),
+    edge ∈ edgesOf (Value.node entry rows depth free) → edge ∈ rows
+selectionLength :
+  ∀ (entry : Cache.Interned InternedBinderProtocol.NodeKey) (rows : List (EdgeValue Symbol Constraint)) (depth : Nat)
+    (free : List InternedBinderProtocol.Reference), (edgesOf (Value.node entry rows depth free)).length ≤ rows.length
+chosen : SourcePruningEnumerationRestart.decision stop order metadata before = some (Next.expand uv)
+start : Seed := ⋯
+inherited : Nat := ⋯
+count : Nat := ⋯
+envelope : Seed := ⋯
+reserved : Reserved bits start count
+enlarged : Le seed.snd envelope.snd
+retained : seed.fst ⊆ envelope.fst
+selection : EnumerationPureSelection.next (order metadata) before = Next.expand uv
+roots : Nat → Nat
+paths : Roots before.core.representatives roots
+_storage : StorageValid before.core
+realized : SourcePruningEnumerationObservation.PendingRealized caller.checked.native.machine.heap before.core
+counts : EnumerationCanonicalWaiting.Correct roots before.core.values before.waiting
+flags :
+  ∀ (slot : Nat),
+    SourcePruningEnumerationNativeIndex.candidate caller.checked.native.machine.heap
+        (before.core.values[slot]?.getD UVarValue.eliminated) =
+      some (before.expandable slot)
+prefixFuel : Nat
+checked : EnumerationState.State Symbol Constraint
+heap : InternedConstructorTemplates.State Symbol Constraint
+phase :
+  ∀ (extra : Nat),
+    runPrefix holeKey fits admits graph templates stop order metadata (prefixFuel + extra) (prefixFuel + extra)
+          (prefixFuel + extra) (prefixFuel + extra) (prefixFuel + extra) (prefixFuel + extra) uv caller before
+          memos.query =
+        SourcePruningEnumerationSelectedStep.Result.narrowed checked
+          (MergedSourceComparison.Result.done (Value.empty, some reject) heap)
+          (SourceCurrentAllocatedPartialState.advance caller
+            (SourceCurrentAllocatedQueryMemo.advancePhysical caller.checked
+              { heap := heap, equality := caller.checked.operations })
+            caller.fourth caller.merge)
+          memos.query (some []) none none none ∧
+      SourcePruningEnumerationSelectedStep.PrefixValid holeKey fits admits graph templates checkEmpty edgesOf stop order
+        metadata formulas solver inventory (prefixFuel + extra) uv caller before memos
+        (runPrefix holeKey fits admits graph templates stop order metadata (prefixFuel + extra) (prefixFuel + extra)
+          (prefixFuel + extra) (prefixFuel + extra) (prefixFuel + extra) (prefixFuel + extra) uv caller before
+          memos.query)
+reached : Caller (bits + 2) := ⋯
+valid :
+  SourcePruningEnumerationSelectedStep.PrefixValid holeKey fits admits graph templates checkEmpty edgesOf stop order
+    metadata formulas solver inventory (prefixFuel + 0) uv caller before memos
+    (SourcePruningEnumerationSelectedStep.Result.narrowed checked
+      (MergedSourceComparison.Result.done (Value.empty, some reject) heap)
+      (SourceCurrentAllocatedPartialState.advance caller
+        (SourceCurrentAllocatedQueryMemo.advancePhysical caller.checked
+          { heap := heap, equality := caller.checked.operations })
+        caller.fourth caller.merge)
+      memos.query (some []) none none none)
+resources :
+  SourcePruningEnumerationSelectedStep.Resources seed.snd (fun guard => guard ∈ seed.fst) caller
+    (SourcePruningEnumerationSelectedStep.Result.narrowed checked
+      (MergedSourceComparison.Result.done (Value.empty, some reject) heap)
+      (SourceCurrentAllocatedPartialState.advance caller
+        (SourceCurrentAllocatedQueryMemo.advancePhysical caller.checked
+          { heap := heap, equality := caller.checked.operations })
+        caller.fourth caller.merge)
+      memos.query (some []) none none none)
+final : Memos
+post :
+  Post formulas solver inventory caller
+    (SourceCurrentAllocatedPartialState.advance caller
+      (SourceCurrentAllocatedQueryMemo.advancePhysical caller.checked
+        { heap := heap, equality := caller.checked.operations })
+      caller.fourth caller.merge)
+    final
+query : final.query = memos.query
+⊢ Type 1
+/tmp/mcfta-enumeration-one-expansion-20261026/strict-one-expansion-1/MicroCFTA/SourcePruningEnumerationOneExpansionResources.lean:106:70: error: don't know how to synthesize implicit argument `Output`
+  @SourcePruningEnumerationNativeContinuations.HookResult.complete (Output (bits + 2) ?m.501)
+    (Failure (bits + 2) ?m.501) (bits + 2) [] reached memos.query
+context:
+Typing Key : Type
+bits : Nat
+inst✝² : DecidableEq Symbol
+inst✝¹ : DecidableEq (EdgeKey Symbol Constraint)
+inst✝ : DecidableEq Node
+holeKey : Typing → Nat → Key
+fits : Key → Symbol → Bool
+admits : Key → Node → Bool
+graph : Graph Symbol Constraint
+templates : List (Template.Pattern Symbol)
+checkEmpty : Bool
+edgesOf : Node → List (EdgeValue Symbol Constraint)
+stop : Option (Metadata Typing → Nat → Bool)
+order : Metadata Typing → List Nat → Option Nat
+formulas : SourceGuards.Formulas FullSyntax.Formula
+solver : SourceGuards.Entailment FullSyntax.Formula
+inventory : Inventory
+caller : Caller (bits + 2)
+memos : Memos
+before : Cached
+metadata : Metadata Typing
+uv : Nat
+seed : Seed
+packet : Packet formulas solver inventory caller memos metadata before
+bounded : Fits seed.snd caller.checked
+known : Heap (fun guard => guard ∈ seed.fst) caller.checked.native.machine.heap
+selectionMembers :
+  ∀ (entry : Cache.Interned InternedBinderProtocol.NodeKey) (rows : List (EdgeValue Symbol Constraint)) (depth : Nat)
+    (free : List InternedBinderProtocol.Reference) (edge : EdgeValue Symbol Constraint),
+    edge ∈ edgesOf (Value.node entry rows depth free) → edge ∈ rows
+selectionLength :
+  ∀ (entry : Cache.Interned InternedBinderProtocol.NodeKey) (rows : List (EdgeValue Symbol Constraint)) (depth : Nat)
+    (free : List InternedBinderProtocol.Reference), (edgesOf (Value.node entry rows depth free)).length ≤ rows.length
+chosen : SourcePruningEnumerationRestart.decision stop order metadata before = some (Next.expand uv)
+start : Seed := ⋯
+inherited : Nat := ⋯
+count : Nat := ⋯
+envelope : Seed := ⋯
+reserved : Reserved bits start count
+enlarged : Le seed.snd envelope.snd
+retained : seed.fst ⊆ envelope.fst
+selection : EnumerationPureSelection.next (order metadata) before = Next.expand uv
+roots : Nat → Nat
+paths : Roots before.core.representatives roots
+_storage : StorageValid before.core
+realized : SourcePruningEnumerationObservation.PendingRealized caller.checked.native.machine.heap before.core
+counts : EnumerationCanonicalWaiting.Correct roots before.core.values before.waiting
+flags :
+  ∀ (slot : Nat),
+    SourcePruningEnumerationNativeIndex.candidate caller.checked.native.machine.heap
+        (before.core.values[slot]?.getD UVarValue.eliminated) =
+      some (before.expandable slot)
+prefixFuel : Nat
+checked : EnumerationState.State Symbol Constraint
+heap : InternedConstructorTemplates.State Symbol Constraint
+phase :
+  ∀ (extra : Nat),
+    runPrefix holeKey fits admits graph templates stop order metadata (prefixFuel + extra) (prefixFuel + extra)
+          (prefixFuel + extra) (prefixFuel + extra) (prefixFuel + extra) (prefixFuel + extra) uv caller before
+          memos.query =
+        SourcePruningEnumerationSelectedStep.Result.narrowed checked
+          (MergedSourceComparison.Result.done (Value.empty, some reject) heap)
+          (SourceCurrentAllocatedPartialState.advance caller
+            (SourceCurrentAllocatedQueryMemo.advancePhysical caller.checked
+              { heap := heap, equality := caller.checked.operations })
+            caller.fourth caller.merge)
+          memos.query (some []) none none none ∧
+      SourcePruningEnumerationSelectedStep.PrefixValid holeKey fits admits graph templates checkEmpty edgesOf stop order
+        metadata formulas solver inventory (prefixFuel + extra) uv caller before memos
+        (runPrefix holeKey fits admits graph templates stop order metadata (prefixFuel + extra) (prefixFuel + extra)
+          (prefixFuel + extra) (prefixFuel + extra) (prefixFuel + extra) (prefixFuel + extra) uv caller before
+          memos.query)
+reached : Caller (bits + 2) := ⋯
+valid :
+  SourcePruningEnumerationSelectedStep.PrefixValid holeKey fits admits graph templates checkEmpty edgesOf stop order
+    metadata formulas solver inventory (prefixFuel + 0) uv caller before memos
+    (SourcePruningEnumerationSelectedStep.Result.narrowed checked
+      (MergedSourceComparison.Result.done (Value.empty, some reject) heap)
+      (SourceCurrentAllocatedPartialState.advance caller
+        (SourceCurrentAllocatedQueryMemo.advancePhysical caller.checked
+          { heap := heap, equality := caller.checked.operations })
+        caller.fourth caller.merge)
+      memos.query (some []) none none none)
+resources :
+  SourcePruningEnumerationSelectedStep.Resources seed.snd (fun guard => guard ∈ seed.fst) caller
+    (SourcePruningEnumerationSelectedStep.Result.narrowed checked
+      (MergedSourceComparison.Result.done (Value.empty, some reject) heap)
+      (SourceCurrentAllocatedPartialState.advance caller
+        (SourceCurrentAllocatedQueryMemo.advancePhysical caller.checked
+          { heap := heap, equality := caller.checked.operations })
+        caller.fourth caller.merge)
+      memos.query (some []) none none none)
+final : Memos
+post :
+  Post formulas solver inventory caller
+    (SourceCurrentAllocatedPartialState.advance caller
+      (SourceCurrentAllocatedQueryMemo.advancePhysical caller.checked
+        { heap := heap, equality := caller.checked.operations })
+      caller.fourth caller.merge)
+    final
+query : final.query = memos.query
+⊢ Type 1
+/tmp/mcfta-enumeration-one-expansion-20261026/strict-one-expansion-1/MicroCFTA/SourcePruningEnumerationOneExpansionResources.lean:106:80: error: don't know how to synthesize implicit argument `α`
+  @List.nil (Output (bits + 2) ?m.501)
+context:
+Typing Key : Type
+bits : Nat
+inst✝² : DecidableEq Symbol
+inst✝¹ : DecidableEq (EdgeKey Symbol Constraint)
+inst✝ : DecidableEq Node
+holeKey : Typing → Nat → Key
+fits : Key → Symbol → Bool
+admits : Key → Node → Bool
+graph : Graph Symbol Constraint
+templates : List (Template.Pattern Symbol)
+checkEmpty : Bool
+edgesOf : Node → List (EdgeValue Symbol Constraint)
+stop : Option (Metadata Typing → Nat → Bool)
+order : Metadata Typing → List Nat → Option Nat
+formulas : SourceGuards.Formulas FullSyntax.Formula
+solver : SourceGuards.Entailment FullSyntax.Formula
+inventory : Inventory
+caller : Caller (bits + 2)
+memos : Memos
+before : Cached
+metadata : Metadata Typing
+uv : Nat
+seed : Seed
+packet : Packet formulas solver inventory caller memos metadata before
+bounded : Fits seed.snd caller.checked
+known : Heap (fun guard => guard ∈ seed.fst) caller.checked.native.machine.heap
+selectionMembers :
+  ∀ (entry : Cache.Interned InternedBinderProtocol.NodeKey) (rows : List (EdgeValue Symbol Constraint)) (depth : Nat)
+    (free : List InternedBinderProtocol.Reference) (edge : EdgeValue Symbol Constraint),
+    edge ∈ edgesOf (Value.node entry rows depth free) → edge ∈ rows
+selectionLength :
+  ∀ (entry : Cache.Interned InternedBinderProtocol.NodeKey) (rows : List (EdgeValue Symbol Constraint)) (depth : Nat)
+    (free : List InternedBinderProtocol.Reference), (edgesOf (Value.node entry rows depth free)).length ≤ rows.length
+chosen : SourcePruningEnumerationRestart.decision stop order metadata before = some (Next.expand uv)
+start : Seed := ⋯
+inherited : Nat := ⋯
+count : Nat := ⋯
+envelope : Seed := ⋯
+reserved : Reserved bits start count
+enlarged : Le seed.snd envelope.snd
+retained : seed.fst ⊆ envelope.fst
+selection : EnumerationPureSelection.next (order metadata) before = Next.expand uv
+roots : Nat → Nat
+paths : Roots before.core.representatives roots
+_storage : StorageValid before.core
+realized : SourcePruningEnumerationObservation.PendingRealized caller.checked.native.machine.heap before.core
+counts : EnumerationCanonicalWaiting.Correct roots before.core.values before.waiting
+flags :
+  ∀ (slot : Nat),
+    SourcePruningEnumerationNativeIndex.candidate caller.checked.native.machine.heap
+        (before.core.values[slot]?.getD UVarValue.eliminated) =
+      some (before.expandable slot)
+prefixFuel : Nat
+checked : EnumerationState.State Symbol Constraint
+heap : InternedConstructorTemplates.State Symbol Constraint
+phase :
+  ∀ (extra : Nat),
+    runPrefix holeKey fits admits graph templates stop order metadata (prefixFuel + extra) (prefixFuel + extra)
+          (prefixFuel + extra) (prefixFuel + extra) (prefixFuel + extra) (prefixFuel + extra) uv caller before
+          memos.query =
+        SourcePruningEnumerationSelectedStep.Result.narrowed checked
+          (MergedSourceComparison.Result.done (Value.empty, some reject) heap)
+          (SourceCurrentAllocatedPartialState.advance caller
+            (SourceCurrentAllocatedQueryMemo.advancePhysical caller.checked
+              { heap := heap, equality := caller.checked.operations })
+            caller.fourth caller.merge)
+          memos.query (some []) none none none ∧
+      SourcePruningEnumerationSelectedStep.PrefixValid holeKey fits admits graph templates checkEmpty edgesOf stop order
+        metadata formulas solver inventory (prefixFuel + extra) uv caller before memos
+        (runPrefix holeKey fits admits graph templates stop order metadata (prefixFuel + extra) (prefixFuel + extra)
+          (prefixFuel + extra) (prefixFuel + extra) (prefixFuel + extra) (prefixFuel + extra) uv caller before
+          memos.query)
+reached : Caller (bits + 2) := ⋯
+valid :
+  SourcePruningEnumerationSelectedStep.PrefixValid holeKey fits admits graph templates checkEmpty edgesOf stop order
+    metadata formulas solver inventory (prefixFuel + 0) uv caller before memos
+    (SourcePruningEnumerationSelectedStep.Result.narrowed checked
+      (MergedSourceComparison.Result.done (Value.empty, some reject) heap)
+      (SourceCurrentAllocatedPartialState.advance caller
+        (SourceCurrentAllocatedQueryMemo.advancePhysical caller.checked
+          { heap := heap, equality := caller.checked.operations })
+        caller.fourth caller.merge)
+      memos.query (some []) none none none)
+resources :
+  SourcePruningEnumerationSelectedStep.Resources seed.snd (fun guard => guard ∈ seed.fst) caller
+    (SourcePruningEnumerationSelectedStep.Result.narrowed checked
+      (MergedSourceComparison.Result.done (Value.empty, some reject) heap)
+      (SourceCurrentAllocatedPartialState.advance caller
+        (SourceCurrentAllocatedQueryMemo.advancePhysical caller.checked
+          { heap := heap, equality := caller.checked.operations })
+        caller.fourth caller.merge)
+      memos.query (some []) none none none)
+final : Memos
+post :
+  Post formulas solver inventory caller
+    (SourceCurrentAllocatedPartialState.advance caller
+      (SourceCurrentAllocatedQueryMemo.advancePhysical caller.checked
+        { heap := heap, equality := caller.checked.operations })
+      caller.fourth caller.merge)
+    final
+query : final.query = memos.query
+⊢ Type 1
+/tmp/mcfta-enumeration-one-expansion-20261026/strict-one-expansion-1/MicroCFTA/SourcePruningEnumerationOneExpansionResources.lean:163:12: error: Tactic `generalize` failed: result is not type correct
+  ∀ (x : Bool),
+    match Value.node entry rows depth free, decoded, _available, _closed, ordinary with
+    | Value.node entry edges depth free, decoded, _available, _closed, ordinary => x = true
+    | x_1, decoded, _available, _closed, ordinary => True
+
+case node
+Typing Key : Type
+bits : Nat
+inst✝² : DecidableEq Symbol
+inst✝¹ : DecidableEq (EdgeKey Symbol Constraint)
+inst✝ : DecidableEq Node
+holeKey : Typing → Nat → Key
+fits : Key → Symbol → Bool
+admits : Key → Node → Bool
+graph : Graph Symbol Constraint
+templates : List (Template.Pattern Symbol)
+checkEmpty : Bool
+edgesOf : Node → List (EdgeValue Symbol Constraint)
+stop : Option (Metadata Typing → Nat → Bool)
+order : Metadata Typing → List Nat → Option Nat
+formulas : SourceGuards.Formulas FullSyntax.Formula
+solver : SourceGuards.Entailment FullSyntax.Formula
+inventory : Inventory
+caller : Caller (bits + 2)
+memos : Memos
+before : Cached
+metadata : Metadata Typing
+uv : Nat
+seed : Seed
+packet : Packet formulas solver inventory caller memos metadata before
+bounded : Fits seed.snd caller.checked
+known : Heap (fun guard => guard ∈ seed.fst) caller.checked.native.machine.heap
+selectionMembers :
+  ∀ (entry : Cache.Interned InternedBinderProtocol.NodeKey) (rows : List (EdgeValue Symbol Constraint)) (depth : Nat)
+    (free : List InternedBinderProtocol.Reference) (edge : EdgeValue Symbol Constraint),
+    edge ∈ edgesOf (Value.node entry rows depth free) → edge ∈ rows
+selectionLength :
+  ∀ (entry : Cache.Interned InternedBinderProtocol.NodeKey) (rows : List (EdgeValue Symbol Constraint)) (depth : Nat)
+    (free : List InternedBinderProtocol.Reference), (edgesOf (Value.node entry rows depth free)).length ≤ rows.length
+chosen : SourcePruningEnumerationRestart.decision stop order metadata before = some (Next.expand uv)
+start : Seed := (seed.fst, headProfile seed.snd)
+inherited : Nat := SourcePruningEnumerationPrefixAdmission.suspendedBound before.core
+count : Nat := SourcePruningEnumerationOriginalForecast.count start inherited
+envelope : Seed := reservationAdvance start count
+reserved : Reserved bits start count
+enlarged : Le seed.snd envelope.snd
+retained : seed.fst ⊆ envelope.fst
+selection : EnumerationPureSelection.next (order metadata) before = Next.expand uv
+roots : Nat → Nat
+paths : Roots before.core.representatives roots
+_storage : StorageValid before.core
+realized : SourcePruningEnumerationObservation.PendingRealized caller.checked.native.machine.heap before.core
+counts : EnumerationCanonicalWaiting.Correct roots before.core.values before.waiting
+flags :
+  ∀ (slot : Nat),
+    SourcePruningEnumerationNativeIndex.candidate caller.checked.native.machine.heap
+        (before.core.values[slot]?.getD UVarValue.eliminated) =
+      some (before.expandable slot)
+prefixFuel : Nat
+checked : EnumerationState.State Symbol Constraint
+phaseValue : Node
+heap : InternedConstructorTemplates.State Symbol Constraint
+after : Cached
+_nonempty : phaseValue ≠ Value.empty
+phase :
+  ∀ (extra : Nat),
+    ∃ action,
+      runPrefix holeKey fits admits graph templates stop order metadata (prefixFuel + extra) (prefixFuel + extra)
+            (prefixFuel + extra) (prefixFuel + extra) (prefixFuel + extra) (prefixFuel + extra) uv caller before
+            memos.query =
+          SourcePruningEnumerationSelectedStep.Result.narrowed checked
+            (MergedSourceComparison.Result.done (phaseValue, some action) heap)
+            (SourceCurrentAllocatedPartialState.advance caller
+              (SourceCurrentAllocatedQueryMemo.advancePhysical caller.checked
+                { heap := heap, equality := caller.checked.operations })
+              caller.fourth caller.merge)
+            memos.query (some [Except.ok ((), after.core)]) (some after)
+            (some [Except.ok ((false, metadata), after.core)]) none ∧
+        SourcePruningEnumerationSelectedStep.PrefixValid holeKey fits admits graph templates checkEmpty edgesOf stop
+          order metadata formulas solver inventory (prefixFuel + extra) uv caller before memos
+          (runPrefix holeKey fits admits graph templates stop order metadata (prefixFuel + extra) (prefixFuel + extra)
+            (prefixFuel + extra) (prefixFuel + extra) (prefixFuel + extra) (prefixFuel + extra) uv caller before
+            memos.query)
+reached : Caller (bits + 2) :=
+  SourceCurrentAllocatedPartialState.advance caller
+    (SourceCurrentAllocatedQueryMemo.advancePhysical caller.checked
+      { heap := heap, equality := caller.checked.operations })
+    caller.fourth caller.merge
+action : EnumerateM Symbol Constraint Unit
+prefixAt :
+  runPrefix holeKey fits admits graph templates stop order metadata (prefixFuel + 0) (prefixFuel + 0) (prefixFuel + 0)
+      (prefixFuel + 0) (prefixFuel + 0) (prefixFuel + 0) uv caller before memos.query =
+    SourcePruningEnumerationSelectedStep.Result.narrowed checked
+      (MergedSourceComparison.Result.done (phaseValue, some action) heap)
+      (SourceCurrentAllocatedPartialState.advance caller
+        (SourceCurrentAllocatedQueryMemo.advancePhysical caller.checked
+          { heap := heap, equality := caller.checked.operations })
+        caller.fourth caller.merge)
+      memos.query (some [Except.ok ((), after.core)]) (some after) (some [Except.ok ((false, metadata), after.core)])
+      none
+valid :
+  SourcePruningEnumerationSelectedStep.PrefixValid holeKey fits admits graph templates checkEmpty edgesOf stop order
+    metadata formulas solver inventory (prefixFuel + 0) uv caller before memos
+    (SourcePruningEnumerationSelectedStep.Result.narrowed checked
+      (MergedSourceComparison.Result.done (phaseValue, some action) heap)
+      (SourceCurrentAllocatedPartialState.advance caller
+        (SourceCurrentAllocatedQueryMemo.advancePhysical caller.checked
+          { heap := heap, equality := caller.checked.operations })
+        caller.fourth caller.merge)
+      memos.query (some [Except.ok ((), after.core)]) (some after) (some [Except.ok ((false, metadata), after.core)])
+      none)
+handle : Nat
+scs : List Suspended
+middleMemos : Memos
+middlePost :
+  Post formulas solver inventory caller
+    (SourceCurrentAllocatedPartialState.advance caller
+      (SourceCurrentAllocatedQueryMemo.advancePhysical caller.checked
+        { heap := heap, equality := caller.checked.operations })
+      caller.fourth caller.merge)
+    middleMemos
+middleQuery : middleMemos.query = memos.query
+middlePacket :
+  Packet formulas solver inventory
+    (SourceCurrentAllocatedPartialState.advance caller
+      (SourceCurrentAllocatedQueryMemo.advancePhysical caller.checked
+        { heap := heap, equality := caller.checked.operations })
+      caller.fourth caller.merge)
+    middleMemos metadata after
+ready : EnumerationDriver.Ready uv after.core
+stored : after.core.values[uv]? = some (UVarValue.unenumerated (some handle) scs)
+incoming : EnumerationReferences.IncomingAvoid uv after.core
+_pending : EnumerationDependencies.InputsPending after.core scs
+_ids : ∀ (sc : Suspended), sc ∈ scs → sc.var < before.core.counter
+lengths : scs.length ≤ SourcePruningEnumerationPrefixAdmission.suspendedBound before.core
+_counter : after.core.counter = before.core.counter
+_waiting : after.waiting = before.waiting
+middleFits :
+  Fits (headProfile seed.snd)
+    (SourceCurrentAllocatedPartialState.advance caller
+        (SourceCurrentAllocatedQueryMemo.advancePhysical caller.checked
+          { heap := heap, equality := caller.checked.operations })
+        caller.fourth caller.merge).checked
+middleKnown :
+  Heap (fun guard => guard ∈ seed.fst)
+    (SourceCurrentAllocatedPartialState.advance caller
+              (SourceCurrentAllocatedQueryMemo.advancePhysical caller.checked
+                { heap := heap, equality := caller.checked.operations })
+              caller.fourth caller.merge).checked.native.machine.heap
+entry : Cache.Interned InternedBinderProtocol.NodeKey
+rows : List (EdgeValue Symbol Constraint)
+depth : Nat
+free : List InternedBinderProtocol.Reference
+decoded :
+  SourcePruningEnumerationNodes.lookupNode
+      (SourceCurrentAllocatedPartialState.advance caller
+                (SourceCurrentAllocatedQueryMemo.advancePhysical caller.checked
+                  { heap := heap, equality := caller.checked.operations })
+                caller.fourth caller.merge).checked.native.machine.heap
+      handle =
+    some (Value.node entry rows depth free)
+_available :
+  InternedProbeProvenance.Available
+    (SourceCurrentAllocatedPartialState.advance caller
+              (SourceCurrentAllocatedQueryMemo.advancePhysical caller.checked
+                { heap := heap, equality := caller.checked.operations })
+              caller.fourth caller.merge).checked.native.machine.heap
+    (Value.node entry rows depth free)
+_closed : (Value.node entry rows depth free).free = []
+ordinary :
+  ¬∃ entry_1 rows_1 depth_1 free_1,
+      Value.node entry rows depth free = Value.node entry_1 rows_1 depth_1 free_1 ∧
+        (scs.any fun sc => EqualityTrie.isTerminal sc.trie) = false
+⊢ match Value.node entry rows depth free, decoded, _available, _closed, ordinary with
+  | Value.node entry edges depth free, decoded, _available, _closed, ordinary =>
+    (scs.any fun sc => EqualityTrie.isTerminal sc.trie) = true
+  | x, decoded, _available, _closed, ordinary => True
+/tmp/mcfta-enumeration-one-expansion-20261026/strict-one-expansion-1/MicroCFTA/SourcePruningEnumerationOneExpansionResources.lean:172:44: error: Application type mismatch: The argument
+  fallback
+has type
+  match value, decoded, _available, _closed, ordinary with
+  | Value.node entry edges depth free, decoded, _available, _closed, ordinary =>
+    (scs.any fun sc => EqualityTrie.isTerminal sc.trie) = true
+  | x, decoded, _available, _closed, ordinary => True
+but is expected to have type
+  match value, decoded with
+  | Value.node entry edges depth free, decoded => (scs.any fun sc => EqualityTrie.isTerminal sc.trie) = true
+  | x, decoded => True
+in the application
+  SourcePruningEnumerationNativeOrdinaryContinuations.fallback_complete_resources formulas solver inventory reached
+    middleMemos after metadata uv handle scs value checkEmpty edgesOf middlePacket ready stored decoded fallback
+/tmp/mcfta-enumeration-one-expansion-20261026/strict-one-expansion-1/MicroCFTA/SourcePruningEnumerationOneExpansionResources.lean:174:18: error(lean.invalidDottedIdent): Invalid dotted identifier notation: The expected type of `.ok` could not be determined
+
+Hint: Using one of these would be unambiguous:
+  [apply] `Except.ok`
+  [apply] `EST.Out.ok`
+  [apply] `EStateM.Result.ok`
+  [apply] `Std.Http.Response.ok`
+  [apply] `Std.Http.Status.ok`

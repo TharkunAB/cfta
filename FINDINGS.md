@@ -70,6 +70,21 @@ Terminal parents retain the existing enumerateNode fallback boundary. Native
 children can still take their terminal dispatcher. No Haskell fix is needed.
 Details: lean/notes-current-pruning-enumeration-native-ordinary.md.
 
+### The actual depth-one driver retains output packets and resources
+
+The formal driver now executes one selected expansion at a common work fuel
+under one reservation fixed before narrowing. Initial stop, done and stuck
+are included. Parked, Empty, ordinary, terminal and nonordinary routes keep
+their actual result shapes. Every output retains its own endpoint, full memos,
+cache Packet and resources. Unsupported and exhausted stops stay explicit.
+The proof does not establish general recursive or terminal fallback semantics.
+
+External Haskell action: no new runtime defect or repair was established.
+No Haskell source changed. Keep all six merged repairs and the pending Sized
+documentation commit `af6369a9e`. The formal selector membership and length
+contracts still need canonical Haskell selector correspondence. Details:
+`lean/notes-current-pruning-enumeration-one-expansion.md`.
+
 ### Original forecasts admit ordinary scans after narrowing
 
 The formal resource forecast now uses original heap, guard-alphabet and
@@ -728,6 +743,42 @@ TH/Generic extraction, valid-position build/read and source codec laws stay open
 
 
 
+
+## The actual recursive driver now has a depth-one resource theorem
+
+Outcome certificates: `4e88eecaa`. Prefix phases: `4cf91e299`.
+Selected expansion: `2be4c5ab6`. Full depth-one driver: `8aad865f0`.
+The goal stays ACTIVE. H6 remains the strongest end-to-end language theorem.
+
+The current Packet, numeric Fits, finite guard carrier and an original mixed
+reservation now derive one common work bound for actual Recursive.run at
+recursive depth one. Every larger work fuel gives the same actual outcome.
+The selector must retain stored edges and must not increase their count.
+The theorem has no future success, range or endpoint premise.
+
+The proof executes the actual selected prefix and continuation. It covers
+initial stop, done and stuck, parked restarts, Empty rejection, ordinary scans,
+terminal and nonordinary fallback, unsupported edges and callback exhaustion.
+Each emitted output retains its own full Post, memos, cache Packet, metadata
+shape and resource bounds. The final native Post remains separate. Unsupported
+stops retain no endpoint. Exhausted stops retain their actual endpoint.
+Prepared action closures may depend on work fuel. The proof does not equate
+the whole prefix Result. It retains full PrefixValid in each exact phase.
+
+All ten new sources and Audit pass strict checks. Aggregate Audit passes
+3847 jobs and checks 77451 theorem dependencies. Installed readback covers
+20 declarations and 15 full definitions or structures. Only the allowed
+axioms occur. H6, earlier APIs, runtime workers and Haskell remain unchanged.
+Main remains imported at `153e1a211`. FINDINGS retains all six merged Haskell
+repairs and the pending Sized documentation repair. No new Haskell fix arose.
+
+Next reserve complete deeper recursive subtrees before later siblings. Thread
+the actual post-subtree caller and full memos through the next sibling. Bound
+dynamic cache growth from original inputs. Whole recursive capacity and
+language, terminal outer fallback semantics, native Graph correspondence,
+extraction and arbitrary lazy demand remain open. Depth one includes explicit
+unsupported and exhausted results. It does not establish successful full
+enumeration. Details: `lean/notes-current-pruning-enumeration-one-expansion.md`.
 
 ## Original forecasts now admit scans after actual narrowing
 

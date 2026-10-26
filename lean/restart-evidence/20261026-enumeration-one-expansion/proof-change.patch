@@ -1,0 +1,1259 @@
+diff --git a/lean/MicroCFTA/Audit.lean b/lean/MicroCFTA/Audit.lean
+index b08b3149f..b88e5ccdf 100644
+--- a/lean/MicroCFTA/Audit.lean
++++ b/lean/MicroCFTA/Audit.lean
+@@ -24,6 +24,7 @@ import MicroCFTA.SourcePruningEnumerationCallbackResources
+ import MicroCFTA.SourcePruningEnumerationOrdinaryHookResources
+ import MicroCFTA.SourcePruningEnumerationOrdinaryForecastResources
+ import MicroCFTA.SourcePruningEnumerationExpansionAdmission
++import MicroCFTA.SourcePruningEnumerationRunOneResources
+ import MicroCFTA.SourceCurrentAllocatedNativeWordBoundary
+ import MicroCFTA.SourcePruningEnumerationSelectedNarrow
+ import MicroCFTA.SourcePruningEnumerationRecursion
+diff --git a/lean/MicroCFTA/SourcePruningEnumerationResumeZero.lean b/lean/MicroCFTA/SourcePruningEnumerationResumeZero.lean
+new file mode 100644
+index 000000000..1315e3ee8
+--- /dev/null
++++ b/lean/MicroCFTA/SourcePruningEnumerationResumeZero.lean
+@@ -0,0 +1,86 @@
++import MicroCFTA.SourcePruningEnumerationRecursivePacket
++import MicroCFTA.SourcePruningEnumerationRecursiveEquations
++import MicroCFTA.SourceCurrentConstrainedCapGeneratedQueryResources
++import MicroCFTA.SourceEqualityAnnotationHeap
++
++/-!
++# Actual restart results with zero expansion fuel
++
++Each result retains its original native caller. Stop and done emit their
++actual cache. A new expansion keeps an explicit exhausted stop.
++-/
++namespace MicroCFTA.SourcePruningEnumerationRecursive
++open EnumerationState InternedConstructorTemplates
++open SourceCurrentAllocatedNativeInventoryState (Inventory)
++open SourceCurrentAllocatedNativeResourceForecast (Profile)
++open SourceCurrentConstrainedCapGeneratedQueryResources (Fits)
++local notation "Symbol" => SourcePruningTemplates.Symbol
++local notation "Constraint" => SourceSymbolicIndex.Constraint FullSyntax.Formula
++local notation "Node" => Value Symbol Constraint
++local notation "Caller" => SourceCurrentAllocatedPartialState.State
++local notation "Memos" => EndpointMemoGateTrace.Memos
++local notation "Metadata" => SourcePruningRecordTypes.Metadata
++local notation "Cached" => EnumerationExpandableIndex.Cached Symbol Constraint
++local notation "Heap" => SourceEqualityAnnotationHeap.Heap
++variable {Typing Key : Type} {width : Nat}
++variable [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Constraint)] [DecidableEq Node]
++local notation "Result" => SourcePruningEnumerationNativeContinuations.HookResult
++  (Output width Typing) (Failure width Typing) width
++
++/-- Zero expansion fuel fixes the actual result and all emitted cache packets at every work fuel. -/
++theorem resume_zero_complete_resources
++    (holeKey : Typing → Nat → Key) (fits : Key → Symbol → Bool) (admits : Key → Node → Bool)
++    (graph : Graph Symbol Constraint) (templates : List (Template.Pattern Symbol))
++    (checkEmpty : Bool) (edgesOf : Node → List (EdgeValue Symbol Constraint))
++    (stop : Option (Metadata Typing → Nat → Bool)) (order : Metadata Typing → List Nat → Option Nat)
++    (formulas : SourceGuards.Formulas FullSyntax.Formula)
++    (solver : SourceGuards.Entailment FullSyntax.Formula) (inventory : Inventory)
++    (caller : Caller width) (memos : Memos) (before : Cached) (metadata : Metadata Typing)
++    (next : Option Next) (profile : Profile) (property : Constraint → Prop)
++    (packet : Packet formulas solver inventory caller memos metadata before)
++    (bounded : Fits profile caller.checked) (known : Heap property caller.checked.native.machine.heap) :
++    ∃ outcome : Result,
++      (∀ workFuel, resume holeKey fits admits graph templates checkEmpty edgesOf stop order workFuel 0
++        metadata caller memos.query before next = outcome) ∧
++      match outcome with
++      | .complete outputs reached saved =>
++          reached = caller ∧ saved = memos.query ∧ Fits profile reached.checked ∧
++          Heap property reached.checked.native.machine.heap ∧
++          ∀ output ∈ outputs,
++            Packet formulas solver inventory caller memos metadata output.cache ∧
++            output.caller = caller ∧ output.queries = memos.query ∧
++            (output.metadata = none ∨ output.metadata = some metadata) ∧ output.cache = before
++      | .stopped outputs reason endpoint =>
++          ∃ selected, next = some (.expand selected) ∧ outputs = [] ∧
++            reason = .exhausted selected metadata before ∧ endpoint = some (caller, memos.query) ∧
++            Fits profile caller.checked ∧ Heap property caller.checked.native.machine.heap := by
++  let outcome : Result := match next with
++    | none => .complete [⟨some metadata, before, caller, memos.query⟩] caller memos.query
++    | some .done => .complete [⟨none, before, caller, memos.query⟩] caller memos.query
++    | some .stuck => .complete [] caller memos.query
++    | some (.expand selected) =>
++        .stopped [] (.exhausted selected metadata before) (some (caller, memos.query))
++  refine ⟨outcome, ?_, ?_⟩
++  · intro workFuel
++    cases next with
++    | none => rfl
++    | some next => cases next <;> rfl
++  · cases next with
++    | none =>
++        refine ⟨rfl, rfl, bounded, known, ?_⟩
++        intro output member
++        have same := List.mem_singleton.mp member
++        subst output
++        exact ⟨packet, rfl, rfl, Or.inr rfl, rfl⟩
++    | some next =>
++        cases next with
++        | done =>
++            refine ⟨rfl, rfl, bounded, known, ?_⟩
++            intro output member
++            have same := List.mem_singleton.mp member
++            subst output
++            exact ⟨packet, rfl, rfl, Or.inl rfl, rfl⟩
++        | stuck => exact ⟨rfl, rfl, bounded, known, fun _ member => False.elim (List.not_mem_nil member)⟩
++        | expand selected => exact ⟨selected, rfl, rfl, rfl, rfl, bounded, known⟩
++
++end MicroCFTA.SourcePruningEnumerationRecursive
+diff --git a/lean/MicroCFTA/SourcePruningEnumerationOrdinaryFallbackResources.lean b/lean/MicroCFTA/SourcePruningEnumerationOrdinaryFallbackResources.lean
+new file mode 100644
+index 000000000..4d6d8f0f3
+--- /dev/null
++++ b/lean/MicroCFTA/SourcePruningEnumerationOrdinaryFallbackResources.lean
+@@ -0,0 +1,87 @@
++import MicroCFTA.SourcePruningEnumerationOrdinaryForecastResources
++
++/-!
++# Actual ordinary-entry fallback observations
++
++Entry still runs for a recursive value or a terminal suspended bucket. The
++ordinary wrapper retains that exact raw result and supplies no scan. Native
++resources and the caller stay unchanged.
++-/
++namespace MicroCFTA.SourcePruningEnumerationNativeOrdinaryContinuations
++open EnumerationState EnumerationSchedule InternedConstructorTemplates InternedProbeProvenance
++open SourcePruningEnumerationNodes SourcePruningEnumerationObservation
++open SourceCurrentAllocatedNativeInventoryState (Inventory)
++open SourceCurrentAllocatedPartialInvariant (Post)
++open SourceCurrentAllocatedNativeResourceForecast (Profile)
++open SourceCurrentConstrainedCapGeneratedQueryResources (Fits)
++open SourcePruningEnumerationRecursive (Packet)
++local notation "Symbol" => SourcePruningTemplates.Symbol
++local notation "Constraint" => SourceSymbolicIndex.Constraint FullSyntax.Formula
++local notation "Node" => Value Symbol Constraint
++local notation "Fragment" => Fragments.Fragment Symbol
++local notation "Caller" => SourceCurrentAllocatedPartialState.State
++local notation "Queries" => SourceEndpointMemo.Memos
++local notation "Memos" => EndpointMemoGateTrace.Memos
++local notation "Metadata" => SourcePruningRecordTypes.Metadata
++local notation "Cached" => EnumerationExpandableIndex.Cached Symbol Constraint
++local notation "Heap" => SourceEqualityAnnotationHeap.Heap
++universe u v
++variable {Typing : Type} {width : Nat} {Output : Type u} {Reason : Type v}
++variable [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Constraint)] [DecidableEq Node]
++
++/-- Current invariants derive the exact fallback entry and its returned packet at a common work bound. -/
++theorem fallback_complete_resources
++    (formulas : SourceGuards.Formulas FullSyntax.Formula)
++    (solver : SourceGuards.Entailment FullSyntax.Formula) (inventory : Inventory)
++    (caller : Caller width) (memos : Memos) (before : Cached) (metadata : Metadata Typing)
++    (uv handle : Nat) (scs : List Suspended) (value : Node)
++    (checkEmpty : Bool) (edgesOf : Node → List (EdgeValue Symbol Constraint))
++    (packet : Packet formulas solver inventory caller memos metadata before)
++    (ready : EnumerationDriver.Ready uv before.core)
++    (stored : before.core.values[uv]? = some (.unenumerated (some handle) scs))
++    (decoded : lookupNode caller.checked.native.machine.heap handle = some value)
++    (fallback : match value with
++      | .node .. => scs.any (fun sc => EqualityTrie.isTerminal sc.trie) = true
++      | _ => True)
++    (profile : Profile) (property : Constraint → Prop)
++    (bounded : Fits profile caller.checked) (known : Heap property caller.checked.native.machine.heap) :
++    ∃ (bound : Nat) (entered : Cached),
++      (∀ extra, ExceptT.run (SourcePruningEnumerationEntry.enter caller.checked.native.machine.heap
++        (bound + extra) uv before.core) = [.ok ((uv, handle, scs, value), entered.core)]) ∧
++      EnumerationDriver.RenderStable before.core entered.core ∧
++      entered.core.counter = before.core.counter ∧ entered.core.values = before.core.values ∧
++      entered.expandable = before.expandable ∧ entered.waiting = before.waiting ∧
++      Packet formulas solver inventory caller memos metadata entered ∧
++      (∀ extra (hook : Fragment → Caller width → Queries → Cached →
++          SourcePruningEnumerationNativeContinuations.HookResult Output Reason width),
++        run hook checkEmpty (bound + extra) (bound + extra) (bound + extra) (bound + extra) (bound + extra)
++          uv edgesOf caller before memos.query =
++            ([.ok ((uv, handle, scs, value), entered.core)], none)) ∧
++      Post formulas solver inventory caller caller memos ∧ Fits profile caller.checked ∧
++      Heap property caller.checked.native.machine.heap := by
++  obtain ⟨roots, paths, _storage, realized, counts, flags⟩ := packet.valid
++  obtain ⟨bound, actualValue, enteredCache, entryRun, lookup, _available, _closed, counter, values,
++    sameFlags, sameWaiting, _enteredStored, _enteredReady, _protected, enteredPaths, enteredRealized,
++    enteredCounts, enteredFlags, _bucketBounded, _retained, stable⟩ :=
++    SourcePruningEnumerationSelectedEntry.complete caller.checked.native.machine.heap before uv handle scs roots
++      ready stored realized paths counts flags
++  have same : actualValue = value := Option.some.inj (lookup.symm.trans decoded)
++  subst actualValue
++  have enteredPacket : Packet formulas solver inventory caller memos metadata enteredCache := by
++    obtain ⟨level, frontier, ordered⟩ := packet.ordered
++    refine ⟨packet.context, stable.safe,
++      EnumerationReferences.pending_read before.core enteredCache.core stable packet.pending,
++      ⟨roots, enteredPaths, stable.safe.1, enteredRealized, enteredCounts, enteredFlags⟩,
++      ⟨level, frontier, EnumerationOrder.stratified_read before.core enteredCache.core level frontier stable ordered⟩,
++      ?_⟩
++    simpa only [counter] using packet.bounded
++  refine ⟨bound, enteredCache, entryRun, stable, counter, values, sameFlags, sameWaiting,
++    enteredPacket, ?_, Post.refl packet.context, bounded, known⟩
++  intro extra hook
++  unfold run
++  rw [entryRun extra]
++  cases value with
++  | node entry edges depth free => simp only [fallback, ↓reduceIte]
++  | empty | reference _ | union _ _ _ _ | mu _ _ _ _ => rfl
++
++end MicroCFTA.SourcePruningEnumerationNativeOrdinaryContinuations
+diff --git a/lean/MicroCFTA/SourcePruningEnumerationPrefixCheckpoint.lean b/lean/MicroCFTA/SourcePruningEnumerationPrefixCheckpoint.lean
+new file mode 100644
+index 000000000..685aa8a18
+--- /dev/null
++++ b/lean/MicroCFTA/SourcePruningEnumerationPrefixCheckpoint.lean
+@@ -0,0 +1,265 @@
++import MicroCFTA.SourcePruningEnumerationPrefixCompletion
++
++namespace MicroCFTA.SourcePruningEnumerationSelectedStep
++open EnumerationState EnumerationCorrectness EnumerationSchedule EnumerationCompressionFrame
++open InternedConstructorTemplates InternedProbeProvenance
++open SourcePruningEnumerationNodes SourcePruningEnumerationObservation
++open SourceCurrentAllocatedQueryMemo (advancePhysical)
++open SourceCurrentAllocatedNativeInventoryState (Inventory)
++open SourceCurrentAllocatedPartialInvariant (Context Post)
++local notation "Symbol" => SourcePruningTemplates.Symbol
++local notation "Constraint" => SourceSymbolicIndex.Constraint FullSyntax.Formula
++local notation "Node" => Value Symbol Constraint
++local notation "Core" => EnumerationState.State Symbol Constraint
++local notation "Cached" => EnumerationExpandableIndex.Cached Symbol Constraint
++local notation "Caller" => SourceCurrentAllocatedPartialState.State
++local notation "Memos" => EndpointMemoGateTrace.Memos
++local notation "Metadata" => SourcePruningRecordTypes.Metadata
++variable {Typing Key : Type} {width : Nat}
++variable [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Constraint)] [DecidableEq Node]
++variable (holeKey : Typing → Nat → Key) (fits : Key → Symbol → Bool) (admits : Key → Node → Bool)
++variable (graph : Graph Symbol Constraint) (templates : List (Template.Pattern Symbol))
++variable (checkEmpty : Bool) (edgesOf : Node → List (EdgeValue Symbol Constraint))
++variable (stop : Option (Metadata Typing → Nat → Bool))
++variable (order : Metadata Typing → List Nat → Option Nat) (metadata : Metadata Typing)
++attribute [local instance] SourcePruningEnumerationAction.actionMonadList
++
++/-- Original selected inputs give one common bound and a fixed resume phase.
++Only the accepted branch's prepared action may change with fuel.
++Every observation retains the full earlier prefix capability.
++This result does not assert completion of the recursive continuation. -/
++theorem prefix_checkpoint_complete
++    (formulas : SourceGuards.Formulas FullSyntax.Formula)
++    (solver : SourceGuards.Entailment FullSyntax.Formula) (inventory : Inventory)
++    (caller : Caller width) (memos : Memos) (before : Cached)
++    (preference : List Nat → Option Nat) (uv : Nat) (roots : Nat → Nat)
++    (initial : Context formulas solver inventory caller memos) (safe : Safe before.core)
++    (pending : EnumerationReferences.PendingReferences before.core)
++    (selection : EnumerationPureSelection.next preference before = .expand uv)
++    (realized : PendingRealized caller.checked.native.machine.heap before.core)
++    (paths : Roots before.core.representatives roots)
++    (counts : EnumerationCanonicalWaiting.Correct roots before.core.values before.waiting)
++    (flags : ∀ slot, SourcePruningEnumerationNativeIndex.candidate caller.checked.native.machine.heap
++      ((before.core.values[slot]?).getD .eliminated) = some (before.expandable slot)) :
++    ∃ fuel,
++      (∃ checked : Cached, ∀ extra,
++        runPrefix holeKey fits admits graph templates stop order metadata
++            (fuel + extra) (fuel + extra) (fuel + extra) (fuel + extra) (fuel + extra) (fuel + extra)
++            uv caller before memos.query =
++          .parked checked.core (some checked)
++            (some (ExceptT.run (SourcePruningEnumerationRestart.run stop order metadata checked checked.core))) ∧
++        PrefixValid holeKey fits admits graph templates checkEmpty edgesOf stop order metadata
++            formulas solver inventory (fuel + extra) uv caller before memos
++            (runPrefix holeKey fits admits graph templates stop order metadata
++            (fuel + extra) (fuel + extra) (fuel + extra) (fuel + extra) (fuel + extra) (fuel + extra)
++            uv caller before memos.query)) ∨
++      (∃ (checked : Core) (heap : InternedConstructorTemplates.State Symbol Constraint), ∀ extra,
++        runPrefix holeKey fits admits graph templates stop order metadata
++            (fuel + extra) (fuel + extra) (fuel + extra) (fuel + extra) (fuel + extra) (fuel + extra)
++            uv caller before memos.query =
++          .narrowed checked (.done (.empty, some (reject : EnumerateM Symbol Constraint Unit)) heap)
++            (SourceCurrentAllocatedPartialState.advance caller
++              (advancePhysical caller.checked ⟨heap, caller.checked.operations⟩) caller.fourth caller.merge)
++            memos.query (some []) none none none ∧
++        PrefixValid holeKey fits admits graph templates checkEmpty edgesOf stop order metadata
++            formulas solver inventory (fuel + extra) uv caller before memos
++            (runPrefix holeKey fits admits graph templates stop order metadata
++            (fuel + extra) (fuel + extra) (fuel + extra) (fuel + extra) (fuel + extra) (fuel + extra)
++            uv caller before memos.query)) ∨
++      (∃ (checked : Core) (value : Node) (heap : InternedConstructorTemplates.State Symbol Constraint)
++          (after : Cached), value ≠ .empty ∧ ∀ extra, ∃ action : EnumerateM Symbol Constraint Unit,
++        runPrefix holeKey fits admits graph templates stop order metadata
++            (fuel + extra) (fuel + extra) (fuel + extra) (fuel + extra) (fuel + extra) (fuel + extra)
++            uv caller before memos.query =
++          .narrowed checked (.done (value, some action) heap)
++            (SourceCurrentAllocatedPartialState.advance caller
++              (advancePhysical caller.checked ⟨heap, caller.checked.operations⟩) caller.fourth caller.merge)
++            memos.query (some [.ok ((), after.core)]) (some after)
++            (some [.ok ((false, metadata), after.core)]) none ∧
++        PrefixValid holeKey fits admits graph templates checkEmpty edgesOf stop order metadata
++            formulas solver inventory (fuel + extra) uv caller before memos
++            (runPrefix holeKey fits admits graph templates stop order metadata
++            (fuel + extra) (fuel + extra) (fuel + extra) (fuel + extra) (fuel + extra) (fuel + extra)
++            uv caller before memos.query)) := by
++  obtain ⟨readFuel, oldHandle, scs, oldValue, readAfter, checkFuel, repeated, checked, stored, oldDecoded,
++    _oldAvailable, _oldClosed, readExact, checkExact, checkReady, checkPaths, checkRealized,
++    checkCounts, checkFlags, _checkIncoming, checkPending, parked, continued⟩ :=
++    SourcePruningEnumerationSelectedOrdinary.complete_with_history formulas solver inventory caller memos
++      holeKey fits admits metadata graph templates checkEmpty edgesOf before preference uv roots
++      initial safe pending selection realized paths counts flags
++  cases repeated with
++  | true =>
++      obtain ⟨_boundary, _cleared, _disabled, _waiting, resolved, countFuel, frame, _reading,
++        _seen, written, indexed⟩ := parked rfl
++      obtain ⟨counter, ordered⟩ := SourcePruningEnumerationParkedRestart.parked_order uv oldHandle scs
++        before.core resolved checked.core stored frame written
++      let bound := readFuel + checkFuel + countFuel
++      refine ⟨bound, Or.inl ⟨checked, ?_⟩⟩
++      intro extra
++      let w := bound + extra
++      have readLe : readFuel ≤ w := by dsimp [w, bound]; omega
++      have checkLe : checkFuel ≤ w := by dsimp [w, bound]; omega
++      have countLe : countFuel ≤ w := by dsimp [w, bound]; omega
++      have reading := readExact (w - readFuel)
++      have checking := checkExact (w - checkFuel)
++      rw [Nat.add_sub_of_le readLe] at reading
++      rw [Nat.add_sub_of_le checkLe] at checking
++      have index := indexed (w - countFuel)
++      rw [Nat.add_sub_of_le countLe] at index
++      have adapted := SourcePruningEnumerationParkedRestart.adapt_after_write caller.checked.native.machine.heap
++        w uv oldHandle scs before checked resolved checked.core written index rfl
++      have prefixRun : runPrefix holeKey fits admits graph templates stop order metadata w w w w w w
++          uv caller before memos.query = .parked checked.core (some checked)
++          (some (ExceptT.run (SourcePruningEnumerationRestart.run stop order metadata checked checked.core))) := by
++        simp only [runPrefix, reading, checking, adapted, Option.map_some]
++      refine ⟨prefixRun, ?_⟩
++      refine ⟨prefix_no_ordinary holeKey fits admits graph templates stop order metadata
++        w w w w w w uv caller before memos.query, ?_, ?_⟩
++      · change Valid holeKey fits admits graph templates checkEmpty edgesOf stop order metadata
++          formulas solver inventory w w w w w w 0 0 0 0 0 uv caller before memos
++          (run holeKey fits admits graph templates checkEmpty edgesOf stop order metadata
++            w w w w w w 0 0 0 0 0 uv caller before memos.query)
++        rw [run_parked holeKey fits admits graph templates checkEmpty edgesOf stop order metadata
++          w w w w w w 0 0 0 0 0 uv oldHandle scs caller before checked memos.query
++          readAfter checked.core reading checking adapted]
++        exact ⟨oldHandle, scs, readAfter, reading, checking, checked, rfl, rfl,
++          ⟨roots, checkPaths, checkReady.safe.1, checkRealized, checkCounts, checkFlags⟩,
++          checkReady.safe, checkPending pending, counter, ordered, rfl⟩
++      · rw [prefixRun]
++        exact ⟨counter, ordered⟩
++  | false =>
++      obtain ⟨value, nativeFuel, heap, newHandle, final, narrowed, stable, post, _retained, query,
++        _available, _closed, encoded, _decoded, rejected, completed⟩ := continued rfl
++      by_cases empty : value = .empty
++      · subst value
++        let bound := readFuel + checkFuel + nativeFuel
++        refine ⟨bound, Or.inr (Or.inl ⟨checked.core, heap, ?_⟩)⟩
++        intro extra
++        let w := bound + extra
++        have readLe : readFuel ≤ w := by dsimp [w, bound]; omega
++        have checkLe : checkFuel ≤ w := by dsimp [w, bound]; omega
++        have nativeLe : nativeFuel ≤ w := by dsimp [w, bound]; omega
++        have reading := readExact (w - readFuel)
++        have checking := checkExact (w - checkFuel)
++        rw [Nat.add_sub_of_le readLe] at reading
++        rw [Nat.add_sub_of_le checkLe] at checking
++        obtain ⟨prepared, _noSuccess⟩ := rejected rfl w
++        have preparedAt := SourcePruningEnumerationPreparedFuel.native_moreFuel holeKey fits admits metadata
++          nativeFuel w uv oldHandle (w - nativeFuel) scs oldValue .empty caller.checked.native.machine.heap
++          heap (some reject) narrowed stable prepared
++        rw [Nat.add_sub_of_le nativeLe] at preparedAt
++        have narrowedAt := stable (w - nativeFuel)
++        rw [Nat.add_sub_of_le nativeLe] at narrowedAt
++        have prefixRun : runPrefix holeKey fits admits graph templates stop order metadata w w w w w w
++            uv caller before memos.query =
++            .narrowed checked.core (.done (.empty, some (reject : EnumerateM Symbol Constraint Unit)) heap)
++              (SourceCurrentAllocatedPartialState.advance caller
++                (advancePhysical caller.checked ⟨heap, caller.checked.operations⟩) caller.fourth caller.merge)
++              memos.query (some []) none none none := by
++          simp only [runPrefix, reading, checking, oldDecoded, preparedAt]
++          rfl
++        refine ⟨prefixRun, ?_⟩
++        refine ⟨prefix_no_ordinary holeKey fits admits graph templates stop order metadata
++          w w w w w w uv caller before memos.query, ?_, ?_⟩
++        · change Valid holeKey fits admits graph templates checkEmpty edgesOf stop order metadata
++            formulas solver inventory w w w w w w 0 0 0 0 0 uv caller before memos
++            (run holeKey fits admits graph templates checkEmpty edgesOf stop order metadata
++              w w w w w w 0 0 0 0 0 uv caller before memos.query)
++          rw [run_empty holeKey fits admits graph templates checkEmpty edgesOf stop order metadata
++            w w w w w w 0 0 0 0 0 uv oldHandle scs oldValue caller before memos.query
++            readAfter checked.core heap reading checking oldDecoded preparedAt]
++          exact ⟨oldHandle, scs, readAfter, reading, checking, oldValue, .empty, heap, reject,
++            final, oldDecoded, narrowedAt, preparedAt, rfl, rfl, rfl, post, query,
++            Or.inl ⟨rfl, rfl, rfl, rfl, rfl⟩⟩
++        · rw [prefixRun]
++          trivial
++      · obtain ⟨representativeFuel, countFuel, action, after, prepared, observed, shape, waiting, afterReady,
++          afterPaths, afterRealized, afterStored, afterCounts, afterFlags, afterPending, _afterIncoming,
++          _callback, ordinary⟩ := completed empty
++        obtain ⟨indexFuel, adapted⟩ := SourcePruningEnumerationNarrowAdapter.complete heap uv oldHandle newHandle
++          representativeFuel countFuel scs before after checked.core shape
++        have readSuccess : Success (getValue readFuel uv) before.core
++            (.unenumerated (some oldHandle) scs) readAfter := by
++          rw [Success, ← Nat.add_zero readFuel, readExact 0]
++          exact List.mem_singleton_self _
++        have checkSuccess : Success (SourcePruningEnumerationRecursion.checkRepeated
++            caller.checked.native.machine.heap checkFuel uv oldHandle scs) readAfter false checked.core := by
++          rw [Success, ← Nat.add_zero checkFuel, checkExact 0]
++          exact List.mem_singleton_self _
++        have history := SourcePruningEnumerationPrefixHistory.complete caller.checked.native.machine.heap
++          before after readAfter checked.core readFuel checkFuel representativeFuel uv oldHandle newHandle scs
++          safe stored readSuccess checkSuccess (by
++            rcases shape with ⟨_same, equal⟩ | ⟨_different, resolved, reading, written, _indexed⟩
++            · exact Or.inl equal
++            · exact Or.inr ⟨resolved, reading, written⟩)
++        let bound := readFuel + checkFuel + nativeFuel + representativeFuel + indexFuel
++        refine ⟨bound, Or.inr (Or.inr ⟨checked.core, value, heap, after, empty, ?_⟩)⟩
++        intro extra
++        let w := bound + extra
++        have readLe : readFuel ≤ w := by dsimp [w, bound]; omega
++        have checkLe : checkFuel ≤ w := by dsimp [w, bound]; omega
++        have nativeLe : nativeFuel ≤ w := by dsimp [w, bound]; omega
++        have representativeLe : representativeFuel ≤ w := by dsimp [w, bound]; omega
++        have indexLe : indexFuel ≤ w := by dsimp [w, bound]; omega
++        have reading := readExact (w - readFuel)
++        have checking := checkExact (w - checkFuel)
++        rw [Nat.add_sub_of_le readLe] at reading
++        rw [Nat.add_sub_of_le checkLe] at checking
++        have adaptedAt := adapted (w - indexFuel)
++        rw [Nat.add_sub_of_le indexLe] at adaptedAt
++        obtain ⟨nextAction, preparedAt, raw⟩ := SourcePruningEnumerationPreparedFuel.nonempty_moreFuel
++          holeKey fits admits metadata nativeFuel representativeFuel uv oldHandle newHandle scs oldValue value
++          caller.checked.native.machine.heap heap action checked.core after.core narrowed stable empty encoded prepared
++          observed (w - nativeFuel) (w - representativeFuel)
++        rw [Nat.add_sub_of_le nativeLe, Nat.add_sub_of_le representativeLe] at preparedAt
++        have narrowedAt := stable (w - nativeFuel)
++        rw [Nat.add_sub_of_le nativeLe] at narrowedAt
++        have right : ExceptT.run (SourcePruningRecordTypes.recordTypes graph templates w metadata uv
++            (.inr newHandle) after.core) = [.ok ((false, metadata), after.core)] := by
++          rw [SourcePruningRecordTypes.recordTypes_inr]
++          rfl
++        have prefixRun : runPrefix holeKey fits admits graph templates stop order metadata w w w w w w
++            uv caller before memos.query = .narrowed checked.core (.done (value, some nextAction) heap)
++              (SourceCurrentAllocatedPartialState.advance caller
++                (advancePhysical caller.checked ⟨heap, caller.checked.operations⟩) caller.fourth caller.merge)
++              memos.query (some [.ok ((), after.core)]) (some after)
++              (some [.ok ((false, metadata), after.core)]) none := by
++          simp only [runPrefix, reading, checking, oldDecoded, preparedAt, raw, encoded, adaptedAt, right]
++          rfl
++        refine ⟨nextAction, prefixRun, ?_⟩
++        refine ⟨prefix_no_ordinary holeKey fits admits graph templates stop order metadata
++          w w w w w w uv caller before memos.query, ?_, ?_⟩
++        · change Valid holeKey fits admits graph templates checkEmpty edgesOf stop order metadata
++            formulas solver inventory w w w w w w 0 0 0 0 0 uv caller before memos
++            (run holeKey fits admits graph templates checkEmpty edgesOf stop order metadata
++              w w w w w w 0 0 0 0 0 uv caller before memos.query)
++          rw [run_narrowed holeKey fits admits graph templates checkEmpty edgesOf stop order metadata
++            w w w w w w 0 0 0 0 0 uv oldHandle newHandle scs oldValue value caller before after memos.query
++            readAfter checked.core heap nextAction reading checking oldDecoded preparedAt raw encoded adaptedAt]
++          refine ⟨oldHandle, scs, readAfter, reading, checking, oldValue, value, heap, nextAction,
++            final, oldDecoded, narrowedAt, preparedAt, rfl, rfl, rfl, post, query, Or.inr
++              ⟨newHandle, after, empty, encoded, rfl, rfl,
++                ⟨roots, afterPaths, afterReady.safe.1, afterRealized, afterCounts, afterFlags⟩,
++                afterReady.safe, afterPending pending, afterReady, afterStored, waiting, rfl, rfl, ?_⟩⟩
++          intro parentEntry storedEdges depth free parent nonterminal selected ranges
++          obtain ⟨R, N, P, H, K, entered, processed, lastCaller, saved, last, next, outcome,
++            ordinaryRun, _render, _sameFlags, _sameWaiting, lastPost, lastQuery, admitted,
++            receiptHistory, receiptPosts, fragments, callbacks, outcomeShape, supported⟩ :=
++            ordinary parentEntry storedEdges depth free parent nonterminal selected (by simpa only [query] using ranges)
++          refine ⟨R, N, P, H, K, entered, processed, lastCaller, saved, last, next, outcome,
++            ?_, lastPost, lastQuery, admitted, receiptHistory, receiptPosts, fragments, callbacks, outcomeShape, supported⟩
++          intro er en ep eh ek
++          rw [run_narrowed holeKey fits admits graph templates checkEmpty edgesOf stop order metadata
++            w w w w w w (R + er) (N + en) (P + ep) (H + eh) (K + ek)
++            uv oldHandle newHandle scs oldValue value caller before after memos.query readAfter checked.core heap
++            nextAction reading checking oldDecoded preparedAt raw encoded adaptedAt]
++          have actual := ordinaryRun er en (P + ep) (H + eh) ek (Nat.le_add_right _ _) (Nat.le_add_right _ _)
++          rw [show SourcePruningEnumerationNativeOrdinary.run checkEmpty (R + er) (N + en) (P + ep) (H + eh)
++            (K + ek) uv edgesOf
++            (SourceCurrentAllocatedPartialState.advance caller
++              (advancePhysical caller.checked ⟨heap, caller.checked.operations⟩) caller.fourth caller.merge)
++            after memos.query = _ from (by simpa only [query] using actual)]
++        · rw [prefixRun]
++          exact history
++
++end MicroCFTA.SourcePruningEnumerationSelectedStep
+diff --git a/lean/MicroCFTA/SourcePruningEnumerationResumeExecution.lean b/lean/MicroCFTA/SourcePruningEnumerationResumeExecution.lean
+new file mode 100644
+index 000000000..d92de1e09
+--- /dev/null
++++ b/lean/MicroCFTA/SourcePruningEnumerationResumeExecution.lean
+@@ -0,0 +1,81 @@
++import MicroCFTA.SourcePruningEnumerationRecursive
++
++namespace MicroCFTA.SourcePruningEnumerationRecursive
++open EnumerationState InternedConstructorTemplates
++local notation "Symbol" => SourcePruningTemplates.Symbol
++local notation "Constraint" => SourceSymbolicIndex.Constraint FullSyntax.Formula
++local notation "Node" => Value Symbol Constraint
++local notation "Caller" => SourceCurrentAllocatedPartialState.State
++local notation "Queries" => SourceEndpointMemo.Memos
++local notation "Cached" => EnumerationExpandableIndex.Cached Symbol Constraint
++local notation "Metadata" => SourcePruningRecordTypes.Metadata
++local notation "Core" => EnumerationState.State Symbol Constraint
++local notation "Prepared" => MergedSourceComparison.Result Symbol Constraint
++  (Node × Option (EnumerateM Symbol Constraint Unit))
++local notation "EntryRaw" => List (Except EnumerationState.Error
++  ((Nat × Nat × List Suspended × Node) × Core))
++local notation "Fold" => SourcePruningEnumerationNativeContinuations.Result
++variable {Typing Key : Type} {width : Nat}
++variable [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Constraint)] [DecidableEq Node]
++variable (holeKey : Typing → Nat → Key) (fits : Key → Symbol → Bool) (admits : Key → Node → Bool)
++variable (graph : Graph Symbol Constraint) (templates : List (Template.Pattern Symbol))
++variable (checkEmpty : Bool) (edgesOf : Node → List (EdgeValue Symbol Constraint))
++variable (stop : Option (Metadata Typing → Nat → Bool)) (order : Metadata Typing → List Nat → Option Nat)
++
++/-- An accepted actual prefix and ordinary observation determine the positive-depth resume result. -/
++theorem resume_narrowed_ordinary
++    (workFuel recursiveFuel uv : Nat) (metadata updated : Metadata Typing)
++    (caller reached : Caller width) (queries saved : Queries) (before after : Cached)
++    (checked : Core) (prepared : Prepared) (raw : EntryRaw)
++    (result : Fold (Output width Typing) (Failure width Typing) width)
++    (prefixRun : SourcePruningEnumerationSelectedStep.runPrefix holeKey fits admits graph templates stop order
++      metadata workFuel workFuel workFuel workFuel workFuel workFuel uv caller before queries =
++      .narrowed checked prepared reached saved (some [.ok ((), after.core)]) (some after)
++        (some [.ok ((false, updated), after.core)]) none)
++    (ordinary : SourcePruningEnumerationNativeOrdinaryContinuations.run
++      (continueWith
++        (resume holeKey fits admits graph templates checkEmpty edgesOf stop order workFuel recursiveFuel)
++        graph templates stop order workFuel updated uv)
++      checkEmpty workFuel workFuel workFuel workFuel workFuel uv edgesOf reached after saved =
++        (raw, some result)) :
++    resume holeKey fits admits graph templates checkEmpty edgesOf stop order workFuel (recursiveFuel + 1)
++      metadata caller queries before (some (.expand uv)) = finish uv result := by
++  simp only [resume, prefixRun, ordinary]
++
++/-- Stable accepted prefix and zero-expansion scan observations share one larger work bound. -/
++theorem resume_one_stable
++    (prefixFuel scanFuel uv : Nat) (metadata updated : Metadata Typing)
++    (caller reached : Caller width) (queries saved : Queries) (before after : Cached)
++    (raw : EntryRaw) (result : Fold (Output width Typing) (Failure width Typing) width)
++    (prefixRun : ∀ extra, ∃ (checked : Core) (prepared : Prepared),
++      SourcePruningEnumerationSelectedStep.runPrefix holeKey fits admits graph templates stop order
++        metadata (prefixFuel + extra) (prefixFuel + extra) (prefixFuel + extra)
++        (prefixFuel + extra) (prefixFuel + extra) (prefixFuel + extra) uv caller before queries =
++        .narrowed checked prepared reached saved (some [.ok ((), after.core)]) (some after)
++          (some [.ok ((false, updated), after.core)]) none)
++    (ordinary : ∀ extra, SourcePruningEnumerationNativeOrdinaryContinuations.run
++      (continueWith
++        (resume holeKey fits admits graph templates checkEmpty edgesOf stop order (scanFuel + extra) 0)
++        graph templates stop order (scanFuel + extra) updated uv)
++      checkEmpty (scanFuel + extra) (scanFuel + extra) (scanFuel + extra) (scanFuel + extra)
++        (scanFuel + extra) uv edgesOf reached after saved = (raw, some result)) :
++    ∀ extra, resume holeKey fits admits graph templates checkEmpty edgesOf stop order
++      (prefixFuel + scanFuel + extra) 1 metadata caller queries before (some (.expand uv)) =
++        finish uv result := by
++  intro extra
++  obtain ⟨checked, prepared, prefixAt⟩ := prefixRun (scanFuel + extra)
++  have actualPrefix : SourcePruningEnumerationSelectedStep.runPrefix holeKey fits admits graph templates stop order
++      metadata (prefixFuel + scanFuel + extra) (prefixFuel + scanFuel + extra)
++      (prefixFuel + scanFuel + extra) (prefixFuel + scanFuel + extra)
++      (prefixFuel + scanFuel + extra) (prefixFuel + scanFuel + extra) uv caller before queries =
++      .narrowed checked prepared reached saved (some [.ok ((), after.core)]) (some after)
++        (some [.ok ((false, updated), after.core)]) none := by
++    simpa only [Nat.add_assoc] using prefixAt
++  have actualOrdinary := ordinary (prefixFuel + extra)
++  have sameFuel : scanFuel + (prefixFuel + extra) = prefixFuel + scanFuel + extra := by omega
++  rw [sameFuel] at actualOrdinary
++  exact resume_narrowed_ordinary holeKey fits admits graph templates checkEmpty edgesOf stop order
++    (prefixFuel + scanFuel + extra) 0 uv metadata updated caller reached queries saved before after
++    checked prepared raw result actualPrefix actualOrdinary
++
++end MicroCFTA.SourcePruningEnumerationRecursive
+diff --git a/lean/MicroCFTA/SourcePruningEnumerationOutcomeResources.lean b/lean/MicroCFTA/SourcePruningEnumerationOutcomeResources.lean
+new file mode 100644
+index 000000000..714166398
+--- /dev/null
++++ b/lean/MicroCFTA/SourcePruningEnumerationOutcomeResources.lean
+@@ -0,0 +1,155 @@
++import MicroCFTA.SourcePruningEnumerationHookCertificates
++
++/-!
++# Resources at recursive outcomes
++
++Each output keeps its own caller, queries, metadata and enumeration cache.
++A stopped result keeps an endpoint only when its execution returns one.
++Post transport and resource padding do not change these observations.
++-/
++namespace MicroCFTA.SourcePruningEnumerationRecursive
++open EnumerationState InternedConstructorTemplates
++open SourceCurrentAllocatedNativeInventoryState (Inventory)
++open SourceCurrentAllocatedPartialInvariant (Post)
++open SourceCurrentAllocatedNativeResourceForecast (Le)
++open SourceCurrentConstrainedCapGeneratedQueryResources (Fits)
++open SourcePruningEnumerationIncomingReservation (Seed)
++open SourcePruningEnumerationNativeBranchCompletion (cost)
++local notation "Symbol" => SourcePruningTemplates.Symbol
++local notation "Constraint" => SourceSymbolicIndex.Constraint FullSyntax.Formula
++local notation "Caller" => SourceCurrentAllocatedPartialState.State
++local notation "Memos" => EndpointMemoGateTrace.Memos
++local notation "Metadata" => SourcePruningRecordTypes.Metadata
++local notation "Cached" => EnumerationExpandableIndex.Cached Symbol Constraint
++local notation "Heap" => SourceEqualityAnnotationHeap.Heap
++local notation "reservationAdvance" => SourcePruningEnumerationIncomingReservation.advance
++
++/-- Every ordered edge prefix costs at most the complete original edge list. -/
++theorem cost_take_le (scs : List Suspended) (start : Nat)
++    (edges : List (EdgeValue Symbol Constraint)) (count : Nat) :
++    cost scs start (edges.take count) ≤ cost scs start edges := by
++  induction edges generalizing count with
++  | nil => simp only [List.take_nil, cost, Nat.le_refl]
++  | cons edge rest ih =>
++      cases count with
++      | zero => exact Nat.zero_le _
++      | succ count =>
++          simp only [List.take_succ_cons, cost]
++          exact Nat.add_le_add_left (ih count) _
++
++variable {Typing : Type} {width : Nat}
++variable [DecidableEq (EdgeKey Symbol Constraint)]
++
++/-- One emitted output retains its complete packet and resources at its own endpoint. -/
++def OutputResources
++    (formulas : SourceGuards.Formulas FullSyntax.Formula)
++    (solver : SourceGuards.Entailment FullSyntax.Formula)
++    (original : Caller width) (seed : Seed) (output : Output width Typing) : Prop :=
++  ∃ (next : Inventory) (final : Memos) (metadata : Metadata Typing),
++    Post formulas solver next original output.caller final ∧ final.query = output.queries ∧
++    Packet formulas solver next output.caller final metadata output.cache ∧
++    (output.metadata = none ∨ output.metadata = some metadata) ∧
++    Fits seed.2 output.caller.checked ∧
++    Heap (fun guard => guard ∈ seed.1) output.caller.checked.native.machine.heap
++
++/-- A recursive outcome retains its actual endpoint and all emitted output packets. -/
++def OutcomeResources
++    (formulas : SourceGuards.Formulas FullSyntax.Formula)
++    (solver : SourceGuards.Entailment FullSyntax.Formula)
++    (original : Caller width) (seed : Seed)
++    (outcome : SourcePruningEnumerationNativeContinuations.HookResult
++      (Output width Typing) (Failure width Typing) width) : Prop :=
++  ∃ (reached : Caller width) (next : Inventory) (final : Memos),
++    Post formulas solver next original reached final ∧ Fits seed.2 reached.checked ∧
++    Heap (fun guard => guard ∈ seed.1) reached.checked.native.machine.heap ∧
++    match outcome with
++    | .complete outputs caller queries =>
++        caller = reached ∧ queries = final.query ∧
++        ∀ output ∈ outputs, OutputResources formulas solver original seed output
++    | .stopped outputs _ endpoint =>
++        (endpoint = none ∨ endpoint = some (reached, final.query)) ∧
++        ∀ output ∈ outputs, OutputResources formulas solver original seed output
++
++variable {formulas : SourceGuards.Formulas FullSyntax.Formula}
++variable {solver : SourceGuards.Entailment FullSyntax.Formula}
++variable {original middle : Caller width} {middleInventory : Inventory} {middleMemos : Memos}
++variable {seed larger : Seed} {output : Output width Typing}
++variable {outcome : SourcePruningEnumerationNativeContinuations.HookResult
++  (Output width Typing) (Failure width Typing) width}
++
++/-- An earlier Post composes without changing an output endpoint or its complete memos. -/
++theorem OutputResources.post
++    (post : Post formulas solver middleInventory original middle middleMemos)
++    (resources : OutputResources formulas solver middle seed output) :
++    OutputResources formulas solver original seed output := by
++  obtain ⟨next, final, metadata, outputPost, query, packet, shape, fits, known⟩ := resources
++  exact ⟨next, final, metadata, post.trans outputPost, query, packet, shape, fits, known⟩
++
++/-- An earlier Post composes with the reached endpoint and every emitted output. -/
++theorem OutcomeResources.post
++    (post : Post formulas solver middleInventory original middle middleMemos)
++    (resources : OutcomeResources formulas solver middle seed outcome) :
++    OutcomeResources formulas solver original seed outcome := by
++  obtain ⟨reached, next, final, reachedPost, fits, known, shape⟩ := resources
++  refine ⟨reached, next, final, post.trans reachedPost, fits, known, ?_⟩
++  cases outcome with
++  | complete outputs caller queries =>
++      obtain ⟨callerSame, querySame, outputsValid⟩ := shape
++      exact ⟨callerSame, querySame, fun output member => (outputsValid output member).post post⟩
++  | stopped outputs reason endpoint =>
++      obtain ⟨endpointSame, outputsValid⟩ := shape
++      exact ⟨endpointSame, fun output member => (outputsValid output member).post post⟩
++
++/-- A larger numeric profile and alphabet retain the same actual output packet. -/
++theorem OutputResources.mono (numeric : Le seed.2 larger.2)
++    (alphabet : seed.1 ⊆ larger.1)
++    (resources : OutputResources formulas solver original seed output) :
++    OutputResources formulas solver original larger output := by
++  obtain ⟨next, final, metadata, outputPost, query, packet, shape, fits, known⟩ := resources
++  refine ⟨next, final, metadata, outputPost, query, packet, shape, fits.mono numeric, ?_⟩
++  intro key edge found
++  exact alphabet (known key edge found)
++
++/-- Resource padding retains the reached endpoint and every output endpoint. -/
++theorem OutcomeResources.mono (numeric : Le seed.2 larger.2)
++    (alphabet : seed.1 ⊆ larger.1)
++    (resources : OutcomeResources formulas solver original seed outcome) :
++    OutcomeResources formulas solver original larger outcome := by
++  obtain ⟨reached, next, final, reachedPost, fits, known, shape⟩ := resources
++  refine ⟨reached, next, final, reachedPost, fits.mono numeric, ?_, ?_⟩
++  · intro key edge found
++    exact alphabet (known key edge found)
++  · cases outcome with
++    | complete outputs caller queries =>
++        obtain ⟨callerSame, querySame, outputsValid⟩ := shape
++        exact ⟨callerSame, querySame,
++          fun output member => (outputsValid output member).mono numeric alphabet⟩
++    | stopped outputs reason endpoint =>
++        obtain ⟨endpointSame, outputsValid⟩ := shape
++        exact ⟨endpointSame,
++          fun output member => (outputsValid output member).mono numeric alphabet⟩
++
++/-- An indexed hook output fits any supplied ceiling for the complete original edge cost. -/
++theorem OutputResources.of_outputAt
++    (formulas : SourceGuards.Formulas FullSyntax.Formula)
++    (solver : SourceGuards.Entailment FullSyntax.Formula)
++    (original : Caller width) (before : Cached) (seed : Seed) (scs : List Suspended)
++    (edges : List (EdgeValue Symbol Constraint)) (index : Nat) (output : Output width Typing)
++    (ceiling : Nat)
++    (certificate : SourcePruningEnumerationNativeHookResources.OutputAt
++      formulas solver original before seed scs edges index output)
++    (enough : cost scs before.core.counter edges ≤ ceiling) :
++    OutputResources formulas solver original (reservationAdvance seed ceiling) output := by
++  let prefixCost := cost scs before.core.counter (edges.take (index + 1))
++  have own : OutputResources formulas solver original (reservationAdvance seed prefixCost) output := certificate
++  have counts : prefixCost ≤ ceiling :=
++    Nat.le_trans (cost_take_le scs before.core.counter edges (index + 1)) enough
++  have numeric := SourcePruningEnumerationIncomingReservation.advance_count_profile_mono seed counts
++  have alphabet : (reservationAdvance seed prefixCost).1 ⊆ (reservationAdvance seed ceiling).1 := by
++    obtain ⟨extra, same⟩ := Nat.exists_eq_add_of_le counts
++    rw [same, SourcePruningEnumerationIncomingReservation.advance_add]
++    exact SourcePruningEnumerationIncomingReservation.advance_alphabet_ge
++      (reservationAdvance seed prefixCost) extra
++  exact own.mono numeric alphabet
++
++end MicroCFTA.SourcePruningEnumerationRecursive
+diff --git a/lean/MicroCFTA/SourcePruningEnumerationFinishResources.lean b/lean/MicroCFTA/SourcePruningEnumerationFinishResources.lean
+new file mode 100644
+index 000000000..c867becd5
+--- /dev/null
++++ b/lean/MicroCFTA/SourcePruningEnumerationFinishResources.lean
+@@ -0,0 +1,61 @@
++import MicroCFTA.SourcePruningEnumerationOutcomeResources
++import MicroCFTA.SourcePruningEnumerationHookCertificates
++
++/-!
++# Resources for the actual finished alternative result
++
++The finish operation retains the aggregate native prefix and each emitted
++output. An unsupported edge has no runtime endpoint. An exhausted callback
++retains its actual endpoint. The proof does not execute a continuation.
++-/
++namespace MicroCFTA.SourcePruningEnumerationRecursive
++open EnumerationState InternedConstructorTemplates
++open SourceCurrentAllocatedNativeInventoryState (Inventory)
++open SourceCurrentAllocatedPartialInvariant (Post)
++open SourceCurrentConstrainedCapGeneratedQueryResources (Fits)
++open SourcePruningEnumerationIncomingReservation (Seed)
++local notation "Symbol" => SourcePruningTemplates.Symbol
++local notation "Constraint" => SourceSymbolicIndex.Constraint FullSyntax.Formula
++local notation "Caller" => SourceCurrentAllocatedPartialState.State
++local notation "Memos" => EndpointMemoGateTrace.Memos
++local notation "Cached" => EnumerationExpandableIndex.Cached Symbol Constraint
++local notation "Receipt" => SourcePruningEnumerationSelectedEdge.Result
++local notation "FoldResult" => SourcePruningEnumerationNativeContinuations.Result
++local notation "Heap" => SourceEqualityAnnotationHeap.Heap
++variable {Typing : Type} {width : Nat}
++variable [DecidableEq (EdgeKey Symbol Constraint)]
++
++/-- Exact scan witnesses retain resources after finish without filling an absent endpoint. -/
++theorem finish_resources
++    (formulas : SourceGuards.Formulas FullSyntax.Formula) (solver : SourceGuards.Entailment FullSyntax.Formula)
++    (original : Caller width) (before : Cached) (uv : Nat) (scanSeed finalSeed : Seed)
++    (scs : List Suspended) (edges : List (EdgeValue Symbol Constraint))
++    (processed : List (Receipt width)) (outputs : List (Output width Typing))
++    (afterCaller : Caller width) (next : Inventory) (final : Memos)
++    (result : FoldResult (Output width Typing) (Failure width Typing) width)
++    (post : Post formulas solver next original afterCaller final)
++    (bounded : Fits finalSeed.2 afterCaller.checked)
++    (known : Heap (fun guard => guard ∈ finalSeed.1) afterCaller.checked.native.machine.heap)
++    (outputResources : ∀ output ∈ outputs, OutputResources formulas solver original finalSeed output)
++    (shape : result = .complete processed outputs afterCaller final.query ∨
++      ∃ current, result = .stopped processed outputs current ∧
++        SourcePruningEnumerationNativeHookResources.StoppedAt formulas solver original before uv scanSeed
++          scs edges processed.length afterCaller next final current) :
++    OutcomeResources formulas solver original finalSeed (finish uv result) := by
++  unfold OutcomeResources
++  refine ⟨afterCaller, next, final, post, bounded, known, ?_⟩
++  rcases shape with completed | ⟨current, stopped, certificate⟩
++  · subst result
++    exact ⟨rfl, rfl, outputResources⟩
++  · subst result
++    change (endpoint current = none ∨ endpoint current = some (afterCaller, final.query)) ∧
++      ∀ output ∈ outputs, OutputResources formulas solver original finalSeed output
++    refine ⟨?_, outputResources⟩
++    rcases certificate with unsupported |
++      ⟨_fragment, _receiptCache, _selected, _updated, _callbackCache, observation, _receipt, _packet⟩
++    · rw [unsupported]
++      exact .inl rfl
++    · rw [observation]
++      exact .inr rfl
++
++end MicroCFTA.SourcePruningEnumerationRecursive
+diff --git a/lean/MicroCFTA/SourcePruningEnumerationParkedOneResources.lean b/lean/MicroCFTA/SourcePruningEnumerationParkedOneResources.lean
+new file mode 100644
+index 000000000..d60bd803c
+--- /dev/null
++++ b/lean/MicroCFTA/SourcePruningEnumerationParkedOneResources.lean
+@@ -0,0 +1,108 @@
++import MicroCFTA.SourcePruningEnumerationPrefixCheckpoint
++import MicroCFTA.SourcePruningEnumerationResumeZero
++import MicroCFTA.SourcePruningEnumerationOutcomeResources
++import MicroCFTA.SourcePruningEnumerationRecursivePrefix
++
++/-!
++# One parked expansion with native resources
++
++The actual checked cache determines the restart observation. A blocked
++restart rejects. Every other restart uses the exact zero-depth result.
++The native caller and its resources do not change in this phase.
++-/
++namespace MicroCFTA.SourcePruningEnumerationRecursive
++open EnumerationState InternedConstructorTemplates
++open SourceCurrentAllocatedNativeInventoryState (Inventory)
++open SourceCurrentAllocatedPartialInvariant (Post)
++open SourceCurrentConstrainedCapGeneratedQueryResources (Fits)
++open SourcePruningEnumerationIncomingReservation (Seed)
++local notation "Symbol" => SourcePruningTemplates.Symbol
++local notation "Constraint" => SourceSymbolicIndex.Constraint FullSyntax.Formula
++local notation "Node" => Value Symbol Constraint
++local notation "Caller" => SourceCurrentAllocatedPartialState.State
++local notation "Memos" => EndpointMemoGateTrace.Memos
++local notation "Metadata" => SourcePruningRecordTypes.Metadata
++local notation "Cached" => EnumerationExpandableIndex.Cached Symbol Constraint
++local notation "Heap" => SourceEqualityAnnotationHeap.Heap
++variable {Typing Key : Type} {width : Nat}
++variable [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Constraint)] [DecidableEq Node]
++local notation "Result" => SourcePruningEnumerationNativeContinuations.HookResult
++  (Output width Typing) (Failure width Typing) width
++
++/-- The produced parked phase has one exact depth-one outcome at every larger work bound. -/
++theorem parked_one_complete_resources
++    (holeKey : Typing → Nat → Key) (fits : Key → Symbol → Bool) (admits : Key → Node → Bool)
++    (graph : Graph Symbol Constraint) (templates : List (Template.Pattern Symbol))
++    (checkEmpty : Bool) (edgesOf : Node → List (EdgeValue Symbol Constraint))
++    (stop : Option (Metadata Typing → Nat → Bool)) (order : Metadata Typing → List Nat → Option Nat)
++    (formulas : SourceGuards.Formulas FullSyntax.Formula)
++    (solver : SourceGuards.Entailment FullSyntax.Formula) (inventory : Inventory)
++    (caller : Caller width) (memos : Memos) (before : Cached) (metadata : Metadata Typing)
++    (prefixFuel uv : Nat) (checked : Cached) (seed : Seed)
++    (packet : Packet formulas solver inventory caller memos metadata before)
++    (bounded : Fits seed.2 caller.checked)
++    (known : Heap (fun guard => guard ∈ seed.1) caller.checked.native.machine.heap)
++    (phase : ∀ extra,
++      SourcePruningEnumerationSelectedStep.runPrefix holeKey fits admits graph templates stop order metadata
++        (prefixFuel + extra) (prefixFuel + extra) (prefixFuel + extra)
++        (prefixFuel + extra) (prefixFuel + extra) (prefixFuel + extra) uv caller before memos.query =
++        .parked checked.core (some checked)
++          (some (ExceptT.run (SourcePruningEnumerationRestart.run stop order metadata checked checked.core))) ∧
++      SourcePruningEnumerationSelectedStep.PrefixValid holeKey fits admits graph templates checkEmpty edgesOf
++        stop order metadata formulas solver inventory (prefixFuel + extra) uv caller before memos
++        (SourcePruningEnumerationSelectedStep.runPrefix holeKey fits admits graph templates stop order metadata
++          (prefixFuel + extra) (prefixFuel + extra) (prefixFuel + extra)
++          (prefixFuel + extra) (prefixFuel + extra) (prefixFuel + extra) uv caller before memos.query)) :
++    ∃ outcome : Result,
++      (∀ extra, resume holeKey fits admits graph templates checkEmpty edgesOf stop order (prefixFuel + extra) 1
++        metadata caller memos.query before (some (.expand uv)) = outcome) ∧
++      OutcomeResources formulas solver caller seed outcome := by
++  have valid := (phase 0).2
++  rw [(phase 0).1] at valid
++  have checkedPacket : Packet formulas solver inventory caller memos metadata checked :=
++    prefix_packet holeKey fits admits graph templates checkEmpty edgesOf stop order metadata
++      formulas solver inventory (prefixFuel + 0) uv caller memos before packet _ valid
++  have framed : EnumerationExpandableIndex.frame checked.core checked = checked := by
++    cases checked
++    rfl
++  by_cases blocked : SourcePruningEnumerationRestart.decision stop order metadata checked = some .stuck
++  · refine ⟨.complete [] caller memos.query, ?_, ?_⟩
++    · intro extra
++      have observed := (phase extra).1
++      rw [SourcePruningEnumerationRestart.run_exact, ite_eq_left blocked] at observed
++      rw [resume, observed]
++    · refine ⟨caller, inventory, memos, Post.refl packet.context, bounded, known, rfl, rfl, ?_⟩
++      intro output member
++      exact False.elim (List.not_mem_nil member)
++  · obtain ⟨outcome, stable, resources⟩ := resume_zero_complete_resources
++      holeKey fits admits graph templates checkEmpty edgesOf stop order formulas solver inventory caller memos
++      checked metadata (SourcePruningEnumerationRestart.decision stop order metadata checked)
++      seed.2 (fun guard => guard ∈ seed.1) checkedPacket bounded known
++    refine ⟨outcome, ?_, ?_⟩
++    · intro extra
++      have observed := (phase extra).1
++      rw [SourcePruningEnumerationRestart.run_exact, ite_eq_right blocked] at observed
++      rw [resume_parked holeKey fits admits graph templates checkEmpty edgesOf stop order
++        (prefixFuel + extra) 0 metadata caller memos.query before uv checked.core checked.core checked metadata
++        (SourcePruningEnumerationRestart.decision stop order metadata checked) observed, framed]
++      exact stable (prefixFuel + extra)
++    · refine ⟨caller, inventory, memos, Post.refl packet.context, bounded, known, ?_⟩
++      cases outcome with
++      | complete outputs reached saved =>
++          obtain ⟨callerSame, queriesSame, _bounded, _known, outputPackets⟩ := resources
++          refine ⟨callerSame, queriesSame, ?_⟩
++          intro output member
++          obtain ⟨outputPacket, outputCaller, outputQueries, metadataSame, _cacheSame⟩ := outputPackets output member
++          refine ⟨inventory, memos, metadata, ?_, outputQueries.symm, ?_, metadataSame, ?_, ?_⟩
++          · simpa only [outputCaller] using Post.refl packet.context
++          · simpa only [outputCaller] using outputPacket
++          · simpa only [outputCaller] using bounded
++          · simpa only [outputCaller] using known
++      | stopped outputs reason endpoint =>
++          obtain ⟨_selected, _nextSame, noOutputs, _reasonSame, endpointSame, _bounded, _known⟩ := resources
++          refine ⟨Or.inr endpointSame, ?_⟩
++          intro output member
++          rw [noOutputs] at member
++          exact False.elim (List.not_mem_nil member)
++
++end MicroCFTA.SourcePruningEnumerationRecursive
+diff --git a/lean/MicroCFTA/SourcePruningEnumerationOneExpansionResources.lean b/lean/MicroCFTA/SourcePruningEnumerationOneExpansionResources.lean
+new file mode 100644
+index 000000000..051f11097
+--- /dev/null
++++ b/lean/MicroCFTA/SourcePruningEnumerationOneExpansionResources.lean
+@@ -0,0 +1,201 @@
++import MicroCFTA.SourcePruningEnumerationPrefixCheckpoint
++import MicroCFTA.SourcePruningEnumerationParkedOneResources
++import MicroCFTA.SourcePruningEnumerationOrdinaryFallbackResources
++import MicroCFTA.SourcePruningEnumerationResumeExecution
++import MicroCFTA.SourcePruningEnumerationFinishResources
++import MicroCFTA.SourcePruningEnumerationExpansionAdmission
++
++/-!
++# One actual recursive expansion under an original reservation
++
++The original packet supplies the selected prefix and its actual continuation.
++One common work bound covers both stages. Parked, Empty and ordinary fallback
++routes retain their exact results. Each emitted output keeps its own native
++endpoint, full memos, cache packet and resource bound.
++-/
++namespace MicroCFTA.SourcePruningEnumerationRecursive
++open EnumerationState EnumerationCorrectness EnumerationSchedule InternedConstructorTemplates
++open SourceCurrentAllocatedNativeInventoryState (Inventory)
++open SourceCurrentAllocatedPartialInvariant (Post)
++open SourceCurrentAllocatedNativeResourceForecast (Le)
++open SourceCurrentConstrainedCapGeneratedQueryResources (Fits)
++open SourceCurrentConstrainedCapEditForecast (headProfile headProfile_ge)
++open SourcePruningEnumerationIncomingReservation (Seed Reserved)
++open SourcePruningEnumerationSelectedStep (runPrefix)
++local notation "Symbol" => SourcePruningTemplates.Symbol
++local notation "Constraint" => SourceSymbolicIndex.Constraint FullSyntax.Formula
++local notation "Node" => Value Symbol Constraint
++local notation "Caller" => SourceCurrentAllocatedPartialState.State
++local notation "Memos" => EndpointMemoGateTrace.Memos
++local notation "Metadata" => SourcePruningRecordTypes.Metadata
++local notation "Cached" => EnumerationExpandableIndex.Cached Symbol Constraint
++local notation "Heap" => SourceEqualityAnnotationHeap.Heap
++local notation "reservationAdvance" => SourcePruningEnumerationIncomingReservation.advance
++local notation "narrowSeed" => SourcePruningEnumerationExpansionAdmission.narrowSeed
++local notation "forecastCount" => SourcePruningEnumerationExpansionAdmission.count
++variable {Typing Key : Type} {bits : Nat}
++variable [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Constraint)] [DecidableEq Node]
++
++/-- Original current inputs derive a stable actual selected expansion at recursive depth one. -/
++theorem selected_one_complete_resources
++    (holeKey : Typing → Nat → Key) (fits : Key → Symbol → Bool) (admits : Key → Node → Bool)
++    (graph : Graph Symbol Constraint) (templates : List (Template.Pattern Symbol))
++    (checkEmpty : Bool) (edgesOf : Node → List (EdgeValue Symbol Constraint))
++    (stop : Option (Metadata Typing → Nat → Bool)) (order : Metadata Typing → List Nat → Option Nat)
++    (formulas : SourceGuards.Formulas FullSyntax.Formula)
++    (solver : SourceGuards.Entailment FullSyntax.Formula) (inventory : Inventory)
++    (caller : Caller (bits + 2)) (memos : Memos) (before : Cached) (metadata : Metadata Typing)
++    (uv : Nat) (seed : Seed)
++    (packet : Packet formulas solver inventory caller memos metadata before)
++    (bounded : Fits seed.2 caller.checked)
++    (known : Heap (fun guard => guard ∈ seed.1) caller.checked.native.machine.heap)
++    (selectionMembers : ∀ entry rows depth free, ∀ edge ∈ edgesOf (.node entry rows depth free), edge ∈ rows)
++    (selectionLength : ∀ entry rows depth free, (edgesOf (.node entry rows depth free)).length ≤ rows.length)
++    (reserved : Reserved bits (narrowSeed seed) (forecastCount seed before.core))
++    (chosen : SourcePruningEnumerationRestart.decision stop order metadata before = some (.expand uv)) :
++    ∃ bound outcome,
++      (∀ extra, resume holeKey fits admits graph templates checkEmpty edgesOf stop order (bound + extra) 1
++        metadata caller memos.query before (some (.expand uv)) = outcome) ∧
++      OutcomeResources formulas solver caller
++        (reservationAdvance (narrowSeed seed) (forecastCount seed before.core)) outcome := by
++  let start : Seed := (seed.1, headProfile seed.2)
++  let inherited := SourcePruningEnumerationPrefixAdmission.suspendedBound before.core
++  let count := SourcePruningEnumerationOriginalForecast.count start inherited
++  let envelope := reservationAdvance start count
++  change Reserved bits start count at reserved
++  change ∃ bound outcome,
++    (∀ extra, resume holeKey fits admits graph templates checkEmpty edgesOf stop order (bound + extra) 1
++      metadata caller memos.query before (some (.expand uv)) = outcome) ∧
++    OutcomeResources formulas solver caller envelope outcome
++  have enlarged : Le seed.2 envelope.2 :=
++    (headProfile_ge seed.2).trans (SourcePruningEnumerationIncomingReservation.advance_profile_ge start count)
++  have retained : seed.1 ⊆ envelope.1 :=
++    SourcePruningEnumerationIncomingReservation.advance_alphabet_ge start count
++  have selection : EnumerationPureSelection.next (order metadata) before = .expand uv := by
++    cases stop with
++    | none => exact Option.some.inj chosen
++    | some rule =>
++        simp only [SourcePruningEnumerationRestart.decision] at chosen
++        split at chosen
++        · cases chosen
++        · exact Option.some.inj chosen
++  obtain ⟨roots, paths, _storage, realized, counts, flags⟩ := packet.valid
++  obtain ⟨prefixFuel, phases⟩ := SourcePruningEnumerationSelectedStep.prefix_checkpoint_complete
++    holeKey fits admits graph templates checkEmpty edgesOf stop order metadata formulas solver inventory
++    caller memos before (order metadata) uv roots packet.context packet.safe packet.pending selection
++    realized paths counts flags
++  rcases phases with parked | rejected | accepted
++  · obtain ⟨checked, phase⟩ := parked
++    obtain ⟨outcome, running, resources⟩ := parked_one_complete_resources
++      holeKey fits admits graph templates checkEmpty edgesOf stop order formulas solver inventory
++      caller memos before metadata prefixFuel uv checked seed packet bounded known phase
++    exact ⟨prefixFuel, outcome, running, resources.mono enlarged retained⟩
++  · obtain ⟨checked, heap, phase⟩ := rejected
++    let reached := SourceCurrentAllocatedPartialState.advance caller
++      (SourceCurrentAllocatedQueryMemo.advancePhysical caller.checked ⟨heap, caller.checked.operations⟩)
++      caller.fourth caller.merge
++    have valid := (phase 0).2
++    rw [(phase 0).1] at valid
++    have resources := SourcePruningEnumerationSelectedStep.prefix_resources
++      holeKey fits admits graph templates checkEmpty edgesOf stop order metadata formulas solver inventory
++      (prefixFuel + 0) uv caller before memos seed.2 (fun guard => guard ∈ seed.1)
++      packet.context realized bounded known _ valid
++    obtain ⟨final, post, query⟩ := SourcePruningEnumerationPrefixPacket.prefix_context
++      holeKey fits admits graph templates checkEmpty edgesOf stop order metadata formulas solver inventory
++      (prefixFuel + 0) uv caller before memos _ valid
++    have certificate : OutcomeResources (Typing := Typing) formulas solver caller start (.complete [] reached memos.query) :=
++      ⟨reached, inventory, final, post, resources.1, resources.2, rfl, query.symm,
++        fun _ member => False.elim (List.not_mem_nil member)⟩
++    refine ⟨prefixFuel, .complete [] reached memos.query, ?_, certificate.mono
++      (SourcePruningEnumerationIncomingReservation.advance_profile_ge start count)
++      (SourcePruningEnumerationIncomingReservation.advance_alphabet_ge start count)⟩
++    intro extra
++    rw [resume, (phase extra).1]
++  · obtain ⟨checked, phaseValue, heap, after, _nonempty, phase⟩ := accepted
++    let reached := SourceCurrentAllocatedPartialState.advance caller
++      (SourceCurrentAllocatedQueryMemo.advancePhysical caller.checked ⟨heap, caller.checked.operations⟩)
++      caller.fourth caller.merge
++    obtain ⟨action, prefixAt, valid⟩ := phase 0
++    rw [prefixAt] at valid
++    have admission := SourcePruningEnumerationPrefixAdmission.narrowed_admission
++      holeKey fits admits graph templates checkEmpty edgesOf stop order metadata formulas solver inventory
++      (prefixFuel + 0) uv caller memos before packet chosen seed.2 (fun guard => guard ∈ seed.1)
++      bounded known _ valid
++    obtain ⟨handle, scs, value, middleMemos, middlePost, middleQuery, middlePacket, ready, stored,
++      decoded, _available, _closed, incoming, _pending, _ids, lengths, _counter, _waiting,
++      middleFits, middleKnown⟩ := admission
++    by_cases ordinary : ∃ entry rows depth free,
++        value = .node entry rows depth free ∧ scs.any (fun sc => EqualityTrie.isTerminal sc.trie) = false
++    · obtain ⟨entry, rows, depth, free, same, nonterminal⟩ := ordinary
++      subst value
++      obtain ⟨scanFuel, entered, processed, outputs, afterCaller, next, final, result, full,
++        costBound, finalFits, finalKnown⟩ :=
++        SourcePruningEnumerationNativeOrdinaryContinuations.ordinary_zero_complete_forecast
++          holeKey fits admits graph templates checkEmpty edgesOf stop order metadata
++          (seed.1, headProfile seed.2) inherited formulas solver inventory reached middleMemos after uv handle scs
++          entry rows depth free middlePacket ready stored decoded (selectionMembers entry rows depth free)
++          (selectionLength entry rows depth free) lengths incoming nonterminal middleFits reserved middleKnown
++      obtain ⟨_entryRun, _stable, counter, _values, _sameFlags, _sameWaiting, _enteredPacket,
++        outerRun, _scanRun, post, _captured, _afterFits, _afterKnown, _receipts, outputPackets, shape⟩ := full
++      have outputResources : ∀ output ∈ outputs, OutputResources formulas solver reached envelope output := by
++        intro output member
++        obtain ⟨index, _inside, certificate⟩ := outputPackets output member
++        exact OutputResources.of_outputAt formulas solver reached entered start scs
++          (edgesOf (.node entry rows depth free)) index output count certificate
++          (by simpa only [counter] using costBound)
++      have certificate := finish_resources formulas solver reached entered uv start envelope scs
++        (edgesOf (.node entry rows depth free)) processed outputs afterCaller next final result post
++        finalFits finalKnown outputResources shape
++      refine ⟨prefixFuel + scanFuel, finish uv result, ?_, certificate.post middlePost⟩
++      apply resume_one_stable holeKey fits admits graph templates checkEmpty edgesOf stop order
++        prefixFuel scanFuel uv metadata metadata caller reached memos.query memos.query before after
++        [.ok ((uv, handle, scs, .node entry rows depth free), entered.core)] result
++      · intro extra
++        obtain ⟨currentAction, currentPrefix, _valid⟩ := phase extra
++        exact ⟨checked, .done (phaseValue, some currentAction) heap, currentPrefix⟩
++      · intro extra
++        simpa only [middleQuery] using outerRun extra
++    · have fallback : match value with
++        | .node .. => scs.any (fun sc => EqualityTrie.isTerminal sc.trie) = true
++        | _ => True := by
++        cases value with
++        | node entry rows depth free =>
++            change scs.any (fun sc => EqualityTrie.isTerminal sc.trie) = true
++            cases terminal : scs.any (fun sc => EqualityTrie.isTerminal sc.trie) with
++            | false => exact False.elim (ordinary ⟨entry, rows, depth, free, rfl, terminal⟩)
++            | true => rfl
++        | empty | reference _ | union _ _ _ _ | mu _ _ _ _ => trivial
++      obtain ⟨entryFuel, entered, _entryRun, _stable, _counter, _values, _flags, _waiting,
++        _enteredPacket, fallbackRun, _post, _fits, _known⟩ :=
++        SourcePruningEnumerationNativeOrdinaryContinuations.fallback_complete_resources
++          (Output := Output (bits + 2) Typing) (Reason := Failure (bits + 2) Typing)
++          formulas solver inventory reached middleMemos after metadata uv handle scs value checkEmpty edgesOf
++          middlePacket ready stored decoded (by cases value <;> exact fallback)
++          (headProfile seed.2) (fun guard => guard ∈ seed.1)
++          middleFits middleKnown
++      let raw := [Except.ok (ε := EnumerationState.Error) ((uv, handle, scs, value), entered.core)]
++      let outcome := SourcePruningEnumerationNativeContinuations.HookResult.stopped
++        (Output := Output (bits + 2) Typing) (Reason := Failure (bits + 2) Typing)
++        [] (.ordinary uv raw) (some (reached, memos.query))
++      have certificate : OutcomeResources formulas solver reached start outcome := by
++        refine ⟨reached, inventory, middleMemos, Post.refl middlePacket.context, middleFits, middleKnown,
++          Or.inr ?_, fun _ member => False.elim (List.not_mem_nil member)⟩
++        exact congrArg some (congrArg (Prod.mk reached) middleQuery.symm)
++      refine ⟨prefixFuel + entryFuel, outcome, ?_, (certificate.mono
++        (SourcePruningEnumerationIncomingReservation.advance_profile_ge start count)
++        (SourcePruningEnumerationIncomingReservation.advance_alphabet_ge start count)).post middlePost⟩
++      intro extra
++      obtain ⟨currentAction, currentPrefix, _valid⟩ := phase (entryFuel + extra)
++      have samePrefix : prefixFuel + (entryFuel + extra) = prefixFuel + entryFuel + extra := by omega
++      rw [samePrefix] at currentPrefix
++      have actual := fallbackRun (prefixFuel + extra)
++        (continueWith (resume holeKey fits admits graph templates checkEmpty edgesOf stop order
++          (prefixFuel + entryFuel + extra) 0) graph templates stop order
++          (prefixFuel + entryFuel + extra) metadata uv)
++      have sameEntry : entryFuel + (prefixFuel + extra) = prefixFuel + entryFuel + extra := by omega
++      rw [sameEntry, middleQuery] at actual
++      rw [resume, currentPrefix]
++      dsimp only
++      rw [actual]
++
++end MicroCFTA.SourcePruningEnumerationRecursive
+diff --git a/lean/MicroCFTA/SourcePruningEnumerationZeroOutcomeResources.lean b/lean/MicroCFTA/SourcePruningEnumerationZeroOutcomeResources.lean
+new file mode 100644
+index 000000000..db7934896
+--- /dev/null
++++ b/lean/MicroCFTA/SourcePruningEnumerationZeroOutcomeResources.lean
+@@ -0,0 +1,62 @@
++import MicroCFTA.SourcePruningEnumerationResumeZero
++import MicroCFTA.SourcePruningEnumerationOutcomeResources
++
++namespace MicroCFTA.SourcePruningEnumerationRecursive
++open EnumerationState InternedConstructorTemplates
++open SourceCurrentAllocatedNativeInventoryState (Inventory)
++open SourceCurrentAllocatedPartialInvariant (Post)
++open SourceCurrentConstrainedCapGeneratedQueryResources (Fits)
++open SourcePruningEnumerationIncomingReservation (Seed)
++local notation "Symbol" => SourcePruningTemplates.Symbol
++local notation "Constraint" => SourceSymbolicIndex.Constraint FullSyntax.Formula
++local notation "Node" => Value Symbol Constraint
++local notation "Caller" => SourceCurrentAllocatedPartialState.State
++local notation "Memos" => EndpointMemoGateTrace.Memos
++local notation "Metadata" => SourcePruningRecordTypes.Metadata
++local notation "Cached" => EnumerationExpandableIndex.Cached Symbol Constraint
++local notation "Heap" => SourceEqualityAnnotationHeap.Heap
++variable {Typing Key : Type} {width : Nat}
++variable [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Constraint)] [DecidableEq Node]
++local notation "Result" => SourcePruningEnumerationNativeContinuations.HookResult
++  (Output width Typing) (Failure width Typing) width
++
++/-- The exact zero-depth result retains resources at its endpoint and each emitted cache. -/
++theorem resume_zero_outcome_resources
++    (holeKey : Typing → Nat → Key) (fits : Key → Symbol → Bool) (admits : Key → Node → Bool)
++    (graph : Graph Symbol Constraint) (templates : List (Template.Pattern Symbol))
++    (checkEmpty : Bool) (edgesOf : Node → List (EdgeValue Symbol Constraint))
++    (stop : Option (Metadata Typing → Nat → Bool)) (order : Metadata Typing → List Nat → Option Nat)
++    (formulas : SourceGuards.Formulas FullSyntax.Formula)
++    (solver : SourceGuards.Entailment FullSyntax.Formula) (inventory : Inventory)
++    (caller : Caller width) (memos : Memos) (before : Cached) (metadata : Metadata Typing)
++    (next : Option Next) (seed : Seed)
++    (packet : Packet formulas solver inventory caller memos metadata before)
++    (bounded : Fits seed.2 caller.checked)
++    (known : Heap (fun guard => guard ∈ seed.1) caller.checked.native.machine.heap) :
++    ∃ outcome : Result,
++      (∀ workFuel, resume holeKey fits admits graph templates checkEmpty edgesOf stop order workFuel 0
++        metadata caller memos.query before next = outcome) ∧
++      OutcomeResources formulas solver caller seed outcome := by
++  obtain ⟨outcome, stable, resources⟩ := resume_zero_complete_resources
++    holeKey fits admits graph templates checkEmpty edgesOf stop order formulas solver inventory caller memos
++    before metadata next seed.2 (fun guard => guard ∈ seed.1) packet bounded known
++  refine ⟨outcome, stable, caller, inventory, memos, Post.refl packet.context, bounded, known, ?_⟩
++  cases outcome with
++  | complete outputs reached saved =>
++      obtain ⟨callerSame, queriesSame, _bounded, _known, outputPackets⟩ := resources
++      refine ⟨callerSame, queriesSame, ?_⟩
++      intro output member
++      obtain ⟨outputPacket, outputCaller, outputQueries, metadataSame, _cacheSame⟩ := outputPackets output member
++      refine ⟨inventory, memos, metadata, ?_, outputQueries.symm, ?_, metadataSame, ?_, ?_⟩
++      · simpa only [outputCaller] using Post.refl packet.context
++      · simpa only [outputCaller] using outputPacket
++      · simpa only [outputCaller] using bounded
++      · simpa only [outputCaller] using known
++  | stopped outputs reason endpoint =>
++      obtain ⟨_selected, _nextSame, noOutputs, _reasonSame, endpointSame, _bounded, _known⟩ := resources
++      refine ⟨Or.inr endpointSame, ?_⟩
++      intro output member
++      rw [noOutputs] at member
++      exact False.elim (List.not_mem_nil member)
++
++end MicroCFTA.SourcePruningEnumerationRecursive
+diff --git a/lean/MicroCFTA/SourcePruningEnumerationRunOneResources.lean b/lean/MicroCFTA/SourcePruningEnumerationRunOneResources.lean
+new file mode 100644
+index 000000000..da527be91
+--- /dev/null
++++ b/lean/MicroCFTA/SourcePruningEnumerationRunOneResources.lean
+@@ -0,0 +1,81 @@
++import MicroCFTA.SourcePruningEnumerationOneExpansionResources
++import MicroCFTA.SourcePruningEnumerationZeroOutcomeResources
++
++/-!
++# The actual recursive driver at depth one
++
++The current packet and one original reservation supply a common work bound.
++The result retains its actual endpoint and each emitted output packet.
++The theorem includes the initial stop, done and stuck decisions.
++-/
++namespace MicroCFTA.SourcePruningEnumerationRecursive
++open EnumerationState InternedConstructorTemplates
++open SourceCurrentAllocatedNativeInventoryState (Inventory)
++open SourceCurrentConstrainedCapGeneratedQueryResources (Fits)
++open SourcePruningEnumerationIncomingReservation (Seed Reserved)
++local notation "Symbol" => SourcePruningTemplates.Symbol
++local notation "Constraint" => SourceSymbolicIndex.Constraint FullSyntax.Formula
++local notation "Node" => Value Symbol Constraint
++local notation "Caller" => SourceCurrentAllocatedPartialState.State
++local notation "Memos" => EndpointMemoGateTrace.Memos
++local notation "Metadata" => SourcePruningRecordTypes.Metadata
++local notation "Cached" => EnumerationExpandableIndex.Cached Symbol Constraint
++local notation "Heap" => SourceEqualityAnnotationHeap.Heap
++local notation "reservationAdvance" => SourcePruningEnumerationIncomingReservation.advance
++local notation "narrowSeed" => SourcePruningEnumerationExpansionAdmission.narrowSeed
++local notation "forecastCount" => SourcePruningEnumerationExpansionAdmission.count
++variable {Typing Key : Type} {bits : Nat}
++variable [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Constraint)] [DecidableEq Node]
++
++/-- Original current inputs derive a stable actual depth-one driver result at every larger work fuel. -/
++theorem run_one_complete_resources
++    (holeKey : Typing → Nat → Key) (fits : Key → Symbol → Bool) (admits : Key → Node → Bool)
++    (graph : Graph Symbol Constraint) (templates : List (Template.Pattern Symbol))
++    (checkEmpty : Bool) (edgesOf : Node → List (EdgeValue Symbol Constraint))
++    (stop : Option (Metadata Typing → Nat → Bool)) (order : Metadata Typing → List Nat → Option Nat)
++    (formulas : SourceGuards.Formulas FullSyntax.Formula)
++    (solver : SourceGuards.Entailment FullSyntax.Formula) (inventory : Inventory)
++    (caller : Caller (bits + 2)) (memos : Memos) (before : Cached) (metadata : Metadata Typing)
++    (seed : Seed)
++    (packet : Packet formulas solver inventory caller memos metadata before)
++    (bounded : Fits seed.2 caller.checked)
++    (known : Heap (fun guard => guard ∈ seed.1) caller.checked.native.machine.heap)
++    (selectionMembers : ∀ entry rows depth free, ∀ edge ∈ edgesOf (.node entry rows depth free), edge ∈ rows)
++    (selectionLength : ∀ entry rows depth free, (edgesOf (.node entry rows depth free)).length ≤ rows.length)
++    (reserved : Reserved bits (narrowSeed seed) (forecastCount seed before.core)) :
++    ∃ bound outcome,
++      (∀ extra, run holeKey fits admits graph templates checkEmpty edgesOf stop order (bound + extra) 1
++        metadata caller memos.query before = outcome) ∧
++      OutcomeResources formulas solver caller
++        (reservationAdvance (narrowSeed seed) (forecastCount seed before.core)) outcome := by
++  by_cases expansion : ∃ uv,
++      SourcePruningEnumerationRestart.decision stop order metadata before = some (.expand uv)
++  · obtain ⟨uv, chosen⟩ := expansion
++    obtain ⟨bound, outcome, running, resources⟩ := selected_one_complete_resources
++      holeKey fits admits graph templates checkEmpty edgesOf stop order formulas solver inventory
++      caller memos before metadata uv seed packet bounded known selectionMembers selectionLength reserved chosen
++    exact ⟨bound, outcome, fun extra => by simpa only [run, chosen] using running extra, resources⟩
++  · obtain ⟨outcome, running, resources⟩ := resume_zero_outcome_resources
++      holeKey fits admits graph templates checkEmpty edgesOf stop order formulas solver inventory
++      caller memos before metadata (SourcePruningEnumerationRestart.decision stop order metadata before)
++      seed packet bounded known
++    have numeric := (SourceCurrentConstrainedCapEditForecast.headProfile_ge seed.2).trans
++      (SourcePruningEnumerationIncomingReservation.advance_profile_ge
++        (seed.1, SourceCurrentConstrainedCapEditForecast.headProfile seed.2) (forecastCount seed before.core))
++    have alphabet : seed.1 ⊆
++        (reservationAdvance (narrowSeed seed) (forecastCount seed before.core)).1 :=
++      SourcePruningEnumerationIncomingReservation.advance_alphabet_ge
++        (seed.1, SourceCurrentConstrainedCapEditForecast.headProfile seed.2) (forecastCount seed before.core)
++    refine ⟨0, outcome, ?_, resources.mono numeric alphabet⟩
++    intro extra
++    have zero := running extra
++    unfold run
++    cases selected : SourcePruningEnumerationRestart.decision stop order metadata before with
++    | none => simpa only [selected, resume] using zero
++    | some next =>
++        cases next with
++        | done => simpa only [selected, resume] using zero
++        | stuck => simpa only [selected, resume] using zero
++        | expand uv => exact False.elim (expansion ⟨uv, selected⟩)
++
++end MicroCFTA.SourcePruningEnumerationRecursive
