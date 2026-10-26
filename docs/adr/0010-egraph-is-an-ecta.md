@@ -43,25 +43,35 @@ e-node with a constraint is in the e-class of its plain form.
 
 - The e-graphs are the same: the AC sums, hegg's math rules at each
   iteration, and the output of HugeLists 5-p4 `--egraph extra`. Against the
-  e-graph of ADR 9, in cachegrind instructions: +6 % on the AC sum of 9
-  variables, and +8 % (t3) and +18 % (t4) on hegg's math rules after 6
-  iterations; 5-p4 `--egraph extra` allocates 0.6 % less. The first version
-  of the store cost +29 % to +68 %. The cost came back from four changes: the
-  union-find of cfta points each member of the smaller set at the new
-  representative on a union, so `root` is one lookup; the table is keyed by
-  an `IntMap`; a merge copies the shorter of the two lists of users and of
-  the two rows; and the matcher reads the transitions of the store, so the
-  snapshot of an iteration without a goal is the table itself.
+  e-graph of ADR 9, in cachegrind instructions: +2.1 % on the AC sum of 9
+  variables, and −4.5 % (t3) and +4.9 % (t4) on hegg's math rules after 6
+  iterations; 5-p4 `--egraph extra` allocates 0.1 % more. The first version
+  of the store cost +29 % to +68 %. These changes brought the cost back:
+  - The union-find of cfta points each member of the smaller set at the new
+    representative on a union, so `root` is one lookup.
+  - Each e-class record holds its row, so the map of the e-classes is the
+    table, and a merge or a new e-node changes one map.
+  - A merge copies the shorter of the two lists of users and of the two
+    rows.
+  - The matcher reads the rows of the store, so the snapshot of an
+    iteration without a goal is the table itself.
+  - Rebuild tidies only the rows that can have a child that is not a root
+    or a transition twice: the rows of the merged e-classes and of the users
+    whose form changed.
+  - The matcher matches the children of arities 0 to 2 without a walk of
+    the lengths. This change costs +1.2 % of allocation on 5-p4 and saves
+    2.1 % of instructions on AC and 2.3 % on t4.
 - `classAutomaton` gives the rows of the table that the state of an e-class
   reaches as an `FTA`.
 - The e-nodes of the hash-cons and of the users stay compact: an e-node with
   at most two children keeps them unboxed.
 - An e-node whose constraint no term satisfies leaves its e-class without
   terms when it is the only e-node of the e-class.
-- Two other changes were slower and are not in the history: a union-find
-  with a separate map of the members of each set (+9 % on AC), and a
-  rebuild that tidies only the rows of the users whose form changed (+5 % on
-  math).
+- Two other union-finds are not in the history: one with a separate map of
+  the members of each set (+9 % on AC), and one with an `IntSet` of the
+  members in place of the list (+1.0 % on AC and t3, −1.1 % on t4, the same
+  on the standard cells). A union points each member of the smaller set at
+  the new root, so it walks the members in each version.
 
 ## Discussion points
 
