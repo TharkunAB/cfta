@@ -1,0 +1,132 @@
+import MicroCFTA.SourcePruningEnumerationIncomingQueryResources
+import MicroCFTA.SourceCurrentParentInitialRoom
+
+/-!
+# Initial reservations for successive incoming queries
+
+The original alphabet and numeric profile determine the complete schedule.
+Each step reserves one native query and its optional Empty check. A shorter
+execution can keep the larger scheduled bounds. The reservation supplies
+Room at each entry. It does not assert that a future execution succeeds.
+-/
+namespace MicroCFTA.SourcePruningEnumerationIncomingReservation
+open SourceCurrentAllocatedNativeResourceForecast (Profile Le Room)
+local notation "Constraint" => SourceSymbolicIndex.Constraint FullSyntax.Formula
+
+/-- One schedule entry retains its guard alphabet and numeric profile. -/
+abbrev Seed := List Constraint × Profile
+
+/-- Forecast one native query and its optional Empty check from the current entry. -/
+noncomputable def step (seed : Seed) : Seed :=
+  (SourceCurrentGeneratedQueryGuardResources.forecast seed.1 seed.2,
+    SourcePruningEnumerationIncomingQuery.forecast seed.1 seed.2)
+
+/-- Forecast a fixed number of combined incoming steps from the original seed. -/
+noncomputable def advance (seed : Seed) : Nat → Seed
+  | 0 => seed
+  | count + 1 => advance (step seed) count
+
+/-- An empty schedule retains the original seed. -/
+theorem advance_zero (seed : Seed) : advance seed 0 = seed := rfl
+
+/-- A nonempty schedule continues from its first forecast. -/
+theorem advance_succ (seed : Seed) (count : Nat) :
+    advance seed (count + 1) = advance (step seed) count := rfl
+
+/-- Consecutive parts of the same schedule compose at their shared seed. -/
+theorem advance_add (seed : Seed) (first last : Nat) :
+    advance seed (first + last) = advance (advance seed first) last := by
+  induction first generalizing seed with
+  | zero => simp only [Nat.zero_add, advance]
+  | succ first ih => simpa only [Nat.succ_add, advance] using ih (step seed)
+
+/-- One combined step retains every initial numeric component. -/
+theorem step_profile_ge (seed : Seed) : Le seed.2 (step seed).2 :=
+  SourcePruningEnumerationIncomingQuery.forecast_ge seed.1 seed.2
+
+/-- One combined step retains every initial guard. -/
+theorem step_alphabet_ge (seed : Seed) : seed.1 ⊆ (step seed).1 :=
+  SourceCurrentGeneratedQueryGuardResources.forecast_ge seed.1 seed.2
+
+/-- Every scheduled numeric profile bounds the original profile. -/
+theorem advance_profile_ge (seed : Seed) (count : Nat) : Le seed.2 (advance seed count).2 := by
+  induction count generalizing seed with
+  | zero => exact Le.refl _
+  | succ count ih => exact (step_profile_ge seed).trans (ih (step seed))
+
+/-- Every scheduled alphabet retains the original guards. -/
+theorem advance_alphabet_ge (seed : Seed) (count : Nat) : seed.1 ⊆ (advance seed count).1 := by
+  induction count generalizing seed with
+  | zero => exact fun _ member => member
+  | succ count ih => exact fun _ member => ih (step seed) (step_alphabet_ge seed member)
+
+/-- A later entry of this schedule bounds every earlier numeric entry. -/
+theorem advance_count_profile_mono (seed : Seed) {first last : Nat} (counts : first ≤ last) :
+    Le (advance seed first).2 (advance seed last).2 := by
+  obtain ⟨extra, rfl⟩ := Nat.exists_eq_add_of_le counts
+  rw [advance_add]
+  exact advance_profile_ge (advance seed first) extra
+
+/-- Initial numeric reservations give entry Room for every step in the fixed schedule. -/
+def Reserved (bits : Nat) (seed : Seed) (count : Nat) : Prop :=
+  ∀ index, index < count → Room bits (advance seed index).2
+
+/-- An empty schedule needs no entry Room. -/
+theorem reserved_zero (bits : Nat) (seed : Seed) : Reserved bits seed 0 := by
+  intro index less
+  omega
+
+/-- A nonempty reservation splits into current Room and the remaining schedule. -/
+theorem reserved_succ_iff (bits : Nat) (seed : Seed) (count : Nat) :
+    Reserved bits seed (count + 1) ↔ Room bits seed.2 ∧ Reserved bits (step seed) count := by
+  constructor
+  · intro reservation
+    exact ⟨reservation 0 (by omega), fun index less => reservation (index + 1) (by omega)⟩
+  · rintro ⟨room, reservation⟩ index less
+    cases index with
+    | zero => exact room
+    | succ index => exact reservation index (by omega)
+
+/-- A nonempty reservation supplies Room for its first actual query. -/
+theorem Reserved.head {bits count : Nat} {seed : Seed}
+    (reservation : Reserved bits seed (count + 1)) : Room bits seed.2 :=
+  ((reserved_succ_iff bits seed count).mp reservation).1
+
+/-- One scheduled step retains the original reservation for its remaining steps. -/
+theorem Reserved.tail {bits count : Nat} {seed : Seed}
+    (reservation : Reserved bits seed (count + 1)) : Reserved bits (step seed) count :=
+  ((reserved_succ_iff bits seed count).mp reservation).2
+
+/-- A reservation covers every shorter initial part of the same schedule. -/
+theorem Reserved.prefix {bits first last : Nat} {seed : Seed}
+    (reservation : Reserved bits seed last) (counts : first ≤ last) : Reserved bits seed first :=
+  fun index less => reservation index (Nat.lt_of_lt_of_le less counts)
+
+/-- A consumed schedule prefix leaves entry Room for each reserved remaining step. -/
+theorem Reserved.after_prefix {bits consumed remaining : Nat} {seed : Seed}
+    (reservation : Reserved bits seed (consumed + remaining)) :
+    Reserved bits (advance seed consumed) remaining := by
+  intro index less
+  have room := reservation (consumed + index) (by omega)
+  simpa only [advance_add] using room
+
+/-- Room at the last reserved entry is equivalent to the complete finite reservation. -/
+theorem reserved_iff_last (bits : Nat) (seed : Seed) (count : Nat) :
+    Reserved bits seed (count + 1) ↔ Room bits (advance seed count).2 := by
+  constructor
+  · intro reservation
+    exact reservation count (by omega)
+  · intro room index less
+    exact room.mono (advance_count_profile_mono seed (by omega))
+
+/-- Room at the final profile supplies entry Room for every earlier scheduled step. -/
+theorem reserved_of_final_room (bits : Nat) (seed : Seed) (count : Nat)
+    (room : Room bits (advance seed count).2) : Reserved bits seed count :=
+  fun index less => room.mono (advance_count_profile_mono seed (Nat.le_of_lt less))
+
+/-- The original finite schedule computes one mathematical width for all its entries. -/
+theorem reserved_computed (seed : Seed) (count : Nat) :
+    Reserved (SourceCurrentParentInitialRoom.roomBits (advance seed count).2) seed count :=
+  reserved_of_final_room _ seed count (SourceCurrentParentInitialRoom.room_computed _)
+
+end MicroCFTA.SourcePruningEnumerationIncomingReservation

@@ -1,5 +1,41 @@
 # Full formalization coverage
 
+## Original mixed reservations now construct the complete cached fold
+
+Reservation and width: `56db96f33`. Exact dispatcher returns: `460c46859`.
+Dispatch resources: `18520a3f7`. Fold admission: `0b20fd6a2`.
+Actual fold bounds: `4e71cc496`. Full cached producer: `e8b5ff324`.
+The goal stays ACTIVE. H6 remains the strongest end-to-end language theorem.
+
+The original guard alphabet, numeric profile and source count now reserve
+successive native queries AND optional enabled Empty allocation. The fixed
+schedule computes one sufficient mathematical word width for every entry.
+It does not establish host-64 capacity or convert an existing caller's width.
+
+Current Context and pending-slot facts derive the ENTIRE old Fold.Ranges
+predicate from that original reservation. This covers every actual successful
+singleton transition at arbitrary successful fuel bounds. Dispatcher
+uniqueness identifies the captured action, complete caller and query memo.
+The returned full current facts support the next actual entry.
+
+The complete cached-fold producer keeps its entire old conclusion and adds
+Fits and a guard carrier at the SAME actual final caller. Empty rejection
+retains native effects from its completed prefix and rejecting step. Unused
+suffix bounds are conservative; the suffix need not execute. Outer errors
+remain separate. Final Fits does not assert Room for another query.
+
+All six new modules and Audit pass strict checks. Public readback covers
+21 declarations and seven full definitions. Audit checks 77249 theorem
+dependencies. Exact old output comparisons retain 5772 dispatcher and 1894
+fold characters. Runtime workers, older interfaces, H6 and Haskell remain
+unchanged. Main remains imported at `153e1a211`. FINDINGS records no new fix.
+
+Next carry the original reservation through terminal join and the incoming
+write AFTER the fold. Then cover selected edges, callbacks, whole recursive
+subtrees and later siblings. Whole-driver language, terminal fallback,
+native Graph correspondence, extraction and arbitrary lazy demand remain
+open. Details: `lean/notes-current-pruning-enumeration-fold-resources.md`.
+
 ## Initial resources now cover incoming writes and their cached index
 
 Exact observations: `b61b9fda9`. Incoming writes: `fbb3097d5`.
