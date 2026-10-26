@@ -11,7 +11,9 @@ and its type variables are sort variables.
 the laws, the two terms, and the limits.
 -}
 module Specftacular.EGraph (
-    defaultEGraphLimits,
+    EGraphLimits (..),
+    noGivenLimits,
+    egraphLimitsFor,
     Law,
     lawSides,
     equalUnder,
@@ -25,9 +27,30 @@ import Data.CFTA.Symbol (Symbol (Symbol))
 import Specftacular.Rewriting (isTemplateVar, isTypeVar)
 import Specftacular.Types
 
--- | Eight iterations, 4000 e-nodes, and no backoff.
-defaultEGraphLimits :: EG.Limits
-defaultEGraphLimits = EG.Limits 8 4000 0
+{- | The limits of each saturation of a search up to a size: eight iterations,
+and up to size 5 4000 e-nodes and no backoff, from size 6 8000 e-nodes and
+the backoff of egg from 200 matches. Most queries reach the e-node limit.
+The backoff bans the rules that match most often, so that the e-nodes go to
+proofs, and a proof saves more of the search when the search is larger: at
+HugeLists 7-p4 the larger limits print 1,285 laws against 1,319, in 3.7 %
+more time, and at 5-p4 one law fewer in 48 % more time.
+-}
+egraphLimitsFor :: Int -> EG.Limits
+egraphLimitsFor size
+    | size <= 5 = EG.Limits 8 4000 0
+    | otherwise = EG.Limits 8 8000 200
+
+-- | The limits of the saturations that the options give; the others follow the size ('egraphLimitsFor').
+data EGraphLimits = EGraphLimits
+    { givenIterations :: Maybe Int
+    , givenNodes :: Maybe Int
+    , givenMatchLimit :: Maybe Int
+    }
+    deriving (Show)
+
+-- | No given limit: each limit follows the size.
+noGivenLimits :: EGraphLimits
+noGivenLimits = EGraphLimits Nothing Nothing Nothing
 
 -- | The rules of a law.
 type Law = [EG.Rule Symbol Symbol]

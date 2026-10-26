@@ -47,9 +47,9 @@ in the e-class of its plain form.
 - Against a dedicated store with its own map of parents and its own sets of
   e-nodes, the e-graphs are the same, and the cost is about the same: in
   cachegrind instructions, +0.2 % on the AC sum of 9 variables, and −10.1 %
-  (t3) and +0.8 % (t4) on hegg's math rules after 6 iterations. HugeLists
-  `--egraph extra` allocates 0.1 % more at 5-p4 and 1.3 % less at 6-p4, with
-  the same laws and proofs.
+  (t3) and +0.8 % (t4) on hegg's math rules after 6 iterations. With 4,000
+  e-nodes and no backoff, HugeLists `--egraph extra` allocates 0.1 % more at
+  5-p4 and 1.3 % less at 6-p4, with the same laws and proofs.
 - The cost rests on these parts of the design:
   - The union-find is the linked-list representation of disjoint sets with
     the weighted-union heuristic (Cormen et al., Introduction to

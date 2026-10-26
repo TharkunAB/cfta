@@ -24,7 +24,7 @@ import qualified Data.Map.Strict as Map
 import Data.Proxy (Proxy (..))
 import qualified Specftacular.CompiledPruning as Compile
 import qualified Specftacular.DecisionTree as DT
-import Specftacular.EGraph (Law, defaultEGraphLimits, equalUnder, lawSides)
+import Specftacular.EGraph (EGraphLimits (..), Law, egraphLimitsFor, equalUnder, lawSides, noGivenLimits)
 import Specftacular.Pruning (prunedPrograms, prunedTerms)
 import Specftacular.Rewriting
 import Specftacular.Types
@@ -427,8 +427,8 @@ data SearchOptions = SearchOptions
     -}
     , searchEGraph :: EGraphMode
     -- ^ Whether equality saturation decides that a law follows (see 'EGraphMode').
-    , searchEGraphLimits :: EG.Limits
-    -- ^ The limits of each saturation (see 'EG.Limits').
+    , searchEGraphLimits :: EGraphLimits
+    -- ^ The given limits of each saturation; the others follow the size ('egraphLimitsFor').
     , searchParallelTests :: Maybe Int
     {- ^ A comparison tests the cases after the first n in parallel chunks,
     one for each capability (see 'DT.insertWith'). The laws do not change.
@@ -509,7 +509,7 @@ defaultOptions size phase =
         , searchCompletionAllocLimit = completionBudget
         , searchCompletionFuel = completionFuelDefault
         , searchEGraph = EGraphOff
-        , searchEGraphLimits = defaultEGraphLimits
+        , searchEGraphLimits = noGivenLimits
         , searchParallelTests = Nothing
         , searchSpeculation = 0
         , searchRecheck = 0
@@ -551,13 +551,15 @@ parseOptions = O.execParser (O.info (options O.<**> O.helper) (O.fullDesc <> O.p
             <*> completionAllocLimitOption
             <*> completionFuelOption
             <*> egraphOption
-            <*> ( EG.Limits
-                    <$> egraphNumber "egraph-iterations" 8 "The iterations of each saturation (default 8)"
-                    <*> egraphNumber "egraph-nodes" 4000 "The e-nodes that each saturation may add (default 4000)"
-                    <*> egraphNumber
-                        "egraph-match-limit"
-                        0
-                        "The matches of a rule in one iteration after which the backoff of egg bans it (default 0: no backoff)"
+            <*> ( EGraphLimits
+                    <$> O.optional (egraphNumber "egraph-iterations" "The iterations of each saturation (default 8)")
+                    <*> O.optional
+                        (egraphNumber "egraph-nodes" "The e-nodes that each saturation may add (default 4000 up to size 5, 8000 from size 6)")
+                    <*> O.optional
+                        ( egraphNumber
+                            "egraph-match-limit"
+                            "The matches of a rule in one iteration after which the backoff of egg bans it (default 0, no backoff, up to size 5, 200 from size 6)"
+                        )
                 )
             <*> O.optional parallelTestsOption
             <*> speculateOption
@@ -715,8 +717,8 @@ parseOptions = O.execParser (O.info (options O.<**> O.helper) (O.fullDesc <> O.p
                 <> O.help
                     "Decide with equality saturation whether the printed laws prove a law: off, extra (after the completion), or replace (no completion)"
             )
-    egraphNumber name value help =
-        O.option O.auto (O.long name <> O.metavar "N" <> O.value value <> O.help help)
+    egraphNumber name help =
+        O.option O.auto (O.long name <> O.metavar "N" <> O.help help)
     parallelTestsOption =
         O.option
             O.auto
@@ -920,7 +922,12 @@ searchPhases
                         , completionAllocLimit = completionAllocLimitSetting
                         , completionFuel = if completionFuelSetting > 0 then Just (2 ^ completionFuelSetting) else Nothing
                         , egraphMode = egraphSetting
-                        , egraphLimits = egraphLimitsSetting
+                        , egraphLimits =
+                            let bySize = egraphLimitsFor size
+                             in EG.Limits
+                                    (fromMaybe (EG.limitIterations bySize) (givenIterations egraphLimitsSetting))
+                                    (fromMaybe (EG.limitNodes bySize) (givenNodes egraphLimitsSetting))
+                                    (fromMaybe (EG.limitMatches bySize) (givenMatchLimit egraphLimitsSetting))
                         , parallelTests = parallelTestsSetting
                         , speculation = speculationSetting
                         , recheckCount = recheckSetting

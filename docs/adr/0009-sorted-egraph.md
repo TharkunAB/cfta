@@ -63,7 +63,8 @@ default).
 ## Consequences
 
 - HugeLists 5-p4 `--egraph extra` prints 286 laws, against 291 off, and the
-  e-graph proves 6.
+  e-graph proves 6; 7-p4 prints 1,285 against 1,413, and the e-graph proves
+  169, in 6.7 % more time than off.
 - The e-node limit stops a saturation at a point that depends on the order
   of the matches, so a change of that order can change which laws the
   e-graph proves.
@@ -90,4 +91,10 @@ default).
   module does not prune.
 - `merge` returns Nothing for two sorts, so that a mistake is not silent.
 - The library limits follow egg (30 iterations, 10,000 e-nodes, a backoff
-  from 1,000 matches); Specftacular uses 8, 4000, and no backoff.
+  from 1,000 matches). Specftacular uses 8 iterations, and its other limits
+  follow the size of the search: up to size 5, 4,000 e-nodes and no backoff;
+  from size 6, 8,000 e-nodes and a backoff from 200 matches. Most queries
+  reach the e-node limit, the backoff turns a larger budget into proofs, and
+  a proof saves more of a larger search. At HugeLists 7-p4 the larger limits
+  print 1,285 laws against 1,319, in 3.7 % more time; at 6-p4, 638 against
+  658, in 20 % more time; at 5-p4, one law fewer, in 48 % more time.
