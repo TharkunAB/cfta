@@ -1,5 +1,35 @@
 # cfta formalization restart handoff
 
+## One common fuel derives the selected-prefix invariant
+
+Action and order history: `ba1111d0e`. Common prefix fuel: `20e48f6a8`.
+Invariant projections and cache transport: `65ccba97f`.
+The goal stays ACTIVE.
+
+An actual restart expansion now derives one sufficient fuel for all six
+selected-prefix operations and every larger bound. Inputs are the current
+native Context, Safe, PendingReferences and CacheValid. No future action,
+cache, callback or range receipt is an initial premise. Repeated recursion,
+Empty rejection and nonempty narrowing use the same actual prefix worker.
+
+The packet retains the full earlier Valid proposition and its conditional
+ordinary-branch capability. It also retains the original counter and every
+initial dependency order at the same level and frontier. Public projections
+give actual native Post on narrowing, plus safe pending and indexed-cache
+invariants at every retained cache. An actual native Post preserves validity
+of the SAME captured enumeration cache at the later native endpoint.
+
+All five new modules and Audit pass strict checking. Installed public
+readback covers 19 declarations and both full invariant definitions.
+Audit checks 77073 theorem dependencies. Runtime workers, older completion
+interfaces and Haskell stay unchanged. H6 remains the strongest end-to-end
+language theorem. Next: preserve this packet through actual concrete callbacks
+and recursive results. Derive capacity at the resulting sibling endpoints.
+Legacy ordinary Ranges does not supply this hook-aware capacity. Terminal
+fallback, native Graph correspondence, full output language, extraction and
+arbitrary lazy forcing remain open. Details:
+`lean/notes-current-pruning-enumeration-uniform-prefix.md`.
+
 ## Concrete recursive callbacks precede native siblings
 
 Callback exactness: `231b4a5ae`. Prefix separation: `ed303a16b`.
