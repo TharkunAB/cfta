@@ -71,6 +71,22 @@ Terminal parents retain the existing enumerateNode fallback boundary. Native
 children can still take their terminal dispatcher. No Haskell fix is needed.
 Details: lean/notes-current-pruning-enumeration-native-ordinary.md.
 
+### Actual depth-two recursive driver and Haskell status
+
+The formal recursive driver now derives its complete actual depth-two
+outcome from original inputs and an original resource reservation. Each
+callback passes its actual native caller and full memos to later siblings.
+The exact prefix execution supplies the mass bound for the retained cache.
+Ordinary entry, parked restart, Empty rejection and explicit stops remain
+covered. The formal worker still chooses serial forcing.
+
+No Haskell source changed. No new runtime defect or repair was established.
+External action: no additional patch. Retain the six earlier merged repairs,
+the merged Sized documentation repair in PR #178, and all recorded repros.
+Keep the pending parallel-decision findings below. Arbitrary lazy demand,
+whole-enumerator language and Haskell correspondence remain open.
+Details: `lean/notes-current-pruning-two-expansion.md`.
+
 ### Complete sibling scan with recursive callbacks and Haskell status
 
 The formal scan now executes each reached depth-one callback before the next
@@ -819,6 +835,40 @@ TH/Generic extraction, valid-position build/read and source codec laws stay open
 
 
 
+
+## The complete depth-two driver now has an original resource envelope
+
+Entry, prefix mass and reservation: `303fd9509`.
+Actual selected expansion and driver: `eb23f9759`.
+The goal stays ACTIVE. H6 remains the strongest end-to-end language theorem.
+Main `6c080537a` remains imported. All earlier Haskell repairs remain merged.
+
+The original Packet, numeric profile, finite guard carrier, selector laws
+and original reservation now derive the COMPLETE actual recursive driver
+at depth two. One common work bound gives the SAME actual complete or
+explicit stopped outcome at every larger work fuel. The theorem covers
+initial stop, done and stuck, parked restart, Empty rejection, ordinary
+scans, terminal and nonordinary fallback, and nested callback stops.
+Each emitted output keeps its own native endpoint, full memos and cache
+Packet. No future result, successful callback or reached range is a premise.
+
+The original profile bounds the row count before selected rows exist.
+The literal prefix execution derives nonincreasing suspended mass.
+Ordinary entry preserves the exact stored values and captured cache facts.
+A paired schedule pays every edge and its depth-one callback. A reserved
+extra stage pays a parked first expansion. Final forecast Room supplies
+all reservations and computes one mathematical width.
+
+All eight new modules and Audit pass strict checks. Aggregate Audit passes
+3886 jobs and checks 77706 theorem dependencies. Installed readback covers
+25 declarations and 23 full definitions or structures. Only permitted
+axioms occur. All earlier Lean APIs, runtime workers, H6 and Haskell remain
+unchanged. FINDINGS records the external Haskell status.
+
+Next derive an original forecast and actual completion for arbitrary finite
+recursive depth. Keep full outcomes and original admission. Whole-enumerator
+language preservation, completeness and Haskell correspondence remain open.
+Details: `lean/notes-current-pruning-two-expansion.md`.
 
 ## The full ordered scan now has original resources for recursive callbacks
 
