@@ -121,6 +121,7 @@ module Data.CFTA.EGraph (
     -- * Analyses and conditions in a saturation
     Analysis (..),
     Condition,
+    refines,
     saturateWith,
     eClasses,
     eNodesOf,
@@ -142,7 +143,9 @@ import Data.Ord (comparing)
 import qualified Data.CFTA as FTA
 import Data.CFTA.Constraint (Constraint, equalitiesHold, equalityConstraint, noConstraint)
 import Data.CFTA.Equality.Constraint (mkEqConstraints)
+import Data.CFTA.Formula (Formula)
 import Data.CFTA.Path (ChildIndex (..), path)
+import Data.CFTA.Refinement.Verdict (Verdict (..))
 import Data.CFTA.Term (Term, pattern Node)
 
 -- | The identity of an e-class. 'find' gives the identity of the root of its e-class.
@@ -897,6 +900,23 @@ data Analysis f d = Analysis
 e-class, and the e-class of each variable of the rule.
 -}
 type Condition s f d = EGraph s f -> (ClassId -> Maybe d) -> (String -> Maybe ClassId) -> Bool
+
+{- | The condition that the refinement of the e-class of a variable implies a
+formula about its value, 'Data.CFTA.Symbol.valueName'. The analysis gives the
+data of each e-class, the function gives its refinement, and the decision,
+such as 'Data.CFTA.Refinement.Lattice.latticeImplies', decides the
+implication. Each term of an e-class has the same value, so the analysis can
+meet the refinements of the e-nodes of an e-class, as egglog merges the
+lattice value of a function. An e-class without data, and an implication
+that the decision does not know, do not satisfy the condition. For example,
+the rule @x / x = 1@ with the condition that @x@ is not zero:
+
+> refines latticeImplies refinementOf "x" (Atom Ne (Var (Name (Text.pack valueName))) (Lit 0))
+-}
+refines :: (Formula -> Formula -> Verdict) -> (d -> Formula) -> String -> Formula -> Condition s f d
+refines implies refinementOf x goal _ dataOf var = case var x >>= dataOf of
+    Just d -> implies (refinementOf d) goal == Yes
+    Nothing -> False
 
 {- | 'saturate' with an analysis, and a condition for each rule. The data of
 each e-class is the fixed point of 'analyse', kept up to date after each

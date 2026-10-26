@@ -28,14 +28,12 @@ import Data.CFTA.Formula (Formula (..), Name (..), Relation (..))
 import qualified Data.CFTA.Formula as Formula
 import Data.CFTA.Index (Depth (..))
 import Data.CFTA.Path (path)
-import Data.CFTA.Refinement.Lattice (latticeEntailment)
-import Data.CFTA.Refinement.Verdict (Verdict (..), entailsWithBindings)
+import Data.CFTA.Refinement.Lattice (latticeImplies)
 import Data.CFTA.Symbol (valueName)
 import Data.CFTA.Term (Term, pattern Node)
 import Data.Hashable (Hashable)
 import qualified Data.Text as Text
 import GHC.Generics (Generic)
-import System.IO.Unsafe (unsafePerformIO)
 
 -- A term with a sort at each node, for 'addTermWith'.
 data Sorted = Sorted (Maybe (Term String)) String [Sorted]
@@ -170,17 +168,7 @@ refinement (Interval lo hi) =
 implies it, as the lattice of cfta decides without a solver.
 -}
 nonzero :: String -> Condition () Arith Interval
-nonzero x _ dataOf var = case var x >>= dataOf of
-    Just interval ->
-        unsafePerformIO
-            ( entailsWithBindings
-                latticeEntailment
-                []
-                (refinement interval)
-                (Atom Ne (Formula.Var (Name (Text.pack valueName))) (Formula.Lit 0))
-            )
-            == Yes
-    Nothing -> False
+nonzero x = refines latticeImplies refinement x (Atom Ne (Formula.Var (Name (Text.pack valueName))) (Formula.Lit 0))
 
 -- The sum x1 + ... + xn, associated to the left.
 sumOf :: Int -> Term String

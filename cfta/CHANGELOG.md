@@ -4,6 +4,12 @@
 
 Before release, the package was called `microcfta`.
 
+- `Data.CFTA.EGraph.refines` is a rule condition on refinements, as egglog
+  conditions a rule on a lattice value: the refinement of the e-class of a
+  variable must imply a formula about its value. An analysis can meet the
+  refinements of the e-nodes of an e-class, because they have one value.
+  `Data.CFTA.Refinement.Lattice.latticeImplies` is the pure decision of
+  `latticeEntailment`, so a condition can use it.
 - `Data.CFTA.EGraph` is a sorted e-graph for any language of terms, as in
   egglog: each e-class has an optional sort that never merges. It has rules
   with sort patterns, a top-down matcher that starts at the rarest symbol,
