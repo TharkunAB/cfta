@@ -582,25 +582,39 @@ each changed e-class canonical, and merge the e-classes of users that
 become the same e-node.
 -}
 rebuild :: (Hashable f) => EGraph s f -> EGraph s f
-rebuild = go IntSet.empty
+rebuild = go IntSet.empty IntSet.empty
   where
     -- dirty: the e-classes whose transitions can have a child that is not a
-    -- root: the merged e-classes and the e-classes of their users.
-    go dirty g0 = case pending g0 of
+    -- root: the merged e-classes and the e-classes of their users. joined:
+    -- the merged e-classes, whose rows a merge joined.
+    go dirty joined g0 = case pending g0 of
         -- Each transition that rebuild touched has roots as children and
         -- occurs once in its row, so that the table is a valid automaton.
         [] ->
-            let g1 = g0
-                roots = IntSet.fromList [r | i <- IntSet.toList dirty, let ClassId r = find g1 (ClassId i), IntMap.member r (classes g1)]
-                tidy table r = IntMap.adjust (dedupe . map canonical) r table
-                canonical t = t{FTA.transitionChildren = map (find g1) (FTA.transitionChildren t)}
-             in g1{transitions = IntSet.foldl' tidy (transitions g1) roots}
+            let roots = IntSet.fromList [r | i <- IntSet.toList dirty, let ClassId r = find g0 (ClassId i), IntMap.member r (classes g0)]
+                joinedRoots = IntSet.map (\i -> let ClassId r = find g0 (ClassId i) in r) joined
+                tidy table r = IntMap.adjust (tidyRow g0 (IntSet.member r joinedRoots)) r table
+             in g0{transitions = IntSet.foldl' tidy (transitions g0) roots}
         todo ->
             let merged = IntSet.fromList [i | c <- todo, let ClassId i = find g0 c]
                 owners =
                     IntSet.fromList
                         [j | i <- IntSet.toList merged, Just e <- [IntMap.lookup i (classes g0)], (_, ClassId j) <- classUsers e]
-             in go (IntSet.unions [dirty, merged, owners]) (foldl' repair g0{pending = []} (IntSet.toList merged))
+             in go
+                    (IntSet.unions [dirty, merged, owners])
+                    (IntSet.union joined merged)
+                    (foldl' repair g0{pending = []} (IntSet.toList merged))
+    -- A row with roots as children. A transition whose children are roots
+    -- stays as it is, and only a joined row or a row with a changed
+    -- transition can have a transition twice.
+    tidyRow g wasJoined row =
+        let (changed, row') = foldr (canonical g) (False, []) row
+         in if changed || wasJoined then dedupe row' else row
+    canonical g t (changed, rest)
+        | all (\c -> find g c == c) cs = (changed, t : rest)
+        | otherwise = (True, t{FTA.transitionChildren = map (find g) cs} : rest)
+      where
+        cs = FTA.transitionChildren t
     -- The transitions once each, in their first order: a plain transition
     -- by its e-node, and a transition with a constraint, which is rare, by
     -- comparison with the kept ones.
