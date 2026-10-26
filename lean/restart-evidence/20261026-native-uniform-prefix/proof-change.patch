@@ -1,0 +1,606 @@
+diff --git a/lean/MicroCFTA/Audit.lean b/lean/MicroCFTA/Audit.lean
+index 2b1f205f9..27c78c286 100644
+--- a/lean/MicroCFTA/Audit.lean
++++ b/lean/MicroCFTA/Audit.lean
+@@ -5,6 +5,8 @@ import MicroCFTA.SourcePruningEnumerationSelectedStepCompletion
+ import MicroCFTA.SourcePruningEnumerationNativeContinuations
+ import MicroCFTA.SourcePruningAfterCallbackExact
+ import MicroCFTA.SourcePruningEnumerationRecursiveEquations
++import MicroCFTA.SourcePruningEnumerationPrefixPacket
++import MicroCFTA.SourcePruningEnumerationNativeCacheGrowth
+ import MicroCFTA.SourcePruningEnumerationSelectedNarrow
+ import MicroCFTA.SourcePruningEnumerationRecursion
+ import MicroCFTA.SourcePruningEnumerationNarrowContext
+diff --git a/lean/MicroCFTA/SourcePruningEnumerationNativeCacheGrowth.lean b/lean/MicroCFTA/SourcePruningEnumerationNativeCacheGrowth.lean
+new file mode 100644
+index 000000000..304673709
+--- /dev/null
++++ b/lean/MicroCFTA/SourcePruningEnumerationNativeCacheGrowth.lean
+@@ -0,0 +1,34 @@
++import MicroCFTA.SourcePruningEnumerationNativeBranchCompletion
++
++namespace MicroCFTA.SourcePruningEnumerationNativeBranchCompletion
++open InternedConstructorTemplates
++local notation "Symbol" => SourcePruningTemplates.Symbol
++local notation "Constraint" => SourceSymbolicIndex.Constraint FullSyntax.Formula
++local notation "Caller" => SourceCurrentAllocatedPartialState.State
++local notation "Cached" => EnumerationExpandableIndex.Cached Symbol Constraint
++variable {width : Nat}
++
++/-- Native heap growth preserves validity of the same captured cache. -/
++theorem cacheValid_keeps (caller nextCaller : Caller width) (before : Cached)
++    (valid : CacheValid caller before)
++    (kept : SourceEqualityRequiredCache.Keeps caller.checked.native.machine.heap
++      nextCaller.checked.native.machine.heap) :
++    CacheValid nextCaller before := by
++  obtain ⟨roots, paths, storage, realized, counts, flags⟩ := valid
++  refine ⟨roots, paths, storage, ?_, counts, ?_⟩
++  · exact SourcePruningEnumerationObservation.realized_preserved _ _ before.core before.core
++      realized (EnumerationCompressionFrame.Frame.refl _) kept
++  · exact SourcePruningEnumerationNativeGrowth.flags _ _ kept before flags
++
++/-- An actual caller postcondition preserves validity of the captured cache. -/
++theorem cacheValid_post [DecidableEq (EdgeKey Symbol Constraint)]
++    {formulas : SourceGuards.Formulas FullSyntax.Formula}
++    {solver : SourceGuards.Entailment FullSyntax.Formula}
++    {next : SourceCurrentAllocatedNativeInventoryState.Inventory}
++    {final : EndpointMemoGateTrace.Memos}
++    (caller nextCaller : Caller width) (before : Cached) (valid : CacheValid caller before)
++    (post : SourceCurrentAllocatedPartialInvariant.Post formulas solver next caller nextCaller final) :
++    CacheValid nextCaller before :=
++  cacheValid_keeps caller nextCaller before valid post.effects.keeps
++
++end MicroCFTA.SourcePruningEnumerationNativeBranchCompletion
+diff --git a/lean/MicroCFTA/SourcePruningEnumerationPrefixCompletion.lean b/lean/MicroCFTA/SourcePruningEnumerationPrefixCompletion.lean
+new file mode 100644
+index 000000000..224256f75
+--- /dev/null
++++ b/lean/MicroCFTA/SourcePruningEnumerationPrefixCompletion.lean
+@@ -0,0 +1,275 @@
++import MicroCFTA.SourcePruningEnumerationPreparedFuel
++import MicroCFTA.SourcePruningEnumerationPrefixHistory
++
++namespace MicroCFTA.SourcePruningEnumerationSelectedStep
++open EnumerationState EnumerationCorrectness EnumerationSchedule EnumerationCompressionFrame
++open InternedConstructorTemplates InternedProbeProvenance
++open SourcePruningEnumerationNodes SourcePruningEnumerationObservation
++open SourceCurrentAllocatedQueryMemo (advancePhysical)
++open SourceCurrentAllocatedNativeInventoryState (Inventory)
++open SourceCurrentAllocatedPartialInvariant (Context Post)
++local notation "Symbol" => SourcePruningTemplates.Symbol
++local notation "Constraint" => SourceSymbolicIndex.Constraint FullSyntax.Formula
++local notation "Node" => Value Symbol Constraint
++local notation "Core" => EnumerationState.State Symbol Constraint
++local notation "Cached" => EnumerationExpandableIndex.Cached Symbol Constraint
++local notation "Caller" => SourceCurrentAllocatedPartialState.State
++local notation "Memos" => EndpointMemoGateTrace.Memos
++local notation "Metadata" => SourcePruningRecordTypes.Metadata
++variable {Typing Key : Type} {width : Nat}
++variable [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Constraint)] [DecidableEq Node]
++variable (holeKey : Typing → Nat → Key) (fits : Key → Symbol → Bool) (admits : Key → Node → Bool)
++variable (graph : Graph Symbol Constraint) (templates : List (Template.Pattern Symbol))
++variable (checkEmpty : Bool) (edgesOf : Node → List (EdgeValue Symbol Constraint))
++variable (stop : Option (Metadata Typing → Nat → Bool))
++variable (order : Metadata Typing → List Nat → Option Nat) (metadata : Metadata Typing)
++attribute [local instance] SourcePruningEnumerationAction.actionMonadList
++
++/-- Retain the complete earlier capability and the prefix endpoint's counter and dependency levels.
++The finish expression embeds the observation in the earlier proposition.
++The recursive worker does not execute this finish expression. -/
++def PrefixValid
++    (formulas : SourceGuards.Formulas FullSyntax.Formula)
++    (solver : SourceGuards.Entailment FullSyntax.Formula) (inventory : Inventory)
++    (fuel uv : Nat) (caller : Caller width) (before : Cached) (memos : Memos)
++    (result : Result width Typing) : Prop :=
++  (match result with
++    | .narrowed _ _ _ _ _ _ _ ordinary => ordinary = none
++    | _ => True) ∧
++  Valid holeKey fits admits graph templates checkEmpty edgesOf stop order metadata formulas solver inventory
++    fuel fuel fuel fuel fuel fuel 0 0 0 0 0 uv caller before memos
++    (finish checkEmpty edgesOf 0 0 0 0 0 uv result) ∧
++  match result with
++  | .parked _ (some after) _ | .narrowed _ _ _ _ _ (some after) _ _ =>
++      after.core.counter = before.core.counter ∧
++      ∀ level frontier, EnumerationOrder.Stratified before.core level frontier →
++        EnumerationOrder.Stratified after.core level frontier
++  | _ => True
++
++/-- Original selected inputs derive one sufficient fuel for every prefix operation and every larger bound. -/
++theorem prefix_complete
++    (formulas : SourceGuards.Formulas FullSyntax.Formula)
++    (solver : SourceGuards.Entailment FullSyntax.Formula) (inventory : Inventory)
++    (caller : Caller width) (memos : Memos) (before : Cached)
++    (preference : List Nat → Option Nat) (uv : Nat) (roots : Nat → Nat)
++    (initial : Context formulas solver inventory caller memos) (safe : Safe before.core)
++    (pending : EnumerationReferences.PendingReferences before.core)
++    (selection : EnumerationPureSelection.next preference before = .expand uv)
++    (realized : PendingRealized caller.checked.native.machine.heap before.core)
++    (paths : Roots before.core.representatives roots)
++    (counts : EnumerationCanonicalWaiting.Correct roots before.core.values before.waiting)
++    (flags : ∀ slot, SourcePruningEnumerationNativeIndex.candidate caller.checked.native.machine.heap
++      ((before.core.values[slot]?).getD .eliminated) = some (before.expandable slot)) :
++    ∃ fuel, ∀ extra,
++      PrefixValid holeKey fits admits graph templates checkEmpty edgesOf stop order metadata
++        formulas solver inventory (fuel + extra) uv caller before memos
++        (runPrefix holeKey fits admits graph templates stop order metadata
++          (fuel + extra) (fuel + extra) (fuel + extra) (fuel + extra) (fuel + extra) (fuel + extra)
++          uv caller before memos.query) := by
++  obtain ⟨readFuel, oldHandle, scs, oldValue, readAfter, checkFuel, repeated, checked, stored, oldDecoded,
++    _oldAvailable, _oldClosed, readExact, checkExact, checkReady, checkPaths, checkRealized,
++    checkCounts, checkFlags, _checkIncoming, checkPending, parked, continued⟩ :=
++    SourcePruningEnumerationSelectedOrdinary.complete_with_history formulas solver inventory caller memos
++      holeKey fits admits metadata graph templates checkEmpty edgesOf before preference uv roots
++      initial safe pending selection realized paths counts flags
++  cases repeated with
++  | true =>
++      obtain ⟨_boundary, _cleared, _disabled, _waiting, resolved, countFuel, frame, _reading,
++        _seen, written, indexed⟩ := parked rfl
++      obtain ⟨counter, ordered⟩ := SourcePruningEnumerationParkedRestart.parked_order uv oldHandle scs
++        before.core resolved checked.core stored frame written
++      let bound := readFuel + checkFuel + countFuel
++      refine ⟨bound, ?_⟩
++      intro extra
++      let w := bound + extra
++      have readLe : readFuel ≤ w := by dsimp [w, bound]; omega
++      have checkLe : checkFuel ≤ w := by dsimp [w, bound]; omega
++      have countLe : countFuel ≤ w := by dsimp [w, bound]; omega
++      have reading := readExact (w - readFuel)
++      have checking := checkExact (w - checkFuel)
++      rw [Nat.add_sub_of_le readLe] at reading
++      rw [Nat.add_sub_of_le checkLe] at checking
++      have index := indexed (w - countFuel)
++      rw [Nat.add_sub_of_le countLe] at index
++      have adapted := SourcePruningEnumerationParkedRestart.adapt_after_write caller.checked.native.machine.heap
++        w uv oldHandle scs before checked resolved checked.core written index rfl
++      have prefixRun : runPrefix holeKey fits admits graph templates stop order metadata w w w w w w
++          uv caller before memos.query = .parked checked.core (some checked)
++          (some (ExceptT.run (SourcePruningEnumerationRestart.run stop order metadata checked checked.core))) := by
++        simp only [runPrefix, reading, checking, adapted, Option.map_some]
++      refine ⟨prefix_no_ordinary holeKey fits admits graph templates stop order metadata
++        w w w w w w uv caller before memos.query, ?_, ?_⟩
++      · change Valid holeKey fits admits graph templates checkEmpty edgesOf stop order metadata
++          formulas solver inventory w w w w w w 0 0 0 0 0 uv caller before memos
++          (run holeKey fits admits graph templates checkEmpty edgesOf stop order metadata
++            w w w w w w 0 0 0 0 0 uv caller before memos.query)
++        rw [run_parked holeKey fits admits graph templates checkEmpty edgesOf stop order metadata
++          w w w w w w 0 0 0 0 0 uv oldHandle scs caller before checked memos.query
++          readAfter checked.core reading checking adapted]
++        exact ⟨oldHandle, scs, readAfter, reading, checking, checked, rfl, rfl,
++          ⟨roots, checkPaths, checkReady.safe.1, checkRealized, checkCounts, checkFlags⟩,
++          checkReady.safe, checkPending pending, counter, ordered, rfl⟩
++      · rw [prefixRun]
++        exact ⟨counter, ordered⟩
++  | false =>
++      obtain ⟨value, nativeFuel, heap, newHandle, final, narrowed, stable, post, _retained, query,
++        _available, _closed, encoded, _decoded, rejected, completed⟩ := continued rfl
++      by_cases empty : value = .empty
++      · subst value
++        let bound := readFuel + checkFuel + nativeFuel
++        refine ⟨bound, ?_⟩
++        intro extra
++        let w := bound + extra
++        have readLe : readFuel ≤ w := by dsimp [w, bound]; omega
++        have checkLe : checkFuel ≤ w := by dsimp [w, bound]; omega
++        have nativeLe : nativeFuel ≤ w := by dsimp [w, bound]; omega
++        have reading := readExact (w - readFuel)
++        have checking := checkExact (w - checkFuel)
++        rw [Nat.add_sub_of_le readLe] at reading
++        rw [Nat.add_sub_of_le checkLe] at checking
++        obtain ⟨prepared, _noSuccess⟩ := rejected rfl w
++        have preparedAt := SourcePruningEnumerationPreparedFuel.native_moreFuel holeKey fits admits metadata
++          nativeFuel w uv oldHandle (w - nativeFuel) scs oldValue .empty caller.checked.native.machine.heap
++          heap (some reject) narrowed stable prepared
++        rw [Nat.add_sub_of_le nativeLe] at preparedAt
++        have narrowedAt := stable (w - nativeFuel)
++        rw [Nat.add_sub_of_le nativeLe] at narrowedAt
++        have prefixRun : runPrefix holeKey fits admits graph templates stop order metadata w w w w w w
++            uv caller before memos.query =
++            .narrowed checked.core (.done (.empty, some (reject : EnumerateM Symbol Constraint Unit)) heap)
++              (SourceCurrentAllocatedPartialState.advance caller
++                (advancePhysical caller.checked ⟨heap, caller.checked.operations⟩) caller.fourth caller.merge)
++              memos.query (some []) none none none := by
++          simp only [runPrefix, reading, checking, oldDecoded, preparedAt]
++          rfl
++        refine ⟨prefix_no_ordinary holeKey fits admits graph templates stop order metadata
++          w w w w w w uv caller before memos.query, ?_, ?_⟩
++        · change Valid holeKey fits admits graph templates checkEmpty edgesOf stop order metadata
++            formulas solver inventory w w w w w w 0 0 0 0 0 uv caller before memos
++            (run holeKey fits admits graph templates checkEmpty edgesOf stop order metadata
++              w w w w w w 0 0 0 0 0 uv caller before memos.query)
++          rw [run_empty holeKey fits admits graph templates checkEmpty edgesOf stop order metadata
++            w w w w w w 0 0 0 0 0 uv oldHandle scs oldValue caller before memos.query
++            readAfter checked.core heap reading checking oldDecoded preparedAt]
++          exact ⟨oldHandle, scs, readAfter, reading, checking, oldValue, .empty, heap, reject,
++            final, oldDecoded, narrowedAt, preparedAt, rfl, rfl, rfl, post, query,
++            Or.inl ⟨rfl, rfl, rfl, rfl, rfl⟩⟩
++        · rw [prefixRun]
++          trivial
++      · obtain ⟨representativeFuel, countFuel, action, after, prepared, observed, shape, waiting, afterReady,
++          afterPaths, afterRealized, afterStored, afterCounts, afterFlags, afterPending, _afterIncoming,
++          _callback, ordinary⟩ := completed empty
++        obtain ⟨indexFuel, adapted⟩ := SourcePruningEnumerationNarrowAdapter.complete heap uv oldHandle newHandle
++          representativeFuel countFuel scs before after checked.core shape
++        have readSuccess : Success (getValue readFuel uv) before.core
++            (.unenumerated (some oldHandle) scs) readAfter := by
++          rw [Success, ← Nat.add_zero readFuel, readExact 0]
++          exact List.mem_singleton_self _
++        have checkSuccess : Success (SourcePruningEnumerationRecursion.checkRepeated
++            caller.checked.native.machine.heap checkFuel uv oldHandle scs) readAfter false checked.core := by
++          rw [Success, ← Nat.add_zero checkFuel, checkExact 0]
++          exact List.mem_singleton_self _
++        have history := SourcePruningEnumerationPrefixHistory.complete caller.checked.native.machine.heap
++          before after readAfter checked.core readFuel checkFuel representativeFuel uv oldHandle newHandle scs
++          safe stored readSuccess checkSuccess (by
++            rcases shape with ⟨_same, equal⟩ | ⟨_different, resolved, reading, written, _indexed⟩
++            · exact Or.inl equal
++            · exact Or.inr ⟨resolved, reading, written⟩)
++        let bound := readFuel + checkFuel + nativeFuel + representativeFuel + indexFuel
++        refine ⟨bound, ?_⟩
++        intro extra
++        let w := bound + extra
++        have readLe : readFuel ≤ w := by dsimp [w, bound]; omega
++        have checkLe : checkFuel ≤ w := by dsimp [w, bound]; omega
++        have nativeLe : nativeFuel ≤ w := by dsimp [w, bound]; omega
++        have representativeLe : representativeFuel ≤ w := by dsimp [w, bound]; omega
++        have indexLe : indexFuel ≤ w := by dsimp [w, bound]; omega
++        have reading := readExact (w - readFuel)
++        have checking := checkExact (w - checkFuel)
++        rw [Nat.add_sub_of_le readLe] at reading
++        rw [Nat.add_sub_of_le checkLe] at checking
++        have adaptedAt := adapted (w - indexFuel)
++        rw [Nat.add_sub_of_le indexLe] at adaptedAt
++        obtain ⟨nextAction, preparedAt, raw⟩ := SourcePruningEnumerationPreparedFuel.nonempty_moreFuel
++          holeKey fits admits metadata nativeFuel representativeFuel uv oldHandle newHandle scs oldValue value
++          caller.checked.native.machine.heap heap action checked.core after.core narrowed stable empty encoded prepared
++          observed (w - nativeFuel) (w - representativeFuel)
++        rw [Nat.add_sub_of_le nativeLe, Nat.add_sub_of_le representativeLe] at preparedAt
++        have narrowedAt := stable (w - nativeFuel)
++        rw [Nat.add_sub_of_le nativeLe] at narrowedAt
++        have right : ExceptT.run (SourcePruningRecordTypes.recordTypes graph templates w metadata uv
++            (.inr newHandle) after.core) = [.ok ((false, metadata), after.core)] := by
++          rw [SourcePruningRecordTypes.recordTypes_inr]
++          rfl
++        have prefixRun : runPrefix holeKey fits admits graph templates stop order metadata w w w w w w
++            uv caller before memos.query = .narrowed checked.core (.done (value, some nextAction) heap)
++              (SourceCurrentAllocatedPartialState.advance caller
++                (advancePhysical caller.checked ⟨heap, caller.checked.operations⟩) caller.fourth caller.merge)
++              memos.query (some [.ok ((), after.core)]) (some after)
++              (some [.ok ((false, metadata), after.core)]) none := by
++          simp only [runPrefix, reading, checking, oldDecoded, preparedAt, raw, encoded, adaptedAt, right]
++          rfl
++        refine ⟨prefix_no_ordinary holeKey fits admits graph templates stop order metadata
++          w w w w w w uv caller before memos.query, ?_, ?_⟩
++        · change Valid holeKey fits admits graph templates checkEmpty edgesOf stop order metadata
++            formulas solver inventory w w w w w w 0 0 0 0 0 uv caller before memos
++            (run holeKey fits admits graph templates checkEmpty edgesOf stop order metadata
++              w w w w w w 0 0 0 0 0 uv caller before memos.query)
++          rw [run_narrowed holeKey fits admits graph templates checkEmpty edgesOf stop order metadata
++            w w w w w w 0 0 0 0 0 uv oldHandle newHandle scs oldValue value caller before after memos.query
++            readAfter checked.core heap nextAction reading checking oldDecoded preparedAt raw encoded adaptedAt]
++          refine ⟨oldHandle, scs, readAfter, reading, checking, oldValue, value, heap, nextAction,
++            final, oldDecoded, narrowedAt, preparedAt, rfl, rfl, rfl, post, query, Or.inr
++              ⟨newHandle, after, empty, encoded, rfl, rfl,
++                ⟨roots, afterPaths, afterReady.safe.1, afterRealized, afterCounts, afterFlags⟩,
++                afterReady.safe, afterPending pending, afterReady, afterStored, waiting, rfl, rfl, ?_⟩⟩
++          intro parentEntry storedEdges depth free parent nonterminal selected ranges
++          obtain ⟨R, N, P, H, K, entered, processed, lastCaller, saved, last, next, outcome,
++            ordinaryRun, _render, _sameFlags, _sameWaiting, lastPost, lastQuery, admitted,
++            receiptHistory, receiptPosts, fragments, callbacks, outcomeShape, supported⟩ :=
++            ordinary parentEntry storedEdges depth free parent nonterminal selected (by simpa only [query] using ranges)
++          refine ⟨R, N, P, H, K, entered, processed, lastCaller, saved, last, next, outcome,
++            ?_, lastPost, lastQuery, admitted, receiptHistory, receiptPosts, fragments, callbacks, outcomeShape, supported⟩
++          intro er en ep eh ek
++          rw [run_narrowed holeKey fits admits graph templates checkEmpty edgesOf stop order metadata
++            w w w w w w (R + er) (N + en) (P + ep) (H + eh) (K + ek)
++            uv oldHandle newHandle scs oldValue value caller before after memos.query readAfter checked.core heap
++            nextAction reading checking oldDecoded preparedAt raw encoded adaptedAt]
++          have actual := ordinaryRun er en (P + ep) (H + eh) ek (Nat.le_add_right _ _) (Nat.le_add_right _ _)
++          rw [show SourcePruningEnumerationNativeOrdinary.run checkEmpty (R + er) (N + en) (P + ep) (H + eh)
++            (K + ek) uv edgesOf
++            (SourceCurrentAllocatedPartialState.advance caller
++              (advancePhysical caller.checked ⟨heap, caller.checked.operations⟩) caller.fourth caller.merge)
++            after memos.query = _ from (by simpa only [query] using actual)]
++        · rw [prefixRun]
++          exact history
++
++/-- The actual restart expansion derives common prefix fuel from the current native context and indexed cache. -/
++theorem restart_prefix_complete
++    (formulas : SourceGuards.Formulas FullSyntax.Formula)
++    (solver : SourceGuards.Entailment FullSyntax.Formula) (inventory : Inventory)
++    (caller : Caller width) (memos : Memos) (before : Cached) (uv : Nat)
++    (initial : Context formulas solver inventory caller memos) (safe : Safe before.core)
++    (pending : EnumerationReferences.PendingReferences before.core)
++    (valid : SourcePruningEnumerationNativeBranchCompletion.CacheValid caller before)
++    (chosen : SourcePruningEnumerationRestart.decision stop order metadata before = some (.expand uv)) :
++    ∃ fuel, ∀ extra,
++      PrefixValid holeKey fits admits graph templates checkEmpty edgesOf stop order metadata
++        formulas solver inventory (fuel + extra) uv caller before memos
++        (runPrefix holeKey fits admits graph templates stop order metadata
++          (fuel + extra) (fuel + extra) (fuel + extra) (fuel + extra) (fuel + extra) (fuel + extra)
++          uv caller before memos.query) := by
++  have selection : EnumerationPureSelection.next (order metadata) before = .expand uv := by
++    cases stop with
++    | none => exact Option.some.inj chosen
++    | some rule =>
++        simp only [SourcePruningEnumerationRestart.decision] at chosen
++        split at chosen
++        · cases chosen
++        · exact Option.some.inj chosen
++  obtain ⟨roots, paths, _storage, realized, counts, flags⟩ := valid
++  exact prefix_complete holeKey fits admits graph templates checkEmpty edgesOf stop order metadata
++    formulas solver inventory caller memos before (order metadata) uv roots
++    initial safe pending selection realized paths counts flags
++
++end MicroCFTA.SourcePruningEnumerationSelectedStep
+diff --git a/lean/MicroCFTA/SourcePruningEnumerationPrefixHistory.lean b/lean/MicroCFTA/SourcePruningEnumerationPrefixHistory.lean
+new file mode 100644
+index 000000000..4f4afca17
+--- /dev/null
++++ b/lean/MicroCFTA/SourcePruningEnumerationPrefixHistory.lean
+@@ -0,0 +1,51 @@
++import MicroCFTA.SourcePruningEnumerationRecursionOrder
++import MicroCFTA.EnumerationPendingOrder
++
++namespace MicroCFTA.SourcePruningEnumerationPrefixHistory
++open EnumerationState EnumerationCorrectness EnumerationCompressionFrame
++local notation "Symbol" => SourcePruningTemplates.Symbol
++variable {EnumGuard NativeGuard : Type}
++
++/-- Actual prefix reads and a pending replacement retain the counter and dependency order.
++Initial safety supplies read totality. No safety result follows from a frame alone. -/
++theorem complete
++    (heap : InternedConstructorTemplates.State Symbol NativeGuard)
++    (before after : EnumerationExpandableIndex.Cached Symbol EnumGuard)
++    (readAfter checked : EnumerationState.State Symbol EnumGuard)
++    (readFuel checkFuel representativeFuel uv oldHandle newHandle : Nat) (scs : List Suspended)
++    (safe : EnumerationSchedule.Safe before.core)
++    (stored : before.core.values[uv]? = some (.unenumerated (some oldHandle) scs))
++    (read : Success (getValue readFuel uv) before.core (.unenumerated (some oldHandle) scs) readAfter)
++    (check : Success (SourcePruningEnumerationRecursion.checkRepeated heap checkFuel uv oldHandle scs)
++      readAfter false checked)
++    (shape : after = EnumerationExpandableIndex.frame checked before ∨
++      ∃ resolved : EnumerationState.State Symbol EnumGuard,
++        Success (representative representativeFuel uv) checked uv resolved ∧
++        Success (setValue uv (.unenumerated (some newHandle) scs)) resolved () after.core) :
++    after.core.counter = before.core.counter ∧
++      ∀ level frontier, EnumerationOrder.Stratified before.core level frontier →
++        EnumerationOrder.Stratified after.core level frontier := by
++  have readFrame := (getValue_frame readFuel uv before.core readAfter _ safe.1.total read).1
++  have checkedFrame := readFrame.trans
++    (SourcePruningEnumerationRecursionOrder.checkRepeated_false_frame heap checkFuel uv oldHandle scs
++      readAfter checked (readFrame.total safe.1.total) check)
++  rcases shape with equal | ⟨resolved, reading, written⟩
++  · refine ⟨?_, ?_⟩
++    · simpa only [equal, EnumerationExpandableIndex.frame] using checkedFrame.counter
++    · intro level frontier ordered
++      simpa only [equal, EnumerationExpandableIndex.frame] using
++        EnumerationOrder.frame_stratified before.core checked checkedFrame level frontier ordered
++  · have resolvedFrame := representative_frame representativeFuel uv uv checked resolved
++      (checkedFrame.total safe.1.total) reading
++    have wholeFrame := checkedFrame.trans resolvedFrame
++    have writtenShape := (EnumerationDriver.modify_success _ resolved after.core).mp written
++    have oldStored : resolved.values[uv]? = some (.unenumerated (some oldHandle) scs) := by
++      simpa only [wholeFrame.values] using stored
++    refine ⟨?_, ?_⟩
++    · simpa only [writtenShape] using wholeFrame.counter
++    · intro level frontier ordered
++      exact EnumerationOrder.setValue_pending_stratified uv (some oldHandle) (some newHandle) scs scs
++        resolved after.core oldStored level frontier
++        (EnumerationOrder.frame_stratified before.core resolved wholeFrame level frontier ordered) written
++
++end MicroCFTA.SourcePruningEnumerationPrefixHistory
+diff --git a/lean/MicroCFTA/SourcePruningEnumerationPrefixPacket.lean b/lean/MicroCFTA/SourcePruningEnumerationPrefixPacket.lean
+new file mode 100644
+index 000000000..0a5bb06bb
+--- /dev/null
++++ b/lean/MicroCFTA/SourcePruningEnumerationPrefixPacket.lean
+@@ -0,0 +1,113 @@
++import MicroCFTA.SourcePruningEnumerationPrefixCompletion
++
++namespace MicroCFTA.SourcePruningEnumerationPrefixPacket
++open EnumerationState EnumerationSchedule InternedConstructorTemplates
++open SourceCurrentAllocatedNativeInventoryState (Inventory)
++open SourceCurrentAllocatedPartialInvariant (Post)
++open SourcePruningEnumerationSelectedStep
++local notation "Symbol" => SourcePruningTemplates.Symbol
++local notation "Constraint" => SourceSymbolicIndex.Constraint FullSyntax.Formula
++local notation "Node" => Value Symbol Constraint
++local notation "Cached" => EnumerationExpandableIndex.Cached Symbol Constraint
++local notation "Caller" => SourceCurrentAllocatedPartialState.State
++local notation "Memos" => EndpointMemoGateTrace.Memos
++local notation "Metadata" => SourcePruningRecordTypes.Metadata
++variable {Typing Key : Type} {width : Nat}
++variable [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Constraint)] [DecidableEq Node]
++
++private theorem finish_preserves
++    (checkEmpty : Bool) (edgesOf : Node → List (EdgeValue Symbol Constraint))
++    (r n p h k uv : Nat) (observed : Result width Typing) :
++    match observed with
++    | .stopped _ _ | .parked _ _ _ => finish checkEmpty edgesOf r n p h k uv observed = observed
++    | .narrowed checked prepared reached queries action candidate right _ =>
++        ∃ ordinary, finish checkEmpty edgesOf r n p h k uv observed =
++          .narrowed checked prepared reached queries action candidate right ordinary := by
++  cases observed with
++  | stopped _ _ => rfl
++  | parked _ _ _ => rfl
++  | narrowed checked prepared reached queries action candidate right ordinary =>
++      dsimp only
++      unfold finish
++      split <;> simp_all only [Result.narrowed.injEq] <;> subst_vars <;>
++        simp only [true_and] <;> exact ⟨_, rfl⟩
++
++variable (holeKey : Typing → Nat → Key) (fits : Key → Symbol → Bool) (admits : Key → Node → Bool)
++variable (graph : Graph Symbol Constraint) (templates : List (Template.Pattern Symbol))
++variable (checkEmpty : Bool) (edgesOf : Node → List (EdgeValue Symbol Constraint))
++variable (stop : Option (Metadata Typing → Nat → Bool))
++variable (order : Metadata Typing → List Nat → Option Nat) (metadata : Metadata Typing)
++variable (formulas : SourceGuards.Formulas FullSyntax.Formula)
++variable (solver : SourceGuards.Entailment FullSyntax.Formula) (inventory : Inventory)
++variable (fuel uv : Nat) (caller : Caller width) (before : Cached) (memos : Memos)
++
++/-- Every narrowed prefix retains its actual native Post, including Empty rejection. -/
++theorem prefix_context (observed : Result width Typing)
++    (valid : PrefixValid holeKey fits admits graph templates checkEmpty edgesOf stop order metadata
++      formulas solver inventory fuel uv caller before memos observed) :
++    match observed with
++    | .stopped _ _ => False
++    | .parked _ _ _ => True
++    | .narrowed _ _ reached queries _ _ _ _ =>
++        ∃ final, Post formulas solver inventory caller reached final ∧ final.query = queries := by
++  have full := valid.2.1
++  cases observed with
++  | stopped read checked =>
++      obtain ⟨_oldHandle, _scs, _readAfter, _reading, impossible⟩ := full
++      exact impossible
++  | parked _ _ _ => trivial
++  | narrowed checked prepared reached queries action candidate right ordinary =>
++      obtain ⟨next, finished⟩ := finish_preserves checkEmpty edgesOf 0 0 0 0 0 uv
++        (.narrowed checked prepared reached queries action candidate right ordinary)
++      rw [finished] at full
++      obtain ⟨_oldHandle, _scs, _readAfter, _reading, _checking, _oldValue, _value, _heap,
++        _selectedAction, final, _decoded, _narrowed, _prepared, _samePrepared, _reached,
++        _queries, post, saved, _shape⟩ := full
++      exact ⟨final, post, saved⟩
++
++/-- Every retained parked or nonempty cache has its actual native laws and original counter and order. -/
++theorem prefix_cache_valid (observed : Result width Typing)
++    (valid : PrefixValid holeKey fits admits graph templates checkEmpty edgesOf stop order metadata
++      formulas solver inventory fuel uv caller before memos observed) :
++    match observed with
++    | .parked _ (some after) _ =>
++        SourcePruningEnumerationNativeBranchCompletion.CacheValid caller after ∧ Safe after.core ∧
++        EnumerationReferences.PendingReferences after.core ∧ after.core.counter = before.core.counter ∧
++        ∀ level frontier, EnumerationOrder.Stratified before.core level frontier →
++          EnumerationOrder.Stratified after.core level frontier
++    | .narrowed _ _ reached _ _ (some after) _ _ =>
++        SourcePruningEnumerationNativeBranchCompletion.CacheValid reached after ∧ Safe after.core ∧
++        EnumerationReferences.PendingReferences after.core ∧ after.core.counter = before.core.counter ∧
++        ∀ level frontier, EnumerationOrder.Stratified before.core level frontier →
++          EnumerationOrder.Stratified after.core level frontier
++    | _ => True := by
++  have full := valid.2.1
++  cases observed with
++  | stopped _ _ => trivial
++  | parked checked candidate raw =>
++      cases candidate with
++      | none => trivial
++      | some after =>
++          obtain ⟨_oldHandle, _scs, _readAfter, _reading, _checking, cached, same, _core,
++            cacheValid, safe, pending, _counter, _ordered, _raw⟩ := full
++          have equal : after = cached := Option.some.inj same
++          subst cached
++          exact ⟨cacheValid, safe, pending, valid.2.2⟩
++  | narrowed checked prepared reached queries action candidate right ordinary =>
++      cases candidate with
++      | none => trivial
++      | some after =>
++          obtain ⟨next, finished⟩ := finish_preserves checkEmpty edgesOf 0 0 0 0 0 uv
++            (.narrowed checked prepared reached queries action (some after) right ordinary)
++          rw [finished] at full
++          obtain ⟨_oldHandle, _scs, _readAfter, _reading, _checking, _oldValue, _value, _heap,
++            _selectedAction, _final, _decoded, _narrowed, _prepared, _samePrepared, _reached,
++            _queries, _post, _saved, shape⟩ := full
++          rcases shape with ⟨_empty, _action, noCache, _right, _ordinary⟩ |
++            ⟨_newHandle, cached, _nonempty, _encoded, _action, same, cacheValid, safe, pending, _rest⟩
++          · cases noCache
++          · have equal : after = cached := Option.some.inj same
++            subst cached
++            exact ⟨cacheValid, safe, pending, valid.2.2⟩
++
++end MicroCFTA.SourcePruningEnumerationPrefixPacket
+diff --git a/lean/MicroCFTA/SourcePruningEnumerationPreparedFuel.lean b/lean/MicroCFTA/SourcePruningEnumerationPreparedFuel.lean
+new file mode 100644
+index 000000000..3509c130f
+--- /dev/null
++++ b/lean/MicroCFTA/SourcePruningEnumerationPreparedFuel.lean
+@@ -0,0 +1,90 @@
++import MicroCFTA.SourcePruningEnumerationSelectedStepCompletion
++import MicroCFTA.EnumerationExecution
++
++namespace MicroCFTA.SourcePruningEnumerationPreparedFuel
++open EnumerationState EnumerationCorrectness EnumerationExecution
++open InternedConstructorTemplates SourcePruningEnumerationNodes
++local notation "Symbol" => SourcePruningTemplates.Symbol
++local notation "Constraint" => SourceSymbolicIndex.Constraint FullSyntax.Formula
++local notation "Node" => Value Symbol Constraint
++local notation "Core" => EnumerationState.State Symbol Constraint
++local notation "Metadata" => SourcePruningRecordTypes.Metadata
++
++attribute [local instance] SourcePruningEnumerationAction.actionMonadList
++
++variable {Typing Key : Type}
++variable [DecidableEq (EdgeKey Symbol Constraint)]
++
++/-- Stable narrowing retains the prepared result when only its native fuel increases. -/
++theorem native_moreFuel
++    (holeKey : Typing → Nat → Key) (fits : Key → Symbol → Bool) (admits : Key → Node → Bool)
++    (metadata : Metadata Typing) (nativeFuel representativeFuel uv oldHandle extra : Nat)
++    (scs : List Suspended) (oldValue value : Node)
++    (heap nextHeap : InternedConstructorTemplates.State Symbol Constraint)
++    (action : Option (EnumerateM Symbol Constraint Unit))
++    (narrowed : SourcePruningOuterNarrow.narrow holeKey fits admits metadata nativeFuel uv oldValue heap =
++      .done value nextHeap)
++    (stable : ∀ extra, SourcePruningOuterNarrow.narrow holeKey fits admits metadata (nativeFuel + extra)
++      uv oldValue heap = .done value nextHeap)
++    (prepared : SourcePruningEnumerationAction.prepare holeKey fits admits metadata nativeFuel representativeFuel
++      uv oldHandle scs oldValue heap = .done (value, action) nextHeap) :
++    SourcePruningEnumerationAction.prepare holeKey fits admits metadata (nativeFuel + extra) representativeFuel
++      uv oldHandle scs oldValue heap = .done (value, action) nextHeap := by
++  unfold SourcePruningEnumerationAction.prepare at prepared ⊢
++  rw [narrowed] at prepared
++  rw [stable extra]
++  exact prepared
++
++/-- Larger native and representative fuels retain the original action's exact successful core. -/
++theorem nonempty_moreFuel
++    (holeKey : Typing → Nat → Key) (fits : Key → Symbol → Bool) (admits : Key → Node → Bool)
++    (metadata : Metadata Typing) (nativeFuel representativeFuel uv oldHandle newHandle : Nat)
++    (scs : List Suspended) (oldValue value : Node)
++    (heap nextHeap : InternedConstructorTemplates.State Symbol Constraint)
++    (action : EnumerateM Symbol Constraint Unit) (checked after : Core)
++    (narrowed : SourcePruningOuterNarrow.narrow holeKey fits admits metadata nativeFuel uv oldValue heap =
++      .done value nextHeap)
++    (stable : ∀ extra, SourcePruningOuterNarrow.narrow holeKey fits admits metadata (nativeFuel + extra)
++      uv oldValue heap = .done value nextHeap)
++    (nonempty : value ≠ .empty) (encoded : encodeNode value = some newHandle)
++    (prepared : SourcePruningEnumerationAction.prepare holeKey fits admits metadata nativeFuel representativeFuel
++      uv oldHandle scs oldValue heap = .done (value, some action) nextHeap)
++    (observed : Success action checked () after) :
++    ∀ nativeExtra representativeExtra, ∃ nextAction : EnumerateM Symbol Constraint Unit,
++      SourcePruningEnumerationAction.prepare holeKey fits admits metadata (nativeFuel + nativeExtra)
++        (representativeFuel + representativeExtra) uv oldHandle scs oldValue heap =
++          .done (value, some nextAction) nextHeap ∧
++      ExceptT.run (nextAction checked) = [.ok ((), after)] := by
++  have actual := SourcePruningEnumerationSelectedStep.prepared_action holeKey fits admits metadata
++    nativeFuel representativeFuel uv oldHandle newHandle scs oldValue value heap nextHeap narrowed nonempty encoded
++  rw [prepared] at actual
++  have actionSame : action =
++      (if newHandle = oldHandle then (pure () : EnumerateM Symbol Constraint Unit)
++        else representative representativeFuel uv >>= fun selected =>
++          setValue selected (.unenumerated (some newHandle) scs)) :=
++    Option.some.inj (Prod.mk.inj (MergedSourceComparison.Result.done.inj actual).1).2
++  rw [actionSame] at observed
++  intro nativeExtra representativeExtra
++  let nextAction : EnumerateM Symbol Constraint Unit :=
++    if newHandle = oldHandle then pure ()
++    else representative (representativeFuel + representativeExtra) uv >>= fun selected =>
++      setValue selected (.unenumerated (some newHandle) scs)
++  have nextPrepared : SourcePruningEnumerationAction.prepare holeKey fits admits metadata
++      (nativeFuel + nativeExtra) (representativeFuel + representativeExtra) uv oldHandle scs oldValue heap =
++      .done (value, some nextAction) nextHeap :=
++    SourcePruningEnumerationSelectedStep.prepared_action holeKey fits admits metadata
++      (nativeFuel + nativeExtra) (representativeFuel + representativeExtra) uv oldHandle newHandle
++      scs oldValue value heap nextHeap (stable nativeExtra) nonempty encoded
++  have nextObserved : Success nextAction checked () after := by
++    dsimp only [nextAction]
++    by_cases same : newHandle = oldHandle
++    · simpa only [ite_eq_left same] using observed
++    · rw [ite_eq_right same] at observed ⊢
++      exact retains_bind _ _ _ _ (representative_moreFuel representativeFuel representativeExtra uv)
++        (fun _ => retains_refl _) checked () after observed
++  exact ⟨nextAction, nextPrepared,
++    SourcePruningEnumerationSelectedStep.prepared_singleton holeKey fits admits metadata
++      (nativeFuel + nativeExtra) (representativeFuel + representativeExtra) uv oldHandle newHandle scs
++      oldValue value heap nextHeap nextAction checked after (stable nativeExtra) nonempty encoded nextPrepared nextObserved⟩
++
++end MicroCFTA.SourcePruningEnumerationPreparedFuel
