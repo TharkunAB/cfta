@@ -40,7 +40,7 @@ automaton whose guards pruning did not discharge.
 'sized' gives the same sequence. It counts, ranks, and unranks with the count
 table when the automaton has no constraint and its rows are unambiguous.
 It uses the reference otherwise. Bottom-up deterministic rows, as in an
-e-graph, are unambiguous, and a linear check finds them.
+e-graph, are unambiguous. A set of transition keys checks this condition first.
 -}
 module Data.CFTA.Sized (
     Sized,
@@ -129,8 +129,8 @@ sized automaton
 child states, as in an e-graph. Then each term reaches at most one state, by
 induction on the term. So two transitions of a state that accept one term
 have the same child states, and are the same transition: each term has at
-most one run, and the rows are unambiguous. The check is linear in the
-transitions. 'unambiguousRows' builds the product of each pair of states.
+most one run, and the rows are unambiguous. The check builds an ordered set
+of transition keys. 'unambiguousRows' builds the product of each pair of states.
 -}
 bottomUpDeterministic :: (Ord state, Ord symbol) => Map.Map state [FTA.Transition state symbol ()] -> Bool
 bottomUpDeterministic rows = length keys == Set.size (Set.fromList keys)
