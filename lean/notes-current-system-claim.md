@@ -1,5 +1,40 @@
 # Current system claim
 
+## The whole native fold and terminal arm now have exact assignment language
+
+Actual full fold: `7a46b2673`.
+Actual terminal composition: `1eae63771`.
+The goal stays ACTIVE. H6 remains the strongest end-to-end language theorem.
+Main `6c080537a` remains imported. All earlier Haskell repairs remain merged.
+
+The full ordered native fold preserves exactly the complete assignments
+whose selected sources already share the target's union-find class. The
+actual terminal prefix derives those classes. The terminal theorem composes
+that prefix, the ENTIRE fold and the actual incoming step. Returned fragment
+rows accept exactly the original assignments plus the requested union
+equations, incoming node at the winner and incoming suspended constraints.
+Both fold rejection and incoming Empty rejection retain their actual effects.
+The original nonempty-incoming admission and every old receipt remain intact.
+
+The two completion wrappers call their old producer once. Actual observation
+bridges retain the current caller, core and full protocol context. Incoming
+stable families are compared at common sufficient bounds. No arbitrary
+low-fuel Incoming uniqueness or cancellation of native Keeps is assumed.
+No desired final Satisfies relation or new original admission is introduced.
+
+All six new modules and Audit pass strict checks. Aggregate Audit passes
+3915 jobs and checks 77821 theorem dependencies. Installed readback covers
+7 declarations with only permitted axioms. H6, all prior Lean sources
+except Audit imports, runtime and Haskell remain unchanged. Every finite
+recursive capacity still has original resource bounds.
+
+Next transport this terminal language through the actual cached terminal
+adapter, then prove child allocation/suspension and traversal semantics.
+Check the ordinary-node versus Union/Mu shallow-child boundary before a
+uniform child claim. Whole-enumerator language, selector coverage, partial
+stops, unsupported fallback, concrete solver and Haskell correspondence stay open.
+Details: `lean/notes-current-pruning-fold-language.md`. FINDINGS has Haskell status.
+
 ## Cached incoming and native assimilation now have assignment semantics
 
 Assimilation and actual terminal unions: `1801f54a5`.

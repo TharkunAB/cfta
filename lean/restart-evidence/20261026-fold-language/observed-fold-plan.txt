@@ -1,0 +1,90 @@
+[2026-10-26 12:35 CET] Bounded source-only plan: actual observed Fold semantics
+
+Result: the requested observer is viable under the EXACT old Fold.run_complete admission. No Safe or StorageValid premise is needed. Keep the current SameClass condition inside the semantic output only. It does not constrain construction of the actual Post/memo receipt.
+
+Proposed interface
+Namespace MicroCFTA.SourcePruningEnumerationFold; theorem observed_semantics.
+Retain the original run_complete parameters and hypotheses, in the same order, through ranges. Add implicit actual n p h raw afterCaller savedQueries outer and:
+  observed : run checkEmpty n p h sources beforeCaller before target memos.query =
+    (.ok (some raw), afterCaller, savedQueries, outer).
+Return:
+  exists next final,
+    Post formulas solver next beforeCaller afterCaller final and
+    final.query = savedQueries and
+    forall ambient residualMeaning assignment,
+      (forall source in sources, SameClass before.representatives source target) ->
+      ((exists output, ok((),output) in raw and
+        Satisfies (NativeLanguage.handles nativeHolds ambient afterCaller.heap)
+          residualMeaning assignment output)
+       iff Satisfies (NativeLanguage.handles nativeHolds ambient beforeCaller.heap)
+          residualMeaning assignment before).
+Optionally retain realization of outer if a consumer needs it, but it is not necessary for the semantic goal. Do not state Satisfies at outer as a replacement for raw-member meaning. The supplied actual raw payload and the outer core are separate fields. There is no input equation relating them.
+
+Actual induction
+1. Induct sources, generalizing inventory, beforeCaller, before, memos and all actual observation fields. This lets the tail use the actual reached full memo record, not a record fabricated from its query projection.
+2. Nil: the actual runtime equation identifies raw=[ok((),before)], afterCaller=beforeCaller, savedQueries=memos.query, outer=before. Use Post.refl initial. Singleton membership reduces the semantic clause to reflexivity.
+3. Cons source rest: destruct the actual dispatch checkEmpty n p h beforeCaller before source target memos.query. Outer error and outer ok none contradict the supplied Fold outer ok(some raw) observation. This does not promote either excluded outcome to success.
+4. In outer ok(some action), build slots from targetPending and selected source (List.mem_cons_self). The source-equals-target disjunct is allowed, but the pending pair or source-eliminated disjunct already suffices. headRanges is ranges.1.
+5. Call Dispatch.observed_packet ONCE at the exact observed n/p/h/action/headCaller/headQueries. Its order is formulas solver inventory beforeCaller before checkEmpty source target memos initial realized slots headRanges targetPending observedDispatch. The returned next/full final memo and Post give headPost.context. It also supplies realization of the unchanged before core under the reached native heap, singleton facts, and head raw semantics.
+6. Split ExceptT.run(action before) using the EXACT runtime matcher. If it is [ok((),middle)], extract singletonFacts middle actualRaw: actual realization, PendingAt middle target, middle.representatives=before.representatives, and preserved eliminated-or-pending shape for every old slot. Construct tailSelected by that universal shape preservation applied to selected remaining (List.mem_cons_of_mem source member).
+7. Derive tailRanges from ranges.2 n p h action headCaller headQueries middle observedDispatch actualRaw. Its query input is headQueries. Rewrite only the query projection with headQuerySame : headMemos.query=headQueries. Rewrite the observed suffix equation the same way. Invoke IH at headPost.context, actual middle realization, pending target, preserved selected slots, tailRanges and the actual tail observation. No second dispatch observation, arbitrary state rebase, or future successful suffix is needed.
+8. Return the tail next/full final memo, headPost.trans tailPost and tail query equality. Do not identify headMemos with an arbitrary record with the same query; the exact headMemos supports Context for the tail.
+9. Under the semantic output binders, obtain headSameClass from the supplied forall on List.mem_cons_self. Transport every tail class with the literal singleton representatives equality. This is not Frame-to-Safe. No new safety fact is required.
+10. Reduce the head raw semantic equivalence using actualRaw=[ok((),middle)]. Its left side becomes Satisfies at middle and the actual head native heap. Compose tailIff.trans headIff. This retains both implication directions and each actual native endpoint.
+11. In the non-singleton raw branch, the Fold runtime returns the exact current headCaller/headQueries and the ORIGINAL before core. The actual observation identifies raw with this head raw. Return the head Post/full memo witness and apply head semantics directly. Do not recurse and do not claim that outer is a post-write core. The existing semantic packet covers [] by false membership and rules out a satisfying original assignment. It also states a correct raw-member equivalence without requiring that the proof first exclude every possible non-singleton/error shape.
+
+Existing reusable current shape facts
+EnumerationCompleteness.PendingAt (EnumerationCompleteness.lean:18) is definitionally the original targetPending existential. PendingOrEliminated (line22) is pending FIRST, then eliminated. The old Fold selected premise and the draft observed_packet universal shape are eliminated FIRST, then pending. Convert with Or.elim Or.inr Or.inl when using the generic lemma; do not silently keep the wrong disjunction order.
+EnumerationCompleteness.assimilated_pending (lines41-55) takes target != source and actual target/source array bounds. These bounds come from the two old stored-slot receipts. It returns target PendingAt and preservation of every PendingOrEliminated slot. No Safe, root, Graph, fresh success or value-language assumption is needed. The observed packet already packages this for Fold, so the Fold proof need not duplicate array-set case analysis.
+EnumerationCorrectness.assimilated (line277) changes only the two values and target recursionAncestry. The literal representative equality is rfl in the changed case. This supplies the exact class transport; do not weaken it to a guessed final cache invariant.
+
+Lean syntax and proof pitfalls
+- Use rcases dispatchEq : dispatch ... with <outcome,headCaller,headQueries>, then cases outcome and Option. This follows FoldUnique.ok_unique's existing decomposition and preserves the tuple field equations.
+- The action raw matcher continues ONLY on a one-element successful Unit row. A list containing an inner error, a longer list, or [] uses the stopped raw branch. Split exactly that pattern rather than all List constructors unless Lean elaboration requires it.
+- Unfold Fold.run once at observed, rewrite the actual dispatch equation, then dsimp only before splitting the action raw. Avoid a global simp that unfolds native execution, actions or captured dictionaries.
+- When the raw pattern matches Unit, Prod/Except/one-element List equalities can leave True conjunctions. Use the same explicit List.cons.injEq, Except.ok.injEq, Prod.mk.injEq, true_and, and_true reductions as observed_packet. Preserve real field equalities before substitution.
+- Keep implicit actual results generalized in the induction. Otherwise IH may remain fixed to the original caller/core/query and fail at the reached suffix.
+- SameClass is an output condition; do not move it to an initial producer premise just to simplify the induction.
+- Keep residualMeaning generic in EnumGuard. Native constraint holds is independent of that type. The new theorem does not need a Graph or a new Monad List declaration.
+- The observer uses actual n/p/h with no adequacy inequality. Its success equation aligns the canonical semantic receipt via DispatchUnique.ok_unique. Request WordRanges remain the old current admission; they are not inferred from that equality.
+
+Old producer wrapper
+A later run_complete_semantics can copy the entire old run_complete input header and existential conclusion, then append the semantic clause above. Call the old run_complete ONCE. Instantiate observed_semantics at literal fuel,p,h using the old stable observation at extra=0 and reflexive lower-bound proofs. Keep every old witness and field exactly. The observer can return its own existential Post/memo witnesses; its final semantic statement uses the actual afterCaller and raw, so the wrapper can discard those additional observer witnesses. Do NOT claim that the observer's full final memo equals the old producer's final memo merely because their query fields agree. The old full Post/final/next remain the wrapper outputs.
+
+The observer itself follows actual heads and canonicalizes each head once. It does not call the old whole Fold producer. There is no need to reconstruct the original sum/max fuel stabilization in this observer. The old producer already provides all-larger-fuel stability to its wrapper. This avoids duplicating the old long completion induction while retaining its complete contract.
+
+Next terminal composition
+TerminalPrefix.run_complete_semantics supplies SameClass joined.representatives source winner for every source in its ACTUAL recorded list, plus exact assignment equations added by the actual union loop. The recorded list is (first::rest).map oldRoots. Its duplicates and winner noops stay in the fold. Canonical filtered keys are waiting-index bookkeeping only.
+
+If composing with a separately retained Terminal.run_complete witness, align its actual prefix receipt to the semantic prefix receipt with TerminalPrefixUnique.run_unique. That theorem identifies recorded,winner,moved,joined across successful representative bounds without a state invariant premise. Do not retarget class facts to a different joined core. For the same joined input and actual Fold observation, the new Fold observer supplies the assignment equivalence at the actual foldCaller heap. The old Fold/Terminal shape already identifies folded with the singleton raw payload in admitted completion. For arbitrary observed tuples, FoldUnique.ok_unique plus a canonical raw shape can derive that payload/outer alignment; it must not be assumed.
+
+For a nonempty fold row, the next incoming write has the actual foldPost.context, foldRealized, folded storage/current root, current incoming Available/closed and original-counter-derived bounds. IncomingNodeLanguage.run_complete_semantics is a canonical producer. Its proof can be factored into an observer over the SAME already retained read/write/optional/present receipts, or used with an exact equality lemma that actually applies. Do not assume arbitrary IncomingNode outer-ok uniqueness: small representative fuel can return outer ok none while larger fuel completes. The Terminal run follows the raw singleton payload and later retains the read core as outer; the logical afterWrite stays a separate witness. Empty incoming replacement yields raw[] even when its logical post-write candidate is reconstructed by the cache adapter.
+
+A rejected fold stops before the incoming query. A rejected incoming result may still include its actual native query and logical write effects. Their semantic arguments and runtime cores are different. Full terminal semantics must compose prefix equations, ordered fold language and this actual incoming write, with full Post/memo witnesses at their own endpoints. This plan does not claim that final terminal, child, callback or whole-driver language composition is already proved, and does not strengthen H6.
+
+Status
+This is a source-grounded plan, not a compiler result. The DispatchObservedPacket draft was read as an uncompiled proposal. Root owns strict checking and installation. No repository file was edited, and no build, Git, network or board operation was run.
+
+Actual source identities at review
+/home/tritlo/Code/mcfta/lean/MicroCFTA/SourcePruningEnumerationFold.lean
+  22663 bytes; SHA256 0a5ae94315af7024fc4cc80bcc00163996fceaf95568969df73401fea9c2db16
+/home/tritlo/Code/mcfta/lean/MicroCFTA/SourcePruningEnumerationDispatchObservedLanguage.lean
+  4927 bytes; SHA256 264206566707010d8b748d2cc6c903f10e11fb8efc12a5594cc4c14dfbe531db
+/home/tritlo/Code/mcfta/lean/MicroCFTA/SourcePruningEnumerationDispatchUnique.lean
+  10397 bytes; SHA256 b5d9f4c0199e38f5d289075e904f896573a317d203c67840d9c0b46a3115c330
+/home/tritlo/Code/mcfta/lean/MicroCFTA/EnumerationCompleteness.lean
+  23285 bytes; SHA256 1cafd52affc702de54e22a37e4ac12496d860b964c0628d95eb94f015fbf34f7
+/home/tritlo/Code/mcfta/lean/MicroCFTA/EnumerationCorrectness.lean
+  76898 bytes; SHA256 087b96d593bb42cea0b61b2742b43d4a41ce5a2d990e300c8d15700e2eb0672d
+/home/tritlo/Code/mcfta/lean/MicroCFTA/SourcePruningEnumerationTerminalPrefixLanguage.lean
+  6723 bytes; SHA256 945be96f71884de017364167db726a78cb485d67a2a70cd1ff50db9aecc608b1
+/home/tritlo/Code/mcfta/lean/MicroCFTA/SourcePruningEnumerationTerminalPrefixUnique.lean
+  7468 bytes; SHA256 67481c93440aabd7ecc21f0a669adc6f23d7261f16cfaff348fb687ef1aa26d3
+/home/tritlo/Code/mcfta/lean/MicroCFTA/SourcePruningEnumerationFoldUnique.lean
+  5012 bytes; SHA256 eae95b53939ccde9d229d9fe8d8981106de92e74930396632a5d16266593a61d
+/home/tritlo/Code/mcfta/lean/MicroCFTA/SourcePruningEnumerationTerminal.lean
+  21983 bytes; SHA256 6b303c0cbe9f23bf63087b3c096d13cb9c34ec772717009d240ca64f0996e5ef
+/home/tritlo/Code/mcfta/lean/MicroCFTA/SourcePruningEnumerationIncomingNodeLanguage.lean
+  10904 bytes; SHA256 a244527e08ef6bfa59eb7d7fcbb9f32bcf730eb1144d68c26bd037cea1f032fe
+/tmp/mcfta-fold-language-20261026/proposals/SourcePruningEnumerationDispatchObservedPacket.lean
+  7420 bytes; SHA256 cf86eaf5f6f9e019dbd2201f3d86a403410de89c274266f17f4e612e5e0dea39

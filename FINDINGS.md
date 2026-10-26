@@ -71,6 +71,23 @@ Terminal parents retain the existing enumerateNode fallback boundary. Native
 children can still take their terminal dispatcher. No Haskell fix is needed.
 Details: lean/notes-current-pruning-enumeration-native-ordinary.md.
 
+### Whole native fold, terminal language and Haskell status
+
+The formal full native fold now preserves assignments already equated by
+the actual union-find forest. The actual terminal prefix derives this class
+relation. The full terminal composition has exact assignment meaning for
+its returned fragment rows. Fold and incoming rejection retain native effects.
+The original nonempty-incoming admission stays unchanged.
+
+No Haskell source changed. No new Haskell defect or repair was established.
+External action: no additional patch. Retain all six earlier merged repairs,
+the merged Sized documentation repair in PR #178 and all historical repros.
+Keep pending parallel-decision suffix-exception and cancellation findings.
+Arbitrary lazy demand and shared global caches remain correspondence work.
+The shallow-child ordinary-node versus Union/Mu boundary needs a semantic
+and source-correspondence check. This is not a confirmed Haskell defect.
+Details: `lean/notes-current-pruning-fold-language.md`.
+
 ### Cached incoming, assimilation and Haskell status
 
 The formal cached incoming adapter now has exact assignment language.
@@ -889,6 +906,41 @@ TH/Generic extraction, valid-position build/read and source codec laws stay open
 
 
 
+
+## The whole native fold and terminal arm now have exact assignment language
+
+Actual full fold: `7a46b2673`.
+Actual terminal composition: `1eae63771`.
+The goal stays ACTIVE. H6 remains the strongest end-to-end language theorem.
+Main `6c080537a` remains imported. All earlier Haskell repairs remain merged.
+
+The full ordered native fold preserves exactly the complete assignments
+whose selected sources already share the target's union-find class. The
+actual terminal prefix derives those classes. The terminal theorem composes
+that prefix, the ENTIRE fold and the actual incoming step. Returned fragment
+rows accept exactly the original assignments plus the requested union
+equations, incoming node at the winner and incoming suspended constraints.
+Both fold rejection and incoming Empty rejection retain their actual effects.
+The original nonempty-incoming admission and every old receipt remain intact.
+
+The two completion wrappers call their old producer once. Actual observation
+bridges retain the current caller, core and full protocol context. Incoming
+stable families are compared at common sufficient bounds. No arbitrary
+low-fuel Incoming uniqueness or cancellation of native Keeps is assumed.
+No desired final Satisfies relation or new original admission is introduced.
+
+All six new modules and Audit pass strict checks. Aggregate Audit passes
+3915 jobs and checks 77821 theorem dependencies. Installed readback covers
+7 declarations with only permitted axioms. H6, all prior Lean sources
+except Audit imports, runtime and Haskell remain unchanged. Every finite
+recursive capacity still has original resource bounds.
+
+Next transport this terminal language through the actual cached terminal
+adapter, then prove child allocation/suspension and traversal semantics.
+Check the ordinary-node versus Union/Mu shallow-child boundary before a
+uniform child claim. Whole-enumerator language, selector coverage, partial
+stops, unsupported fallback, concrete solver and Haskell correspondence stay open.
+Details: `lean/notes-current-pruning-fold-language.md`. FINDINGS has Haskell status.
 
 ## Cached incoming and native assimilation now have assignment semantics
 

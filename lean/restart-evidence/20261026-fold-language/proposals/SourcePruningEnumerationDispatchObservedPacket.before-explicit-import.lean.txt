@@ -1,0 +1,118 @@
+import MicroCFTA.SourcePruningEnumerationDispatchLanguage
+import MicroCFTA.SourcePruningEnumerationDispatchUnique
+
+/-!
+# Current entry facts and assignment meaning of an actual dispatcher observation
+
+One canonical receipt identifies the observed action, caller and query memo.
+An actual singleton retains the target and every old pending or eliminated slot.
+-/
+namespace MicroCFTA.SourcePruningEnumerationDispatch
+open EnumerationState EnumerationCorrectness InternedConstructorTemplates InternedProbeProvenance
+open SourcePruningEnumerationNodes SourcePruningEnumerationObservation
+open SourceCurrentAllocatedNativeInventoryState (Inventory)
+open SourceCurrentAllocatedPartialInvariant (Context Post)
+local notation "Symbol" => SourcePruningTemplates.Symbol
+local notation "Constraint" => SourceSymbolicIndex.Constraint FullSyntax.Formula
+local notation "Node" => InternedConstructorTemplates.Value Symbol Constraint
+local notation "Caller" => SourceCurrentAllocatedPartialState.State
+local notation "Memos" => EndpointMemoGateTrace.Memos
+local notation "Queries" => SourceEndpointMemo.Memos
+variable {EnumGuard : Type} {width : Nat}
+
+/-- Retain the exact head receipt and derive current slot facts from its actual singleton. -/
+theorem observed_packet
+    [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Constraint)] [DecidableEq Node]
+    (formulas : SourceGuards.Formulas FullSyntax.Formula)
+    (solver : SourceGuards.Entailment FullSyntax.Formula)
+    (inventory : Inventory) (beforeCaller : Caller width)
+    (before : EnumerationState.State Symbol EnumGuard)
+    (checkEmpty : Bool) (source target : Nat) (memos : Memos)
+    (initial : Context formulas solver inventory beforeCaller memos)
+    (realized : PendingRealized beforeCaller.checked.native.machine.heap before)
+    (slots : source = target ∨ before.values[source]? = some .eliminated ∨
+      ∃ (sourceNode targetNode : Option Nat) (sourceScs targetScs : List EnumerationState.Suspended),
+        before.values[source]? = some (.unenumerated sourceNode sourceScs) ∧
+        before.values[target]? = some (.unenumerated targetNode targetScs))
+    (ranges : if source = target then True else
+      match before.values[source]?, before.values[target]? with
+      | some (.unenumerated (some left) _), some (.unenumerated (some right) _) =>
+          match lookupNode beforeCaller.checked.native.machine.heap left,
+              lookupNode beforeCaller.checked.native.machine.heap right with
+          | some first, some second => SourceCurrentAllocatedNativeRequestBounds.WordRanges
+              (.code (SourceRecursiveIntersectionCode.requestNode IntersectionEmptyDomain.emptyDomain first second))
+              beforeCaller.checked
+          | _, _ => True
+      | _, _ => True)
+    (targetPending : EnumerationCompleteness.PendingAt before target)
+    {n p h : Nat} {action : EnumerateM Symbol EnumGuard Unit}
+    {reachedCaller : Caller width} {savedQueries : Queries}
+    (observed : dispatch checkEmpty n p h beforeCaller before source target memos.query =
+      (.ok (some action), reachedCaller, savedQueries)) :
+    ∃ (next : Inventory) (final : Memos),
+      Post formulas solver next beforeCaller reachedCaller final ∧ final.query = savedQueries ∧
+      PendingRealized reachedCaller.checked.native.machine.heap before ∧
+      (∀ after : EnumerationState.State Symbol EnumGuard,
+        ExceptT.run (action before) = [.ok ((), after)] →
+          PendingRealized reachedCaller.checked.native.machine.heap after ∧
+          EnumerationCompleteness.PendingAt after target ∧
+          after.representatives = before.representatives ∧
+          ∀ uv, (before.values[uv]? = some .eliminated ∨ EnumerationCompleteness.PendingAt before uv) →
+            after.values[uv]? = some .eliminated ∨ EnumerationCompleteness.PendingAt after uv) ∧
+      ∀ (ambient : InternedGuardedLanguage.Env Symbol)
+        (residualMeaning : EnumGuard → Language.Term Symbol → Prop)
+        (assignment : Nat → Language.Term Symbol),
+        UnionFind.SameClass before.representatives source target →
+          ((∃ after : EnumerationState.State Symbol EnumGuard,
+            Except.ok ((), after) ∈ ExceptT.run (action before) ∧
+            Satisfies
+              (SourcePruningEnumerationNativeLanguage.handles (SourceEqualityPCSGuard.holds formulas solver)
+                ambient reachedCaller.checked.native.machine.heap) residualMeaning assignment after) ↔
+          Satisfies
+            (SourcePruningEnumerationNativeLanguage.handles (SourceEqualityPCSGuard.holds formulas solver)
+              ambient beforeCaller.checked.native.machine.heap) residualMeaning assignment before) := by
+  obtain ⟨fuel, minimumP, minimumH, canonical, afterCaller, returnedQueries, final, next,
+    stable, post, querySame, afterRealized, noop, live, semantic⟩ :=
+      dispatch_complete_semantics formulas solver inventory beforeCaller before checkEmpty source target memos
+        initial realized slots ranges
+  have canonicalObserved : dispatch checkEmpty fuel minimumP minimumH
+      beforeCaller before source target memos.query =
+      (.ok (some canonical), afterCaller, returnedQueries) := by
+    simpa only [Nat.add_zero] using
+      stable 0 minimumP minimumH (Nat.le_refl minimumP) (Nat.le_refl minimumH)
+  obtain ⟨actionsSame, callerSame, queriesSame⟩ := ok_unique checkEmpty observed canonicalObserved
+  have actionSame : action = canonical := Option.some.inj actionsSame
+  subst canonical
+  subst afterCaller
+  subst returnedQueries
+  refine ⟨next, final, post, querySame, afterRealized, ?_, semantic⟩
+  intro after completed
+  by_cases noWork : source = target ∨ before.values[source]? = some .eliminated
+  · have raw := (noop noWork).1
+    have afterSame : before = after := by
+      simpa only [raw, List.cons.injEq, Except.ok.injEq, Prod.mk.injEq, true_and, and_true] using completed
+    subst after
+    exact ⟨afterRealized, targetPending, rfl, fun _ previous => previous⟩
+  · have different : source ≠ target := fun same => noWork (.inl same)
+    have notEliminated : before.values[source]? ≠ some .eliminated := fun same => noWork (.inr same)
+    obtain ⟨sourceNode, targetNode, merged, sourceScs, targetScs, sourceStored, targetStored,
+      raw, surviving, _optional, _present⟩ := live different notEliminated
+    have nonzero : merged ≠ some 0 := by
+      intro empty
+      rw [raw, ite_eq_left empty] at completed
+      cases completed
+    rw [raw, ite_eq_right nonzero] at completed
+    have afterSame :
+        assimilated before target source (.unenumerated merged (sourceScs ++ targetScs)) = after := by
+      simpa only [List.cons.injEq, Except.ok.injEq, Prod.mk.injEq, true_and, and_true] using completed
+    subst after
+    obtain ⟨_targetStored, _sourceStored, nextRealized⟩ := surviving nonzero
+    have pending := EnumerationCompleteness.assimilated_pending before target source merged
+      (sourceScs ++ targetScs) (Ne.symm different)
+      (List.getElem?_eq_some_iff.mp targetStored).1 (List.getElem?_eq_some_iff.mp sourceStored).1
+    refine ⟨nextRealized, pending.1, rfl, ?_⟩
+    intro uv previous
+    have oldShape : EnumerationCompleteness.PendingOrEliminated before uv := previous.elim Or.inr Or.inl
+    exact (pending.2 uv oldShape).elim Or.inr Or.inl
+
+end MicroCFTA.SourcePruningEnumerationDispatch
