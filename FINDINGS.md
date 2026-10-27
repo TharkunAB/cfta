@@ -71,6 +71,36 @@ Terminal parents retain the existing enumerateNode fallback boundary. Native
 children can still take their terminal dispatcher. No Haskell fix is needed.
 Details: lean/notes-current-pruning-enumeration-native-ordinary.md.
 
+### Captured-slot soundness restores the original pending restriction
+
+The backward captured-slot semantic gap is now closed for an actual stable
+completed captured edge under the stated current admission and semantic gates.
+A satisfying final assignment implies full original Satisfies, native edge
+and parent acceptance at the captured term, every original suspended constraint,
+and the final filled-fragment equation. Initial Canonical, no-terminal status,
+fresh own arity and structural child retention remain required. This does not
+prove assignment existence, whole enumeration or Haskell runtime correctness.
+
+The proof neutralizes the captured payload through the same actual native
+receipts. It restores that original payload from the final equation and actual
+stored/decoded parent. It does not assume original or middle satisfaction.
+Neutralizing only Cached.core would invalidate waiting counts and expandable
+flags, so no cache producer is rerun on such a modified cache. Actual native
+caller and memo effects remain intact. Rejection gives no new Safe claim.
+
+Actual ordinary entry and every processed completed alternative now preserve
+stored trie validity from the original captured input and actual prefix Posts.
+The sibling cache is restored while native effects continue, as recorded in
+the native alternative state boundary above. Recursive callbacks, rendering,
+selector coverage, truncation and completeness remain open.
+
+No Haskell source changed. No new Haskell defect or repair was established.
+External action: no additional patch. Keep all six merged repairs, the merged
+Sized documentation repair, earlier reproducers and pending parallel-decision
+suffix-exception/cancellation findings. Record future verified repairs here.
+Details: `lean/notes-current-pruning-captured-soundness.md`.
+Evidence: `lean/restart-evidence/20261027-native-captured-frame`.
+
 ### Native stored-trie validity through actual successful paths
 
 The native enumeration model now preserves EnumerationValidity.Canonical
@@ -1035,6 +1065,51 @@ TH/Generic extraction, valid-position build/read and source codec laws stay open
 
 
 
+
+## Actual captured-slot expansion now restores the original pending language
+
+Native locality and neutral foundations: `e4f2d1802`.
+Actual incoming and fold semantics: `09cf564f7`.
+Terminal and shallow child composition: `6fa1aa55d`.
+Ordinary alternative canonical history: `6bc2cf1f4`.
+Neutral traversal and captured native soundness: `645a4dd24`.
+The full formalization goal stays ACTIVE. H6 is still the strongest system
+language theorem. Imported main remains `6c080537a`. No Haskell source changed.
+
+CapturedEdge.stable_complete_sound_current now proves the missing backward
+captured-slot argument. For its actual stable completed family, a satisfying
+final assignment implies full original Satisfies, native selected-edge and
+parent acceptance at assignment uv, every original suspended Holds, and
+fill assignment fragment = assignment uv. Original caller/history admission,
+initial Canonical, ordinary no-terminal status, fresh own arity and structural
+child retention remain explicit. Assignment existence and completeness do not
+follow. This does not certify arbitrary low-fuel completed observations.
+
+The proof removes the captured payload through the actual own prefix, child
+partition, terminal fold, incoming writes, ordered traversal and residual.
+Finalization supplies the fragment equation. The actual original stored and
+decoded pending slot then restores its old restriction. No circular original
+or middle Satisfies premise is added. Native endpoints and full memo contexts
+remain exact. No cached worker runs on a neutral core with stale indexes.
+
+Actual ordinary entry and processed alternatives now carry Canonical too.
+Every completed receipt uses its own reached heap and restored captured input.
+The guarantee also covers processed prefixes before an unsupported stop.
+Rejected candidates receive no new safety or acceptance guarantee.
+
+All 21 new modules and Audit pass strict checks. Aggregate Audit passes
+3972 jobs and checks 78031 theorem dependencies. Installed readback covers
+40 new public theorems, unchanged H6 and one complete receipt-view definition.
+Only permitted axioms occur. All prior proof sources except Audit imports,
+runtime and Haskell remain unchanged. Full evidence and attempts are retained.
+
+Next connect captured soundness to actual recursive callbacks and rendering.
+Retain initial Canonical and checked arity origins through remaining paths.
+Keep recursive truncation retention explicit. Prove emitted-term soundness,
+selector coverage and completeness without a final assignment premise.
+Partial stops, unsupported fallback and full Haskell correspondence stay open.
+Details: `lean/notes-current-pruning-captured-soundness.md`.
+FINDINGS retains the complete external Haskell repair handoff.
 
 ## Actual native enumeration now preserves stored trie validity through captured completion
 
