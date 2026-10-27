@@ -1,3 +1,6 @@
+import MicroCFTA.EnumerationFlatNativeAssimilation
+import MicroCFTA.EnumerationFlatReplay
+import MicroCFTA.EnumerationFlatTerminalPrefix
 import MicroCFTA.FlatUnionFindBounds
 import MicroCFTA.EnumerationFlatBounds
 import MicroCFTA.EnumerationFlatCached
