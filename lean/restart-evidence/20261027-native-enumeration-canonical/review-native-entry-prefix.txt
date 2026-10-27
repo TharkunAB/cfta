@@ -1,0 +1,22 @@
+[2026-10-27 01:45 CET] FINAL CLEAR — native entry, terminal prefix and incoming canonicality.
+
+Final source and actual receipt controls:
+- SourcePruningEnumerationPrefixCanonical.lean SHA256 690f1210f89e072eaa5a85f9ba3859adc5000c8f775873b07bcbe15010b281d1. strict-prefix-canonical-1/report.json SHA256 8e8672979613a6ea643c46b2263e4587c97a0c4d29ed7adf315669029e88362a.
+- SourcePruningEnumerationEntryCanonical.lean SHA256 ac5d49c5c0df6a4b3c43adf0452fb19b872d53a3b892056f57c01d20e5c7bbb9. strict-entry-canonical-2/report.json SHA256 50d288d91bc3ce95f58dfdf9c8aeedd5188dc95cce97f56155b39a60c93636c6.
+- SourcePruningEnumerationIncomingCanonical.lean SHA256 7769aeb875845cfc85a72f1f044a70a941397020fec3ff6f4bbc7b39dbbc6788. strict-incoming-canonical-5/report.json SHA256 6d3b66ba631948f1f5b640bc001e8633719bc0c1636464894ca6db1bdd649c8d.
+All repository paths are under /home/tritlo/Code/mcfta/lean/MicroCFTA. All receipt paths are under /tmp/mcfta-native-enumeration-canonical-20261027. Each complete source matches its retained MicroCFTA snapshot byte for byte and its report source_sha256. Each actual report records exit_code=0, bytes=0, warningAsError=true and linter.all=true. All three raw logs are literally empty, SHA256 e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855. I read the full three sources and actual reports. No check was run by this reviewer.
+
+TerminalPrefix.run_canonical follows the actual runtime order: representative map over first::rest, unions over rest, representative read for first, then the pure recorded/winner/moved-waiting result. mapM_invariant and forM_invariant compose the existing representative_canonical and unionVariables_canonical lemmas at each actual intermediate core. These operations change only the representative forest; the pure final result changes no slot. Thus initial Canonical suffices for the actually successful prefix. No canonicality of incoming suspended arguments is assumed or derived unnecessarily, because this prefix does not store them. The lemma is an observer of actual Success, not a new finite execution producer and not a proof for a later assimilation fold.
+
+Entry.enter_canonical follows actual getValue, representative capture, native handle lookup and ancestry modification. getValue_canonical derives validity of the exact stored payload from initial Canonical. Non-pending, constraint-only and unresolved lookup alternatives cannot meet actual successful entry. The second representative read preserves Canonical. The ancestry write leaves value payloads unchanged. The final packet equality identifies the returned bucket with the same observed stored bucket; therefore ValidSuspended concerns the actual inherited bucket, not a separately chosen list. It assumes neither final canonicality, native availability, a fabricated Graph nor successful future enumeration. It does not claim entry alone proves no-terminal: that separate gate belongs to the actual ordinary scan.
+
+Incoming preservation is detailed in review-incoming-canonical.txt. Its all-fixed-bounds observer covers outer reads and singleton rows. Its adapter observer also covers the exact synthetic raw-empty write, without claiming Safe for rejection. This is the appropriate local conclusion to combine with the canonical terminal prefix and actual entry payload.
+
+Genuine boundary: initial Canonical must be established at the whole driver seed and propagated through the other operations. ValidSuspended for a newly stored incoming bucket must come from its actual construction/descent history. These files close specific transport steps; they do not independently establish complete recursive language correctness, source constructor provenance, bucket retention, or H6 end-to-end completion. Earlier runtime and producer declarations remain unchanged.
+
+Underlying sources read:
+EnumerationValidity a1839fd2c73369241dae93b3e799f15d9ce5dbd6246d502681f723992958649d
+TerminalPrefix bc975e650b8ee6cecba75605107cbf2ad458e02137854994d91541b4b63d9b30
+Entry 7f09100d11c24ff225560b3c782d7eb4080f7dad082d9d4b9171cc787cc153b9
+
+No blocker found. No repository edits, builds or Git operations performed.

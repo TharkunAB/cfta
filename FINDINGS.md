@@ -71,6 +71,34 @@ Terminal parents retain the existing enumerateNode fallback boundary. Native
 children can still take their terminal dispatcher. No Haskell fix is needed.
 Details: lean/notes-current-pruning-enumeration-native-ordinary.md.
 
+### Native stored-trie validity through actual successful paths
+
+The native enumeration model now preserves EnumerationValidity.Canonical
+through actual successful preparation, pending writes, terminal processing,
+child dispatch, ordered traversal, selected-edge completion and captured-slot
+finalization. Actual successful entry derives ValidSuspended for its returned
+bucket. Captured completion derives that validity from the original stored
+pending slot. Current Context supplies valid actual projected own classes.
+Initial Canonical and the stated source-operation admission remain premises.
+
+The invariant concerns the representation of each stored trie. It does not
+imply Safe, semantic acceptance, assignment existence or completion. Incoming
+raw-empty cache adaptation also preserves trie validity in its synthetic write.
+This gives no safety or acceptance claim for that rejection. Outer fold cores
+and optional cache candidates remain distinct actual observations.
+
+This closes specific stored-bucket history steps identified below. Recursive
+packets, callbacks, alternatives and restarts still need connected history.
+Neutralization transport and recovery of the captured native restriction are
+still open. These are formalization gaps. No new Haskell defect is established.
+
+No Haskell source changed. External action: no additional Haskell patch.
+Keep all six merged repairs, the merged Sized documentation repair, earlier
+reproducers and pending parallel-decision suffix-exception/cancellation notes.
+Record every future verified Haskell repair here for external work.
+Details: `lean/notes-current-pruning-native-canonical.md`.
+Evidence: `lean/restart-evidence/20261027-native-enumeration-canonical`.
+
 ### Correction: current caller annotations and concrete checked arity
 
 The preceding checkpoint incorrectly grouped full caller Context with bare
@@ -1007,6 +1035,45 @@ TH/Generic extraction, valid-position build/read and source codec laws stay open
 
 
 
+
+## Actual native enumeration now preserves stored trie validity through captured completion
+
+Native preparation and assimilation: `836a13fc5`.
+Incoming writes, own allocation and captured entry: `832024c78`.
+Terminal dispatch and actual cache folds: `325b8df92`.
+Ordered children, selected edge and captured finalization: `44943f901`.
+The full formalization goal stays ACTIVE. H6 is still the strongest system
+language theorem. Imported main remains `6c080537a`. No Haskell source changed.
+
+Reuse EnumerationValidity.Canonical for valid tries in every stored bucket.
+Actual successful entry derives validity of its returned inherited bucket.
+Actual incoming writes, terminal processing, child dispatch and ordered child
+traces preserve this invariant. Actual selected-edge completion derives valid
+own tries from current Context and preserves canonical storage. Actual captured
+completion derives inherited validity from its original stored pending bucket
+and preserves canonical storage through the actual final write.
+
+These are actual fixed-bound observers. They assume initial Canonical and the
+stated operation admission. They derive the output invariant. They do not need
+a final-validity premise, a fabricated Graph, numeric Ranges or a successful
+future callback. They do not prove completion exists at arbitrary bounds.
+Canonical proves trie representation validity. It does not prove Safe, native
+acceptance, assignment existence or whole-enumerator language correctness.
+Rejection cache candidates and outer cores retain separate guarantees.
+
+All 15 new modules and Audit pass strict checks. Aggregate Audit passes
+3951 jobs and checks 77938 theorem dependencies. Installed readback covers
+28 new public theorems and unchanged H6. Only permitted axioms occur.
+All earlier proof sources except Audit imports and all runtime sources remain
+unchanged. Reviews, failed attempts and exact source evidence are retained.
+
+Next connect this invariant through actual recursive packets, callbacks,
+alternative scans and restarts. Retain checked arity origins. Transport the
+neutral captured root through native expansion and recover its old pending
+restriction. Then compose finalization and rendering. Selector coverage,
+partial stops, unsupported fallback and full Haskell correspondence stay open.
+Details: `lean/notes-current-pruning-native-canonical.md`.
+FINDINGS keeps the external Haskell handoff and all pending repair findings.
 
 ## Current caller gates and exact finalization refine selected-edge soundness
 

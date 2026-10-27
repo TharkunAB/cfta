@@ -1,0 +1,1406 @@
+diff --git a/lean/MicroCFTA/Audit.lean b/lean/MicroCFTA/Audit.lean
+index 316766bc4..5f36ceb73 100644
+--- a/lean/MicroCFTA/Audit.lean
++++ b/lean/MicroCFTA/Audit.lean
+@@ -1,3 +1,18 @@
++import MicroCFTA.SourcePruningEnumerationPrefixCanonical
++import MicroCFTA.SourcePruningEnumerationCachedPrepareCanonical
++import MicroCFTA.SourcePruningEnumerationAssimilationCanonical
++import MicroCFTA.SourcePruningEnumerationDispatchCanonical
++import MicroCFTA.SourcePruningEnumerationFoldCanonical
++import MicroCFTA.SourcePruningEnumerationIncomingCanonical
++import MicroCFTA.SourcePruningEnumerationOwnFinalizeCanonical
++import MicroCFTA.SourcePruningEnumerationEntryCanonical
++import MicroCFTA.SourcePruningEnumerationTerminalCanonical
++import MicroCFTA.SourcePruningEnumerationCachedAdapterCanonical
++import MicroCFTA.SourcePruningEnumerationCachedFoldCanonical
++import MicroCFTA.SourcePruningEnumerationChildCanonical
++import MicroCFTA.SourcePruningEnumerationTraversalCanonical
++import MicroCFTA.SourcePruningEnumerationSelectedEdgeCanonical
++import MicroCFTA.SourcePruningEnumerationCapturedEdgeCanonical
+ import MicroCFTA.SourcePruningEnumerationAnnotationHeap
+ import MicroCFTA.SourcePruningEnumerationCheckedBuildArity
+ import MicroCFTA.SourcePruningEnumerationOrdinarySemanticGates
+diff --git a/lean/MicroCFTA/SourcePruningEnumerationPrefixCanonical.lean b/lean/MicroCFTA/SourcePruningEnumerationPrefixCanonical.lean
+new file mode 100644
+index 000000000..c43f7cb73
+--- /dev/null
++++ b/lean/MicroCFTA/SourcePruningEnumerationPrefixCanonical.lean
+@@ -0,0 +1,40 @@
++import MicroCFTA.SourcePruningEnumerationTerminalPrefix
++import MicroCFTA.EnumerationValidity
++
++/-!
++# Canonical stored tries through the actual terminal prefix
++
++Representative reads and unions retain the stored value array.
++The fixed-bound successful prefix therefore retains every valid stored trie.
++-/
++namespace MicroCFTA.SourcePruningEnumerationTerminalPrefix
++open EnumerationState EnumerationCorrectness EnumerationValidity EnumerationSchedule
++
++attribute [local instance] terminalPrefixMonadList terminalPrefixLawfulMonadList
++
++/-- Every actual successful terminal prefix retains canonical stored suspended tries. -/
++theorem run_canonical
++    (fuel : Nat) (first : Suspended) (rest : List Suspended)
++    (waiting : EnumerationWaitingIndex.Waiting)
++    (before after : State SourcePruningTemplates.Symbol EnumGuard)
++    (recorded : List Nat) (winner : Nat) (moved : EnumerationWaitingIndex.Waiting)
++    (canonical : Canonical before)
++    (success : Success (run fuel first rest waiting) before (recorded, winner, moved) after) :
++    Canonical after := by
++  unfold run at success
++  obtain ⟨actualRecorded, scanned, scanning, continued⟩ := (success_bind _ _ _ _ _).mp success
++  have scannedCanonical := mapM_invariant (fun sc => representative fuel sc.var) Canonical (first :: rest)
++    (fun sc _ previous result next valid step => representative_canonical fuel sc.var result previous next valid step)
++    before scanned actualRecorded canonical scanning
++  obtain ⟨ignored, united, unions, continued⟩ := (success_bind _ _ _ _ _).mp continued
++  cases ignored
++  have unitedCanonical := forM_invariant (fun sc => unionVariables fuel first.var sc.var) Canonical rest
++    (fun sc _ previous next valid step => unionVariables_canonical fuel first.var sc.var previous next valid step)
++    scanned united scannedCanonical unions
++  obtain ⟨actualWinner, resolved, resolution, final⟩ := (success_bind _ _ _ _ _).mp continued
++  have resolvedCanonical := representative_canonical fuel first.var actualWinner united resolved
++    unitedCanonical resolution
++  obtain ⟨_same, rfl⟩ := (success_pure _ _ _ _).mp final
++  exact resolvedCanonical
++
++end MicroCFTA.SourcePruningEnumerationTerminalPrefix
+diff --git a/lean/MicroCFTA/SourcePruningEnumerationCachedPrepareCanonical.lean b/lean/MicroCFTA/SourcePruningEnumerationCachedPrepareCanonical.lean
+new file mode 100644
+index 000000000..088a87bfb
+--- /dev/null
++++ b/lean/MicroCFTA/SourcePruningEnumerationCachedPrepareCanonical.lean
+@@ -0,0 +1,126 @@
++import MicroCFTA.SourcePruningEnumerationCachedPrepare
++import MicroCFTA.EnumerationValidity
++
++/-!
++# Canonical tries in actual shallow child preparations
++
++Ordinary children store the valid input bucket in a fresh slot.
++Boundary children allocate an empty bucket. Empty rejects without a raw row.
++The cache erasure receipt identifies the same successful raw and cached cores.
++-/
++namespace MicroCFTA.SourcePruningEnumerationShallowChild
++open Fragments EnumerationState EnumerationCorrectness EnumerationSemantics EnumerationValidity EnumerationSchedule
++open InternedConstructorTemplates
++local notation "Symbol" => SourcePruningTemplates.Symbol
++variable {EnumGuard NativeGuard : Type}
++
++/-- Every actual successful prepared action retains canonical stored tries. -/
++theorem prepared_canonical
++    (scs : List Suspended) (value : Value Symbol NativeGuard)
++    (before after : EnumerationState.State Symbol EnumGuard)
++    (action : EnumerateM Symbol EnumGuard (Fragment Symbol)) (fragment : Fragment Symbol)
++    (canonical : Canonical before) (inputs : ValidSuspended scs)
++    (prepared : prepareChild scs value = some action)
++    (success : Success action before fragment after) : Canonical after := by
++  cases value with
++  | empty =>
++      simp only [prepareChild, Option.some.injEq] at prepared
++      rw [← prepared] at success
++      exact (reject_unsuccessful before after fragment success).elim
++  | reference name =>
++      simp only [prepareChild, reduceCtorEq] at prepared
++  | node entry edges depth free =>
++      by_cases terminal : scs.any (fun sc => EqualityTrie.isTerminal sc.trie) = true
++      · simp only [prepareChild, terminal, ↓reduceIte, reduceCtorEq] at prepared
++      · simp only [prepareChild, terminal, Bool.false_eq_true, ↓reduceIte, SourcePruningEnumerationNodes.encodeNode,
++          Option.some.injEq] at prepared
++        rw [← prepared] at success
++        obtain ⟨uv, allocatedAfter, allocation, continued⟩ := (success_bind _ _ _ _ _).mp success
++        have shape : uv = before.counter ∧ allocatedAfter = allocated (some (entry.identity + 1)) before := by
++          simpa [Success, allocate_exact, ExceptT.run] using allocation
++        obtain ⟨rfl, rfl⟩ := shape
++        obtain ⟨ignored, written, writing, final⟩ := (success_bind _ _ _ _ _).mp continued
++        cases ignored
++        have writtenCanonical := setValue_canonical before.counter
++          (.unenumerated (some (entry.identity + 1)) scs)
++          (allocated (some (entry.identity + 1)) before) written
++          (allocation_canonical (some (entry.identity + 1)) before canonical) inputs writing
++        obtain ⟨_fragmentSame, afterSame⟩ :=
++          (success_pure (.hole before.counter) fragment written after).mp final
++        subst after
++        exact writtenCanonical
++  | union entry _ _ _ | mu entry _ _ _ =>
++      by_cases terminal : scs.any (fun sc => EqualityTrie.isTerminal sc.trie) = true
++      · simp only [prepareChild, terminal, ↓reduceIte, reduceCtorEq] at prepared
++      · simp only [prepareChild, terminal, Bool.false_eq_true, ↓reduceIte, SourcePruningEnumerationNodes.encodeNode,
++          Option.some.injEq] at prepared
++        rw [← prepared] at success
++        obtain ⟨uv, allocatedAfter, allocation, final⟩ := (success_bind _ _ _ _ _).mp success
++        have shape : uv = before.counter ∧ allocatedAfter = allocated (some (entry.identity + 1)) before := by
++          simpa [Success, allocate_exact, ExceptT.run] using allocation
++        obtain ⟨rfl, rfl⟩ := shape
++        obtain ⟨_fragmentSame, afterSame⟩ :=
++          (success_pure (.hole before.counter) fragment (allocated (some (entry.identity + 1)) before) after).mp final
++        subst after
++        exact allocation_canonical (some (entry.identity + 1)) before canonical
++
++end MicroCFTA.SourcePruningEnumerationShallowChild
++
++namespace MicroCFTA.SourcePruningEnumerationCachedPrepare
++open Fragments EnumerationState EnumerationCorrectness EnumerationSemantics EnumerationValidity EnumerationSchedule
++open InternedConstructorTemplates
++local notation "Symbol" => SourcePruningTemplates.Symbol
++variable {EnumGuard NativeGuard : Type}
++
++/-- Every attached row cache is canonical at the same actual successful raw core. -/
++theorem rows_canonical
++    (heap : InternedConstructorTemplates.State Symbol NativeGuard) (fuel : Nat)
++    (scs : List Suspended) (value : Value Symbol NativeGuard)
++    (before : EnumerationExpandableIndex.Cached Symbol EnumGuard)
++    (rows : List (Fragment Symbol × EnumerationExpandableIndex.Cached Symbol EnumGuard))
++    (canonical : Canonical before.core) (inputs : ValidSuspended scs)
++    (cached : prepareChild heap fuel scs value before = some rows) :
++    ∀ fragment after, (fragment, after) ∈ rows → Canonical after.core := by
++  have raw := erase_some heap fuel scs value before rows cached
++  cases prepared : SourcePruningEnumerationShallowChild.prepareChild (EnumGuard := EnumGuard) scs value with
++  | none =>
++      simp only [prepared, Option.map_none, reduceCtorEq] at raw
++  | some action =>
++      simp only [prepared, Option.map_some, Option.some.injEq] at raw
++      intro fragment after member
++      apply SourcePruningEnumerationShallowChild.prepared_canonical scs value before.core after.core
++        action fragment canonical inputs prepared
++      rw [Success, raw]
++      exact List.mem_map.mpr ⟨(fragment, after), member, rfl⟩
++
++/-- The actual nonterminal candidate retains canonical tries, including empty rejection. -/
++theorem cache_canonical
++    (heap : InternedConstructorTemplates.State Symbol NativeGuard) (fuel : Nat)
++    (scs : List Suspended) (value : Value Symbol NativeGuard)
++    (before after : EnumerationExpandableIndex.Cached Symbol EnumGuard)
++    (canonical : Canonical before.core) (inputs : ValidSuspended scs)
++    (observed : (match prepareChild heap fuel scs value before with
++      | some [] => some before
++      | some [(_, result)] => some result
++      | _ => none) = some after) : Canonical after.core := by
++  cases prepared : prepareChild heap fuel scs value before with
++  | none =>
++      simp only [prepared, reduceCtorEq] at observed
++  | some rows =>
++      cases rows with
++      | nil =>
++          have same : before = after := by simpa only [prepared, Option.some.injEq] using observed
++          subst after
++          exact canonical
++      | cons row rest =>
++          rcases row with ⟨fragment, reached⟩
++          cases rest with
++          | nil =>
++              have same : reached = after := by simpa only [prepared, Option.some.injEq] using observed
++              rw [← same]
++              exact rows_canonical heap fuel scs value before [(fragment, reached)]
++                canonical inputs prepared fragment reached (by simp)
++          | cons row rest =>
++              simp only [prepared, reduceCtorEq] at observed
++
++end MicroCFTA.SourcePruningEnumerationCachedPrepare
+diff --git a/lean/MicroCFTA/SourcePruningEnumerationAssimilationCanonical.lean b/lean/MicroCFTA/SourcePruningEnumerationAssimilationCanonical.lean
+new file mode 100644
+index 000000000..4b966964a
+--- /dev/null
++++ b/lean/MicroCFTA/SourcePruningEnumerationAssimilationCanonical.lean
+@@ -0,0 +1,62 @@
++import MicroCFTA.SourcePruningEnumerationAssimilation
++import MicroCFTA.EnumerationValidity
++
++/-!
++# Canonical suspended tries through native pending assimilation
++
++The proof uses the actual stored source and target buckets.
++Canonicality does not imply Safe and also permits a logical Empty slot.
++-/
++namespace MicroCFTA.SourcePruningEnumerationAssimilation
++open EnumerationState EnumerationCorrectness EnumerationSchedule EnumerationSemantics EnumerationValidity
++local notation "Symbol" => SourcePruningTemplates.Symbol
++local notation "Constraint" => SourceSymbolicIndex.Constraint FullSyntax.Formula
++variable {EnumGuard : Type}
++
++/-- The actual two writes concatenate canonical buckets and eliminate the source. -/
++theorem assimilated_canonical
++    (before : EnumerationState.State Symbol EnumGuard) (source target : Nat)
++    (sourceNode targetNode merged : Option Nat) (sourceScs targetScs : List Suspended)
++    (canonical : Canonical before)
++    (sourceStored : before.values[source]? = some (.unenumerated sourceNode sourceScs))
++    (targetStored : before.values[target]? = some (.unenumerated targetNode targetScs)) :
++    Canonical (assimilated before target source (.unenumerated merged (sourceScs ++ targetScs))) := by
++  have sourceValid : ValidSuspended sourceScs :=
++    canonical (.unenumerated sourceNode sourceScs) (List.mem_of_getElem? sourceStored)
++  have targetValid : ValidSuspended targetScs :=
++    canonical (.unenumerated targetNode targetScs) (List.mem_of_getElem? targetStored)
++  have mergedValid : ValidSuspended
++      (references (.unenumerated merged (sourceScs ++ targetScs) : UVarValue Symbol)) := by
++    intro sc member
++    rcases List.mem_append.mp member with fromSource | fromTarget
++    · exact sourceValid sc fromSource
++    · exact targetValid sc fromTarget
++  have targetWritten := set_canonical target (.unenumerated merged (sourceScs ++ targetScs))
++    before canonical mergedValid
++  have sourceWritten := set_canonical source .eliminated
++    {before with values := before.values.set target (.unenumerated merged (sourceScs ++ targetScs))}
++    targetWritten (by simp [references, ValidSuspended])
++  exact sourceWritten
++
++/-- Every actual successful nonempty finish preserves canonical suspended tries. -/
++theorem finish_canonical
++    (before after : EnumerationState.State Symbol EnumGuard) (source target resultHandle : Nat)
++    (sourceNode targetNode : Option Nat) (sourceScs targetScs : List Suspended)
++    (result : InternedConstructorTemplates.Value Symbol Constraint)
++    (canonical : Canonical before)
++    (sourceStored : before.values[source]? = some (.unenumerated sourceNode sourceScs))
++    (targetStored : before.values[target]? = some (.unenumerated targetNode targetScs))
++    (success : Success (finish source target resultHandle sourceScs targetScs result) before () after) :
++    Canonical after := by
++  cases result <;> first
++    | exact (reject_unsuccessful before after () success).elim
++    | have endpoint : after = assimilated before target source
++          (.unenumerated (some resultHandle) (sourceScs ++ targetScs)) := by
++        change Except.ok ((), after) ∈ [Except.ok ((), assimilated before target source
++          (.unenumerated (some resultHandle) (sourceScs ++ targetScs)))] at success
++        simpa only [List.mem_singleton, Except.ok.injEq, Prod.mk.injEq, true_and] using success
++      rw [endpoint]
++      exact assimilated_canonical before source target sourceNode targetNode (some resultHandle)
++        sourceScs targetScs canonical sourceStored targetStored
++
++end MicroCFTA.SourcePruningEnumerationAssimilation
+diff --git a/lean/MicroCFTA/SourcePruningEnumerationDispatchCanonical.lean b/lean/MicroCFTA/SourcePruningEnumerationDispatchCanonical.lean
+new file mode 100644
+index 000000000..3fab4b361
+--- /dev/null
++++ b/lean/MicroCFTA/SourcePruningEnumerationDispatchCanonical.lean
+@@ -0,0 +1,33 @@
++import MicroCFTA.SourcePruningEnumerationAssimilationCanonical
++import MicroCFTA.SourcePruningEnumerationDispatchShape
++
++namespace MicroCFTA.SourcePruningEnumerationDispatch
++open EnumerationState EnumerationCorrectness EnumerationValidity
++open InternedConstructorTemplates
++local notation "Symbol" => SourcePruningTemplates.Symbol
++local notation "Constraint" => SourceSymbolicIndex.Constraint FullSyntax.Formula
++local notation "Node" => InternedConstructorTemplates.Value Symbol Constraint
++local notation "Caller" => SourceCurrentAllocatedPartialState.State
++local notation "Queries" => SourceEndpointMemo.Memos
++variable {EnumGuard : Type} {width : Nat}
++
++/-- An actual captured dispatcher singleton preserves canonical suspended tries. -/
++theorem dispatch_canonical
++    [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Constraint)] [DecidableEq Node]
++    (checkEmpty : Bool) (nativeFuel p h : Nat)
++    (beforeCaller : Caller width) (before : EnumerationState.State Symbol EnumGuard)
++    (source target : Nat) (queries : Queries) (action : EnumerateM Symbol EnumGuard Unit)
++    (afterCaller : Caller width) (savedQueries : Queries)
++    (after : EnumerationState.State Symbol EnumGuard)
++    (canonical : Canonical before)
++    (selected : dispatch checkEmpty nativeFuel p h beforeCaller before source target queries =
++      (.ok (some action), afterCaller, savedQueries))
++    (completed : ExceptT.run (action before) = [.ok ((), after)]) : Canonical after := by
++  rcases SourcePruningEnumerationDispatchShape.singleton checkEmpty nativeFuel p h
++    beforeCaller before source target queries action afterCaller savedQueries after selected completed with
++    rfl | ⟨_different, sourceNode, targetNode, merged, sourceScs, targetScs, sourceStored, targetStored, rfl⟩
++  · exact canonical
++  · exact SourcePruningEnumerationAssimilation.assimilated_canonical before source target
++      sourceNode targetNode merged sourceScs targetScs canonical sourceStored targetStored
++
++end MicroCFTA.SourcePruningEnumerationDispatch
+diff --git a/lean/MicroCFTA/SourcePruningEnumerationFoldCanonical.lean b/lean/MicroCFTA/SourcePruningEnumerationFoldCanonical.lean
+new file mode 100644
+index 000000000..98bb62c8e
+--- /dev/null
++++ b/lean/MicroCFTA/SourcePruningEnumerationFoldCanonical.lean
+@@ -0,0 +1,107 @@
++import MicroCFTA.SourcePruningEnumerationDispatchCanonical
++import MicroCFTA.SourcePruningEnumerationCachedFold
++
++/-!
++# Canonical suspended tries at every actual native fold endpoint
++
++Singleton actions advance the canonical state.
++Every other outcome retains the reached prefix state.
++No conclusion requires or asserts Safe.
++-/
++namespace MicroCFTA.SourcePruningEnumerationFold
++open EnumerationState EnumerationCorrectness EnumerationValidity
++open InternedConstructorTemplates
++local notation "Symbol" => SourcePruningTemplates.Symbol
++local notation "Constraint" => SourceSymbolicIndex.Constraint FullSyntax.Formula
++local notation "Node" => InternedConstructorTemplates.Value Symbol Constraint
++local notation "Caller" => SourceCurrentAllocatedPartialState.State
++local notation "Queries" => SourceEndpointMemo.Memos
++variable {EnumGuard : Type} {width : Nat}
++
++/-- Every fixed-bound fold outcome retains canonical tries at its actual outer core. -/
++theorem run_canonical
++    [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Constraint)] [DecidableEq Node]
++    (checkEmpty : Bool) (nativeFuel p h : Nat) (sources : List Nat)
++    (beforeCaller : Caller width) (before : EnumerationState.State Symbol EnumGuard)
++    (target : Nat) (queries : Queries)
++    (result : Except (SourceEqualityNativeDemand.Outcome width Node ⊕
++      SourceCurrentAllocatedConjunctionWorker.Outcome width)
++      (Option (List (Except EnumerationState.Error (Unit × EnumerationState.State Symbol EnumGuard)))))
++    (afterCaller : Caller width) (savedQueries : Queries)
++    (after : EnumerationState.State Symbol EnumGuard)
++    (canonical : Canonical before)
++    (observed : run checkEmpty nativeFuel p h sources beforeCaller before target queries =
++      (result, afterCaller, savedQueries, after)) : Canonical after := by
++  induction sources generalizing beforeCaller before queries with
++  | nil =>
++      simp only [run, Prod.mk.injEq] at observed
++      rcases observed with ⟨rfl, rfl, rfl, rfl⟩
++      exact canonical
++  | cons source rest ih =>
++      rcases dispatchObserved : SourcePruningEnumerationDispatch.dispatch checkEmpty nativeFuel p h
++        beforeCaller before source target queries with ⟨dispatchResult, reachedCaller, saved⟩
++      cases dispatchResult with
++      | error fault =>
++          simp only [run, dispatchObserved, Prod.mk.injEq] at observed
++          rcases observed with ⟨rfl, rfl, rfl, rfl⟩
++          exact canonical
++      | ok possible =>
++          cases possible with
++          | none =>
++              simp only [run, dispatchObserved, Prod.mk.injEq] at observed
++              rcases observed with ⟨rfl, rfl, rfl, rfl⟩
++              exact canonical
++          | some action =>
++              cases rawObserved : ExceptT.run (action before) with
++              | nil =>
++                  simp only [run, dispatchObserved, rawObserved, Prod.mk.injEq] at observed
++                  rcases observed with ⟨rfl, rfl, rfl, rfl⟩
++                  exact canonical
++              | cons head tail =>
++                  cases head with
++                  | error failure =>
++                      simp only [run, dispatchObserved, rawObserved, Prod.mk.injEq] at observed
++                      rcases observed with ⟨rfl, rfl, rfl, rfl⟩
++                      exact canonical
++                  | ok pair =>
++                      rcases pair with ⟨ignored, middle⟩
++                      cases ignored
++                      cases tail with
++                      | nil =>
++                          have middleCanonical := SourcePruningEnumerationDispatch.dispatch_canonical
++                            checkEmpty nativeFuel p h beforeCaller before source target queries action
++                            reachedCaller saved middle canonical dispatchObserved rawObserved
++                          simp only [run, dispatchObserved, rawObserved] at observed
++                          exact ih reachedCaller middle saved middleCanonical observed
++                      | cons second remaining =>
++                          simp only [run, dispatchObserved, rawObserved, Prod.mk.injEq] at observed
++                          rcases observed with ⟨rfl, rfl, rfl, rfl⟩
++                          exact canonical
++
++end MicroCFTA.SourcePruningEnumerationFold
++
++namespace MicroCFTA.SourcePruningEnumerationCachedFold
++open EnumerationState EnumerationValidity
++local notation "Symbol" => SourcePruningTemplates.Symbol
++local notation "Constraint" => SourceSymbolicIndex.Constraint FullSyntax.Formula
++local notation "Node" => InternedConstructorTemplates.Value Symbol Constraint
++local notation "Caller" => SourceCurrentAllocatedPartialState.State
++local notation "Queries" => SourceEndpointMemo.Memos
++variable {width : Nat}
++
++/-- Cache erasure transfers canonicality to the actual bounded cached-fold outer core. -/
++theorem canonical
++    [DecidableEq Symbol] [DecidableEq (InternedConstructorTemplates.EdgeKey Symbol Constraint)] [DecidableEq Node]
++    (checkEmpty : Bool) (nativeFuel p h : Nat) (sources : List Nat)
++    (beforeCaller : Caller width) (before : EnumerationExpandableIndex.Cached Symbol Constraint)
++    (target : Nat) (queries : Queries) (valid : Canonical before.core) :
++    Canonical (run checkEmpty nativeFuel p h sources beforeCaller before target queries).1.2.2.2 := by
++  exact SourcePruningEnumerationFold.run_canonical checkEmpty nativeFuel p h sources
++    beforeCaller before.core target queries
++    (run checkEmpty nativeFuel p h sources beforeCaller before target queries).1.1
++    (run checkEmpty nativeFuel p h sources beforeCaller before target queries).1.2.1
++    (run checkEmpty nativeFuel p h sources beforeCaller before target queries).1.2.2.1
++    (run checkEmpty nativeFuel p h sources beforeCaller before target queries).1.2.2.2
++    valid (erase checkEmpty nativeFuel p h sources beforeCaller before target queries).symm
++
++end MicroCFTA.SourcePruningEnumerationCachedFold
+diff --git a/lean/MicroCFTA/SourcePruningEnumerationIncomingCanonical.lean b/lean/MicroCFTA/SourcePruningEnumerationIncomingCanonical.lean
+new file mode 100644
+index 000000000..0aede2bdf
+--- /dev/null
++++ b/lean/MicroCFTA/SourcePruningEnumerationIncomingCanonical.lean
+@@ -0,0 +1,209 @@
++import MicroCFTA.SourcePruningEnumerationIncomingCacheAdapter
++import MicroCFTA.EnumerationValidity
++
++/-!
++# Canonical tries at actual incoming observations
++
++The incoming read changes no value slot. A completed write concatenates the
++incoming bucket with the actual stored bucket. The cache adapter retains
++canonical tries in both singleton rows and synthetic Empty writes.
++-/
++namespace MicroCFTA.SourcePruningEnumerationIncomingNode
++open EnumerationState EnumerationSchedule EnumerationCorrectness
++open EnumerationSemantics EnumerationValidity InternedConstructorTemplates
++local notation "Symbol" => SourcePruningTemplates.Symbol
++local notation "Constraint" => SourceSymbolicIndex.Constraint FullSyntax.Formula
++local notation "Node" => Value Symbol Constraint
++local notation "Core" => EnumerationState.State Symbol Constraint
++local notation "Caller" => SourceCurrentAllocatedPartialState.State
++local notation "Queries" => SourceEndpointMemo.Memos
++local notation "Raw" => List (Except EnumerationState.Error (Unit × Core))
++attribute [local instance] SourcePruningEnumerationIncomingNode.incomingNodeMonadList
++
++private theorem finish_singleton_canonical
++    {before returned : Core} {target handle : Nat} {oldNode : Option Nat}
++    {incomingScs oldScs : List Suspended} {replacement : Node}
++    (valid : Canonical before) (inputs : ValidSuspended incomingScs)
++    (stored : before.values[target]? = some (.unenumerated oldNode oldScs))
++    (observed : ExceptT.run (finish target handle incomingScs oldScs replacement before) =
++      [.ok ((), returned)]) : Canonical returned := by
++  let written : Core :=
++    {before with
++      values := before.values.set target (.unenumerated (some handle) (incomingScs ++ oldScs))
++      recursionAncestry := fun other => if other = target then
++        (before.expansionAncestry ++ before.recursionAncestry target).eraseDups
++        else before.recursionAncestry other}
++  have rawRun : ExceptT.run (finish target handle incomingScs oldScs replacement before) =
++      match replacement with
++      | .empty => []
++      | _ => [.ok ((), written)] := by
++    cases replacement <;> rfl
++  rw [rawRun] at observed
++  have coreSame : written = returned := by
++    split at observed
++    · cases observed
++    · exact (Prod.mk.inj (Except.ok.inj (List.cons.inj observed).1)).2
++  rw [← coreSame]
++  have oldValid : ValidSuspended oldScs :=
++    valid (.unenumerated oldNode oldScs) (List.mem_of_getElem? stored)
++  apply set_canonical target (.unenumerated (some handle) (incomingScs ++ oldScs)) before valid
++  intro sc member
++  rcases List.mem_append.mp member with incoming | old
++  · exact inputs sc incoming
++  · exact oldValid sc old
++
++private theorem finish_reply_canonical
++    {Fault : Type _} {before returned : Core} {target handle : Nat} {oldNode : Option Nat}
++    {incomingScs oldScs : List Suspended} {replacement : Node}
++    (valid : Canonical before) (inputs : ValidSuspended incomingScs)
++    (stored : before.values[target]? = some (.unenumerated oldNode oldScs))
++    (observed : (Except.ok (some (ExceptT.run
++        (finish target handle incomingScs oldScs replacement before))) : Except Fault (Option Raw)) =
++      .ok (some [.ok ((), returned)])) : Canonical returned :=
++  finish_singleton_canonical valid inputs stored (Option.some.inj (Except.ok.inj observed))
++
++variable {width : Nat}
++section runtime
++variable [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Constraint)] [DecidableEq Node]
++
++/-- Every actual read and successful singleton retain canonical tries at every fixed bound. -/
++theorem run_canonical
++    (checkEmpty : Bool) (r n p h : Nat) (caller : Caller width) (before : Core)
++    (target : Nat) (incoming : Node) (incomingScs : List Suspended) (queries : Queries)
++    (valid : Canonical before) (inputs : ValidSuspended incomingScs) :
++    Canonical (run checkEmpty r n p h caller before target incoming incomingScs queries).2.2.2 ∧
++      ∀ returned, (run checkEmpty r n p h caller before target incoming incomingScs queries).1 =
++        .ok (some [.ok ((), returned)]) → Canonical returned := by
++  generalize observedEq : run checkEmpty r n p h caller before target incoming incomingScs queries = observed
++  obtain ⟨result, reachedCaller, savedQueries, read⟩ := observed
++  dsimp only
++  unfold run at observedEq
++  split at observedEq
++  next =>
++    simp only [Prod.mk.injEq] at observedEq
++    rcases observedEq with ⟨rfl, rfl, rfl, rfl⟩
++    refine ⟨valid, ?_⟩
++    intro returned singleton
++    simp at singleton
++  next =>
++    repeat' first
++      | (have readSame := congrArg (fun observed : _ × Caller width × Queries × Core => observed.2.2.2) observedEq
++         have resultSame := congrArg Prod.fst observedEq
++         dsimp only at readSame resultSame
++         constructor
++         · rw [← readSame]
++           change Canonical before
++           exact valid
++         · intro returned singleton
++           rw [← resultSame] at singleton
++           solve
++           | simp at singleton
++           | apply finish_reply_canonical (observed := singleton)
++             · change Canonical before
++               exact valid
++             · exact inputs
++             · assumption)
++      | split at observedEq
++      | (dsimp only at observedEq; split at observedEq)
++
++end runtime
++
++/-- The actual read and explicit write shape also retain canonical tries when raw continuation rejects. -/
++theorem written_canonical
++    (before read after : Core) (fuel uv target handle : Nat) (oldNode : Option Nat)
++    (incomingScs oldScs : List Suspended)
++    (valid : Canonical before) (inputs : ValidSuspended incomingScs)
++    (reading : Success (getValue fuel uv) before (.unenumerated oldNode oldScs) read)
++    (shape : after = {read with
++      values := read.values.set target (.unenumerated (some handle) (incomingScs ++ oldScs))
++      recursionAncestry := fun other => if other = target then
++        (read.expansionAncestry ++ read.recursionAncestry target).eraseDups
++        else read.recursionAncestry other}) : Canonical after := by
++  obtain ⟨readValid, oldValid⟩ := getValue_canonical fuel uv before read
++    (.unenumerated oldNode oldScs) valid reading
++  rw [shape]
++  apply set_canonical target (.unenumerated (some handle) (incomingScs ++ oldScs)) read readValid
++  intro sc member
++  rcases List.mem_append.mp member with incoming | old
++  · exact inputs sc incoming
++  · exact oldValid sc old
++
++end MicroCFTA.SourcePruningEnumerationIncomingNode
++
++namespace MicroCFTA.SourcePruningEnumerationIncomingCacheAdapter
++open EnumerationState EnumerationSchedule EnumerationCorrectness
++open EnumerationSemantics EnumerationValidity InternedConstructorTemplates
++local notation "Symbol" => SourcePruningTemplates.Symbol
++local notation "Constraint" => SourceSymbolicIndex.Constraint FullSyntax.Formula
++local notation "Node" => Value Symbol Constraint
++local notation "Core" => EnumerationState.State Symbol Constraint
++local notation "Caller" => SourceCurrentAllocatedPartialState.State
++local notation "Queries" => SourceEndpointMemo.Memos
++local notation "Cached" => EnumerationExpandableIndex.Cached Symbol Constraint
++local notation "Raw" => List (Except EnumerationState.Error (Unit × Core))
++
++/-- The literal adapter preserves canonical tries, including its synthetic raw-empty write. -/
++theorem adapt_canonical
++    {heap : InternedConstructorTemplates.State Symbol Constraint} {indexFuel target : Nat}
++    {incomingScs : List Suspended} {before after : Cached} {read : Core} {raw : Raw}
++    (readValid : Canonical read) (inputs : ValidSuspended incomingScs)
++    (rows : ∀ returned, raw = [.ok ((), returned)] → Canonical returned)
++    (adapted : adapt heap indexFuel target incomingScs before read raw = some after) :
++    Canonical after.core := by
++  cases raw with
++  | nil =>
++      simp only [adapt] at adapted
++      split at adapted
++      · rename_i oldNode oldScs stored
++        simp only [Option.map_eq_some_iff] at adapted
++        obtain ⟨written, _written, same⟩ := adapted
++        subst after
++        have oldValid : ValidSuspended oldScs :=
++          readValid (.unenumerated oldNode oldScs) (List.mem_of_getElem? stored)
++        apply set_canonical target (.unenumerated (some 0) (incomingScs ++ oldScs)) read readValid
++        intro sc member
++        rcases List.mem_append.mp member with incoming | old
++        · exact inputs sc incoming
++        · exact oldValid sc old
++      · cases adapted
++  | cons row rest =>
++      cases row with
++      | error fault => simp only [adapt] at adapted; cases adapted
++      | ok payload =>
++          obtain ⟨⟨⟩, returned⟩ := payload
++          cases rest with
++          | nil =>
++              have coreSame := adapt_singleton_core heap indexFuel target incomingScs
++                before after read returned adapted
++              simpa only [coreSame] using rows returned rfl
++          | cons next later => simp only [adapt] at adapted; cases adapted
++
++variable {width : Nat}
++variable [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Constraint)] [DecidableEq Node]
++
++/-- Every actual attached cache retains canonical tries, without a safety claim on rejection. -/
++theorem observed_cache_canonical
++    (checkEmpty : Bool) (r n p h k : Nat) (caller : Caller width) (before : Cached)
++    (target : Nat) (incoming : Node) (incomingScs : List Suspended) (queries : Queries)
++    (valid : Canonical before.core) (inputs : ValidSuspended incomingScs)
++    (after : Cached)
++    (candidate : (run checkEmpty r n p h k caller before target incoming incomingScs queries).2 = some after) :
++    Canonical after.core := by
++  have fields := SourcePruningEnumerationIncomingNode.run_canonical
++    checkEmpty r n p h caller before.core target incoming incomingScs queries valid inputs
++  unfold run at candidate
++  generalize original : SourcePruningEnumerationIncomingNode.run checkEmpty r n p h
++    caller before.core target incoming incomingScs queries = observed at fields candidate
++  obtain ⟨result, reached, saved, read⟩ := observed
++  dsimp only at fields candidate
++  cases result with
++  | error fault => cases candidate
++  | ok payload =>
++      cases payload with
++      | none => cases candidate
++      | some raw =>
++          apply adapt_canonical fields.1 inputs ?_ candidate
++          intro returned rawSame
++          exact fields.2 returned (by rw [rawSame])
++
++end MicroCFTA.SourcePruningEnumerationIncomingCacheAdapter
+diff --git a/lean/MicroCFTA/SourcePruningEnumerationOwnFinalizeCanonical.lean b/lean/MicroCFTA/SourcePruningEnumerationOwnFinalizeCanonical.lean
+new file mode 100644
+index 000000000..c701d35f9
+--- /dev/null
++++ b/lean/MicroCFTA/SourcePruningEnumerationOwnFinalizeCanonical.lean
+@@ -0,0 +1,101 @@
++import MicroCFTA.SourcePruningEnumerationCachedOwn
++import MicroCFTA.SourcePruningEnumerationFinalize
++import MicroCFTA.SourcePruningEnumerationSelectedEdge
++import MicroCFTA.EnumerationValidity
++
++/-!
++# Canonical tries at actual own-class and finalization receipts
++
++Own-class allocation adds empty stored buckets.
++Finalization replaces the captured bucket by a fragment.
++Residual recording changes no stored trie.
++-/
++namespace MicroCFTA.SourcePruningEnumerationCachedChild
++open EnumerationState EnumerationCorrectness EnumerationSemantics EnumerationValidity EnumerationSchedule
++local notation "Symbol" => SourcePruningTemplates.Symbol
++variable {EnumGuard NativeGuard : Type}
++
++/-- A successful native allocation stores an empty canonical bucket. -/
++theorem allocate_canonical
++    (heap : InternedConstructorTemplates.State Symbol NativeGuard) (node : Option Nat)
++    (before after : EnumerationExpandableIndex.Cached Symbol EnumGuard) (uv : Nat)
++    (canonical : Canonical before.core)
++    (observed : allocate heap node before = some (uv, after)) : Canonical after.core := by
++  simp only [allocate, Option.map_eq_some_iff] at observed
++  obtain ⟨flag, _classified, same⟩ := observed
++  have coreSame : allocated node before.core = after.core := congrArg (fun result => result.2.core) same
++  rw [← coreSame]
++  exact allocation_canonical node before.core canonical
++
++end MicroCFTA.SourcePruningEnumerationCachedChild
++
++namespace MicroCFTA.SourcePruningEnumerationCachedOwn
++open EnumerationState EnumerationCorrectness EnumerationSemantics EnumerationValidity EnumerationSchedule
++local notation "Symbol" => SourcePruningTemplates.Symbol
++variable {EnumGuard NativeGuard : Type}
++
++/-- An actual own-class suspension preserves canonical stored tries. -/
++theorem suspendMany_canonical
++    (heap : InternedConstructorTemplates.State Symbol NativeGuard) (tries : List EqualityTrie.Trie)
++    (before after : EnumerationExpandableIndex.Cached Symbol EnumGuard) (suspended : List Suspended)
++    (canonical : Canonical before.core)
++    (observed : suspendMany heap tries before = some (suspended, after)) : Canonical after.core := by
++  induction tries generalizing before after suspended with
++  | nil =>
++      have same : ([], before) = (suspended, after) := Option.some.inj observed
++      have cacheSame : before = after := congrArg Prod.snd same
++      simpa only [cacheSame] using canonical
++  | cons trie rest ih =>
++      simp only [suspendMany, Option.bind_eq_some_iff, Option.map_eq_some_iff] at observed
++      obtain ⟨allocation, allocated, result, continued, same⟩ := observed
++      have allocationCanonical := SourcePruningEnumerationCachedChild.allocate_canonical
++        heap none before allocation.2 allocation.1 canonical allocated
++      have resultCanonical := ih allocation.2 result.2 result.1 allocationCanonical continued
++      have cacheSame : result.2 = after := congrArg Prod.snd same
++      simpa only [cacheSame] using resultCanonical
++
++end MicroCFTA.SourcePruningEnumerationCachedOwn
++
++namespace MicroCFTA.SourcePruningEnumerationFinalize
++open EnumerationState EnumerationCorrectness EnumerationSemantics EnumerationValidity EnumerationSchedule
++local notation "Symbol" => SourcePruningTemplates.Symbol
++variable {EnumGuard NativeGuard : Type}
++
++/-- The exact final captured-slot write preserves canonical stored tries. -/
++theorem written_canonical
++    (before after : EnumerationState.State Symbol EnumGuard) (target : Nat) (fragment : Fragments.Fragment Symbol)
++    (canonical : Canonical before)
++    (written : after = {before with
++      values := before.values.set target (.enumerated fragment)
++      expansionAncestry := []}) : Canonical after := by
++  subst after
++  exact set_canonical target (.enumerated fragment) before canonical
++    (by simp only [references, ValidSuspended, List.not_mem_nil, false_implies, implies_true])
++
++/-- Every actual indexed finalization cache has canonical stored tries. -/
++theorem run_canonical
++    (heap : InternedConstructorTemplates.State Symbol NativeGuard) (fuel target : Nat)
++    (fragment : Fragments.Fragment Symbol) (before after : EnumerationExpandableIndex.Cached Symbol EnumGuard)
++    (canonical : Canonical before.core)
++    (observed : run heap fuel target fragment before = some after) : Canonical after.core := by
++  simp only [run, Option.bind_eq_some_iff] at observed
++  obtain ⟨_old, _stored, written⟩ := observed
++  simp only [SourcePruningEnumerationNativeIndex.write, Option.bind_eq_some_iff, Option.some.injEq] at written
++  obtain ⟨_flag, _classified, _removed, _removedCounts, _saved, _savedCounts, same⟩ := written
++  subst after
++  exact set_canonical target (.enumerated fragment) _ canonical
++    (by simp only [references, ValidSuspended, List.not_mem_nil, false_implies, implies_true])
++
++end MicroCFTA.SourcePruningEnumerationFinalize
++
++namespace MicroCFTA.SourcePruningEnumerationSelectedEdge
++open EnumerationValidity
++local notation "Symbol" => SourcePruningTemplates.Symbol
++local notation "Constraint" => SourceSymbolicIndex.Constraint FullSyntax.Formula
++
++/-- Recording an actual completed edge residual leaves canonical stored tries unchanged. -/
++theorem finish_canonical (residual : Option Constraint) (fragment : Fragments.Fragment Symbol)
++    (before : EnumerationExpandableIndex.Cached Symbol Constraint) (canonical : Canonical before.core) :
++    Canonical (finish residual fragment before).core := canonical
++
++end MicroCFTA.SourcePruningEnumerationSelectedEdge
+diff --git a/lean/MicroCFTA/SourcePruningEnumerationEntryCanonical.lean b/lean/MicroCFTA/SourcePruningEnumerationEntryCanonical.lean
+new file mode 100644
+index 000000000..0309b37e1
+--- /dev/null
++++ b/lean/MicroCFTA/SourcePruningEnumerationEntryCanonical.lean
+@@ -0,0 +1,52 @@
++import MicroCFTA.SourcePruningEnumerationEntry
++import MicroCFTA.EnumerationValidity
++
++/-!
++# Canonical inherited tries at actual pending entry
++
++The actual read supplies its stored bucket.
++Compression and ancestry changes retain that bucket and the stored trie invariant.
++-/
++namespace MicroCFTA.SourcePruningEnumerationEntry
++open EnumerationState EnumerationCorrectness EnumerationSchedule EnumerationValidity
++open EnumerationSemantics InternedConstructorTemplates
++local notation "Symbol" => SourcePruningTemplates.Symbol
++variable {EnumGuard NativeGuard : Type}
++attribute [local instance] entryMonadList
++
++/-- Successful entry retains canonical storage and derives validity of its actual inherited bucket. -/
++theorem enter_canonical
++    (heap : InternedConstructorTemplates.State Symbol NativeGuard) (fuel uv : Nat)
++    (before after : EnumerationState.State Symbol EnumGuard) (target handle : Nat)
++    (bucket : List Suspended) (decoded : Value Symbol NativeGuard)
++    (canonical : Canonical before)
++    (success : Success (enter heap fuel uv) before (target, handle, bucket, decoded) after) :
++    Canonical after ∧ ValidSuspended bucket := by
++  unfold enter at success
++  obtain ⟨value, read, reading, continued⟩ := (success_bind _ _ _ _ _).mp success
++  obtain ⟨readCanonical, storedValid⟩ := getValue_canonical fuel uv before read value canonical reading
++  cases value with
++  | enumerated fragment => exact (reject_unsuccessful read after _ continued).elim
++  | eliminated => exact (reject_unsuccessful read after _ continued).elim
++  | unenumerated node scs =>
++      cases node with
++      | none => exact (reject_unsuccessful read after _ continued).elim
++      | some storedHandle =>
++          obtain ⟨found, compressed, compressing, continued⟩ := (success_bind _ _ _ _ _).mp continued
++          have compressedCanonical := representative_canonical fuel uv found read compressed readCanonical compressing
++          cases lookup : SourcePruningEnumerationNodes.lookupNode heap storedHandle with
++          | none =>
++              simp only [lookup] at continued
++              exact (success_failure .unresolvedReference compressed after _ continued).elim
++          | some actual =>
++              simp only [lookup] at continued
++              obtain ⟨ignored, entered, modifying, final⟩ := (success_bind _ _ _ _ _).mp continued
++              cases ignored
++              obtain rfl := (EnumerationDriver.modify_success _ compressed entered).mp modifying
++              obtain ⟨same, rfl⟩ := (success_pure _ _ _ _).mp final
++              have bucketSame : scs = bucket :=
++                (congrArg (fun packet : Nat × Nat × List Suspended × Value Symbol NativeGuard => packet.2.2.1) same).symm
++              change ValidSuspended scs at storedValid
++              exact ⟨compressedCanonical, by simpa only [← bucketSame] using storedValid⟩
++
++end MicroCFTA.SourcePruningEnumerationEntry
+diff --git a/lean/MicroCFTA/SourcePruningEnumerationTerminalCanonical.lean b/lean/MicroCFTA/SourcePruningEnumerationTerminalCanonical.lean
+new file mode 100644
+index 000000000..0296f2624
+--- /dev/null
++++ b/lean/MicroCFTA/SourcePruningEnumerationTerminalCanonical.lean
+@@ -0,0 +1,98 @@
++import MicroCFTA.SourcePruningEnumerationPrefixCanonical
++import MicroCFTA.SourcePruningEnumerationFoldCanonical
++import MicroCFTA.SourcePruningEnumerationFoldCacheBounds
++import MicroCFTA.SourcePruningEnumerationIncomingCanonical
++
++/-!
++# Canonical tries in actual successful terminal rows
++
++The actual prefix supplies the canonical joined state.
++The fold and incoming observation supply the exact successful row.
++No rejected state is treated as an accepted row.
++-/
++namespace MicroCFTA.SourcePruningEnumerationTerminal
++open EnumerationState EnumerationCorrectness EnumerationSchedule EnumerationSemantics EnumerationValidity
++open InternedConstructorTemplates
++local notation "Symbol" => SourcePruningTemplates.Symbol
++local notation "Constraint" => SourceSymbolicIndex.Constraint FullSyntax.Formula
++local notation "Node" => Value Symbol Constraint
++local notation "Core" => EnumerationState.State Symbol Constraint
++local notation "Caller" => SourceCurrentAllocatedPartialState.State
++local notation "Queries" => SourceEndpointMemo.Memos
++local notation "Fragment" => Fragments.Fragment Symbol
++variable {width : Nat}
++variable [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Constraint)] [DecidableEq Node]
++attribute [local instance] terminalMonadList
++
++/-- An actual successful terminal row retains canonical stored suspended tries. -/
++theorem successful_canonical
++    (checkEmpty : Bool) (r n p h : Nat) (first : Suspended) (rest : List Suspended)
++    (waiting : EnumerationWaitingIndex.Waiting) (caller : Caller width) (before : Core)
++    (incoming : Node) (incomingScs : List Suspended) (queries : Queries)
++    (fragment : Fragment) (afterCaller : Caller width) (savedQueries : Queries)
++    (outer after : Core) (moved : EnumerationWaitingIndex.Waiting)
++    (canonical : Canonical before) (inputs : ValidSuspended incomingScs)
++    (observed : run checkEmpty r n p h first rest waiting caller before incoming incomingScs queries =
++      (.ok (some [.ok (fragment, after)]), afterCaller, savedQueries, outer, moved)) : Canonical after := by
++  unfold run at observed
++  split at observed
++  next empty => cases observed
++  next nonempty =>
++    split at observed
++    next recorded winner transfer joined prefixObserved =>
++      have prefixSuccess : Success (SourcePruningEnumerationTerminalPrefix.run r first rest waiting)
++          before (recorded, winner, transfer) joined := by
++        rw [Success, prefixObserved]
++        exact List.mem_singleton_self _
++      have joinedCanonical := SourcePruningEnumerationTerminalPrefix.run_canonical r first rest waiting
++        before joined recorded winner transfer canonical prefixSuccess
++      rcases foldObserved : SourcePruningEnumerationFold.run checkEmpty n p h recorded caller joined winner queries with
++        ⟨foldResult, foldCaller, foldQueries, foldOuter⟩
++      rw [foldObserved] at observed
++      have foldCanonical := SourcePruningEnumerationFold.run_canonical checkEmpty n p h recorded caller joined
++        winner queries foldResult foldCaller foldQueries foldOuter joinedCanonical foldObserved
++      cases foldResult with
++      | error fault => cases observed
++      | ok possible =>
++        cases possible with
++        | none => cases observed
++        | some raw =>
++          dsimp only at observed
++          split at observed
++          next empty => cases observed
++          next folded =>
++            have foldedSame := SourcePruningEnumerationFold.singleton_core checkEmpty n p h recorded
++              caller joined winner queries folded foldCaller foldQueries foldOuter foldObserved
++            have foldedCanonical : Canonical folded := by simpa only [foldedSame] using foldCanonical
++            have incomingCanonical := SourcePruningEnumerationIncomingNode.run_canonical checkEmpty r n p h
++              foldCaller folded winner incoming incomingScs foldQueries foldedCanonical inputs
++            rcases incomingObserved : SourcePruningEnumerationIncomingNode.run checkEmpty r n p h
++                foldCaller folded winner incoming incomingScs foldQueries with
++              ⟨incomingResult, reached, saved, read⟩
++            rw [incomingObserved] at observed incomingCanonical
++            cases incomingResult with
++            | error fault => cases observed
++            | ok result =>
++              cases result with
++              | none => cases observed
++              | some incomingRaw =>
++                have rowsSame := congrArg Prod.fst observed
++                dsimp only at rowsSame
++                have mapped := Option.some.inj (Except.ok.inj rowsSame)
++                have single : incomingRaw = [.ok ((), after)] := by
++                  cases incomingRaw with
++                  | nil => cases mapped
++                  | cons row rest =>
++                    cases row with
++                    | error error => cases mapped
++                    | ok value =>
++                      rcases value with ⟨⟨⟩, returned⟩
++                      have fields := List.cons.inj mapped
++                      have coreSame : returned = after := (Prod.mk.inj (Except.ok.inj fields.1)).2
++                      have restEmpty : rest = [] := List.map_eq_nil_iff.mp fields.2
++                      simp only [coreSame, restEmpty]
++                exact incomingCanonical.2 after (by rw [single])
++          next other => cases observed
++    next other => cases observed
++
++end MicroCFTA.SourcePruningEnumerationTerminal
+diff --git a/lean/MicroCFTA/SourcePruningEnumerationCachedAdapterCanonical.lean b/lean/MicroCFTA/SourcePruningEnumerationCachedAdapterCanonical.lean
+new file mode 100644
+index 000000000..c3f69129c
+--- /dev/null
++++ b/lean/MicroCFTA/SourcePruningEnumerationCachedAdapterCanonical.lean
+@@ -0,0 +1,106 @@
++import MicroCFTA.SourcePruningEnumerationDispatchCanonical
++import MicroCFTA.SourcePruningEnumerationCachedAdapter
++
++namespace MicroCFTA.SourcePruningEnumerationCachedAdapter
++open EnumerationState EnumerationValidity InternedConstructorTemplates
++local notation "Symbol" => SourcePruningTemplates.Symbol
++local notation "Constraint" => SourceSymbolicIndex.Constraint FullSyntax.Formula
++local notation "Node" => Value Symbol Constraint
++local notation "Core" => EnumerationState.State Symbol Constraint
++local notation "Cached" => EnumerationExpandableIndex.Cached Symbol Constraint
++local notation "Raw" => List (Except EnumerationState.Error (Unit × Core))
++local notation "Caller" => SourceCurrentAllocatedPartialState.State
++local notation "Queries" => SourceEndpointMemo.Memos
++
++private theorem recovered_canonical
++    {heap : InternedConstructorTemplates.State Symbol Constraint} {before after : Cached}
++    {source target : Nat} {returned : Core} (valid : Canonical returned)
++    (recovered : (returned.values[target]?).bind (fun value =>
++      (SourcePruningEnumerationNativeIndex.candidate heap value).map (fun flag =>
++        (⟨returned, (fun slot => if slot = source then false else
++          if slot = target then flag else before.expandable slot), before.waiting⟩ : Cached))) = some after) :
++    Canonical after.core := by
++  obtain ⟨value, _stored, classified⟩ := Option.bind_eq_some_iff.mp recovered
++  obtain ⟨flag, _classified, same⟩ := Option.map_eq_some_iff.mp classified
++  subst after
++  exact valid
++
++/-- The actual adapter retains a canonical old cache or a canonical singleton core. -/
++theorem adapt_canonical
++    {heap : InternedConstructorTemplates.State Symbol Constraint} {before after : Cached}
++    {source target : Nat} {raw : Raw} (valid : Canonical before.core)
++    (rows : ∀ returned, raw = [.ok ((), returned)] → Canonical returned)
++    (adapted : adapt heap before source target raw = some after) : Canonical after.core := by
++  cases raw with
++  | nil =>
++      simp only [adapt, Option.some.injEq] at adapted
++      subst after
++      exact valid
++  | cons row rest =>
++      cases row with
++      | error fault => simp only [adapt] at adapted; cases adapted
++      | ok payload =>
++          rcases payload with ⟨ignored, returned⟩
++          cases ignored
++          cases rest with
++          | cons next later => simp only [adapt] at adapted; cases adapted
++          | nil =>
++              have returnedValid := rows returned rfl
++              by_cases same : source = target
++              · simp only [adapt, same, ↓reduceIte, Option.some.injEq] at adapted
++                subst after
++                exact valid
++              · cases stored : before.core.values[source]? with
++                | none =>
++                    simp only [adapt, same, ↓reduceIte, stored] at adapted
++                    exact recovered_canonical returnedValid adapted
++                | some value =>
++                    cases value with
++                    | eliminated =>
++                        simp only [adapt, same, ↓reduceIte, stored, Option.some.injEq] at adapted
++                        subst after
++                        exact valid
++                    | enumerated fragment =>
++                        simp only [adapt, same, ↓reduceIte, stored] at adapted
++                        exact recovered_canonical returnedValid adapted
++                    | unenumerated node scs =>
++                        simp only [adapt, same, ↓reduceIte, stored] at adapted
++                        exact recovered_canonical returnedValid adapted
++
++variable {width : Nat}
++
++/-- Every actual singleton core and every attached cache retain canonical suspended tries. -/
++theorem run_canonical
++    [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Constraint)] [DecidableEq Node]
++    (checkEmpty : Bool) (nativeFuel p h : Nat) (caller : Caller width) (before : Cached)
++    (source target : Nat) (queries : Queries) (valid : Canonical before.core) :
++    (∀ returned, (run checkEmpty nativeFuel p h caller before source target queries).1 =
++      .ok (some [.ok ((), returned)]) → Canonical returned) ∧
++    (∀ after, (run checkEmpty nativeFuel p h caller before source target queries).2.2.2 = some after →
++      Canonical after.core) := by
++  rcases dispatched : SourcePruningEnumerationDispatch.dispatch checkEmpty nativeFuel p h
++    caller before.core source target queries with ⟨outcome, reachedCaller, saved⟩
++  cases outcome with
++  | error fault =>
++      simp only [run, dispatched]
++      constructor <;> intro after impossible <;> cases impossible
++  | ok possible =>
++      cases possible with
++      | none =>
++          simp only [run, dispatched]
++          constructor <;> intro after impossible <;> cases impossible
++      | some action =>
++          simp only [run, dispatched]
++          have rows : ∀ returned, ExceptT.run (action before.core) = [.ok ((), returned)] →
++              Canonical returned := by
++            intro returned completed
++            exact SourcePruningEnumerationDispatch.dispatch_canonical checkEmpty nativeFuel p h
++              caller before.core source target queries action reachedCaller saved returned
++              valid dispatched completed
++          constructor
++          · intro returned same
++            exact rows returned (Option.some.inj (Except.ok.inj same))
++          · intro after adapted
++            exact adapt_canonical valid rows adapted
++
++end MicroCFTA.SourcePruningEnumerationCachedAdapter
+diff --git a/lean/MicroCFTA/SourcePruningEnumerationCachedFoldCanonical.lean b/lean/MicroCFTA/SourcePruningEnumerationCachedFoldCanonical.lean
+new file mode 100644
+index 000000000..81b50e922
+--- /dev/null
++++ b/lean/MicroCFTA/SourcePruningEnumerationCachedFoldCanonical.lean
+@@ -0,0 +1,65 @@
++import MicroCFTA.SourcePruningEnumerationFoldCanonical
++import MicroCFTA.SourcePruningEnumerationCachedAdapterCanonical
++
++namespace MicroCFTA.SourcePruningEnumerationCachedFold
++open EnumerationState EnumerationValidity InternedConstructorTemplates
++local notation "Symbol" => SourcePruningTemplates.Symbol
++local notation "Constraint" => SourceSymbolicIndex.Constraint FullSyntax.Formula
++local notation "Node" => Value Symbol Constraint
++local notation "Cached" => EnumerationExpandableIndex.Cached Symbol Constraint
++local notation "Caller" => SourceCurrentAllocatedPartialState.State
++local notation "Queries" => SourceEndpointMemo.Memos
++variable {width : Nat}
++
++/-- Every actual attached fold cache is canonical, including a rejected prefix cache. -/
++theorem candidate_canonical
++    [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Constraint)] [DecidableEq Node]
++    (checkEmpty : Bool) (nativeFuel p h : Nat) (sources : List Nat)
++    (caller : Caller width) (before : Cached) (target : Nat) (queries : Queries)
++    (valid : Canonical before.core) (after : Cached)
++    (candidate : (run checkEmpty nativeFuel p h sources caller before target queries).2 = some after) :
++    Canonical after.core := by
++  induction sources generalizing caller before queries with
++  | nil =>
++      simp only [run, Option.some.injEq] at candidate
++      subst after
++      exact valid
++  | cons source rest ih =>
++      have headCanonical := SourcePruningEnumerationCachedAdapter.run_canonical
++        checkEmpty nativeFuel p h caller before source target queries valid
++      rcases headObserved : SourcePruningEnumerationCachedAdapter.run checkEmpty nativeFuel p h
++        caller before source target queries with ⟨outcome, reachedCaller, saved, headCache⟩
++      rw [headObserved] at headCanonical
++      dsimp only at headCanonical
++      cases outcome with
++      | error fault => simp only [run, headObserved] at candidate; cases candidate
++      | ok possible =>
++          cases possible with
++          | none => simp only [run, headObserved] at candidate; cases candidate
++          | some raw =>
++              cases raw with
++              | nil =>
++                  simp only [run, headObserved] at candidate
++                  exact headCanonical.2 after candidate
++              | cons row tail =>
++                  cases row with
++                  | error fault =>
++                      simp only [run, headObserved] at candidate
++                      exact headCanonical.2 after candidate
++                  | ok payload =>
++                      rcases payload with ⟨ignored, core⟩
++                      cases ignored
++                      cases tail with
++                      | cons next later =>
++                          simp only [run, headObserved] at candidate
++                          exact headCanonical.2 after candidate
++                      | nil =>
++                          have coreValid := headCanonical.1 core rfl
++                          cases headCache with
++                          | none => simp only [run, headObserved] at candidate; cases candidate
++                          | some recovered =>
++                              simp only [run, headObserved] at candidate
++                              exact ih reachedCaller (EnumerationExpandableIndex.frame core recovered)
++                                saved coreValid candidate
++
++end MicroCFTA.SourcePruningEnumerationCachedFold
+diff --git a/lean/MicroCFTA/SourcePruningEnumerationChildCanonical.lean b/lean/MicroCFTA/SourcePruningEnumerationChildCanonical.lean
+new file mode 100644
+index 000000000..2679db94e
+--- /dev/null
++++ b/lean/MicroCFTA/SourcePruningEnumerationChildCanonical.lean
+@@ -0,0 +1,67 @@
++import MicroCFTA.SourcePruningEnumerationTerminalCanonical
++import MicroCFTA.SourcePruningEnumerationCachedPrepareCanonical
++import MicroCFTA.SourcePruningEnumerationOrdinarySemanticGates
++import MicroCFTA.SourcePruningEnumerationChildTraversal
++
++/-!
++# Canonical stored tries through actual successful child dispatch
++
++The actual partition retains valid inherited tries.
++Successful raw rows and their attached caches have the same core.
++-/
++namespace MicroCFTA.SourcePruningEnumerationChildDispatch
++open EnumerationState EnumerationCorrectness EnumerationSemantics EnumerationValidity
++open InternedConstructorTemplates
++local notation "Symbol" => SourcePruningTemplates.Symbol
++local notation "Constraint" => SourceSymbolicIndex.Constraint FullSyntax.Formula
++local notation "Node" => Value Symbol Constraint
++local notation "Core" => EnumerationState.State Symbol Constraint
++local notation "Caller" => SourceCurrentAllocatedPartialState.State
++local notation "Queries" => SourceEndpointMemo.Memos
++local notation "Cached" => EnumerationExpandableIndex.Cached Symbol Constraint
++local notation "Fragment" => Fragments.Fragment Symbol
++variable {width : Nat}
++variable [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Constraint)] [DecidableEq Node]
++
++/-- Every actual successful child row derives canonicality of its exact attached cache. -/
++theorem successful_canonical
++    {checkEmpty : Bool} {r n p h k : Nat} {scs : List Suspended} {incoming : Node}
++    {caller reachedCaller : Caller width} {before after : Cached} {queries savedQueries : Queries}
++    {fragment : Fragment} {returned outer : Core} {waiting : EnumerationWaitingIndex.Waiting}
++    (canonical : Canonical before.core) (inputs : ValidSuspended scs)
++    (observed : run checkEmpty r n p h k scs incoming caller before queries =
++      ((.ok (some [.ok (fragment, returned)]), reachedCaller, savedQueries, outer, waiting), some after)) :
++    Canonical after.core := by
++  have coreSame := singleton_core checkEmpty r n p h k scs incoming caller reachedCaller before after
++    queries savedQueries fragment returned outer waiting observed
++  rw [coreSame]
++  have original := (erase checkEmpty r n p h k scs incoming caller before queries).symm.trans
++    (congrArg Prod.fst observed)
++  by_cases empty : incoming = .empty
++  · simp only [observe, empty, ↓reduceIte] at original
++    cases original
++  · cases partitioned : scs.partition (fun sc => EqualityTrie.isTerminal sc.trie) with
++    | mk here descendants =>
++      cases here with
++      | nil =>
++        simp only [observe, empty, ↓reduceIte, partitioned] at original
++        cases prepared : SourcePruningEnumerationShallowChild.prepareChild (EnumGuard := Constraint) scs incoming with
++        | none => simp only [prepared] at original; cases original
++        | some action =>
++          rw [prepared] at original
++          have rawSame := congrArg Prod.fst original
++          dsimp only at rawSame
++          have success : Success action before.core fragment returned := by
++            rw [Success, Option.some.inj (Except.ok.inj rawSame)]
++            exact List.mem_singleton_self _
++          exact SourcePruningEnumerationShallowChild.prepared_canonical scs incoming before.core returned
++            action fragment canonical inputs prepared success
++      | cons first rest =>
++        have validParts := (SourcePruningEnumerationOrdinarySemanticGates.partition_descendants scs
++          (first :: rest) descendants partitioned).2 inputs
++        apply SourcePruningEnumerationTerminal.successful_canonical checkEmpty r n p h first rest before.waiting
++          caller before.core incoming descendants queries fragment reachedCaller savedQueries outer returned
++          waiting canonical validParts.2
++        simpa only [observe, empty, ↓reduceIte, partitioned] using original
++
++end MicroCFTA.SourcePruningEnumerationChildDispatch
+diff --git a/lean/MicroCFTA/SourcePruningEnumerationTraversalCanonical.lean b/lean/MicroCFTA/SourcePruningEnumerationTraversalCanonical.lean
+new file mode 100644
+index 000000000..4ed5ea2fc
+--- /dev/null
++++ b/lean/MicroCFTA/SourcePruningEnumerationTraversalCanonical.lean
+@@ -0,0 +1,50 @@
++import MicroCFTA.SourcePruningEnumerationChildCanonical
++
++/-!
++# Canonical stored tries through actual ordered child traces
++
++Each actual successful child cache supplies the next child's input.
++The validity premise concerns the original ordered input buckets.
++-/
++namespace MicroCFTA.SourcePruningEnumerationChildTraversal
++open EnumerationState EnumerationSemantics EnumerationValidity InternedConstructorTemplates
++local notation "Symbol" => SourcePruningTemplates.Symbol
++local notation "Constraint" => SourceSymbolicIndex.Constraint FullSyntax.Formula
++local notation "Node" => Value Symbol Constraint
++local notation "Caller" => SourceCurrentAllocatedPartialState.State
++local notation "Queries" => SourceEndpointMemo.Memos
++local notation "Cached" => EnumerationExpandableIndex.Cached Symbol Constraint
++local notation "Fragment" => Fragments.Fragment Symbol
++variable {width : Nat}
++variable [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Constraint)] [DecidableEq Node]
++
++/-- Every actual complete ordered trace retains canonical suspended tries. -/
++theorem trace_canonical
++    {checkEmpty : Bool} {r n p h k : Nat} {inputs : List (Node × List Suspended)}
++    {caller afterCaller : Caller width} {before after : Cached} {queries savedQueries : Queries}
++    {fragments : List Fragment}
++    (trace : Trace checkEmpty r n p h k inputs caller before queries fragments afterCaller after savedQueries)
++    (canonical : Canonical before.core)
++    (valid : ∀ incoming bucket, (incoming, bucket) ∈ inputs → ValidSuspended bucket) :
++    Canonical after.core := by
++  induction trace with
++  | nil => exact canonical
++  | cons head _tail ih =>
++      apply ih (SourcePruningEnumerationChildDispatch.successful_canonical (observed := head)
++        canonical (valid _ _ (List.mem_cons_self)))
++      intro incoming bucket member
++      exact valid incoming bucket (List.mem_cons_of_mem _ member)
++
++/-- An observed complete traversal derives its own trace and preserves canonical stored tries. -/
++theorem complete_canonical
++    {checkEmpty : Bool} {r n p h k : Nat} {inputs : List (Node × List Suspended)}
++    {caller afterCaller : Caller width} {before after : Cached} {queries savedQueries : Queries}
++    {fragments : List Fragment}
++    (canonical : Canonical before.core)
++    (valid : ∀ incoming bucket, (incoming, bucket) ∈ inputs → ValidSuspended bucket)
++    (completed : run checkEmpty r n p h k inputs caller before queries =
++      .complete fragments afterCaller savedQueries after) : Canonical after.core :=
++  trace_canonical (complete_trace checkEmpty r n p h k inputs caller afterCaller before after
++    queries savedQueries fragments completed) canonical valid
++
++end MicroCFTA.SourcePruningEnumerationChildTraversal
+diff --git a/lean/MicroCFTA/SourcePruningEnumerationSelectedEdgeCanonical.lean b/lean/MicroCFTA/SourcePruningEnumerationSelectedEdgeCanonical.lean
+new file mode 100644
+index 000000000..ef7f734e7
+--- /dev/null
++++ b/lean/MicroCFTA/SourcePruningEnumerationSelectedEdgeCanonical.lean
+@@ -0,0 +1,93 @@
++import MicroCFTA.SourcePruningEnumerationSelectedEdge
++import MicroCFTA.SourcePruningEnumerationTraversalCanonical
++import MicroCFTA.SourcePruningEnumerationOwnFinalizeCanonical
++import MicroCFTA.SourcePruningEnumerationOrdinarySemanticGates
++import MicroCFTA.SourcePruningEnumerationEdgeProjectionLanguage
++import MicroCFTA.SourcePruningEnumerationAnnotationHeap
++
++/-!
++# Canonical stored tries through an actual completed selected edge
++
++The current caller supplies valid projected equality classes.
++The actual own-class prefix supplies the ordered child input cache.
++The actual completed child trace preserves canonical stored buckets.
++-/
++namespace MicroCFTA.SourcePruningEnumerationSelectedEdge
++open EnumerationSemantics EnumerationValidity Language EnumerationState EnumerationCorrectness EnumerationSchedule EnumerationDependencies
++open InternedConstructorTemplates InternedProbeProvenance
++open SourcePruningEnumerationNodes SourcePruningEnumerationObservation
++open SourceCurrentAllocatedNativeInventoryState (Inventory)
++open SourceCurrentAllocatedPartialInvariant (Context Post)
++local notation "Symbol" => SourcePruningTemplates.Symbol
++local notation "Constraint" => SourceSymbolicIndex.Constraint FullSyntax.Formula
++local notation "Node" => InternedConstructorTemplates.Value Symbol Constraint
++local notation "Caller" => SourceCurrentAllocatedPartialState.State
++local notation "Memos" => EndpointMemoGateTrace.Memos
++local notation "Queries" => SourceEndpointMemo.Memos
++local notation "Cached" => EnumerationExpandableIndex.Cached Symbol Constraint
++local notation "Fragment" => Fragments.Fragment Symbol
++variable {width : Nat}
++variable [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Constraint)] [DecidableEq Node]
++
++/-- An actual completed selected edge preserves canonical stored suspended tries. -/
++theorem complete_canonical
++    {formulas : SourceGuards.Formulas FullSyntax.Formula}
++    {solver : SourceGuards.Entailment FullSyntax.Formula}
++    {inventory : Inventory} (caller : Caller width) (before : Cached) (checkEmpty : Bool)
++    (parentEntry : Cache.Interned InternedBinderProtocol.NodeKey)
++    (edges : List (EdgeValue Symbol Constraint)) (depth : Nat) (free : List InternedBinderProtocol.Reference)
++    (edge : EdgeValue Symbol Constraint) (scs : List Suspended) (roots : Nat → Nat) (memos : Memos)
++    (initial : Context formulas solver inventory caller memos)
++    (parentAvailable : Available caller.checked.native.machine.heap (.node parentEntry edges depth free))
++    (parentClosed : free = []) (selected : edge ∈ edges)
++    (safe : Safe before.core) (realized : PendingRealized caller.checked.native.machine.heap before.core)
++    (paths : Roots before.core.representatives roots)
++    (counts : EnumerationCanonicalWaiting.Correct roots before.core.values before.waiting)
++    (flags : ∀ slot, SourcePruningEnumerationNativeIndex.candidate caller.checked.native.machine.heap
++      ((before.core.values[slot]?).getD .eliminated) = some (before.expandable slot))
++    (bounded : ∀ sc ∈ scs, sc.var < before.core.counter) (pending : InputsPending before.core scs)
++    (allowed : arityAllows edge.children.length scs = true)
++    (tries : List EqualityTrie.Trie) (residual : Option Constraint)
++    (projected : SourcePruningEnumerationConstraint.project edge.entry.key.constraint = some (tries, residual))
++    (canonical : Canonical before.core) (inherited : ValidSuspended scs)
++    {r n p h k : Nat} {fragment : Fragment} {afterCaller : Caller width}
++    {after : Cached} {savedQueries : Queries}
++    (completed : run checkEmpty r n p h k scs edge caller before memos.query =
++      .complete fragment afterCaller savedQueries after) : Canonical after.core := by
++  obtain ⟨_action, own, _prepared, ownRun, _raw, ownCore, _ownCounter, _ownForest,
++    _ownSafe, _ownPaths, _ownRealized, _ownCounts, _ownFlags, _combinedPending, _genuine,
++    _ownProtects⟩ :=
++    SourcePruningEnumerationEdgeInputs.complete caller.checked.native.machine.heap parentEntry edges depth free
++      edge scs roots initial.ready.semantic.ready parentAvailable parentClosed selected before safe realized
++      paths counts flags bounded pending allowed tries residual projected
++  have ownCanonical : Canonical own.core := by
++    rw [ownCore]
++    exact suspension_canonical tries.length before.core canonical
++  have triesValid := (SourcePruningEnumerationEdgeProjectionLanguage.selected_projected_complete
++    caller.checked.native.machine.heap parentEntry edges depth free edge
++    initial.ready.semantic.ready initial.annotation_heap parentAvailable selected tries residual projected).1
++  let inputs := SourcePruningEnumerationEdgeInputs.children edge scs before.core.counter tries
++  have inputsValid : ∀ incoming bucket, (incoming, bucket) ∈ inputs → ValidSuspended bucket :=
++    SourcePruningEnumerationOrdinarySemanticGates.children_valid edge scs before.core.counter tries
++      inherited triesValid
++  have readback : ((inputs.map (fun input =>
++      (input.1, input.2, SourcePruningEnumerationShallowChild.prepareChild (EnumGuard := Constraint) input.2 input.1))).map
++      (fun input => (input.1, input.2.1))) = inputs := by
++    simp only [List.map_map]
++    exact List.map_id _
++  simp only [run, ownRun] at completed
++  rw [readback] at completed
++  cases childrenRun : SourcePruningEnumerationChildTraversal.run checkEmpty r n p h k
++      inputs caller own memos.query with
++  | stopped fragments observation candidate =>
++      rw [childrenRun] at completed
++      cases completed
++  | complete fragments reachedCaller saved reached =>
++      rw [childrenRun] at completed
++      have same : after = finish residual (.node edge.entry.key.symbol fragments) reached := by
++        exact ((Result.complete.inj completed).2.2.2).symm
++      rw [same]
++      exact finish_canonical residual (.node edge.entry.key.symbol fragments) reached
++        (SourcePruningEnumerationChildTraversal.complete_canonical ownCanonical inputsValid childrenRun)
++
++end MicroCFTA.SourcePruningEnumerationSelectedEdge
+diff --git a/lean/MicroCFTA/SourcePruningEnumerationCapturedEdgeCanonical.lean b/lean/MicroCFTA/SourcePruningEnumerationCapturedEdgeCanonical.lean
+new file mode 100644
+index 000000000..f72a6e7da
+--- /dev/null
++++ b/lean/MicroCFTA/SourcePruningEnumerationCapturedEdgeCanonical.lean
+@@ -0,0 +1,84 @@
++import MicroCFTA.SourcePruningEnumerationSelectedEdge
++import MicroCFTA.SourcePruningEnumerationSelectedEntry
++import MicroCFTA.SourcePruningEnumerationFinalize
++import MicroCFTA.EnumerationStratifiedTransport
++import MicroCFTA.SourcePruningEnumerationSelectedEdgeCanonical
++import MicroCFTA.SourcePruningEnumerationEntryCanonical
++
++/-!
++# Canonical tries at actual captured-slot completion
++
++The original stored bucket supplies inherited trie validity.
++The completed selected edge supplies canonical storage before the final write.
++-/
++namespace MicroCFTA.SourcePruningEnumerationCapturedEdge
++open EnumerationValidity EnumerationSemantics EnumerationState EnumerationCorrectness EnumerationSchedule EnumerationDependencies
++open InternedConstructorTemplates InternedProbeProvenance
++open SourcePruningEnumerationNodes SourcePruningEnumerationObservation
++open SourceCurrentAllocatedNativeInventoryState (Inventory)
++open SourceCurrentAllocatedPartialInvariant (Context Post)
++local notation "Symbol" => SourcePruningTemplates.Symbol
++local notation "Constraint" => SourceSymbolicIndex.Constraint FullSyntax.Formula
++local notation "Node" => InternedConstructorTemplates.Value Symbol Constraint
++local notation "Caller" => SourceCurrentAllocatedPartialState.State
++local notation "Memos" => EndpointMemoGateTrace.Memos
++local notation "Queries" => SourceEndpointMemo.Memos
++local notation "Cached" => EnumerationExpandableIndex.Cached Symbol Constraint
++local notation "Fragment" => Fragments.Fragment Symbol
++local notation "Result" => SourcePruningEnumerationSelectedEdge.Result
++variable {width : Nat}
++variable [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Constraint)] [DecidableEq Node]
++
++/-- Actual captured-slot completion derives inherited validity from storage and preserves it. -/
++theorem complete_canonical
++    (formulas : SourceGuards.Formulas FullSyntax.Formula)
++    (solver : SourceGuards.Entailment FullSyntax.Formula)
++    (inventory : Inventory) (caller : Caller width) (before : Cached) (checkEmpty : Bool)
++    (uv handle : Nat) (scs : List Suspended)
++    (parentEntry : Cache.Interned InternedBinderProtocol.NodeKey)
++    (edges : List (EdgeValue Symbol Constraint)) (depth : Nat) (free : List InternedBinderProtocol.Reference)
++    (edge : EdgeValue Symbol Constraint) (roots : Nat → Nat) (memos : Memos)
++    (initial : Context formulas solver inventory caller memos)
++    (ready : EnumerationDriver.Ready uv before.core)
++    (stored : before.core.values[uv]? = some (.unenumerated (some handle) scs))
++    (decoded : lookupNode caller.checked.native.machine.heap handle = some (.node parentEntry edges depth free))
++    (realized : PendingRealized caller.checked.native.machine.heap before.core)
++    (selected : edge ∈ edges)
++    (paths : Roots before.core.representatives roots)
++    (counts : EnumerationCanonicalWaiting.Correct roots before.core.values before.waiting)
++    (flags : ∀ slot, SourcePruningEnumerationNativeIndex.candidate caller.checked.native.machine.heap
++      ((before.core.values[slot]?).getD .eliminated) = some (before.expandable slot))
++    (pending : InputsPending before.core scs)
++    (allowed : arityAllows edge.children.length scs = true)
++    (tries : List EqualityTrie.Trie) (residual : Option Constraint)
++    (projected : SourcePruningEnumerationConstraint.project edge.entry.key.constraint = some (tries, residual))
++    (canonical : Canonical before.core)
++    {r n p h k : Nat} {fragment : Fragment} {afterCaller : Caller width}
++    {after : Cached} {savedQueries : Queries}
++    (completed : run checkEmpty r n p h k uv scs edge caller before memos.query =
++      some (.complete fragment afterCaller savedQueries after)) : Canonical after.core := by
++  obtain ⟨value, lookup, available, closed⟩ := realized uv handle scs stored
++  have same : value = .node parentEntry edges depth free := Option.some.inj (lookup.symm.trans decoded)
++  subst value
++  have bounded : ∀ sc ∈ scs, sc.var < before.core.counter :=
++    ready.safe.1.values _ (List.mem_of_getElem? stored)
++  have inherited : ValidSuspended scs := canonical _ (List.mem_of_getElem? stored)
++  unfold run at completed
++  cases selectedRun : SourcePruningEnumerationSelectedEdge.run checkEmpty r n p h k
++      scs edge caller before memos.query with
++  | unhandled => rw [selectedRun] at completed; cases completed
++  | rejected reachedCaller saved reached => rw [selectedRun] at completed; cases completed
++  | stopped fragments observation candidate => rw [selectedRun] at completed; cases completed
++  | complete produced reachedCaller saved reached =>
++      rw [selectedRun] at completed
++      simp only [Option.map_eq_some_iff] at completed
++      obtain ⟨finished, finishRun, fields⟩ := completed
++      have cacheSame : finished = after := (SourcePruningEnumerationSelectedEdge.Result.complete.inj fields).2.2.2
++      rw [← cacheSame]
++      exact SourcePruningEnumerationFinalize.run_canonical reachedCaller.checked.native.machine.heap k uv
++        produced reached finished
++        (SourcePruningEnumerationSelectedEdge.complete_canonical caller before checkEmpty parentEntry edges depth free
++          edge scs roots memos initial available closed selected ready.safe realized paths counts flags bounded
++          pending allowed tries residual projected canonical inherited selectedRun) finishRun
++
++end MicroCFTA.SourcePruningEnumerationCapturedEdge

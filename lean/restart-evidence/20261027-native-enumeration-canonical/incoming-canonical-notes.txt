@@ -1,0 +1,24 @@
+[2026-10-27 01:37 CET] Incoming canonicality draft, source-only.
+
+Draft: drafts/SourcePruningEnumerationIncomingCanonical.lean
+SHA256 0e55fed4f29998b6e664e7043d9e3ab767f16b3b12e80588dc1c139790958fa5.
+The draft is held unchanged for Root's serial check. No builds or repository edits were performed.
+
+Theorems:
+- IncomingNode.run_canonical checkEmpty r n p h caller before target incoming incomingScs queries valid inputs gives Canonical of the actual outer read and Canonical of every observed successful raw singleton core.
+- IncomingNode.written_canonical before read after fuel uv target handle oldNode incomingScs oldScs valid inputs reading shape gives Canonical after. reading is actual getValue Success; shape is the actual write plus ancestry update. It therefore applies to the logical write retained by the original producer even if the raw continuation rejects.
+- IncomingCacheAdapter.adapt_canonical takes Canonical read, ValidSuspended incomingScs, canonicality for a literal raw singleton if present, and the actual adapt=some after equation. It gives Canonical after.core.
+- IncomingCacheAdapter.observed_cache_canonical checkEmpty r n p h k caller before target incoming incomingScs queries valid inputs after candidate gives Canonical of any actual attached cache. candidate is the literal run projection equal to some after.
+
+Proof route:
+Canonical depends only on stored value payloads. All IncomingNode.run outcomes retain the original values at the outer read; representative compression and native Caller/Queries changes do not change those values. Actual finish success writes incomingScs++oldScs from the pending slot read by the worker. Initial Canonical supplies ValidSuspended oldScs. Incoming ValidSuspended supplies the other half. EnumerationValidity.set_canonical proves the exact new slot update; ancestry changes do not affect Canonical.
+
+The adapter raw[] branch is essential. It reads the old pending bucket from the actual read core, constructs .unenumerated (some 0) (incomingScs++oldScs), and frames that exact synthetic core after a successful index update. The proof applies set_canonical to this branch directly. It does not equate raw[] with a successful row or ignore the synthetic write. The singleton branch uses the existing adapt_singleton_core theorem. Error rows, longer lists, missing slots, failed index updates and unsupported/native-error branches cannot yield Some after and are excluded only by the literal adapter equation.
+
+The runtime case proof follows the already checked IncomingMass.run_mass/adapt_mass proof structure. It introduces no Context, Safe, availability, ranges, Graph or future success premise. Canonical is not Safe and does not assert native realization, candidate flags, waiting correctness or ancestry safety. In particular, raw-empty rejection receives only a canonical-trie conclusion. All statements concern the actual unchanged bounds and returned cores; no completion producer is executed again.
+
+Original source identities read:
+IncomingNode ff3a4fa83ad6f3368a1141cf6b908f5d1e5a56d500b4efc3c480d2b263b508c4
+IncomingCacheAdapter b26eb4e9fa42679025df970c09fe6da0e2c32833201bd327bef1bf774e2e0030
+EnumerationValidity a1839fd2c73369241dae93b3e799f15d9ce5dbd6246d502681f723992958649d
+IncomingMass 3d01182ebce1cd5da71438b859538fe7a3133a416623a5d2e4fea70c7717c5b6
