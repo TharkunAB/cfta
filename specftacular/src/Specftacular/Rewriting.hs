@@ -18,6 +18,7 @@ module Specftacular.Rewriting (
     pruningTemplates,
     joinable,
     kboCompare,
+    definitionWeights,
     addLaw,
     addLawRules,
     generalizeLaw,
@@ -144,7 +145,13 @@ emptyRules order = Rules order emptyIndex emptyIndex emptyIndex
 'KnuthBendix' is the Knuth-Bendix order of 'kboCompare' and 'kboGreater':
 each symbol and each application has the weight 1. It orients an equation
 towards the side with fewer symbols, so a rule never makes a term larger,
-and a term that a rule rewrites has a smaller form in the search.
+and a term that a rule rewrites has a smaller form in the search. The map
+gives the weights of definition of the defined symbols
+('definitionWeights'). Of two terms of the same weight, the term with the
+smaller sum of the weights of definition of its leaves is smaller. Then a
+definition whose body has its size, such as @(f >=> g) x = f x >>= g@,
+orients towards its body for each instance. The weight decides first, so a
+rule still never makes a term larger.
 
 'PathOrder' is the lexicographic path order on the uncurried terms: the
 function symbol of the spine of an application with its arguments. The list
@@ -157,7 +164,7 @@ make a term larger, for example
 search can then prune a term whose smaller form is over the size bound.
 -}
 data TermOrder
-    = KnuthBendix
+    = KnuthBendix !(Map Symbol Int)
     | PathOrder ![T.Text]
     deriving (Eq, Show)
 
@@ -166,7 +173,7 @@ and the order of the terms of a bucket. The generated variables are
 constants, below all function symbols.
 -}
 termCompare :: TermOrder -> (Symbol -> Bool) -> Term -> Term -> Ordering
-termCompare KnuthBendix isVar = kboCompare isVar
+termCompare (KnuthBendix defined) isVar = kboCompare defined isVar
 termCompare (PathOrder precedence) isVar = lpoCompare precedence isVar
 
 -- | Whether a ground term is greater than another in the order.
@@ -178,12 +185,12 @@ the ranked template variables compare as the ranking says (see
 'kboGreater').
 -}
 rankedGreater :: TermOrder -> Map Symbol Int -> Term -> Term -> Bool
-rankedGreater KnuthBendix rank = kboGreater rank
+rankedGreater (KnuthBendix defined) rank = kboGreater defined rank
 rankedGreater (PathOrder precedence) rank = lpoGreater precedence rank
 
 -- | Whether a template is greater than another for each term and type instance.
 independentGreater :: TermOrder -> Term -> Term -> Bool
-independentGreater KnuthBendix = annotationIndependentGreater
+independentGreater (KnuthBendix defined) = annotationIndependentGreater defined
 independentGreater (PathOrder precedence) = lpoGreater precedence Map.empty
 
 {- | Whether the decrease of a template also holds when both sides take
@@ -196,7 +203,7 @@ variable takes no argument. The Knuth-Bendix order is closed under
 contexts.
 -}
 appliedGreater :: TermOrder -> Map Symbol Int -> Term -> Term -> Bool
-appliedGreater KnuthBendix _ _ _ = True
+appliedGreater (KnuthBendix _) _ _ _ = True
 appliedGreater (PathOrder precedence) rank l r = case l of
     Term _ (Term "->" [_, a, b] : _) -> applied a b
     Term _ (Term v [] : _) | isTypeVar v -> applied (Term "<t>applied" []) (Term "<t>applied" [])
@@ -268,7 +275,7 @@ rewriteStep greater rules = go id
     -- The application of a function to its arguments, for the order check.
     inFunction context ty v = case rulesOrder rules of
         PathOrder _ -> context . (\f' -> Term "app" [ty, f', v])
-        KnuthBendix -> id
+        KnuthBendix _ -> id
     go context t =
         case [ r'
              | (l, r) <- candidates (oriented rules) t
@@ -356,17 +363,17 @@ pruningTemplates sig size rules =
 
 {- | Prove a decrease that cannot depend on the type annotations. The
 variable conditions of 'kboGreater' preserve the weight comparison under
-term substitution. Equal weights need a strict function comparison or a
-strict comparison of constant names. Identical functions stay identical
+term substitution. Equal weights and equal weights of definition need a
+strict function comparison or a strict comparison of constant names. Identical functions stay identical
 under one shared term and type substitution.
 -}
-annotationIndependentGreater :: Term -> Term -> Bool
-annotationIndependentGreater a b =
-    kboGreater Map.empty a b && (weight a > weight b || tie a b)
+annotationIndependentGreater :: Map Symbol Int -> Term -> Term -> Bool
+annotationIndependentGreater defined a b =
+    kboGreater defined Map.empty a b && (heavier defined a b == GT || tie a b)
   where
     tie (Term "app" [_, f, v]) (Term "app" [_, g, u])
         | f == g = tie v u
-        | otherwise = annotationIndependentGreater f g
+        | otherwise = annotationIndependentGreater defined f g
     tie (Term f [_]) (Term g [_])
         | not (isTemplateVar f || isTemplateVar g) = f > g
     tie _ _ = False
@@ -661,20 +668,75 @@ leaves :: Term -> Int
 leaves (Term "app" [_, f, v]) = leaves f + leaves v
 leaves _ = 1
 
+-- | The sum of the weights of definition of the leaves of a term (see 'TermOrder').
+definitionWeight :: Map Symbol Int -> Term -> Int
+definitionWeight defined t
+    | Map.null defined = 0
+    | otherwise = go t
+  where
+    go (Term "app" [_, f, v]) = go f + go v
+    go (Term s _) = Map.findWithDefault 0 s defined
+
+-- | Compare the weights of two terms, then their weights of definition.
+heavier :: Map Symbol Int -> Term -> Term -> Ordering
+heavier defined s t =
+    compare (weight s) (weight t) <> compare (definitionWeight defined s) (definitionWeight defined t)
+
+{- | The weights of definition of the symbols that the definitions among the
+rewriting rules define (see 'TermOrder'). A definition is a rule @c x1 ... xk -> t@
+whose variables @xi@ are distinct, whose body @t@ does not contain @c@ and
+contains each variable at most once, and whose two sides have the same
+number of leaves. The weight of @c@ is one more than the largest sum of the
+weights of the defined symbols of a body of @c@, so @c x1 ... xk@ is greater
+than its body for each instance. The definitions go from the greatest
+symbol to the least, and a definition whose body leads back to its symbol
+through the definitions before it is dropped. Thus of two symbols that
+define each other, the greater one is defined. The weights choose only the
+order, so a rule that is not true makes the order less useful, but the
+search stays right.
+-}
+definitionWeights :: Rules -> Map Symbol Int
+definitionWeights rules = Map.mapWithKey (\c _ -> weightOf c) kept
+  where
+    rewriting = concatMap (concat . Map.elems . byHead) [oriented rules, unoriented rules]
+    found = Map.fromListWith (++) [(c, [body]) | (l, r) <- rewriting, Just (c, body) <- [definition l r]]
+    kept = foldl' keep Map.empty (Map.toDescList found)
+    keep acc (c, bodies) = case filter (not . any (leadsTo acc c)) bodies of
+        [] -> acc
+        acyclic -> Map.insert c acyclic acc
+    leadsTo acc c s = s == c || any (any (leadsTo acc c)) (Map.findWithDefault [] s acc)
+    weightOf c = 1 + maximum [sum [weightOf s | s <- body, Map.member s kept] | body <- kept Map.! c]
+    -- The defined symbol and the symbols of the body, with repetitions.
+    definition l r = case spine l of
+        (Term c [_], args)
+            | not (isTemplateVar c)
+            , Just vars <- traverse templateVar args
+            , length (nubOrd vars) == length vars
+            , c `notElem` symbols r
+            , length (nubOrd (templateVars r)) == length (templateVars r)
+            , leaves l == leaves r ->
+                Just (c, symbols r)
+        _ -> Nothing
+    templateVar (Term v [_]) | isTemplateVar v = Just v
+    templateVar _ = Nothing
+    symbols (Term "app" [_, f, v]) = symbols f ++ symbols v
+    symbols (Term s _) = [s | not (isTemplateVar s)]
+
 {- | The Knuth-Bendix order on ground terms. Each symbol has the weight 1.
-An application is the binary symbol app, which is above the other
-symbols. Of the other symbols, the generated variables are below the
+Of two terms of the same weight, the term with the smaller weight of
+definition is smaller (see 'TermOrder'). An application is the binary
+symbol app, which is above the other symbols. Of the other symbols, the generated variables are below the
 constants, so that the more general terms come first, and symbols of one
 kind compare by their names, then by their types. The generated
 variables of a term are constants here. Smaller type instances come first.
 The order is total,
 well-founded, and closed under contexts, so rewriting with it ends.
 -}
-kboCompare :: (Symbol -> Bool) -> Term -> Term -> Ordering
-kboCompare isVar s t = compare (weight s) (weight t) <> sameWeight s t
+kboCompare :: Map Symbol Int -> (Symbol -> Bool) -> Term -> Term -> Ordering
+kboCompare defined isVar s t = heavier defined s t <> sameWeight s t
   where
     sameWeight (Term "app" [_, f, v]) (Term "app" [_, g, u]) =
-        kboCompare isVar f g <> kboCompare isVar v u
+        kboCompare defined isVar f g <> kboCompare defined isVar v u
     sameWeight (Term "app" _) _ = GT
     sameWeight _ (Term "app" _) = LT
     sameWeight (Term a tys) (Term b tys') =
@@ -697,22 +759,24 @@ variable without a rank compares with no other term, and a template
 variable is never greater than a constant or below it. Other symbols
 compare as in 'kboCompare'.
 
-The instance of s must not be lighter than the instance of t. Let c x be
+The instance of s must not be lighter than the instance of t, where the
+weights compare first and the weights of definition second. A variable
+has the weight 1 and no weight of definition, and an instance of it has
+no smaller ones. Let c x be
 the number of occurrences of x in s minus the number in t. A variable
 without a rank can have any weight, so c x must not be negative. For
 the ranked variables, a greater variable has an instance that is not
 lighter, so the sum of c over the variables of a rank and the greater
 ranks must not be negative, for each rank.
 -}
-kboGreater :: Map Symbol Int -> Term -> Term -> Bool
-kboGreater rank s t =
-    ws >= wt
+kboGreater :: Map Symbol Int -> Map Symbol Int -> Term -> Term -> Bool
+kboGreater defined rank s t =
+    heavy /= LT
         && all ((>= 0) . c) unranked
         && and [sum [c x | (x, j) <- ranked, j >= i] >= 0 | (_, i) <- ranked]
-        && (ws > wt || sameWeight s t)
+        && (heavy == GT || sameWeight s t)
   where
-    ws = weight s
-    wt = weight t
+    heavy = heavier defined s t
     -- The occurrences of the variables of s, minus those of t. A term has
     -- few variables, so a list is enough.
     diff = occurrences (-1) t (occurrences 1 s [])
@@ -734,7 +798,7 @@ kboGreater rank s t =
     -- to compare.
     sameWeight (Term "app" [_, f, v]) (Term "app" [_, g, u])
         | f == g = sameWeight v u
-        | otherwise = kboGreater rank f g
+        | otherwise = kboGreater defined rank f g
     sameWeight (Term a tys@[_]) (Term b tys'@[_])
         | isTemplateVar a || isTemplateVar b =
             case (Map.lookup a rank, Map.lookup b rank) of

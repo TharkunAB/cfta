@@ -150,8 +150,9 @@ main = do
 phase, as 'discoverMonomorphic', with or without the test of the types.
 -}
 monomorphic :: Bool -> Int -> (TypeSkeleton -> Maybe GeneratedInstance) -> [Sig] -> IO [String]
-monomorphic = withOrder KnuthBendix
+monomorphic = withOrder (KnuthBendix mempty)
 
 -- | 'monomorphic' with a term order.
 withOrder :: TermOrder -> Bool -> Int -> (TypeSkeleton -> Maybe GeneratedInstance) -> [Sig] -> IO [String]
-withOrder order checked size = experimentalPhases ((defaultOptions size 1){searchChecked = checked, searchTermOrder = order})
+withOrder order checked size =
+    experimentalPhases ((defaultOptions size 1){searchChecked = checked, searchTermOrder = order, searchDefinitions = True})
