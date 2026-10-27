@@ -3615,6 +3615,7 @@ import MicroCFTA.SourcePruningEnumerationInitialRendering
 import MicroCFTA.SourcePruningEnumerationIncomingCoverage
 import MicroCFTA.SourcePruningEnumerationTerminalChildCoverage
 import MicroCFTA.SourcePruningEnumerationChildCoverage
+import MicroCFTA.SourcePruningEnumerationTraversalCoverage
 /-!
 # Proof dependency audit
 
