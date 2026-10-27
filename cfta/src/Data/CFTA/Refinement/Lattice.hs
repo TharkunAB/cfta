@@ -29,6 +29,7 @@ module Data.CFTA.Refinement.Lattice (
     pointRank,
     onlyPoint,
     latticeEntailment,
+    latticeImplies,
 ) where
 
 import Control.Monad (when)
@@ -122,21 +123,28 @@ again, at most once for each variable. The count can take time exponential in
 the number of disjunctions and disequalities of the two formulas.
 -}
 latticeEntailment :: Entailment
-latticeEntailment = entailmentWithBindings $ \_ antecedent consequent ->
-    let counterexamples = And [antecedent, Not consequent]
-        names = nubOrd [Text.unpack name | Name name <- freeNames counterexamples]
-        attempt tries order = case points order counterexamples of
-            Left (NonUnitCoefficient (Name name))
-                | tries > 0
-                , moved <- Text.unpack name
-                , take 1 order /= [moved] ->
-                    attempt (tries - 1 :: Int) (moved : filter (/= moved) order)
-            result -> result
-     in pure $ case attempt (length names) names of
-            Right found
-                | pointCount found == 0 -> Yes
-                | otherwise -> No
-            Left _ -> Unknown
+latticeEntailment = entailmentWithBindings $ \_ antecedent consequent -> pure (latticeImplies antecedent consequent)
+
+{- | Whether the first formula implies the second, by counting integer points,
+as 'latticeEntailment' decides it. It is pure, so a rule condition of
+"Data.CFTA.EGraph" can use it.
+-}
+latticeImplies :: Formula -> Formula -> Verdict
+latticeImplies antecedent consequent = case attempt (length names) names of
+    Right found
+        | pointCount found == 0 -> Yes
+        | otherwise -> No
+    Left _ -> Unknown
+  where
+    counterexamples = And [antecedent, Not consequent]
+    names = nubOrd [Text.unpack name | Name name <- freeNames counterexamples]
+    attempt tries order = case points order counterexamples of
+        Left (NonUnitCoefficient (Name name))
+            | tries > 0
+            , moved <- Text.unpack name
+            , take 1 order /= [moved] ->
+                attempt (tries - 1 :: Int) (moved : filter (/= moved) order)
+        result -> result
 
 {- | The point at a rank, in lexicographic order of the variables.
 

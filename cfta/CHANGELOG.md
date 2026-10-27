@@ -8,6 +8,40 @@ Before release, the package was called `microcfta`.
   references. Reuse that same probe choice when matching a Mu. This avoids
   a pending interning lookup in a closed nested constructor expression.
 
+- `Data.CFTA.EGraph.refines` is a rule condition on refinements, as egglog
+  conditions a rule on a lattice value: the refinement of the e-class of a
+  variable must imply a formula about its value. An analysis can meet the
+  refinements of the e-nodes of an e-class, because they have one value.
+  `Data.CFTA.Refinement.Lattice.latticeImplies` is the pure decision of
+  `latticeEntailment`, so a condition can use it.
+- `Data.CFTA.EGraph` is a sorted e-graph for any language of terms, as in
+  egglog: each e-class has an optional sort that never merges. It has rules
+  with sort patterns, a top-down matcher that starts at the rarest symbol,
+  semi-naive matching, `saturate`, `saturateUntilEqual`, and `saturateWith`
+  with an e-class analysis and a condition for each rule. `classAutomaton`
+  gives the automaton of the terms of an e-class, and `ematchByIntersection`
+  is the definition of a match as the terms of a product automaton with
+  equality constraints. On saturated AC sums of 8 to 10 variables it builds
+  the same e-graphs as hegg 0.6 and allocates a quarter to a third as much.
+  Conditions are a monoid (`holds`, `different`), a string
+  literal is a pattern variable, `rewrite` fails loudly on a stated rule,
+  and `lookupTerm` finds the e-class of a term without adding it.
+  `saturateWith` takes a `Saturation`: the limits, an analysis, and two
+  e-classes to make equal, in any combination.
+  The store of the e-graph is the transition table of an ECTA: each root
+  e-class is a state and its e-nodes are the transitions of the state.
+  Merges use the union-find of the ECTA enumeration, `addConstrained` adds
+  an e-node with an equality constraint, and `classAutomaton` gives the rows
+  that the state of an e-class reaches.
+- `Data.CFTA.termsByCost` lists the terms of an automaton in the order of a
+  cost, cheapest first, also the infinite language of a cyclic automaton.
+  It is a best-first search over partial terms whose holes count the least
+  cost of their states, as Knuth's generalization of Dijkstra's algorithm.
+  `Data.CFTA.EGraph.termsByCost` lists the terms of an e-class this way,
+  from the rows of the store; its first term has the cost of `extract`.
+- The union-find of the ECTA enumeration points each member of the smaller
+  set at the new representative on a union, so `root` is one lookup. The
+  representative holds the size of its set and the set as an `IntSet`.
 - Template exclusion computes the copies of an edge once for each wanted
   and unwanted parts, symbol, and child shapes. On Specftacular's HugeLists
   6-p4 this cut 3.8% of allocation and time, with the same laws.
