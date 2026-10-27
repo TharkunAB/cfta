@@ -21,6 +21,8 @@ module Specftacular.Rewriting (
     addLaw,
     addLawRules,
     generalizeLaw,
+    isTemplateVar,
+    isTypeVar,
 ) where
 
 import Control.Applicative ((<|>))

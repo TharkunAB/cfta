@@ -62,6 +62,34 @@ Wilf, and Feat (ranking).
   refines the second (the **supertype**); the LTA paper writes `δi ≲ δj`.
   Minimization keeps the **representative** and removes the supertype.
 
+## E-graphs
+
+- **E-graph**: a set of terms with a congruence of them, as in egg
+  (`Data.CFTA.EGraph`). An e-graph is a bottom-up deterministic tree
+  automaton.
+- **E-class**: a set of equal terms of an e-graph; a state of its automaton.
+  An e-class is not an equality class, which is a set of paths.
+- **E-node**: a symbol with an e-class for each child; a transition of the
+  automaton of an e-graph.
+- **Sort**: the term, such as a type, that each e-class of a sorted e-graph
+  has. Sorts never merge. An ECTA of typed terms puts the type in a child
+  instead.
+- **Pattern**: a term with variables and sort variables. A variable that
+  occurs twice is an equality class of paths.
+- **Match**: an e-class of an instance of a pattern, and an e-class for each
+  variable of the pattern.
+- **Rule**: a left and a right pattern; each instance of the left side is
+  equal to the instance of the right side.
+- **Equality saturation**: the application of rules to an e-graph until no
+  rule changes it, or a limit stops it.
+- **E-class analysis**: data for each e-class, the merge of the data of its
+  e-nodes, a bottom-up evaluation of the automaton of the e-graph. A
+  **condition** of a rule reads it. A refinement of the value is such data,
+  and its merge is the meet, because the terms of an e-class have one value.
+- **Stamp**: the iteration of the last change of an e-class. **Semi-naive
+  matching** finds only the matches through e-classes with a stamp after the
+  last run of the rule.
+
 ## Transformations
 
 - **Exact transformation**: an operation on an automaton that keeps its
