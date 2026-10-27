@@ -1,5 +1,35 @@
 # Proof status at 2026-10-18
 
+## Original resources now derive full finite recursive histories
+
+Source checkpoint: 324a2c527e003fc5c19ce4332b4c4b1ac53254d2.
+Original Packet, full Memos, Fits, guard heap, input mass and finite reservation
+now derive one sufficient work bound and the actual stable recursive result.
+Every emitted output retains an admitted ResourceHistory at its actual work
+bound. This includes outputs before a later stop. Depth induction supplies
+all smaller recursive drivers. No recursive completion premise remains.
+Each history retains actual prefixes, entry, completed heads, callbacks,
+original callback seeds, mass ceilings and reservations. Siblings use their
+actual post-hook endpoints and the SAME captured enumeration cache.
+
+An isolated recursive boundary in the ORIGINAL input persists at each output's
+own cache and heap. That output cannot be fully Discharged. Local creation
+and opaque-suffix isolation are proved. Their attachment to every remaining
+history is still open. Whole recursive assignment soundness, rendering
+acceptance, enumeration coverage and physical correspondence remain open.
+H6 remains the strongest global exact finite-tree construction theorem.
+
+Eighteen modules, 3226 lines and 31 public theorems pass strict checking.
+Audit passes 4139 jobs and 79423 theorem dependency checks. H6 and both
+previous conditional captured renderers retain exact signatures and axioms.
+Main extraction documentation and KBO definition preferences are integrated.
+The CFTA runtime is unchanged. Imported Specftacular runtime is tested
+separately; its integer-weight limitation is recorded below and in the note.
+All earlier Haskell fixes and repair handoffs remain in FINDINGS.
+Details: `lean/notes-current-recursive-history-resources.md`.
+The whole-system goal stays ACTIVE.
+
+
 ## Actual selected-step meaning and recursive callback admission
 
 Source checkpoint: fcbb20ee93aacabb645c09cf5e64ff08be86c23f.
