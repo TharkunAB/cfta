@@ -1,0 +1,21 @@
+theorem head_mass_le {width : Nat} (seed : Seed) (capturedMass inherited : Nat)
+    (before : Cached) (scs : List Suspended)
+    (receipt : SourcePruningEnumerationSelectedEdge.Result width)
+    (initial : suspendedBound before.core ≤ capturedMass)
+    (length : scs.length ≤ inherited)
+    (actual : SourcePruningEnumerationNativeBranchCompletion.HeadCacheBounds before scs
+      (scalar seed.2) (guardWidth seed.1) receipt) :
+    match (generalizing := false) receipt with
+    | .complete _ _ _ after => suspendedBound after.core ≤ massCeil seed capturedMass inherited
+    | _ => True := by
+  cases receipt with
+  | complete fragment caller queries after =>
+      exact Nat.le_trans actual.2 (Nat.add_le_add initial
+        (Nat.mul_le_mul_left _ (Nat.add_le_add_right length _)))
+  | unhandled | rejected _ _ _ | stopped _ _ _ => trivial
+
+variable {Typing : Type} {width : Nat}
+variable [DecidableEq (EdgeKey Symbol Constraint)]
+
+/-- A current packet and its current heap bounds derive each selected edge's shape bounds. -/
+theorem edge_shape_from_packet

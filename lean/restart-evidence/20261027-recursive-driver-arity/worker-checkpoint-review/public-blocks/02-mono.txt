@@ -1,0 +1,20 @@
+MicroCFTA.SourcePruningEnumerationRecursive.OutcomeResourcesWithArity.mono {Typing : Type} {width : Nat}
+  [DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey MicroCFTA.SourcePruningTemplates.Symbol
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  {formulas : MicroCFTA.SourceGuards.Formulas MicroCFTA.FullSyntax.Formula}
+  {solver : MicroCFTA.SourceGuards.Entailment MicroCFTA.FullSyntax.Formula}
+  {original : MicroCFTA.SourceCurrentAllocatedPartialState.State width}
+  {seed larger : MicroCFTA.SourcePruningEnumerationIncomingReservation.Seed}
+  {outcome :
+    MicroCFTA.SourcePruningEnumerationNativeContinuations.HookResult
+      (MicroCFTA.SourcePruningEnumerationRecursive.Output width Typing)
+      (MicroCFTA.SourcePruningEnumerationRecursive.Failure width Typing) width}
+  (numeric : MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Le seed.snd larger.snd)
+  (alphabet : seed.fst ⊆ larger.fst)
+  (resources :
+    MicroCFTA.SourcePruningEnumerationRecursive.OutcomeResourcesWithArity formulas solver original seed outcome) :
+  MicroCFTA.SourcePruningEnumerationRecursive.OutcomeResourcesWithArity formulas solver original larger outcome
+'MicroCFTA.SourcePruningEnumerationRecursive.OutcomeResourcesWithArity.mono' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]

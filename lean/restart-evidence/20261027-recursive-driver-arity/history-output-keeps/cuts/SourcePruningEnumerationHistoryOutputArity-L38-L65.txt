@@ -1,0 +1,28 @@
+theorem ResourceHistory.with_arity_of_output_heap
+    (history : ResourceHistory holeKey fits admits graph templates checkEmpty edgesOf stop order formulas solver
+      workFuel recursiveFuel inventory caller memos metadata before seed ceiling next output)
+    (outputHeap : ArityHeap output.caller.checked.native.machine.heap) :
+    ResourceHistoryWithArity holeKey fits admits graph templates checkEmpty edgesOf stop order formulas solver
+      workFuel recursiveFuel inventory caller memos metadata before seed ceiling next output := by
+  revert outputHeap
+  induction history with
+  | stopped admission =>
+      intro _outputHeap
+      exact .stopped admission
+  | done admission =>
+      intro _outputHeap
+      exact .done admission
+  | parked admission valid observed _tail ih =>
+      intro outputHeap
+      exact .parked admission valid observed (ih outputHeap)
+  | ordinary admission valid observed prefixPost invocation receipt callbackAdmission callback tail ih =>
+      intro outputHeap
+      obtain ⟨_next, _final, tailPost, _query⟩ := tail.native_post
+      refine .ordinary admission valid observed prefixPost invocation ?_ callbackAdmission callback (ih outputHeap)
+      apply OrdinaryHistoryReceipt.with_arity_from_scan_heap receipt
+      obtain ⟨_entered, _handle, _scs, _decoded, _edge, _headSeed, _inherited, _headInventory,
+        _headCaller, _headMemos, _headBound, _original, _entry, _enteredPacket, headPost,
+        _captured, completed⟩ := receipt
+      have kept := (headPost.effects.keeps.trans completed.post.effects.keeps).trans tailPost.effects.keeps
+      intro key edge stored
+      exact outputHeap key edge (kept.growth.edgeRecords key edge stored)

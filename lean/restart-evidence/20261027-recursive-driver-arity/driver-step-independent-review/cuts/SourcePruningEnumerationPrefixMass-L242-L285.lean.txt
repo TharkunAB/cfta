@@ -1,0 +1,44 @@
+theorem retained_le
+    (holeKey : Typing → Nat → Key) (fits : Key → Symbol → Bool) (admits : Key → Node → Bool)
+    (graph : Graph Symbol Constraint) (templates : List (Template.Pattern Symbol))
+    (checkEmpty : Bool) (edgesOf : Node → List (EdgeValue Symbol Constraint))
+    (stop : Option (Metadata Typing → Nat → Bool)) (order : Metadata Typing → List Nat → Option Nat)
+    (metadata : Metadata Typing) (formulas : SourceGuards.Formulas FullSyntax.Formula)
+    (solver : SourceGuards.Entailment FullSyntax.Formula)
+    (inventory : SourceCurrentAllocatedNativeInventoryState.Inventory)
+    (fuel uv : Nat) (caller : Caller width) (memos : Memos) (before : Cached)
+    (packet : SourcePruningEnumerationRecursive.Packet formulas solver inventory caller memos metadata before)
+    (observed : Result width Typing)
+    (valid : PrefixValid holeKey fits admits graph templates checkEmpty edgesOf stop order metadata
+      formulas solver inventory fuel uv caller before memos observed)
+    (actual : runPrefix holeKey fits admits graph templates stop order metadata fuel fuel fuel fuel fuel fuel
+      uv caller before memos.query = observed) :
+    match (generalizing := false) observed with
+    | .parked _ (some after) _ | .narrowed _ _ _ _ _ (some after) _ _ =>
+        suspendedBound after.core ≤ suspendedBound before.core
+    | _ => True := by
+  have full := valid.2.1
+  cases observed with
+  | stopped _ _ => trivial
+  | parked checked candidate raw =>
+      cases candidate with
+      | none => trivial
+      | some after =>
+          obtain ⟨oldHandle, scs, readAfter, reading, checking, cached, same, core,
+            _cacheValid, _safe, _pending, _counter, _ordered, _raw⟩ := full
+          have equal : after = cached := Option.some.inj same
+          subst cached
+          have read : Success (getValue fuel uv) before.core (.unenumerated (some oldHandle) scs) readAfter := by
+            rw [Success, reading]
+            exact List.mem_singleton_self _
+          have check : Success (SourcePruningEnumerationRecursion.checkRepeated caller.checked.native.machine.heap
+              fuel uv oldHandle scs) readAfter true checked := by
+            rw [Success, checking]
+            exact List.mem_singleton_self _
+          simpa only [core] using parked_mass caller.checked.native.machine.heap fuel fuel uv oldHandle scs
+            before.core readAfter checked packet.safe read check
+  | narrowed checked prepared reached queries action candidate right ordinary =>
+      cases candidate with
+      | none => trivial
+      | some after =>
+          obtain ⟨_next, finished⟩ := finish_preserves checkEmpty edgesOf 0 0 0 0 0 uv

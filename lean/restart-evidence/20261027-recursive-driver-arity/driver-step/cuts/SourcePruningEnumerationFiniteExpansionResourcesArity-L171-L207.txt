@@ -1,0 +1,37 @@
+        | node entry rows depth free =>
+            change scs.any (fun sc => EqualityTrie.isTerminal sc.trie) = true
+            cases terminal : scs.any (fun sc => EqualityTrie.isTerminal sc.trie) with
+            | false => exact False.elim (ordinary ⟨entry, rows, depth, free, rfl, terminal⟩)
+            | true => rfl
+        | empty | reference _ | union _ _ _ _ | mu _ _ _ _ => trivial
+      obtain ⟨entryFuel, entered, _entryRun, _stable, _counter, _values, _flags, _waiting,
+        _enteredPacket, fallbackRun, _post, _fits, _known⟩ :=
+        SourcePruningEnumerationNativeOrdinaryContinuations.fallback_complete_resources
+          (Output := Output (bits + 2) Typing) (Reason := Failure (bits + 2) Typing)
+          formulas solver inventory reached middleMemos after metadata uv handle scs value checkEmpty edgesOf
+          middlePacket ready stored decoded (by cases value <;> exact fallback)
+          (headProfile seed.2) (fun guard => guard ∈ seed.1)
+          middleFits middleKnown
+      let raw := [Except.ok (ε := EnumerationState.Error) ((uv, handle, scs, value), entered.core)]
+      let outcome := SourcePruningEnumerationNativeContinuations.HookResult.stopped
+        (Output := Output (bits + 2) Typing) (Reason := Failure (bits + 2) Typing)
+        [] (.ordinary uv raw) (some (reached, memos.query))
+      have certificate : OutcomeResourcesWithArity formulas solver reached start outcome := by
+        refine ⟨reached, inventory, middleMemos, Post.refl middlePacket.context, middleFits, middleKnown, reachedArity,
+          Or.inr ?_, fun _ member => False.elim (List.not_mem_nil member)⟩
+        exact congrArg some (congrArg (Prod.mk reached) middleQuery.symm)
+      have fromOriginal := (certificate.mono stageGrowth.1 stageGrowth.2).post middlePost
+      refine ⟨prefixFuel + entryFuel, outcome, ?_, fromOriginal.forget, fromOriginal⟩
+      intro extra
+      obtain ⟨currentAction, currentPrefix, _valid⟩ := phase (entryFuel + extra)
+      have samePrefix : prefixFuel + (entryFuel + extra) = prefixFuel + entryFuel + extra := by omega
+      rw [samePrefix] at currentPrefix
+      have actual := fallbackRun (prefixFuel + extra)
+        (continueWith (resume holeKey fits admits graph templates checkEmpty edgesOf stop order
+          (prefixFuel + entryFuel + extra) recursiveFuel) graph templates stop order
+          (prefixFuel + entryFuel + extra) metadata uv)
+      have sameEntry : entryFuel + (prefixFuel + extra) = prefixFuel + entryFuel + extra := by omega
+      rw [sameEntry, middleQuery] at actual
+      rw [resume, currentPrefix]
+      dsimp only
+      rw [actual]

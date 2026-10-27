@@ -1,0 +1,24 @@
+        (SourcePruningEnumerationFiniteReservation.final (recursiveFuel + 1) seed ceiling) outcome := by
+  by_cases expansion : ∃ uv,
+      SourcePruningEnumerationRestart.decision stop order metadata before = some (.expand uv)
+  · obtain ⟨uv, chosen⟩ := expansion
+    obtain ⟨bound, outcome, running, resources⟩ := selected_finite_complete_resources
+      holeKey fits admits graph templates checkEmpty edgesOf stop order formulas solver recursiveFuel recursive inventory
+      caller memos before metadata uv seed ceiling packet bounded known selectionMembers selectionLength initialMass reserved chosen
+    exact ⟨bound, outcome, fun extra => by simpa only [run, chosen] using running extra, resources⟩
+  · obtain ⟨outcome, running, resources⟩ := resume_zero_outcome_resources
+      holeKey fits admits graph templates checkEmpty edgesOf stop order formulas solver inventory
+      caller memos before metadata (SourcePruningEnumerationRestart.decision stop order metadata before)
+      seed packet bounded known
+    have growth := SourcePruningEnumerationFiniteReservation.final_ge (recursiveFuel + 1) seed ceiling
+    refine ⟨0, outcome, ?_, resources.mono growth.1 growth.2⟩
+    intro extra
+    have zero := running extra
+    unfold run
+    cases selected : SourcePruningEnumerationRestart.decision stop order metadata before with
+    | none => simpa only [selected, resume] using zero
+    | some next =>
+        cases next with
+        | done => simpa only [selected, resume] using zero
+        | stuck => simpa only [selected, resume] using zero
+        | expand uv => exact False.elim (expansion ⟨uv, selected⟩)

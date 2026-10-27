@@ -1,0 +1,28 @@
+          (by simpa only [SourcePruningEnumerationRecursiveReservation.afterHead] using headRoom),
+        ih (afterHead current ceiling) (massCeil current ceiling ceiling) callbackRoom⟩
+
+/-- Room at one paired final forecast supplies its edge and recursive callback reservations. -/
+theorem head_reserved_of_final_room (bits depth : Nat) (seed : Seed) (capturedMass inherited : Nat)
+    (room : Room bits (step depth seed capturedMass inherited).2) :
+    HeadReserved bits depth seed capturedMass inherited :=
+  ⟨SourcePruningEnumerationIncomingReservation.reserved_of_final_room bits seed (edgeCount seed inherited)
+      (by
+        have headRoom := room.mono (afterHead_le_step depth seed capturedMass inherited).1
+        simpa only [SourcePruningEnumerationRecursiveReservation.afterHead] using headRoom),
+    reserved_of_final_room bits depth (afterHead seed inherited) (massCeil seed capturedMass inherited) room⟩
+
+/-- Room at the scan's final entry supplies every paired reservation in its original prefix. -/
+theorem scan_reserved_of_final_room (bits depth : Nat) (seed : Seed) (capturedMass inherited count : Nat)
+    (room : Room bits (stage depth seed capturedMass inherited count).2) :
+    ScanReserved bits depth seed capturedMass inherited count := by
+  intro index less
+  have later := count_mono depth seed capturedMass inherited (by omega : index + 1 ≤ count)
+  apply head_reserved_of_final_room bits depth (stage depth seed capturedMass inherited index) capturedMass inherited
+  exact room.mono (by simpa only [stage_succ_right] using later.1)
+
+/-- The original recursive forecast computes a mathematical width for every nested query entry. -/
+theorem reserved_computed (depth : Nat) (seed : Seed) (ceiling : Nat) :
+    Reserved (SourceCurrentParentInitialRoom.roomBits (final depth seed ceiling).2) depth seed ceiling :=
+  reserved_of_final_room _ depth seed ceiling (SourceCurrentParentInitialRoom.room_computed _)
+
+/-- The original paired forecast computes a width before its actual receipt exists. -/

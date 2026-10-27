@@ -1,0 +1,32 @@
+    (resources : OutcomeResourcesWithArity formulas solver middle seed outcome) :
+    OutcomeResourcesWithArity formulas solver original seed outcome := by
+  obtain ⟨reached, next, final, reachedPost, bounded, known, arity, shape⟩ := resources
+  refine ⟨reached, next, final, post.trans reachedPost, bounded, known, arity, ?_⟩
+  cases outcome with
+  | complete outputs caller queries =>
+      obtain ⟨callerSame, querySame, outputsValid⟩ := shape
+      exact ⟨callerSame, querySame, fun output member =>
+        ⟨(outputsValid output member).1.post post, (outputsValid output member).2⟩⟩
+  | stopped outputs reason endpoint =>
+      obtain ⟨endpointSame, outputsValid⟩ := shape
+      exact ⟨endpointSame, fun output member =>
+        ⟨(outputsValid output member).1.post post, (outputsValid output member).2⟩⟩
+
+/-- Pad numeric resources without changing either actual native endpoint. -/
+theorem OutcomeResourcesWithArity.mono
+    (numeric : Le seed.2 larger.2) (alphabet : seed.1 ⊆ larger.1)
+    (resources : OutcomeResourcesWithArity formulas solver original seed outcome) :
+    OutcomeResourcesWithArity formulas solver original larger outcome := by
+  obtain ⟨reached, next, final, post, bounded, known, arity, shape⟩ := resources
+  refine ⟨reached, next, final, post, bounded.mono numeric, ?_, arity, ?_⟩
+  · intro key edge found
+    exact alphabet (known key edge found)
+  · cases outcome with
+    | complete outputs caller queries =>
+        obtain ⟨callerSame, querySame, outputsValid⟩ := shape
+        exact ⟨callerSame, querySame, fun output member =>
+          ⟨(outputsValid output member).1.mono numeric alphabet, (outputsValid output member).2⟩⟩
+    | stopped outputs reason endpoint =>
+        obtain ⟨endpointSame, outputsValid⟩ := shape
+        exact ⟨endpointSame, fun output member =>
+          ⟨(outputsValid output member).1.mono numeric alphabet, (outputsValid output member).2⟩⟩
