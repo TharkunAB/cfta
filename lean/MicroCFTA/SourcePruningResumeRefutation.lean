@@ -1,0 +1,217 @@
+import MicroCFTA.SourcePruningPartialMatchSemantics
+import MicroCFTA.SourcePruningResume
+import MicroCFTA.SourcePruningTemplates
+
+/-!
+# Refutation through actual pending-match resumption
+
+Representative reads retain the original assignment. Each successful match
+reduces the original pending group without losing its refutation.
+-/
+namespace MicroCFTA.SourcePruningResume
+open Language EnumerationState EnumerationCorrectness EnumerationSchedule
+open SourcePruningPartialMatch
+
+local instance : Monad List where
+  pure value := [value]
+  bind values continuation := values.flatMap continuation
+
+local instance : LawfulMonad List where
+  map_const := rfl
+  id_map := by intro α xs; simp [Functor.map]
+  seqLeft_eq := by
+    intros
+    simp [SeqLeft.seqLeft, Seq.seq, Functor.map, List.flatMap_map, ← List.map_eq_flatMap]
+    simp only [List.map_const']
+  seqRight_eq := by
+    intros
+    simp only [SeqRight.seqRight, Seq.seq, Functor.map, List.flatMap_map]
+    simp
+  pure_seq := by intros; simp [Seq.seq, Functor.map, pure]
+  bind_pure_comp := by intros; simp [bind, pure, Functor.map, ← List.map_eq_flatMap]
+  bind_map := by intros; rfl
+  pure_bind := by intros; simp [pure, bind]
+  bind_assoc := by intros; exact List.flatMap_assoc
+
+/-- At least one pending pattern fails at its assigned complete term. -/
+def Refutes [DecidableEq Symbol] (assignment : Nat → Term Symbol)
+    (pending : Pending Symbol) : Prop :=
+  ¬ ∀ entry ∈ pending, Template.Matches entry.1 (assignment entry.2)
+
+variable {Symbol Guard : Type} [DecidableEq Symbol]
+
+/-- This local expression is definitionally equal to the private source part. -/
+private def part (fuel current : Nat) (term : Term (PartialSymbol Symbol))
+    (pending : Template.Pattern Symbol × Nat) : EnumerateM Symbol Guard (Option (Pending Symbol)) := do
+  let root ← representative fuel pending.2
+  pure (if root = current then matchPartial pending.1 term else some [(pending.1, root)])
+
+private theorem part_success (fuel current : Nat) (term : Term (PartialSymbol Symbol))
+    (pending : Template.Pattern Symbol × Nat) (before after : State Symbol Guard)
+    (result : Option (Pending Symbol)) :
+    Success (part fuel current term pending) before result after ↔
+      ∃ root, Success (representative fuel pending.2) before root after ∧
+        result = (if root = current then matchPartial pending.1 term else some [(pending.1, root)]) := by
+  unfold part
+  constructor
+  · intro success
+    obtain ⟨root, middle, reading, final⟩ := (success_bind _ _ _ _ _).mp success
+    obtain ⟨projected, same⟩ := (success_pure _ result middle after).mp final
+    subst after
+    exact ⟨root, reading, projected⟩
+  · rintro ⟨root, reading, projected⟩
+    exact (success_bind _ _ _ _ _).mpr
+      ⟨root, after, reading, (success_pure _ result after after).mpr ⟨projected, rfl⟩⟩
+
+private theorem part_sound (fuel current : Nat) (term : Term (PartialSymbol Symbol))
+    (assignment : Nat → Term Symbol)
+    (completed : Completes assignment term (assignment current))
+    (pending : Template.Pattern Symbol × Nat) (before after : State Symbol Guard)
+    (result : Option (Pending Symbol))
+    (total : UnionFind.Total before.representatives)
+    (consistent : UnionFind.Satisfies before.representatives assignment)
+    (success : Success (part fuel current term pending) before result after) :
+    UnionFind.Total after.representatives ∧
+      UnionFind.Satisfies after.representatives assignment ∧
+      ∀ resumed, result = some resumed →
+        (∀ entry ∈ resumed, Template.Matches entry.1 (assignment entry.2)) →
+          Template.Matches pending.1 (assignment pending.2) := by
+  obtain ⟨root, reading, projected⟩ :=
+    (part_success fuel current term pending before after result).mp success
+  obtain ⟨found, lookup, rootSame, afterSame⟩ :=
+    (representative_success fuel pending.2 before after root).mp reading
+  have path := (UnionFind.findRoot_correct fuel before.representatives pending.2 found lookup).1
+  have assigned : assignment pending.2 = assignment root := by
+    rw [rootSame]
+    exact consistent pending.2 found.representative (UnionFind.sameClass_root path)
+  refine ⟨?_, ?_, ?_⟩
+  · rw [afterSame]
+    exact UnionFind.findRoot_total total lookup
+  · rw [afterSame]
+    exact (UnionFind.findRoot_satisfies total lookup assignment).mpr consistent
+  · intro resumed accepted allMatches
+    rw [projected] at accepted
+    by_cases same : root = current
+    · rw [ite_eq_left same] at accepted
+      have matched := matchPartial_sound assignment pending.1 term (assignment current)
+        resumed completed accepted allMatches
+      rw [assigned, same]
+      exact matched
+    · rw [ite_eq_right same] at accepted
+      have resumedSame := Option.some.inj accepted
+      have matched := allMatches (pending.1, root) (by rw [← resumedSame]; simp)
+      simpa only [assigned] using matched
+
+private theorem parts_sound (fuel current : Nat) (term : Term (PartialSymbol Symbol))
+    (assignment : Nat → Term Symbol)
+    (completed : Completes assignment term (assignment current))
+    (pending : Pending Symbol) (before after : State Symbol Guard)
+    (results : List (Option (Pending Symbol)))
+    (total : UnionFind.Total before.representatives)
+    (consistent : UnionFind.Satisfies before.representatives assignment)
+    (success : Success (pending.mapM (part fuel current term)) before results after) :
+    UnionFind.Total after.representatives ∧
+      UnionFind.Satisfies after.representatives assignment ∧
+      ∀ pieces, (results.mapM id : Option (List (Pending Symbol))) = some pieces →
+        (∀ entry ∈ pieces.flatMap id, Template.Matches entry.1 (assignment entry.2)) →
+          ∀ entry ∈ pending, Template.Matches entry.1 (assignment entry.2) := by
+  induction pending generalizing before after results with
+  | nil =>
+      obtain ⟨rfl, rfl⟩ := (success_pure [] results before after).mp success
+      exact ⟨total, consistent, by intro pieces sequenced allMatches entry member; cases member⟩
+  | cons first rest ih =>
+      rw [List.mapM_cons] at success
+      obtain ⟨firstResult, middle, firstRead, continued⟩ := (success_bind _ _ _ _ _).mp success
+      obtain ⟨tailResults, last, restRead, final⟩ := (success_bind _ _ _ _ _).mp continued
+      obtain ⟨rfl, rfl⟩ :=
+        (success_pure (firstResult :: tailResults) results last after).mp final
+      obtain ⟨middleTotal, middleConsistent, firstSound⟩ :=
+        part_sound fuel current term assignment completed first before middle firstResult total consistent firstRead
+      obtain ⟨lastTotal, lastConsistent, restSound⟩ :=
+        ih middle after tailResults middleTotal middleConsistent restRead
+      refine ⟨lastTotal, lastConsistent, ?_⟩
+      intro pieces sequenced allMatches
+      cases firstResult with
+      | none => simp [List.mapM_cons] at sequenced
+      | some firstPending =>
+          cases tailSequence : (tailResults.mapM id : Option (List (Pending Symbol))) with
+          | none => simp [List.mapM_cons, tailSequence] at sequenced
+          | some tailPieces =>
+              have piecesSame : pieces = firstPending :: tailPieces := by
+                simpa [List.mapM_cons, tailSequence] using sequenced.symm
+              subst pieces
+              have firstMatches : ∀ entry ∈ firstPending,
+                  Template.Matches entry.1 (assignment entry.2) := by
+                intro entry member
+                apply allMatches entry
+                simp only [List.flatMap_cons, id_eq, List.mem_append]
+                exact Or.inl member
+              have tailMatches : ∀ entry ∈ tailPieces.flatMap id,
+                  Template.Matches entry.1 (assignment entry.2) := by
+                intro entry member
+                apply allMatches entry
+                simp only [List.flatMap_cons, id_eq, List.mem_append]
+                exact Or.inr member
+              intro entry member
+              rcases List.mem_cons.mp member with same | member
+              · subst entry
+                exact firstSound firstPending rfl firstMatches
+              · exact restSound tailPieces tailSequence tailMatches entry member
+
+/-- An actual successful resume retains the refutation of its original group. -/
+theorem resume_refutes (fuel current : Nat) (term : Term (PartialSymbol Symbol))
+    (pending : Pending Symbol) (before after : State Symbol Guard)
+    (resumed : Pending Symbol) (assignment : Nat → Term Symbol)
+    (total : UnionFind.Total before.representatives)
+    (consistent : UnionFind.Satisfies before.representatives assignment)
+    (completed : Completes assignment term (assignment current))
+    (refuted : Refutes assignment pending)
+    (success : Success (resume fuel current term pending) before (some resumed) after) :
+    Refutes assignment resumed := by
+  change Success (do
+    let results ← pending.mapM (part fuel current term)
+    pure ((results.mapM id : Option (List (Pending Symbol))).map (fun pieces => pieces.flatMap id)))
+    before (some resumed) after at success
+  obtain ⟨results, middle, traversed, final⟩ := (success_bind _ _ _ _ _).mp success
+  have reflected := (parts_sound fuel current term assignment completed pending
+    before middle results total consistent traversed).2.2
+  obtain ⟨projected, _same⟩ := (success_pure _ (some resumed) middle after).mp final
+  intro allMatches
+  apply refuted
+  cases sequenced : (results.mapM id : Option (List (Pending Symbol))) with
+  | none => simp [sequenced] at projected
+  | some pieces =>
+      have same : resumed = pieces.flatMap id := by simpa [sequenced] using projected
+      exact reflected pieces sequenced (by simpa only [← same] using allMatches)
+
+attribute [local instance] FormulaExecutable.formulaDecidableEq
+
+/-- Refuted successful groups neither reject nor lose refutation at finishChecks. -/
+theorem finishChecks_refutes
+    (assignment : Nat → Term SourcePruningTemplates.Symbol)
+    (resumed started : List (Option (Pending SourcePruningTemplates.Symbol)))
+    (resumedRefutes : ∀ group, some group ∈ resumed → Refutes assignment group)
+    (startedRefutes : ∀ group, some group ∈ started → Refutes assignment group) :
+    (SourcePruningTemplates.finishChecks resumed started).1 = false ∧
+      ∀ group ∈ (SourcePruningTemplates.finishChecks resumed started).2,
+        Refutes assignment group := by
+  have checkedRefutes : ∀ group ∈ (resumed ++ started).filterMap id,
+      Refutes assignment group := by
+    intro group member
+    obtain ⟨entry, listed, found⟩ := List.mem_filterMap.mp member
+    have same : entry = some group := found
+    subst entry
+    exact (List.mem_append.mp listed).elim (resumedRefutes group) (startedRefutes group)
+  constructor
+  · change ((resumed ++ started).filterMap id).any (fun pending => pending.isEmpty) = false
+    apply List.any_eq_false.mpr
+    intro group member
+    have refuted := checkedRefutes group member
+    cases group with
+    | nil => exact False.elim (refuted (by intro entry member; cases member))
+    | cons first rest => simp
+  · intro group member
+    change group ∈ ((resumed ++ started).filterMap id).filter (fun pending => !pending.isEmpty) at member
+    exact checkedRefutes group (List.mem_filter.mp member).1
+
+end MicroCFTA.SourcePruningResume
