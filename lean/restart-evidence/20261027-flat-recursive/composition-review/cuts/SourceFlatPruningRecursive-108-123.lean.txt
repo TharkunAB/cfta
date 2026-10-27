@@ -1,0 +1,16 @@
+def ResultRelated (flat : Result)
+    (earlier : SourcePruningEnumerationNativeContinuations.HookResult
+      (SourcePruningEnumerationRecursive.Output width Typing)
+      (SourcePruningEnumerationRecursive.Failure width Typing) width) : Prop :=
+  SourceFlatPruningNativeContinuations.HookResultRelated OutputRelated FailureRelated flat earlier
+
+/-- Read only a native endpoint supplied by the actual stopped receipt. -/
+def endpoint : FoldStop (Failure width Typing) width → Option (Caller width × Queries)
+  | .edge current => current.bind SourceFlatPruningNativeBranches.advance
+  | .continuation _ _ reached => reached
+
+/-- Convert the ordered alternative result without losing its outputs or stopped receipts. -/
+def finish (uv : Nat) : Fold (Output width Typing) (Failure width Typing) width → Result
+  | .complete _processed outputs caller queries => .complete outputs caller queries
+  | .stopped processed outputs current =>
+      .stopped outputs (.alternatives uv processed current) (endpoint current)

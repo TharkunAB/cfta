@@ -1,0 +1,49 @@
+local notation "FlatResult" => SourceFlatPruningSelectedEdge.Result
+variable {width bits : Nat}
+
+private theorem result_correct
+    (flat : FlatResult width) (result : Result width)
+    (afterCaller : Caller width) (after : Cached) (savedQueries : Queries)
+    (roots : Nat → Nat) (paths : Roots after.core.representatives roots)
+    (storage : StorageValid after.core)
+    (counts : EnumerationCanonicalWaiting.Correct roots after.core.values after.waiting)
+    (flags : ∀ slot, SourcePruningEnumerationNativeIndex.candidate afterCaller.checked.native.machine.heap
+      ((after.core.values[slot]?).getD .eliminated) = some (after.expandable slot))
+    (shape : (∃ fragment, result = .complete fragment afterCaller savedQueries after) ∨
+      ∃ fragments outer waiting, result = .stopped fragments
+        (.ok (some []), afterCaller, savedQueries, outer, waiting) (some after))
+    (related : SourceFlatPruningSelectedEdge.ResultRelated flat result) :
+    match flat with
+    | .complete _ reached _ recovered =>
+        EnumerationFlatNativeIndex.Correct reached.checked.native.machine.heap recovered
+    | .stopped _ observation (some recovered) =>
+        EnumerationFlatNativeIndex.Correct observation.2.1.checked.native.machine.heap recovered
+    | _ => False := by
+  rcases shape with ⟨fragment, completed⟩ | ⟨fragments, outer, waiting, stopped⟩
+  · rw [completed] at related
+    cases flat with
+    | unhandled => cases related
+    | rejected reached saved recovered => cases related
+    | stopped prefixFragments observation candidate => cases related
+    | complete flatFragment reached saved recovered =>
+        obtain ⟨_fragmentSame, callerSame, _querySame, caches⟩ := related
+        change EnumerationFlatNativeIndex.Correct reached.checked.native.machine.heap recovered
+        rw [callerSame]
+        exact EnumerationFlatNativeIndex.correct_of_related caches afterCaller.checked.native.machine.heap
+          roots paths storage.aligned flags counts
+  · rw [stopped] at related
+    cases flat with
+    | unhandled => cases related
+    | rejected reached saved recovered => cases related
+    | complete flatFragment reached saved recovered => cases related
+    | stopped prefixFragments observation candidate =>
+        obtain ⟨_fragmentsSame, ⟨callerSame, _queriesSame, _outerRelated, _waitingSame, _rowsRelated⟩,
+          cacheRelated⟩ := related
+        cases candidate with
+        | none => cases cacheRelated
+        | some recovered =>
+            change EnumerationFlatNativeIndex.Correct observation.2.1.checked.native.machine.heap recovered
+            dsimp only at callerSame
+            rw [callerSame]
+            exact EnumerationFlatNativeIndex.correct_of_related cacheRelated
+              afterCaller.checked.native.machine.heap roots paths storage.aligned flags counts

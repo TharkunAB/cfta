@@ -1,0 +1,14 @@
+theorem completed_captured_packet
+    (formulas : SourceGuards.Formulas FullSyntax.Formula) (solver : SourceGuards.Entailment FullSyntax.Formula)
+    (inventory : Inventory) (caller : Caller width) (memos : Memos)
+    (metadata : Metadata Typing) (before : Cached) (seed : Seed)
+    (outputs : List (Output width Typing)) (reached : Caller width) (queries : Queries)
+    (packet : Packet formulas solver inventory caller memos metadata before)
+    (resources : OutcomeResources formulas solver caller seed (.complete outputs reached queries)) :
+    ∃ (next : Inventory) (final : Memos),
+      Post formulas solver next caller reached final ∧ final.query = queries ∧
+      Packet formulas solver next reached final metadata before ∧
+      Fits seed.2 reached.checked ∧ Heap (fun guard => guard ∈ seed.1) reached.checked.native.machine.heap ∧
+      ∀ output ∈ outputs, OutputResources formulas solver caller seed output := by
+  obtain ⟨actual, next, final, post, bounded, known, same, query, outputPackets⟩ := resources
+  subst actual

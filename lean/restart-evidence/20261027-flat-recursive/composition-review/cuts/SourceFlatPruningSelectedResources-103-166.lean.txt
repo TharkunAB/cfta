@@ -1,0 +1,64 @@
+      edge scs roots initial.ready.semantic.ready parentAvailable parentClosed selected before safe realized
+      paths counts flags bounded pending allowed tries residual projected
+  let inputs := SourcePruningEnumerationEdgeInputs.children edge scs before.core.counter tries
+  have readback : ((inputs.map (fun input =>
+      (input.1, input.2, SourcePruningEnumerationShallowChild.prepareChild (EnumGuard := Constraint) input.2 input.1))).map
+      (fun input => (input.1, input.2.1))) = inputs := by
+    simp only [List.map_map]
+    exact List.map_id _
+  obtain ⟨r, n, p, h, k, fragments, afterCaller, after, savedQueries, final, next, afterRoots,
+    childResult, childrenRun, post, querySame, growth, afterPaths, storage, afterRealized,
+    afterCounts, afterFlags, origin, enumProtects, rootsProtects, references, _pendingHistory, fragmentBounds, shape, returnedFits, returnedKnown, childrenFlat⟩ :=
+    SourceFlatPruningTraversalResources.complete_with_fragments_resources seed formulas solver inventory caller own checkEmpty inputs roots memos
+      initial ownSafe ownPaths ownCounts ownFlags ownRealized genuine fits reserved known
+  have flatRunning : ∀ (flat : EnumerationFlatCached.Cached Symbol Constraint),
+      EnumerationFlatCached.Related flat before →
+      ∀ extraNative P H, p ≤ P → h ≤ H →
+        ∃ flatResult : SourceFlatPruningSelectedEdge.Result (bits + 2),
+          SourceFlatPruningSelectedEdge.run checkEmpty (n + extraNative) P H
+            scs edge caller flat memos.query = flatResult ∧
+          SourceFlatPruningSelectedEdge.ResultRelated flatResult
+            (match childResult with
+            | .complete children reached saved cache =>
+                .complete (.node edge.entry.key.symbol children) reached saved
+                  (finish residual (.node edge.entry.key.symbol children) cache)
+            | .stopped children observation candidate => .stopped children observation candidate) := by
+    intro flat related en P H largeP largeH
+    obtain ⟨flatStaged, flatOwn, preparedFlat, stagedInputs, ownRelated, _stages⟩ :=
+      SourceFlatPruningCachedOwn.prepare_completed related caller.checked.native.machine.heap
+        scs edge edge.entry.key.symbol
+        (inputs.map (fun input =>
+          (input.1, input.2,
+            SourcePruningEnumerationShallowChild.prepareChild (EnumGuard := Constraint) input.2 input.1)))
+        residual own ownRun
+    have inputsSame : flatStaged.map (fun input => (input.1, input.2.1)) = inputs :=
+      stagedInputs.trans readback
+    obtain ⟨flatChildren, flatChildrenRun, compared⟩ :=
+      childrenFlat flatOwn ownRelated en P H largeP largeH
+    cases childResult with
+    | complete children reached saved cache =>
+      cases flatChildren with
+      | stopped flatFragments observation candidate => exact False.elim compared
+      | complete flatFragments flatCaller flatQueries flatCache =>
+        obtain ⟨fragmentsSame, callerSame, queriesSame, caches⟩ := compared
+        subst flatFragments flatCaller flatQueries
+        refine ⟨.complete (.node edge.entry.key.symbol children) reached saved
+          (SourceFlatPruningSelectedEdge.finish residual (.node edge.entry.key.symbol children) flatCache),
+          ?_, ?_⟩
+        · simp only [SourceFlatPruningSelectedEdge.run, preparedFlat]
+          rw [inputsSame, flatChildrenRun]
+        · exact ⟨rfl, rfl, rfl,
+            SourceFlatPruningSelectedEdge.finish_related caches residual (.node edge.entry.key.symbol children)⟩
+    | stopped children observation candidate =>
+      cases flatChildren with
+      | complete flatFragments flatCaller flatQueries flatCache => exact False.elim compared
+      | stopped flatFragments flatObservation flatCandidate =>
+        refine ⟨.stopped flatFragments flatObservation flatCandidate, ?_, compared⟩
+        simp only [SourceFlatPruningSelectedEdge.run, preparedFlat]
+        rw [inputsSame, flatChildrenRun]
+  have ownOrigin : EnumeratedOrigin before.core own.core := by
+    rw [ownCore]
+    exact suspension_origin tries.length before.core
+  have fullOrigin := ownOrigin.trans origin
+  have ownPending : InputsPending own.core scs := by
+    intro held fragment stored

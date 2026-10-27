@@ -1,0 +1,122 @@
+theorem run_related_of_valid
+    (checkEmpty : Bool) (edgesOf : Node → List (EdgeValue Symbol Constraint))
+    (formulas : SourceGuards.Formulas FullSyntax.Formula)
+    (solver : SourceGuards.Entailment FullSyntax.Formula) (inventory : Inventory)
+    (fuel uv : Nat) (caller : Caller width) (before : OldCached) (flat : FlatCached) (memos : Memos)
+    (related : EnumerationFlatCached.Related flat before)
+    (valid : SourcePruningEnumerationSelectedStep.PrefixValid holeKey fits admits graph templates
+      checkEmpty edgesOf stop order metadata formulas solver inventory fuel uv caller before memos
+      (SourcePruningEnumerationSelectedStep.runPrefix holeKey fits admits graph templates stop order metadata
+        fuel fuel fuel fuel fuel fuel uv caller before memos.query)) :
+    ResultRelated (run holeKey fits admits graph templates stop order metadata fuel fuel uv caller flat memos.query)
+      (SourcePruningEnumerationSelectedStep.runPrefix holeKey fits admits graph templates stop order metadata
+        fuel fuel fuel fuel fuel fuel uv caller before memos.query) := by
+  generalize original : SourcePruningEnumerationSelectedStep.runPrefix holeKey fits admits graph templates
+    stop order metadata fuel fuel fuel fuel fuel fuel uv caller before memos.query = observed at valid ⊢
+  have full := valid.2.1
+  cases observed with
+  | stopped read checked =>
+      obtain ⟨_oldHandle, _scs, _readAfter, _reading, impossible⟩ := full
+      exact impossible.elim
+  | parked checked candidate raw =>
+      obtain ⟨oldHandle, scs, readAfter, reading, checking, after, candidateSame, coreSame,
+        _cacheValid, _safe, _pending, _counter, _ordered, rawSame⟩ := full
+      subst candidate
+      subst raw
+      obtain ⟨flatRead, flatReading, reads⟩ := EnumerationFlatPartial.getValue_replays fuel uv
+        flat.core before.core (.unenumerated (some oldHandle) scs) readAfter related.core (by
+          rw [Success, reading]
+          exact List.mem_singleton_self _)
+      obtain ⟨flatChecked, flatChecking, checkedRelated⟩ :=
+        SourceFlatPruningRecursion.checkRepeated_replays caller.checked.native.machine.heap fuel uv oldHandle scs
+          flatRead readAfter true checked reads (by
+            rw [Success, checking]
+            exact List.mem_singleton_self _)
+      have adapted : SourcePruningEnumerationParkedRestart.adapt caller.checked.native.machine.heap fuel
+          uv oldHandle scs before checked = some after := by
+        have projected := congrArg (fun result => match result with
+          | .parked _ attached _ => attached
+          | _ => none) original
+        simpa only [SourcePruningEnumerationSelectedStep.runPrefix, reading, checking] using projected
+      obtain ⟨flatAfter, flatAdapted, caches⟩ := SourceFlatPruningIndexAdapters.parked_completed
+        related checkedRelated caller.checked.native.machine.heap fuel uv oldHandle scs adapted
+      have flatCore := SourceFlatPruningIndexAdapters.parked_core caller.checked.native.machine.heap
+        uv oldHandle scs flat flatAfter flatChecked flatAdapted
+      simp only [run, ExceptT.run, flatReading, flatChecking, flatAdapted, Option.map_some, ResultRelated, OptionalRows]
+      refine ⟨checkedRelated, caches, ?_⟩
+      simpa only [flatCore, coreSame] using SourceFlatPruningRestart.run_related caches stop order metadata
+  | narrowed checked preparedResult reached saved action candidate right ordinary =>
+      obtain ⟨finishedOrdinary, finished⟩ := finish_preserves checkEmpty edgesOf uv
+        (.narrowed checked preparedResult reached saved action candidate right ordinary)
+      rw [finished] at full
+      have noOrdinary : ordinary = none := valid.1
+      subst ordinary
+      obtain ⟨oldHandle, scs, readAfter, reading, checking, oldValue, value, heap, oldAction, _final,
+        decoded, narrowed, preparation, preparedSame, reachedSame, savedSame, _post, _query, shape⟩ := full
+      subst preparedResult
+      subst reached
+      subst saved
+      obtain ⟨flatRead, flatReading, reads⟩ := EnumerationFlatPartial.getValue_replays fuel uv
+        flat.core before.core (.unenumerated (some oldHandle) scs) readAfter related.core (by
+          rw [Success, reading]
+          exact List.mem_singleton_self _)
+      obtain ⟨flatChecked, flatChecking, checkedRelated⟩ :=
+        SourceFlatPruningRecursion.checkRepeated_replays caller.checked.native.machine.heap fuel uv oldHandle scs
+          flatRead readAfter false checked reads (by
+            rw [Success, checking]
+            exact List.mem_singleton_self _)
+      obtain ⟨flatAction, flatPreparation, replay, flatEmpty⟩ := SourceFlatPruningAction.prepare_replays
+        holeKey fits admits metadata fuel fuel uv oldHandle scs oldValue value
+          caller.checked.native.machine.heap heap oldAction preparation
+      rcases shape with empty | live
+      · obtain ⟨empty, actionSame, candidateSame, rightSame, _finished⟩ := empty
+        subst value
+        subst action
+        subst candidate
+        subst right
+        have oldReject : oldAction = EnumerationState.reject := by
+          have direct : SourcePruningEnumerationAction.prepare holeKey fits admits metadata fuel fuel
+              uv oldHandle scs oldValue caller.checked.native.machine.heap =
+              .done (.empty, some (EnumerationState.reject : EnumerateM Symbol Constraint Unit)) heap := by
+            simp only [SourcePruningEnumerationAction.prepare, narrowed]
+          rw [preparation] at direct
+          exact Option.some.inj (Prod.mk.inj (MergedSourceComparison.Result.done.inj direct).1).2
+        have flatReject := flatEmpty rfl
+        subst oldAction
+        subst flatAction
+        simp only [run, ExceptT.run, flatReading, flatChecking, decoded, flatPreparation]
+        change EnumerationFlatState.Related flatChecked checked ∧
+          SourceFlatPruningAction.PreparedRelated flatChecked checked
+            (.done (.empty, some EnumerationFlatState.reject) heap)
+            (.done (.empty, some EnumerationState.reject) heap) ∧ _
+        exact ⟨checkedRelated, ⟨rfl, rfl, .nil⟩, rfl, rfl, .nil, trivial, trivial, rfl⟩
+      · obtain ⟨newHandle, after, _nonempty, encoded, actionSame, candidateSame,
+          _cacheValid, _safe, _pending, _ready, _stored, _waiting, rightSame, _finished, _ordinaryCapability⟩ := live
+        subst action
+        subst candidate
+        subst right
+        obtain ⟨actionRaw, adapted⟩ := narrowed_observation holeKey fits admits graph templates stop order metadata
+          fuel uv oldHandle newHandle scs oldValue value caller _ before after memos.query memos.query
+            readAfter checked heap oldAction _ none reading checking decoded preparation encoded original
+        obtain ⟨flatObserved, flatRaw, states⟩ := replay flatChecked checked () after.core checkedRelated (by
+          rw [Success, actionRaw]
+          exact List.mem_singleton_self _)
+        obtain ⟨flatAfter, flatAdapted, caches⟩ := SourceFlatPruningIndexAdapters.narrowed_completed related
+          states heap fuel uv oldHandle newHandle scs adapted
+        have flatRight : SourceFlatPruningOracle.recordTypes graph templates fuel metadata uv
+            (.inr newHandle) flatAfter.core = [.ok ((false, metadata), flatAfter.core)] := by
+          rw [flat_recordTypes_inr]
+          rfl
+        simp only [run, ExceptT.run, flatReading, flatChecking, decoded, flatPreparation, flatRaw, encoded, flatAdapted, flatRight]
+        change EnumerationFlatState.Related flatChecked checked ∧
+          SourceFlatPruningAction.PreparedRelated flatChecked checked
+            (.done (value, some flatAction) heap) (.done (value, some oldAction) heap) ∧ _
+        refine ⟨checkedRelated, ⟨rfl, rfl, ?_⟩, rfl, rfl, ?_, caches, ?_, rfl⟩
+        · change EnumerationResultRelation.Results EnumerationFlatState.Related
+            (flatAction flatChecked) (oldAction checked)
+          rw [flatRaw, show oldAction checked = [.ok ((), after.core)] from actionRaw]
+          exact .cons (.ok () states) .nil
+        · exact .cons (.ok () states) .nil
+        · exact .cons (.ok (false, metadata) caches.core) .nil
+
+end MicroCFTA.SourceFlatPruningSelectedPrefix

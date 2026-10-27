@@ -1,0 +1,23 @@
+theorem completed_subtree
+    (formulas : SourceGuards.Formulas FullSyntax.Formula)
+    (solver : SourceGuards.Entailment FullSyntax.Formula) (inventory : Inventory)
+    (caller : Caller (bits + 2)) (memos : Memos) (metadata : Metadata Typing)
+    (before : Cached) (flat : FlatCached) (seed : Seed)
+    (outputs : List (Output (bits + 2) Typing)) (reached : Caller (bits + 2)) (queries : Queries)
+    (packet : Packet formulas solver inventory caller memos metadata before)
+    (related : EnumerationFlatCached.Related flat before)
+    (resources : OutcomeResources formulas solver caller seed (.complete outputs reached queries)) :
+    ∃ (next : Inventory) (final : Memos),
+      Post formulas solver next caller reached final ∧ final.query = queries ∧
+      Packet formulas solver next reached final metadata before ∧
+      EnumerationFlatNativeIndex.Correct reached.checked.native.machine.heap flat ∧
+      Fits seed.2 reached.checked ∧
+      Heap (fun guard => guard ∈ seed.1) reached.checked.native.machine.heap ∧
+      ∀ output ∈ outputs, OutputResources formulas solver caller seed output := by
+  obtain ⟨next, final, post, saved, captured, bounded, known, outputPackets⟩ :=
+    completed_captured_packet formulas solver inventory caller memos metadata before seed
+      outputs reached queries packet resources
+  obtain ⟨roots, paths, storage, _realized, counts, flags⟩ := captured.valid
+  exact ⟨next, final, post, saved, captured,
+    EnumerationFlatNativeIndex.correct_of_related related reached.checked.native.machine.heap roots paths
+      storage.aligned flags counts, bounded, known, outputPackets⟩

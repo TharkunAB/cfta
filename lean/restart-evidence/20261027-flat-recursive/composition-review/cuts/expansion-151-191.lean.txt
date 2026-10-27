@@ -1,0 +1,41 @@
+      obtain ⟨scanFuel, entered, _processed, _outputs, _afterCaller, _next, _final, result,
+        _entryRun, _stable, _counter, _values, _sameFlags, _sameWaiting, _enteredPacket,
+        outerRun, _scanRun, _post, _captured, _afterFits, _afterKnown, _processedLength,
+        _receipts, _outputPackets, _shape, _finished, _countBound, _finalFits, _finalKnown, certificate, flatRunning⟩ :=
+        SourceFlatPruningNativeOrdinaryContinuations.ordinary_finite_complete_forecast
+          holeKey fits admits graph templates checkEmpty edgesOf stop order metadata recursiveFuel start formulas solver recursive inventory
+          reached middleMemos after uv handle scs entry rows depth free middlePacket ready stored decoded
+          (selectionMembers entry rows depth free) incoming nonterminal middleFits middleKnown
+          selectionMembers selectionLength inherited inherited currentMass inheritedBound reserved.scan
+      refine ⟨prefixFuel + scanFuel, SourcePruningEnumerationRecursive.finish uv result, ?_,
+        certificate.post middlePost, ?_⟩
+      · apply SourcePruningEnumerationRecursive.resume_depth_stable holeKey fits admits graph templates checkEmpty edgesOf stop order
+          prefixFuel scanFuel recursiveFuel uv metadata metadata caller reached memos.query memos.query before after
+          [.ok ((uv, handle, scs, .node entry rows depth free), entered.core)] result
+        · intro extra
+          obtain ⟨currentAction, currentPrefix, _valid⟩ := phase extra
+          exact ⟨checked, .done (phaseValue, some currentAction) heap, currentPrefix⟩
+        · intro extra
+          simpa only [middleQuery] using outerRun extra
+      · intro flat related extra
+        let w := prefixFuel + scanFuel + extra
+        obtain ⟨currentAction, currentPrefix, currentValid⟩ := phase (scanFuel + extra)
+        have prefixSame : prefixFuel + (scanFuel + extra) = w := by dsimp [w]; omega
+        rw [prefixSame] at currentPrefix currentValid
+        have replay := SourceFlatPruningSelectedPrefix.run_related_of_valid
+          holeKey fits admits graph templates stop order metadata checkEmpty edgesOf formulas solver inventory
+          w uv caller before flat memos related currentValid
+        rw [currentPrefix] at replay
+        obtain ⟨flatChecked, flatPrepared, actionCore, flatAfter, rightCore, observed, caches⟩ :=
+          SourceFlatPruningRecursivePrefixShape.accepted _ checked _ reached memos.query after metadata replay
+        obtain ⟨flatEntered, flatResult, actual, _enteredRelated, foldedRelated⟩ :=
+          flatRunning flatAfter caches (prefixFuel + extra)
+        have scanSame : scanFuel + (prefixFuel + extra) = w := by dsimp [w]; omega
+        rw [scanSame, middleQuery] at actual
+        refine ⟨finish uv flatResult, ?_, finish_related uv flatResult result foldedRelated⟩
+        change resume holeKey fits admits graph templates checkEmpty edgesOf stop order w (recursiveFuel + 1)
+          metadata caller memos.query flat (some (.expand uv)) = finish uv flatResult
+        rw [resume, observed]
+        dsimp only
+        rw [actual]
+    · have fallback : match value with

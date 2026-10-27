@@ -1,5 +1,37 @@
 # Constrained languages, indexing, and distributions
 
+## Actual flat recursive correspondence now holds at every finite depth
+
+Source checkpoint: 4b0400e958911d86bcd1953250d1484086a75eff.
+Twenty-two new modules execute the full flat recursive driver and preserve
+the original finite-depth completion and resource contract.
+For each original admitted packet and finite recursive reservation, one
+work bound and one stable original result are chosen before the flat input.
+Every related initial flat cache executes to a related result at every
+adequate work bound. Ordered outputs retain metadata, branch caches, Caller
+and Queries. Explicit stops retain their observations and optional endpoints.
+The result retains the entire original OutcomeResources certificate.
+
+The depth induction executes actual callbacks and smaller-depth subtrees.
+Each later sibling starts at the actual post-hook native Caller and full
+Memos. Each sibling restores the same captured enumeration cache and metadata.
+The public theorem has no recursive-completion or future-flat-success premise.
+No semantic Canonical or Ranges assumption was added to the original contract.
+It does not prove unbounded convergence or exclude explicit budget stops.
+
+H6 remains the strongest global exact finite-tree language theorem.
+Recursive output soundness, coverage, pruning-policy soundness, initial
+admission histories and full Haskell correspondence remain open.
+Audit passes 4064 jobs and 78977 theorem dependency checks.
+All twenty-two modules and Audit pass strict checks. No Haskell source changed.
+FINDINGS retains all Haskell repair handoffs and the extraction-progress limit.
+
+Next classify the actual recursive outputs and prove their language meaning.
+Derive initial Canonical, semantic Ranges and allocation histories where
+semantic consumers require them. The full goal stays ACTIVE and incomplete.
+Details: `lean/notes-current-flat-recursive.md`.
+
+
 ## Actual flat ordinary scans now retain completion and sibling history
 
 Source checkpoint: f75c088bed6a1848dccdf97e63839ceb8cd09ddb.

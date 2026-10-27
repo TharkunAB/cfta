@@ -1,0 +1,37 @@
+      returned, stable, frame, types, holes, typing, ?_, ?_, resources, ?_⟩
+    · intro extra
+      have actual := callback (resumeFuel + extra)
+      rw [← Nat.add_assoc] at actual
+      exact actual
+    · intro extra
+      have actual := callback (resumeFuel + extra)
+      rw [← Nat.add_assoc] at actual
+      rw [actual.2.2
+        (SourcePruningEnumerationRecursive.resume holeKey fits admits graph templates checkEmpty edgesOf
+          stop order (callbackFuel + resumeFuel + extra) recursiveFuel) stop order, ite_eq_right rejected]
+      have observed := running (callbackFuel + extra)
+      have common : resumeFuel + (callbackFuel + extra) = callbackFuel + resumeFuel + extra := by omega
+      rw [common] at observed
+      exact observed
+    · intro flat related extra
+      have success := (callback (resumeFuel + extra)).1
+      rw [← Nat.add_assoc] at success
+      obtain ⟨flatAfter, actual, cores⟩ := SourceFlatPruningOracle.recordTypes_replays graph templates
+        (callbackFuel + resumeFuel + extra) metadata uv (.inl fragment) flat.core before.core result after
+        related.core success
+      have caches := EnumerationFlatCached.frame_related related cores
+      obtain ⟨flatOutcome, resumed, compared⟩ :=
+        flatRunning (EnumerationFlatCached.frame flatAfter flat) caches (callbackFuel + extra)
+      have common : resumeFuel + (callbackFuel + extra) = callbackFuel + resumeFuel + extra := by omega
+      rw [common] at resumed
+      refine ⟨flatOutcome, ?_, compared⟩
+      change SourceFlatPruningContinuation.continueWith SourceFlatPruningRecursive.Failure.callback
+        (SourceFlatPruningRecursive.resume holeKey fits admits graph templates checkEmpty edgesOf stop order
+          (callbackFuel + resumeFuel + extra) recursiveFuel) graph templates stop order
+          (callbackFuel + resumeFuel + extra) metadata uv fragment caller memos.query flat = flatOutcome
+      rw [SourceFlatPruningContinuation.continueWith_exact SourceFlatPruningRecursive.Failure.callback
+        (SourceFlatPruningRecursive.resume holeKey fits admits graph templates checkEmpty edgesOf stop order
+          (callbackFuel + resumeFuel + extra) recursiveFuel) graph templates stop order
+          (callbackFuel + resumeFuel + extra) metadata uv fragment caller memos.query flat result flatAfter actual,
+        ite_eq_right rejected]
+      exact resumed

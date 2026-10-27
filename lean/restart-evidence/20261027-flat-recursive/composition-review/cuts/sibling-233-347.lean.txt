@@ -1,0 +1,115 @@
+              have tl : tailBound ≤ w := by dsimp [w, bound]; omega
+              have first := headRun (w - headBound)
+              rw [Nat.add_sub_of_le hl] at first
+              have hooked := callbackRun (w - headBound)
+              rw [Nat.add_sub_of_le hl] at hooked
+              have continued : match (generalizing := false) receipt with
+                  | .complete fragment actual queries after =>
+                      continueWith (resume holeKey fits admits graph templates checkEmpty edgesOf stop order w recursiveFuel)
+                        graph templates stop order w metadata uv fragment actual queries after =
+                        .complete headOutputs hookCaller hookQueries
+                  | _ => advance receipt = some (hookCaller, hookQueries) ∧ headOutputs = [] := by
+                cases receipt with
+                | complete fragment actual queries after => exact hooked
+                | unhandled => cases advanced
+                | rejected actual queries after | stopped fragments observation candidate =>
+                    obtain ⟨empty, actual, queries⟩ :=
+                      SourcePruningEnumerationNativeContinuations.HookResult.complete.inj hooked
+                    exact ⟨by rw [actual, queries]; exact advanced, empty⟩
+              have running := SourcePruningEnumerationNativeContinuations.continued_head
+                (continueWith (resume holeKey fits admits graph templates checkEmpty edgesOf stop order w recursiveFuel)
+                  graph templates stop order w metadata uv)
+                checkEmpty w w w w w uv scs before edge rest caller hookCaller memos.query hookQueries
+                receipt headOutputs first (by cases receipt <;> exact continued)
+              have later := tailRun (w - tailBound)
+              rw [Nat.add_sub_of_le tl, hookQuery] at later
+              rw [later] at running
+              cases tailResult <;> exact running
+            · intro index current found
+              cases index with
+              | zero =>
+                  have same : receipt = current := Option.some.inj found
+                  subst current
+                  exact receiptCertificate
+              | succ index =>
+                  have member : processed[index]? = some current := by simpa only [List.getElem?_cons_succ] using found
+                  exact (tailReceipts index current member).prepend hookPost
+            · intro output member
+              rcases List.mem_append.mp member with first | later
+              · exact ⟨0, by simp, headOutputsValid output first⟩
+              · obtain ⟨index, inside, certificate⟩ := tailOutputs output later
+                exact ⟨index + 1, by simpa only [List.length_cons] using Nat.add_lt_add_right inside 1,
+                  certificate.prepend hookPost⟩
+            · rcases tailShape with completed | ⟨current, stopped, observed, certificate⟩
+              · exact .inl (by simp only [result, completed])
+              · exact .inr ⟨current, by simp only [result, stopped], observed,
+                  certificate.prepend hookPost headOutputs⟩
+            · intro flat related extra
+              let w := bound + extra
+              have hl : headBound ≤ w := by dsimp [w, bound]; omega
+              have tl : tailBound ≤ w := by dsimp [w, bound]; omega
+              obtain ⟨flatReceipt, actualHead, comparedHead⟩ := headFlat flat related (w - headBound)
+              rw [Nat.add_sub_of_le hl] at actualHead
+              have actualHook := flatCallbackRun (w - headBound) flatReceipt comparedHead
+              rw [Nat.add_sub_of_le hl] at actualHook
+              obtain ⟨flatHeadOutputs, headOutputsRelated, flatContinued⟩ := continued_hook
+                (SourceFlatPruningRecursive.continueWith
+                  (SourceFlatPruningRecursive.resume holeKey fits admits graph templates checkEmpty edgesOf
+                    stop order w recursiveFuel) graph templates stop order w metadata uv)
+                receipt flatReceipt middleCaller hookCaller middleMemos.query hookQueries headOutputs
+                advanced comparedHead actualHook
+              obtain ⟨flatTail, actualTail, comparedTail⟩ := tailFlat flat related (w - tailBound)
+              rw [Nat.add_sub_of_le tl, hookQuery] at actualTail
+              let flatResult : SourceFlatPruningNativeContinuations.Result
+                  (FlatOutput (bits + 2) Typing) (FlatFailure (bits + 2) Typing) (bits + 2) :=
+                match (generalizing := false) flatTail with
+                | .complete receipts later actual queries =>
+                    .complete (flatReceipt :: receipts) (flatHeadOutputs ++ later) actual queries
+                | .stopped receipts later current =>
+                    .stopped (flatReceipt :: receipts) (flatHeadOutputs ++ later) current
+              refine ⟨flatResult, ?_, ?_⟩
+              · have running := SourceFlatPruningNativeContinuations.continued_head
+                  (SourceFlatPruningRecursive.continueWith
+                    (SourceFlatPruningRecursive.resume holeKey fits admits graph templates checkEmpty edgesOf
+                      stop order w recursiveFuel) graph templates stop order w metadata uv)
+                  checkEmpty w w w uv scs flat edge rest caller hookCaller memos.query hookQueries
+                  flatReceipt flatHeadOutputs actualHead (by cases flatReceipt <;> exact flatContinued)
+                rw [actualTail] at running
+                cases flatTail <;> exact running
+              · cases flatTail <;> cases tailResult <;>
+                  simp only [SourceFlatPruningNativeContinuations.ResultRelated] at comparedTail <;> try contradiction
+                case complete.complete flatProcessed flatOutputs flatCaller flatQueries
+                    oldProcessed oldOutputs oldCaller oldQueries =>
+                  obtain ⟨receipts, outputsRelated, callerSame, queriesSame⟩ := comparedTail
+                  exact ⟨.cons comparedHead receipts, ordered_append headOutputsRelated outputsRelated,
+                    callerSame, queriesSame⟩
+                case stopped.stopped flatProcessed flatOutputs flatCurrent oldProcessed oldOutputs oldCurrent =>
+                  obtain ⟨receipts, outputsRelated, current⟩ := comparedTail
+                  exact ⟨.cons comparedHead receipts, ordered_append headOutputsRelated outputsRelated, current⟩
+        | stopped headOutputs reason reached =>
+            have currentResources := resources
+            obtain ⟨afterCaller, next, final, post, returnedFits, returnedKnown, observed, outputsValid⟩ := resources
+            have completed : ∃ fragment actual queries after, receipt = .complete fragment actual queries after := by
+              cases receipt with
+              | complete fragment actual queries after => exact ⟨fragment, actual, queries, after, rfl⟩
+              | unhandled => cases advanced
+              | rejected actual queries after | stopped fragments observation candidate =>
+                  have impossible := callbackRun 0
+                  cases impossible
+            obtain ⟨fragment, actual, queries, after, same⟩ := completed
+            subst receipt
+            refine ⟨headBound, [], headOutputs, afterCaller, next, final,
+              .stopped [] headOutputs (.continuation (.complete fragment actual queries after) reason reached),
+              ?_, post, SourcePruningEnumerationRecursive.captured_post packet post,
+              returnedFits.mono laterGrowth.1, ?_, by simp, ?_, ?_, ?_, ?_⟩
+            · intro extra
+              simp only [SourcePruningEnumerationNativeContinuations.run, headRun extra, callbackRun extra]
+            · intro key resident found
+              exact laterGrowth.2 (returnedKnown key resident found)
+            · intro index current found
+              cases found
+            · intro output member
+              exact ⟨0, by simp, outputsValid output member⟩
+            · exact .inr ⟨_, rfl, observed, .inr ⟨_, reason, reached, headOutputs, [], rfl, rfl,
+                receiptCertificate, currentResources⟩⟩
+            · intro flat related extra

@@ -1,0 +1,72 @@
+theorem advance_related (flat : Receipt width) (earlier : OldReceipt width)
+    (related : SourceFlatPruningSelectedEdge.ResultRelated flat earlier) :
+    SourceFlatPruningNativeBranches.advance flat = SourcePruningEnumerationNativeBranches.advance earlier := by
+  cases flat <;> cases earlier <;>
+    simp only [SourceFlatPruningSelectedEdge.ResultRelated] at related <;> try contradiction
+  case unhandled.unhandled => rfl
+  case rejected.rejected caller queries after oldCaller oldQueries oldAfter =>
+    obtain ⟨rfl, rfl, _caches⟩ := related
+    rfl
+  case complete.complete fragment caller queries after oldFragment oldCaller oldQueries oldAfter =>
+    obtain ⟨rfl, rfl, rfl, _caches⟩ := related
+    rfl
+  case stopped.stopped fragments observation candidate oldFragments oldObservation oldCandidate =>
+    obtain ⟨outcome, caller, queries, outer, waiting⟩ := observation
+    obtain ⟨oldOutcome, oldCaller, oldQueries, oldOuter, oldWaiting⟩ := oldObservation
+    obtain ⟨_fragmentsSame,
+      ⟨callerSame, queriesSame, _outerRelated, _waitingSame, rows⟩, caches⟩ := related
+    dsimp only at callerSame queriesSame rows caches
+    subst oldCaller oldQueries
+    cases candidate with
+    | none =>
+      cases oldCandidate with
+      | some oldAfter => cases caches
+      | none =>
+        have left : SourceFlatPruningNativeBranches.advance
+            (.stopped fragments (outcome, caller, queries, outer, waiting) none) = none := by
+          cases outcome with
+          | error _ => rfl
+          | ok value =>
+            cases value with
+            | none => rfl
+            | some raw => cases raw <;> rfl
+        have right : SourcePruningEnumerationNativeBranches.advance
+            (.stopped oldFragments (oldOutcome, caller, queries, oldOuter, oldWaiting) none) = none := by
+          cases oldOutcome with
+          | error _ => rfl
+          | ok value =>
+            cases value with
+            | none => rfl
+            | some raw => cases raw <;> rfl
+        exact left.trans right.symm
+    | some after =>
+      cases oldCandidate with
+      | none => cases caches
+      | some oldAfter =>
+        cases outcome with
+        | error fault =>
+          cases oldOutcome with
+          | error _ => rfl
+          | ok oldValue =>
+            cases fault with
+            | inl _ => cases oldValue <;> cases rows
+            | inr remaining => cases remaining <;> cases oldValue <;> cases rows
+        | ok value =>
+          cases oldOutcome with
+          | error fault =>
+            cases fault with
+            | inl _ => cases value <;> cases rows
+            | inr remaining => cases remaining <;> cases value <;> cases rows
+          | ok oldValue =>
+            cases value with
+            | none =>
+              cases oldValue with
+              | none => rfl
+              | some _ => cases rows
+            | some raw =>
+              cases oldValue with
+              | none => cases rows
+              | some oldRaw =>
+                cases rows with
+                | nil => rfl
+                | cons _ _ => rfl

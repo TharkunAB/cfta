@@ -1,0 +1,54 @@
+variable [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Constraint)] [DecidableEq Node]
+variable (holeKey : Typing → Nat → Key) (fits : Key → Symbol → Bool) (admits : Key → Node → Bool)
+variable (graph : Graph Symbol Constraint) (templates : List (Template.Pattern Symbol))
+variable (checkEmpty : Bool) (edgesOf : Node → List (EdgeValue Symbol Constraint))
+variable (stop : Option (Metadata Typing → Nat → Bool))
+variable (order : Metadata Typing → List Nat → Option Nat) (workFuel : Nat)
+variable (metadata : Metadata Typing) (caller : Caller width) (queries : Queries)
+variable (flat : Cached) (earlier : OldCached) (related : EnumerationFlatCached.Related flat earlier)
+include related
+
+/-- Zero recursive depth relates every decision without running a selected step. -/
+theorem resume_zero_related (next : Option Next) :
+    ResultRelated
+      (resume holeKey fits admits graph templates checkEmpty edgesOf stop order workFuel 0
+        metadata caller queries flat next)
+      (SourcePruningEnumerationRecursive.resume holeKey fits admits graph templates checkEmpty edgesOf
+        stop order workFuel 0 metadata caller queries earlier next) := by
+  cases next with
+  | none => exact ⟨.cons ⟨rfl, related, rfl, rfl⟩ .nil, rfl, rfl⟩
+  | some next =>
+    cases next with
+    | done => exact ⟨.cons ⟨rfl, related, rfl, rfl⟩ .nil, rfl, rfl⟩
+    | stuck => exact ⟨.nil, rfl, rfl⟩
+    | expand uv => exact ⟨.nil, .exhausted uv metadata related, rfl⟩
+
+/-- The actual initial restart decision derives zero-depth correspondence from related caches. -/
+theorem run_zero_related :
+    ResultRelated
+      (run holeKey fits admits graph templates checkEmpty edgesOf stop order workFuel 0
+        metadata caller queries flat)
+      (SourcePruningEnumerationRecursive.run holeKey fits admits graph templates checkEmpty edgesOf
+        stop order workFuel 0 metadata caller queries earlier) := by
+  unfold run SourcePruningEnumerationRecursive.run
+  rw [SourceFlatPruningRestart.decision_related related stop order metadata]
+  exact resume_zero_related holeKey fits admits graph templates checkEmpty edgesOf stop order workFuel
+    metadata caller queries flat earlier related _
+
+/-- A nonexpanding decision retains correspondence at every recursive depth. -/
+theorem resume_nonexpanding_related (recursiveFuel : Nat) (next : Option Next)
+    (nonexpanding : ∀ uv, next ≠ some (.expand uv)) :
+    ResultRelated
+      (resume holeKey fits admits graph templates checkEmpty edgesOf stop order workFuel recursiveFuel
+        metadata caller queries flat next)
+      (SourcePruningEnumerationRecursive.resume holeKey fits admits graph templates checkEmpty edgesOf
+        stop order workFuel recursiveFuel metadata caller queries earlier next) := by
+  cases next with
+  | none =>
+    cases recursiveFuel <;> exact ⟨.cons ⟨rfl, related, rfl, rfl⟩ .nil, rfl, rfl⟩
+  | some next =>
+    cases next with
+    | done =>
+      cases recursiveFuel <;> exact ⟨.cons ⟨rfl, related, rfl, rfl⟩ .nil, rfl, rfl⟩
+    | stuck => cases recursiveFuel <;> exact ⟨.nil, rfl, rfl⟩
+    | expand uv => exact (nonexpanding uv rfl).elim

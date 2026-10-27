@@ -1,0 +1,44 @@
+noncomputable def resume
+    (holeKey : Typing → Nat → Key) (fits : Key → Symbol → Bool) (admits : Key → Node → Bool)
+    (graph : Graph Symbol Constraint) (templates : List (Template.Pattern Symbol))
+    (checkEmpty : Bool) (edgesOf : Node → List (EdgeValue Symbol Constraint))
+    (stop : Option (Metadata Typing → Nat → Bool))
+    (order : Metadata Typing → List Nat → Option Nat) (workFuel : Nat) :
+    Nat → Metadata Typing → Caller width → Queries → Cached → Option Next → Result
+  | _fuel, metadata, caller, queries, before, none => .complete [⟨some metadata, before, caller, queries⟩] caller queries
+  | _fuel, _metadata, caller, queries, before, some .done => .complete [⟨none, before, caller, queries⟩] caller queries
+  | _fuel, _metadata, caller, queries, _before, some .stuck => .complete [] caller queries
+  | 0, metadata, caller, queries, before, some (.expand uv) =>
+      .stopped [] (.exhausted uv metadata before) (some (caller, queries))
+  | fuel + 1, metadata, caller, queries, before, some (.expand uv) =>
+      let observed := SourcePruningEnumerationSelectedStep.runPrefix holeKey fits admits graph templates
+        stop order metadata workFuel workFuel workFuel workFuel workFuel workFuel uv caller before queries
+      match observed with
+      | .parked _ (some _parked) (some []) => .complete [] caller queries
+      | .parked _ (some parked) (some [.ok ((updated, next), core)]) =>
+          resume holeKey fits admits graph templates checkEmpty edgesOf stop order workFuel fuel
+            updated caller queries (EnumerationExpandableIndex.frame core parked) next
+      | .narrowed _ _ reached saved (some []) _ _ _ => .complete [] reached saved
+      | .narrowed _ _ reached saved _ _ (some [.ok ((true, _updated), _core)]) _ =>
+          .complete [] reached saved
+      | .narrowed _ _ reached saved _ (some after) (some [.ok ((false, updated), _core)]) none =>
+          let ordinary := SourcePruningEnumerationNativeOrdinaryContinuations.run
+            (continueWith (resume holeKey fits admits graph templates checkEmpty edgesOf stop order workFuel fuel)
+              graph templates stop order workFuel updated uv)
+            checkEmpty workFuel workFuel workFuel workFuel workFuel uv edgesOf reached after saved
+          match ordinary.2 with
+          | none => .stopped [] (.ordinary uv ordinary.1) (some (reached, saved))
+          | some folded => finish uv folded
+      | .narrowed _ _ reached saved _ _ _ _ => .stopped [] (.selected uv observed) (some (reached, saved))
+      | _ => .stopped [] (.selected uv observed) (some (caller, queries))
+
+/-- Start from the source stop test and next selection at the supplied metadata and cache. -/
+noncomputable def run
+    (holeKey : Typing → Nat → Key) (fits : Key → Symbol → Bool) (admits : Key → Node → Bool)
+    (graph : Graph Symbol Constraint) (templates : List (Template.Pattern Symbol))
+    (checkEmpty : Bool) (edgesOf : Node → List (EdgeValue Symbol Constraint))
+    (stop : Option (Metadata Typing → Nat → Bool))
+    (order : Metadata Typing → List Nat → Option Nat) (workFuel recursiveFuel : Nat)
+    (metadata : Metadata Typing) (caller : Caller width) (queries : Queries) (before : Cached) : Result :=
+  resume holeKey fits admits graph templates checkEmpty edgesOf stop order workFuel recursiveFuel
+    metadata caller queries before (SourcePruningEnumerationRestart.decision stop order metadata before)

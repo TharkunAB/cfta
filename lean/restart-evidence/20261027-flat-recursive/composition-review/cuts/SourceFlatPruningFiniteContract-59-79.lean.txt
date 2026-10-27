@@ -1,0 +1,21 @@
+theorem zero_complete
+    (holeKey : Typing → Nat → Key) (fits : Key → Symbol → Bool) (admits : Key → Node → Bool)
+    (graph : Graph Symbol Constraint) (templates : List (Template.Pattern Symbol))
+    (checkEmpty : Bool) (edgesOf : Node → List (EdgeValue Symbol Constraint))
+    (stop : Option (Metadata Typing → Nat → Bool)) (order : Metadata Typing → List Nat → Option Nat)
+    (formulas : SourceGuards.Formulas FullSyntax.Formula) (solver : SourceGuards.Entailment FullSyntax.Formula) :
+    Complete (bits := bits) holeKey fits admits graph templates checkEmpty edgesOf stop order
+      formulas solver 0 := by
+  intro inventory caller memos before metadata seed ceiling packet bounded known
+    selectionMembers selectionLength initialMass reserved
+  obtain ⟨bound, outcome, running, resources⟩ :=
+    SourcePruningEnumerationRecursive.finite_complete (bits := bits)
+      holeKey fits admits graph templates checkEmpty edgesOf stop order formulas solver 0
+      inventory caller memos before metadata seed ceiling packet bounded known
+      selectionMembers selectionLength initialMass reserved
+  refine ⟨bound, outcome, running, resources, ?_⟩
+  intro flat related extra
+  have relatedResult := run_zero_related holeKey fits admits graph templates checkEmpty edgesOf stop order
+    (bound + extra) metadata caller memos.query flat before related
+  rw [running extra] at relatedResult
+  exact ⟨_, rfl, relatedResult⟩

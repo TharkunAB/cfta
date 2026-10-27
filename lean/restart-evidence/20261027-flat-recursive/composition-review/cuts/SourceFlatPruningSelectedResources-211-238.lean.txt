@@ -1,0 +1,28 @@
+      obtain ⟨frame, avoidsChildren⟩ := ownProtects held inside root avoids
+      change HasHole (.node edge.entry.key.symbol fragments) uv at hole
+      cases hole with
+      | child _ _ child _ member below =>
+          exact (fragmentHistory child member).2 held (by omega) frame.root avoidsChildren uv below
+    refine ⟨r, n, p, h, k, afterCaller, finished, savedQueries, final, next, afterRoots,
+      .complete fragment afterCaller savedQueries finished, ?_, post, querySame, ?_, afterPaths,
+      (finish_safe residual fragment after afterSafe fragmentBound).1, afterRealized, afterCounts,
+      afterFlags, fullOrigin, retained, ?_, pendingPreserved, incomingPreserved, .inl ⟨fragment, rfl,
+        finish_safe residual fragment after afterSafe fragmentBound, fragmentBound, fragmentPending, fragmentSeparate⟩, returnedFits, returnedKnown, flatRunning⟩
+    · intro er en P H ek largeP largeH
+      simp only [SourcePruningEnumerationSelectedEdge.run, ownRun]
+      rw [readback, childrenRun er en P H ek largeP largeH]
+    · change before.core.counter ≤ after.core.counter
+      omega
+    · intro held inside root avoids
+      have frame := protectedRoots held inside root avoids
+      exact frame.trans (finish_protected residual fragment after held frame.root)
+  · subst childResult
+    refine ⟨r, n, p, h, k, afterCaller, after, savedQueries, final, next, afterRoots,
+      .stopped fragments (.ok (some []), afterCaller, savedQueries, outer, waiting) (some after),
+      ?_, post, querySame, ?_, afterPaths, storage, afterRealized, afterCounts, afterFlags,
+      fullOrigin, retained, protectedRoots, pendingPreserved, incomingPreserved,
+      .inr ⟨fragments, outer, waiting, rfl⟩, returnedFits, returnedKnown, flatRunning⟩
+    · intro er en P H ek largeP largeH
+      simp only [SourcePruningEnumerationSelectedEdge.run, ownRun]
+      rw [readback, childrenRun er en P H ek largeP largeH]
+    · omega

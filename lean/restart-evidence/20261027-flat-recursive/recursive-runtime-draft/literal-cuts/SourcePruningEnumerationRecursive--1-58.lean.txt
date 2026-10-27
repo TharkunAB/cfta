@@ -1,0 +1,58 @@
+import MicroCFTA.SourcePruningEnumerationSelectedStep
+import MicroCFTA.SourcePruningEnumerationNativeOrdinaryContinuations
+
+namespace MicroCFTA.SourcePruningEnumerationRecursive
+open EnumerationState InternedConstructorTemplates
+local notation "Symbol" => SourcePruningTemplates.Symbol
+local notation "Constraint" => SourceSymbolicIndex.Constraint FullSyntax.Formula
+local notation "Node" => Value Symbol Constraint
+local notation "Fragment" => Fragments.Fragment Symbol
+local notation "Caller" => SourceCurrentAllocatedPartialState.State
+local notation "Queries" => SourceEndpointMemo.Memos
+local notation "Cached" => EnumerationExpandableIndex.Cached Symbol Constraint
+local notation "Metadata" => SourcePruningRecordTypes.Metadata
+local notation "Core" => EnumerationState.State Symbol Constraint
+local notation "Receipt" => SourcePruningEnumerationSelectedEdge.Result
+local notation "Fold" => SourcePruningEnumerationNativeContinuations.Result
+local notation "FoldStop" => SourcePruningEnumerationNativeContinuations.Stop
+local notation "HookResult" => SourcePruningEnumerationNativeContinuations.HookResult
+local notation "EntryRaw" => List (Except EnumerationState.Error ((Nat × Nat × List Suspended × Node) × Core))
+local notation "CallbackRaw" => fun Typing => List (Except EnumerationState.Error ((Bool × Metadata Typing) × Core))
+
+/-- Retain the exact bounded or unsupported observation that prevents continuation. -/
+inductive Failure (width : Nat) (Typing : Type) : Type 1 where
+  /-- The recursive budget does not permit the selected expansion. -/
+  | exhausted (uv : Nat) (metadata : Metadata Typing) (before : Cached)
+  /-- The actual selected prefix cannot supply a supported continuation. -/
+  | selected (uv : Nat) (observed : SourcePruningEnumerationSelectedStep.Result width Typing)
+  /-- The actual fragment callback does not return a singleton success. -/
+  | callback (uv : Nat) (raw : CallbackRaw Typing)
+  /-- Entry does not supply an ordinary nonterminal alternative scan. -/
+  | ordinary (uv : Nat) (raw : EntryRaw)
+  /-- Retain the processed alternatives and their exact edge or recursive stop. -/
+  | alternatives (uv : Nat) (processed : List (Receipt width))
+      (current : FoldStop (Failure width Typing) width)
+
+/-- Retain each source output at its own enumeration cache and native endpoint. -/
+structure Output (width : Nat) (Typing : Type) where
+  /-- A stop rule returns metadata. Exhausted candidate selection returns none. -/
+  metadata : Option (Metadata Typing)
+  /-- The enumeration cache belongs to this output branch. -/
+  cache : Cached
+  /-- The caller is the native endpoint when this output is emitted. -/
+  caller : Caller width
+  /-- The saved queries belong to the same endpoint. -/
+  queries : Queries
+
+variable {Typing Key : Type} {width : Nat}
+local notation "Result" => HookResult (Output width Typing) (Failure width Typing) width
+
+/-- Read only a native endpoint supplied by the actual stopped receipt. -/
+def endpoint : FoldStop (Failure width Typing) width → Option (Caller width × Queries)
+  | .edge current => current.bind SourcePruningEnumerationNativeBranches.advance
+  | .continuation _ _ reached => reached
+
+/-- Convert the ordered alternative result without losing its outputs or stopped receipts. -/
+def finish (uv : Nat) : Fold (Output width Typing) (Failure width Typing) width → Result
+  | .complete _processed outputs caller queries => .complete outputs caller queries
+  | .stopped processed outputs current =>

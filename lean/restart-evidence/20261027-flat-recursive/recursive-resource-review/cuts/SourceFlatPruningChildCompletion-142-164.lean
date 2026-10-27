@@ -1,0 +1,23 @@
+theorem observed
+    (flat : FlatCached) (before : Cached) (related : EnumerationFlatCached.Related flat before)
+    (checkEmpty : Bool) (r nativeFuel p h k : Nat) (bucket : List Suspended) (incoming : Node)
+    (beforeCaller afterCaller : Caller width) (queries savedQueries : Queries)
+    (raw : Raw) (after : Cached) (outer : Core) (waiting : EnumerationWaitingIndex.Waiting)
+    (roots : Nat → Nat) (safe : Safe before.core)
+    (paths : Roots before.core.representatives roots)
+    (counts : EnumerationCanonicalWaiting.Correct roots before.core.values before.waiting)
+    (realized : PendingRealized beforeCaller.checked.native.machine.heap before.core)
+    (bounded : ∀ sc ∈ bucket, sc.var < before.core.counter)
+    (pending : InputsPending before.core bucket)
+    (stable : ∀ extraRepresentative extraIndex,
+      SourcePruningEnumerationChildDispatch.run checkEmpty (r + extraRepresentative) nativeFuel p h
+        (k + extraIndex) bucket incoming beforeCaller before queries =
+        ((.ok (some raw), afterCaller, savedQueries, outer, waiting), some after)) :
+    ∃ flatRows flatOuter recovered,
+      SourceFlatPruningChildDispatch.run checkEmpty nativeFuel p h bucket incoming beforeCaller flat queries =
+        ((.ok (some flatRows), afterCaller, savedQueries, flatOuter, waiting), some recovered) ∧
+      EnumerationFlatCached.Related recovered after ∧
+      EnumerationFlatState.Related flatOuter outer ∧
+      EnumerationResultRelation.Results EnumerationFlatState.Related flatRows raw := by
+  have correspondence : SourceFlatPruningChildDispatch.ResultRelated
+      (SourceFlatPruningChildDispatch.run checkEmpty nativeFuel p h bucket incoming beforeCaller flat queries)

@@ -1,0 +1,35 @@
+import MicroCFTA.EnumerationFlatCore
+import MicroCFTA.SourcePruningEnumerationTerminalPrefix
+
+/-!
+# Replay of successful earlier core traces
+
+The old execution supplies actual successful intermediate states. The flat
+execution returns one equal result and a related final state. This conditional
+relation does not compare errors at insufficient old lookup bounds.
+-/
+
+namespace MicroCFTA.EnumerationFlatReplay
+
+open EnumerationFlatState (Action Related)
+open EnumerationCorrectness (Success)
+
+variable {Symbol Guard α β : Type}
+
+attribute [local instance] SourcePruningEnumerationTerminalPrefix.terminalPrefixMonadList
+  SourcePruningEnumerationTerminalPrefix.terminalPrefixLawfulMonadList
+
+/-- Replay every successful earlier trace at its actual related input core. -/
+def Replays (flat : Action Symbol Guard α) (earlier : EnumerationState.EnumerateM Symbol Guard α) : Prop :=
+  ∀ left right value after, Related left right → Success earlier right value after →
+    ∃ next, flat left = [.ok (value, next)] ∧ Related next after
+
+/-- The same pure value retains the related complete input cores. -/
+theorem pure_replays (value : α) :
+    Replays (pure value : Action Symbol Guard α) (pure value) := by
+  intro left right result after related observed
+  obtain ⟨rfl, rfl⟩ := (EnumerationCorrectness.success_pure value result right after).mp observed
+  exact ⟨left, rfl, related⟩
+
+/-- Sequential replay follows the old execution's actual intermediate state. -/
+theorem bind_replays (first : Action Symbol Guard α)

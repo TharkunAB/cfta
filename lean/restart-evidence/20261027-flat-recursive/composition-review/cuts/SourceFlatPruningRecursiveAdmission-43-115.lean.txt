@@ -1,0 +1,73 @@
+theorem callback_entry
+    (formulas : SourceGuards.Formulas FullSyntax.Formula)
+    (solver : SourceGuards.Entailment FullSyntax.Formula) (inventory : Inventory)
+    (graph : Graph Symbol Constraint) (templates : List (Template.Pattern Symbol))
+    (metadata : Metadata Typing) (uv : Nat) (fragment : Fragment)
+    (caller : Caller (bits + 2)) (memos : Memos) (before : Cached) (flat : FlatCached)
+    (seed : Seed) (ceiling : Nat)
+    (packet : Packet formulas solver inventory caller memos metadata before)
+    (allocated : FragmentBound before.core.counter fragment)
+    (related : EnumerationFlatCached.Related flat before)
+    (bounded : Fits seed.2 caller.checked)
+    (known : Heap (fun guard => guard ∈ seed.1) caller.checked.native.machine.heap)
+    (initialMass : mass before.core ≤ ceiling) :
+    ∃ (fuel : Nat) (result : Bool × Metadata Typing) (after : Core),
+      Packet formulas solver inventory caller memos result.2 (EnumerationExpandableIndex.frame after before) ∧
+      RenderStable before.core after ∧ Frame before.core after ∧
+      result.2.types = updatedTypes metadata uv (.inl fragment) ∧
+      result.2.openHoles = metadata.openHoles ∧ result.2.typing = metadata.typing ∧
+      (∀ extra,
+        Success (SourcePruningRecordTypes.recordTypes graph templates (fuel + extra) metadata uv (.inl fragment))
+          before.core result after ∧
+        ExceptT.run (SourcePruningRecordTypes.recordTypes graph templates (fuel + extra) metadata uv
+          (.inl fragment) before.core) = [.ok (result, after)] ∧
+        ∀ (recur : Metadata Typing → Caller (bits + 2) → Queries → Cached → Option Next → OldResult) stop order,
+          SourcePruningEnumerationRecursive.continueWith recur graph templates stop order (fuel + extra)
+            metadata uv fragment caller memos.query before =
+            if result.1 then .complete [] caller memos.query
+            else recur result.2 caller memos.query (EnumerationExpandableIndex.frame after before)
+              (SourcePruningEnumerationRestart.decision stop order result.2
+                (EnumerationExpandableIndex.frame after before))) ∧
+      mass (EnumerationExpandableIndex.frame after before).core ≤ ceiling ∧
+      Fits seed.2 caller.checked ∧
+      Heap (fun guard => guard ∈ seed.1) caller.checked.native.machine.heap ∧
+      ∀ extra, ∃ flatAfter,
+        SourceFlatPruningOracle.recordTypes graph templates (fuel + extra) metadata uv
+          (.inl fragment) flat.core = [.ok (result, flatAfter)] ∧
+        EnumerationFlatCached.Related (EnumerationFlatCached.frame flatAfter flat)
+          (EnumerationExpandableIndex.frame after before) ∧
+        EnumerationFlatNativeIndex.Correct caller.checked.native.machine.heap
+          (EnumerationFlatCached.frame flatAfter flat) ∧
+        (∀ stop order, SourceFlatPruningRestart.decision stop order result.2
+          (EnumerationFlatCached.frame flatAfter flat) =
+          SourcePruningEnumerationRestart.decision stop order result.2
+            (EnumerationExpandableIndex.frame after before)) ∧
+        ∀ (Out : Type u) (Reason : Type v)
+          (callbackFailure : Nat → List (Except Error ((Bool × Metadata Typing) × FlatCore)) → Reason)
+          (recur : Metadata Typing → Caller (bits + 2) → Queries → FlatCached → Option Next →
+            SourcePruningEnumerationNativeContinuations.HookResult Out Reason (bits + 2)) stop order,
+          SourceFlatPruningContinuation.continueWith callbackFailure recur graph templates stop order
+            (fuel + extra) metadata uv fragment caller memos.query flat =
+            if result.1 then .complete [] caller memos.query
+            else recur result.2 caller memos.query (EnumerationFlatCached.frame flatAfter flat)
+              (SourceFlatPruningRestart.decision stop order result.2
+                (EnumerationFlatCached.frame flatAfter flat)) := by
+  obtain ⟨fuel, result, after, returned, stable, frame, types, holes, typing, callback⟩ :=
+    callback_complete formulas solver inventory graph templates metadata uv fragment caller memos before
+      packet allocated
+  have returnedMass : mass (EnumerationExpandableIndex.frame after before).core ≤ ceiling := by
+    change mass after ≤ ceiling
+    rw [SourcePruningEnumerationPrefixAdmission.suspendedBound_values before.core after frame.values]
+    exact initialMass
+  refine ⟨fuel, result, after, returned, stable, frame, types, holes, typing, callback,
+    returnedMass, bounded, known, ?_⟩
+  intro extra
+  obtain ⟨flatAfter, actual, cores⟩ := SourceFlatPruningOracle.recordTypes_replays graph templates
+    (fuel + extra) metadata uv (.inl fragment) flat.core before.core result after related.core
+      (callback extra).1
+  have caches := EnumerationFlatCached.frame_related related cores
+  obtain ⟨roots, paths, storage, _realized, counts, flags⟩ := returned.valid
+  refine ⟨flatAfter, actual, caches,
+    EnumerationFlatNativeIndex.correct_of_related caches caller.checked.native.machine.heap roots paths
+      storage.aligned flags counts, ?_, ?_⟩
+  · intro stop order

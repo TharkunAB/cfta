@@ -1,0 +1,26 @@
+structure Output (width : Nat) (Typing : Type) where
+  /-- A stop rule returns metadata. Exhausted candidate selection returns none. -/
+  metadata : Option (Metadata Typing)
+  /-- The enumeration cache belongs to this output branch. -/
+  cache : Cached
+  /-- The caller is the native endpoint when this output is emitted. -/
+  caller : Caller width
+  /-- The saved queries belong to the same endpoint. -/
+  queries : Queries
+
+variable {Typing Key : Type} {width : Nat}
+local notation "Result" => HookResult (Output width Typing) (Failure width Typing) width
+
+/-- Related outputs retain metadata, branch cache and the actual emission endpoint. -/
+def OutputRelated (flat : Output width Typing)
+    (earlier : SourcePruningEnumerationRecursive.Output width Typing) : Prop :=
+  flat.metadata = earlier.metadata ∧ EnumerationFlatCached.Related flat.cache earlier.cache ∧
+    flat.caller = earlier.caller ∧ flat.queries = earlier.queries
+
+/-- Related failures retain every raw diagnostic and recursive stopping context. -/
+inductive FailureRelated : Failure width Typing → SourcePruningEnumerationRecursive.Failure width Typing → Prop where
+  /-- Exhaustion retains the selected variable, metadata and related captured cache. -/
+  | exhausted (uv : Nat) (metadata : Metadata Typing)
+      {flat : Cached} {earlier : EnumerationExpandableIndex.Cached Symbol Constraint}
+      (related : EnumerationFlatCached.Related flat earlier) :
+      FailureRelated (.exhausted uv metadata flat) (.exhausted uv metadata earlier)

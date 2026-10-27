@@ -1,0 +1,30 @@
+  · have advancedQuery : advance receipt = some (middleCaller, middleMemos.query) := by
+      simpa only [headQueries] using advanced
+    have mass := SourcePruningEnumerationRecursiveReservation.head_mass_le seed capturedMass inherited
+      before scs receipt initialMass inheritedLength cacheBounds
+    obtain ⟨callbackFuel, outcome, callbackRun, resources⟩ := receipt_finite_complete_resources
+      holeKey fits admits graph templates checkEmpty edgesOf stop order metadata formulas solver recursiveFuel recursive
+      inventory middleInventory
+      caller middleCaller memos middleMemos before uv receipt packet headPost advancedQuery admitted receiptPending history
+      (afterHead seed inherited) (massCeil seed capturedMass inherited) boundedHead knownHead
+      selectionMembers selectionLength (by cases receipt <;> exact mass) reserved.2
+    have fullResources : OutcomeResources formulas solver caller (finiteStep recursiveFuel seed capturedMass inherited) outcome :=
+      resources.post headPost
+    refine ⟨headBound + callbackFuel, receipt, middleCaller, saved, middleMemos, middleInventory,
+      ?_, headPost, headQueries, admitted, receiptPending, history, cacheBounds, boundedHead, knownHead,
+      .inr ⟨outcome, advancedQuery, ?_, fullResources, ?_⟩⟩
+    · intro extra
+      exact headAt (headBound + callbackFuel + extra) (by omega)
+    · intro extra
+      have actual := callbackRun (headBound + extra)
+      have common : callbackFuel + (headBound + extra) = headBound + callbackFuel + extra := by omega
+      rw [common] at actual
+      exact actual
+    · cases outcome with
+      | stopped _ _ _ => trivial
+      | complete outputs actual queries =>
+          obtain ⟨next, final, post, query, captured, returnedFits, returnedKnown, _outputs⟩ :=
+            SourcePruningEnumerationRecursive.completed_captured_packet formulas solver inventory caller memos
+              metadata before (finiteStep recursiveFuel seed capturedMass inherited) outputs actual queries packet fullResources
+          exact ⟨next, final, post, query, captured, returnedFits, returnedKnown⟩
+  · exact ⟨headBound, receipt, middleCaller, saved, middleMemos, middleInventory,

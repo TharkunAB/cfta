@@ -1,0 +1,21 @@
+          (.complete [] reached final.query) := by
+        refine ⟨reached, next, final, Post.refl post.context, bounded, known, rfl, rfl, ?_⟩
+        intro output member
+        exact False.elim (List.not_mem_nil member)
+      have growth := SourcePruningEnumerationFiniteReservation.final_ge recursiveFuel seed ceiling
+      exact ⟨0, .complete [] reached final.query, fun _ => rfl, originalResources.mono growth.1 growth.2⟩
+  | complete fragment actual saved after =>
+      have endpoints : (actual, saved) = (reached, final.query) := Option.some.inj advanced
+      obtain ⟨callerSame, querySame⟩ := Prod.mk.inj endpoints
+      subst actual
+      subst saved
+      obtain ⟨level, frontier, ordered⟩ := packet.ordered
+      have current := SourcePruningEnumerationRecursive.receipt_packet before.core uv fragment after level frontier
+        post.context admitted history pending ordered packet.bounded
+      obtain ⟨fuel, result, callbackCore, outcome, _returned, _stable, _frame, _types, _holes, _typing,
+        _callback, running, resources⟩ :=
+        SourcePruningEnumerationRecursive.callback_finite_complete_resources
+          holeKey fits admits formulas solver next graph templates metadata uv fragment reached final after
+          checkEmpty edgesOf stop order recursiveFuel recursive seed ceiling
+          current admitted.2.2.1 bounded known selectionMembers selectionLength mass reserved
+      exact ⟨fuel, outcome, running, resources⟩

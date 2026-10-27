@@ -1,0 +1,99 @@
+/-- Retain the exact bounded or unsupported observation that prevents continuation. -/
+inductive Failure (width : Nat) (Typing : Type) : Type 1 where
+  /-- The recursive budget does not permit the selected expansion. -/
+  | exhausted (uv : Nat) (metadata : Metadata Typing) (before : Cached)
+  /-- The actual selected prefix cannot supply a supported continuation. -/
+  | selected (uv : Nat) (observed : SourceFlatPruningSelectedPrefix.Result width Typing)
+  /-- The actual fragment callback does not return a singleton success. -/
+  | callback (uv : Nat) (raw : CallbackRaw Typing)
+  /-- Entry does not supply an ordinary nonterminal alternative scan. -/
+  | ordinary (uv : Nat) (raw : EntryRaw)
+  /-- Retain the processed alternatives and their exact edge or recursive stop. -/
+  | alternatives (uv : Nat) (processed : List (Receipt width))
+      (current : FoldStop (Failure width Typing) width)
+
+/-- Retain each source output at its own enumeration cache and native endpoint. -/
+structure Output (width : Nat) (Typing : Type) where
+  /-- A stop rule returns metadata. Exhausted candidate selection returns none. -/
+  metadata : Option (Metadata Typing)
+  /-- The enumeration cache belongs to this output branch. -/
+  cache : Cached
+  /-- The caller is the native endpoint when this output is emitted. -/
+  caller : Caller width
+  /-- The saved queries belong to the same endpoint. -/
+  queries : Queries
+
+variable {Typing Key : Type} {width : Nat}
+local notation "Result" => HookResult (Output width Typing) (Failure width Typing) width
+
+/-- Related outputs retain metadata, branch cache and the actual emission endpoint. -/
+def OutputRelated (flat : Output width Typing)
+    (earlier : SourcePruningEnumerationRecursive.Output width Typing) : Prop :=
+  flat.metadata = earlier.metadata ∧ EnumerationFlatCached.Related flat.cache earlier.cache ∧
+    flat.caller = earlier.caller ∧ flat.queries = earlier.queries
+
+/-- Related failures retain every raw diagnostic and recursive stopping context. -/
+inductive FailureRelated : Failure width Typing → SourcePruningEnumerationRecursive.Failure width Typing → Prop where
+  /-- Exhaustion retains the selected variable, metadata and related captured cache. -/
+  | exhausted (uv : Nat) (metadata : Metadata Typing)
+      {flat : Cached} {earlier : EnumerationExpandableIndex.Cached Symbol Constraint}
+      (related : EnumerationFlatCached.Related flat earlier) :
+      FailureRelated (.exhausted uv metadata flat) (.exhausted uv metadata earlier)
+  /-- Selected-prefix failure retains its complete actual prefix observation. -/
+  | selected (uv : Nat) {flat : SourceFlatPruningSelectedPrefix.Result width Typing}
+      {earlier : SourcePruningEnumerationSelectedStep.Result width Typing}
+      (related : SourceFlatPruningSelectedPrefix.ResultRelated flat earlier) :
+      FailureRelated (.selected uv flat) (.selected uv earlier)
+  /-- Callback failure retains every raw result and error in order. -/
+  | callback (uv : Nat) {flat : CallbackRaw Typing}
+      {earlier : List (Except EnumerationState.Error
+        ((Bool × Metadata Typing) × EnumerationState.State Symbol Constraint))}
+      (related : EnumerationResultRelation.Results EnumerationFlatState.Related flat earlier) :
+      FailureRelated (.callback uv flat) (.callback uv earlier)
+  /-- Ordinary-entry failure retains every raw result and error in order. -/
+  | ordinary (uv : Nat) {flat : EntryRaw}
+      {earlier : List (Except EnumerationState.Error
+        ((Nat × Nat × List Suspended × Node) × EnumerationState.State Symbol Constraint))}
+      (related : EnumerationResultRelation.Results EnumerationFlatState.Related flat earlier) :
+      FailureRelated (.ordinary uv flat) (.ordinary uv earlier)
+  /-- A missing edge retains its absence after the same ordered processed receipts. -/
+  | alternatives_none (uv : Nat) {processed : List (Receipt width)}
+      {earlier : List (SourcePruningEnumerationSelectedEdge.Result width)}
+      (related : SourceFlatPruningNativeBranches.ReceiptsRelated processed earlier) :
+      FailureRelated (.alternatives uv processed (.edge none)) (.alternatives uv earlier (.edge none))
+  /-- An edge stop retains its exact current receipt outside the processed prefix. -/
+  | alternatives_edge (uv : Nat) {processed : List (Receipt width)}
+      {earlier : List (SourcePruningEnumerationSelectedEdge.Result width)}
+      {current : Receipt width} {oldCurrent : SourcePruningEnumerationSelectedEdge.Result width}
+      (processedRelated : SourceFlatPruningNativeBranches.ReceiptsRelated processed earlier)
+      (currentRelated : SourceFlatPruningSelectedEdge.ResultRelated current oldCurrent) :
+      FailureRelated (.alternatives uv processed (.edge (some current)))
+        (.alternatives uv earlier (.edge (some oldCurrent)))
+  /-- A continuation stop retains its nested failure and exact optional native endpoint. -/
+  | alternatives_continuation (uv : Nat) {processed : List (Receipt width)}
+      {earlier : List (SourcePruningEnumerationSelectedEdge.Result width)}
+      {current : Receipt width} {oldCurrent : SourcePruningEnumerationSelectedEdge.Result width}
+      {reason : Failure width Typing} {oldReason : SourcePruningEnumerationRecursive.Failure width Typing}
+      (reached : Option (Caller width × Queries))
+      (processedRelated : SourceFlatPruningNativeBranches.ReceiptsRelated processed earlier)
+      (currentRelated : SourceFlatPruningSelectedEdge.ResultRelated current oldCurrent)
+      (reasonRelated : FailureRelated reason oldReason) :
+      FailureRelated (.alternatives uv processed (.continuation current reason reached))
+        (.alternatives uv earlier (.continuation oldCurrent oldReason reached))
+
+/-- Related recursive observations retain ordered outputs, failure context and native endpoint. -/
+def ResultRelated (flat : Result)
+    (earlier : SourcePruningEnumerationNativeContinuations.HookResult
+      (SourcePruningEnumerationRecursive.Output width Typing)
+      (SourcePruningEnumerationRecursive.Failure width Typing) width) : Prop :=
+  SourceFlatPruningNativeContinuations.HookResultRelated OutputRelated FailureRelated flat earlier
+
+/-- Read only a native endpoint supplied by the actual stopped receipt. -/
+def endpoint : FoldStop (Failure width Typing) width → Option (Caller width × Queries)
+  | .edge current => current.bind SourceFlatPruningNativeBranches.advance
+  | .continuation _ _ reached => reached
+
+/-- Convert the ordered alternative result without losing its outputs or stopped receipts. -/
+def finish (uv : Nat) : Fold (Output width Typing) (Failure width Typing) width → Result
+  | .complete _processed outputs caller queries => .complete outputs caller queries
+  | .stopped processed outputs current =>

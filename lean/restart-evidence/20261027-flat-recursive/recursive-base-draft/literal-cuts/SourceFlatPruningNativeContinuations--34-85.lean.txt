@@ -1,0 +1,52 @@
+  | stopped (processed : List (Receipt width)) (outputs : List Output) (current : Stop Reason width)
+
+universe u' v'
+
+/-- Related hooks retain ordered payloads and the exact optional native endpoint. -/
+def HookResultRelated {OldOutput : Type u'} {OldReason : Type v'}
+    (outputsRelated : Output → OldOutput → Prop) (reasonsRelated : Reason → OldReason → Prop)
+    (flat : HookResult Output Reason width)
+    (earlier : SourcePruningEnumerationNativeContinuations.HookResult OldOutput OldReason width) : Prop :=
+  match flat, earlier with
+  | .complete outputs caller queries, .complete oldOutputs oldCaller oldQueries =>
+      SourceFlatPruningNativeBranches.OrderedRelated outputsRelated outputs oldOutputs ∧
+        caller = oldCaller ∧ queries = oldQueries
+  | .stopped outputs reason reached, .stopped oldOutputs oldReason oldReached =>
+      SourceFlatPruningNativeBranches.OrderedRelated outputsRelated outputs oldOutputs ∧
+        reasonsRelated reason oldReason ∧ reached = oldReached
+  | _, _ => False
+
+/-- Absent captured results remain absent; present receipts retain their full relation. -/
+def OptionalReceiptRelated (flat : Option (Receipt width))
+    (earlier : Option (SourcePruningEnumerationSelectedEdge.Result width)) : Prop :=
+  match flat, earlier with
+  | none, none => True
+  | some current, some oldCurrent => SourceFlatPruningSelectedEdge.ResultRelated current oldCurrent
+  | _, _ => False
+
+/-- Related stops retain their stage, receipt, related reason and actual endpoint. -/
+def StopRelated {OldReason : Type v'} (reasonsRelated : Reason → OldReason → Prop)
+    (flat : Stop Reason width)
+    (earlier : SourcePruningEnumerationNativeContinuations.Stop OldReason width) : Prop :=
+  match flat, earlier with
+  | .edge current, .edge oldCurrent => OptionalReceiptRelated current oldCurrent
+  | .continuation current reason reached, .continuation oldCurrent oldReason oldReached =>
+      SourceFlatPruningSelectedEdge.ResultRelated current oldCurrent ∧
+        reasonsRelated reason oldReason ∧ reached = oldReached
+  | _, _ => False
+
+/-- Relate both payload representations without changing output order or native effects. -/
+def ResultRelated {OldOutput : Type u'} {OldReason : Type v'}
+    (outputsRelated : Output → OldOutput → Prop) (reasonsRelated : Reason → OldReason → Prop)
+    (flat : Result Output Reason width)
+    (earlier : SourcePruningEnumerationNativeContinuations.Result OldOutput OldReason width) : Prop :=
+  match flat, earlier with
+  | .complete processed outputs caller queries, .complete oldProcessed oldOutputs oldCaller oldQueries =>
+      SourceFlatPruningNativeBranches.ReceiptsRelated processed oldProcessed ∧
+        SourceFlatPruningNativeBranches.OrderedRelated outputsRelated outputs oldOutputs ∧
+        caller = oldCaller ∧ queries = oldQueries
+  | .stopped processed outputs current, .stopped oldProcessed oldOutputs oldCurrent =>
+      SourceFlatPruningNativeBranches.ReceiptsRelated processed oldProcessed ∧
+        SourceFlatPruningNativeBranches.OrderedRelated outputsRelated outputs oldOutputs ∧
+        StopRelated reasonsRelated current oldCurrent
+  | _, _ => False

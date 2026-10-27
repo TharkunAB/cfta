@@ -1,0 +1,70 @@
+theorem endpoint_related (flat : Stop) (earlier : OldStop)
+    (related : SourceFlatPruningNativeContinuations.StopRelated FailureRelated flat earlier) :
+    endpoint flat = SourcePruningEnumerationRecursive.endpoint earlier := by
+  cases flat with
+  | edge current =>
+    cases earlier with
+    | continuation _ _ _ => cases related
+    | edge oldCurrent =>
+      cases current with
+      | none =>
+        cases oldCurrent with
+        | none => rfl
+        | some _ => cases related
+      | some current =>
+        cases oldCurrent with
+        | none => cases related
+        | some oldCurrent => exact advance_related current oldCurrent related
+  | continuation current reason reached =>
+    cases earlier with
+    | edge _ => cases related
+    | continuation oldCurrent oldReason oldReached => exact related.2.2
+
+/-- Related processed receipts and stops retain the full recursive alternative failure. -/
+theorem alternatives_related (uv : Nat) {processed : List (Receipt width)}
+    {oldProcessed : List (OldReceipt width)} (flat : Stop) (earlier : OldStop)
+    (processedRelated : SourceFlatPruningNativeBranches.ReceiptsRelated processed oldProcessed)
+    (related : SourceFlatPruningNativeContinuations.StopRelated FailureRelated flat earlier) :
+    FailureRelated (.alternatives uv processed flat)
+      (.alternatives uv oldProcessed earlier) := by
+  cases flat with
+  | edge current =>
+    cases earlier with
+    | continuation _ _ _ => cases related
+    | edge oldCurrent =>
+      cases current with
+      | none =>
+        cases oldCurrent with
+        | none => exact .alternatives_none uv processedRelated
+        | some _ => cases related
+      | some current =>
+        cases oldCurrent with
+        | none => cases related
+        | some oldCurrent => exact .alternatives_edge uv processedRelated related
+  | continuation current reason reached =>
+    cases earlier with
+    | edge _ => cases related
+    | continuation oldCurrent oldReason oldReached =>
+      obtain ⟨currentRelated, reasonRelated, reachedSame⟩ := related
+      subst oldReached
+      exact .alternatives_continuation uv reached processedRelated currentRelated reasonRelated
+
+/-- Finishing related folds retains ordered outputs and the complete actual stopping context. -/
+theorem finish_related (uv : Nat) (flat : Fold) (earlier : OldFold)
+    (related : SourceFlatPruningNativeContinuations.ResultRelated
+      OutputRelated FailureRelated flat earlier) :
+    ResultRelated (finish uv flat) (SourcePruningEnumerationRecursive.finish uv earlier) := by
+  cases flat with
+  | complete processed outputs caller queries =>
+    cases earlier with
+    | stopped _ _ _ => cases related
+    | complete oldProcessed oldOutputs oldCaller oldQueries =>
+      obtain ⟨_processedRelated, outputsRelated, callerSame, queriesSame⟩ := related
+      exact ⟨outputsRelated, callerSame, queriesSame⟩
+  | stopped processed outputs current =>
+    cases earlier with
+    | complete _ _ _ _ => cases related
+    | stopped oldProcessed oldOutputs oldCurrent =>
+      obtain ⟨processedRelated, outputsRelated, currentRelated⟩ := related
+      exact ⟨outputsRelated, alternatives_related uv current oldCurrent processedRelated currentRelated,
+        endpoint_related current oldCurrent currentRelated⟩

@@ -1,0 +1,43 @@
+      inventory caller memos checked metadata parkedSeed parkedMass checkedPacket parkedFits parkedKnown
+      selectionMembers selectionLength boundedMass reserved.first.2
+    have growth := SourcePruningEnumerationFiniteReservation.first_le_final recursiveFuel seed ceiling
+    refine ⟨prefixFuel + resumeFuel, outcome, ?_, resources.mono growth.1 growth.2, ?_⟩
+    · intro extra
+      have observed := (phase (resumeFuel + extra)).1
+      have prefixSame : prefixFuel + (resumeFuel + extra) = prefixFuel + resumeFuel + extra := by omega
+      rw [prefixSame, SourcePruningEnumerationRestart.run_exact, ite_eq_right blocked] at observed
+      rw [SourcePruningEnumerationRecursive.resume_parked holeKey fits admits graph templates checkEmpty edgesOf stop order
+        (prefixFuel + resumeFuel + extra) recursiveFuel metadata caller memos.query before uv checked.core checked.core checked metadata
+        (SourcePruningEnumerationRestart.decision stop order metadata checked) observed, framed]
+      have actual := running (prefixFuel + extra)
+      have common : resumeFuel + (prefixFuel + extra) = prefixFuel + resumeFuel + extra := by omega
+      rw [common] at actual
+      exact actual
+    · intro flat related extra
+      let w := prefixFuel + resumeFuel + extra
+      have prefixSame : prefixFuel + (resumeFuel + extra) = w := by dsimp [w]; omega
+      have actualPhase := phase (resumeFuel + extra)
+      rw [prefixSame] at actualPhase
+      have replay := SourceFlatPruningSelectedPrefix.run_related_of_valid
+        holeKey fits admits graph templates stop order metadata checkEmpty edgesOf formulas solver inventory
+        w uv caller before flat memos related actualPhase.2
+      rw [actualPhase.1, SourcePruningEnumerationRestart.run_exact, ite_eq_right blocked] at replay
+      obtain ⟨flatChecked, flatAfter, flatRaw, observed, caches, rows⟩ :=
+        SourceFlatPruningRecursivePrefixShape.parked _ checked.core checked _ replay
+      obtain ⟨flatCore, rawSame, states⟩ := SourceFlatPruningRecursivePrefixShape.rows_singleton rows
+      rw [rawSame] at observed
+      have restored : EnumerationFlatCached.Related (EnumerationFlatCached.frame flatCore flatAfter) checked := by
+        simpa only [framed] using EnumerationFlatCached.frame_related caches states
+      obtain ⟨flatOutcome, actual, relatedOutcome⟩ :=
+        flatRunning (EnumerationFlatCached.frame flatCore flatAfter) restored (prefixFuel + extra)
+      have common : resumeFuel + (prefixFuel + extra) = w := by dsimp [w]; omega
+      rw [common] at actual
+      refine ⟨flatOutcome, ?_, relatedOutcome⟩
+      change resume holeKey fits admits graph templates checkEmpty edgesOf stop order w (recursiveFuel + 1)
+        metadata caller memos.query flat (some (.expand uv)) = flatOutcome
+      rw [resume, observed]
+      unfold run at actual
+      rw [SourceFlatPruningRestart.decision_related restored stop order metadata] at actual
+      exact actual
+
+end MicroCFTA.SourceFlatPruningRecursive

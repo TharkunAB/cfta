@@ -1,0 +1,21 @@
+universe u v
+
+/-- Relate ordered payloads, including native callers and recursive outputs in Type 1. -/
+inductive OrderedRelated {Left : Type u} {Right : Type v} (relation : Left → Right → Prop) :
+    List Left → List Right → Prop where
+  /-- Empty payload lists agree. -/
+  | nil : OrderedRelated relation [] []
+  /-- Related heads retain their position before related suffixes. -/
+  | cons : relation first second → OrderedRelated relation rest tail →
+      OrderedRelated relation (first :: rest) (second :: tail)
+
+/-- Relate every native receipt at its original ordered position. -/
+abbrev ReceiptsRelated (flat : List (Receipt width))
+    (earlier : List (SourcePruningEnumerationSelectedEdge.Result width)) : Prop :=
+  OrderedRelated SourceFlatPruningSelectedEdge.ResultRelated flat earlier
+
+variable [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Constraint)] [DecidableEq Node]
+
+/-- Scan siblings with the captured cache and each actual returned native endpoint. -/
+noncomputable def run (checkEmpty : Bool) (nativeFuel p h target : Nat) (scs : List Suspended)
+    (before : Cached) : List (EdgeValue Symbol Constraint) → Caller width → Queries → Result width

@@ -1,0 +1,33 @@
+    rw [resume, (phase extra).1]
+  · obtain ⟨checked, phaseValue, heap, after, _nonempty, phase⟩ := accepted
+    let reached := SourceCurrentAllocatedPartialState.advance caller
+      (SourceCurrentAllocatedQueryMemo.advancePhysical caller.checked ⟨heap, caller.checked.operations⟩)
+      caller.fourth caller.merge
+    obtain ⟨action, prefixAt, valid⟩ := phase 0
+    rw [prefixAt] at valid
+    have admission := SourcePruningEnumerationPrefixAdmission.narrowed_admission
+      holeKey fits admits graph templates checkEmpty edgesOf stop order metadata formulas solver inventory
+      (prefixFuel + 0) uv caller memos before packet chosen seed.2 (fun guard => guard ∈ seed.1)
+      bounded known _ valid
+    obtain ⟨handle, scs, value, middleMemos, middlePost, middleQuery, middlePacket, ready, stored,
+      decoded, _available, _closed, incoming, _pending, _ids, lengths, _counter, _waiting,
+      middleFits, middleKnown⟩ := admission
+    by_cases ordinary : ∃ entry rows depth free,
+        value = .node entry rows depth free ∧ scs.any (fun sc => EqualityTrie.isTerminal sc.trie) = false
+    · obtain ⟨entry, rows, depth, free, same, nonterminal⟩ := ordinary
+      subst value
+      have currentMass : mass after.core ≤ inherited :=
+        Nat.le_trans (SourcePruningEnumerationPrefixMass.retained_le holeKey fits admits graph templates checkEmpty edgesOf
+          stop order metadata formulas solver inventory (prefixFuel + 0) uv caller memos before packet _ valid prefixAt)
+          initialMass
+      have inheritedBound : scs.length ≤ inherited := Nat.le_trans lengths initialMass
+      obtain ⟨scanFuel, entered, _processed, _outputs, _afterCaller, _next, _final, result,
+        _entryRun, _stable, _counter, _values, _sameFlags, _sameWaiting, _enteredPacket,
+        outerRun, _scanRun, _post, _captured, _afterFits, _afterKnown, _processedLength,
+        _receipts, _outputPackets, _shape, _finished, _countBound, _finalFits, _finalKnown, certificate⟩ :=
+        SourcePruningEnumerationNativeOrdinaryContinuations.ordinary_finite_complete_forecast
+          holeKey fits admits graph templates checkEmpty edgesOf stop order metadata recursiveFuel start formulas solver recursive inventory
+          reached middleMemos after uv handle scs entry rows depth free middlePacket ready stored decoded
+          (selectionMembers entry rows depth free) incoming nonterminal middleFits middleKnown
+          selectionMembers selectionLength inherited inherited currentMass inheritedBound reserved.scan
+      refine ⟨prefixFuel + scanFuel, finish uv result, ?_, certificate.post middlePost⟩

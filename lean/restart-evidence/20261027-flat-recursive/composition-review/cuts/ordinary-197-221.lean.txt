@@ -1,0 +1,25 @@
+  · intro flat related extra
+    obtain ⟨read, flatEntry, enteredCores⟩ :=
+      SourceFlatPruningEntry.enter_replays caller.checked.native.machine.heap
+        (entryFuel + scanBound + extra) uv flat.core before.core
+        (uv, handle, scs, .node parentEntry storedEdges depth free) enteredCache.core
+        related.core (entryAt extra)
+    let enteredFlat := EnumerationFlatCached.frame read flat
+    have enteredRelated : EnumerationFlatCached.Related enteredFlat enteredCache := by
+      rw [← frame]
+      exact EnumerationFlatCached.frame_related related enteredCores
+    obtain ⟨flatResult, actualScan, scanRelated⟩ :=
+      flatScan enteredFlat enteredRelated (entryFuel + extra)
+    have fuelSame : scanBound + (entryFuel + extra) = entryFuel + scanBound + extra := by omega
+    rw [fuelSame] at actualScan
+    refine ⟨read, flatResult, ?_, enteredCores, scanRelated⟩
+    have actual := SourceFlatPruningNativeOrdinaryContinuations.entered
+      (SourceFlatPruningRecursive.continueWith
+        (SourceFlatPruningRecursive.resume holeKey fits admits graph templates checkEmpty edgesOf stop order
+          (entryFuel + scanBound + extra) recursiveFuel)
+        graph templates stop order (entryFuel + scanBound + extra) metadata uv)
+      checkEmpty (entryFuel + scanBound + extra) (entryFuel + scanBound + extra)
+      (entryFuel + scanBound + extra) uv uv handle scs parentEntry storedEdges depth free edgesOf caller flat
+      memos.query read flatEntry nonterminal
+    rw [actualScan] at actual
+    exact actual
