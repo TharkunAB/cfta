@@ -36,11 +36,13 @@ import Data.CFTA.Template (Template (..))
 import Data.Containers.ListUtils (nubOrd)
 import qualified Data.HashMap.Strict as HashMap
 import Data.List (elemIndex, permutations, sortOn)
+import qualified Data.Map.Lazy as LazyMap
 import Data.Map.Strict (Map)
 import qualified Data.Map.Strict as Map
 import Data.Maybe (fromMaybe, isJust, isNothing)
 import Data.Ord (Down (..))
 import qualified Data.Text as T
+import Numeric.Natural (Natural)
 import System.IO.Unsafe (unsafePerformIO)
 import System.Mem (getAllocationCounter, setAllocationCounter)
 
@@ -151,7 +153,9 @@ gives the weights of definition of the defined symbols
 smaller sum of the weights of definition of its leaves is smaller. Then a
 definition whose body has its size, such as @(f >=> g) x = f x >>= g@,
 orients towards its body for each instance. The weight decides first, so a
-rule still never makes a term larger.
+rule still never makes a term larger. The weights of definition are natural
+numbers, so their sums are exact, and the order is closed under contexts
+for each map.
 
 'PathOrder' is the lexicographic path order on the uncurried terms: the
 function symbol of the spine of an application with its arguments. The list
@@ -164,7 +168,7 @@ make a term larger, for example
 search can then prune a term whose smaller form is over the size bound.
 -}
 data TermOrder
-    = KnuthBendix !(Map Symbol Int)
+    = KnuthBendix !(Map Symbol Natural)
     | PathOrder ![T.Text]
     deriving (Eq, Show)
 
@@ -367,7 +371,7 @@ term substitution. Equal weights and equal weights of definition need a
 strict function comparison or a strict comparison of constant names. Identical functions stay identical
 under one shared term and type substitution.
 -}
-annotationIndependentGreater :: Map Symbol Int -> Term -> Term -> Bool
+annotationIndependentGreater :: Map Symbol Natural -> Term -> Term -> Bool
 annotationIndependentGreater defined a b =
     kboGreater defined Map.empty a b && (heavier defined a b == GT || tie a b)
   where
@@ -669,7 +673,7 @@ leaves (Term "app" [_, f, v]) = leaves f + leaves v
 leaves _ = 1
 
 -- | The sum of the weights of definition of the leaves of a term (see 'TermOrder').
-definitionWeight :: Map Symbol Int -> Term -> Int
+definitionWeight :: Map Symbol Natural -> Term -> Natural
 definitionWeight defined t
     | Map.null defined = 0
     | otherwise = go t
@@ -678,7 +682,7 @@ definitionWeight defined t
     go (Term s _) = Map.findWithDefault 0 s defined
 
 -- | Compare the weights of two terms, then their weights of definition.
-heavier :: Map Symbol Int -> Term -> Term -> Ordering
+heavier :: Map Symbol Natural -> Term -> Term -> Ordering
 heavier defined s t =
     compare (weight s) (weight t) <> compare (definitionWeight defined s) (definitionWeight defined t)
 
@@ -693,10 +697,11 @@ symbol to the least, and a definition whose body leads back to its symbol
 through the definitions before it is dropped. Thus of two symbols that
 define each other, the greater one is defined. The weights choose only the
 order, so a rule that is not true makes the order less useful, but the
-search stays right.
+search stays right. Each weight is computed once from the weights of its
+bodies.
 -}
-definitionWeights :: Rules -> Map Symbol Int
-definitionWeights rules = Map.mapWithKey (\c _ -> weightOf c) kept
+definitionWeights :: Rules -> Map Symbol Natural
+definitionWeights rules = weights
   where
     rewriting = concatMap (concat . Map.elems . byHead) [oriented rules, unoriented rules]
     found = Map.fromListWith (++) [(c, [body]) | (l, r) <- rewriting, Just (c, body) <- [definition l r]]
@@ -705,7 +710,8 @@ definitionWeights rules = Map.mapWithKey (\c _ -> weightOf c) kept
         [] -> acc
         acyclic -> Map.insert c acyclic acc
     leadsTo acc c s = s == c || any (any (leadsTo acc c)) (Map.findWithDefault [] s acc)
-    weightOf c = 1 + maximum [sum [weightOf s | s <- body, Map.member s kept] | body <- kept Map.! c]
+    -- A lazy map, so that a weight refers to the weights of its bodies; the definitions are acyclic.
+    weights = LazyMap.map (\bodies -> 1 + maximum [sum [w | s <- body, Just w <- [Map.lookup s weights]] | body <- bodies]) kept
     -- The defined symbol and the symbols of the body, with repetitions.
     definition l r = case spine l of
         (Term c [_], args)
@@ -732,7 +738,7 @@ variables of a term are constants here. Smaller type instances come first.
 The order is total,
 well-founded, and closed under contexts, so rewriting with it ends.
 -}
-kboCompare :: Map Symbol Int -> (Symbol -> Bool) -> Term -> Term -> Ordering
+kboCompare :: Map Symbol Natural -> (Symbol -> Bool) -> Term -> Term -> Ordering
 kboCompare defined isVar s t = heavier defined s t <> sameWeight s t
   where
     sameWeight (Term "app" [_, f, v]) (Term "app" [_, g, u]) =
@@ -769,7 +775,7 @@ the ranked variables, a greater variable has an instance that is not
 lighter, so the sum of c over the variables of a rank and the greater
 ranks must not be negative, for each rank.
 -}
-kboGreater :: Map Symbol Int -> Map Symbol Int -> Term -> Term -> Bool
+kboGreater :: Map Symbol Natural -> Map Symbol Int -> Term -> Term -> Bool
 kboGreater defined rank s t =
     heavy /= LT
         && all ((>= 0) . c) unranked

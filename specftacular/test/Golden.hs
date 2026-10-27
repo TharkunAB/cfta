@@ -9,11 +9,13 @@ Set GOLDEN_ACCEPT=1 to write the files again.
 module Main (main) where
 
 import Control.Monad (unless, when)
+import qualified Data.Map.Strict as Map
 import System.Environment (lookupEnv)
 import System.Exit (exitFailure)
 import Test.QuickCheck (Arbitrary (..), CoArbitrary, suchThat)
 
 import Specftacular
+import Specftacular.Rewriting (kboCompare)
 
 newtype PosInt = P Int
     deriving (Eq, Ord, Show, Num, Enum, Real, Integral, CoArbitrary)
@@ -144,7 +146,20 @@ main :: IO ()
 main = do
     accept <- (== Just "1") <$> lookupEnv "GOLDEN_ACCEPT"
     results <- mapM (check accept) cases
-    unless (and results) exitFailure
+    unless contextClosed $ putStrLn "FAIL the Knuth-Bendix order is not closed under contexts"
+    unless (and results && contextClosed) exitFailure
+
+{- | Whether the Knuth-Bendix order keeps the order of two leaves in a
+context when a weight of definition is beyond the range of Int: a is greater
+than b, so c a must be greater than c b.
+-}
+contextClosed :: Bool
+contextClosed = greater (leaf "a") (leaf "b") && greater (app (leaf "c") (leaf "a")) (app (leaf "c") (leaf "b"))
+  where
+    defined = Map.fromList [("a", fromIntegral (maxBound :: Int)), ("c", 1)]
+    leaf s = Term s [Term "T" []]
+    app f x = Term "app" [Term "T" [], f, x]
+    greater x y = kboCompare defined (const False) x y == GT
 
 {- | The laws of a signature with terms up to a size in the monomorphic
 phase, as 'discoverMonomorphic', with or without the test of the types.
