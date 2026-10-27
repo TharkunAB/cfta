@@ -1,0 +1,38 @@
+/-- Pre-expansion events return the complete original metadata without state reads. -/
+theorem recordTypes_inr (graph : Graph Symbol Guard) (templates : List (Template.Pattern Symbol))
+    (fuel : Nat) (metadata : Metadata Typing) (uv node : Nat) :
+    recordTypes graph templates fuel metadata uv (.inr node) = pure (false, metadata) := by
+  cases templates <;> rfl
+
+/-- Every successful result retains the pure update and both unchanged metadata fields. -/
+theorem recordTypes_metadata (graph : Graph Symbol Guard) (templates : List (Template.Pattern Symbol))
+    (fuel : Nat) (metadata : Metadata Typing) (uv : Nat) (input : Sum (Fragment Symbol) Nat)
+    (before after : State Symbol Guard) (result : Bool × Metadata Typing)
+    (success : Success (recordTypes graph templates fuel metadata uv input) before result after) :
+    result.2.types = updatedTypes metadata uv input ∧
+      result.2.openHoles = metadata.openHoles ∧ result.2.typing = metadata.typing := by
+  unfold recordTypes at success
+  split at success
+  all_goals
+    obtain ⟨observed, middle, _read, finished⟩ := (success_bind _ _ _ _ _).mp success
+    obtain ⟨resultEq, _same⟩ := (success_pure
+      (observed.1, {metadata with pending := observed.2, types := updatedTypes metadata uv input})
+      result middle after).mp finished
+    rw [resultEq]
+    exact ⟨rfl, rfl, rfl⟩
+
+/-- Every successful callback preserves all modeled compression fields and root paths. -/
+theorem recordTypes_frame (graph : Graph Symbol Guard) (templates : List (Template.Pattern Symbol))
+    (fuel : Nat) (metadata : Metadata Typing) (uv : Nat) (input : Sum (Fragment Symbol) Nat)
+    (before after : State Symbol Guard) (result : Bool × Metadata Typing)
+    (total : UnionFind.Total before.representatives)
+    (success : Success (recordTypes graph templates fuel metadata uv input) before result after) :
+    Frame before after := by
+  cases templates with
+  | nil =>
+      rw [recordTypes_empty] at success
+      exact pure_frame _ result before after success
+  | cons first rest =>
+      change Success (SourcePruningOracle.oracle graph (first :: rest) fuel metadata.pending uv input >>= fun observed =>
+        pure (observed.1, {metadata with pending := observed.2, types := updatedTypes metadata uv input}))
+        before result after at success

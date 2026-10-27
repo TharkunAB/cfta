@@ -1,0 +1,34 @@
+ ∧
+      ∀ extra (fragment : Fragment) (reached : Caller (bits + 2)) (saved : Queries) (after : Cached),
+        SourcePruningEnumerationHookInvocation.OrdinaryInvocation
+          (continueWith (resume holeKey fits admits graph templates checkEmpty edgesOf stop order
+            (bound + extra) recursiveFuel) graph templates stop order (bound + extra) metadata uv)
+          checkEmpty (bound + extra) (bound + extra) (bound + extra) (bound + extra) (bound + extra)
+          uv edgesOf caller before memos.query fragment reached saved after →
+        ∃ edge ∈ edgesOf (.node parentEntry storedEdges depth free),
+          EnumerationValidity.Canonical before.core →
+          (∀ tries residual,
+            SourcePruningEnumerationConstraint.project edge.entry.key.constraint = some (tries, residual) →
+            EnumerationState.arityAllows edge.children.length
+              (EnumerationCorrectness.suspendedVars before.core.counter tries) = true) →
+          (∀ tries residual,
+            SourcePruningEnumerationConstraint.project edge.entry.key.constraint = some (tries, residual) →
+            ∀ incoming bucket,
+              (incoming, bucket) ∈ SourcePruningEnumerationEdgeInputs.children edge scs before.core.counter tries →
+              (match incoming with | .node _ _ _ _ => True | _ => False) ∨
+                bucket.any (fun sc => EqualityTrie.isTerminal sc.trie) = true ∨ bucket = []) →
+          ∀ (ambient : InternedGuardedLanguage.Env Symbol) (assignment : Nat → Language.Term Symbol),
+            EnumerationCorrectness.Satisfies
+              (SourcePruningEnumerationNativeLanguage.handles (SourceEqualityPCSGuard.holds formulas solver)
+                ambient reached.checked.native.machine.heap)
+              (fun guard term => SourceEqualityPCSGuard.holds formulas solver guard term = true) assignment after.core →
+            EnumerationCorrectness.Satisfies
+              (SourcePruningEnumerationNativeLanguage.handles (SourceEqualityPCSGuard.holds formulas solver)
+                ambient caller.checked.native.machine.heap)
+              (fun guard term => SourceEqualityPCSGuard.holds formulas solver guard term = true) assignment before.core ∧
+            InternedGuardedLanguage.edgeMeaning (SourceEqualityPCSGuard.holds formulas solver)
+              ambient edge (assignment uv) ∧
+            InternedGuardedLanguage.meaning (SourceEqualityPCSGuard.holds formulas solver)
+              ambient (.node parentEntry storedEdges depth free) (assignment uv) ∧
+            (∀ sc ∈ scs, EnumerationState.Suspended.Holds assignment (assignment uv) sc) ∧
+            Fragments.fill assignment fragment = assignment uv

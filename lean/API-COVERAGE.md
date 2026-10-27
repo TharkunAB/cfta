@@ -1,5 +1,33 @@
 # Public API and source correspondence
 
+## Actual selected-step meaning and recursive callback admission
+
+Source checkpoint: fcbb20ee93aacabb645c09cf5e64ff08be86c23f.
+Actual receipts now restore original selected-input satisfaction across
+narrowing, ordinary entry, a completed captured head and its false callback.
+Canonical, nonterminal, fresh arity and child retention remain explicit gates.
+The original finite ordinary producer retains its ENTIRE old result and derives
+rich actual invocation receipts and a conditional backward language law.
+The callback retains its actual false singleton, returned Packet, full Memos
+and concrete restart equation at the same work bound.
+
+A completed captured head now preserves any different isolated pending slot
+at its actual completed cache, including IncomingAvoid. Original resources
+suffice. No semantic gate or universal Ranges is added to this preservation.
+A stronger head producer retains the original callback seed, mass ceiling,
+Fits, guard heap, fragment allocation and reservation. An actual false callback
+retains that same recursive admission. Earlier sibling/ordinary receipt
+families do not yet carry this new admission. Rich whole-history induction
+still needs one common bound and admission at every recursive input.
+
+Nine modules, 1592 lines and 16 public theorems pass strict checking.
+Audit passes 4121 jobs and 79370 theorem dependency checks.
+H6 and both earlier conditional captured renderers retain their signatures.
+Whole recursive acceptance, coverage and physical correspondence remain open.
+No Haskell source changed. All earlier Haskell repair handoffs stay in FINDINGS.
+Details: `lean/notes-current-recursive-admission.md`. The full goal stays ACTIVE.
+
+
 ## Finite sibling invocations now carry full native head receipts
 
 Source checkpoint: 0f2918da7364b302600cf4ded0e7bee3afeb603a.

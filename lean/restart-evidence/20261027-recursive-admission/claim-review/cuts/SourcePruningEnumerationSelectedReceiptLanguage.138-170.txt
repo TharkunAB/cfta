@@ -1,0 +1,33 @@
+  have narrowedCanonical := prefix_canonical holeKey fits admits graph templates checkEmpty edgesOf stop order
+    metadata formulas solver inventory fuel uv caller before memos canonical valid
+  rw [actual] at narrowedCanonical
+  have concreteValid := valid
+  rw [actual] at concreteValid
+  have cacheFacts := SourcePruningEnumerationPrefixPacket.prefix_cache_valid
+    holeKey fits admits graph templates checkEmpty edgesOf stop order metadata formulas solver inventory
+    fuel uv caller before memos
+    (.narrowed checked prepared ordinaryCaller ordinaryMemos.query action (some narrowed) right none) concreteValid
+  obtain ⟨cacheValid, safe, pending, counter, ordered⟩ := cacheFacts
+  have narrowedPacket : SourcePruningEnumerationRecursive.Packet formulas solver inventory
+      ordinaryCaller ordinaryMemos metadata narrowed := by
+    refine ⟨enteredPacket.context, safe, pending, cacheValid, ?_, ?_⟩
+    · obtain ⟨level, frontier, originalOrder⟩ := packet.ordered
+      exact ⟨level, frontier, ordered level frontier originalOrder⟩
+    · simpa only [counter] using packet.bounded
+  have ready := SourcePruningEnumerationRecursive.packet_selected_ready formulas solver inventory stop order
+    metadata caller memos before uv packet chosen
+  obtain ⟨_roots, _paths, _storage, realized, _counts, _flags⟩ := packet.valid
+  have meaning := prefix_semantics holeKey fits admits graph templates checkEmpty edgesOf stop order metadata
+    formulas solver inventory fuel uv caller before memos packet.context ready realized valid
+  rw [actual] at meaning
+  obtain ⟨handle, parentEntry, storedEdges, depth, free, stored, decoded, selected, sound⟩ :=
+    SourcePruningEnumerationNativeHookResources.CompletedHeadReceipt.sound_ordinary_callback_input
+      narrowedPacket entry enteredPacket prefixPost receipt recording narrowedCanonical nonterminal freshArity retained
+  have values := entry_values ordinaryCaller.checked.native.machine.heap entryFuel uv narrowed.core
+    entered.core target entryHandle scs entryValue narrowedPacket.safe.1.total entry
+  have originalStored : narrowed.core.values[target]? = some (.unenumerated (some handle) scs) := by
+    simpa only [values] using stored
+  refine ⟨handle, parentEntry, storedEdges, depth, free, originalStored, decoded, selected, ?_⟩
+  intro ambient assignment satisfied
+  obtain ⟨narrowedHolds, edgeHolds, parentHolds, suspendedHolds, filled⟩ := sound ambient assignment satisfied
+  exact ⟨meaning ambient _ assignment narrowedHolds, edgeHolds, parentHolds, suspendedHolds, filled⟩

@@ -1,0 +1,28 @@
+DESIGN ONLY — no Lean declaration in this file has been compiled.
+
+Stronger finite contract shape, with ALL original Complete inputs:
+  originalAdmission → ∃ bound outcome,
+    (∀extra, oldRun(bound+extra,depth,actualInput)=outcome) ∧
+    OutcomeResources originalCaller(final depth seed ceiling) outcome ∧
+    (∀extra output, output∈hookOutputs outcome →
+      ∃ history, OutputHistory(workFuel=bound+extra, actual original input, output) ∧
+        operation-by-operation resource evidence for that SAME history).
+
+Resource evidence for each false callback tail input:
+  ∃inventory fullMemos callbackSeed callbackCeiling,
+    fullMemos.query=actualSavedQueries ∧
+    Packet inventory actualReachedCaller fullMemos actualUpdatedMetadata actualFramedCache ∧
+    Fits callbackSeed.profile actualReachedCaller ∧ Heap callbackSeed.alpha actualReachedHeap ∧
+    suspendedBound actualFramedCache≤callbackCeiling ∧
+    FiniteReservation.Reserved bits smallerDepth callbackSeed callbackCeiling.
+  PLUS exact actual callback singleton, local recording/frame receipt,
+  and the smaller-depth history at the SAME parent workFuel.
+
+Actual head provenance:
+  callbackSeed = afterHead localHeadSeed inherited;
+  callbackCeiling = massCeil localHeadSeed capturedMass inherited;
+  callbackReserved = original local HeadReserved second component;
+  fullMemos = actual head Post's complete returned Memos witness.
+
+No Satisfies, desired history, future Success or final resource premise is an
+initial producer input. Global selector policies remain unchanged outer inputs.

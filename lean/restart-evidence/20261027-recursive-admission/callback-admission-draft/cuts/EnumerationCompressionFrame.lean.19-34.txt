@@ -1,0 +1,16 @@
+/-- Compression changes only the forest and preserves exact root paths. -/
+structure Frame (before after : State Symbol Guard) : Prop where
+  /-- Compression keeps the allocation counter. -/
+  counter : after.counter = before.counter
+  /-- Compression keeps every stored slot. -/
+  values : after.values = before.values
+  /-- Compression keeps every residual obligation. -/
+  obligations : after.obligations = before.obligations
+  /-- Compression keeps the complete per-variable ancestry function. -/
+  recursionAncestry : after.recursionAncestry = before.recursionAncestry
+  /-- Compression keeps the current expansion ancestry. -/
+  expansionAncestry : after.expansionAncestry = before.expansionAncestry
+  /-- Every finite root path has the same representative and size. -/
+  reaches : ∀ uv root size,
+    UnionFind.Reaches after.representatives uv root size ↔
+      UnionFind.Reaches before.representatives uv root size

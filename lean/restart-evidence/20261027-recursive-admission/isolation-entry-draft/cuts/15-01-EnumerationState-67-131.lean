@@ -1,0 +1,65 @@
+structure State (Symbol Guard : Type) where
+  counter : Nat
+  representatives : UnionFind.Forest
+  values : List (UVarValue Symbol)
+  obligations : List (Guard × Fragment Symbol)
+  recursionAncestry : Nat → List RecursionKey
+  expansionAncestry : List RecursionKey
+
+/-- The root starts in UVar zero. -/
+def initial (root : Nat) : State Symbol Guard :=
+  ⟨1, UnionFind.withInitialValues [0], [.unenumerated (some root) []], [], fun _ => [], []⟩
+
+/-- Source invariant failures and explicit finite execution bounds. -/
+inductive Error where
+  | fuelExhausted | representativeFuel | invalidSlot | invalidIntersection
+  | unresolvedReference | unfinishedFragment
+  deriving DecidableEq, Repr
+
+/-- State and errors are local to each nondeterministic alternative. -/
+abbrev EnumerateM (Symbol Guard : Type) := StateT (State Symbol Guard) (ExceptT Error List)
+
+/-- Reject one branch, as the list monad does. -/
+def reject : EnumerateM Symbol Guard α := fun _ => []
+
+/-- Choose each alternative with the same input state. -/
+def choose (values : List α) : EnumerateM Symbol Guard α := fun state =>
+  values.map fun value => .ok (value, state)
+
+/-- Report an execution limit or source invariant failure. -/
+def failure (error : Error) : EnumerateM Symbol Guard α := fun _ => [.error error]
+
+/-- Retain a branch exactly when its Boolean guard is true. -/
+def require (condition : Bool) : EnumerateM Symbol Guard Unit :=
+  if condition then pure () else reject
+
+/-- Write the supplied UVar, not its representative. -/
+def setValue (uv : Nat) (value : UVarValue Symbol) : EnumerateM Symbol Guard Unit :=
+  modify fun state => {state with values := state.values.set uv value}
+
+/-- Read one raw slot. -/
+def rawValue (uv : Nat) : EnumerateM Symbol Guard (UVarValue Symbol) := do
+  match (← get).values[uv]? with
+  | none => failure .invalidSlot
+  | some value => pure value
+
+/-- Find and path-compress a representative. -/
+def representative (fuel uv : Nat) : EnumerateM Symbol Guard Nat := do
+  let state ← get
+  match UnionFind.findRoot fuel state.representatives uv with
+  | none => failure .representativeFuel
+  | some found =>
+      set {state with representatives := found.forest}
+      pure found.representative
+
+/-- Read the current representative's slot. -/
+def getValue (fuel uv : Nat) : EnumerateM Symbol Guard (UVarValue Symbol) := do
+  rawValue (← representative fuel uv)
+
+/-- Give a variable the ancestry of the current expansion. -/
+def inheritAncestry (uv : Nat) : EnumerateM Symbol Guard Unit :=
+  modify fun state => {state with recursionAncestry := (fun other =>
+    if other = uv then (state.expansionAncestry ++ state.recursionAncestry uv).eraseDups
+    else state.recursionAncestry other)}
+
+/-- Allocate a slot and inherit the current recursion ancestry. -/

@@ -1,0 +1,33 @@
+  | cons edge rest ih =>
+      obtain ⟨headBound, receipt, middleCaller, headSaved, middleMemos, middleInventory,
+        headRun, _headPost, _headQueries, _admitted, _pending, _history, _cacheBounds,
+        _headFits, _headKnown, shape, completedReceipt⟩ :=
+        SourcePruningEnumerationNativeHookResources.head_finite_complete_resources_with_receipt
+          holeKey fits admits graph templates checkEmpty edgesOf stop order metadata recursiveFuel
+          seed formulas solver recursive inventory caller memos before uv handle scs parentEntry storedEdges
+          depth free edge packet ready stored decoded (selected edge List.mem_cons_self) incoming
+          bounded known selectionMembers selectionLength capturedMass inherited initialMass inheritedLength reserved.head
+      rcases shape with unsupported | ⟨outcome, advanced, callbackRun, _resources, captured⟩
+      · obtain ⟨unhandled, _allowed, _projected⟩ := unsupported
+        subst receipt
+        refine ⟨headBound, ?_⟩
+        intro extra fragment reached saved after invocation
+        have first := headRun extra
+        cases invocation with
+        | here observed =>
+            rw [first] at observed
+            cases observed
+        | completed observed _continued _tail =>
+            rw [first] at observed
+            cases observed
+        | other observed _notComplete actualAdvance _tail =>
+            rw [first] at observed
+            cases observed
+            cases actualAdvance
+      · cases outcome with
+        | complete headOutputs hookCaller hookQueries =>
+            obtain ⟨hookInventory, hookMemos, hookPost, hookQuery, hookCaptured, hookFits, hookKnown⟩ := captured
+            obtain ⟨tailBound, tailReceipts⟩ :=
+              ih (afterHook recursiveFuel seed capturedMass inherited) hookInventory hookCaller hookMemos hookCaptured
+                (lookupNode_keeps _ _ hookPost.effects.keeps handle _ decoded)
+                (fun chosen member => selected chosen (List.mem_cons_of_mem _ member)) hookFits hookKnown reserved.tail

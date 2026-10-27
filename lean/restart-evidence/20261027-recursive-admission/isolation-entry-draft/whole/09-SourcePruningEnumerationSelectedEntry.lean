@@ -1,0 +1,103 @@
+import MicroCFTA.SourcePruningEnumerationEntry
+import MicroCFTA.SourcePruningEnumerationSelection
+
+namespace MicroCFTA.SourcePruningEnumerationSelectedEntry
+open EnumerationState EnumerationSchedule EnumerationCorrectness EnumerationDependencies
+open SourcePruningEnumerationNodes SourcePruningEnumerationObservation
+local notation "Symbol" => SourcePruningTemplates.Symbol
+variable {EnumGuard NativeGuard : Type}
+
+/-- Actual pending entry retains the selected raw root and its cached invariants. -/
+theorem complete
+    (heap : InternedConstructorTemplates.State Symbol NativeGuard)
+    (before : EnumerationExpandableIndex.Cached Symbol EnumGuard)
+    (uv handle : Nat) (scs : List Suspended) (roots : Nat → Nat)
+    (ready : EnumerationDriver.Ready uv before.core)
+    (stored : before.core.values[uv]? = some (.unenumerated (some handle) scs))
+    (realized : PendingRealized heap before.core)
+    (paths : Roots before.core.representatives roots)
+    (counts : EnumerationCanonicalWaiting.Correct roots before.core.values before.waiting)
+    (flags : ∀ slot, SourcePruningEnumerationNativeIndex.candidate heap
+      ((before.core.values[slot]?).getD .eliminated) = some (before.expandable slot)) :
+    ∃ (fuel : Nat) (decoded : InternedConstructorTemplates.Value Symbol NativeGuard)
+      (after : EnumerationExpandableIndex.Cached Symbol EnumGuard),
+      (∀ extra, ExceptT.run (SourcePruningEnumerationEntry.enter heap (fuel + extra) uv before.core) =
+        [.ok ((uv, handle, scs, decoded), after.core)]) ∧
+      lookupNode heap handle = some decoded ∧
+      InternedProbeProvenance.Available heap decoded ∧ decoded.free = [] ∧
+      after.core.counter = before.core.counter ∧ after.core.values = before.core.values ∧
+      after.expandable = before.expandable ∧ after.waiting = before.waiting ∧
+      after.core.values[uv]? = some (.unenumerated (some handle) scs) ∧
+      EnumerationDriver.Ready uv after.core ∧ EnumerationDriver.Protected uv before.core after.core ∧
+      Roots after.core.representatives roots ∧ PendingRealized heap after.core ∧
+      EnumerationCanonicalWaiting.Correct roots after.core.values after.waiting ∧
+      (∀ slot, SourcePruningEnumerationNativeIndex.candidate heap
+        ((after.core.values[slot]?).getD .eliminated) = some (after.expandable slot)) ∧
+      (∀ sc ∈ scs, sc.var < after.core.counter) ∧
+      (∀ bucket, InputsPending before.core bucket → InputsPending after.core bucket) ∧
+      EnumerationDriver.RenderStable before.core after.core := by
+  obtain ⟨fuel, readValue, readAfter, readRun, _readFrame, packet⟩ :=
+    SourcePruningEnumerationEntry.complete heap before.core uv ready.safe.1 ready.inside realized
+  have readSuccess : Success (getValue fuel uv) before.core readValue readAfter := by
+    rw [Success, ← Nat.add_zero fuel, readRun 0]
+    exact List.mem_singleton_self _
+  obtain ⟨readSafe, readCounter, readProtection, readStored⟩ :=
+    EnumerationDriver.getValue_root fuel uv before.core readAfter readValue
+      ready.safe ready.inside ready.root readSuccess
+  have same : readValue = .unenumerated (some handle) scs :=
+    Option.some.inj (readStored.symm.trans (readProtection.value.trans stored))
+  subst readValue
+  obtain ⟨target, decoded, compressed, entered, fullFrame, captureRun, _storedCapture,
+    decodedLookup, available, closed, ancestry, entryRun, _enteredStorage, enteredRealized⟩ := packet
+  have captureSuccess : Success (representative fuel uv) readAfter target compressed := by
+    rw [Success, ← Nat.add_zero fuel, captureRun 0]
+    exact List.mem_singleton_self _
+  obtain ⟨targetSame, compressedSafe, _compressedCounter, captureProtection⟩ :=
+    EnumerationDriver.representative_root fuel uv target readAfter compressed readSafe
+      (by simpa only [readCounter] using ready.inside) readProtection.root captureSuccess
+  subst target
+  let after := EnumerationExpandableIndex.frame entered before
+  have counter : after.core.counter = before.core.counter := by
+    rw [show after.core = entered from rfl, ancestry]
+    exact fullFrame.counter
+  have values : after.core.values = before.core.values := by
+    rw [show after.core = entered from rfl, ancestry]
+    exact fullFrame.values
+  have classes : ∀ left right, UnionFind.SameClass after.core.representatives left right ↔
+      UnionFind.SameClass before.core.representatives left right := by
+    intro left right
+    simp only [after, EnumerationExpandableIndex.frame, ancestry, UnionFind.SameClass, fullFrame.reaches]
+  have safe : Safe after.core := by
+    rw [show after.core = entered from rfl, ancestry]
+    exact EnumerationDriver.ancestry_safe compressed _ compressedSafe
+  have frame : EnumerationDriver.Protected uv before.core after.core := by
+    have compressedFrame := readProtection.trans captureProtection
+    refine ⟨?_, ?_, classes uv⟩
+    · rw [values]
+    · rw [show after.core = entered from rfl, ancestry]
+      exact compressedFrame.root
+  have afterReady : EnumerationDriver.Ready uv after.core := by
+    refine ⟨safe, by simpa only [counter] using ready.inside, frame.root, ?_⟩
+    intro node bucket read
+    exact frame.avoids bucket (ready.avoids node bucket (by simpa only [values] using read))
+  have afterPaths : Roots after.core.representatives roots := by
+    intro slot
+    obtain ⟨size, path⟩ := paths slot
+    refine ⟨size, ?_⟩
+    rw [show after.core = entered from rfl, ancestry]
+    exact (fullFrame.reaches slot (roots slot) size).mpr path
+  have actualStored : after.core.values[uv]? = some (.unenumerated (some handle) scs) := by
+    simpa only [values] using stored
+  refine ⟨fuel, decoded, after, entryRun, decodedLookup, available, closed, counter, values,
+    rfl, rfl, actualStored, afterReady, frame, afterPaths, enteredRealized, ?_, ?_,
+    safe.1.values _ (List.mem_of_getElem? actualStored), ?_, ?_⟩
+  · simpa only [values, show after.waiting = before.waiting from rfl] using counts
+  · simpa only [values, show after.expandable = before.expandable from rfl] using flags
+  · intro bucket pending held fragment expanded sc member sameClass
+    exact pending held fragment (by simpa only [values] using expanded) sc member
+      ((classes held sc.var).mp sameClass)
+  · refine ⟨safe, counter, values, ?_, classes⟩
+    rw [show after.core = entered from rfl, ancestry]
+    exact fullFrame.obligations
+
+end MicroCFTA.SourcePruningEnumerationSelectedEntry

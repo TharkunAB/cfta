@@ -1,0 +1,53 @@
+{
+  "scope": "Source-grounded proof links; not an executed native trace or new public runtime.",
+  "routes": [
+    {
+      "from": "NativeHookResources.CompletedHeadReceipt",
+      "to": "NativeHookResources.HeadAdmission",
+      "evidence": "SourcePruningEnumerationHeadAdmission.lean:71-102",
+      "meaning": "Same original captured cache, full memo/native receipt, actual diagonal completion"
+    },
+    {
+      "from": "NativeHookResources.HeadAdmission",
+      "to": "Recursive.Packet",
+      "evidence": "SourcePruningEnumerationHeadAdmission.lean:41-66; SourcePruningEnumerationRecursivePacket.lean:20-35",
+      "meaning": "Original native/context/cache/reference/resource inputs"
+    },
+    {
+      "from": "HeadAdmission.source and Packet.valid",
+      "to": "SelectedEdge.complete_with_fragments_resources",
+      "evidence": "SourcePruningEnumerationSelectedEdgeResources.lean:48-99",
+      "meaning": "Actual stored parent/edge; original reservation; one canonical producer"
+    },
+    {
+      "from": "SelectedEdge.complete_with_fragments_resources",
+      "to": "EnumerationDriver.Protected and EnumerationReferences.IncomingAvoid",
+      "evidence": "SourcePruningEnumerationSelectedEdgeResources.lean:126-150",
+      "meaning": "Both properties hold at the same selected endpoint"
+    },
+    {
+      "from": "CompletedHeadReceipt.running",
+      "to": "CapturedEdge.run",
+      "evidence": "SourcePruningEnumerationCapturedEdge.lean:25-33",
+      "meaning": "Common adequate diagonal exposes same actual finalizer"
+    },
+    {
+      "from": "CapturedEdge.run",
+      "to": "Finalize.run",
+      "evidence": "SourcePruningEnumerationFinalize.lean:24-32",
+      "meaning": "Finalizer executes only after actual selected completion"
+    },
+    {
+      "from": "Finalize.run",
+      "to": "NativeIndex.write",
+      "evidence": "SourcePruningEnumerationNativeIndex.lean:19-51",
+      "meaning": "Actual captured raw-slot write and lost-before-gained waiting effects"
+    },
+    {
+      "from": "Actual Finalize.run Some and held != uv",
+      "to": "IsolatedPending held heldHandle after.core",
+      "evidence": "SourcePruningEnumerationIsolatedPending.lean:19-26; draft:120-141",
+      "meaning": "Actual same representative, unchanged held slot, no new suspended reference"
+    }
+  ]
+}

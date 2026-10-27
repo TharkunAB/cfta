@@ -1,0 +1,52 @@
+theorem callback_finite_complete_resources_with_receipt
+    (holeKey : Typing → Nat → Key) (fits : Key → Symbol → Bool) (admits : Key → Node → Bool)
+    (formulas : SourceGuards.Formulas FullSyntax.Formula)
+    (solver : SourceGuards.Entailment FullSyntax.Formula) (inventory : Inventory)
+    (graph : Graph Symbol Constraint) (templates : List (Template.Pattern Symbol))
+    (metadata : Metadata Typing) (uv : Nat) (fragment : Fragment)
+    (caller : Caller (bits + 2)) (memos : Memos) (before : Cached)
+    (checkEmpty : Bool) (edgesOf : Node → List (EdgeValue Symbol Constraint))
+    (stop : Option (Metadata Typing → Nat → Bool)) (order : Metadata Typing → List Nat → Option Nat)
+    (recursiveFuel : Nat)
+    (recursive : Complete (bits := bits) holeKey fits admits graph templates checkEmpty edgesOf stop order
+      formulas solver recursiveFuel)
+    (seed : Seed) (ceiling : Nat)
+    (packet : Packet formulas solver inventory caller memos metadata before)
+    (allocated : FragmentBound before.core.counter fragment)
+    (bounded : Fits seed.2 caller.checked)
+    (known : Heap (fun guard => guard ∈ seed.1) caller.checked.native.machine.heap)
+    (selectionMembers : ∀ entry rows depth free, ∀ edge ∈ edgesOf (.node entry rows depth free), edge ∈ rows)
+    (selectionLength : ∀ entry rows depth free, (edgesOf (.node entry rows depth free)).length ≤ rows.length)
+    (mass : suspendedBound before.core ≤ ceiling)
+    (reserved : SourcePruningEnumerationFiniteReservation.Reserved bits recursiveFuel seed ceiling) :
+    ∃ (fuel : Nat) (result : Bool × Metadata Typing) (after : Core) (outcome : Result),
+      Packet formulas solver inventory caller memos result.2 (EnumerationExpandableIndex.frame after before) ∧
+      RenderStable before.core after ∧ Frame before.core after ∧
+      result.2.types = updatedTypes metadata uv (.inl fragment) ∧
+      result.2.openHoles = metadata.openHoles ∧ result.2.typing = metadata.typing ∧
+      (∀ extra,
+        Success (recordTypes graph templates (fuel + extra) metadata uv (.inl fragment)) before.core result after ∧
+        ExceptT.run (recordTypes graph templates (fuel + extra) metadata uv (.inl fragment) before.core) =
+          [.ok (result, after)] ∧
+        ∀ (recur : Metadata Typing → Caller (bits + 2) → Queries → Cached → Option Next → Result) stop order,
+          continueWith recur graph templates stop order (fuel + extra) metadata uv fragment caller memos.query before =
+            if result.1 then .complete [] caller memos.query
+            else recur result.2 caller memos.query (EnumerationExpandableIndex.frame after before)
+              (SourcePruningEnumerationRestart.decision stop order result.2
+                (EnumerationExpandableIndex.frame after before))) ∧
+      (∀ extra, continueWith
+        (resume holeKey fits admits graph templates checkEmpty edgesOf stop order (fuel + extra) recursiveFuel)
+        graph templates stop order (fuel + extra) metadata uv fragment caller memos.query before = outcome) ∧
+      OutcomeResources formulas solver caller
+        (SourcePruningEnumerationFiniteReservation.final recursiveFuel seed ceiling) outcome ∧
+      (∀ (ambient : InternedGuardedLanguage.Env Symbol)
+        (residualMeaning : Constraint → Language.Term Symbol → Prop) (assignment : Nat → Language.Term Symbol),
+        Satisfies (SourcePruningEnumerationNativeLanguage.handles (SourceEqualityPCSGuard.holds formulas solver)
+          ambient caller.checked.native.machine.heap) residualMeaning assignment after ↔
+        Satisfies (SourcePruningEnumerationNativeLanguage.handles (SourceEqualityPCSGuard.holds formulas solver)
+          ambient caller.checked.native.machine.heap) residualMeaning assignment before.core) ∧
+      (EnumerationValidity.Canonical before.core → EnumerationValidity.Canonical after) ∧
+      (∀ held handle, EnumerationDischargeHistory.IsolatedPending held handle before.core →
+        EnumerationDischargeHistory.IsolatedPending held handle after) ∧
+      (result.1 = false → FalseCallbackReceipt holeKey fits admits formulas solver inventory graph templates
+        metadata uv fragment caller memos before checkEmpty edgesOf stop order recursiveFuel fuel result.2 after outcome)

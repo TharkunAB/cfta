@@ -1,0 +1,118 @@
+theorem ordinary_finite_complete_invocation_semantics
+    (holeKey : Typing → Nat → Key) (fits : Key → Symbol → Bool) (admits : Key → Node → Bool)
+    (graph : Graph Symbol Constraint) (templates : List (Template.Pattern Symbol))
+    (checkEmpty : Bool) (edgesOf : Node → List (EdgeValue Symbol Constraint))
+    (stop : Option (Metadata Typing → Nat → Bool)) (order : Metadata Typing → List Nat → Option Nat)
+    (metadata : Metadata Typing) (recursiveFuel : Nat)
+    (seed : Seed) (formulas : SourceGuards.Formulas FullSyntax.Formula)
+    (solver : SourceGuards.Entailment FullSyntax.Formula)
+    (inventory : Inventory)
+    (caller : Caller (bits + 2)) (memos : Memos) (before : Cached) (uv handle : Nat) (scs : List Suspended)
+    (parentEntry : Cache.Interned InternedBinderProtocol.NodeKey)
+    (storedEdges : List (EdgeValue Symbol Constraint))
+    (depth : Nat) (free : List InternedBinderProtocol.Reference)
+    (packet : Packet formulas solver inventory caller memos metadata before)
+    (ready : EnumerationDriver.Ready uv before.core)
+    (stored : before.core.values[uv]? = some (.unenumerated (some handle) scs))
+    (decoded : lookupNode caller.checked.native.machine.heap handle = some (.node parentEntry storedEdges depth free))
+    (selected : ∀ edge ∈ edgesOf (.node parentEntry storedEdges depth free), edge ∈ storedEdges)
+    (incoming : EnumerationReferences.IncomingAvoid uv before.core)
+    (nonterminal : scs.any (fun sc => EqualityTrie.isTerminal sc.trie) = false)
+    (bounded : Fits seed.2 caller.checked)
+    (known : Heap (fun guard => guard ∈ seed.1) caller.checked.native.machine.heap)
+    (selectionMembers : ∀ entry rows depth free, ∀ edge ∈ edgesOf (.node entry rows depth free), edge ∈ rows)
+    (selectionLength : ∀ entry rows depth free, (edgesOf (.node entry rows depth free)).length ≤ rows.length)
+    (capturedMass inherited : Nat) (initialMass : suspendedBound before.core ≤ capturedMass)
+    (inheritedLength : scs.length ≤ inherited)
+    (reserved : ScanReserved bits recursiveFuel seed capturedMass inherited
+      (edgesOf (.node parentEntry storedEdges depth free)).length) :
+    ∃ (bound : Nat) (entered : Cached)
+      (processed : List (Receipt (bits + 2))) (outputs : List (Output (bits + 2) Typing))
+      (afterCaller : Caller (bits + 2)) (next : Inventory) (final : Memos)
+      (result : Result (Output (bits + 2) Typing) (Failure (bits + 2) Typing) (bits + 2)),
+      (∀ extra, ExceptT.run (SourcePruningEnumerationEntry.enter caller.checked.native.machine.heap
+          (bound + extra) uv before.core) =
+        [.ok ((uv, handle, scs, .node parentEntry storedEdges depth free), entered.core)]) ∧
+      EnumerationDriver.RenderStable before.core entered.core ∧
+      entered.core.counter = before.core.counter ∧ entered.core.values = before.core.values ∧
+      entered.expandable = before.expandable ∧ entered.waiting = before.waiting ∧
+      Packet formulas solver inventory caller memos metadata entered ∧
+      (∀ extra, run
+        (continueWith (resume holeKey fits admits graph templates checkEmpty edgesOf stop order (bound + extra) recursiveFuel)
+          graph templates stop order (bound + extra) metadata uv)
+        checkEmpty (bound + extra) (bound + extra) (bound + extra) (bound + extra) (bound + extra)
+        uv edgesOf caller before memos.query =
+          ([.ok ((uv, handle, scs, .node parentEntry storedEdges depth free), entered.core)], some result)) ∧
+      (∀ extra, SourcePruningEnumerationNativeContinuations.run
+        (continueWith (resume holeKey fits admits graph templates checkEmpty edgesOf stop order (bound + extra) recursiveFuel)
+          graph templates stop order (bound + extra) metadata uv)
+        checkEmpty (bound + extra) (bound + extra) (bound + extra) (bound + extra) (bound + extra)
+        uv scs entered (edgesOf (.node parentEntry storedEdges depth free)) caller memos.query = result) ∧
+      Post formulas solver next caller afterCaller final ∧
+      Packet formulas solver next afterCaller final metadata entered ∧
+      Fits (stage recursiveFuel seed capturedMass inherited
+        (edgesOf (.node parentEntry storedEdges depth free)).length).2 afterCaller.checked ∧
+      Heap (fun guard => guard ∈ (stage recursiveFuel seed capturedMass inherited
+        (edgesOf (.node parentEntry storedEdges depth free)).length).1) afterCaller.checked.native.machine.heap ∧
+      processed.length ≤ (edgesOf (.node parentEntry storedEdges depth free)).length ∧
+      (∀ index receipt, processed[index]? = some receipt →
+        ReceiptAt recursiveFuel formulas solver caller entered uv seed scs capturedMass inherited index receipt) ∧
+      (∀ output ∈ outputs, ∃ index, index < (edgesOf (.node parentEntry storedEdges depth free)).length ∧
+        OutputAt recursiveFuel formulas solver caller seed capturedMass inherited index output) ∧
+      (result = .complete processed outputs afterCaller final.query ∨
+        ∃ current, result = .stopped processed outputs current ∧
+          (endpoint current = none ∨ endpoint current = some (afterCaller, final.query)) ∧
+          StoppedAt recursiveFuel formulas solver caller entered uv seed scs capturedMass inherited
+            processed.length outputs current) ∧
+      OutcomeResources formulas solver caller
+        (stage recursiveFuel seed capturedMass inherited (edgesOf (.node parentEntry storedEdges depth free)).length)
+        (SourcePruningEnumerationRecursive.finish uv result) ∧
+    (∀ extra (fragment : Fragment) (reached : Caller (bits + 2)) (saved : Queries) (after : Cached),
+      SourcePruningEnumerationHookInvocation.OrdinaryInvocation
+        (continueWith (resume holeKey fits admits graph templates checkEmpty edgesOf stop order
+          (bound + extra) recursiveFuel) graph templates stop order (bound + extra) metadata uv)
+        checkEmpty (bound + extra) (bound + extra) (bound + extra) (bound + extra) (bound + extra)
+        uv edgesOf caller before memos.query fragment reached saved after →
+      ∃ edge ∈ edgesOf (.node parentEntry storedEdges depth free),
+        ∃ (headSeed : Seed) (headInventory : Inventory) (headCaller : Caller (bits + 2))
+          (headMemos : Memos) (headBound : Nat) (returnedInventory : Inventory) (returnedMemos : Memos),
+          Post formulas solver headInventory caller headCaller headMemos ∧
+          SourcePruningEnumerationCapturedEdge.run checkEmpty
+            (bound + extra) (bound + extra) (bound + extra) (bound + extra) (bound + extra)
+            uv scs edge headCaller entered headMemos.query = some (.complete fragment reached saved after) ∧
+          SourcePruningEnumerationNativeHookResources.CompletedHeadReceipt headSeed inherited formulas solver
+            headInventory headCaller headMemos metadata entered checkEmpty uv scs edge headBound
+            fragment reached saved after returnedInventory returnedMemos) ∧
+      ∀ extra (fragment : Fragment) (reached : Caller (bits + 2)) (saved : Queries) (after : Cached),
+        SourcePruningEnumerationHookInvocation.OrdinaryInvocation
+          (continueWith (resume holeKey fits admits graph templates checkEmpty edgesOf stop order
+            (bound + extra) recursiveFuel) graph templates stop order (bound + extra) metadata uv)
+          checkEmpty (bound + extra) (bound + extra) (bound + extra) (bound + extra) (bound + extra)
+          uv edgesOf caller before memos.query fragment reached saved after →
+        ∃ edge ∈ edgesOf (.node parentEntry storedEdges depth free),
+          EnumerationValidity.Canonical before.core →
+          (∀ tries residual,
+            SourcePruningEnumerationConstraint.project edge.entry.key.constraint = some (tries, residual) →
+            EnumerationState.arityAllows edge.children.length
+              (EnumerationCorrectness.suspendedVars before.core.counter tries) = true) →
+          (∀ tries residual,
+            SourcePruningEnumerationConstraint.project edge.entry.key.constraint = some (tries, residual) →
+            ∀ incoming bucket,
+              (incoming, bucket) ∈ SourcePruningEnumerationEdgeInputs.children edge scs before.core.counter tries →
+              (match incoming with | .node _ _ _ _ => True | _ => False) ∨
+                bucket.any (fun sc => EqualityTrie.isTerminal sc.trie) = true ∨ bucket = []) →
+          ∀ (ambient : InternedGuardedLanguage.Env Symbol) (assignment : Nat → Language.Term Symbol),
+            EnumerationCorrectness.Satisfies
+              (SourcePruningEnumerationNativeLanguage.handles (SourceEqualityPCSGuard.holds formulas solver)
+                ambient reached.checked.native.machine.heap)
+              (fun guard term => SourceEqualityPCSGuard.holds formulas solver guard term = true) assignment after.core →
+            EnumerationCorrectness.Satisfies
+              (SourcePruningEnumerationNativeLanguage.handles (SourceEqualityPCSGuard.holds formulas solver)
+                ambient caller.checked.native.machine.heap)
+              (fun guard term => SourceEqualityPCSGuard.holds formulas solver guard term = true) assignment before.core ∧
+            InternedGuardedLanguage.edgeMeaning (SourceEqualityPCSGuard.holds formulas solver)
+              ambient edge (assignment uv) ∧
+            InternedGuardedLanguage.meaning (SourceEqualityPCSGuard.holds formulas solver)
+              ambient (.node parentEntry storedEdges depth free) (assignment uv) ∧
+            (∀ sc ∈ scs, EnumerationState.Suspended.Holds assignment (assignment uv) sc) ∧
+            Fragments.fill assignment fragment = assignment uv := by

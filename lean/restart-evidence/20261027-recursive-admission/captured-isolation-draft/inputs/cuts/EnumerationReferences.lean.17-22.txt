@@ -1,0 +1,6 @@
+/-- Every listed suspended reference has an allowed variable. -/
+def InputsAllowed (allowed : Nat → Prop) (scs : List Suspended) : Prop := ∀ sc ∈ scs, allowed sc.var
+
+/-- Every suspended reference in the store has an allowed variable. -/
+def ReferencesAllowed (allowed : Nat → Prop) (state : State Symbol Guard) : Prop :=
+  ∀ value ∈ state.values, InputsAllowed allowed (references value)

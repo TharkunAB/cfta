@@ -1,0 +1,48 @@
+  obtain ⟨bound, entered, processed, outputs, afterCaller, next, final, result,
+    entryRun, stable, counter, values, sameFlags, sameWaiting, enteredPacket,
+    ordinaryRun, scanRun, post, captured, returnedFits, returnedKnown, processedLength,
+    receipts, outputCertificates, shape, finished, rich⟩ :=
+    ordinary_finite_complete_invocation_resources holeKey fits admits graph templates checkEmpty edgesOf stop order
+      metadata recursiveFuel seed formulas solver inventory caller memos before uv handle scs parentEntry storedEdges
+      depth free packet ready stored decoded selected incoming nonterminal bounded known selectionMembers selectionLength
+      capturedMass inherited initialMass inheritedLength reserved
+  refine ⟨bound, entered, processed, outputs, afterCaller, next, final, result,
+    entryRun, stable, counter, values, sameFlags, sameWaiting, enteredPacket,
+    ordinaryRun, scanRun, post, captured, returnedFits, returnedKnown, processedLength,
+    receipts, outputCertificates, shape, finished, rich, ?_⟩
+  intro extra fragment reached saved after invocation
+  obtain ⟨edge, member, headSeed, headInventory, headCaller, headMemos, headBound,
+    returnedInventory, returnedMemos, prefixPost, _headRun, receipt⟩ := rich extra fragment reached saved after invocation
+  refine ⟨edge, member, ?_⟩
+  intro canonical freshArity retained ambient assignment satisfied
+  have entrySuccess : EnumerationCorrectness.Success
+      (SourcePruningEnumerationEntry.enter caller.checked.native.machine.heap (bound + extra) uv)
+      before.core (uv, handle, scs, .node parentEntry storedEdges depth free) entered.core := by
+    rw [EnumerationCorrectness.Success, entryRun extra]
+    exact List.mem_singleton_self _
+  have localFresh : ∀ tries residual,
+      SourcePruningEnumerationConstraint.project edge.entry.key.constraint = some (tries, residual) →
+      EnumerationState.arityAllows edge.children.length
+        (EnumerationCorrectness.suspendedVars entered.core.counter tries) = true := by
+    simpa only [counter] using freshArity
+  have localRetained : ∀ tries residual,
+      SourcePruningEnumerationConstraint.project edge.entry.key.constraint = some (tries, residual) →
+      ∀ incoming bucket,
+        (incoming, bucket) ∈ SourcePruningEnumerationEdgeInputs.children edge scs entered.core.counter tries →
+        (match incoming with | .node _ _ _ _ => True | _ => False) ∨
+          bucket.any (fun sc => EqualityTrie.isTerminal sc.trie) = true ∨ bucket = [] := by
+    simpa only [counter] using retained
+  obtain ⟨actualHandle, actualEntry, actualRows, actualDepth, actualFree,
+    actualStored, actualDecoded, _actualSelected, sound⟩ :=
+    SourcePruningEnumerationNativeHookResources.CompletedHeadReceipt.sound_ordinary_input
+      packet entrySuccess enteredPacket prefixPost receipt canonical nonterminal localFresh localRetained
+  have enteredStored : entered.core.values[uv]? = some (.unenumerated (some handle) scs) := by
+    simpa only [values] using stored
+  have handleSame : actualHandle = handle := by
+    have same := actualStored.symm.trans enteredStored
+    simpa only [Option.some.injEq, UVarValue.unenumerated.injEq, true_and, and_true] using same
+  subst actualHandle
+  have originalDecoded := lookupNode_keeps _ _ prefixPost.effects.keeps handle _ decoded
+  have parentSame := Option.some.inj (actualDecoded.symm.trans originalDecoded)
+  cases parentSame
+  exact sound ambient assignment satisfied

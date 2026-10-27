@@ -1,0 +1,19 @@
+}
+
+/-- Read a pending handle, capture its root, and set expansion ancestry. -/
+def enter (heap : InternedConstructorTemplates.State Symbol NativeGuard)
+    (fuel uv : Nat) : EnumerateM Symbol EnumGuard
+      (Nat × Nat × List EnumerationState.Suspended ×
+        InternedConstructorTemplates.Value Symbol NativeGuard) := do
+  match ← getValue fuel uv with
+  | .unenumerated (some handle) scs =>
+      let target ← representative fuel uv
+      match lookupNode heap handle with
+      | none => failure .unresolvedReference
+      | some decoded =>
+          modify fun state => {state with expansionAncestry :=
+            (if MergedOrdinaryHeight.recursiveBoundary decoded then
+              (recursionKey handle scs :: state.recursionAncestry target).eraseDups
+            else state.recursionAncestry target)}
+          pure (target, handle, scs, decoded)
+  | _ => reject
