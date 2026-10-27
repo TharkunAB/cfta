@@ -1,0 +1,11 @@
+--- authored-v1
++++ root-v2
+@@ -54,7 +54,7 @@
+     (proper : ProperState before.core)
+     {r n p h k : Nat} {result : Result width}
+     (observed : run checkEmpty r n p h k uv scs edge caller before memos.query = some result) :
+-    match result with
++    match (generalizing := false) result with
+     | .complete _ _ _ after | .rejected _ _ after => ProperState after.core
+     | .stopped _ _ (some after) => ProperState after.core
+     | _ => True := by

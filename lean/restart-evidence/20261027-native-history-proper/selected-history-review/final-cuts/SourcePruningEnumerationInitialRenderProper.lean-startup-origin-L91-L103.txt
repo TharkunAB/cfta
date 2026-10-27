@@ -1,0 +1,13 @@
+            (fun guard accepted => SourceEqualityPCSGuard.holds formulas solver guard accepted = true)
+            assignment after) ∧
+      (∀ output ∈ SourcePruningEnumerationHookInvocation.hookOutputs outcome,
+        EnumerationProgress.ProperState output.cache.core) := by
+  obtain ⟨handle, encoded, decoded, bound, outcome, packet⟩ :=
+    run_initial_finite_render_sound holeKey fits admits graph templates checkEmpty edgesOf stop order
+      formulas solver recursiveFuel inventory caller memos metadata value seed ceiling context available
+      closed emptyPending bounded known selectionMembers selectionLength reserved arity
+  refine ⟨handle, encoded, decoded, bound, outcome, packet, ?_⟩
+  intro output member
+  exact (packet.2.2.1 0 output member).proper_output (EnumerationProgress.initial_proper handle)
+
+end MicroCFTA.SourcePruningEnumerationRecursive

@@ -1,0 +1,17 @@
+  simp only [run, ownRun] at observed
+  rw [readback] at observed
+  cases childrenRun : SourcePruningEnumerationChildTraversal.run checkEmpty r n p h k
+      inputs caller own memos.query with
+  | stopped fragments observation candidate =>
+      rw [childrenRun] at observed
+      cases observed
+      cases candidate with
+      | none => trivial
+      | some after =>
+          exact SourcePruningEnumerationChildTraversal.stopped_proper
+            ownProperState inputsProper childrenRun
+  | complete fragments reachedCaller saved reached =>
+      rw [childrenRun] at observed
+      cases observed
+      exact finish_proper residual (.node edge.entry.key.symbol fragments) reached
+        (SourcePruningEnumerationChildTraversal.complete_proper ownProperState inputsProper childrenRun)

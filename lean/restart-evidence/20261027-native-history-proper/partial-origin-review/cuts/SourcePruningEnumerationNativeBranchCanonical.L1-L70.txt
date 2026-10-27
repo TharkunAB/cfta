@@ -1,0 +1,70 @@
+import MicroCFTA.SourcePruningEnumerationNativeBranchCompletion
+import MicroCFTA.SourcePruningEnumerationCapturedEdgeCanonical
+
+/-!
+# Canonical storage in actual native alternative receipts
+
+Each alternative uses the same captured enumeration cache.
+The actual prefix Post supplies the next native context and its full memos.
+Only a completed receipt is certified here.
+-/
+namespace MicroCFTA.SourcePruningEnumerationNativeBranchCompletion
+open EnumerationState EnumerationCorrectness EnumerationSchedule EnumerationDependencies EnumerationValidity
+open InternedConstructorTemplates InternedProbeProvenance
+open SourcePruningEnumerationNativeBranches (advance)
+open SourcePruningEnumerationNodes SourcePruningEnumerationObservation
+open SourceCurrentAllocatedNativeInventoryState (Inventory)
+open SourceCurrentAllocatedPartialInvariant (Context Post)
+local notation "Symbol" => SourcePruningTemplates.Symbol
+local notation "Constraint" => SourceSymbolicIndex.Constraint FullSyntax.Formula
+local notation "Node" => InternedConstructorTemplates.Value Symbol Constraint
+local notation "Caller" => SourceCurrentAllocatedPartialState.State
+local notation "Memos" => EndpointMemoGateTrace.Memos
+local notation "Queries" => SourceEndpointMemo.Memos
+local notation "Cached" => EnumerationExpandableIndex.Cached Symbol Constraint
+local notation "Receipt" => SourcePruningEnumerationSelectedEdge.Result
+local notation "Result" => SourcePruningEnumerationNativeBranches.Result
+local notation "Fragment" => Fragments.Fragment Symbol
+variable {width : Nat}
+variable [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Constraint)] [DecidableEq Node]
+
+/-- A stopped scan retains every receipt before its exact stopping observation. -/
+def processedReceipts : Result width → List (Receipt width)
+  | .complete processed _ _ | .stopped processed _ => processed
+
+/-- Actual prefix receipts supply the contexts used to certify completed branch caches. -/
+theorem observed_canonical
+    (formulas : SourceGuards.Formulas FullSyntax.Formula)
+    (solver : SourceGuards.Entailment FullSyntax.Formula)
+    (inventory : Inventory) (caller : Caller width) (before : Cached) (checkEmpty : Bool)
+    (uv handle : Nat) (scs : List Suspended)
+    (parentEntry : Cache.Interned InternedBinderProtocol.NodeKey)
+    (storedEdges selectedEdges : List (EdgeValue Symbol Constraint))
+    (depth : Nat) (free : List InternedBinderProtocol.Reference) (roots : Nat → Nat) (memos : Memos)
+    (initial : Context formulas solver inventory caller memos)
+    (ready : EnumerationDriver.Ready uv before.core)
+    (stored : before.core.values[uv]? = some (.unenumerated (some handle) scs))
+    (decoded : lookupNode caller.checked.native.machine.heap handle = some (.node parentEntry storedEdges depth free))
+    (realized : PendingRealized caller.checked.native.machine.heap before.core)
+    (selected : ∀ edge ∈ selectedEdges, edge ∈ storedEdges)
+    (paths : Roots before.core.representatives roots)
+    (counts : EnumerationCanonicalWaiting.Correct roots before.core.values before.waiting)
+    (flags : ∀ slot, SourcePruningEnumerationNativeIndex.candidate caller.checked.native.machine.heap
+      ((before.core.values[slot]?).getD .eliminated) = some (before.expandable slot))
+    (pending : InputsPending before.core scs)
+    (canonical : Canonical before.core)
+    {r n p h k : Nat} {result : Result width}
+    (observed : SourcePruningEnumerationNativeBranches.run checkEmpty r n p h k
+      uv scs before selectedEdges caller memos.query = result)
+    (receiptPosts : ∀ receipt ∈ processedReceipts result,
+      ∃ (reached : Caller width) (saved : Queries) (next : Inventory) (final : Memos),
+        SourcePruningEnumerationNativeBranches.advance receipt = some (reached, saved) ∧
+        Post formulas solver next caller reached final ∧ final.query = saved) :
+    ∀ (fragment : Fragment) (reached : Caller width) (saved : Queries) (after : Cached),
+      .complete fragment reached saved after ∈ processedReceipts result → Canonical after.core := by
+  subst result
+  have scan : ∀ (remaining : List (EdgeValue Symbol Constraint))
+      (currentInventory : Inventory) (currentCaller : Caller width) (currentMemos : Memos),
+      Post formulas solver currentInventory caller currentCaller currentMemos →
+      (∀ edge ∈ remaining, edge ∈ storedEdges) →
+      (∀ receipt ∈ processedReceipts (SourcePruningEnumerationNativeBranches.run checkEmpty r n p h k

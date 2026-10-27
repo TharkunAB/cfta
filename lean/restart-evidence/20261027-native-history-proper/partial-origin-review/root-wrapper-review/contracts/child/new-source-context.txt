@@ -1,0 +1,31 @@
+import MicroCFTA.SourcePruningEnumerationChildResources
+import MicroCFTA.SourcePruningEnumerationChildProper
+
+/-!
+# Proper paths with the full original child resource packet
+
+The original bounds and returned packet precede the proper-input observer.
+The actual attached cache remains covered on rejection.
+-/
+namespace MicroCFTA.SourcePruningEnumerationChildCompletion
+open EnumerationState EnumerationCorrectness EnumerationSchedule EnumerationDependencies
+open InternedConstructorTemplates InternedProbeProvenance
+open SourcePruningEnumerationNodes SourcePruningEnumerationObservation
+open SourceCurrentAllocatedNativeInventoryState (Inventory)
+open SourceCurrentAllocatedPartialInvariant (Context Post)
+open SourcePruningEnumerationIncomingReservation (Seed advance Reserved)
+open SourceCurrentConstrainedCapGeneratedQueryResources (Fits)
+local notation "Symbol" => SourcePruningTemplates.Symbol
+local notation "Constraint" => SourceSymbolicIndex.Constraint FullSyntax.Formula
+local notation "Node" => Value Symbol Constraint
+local notation "Caller" => SourceCurrentAllocatedPartialState.State
+local notation "Memos" => EndpointMemoGateTrace.Memos
+local notation "Queries" => SourceEndpointMemo.Memos
+local notation "Cached" => EnumerationExpandableIndex.Cached Symbol Constraint
+local notation "Fragment" => Fragments.Fragment Symbol
+local notation "Raw" => List (Except EnumerationState.Error (Fragment × EnumerationState.State Symbol Constraint))
+local notation "Heap" => SourceEqualityAnnotationHeap.Heap
+variable {bits : Nat}
+variable [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Constraint)] [DecidableEq Node]
+
+/-- Retain the entire original child resource packet and its proper attached cache. -/

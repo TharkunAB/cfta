@@ -1,0 +1,38 @@
+MicroCFTA.SourcePruningEnumerationChildTraversal.observed_cache_proper {width : Nat}
+  [DecidableEq MicroCFTA.SourcePruningTemplates.Symbol]
+  [DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey MicroCFTA.SourcePruningTemplates.Symbol
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  [DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.Value MicroCFTA.SourcePruningTemplates.Symbol
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  {checkEmpty : Bool} {r n p h k : Nat}
+  {inputs :
+    List
+      (MicroCFTA.InternedConstructorTemplates.Value MicroCFTA.SourcePruningTemplates.Symbol
+          (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) ×
+        List MicroCFTA.EnumerationState.Suspended)}
+  {caller : MicroCFTA.SourceCurrentAllocatedPartialState.State width}
+  {before :
+    MicroCFTA.EnumerationExpandableIndex.Cached MicroCFTA.SourcePruningTemplates.Symbol
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)}
+  {queries : MicroCFTA.SourceEndpointMemo.Memos} (proper : MicroCFTA.EnumerationProgress.ProperState before.core)
+  (valid :
+    ∀
+      (incoming :
+        MicroCFTA.InternedConstructorTemplates.Value MicroCFTA.SourcePruningTemplates.Symbol
+          (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+      (bucket : List MicroCFTA.EnumerationState.Suspended),
+      (incoming, bucket) ∈ inputs → MicroCFTA.EnumerationProgress.ProperInputs bucket)
+  {result : MicroCFTA.SourcePruningEnumerationChildTraversal.Result width}
+  (observed :
+    MicroCFTA.SourcePruningEnumerationChildTraversal.run checkEmpty r n p h k inputs caller before queries = result) :
+  match result with
+  | MicroCFTA.SourcePruningEnumerationChildTraversal.Result.complete fragments caller queries after =>
+    MicroCFTA.EnumerationProgress.ProperState after.core
+  | MicroCFTA.SourcePruningEnumerationChildTraversal.Result.stopped completedPrefix observation (some after) =>
+    MicroCFTA.EnumerationProgress.ProperState after.core
+  | MicroCFTA.SourcePruningEnumerationChildTraversal.Result.stopped completedPrefix observation none => True
+'MicroCFTA.SourcePruningEnumerationChildTraversal.observed_cache_proper' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]

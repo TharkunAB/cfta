@@ -1,0 +1,18 @@
+theorem observed_cache_proper
+    {checkEmpty : Bool} {r n p h k : Nat} {inputs : List (Node × List Suspended)}
+    {caller : Caller width} {before : Cached} {queries : Queries}
+    (proper : ProperState before.core)
+    (valid : ∀ incoming bucket, (incoming, bucket) ∈ inputs → ProperInputs bucket)
+    {result : Result width}
+    (observed : run checkEmpty r n p h k inputs caller before queries = result) :
+    match result with
+    | .complete _ _ _ after => ProperState after.core
+    | .stopped _ _ (some after) => ProperState after.core
+    | .stopped _ _ none => True := by
+  cases result with
+  | complete fragments afterCaller savedQueries after =>
+      exact complete_proper proper valid observed
+  | stopped fragments observation candidate =>
+      cases candidate with
+      | none => trivial
+      | some after => exact stopped_proper proper valid observed

@@ -1,0 +1,17 @@
+theorem allocation_proper (node : Option Nat) (state : State Symbol Guard) (proper : ProperState state) :
+    ProperState (allocated node state) := by
+  intro value member
+  rcases List.mem_append.mp member with old | fresh
+  · exact proper value old
+  · have same : value = .unenumerated node [] := by simpa using fresh
+    subst value
+    cases node <;> simp [ProperValue]
+
+/-- Repeated equality allocation preserves all prior proper paths. -/
+theorem suspension_proper (count : Nat) (state : State Symbol Guard) (proper : ProperState state) :
+    ProperState (suspendedState count state) := by
+  induction count generalizing state with
+  | zero => exact proper
+  | succ count ih => exact ih (allocated none state) (allocation_proper none state proper)
+
+/-- Residual recording changes no pending slot. -/

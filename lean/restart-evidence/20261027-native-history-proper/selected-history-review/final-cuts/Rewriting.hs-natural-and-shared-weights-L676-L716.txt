@@ -1,0 +1,41 @@
+definitionWeight :: Map Symbol Natural -> Term -> Natural
+definitionWeight defined t
+    | Map.null defined = 0
+    | otherwise = go t
+  where
+    go (Term "app" [_, f, v]) = go f + go v
+    go (Term s _) = Map.findWithDefault 0 s defined
+
+-- | Compare the weights of two terms, then their weights of definition.
+heavier :: Map Symbol Natural -> Term -> Term -> Ordering
+heavier defined s t =
+    compare (weight s) (weight t) <> compare (definitionWeight defined s) (definitionWeight defined t)
+
+{- | The weights of definition of the symbols that the definitions among the
+rewriting rules define (see 'TermOrder'). A definition is a rule @c x1 ... xk -> t@
+whose variables @xi@ are distinct, whose body @t@ does not contain @c@ and
+contains each variable at most once, and whose two sides have the same
+number of leaves. The weight of @c@ is one more than the largest sum of the
+weights of the defined symbols of a body of @c@, so @c x1 ... xk@ is greater
+than its body for each instance. The definitions go from the greatest
+symbol to the least, and a definition whose body leads back to its symbol
+through the definitions before it is dropped. Thus of two symbols that
+define each other, the greater one is defined. The weights choose only the
+order, so a rule that is not true makes the order less useful, but the
+search stays right. Each weight is computed once from the weights of its
+bodies.
+-}
+definitionWeights :: Rules -> Map Symbol Natural
+definitionWeights rules = weights
+  where
+    rewriting = concatMap (concat . Map.elems . byHead) [oriented rules, unoriented rules]
+    found = Map.fromListWith (++) [(c, [body]) | (l, r) <- rewriting, Just (c, body) <- [definition l r]]
+    kept = foldl' keep Map.empty (Map.toDescList found)
+    keep acc (c, bodies) = case filter (not . any (leadsTo acc c)) bodies of
+        [] -> acc
+        acyclic -> Map.insert c acyclic acc
+    leadsTo acc c s = s == c || any (any (leadsTo acc c)) (Map.findWithDefault [] s acc)
+    -- A lazy map, so that a weight refers to the weights of its bodies; the definitions are acyclic.
+    weights = LazyMap.map (\bodies -> 1 + maximum [sum [w | s <- body, Just w <- [Map.lookup s weights]] | body <- bodies]) kept
+    -- The defined symbol and the symbols of the body, with repetitions.
+    definition l r = case spine l of

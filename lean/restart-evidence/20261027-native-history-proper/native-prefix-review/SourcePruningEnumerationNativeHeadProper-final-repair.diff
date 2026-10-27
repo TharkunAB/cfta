@@ -1,0 +1,18 @@
+--- own-v2
++++ root-final
+@@ -69,9 +69,14 @@
+         trivial
+     | some pair =>
+         obtain ⟨tries, residual⟩ := pair
+-        exact SourcePruningEnumerationCapturedEdge.observed_cache_proper formulas solver inventory caller before checkEmpty
++        have preserved := SourcePruningEnumerationCapturedEdge.observed_cache_proper formulas solver inventory caller before checkEmpty
+           uv handle scs parentEntry edges depth free edge roots memos initial ready stored decoded realized
+           selected paths counts flags pending allowed tries residual projected proper observed
++        cases receipt with
++        | complete => exact preserved
++        | rejected => exact preserved
++        | stopped _ _ candidate => cases candidate <;> exact preserved
++        | unhandled => trivial
+   · have rejected : arityAllows edge.children.length scs = false := by
+       cases value : arityAllows edge.children.length scs with
+       | false => rfl

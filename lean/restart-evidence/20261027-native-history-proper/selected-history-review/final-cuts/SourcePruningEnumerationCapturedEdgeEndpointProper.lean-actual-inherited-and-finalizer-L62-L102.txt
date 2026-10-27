@@ -1,0 +1,41 @@
+  have same : value = .node parentEntry edges depth free := Option.some.inj (lookup.symm.trans decoded)
+  subst value
+  have bounded : ∀ sc ∈ scs, sc.var < before.core.counter :=
+    ready.safe.1.values _ (List.mem_of_getElem? stored)
+  have inheritedInputs : ProperInputs scs :=
+    proper_inputs (.unenumerated (some handle) scs) (proper _ (List.mem_of_getElem? stored))
+  have inherited : ValidSuspended scs := fun sc member => (inheritedInputs sc member).1
+  unfold run at observed
+  cases selectedRun : SourcePruningEnumerationSelectedEdge.run checkEmpty r n p h k
+      scs edge caller before memos.query with
+  | unhandled =>
+      rw [selectedRun] at observed
+      cases Option.some.inj observed
+      trivial
+  | rejected reachedCaller saved reached =>
+      rw [selectedRun] at observed
+      cases Option.some.inj observed
+      exact SourcePruningEnumerationSelectedEdge.observed_cache_proper caller before checkEmpty
+        parentEntry edges depth free edge scs roots memos initial available closed selected ready.safe
+        realized paths counts flags bounded pending allowed tries residual projected proper inherited selectedRun
+  | stopped fragments observation candidate =>
+      rw [selectedRun] at observed
+      cases Option.some.inj observed
+      exact SourcePruningEnumerationSelectedEdge.observed_cache_proper caller before checkEmpty
+        parentEntry edges depth free edge scs roots memos initial available closed selected ready.safe
+        realized paths counts flags bounded pending allowed tries residual projected proper inherited selectedRun
+  | complete fragment reachedCaller saved reached =>
+      rw [selectedRun] at observed
+      simp only [Option.map_eq_some_iff] at observed
+      obtain ⟨finished, finishRun, fields⟩ := observed
+      cases fields
+      exact SourcePruningEnumerationFinalize.run_proper reachedCaller.checked.native.machine.heap k uv
+        fragment reached finished
+        (SourcePruningEnumerationSelectedEdge.complete_proper caller before checkEmpty parentEntry edges depth free
+          edge scs roots memos initial available closed selected ready.safe realized paths counts flags bounded
+          pending allowed tries residual projected proper inherited selectedRun) finishRun
+
+variable {bits : Nat}
+open SourcePruningEnumerationIncomingReservation (Seed advance Reserved)
+open SourceCurrentConstrainedCapGeneratedQueryResources (Fits)
+local notation "Heap" => SourceEqualityAnnotationHeap.Heap

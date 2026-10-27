@@ -1,0 +1,35 @@
+import MicroCFTA.SourcePruningEnumerationTraversalCompletion
+import MicroCFTA.SourcePruningEnumerationChildResources
+
+/-!
+# Original resource completion for successive children
+
+Each reached child supplies the next actual caller and cache.
+The original buckets determine the complete mixed reservation.
+Rejection retains its native effects and does not run the remaining children.
+-/
+namespace MicroCFTA.SourcePruningEnumerationTraversalCompletion
+open EnumerationState EnumerationCorrectness EnumerationSchedule EnumerationDependencies
+open InternedConstructorTemplates InternedProbeProvenance
+open SourcePruningEnumerationNodes SourcePruningEnumerationObservation
+open SourceCurrentAllocatedNativeInventoryState (Inventory)
+open SourceCurrentAllocatedPartialInvariant (Context Post)
+open SourcePruningEnumerationIncomingReservation (Seed advance Reserved)
+open SourceCurrentConstrainedCapGeneratedQueryResources (Fits)
+local notation "Symbol" => SourcePruningTemplates.Symbol
+local notation "Constraint" => SourceSymbolicIndex.Constraint FullSyntax.Formula
+local notation "Node" => InternedConstructorTemplates.Value Symbol Constraint
+local notation "Caller" => SourceCurrentAllocatedPartialState.State
+local notation "Memos" => EndpointMemoGateTrace.Memos
+local notation "Queries" => SourceEndpointMemo.Memos
+local notation "Cached" => EnumerationExpandableIndex.Cached Symbol Constraint
+local notation "Fragment" => Fragments.Fragment Symbol
+local notation "Heap" => SourceEqualityAnnotationHeap.Heap
+variable {bits : Nat}
+
+/-- Each original child bucket reserves its length plus one mixed query step. -/
+def cost : List (Node × List Suspended) → Nat
+  | [] => 0
+  | (_, bucket) :: rest => bucket.length + 1 + cost rest
+
+/-- Original resources retain the full traversal packet and its actual returned caller. -/

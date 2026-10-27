@@ -1,0 +1,22 @@
+        (SourcePruningEnumerationSelectedEdge.cost edge scs before.core.counter tries)).1)
+        afterCaller.checked.native.machine.heap) ∧
+      (ProperState before.core → ProperState after.core) := by
+  obtain ⟨r, n, p, h, k, afterCaller, after, savedQueries, final, next, afterRoots, result, packet⟩ :=
+    complete_with_history_resources seed formulas solver inventory caller before checkEmpty uv handle scs
+      parentEntry edges depth free edge roots memos initial ready stored decoded realized selected paths counts
+      flags pending allowed tries residual projected fits reserved known
+  refine ⟨r, n, p, h, k, afterCaller, after, savedQueries, final, next, afterRoots, result, packet, ?_⟩
+  intro proper
+  rcases packet with ⟨running, _post, _querySame, _growth, _afterPaths, _storage, _afterRealized,
+    _afterCounts, _afterFlags, _origin, _retained, _protects, _pendingHistory,
+    shape, _returnedFits, _returnedKnown⟩
+  have actual : run checkEmpty r n p h k uv scs edge caller before memos.query = some result := by
+    simpa only [Nat.add_zero] using running 0 0 p h 0 (Nat.le_refl _) (Nat.le_refl _)
+  have resultProper := observed_cache_proper formulas solver inventory caller before checkEmpty uv handle
+    scs parentEntry edges depth free edge roots memos initial ready stored decoded realized selected paths
+    counts flags pending allowed tries residual projected proper actual
+  rcases shape with ⟨fragment, completed, _rest⟩ | ⟨fragments, outer, waiting, stopped⟩
+  · simpa only [completed] using resultProper
+  · simpa only [stopped] using resultProper
+
+end MicroCFTA.SourcePruningEnumerationCapturedEdge

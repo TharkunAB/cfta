@@ -1,0 +1,10 @@
+MicroCFTA.SourcePruningEnumerationSelectedPrefixProper.checkRepeated_proper {EnumGuard NativeGuard : Type}
+  (heap : MicroCFTA.InternedConstructorTemplates.State MicroCFTA.SourcePruningTemplates.Symbol NativeGuard)
+  (fuel uv handle : Nat) (scs : List MicroCFTA.EnumerationState.Suspended)
+  (before after : MicroCFTA.EnumerationState.State MicroCFTA.SourcePruningTemplates.Symbol EnumGuard) (repeated : Bool)
+  (proper : MicroCFTA.EnumerationProgress.ProperState before)
+  (observed :
+    MicroCFTA.EnumerationCorrectness.Success
+      (MicroCFTA.SourcePruningEnumerationRecursion.checkRepeated heap fuel uv handle scs) before repeated after) :
+  MicroCFTA.EnumerationProgress.ProperState after
+'MicroCFTA.SourcePruningEnumerationSelectedPrefixProper.checkRepeated_proper' depends on axioms: [propext, Quot.sound]

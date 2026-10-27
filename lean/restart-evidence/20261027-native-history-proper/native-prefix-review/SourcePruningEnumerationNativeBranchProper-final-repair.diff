@@ -1,0 +1,17 @@
+--- own-v2
++++ root-final
+@@ -190,7 +190,13 @@
+                     SourcePruningEnumerationIncomingReservation.advance_add] using prefixKnown
+         · intro proper current member
+           rcases List.mem_cons.mp member with same | member
+-          · simpa only [same] using headProper proper
++          · subst current
++            have preserved := headProper proper
++            cases receipt with
++            | complete => exact preserved
++            | rejected => exact preserved
++            | stopped _ _ candidate => cases candidate <;> exact preserved
++            | unhandled => trivial
+           · exact tailProper proper current member
+       · subst receipt
+         refine ⟨r, n, p, h, k, [], middleCaller, middleQueries, middleMemos, middleInventory,
