@@ -1,5 +1,41 @@
 # Public API and source correspondence
 
+## Arity through every finite native query outcome
+
+Source checkpoint: 7dc1dbd371d10e5f6bd065b1b95e6e374d7faa60.
+Initial physical Good, an arity-valid edge-record heap and the actual physical
+InputsThrough plan now imply the same invariant at EVERY finite native node
+or edge query outcome. The result covers yielded, done, failed, constraintError
+and blocked states. It checks every old and child-created edge record at the
+actual returned heap. Every completed edge memo cell after a finite node
+query also derives arity from its real resident payload. No future successful
+return, per-child arity certificate or desired final invariant is assumed.
+
+The proof first retains arity at every actual rich query prefix. It uses strong
+induction on actual yielded trace length and discharges both recursive call
+families. Physical outcome readback then derives the reached prefix and exact
+terminal instruction from the actual plan. A separate terminal-step theorem
+covers the actual pending optional-binder heap. The plan checks reached input
+availability, readiness, memo cells and physical key safety. It contains no
+future arity result. This result does not cover arbitrary unchecked programs.
+
+The main remaining resource gap is actual worker composition: local reduction,
+cold exposure, narrowing, callbacks, captured-cache restores and finite history.
+Derive ResourceHistoryWithArity from genuine checked initial origins at the
+SAME bound and actual own-output state. Keep the entire original producer
+admission and result. The whole-history acceptance theorem still requires its
+arity-certified history observer. H6 and all prior strongest contracts remain
+unchanged. Enumeration coverage, API contracts and physical Haskell
+correspondence remain open. The full goal stays ACTIVE.
+
+Six modules, 877 lines and 13 new public theorems pass strict checks. Aggregate
+Audit passes 4179 jobs and 79760 theorem dependency checks. Full public readback
+has 22 signatures and axiom sets with no elision. All nine prior strongest
+blocks match byte exactly. Only the three standard Lean axioms occur. No
+Haskell source changed. FINDINGS retains every repair handoff. Details:
+`lean/notes-current-native-prefix-arity.md`.
+
+
 ## Arity through complete native queries and returned memo cells
 
 Source checkpoint: 4c7ab3a5f755df020e6810c03175efddf873b14a.
