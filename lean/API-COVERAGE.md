@@ -1,5 +1,36 @@
 # Public API and source correspondence
 
+## Actual opaque boundaries now reach their own recursive outputs
+
+Source checkpoint: 70cfa4a3ab78f0d28bf14952d8a6a5491a0b38a5.
+A stable completed head receipt and an actual nonterminal opaque child event
+now derive a fresh isolated boundary at the SAME completed head cache.
+The proof aligns the own allocation, actual consumed prefix, opaque allocation,
+remaining suffix, residual and successful finalizer at one sufficient bound.
+No final isolation, endpoint equality or future success is assumed.
+The actual false callback and its admitted remaining ResourceHistory preserve
+that boundary at the SAME output's OWN cache and native heap. The output
+cannot be fully Discharged. This is a consumer of actual head and tail receipts.
+It does not claim that every output contains an opaque event. Siblings restore
+their captured cache. A marker does not transfer to another sibling.
+
+The stable-prefix producer retains the ENTIRE previous resource contract.
+It adds a fixed actual prefix result, which may be stopped. The original two
+producer calls are retained. Initial Canonical and parked-marker preservation
+from the previous checkpoint remain unchanged. Storage is not Satisfies.
+H6 remains the strongest global exact finite-tree construction theorem.
+Whole backward assignment meaning, remaining checked-arity and retention
+obligations, recursive rendering acceptance, coverage and physical Haskell
+correspondence remain open. The whole-system goal stays ACTIVE.
+
+Three modules, 484 lines and four public theorems pass strict checks.
+Audit passes 4153 jobs and 79492 theorem dependency checks. H6 and both
+previous conditional captured renderers retain exact signatures and axioms.
+No Haskell source changed. FINDINGS preserves earlier fixes and records a
+separate upstream KBO repair candidate. It is not integrated or executed here.
+Details: `lean/notes-current-opaque-finalizer-attachment.md`.
+
+
 ## Actual parked boundaries and canonical output caches
 
 Source checkpoint: d60f6c1607d39fa114ae83a489af7b34d832ad23.
