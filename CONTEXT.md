@@ -46,6 +46,31 @@ Wilf, and Feat (ranking).
 - **Overlap**: a term of the whole that two parts accept, with the indexes of
   the two parts. A term of two parts that the whole rejects is not an
   overlap.
+- **Edit** (of a term): a change at one position of a term that keeps the
+  state of the position. A **replacement** gives the position another term of
+  its state. A **wrap** puts a new node of that state above the old subterm,
+  as one of its children. A **context wrap** puts a new term with one hole
+  above the old subterm: the old subterm fills the hole, and the hole is
+  deeper than the children of the new root. An **unwrap** gives the position
+  a child of its old subterm, when the state accepts that child. An **edit
+  site** is a position with a kind of edit: a replacement, a wrap or a
+  context wrap with a transition index and a child index, or an unwrap with a
+  child index. The **new material** of an edit is what it adds: the new
+  subterm, the other children of the new node, or the nodes of the new term
+  of a context wrap. An unwrap has none. Not a row edit of an automaton
+  (`Data.CFTA.replaceRows`). A **branching site** is an edit site below a
+  state with two transitions for the symbol of the term there: with
+  constraints, another transition can accept an edited term.
+- **Edit set** (of a term): the edits at one to k sites of a term at pairwise
+  incomparable paths, so that no edit is inside another. `Data.CFTA.Edit.Sets`
+  gives the automaton of the edit sets. Its size is the number of the edits plus
+  the total new material.
+- **Edit tree** (of a term): an edit set where an edit may lie inside a wrap.
+  A wrap or a context wrap holds edits only when the state of its hole is the
+  state of its position (it is **treeable**). The edits inside change the old
+  subterm before the wrap goes around it. `Data.CFTA.Edit.Trees` gives the
+  automaton of the edit trees. Its size is the number of the edits plus the
+  total new material, as for an edit set.
 
 ## Constraints
 

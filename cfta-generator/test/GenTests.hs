@@ -2,6 +2,11 @@ module Main (main) where
 
 import Test.Hspec (hspec)
 
+import qualified Data.CFTA.Edit.SetsSpec
+import qualified Data.CFTA.Edit.TreesSpec
+import qualified Data.CFTA.Edit.BetweenSpec
+import qualified Data.CFTA.Edit.ConstrainedSpec
+import qualified Data.CFTA.EditSpec
 import qualified Data.CFTA.Gen.Equality.DatatypeGenSpec
 import qualified Data.CFTA.Gen.Equality.GenSpec
 import qualified Data.CFTA.Gen.Equality.IFCExpressionGenSpec
@@ -40,3 +45,8 @@ main =
         Data.CFTA.InclusionSpec.spec
         Data.CFTA.Template.LearnSpec.spec
         Data.CFTA.Template.NamedSpec.spec
+        Data.CFTA.Edit.SetsSpec.spec
+        Data.CFTA.Edit.TreesSpec.spec
+        Data.CFTA.Edit.BetweenSpec.spec
+        Data.CFTA.EditSpec.spec
+        Data.CFTA.Edit.ConstrainedSpec.spec

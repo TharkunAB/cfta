@@ -170,6 +170,56 @@ tree automata of `cfta`, with QuickCheck integration.
   one named hole to a difference at two or more positions, so `x - x` and
   `1 - 1` give `v0 - v0`. `exclusionPriceUpTo` prices templates with
   repeated names with `sizedUpTo`.
+- `Data.CFTA.Edit`: `editAutomaton` gives an automaton whose terms are the
+  edits of one term of a plain automaton: replacements of a subterm by
+  another term of the state of its position, and wraps of a subterm in a new
+  node of that state. Each edit site has a root symbol of its own, and the
+  children are the new material, so the size-major order gives the edits with
+  the least new material first. The edit automaton is unambiguous when the
+  automaton is, so the generator import and the count table accept it.
+  `applyEdit` gives the edited term of an edit. An unwrap (`UnwrapAt`)
+  replaces a subterm by a child that its state accepts. A context wrap
+  (`ContextAt`, with `HoleParent` in its new term) puts a new term with one hole
+  above the subterm, deeper than a wrap does.
+- `Data.CFTA.Edit.Trees`: `editTreeAutomaton k automaton term` gives an
+  automaton whose terms are the edit trees of a term: edit sets where an edit
+  may lie inside a wrap whose hole has the state of its position. `applyEditTree`
+  gives the edited term. A stack of wraps at one position is one context wrap,
+  so a tree has no wrap directly after a treeable wrap at its index.
+- `Data.CFTA.Edit.Between`: `editSetsBetween k automaton old new` gives every
+  edit set of `editSetAutomaton k` whose `applyEditSet` gives the new term,
+  the smallest first, and `rankedEditSetsBetween` gives their ranks. The
+  candidates are the cuts of the difference of the two terms, with the
+  candidates of `editsBetween` at each position. The function counts the
+  candidate sets before it builds them, and gives `TooManyCandidates` above
+  `candidateLimit`. The one-edit sets are the edits of `editsBetween`.
+- `Data.CFTA.Edit.Constrained`: `constrainedEditAutomaton` gives the
+  replacements, unwraps, wraps, and context wraps of a term under an automaton
+  with equality constraints, in the symbols of `Data.CFTA.Edit`, so
+  `applyEdit` decodes them. An equality class above an edit, or of the new
+  node of a wrap or a context wrap, pins the new material to a fixed subterm,
+  moves onto the root transition of the edit, or leaves the site without a
+  valid edit. An unwrap is valid or not. The result is unambiguous when the
+  automaton is, and `Data.CFTA.Sized` counts it exactly; the cyclic generator
+  import does not count equality constraints. `leftOut` lists the sites whose
+  edits the result leaves out, with the reason: `Branching` for a site below
+  a state with two transitions for the symbol of the term there, and
+  `ConstrainedHole` for a context wrap whose hole a class or a constrained
+  transition can read.
+- `Data.CFTA.Edit.Constrained`: `guardedEditAutomaton` gives the edits of a
+  term under an automaton with guards, with a solver. A guard atom on fixed
+  paths is decided once when the automaton is built: Yes keeps the site, and
+  No leaves it without a valid edit. An atom on the new material moves onto
+  the root transition of the edit, and `sizedUpTo` decides it on each edit.
+  A negation is decided with its atom, as the evaluator does. `leftOut` has
+  three new reasons: `MixedGuard` for an atom on fixed paths and new material
+  together, `GuardSubstitution` for a guard with a substitution, and
+  `UndecidedGuard` when the solver does not decide an atom on fixed paths or
+  the fixed part of a site. `plainSymbols` gives the edit automaton over
+  `Symbol`, for `sizedUpTo`, and the decoding of its terms to edits.
+  `GuardedEditError` tells a term that the solver does not decide
+  (`UndecidedTerm`, or `UndecidedRuns` for an accepted term whose second run
+  is not decided) from a term that the automaton does not accept.
 - Terms are `Term symbol` from `Data.CFTA.Term` of `cfta`:
   `fromAutomaton`, `fromAutomatonUpToDepth`, `termAt`, `rankOf`, `ranksOf`,
   `rankOfTerm`, `surface`, and the refinement witnesses take and give `Term`

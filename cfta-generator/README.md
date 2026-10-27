@@ -355,6 +355,81 @@ Right Included
 Right (NotIncluded (Node "node" [Node "node" [Node "leaf" [],Node "leaf" []],Node "leaf" []]))
 ```
 
+### The edits of a term
+
+`Data.CFTA.Edit` lists the edits of one term of a plain automaton as the
+terms of another automaton. An edit keeps the state of its position: a
+replacement gives the position another term of its state, and a wrap puts a
+new node of that state above the old subterm, as one of its children.
+A context wrap puts a new term with one hole above the old subterm, deeper
+than a wrap does, and an unwrap gives the position a child of its old subterm
+that the state accepts.
+`editAutomaton automaton term` gives an automaton with one root symbol for
+each edit site (`ReplaceAt`, `WrapAt` and `ContextAt` with a transition index
+and a child index, and `UnwrapAt` with a child index). The children of the
+root are the new material, so the size of a replacement is one more than the
+size of its new material, an unwrap has size 1, a context wrap has the size of
+its new term without the hole, and the size-major order of
+`Data.CFTA.Sized` or of the generator import gives the smallest edits first.
+`applyEdit term edit` gives the edited term. Two edits can give one edited
+term, for example a replacement at the root and a deeper edit, so the
+automaton counts edits, not edited terms. When the automaton is
+unambiguous, the edit automaton is unambiguous too.
+
+`Data.CFTA.Edit.Between` goes the other way: `editsBetween automaton old new`
+gives every edit of the old term whose edited term is the new term, and
+`editSetsBetween k automaton old new` gives every edit set of one to k edits
+that gives it, for a change at several places. The candidates of an edit set
+are the cuts of the difference: sets of at most k positions where each
+position whose symbol or number of children changed is at or below exactly
+one of them. Each position takes the replacements, wraps, unwraps, and
+context wraps that change its old subterm into its new subterm, and each set
+is checked by the automaton of edit sets and by `applyEditSet`. A set of one
+edit is an edit of `editsBetween`, so the result has those edits too, for each
+k. The number of candidate sets grows as the number of cuts times the
+candidates at their positions, so the function counts them first and gives
+`TooManyCandidates` above `candidateLimit`.
+
+`Data.CFTA.Edit.Constrained` gives the replacements, unwraps, wraps, and
+context wraps of a term under an automaton with equality constraints. An edit
+is valid when the automaton accepts the edited term.
+`constrainedEditAutomaton` moves each equality class of a transition above
+the edit, or of the new node of a wrap, onto the edit: a class with a fixed
+subterm pins the new material to it, a class with only paths into the new
+material becomes a class on the root transition of the edit, and a class with
+a path through the edited node leaves the site without a valid edit. An unwrap
+adds no material, so each of its classes holds or does not. The edits use the
+symbols of `Data.CFTA.Edit`, so `applyEdit` decodes them, and
+`Data.CFTA.Sized` counts them exactly. The cyclic generator import does not
+count equality constraints; use `Data.CFTA.Sized` or the depth-bounded import.
+
+`leftOut` lists two kinds of site whose edits the result leaves out, instead
+of counting them under an assumption. A site is `Branching` when a state above
+it has two transitions for the symbol of the term there: another transition
+could accept an edited term. A context wrap is `ConstrainedHole` when a class
+reads the child with the hole, or when that child can have a node with a
+constraint: the place of the hole differs from edit to edit.
+
+`guardedEditAutomaton` does the same for an automaton with guards, with a
+solver. A guard atom reads the symbols at its paths, and the symbols outside
+the new material do not change. So the solver decides an atom on fixed paths
+once, when the automaton is built: Yes keeps the site, and No leaves it
+without a valid edit. An atom on the new material moves onto the root
+transition of the edit, and the count decides it on each edit. A negation is
+decided with its atom, so it holds only when the refinements refute the
+formula. Three more reasons in `leftOut` keep the result exact: `MixedGuard`
+for an atom on fixed paths and new material together, which the guard
+language cannot move onto the edit; `GuardSubstitution` for a guard with a
+substitution; and `UndecidedGuard` when the solver does not decide an atom on
+fixed paths, or whether a state accepts the fixed part of a site. In an
+automaton with guards on many states, most context wraps are
+`ConstrainedHole`. Count the result with `sizedUpTo` over the symbols of
+`plainSymbols`, which also decodes each counted term to an edit for
+`applyEdit`. The term needs one run that the solver decides. When the solver
+does not decide whether the automaton accepts the term, the error is
+`UndecidedTerm`, not `NotAccepted`. When it decides one run and not another,
+the error is `UndecidedRuns`.
+
 ## Equality-constrained generators
 
 An equality generator is a `Gen Symbol`, with the name `ECTAGen`. Each
