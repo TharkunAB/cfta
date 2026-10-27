@@ -1,0 +1,19 @@
+theorem findRoot_terminates (path : Reaches forest uv representative size) :
+    ∃ fuel found, findRoot fuel forest uv = some found := by
+  induction path with
+  | @root uv size lookup =>
+    cases actual : forest uv with
+    | none => exact ⟨1, ⟨uv, 1, put forest uv (.root 1)⟩, by simp [findRoot, actual]⟩
+    | some entry =>
+      have same : entry = .root size := by simpa [read, actual] using lookup
+      subst entry
+      exact ⟨1, ⟨uv, size, forest⟩, by simp [findRoot, actual]⟩
+  | @parent uv next representative size lookup tail ih =>
+    obtain ⟨fuel, found, result⟩ := ih
+    cases actual : forest uv with
+    | none => simp [read, actual] at lookup
+    | some entry =>
+      have same : entry = .parent next := by simpa [read, actual] using lookup
+      subst entry
+      exact ⟨fuel + 1, {found with forest := put found.forest uv (.parent found.representative)},
+        by simp [findRoot, actual, result]⟩

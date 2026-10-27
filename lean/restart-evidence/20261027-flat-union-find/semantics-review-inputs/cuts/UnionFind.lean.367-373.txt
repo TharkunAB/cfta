@@ -1,0 +1,7 @@
+theorem union_correct (valid : Total forest)
+    (result : union leftFuel rightFuel forest left right = some output) :
+    Total output ∧ ∀ x y,
+      SameClass output x y ↔
+        SameClass forest x y ∨
+        (SameClass forest x left ∧ SameClass forest y right) ∨
+        (SameClass forest x right ∧ SameClass forest y left) := by

@@ -1,0 +1,34 @@
+theorem union_terminates (valid : Total forest) (left right : Nat) :
+    ∃ leftFuel rightFuel output, union leftFuel rightFuel forest left right = some output := by
+  obtain ⟨root, size, path⟩ := valid left
+  obtain ⟨leftFuel, first, firstResult⟩ := findRoot_terminates path
+  obtain ⟨root', size', path'⟩ := findRoot_total valid firstResult right
+  obtain ⟨rightFuel, second, secondResult⟩ := findRoot_terminates path'
+  refine ⟨leftFuel, rightFuel, ?_⟩
+  simp [union, firstResult, secondResult]
+  split <;> (try split) <;> exact ⟨_, rfl⟩
+
+/-- The empty Haskell map. -/
+def empty : Forest := fun _ => none
+
+/-- Initialize the supplied variables as singleton roots. -/
+def withInitialValues (variables : List Nat) : Forest :=
+  fun uv => if uv ∈ variables then some (.root 1) else none
+
+@[simp] theorem read_empty (uv : Nat) : read empty uv = .root 1 := rfl
+
+@[simp] theorem read_initial (variables : List Nat) (uv : Nat) :
+    read (withInitialValues variables) uv = .root 1 := by
+  simp only [read, withInitialValues]
+  split <;> rfl
+
+/-- Empty and initialized forests both give terminating singleton paths. -/
+theorem empty_total : Total empty := fun uv => ⟨uv, 1, .root rfl⟩
+
+theorem initial_total (variables : List Nat) : Total (withInitialValues variables) :=
+  fun uv => ⟨uv, 1, .root (read_initial variables uv)⟩
+
+/-- Initial classes identify no distinct variables, including missing entries. -/
+theorem initial_classes (variables : List Nat) (left right : Nat) :
+    SameClass (withInitialValues variables) left right ↔ left = right :=
+  sameClass_iff_roots (.root (read_initial variables left)) (.root (read_initial variables right))

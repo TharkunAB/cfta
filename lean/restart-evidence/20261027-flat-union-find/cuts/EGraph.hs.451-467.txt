@@ -1,0 +1,17 @@
+addNode :: (Hashable f) => ENode f -> EGraph s f -> (ClassId, EGraph s f)
+addNode n0 g = case HashMap.lookup n (memo g) of
+    Just c -> (find g c, if constrained g then withTransition (find g c) (transitionOf n) g else g)
+    Nothing ->
+        let c@(ClassId i) = ClassId (added g)
+            ENode k _ cs = n
+            use = IntMap.adjust (\e -> e{classUsers = (n, c) : classUsers e, classUserCount = classUserCount e + 1})
+         in ( c
+            , g
+                { classes = foldr (\(ClassId j) -> use j) (IntMap.insert i (EClass [transitionOf n] [] 0 k (clock g)) (classes g)) cs
+                , memo = HashMap.insert n c (memo g)
+                , classCount = classCount g + 1
+                , added = added g + 1
+                }
+            )
+  where
+    n = canon g n0

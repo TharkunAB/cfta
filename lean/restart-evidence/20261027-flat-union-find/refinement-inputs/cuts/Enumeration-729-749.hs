@@ -1,0 +1,21 @@
+                            <> show recId
+                            <> " for symbol type "
+                            <> show (typeRep @symbol)
+            (x :<| xs) -> do
+                reps <- mapM (getUVarRepresentative . scGetUVar) hereConstraints
+                forM_ xs $ \sc ->
+                    modify' $ \s ->
+                        s{_uvarRepresentative = UnionFind.union (scGetUVar x) (scGetUVar sc) (_uvarRepresentative s)}
+                uv <- getUVarRepresentative (scGetUVar x)
+                -- The waiting counts of the old representatives go to the new one.
+                let merged = IntSet.delete (uvarToInt uv) (IntSet.fromList (map uvarToInt (Foldable.toList reps)))
+                    move waiting old = case IntMap.lookup old waiting of
+                        Just waits -> IntMap.insertWith (+) (uvarToInt uv) waits (IntMap.delete old waiting)
+                        Nothing -> waiting
+                modify' $ \s -> s{_waitingUVars = IntSet.foldl' move (_waitingUVars s) merged}
+                mapM_ (assimilateUvarVal uv) reps
+
+                mergeNodeIntoUVarVal uv n descendantConstraints
+                return $ TermFragmentUVar uv
+
+-- | Enumerate one edge, introducing UVars for its equality classes.

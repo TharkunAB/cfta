@@ -1,0 +1,214 @@
+[2026-10-27 03:09 CET] Flat union-find refinement plan.
+
+This is a source-grounded design, not a checked theorem. No repository source,
+Lean check, build, Git state, network or board was changed. Exact live inputs and
+retained whole/slice copies are recorded in refinement-source-pins.json.
+
+CURRENT SOURCE AND RELEVANT OLD SEMANTICS
+
+Data/CFTA/Internal/UnionFind.hs:84-93 stores Parent UVar or Root Int IntSet. Each
+root stores its members, including itself. union (100-106) reads both roots
+without changing the input and skips unionRoots when they are equal. unionRoots
+(111-125) chooses the right root only when the left size is strictly smaller.
+Equal sizes keep the LEFT root. It points EVERY member of the smaller class at
+the winner, then installs the summed size and union of both member sets. root
+(133-136) performs ONE parent lookup; find (129-130) returns the SAME map.
+
+UnionFind.lean has no member sets. Reaches (39-59) retains exact representative
+AND stored size. findRoot (113-122) follows and compresses a path. A missing lookup
+materializes root size one. Its correctness, termination and stability are
+findRoot_correct (124), findRoot_terminates (160), findRoot_moreFuel (181),
+findRoot_total (204), findRoot_reaches_iff (211). link (234) only changes the two
+root entries. link_reaches (245) gives the precise redirect and merged size.
+sameClass_iff_roots (284) and union_correct (367) give class semantics.
+
+MINIMAL OBSERVATIONAL RELATION
+
+Use a source-faithful Flat entry type with Parent Nat | Root Nat (List Nat), and
+Flat.Forest := Nat -> Option Flat.Entry. The following names are proposed API
+names; no such definitions were asserted to exist during this review.
+
+Flat.root f uv := match f uv with | some (.parent parent) => parent | _ => uv
+Flat.info f r := match f r with | some (.root size members) => (size,members)
+                             | _ => (1,[r])
+Flat.classSize f uv := (Flat.info f (Flat.root f uv)).1
+
+Define the refinement relation by ONE path receipt per natural identifier:
+
+  Refines (flat : Flat.Forest) (old : UnionFind.Forest) : Prop :=
+    forall uv, UnionFind.Reaches old uv (Flat.root flat uv)
+      (Flat.classSize flat uv)
+
+Keep flat representation validity as a separate invariant. Do not put literal
+entry equality, old-map shape, an allocation counter or a finite-domain argument
+into Refines. This relation already derives UnionFind.Total old. Uniqueness of
+Reaches derives the equivalent exact iff:
+
+  Reaches old uv representative size <->
+    representative = Flat.root flat uv /\ size = Flat.classSize flat uv.
+
+It derives SameClass old x y <-> Flat.root flat x = Flat.root flat y. Class-only
+correspondence is insufficient. A different root name changes enumeration value
+lookup, waiting maps and ancestry keys. A different size changes the next winner,
+including ties. Both exact fields are required. Parent shape is irrelevant.
+
+FLAT VALIDITY AND THE MEMBER LIST
+
+An effective flat root is an entry that is missing or is Root size members;
+it is not a Parent entry. Keep these source invariants:
+
+1. Every stored Parent target is an effective root. This rules out chains,
+   self-parent entries and cycles in the one-lookup representation.
+2. For every effective root r, forall uv,
+     uv in (Flat.info flat r).2 <-> Flat.root flat uv = r.
+   The member list is the WHOLE class, not an arbitrary subset.
+3. Each root list is Nodup, and its stored size is its list length.
+
+The first two give the structural root/membership equations required by the
+refinement proof. The third retains the IntSet abstraction and exact cardinality
+metadata. It implies positive sizes because r belongs to its own class. Treat a
+missing root as the singleton (1,[r]) throughout. A missing map entry is NOT an
+invalid or unallocated variable in either model.
+
+Concat of the disjoint loser/winner lists is a sufficient model of IntSet.union.
+No sorted-list or list-order equality is needed for this semantic bridge. Prove
+membership equivalence and Nodup. For pointing, a list-fold lemma should say:
+
+  pointAll f members winner uv =
+    if uv in members then some (.parent winner) else f uv.
+
+Repeated writes have the same value, so this formula does not need list order.
+Nodup remains necessary for interpreting stored size as list length. A later
+literal IntSet extraction theorem must retain the separate finite-set abstraction;
+list concatenation is not equality with the source's sorted IntSet traversal.
+
+SMALLEST ROOT/FIND API
+
+Given flatValid and related : Refines flat old, derive:
+
+- related.total : UnionFind.Total old.
+- related.path uv : Reaches old uv (Flat.root flat uv) (Flat.classSize flat uv).
+- related.classes x y : SameClass old x y <-> Flat.root flat x=Flat.root flat y.
+- related.find (observed : findRoot fuel old uv = some found) :
+    found.representative=Flat.root flat uv /\
+    found.size=Flat.classSize flat uv /\ Refines flat found.forest.
+- related.find_complete uv : exists fuel found,
+    (forall extra, findRoot (fuel+extra) old uv=some found) /\
+    found.representative=Flat.root flat uv /\
+    found.size=Flat.classSize flat uv /\ Refines flat found.forest.
+
+Use findRoot_correct plus reaches_unique for returned fields. For the returned
+relation use findRoot_reaches_iff with related.total. For completion use
+findRoot_terminates on related.path, then findRoot_moreFuel. This aligns the
+source find result (Flat.root flat uv,flat) with the old compressed result, not
+with an identical old forest. SourceUnionFindRoot.root_correct/root_terminates
+can also project the old pure root observation, but are not the new one-hop
+source implementation.
+
+UNION PROOF AND ADEQUATE OLD FUELS
+
+First prove a flat link lemma for two DISTINCT effective roots loser/winner.
+The complete small member list and disjoint classes give, for EVERY uv:
+
+  Flat.root linked uv = UnionFind.redirect loser winner (Flat.root flat uv)
+  Flat.classSize linked uv =
+    UnionFind.mergedSize loser winner loserSize winnerSize
+      (Flat.root flat uv) (Flat.classSize flat uv).
+
+The large representative is outside the small list. The pointing fold therefore
+does not corrupt it; the final root insertion supplies its exact summed size.
+Unchanged other roots and all members of the two classes retain the right names.
+Prove Flat.Valid linked in the same step. Then apply existing link_reaches to
+each related.path. This is the central semantic proof. It avoids reproving old
+transitive closure, union_correct or compression correctness.
+
+The public next theorem should hold for ANY successful old execution:
+
+  union_refines flat old left right flatValid related
+    (observed : UnionFind.union leftFuel rightFuel old left right=some output) :
+      Refines (Flat.union left right flat) output.
+
+Unpack the two old findRoot observations. Use related.find after each, and the
+preserved exact first representative/size. If roots agree, the source keeps the
+old flat map while old union may keep two compression writes. They are still
+related. Otherwise BOTH workers compare the same sizes with strict < and keep
+the same left root on a tie. Apply the flat link equations and link_reaches.
+
+The adequacy theorem can expose a stable old family, with a fixed old output:
+
+  union_complete flat old left right flatValid related :
+    exists leftFuel rightFuel output,
+      (forall eLeft eRight,
+        UnionFind.union (leftFuel+eLeft) (rightFuel+eRight) old left right =
+          some output) /\ Refines (Flat.union left right flat) output.
+
+Choose the first find bound from related.path left. Choose the second bound at
+THAT actual compressed first.forest using findRoot_total. findRoot_moreFuel keeps
+the first full Result fixed, so the second bound is valid for every larger first
+fuel too. Apply moreFuel to the second observation. Unfold union; its size/root
+branch is fixed. union_terminates already provides existence (414), but the two
+actual stable lookup families also establish the stated uniform extra-fuel form.
+No successful future source operation is an admission premise.
+
+Do NOT claim an all-fuel equality: old fuel zero can fail while source root is
+one lookup. Do NOT claim one uniform bound for every Nat merely from Total;
+a functional old forest can have arbitrarily long finite components. Bounds are
+per query, union, or a separately specified finite query list/domain.
+
+INITIALIZATION AND EXISTING CONSUMERS
+
+Flat.withInitialValues variables installs Root 1 [uv] exactly where uv is in the
+input list. Repeated initial variables are harmless map overwrites. Prove Valid
+and Refines against UnionFind.withInitialValues using read_initial. No Nodup
+premise is needed for this initialization relation. A finite allocation-domain
+SizesCorrect conclusion has its own domain assumptions; do not silently identify
+that domain with every natural identifier.
+
+Class-based consumers can reuse sameClass_iff_roots, union_correct and
+union_satisfies (676). Exact root and size correspondence also transfers old
+ClosedDomain and already-established SizesCorrect facts. Deriving SizesCorrect
+from Flat.Valid alone for an arbitrary chosen domain would require the domain to
+contain each relevant complete class and count each member once.
+
+Enumeration.hs:415-430 selects values by the actual returned representative.
+Its terminal path at 729-749 moves waiting counts and assimilates each ORIGINAL
+recorded root into the final winner. Exact representative equality is therefore
+part of observable enumeration behavior, not just an optimization property.
+A whole enumeration action bridge will need related branch states with all other
+fields unchanged. The current flat find keeps source metadata fixed, while the
+old action writes a compressed old forest. This is a relational state theorem,
+not equality of the existing Action result list at the old literal state type.
+
+SourceUnionFindCompression.findRoot_eq/union_eq and the CPS wrapper's
+representative_exact/unionVariables_exact prove the former conditional-compression
+worker. They remain valid historical model lemmas. They do NOT prove the current
+flat Haskell source: their implementation and full-forest conclusion differ.
+Do not relabel them as current-source correspondence or replace their declarations.
+ArrayUnionFind erases sizes and uses an unweighted union direction, so its erasure
+relation is also not the needed source bridge.
+
+BOUNDARIES AND SMALL WITNESSES
+
+On an empty map, source find uv returns the unchanged empty map. Old findRoot
+materializes uv's root entry. Literal map equality already fails in that case.
+After union 0 1, union 2 3, then union 0 2 (all ties keep the left root), the flat
+map points 3 directly to 0. The old linked forest can retain 3->2->0. Root names,
+sizes and classes coincide, but parent shapes do not.
+
+unionRoots is exported and DOCUMENTED for two different representatives. Its
+refinement theorem must explicitly require these preconditions. Calling it on
+the same representative doubles the stored size; calling it on a nonroot uses
+the source's default singleton entryOf branch. Neither is covered by the valid
+root-link theorem. The safe union wrapper derives both preconditions itself.
+This is a boundary of the API contract, not an established normal-call defect.
+
+The existing QuickCheck test (UnionFindSpec.hs:68-78) checks streams of class
+equivalence against EquivM. It does not check exact root choice, stored sizes,
+member completeness, map shape or the documented unionRoots precondition.
+No test or counterexample was executed for this plan.
+
+Finally the proposed model uses Nat and lists. Source UVar/size are machine Int
+and members are IntSet. Negative external IDs, size overflow, machine capacity
+and concrete containers extraction require their own source boundary. This plan
+establishes no new whole-enumerator language theorem, native extraction claim or
+H6 improvement. It supplies a minimal adequate-fuel semantic refinement route.

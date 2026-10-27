@@ -1,0 +1,30 @@
+/-- Linking two distinct roots preserves termination throughout the forest. -/
+theorem link_total (valid : Total forest)
+    (loserRoot : read forest loser = .root loserSize)
+    (winnerRoot : read forest winner = .root winnerSize) (different : loser ≠ winner) :
+    Total (link forest loser winner loserSize winnerSize) := by
+  intro uv
+  obtain ⟨root, size, path⟩ := valid uv
+  exact ⟨_, _, link_reaches loserRoot winnerRoot different path⟩
+
+/-- Equality of representatives characterizes class membership. -/
+theorem sameClass_iff_roots (left : Reaches forest x root₁ size₁)
+    (right : Reaches forest y root₂ size₂) : SameClass forest x y ↔ root₁ = root₂ := by
+  constructor
+  · rintro ⟨root, size, hx, hy⟩
+    exact (reaches_unique left hx).1.trans (reaches_unique right hy).1.symm
+  · intro same
+    subst root₂
+    have sizes : size₁ = size₂ := by
+      have equality := (reaches_terminal left).symm.trans (reaches_terminal right)
+      cases equality
+      rfl
+    subst size₂
+    exact ⟨root₁, size₁, left, right⟩
+
+/-- A root redirect identifies only the two selected roots. -/
+theorem redirect_eq_iff (loser winner left right : Nat) :
+    redirect loser winner left = redirect loser winner right ↔
+      left = right ∨ (left = loser ∧ right = winner) ∨ (left = winner ∧ right = loser) := by
+  simp only [redirect]
+  split <;> split <;> grind

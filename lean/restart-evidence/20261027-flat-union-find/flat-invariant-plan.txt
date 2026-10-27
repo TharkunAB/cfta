@@ -1,0 +1,49 @@
+[2026-10-27 03:13 CET] Source-only flat union-find invariant and preservation plan.
+
+Reviewed upstream c168a952d779a72294c34d9c8fd5afd0e308c5ab. The authoritative operation is cfta/src/Data/CFTA/Internal/UnionFind.hs:77–136. flat-invariant-pins.json binds four whole-source snapshots and 13 inclusive cuts/316 lines; SHA256 617d88d804b98f960d6f6f8f7b8b8e85d6fdf430b5f6263952182ebaccc2f5e7. The formulas below are a proposed proof design. They are not compiled Lean declarations. I made no repository edits and ran no Lean/native job or Git mutation.
+
+1. Use a functional map F : Nat → Option Entry. Entry has Parent r and Root n members. Define root by the actual one-lookup rule: Parent r returns r; Root and None return the queried key. Define Class F r v by root F v = r. The minimum sufficient Valid F has these two clauses:
+
+    ParentClosed: F v = some (Parent r) → ∃ n members, F r = some (Root n members).
+    RootExact: F r = some (Root n members) →
+      members.Nodup ∧ n = members.length ∧ ∀ v, (v ∈ members ↔ root F v = r).
+
+RootExact derives r ∈ members because a Root entry returns its own key. It therefore derives 0 < n. Do not add root self-membership as an independent axiom. The membership biconditional supplies both inclusion directions: no unrelated member, and no omitted parent. ParentClosed forbids self-parents, parent chains and cycles. Under it, RootExact is equivalently members = {r} ∪ {v | F v = Parent r}, as an extensional set. No ordering condition is needed.
+
+2. ParentClosed is necessary, including for missing roots. Without it, let F 0=Parent 1, F 1=None and F 2=Root 1 [2], with every other entry absent. Every stored-root check in RootExact passes. Yet unionRoots 2 1 treats the missing 1 as singleton, writes 1→2 and leaves 0→1. The one-lookup root of 0 is then stale. This is an invalid abstract forest admitted by the weaker invariant, not a claimed reachable native defect.
+
+With ParentClosed, prove the missing-class lemma: F r=None implies (root F v=r ↔ v=r). If v≠r returned r, v would be a Parent r, and closure would contradict F r=None. Thus no separate absent-entry closure axiom is needed. Also prove root F (root F v)=root F v. Each returned representative is either absent or a stored Root.
+
+3. Prove entryOf_spec once. For a fixed representative r, the source entryOf at 121–126 returns (n,M) with M.Nodup, n=M.length, r∈M and v∈M ↔ root F v=r. A stored root uses RootExact. An absent root uses (1,[r]) and the missing-class lemma. A Parent case is impossible from Valid and root F r=r. This handles the actual fallback case without assuming every allocated variable has a stored UF entry.
+
+The fresh case occurs in current clients. Enumeration.hs:384–404 allocates variables/value slots without inserting UF roots. EGraph.hs:375–394 starts with an empty UF, and addNode at 451–467 also does not insert an entry. Fresh/missing roots are therefore part of ordinary source behavior.
+
+4. Require unionRoots inputs to be distinct fixed representatives: root F r1=r1, root F r2=r2, r1≠r2. The source contract at 108–110 says "two different representatives". Do not prove preservation for arbitrary raw keys. In particular, calling unionRoots with the same representative doubles its stored size without doubling the set. Source union at 100–106 and EGraph.union at 553–594 resolve representatives and test equality before this call.
+
+Use entryOf_spec for both inputs. Distinct representative classes have disjoint member lists: a member in both would force r1=r2. The source chooses r2 only when n1<n2; ties choose r1. Separate this size comparison from a symmetric merge lemma for any designated big/small pair with their exact class data.
+
+5. First prove the fold-write equation, generalized over the initial map:
+
+    point F smallMembers big v =
+      if v ∈ smallMembers then some (Parent big) else F v.
+
+It holds even with repeated list entries because every write uses the same payload. It makes fold order irrelevant to the final map. After the final Root write, the complete lookup equation is:
+
+    F' v = if v=big then some (Root (bigSize+smallSize) mergedMembers)
+      else if v∈smallMembers then some (Parent big) else F v.
+
+Choose mergedMembers=bigMembers++smallMembers. Disjointness and Nodup establish its Nodup; length_append gives exactly bigSize+smallSize. This list represents IntSet.union smallSet bigSet by membership, not by physical order. The stored big key is not in smallMembers, so the fold cannot remove it accidentally.
+
+6. Derive the central root equation directly from that lookup equation and entryOf_spec:
+
+    root F' v = if root F v=small then big else root F v.
+
+This proof uses the old invariant only; it must not assume Valid F'. Then prove Valid F'. New parents point at the new big Root. An unchanged parent cannot have targeted small, since it would have belonged to smallMembers and been redirected. Its other target remains a Root. The new big class is exactly the disjoint union of the two old classes. Every other stored Root has its old payload and its old class. The old small Root, if present, becomes Parent big. These facts prove RootExact and exact size, not merely an upper bound.
+
+The same proof covers stored/stored, stored/missing, missing/stored and missing/missing roots through entryOf_spec. Both missing roots give a new Root of size two and one direct Parent. No old parent can target either missing root. There is no need for four separate merge proofs.
+
+7. Lift to source union: compute both roots, use idempotence to establish the unionRoots preconditions, and split on equality. The equal branch returns the exact original map, including an absent singleton. Prove find v F=(root F v,F) literally. Useful public results are Valid preservation, exact weighted winner/tie behavior, the root-redirection equation, merged size, and same-class equivalence. withInitialValues accepts duplicate input variables: repeated keys store the same Root 1 [v]. Its proof needs no Nodup assumption on the input list.
+
+8. Keep representation boundaries separate. Root member lists are finite and duplicate-free. A global finite-support condition is not needed for these algebraic preservation proofs; add it only to the IntMap representation relation. Finite writes preserve finite support. Relate IntSet fields by membership, unless a separate sorted-list implementation is selected. Relate IntMap extensionally, without claiming tree-layout identity. Nat excludes negative public intToUVar inputs. An eventual machine bridge must also bound generated identifiers and class-size sums to prevent Int overflow. The algebraic theorem alone does not cover those machine cases.
+
+For the existing Lean UnionFind model, target representative/size/Reaches correspondence, not returned-forest equality. Its findRoot inserts missing roots and compresses chains; its union links only the losing root. Both differences are explicit in the pinned old definitions. A relation that preserves each variable's representative and exact class size can support weighted winner correspondence while allowing different parent layouts. Whole enumeration source correspondence still requires that integration; no H6 or end-to-end completion claim follows from this plan.

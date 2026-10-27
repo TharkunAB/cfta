@@ -1,0 +1,87 @@
+Flat member-list union-find: minimal proof plan
+
+This plan follows the current cfta/src/Data/CFTA/Internal/UnionFind.hs. No Lean evaluation, build, Git mutation, web request or repository edit was run. Proof scripts below are source-guided candidates, not checked declarations. Exact local source and Lean 4.34.1 library identities are in member-fold-source-pins.json.
+
+1. Exact source operation
+
+Haskell Entry stores Parent representative or Root size IntSet (84). A missing map entry denotes a singleton class (124–126). root makes one map lookup (133–136). find returns the input forest unchanged (129–130). unionRoots requires two distinct representatives (108–109). It selects the right representative only when s1<s2; ties keep the left (113–114). It redirects EVERY smallSet member to big (116), then writes big's Root with size bigSize+smallSize and IntSet.union smallSet bigSet (118).
+
+A List Nat member payload is sufficient. Represent the set by membership. Use small++big for the merged list. List.mem_append gives exact union membership. Do not claim sorted-list equality with IntSet's member order. Every redirect writes the same Parent big payload, so final map values do not depend on list order or duplicate visits. Nodup is needed for cardinality, not for the fold fact.
+
+Keep this flat runtime separate from the older UnionFind.lean: that module stores no member list, findRoot can recurse and compress, and a missing successful lookup inserts an explicit root. Those operations differ from current Haskell find/root. Its pointwise put definition (28–29) and pure redirect_eq_iff theorem (299–304) are useful proof patterns.
+
+2. First prove the fold with no invariant
+
+Define redirectMembers forest members big as members.foldl (fun acc v => put acc v (.parent big)) forest. Prove the pointwise statement:
+
+  redirectMembers forest members big key =
+    if key ∈ members then some (.parent big) else forest key
+
+No Nodup, root, disjointness or size hypothesis is required. State it directly for List.foldl, or unfold redirectMembers before induction. Generalize forest in a list induction. List.foldl_cons reduces cons to the induction hypothesis at put forest head (.parent big). Split key∈tail, then key=head. List.mem_cons and put finish the cases.
+
+Candidate proof for the direct List.foldl statement:
+
+  induction members generalizing forest with
+  | nil => simp
+  | cons head tail ih =>
+      rw [List.foldl_cons, ih]
+      by_cases inTail : key ∈ tail
+      · simp [List.mem_cons, inTail]
+      · by_cases same : key = head
+        · subst key; simp [put, inTail]
+        · simp [put, List.mem_cons, same, inTail]
+
+Next derive the entire final-map equation, in source write order:
+
+  merged key =
+    if key = big then some (.root (bigSize+smallSize) (small++big))
+    else if key ∈ small then some (.parent big)
+    else forest key
+
+This follows by unfolding the final put and using the fold theorem. No invariant is needed. Function extensionality then identifies folds whose membership predicates are equal. It covers duplicate visits too. A permutation proof is unnecessary, although List.Perm.foldl_eq' exists with an explicit commuting-step premise.
+
+3. Minimal complete flat invariant
+
+Use effective read at key r with default Root 1 [r]. Two clauses suffice:
+
+- Every stored Parent r points directly to an effective Root payload at r.
+- Every effective Root size members at r has members.Nodup, size=members.length, and exact membership: for every v, v∈members iff root forest v=r.
+
+These clauses include missing singleton roots. Root self-membership follows from exact membership and root forest r=r. The direct-parent clause excludes chains and self-parents. A missing root cannot silently acquire other members because its default payload is [r]; a successful merge writes an explicit Root at that representative.
+
+For two distinct effective roots, exact membership derives cross-disjointness. A member in both lists would have both representatives. Thus the full preservation theorem needs no additional disjointness assumption.
+
+Nodup and size=length alone are insufficient. Example: 0 stores Root 1 [0], 1 stores Parent 0, 2 stores Root 2 [2,3], and 3 stores Parent 2. All root lists are Nodup, all sizes are their lengths, and parents point directly to roots. But 1 is omitted from the list at 0. Merging 0 into 2 redirects only 0 and leaves 1→0→2, violating the one-lookup representation. This shows an insufficient formal invariant; it is not a defect in source executions from valid states.
+
+4. Prove preservation after the FINAL root write
+
+Do not preserve the full class-list invariant after each redirect step. The first redirected member gives big a new member while big's Root size/list still describes the old class. Use the fold's exact effect and prove the full merge invariant only after the final big Root update.
+
+Derive the exact representative equation:
+
+  root merged v =
+    if root forest v = smallRoot then bigRoot else root forest v
+
+Split v=bigRoot and v∈small. Every small member becomes a direct parent of big. Other lookup entries stay unchanged. An old parent target can equal smallRoot only when exact membership puts its source in small, so no stale parent to smallRoot remains. The final big entry is a Root; other root payloads remain unchanged.
+
+The root equation gives exact new membership for small++big and unchanged membership for other roots. List.nodup_append combines old Nodup and derived cross-disjointness. List.length_append plus old size equalities gives the exact size; Nat.add_comm reconciles source bigSize+smallSize with list order small++big. Keep source write order and commute only the arithmetic proof.
+
+A compact final theorem should take the initial flat invariant, two distinct effective root receipts and the source-defined merge result. Return the invariant plus the representative equation. The two root receipts follow from the actual root calls in union. The same-root branch of union returns the unchanged forest. Do not apply unionRoots to equal roots: the source contract excludes it, and small++big would duplicate the class.
+
+For exact equivalence classes, use the root equation and existing UnionFind.redirect_eq_iff. Its conclusion is old equality or either direction of the two selected classes. This pure Nat lemma does not depend on the older executable union or path compression.
+
+5. Exact local library facts
+
+All library paths are under the pinned Lean 4.34.1 src/lean directory.
+
+- Init/Data/List/Basic.lean 105–106: List.foldl_nil and List.foldl_cons are definitional equations.
+- Init/Data/List/Basic.lean 631–634: List.length_append.
+- Init/Data/List/Lemmas.lean 354–356: List.mem_cons.
+- Init/Data/List/Lemmas.lean 1598–1599: List.mem_append, membership iff left or right membership.
+- Init/Data/List/Pairwise.lean 361–363: List.nodup_append. Its exact RHS is left.Nodup ∧ right.Nodup ∧ ∀a∈left,∀b∈right,a≠b. No separate List.Disjoint API is needed.
+- Init/Data/List/Lemmas.lean 2723–2725: List.foldl_append, if a later proof splits the redirect input into prefixes.
+- Init/Data/List/Perm.lean 310–321: optional List.Perm.foldl_eq', with explicit commuting accumulator steps.
+
+The initial singleton forest is valid even when its initialization list has duplicates: IntMap.fromList overwrites an identical payload at the same key. Do not add a Nodup input-list premise merely to simplify that proof. Each stored member list is itself a singleton.
+
+This proof unit covers mathematical class membership, flatness and exact Nat cardinalities. It does not establish Haskell Int overflow bounds, the IntMap/IntSet implementation, asymptotic costs or sorted member-list representation.

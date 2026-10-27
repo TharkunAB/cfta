@@ -1,0 +1,35 @@
+CLEAR — flat member-list union-find and weighted union
+
+Source-only review. No Lean, build, Git, network or repository edit was run. Both final live sources equal their strict-2 checked snapshots. Both actual final reports record exit 0, empty physical raw logs, all linters and warnings as errors under Lean 4.34.1 and a 4 GiB cap with no swap. Earlier failed attempts are not reported as passes.
+
+Exact reviewed sources:
+- FlatUnionFind.lean: 194 lines, 8210 bytes, SHA256 6a474655548479a53848b8ea09c075808af48d5b0e292bbd49c2a4fc4dd3ce7f; strict-flat-2.
+- FlatUnionFindUnion.lean: 145 lines, 6753 bytes, SHA256 06815b165f67e1be42953a4b0fd21043e636f0881a5c3ca707e3bf1572b0cb53; strict-flat-union-2.
+
+Invariant completeness
+
+Valid (FlatUnionFind 49–57) requires every Parent target to have a STORED Root. Each stored Root has a Nodup member list, size equal to list length, and exact membership iff direct root lookup equals that representative. This excludes stale, missing and extra members, parent chains and self-parents. It is stronger than just Nodup and size=length.
+
+The stored-root requirement also closes the default-root case. If a representative is absent, no other variable can point to it. entryOf_spec (72–106) derives exact singleton metadata for that absent root. It does not assume missing roots have no incoming parents. Root self-membership and positive size follow from the exact membership clause. initial_valid accepts duplicate initialization inputs, as the source does.
+
+Exact source operation
+
+root makes one map read. find returns the same forest. entryOf has the same fallback as Haskell: any entry that is not a Root gives size 1 and singleton membership. Under the invariant, the fixed-point root inputs to unionRoots cannot be Parent records. The source contract explicitly requires distinct representatives (Haskell 108–109); unionRoots_valid requires both fixed-point receipts and distinctness. union derives them from actual one-hop root reads and checks equality before unionRoots. No precondition is silently dropped.
+
+The strict size comparison selects right only when left is smaller. Ties select left. merge redirects the losing member list, then writes the winning root with winnerSize+loserSize and loserMembers++winnerMembers. This matches the source update order and tie behavior. The same-root union branch retains the exact original abstract map.
+
+Fold and final invariant
+
+redirectMembers_lookup (166–178) proves exact pointwise writes without any invariant or Nodup input. Duplicate visits cause no additional effect because every visit writes the same Parent winner value. merge_lookup (187–192) preserves the final root write's precedence.
+
+link_root derives the precise old-root redirect. link_valid uses that fact to prove the final complete-member invariant. It derives list disjointness from distinct old roots and exact membership. Nodup append and exact length then justify the added size. Existing parents outside the losing class retain valid stored root targets; all parents of the old losing root are covered by its complete member list. The proof does not assert the complete invariant at partial fold states, where root metadata can be stale.
+
+Representation and claim boundaries
+
+Lists model IntSet membership. Their order is not IntSet order. The merged append has exact set-union membership, and derived disjointness makes its length the set cardinality. No sorted-list equality, concrete IntSet tree representation or memory layout is asserted.
+
+Forest is an abstract function and can describe maps without finite support. The actual initial map and each update match the source extensionally; these modules do not prove IntMap implementation correctness or finite physical storage. Nat identifiers and cardinalities do not prove machine Int conversion, overflow bounds or the source complexity claim. The module header states the map and Nat abstraction explicitly.
+
+erase_reaches returns the same representative and size in the older parent-path relation. It does not equate the old compressed runtime's returned forest with the flat backend's map. No such physical-map equality is hidden in either module.
+
+No blocker found. The exact invariant, source unionRoots contract, list-set abstraction and final-write proof scope agree. This review covers these two modules only; separate semantic/refinement consumers require their own actual contract review. Exact whole-file, focused-span and strict-receipt identities are in member-fold-review-source-pins.json. Span hashes retain literal inclusive source bytes and final LF.

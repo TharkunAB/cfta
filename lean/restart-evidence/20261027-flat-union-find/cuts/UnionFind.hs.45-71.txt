@@ -1,0 +1,27 @@
+-- | Fresh supply for enumeration variables.
+newtype UVarGen = UVarGen Int
+    deriving (Eq, Ord, Show)
+
+-- | Initial variable supply.
+initUVarGen :: UVarGen
+initUVarGen = UVarGen 0
+
+-- | Allocate one fresh variable and advance the supply.
+nextUVar :: UVarGen -> (UVarGen, UVar)
+nextUVar (UVarGen n) = (UVarGen (n + 1), UVar n)
+
+---------------------------
+-------- UVar
+---------------------------
+
+-- | Union-find variable identifier.
+newtype UVar = UVar Int
+    deriving (Eq, Ord, Show)
+
+-- | Convert a variable to its dense integer id.
+uvarToInt :: UVar -> Int
+uvarToInt (UVar i) = i
+
+-- | Reconstruct a variable from its dense integer id.
+intToUVar :: Int -> UVar
+intToUVar = UVar

@@ -1,0 +1,19 @@
+/-- Attach one root below another and add the two stored sizes. -/
+def link (forest : Forest) (loser winner loserSize winnerSize : Nat) : Forest :=
+  put (put forest loser (.parent winner)) winner (.root (loserSize + winnerSize))
+
+/-- The root selected after linking two different classes. -/
+def redirect (loser winner root : Nat) : Nat := if root = loser then winner else root
+
+/-- Only the two merged classes receive the added root size. -/
+def mergedSize (loser winner loserSize winnerSize root size : Nat) : Nat :=
+  if root = loser ∨ root = winner then loserSize + winnerSize else size
+
+/-- Linking two roots changes precisely their representatives and stored sizes. -/
+theorem link_reaches
+    (loserRoot : read forest loser = .root loserSize)
+    (winnerRoot : read forest winner = .root winnerSize) (different : loser ≠ winner)
+    (path : Reaches forest uv representative size) :
+    Reaches (link forest loser winner loserSize winnerSize) uv
+      (redirect loser winner representative)
+      (mergedSize loser winner loserSize winnerSize representative size) := by

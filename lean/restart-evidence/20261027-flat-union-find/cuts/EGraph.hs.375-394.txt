@@ -1,0 +1,20 @@
+emptyEGraph :: EGraph s f
+emptyEGraph =
+    EGraph
+        (UnionFind.withInitialValues [])
+        IntMap.empty
+        HashMap.empty
+        0
+        0
+        HashMap.empty
+        IntMap.empty
+        []
+        0
+        False
+
+-- | The root of the e-class of an identity.
+find :: EGraph s f -> ClassId -> ClassId
+find g (ClassId i) = ClassId (uvarToInt (UnionFind.root (intToUVar i) (unionFind g)))
+
+-- | Whether two identities are in one e-class.
+equivalent :: EGraph s f -> ClassId -> ClassId -> Bool

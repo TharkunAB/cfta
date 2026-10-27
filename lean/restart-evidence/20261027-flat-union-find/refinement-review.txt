@@ -1,0 +1,133 @@
+[2026-10-27 03:14 CET] Flat union-find source review: CLEAR.
+
+All four current sources were read in full: 588 lines. No substantive defect or
+statement overclaim was found. This was a source/data review. No Lean, build,
+Git, network, board or repository edit was performed.
+
+EXACT SOURCES AND RETAINED CHECKS
+
+FlatUnionFind.lean: 194 lines; SHA256
+6a474655548479a53848b8ea09c075808af48d5b0e292bbd49c2a4fc4dd3ce7f.
+FlatUnionFindUnion.lean: 145 lines; SHA256
+06815b165f67e1be42953a4b0fd21043e636f0881a5c3ca707e3bf1572b0cb53.
+FlatUnionFindRefinement.lean: 152 lines; SHA256
+90f0443ae3ecaa441109c4cc07402434631e37f1548d1d6467654fea5997970a.
+FlatUnionFindSemantics.lean: 97 lines; SHA256
+eb83102d92ce81556fce602bd2ace8577933dc59f7d2fe7a1965eda56edc605d.
+
+Each live source equals its final strict snapshot. The checked retained reports
+are strict-flat-2, strict-flat-union-2, strict-flat-refinement-3 and
+strict-flat-semantics-2. Each records exit 0 with warningAsError=true and
+linter.all=true, a literal empty raw log, and the matching source hash.
+Exact report/raw/source identities and copied reviewed sources are retained in
+refinement-review-source-pins.json and refinement-review-inputs. No independent
+compiler execution is claimed by this review.
+
+SOURCE MODEL AND REPRESENTATION VALIDITY
+
+FlatUnionFind.root performs one map lookup. find returns its representative and
+THE SAME forest. Missing metadata uses the source default (1,[uv]). Initialization
+uses singleton roots and ignores duplicate inputs. These agree with the current
+Haskell source at Internal/UnionFind.hs:84-93 and 123-136 within the stated Nat/map
+abstraction. redirectMembers writes every listed key; its lookup theorem covers
+duplicate input lists too. merge performs that fold then one final winning-root
+write. Its member list is loserMembers++winnerMembers, which describes the
+IntSet union by membership, not literal container order.
+
+Valid.parents explicitly requires every direct parent target to have a stored
+root. It excludes chains, cycles, self parents and dangling parent targets. This
+is stronger than just root idempotence and is true for initialization and the
+source-style union construction. Valid.roots gives Nodup members, exact list
+length as stored size, and membership iff the one-hop representative equals that
+root. entryOf_spec proves the corresponding singleton fact for an absent root;
+there is no hidden allocated-domain restriction or required initial Nodup list.
+
+FlatUnionFindUnion.link uses actual root metadata. link_root derives the precise
+old UnionFind.redirect equation for every raw variable. link_valid proves both
+direct-parent and complete-member invariants after the whole operation. It never
+assumes that the intermediate member-redirection fold is itself Valid. The two
+member classes are disjoint because their roots differ. The final append is
+Nodup and its size is the sum. The final root overwrite and outside-class cases
+retain exactly the intended representative and metadata.
+
+unionRoots compares the same stored sizes as the Haskell source. Strict < chooses
+the right root only when the left class is smaller; ties keep the first root.
+Its validity theorem requires two actual fixed roots and their distinctness.
+union derives these conditions from two root reads and handles equal roots by
+retaining the unchanged flat input. No validity claim is made for an arbitrary
+same-root or nonroot call to the exported raw unionRoots function.
+
+REFINEMENT AND LOOKUP
+
+Represents (Refinement:15-16) gives one actual old Reaches path for EVERY Nat,
+with exactly root flat uv and the root's stored size. It does not equate map
+contents or compression shape. It immediately implies old Total and exact class
+equivalence. Reaches uniqueness ensures every other old path from uv has these
+same representative and size. Separate Valid inputs are present where the new
+union proof needs complete member sets; Represents is not used as an implicit
+proof of flat representation validity.
+
+findRoot_represents uses actual old findRoot_correct and path uniqueness for the
+returned representative/size. It preserves all original relation paths at the
+actual compressed old forest. find_refines derives an actual finite successful
+old execution using findRoot_terminates. The source output forest stays flat;
+the old counterpart may compress or insert an absent singleton root. No literal
+forest equality or all-fuel observation equality is claimed. The existential
+find_refines conclusion does not repeat size as a separate conjunct, but the
+exported findRoot_represents lemma explicitly gives it and Represents retains it
+at every raw variable.
+
+UNION AND FINITE HISTORIES
+
+The private link_size proves the exact old mergedSize equation. link_represents
+combines that equation, link_root and old link_reaches, including exact stored
+size and the chosen winning name. The addition-order difference is handled by
+Nat.add_comm. No class-only shortcut loses root identity.
+
+union_represents proves correspondence for EVERY successful old union observation
+from the related original forest. It unpacks the two actual old lookups in order.
+The second lookup uses the first returned old forest. Both retain the relation,
+so both root names and both sizes match the flat worker. Equal-root union retains
+the relation despite old compression writes. Distinct-root union takes the same
+strict size branch and uses link_represents. No desired returned relation or
+successful future operation is an admission premise.
+
+union_refines requires only current Valid, current Represents and the requested
+pair. Old union_terminates, using the derived old Total, supplies finite bounds
+and a successful old counterpart. The result includes actual flat validity and
+the exact-root/size relation. This is an existential adequate-fuel theorem. It
+does not expose a common stable fuel family or a uniform bound for all Nat.
+Old findRoot_moreFuel can support a later fuel-stability corollary if needed;
+such a corollary is not claimed in this source.
+
+EarlierUnions is an ordered trace of actual successful old calls. Each cons holds
+its own concrete old bounds and returned forest. unions_refine inducts over the
+requested list, passes the actual next flat/old forests and their relation into
+the suffix, and retains final Valid plus the final relation. It assumes no
+successful suffix. This does not claim one common fuel for the whole history,
+whole enumeration action equivalence, or equality of old/new final forests.
+
+SEMANTIC CONCLUSIONS AND LIMITS
+
+represents_satisfies transports exactly the forest assignment equations.
+union_classes and union_satisfies reuse the existing old union_correct and
+union_satisfies at their actual bounded counterpart. unions_satisfies accumulates
+precisely every requested pair equality, including repeated/redundant requests.
+Initialization imposes no distinct-variable equality, so the final initialized
+statement has no unsupported initial assignment premise. These are equality
+semantics, not node-language acceptance or full cache/enum-state semantics.
+
+The functional map may be abstractly infinite. Lists model finite class member
+sets. No theorem extracts concrete IntMap/IntSet structure, sorted member order,
+negative machine identifiers, Int overflow, allocation bounds or complexity.
+The source module header states the map/Nat abstraction and list-order limit.
+compressed_union_represents explicitly treats the historical conditional-
+compression worker via its old proven equality; it is not a claim that the
+current flat source performs compression.
+
+The older CPS exact-result equations still describe the older worker. This
+checkpoint does not switch or prove relational equivalence of the complete
+current enumeration state/action interpreter. Waiting maps, slots and ancestry
+need exact root correspondence at that later boundary. Safe, cache validity,
+whole-enumerator language semantics and H6 are unchanged. Within the four stated
+module contracts, the exact source review is CLEAR.

@@ -1,0 +1,16 @@
+getUVarRepresentative :: UVar -> EnumerateM symbol UVar
+getUVarRepresentative uv = do
+    uf <- gets _uvarRepresentative
+    let (uv', uf') = UnionFind.find uv uf
+    modify' $ \s -> s{_uvarRepresentative = uf'}
+    return uv'
+
+-- | Look up the value for a UVar after path-compressing its representative.
+getUVarValue :: UVar -> EnumerateM symbol (UVarValue symbol)
+getUVarValue uv = do
+    uv' <- getUVarRepresentative uv
+    let idx = uvarToInt uv'
+    values <- gets _uvarValues
+    return $ values IntMap.! idx
+
+{- | Replace the value of a UVar.

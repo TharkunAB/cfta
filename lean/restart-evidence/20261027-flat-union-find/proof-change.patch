@@ -1,0 +1,624 @@
+diff --git a/lean/MicroCFTA/Audit.lean b/lean/MicroCFTA/Audit.lean
+index 2b5a07a9b..10018e122 100644
+--- a/lean/MicroCFTA/Audit.lean
++++ b/lean/MicroCFTA/Audit.lean
+@@ -1,3 +1,7 @@
++import MicroCFTA.FlatUnionFind
++import MicroCFTA.FlatUnionFindUnion
++import MicroCFTA.FlatUnionFindRefinement
++import MicroCFTA.FlatUnionFindSemantics
+ import MicroCFTA.SourcePruningEnumerationCapturedEdgeDiagonalSoundness
+ import MicroCFTA.SourcePruningEnumerationRecursiveCapturedSoundness
+ import MicroCFTA.SourcePruningEnumerationRecursiveCallbackCanonical
+diff --git a/lean/MicroCFTA/FlatUnionFind.lean b/lean/MicroCFTA/FlatUnionFind.lean
+new file mode 100644
+index 000000000..e4c582928
+--- /dev/null
++++ b/lean/MicroCFTA/FlatUnionFind.lean
+@@ -0,0 +1,194 @@
++import MicroCFTA.UnionFind
++
++/-!
++# Union-find with direct parent pointers
++
++This model follows the member-set backend in `Internal/UnionFind.hs`.
++Lists describe finite set membership. Their order does not describe `IntSet`.
++The map interface and natural-number identifiers remain abstract.
++-/
++
++namespace MicroCFTA.FlatUnionFind
++
++/-- A direct parent pointer or a root with its size and members. -/
++inductive Entry where
++  /-- The stored pointer targets the class representative. -/
++  | parent (uv : Nat)
++  /-- A representative stores the complete finite class. -/
++  | root (size : Nat) (members : List Nat)
++deriving DecidableEq, Repr
++
++/-- The persistent map interface permits absent singleton roots. -/
++abbrev Forest := Nat → Option Entry
++
++/-- Replace one map entry. -/
++def put (forest : Forest) (uv : Nat) (entry : Entry) : Forest :=
++  fun other => if other = uv then some entry else forest other
++
++/-- Read one parent pointer, or return the variable itself. -/
++def root (forest : Forest) (uv : Nat) : Nat :=
++  match forest uv with
++  | some (.parent parent) => parent
++  | _ => uv
++
++/-- Read root metadata, with the source singleton default. -/
++def entryOf (forest : Forest) (uv : Nat) : Nat × List Nat :=
++  match forest uv with
++  | some (.root size members) => (size, members)
++  | _ => (1, [uv])
++
++/-- Find reads the representative and retains the same forest. -/
++def find (forest : Forest) (uv : Nat) : Nat × Forest :=
++  (root forest uv, forest)
++
++/-- Each supplied variable is a singleton root. Duplicate inputs have no effect. -/
++def withInitialValues (variables : List Nat) : Forest :=
++  fun uv => if uv ∈ variables then some (.root 1 [uv]) else none
++
++/-- Parents target stored roots. Root metadata describes the complete class. -/
++structure Valid (forest : Forest) : Prop where
++  /-- Every parent target has a stored root record. -/
++  parents : ∀ uv parent, forest uv = some (.parent parent) →
++    ∃ size members, forest parent = some (.root size members)
++  /-- Root size and members agree with the direct lookup classes. -/
++  roots : ∀ representative size members,
++    forest representative = some (.root size members) →
++    members.Nodup ∧ size = members.length ∧
++      ∀ uv, uv ∈ members ↔ root forest uv = representative
++
++/-- Every representative is a fixed point of the direct root read. -/
++theorem root_root (valid : Valid forest) (uv : Nat) :
++    root forest (root forest uv) = root forest uv := by
++  cases lookup : forest uv with
++  | none => simp [root, lookup]
++  | some entry =>
++    cases entry with
++    | root size members => simp [root, lookup]
++    | parent parent =>
++      obtain ⟨size, members, terminal⟩ := valid.parents uv parent lookup
++      simp [root, lookup, terminal]
++
++/-- Root metadata also describes an absent singleton root exactly. -/
++theorem entryOf_spec (valid : Valid forest)
++    (fixed : root forest representative = representative) :
++    (entryOf forest representative).2.Nodup ∧
++      (entryOf forest representative).1 = (entryOf forest representative).2.length ∧
++      ∀ uv, uv ∈ (entryOf forest representative).2 ↔
++        root forest uv = representative := by
++  cases lookup : forest representative with
++  | none =>
++    simp only [entryOf, lookup]
++    refine ⟨by simp, by simp, ?_⟩
++    intro uv
++    simp only [List.mem_singleton]
++    constructor
++    · rintro rfl
++      exact fixed
++    · intro same
++      cases actual : forest uv with
++      | none => simpa [root, actual] using same
++      | some entry =>
++        cases entry with
++        | root size members => simpa [root, actual] using same
++        | parent parent =>
++          have parentSame : parent = representative := by simpa [root, actual] using same
++          obtain ⟨size, members, terminal⟩ := valid.parents uv parent actual
++          rw [parentSame, lookup] at terminal
++          contradiction
++  | some entry =>
++    cases entry with
++    | root size members =>
++      simpa only [entryOf, lookup] using valid.roots representative size members lookup
++    | parent parent =>
++      have same : parent = representative := by simpa [root, lookup] using fixed
++      obtain ⟨size, members, terminal⟩ := valid.parents representative parent lookup
++      rw [same, lookup] at terminal
++      cases terminal
++
++/-- Initialization satisfies the direct-parent and complete-member invariant. -/
++theorem initial_valid (variables : List Nat) : Valid (withInitialValues variables) := by
++  have roots (uv : Nat) : root (withInitialValues variables) uv = uv := by
++    simp [root, withInitialValues]
++  refine ⟨?_, ?_⟩
++  · intro uv parent lookup
++    simp [withInitialValues] at lookup
++  · intro representative size members lookup
++    simp only [withInitialValues] at lookup
++    split at lookup
++    · cases lookup
++      simp [roots]
++    · contradiction
++
++/-- Erase member lists to obtain the earlier parent-path interface. -/
++def erase (forest : Forest) : UnionFind.Forest :=
++  fun uv => (forest uv).map fun entry =>
++    match entry with
++    | .parent parent => .parent parent
++    | .root size _ => .root size
++
++/-- A direct representative is a root in the earlier path interface. -/
++theorem erase_root (valid : Valid forest)
++    (fixed : root forest representative = representative) :
++    UnionFind.read (erase forest) representative =
++      .root (entryOf forest representative).1 := by
++  cases lookup : forest representative with
++  | none => simp [UnionFind.read, erase, entryOf, lookup]
++  | some entry =>
++    cases entry with
++    | root size members => simp [UnionFind.read, erase, entryOf, lookup]
++    | parent parent =>
++      have same : parent = representative := by simpa [root, lookup] using fixed
++      obtain ⟨size, members, terminal⟩ := valid.parents representative parent lookup
++      rw [same, lookup] at terminal
++      cases terminal
++
++/-- Direct lookup gives the same representative and size as a finite parent path. -/
++theorem erase_reaches (valid : Valid forest) (uv : Nat) :
++    UnionFind.Reaches (erase forest) uv (root forest uv)
++      (entryOf forest (root forest uv)).1 := by
++  have terminal := erase_root valid (root_root valid uv)
++  cases lookup : forest uv with
++  | none =>
++    simpa only [root, lookup] using (UnionFind.Reaches.root terminal)
++  | some entry =>
++    cases entry with
++    | root size members =>
++      simpa only [root, lookup] using (UnionFind.Reaches.root terminal)
++    | parent parent =>
++      simp only [root, lookup] at terminal ⊢
++      exact .parent (by simp [UnionFind.read, erase, lookup]) (.root terminal)
++
++/-- Redirect every listed member to the selected winner. -/
++def redirectMembers (forest : Forest) (winner : Nat) (members : List Nat) : Forest :=
++  members.foldl (fun current uv => put current uv (.parent winner)) forest
++
++/-- The redirect fold changes exactly the listed keys, even with duplicate inputs. -/
++theorem redirectMembers_lookup (forest : Forest) (winner : Nat) (members : List Nat)
++    (uv : Nat) :
++    redirectMembers forest winner members uv =
++      if uv ∈ members then some (.parent winner) else forest uv := by
++  induction members generalizing forest with
++  | nil => simp [redirectMembers]
++  | cons head tail ih =>
++    simp only [redirectMembers, List.foldl_cons]
++    change redirectMembers (put forest head (.parent winner)) winner tail uv = _
++    rw [ih]
++    by_cases inTail : uv ∈ tail
++    · simp [inTail]
++    · simp [inTail, put]
++
++/-- Redirect the losing class, then replace the winning root metadata. -/
++def merge (forest : Forest) (winner winnerSize loserSize : Nat)
++    (loserMembers winnerMembers : List Nat) : Forest :=
++  put (redirectMembers forest winner loserMembers) winner
++    (.root (winnerSize + loserSize) (loserMembers ++ winnerMembers))
++
++/-- The complete merge has one root write and one member-redirection fold. -/
++theorem merge_lookup (forest : Forest) (winner winnerSize loserSize : Nat)
++    (loserMembers winnerMembers : List Nat) (uv : Nat) :
++    merge forest winner winnerSize loserSize loserMembers winnerMembers uv =
++      if uv = winner then some (.root (winnerSize + loserSize) (loserMembers ++ winnerMembers))
++      else if uv ∈ loserMembers then some (.parent winner) else forest uv := by
++  simp only [merge, put, redirectMembers_lookup]
++
++end MicroCFTA.FlatUnionFind
+diff --git a/lean/MicroCFTA/FlatUnionFindRefinement.lean b/lean/MicroCFTA/FlatUnionFindRefinement.lean
+new file mode 100644
+index 000000000..b310e57f2
+--- /dev/null
++++ b/lean/MicroCFTA/FlatUnionFindRefinement.lean
+@@ -0,0 +1,152 @@
++import MicroCFTA.FlatUnionFindUnion
++import MicroCFTA.SourceUnionFindCompression
++
++/-!
++# Correspondence with the earlier union-find semantics
++
++The relation retains exact representatives and sizes. It permits different
++map contents and parent paths. In particular, the earlier lookup can insert
++an absent singleton root while the current lookup retains its input map.
++-/
++
++namespace MicroCFTA.FlatUnionFind
++
++/-- Every earlier path returns the direct representative and its stored size. -/
++def Represents (flat : Forest) (earlier : UnionFind.Forest) : Prop :=
++  ∀ uv, UnionFind.Reaches earlier uv (root flat uv) (entryOf flat (root flat uv)).1
++
++/-- Erasing member lists gives one forest with the required path semantics. -/
++theorem erase_represents (valid : Valid flat) : Represents flat (erase flat) :=
++  erase_reaches valid
++
++/-- The relation implies termination of all earlier lookups. -/
++theorem represents_total (related : Represents flat earlier) : UnionFind.Total earlier :=
++  fun uv => ⟨_, _, related uv⟩
++
++/-- Both representations have exactly the same equality classes. -/
++theorem represents_classes (related : Represents flat earlier) (left right : Nat) :
++    UnionFind.SameClass earlier left right ↔ root flat left = root flat right :=
++  UnionFind.sameClass_iff_roots (related left) (related right)
++
++/-- Singleton initialization relates the two representations, including absent entries. -/
++theorem initial_represents (variables : List Nat) :
++    Represents (withInitialValues variables) (UnionFind.withInitialValues variables) := by
++  intro uv
++  have direct : root (withInitialValues variables) uv = uv := by
++    simp [root, withInitialValues]
++  have size : (entryOf (withInitialValues variables) uv).1 = 1 := by
++    by_cases supplied : uv ∈ variables <;> simp [entryOf, withInitialValues, supplied]
++  rw [direct, size]
++  exact .root (UnionFind.read_initial variables uv)
++
++/-- A completed earlier lookup agrees on its root and size and retains the relation. -/
++theorem findRoot_represents (related : Represents flat earlier)
++    (completed : UnionFind.findRoot fuel earlier uv = some found) :
++    found.representative = root flat uv ∧
++      found.size = (entryOf flat (root flat uv)).1 ∧ Represents flat found.forest := by
++  obtain ⟨path, preserved⟩ := UnionFind.findRoot_correct _ _ _ _ completed
++  obtain ⟨sameRoot, sameSize⟩ := UnionFind.reaches_unique path (related uv)
++  exact ⟨sameRoot, sameSize, fun other => preserved (related other)⟩
++
++/-- The current lookup and a finite earlier execution return the same representative. -/
++theorem find_refines (related : Represents flat earlier) (uv : Nat) :
++    ∃ fuel found, UnionFind.findRoot fuel earlier uv = some found ∧
++      found.representative = (find flat uv).1 ∧ Represents (find flat uv).2 found.forest := by
++  obtain ⟨fuel, found, completed⟩ := UnionFind.findRoot_terminates (related uv)
++  obtain ⟨sameRoot, _, retained⟩ := findRoot_represents related completed
++  exact ⟨fuel, found, completed, sameRoot, retained⟩
++
++private theorem link_size (valid : Valid forest)
++    (loserRoot : root forest loser = loser) (winnerRoot : root forest winner = winner)
++    (different : loser ≠ winner) (uv : Nat) :
++    (entryOf (link forest loser winner) (root (link forest loser winner) uv)).1 =
++      UnionFind.mergedSize loser winner (entryOf forest loser).1 (entryOf forest winner).1
++        (root forest uv) (entryOf forest (root forest uv)).1 := by
++  rw [link_root valid loserRoot winnerRoot different]
++  have winnerInfo : entryOf (link forest loser winner) winner =
++      ((entryOf forest winner).1 + (entryOf forest loser).1,
++        (entryOf forest loser).2 ++ (entryOf forest winner).2) := by
++    simp [entryOf, link, merge, put]
++  by_cases isLoser : root forest uv = loser
++  · simp [UnionFind.redirect, UnionFind.mergedSize, isLoser, winnerInfo, Nat.add_comm]
++  · by_cases isWinner : root forest uv = winner
++    · simp [UnionFind.redirect, UnionFind.mergedSize, isWinner,
++        winnerInfo, Nat.add_comm]
++    · have outside : root forest uv ∉ (entryOf forest loser).2 := by
++        intro member
++        have same := ((entryOf_spec valid loserRoot).2.2 (root forest uv)).mp member
++        rw [root_root valid] at same
++        exact isLoser same
++      have unchanged : link forest loser winner (root forest uv) = forest (root forest uv) := by
++        simp [link, merge_lookup, isWinner, outside]
++      simp only [UnionFind.redirect, UnionFind.mergedSize, isLoser, isWinner,
++        or_self, ↓reduceIte]
++      unfold entryOf
++      rw [unchanged]
++
++/-- Merging the same two roots preserves the exact-root and exact-size relation. -/
++theorem link_represents (valid : Valid flat) (related : Represents flat earlier)
++    (loserRoot : root flat loser = loser) (winnerRoot : root flat winner = winner)
++    (different : loser ≠ winner) :
++    Represents (link flat loser winner)
++      (UnionFind.link earlier loser winner (entryOf flat loser).1 (entryOf flat winner).1) := by
++  have loserPath := related loser
++  have winnerPath := related winner
++  rw [loserRoot] at loserPath
++  rw [winnerRoot] at winnerPath
++  intro uv
++  rw [link_size valid loserRoot winnerRoot different,
++    link_root valid loserRoot winnerRoot different]
++  exact UnionFind.link_reaches (UnionFind.reaches_terminal loserPath)
++    (UnionFind.reaches_terminal winnerPath) different (related uv)
++
++/-- Every successful earlier union agrees with the current root choices and class sizes. -/
++theorem union_represents (valid : Valid flat) (related : Represents flat earlier)
++    (completed : UnionFind.union leftFuel rightFuel earlier left right = some output) :
++    Represents (union flat left right) output := by
++  cases firstResult : UnionFind.findRoot leftFuel earlier left with
++  | none => simp [UnionFind.union, firstResult] at completed
++  | some first =>
++    obtain ⟨firstRoot, firstSize, firstRelated⟩ := findRoot_represents related firstResult
++    cases secondResult : UnionFind.findRoot rightFuel first.forest right with
++    | none => simp [UnionFind.union, firstResult, secondResult] at completed
++    | some second =>
++      obtain ⟨secondRoot, secondSize, secondRelated⟩ := findRoot_represents firstRelated secondResult
++      simp [UnionFind.union, firstResult, secondResult,
++        firstRoot, firstSize, secondRoot, secondSize] at completed
++      dsimp only [union]
++      by_cases same : root flat left = root flat right
++      · simp only [same, ↓reduceIte, Option.some.injEq] at completed
++        subst output
++        simpa only [same, ↓reduceIte] using secondRelated
++      · simp only [same, ↓reduceIte, unionRoots] at completed ⊢
++        split at completed
++        · cases completed
++          simp only [‹_ < _›, ↓reduceIte]
++          exact link_represents valid secondRelated (root_root valid left)
++            (root_root valid right) same
++        · cases completed
++          simp only [‹¬ _ < _›, ↓reduceIte]
++          exact link_represents valid secondRelated (root_root valid right)
++            (root_root valid left) (Ne.symm same)
++
++/-- The current union has a corresponding finite earlier execution and remains valid. -/
++theorem union_refines (valid : Valid flat) (related : Represents flat earlier)
++    (left right : Nat) :
++    Valid (union flat left right) ∧
++      ∃ leftFuel rightFuel output,
++        UnionFind.union leftFuel rightFuel earlier left right = some output ∧
++          Represents (union flat left right) output := by
++  obtain ⟨leftFuel, rightFuel, output, completed⟩ :=
++    UnionFind.union_terminates (represents_total related) left right
++  exact ⟨union_valid valid left right, leftFuel, rightFuel, output, completed,
++    union_represents valid related completed⟩
++
++/-- The conditional-compression worker has the same correspondence on successful union. -/
++theorem compressed_union_represents (valid : Valid flat) (related : Represents flat earlier)
++    (completed : SourceUnionFindCompression.union leftFuel rightFuel earlier left right =
++      some output) : Represents (union flat left right) output := by
++  rw [SourceUnionFindCompression.union_eq] at completed
++  exact union_represents valid related completed
++
++end MicroCFTA.FlatUnionFind
+diff --git a/lean/MicroCFTA/FlatUnionFindSemantics.lean b/lean/MicroCFTA/FlatUnionFindSemantics.lean
+new file mode 100644
+index 000000000..7edd99a19
+--- /dev/null
++++ b/lean/MicroCFTA/FlatUnionFindSemantics.lean
+@@ -0,0 +1,97 @@
++import MicroCFTA.FlatUnionFindRefinement
++
++/-!
++# Equality semantics of the current union-find backend
++
++Union adds exactly one requested equality. Finite union histories retain the
++representation invariant and have corresponding earlier bounded executions.
++-/
++
++namespace MicroCFTA.FlatUnionFind
++
++/-- An assignment gives equal values to variables with the same direct root. -/
++def Satisfies (forest : Forest) (assignment : Nat → α) : Prop :=
++  ∀ left right, root forest left = root forest right → assignment left = assignment right
++
++/-- The two representations permit exactly the same assignments. -/
++theorem represents_satisfies (related : Represents flat earlier) (assignment : Nat → α) :
++    UnionFind.Satisfies earlier assignment ↔ Satisfies flat assignment := by
++  simp only [UnionFind.Satisfies, Satisfies, represents_classes related]
++
++/-- Current union merges exactly the requested classes. -/
++theorem union_classes (valid : Valid forest) (left right x y : Nat) :
++    root (union forest left right) x = root (union forest left right) y ↔
++      root forest x = root forest y ∨
++      (root forest x = root forest left ∧ root forest y = root forest right) ∨
++      (root forest x = root forest right ∧ root forest y = root forest left) := by
++  have related := erase_represents valid
++  obtain ⟨_, leftFuel, rightFuel, output, completed, after⟩ := union_refines valid related left right
++  simpa only [represents_classes after, represents_classes related] using
++    (UnionFind.union_correct (represents_total related) completed).2 x y
++
++/-- Current union adds exactly the requested value equality. -/
++theorem union_satisfies (valid : Valid forest) (left right : Nat) (assignment : Nat → α) :
++    Satisfies (union forest left right) assignment ↔
++      Satisfies forest assignment ∧ assignment left = assignment right := by
++  have related := erase_represents valid
++  obtain ⟨_, leftFuel, rightFuel, output, completed, after⟩ := union_refines valid related left right
++  simpa only [represents_satisfies after, represents_satisfies related] using
++    UnionFind.union_satisfies (represents_total related) completed assignment
++
++/-- Execute the requested unions in list order. -/
++def unions (forest : Forest) (requests : List (Nat × Nat)) : Forest :=
++  requests.foldl (fun current request => union current request.1 request.2) forest
++
++/-- A finite ordered history of successful earlier union calls. -/
++inductive EarlierUnions : UnionFind.Forest → List (Nat × Nat) → UnionFind.Forest → Prop where
++  /-- An empty request list retains the forest. -/
++  | nil : EarlierUnions forest [] forest
++  /-- The first call succeeds with finite bounds before the remaining calls. -/
++  | cons (completed : UnionFind.union leftFuel rightFuel forest left right = some next)
++      (tail : EarlierUnions next rest output) :
++      EarlierUnions forest ((left, right) :: rest) output
++
++/-- Every finite current union history preserves validity and has an exact-root counterpart. -/
++theorem unions_refine (valid : Valid flat) (related : Represents flat earlier)
++    (requests : List (Nat × Nat)) :
++    Valid (unions flat requests) ∧
++      ∃ output, EarlierUnions earlier requests output ∧ Represents (unions flat requests) output := by
++  induction requests generalizing flat earlier with
++  | nil => exact ⟨valid, earlier, .nil, related⟩
++  | cons request rest ih =>
++    obtain ⟨nextValid, leftFuel, rightFuel, next, completed, nextRelated⟩ :=
++      union_refines valid related request.1 request.2
++    obtain ⟨finalValid, output, trace, finalRelated⟩ := ih nextValid nextRelated
++    exact ⟨finalValid, output, .cons completed trace, finalRelated⟩
++
++/-- A finite union history adds exactly its listed value equalities. -/
++theorem unions_satisfies (valid : Valid forest) (requests : List (Nat × Nat))
++    (assignment : Nat → α) :
++    Satisfies (unions forest requests) assignment ↔
++      Satisfies forest assignment ∧
++        ∀ request ∈ requests, assignment request.1 = assignment request.2 := by
++  induction requests generalizing forest with
++  | nil => simp [unions]
++  | cons request rest ih =>
++    change Satisfies (unions (union forest request.1 request.2) rest) assignment ↔ _
++    rw [ih (union_valid valid request.1 request.2), union_satisfies valid]
++    simp only [List.mem_cons, forall_eq_or_imp]
++    exact and_assoc
++
++/-- Initialization and every finite union history satisfy the current representation invariant. -/
++theorem initialized_unions_valid (variables : List Nat) (requests : List (Nat × Nat)) :
++    Valid (unions (withInitialValues variables) requests) :=
++  (unions_refine (initial_valid variables) (initial_represents variables) requests).1
++
++/-- Initialized finite union histories impose precisely the requested equalities. -/
++theorem initialized_unions_satisfies (variables : List Nat) (requests : List (Nat × Nat))
++    (assignment : Nat → α) :
++    Satisfies (unions (withInitialValues variables) requests) assignment ↔
++      ∀ request ∈ requests, assignment request.1 = assignment request.2 := by
++  have initial : Satisfies (withInitialValues variables) assignment :=
++    (represents_satisfies (initial_represents variables) assignment).mp
++      (UnionFind.initial_satisfies variables assignment)
++  rw [unions_satisfies (initial_valid variables)]
++  simp only [initial, true_and]
++
++end MicroCFTA.FlatUnionFind
+diff --git a/lean/MicroCFTA/FlatUnionFindUnion.lean b/lean/MicroCFTA/FlatUnionFindUnion.lean
+new file mode 100644
+index 000000000..bae37206f
+--- /dev/null
++++ b/lean/MicroCFTA/FlatUnionFindUnion.lean
+@@ -0,0 +1,145 @@
++import MicroCFTA.FlatUnionFind
++
++/-!
++# Weighted union for direct parent pointers
++
++The member fold can temporarily invalidate root metadata. The proofs use its
++pointwise effect and establish validity after the final root write.
++-/
++
++namespace MicroCFTA.FlatUnionFind
++
++/-- Merge two root classes with the second root as winner. -/
++def link (forest : Forest) (loser winner : Nat) : Forest :=
++  merge forest winner (entryOf forest winner).1 (entryOf forest loser).1
++    (entryOf forest loser).2 (entryOf forest winner).2
++
++private theorem link_lookup (forest : Forest) (loser winner uv : Nat) :
++    link forest loser winner uv =
++      if uv = winner then
++        some (.root ((entryOf forest winner).1 + (entryOf forest loser).1)
++          ((entryOf forest loser).2 ++ (entryOf forest winner).2))
++      else if uv ∈ (entryOf forest loser).2 then some (.parent winner) else forest uv := by
++  exact merge_lookup ..
++
++/-- A complete merge redirects exactly the losing class. -/
++theorem link_root (valid : Valid forest)
++    (loserRoot : root forest loser = loser) (winnerRoot : root forest winner = winner)
++    (different : loser ≠ winner) (uv : Nat) :
++    root (link forest loser winner) uv =
++      UnionFind.redirect loser winner (root forest uv) := by
++  have member := (entryOf_spec valid loserRoot).2.2 uv
++  by_cases isWinner : uv = winner
++  · subst uv
++    rw [winnerRoot]
++    simp [root, link_lookup, UnionFind.redirect, Ne.symm different]
++  · by_cases inLoser : uv ∈ (entryOf forest loser).2
++    · rw [member.mp inLoser]
++      simp [root, link_lookup, isWinner, inLoser, UnionFind.redirect]
++    · have unchanged : link forest loser winner uv = forest uv := by
++        simp [link_lookup, isWinner, inLoser]
++      have notLoser : root forest uv ≠ loser := fun same => inLoser (member.mpr same)
++      simp only [UnionFind.redirect, notLoser, ↓reduceIte]
++      unfold root
++      rw [unchanged]
++
++/-- The complete merge preserves direct parents and exact finite class metadata. -/
++theorem link_valid (valid : Valid forest)
++    (loserRoot : root forest loser = loser) (winnerRoot : root forest winner = winner)
++    (different : loser ≠ winner) : Valid (link forest loser winner) := by
++  obtain ⟨loserNodup, loserSize, loserMembers⟩ := entryOf_spec valid loserRoot
++  obtain ⟨winnerNodup, winnerSize, winnerMembers⟩ := entryOf_spec valid winnerRoot
++  have roots := link_root valid loserRoot winnerRoot different
++  have winnerLookup := link_lookup forest loser winner winner
++  simp only [↓reduceIte] at winnerLookup
++  refine ⟨?_, ?_⟩
++  · intro uv parent lookup
++    by_cases isWinner : uv = winner
++    · subst uv
++      rw [winnerLookup] at lookup
++      cases lookup
++    · by_cases inLoser : uv ∈ (entryOf forest loser).2
++      · simp only [link_lookup, isWinner, ↓reduceIte, inLoser] at lookup
++        cases lookup
++        exact ⟨_, _, winnerLookup⟩
++      · have original : forest uv = some (.parent parent) := by
++          simpa only [link_lookup, isWinner, ↓reduceIte, inLoser] using lookup
++        obtain ⟨size, members, terminal⟩ := valid.parents uv parent original
++        have parentFixed : root forest parent = parent := by simp [root, terminal]
++        have parentNotLoser : parent ≠ loser := by
++          intro same
++          apply inLoser
++          apply (loserMembers uv).mpr
++          simp [root, original, same]
++        by_cases parentWinner : parent = winner
++        · subst parent
++          exact ⟨_, _, winnerLookup⟩
++        · have parentOutside : parent ∉ (entryOf forest loser).2 := by
++            intro member
++            exact parentNotLoser (parentFixed.symm.trans ((loserMembers parent).mp member))
++          exact ⟨size, members, by simp [link_lookup, parentWinner, parentOutside, terminal]⟩
++  · intro representative size members lookup
++    by_cases isWinner : representative = winner
++    · subst representative
++      rw [winnerLookup] at lookup
++      cases lookup
++      refine ⟨List.nodup_append.mpr ⟨loserNodup, winnerNodup, ?_⟩, ?_, ?_⟩
++      · intro left inLeft right inRight same
++        have leftRoot := (loserMembers left).mp inLeft
++        have rightRoot := (winnerMembers right).mp inRight
++        exact different (leftRoot.symm.trans (same ▸ rightRoot))
++      · simp only [List.length_append, loserSize, winnerSize]
++        omega
++      · intro uv
++        rw [List.mem_append, roots]
++        simp only [loserMembers, winnerMembers, UnionFind.redirect]
++        by_cases isLoser : root forest uv = loser <;> simp [isLoser]
++    · have outside : representative ∉ (entryOf forest loser).2 := by
++        intro member
++        simp [link_lookup, isWinner, member] at lookup
++      have original : forest representative = some (.root size members) := by
++        simpa only [link_lookup, isWinner, ↓reduceIte, outside] using lookup
++      obtain ⟨nodup, count, originalMembers⟩ := valid.roots representative size members original
++      have representativeNotLoser : representative ≠ loser := by
++        intro same
++        apply outside
++        apply (loserMembers representative).mpr
++        simpa only [same] using loserRoot
++      refine ⟨nodup, count, ?_⟩
++      intro uv
++      rw [originalMembers, roots]
++      simp only [UnionFind.redirect]
++      by_cases isLoser : root forest uv = loser
++      · simp [isLoser, Ne.symm isWinner, Ne.symm representativeNotLoser]
++      · simp [isLoser]
++
++/-- Merge distinct roots and select the larger class. Ties select the first root. -/
++def unionRoots (forest : Forest) (left right : Nat) : Nat × Forest :=
++  if (entryOf forest left).1 < (entryOf forest right).1 then
++    (right, link forest left right)
++  else (left, link forest right left)
++
++/-- Merge two variable classes after their direct root reads. -/
++def union (forest : Forest) (left right : Nat) : Forest :=
++  let leftRoot := root forest left
++  let rightRoot := root forest right
++  if leftRoot = rightRoot then forest else (unionRoots forest leftRoot rightRoot).2
++
++/-- Weighted union of distinct roots preserves the representation invariant. -/
++theorem unionRoots_valid (valid : Valid forest)
++    (leftRoot : root forest left = left) (rightRoot : root forest right = right)
++    (different : left ≠ right) : Valid (unionRoots forest left right).2 := by
++  unfold unionRoots
++  split
++  · exact link_valid valid leftRoot rightRoot different
++  · exact link_valid valid rightRoot leftRoot (Ne.symm different)
++
++/-- Union preserves the representation invariant for every pair of variables. -/
++theorem union_valid (valid : Valid forest) (left right : Nat) :
++    Valid (union forest left right) := by
++  dsimp only [union]
++  split
++  · exact valid
++  · exact unionRoots_valid valid (root_root valid left) (root_root valid right) ‹_›
++
++end MicroCFTA.FlatUnionFind
