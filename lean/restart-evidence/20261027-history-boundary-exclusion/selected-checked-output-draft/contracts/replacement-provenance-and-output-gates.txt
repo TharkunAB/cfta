@@ -1,0 +1,31 @@
+    (sourceSymbol : Symbol) (original : Constraint) (storedField : SourceEqualityConstraintAllocation.Value)
+    (sourceChildren : List Node) (operations : SourceEqualityConstraintMemoAllocation.State)
+    (sourceHeap : InternedConstructorTemplates.State Symbol Constraint)
+    (cached : SourceEqualityGuardReadback.Cached original.equalities)
+    (physical : SourceEqualityPhysicalPayload.read original.equalities = .ok storedField.payload)
+    (storedReady : SourceEqualityConstraintAllocation.Ready operations.constraints storedField)
+    (operationsValid : SourceEqualityConstraintMemoAllocation.Valid operations)
+    (sourceReady : SourceEqualityRequiredCache.Ready sourceHeap)
+    (sourceAvailable : SourceEqualityMkEdgeAllocation.accepted original sourceChildren.length = true →
+      InternedNestedProvenance.Values sourceHeap sourceChildren)
+    (builtEdge : EdgeValue Symbol Constraint)
+    (builtOperations : SourceEqualityConstraintMemoAllocation.State)
+    (builtHeap : InternedConstructorTemplates.State Symbol Constraint)
+    (constructed : SourceEqualityMkEdgeAllocation.build sourceSymbol storedField original.guard sourceChildren
+      operations sourceHeap = (.ok builtEdge, builtOperations, builtHeap))
+    (builtCaller : Caller (bits + 2))
+    (builtAt : builtCaller.checked.native.machine.heap = builtHeap)
+    (constructorPost : SourceCurrentAllocatedPartialInvariant.Post formulas solver headInventory
+      builtCaller headCaller headMemos)
+    (sameIdentity : builtEdge.entry.identity = edge.entry.identity)
+    (recursiveFuel : Nat) (tailSeed : Seed) (tailCeiling : Nat)
+    (output : SourcePruningEnumerationRecursive.Output (bits + 2) Typing)
+    (callback : ExceptT.run (SourcePruningRecordTypes.recordTypes graph templates callbackFuel updated target
+      (.inl fragment) after.core) = [.ok ((false, recorded), callbackAfter)])
+    (tail : SourcePruningEnumerationRecursive.ResourceHistory
+      holeKey fits admits graph templates checkEmpty edgesOf stop order formulas solver callbackFuel
+      recursiveFuel returnedInventory reached returnedMemos recorded
+      (EnumerationExpandableIndex.frame callbackAfter after) tailSeed tailCeiling
+      (SourcePruningEnumerationRestart.decision stop order recorded
+        (EnumerationExpandableIndex.frame callbackAfter after)) output)
+    (discharged : SourcePruningEnumerationRendering.Discharged output.cache.core) :

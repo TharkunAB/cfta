@@ -1,0 +1,29 @@
+import MicroCFTA.SourcePruningEnumerationOpaqueOutputAttachment
+
+/-!
+# Retained child restrictions at a discharged recursive output
+
+The actual completed head supplies the same ordered child trace.
+That trace excludes Empty children. The original closed parent excludes references.
+A nonterminal opaque child creates a marker at this output's own recorded path.
+A discharged output excludes that marker and supplies the retained-child gate.
+-/
+namespace MicroCFTA.SourcePruningEnumerationOpaqueEvent
+open EnumerationState EnumerationCorrectness EnumerationSchedule EnumerationDependencies
+open InternedConstructorTemplates InternedProbeProvenance
+open SourcePruningEnumerationNodes SourcePruningEnumerationObservation
+open SourceCurrentAllocatedNativeInventoryState (Inventory)
+open SourcePruningEnumerationNativeHookResources (CompletedHeadReceipt)
+open SourcePruningEnumerationIncomingReservation (Seed)
+local notation "Symbol" => SourcePruningTemplates.Symbol
+local notation "Constraint" => SourceSymbolicIndex.Constraint FullSyntax.Formula
+local notation "Node" => Value Symbol Constraint
+local notation "Caller" => SourceCurrentAllocatedPartialState.State
+local notation "Memos" => EndpointMemoGateTrace.Memos
+local notation "Queries" => SourceEndpointMemo.Memos
+local notation "Cached" => EnumerationExpandableIndex.Cached Symbol Constraint
+local notation "Core" => EnumerationState.State Symbol Constraint
+local notation "Fragment" => Fragments.Fragment Symbol
+local notation "Metadata" => SourcePruningRecordTypes.Metadata
+variable {Typing Key : Type} {bits : Nat}
+variable [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Constraint)] [DecidableEq Node]

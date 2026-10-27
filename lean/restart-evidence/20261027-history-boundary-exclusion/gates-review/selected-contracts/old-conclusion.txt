@@ -1,0 +1,20 @@
+    ∃ (handle : Nat) (parentEntry : Cache.Interned InternedBinderProtocol.NodeKey)
+      (storedEdges : List (EdgeValue Symbol Constraint)) (depth : Nat)
+      (free : List InternedBinderProtocol.Reference),
+      narrowed.core.values[target]? = some (.unenumerated (some handle) scs) ∧
+      lookupNode headCaller.checked.native.machine.heap handle = some (.node parentEntry storedEdges depth free) ∧
+      edge ∈ storedEdges ∧
+      ∀ (ambient : InternedGuardedLanguage.Env Symbol) (assignment : Nat → Language.Term Symbol),
+        Satisfies (SourcePruningEnumerationNativeLanguage.handles (SourceEqualityPCSGuard.holds formulas solver)
+          ambient reached.checked.native.machine.heap)
+          (fun guard term => SourceEqualityPCSGuard.holds formulas solver guard term = true)
+          assignment callbackAfter →
+        Satisfies (SourcePruningEnumerationNativeLanguage.handles (SourceEqualityPCSGuard.holds formulas solver)
+          ambient caller.checked.native.machine.heap)
+          (fun guard term => SourceEqualityPCSGuard.holds formulas solver guard term = true) assignment before.core ∧
+        InternedGuardedLanguage.edgeMeaning (SourceEqualityPCSGuard.holds formulas solver)
+          ambient edge (assignment target) ∧
+        InternedGuardedLanguage.meaning (SourceEqualityPCSGuard.holds formulas solver)
+          ambient (.node parentEntry storedEdges depth free) (assignment target) ∧
+        (∀ sc ∈ scs, Suspended.Holds assignment (assignment target) sc) ∧
+        Fragments.fill assignment fragment = assignment target

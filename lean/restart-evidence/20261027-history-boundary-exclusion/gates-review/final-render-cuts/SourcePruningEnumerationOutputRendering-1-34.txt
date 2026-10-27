@@ -1,0 +1,34 @@
+import MicroCFTA.SourcePruningEnumerationFiniteHistoryContract
+import MicroCFTA.SourcePruningEnumerationRendering
+
+/-!
+# Assignments from rendering an actual resource-history output
+
+The final history tag supplies its own complete packet.
+Actual rendering and checked residuals construct the output assignment.
+No separate final resource or safety premise is required.
+-/
+namespace MicroCFTA.SourcePruningEnumerationRecursive
+open Language EnumerationState EnumerationCorrectness InternedConstructorTemplates
+open SourceCurrentAllocatedNativeInventoryState (Inventory)
+open SourcePruningEnumerationIncomingReservation (Seed)
+local notation "Symbol" => SourcePruningTemplates.Symbol
+local notation "Constraint" => SourceSymbolicIndex.Constraint FullSyntax.Formula
+local notation "Node" => Value Symbol Constraint
+local notation "Caller" => SourceCurrentAllocatedPartialState.State
+local notation "Memos" => EndpointMemoGateTrace.Memos
+local notation "Metadata" => SourcePruningRecordTypes.Metadata
+local notation "Cached" => EnumerationExpandableIndex.Cached Symbol Constraint
+local notation "Core" => EnumerationState.State Symbol Constraint
+variable {Typing Key : Type} {bits : Nat}
+variable [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Constraint)] [DecidableEq Node]
+variable {holeKey : Typing → Nat → Key} {fits : Key → Symbol → Bool} {admits : Key → Node → Bool}
+variable {graph : Graph Symbol Constraint} {templates : List (Template.Pattern Symbol)}
+variable {checkEmpty : Bool} {edgesOf : Node → List (EdgeValue Symbol Constraint)}
+variable {stop : Option (Metadata Typing → Nat → Bool)}
+variable {order : Metadata Typing → List Nat → Option Nat}
+variable {formulas : SourceGuards.Formulas FullSyntax.Formula}
+variable {solver : SourceGuards.Entailment FullSyntax.Formula}
+variable {workFuel recursiveFuel : Nat} {inventory : Inventory} {caller : Caller (bits + 2)} {memos : Memos}
+variable {metadata : Metadata Typing} {before : Cached} {seed : Seed} {ceiling : Nat}
+variable {next : Option Next} {output : Output (bits + 2) Typing}

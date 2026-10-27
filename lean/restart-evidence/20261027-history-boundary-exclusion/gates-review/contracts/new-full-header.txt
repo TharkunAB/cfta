@@ -1,0 +1,33 @@
+theorem CompletedHeadReceipt.freshArity_of_checked_build
+    (seed : Seed) (inherited : Nat)
+    (formulas : SourceGuards.Formulas FullSyntax.Formula)
+    (solver : SourceGuards.Entailment FullSyntax.Formula) (inventory : Inventory)
+    (caller : Caller (bits + 2)) (memos : Memos) (metadata : SourcePruningRecordTypes.Metadata Typing)
+    (before : Cached) (checkEmpty : Bool) (uv : Nat) (scs : List Suspended)
+    (edge : EdgeValue Symbol Constraint) (bound : Nat) (fragment : Fragments.Fragment Symbol)
+    (reached : Caller (bits + 2)) (saved : Queries) (after : Cached)
+    (returnedInventory : Inventory) (returnedMemos : Memos)
+    (head : CompletedHeadReceipt seed inherited formulas solver inventory caller memos metadata before
+      checkEmpty uv scs edge bound fragment reached saved after returnedInventory returnedMemos)
+    (sourceSymbol : Symbol) (original : Constraint) (storedField : SourceEqualityConstraintAllocation.Value)
+    (sourceChildren : List Node) (operations : SourceEqualityConstraintMemoAllocation.State)
+    (sourceHeap : InternedConstructorTemplates.State Symbol Constraint)
+    (cached : SourceEqualityGuardReadback.Cached original.equalities)
+    (physical : SourceEqualityPhysicalPayload.read original.equalities = .ok storedField.payload)
+    (storedReady : SourceEqualityConstraintAllocation.Ready operations.constraints storedField)
+    (operationsValid : SourceEqualityConstraintMemoAllocation.Valid operations)
+    (sourceReady : SourceEqualityRequiredCache.Ready sourceHeap)
+    (sourceAvailable : SourceEqualityMkEdgeAllocation.accepted original sourceChildren.length = true →
+      InternedNestedProvenance.Values sourceHeap sourceChildren)
+    (builtEdge : EdgeValue Symbol Constraint)
+    (builtOperations : SourceEqualityConstraintMemoAllocation.State)
+    (builtHeap : InternedConstructorTemplates.State Symbol Constraint)
+    (constructed : SourceEqualityMkEdgeAllocation.build sourceSymbol storedField original.guard sourceChildren
+      operations sourceHeap = (.ok builtEdge, builtOperations, builtHeap))
+    (builtCaller : Caller (bits + 2))
+    (builtAt : builtCaller.checked.native.machine.heap = builtHeap)
+    (retained : Post formulas solver inventory builtCaller caller memos)
+    (sameIdentity : builtEdge.entry.identity = edge.entry.identity) :
+    ∀ tries residual,
+      SourcePruningEnumerationConstraint.project edge.entry.key.constraint = some (tries, residual) →
+      arityAllows edge.children.length (suspendedVars before.core.counter tries) = true

@@ -1,0 +1,45 @@
+    {inventory : Inventory} {caller : Caller (bits + 2)} {memos : Memos} {before : Cached}
+    {fragment : Fragments.Fragment Symbol} {reached : Caller (bits + 2)} {after : Cached}
+    {returnedInventory : Inventory} {returnedMemos : Memos}
+    (receipt : OrdinaryHistoryArityReceipt formulas solver metadata checkEmpty workFuel uv
+      inventory caller memos before fragment reached after returnedInventory returnedMemos) :
+    OrdinaryHistoryReceipt formulas solver metadata checkEmpty workFuel uv
+      inventory caller memos before fragment reached after returnedInventory returnedMemos := by
+  obtain ⟨entered, handle, scs, decoded, edge, headSeed, inherited, headInventory, headCaller,
+    headMemos, headBound, original, entry, enteredPacket, post, captured, completed, _arity⟩ := receipt
+  exact ⟨entered, handle, scs, decoded, edge, headSeed, inherited, headInventory, headCaller,
+    headMemos, headBound, original, entry, enteredPacket, post, captured, completed⟩
+
+variable {holeKey : Typing → Nat → Key} {fits : Key → Symbol → Bool} {admits : Key → Node → Bool}
+variable {graph : Graph Symbol Constraint} {templates : List (Template.Pattern Symbol)}
+variable {checkEmpty : Bool} {edgesOf : Node → List (EdgeValue Symbol Constraint)}
+variable {stop : Option (Metadata Typing → Nat → Bool)}
+variable {order : Metadata Typing → List Nat → Option Nat}
+variable {formulas : SourceGuards.Formulas FullSyntax.Formula}
+variable {solver : SourceGuards.Entailment FullSyntax.Formula}
+variable {workFuel recursiveFuel : Nat} {inventory : Inventory} {caller : Caller (bits + 2)} {memos : Memos}
+variable {metadata : Metadata Typing} {before : Cached} {seed : Seed} {ceiling : Nat}
+variable {next : Option Next} {output : Output (bits + 2) Typing}
+
+/-- Forget only the projected-arity annotations and retain the entire actual resource path. -/
+theorem ResourceHistoryWithArity.forget
+    (history : ResourceHistoryWithArity holeKey fits admits graph templates checkEmpty edgesOf stop order
+      formulas solver workFuel recursiveFuel inventory caller memos metadata before seed ceiling next output) :
+    ResourceHistory holeKey fits admits graph templates checkEmpty edgesOf stop order formulas solver workFuel
+      recursiveFuel inventory caller memos metadata before seed ceiling next output := by
+  induction history with
+  | stopped admission => exact .stopped admission
+  | done admission => exact .done admission
+  | parked admission valid observed _tail ih => exact .parked admission valid observed ih
+  | ordinary admission valid observed post invocation receipt callbackAdmission callback _tail ih =>
+      exact .ordinary admission valid observed post invocation receipt.forget callbackAdmission callback ih
+
+/-- A discharged path restores initial assignment meaning under only its recorded own-arity annotations. -/
+theorem ResourceHistoryWithArity.sound
+    (history : ResourceHistoryWithArity holeKey fits admits graph templates checkEmpty edgesOf stop order
+      formulas solver workFuel recursiveFuel inventory caller memos metadata before seed ceiling next output)
+    (actualNext : next = SourcePruningEnumerationRestart.decision stop order metadata before)
+    (canonical : Canonical before.core)
+    (discharged : SourcePruningEnumerationRendering.Discharged output.cache.core) :
+    ∀ (ambient : InternedGuardedLanguage.Env Symbol) (assignment : Nat → Language.Term Symbol),
+      Satisfies (SourcePruningEnumerationNativeLanguage.handles (SourceEqualityPCSGuard.holds formulas solver)

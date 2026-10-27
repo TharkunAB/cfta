@@ -1,0 +1,53 @@
+import MicroCFTA.SourcePruningEnumerationDischargedRetention
+import MicroCFTA.SourcePruningEnumerationParkedMarkerAttachment
+import MicroCFTA.SourcePruningEnumerationResourceHistoryCanonical
+import MicroCFTA.SourcePruningEnumerationSelectedInvocationLanguage
+
+/-!
+# Backward assignment meaning along a discharged resource history
+
+The path retains every original resource and execution receipt.
+Only each recorded ordinary head has an extra projected-arity annotation.
+A discharged output excludes parked steps and nonterminal opaque children.
+The proof derives all other local semantic gates from the actual receipts.
+-/
+namespace MicroCFTA.SourcePruningEnumerationRecursive
+open EnumerationState EnumerationCorrectness EnumerationValidity InternedConstructorTemplates
+open SourcePruningEnumerationNodes
+open SourceCurrentAllocatedNativeInventoryState (Inventory)
+open SourceCurrentAllocatedPartialInvariant (Post)
+open SourcePruningEnumerationIncomingReservation (Seed)
+local notation "Symbol" => SourcePruningTemplates.Symbol
+local notation "Constraint" => SourceSymbolicIndex.Constraint FullSyntax.Formula
+local notation "Node" => Value Symbol Constraint
+local notation "Fragment" => Fragments.Fragment Symbol
+local notation "Caller" => SourceCurrentAllocatedPartialState.State
+local notation "Memos" => EndpointMemoGateTrace.Memos
+local notation "Metadata" => SourcePruningRecordTypes.Metadata
+local notation "Cached" => EnumerationExpandableIndex.Cached Symbol Constraint
+variable {Typing Key : Type} {bits : Nat}
+variable [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Constraint)] [DecidableEq Node]
+
+/-- The same actual ordinary receipt also records its own projected arity. -/
+def OrdinaryHistoryArityReceipt
+    (formulas : SourceGuards.Formulas FullSyntax.Formula) (solver : SourceGuards.Entailment FullSyntax.Formula)
+    (metadata : Metadata Typing) (checkEmpty : Bool) (workFuel uv : Nat)
+    (inventory : Inventory) (caller : Caller (bits + 2)) (memos : Memos) (before : Cached)
+    (fragment : Fragment) (reached : Caller (bits + 2)) (after : Cached)
+    (returnedInventory : Inventory) (returnedMemos : Memos) : Prop :=
+  ∃ (entered : Cached) (handle : Nat) (scs : List Suspended) (decoded : Node)
+    (edge : EdgeValue Symbol Constraint) (headSeed : Seed) (inherited : Nat)
+    (headInventory : Inventory) (headCaller : Caller (bits + 2)) (headMemos : Memos) (headBound : Nat),
+    Packet formulas solver inventory caller memos metadata before ∧
+    ExceptT.run (SourcePruningEnumerationEntry.enter caller.checked.native.machine.heap workFuel uv before.core) =
+      [.ok ((uv, handle, scs, decoded), entered.core)] ∧
+    Packet formulas solver inventory caller memos metadata entered ∧
+    Post formulas solver headInventory caller headCaller headMemos ∧
+    SourcePruningEnumerationCapturedEdge.run checkEmpty workFuel workFuel workFuel workFuel workFuel
+      uv scs edge headCaller entered headMemos.query = some (.complete fragment reached returnedMemos.query after) ∧
+    SourcePruningEnumerationNativeHookResources.CompletedHeadReceipt headSeed inherited formulas solver
+      headInventory headCaller headMemos metadata entered checkEmpty uv scs edge headBound fragment reached
+      returnedMemos.query after returnedInventory returnedMemos ∧
+    ∀ tries residual,
+      SourcePruningEnumerationConstraint.project edge.entry.key.constraint = some (tries, residual) →
+      arityAllows edge.children.length (EnumerationCorrectness.suspendedVars entered.core.counter tries) = true

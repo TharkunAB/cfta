@@ -1,0 +1,23 @@
+/-- Encode represented natural paths as nonnegative source paths. -/
+def signed (classes : Option EqualityNormalize.Constraints) : Option (List (List SymbolicSignedPaths.Path)) :=
+  classes.map fun records => records.map fun paths => paths.map fun path => path.map Int.ofNat
+
+/-- Use the exact signed source arity check on represented equality classes. -/
+def fits (arity : Nat) (classes : Option EqualityNormalize.Constraints) : Bool :=
+  SymbolicSignedPaths.fitsArity arity (signed classes)
+
+/-- Source contradiction reads only the stored equality tag and the outer guard. -/
+def contradictory (constraint : Constraint Formula) : Bool :=
+  constraint.equalities.isNone || match constraint.guard with
+    | .bottom => true
+    | _ => false
+
+/-- The checked constructor preserves the source short circuit before accessor demand. -/
+noncomputable def accepted (constraint : Constraint Formula) (arity : Nat) : Bool :=
+  if contradictory constraint then false else fits arity (SourceCompactGuards.sourceEqualities constraint)
+
+/-- Demand only the accessor needed by the actual source constructor guard. -/
+noncomputable def check (stored : Value) (guard : SourceGuards.Guard Formula) (arity : Nat) (before : OpState) :
+    Except String Bool × OpState :=
+  if contradictory (SourceEqualityAccessorAllocation.constraint stored guard) then (.ok false, before)
+  else

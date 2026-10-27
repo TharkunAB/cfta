@@ -1,0 +1,16 @@
+        assignment after := by
+  obtain ⟨assignment, satisfied, termSame, frame, renderedSatisfied⟩ :=
+    history.forget.render_assignment ambient marker fuel uv after term pending discharged observed checked
+  have original := history.sound actualNext canonical discharged ambient assignment satisfied
+  have atRoot := original.1.2 uv
+  have restrictions :
+      SourcePruningEnumerationNativeLanguage.handles (SourceEqualityPCSGuard.holds formulas solver)
+        ambient caller.checked.native.machine.heap handle (assignment uv) ∧
+      ∀ sc ∈ bucket, Suspended.Holds assignment (assignment uv) sc := by
+    simpa [heap, stored, slot, Fragments.slotSatisfies, Fragments.permits] using atRoot
+  have accepted := (SourcePruningEnumerationNativeLanguage.handles_lookup
+    (SourceEqualityPCSGuard.holds formulas solver) ambient caller.checked.native.machine.heap
+    handle value (assignment uv) decoded).mp restrictions.1
+  refine ⟨assignment, original, ?_, ?_, termSame, frame, satisfied, renderedSatisfied⟩
+  · simpa only [termSame] using accepted
+  · simpa only [termSame] using restrictions.2

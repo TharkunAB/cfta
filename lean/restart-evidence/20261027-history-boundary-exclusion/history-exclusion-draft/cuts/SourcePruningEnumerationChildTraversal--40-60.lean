@@ -1,0 +1,21 @@
+/-- A complete trace records each actual child call at its exact returned core. -/
+inductive Trace (checkEmpty : Bool) (representativeFuel nativeFuel p h indexFuel : Nat) :
+    List (Node × List Suspended) → Caller width → Cached → Queries →
+      List Fragment → Caller width → Cached → Queries → Prop
+  /-- An empty child list retains its input state. -/
+  | nil (caller : Caller width) (before : Cached) (queries : Queries) :
+      Trace checkEmpty representativeFuel nativeFuel p h indexFuel [] caller before queries [] caller before queries
+  /-- One actual child result supplies the next child state. -/
+  | cons {value : Node} {bucket : List Suspended} {rest : List (Node × List Suspended)}
+      {beforeCaller middleCaller afterCaller : Caller width} {before middle after : Cached}
+      {queries middleQueries afterQueries : Queries} {fragment : Fragment} {fragments : List Fragment}
+      {outer : EnumerationState.State Symbol Constraint} {waiting : EnumerationWaitingIndex.Waiting}
+      (head : SourcePruningEnumerationChildDispatch.run checkEmpty representativeFuel nativeFuel p h indexFuel
+        bucket value beforeCaller before queries =
+        ((.ok (some [.ok (fragment, middle.core)]), middleCaller, middleQueries, outer, waiting), some middle))
+      (tail : Trace checkEmpty representativeFuel nativeFuel p h indexFuel rest middleCaller middle middleQueries
+        fragments afterCaller after afterQueries) :
+      Trace checkEmpty representativeFuel nativeFuel p h indexFuel ((value, bucket) :: rest)
+        beforeCaller before queries (fragment :: fragments) afterCaller after afterQueries
+
+/-- Every recorded native trace completes through the same ordered traversal. -/

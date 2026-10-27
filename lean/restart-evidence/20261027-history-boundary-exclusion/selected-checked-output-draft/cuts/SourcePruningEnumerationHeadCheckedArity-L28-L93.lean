@@ -1,0 +1,66 @@
+theorem CompletedHeadReceipt.freshArity_of_checked_build
+    (seed : Seed) (inherited : Nat)
+    (formulas : SourceGuards.Formulas FullSyntax.Formula)
+    (solver : SourceGuards.Entailment FullSyntax.Formula) (inventory : Inventory)
+    (caller : Caller (bits + 2)) (memos : Memos) (metadata : SourcePruningRecordTypes.Metadata Typing)
+    (before : Cached) (checkEmpty : Bool) (uv : Nat) (scs : List Suspended)
+    (edge : EdgeValue Symbol Constraint) (bound : Nat) (fragment : Fragments.Fragment Symbol)
+    (reached : Caller (bits + 2)) (saved : Queries) (after : Cached)
+    (returnedInventory : Inventory) (returnedMemos : Memos)
+    (head : CompletedHeadReceipt seed inherited formulas solver inventory caller memos metadata before
+      checkEmpty uv scs edge bound fragment reached saved after returnedInventory returnedMemos)
+    (sourceSymbol : Symbol) (original : Constraint) (storedField : SourceEqualityConstraintAllocation.Value)
+    (sourceChildren : List Node) (operations : SourceEqualityConstraintMemoAllocation.State)
+    (sourceHeap : InternedConstructorTemplates.State Symbol Constraint)
+    (cached : SourceEqualityGuardReadback.Cached original.equalities)
+    (physical : SourceEqualityPhysicalPayload.read original.equalities = .ok storedField.payload)
+    (storedReady : SourceEqualityConstraintAllocation.Ready operations.constraints storedField)
+    (operationsValid : SourceEqualityConstraintMemoAllocation.Valid operations)
+    (sourceReady : SourceEqualityRequiredCache.Ready sourceHeap)
+    (sourceAvailable : SourceEqualityMkEdgeAllocation.accepted original sourceChildren.length = true →
+      InternedNestedProvenance.Values sourceHeap sourceChildren)
+    (builtEdge : EdgeValue Symbol Constraint)
+    (builtOperations : SourceEqualityConstraintMemoAllocation.State)
+    (builtHeap : InternedConstructorTemplates.State Symbol Constraint)
+    (constructed : SourceEqualityMkEdgeAllocation.build sourceSymbol storedField original.guard sourceChildren
+      operations sourceHeap = (.ok builtEdge, builtOperations, builtHeap))
+    (builtCaller : Caller (bits + 2))
+    (builtAt : builtCaller.checked.native.machine.heap = builtHeap)
+    (retained : Post formulas solver inventory builtCaller caller memos)
+    (sameIdentity : builtEdge.entry.identity = edge.entry.identity) :
+    ∀ tries residual,
+      SourcePruningEnumerationConstraint.project edge.entry.key.constraint = some (tries, residual) →
+      arityAllows edge.children.length (suspendedVars before.core.counter tries) = true := by
+  obtain ⟨_checked, receipt, _operationsValid, _operationsGrowth, _sourceKept, resident,
+    _symbol, _guard, _children, classes, _source, actualProjection, _validTries,
+    _pathReadback, ownArity⟩ :=
+    SourcePruningEnumerationCheckedArity.checked_projected_arity sourceSymbol original storedField sourceChildren
+      operations sourceHeap cached physical storedReady operationsValid sourceReady sourceAvailable
+  have edgeSame := Except.ok.inj (congrArg Prod.fst (receipt.symm.trans constructed))
+  have heapSame := congrArg (fun returned => returned.2.2) (receipt.symm.trans constructed)
+  rw [edgeSame, heapSame] at resident
+  rw [edgeSame] at actualProjection ownArity
+  have kept : SourceEqualityRequiredCache.Keeps builtHeap caller.checked.native.machine.heap := by
+    rw [← builtAt]
+    exact retained.effects.keeps
+  have builtResident := InternedEdgeResidency.edge_grows builtHeap caller.checked.native.machine.heap
+    kept.growth builtEdge resident
+  obtain ⟨_roots, _paths, _storage, realized, _counts, _flags⟩ := head.admission.packet.valid
+  obtain ⟨handle, parentEntry, edges, depth, free, stored, decoded, selected⟩ := head.admission.source
+  obtain ⟨parent, parentLookup, available, _closed⟩ := realized uv handle scs stored
+  have parentSame : parent = .node parentEntry edges depth free :=
+    Option.some.inj (parentLookup.symm.trans decoded)
+  subst parent
+  have currentReady := head.admission.packet.context.ready.semantic.ready
+  have selectedResident : InternedEdgeResidency.EdgeResident caller.checked.native.machine.heap edge :=
+    InternedEdgeResidency.resident_edges caller.checked.native.machine.heap
+      currentReady.semantic.1.normal.facts.linked (.node parentEntry edges depth free)
+      available.resident edge selected
+  have selectedSame := InternedEdgeResidency.edge_identity_unique caller.checked.native.machine.heap
+    currentReady.semantic.1.normal.facts.coherent builtEdge edge builtResident selectedResident sameIdentity
+  rw [selectedSame] at actualProjection ownArity
+  intro tries residual projected
+  have same := Option.some.inj (actualProjection.symm.trans projected)
+  have triesSame : EnumerationEquality.readClasses classes = tries := congrArg Prod.fst same
+  rw [← triesSame]
+  exact ownArity before.core.counter

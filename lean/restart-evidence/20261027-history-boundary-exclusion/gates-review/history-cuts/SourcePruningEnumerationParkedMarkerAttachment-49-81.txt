@@ -1,0 +1,33 @@
+/-- An actual parked prefix creates an isolated marker that survives its own remaining admitted history. -/
+theorem parked_tail_created_isolated
+    (holeKey : Typing → Nat → Key) (fits : Key → Symbol → Bool) (admits : Key → Node → Bool)
+    (graph : Graph Symbol Constraint) (templates : List (Template.Pattern Symbol))
+    (checkEmpty : Bool) (edgesOf : Node → List (EdgeValue Symbol Constraint))
+    (stop : Option (Metadata Typing → Nat → Bool)) (order : Metadata Typing → List Nat → Option Nat)
+    (formulas : SourceGuards.Formulas FullSyntax.Formula) (solver : SourceGuards.Entailment FullSyntax.Formula)
+    (workFuel recursiveFuel : Nat) (inventory : Inventory) (caller : Caller (bits + 2))
+    (memos : Memos) (metadata updated : Metadata Typing) (before parked : Cached)
+    (uv : Nat) (checked core : Core) (next : Option Next)
+    (tailSeed : SourcePruningEnumerationIncomingReservation.Seed) (tailCeiling : Nat)
+    (output : Output (bits + 2) Typing)
+    (packet : Packet formulas solver inventory caller memos metadata before)
+    (chosen : SourcePruningEnumerationRestart.decision stop order metadata before = some (.expand uv))
+    (valid : SourcePruningEnumerationSelectedStep.PrefixValid holeKey fits admits graph templates checkEmpty edgesOf
+      stop order metadata formulas solver inventory workFuel uv caller before memos
+      (SourcePruningEnumerationSelectedStep.runPrefix holeKey fits admits graph templates stop order metadata
+        workFuel workFuel workFuel workFuel workFuel workFuel uv caller before memos.query))
+    (observed : SourcePruningEnumerationSelectedStep.runPrefix holeKey fits admits graph templates stop order metadata
+      workFuel workFuel workFuel workFuel workFuel workFuel uv caller before memos.query =
+        .parked checked (some parked) (some [.ok ((updated, next), core)]))
+    (tail : ResourceHistory holeKey fits admits graph templates checkEmpty edgesOf stop order formulas solver workFuel
+      recursiveFuel inventory caller memos updated (EnumerationExpandableIndex.frame core parked)
+        tailSeed tailCeiling next output) :
+    ∃ handle bucket value,
+      before.core.values[uv]? = some (.unenumerated (some handle) bucket) ∧
+      lookupNode caller.checked.native.machine.heap handle = some value ∧
+      MergedOrdinaryHeight.recursiveBoundary value = true ∧
+      IsolatedPending uv handle parked.core ∧ IsolatedPending uv handle output.cache.core ∧
+      lookupNode output.caller.checked.native.machine.heap handle = some value ∧
+      ¬SourcePruningEnumerationRendering.Discharged output.cache.core := by
+  obtain ⟨ready, incoming, _selectedValue⟩ := SourcePruningEnumerationRestart.selected
+    stop order metadata caller before uv packet.valid packet.safe chosen

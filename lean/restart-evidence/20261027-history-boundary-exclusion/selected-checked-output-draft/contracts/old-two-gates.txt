@@ -1,0 +1,9 @@
+    (freshArity : ∀ tries residual,
+      SourcePruningEnumerationConstraint.project edge.entry.key.constraint = some (tries, residual) →
+      arityAllows edge.children.length (EnumerationCorrectness.suspendedVars entered.core.counter tries) = true)
+    (retained : ∀ tries residual,
+      SourcePruningEnumerationConstraint.project edge.entry.key.constraint = some (tries, residual) →
+      ∀ incoming bucket,
+        (incoming, bucket) ∈ SourcePruningEnumerationEdgeInputs.children edge scs entered.core.counter tries →
+        (match incoming with | .node _ _ _ _ => True | _ => False) ∨
+          bucket.any (fun sc => EqualityTrie.isTerminal sc.trie) = true ∨ bucket = []) :

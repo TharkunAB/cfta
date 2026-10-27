@@ -1,0 +1,22 @@
+
+/-- The same actual entry receipt has the invocation's nonterminal bucket. -/
+theorem OrdinaryInvocation.entry_nonterminal
+    {hook : Fragment → Caller width → Queries → Cached → HookResult Output Reason width}
+    {checkEmpty : Bool} {r n p h k uv : Nat} {edgesOf : Node → List (EdgeValue Symbol Constraint)}
+    {caller : Caller width} {before : Cached} {queries : Queries}
+    {fragment : Fragment} {reached : Caller width} {saved : Queries} {after : Cached}
+    (invocation : OrdinaryInvocation hook checkEmpty r n p h k uv edgesOf caller before queries
+      fragment reached saved after)
+    {target handle : Nat} {bucket : List Suspended} {decoded : Node} {entered : Core}
+    (entry : Success (SourcePruningEnumerationEntry.enter caller.checked.native.machine.heap r uv)
+      before.core (target, handle, bucket, decoded) entered) :
+    bucket.any (fun sc => EqualityTrie.isTerminal sc.trie) = false := by
+  obtain ⟨actualTarget, actualHandle, actualBucket, actualEntry, actualRows, actualDepth,
+    actualFree, actualEntered, actualRead, nonterminal, _invoked⟩ := invocation
+  change Except.ok ((target, handle, bucket, decoded), entered) ∈
+    ExceptT.run (SourcePruningEnumerationEntry.enter caller.checked.native.machine.heap r uv before.core) at entry
+  rw [actualRead] at entry
+  have same := Except.ok.inj (List.mem_singleton.mp entry)
+  have bucketSame : bucket = actualBucket := congrArg
+    (fun packet : (Nat × Nat × List Suspended × Node) × Core => packet.1.2.2.1) same
+  rw [bucketSame]

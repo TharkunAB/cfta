@@ -1,0 +1,62 @@
+  let actualBuilt : InternedConstructorTemplates.EdgeValue Symbol Constraint ×
+        InternedConstructorTemplates.State Symbol Constraint :=
+      InternedConstructorTemplates.run (SourceEqualityMkEdgeAllocation.work symbol original children
+        (SourceEqualityMkEdgeAllocation.accepted original children.length)) heap
+  let actualOperations : SourceEqualityConstraintMemoAllocation.State :=
+      SourceEqualityMkEdgeAllocation.outputState
+        (SourceEqualityMkEdgeAllocation.check stored original.guard children.length before).2
+        (SourceEqualityMkEdgeAllocation.accepted original children.length)
+  have reconstructed : SourceEqualityAccessorAllocation.constraint stored original.guard = original := by
+    exact congrArg
+      (fun equalities : Option EqualityNormalize.Constraints =>
+        (⟨equalities, original.guard⟩ : Constraint))
+      (SourceEqualityConstraintAllocation.read_classes original.equalities cached stored.payload physical)
+  obtain ⟨checkedExact, checkedValid, checkedGrowth⟩ :=
+    SourceEqualityMkEdgeAllocation.check_correct stored original.guard children.length before valid storedReady
+  rw [reconstructed] at checkedExact
+  obtain ⟨receipt, receiptValid, receiptGrowth⟩ :=
+    SourceEqualityMkEdgeAllocation.build_receipt symbol stored original.guard children before heap valid storedReady
+  rw [reconstructed] at receipt
+  rw [receipt] at receiptValid receiptGrowth
+  refine ⟨checkedExact, receipt, receiptValid, receiptGrowth, ?_⟩
+  cases keepEq : SourceEqualityMkEdgeAllocation.accepted original children.length with
+  | true =>
+    have checkedTrue : (SourceEqualityMkEdgeAllocation.check stored original.guard children.length before).1 = .ok true := by
+      simpa only [keepEq] using checkedExact
+    obtain ⟨acceptedReceipt, _acceptedValid, _acceptedGrowth, acceptedKept,
+      acceptedSymbol, acceptedGuard, acceptedChildren, classes, source, projected,
+      validTries, pathReadback, ownArity⟩ :=
+      SourcePruningEnumerationOwnArity.accepted_projected_arity symbol original stored children
+        before heap cached physical storedReady valid heapReady (available keepEq) checkedTrue
+    simp only [SourceEqualityMkEdgeAllocation.work, ↓reduceIte]
+    refine ⟨acceptedKept,
+      (SourceEqualityRequiredCache.edge symbol original children heap heapReady (available keepEq)).2.1,
+      acceptedSymbol, acceptedGuard, acceptedChildren, classes, source, ?_, validTries, pathReadback, ownArity⟩
+    simpa only [acceptedGuard] using projected
+  | false =>
+    have emptyAvailable : InternedNestedProvenance.Values heap
+        ([.empty] : List (InternedConstructorTemplates.Value Symbol Constraint)) := by
+      intro child member
+      simp only [List.mem_singleton] at member
+      subst child
+      exact InternedProbeProvenance.empty_available heap
+    obtain ⟨rejectedKept, rejectedResident, _rejectedChildReadback⟩ :=
+      SourceEqualityRequiredCache.edge symbol (top : Constraint) [.empty] heap heapReady emptyAvailable
+    obtain ⟨rejectedSymbol, rejectedGuard, rejectedChildren⟩ :=
+      MergedPhysicalGroupEdges.makeEdge_fields heap heapReady.semantic.1.normal.facts
+        symbol (top : Constraint) [.empty] emptyAvailable
+    have topSource : SourceCompactGuards.sourceEqualities (top : Constraint) = some [] := by rfl
+    have topProjected : SourcePruningEnumerationConstraint.project (top : Constraint) = some ([], none) := by rfl
+    simp only [SourceEqualityMkEdgeAllocation.work, Bool.false_eq_true, ↓reduceIte]
+    refine ⟨rejectedKept, rejectedResident, rejectedSymbol, rejectedGuard, rejectedChildren,
+      [], ?_, ?_, ?_, ?_, ?_⟩
+    · rw [rejectedGuard]
+      exact topSource
+    · rw [rejectedGuard]
+      simpa only [EnumerationEquality.readClasses, List.map_nil,
+        SourceEqualityConstraintConstructors.top, SourceCompactGuards.positive,
+        Option.isSome_some, ↓reduceIte] using topProjected
+    · simp [EnumerationEquality.readClasses]
+    · simp
+    · intro start
+      rfl

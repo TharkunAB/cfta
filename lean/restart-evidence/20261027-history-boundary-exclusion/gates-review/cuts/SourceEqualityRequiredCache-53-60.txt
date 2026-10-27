@@ -1,0 +1,8 @@
+theorem edge [DecidableEq (EdgeKey Symbol Guard)] (symbol : Symbol) (guard : Guard)
+    (values : List (Value Symbol Guard)) (state : State Symbol Guard) (ready : Ready state)
+    (available : Values state values) :
+    Keeps state (run (makeEdge symbol guard values) state).2 ∧
+      EdgeResident (run (makeEdge symbol guard values) state).2 (run (makeEdge symbol guard values) state).1 ∧
+      (run (makeEdge symbol guard values) state).1.children = values := by
+  have facts := ready.semantic.1.normal.facts
+  have checked := InternedNestedFacts.edge_verified symbol guard values state facts available

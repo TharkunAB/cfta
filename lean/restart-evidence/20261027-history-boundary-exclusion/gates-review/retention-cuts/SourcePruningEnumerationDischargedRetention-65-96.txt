@@ -1,0 +1,32 @@
+  intro tries residual projected
+  obtain ⟨roots, paths, _storage, realized, counts, flags⟩ := head.admission.packet.valid
+  obtain ⟨handle, parentEntry, edges, depth, free, stored, decoded, selected⟩ := head.admission.source
+  obtain ⟨parent, parentLookup, parentAvailable, parentClosed⟩ := realized uv handle scs stored
+  have parentSame : parent = .node parentEntry edges depth free :=
+    Option.some.inj (parentLookup.symm.trans decoded)
+  subst parent
+  have bounded : ∀ sc ∈ scs, sc.var < before.core.counter :=
+    head.admission.ready.safe.1.values _ (List.mem_of_getElem? stored)
+  have pending := EnumerationReferences.pending_inputs before.core head.admission.packet.pending
+    uv (some handle) scs stored
+  obtain ⟨_action, own, _prepared, ownRun, _raw, _ownCore, _ownCounter, _ownForest,
+    _ownSafe, _ownPaths, _ownRealized, _ownCounts, _ownFlags, _combinedPending, genuine, _ownProtects⟩ :=
+    SourcePruningEnumerationEdgeInputs.complete caller.checked.native.machine.heap parentEntry edges depth free
+      edge scs roots head.admission.packet.context.ready.semantic.ready parentAvailable parentClosed selected
+      before head.admission.packet.safe realized paths counts flags bounded pending head.allowed tries residual projected
+  let inputs := SourcePruningEnumerationEdgeInputs.children edge scs before.core.counter tries
+  let staged := inputs.map (fun input => (input.1, input.2,
+    SourcePruningEnumerationShallowChild.prepareChild (EnumGuard := Constraint) input.2 input.1))
+  have stagedInputs : staged.map (fun input => (input.1, input.2.1)) = inputs := by
+    simp only [staged, List.map_map]
+    exact List.map_id _
+  obtain ⟨fragments, childCache, _fragmentShape, trace, _finalized⟩ :=
+    captured_complete_trace checkEmpty bound bound bound bound bound uv scs edge caller reached
+      before own headCache memos.query saved edge.entry.key.symbol staged residual fragment ownRun
+      (by simpa only [Nat.add_zero] using head.running 0)
+  rw [stagedInputs] at trace
+  intro incoming bucket member
+  have closed := (genuine incoming bucket member).2.1
+  obtain ⟨consumed, suffix, location⟩ := List.mem_iff_append.mp member
+  by_cases terminal : bucket.any (fun sc => EqualityTrie.isTerminal sc.trie) = true
+  · exact .inr (.inl terminal)

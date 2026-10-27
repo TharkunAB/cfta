@@ -1,0 +1,26 @@
+/-- Actual output resources and checked rendering construct an assignment at that output's native heap. -/
+theorem OutputResources.render_assignment
+    (formulas : SourceGuards.Formulas FullSyntax.Formula)
+    (solver : SourceGuards.Entailment FullSyntax.Formula)
+    (original : Caller width) (seed : Seed) (output : Output width Typing)
+    (resources : OutputResources formulas solver original seed output)
+    (ambient : InternedGuardedLanguage.Env Symbol) (marker : Symbol) (fuel uv : Nat)
+    (after : Core) (term : Term Symbol) (pending : List (Constraint × Term Symbol))
+    (discharged : SourcePruningEnumerationRendering.Discharged output.cache.core)
+    (observed : Success
+      (SourcePruningEnumerationRendering.render output.caller.checked.native.machine.heap marker fuel uv)
+      output.cache.core (term, pending) after)
+    (checked : ∀ obligation ∈ pending,
+      SourceEqualityPCSGuard.holds formulas solver obligation.1 obligation.2 = true) :
+    ∃ assignment : Nat → Term Symbol,
+      Satisfies
+        (SourcePruningEnumerationNativeLanguage.handles (SourceEqualityPCSGuard.holds formulas solver)
+          ambient output.caller.checked.native.machine.heap)
+        (fun guard value => SourceEqualityPCSGuard.holds formulas solver guard value = true)
+        assignment output.cache.core ∧
+      term = assignment uv ∧ EnumerationCompressionFrame.Frame output.cache.core after ∧
+      Satisfies
+        (SourcePruningEnumerationNativeLanguage.handles (SourceEqualityPCSGuard.holds formulas solver)
+          ambient output.caller.checked.native.machine.heap)
+        (fun guard value => SourceEqualityPCSGuard.holds formulas solver guard value = true)
+        assignment after := by

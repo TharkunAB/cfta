@@ -1,0 +1,30 @@
+/-- Actual rendering constructs a complete assignment at the same history output's native heap. -/
+theorem ResourceHistory.render_assignment
+    (history : ResourceHistory holeKey fits admits graph templates checkEmpty edgesOf stop order formulas solver
+      workFuel recursiveFuel inventory caller memos metadata before seed ceiling next output)
+    (ambient : InternedGuardedLanguage.Env Symbol) (marker : Symbol) (fuel uv : Nat)
+    (after : Core) (term : Term Symbol) (pending : List (Constraint × Term Symbol))
+    (discharged : SourcePruningEnumerationRendering.Discharged output.cache.core)
+    (observed : Success
+      (SourcePruningEnumerationRendering.render output.caller.checked.native.machine.heap marker fuel uv)
+      output.cache.core (term, pending) after)
+    (checked : ∀ obligation ∈ pending,
+      SourceEqualityPCSGuard.holds formulas solver obligation.1 obligation.2 = true) :
+    ∃ assignment : Nat → Term Symbol,
+      Satisfies
+        (SourcePruningEnumerationNativeLanguage.handles (SourceEqualityPCSGuard.holds formulas solver)
+          ambient output.caller.checked.native.machine.heap)
+        (fun guard value => SourceEqualityPCSGuard.holds formulas solver guard value = true)
+        assignment output.cache.core ∧
+      term = assignment uv ∧ EnumerationCompressionFrame.Frame output.cache.core after ∧
+      Satisfies
+        (SourcePruningEnumerationNativeLanguage.handles (SourceEqualityPCSGuard.holds formulas solver)
+          ambient output.caller.checked.native.machine.heap)
+        (fun guard value => SourceEqualityPCSGuard.holds formulas solver guard value = true)
+        assignment after := by
+  obtain ⟨_finalInventory, _finalMemos, _finalMetadata, packet⟩ := history.output_packet
+  obtain ⟨level, frontier, ordered⟩ := packet.ordered
+  exact SourcePruningEnumerationRendering.render_assignment
+    output.caller.checked.native.machine.heap (SourceEqualityPCSGuard.holds formulas solver) ambient
+    (fun guard value => SourceEqualityPCSGuard.holds formulas solver guard value = true)
+    marker fuel uv output.cache.core after term pending packet.safe level frontier ordered

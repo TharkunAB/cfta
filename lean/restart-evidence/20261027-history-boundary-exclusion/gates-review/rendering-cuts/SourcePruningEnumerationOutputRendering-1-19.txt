@@ -1,0 +1,19 @@
+import MicroCFTA.SourcePruningEnumerationOutcomeResources
+import MicroCFTA.SourcePruningEnumerationRendering
+
+/-!
+# Assignments from rendering an actual recursive output
+
+The output resources supply that output's own safe ordered cache.
+Actual rendering and checked residuals construct its complete assignment.
+This result does not infer acceptance at an earlier input.
+-/
+namespace MicroCFTA.SourcePruningEnumerationRecursive
+open Language EnumerationState EnumerationCorrectness
+open SourcePruningEnumerationIncomingReservation (Seed)
+local notation "Symbol" => SourcePruningTemplates.Symbol
+local notation "Constraint" => SourceSymbolicIndex.Constraint FullSyntax.Formula
+local notation "Caller" => SourceCurrentAllocatedPartialState.State
+local notation "Core" => EnumerationState.State Symbol Constraint
+variable {Typing : Type} {width : Nat}
+variable [DecidableEq (InternedConstructorTemplates.EdgeKey Symbol Constraint)]

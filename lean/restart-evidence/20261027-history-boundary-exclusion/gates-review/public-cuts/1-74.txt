@@ -1,0 +1,74 @@
+MicroCFTA.SourcePruningEnumerationNativeHookResources.CompletedHeadReceipt.freshArity_of_checked_build {Typing : Type}
+  {bits : Nat} [DecidableEq MicroCFTA.SourcePruningTemplates.Symbol]
+  [DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey MicroCFTA.SourcePruningTemplates.Symbol
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  [DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.Value MicroCFTA.SourcePruningTemplates.Symbol
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  (seed : MicroCFTA.SourcePruningEnumerationIncomingReservation.Seed) (inherited : Nat)
+  (formulas : MicroCFTA.SourceGuards.Formulas MicroCFTA.FullSyntax.Formula)
+  (solver : MicroCFTA.SourceGuards.Entailment MicroCFTA.FullSyntax.Formula)
+  (inventory : MicroCFTA.SourceCurrentAllocatedNativeInventoryState.Inventory)
+  (caller : MicroCFTA.SourceCurrentAllocatedPartialState.State (bits + 2))
+  (memos : MicroCFTA.EndpointMemoGateTrace.Memos) (metadata : MicroCFTA.SourcePruningRecordTypes.Metadata Typing)
+  (before :
+    MicroCFTA.EnumerationExpandableIndex.Cached MicroCFTA.SourcePruningTemplates.Symbol
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+  (checkEmpty : Bool) (uv : Nat) (scs : List MicroCFTA.EnumerationState.Suspended)
+  (edge :
+    MicroCFTA.InternedConstructorTemplates.EdgeValue MicroCFTA.SourcePruningTemplates.Symbol
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+  (bound : Nat) (fragment : MicroCFTA.Fragments.Fragment MicroCFTA.SourcePruningTemplates.Symbol)
+  (reached : MicroCFTA.SourceCurrentAllocatedPartialState.State (bits + 2)) (saved : MicroCFTA.SourceEndpointMemo.Memos)
+  (after :
+    MicroCFTA.EnumerationExpandableIndex.Cached MicroCFTA.SourcePruningTemplates.Symbol
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+  (returnedInventory : MicroCFTA.SourceCurrentAllocatedNativeInventoryState.Inventory)
+  (returnedMemos : MicroCFTA.EndpointMemoGateTrace.Memos)
+  (head :
+    MicroCFTA.SourcePruningEnumerationNativeHookResources.CompletedHeadReceipt seed inherited formulas solver inventory
+      caller memos metadata before checkEmpty uv scs edge bound fragment reached saved after returnedInventory
+      returnedMemos)
+  (sourceSymbol : MicroCFTA.SourcePruningTemplates.Symbol)
+  (original : MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+  (storedField : MicroCFTA.SourceEqualityConstraintAllocation.Value)
+  (sourceChildren :
+    List
+      (MicroCFTA.InternedConstructorTemplates.Value MicroCFTA.SourcePruningTemplates.Symbol
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)))
+  (operations : MicroCFTA.SourceEqualityConstraintMemoAllocation.State)
+  (sourceHeap :
+    MicroCFTA.InternedConstructorTemplates.State MicroCFTA.SourcePruningTemplates.Symbol
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+  (cached : MicroCFTA.SourceEqualityGuardReadback.Cached original.equalities)
+  (physical : MicroCFTA.SourceEqualityPhysicalPayload.read original.equalities = Except.ok storedField.payload)
+  (storedReady : MicroCFTA.SourceEqualityConstraintAllocation.Ready operations.constraints storedField)
+  (operationsValid : MicroCFTA.SourceEqualityConstraintMemoAllocation.Valid operations)
+  (sourceReady : MicroCFTA.SourceEqualityRequiredCache.Ready sourceHeap)
+  (sourceAvailable :
+    MicroCFTA.SourceEqualityMkEdgeAllocation.accepted original sourceChildren.length = true →
+      MicroCFTA.InternedNestedProvenance.Values sourceHeap sourceChildren)
+  (builtEdge :
+    MicroCFTA.InternedConstructorTemplates.EdgeValue MicroCFTA.SourcePruningTemplates.Symbol
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+  (builtOperations : MicroCFTA.SourceEqualityConstraintMemoAllocation.State)
+  (builtHeap :
+    MicroCFTA.InternedConstructorTemplates.State MicroCFTA.SourcePruningTemplates.Symbol
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+  (constructed :
+    MicroCFTA.SourceEqualityMkEdgeAllocation.build sourceSymbol storedField original.guard sourceChildren operations
+        sourceHeap =
+      (Except.ok builtEdge, builtOperations, builtHeap))
+  (builtCaller : MicroCFTA.SourceCurrentAllocatedPartialState.State (bits + 2))
+  (builtAt : builtCaller.checked.native.machine.heap = builtHeap)
+  (retained : MicroCFTA.SourceCurrentAllocatedPartialInvariant.Post formulas solver inventory builtCaller caller memos)
+  (sameIdentity : builtEdge.entry.identity = edge.entry.identity) (tries : List MicroCFTA.EqualityTrie.Trie)
+  (residual : Option (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)) :
+  MicroCFTA.SourcePruningEnumerationConstraint.project edge.entry.key.constraint = some (tries, residual) →
+    MicroCFTA.EnumerationState.arityAllows edge.children.length
+        (MicroCFTA.EnumerationCorrectness.suspendedVars before.core.counter tries) =
+      true
+'MicroCFTA.SourcePruningEnumerationNativeHookResources.CompletedHeadReceipt.freshArity_of_checked_build' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]

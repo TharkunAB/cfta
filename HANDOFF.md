@@ -1,5 +1,38 @@
 # cfta formalization restart handoff
 
+## Conditional original acceptance across a complete resource history
+
+Source checkpoint: 87f6dee2580ba6b668775a34325b015ff2bfe4d0.
+An actual arity-certified ResourceHistory now restores original assignment
+satisfaction from its own discharged output. The actual native renderer
+constructs the assignment. Successful rendering and checked returned residuals
+therefore imply that the term belongs to the original stored native value and
+satisfies every original suspended constraint at that root.
+Initial Canonical and the actual restart decision remain explicit inputs.
+No final Satisfies or desired original acceptance is assumed.
+
+The finite producer retains its ENTIRE previous admission and stable outcome,
+resources, actual unannotated histories and output Canonical result.
+It adds this acceptance result as a conditional observer. The arity-certified
+history is an observer antecedent. It is not a new producer admission.
+The bare finite producer does not yet generate that arity certificate.
+A separate local theorem derives projected arity from genuine checked-build
+provenance, heap growth and the actual selected edge identity.
+Actual same-output discharge now derives the old child-retention gate.
+The history proof uses actual post-prefix inventories and full Memos.
+
+Seven modules, 892 lines and ten public theorems pass strict checking.
+Two data declarations retain all old history fields and add only numeric
+projected arity. Audit passes 4160 jobs and 79503 theorem dependency checks.
+H6 and both previous captured renderers keep exact signatures and axioms.
+H6 remains the strongest global exact finite-tree construction theorem.
+Generate arity certificates for every actual history next. Enumeration
+coverage, remaining API contracts and physical Haskell correspondence stay
+open. The whole-system goal stays ACTIVE. No Haskell source changed.
+FINDINGS retains all Haskell fixes and external repair handoffs.
+Details: `lean/notes-current-history-assignment-rendering.md`.
+
+
 ## Actual opaque boundaries now reach their own recursive outputs
 
 Source checkpoint: 70cfa4a3ab78f0d28bf14952d8a6a5491a0b38a5.

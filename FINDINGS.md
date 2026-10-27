@@ -1,5 +1,61 @@
 # Current formalization findings
 
+## Conditional original acceptance across a complete resource history
+
+Source checkpoint: 87f6dee2580ba6b668775a34325b015ff2bfe4d0.
+An actual arity-certified ResourceHistory now restores original assignment
+satisfaction from its own discharged output. The actual native renderer
+constructs the assignment. Successful rendering and checked returned residuals
+therefore imply that the term belongs to the original stored native value and
+satisfies every original suspended constraint at that root.
+Initial Canonical and the actual restart decision remain explicit inputs.
+No final Satisfies or desired original acceptance is assumed.
+
+The finite producer retains its ENTIRE previous admission and stable outcome,
+resources, actual unannotated histories and output Canonical result.
+It adds this acceptance result as a conditional observer. The arity-certified
+history is an observer antecedent. It is not a new producer admission.
+The bare finite producer does not yet generate that arity certificate.
+A separate local theorem derives projected arity from genuine checked-build
+provenance, heap growth and the actual selected edge identity.
+Actual same-output discharge now derives the old child-retention gate.
+The history proof uses actual post-prefix inventories and full Memos.
+
+Seven modules, 892 lines and ten public theorems pass strict checking.
+Two data declarations retain all old history fields and add only numeric
+projected arity. Audit passes 4160 jobs and 79503 theorem dependency checks.
+H6 and both previous captured renderers keep exact signatures and axioms.
+H6 remains the strongest global exact finite-tree construction theorem.
+Generate arity certificates for every actual history next. Enumeration
+coverage, remaining API contracts and physical Haskell correspondence stay
+open. The whole-system goal stays ACTIVE. No Haskell source changed.
+FINDINGS retains all Haskell fixes and external repair handoffs.
+Details: `lean/notes-current-history-assignment-rendering.md`.
+
+
+### History API inventory boundary and Haskell repair status
+
+No Haskell source or Cabal file changed in this checkpoint. All earlier fixes,
+regressions and external repair instructions remain below without change.
+The integrated LPO fix and extraction documentation repair remain present.
+Main is still 8766699b594eaad80381af2eee034c378ccf3192 at the upstream refresh.
+The separate KBO weight candidate d7b6a9dfff464eb32c17c314d4825d5b027f1b2d
+is not on main. It is not integrated, built or executed in this checkpoint.
+The prior positive-Int context-reversal finding remains open in this branch.
+Its Natural and lazy-map changes have only the earlier source assessment.
+Run the targeted regression when the candidate lands on main.
+
+The earlier local selected-step semantic API requires enteredPacket at the
+original selected inventory. An actual ordinary ResourceHistory retains the
+inventory and full Memos reached after its prefix. The new whole-history
+proof composes prefix_semantics with the lower completed-head consumer at
+those actual reached endpoints. It does not equate the two inventories or
+infer full-Memos equality from query equality. The local selected wrapper
+retains its full old conditional contract. This is a formal API boundary,
+not a new Haskell defect. Do not use that wrapper as an unconditional history
+consumer. Preserve all earlier constructor and equality targets and evidence.
+
+
 ## Actual opaque boundaries now reach their own recursive outputs
 
 Source checkpoint: 70cfa4a3ab78f0d28bf14952d8a6a5491a0b38a5.
