@@ -43,6 +43,7 @@ The table uses these module aliases:
 
 ```haskell
 import qualified Data.CFTA as FTA
+import qualified Data.CFTA.Abstraction as Abstraction
 import qualified Data.CFTA.Enumeration as Enumeration
 import qualified Data.CFTA.Generic as Generic
 import qualified Data.CFTA.Interned as Common
@@ -62,6 +63,7 @@ import qualified Data.CFTA.Trace as Trace
 | Translate to an earlier language | `Lowering.lower`, `Lowering.lift`, `Lowering.checkLowering` | A lowered term; the automaton of the terms whose lowering an automaton accepts; the productions that do not lower. |
 | Build the traces of a state machine | `Trace.traceAutomaton`, `Trace.feasibility` | The automaton of the traces; the shortest prefix of a sequence of steps that has no run. |
 | Combine trace languages | `Trace.concatenate`, `Trace.project`, `Trace.projectMaybe`, `Trace.determinize` | The traces of one language followed by the traces of another; the traces with each step replaced by its image, or removed when it has none; the automaton with one run for each trace. |
+| Check an abstraction extension | `Abstraction.checkAbstraction`, `Abstraction.checkOverlaps` | With a solver: the productions that their refined variants do not cover, the variants with new values, and the variants with a common value. Each report keeps the verdict `No` or `Unknown`. |
 | Restrict to a pattern | `Template.restrictFTA`, `Template.restrict` | A grammar for the terms that match a `Template`. |
 | List terms a check accepts | `FTA.termsUpToM` | The terms up to a depth, each checked once by a monadic predicate that sees its transition. |
 | Bound tree depth | `FTA.boundDepth` | Another grammar, restricted to trees within the bound. |

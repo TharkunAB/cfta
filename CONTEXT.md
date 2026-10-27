@@ -282,6 +282,10 @@ Three kinds, never called only "variable":
   apart, for example a new predicate in the vocabulary of the refinements. A
   term of the new version means a set of concrete tests: its
   **concretization**.
+- **Variant**: a production of the later version of an abstraction extension
+  that keeps the symbol text, the child states, and the constraint of a
+  production of the earlier version, with another refinement. The variants of
+  a production cover it when together they keep all its values.
 - **Definitional extension**: an extension that adds a named constructor for
   a pattern of the earlier version. A term of the new version means one term
   of the earlier version: its lowering.

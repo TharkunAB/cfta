@@ -14,10 +14,12 @@ module Data.CFTA.Lowering (
     LoweringError (..),
     mkLowering,
     identity,
+    newConstructors,
     compose,
     lower,
     lift,
     checkLowering,
+    checkProductions,
 ) where
 
 import Control.Monad (forM_, replicateM, unless)
@@ -77,6 +79,10 @@ mkLowering entries = do
 -- | The lowering that keeps every constructor.
 identity :: Lowering symbol
 identity = Lowering Map.empty
+
+-- | The new constructors: the constructors that have an expansion, in ascending order.
+newConstructors :: Lowering symbol -> [symbol]
+newConstructors (Lowering expansions) = Map.keys expansions
 
 {- | One lowering from the later language to the language two versions down:
 first @later@, then @earlier@. An expansion of @later@ has the constructors of
@@ -164,10 +170,19 @@ checkLowering ::
     FTA.FTA state symbol constraint ->
     FTA.FTA state symbol constraint ->
     [LoweringError state symbol]
-checkLowering (Lowering expansions) earlier later =
-    [ failure
+checkLowering lowering earlier later = [failure | (_, _, failure) <- checkProductions lowering earlier later]
+
+-- | The failures of 'checkLowering', each with the state and the production of the later grammar.
+checkProductions ::
+    (Ord state, Ord symbol) =>
+    Lowering symbol ->
+    FTA.FTA state symbol constraint ->
+    FTA.FTA state symbol constraint ->
+    [(state, FTA.Transition state symbol constraint, LoweringError state symbol)]
+checkProductions (Lowering expansions) earlier later =
+    [ (state, transition, failure)
     | (state, transitions) <- Map.toList $ FTA.transitionTable later
-    , FTA.Transition symbol children _ <- transitions
+    , transition@(FTA.Transition symbol children _) <- transitions
     , failure <- check state symbol children
     ]
   where

@@ -8,6 +8,7 @@ import qualified Data.CFTA.Edit.BetweenSpec
 import qualified Data.CFTA.Edit.ConstrainedSpec
 import qualified Data.CFTA.EditSpec
 import qualified Data.CFTA.Gen.CompiledRankSpec
+import qualified Data.CFTA.ExtensionSpec
 import qualified Data.CFTA.Gen.Equality.DatatypeGenSpec
 import qualified Data.CFTA.Gen.Equality.GenSpec
 import qualified Data.CFTA.Gen.Equality.IFCExpressionGenSpec
@@ -70,3 +71,4 @@ main =
         Data.CFTA.TraceSpec.spec
         Data.CFTA.Sized.PrefixSpec.spec
         Data.CFTA.Sized.PrefixGuardSpec.spec
+        Data.CFTA.ExtensionSpec.spec

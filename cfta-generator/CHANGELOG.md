@@ -14,6 +14,13 @@
   of two machines, with the intersection of the ranges of a shared step.
   `guardedRun` gives the shortest prefix that fails, and `unrolled` gives a
   finite `StateMachine` of `Data.CFTA.Trace` for small ranges.
+- Add `Data.CFTA.Extension`: `checkExtension` checks that a later automaton
+  is a definitional extension of an earlier automaton by a template lowering.
+  It reports another initial state, a lost or changed old production, an old
+  constructor that the lowering expands, a production that does not lower,
+  and a production with another number of children than its expansion. Each
+  report has a counterexample term, built with the smallest terms of
+  `Data.CFTA.Sized`, and its lowering. Automata with constraints are rejected.
 
 Before release, the package was called `microcfta-generator`.
 

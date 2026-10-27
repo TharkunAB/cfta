@@ -5,6 +5,7 @@ import System.Exit (die)
 import Test.Hspec (hspec)
 
 import qualified Data.CFTA.EGraphSpec
+import qualified Data.CFTA.AbstractionSpec
 import qualified Data.CFTA.Equality.ConstraintSpec
 import qualified Data.CFTA.Equality.FTASpec
 import qualified Data.CFTA.EqualitySpec
@@ -60,3 +61,4 @@ main = do
         Data.CFTA.Refinement.SimpleSpec.spec
         Data.CFTA.LoweringSpec.spec
         Data.CFTA.LarkSpec.spec
+        Data.CFTA.AbstractionSpec.spec

@@ -470,6 +470,41 @@ mass that grammar-aligned decoding needs (Park et al., *Grammar-Aligned
 Decoding*, NeurIPS 2024), exact for a weight that is a product over the
 nodes. With the weight one for each symbol, the weights are the counts.
 
+### Check a definitional extension
+
+A definitional extension adds constructors to a language, and a template
+lowering of `Data.CFTA.Lowering` gives each new constructor an expansion in
+the earlier language. `checkExtension lowering earlier later` of
+`Data.CFTA.Extension` reports each reason why `later` is not such an
+extension of `earlier`, with a counterexample term:
+
+| Report | Meaning | Counterexample |
+| --- | --- | --- |
+| `ChangedStart` | Another initial state. | None. |
+| `LostProduction` | A production of `earlier` that `later` does not have at the same state. | A term of `earlier` that uses it. |
+| `LoweredOldConstructor` | The lowering expands an old constructor, so old terms change their meaning. | None. |
+| `NotTotal` | A new constructor with another number of children than its expansion. | A term of `later` that uses it, which does not lower. |
+| `RejectedLowering` | A production that does not lower into `earlier` at its state. | A term of `later` that uses it, and its lowering, which `earlier` rejects. |
+| `UnprovedLowering` | `checkLowering` does not show that the production lowers, but the term below lowers into `earlier`. | A term of `later` that uses it, and its lowering. |
+
+A counterexample is `Nothing` when no term uses the production. It is a term
+from the initial state, with the smallest term of each other state from
+`Data.CFTA.Sized`, so it is small, but not always the smallest. An empty
+report shows that every term of `later` lowers into `earlier`, and that every
+term of `earlier` is a term of `later` with the same meaning: the lowering of
+an old term is that term. The check handles automata without constraints.
+
+For example, let `earlier` have the sums of `zero` and `one` at the state
+`e`, and let `later` also have `double(e)`. With the lowering
+`double(x) -> mul(x, x)`, the report is `RejectedLowering` for `double(e)`,
+with the term `double(one)` and its lowering `mul(one, one)`. With
+`double(x) -> add(x, x)`, the report is empty.
+
+An abstraction extension splits a production into refined variants, for
+example a digit into the digits above four and the digits up to four.
+`checkAbstraction` and `checkOverlaps` of `Data.CFTA.Abstraction`, in `cfta`,
+check it with a solver.
+
 ## Equality-constrained generators
 
 An equality generator is a `Gen Symbol`, with the name `ECTAGen`. Each
