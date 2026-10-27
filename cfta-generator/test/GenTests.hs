@@ -7,6 +7,7 @@ import qualified Data.CFTA.Edit.TreesSpec
 import qualified Data.CFTA.Edit.BetweenSpec
 import qualified Data.CFTA.Edit.ConstrainedSpec
 import qualified Data.CFTA.EditSpec
+import qualified Data.CFTA.Gen.CompiledRankSpec
 import qualified Data.CFTA.Gen.Equality.DatatypeGenSpec
 import qualified Data.CFTA.Gen.Equality.GenSpec
 import qualified Data.CFTA.Gen.Equality.IFCExpressionGenSpec
@@ -14,6 +15,7 @@ import qualified Data.CFTA.Gen.Equality.RankDecodingSpec
 import qualified Data.CFTA.Gen.Equality.RecursiveGenSpec
 import qualified Data.CFTA.Gen.Equality.SimpleSpec
 import qualified Data.CFTA.Gen.Equality.TypedExpressionGenSpec
+import qualified Data.CFTA.Gen.InvertibleSpec
 import qualified Data.CFTA.Gen.ReferenceSpec
 import qualified Data.CFTA.Gen.Synthesis.StatesSpec
 import qualified Data.CFTA.Gen.SynthesisSpec
@@ -29,6 +31,7 @@ main :: IO ()
 main =
     hspec $ do
         Data.CFTA.RankedSpec.spec
+        Data.CFTA.Gen.CompiledRankSpec.spec
         Data.CFTA.GenSpec.spec
         Data.CFTA.Gen.Equality.DatatypeGenSpec.spec
         Data.CFTA.Gen.Equality.GenSpec.spec
@@ -37,6 +40,7 @@ main =
         Data.CFTA.Gen.Equality.RecursiveGenSpec.spec
         Data.CFTA.Gen.Equality.SimpleSpec.spec
         Data.CFTA.Gen.Equality.TypedExpressionGenSpec.spec
+        Data.CFTA.Gen.InvertibleSpec.spec
         Data.CFTA.Gen.ReferenceSpec.spec
         Data.CFTA.Gen.SynthesisSpec.spec
         Data.CFTA.Gen.Synthesis.StatesSpec.spec
