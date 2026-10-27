@@ -97,4 +97,7 @@ default).
   reach the e-node limit, the backoff turns a larger budget into proofs, and
   a proof saves more of a larger search. At HugeLists 7-p4 the larger limits
   print 1,285 laws against 1,319, in 3.7 % more time; at 6-p4, 638 against
-  658, in 20 % more time; at 5-p4, one law fewer, in 48 % more time.
+  658, in 20 % more time; at 5-p4, one law fewer, in 48 % more time. With
+  16,000 e-nodes, 7-p4 prints 1,244 laws in 21 % more time than with 8,000:
+  the proofs continue past each limit, and the cost of a removed law grows
+  about fivefold.
