@@ -1,0 +1,76 @@
+import MicroCFTA.SourcePruningEnumerationNativeBodyTrace
+import MicroCFTA.SourcePruningEnumerationNativeNodeArity
+
+/-!
+# Arity through every record created by a checked native edge body
+
+Actual child calls preserve their complete edge-record heaps.
+The actual checked prefix supplies the final constructor's arity.
+The conclusion checks the entire returned heap.
+-/
+namespace MicroCFTA.SourcePruningEnumerationNativeQueryArity
+open InternedConstructorTemplates InternedProbeProvenance
+open SourceRecursiveIntersectionKernel SourceRecursiveIntersectionThunks SourceRecursiveIntersectionCode
+open SourceEqualityNativeDemand
+open SourceCurrentAllocatedNativePhysicalTraceCompletion (Trace)
+open SourceCurrentAllocatedNativePhysicalCompletion (Good)
+open SourcePruningEnumerationArityOrigins (Fits Heap edge_heap)
+local notation "Symbol" => SourceObservations.Label FullSyntax.Formula
+local notation "Guard" => SourceSymbolicIndex.Constraint FullSyntax.Formula
+local notation "Checked" => SourceEqualityNativeDemand.State
+local notation "top" => SourceEqualityConstraintConstructors.top (Formula := FullSyntax.Formula)
+local instance : DecidableEq (SourceGuards.Guard FullSyntax.Formula) :=
+  SourceEqualityPCSNativeEdge.guardDecidableEq
+variable {width : Nat}
+
+private theorem top_fits (arity : Nat) : Fits (top : Guard) arity := by
+  intro tries residual projected start
+  have topProjection : SourcePruningEnumerationConstraint.project (top : Guard) = some ([], none) := rfl
+  rw [topProjection] at projected
+  have triesSame : [] = tries := congrArg Prod.fst (Option.some.inj projected)
+  subst tries
+  rfl
+
+/-- Actual shorter node calls derive arity for all records in the completed body heap. -/
+theorem body_heap [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)]
+    (limit : Nat)
+    (calls : ∀ (request : NodeRequest Symbol Guard) (count : Nat), count ≤ limit →
+      ∀ (start final : Checked width) (result : Value Symbol Guard), Good start →
+        Heap start.native.machine.heap →
+        Trace count (.code (requestNode request.domain request.left request.right)) start (.code (.pure result)) final →
+        Heap final.native.machine.heap)
+    (request : EdgeRequest Symbol Guard) (fuel : Nat) (before after : Checked width)
+    (value : EdgeValue Symbol Guard) (bounded : fuel ≤ limit)
+    (valid : Good before) (inputs : EdgeReady before.native.machine request)
+    (heap : Heap before.native.machine.heap)
+    (trace : Trace fuel (.edgeBody request .pure) before (.code (.pure value)) after) :
+    Heap after.native.machine.heap := by
+  obtain ⟨code, started, rest, total, _one, nativeSame, startedGood, _startedFields,
+      _tail, _afterGood, branch⟩ :=
+    SourcePruningEnumerationNativeBodyTrace.body_observation_rich request fuel before after value trace valid inputs
+  have startedHeap : Heap started.native.machine.heap := by rw [nativeSame]; exact heap
+  rcases branch with ⟨_codeSame, _size, _operands, _valueSame, afterSame⟩ |
+      ⟨first, second, combined, values, middle, childFuel, left, right, accepted,
+        _codeSame, _startedSame, counted, walked, _middleGood, _operands, _valueSame, afterSame, lengthSame⟩
+  · rw [afterSame]
+    exact edge_heap request.left.entry.key.symbol top [.empty] started.native.machine.heap startedHeap (top_fits _)
+  · have childHeap := walk_heap limit
+      (fun pair : Value Symbol Guard × Value Symbol Guard => requestNode request.domain pair.1 pair.2)
+      (fun pair count bound start final result good current actual =>
+        calls ⟨request.domain, pair.1, pair.2⟩ count bound start final result good current actual)
+      (fun _ _ => fun _ => trivial)
+      (request.left.children.zip request.right.children) values started middle childFuel
+      (by omega) startedGood startedHeap walked
+    have firstReady := (SourceEqualityConstraintFieldLookup.load_ready _ _ valid.operations.constraints
+      (valid.fields _ _ inputs.2.1).1 first left).1
+    have secondReady := (SourceEqualityConstraintFieldLookup.load_ready _ _ valid.operations.constraints
+      (valid.fields _ _ inputs.2.2).1 second right).1
+    have checked := SourcePruningEnumerationNativeCheckedOriginArity.ready_fits
+      GuardStructuralOrder.le first second combined request.left.children.length request.right.children.length
+      before.operations valid.operations firstReady secondReady accepted
+    rw [← lengthSame] at checked
+    rw [afterSame]
+    exact edge_heap request.left.entry.key.symbol (SourceEqualityConjoinAllocation.readback combined)
+      values middle.native.machine.heap childHeap checked
+
+end MicroCFTA.SourcePruningEnumerationNativeQueryArity
