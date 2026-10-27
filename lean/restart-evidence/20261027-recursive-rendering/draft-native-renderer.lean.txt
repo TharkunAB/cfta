@@ -1,0 +1,223 @@
+-- Source-only design. No Lean check has run on this file.
+-- Root owns the implementation and all checks.
+import MicroCFTA.EnumerationAssignment
+import MicroCFTA.SourcePruningEnumerationNativeLanguage
+import MicroCFTA.MergedOrdinaryHeight
+
+/-!
+# Concrete native rendering at one actual emitted cache
+
+The heap is the heap at this output's own caller.
+Rendering reads the enumeration state and compresses representative paths.
+It does not change the native caller, query memo or native heap.
+The runtime retains the source recursive-marker branch.
+The assignment theorem excludes that branch with a structural output gate.
+-/
+namespace MicroCFTA.SourcePruningEnumerationRender
+open Language Fragments EnumerationState EnumerationCorrectness EnumerationSchedule
+open EnumerationDriver EnumerationOrder EnumerationAssignment EnumerationCompressionFrame
+open SourcePruningEnumerationNodes
+local notation "Symbol" => SourcePruningTemplates.Symbol
+local notation "Constraint" => SourceSymbolicIndex.Constraint FullSyntax.Formula
+local notation "Core" => EnumerationState.State Symbol Constraint
+local notation "NativeHeap" => InternedConstructorTemplates.State Symbol Constraint
+
+local instance nativeRenderMonadList : Monad List where
+  pure value := [value]
+  bind values continuation := values.flatMap continuation
+
+/-- Every remaining pending slot is an unconstrained pure equality variable. -/
+def NoPendingNative (state : Core) : Prop :=
+  ∀ uv node scs, state.values[uv]? = some (.unenumerated node scs) → node = none ∧ scs = []
+
+/-- An unchanged stored array retains the structural pending-slot gate. -/
+theorem noPendingNative_values (before after : Core)
+    (closed : NoPendingNative before) (values : after.values = before.values) :
+    NoPendingNative after := by
+  intro uv node scs stored
+  apply closed uv node scs
+  simpa only [values] using stored
+
+/-- Render actual stored fragments and retain native recursive truncation explicitly. -/
+def expandFragment (heap : NativeHeap) (marker : Symbol) : Nat → Fragment Symbol →
+    EnumerateM Symbol Constraint (Term Symbol)
+  | 0, _ => failure .fuelExhausted
+  | fuel + 1, .node symbol children => do
+      pure (.node symbol (← children.mapM (expandFragment heap marker fuel)))
+  | fuel + 1, .hole uv => do
+      match ← getValue (fuel + 1) uv with
+      | .enumerated fragment => expandFragment heap marker fuel fragment
+      | .unenumerated (some handle) _ =>
+          match lookupNode heap handle with
+          | some value =>
+              if MergedOrdinaryHeight.recursiveBoundary value then pure (.node marker [])
+              else failure .unfinishedFragment
+          | none => failure .unfinishedFragment
+      | _ => failure .unfinishedFragment
+
+/-- Render the requested raw root through its actual representative and stored value. -/
+def expandUVar (heap : NativeHeap) (marker : Symbol) (fuel uv : Nat) :
+    EnumerateM Symbol Constraint (Term Symbol) := do
+  match ← getValue (fuel + 1) uv with
+  | .enumerated fragment => expandFragment heap marker fuel fragment
+  | .unenumerated (some handle) _ =>
+      match lookupNode heap handle with
+      | some value =>
+          if MergedOrdinaryHeight.recursiveBoundary value then pure (.node marker [])
+          else reject
+      | none => reject
+  | _ => reject
+
+/-- Pair the actual root rendering with every retained guard and its actual rendered subtree. -/
+def renderRow (heap : NativeHeap) (marker : Symbol) (fuel uv : Nat) :
+    EnumerateM Symbol Constraint (Term Symbol × List (Constraint × Term Symbol)) := do
+  let term ← expandUVar heap marker fuel uv
+  let state ← get
+  let pending ← state.obligations.mapM fun obligation => do
+    pure (obligation.1, ← expandFragment heap marker fuel obligation.2)
+  pure (term, pending)
+
+/-
+Source scope:
+- Enumeration.hs:1049-1060 is expandTermFragWith: enumerate stored fragments;
+  pending actual Mu or Union gives the marker, even with a nonempty bucket.
+- Enumeration.hs:1068-1075 is expandUVarWith: the same boundary marker at root;
+  other unfinished roots reject the branch.
+- Enumeration.hs:1280-1287 and 1519-1523 render root and all residual fragments.
+- Missing handle readback has no counterpart on the admitted realized source
+  domain. The explicit model failure/rejection above does not assert total
+  correspondence for invalid native handles. It is unreachable in the
+  NoPendingNative theorem because that gate excludes every pending Some.
+- The fuel is model execution fuel. No Haskell runtime budget is asserted.
+
+NoPendingNative is a finite, meaningful output predicate. It can be checked
+by a constructor traversal of state.values: each pending slot must have node
+None and empty scs. It is NOT native candidate exhaustion. A pending Mu/Union
+with an empty bucket is a noncandidate but fails this gate. A pending None
+slot with nonempty scs also fails the gate and is not excluded by Canonical.
+
+PROPOSED internal observation lemma (exact intended statement):
+
+theorem expandFragment_equations
+    (heap : NativeHeap) (marker : Symbol) (fuel : Nat)
+    (fragment : Fragment Symbol) (before after : Core) (term : Term Symbol)
+    (language : NodeLanguage Symbol) (assignment : Nat → Term Symbol)
+    (safe : Safe before) (closed : NoPendingNative before)
+    (equations : Fragments.stateSatisfies before.representatives
+      (EnumerationCorrectness.heap language before.values) assignment)
+    (bounded : FragmentBound before.counter fragment)
+    (observed : Success (expandFragment heap marker fuel fragment) before term after) :
+    RenderStable before after ∧ NoPendingNative after ∧
+      Fragments.stateSatisfies after.representatives
+        (EnumerationCorrectness.heap language after.values) assignment ∧
+      term = Fragments.fill assignment fragment
+
+Proof outline, without a Graph:
+1. Induct fuel, with mapM_sound at .node. Keep actual successive intermediate
+   states; use returned RenderStable.counter and values to transport bounds
+   and NoPendingNative. Propagate actual Safe from the read, not from Frame.
+2. At .hole decompose getValue success. getValue_storage supplies actual safe
+   RenderStable using the original FragmentBound; alternatively its Frame
+   follows from getValue_frame. Fragments.stateSatisfies transports across
+   actual representative compression by representative_semantics (with
+   temporary residual predicate True) or the direct Frame forest/values proof.
+3. getValue_success and findRoot_correct identify the original stored value
+   and the actual representative. The assignment's original forest equality
+   equates assignment rawUV with assignment representative. For an enumerated
+   slot the original stored equation therefore gives fill assignment stored
+   fragment = assignment rawUV. Apply the induction at the exact read state.
+4. An observed pending Some handle contradicts NoPendingNative applied to the
+   ACTUAL stored representative. A pending None or eliminated slot makes the
+   actual worker fail. No graph/marker interpretation is used.
+5. Values/obligations/counter preservation and exact class equivalence give
+   the final RenderStable and equation invariant. Existing all2_map_eq and
+   mapM_sound provide ordered children. No run-completion producer is invoked.
+
+The analogous root observer expandUVar_equations takes inside : uv <
+before.counter, decomposes its actual getValue once and then calls the
+fragment lemma. A pending Some again contradicts closed; pending None or
+eliminated contradicts successful root observation. It concludes term =
+assignment uv, preserving the actual read endpoint.
+
+PROPOSED public semantic construction (no assumed final Satisfies):
+
+theorem renderRow_assignment
+    (heap : NativeHeap) (marker : Symbol) (fuel uv : Nat)
+    (before after : Core) (term : Term Symbol)
+    (pending : List (Constraint × Term Symbol))
+    (holds : Constraint → Term Symbol → Bool)
+    (ambient : InternedGuardedLanguage.Env Symbol)
+    (residualMeaning : Constraint → Term Symbol → Prop)
+    (level : Nat → Nat) (frontier : Nat)
+    (safe : Safe before) (inside : uv < before.counter)
+    (stratified : Stratified before level frontier)
+    (closed : NoPendingNative before)
+    (observed : Success (renderRow heap marker fuel uv) before (term, pending) after)
+    (checked : ∀ obligation ∈ pending, residualMeaning obligation.1 obligation.2) :
+    ∃ assignment : Nat → Term Symbol,
+      Satisfies (SourcePruningEnumerationNativeLanguage.handles holds ambient heap)
+        residualMeaning assignment before ∧
+      term = assignment uv ∧ RenderStable before after ∧
+      Satisfies (SourcePruningEnumerationNativeLanguage.handles holds ambient heap)
+        residualMeaning assignment after
+
+Proof outline:
+1. Use EnumerationAssignment.stratified_assignment before safe level frontier
+   stratified (.node marker []) (NativeLanguage.handles holds ambient heap)
+   closed. This CONSTRUCTS a total assignment satisfying forest and slot
+   equations. The language is the ACTUAL native output heap language; no
+   desired endpoint meaning or Graph is supplied as admission.
+2. Decompose the actual renderRow success. The root observer gives the exact
+   term equation and the root rendering's actual RenderStable. The get action
+   returns that same state and its exact obligation list.
+3. For each original obligation use expandFragment_equations at the actual
+   current state. Safe.bounds provides each fragment's allocation bound:
+   StorageValid.guards, namely safe.1.guards obligation originalMember.
+   Transport this bound to the current actual state with RenderStable.counter.
+   mapM_sound gives EXACT (guard, fill assignment fragment) output pairs, not
+   only membership or a permutation. Retain duplicates and source order.
+4. The actual output checked proof for these exact pairs gives guardsHold at
+   the input, using RenderStable.obligations. Add it to the constructed
+   forest+slot equations to obtain full native Satisfies before. Use the
+   actual final RenderStable and EnumerationSoundness.renderStable_assignment
+   for Satisfies after. No future callback, desired Satisfies or guessed final
+   native heap appears.
+
+Enough for an observed render, not yet a render producer:
+NoPendingNative+Safe+Stratified does not guarantee any root rendering exists.
+For example a lone pending None/[] slot satisfies the structural gate but
+expandUVar rejects it. Constructing rendering needs the additional ACTUAL
+root/fragment provenance. Existing EnumerationCarriers.CarriesGraph,
+EnumerationGraphReferences.FragmentCarries and ReferencesCarry are graph-FREE
+structural predicates despite their names; they can be reused on native cores.
+Under NoPendingNative a carried root cannot be pending Some, and GraphValue
+excludes eliminated/None. Safe and root paths then identify an enumerated
+representative directly. This replaces EnumerationRenderability.completed_carrier
+without CompleteGraph. Stratified rank gives the same finite recursive read
+bound as EnumerationRendering.expandFragment_complete. Derive that producer
+separately if needed; the observer above does not assume those provenance facts
+or claim all native done outputs meet them.
+
+Actual Recursive connection:
+Apply renderRow_assignment at output.cache.core and output.caller.heap, using
+that output's OWN Packet.safe/ordered and full Post/memos witness. Do not use
+an aggregate later sibling caller. The read has no native action, so caller
+and queries stay exact. The resulting assignment can instantiate a retained
+captured soundness receipt with the SAME initial/final cache, native endpoints
+and stable family. A whole Recursive.run proof still needs the complete
+semantic trace through narrowing, callbacks, restart and all earlier captured
+writes. OutcomeResources alone provides resources, not that trace.
+
+The checked predicate is an explicit condition on ACTUAL rendered residuals.
+Source terms/runs does not decide every residual (Enumeration.hs:1196-1203,
+1280-1287); template callback acceptance is not the same condition. No concrete
+solver correctness or automatic all-guard acceptance is claimed.
+
+Early stop outputs and recursive marker outputs are excluded from this strong
+complete finite-native-term theorem unless they independently meet the stated
+structural gate and actual observation. They need a separate precise partial
+or truncation semantics. This design does not claim a partial term has a
+completion, and does not claim every marker belongs to a least-Mu language.
+-/
+
+end MicroCFTA.SourcePruningEnumerationRender

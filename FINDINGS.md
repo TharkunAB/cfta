@@ -71,6 +71,51 @@ Terminal parents retain the existing enumerateNode fallback boundary. Native
 children can still take their terminal dispatcher. No Haskell fix is needed.
 Details: lean/notes-current-pruning-enumeration-native-ordinary.md.
 
+### Verified constrained EGraph.extract failure after main integration
+
+Upstream `c168a952d779a72294c34d9c8fd5afd0e308c5ab` is integrated at
+`646a9af8d543e53efbb08677840a15381afab8cc`. EGraph.extract promises the cheapest
+term of an e-class. Its current implementation first computes unconstrained
+least costs, builds only cheapest children, and then checks the parent path
+equalities. It does not try a more expensive child after a failed equality.
+
+Verified finite reproducer: merge g(a) and h(b) into C. Add p[C,b] with the
+equality at paths [0,0] and [1]. Give h cost 2 + sum(children), and every other
+symbol cost 1 + sum(children). The cost is monotone and exceeds each child.
+Native extract returns Nothing. Native termsByCost returns p(h(b),b) at cost 5.
+Native classAutomaton accepts that term and returns Right True. The cheaper
+unconstrained child g(a) fails the equality. All 341 existing core tests pass.
+The existing extraction property generates plain terms, so it misses this case.
+
+External repair is pending. Preserve this example as a regression. A repair
+must search beyond unconstrained minimum children when constraints reject them.
+Do not substitute termsByCost without reviewing the public cost contract:
+termsByCost requires monotonicity in child costs, while extract currently states
+only strict increase above each child. The reproducer satisfies both conditions.
+No Haskell repair or regression-suite change is applied in this checkpoint.
+
+Reproducer and complete native receipt:
+`lean/restart-evidence/20261027-recursive-rendering/extract-constrained-repro.hs`
+and `native-constrained-extract-1/raw.log.gz`. The decoded 71-byte output has
+SHA256 `5ba63849d82a51db3bb8b99e7cc5c038d2f4c7d948704f67afec7b4ac70d80af`.
+Run the reproducer in the project Nix shell with cabal exec and runghc -package=cfta.
+The original proposal comments remain in the evidence. The actual execution
+and results above supersede its original unexecuted status.
+
+The upstream union-find is also a real representation change. It stores each
+root's member IntSet and points every losing member directly to the winner.
+find returns the same forest. Existing Lean UnionFind still models parent
+chains, path compression and a link of the losing root. Weighted winner and
+tie rules agree, but exact returned-forest correspondence needs a new invariant
+and representation relation. No valid-input native union-find defect was found.
+New EGraph, termsByCost and opt-in Specftacular e-graph pruning add open proof
+scope. They are not covered by the new rendering theorem or unchanged H6.
+
+All six earlier merged Haskell repairs, the merged Sized documentation repair,
+earlier reproducers and pending parallel-decision suffix-exception/cancellation
+findings remain below. Record future verified Haskell repairs here.
+Details: `lean/notes-current-pruning-native-rendering.md`.
+
 ### Captured-slot soundness restores the original pending restriction
 
 The backward captured-slot semantic gap is now closed for an actual stable
@@ -1065,6 +1110,52 @@ TH/Generic extraction, valid-position build/read and source codec laws stay open
 
 
 
+
+## Actual native rendering constructs the assignment for captured-slot soundness
+
+Main `c168a952d` is integrated by `646a9af8d`. This adds the sorted e-graph,
+cost-ordered term APIs and a new flat member-set union-find. Both changelog
+entries remain. Existing proofs and the optimized interned core remain intact.
+Diagonal completion and structural history: `57a10ab95`.
+Actual recursive consumers and callback Canonical: `c38c3a68d`.
+Native rendering and captured-term acceptance: `51331a044`.
+The full goal stays ACTIVE. H6 remains the strongest system language theorem.
+
+CapturedEdge.diagonal_render_sound_current now derives native edge and parent
+acceptance of the actual rendered captured term. It constructs an assignment
+from the stored fragment equations and checks the actual rendered residuals.
+It derives final-cache Safe and dependency order from the same completed
+native producer. No final Satisfies, final Safe or final order is an input.
+The full original pending language and every original suspended Holds follow.
+
+The original current admission and semantic gates remain explicit. The
+completed observation is an actual stable diagonal family. Initial Canonical,
+initial Stratified, ordinary no-terminal status, fresh own arity, structural
+child retention and numeric Ranges remain. Discharged requires every remaining
+pending slot to have no native handle and no suspended restriction. The actual
+render must succeed, and its returned residuals must hold. Scheduler done does
+not imply Discharged. Rendering existence, recursive truncation, arbitrary
+partial outputs, selector coverage and forward completeness are still open.
+
+Recursive consumers now derive allowed arity and actual projection from their
+completed observations. The actual callback producer retains its complete old
+result and adds Canonical at the same returned core. Resource-only recursive
+receipts do not yet derive semantic Ranges. Preserve that gap explicitly.
+
+All six new modules and Audit pass strict checks. Aggregate Audit passes
+3978 jobs and 78052 theorem dependency checks. Installed public readback covers
+eight new theorems, unchanged H6 and four complete native renderer definitions.
+Only permitted axioms occur. All earlier proof sources except Audit imports
+remain unchanged. Core tests pass 341 examples. Specftacular library and CLI
+build in Nix. Fourmolu and both changed Cabal gild checks pass.
+
+A new Haskell defect is verified: constrained EGraph.extract can return Nothing
+for a nonempty class. The focused example returns an accepted cost-5 term via
+termsByCost while extract returns Nothing. No repair is applied. FINDINGS has
+the exact reproducer, evidence and cost-contract caveat for external repair.
+The new union-find also needs a representation bridge: the existing Lean model
+still uses path compression. New e-graph and cost-order APIs are not certified.
+Details: `lean/notes-current-pruning-native-rendering.md`.
 
 ## Actual captured-slot expansion now restores the original pending language
 

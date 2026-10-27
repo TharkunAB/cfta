@@ -1,0 +1,74 @@
+[2026-10-27 02:47 CET] Independent native renderer source review: CLEAR.
+
+Source: lean/MicroCFTA/SourcePruningEnumerationRendering.lean, 204 lines.
+SHA256 6dfeb5bee518f86b60bfe16edb057c95820700610a8805ba982b3539ec1b458b.
+The complete live source equals the retained strict-native-rendering-5 snapshot.
+Its report records exit 0, warningAsError=true and linter.all=true. The raw log is
+literally empty. All five report/raw/snapshot identities and four adjacent source
+changes were checked as data. Exact identities are in review-native-rendering-pins.json.
+No Lean, build, Git, network or repository edit was performed in this review.
+
+The runtime at lines 28-62 reads the supplied actual native heap. It uses
+SourcePruningEnumerationNodes.lookupNode and the actual Mu/Union recursiveBoundary.
+It has no Graph parameter or constructed Graph interpretation. Root rendering
+precedes the residual mapM. Each residual uses the same fixed heap and the actual
+state reached by the previous read. Residual order and duplicate entries remain
+in the returned list. This follows the source order at Enumeration.hs:1049-1075,
+1280-1287 and 1519-1524. Bounded failures and missing-handle failure are explicit
+model outcomes; this is not a proof that every Haskell rendering attempt succeeds.
+
+Discharged (23-25) is an explicit structural gate: every stored pending slot has
+node=none and scs=[]. It permits free equality variables. It excludes every
+pending native handle, including recursive truncation. Therefore the successful
+soundness proof cannot use the marker branch to infer native finite-tree
+membership. The gate is stronger than ordinary scheduler done. A free pending
+root can satisfy Discharged while expandUVar rejects it. This theorem assumes an
+actual successful rendering and does not derive a successful render from the gate.
+
+The assignment construction is not circular. At 157-158, stratified_assignment
+constructs forest and stored-slot equations from actual initial Safe, Stratified
+and Discharged. It uses the fixed finite marker leaf only as the fallback term
+for free variables. The private Valid predicate contains these equations, Total
+and Discharged. It does not contain the desired residual predicates. Neither
+original nor final full Satisfies is an input of the public theorem.
+
+At 69-87, getValue_frame identifies the exact stored representative and preserves
+all frame fields and finite paths. Forest satisfaction relates the original raw
+variable to that root. The stored-slot equation therefore applies to the actual
+returned value. Frame.values preserves Discharged. The fragment/root proofs at
+89-140 then identify every actual successful output with fill assignment fragment
+or assignment uv. They accumulate the actual read Frames through each mapM call.
+No arbitrary final core, reconstructed query result or counterfactual read is used.
+
+At 159-193, the proof unpacks the literal observed render, its actual root endpoint,
+state read, residual traversal and final pair. The mapM relation fixes each pair
+as (original guard, fill assignment original fragment). At 194-199, checked applies
+to those actual returned pairs and establishes every retained original residual.
+Thus the result includes Satisfies of the pre-render state in the supplied native
+heap, term=assignment uv, the exact Frame to the actual returned core, and Satisfies
+of that returned core. It does not require a native heap validity premise for this
+closed case: Discharged has removed all pending native-domain restrictions.
+
+The final frame transports full assignment meaning with satisfies_frame. It does
+not infer Safe after. The theorem correctly makes no such conclusion. It also
+does not show that a solver or callback checks all residuals: checked is a separate
+semantic condition on every actual returned pair.
+
+The retained failures are proof elaboration repairs. Attempt 1 to 2 adds explicit
+Discharged binder types. Attempt 2 to 3 opens the existing EnumerationDriver
+namespace for get_success. Attempt 3 to 4 explicitly unfolds and unpacks the
+render/get/mapM/pair structure. Attempt 4 to 5 types the local residual action.
+All expandFragment, expandUVar and render runtime definitions remain byte-identical
+across the five snapshots. The public render_assignment admission and conclusion
+are unchanged. Raw failure sizes are 2543, 385, 3081 and 8997 bytes. Final raw size
+is zero. The proof repair history is retained and is not presented as five passes.
+
+For captured soundness, use the returned ORIGINAL pre-render Satisfies at exactly
+the emitted output cache and its own native heap. The theorem also gives the
+post-render copy without identifying different heaps or aggregate sibling callers.
+It removes assignment existence as a premise for that stated discharged successful
+render domain. A separate actual recursive semantic trace, the captured operation's
+other gates, and derivation of final structural completion remain necessary.
+It proves neither whole-enumerator language soundness nor completeness, recursive
+truncation soundness, rendering totality, native extraction correspondence or a
+stronger H6 result. No substantive semantic blocker was found in this exact source.

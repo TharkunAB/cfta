@@ -1,0 +1,11 @@
+CLEAR — focused span convention correction
+
+The original reviews and pin files remain byte for byte unchanged. All whole-source hashes still match. All 64 focused spans reproduce under their original generation conventions. No Lean, build, Git or repository edit was run.
+
+recursive-source-pins.json has 59 focused spans. Each hash covers the literal bytes of the stated one-based inclusive physical line range. The final LF and any selected blank lines are included.
+
+review-recursive-soundness-inputs.json has five focused spans. Each hash covers the same inclusive physical line slice after UTF-8 decoding and Python str.rstrip() with no arguments, then UTF-8 encoding. This removes all trailing whitespace, including blank lines and the final LF. The original range describes the slice before this trim. The missing convention metadata caused the verifier mismatch.
+
+For stable_complete_of_diagonal at original lines 35–87, the historical trimmed hash is c49eae55ca4d207e096fe9771dffff653adee98c72e0bf954b1da83abec07876. This covers 3661 bytes and has no final LF. The literal inclusive physical slice is 3663 bytes, has 2 trailing LF bytes, and hashes to 6616af027c5b702c89f29401e7e60bc79efa5c6db60ac0f70b2dbbe20abe5ecf.
+
+focused-span-convention-correction.json gives both the historical digest and the literal inclusive byte digest for every focused span. Its convention IDs state the exact operations. Use literal_inclusive_span_sha256 for a direct byte-range verifier. Use original_span_sha256 with original_span_convention to reproduce the historical pin. No semantic or strict-check result changes.
