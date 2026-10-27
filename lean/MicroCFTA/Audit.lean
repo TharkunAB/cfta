@@ -1,3 +1,7 @@
+import MicroCFTA.EnumerationFlatNativeCachedAdapter
+import MicroCFTA.EnumerationFlatNativeCachedFold
+import MicroCFTA.EnumerationFlatNativeCachedCompletion
+import MicroCFTA.EnumerationFlatNativeCachedResources
 import MicroCFTA.EnumerationFlatNativeDispatch
 import MicroCFTA.EnumerationFlatNativeFold
 import MicroCFTA.EnumerationFlatNativeAssimilation
