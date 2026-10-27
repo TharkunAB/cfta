@@ -71,6 +71,33 @@ Terminal parents retain the existing enumerateNode fallback boundary. Native
 children can still take their terminal dispatcher. No Haskell fix is needed.
 Details: lean/notes-current-pruning-enumeration-native-ordinary.md.
 
+### Native selected-edge semantics and missing current-data gates
+
+Completed selected edges now have exact operational assignment semantics.
+A separate conditional theorem proves native edge and parent acceptance.
+The gates remain explicit: current normalized annotations, inherited valid
+tries, no inherited terminal, fresh own arity, and child-bucket retention.
+Ready/Available and the old completion packet do not supply all these gates.
+This is a formal correspondence gap. It is not a verified Haskell defect.
+
+Haskell Interned/Type.hs mkEdge checks its own constraint fitsArity before
+it stores the edge. Enumeration.hs checks inherited arity at edge selection.
+The raw native makeEdge model can intern an arbitrary guard and child list.
+Retain the checked source constructor's arity receipt in the native invariant.
+Do not change Haskell or silently add this premise to the old producer.
+Likewise, transport the current annotation heap through actual native growth.
+The source terminal partition supplies the no-terminal edge-selection gate.
+Nonterminal Mu/Union allocation still uses its documented empty bucket.
+Full child retention needs its explicit supported domain or a partial-output
+interpretation. No full accepted finite completion below a marker is proved.
+
+No Haskell source changed. External action: no additional patch for this
+checkpoint. Retain all six merged repairs, merged Sized documentation PR #178,
+all historical repros, and pending parallel-decision suffix-exception and
+cancellation findings. Record any future verified Haskell fix here as well.
+Details: `lean/notes-current-pruning-selected-edge-language.md`.
+Evidence: `lean/restart-evidence/20261027-selected-edge-language`.
+
 ### Native child dispatcher and ordered traversal language
 
 The actual native child dispatcher and stable complete ordered traversal now
@@ -949,6 +976,40 @@ TH/Generic extraction, valid-position build/read and source codec laws stay open
 
 
 
+
+## Actual selected edges now have exact assignment language and conditional native soundness
+
+Selected-edge assignment equivalence: `95a0912b3`.
+Conditional native edge and parent acceptance: `72fef36ea`.
+The goal stays ACTIVE. H6 remains the strongest end-to-end language theorem.
+Main `6c080537a` remains imported. All earlier Haskell repairs remain merged.
+
+The original selected-edge producer keeps its complete admission and result.
+For its actual stable COMPLETE result, final Satisfies is equivalent to original
+Satisfies, the actual ordered effective child restrictions, and the full retained
+residual at the returned filled fragment. The original producer runs once.
+The proof uses the actual own-class prefix and actual child traversal. It
+assumes no future semantic callback and does not cancel final cache writes.
+
+A second theorem derives native acceptance by the actual selected edge and
+its parent from a satisfying completed assignment. It requires a current
+annotation heap, inherited trie validity, no inherited terminal, fresh own
+arity, and structural child-bucket retention. These are explicit gates.
+They do not follow from the original Ready/Available admission alone.
+This is backward soundness. It does not prove assignment existence or full
+enumeration completeness. Recursive truncation remains the source behavior.
+
+All six new modules and Audit pass strict checks. Aggregate Audit passes
+3930 jobs and checks 77859 theorem dependencies. Installed readback covers
+8 declarations with only permitted axioms. H6, prior Lean sources
+except Audit imports, runtime and Haskell remain unchanged.
+
+Next retain these semantic gates through checked native construction and
+actual recursive calls. Then prove captured-slot writes and rendering.
+Whole-enumerator language, selector coverage, partial stops, unsupported
+fallback and Haskell correspondence remain open. FINDINGS distinguishes
+formal invariant gaps from Haskell defects. No new Haskell patch is needed.
+Details: `lean/notes-current-pruning-selected-edge-language.md`.
 
 ## Actual child dispatch and ordered traversal now have exact assignment language
 

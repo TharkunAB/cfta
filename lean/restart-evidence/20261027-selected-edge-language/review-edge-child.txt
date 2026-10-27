@@ -1,0 +1,54 @@
+[2026-10-27 01:14 CET] CLEAR — final EdgeChildLanguage source review
+
+Reviewed the entire final repository module, 123 lines / 7,688 bytes:
+lean/MicroCFTA/SourcePruningEnumerationEdgeChildLanguage.lean
+SHA256 960c493a72bcfaaf0e896910ba9f681818d3122b248d708f984f0c01b38ade71.
+The retained strict-edge-child-3/MicroCFTA source is byte-identical.
+
+Actual retained check:
+strict-edge-child-3/report.json
+SHA256 1300460e6460a1f4771cfadaf4d4364ce7a696de7a487b6d13263c2a0359e02f.
+It records Lean 4.34.1, warningAsError=true, linter.all=true, exit_code=0,
+source_sha256 equal to the final module, and the literal empty output.
+strict-edge-child-3/raw.log is 0 bytes, SHA256
+ e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855.
+The recorded cgroup limit is 4 GiB with no swap. I did not run a compiler,
+parser, build, Git command or repository edit for this review.
+
+The two public declaration headers are byte-identical to the original draft.
+Their header SHA256 values are:
+child_evidence: 14dba44434550ab52d4fd244cfcabc91eb967136532190a4388f61a169465713.
+restrictions_from_children: 3c9ee2ec3dcf821f8341a4cf810c5cc05971c37080b2ef529b9e7e364b3b01b6.
+The final proof replaces the dependent bucket-equality rewrite with the private
+retained_holds lemma at lines 18–32. This lemma consumes exactly the explicit
+structural disjunction. Ordinary nodes expose the full effective bucket;
+a terminal bucket exposes that same bucket; an empty bucket is vacuous.
+It does not recover restrictions for a non-node nonempty nonterminal bucket.
+
+child_evidence at lines 39–87 consumes the exact effective All₂ relation over
+EdgeInputs.children. Its forest proof maps actual values and actual filled
+fragments in order. Removing zipIdx retains duplicates and child arity.
+The second proof uses the actual input lookup at the same output index.
+The explicit bucketSame equation and descend_append restore the full inherited
+plus fresh-own descent. No graph interpretation replaces the native values.
+
+restrictions_from_children at lines 90–121 derives the term count from the native
+forest. Own EqualityHolds uses the explicit valid-tries and fresh-arity gates.
+Inherited Holds uses the explicit ValidSuspended, original-arity and nonterminal
+gates. The nonterminal gate discharges only the root-path obligation in
+suspended_descent_complete. No assignment equality at a terminal parent root is
+silently inferred from child descent.
+
+All six defining source identities in edge-child-source-identities.json remain
+unchanged: actual EdgeInputs, TraversalLanguage, EnumerationSemantics,
+EnumerationCorrectness, EnumerationState and InternedGuardedLanguage. The exact
+source hash list and defining positions are retained there and in
+edge-child-proof-plan.md. The relevant actual relation is TraversalLanguage:83;
+ordered mapping/index recovery is EnumerationSemantics:434–452; own recovery is
+EnumerationCorrectness:512–539; inherited recovery is EnumerationState:483–507.
+
+These are conditional pure helpers. They do not strengthen any old producer
+admission or claim its current facts establish these gates. Native Ready/Context
+alone does not establish cached equality normalization or fresh arity. The helpers
+do not claim residual guard acceptance, full edge acceptance, a completed runtime
+producer, rejection safety, language completeness or an H6 change. No blocker found.
