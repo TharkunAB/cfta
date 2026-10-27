@@ -3,7 +3,7 @@
 -- | The readable text format: exact round trips, stable printing, errors, and ranks.
 module Main (main) where
 
-import Control.Monad (forM_)
+import Control.Monad (forM_, void)
 import qualified Data.Map.Strict as Map
 import qualified Data.Set as Set
 import Data.Text (Text)
@@ -29,7 +29,7 @@ import Data.CFTA.Equality.Constraint (
     mkEqConstraints,
  )
 import qualified Data.CFTA.Formula as F
-import Data.CFTA.Index (ClassRank (..))
+import Data.CFTA.Index (ClassRank (..), Size, Weight)
 import qualified Data.CFTA.Language as L
 import qualified Data.CFTA.Merge as Merge
 import Data.CFTA.Path (path)
@@ -38,6 +38,8 @@ import Data.CFTA.Refinement.LiquidFixpoint (withZ3)
 import Data.CFTA.Serialization.Text (StateCodec (..), TextError (..))
 import qualified Data.CFTA.Serialization.Text as T
 import qualified Data.CFTA.Sized as Sized
+import Data.CFTA.Sized.Checkpoint (Checkpoint (..), CheckpointError (..), SamplingCheckpoint (..))
+import qualified Data.CFTA.Sized.Checkpoint as Checkpoint
 import Data.CFTA.Symbol (Symbol (RefinedSymbol, Symbol), symbolText, valueName)
 import Data.CFTA.Template (Template (..))
 
@@ -156,6 +158,173 @@ spec = do
         it "are the same after a round trip" $
             forM_ (filter ((/= "all-forms") . fst) graphs) $ \(_, graph) ->
                 sameRanks graph $ must $ T.parseGraph $ T.printGraph graph
+
+    describe "checkpoints" $ do
+        it "resume at every cut as the listing without a cut, after the checkpoint and the graph are printed and read" $
+            forM_ listed $ \graph -> do
+                let entries = must $ Checkpoint.resume (Checkpoint.start 7 graph) graph
+                    listing = map fst entries
+                    reopened = must $ T.parseGraphWith strings $ T.printGraphWith strings graph
+                forM_ (zip [0 ..] $ Checkpoint.start 7 graph : map snd entries) $ \(cut, checkpoint) -> do
+                    let saved = must $ T.parseCheckpointWith strings $ T.printCheckpointWith strings checkpoint
+                    (take cut listing <>) . map fst <$> Checkpoint.resume saved reopened `shouldBe` Right listing
+
+        it "reject a checkpoint for an edited graph as stale" $ do
+            let edited = must $ FTA.replaceRows (Map.singleton "q" $ Just [FTA.Transition "n" ["leaf"] noConstraint]) ordinary
+                saved = must $ T.parseCheckpoint $ T.printCheckpoint $ Checkpoint.start 7 ordinary
+            void (Checkpoint.resume saved edited) `shouldBe` Left (StaleRow "q")
+            void (Checkpoint.resume saved ordinary) `shouldBe` Right ()
+
+        it "reject a guard beyond equality constraints, which needs a solver" $
+            void (Checkpoint.resume (Checkpoint.start 7 liquid) liquid) `shouldBe` Left (QueryFailed Sized.ResidualGuard)
+
+        it "keep every checkpoint" $
+            forM_ checkpoints $ \checkpoint -> do
+                roundTrip T.printCheckpoint T.parseCheckpoint checkpoint
+                roundTrip (T.printCheckpointWith strings) (T.parseCheckpointWith strings) checkpoint
+
+        it "print the query and the next sized rank, then the printed graph" $ do
+            let printed = T.printCheckpointWith strings (Checkpoint.start 7 trees){checkpointNext = (5, 1)}
+            printed
+                `shouldBe` Text.unlines
+                    [ "checkpoint 1;"
+                    , "query sized 1;"
+                    , "bound 7;"
+                    , "next 5 1;"
+                    , ""
+                    , "graph 1;"
+                    , "start tree;"
+                    , ""
+                    , "state tree {"
+                    , "  leaf;"
+                    , "  node(tree, tree);"
+                    , "}"
+                    , ""
+                    ]
+            printed `shouldSatisfy` Text.isSuffixOf (T.printGraphWith strings trees)
+
+        it "give the line of a syntax error" $ do
+            case T.parseCheckpointWith strings "checkpoint 1;\nquery sized 1;\nbound 7;\nnext 5;\n\ngraph 1;\nstart s;\nstate s {}" of
+                Left (SyntaxError line _ _) -> line `shouldBe` 4
+                other -> expectationFailure $ show other
+            T.parseCheckpointWith strings "checkpoint 2;\nquery sized 1;\nbound 7;\nnext 1 0;\ngraph 1;\nstart s;\nstate s {}"
+                `shouldSatisfy` either (const True) (const False)
+
+    describe "sampling checkpoints" $ do
+        it "resume at every cut as the run without a cut, after the checkpoint and the graph are printed and read" $
+            forM_ [(graph, weights) | graph <- listed, FTA.initialState graph /= "empty", weights <- [Nothing, Just drawWeights]] $
+                \(graph, weights) -> do
+                    let start = Checkpoint.startSampling 7 weights 11 graph
+                        entries = take 30 $ must $ Checkpoint.resumeSampling start graph weights
+                        run = map fst entries
+                        reopened = must $ T.parseGraphWith strings $ T.printGraphWith strings graph
+                    forM_ (zip [0 ..] $ start : map snd entries) $ \(cut, checkpoint) -> do
+                        let saved = must $ T.parseSamplingCheckpointWith strings $ T.printSamplingCheckpointWith strings checkpoint
+                        (take cut run <>) . take (30 - cut) . map fst <$> Checkpoint.resumeSampling saved reopened weights
+                            `shouldBe` Right run
+
+        it "reject a sampling checkpoint for an edited graph or other weights" $ do
+            let edited = must $ FTA.replaceRows (Map.singleton "q" $ Just [FTA.Transition "n" ["leaf"] noConstraint]) ordinary
+                saved = must $ T.parseSamplingCheckpoint $ T.printSamplingCheckpoint $ Checkpoint.startSampling 7 Nothing 11 ordinary
+            void (Checkpoint.resumeSampling saved edited Nothing) `shouldBe` Left (StaleRow "q")
+            void (Checkpoint.resumeSampling saved ordinary $ Just drawWeights) `shouldBe` Left StaleWeights
+            void (Checkpoint.resumeSampling saved ordinary Nothing) `shouldBe` Right ()
+
+        it "keep every sampling checkpoint" $
+            forM_ samplingCheckpoints $ \checkpoint -> do
+                roundTrip T.printSamplingCheckpoint T.parseSamplingCheckpoint checkpoint
+                roundTrip (T.printSamplingCheckpointWith strings) (T.parseSamplingCheckpointWith strings) checkpoint
+
+        it "print the query, the weights, and the position of the run, then the printed graph" $ do
+            let weighted = Checkpoint.startSampling 7 (Just $ Map.fromList [(1, 1), (5, 3)]) 11 trees
+                printed = T.printSamplingCheckpointWith strings weighted{samplingDraws = 12}
+            printed
+                `shouldBe` Text.unlines
+                    [ "sampling 1;"
+                    , "query sized-sample 1;"
+                    , "bound 7;"
+                    , "weights [1: 1, 5: 3];"
+                    , "prng splitmix64 1;"
+                    , "seed 11;"
+                    , "draws 12;"
+                    , ""
+                    , "graph 1;"
+                    , "start tree;"
+                    , ""
+                    , "state tree {"
+                    , "  leaf;"
+                    , "  node(tree, tree);"
+                    , "}"
+                    , ""
+                    ]
+            T.printSamplingCheckpointWith strings (Checkpoint.startSampling 7 Nothing 11 trees)
+                `shouldSatisfy` Text.isInfixOf "\nweights uniform;\n"
+
+        it "give the line of a syntax error" $ do
+            let header seed weights =
+                    "sampling 1;\nquery sized-sample 1;\nbound 7;\nweights "
+                        <> weights
+                        <> ";\nprng splitmix64 1;\nseed "
+                        <> seed
+                        <> ";\ndraws 0;\n\ngraph 1;\nstart s;\nstate s {}"
+                lineOf text = case T.parseSamplingCheckpointWith strings text of
+                    Left (SyntaxError line _ _) -> Just line
+                    _ -> Nothing
+            lineOf (header "18446744073709551615" "uniform") `shouldBe` Nothing
+            lineOf (header "18446744073709551616" "uniform") `shouldBe` Just 6
+            lineOf (header "-1" "uniform") `shouldBe` Just 6
+            lineOf (header "0" "[1: 1, 1: 2]") `shouldBe` Just 4
+            lineOf ("sampling 2;" <> Text.drop (Text.length "sampling 1;") (header "0" "uniform")) `shouldBe` Just 1
+
+-- | The graphs whose listing needs no solver, and a recursive graph with equal children.
+listed :: [FTA.PlainFTA String Symbol]
+listed =
+    [graph | (name, graph) <- graphs, name `elem` ["ordinary", "recursive", "equality", "empty"]]
+        <> [ must $
+                FTA.mkFTA "s" [("s", [leaf "a", leaf "b", FTA.Transition "f" ["s"] noConstraint, FTA.Transition "g" ["s", "s"] equal])]
+           ]
+
+-- | A checkpoint for each graph, and checkpoints with unusual route names and large or negative numbers.
+checkpoints :: [Checkpoint String]
+checkpoints =
+    [Checkpoint.start 7 graph | (_, graph) <- graphs]
+        <> [ (Checkpoint.start 7 ordinary)
+                { checkpointRoute = name
+                , checkpointVersion = -1
+                , checkpointBound = 10 ^ (30 :: Int)
+                , checkpointNext = (10 ^ (40 :: Int), 2 ^ (100 :: Int))
+                }
+           | name <- names
+           ]
+
+-- | Weights of sizes up to seven, with a size of no terms in some graphs.
+drawWeights :: Map.Map Size Weight
+drawWeights = Map.fromList [(1, 1), (3, 2), (6, 1), (7, 5)]
+
+{- | A sampling checkpoint for each graph and each form of weights, and
+sampling checkpoints with unusual names and large or negative numbers.
+-}
+samplingCheckpoints :: [SamplingCheckpoint String]
+samplingCheckpoints =
+    [ Checkpoint.startSampling 7 weights seed graph
+    | (_, graph) <- graphs
+    , (weights, seed) <- [(Nothing, 0), (Just drawWeights, maxBound), (Just Map.empty, 11)]
+    ]
+        <> [ (Checkpoint.startSampling (10 ^ (30 :: Int)) (Just unusual) 11 ordinary)
+                { samplingRoute = name
+                , samplingVersion = -1
+                , samplingPrng = name
+                , samplingPrngVersion = 2 ^ (100 :: Int)
+                , samplingDraws = 2 ^ (100 :: Int)
+                }
+           | name <- names
+           ]
+  where
+    unusual = Map.fromList [(-2, -5), (0, 0), (10 ^ (30 :: Int), 2 ^ (100 :: Int))]
+
+-- | Binary trees: a leaf, or a node with two trees.
+trees :: FTA.PlainFTA String Symbol
+trees = must $ FTA.mkFTA "tree" [("tree", [leaf "leaf", FTA.Transition "node" ["tree", "tree"] noConstraint])]
 
 -- | Print and parse again: the value is the same, and so is the text.
 roundTrip ::
@@ -322,18 +491,20 @@ graphs =
     , ("empty", must $ FTA.mkFTA "empty" [("empty", [])])
     , ("all-forms", allForms)
     ]
-  where
-    ordinary =
-        must $
-            FTA.mkFTA
-                "s"
-                [ ("s", [FTA.Transition "f" ["p"] noConstraint, FTA.Transition "f" ["q"] noConstraint])
-                , ("p", [FTA.Transition "a" ["dead"] noConstraint, FTA.Transition "z" ["leaf"] noConstraint])
-                , ("q", [FTA.Transition "m" ["leaf"] noConstraint])
-                , ("leaf", [leaf "k", leaf "k"])
-                , ("dead", [])
-                , ("unreachable", [leaf "unused"])
-                ]
+
+-- | A graph with a dead row, an unreachable row, and a repeated alternative.
+ordinary :: FTA.PlainFTA String Symbol
+ordinary =
+    must $
+        FTA.mkFTA
+            "s"
+            [ ("s", [FTA.Transition "f" ["p"] noConstraint, FTA.Transition "f" ["q"] noConstraint])
+            , ("p", [FTA.Transition "a" ["dead"] noConstraint, FTA.Transition "z" ["leaf"] noConstraint])
+            , ("q", [FTA.Transition "m" ["leaf"] noConstraint])
+            , ("leaf", [leaf "k", leaf "k"])
+            , ("dead", [])
+            , ("unreachable", [leaf "unused"])
+            ]
 
 -- | Pairs of atoms with a refinement each, under a constraint.
 liquid :: FTA.PlainFTA String Symbol

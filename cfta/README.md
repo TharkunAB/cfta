@@ -1213,6 +1213,7 @@ productivity; they do not prove that arbitrary transition guards are satisfiable
 | --- | --- |
 | `Data.CFTA.Generic` | Datatype derivation, finite domains, metadata, and typed codecs. |
 | `Data.CFTA` | Checked explicit-state graphs, recognition, depth bounds, product intersection, and enumeration. |
+| `Data.CFTA.Checkpoint` | A saved position in a size-ordered listing of the terms of a graph: the graph, the query route and its version, the size bound, and the sized rank of the next term. A sampling checkpoint saves a position in a sampled run: the weights, the pseudorandom generator, the seed, and the number of draws. `cfta-generator` resumes both, and `cfta-serialization` stores both. |
 | `Data.CFTA.Interned` | Shared nodes and edges, recursive languages, union, intersection, and views. |
 | `Data.CFTA.Template` | Patterns with holes and prefixes, and restriction of a grammar to a pattern. |
 | `Data.CFTA.Path` | Child-index paths, and reading, editing, and requiring positions in a graph. |
