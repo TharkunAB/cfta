@@ -3610,6 +3610,8 @@ import MicroCFTA.SourceCurrentSameSymbolEdgeModelTransport
 import MicroCFTA.SourceCurrentSameSymbolEdgeRequestAdmission
 import MicroCFTA.SourceCurrentSameSymbolEdgeOriginalRowsCovered
 import MicroCFTA.SourceCurrentSameSymbolEdgeHitReadback
+import MicroCFTA.SourcePruningEnumerationInitialPacket
+import MicroCFTA.SourcePruningEnumerationInitialRendering
 /-!
 # Proof dependency audit
 
