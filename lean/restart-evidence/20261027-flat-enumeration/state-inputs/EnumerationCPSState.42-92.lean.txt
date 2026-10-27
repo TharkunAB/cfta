@@ -1,0 +1,51 @@
+
+/-- Interpret one existing bounded state-machine action in the checked CPS interface. -/
+def lift (action : EnumerationState.EnumerateM Symbol Guard α) : Action Symbol Guard α := encode action
+
+/-- Every lifted worker preserves every branch, error, and final state. -/
+theorem lift_exact (action : EnumerationState.EnumerateM Symbol Guard α) :
+    Represents (lift action) action := rfl
+
+/-- The exact model return operation agrees with CPS pure. -/
+theorem pure_exact (value : α) :
+    Represents (EnumerationCPSChecked.pure value : Action Symbol Guard α)
+      (Pure.pure value : EnumerationState.EnumerateM Symbol Guard α) := rfl
+
+/-- Source failed alternatives agree with rejection in the finite model. -/
+theorem reject_exact : Represents (reject : Action Symbol Guard α)
+    (EnumerationState.reject : EnumerationState.EnumerateM Symbol Guard α) := rfl
+
+/-- The finite model's explicit errors remain errors in the checked interface. -/
+theorem failure_exact (error : EnumerationState.Error) :
+    Represents (failure error : Action Symbol Guard α) (EnumerationState.failure error) := rfl
+
+/-- A model state read agrees with the source CPS state primitive. -/
+theorem get_exact : Represents (get : Action Symbol Guard (EnumerationState.State Symbol Guard))
+    (MonadStateOf.get : EnumerationState.EnumerateM Symbol Guard (EnumerationState.State Symbol Guard)) := rfl
+
+/-- A model state replacement agrees with the source CPS state primitive. -/
+theorem put_exact (after : EnumerationState.State Symbol Guard) :
+    Represents (put after : Action Symbol Guard Unit)
+      (set after : EnumerationState.EnumerateM Symbol Guard Unit) := rfl
+
+/-- A model state update agrees with the source CPS state primitive. -/
+theorem modify_exact (change : EnumerationState.State Symbol Guard → EnumerationState.State Symbol Guard) :
+    Represents (EnumerationCPSChecked.modify change : Action Symbol Guard Unit)
+      (_root_.modify change : EnumerationState.EnumerateM Symbol Guard Unit) := rfl
+
+/-- Source branches replaces the old choose worker without changing its rows. -/
+theorem branches_exact (values : List α) :
+    Represents (branches values : Action Symbol Guard α) (EnumerationState.choose values) :=
+  branches_represents values
+
+/-- Replacing both sides of an actual model bind preserves its full result list. -/
+theorem bind_exact (action : Action Symbol Guard α) (next : α → Action Symbol Guard β)
+    (first : EnumerationState.EnumerateM Symbol Guard α)
+    (second : α → EnumerationState.EnumerateM Symbol Guard β)
+    (initial : Represents action first) (following : ∀ value, Represents (next value) (second value)) :
+    Represents (bind action next) (Bind.bind (m := EnumerationState.EnumerateM Symbol Guard) first second) := by
+  have same : (Bind.bind (m := EnumerationState.EnumerateM Symbol Guard) first second) =
+      bindRows first second := by
+    funext before
+    simp only [Bind.bind, StateT.bind, ExceptT.bind, ExceptT.mk, bindRows]
+    congr 1

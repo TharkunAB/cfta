@@ -1,0 +1,52 @@
+/-- The checked protocol adds one continuation for explicit model errors. -/
+abbrev Computation (State Error α : Type) := {Result : Type} → State →
+  (α → State → Result → Result) → (Error → Result → Result) → Result → Result
+
+/-- The finite ordered result list, with errors at their original positions. -/
+abbrev Rows (State Error α : Type) := State → List (Except Error (α × State))
+
+/-- Interpret one finite model result in the two-continuation protocol. -/
+def fold (success : α → State → Result → Result) (failure : Error → Result → Result) :
+    Except Error (α × State) → Result → Result
+  | .ok (value, state), later => success value state later
+  | .error error, later => failure error later
+
+/-- Encode the ordered bounded model without changing its error behavior. -/
+def encode (rows : Rows State Error α) : Computation State Error α :=
+  fun state success failure later => (rows state).foldr (fold success failure) later
+
+/-- Record successes and errors in the same order as the finite model. -/
+def allResults (action : Computation State Error α) (state : State) : List (Except Error (α × State)) :=
+  action state (fun value state later => .ok (value, state) :: later) (fun error later => .error error :: later) []
+
+/-- Exact representation holds for all success, error, and later continuations. -/
+def Represents (action : Computation State Error α) (rows : Rows State Error α) : Prop :=
+  @action = @encode State Error α rows
+
+/-- Return one checked value at the current state. -/
+def pure (value : α) : Computation State Error α := fun state success _ later => success value state later
+
+/-- Reject one branch without inventing an error result. -/
+def reject : Computation State Error α := fun _ _ _ later => later
+
+/-- Report one model error without invoking a value continuation. -/
+def failure (error : Error) : Computation State Error α := fun _ _ fail later => fail error later
+
+/-- Preserve branch-local state and all error positions under bind. -/
+def bind (action : Computation State Error α) (next : α → Computation State Error β) :
+    Computation State Error β :=
+  fun state success fail later => action state
+    (fun value after rest => next value after success fail rest) fail later
+
+/-- Each checked alternative starts from the same input state. -/
+def choice (left right : Computation State Error α) : Computation State Error α :=
+  fun state success fail later => left state success fail (right state success fail later)
+
+/-- Execute one total source state operation. -/
+def state (change : State → α × State) : Computation State Error α :=
+  fun before success _ later => let (value, after) := change before; success value after later
+
+/-- Read the current branch state. -/
+def get : Computation State Error State := state fun before => (before, before)
+
+/-- Set only the current branch state. -/

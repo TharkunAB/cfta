@@ -1,0 +1,8 @@
+theorem unionVariables_moreFuel (fuel extra left right : Nat) :
+    Retains (unionVariables (Symbol := Symbol) (Guard := Guard) fuel left right)
+      (unionVariables (fuel + extra) left right) := by
+  intro before ignored after success
+  cases ignored
+  obtain ⟨forest, lookup, rfl⟩ := (unionVariables_success fuel left right before after).mp success
+  exact (unionVariables_success (fuel + extra) left right before _).mpr
+    ⟨forest, union_moreFuel fuel fuel extra extra before.representatives left right forest lookup, rfl⟩

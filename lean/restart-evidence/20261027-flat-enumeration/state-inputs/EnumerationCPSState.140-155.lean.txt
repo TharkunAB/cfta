@@ -1,0 +1,16 @@
+  EnumerationCPSChecked.modify fun state => {state with values := state.values.set uv value}
+
+/-- The CPS raw-slot write is exactly the established finite machine operation. -/
+theorem setValue_exact (uv : Nat) (value : EnumerationState.UVarValue Symbol) :
+    Represents (setValue (Guard := Guard) uv value) (EnumerationState.setValue uv value) := rfl
+
+/-- A Boolean guard either returns unit or rejects only its current branch. -/
+def require (condition : Bool) : Action Symbol Guard Unit :=
+  if condition then EnumerationCPSChecked.pure () else reject
+
+/-- The CPS require operation matches the current finite branch guard. -/
+theorem require_exact (condition : Bool) :
+    Represents (require (Symbol := Symbol) (Guard := Guard) condition) (EnumerationState.require condition) := by
+  cases condition <;> rfl
+
+end MicroCFTA.EnumerationCPSState

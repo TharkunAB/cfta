@@ -1,0 +1,9 @@
+def union (leftFuel rightFuel : Nat) (forest : Forest) (left right : Nat) : Option Forest := do
+  let first ← findRoot leftFuel forest left
+  let second ← findRoot rightFuel first.forest right
+  if first.representative = second.representative then
+    some second.forest
+  else if first.size < second.size then
+    some (link second.forest first.representative second.representative first.size second.size)
+  else
+    some (link second.forest second.representative first.representative second.size first.size)

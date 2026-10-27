@@ -1,0 +1,45 @@
+[2026-10-27 03:29 CET] Source-only common-fuel plan. No new primitive stability proof is needed.
+
+The exact theorem already exists at EnumerationExecution.lean:84–96:
+
+    EnumerationExecution.union_moreFuel
+      (leftFuel rightFuel leftExtra rightExtra : Nat)
+      (forest : UnionFind.Forest) (left right : Nat) (after : UnionFind.Forest)
+      (success : UnionFind.union leftFuel rightFuel forest left right = some after) :
+      UnionFind.union (leftFuel + leftExtra) (rightFuel + rightExtra)
+        forest left right = some after
+
+It needs no Total, Valid, Context or desired endpoint premise. It case-splits the first findRoot result, then the second result at the first result's exact forest. A failed case contradicts the supplied success. In the successful cases it applies UnionFind.findRoot_moreFuel twice and rewrites union. Both complete lookup Results stay identical, including forest and size. Thus the weighted comparison and final union forest also stay identical. This is exact result equality, not merely class equivalence. The original proof is already on disk; reuse it through an EnumerationExecution import in the new consumer. Do not duplicate it or change heartbeat limits.
+
+FlatUnionFind.union_refines at FlatUnionFindRefinement.lean:134–143 already produces validAfter, leftFuel, rightFuel, output, completed and represented from Valid flat and Represents flat earlier. Retain those same witnesses. Set m=max leftFuel rightFuel and perform two small theorem applications. This proposed fragment is source-only and uncompiled:
+
+    let m := max leftFuel rightFuel
+    have leftLe : leftFuel ≤ m := Nat.le_max_left _ _
+    have rightLe : rightFuel ≤ m := Nat.le_max_right _ _
+    have common : UnionFind.union m m earlier left right = some output := by
+      have padded := EnumerationExecution.union_moreFuel leftFuel rightFuel
+        (m - leftFuel) (m - rightFuel) earlier left right output completed
+      simpa only [Nat.add_sub_of_le leftLe, Nat.add_sub_of_le rightLe] using padded
+    have stable : ∀ extra,
+        UnionFind.union (m + extra) (m + extra) earlier left right = some output := by
+      intro extra
+      exact EnumerationExecution.union_moreFuel m m extra extra
+        earlier left right output common
+
+The additive wrapper conclusion can be:
+
+    Valid (FlatUnionFind.union flat left right) ∧
+      ∃ fuel output,
+        (∀ extra, UnionFind.union (fuel + extra) (fuel + extra)
+          earlier left right = some output) ∧
+        FlatUnionFind.Represents (FlatUnionFind.union flat left right) output
+
+Call union_refines once, use the displayed m/stable proof, then return validAfter, m, output, stable and represented. The same output forest works for every extra, so the existing Represents proof is retained unchanged. No second producer or new future-success premise is required.
+
+The old source runtime uses exactly this diagonal primitive: EnumerationState.lean:190–194 calls UnionFind.union fuel fuel before.representatives. Lift stable at that exact state with EnumerationSchedule.unionVariables_success (488–498), obtaining the fixed endpoint {before with representatives := output} for all extra. If an exact raw equality is required, EnumerationCorrectness.union_exact (173–177) gives the literal singleton [.ok ((), {before with representatives := output})] directly from stable extra. Every other state field remains the same. This step needs no graph, slot-shape, Safe or callback premise.
+
+Existing EnumerationExecution.unionVariables_terminates at 420–428 already unifies its two fuels by their sum. Its unionVariables_moreFuel at 113–120 already transports successful diagonal actions. Reuse these as corroborating APIs; the max construction above preserves the specific earlier output supplied by FlatUnionFind.union_refines and gives the requested stable family explicitly. Use simp only for the two arithmetic cancellations. Keep union/findRoot opaque in the wrapper. No broad simplification or unfolding of forest functions is needed.
+
+Scope: larger bounds preserve a completed result; this does not state that failed low-fuel results remain failed or become the same error. The initial Valid/Represents inputs derive adequate completion through union_refines. The result covers this one union and its exact enum-state update. It does not by itself provide a common fuel for an entire native enumeration pipeline.
+
+fuel-source-pins.json binds six literal source snapshots and nine inclusive cuts/88 lines, SHA256 917bd630b7ebd6b111bf1af3c282283cd5a2e5c030038273cbcc3423684c4c3b. No build, compiler run, Git command or repository edit was performed. Root owns implementation and checking.

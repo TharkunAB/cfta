@@ -1,0 +1,102 @@
+import MicroCFTA.FlatUnionFindStable
+import MicroCFTA.EnumerationResultRelation
+import MicroCFTA.EnumerationFlatState
+import MicroCFTA.EnumerationFlatPrimitives
+import MicroCFTA.EnumerationFlatCore
+import MicroCFTA.EnumerationFlatAssimilation
+import MicroCFTA.EnumerationFlatSemantics
+import MicroCFTA.SourceCurrentColdFiniteWarmCalls
+import MicroCFTA.SourcePruningEnumerationCapturedRendering
+set_option pp.maxSteps 1000000
+set_option pp.deepTerms true
+#check MicroCFTA.FlatUnionFind.find_stable
+#print axioms MicroCFTA.FlatUnionFind.find_stable
+#check MicroCFTA.FlatUnionFind.union_stable
+#print axioms MicroCFTA.FlatUnionFind.union_stable
+#check MicroCFTA.EnumerationResultRelation.append
+#print axioms MicroCFTA.EnumerationResultRelation.append
+#check MicroCFTA.EnumerationResultRelation.length_eq
+#print axioms MicroCFTA.EnumerationResultRelation.length_eq
+#check MicroCFTA.EnumerationResultRelation.bind_rows
+#print axioms MicroCFTA.EnumerationResultRelation.bind_rows
+#check MicroCFTA.EnumerationResultRelation.stateT_bind_rows
+#print axioms MicroCFTA.EnumerationResultRelation.stateT_bind_rows
+#check MicroCFTA.EnumerationResultRelation.stateT_bind
+#print axioms MicroCFTA.EnumerationResultRelation.stateT_bind
+#check MicroCFTA.EnumerationResultRelation.represented
+#print axioms MicroCFTA.EnumerationResultRelation.represented
+#check MicroCFTA.EnumerationFlatState.initial_related
+#print axioms MicroCFTA.EnumerationFlatState.initial_related
+#check MicroCFTA.EnumerationFlatState.related_forests
+#print axioms MicroCFTA.EnumerationFlatState.related_forests
+#check MicroCFTA.EnumerationFlatState.representative_related
+#print axioms MicroCFTA.EnumerationFlatState.representative_related
+#check MicroCFTA.EnumerationFlatState.representative_stable
+#print axioms MicroCFTA.EnumerationFlatState.representative_stable
+#check MicroCFTA.EnumerationFlatState.unionVariables_related
+#print axioms MicroCFTA.EnumerationFlatState.unionVariables_related
+#check MicroCFTA.EnumerationFlatState.unionVariables_stable
+#print axioms MicroCFTA.EnumerationFlatState.unionVariables_stable
+#check MicroCFTA.EnumerationFlatState.rawValue_related
+#print axioms MicroCFTA.EnumerationFlatState.rawValue_related
+#check MicroCFTA.EnumerationFlatState.setValue_related
+#print axioms MicroCFTA.EnumerationFlatState.setValue_related
+#check MicroCFTA.EnumerationFlatState.representative_cps_related
+#print axioms MicroCFTA.EnumerationFlatState.representative_cps_related
+#check MicroCFTA.EnumerationFlatState.unionVariables_cps_related
+#print axioms MicroCFTA.EnumerationFlatState.unionVariables_cps_related
+#check MicroCFTA.EnumerationFlatState.pure_related
+#print axioms MicroCFTA.EnumerationFlatState.pure_related
+#check MicroCFTA.EnumerationFlatState.reject_related
+#print axioms MicroCFTA.EnumerationFlatState.reject_related
+#check MicroCFTA.EnumerationFlatState.failure_related
+#print axioms MicroCFTA.EnumerationFlatState.failure_related
+#check MicroCFTA.EnumerationFlatState.require_related
+#print axioms MicroCFTA.EnumerationFlatState.require_related
+#check MicroCFTA.EnumerationFlatState.getValue_related
+#print axioms MicroCFTA.EnumerationFlatState.getValue_related
+#check MicroCFTA.EnumerationFlatState.getValue_stable
+#print axioms MicroCFTA.EnumerationFlatState.getValue_stable
+#check MicroCFTA.EnumerationFlatState.inheritAncestry_related
+#print axioms MicroCFTA.EnumerationFlatState.inheritAncestry_related
+#check MicroCFTA.EnumerationFlatState.allocate_related
+#print axioms MicroCFTA.EnumerationFlatState.allocate_related
+#check MicroCFTA.EnumerationFlatState.assimilate_related
+#print axioms MicroCFTA.EnumerationFlatState.assimilate_related
+#check MicroCFTA.EnumerationFlatState.mergeNode_related
+#print axioms MicroCFTA.EnumerationFlatState.mergeNode_related
+#check MicroCFTA.EnumerationFlatState.mergeNode_stable
+#print axioms MicroCFTA.EnumerationFlatState.mergeNode_stable
+#check MicroCFTA.EnumerationFlatState.related_satisfies
+#print axioms MicroCFTA.EnumerationFlatState.related_satisfies
+#check MicroCFTA.EnumerationFlatState.related_isRoot
+#print axioms MicroCFTA.EnumerationFlatState.related_isRoot
+#check MicroCFTA.EnumerationFlatState.related_supplyAligned
+#print axioms MicroCFTA.EnumerationFlatState.related_supplyAligned
+#check MicroCFTA.EnumerationFlatState.related_canonical
+#print axioms MicroCFTA.EnumerationFlatState.related_canonical
+#check MicroCFTA.EnumerationFlatState.union_satisfies
+#print axioms MicroCFTA.EnumerationFlatState.union_satisfies
+#check MicroCFTA.SourceCurrentColdFiniteWarmCalls.constructed_node_calls
+#print axioms MicroCFTA.SourceCurrentColdFiniteWarmCalls.constructed_node_calls
+#check MicroCFTA.SourcePruningEnumerationCapturedEdge.diagonal_render_sound_current
+#print axioms MicroCFTA.SourcePruningEnumerationCapturedEdge.diagonal_render_sound_current
+#print MicroCFTA.EnumerationResultRelation.Outcome
+#print MicroCFTA.EnumerationResultRelation.Results
+#print MicroCFTA.EnumerationFlatState.State
+#print MicroCFTA.EnumerationFlatState.Related
+#print MicroCFTA.EnumerationFlatState.initial
+#print MicroCFTA.EnumerationFlatState.Action
+#print MicroCFTA.EnumerationFlatState.reject
+#print MicroCFTA.EnumerationFlatState.failure
+#print MicroCFTA.EnumerationFlatState.require
+#print MicroCFTA.EnumerationFlatState.representative
+#print MicroCFTA.EnumerationFlatState.unionVariables
+#print MicroCFTA.EnumerationFlatState.setValue
+#print MicroCFTA.EnumerationFlatState.rawValue
+#print MicroCFTA.EnumerationFlatState.getValue
+#print MicroCFTA.EnumerationFlatState.inheritAncestry
+#print MicroCFTA.EnumerationFlatState.allocate
+#print MicroCFTA.EnumerationFlatState.assimilate
+#print MicroCFTA.EnumerationFlatState.mergeNode
+#print MicroCFTA.EnumerationFlatState.Satisfies

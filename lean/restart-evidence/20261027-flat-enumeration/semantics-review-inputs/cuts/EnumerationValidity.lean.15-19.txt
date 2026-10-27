@@ -1,0 +1,5 @@
+  bind values continuation := values.flatMap continuation
+
+/-- Every stored suspended constraint uses a canonical trie. -/
+def Canonical (state : State Symbol Guard) : Prop :=
+  ∀ value ∈ state.values, ValidSuspended (references value)

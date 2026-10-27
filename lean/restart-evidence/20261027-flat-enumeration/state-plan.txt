@@ -1,0 +1,207 @@
+[2026-10-27 03:32 CET] Parallel flat enumeration state: source-only plan.
+
+Use one new six-field core beside EnumerationState.State. Change only its UF
+field. Reuse existing slot, fragment, suspended, recursion-key and error types.
+Keep all older workers and theorems unchanged. Exact source identities and 29
+cut copies are in state-source-pins.json. This plan includes no repository edit,
+Lean/build execution, Git mutation, network or board action.
+
+MINIMAL STATE AND EXACT RELATION
+
+Suggested namespace: MicroCFTA.EnumerationFlatState. These are proposed names.
+
+structure State (Symbol Guard : Type) where
+  counter : Nat
+  representatives : FlatUnionFind.Forest
+  values : List (EnumerationState.UVarValue Symbol)
+  obligations : List (Guard × Fragments.Fragment Symbol)
+  recursionAncestry : Nat → List EnumerationState.RecursionKey
+  expansionAncestry : List EnumerationState.RecursionKey
+
+Keep Valid out of the runtime record. Do not add a new UVarValue, RecursionKey,
+Error, Graph, guard carrier or opaque state wrapper. Reuse EnumerationState.Error
+for the finite checked model. Flat representative and union operations need no
+source UF fuel; old finite bounds belong in comparison theorems.
+
+The relation should name these seven proof fields:
+
+structure Represents (flat : State Symbol Guard)
+    (earlier : EnumerationState.State Symbol Guard) : Prop where
+  valid : FlatUnionFind.Valid flat.representatives
+  representatives : FlatUnionFind.Represents flat.representatives earlier.representatives
+  counter : earlier.counter = flat.counter
+  values : earlier.values = flat.values
+  obligations : earlier.obligations = flat.obligations
+  recursionAncestry : earlier.recursionAncestry = flat.recursionAncestry
+  expansionAncestry : earlier.expansionAncestry = flat.expansionAncestry
+
+All FIVE non-UF fields are literally equal. In particular, retain extensional
+function equality for recursionAncestry, not a class-renamed or root-only view.
+Actual raw keys and captured expansion ancestry are used by later workers.
+
+Define erase flat by constructing an old State with the same five fields and
+FlatUnionFind.erase flat.representatives. From Flat.Valid, erase_represents
+supplies Represents flat (erase flat). This is one related old view. An old
+execution can return another forest shape; it need not return this erased map.
+
+New initial is old initial with only the UF constructor changed to
+FlatUnionFind.withInitialValues [0]. Use initial_valid and initial_represents.
+Counter 1, one pending root slot, no guards and both empty ancestries stay exact.
+
+ROW INTERFACE AND FIRST PRIMITIVES
+
+StateT newState (ExceptT EnumerationState.Error List) is sufficient for checked
+finite observations. The generic EnumerationCPSChecked.Computation can also be
+specialized to the new state. Do not clone its interpreter. The live generic
+EnumerationResultRelation.Results already keeps success values equal, success
+states related, and identical errors at the same positions. Its bind_rows, stateT_bind and
+represented lemmas compose explicit rows/StateT/CPS representations. They do not infer
+arbitrary continuation behavior from a single CPS observation.
+
+representative uv reads FlatUnionFind.root and returns the SAME flat state.
+Haskell getUVarRepresentative (415-420) writes the forest returned by find, but
+current find returns its input forest, so that write is a same-value update.
+
+Use FlatUnionFind.find_stable on the UF relation. It supplies one old bound,
+actual found Result, exact root/size and a fixed old returned forest at every
+larger bound. The related old state is precisely
+{earlier with representatives := found.forest}; its five other fields are exact.
+No old low-fuel representativeFuel error is relabeled as source rejection.
+
+unionVariables left right changes ONLY representatives to FlatUnionFind.union.
+Use the live FlatUnionFind.union_stable, not only union_refines: the stable lemma
+supplies ONE common bound for BOTH old lookups and every extension. This matches
+EnumerationState.unionVariables's actual union fuel fuel call. Its actual old
+output, new Valid and UF Represents complete the state relation.
+
+rawValue uv reads the same values[uv]? on both sides, giving the same value or
+same explicit invalidSlot. setValue uv value uses List.set at the SAME RAW uv.
+It must not resolve uv: assimilation must eliminate former representative slots.
+
+getValue uv composes the actual flat representative with rawValue at that exact
+root. The old side first executes its actual compressing representative, then
+reads the equal root from the equal values. Missing slots produce identical
+invalidSlot rows. Errors carry no returned state in this checked model; attach
+no invented error endpoint. Successes retain their actual related endpoints.
+
+inheritAncestry, allocate, suspend, residual cons and expansion-ancestry reset can
+reuse the old formulas with direct equality proofs. Allocate uses the old counter,
+increments it, appends .unenumerated node [], and inherits ancestry at that old
+counter. It does NOT insert a UF root: absent UF entries are singleton roots.
+Initial relation alone is not an allocation-freshness or slot-domain theorem.
+
+For these deterministic primitives, the useful public result is an exact old
+singleton/error row at every larger sufficient fuel plus the relation on actual
+successful states. Later branch workers can use Results for complete ordered
+lists. Do not replace errors by [] or compare only successful members.
+
+EXACT TERMINAL PREFIX ORDER
+
+Enumeration.hs:729-749 does this:
+1. Record ALL original here representatives in order, retaining duplicates.
+2. Union the first ORIGINAL raw variable with each remaining one.
+3. Read the actual final representative of the first raw variable.
+4. Move waiting counts for DISTINCT recorded roots, excluding that winner.
+5. Assimilate each originally recorded RAW slot into the winner, in order.
+6. Merge the incoming node and descendant constraints into the winner.
+
+Keep the exact recorded list and exact winner. Rereading the old variables after
+union would return only the winner and lose the losing raw slots. Duplicates are
+valid: already eliminated sources are no-ops. Waiting movement uses the deduplicated
+key set, whereas assimilation consumes the original list.
+
+assimilateUvarVal (489-508) checks target=source, reads raw source, skips eliminated
+source, computes source/target intersection, rejects Empty BEFORE both value
+writes, writes merged target and eliminated source, then unions source ancestry
+into target. Keep sourceScs++targetScs and this argument order. The Haskell target
+lookup is let-bound lazily; its textual placement before the source case does
+not force it on the eliminated-source no-op.
+
+mergeNodeIntoUVarVal (512-525) instead resolves the actual target, reads its slot,
+computes incoming/old intersection, WRITES replacement with gained incoming
+constraints, inherits ancestry, THEN rejects Empty. This differs from assimilation's
+pre-write rejection. Both can return [], but their logical write receipts and
+native caller effects differ.
+
+A graph-based flat-vs-old core refinement may reuse old intersectValues and
+hasEmptyContents with the SAME graph argument. This is not actual native
+intersection execution. Current SourcePruning producers separately retain reached
+native caller/query/handle and Empty receipts. Do not rerun intersection, fabricate
+a Graph, or infer rollback of native effects from rejection of a core branch.
+
+EFFECTS OUTSIDE THE SIX FIELDS
+
+Actual Haskell EnumerationState (227-265) has four more fields:
+expandableUVars, waitingUVars, edgesOf and constrainedRecursion. The first two
+are maintained indexes; the latter two are fixed configuration inputs in the
+old model. The proposed type is a CORE, not the entire literal Haskell state.
+
+addUVarValue updates counter, slot, expandable membership and ancestry. A raw
+write updates slot and expandable membership. Its waiting count removes lost
+occurrences BEFORE adding gained ones, at each occurrence's actual current UF
+root. Multiplicity matters. setUVarValue derives gained/lost from the old slot.
+Assimilation uses EMPTY gained/lost lists because the references move within
+the same class, while still changing both expandable entries.
+
+Terminal union changes UF before its explicit waiting-key transfer and before
+loser elimination. Index correctness and LiveRoots can be temporarily false in
+that interval. Keep only the operational relation at that intermediate point.
+Do not claim every primitive preserves all admission/cache invariants.
+
+EnumerationExpandableIndex.Cached already separates the six-field old core and
+indexes. NativeIndex.count/write are not generic over a flat core. A later flat
+Cached adapter should keep waiting/expandable fields literally equal at matched
+prefixes, use the same actual native heap, use exact root equality for count keys,
+and same values+heap for candidate flags. Merely replacing Cached.core does not
+prove those invariants. The initial checkpoint need not introduce that adapter.
+
+Haskell branches (368-373) copies the same input state into each alternative,
+including indexes/configuration. This does not prove rollback of the separate
+native/interner/query effects modeled by other SourcePruning components.
+
+STORAGE SAFETY DOES NOT FOLLOW FROM THE RELATION
+
+Valid + exact-root/size UF Represents + five field equalities do NOT imply
+ForestBound or Safe on the new representation. Let flat explicitly store
+Root 1 [uv] for EVERY Nat and let the old forest be empty. Flat.Valid and UF
+Represents hold, yet at finite counter the flat map has stored addresses outside
+the allocation domain. The old map has none. This is a representation-bound gap,
+not a defect in the proposed operational relation.
+
+For later admission, derive and retain separately:
+  EnumerationCorrectness.ForestBound flat.counter
+    (FlatUnionFind.erase flat.representatives).
+No new runtime field or proof-carrying State is needed. Initialization derives
+this bound. Valid allocated UF calls preserve it; a total UF union on arbitrary
+Nat can add unallocated entries, so source operands need genuine bounds there.
+Allocation leaves UF unchanged and increases the bound. Valid plus this bound
+also bounds each class member. Slots/obligation bounds and LiveRoots retain
+their own existing current-state receipts. Do not assume desired final Safe.
+
+SOURCE BOUNDARIES AND RECOMMENDED FIRST UNIT
+
+EnumerationCPSUnionFind currently imports SourceUnionFindCompression and proves
+literal old full-result equality at the old state type. Keep it unchanged as a
+historical worker. The new flat boundary needs a parallel relational wrapper,
+not a weakened exact theorem or replacement of every old consumer.
+
+The current abstract core uses Nat, functional maps, List slots/ancestry and Nat
+node handles. Haskell uses Int, IntMap, Seq, HashSet and actual Node values. Its
+missing slot (!) can raise an exception; the finite model has invalidSlot. Raw
+List.set outside bounds is also not the source's required old-slot lookup. Keep
+genuine storage/domain assumptions at these boundaries. Exact list equality
+inside the two Lean cores does not establish list-order equality with HashSet.
+No new machine-capacity, containers extraction, complexity, whole-language or
+stronger H6 claim follows from state/primitive refinement.
+
+Implement only State, initial, erase, Represents and simple non-UF updates first;
+then representative/unionVariables/getValue with stable ordered-result refinement.
+Reuse FlatUnionFindStable and EnumerationResultRelation. Keep indexed/native
+assimilation and the full recursive driver as separately reviewable consumers.
+
+Current helper update: EnumerationResultRelation now also exports stateT_bind_rows
+and stateT_bind. They reduce actual StateT/ExceptT/List bind to bindRows and
+compose the same exact Results relation. The initial 77-line helper pins remain
+separate; final state-source-pins bind the revised 106-line source. No runtime
+state relation or plan premise changed. This note does not review the new state
+implementation now being written by Root.

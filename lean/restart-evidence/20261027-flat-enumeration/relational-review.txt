@@ -1,0 +1,40 @@
+CLEAR — final ordered checked relation and flat core consumers
+
+Source-only review. No Lean, build, Git, network or repository edit was run. The final 106-line EnumerationResultRelation.lean is SHA256 d733967c8ac3c584e1e5294321ff884ab977b04a0428be8a315522676ff44222, not the older c16cba draft. Its live bytes equal strict-result-relation-3's snapshot. All six reviewed final live modules equal their pinned checked snapshots; each final actual report is PASS0 with an empty physical raw log, all linters and warnings as errors under Lean 4.34.1 and a 4 GiB cap with no swap. Earlier failed checks are not described as passes.
+
+Exact consumer identities:
+- EnumerationFlatPrimitives.lean: 106 lines, 6219 bytes, SHA256 0b6e06b42311b243796d175d13d9ebd3ec604736237e2c22223b8ca9ba1319d1; strict-flat-primitives-3.
+- EnumerationFlatCore.lean: 99 lines, 5057 bytes, SHA256 c55e83f8ce8c2f626eec739863c9699955c5c5fc77174114b3e60204ada64ce1; strict-flat-core-1.
+- EnumerationFlatAssimilation.lean: 124 lines, 6287 bytes, SHA256 bae50b4b858bc7b101214c2f1696b4e951c6c1053a3b577cdcadf867178dec53; strict-flat-assimilation-2.
+- EnumerationFlatState.lean: 119 lines, 5709 bytes, SHA256 d9d62dca6bb0b9af869ef97ab8c49041f7ef81ef721bb5e560b0c6b346291911; strict-flat-state-3.
+- FlatUnionFindStable.lean: 41 lines, 2216 bytes, SHA256 f41d80a938e1f581ad3948053c88bc93d46489437bbb1e5fa613b413f4fd464f; strict-stable-2.
+
+Result relation and bind
+
+Outcome has only equal-error and equal-value/related-state constructors (20–26). Results is the existing ordered Language.All₂, so it retains order, duplicates, success/error positions and total result length. It cannot pair an error with a success or rejection [] with an error singleton.
+
+bind_rows (45–64) unfolds the actual finite bindRows. Its induction preserves each error as one equal error row without invoking a continuation. A successful head passes its SAME common value and actual related intermediate states to the continuation premise, then appends the paired tail. No support-only reasoning, filtering or endpoint replacement occurs.
+
+stateT_bind_rows (67–76) proves the precise concrete StateT/ExceptT/List row equation. It unfolds StateT.bind, ExceptT.bind and the local Monad List whose bind is flatMap and whose pure is singleton. The error/ok cases reduce definitionally. stateT_bind rewrites BOTH actual binds with this equation before applying the row theorem. The local dictionaries in FlatState/Core/Assimilation use those same pure/bind fields; their actual checked consumer applications reduce to this finite-row behavior. No unproved monad-equivalence or arbitrary-instance assumption is inserted.
+
+CPS boundary
+
+represented (92–104) requires full Represents witnesses for BOTH actions and rewrites with allResults_exact. It does not infer arbitrary-continuation behavior from one allResults observation. The primitive CPS consumers also use exact facts: the flat action is encode of its actual rows, and the earlier representative_results/unionVariables_results use the existing represented CPS worker. They do not claim a general CPS bind law from related observations alone.
+
+The relation deliberately compares common returned values. It does not relate heterogeneous raw get values. Current consumers avoid that unsupported operation by proving their common-value state transitions directly. No extra value relation is needed for this implemented scope.
+
+Full states, primitive fuel and errors
+
+Related includes flat Valid, exact representative/size correspondence, and equality of counter, values, obligations and BOTH ancestry fields. It permits different physical forest maps. Every successful primitive conclusion retains all these fields.
+
+Conditional representative/union lemmas consume an actual old primitive equation. Their stable wrappers derive such equations from the CURRENT related forest using find_stable/union_stable. The latter retains the same old output at a common maximum of its genuine two bounds, then at every extension. No future successful callback, final related-state input, or universal arbitrary-fuel equality is assumed. Too-small old bounds can still report representativeFuel; these theorems do not erase or equate that case with a total flat primitive.
+
+rawValue preserves invalidSlot as the same explicit error. getValue composes the actual representative value with the actual raw read. setValue writes the same raw index and value. Ancestry concatenation and eraseDups use equal input lists. Allocation returns the same current counter, appends the same slot, advances the counter and updates the same ancestry function. It proves full correspondence, not a separate StorageValid/SupplyAligned or freshness theorem from Related alone.
+
+Assimilation and incoming merge
+
+assimilate handles target=source, eliminated source, invalid source/target slots, invalid intersection, empty rejection and successful writes in the old core order. In particular, target is still read before reporting an invalid intersection for an enumerated source. The emptiness guard comes BEFORE both writes in assimilation. The target write, source elimination and ancestry update then retain full Related states.
+
+mergeNode resolves the actual target, reads its actual slot, writes the merged value, inherits ancestry, then tests emptiness, matching the old worker's distinct order. The relation compares the entire row results, including [] rejection and explicit errors. It asserts no retained state on an absent rejected row. Both sides use the same abstract graph; no native callback/index execution is inferred.
+
+No blocker found within this scope. These modules establish ordered correspondence for the listed six-field core primitives. They do not yet establish a full flat recursive enumerator, native waiting/expandable cache transport, concrete IntMap equality, machine-Int bounds, extraction or infinite productivity. Exact sources, focused literal spans and actual final strict evidence are in relational-review-source-pins.json.

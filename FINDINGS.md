@@ -10,8 +10,9 @@ Both recorded LPO repairs are merged in PR #169 at `0db62d26b`.
 Focused native repair probes pass. Historical counterexamples remain below.
 The generated scalar-view name repair is merged in PR #172 at `74250bd88`.
 Upstream `f1f266ab4` has the same five files as local `07229ca7f3`.
-The constrained EGraph.extract repair is open in PR #182 at `f961332e59`.
-It is not merged or included in this checkout. See the verified failure below.
+The constrained EGraph.extract repair is merged in PR #182 at `64cfe9fc6`.
+It is integrated at `865facc70`. The retained native reproducer now passes.
+The merged implementation and regression source equal upstream `f961332e59`.
 
 | Repair | Current status | External action |
 | --- | --- | --- |
@@ -76,36 +77,40 @@ Details: lean/notes-current-pruning-enumeration-native-ordinary.md.
 ### Verified constrained EGraph.extract failure after main integration
 
 Upstream `c168a952d779a72294c34d9c8fd5afd0e308c5ab` is integrated at
-`646a9af8d543e53efbb08677840a15381afab8cc`. EGraph.extract promises the cheapest
-term of an e-class. Its current implementation first computes unconstrained
-least costs, builds only cheapest children, and then checks the parent path
-equalities. It does not try a more expensive child after a failed equality.
+`646a9af8d543e53efbb08677840a15381afab8cc`. At that revision, EGraph.extract
+promised the cheapest term of an e-class. Its implementation computed unconstrained
+least costs, built only cheapest children, and then checked the parent path
+equalities. It did not try a more expensive child after a failed equality.
 
 Verified finite reproducer: merge g(a) and h(b) into C. Add p[C,b] with the
 equality at paths [0,0] and [1]. Give h cost 2 + sum(children), and every other
 symbol cost 1 + sum(children). The cost is monotone and exceeds each child.
-Native extract returns Nothing. Native termsByCost returns p(h(b),b) at cost 5.
-Native classAutomaton accepts that term and returns Right True. The cheaper
-unconstrained child g(a) fails the equality. All 341 existing core tests pass.
-The existing extraction property generates plain terms, so it misses this case.
+The baseline native extract returned Nothing. Native termsByCost returned
+p(h(b),b) at cost 5. Native classAutomaton accepted that term with Right True.
+The cheaper unconstrained child g(a) failed the equality. All 341 existing core
+tests passed. The earlier extraction property generated plain terms and missed it.
 
-External repair is open in PR #182 at
-`f961332e59eb5a06fa151a7cf3647232b6ebd05b`. GitHub confirms that it is unmerged.
-Its actual diff uses the first term of termsByCost, adds child-cost monotonicity
+The external repair `f961332e59eb5a06fa151a7cf3647232b6ebd05b` is merged in
+PR #182 at `64cfe9fc6fb9df5a3957ba8821fae3e88f1790ea`. This branch integrates
+that main at `865facc70ba6a10b6a875c60d1bb3ceb8c2d2cb3` without conflicts.
+Its implementation uses the first term of termsByCost, adds child-cost monotonicity
 to the extract contract, and documents nontermination when an infinite language
 has no accepted term. It adds this regression and removes an identity property.
-The author reports 341 passing examples and the repaired reproducer output.
-This checkout has not rerun that PR or applied its source. Preserve the original
-native failure and verify the merged source before marking the repair complete.
+The implementation and regression source are byte-identical to upstream.
+The retained native reproducer now returns Just (5,p(h(b),b)), the same first
+termsByCost result, and Right True. Its exact 118-byte result has SHA256
+`4414d3a1236d3e56c4ac279637fb7d8c71fe0d40b3a5fe3cd5188b3d1ad1e943`.
+All 341 core examples pass with seed 20261027. Fourmolu and cabal-gild checks
+pass in Nix. External action: no additional patch for this witness.
 PR: https://github.com/TharkunAB/cfta/pull/182.
-Readback: lean/restart-evidence/20261027-flat-union-find/pr182-readback.json.
+Merged readback and execution: lean/restart-evidence/20261027-flat-enumeration.
+The earlier open-PR readback remains in the preceding flat-union-find evidence.
 
-Preserve this example as a regression. A repair
-must search beyond unconstrained minimum children when constraints reject them.
-Do not substitute termsByCost without reviewing the public cost contract:
-termsByCost requires monotonicity in child costs, while extract currently states
-only strict increase above each child. The reproducer satisfies both conditions.
-No Haskell repair or regression-suite change is applied in this checkpoint.
+Preserve this example as a regression. The original extract contract required
+strict increase above each child. The repaired contract also requires monotonicity
+in child costs. The reproducer satisfies both. The documented nontermination case
+for an infinite rejected language remains. General extraction correctness and
+termination proofs are separate from this verified repair.
 
 Reproducer and complete native receipt:
 `lean/restart-evidence/20261027-recursive-rendering/extract-constrained-repro.hs`
@@ -122,10 +127,17 @@ They relate every finite union history to actual earlier bounded calls with
 the same representative names and stored sizes. The permitted assignments are
 exactly the requested equalities. Literal returned-forest equality is not a
 claim. The existing UnionFind and CPS proofs retain the earlier path backend.
-Transport through the full enumeration state remains open. A focused native
+Transport now covers the six-field enumeration core. Related cores keep all raw
+slots, obligations, the counter and both ancestry fields exact. Representative,
+union, slot access, allocation, assimilation and incoming-node merge preserve
+ordered core outcomes at sufficient stable earlier bounds. Invalid accesses
+remain errors. Full assignment semantics, root tests and canonical tries transfer.
+Native indexes, cache validity, stored-address bounds and whole recursive worker
+transport remain open. A focused native
 comparison matches 88 representative reads and the final class size and members.
 No valid-input native union-find defect or Haskell repair was found.
 Details: lean/notes-current-flat-union-find.md.
+Current core correspondence: lean/notes-current-flat-enumeration.md.
 New EGraph, termsByCost and opt-in Specftacular e-graph pruning add open proof
 scope. They are not covered by the new rendering theorem or unchanged H6.
 

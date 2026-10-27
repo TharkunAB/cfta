@@ -1,0 +1,5 @@
+theorem union_exact (fuel left right : Nat) (state : State Symbol Guard) (after : UnionFind.Forest)
+    (result : UnionFind.union fuel fuel state.representatives left right = some after) :
+    unionVariables fuel left right state = [.ok ((), {state with representatives := after})] := by
+  simp [unionVariables, result, bind, get, getThe, MonadStateOf.get, set, pure,
+    StateT.bind, StateT.get, StateT.set, ExceptT.bind, ExceptT.pure, ExceptT.bindCont, ExceptT.mk]

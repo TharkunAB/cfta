@@ -1,0 +1,54 @@
+
+{- | Nondeterministic enumeration with one state for each branch.
+
+A computation gets the state, a success continuation, and the result of the
+branches after it. The success continuation gets a result, the new state, and
+the result of the branches after it. The branches run depth first, in the
+order of @StateT state []@, but a bind builds no intermediate list.
+-}
+newtype EnumerateM symbol a = EnumerateM
+    { runEnumerateM ::
+        forall r.
+        EnumerationState symbol ->
+        (a -> EnumerationState symbol -> r -> r) ->
+        r ->
+        r
+    }
+
+instance Functor (EnumerateM symbol) where
+    {-# INLINE fmap #-}
+    fmap f (EnumerateM m) = EnumerateM $ \s success later -> m s (success . f) later
+
+instance Applicative (EnumerateM symbol) where
+    {-# INLINE pure #-}
+    pure a = EnumerateM $ \s success later -> success a s later
+    {-# INLINE (<*>) #-}
+    EnumerateM mf <*> EnumerateM ma =
+        EnumerateM $ \s success later -> mf s (\f s' later' -> ma s' (success . f) later') later
+
+instance Monad (EnumerateM symbol) where
+    {-# INLINE (>>=) #-}
+    EnumerateM m >>= k =
+        EnumerateM $ \s success later -> m s (\a s' later' -> runEnumerateM (k a) s' success later') later
+
+instance Alternative (EnumerateM symbol) where
+    {-# INLINE empty #-}
+    empty = EnumerateM $ \_ _ later -> later
+    {-# INLINE (<|>) #-}
+    EnumerateM m <|> EnumerateM n = EnumerateM $ \s success later -> m s success (n s success later)
+
+instance MonadPlus (EnumerateM symbol)
+
+-- | A failed pattern match ends the branch.
+instance MonadFail (EnumerateM symbol) where
+    {-# INLINE fail #-}
+    fail _ = empty
+
+-- | Like @StateT@ from "Control.Monad.State.Strict", 'state' forces the pair that its function gives.
+instance MonadState (EnumerationState symbol) (EnumerateM symbol) where
+    {-# INLINE state #-}
+    state f = EnumerateM $ \s success later -> case f s of (a, s') -> success a s' later
+
+-- | One branch for each element, in order.
+branches :: [a] -> EnumerateM symbol a
+{-# INLINE branches #-}

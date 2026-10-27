@@ -1,0 +1,11 @@
+theorem unionVariables_success (fuel left right : Nat) (before after : State Symbol Guard) :
+    Success (unionVariables fuel left right) before () after ↔
+      ∃ forest, UnionFind.union fuel fuel before.representatives left right = some forest ∧
+        after = {before with representatives := forest} := by
+  cases result : UnionFind.union fuel fuel before.representatives left right with
+  | none =>
+      simp [Success, unionVariables, result, EnumerationState.failure, bind, get, getThe, MonadStateOf.get,
+        pure, StateT.bind, StateT.get, ExceptT.bind, ExceptT.pure, ExceptT.bindCont, ExceptT.mk, ExceptT.run]
+  | some forest =>
+      simp only [Success, union_exact fuel left right before forest result, ExceptT.run]
+      simp

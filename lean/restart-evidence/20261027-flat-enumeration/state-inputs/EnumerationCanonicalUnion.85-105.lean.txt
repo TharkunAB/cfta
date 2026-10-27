@@ -1,0 +1,21 @@
+
+/-- The same actual union prefix realizes the completed cached-count transfer. -/
+theorem terminal_transfer_correct (graph : Graph Symbol Guard) (roots : Nat → Nat)
+    (state : Cached Symbol Guard) (correct : EnumerationPureSelection.Correct graph roots state)
+    (paths : Roots state.core.representatives roots) (fuel : Nat) (first : Suspended) (rest : List Suspended)
+    (united after : State Symbol Guard) (target : Nat) (sources : List Nat)
+    (unions : Success (rest.forM fun sc => unionVariables fuel first.var sc.var) state.core () united)
+    (winner : Success (representative fuel first.var) united target after)
+    (keys : ∀ key, key ∈ sources ↔ key ∈ (first :: rest).map (fun sc => roots sc.var) ∧ key ≠ target) :
+    EnumerationPureSelection.Correct graph (mergedRoots roots ((first :: rest).map (fun sc => roots sc.var)) target)
+      (EnumerationPureSelection.transfer target sources (EnumerationExpandableIndex.frame after state)) ∧
+    Roots after.representatives (mergedRoots roots ((first :: rest).map (fun sc => roots sc.var)) target) := by
+  let selected := rest.foldl (fun selected sc => roots sc.var :: selected) [roots first.var]
+  have joined := terminal_unions state.core.values roots [roots first.var] fuel first.var rest state.core united
+    (merging_initial state.core.values roots state.core first.var ⟨rfl, paths⟩) (by simp) unions
+  obtain ⟨resolved, count, path⟩ := merging_representative state.core.values roots selected fuel first.var target
+    united after joined winner
+  have firstSelected : roots first.var ∈ selected :=
+    (resolve_members roots rest [roots first.var] (roots first.var)).mpr (Or.inl (by simp))
+  have actualRoots := merging_roots state.core.values roots selected after resolved first.var target count firstSelected path
+  have selectedSame (key : Nat) : key ∈ selected ↔ key ∈ (first :: rest).map (fun sc => roots sc.var) := by

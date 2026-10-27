@@ -1,0 +1,24 @@
+    | fuel + 1, scs, node => do
+        match graph.node node with
+        | .empty => reject
+        | view =>
+          let here := scs.filter fun sc => EqualityTrie.isTerminal sc.trie
+          let below := scs.filter fun sc => !EqualityTrie.isTerminal sc.trie
+          match here with
+          | [] =>
+            match view with
+            | .empty => reject
+            | .recursive _ => pure (.hole (← allocate (some node)))
+            | .alternatives edges => enumerateEdge graph fuel scs (← choose edges)
+            | .unresolved _ => failure .unresolvedReference
+          | first :: rest =>
+            let roots ← here.mapM fun sc => representative (fuel + 1) sc.var
+            rest.forM fun sc => unionVariables (fuel + 1) first.var sc.var
+            let root ← representative (fuel + 1) first.var
+            roots.forM (assimilate graph root)
+            mergeNode graph (fuel + 1) root node below
+            pure (.hole root)
+
+  /-- Descend edge constraints and retain its residual guard for the caller. -/
+  def enumerateEdge (graph : Graph Symbol Guard) : Nat → List Suspended → Edge Symbol Guard →
+      EnumerateM Symbol Guard (Fragment Symbol)

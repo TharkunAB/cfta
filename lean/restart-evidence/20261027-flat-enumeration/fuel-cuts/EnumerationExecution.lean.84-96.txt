@@ -1,0 +1,13 @@
+theorem union_moreFuel (leftFuel rightFuel leftExtra rightExtra : Nat) (forest : UnionFind.Forest)
+    (left right : Nat) (after : UnionFind.Forest)
+    (success : UnionFind.union leftFuel rightFuel forest left right = some after) :
+    UnionFind.union (leftFuel + leftExtra) (rightFuel + rightExtra) forest left right = some after := by
+  cases first : UnionFind.findRoot leftFuel forest left with
+  | none => simp [UnionFind.union, first] at success
+  | some result =>
+      have firstMore := UnionFind.findRoot_moreFuel leftFuel leftExtra forest left result first
+      cases second : UnionFind.findRoot rightFuel result.forest right with
+      | none => simp [UnionFind.union, first, second] at success
+      | some other =>
+          have secondMore := UnionFind.findRoot_moreFuel rightFuel rightExtra result.forest right other second
+          simpa [UnionFind.union, first, second, firstMore, secondMore] using success

@@ -1,0 +1,10 @@
+theorem union_refines (valid : Valid flat) (related : Represents flat earlier)
+    (left right : Nat) :
+    Valid (union flat left right) ∧
+      ∃ leftFuel rightFuel output,
+        UnionFind.union leftFuel rightFuel earlier left right = some output ∧
+          Represents (union flat left right) output := by
+  obtain ⟨leftFuel, rightFuel, output, completed⟩ :=
+    UnionFind.union_terminates (represents_total related) left right
+  exact ⟨union_valid valid left right, leftFuel, rightFuel, output, completed,
+    union_represents valid related completed⟩

@@ -1,0 +1,5 @@
+def unionVariables (fuel left right : Nat) : EnumerateM Symbol Guard Unit := do
+  let state ← get
+  match UnionFind.union fuel fuel state.representatives left right with
+  | none => failure .representativeFuel
+  | some forest => set {state with representatives := forest}

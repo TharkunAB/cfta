@@ -1,0 +1,83 @@
+Ordered checked CPS relation across state representations
+
+Source-only plan. No Lean evaluation, build, Git or repository edit was run. The proposed APIs below are not checked declarations. Exact source identities and literal inclusive line hashes are in relational-source-pins.json.
+
+Local relation
+
+The pinned Lean 4.34.1 Init/Std sources contain no declaration named List.Forall₂, Forall2 or ForallTwo. This checkout defines MicroCFTA.Language.All₂ with nil/cons, imp and length_eq (Language.lean 27–43). Reuse it. Archived draft text that names List.Forall₂ is not a current library API. No second ordered-list predicate is needed.
+
+Minimal outcome relation
+
+Use a Prop-valued match, not a new runtime type:
+
+  Outcome (V : A → B → Prop) (R : S → T → Prop)
+      : Except Error (A × S) → Except Error (B × T) → Prop
+  | .ok (a,s), .ok (b,t) => V a b ∧ R s t
+  | .error e, .error f => e = f
+  | _, _ => False
+
+Keep the SAME error type. For ordinary worker outputs specialize V to Eq. The value relation is needed to compose get: its two returned values have different state types S/T, so equality is not well typed. For get take V=R. This parameter can be omitted if the API relates only complete common-value primitives and never relates their heterogeneous get operations separately.
+
+  RelatedRows V R left right :=
+    ∀ s t, R s t → Language.All₂ (Outcome V R) (left s) (right t)
+
+All₂ retains complete order, length, multiplicity and every error position. [] remains rejection; [.error e] remains a model error. No ErrorFree premise or successful-result projection belongs in this main relation.
+
+Minimal laws
+
+Add an All₂ append lemma by induction on the first pairing. An optional All₂ flatMap lemma is one induction with append; direct bindRows induction is equally small.
+
+For bindRows, relate the first result lists by Outcome V R. For every V-related a/b and R-related returned states s/t, require their next lists to be paired by Outcome W R. Induct on the first pairing. An error/error pair has equal errors and emits one equal error row on each side. An ok/ok pair uses the continuation hypothesis. Append each head result list to the paired tail. A constructor mismatch is impossible. No continuation runs for an error.
+
+Choice appends the related left and right lists at the SAME original related states. The left alternative's result state must not feed the right alternative.
+
+Pure returns one paired success using V a b and R s t. Reject uses nil/nil. Failure uses one equal error pair. Branches maps the same ordered input values at unchanged related states and retains duplicates.
+
+For state changes f:S→A×S and g:T→B×T, use exactly:
+
+  ∀s t, R s t → V (f s).1 (g t).1 ∧ R (f s).2 (g t).2
+
+Both lists are singleton successes. Get follows with V=R. Put uses common Unit and related replacement states. Modify requires preservation of R. Require uses the SAME Boolean test and returns pure Unit or reject on both sides. MapM/foldlM follow by induction over the finite input list using the existing ordered CPS definitions.
+
+CPS bind needs finite representation
+
+Do not infer a general CPS bind law from an All₂ relation on allResults alone. allResults fixes its success/error constructors and later=[] (EnumerationCPSChecked 35–36). Bind uses other success continuations and accumulated tails. The raw Computation function type does not state parametricity or tail linearity.
+
+A concrete source-level counterexample is possible with classical equality on Result. At Unit state/value/error, let bad test whether success () () later = later. If true, call failure () later; otherwise call success () () later. Its allResults is the same singleton success as pure (). Binding bad to reject makes its success continuation return later, so bad emits an error; pure () followed by reject yields []. This is an unchecked mathematical example, not a new source definition.
+
+Prove row laws first. Lift them through the existing Represents inputs and allResults_exact. For bind, keep finite representations of BOTH first actions and every continuation action, then apply bind_represents on each side. Choice uses choice_represents. The finite primitive representations already exist. No new bundled computation type or supplied successful-action premise is needed. The Represents condition is about behavior for ALL continuations, not merely the allResults observation.
+
+Concrete state relation
+
+For flat versus old enumeration states, retain FlatUnionFind.Valid on the flat representatives and FlatUnionFind.Represents to the old representatives. Also equate counter, values, obligations, recursionAncestry and expansionAncestry. Represents alone does not validate the flat member lists. Keep every state field. Equality classes alone would not determine the winning representative or size-based choice.
+
+Find_refines and findRoot_represents give actual old completed lookup witnesses with the same returned Nat and exact sizes. The flat forest stays unchanged; the old forest can change by compression or insertion. The returned forests stay related, not equal. union_refines gives actual old left/right bounds and a forest related to the new flat union. Its result is Unit; other state fields remain equal.
+
+rawValue compares equal values lists and preserves invalidSlot exactly. getValue composes representative and rawValue. Slot writes, allocation and ancestry updates must retain every listed field equality. This relation does not itself establish global storage/freshness invariants.
+
+Existing exact common-fuel APIs
+
+UnionFind.findRoot_moreFuel (181–199) preserves the ENTIRE successful Result, including its compressed forest. It needs only an actual successful equation. EnumerationExecution.union_moreFuel (84–99) already preserves the ENTIRE successful union forest under independent bound increases:
+
+  union_moreFuel leftFuel rightFuel leftExtra rightExtra forest left right after success
+
+Do not duplicate this proof. SourceUnionFindCompression.findRoot_eq and union_eq transfer the result to conditional compression. Higher Retains lemmas preserve successful membership; they do not assert equality of every error row.
+
+From an actual union success at leftFuel/rightFuel, let bound=leftFuel+rightFuel. For each extra, pass leftExtra=rightFuel+extra and rightExtra=leftFuel+extra. Nat associativity/commutativity gives:
+
+  UnionFind.union (bound+extra) (bound+extra) forest left right = some after
+
+No Total assumption is needed once success is given. To derive this family from genuine current inputs, call union_refines ONCE with Flat.Valid and Represents. Synchronize its actual returned bounds and retain the SAME output forest and Represents proof. A useful wrapper returns:
+
+  Valid (Flat.union flat left right) ∧
+  ∃ bound after,
+    (∀extra, UnionFind.union (bound+extra) (bound+extra) earlier left right = some after) ∧
+    Represents (Flat.union flat left right) after
+
+For find, call find_refines once and use findRoot_moreFuel on its witness. Two actual successful find observations are equal by lifting both to the sum of their bounds and applying Option.some.inj. The same argument for union uses independent pairwise sums on its two axes. No extra Total assumption is needed for either uniqueness lemma.
+
+Fuel boundary
+
+A total flat primitive cannot match an old representativeFuel error at too little fuel. Claim eventual checked related rows at a genuine per-input common bound, not arbitrary-fuel equality. Genuine invalidSlot and other model errors remain explicit; representative totality does not remove them.
+
+Per-primitive eventual bounds do not automatically supply one global program bound. For a fixed finite composition and fixed related initial states, collect finitely many actual continuation witnesses and combine their bounds with maxima and exact monotonicity. The bound can depend on those original states. A relation quantified over every related state supplies no uniform bound for unbounded parent paths, arbitrary recursive executions or infinite lazy source computations. Successful support or source error projection alone does not establish full ordered checked correspondence.

@@ -1,0 +1,143 @@
+[2026-10-27 03:40 CET] Parallel flat enumeration core review: CLEAR.
+
+All seven final live sources were read in full: 668 lines. Each source equals
+its final retained strict snapshot. The seven reports record exit 0 with
+warningAsError=true and linter.all=true; every final raw log is literally empty.
+This review ran no Lean, builds, Git, network or board actions and edited no
+repository source. Literal source/report/raw identities and reviewed copies are
+in state-review-source-pins.json and state-review-inputs.
+
+EXACT SOURCES
+
+FlatUnionFindStable.lean, 41 lines:
+f41d80a938e1f581ad3948053c88bc93d46489437bbb1e5fa613b413f4fd464f
+EnumerationResultRelation.lean, 106 lines:
+d733967c8ac3c584e1e5294321ff884ab977b04a0428be8a315522676ff44222
+EnumerationFlatState.lean, 119 lines:
+d9d62dca6bb0b9af869ef97ab8c49041f7ef81ef721bb5e560b0c6b346291911
+EnumerationFlatPrimitives.lean, 106 lines:
+0b6e06b42311b243796d175d13d9ebd3ec604736237e2c22223b8ca9ba1319d1
+EnumerationFlatCore.lean, 99 lines:
+c55e83f8ce8c2f626eec739863c9699955c5c5fc77174114b3e60204ada64ce1
+EnumerationFlatAssimilation.lean, 124 lines:
+bae50b4b858bc7b101214c2f1696b4e951c6c1053a3b577cdcadf867178dec53
+EnumerationFlatSemantics.lean, 73 lines:
+5fb09d776d76ed12613c5abee0f6eb239662364dc1c52954f81c72594f097375
+
+Final retained attempts: strict-stable-2, strict-result-relation-3,
+strict-flat-state-3, strict-flat-primitives-3, strict-flat-core-1,
+strict-flat-assimilation-2 and strict-flat-semantics-2. Earlier attempts remain
+separate. The seven passing receipts do not imply that every prior attempt passed.
+
+STATE AND PRIMITIVE CORRESPONDENCE
+
+State has precisely the old six fields. Only representatives changes type.
+UVarValue, RecursionKey, Error, suspended constraints and fragments retain their
+existing types. Related requires current flat Valid and exact old root/size
+Represents, then literal equality of counter, values, obligations and BOTH
+ancestry fields. No class-only or root-renamed value array is substituted.
+Initial state correctly uses singleton variable zero and the same five fields.
+related_forests changes only the two actual forest fields while retaining those
+five equalities. Neither Related nor that update lemma asserts storage safety.
+
+Flat representative returns the SAME flat state because FlatUnionFind.find
+retains its input forest. The actual old counterpart writes the old compressed
+forest. representative_related identifies the exact returned root and retains
+the complete state relation. unionVariables changes only UF. Its old counterpart
+uses the same fuel for both lookups. union_stable takes max of the original two
+bounds and uses the actual old union_moreFuel theorem, so there is no mismatch
+between separate-fuel UF adequacy and one-fuel enumeration calls. The returned
+old forest stays fixed at every larger common bound. Stable core theorems derive
+these old observations from Related; they do not admit a desired future success.
+
+rawValue_related retains both present values and invalidSlot errors. setValue
+writes the SUPPLIED RAW key, not its representative. This is essential for the
+old losing slots during assimilation. getValue composes the actual representative
+and actual root-slot read. Its proof uses the related INTERMEDIATE states, so it
+does not read from a fabricated or stale endpoint. A failed slot read has the same
+explicit error on both sides and no invented returned core.
+
+inheritAncestry applies the same raw-key update and same ordered eraseDups formula.
+allocate returns the same old counter, appends the same pending slot, increments
+counter and inherits the same expansion ancestry. UF remains unchanged. Its
+correspondence does not assert that an arbitrary malformed input counter is a
+genuinely fresh source address or that allocation establishes Safe. Those remain
+separate storage/admission invariants.
+
+ORDERED ROW AND CPS SCOPE
+
+Outcome and Results preserve equal success values, related success states, and
+identical errors at identical list positions. Rejection is empty on both sides;
+errors are not silently removed. bind_rows and stateT_bind use actual explicit
+finite rows and actual intermediate states. The universal continuation condition
+is a relational composition hypothesis, not an execution-success premise.
+
+The CPS corollaries compare encode of the actual flat worker against the EARLIER
+conditional-compression CPS worker. They explicitly use that worker's old exact
+results theorem. They do not rename it as the new Haskell backend or claim that
+arbitrary CPS computations are determined by one observed result list.
+
+RAW ASSIMILATION AND INCOMING ORDER
+
+Flat assimilate is a literal parallel of EnumerationState.assimilate. It first
+checks target=source. Otherwise it reads RAW source, skips eliminated sources,
+then reads RAW target. This retains source duplicate-constraint behavior and does
+not replace former roots by roots reread after union. It computes the same pure
+source/target intersection, checks Empty BEFORE both slot writes, writes merged
+target, eliminates raw source and then appends source/target ancestry at target.
+The proof composes the actual row at each point and carries all exact state fields.
+Invalid/intersecting-enumerated cases remain explicit old-model errors.
+
+Haskell assimilateUvarVal at Enumeration.hs:489-508 has the same core order. Its
+let-bound target lookup is lazy, so the eliminated-source case does not force
+that target read. Its slot writes also maintain indexes; this six-field theorem
+correctly does not claim those additional effects.
+
+Flat mergeNode instead resolves its actual target, reads that slot, writes the
+incoming/old intersection, inherits ancestry, THEN checks Empty. This agrees
+with EnumerationState.mergeNode and the source at Enumeration.hs:512-525.
+The pre-write assimilation guard and post-write incoming guard are not confused.
+Rejection yields no accepted core row, and the theorem does not equate their
+logical writes or any external native effects.
+
+Both definitions intentionally use the OLD Graph intersectValues/hasEmptyContents
+interfaces. The same graph is supplied to both sides. No theorem equates Graph
+intersection with actual native allocation/query execution or performs a second
+native operation. The module header explicitly leaves native intersection and
+index effects as separate interfaces.
+
+SEMANTICS AND PRECISE LIMITS
+
+The new Satisfies definition contains forest equalities, every original slot
+restriction and every retained residual. related_satisfies gives full iff at the
+SAME supplied NodeLanguage and residual meaning; it does not construct an
+assignment or infer acceptance of a final native term. It also does not identify
+languages at different native heaps.
+
+related_isRoot uses actual old path uniqueness for the exact new root test.
+related_supplyAligned is a field-equality iff, not an automatic supply invariant.
+related_canonical transports exactly the existing stored-trie Canonical predicate
+through values equality. It does not claim readiness or progress. union_satisfies
+adds precisely assignment left=assignment right while retaining every slot and
+guard restriction; it does not assume that the resulting constraints are satisfiable.
+
+The headers correctly restrict the checkpoint to the core projection. Actual
+Haskell state also has expandable and waiting indexes, edgesOf and constrained-
+recursion configuration. Native caller/full memos/heap effects are outside these
+six fields. No result here supplies those index/config/native transports.
+
+Related alone cannot transfer ForestBound/Safe: arbitrary valid flat maps can
+materialize singleton root entries outside counter while the related old map is
+empty. Union can also temporarily break LiveRoots until old losing slots are
+eliminated. No such bound/Safe claim appears in these statements. The semantics
+header explicitly disclaims stored-address bounds. Raw List.set, finite errors,
+Nat identifiers, list/functional-map representation and pure Graph interfaces
+also remain abstractions of the source's partial IntMap/Int/Seq/HashSet/native
+operations. The initial source-domain assumptions are not silently discharged.
+
+The checkpoint therefore proves stable primitive and assimilation/incoming CORE
+refinement plus exact assignment transport. It does not switch the whole native
+enumerator, prove cached-index refinement, full recursive completion/rendering,
+containers extraction, source capacity or a stronger H6 result. No substantive
+mathematical defect, source-order error, hidden future-success admission or
+statement overclaim was found in the exact reviewed sources.

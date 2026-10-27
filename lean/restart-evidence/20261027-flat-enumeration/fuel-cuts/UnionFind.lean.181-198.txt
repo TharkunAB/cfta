@@ -1,0 +1,18 @@
+theorem findRoot_moreFuel (fuel extra : Nat) (forest : Forest) (uv : Nat) (found : Result)
+    (result : findRoot fuel forest uv = some found) :
+    findRoot (fuel + extra) forest uv = some found := by
+  induction fuel generalizing forest uv found with
+  | zero => simp [findRoot] at result
+  | succ fuel ih =>
+    rw [Nat.succ_add]
+    cases lookup : forest uv with
+    | none => simpa [findRoot, lookup] using result
+    | some entry =>
+      cases entry with
+      | root size => simpa [findRoot, lookup] using result
+      | parent next =>
+        cases recursive : findRoot fuel forest next with
+        | none => simp [findRoot, lookup, recursive] at result
+        | some earlier =>
+          have extended := ih forest next earlier recursive
+          simpa [findRoot, lookup, extended, recursive] using result

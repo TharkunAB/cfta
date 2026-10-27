@@ -1,5 +1,38 @@
 # Proof status at 2026-10-18
 
+## Flat union-find now preserves complete enumeration core outcomes
+
+Main `64cfe9fc6` is integrated at `865facc70`. The constrained extraction repair
+from PR #182 is merged and locally verified. Its source and regression equal
+upstream. The retained reproducer now returns the accepted cost-5 term.
+All 341 core tests, changed Haskell Fourmolu and cfta Cabal-gild checks pass in Nix.
+FINDINGS retains the baseline failure, stronger cost contract and repair evidence.
+
+Stable bounds and ordered results: `b474c9f6a`.
+Flat core, access and allocation: `3b491a34e`.
+Assimilation and full assignment transport: `ae964e335`.
+The full goal stays ACTIVE. H6 remains the strongest global language theorem.
+The previous captured native rendering theorem remains unchanged too.
+
+The new six-field core changes only the union-find representation. Related cores
+retain exact counters, raw slots, obligations and both ancestry fields. Actual
+representative reads and unions agree at a derived stable sufficient old bound.
+Slot access, allocation, ancestry, assimilation and incoming-node merging retain
+ordered successes, rejections and explicit errors. Raw source slots stay raw.
+Full assignments include all forest equalities, stored restrictions and residuals;
+related cores permit exactly the same assignments. No assignment existence follows.
+
+All seven modules and Audit pass strict Lean checks. Aggregate Audit passes
+3989 jobs and 78183 theorem dependency checks. Installed readback covers 34 new
+public theorems, unchanged H6 and captured rendering, and 19 full definitions.
+Old proof sources change only by seven Audit imports. Keep every prior draft.
+
+Next carry the relation through native indexes, cached state, Caller and queries.
+Related alone does not imply Safe, stored-address bounds or canonical indexes.
+Whole recursive output soundness, discharge/rendering existence, selector coverage,
+forward completeness, concrete containers and machine integers remain open.
+Details: `lean/notes-current-flat-enumeration.md`.
+
 ## Direct-parent union-find now preserves exact representatives and sizes
 
 Main remains `c168a952d`. The new backend proofs are `9dfc776e8` and `75c3a7961`.

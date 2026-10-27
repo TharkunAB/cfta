@@ -1,0 +1,9 @@
+/-- Actual union has one sufficient bound for both representative lookups. -/
+theorem unionVariables_terminates (before : State Symbol Guard) (total : UnionFind.Total before.representatives)
+    (left right : Nat) :
+    ∃ fuel after, Success (unionVariables fuel left right) before () after ∧ UnionFind.Total after.representatives := by
+  obtain ⟨leftFuel, rightFuel, forest, lookup⟩ := UnionFind.union_terminates total left right
+  have extended : UnionFind.union (leftFuel + rightFuel) (leftFuel + rightFuel) before.representatives left right = some forest := by
+    simpa [Nat.add_comm] using union_moreFuel leftFuel rightFuel rightFuel leftFuel before.representatives left right forest lookup
+  exact ⟨leftFuel + rightFuel, {before with representatives := forest},
+    (unionVariables_success _ _ _ _ _).mpr ⟨forest, extended, rfl⟩, (UnionFind.union_correct total extended).1⟩
