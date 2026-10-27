@@ -1,0 +1,87 @@
+import MicroCFTA.SourcePruningEnumerationRecursiveCallbackLanguage
+import MicroCFTA.SourcePruningEnumerationNativeLanguage
+import MicroCFTA.SourcePruningEnumerationNativeProgress
+
+/-!
+# Scheduler progress after the actual fragment callback
+
+The original callback supplies its actual returned frame and metadata.
+The complete original callback packet and assignment meaning remain.
+An original proper finite model excludes a stuck restart at that frame.
+Native preservation of ProperState through preparation remains separate.
+-/
+namespace MicroCFTA.SourcePruningEnumerationRecursive
+open EnumerationState EnumerationCorrectness EnumerationDriver EnumerationOrder EnumerationCompressionFrame
+open SourceCurrentAllocatedNativeInventoryState (Inventory)
+open SourcePruningRecordTypes SourcePruningPartialMatch
+local notation "Symbol" => SourcePruningTemplates.Symbol
+local notation "Constraint" => SourceSymbolicIndex.Constraint FullSyntax.Formula
+local notation "Fragment" => Fragments.Fragment Symbol
+local notation "Caller" => SourceCurrentAllocatedPartialState.State
+local notation "Queries" => SourceEndpointMemo.Memos
+local notation "Memos" => EndpointMemoGateTrace.Memos
+local notation "Cached" => EnumerationExpandableIndex.Cached Symbol Constraint
+variable {Typing : Type} {width : Nat}
+variable [DecidableEq (InternedConstructorTemplates.EdgeKey Symbol Constraint)]
+variable (formulas : SourceGuards.Formulas FullSyntax.Formula)
+variable (solver : SourceGuards.Entailment FullSyntax.Formula) (inventory : Inventory)
+variable (graph : Graph Symbol Constraint) (templates : List (Template.Pattern Symbol))
+variable (metadata : Metadata Typing) (uv : Nat) (fragment : Fragment)
+variable (caller : Caller width) (memos : Memos) (before : Cached)
+local notation "Result" => SourcePruningEnumerationNativeContinuations.HookResult
+  (Output width Typing) (Failure width Typing) width
+
+/-- Keep the entire callback packet and exclude stuck restart for each original proper model. -/
+theorem callback_complete_progress (packet : Packet formulas solver inventory caller memos metadata before)
+    (allocated : FragmentBound before.core.counter fragment) :
+    ∃ fuel result after,
+      (Packet formulas solver inventory caller memos result.2 (EnumerationExpandableIndex.frame after before) ∧
+      RenderStable before.core after ∧ Frame before.core after ∧
+      result.2.types = updatedTypes metadata uv (.inl fragment) ∧
+      result.2.openHoles = metadata.openHoles ∧ result.2.typing = metadata.typing ∧
+      (∀ extra,
+        Success (recordTypes graph templates (fuel + extra) metadata uv (.inl fragment)) before.core result after ∧
+        ExceptT.run (recordTypes graph templates (fuel + extra) metadata uv (.inl fragment) before.core) =
+          [.ok (result, after)] ∧
+        ∀ (recur : Metadata Typing → Caller width → Queries → Cached → Option Next → Result) stop order,
+          continueWith recur graph templates stop order (fuel + extra) metadata uv fragment caller memos.query before =
+            if result.1 then .complete [] caller memos.query
+            else recur result.2 caller memos.query (EnumerationExpandableIndex.frame after before)
+              (SourcePruningEnumerationRestart.decision stop order result.2
+                (EnumerationExpandableIndex.frame after before))) ∧
+      ∀ (ambient : InternedGuardedLanguage.Env Symbol)
+        (residualMeaning : Constraint → Language.Term Symbol → Prop)
+        (assignment : Nat → Language.Term Symbol),
+        Satisfies
+          (SourcePruningEnumerationNativeLanguage.handles (SourceEqualityPCSGuard.holds formulas solver)
+            ambient caller.checked.native.machine.heap) residualMeaning assignment
+          (EnumerationExpandableIndex.frame after before).core ↔
+        Satisfies
+          (SourcePruningEnumerationNativeLanguage.handles (SourceEqualityPCSGuard.holds formulas solver)
+            ambient caller.checked.native.machine.heap) residualMeaning assignment before.core) ∧
+      ∀ (stop : Option (Metadata Typing → Nat → Bool))
+        (order : Metadata Typing → List Nat → Option Nat),
+        EnumerationProgress.ProperState before.core →
+        ∀ (ambient : InternedGuardedLanguage.Env Symbol)
+          (residualMeaning : Constraint → Language.Term Symbol → Prop)
+          (assignment : Nat → Language.Term Symbol),
+          Satisfies
+            (SourcePruningEnumerationNativeLanguage.handles (SourceEqualityPCSGuard.holds formulas solver)
+              ambient caller.checked.native.machine.heap) residualMeaning assignment before.core →
+          SourcePruningEnumerationRestart.decision stop order result.2
+            (EnumerationExpandableIndex.frame after before) ≠ some .stuck := by
+  obtain ⟨fuel, result, after, returned, stable, framed, types, holes, typing, running, meaning⟩ :=
+    callback_complete_semantics formulas solver inventory graph templates metadata uv fragment caller memos before
+      packet allocated
+  refine ⟨fuel, result, after, ⟨returned, stable, framed, types, holes, typing, running, meaning⟩, ?_⟩
+  intro stop order proper ambient residualMeaning assignment satisfied
+  have afterProper : EnumerationProgress.ProperState (EnumerationExpandableIndex.frame after before).core := by
+    change EnumerationProgress.ProperState after
+    simpa only [EnumerationProgress.ProperState, framed.values] using proper
+  have afterSatisfied := (meaning ambient residualMeaning assignment).mpr satisfied
+  -- Apply the actual native scheduler progress theorem at the returned packet.
+  exact SourcePruningEnumerationRestart.not_stuck_of_proper
+    formulas solver stop order result.2 caller (EnumerationExpandableIndex.frame after before)
+    returned.valid returned.safe afterProper ambient residualMeaning assignment afterSatisfied
+
+end MicroCFTA.SourcePruningEnumerationRecursive

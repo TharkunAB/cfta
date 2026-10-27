@@ -1,0 +1,30 @@
+--- NativeProgress-v2
++++ NativeProgress-installed-v3
+@@ -48,21 +48,21 @@
+   have noOffered : EnumerationPureSelection.find before = some [] := by
+     unfold EnumerationPureSelection.next at picked
+     cases found : EnumerationPureSelection.find before with
+-    | none => simp only [found, pickNext] at picked
++    | none => simp only [found, pickNext] at picked; cases picked
+     | some offered =>
+         cases offered with
+-        | nil => exact found
++        | nil => rfl
+         | cons first rest =>
+             cases preferred : order metadata (first :: rest) with
+-            | none => simp only [found, pickNext, preferred] at picked
++            | none => simp only [found, pickNext, preferred] at picked; cases picked
+             | some uv =>
+                 by_cases member : uv ∈ first :: rest <;>
+-                  simp only [found, pickNext, preferred, member, ↓reduceIte] at picked
++                  (simp only [found, pickNext, preferred, member, ↓reduceIte] at picked; cases picked)
+   let candidates := EnumerationIndexSelection.candidates before
+   have nonempty : candidates ≠ [] := by
+     intro empty
+-    simp only [EnumerationPureSelection.find, ← show EnumerationIndexSelection.candidates before = candidates from rfl,
+-      empty, List.isEmpty_nil, ↓reduceIte] at noOffered
++    change EnumerationIndexSelection.candidates before = [] at empty
++    simp [EnumerationPureSelection.find, empty] at noOffered
+   have filtered : candidates.filter (fun uv => (before.waiting uv).isNone) = [] := by
+     simpa [EnumerationPureSelection.find, candidates, nonempty] using noOffered
+   obtain ⟨roots, paths, _storage, realized, counts, flags⟩ := valid

@@ -1,0 +1,9 @@
+  /-- Enumerate every represented path. -/
+  def fromPathTrie : Trie → List Path
+    | .empty => []
+    | .terminal => [[]]
+    | .branch children => fromChildren children
+  /-- Prefix each child path by its child index. -/
+  def fromChildren : List (Nat × Trie) → List Path
+    | [] => []
+    | (index, child) :: rest => (fromPathTrie child).map (index :: ·) ++ fromChildren rest

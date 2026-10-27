@@ -1,0 +1,18 @@
+/-- A finite nonempty set cannot consist only of strict subtree dependencies.
+The scheduler's stuck case needs its reachable-slot invariants to establish these dependencies. -/
+theorem strict_dependency_stuck_impossible (variables : List Nat) (nonempty : variables ≠ [])
+    (assignment : Nat → Term Symbol)
+    (blocked : ∀ target ∈ variables, ∃ source ∈ variables,
+      ∃ path, path ≠ [] ∧ (assignment source).atPath path = some (assignment target)) : False := by
+  obtain ⟨largest, member, maximal⟩ :=
+    finite_height_maximum variables (fun uv => (assignment uv).height) nonempty
+  obtain ⟨source, sourceMember, path, proper, reaches⟩ := blocked largest member
+  have bound := atPath_height_bound _ _ path reaches
+  have largestHeight := maximal source sourceMember
+  have positive : 0 < path.length := by
+    have nonzero : path.length ≠ 0 := fun zero => proper (List.length_eq_zero_iff.mp zero)
+    omega
+  omega
+
+/-- The concrete state update performed by allocation. -/
+def allocated (node : Option Nat) (state : State Symbol Guard) : State Symbol Guard :=

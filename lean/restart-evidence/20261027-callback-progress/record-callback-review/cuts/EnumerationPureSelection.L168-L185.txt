@@ -1,0 +1,18 @@
+  else some (candidates.filter fun uv => (state.waiting uv).isNone)
+
+/-- Apply the source preference rule to the pure candidate-minus-waiting result. -/
+def next (preference : List Nat → Option Nat) (state : Cached Symbol Guard) : Next :=
+  pickNext preference (find state)
+
+/-- Execute the pure lookup through the existing source CPS state operation. -/
+def findAction : EnumerationCPS.Computation (Cached Symbol Guard) (Option (List Nat)) :=
+  EnumerationCPS.state fun state => (find state, state)
+
+/-- Pure cached lookup returns one result with the complete input state unchanged. -/
+theorem findAction_represents : EnumerationCPS.Represents
+    (findAction : EnumerationCPS.Computation (Cached Symbol Guard) (Option (List Nat)))
+    (fun state => [(find state, state)]) :=
+  EnumerationCPS.state_represents (fun state => (find state, state))
+
+/-- Canonical cached selection equals the full slot scan's mathematical summary. -/
+theorem find_exact (graph : Graph Symbol Guard) (roots : Nat → Nat) (state : Cached Symbol Guard)

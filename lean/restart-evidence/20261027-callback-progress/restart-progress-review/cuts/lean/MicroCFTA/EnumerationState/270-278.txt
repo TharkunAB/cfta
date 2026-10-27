@@ -1,0 +1,9 @@
+def pickNext (preference : List Nat → Option Nat) : Option (List Nat) → Next
+  | none => .done
+  | some [] => .stuck
+  | some (first :: rest) =>
+      match preference (first :: rest) with
+      | some preferred => if preferred ∈ first :: rest then .expand preferred else .expand first
+      | none => .expand first
+
+/-- Expand one selected UVar and store its fragment. -/

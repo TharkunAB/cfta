@@ -1,0 +1,15 @@
+theorem not_stuck_of_proper
+    (formulas : SourceGuards.Formulas FullSyntax.Formula)
+    (solver : SourceGuards.Entailment FullSyntax.Formula)
+    (stop : Option (Metadata Typing → Nat → Bool))
+    (order : Metadata Typing → List Nat → Option Nat) (metadata : Metadata Typing)
+    (caller : Caller width) (before : Cached)
+    (valid : SourcePruningEnumerationNativeBranchCompletion.CacheValid caller before)
+    (safe : Safe before.core) (proper : ProperState before.core)
+    (ambient : InternedGuardedLanguage.Env Symbol)
+    (residualMeaning : Constraint → Term Symbol → Prop) (assignment : Nat → Term Symbol)
+    (satisfied : Satisfies
+      (SourcePruningEnumerationNativeLanguage.handles (SourceEqualityPCSGuard.holds formulas solver)
+        ambient caller.checked.native.machine.heap)
+      residualMeaning assignment before.core) :
+    decision stop order metadata before ≠ some .stuck := by

@@ -1,0 +1,7 @@
+/-- The increasing finite view of the cached expandable set uses the allocated slot domain. -/
+def candidates (state : Cached Symbol Guard) : List Nat :=
+  (List.range state.core.counter).filter state.expandable
+
+/-- The finite map's key enumeration contains exactly its stored entries. -/
+def WaitingKeys (state : Cached Symbol Guard) (keys : List Nat) : Prop :=
+  ∀ uv, uv ∈ keys ↔ state.waiting uv ≠ none

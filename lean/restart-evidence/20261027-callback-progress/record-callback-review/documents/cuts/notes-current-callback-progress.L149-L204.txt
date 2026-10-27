@@ -1,0 +1,56 @@
+## Checks, attempts and preservation
+
+The two modules have 204 lines and 12256 bytes. They add two
+public theorems and no definition, structure or predicate. Both installed
+sources and standalone Audit pass -DwarningAsError=true and -Dlinter.all=true.
+Successful source logs are empty. Audit has its expected 56-byte dependency
+count. The native dependency build passes 1360 jobs. Full Audit passes 4254
+jobs and checks 80108 theorem dependencies. Lake replays the unchanged
+unused-input warning from InternedFreshOrdinaryClosedCompletion. No warning
+is suppressed. Every compiler/build/public command runs serially under
+measured 4 GiB memory.max/high and zero swap.
+
+Seven actual compiler/build/public commands are retained. One fails:
+native-progress-strict-1. Native v1 is UNTESTED. V2 generalizes only the
+residual interpretation and fails strict1 in the local noOffered proof:
+constructor contradictions need explicit elimination, its nil case is already
+rewritten, and a local candidates definition needs an explicit change.
+Root v3 repairs those proof steps and passes strict2. Its public statement
+is byte identical to v2. Callback root v1 is an explicitly INCOMPLETE,
+UNTESTED draft. V2 imports the actual semantic producer, uses the finalized
+native lemma interface and updates its module description. It passes its
+first strict check. All drafts and the entire 8499-byte failed log remain.
+
+Public readback has 182 full signature/axiom blocks, 792434 bytes,
+SHA256 9924b4a0f3e1de671942a7402f27187ff080cfaf2cd3380a6ff4c0292a769c7e.
+All 180 prior blocks form the exact 783343-byte prefix. The two new blocks
+have 9091 bytes and 119 lines. Only propext, Classical.choice and Quot.sound
+occur. No sorry, admit tactic, custom axiom, native_decide, heartbeat increase
+or linter suppression is used. The public-validation helper first fails
+because its literal name boundary misses the existing universe suffix on
+complete_prefix_invocation. The corrected helper accepts that suffix and
+verifies both complete outputs. No compiler rerun was needed for this repair.
+
+All 100 prior strong modules, 447 prior enumeration sources, 4251 old
+non-Audit Lean sources and 203 Haskell sources retain their bytes. Removing
+only the two new imports recovers the entire old Audit source. Removing each
+new document insertion recovers all nine entire previous restart documents.
+All previous frozen evidence remains unchanged.
+
+## Haskell handoff and portable evidence
+
+No Haskell source or Cabal file changed. No native test or benchmark ran.
+Main contains the LPO and extraction documentation fixes. Candidate
+KBO d7b6a9dfff464eb32c17c314d4825d5b027f1b2d remains unintegrated, unbuilt and
+unexecuted. Its positive-Int context-reversal finding remains open. FINDINGS
+retains all earlier external repair instructions and records the current
+source-level template/pending semantics gaps without claiming a new runtime
+repair or physical defect.
+
+Portable evidence: restart-evidence/20261027-callback-progress/.
+The manifest records stored bytes. decoded-files.json records original bytes
+for deterministic gzip payloads. Run verify-evidence.py on the snapshot.
+Use --committed after the evidence commit to compare every payload with Git.
+Preserve all drafts, failures, public output, exact old-contract comparison,
+source copies/cuts, final reviews and all nine entire old document bodies.
+Keep publication receipts outside frozen TEMP and archive.

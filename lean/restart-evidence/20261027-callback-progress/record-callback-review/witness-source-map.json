@@ -1,0 +1,436 @@
+{
+  "measured_at": "2026-10-27T22:42:27.399886+01:00",
+  "status": "OPEN; evidence map only; no proof/runtime evaluation/physical defect claim",
+  "span_convention": "1-based inclusive; retained cuts preserve source LF; source_sha256 names whole live source",
+  "designs": [
+    {
+      "id": "D-terminal-self-scheduler",
+      "status": "SOURCE-LEVEL DESIGN ONLY; UNEXECUTED; UNFORMALIZED; no complete native Packet/Context/CacheValid countermodel was constructed.",
+      "design": "One allocated root0 pending slot has a valid native handle and bucket [terminal@0]. Choose an accepting native term for assignment0, identity representatives, native candidate flag true, and exact one-reference waiting count. Terminal validity and self-equality do not imply ProperTrie. With stop=None the pure scheduler finds some[] and returns some.stuck. This is a component-level design, not a proved full Packet countermodel.",
+      "unbuilt_obligations": [
+        "No concrete complete native Context/Packet/CacheValid/Ready witnesses are supplied.",
+        "No startup reachability or actual mutation origin is proved.",
+        "No physical Haskell execution or defect is claimed."
+      ],
+      "sources": [
+        {
+          "source": "/home/tritlo/Code/mcfta/lean/MicroCFTA/EqualityTrie.lean",
+          "source_sha256": "0cf7d0b98a7bbc24382fde259b3f9b71462c752c347ad6e7788b9e95b41e10d5",
+          "first_line": 25,
+          "last_line": 28,
+          "reason": "terminal denotes exactly [[]]",
+          "retained_cut": "cuts/EqualityTrie.L16-L61.txt",
+          "retained_cut_first_line": 16,
+          "retained_cut_last_line": 61,
+          "retained_cut_sha256": "3dfdb034de7905ef98c137d5a9ab9a89433428c75a53e51697a54ce9b6dd7d04"
+        },
+        {
+          "source": "/home/tritlo/Code/mcfta/lean/MicroCFTA/EqualityTrie.lean",
+          "source_sha256": "0cf7d0b98a7bbc24382fde259b3f9b71462c752c347ad6e7788b9e95b41e10d5",
+          "first_line": 47,
+          "last_line": 61,
+          "reason": "terminal is valid and terminal, not empty",
+          "retained_cut": "cuts/EqualityTrie.L16-L61.txt",
+          "retained_cut_first_line": 16,
+          "retained_cut_last_line": 61,
+          "retained_cut_sha256": "3dfdb034de7905ef98c137d5a9ab9a89433428c75a53e51697a54ce9b6dd7d04"
+        },
+        {
+          "source": "/home/tritlo/Code/mcfta/lean/MicroCFTA/EnumerationState.lean",
+          "source_sha256": "83a898b883ec7b52469bccd87e8afa4f7abb320e3c935bf48f3d80ad77003cc4",
+          "first_line": 453,
+          "last_line": 456,
+          "reason": "terminal Holds is complete-term equality",
+          "retained_cut": "cuts/EnumerationState.L453-L456.txt",
+          "retained_cut_first_line": 453,
+          "retained_cut_last_line": 456,
+          "retained_cut_sha256": "4054de713c3d59c582b9400d4f751f6d79e298f66fea07234eb26308e910754a"
+        },
+        {
+          "source": "/home/tritlo/Code/mcfta/lean/MicroCFTA/EnumerationValidity.lean",
+          "source_sha256": "a1839fd2c73369241dae93b3e799f15d9ce5dbd6246d502681f723992958649d",
+          "first_line": 17,
+          "last_line": 19,
+          "reason": "Canonical restricts trie validity",
+          "retained_cut": "cuts/EnumerationValidity.L17-L23.txt",
+          "retained_cut_first_line": 17,
+          "retained_cut_last_line": 23,
+          "retained_cut_sha256": "2ab9f77a6a004b36629557c41c4ddc96e6583ff4947ba3162bf0c8fb4c9d5458"
+        },
+        {
+          "source": "/home/tritlo/Code/mcfta/lean/MicroCFTA/EnumerationOrder.lean",
+          "source_sha256": "ba321f3490d5e0884bcdd538efd4ee4e600de765185137b49f3e7f538b39754b",
+          "first_line": 18,
+          "last_line": 22,
+          "reason": "Stratified imposes common pending frontier, not proper paths",
+          "retained_cut": "cuts/EnumerationOrder.L17-L25.txt",
+          "retained_cut_first_line": 17,
+          "retained_cut_last_line": 25,
+          "retained_cut_sha256": "6d0bacd93ff1b566ff7119aba306f5e8d59f50657b14d442d9b21b753d70b0d0"
+        },
+        {
+          "source": "/home/tritlo/Code/mcfta/lean/MicroCFTA/EnumerationProgress.lean",
+          "source_sha256": "da04e7ff636b47ba6649323343109a8b3cb4998e66627e86b43719a16cbfc553",
+          "first_line": 17,
+          "last_line": 28,
+          "reason": "ProperTrie additionally excludes empty and terminal tries",
+          "retained_cut": "cuts/EnumerationProgress.L17-L35.txt",
+          "retained_cut_first_line": 17,
+          "retained_cut_last_line": 35,
+          "retained_cut_sha256": "2982217af5d4ed2c87c97e8980360aae6bf9276a9299c71f8315887e979d7506"
+        },
+        {
+          "source": "/home/tritlo/Code/mcfta/lean/MicroCFTA/SourcePruningEnumerationNativeIndex.lean",
+          "source_sha256": "13c8b37a63e950f4b26d2e9c927cc3108b50b3024b96b3be70a8a539f6f7f160",
+          "first_line": 17,
+          "last_line": 27,
+          "reason": "nonempty bucket gives native candidate at valid lookup",
+          "retained_cut": "cuts/SourcePruningEnumerationNativeIndex.L16-L30.txt",
+          "retained_cut_first_line": 16,
+          "retained_cut_last_line": 30,
+          "retained_cut_sha256": "9e1b54ca1e37117cb1cf393bf4c5e06432e244556178046b6ad1687a08e06183"
+        },
+        {
+          "source": "/home/tritlo/Code/mcfta/lean/MicroCFTA/EnumerationCanonicalWaiting.lean",
+          "source_sha256": "a941b9b49e87115f26ecba015bc23e15a3d873410ac943ded77ff5f8963057bd",
+          "first_line": 17,
+          "last_line": 37,
+          "reason": "reference keys map to representatives before exact waiting count",
+          "retained_cut": "cuts/EnumerationCanonicalWaiting.L16-L37.txt",
+          "retained_cut_first_line": 16,
+          "retained_cut_last_line": 37,
+          "retained_cut_sha256": "999b4c1afba8c3737f265cd3a4dd97e3c4a21960a69d96fb89e1884fa61e6ea9"
+        },
+        {
+          "source": "/home/tritlo/Code/mcfta/lean/MicroCFTA/EnumerationWaitingIndex.lean",
+          "source_sha256": "3dd9d39df6a289d3b9689280f0dbb786ea4609b8132016d1e4178d2ea9c0d8e5",
+          "first_line": 20,
+          "last_line": 25,
+          "reason": "one self reference has positive encoded count",
+          "retained_cut": "cuts/EnumerationWaitingIndex.L13-L25.txt",
+          "retained_cut_first_line": 13,
+          "retained_cut_last_line": 25,
+          "retained_cut_sha256": "ebcb888ced7b54a63e2d30d870ea9af7a7155ee03d8b8d27872d7428829706aa"
+        },
+        {
+          "source": "/home/tritlo/Code/mcfta/lean/MicroCFTA/EnumerationWaitingIndex.lean",
+          "source_sha256": "3dd9d39df6a289d3b9689280f0dbb786ea4609b8132016d1e4178d2ea9c0d8e5",
+          "first_line": 34,
+          "last_line": 56,
+          "reason": "Correct requires exact stored-slot occurrence count",
+          "retained_cut": "cuts/EnumerationWaitingIndex.L34-L56.txt",
+          "retained_cut_first_line": 34,
+          "retained_cut_last_line": 56,
+          "retained_cut_sha256": "b3193de2cb320a8747e1b23dfcfc756a91edcb38d226d8597931aefd40430dce"
+        },
+        {
+          "source": "/home/tritlo/Code/mcfta/lean/MicroCFTA/EnumerationIndexSelection.lean",
+          "source_sha256": "ae067c7531435870f7c4fb84f13c93feced5c8f81cdd11fc621939fd77e9fcdc",
+          "first_line": 37,
+          "last_line": 39,
+          "reason": "finite allocated domain gives candidates",
+          "retained_cut": "cuts/EnumerationIndexSelection.L37-L43.txt",
+          "retained_cut_first_line": 37,
+          "retained_cut_last_line": 43,
+          "retained_cut_sha256": "e0a769ff90a58cf66d3b8b6909712cebc254d36b09ed146ceb1775a9862af42f"
+        },
+        {
+          "source": "/home/tritlo/Code/mcfta/lean/MicroCFTA/EnumerationPureSelection.lean",
+          "source_sha256": "32c3840fbade865c3e9342f6b7dddcc44fbfef0db0185b4950aedce3912e6729",
+          "first_line": 164,
+          "last_line": 172,
+          "reason": "candidate-minus-waiting filter",
+          "retained_cut": "cuts/EnumerationPureSelection.L164-L172.txt",
+          "retained_cut_first_line": 164,
+          "retained_cut_last_line": 172,
+          "retained_cut_sha256": "1f890d0341cb9616338ecc3dff8a6ee5d900ba72ad3c7fbf5c830ecb011295d4"
+        },
+        {
+          "source": "/home/tritlo/Code/mcfta/lean/MicroCFTA/EnumerationState.lean",
+          "source_sha256": "83a898b883ec7b52469bccd87e8afa4f7abb320e3c935bf48f3d80ad77003cc4",
+          "first_line": 270,
+          "last_line": 276,
+          "reason": "some[] becomes stuck",
+          "retained_cut": "cuts/EnumerationState.L264-L276.txt",
+          "retained_cut_first_line": 264,
+          "retained_cut_last_line": 276,
+          "retained_cut_sha256": "17d9b747740888083f123a340733f66ceb2c6e1abc237f509b99a017179ccc85"
+        },
+        {
+          "source": "/home/tritlo/Code/mcfta/lean/MicroCFTA/SourcePruningEnumerationRestart.lean",
+          "source_sha256": "eb236a511d3ccd26acfdc52558803eb8f53d287ddca9a444a6e31823d87c9526",
+          "first_line": 13,
+          "last_line": 21,
+          "reason": "stop=None retains pure stuck result",
+          "retained_cut": "cuts/SourcePruningEnumerationRestart.L12-L45.txt",
+          "retained_cut_first_line": 12,
+          "retained_cut_last_line": 45,
+          "retained_cut_sha256": "2662197eb8ec0169056cacbdb683d367c3b6206f8f70d9d20d70a2d26069f8ab"
+        },
+        {
+          "source": "/home/tritlo/Code/mcfta/lean/MicroCFTA/SourcePruningEnumerationRecursivePacket.lean",
+          "source_sha256": "a4b24cb62806bda0f1b9a5f02b95650637b9e8e3c274f2f508438927915ad837",
+          "first_line": 21,
+          "last_line": 35,
+          "reason": "Packet does not contain ProperState",
+          "retained_cut": "cuts/SourcePruningEnumerationRecursivePacket.L20-L35.txt",
+          "retained_cut_first_line": 20,
+          "retained_cut_last_line": 35,
+          "retained_cut_sha256": "ac8fdafc43aa87110e1ddc65d94193269da65bb723626bd2ad3f95077814981b"
+        }
+      ]
+    },
+    {
+      "id": "A-empty-raw-pending-group",
+      "status": "SOURCE-LEVEL DESIGN ONLY; UNEXECUTED; UNFORMALIZED; no complete native Packet/Context/CacheValid countermodel was constructed.",
+      "design": "templates=[hole], metadata.pending=[[]], positive render fuel, concrete nonprogram leaf. The empty group has vacuous ID bounds, resumes to some[], and finishChecks returns true. A full native Packet is not constructed.",
+      "sources": [
+        {
+          "source": "/home/tritlo/Code/mcfta/lean/MicroCFTA/SourcePruningPartialMatch.lean",
+          "source_sha256": "c911cb4f2218ae7eb5d8a3c31ed942b366fe1819c72f7c0f774b27f6d5fb6c10",
+          "first_line": 13,
+          "last_line": 18,
+          "reason": "PendingBound is vacuous on []",
+          "retained_cut": "cuts/SourcePruningPartialMatch.L13-L51.txt",
+          "retained_cut_first_line": 13,
+          "retained_cut_last_line": 51,
+          "retained_cut_sha256": "2143a68a71f999a66b61e2efe9cf9b8b0c4fd967bf4b4415ddd03043fdc483bc"
+        },
+        {
+          "source": "/home/tritlo/Code/mcfta/lean/MicroCFTA/SourcePruningEnumerationRecursivePacket.lean",
+          "source_sha256": "a4b24cb62806bda0f1b9a5f02b95650637b9e8e3c274f2f508438927915ad837",
+          "first_line": 33,
+          "last_line": 35,
+          "reason": "Packet only bounds pending IDs",
+          "retained_cut": "cuts/SourcePruningEnumerationRecursivePacket.L20-L35.txt",
+          "retained_cut_first_line": 20,
+          "retained_cut_last_line": 35,
+          "retained_cut_sha256": "ac8fdafc43aa87110e1ddc65d94193269da65bb723626bd2ad3f95077814981b"
+        },
+        {
+          "source": "/home/tritlo/Code/mcfta/lean/MicroCFTA/SourcePruningOracle.lean",
+          "source_sha256": "c7fb67635c732aafbe9b447be9889868a20af9003a00969bbb492005f32d4f31",
+          "first_line": 43,
+          "last_line": 64,
+          "reason": "nonempty pending avoids idle; nonprogram leaf avoids early rejection",
+          "retained_cut": "cuts/SourcePruningOracle.L43-L69.txt",
+          "retained_cut_first_line": 43,
+          "retained_cut_last_line": 69,
+          "retained_cut_sha256": "641eca6f6c16e3d9de3e5071f10bb35d03c1854105199e471bb5622ec8eee363"
+        },
+        {
+          "source": "/home/tritlo/Code/mcfta/lean/MicroCFTA/SourcePruningResume.lean",
+          "source_sha256": "ce1687067cb47d36513d6529c0777e28cdc7345be1cb1af9d6a94784ab2f7fa4",
+          "first_line": 73,
+          "last_line": 76,
+          "reason": "empty group maps/sequences to some[]",
+          "retained_cut": "cuts/SourcePruningResume.L66-L94.txt",
+          "retained_cut_first_line": 66,
+          "retained_cut_last_line": 94,
+          "retained_cut_sha256": "ea892a3f93c207229b9752320f3e626ae3f7995d97c3e7a4233eeefa7693071e"
+        },
+        {
+          "source": "/home/tritlo/Code/mcfta/lean/MicroCFTA/EnumerationState.lean",
+          "source_sha256": "83a898b883ec7b52469bccd87e8afa4f7abb320e3c935bf48f3d80ad77003cc4",
+          "first_line": 334,
+          "last_line": 354,
+          "reason": "positive partial renderer for concrete leaf",
+          "retained_cut": "cuts/EnumerationState.L334-L354.txt",
+          "retained_cut_first_line": 334,
+          "retained_cut_last_line": 354,
+          "retained_cut_sha256": "0d763bbe127b4790162c225a60dcdb3c4758097057f2a59594414186e1fc9d91"
+        },
+        {
+          "source": "/home/tritlo/Code/mcfta/lean/MicroCFTA/SourcePruningTemplates.lean",
+          "source_sha256": "459fcb6d825120d2c5ae457fb9d6239352f6d45a2f7c7d185d1a1cafda74da5f",
+          "first_line": 28,
+          "last_line": 35,
+          "reason": "nonprogram leaf has no newly selected program",
+          "retained_cut": "cuts/SourcePruningTemplates.L27-L35.txt",
+          "retained_cut_first_line": 27,
+          "retained_cut_last_line": 35,
+          "retained_cut_sha256": "2480b270172dac8ea059a79c90c792fe872b631a81b11d7163fab2195745d836"
+        },
+        {
+          "source": "/home/tritlo/Code/mcfta/lean/MicroCFTA/SourcePruningTemplates.lean",
+          "source_sha256": "459fcb6d825120d2c5ae457fb9d6239352f6d45a2f7c7d185d1a1cafda74da5f",
+          "first_line": 116,
+          "last_line": 118,
+          "reason": "some[] sets rejection flag",
+          "retained_cut": "cuts/SourcePruningTemplates.L98-L118.txt",
+          "retained_cut_first_line": 98,
+          "retained_cut_last_line": 118,
+          "retained_cut_sha256": "5437e0ece5e43242c6ae5862b6bbe908e65eef00a13cbffefb6ef8129253ef85"
+        },
+        {
+          "source": "/home/tritlo/Code/mcfta/lean/MicroCFTA/SourcePruningRecordTypes.lean",
+          "source_sha256": "c5a714825eab5f8efa89eaecbc5cae7438136834010d4270257d145af108bfbf",
+          "first_line": 49,
+          "last_line": 55,
+          "reason": "nonempty catalog executes oracle and retains Boolean",
+          "retained_cut": "cuts/SourcePruningRecordTypes.L49-L55.txt",
+          "retained_cut_first_line": 49,
+          "retained_cut_last_line": 55,
+          "retained_cut_sha256": "82f64458a4666c076a4b1a87128641afa220c523175b14406622b9bc64f89057"
+        }
+      ]
+    },
+    {
+      "id": "B-forbidden-hole-policy",
+      "status": "SOURCE-LEVEL DESIGN ONLY; UNEXECUTED; UNFORMALIZED; no complete native Packet/Context/CacheValid countermodel was constructed.",
+      "design": "templates=[hole], pending=[], exact concrete four-child app. No early structural template is produced; observe starts a hole match with some[]. This is legitimate forbidden-template policy. Native acceptance alone does not imply pruning absence.",
+      "sources": [
+        {
+          "source": "/home/tritlo/Code/mcfta/lean/MicroCFTA/SourcePruningTemplates.lean",
+          "source_sha256": "459fcb6d825120d2c5ae457fb9d6239352f6d45a2f7c7d185d1a1cafda74da5f",
+          "first_line": 87,
+          "last_line": 90,
+          "reason": "root hole has no early structural template",
+          "retained_cut": "cuts/SourcePruningTemplates.L70-L90.txt",
+          "retained_cut_first_line": 70,
+          "retained_cut_last_line": 90,
+          "retained_cut_sha256": "e3c6e0b0ef2c1c03bf54d6b9f0f7a3d762228a9ee834f86962d893f253660402"
+        },
+        {
+          "source": "/home/tritlo/Code/mcfta/lean/MicroCFTA/SourcePruningTemplates.lean",
+          "source_sha256": "459fcb6d825120d2c5ae457fb9d6239352f6d45a2f7c7d185d1a1cafda74da5f",
+          "first_line": 28,
+          "last_line": 35,
+          "reason": "application root is selected as program",
+          "retained_cut": "cuts/SourcePruningTemplates.L27-L35.txt",
+          "retained_cut_first_line": 27,
+          "retained_cut_last_line": 35,
+          "retained_cut_sha256": "2480b270172dac8ea059a79c90c792fe872b631a81b11d7163fab2195745d836"
+        },
+        {
+          "source": "/home/tritlo/Code/mcfta/lean/MicroCFTA/SourcePruningTemplates.lean",
+          "source_sha256": "459fcb6d825120d2c5ae457fb9d6239352f6d45a2f7c7d185d1a1cafda74da5f",
+          "first_line": 58,
+          "last_line": 68,
+          "reason": "generic hole remains indexed",
+          "retained_cut": "cuts/SourcePruningTemplates.L57-L68.txt",
+          "retained_cut_first_line": 57,
+          "retained_cut_last_line": 68,
+          "retained_cut_sha256": "6347af2b45998d129d5e502e10afd6f355c9ecf1af846d66b405437cbc81a31e"
+        },
+        {
+          "source": "/home/tritlo/Code/mcfta/lean/MicroCFTA/SourcePruningPartialMatch.lean",
+          "source_sha256": "c911cb4f2218ae7eb5d8a3c31ed942b366fe1819c72f7c0f774b27f6d5fb6c10",
+          "first_line": 22,
+          "last_line": 28,
+          "reason": "hole immediately matches with no pending pieces",
+          "retained_cut": "cuts/SourcePruningPartialMatch.L13-L51.txt",
+          "retained_cut_first_line": 13,
+          "retained_cut_last_line": 51,
+          "retained_cut_sha256": "2143a68a71f999a66b61e2efe9cf9b8b0c4fd967bf4b4415ddd03043fdc483bc"
+        },
+        {
+          "source": "/home/tritlo/Code/mcfta/lean/MicroCFTA/SourcePruningTemplates.lean",
+          "source_sha256": "459fcb6d825120d2c5ae457fb9d6239352f6d45a2f7c7d185d1a1cafda74da5f",
+          "first_line": 110,
+          "last_line": 118,
+          "reason": "new empty match produces true",
+          "retained_cut": "cuts/SourcePruningTemplates.L98-L118.txt",
+          "retained_cut_first_line": 98,
+          "retained_cut_last_line": 118,
+          "retained_cut_sha256": "5437e0ece5e43242c6ae5862b6bbe908e65eef00a13cbffefb6ef8129253ef85"
+        },
+        {
+          "source": "/home/tritlo/Code/mcfta/lean/MicroCFTA/SourceTemplateAnywhere.lean",
+          "source_sha256": "8ee70e8f169150d5b76df2ef57a2f4190366c4b4f1dfde3690e896c253dc59e9",
+          "first_line": 101,
+          "last_line": 108,
+          "reason": "existing theorem: forbidden hole rejects every complete term",
+          "retained_cut": "cuts/SourceTemplateAnywhere.L49-L108.txt",
+          "retained_cut_first_line": 49,
+          "retained_cut_last_line": 108,
+          "retained_cut_sha256": "c3fb6142d499ec43fd5878d838b965504ec1b067025e676c24a4d0b17be269e0"
+        }
+      ]
+    },
+    {
+      "id": "C-early-marker-erasure",
+      "status": "SOURCE-LEVEL DESIGN ONLY; UNEXECUTED; UNFORMALIZED; no complete native Packet/Context/CacheValid countermodel was constructed.",
+      "design": "Original exact app pattern requires (->) marker; a concrete app has another marker and no app subterms. It fails the original pattern everywhere. structuralTemplate replaces the marker with a hole; equal function spine retains the transformed template, which matches the raw fragment. No source typing/marker-origin or physical caller reachability is constructed.",
+      "sources": [
+        {
+          "source": "/home/tritlo/Code/mcfta/lean/MicroCFTA/SourcePruningTemplates.lean",
+          "source_sha256": "459fcb6d825120d2c5ae457fb9d6239352f6d45a2f7c7d185d1a1cafda74da5f",
+          "first_line": 23,
+          "last_line": 25,
+          "reason": "fragmentTerm preserves labels without state read",
+          "retained_cut": "cuts/SourcePruningTemplates.L19-L119.txt",
+          "retained_cut_first_line": 19,
+          "retained_cut_last_line": 119,
+          "retained_cut_sha256": "7af35e64fb34dee839dda9bbaf2dd1505084e887aa53d9659abdda60872051cd"
+        },
+        {
+          "source": "/home/tritlo/Code/mcfta/lean/MicroCFTA/SourcePruningTemplates.lean",
+          "source_sha256": "459fcb6d825120d2c5ae457fb9d6239352f6d45a2f7c7d185d1a1cafda74da5f",
+          "first_line": 37,
+          "last_line": 55,
+          "reason": "template/partial indexing inspect function spine",
+          "retained_cut": "cuts/SourcePruningTemplates.L19-L119.txt",
+          "retained_cut_first_line": 19,
+          "retained_cut_last_line": 119,
+          "retained_cut_sha256": "7af35e64fb34dee839dda9bbaf2dd1505084e887aa53d9659abdda60872051cd"
+        },
+        {
+          "source": "/home/tritlo/Code/mcfta/lean/MicroCFTA/SourcePruningTemplates.lean",
+          "source_sha256": "459fcb6d825120d2c5ae457fb9d6239352f6d45a2f7c7d185d1a1cafda74da5f",
+          "first_line": 58,
+          "last_line": 68,
+          "reason": "equal fixed spine retains transformed template",
+          "retained_cut": "cuts/SourcePruningTemplates.L57-L68.txt",
+          "retained_cut_first_line": 57,
+          "retained_cut_last_line": 68,
+          "retained_cut_sha256": "6347af2b45998d129d5e502e10afd6f355c9ecf1af846d66b405437cbc81a31e"
+        },
+        {
+          "source": "/home/tritlo/Code/mcfta/lean/MicroCFTA/SourcePruningTemplates.lean",
+          "source_sha256": "459fcb6d825120d2c5ae457fb9d6239352f6d45a2f7c7d185d1a1cafda74da5f",
+          "first_line": 70,
+          "last_line": 90,
+          "reason": "accepted arrow marker is erased to wildcard",
+          "retained_cut": "cuts/SourcePruningTemplates.L70-L90.txt",
+          "retained_cut_first_line": 70,
+          "retained_cut_last_line": 90,
+          "retained_cut_sha256": "e3c6e0b0ef2c1c03bf54d6b9f0f7a3d762228a9ee834f86962d893f253660402"
+        },
+        {
+          "source": "/home/tritlo/Code/mcfta/lean/MicroCFTA/SourcePruningTemplates.lean",
+          "source_sha256": "459fcb6d825120d2c5ae457fb9d6239352f6d45a2f7c7d185d1a1cafda74da5f",
+          "first_line": 98,
+          "last_line": 106,
+          "reason": "early empty match rejects before observe",
+          "retained_cut": "cuts/SourcePruningTemplates.L98-L118.txt",
+          "retained_cut_first_line": 98,
+          "retained_cut_last_line": 118,
+          "retained_cut_sha256": "5437e0ece5e43242c6ae5862b6bbe908e65eef00a13cbffefb6ef8129253ef85"
+        },
+        {
+          "source": "/home/tritlo/Code/mcfta/lean/MicroCFTA/Template.lean",
+          "source_sha256": "67abebd52ddc3320afd88a142e46b92b357c9bb7947efd7e290976a1cd5530d8",
+          "first_line": 32,
+          "last_line": 38,
+          "reason": "original exact marker child enforces wanted symbol",
+          "retained_cut": "cuts/Template.L15-L38.txt",
+          "retained_cut_first_line": 15,
+          "retained_cut_last_line": 38,
+          "retained_cut_sha256": "3a7bd7f116d51136a70200460eb0b338dbae0a9ed71a6c7c1c5e119640583390"
+        },
+        {
+          "source": "/home/tritlo/Code/mcfta/lean/MicroCFTA/SourceTemplateAnywhere.lean",
+          "source_sha256": "8ee70e8f169150d5b76df2ef57a2f4190366c4b4f1dfde3690e896c253dc59e9",
+          "first_line": 48,
+          "last_line": 53,
+          "reason": "NoMatchAt concerns original complete templates; no transformation implication supplied",
+          "retained_cut": "cuts/SourceTemplateAnywhere.L47-L53.txt",
+          "retained_cut_first_line": 47,
+          "retained_cut_last_line": 53,
+          "retained_cut_sha256": "121d10d8ace9e29da375aea2c12e2c159b4febd00fe3f7e7dab7d028c75fedac"
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,11 @@
+      ∀ (stop : Option (Metadata Typing → Nat → Bool))
+        (order : Metadata Typing → List Nat → Option Nat),
+        EnumerationProgress.ProperState before.core →
+        ∀ (ambient : InternedGuardedLanguage.Env Symbol)
+          (residualMeaning : Constraint → Language.Term Symbol → Prop)
+          (assignment : Nat → Language.Term Symbol),
+          Satisfies
+            (SourcePruningEnumerationNativeLanguage.handles (SourceEqualityPCSGuard.holds formulas solver)
+              ambient caller.checked.native.machine.heap) residualMeaning assignment before.core →
+          SourcePruningEnumerationRestart.decision stop order result.2
+            (EnumerationExpandableIndex.frame after before) ≠ some .stuck

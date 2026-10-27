@@ -1,0 +1,11 @@
+    simpa only [counter] using packet.bounded
+  refine ⟨bound, enteredCache, entryRun, stable, counter, values, sameFlags, sameWaiting,
+    enteredPacket, ?_, Post.refl packet.context, bounded, known⟩
+  intro extra hook
+  unfold run
+  rw [entryRun extra]
+  cases value with
+  | node entry edges depth free => simp only [fallback, ↓reduceIte]
+  | empty | reference _ | union _ _ _ _ | mu _ _ _ _ => rfl
+
+end MicroCFTA.SourcePruningEnumerationNativeOrdinaryContinuations

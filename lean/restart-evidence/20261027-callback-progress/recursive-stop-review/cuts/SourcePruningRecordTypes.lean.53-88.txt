@@ -1,0 +1,36 @@
+  let observed ← if templates.isEmpty then pure (false, metadata.pending)
+    else SourcePruningOracle.oracle graph templates fuel metadata.pending uv input
+  pure (observed.1, {metadata with pending := observed.2, types := types})
+
+/-- A pending candidate has priority over type-position membership. -/
+theorem typesLast_pending (metadata : Metadata Typing) (candidates : List Nat) (uv : Nat)
+    (chosen : SourcePruningTemplates.order metadata.pending candidates = some uv) :
+    typesLast metadata candidates = some uv := by
+  simp only [typesLast, chosen]
+
+/-- Without a pending candidate, use the first raw candidate outside the type set. -/
+theorem typesLast_fallback (metadata : Metadata Typing) (candidates : List Nat)
+    (missed : SourcePruningTemplates.order metadata.pending candidates = none) :
+    typesLast metadata candidates = candidates.find? (fun uv => !metadata.types.contains uv) := by
+  simp only [typesLast, missed]
+
+/-- The stopping test is exactly type membership and absence from every pending group. -/
+theorem atTypes_exact (metadata : Metadata Typing) (uv : Nat) :
+    atTypes metadata uv = true ↔ uv ∈ metadata.types ∧
+      ∀ group ∈ metadata.pending, ∀ entry ∈ group, entry.2 ≠ uv := by
+  simp [atTypes]
+
+/-- An empty catalog performs the pure metadata update without an oracle call. -/
+theorem recordTypes_empty (graph : Graph Symbol Guard) (fuel : Nat)
+    (metadata : Metadata Typing) (uv : Nat) (input : Sum (Fragment Symbol) Nat) :
+    recordTypes graph [] fuel metadata uv input =
+      pure (false, {metadata with types := updatedTypes metadata uv input}) := by
+  rfl
+
+/-- Pre-expansion events return the complete original metadata without state reads. -/
+theorem recordTypes_inr (graph : Graph Symbol Guard) (templates : List (Template.Pattern Symbol))
+    (fuel : Nat) (metadata : Metadata Typing) (uv node : Nat) :
+    recordTypes graph templates fuel metadata uv (.inr node) = pure (false, metadata) := by
+  cases templates <;> rfl
+
+/-- Every successful result retains the pure update and both unchanged metadata fields. -/

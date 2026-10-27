@@ -1,0 +1,19 @@
+  enumeration continues.
+
+The threaded state parameter belongs entirely to the caller. Returning @True@
+prunes the current nondeterministic branch; returning @False@ keeps it.
+
+The 'ExpansionOrder' sees the same state and may steer which expandable UVar
+goes next; 'noExpansionPreference' leaves that to the enumerator. An
+unconstrained 'Mu' is never offered for expansion, so it is not expanded and
+produces neither callback. Enumeration ends when no other UVar can be expanded.
+
+Before the choice of an edge, the narrowing function can drop edges of the
+node of the UVar. It sees the state and the UVar. A node without edges ends
+the branch. The node expansion function expands the chosen node, for example
+'enumerateNode'.
+
+With a stop rule, enumeration also ends when the rule accepts every UVar that
+is still to expand, the blocked ones included. The result is then the state at
+that point. Without a stop rule, or at the end of the enumeration, the result
+is 'Nothing'.

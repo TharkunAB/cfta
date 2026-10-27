@@ -1,0 +1,9 @@
+/-- Select application terms in function-before-argument order. -/
+def programs : PartialTerm → List PartialTerm
+  | .node (.concrete symbol) [_, term] =>
+      if symbol = ("filter", FullSyntax.Formula.top) then programs term else []
+  | term@(.node (.concrete symbol) [_, _, function, argument]) =>
+      if symbol = ("app", FullSyntax.Formula.top) then
+        term :: programs function ++ programs argument
+      else []
+  | _ => []

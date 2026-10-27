@@ -1,0 +1,46 @@
+/-- A terminal-or-branch trie for equality paths. -/
+inductive Trie where
+  | empty
+  | terminal
+  | branch (children : List (Nat × Trie))
+  deriving Repr
+
+mutual
+  /-- Enumerate every represented path. -/
+  def fromPathTrie : Trie → List Path
+    | .empty => []
+    | .terminal => [[]]
+    | .branch children => fromChildren children
+  /-- Prefix each child path by its child index. -/
+  def fromChildren : List (Nat × Trie) → List Path
+    | [] => []
+    | (index, child) :: rest => (fromPathTrie child).map (index :: ·) ++ fromChildren rest
+end
+
+/-- Read a finite child map. -/
+def lookup (index : Nat) : List (Nat × Trie) → Option Trie
+  | [] => none
+  | (key, child) :: rest => if index = key then some child else lookup index rest
+
+/-- Descend one index. Missing children and terminals have no suffix paths. -/
+def pathTrieDescend : Trie → Nat → Trie
+  | .empty, _ => .empty
+  | .terminal, _ => .empty
+  | .branch children, index => (lookup index children).getD .empty
+
+/-- The structural empty test used to discard suspended constraints. -/
+def isEmpty : Trie → Bool
+  | .empty => true
+  | _ => false
+
+/-- The structural terminal test used to discharge suspended constraints. -/
+def isTerminal : Trie → Bool
+  | .terminal => true
+  | _ => false
+
+/-- Child maps have distinct indices, no empty values, and valid descendants. -/
+def Valid : Trie → Prop
+  | .empty => True
+  | .terminal => True
+  | .branch children => children ≠ [] ∧ (children.map Prod.fst).Nodup ∧
+      ∀ index child, (index, child) ∈ children → child ≠ .empty ∧ Valid child

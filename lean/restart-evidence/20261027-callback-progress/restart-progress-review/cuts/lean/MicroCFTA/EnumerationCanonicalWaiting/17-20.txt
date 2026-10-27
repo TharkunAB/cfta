@@ -1,0 +1,4 @@
+def canonicalValue (roots : Nat → Nat) : UVarValue Symbol → UVarValue Symbol
+  | .unenumerated node scs =>
+      .unenumerated node (scs.map fun sc => {sc with var := roots sc.var})
+  | .enumerated fragment => .enumerated fragment

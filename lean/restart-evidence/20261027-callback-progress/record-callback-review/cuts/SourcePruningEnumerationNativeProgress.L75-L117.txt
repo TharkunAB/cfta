@@ -1,0 +1,43 @@
+    simp only [filtered, List.not_mem_nil] at offered
+  obtain ⟨value, present, sc, listed, sameRoot⟩ :=
+    (EnumerationCanonicalWaiting.support_exact roots before.core.values before.waiting counts target).mp blocked
+  obtain ⟨source, stored⟩ := List.mem_iff_getElem?.mp present
+  have payload := proper value present
+  cases value with
+  | eliminated | enumerated fragment => cases listed
+  | unenumerated node scs =>
+      cases node with
+      | none =>
+          have empty : scs = [] := payload
+          simp only [references, empty, List.not_mem_nil] at listed
+      | some handle =>
+          have member : sc ∈ scs := listed
+          obtain ⟨path, pathMember, strict⟩ := proper_path sc.trie (payload sc member)
+          obtain ⟨native, decoded, _available, _closed⟩ := realized source handle scs stored
+          have nonemptyScs : scs ≠ [] := by
+            intro empty
+            simp only [empty, List.not_mem_nil] at member
+          have nativeCandidate : SourcePruningEnumerationNativeIndex.candidate
+              caller.checked.native.machine.heap (.unenumerated (some handle) scs) = some true := by
+            simp [SourcePruningEnumerationNativeIndex.candidate, decoded, nonemptyScs]
+          have sourceFlag := flags source
+          rw [stored, Option.getD_some] at sourceFlag
+          have expandable : before.expandable source = true :=
+            Option.some.inj (sourceFlag.symm.trans nativeCandidate)
+          have inside : source < before.core.counter := by
+            rw [safe.1.aligned]
+            exact (List.getElem?_eq_some_iff.mp stored).1
+          have sourceMember : source ∈ candidates := by
+            exact List.mem_filter.mpr ⟨List.mem_range.mpr inside, expandable⟩
+          have slotHolds := satisfied.1.2 source
+          rw [heap, stored, Option.getD_some] at slotHolds
+          have suspended : Suspended.Holds assignment (assignment source) sc :=
+            slotHolds.2 _ (List.mem_map.mpr ⟨sc, member, rfl⟩)
+          obtain ⟨size, reached⟩ := paths sc.var
+          have assigned : assignment sc.var = assignment target := by
+            rw [←sameRoot]
+            exact satisfied.1.1 sc.var (roots sc.var) (UnionFind.sameClass_root reached)
+          exact ⟨source, sourceMember, path, strict,
+            by simpa only [assigned] using suspended path pathMember⟩
+
+end MicroCFTA.SourcePruningEnumerationRestart

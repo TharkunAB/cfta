@@ -1,0 +1,67 @@
+theorem proper_path (trie : EqualityTrie.Trie) (proper : ProperTrie trie) :
+    ∃ path ∈ EqualityTrie.fromPathTrie trie, path ≠ [] := by
+  have nonempty : trie ≠ .empty := by intro same; simp [ProperTrie, same, EqualityTrie.isEmpty] at proper
+  obtain ⟨path, member⟩ := EqualityTrie.valid_has_path trie proper.1 nonempty
+  refine ⟨path, member, ?_⟩
+  intro same
+  subst path
+  have terminal := (EqualityTrie.nil_mem trie).mp member
+  simp [ProperTrie, terminal, EqualityTrie.isTerminal] at proper
+
+/-- A stored reference necessarily belongs to an eligible graph slot. -/
+theorem referenced_candidate (graph : Graph Symbol Guard) (value : UVarValue Symbol) (sc : Suspended)
+    (proper : ProperValue value) (member : sc ∈ references value) : candidate graph value = true ∧ ProperTrie sc.trie := by
+  cases value with
+  | eliminated | enumerated _ => cases member
+  | unenumerated node scs =>
+      cases node with
+      | none => simp [ProperValue] at proper; simp [references, proper] at member
+      | some node =>
+          have nonempty : scs ≠ [] := by intro same; simp [references, same] at member
+          refine ⟨?_, proper sc member⟩
+          cases view : graph.node node <;> simp [candidate, view, nonempty]
+
+/-- An actual blocked scheduler result contradicts a complete finite assignment to proper pending slots. -/
+theorem findExpandable_not_stuck (graph : Graph Symbol Guard) (language : NodeLanguage Symbol)
+    (meaning : Guard → Term Symbol → Prop) (assignment : Nat → Term Symbol) (fuel : Nat)
+    (before after : State Symbol Guard) (safe : Safe before) (proper : ProperState before)
+    (satisfies : Satisfies language meaning assignment before)
+    (success : Success (findExpandable graph fuel) before (some []) after) : False := by
+  obtain ⟨roots, paths⟩ := roots_exist before.representatives safe.1.total
+  obtain ⟨_, result⟩ := findExpandable_exact graph fuel roots before after (some []) paths success
+  let summary := before.values.zipIdx.foldl (collectPure graph roots) ([], [])
+  have offeredEmpty : offered summary.1 summary.2 = some [] := result.symm
+  have nonempty : summary.1 ≠ [] := by
+    intro empty
+    simp [offered, empty] at offeredEmpty
+  have blocked : ∀ uv ∈ summary.1, uv ∈ summary.2 := by
+    intro uv candidateMember
+    have filtered : summary.1.filter (fun uv => !(uv ∈ summary.2)) = [] := by
+      simpa [offered, nonempty] using offeredEmpty
+    by_cases member : uv ∈ summary.2
+    · exact member
+    · have available : uv ∈ summary.1.filter (fun uv => !(uv ∈ summary.2)) := List.mem_filter.mpr ⟨candidateMember, by simp [member]⟩
+      simp [filtered] at available
+  apply strict_dependency_stuck_impossible summary.1 nonempty assignment
+  intro target targetMember
+  have targetBlocked := blocked target targetMember
+  obtain ⟨entry, present, sc, scMember, sameRoot⟩ :=
+    ((blocked_exact graph roots before.values.zipIdx ([], []) target).mp targetBlocked).resolve_left (by simp)
+  have stored : before.values[entry.2]? = some entry.1 := List.mem_zipIdx_iff_getElem?.mp present
+  obtain ⟨sourceCandidate, properTrie⟩ := referenced_candidate graph entry.1 sc (proper entry.1 (List.mem_of_getElem? stored)) scMember
+  have sourceMember : entry.2 ∈ summary.1 := (candidates_exact graph roots before.values.zipIdx ([], []) entry.2).mpr
+    (Or.inr ⟨entry, present, rfl, sourceCandidate⟩)
+  obtain ⟨path, pathMember, pathProper⟩ := proper_path sc.trie properTrie
+  have storedHolds := satisfies.1.2 entry.2
+  rw [heap, stored, Option.getD_some] at storedHolds
+  have suspended : Suspended.Holds assignment (assignment entry.2) sc := by
+    obtain ⟨value, index⟩ := entry
+    cases value with
+    | eliminated | enumerated _ => cases scMember
+    | unenumerated node scs =>
+        exact storedHolds.2 _ (List.mem_map.mpr ⟨sc, scMember, rfl⟩)
+  obtain ⟨size, reached⟩ := paths sc.var
+  have assigned : assignment sc.var = assignment target := by
+    rw [← sameRoot]
+    exact satisfies.1.1 sc.var (roots sc.var) (UnionFind.sameClass_root reached)
+  exact ⟨entry.2, sourceMember, path, pathProper, by simpa [assigned] using suspended path pathMember⟩

@@ -1,0 +1,7 @@
+/-- No existing subterm matches any of the given templates. -/
+def NoMatchAt [DecidableEq Symbol] (templates : List (Pattern Symbol)) (term : Term Symbol) : Prop :=
+  ∀ path subtree, term.atPath path = some subtree → ∀ pattern ∈ templates, ¬Matches pattern subtree
+
+/-- The source worker rejects exactly the terms with a matching existing subterm. -/
+theorem matchesNowhere_correct [DecidableEq Symbol] (templates : List (Pattern Symbol)) (term : Term Symbol) :
+    matchesNowhere templates term = true ↔ NoMatchAt templates term := by

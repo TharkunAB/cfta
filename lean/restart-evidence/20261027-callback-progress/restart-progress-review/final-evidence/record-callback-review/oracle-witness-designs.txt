@@ -1,0 +1,18 @@
+SOURCE-LEVEL WITNESS DESIGNS ONLY — UNEXECUTED AND UNFORMALIZED
+
+A. Bounded empty pending group
+Take templates=[.hole], metadata.pending=[[]], and fragment=.node("leaf",top)[]. No fragment hole is read. isProgramRoot=false, so rejectEarly=false. idle=false because pending is nonempty. For positive render fuel the partial term is the concrete leaf; resume [] returns some[]; programs leaf=[]; finishChecks [some[]] [] returns(true,[]). recordTypes returns the actual true result and updated metadata. Every original PendingBound condition on [] is vacuous. This is independent of the native accepted language; a full native Packet witness is not constructed or claimed here.
+
+B. Legitimate forbidden-template pruning
+Take templates=[.hole], pending=[], and a concrete application fragment with four children. structuralTemplate(.hole)=none, hence no early check is produced. The observing branch renders the app; programs includes its root; indexTemplates retains .hole; matchPartial .hole term=some[]. finishChecks therefore returns true. SourceTemplateAnywhere.hole_rejects independently confirms every complete term is forbidden by a catalog containing .hole. Native edge acceptance by itself cannot impose template absence.
+
+C. Early transformed template exceeds original full-template matching
+Let app=("app",top), arrow=("(->)",top), f=("f",top), wrong=("not-arrow",top), x=("x",top), y=("y",top), ann=("ann",top).
+Original pattern:
+ node app [hole,node arrow [],node f [hole],hole].
+Fully concrete fragment/value:
+ node app [node ann [],node wrong [],node f [node x []],node y []].
+No original full pattern matches: at the only app root, the arrow marker differs; every other subtree has a different label. structuralTemplate maps the original pattern to node app [hole,hole,node f [hole],hole]. Its index spine and actual partial app spine both equal(f,1). It matches the original raw fragment view with some[], hence rejectEarly=true before any state read. Thus original full-template NoMatchAt alone cannot exclude this early branch. A genuine source typing/marker invariant or avoidance for the transformed early catalog is needed. No assertion about which physical Haskell callers admit this fragment is made.
+
+D. Canonical terminal-self scheduler blocker design
+One allocated pending root0 has a nonempty bucket [terminal@0] and a valid native handle. Its terminal Holds obligation is assignment0=assignment0; terminal is valid, so canonicality alone does not exclude it. With identity representatives the exact count is waiting0=some1. Candidate [0] filters to some[]; stop=None yields some.stuck. ProperState excludes the terminal trie. This is ONLY a source-level component design. No complete native Context/Packet/CacheValid countermodel, startup reachability, execution, or physical defect is claimed. witness-source-map.json records exact source identities and per-claim line ranges for all four designs.

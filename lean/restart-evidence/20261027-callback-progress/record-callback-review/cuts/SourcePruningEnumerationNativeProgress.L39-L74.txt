@@ -1,0 +1,36 @@
+  intro stuck
+  have picked : EnumerationPureSelection.next (order metadata) before = .stuck := by
+    cases stop with
+    | none => exact Option.some.inj stuck
+    | some rule =>
+        simp only [decision] at stuck
+        split at stuck
+        · cases stuck
+        · exact Option.some.inj stuck
+  have noOffered : EnumerationPureSelection.find before = some [] := by
+    unfold EnumerationPureSelection.next at picked
+    cases found : EnumerationPureSelection.find before with
+    | none => simp only [found, pickNext] at picked; cases picked
+    | some offered =>
+        cases offered with
+        | nil => rfl
+        | cons first rest =>
+            cases preferred : order metadata (first :: rest) with
+            | none => simp only [found, pickNext, preferred] at picked; cases picked
+            | some uv =>
+                by_cases member : uv ∈ first :: rest <;>
+                  (simp only [found, pickNext, preferred, member, ↓reduceIte] at picked; cases picked)
+  let candidates := EnumerationIndexSelection.candidates before
+  have nonempty : candidates ≠ [] := by
+    intro empty
+    change EnumerationIndexSelection.candidates before = [] at empty
+    simp [EnumerationPureSelection.find, empty] at noOffered
+  have filtered : candidates.filter (fun uv => (before.waiting uv).isNone) = [] := by
+    simpa [EnumerationPureSelection.find, candidates, nonempty] using noOffered
+  obtain ⟨roots, paths, _storage, realized, counts, flags⟩ := valid
+  apply strict_dependency_stuck_impossible candidates nonempty assignment
+  intro target candidateMember
+  have blocked : before.waiting target ≠ none := by
+    intro absent
+    have offered : target ∈ candidates.filter (fun uv => (before.waiting uv).isNone) :=
+      List.mem_filter.mpr ⟨candidateMember, by simp [absent]⟩

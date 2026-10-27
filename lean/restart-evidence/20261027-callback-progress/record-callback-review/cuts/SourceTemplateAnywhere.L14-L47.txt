@@ -1,0 +1,34 @@
+def matchesNone [DecidableEq Symbol] (templates : List (Pattern Symbol)) (term : Term Symbol) : Bool :=
+  !(templates.any (fun pattern => matchesTerm pattern term))
+
+/-- Root rejection agrees with independent template matching. -/
+theorem matchesNone_correct [DecidableEq Symbol] (templates : List (Pattern Symbol)) (term : Term Symbol) :
+    matchesNone templates term = true ↔ ∀ pattern ∈ templates, ¬Matches pattern term := by
+  simp only [matchesNone, Bool.not_eq_true', List.any_eq_false, matchesTerm_correct]
+
+mutual
+/-- Check the root before checking each child in source order. -/
+def matchesNowhere [DecidableEq Symbol] (templates : List (Pattern Symbol)) : Term Symbol → Bool
+  | .node symbol children => matchesNone templates (.node symbol children) && matchesChildrenNowhere templates children
+
+/-- Check each complete child and then the remaining children. -/
+def matchesChildrenNowhere [DecidableEq Symbol] (templates : List (Pattern Symbol)) : List (Term Symbol) → Bool
+  | [] => true
+  | first :: rest => matchesNowhere templates first && matchesChildrenNowhere templates rest
+end
+
+/-- The ordered child worker equals the source list predicate. -/
+theorem children_eq_all [DecidableEq Symbol] (templates : List (Pattern Symbol)) (children : List (Term Symbol)) :
+    matchesChildrenNowhere templates children = children.all (matchesNowhere templates) := by
+  induction children with
+  | nil => rfl
+  | cons first rest ih => simp only [matchesChildrenNowhere, List.all_cons, ih]
+
+/-- The complete term worker has the literal source root-and-children equation. -/
+theorem matchesNowhere_equation [DecidableEq Symbol] (templates : List (Pattern Symbol))
+    (symbol : Symbol) (children : List (Term Symbol)) :
+    matchesNowhere templates (.node symbol children) =
+      (matchesNone templates (.node symbol children) && children.all (matchesNowhere templates)) := by
+  simp only [matchesNowhere, children_eq_all]
+
+/-- No existing subterm matches any of the given templates. -/

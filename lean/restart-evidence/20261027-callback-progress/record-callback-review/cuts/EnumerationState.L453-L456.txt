@@ -1,0 +1,4 @@
+/-- A terminal suspended trie requires equality with the current complete term. -/
+theorem terminal_requirement (assignment : Nat → Term Symbol) (term : Term Symbol) (uv : Nat) :
+    Suspended.Holds assignment term ⟨.terminal, uv⟩ ↔ term = assignment uv := by
+  simp [Suspended.Holds, EqualityTrie.fromPathTrie, Term.atPath]

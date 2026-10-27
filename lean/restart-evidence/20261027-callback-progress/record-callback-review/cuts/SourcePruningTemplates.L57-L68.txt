@@ -1,0 +1,12 @@
+/-- Select the ascending-position union of generic and matching fixed buckets. -/
+def indexTemplates (templates : List (Template.Pattern Symbol)) (term : PartialTerm) :
+    List (Template.Pattern Symbol) :=
+  let tagged := templates.zipIdx
+  let generic := tagged.filter (fun entry => (templateSpine entry.1).isNone)
+  let fixed := fun key => tagged.filter (fun entry => decide (templateSpine entry.1 = some key))
+  match partialSpine term with
+  | none => templates
+  | some key =>
+      (List.range templates.length).filterMap fun position =>
+        ((generic.find? (fun entry => entry.2 == position)).map Prod.fst).orElse
+          (fun _ => ((fixed key).find? (fun entry => entry.2 == position)).map Prod.fst)

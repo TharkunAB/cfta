@@ -1,0 +1,6 @@
+/-- Empty paths occur only at a terminal. -/
+theorem nil_mem (trie : Trie) : [] ∈ fromPathTrie trie ↔ trie = .terminal := by
+  cases trie with
+  | empty => simp [fromPathTrie]
+  | terminal => simp [fromPathTrie]
+  | branch children => simp [fromPathTrie, mem_fromChildren]

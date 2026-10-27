@@ -1,0 +1,6 @@
+/-- A native handle denotes the independent guarded meaning of its actual readback. -/
+def handles (holds : NativeGuard → Term Symbol → Bool)
+    (ambient : InternedGuardedLanguage.Env Symbol)
+    (heap : InternedConstructorTemplates.State Symbol NativeGuard) : NodeLanguage Symbol :=
+  fun handle term => ∃ value, lookupNode heap handle = some value ∧
+    InternedGuardedLanguage.meaning holds ambient value term

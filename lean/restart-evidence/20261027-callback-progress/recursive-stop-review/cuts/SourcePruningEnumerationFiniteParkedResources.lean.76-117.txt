@@ -1,0 +1,42 @@
+    cases checked
+    rfl
+  by_cases blocked : SourcePruningEnumerationRestart.decision stop order metadata checked = some .stuck
+  · have resources : OutcomeResources (Typing := Typing) formulas solver caller seed
+        (.complete [] caller memos.query) := by
+      refine ⟨caller, inventory, memos, Post.refl packet.context, bounded, known, rfl, rfl, ?_⟩
+      intro output member
+      exact False.elim (List.not_mem_nil member)
+    have growth := SourcePruningEnumerationFiniteReservation.final_ge (recursiveFuel + 1) seed ceiling
+    refine ⟨prefixFuel, .complete [] caller memos.query, ?_, resources.mono growth.1 growth.2⟩
+    intro extra
+    have observed := (phase extra).1
+    rw [SourcePruningEnumerationRestart.run_exact, ite_eq_left blocked] at observed
+    rw [resume, observed]
+  · let start := SourcePruningEnumerationExpansionAdmission.narrowSeed seed
+    let parkedSeed := SourcePruningEnumerationRecursiveReservation.afterHead start ceiling
+    let parkedMass := SourcePruningEnumerationRecursiveReservation.massCeil start ceiling ceiling
+    have narrowGrowth := SourcePruningEnumerationFiniteReservation.narrowSeed_ge seed
+    have headGrowth := SourcePruningEnumerationRecursiveReservation.afterHead_ge start ceiling
+    have parkedFits : Fits parkedSeed.2 caller.checked := bounded.mono (narrowGrowth.1.trans headGrowth.1)
+    have parkedKnown : Heap (fun guard => guard ∈ parkedSeed.1) caller.checked.native.machine.heap :=
+      fun key edge resident => headGrowth.2 (narrowGrowth.2 (known key edge resident))
+    have boundedMass : SourcePruningEnumerationPrefixAdmission.suspendedBound checked.core ≤ parkedMass :=
+      Nat.le_trans (Nat.le_trans checkedMass initialMass) (Nat.le_add_right _ _)
+    obtain ⟨resumeFuel, outcome, running, resources⟩ := recursive
+      inventory caller memos checked metadata parkedSeed parkedMass checkedPacket parkedFits parkedKnown
+      selectionMembers selectionLength boundedMass reserved.first.2
+    have growth := SourcePruningEnumerationFiniteReservation.first_le_final recursiveFuel seed ceiling
+    refine ⟨prefixFuel + resumeFuel, outcome, ?_, resources.mono growth.1 growth.2⟩
+    intro extra
+    have observed := (phase (resumeFuel + extra)).1
+    have prefixSame : prefixFuel + (resumeFuel + extra) = prefixFuel + resumeFuel + extra := by omega
+    rw [prefixSame, SourcePruningEnumerationRestart.run_exact, ite_eq_right blocked] at observed
+    rw [resume_parked holeKey fits admits graph templates checkEmpty edgesOf stop order
+      (prefixFuel + resumeFuel + extra) recursiveFuel metadata caller memos.query before uv checked.core checked.core checked metadata
+      (SourcePruningEnumerationRestart.decision stop order metadata checked) observed, framed]
+    have actual := running (prefixFuel + extra)
+    have common : resumeFuel + (prefixFuel + extra) = prefixFuel + resumeFuel + extra := by omega
+    rw [common] at actual
+    exact actual
+
+end MicroCFTA.SourcePruningEnumerationRecursive

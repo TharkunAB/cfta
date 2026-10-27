@@ -1,0 +1,9 @@
+/-- Every stored suspended constraint uses a canonical trie. -/
+def Canonical (state : State Symbol Guard) : Prop :=
+  ∀ value ∈ state.values, ValidSuspended (references value)
+
+/-- The initialized root has no suspended constraints. -/
+theorem initial_canonical (root : Nat) : Canonical (initial root : State Symbol Guard) := by
+  simp [Canonical, initial, references, ValidSuspended]
+
+/-- Replacing one slot preserves canonical tries when its new payload is canonical. -/

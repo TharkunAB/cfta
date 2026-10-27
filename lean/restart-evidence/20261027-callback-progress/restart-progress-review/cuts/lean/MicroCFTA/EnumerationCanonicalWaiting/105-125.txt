@@ -1,0 +1,21 @@
+/-- The stored keys are exactly the current classes named by suspended references. -/
+theorem support_exact (roots : Nat → Nat) (values : List (UVarValue Symbol))
+    (waiting : EnumerationWaitingIndex.Waiting) (correct : Correct roots values waiting) (key : Nat) :
+    waiting key ≠ none ↔ ∃ value ∈ values, ∃ sc ∈ references value, roots sc.var = key := by
+  have original := EnumerationWaitingIndex.support_exact
+    (values.map (canonicalValue roots)) waiting correct key
+  constructor
+  · intro stored
+    obtain ⟨mapped, member, sc, present, named⟩ := original.mp stored
+    obtain ⟨value, valueMember, same⟩ := List.mem_map.mp member
+    subst mapped
+    rw [references_canonicalValue] at present
+    obtain ⟨old, oldMember, same⟩ := List.mem_map.mp present
+    subst sc
+    exact ⟨value, valueMember, old, oldMember, named⟩
+  · rintro ⟨value, valueMember, sc, present, named⟩
+    apply original.mpr
+    refine ⟨canonicalValue roots value, List.mem_map.mpr ⟨value, valueMember, rfl⟩,
+      {sc with var := roots sc.var}, ?_, named⟩
+    rw [references_canonicalValue]
+    exact List.mem_map.mpr ⟨sc, present, rfl⟩

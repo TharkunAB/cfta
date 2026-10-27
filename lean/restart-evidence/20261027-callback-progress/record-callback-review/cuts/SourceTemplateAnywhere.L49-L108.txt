@@ -1,0 +1,60 @@
+  ∀ path subtree, term.atPath path = some subtree → ∀ pattern ∈ templates, ¬Matches pattern subtree
+
+/-- The source worker rejects exactly the terms with a matching existing subterm. -/
+theorem matchesNowhere_correct [DecidableEq Symbol] (templates : List (Pattern Symbol)) (term : Term Symbol) :
+    matchesNowhere templates term = true ↔ NoMatchAt templates term := by
+  induction term using Term.rec
+    (motive_2 := fun terms : List (Term Symbol) =>
+      matchesChildrenNowhere templates terms = true ↔ ∀ child ∈ terms, NoMatchAt templates child) with
+  | node symbol children ih =>
+      simp only [matchesNowhere, Bool.and_eq_true, matchesNone_correct, ih]
+      constructor
+      · rintro ⟨root, descendants⟩ path subtree found pattern member
+        cases path with
+        | nil =>
+            have same := Option.some.inj found
+            subst subtree
+            exact root pattern member
+        | cons index rest =>
+            cases selected : children[index]? with
+            | none => simp only [Term.atPath, selected, Option.bind_none] at found; cases found
+            | some child =>
+                have below : child.atPath rest = some subtree := by
+                  simpa only [Term.atPath, selected, Option.bind_some] using found
+                exact descendants child (List.mem_of_getElem? selected) rest subtree below pattern member
+      · intro absent
+        refine ⟨absent [] (.node symbol children) rfl, ?_⟩
+        intro child member path subtree found pattern present
+        obtain ⟨index, selected⟩ := List.mem_iff_getElem?.mp member
+        have below : (Term.node symbol children).atPath (index :: path) = some subtree := by
+          simpa only [Term.atPath, selected, Option.bind_some] using found
+        exact absent (index :: path) subtree below pattern present
+  | nil => simp [matchesChildrenNowhere]
+  | cons first rest head tail =>
+      simp only [matchesChildrenNowhere, Bool.and_eq_true, head, tail]
+      constructor
+      · rintro ⟨own, others⟩ child member
+        rcases List.mem_cons.mp member with rfl | later
+        · exact own
+        · exact others child later
+      · intro all
+        exact ⟨all first List.mem_cons_self, fun child member => all child (List.mem_cons_of_mem _ member)⟩
+
+/-- Every selected existing subterm retains the source absence predicate. -/
+theorem matchesNowhere_subterm [DecidableEq Symbol] (templates : List (Pattern Symbol))
+    (term subtree : Term Symbol) (path : List Nat) (found : term.atPath path = some subtree)
+    (absent : matchesNowhere templates term = true) : matchesNowhere templates subtree = true := by
+  apply (matchesNowhere_correct templates subtree).mpr
+  intro below selected lookup pattern member
+  have combined : term.atPath (path ++ below) = some selected := by
+    simpa only [atPath_append, found, Option.bind_some] using lookup
+  exact (matchesNowhere_correct templates term).mp absent (path ++ below) selected combined pattern member
+
+/-- A hole in the forbidden templates rejects every complete term. -/
+theorem hole_rejects [DecidableEq Symbol] (templates : List (Pattern Symbol)) (term : Term Symbol)
+    (present : .hole ∈ templates) : matchesNowhere templates term = false := by
+  cases actual : matchesNowhere templates term with
+  | false => rfl
+  | true =>
+      have absent := (matchesNowhere_correct templates term).mp actual
+      exact False.elim (absent [] term rfl .hole present (hole_matches term))

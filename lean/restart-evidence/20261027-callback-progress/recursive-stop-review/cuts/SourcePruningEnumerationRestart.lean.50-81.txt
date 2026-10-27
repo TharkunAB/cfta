@@ -1,0 +1,32 @@
+
+/-- An actual restart expansion derives readiness and its closed available pending value. -/
+theorem selected (stop : Option (Metadata Typing → Nat → Bool))
+    (order : Metadata Typing → List Nat → Option Nat) (metadata : Metadata Typing)
+    (caller : SourceCurrentAllocatedPartialState.State width)
+    (before : EnumerationExpandableIndex.Cached Symbol Constraint) (uv : Nat)
+    (valid : SourcePruningEnumerationNativeBranchCompletion.CacheValid caller before)
+    (safe : Safe before.core) (chosen : decision stop order metadata before = some (.expand uv)) :
+    EnumerationDriver.Ready uv before.core ∧ EnumerationReferences.IncomingAvoid uv before.core ∧
+      ∃ (handle : Nat) (scs : List Suspended)
+        (value : InternedConstructorTemplates.Value Symbol Constraint),
+        before.core.values[uv]? = some (.unenumerated (some handle) scs) ∧
+        lookupNode caller.checked.native.machine.heap handle = some value ∧
+        InternedProbeProvenance.Available caller.checked.native.machine.heap value ∧ value.free = [] ∧
+        (!(MergedOrdinaryHeight.recursiveBoundary value && scs.isEmpty)) = true := by
+  have picked : EnumerationPureSelection.next (order metadata) before = .expand uv := by
+    cases stop with
+    | none => exact Option.some.inj chosen
+    | some rule =>
+        simp only [decision] at chosen
+        split at chosen
+        · cases chosen
+        · exact Option.some.inj chosen
+  obtain ⟨roots, paths, _storage, realized, counts, flags⟩ := valid
+  exact ⟨SourcePruningEnumerationSelection.ready caller.checked.native.machine.heap before
+      (order metadata) uv safe roots paths counts flags picked,
+    SourcePruningEnumerationSelection.incoming caller.checked.native.machine.heap before
+      (order metadata) uv safe roots paths counts flags picked,
+    SourcePruningEnumerationSelection.realized caller.checked.native.machine.heap before
+      (order metadata) uv safe.1.aligned realized flags picked⟩
+
+end MicroCFTA.SourcePruningEnumerationRestart

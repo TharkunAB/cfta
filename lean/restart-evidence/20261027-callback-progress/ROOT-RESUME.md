@@ -1,0 +1,15 @@
+# Callback progress checkpoint
+
+Goal ACTIVE. Prior turn PROGRESS; current turn PROGRESS after two checked public theorems. Source HEAD a9e4a7def94dd333a1567ed95026c1ca205562a0, native source commit e6b9298239424e1893238139d0c91b2e5d81a4d0; published base6b66b1b57f404658059422c2ac128828391d8e08. Main8766699b594eaad80381af2eee034c378ccf3192 refreshed,ancestortrue. Push formalize authorized.
+
+New proofs: native CacheValid+Safe+existingProperState+nativeSatisfies excludes Restart.decision=some.stuck; full original callback semantic producer retained with new universal observer after its bounds/result. ProperState preserved at callback via Frame.values; SAMEassignment nativeSat via original iff; origin/preservation through actual native preparation remains OPEN. Mu/Union retained. No no-pruning/nonempty-output/full-recursion claim.
+
+Installed NativeProgress117lines/SHA15ea08bbe764cede05fd8f811da2fcb669bf079b956990351b4238e3d52d6343; CallbackProgress87lines/SHA6cb988bf498cc19c8138ffa73a7be3d975a61a0389dff09eda635d3bb5dd8efb. Strict native2/callback1/Audit1 PASS; native1FAIL8499B retained. Nativebuild1360/Audit4254jobs80108deps PASS. Seven actualcommands,1FAIL. Public182blocks792434B/9924b4a0f3e1de671942a7402f27187ff080cfaf2cd3380a6ff4c0292a769c7e, old180exact783343Bprefix; new119lines9091B. All prior4251nonAuditLean/100strong/447Enumeration/203Haskell retained. ENTIRE2032B oldcallbackdeclaration retained.
+
+All10docs written and9oldbodies preserved. Newnote lean/notes-current-callback-progress.md. Rootread full newsource/public/note+9insertions. Three reviewers doing finaldocs/public review then seals in ONLY own folders. Once each sealed neverwrite. No live compiler/process now. Next rootread3finalreports,liveevidenceverification,freeze/archive,portableverification,evidencecommit,committedverification,nonforce authorizedpush,board+outsidefinalstatus. All older TEMP/evidence frozen.
+
+Remaining fullgoal: actualnative Proper origin/preservation; partial-match completion semantics and pending refutation; template policy avoiding legitimate forbiddenpattern pruning, with original+early transformed patterns or syntaxprovenance; recursive depth/stop/frontier;discharge/renderingcoverage/API/Haskell correspondence. LPO integrated. KBOcandidate d7b6a9dfff464eb32c17c314d4825d5b027f1b2d UNINTEGRATED/UNBUILT/UNEXECUTED,positiveIntcontextreversalopen. NoHaskell/Cabal/native test/benchmark change orrun.
+
+All three final reviews are now CLEAR and sealed; Root read all three entire reports and verified every payload/seal/file set. No writes in sealed subfolders. Next freeze, portable/committed verification, evidence commit and authorized push; those future actions are not yet claimed.
+
+Live evidence preflight PASS268source records/3seals. One historical interim review report is exactly retained at report-source-assessment-open.txt; actual final report independently sealed/Root-read. Evidence schema repair recognizes reconstruction-backed document cuts and verifies full reconstructed bytes. Freeze follows; all current stage content must remain immutable after freeze.

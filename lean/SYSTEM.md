@@ -1,5 +1,44 @@
 # Constrained languages, indexing, and distributions
 
+## Native scheduler progress after the actual callback
+
+Source checkpoint: a9e4a7def94dd333a1567ed95026c1ca205562a0.
+The actual native scheduler cannot return stuck from a safe indexed state
+that has ProperState and a satisfying finite assignment. ProperState requires
+strict nonempty pending paths. Canonical waiting counts identify a blocking
+reference. Its source is an actual native candidate, including Mu and Union
+when its pending bucket is nonempty. A cycle would require an infinite
+strict descent in finite terms. The theorem uses the actual native heap.
+
+The callback producer retains its ENTIRE original admission and result.
+Its uniform fuel and actual result precede the new semantic observer.
+For any original ProperState and satisfying assignment, the SAME returned
+metadata and framed cache have a restart decision different from stuck.
+The frame preserves ProperState and the same assignment. The proof uses the
+actual returned Packet. No future successful execution is supplied.
+
+This excludes one empty-result route. It does not prove that recording
+returns false, a hook emits output, or recursion finishes. Packet alone does
+not imply ProperState. Its origin and preservation through native child
+preparation remain open. Templates are forbidden patterns, so native term
+acceptance alone does not exclude legitimate template pruning. Pending-group
+meaning and the early template transformation need separate semantic laws.
+The witness designs in the review are source assessments, not executed
+countermodels or new physical Haskell defects.
+
+Two modules contain 204 lines and two public theorems. Strict checks
+and full Audit pass. Audit passes 4254 jobs and checks 80108 theorem
+dependencies. Public readback has 182 complete blocks; all 180 older blocks
+form the exact 783343-byte prefix. Only the three standard Lean axioms occur.
+All 4251 older non-Audit Lean sources, 100 pinned modules, 447 enumeration
+sources and 203 Haskell sources retain their bytes. Only two imports change
+Audit. H6, checked finite rendering soundness and finite invocation-or-stop
+coverage retain their earlier scopes. End-to-end recursive coverage, frontier
+policy, rendering coverage, API admission and Haskell correspondence remain
+open. The whole goal stays ACTIVE. Details:
+`lean/notes-current-callback-progress.md`.
+
+
 ## Actual finite recursive invocation or an exact earlier hook stop
 
 Source checkpoint: 0684e0b726efa04c1063f0f71b24d58d77ffbea6.

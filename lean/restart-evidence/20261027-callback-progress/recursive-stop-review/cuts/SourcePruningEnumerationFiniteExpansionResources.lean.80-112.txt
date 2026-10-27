@@ -1,0 +1,33 @@
+  obtain ⟨roots, paths, _storage, realized, counts, flags⟩ := packet.valid
+  obtain ⟨prefixFuel, phases⟩ := SourcePruningEnumerationSelectedStep.prefix_checkpoint_complete
+    holeKey fits admits graph templates checkEmpty edgesOf stop order metadata formulas solver inventory
+    caller memos before (order metadata) uv roots packet.context packet.safe packet.pending selection
+    realized paths counts flags
+  rcases phases with parked | rejected | accepted
+  · obtain ⟨checked, phase⟩ := parked
+    obtain ⟨bound, outcome, running, resources⟩ := parked_finite_complete_resources
+      holeKey fits admits graph templates checkEmpty edgesOf stop order formulas solver recursiveFuel recursive inventory
+      caller memos before metadata prefixFuel uv checked seed ceiling packet bounded known
+      selectionMembers selectionLength initialMass reserved phase
+    exact ⟨bound, outcome, running, by
+      simpa only [SourcePruningEnumerationFiniteReservation.final_succ] using resources⟩
+  · obtain ⟨checked, heap, phase⟩ := rejected
+    let reached := SourceCurrentAllocatedPartialState.advance caller
+      (SourceCurrentAllocatedQueryMemo.advancePhysical caller.checked ⟨heap, caller.checked.operations⟩)
+      caller.fourth caller.merge
+    have valid := (phase 0).2
+    rw [(phase 0).1] at valid
+    have resources := SourcePruningEnumerationSelectedStep.prefix_resources
+      holeKey fits admits graph templates checkEmpty edgesOf stop order metadata formulas solver inventory
+      (prefixFuel + 0) uv caller before memos seed.2 (fun guard => guard ∈ seed.1)
+      packet.context realized bounded known _ valid
+    obtain ⟨final, post, query⟩ := SourcePruningEnumerationPrefixPacket.prefix_context
+      holeKey fits admits graph templates checkEmpty edgesOf stop order metadata formulas solver inventory
+      (prefixFuel + 0) uv caller before memos _ valid
+    have certificate : OutcomeResources (Typing := Typing) formulas solver caller start (.complete [] reached memos.query) :=
+      ⟨reached, inventory, final, post, resources.1, resources.2, rfl, query.symm,
+        fun _ member => False.elim (List.not_mem_nil member)⟩
+    refine ⟨prefixFuel, .complete [] reached memos.query, ?_, certificate.mono
+      stageGrowth.1 stageGrowth.2⟩
+    intro extra
+    rw [resume, (phase extra).1]

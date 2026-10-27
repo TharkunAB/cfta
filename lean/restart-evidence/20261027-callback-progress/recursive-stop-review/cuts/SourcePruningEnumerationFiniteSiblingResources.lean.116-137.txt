@@ -1,0 +1,22 @@
+      rcases shape with unsupported | ⟨outcome, advanced, callbackRun, resources, captured⟩
+      · obtain ⟨unhandled, _allowed, _projected⟩ := unsupported
+        subst receipt
+        refine ⟨headBound, [], [], middleCaller, middleInventory, middleMemos,
+          .stopped [] [] (.edge (some .unhandled)), ?_, headPost,
+          SourcePruningEnumerationRecursive.captured_post packet headPost, wholeFits, wholeKnown,
+          by simp, ?_, ?_, .inr ⟨_, rfl, .inl rfl, .inl rfl⟩⟩
+        · intro extra
+          simp only [SourcePruningEnumerationNativeContinuations.run, headRun extra,
+            SourcePruningEnumerationNativeBranches.advance]
+        · intro index current found
+          cases found
+        · intro output member
+          cases member
+      · have receiptCertificate : ReceiptAt recursiveFuel formulas solver caller before uv seed scs capturedMass inherited 0 receipt :=
+          ⟨admitted, pending, history, cacheBounds, middleCaller, middleMemos.query, middleInventory, middleMemos,
+            advanced, headPost, rfl, headFits, headKnown⟩
+        cases outcome with
+        | complete headOutputs hookCaller hookQueries =>
+            obtain ⟨hookInventory, hookMemos, hookPost, hookQuery, hookCaptured, hookFits, hookKnown⟩ := captured
+            obtain ⟨_actual, _next, _final, _post, _fits, _known, _same, _query, headOutputsValid⟩ := resources
+            obtain ⟨tailBound, processed, outputs, afterCaller, next, final, tailResult,

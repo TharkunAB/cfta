@@ -1,0 +1,28 @@
+  | nil => exact .nil
+  | cons term rest first restMatches => exact .cons first restMatches
+
+mutual
+  /-- Execute complete-term template matching. -/
+  def matchesTerm [DecidableEq Symbol] (pattern : Pattern Symbol) : Term Symbol → Bool
+    | .node symbol terms =>
+        match childTemplates pattern symbol terms.length with
+        | none => false
+        | some patterns => matchesChildren patterns terms
+
+  /-- Execute pointwise matching of aligned children. -/
+  def matchesChildren [DecidableEq Symbol] : List (Pattern Symbol) → List (Term Symbol) → Bool
+    | [], [] => true
+    | pattern :: patterns, term :: terms => matchesTerm pattern term && matchesChildren patterns terms
+    | _, _ => false
+end
+
+/-- Executable matching decides the complete-term pattern relation. -/
+theorem matchesTerm_correct [DecidableEq Symbol] (term : Term Symbol) (pattern : Pattern Symbol) :
+    matchesTerm pattern term = true ↔ Matches pattern term := by
+  induction term using Term.rec
+    (motive_2 := fun (terms : List (Term Symbol)) => ∀ patterns : List (Pattern Symbol),
+      matchesChildren patterns terms = true ↔ All₂ Matches patterns terms) generalizing pattern with
+  | node symbol terms ih =>
+      cases aligned : childTemplates pattern symbol terms.length with
+      | none =>
+          simp only [matchesTerm, aligned, Bool.false_eq_true, false_iff]
