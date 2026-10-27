@@ -1,0 +1,16 @@
+/-- Initialize the supplied variables as singleton roots. -/
+def withInitialValues (variables : List Nat) : Forest :=
+  fun uv => if uv ∈ variables then some (.root 1) else none
+
+@[simp] theorem read_empty (uv : Nat) : read empty uv = .root 1 := rfl
+
+@[simp] theorem read_initial (variables : List Nat) (uv : Nat) :
+    read (withInitialValues variables) uv = .root 1 := by
+  simp only [read, withInitialValues]
+  split <;> rfl
+
+/-- Empty and initialized forests both give terminating singleton paths. -/
+theorem empty_total : Total empty := fun uv => ⟨uv, 1, .root rfl⟩
+
+theorem initial_total (variables : List Nat) : Total (withInitialValues variables) :=
+  fun uv => ⟨uv, 1, .root (read_initial variables uv)⟩

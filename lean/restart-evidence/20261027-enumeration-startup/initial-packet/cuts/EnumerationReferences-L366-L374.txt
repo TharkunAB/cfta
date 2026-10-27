@@ -1,0 +1,9 @@
+/-- The initial root contains no references to expanded slots. -/
+theorem initial_pending (root : Nat) : PendingReferences (initial root : State Symbol Guard) := by
+  intro held fragment stored
+  cases held <;> simp [initial] at stored
+
+/-- A value-preserving class-preserving read retains a protected root's incoming-reference condition. -/
+theorem incoming_read (held : Nat) (before after : State Symbol Guard) (stable : RenderStable before after)
+    (incoming : IncomingAvoid held before) : IncomingAvoid held after := by
+  intro value member sc listed same

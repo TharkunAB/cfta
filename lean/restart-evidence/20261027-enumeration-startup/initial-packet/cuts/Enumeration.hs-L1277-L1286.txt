@@ -1,0 +1,10 @@
+runsFrom ::
+    (Hashable symbol, Typeable symbol) =>
+    (Node symbol -> Node symbol -> [Edge symbol]) -> symbol -> Node symbol -> [(Term symbol, [(Constraint, Term symbol)])]
+runsFrom order recursionSymbol n =
+    map fst $ flip allBranches (initEnumerationState (order n) n) $ do
+        enumerateFully
+        term <- expandUVarWith recursionSymbol (intToUVar 0)
+        obligations <- gets _obligations
+        pending <- mapM (\(constraint, fragment) -> (constraint,) <$> expandTermFragWith recursionSymbol fragment) obligations
+        return (term, pending)

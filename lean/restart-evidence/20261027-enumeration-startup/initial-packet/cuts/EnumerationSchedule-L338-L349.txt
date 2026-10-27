@@ -1,0 +1,12 @@
+/-- The initialized root is live and is its own representative. -/
+theorem initial_live (root : Nat) : LiveRoots (initial root : State Symbol Guard) := by
+  intro uv value stored
+  cases uv with
+  | zero =>
+      simp [initial] at stored
+      subst value
+      refine ⟨fun _ => ⟨1, .root (UnionFind.read_initial [0] 0)⟩, ?_⟩
+      simp
+  | succ uv => simp [initial] at stored
+
+/-- Every actual fresh allocation establishes a live singleton and retains older live slots. -/

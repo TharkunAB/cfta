@@ -1,0 +1,27 @@
+/-- Each stored pending handle decodes to a closed available interned value. -/
+def PendingRealized (heap : InternedConstructorTemplates.State Symbol NativeGuard)
+    (state : EnumerationState.State Symbol EnumGuard) : Prop :=
+  ∀ (slot node : Nat) (scs : List EnumerationState.Suspended),
+    state.values[slot]? = some (.unenumerated (some node) scs) →
+      ∃ value : InternedConstructorTemplates.Value Symbol NativeGuard,
+        lookupNode heap node = some value ∧
+        InternedProbeProvenance.Available heap value ∧ value.free = []
+
+/-- A closed available input derives the handle in the actual initial slot. -/
+theorem initial_realized (heap : InternedConstructorTemplates.State Symbol NativeGuard)
+    (value : InternedConstructorTemplates.Value Symbol NativeGuard)
+    (coherent : InternedRecordCoherence.Coherent heap)
+    (available : InternedProbeProvenance.Available heap value) (closed : value.free = []) :
+    ∃ node, encodeNode value = some node ∧
+      PendingRealized heap (EnumerationState.initial node : EnumerationState.State Symbol EnumGuard) := by
+  obtain ⟨node, encoded, decoded⟩ := available_readback heap value coherent available closed
+  refine ⟨node, encoded, ?_⟩
+  intro slot storedNode scs stored
+  cases slot with
+  | zero =>
+      simp [EnumerationState.initial] at stored
+      obtain ⟨rfl, rfl⟩ := stored
+      exact ⟨value, decoded, available, closed⟩
+  | succ => simp [EnumerationState.initial] at stored
+
+/-- A full enumeration frame and actual native growth retain realized slots. -/

@@ -1,0 +1,11 @@
+-}
+data Entry = Parent !UVar | Root !Int !IntSet
+    deriving (Eq, Ord, Show)
+
+-- | Persistent union-find forest, keyed by the integer id of a variable.
+newtype UnionFind = UnionFind {getUnionFindMap :: IntMap Entry}
+    deriving (Eq, Ord, Show)
+
+-- | Forest containing each supplied variable as a singleton set.
+withInitialValues :: [UVar] -> UnionFind
+withInitialValues uvs = UnionFind $ IntMap.fromList [(i, Root 1 (IntSet.singleton i)) | i <- map uvarToInt uvs]

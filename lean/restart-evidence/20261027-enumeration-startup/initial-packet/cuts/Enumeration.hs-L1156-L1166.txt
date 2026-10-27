@@ -1,0 +1,11 @@
+    (Hashable symbol, Ord symbol, Typeable symbol) =>
+    symbol ->
+    a ->
+    ExpansionOrder a ->
+    (a -> UVar -> Either (TermFragment symbol) (Node symbol) -> EnumerateM symbol (Bool, a)) ->
+    Node symbol ->
+    [Term symbol]
+termsPruneWith recursionSymbol ost order oracle n =
+    map fst $ flip allBranches (initEnumerationState (canonicalEdgesOf Nothing n) n) $ do
+        enumerateFully' ost order oracle
+        expandUVarWith recursionSymbol (intToUVar 0)

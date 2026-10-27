@@ -1,0 +1,34 @@
+  have coherent := context.ready.good.heap.semantic.1.normal.facts.coherent
+  obtain ⟨handle, encoded, decoded⟩ := available_readback
+    caller.checked.native.machine.heap value coherent available closed
+  let startup : Cached :=
+    ⟨EnumerationState.initial handle,
+      fun slot => if slot = 0 then !MergedOrdinaryHeight.recursiveBoundary value else false,
+      fun _ => none⟩
+  have realized : PendingRealized caller.checked.native.machine.heap startup.core := by
+    intro slot storedNode scs stored
+    cases slot with
+    | zero =>
+        simp [startup, EnumerationState.initial] at stored
+        obtain ⟨rfl, rfl⟩ := stored
+        exact ⟨value, decoded, available, closed⟩
+    | succ slot => simp [startup, EnumerationState.initial] at stored
+  have counts : EnumerationCanonicalWaiting.Correct (fun uv => uv) startup.core.values startup.waiting :=
+    EnumerationCanonicalWaiting.initial_correct (fun uv => uv) handle
+  have flags : ∀ slot, SourcePruningEnumerationNativeIndex.candidate caller.checked.native.machine.heap
+      ((startup.core.values[slot]?).getD .eliminated) = some (startup.expandable slot) := by
+    intro slot
+    cases slot with
+    | zero => simp [startup, EnumerationState.initial, SourcePruningEnumerationNativeIndex.candidate, decoded]
+    | succ slot => simp [startup, EnumerationState.initial, SourcePruningEnumerationNativeIndex.candidate]
+  have packet : Packet formulas solver inventory caller memos metadata startup := by
+    refine ⟨context, ⟨initial_storage handle, initial_live handle⟩, EnumerationReferences.initial_pending handle,
+      ⟨(fun uv => uv), ?_, initial_storage handle, realized, counts, flags⟩,
+      ⟨(fun _ => 0), 0, EnumerationOrder.initial_stratified handle⟩, ?_⟩
+    · intro uv
+      exact ⟨1, .root (UnionFind.read_initial [0] uv)⟩
+    · intro group member
+      rw [emptyPending] at member
+      exact False.elim (List.not_mem_nil member)
+  exact ⟨handle, encoded, decoded, packet, EnumerationValidity.initial_canonical handle,
+    rfl, rfl, counts, flags⟩

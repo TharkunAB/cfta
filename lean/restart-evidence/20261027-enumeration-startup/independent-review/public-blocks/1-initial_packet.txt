@@ -1,0 +1,33 @@
+MicroCFTA.SourcePruningEnumerationRecursive.initial_packet {Typing : Type} {width : Nat}
+  [DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey MicroCFTA.SourcePruningTemplates.Symbol
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  (formulas : MicroCFTA.SourceGuards.Formulas MicroCFTA.FullSyntax.Formula)
+  (solver : MicroCFTA.SourceGuards.Entailment MicroCFTA.FullSyntax.Formula)
+  (inventory : MicroCFTA.SourceCurrentAllocatedNativeInventoryState.Inventory)
+  (caller : MicroCFTA.SourceCurrentAllocatedPartialState.State width) (memos : MicroCFTA.EndpointMemoGateTrace.Memos)
+  (metadata : MicroCFTA.SourcePruningRecordTypes.Metadata Typing)
+  (value :
+    MicroCFTA.InternedConstructorTemplates.Value MicroCFTA.SourcePruningTemplates.Symbol
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+  (context : MicroCFTA.SourceCurrentAllocatedPartialInvariant.Context formulas solver inventory caller memos)
+  (available : MicroCFTA.InternedProbeProvenance.Available caller.checked.native.machine.heap value)
+  (closed : value.free = []) (emptyPending : metadata.pending = []) :
+  ∃ handle,
+    MicroCFTA.SourcePruningEnumerationNodes.encodeNode value = some handle ∧
+      MicroCFTA.SourcePruningEnumerationNodes.lookupNode caller.checked.native.machine.heap handle = some value ∧
+        have startup :=
+          { core := MicroCFTA.EnumerationState.initial handle,
+            expandable := fun slot =>
+              if slot = 0 then !MicroCFTA.MergedOrdinaryHeight.recursiveBoundary value else false,
+            waiting := fun x => none };
+        MicroCFTA.SourcePruningEnumerationRecursive.Packet formulas solver inventory caller memos metadata startup ∧
+          MicroCFTA.EnumerationValidity.Canonical startup.core ∧
+            startup.core.values[0]? = some (MicroCFTA.EnumerationState.UVarValue.unenumerated (some handle) []) ∧
+              MicroCFTA.SourcePruningEnumerationPrefixAdmission.suspendedBound startup.core = 0 ∧
+                MicroCFTA.EnumerationCanonicalWaiting.Correct (fun uv => uv) startup.core.values startup.waiting ∧
+                  ∀ (slot : Nat),
+                    MicroCFTA.SourcePruningEnumerationNativeIndex.candidate caller.checked.native.machine.heap
+                        (startup.core.values[slot]?.getD MicroCFTA.EnumerationState.UVarValue.eliminated) =
+                      some (startup.expandable slot)
+'MicroCFTA.SourcePruningEnumerationRecursive.initial_packet' depends on axioms: [propext, Classical.choice, Quot.sound]

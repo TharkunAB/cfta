@@ -1,0 +1,10 @@
+newtype UVarGen = UVarGen Int
+    deriving (Eq, Ord, Show)
+
+-- | Initial variable supply.
+initUVarGen :: UVarGen
+initUVarGen = UVarGen 0
+
+-- | Allocate one fresh variable and advance the supply.
+nextUVar :: UVarGen -> (UVarGen, UVar)
+nextUVar (UVarGen n) = (UVarGen (n + 1), UVar n)

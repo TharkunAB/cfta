@@ -1,0 +1,36 @@
+    ∃ bound outcome,
+      (∀ extra, run holeKey fits admits graph templates checkEmpty edgesOf stop order (bound + extra) recursiveFuel
+        metadata caller memos.query before = outcome) ∧
+      OutcomeResources formulas solver caller
+        (SourcePruningEnumerationFiniteReservation.final recursiveFuel seed ceiling) outcome ∧
+      (∀ extra output, output ∈ SourcePruningEnumerationHookInvocation.hookOutputs outcome →
+        ResourceHistory holeKey fits admits graph templates checkEmpty edgesOf stop order formulas solver
+          (bound + extra) recursiveFuel inventory caller memos metadata before seed ceiling
+          (SourcePruningEnumerationRestart.decision stop order metadata before) output) ∧
+      (∀ output ∈ SourcePruningEnumerationHookInvocation.hookOutputs outcome, Canonical output.cache.core) ∧
+      ∀ (_extra : Nat) output, output ∈ SourcePruningEnumerationHookInvocation.hookOutputs outcome →
+        ∀ (ambient : InternedGuardedLanguage.Env Symbol) (marker : Symbol) (fuel : Nat)
+          (after : Core) (term : Language.Term Symbol) (pending : List (Constraint × Language.Term Symbol)),
+        SourcePruningEnumerationRendering.Discharged output.cache.core →
+        Success (SourcePruningEnumerationRendering.render output.caller.checked.native.machine.heap marker fuel 0)
+          output.cache.core (term, pending) after →
+        (∀ obligation ∈ pending, SourceEqualityPCSGuard.holds formulas solver obligation.1 obligation.2 = true) →
+        ∃ assignment : Nat → Language.Term Symbol,
+          Satisfies
+            (SourcePruningEnumerationNativeLanguage.handles (SourceEqualityPCSGuard.holds formulas solver)
+              ambient caller.checked.native.machine.heap)
+            (fun guard accepted => SourceEqualityPCSGuard.holds formulas solver guard accepted = true)
+            assignment before.core ∧
+          InternedGuardedLanguage.meaning (SourceEqualityPCSGuard.holds formulas solver) ambient value term ∧
+          (∀ sc ∈ ([] : List Suspended), Suspended.Holds assignment term sc) ∧ term = assignment 0 ∧
+          EnumerationCompressionFrame.Frame output.cache.core after ∧
+          Satisfies
+            (SourcePruningEnumerationNativeLanguage.handles (SourceEqualityPCSGuard.holds formulas solver)
+              ambient output.caller.checked.native.machine.heap)
+            (fun guard accepted => SourceEqualityPCSGuard.holds formulas solver guard accepted = true)
+            assignment output.cache.core ∧
+          Satisfies
+            (SourcePruningEnumerationNativeLanguage.handles (SourceEqualityPCSGuard.holds formulas solver)
+              ambient output.caller.checked.native.machine.heap)
+            (fun guard accepted => SourceEqualityPCSGuard.holds formulas solver guard accepted = true)
+            assignment after

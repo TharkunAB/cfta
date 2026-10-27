@@ -1,5 +1,43 @@
 # Constrained languages, indexing, and distributions
 
+## Checked rendering from the literal native startup
+
+Source checkpoint: 63942a2bff4143e44fdc16ea026df24c0ac9d6b8.
+The initial enumeration packet now follows from an available closed native
+root, the original native Context and metadata with no pending templates.
+The proof derives Canonical storage, both native indexes, the exact root
+handle and lookup, and zero suspended mass. It uses the literal single-root
+startup state. Empty is initially expandable. Mu and Union are initially
+parked when their suspended bucket is empty. Every unallocated slot has a
+false expandable flag.
+
+run_initial_finite_render_sound connects that startup to the finite driver.
+For each fully discharged output whose native rendering succeeds and whose
+returned residuals check, the rendered term belongs to the original root's
+native language. The proof constructs an assignment for the original,
+output and rendered states. Stable execution, all original resource packets,
+all resource histories and every output Canonical certificate remain.
+No supplied startup Packet, Canonical, mass bound, root storage or root lookup
+is an input. Genuine initial arity, native Context, numerical resources,
+annotation carrier, selector and reservation contracts remain explicit.
+The model handle encoding remains separate from physical Haskell NodeId
+extraction. The proof retains the full caller and all memo families.
+
+H6 retains exact accepted finite trees for its covered construction and any
+fixed finite number of pruning rounds, with sufficient width and fuel.
+Enumeration coverage, remaining public admissions and API obligations, and
+physical Haskell correspondence remain open. A selector that returns []
+satisfies the current subset and length contracts. Coverage needs a stronger
+edge-retention contract. The full formalization goal stays ACTIVE.
+
+Two modules contain 198 lines and two new theorems. Both pass strict checks.
+Audit passes 4234 jobs and checks 80044 theorem dependencies. Public readback
+contains 159 full signature and axiom blocks. All 157 prior blocks and all
+80 pinned prior source modules remain byte exact. Only the three standard
+Lean axioms occur. No Haskell source changed. FINDINGS retains every repair
+handoff. Details: `lean/notes-current-enumeration-startup.md`.
+
+
 ## Derived arity histories and rendered original acceptance
 
 Source checkpoint: 074e4aaabdc8a3cd2d1bdf8722e268460c178dc7.

@@ -1,0 +1,16 @@
+/-- The actual initial state establishes the complete finite storage invariant. -/
+theorem initial_storage (root : Nat) : StorageValid (initial root : State Symbol Guard) := by
+  refine ⟨rfl, UnionFind.initial_total _, ?_, ?_, ?_⟩
+  · intro uv entry stored
+    simp only [initial, UnionFind.withInitialValues, List.mem_singleton] at stored
+    by_cases zero : uv = 0
+    · subst uv
+      simp at stored
+      subst entry
+      simp [initial]
+    · simp [zero] at stored
+  · intro value member
+    have same : value = .unenumerated (some root) [] := by simpa [initial] using member
+    subst value
+    simp [initial, SlotBound]
+  · simp [initial]
