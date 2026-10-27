@@ -1,0 +1,31 @@
+/-- Clearing a recursive boundary removes its full bucket and derives the actual native indexes. -/
+theorem complete
+    (heap : InternedConstructorTemplates.State Symbol NativeGuard)
+    (before : EnumerationExpandableIndex.Cached Symbol EnumGuard)
+    (after : EnumerationState.State Symbol EnumGuard)
+    (target handle : Nat) (scs : List Suspended)
+    (value : Value Symbol NativeGuard) (roots : Nat → Nat)
+    (ready : EnumerationDriver.Ready target before.core)
+    (stored : before.core.values[target]? = some (.unenumerated (some handle) scs))
+    (realized : PendingRealized heap before.core)
+    (decoded : lookupNode heap handle = some value)
+    (boundary : MergedOrdinaryHeight.recursiveBoundary value = true)
+    (paths : Roots before.core.representatives roots)
+    (counts : EnumerationCanonicalWaiting.Correct roots before.core.values before.waiting)
+    (flags : ∀ slot, SourcePruningEnumerationNativeIndex.candidate heap
+      ((before.core.values[slot]?).getD .eliminated) = some (before.expandable slot))
+    (written : Success (setValue target (.unenumerated (some handle) [])) before.core () after) :
+    ∃ (fuel : Nat) (cached : EnumerationExpandableIndex.Cached Symbol EnumGuard),
+      (∀ extra, SourcePruningEnumerationNativeIndex.write heap (fuel + extra) target
+        (.unenumerated (some handle) []) [] scs before = some cached) ∧
+      cached.core = after ∧
+      cached.waiting = EnumerationCanonicalWaiting.count roots (-1) scs before.waiting ∧
+      cached.expandable = (fun slot => if slot = target then false else before.expandable slot) ∧
+      cached.expandable target = false ∧ EnumerationDriver.Ready target after ∧
+      Roots after.representatives roots ∧ PendingRealized heap after ∧
+      after.values[target]? = some (.unenumerated (some handle) []) ∧
+      EnumerationCanonicalWaiting.Correct roots after.values cached.waiting ∧
+      (∀ slot, SourcePruningEnumerationNativeIndex.candidate heap
+        ((after.values[slot]?).getD .eliminated) = some (cached.expandable slot)) ∧
+      (EnumerationReferences.PendingReferences before.core → EnumerationReferences.PendingReferences after) ∧
+      (∀ held, EnumerationReferences.IncomingAvoid held before.core → EnumerationReferences.IncomingAvoid held after) := by

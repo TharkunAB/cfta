@@ -1,0 +1,33 @@
+[2026-10-27 06:40 CET] Actual prepared-action replay draft
+
+Draft: SourceFlatPruningActionReplay.lean
+SHA256: c2e9b802ee9a37e85048e1625c727053eef1ed018635a5490716f48c06b95678
+Status: source-only, no Lean or build execution. All proof terms are present. No sorry, axiom, runtime definition change, or repository edit was added.
+
+Public API in namespace MicroCFTA.SourceFlatPruningAction:
+prepare_replays holeKey fits admits metadata nativeFuel representativeFuel uv oldHandle
+  scs oldValue value heap afterHeap action prepared
+where prepared is the literal old Action.prepare equation returning .done(value,some action) afterHeap.
+
+Result:
+exists flatAction,
+  flat prepare at the SAME nativeFuel/input = .done(value,some flatAction) afterHeap
+  and EnumerationFlatReplay.Replays flatAction action
+  and (value=.empty -> flatAction=EnumerationFlatState.reject).
+
+There is no completed old findRoot premise and no initial Ready/Safe/resource premise. The new flat action executes the same existing native narrowing call from prepare; the theorem relates it to the supplied old preparation result. The theorem does not produce a new native completion history.
+
+Proof structure:
+- private write_replays derives the actual old setValue endpoint from EnumerationDriver.modify_success, then returns the literal flat values.set endpoint with all seven Related fields. No representative or allocation premise is used.
+- private rejection_replays uses EnumerationSchedule.reject_unsuccessful. This relation is vacuous, so the public theorem ALSO retains the explicit flatAction=reject equality on Empty.
+- private replacement_replays splits equal handles. Pure uses pure_replays directly. Changed handles compose representative_replays representativeFuel uv with write_replays at the exact returned root, using bind_replays. The successful old trace supplies the representative success. Its fuel can be any value.
+- prepare_replays splits the same native narrow observation. Failure contradicts the supplied done receipt. Empty returns the exact flat reject. Reference is unencodable, so it contradicts some action. Node/Union/Mu extract the actual value/action/heap equalities, then use replacement_replays at entry.identity+1. No branch requires a lookup that its runtime does not execute.
+
+Consumer recipe:
+Obtain flatAction, preparedFlat, replay, emptyFlat from prepare_replays ... oldPrepared.
+For a nonempty old action observation, apply replay flatChecked oldChecked () oldAfter checkedRelated oldSuccess. This gives the actual flat singleton with the same Unit and a related endpoint. It does not require extending representativeFuel or nativeFuel.
+For Empty, use emptyFlat valueEmpty to rewrite the actual flat action to reject; its raw rows reduce to []. Do not use the vacuous Replays fact to invent a successful endpoint. Old native Caller and reached heap remain exact from preparedFlat.
+
+The theorem intentionally covers successful PREPARATION, not successful execution only. Thus Empty preparation is covered although its action has no success. It does not claim old insufficient-fuel errors match a total flat action, or compare native failure/absent-action branches under this done receipt; the existing PreparedRelated API handles those separately when its own premises hold.
+
+Adoption requires only the two imports in the draft. Keep this original draft immutable when applying any elaboration or linter repair in the repository. Parent has sole build ownership.

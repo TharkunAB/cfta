@@ -1,0 +1,19 @@
+/-- The actual pending-bucket clear retains the allocation counter and dependency levels. -/
+theorem parked_order
+    (uv handle : Nat) (scs : List Suspended)
+    (before resolved after : EnumerationState.State Symbol EnumGuard)
+    (stored : before.values[uv]? = some (.unenumerated (some handle) scs))
+    (frame : Frame before resolved)
+    (written : Success (setValue uv (.unenumerated (some handle) [])) resolved () after) :
+    after.counter = before.counter ∧
+    ∀ level frontier, EnumerationOrder.Stratified before level frontier →
+      EnumerationOrder.Stratified after level frontier := by
+  have resolvedStored : resolved.values[uv]? = some (.unenumerated (some handle) scs) := by
+    simpa only [frame.values] using stored
+  have shape := (EnumerationDriver.modify_success _ resolved after).mp written
+  refine ⟨?_, ?_⟩
+  · simpa only [shape] using frame.counter
+  · intro level frontier stratified
+    exact EnumerationOrder.setValue_pending_stratified uv (some handle) (some handle) scs []
+      resolved after resolvedStored level frontier
+      (EnumerationOrder.frame_stratified before resolved frame level frontier stratified) written

@@ -1,0 +1,28 @@
+  obtain ⟨fuel, countRun⟩ := SourcePruningEnumerationNativeIndex.count_complete
+    before.core.representatives roots paths scs
+  let cached : EnumerationExpandableIndex.Cached Symbol EnumGuard := ⟨after,
+    fun slot => if slot = target then false else before.expandable slot,
+    EnumerationCanonicalWaiting.count roots (-1) scs before.waiting⟩
+  refine ⟨fuel, cached, ?_, rfl, rfl, rfl, by simp [cached], afterReady,
+    by simpa only [shape] using paths, afterRealized,
+    by simpa only [shape] using List.getElem?_set_self inside, ?_, ?_,
+    (fun history => EnumerationPendingReplacement.setValue_clear_pending target (some handle) scs
+      before.core after stored history written),
+    fun held incoming => EnumerationPendingReplacement.setValue_clear_incoming held target (some handle)
+      before.core after incoming written⟩
+  · intro extra
+    simp only [SourcePruningEnumerationNativeIndex.write, SourcePruningEnumerationNativeIndex.candidate,
+      decoded, Option.map_some, boundary, List.isEmpty_nil, Bool.and_self, Bool.not_true, Option.bind_some,
+      countRun extra (-1) before.waiting, SourcePruningEnumerationNativeIndex.count]
+    rw [← shape]
+  · have counted := EnumerationCanonicalWaiting.replace_correct roots before.core.values target
+      (.unenumerated (some handle) scs) (.unenumerated (some handle) []) stored before.waiting counts
+    simpa only [shape, cached, EnumerationCanonicalWaiting.replace, references, EnumerationCanonicalWaiting.count,
+      List.map_nil, EnumerationWaitingIndex.count, List.foldl_nil] using counted
+  · intro slot
+    by_cases same : slot = target
+    · subst slot
+      simp only [shape, List.getElem?_set_self inside, Option.getD_some,
+        SourcePruningEnumerationNativeIndex.candidate, decoded, Option.map_some, boundary,
+        List.isEmpty_nil, Bool.and_self, Bool.not_true, cached, ↓reduceIte]
+    · simpa only [shape, List.getElem?_set_ne (Ne.symm same), cached, ite_eq_right same] using flags slot

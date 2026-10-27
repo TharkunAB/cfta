@@ -1,0 +1,40 @@
+/-- Actual read, check and index observations derive the exact parked restart result. -/
+theorem run_parked
+    (heap : InternedConstructorTemplates.State Symbol Constraint)
+    (readFuel checkFuel indexFuel uv handle : Nat) (scs : List Suspended)
+    (stop : Option (Metadata Typing → Nat → Bool))
+    (order : Metadata Typing → List Nat → Option Nat) (metadata : Metadata Typing)
+    (before parked : Cached) (readAfter checked : EnumerationState.State Symbol Constraint)
+    (read : ExceptT.run (getValue readFuel uv before.core) =
+      [.ok (.unenumerated (some handle) scs, readAfter)])
+    (check : ExceptT.run (SourcePruningEnumerationRecursion.checkRepeated heap checkFuel uv handle scs readAfter) =
+      [.ok (true, checked)])
+    (adapted : adapt heap indexFuel uv handle scs before checked = some parked) :
+    ExceptT.run (run heap readFuel checkFuel indexFuel uv stop order metadata before before.core) =
+      if SourcePruningEnumerationRestart.decision stop order metadata parked = some .stuck then []
+      else [.ok (some (metadata, SourcePruningEnumerationRestart.decision stop order metadata parked), parked.core)] := by
+  have core := adapt_core heap indexFuel uv handle scs before parked checked adapted
+  rw [core]
+  simp only [run, read, check, List.flatMap_singleton, adapted, SourcePruningEnumerationRestart.run]
+  split <;> rfl
+
+/-- The selected producer's actual clear and indexed-write receipts discharge cache recovery. -/
+theorem run_parked_after_write
+    (heap : InternedConstructorTemplates.State Symbol Constraint)
+    (readFuel checkFuel indexFuel uv handle : Nat) (scs : List Suspended)
+    (stop : Option (Metadata Typing → Nat → Bool))
+    (order : Metadata Typing → List Nat → Option Nat) (metadata : Metadata Typing)
+    (before parked : Cached) (readAfter resolved : EnumerationState.State Symbol Constraint)
+    (read : ExceptT.run (getValue readFuel uv before.core) =
+      [.ok (.unenumerated (some handle) scs, readAfter)])
+    (check : ExceptT.run (SourcePruningEnumerationRecursion.checkRepeated heap checkFuel uv handle scs readAfter) =
+      [.ok (true, parked.core)])
+    (written : Success (setValue uv (.unenumerated (some handle) [])) resolved () parked.core)
+    (indexed : SourcePruningEnumerationNativeIndex.write heap indexFuel uv
+      (.unenumerated (some handle) []) [] scs (EnumerationExpandableIndex.frame resolved before) = some parked) :
+    ExceptT.run (run heap readFuel checkFuel indexFuel uv stop order metadata before before.core) =
+      if SourcePruningEnumerationRestart.decision stop order metadata parked = some .stuck then []
+      else [.ok (some (metadata, SourcePruningEnumerationRestart.decision stop order metadata parked), parked.core)] := by
+  exact run_parked heap readFuel checkFuel indexFuel uv handle scs stop order metadata before parked
+    readAfter parked.core read check
+    (adapt_after_write heap indexFuel uv handle scs before parked resolved parked.core written indexed rfl)

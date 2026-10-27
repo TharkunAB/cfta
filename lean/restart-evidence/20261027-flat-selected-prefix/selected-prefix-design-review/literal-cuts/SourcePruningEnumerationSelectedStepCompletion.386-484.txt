@@ -1,0 +1,99 @@
+theorem complete
+    (formulas : SourceGuards.Formulas FullSyntax.Formula)
+    (solver : SourceGuards.Entailment FullSyntax.Formula) (inventory : Inventory)
+    (caller : Caller width) (memos : Memos) (before : Cached)
+    (preference : List Nat → Option Nat) (uv : Nat) (roots : Nat → Nat)
+    (initial : Context formulas solver inventory caller memos) (safe : Safe before.core)
+    (pending : EnumerationReferences.PendingReferences before.core)
+    (selection : EnumerationPureSelection.next preference before = .expand uv)
+    (realized : PendingRealized caller.checked.native.machine.heap before.core)
+    (paths : Roots before.core.representatives roots)
+    (counts : EnumerationCanonicalWaiting.Correct roots before.core.values before.waiting)
+    (flags : ∀ slot, SourcePruningEnumerationNativeIndex.candidate caller.checked.native.machine.heap
+      ((before.core.values[slot]?).getD .eliminated) = some (before.expandable slot)) :
+    ∃ readFuel checkFuel nativeFuel representativeFuel indexFuel,
+      ∀ er ec ei callbackFuel r n p h k,
+        Valid holeKey fits admits graph templates checkEmpty edgesOf stop order metadata formulas solver inventory
+          (readFuel + er) (checkFuel + ec) nativeFuel representativeFuel (indexFuel + ei) callbackFuel
+          r n p h k uv caller before memos
+          (run holeKey fits admits graph templates checkEmpty edgesOf stop order metadata
+            (readFuel + er) (checkFuel + ec) nativeFuel representativeFuel (indexFuel + ei)
+            callbackFuel r n p h k uv caller before memos.query) := by
+  obtain ⟨readFuel, oldHandle, scs, oldValue, readAfter, checkFuel, repeated, checked, stored, oldDecoded,
+    _oldAvailable, _oldClosed, readExact, checkExact, checkReady, checkPaths, checkRealized,
+    checkCounts, checkFlags, _checkIncoming, checkPending, parked, continued⟩ :=
+    SourcePruningEnumerationSelectedOrdinary.complete_with_history formulas solver inventory caller memos
+      holeKey fits admits metadata graph templates checkEmpty edgesOf before preference uv roots
+      initial safe pending selection realized paths counts flags
+  cases repeated with
+  | true =>
+      obtain ⟨_boundary, _cleared, _disabled, _waiting, resolved, countFuel, frame, _reading,
+        _seen, written, indexed⟩ := parked rfl
+      obtain ⟨counter, ordered⟩ := SourcePruningEnumerationParkedRestart.parked_order uv oldHandle scs
+        before.core resolved checked.core stored frame written
+      refine ⟨readFuel, checkFuel, 0, 0, countFuel, ?_⟩
+      intro er ec ei callbackFuel r n p h k
+      have adapted := SourcePruningEnumerationParkedRestart.adapt_after_write caller.checked.native.machine.heap
+        (countFuel + ei) uv oldHandle scs before checked resolved checked.core written (indexed ei) rfl
+      rw [run_parked holeKey fits admits graph templates checkEmpty edgesOf stop order metadata
+        (readFuel + er) (checkFuel + ec) 0 0 (countFuel + ei) callbackFuel r n p h k uv oldHandle
+        scs caller before checked memos.query readAfter checked.core (readExact er) (checkExact ec) adapted]
+      exact ⟨oldHandle, scs, readAfter, readExact er, checkExact ec, checked, rfl, rfl,
+        ⟨roots, checkPaths, checkReady.safe.1, checkRealized, checkCounts, checkFlags⟩,
+        checkReady.safe, checkPending pending, counter, ordered, rfl⟩
+  | false =>
+      obtain ⟨value, nativeFuel, heap, newHandle, final, narrowed, _stable, post, _retained, query,
+        _available, _closed, encoded, _decoded, rejected, completed⟩ := continued rfl
+      by_cases empty : value = .empty
+      · subst value
+        obtain ⟨prepared, _noSuccess⟩ := rejected rfl 0
+        refine ⟨readFuel, checkFuel, nativeFuel, 0, 0, ?_⟩
+        intro er ec ei callbackFuel r n p h k
+        rw [run_empty holeKey fits admits graph templates checkEmpty edgesOf stop order metadata
+          (readFuel + er) (checkFuel + ec) nativeFuel 0 (0 + ei) callbackFuel r n p h k uv oldHandle
+          scs oldValue caller before memos.query readAfter checked.core heap
+          (readExact er) (checkExact ec) oldDecoded prepared]
+        exact ⟨oldHandle, scs, readAfter, readExact er, checkExact ec, oldValue, .empty, heap, reject,
+          final, oldDecoded, narrowed, prepared, rfl, rfl, rfl, post, query,
+          Or.inl ⟨rfl, rfl, rfl, rfl, rfl⟩⟩
+      · obtain ⟨representativeFuel, countFuel, action, after, prepared, observed, shape, waiting, afterReady,
+          afterPaths, afterRealized, afterStored, afterCounts, afterFlags, afterPending, _afterIncoming,
+          _callback, ordinary⟩ := completed empty
+        have raw := prepared_singleton holeKey fits admits metadata nativeFuel representativeFuel uv oldHandle
+          newHandle scs oldValue value caller.checked.native.machine.heap heap action checked.core after.core
+          narrowed empty encoded prepared observed
+        obtain ⟨indexFuel, adapted⟩ := SourcePruningEnumerationNarrowAdapter.complete heap uv oldHandle newHandle
+          representativeFuel countFuel scs before after checked.core shape
+        refine ⟨readFuel, checkFuel, nativeFuel, representativeFuel, indexFuel, ?_⟩
+        intro er ec ei callbackFuel r n p h k
+        rw [run_narrowed holeKey fits admits graph templates checkEmpty edgesOf stop order metadata
+          (readFuel + er) (checkFuel + ec) nativeFuel representativeFuel (indexFuel + ei) callbackFuel
+          r n p h k uv oldHandle newHandle scs oldValue value caller before after memos.query readAfter
+          checked.core heap action (readExact er) (checkExact ec) oldDecoded prepared raw encoded (adapted ei)]
+        refine ⟨oldHandle, scs, readAfter, readExact er, checkExact ec, oldValue, value, heap, action,
+          final, oldDecoded, narrowed, prepared, rfl, rfl, rfl, post, query, Or.inr
+            ⟨newHandle, after, empty, encoded, rfl, rfl,
+              ⟨roots, afterPaths, afterReady.safe.1, afterRealized, afterCounts, afterFlags⟩,
+              afterReady.safe, afterPending pending, afterReady, afterStored, waiting, rfl, rfl, ?_⟩⟩
+        intro parentEntry storedEdges depth free parent nonterminal selected ranges
+        obtain ⟨R, N, P, H, K, entered, processed, lastCaller, saved, last, next, outcome,
+          ordinaryRun, _render, _sameFlags, _sameWaiting, lastPost, lastQuery, admitted,
+          history, receiptPosts, fragments, callbacks, outcomeShape, supported⟩ :=
+          ordinary parentEntry storedEdges depth free parent nonterminal selected (by simpa only [query] using ranges)
+        refine ⟨R, N, P, H, K, entered, processed, lastCaller, saved, last, next, outcome,
+          ?_, lastPost, lastQuery, admitted, history, receiptPosts, fragments, callbacks, outcomeShape, supported⟩
+        intro ordinaryReadExtra ordinaryNativeExtra ep eh ek
+        rw [run_narrowed holeKey fits admits graph templates checkEmpty edgesOf stop order metadata
+          (readFuel + er) (checkFuel + ec) nativeFuel representativeFuel (indexFuel + ei) callbackFuel
+          (R + ordinaryReadExtra) (N + ordinaryNativeExtra) (P + ep) (H + eh) (K + ek)
+          uv oldHandle newHandle scs oldValue value caller before after memos.query readAfter checked.core heap action
+          (readExact er) (checkExact ec) oldDecoded prepared raw encoded (adapted ei)]
+        have actual := ordinaryRun ordinaryReadExtra ordinaryNativeExtra (P + ep) (H + eh) ek
+          (Nat.le_add_right _ _) (Nat.le_add_right _ _)
+        rw [show SourcePruningEnumerationNativeOrdinary.run checkEmpty (R + ordinaryReadExtra)
+          (N + ordinaryNativeExtra) (P + ep) (H + eh) (K + ek) uv edgesOf
+          (SourceCurrentAllocatedPartialState.advance caller
+            (advancePhysical caller.checked ⟨heap, caller.checked.operations⟩) caller.fourth caller.merge)
+          after memos.query = _ from (by simpa only [query] using actual)]
+
+end MicroCFTA.SourcePruningEnumerationSelectedStep

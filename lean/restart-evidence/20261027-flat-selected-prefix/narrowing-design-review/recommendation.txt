@@ -1,0 +1,65 @@
+[2026-10-27 06:32 CET] Source-only design review: actual flat native narrowing and selected prefix
+
+Verdict: the existing actual narrowing producer and flat primitives support a small correspondence layer. No extra future flat observation is required. The important constraint is to relate a prepared action at its actual entry cores. One fixed old representative fuel cannot support a full action relation on every arbitrary forest.
+
+1. Exact runtime to preserve
+
+SourcePruningEnumerationAction.prepare:17–41 calls OuterNarrow.narrow once. Its failed arm keeps both the exact fault and reached native heap. Its done arm keeps the complete Value and reached heap. Empty returns some reject BEFORE encoding or comparing handles. An unencodable nonempty result returns action none. Equal handles return pure (). A changed handle performs representative representativeFuel uv, then writes the resolved raw slot with .unenumerated (some newHandle) scs. This write changes values only. It does not change ancestry, concatenate another suspended bucket, or run another native query.
+
+OuterNarrow.narrow:11–21 bypasses narrowing for Mu, then for raw metadata.types membership at uv. The remaining path uses the original raw holeKey metadata.typing uv. Union has no Mu shortcut. These choices must remain exact in the flat worker.
+
+SelectedStep.runPrefix:43–94 advances Caller using prepared.state before it splits the prepared result. Failed and action-none results therefore retain native effects. They do not justify a Post or a valid candidate merely from that retained state. Empty produces action raw [], retains the native reached Caller, and stops before cache attachment and Right recording. This is not Incoming's logical Empty-after-write path. Keep that distinction.
+
+2. Minimal flat runtime and complete effects relation
+
+Add a flat prepare with the same arguments except representativeFuel. Copy the existing native narrow call and the exact result split. Replace only the changed-handle closure by flat representative uv >>= flat setValue resolvedRoot (.unenumerated (some newHandle) scs). Return the same native Result type with flat actions. Do not repeat native narrowing in a cache adapter or prove correspondence by defining the new runtime through an old execution.
+
+Define PreparedAtRelated flatEntry oldEntry on two prepared Results. Failed pairs require the same fault and complete native heap. Done pairs require the same complete Value and native heap. None must match none. Some actions must have EnumerationResultRelation.Results EnumerationFlatState.Related on their actual raw rows at flatEntry and oldEntry. This compares errors, rejection, ordering and successful full cores. It does not equate function values.
+
+Proposed public bridge, with ordinary parameters fixed:
+  prepare_related_stable (entryRelated : Related flatEntry oldEntry) :
+    exists r, forall extra nativeFuel,
+      PreparedAtRelated flatEntry oldEntry
+        (flatPrepare ... nativeFuel uv oldHandle scs oldValue heap)
+        (oldPrepare ... nativeFuel (r+extra) uv oldHandle scs oldValue heap).
+
+This is a proposed interface, not checked Lean code. Derive r from FlatUnionFind.find_stable at oldEntry.representatives and uv. Then split the SAME native narrow result and value. Empty uses reject_related; equal handles use pure_related; a changed handle composes representative_related and setValue_related through the actual intermediate cores. The generic comparison needs only Related, not Context or a future successful action. It includes fault and absence branches at every native fuel.
+
+Do not quantify forall arbitrary related entry cores AFTER choosing r. prepare captures old representativeFuel, and arbitrary old forests can require larger lookup fuel. EnumerationFlatReplay.Replays can be proved for the closures at each fuel from successful old traces, but it does not compare insufficient-fuel errors or raw rejection. Use it as a successful-replay corollary, not as the entire prepared-effects claim.
+
+3. Cache attachment and old index fuel
+
+NarrowAdapter.adapt:10–19 uses the actual observed core and the ORIGINAL before indexes. Equal handles attach frame observed before. Changed handles invoke NativeIndex.write at raw uv with gained=scs and lost=scs, then frame the result back to observed. The flat adapter should mirror this using EnumerationFlatNativeIndex.write. A generic related-adapter bridge follows from FlatCached.frame_related, FlatNativeIndex.write_stable and frame_related again. It preserves none and some results. The flat write must still remove lost occurrences before adding gained occurrences, including duplicates.
+
+The observed core and the earlier resolved core have equal forests because the actual setValue changes values only. NarrowAdapter.adapt_after_write:39–68 uses precisely this fact to recover old indexes. It does not claim a compression Frame for a replacement write. NarrowAdapter.complete:72–94 derives a stable adapter fuel from the existing actual replacement receipt. Replacement.count_cancel:12–25 requires canonical sparse waiting; equal gained/lost lists alone do not justify replacing the runtime count folds by identity on an arbitrary waiting map.
+
+A generic prepare writes the resolved root. The admitted old NarrowCache packet proves that root is uv, using the original pending getValue and entry Ready. Preserve this proof boundary when the adapter writes raw uv. Do not replace resolvedRoot by uv in an unconditional action theorem.
+
+4. Admitted producer and bound synchronization
+
+NarrowContext.complete_after_frame:20–92 is the smallest existing full producer to extend. It consumes current Context, original Ready/realization/Roots/counts/native flags, the actual original pending getValue and entered Frame+entryReady. It calls NarrowCache.complete_after_frame once, then outer_post on that SAME actual native result. It returns native result and heap stability, complete afterCaller, full Post, full final Memos with unfolding extension and query equality, encoding/readback, Empty rejection, and the complete nonempty action/cache/history packet. Retain that whole packet as the old output prefix.
+
+For each nonempty actual old receipt, prepare_related_stable gives the actual flat action at the actual related entry. PreparedFuel.nonempty_moreFuel:39–88 increases native and representative fuels while keeping the same old successful endpoint. It explicitly returns a NEW old action closure at each larger representative fuel. Do not infer equality of closures across fuel. NarrowAdapter.complete supplies the old count bound; the flat adapter bridge supplies related actual cache results. A sum or max of these original bounds yields one adequate old representative/index ceiling. The flat direct-read action has no representative fuel.
+
+A useful extension appends: actual flat preparation with the same result/heap; an actual flat singleton action result in the nonempty branch; actual adapter result related to the retained old cache; and NativeIndex.Correct at the SAME reached afterCaller heap. Derive Correct from correct_of_related plus the old endpoint Roots, alignment, count and actual candidate receipts. Keep Empty rejection separate; do not manufacture a cache or Safe endpoint for it. No future flat execution equation is an admission premise.
+
+For the full selected prefix, consume the existing SelectedNarrow.complete or the original PrefixCompletion producer ONCE and derive correspondence from its retained read/check/narrow receipts. SelectedNarrow.complete already calls the original Recursion.selected_complete once and supplies the same checked-entry Ready and original selection witness. Do not call a second independent narrowing completion beside an existing whole-prefix producer. PrefixValid alone is a semantic capability; keep the literal actual runPrefix equation when deriving raw prepared/action observations. Ordinary execution is still none at this stage.
+
+5. Minimal semantics and limitations
+
+EnumerationFlatSemantics.related_satisfies transports complete assignments between related OLD and FLAT endpoints, for the same NodeLanguage, residual meaning and assignment. The native heap is exactly equal in the prepared-result relation, so its handle language is the same on both sides. This is enough for representation semantics of the new prefix layer.
+
+A changed-handle narrowing write is not a compression Frame from before to after. Do not infer before/after assignment equivalence or Safe from Frame alone. Those require the existing actual filter semantics or actual producer safety receipts. Likewise final.query=memos.query does not imply equality of full Memos; retain final and its unfolding extension. Initial Context/native Ready supplies termination for genuine closed available inputs through the old producer. Generic representation correspondence does not add numeric capacity, arbitrary recursion completion, language soundness of filtering, or a guarantee that all outside-admission runtime candidates are present.
+
+No Lean, native program, compiler, Git command or network operation was run for this review. All artifacts are data copies and literal source slices. The proposed public interfaces have not been elaborated. Parent owns implementation and verification.
+
+Primary whole-file identities:
+  SourcePruningEnumerationAction.lean e2f54fb2192c5c8e74e44a3dae620d7bcb448bd9c5096cb767271145f2086ba0
+  SourcePruningEnumerationOuter.lean 40b7b3119bac9060032bfcd802f4d6fb6648fbf85e9d88572ab40cf295950562
+  SourcePruningOuterNarrow.lean 683318a8481f24af623174b5ea6ac9580520a86eba41a7eb2a441f9763e1ab28
+  SourcePruningEnumerationNarrowAdapter.lean 1646a80d568032f0d534bc84019be2b7cf5bdf6d30d65b737b0074464cff60a1
+  SourcePruningEnumerationNarrowCache.lean 926190ab64473d9901786b06b3b70a1231c2fb861944ccff0ef4a4dab49f8dcc
+  SourcePruningEnumerationNarrowContext.lean f0aa4edf4aa334626472e7a20f54793b5315ccb86d0c8b26efb54571f5abb477
+  SourcePruningEnumerationPreparedFuel.lean 528cbbf911bde265b6dee744ef5d5e82807f267e3f6591d03587caeaa4ad5ac2
+  EnumerationFlatNativeIndex.lean b98136a435f8b26495cb5ad5b81e8e11f41f7fbedf151f5a562215deb278325c
+  EnumerationFlatReplay.lean c6cfc7cc25c31e8ac96137b388464e175a3ea7217b0c28cc4382ab6191a4f5e5

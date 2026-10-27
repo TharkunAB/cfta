@@ -1,0 +1,10 @@
+inductive Result (width : Nat) (Typing : Type) where
+  /-- Entry or recursion checking does not supply the supported singleton. -/
+  | stopped (read : ReadRaw) (checked : Option CheckRaw)
+  /-- Retain the cleared core, optional indexed cache and actual restart rows. -/
+  | parked (checked : Core) (candidate : Option Cached)
+      (raw : Option (List (Except Error ((Metadata Typing × Option Next) × Core))))
+  /-- Retain the exact preparation, native effects and all reached core observations. -/
+  | narrowed (checked : Core) (prepared : Prepared) (caller : Caller width) (queries : Queries)
+      (action : Option ActionRaw) (candidate : Option Cached)
+      (right : Option (List (Except Error ((Bool × Metadata Typing) × Core))))

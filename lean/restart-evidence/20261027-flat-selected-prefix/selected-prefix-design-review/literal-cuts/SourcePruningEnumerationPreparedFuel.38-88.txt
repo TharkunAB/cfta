@@ -1,0 +1,51 @@
+/-- Larger native and representative fuels retain the original action's exact successful core. -/
+theorem nonempty_moreFuel
+    (holeKey : Typing → Nat → Key) (fits : Key → Symbol → Bool) (admits : Key → Node → Bool)
+    (metadata : Metadata Typing) (nativeFuel representativeFuel uv oldHandle newHandle : Nat)
+    (scs : List Suspended) (oldValue value : Node)
+    (heap nextHeap : InternedConstructorTemplates.State Symbol Constraint)
+    (action : EnumerateM Symbol Constraint Unit) (checked after : Core)
+    (narrowed : SourcePruningOuterNarrow.narrow holeKey fits admits metadata nativeFuel uv oldValue heap =
+      .done value nextHeap)
+    (stable : ∀ extra, SourcePruningOuterNarrow.narrow holeKey fits admits metadata (nativeFuel + extra)
+      uv oldValue heap = .done value nextHeap)
+    (nonempty : value ≠ .empty) (encoded : encodeNode value = some newHandle)
+    (prepared : SourcePruningEnumerationAction.prepare holeKey fits admits metadata nativeFuel representativeFuel
+      uv oldHandle scs oldValue heap = .done (value, some action) nextHeap)
+    (observed : Success action checked () after) :
+    ∀ nativeExtra representativeExtra, ∃ nextAction : EnumerateM Symbol Constraint Unit,
+      SourcePruningEnumerationAction.prepare holeKey fits admits metadata (nativeFuel + nativeExtra)
+        (representativeFuel + representativeExtra) uv oldHandle scs oldValue heap =
+          .done (value, some nextAction) nextHeap ∧
+      ExceptT.run (nextAction checked) = [.ok ((), after)] := by
+  have actual := SourcePruningEnumerationSelectedStep.prepared_action holeKey fits admits metadata
+    nativeFuel representativeFuel uv oldHandle newHandle scs oldValue value heap nextHeap narrowed nonempty encoded
+  rw [prepared] at actual
+  have actionSame : action =
+      (if newHandle = oldHandle then (pure () : EnumerateM Symbol Constraint Unit)
+        else representative representativeFuel uv >>= fun selected =>
+          setValue selected (.unenumerated (some newHandle) scs)) :=
+    Option.some.inj (Prod.mk.inj (MergedSourceComparison.Result.done.inj actual).1).2
+  rw [actionSame] at observed
+  intro nativeExtra representativeExtra
+  let nextAction : EnumerateM Symbol Constraint Unit :=
+    if newHandle = oldHandle then pure ()
+    else representative (representativeFuel + representativeExtra) uv >>= fun selected =>
+      setValue selected (.unenumerated (some newHandle) scs)
+  have nextPrepared : SourcePruningEnumerationAction.prepare holeKey fits admits metadata
+      (nativeFuel + nativeExtra) (representativeFuel + representativeExtra) uv oldHandle scs oldValue heap =
+      .done (value, some nextAction) nextHeap :=
+    SourcePruningEnumerationSelectedStep.prepared_action holeKey fits admits metadata
+      (nativeFuel + nativeExtra) (representativeFuel + representativeExtra) uv oldHandle newHandle
+      scs oldValue value heap nextHeap (stable nativeExtra) nonempty encoded
+  have nextObserved : Success nextAction checked () after := by
+    dsimp only [nextAction]
+    by_cases same : newHandle = oldHandle
+    · simpa only [ite_eq_left same] using observed
+    · rw [ite_eq_right same] at observed ⊢
+      exact retains_bind _ _ _ _ (representative_moreFuel representativeFuel representativeExtra uv)
+        (fun _ => retains_refl _) checked () after observed
+  exact ⟨nextAction, nextPrepared,
+    SourcePruningEnumerationSelectedStep.prepared_singleton holeKey fits admits metadata
+      (nativeFuel + nativeExtra) (representativeFuel + representativeExtra) uv oldHandle newHandle scs
+      oldValue value heap nextHeap nextAction checked after (stable nativeExtra) nonempty encoded nextPrepared nextObserved⟩

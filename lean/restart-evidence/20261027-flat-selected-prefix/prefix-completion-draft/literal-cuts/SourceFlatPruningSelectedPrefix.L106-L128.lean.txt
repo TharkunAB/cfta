@@ -1,0 +1,23 @@
+  match flat, earlier with
+  | none, none => True
+  | some first, some second => EnumerationResultRelation.Results EnumerationFlatState.Related first second
+  | _, _ => False
+
+/-- Relate the complete prefix and require its old ordinary continuation to remain absent. -/
+def ResultRelated (flat : Result width Typing)
+    (earlier : SourcePruningEnumerationSelectedStep.Result width Typing) : Prop :=
+  match flat, earlier with
+  | .stopped read checked, .stopped oldRead oldChecked =>
+      EnumerationResultRelation.Results EnumerationFlatState.Related read oldRead ∧ OptionalRows checked oldChecked
+  | .parked checked candidate raw, .parked oldChecked oldCandidate oldRaw =>
+      EnumerationFlatState.Related checked oldChecked ∧
+        EnumerationFlatNativeIndex.WritesRelated candidate oldCandidate ∧ OptionalRows raw oldRaw
+  | .narrowed checked prepared caller queries action candidate right,
+      .narrowed oldChecked oldPrepared oldCaller oldQueries oldAction oldCandidate oldRight ordinary =>
+      EnumerationFlatState.Related checked oldChecked ∧
+        SourceFlatPruningAction.PreparedRelated checked oldChecked prepared oldPrepared ∧
+        caller = oldCaller ∧ queries = oldQueries ∧ OptionalRows action oldAction ∧
+        EnumerationFlatNativeIndex.WritesRelated candidate oldCandidate ∧ OptionalRows right oldRight ∧ ordinary = none
+  | _, _ => False
+
+end MicroCFTA.SourceFlatPruningSelectedPrefix

@@ -1,0 +1,33 @@
+/-- Native flags and representative counts describe the same complete slot array. -/
+structure Correct (heap : InternedConstructorTemplates.State Symbol NativeGuard)
+    (state : Cached Symbol EnumGuard) : Prop where
+  /-- The fresh identifier follows the last stored raw slot. -/
+  aligned : state.core.counter = state.core.values.length
+  /-- Every slot has its actual decoded expandable flag. -/
+  expandable : ∀ uv, SourcePruningEnumerationNativeIndex.candidate heap
+    ((state.core.values[uv]?).getD .eliminated) = some (state.expandable uv)
+  /-- Every waiting count uses the current representative of each occurrence. -/
+  waiting : EnumerationCanonicalWaiting.Correct (FlatUnionFind.root state.core.representatives)
+    state.core.values state.waiting
+
+/-- Earlier native index invariants transfer at the same supplied heap and roots. -/
+theorem correct_of_related (related : Related flat earlier)
+    (heap : InternedConstructorTemplates.State Symbol NativeGuard) (roots : Nat → Nat)
+    (paths : EnumerationSchedule.Roots earlier.core.representatives roots)
+    (aligned : earlier.core.counter = earlier.core.values.length)
+    (flags : ∀ uv, SourcePruningEnumerationNativeIndex.candidate heap
+      ((earlier.core.values[uv]?).getD .eliminated) = some (earlier.expandable uv))
+    (waiting : EnumerationCanonicalWaiting.Correct roots earlier.core.values earlier.waiting) :
+    Correct heap flat := by
+  have sameRoots : FlatUnionFind.root flat.core.representatives = roots := by
+    funext uv
+    obtain ⟨size, path⟩ := paths uv
+    exact (UnionFind.reaches_unique (related.core.representatives uv) path).1
+  refine ⟨?_, ?_, ?_⟩
+  · rw [related.core.counter, related.core.values]
+    exact aligned
+  · intro uv
+    rw [related.core.values, related.expandable]
+    exact flags uv
+  · rw [sameRoots, related.core.values, related.waiting]
+    exact waiting

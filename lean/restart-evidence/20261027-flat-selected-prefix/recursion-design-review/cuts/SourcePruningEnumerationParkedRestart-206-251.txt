@@ -1,0 +1,46 @@
+/-- Original native selection derives the indexed parked restart without a future cache premise. -/
+theorem selected_complete_with_restart
+    (caller : SourceCurrentAllocatedPartialState.State width)
+    (before : Cached) (preference : List Nat → Option Nat) (uv : Nat)
+    (safe : Safe before.core)
+    (valid : SourcePruningEnumerationNativeBranchCompletion.CacheValid caller before)
+    (selection : EnumerationPureSelection.next preference before = .expand uv) :
+    ∃ (readFuel handle : Nat) (scs : List Suspended)
+      (readAfter : EnumerationState.State Symbol Constraint) (checkFuel : Nat) (repeated : Bool) (after : Cached),
+      before.core.values[uv]? = some (.unenumerated (some handle) scs) ∧
+      (∀ extra, ExceptT.run (getValue (readFuel + extra) uv before.core) =
+        [.ok (.unenumerated (some handle) scs, readAfter)]) ∧
+      (∀ extra, ExceptT.run (SourcePruningEnumerationRecursion.checkRepeated caller.checked.native.machine.heap
+        (checkFuel + extra) uv handle scs readAfter) = [.ok (repeated, after.core)]) ∧
+      SourcePruningEnumerationNativeBranchCompletion.CacheValid caller after ∧ Safe after.core ∧
+      (EnumerationReferences.PendingReferences before.core → EnumerationReferences.PendingReferences after.core) ∧
+      (repeated = true → after.core.counter = before.core.counter ∧
+        (∀ level frontier, EnumerationOrder.Stratified before.core level frontier →
+          EnumerationOrder.Stratified after.core level frontier) ∧
+        ∃ countFuel, ∀ extra (stop : Option (Metadata Typing → Nat → Bool))
+          (order : Metadata Typing → List Nat → Option Nat) (metadata : Metadata Typing),
+          ExceptT.run (run caller.checked.native.machine.heap readFuel checkFuel (countFuel + extra) uv
+            stop order metadata before before.core) =
+            if SourcePruningEnumerationRestart.decision stop order metadata after = some .stuck then []
+            else [.ok (some (metadata, SourcePruningEnumerationRestart.decision stop order metadata after), after.core)]) := by
+  obtain ⟨roots, paths, _storage, realized, counts, flags⟩ := valid
+  obtain ⟨readFuel, handle, scs, _value, readAfter, checkFuel, repeated, after, stored, _decoded,
+    _available, _closed, readExact, _readFrame, checkExact, afterReady, afterPaths, afterRealized,
+    afterCounts, afterFlags, _incoming, pending, _continued, orderPreserved, parked⟩ :=
+    selected_complete_with_order caller.checked.native.machine.heap before preference uv roots
+      safe selection realized paths counts flags
+  refine ⟨readFuel, handle, scs, readAfter, checkFuel, repeated, after, stored, readExact, checkExact,
+    ⟨roots, afterPaths, afterReady.safe.1, afterRealized, afterCounts, afterFlags⟩,
+    afterReady.safe, pending, ?_⟩
+  intro repeatedTrue
+  obtain ⟨counter, ordered⟩ := orderPreserved repeatedTrue
+  obtain ⟨_boundary, _cleared, _disabled, _waiting, resolved, countFuel, _frame, _readRoot,
+    _seen, written, indexed⟩ := parked repeatedTrue
+  refine ⟨counter, ordered, countFuel, ?_⟩
+  intro extra stop order metadata
+  apply run_parked_after_write caller.checked.native.machine.heap readFuel checkFuel (countFuel + extra)
+    uv handle scs stop order metadata before after readAfter resolved
+  · simpa only [Nat.add_zero] using readExact 0
+  · simpa only [Nat.add_zero, repeatedTrue] using checkExact 0
+  · exact written
+  · exact indexed extra

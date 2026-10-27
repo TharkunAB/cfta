@@ -1,0 +1,17 @@
+/-- A completed earlier lookup returns the same value and a related complete core state. -/
+theorem representative_related (related : Related flat earlier)
+    (completed : UnionFind.findRoot fuel earlier.representatives uv = some found) :
+    Results Related (representative uv flat) (EnumerationState.representative fuel uv earlier) := by
+  rw [EnumerationCorrectness.representative_exact fuel uv earlier found completed]
+  obtain ⟨sameRoot, _, retained⟩ := FlatUnionFind.findRoot_represents related.representatives completed
+  change Results Related [.ok (FlatUnionFind.root flat.representatives uv, flat)]
+    [.ok (found.representative, {earlier with representatives := found.forest})]
+  rw [sameRoot]
+  exact .cons (.ok _ (related_forests related related.valid retained)) .nil
+
+/-- One sufficient representative bound and all its extensions preserve every result. -/
+theorem representative_stable (related : Related flat earlier) (uv : Nat) :
+    ∃ fuel, ∀ extra, Results Related (representative uv flat)
+      (EnumerationState.representative (fuel + extra) uv earlier) := by
+  obtain ⟨fuel, found, stable, _, _, _⟩ := FlatUnionFind.find_stable related.representatives uv
+  exact ⟨fuel, fun extra => representative_related related (stable extra)⟩

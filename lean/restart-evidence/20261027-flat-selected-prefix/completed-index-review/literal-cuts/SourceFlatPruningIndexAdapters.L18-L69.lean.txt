@@ -1,0 +1,52 @@
+/-- Remove the original bucket and rebuild its flag at the actual checked forest. -/
+def parked (heap : InternedConstructorTemplates.State Symbol NativeGuard)
+    (uv handle : Nat) (scs : List Suspended) (before : Cached Symbol EnumGuard)
+    (checked : EnumerationFlatState.State Symbol EnumGuard) : Option (Cached Symbol EnumGuard) :=
+  (write heap uv (.unenumerated (some handle) []) [] scs (frame checked before)).map (frame checked)
+
+/-- Attach unchanged or rebuilt indexes to the actual narrowing endpoint. -/
+def narrowed (heap : InternedConstructorTemplates.State Symbol NativeGuard)
+    (uv oldHandle newHandle : Nat) (scs : List Suspended) (before : Cached Symbol EnumGuard)
+    (observed : EnumerationFlatState.State Symbol EnumGuard) : Option (Cached Symbol EnumGuard) :=
+  if newHandle = oldHandle then some (frame observed before)
+  else (write heap uv (.unenumerated (some newHandle) scs) scs scs
+    (frame observed before)).map (frame observed)
+
+private theorem frame_options (cores : EnumerationFlatState.Related flatCore earlierCore)
+    (writes : WritesRelated flat earlier) :
+    WritesRelated (flat.map (frame flatCore)) (earlier.map (EnumerationExpandableIndex.frame earlierCore)) := by
+  cases flat with
+  | none => cases earlier <;> exact writes
+  | some flat =>
+      cases earlier with
+      | none => exact writes
+      | some earlier => exact frame_related writes cores
+
+/-- Related checked cores derive adequate old counts without a future parked-cache premise. -/
+theorem parked_stable (related : Related flat earlier)
+    (checked : EnumerationFlatState.Related flatChecked earlierChecked)
+    (heap : InternedConstructorTemplates.State Symbol (SourceSymbolicIndex.Constraint FullSyntax.Formula))
+    (uv handle : Nat) (scs : List Suspended) :
+    ∃ fuel, ∀ extra, WritesRelated (parked heap uv handle scs flat flatChecked)
+      (SourcePruningEnumerationParkedRestart.adapt heap (fuel + extra) uv handle scs earlier earlierChecked) := by
+  obtain ⟨fuel, stable⟩ := write_stable (frame_related related checked) heap uv
+    (.unenumerated (some handle) []) [] scs
+  exact ⟨fuel, fun extra => frame_options checked (stable extra)⟩
+
+/-- Related narrowing endpoints derive both count folds at the same native heap. -/
+theorem narrowed_stable (related : Related flat earlier)
+    (observed : EnumerationFlatState.Related flatObserved earlierObserved)
+    (heap : InternedConstructorTemplates.State Symbol NativeGuard)
+    (uv oldHandle newHandle : Nat) (scs : List Suspended) :
+    ∃ fuel, ∀ extra, WritesRelated (narrowed heap uv oldHandle newHandle scs flat flatObserved)
+      (SourcePruningEnumerationNarrowAdapter.adapt heap (fuel + extra) uv oldHandle newHandle scs
+        earlier earlierObserved) := by
+  by_cases same : newHandle = oldHandle
+  · exact ⟨0, fun _ => by
+      simpa only [narrowed, SourcePruningEnumerationNarrowAdapter.adapt, same, ↓reduceIte,
+        WritesRelated] using frame_related related observed⟩
+  · obtain ⟨fuel, stable⟩ := write_stable (frame_related related observed) heap uv
+      (.unenumerated (some newHandle) scs) scs scs
+    refine ⟨fuel, fun extra => ?_⟩
+    simpa only [narrowed, SourcePruningEnumerationNarrowAdapter.adapt, same, ↓reduceIte] using
+      frame_options observed (stable extra)

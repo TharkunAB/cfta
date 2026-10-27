@@ -1,0 +1,15 @@
+/-- Removing and adding the same bucket retains a canonical sparse count table. -/
+theorem count_cancel (roots : Nat → Nat) (scs : List Suspended)
+    (waiting : EnumerationWaitingIndex.Waiting) (canonical : EnumerationWaitingIndex.Canonical waiting) :
+    EnumerationCanonicalWaiting.count roots 1 scs
+      (EnumerationCanonicalWaiting.count roots (-1) scs waiting) = waiting := by
+  unfold EnumerationCanonicalWaiting.count
+  let mapped := scs.map (fun sc => {sc with var := roots sc.var})
+  have sparse := EnumerationWaitingIndex.count_canonical 1 mapped
+    (EnumerationWaitingIndex.count (-1) mapped waiting)
+    (EnumerationWaitingIndex.count_canonical (-1) mapped waiting canonical)
+  funext key
+  rw [sparse key, canonical key]
+  congr 1
+  simp only [EnumerationWaitingIndex.count_read, Int.one_mul, Int.neg_one_mul]
+  omega

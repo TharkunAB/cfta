@@ -1,0 +1,14 @@
+/-- Check the native boundary and clear only a repeated recursion key. -/
+def checkRepeated (heap : InternedConstructorTemplates.State Symbol NativeGuard)
+    (uv handle : Nat) (scs : List Suspended) : Action Symbol EnumGuard Bool := do
+  match lookupNode heap handle with
+  | none => EnumerationFlatState.failure .unresolvedReference
+  | some value =>
+      if MergedOrdinaryHeight.recursiveBoundary value then
+        let root ← EnumerationFlatState.representative uv
+        let current : EnumerationFlatState.State Symbol EnumGuard ← get
+        if recursionKey handle scs ∈ current.recursionAncestry root then
+          EnumerationFlatState.setValue root (.unenumerated (some handle) [])
+          pure true
+        else pure false
+      else pure false

@@ -1,0 +1,10 @@
+/-- A raw-slot write retains the exact value array in both representations. -/
+theorem setValue_related (related : Related flat earlier) (uv : Nat)
+    (value : EnumerationState.UVarValue Symbol) :
+    Results Related (setValue uv value flat) (EnumerationState.setValue uv value earlier) := by
+  change Results Related
+    [.ok ((), {flat with values := flat.values.set uv value})]
+    [.ok ((), {earlier with values := earlier.values.set uv value})]
+  exact .cons (.ok () ⟨related.valid, related.representatives, related.counter,
+    congrArg (fun values => values.set uv value) related.values, related.obligations,
+    related.recursionAncestry, related.expansionAncestry⟩) .nil

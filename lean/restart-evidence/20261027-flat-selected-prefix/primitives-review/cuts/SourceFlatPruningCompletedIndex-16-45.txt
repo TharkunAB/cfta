@@ -1,0 +1,30 @@
+/-- Every completed old count equals the direct-root fold at the same occurrences. -/
+theorem count_eq (related : FlatUnionFind.Represents flat earlier)
+    (fuel : Nat) (change : Int) (scs : List EnumerationState.Suspended)
+    (waiting after : EnumerationWaitingIndex.Waiting)
+    (completed : SourcePruningEnumerationNativeIndex.count fuel earlier change scs waiting = some after) :
+    count flat change scs waiting = after := by
+  induction scs generalizing waiting after with
+  | nil => exact Option.some.inj completed
+  | cons sc rest ih =>
+      unfold SourcePruningEnumerationNativeIndex.count at completed
+      cases observed : SourceUnionFindRoot.root fuel earlier sc.var with
+      | none =>
+          simp only [observed, Option.bind_none] at completed
+          cases completed
+      | some root =>
+          obtain ⟨size, reached⟩ := SourceUnionFindRoot.root_correct fuel earlier sc.var root observed
+          have same : FlatUnionFind.root flat sc.var = root :=
+            (UnionFind.reaches_unique (related sc.var) reached).1
+          simp only [observed, Option.bind_some] at completed
+          have tail := ih _ _ completed
+          simpa only [count, EnumerationCanonicalWaiting.count, List.map_cons,
+            EnumerationWaitingIndex.count, List.foldl_cons, same] using tail
+
+/-- An actual completed old native write returns the related flat cache immediately. -/
+theorem write_related (related : Related flat earlier)
+    (heap : InternedConstructorTemplates.State Symbol NativeGuard)
+    (fuel target : Nat) (value : EnumerationState.UVarValue Symbol)
+    (gained lost : List EnumerationState.Suspended)
+    (completed : SourcePruningEnumerationNativeIndex.write heap fuel target value gained lost earlier = some after) :
+    ∃ next, write heap target value gained lost flat = some next ∧ Related next after := by

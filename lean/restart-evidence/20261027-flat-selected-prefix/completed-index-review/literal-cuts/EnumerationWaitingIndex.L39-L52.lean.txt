@@ -1,0 +1,14 @@
+/-- Apply one source `IntMap.alter` update to one raw UVar. -/
+def bump (change : Int) (uv : Nat) (waiting : Waiting) : Waiting :=
+  fun other => if other = uv then encode (read waiting uv + change) else waiting other
+
+/-- Apply the source's ordered counter fold to all suspended references. -/
+def count (change : Int) (scs : List Suspended) (waiting : Waiting) : Waiting :=
+  scs.foldl (fun previous sc => bump change sc.var previous) waiting
+
+/-- Slot replacement removes the old references before it adds the new references. -/
+def replace (old new : UVarValue Symbol) (waiting : Waiting) : Waiting :=
+  count 1 (references new) (count (-1) (references old) waiting)
+
+/-- Sparse maps store no zero-valued entry. -/
+def Canonical (waiting : Waiting) : Prop := ∀ uv, waiting uv = encode (read waiting uv)

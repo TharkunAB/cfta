@@ -1,0 +1,23 @@
+/-- The actual clear write supplies the same rebuilt parked cache after observation. -/
+theorem adapt_after_write
+    (heap : InternedConstructorTemplates.State Symbol Constraint)
+    (indexFuel uv handle : Nat) (scs : List Suspended)
+    (before after : Cached) (resolved checked : EnumerationState.State Symbol Constraint)
+    (written : Success (setValue uv (.unenumerated (some handle) [])) resolved () checked)
+    (indexed : SourcePruningEnumerationNativeIndex.write heap indexFuel uv
+      (.unenumerated (some handle) []) [] scs (EnumerationExpandableIndex.frame resolved before) = some after)
+    (core : after.core = checked) :
+    adapt heap indexFuel uv handle scs before checked = some after := by
+  have shape := (EnumerationDriver.modify_success _ resolved checked).mp written
+  have forest : checked.representatives = resolved.representatives := by rw [shape]
+  have same : adapt heap indexFuel uv handle scs before checked =
+      (SourcePruningEnumerationNativeIndex.write heap indexFuel uv (.unenumerated (some handle) []) [] scs
+        (EnumerationExpandableIndex.frame resolved before)).map (EnumerationExpandableIndex.frame checked) := by
+    unfold adapt SourcePruningEnumerationNativeIndex.write
+    dsimp only [EnumerationExpandableIndex.frame]
+    rw [forest]
+    cases SourcePruningEnumerationNativeIndex.candidate heap (.unenumerated (some handle) []) with
+    | none => rfl
+    | some _flag =>
+        cases SourcePruningEnumerationNativeIndex.count indexFuel resolved.representatives (-1) scs before.waiting <;> rfl
+  rw [same, indexed, Option.map_some, ← core]

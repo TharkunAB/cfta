@@ -1,0 +1,43 @@
+/-- Replay every successful earlier trace at its actual related input core. -/
+def Replays (flat : Action Symbol Guard α) (earlier : EnumerationState.EnumerateM Symbol Guard α) : Prop :=
+  ∀ left right value after, Related left right → Success earlier right value after →
+    ∃ next, flat left = [.ok (value, next)] ∧ Related next after
+
+/-- The same pure value retains the related complete input cores. -/
+theorem pure_replays (value : α) :
+    Replays (pure value : Action Symbol Guard α) (pure value) := by
+  intro left right result after related observed
+  obtain ⟨rfl, rfl⟩ := (EnumerationCorrectness.success_pure value result right after).mp observed
+  exact ⟨left, rfl, related⟩
+
+/-- Sequential replay follows the old execution's actual intermediate state. -/
+theorem bind_replays (first : Action Symbol Guard α)
+    (oldFirst : EnumerationState.EnumerateM Symbol Guard α)
+    (next : α → Action Symbol Guard β) (oldNext : α → EnumerationState.EnumerateM Symbol Guard β)
+    (initial : Replays first oldFirst) (following : ∀ value, Replays (next value) (oldNext value)) :
+    Replays (first >>= next) (oldFirst >>= oldNext) := by
+  intro left right value after related observed
+  obtain ⟨middle, intermediate, head, tail⟩ :=
+    (EnumerationCorrectness.success_bind oldFirst oldNext right value after).mp observed
+  obtain ⟨nextLeft, firstDone, middleRelated⟩ := initial left right middle intermediate related head
+  obtain ⟨finalLeft, lastDone, finalRelated⟩ :=
+    following middle nextLeft intermediate value after middleRelated tail
+  refine ⟨finalLeft, ?_, finalRelated⟩
+  rw [EnumerationResultRelation.stateT_bind_rows]
+  change (first left).flatMap _ = _
+  rw [firstDone]
+  simpa only [List.flatMap_cons, List.flatMap_nil, List.append_nil] using lastDone
+
+/-- A successful old representative read has the same direct root and related final core. -/
+theorem representative_replays (fuel uv : Nat) :
+    Replays (Symbol := Symbol) (Guard := Guard)
+      (EnumerationFlatState.representative uv) (EnumerationState.representative fuel uv) := by
+  intro left right value after related observed
+  obtain ⟨found, lookup, rfl, rfl⟩ :=
+    (EnumerationSchedule.representative_success fuel uv right after value).mp observed
+  obtain ⟨sameRoot, _size, retained⟩ := FlatUnionFind.findRoot_represents related.representatives lookup
+  refine ⟨left, ?_, EnumerationFlatState.related_forests related related.valid retained⟩
+  change ([.ok (FlatUnionFind.root left.representatives uv, left)] :
+    List (Except EnumerationState.Error (Nat × EnumerationFlatState.State Symbol Guard))) =
+      [.ok (found.representative, left)]
+  rw [sameRoot]

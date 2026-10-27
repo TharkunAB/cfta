@@ -1,0 +1,54 @@
+theorem prepared_action
+    (nativeFuel representativeFuel uv oldHandle newHandle : Nat) (scs : List Suspended)
+    (oldValue value : Node) (heap nextHeap : InternedConstructorTemplates.State Symbol Constraint)
+    (narrowed : SourcePruningOuterNarrow.narrow holeKey fits admits metadata nativeFuel uv oldValue heap =
+      .done value nextHeap)
+    (nonempty : value ≠ .empty) (encoded : encodeNode value = some newHandle) :
+    SourcePruningEnumerationAction.prepare holeKey fits admits metadata nativeFuel representativeFuel
+      uv oldHandle scs oldValue heap =
+      .done (value, some (if newHandle = oldHandle then (pure () : EnumerateM Symbol Constraint Unit)
+        else representative representativeFuel uv >>= fun selected =>
+          setValue selected (.unenumerated (some newHandle) scs))) nextHeap := by
+  cases value with
+  | empty => exact False.elim (nonempty rfl)
+  | reference name => simp [encodeNode] at encoded
+  | node entry edges depth free => simp only [SourcePruningEnumerationAction.prepare, narrowed, encoded]
+  | union entry members depth free => simp only [SourcePruningEnumerationAction.prepare, narrowed, encoded]
+  | mu entry body depth ordinary => simp only [SourcePruningEnumerationAction.prepare, narrowed, encoded]
+
+/-- Successful preparation has one raw row at its actual reached core. -/
+theorem prepared_singleton
+    (nativeFuel representativeFuel uv oldHandle newHandle : Nat) (scs : List Suspended)
+    (oldValue value : Node) (heap nextHeap : InternedConstructorTemplates.State Symbol Constraint)
+    (action : EnumerateM Symbol Constraint Unit) (checked after : Core)
+    (narrowed : SourcePruningOuterNarrow.narrow holeKey fits admits metadata nativeFuel uv oldValue heap =
+      .done value nextHeap)
+    (nonempty : value ≠ .empty) (encoded : encodeNode value = some newHandle)
+    (prepared : SourcePruningEnumerationAction.prepare holeKey fits admits metadata nativeFuel representativeFuel
+      uv oldHandle scs oldValue heap = .done (value, some action) nextHeap)
+    (observed : Success action checked () after) :
+    ExceptT.run (action checked) = [.ok ((), after)] := by
+  have actual := prepared_action holeKey fits admits metadata nativeFuel representativeFuel uv oldHandle newHandle
+    scs oldValue value heap nextHeap narrowed nonempty encoded
+  rw [prepared] at actual
+  have actionSame : action =
+      (if newHandle = oldHandle then (pure () : EnumerateM Symbol Constraint Unit)
+        else representative representativeFuel uv >>= fun selected =>
+          setValue selected (.unenumerated (some newHandle) scs)) :=
+    Option.some.inj (Prod.mk.inj (MergedSourceComparison.Result.done.inj actual).1).2
+  rw [actionSame] at observed ⊢
+  by_cases same : newHandle = oldHandle
+  · rw [ite_eq_left same] at observed ⊢
+    obtain ⟨_unit, rfl⟩ := (success_pure () () checked after).mp observed
+    rfl
+  · rw [ite_eq_right same] at observed ⊢
+    obtain ⟨selected, resolved, reading, writing⟩ := (success_bind _ _ checked () after).mp observed
+    obtain ⟨found, lookup, selectedSame, resolvedSame⟩ :=
+      (representative_success representativeFuel uv checked resolved selected).mp reading
+    have raw : representative representativeFuel uv checked = [.ok (selected, resolved)] := by
+      rw [selectedSame, resolvedSame]
+      exact representative_exact representativeFuel uv checked found lookup
+    rw [bind_single _ _ checked resolved selected raw]
+    have afterSame := (EnumerationDriver.modify_success _ resolved after).mp writing
+    rw [afterSame]
+    rfl

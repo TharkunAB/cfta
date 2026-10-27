@@ -1,0 +1,34 @@
+private theorem write_replays (uv : Nat) (value : UVarValue Symbol) :
+    Replays (EnumerationFlatState.setValue (Guard := EnumGuard) uv value)
+      (EnumerationState.setValue uv value) := by
+  intro left right result after related observed
+  cases result
+  have shape := (EnumerationDriver.modify_success
+    (fun state => {state with values := state.values.set uv value}) right after).mp observed
+  subst after
+  refine ⟨{left with values := left.values.set uv value}, rfl, ?_⟩
+  exact ⟨related.valid, related.representatives, related.counter,
+    congrArg (fun values => values.set uv value) related.values,
+    related.obligations, related.recursionAncestry, related.expansionAncestry⟩
+
+private theorem rejection_replays :
+    Replays (EnumerationFlatState.reject : Action Symbol EnumGuard Unit)
+      (EnumerationState.reject : EnumerateM Symbol EnumGuard Unit) := by
+  intro left right result after _related observed
+  exact (EnumerationSchedule.reject_unsuccessful right after result observed).elim
+
+private theorem replacement_replays (representativeFuel uv oldHandle newHandle : Nat)
+    (scs : List Suspended) :
+    Replays
+      (if newHandle = oldHandle then (pure () : Action Symbol EnumGuard Unit)
+        else EnumerationFlatState.representative uv >>= fun root =>
+          EnumerationFlatState.setValue root (.unenumerated (some newHandle) scs))
+      (if newHandle = oldHandle then (pure () : EnumerateM Symbol EnumGuard Unit)
+        else EnumerationState.representative representativeFuel uv >>= fun root =>
+          EnumerationState.setValue root (.unenumerated (some newHandle) scs)) := by
+  by_cases same : newHandle = oldHandle
+  · simp only [same, ↓reduceIte]
+    exact pure_replays ()
+  · simp only [same, ↓reduceIte]
+    exact bind_replays _ _ _ _ (representative_replays representativeFuel uv)
+      (fun root => write_replays root (.unenumerated (some newHandle) scs))

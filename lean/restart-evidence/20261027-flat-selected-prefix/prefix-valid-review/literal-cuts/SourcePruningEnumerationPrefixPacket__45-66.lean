@@ -1,0 +1,22 @@
+theorem prefix_context (observed : Result width Typing)
+    (valid : PrefixValid holeKey fits admits graph templates checkEmpty edgesOf stop order metadata
+      formulas solver inventory fuel uv caller before memos observed) :
+    match observed with
+    | .stopped _ _ => False
+    | .parked _ _ _ => True
+    | .narrowed _ _ reached queries _ _ _ _ =>
+        ∃ final, Post formulas solver inventory caller reached final ∧ final.query = queries := by
+  have full := valid.2.1
+  cases observed with
+  | stopped read checked =>
+      obtain ⟨_oldHandle, _scs, _readAfter, _reading, impossible⟩ := full
+      exact impossible
+  | parked _ _ _ => trivial
+  | narrowed checked prepared reached queries action candidate right ordinary =>
+      obtain ⟨next, finished⟩ := finish_preserves checkEmpty edgesOf 0 0 0 0 0 uv
+        (.narrowed checked prepared reached queries action candidate right ordinary)
+      rw [finished] at full
+      obtain ⟨_oldHandle, _scs, _readAfter, _reading, _checking, _oldValue, _value, _heap,
+        _selectedAction, final, _decoded, _narrowed, _prepared, _samePrepared, _reached,
+        _queries, post, saved, _shape⟩ := full
+      exact ⟨final, post, saved⟩

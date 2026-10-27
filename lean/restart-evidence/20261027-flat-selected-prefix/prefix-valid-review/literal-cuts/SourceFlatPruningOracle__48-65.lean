@@ -1,0 +1,18 @@
+def oracle (graph : EnumerationState.Graph Symbol Guard) (templates : List (Template.Pattern Symbol))
+    (fuel : Nat) (pending : List (Pending Symbol)) (uv : Nat) (input : Sum (Fragment Symbol) Nat) :
+    Action Symbol Guard (Bool × List (Pending Symbol)) :=
+  match input with
+  | .inr _ => pure (false, pending)
+  | .inl fragment =>
+      if rejectEarly templates fragment = true then pure (true, pending)
+      else if idle pending fragment = true then pure (false, [])
+      else observe graph templates fuel pending uv fragment
+
+/-- Record the same raw type positions and retain the other metadata fields. -/
+def recordTypes (graph : EnumerationState.Graph Symbol Guard) (templates : List (Template.Pattern Symbol))
+    (fuel : Nat) (metadata : Metadata Typing) (uv : Nat) (input : Sum (Fragment Symbol) Nat) :
+    Action Symbol Guard (Bool × Metadata Typing) := do
+  let types := updatedTypes metadata uv input
+  let observed ← if templates.isEmpty then pure (false, metadata.pending)
+    else oracle graph templates fuel metadata.pending uv input
+  pure (observed.1, {metadata with pending := observed.2, types := types})

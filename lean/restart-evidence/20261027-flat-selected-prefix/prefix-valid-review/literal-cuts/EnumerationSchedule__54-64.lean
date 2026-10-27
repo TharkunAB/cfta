@@ -1,0 +1,11 @@
+theorem representative_success (fuel uv : Nat) (before after : State Symbol Guard) (root : Nat) :
+    Success (representative fuel uv) before root after ↔
+      ∃ found, UnionFind.findRoot fuel before.representatives uv = some found ∧
+        root = found.representative ∧ after = {before with representatives := found.forest} := by
+  cases lookup : UnionFind.findRoot fuel before.representatives uv with
+  | none =>
+      simp [Success, representative, lookup, EnumerationState.failure, bind, get, getThe, MonadStateOf.get,
+        pure, StateT.bind, StateT.get, ExceptT.bind, ExceptT.pure, ExceptT.bindCont, ExceptT.mk, ExceptT.run]
+  | some found =>
+      simp only [Success, representative_exact fuel uv before found lookup, ExceptT.run]
+      simp

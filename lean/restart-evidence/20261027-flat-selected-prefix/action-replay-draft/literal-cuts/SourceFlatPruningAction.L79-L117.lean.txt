@@ -1,0 +1,39 @@
+/-- Completed old representative reads preserve every native and action outcome. -/
+theorem prepare_related [DecidableEq (EdgeKey Symbol NativeGuard)]
+    (related : Related flat earlier)
+    (holeKey : Typing → Nat → Key) (fits : Key → Symbol → Bool)
+    (admits : Key → Value Symbol NativeGuard → Bool) (metadata : Metadata Typing)
+    (nativeFuel uv oldHandle : Nat) (scs : List Suspended) (oldValue : Value Symbol NativeGuard)
+    (heap : InternedConstructorTemplates.State Symbol NativeGuard)
+    (completed : UnionFind.findRoot fuel earlier.representatives uv = some found) :
+    PreparedRelated flat earlier
+      (prepare holeKey fits admits metadata nativeFuel uv oldHandle scs oldValue heap)
+      (SourcePruningEnumerationAction.prepare holeKey fits admits metadata nativeFuel fuel uv oldHandle scs oldValue heap) := by
+  unfold prepare SourcePruningEnumerationAction.prepare
+  cases observed : SourcePruningOuterNarrow.narrow holeKey fits admits metadata nativeFuel uv oldValue heap with
+  | failed fault after => exact ⟨rfl, rfl⟩
+  | done result after =>
+      cases result with
+      | empty => exact ⟨rfl, rfl, .nil⟩
+      | reference name => exact ⟨rfl, rfl, trivial⟩
+      | node entry edges depth free =>
+          exact ⟨rfl, rfl, replacement_related related uv oldHandle (entry.identity + 1) scs completed⟩
+      | union entry members depth free =>
+          exact ⟨rfl, rfl, replacement_related related uv oldHandle (entry.identity + 1) scs completed⟩
+      | mu entry body depth ordinary =>
+          exact ⟨rfl, rfl, replacement_related related uv oldHandle (entry.identity + 1) scs completed⟩
+
+/-- One old action-read bound covers every native bound at the same actual entry. -/
+theorem prepare_stable [DecidableEq (EdgeKey Symbol NativeGuard)]
+    (related : Related flat earlier)
+    (holeKey : Typing → Nat → Key) (fits : Key → Symbol → Bool)
+    (admits : Key → Value Symbol NativeGuard → Bool) (metadata : Metadata Typing)
+    (uv oldHandle : Nat) (scs : List Suspended) (oldValue : Value Symbol NativeGuard)
+    (heap : InternedConstructorTemplates.State Symbol NativeGuard) :
+    ∃ fuel, ∀ extra nativeFuel, PreparedRelated flat earlier
+      (prepare holeKey fits admits metadata nativeFuel uv oldHandle scs oldValue heap)
+      (SourcePruningEnumerationAction.prepare holeKey fits admits metadata nativeFuel (fuel + extra)
+        uv oldHandle scs oldValue heap) := by
+  obtain ⟨fuel, found, stable, _path, _size, _forest⟩ := FlatUnionFind.find_stable related.representatives uv
+  exact ⟨fuel, fun extra nativeFuel => prepare_related related holeKey fits admits metadata
+    nativeFuel uv oldHandle scs oldValue heap (stable extra)⟩

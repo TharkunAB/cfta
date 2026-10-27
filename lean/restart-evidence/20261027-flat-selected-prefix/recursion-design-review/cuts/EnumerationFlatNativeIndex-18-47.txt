@@ -1,0 +1,30 @@
+/-- Count each occurrence at its direct representative in the input forest. -/
+def count (forest : FlatUnionFind.Forest) (change : Int)
+    (scs : List EnumerationState.Suspended) (waiting : EnumerationWaitingIndex.Waiting) :
+    EnumerationWaitingIndex.Waiting :=
+  EnumerationCanonicalWaiting.count (FlatUnionFind.root forest) change scs waiting
+
+/-- Related forests supply the earlier finite paths at the exact direct roots. -/
+theorem related_roots (related : FlatUnionFind.Represents flat earlier) :
+    EnumerationSchedule.Roots earlier (FlatUnionFind.root flat) :=
+  fun uv => ⟨_, related uv⟩
+
+/-- One sufficient old bound counts every occurrence for every change and map. -/
+theorem count_stable (related : FlatUnionFind.Represents flat earlier)
+    (scs : List EnumerationState.Suspended) :
+    ∃ fuel, ∀ extra change waiting,
+      SourcePruningEnumerationNativeIndex.count (fuel + extra) earlier change scs waiting =
+        some (count flat change scs waiting) :=
+  SourcePruningEnumerationNativeIndex.count_complete earlier (FlatUnionFind.root flat)
+    (related_roots related) scs
+
+/-- Update the raw slot, its expandable flag and the two ordered count folds. -/
+def write (heap : InternedConstructorTemplates.State Symbol NativeGuard)
+    (target : Nat) (value : EnumerationState.UVarValue Symbol)
+    (gained lost : List EnumerationState.Suspended) (before : Cached Symbol EnumGuard) :
+    Option (Cached Symbol EnumGuard) :=
+  (SourcePruningEnumerationNativeIndex.candidate heap value).map fun flag =>
+    ⟨{before.core with values := before.core.values.set target value},
+      fun other => if other = target then flag else before.expandable other,
+      count before.core.representatives 1 gained
+        (count before.core.representatives (-1) lost before.waiting)⟩

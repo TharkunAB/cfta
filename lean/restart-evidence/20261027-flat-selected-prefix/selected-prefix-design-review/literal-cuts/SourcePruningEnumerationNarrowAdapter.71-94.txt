@@ -1,0 +1,24 @@
+/-- The original narrowing receipt derives sufficient adapter fuel without a future cache premise. -/
+theorem complete
+    (heap : InternedConstructorTemplates.State Symbol NativeGuard)
+    (uv oldHandle newHandle representativeFuel countFuel : Nat) (scs : List Suspended)
+    (before after : EnumerationExpandableIndex.Cached Symbol EnumGuard)
+    (checked : EnumerationState.State Symbol EnumGuard)
+    (shape :
+      (newHandle = oldHandle ∧ after = EnumerationExpandableIndex.frame checked before) ∨
+      (newHandle ≠ oldHandle ∧ ∃ resolved : EnumerationState.State Symbol EnumGuard,
+        Success (representative representativeFuel uv) checked uv resolved ∧
+        Success (setValue uv (.unenumerated (some newHandle) scs)) resolved () after.core ∧
+        ∀ extra, SourcePruningEnumerationNativeIndex.write heap (countFuel + extra) uv
+          (.unenumerated (some newHandle) scs) scs scs
+          (EnumerationExpandableIndex.frame resolved before) = some after)) :
+    ∃ fuel, ∀ extra, adapt heap (fuel + extra) uv oldHandle newHandle scs before after.core = some after := by
+  rcases shape with ⟨same, equal⟩ | ⟨different, resolved, _read, written, indexed⟩
+  · refine ⟨0, ?_⟩
+    intro extra
+    rw [adapt, ite_eq_left same, equal]
+    rfl
+  · refine ⟨countFuel, ?_⟩
+    intro extra
+    exact adapt_after_write heap (countFuel + extra) uv oldHandle newHandle scs before after
+      resolved after.core different written (indexed extra) rfl

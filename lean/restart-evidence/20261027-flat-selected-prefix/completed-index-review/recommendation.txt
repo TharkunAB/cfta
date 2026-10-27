@@ -1,0 +1,40 @@
+[2026-10-27 06:35 CET] Completed native counts and writes at the original fuel
+
+Verdict: YES for a completed old count or completed old write. The existing source lemmas prove the needed result without increasing any old fuel. A small soundness helper is missing from the current public index API; the current count_stable/write_stable helpers provide existence at a new bound instead.
+
+Exact dependencies:
+- SourceUnionFindRoot.root_correct:38–46 converts a successful read-only root call at ANY fuel into a finite Reaches path.
+- FlatUnionFind.Represents:15–16 supplies a path from that same variable to the direct flat root, in that same old forest.
+- UnionFind.reaches_unique:52–65 equates those roots, and their sizes if needed.
+- SourcePruningEnumerationNativeIndex.count:30–38 is a recursive ordered fold. It does not update the forest between occurrences.
+- EnumerationFlatNativeIndex.count:19–22 is the same ordered bump fold at the direct flat roots, through EnumerationCanonicalWaiting.count:24–27 and EnumerationWaitingIndex.count:44–45.
+
+Minimal public helper, proposed but not elaborated:
+  count_completed (related : FlatUnionFind.Represents flatForest oldForest)
+    (completed : OldIndex.count fuel oldForest change scs waiting = some saved) :
+    FlatIndex.count flatForest change scs waiting = saved.
+
+Proof: induct scs generalizing waiting. The nil branch is injectivity of some. In the cons branch, split SourceUnionFindRoot.root fuel oldForest sc.var. none contradicts completed. For some returnedRoot, root_correct gives a path; reaches_unique path (related sc.var) gives returnedRoot=FlatUnionFind.root flatForest sc.var. Reduce the successful bind, then apply the tail induction hypothesis with the exact waiting map bump change returnedRoot waiting. Simplify the canonical count/map/foldl cons equations. This proves literal function equality of the whole sparse waiting map. No extensional count-read argument or canonical-map assumption is needed. Duplicates and arbitrary integer change remain exact.
+
+Minimal write helper:
+  write_completed (related : FlatCached.Related flatBefore oldBefore)
+    (completed : OldIndex.write heap fuel target value gained lost oldBefore = some oldAfter) :
+    exists flatAfter, FlatIndex.write heap target value gained lost flatBefore = some flatAfter
+      and FlatCached.Related flatAfter oldAfter.
+
+Proof: split candidate heap value, then both old count binds in write:47–51. A none branch contradicts completed. Retain the actual flag, removed map and saved map. Apply count_completed to lost at change -1 and oldBefore.waiting, then to gained at change 1 and that SAME removed map. Use related.waiting to align the original flat waiting map. The flat runtime now reduces to an explicit some record. The old result is the corresponding explicit record by completed. Build Related exactly as current write_stable:79–85: retain forest validity/representation and the counter/obligations/ancestries, transport values.set target value, then transport expandable and the exact ordered waiting result. No lookup-fuel increase and no native execution is introduced.
+
+Only the representation relation and the actual completed observation are needed. The helper does not need Context, Ready, Safe, allocated target, Roots parameter, Canonical waiting, NativeCorrect, capacity, or a future successful execution premise. It is a source observation bridge. Deriving the completed observation in a producer still uses that producer's genuine admission.
+
+Adapters at the SAME diagonal W:
+1. Parked: combine original cache Related and actual checked-core Related with FlatCached.frame_related. Unfold old ParkedRestart.adapt:95–100 and recover its completed write from its actual some result. Apply write_completed at W. Map frame checked on both sides. The flat adapter output is some and related to the actual old parked cache.
+2. Narrowed equal-handle: both adapters are frame observed before, so frame_related suffices at every fuel.
+3. Narrowed changed-handle: recover the old completed write from NarrowAdapter.adapt:10–19, apply write_completed at W on the related actual observed cores, then map the final observed frame. Keep original captured indexes. Do not substitute the synthetic write core for the actual observed core.
+
+PrefixValid supplies the needed success shape only together with the literal actual runPrefix observation. The underlying SelectedStep.Valid requires parked candidate=some after at lines320–325. Its nonempty narrowed arm requires action singleton, candidate=some after and exact false Right row at lines341–347. The Empty arm at line340 has action some[], candidate none and no Right. Unfold the actual runtime/adapters to extract the completed write at the original W. A semantic Valid proposition alone must not stand in for the literal action or adapter execution equation.
+
+Important limit: an old NONE caused by insufficient count fuel does not imply flat NONE. At fuel0 with any nonempty scs, old count is none, even in an empty valid forest; the flat count still returns a waiting map. Consequently a write with a valid candidate may be flat some while old write is none at that fuel. Candidate-none itself matches at every fuel because both runtimes use the identical classifier. Do not generalize write_completed to unconditional all-fuel WritesRelated. The admitted diagonal prefix avoids the timeout ambiguity through its actual successful candidate receipts. Empty rejection remains a separate pre-write branch.
+
+These helpers let the admitted producer keep nativeFuel=W and the full existing old resource/Caller/Memos packet. They remove only a proof-layer need to choose new index fuel. They do not establish low-fuel whole-prefix equivalence, uniform action closure equality, or successful completion outside admission.
+
+No builds, Lean execution, Git, network, or repository edits were performed. Complete source copies are custody inputs; literal cuts identify the focused evidence. The recommended helper statements and proof steps have not been elaborated.

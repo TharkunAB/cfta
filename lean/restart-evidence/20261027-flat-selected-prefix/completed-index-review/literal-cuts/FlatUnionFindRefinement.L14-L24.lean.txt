@@ -1,0 +1,11 @@
+/-- Every earlier path returns the direct representative and its stored size. -/
+def Represents (flat : Forest) (earlier : UnionFind.Forest) : Prop :=
+  ∀ uv, UnionFind.Reaches earlier uv (root flat uv) (entryOf flat (root flat uv)).1
+
+/-- Erasing member lists gives one forest with the required path semantics. -/
+theorem erase_represents (valid : Valid flat) : Represents flat (erase flat) :=
+  erase_reaches valid
+
+/-- The relation implies termination of all earlier lookups. -/
+theorem represents_total (related : Represents flat earlier) : UnionFind.Total earlier :=
+  fun uv => ⟨_, _, related uv⟩

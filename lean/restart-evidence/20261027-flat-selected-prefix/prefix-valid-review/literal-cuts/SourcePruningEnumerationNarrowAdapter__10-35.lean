@@ -1,0 +1,26 @@
+def adapt
+    (heap : InternedConstructorTemplates.State Symbol NativeGuard)
+    (fuel uv oldHandle newHandle : Nat) (scs : List Suspended)
+    (before : EnumerationExpandableIndex.Cached Symbol EnumGuard)
+    (observed : EnumerationState.State Symbol EnumGuard) :
+    Option (EnumerationExpandableIndex.Cached Symbol EnumGuard) :=
+  if newHandle = oldHandle then some (EnumerationExpandableIndex.frame observed before)
+  else
+    (SourcePruningEnumerationNativeIndex.write heap fuel uv (.unenumerated (some newHandle) scs) scs scs
+      (EnumerationExpandableIndex.frame observed before)).map (EnumerationExpandableIndex.frame observed)
+
+/-- Every attached cache retains the exact observed narrowing core. -/
+theorem adapt_core
+    (heap : InternedConstructorTemplates.State Symbol NativeGuard)
+    (fuel uv oldHandle newHandle : Nat) (scs : List Suspended)
+    (before after : EnumerationExpandableIndex.Cached Symbol EnumGuard)
+    (observed : EnumerationState.State Symbol EnumGuard)
+    (adapted : adapt heap fuel uv oldHandle newHandle scs before observed = some after) :
+    after.core = observed := by
+  unfold adapt at adapted
+  split at adapted
+  · cases adapted
+    rfl
+  · simp only [Option.map_eq_some_iff] at adapted
+    obtain ⟨cached, _written, same⟩ := adapted
+    subst after

@@ -1,0 +1,67 @@
+/-- Retain each actual prefix observation before any ordinary continuation. -/
+inductive Result (width : Nat) (Typing : Type) where
+  /-- Entry or recursion checking does not supply the supported singleton. -/
+  | stopped (read : ReadRaw) (checked : Option CheckRaw)
+  /-- Retain the cleared core, optional indexed cache and actual restart rows. -/
+  | parked (checked : Core) (candidate : Option Cached)
+      (raw : Option (List (Except Error ((Metadata Typing × Option Next) × Core))))
+  /-- Retain the exact preparation, native effects and all reached core observations. -/
+  | narrowed (checked : Core) (prepared : Prepared) (caller : Caller width) (queries : Queries)
+      (action : Option ActionRaw) (candidate : Option Cached)
+      (right : Option (List (Except Error ((Bool × Metadata Typing) × Core))))
+
+variable {Typing Key α : Type} {width : Nat}
+variable [DecidableEq (EdgeKey Symbol Constraint)]
+
+/-- Execute the whole selected prefix through its actual Right callback. -/
+noncomputable def run
+    (holeKey : Typing → Nat → Key) (fits : Key → Symbol → Bool) (admits : Key → Node → Bool)
+    (graph : Graph Symbol Constraint) (templates : List (Template.Pattern Symbol))
+    (stop : Option (Metadata Typing → Nat → Bool))
+    (order : Metadata Typing → List Nat → Option Nat) (metadata : Metadata Typing)
+    (nativeFuel callbackFuel uv : Nat) (caller : Caller width) (before : Cached)
+    (queries : Queries) : Result width Typing :=
+  let read := ExceptT.run (EnumerationFlatState.getValue uv before.core)
+  match read with
+  | [.ok (.unenumerated (some oldHandle) scs, readAfter)] =>
+      let check := ExceptT.run (SourceFlatPruningRecursion.checkRepeated
+        caller.checked.native.machine.heap uv oldHandle scs readAfter)
+      match check with
+      | [.ok (true, checked)] =>
+          let candidate := SourceFlatPruningIndexAdapters.parked
+            caller.checked.native.machine.heap uv oldHandle scs before checked
+          .parked checked candidate (candidate.map fun parked =>
+            ExceptT.run (SourceFlatPruningRestart.run stop order metadata parked checked))
+      | [.ok (false, checked)] =>
+          match lookupNode caller.checked.native.machine.heap oldHandle with
+          | none => .stopped read (some check)
+          | some oldValue =>
+              let prepared := SourceFlatPruningAction.prepare holeKey fits admits metadata nativeFuel
+                uv oldHandle scs oldValue caller.checked.native.machine.heap
+              let reached := SourceCurrentAllocatedPartialState.advance caller
+                (advancePhysical caller.checked ⟨prepared.state, caller.checked.operations⟩) caller.fourth caller.merge
+              match prepared with
+              | .failed _fault _heap => .narrowed checked prepared reached queries none none none
+              | .done (_value, none) _heap => .narrowed checked prepared reached queries none none none
+              | .done (value, some action) heap =>
+                  let raw := ExceptT.run (action checked)
+                  match raw with
+                  | [.ok ((), observed)] =>
+                      match encodeNode value with
+                      | none => .narrowed checked prepared reached queries (some raw) none none
+                      | some newHandle =>
+                          let candidate := SourceFlatPruningIndexAdapters.narrowed heap
+                            uv oldHandle newHandle scs before observed
+                          match candidate with
+                          | none => .narrowed checked prepared reached queries (some raw) none none
+                          | some attached =>
+                              let right := ExceptT.run (SourceFlatPruningOracle.recordTypes
+                                graph templates callbackFuel metadata uv (.inr newHandle) attached.core)
+                              match right with
+                              | [.ok ((false, _updated), callbackCore)] =>
+                                  let after := EnumerationFlatCached.frame callbackCore attached
+                                  .narrowed checked prepared reached queries (some raw) (some after) (some right)
+                              | _ => .narrowed checked prepared reached queries (some raw) (some attached) (some right)
+                  | _ => .narrowed checked prepared reached queries (some raw) none none
+      | _ => .stopped read (some check)
+  | _ => .stopped read none

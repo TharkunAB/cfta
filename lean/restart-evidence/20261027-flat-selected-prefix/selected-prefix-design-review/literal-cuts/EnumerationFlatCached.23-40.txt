@@ -1,0 +1,18 @@
+structure Related (flat : Cached Symbol Guard)
+    (earlier : EnumerationExpandableIndex.Cached Symbol Guard) : Prop where
+  /-- All non-forest fields agree and the forests have equal roots and sizes. -/
+  core : EnumerationFlatState.Related flat.core earlier.core
+  /-- The complete expandable functions agree. -/
+  expandable : flat.expandable = earlier.expandable
+  /-- The complete sparse waiting functions agree. -/
+  waiting : flat.waiting = earlier.waiting
+
+/-- Replace the core without changing the cached indexes. -/
+def frame (core : EnumerationFlatState.State Symbol Guard) (state : Cached Symbol Guard) :
+    Cached Symbol Guard := {state with core := core}
+
+/-- Related returned cores retain the exact indexes of the related input caches. -/
+theorem frame_related (related : Related flat earlier)
+    (cores : EnumerationFlatState.Related nextFlat nextEarlier) :
+    Related (frame nextFlat flat) (EnumerationExpandableIndex.frame nextEarlier earlier) :=
+  ⟨cores, related.expandable, related.waiting⟩

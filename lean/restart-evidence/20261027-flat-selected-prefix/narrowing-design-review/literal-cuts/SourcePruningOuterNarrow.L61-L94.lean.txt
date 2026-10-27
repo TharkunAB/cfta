@@ -1,0 +1,34 @@
+/-- Ready closed inputs derive a completed run and retain that run at larger fuel. -/
+theorem narrow_complete [DecidableEq (EdgeKey Symbol Guard)]
+    (holeKey : Typing → Nat → Key) (fits : Key → Symbol → Bool)
+    (admits : Key → Value Symbol Guard → Bool) (metadata : Metadata Typing)
+    (uv : Nat) (value : Value Symbol Guard) (before : State Symbol Guard)
+    (ready : SourceEqualityRequiredCache.Ready before)
+    (available : Available before value) (closed : value.free = []) :
+    ∃ fuel result after,
+      narrow holeKey fits admits metadata fuel uv value before = .done result after ∧
+      SourceEqualityRequiredCache.Keeps before after ∧ Available after result ∧ result.free = [] ∧
+      (∀ extra, narrow holeKey fits admits metadata (fuel + extra) uv value before = .done result after)
+ := by
+  cases value with
+  | mu entry body depthShape ordinaryShape =>
+      refine ⟨0, .mu entry body depthShape ordinaryShape, before, rfl,
+        SourceEqualityRequiredCache.pure_keeps before ready, available, closed, ?_⟩
+      intro extra
+      rfl
+  | empty | reference | node | union =>
+      by_cases inTypes : uv ∈ metadata.types
+      · refine ⟨0, _, before, ?_, SourceEqualityRequiredCache.pure_keeps before ready,
+          available, closed, ?_⟩
+        · simp [narrow, inTypes]
+        · intro extra
+          simp [narrow, inTypes]
+      · obtain ⟨fuel, _rows, _middle, result, after, _exposed, _built, narrowed, kept,
+            resultAvailable, resultClosed, _ordinary, _resultRows, _secondRead,
+            _emptyIff, _rowsEmptyIff, stable⟩ :=
+          SourcePruningNativeView.narrowAt_complete fits admits (holeKey metadata.typing uv) _ before
+            ready available closed
+        refine ⟨fuel, result, after, ?_, kept, resultAvailable, resultClosed, ?_⟩
+        · simpa [narrow, inTypes] using narrowed
+        · intro extra
+          simpa [narrow, inTypes] using stable extra

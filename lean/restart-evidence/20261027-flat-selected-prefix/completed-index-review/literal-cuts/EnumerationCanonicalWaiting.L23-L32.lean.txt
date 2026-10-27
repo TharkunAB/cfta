@@ -1,0 +1,10 @@
+/-- Apply the actual sparse counter fold at each current class key. -/
+def count (roots : Nat → Nat) (change : Int) (scs : List Suspended)
+    (waiting : EnumerationWaitingIndex.Waiting) : EnumerationWaitingIndex.Waiting :=
+  EnumerationWaitingIndex.count change
+    (scs.map fun sc => {sc with var := roots sc.var}) waiting
+
+/-- Remove the old slot references before adding its replacement references. -/
+def replace (roots : Nat → Nat) (old new : UVarValue Symbol)
+    (waiting : EnumerationWaitingIndex.Waiting) : EnumerationWaitingIndex.Waiting :=
+  count roots 1 (references new) (count roots (-1) (references old) waiting)
