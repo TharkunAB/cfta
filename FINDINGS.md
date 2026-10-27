@@ -12,7 +12,11 @@ The generated scalar-view name repair is merged in PR #172 at `74250bd88`.
 Upstream `f1f266ab4` has the same five files as local `07229ca7f3`.
 The constrained EGraph.extract repair is merged in PR #182 at `64cfe9fc6`.
 It is integrated at `865facc70`. The retained native reproducer now passes.
-The merged implementation and regression source equal upstream `f961332e59`.
+At that integration, the implementation and regression equalled upstream `f961332e59`.
+The e-class cost-context API is now merged in PR #183 at `82258094c` and
+integrated at `f61c306e7`. The adapted cost-5 witness and all 342 core examples
+pass. The extraction-progress documentation repair is on formalize at `1c2e0cb21`.
+It corrects the contract only. The lexicographic starvation case remains below.
 
 | Repair | Current status | External action |
 | --- | --- | --- |
@@ -102,7 +106,7 @@ The source queue always has another cheaper bad candidate at cost (0,n),
 before the accepted good at (1,1). This explains starvation. The timeout alone
 is not a formal proof of nontermination.
 
-The local Haskell documentation repair states a sufficient progress condition:
+The Haskell documentation repair `1c2e0cb21` states a sufficient progress condition:
 each cost bound admits finitely many generated partial terms. It removes the
 unsupported claim that local cost laws alone guarantee reaching a term.
 EGraph.extract, both termsByCost interfaces, the internal search comment and
@@ -135,7 +139,7 @@ that main at `865facc70ba6a10b6a875c60d1bb3ceb8c2d2cb3` without conflicts.
 Its implementation uses the first term of termsByCost, adds child-cost monotonicity
 to the extract contract, and documents nontermination when an infinite language
 has no accepted term. It adds this regression and removes an identity property.
-The implementation and regression source are byte-identical to upstream.
+At that integration, the implementation and regression source were byte-identical to upstream.
 The retained native reproducer now returns Just (5,p(h(b),b)), the same first
 termsByCost result, and Right True. Its exact 118-byte result has SHA256
 `4414d3a1236d3e56c4ac279637fb7d8c71fe0d40b3a5fe3cd5188b3d1ad1e943`.
@@ -174,15 +178,23 @@ remain errors. Full assignment semantics, root tests and canonical tries transfe
 Native cached count and write correspondence now preserves both complete index
 functions at a derived stable old bound. Lost occurrences are removed before
 gained occurrences are added at their current representatives. Full-reference
-replacement derives both native index invariants. Empty-delta assimilation needs
-its separate completed two-write proof. Frames must preserve the actual root
-function as well as slots and supply to preserve canonical count correctness.
+replacement derives both native index invariants. Completed empty-delta
+assimilation now derives both index laws after the actual two writes. It retains
+the supply, forest, waiting map and residual guards. Current decoded merged
+handles derive completion. No intermediate count invariant is asserted.
+Frames must preserve the actual root function as well as slots and supply.
 Separate allocation proofs establish bounded initial map keys, fresh allocation
 and bounded unions. A checked finite counterexample proves that core Related
-alone does not imply those key bounds. Cache reachability, recorded-root count
-transfer, whole recursive worker transport and physical Haskell containers
-remain open. These proofs add no Haskell repair or regression test.
+alone does not imply those key bounds. The actual flat terminal prefix now
+replays the old stable completion packet. It records roots before union, uses
+the original raw union anchor and moves each distinct losing recorded bucket
+once. Its actual cached endpoint derives both native index laws. Earlier Safe,
+pending inputs and native realization remain explicit admission premises.
+Full cached histories, actual Caller/memo/query effects, whole recursive worker
+transport and physical Haskell containers remain open. The proof modules add no
+Haskell runtime repair or regression test.
 Details: lean/notes-current-flat-native-index.md.
+Current prefix and paired assimilation: lean/notes-current-flat-native-assimilation.md.
 A focused native
 comparison matches 88 representative reads and the final class size and members.
 No valid-input native union-find defect or Haskell repair was found.
