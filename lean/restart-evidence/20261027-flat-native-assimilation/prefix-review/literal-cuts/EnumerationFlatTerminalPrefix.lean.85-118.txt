@@ -1,0 +1,34 @@
+  have oldCounts : EnumerationCanonicalWaiting.Correct
+      (FlatUnionFind.root flat.representatives) earlier.values waiting := by
+    simpa only [related.values] using counts
+  have oldBounded : ∀ sc ∈ first :: rest, sc.var < earlier.counter := by
+    simpa only [related.counter] using bounded
+  obtain ⟨fuel, recorded, winner, saved, scanned, united, oldAfter,
+    actual, scan, unions, read, recordedSame, savedSame, winnerMember, winnerFixed,
+    paths, finalCounts, afterSame, storage, finalRealized, winnerPending, sourcesPending,
+    nodup, ordered, keys⟩ :=
+    SourcePruningEnumerationTerminalPrefix.run_complete heap earlier first rest waiting
+      (FlatUnionFind.root flat.representatives)
+      (EnumerationFlatNativeIndex.related_roots related.representatives)
+      oldCounts safe oldBounded pending realized
+  have oldSuccess : EnumerationCorrectness.Success
+      (SourcePruningEnumerationTerminalPrefix.run fuel first rest waiting) earlier
+      (recorded, winner, saved) oldAfter := by
+    have exactRun := actual 0
+    simp only [Nat.add_zero] at exactRun
+    simp only [EnumerationCorrectness.Success, exactRun, List.mem_singleton]
+  obtain ⟨after, flatRun, finalRelated⟩ :=
+    run_replays fuel first rest waiting flat earlier (recorded, winner, saved) oldAfter related oldSuccess
+  have roots : FlatUnionFind.root after.representatives =
+      EnumerationCanonicalUnion.mergedRoots (FlatUnionFind.root flat.representatives) recorded winner := by
+    funext uv
+    obtain ⟨size, path⟩ := paths uv
+    exact (UnionFind.reaches_unique (finalRelated.representatives uv) path).1
+  have flatCounts : EnumerationCanonicalWaiting.Correct
+      (FlatUnionFind.root after.representatives) after.values saved := by
+    rw [roots, finalRelated.values]
+    exact finalCounts
+  exact ⟨fuel, recorded, winner, saved, scanned, united, oldAfter, after,
+    flatRun, actual, finalRelated, scan, unions, read, recordedSame, savedSame,
+    winnerMember, winnerFixed, roots, flatCounts, afterSame, storage, finalRealized,
+    winnerPending, sourcesPending, nodup, ordered, keys⟩

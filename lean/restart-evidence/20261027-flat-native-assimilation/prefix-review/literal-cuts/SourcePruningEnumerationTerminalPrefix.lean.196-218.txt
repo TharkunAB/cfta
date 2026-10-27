@@ -1,0 +1,23 @@
+  have recordedPending : ∀ (source : Nat), source ∈ recorded → PendingAt after source := by
+    intro source member
+    rw [recordedSame] at member
+    obtain ⟨sc, present, sourceSame⟩ := List.mem_map.mp member
+    obtain ⟨size, path⟩ := paths sc.var
+    obtain ⟨node, scs, stored⟩ := inputs_pendingAt before safe (first :: rest) bounded pending sc present (roots sc.var) size path
+    exact ⟨node, scs, by simpa only [resolved.values, ← sourceSame] using stored⟩
+  let keys : List Nat := EnumerationBuilderCaches.canonicalIds (recorded.filter (fun key => key != winner))
+  have keyMembers : ∀ (key : Nat), key ∈ keys ↔ key ∈ recorded ∧ key ≠ winner := by
+    intro key
+    simp [keys, EnumerationBuilderCaches.canonicalIds_member]
+  have actualRoots : Roots after.representatives (EnumerationCanonicalUnion.mergedRoots roots recorded winner) := by
+    intro uv
+    simpa only [EnumerationCanonicalUnion.mergedRoots, ← sameSelected] using
+      EnumerationCanonicalUnion.merging_roots before.values roots selected after resolved first.var winner count firstSelected winnerPath uv
+  have finalCounts : EnumerationCanonicalWaiting.Correct
+      (EnumerationCanonicalUnion.mergedRoots roots recorded winner) after.values
+      (EnumerationCanonicalWaiting.moveMany winner keys waiting) := by
+    rw [resolved.values, ← EnumerationCanonicalUnion.redirect_fold_eq roots recorded winner keys keyMembers]
+    exact EnumerationCanonicalWaiting.moveMany_correct winner keys roots before.values waiting counts
+  have finalRealized : PendingRealized heap after := by
+    intro slot node scs stored
+    exact realized slot node scs (by simpa only [resolved.values] using stored)

@@ -1,0 +1,421 @@
+{-# LANGUAGE DeriveFunctor #-}
+
+-- | Shared finite tree views of graph nodes and their outgoing transitions.
+module Data.CFTA.Internal.Tree (
+    adjustAt,
+    ViewStep (..),
+    ViewPath,
+    StateView (..),
+    toTreeBy,
+    explore,
+    trimRows,
+    termsBy,
+    termLevelsBy,
+    termsUpToBy,
+    termsByCostBy,
+    acceptsBy,
+    andM,
+    orM,
+) where
+
+import Control.Monad (filterM, zipWithM)
+import qualified Control.Monad.State.Strict as State
+import Control.Monad.Trans.Class (lift)
+import Data.Containers.ListUtils (nubOrd)
+import Data.Foldable (toList)
+import qualified Data.Graph as Graph
+import qualified Data.HashSet as HashSet
+import Data.Hashable (Hashable)
+import Data.Map.Strict (Map)
+import qualified Data.Map.Strict as Map
+import Data.Sequence (Seq (..))
+import qualified Data.Sequence as Sequence
+import qualified Data.Set as Set
+import qualified Data.Tree as Tree
+
+import Data.CFTA.Index (ChildIndex (..), Depth (..), TransitionIndex (..))
+import Data.CFTA.Term (Term (Leaf, One, Three, Two), arity, childAt, rootLabel, pattern Node)
+
+{- | A root-relative location in a tree view.
+
+Each step selects a transition and then a child of that transition. The root
+has path @[]@. This location belongs to one view; it is not a persistent node
+identity or a child-only constraint path.
+-}
+type ViewPath = [ViewStep]
+
+-- | One step of a 'ViewPath': a transition of a node, then a child of that transition.
+data ViewStep = ViewStep
+    { stepTransition :: !TransitionIndex
+    , stepChild :: !ChildIndex
+    }
+    deriving (Eq, Ord, Show)
+
+-- | A node definition or reference with its location in the tree view.
+data StateView node
+    = -- | The node is expanded here, with its outgoing transitions as children.
+      Expanded
+        { viewPath :: ViewPath
+        -- ^ Location of this occurrence, including recursive and shared references.
+        , viewNode :: node
+        -- ^ Original node. References retain the same identity as its definition.
+        }
+    | -- | The node is already on the current path.
+      Recursive {viewPath :: ViewPath, viewNode :: node}
+    | -- | The node was expanded on an earlier path.
+      Shared {viewPath :: ViewPath, viewNode :: node}
+    deriving (Eq, Ord, Show, Functor)
+
+-- | Expand each reachable node once and retain the original node and edge labels.
+toTreeBy ::
+    (Ord node) =>
+    (node -> [edge]) ->
+    (edge -> [node]) ->
+    node ->
+    Tree.Tree (Either (StateView node) edge)
+toTreeBy outgoing children root = State.evalState (visit Set.empty Empty root) Set.empty
+  where
+    visit ancestors path node
+        | Set.member node ancestors = pure $ Tree.Node (Left $ Recursive (toList path) node) []
+        | otherwise = do
+            seen <- State.get
+            if Set.member node seen
+                then pure $ Tree.Node (Left $ Shared (toList path) node) []
+                else do
+                    State.modify' (Set.insert node)
+                    transitions <- zipWithM (transition (Set.insert node ancestors) path) [0 ..] $ outgoing node
+                    pure $ Tree.Node (Left $ Expanded (toList path) node) transitions
+
+    transition ancestors path index edge =
+        Tree.Node (Right edge)
+            <$> zipWithM
+                (\child -> visit ancestors (path :|> ViewStep index child))
+                [0 ..]
+                (children edge)
+
+{- | The keys that a search from the root reaches, each with its row. The search
+finds the rows as it goes, so it cannot use 'Data.Graph.reachable', which needs
+the graph first.
+-}
+explore :: (Ord key) => (key -> [alternative]) -> (alternative -> [key]) -> key -> [(key, [alternative])]
+explore rowOf childrenOf root = go Set.empty [root] []
+  where
+    go _ [] rows = rows
+    go visited (key : pending) rows
+        | Set.member key visited = go visited pending rows
+        | otherwise = go (Set.insert key visited) (concatMap childrenOf row <> pending) ((key, row) : rows)
+      where
+        row = rowOf key
+
+{- | Keep the rows the root reaches through alternatives whose children all
+accept a term.
+
+A key accepts a term when some alternative has only accepting children; this
+is the least fixed point over the rows. Alternatives with a removed child are
+removed. The root is absent from the result when it accepts nothing.
+-}
+trimRows :: (Ord key) => (alternative -> [key]) -> [(key, [alternative])] -> key -> Map key [alternative]
+trimRows childrenOf rows root = Map.restrictKeys liveTable reached
+  where
+    grow known
+        | Set.size more == Set.size known = known
+        | otherwise = grow more
+      where
+        more = Set.fromList [key | (key, outgoing) <- rows, any (all (`Set.member` known) . childrenOf) outgoing]
+    liveTable =
+        Map.fromList
+            [ (key, [alternative | alternative <- outgoing, all (`Set.member` live) (childrenOf alternative)])
+            | (key, outgoing) <- rows
+            , Set.member key live
+            ]
+      where
+        live = grow Set.empty
+    (graph, nodeOf, vertexOf) =
+        Graph.graphFromEdges [((), key, concatMap childrenOf alternatives) | (key, alternatives) <- Map.toList liveTable]
+    reached =
+        Set.fromList
+            [key | start <- toList (vertexOf root), vertex <- Graph.reachable graph start, let ((), key, _) = nodeOf vertex]
+
+{- | Every accepted term of a graph given as rows, ordered by depth.
+
+A leaf has depth zero. All terms of one depth are listed before deeper
+terms, so every term of a cyclic graph appears after finitely many others.
+The rows are trimmed first with 'trimRows'; the list then ends once no
+remaining row has a term of the current depth, so an acyclic graph gives a
+finite list. Each key lists a term once per depth: rows whose alternatives
+all carry distinct symbols cannot repeat a term, and the others are
+deduplicated per level. A child key without a row accepts nothing, so
+'trimRows' removes the alternatives that use it.
+-}
+termsBy :: (Ord key, Ord symbol, Hashable symbol) => [(key, [(symbol, [key])])] -> key -> [Term symbol]
+termsBy rows root = concat $ termLevelsBy rows root
+
+{- | The terms of 'termsBy' grouped by depth: the terms of depth zero first,
+then the terms of depth one, and so on. The list of levels is lazy, so a
+prefix of it bounds the depth without building the deeper terms.
+-}
+termLevelsBy :: (Ord key, Ord symbol, Hashable symbol) => [(key, [(symbol, [key])])] -> key -> [[Term symbol]]
+termLevelsBy rows root
+    | Map.member root table = map (Map.! root) $ takeWhile (not . all null) $ map exactly levels
+    | otherwise = []
+  where
+    table = trimRows snd rows root
+    dedup = dedupUnless (all (distinctSymbols . map fst) table)
+
+    -- Each level holds, for every row, the terms of exactly its depth, of at
+    -- most its depth, and of at most the depth before it.
+    levels = iterate next (leaves, leaves, fmap (const []) table)
+      where
+        leaves = fmap (\outgoing -> dedup [Node symbol [] | (symbol, []) <- outgoing]) table
+    exactly (terms, _, _) = terms
+    next (current, atMost, shallower) = (deeper, Map.unionWith (++) deeper atMost, atMost)
+      where
+        deeper =
+            fmap
+                ( \outgoing ->
+                    dedup [term | (symbol, childKeys@(_ : _)) <- outgoing, term <- deepestTerms current atMost shallower symbol childKeys]
+                )
+                table
+
+{- | The terms of depth at most the bound that a check accepts, from rows.
+
+Terms are built level by level, as in 'termsBy'. The check sees each
+candidate once, with the key and alternative that built it, and a rejected
+candidate is never a child. Each key lists a term once per depth, as in
+'termsBy'.
+-}
+termsUpToBy ::
+    (Monad m, Ord key, Ord symbol, Hashable symbol) =>
+    (alternative -> symbol) ->
+    (alternative -> [key]) ->
+    (key -> alternative -> Term symbol -> m Bool) ->
+    [(key, [alternative])] ->
+    Depth ->
+    key ->
+    m [Term symbol]
+termsUpToBy symbolOf childrenOf accept rows bound root
+    | bound < 0 || Map.notMember root table = pure []
+    | otherwise = do
+        leaves <- level (\symbol keys -> [Leaf symbol | null keys])
+        collect 1 (leaves, leaves, fmap (const []) table) (Sequence.singleton $ leaves Map.! root)
+  where
+    table = trimRows childrenOf rows root
+    dedup = dedupUnless (all (distinctSymbols . map symbolOf) table)
+
+    level terms = Map.traverseWithKey (\key outgoing -> dedup . concat <$> traverse (candidates key) outgoing) table
+      where
+        candidates key alternative =
+            filterM (accept key alternative) (terms (symbolOf alternative) (childrenOf alternative))
+
+    collect depth (current, atMost, shallower) collected
+        | depth > bound || all null current = pure (concat collected)
+        | otherwise = do
+            deeper <- level (deepestTerms current atMost shallower)
+            collect (depth + 1) (deeper, Map.unionWith (++) deeper atMost, atMost) (collected :|> deeper Map.! root)
+
+{- | The terms of a symbol whose deepest child has exactly the current depth.
+The maps give the terms of each key of exactly the current depth, of at most
+that depth, and of at most the depth before it. The first child at the
+current depth is fixed, so no term comes twice. A term with up to three
+children is built without a list of children. No keys give no terms.
+-}
+deepestTerms ::
+    (Ord key) => Map key [Term symbol] -> Map key [Term symbol] -> Map key [Term symbol] -> symbol -> [key] -> [Term symbol]
+deepestTerms current atMost shallower symbol keys = case keys of
+    [first] -> [One symbol a | a <- current Map.! first]
+    [first, second] ->
+        [Two symbol a b | a <- current Map.! first, b <- atMost Map.! second]
+            <> [Two symbol a b | b <- current Map.! second, a <- shallower Map.! first]
+    [first, second, third] ->
+        [Three symbol a b c | a <- current Map.! first, b <- atMost Map.! second, c <- atMost Map.! third]
+            <> [Three symbol a b c | b <- current Map.! second, c <- atMost Map.! third, a <- shallower Map.! first]
+            <> [Three symbol a b c | c <- current Map.! third, b <- shallower Map.! second, a <- shallower Map.! first]
+    _ -> map (Node symbol) (childLists keys)
+  where
+    childLists [] = []
+    childLists (key : rest) =
+        [child : others | child <- current Map.! key, others <- traverse (atMost Map.!) rest]
+            <> [child : others | others <- childLists rest, child <- shallower Map.! key]
+
+{- | Whether alternatives carry pairwise distinct symbols. Then no two of
+them build the same term, so a level built from deduplicated levels has no
+duplicates.
+-}
+distinctSymbols :: (Ord symbol) => [symbol] -> Bool
+distinctSymbols symbols = length (nubOrd symbols) == length symbols
+
+{- | Deduplicate a level unless it cannot contain duplicates.
+
+With an optimized @hashable@, a hash set does this in less than half the
+time of an ordered set: on the four ambiguous cells of @enumeration-speed@,
+the hash set takes 35% to 39% of the time of the ordered set. An ordered set
+compares each new term with about log n terms of the level, and terms of one
+level often share long prefixes. A hash set visits each term once to hash it
+and compares terms only when the hashes match. An unoptimized @hashable@ makes
+the hash set slower than the ordered set: on the same cells, it takes 2.7 to 4.9
+times the time of the ordered set. The order within a level is not specified.
+-}
+dedupUnless :: (Hashable a) => Bool -> [a] -> [a]
+dedupUnless unambiguous
+    | unambiguous = id
+    | otherwise = HashSet.toList . HashSet.fromList
+
+-- | Apply a function to the child at an index, if it exists.
+adjustAt :: ChildIndex -> (a -> a) -> [a] -> [a]
+adjustAt (ChildIndex i) f xs
+    | i < 0 = xs
+    | otherwise = case splitAt i xs of
+        (prefix, x : suffix) -> prefix ++ f x : suffix
+        _ -> xs
+
+-- | Whether every action succeeds, stopping at the first failure.
+andM :: (Monad m) => [m Bool] -> m Bool
+andM [] = pure True
+andM (action : actions) = action >>= \ok -> if ok then andM actions else pure False
+
+-- | Whether some action succeeds, stopping at the first success.
+orM :: (Monad m) => [m Bool] -> m Bool
+orM [] = pure False
+orM (action : actions) = action >>= \ok -> if ok then pure True else orM actions
+
+{- | Decide whether a key accepts a term, from the outgoing alternatives of each key.
+
+An alternative matches a subterm when its symbol and its number of children
+are those of the root of the subterm. The matching alternatives of a key are
+tried in order, and the search stops at the first one that accepts. The
+children of an alternative are tried from left to right. The check runs only
+when all of them accept. This is the order of the direct recursion.
+
+The direct recursion decides a subterm again for each alternative above it
+that fails, so its time can be exponential in the depth of the term. This
+search keeps a table below each subterm that two or more alternatives match.
+In the table, each key at each position of the term is decided once, and a
+later visit uses that result and runs no check. Above such a subterm, each
+subterm has one visit, and the search keeps no table. Thus each check runs at
+most once for each key, alternative, and position, in the order in which the
+direct recursion first runs it.
+-}
+{-# INLINEABLE acceptsBy #-}
+
+{- | The terms below a key in the order of a cost, cheapest first, each with
+its cost, produced lazily.
+
+The cost of a term comes from the alternative that built it and the costs
+of its children. It must not decrease when the cost of a child grows. The least cost of a key is
+the least cost of its terms, or Nothing when it has none. Then the costs of
+the list never decrease, also below a cycle, whose list is infinite. The
+check decides each complete term at the alternative that built it. A term
+with two runs comes twice.
+
+An infinite set of cheaper rejected candidates can prevent the next term from
+being reached. A sufficient progress condition is that each cost bound admits
+only finitely many generated partial terms.
+
+This is a best-first search over partial terms, as Knuth's generalization of
+Dijkstra's algorithm: the key of a partial term is its cost with the least
+cost of the key of each hole, so a step never lowers the key, and a complete
+term comes out at its exact cost. Equal keys come out in the order in which
+the search made them.
+-}
+termsByCostBy ::
+    (Ord c) =>
+    (key -> [alternative]) ->
+    (alternative -> symbol) ->
+    (alternative -> [key]) ->
+    (alternative -> Term symbol -> Bool) ->
+    (alternative -> [c] -> c) ->
+    (key -> Maybe c) ->
+    key ->
+    [(c, Term symbol)]
+termsByCostBy outgoing symbolOf childrenOf check cost least root =
+    maybe [] (\k -> search 1 (Map.singleton (k, 0 :: Int) (Hole root))) (least root)
+  where
+    search serial queue = case Map.minViewWithKey queue of
+        Nothing -> []
+        Just (((k, _), partial), rest) -> case fill partial of
+            -- A partial term without a hole is complete, and its key is its cost.
+            Nothing -> [(k, term) | Just term <- [complete partial]] ++ search serial rest
+            Just filled -> let (serial', queue') = foldl' push (serial, rest) filled in search serial' queue'
+    -- A partial term with a hole of a key without terms has no complete term.
+    push (serial, queue) partial = case value partial of
+        Nothing -> (serial, queue)
+        Just k -> (serial + 1, Map.insert (k, serial) partial queue)
+    value (Hole key) = least key
+    value (Built alternative children) = cost alternative <$> traverse value children
+    -- The partial terms that fill the leftmost hole with each alternative of
+    -- its key, or Nothing for a complete partial term.
+    fill (Hole key) = Just [Built alternative (map Hole (childrenOf alternative)) | alternative <- outgoing key]
+    fill (Built alternative children) = map (Built alternative) <$> fillFirst children
+    fillFirst [] = Nothing
+    fillFirst (child : rest) = case fill child of
+        Just filled -> Just [child' : rest | child' <- filled]
+        Nothing -> map (child :) <$> fillFirst rest
+    complete (Hole _) = Nothing
+    complete (Built alternative children) = do
+        subterms <- traverse complete children
+        let term = Node (symbolOf alternative) subterms
+        if check alternative term then Just term else Nothing
+
+-- | A term whose subterms can be holes, each of a key.
+data Partial key alternative = Hole key | Built alternative [Partial key alternative]
+
+acceptsBy ::
+    (Monad m, Ord key, Eq symbol) =>
+    (key -> [alternative]) ->
+    (alternative -> symbol) ->
+    (alternative -> [key]) ->
+    (key -> alternative -> Term symbol -> m Bool) ->
+    key ->
+    Term symbol ->
+    m Bool
+acceptsBy outgoing symbolOf childrenOf check = unshared
+  where
+    matches term alternative =
+        symbolOf alternative == rootLabel term && length (childrenOf alternative) == arity term
+
+    -- The alternatives of a row from the first one that matches a subterm.
+    fromMatch _ [] = []
+    fromMatch term alternatives@(alternative : rest)
+        | matches term alternative = alternatives
+        | otherwise = fromMatch term rest
+
+    -- No other visit reaches this subterm, so its result needs no table.
+    -- The alternative matched, so the children have the keys of its child
+    -- list, in order.
+    unshared key term = case fromMatch term (outgoing key) of
+        [] -> pure False
+        alternative : rest -> case fromMatch term rest of
+            [] ->
+                childrenAccept (childrenOf alternative) 0 term >>= \accepted ->
+                    if accepted then check key alternative term else pure False
+            _ -> State.evalStateT (shared key (positioned term)) Map.empty
+    childrenAccept (key : keys) index term =
+        unshared key (childAt index term) >>= \accepted ->
+            if accepted then childrenAccept keys (index + 1) term else pure False
+    childrenAccept [] _ _ = pure True
+
+    -- This subterm is at or below a subterm that two or more alternatives
+    -- match. The table holds the result of each position and key.
+    shared key (Node (_, term) children) =
+        orM
+            [ andM (zipWith visit (childrenOf alternative) children) >>= \accepted ->
+                if accepted then lift (check key alternative term) else pure False
+            | alternative <- outgoing key
+            , matches term alternative
+            ]
+    visit key node@(Node (position, _) _) = do
+        known <- State.gets (Map.lookup (position, key))
+        case known of
+            Just accepted -> pure accepted
+            Nothing -> do
+                accepted <- shared key node
+                State.modify' (Map.insert (position, key) accepted)
+                pure accepted
+
+    -- Each subterm with its position in preorder.
+    positioned whole = State.evalState (number whole) (0 :: Int)
+      where
+        number term@(Node _ children) = do
+            position <- State.get
+            State.modify' (+ 1)
+            Node (position, term) <$> traverse number children

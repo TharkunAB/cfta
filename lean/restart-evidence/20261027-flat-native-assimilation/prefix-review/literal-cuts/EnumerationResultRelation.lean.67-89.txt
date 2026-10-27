@@ -1,0 +1,23 @@
+theorem stateT_bind_rows (first : StateT Left (ExceptT Error List) α)
+    (next : α → StateT Left (ExceptT Error List) β) (before : Left) :
+    ((first >>= next) before : List (Except Error (β × Left))) =
+      EnumerationCPSChecked.bindRows first next before := by
+  simp only [Bind.bind, StateT.bind, ExceptT.bind, ExceptT.mk, EnumerationCPSChecked.bindRows]
+  congr 1
+  funext result
+  cases result with
+  | error error => rfl
+  | ok pair => cases pair; rfl
+
+/-- Related StateT actions compose through their actual intermediate states. -/
+theorem stateT_bind
+    (first : StateT Left (ExceptT Error List) α)
+    (second : StateT Right (ExceptT Error List) α)
+    (leftNext : α → StateT Left (ExceptT Error List) β)
+    (rightNext : α → StateT Right (ExceptT Error List) β)
+    (initial : Results relation (first left) (second right))
+    (following : ∀ value left right, relation left right →
+      Results relation (leftNext value left) (rightNext value right)) :
+    Results relation ((first >>= leftNext) left) ((second >>= rightNext) right) := by
+  rw [stateT_bind_rows, stateT_bind_rows]
+  exact bind_rows first second leftNext rightNext initial following

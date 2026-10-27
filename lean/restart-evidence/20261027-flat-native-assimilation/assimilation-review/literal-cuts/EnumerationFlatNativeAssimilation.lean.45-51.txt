@@ -1,0 +1,7 @@
+/-- Empty-delta assimilation retains the complete observation at every earlier fuel. -/
+theorem finish_related (related : Related flat earlier)
+    (heap : InternedConstructorTemplates.State Symbol Constraint) (fuel source target : Nat)
+    (merged : Option Nat) (sourceScs targetScs : List EnumerationState.Suspended) :
+    ResultRelated (finish heap source target merged sourceScs targetScs flat)
+      (SourcePruningEnumerationCachedAssimilation.finish heap fuel source target
+        merged sourceScs targetScs earlier) := by

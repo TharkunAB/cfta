@@ -1,0 +1,20 @@
+{- | The terms below a key in the order of a cost, cheapest first, each with
+its cost, produced lazily.
+
+The cost of a term comes from the alternative that built it and the costs
+of its children. It must not decrease when the cost of a child grows. The least cost of a key is
+the least cost of its terms, or Nothing when it has none. Then the costs of
+the list never decrease, also below a cycle, whose list is infinite. The
+check decides each complete term at the alternative that built it. A term
+with two runs comes twice.
+
+An infinite set of cheaper rejected candidates can prevent the next term from
+being reached. A sufficient progress condition is that each cost bound admits
+only finitely many generated partial terms.
+
+This is a best-first search over partial terms, as Knuth's generalization of
+Dijkstra's algorithm: the key of a partial term is its cost with the least
+cost of the key of each hole, so a step never lowers the key, and a complete
+term comes out at its exact cost. Equal keys come out in the order in which
+the search made them.
+-}

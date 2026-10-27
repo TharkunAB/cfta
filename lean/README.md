@@ -1,5 +1,34 @@
 # cfta formal model
 
+## Actual flat terminal prefixes and paired assimilation now retain native indexes
+
+Main `82258094c` is integrated at `f61c306e7`. EGraph extraction costs now
+receive the owning class, symbol, child classes and child costs.
+All 342 core examples pass in Nix. The adapted constrained cost-5 witness passes.
+A verified lexicographic starvation case shows a pre-existing progress limit.
+Documentation repair `1c2e0cb21` and FINDINGS state a sufficient finiteness
+condition. The repair changes comments and the changelog; executable code stays equal.
+
+Paired native assimilation: `d66c342d5`. Actual terminal prefix: `0b2d3bcc6`.
+Empty-delta writes preserve full correspondence at every old fuel. Completion
+from current decoding derives final native indexes and retains established bounds.
+The actual prefix records old roots, unions original raw variables, reads the
+winner and moves each distinct losing recorded count bucket once. Its cached
+endpoint derives native flags and canonical counts. The full earlier completion
+packet remains available. Earlier Safe, pending and realization gates stay explicit.
+Related alone does not establish those gates or a flat allocation bound.
+
+All three modules and Audit pass strict checks. Aggregate Audit passes 3996 jobs
+and 78255 theorem dependency checks. Installed readback covers 14 new theorems,
+unchanged H6 and captured rendering, and seven complete definitions.
+The full goal stays ACTIVE. H6 remains the strongest global language theorem.
+
+Next compose the same native fold and its actual Caller, memo and query effects.
+Carry allocation and semantic gates through that complete history. Whole recursive
+output soundness, discharge/rendering existence, selector coverage, completeness
+and physical Haskell correspondence remain open.
+Details: `lean/notes-current-flat-native-assimilation.md`.
+
 ## Native cached writes now retain exact indexes across union-find backends
 
 Allocation-bound proofs: `7c6c8ae97`. Native cache correspondence: `cd0e66456`.

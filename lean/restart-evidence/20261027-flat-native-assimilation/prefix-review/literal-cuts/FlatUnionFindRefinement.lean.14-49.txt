@@ -1,0 +1,36 @@
+/-- Every earlier path returns the direct representative and its stored size. -/
+def Represents (flat : Forest) (earlier : UnionFind.Forest) : Prop :=
+  ∀ uv, UnionFind.Reaches earlier uv (root flat uv) (entryOf flat (root flat uv)).1
+
+/-- Erasing member lists gives one forest with the required path semantics. -/
+theorem erase_represents (valid : Valid flat) : Represents flat (erase flat) :=
+  erase_reaches valid
+
+/-- The relation implies termination of all earlier lookups. -/
+theorem represents_total (related : Represents flat earlier) : UnionFind.Total earlier :=
+  fun uv => ⟨_, _, related uv⟩
+
+/-- Both representations have exactly the same equality classes. -/
+theorem represents_classes (related : Represents flat earlier) (left right : Nat) :
+    UnionFind.SameClass earlier left right ↔ root flat left = root flat right :=
+  UnionFind.sameClass_iff_roots (related left) (related right)
+
+/-- Singleton initialization relates the two representations, including absent entries. -/
+theorem initial_represents (variables : List Nat) :
+    Represents (withInitialValues variables) (UnionFind.withInitialValues variables) := by
+  intro uv
+  have direct : root (withInitialValues variables) uv = uv := by
+    simp [root, withInitialValues]
+  have size : (entryOf (withInitialValues variables) uv).1 = 1 := by
+    by_cases supplied : uv ∈ variables <;> simp [entryOf, withInitialValues, supplied]
+  rw [direct, size]
+  exact .root (UnionFind.read_initial variables uv)
+
+/-- A completed earlier lookup agrees on its root and size and retains the relation. -/
+theorem findRoot_represents (related : Represents flat earlier)
+    (completed : UnionFind.findRoot fuel earlier uv = some found) :
+    found.representative = root flat uv ∧
+      found.size = (entryOf flat (root flat uv)).1 ∧ Represents flat found.forest := by
+  obtain ⟨path, preserved⟩ := UnionFind.findRoot_correct _ _ _ _ completed
+  obtain ⟨sameRoot, sameSize⟩ := UnionFind.reaches_unique path (related uv)
+  exact ⟨sameRoot, sameSize, fun other => preserved (related other)⟩

@@ -1,0 +1,15 @@
+/-- Actual decoded merged handles give a completed run and correct final native indexes. -/
+theorem finish_complete (heap : InternedConstructorTemplates.State Symbol Constraint)
+    (before : Cached Symbol Constraint) (correct : EnumerationFlatNativeIndex.Correct heap before)
+    (source target : Nat) (sourceNode targetNode merged : Option Nat)
+    (sourceScs targetScs : List EnumerationState.Suspended)
+    (sourceStored : before.core.values[source]? = some (.unenumerated sourceNode sourceScs))
+    (targetStored : before.core.values[target]? = some (.unenumerated targetNode targetScs))
+    (different : target ≠ source)
+    (decoded : ∀ handle, merged = some handle → handle ≠ 0 →
+      ∃ value, SourcePruningEnumerationNodes.lookupNode heap handle = some value) :
+    ∃ rows after, finish heap source target merged sourceScs targetScs before = some (rows, after) ∧
+      EnumerationFlatNativeIndex.Correct heap after ∧
+      after.core.counter = before.core.counter ∧
+      after.core.representatives = before.core.representatives ∧ after.waiting = before.waiting ∧
+      (EnumerationFlatState.Bounded before.core → EnumerationFlatState.Bounded after.core) := by

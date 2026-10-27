@@ -1,0 +1,4 @@
+/-- A successful branch of an actual state action. Errors remain separate list entries. -/
+def Success (action : EnumerateM Symbol Guard α) (before : State Symbol Guard)
+    (value : α) (after : State Symbol Guard) : Prop :=
+  Except.ok (value, after) ∈ ExceptT.run (action before)

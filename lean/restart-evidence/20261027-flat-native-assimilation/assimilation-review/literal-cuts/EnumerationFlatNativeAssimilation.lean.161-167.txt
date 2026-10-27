@@ -1,0 +1,7 @@
+/-- Successful assimilation retains the separately established explicit-key bound. -/
+theorem finish_bounded (heap : InternedConstructorTemplates.State Symbol Constraint)
+    (before after : Cached Symbol Constraint) (bounded : EnumerationFlatState.Bounded before.core)
+    (source target : Nat) (merged : Option Nat)
+    (sourceScs targetScs : List EnumerationState.Suspended)
+    (done : finish heap source target merged sourceScs targetScs before = some (rows, after)) :
+    EnumerationFlatState.Bounded after.core := by

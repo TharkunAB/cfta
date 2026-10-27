@@ -1,0 +1,11 @@
+/-- Native flags and representative counts describe the same complete slot array. -/
+structure Correct (heap : InternedConstructorTemplates.State Symbol NativeGuard)
+    (state : Cached Symbol EnumGuard) : Prop where
+  /-- The fresh identifier follows the last stored raw slot. -/
+  aligned : state.core.counter = state.core.values.length
+  /-- Every slot has its actual decoded expandable flag. -/
+  expandable : ∀ uv, SourcePruningEnumerationNativeIndex.candidate heap
+    ((state.core.values[uv]?).getD .eliminated) = some (state.expandable uv)
+  /-- Every waiting count uses the current representative of each occurrence. -/
+  waiting : EnumerationCanonicalWaiting.Correct (FlatUnionFind.root state.core.representatives)
+    state.core.values state.waiting

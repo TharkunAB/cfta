@@ -1,0 +1,26 @@
+/-- Reject Empty or write target, eliminate source and then combine ancestry. -/
+def finish (heap : InternedConstructorTemplates.State Symbol Constraint)
+    (source target : Nat) (merged : Option Nat)
+    (sourceScs targetScs : List EnumerationState.Suspended) (before : Cached Symbol Constraint) :
+    Option (List (Unit × Cached Symbol Constraint) × Cached Symbol Constraint) :=
+  if merged = some 0 then some ([], before) else
+    (EnumerationFlatNativeIndex.write heap target
+      (.unenumerated merged (sourceScs ++ targetScs)) [] [] before).bind fun targetAfter =>
+      (EnumerationFlatNativeIndex.write heap source .eliminated [] [] targetAfter).map fun sourceAfter =>
+        let finished := frame
+          {sourceAfter.core with recursionAncestry := fun other =>
+            if other = target then
+              (sourceAfter.core.recursionAncestry source ++ sourceAfter.core.recursionAncestry target).eraseDups
+            else sourceAfter.core.recursionAncestry other} sourceAfter
+        ([((), finished)], finished)
+
+/-- Optional cached runs retain every ordered row and the actual outer cache. -/
+def ResultRelated (flat : Option (List (Unit × Cached Symbol Constraint) × Cached Symbol Constraint))
+    (earlier : Option (List (Unit × EnumerationExpandableIndex.Cached Symbol Constraint) ×
+      EnumerationExpandableIndex.Cached Symbol Constraint)) : Prop :=
+  match flat, earlier with
+  | none, none => True
+  | some (rows, after), some (oldRows, oldAfter) =>
+      EnumerationResultRelation.Results (Error := EnumerationState.Error) Related
+        (rows.map Except.ok) (oldRows.map Except.ok) ∧ Related after oldAfter
+  | _, _ => False

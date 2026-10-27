@@ -1,0 +1,39 @@
+  let fuel : Nat := scanFuel + unionFuel + rootFuel
+  have scanMore : ∀ (extra : Nat), Success ((first :: rest).mapM fun sc =>
+      representative (fuel + extra) sc.var) before recorded scanned := by
+    intro extra
+    simpa [fuel, Nat.add_assoc] using retains_mapM _ _ (fun (sc : Suspended) =>
+      representative_moreFuel scanFuel (unionFuel + rootFuel + extra) sc.var) (first :: rest) _ _ _ scan
+  have unionsMore : ∀ (extra : Nat), Success (rest.forM fun sc =>
+      unionVariables (fuel + extra) first.var sc.var) scanned () united := by
+    intro extra
+    simpa [fuel, Nat.add_assoc, Nat.add_comm, Nat.add_left_comm] using retains_forM _ _ (fun (sc : Suspended) =>
+      unionVariables_moreFuel unionFuel (scanFuel + rootFuel + extra) first.var sc.var) rest _ _ _ unions
+  have resolutionMore : ∀ (extra : Nat), Success (representative (fuel + extra) first.var)
+      united winner after := by
+    intro extra
+    simpa [fuel, Nat.add_assoc, Nat.add_comm, Nat.add_left_comm] using
+      representative_moreFuel rootFuel (scanFuel + unionFuel + extra) first.var _ _ _ resolution
+  refine ⟨fuel, recorded, winner, EnumerationCanonicalWaiting.moveMany winner keys waiting,
+    scanned, united, after, ?_, ?_, ?_, ?_, recordedSame, rfl,
+    (sameSelected winner).mpr winnerSelected, winnerFixed, actualRoots, finalCounts, afterFrame,
+    afterStable.1, finalRealized, recordedPending winner ((sameSelected winner).mpr winnerSelected),
+    recordedPending, EnumerationBuilderCaches.canonicalIds_nodup _,
+    EnumerationBuilderCaches.canonicalIds_sorted _, keyMembers⟩
+  · intro extra
+    unfold run
+    rw [bind_single _ _ before scanned recorded (scanExact _ _ _ _ _ (scanMore extra))]
+    rw [bind_single _ _ scanned united () (unionsExact _ _ _ _ _ (unionsMore extra))]
+    obtain ⟨found, lookup, rootSame, finalSame⟩ :=
+      (representative_success (fuel + extra) first.var united after winner).mp (resolutionMore extra)
+    rw [bind_single _ _ united after winner
+      (by simpa only [← rootSame, ← finalSame] using representative_exact (fuel + extra) first.var united found lookup)]
+    rfl
+  · intro extra
+    exact scanExact _ _ _ _ _ (scanMore extra)
+  · intro extra
+    exact unionsExact _ _ _ _ _ (unionsMore extra)
+  · intro extra
+    obtain ⟨found, lookup, rootSame, finalSame⟩ :=
+      (representative_success (fuel + extra) first.var united after winner).mp (resolutionMore extra)
+    simpa only [← rootSame, ← finalSame, ExceptT.run] using representative_exact (fuel + extra) first.var united found lookup

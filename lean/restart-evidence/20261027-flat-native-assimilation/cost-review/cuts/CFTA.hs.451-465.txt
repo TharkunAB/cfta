@@ -1,0 +1,15 @@
+{- | The accepted terms in the order of a cost, cheapest first, each with its
+cost, produced lazily.
+
+The cost of a term comes from its symbol and the costs of its children, as
+for an extraction, such as the size or a sum of weights. It must not decrease
+when the cost of a child grows, and it must be at least the cost of each
+child, so that each state has a least cost. Then the costs of the list never
+decrease, also for a cyclic automaton, whose list is infinite. The terms of
+one cost come in a fixed order. A transition with a constraint gives only the
+terms that satisfy its path equalities. A term with two runs comes twice.
+
+An infinite set of cheaper rejected candidates can prevent the next term from
+being reached. A sufficient progress condition is that each cost bound admits
+only finitely many generated partial terms.
+-}

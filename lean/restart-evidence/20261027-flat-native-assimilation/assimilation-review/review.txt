@@ -1,0 +1,68 @@
+[2026-10-27 04:20 CET] CLEAR — final flat native assimilation review.
+
+Reviewed the entire 215-line EnumerationFlatNativeAssimilation.lean and all five
+theorem statements and proofs. Whole-file SHA256:
+701fdecce648cce7da5a7772794746a1cbb93211e3da998a8d802398614e4751.
+The retained strict-assimilation-5 source is byte-equal to the repository file.
+Its report records exit 0, warningAsError and linter.all, with a zero-byte raw
+log. The source, report and raw log are copied as evidence. No Lean, build,
+Git or native check was executed for this review.
+
+1. Runtime ordering and optional outcomes (18–43).
+finish tests merged=some 0 before classification or either write. That branch
+returns some([],before). Otherwise it writes the raw target with the concatenated
+sourceScs++targetScs, eliminates the raw source, and then combines SOURCE ancestry
+before TARGET ancestry with eraseDups. It resolves neither raw identifier. Both
+writes use empty gained/lost deltas. The outer cache equals the sole row cache
+on success. Missing decoding on a nonempty merged handle returns None; merged=none
+is a valid optional pending node and classifies as false. The eliminated source
+classifies as false without decoding. These branches and order match the earlier
+CachedAssimilation.finish:10–27 and the source assimilation:489–510. Same-source
+and eliminated-source noops remain responsibilities of the enclosing dispatcher.
+
+2. Exact correspondence for every earlier fuel (45–87).
+finish_related quantifies an arbitrary fuel and all raw parameters. It has only
+the initial complete cache relation as its premise. Empty old count lists reduce
+without root reads at any fuel. ResultRelated relates None only to None. For Some,
+it retains every ordered row through Results/All₂ and separately relates the
+actual outer cache, including the empty-row case. The final core relation keeps
+validity, forest paths/sizes, supply, obligations and both ancestry fields; both
+index functions retain their complete literal correspondence. No sufficient-fuel
+bound or successful future execution is assumed.
+
+3. Endpoint correctness and retained fields (89–170).
+finish_correct requires initial native Correct, the actual distinct pending
+source/target slots, and an observed returned cache. The stored receipts supply
+the two array bounds. It proves native flags at the SAME heap and canonical
+waiting counts only after BOTH writes. Its count proof is exactly the completed
+CanonicalWaiting.assimilation_correct law with the concatenated references;
+duplicates remain occurrences. It does not invoke the full-replacement
+write_correct at an empty-delta intermediate write. finish_fields retains the
+counter, exact forest, waiting function and obligations, including rejection.
+finish_bounded transports a separately supplied Bounded law through those exact
+forest/counter equations. Bounded concerns explicit forest keys below counter;
+it does not establish Safe, slot-reference bounds or native word capacity.
+
+4. Actual completion from current decoding (172–213).
+finish_complete has no supplied finish observation. It constructs the actual
+result: some 0 rejects before decoding; none needs no decoding; every nonzero
+some handle uses the given CURRENT heap lookup to derive a candidate flag.
+The eliminated-source classifier then completes the second write. It returns the
+actual rows/cache equation, endpoint Correct, unchanged counter/forest/waiting
+and conditional preservation of the original allocation bound. The decoding
+premise states neither future success nor desired endpoint properties. It is
+weaker than the older mergedRealized premise because this theorem does not claim
+Available/closed operands, StorageValid, PendingRealized or language preservation.
+
+This is a native finish-stage correspondence and completed-index result. It does
+not repeat intersection or prove the enclosing dispatcher/enumerator correct.
+It does not establish assignment semantics or Safe on rejection. The old full
+CachedAssimilation.complete packet remains a separate, stronger storage and
+realization API; this file does not present its smaller result as that entire
+packet.
+
+source-pins.json distinguishes complete_source_copy records in full-sources/
+from literal_line_slice records in literal-cuts/. Declaration-prefix slices are
+explicitly marked and include all five new signatures plus the earlier complete
+header/output prefix. Root's source snapshots and older failed check records
+remain unchanged in their original locations.

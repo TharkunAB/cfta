@@ -1,0 +1,38 @@
+/-- Replacing all old references by all new references derives both native indexes. -/
+theorem write_correct (heap : InternedConstructorTemplates.State Symbol NativeGuard)
+    (before after : Cached Symbol EnumGuard) (correct : Correct heap before)
+    (target : Nat) (old value : EnumerationState.UVarValue Symbol)
+    (stored : before.core.values[target]? = some old)
+    (done : write heap target value (EnumerationSchedule.references value)
+      (EnumerationSchedule.references old) before = some after) : Correct heap after := by
+  cases classified : SourcePruningEnumerationNativeIndex.candidate heap value with
+  | none => simp [write, classified] at done
+  | some flag =>
+      simp [write, classified] at done
+      subst after
+      refine ⟨by simpa using correct.aligned, ?_, ?_⟩
+      · intro uv
+        by_cases same : uv = target
+        · subst uv
+          have bound := (List.getElem?_eq_some_iff.mp stored).1
+          simpa only [List.getElem?_set_self bound, Option.getD_some, ↓reduceIte] using classified
+        · simpa only [List.getElem?_set_ne (Ne.symm same), ite_eq_right same]
+            using correct.expandable uv
+      · exact EnumerationCanonicalWaiting.replace_correct
+          (FlatUnionFind.root before.core.representatives) before.core.values target old value
+          stored before.waiting correct.waiting
+
+/-- Framing retains canonical indexes when slots, supply and representatives stay equal. -/
+theorem frame_correct (heap : InternedConstructorTemplates.State Symbol NativeGuard)
+    (before : Cached Symbol EnumGuard) (next : EnumerationFlatState.State Symbol EnumGuard)
+    (correct : Correct heap before) (values : next.values = before.core.values)
+    (counter : next.counter = before.core.counter)
+    (roots : FlatUnionFind.root next.representatives = FlatUnionFind.root before.core.representatives) :
+    Correct heap (frame next before) := by
+  refine ⟨?_, ?_, ?_⟩
+  · change next.counter = next.values.length
+    rw [counter, values]
+    exact correct.aligned
+  · intro uv
+    simpa only [frame, values] using correct.expandable uv
+  · simpa only [frame, values, roots] using correct.waiting

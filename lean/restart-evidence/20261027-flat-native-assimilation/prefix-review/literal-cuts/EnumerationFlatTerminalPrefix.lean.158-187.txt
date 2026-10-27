@@ -1,0 +1,30 @@
+  obtain ⟨fuel, recorded, winner, saved, _scanned, _united, oldAfter, after,
+    flatRun, oldRun, finalRelated, _scan, _unions, _read, recordedSame, savedSame,
+    winnerMember, _winnerFixed, _roots, counts, afterSame, storage, finalRealized,
+    winnerPending, sourcesPending, _nodup, _ordered, _keys⟩ :=
+    run_complete heap flat.core earlier.core related.core first rest flat.waiting
+      correct.waiting safe bounded pending realized
+  have values : after.values = flat.core.values := by
+    rw [finalRelated.values, afterSame]
+    exact related.core.values.symm
+  have counter : after.counter = flat.core.counter := by
+    rw [finalRelated.counter, afterSame]
+    exact related.core.counter.symm
+  let next : EnumerationFlatCached.Cached Symbol EnumGuard := ⟨after, flat.expandable, saved⟩
+  let oldNext : EnumerationExpandableIndex.Cached Symbol EnumGuard :=
+    ⟨oldAfter, earlier.expandable, saved⟩
+  have nextCorrect : EnumerationFlatNativeIndex.Correct heap next := by
+    refine ⟨?_, ?_, counts⟩
+    · change after.counter = after.values.length
+      rw [counter, values]
+      exact correct.aligned
+    · intro uv
+      simpa only [next, values] using correct.expandable uv
+  refine ⟨fuel, recorded, winner, next, oldNext, ?_, ?_,
+    ⟨finalRelated, related.expandable, rfl⟩, nextCorrect, rfl, rfl, rfl,
+    recordedSame, savedSame, winnerMember, storage, finalRealized, winnerPending, sourcesPending⟩
+  · simp only [cached, ExceptT.run, flatRun, List.map_cons, List.map_nil]
+    rfl
+  · intro extra
+    rw [← related.waiting]
+    exact oldRun extra

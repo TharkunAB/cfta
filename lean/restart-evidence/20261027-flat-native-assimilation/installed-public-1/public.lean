@@ -1,0 +1,46 @@
+import MicroCFTA.EnumerationFlatNativeAssimilation
+import MicroCFTA.EnumerationFlatReplay
+import MicroCFTA.EnumerationFlatTerminalPrefix
+import MicroCFTA.SourceCurrentColdFiniteWarmCalls
+import MicroCFTA.SourcePruningEnumerationCapturedRendering
+set_option pp.maxSteps 1000000
+set_option pp.deepTerms true
+#check MicroCFTA.EnumerationFlatNativeAssimilation.finish_related
+#print axioms MicroCFTA.EnumerationFlatNativeAssimilation.finish_related
+#check MicroCFTA.EnumerationFlatNativeAssimilation.finish_correct
+#print axioms MicroCFTA.EnumerationFlatNativeAssimilation.finish_correct
+#check MicroCFTA.EnumerationFlatNativeAssimilation.finish_fields
+#print axioms MicroCFTA.EnumerationFlatNativeAssimilation.finish_fields
+#check MicroCFTA.EnumerationFlatNativeAssimilation.finish_bounded
+#print axioms MicroCFTA.EnumerationFlatNativeAssimilation.finish_bounded
+#check MicroCFTA.EnumerationFlatNativeAssimilation.finish_complete
+#print axioms MicroCFTA.EnumerationFlatNativeAssimilation.finish_complete
+#check MicroCFTA.EnumerationFlatReplay.pure_replays
+#print axioms MicroCFTA.EnumerationFlatReplay.pure_replays
+#check MicroCFTA.EnumerationFlatReplay.bind_replays
+#print axioms MicroCFTA.EnumerationFlatReplay.bind_replays
+#check MicroCFTA.EnumerationFlatReplay.representative_replays
+#print axioms MicroCFTA.EnumerationFlatReplay.representative_replays
+#check MicroCFTA.EnumerationFlatReplay.union_replays
+#print axioms MicroCFTA.EnumerationFlatReplay.union_replays
+#check MicroCFTA.EnumerationFlatReplay.mapM_replays
+#print axioms MicroCFTA.EnumerationFlatReplay.mapM_replays
+#check MicroCFTA.EnumerationFlatReplay.forM_replays
+#print axioms MicroCFTA.EnumerationFlatReplay.forM_replays
+#check MicroCFTA.EnumerationFlatTerminalPrefix.run_replays
+#print axioms MicroCFTA.EnumerationFlatTerminalPrefix.run_replays
+#check MicroCFTA.EnumerationFlatTerminalPrefix.run_complete
+#print axioms MicroCFTA.EnumerationFlatTerminalPrefix.run_complete
+#check MicroCFTA.EnumerationFlatTerminalPrefix.cached_complete
+#print axioms MicroCFTA.EnumerationFlatTerminalPrefix.cached_complete
+#check MicroCFTA.SourceCurrentColdFiniteWarmCalls.constructed_node_calls
+#print axioms MicroCFTA.SourceCurrentColdFiniteWarmCalls.constructed_node_calls
+#check MicroCFTA.SourcePruningEnumerationCapturedEdge.diagonal_render_sound_current
+#print axioms MicroCFTA.SourcePruningEnumerationCapturedEdge.diagonal_render_sound_current
+#print MicroCFTA.EnumerationFlatNativeAssimilation.finish
+#print MicroCFTA.EnumerationFlatNativeAssimilation.ResultRelated
+#print MicroCFTA.EnumerationFlatReplay.Replays
+#print MicroCFTA.EnumerationFlatTerminalPrefix.run
+#print MicroCFTA.EnumerationFlatTerminalPrefix.cached
+#print MicroCFTA.SourcePruningEnumerationTerminalPrefix.run
+#print MicroCFTA.SourcePruningEnumerationCachedAssimilation.finish

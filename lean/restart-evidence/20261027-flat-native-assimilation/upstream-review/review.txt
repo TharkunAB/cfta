@@ -1,0 +1,29 @@
+Review time: 2026-10-27T04:15:45+01:00
+
+CLEAR for the source change, with an API change and explicit search limits
+
+Reviewed immutable upstream 82258094c2c32bb93e517427bc649a5c7077adac against 64cfe9fc6fb9df5a3957ba8821fae3e88f1790ea. Only the five files listed in source-pins.json change. No compile, test, network, Git mutation or repository edit is performed by this review.
+
+Semantics
+
+EGraph.extract and termsByCost now take a callback of type ClassId -> symbol -> [ClassId] -> [cost] -> cost. The owner and child IDs denote e-classes in the supplied immutable graph. analyseFrom passes the current owner and canonical child IDs (EGraph.hs:708–731). The search stores the owner with the actual transition and applies the same cost to it (766–790). Public graph operations restore rows to canonical children (595–630). This keeps the lower-bound and complete-term cost contexts consistent. A callback can close over sortOf or a completed analysis of that same graph. Its context must not come from a different graph revision.
+
+Internal.Tree.termsByCostBy now costs the complete alternative rather than its symbol (316–353). Data.CFTA.termsByCost adapts with cost . transitionSymbol (462–470). Its public type and old symbol-only behavior remain unchanged. Public analyse and saturation Analysis also use adapters that discard the added context (EGraph.hs:686–689,1320,1333). I found no new mutation, constraint bypass or analysis-combine change.
+
+The constrained extraction repair remains: extract takes the first accepted termsByCost result. Complete construction still checks every actual transition constraint. The plain-transition optimization remains sound for this interface because the callback sees the same owner, symbol and children for plain and constrained copies. It cannot distinguish their constraint. In sorted graphs the same erased Term can have different runs and costs; the API enumerates e-node runs, not one universal symbol-only cost for that erased Term.
+
+The EGraph callback change is a source API break: existing two-argument callbacks must add owner and child-ID parameters. The changed tests and example do this. Building all in-repository clients is still necessary; source review is not a substitute for that check.
+
+Extraction and termination limits
+
+Cost monotonicity and increase above children remain caller obligations. They are not checked. User costs can also diverge, depend on a nonterminating analysis or overflow bounded Int arithmetic. The best-first search has no fuel or rejection limit. The documented infinite-rejected-language nontermination remains. A weak, zero-increment cyclic cost can also leave an infinite low-cost search before any more expensive result.
+
+There is a stronger pre-existing generic-Ord limitation. Monotonicity and strict increase above each child do not by themselves ensure extraction progress. An unexecuted witness design is saved in termination-witness.txt. With lexicographic (Integer,Integer) costs, infinitely many rejected candidates of costs (0,n) precede an accepted leaf of cost (1,1). The search never reaches that leaf. The cost can be monotone and strictly above every child. This is not introduced by the new context parameters and is not a measured regression. A progress claim needs finite sublevel search, or another sufficient fairness condition, in addition to the stated local laws.
+
+Focused verification for Root
+
+Run the existing EGraph suite: least-size property, the new child-class cost example, constrained cost-5 regression, refinement analyses, constrained/plain duplicate case, AC enumeration and cyclic enumeration. Also run Data.CFTASpec's cost-order and equality-constrained cyclic tests, plus the normal dependent build and changed-file format check. The new test checks child-class costs. It does not separately check owner IDs, sort/analysis-dependent costs or representative changes after child merges. One small external witness should exercise those contexts and verify both returned cost and accepted term. A capped witness may test the termination limitation; do not add an unbounded hang to the ordinary test suite. No performance matrix is needed for this source change.
+
+Formalization impact
+
+This changes the public EGraph cost API and the internal best-first cost algebra. It does not change the native enumeration workers, flat union-find operations or Lean sources in this upstream diff. H6's finite modeled node-processing language theorem and the gated captured-rendering theorem retain their existing scope. Neither certifies general native EGraph extraction ordering or termination. A future extraction proof must include the actual owner/child-class context and prove a suitable search-progress condition; a symbol-only cost model is insufficient for the new EGraph API.

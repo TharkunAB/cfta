@@ -1,0 +1,38 @@
+/-- Retain the expandable flags and install the actual completed prefix count table. -/
+def cached (first : EnumerationState.Suspended) (rest : List EnumerationState.Suspended)
+    (before : EnumerationFlatCached.Cached Symbol EnumGuard) :
+    List (Except EnumerationState.Error
+      ((List Nat × Nat) × EnumerationFlatCached.Cached Symbol EnumGuard)) :=
+  (ExceptT.run (run first rest before.waiting before.core)).map fun row =>
+    match row with
+    | .error error => .error error
+    | .ok ((recorded, winner, moved), after) =>
+        .ok ((recorded, winner), ⟨after, before.expandable, moved⟩)
+
+/-- The same actual cached prefix derives its final native indexes and earlier pending packet. -/
+theorem cached_complete (heap : InternedConstructorTemplates.State Symbol NativeGuard)
+    (flat : EnumerationFlatCached.Cached Symbol EnumGuard)
+    (earlier : EnumerationExpandableIndex.Cached Symbol EnumGuard)
+    (related : EnumerationFlatCached.Related flat earlier)
+    (correct : EnumerationFlatNativeIndex.Correct heap flat)
+    (first : EnumerationState.Suspended) (rest : List EnumerationState.Suspended)
+    (safe : EnumerationSchedule.Safe earlier.core)
+    (bounded : ∀ sc ∈ first :: rest, sc.var < flat.core.counter)
+    (pending : EnumerationDependencies.InputsPending earlier.core (first :: rest))
+    (realized : SourcePruningEnumerationObservation.PendingRealized heap earlier.core) :
+    ∃ fuel recorded winner after oldAfter,
+      cached first rest flat = [.ok ((recorded, winner), after)] ∧
+      (∀ extra, ExceptT.run (SourcePruningEnumerationTerminalPrefix.run
+        (fuel + extra) first rest earlier.waiting earlier.core) =
+        [.ok ((recorded, winner, after.waiting), oldAfter.core)]) ∧
+      EnumerationFlatCached.Related after oldAfter ∧ EnumerationFlatNativeIndex.Correct heap after ∧
+      after.expandable = flat.expandable ∧ oldAfter.expandable = earlier.expandable ∧
+      oldAfter.waiting = after.waiting ∧
+      recorded = (first :: rest).map (fun sc => FlatUnionFind.root flat.core.representatives sc.var) ∧
+      after.waiting = EnumerationCanonicalWaiting.moveMany winner
+        (EnumerationBuilderCaches.canonicalIds (recorded.filter fun key => key != winner)) flat.waiting ∧
+      winner ∈ recorded ∧
+      EnumerationCorrectness.StorageValid oldAfter.core ∧
+      SourcePruningEnumerationObservation.PendingRealized heap oldAfter.core ∧
+      EnumerationCompleteness.PendingAt oldAfter.core winner ∧
+      (∀ source, source ∈ recorded → EnumerationCompleteness.PendingAt oldAfter.core source) := by

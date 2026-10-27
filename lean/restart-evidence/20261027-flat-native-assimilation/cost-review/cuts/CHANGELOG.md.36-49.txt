@@ -1,0 +1,14 @@
+- `Data.CFTA.termsByCost` lists the terms of an automaton in the order of a
+  cost, cheapest first, also the infinite language of a cyclic automaton.
+  It is a best-first search over partial terms whose holes count the least
+  cost of their states, as Knuth's generalization of Dijkstra's algorithm.
+  `Data.CFTA.EGraph.termsByCost` lists the terms of an e-class this way,
+  from the rows of the store, and `extract` gives its first term, so that
+  the term of `extract` satisfies the constraints of its e-nodes. The cost
+  of `extract` must not decrease when the cost of a child grows. As in egg,
+  the cost of an e-node sees the e-node: its e-class, its symbol, and the
+  e-classes and costs of its children. So a cost can use the sort of an
+  e-class or the data of an analysis.
+  The extraction and cost-enumeration comments state a sufficient progress
+  condition. Monotone costs and strict child growth alone can leave an
+  accepted term behind infinitely many cheaper rejected candidates.

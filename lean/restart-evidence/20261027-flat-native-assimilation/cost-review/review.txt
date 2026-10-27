@@ -1,0 +1,15 @@
+Review time: 2026-10-27T04:21:05+01:00
+
+CLEAR — cost progress documentation repair
+
+The four-file uncommitted diff changes documentation and the changelog only. It does not change function signatures, executable expressions, cost laws or queue order. This review reads source and retained evidence. It runs no compiler, native test or Git mutation. The earlier upstream review and pins remain byte-exact.
+
+The new condition is sufficient, not necessary. Read “each cost bound admits only finitely many generated partial terms” as finitely many generated search candidates with queue priority at or below that bound. For the existing finite branching search, total cost/check callbacks and supplied lower bounds, this prevents an accepted finite candidate from being preceded by infinitely many cheaper or equal-priority candidates. The statement does not require a global finite language or finite graph unfolding. It does not imply termination for an infinite language with no accepted term. Neither the comments nor the changelog claim necessity.
+
+EGraph.extract no longer claims unconditional progress from monotonicity and strict child growth alone. It says a returned term is cheapest and satisfies each transition constraint. That is consistent with the unchanged best-first algorithm and the existing cost assumptions. EGraph.termsByCost, Data.CFTA.termsByCost and Internal.Tree.termsByCostBy all retain the distinction between ordered returned results and eventual production of the next result. The changes add no callback-totality, host-integer safety, performance or whole-enumerator guarantee.
+
+The retained native witness provides concrete evidence for the limitation. Its exact four-line output is: Right True; Just (1,Node "good" []); Just (0,2); lexicographic extraction timed out after 2000000 microseconds. The report records exit 0, 108 raw bytes and SHA256 c0d16e5248c616734d370648f6ac58e313fccb2d327255adbb38dc8379779564. The source uses unbounded Integer pairs. Lexicographic maximum is monotone in each child, and adding one to the maximal second component makes the result strictly exceed every child. These laws hold for arbitrary Integer pair arguments, including negative ones. Its actual cheap rejected candidates have priorities (0,n), below accepted good at (1,1). The timeout corroborates the source-level starvation argument; a two-second timeout alone is not a general nontermination theorem.
+
+No runtime fix or new automatic termination check is claimed. The native repair is the correction of the documented contract. The same symbol-only cost witness also applies to the preceding API. This is not a new regression caused by cost-context parameters. Existing H6 and captured-rendering proof scope stays unchanged.
+
+The pinned source snapshots are from this review before Root's planned formatting. If formatting changes whole-file hashes, retain these reviewed snapshots and correlate the formatting delta separately. No additional native run is required by this comment-only source review.

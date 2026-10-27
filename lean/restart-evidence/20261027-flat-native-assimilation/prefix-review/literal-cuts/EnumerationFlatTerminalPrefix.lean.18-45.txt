@@ -1,0 +1,28 @@
+attribute [local instance] SourcePruningEnumerationTerminalPrefix.terminalPrefixMonadList
+  SourcePruningEnumerationTerminalPrefix.terminalPrefixLawfulMonadList
+
+/-- Record old roots, join original variables, read the winner and move old counts. -/
+def run (first : EnumerationState.Suspended) (rest : List EnumerationState.Suspended)
+    (waiting : EnumerationWaitingIndex.Waiting) :
+    Action Symbol EnumGuard (List Nat × Nat × EnumerationWaitingIndex.Waiting) := do
+  let recorded ← (first :: rest).mapM fun sc => EnumerationFlatState.representative sc.var
+  rest.forM fun sc => EnumerationFlatState.unionVariables first.var sc.var
+  let winner ← EnumerationFlatState.representative first.var
+  let sources := EnumerationBuilderCaches.canonicalIds (recorded.filter fun key => key != winner)
+  pure (recorded, winner, EnumerationCanonicalWaiting.moveMany winner sources waiting)
+
+/-- Every actual successful earlier prefix has the same flat packet and related final core. -/
+theorem run_replays (fuel : Nat) (first : EnumerationState.Suspended)
+    (rest : List EnumerationState.Suspended) (waiting : EnumerationWaitingIndex.Waiting) :
+    Replays (run (EnumGuard := EnumGuard) first rest waiting)
+      (SourcePruningEnumerationTerminalPrefix.run fuel first rest waiting) := by
+  unfold run SourcePruningEnumerationTerminalPrefix.run
+  apply bind_replays _ _ _ _
+    (mapM_replays _ _ (fun sc => representative_replays fuel sc.var) (first :: rest))
+  intro recorded
+  apply bind_replays _ _ _ _
+    (forM_replays _ _ (fun sc => union_replays fuel first.var sc.var) rest)
+  intro _
+  apply bind_replays _ _ _ _ (representative_replays fuel first.var)
+  intro winner
+  exact pure_replays _

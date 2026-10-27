@@ -1,0 +1,29 @@
+/-- Every successful earlier union agrees with the current root choices and class sizes. -/
+theorem union_represents (valid : Valid flat) (related : Represents flat earlier)
+    (completed : UnionFind.union leftFuel rightFuel earlier left right = some output) :
+    Represents (union flat left right) output := by
+  cases firstResult : UnionFind.findRoot leftFuel earlier left with
+  | none => simp [UnionFind.union, firstResult] at completed
+  | some first =>
+    obtain ⟨firstRoot, firstSize, firstRelated⟩ := findRoot_represents related firstResult
+    cases secondResult : UnionFind.findRoot rightFuel first.forest right with
+    | none => simp [UnionFind.union, firstResult, secondResult] at completed
+    | some second =>
+      obtain ⟨secondRoot, secondSize, secondRelated⟩ := findRoot_represents firstRelated secondResult
+      simp [UnionFind.union, firstResult, secondResult,
+        firstRoot, firstSize, secondRoot, secondSize] at completed
+      dsimp only [union]
+      by_cases same : root flat left = root flat right
+      · simp only [same, ↓reduceIte, Option.some.injEq] at completed
+        subst output
+        simpa only [same, ↓reduceIte] using secondRelated
+      · simp only [same, ↓reduceIte, unionRoots] at completed ⊢
+        split at completed
+        · cases completed
+          simp only [‹_ < _›, ↓reduceIte]
+          exact link_represents valid secondRelated (root_root valid left)
+            (root_root valid right) same
+        · cases completed
+          simp only [‹¬ _ < _›, ↓reduceIte]
+          exact link_represents valid secondRelated (root_root valid right)
+            (root_root valid left) (Ne.symm same)

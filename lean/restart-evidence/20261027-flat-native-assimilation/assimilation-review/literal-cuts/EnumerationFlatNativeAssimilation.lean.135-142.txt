@@ -1,0 +1,8 @@
+/-- Successful assimilation retains supply, forest, waiting table and residual guards. -/
+theorem finish_fields (heap : InternedConstructorTemplates.State Symbol Constraint)
+    (before after : Cached Symbol Constraint) (source target : Nat) (merged : Option Nat)
+    (sourceScs targetScs : List EnumerationState.Suspended)
+    (done : finish heap source target merged sourceScs targetScs before = some (rows, after)) :
+    after.core.counter = before.core.counter ∧
+      after.core.representatives = before.core.representatives ∧
+      after.waiting = before.waiting ∧ after.core.obligations = before.core.obligations := by

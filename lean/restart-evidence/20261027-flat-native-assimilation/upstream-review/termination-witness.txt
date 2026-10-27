@@ -1,0 +1,9 @@
+UNEXECUTED source-level termination witness design
+
+Use one immutable unsorted EGraph. Build class A with a leaf a and a unary cycle u(A): add a, add u(a), then merge their classes. Build a separate leaf z. Add a constrained binary node bad(A,Z) whose equality constraint equates paths [0] and [1]. Its language is empty because no a/u-chain equals z. Build leaf good and merge its class with the constrained bad class. The resulting root class has the accepted term good.
+
+Use lexicographic pairs of unbounded nonnegative integers. For every owner/symbol/child-ID context, define base(good)=(1,0), base(other)=(0,0). Let m=max(base(symbol), maximum((0,0):childCosts)); return (fst m,snd m+1). This cost is monotone in each child and strictly greater than every child under lexicographic order. Context arguments may be ignored. The unconstrained lower bound of A is (0,1), and bad's bound is (0,2). The accepted good leaf costs (1,1).
+
+Internal.Tree's queue repeatedly expands bad's A hole. Each concrete bad(u^n(a),z) fails the equality check. Every next partial candidate has cost (0,n+2), always below (1,1). The already queued good leaf is never selected. The analysis itself reaches a fixed point; starvation occurs in the best-first search. This predicts nontermination despite an accepted cheapest term and the documented local cost laws.
+
+This is an analytical witness, not an executed failure. It uses the old symbol-only specialization too. If external validation is desired, construct it in a separate capped process and compare a finite accepted-term check for good with the extraction timeout. Preserve the exact graph and raw output. Do not call the timeout a new cost-context regression.

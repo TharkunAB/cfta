@@ -1,0 +1,18 @@
+/-- Reject Empty or apply both native writes and then combine recursion ancestry. -/
+def finish
+    (heap : InternedConstructorTemplates.State Symbol Constraint) (fuel source target : Nat)
+    (merged : Option Nat) (sourceScs targetScs : List EnumerationState.Suspended)
+    (before : EnumerationExpandableIndex.Cached Symbol Constraint) :
+    Option (List (Unit × EnumerationExpandableIndex.Cached Symbol Constraint) ×
+      EnumerationExpandableIndex.Cached Symbol Constraint) :=
+  if merged = some 0 then some ([], before) else
+    (SourcePruningEnumerationNativeIndex.write heap fuel target
+      (.unenumerated merged (sourceScs ++ targetScs)) [] [] before).bind fun targetAfter =>
+      (SourcePruningEnumerationNativeIndex.write heap fuel source .eliminated [] [] targetAfter).map fun sourceAfter =>
+        let finished : EnumerationExpandableIndex.Cached Symbol Constraint :=
+          EnumerationExpandableIndex.frame
+            {sourceAfter.core with recursionAncestry := fun other =>
+              if other = target then
+                (sourceAfter.core.recursionAncestry source ++ sourceAfter.core.recursionAncestry target).eraseDups
+              else sourceAfter.core.recursionAncestry other} sourceAfter
+        ([((), finished)], finished)
