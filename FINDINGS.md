@@ -1,5 +1,64 @@
 # Current formalization findings
 
+## Native scheduler progress after the actual callback
+
+Source checkpoint: a9e4a7def94dd333a1567ed95026c1ca205562a0.
+The actual native scheduler cannot return stuck from a safe indexed state
+that has ProperState and a satisfying finite assignment. ProperState requires
+strict nonempty pending paths. Canonical waiting counts identify a blocking
+reference. Its source is an actual native candidate, including Mu and Union
+when its pending bucket is nonempty. A cycle would require an infinite
+strict descent in finite terms. The theorem uses the actual native heap.
+
+The callback producer retains its ENTIRE original admission and result.
+Its uniform fuel and actual result precede the new semantic observer.
+For any original ProperState and satisfying assignment, the SAME returned
+metadata and framed cache have a restart decision different from stuck.
+The frame preserves ProperState and the same assignment. The proof uses the
+actual returned Packet. No future successful execution is supplied.
+
+This excludes one empty-result route. It does not prove that recording
+returns false, a hook emits output, or recursion finishes. Packet alone does
+not imply ProperState. Its origin and preservation through native child
+preparation remain open. Templates are forbidden patterns, so native term
+acceptance alone does not exclude legitimate template pruning. Pending-group
+meaning and the early template transformation need separate semantic laws.
+The witness designs in the review are source assessments, not executed
+countermodels or new physical Haskell defects.
+
+Two modules contain 204 lines and two public theorems. Strict checks
+and full Audit pass. Audit passes 4254 jobs and checks 80108 theorem
+dependencies. Public readback has 182 complete blocks; all 180 older blocks
+form the exact 783343-byte prefix. Only the three standard Lean axioms occur.
+All 4251 older non-Audit Lean sources, 100 pinned modules, 447 enumeration
+sources and 203 Haskell sources retain their bytes. Only two imports change
+Audit. H6, checked finite rendering soundness and finite invocation-or-stop
+coverage retain their earlier scopes. End-to-end recursive coverage, frontier
+policy, rendering coverage, API admission and Haskell correspondence remain
+open. The whole goal stays ACTIVE. Details:
+`lean/notes-current-callback-progress.md`.
+
+
+### Callback progress and external Haskell repair status
+
+No Haskell source, Cabal file, native test or benchmark changed or ran.
+All earlier repair handoffs remain below. Main stays
+8766699b594eaad80381af2eee034c378ccf3192 and contains the LPO and extraction
+documentation fixes. The current pull and fetch pass; main is an ancestor.
+KBO candidate d7b6a9dfff464eb32c17c314d4825d5b027f1b2d remains unintegrated,
+unbuilt and unexecuted. The positive-Int context-reversal finding remains open.
+
+The new callback result is a Lean scheduler theorem. It establishes no new
+physical Haskell defect. External proof work must keep template rejection
+separate from automaton acceptance. Packet.bounded permits an empty pending
+group. Such a group causes rejection in the modeled oracle. Also, the early
+structural template conversion can erase an allowed arrow marker to a hole.
+Avoidance of original full templates alone therefore does not justify the
+early rejection step without syntax provenance or a law for transformed
+templates. These are source-level semantic gaps. The review retains three
+unexecuted witness designs; it supplies no compiled full Packet countermodel.
+
+
 ## Actual finite recursive invocation or an exact earlier hook stop
 
 Source checkpoint: 0684e0b726efa04c1063f0f71b24d58d77ffbea6.
