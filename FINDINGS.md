@@ -1,5 +1,66 @@
 # Current formalization findings
 
+## Proper storage for every emitted output from native startup
+
+Source checkpoint: a783e5c0c6880c6c1b86c04d87f7bea82f6dad96.
+Recursive.run_initial_finite_render_sound_proper keeps the ENTIRE original
+startup admission, fixed bound, actual outcome and rendered-soundness packet.
+Every emitted output now has ProperState in its own actual cache.
+This conclusion needs no new input invariant or satisfying model.
+Literal startup supplies proper storage. Each output's actual ResourceHistory
+preserves it through narrowing, parked steps, ordinary entry, completed heads
+and callbacks. The same output retains Canonical, resources and history.
+
+Local resource wrappers also preserve proper attached caches on complete and
+stopped child, traversal, selected and captured results. Native scans preserve
+each processed receipt's own cache. They retain full callers, Memos and bounds.
+The eight original producer declarations remain exact after theorem rename,
+outer grouping and the added observer. No desired future state is supplied.
+
+This closes proper-storage origin for EMITTED recursive outputs. Aggregate
+zero-output or stopped endpoints still need their own history argument.
+End-to-end coverage remains the main gap: template rejection and partial
+completion laws, depth and stop policy, projection and recursive frontiers,
+discharge and rendering coverage, public API admission and physical Haskell
+correspondence remain open. Exact finite pruning preservation, conditional
+rendered soundness and invocation-or-earlier-stop retain their prior scopes.
+The whole formalization goal remains ACTIVE.
+
+Fourteen modules add 1727 lines, 114132 bytes and 21 public theorems.
+All strict checks pass. Full Audit passes 4282 jobs and checks 80232 theorem
+dependencies. The 233 public blocks have 971561 bytes. All 212 older
+blocks form the exact 857288-byte prefix. Only the three standard axioms occur.
+All 4267 older non-Audit Lean sources, 116 pinned modules and 463 enumeration
+sources retain their bytes. Audit adds only imports. Main's KBO Natural-weight
+repair is integrated and tested. FINDINGS records its current repair status.
+Details: `lean/notes-current-native-history-proper.md`.
+
+
+## KBO overflow repair integrated and checked
+
+Main d1ca06a1dd0c7488205feda613b529df21a08669 merges repair
+d7b6a9dfff464eb32c17c314d4825d5b027f1b2d. The repair is now integrated.
+Definition weights use Natural. The public map excludes negative entries,
+and addition does not wrap at the Int bound. The lazy weight map also avoids
+repeated evaluation of the same definition dependencies.
+
+The existing golden suite passes, including its context-ordering regression.
+The original public-API witness now gives GT for both a versus b and
+app c a versus app c b. The accepted local rewrite decreases that tested
+context. Actual definitionWeights values at indexes 0 through 63 equal the
+exact Integer recurrence 2^(index+1)-1. Index 63 gives 18446744073709551615,
+which is greater than maxBound :: Int. This closes the recorded Int-weight
+context-reversal finding for the imported repair. General KBO order laws,
+rewrite termination and pruning-production correspondence remain unproved.
+
+All three validation commands passed inside nix-shell with a measured serial
+4 GiB cap and zero swap. They cover formatting/cabal-gild, the existing golden
+suite, and the public context/generated-weight witnesses. No benchmark ran.
+No local Haskell edit was made. The two imported Haskell files equal main.
+The earlier reports below retain their historical unintegrated/unexecuted
+status. This section records their current replacement status.
+
+
 ## Proper native paths from startup through completed captured edges
 
 Source checkpoint: a2ee850391be7e3102798041d87d91d718480e7a.

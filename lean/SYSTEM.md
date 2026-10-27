@@ -1,5 +1,41 @@
 # Constrained languages, indexing, and distributions
 
+## Proper storage for every emitted output from native startup
+
+Source checkpoint: a783e5c0c6880c6c1b86c04d87f7bea82f6dad96.
+Recursive.run_initial_finite_render_sound_proper keeps the ENTIRE original
+startup admission, fixed bound, actual outcome and rendered-soundness packet.
+Every emitted output now has ProperState in its own actual cache.
+This conclusion needs no new input invariant or satisfying model.
+Literal startup supplies proper storage. Each output's actual ResourceHistory
+preserves it through narrowing, parked steps, ordinary entry, completed heads
+and callbacks. The same output retains Canonical, resources and history.
+
+Local resource wrappers also preserve proper attached caches on complete and
+stopped child, traversal, selected and captured results. Native scans preserve
+each processed receipt's own cache. They retain full callers, Memos and bounds.
+The eight original producer declarations remain exact after theorem rename,
+outer grouping and the added observer. No desired future state is supplied.
+
+This closes proper-storage origin for EMITTED recursive outputs. Aggregate
+zero-output or stopped endpoints still need their own history argument.
+End-to-end coverage remains the main gap: template rejection and partial
+completion laws, depth and stop policy, projection and recursive frontiers,
+discharge and rendering coverage, public API admission and physical Haskell
+correspondence remain open. Exact finite pruning preservation, conditional
+rendered soundness and invocation-or-earlier-stop retain their prior scopes.
+The whole formalization goal remains ACTIVE.
+
+Fourteen modules add 1727 lines, 114132 bytes and 21 public theorems.
+All strict checks pass. Full Audit passes 4282 jobs and checks 80232 theorem
+dependencies. The 233 public blocks have 971561 bytes. All 212 older
+blocks form the exact 857288-byte prefix. Only the three standard axioms occur.
+All 4267 older non-Audit Lean sources, 116 pinned modules and 463 enumeration
+sources retain their bytes. Audit adds only imports. Main's KBO Natural-weight
+repair is integrated and tested. FINDINGS records its current repair status.
+Details: `lean/notes-current-native-history-proper.md`.
+
+
 ## Proper native paths from startup through completed captured edges
 
 Source checkpoint: a2ee850391be7e3102798041d87d91d718480e7a.
