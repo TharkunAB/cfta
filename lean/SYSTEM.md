@@ -1,5 +1,39 @@
 # Constrained languages, indexing, and distributions
 
+## Actual flat captured rendering now restores original captured acceptance
+
+Source checkpoint: c9be731a2a3f554a636ddf3b91b6a647d30e95e1.
+Six new modules prove captured-step and prefix-operation language results.
+Original captured admission derives a uniform sufficient bound before the
+related flat input. An actual completed flat receipt at that bound supplies
+its own reached heap, safe ordered earlier cache and backward language law.
+Discharge, actual flat rendering and checked residuals construct an assignment
+and derive acceptance at the original captured edge and parent node.
+No old successful render, future completed family or assignment is an input.
+Canonical, numeric Ranges, nonterminal, fresh arity and retention stay explicit.
+
+Actual native narrowing returns exactly its accepted filtered exposed edges.
+Every accepted result term belongs to the original independent node language.
+An actual recursion check preserves assignments when it does not repeat.
+A repeated check clears only its bucket and retains the native handle.
+Its original assignment holds iff the reached assignment holds and every
+cleared suspended constraint holds. The same exact law holds for flat checks.
+An ancestry key alone does not establish those suspended constraints.
+
+Actual stable complete child traversal now has the full existing semantic
+iff and ordered effective-bucket relation from original finite resources.
+The proof derives each reached leaf Ranges. It does not assume universal
+traversal Ranges or assert validity of every low-fuel prefix.
+Next lift this resource language result through selected and captured edges.
+Then compose actual recursive histories and recover parked constraints.
+Original recursive-input acceptance and enumeration coverage remain open.
+
+Audit passes 4079 jobs and 79129 theorem dependency checks.
+All six modules and Audit pass strict checking. H6 stays unchanged.
+No Haskell source changed. FINDINGS preserves every earlier repair handoff.
+Details: `lean/notes-current-recursive-meaning.md`. The full goal stays ACTIVE.
+
+
 ## Actual recursive outputs now retain their own invariants and frontier
 
 Source checkpoint: 563a92a206770c2112b79703b2bec6c43469b3fe.

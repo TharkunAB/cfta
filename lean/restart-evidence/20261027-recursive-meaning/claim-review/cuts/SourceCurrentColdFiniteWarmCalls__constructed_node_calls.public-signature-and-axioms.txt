@@ -1,0 +1,53 @@
+MicroCFTA.SourceCurrentColdFiniteWarmCalls.constructed_node_calls
+  [DecidableEq (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)]
+  [DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  [DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  (formulas : MicroCFTA.SourceGuards.Formulas MicroCFTA.FullSyntax.Formula)
+  (solver : MicroCFTA.SourceGuards.Entailment MicroCFTA.FullSyntax.Formula)
+  {initial finalCache : MicroCFTA.Cache.State MicroCFTA.SourceEqualityPartialConstraintKey.Key}
+  {originals : List (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)}
+  (history : MicroCFTA.SourceEqualityOriginalAllocationHistory.History initial finalCache originals)
+  (valid : MicroCFTA.Cache.Valid initial)
+  (expression :
+    MicroCFTA.InternedNestedConstruction.Syntax (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+  (covered :
+    ∀ (guard : MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula),
+      guard ∈ MicroCFTA.SourceEqualityConstraintOrigins.guards expression → guard ∈ originals)
+  (budget rounds : Nat) :
+  ∃ value heap _built,
+    have seed :=
+      (MicroCFTA.SourceEqualityConstraintOrigins.guards expression,
+        { nodes := heap.nodes.next, edges := heap.edges.next, domains := 0,
+          mass := MicroCFTA.InternedValueMassHeap.initialBound heap });
+    have bits :=
+      MicroCFTA.SourceCurrentParentInitialRoom.roomBits
+        (MicroCFTA.SourceCurrentFiniteRoundForecast.stage budget seed rounds).snd;
+    have fuels := MicroCFTA.SourceCurrentFiniteRoundForecast.fuelBounds budget rounds seed;
+    have inherited := MicroCFTA.SourceCurrentAllocatedPartialInitialization.emptyValue finalCache;
+    have before := MicroCFTA.SourceCurrentAllocatedPartialInitialization.caller (bits + 2) finalCache heap;
+    ∃ trace,
+      trace 0 = (value, before) ∧
+        (∀ (index : Fin rounds),
+            MicroCFTA.SourceCurrentAllocatedPartialWorker.nodeCall fuels.fst fuels.snd fuels.snd fuels.snd fuels.snd
+                fuels.snd fuels.snd fuels.snd fuels.snd fuels.snd budget
+                { inherited := inherited, value := (trace index.castSucc).fst } (trace index.castSucc).snd =
+              MicroCFTA.SourceCurrentAllocatedPartialWorker.Outcome.done (trace index.succ).fst
+                (trace index.succ).snd) ∧
+          MicroCFTA.InternedProbeProvenance.Available (trace (Fin.last rounds)).snd.checked.native.machine.heap
+              (trace (Fin.last rounds)).fst ∧
+            ∀
+              (ambient :
+                MicroCFTA.InternedGuardedLanguage.Env (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula))
+              (term : MicroCFTA.Language.Term (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)),
+              MicroCFTA.InternedGuardedLanguage.meaning (MicroCFTA.SourceEqualityPCSGuard.holds formulas solver) ambient
+                  value term ↔
+                MicroCFTA.InternedGuardedLanguage.meaning (MicroCFTA.SourceEqualityPCSGuard.holds formulas solver)
+                  ambient (trace (Fin.last rounds)).fst term
+'MicroCFTA.SourceCurrentColdFiniteWarmCalls.constructed_node_calls' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]

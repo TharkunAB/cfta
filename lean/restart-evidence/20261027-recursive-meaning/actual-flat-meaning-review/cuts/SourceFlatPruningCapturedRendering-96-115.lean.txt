@@ -1,0 +1,20 @@
+  obtain ⟨bound, completed⟩ := complete_sound_current formulas solver inventory caller before checkEmpty
+    uv handle scs parentEntry edges depth free edge roots memos initial ready stored decoded realized selected
+    paths counts flags pending allowed tries residual projected ranges canonical nonterminal freshArity retained
+  refine ⟨bound, ?_⟩
+  intro flat related extra fragment reached saved after observed level frontier ordered discharged
+    ambient marker renderFuel term pendingResiduals renderedAfter rendered checked
+  obtain ⟨earlier, caches, safe, order, sound⟩ := completed flat related extra fragment reached saved after observed
+  obtain ⟨nextLevel, afterOrder⟩ := order level frontier ordered
+  obtain ⟨assignment, satisfies, termSame, unchanged, renderedSatisfies⟩ :=
+    SourceFlatPruningRendering.render_assignment reached.checked.native.machine.heap
+      (SourceEqualityPCSGuard.holds formulas solver) ambient
+      (fun guard value => SourceEqualityPCSGuard.holds formulas solver guard value = true)
+      marker renderFuel uv after.core renderedAfter earlier.core term pendingResiduals
+      caches.core safe nextLevel (frontier + 1) afterOrder discharged rendered checked
+  obtain ⟨original, edgeAccepted, parentAccepted, suspended, filled⟩ := sound ambient assignment satisfies
+  refine ⟨assignment, original, ?_, ?_, ?_, filled.trans termSame.symm, unchanged,
+    satisfies, renderedSatisfies⟩
+  · simpa only [← termSame] using edgeAccepted
+  · simpa only [← termSame] using parentAccepted
+  · simpa only [← termSame] using suspended

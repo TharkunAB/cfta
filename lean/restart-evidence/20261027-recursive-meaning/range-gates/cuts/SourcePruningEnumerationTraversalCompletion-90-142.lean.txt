@@ -1,0 +1,53 @@
+      · simp
+  | cons input rest ih =>
+      rcases input with ⟨incoming, bucket⟩
+      obtain ⟨available, closed, bounded, pending⟩ := genuine incoming bucket (by simp)
+      obtain ⟨r, n, p, h, k, raw, middleCaller, middle, middleQueries, middleMemos, middleInventory,
+        middleRoots, outer, waiting, headRun, headPost, headQueries, growth, middlePaths,
+        middleStorage, middleRealized, middleCounts, middleFlags, headOrigin, headProtected,
+        headReferences, headPending, shape⟩ :=
+        SourcePruningEnumerationChildCompletion.complete_with_fragments formulas solver inventory beforeCaller before
+          checkEmpty bucket incoming roots memos initial safe paths counts flags realized bounded pending available closed ranges.1
+      have protects : ∀ held fragment, before.core.values[held]? = some (.enumerated fragment) →
+          EnumerationDriver.Protected held before.core middle.core := by
+        intro held fragment stored
+        obtain ⟨inside, root⟩ := enumerated_root before.core safe held fragment stored
+        exact headProtected held inside root (pending held fragment stored)
+      rcases shape with rejected | ⟨fragment, singleton, middleSafe, fragmentBound, fragmentPending, fragmentSeparate⟩
+      · subst raw
+        refine ⟨r, n, p, h, k, [], middleCaller, middle, middleQueries, middleMemos, middleInventory,
+          middleRoots, .stopped [] (.ok (some []), middleCaller, middleQueries, outer, waiting) (some middle),
+          ?_, headPost, headQueries, growth, middlePaths, middleStorage, middleRealized, middleCounts,
+          middleFlags, headOrigin, protects, ?_, ?_, headPending, ?_, .inr ⟨outer, waiting, rfl⟩⟩
+        · intro er en P H ek largeP largeH
+          simp only [SourcePruningEnumerationChildTraversal.run, headRun er en P H ek largeP largeH]
+        · intro held inside root avoids
+          exact headProtected held inside root (avoids incoming bucket (by simp))
+        · intro allowed valid allowedInputs
+          exact headReferences allowed valid (allowedInputs incoming bucket (by simp))
+        · simp
+      · have tailGenuine : ∀ value bucket, (value, bucket) ∈ rest →
+            Available middleCaller.checked.native.machine.heap value ∧ value.free = [] ∧
+            (∀ sc ∈ bucket, sc.var < middle.core.counter) ∧ InputsPending middle.core bucket := by
+          intro value retained member
+          obtain ⟨childAvailable, childClosed, childBounded, childPending⟩ :=
+            genuine value retained (List.mem_cons_of_mem _ member)
+          refine ⟨headPost.effects.keeps.available value childAvailable, childClosed,
+            fun sc member => Nat.lt_of_lt_of_le (childBounded sc member) growth, ?_⟩
+          intro held storedFragment stored
+          have old := headOrigin held storedFragment stored
+          exact (protects held storedFragment old).avoids retained (childPending held storedFragment old)
+        have firstRun := headRun 0 0 p h 0 (Nat.le_refl _) (Nat.le_refl _)
+        simp only [Nat.add_zero, singleton] at firstRun
+        have tailRanges : Ranges checkEmpty rest middleCaller middle middleMemos.query := by
+          rw [headQueries]
+          exact ranges.2 r n p h k fragment middleCaller middle middleQueries outer waiting firstRun
+        obtain ⟨tailR, tailN, tailP, tailH, tailK, tailFragments, afterCaller, after, savedQueries,
+          final, next, afterRoots, tailResult, tailRun, tailPost, querySame, tailGrowth, afterPaths,
+          storage, afterRealized, afterCounts, afterFlags, tailOrigin, tailProtected, tailRootsProtected,
+          tailReferences, tailPending, tailBounds, tailShape⟩ :=
+          ih middleInventory middleCaller middle middleRoots middleMemos headPost.context middleSafe
+            middlePaths middleCounts middleFlags middleRealized tailGenuine tailRanges
+        let result : SourcePruningEnumerationChildTraversal.Result width := match tailResult with
+          | .complete fragments caller queries cache => .complete (fragment :: fragments) caller queries cache
+          | .stopped fragments observation candidate => .stopped (fragment :: fragments) observation candidate

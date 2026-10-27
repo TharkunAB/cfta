@@ -1,0 +1,27 @@
+  generalize flatObserved : SourceFlatPruningSelectedEdge.run checkEmpty nativeFuel p h
+    scs edge caller flat queries = left at selected
+  generalize oldObserved : SourcePruningEnumerationSelectedEdge.run checkEmpty r nativeFuel p h k
+    scs edge caller before queries = right at selected
+  unfold SourcePruningEnumerationCapturedEdge.run at completed
+  rw [oldObserved] at completed
+  unfold run
+  rw [flatObserved]
+  cases left <;> cases right <;>
+    simp only [SourceFlatPruningSelectedEdge.ResultRelated] at selected <;> try contradiction
+  case unhandled.unhandled =>
+    cases completed
+    exact ⟨_, rfl, selected⟩
+  case rejected.rejected =>
+    cases completed
+    exact ⟨_, rfl, selected⟩
+  case stopped.stopped =>
+    cases completed
+    exact ⟨_, rfl, selected⟩
+  case complete.complete fragment reached saved after oldFragment oldCaller oldQueries oldAfter =>
+    obtain ⟨rfl, rfl, rfl, caches⟩ := selected
+    obtain ⟨finished, written, same⟩ := Option.map_eq_some_iff.mp completed
+    subst earlier
+    obtain ⟨next, actual, related⟩ := SourceFlatPruningFinalize.run_completed caches
+      _ k target fragment written
+    refine ⟨.complete fragment reached saved next, ?_, rfl, rfl, rfl, related⟩
+    simp only [actual, Option.map_some]

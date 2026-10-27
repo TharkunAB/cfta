@@ -1,0 +1,7 @@
+
+/-- Only a nonempty terminal head requires numeric native-request admission. -/
+def Ranges [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Constraint)] [DecidableEq Node]
+    (checkEmpty : Bool) (bucket : List Suspended) (incoming : Node)
+    (caller : Caller width) (before : Cached) (queries : Queries) : Prop :=
+  incoming ≠ .empty → ∀ first rest descendants,
+    bucket.partition (fun sc => EqualityTrie.isTerminal sc.trie) = (first :: rest, descendants) →

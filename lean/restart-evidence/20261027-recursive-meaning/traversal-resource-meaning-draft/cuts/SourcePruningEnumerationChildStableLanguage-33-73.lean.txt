@@ -1,0 +1,41 @@
+/-- Each actual successful row has exactly its stored assignment restrictions. -/
+theorem stable_semantics
+    (formulas : SourceGuards.Formulas FullSyntax.Formula)
+    (solver : SourceGuards.Entailment FullSyntax.Formula)
+    (inventory : Inventory) (beforeCaller : Caller width) (before : Cached)
+    (checkEmpty : Bool) (bucket : List Suspended) (incoming : Node)
+    (roots : Nat → Nat) (memos : Memos)
+    (initial : Context formulas solver inventory beforeCaller memos)
+    (safe : Safe before.core) (paths : Roots before.core.representatives roots)
+    (counts : EnumerationCanonicalWaiting.Correct roots before.core.values before.waiting)
+    (flags : ∀ slot, SourcePruningEnumerationNativeIndex.candidate beforeCaller.checked.native.machine.heap
+      ((before.core.values[slot]?).getD .eliminated) = some (before.expandable slot))
+    (realized : PendingRealized beforeCaller.checked.native.machine.heap before.core)
+    (bounded : ∀ sc ∈ bucket, sc.var < before.core.counter)
+    (pending : InputsPending before.core bucket)
+    (available : Available beforeCaller.checked.native.machine.heap incoming) (closed : incoming.free = [])
+    (ranges : Ranges checkEmpty bucket incoming beforeCaller before memos.query)
+    {r n p h k : Nat} {raw : Raw} {afterCaller : Caller width} {after : Cached}
+    {savedQueries : Queries} {outer : EnumerationState.State Symbol Constraint}
+    {waiting : EnumerationWaitingIndex.Waiting}
+    (observed : ∀ extraRepresentative extraNative P H extraIndex, p ≤ P → h ≤ H →
+      SourcePruningEnumerationChildDispatch.run checkEmpty (r + extraRepresentative) (n + extraNative)
+        P H (k + extraIndex) bucket incoming beforeCaller before memos.query =
+        ((.ok (some raw), afterCaller, savedQueries, outer, waiting), some after)) :
+    ∀ (ambient : InternedGuardedLanguage.Env Symbol)
+      (residualMeaning : Constraint → Language.Term Symbol → Prop)
+      (assignment : Nat → Language.Term Symbol)
+      (fragment : Fragments.Fragment Symbol) (output : EnumerationState.State Symbol Constraint),
+      Except.ok (fragment, output) ∈ raw →
+        (Satisfies
+          (SourcePruningEnumerationNativeLanguage.handles (SourceEqualityPCSGuard.holds formulas solver)
+            ambient afterCaller.checked.native.machine.heap) residualMeaning assignment output ↔
+          Satisfies
+            (SourcePruningEnumerationNativeLanguage.handles (SourceEqualityPCSGuard.holds formulas solver)
+              ambient beforeCaller.checked.native.machine.heap) residualMeaning assignment before.core ∧
+          InternedGuardedLanguage.meaning (SourceEqualityPCSGuard.holds formulas solver)
+            ambient incoming (Fragments.fill assignment fragment) ∧
+          ∀ sc ∈ (match incoming with
+            | .node _ _ _ _ => bucket
+            | _ => if bucket.any (fun sc => EqualityTrie.isTerminal sc.trie) then bucket else []),
+            Suspended.Holds assignment (Fragments.fill assignment fragment) sc) := by

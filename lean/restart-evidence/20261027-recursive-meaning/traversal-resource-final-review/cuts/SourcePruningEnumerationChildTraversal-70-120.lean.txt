@@ -1,0 +1,51 @@
+/-- Every completed traversal derives the actual ordered trace, without admission premises. -/
+theorem complete_trace
+    (checkEmpty : Bool) (representativeFuel nativeFuel p h indexFuel : Nat)
+    (inputs : List (Node × List Suspended)) (beforeCaller afterCaller : Caller width)
+    (before after : Cached) (queries afterQueries : Queries) (fragments : List Fragment)
+    (completed : run checkEmpty representativeFuel nativeFuel p h indexFuel inputs beforeCaller before queries =
+      .complete fragments afterCaller afterQueries after) :
+    Trace checkEmpty representativeFuel nativeFuel p h indexFuel inputs beforeCaller before queries
+      fragments afterCaller after afterQueries := by
+  induction inputs generalizing beforeCaller before queries fragments with
+  | nil =>
+    cases completed
+    exact .nil _ _ _
+  | cons input rest ih =>
+    rcases input with ⟨value, bucket⟩
+    cases headEq : SourcePruningEnumerationChildDispatch.run checkEmpty representativeFuel nativeFuel p h indexFuel
+        bucket value beforeCaller before queries with
+    | mk observation candidate =>
+      rcases observation with ⟨outcome, middleCaller, middleQueries, outer, waiting⟩
+      cases outcome with
+      | error fault => simp [run, headEq] at completed
+      | ok returned =>
+        cases returned with
+        | none => simp [run, headEq] at completed
+        | some raw =>
+          cases raw with
+          | nil => simp [run, headEq] at completed
+          | cons row rows =>
+            cases row with
+            | error error => simp [run, headEq] at completed
+            | ok child =>
+              rcases child with ⟨fragment, returnedCore⟩
+              cases rows with
+              | cons row rows => simp [run, headEq] at completed
+              | nil =>
+                cases candidate with
+                | none => simp [run, headEq] at completed
+                | some middle =>
+                  have coreSame := SourcePruningEnumerationChildDispatch.singleton_core checkEmpty
+                    representativeFuel nativeFuel p h indexFuel bucket value beforeCaller middleCaller
+                    before middle queries middleQueries fragment returnedCore outer waiting headEq
+                  cases tailEq : run checkEmpty representativeFuel nativeFuel p h indexFuel
+                      rest middleCaller middle middleQueries with
+                  | stopped completedPrefix observation candidate => simp [run, headEq, tailEq] at completed
+                  | complete tailFragments finalCaller finalQueries final =>
+                    simp only [run, headEq, tailEq, Result.complete.injEq] at completed
+                    obtain ⟨rfl, rfl, rfl, rfl⟩ := completed
+                    rw [← coreSame] at headEq
+                    exact .cons headEq (ih middleCaller middle middleQueries tailFragments tailEq)
+
+/-- A missing cache retains the exact child observation and does not run the tail. -/

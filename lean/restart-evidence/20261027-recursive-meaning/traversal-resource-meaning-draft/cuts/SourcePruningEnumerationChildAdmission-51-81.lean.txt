@@ -1,0 +1,31 @@
+theorem initial_ranges
+    [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Constraint)] [DecidableEq Node]
+    (seed : Seed)
+    (formulas : SourceGuards.Formulas FullSyntax.Formula)
+    (solver : SourceGuards.Entailment FullSyntax.Formula)
+    (inventory : Inventory) (beforeCaller : Caller (bits + 2)) (before : Cached)
+    (checkEmpty : Bool) (bucket : List Suspended) (incoming : Node)
+    (roots : Nat → Nat) (memos : Memos)
+    (initial : Context formulas solver inventory beforeCaller memos)
+    (safe : Safe before.core) (paths : Roots before.core.representatives roots)
+    (counts : EnumerationCanonicalWaiting.Correct roots before.core.values before.waiting)
+    (bounded : ∀ sc ∈ bucket, sc.var < before.core.counter)
+    (pending : InputsPending before.core bucket)
+    (realized : PendingRealized beforeCaller.checked.native.machine.heap before.core)
+    (available : Available beforeCaller.checked.native.machine.heap incoming) (closed : incoming.free = [])
+    (fits : Fits seed.2 beforeCaller.checked)
+    (reserved : Reserved bits seed (bucket.length + 1))
+    (known : Heap (fun guard => guard ∈ seed.1) beforeCaller.checked.native.machine.heap) :
+    Ranges checkEmpty bucket incoming beforeCaller before memos.query := by
+  intro _nonempty first rest descendants partitioned
+  have subsets := partition_subsets bucket first rest descendants partitioned
+  have activeBounded : ∀ sc ∈ first :: rest, sc.var < before.core.counter :=
+    fun sc member => bounded sc (subsets.1 member)
+  have activePending : InputsPending before.core (first :: rest) := by
+    intro held fragment stored sc member
+    exact pending held fragment stored sc (subsets.1 member)
+  have activeReserved : Reserved bits seed ((first :: rest).length + 1) :=
+    reserved.prefix (Nat.add_le_add_right (terminal_length_le bucket first rest descendants partitioned) 1)
+  exact SourcePruningEnumerationCachedTerminalAdapter.initial_ranges seed formulas solver inventory
+    beforeCaller before checkEmpty first rest incoming roots memos initial safe paths counts
+    activeBounded activePending realized available closed fits activeReserved known

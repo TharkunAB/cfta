@@ -1,0 +1,33 @@
+  obtain ⟨r, n, p, h, k, earlierCaller, earlierAfter, earlierQueries, _final, _next, _afterRoots,
+    result, ⟨running, _post, _querySame, _growth, _paths, _storage, _realized, _counts,
+      _flags, _origin, _pending, _protects, _history, shape⟩, flatRunning⟩ :=
+    SourceFlatPruningCapturedCompletion.complete_with_history formulas solver inventory caller before
+      checkEmpty uv handle scs parentEntry edges depth free edge roots memos initial ready stored decoded
+      realized selected paths counts flags pending allowed tries residual projected ranges
+  let bound := r + n + p + h + k
+  refine ⟨bound, ?_⟩
+  intro flat related extra fragment reached saved after observed
+  have enoughN : n ≤ bound + extra := by dsimp [bound]; omega
+  have enoughP : p ≤ bound + extra := by dsimp [bound]; omega
+  have enoughH : h ≤ bound + extra := by dsimp [bound]; omega
+  obtain ⟨flatResult, actual, compared, _correct⟩ :=
+    flatRunning flat related (bound + extra - n) (bound + extra) (bound + extra) enoughP enoughH
+  rw [Nat.add_sub_of_le enoughN] at actual
+  have same : flatResult = .complete fragment reached saved after := Option.some.inj (actual.symm.trans observed)
+  subst flatResult
+  rcases shape with ⟨earlierFragment, completed, safe, _bounded, _written, _ancestry, _root,
+    _fragmentPending, ordered⟩ | ⟨fragments, outer, waiting, stopped⟩
+  · rw [completed] at compared running
+    obtain ⟨rfl, rfl, rfl, caches⟩ := compared
+    refine ⟨earlierAfter, caches, safe, ordered, ?_⟩
+    intro ambient assignment satisfies
+    have earlierSatisfies := (EnumerationFlatState.related_satisfies caches.core _ _ assignment).mpr satisfies
+    obtain ⟨original, edgeAccepted, parentAccepted, suspended, filled⟩ :=
+      SourcePruningEnumerationCapturedEdge.stable_complete_sound_current formulas solver inventory caller before
+        checkEmpty uv handle scs parentEntry edges depth free edge roots memos initial ready stored decoded
+        realized selected paths counts flags pending allowed tries residual projected ranges canonical nonterminal
+        freshArity retained running ambient assignment earlierSatisfies
+    exact ⟨(EnumerationFlatState.related_satisfies related.core _ _ assignment).mp original,
+      edgeAccepted, parentAccepted, suspended, filled⟩
+  · rw [stopped] at compared
+    cases compared

@@ -1,0 +1,25 @@
+import MicroCFTA.SourceEqualityRequiredHead
+import MicroCFTA.SourceFreshOrdinaryColdGuardedExact
+import MicroCFTA.InternedGuardedBudgetExecution
+
+/-!
+# Semantic probe heaps through actual required-path constructors
+
+The finite worker readiness remains unchanged. Independent language proofs
+also retain the ordinary and budget probe-language heaps. Original source
+construction derives these fields. Actual ordinary requests add no Mu record.
+-/
+namespace MicroCFTA.SourceEqualityRequiredSemanticCache
+open InternedConstructorTemplates InternedProbeProvenance InternedRecordCoherence
+open InternedNestedProvenance (Values Edges)
+open SourceEqualityRequiredCache SourceEqualityRequiredHead
+
+/-- A complete worker cache also retains both independent probe-language heaps. -/
+structure SemanticReady (state : State Symbol Guard) : Prop where
+  ready : Ready state
+  guarded : InternedGuardedProbeHeap.Heap state
+  budget : InternedGuardedBudgetProbeHeap.Heap state
+
+/-- Original closed source construction derives every semantic cache premise. -/
+theorem constructed [DecidableEq (EdgeKey Symbol Guard)] (expression : InternedNestedConstruction.Syntax Symbol Guard)
+    (value : Value Symbol Guard) (state : State Symbol Guard)

@@ -1,0 +1,71 @@
+              EnumerationFlatNativeIndex.Correct observation.2.1.checked.native.machine.heap recovered
+          | _ => False) := by
+  obtain ⟨r, n, p, h, k, afterCaller, after, savedQueries, final, next, afterRoots, result, packet⟩ :=
+    SourcePruningEnumerationCapturedEdge.complete_with_history formulas solver inventory caller before
+      checkEmpty uv handle scs parentEntry edges depth free edge roots memos initial ready stored decoded
+      realized selected paths counts flags pending allowed tries residual projected ranges
+  obtain ⟨value, lookup, available, closed⟩ := realized uv handle scs stored
+  have same : value = .node parentEntry edges depth free := Option.some.inj (lookup.symm.trans decoded)
+  subst value
+  have bounded : ∀ sc ∈ scs, sc.var < before.core.counter :=
+    ready.safe.1.values _ (List.mem_of_getElem? stored)
+  obtain ⟨selectedR, selectedN, selectedP, selectedH, selectedK,
+    _selectedCaller, _selectedAfter, _selectedQueries, _selectedFinal, _selectedInventory,
+    _selectedRoots, selectedResult, selectedRun, _selectedPost, _selectedQuerySame,
+    _selectedGrowth, _selectedPaths, _selectedStorage, _selectedRealized, _selectedCounts,
+    _selectedFlags, _selectedOrigin, _selectedPending, _selectedProtects, _selectedHistory,
+    _selectedIncoming, _selectedShape, selectedFlat⟩ :=
+    SourceFlatPruningSelectedCompletion.complete_with_fragments formulas solver inventory caller before checkEmpty
+      parentEntry edges depth free edge scs roots memos initial available closed selected ready.safe realized
+      paths counts flags bounded pending allowed tries residual projected ranges
+  obtain ⟨oldRun, oldRest⟩ := packet
+  have shiftedRun : ∀ er en P H ek, max p selectedP ≤ P → max h selectedH ≤ H →
+      SourcePruningEnumerationCapturedEdge.run checkEmpty (r + selectedR + er) (n + selectedN + en)
+        P H (k + selectedK + ek) uv scs edge caller before memos.query = some result := by
+    intro er en P H ek enoughP enoughH
+    simpa only [Nat.add_assoc] using oldRun (selectedR + er) (selectedN + en) P H
+      (selectedK + ek) (Nat.le_trans (Nat.le_max_left p selectedP) enoughP)
+      (Nat.le_trans (Nat.le_max_left h selectedH) enoughH)
+  refine ⟨r + selectedR, n + selectedN, max p selectedP, max h selectedH, k + selectedK,
+    afterCaller, after, savedQueries, final, next, afterRoots, result, ⟨shiftedRun, oldRest⟩, ?_⟩
+  obtain ⟨_post, _querySame, _growth, afterPaths, storage, _afterRealized,
+    afterCounts, afterFlags, _origin, _pending, _protects, _history, shape⟩ := oldRest
+  have resultShape : (∃ fragment, result = .complete fragment afterCaller savedQueries after) ∨
+      ∃ fragments outer waiting, result = .stopped fragments
+        (.ok (some []), afterCaller, savedQueries, outer, waiting) (some after) := by
+    rcases shape with ⟨fragment, completed, _⟩ | ⟨fragments, outer, waiting, stopped⟩
+    · exact .inl ⟨fragment, completed⟩
+    · exact .inr ⟨fragments, outer, waiting, stopped⟩
+  intro flat related en P H enoughP enoughH
+  have selectedEnoughP := Nat.le_trans (Nat.le_max_right p selectedP) enoughP
+  have selectedEnoughH := Nat.le_trans (Nat.le_max_right h selectedH) enoughH
+  obtain ⟨flatSelected, flatAt, selectedRelated⟩ :=
+    selectedFlat flat related (n + en) P H selectedEnoughP selectedEnoughH
+  have selectedAt : SourcePruningEnumerationSelectedEdge.run checkEmpty (r + selectedR)
+      (n + selectedN + en) P H (k + selectedK) scs edge caller before memos.query = selectedResult := by
+    simpa only [Nat.add_assoc, Nat.add_comm, Nat.add_left_comm] using
+      selectedRun r (n + en) P H k selectedEnoughP selectedEnoughH
+  have flatSelectedAt : SourceFlatPruningSelectedEdge.run checkEmpty (n + selectedN + en) P H
+      scs edge caller flat memos.query = flatSelected := by
+    simpa only [Nat.add_assoc, Nat.add_comm, Nat.add_left_comm] using flatAt
+  have actualSelected : SourceFlatPruningSelectedEdge.ResultRelated
+      (SourceFlatPruningSelectedEdge.run checkEmpty (n + selectedN + en) P H
+        scs edge caller flat memos.query)
+      (SourcePruningEnumerationSelectedEdge.run checkEmpty (r + selectedR) (n + selectedN + en)
+        P H (k + selectedK) scs edge caller before memos.query) := by
+    rw [flatSelectedAt, selectedAt]
+    exact selectedRelated
+  have actualCaptured : SourcePruningEnumerationCapturedEdge.run checkEmpty (r + selectedR)
+      (n + selectedN + en) P H (k + selectedK) uv scs edge caller before memos.query = some result := by
+    simpa only [Nat.add_zero] using shiftedRun 0 en P H 0 enoughP enoughH
+  obtain ⟨flatResult, actual, resultRelated⟩ :=
+    SourceFlatPruningCapturedEdge.run_completed checkEmpty (r + selectedR) (n + selectedN + en)
+      P H (k + selectedK) uv scs edge caller flat before memos.query result actualSelected actualCaptured
+  refine ⟨flatResult, actual, resultRelated, ?_⟩
+  have correct := result_correct flatResult result afterCaller after savedQueries afterRoots afterPaths storage
+    afterCounts afterFlags resultShape resultRelated
+  cases flatResult with
+  | unhandled => exact correct
+  | rejected reached saved recovered => exact correct
+  | complete fragment reached saved recovered => exact correct
+  | stopped fragments observation candidate => cases candidate <;> exact correct

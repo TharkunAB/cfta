@@ -1,0 +1,25 @@
+import MicroCFTA.InternedGuardedLanguageSupport
+
+/-!
+# Actual constructor effects preserve independent guarded meaning
+
+The existing normalization proofs apply to the stored-payload least-language
+interpretation. Coherent free-name support also proves actual unused-binder
+and bare-self cleanup. No cold-reader language or allocation-order premise
+defines the result.
+-/
+namespace MicroCFTA.InternedGuardedLanguage
+open Cache InternedConstructorTemplates InternedRecordCoherence InternedProbeProvenance
+open InternedNestedFacts InternedNestedProvenance
+open InternedBinderProtocol Language
+
+/-- Actual node normalization retains precisely the independent guarded meanings of its source edges. -/
+theorem makeNode_exact [DecidableEq (EdgeKey Symbol Guard)] (state : State Symbol Guard) (facts : Facts state)
+    (holds : Guard → Term Symbol → Bool) (environment : Env Symbol) (edges : List (EdgeValue Symbol Guard))
+    (resident : Edges state edges) (term : Term Symbol) :
+    meaning holds environment (run (makeNode edges) state).1 term ↔
+      ∃ edge ∈ edges, MergedColdInterpretation.EdgeMeaning (meaning holds environment) holds edge term :=
+  MergedColdInterpretation.makeNode_exact state facts (meaning holds environment) edges resident holds (laws holds environment) term
+
+/-- Actual union normalization retains exactly the independent guarded language of its original operands. -/
+theorem makeUnion_exact [DecidableEq (EdgeKey Symbol Guard)] (state : State Symbol Guard) (facts : Facts state)

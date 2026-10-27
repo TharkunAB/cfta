@@ -1,0 +1,62 @@
+/-- A safe ordered original packet and checked actual rendering construct a full flat assignment. -/
+theorem render_assignment (native : InternedConstructorTemplates.State Symbol NativeGuard)
+    (holds : NativeGuard → Term Symbol → Bool) (ambient : InternedGuardedLanguage.Env Symbol)
+    (meaning : EnumGuard → Term Symbol → Prop) (marker : Symbol) (fuel uv : Nat)
+    (before after : State Symbol EnumGuard) (earlier : EnumerationState.State Symbol EnumGuard)
+    (term : Term Symbol) (pending : List (EnumGuard × Term Symbol))
+    (related : Related before earlier) (safe : EnumerationSchedule.Safe earlier)
+    (level : Nat → Nat) (frontier : Nat) (ordered : EnumerationOrder.Stratified earlier level frontier)
+    (discharged : Discharged before)
+    (observed : Except.ok ((term, pending), after) ∈ ExceptT.run (render native marker fuel uv before))
+    (checked : ∀ obligation ∈ pending, meaning obligation.1 obligation.2) :
+    ∃ assignment : Nat → Term Symbol,
+      Satisfies (SourcePruningEnumerationNativeLanguage.handles holds ambient native) meaning assignment before ∧
+      term = assignment uv ∧ after = before ∧
+      Satisfies (SourcePruningEnumerationNativeLanguage.handles holds ambient native) meaning assignment after := by
+  let language := SourcePruningEnumerationNativeLanguage.handles holds ambient native
+  have oldDischarged : SourcePruningEnumerationRendering.Discharged earlier := by
+    intro held node scs stored
+    exact discharged held node scs (by simpa only [related.values] using stored)
+  obtain ⟨assignment, equations⟩ := EnumerationAssignment.stratified_assignment earlier safe
+    level frontier ordered (.node marker []) language oldDischarged
+  have flatEquations := (related_satisfies related language (fun _ _ => True) assignment).mp
+    ⟨equations, by simp [guardsHold]⟩
+  have valid : Valid language assignment before := ⟨related.valid, flatEquations.1, discharged⟩
+  obtain ⟨rendered, middle, rendering, continued⟩ := (success_bind _ _ _ _ _).mp observed
+  obtain ⟨middleSame, termSame⟩ := root_sound native language assignment marker fuel uv before middle rendered valid rendering
+  subst middle
+  obtain ⟨current, readAfter, reading, continued⟩ := (success_bind _ _ _ _ _).mp continued
+  have readSame : current = before ∧ readAfter = before := by
+    simpa only [Success, get, getThe, MonadStateOf.get, StateT.get, pure, ExceptT.pure, ExceptT.mk, ExceptT.run,
+      List.mem_singleton, Except.ok.injEq, Prod.mk.injEq] using reading
+  rcases readSame with ⟨currentSame, readAfterSame⟩
+  subst current readAfter
+  obtain ⟨obligations, guarded, traversal, final⟩ := (success_bind _ _ _ _ _).mp continued
+  let action : EnumGuard × Fragment Symbol → Action Symbol EnumGuard (EnumGuard × Term Symbol) :=
+    fun obligation => do pure (obligation.1, ← expandFragment native marker fuel obligation.2)
+  have step : ∀ obligation result next, Success (action obligation) before result next →
+      next = before ∧ result = (obligation.1, fill assignment obligation.2) := by
+    intro obligation result next success
+    obtain ⟨subterm, reached, rendering, final⟩ := (success_bind _ _ _ _ _).mp success
+    obtain ⟨reachedSame, exactTerm⟩ := fragment_sound native language assignment marker fuel obligation.2
+      before reached subterm valid rendering
+    subst reached
+    obtain ⟨resultSame, nextSame⟩ := (success_pure (obligation.1, subterm) result before next).mp final
+    subst result next
+    exact ⟨rfl, by simp only [exactTerm]⟩
+  obtain ⟨guardedSame, pendingSame⟩ := mapM_read action
+    (fun obligation => (obligation.1, fill assignment obligation.2)) before step
+    before.obligations obligations guarded traversal
+  subst guarded
+  obtain ⟨pairSame, afterSame⟩ := (success_pure (rendered, obligations) (term, pending) before after).mp final
+  have termEq := congrArg Prod.fst pairSame
+  have pendingEq := congrArg Prod.snd pairSame
+  dsimp only at termEq pendingEq
+  subst term pending after
+  have satisfies : Satisfies language meaning assignment before := by
+    refine ⟨flatEquations.1, ?_⟩
+    intro obligation member
+    apply checked (obligation.1, fill assignment obligation.2)
+    rw [pendingSame]
+    exact List.mem_map.mpr ⟨obligation, member, rfl⟩
+  exact ⟨assignment, satisfies, termSame, rfl, satisfies⟩

@@ -1,0 +1,73 @@
+  · cases partitioned : bucket.partition (fun sc => EqualityTrie.isTerminal sc.trie) with
+    | mk here descendants =>
+      cases here with
+      | nil =>
+        have noTerminal : bucket.any (fun sc => EqualityTrie.isTerminal sc.trie) = false := by
+          have filtered : bucket.filter (fun sc => EqualityTrie.isTerminal sc.trie) = [] := by
+            simpa only [List.partition_eq_filter_filter] using congrArg Prod.fst partitioned
+          exact List.any_eq_false.mpr (List.filter_eq_nil_iff.mp filtered)
+        obtain ⟨action, indexFuel, rows, prepared, cachedRun, rawRun, shape, rowMeaning⟩ :=
+          SourcePruningEnumerationCachedPrepare.complete_semantics beforeCaller.checked.native.machine.heap
+            before incoming bucket roots initial.ready.semantic.ready.semantic.1.normal.facts.coherent
+            available closed safe.1 realized paths counts flags bounded (fun _ => noTerminal)
+        rcases shape with ⟨emptyValue, _emptyRows⟩ | ⟨next, _nonempty, rowsSame, _rest⟩
+        · exact (empty emptyValue).elim
+        · have cachedAt := cachedRun k
+          rw [Nat.add_comm indexFuel k] at cachedAt
+          have canonicalObserved :
+              SourcePruningEnumerationChildDispatch.run checkEmpty r n p h (k + indexFuel)
+                bucket incoming beforeCaller before memos.query =
+                ((.ok (some [.ok (.hole before.core.counter, next.core)]),
+                  beforeCaller, memos.query, before.core, before.waiting), some next) := by
+            simp only [SourcePruningEnumerationChildDispatch.run, SourcePruningEnumerationChildDispatch.observe,
+              ite_eq_right empty, partitioned, prepared, cachedAt, rowsSame, rawRun,
+              List.map_cons, List.map_nil]
+          have actualObserved :
+              SourcePruningEnumerationChildDispatch.run checkEmpty r n p h (k + indexFuel)
+                bucket incoming beforeCaller before memos.query =
+                ((.ok (some raw), afterCaller, savedQueries, outer, waiting), some after) := by
+            simpa only [Nat.add_zero] using
+              observed 0 0 p h indexFuel (Nat.le_refl _) (Nat.le_refl _)
+          have same : raw = [.ok (.hole before.core.counter, next.core)] ∧
+              afterCaller = beforeCaller ∧ savedQueries = memos.query ∧
+              outer = before.core ∧ waiting = before.waiting ∧ after = next := by
+            simpa only [Prod.mk.injEq, Except.ok.injEq, Option.some.injEq, and_assoc] using
+              actualObserved.symm.trans canonicalObserved
+          obtain ⟨rawSame, callerSame, _queriesSame, _outerSame, _waitingSame, _cacheSame⟩ := same
+          intro ambient residualMeaning assignment fragment output member
+          have pairSame : (fragment, output) = (.hole before.core.counter, next.core) :=
+            Except.ok.inj (List.mem_singleton.mp (by simpa only [rawSame] using member))
+          have fragmentSame : fragment = .hole before.core.counter := congrArg Prod.fst pairSame
+          have outputSame : output = next.core := congrArg Prod.snd pairSame
+          have accepted :
+              Satisfies
+                (SourcePruningEnumerationNativeLanguage.handles (SourceEqualityPCSGuard.holds formulas solver)
+                  ambient beforeCaller.checked.native.machine.heap) residualMeaning assignment next.core ↔
+              Satisfies
+                (SourcePruningEnumerationNativeLanguage.handles (SourceEqualityPCSGuard.holds formulas solver)
+                  ambient beforeCaller.checked.native.machine.heap) residualMeaning assignment before.core ∧
+              InternedGuardedLanguage.meaning (SourceEqualityPCSGuard.holds formulas solver)
+                ambient incoming (assignment before.core.counter) ∧
+              ∀ sc ∈ (match incoming with | .node _ _ _ _ => bucket | _ => []),
+                Suspended.Holds assignment (assignment before.core.counter) sc := by
+            have semantic := rowMeaning (SourceEqualityPCSGuard.holds formulas solver)
+              ambient residualMeaning assignment
+            constructor
+            · intro satisfied
+              have restrictions := semantic.mp ⟨.hole before.core.counter, next,
+                by simp only [rowsSame, List.mem_singleton], satisfied⟩
+              cases incoming <;> exact restrictions
+            · intro restrictions
+              obtain ⟨otherFragment, row, rowMember, satisfied⟩ :=
+                semantic.mpr (by cases incoming <;> exact restrictions)
+              have rowSame : row = next :=
+                congrArg Prod.snd (List.mem_singleton.mp (by simpa only [rowsSame] using rowMember))
+              simpa only [rowSame] using satisfied
+          have effectiveSame :
+              (match incoming with
+                | .node _ _ _ _ => bucket
+                | _ => if bucket.any (fun sc => EqualityTrie.isTerminal sc.trie) then bucket else []) =
+              (match incoming with | .node _ _ _ _ => bucket | _ => []) := by
+            cases incoming <;> simp [noTerminal]
+          simpa only [callerSame, fragmentSame, outputSame, Fragments.fill, effectiveSame] using accepted
+      | cons first rest =>

@@ -1,0 +1,21 @@
+theorem output_resources_of_related
+    (formulas : SourceGuards.Formulas FullSyntax.Formula)
+    (solver : SourceGuards.Entailment FullSyntax.Formula)
+    (original : Caller width) (seed : Seed) (output : Output width Typing)
+    (earlier : SourcePruningEnumerationRecursive.Output width Typing)
+    (resources : SourcePruningEnumerationRecursive.OutputResources formulas solver original seed earlier)
+    (related : OutputRelated output earlier) :
+    OutputResources formulas solver original seed output := by
+  obtain ⟨next, final, metadata, post, queries, packet, shape, bounded, known⟩ := resources
+  obtain ⟨metadataSame, caches, callerSame, queriesSame⟩ := related
+  obtain ⟨roots, paths, storage, _realized, counts, flags⟩ := packet.valid
+  refine ⟨next, final, metadata, earlier.cache, ?_, queries.trans queriesSame.symm,
+    ?_, caches, ?_, ?_, ?_, ?_⟩
+  · simpa only [callerSame] using post
+  · simpa only [callerSame] using packet
+  · simpa only [metadataSame] using shape
+  · rw [callerSame]
+    exact EnumerationFlatNativeIndex.correct_of_related caches earlier.caller.checked.native.machine.heap
+      roots paths storage.aligned flags counts
+  · simpa only [callerSame] using bounded
+  · simpa only [callerSame] using known

@@ -1,0 +1,63 @@
+    SourcePruningEnumerationEdgeInputs.complete caller.checked.native.machine.heap parentEntry edges depth free
+      edge scs roots initial.ready.semantic.ready parentAvailable parentClosed selected before safe realized
+      paths counts flags bounded pending allowed tries residual projected
+  let inputs := SourcePruningEnumerationEdgeInputs.children edge scs before.core.counter tries
+  have readback : ((inputs.map (fun input =>
+      (input.1, input.2, SourcePruningEnumerationShallowChild.prepareChild (EnumGuard := Constraint) input.2 input.1))).map
+      (fun input => (input.1, input.2.1))) = inputs := by
+    simp only [List.map_map]
+    exact List.map_id _
+  have numeric : SourcePruningEnumerationTraversalCompletion.Ranges checkEmpty inputs caller own memos.query := by
+    have admitted := ranges edge.entry.key.symbol _ residual own ownRun
+    rwa [readback] at admitted
+  obtain ⟨childR, childN, childP, childH, childK, childFragments, reachedCaller,
+    reached, childQueries, _childMemos, _childInventory, _childRoots, childResult,
+    childrenRun, _post, _querySame, _growth, _afterPaths, _storage, _afterRealized,
+    _afterCounts, _afterFlags, _origin, _enumProtects, _rootsProtects, _references,
+    _pendingHistory, _fragmentBounds, shape, childMeaning⟩ :=
+    SourcePruningEnumerationTraversalCompletion.complete_with_fragments_semantics
+      formulas solver inventory caller own checkEmpty inputs roots memos
+      initial ownSafe ownPaths ownCounts ownFlags ownRealized genuine numeric
+  have commonRun := observed childR childN (max p childP) (max h childH) childK
+    (Nat.le_max_left _ _) (Nat.le_max_left _ _)
+  have childrenAt : SourcePruningEnumerationChildTraversal.run checkEmpty
+      (r + childR) (n + childN) (max p childP) (max h childH) (k + childK)
+      inputs caller own memos.query = childResult := by
+    simpa only [Nat.add_comm] using childrenRun r n (max p childP) (max h childH) k
+      (Nat.le_max_right _ _) (Nat.le_max_right _ _)
+  rcases shape with ⟨completed, _afterSafe, _fragmentHistory⟩ | ⟨outer, waiting, stopped⟩
+  · rw [completed] at childrenAt
+    have canonicalRun : run checkEmpty (r + childR) (n + childN) (max p childP) (max h childH)
+        (k + childK) scs edge caller before memos.query =
+        .complete (.node edge.entry.key.symbol childFragments) reachedCaller childQueries
+          (finish residual (.node edge.entry.key.symbol childFragments) reached) := by
+      simp only [run, ownRun]
+      rw [readback, childrenAt]
+    have fields : fragment = .node edge.entry.key.symbol childFragments ∧
+        afterCaller = reachedCaller ∧ savedQueries = childQueries ∧
+        after = finish residual (.node edge.entry.key.symbol childFragments) reached := by
+      simpa only [Result.complete.injEq] using commonRun.symm.trans canonicalRun
+    obtain ⟨fragmentSame, callerSame, _queriesSame, cacheSame⟩ := fields
+    refine ⟨childFragments, fragmentSame, ?_⟩
+    intro ambient residualMeaning assignment
+    rw [cacheSame, callerSame, fragmentSame]
+    have ownMeaning :
+        Satisfies
+          (SourcePruningEnumerationNativeLanguage.handles (SourceEqualityPCSGuard.holds formulas solver)
+            ambient caller.checked.native.machine.heap) residualMeaning assignment own.core ↔
+        Satisfies
+          (SourcePruningEnumerationNativeLanguage.handles (SourceEqualityPCSGuard.holds formulas solver)
+            ambient caller.checked.native.machine.heap) residualMeaning assignment before.core := by
+      rw [ownCore]
+      exact suspendMany_semantics _ residualMeaning assignment tries.length before.core safe.1.aligned
+    rw [finish_semantics residual (.node edge.entry.key.symbol childFragments) reached
+      (SourcePruningEnumerationNativeLanguage.handles (SourceEqualityPCSGuard.holds formulas solver)
+        ambient reachedCaller.checked.native.machine.heap) residualMeaning assignment,
+      childMeaning completed ambient residualMeaning assignment, ownMeaning]
+    exact and_assoc
+  · rw [stopped] at childrenAt
+    simp only [run, ownRun] at commonRun
+    rw [readback, childrenAt] at commonRun
+    cases commonRun
+
+end MicroCFTA.SourcePruningEnumerationSelectedEdge
