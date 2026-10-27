@@ -50,6 +50,19 @@
 - `Data.CFTA.Lowering`: `newConstructors` gives the constructors with an
   expansion, and `checkProductions` gives each failure of `checkLowering`
   with its state and production.
+- Add `Data.CFTA.Merge`: `diff` and `diffDocument` give the update or the
+  patch between two versions of a language or a document. `merge3` and
+  `merge3Document` merge two versions from one base by stable names: the
+  initial state, the rows, the production names, the fact names, and the
+  exclusion names. Each conflict holds its key and its three versions. The
+  merged order of a row is defined, and two different new orders of one row
+  are a conflict.
+- Add the source edit `SetStart` and the language operation `start`, which
+  change the initial state of a document. The new initial state must have a
+  row at the end of the batch. With it, `Merge.diff` and
+  `Merge.diffDocument` are total and give `SetStart` first when the initial
+  states differ; `DiffError` and `DifferentStart` are removed. The text
+  format writes the edit as `start STATE;` in an update.
 
 Before release, the package was called `microcfta`.
 
@@ -122,6 +135,12 @@ Before release, the package was called `microcfta`.
   terms can have the same text.
 - `Data.CFTA.Refinement.Expression.modulo`: the remainder of a term, as the
   `mod` of SMT-LIB.
+- Add `Data.CFTA.Document`: editable source documents with named
+  productions and named facts, and patches that check the document they
+  were prepared on. `applyEdits` applies a batch without that check. Both
+  replace only the changed rows and share the others.
+- Add `Data.CFTA.Language`: updates that combine with `<>` over a source
+  document, and named exclusions that `restore` removes again.
 - `Data.CFTA.replaceRows` applies row replacements and deletions to an
   existing explicit automaton. It shares unchanged rows and validates the
   complete result after the batch. The original automaton stays unchanged.

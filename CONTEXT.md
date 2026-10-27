@@ -136,6 +136,32 @@ Wilf, and Feat (ranking).
   matching** finds only the matches through e-classes with a stamp after the
   last run of the rule.
 
+## Editable languages
+
+- **Source document**: an editable language definition that retains named
+  transitions and their separate facts before compilation.
+- **Language update**: a reusable expression that changes source definitions or
+  named exclusions. It does not contain an expected source version.
+- **Named exclusion**: a removable restriction that rejects matching whole terms
+  or terms with matching subtrees. The source definition remains available.
+- **Production reference**: a source state and the stable name of one transition
+  in that state.
+- **Source fact**: one named constraint attached to a source transition.
+  Removing a fact removes that obligation. It does not negate the constraint.
+- **Patch**: an ordered batch of edits together with the source document it
+  expects. A valid patch produces a new source document.
+- **Three-way merge**: the merge of two versions of a language, the left and
+  the right, that come from one base. It merges by key: the initial state, the
+  state rows, the production names, the fact names, and the exclusion names.
+  A key that one side changes takes that change. A key that both sides change
+  in the same way takes that change.
+- **Conflict**: a key that the two sides of a three-way merge change in
+  different ways, or that one side deletes and the other side changes. A
+  conflict holds its key and its three versions.
+- **Graph snapshot**: a stored explicit graph with its symbols, refinements,
+  constraints, states, and transitions. It need not retain the source facts
+  from which its compiled constraints were made.
+
 ## Transformations
 
 - **Solver lowering**: a meaning-preserving translation of a logical

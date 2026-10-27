@@ -47,6 +47,8 @@ import qualified Data.CFTA.Abstraction as Abstraction
 import qualified Data.CFTA.Enumeration as Enumeration
 import qualified Data.CFTA.Generic as Generic
 import qualified Data.CFTA.Interned as Common
+import qualified Data.CFTA.Language as Language
+import qualified Data.CFTA.Merge as Merge
 import qualified Data.CFTA.Template as Template
 import qualified Data.CFTA.Trace as Trace
 ```
@@ -64,6 +66,8 @@ import qualified Data.CFTA.Trace as Trace
 | Build the traces of a state machine | `Trace.traceAutomaton`, `Trace.feasibility` | The automaton of the traces; the shortest prefix of a sequence of steps that has no run. |
 | Combine trace languages | `Trace.concatenate`, `Trace.project`, `Trace.projectMaybe`, `Trace.determinize` | The traces of one language followed by the traces of another; the traces with each step replaced by its image, or removed when it has none; the automaton with one run for each trace. |
 | Check an abstraction extension | `Abstraction.checkAbstraction`, `Abstraction.checkOverlaps` | With a solver: the productions that their refined variants do not cover, the variants with new values, and the variants with a common value. Each report keeps the verdict `No` or `Unknown`. |
+| Edit a language | `Language.update`, `Language.define`, `Language.require`, `Language.relax`, `Language.start`, `Language.without`, `Language.restore` | A new language value with its source productions, named facts, and named exclusions. `Language.compileGraph` gives the graph to query. |
+| Compare or merge languages | `Merge.diff`, `Merge.merge3`, `Merge.diffDocument`, `Merge.merge3Document` | The update between two versions, or the three-way merge of two versions by stable names, with each conflict as data. |
 | Restrict to a pattern | `Template.restrictFTA`, `Template.restrict` | A grammar for the terms that match a `Template`. |
 | List terms a check accepts | `FTA.termsUpToM` | The terms up to a depth, each checked once by a monadic predicate that sees its transition. |
 | Bound tree depth | `FTA.boundDepth` | Another grammar, restricted to trees within the bound. |
@@ -314,6 +318,24 @@ A trace can split in more than one way, and two steps can have one image, so
 these operations use `determinize`, the subset construction. Its result has
 one run for each trace, so the count table of `Data.CFTA.Sized` counts it.
 For an input of `n` states, the result has at most `2^n - 1` states.
+
+## Edit a language
+
+`Data.CFTA.Language` keeps the source of a language: named productions, their
+named facts, and named exclusions. Combine `define`, `require`, `relax`,
+`start`, `without`, and `restore` with `<>`, and apply the result with
+`update`.
+`wholeTerm` excludes one complete term. `subterm` excludes every term that
+contains it. `compileGraph` gives a new graph for queries, and the language
+keeps its source for the next edit. See
+[editable languages](../docs/editable-languages.md).
+
+`Data.CFTA.Merge` compares and merges languages by their stable names.
+`diff base other` gives the update that changes `base` into `other`.
+`merge3 base left right` merges two versions that come from one base, key by
+key: the initial state, the state rows, the production names, the fact names,
+and the exclusion names. A key that the two sides change in different ways is
+a `Conflict` with its key and its three versions.
 
 ## Visualize a grammar
 
