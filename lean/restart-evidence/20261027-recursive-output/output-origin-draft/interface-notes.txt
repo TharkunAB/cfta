@@ -1,0 +1,75 @@
+[2026-10-27 09:15 CET] Actual recursive output-origin draft
+
+Status: two complete source-only Lean proof drafts. No sorry or admit.
+No Lean, build, Git, network or repository mutation was run by this author.
+Root must check elaboration and the repository's strict linter settings.
+
+Install/check order:
+- SourceFlatPruningOutputFlow imports the existing actual flat Recursive.
+- Arity's SourceFlatPruningOutputFrontier supplies decision_done_iff.
+- SourceFlatPruningRecursiveOutputOrigin imports these two modules.
+
+SourceFlatPruningOutputFlow, namespace MicroCFTA.SourceFlatPruningOutputFlow:
+- hookOutputs reads outputs from both complete and stopped HookResult.
+- foldOutputs reads outputs from both complete and stopped sibling Result.
+- continueWith_outputs proves that an actual callback only emits outputs
+  supplied by its actual decision-based recursive continuation.
+- run_outputs preserves a property through the actual ordered sibling run.
+  The property is supplied for all hook invocations. Completed hook outputs
+  are appended to the actual suffix. A stopped hook retains its own outputs.
+  Edge absence, unhandled cases and noncontinuable observations emit none.
+  A continued rejection threads the actual caller/query into the suffix.
+- ordinary_outputs applies this law to a present actual ordinary fold.
+
+The generic property hypotheses are structural induction tools. They are
+not additional admission hypotheses in the final recursive driver theorem.
+
+SourceFlatPruningRecursiveOutputOrigin, namespace MicroCFTA.SourceFlatPruningRecursive:
+- OutputOrigin stop order output inspects output.metadata at output.cache.
+  Some metadata means Restart.decision stop order metadata cache = none.
+  None means Restart.candidates cache = [].
+- parked_decision consumes a literal actual flat selected-prefix parked
+  singleton and derives next = decision at frame returnedCore parked.
+- finish_outputs retains the exact fold output list.
+- resume_output_origin takes the algorithm arguments, workFuel and
+  recursiveFuel, then universally quantifies metadata/caller/queries/cache/
+  next. The only control hypothesis is next = actual decision at that same
+  input. Every emitted output, including output before a stop, has Origin.
+- run_output_origin discharges the control hypothesis by reflexivity for
+  actual Recursive.run. It quantifies all workFuel, all finite depth, all
+  caches, all metadata and all current callers/queries. No producer or
+  sufficient-work observation is assumed.
+
+Parked proof:
+The actual prefix's parked raw is exactly candidate.map Restart.run using
+its checked core. IndexAdapters.parked_core says the attached candidate has
+that same core. The successful restart row supplies unchanged metadata,
+the actual next decision, and the same checked core. Framing that returned
+core into the candidate is therefore the candidate itself. This derives the
+induction input at the actual reached cache. Counter equality alone is not
+used as a substitute for this exact identity.
+
+Induction:
+None emits the singleton with Some metadata at the supplied endpoint.
+Done emits the singleton with None metadata; decision_done_iff proves empty
+candidates. Stuck and zero-depth expansion emit no output. At positive
+depth, the parked singleton passes its derived actual decision to the IH.
+Empty and callback pruning emit none. Accepted ordinary execution uses the
+generic callback and sibling laws, then finish_outputs. Unsupported/raw
+failures emit none at that node; earlier outputs in a stopped fold remain
+included and are classified by the same induction.
+
+Scope:
+Output cache/caller/queries are never replaced by the aggregate endpoint.
+The theorem classifies actual model outputs. It does not state an all-input
+native diagnostic equivalence, a native Haskell whole-loop correspondence,
+resource adequacy, canonical indexes, Safe, final Satisfies, Discharged,
+renderability or language soundness. Done can retain stopped recursive
+pending slots and pure equality slots; Arity's separate frontier theorem
+states that boundary. H6 is unchanged.
+
+Likely elaboration-only work for Root:
+Nested match split names and generated equations in parked_source and the
+positive resume case; reduction of ExceptT.run before singleton projections;
+reduction of the actual ordinary pair projection; strict unused-section and
+case-binder lint checks. No compiler pass is claimed in this draft.

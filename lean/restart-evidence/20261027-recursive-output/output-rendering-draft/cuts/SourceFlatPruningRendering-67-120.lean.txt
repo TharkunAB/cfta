@@ -1,0 +1,54 @@
+    (marker : Symbol) (fuel : Nat) (fragment : Fragment Symbol) :
+    Replays (expandFragment (EnumGuard := EnumGuard) heap marker fuel fragment)
+      (SourcePruningEnumerationRendering.expandFragment heap marker fuel fragment) := by
+  induction fuel generalizing fragment with
+  | zero => exact failure_replays .fuelExhausted
+  | succ fuel ih =>
+      cases fragment with
+      | node symbol children =>
+          exact bind_replays _ _ _ _ (mapM_replays _ _ (fun child => ih child) children)
+            (fun terms => pure_replays (Term.node symbol terms))
+      | hole uv =>
+          apply bind_replays _ _ _ _ (EnumerationFlatPartial.getValue_replays (fuel + 1) uv)
+          intro value
+          cases value with
+          | eliminated => exact failure_replays .unfinishedFragment
+          | enumerated fragment => exact ih fragment
+          | unenumerated node scs =>
+              cases node with
+              | none => exact failure_replays .unfinishedFragment
+              | some handle =>
+                  dsimp only
+                  cases lookupNode heap handle with
+                  | none => exact failure_replays .unresolvedReference
+                  | some value =>
+                      by_cases boundary : MergedOrdinaryHeight.recursiveBoundary value = true
+                      · simpa only [boundary, Bool.false_eq_true, ↓reduceIte] using
+                          (pure_replays (Guard := EnumGuard) (Term.node marker []))
+                      · simpa only [boundary, Bool.false_eq_true, ↓reduceIte] using
+                          (failure_replays (EnumGuard := EnumGuard) (α := Term Symbol) .unfinishedFragment)
+
+/-- Every successful original root rendering retains its term and related final core. -/
+theorem expandUVar_replays (heap : InternedConstructorTemplates.State Symbol NativeGuard)
+    (marker : Symbol) (fuel uv : Nat) :
+    Replays (expandUVar (EnumGuard := EnumGuard) heap marker fuel uv)
+      (SourcePruningEnumerationRendering.expandUVar heap marker fuel uv) := by
+  apply bind_replays _ _ _ _ (EnumerationFlatPartial.getValue_replays (fuel + 1) uv)
+  intro value
+  cases value with
+  | eliminated => exact reject_replays
+  | enumerated fragment => exact expandFragment_replays heap marker fuel fragment
+  | unenumerated node scs =>
+      cases node with
+      | none => exact reject_replays
+      | some handle =>
+          dsimp only
+          cases lookupNode heap handle with
+          | none => exact failure_replays .unresolvedReference
+          | some value =>
+              by_cases boundary : MergedOrdinaryHeight.recursiveBoundary value = true
+              · simpa only [boundary, Bool.false_eq_true, ↓reduceIte] using
+                  (pure_replays (Guard := EnumGuard) (Term.node marker []))
+              · simpa only [boundary, Bool.false_eq_true, ↓reduceIte] using (reject_replays (EnumGuard := EnumGuard) (α := Term Symbol))
+
+end MicroCFTA.SourceFlatPruningRendering

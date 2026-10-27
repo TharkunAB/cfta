@@ -1,0 +1,32 @@
+theorem output_state
+    (formulas : SourceGuards.Formulas FullSyntax.Formula)
+    (solver : SourceGuards.Entailment FullSyntax.Formula)
+    (original : Caller width) (seed : Seed) (output : Output width Typing)
+    (resources : OutputResources formulas solver original seed output) :
+    FlatUnionFind.Valid output.cache.core.representatives ∧
+    output.cache.core.counter = output.cache.core.values.length ∧
+    (∀ value ∈ output.cache.core.values, EnumerationCorrectness.SlotBound output.cache.core.counter value) ∧
+    (∀ obligation ∈ output.cache.core.obligations,
+      EnumerationCorrectness.FragmentBound output.cache.core.counter obligation.2) ∧
+    (∀ uv value, output.cache.core.values[uv]? = some value →
+      (value ≠ .eliminated ↔ FlatUnionFind.root output.cache.core.representatives uv = uv)) ∧
+    ∃ (level : Nat → Nat) (frontier : Nat),
+      FlatUnionFind.Satisfies output.cache.core.representatives level ∧
+      (∀ uv fragment, output.cache.core.values[uv]? = some (.enumerated fragment) →
+        level uv < frontier ∧ ∀ hole, EnumerationDependencies.HasHole fragment hole → level uv < level hole) ∧
+      (∀ uv node scs, output.cache.core.values[uv]? = some (.unenumerated node scs) → level uv = frontier) := by
+  obtain ⟨_next, _final, _metadata, earlier, _post, _queries, packet, related,
+    _shape, correct, _bounded, _known⟩ := resources
+  obtain ⟨level, frontier, ordered⟩ := packet.ordered
+  refine ⟨related.core.valid, correct.aligned, ?_, ?_, ?_, level, frontier,
+    (FlatUnionFind.represents_satisfies related.core.representatives level).mp ordered.classes, ?_, ?_⟩
+  · simpa only [related.core.counter, related.core.values] using packet.safe.1.values
+  · simpa only [related.core.counter, related.core.obligations] using packet.safe.1.guards
+  · intro uv value stored
+    have oldStored : earlier.core.values[uv]? = some value := by
+      simpa only [related.core.values] using stored
+    exact (packet.safe.2 uv value oldStored).trans (EnumerationFlatState.related_isRoot related.core uv)
+  · simpa only [related.core.values] using ordered.expanded
+  · simpa only [related.core.values] using ordered.pending
+
+private theorem ordered_output_resources

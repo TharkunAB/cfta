@@ -1,0 +1,25 @@
+[2026-10-27 09:22 CET] OutputOrigin strict1 elaboration triage
+
+Root cause 1 (line53): run unfolds to a leading let/have read. The split
+tactic does not reduce it. Add dsimp only before the first read split and
+before the nested check split. Reduce ParkedSource before constructor. The
+nonparked false-check branch uses dsimp only before each nested split.
+
+Root cause 2 (finish_outputs): EdgeKey DecidableEq is automatically included
+from the section but unused. Omit it around this theorem only. The theorem
+statement and proof do not change.
+
+Root cause 3 (hookProperty lines175-179): the reached caller is untyped, so
+its width is a fresh metavariable. No later binder fixes it to the induction
+width. All reported width/Reason/Output/Membership errors come from this
+single ambiguity. Explicitly type every hookProperty binder, including
+reached : Caller width and output : Output width Typing.
+
+Preventive reduction: add dsimp only at member between rw [resume] and the
+positive recursive match split, for the leading observed let.
+
+No new premise, depth gate, runtime edit or claim weakening. All public
+statements are unchanged except omission of the unused theorem instance.
+The original immutable draft remains untouched. This repair is source-only;
+Root alone runs Lean, builds and installation. More branch-local errors may
+be exposed after these three blockers are removed; no pass is claimed.

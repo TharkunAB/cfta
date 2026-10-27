@@ -1,0 +1,110 @@
+  | edge :: rest, caller, queries =>
+      match SourceFlatPruningCapturedEdge.run checkEmpty nativeFuel p h target scs edge caller before queries with
+      | none => .stopped [] [] (.edge none)
+      | some receipt =>
+          match receipt with
+          | .complete fragment reached saved after =>
+              match hook fragment reached saved after with
+              | .stopped outputs reason endpoint =>
+                  .stopped [] outputs (.continuation receipt reason endpoint)
+              | .complete outputs middleCaller middleQueries =>
+                  match run hook checkEmpty nativeFuel p h target scs before rest middleCaller middleQueries with
+                  | .complete processed later finalCaller finalQueries =>
+                      .complete (receipt :: processed) (outputs ++ later) finalCaller finalQueries
+                  | .stopped processed later current =>
+                      .stopped (receipt :: processed) (outputs ++ later) current
+          | other =>
+              match SourceFlatPruningNativeBranches.advance other with
+              | none => .stopped [] [] (.edge (some other))
+              | some (middleCaller, middleQueries) =>
+                  match run hook checkEmpty nativeFuel p h target scs before rest middleCaller middleQueries with
+                  | .complete processed outputs finalCaller finalQueries =>
+                      .complete (other :: processed) outputs finalCaller finalQueries
+                  | .stopped processed outputs current => .stopped (other :: processed) outputs current
+
+/-- A missing edge result retains its absence and does not invoke the hook or suffix. -/
+theorem missing
+    (hook : Fragment → Caller width → Queries → Cached → HookResult Output Reason width)
+    (checkEmpty : Bool) (nativeFuel p h target : Nat) (scs : List Suspended) (before : Cached)
+    (edge : EdgeValue Symbol Constraint) (rest : List (EdgeValue Symbol Constraint))
+    (caller : Caller width) (queries : Queries)
+    (observed : SourceFlatPruningCapturedEdge.run checkEmpty nativeFuel p h target scs edge caller before queries =
+      none) :
+    run hook checkEmpty nativeFuel p h target scs before (edge :: rest) caller queries =
+      .stopped [] [] (.edge none) := by
+  simp only [run, observed]
+
+/-- The sibling starts at the hook's actual returned endpoint, after the head hook completes. -/
+theorem completed_head
+    (hook : Fragment → Caller width → Queries → Cached → HookResult Output Reason width)
+    (checkEmpty : Bool) (nativeFuel p h target : Nat) (scs : List Suspended) (before : Cached)
+    (edge : EdgeValue Symbol Constraint) (rest : List (EdgeValue Symbol Constraint))
+    (caller reached middleCaller : Caller width) (queries saved middleQueries : Queries)
+    (fragment : Fragment) (after : Cached) (outputs : List Output)
+    (observed : SourceFlatPruningCapturedEdge.run checkEmpty nativeFuel p h target scs edge caller before queries =
+      some (.complete fragment reached saved after))
+    (continued : hook fragment reached saved after = .complete outputs middleCaller middleQueries) :
+    run hook checkEmpty nativeFuel p h target scs before (edge :: rest) caller queries =
+      match run hook checkEmpty nativeFuel p h target scs before rest middleCaller middleQueries with
+      | .complete processed later finalCaller finalQueries =>
+          .complete (.complete fragment reached saved after :: processed) (outputs ++ later) finalCaller finalQueries
+      | .stopped processed later current =>
+          .stopped (.complete fragment reached saved after :: processed) (outputs ++ later) current := by
+  simp only [run, observed, continued]
+
+/-- A stopped hook retains its output, reason and receipt without evaluating the sibling. -/
+theorem stopped_hook
+    (hook : Fragment → Caller width → Queries → Cached → HookResult Output Reason width)
+    (checkEmpty : Bool) (nativeFuel p h target : Nat) (scs : List Suspended) (before : Cached)
+    (edge : EdgeValue Symbol Constraint) (rest : List (EdgeValue Symbol Constraint))
+    (caller reached : Caller width) (queries saved : Queries) (fragment : Fragment) (after : Cached)
+    (outputs : List Output) (reason : Reason) (endpoint : Option (Caller width × Queries))
+    (observed : SourceFlatPruningCapturedEdge.run checkEmpty nativeFuel p h target scs edge caller before queries =
+      some (.complete fragment reached saved after))
+    (halted : hook fragment reached saved after = .stopped outputs reason endpoint) :
+    run hook checkEmpty nativeFuel p h target scs before (edge :: rest) caller queries =
+      .stopped [] outputs (.continuation (.complete fragment reached saved after) reason endpoint) := by
+  simp only [run, observed, halted]
+
+/-- Embed a flat branch result without continuation outputs or continuation stops. -/
+def ofBranches : SourceFlatPruningNativeBranches.Result width → Result Output Reason width
+  | .complete processed caller queries => .complete processed [] caller queries
+  | .stopped processed current => .stopped processed [] (.edge current)
+
+/-- The identity hook preserves the entire flat branch result, including stopped receipts. -/
+theorem identity_run
+    (checkEmpty : Bool) (nativeFuel p h target : Nat) (scs : List Suspended) (before : Cached)
+    (edges : List (EdgeValue Symbol Constraint)) (caller : Caller width) (queries : Queries) :
+    run (identityHook (Output := Output) (Reason := Reason)) checkEmpty nativeFuel p h target scs before edges caller queries =
+      ofBranches (SourceFlatPruningNativeBranches.run checkEmpty nativeFuel p h target scs before edges caller queries) := by
+  induction edges generalizing caller queries with
+  | nil => rfl
+  | cons edge rest ih =>
+      cases observed : SourceFlatPruningCapturedEdge.run checkEmpty nativeFuel p h target scs edge caller before queries with
+      | none => simp only [run, SourceFlatPruningNativeBranches.run, observed, ofBranches]
+      | some receipt =>
+          cases receipt with
+          | unhandled =>
+              simp only [run, SourceFlatPruningNativeBranches.run, observed,
+                SourceFlatPruningNativeBranches.advance, ofBranches]
+          | rejected reached saved after =>
+              simp only [run, SourceFlatPruningNativeBranches.run, observed,
+                SourceFlatPruningNativeBranches.advance]
+              rw [ih reached saved]
+              cases SourceFlatPruningNativeBranches.run checkEmpty nativeFuel p h target scs before rest reached saved <;> rfl
+          | complete fragment reached saved after =>
+              simp only [run, SourceFlatPruningNativeBranches.run, observed, identityHook,
+                SourceFlatPruningNativeBranches.advance]
+              rw [ih reached saved]
+              cases SourceFlatPruningNativeBranches.run checkEmpty nativeFuel p h target scs before rest reached saved <;> rfl
+          | stopped fragments observation candidate =>
+              simp only [run, SourceFlatPruningNativeBranches.run, observed]
+              cases advanced : SourceFlatPruningNativeBranches.advance (.stopped fragments observation candidate) with
+              | none => rfl
+              | some endpoint =>
+                  obtain ⟨reached, saved⟩ := endpoint
+                  dsimp only
+                  rw [ih reached saved]
+                  cases SourceFlatPruningNativeBranches.run checkEmpty nativeFuel p h target scs before rest reached saved <;> rfl
+
+end MicroCFTA.SourceFlatPruningNativeContinuations

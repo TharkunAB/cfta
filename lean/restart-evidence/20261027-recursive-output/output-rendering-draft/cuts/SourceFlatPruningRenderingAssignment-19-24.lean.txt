@@ -1,0 +1,6 @@
+/-- Remaining pending slots are unrestricted equality variables. -/
+def Discharged (state : State Symbol EnumGuard) : Prop :=
+  ∀ (uv : Nat) (node : Option Nat) (scs : List EnumerationState.Suspended), state.values[uv]? = some (.unenumerated node scs) → node = none ∧ scs = []
+
+private abbrev Success (action : Action Symbol EnumGuard α) (before : State Symbol EnumGuard)
+    (value : α) (after : State Symbol EnumGuard) : Prop :=

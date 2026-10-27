@@ -1,0 +1,13 @@
+/-- The complete resource packet belongs to the actual output's caller and cache. -/
+def OutputResources
+    (formulas : SourceGuards.Formulas FullSyntax.Formula)
+    (solver : SourceGuards.Entailment FullSyntax.Formula)
+    (original : Caller width) (seed : Seed) (output : Output width Typing) : Prop :=
+  ∃ (next : Inventory) (final : Memos) (metadata : Metadata Typing) (earlier : Cached),
+    Post formulas solver next original output.caller final ∧ final.query = output.queries ∧
+    SourcePruningEnumerationRecursive.Packet formulas solver next output.caller final metadata earlier ∧
+    EnumerationFlatCached.Related output.cache earlier ∧
+    (output.metadata = none ∨ output.metadata = some metadata) ∧
+    EnumerationFlatNativeIndex.Correct output.caller.checked.native.machine.heap output.cache ∧
+    Fits seed.2 output.caller.checked ∧
+    Heap (fun guard => guard ∈ seed.1) output.caller.checked.native.machine.heap

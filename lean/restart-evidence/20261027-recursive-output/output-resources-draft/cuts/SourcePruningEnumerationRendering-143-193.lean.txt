@@ -1,0 +1,51 @@
+theorem render_assignment (heap : InternedConstructorTemplates.State Symbol NativeGuard)
+    (holds : NativeGuard → Term Symbol → Bool) (ambient : InternedGuardedLanguage.Env Symbol)
+    (meaning : EnumGuard → Term Symbol → Prop) (marker : Symbol) (fuel uv : Nat)
+    (before after : EnumerationState.State Symbol EnumGuard) (term : Term Symbol)
+    (pending : List (EnumGuard × Term Symbol)) (safe : Safe before)
+    (level : Nat → Nat) (frontier : Nat) (ordered : EnumerationOrder.Stratified before level frontier)
+    (discharged : Discharged before)
+    (success : Success (render heap marker fuel uv) before (term, pending) after)
+    (checked : ∀ obligation ∈ pending, meaning obligation.1 obligation.2) :
+    ∃ assignment : Nat → Term Symbol,
+      Satisfies (SourcePruningEnumerationNativeLanguage.handles holds ambient heap) meaning assignment before ∧
+      term = assignment uv ∧ Frame before after ∧
+      Satisfies (SourcePruningEnumerationNativeLanguage.handles holds ambient heap) meaning assignment after := by
+  let language := SourcePruningEnumerationNativeLanguage.handles holds ambient heap
+  obtain ⟨assignment, equations⟩ := EnumerationAssignment.stratified_assignment before safe level frontier
+    ordered (.node marker []) language discharged
+  unfold render at success
+  obtain ⟨rendered, middle, rendering, afterRoot⟩ := (success_bind _ _ _ _ _).mp success
+  obtain ⟨middleValid, rootFrame, sameTerm⟩ := root_sound heap language assignment marker fuel uv
+    before middle rendered ⟨safe.1.total, equations, discharged⟩ rendering
+  obtain ⟨current, readAfter, reading, afterRead⟩ := (success_bind _ _ _ _ _).mp afterRoot
+  obtain ⟨currentSame, readSame⟩ := (get_success middle readAfter current).mp reading
+  subst current
+  subst readAfter
+  obtain ⟨obligations, guarded, traversal, final⟩ := (success_bind _ _ _ _ _).mp afterRead
+  obtain ⟨samePair, afterSame⟩ := (success_pure (rendered, obligations) (term, pending) guarded after).mp final
+  have termSame : term = rendered := congrArg Prod.fst samePair
+  have pendingSame : pending = obligations := congrArg Prod.snd samePair
+  subst term
+  subst obligations
+  subst guarded
+  let action : EnumGuard × Fragment Symbol → EnumerateM Symbol EnumGuard (EnumGuard × Term Symbol) :=
+    fun obligation => do
+    pure (obligation.1, ← expandFragment heap marker fuel obligation.2)
+  have step : ∀ obligation previous output next,
+      (Valid language assignment previous ∧ Frame middle previous) →
+      Success (action obligation) previous output next →
+      (Valid language assignment next ∧ Frame middle next) ∧
+        output = (obligation.1, fill assignment obligation.2) := by
+    intro obligation previous output next valid observed
+    obtain ⟨subterm, reached, rendering, final⟩ := (success_bind _ _ _ _ _).mp observed
+    obtain ⟨nextValid, frame, exactTerm⟩ := fragment_sound heap language assignment marker fuel
+      obligation.2 previous reached subterm valid.1 rendering
+    obtain ⟨rfl, rfl⟩ := (success_pure (obligation.1, subterm) output reached next).mp final
+    exact ⟨⟨nextValid, valid.2.trans frame⟩, by simp only [exactTerm]⟩
+  obtain ⟨guardedValid, related⟩ := mapM_sound action
+    (fun state => Valid language assignment state ∧ Frame middle state)
+    (fun obligation output => output = (obligation.1, fill assignment obligation.2)) step
+    middle.obligations middle after pending ⟨middleValid, .refl middle⟩ traversal
+  have exactPending := all₂_map_eq (fun obligation => (obligation.1, fill assignment obligation.2))
+    middle.obligations pending related
