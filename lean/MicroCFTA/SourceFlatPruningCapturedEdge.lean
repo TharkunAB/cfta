@@ -1,0 +1,76 @@
+import MicroCFTA.SourceFlatPruningSelectedEdge
+import MicroCFTA.SourceFlatPruningFinalize
+import MicroCFTA.SourcePruningEnumerationCapturedEdge
+
+/-!
+# Actual captured edges with direct-parent forests
+
+Only a completed selected edge finalizes the original captured raw slot.
+Every other result retains its exact stopping stage and observation.
+-/
+
+namespace MicroCFTA.SourceFlatPruningCapturedEdge
+
+open EnumerationState InternedConstructorTemplates
+local notation "Symbol" => SourcePruningTemplates.Symbol
+local notation "Constraint" => SourceSymbolicIndex.Constraint FullSyntax.Formula
+local notation "Node" => Value Symbol Constraint
+local notation "Caller" => SourceCurrentAllocatedPartialState.State
+local notation "Queries" => SourceEndpointMemo.Memos
+local notation "Cached" => EnumerationFlatCached.Cached Symbol Constraint
+local notation "Result" => SourceFlatPruningSelectedEdge.Result
+variable {width : Nat}
+variable [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Constraint)] [DecidableEq Node]
+
+/-- Finalize the original captured raw slot only after every child completes. -/
+noncomputable def run (checkEmpty : Bool) (nativeFuel p h target : Nat)
+    (scs : List Suspended) (edge : EdgeValue Symbol Constraint)
+    (caller : Caller width) (before : Cached) (queries : Queries) : Option (Result width) :=
+  match SourceFlatPruningSelectedEdge.run checkEmpty nativeFuel p h scs edge caller before queries with
+  | .complete fragment reached saved after =>
+      (SourceFlatPruningFinalize.run reached.checked.native.machine.heap target fragment after).map
+        (fun finished => .complete fragment reached saved finished)
+  | result => some result
+
+/-- A related selected execution transports actual successful captured finalization. -/
+theorem run_completed (checkEmpty : Bool) (r nativeFuel p h k target : Nat)
+    (scs : List Suspended) (edge : EdgeValue Symbol Constraint)
+    (caller : Caller width) (flat : Cached)
+    (before : EnumerationExpandableIndex.Cached Symbol Constraint) (queries : Queries)
+    (earlier : SourcePruningEnumerationSelectedEdge.Result width)
+    (selected : SourceFlatPruningSelectedEdge.ResultRelated
+      (SourceFlatPruningSelectedEdge.run checkEmpty nativeFuel p h scs edge caller flat queries)
+      (SourcePruningEnumerationSelectedEdge.run checkEmpty r nativeFuel p h k scs edge caller before queries))
+    (completed : SourcePruningEnumerationCapturedEdge.run checkEmpty r nativeFuel p h k target
+      scs edge caller before queries = some earlier) :
+    ∃ next, run checkEmpty nativeFuel p h target scs edge caller flat queries = some next ∧
+      SourceFlatPruningSelectedEdge.ResultRelated next earlier := by
+  generalize flatObserved : SourceFlatPruningSelectedEdge.run checkEmpty nativeFuel p h
+    scs edge caller flat queries = left at selected
+  generalize oldObserved : SourcePruningEnumerationSelectedEdge.run checkEmpty r nativeFuel p h k
+    scs edge caller before queries = right at selected
+  unfold SourcePruningEnumerationCapturedEdge.run at completed
+  rw [oldObserved] at completed
+  unfold run
+  rw [flatObserved]
+  cases left <;> cases right <;>
+    simp only [SourceFlatPruningSelectedEdge.ResultRelated] at selected <;> try contradiction
+  case unhandled.unhandled =>
+    cases completed
+    exact ⟨_, rfl, selected⟩
+  case rejected.rejected =>
+    cases completed
+    exact ⟨_, rfl, selected⟩
+  case stopped.stopped =>
+    cases completed
+    exact ⟨_, rfl, selected⟩
+  case complete.complete fragment reached saved after oldFragment oldCaller oldQueries oldAfter =>
+    obtain ⟨rfl, rfl, rfl, caches⟩ := selected
+    obtain ⟨finished, written, same⟩ := Option.map_eq_some_iff.mp completed
+    subst earlier
+    obtain ⟨next, actual, related⟩ := SourceFlatPruningFinalize.run_completed caches
+      _ k target fragment written
+    refine ⟨.complete fragment reached saved next, ?_, rfl, rfl, rfl, related⟩
+    simp only [actual, Option.map_some]
+
+end MicroCFTA.SourceFlatPruningCapturedEdge

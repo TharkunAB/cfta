@@ -1,0 +1,84 @@
+import MicroCFTA.SourceFlatPruningCachedOwn
+import MicroCFTA.SourceFlatPruningChildTraversal
+import MicroCFTA.SourcePruningEnumerationSelectedEdge
+
+/-!
+# Actual selected edges with direct-parent forests
+
+The edge allocates its own classes before it runs the ordered children.
+Only completed children permit the final residual update.
+-/
+
+namespace MicroCFTA.SourceFlatPruningSelectedEdge
+
+open EnumerationState EnumerationSchedule InternedConstructorTemplates
+local notation "Symbol" => SourcePruningTemplates.Symbol
+local notation "Constraint" => SourceSymbolicIndex.Constraint FullSyntax.Formula
+local notation "Node" => Value Symbol Constraint
+local notation "Caller" => SourceCurrentAllocatedPartialState.State
+local notation "Queries" => SourceEndpointMemo.Memos
+local notation "Cached" => EnumerationFlatCached.Cached Symbol Constraint
+local notation "Fragment" => Fragments.Fragment Symbol
+variable {width : Nat}
+
+/-- Retain unsupported prefixes, arity rejection, stopped children and complete edges. -/
+inductive Result (width : Nat) where
+  /-- The own-class prefix does not supply the supported singleton. -/
+  | unhandled
+  /-- Arity rejection retains the original native endpoint and cache. -/
+  | rejected (caller : Caller width) (queries : Queries) (after : Cached)
+  /-- Retain the completed child prefix and exact stopping receipt. -/
+  | stopped (completedPrefix : List Fragment)
+      (observation : SourceFlatPruningChildDispatch.Observation width) (candidate : Option Cached)
+  /-- Every child succeeds and the residual is recorded. -/
+  | complete (fragment : Fragment) (caller : Caller width) (queries : Queries) (after : Cached)
+
+/-- Record the residual at the actual completed child cache. -/
+def finish (residual : Option Constraint) (fragment : Fragment) (before : Cached) : Cached :=
+  EnumerationFlatCached.frame {before.core with obligations :=
+    match residual with
+    | none => before.core.obligations
+    | some guard => (guard, fragment) :: before.core.obligations} before
+
+/-- Residual recording retains related complete cores and both native indexes. -/
+theorem finish_related (related : EnumerationFlatCached.Related flat earlier)
+    (residual : Option Constraint) (fragment : Fragment) :
+    EnumerationFlatCached.Related (finish residual fragment flat)
+      (SourcePruningEnumerationSelectedEdge.finish residual fragment earlier) := by
+  refine EnumerationFlatCached.frame_related related ?_
+  refine ⟨related.core.valid, related.core.representatives, related.core.counter,
+    related.core.values, ?_, related.core.recursionAncestry, related.core.expansionAncestry⟩
+  cases residual <;> simp only [related.core.obligations]
+
+variable [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Constraint)] [DecidableEq Node]
+
+/-- Execute own classes, actual native children and the final residual update. -/
+noncomputable def run (checkEmpty : Bool) (nativeFuel p h : Nat)
+    (scs : List Suspended) (edge : EdgeValue Symbol Constraint)
+    (caller : Caller width) (before : Cached) (queries : Queries) : Result width :=
+  match SourceFlatPruningCachedOwn.prepare caller.checked.native.machine.heap scs edge before with
+  | none => .unhandled
+  | some [] => .rejected caller queries before
+  | some [((symbol, staged, residual), middle)] =>
+      match SourceFlatPruningChildTraversal.run checkEmpty nativeFuel p h
+          (staged.map (fun input => (input.1, input.2.1))) caller middle queries with
+      | .stopped fragments observation candidate => .stopped fragments observation candidate
+      | .complete fragments afterCaller saved after =>
+          let fragment := Fragments.Fragment.node symbol fragments
+          .complete fragment afterCaller saved (finish residual fragment after)
+  | _ => .unhandled
+
+/-- Retain the exact result kind, fragments, native effects and every cache observation. -/
+def ResultRelated (flat : Result width) (earlier : SourcePruningEnumerationSelectedEdge.Result width) : Prop :=
+  match flat, earlier with
+  | .unhandled, .unhandled => True
+  | .rejected caller queries after, .rejected oldCaller oldQueries oldAfter =>
+      caller = oldCaller ∧ queries = oldQueries ∧ EnumerationFlatCached.Related after oldAfter
+  | .complete fragment caller queries after, .complete oldFragment oldCaller oldQueries oldAfter =>
+      fragment = oldFragment ∧ caller = oldCaller ∧ queries = oldQueries ∧ EnumerationFlatCached.Related after oldAfter
+  | .stopped fragments observation candidate, .stopped oldFragments oldObservation oldCandidate =>
+      fragments = oldFragments ∧ SourceFlatPruningChildDispatch.ResultRelated
+        (observation, candidate) (oldObservation, oldCandidate)
+  | _, _ => False
+
+end MicroCFTA.SourceFlatPruningSelectedEdge
