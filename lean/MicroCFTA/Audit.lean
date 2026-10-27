@@ -3623,6 +3623,9 @@ import MicroCFTA.SourcePruningEnumerationSelectedEdgeAccepting
 import MicroCFTA.SourcePruningEnumerationSelectorLanguage
 import MicroCFTA.SourcePruningEnumerationCapturedEdgeCoverage
 import MicroCFTA.SourcePruningEnumerationCapturedEdgeAccepting
+import MicroCFTA.SourcePruningEnumerationNativeHeadCoverage
+import MicroCFTA.SourcePruningEnumerationNativeBranchCoverage
+import MicroCFTA.SourcePruningEnumerationNativeParentCoverage
 /-!
 # Proof dependency audit
 
