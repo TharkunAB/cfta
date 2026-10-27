@@ -4,6 +4,16 @@
 
 - Carry named predicates through child substitution and measured constructors.
   The logical result value can have a solver-defined data type.
+- Add `Data.CFTA.Gen.Refinement.Trace`: the traces of state machines over
+  named integers, as refinement generators. A step can have an integer
+  parameter from a range, a guard, and an update, which read the state by
+  name and are written once over `Symbolic`. `guardedTraces` gives the traces
+  of at most `n` steps. The state of a prefix is its named measures, and the
+  compiled generator counts the parameters without a list of them. The traces
+  of exactly `n` steps have size `2n + 1`. `guardedProduct` gives the traces
+  of two machines, with the intersection of the ranges of a shared step.
+  `guardedRun` gives the shortest prefix that fails, and `unrolled` gives a
+  finite `StateMachine` of `Data.CFTA.Trace` for small ranges.
 
 Before release, the package was called `microcfta-generator`.
 

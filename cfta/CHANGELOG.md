@@ -25,6 +25,23 @@
   sets the time limit of each query. `cfta` depends on `process`
   (ADR 0009). `entailmentCommands` gives the commands of one query without
   the theory.
+- `Data.CFTA.Trace.projectMaybe`: a projection that hides the steps whose
+  image is `Nothing`. The subset construction closes each set of states
+  under hidden steps, so the result still has one run for each trace.
+- `Data.CFTA.Trace`: `determinize` makes the automaton of a trace language
+  with one run for each trace (the subset construction, at most `2^n - 1`
+  states for an input of `n` states). `concatenate` gives the traces of one
+  automaton followed by the traces of another, and `project` replaces each
+  step by its image in a coarser alphabet. Both results come from the subset
+  construction, so `Data.CFTA.Sized` counts them with its count table.
+- Add `Data.CFTA.Trace`: the trace languages of state machines. A
+  `StateMachine` gives the precondition and the next state of each step over
+  a finite abstract state, and the final states. `traceAutomaton` builds the
+  automaton of its traces as right spines. The automaton is unambiguous, so
+  the generators of cfta-generator count, rank, sample, and shrink the traces
+  of each length exactly. `feasibility` gives the shortest prefix of a
+  sequence of steps that has no run, and the states in which its last symbol
+  fails.
 
 Before release, the package was called `microcfta`.
 
@@ -73,6 +90,11 @@ Before release, the package was called `microcfta`.
 - Template exclusion computes the copies of an edge once for each wanted
   and unwanted parts, symbol, and child shapes. On Specftacular's HugeLists
   6-p4 this cut 3.8% of allocation and time, with the same laws.
+- Add `Data.CFTA.Lowering`: template lowerings, which translate the terms of
+  a language version to the version before it. `lift` gives the inverse image
+  of an automaton, and `checkLowering` checks a later grammar against an
+  earlier one. `compose` makes one lowering of two. It reports an expansion
+  that applies an earlier constructor to the wrong number of children.
 - `Data.CFTA.replaceRows` applies row replacements and deletions to an
   existing explicit automaton. It shares unchanged rows and validates the
   complete result after the batch. The original automaton stays unchanged.

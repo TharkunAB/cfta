@@ -203,6 +203,32 @@ Wilf, and Feat (ranking).
 - **Group index**: which matched key pair of a two-way join.
 - **Key index**: the position of a key among the keys of a recursive family.
 
+## Traces
+
+- **State machine**: an initial state, a list of steps, the next state of a
+  step in a state, and the final states (`StateMachine`). The
+  **precondition** of a step is true in a state when the step has a next
+  state there. The next state is the **postcondition** of the step.
+  quickcheck-state-machine calls the next state the *transition*, and its
+  postcondition checks a response. Do not call the next state a transition:
+  a transition is a rule of an automaton. A **final state** is a state in
+  which a trace can end.
+- **Step**: one action of a state machine. When the next state depends on a
+  response, the response is part of the step.
+- **Guarded state machine**: a state machine whose state is named integers
+  (`GuardedMachine`). A step can have an integer **parameter** from a range.
+  Its **guard** is its precondition as a formula over the state and the
+  parameter, and its **update** gives the new values of some names. In the
+  refinement generator, the guard is the contract of the constructor of the
+  step, and each name is a named measure of a prefix.
+- **Trace**: a sequence of steps that a state machine accepts. In
+  `Data.CFTA.Trace`, its term is the right spine
+  `Step s1 (Step s2 (... (Step sn End)))`, so a trace of `n` steps has size
+  `n + 1`, and a prefix of a trace is a preorder prefix of its term. In the
+  generator of a guarded state machine, the last step is at the root, because
+  a measure is calculated from the children. Do not call a trace a path: a
+  path is a list of child indexes.
+
 ## Variables
 
 Three kinds, never called only "variable":

@@ -26,6 +26,7 @@ import qualified Data.CFTA.RankedSpec
 import qualified Data.CFTA.SizedSpec
 import qualified Data.CFTA.Template.LearnSpec
 import qualified Data.CFTA.Template.NamedSpec
+import qualified Data.CFTA.TraceSpec
 
 main :: IO ()
 main =
@@ -54,3 +55,4 @@ main =
         Data.CFTA.Edit.BetweenSpec.spec
         Data.CFTA.EditSpec.spec
         Data.CFTA.Edit.ConstrainedSpec.spec
+        Data.CFTA.TraceSpec.spec
