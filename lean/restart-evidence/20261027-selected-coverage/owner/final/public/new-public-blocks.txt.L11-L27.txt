@@ -1,0 +1,17 @@
+MicroCFTA.SourcePruningEnumerationSelectedEdgeAdmission.projected_of_accepted {Formula : Type} [DecidableEq Formula]
+  (formulas : MicroCFTA.SourceGuards.Formulas Formula) (solver : MicroCFTA.SourceGuards.Entailment Formula)
+  (constraint : MicroCFTA.SourceSymbolicIndex.Constraint Formula)
+  (cached : MicroCFTA.SourceEqualityGuardReadback.Cached constraint.equalities)
+  (term : MicroCFTA.Language.Term (MicroCFTA.SourceObservations.Label Formula))
+  (accepted : MicroCFTA.SourceEqualityPCSGuard.holds formulas solver constraint term = true) :
+  ∃ tries residual,
+    MicroCFTA.SourcePruningEnumerationConstraint.project constraint = some (tries, residual) ∧
+      (∀ (trie : MicroCFTA.EqualityTrie.Trie), trie ∈ tries → MicroCFTA.EqualityTrie.Valid trie) ∧
+        (∀ (trie : MicroCFTA.EqualityTrie.Trie),
+            trie ∈ tries → MicroCFTA.EnumerationCorrectness.EqualityHolds term trie) ∧
+          MicroCFTA.EnumerationCorrectness.ResidualHolds
+            (fun guard candidate => MicroCFTA.SourceEqualityPCSGuard.holds formulas solver guard candidate = true)
+            residual term
+'MicroCFTA.SourcePruningEnumerationSelectedEdgeAdmission.projected_of_accepted' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]

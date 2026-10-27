@@ -1,0 +1,36 @@
+theorem mem_fromChildren (children : List (Nat × Trie)) (path : Path) :
+    path ∈ fromChildren children ↔
+      ∃ index child suffix, (index, child) ∈ children ∧ suffix ∈ fromPathTrie child ∧ path = index :: suffix := by
+  induction children with
+  | nil => simp [fromChildren]
+  | cons pair rest ih =>
+      obtain ⟨index, child⟩ := pair
+      simp only [fromChildren, List.mem_append, List.mem_map, ih, List.mem_cons]
+      constructor
+      · rintro (⟨suffix, member, rfl⟩ | ⟨key, node, suffix, member, present, rfl⟩)
+        · exact ⟨index, child, suffix, Or.inl rfl, member, rfl⟩
+        · exact ⟨key, node, suffix, Or.inr member, present, rfl⟩
+      · rintro ⟨key, node, suffix, (same | member), present, rfl⟩
+        · cases same
+          exact Or.inl ⟨suffix, present, rfl⟩
+        · exact Or.inr ⟨key, node, suffix, member, present, rfl⟩
+
+/-- Empty paths occur only at a terminal. -/
+theorem nil_mem (trie : Trie) : [] ∈ fromPathTrie trie ↔ trie = .terminal := by
+  cases trie with
+  | empty => simp [fromPathTrie]
+  | terminal => simp [fromPathTrie]
+  | branch children => simp [fromPathTrie, mem_fromChildren]
+
+/-- Successful map lookup finds an actual child entry. -/
+theorem lookup_mem (index : Nat) (children : List (Nat × Trie)) (child : Trie)
+    (found : lookup index children = some child) : (index, child) ∈ children := by
+  induction children with
+  | nil => simp [lookup] at found
+  | cons pair rest ih =>
+      obtain ⟨key, node⟩ := pair
+      by_cases same : index = key
+      · simp [lookup, same] at found
+        subst key
+        subst node
+        simp

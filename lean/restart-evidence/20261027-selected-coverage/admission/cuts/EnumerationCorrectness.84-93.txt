@@ -1,0 +1,10 @@
+def EqualityHolds (term : Term Symbol) (trie : EqualityTrie.Trie) : Prop :=
+  ∃ common, ∀ path ∈ EqualityTrie.fromPathTrie trie, term.atPath path = some common
+
+/-- An absent residual imposes no predicate; a present residual applies at this term. -/
+def ResidualHolds (meaning : Guard → Term Symbol → Prop) (residual : Option Guard) (term : Term Symbol) : Prop :=
+  match residual with
+  | none => True
+  | some guard => meaning guard term
+
+/-- Finite-run denotation of the actual node view consumed by the state driver. -/

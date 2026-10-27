@@ -1,0 +1,20 @@
+    (InternedGuardedLanguage.edgeMeaning_all
+      (SourceEqualityPCSGuard.holds formulas solver) ambient edge term).mp accepted
+  obtain ⟨r, n, p, h, k, afterCaller, after, savedQueries, final, next, afterRoots, result,
+    running, post, querySame, growth, afterPaths, storage, afterRealized, afterCounts, afterFlags,
+    origin, pendingInputs, protects, pendingHistory, incomingHistory, shape, returnedFits,
+    returnedKnown, accepting⟩ :=
+    complete_with_fragments_resources_accepting seed formulas solver inventory caller before checkEmpty
+      parentEntry edges depth free edge scs roots memos initial parentAvailable parentClosed selected
+      safe realized paths counts flags bounded pending allowed tries residual projected fits
+      (reserved tries residual projected) known
+  obtain ⟨extended, fragment, agree, originalSatisfied, completed, filled, afterSatisfied⟩ :=
+    accepting ambient assignment terms satisfied childrenAccepted
+      (by simpa only [termShape] using guardHolds)
+      (by simpa only [termShape] using inherited)
+  refine ⟨tries, residual, projected, allowed, r, n, p, h, k, afterCaller, after, savedQueries,
+    final, next, afterRoots, result, ?_, extended, fragment, agree, originalSatisfied, completed, ?_, afterSatisfied⟩
+  · exact ⟨running, post, querySame, growth, afterPaths, storage, afterRealized, afterCounts,
+      afterFlags, origin, pendingInputs, protects, pendingHistory, incomingHistory, shape,
+      returnedFits, returnedKnown, accepting⟩
+  · simpa only [termShape] using filled

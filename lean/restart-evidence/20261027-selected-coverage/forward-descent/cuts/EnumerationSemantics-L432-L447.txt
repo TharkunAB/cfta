@@ -1,0 +1,16 @@
+
+/-- Pointwise child evidence maps both sides without changing their order. -/
+theorem all₂_map_both (leftMap : α → γ) (rightMap : β → δ) (relation : α → β → Prop)
+    (target : γ → δ → Prop) (step : ∀ left right, relation left right → target (leftMap left) (rightMap right))
+    (left : List α) (right : List β) (related : All₂ relation left right) :
+    All₂ target (left.map leftMap) (right.map rightMap) := by
+  induction related with
+  | nil => exact .nil
+  | cons head _ ih => exact .cons (step _ _ head) ih
+
+/-- Pointwise child evidence identifies the corresponding input at each output index. -/
+theorem all₂_get_right (relation : α → β → Prop) (left : List α) (right : List β)
+    (related : All₂ relation left right) (index : Nat) (output : β) (found : right[index]? = some output) :
+    ∃ input, left[index]? = some input ∧ relation input output := by
+  induction related generalizing index with
+  | nil => simp at found

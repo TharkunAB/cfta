@@ -1,0 +1,223 @@
+MicroCFTA.SourcePruningEnumerationSelectedEdge.accepted_complete {bits : Nat}
+  [DecidableEq MicroCFTA.SourcePruningTemplates.Symbol]
+  [DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey MicroCFTA.SourcePruningTemplates.Symbol
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  [DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.Value MicroCFTA.SourcePruningTemplates.Symbol
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  (seed : MicroCFTA.SourcePruningEnumerationIncomingReservation.Seed)
+  (formulas : MicroCFTA.SourceGuards.Formulas MicroCFTA.FullSyntax.Formula)
+  (solver : MicroCFTA.SourceGuards.Entailment MicroCFTA.FullSyntax.Formula)
+  (inventory : MicroCFTA.SourceCurrentAllocatedNativeInventoryState.Inventory)
+  (caller : MicroCFTA.SourceCurrentAllocatedPartialState.State (bits + 2))
+  (before :
+    MicroCFTA.EnumerationExpandableIndex.Cached MicroCFTA.SourcePruningTemplates.Symbol
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+  (checkEmpty : Bool) (parentEntry : MicroCFTA.Cache.Interned MicroCFTA.InternedBinderProtocol.NodeKey)
+  (edges :
+    List
+      (MicroCFTA.InternedConstructorTemplates.EdgeValue MicroCFTA.SourcePruningTemplates.Symbol
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)))
+  (depth : Nat) (free : List MicroCFTA.InternedBinderProtocol.Reference)
+  (edge :
+    MicroCFTA.InternedConstructorTemplates.EdgeValue MicroCFTA.SourcePruningTemplates.Symbol
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+  (scs : List MicroCFTA.EnumerationState.Suspended) (roots : Nat → Nat) (memos : MicroCFTA.EndpointMemoGateTrace.Memos)
+  (initial : MicroCFTA.SourceCurrentAllocatedPartialInvariant.Context formulas solver inventory caller memos)
+  (parentAvailable :
+    MicroCFTA.InternedProbeProvenance.Available caller.checked.native.machine.heap
+      (MicroCFTA.InternedConstructorTemplates.Value.node parentEntry edges depth free))
+  (parentClosed : free = []) (selected : edge ∈ edges) (safe : MicroCFTA.EnumerationSchedule.Safe before.core)
+  (realized :
+    MicroCFTA.SourcePruningEnumerationObservation.PendingRealized caller.checked.native.machine.heap before.core)
+  (paths : MicroCFTA.EnumerationSchedule.Roots before.core.representatives roots)
+  (counts : MicroCFTA.EnumerationCanonicalWaiting.Correct roots before.core.values before.waiting)
+  (flags :
+    ∀ (slot : Nat),
+      MicroCFTA.SourcePruningEnumerationNativeIndex.candidate caller.checked.native.machine.heap
+          (before.core.values[slot]?.getD MicroCFTA.EnumerationState.UVarValue.eliminated) =
+        some (before.expandable slot))
+  (bounded : ∀ (sc : MicroCFTA.EnumerationState.Suspended), sc ∈ scs → sc.var < before.core.counter)
+  (pending : MicroCFTA.EnumerationDependencies.InputsPending before.core scs)
+  (fits : MicroCFTA.SourceCurrentConstrainedCapGeneratedQueryResources.Fits seed.snd caller.checked)
+  (reserved :
+    ∀ (tries : List MicroCFTA.EqualityTrie.Trie)
+      (residual : Option (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)),
+      MicroCFTA.SourcePruningEnumerationConstraint.project edge.entry.key.constraint = some (tries, residual) →
+        MicroCFTA.SourcePruningEnumerationIncomingReservation.Reserved bits seed
+          (MicroCFTA.SourcePruningEnumerationSelectedEdge.cost edge scs before.core.counter tries))
+  (known :
+    MicroCFTA.SourceEqualityAnnotationHeap.Heap (fun guard => guard ∈ seed.fst) caller.checked.native.machine.heap)
+  (ambient : MicroCFTA.InternedGuardedLanguage.Env MicroCFTA.SourcePruningTemplates.Symbol)
+  (assignment : Nat → MicroCFTA.Language.Term MicroCFTA.SourcePruningTemplates.Symbol)
+  (term : MicroCFTA.Language.Term MicroCFTA.SourcePruningTemplates.Symbol)
+  (satisfied :
+    MicroCFTA.EnumerationCorrectness.Satisfies
+      (MicroCFTA.SourcePruningEnumerationNativeLanguage.handles (MicroCFTA.SourceEqualityPCSGuard.holds formulas solver)
+        ambient caller.checked.native.machine.heap)
+      (fun guard candidate => MicroCFTA.SourceEqualityPCSGuard.holds formulas solver guard candidate = true) assignment
+      before.core)
+  (accepted :
+    MicroCFTA.InternedGuardedLanguage.edgeMeaning (MicroCFTA.SourceEqualityPCSGuard.holds formulas solver) ambient edge
+      term)
+  (inherited :
+    ∀ (sc : MicroCFTA.EnumerationState.Suspended),
+      sc ∈ scs → MicroCFTA.EnumerationState.Suspended.Holds assignment term sc) :
+  ∃ tries residual,
+    MicroCFTA.SourcePruningEnumerationConstraint.project edge.entry.key.constraint = some (tries, residual) ∧
+      MicroCFTA.EnumerationState.arityAllows edge.children.length scs = true ∧
+        ∃ r n p h k afterCaller after savedQueries final next afterRoots result,
+          ((∀ (er en P H ek : Nat),
+                p ≤ P →
+                  h ≤ H →
+                    MicroCFTA.SourcePruningEnumerationSelectedEdge.run checkEmpty (r + er) (n + en) P H (k + ek) scs
+                        edge caller before memos.query =
+                      result) ∧
+              MicroCFTA.SourceCurrentAllocatedPartialInvariant.Post formulas solver next caller afterCaller final ∧
+                final.query = savedQueries ∧
+                  before.core.counter ≤ after.core.counter ∧
+                    MicroCFTA.EnumerationSchedule.Roots after.core.representatives afterRoots ∧
+                      MicroCFTA.EnumerationCorrectness.StorageValid after.core ∧
+                        MicroCFTA.SourcePruningEnumerationObservation.PendingRealized
+                            afterCaller.checked.native.machine.heap after.core ∧
+                          MicroCFTA.EnumerationCanonicalWaiting.Correct afterRoots after.core.values after.waiting ∧
+                            (∀ (slot : Nat),
+                                MicroCFTA.SourcePruningEnumerationNativeIndex.candidate
+                                    afterCaller.checked.native.machine.heap
+                                    (after.core.values[slot]?.getD MicroCFTA.EnumerationState.UVarValue.eliminated) =
+                                  some (after.expandable slot)) ∧
+                              MicroCFTA.EnumerationDependencies.EnumeratedOrigin before.core after.core ∧
+                                MicroCFTA.EnumerationDependencies.InputsPending after.core scs ∧
+                                  (∀ (held : Nat),
+                                      held < before.core.counter →
+                                        MicroCFTA.EnumerationSchedule.IsRoot before.core.representatives held →
+                                          MicroCFTA.EnumerationCorrectness.Avoids before.core.representatives held scs →
+                                            MicroCFTA.EnumerationDriver.Protected held before.core after.core) ∧
+                                    (MicroCFTA.EnumerationReferences.PendingReferences before.core →
+                                        MicroCFTA.EnumerationReferences.PendingReferences after.core) ∧
+                                      (∀ (held : Nat),
+                                          held < before.core.counter →
+                                            MicroCFTA.EnumerationSchedule.IsRoot before.core.representatives held →
+                                              MicroCFTA.EnumerationCorrectness.Avoids before.core.representatives held
+                                                  scs →
+                                                MicroCFTA.EnumerationReferences.IncomingAvoid held before.core →
+                                                  MicroCFTA.EnumerationReferences.IncomingAvoid held after.core) ∧
+                                        ((∃ fragment,
+                                              result =
+                                                  MicroCFTA.SourcePruningEnumerationSelectedEdge.Result.complete
+                                                    fragment afterCaller savedQueries after ∧
+                                                MicroCFTA.EnumerationSchedule.Safe after.core ∧
+                                                  MicroCFTA.EnumerationCorrectness.FragmentBound after.core.counter
+                                                      fragment ∧
+                                                    MicroCFTA.EnumerationDependencies.PendingFragment after.core
+                                                        fragment ∧
+                                                      ∀ (held : Nat),
+                                                        held < before.core.counter →
+                                                          MicroCFTA.EnumerationSchedule.IsRoot
+                                                              before.core.representatives held →
+                                                            MicroCFTA.EnumerationCorrectness.Avoids
+                                                                before.core.representatives held scs →
+                                                              MicroCFTA.EnumerationDependencies.FragmentAvoid
+                                                                after.core.representatives held fragment) ∨
+                                            ∃ fragments outer waiting,
+                                              result =
+                                                MicroCFTA.SourcePruningEnumerationSelectedEdge.Result.stopped fragments
+                                                  (Except.ok (some []), afterCaller, savedQueries, outer, waiting)
+                                                  (some after)) ∧
+                                          MicroCFTA.SourceCurrentConstrainedCapGeneratedQueryResources.Fits
+                                              (MicroCFTA.SourcePruningEnumerationIncomingReservation.advance seed
+                                                  (MicroCFTA.SourcePruningEnumerationSelectedEdge.cost edge scs
+                                                    before.core.counter tries)).snd
+                                              afterCaller.checked ∧
+                                            MicroCFTA.SourceEqualityAnnotationHeap.Heap
+                                                (fun guard =>
+                                                  guard ∈
+                                                    (MicroCFTA.SourcePruningEnumerationIncomingReservation.advance seed
+                                                        (MicroCFTA.SourcePruningEnumerationSelectedEdge.cost edge scs
+                                                          before.core.counter tries)).fst)
+                                                afterCaller.checked.native.machine.heap ∧
+                                              ∀
+                                                (ambient :
+                                                  MicroCFTA.InternedGuardedLanguage.Env
+                                                    MicroCFTA.SourcePruningTemplates.Symbol)
+                                                (assignment :
+                                                  Nat → MicroCFTA.Language.Term MicroCFTA.SourcePruningTemplates.Symbol)
+                                                (terms :
+                                                  List
+                                                    (MicroCFTA.Language.Term MicroCFTA.SourcePruningTemplates.Symbol)),
+                                                MicroCFTA.EnumerationCorrectness.Satisfies
+                                                    (MicroCFTA.SourcePruningEnumerationNativeLanguage.handles
+                                                      (MicroCFTA.SourceEqualityPCSGuard.holds formulas solver) ambient
+                                                      caller.checked.native.machine.heap)
+                                                    (fun guard term =>
+                                                      MicroCFTA.SourceEqualityPCSGuard.holds formulas solver guard
+                                                          term =
+                                                        true)
+                                                    assignment before.core →
+                                                  MicroCFTA.Language.All₂
+                                                      (MicroCFTA.InternedGuardedLanguage.meaning
+                                                        (MicroCFTA.SourceEqualityPCSGuard.holds formulas solver)
+                                                        ambient)
+                                                      edge.children terms →
+                                                    MicroCFTA.SourceEqualityPCSGuard.holds formulas solver
+                                                          edge.entry.key.constraint
+                                                          (MicroCFTA.Language.Term.node edge.entry.key.symbol terms) =
+                                                        true →
+                                                      (∀ (sc : MicroCFTA.EnumerationState.Suspended),
+                                                          sc ∈ scs →
+                                                            MicroCFTA.EnumerationState.Suspended.Holds assignment
+                                                              (MicroCFTA.Language.Term.node edge.entry.key.symbol terms)
+                                                              sc) →
+                                                        ∃ extended fragment,
+                                                          (∀ (uv : Nat),
+                                                              uv < before.core.counter → extended uv = assignment uv) ∧
+                                                            MicroCFTA.EnumerationCorrectness.Satisfies
+                                                                (MicroCFTA.SourcePruningEnumerationNativeLanguage.handles
+                                                                  (MicroCFTA.SourceEqualityPCSGuard.holds formulas
+                                                                    solver)
+                                                                  ambient caller.checked.native.machine.heap)
+                                                                (fun guard term =>
+                                                                  MicroCFTA.SourceEqualityPCSGuard.holds formulas solver
+                                                                      guard term =
+                                                                    true)
+                                                                extended before.core ∧
+                                                              result =
+                                                                  MicroCFTA.SourcePruningEnumerationSelectedEdge.Result.complete
+                                                                    fragment afterCaller savedQueries after ∧
+                                                                MicroCFTA.Fragments.fill extended fragment =
+                                                                    MicroCFTA.Language.Term.node edge.entry.key.symbol
+                                                                      terms ∧
+                                                                  MicroCFTA.EnumerationCorrectness.Satisfies
+                                                                    (MicroCFTA.SourcePruningEnumerationNativeLanguage.handles
+                                                                      (MicroCFTA.SourceEqualityPCSGuard.holds formulas
+                                                                        solver)
+                                                                      ambient afterCaller.checked.native.machine.heap)
+                                                                    (fun guard term =>
+                                                                      MicroCFTA.SourceEqualityPCSGuard.holds formulas
+                                                                          solver guard term =
+                                                                        true)
+                                                                    extended after.core) ∧
+            ∃ extended fragment,
+              (∀ (uv : Nat), uv < before.core.counter → extended uv = assignment uv) ∧
+                MicroCFTA.EnumerationCorrectness.Satisfies
+                    (MicroCFTA.SourcePruningEnumerationNativeLanguage.handles
+                      (MicroCFTA.SourceEqualityPCSGuard.holds formulas solver) ambient
+                      caller.checked.native.machine.heap)
+                    (fun guard candidate =>
+                      MicroCFTA.SourceEqualityPCSGuard.holds formulas solver guard candidate = true)
+                    extended before.core ∧
+                  result =
+                      MicroCFTA.SourcePruningEnumerationSelectedEdge.Result.complete fragment afterCaller savedQueries
+                        after ∧
+                    MicroCFTA.Fragments.fill extended fragment = term ∧
+                      MicroCFTA.EnumerationCorrectness.Satisfies
+                        (MicroCFTA.SourcePruningEnumerationNativeLanguage.handles
+                          (MicroCFTA.SourceEqualityPCSGuard.holds formulas solver) ambient
+                          afterCaller.checked.native.machine.heap)
+                        (fun guard candidate =>
+                          MicroCFTA.SourceEqualityPCSGuard.holds formulas solver guard candidate = true)
+                        extended after.core
+'MicroCFTA.SourcePruningEnumerationSelectedEdge.accepted_complete' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]

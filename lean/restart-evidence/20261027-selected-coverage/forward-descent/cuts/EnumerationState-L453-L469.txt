@@ -1,0 +1,17 @@
+/-- A terminal suspended trie requires equality with the current complete term. -/
+theorem terminal_requirement (assignment : Nat → Term Symbol) (term : Term Symbol) (uv : Nat) :
+    Suspended.Holds assignment term ⟨.terminal, uv⟩ ↔ term = assignment uv := by
+  simp [Suspended.Holds, EqualityTrie.fromPathTrie, Term.atPath]
+
+/-- Descent preserves every inherited suspended equality at an existing child. -/
+theorem suspended_descent_sound (assignment : Nat → Term Symbol)
+    (symbol : Symbol) (children : List (Term Symbol)) (scs : List Suspended)
+    (valid : ∀ sc ∈ scs, EqualityTrie.Valid sc.trie)
+    (holds : ∀ sc ∈ scs, Suspended.Holds assignment (.node symbol children) sc)
+    (index : Nat) (child : Term Symbol) (found : children[index]? = some child) :
+    ∀ sc ∈ descendScs index scs, Suspended.Holds assignment child sc := by
+  intro sc member suffix present
+  obtain ⟨original, originalMember, same, path⟩ :=
+    (EqualityTrie.descendScs_exact index scs valid sc.var suffix).mp ⟨sc, member, rfl, present⟩
+  have equality := holds original originalMember (index :: suffix) path
+  simpa [Term.atPath, found, same] using equality

@@ -1,0 +1,11 @@
+theorem suspended_arity_necessary (assignment : Nat → Term Symbol)
+    (symbol : Symbol) (children : List (Term Symbol)) (scs : List Suspended)
+    (holds : ∀ sc ∈ scs, Suspended.Holds assignment (.node symbol children) sc) :
+    arityAllows children.length scs = true := by
+  apply arityAllows_correct _ _ |>.mpr
+  intro sc member index suffix path
+  have equality := holds sc member (index :: suffix) path
+  obtain ⟨child, found, _⟩ := Option.bind_eq_some_iff.mp equality
+  exact (List.getElem?_eq_some_iff.mp found).1
+
+/-- Arity, root equalities, and all descended obligations reconstruct every original obligation. -/

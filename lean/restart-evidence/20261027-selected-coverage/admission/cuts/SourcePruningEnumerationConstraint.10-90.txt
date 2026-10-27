@@ -1,0 +1,81 @@
+noncomputable def project (constraint : SourceSymbolicIndex.Constraint Formula) :
+    Option (List EqualityTrie.Trie × Option (SourceSymbolicIndex.Constraint Formula))
+ :=
+  match sourceEqualities constraint with
+  | none => none
+  | some classes =>
+      some (EnumerationEquality.readClasses classes,
+        if (positive constraint.guard).isSome then none else some constraint)
+
+/-- Derive valid path tries and the exact complete-constraint meaning of the projection. -/
+theorem project_complete [DecidableEq Formula]
+    (constraint : SourceSymbolicIndex.Constraint Formula) (cached : Cached constraint.equalities) :
+    match sourceEqualities constraint with
+    | none => project constraint = none ∧
+        ∀ (formulas : Formulas Formula) (solver : Entailment Formula) (term : Term (Label Formula)),
+          SourceEqualityPCSGuard.holds formulas solver constraint term ≠ true
+    | some classes =>
+        project constraint = some (EnumerationEquality.readClasses classes,
+          if (positive constraint.guard).isSome then none else some constraint) ∧
+        (∀ trie ∈ EnumerationEquality.readClasses classes, EqualityTrie.Valid trie) ∧
+        (∀ paths ∈ classes, ∀ path,
+          path ∈ EqualityTrie.fromPathTrie (EnumerationEquality.classTrie paths) ↔ path ∈ paths) ∧
+        ∀ (formulas : Formulas Formula) (solver : Entailment Formula) (term : Term (Label Formula)),
+          SourceEqualityPCSGuard.holds formulas solver constraint term = true ↔
+            (∀ trie ∈ EnumerationEquality.readClasses classes, EqualityHolds term trie) ∧
+              ResidualHolds (fun complete candidate =>
+                SourceEqualityPCSGuard.holds formulas solver complete candidate = true)
+                (if (positive constraint.guard).isSome then none else some constraint) term
+ := by
+  cases source : sourceEqualities constraint with
+  | none =>
+      refine ⟨?_, ?_⟩
+      · simp only [project, source]
+      · intro formulas solver term accepted
+        simpa only [source, Sat] using
+          SourceEqualityPCSGuard.own_sat formulas solver constraint term accepted
+  | some classes =>
+      have actual : NormalClasses classes := by
+        exact source_cached constraint cached classes source
+      have readback : ∀ paths ∈ classes, EqualityTrie.Valid (EnumerationEquality.classTrie paths) ∧
+        ∀ path, path ∈ EqualityTrie.fromPathTrie (EnumerationEquality.classTrie paths) ↔ path ∈ paths := by
+        intro paths member
+        obtain ⟨trie, built, valid, _, same⟩ := EqualityTrie.toPathTrie_correct paths.eraseDups
+          (EqualityNormalize.consistent_supported classes actual.2.1 paths member)
+        simp only [EnumerationEquality.classTrie, built, Option.getD_some]
+        refine ⟨valid, ?_⟩
+        intro path
+        exact (same path).trans (by simp)
+      have equalityExact : ∀ term : Term (Label Formula),
+        (∀ trie ∈ EnumerationEquality.readClasses classes, EqualityHolds term trie) ↔
+          EqualityNormalize.Satisfies term classes := by
+        intro term
+        simp only [EnumerationEquality.readClasses, List.forall_mem_map, EqualityNormalize.Satisfies]
+        apply forall_congr'
+        intro paths
+        apply forall_congr'
+        intro member
+        exact EnumerationEquality.trie_pcs_exact term (EnumerationEquality.classTrie paths) paths
+          (readback paths member).2 (actual.1 paths member)
+      refine ⟨?_, ?_, ?_, ?_⟩
+      · simp only [project, source]
+      · intro trie member
+        obtain ⟨paths, present, rfl⟩ := List.mem_map.mp member
+        exact (readback paths present).1
+      · intro paths member
+        exact (readback paths member).2
+      · intro formulas solver term
+        by_cases positiveGuard : (positive constraint.guard).isSome = true
+        · simpa only [positiveGuard, ↓reduceIte, ResidualHolds, and_true] using
+            (SourceEqualityPCSGuard.positive_source formulas solver constraint positiveGuard term).trans
+              (by simpa only [source, Sat] using (equalityExact term).symm)
+        · simp only [positiveGuard, ResidualHolds]
+          constructor
+          · intro accepted
+            refine ⟨(equalityExact term).mpr ?_, accepted⟩
+            simpa only [source, Sat] using
+              SourceEqualityPCSGuard.own_sat formulas solver constraint term accepted
+          · intro satisfied
+            exact satisfied.2
+
+end MicroCFTA.SourcePruningEnumerationConstraint

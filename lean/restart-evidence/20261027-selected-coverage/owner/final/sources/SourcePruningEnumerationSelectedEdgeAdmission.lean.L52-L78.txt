@@ -1,0 +1,27 @@
+theorem selected_admission {width : Nat} [DecidableEq (EdgeKey Symbol Constraint)]
+    (formulas : SourceGuards.Formulas FullSyntax.Formula)
+    (solver : SourceGuards.Entailment FullSyntax.Formula)
+    (inventory : Inventory) (caller : Caller width) (memos : Memos)
+    (parentEntry : Cache.Interned InternedBinderProtocol.NodeKey)
+    (edges : List (EdgeValue Symbol Constraint)) (depth : Nat)
+    (free : List InternedBinderProtocol.Reference)
+    (edge : EdgeValue Symbol Constraint) (scs : List Suspended)
+    (initial : Context formulas solver inventory caller memos)
+    (parentAvailable : Available caller.checked.native.machine.heap (.node parentEntry edges depth free))
+    (selected : edge ∈ edges)
+    (ambient : InternedGuardedLanguage.Env Symbol)
+    (assignment : Nat → Term Symbol) (term : Term Symbol)
+    (accepted : InternedGuardedLanguage.edgeMeaning
+      (SourceEqualityPCSGuard.holds formulas solver) ambient edge term)
+    (inherited : ∀ sc ∈ scs, Suspended.Holds assignment term sc) :
+    ∃ (tries : List EqualityTrie.Trie) (residual : Option Constraint) (terms : List (Term Symbol)),
+      SourcePruningEnumerationConstraint.project edge.entry.key.constraint = some (tries, residual) ∧
+      (∀ trie ∈ tries, EqualityTrie.Valid trie) ∧
+      term = .node edge.entry.key.symbol terms ∧
+      Language.All₂ (InternedGuardedLanguage.meaning (SourceEqualityPCSGuard.holds formulas solver) ambient)
+        edge.children terms ∧
+      edge.children.length = terms.length ∧
+      arityAllows edge.children.length scs = true ∧
+      (∀ trie ∈ tries, EqualityHolds term trie) ∧
+      ResidualHolds (fun guard candidate =>
+        SourceEqualityPCSGuard.holds formulas solver guard candidate = true) residual term := by

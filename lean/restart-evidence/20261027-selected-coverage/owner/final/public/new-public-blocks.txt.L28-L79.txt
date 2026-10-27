@@ -1,0 +1,52 @@
+MicroCFTA.SourcePruningEnumerationSelectedEdgeAdmission.selected_admission {width : Nat}
+  [DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  (formulas : MicroCFTA.SourceGuards.Formulas MicroCFTA.FullSyntax.Formula)
+  (solver : MicroCFTA.SourceGuards.Entailment MicroCFTA.FullSyntax.Formula)
+  (inventory : MicroCFTA.SourceCurrentAllocatedNativeInventoryState.Inventory)
+  (caller : MicroCFTA.SourceCurrentAllocatedPartialState.State width) (memos : MicroCFTA.EndpointMemoGateTrace.Memos)
+  (parentEntry : MicroCFTA.Cache.Interned MicroCFTA.InternedBinderProtocol.NodeKey)
+  (edges :
+    List
+      (MicroCFTA.InternedConstructorTemplates.EdgeValue
+        (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)))
+  (depth : Nat) (free : List MicroCFTA.InternedBinderProtocol.Reference)
+  (edge :
+    MicroCFTA.InternedConstructorTemplates.EdgeValue (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+  (scs : List MicroCFTA.EnumerationState.Suspended)
+  (initial : MicroCFTA.SourceCurrentAllocatedPartialInvariant.Context formulas solver inventory caller memos)
+  (parentAvailable :
+    MicroCFTA.InternedProbeProvenance.Available caller.checked.native.machine.heap
+      (MicroCFTA.InternedConstructorTemplates.Value.node parentEntry edges depth free))
+  (selected : edge ∈ edges)
+  (ambient : MicroCFTA.InternedGuardedLanguage.Env (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula))
+  (assignment : Nat → MicroCFTA.Language.Term (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula))
+  (term : MicroCFTA.Language.Term (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula))
+  (accepted :
+    MicroCFTA.InternedGuardedLanguage.edgeMeaning (MicroCFTA.SourceEqualityPCSGuard.holds formulas solver) ambient edge
+      term)
+  (inherited :
+    ∀ (sc : MicroCFTA.EnumerationState.Suspended),
+      sc ∈ scs → MicroCFTA.EnumerationState.Suspended.Holds assignment term sc) :
+  ∃ tries residual terms,
+    MicroCFTA.SourcePruningEnumerationConstraint.project edge.entry.key.constraint = some (tries, residual) ∧
+      (∀ (trie : MicroCFTA.EqualityTrie.Trie), trie ∈ tries → MicroCFTA.EqualityTrie.Valid trie) ∧
+        term = MicroCFTA.Language.Term.node edge.entry.key.symbol terms ∧
+          MicroCFTA.Language.All₂
+              (MicroCFTA.InternedGuardedLanguage.meaning (MicroCFTA.SourceEqualityPCSGuard.holds formulas solver)
+                ambient)
+              edge.children terms ∧
+            edge.children.length = terms.length ∧
+              MicroCFTA.EnumerationState.arityAllows edge.children.length scs = true ∧
+                (∀ (trie : MicroCFTA.EqualityTrie.Trie),
+                    trie ∈ tries → MicroCFTA.EnumerationCorrectness.EqualityHolds term trie) ∧
+                  MicroCFTA.EnumerationCorrectness.ResidualHolds
+                    (fun guard candidate =>
+                      MicroCFTA.SourceEqualityPCSGuard.holds formulas solver guard candidate = true)
+                    residual term
+'MicroCFTA.SourcePruningEnumerationSelectedEdgeAdmission.selected_admission' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]

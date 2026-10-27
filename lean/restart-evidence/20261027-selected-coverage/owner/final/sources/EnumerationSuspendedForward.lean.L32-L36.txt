@@ -1,0 +1,5 @@
+theorem suspended_descent_forward (assignment : Nat → Term Symbol)
+    (symbol : Symbol) (children : List (Term Symbol)) (scs : List Suspended)
+    (holds : ∀ sc ∈ scs, Suspended.Holds assignment (.node symbol children) sc)
+    (index : Nat) (child : Term Symbol) (found : children[index]? = some child) :
+    ∀ sc ∈ descendScs index scs, Suspended.Holds assignment child sc := by

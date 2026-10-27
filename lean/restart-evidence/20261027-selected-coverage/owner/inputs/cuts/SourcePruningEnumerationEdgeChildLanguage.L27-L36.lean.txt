@@ -1,0 +1,10 @@
+  cases incoming <;> first
+    | exact effective
+    | rcases retained with ordinary | hasTerminal | emptyBucket
+      · cases ordinary
+      · simpa only [hasTerminal, ↓reduceIte] using effective
+      · simp only [emptyBucket, List.not_mem_nil, false_implies, implies_true]
+
+private theorem descend_append (index : Nat) (first second : List Suspended) :
+    descendScs index (first ++ second) = descendScs index first ++ descendScs index second := by
+  simp only [descendScs, EqualityTrie.descendScs, List.map_append, List.filter_append]

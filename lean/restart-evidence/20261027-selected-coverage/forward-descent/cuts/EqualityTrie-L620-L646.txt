@@ -1,0 +1,27 @@
+  var : Variable
+
+/-- Descend each obligation and remove exactly the structurally empty tries. -/
+def descendScs (index : Nat) (constraints : List (Suspended Variable)) : List (Suspended Variable) :=
+  (constraints.map (fun constraint => ⟨pathTrieDescend constraint.trie index, constraint.var⟩)).filter
+    (fun constraint => !isEmpty constraint.trie)
+
+/-- Suspended descent retains exactly the requested suffixes and their original variables. -/
+theorem descendScs_exact (index : Nat) (constraints : List (Suspended Variable))
+    (valid : ∀ constraint ∈ constraints, Valid constraint.trie) (var : Variable) (suffix : Path) :
+    (∃ constraint ∈ descendScs index constraints,
+      constraint.var = var ∧ suffix ∈ fromPathTrie constraint.trie) ↔
+    ∃ constraint ∈ constraints,
+      constraint.var = var ∧ index :: suffix ∈ fromPathTrie constraint.trie := by
+  constructor
+  · rintro ⟨constraint, member, same, present⟩
+    obtain ⟨mapped, _⟩ := List.mem_filter.mp member
+    obtain ⟨original, originalMember, rfl⟩ := List.mem_map.mp mapped
+    exact ⟨original, originalMember, same, (descend_exact original.trie (valid original originalMember) index suffix).mp present⟩
+  · rintro ⟨original, member, same, present⟩
+    have descended := (descend_exact original.trie (valid original member) index suffix).mpr present
+    refine ⟨⟨pathTrieDescend original.trie index, original.var⟩, ?_, same, descended⟩
+    apply List.mem_filter.mpr
+    refine ⟨List.mem_map.mpr ⟨original, member, rfl⟩, ?_⟩
+    have notEmpty : isEmpty (pathTrieDescend original.trie index) ≠ true := by
+      intro empty
+      have noPaths := (empty_exact _ (descend_valid original.trie (valid original member) index)).mp empty

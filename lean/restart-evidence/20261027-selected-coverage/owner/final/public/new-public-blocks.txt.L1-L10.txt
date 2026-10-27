@@ -1,0 +1,10 @@
+MicroCFTA.EnumerationState.suspended_descent_forward {Symbol : Type} (assignment : Nat → MicroCFTA.Language.Term Symbol)
+  (symbol : Symbol) (children : List (MicroCFTA.Language.Term Symbol)) (scs : List MicroCFTA.EnumerationState.Suspended)
+  (holds :
+    ∀ (sc : MicroCFTA.EnumerationState.Suspended),
+      sc ∈ scs →
+        MicroCFTA.EnumerationState.Suspended.Holds assignment (MicroCFTA.Language.Term.node symbol children) sc)
+  (index : Nat) (child : MicroCFTA.Language.Term Symbol) (found : children[index]? = some child)
+  (sc : MicroCFTA.EqualityTrie.Suspended Nat) :
+  sc ∈ MicroCFTA.EnumerationState.descendScs index scs → MicroCFTA.EnumerationState.Suspended.Holds assignment child sc
+'MicroCFTA.EnumerationState.suspended_descent_forward' depends on axioms: [propext, Quot.sound]

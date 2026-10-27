@@ -1,0 +1,15 @@
+        id
+        (fun indexed child =>
+          InternedGuardedLanguage.meaning (SourceEqualityPCSGuard.holds formulas solver)
+            ambient indexed.1 child ∧
+          ∀ sc ∈ descendScs indexed.2 (scs ++ suspendedVars before.core.counter tries),
+            Suspended.Holds witnesses child sc)
+        (fun input term =>
+          InternedGuardedLanguage.meaning (SourceEqualityPCSGuard.holds formulas solver)
+            ambient input.1 term ∧ ∀ sc ∈ input.2, Suspended.Holds witnesses term sc)
+        (fun _ _ evidence => ⟨evidence.1, by
+          simpa only [id_eq, descendScs, EqualityTrie.descendScs, List.map_append, List.filter_append]
+            using evidence.2⟩)
+        edge.children.zipIdx terms indexedModels
+      simpa only [inputs, SourcePruningEnumerationEdgeInputs.children, List.map_id] using mapped
+    obtain ⟨extended, childAgree, _ownOriginalSatisfied, completed, filled, afterSatisfied⟩ :=

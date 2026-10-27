@@ -1,0 +1,13 @@
+theorem projected_of_accepted {Formula : Type} [DecidableEq Formula]
+    (formulas : SourceGuards.Formulas Formula)
+    (solver : SourceGuards.Entailment Formula)
+    (constraint : SourceSymbolicIndex.Constraint Formula)
+    (cached : SourceEqualityGuardReadback.Cached constraint.equalities)
+    (term : Term (SourceObservations.Label Formula))
+    (accepted : SourceEqualityPCSGuard.holds formulas solver constraint term = true) :
+    ∃ (tries : List EqualityTrie.Trie) (residual : Option (SourceSymbolicIndex.Constraint Formula)),
+      SourcePruningEnumerationConstraint.project constraint = some (tries, residual) ∧
+      (∀ trie ∈ tries, EqualityTrie.Valid trie) ∧
+      (∀ trie ∈ tries, EqualityHolds term trie) ∧
+      ResidualHolds (fun guard candidate =>
+        SourceEqualityPCSGuard.holds formulas solver guard candidate = true) residual term := by

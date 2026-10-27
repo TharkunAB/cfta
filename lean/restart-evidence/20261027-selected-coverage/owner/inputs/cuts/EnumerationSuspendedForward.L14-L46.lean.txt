@@ -1,0 +1,33 @@
+private theorem descended_path_original (trie : EqualityTrie.Trie)
+    (index : Nat) (suffix : EqualityTrie.Path)
+    (member : suffix ∈ EqualityTrie.fromPathTrie (EqualityTrie.pathTrieDescend trie index)) :
+    index :: suffix ∈ EqualityTrie.fromPathTrie trie := by
+  cases trie with
+  | empty | terminal =>
+      simp [EqualityTrie.pathTrieDescend, EqualityTrie.fromPathTrie] at member
+  | branch children =>
+      cases found : EqualityTrie.lookup index children with
+      | none =>
+          simp [EqualityTrie.pathTrieDescend, found, EqualityTrie.fromPathTrie] at member
+      | some child =>
+          have present : suffix ∈ EqualityTrie.fromPathTrie child := by
+            simpa [EqualityTrie.pathTrieDescend, found] using member
+          exact (EqualityTrie.mem_fromChildren children _).mpr
+            ⟨index, child, suffix, EqualityTrie.lookup_mem _ _ _ found, present, rfl⟩
+
+/-- Every actual descended restriction follows from the original complete parent restriction. -/
+theorem suspended_descent_forward (assignment : Nat → Term Symbol)
+    (symbol : Symbol) (children : List (Term Symbol)) (scs : List Suspended)
+    (holds : ∀ sc ∈ scs, Suspended.Holds assignment (.node symbol children) sc)
+    (index : Nat) (child : Term Symbol) (found : children[index]? = some child) :
+    ∀ sc ∈ descendScs index scs, Suspended.Holds assignment child sc := by
+  intro sc member suffix present
+  change sc ∈ EqualityTrie.descendScs index scs at member
+  unfold EqualityTrie.descendScs at member
+  obtain ⟨mapped, _⟩ := List.mem_filter.mp member
+  obtain ⟨original, originalMember, rfl⟩ := List.mem_map.mp mapped
+  have path := descended_path_original original.trie index suffix present
+  have equality := holds original originalMember (index :: suffix) path
+  simpa [Term.atPath, found] using equality
+
+end MicroCFTA.EnumerationState

@@ -1,0 +1,15 @@
+# Selected-edge admission draft
+
+The draft derives actual local admission from an accepted current edge. It does not assume a successful projection, child run, final assignment, or resource forecast.
+
+`projected_of_accepted` splits the actual `SourceCompactGuards.sourceEqualities` result. In the None case, `Constraint.project_complete` contradicts the accepted actual guard. In the Some case, that same theorem provides the exact project equation, valid tries, own EqualityHolds, and the actual complete residual meaning. There is no independent residual interpretation parameter.
+
+`selected_admission` uses the actual native `edgeMeaning_all` decomposition to obtain the ordered child terms, native All₂, parent shape, and accepted guard. The current Context derives annotation normalization at the SAME heap. Actual parent availability and selected row membership give that edge's actual canonical residency. The annotation supplies Cached for that resident key. The first helper then derives actual projection. The inherited Holds evidence at the accepted parent shape derives `arityAllows` by `suspended_arity_necessary`. Native All₂ supplies the equal child length. No inherited trie validity, no-terminal condition, checked-origin arity receipt, Graph, or future operational observation is needed for these forward local gates.
+
+The precise output order is: tries, residual, terms; project equation; valid tries; parent shape; native ordered All₂; child length equality; inherited arity; own EqualityHolds; actual ResidualHolds. The generic helper works for any formula type with DecidableEq. The selected helper works at the actual current caller width and only needs the existing EdgeKey equality instance. It does not change any existing producer.
+
+Resource width is outside this helper. A later completion wrapper must supply original finite reservation for the cost of the actual derived tries. The helper does not grant arbitrary capacity or physical Word checks. It constructs no equality assignment or actual successful selected execution. Those are the constructive coverage producer's obligations. Parent acceptance alone does not ensure `edgesOf` retains this accepting resident edge. Selector and pruning policy, recursive/opaque frontier behavior, and rendering coverage remain open.
+
+Both drafts are immutable. V2 changes only explicit import provenance and the definitionally equal Symbol alias. Root owns compilation and installation. Root strict-selected-admission-1 passes with empty output at 4 GiB and zero swap. The strict snapshot, V2 draft, and installed source are byte equal. This bundle remains OPEN pending installed build, public readback, and final documents. No compiler, build, Git, network, board, repository, or frozen-area write was performed here.
+
+Root installed admission build-selected-admission-1 passes. The full accepted wrapper also passes its first strict check. Its separate review and byte-exact contract comparison are recorded in accepted-wrapper-review.md and contracts/independent-contract-validation.json. Final public, Audit, and documents remain pending.

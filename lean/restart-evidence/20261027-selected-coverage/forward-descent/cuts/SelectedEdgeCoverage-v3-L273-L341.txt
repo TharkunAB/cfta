@@ -1,0 +1,69 @@
+  have pendingPreserved : EnumerationReferences.PendingReferences before.core →
+      EnumerationReferences.PendingReferences after.core := by
+    intro history held fragment stored
+    have old := fullOrigin held fragment stored
+    obtain ⟨inside, root⟩ := enumerated_root before.core safe held fragment old
+    exact incomingPreserved held inside root (pending held fragment old) (history held fragment old)
+  rcases shape with ⟨completed, afterSafe, fragmentHistory⟩ | ⟨outer, waiting, stopped⟩
+  · subst childResult
+    let fragment : Fragment := .node edge.entry.key.symbol fragments
+    let finished := finish residual fragment after
+    have fragmentBound : FragmentBound after.core.counter fragment := by
+      have build : ∀ fragments : List Fragment,
+          (∀ child ∈ fragments, FragmentBound after.core.counter child) →
+          FragmentBound after.core.counter (.node edge.entry.key.symbol fragments) := by
+        intro children childrenBound
+        induction children with
+        | nil => trivial
+        | cons child rest ih =>
+            exact ⟨childrenBound child (by simp), ih (fun item member => childrenBound item (by simp [member]))⟩
+      exact build fragments fragmentBounds
+    have fragmentPending : PendingFragment after.core fragment :=
+      pendingFragment_node after.core _ fragments (fun child member => (fragmentHistory child member).1)
+    have fragmentSeparate : ∀ held, held < before.core.counter → IsRoot before.core.representatives held →
+        Avoids before.core.representatives held scs → FragmentAvoid after.core.representatives held fragment := by
+      intro held inside root avoids uv hole
+      obtain ⟨frame, avoidsChildren⟩ := ownProtects held inside root avoids
+      change HasHole (.node edge.entry.key.symbol fragments) uv at hole
+      cases hole with
+      | child _ _ child _ member below =>
+          exact (fragmentHistory child member).2 held (by omega) frame.root avoidsChildren uv below
+    refine ⟨r, n, p, h, k, afterCaller, finished, savedQueries, final, next, afterRoots,
+      .complete fragment afterCaller savedQueries finished, ?_, post, querySame, ?_, afterPaths,
+      (finish_safe residual fragment after afterSafe fragmentBound).1, afterRealized, afterCounts,
+      afterFlags, fullOrigin, retained, ?_, pendingPreserved, incomingPreserved, .inl ⟨fragment, rfl,
+        finish_safe residual fragment after afterSafe fragmentBound, fragmentBound, fragmentPending, fragmentSeparate⟩,
+      returnedFits, returnedKnown, ?_⟩
+    · intro er en P H ek largeP largeH
+      simp only [run, ownRun]
+      rw [readback, childrenRun er en P H ek largeP largeH]
+    · change before.core.counter ≤ after.core.counter
+      omega
+    · intro held inside root avoids
+      have frame := protectedRoots held inside root avoids
+      exact frame.trans (finish_protected residual fragment after held frame.root)
+    · intro ambient assignment terms satisfied accepted guardHolds inherited
+      obtain ⟨extended, agree, originalSatisfied, _completed, filled, afterSatisfied, residualHolds⟩ :=
+        model ambient assignment terms satisfied accepted guardHolds inherited
+      have termSame : Fragments.fill extended fragment = .node edge.entry.key.symbol terms := by
+        simp only [fragment, Fragments.fill, filled]
+      refine ⟨extended, fragment, agree, originalSatisfied, rfl, termSame, ?_⟩
+      exact (finish_semantics residual fragment after
+        (SourcePruningEnumerationNativeLanguage.handles (SourceEqualityPCSGuard.holds formulas solver)
+          ambient afterCaller.checked.native.machine.heap)
+        (fun guard term => SourceEqualityPCSGuard.holds formulas solver guard term = true) extended).mpr
+        ⟨afterSatisfied, by simpa only [termSame] using residualHolds⟩
+  · subst childResult
+    refine ⟨r, n, p, h, k, afterCaller, after, savedQueries, final, next, afterRoots,
+      .stopped fragments (.ok (some []), afterCaller, savedQueries, outer, waiting) (some after),
+      ?_, post, querySame, ?_, afterPaths, storage, afterRealized, afterCounts, afterFlags,
+      fullOrigin, retained, protectedRoots, pendingPreserved, incomingPreserved,
+      .inr ⟨fragments, outer, waiting, rfl⟩, returnedFits, returnedKnown, ?_⟩
+    · intro er en P H ek largeP largeH
+      simp only [run, ownRun]
+      rw [readback, childrenRun er en P H ek largeP largeH]
+    · omega
+    · intro ambient assignment terms satisfied accepted guardHolds inherited
+      obtain ⟨extended, _agree, _originalSatisfied, impossible, _filled, _afterSatisfied, _residualHolds⟩ :=
+        model ambient assignment terms satisfied accepted guardHolds inherited
+      cases impossible
