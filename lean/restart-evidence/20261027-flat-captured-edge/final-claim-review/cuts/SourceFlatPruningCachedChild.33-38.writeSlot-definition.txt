@@ -1,0 +1,6 @@
+def writeSlot (heap : InternedConstructorTemplates.State Symbol NativeGuard)
+    (target : Nat) (value : UVarValue Symbol) (before : Cached Symbol EnumGuard) :
+    Option (Cached Symbol EnumGuard) :=
+  (before.core.values[target]?).bind fun old =>
+    EnumerationFlatNativeIndex.write heap target value
+      (EnumerationSchedule.references value) (EnumerationSchedule.references old) before

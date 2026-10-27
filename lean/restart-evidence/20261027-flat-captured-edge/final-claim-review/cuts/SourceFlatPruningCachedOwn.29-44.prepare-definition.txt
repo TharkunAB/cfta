@@ -1,0 +1,16 @@
+noncomputable def prepare (heap : InternedConstructorTemplates.State Symbol Constraint)
+    (scs : List Suspended) (edge : EdgeValue Symbol Constraint) (before : Cached Symbol Constraint) :
+    Option (List ((Symbol × List (Value Symbol Constraint × List Suspended ×
+      Option (EnumerationFlatState.Action Symbol Constraint (Fragments.Fragment Symbol))) ×
+        Option Constraint) × Cached Symbol Constraint)) :=
+  if arityAllows edge.children.length scs then
+    match SourcePruningEnumerationConstraint.project edge.entry.key.constraint with
+    | none => none
+    | some (tries, residual) =>
+        (suspendMany heap tries before).map fun result =>
+          [((edge.entry.key.symbol,
+            edge.children.zipIdx.map (fun indexed =>
+              (indexed.1, descendScs indexed.2 scs ++ descendScs indexed.2 result.1,
+                SourceFlatPruningShallowChild.prepareChild (EnumGuard := Constraint)
+                  (descendScs indexed.2 scs ++ descendScs indexed.2 result.1) indexed.1)), residual), result.2)]
+  else some []

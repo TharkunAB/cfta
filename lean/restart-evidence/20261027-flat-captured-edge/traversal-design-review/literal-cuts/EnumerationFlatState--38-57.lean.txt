@@ -1,0 +1,20 @@
+  /-- The current direct-parent representation is valid. -/
+  valid : FlatUnionFind.Valid flat.representatives
+  /-- Every variable has the same representative and stored class size. -/
+  representatives : FlatUnionFind.Represents flat.representatives earlier.representatives
+  /-- Both states use the same fresh identifier. -/
+  counter : flat.counter = earlier.counter
+  /-- All raw value slots are equal. -/
+  values : flat.values = earlier.values
+  /-- All residual obligations are equal and ordered alike. -/
+  obligations : flat.obligations = earlier.obligations
+  /-- Both per-variable ancestry functions are equal. -/
+  recursionAncestry : flat.recursionAncestry = earlier.recursionAncestry
+  /-- Both expansion ancestry lists are equal. -/
+  expansionAncestry : flat.expansionAncestry = earlier.expansionAncestry
+
+/-- The root starts at variable zero with a singleton direct-parent forest. -/
+def initial (root : Nat) : State Symbol Guard :=
+  ⟨1, FlatUnionFind.withInitialValues [0], [.unenumerated (some root) []], [], fun _ => [], []⟩
+
+/-- Initialization relates the complete six-field core states. -/

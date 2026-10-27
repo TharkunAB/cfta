@@ -1,0 +1,11 @@
+noncomputable def run (checkEmpty : Bool) (nativeFuel p h : Nat) :
+    List (Node × List Suspended) → Caller width → Cached → Queries → Result width
+  | [], caller, before, queries => .complete [] caller queries before
+  | (value, bucket) :: rest, caller, before, queries =>
+      match SourceFlatPruningChildDispatch.run checkEmpty nativeFuel p h bucket value caller before queries with
+      | ((.ok (some [.ok (fragment, _returned)]), reached, saved, _outer, _waiting), some after) =>
+          match run checkEmpty nativeFuel p h rest reached after saved with
+          | .complete fragments finalCaller finalQueries final =>
+              .complete (fragment :: fragments) finalCaller finalQueries final
+          | .stopped completed observation candidate => .stopped (fragment :: completed) observation candidate
+      | (observation, candidate) => .stopped [] observation candidate

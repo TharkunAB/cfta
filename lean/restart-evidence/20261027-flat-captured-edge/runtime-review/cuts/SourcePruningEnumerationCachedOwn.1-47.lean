@@ -1,0 +1,47 @@
+import MicroCFTA.SourcePruningEnumerationCachedPrepare
+import MicroCFTA.SourcePruningEnumerationEdgePrefix
+
+namespace MicroCFTA.SourcePruningEnumerationCachedOwn
+open EnumerationState EnumerationSchedule EnumerationCorrectness
+open SourcePruningEnumerationObservation
+local notation "Symbol" => SourcePruningTemplates.Symbol
+local notation "Constraint" => SourceSymbolicIndex.Constraint FullSyntax.Formula
+variable {EnumGuard NativeGuard : Type}
+
+/-- Allocate the selected own-class tries in their actual order. -/
+def suspendMany
+    (heap : InternedConstructorTemplates.State Symbol NativeGuard) :
+    List EqualityTrie.Trie → EnumerationExpandableIndex.Cached Symbol EnumGuard →
+      Option (List EnumerationState.Suspended × EnumerationExpandableIndex.Cached Symbol EnumGuard)
+  | [], before => some ([], before)
+  | trie :: rest, before =>
+      (SourcePruningEnumerationCachedChild.allocate heap none before).bind fun allocation =>
+        (suspendMany heap rest allocation.2).map fun result =>
+          (⟨trie, allocation.1⟩ :: result.1, result.2)
+
+/-- Allocate own classes and capture the existing ordered child actions. -/
+noncomputable def prepare
+    (heap : InternedConstructorTemplates.State Symbol Constraint)
+    (scs : List EnumerationState.Suspended)
+    (edge : InternedConstructorTemplates.EdgeValue Symbol Constraint)
+    (before : EnumerationExpandableIndex.Cached Symbol Constraint) :
+    Option (List ((Symbol ×
+      List (InternedConstructorTemplates.Value Symbol Constraint × List EnumerationState.Suspended ×
+        Option (EnumerateM Symbol Constraint (Fragments.Fragment Symbol))) × Option Constraint) ×
+      EnumerationExpandableIndex.Cached Symbol Constraint)) :=
+  if arityAllows edge.children.length scs then
+    match SourcePruningEnumerationConstraint.project edge.entry.key.constraint with
+    | none => none
+    | some (tries, residual) =>
+        (suspendMany heap tries before).map fun result =>
+          [((edge.entry.key.symbol,
+            edge.children.zipIdx.map (fun indexed =>
+              (indexed.1, descendScs indexed.2 scs ++ descendScs indexed.2 result.1,
+                SourcePruningEnumerationShallowChild.prepareChild (EnumGuard := Constraint)
+                  (descendScs indexed.2 scs ++ descendScs indexed.2 result.1) indexed.1)),
+            residual), result.2)]
+  else some []
+
+/-- Derive the cached own-class traversal and the exact existing core endpoint. -/
+theorem suspendMany_complete
+    (heap : InternedConstructorTemplates.State Symbol NativeGuard)

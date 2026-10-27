@@ -1,0 +1,20 @@
+    (related_roots related) scs
+
+/-- Update the raw slot, its expandable flag and the two ordered count folds. -/
+def write (heap : InternedConstructorTemplates.State Symbol NativeGuard)
+    (target : Nat) (value : EnumerationState.UVarValue Symbol)
+    (gained lost : List EnumerationState.Suspended) (before : Cached Symbol EnumGuard) :
+    Option (Cached Symbol EnumGuard) :=
+  (SourcePruningEnumerationNativeIndex.candidate heap value).map fun flag =>
+    ⟨{before.core with values := before.core.values.set target value},
+      fun other => if other = target then flag else before.expandable other,
+      count before.core.representatives 1 gained
+        (count before.core.representatives (-1) lost before.waiting)⟩
+
+/-- Optional writes fail together or return related complete caches. -/
+def WritesRelated (flat : Option (Cached Symbol EnumGuard))
+    (earlier : Option (EnumerationExpandableIndex.Cached Symbol EnumGuard)) : Prop :=
+  match flat, earlier with
+  | none, none => True
+  | some flat, some earlier => Related flat earlier
+  | _, _ => False

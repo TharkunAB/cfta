@@ -1,0 +1,39 @@
+/-- Run the actual own-class prefix, ordered native children and final residual update. -/
+noncomputable def run (checkEmpty : Bool) (r n p h k : Nat)
+    (scs : List Suspended) (edge : EdgeValue Symbol Constraint)
+    (caller : Caller width) (before : Cached) (queries : Queries) : Result width :=
+  match SourcePruningEnumerationCachedOwn.prepare caller.checked.native.machine.heap scs edge before with
+  | none => .unhandled
+  | some [] => .rejected caller queries before
+  | some [((symbol, staged, residual), middle)] =>
+      match SourcePruningEnumerationChildTraversal.run checkEmpty r n p h k
+          (staged.map (fun input => (input.1, input.2.1))) caller middle queries with
+      | .stopped fragments observation candidate => .stopped fragments observation candidate
+      | .complete fragments afterCaller saved after =>
+          let fragment := Fragments.Fragment.node symbol fragments
+          .complete fragment afterCaller saved (finish residual fragment after)
+  | _ => .unhandled
+
+/-- Numeric admission is required at the actual successful own-class prefix endpoint. -/
+def Ranges (checkEmpty : Bool) (scs : List Suspended) (edge : EdgeValue Symbol Constraint)
+    (caller : Caller width) (before : Cached) (queries : Queries) : Prop :=
+  ∀ symbol staged residual middle,
+    SourcePruningEnumerationCachedOwn.prepare caller.checked.native.machine.heap scs edge before =
+      some [((symbol, staged, residual), middle)] →
+    SourcePruningEnumerationTraversalCompletion.Ranges checkEmpty
+      (staged.map (fun input => (input.1, input.2.1))) caller middle queries
+
+/-- Arity rejection retains the original caller and cache without running a child. -/
+theorem arity_rejected (checkEmpty : Bool) (r n p h k : Nat) (scs : List Suspended)
+    (edge : EdgeValue Symbol Constraint) (caller : Caller width) (before : Cached) (queries : Queries)
+    (rejected : arityAllows edge.children.length scs = false) :
+    run checkEmpty r n p h k scs edge caller before queries = .rejected caller queries before := by
+  simp only [run, SourcePruningEnumerationCachedOwn.prepare, rejected, Bool.false_eq_true, ↓reduceIte]
+
+/-- Unsupported annotations retain the explicit prefix fallback. -/
+theorem unsupported (checkEmpty : Bool) (r n p h k : Nat) (scs : List Suspended)
+    (edge : EdgeValue Symbol Constraint) (caller : Caller width) (before : Cached) (queries : Queries)
+    (allowed : arityAllows edge.children.length scs = true)
+    (projected : SourcePruningEnumerationConstraint.project edge.entry.key.constraint = none) :
+    run checkEmpty r n p h k scs edge caller before queries = .unhandled := by
+  simp only [run, SourcePruningEnumerationCachedOwn.prepare, allowed, ↓reduceIte, projected]

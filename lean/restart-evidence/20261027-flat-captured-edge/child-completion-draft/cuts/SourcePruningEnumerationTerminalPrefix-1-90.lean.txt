@@ -1,0 +1,90 @@
+import MicroCFTA.EnumerationCompleteness
+import MicroCFTA.EnumerationCanonicalUnion
+import MicroCFTA.EnumerationBuilderCaches
+import MicroCFTA.SourcePruningEnumerationObservation
+
+namespace MicroCFTA.SourcePruningEnumerationTerminalPrefix
+open EnumerationState EnumerationCorrectness EnumerationSchedule EnumerationExecution
+open EnumerationCompleteness EnumerationDependencies
+open SourcePruningEnumerationObservation
+local notation "Symbol" => SourcePruningTemplates.Symbol
+variable {EnumGuard NativeGuard : Type}
+
+local instance terminalPrefixMonadList : Monad List where
+  pure value := [value]
+  bind values continuation := values.flatMap continuation
+
+local instance terminalPrefixLawfulMonadList : LawfulMonad List where
+  map_const := rfl
+  id_map := by intro α xs; simp [Functor.map]
+  seqLeft_eq := by
+    intros
+    simp [SeqLeft.seqLeft, Seq.seq, Functor.map, List.flatMap_map, ← List.map_eq_flatMap]
+    simp only [List.map_const']
+  seqRight_eq := by
+    intros
+    simp only [SeqRight.seqRight, Seq.seq, Functor.map, List.flatMap_map]
+    simp
+  pure_seq := by intros; simp [Seq.seq, Functor.map, pure]
+  bind_pure_comp := by intros; simp [bind, pure, Functor.map, ← List.map_eq_flatMap]
+  bind_map := by intros; rfl
+  pure_bind := by intros; simp [pure, bind]
+  bind_assoc := by intros; exact List.flatMap_assoc
+
+/-- Record original roots, join their classes and transfer the old waiting buckets. -/
+def run (fuel : Nat) (first : EnumerationState.Suspended) (rest : List EnumerationState.Suspended)
+    (waiting : EnumerationWaitingIndex.Waiting) :
+    EnumerateM Symbol EnumGuard (List Nat × Nat × EnumerationWaitingIndex.Waiting) := do
+  let recorded ← (first :: rest).mapM fun sc => representative fuel sc.var
+  rest.forM fun sc => unionVariables fuel first.var sc.var
+  let winner ← representative fuel first.var
+  let sources : List Nat :=
+    EnumerationBuilderCaches.canonicalIds (recorded.filter (fun key => key != winner))
+  pure (recorded, winner, EnumerationCanonicalWaiting.moveMany winner sources waiting)
+
+/-- Genuine initial invariants derive the exact prefix at every sufficient fuel. -/
+theorem run_complete
+    (heap : InternedConstructorTemplates.State Symbol NativeGuard)
+    (before : EnumerationState.State Symbol EnumGuard)
+    (first : EnumerationState.Suspended) (rest : List EnumerationState.Suspended)
+    (waiting : EnumerationWaitingIndex.Waiting) (roots : Nat → Nat)
+    (paths : Roots before.representatives roots)
+    (counts : EnumerationCanonicalWaiting.Correct roots before.values waiting)
+    (safe : Safe before)
+    (bounded : ∀ sc ∈ first :: rest, sc.var < before.counter)
+    (pending : InputsPending before (first :: rest))
+    (realized : PendingRealized heap before) :
+    ∃ (fuel : Nat) (recorded : List Nat) (winner : Nat) (saved : EnumerationWaitingIndex.Waiting)
+      (scanned united after : EnumerationState.State Symbol EnumGuard),
+      (∀ (extra : Nat), ExceptT.run (run (fuel + extra) first rest waiting before) =
+        [.ok ((recorded, winner, saved), after)]) ∧
+      (∀ (extra : Nat), ExceptT.run (((first :: rest).mapM fun sc =>
+        representative (fuel + extra) sc.var) before) = [.ok (recorded, scanned)]) ∧
+      (∀ (extra : Nat), ExceptT.run ((rest.forM fun sc =>
+        unionVariables (fuel + extra) first.var sc.var) scanned) = [.ok ((), united)]) ∧
+      (∀ (extra : Nat), ExceptT.run (representative (fuel + extra) first.var united) = [.ok (winner, after)]) ∧
+      recorded = (first :: rest).map (fun sc => roots sc.var) ∧
+      saved = EnumerationCanonicalWaiting.moveMany winner
+        (EnumerationBuilderCaches.canonicalIds (recorded.filter (fun key => key != winner))) waiting ∧
+      winner ∈ recorded ∧ roots winner = winner ∧
+      Roots after.representatives (EnumerationCanonicalUnion.mergedRoots roots recorded winner) ∧
+      EnumerationCanonicalWaiting.Correct (EnumerationCanonicalUnion.mergedRoots roots recorded winner)
+        after.values saved ∧
+      after = {before with representatives := after.representatives} ∧
+      StorageValid after ∧ PendingRealized heap after ∧ PendingAt after winner ∧
+      (∀ (source : Nat), source ∈ recorded → PendingAt after source) ∧
+      (EnumerationBuilderCaches.canonicalIds (recorded.filter (fun key => key != winner))).Nodup ∧
+      (EnumerationBuilderCaches.canonicalIds (recorded.filter (fun key => key != winner))).Pairwise (· ≤ ·) ∧
+      (∀ (key : Nat), key ∈ EnumerationBuilderCaches.canonicalIds (recorded.filter (fun key => key != winner)) ↔
+        key ∈ recorded ∧ key ≠ winner) := by
+  have scanExact : ∀ (fuel : Nat) (items : List EnumerationState.Suspended)
+      (entry exit : EnumerationState.State Symbol EnumGuard) (recorded : List Nat),
+      Success (items.mapM fun sc => representative fuel sc.var) entry recorded exit →
+      ExceptT.run ((items.mapM fun sc => representative fuel sc.var) entry) = [.ok (recorded, exit)] := by
+    intro fuel items
+    induction items with
+    | nil =>
+        intro entry exit recorded observed
+        obtain ⟨valueSame, stateSame⟩ := (success_pure [] recorded entry exit).mp observed
+        rw [valueSame, stateSame]
+        rfl

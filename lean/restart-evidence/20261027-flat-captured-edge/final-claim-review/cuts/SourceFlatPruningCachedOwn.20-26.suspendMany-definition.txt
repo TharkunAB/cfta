@@ -1,0 +1,7 @@
+def suspendMany (heap : InternedConstructorTemplates.State Symbol NativeGuard) :
+    List EqualityTrie.Trie → Cached Symbol EnumGuard → Option (List Suspended × Cached Symbol EnumGuard)
+  | [], before => some ([], before)
+  | trie :: rest, before =>
+      (SourceFlatPruningCachedChild.allocate heap none before).bind fun allocation =>
+        (suspendMany heap rest allocation.2).map fun result =>
+          (⟨trie, allocation.1⟩ :: result.1, result.2)

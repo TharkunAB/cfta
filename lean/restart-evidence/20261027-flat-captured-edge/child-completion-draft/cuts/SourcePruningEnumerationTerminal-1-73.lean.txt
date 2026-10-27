@@ -1,0 +1,73 @@
+import MicroCFTA.SourcePruningEnumerationTerminalPrefix
+import MicroCFTA.SourcePruningEnumerationFoldInvariants
+import MicroCFTA.SourcePruningEnumerationIncomingNode
+
+namespace MicroCFTA.SourcePruningEnumerationTerminal
+open EnumerationState EnumerationCorrectness EnumerationSchedule
+open EnumerationCompleteness EnumerationDependencies
+open InternedConstructorTemplates InternedProbeProvenance
+open SourcePruningEnumerationNodes SourcePruningEnumerationObservation
+open SourceCurrentAllocatedNativeInventoryState (Inventory)
+open SourceCurrentAllocatedPartialInvariant (Context Post)
+local notation "Symbol" => SourcePruningTemplates.Symbol
+local notation "Constraint" => SourceSymbolicIndex.Constraint FullSyntax.Formula
+local notation "Node" => InternedConstructorTemplates.Value Symbol Constraint
+local notation "Caller" => SourceCurrentAllocatedPartialState.State
+local notation "Memos" => EndpointMemoGateTrace.Memos
+local notation "Queries" => SourceEndpointMemo.Memos
+variable {EnumGuard : Type} {width : Nat}
+local notation "PrefixRaw" => List (Except EnumerationState.Error
+  ((List Nat × Nat × EnumerationWaitingIndex.Waiting) × EnumerationState.State Symbol EnumGuard))
+local notation "FoldRaw" => List (Except EnumerationState.Error (Unit × EnumerationState.State Symbol EnumGuard))
+local notation "TerminalRaw" => List (Except EnumerationState.Error
+  (Fragments.Fragment Symbol × EnumerationState.State Symbol EnumGuard))
+local notation "NativeOutcome" => SourceEqualityNativeDemand.Outcome width Node
+local notation "WorkerOutcome" => SourceCurrentAllocatedConjunctionWorker.Outcome width
+
+local instance terminalMonadList : Monad List where
+  pure value := [value]
+  bind values continuation := values.flatMap continuation
+
+/-- Run the terminal prefix, ordered fold and actual incoming merge. -/
+noncomputable def run
+    [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Constraint)] [DecidableEq Node]
+    (checkEmpty : Bool) (representativeFuel nativeFuel p h : Nat)
+    (first : EnumerationState.Suspended) (rest : List EnumerationState.Suspended)
+    (waiting : EnumerationWaitingIndex.Waiting)
+    (beforeCaller : Caller width) (before : EnumerationState.State Symbol EnumGuard)
+    (incoming : Node) (incomingScs : List EnumerationState.Suspended) (queries : Queries) :
+    (Except (PrefixRaw ⊕ ((NativeOutcome ⊕ WorkerOutcome) ⊕ FoldRaw)) (Option TerminalRaw)) ×
+      Caller width × Queries × EnumerationState.State Symbol EnumGuard × EnumerationWaitingIndex.Waiting :=
+  if incoming = .empty then (.ok (some []), beforeCaller, queries, before, waiting)
+  else
+    match ExceptT.run (SourcePruningEnumerationTerminalPrefix.run representativeFuel first rest waiting before) with
+    | [.ok ((recorded, winner, moved), joined)] =>
+      match SourcePruningEnumerationFold.run checkEmpty nativeFuel p h recorded beforeCaller joined winner queries with
+      | (foldResult, foldCaller, foldQueries, foldOuter) =>
+        match foldResult with
+        | .error foldFault => (.error (.inr (.inl foldFault)), foldCaller, foldQueries, foldOuter, moved)
+        | .ok none => (.ok none, foldCaller, foldQueries, foldOuter, moved)
+        | .ok (some foldRaw) =>
+          match foldRaw with
+          | [] => (.ok (some []), foldCaller, foldQueries, foldOuter, moved)
+          | [.ok ((), folded)] =>
+            match SourcePruningEnumerationIncomingNode.run checkEmpty representativeFuel nativeFuel p h
+                foldCaller folded winner incoming incomingScs foldQueries with
+            | (incomingResult, afterCaller, savedQueries, read) =>
+              match incomingResult with
+              | .error incomingFault => (.error (.inr (.inl incomingFault)), afterCaller, savedQueries, read, moved)
+              | .ok none => (.ok none, afterCaller, savedQueries, read, moved)
+              | .ok (some incomingRaw) =>
+                (.ok (some (incomingRaw.map fun row => match row with
+                  | .error error => .error error
+                  | .ok result => .ok (.hole winner, result.2))), afterCaller, savedQueries, read, moved)
+          | stoppedRaw => (.error (.inr (.inr stoppedRaw)), foldCaller, foldQueries, foldOuter, moved)
+    | prefixRaw => (.error (.inl prefixRaw), beforeCaller, queries, before, waiting)
+
+/-- Adding incoming references gives the exact logical gained-only table. -/
+theorem gained_correct
+    (values : List (EnumerationState.UVarValue Symbol)) (target : Nat)
+    (oldNode newNode : Option Nat) (incomingScs oldScs : List EnumerationState.Suspended)
+    (roots : Nat → Nat) (waiting : EnumerationWaitingIndex.Waiting)
+    (stored : values[target]? = some (.unenumerated oldNode oldScs))
+    (counts : EnumerationCanonicalWaiting.Correct roots values waiting) :

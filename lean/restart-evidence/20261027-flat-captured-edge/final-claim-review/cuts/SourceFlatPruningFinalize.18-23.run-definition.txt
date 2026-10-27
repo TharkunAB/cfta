@@ -1,0 +1,6 @@
+def run (heap : InternedConstructorTemplates.State Symbol NativeGuard)
+    (target : Nat) (fragment : Fragments.Fragment Symbol)
+    (before : Cached Symbol EnumGuard) : Option (Cached Symbol EnumGuard) :=
+  let reset := frame {before.core with expansionAncestry := []} before
+  (reset.core.values[target]?).bind fun old =>
+    EnumerationFlatNativeIndex.write heap target (.enumerated fragment) [] (references old) reset

@@ -1,0 +1,25 @@
+  | cons edge rest ih =>
+      obtain ⟨r, n, p, h, k, receipt, middleCaller, middleQueries, middleMemos, middleInventory,
+        headRun, headPost, headQueries, admitted, headPending, headHistory, shape⟩ :=
+        head_complete formulas solver inventory caller before checkEmpty uv handle scs parentEntry storedEdges depth free
+          edge roots memos initial ready stored decoded realized (selected edge (by simp)) paths counts flags pending ranges.1
+      rcases shape with continued | ⟨unhandled, allowed, projected⟩
+      · have kept := headPost.effects.keeps
+        have middleRealized : PendingRealized middleCaller.checked.native.machine.heap before.core :=
+          realized_preserved _ _ before.core before.core realized (EnumerationCompressionFrame.Frame.refl _) kept
+        have middleFlags := SourcePruningEnumerationNativeGrowth.flags _ _ kept before flags
+        have tailRanges : Ranges checkEmpty uv scs before rest middleCaller middleMemos.query := by
+          rw [headQueries]
+          apply ranges.2 r n p h k receipt middleCaller middleQueries
+          · simpa only [Nat.add_zero] using headRun 0 0 p h 0 (Nat.le_refl _) (Nat.le_refl _)
+          · exact continued
+        obtain ⟨tr, tn, tp, th, tk, processed, afterCaller, saved, final, next, tailResult,
+          tailRun, tailPost, querySame, admittedTail, tailPending, tailPosts, tailHistory, tailShape, tailSupported⟩ :=
+          ih middleInventory middleCaller middleMemos headPost.context
+            (lookupNode_keeps _ _ kept handle _ decoded) middleRealized
+            (fun chosen member => selected chosen (List.mem_cons_of_mem _ member)) middleFlags tailRanges
+        let result : Result width := match (generalizing := false) tailResult with
+          | .complete receipts afterCaller saved => .complete (receipt :: receipts) afterCaller saved
+          | .stopped receipts current => .stopped (receipt :: receipts) current
+        refine ⟨r + tr, n + tn, max p tp, max h th, k + tk, receipt :: processed,
+          afterCaller, saved, final, next, result, ?_, headPost.trans tailPost, querySame, ?_, ?_, ?_, ?_, ?_, ?_⟩

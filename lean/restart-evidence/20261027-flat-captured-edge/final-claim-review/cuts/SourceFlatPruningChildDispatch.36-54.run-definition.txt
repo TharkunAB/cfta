@@ -1,0 +1,19 @@
+noncomputable def run (checkEmpty : Bool) (nativeFuel p h : Nat)
+    (scs : List Suspended) (incoming : Node) (caller : Caller width) (before : Cached)
+    (queries : Queries) : Observation width × Option Cached :=
+  if incoming = .empty then
+    ((.ok (some []), caller, queries, before.core, before.waiting), some before)
+  else
+    match scs.partition (fun sc => EqualityTrie.isTerminal sc.trie) with
+    | ([], _) =>
+        let observed : Observation width :=
+          match SourceFlatPruningShallowChild.prepareChild scs incoming with
+          | none => (.ok none, caller, queries, before.core, before.waiting)
+          | some action => (.ok (some (action before.core)), caller, queries, before.core, before.waiting)
+        (observed,
+          match SourceFlatPruningCachedPrepare.prepareChild caller.checked.native.machine.heap scs incoming before with
+          | some [] => some before
+          | some [(_, after)] => some after
+          | _ => none)
+    | (first :: rest, descendants) =>
+        EnumerationFlatNativeTerminal.run checkEmpty nativeFuel p h first rest caller before incoming descendants queries

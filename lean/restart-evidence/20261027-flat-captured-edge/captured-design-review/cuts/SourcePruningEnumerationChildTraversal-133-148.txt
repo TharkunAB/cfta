@@ -1,0 +1,16 @@
+/-- Every stop retains an actual completed-prefix trace and the exact next child call. -/
+theorem stopped_trace
+    (checkEmpty : Bool) (representativeFuel nativeFuel p h indexFuel : Nat)
+    (inputs : List (Node × List Suspended)) (beforeCaller : Caller width)
+    (before : Cached) (queries : Queries) (completedPrefix : List Fragment)
+    (observation : SourcePruningEnumerationChildDispatch.Observation width) (candidate : Option Cached)
+    (stopped : run checkEmpty representativeFuel nativeFuel p h indexFuel inputs beforeCaller before queries =
+      .stopped completedPrefix observation candidate) :
+    ∃ (consumed : List (Node × List Suspended)) (value : Node) (bucket : List Suspended)
+      (remaining : List (Node × List Suspended)) (stoppedCaller : Caller width)
+      (stoppedBefore : Cached) (stoppedQueries : Queries),
+      inputs = consumed ++ ((value, bucket) :: remaining) ∧
+      Trace checkEmpty representativeFuel nativeFuel p h indexFuel consumed beforeCaller before queries
+        completedPrefix stoppedCaller stoppedBefore stoppedQueries ∧
+      SourcePruningEnumerationChildDispatch.run checkEmpty representativeFuel nativeFuel p h indexFuel
+        bucket value stoppedCaller stoppedBefore stoppedQueries = (observation, candidate) := by

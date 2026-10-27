@@ -1,0 +1,39 @@
+/-- A stable actual prefix supplies sufficient old read/count bounds for every fixed native run. -/
+theorem run_stable
+    [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Constraint)] [DecidableEq Node]
+    (related : EnumerationFlatCached.Related flat earlier)
+    (first : Suspended) (rest : List Suspended)
+    (r : Nat) (recorded : List Nat) (winner : Nat) (moved : EnumerationWaitingIndex.Waiting)
+    (joined : EnumerationState.State Symbol Constraint)
+    (prefixRun : ∀ extra, ExceptT.run (SourcePruningEnumerationTerminalPrefix.run
+      (r + extra) first rest earlier.waiting earlier.core) = [.ok ((recorded, winner, moved), joined)])
+    (checkEmpty : Bool) (nativeFuel p h : Nat) (beforeCaller : Caller width)
+    (incoming : Node) (incomingScs : List Suspended) (queries : Queries) :
+    ∃ extraFuel indexFuel, ∀ extraRepresentative extraIndex,
+      ResultRelated (run checkEmpty nativeFuel p h first rest beforeCaller flat incoming incomingScs queries)
+        (SourcePruningEnumerationCachedTerminalAdapter.run checkEmpty
+          (r + extraFuel + extraRepresentative) nativeFuel p h (indexFuel + extraIndex)
+          first rest beforeCaller earlier incoming incomingScs queries) := by
+  by_cases empty : incoming = .empty
+  · refine ⟨0, 0, fun _ _ => ?_⟩
+    simp only [run, SourcePruningEnumerationCachedTerminalAdapter.run, ite_eq_left empty]
+    exact ⟨⟨rfl, rfl, related.core, related.waiting, .nil⟩, related⟩
+  have success : Success (SourcePruningEnumerationTerminalPrefix.run r first rest earlier.waiting)
+      earlier.core (recorded, winner, moved) joined := by
+    simp only [Success, show ExceptT.run (SourcePruningEnumerationTerminalPrefix.run
+      r first rest earlier.waiting earlier.core) = [.ok ((recorded, winner, moved), joined)] from by
+        simpa only [Nat.add_zero] using prefixRun 0, List.mem_singleton]
+  obtain ⟨joinedFlat, flatPrefix, joinedRelated⟩ :=
+    EnumerationFlatTerminalPrefix.run_replays r first rest earlier.waiting
+      flat.core earlier.core _ joined related.core success
+  have flatPrefix' : ExceptT.run (EnumerationFlatTerminalPrefix.run
+      first rest flat.waiting flat.core) = [.ok ((recorded, winner, moved), joinedFlat)] := by
+    rw [related.waiting]
+    exact flatPrefix
+  let joinedCache : EnumerationFlatCached.Cached Symbol Constraint :=
+    ⟨joinedFlat, flat.expandable, moved⟩
+  let oldJoined : EnumerationExpandableIndex.Cached Symbol Constraint :=
+    ⟨joined, earlier.expandable, moved⟩
+  have step := EnumerationFlatNativeCachedFold.run_related
+    (show EnumerationFlatCached.Related joinedCache oldJoined from
+      ⟨joinedRelated, related.expandable, rfl⟩)

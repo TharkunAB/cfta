@@ -1,0 +1,26 @@
+                                        (some after))) ∧
+      ∀
+        (flat :
+          MicroCFTA.EnumerationFlatCached.Cached MicroCFTA.SourcePruningTemplates.Symbol
+            (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)),
+        MicroCFTA.EnumerationFlatCached.Related flat before →
+          ∀ (en P H : Nat),
+            p ≤ P →
+              h ≤ H →
+                ∃ flatResult,
+                  MicroCFTA.SourceFlatPruningCapturedEdge.run checkEmpty (n + en) P H uv scs edge caller flat
+                        memos.query =
+                      some flatResult ∧
+                    MicroCFTA.SourceFlatPruningSelectedEdge.ResultRelated flatResult result ∧
+                      match flatResult with
+                      | MicroCFTA.SourceFlatPruningSelectedEdge.Result.complete fragment reached queries recovered =>
+                        MicroCFTA.EnumerationFlatNativeIndex.Correct reached.checked.native.machine.heap recovered
+                      |
+                      MicroCFTA.SourceFlatPruningSelectedEdge.Result.stopped completedPrefix observation
+                          (some recovered) =>
+                        MicroCFTA.EnumerationFlatNativeIndex.Correct observation.snd.fst.checked.native.machine.heap
+                          recovered
+                      | x => False
+'MicroCFTA.SourceFlatPruningCapturedCompletion.complete_with_history' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]

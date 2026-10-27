@@ -1,5 +1,33 @@
 # cfta formalization restart handoff
 
+## Actual flat captured edges now derive completion and full native history
+
+Source checkpoint: cc74b0823653657df0f13e44b17eb2588ed7770c.
+Fourteen new modules execute own-class allocation, child dispatch, ordered
+child traversal, residual recording and captured-slot finalization.
+Original admission derives actual flat completion at every adequate native
+bound, for any related initial flat cache. The full earlier packet remains
+available. The result is a completed edge or the first valid child rejection.
+It retains the same reached Caller, saved Queries and full Post/global Memos.
+Every returned cache has correct native indexes at that same reached heap.
+Completion writes the original captured raw slot and resets expansion ancestry.
+Rejection retains its full stopping observation and does not assert Safe.
+No future flat observation or final flat invariant is an input.
+
+H6 remains the strongest global finite-tree language theorem. Captured
+rendering retains its original admission, discharge and rendering gates.
+Whole recursive enumeration, sibling composition, output soundness, coverage,
+pruning-policy soundness and initial admission histories remain open.
+Audit passes 4034 jobs and 78726 theorem dependency checks.
+All fourteen modules and Audit pass strict checks. No Haskell source changed.
+FINDINGS retains all Haskell repair handoffs and the extraction-progress limit.
+
+Next transport ordinary siblings and the recursive worker through these same
+native histories. Restore the captured enumeration cache for each sibling;
+advance the actual native Caller and full Memos. Derive initial Canonical,
+semantic Ranges and allocation bounds. Details: `lean/notes-current-flat-captured-edge.md`.
+
+
 ## Actual flat selected prefixes now derive completion and full native effects
 
 Source checkpoint: 498dd60c61b885ca58fa7d5d51b3284672e06b41.

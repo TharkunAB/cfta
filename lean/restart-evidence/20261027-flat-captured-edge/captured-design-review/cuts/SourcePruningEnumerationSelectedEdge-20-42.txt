@@ -1,0 +1,23 @@
+/-- Retain prefix rejection, unsupported preparation, stopped children and a completed edge. -/
+inductive Result (width : Nat) where
+  /-- The prefix does not supply the supported singleton packet. -/
+  | unhandled
+  /-- The arity check rejects before any child runs. -/
+  | rejected (caller : Caller width) (queries : Queries) (after : Cached)
+  /-- Retain the exact first stopping child observation and optional cache. -/
+  | stopped (completedPrefix : List Fragment)
+      (observation : SourcePruningEnumerationChildDispatch.Observation width) (candidate : Option Cached)
+  /-- Every child succeeds and the edge residual is recorded. -/
+  | complete (fragment : Fragment) (caller : Caller width) (queries : Queries) (after : Cached)
+
+/-- Record the residual in the actual completed cache. -/
+def finish (residual : Option Constraint) (fragment : Fragment) (before : Cached) : Cached :=
+  EnumerationExpandableIndex.frame {before.core with obligations :=
+    match residual with
+    | none => before.core.obligations
+    | some guard => (guard, fragment) :: before.core.obligations} before
+
+/-- Residual recording has exactly the source action's successful singleton result. -/
+theorem finish_raw (residual : Option Constraint) (fragment : Fragment) (before : Cached) :
+    ExceptT.run (recordResidual residual fragment before.core) = [.ok ((), (finish residual fragment before).core)] := by
+  cases residual <;> rfl

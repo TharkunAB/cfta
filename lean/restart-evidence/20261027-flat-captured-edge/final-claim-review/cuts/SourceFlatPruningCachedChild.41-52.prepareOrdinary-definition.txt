@@ -1,0 +1,12 @@
+def prepareOrdinary (heap : InternedConstructorTemplates.State Symbol NativeGuard)
+    (scs : List Suspended) (value : InternedConstructorTemplates.Value Symbol NativeGuard)
+    (before : Cached Symbol EnumGuard) : Option (Fragments.Fragment Symbol × Cached Symbol EnumGuard) :=
+  match value with
+  | .node _ _ _ _ =>
+      if scs.any (fun sc => EqualityTrie.isTerminal sc.trie) then none
+      else
+        (encodeNode value).bind fun handle =>
+          (allocate heap (some handle) before).bind fun allocation =>
+            (writeSlot heap allocation.1 (.unenumerated (some handle) scs) allocation.2).map
+              fun after => (.hole allocation.1, after)
+  | _ => none

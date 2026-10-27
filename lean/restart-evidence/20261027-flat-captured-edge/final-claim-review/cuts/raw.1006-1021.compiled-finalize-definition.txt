@@ -1,0 +1,16 @@
+def MicroCFTA.SourceFlatPruningFinalize.run : {EnumGuard NativeGuard : Type} →
+  MicroCFTA.InternedConstructorTemplates.State MicroCFTA.SourcePruningTemplates.Symbol NativeGuard →
+    Nat →
+      MicroCFTA.Fragments.Fragment MicroCFTA.SourcePruningTemplates.Symbol →
+        MicroCFTA.EnumerationFlatCached.Cached MicroCFTA.SourcePruningTemplates.Symbol EnumGuard →
+          Option (MicroCFTA.EnumerationFlatCached.Cached MicroCFTA.SourcePruningTemplates.Symbol EnumGuard) :=
+fun {EnumGuard NativeGuard} heap target fragment before =>
+  have reset :=
+    MicroCFTA.EnumerationFlatCached.frame
+      (have __src := before.core;
+      { counter := __src.counter, representatives := __src.representatives, values := __src.values,
+        obligations := __src.obligations, recursionAncestry := __src.recursionAncestry, expansionAncestry := [] })
+      before;
+  reset.core.values[target]?.bind fun old =>
+    MicroCFTA.EnumerationFlatNativeIndex.write heap target (MicroCFTA.EnumerationState.UVarValue.enumerated fragment) []
+      (MicroCFTA.EnumerationSchedule.references old) reset

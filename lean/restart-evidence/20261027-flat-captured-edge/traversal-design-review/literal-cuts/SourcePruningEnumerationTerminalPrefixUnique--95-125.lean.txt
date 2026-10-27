@@ -1,0 +1,31 @@
+theorem run_unique (first : Suspended) (rest : List Suspended)
+    (waiting : EnumerationWaitingIndex.Waiting) (before : State Symbol EnumGuard)
+    {fuel otherFuel : Nat} {recorded otherRecorded : List Nat} {winner otherWinner : Nat}
+    {moved otherMoved : EnumerationWaitingIndex.Waiting} {joined otherJoined : State Symbol EnumGuard}
+    (one : ExceptT.run (run fuel first rest waiting before) = [.ok ((recorded, winner, moved), joined)])
+    (two : ExceptT.run (run otherFuel first rest waiting before) =
+      [.ok ((otherRecorded, otherWinner, otherMoved), otherJoined)]) :
+    recorded = otherRecorded ∧ winner = otherWinner ∧ moved = otherMoved ∧ joined = otherJoined := by
+  have firstSuccess : Success (run fuel first rest waiting) before (recorded, winner, moved) joined := by
+    simp only [Success, one, List.mem_singleton]
+  have secondSuccess : Success (run otherFuel first rest waiting) before
+      (otherRecorded, otherWinner, otherMoved) otherJoined := by
+    simp only [Success, two, List.mem_singleton]
+  have firstMore := run_moreFuel fuel (max fuel otherFuel - fuel) first rest waiting
+    before (recorded, winner, moved) joined firstSuccess
+  have secondMore := run_moreFuel otherFuel (max fuel otherFuel - otherFuel) first rest waiting
+    before (otherRecorded, otherWinner, otherMoved) otherJoined secondSuccess
+  have firstFuel : fuel + (max fuel otherFuel - fuel) = max fuel otherFuel := by omega
+  have secondFuel : otherFuel + (max fuel otherFuel - otherFuel) = max fuel otherFuel := by omega
+  rw [firstFuel] at firstMore
+  rw [secondFuel] at secondMore
+  have firstExact := run_exact _ first rest waiting before joined (recorded, winner, moved) firstMore
+  have secondExact := run_exact _ first rest waiting before otherJoined
+    (otherRecorded, otherWinner, otherMoved) secondMore
+  have pairSame := Except.ok.inj (List.cons.inj (firstExact.symm.trans secondExact)).1
+  obtain ⟨resultSame, joinedSame⟩ := Prod.mk.inj pairSame
+  obtain ⟨recordedSame, remainingSame⟩ := Prod.mk.inj resultSame
+  obtain ⟨winnerSame, movedSame⟩ := Prod.mk.inj remainingSame
+  exact ⟨recordedSame, winnerSame, movedSame, joinedSame⟩
+
+end MicroCFTA.SourcePruningEnumerationTerminalPrefix

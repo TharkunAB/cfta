@@ -1,0 +1,8 @@
+noncomputable def run (checkEmpty : Bool) (nativeFuel p h target : Nat)
+    (scs : List Suspended) (edge : EdgeValue Symbol Constraint)
+    (caller : Caller width) (before : Cached) (queries : Queries) : Option (Result width) :=
+  match SourceFlatPruningSelectedEdge.run checkEmpty nativeFuel p h scs edge caller before queries with
+  | .complete fragment reached saved after =>
+      (SourceFlatPruningFinalize.run reached.checked.native.machine.heap target fragment after).map
+        (fun finished => .complete fragment reached saved finished)
+  | result => some result

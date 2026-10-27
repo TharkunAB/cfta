@@ -1,0 +1,95 @@
+/-- Retain incoming errors and map each actual successful row to its terminal hole. -/
+def wrapIncoming (winner : Nat) (moved : EnumerationWaitingIndex.Waiting)
+    (observed : ((Except (NativeOutcome ⊕ WorkerOutcome) (Option Raw)) ×
+      Caller width × Queries × EnumerationFlatState.State Symbol Constraint) ×
+      Option (EnumerationFlatCached.Cached Symbol Constraint)) :
+    ((Except (PrefixRaw ⊕ ((NativeOutcome ⊕ WorkerOutcome) ⊕ FoldRaw)) (Option TerminalRaw)) ×
+      Caller width × Queries × EnumerationFlatState.State Symbol Constraint × EnumerationWaitingIndex.Waiting) ×
+      Option (EnumerationFlatCached.Cached Symbol Constraint) :=
+match observed with
+| ((incomingResult, afterCaller, savedQueries, read), incomingCache) =>
+  match incomingResult with
+  | .error incomingFault =>
+      ((.error (.inr (.inl incomingFault)), afterCaller, savedQueries, read, moved), none)
+  | .ok none => ((.ok none, afterCaller, savedQueries, read, moved), none)
+  | .ok (some incomingRaw) =>
+      ((.ok (some (incomingRaw.map fun row => match row with
+        | .error error => .error error
+        | .ok result => .ok (.hole winner, result.2))),
+        afterCaller, savedQueries, read, moved), incomingCache)
+
+/-- Run the actual prefix, cached fold and incoming merge with independent cache recovery. -/
+noncomputable def run
+    [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Constraint)] [DecidableEq Node]
+    (checkEmpty : Bool) (nativeFuel p h : Nat)
+    (first : EnumerationState.Suspended) (rest : List EnumerationState.Suspended)
+    (beforeCaller : Caller width) (before : EnumerationFlatCached.Cached Symbol Constraint)
+    (incoming : Node) (incomingScs : List EnumerationState.Suspended) (queries : Queries) :
+    ((Except (PrefixRaw ⊕ ((NativeOutcome ⊕ WorkerOutcome) ⊕ FoldRaw)) (Option TerminalRaw)) ×
+      Caller width × Queries × EnumerationFlatState.State Symbol Constraint × EnumerationWaitingIndex.Waiting) ×
+      Option (EnumerationFlatCached.Cached Symbol Constraint) :=
+  if incoming = .empty then
+    ((.ok (some []), beforeCaller, queries, before.core, before.waiting), some before)
+  else
+    match ExceptT.run (EnumerationFlatTerminalPrefix.run
+        first rest before.waiting before.core) with
+    | [.ok ((recorded, winner, moved), joined)] =>
+      match EnumerationFlatNativeCachedFold.run checkEmpty nativeFuel p h recorded
+          beforeCaller ⟨joined, before.expandable, moved⟩ winner queries with
+      | ((foldResult, foldCaller, foldQueries, foldOuter), foldCache) =>
+        match foldResult with
+        | .error foldFault =>
+            ((.error (.inr (.inl foldFault)), foldCaller, foldQueries, foldOuter, moved), none)
+        | .ok none => ((.ok none, foldCaller, foldQueries, foldOuter, moved), none)
+        | .ok (some foldRaw) =>
+          match foldRaw with
+          | [] => ((.ok (some []), foldCaller, foldQueries, foldOuter, moved), foldCache)
+          | [.ok ((), folded)] =>
+            let incomingObserved : ((Except (NativeOutcome ⊕ WorkerOutcome) (Option Raw)) ×
+                Caller width × Queries × EnumerationFlatState.State Symbol Constraint) ×
+                Option (EnumerationFlatCached.Cached Symbol Constraint) :=
+              match foldCache with
+              | none =>
+                  (EnumerationFlatNativeIncoming.run checkEmpty nativeFuel p h
+                    foldCaller folded winner incoming incomingScs foldQueries, none)
+              | some recovered =>
+                  EnumerationFlatNativeIncomingCache.run checkEmpty nativeFuel p h
+                    foldCaller (EnumerationFlatCached.frame folded recovered)
+                    winner incoming incomingScs foldQueries
+            wrapIncoming winner moved incomingObserved
+          | stoppedRaw =>
+              ((.error (.inr (.inr stoppedRaw)), foldCaller, foldQueries, foldOuter, moved), none)
+    | prefixRaw => ((.error (.inl prefixRaw), beforeCaller, queries, before.core, before.waiting), none)
+
+
+local notation "OldPrefixRaw" => List (Except EnumerationState.Error
+  ((List Nat × Nat × EnumerationWaitingIndex.Waiting) × EnumerationState.State Symbol Constraint))
+local notation "OldFoldRaw" => List (Except EnumerationState.Error
+  (Unit × EnumerationState.State Symbol Constraint))
+local notation "OldTerminalRaw" => List (Except EnumerationState.Error
+  (Fragments.Fragment Symbol × EnumerationState.State Symbol Constraint))
+
+/-- Preserve native effects, moved counts, raw diagnostics and optional cache recovery. -/
+def ResultRelated
+    (flat : ((Except (PrefixRaw ⊕ ((NativeOutcome ⊕ WorkerOutcome) ⊕ FoldRaw)) (Option TerminalRaw)) ×
+      Caller width × Queries × EnumerationFlatState.State Symbol Constraint × EnumerationWaitingIndex.Waiting) ×
+      Option (EnumerationFlatCached.Cached Symbol Constraint))
+    (earlier : ((Except (OldPrefixRaw ⊕ ((NativeOutcome ⊕ WorkerOutcome) ⊕ OldFoldRaw)) (Option OldTerminalRaw)) ×
+      Caller width × Queries × EnumerationState.State Symbol Constraint × EnumerationWaitingIndex.Waiting) ×
+      Option (EnumerationExpandableIndex.Cached Symbol Constraint)) : Prop :=
+  (flat.1.2.1 = earlier.1.2.1 ∧ flat.1.2.2.1 = earlier.1.2.2.1 ∧
+    EnumerationFlatState.Related flat.1.2.2.2.1 earlier.1.2.2.2.1 ∧
+    flat.1.2.2.2.2 = earlier.1.2.2.2.2 ∧
+    match flat.1.1, earlier.1.1 with
+    | .error (.inl first), .error (.inl second) =>
+        EnumerationResultRelation.Results EnumerationFlatState.Related first second
+    | .error (.inr (.inl first)), .error (.inr (.inl second)) => first = second
+    | .error (.inr (.inr first)), .error (.inr (.inr second)) =>
+        EnumerationResultRelation.Results EnumerationFlatState.Related first second
+    | .ok none, .ok none => True
+    | .ok (some first), .ok (some second) =>
+        EnumerationResultRelation.Results EnumerationFlatState.Related first second
+    | _, _ => False) ∧
+    EnumerationFlatNativeIndex.WritesRelated flat.2 earlier.2
+
+private def earlierIncoming (winner : Nat) (moved : EnumerationWaitingIndex.Waiting)

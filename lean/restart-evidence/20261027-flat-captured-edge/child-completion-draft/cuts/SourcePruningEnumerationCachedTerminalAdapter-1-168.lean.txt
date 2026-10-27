@@ -1,0 +1,168 @@
+import MicroCFTA.SourcePruningEnumerationCachedTerminal
+import MicroCFTA.SourcePruningEnumerationIncomingCacheAdapter
+import MicroCFTA.SourcePruningEnumerationNativeReferences
+
+namespace MicroCFTA.SourcePruningEnumerationCachedTerminalAdapter
+open EnumerationState EnumerationCorrectness EnumerationSchedule
+open EnumerationCompleteness EnumerationDependencies
+open InternedConstructorTemplates InternedProbeProvenance
+open SourcePruningEnumerationNodes SourcePruningEnumerationObservation
+open SourceCurrentAllocatedNativeInventoryState (Inventory)
+open SourceCurrentAllocatedPartialInvariant (Context Post)
+local notation "Symbol" => SourcePruningTemplates.Symbol
+local notation "Constraint" => SourceSymbolicIndex.Constraint FullSyntax.Formula
+local notation "Node" => InternedConstructorTemplates.Value Symbol Constraint
+local notation "Checked" => SourceEqualityNativeDemand.State
+local notation "Caller" => SourceCurrentAllocatedPartialState.State
+local notation "Memos" => EndpointMemoGateTrace.Memos
+local notation "Queries" => SourceEndpointMemo.Memos
+local notation "Raw" => List (Except EnumerationState.Error
+  (Unit × EnumerationState.State Symbol Constraint))
+local notation "PrefixRaw" => List (Except EnumerationState.Error
+  ((List Nat × Nat × EnumerationWaitingIndex.Waiting) × EnumerationState.State Symbol Constraint))
+local notation "FoldRaw" => Raw
+local notation "TerminalRaw" => List (Except EnumerationState.Error
+  (Fragments.Fragment Symbol × EnumerationState.State Symbol Constraint))
+variable {width : Nat}
+local notation "NativeOutcome" => SourceEqualityNativeDemand.Outcome width Node
+local notation "WorkerOutcome" => SourceCurrentAllocatedConjunctionWorker.Outcome width
+attribute [local instance] SourcePruningEnumerationTerminal.terminalMonadList
+
+/-- Attach a cache candidate to the exact original terminal observation. -/
+noncomputable def run
+    [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Constraint)] [DecidableEq Node]
+    (checkEmpty : Bool) (representativeFuel nativeFuel p h indexFuel : Nat)
+    (first : EnumerationState.Suspended) (rest : List EnumerationState.Suspended)
+    (beforeCaller : Caller width) (before : EnumerationExpandableIndex.Cached Symbol Constraint)
+    (incoming : Node) (incomingScs : List EnumerationState.Suspended) (queries : Queries) :
+    ((Except (PrefixRaw ⊕ ((NativeOutcome ⊕ WorkerOutcome) ⊕ FoldRaw)) (Option TerminalRaw)) ×
+      Caller width × Queries × EnumerationState.State Symbol Constraint × EnumerationWaitingIndex.Waiting) ×
+      Option (EnumerationExpandableIndex.Cached Symbol Constraint) :=
+  if incoming = .empty then
+    ((.ok (some []), beforeCaller, queries, before.core, before.waiting), some before)
+  else
+    match ExceptT.run (SourcePruningEnumerationTerminalPrefix.run
+        representativeFuel first rest before.waiting before.core) with
+    | [.ok ((recorded, winner, moved), joined)] =>
+      match SourcePruningEnumerationCachedFold.run checkEmpty nativeFuel p h recorded
+          beforeCaller ⟨joined, before.expandable, moved⟩ winner queries with
+      | ((foldResult, foldCaller, foldQueries, foldOuter), foldCache) =>
+        match foldResult with
+        | .error foldFault =>
+            ((.error (.inr (.inl foldFault)), foldCaller, foldQueries, foldOuter, moved), none)
+        | .ok none => ((.ok none, foldCaller, foldQueries, foldOuter, moved), none)
+        | .ok (some foldRaw) =>
+          match foldRaw with
+          | [] => ((.ok (some []), foldCaller, foldQueries, foldOuter, moved), foldCache)
+          | [.ok ((), folded)] =>
+            let incomingObserved : ((Except (NativeOutcome ⊕ WorkerOutcome) (Option Raw)) ×
+                Caller width × Queries × EnumerationState.State Symbol Constraint) ×
+                Option (EnumerationExpandableIndex.Cached Symbol Constraint) :=
+              match foldCache with
+              | none =>
+                  (SourcePruningEnumerationIncomingNode.run checkEmpty representativeFuel nativeFuel p h
+                    foldCaller folded winner incoming incomingScs foldQueries, none)
+              | some recovered =>
+                  SourcePruningEnumerationIncomingCacheAdapter.run checkEmpty representativeFuel nativeFuel p h
+                    indexFuel foldCaller (EnumerationExpandableIndex.frame folded recovered)
+                    winner incoming incomingScs foldQueries
+            match incomingObserved with
+            | ((incomingResult, afterCaller, savedQueries, read), incomingCache) =>
+              match incomingResult with
+              | .error incomingFault =>
+                  ((.error (.inr (.inl incomingFault)), afterCaller, savedQueries, read, moved), none)
+              | .ok none => ((.ok none, afterCaller, savedQueries, read, moved), none)
+              | .ok (some incomingRaw) =>
+                  ((.ok (some (incomingRaw.map fun row => match row with
+                    | .error error => .error error
+                    | .ok result => .ok (.hole winner, result.2))),
+                    afterCaller, savedQueries, read, moved), incomingCache)
+          | stoppedRaw =>
+              ((.error (.inr (.inr stoppedRaw)), foldCaller, foldQueries, foldOuter, moved), none)
+    | prefixRaw => ((.error (.inl prefixRaw), beforeCaller, queries, before.core, before.waiting), none)
+
+/-- Erase the cache candidate at every fixed execution bound. -/
+theorem erase
+    [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Constraint)] [DecidableEq Node]
+    (checkEmpty : Bool) (representativeFuel nativeFuel p h indexFuel : Nat)
+    (first : EnumerationState.Suspended) (rest : List EnumerationState.Suspended)
+    (beforeCaller : Caller width) (before : EnumerationExpandableIndex.Cached Symbol Constraint)
+    (incoming : Node) (incomingScs : List EnumerationState.Suspended) (queries : Queries) :
+    (run checkEmpty representativeFuel nativeFuel p h indexFuel first rest beforeCaller before
+      incoming incomingScs queries).1 =
+      SourcePruningEnumerationTerminal.run checkEmpty representativeFuel nativeFuel p h
+        first rest before.waiting beforeCaller before.core incoming incomingScs queries := by
+  by_cases empty : incoming = .empty
+  · simp only [run, SourcePruningEnumerationTerminal.run, ite_eq_left empty]
+  · cases prefixResultEq : ExceptT.run (SourcePruningEnumerationTerminalPrefix.run
+        representativeFuel first rest before.waiting before.core) with
+    | nil =>
+      simp only [run, SourcePruningEnumerationTerminal.run, ite_eq_right empty, prefixResultEq]
+    | cons prefixEntry prefixTail =>
+      cases prefixEntry with
+      | error prefixError =>
+        simp only [run, SourcePruningEnumerationTerminal.run, ite_eq_right empty, prefixResultEq]
+      | ok prefixResult =>
+        rcases prefixResult with ⟨⟨recorded, winner, moved⟩, joined⟩
+        cases prefixTail with
+        | cons prefixNext prefixRest =>
+          simp only [run, SourcePruningEnumerationTerminal.run, ite_eq_right empty, prefixResultEq]
+        | nil =>
+          cases cachedFoldResult : SourcePruningEnumerationCachedFold.run checkEmpty nativeFuel p h
+              recorded beforeCaller ⟨joined, before.expandable, moved⟩ winner queries with
+          | mk foldObservation foldCache =>
+            rcases foldObservation with ⟨foldOutcome, foldCaller, foldQueries, foldOuter⟩
+            have foldErased : SourcePruningEnumerationFold.run checkEmpty nativeFuel p h recorded
+                beforeCaller joined winner queries = (foldOutcome, foldCaller, foldQueries, foldOuter) := by
+              rw [← SourcePruningEnumerationCachedFold.erase checkEmpty nativeFuel p h recorded
+                beforeCaller ⟨joined, before.expandable, moved⟩ winner queries, cachedFoldResult]
+            simp only [run, SourcePruningEnumerationTerminal.run, ite_eq_right empty,
+              prefixResultEq, cachedFoldResult, foldErased]
+            cases foldOutcome with
+            | error foldFault => rfl
+            | ok foldReturned =>
+              cases foldReturned with
+              | none => rfl
+              | some foldRaw =>
+                cases foldRaw with
+                | nil => rfl
+                | cons foldEntry foldTail =>
+                  cases foldEntry with
+                  | error foldError => rfl
+                  | ok foldValue =>
+                    rcases foldValue with ⟨foldUnit, folded⟩
+                    cases foldUnit
+                    cases foldTail with
+                    | cons foldNext foldRest => rfl
+                    | nil =>
+                      cases foldCache with
+                      | none =>
+                        cases fallbackIncomingResult : SourcePruningEnumerationIncomingNode.run
+                            checkEmpty representativeFuel nativeFuel p h foldCaller folded
+                            winner incoming incomingScs foldQueries with
+                        | mk incomingOutcome incomingObservation =>
+                          rcases incomingObservation with ⟨afterCaller, savedQueries, read⟩
+                          simp only [fallbackIncomingResult]
+                          cases incomingOutcome with
+                          | error incomingFault => rfl
+                          | ok incomingReturned =>
+                            cases incomingReturned with
+                            | none => rfl
+                            | some incomingRaw => rfl'
+                      | some recovered =>
+                        dsimp only
+                        erw [← SourcePruningEnumerationIncomingCacheAdapter.erase checkEmpty
+                          representativeFuel nativeFuel p h indexFuel foldCaller
+                          (EnumerationExpandableIndex.frame folded recovered)
+                          winner incoming incomingScs foldQueries]
+                        cases cachedIncomingResult : SourcePruningEnumerationIncomingCacheAdapter.run
+                            checkEmpty representativeFuel nativeFuel p h indexFuel foldCaller
+                            (EnumerationExpandableIndex.frame folded recovered)
+                            winner incoming incomingScs foldQueries with
+                        | mk incomingObservation incomingCache =>
+                          rcases incomingObservation with ⟨incomingOutcome, afterCaller, savedQueries, read⟩
+                          cases incomingOutcome with
+                          | error incomingFault => rfl
+                          | ok incomingReturned =>
+                            cases incomingReturned with
+                            | none => rfl

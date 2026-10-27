@@ -1,0 +1,23 @@
+inductive Outcome (relation : Left → Right → Prop) :
+    Except Error (α × Left) → Except Error (α × Right) → Prop where
+  /-- The same error occupies both result positions. -/
+  | error (error : Error) : Outcome relation (.error error) (.error error)
+  /-- Equal values have related final states. -/
+  | ok (value : α) (states : relation left right) :
+      Outcome relation (.ok (value, left)) (.ok (value, right))
+
+/-- Relate every result at the same position in both finite lists. -/
+abbrev Results (relation : Left → Right → Prop)
+    (left : List (Except Error (α × Left))) (right : List (Except Error (α × Right))) : Prop :=
+  Language.All₂ (Outcome relation) left right
+
+/-- Ordered alternatives preserve the relation when concatenated. -/
+theorem append (first : Results relation left right) (rest : Results relation later tail) :
+    Results relation (left ++ later) (right ++ tail) := by
+  induction first with
+  | nil => exact rest
+  | cons head _ ih => exact .cons head ih
+
+/-- Related result lists have the same number of successes and errors together. -/
+theorem length_eq (related : Results relation left right) : left.length = right.length :=
+  Language.All₂.length_eq related

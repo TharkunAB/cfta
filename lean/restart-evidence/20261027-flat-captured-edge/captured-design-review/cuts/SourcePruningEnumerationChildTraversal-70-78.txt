@@ -1,0 +1,9 @@
+/-- Every completed traversal derives the actual ordered trace, without admission premises. -/
+theorem complete_trace
+    (checkEmpty : Bool) (representativeFuel nativeFuel p h indexFuel : Nat)
+    (inputs : List (Node × List Suspended)) (beforeCaller afterCaller : Caller width)
+    (before after : Cached) (queries afterQueries : Queries) (fragments : List Fragment)
+    (completed : run checkEmpty representativeFuel nativeFuel p h indexFuel inputs beforeCaller before queries =
+      .complete fragments afterCaller afterQueries after) :
+    Trace checkEmpty representativeFuel nativeFuel p h indexFuel inputs beforeCaller before queries
+      fragments afterCaller after afterQueries := by

@@ -1,0 +1,5 @@
+def finish (residual : Option Constraint) (fragment : Fragment) (before : Cached) : Cached :=
+  EnumerationFlatCached.frame {before.core with obligations :=
+    match residual with
+    | none => before.core.obligations
+    | some guard => (guard, fragment) :: before.core.obligations} before

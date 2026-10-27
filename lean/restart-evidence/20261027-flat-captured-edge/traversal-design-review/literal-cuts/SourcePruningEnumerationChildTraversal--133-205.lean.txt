@@ -1,0 +1,73 @@
+/-- Every stop retains an actual completed-prefix trace and the exact next child call. -/
+theorem stopped_trace
+    (checkEmpty : Bool) (representativeFuel nativeFuel p h indexFuel : Nat)
+    (inputs : List (Node × List Suspended)) (beforeCaller : Caller width)
+    (before : Cached) (queries : Queries) (completedPrefix : List Fragment)
+    (observation : SourcePruningEnumerationChildDispatch.Observation width) (candidate : Option Cached)
+    (stopped : run checkEmpty representativeFuel nativeFuel p h indexFuel inputs beforeCaller before queries =
+      .stopped completedPrefix observation candidate) :
+    ∃ (consumed : List (Node × List Suspended)) (value : Node) (bucket : List Suspended)
+      (remaining : List (Node × List Suspended)) (stoppedCaller : Caller width)
+      (stoppedBefore : Cached) (stoppedQueries : Queries),
+      inputs = consumed ++ ((value, bucket) :: remaining) ∧
+      Trace checkEmpty representativeFuel nativeFuel p h indexFuel consumed beforeCaller before queries
+        completedPrefix stoppedCaller stoppedBefore stoppedQueries ∧
+      SourcePruningEnumerationChildDispatch.run checkEmpty representativeFuel nativeFuel p h indexFuel
+        bucket value stoppedCaller stoppedBefore stoppedQueries = (observation, candidate) := by
+  induction inputs generalizing beforeCaller before queries completedPrefix with
+  | nil => cases stopped
+  | cons input rest ih =>
+    rcases input with ⟨value, bucket⟩
+    cases headEq : SourcePruningEnumerationChildDispatch.run checkEmpty representativeFuel nativeFuel p h indexFuel
+        bucket value beforeCaller before queries with
+    | mk headObservation headCandidate =>
+      have stoppedHere (same : Result.stopped [] headObservation headCandidate =
+          .stopped completedPrefix observation candidate) :
+          ∃ (consumed : List (Node × List Suspended)) (stopValue : Node) (stopBucket : List Suspended)
+            (remaining : List (Node × List Suspended)) (stoppedCaller : Caller width)
+            (stoppedBefore : Cached) (stoppedQueries : Queries),
+            (value, bucket) :: rest = consumed ++ ((stopValue, stopBucket) :: remaining) ∧
+            Trace checkEmpty representativeFuel nativeFuel p h indexFuel consumed beforeCaller before queries
+              completedPrefix stoppedCaller stoppedBefore stoppedQueries ∧
+            SourcePruningEnumerationChildDispatch.run checkEmpty representativeFuel nativeFuel p h indexFuel
+              stopBucket stopValue stoppedCaller stoppedBefore stoppedQueries = (observation, candidate) := by
+        cases same
+        exact ⟨[], value, bucket, rest, beforeCaller, before, queries, rfl, .nil _ _ _, headEq⟩
+      rcases headObservation with ⟨outcome, middleCaller, middleQueries, outer, waiting⟩
+      cases outcome with
+      | error fault => exact stoppedHere (by simpa only [run, headEq] using stopped)
+      | ok returned =>
+        cases returned with
+        | none => exact stoppedHere (by simpa only [run, headEq] using stopped)
+        | some raw =>
+          cases raw with
+          | nil => exact stoppedHere (by simpa only [run, headEq] using stopped)
+          | cons row rows =>
+            cases row with
+            | error error => exact stoppedHere (by simpa only [run, headEq] using stopped)
+            | ok child =>
+              rcases child with ⟨fragment, returnedCore⟩
+              cases rows with
+              | cons row rows => exact stoppedHere (by simpa only [run, headEq] using stopped)
+              | nil =>
+                cases headCandidate with
+                | none => exact stoppedHere (by simpa only [run, headEq] using stopped)
+                | some middle =>
+                  have coreSame := SourcePruningEnumerationChildDispatch.singleton_core checkEmpty
+                    representativeFuel nativeFuel p h indexFuel bucket value beforeCaller middleCaller
+                    before middle queries middleQueries fragment returnedCore outer waiting headEq
+                  cases tailEq : run checkEmpty representativeFuel nativeFuel p h indexFuel
+                      rest middleCaller middle middleQueries with
+                  | complete fragments finalCaller finalQueries final => simp [run, headEq, tailEq] at stopped
+                  | stopped tailPrefix finalObservation finalCandidate =>
+                    simp only [run, headEq, tailEq, Result.stopped.injEq] at stopped
+                    obtain ⟨rfl, rfl, rfl⟩ := stopped
+                    obtain ⟨consumed, nextValue, nextBucket, remaining, stoppedCaller,
+                      stoppedBefore, stoppedQueries, shape, trace, stopEq⟩ :=
+                        ih middleCaller middle middleQueries tailPrefix tailEq
+                    rw [← coreSame] at headEq
+                    exact ⟨(value, bucket) :: consumed, nextValue, nextBucket, remaining,
+                      stoppedCaller, stoppedBefore, stoppedQueries, congrArg (List.cons (value, bucket)) shape,
+                      .cons headEq trace, stopEq⟩
+
+end MicroCFTA.SourcePruningEnumerationChildTraversal

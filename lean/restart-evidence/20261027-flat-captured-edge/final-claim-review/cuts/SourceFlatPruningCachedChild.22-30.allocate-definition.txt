@@ -1,0 +1,9 @@
+def allocate (heap : InternedConstructorTemplates.State Symbol NativeGuard)
+    (node : Option Nat) (before : Cached Symbol EnumGuard) : Option (Nat × Cached Symbol EnumGuard) :=
+  (SourcePruningEnumerationNativeIndex.candidate heap (.unenumerated node [])).map fun flag =>
+    (before.core.counter,
+      ⟨EnumerationFlatState.allocated node before.core,
+        fun slot => if flag then
+          if slot = before.core.counter then true else before.expandable slot
+          else before.expandable slot,
+        before.waiting⟩)
