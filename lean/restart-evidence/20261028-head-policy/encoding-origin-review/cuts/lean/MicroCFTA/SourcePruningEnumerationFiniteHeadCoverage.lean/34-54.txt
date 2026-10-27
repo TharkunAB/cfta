@@ -1,0 +1,21 @@
+local notation "suspendedBound" => SourcePruningEnumerationPrefixAdmission.suspendedBound
+local notation "afterHead" => SourcePruningEnumerationRecursiveReservation.afterHead
+local notation "finiteStep" => SourcePruningEnumerationFiniteReservation.step
+local notation "massCeil" => SourcePruningEnumerationRecursiveReservation.massCeil
+variable {Typing Key : Type} {bits : Nat}
+variable [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Constraint)] [DecidableEq Node]
+
+/-- Keep the full finite head packet and construct each accepted captured receipt. -/
+theorem head_finite_complete_resources_accepting
+    (holeKey : Typing → Nat → Key) (fits : Key → Symbol → Bool) (admits : Key → Node → Bool)
+    (graph : Graph Symbol Constraint) (templates : List (Template.Pattern Symbol))
+    (checkEmpty : Bool) (edgesOf : Node → List (EdgeValue Symbol Constraint))
+    (stop : Option (SourcePruningRecordTypes.Metadata Typing → Nat → Bool))
+    (order : SourcePruningRecordTypes.Metadata Typing → List Nat → Option Nat)
+    (metadata : SourcePruningRecordTypes.Metadata Typing) (recursiveFuel : Nat)
+    (seed : Seed) (formulas : SourceGuards.Formulas FullSyntax.Formula)
+    (solver : SourceGuards.Entailment FullSyntax.Formula)
+    (recursive : Complete (bits := bits) holeKey fits admits graph templates checkEmpty edgesOf stop order
+      formulas solver recursiveFuel)
+    (inventory : Inventory)
+    (caller : Caller (bits + 2)) (memos : Memos) (before : Cached) (uv handle : Nat) (scs : List Suspended)

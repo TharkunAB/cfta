@@ -1,0 +1,6 @@
+/-- A pattern matches a complete term when all aligned child patterns match. -/
+inductive Matches [DecidableEq Symbol] : Pattern Symbol → Term Symbol → Prop where
+  | node (pattern : Pattern Symbol) (symbol : Symbol) (terms : List (Term Symbol))
+      (patterns : List (Pattern Symbol)) :
+      childTemplates pattern symbol terms.length = some patterns →
+      All₂ Matches patterns terms → Matches pattern (.node symbol terms)

@@ -1,0 +1,12 @@
+
+/-- Edge construction occurs after its actual nested child computations complete. -/
+def buildEdges [DecidableEq (EdgeKey Symbol Guard)] (expression : List (EdgeSyntax Symbol Guard))
+    (environment : List (Value Symbol Guard)) (state : InternedConstructorTemplates.State Symbol Guard) :
+    Outcome Symbol Guard (List (EdgeValue Symbol Guard)) :=
+  match expression with
+  | [] => .done [] state
+  | .mk symbol constraint children :: rest =>
+      (buildMany children environment state).bind fun values next =>
+      (work (makeEdge symbol constraint values) next).bind fun edge afterEdge =>
+      (buildEdges rest environment afterEdge).bind fun edges final => .done (edge :: edges) final
+termination_by sizeOf expression

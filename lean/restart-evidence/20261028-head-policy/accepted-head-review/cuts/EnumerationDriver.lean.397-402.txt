@@ -1,0 +1,6 @@
+structure Ready (uv : Nat) (state : State Symbol Guard) : Prop where
+  safe : Safe state
+  inside : uv < state.counter
+  root : IsRoot state.representatives uv
+  avoids : ∀ node scs, state.values[uv]? = some (.unenumerated (some node) scs) →
+    Avoids state.representatives uv scs

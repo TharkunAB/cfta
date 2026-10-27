@@ -1,0 +1,22 @@
+--- v6
++++ final-v7
+@@ -276,7 +276,18 @@
+           (afterHead seed inherited).2 (fun guard => guard ∈ (afterHead seed inherited).1) headFits headKnown
+       refine ⟨callbackFuel, result, callbackAfter, ⟨⟨callbackRetained.1, (by
+         intro extra rejected selected chosen
+-        simpa only using callbackRetained.2 extra rejected selected chosen)⟩, callbackSemantics⟩, ?_⟩
++        have kept := callbackRetained.2 extra rejected selected chosen
++        dsimp only at kept ⊢
++        refine ⟨kept.1, ?_⟩
++        generalize observedEq : SourcePruningEnumerationSelectedStep.runPrefix holeKey fits admits graph templates
++          stop order result.2 (callbackFuel + extra) (callbackFuel + extra) (callbackFuel + extra)
++          (callbackFuel + extra) (callbackFuel + extra) (callbackFuel + extra) selected middleCaller
++          (EnumerationExpandableIndex.frame callbackAfter afterCache) middleMemos.query = observed at kept ⊢
++        cases observed with
++        | stopped _ _ => trivial
++        | parked checked candidate raw => cases candidate <;> exact kept.2
++        | narrowed checked prepared reached queries action candidate right ordinary =>
++            cases candidate <;> exact kept.2)⟩, callbackSemantics⟩, ?_⟩
+       intro ambient assignment satisfied accepted refuted avoids encoded
+       obtain ⟨extended, produced, producedCache, agree, beforeModel, completed, filled, afterModel,
+         self, pendingRefutes, currentAvoids, currentEncoding⟩ :=

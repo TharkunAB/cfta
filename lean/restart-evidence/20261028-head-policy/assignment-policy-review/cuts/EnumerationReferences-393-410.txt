@@ -1,0 +1,18 @@
+/-- The actual scheduler selects a root with no incoming suspended reference. -/
+theorem selected_incoming (graph : Graph Symbol Guard) (fuel uv : Nat) (before after : State Symbol Guard)
+    (available : Option (List Nat)) (preference : List Nat → Option Nat) (safe : Safe before)
+    (success : Success (findExpandable graph fuel) before available after)
+    (selected : pickNext preference available = .expand uv) : IncomingAvoid uv after := by
+  cases available with
+  | none => cases selected
+  | some available =>
+      have offered := pickNext_safe preference available uv selected
+      have avoided := (findExpandable_safe graph fuel before after available uv safe.1.total safe.2 success offered).2.2.2
+      intro value member
+      obtain ⟨index, stored⟩ := List.mem_iff_getElem?.mp member
+      cases value with
+      | eliminated | enumerated _ => simp [references, InputsAllowed]
+      | unenumerated node scs => exact avoided index node scs stored
+
+/-- Writing an expanded value is safe for references when the selected root has no incoming reference. -/
+theorem setValue_pending (uv : Nat) (fragment : Fragment Symbol) (before after : State Symbol Guard)

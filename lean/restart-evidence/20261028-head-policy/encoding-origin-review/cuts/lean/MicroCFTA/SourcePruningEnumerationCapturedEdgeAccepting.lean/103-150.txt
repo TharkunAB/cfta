@@ -1,0 +1,48 @@
+      ∀ (ambient : InternedGuardedLanguage.Env Symbol)
+        (assignment : Nat → Language.Term Symbol),
+        Satisfies
+          (SourcePruningEnumerationNativeLanguage.handles (SourceEqualityPCSGuard.holds formulas solver)
+            ambient caller.checked.native.machine.heap)
+          (fun guard term => SourceEqualityPCSGuard.holds formulas solver guard term = true)
+          assignment before.core →
+        InternedGuardedLanguage.edgeMeaning (SourceEqualityPCSGuard.holds formulas solver)
+          ambient edge (assignment uv) →
+        ∃ (extended : Nat → Language.Term Symbol) (fragment : Fragment),
+          (∀ old < before.core.counter, extended old = assignment old) ∧
+          Satisfies
+            (SourcePruningEnumerationNativeLanguage.handles (SourceEqualityPCSGuard.holds formulas solver)
+              ambient caller.checked.native.machine.heap)
+            (fun guard term => SourceEqualityPCSGuard.holds formulas solver guard term = true)
+            extended before.core ∧
+          result = .complete fragment afterCaller savedQueries after ∧
+          Fragments.fill extended fragment = assignment uv ∧
+          Satisfies
+            (SourcePruningEnumerationNativeLanguage.handles (SourceEqualityPCSGuard.holds formulas solver)
+              ambient afterCaller.checked.native.machine.heap)
+            (fun guard term => SourceEqualityPCSGuard.holds formulas solver guard term = true)
+            extended after.core) ∧
+      ∃ (extended : Nat → Language.Term Symbol) (fragment : Fragment),
+        (∀ old < before.core.counter, extended old = assignment old) ∧
+        Satisfies
+          (SourcePruningEnumerationNativeLanguage.handles (SourceEqualityPCSGuard.holds formulas solver)
+            ambient caller.checked.native.machine.heap)
+          (fun guard candidate => SourceEqualityPCSGuard.holds formulas solver guard candidate = true)
+          extended before.core ∧
+        result = .complete fragment afterCaller savedQueries after ∧
+        Fragments.fill extended fragment = assignment uv ∧
+        Satisfies
+          (SourcePruningEnumerationNativeLanguage.handles (SourceEqualityPCSGuard.holds formulas solver)
+            ambient afterCaller.checked.native.machine.heap)
+          (fun guard candidate => SourceEqualityPCSGuard.holds formulas solver guard candidate = true)
+          extended after.core := by
+  obtain ⟨value, lookup, available, _closed⟩ := realized uv handle scs stored
+  have same : value = .node parentEntry edges depth free := Option.some.inj (lookup.symm.trans decoded)
+  subst value
+  have model := satisfied.1.2 uv
+  simp only [heap, stored, Option.getD_some, slot, Fragments.slotSatisfies,
+    List.forall_mem_map] at model
+  have parentAccepted : InternedGuardedLanguage.meaning
+      (SourceEqualityPCSGuard.holds formulas solver) ambient
+      (.node parentEntry edges depth free) (assignment uv) :=
+    (SourcePruningEnumerationNativeLanguage.handles_lookup _ _ _ _ _ _ decoded).mp model.1
+  obtain ⟨edge, offered, selected, _resident, accepted⟩ :=

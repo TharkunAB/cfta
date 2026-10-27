@@ -1,0 +1,44 @@
+          advance receipt = some (middleCaller, middleMemos.query) ∧
+          (∀ extra, match (generalizing := false) receipt with
+            | .complete fragment actual queries after =>
+                continueWith (resume holeKey fits admits graph templates checkEmpty edgesOf stop order (bound + extra) recursiveFuel)
+                  graph templates stop order (bound + extra) metadata uv fragment actual queries after = outcome
+            | _ => outcome = .complete [] middleCaller middleMemos.query) ∧
+          OutcomeResources formulas solver caller (finiteStep recursiveFuel seed capturedMass inherited) outcome ∧
+          match outcome with
+          | .complete _ actual queries =>
+              ∃ (next : Inventory) (final : Memos),
+                Post formulas solver next caller actual final ∧ final.query = queries ∧
+                Packet formulas solver next actual final metadata before ∧
+                Fits (finiteStep recursiveFuel seed capturedMass inherited).2 actual.checked ∧
+                Heap (fun guard => guard ∈ (finiteStep recursiveFuel seed capturedMass inherited).1)
+                  actual.checked.native.machine.heap
+          | .stopped _ _ _ => True) ∧
+      (∀ (fragment : Fragments.Fragment Symbol) (reached : Caller (bits + 2)) (queries : Queries) (after : Cached),
+        receipt = .complete fragment reached queries after →
+        CompletedHeadReceipt seed inherited formulas solver inventory caller memos metadata before checkEmpty uv scs edge
+          bound fragment reached queries after middleInventory middleMemos) ∧
+      ∀ (fragment : Fragments.Fragment Symbol) (reached : Caller (bits + 2)) (queries : Queries) (after : Cached),
+        receipt = .complete fragment reached queries after →
+        SourcePruningEnumerationRecursive.RecursiveCallbackAdmission formulas solver middleInventory reached middleMemos
+          metadata after uv fragment recursiveFuel (afterHead seed inherited) (massCeil seed capturedMass inherited) := by
+  obtain ⟨bound, receipt, middleCaller, saved, middleMemos, middleInventory,
+    running, post, querySame, admitted, pending, history, cacheBounds, headFits, headKnown, shape, completedReceipt⟩ :=
+    head_finite_complete_resources_with_receipt holeKey fits admits graph templates checkEmpty edgesOf stop order
+      metadata recursiveFuel seed formulas solver recursive inventory caller memos before uv handle scs parentEntry storedEdges
+      depth free edge packet ready stored decoded selected incoming bounded known selectionMembers selectionLength
+      capturedMass inherited initialMass inheritedLength reserved
+  refine ⟨bound, receipt, middleCaller, saved, middleMemos, middleInventory,
+    running, post, querySame, admitted, pending, history, cacheBounds, headFits, headKnown, shape, completedReceipt, ?_⟩
+  intro fragment reached queries after completed
+  have actualReceipt := completedReceipt fragment reached queries after completed
+  have actualAdmitted : Admitted uv (.complete fragment reached queries after) := by
+    simpa only [completed] using admitted
+  have actualMass := SourcePruningEnumerationRecursiveReservation.head_mass_le seed capturedMass inherited
+    before scs receipt initialMass inheritedLength cacheBounds
+  have mass : suspendedBound after.core ≤ massCeil seed capturedMass inherited := by
+    simpa only [completed] using actualMass
+  exact ⟨actualReceipt.completed, actualAdmitted.2.2.1,
+    actualReceipt.bounded, actualReceipt.known, mass, reserved.2⟩
+
+end MicroCFTA.SourcePruningEnumerationNativeHookResources

@@ -1,0 +1,10 @@
+/-- Complete programs use annotated constants and the source application marker. -/
+inductive ProgramEncoding : Language.Term Symbol → Prop where
+  /-- A constant has one annotation child. -/
+  | constant (symbol : Symbol) (annotation : Language.Term Symbol) :
+      ProgramEncoding (.node symbol [annotation])
+  /-- An application has the fixed arrow marker and two complete program children. -/
+  | app (annotation function argument : Language.Term Symbol) :
+      ProgramEncoding function → ProgramEncoding argument →
+      ProgramEncoding (.node ("app", FullSyntax.Formula.top)
+        [annotation, .node ("(->)", FullSyntax.Formula.top) [], function, argument])

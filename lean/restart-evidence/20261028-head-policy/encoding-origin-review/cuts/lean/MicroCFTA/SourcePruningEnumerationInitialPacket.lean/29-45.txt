@@ -1,0 +1,17 @@
+/-- Original native admission derives the exact initialized packet, root and both indexes. -/
+theorem initial_packet
+    (formulas : SourceGuards.Formulas FullSyntax.Formula)
+    (solver : SourceGuards.Entailment FullSyntax.Formula) (inventory : Inventory)
+    (caller : Caller width) (memos : Memos) (metadata : Metadata Typing) (value : Node)
+    (context : Context formulas solver inventory caller memos)
+    (available : Available caller.checked.native.machine.heap value)
+    (closed : value.free = []) (emptyPending : metadata.pending = []) :
+    ∃ handle,
+      encodeNode value = some handle ∧
+      lookupNode caller.checked.native.machine.heap handle = some value ∧
+      let startup : Cached :=
+        ⟨EnumerationState.initial handle,
+          fun slot => if slot = 0 then !MergedOrdinaryHeight.recursiveBoundary value else false,
+          fun _ => none⟩
+      Packet formulas solver inventory caller memos metadata startup ∧
+      EnumerationValidity.Canonical startup.core ∧

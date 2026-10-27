@@ -1,0 +1,26 @@
+    head_finite_complete_resources_accepting holeKey fits admits graph templates checkEmpty edgesOf stop order
+      metadata recursiveFuel seed formulas solver recursive inventory caller memos before uv handle scs parentEntry
+      storedEdges depth free edge packet ready stored decoded selected incoming bounded known selectionMembers selectionLength
+      capturedMass inherited initialMass inheritedLength reserved
+  refine ⟨bound, receipt, middleCaller, saved, middleMemos, middleInventory, retained, ?_⟩
+  obtain ⟨_running, _post, _queries, _admitted, _pending, _history, _cacheBounds, _headFits,
+    _headKnown, _shape, accepting⟩ := retained
+  intro ambient assignment satisfied accepted refuted avoids encoded
+  obtain ⟨extended, fragment, afterCache, agree, beforeModel, completed, filled, afterModel⟩ :=
+    accepting ambient assignment satisfied accepted
+  have self : Fragments.fill extended fragment = extended uv :=
+    filled.trans (agree uv ready.inside).symm
+  have pendingRefutes : ∀ group ∈ metadata.pending, @SourcePruningResume.Refutes Symbol
+      (@instDecidableEqProd String FullSyntax.Formula inferInstance FormulaExecutable.formulaDecidableEq) extended group := by
+    intro group member
+    exact (@SourcePruningResume.refutes_assignment_congr Symbol
+      (@instDecidableEqProd String FullSyntax.Formula inferInstance FormulaExecutable.formulaDecidableEq)
+      before.core.counter assignment extended group (packet.bounded group member) agree).mpr (refuted group member)
+  refine ⟨extended, fragment, afterCache, agree, beforeModel, completed, filled, afterModel,
+    self, pendingRefutes, ?_, ?_⟩
+  · rw [filled]
+    exact avoids
+  · rw [filled]
+    exact encoded
+
+end MicroCFTA.SourcePruningEnumerationNativeHookResources

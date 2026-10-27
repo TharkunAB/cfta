@@ -1,0 +1,51 @@
+/-- The actual callback input retains its original finite resource admission. -/
+structure RecursiveCallbackAdmission
+    (formulas : SourceGuards.Formulas FullSyntax.Formula)
+    (solver : SourceGuards.Entailment FullSyntax.Formula) (inventory : Inventory)
+    (caller : Caller (bits + 2)) (memos : Memos) (metadata : Metadata Typing) (before : Cached)
+    (uv : Nat) (fragment : Fragments.Fragment Symbol) (recursiveFuel : Nat) (seed : Seed) (ceiling : Nat) : Prop where
+  /-- The callback uses this actual native caller, full memo state and cache. -/
+  packet : Packet formulas solver inventory caller memos metadata before
+  /-- Every fragment hole names an allocated input variable. -/
+  allocated : FragmentBound before.core.counter fragment
+  /-- The actual native caller fits the planned callback profile. -/
+  bounded : Fits seed.2 caller.checked
+  /-- Every current native guard belongs to the planned callback carrier. -/
+  known : Heap (fun guard => guard ∈ seed.1) caller.checked.native.machine.heap
+  /-- The actual input cache fits the original mass ceiling. -/
+  mass : suspendedBound before.core ≤ ceiling
+  /-- The original reservation pays the smaller-depth recursive callback. -/
+  reserved : SourcePruningEnumerationFiniteReservation.Reserved bits recursiveFuel seed ceiling
+
+variable {Key : Type}
+variable [DecidableEq Symbol] [DecidableEq Node]
+
+/-- An actual false callback retains the same seed, mass ceiling and reservation. -/
+theorem RecursiveCallbackAdmission.after_false
+    {holeKey : Typing → Nat → Key} {fits : Key → Symbol → Bool} {admits : Key → Node → Bool}
+    {formulas : SourceGuards.Formulas FullSyntax.Formula}
+    {solver : SourceGuards.Entailment FullSyntax.Formula} {inventory : Inventory}
+    {graph : Graph Symbol Constraint} {templates : List (Template.Pattern Symbol)}
+    {metadata : Metadata Typing} {uv : Nat} {fragment : Fragments.Fragment Symbol}
+    {caller : Caller (bits + 2)} {memos : Memos} {before : Cached}
+    {checkEmpty : Bool} {edgesOf : Node → List (InternedConstructorTemplates.EdgeValue Symbol Constraint)}
+    {stop : Option (Metadata Typing → Nat → Bool)} {order : Metadata Typing → List Nat → Option Nat}
+    {recursiveFuel fuel : Nat} {updated : Metadata Typing} {after : Core}
+    {outcome : SourcePruningEnumerationNativeContinuations.HookResult
+      (Output (bits + 2) Typing) (Failure (bits + 2) Typing) (bits + 2)}
+    {seed : Seed} {ceiling : Nat}
+    (admission : RecursiveCallbackAdmission formulas solver inventory caller memos metadata before uv fragment
+      recursiveFuel seed ceiling)
+    (receipt : FalseCallbackReceipt holeKey fits admits formulas solver inventory graph templates metadata uv fragment
+      caller memos before checkEmpty edgesOf stop order recursiveFuel fuel updated after outcome) :
+    RecursiveCallbackAdmission formulas solver inventory caller memos updated
+      (EnumerationExpandableIndex.frame after before) uv fragment recursiveFuel seed ceiling := by
+  refine ⟨receipt.returned, ?_, admission.bounded, admission.known, ?_, admission.reserved⟩
+  · change FragmentBound after.counter fragment
+    rw [receipt.frame.counter]
+    exact admission.allocated
+  · change suspendedBound after ≤ ceiling
+    rw [SourcePruningEnumerationPrefixAdmission.suspendedBound_values before.core after receipt.frame.values]
+    exact admission.mass
+
+end MicroCFTA.SourcePruningEnumerationRecursive

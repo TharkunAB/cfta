@@ -1,0 +1,61 @@
+      | _ => True := by
+  obtain ⟨bound, receipt, middleCaller, saved, middleMemos, middleInventory, oldHead, policy⟩ :=
+    head_finite_complete_resources_policy holeKey fits admits graph templates checkEmpty edgesOf stop order
+      metadata recursiveFuel seed formulas solver recursive inventory caller memos before uv handle scs parentEntry
+      storedEdges depth free edge packet ready stored decoded selected incoming bounded known selectionMembers selectionLength
+      capturedMass inherited initialMass inheritedLength reserved
+  refine ⟨bound, receipt, middleCaller, saved, middleMemos, middleInventory, ⟨oldHead, policy⟩, ?_⟩
+  cases receipt with
+  | unhandled | rejected _ _ _ | stopped _ _ _ => trivial
+  | complete fragment actual queries afterCache =>
+      obtain ⟨_running, post, _querySame, admitted, headPending, history, _cacheBounds, headFits,
+        headKnown, shape, _accepting⟩ := oldHead
+      have endpoint : actual = middleCaller ∧ queries = middleMemos.query := by
+        rcases shape with unsupported | ⟨_outcome, advanced, _callback, _resources, _end⟩
+        · cases unsupported.1
+        · exact Prod.mk.inj (Option.some.inj advanced)
+      have actualSame := endpoint.1
+      have querySame := endpoint.2
+      subst actual
+      obtain ⟨level, frontier, ordered⟩ := packet.ordered
+      have callbackPacket := SourcePruningEnumerationRecursive.receipt_packet before.core uv fragment afterCache
+        level frontier post.context admitted history headPending ordered packet.bounded
+      obtain ⟨callbackFuel, result, callbackAfter, callbackRetained, callbackSemantics⟩ :=
+        SourcePruningEnumerationRecursive.callback_prefix_complete_resources_refutes formulas solver middleInventory
+          graph templates metadata uv fragment middleCaller middleMemos afterCache
+          holeKey fits admits checkEmpty edgesOf stop order callbackPacket admitted.2.2.1
+          (afterHead seed inherited).2 (fun guard => guard ∈ (afterHead seed inherited).1) headFits headKnown
+      refine ⟨callbackFuel, result, callbackAfter, ⟨⟨callbackRetained.1, (by
+        intro extra rejected selected chosen
+        have kept := callbackRetained.2 extra rejected selected chosen
+        dsimp only at kept ⊢
+        refine ⟨kept.1, ?_⟩
+        generalize observedEq : SourcePruningEnumerationSelectedStep.runPrefix holeKey fits admits graph templates
+          stop order result.2 (callbackFuel + extra) (callbackFuel + extra) (callbackFuel + extra)
+          (callbackFuel + extra) (callbackFuel + extra) (callbackFuel + extra) selected middleCaller
+          (EnumerationExpandableIndex.frame callbackAfter afterCache) middleMemos.query = observed at kept ⊢
+        cases observed with
+        | stopped _ _ => trivial
+        | parked checked candidate raw => cases candidate <;> exact kept.2
+        | narrowed checked prepared reached queries action candidate right ordinary =>
+            cases candidate <;> exact kept.2)⟩, callbackSemantics⟩, ?_⟩
+      intro ambient assignment satisfied accepted refuted avoids encoded
+      obtain ⟨extended, produced, producedCache, agree, beforeModel, completed, filled, afterModel,
+        self, pendingRefutes, currentAvoids, currentEncoding⟩ :=
+        policy ambient assignment satisfied accepted refuted avoids encoded
+      cases completed
+      have semantic := callbackSemantics
+        (SourcePruningEnumerationNativeLanguage.handles (SourceEqualityPCSGuard.holds formulas solver)
+          ambient middleCaller.checked.native.machine.heap)
+        (fun guard term => SourceEqualityPCSGuard.holds formulas solver guard term = true)
+        extended afterModel self pendingRefutes currentAvoids currentEncoding
+      refine ⟨extended, agree, beforeModel, filled, afterModel, semantic.1, semantic.2, ?_⟩
+      intro extra
+      have actualCallback := (callbackRetained.1.2.2.2.2.2.2 (bound + extra)).2.2.1
+        (resume holeKey fits admits graph templates checkEmpty edgesOf stop order
+          (bound + callbackFuel + extra) recursiveFuel)
+      have common : callbackFuel + (bound + extra) = bound + callbackFuel + extra := by omega
+      rw [common, semantic.1] at actualCallback
+      simpa only [querySame, Bool.false_eq_true, ↓reduceIte] using actualCallback
+
+end MicroCFTA.SourcePruningEnumerationNativeHookResources

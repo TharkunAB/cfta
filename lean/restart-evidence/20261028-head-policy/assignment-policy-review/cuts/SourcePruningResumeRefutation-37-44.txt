@@ -1,0 +1,8 @@
+def Refutes [DecidableEq Symbol] (assignment : Nat → Term Symbol)
+    (pending : Pending Symbol) : Prop :=
+  ¬ ∀ entry ∈ pending, Template.Matches entry.1 (assignment entry.2)
+
+variable {Symbol Guard : Type} [DecidableEq Symbol]
+
+/-- This local expression is definitionally equal to the private source part. -/
+private def part (fuel current : Nat) (term : Term (PartialSymbol Symbol))
