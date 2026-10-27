@@ -1,0 +1,42 @@
+/-- Additional fuel retains the exact callback result and complete final state. -/
+theorem recordTypes_moreFuel (graph : Graph Symbol Guard) (templates : List (Template.Pattern Symbol))
+    (fuel extra : Nat) (metadata : Metadata Typing) (uv : Nat) (input : Sum (Fragment Symbol) Nat) :
+    Retains (recordTypes graph templates fuel metadata uv input)
+      (recordTypes graph templates (fuel + extra) metadata uv input) := by
+  cases templates with
+  | nil =>
+      rw [recordTypes_empty, recordTypes_empty]
+      exact retains_refl _
+  | cons first rest =>
+      change Retains (SourcePruningOracle.oracle graph (first :: rest) fuel metadata.pending uv input >>= _)
+        (SourcePruningOracle.oracle graph (first :: rest) (fuel + extra) metadata.pending uv input >>= _)
+      exact retains_bind _ _ _ _
+        (SourcePruningOracle.oracle_moreFuel graph (first :: rest) fuel extra metadata.pending uv input)
+        (fun _ => retains_refl _)
+
+/-- One actual callback constructs a finite matching call from a framed input. -/
+theorem recordTypes_transport (graph : Graph Symbol Guard) (templates : List (Template.Pattern Symbol))
+    (leftFuel : Nat) (metadata : Metadata Typing) (uv : Nat) (input : Sum (Fragment Symbol) Nat)
+    (left right leftAfter : State Symbol Guard) (result : Bool × Metadata Typing)
+    (frame : Frame left right) (total : UnionFind.Total left.representatives)
+    (leftRead : Success (recordTypes graph templates leftFuel metadata uv input) left result leftAfter) :
+    ∃ rightFuel rightAfter,
+      Success (recordTypes graph templates rightFuel metadata uv input) right result rightAfter ∧
+      Frame leftAfter rightAfter := by
+  cases templates with
+  | nil =>
+      simp only [recordTypes_empty] at leftRead ⊢
+      let value := (false, {metadata with types := updatedTypes metadata uv input})
+      obtain ⟨resultEq, leftSame⟩ := (success_pure value result left leftAfter).mp leftRead
+      exact ⟨0, right, (success_pure value result right right).mpr ⟨resultEq, rfl⟩,
+        by simpa only [leftSame] using frame⟩
+  | cons first rest =>
+      change Success (SourcePruningOracle.oracle graph (first :: rest) leftFuel metadata.pending uv input >>= fun observed =>
+        pure (observed.1, {metadata with pending := observed.2, types := updatedTypes metadata uv input}))
+        left result leftAfter at leftRead
+      obtain ⟨observed, leftMiddle, leftFirst, finished⟩ := (success_bind _ _ _ _ _).mp leftRead
+      obtain ⟨rightFuel, rightMiddle, rightFirst, middleFrame⟩ := SourcePruningOracle.oracle_transport graph (first :: rest)
+        leftFuel metadata.pending uv input left right leftMiddle observed frame total leftFirst
+      let value := (observed.1, {metadata with pending := observed.2, types := updatedTypes metadata uv input})
+      obtain ⟨resultEq, leftSame⟩ := (success_pure value result leftMiddle leftAfter).mp finished
+      refine ⟨rightFuel, rightMiddle, ?_, by simpa only [leftSame] using middleFrame⟩

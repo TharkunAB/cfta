@@ -1,0 +1,45 @@
+theorem resume_replays (fuel current : Nat) (term : PartialTerm) (pending : Pending Symbol) :
+    Replays (Guard := Guard) (resume current term pending)
+      (SourcePruningResume.resume fuel current term pending) := by
+  apply bind_replays _ _ _ _
+    (mapM_replays _ _ (fun entry => ?_) pending) (fun _ => pure_replays _)
+  exact bind_replays _ _ _ _ (representative_replays fuel entry.2) (fun _ => pure_replays _)
+
+/-- The full oracle replays every successful old branch without a catalog restriction. -/
+theorem oracle_replays (graph : EnumerationState.Graph Symbol Guard)
+    (templates : List (Template.Pattern Symbol)) (fuel : Nat) (pending : List (Pending Symbol))
+    (uv : Nat) (input : Sum (Fragment Symbol) Nat) :
+    Replays (oracle graph templates fuel pending uv input)
+      (SourcePruningOracle.oracle graph templates fuel pending uv input) := by
+  cases input with
+  | inr node => exact pure_replays _
+  | inl fragment =>
+      dsimp only [oracle, SourcePruningOracle.oracle]
+      by_cases rejected : rejectEarly templates fragment = true
+      · simpa only [rejected, ↓reduceIte] using
+          (pure_replays (Symbol := Symbol) (Guard := Guard) (true, pending))
+      · simp only [rejected]
+        change Replays (if idle pending fragment = true then _ else _)
+          (if idle pending fragment = true then _ else _)
+        by_cases skipped : idle pending fragment = true
+        · simpa only [skipped, ↓reduceIte] using
+            (pure_replays (Symbol := Symbol) (Guard := Guard) (false, ([] : List (Pending Symbol))))
+        · simp only [skipped]
+          exact bind_replays _ _ _ _ (EnumerationFlatPartial.expandPartial_replays graph fuel fragment)
+            (fun term => bind_replays _ _ _ _
+              (mapM_replays _ _ (fun group => resume_replays fuel uv term group) pending)
+              (fun _ => pure_replays _))
+
+/-- The concrete metadata callback returns the same complete metadata and Boolean. -/
+theorem recordTypes_replays (graph : EnumerationState.Graph Symbol Guard)
+    (templates : List (Template.Pattern Symbol)) (fuel : Nat) (metadata : Metadata Typing)
+    (uv : Nat) (input : Sum (Fragment Symbol) Nat) :
+    Replays (recordTypes graph templates fuel metadata uv input)
+      (SourcePruningRecordTypes.recordTypes graph templates fuel metadata uv input) := by
+  dsimp only [recordTypes, SourcePruningRecordTypes.recordTypes]
+  by_cases empty : templates.isEmpty
+  · simp only [empty, ↓reduceIte]
+    exact bind_replays _ _ _ _ (pure_replays (false, metadata.pending)) (fun _ => pure_replays _)
+  · simp only [empty]
+    exact bind_replays _ _ _ _ (oracle_replays graph templates fuel metadata.pending uv input)
+      (fun _ => pure_replays _)

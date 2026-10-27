@@ -1,0 +1,46 @@
+variable {Guard Typing : Type}
+
+/-- Read one parked root before testing the supplied raw current variable. -/
+def part (current : Nat) (term : PartialTerm) (pending : Template.Pattern Symbol × Nat) :
+    Action Symbol Guard (Option (Pending Symbol)) := do
+  let root ← representative pending.2
+  pure (if root = current then matchPartial pending.1 term else some [(pending.1, root)])
+
+/-- Read every parked part before sequencing its optional match results. -/
+def resume (current : Nat) (term : PartialTerm) (pending : Pending Symbol) :
+    Action Symbol Guard (Option (Pending Symbol)) := do
+  let results ← pending.mapM (part current term)
+  pure ((results.mapM id : Option (List (Pending Symbol))).map (fun pieces => pieces.flatMap id))
+
+/-- The concrete-root fast path requires no pending checks. -/
+def idle (pending : List (Pending Symbol)) : Fragment Symbol → Bool
+  | .node symbol children => pending.isEmpty && !(isProgramRoot (.node symbol children))
+  | .hole _ => false
+
+/-- Render once and read every group before combining the match results. -/
+def observe (graph : EnumerationState.Graph Symbol Guard) (templates : List (Template.Pattern Symbol))
+    (fuel : Nat) (pending : List (Pending Symbol)) (uv : Nat) (fragment : Fragment Symbol) :
+    Action Symbol Guard (Bool × List (Pending Symbol)) := do
+  let term ← EnumerationFlatPartial.expandPartial graph fuel fragment
+  let resumed ← pending.mapM (resume uv term)
+  pure (finishChecks resumed (startMatches templates term))
+
+/-- Preserve early rejection, the idle branch and the full template callback. -/
+def oracle (graph : EnumerationState.Graph Symbol Guard) (templates : List (Template.Pattern Symbol))
+    (fuel : Nat) (pending : List (Pending Symbol)) (uv : Nat) (input : Sum (Fragment Symbol) Nat) :
+    Action Symbol Guard (Bool × List (Pending Symbol)) :=
+  match input with
+  | .inr _ => pure (false, pending)
+  | .inl fragment =>
+      if rejectEarly templates fragment = true then pure (true, pending)
+      else if idle pending fragment = true then pure (false, [])
+      else observe graph templates fuel pending uv fragment
+
+/-- Record the same raw type positions and retain the other metadata fields. -/
+def recordTypes (graph : EnumerationState.Graph Symbol Guard) (templates : List (Template.Pattern Symbol))
+    (fuel : Nat) (metadata : Metadata Typing) (uv : Nat) (input : Sum (Fragment Symbol) Nat) :
+    Action Symbol Guard (Bool × Metadata Typing) := do
+  let types := updatedTypes metadata uv input
+  let observed ← if templates.isEmpty then pure (false, metadata.pending)
+    else oracle graph templates fuel metadata.pending uv input
+  pure (observed.1, {metadata with pending := observed.2, types := types})

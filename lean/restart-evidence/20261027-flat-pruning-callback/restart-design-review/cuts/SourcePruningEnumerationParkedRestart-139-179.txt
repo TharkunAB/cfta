@@ -1,0 +1,41 @@
+/-- Read and check once, then restart with rebuilt indexes on the repeated branch. -/
+def run
+    (heap : InternedConstructorTemplates.State Symbol Constraint)
+    (readFuel checkFuel indexFuel uv : Nat)
+    (stop : Option (Metadata Typing → Nat → Bool))
+    (order : Metadata Typing → List Nat → Option Nat) (metadata : Metadata Typing)
+    (before : Cached) : EnumerateM Symbol Constraint (Option (Metadata Typing × Option Next)) :=
+  fun state =>
+    (ExceptT.run (getValue readFuel uv state)).flatMap fun row =>
+      match row with
+      | .error error => [.error error]
+      | .ok (.unenumerated (some handle) scs, readAfter) =>
+          (ExceptT.run (SourcePruningEnumerationRecursion.checkRepeated heap checkFuel uv handle scs readAfter)).flatMap
+            fun checkedRow => match checkedRow with
+            | .error error => [.error error]
+            | .ok (false, checked) => [.ok (none, checked)]
+            | .ok (true, checked) =>
+                match adapt heap indexFuel uv handle scs before checked with
+                | none => [.error .representativeFuel]
+                | some parked =>
+                    (ExceptT.run (SourcePruningEnumerationRestart.run stop order metadata parked checked)).map
+                      fun restarted => match restarted with
+                      | .error error => .error error
+                      | .ok (result, final) => .ok (some result, final)
+      | .ok _ => []
+
+/-- Actual read, check and index observations derive the exact parked restart result. -/
+theorem run_parked
+    (heap : InternedConstructorTemplates.State Symbol Constraint)
+    (readFuel checkFuel indexFuel uv handle : Nat) (scs : List Suspended)
+    (stop : Option (Metadata Typing → Nat → Bool))
+    (order : Metadata Typing → List Nat → Option Nat) (metadata : Metadata Typing)
+    (before parked : Cached) (readAfter checked : EnumerationState.State Symbol Constraint)
+    (read : ExceptT.run (getValue readFuel uv before.core) =
+      [.ok (.unenumerated (some handle) scs, readAfter)])
+    (check : ExceptT.run (SourcePruningEnumerationRecursion.checkRepeated heap checkFuel uv handle scs readAfter) =
+      [.ok (true, checked)])
+    (adapted : adapt heap indexFuel uv handle scs before checked = some parked) :
+    ExceptT.run (run heap readFuel checkFuel indexFuel uv stop order metadata before before.core) =
+      if SourcePruningEnumerationRestart.decision stop order metadata parked = some .stuck then []
+      else [.ok (some (metadata, SourcePruningEnumerationRestart.decision stop order metadata parked), parked.core)] := by

@@ -1,0 +1,9 @@
+resume :: UVar -> PartialTerm -> Pending -> EnumerateM Symbol (Maybe Pending)
+resume current partial pending = fmap (fmap concat . sequence) (traverse part pending)
+  where
+    part (template, uv) = do
+        representative <- getUVarRepresentative uv
+        pure $
+            if representative == current
+                then matchPartial template partial
+                else Just [(template, representative)]

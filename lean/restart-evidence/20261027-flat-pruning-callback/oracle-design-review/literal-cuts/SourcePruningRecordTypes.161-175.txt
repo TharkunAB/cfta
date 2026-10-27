@@ -1,0 +1,15 @@
+/-- Additional fuel retains the exact callback result and complete final state. -/
+theorem recordTypes_moreFuel (graph : Graph Symbol Guard) (templates : List (Template.Pattern Symbol))
+    (fuel extra : Nat) (metadata : Metadata Typing) (uv : Nat) (input : Sum (Fragment Symbol) Nat) :
+    Retains (recordTypes graph templates fuel metadata uv input)
+      (recordTypes graph templates (fuel + extra) metadata uv input) := by
+  cases templates with
+  | nil =>
+      rw [recordTypes_empty, recordTypes_empty]
+      exact retains_refl _
+  | cons first rest =>
+      change Retains (SourcePruningOracle.oracle graph (first :: rest) fuel metadata.pending uv input >>= _)
+        (SourcePruningOracle.oracle graph (first :: rest) (fuel + extra) metadata.pending uv input >>= _)
+      exact retains_bind _ _ _ _
+        (SourcePruningOracle.oracle_moreFuel graph (first :: rest) fuel extra metadata.pending uv input)
+        (fun _ => retains_refl _)

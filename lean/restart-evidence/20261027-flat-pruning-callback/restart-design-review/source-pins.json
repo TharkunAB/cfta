@@ -1,0 +1,635 @@
+{
+  "reviewed_at": "2026-10-27T06:04:06.483348+01:00",
+  "status": "DESIGN CLEAR; implementation and strict checking remain Root work",
+  "cut_convention": "One-based inclusive line spans. Concatenate bytes.splitlines(keepends=True)[first-1:last]. Keep original LF bytes. Do not strip or normalize.",
+  "scope": "Source-only review; no Lean/compiler/native tests, Git, network, or repository mutation.",
+  "sources": [
+    {
+      "source": "/home/tritlo/Code/mcfta/lean/MicroCFTA/SourcePruningEnumerationRestart.lean",
+      "snapshot": "/tmp/mcfta-flat-pruning-callback-20261027/restart-design-review/inputs/SourcePruningEnumerationRestart.lean",
+      "bytes": 5022,
+      "sha256": "eb236a511d3ccd26acfdc52558803eb8f53d287ddca9a444a6e31823d87c9526",
+      "read_scope": "whole"
+    },
+    {
+      "source": "/home/tritlo/Code/mcfta/lean/MicroCFTA/SourcePruningEnumerationSelectedStep.lean",
+      "snapshot": "/tmp/mcfta-flat-pruning-callback-20261027/restart-design-review/inputs/SourcePruningEnumerationSelectedStep.lean",
+      "bytes": 14387,
+      "sha256": "cf1f24b70d7132344485fc6db14dacf435b806c12da2b4241142c3de6e9be3ab",
+      "read_scope": "whole"
+    },
+    {
+      "source": "/home/tritlo/Code/mcfta/lean/MicroCFTA/SourcePruningEnumerationRecursive.lean",
+      "snapshot": "/tmp/mcfta-flat-pruning-callback-20261027/restart-design-review/inputs/SourcePruningEnumerationRecursive.lean",
+      "bytes": 8574,
+      "sha256": "9a0c5d1067439593915c06e9f92bb7f2ea5f9f9db2e38ae61f021b0b5bd608ea",
+      "read_scope": "whole"
+    },
+    {
+      "source": "/home/tritlo/Code/mcfta/lean/MicroCFTA/EnumerationFlatCached.lean",
+      "snapshot": "/tmp/mcfta-flat-pruning-callback-20261027/restart-design-review/inputs/EnumerationFlatCached.lean",
+      "bytes": 2553,
+      "sha256": "16721b8cde9584b1aa0c782e0c6fbc6a5eb64d4ea7a3228f8568c75822c50e1e",
+      "read_scope": "whole"
+    },
+    {
+      "source": "/home/tritlo/Code/mcfta/lean/MicroCFTA/EnumerationFlatSemantics.lean",
+      "snapshot": "/tmp/mcfta-flat-pruning-callback-20261027/restart-design-review/inputs/EnumerationFlatSemantics.lean",
+      "bytes": 3767,
+      "sha256": "5fb09d776d76ed12613c5abee0f6eb239662364dc1c52954f81c72594f097375",
+      "read_scope": "whole"
+    },
+    {
+      "source": "/home/tritlo/Code/mcfta/lean/MicroCFTA/EnumerationPureSelection.lean",
+      "snapshot": "/tmp/mcfta-flat-pruning-callback-20261027/restart-design-review/inputs/EnumerationPureSelection.lean",
+      "bytes": 14461,
+      "sha256": "32c3840fbade865c3e9342f6b7dddcc44fbfef0db0185b4950aedce3912e6729",
+      "read_scope": "whole"
+    },
+    {
+      "source": "/home/tritlo/Code/mcfta/lean/MicroCFTA/EnumerationIndexSelection.lean",
+      "snapshot": "/tmp/mcfta-flat-pruning-callback-20261027/restart-design-review/inputs/EnumerationIndexSelection.lean",
+      "bytes": 14063,
+      "sha256": "ae067c7531435870f7c4fb84f13c93feced5c8f81cdd11fc621939fd77e9fcdc",
+      "read_scope": "focused: lines 1-125"
+    },
+    {
+      "source": "/home/tritlo/Code/mcfta/lean/MicroCFTA/EnumerationState.lean",
+      "snapshot": "/tmp/mcfta-flat-pruning-callback-20261027/restart-design-review/inputs/EnumerationState.lean",
+      "bytes": 33489,
+      "sha256": "83a898b883ec7b52469bccd87e8afa4f7abb320e3c935bf48f3d80ad77003cc4",
+      "read_scope": "focused: lines 250-285 and 335-390"
+    },
+    {
+      "source": "/home/tritlo/Code/mcfta/lean/MicroCFTA/SourcePruningEnumerationParkedRestart.lean",
+      "snapshot": "/tmp/mcfta-flat-pruning-callback-20261027/restart-design-review/inputs/SourcePruningEnumerationParkedRestart.lean",
+      "bytes": 16903,
+      "sha256": "bf5c16846f77bfa8d146f58ea8dafbde34ca1a1bef9dbfe453f344bebc0b94e0",
+      "read_scope": "focused: lines 80-180"
+    },
+    {
+      "source": "/home/tritlo/Code/mcfta/lean/MicroCFTA/SourcePruningEnumerationRecursion.lean",
+      "snapshot": "/tmp/mcfta-flat-pruning-callback-20261027/restart-design-review/inputs/SourcePruningEnumerationRecursion.lean",
+      "bytes": 16112,
+      "sha256": "14cb1702701b110366170500ac722cdeeb7a04d61fd09928634dbf6b9db76850",
+      "read_scope": "focused: lines 1-120"
+    },
+    {
+      "source": "/home/tritlo/Code/mcfta/lean/MicroCFTA/SourcePruningEnumerationAfterCallback.lean",
+      "snapshot": "/tmp/mcfta-flat-pruning-callback-20261027/restart-design-review/inputs/SourcePruningEnumerationAfterCallback.lean",
+      "bytes": 8985,
+      "sha256": "ba452d953b87949f4d850c5e00ae4604f4a08380befed375d097fe5ed44537df",
+      "read_scope": "whole"
+    },
+    {
+      "source": "/home/tritlo/Code/mcfta/lean/MicroCFTA/SourcePruningAfterCallbackExact.lean",
+      "snapshot": "/tmp/mcfta-flat-pruning-callback-20261027/restart-design-review/inputs/SourcePruningAfterCallbackExact.lean",
+      "bytes": 3079,
+      "sha256": "237c62fd2f7bc907e0e9b5117ef81443e967f47fa5fc1362b54d310ee55aaa1d",
+      "read_scope": "whole"
+    },
+    {
+      "source": "/home/tritlo/Code/mcfta/lean/MicroCFTA/SourcePruningEnumerationReceiptCallback.lean",
+      "snapshot": "/tmp/mcfta-flat-pruning-callback-20261027/restart-design-review/inputs/SourcePruningEnumerationReceiptCallback.lean",
+      "bytes": 4336,
+      "sha256": "cea2552071abda1ebe4d3f481564c19ddce30ba846b9ff69defa2f8059925f80",
+      "read_scope": "whole"
+    },
+    {
+      "source": "/home/tritlo/Code/mcfta/lean/MicroCFTA/SourcePruningEnumerationRecursiveCallback.lean",
+      "snapshot": "/tmp/mcfta-flat-pruning-callback-20261027/restart-design-review/inputs/SourcePruningEnumerationRecursiveCallback.lean",
+      "bytes": 7734,
+      "sha256": "6967beebbc520c475907d603125660d4894e246aae06b03a265382e4c431ef6e",
+      "read_scope": "whole"
+    },
+    {
+      "source": "/home/tritlo/Code/mcfta/lean/MicroCFTA/SourcePruningEnumerationRecursiveCallbackCanonical.lean",
+      "snapshot": "/tmp/mcfta-flat-pruning-callback-20261027/restart-design-review/inputs/SourcePruningEnumerationRecursiveCallbackCanonical.lean",
+      "bytes": 3792,
+      "sha256": "29feb22a95e41cee3e9ef641ad3faaf270a26d2cc6b46a35112fa213740a3842",
+      "read_scope": "whole"
+    },
+    {
+      "source": "/home/tritlo/Code/mcfta/lean/MicroCFTA/SourcePruningCallbackCompletion.lean",
+      "snapshot": "/tmp/mcfta-flat-pruning-callback-20261027/restart-design-review/inputs/SourcePruningCallbackCompletion.lean",
+      "bytes": 6177,
+      "sha256": "d3a1b75a3d93739185a85f14b70d1944630afcb9a6f523c45cb595462c8c28a7",
+      "read_scope": "whole"
+    },
+    {
+      "source": "/home/tritlo/Code/mcfta/lean/MicroCFTA/SourcePruningCallbackExact.lean",
+      "snapshot": "/tmp/mcfta-flat-pruning-callback-20261027/restart-design-review/inputs/SourcePruningCallbackExact.lean",
+      "bytes": 8279,
+      "sha256": "64b5844025d97a707c08eaab34050678a45b1231b7ff2b27e4ef3f5da67297c7",
+      "read_scope": "focused: lines 100-134"
+    },
+    {
+      "source": "/home/tritlo/Code/mcfta/lean/MicroCFTA/SourcePruningEnumerationNativeCacheFrame.lean",
+      "snapshot": "/tmp/mcfta-flat-pruning-callback-20261027/restart-design-review/inputs/SourcePruningEnumerationNativeCacheFrame.lean",
+      "bytes": 5099,
+      "sha256": "c021866658894db662a56bb2e853688f519fd3415067bfa532ef74cb127ea198",
+      "read_scope": "whole"
+    },
+    {
+      "source": "/home/tritlo/Code/mcfta/lean/MicroCFTA/SourcePruningEnumerationRecursivePacket.lean",
+      "snapshot": "/tmp/mcfta-flat-pruning-callback-20261027/restart-design-review/inputs/SourcePruningEnumerationRecursivePacket.lean",
+      "bytes": 5104,
+      "sha256": "a4b24cb62806bda0f1b9a5f02b95650637b9e8e3c274f2f508438927915ad837",
+      "read_scope": "focused: lines 20-79"
+    },
+    {
+      "source": "/home/tritlo/Code/mcfta/lean/MicroCFTA/EnumerationFlatState.lean",
+      "snapshot": "/tmp/mcfta-flat-pruning-callback-20261027/restart-design-review/inputs/EnumerationFlatState.lean",
+      "bytes": 5709,
+      "sha256": "d9d62dca6bb0b9af869ef97ab8c49041f7ef81ef721bb5e560b0c6b346291911",
+      "read_scope": "whole"
+    },
+    {
+      "source": "/home/tritlo/Code/mcfta/lean/MicroCFTA/EnumerationFlatNativeIndex.lean",
+      "snapshot": "/tmp/mcfta-flat-pruning-callback-20261027/restart-design-review/inputs/EnumerationFlatNativeIndex.lean",
+      "bytes": 8562,
+      "sha256": "b98136a435f8b26495cb5ad5b81e8e11f41f7fbedf151f5a562215deb278325c",
+      "read_scope": "whole"
+    },
+    {
+      "source": "/home/tritlo/Code/mcfta/lean/MicroCFTA/EnumerationFlatPrimitives.lean",
+      "snapshot": "/tmp/mcfta-flat-pruning-callback-20261027/restart-design-review/inputs/EnumerationFlatPrimitives.lean",
+      "bytes": 6219,
+      "sha256": "0b6e06b42311b243796d175d13d9ebd3ec604736237e2c22223b8ca9ba1319d1",
+      "read_scope": "whole"
+    },
+    {
+      "source": "/home/tritlo/Code/mcfta/lean/MicroCFTA/EnumerationCompressionFrame.lean",
+      "snapshot": "/tmp/mcfta-flat-pruning-callback-20261027/restart-design-review/inputs/EnumerationCompressionFrame.lean",
+      "bytes": 8220,
+      "sha256": "5b6e6a4b11c21b949874db500e23aa074fcdd4e0de683f46f33863113dc91375",
+      "read_scope": "focused: lines 1-85"
+    },
+    {
+      "source": "/home/tritlo/Code/mcfta/lean/MicroCFTA/FlatUnionFind.lean",
+      "snapshot": "/tmp/mcfta-flat-pruning-callback-20261027/restart-design-review/inputs/FlatUnionFind.lean",
+      "bytes": 8210,
+      "sha256": "6a474655548479a53848b8ea09c075808af48d5b0e292bbd49c2a4fc4dd3ce7f",
+      "read_scope": "focused: lines 18-85"
+    },
+    {
+      "source": "/home/tritlo/Code/mcfta/lean/MicroCFTA/SourcePruningOracle.lean",
+      "snapshot": "/tmp/mcfta-flat-pruning-callback-20261027/restart-design-review/inputs/SourcePruningOracle.lean",
+      "bytes": 30597,
+      "sha256": "c7fb67635c732aafbe9b447be9889868a20af9003a00969bbb492005f32d4f31",
+      "read_scope": "focused: lines 1-140"
+    },
+    {
+      "source": "/home/tritlo/Code/mcfta/lean/MicroCFTA/SourcePruningResume.lean",
+      "snapshot": "/tmp/mcfta-flat-pruning-callback-20261027/restart-design-review/inputs/SourcePruningResume.lean",
+      "bytes": 24653,
+      "sha256": "ce1687067cb47d36513d6529c0777e28cdc7345be1cb1af9d6a94784ab2f7fa4",
+      "read_scope": "focused: lines 1-115"
+    },
+    {
+      "source": "/home/tritlo/Code/mcfta/lean/MicroCFTA/SourcePruningRecordTypes.lean",
+      "snapshot": "/tmp/mcfta-flat-pruning-callback-20261027/restart-design-review/inputs/SourcePruningRecordTypes.lean",
+      "bytes": 13138,
+      "sha256": "c5a714825eab5f8efa89eaecbc5cae7438136834010d4270257d145af108bfbf",
+      "read_scope": "focused: lines 15-202"
+    },
+    {
+      "source": "/home/tritlo/Code/mcfta/lean/MicroCFTA/SourcePruningEnumerationNativeContinuations.lean",
+      "snapshot": "/tmp/mcfta-flat-pruning-callback-20261027/restart-design-review/inputs/SourcePruningEnumerationNativeContinuations.lean",
+      "bytes": 10765,
+      "sha256": "108bb3652bfc67fa341ab22bdc83940eb59e96b5a19501dd84d7ebe6b3efbdc8",
+      "read_scope": "whole"
+    },
+    {
+      "source": "/home/tritlo/Code/mcfta/lean/MicroCFTA/SourcePruningEnumerationNativeOrdinaryContinuations.lean",
+      "snapshot": "/tmp/mcfta-flat-pruning-callback-20261027/restart-design-review/inputs/SourcePruningEnumerationNativeOrdinaryContinuations.lean",
+      "bytes": 6018,
+      "sha256": "74682c9cdc9bf037363c780b64d2f5e9303ffd3c510666eda7a654ce273baa5a",
+      "read_scope": "whole"
+    },
+    {
+      "source": "/home/tritlo/Code/mcfta/lean/MicroCFTA/EnumerationResultRelation.lean",
+      "snapshot": "/tmp/mcfta-flat-pruning-callback-20261027/restart-design-review/inputs/EnumerationResultRelation.lean",
+      "bytes": 5074,
+      "sha256": "d733967c8ac3c584e1e5294321ff884ab977b04a0428be8a315522676ff44222",
+      "read_scope": "whole"
+    },
+    {
+      "source": "/home/tritlo/Code/mcfta/cfta/src/Data/CFTA/Enumeration.hs",
+      "snapshot": "/tmp/mcfta-flat-pruning-callback-20261027/restart-design-review/inputs/Enumeration.hs",
+      "bytes": 71269,
+      "sha256": "949c484539483f0e646b069899be127a57f0897353b24b92e51a5d90654cec07",
+      "read_scope": "focused: lines 835-874 and 941-1014"
+    }
+  ],
+  "cuts": [
+    {
+      "source": "/home/tritlo/Code/mcfta/lean/MicroCFTA/SourcePruningEnumerationRestart.lean",
+      "first": 13,
+      "last": 37,
+      "snapshot": "/tmp/mcfta-flat-pruning-callback-20261027/restart-design-review/cuts/SourcePruningEnumerationRestart-13-37.txt",
+      "bytes": 1596,
+      "sha256": "75237b95bdcec0acdfdfaf6ad799151d8b038e9d15229b2b8b9e20420f6d5df1"
+    },
+    {
+      "source": "/home/tritlo/Code/mcfta/lean/MicroCFTA/SourcePruningEnumerationRestart.lean",
+      "first": 39,
+      "last": 79,
+      "snapshot": "/tmp/mcfta-flat-pruning-callback-20261027/restart-design-review/cuts/SourcePruningEnumerationRestart-39-79.txt",
+      "bytes": 2741,
+      "sha256": "f695da80bd1b6ebeeef945eca47f0bc7767fcbbf7df252de0fe060ce11d29d63"
+    },
+    {
+      "source": "/home/tritlo/Code/mcfta/lean/MicroCFTA/SourcePruningEnumerationSelectedStep.lean",
+      "first": 20,
+      "last": 94,
+      "snapshot": "/tmp/mcfta-flat-pruning-callback-20261027/restart-design-review/cuts/SourcePruningEnumerationSelectedStep-20-94.txt",
+      "bytes": 5292,
+      "sha256": "42d1a1e0cbd5724caaf806436f2512af5fd2b19e4081e54a1b93bded46f55774"
+    },
+    {
+      "source": "/home/tritlo/Code/mcfta/lean/MicroCFTA/SourcePruningEnumerationSelectedStep.lean",
+      "first": 187,
+      "last": 226,
+      "snapshot": "/tmp/mcfta-flat-pruning-callback-20261027/restart-design-review/cuts/SourcePruningEnumerationSelectedStep-187-226.txt",
+      "bytes": 2771,
+      "sha256": "92ad81d44ebba401a5837198f1e5a255c6fabbac638577568b3469322f059cd5"
+    },
+    {
+      "source": "/home/tritlo/Code/mcfta/lean/MicroCFTA/SourcePruningEnumerationRecursive.lean",
+      "first": 22,
+      "last": 59,
+      "snapshot": "/tmp/mcfta-flat-pruning-callback-20261027/restart-design-review/cuts/SourcePruningEnumerationRecursive-22-59.txt",
+      "bytes": 2225,
+      "sha256": "dcdd0f3f5a7982364ac1d626422353a3004e17f905185b517d246cac6d342871"
+    },
+    {
+      "source": "/home/tritlo/Code/mcfta/lean/MicroCFTA/SourcePruningEnumerationRecursive.lean",
+      "first": 61,
+      "last": 76,
+      "snapshot": "/tmp/mcfta-flat-pruning-callback-20261027/restart-design-review/cuts/SourcePruningEnumerationRecursive-61-76.txt",
+      "bytes": 1080,
+      "sha256": "b7ffc6ad460735eca7ee3e98fc73ef84adb1f973c35064fc51017cf45772a22c"
+    },
+    {
+      "source": "/home/tritlo/Code/mcfta/lean/MicroCFTA/SourcePruningEnumerationRecursive.lean",
+      "first": 80,
+      "last": 126,
+      "snapshot": "/tmp/mcfta-flat-pruning-callback-20261027/restart-design-review/cuts/SourcePruningEnumerationRecursive-80-126.txt",
+      "bytes": 3779,
+      "sha256": "9b9f62821fef80160e04bd553877c73cc034d9cebbed0c48213faa2a3a700c5c"
+    },
+    {
+      "source": "/home/tritlo/Code/mcfta/lean/MicroCFTA/EnumerationFlatCached.lean",
+      "first": 13,
+      "last": 40,
+      "snapshot": "/tmp/mcfta-flat-pruning-callback-20261027/restart-design-review/cuts/EnumerationFlatCached-13-40.txt",
+      "bytes": 1514,
+      "sha256": "ff4cf071747a0eb0e2ea1604b0a095c2766fd8fac5bb64afcf82c2fb08dc7ec2"
+    },
+    {
+      "source": "/home/tritlo/Code/mcfta/lean/MicroCFTA/EnumerationFlatSemantics.lean",
+      "first": 19,
+      "last": 57,
+      "snapshot": "/tmp/mcfta-flat-pruning-callback-20261027/restart-design-review/cuts/EnumerationFlatSemantics-19-57.txt",
+      "bytes": 2293,
+      "sha256": "ff4f05d7d0eb0b9af3f8583038c585bf8c11a629ee5541448954220226196720"
+    },
+    {
+      "source": "/home/tritlo/Code/mcfta/lean/MicroCFTA/EnumerationPureSelection.lean",
+      "first": 164,
+      "last": 172,
+      "snapshot": "/tmp/mcfta-flat-pruning-callback-20261027/restart-design-review/cuts/EnumerationPureSelection-164-172.txt",
+      "bytes": 515,
+      "sha256": "1f890d0341cb9616338ecc3dff8a6ee5d900ba72ad3c7fbf5c830ecb011295d4"
+    },
+    {
+      "source": "/home/tritlo/Code/mcfta/lean/MicroCFTA/EnumerationIndexSelection.lean",
+      "first": 37,
+      "last": 39,
+      "snapshot": "/tmp/mcfta-flat-pruning-callback-20261027/restart-design-review/cuts/EnumerationIndexSelection-37-39.txt",
+      "bytes": 212,
+      "sha256": "4b596c78a8cf3154a51706d2a6cd8ec449125c46675530a78b5768e19d6d6352"
+    },
+    {
+      "source": "/home/tritlo/Code/mcfta/lean/MicroCFTA/EnumerationState.lean",
+      "first": 264,
+      "last": 276,
+      "snapshot": "/tmp/mcfta-flat-pruning-callback-20261027/restart-design-review/cuts/EnumerationState-264-276.txt",
+      "bytes": 554,
+      "sha256": "17d9b747740888083f123a340733f66ceb2c6e1abc237f509b99a017179ccc85"
+    },
+    {
+      "source": "/home/tritlo/Code/mcfta/lean/MicroCFTA/EnumerationState.lean",
+      "first": 341,
+      "last": 354,
+      "snapshot": "/tmp/mcfta-flat-pruning-callback-20261027/restart-design-review/cuts/EnumerationState-341-354.txt",
+      "bytes": 747,
+      "sha256": "86740ab2fa3956b9d46516bc452473082ad7693d3b9a2b150f31bc88f3aa51f0"
+    },
+    {
+      "source": "/home/tritlo/Code/mcfta/lean/MicroCFTA/SourcePruningEnumerationParkedRestart.lean",
+      "first": 94,
+      "last": 137,
+      "snapshot": "/tmp/mcfta-flat-pruning-callback-20261027/restart-design-review/cuts/SourcePruningEnumerationParkedRestart-94-137.txt",
+      "bytes": 2646,
+      "sha256": "ea95eae85dca4057212df17a617b34b52dc59b9d76e897ed64bd83ceba179e2b"
+    },
+    {
+      "source": "/home/tritlo/Code/mcfta/lean/MicroCFTA/SourcePruningEnumerationParkedRestart.lean",
+      "first": 139,
+      "last": 179,
+      "snapshot": "/tmp/mcfta-flat-pruning-callback-20261027/restart-design-review/cuts/SourcePruningEnumerationParkedRestart-139-179.txt",
+      "bytes": 2592,
+      "sha256": "93c5b9e9df3f6b5b0c53e7db6e5a46456f59e5d5b14900ba99a99169d410322b"
+    },
+    {
+      "source": "/home/tritlo/Code/mcfta/lean/MicroCFTA/SourcePruningEnumerationRecursion.lean",
+      "first": 16,
+      "last": 34,
+      "snapshot": "/tmp/mcfta-flat-pruning-callback-20261027/restart-design-review/cuts/SourcePruningEnumerationRecursion-16-34.txt",
+      "bytes": 984,
+      "sha256": "cd5d7217756899b265cb21b793675cf12e5efb8a2bfb91b6958b1fae51b20d3f"
+    },
+    {
+      "source": "/home/tritlo/Code/mcfta/lean/MicroCFTA/SourcePruningEnumerationAfterCallback.lean",
+      "first": 14,
+      "last": 46,
+      "snapshot": "/tmp/mcfta-flat-pruning-callback-20261027/restart-design-review/cuts/SourcePruningEnumerationAfterCallback-14-46.txt",
+      "bytes": 2190,
+      "sha256": "8cf3816e2c2104b2fbd985fdc2329a43d3259c9dc12a80511e9d429f025e1799"
+    },
+    {
+      "source": "/home/tritlo/Code/mcfta/lean/MicroCFTA/SourcePruningAfterCallbackExact.lean",
+      "first": 13,
+      "last": 45,
+      "snapshot": "/tmp/mcfta-flat-pruning-callback-20261027/restart-design-review/cuts/SourcePruningAfterCallbackExact-13-45.txt",
+      "bytes": 2442,
+      "sha256": "c1f3ff8a2123117f0e7e0699837266504f7925368109028492b07e0e4741ac91"
+    },
+    {
+      "source": "/home/tritlo/Code/mcfta/lean/MicroCFTA/SourcePruningEnumerationReceiptCallback.lean",
+      "first": 13,
+      "last": 58,
+      "snapshot": "/tmp/mcfta-flat-pruning-callback-20261027/restart-design-review/cuts/SourcePruningEnumerationReceiptCallback-13-58.txt",
+      "bytes": 3597,
+      "sha256": "844fd73efdce99c17c9829ccd417bb575a90fe3cbde09ce2e414b791622c60b6"
+    },
+    {
+      "source": "/home/tritlo/Code/mcfta/lean/MicroCFTA/SourcePruningEnumerationRecursiveCallback.lean",
+      "first": 28,
+      "last": 60,
+      "snapshot": "/tmp/mcfta-flat-pruning-callback-20261027/restart-design-review/cuts/SourcePruningEnumerationRecursiveCallback-28-60.txt",
+      "bytes": 2423,
+      "sha256": "a0914c18b341dad60625d9a8b06662bb18cff67e207fb94ce4bbb5b1ae878ed5"
+    },
+    {
+      "source": "/home/tritlo/Code/mcfta/lean/MicroCFTA/SourcePruningEnumerationRecursiveCallback.lean",
+      "first": 64,
+      "last": 108,
+      "snapshot": "/tmp/mcfta-flat-pruning-callback-20261027/restart-design-review/cuts/SourcePruningEnumerationRecursiveCallback-64-108.txt",
+      "bytes": 3540,
+      "sha256": "f39efd46b9f01a9aba793fd27a7572fb7a855cc1110b104dde400a88945857ea"
+    },
+    {
+      "source": "/home/tritlo/Code/mcfta/lean/MicroCFTA/SourcePruningEnumerationRecursiveCallbackCanonical.lean",
+      "first": 34,
+      "last": 57,
+      "snapshot": "/tmp/mcfta-flat-pruning-callback-20261027/restart-design-review/cuts/SourcePruningEnumerationRecursiveCallbackCanonical-34-57.txt",
+      "bytes": 1921,
+      "sha256": "b9d874b35f5051858436c11eebe91f0f3c94b7e9c265b4380a98826b49201697"
+    },
+    {
+      "source": "/home/tritlo/Code/mcfta/lean/MicroCFTA/SourcePruningCallbackCompletion.lean",
+      "first": 21,
+      "last": 55,
+      "snapshot": "/tmp/mcfta-flat-pruning-callback-20261027/restart-design-review/cuts/SourcePruningCallbackCompletion-21-55.txt",
+      "bytes": 2463,
+      "sha256": "ddbfa659a4fdc57ee1055c400816a6fb7ca357bb68b53986820a2f63e93f5003"
+    },
+    {
+      "source": "/home/tritlo/Code/mcfta/lean/MicroCFTA/SourcePruningCallbackCompletion.lean",
+      "first": 80,
+      "last": 97,
+      "snapshot": "/tmp/mcfta-flat-pruning-callback-20261027/restart-design-review/cuts/SourcePruningCallbackCompletion-80-97.txt",
+      "bytes": 1459,
+      "sha256": "790149ee297e4bd1073f769ac9cd98ed01fe9886e07dfcd5f0a910340581d18b"
+    },
+    {
+      "source": "/home/tritlo/Code/mcfta/lean/MicroCFTA/SourcePruningCallbackExact.lean",
+      "first": 112,
+      "last": 132,
+      "snapshot": "/tmp/mcfta-flat-pruning-callback-20261027/restart-design-review/cuts/SourcePruningCallbackExact-112-132.txt",
+      "bytes": 1551,
+      "sha256": "ce4cd187effa27ddc4a6bb5cff7287a5eb5265fc65021f87bd1e6c77bce43501"
+    },
+    {
+      "source": "/home/tritlo/Code/mcfta/lean/MicroCFTA/SourcePruningEnumerationNativeCacheFrame.lean",
+      "first": 16,
+      "last": 38,
+      "snapshot": "/tmp/mcfta-flat-pruning-callback-20261027/restart-design-review/cuts/SourcePruningEnumerationNativeCacheFrame-16-38.txt",
+      "bytes": 1534,
+      "sha256": "e80a0554f92a0f73123caa35a49a8336c8c5464f1cb3efe8c6755f8e7caac7e3"
+    },
+    {
+      "source": "/home/tritlo/Code/mcfta/lean/MicroCFTA/SourcePruningEnumerationNativeCacheFrame.lean",
+      "first": 40,
+      "last": 74,
+      "snapshot": "/tmp/mcfta-flat-pruning-callback-20261027/restart-design-review/cuts/SourcePruningEnumerationNativeCacheFrame-40-74.txt",
+      "bytes": 2707,
+      "sha256": "52c544f33d57b6a762e14c7442447e030f13ee4368c3e09cad5649329e1f35b6"
+    },
+    {
+      "source": "/home/tritlo/Code/mcfta/lean/MicroCFTA/SourcePruningEnumerationRecursivePacket.lean",
+      "first": 20,
+      "last": 60,
+      "snapshot": "/tmp/mcfta-flat-pruning-callback-20261027/restart-design-review/cuts/SourcePruningEnumerationRecursivePacket-20-60.txt",
+      "bytes": 2840,
+      "sha256": "2833804839942a4634bc98d1ed74540ed2ae12e9f93f8a76ab79085b828b5fef"
+    },
+    {
+      "source": "/home/tritlo/Code/mcfta/lean/MicroCFTA/SourcePruningEnumerationRecursivePacket.lean",
+      "first": 62,
+      "last": 77,
+      "snapshot": "/tmp/mcfta-flat-pruning-callback-20261027/restart-design-review/cuts/SourcePruningEnumerationRecursivePacket-62-77.txt",
+      "bytes": 1200,
+      "sha256": "0af023148e0dc39a4e4fa998f3104341646ca621728f90ee4f0238bf075b98e8"
+    },
+    {
+      "source": "/home/tritlo/Code/mcfta/lean/MicroCFTA/EnumerationFlatState.lean",
+      "first": 21,
+      "last": 51,
+      "snapshot": "/tmp/mcfta-flat-pruning-callback-20261027/restart-design-review/cuts/EnumerationFlatState-21-51.txt",
+      "bytes": 1692,
+      "sha256": "8fa7ab078395ca5ed6391fb504418df0a14c6379e5a30e40a6661f371a10a551"
+    },
+    {
+      "source": "/home/tritlo/Code/mcfta/lean/MicroCFTA/EnumerationFlatState.lean",
+      "first": 69,
+      "last": 103,
+      "snapshot": "/tmp/mcfta-flat-pruning-callback-20261027/restart-design-review/cuts/EnumerationFlatState-69-103.txt",
+      "bytes": 1704,
+      "sha256": "3356d2418ac4a23e94d81fb46383d0c11b2fbab1c9d52c792a7b796c7e8dd2ba"
+    },
+    {
+      "source": "/home/tritlo/Code/mcfta/lean/MicroCFTA/EnumerationFlatNativeIndex.lean",
+      "first": 18,
+      "last": 47,
+      "snapshot": "/tmp/mcfta-flat-pruning-callback-20261027/restart-design-review/cuts/EnumerationFlatNativeIndex-18-47.txt",
+      "bytes": 1798,
+      "sha256": "d38e6255c99dfe93c5de64ea1d6dc0fa046f96c42c08599dbd238eb55df735d4"
+    },
+    {
+      "source": "/home/tritlo/Code/mcfta/lean/MicroCFTA/EnumerationFlatNativeIndex.lean",
+      "first": 57,
+      "last": 85,
+      "snapshot": "/tmp/mcfta-flat-pruning-callback-20261027/restart-design-review/cuts/EnumerationFlatNativeIndex-57-85.txt",
+      "bytes": 1794,
+      "sha256": "5a48155a07f7f8b41ba1a4d4c529de62715eb99f59ff1f5c179c8da51ae87229"
+    },
+    {
+      "source": "/home/tritlo/Code/mcfta/lean/MicroCFTA/EnumerationFlatNativeIndex.lean",
+      "first": 87,
+      "last": 119,
+      "snapshot": "/tmp/mcfta-flat-pruning-callback-20261027/restart-design-review/cuts/EnumerationFlatNativeIndex-87-119.txt",
+      "bytes": 1883,
+      "sha256": "c6aac7dba5db68cbac67d6ab18bc021d233270a30925c284a9f29448a02fd299"
+    },
+    {
+      "source": "/home/tritlo/Code/mcfta/lean/MicroCFTA/EnumerationFlatNativeIndex.lean",
+      "first": 145,
+      "last": 158,
+      "snapshot": "/tmp/mcfta-flat-pruning-callback-20261027/restart-design-review/cuts/EnumerationFlatNativeIndex-145-158.txt",
+      "bytes": 805,
+      "sha256": "6dc060e029d99b514c2bae81496cd579741ab19075be8f7e53b957e2353b6bac"
+    },
+    {
+      "source": "/home/tritlo/Code/mcfta/lean/MicroCFTA/EnumerationFlatPrimitives.lean",
+      "first": 18,
+      "last": 34,
+      "snapshot": "/tmp/mcfta-flat-pruning-callback-20261027/restart-design-review/cuts/EnumerationFlatPrimitives-18-34.txt",
+      "bytes": 1270,
+      "sha256": "6c32a5fa2300fb3bb985f8f56a6ff8699acbd614bf67c666acf0f27fd7b88615"
+    },
+    {
+      "source": "/home/tritlo/Code/mcfta/lean/MicroCFTA/EnumerationFlatPrimitives.lean",
+      "first": 54,
+      "last": 75,
+      "snapshot": "/tmp/mcfta-flat-pruning-callback-20261027/restart-design-review/cuts/EnumerationFlatPrimitives-54-75.txt",
+      "bytes": 1315,
+      "sha256": "58a2cb4ce52e0174b801fc7d7f581178959b5b918376f313f103acbd4e02e678"
+    },
+    {
+      "source": "/home/tritlo/Code/mcfta/lean/MicroCFTA/EnumerationCompressionFrame.lean",
+      "first": 19,
+      "last": 52,
+      "snapshot": "/tmp/mcfta-flat-pruning-callback-20261027/restart-design-review/cuts/EnumerationCompressionFrame-19-52.txt",
+      "bytes": 1938,
+      "sha256": "11e80dfe09f994aa810fc5ee891870daf5cb18ec8c432bee65df4ef45d0bdcac"
+    },
+    {
+      "source": "/home/tritlo/Code/mcfta/lean/MicroCFTA/EnumerationCompressionFrame.lean",
+      "first": 68,
+      "last": 85,
+      "snapshot": "/tmp/mcfta-flat-pruning-callback-20261027/restart-design-review/cuts/EnumerationCompressionFrame-68-85.txt",
+      "bytes": 1272,
+      "sha256": "e9d3ff4c1ce7ad14da060294d09ecf40d2ec00b14d101a2d60c929f20fb218e6"
+    },
+    {
+      "source": "/home/tritlo/Code/mcfta/lean/MicroCFTA/FlatUnionFind.lean",
+      "first": 28,
+      "last": 42,
+      "snapshot": "/tmp/mcfta-flat-pruning-callback-20261027/restart-design-review/cuts/FlatUnionFind-28-42.txt",
+      "bytes": 548,
+      "sha256": "2c4dbcaaab326aa9d084f354bec5410bd2f93ce9d1b611ff8f5186d65cffbefa"
+    },
+    {
+      "source": "/home/tritlo/Code/mcfta/lean/MicroCFTA/SourcePruningOracle.lean",
+      "first": 42,
+      "last": 69,
+      "snapshot": "/tmp/mcfta-flat-pruning-callback-20261027/restart-design-review/cuts/SourcePruningOracle-42-69.txt",
+      "bytes": 1651,
+      "sha256": "57eece4b67a45df715653affeece57606b2ef99553af36535e756b95e13b7059"
+    },
+    {
+      "source": "/home/tritlo/Code/mcfta/lean/MicroCFTA/SourcePruningResume.lean",
+      "first": 66,
+      "last": 83,
+      "snapshot": "/tmp/mcfta-flat-pruning-callback-20261027/restart-design-review/cuts/SourcePruningResume-66-83.txt",
+      "bytes": 1257,
+      "sha256": "3f044329d32a9a2bdc6d7babb2d1556cbc94173068d28060453dadbf9277d56a"
+    },
+    {
+      "source": "/home/tritlo/Code/mcfta/lean/MicroCFTA/SourcePruningRecordTypes.lean",
+      "first": 23,
+      "last": 55,
+      "snapshot": "/tmp/mcfta-flat-pruning-callback-20261027/restart-design-review/cuts/SourcePruningRecordTypes-23-55.txt",
+      "bytes": 1917,
+      "sha256": "5c386d7830b6fde7b06d9ae1f30e7f703318841c811c9b0023f75aa48e8825ea"
+    },
+    {
+      "source": "/home/tritlo/Code/mcfta/lean/MicroCFTA/SourcePruningRecordTypes.lean",
+      "first": 161,
+      "last": 202,
+      "snapshot": "/tmp/mcfta-flat-pruning-callback-20261027/restart-design-review/cuts/SourcePruningRecordTypes-161-202.txt",
+      "bytes": 2998,
+      "sha256": "2c69737838f53de48797adb6991ce6ab770651eb86448af9d710c2bd11f752b3"
+    },
+    {
+      "source": "/home/tritlo/Code/mcfta/lean/MicroCFTA/SourcePruningEnumerationNativeContinuations.lean",
+      "first": 14,
+      "last": 71,
+      "snapshot": "/tmp/mcfta-flat-pruning-callback-20261027/restart-design-review/cuts/SourcePruningEnumerationNativeContinuations-14-71.txt",
+      "bytes": 3815,
+      "sha256": "44a3d63c4a790989b3a845e7033e4657711a339bcbdd2a02078da572c0d41cec"
+    },
+    {
+      "source": "/home/tritlo/Code/mcfta/lean/MicroCFTA/SourcePruningEnumerationNativeContinuations.lean",
+      "first": 85,
+      "last": 101,
+      "snapshot": "/tmp/mcfta-flat-pruning-callback-20261027/restart-design-review/cuts/SourcePruningEnumerationNativeContinuations-85-101.txt",
+      "bytes": 1370,
+      "sha256": "312e476b9a13c1470565dd904a3d12eab97d5cf523f4dc7aae49aeefd6d0cdfa"
+    },
+    {
+      "source": "/home/tritlo/Code/mcfta/lean/MicroCFTA/SourcePruningEnumerationNativeContinuations.lean",
+      "first": 125,
+      "last": 162,
+      "snapshot": "/tmp/mcfta-flat-pruning-callback-20261027/restart-design-review/cuts/SourcePruningEnumerationNativeContinuations-125-162.txt",
+      "bytes": 2498,
+      "sha256": "66bb29f431ff1aef747cce641686e3d9e6672d2c0fae52af6ac7dd0bd8bb92ad"
+    },
+    {
+      "source": "/home/tritlo/Code/mcfta/lean/MicroCFTA/SourcePruningEnumerationNativeOrdinaryContinuations.lean",
+      "first": 17,
+      "last": 62,
+      "snapshot": "/tmp/mcfta-flat-pruning-callback-20261027/restart-design-review/cuts/SourcePruningEnumerationNativeOrdinaryContinuations-17-62.txt",
+      "bytes": 3142,
+      "sha256": "6eba07e89964fe9b61d93d3ec3afcfd4852a09d1afb1002eb20af618569ac0d6"
+    },
+    {
+      "source": "/home/tritlo/Code/mcfta/lean/MicroCFTA/EnumerationResultRelation.lean",
+      "first": 19,
+      "last": 31,
+      "snapshot": "/tmp/mcfta-flat-pruning-callback-20261027/restart-design-review/cuts/EnumerationResultRelation-19-31.txt",
+      "bytes": 780,
+      "sha256": "30e5ea043711fca68b5eca263c8a9f2947290559d52ccb2e09a863690308fd0a"
+    },
+    {
+      "source": "/home/tritlo/Code/mcfta/lean/MicroCFTA/EnumerationResultRelation.lean",
+      "first": 44,
+      "last": 89,
+      "snapshot": "/tmp/mcfta-flat-pruning-callback-20261027/restart-design-review/cuts/EnumerationResultRelation-44-89.txt",
+      "bytes": 2320,
+      "sha256": "23759173719ea2d55e27c75a2e1b1357fcfe54fd9194038e3b0acbfbd494bfad"
+    },
+    {
+      "source": "/home/tritlo/Code/mcfta/cfta/src/Data/CFTA/Enumeration.hs",
+      "first": 945,
+      "last": 1006,
+      "snapshot": "/tmp/mcfta-flat-pruning-callback-20261027/restart-design-review/cuts/Enumeration-945-1006.txt",
+      "bytes": 3043,
+      "sha256": "9a2c5d4f462f52c3937add37386eeee836ff36a2f5923fb73e575ae437941b8a"
+    }
+  ]
+}

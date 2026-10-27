@@ -1,0 +1,38 @@
+@[reducible] def MicroCFTA.EnumerationFlatPartial.expandPartial._f : {Symbol Guard : Type} →
+  MicroCFTA.EnumerationState.Graph Symbol Guard →
+    (x : Nat) →
+      Nat.below (motive := fun x =>
+          MicroCFTA.Fragments.Fragment Symbol →
+            MicroCFTA.EnumerationFlatState.Action Symbol Guard
+              (MicroCFTA.Language.Term (MicroCFTA.EnumerationState.PartialSymbol Symbol)))
+          x →
+        MicroCFTA.Fragments.Fragment Symbol →
+          MicroCFTA.EnumerationFlatState.Action Symbol Guard
+            (MicroCFTA.Language.Term (MicroCFTA.EnumerationState.PartialSymbol Symbol)) :=
+fun {Symbol Guard} graph x f x_1 =>
+  (match (motive :=
+      (x : Nat) →
+        MicroCFTA.Fragments.Fragment Symbol →
+          Nat.below (motive := fun x =>
+              MicroCFTA.Fragments.Fragment Symbol →
+                MicroCFTA.EnumerationFlatState.Action Symbol Guard
+                  (MicroCFTA.Language.Term (MicroCFTA.EnumerationState.PartialSymbol Symbol)))
+              x →
+            MicroCFTA.EnumerationFlatState.Action Symbol Guard
+              (MicroCFTA.Language.Term (MicroCFTA.EnumerationState.PartialSymbol Symbol)))
+      x, x_1 with
+    | 0, x => fun x => MicroCFTA.EnumerationFlatState.failure MicroCFTA.EnumerationState.Error.fuelExhausted
+    | fuel.succ, MicroCFTA.Fragments.Fragment.node symbol children => fun x => do
+      let __do_lift ← List.mapM x.1 children
+      pure (MicroCFTA.Language.Term.node (MicroCFTA.EnumerationState.PartialSymbol.concrete symbol) __do_lift)
+    | fuel.succ, MicroCFTA.Fragments.Fragment.hole uv => fun x => do
+      let __do_lift ← MicroCFTA.EnumerationFlatState.getValue uv
+      match __do_lift with
+        | MicroCFTA.EnumerationState.UVarValue.enumerated fragment => x.1 fragment
+        | MicroCFTA.EnumerationState.UVarValue.unenumerated (some node) [] =>
+          match graph.node node with
+          | MicroCFTA.EnumerationState.Node.recursive a =>
+            pure (MicroCFTA.Language.Term.node MicroCFTA.EnumerationState.PartialSymbol.truncated [])
+          | x => pure (MicroCFTA.Language.Term.node (MicroCFTA.EnumerationState.PartialSymbol.hole uv) [])
+        | x => pure (MicroCFTA.Language.Term.node (MicroCFTA.EnumerationState.PartialSymbol.hole uv) []))
+    f

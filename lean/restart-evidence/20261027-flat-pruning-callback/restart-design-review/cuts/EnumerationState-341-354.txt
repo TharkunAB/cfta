@@ -1,0 +1,14 @@
+/-- Diagnostic rendering distinguishes pending recursive constraints from final truncation. -/
+def expandPartial (graph : Graph Symbol Guard) : Nat → Fragment Symbol →
+    EnumerateM Symbol Guard (Term (PartialSymbol Symbol))
+  | 0, _ => failure .fuelExhausted
+  | fuel + 1, .node symbol children => do
+      pure (.node (.concrete symbol) (← children.mapM (expandPartial graph fuel)))
+  | fuel + 1, .hole uv => do
+      match ← getValue (fuel + 1) uv with
+      | .enumerated fragment => expandPartial graph fuel fragment
+      | .unenumerated (some node) [] =>
+          match graph.node node with
+          | .recursive _ => pure (.node .truncated [])
+          | _ => pure (.node (.hole uv) [])
+      | _ => pure (.node (.hole uv) [])

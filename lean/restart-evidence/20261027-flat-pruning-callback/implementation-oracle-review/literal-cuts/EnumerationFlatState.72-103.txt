@@ -1,0 +1,32 @@
+/-- Reject the current alternative. -/
+def reject : Action Symbol Guard α := fun _ => []
+
+/-- Retain an explicit core error. -/
+def failure (error : Error) : Action Symbol Guard α := fun _ => [.error error]
+
+/-- Retain a branch exactly when the guard is true. -/
+def require (condition : Bool) : Action Symbol Guard Unit :=
+  if condition then pure () else reject
+
+/-- Read the direct representative and retain the input forest. -/
+def representative (uv : Nat) : Action Symbol Guard Nat := fun before =>
+  let found := FlatUnionFind.find before.representatives uv
+  [.ok (found.1, {before with representatives := found.2})]
+
+/-- Merge the requested classes before any raw-slot assimilation. -/
+def unionVariables (left right : Nat) : Action Symbol Guard Unit := fun before =>
+  [.ok ((), {before with representatives := FlatUnionFind.union before.representatives left right})]
+
+/-- Write the supplied raw variable rather than its representative. -/
+def setValue (uv : Nat) (value : UVarValue Symbol) : Action Symbol Guard Unit :=
+  modify fun state => {state with values := state.values.set uv value}
+
+/-- Read a raw slot and retain an explicit invalid-slot error. -/
+def rawValue (uv : Nat) : Action Symbol Guard (UVarValue Symbol) := fun before =>
+  match before.values[uv]? with
+  | none => [.error .invalidSlot]
+  | some value => [.ok (value, before)]
+
+/-- Read the slot at the current direct representative. -/
+def getValue (uv : Nat) : Action Symbol Guard (UVarValue Symbol) := do
+  rawValue (← representative uv)

@@ -1,0 +1,10 @@
+/-- The four source metadata fields retain pending order and raw hole IDs. -/
+structure Metadata (Typing : Type) where
+  /-- Pending template checks retain order and repeated occurrences. -/
+  pending : List (Pending Symbol)
+  /-- Raw type-position IDs model the source IntSet observation. -/
+  types : List Nat
+  /-- Raw open-program IDs use the same source set representation. -/
+  openHoles : List Nat
+  /-- The caller's typing state is unchanged by recording. -/
+  typing : Typing

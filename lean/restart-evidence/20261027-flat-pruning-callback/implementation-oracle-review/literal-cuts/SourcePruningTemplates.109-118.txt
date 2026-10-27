@@ -1,0 +1,10 @@
+/-- Start every indexed match in program order and then template order. -/
+def startMatches (templates : List (Template.Pattern Symbol)) (term : PartialTerm) :
+    List (Option (Pending Symbol)) :=
+  (programs term).flatMap fun program =>
+    (indexTemplates templates program).map fun pattern => matchPartial pattern program
+
+/-- Combine resumed and new results without dropping repeated nonempty checks. -/
+def finishChecks (resumed started : List (Option (Pending Symbol))) : Bool × List (Pending Symbol) :=
+  let checks := (resumed ++ started).filterMap id
+  (checks.any (fun pending => pending.isEmpty), checks.filter (fun pending => !pending.isEmpty))

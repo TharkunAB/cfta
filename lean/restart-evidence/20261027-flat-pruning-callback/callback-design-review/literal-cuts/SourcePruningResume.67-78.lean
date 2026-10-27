@@ -1,0 +1,12 @@
+private def part (fuel current : Nat) (term : Term (PartialSymbol Symbol))
+    (pending : Template.Pattern Symbol × Nat) : EnumerateM Symbol Guard (Option (Pending Symbol)) := do
+  let root ← representative fuel pending.2
+  pure (if root = current then matchPartial pending.1 term else some [(pending.1, root)])
+
+/-- Read all parked parts before sequencing and concatenating their pure results. -/
+def resume (fuel current : Nat) (term : Term (PartialSymbol Symbol))
+    (pending : Pending Symbol) : EnumerateM Symbol Guard (Option (Pending Symbol)) := do
+  let results ← pending.mapM (part fuel current term)
+  pure ((results.mapM id : Option (List (Pending Symbol))).map (fun pieces => pieces.flatMap id))
+
+private theorem part_success (fuel current : Nat) (term : Term (PartialSymbol Symbol))

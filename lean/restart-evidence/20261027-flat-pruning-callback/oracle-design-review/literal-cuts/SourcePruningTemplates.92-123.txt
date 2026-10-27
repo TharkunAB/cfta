@@ -1,0 +1,32 @@
+/-- Recognize the exact ordinary application and filter root shapes. -/
+def isProgramRoot : Fragment Symbol → Bool
+  | .node symbol [_, _, _, _] => decide (symbol = ("app", FullSyntax.Formula.top))
+  | .node symbol [_, _] => decide (symbol = ("filter", FullSyntax.Formula.top))
+  | _ => false
+
+/-- Check only the exact application and filter roots used by the early path. -/
+def rejectEarly (templates : List (Template.Pattern Symbol)) (fragment : Fragment Symbol) : Bool :=
+  if isProgramRoot fragment then
+    let early := templates.filterMap structuralTemplate
+    (programs (fragmentTerm fragment)).any fun term =>
+      (indexTemplates early term).any fun pattern =>
+        match matchPartial pattern term with
+        | some [] => true
+        | _ => false
+  else false
+
+/-- Start every indexed match in program order and then template order. -/
+def startMatches (templates : List (Template.Pattern Symbol)) (term : PartialTerm) :
+    List (Option (Pending Symbol)) :=
+  (programs term).flatMap fun program =>
+    (indexTemplates templates program).map fun pattern => matchPartial pattern program
+
+/-- Combine resumed and new results without dropping repeated nonempty checks. -/
+def finishChecks (resumed started : List (Option (Pending Symbol))) : Bool × List (Pending Symbol) :=
+  let checks := (resumed ++ started).filterMap id
+  (checks.any (fun pending => pending.isEmpty), checks.filter (fun pending => !pending.isEmpty))
+
+/-- Choose the first candidate named by any raw pending hole. -/
+def order (pending : List (Pending Symbol)) (candidates : List Nat) : Option Nat :=
+  let waiting := (pending.flatMap id).map Prod.snd
+  candidates.find? (fun uv => waiting.contains uv)

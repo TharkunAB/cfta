@@ -1,0 +1,32 @@
+theorem expandPartial_replays (graph : EnumerationState.Graph Symbol Guard)
+    (fuel : Nat) (fragment : Fragment Symbol) :
+    Replays (expandPartial graph fuel fragment) (EnumerationState.expandPartial graph fuel fragment) := by
+  induction fuel generalizing fragment with
+  | zero =>
+      intro flat earlier value after _ observed
+      exact (EnumerationCorrectness.success_failure .fuelExhausted earlier after value observed).elim
+  | succ fuel ih =>
+      cases fragment with
+      | node symbol children =>
+          change Replays
+            (children.mapM (expandPartial graph fuel) >>= fun terms => pure (Term.node (.concrete symbol) terms))
+            (children.mapM (EnumerationState.expandPartial graph fuel) >>= fun terms =>
+              pure (Term.node (.concrete symbol) terms))
+          exact bind_replays _ _ _ _
+            (mapM_replays _ _ (fun child => ih child) children)
+            (fun terms => pure_replays (Term.node (.concrete symbol) terms))
+      | hole uv =>
+          apply bind_replays _ _ _ _ (getValue_replays (fuel + 1) uv)
+          intro value
+          cases value with
+          | enumerated fragment => exact ih fragment
+          | eliminated => exact pure_replays _
+          | unenumerated node scs =>
+              cases node with
+              | none => exact pure_replays _
+              | some node =>
+                  cases scs with
+                  | cons first rest => exact pure_replays _
+                  | nil =>
+                      dsimp only
+                      cases graph.node node <;> exact pure_replays _

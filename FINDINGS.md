@@ -1,5 +1,32 @@
 # Current formalization findings
 
+## Actual flat pruning callbacks now retain completion and restart decisions
+
+Source checkpoint: `765f5a7628b36ec4bed33ecd774e5a81e44b6e46`.
+Five new modules and nine public theorems execute partial rendering, every
+pending read, the full template callback, metadata updates and restart selection.
+The catalog can be nonempty. Structural rendering fuel remains explicit.
+The original admitted callback producer supplies its full old packet once.
+It derives actual flat singleton rows at every adequate larger bound, equal
+metadata and restart decisions, valid native indexes and valid stored tries.
+The actual callback retains exactly the same complete satisfying assignments.
+The initial Canonical condition remains separate from the recursive Packet.
+
+The continuation executes this callback once and passes its actual returned
+cache to the supplied recursive function. It does not execute the whole worker.
+No pruning-policy soundness, arbitrary low-fuel correspondence, or completion
+of the supplied recursive function is asserted. H6 and captured rendering stay
+unchanged. Whole recursive output soundness and completeness remain open.
+Audit passes 4012 jobs and 78475 theorem dependency checks. All five modules
+and Audit pass strict checks. No Haskell source changed in this checkpoint.
+The Haskell repair handoffs and extraction-progress limit remain in FINDINGS.
+
+Next transport actual selected-step and child consumers, then the recursive
+worker through these same callback and native histories. Derive initial
+Canonical, semantic Ranges and allocation bounds from those histories.
+Details: `lean/notes-current-flat-pruning-callback.md`.
+
+
 ## Haskell fix handoff for external work
 
 ### External Haskell repair status

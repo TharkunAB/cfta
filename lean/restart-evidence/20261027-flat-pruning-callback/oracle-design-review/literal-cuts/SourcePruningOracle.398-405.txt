@@ -1,0 +1,8 @@
+/-- A completed fragment callback returns only allocated pending references. -/
+theorem oracle_inl_bounded (graph : Graph Symbol Guard) (templates : List (Template.Pattern Symbol))
+    (fuel : Nat) (pending : List (Pending Symbol)) (uv : Nat) (fragment : Fragment Symbol)
+    (before after : State Symbol Guard) (result : Bool × List (Pending Symbol))
+    (safe : Safe before) (allocated : FragmentBound before.counter fragment)
+    (bounded : ∀ group ∈ pending, PendingBound before.counter group)
+    (success : Success (oracle graph templates fuel pending uv (.inl fragment)) before result after) :
+    ∀ group ∈ result.2, PendingBound after.counter group := by

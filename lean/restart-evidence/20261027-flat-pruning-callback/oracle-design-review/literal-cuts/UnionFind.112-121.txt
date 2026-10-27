@@ -1,0 +1,10 @@
+/-- Execute the Haskell lookup with an explicit finite recursion bound. -/
+def findRoot : Nat → Forest → Nat → Option Result
+  | 0, _, _ => none
+  | fuel + 1, forest, uv =>
+    match forest uv with
+    | none => some ⟨uv, 1, put forest uv (.root 1)⟩
+    | some (.root size) => some ⟨uv, size, forest⟩
+    | some (.parent next) => do
+      let found ← findRoot fuel forest next
+      some {found with forest := put found.forest uv (.parent found.representative)}

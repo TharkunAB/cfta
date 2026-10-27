@@ -1,0 +1,15 @@
+/-- Read one parent pointer, or return the variable itself. -/
+def root (forest : Forest) (uv : Nat) : Nat :=
+  match forest uv with
+  | some (.parent parent) => parent
+  | _ => uv
+
+/-- Read root metadata, with the source singleton default. -/
+def entryOf (forest : Forest) (uv : Nat) : Nat × List Nat :=
+  match forest uv with
+  | some (.root size members) => (size, members)
+  | _ => (1, [uv])
+
+/-- Find reads the representative and retains the same forest. -/
+def find (forest : Forest) (uv : Nat) : Nat × Forest :=
+  (root forest uv, forest)

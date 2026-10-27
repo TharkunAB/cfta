@@ -1,0 +1,22 @@
+/-- Raw-slot reads preserve both successful values and invalid-slot errors. -/
+theorem rawValue_related (related : Related flat earlier) (uv : Nat) :
+    Results Related (rawValue uv flat) (EnumerationState.rawValue uv earlier) := by
+  cases stored : flat.values[uv]? with
+  | none =>
+    have oldStored : earlier.values[uv]? = none := by rw [← related.values]; exact stored
+    have oldRead : EnumerationState.rawValue uv earlier = [.error .invalidSlot] := by
+      simp [EnumerationState.rawValue, oldStored, EnumerationState.failure, Bind.bind,
+        Pure.pure, get, getThe, MonadStateOf.get, StateT.bind, StateT.get, ExceptT.bind, ExceptT.pure,
+        ExceptT.bindCont, ExceptT.mk]
+    rw [oldRead]
+    simp only [rawValue, stored]
+    exact .cons (.error EnumerationState.Error.invalidSlot) .nil
+  | some value =>
+    have oldStored : earlier.values[uv]? = some value := by rw [← related.values]; exact stored
+    have oldRead : EnumerationState.rawValue uv earlier = [.ok (value, earlier)] := by
+      simp [EnumerationState.rawValue, oldStored, Bind.bind, Pure.pure,
+        get, getThe, MonadStateOf.get, StateT.bind, StateT.pure, StateT.get, ExceptT.bind, ExceptT.pure,
+        ExceptT.bindCont, ExceptT.mk]
+    rw [oldRead]
+    simp only [rawValue, stored]
+    exact .cons (.ok value related) .nil

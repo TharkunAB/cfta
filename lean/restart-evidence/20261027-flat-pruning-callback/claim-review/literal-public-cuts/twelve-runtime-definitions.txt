@@ -1,0 +1,180 @@
+def MicroCFTA.EnumerationFlatPartial.expandPartial : {Symbol Guard : Type} →
+  MicroCFTA.EnumerationState.Graph Symbol Guard →
+    Nat →
+      MicroCFTA.Fragments.Fragment Symbol →
+        MicroCFTA.EnumerationFlatState.Action Symbol Guard
+          (MicroCFTA.Language.Term (MicroCFTA.EnumerationState.PartialSymbol Symbol)) :=
+fun {Symbol Guard} graph x x_1 =>
+  Nat.brecOn (motive := fun x =>
+    MicroCFTA.Fragments.Fragment Symbol →
+      MicroCFTA.EnumerationFlatState.Action Symbol Guard
+        (MicroCFTA.Language.Term (MicroCFTA.EnumerationState.PartialSymbol Symbol)))
+    x (MicroCFTA.EnumerationFlatPartial.expandPartial._f graph) x_1
+def MicroCFTA.SourceFlatPruningOracle.part : {Guard : Type} →
+  Nat →
+    MicroCFTA.SourcePruningTemplates.PartialTerm →
+      MicroCFTA.Template.Pattern MicroCFTA.SourcePruningTemplates.Symbol × Nat →
+        MicroCFTA.EnumerationFlatState.Action MicroCFTA.SourcePruningTemplates.Symbol Guard
+          (Option (MicroCFTA.SourcePruningPartialMatch.Pending MicroCFTA.SourcePruningTemplates.Symbol)) :=
+fun {Guard} current term pending => do
+  let root ← MicroCFTA.EnumerationFlatState.representative pending.snd
+  pure
+      (if root = current then MicroCFTA.SourcePruningPartialMatch.matchPartial pending.fst term
+      else some [(pending.fst, root)])
+def MicroCFTA.SourceFlatPruningOracle.resume : {Guard : Type} →
+  Nat →
+    MicroCFTA.SourcePruningTemplates.PartialTerm →
+      MicroCFTA.SourcePruningPartialMatch.Pending MicroCFTA.SourcePruningTemplates.Symbol →
+        MicroCFTA.EnumerationFlatState.Action MicroCFTA.SourcePruningTemplates.Symbol Guard
+          (Option (MicroCFTA.SourcePruningPartialMatch.Pending MicroCFTA.SourcePruningTemplates.Symbol)) :=
+fun {Guard} current term pending => do
+  let results ← List.mapM (MicroCFTA.SourceFlatPruningOracle.part current term) pending
+  pure (Option.map (fun pieces => List.flatMap id pieces) (List.mapM id results))
+def MicroCFTA.SourceFlatPruningOracle.idle : List
+    (MicroCFTA.SourcePruningPartialMatch.Pending MicroCFTA.SourcePruningTemplates.Symbol) →
+  MicroCFTA.Fragments.Fragment MicroCFTA.SourcePruningTemplates.Symbol → Bool :=
+fun pending x =>
+  match x with
+  | MicroCFTA.Fragments.Fragment.node symbol children =>
+    pending.isEmpty &&
+      !MicroCFTA.SourcePruningTemplates.isProgramRoot (MicroCFTA.Fragments.Fragment.node symbol children)
+  | MicroCFTA.Fragments.Fragment.hole uv => false
+def MicroCFTA.SourceFlatPruningOracle.observe : {Guard : Type} →
+  MicroCFTA.EnumerationState.Graph MicroCFTA.SourcePruningTemplates.Symbol Guard →
+    List (MicroCFTA.Template.Pattern MicroCFTA.SourcePruningTemplates.Symbol) →
+      Nat →
+        List (MicroCFTA.SourcePruningPartialMatch.Pending MicroCFTA.SourcePruningTemplates.Symbol) →
+          Nat →
+            MicroCFTA.Fragments.Fragment MicroCFTA.SourcePruningTemplates.Symbol →
+              MicroCFTA.EnumerationFlatState.Action MicroCFTA.SourcePruningTemplates.Symbol Guard
+                (Bool × List (MicroCFTA.SourcePruningPartialMatch.Pending MicroCFTA.SourcePruningTemplates.Symbol)) :=
+fun {Guard} graph templates fuel pending uv fragment => do
+  let term ← MicroCFTA.EnumerationFlatPartial.expandPartial graph fuel fragment
+  let resumed ← List.mapM (MicroCFTA.SourceFlatPruningOracle.resume uv term) pending
+  pure
+      (MicroCFTA.SourcePruningTemplates.finishChecks resumed
+        (MicroCFTA.SourcePruningTemplates.startMatches templates term))
+def MicroCFTA.SourceFlatPruningOracle.oracle : {Guard : Type} →
+  MicroCFTA.EnumerationState.Graph MicroCFTA.SourcePruningTemplates.Symbol Guard →
+    List (MicroCFTA.Template.Pattern MicroCFTA.SourcePruningTemplates.Symbol) →
+      Nat →
+        List (MicroCFTA.SourcePruningPartialMatch.Pending MicroCFTA.SourcePruningTemplates.Symbol) →
+          Nat →
+            MicroCFTA.Fragments.Fragment MicroCFTA.SourcePruningTemplates.Symbol ⊕ Nat →
+              MicroCFTA.EnumerationFlatState.Action MicroCFTA.SourcePruningTemplates.Symbol Guard
+                (Bool × List (MicroCFTA.SourcePruningPartialMatch.Pending MicroCFTA.SourcePruningTemplates.Symbol)) :=
+fun {Guard} graph templates fuel pending uv input =>
+  match input with
+  | Sum.inr val => pure (false, pending)
+  | Sum.inl fragment =>
+    if MicroCFTA.SourcePruningTemplates.rejectEarly templates fragment = true then pure (true, pending)
+    else
+      if MicroCFTA.SourceFlatPruningOracle.idle pending fragment = true then pure (false, [])
+      else MicroCFTA.SourceFlatPruningOracle.observe graph templates fuel pending uv fragment
+def MicroCFTA.SourceFlatPruningOracle.recordTypes : {Guard Typing : Type} →
+  MicroCFTA.EnumerationState.Graph MicroCFTA.SourcePruningTemplates.Symbol Guard →
+    List (MicroCFTA.Template.Pattern MicroCFTA.SourcePruningTemplates.Symbol) →
+      Nat →
+        MicroCFTA.SourcePruningRecordTypes.Metadata Typing →
+          Nat →
+            MicroCFTA.Fragments.Fragment MicroCFTA.SourcePruningTemplates.Symbol ⊕ Nat →
+              MicroCFTA.EnumerationFlatState.Action MicroCFTA.SourcePruningTemplates.Symbol Guard
+                (Bool × MicroCFTA.SourcePruningRecordTypes.Metadata Typing) :=
+fun {Guard Typing} graph templates fuel metadata uv input =>
+  have types := MicroCFTA.SourcePruningRecordTypes.updatedTypes metadata uv input;
+  have __do_jp := fun observed =>
+    pure
+      (observed.fst,
+        { pending := observed.snd, types := types, openHoles := metadata.openHoles, typing := metadata.typing });
+  if templates.isEmpty = true then do
+    let observed ← pure (false, metadata.pending)
+    __do_jp observed
+  else do
+    let observed ← MicroCFTA.SourceFlatPruningOracle.oracle graph templates fuel metadata.pending uv input
+    __do_jp observed
+def MicroCFTA.SourceFlatPruningRestart.candidates : MicroCFTA.EnumerationFlatCached.Cached
+    MicroCFTA.SourcePruningTemplates.Symbol (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) →
+  List Nat :=
+fun before => List.filter before.expandable (List.range before.core.counter)
+def MicroCFTA.SourceFlatPruningRestart.next : (List Nat → Option Nat) →
+  MicroCFTA.EnumerationFlatCached.Cached MicroCFTA.SourcePruningTemplates.Symbol
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) →
+    MicroCFTA.EnumerationState.Next :=
+fun preference before =>
+  have remaining := MicroCFTA.SourceFlatPruningRestart.candidates before;
+  MicroCFTA.EnumerationState.pickNext preference
+    (if remaining.isEmpty = true then none else some (List.filter (fun uv => (before.waiting uv).isNone) remaining))
+def MicroCFTA.SourceFlatPruningRestart.decision : {Typing : Type} →
+  Option (MicroCFTA.SourcePruningRecordTypes.Metadata Typing → Nat → Bool) →
+    (MicroCFTA.SourcePruningRecordTypes.Metadata Typing → List Nat → Option Nat) →
+      MicroCFTA.SourcePruningRecordTypes.Metadata Typing →
+        MicroCFTA.EnumerationFlatCached.Cached MicroCFTA.SourcePruningTemplates.Symbol
+            (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) →
+          Option MicroCFTA.EnumerationState.Next :=
+fun {Typing} stop order metadata before =>
+  match stop with
+  | none => some (MicroCFTA.SourceFlatPruningRestart.next (order metadata) before)
+  | some rule =>
+    have remaining := MicroCFTA.SourceFlatPruningRestart.candidates before;
+    if (!remaining.isEmpty && remaining.all (rule metadata)) = true then none
+    else some (MicroCFTA.SourceFlatPruningRestart.next (order metadata) before)
+def MicroCFTA.SourceFlatPruningRestart.run : {Typing : Type} →
+  Option (MicroCFTA.SourcePruningRecordTypes.Metadata Typing → Nat → Bool) →
+    (MicroCFTA.SourcePruningRecordTypes.Metadata Typing → List Nat → Option Nat) →
+      MicroCFTA.SourcePruningRecordTypes.Metadata Typing →
+        MicroCFTA.EnumerationFlatCached.Cached MicroCFTA.SourcePruningTemplates.Symbol
+            (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) →
+          MicroCFTA.EnumerationFlatState.Action MicroCFTA.SourcePruningTemplates.Symbol
+            (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+            (MicroCFTA.SourcePruningRecordTypes.Metadata Typing × Option MicroCFTA.EnumerationState.Next) :=
+fun {Typing} stop order metadata before =>
+  have selected := MicroCFTA.SourceFlatPruningRestart.decision stop order metadata before;
+  fun core =>
+  if selected = some MicroCFTA.EnumerationState.Next.stuck then [] else [Except.ok ((metadata, selected), core)]
+def MicroCFTA.SourceFlatPruningContinuation.continueWith.{u, v} : {Typing : Type} →
+  {width : Nat} →
+    {Output : Type u} →
+      {Failure : Type v} →
+        (Nat →
+            List
+                (Except MicroCFTA.EnumerationState.Error
+                  ((Bool × MicroCFTA.SourcePruningRecordTypes.Metadata Typing) ×
+                    MicroCFTA.EnumerationFlatState.State MicroCFTA.SourcePruningTemplates.Symbol
+                      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))) →
+              Failure) →
+          (MicroCFTA.SourcePruningRecordTypes.Metadata Typing →
+              MicroCFTA.SourceCurrentAllocatedPartialState.State width →
+                MicroCFTA.SourceEndpointMemo.Memos →
+                  MicroCFTA.EnumerationFlatCached.Cached MicroCFTA.SourcePruningTemplates.Symbol
+                      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) →
+                    Option MicroCFTA.EnumerationState.Next →
+                      MicroCFTA.SourcePruningEnumerationNativeContinuations.HookResult Output Failure width) →
+            MicroCFTA.EnumerationState.Graph MicroCFTA.SourcePruningTemplates.Symbol
+                (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) →
+              List (MicroCFTA.Template.Pattern MicroCFTA.SourcePruningTemplates.Symbol) →
+                Option (MicroCFTA.SourcePruningRecordTypes.Metadata Typing → Nat → Bool) →
+                  (MicroCFTA.SourcePruningRecordTypes.Metadata Typing → List Nat → Option Nat) →
+                    Nat →
+                      MicroCFTA.SourcePruningRecordTypes.Metadata Typing →
+                        Nat →
+                          MicroCFTA.Fragments.Fragment MicroCFTA.SourcePruningTemplates.Symbol →
+                            MicroCFTA.SourceCurrentAllocatedPartialState.State width →
+                              MicroCFTA.SourceEndpointMemo.Memos →
+                                MicroCFTA.EnumerationFlatCached.Cached MicroCFTA.SourcePruningTemplates.Symbol
+                                    (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) →
+                                  MicroCFTA.SourcePruningEnumerationNativeContinuations.HookResult Output Failure
+                                    width :=
+fun {Typing} {width} {Output} {Failure} callbackFailure recur graph templates stop order callbackFuel metadata uv
+    fragment caller queries before =>
+  have raw :=
+    MicroCFTA.SourceFlatPruningOracle.recordTypes graph templates callbackFuel metadata uv (Sum.inl fragment)
+      before.core;
+  match raw with
+  | [Except.ok ((true, _updated), _observed)] =>
+    MicroCFTA.SourcePruningEnumerationNativeContinuations.HookResult.complete [] caller queries
+  | [Except.ok ((false, updated), observed)] =>
+    have after := MicroCFTA.EnumerationFlatCached.frame observed before;
+    recur updated caller queries after (MicroCFTA.SourceFlatPruningRestart.decision stop order updated after)
+  | x =>
+    MicroCFTA.SourcePruningEnumerationNativeContinuations.HookResult.stopped [] (callbackFailure uv raw)
+      (some (caller, queries))

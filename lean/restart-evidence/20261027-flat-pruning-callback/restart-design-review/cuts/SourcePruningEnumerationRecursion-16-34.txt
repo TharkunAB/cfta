@@ -1,0 +1,19 @@
+/-- Check the actual native boundary and clear the bucket only for a repeated recursion key. -/
+def checkRepeated (heap : InternedConstructorTemplates.State Symbol NativeGuard)
+    (fuel uv handle : Nat) (scs : List Suspended) : EnumerateM Symbol EnumGuard Bool := do
+  match lookupNode heap handle with
+  | none => failure .unresolvedReference
+  | some value =>
+      if MergedOrdinaryHeight.recursiveBoundary value then
+        let root ← representative fuel uv
+        let current : EnumerationState.State Symbol EnumGuard ← get
+        if recursionKey handle scs ∈ current.recursionAncestry root then
+          setValue root (.unenumerated (some handle) [])
+          pure true
+        else pure false
+      else pure false
+
+/-- The actual native recursion guard derives finite execution and both indexed cache outcomes. -/
+theorem complete
+    (heap : InternedConstructorTemplates.State Symbol NativeGuard)
+    (before : EnumerationExpandableIndex.Cached Symbol EnumGuard)

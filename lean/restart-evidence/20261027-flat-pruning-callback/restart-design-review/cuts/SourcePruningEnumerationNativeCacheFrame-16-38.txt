@@ -1,0 +1,23 @@
+/-- A fixed preference selects the same next step after reads that keep the allocation counter. -/
+theorem selection_frame (preference : List Nat → Option Nat) (before : Cached)
+    (after : EnumerationState.State Symbol Constraint) (counter : after.counter = before.core.counter) :
+    EnumerationPureSelection.next preference (EnumerationExpandableIndex.frame after before) =
+      EnumerationPureSelection.next preference before := by
+  simp only [EnumerationPureSelection.next, EnumerationPureSelection.find,
+    EnumerationIndexSelection.candidates, EnumerationExpandableIndex.frame, counter]
+  rfl
+
+/-- An actual safe compressed cache retains native handles and both maintained indexes. -/
+theorem cacheValid_frame (caller : Caller width) (before : Cached)
+    (after : EnumerationState.State Symbol Constraint) (frame : Frame before.core after)
+    (safe : Safe after) (valid : CacheValid caller before) :
+    CacheValid caller (EnumerationExpandableIndex.frame after before) := by
+  obtain ⟨roots, paths, _storage, realized, counts, flags⟩ := valid
+  refine ⟨roots, ?_, safe.1, ?_, ?_, ?_⟩
+  · intro slot
+    obtain ⟨size, path⟩ := paths slot
+    exact ⟨size, (frame.reaches slot (roots slot) size).mpr path⟩
+  · intro slot node scs stored
+    exact realized slot node scs (by simpa only [EnumerationExpandableIndex.frame, frame.values] using stored)
+  · simpa only [EnumerationExpandableIndex.frame, frame.values] using counts
+  · simpa only [EnumerationExpandableIndex.frame, frame.values] using flags

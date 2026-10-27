@@ -1,0 +1,28 @@
+/-- The concrete-root fast path applies only when no check is pending. -/
+private def idle (pending : List (Pending Symbol)) : Fragment Symbol → Bool
+  | .node symbol children => pending.isEmpty &&
+      !(isProgramRoot (.node symbol children))
+  | .hole _ => false
+
+/-- Render the fragment, then read every group before combining match results. -/
+private def observe (graph : Graph Symbol Guard) (templates : List (Template.Pattern Symbol))
+    (fuel : Nat) (pending : List (Pending Symbol)) (uv : Nat) (fragment : Fragment Symbol) :
+    EnumerateM Symbol Guard (Bool × List (Pending Symbol)) := do
+  let term ← expandPartial graph fuel fragment
+  let resumed ← pending.mapM (SourcePruningResume.resume fuel uv term)
+  pure (finishChecks resumed (startMatches templates term))
+
+/-- The source callback preserves its early-rejection and empty-check branches. -/
+def oracle (graph : Graph Symbol Guard) (templates : List (Template.Pattern Symbol))
+    (fuel : Nat) : Oracle Symbol Guard (List (Pending Symbol)) := fun pending uv input =>
+  match input with
+  | .inr _ => pure (false, pending)
+  | .inl fragment =>
+      if rejectEarly templates fragment = true then pure (true, pending)
+      else if idle pending fragment = true then pure (false, [])
+      else observe graph templates fuel pending uv fragment
+
+/-- The pre-expansion callback returns the pending checks without a state read. -/
+theorem oracle_inr (graph : Graph Symbol Guard) (templates : List (Template.Pattern Symbol))
+    (fuel : Nat) (pending : List (Pending Symbol)) (uv node : Nat) :
+    oracle graph templates fuel pending uv (.inr node) = pure (false, pending) := rfl

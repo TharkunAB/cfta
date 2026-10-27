@@ -1,0 +1,44 @@
+import MicroCFTA.EnumerationFlatPartial
+import MicroCFTA.SourceFlatPruningOracle
+import MicroCFTA.SourceFlatPruningRestart
+import MicroCFTA.SourceFlatPruningContinuation
+import MicroCFTA.SourceFlatPruningCallbackCompletion
+import MicroCFTA.SourceCurrentColdFiniteWarmCalls
+import MicroCFTA.SourcePruningEnumerationCapturedRendering
+set_option pp.maxSteps 1000000
+set_option pp.deepTerms true
+#check MicroCFTA.EnumerationFlatPartial.getValue_replays
+#print axioms MicroCFTA.EnumerationFlatPartial.getValue_replays
+#check MicroCFTA.EnumerationFlatPartial.expandPartial_replays
+#print axioms MicroCFTA.EnumerationFlatPartial.expandPartial_replays
+#check MicroCFTA.SourceFlatPruningOracle.resume_replays
+#print axioms MicroCFTA.SourceFlatPruningOracle.resume_replays
+#check MicroCFTA.SourceFlatPruningOracle.oracle_replays
+#print axioms MicroCFTA.SourceFlatPruningOracle.oracle_replays
+#check MicroCFTA.SourceFlatPruningOracle.recordTypes_replays
+#print axioms MicroCFTA.SourceFlatPruningOracle.recordTypes_replays
+#check MicroCFTA.SourceFlatPruningRestart.decision_related
+#print axioms MicroCFTA.SourceFlatPruningRestart.decision_related
+#check MicroCFTA.SourceFlatPruningRestart.run_related
+#print axioms MicroCFTA.SourceFlatPruningRestart.run_related
+#check MicroCFTA.SourceFlatPruningContinuation.continueWith_exact
+#print axioms MicroCFTA.SourceFlatPruningContinuation.continueWith_exact
+#check MicroCFTA.SourceFlatPruningCallbackCompletion.complete
+#print axioms MicroCFTA.SourceFlatPruningCallbackCompletion.complete
+#check MicroCFTA.SourceCurrentColdFiniteWarmCalls.constructed_node_calls
+#print axioms MicroCFTA.SourceCurrentColdFiniteWarmCalls.constructed_node_calls
+#check MicroCFTA.SourcePruningEnumerationCapturedEdge.diagonal_render_sound_current
+#print axioms MicroCFTA.SourcePruningEnumerationCapturedEdge.diagonal_render_sound_current
+#print MicroCFTA.EnumerationFlatPartial.expandPartial
+#print MicroCFTA.SourceFlatPruningOracle.part
+#print MicroCFTA.SourceFlatPruningOracle.resume
+#print MicroCFTA.SourceFlatPruningOracle.idle
+#print MicroCFTA.SourceFlatPruningOracle.observe
+#print MicroCFTA.SourceFlatPruningOracle.oracle
+#print MicroCFTA.SourceFlatPruningOracle.recordTypes
+#print MicroCFTA.SourceFlatPruningRestart.candidates
+#print MicroCFTA.SourceFlatPruningRestart.next
+#print MicroCFTA.SourceFlatPruningRestart.decision
+#print MicroCFTA.SourceFlatPruningRestart.run
+#print MicroCFTA.SourceFlatPruningContinuation.continueWith
+#print MicroCFTA.EnumerationFlatPartial.expandPartial._f

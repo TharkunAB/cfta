@@ -1,0 +1,14 @@
+/-- Framing retains canonical indexes when slots, supply and representatives stay equal. -/
+theorem frame_correct (heap : InternedConstructorTemplates.State Symbol NativeGuard)
+    (before : Cached Symbol EnumGuard) (next : EnumerationFlatState.State Symbol EnumGuard)
+    (correct : Correct heap before) (values : next.values = before.core.values)
+    (counter : next.counter = before.core.counter)
+    (roots : FlatUnionFind.root next.representatives = FlatUnionFind.root before.core.representatives) :
+    Correct heap (frame next before) := by
+  refine ⟨?_, ?_, ?_⟩
+  · change next.counter = next.values.length
+    rw [counter, values]
+    exact correct.aligned
+  · intro uv
+    simpa only [frame, values] using correct.expandable uv
+  · simpa only [frame, values, roots] using correct.waiting

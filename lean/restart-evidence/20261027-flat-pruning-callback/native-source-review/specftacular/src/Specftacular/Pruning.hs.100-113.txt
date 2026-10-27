@@ -1,0 +1,14 @@
+    -- the open holes at program positions, and the typing.
+    (order, oracle) = templateOracle templates
+    typesLast (pending, types, _, _) candidates =
+        case order pending candidates of
+            Just uv -> Just uv
+            Nothing -> find (\uv -> uvarToInt uv `IntSet.notMember` types) candidates
+    atTypes (pending, types, _, _) uv = uvarToInt uv `IntSet.member` types && all (all ((/= uv) . snd)) pending
+    recordTypes (pending, types, open, typing) uv input = do
+        let types' = case input of
+                Left fragment -> typePositions (uvarToInt uv `IntSet.member` types) fragment types
+                Right _ -> types
+        (prune, pending') <- if null templates then pure (False, pending) else oracle pending uv input
+        pure (prune, (pending', types', open, typing))
+    typedTypes state@(_, types, _, _) uv input = do

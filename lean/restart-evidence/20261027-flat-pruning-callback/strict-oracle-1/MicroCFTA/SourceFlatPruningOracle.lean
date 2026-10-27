@@ -1,0 +1,108 @@
+import MicroCFTA.EnumerationFlatPartial
+import MicroCFTA.SourcePruningRecordTypes
+
+/-!
+# Concrete pruning callbacks with direct representative reads
+
+The callback reads every parked group before it combines optional matches.
+The template catalog, partial matching and metadata updates are unchanged.
+-/
+
+namespace MicroCFTA.SourceFlatPruningOracle
+
+open Language Fragments EnumerationFlatState EnumerationFlatReplay
+open SourcePruningPartialMatch SourcePruningTemplates SourcePruningRecordTypes
+
+attribute [local instance] FormulaExecutable.formulaDecidableEq
+  SourcePruningEnumerationTerminalPrefix.terminalPrefixMonadList
+  SourcePruningEnumerationTerminalPrefix.terminalPrefixLawfulMonadList
+
+variable {Guard Typing : Type}
+
+/-- Read one parked root before testing the supplied raw current variable. -/
+def part (current : Nat) (term : PartialTerm) (pending : Template.Pattern Symbol × Nat) :
+    Action Symbol Guard (Option (Pending Symbol)) := do
+  let root ← representative pending.2
+  pure (if root = current then matchPartial pending.1 term else some [(pending.1, root)])
+
+/-- Read every parked part before sequencing its optional match results. -/
+def resume (current : Nat) (term : PartialTerm) (pending : Pending Symbol) :
+    Action Symbol Guard (Option (Pending Symbol)) := do
+  let results ← pending.mapM (part current term)
+  pure ((results.mapM id : Option (List (Pending Symbol))).map (fun pieces => pieces.flatMap id))
+
+/-- The concrete-root fast path requires no pending checks. -/
+def idle (pending : List (Pending Symbol)) : Fragment Symbol → Bool
+  | .node symbol children => pending.isEmpty && !(isProgramRoot (.node symbol children))
+  | .hole _ => false
+
+/-- Render once and read every group before combining the match results. -/
+def observe (graph : EnumerationState.Graph Symbol Guard) (templates : List (Template.Pattern Symbol))
+    (fuel : Nat) (pending : List (Pending Symbol)) (uv : Nat) (fragment : Fragment Symbol) :
+    Action Symbol Guard (Bool × List (Pending Symbol)) := do
+  let term ← EnumerationFlatPartial.expandPartial graph fuel fragment
+  let resumed ← pending.mapM (resume uv term)
+  pure (finishChecks resumed (startMatches templates term))
+
+/-- Preserve early rejection, the idle branch and the full template callback. -/
+def oracle (graph : EnumerationState.Graph Symbol Guard) (templates : List (Template.Pattern Symbol))
+    (fuel : Nat) (pending : List (Pending Symbol)) (uv : Nat) (input : Sum (Fragment Symbol) Nat) :
+    Action Symbol Guard (Bool × List (Pending Symbol)) :=
+  match input with
+  | .inr _ => pure (false, pending)
+  | .inl fragment =>
+      if rejectEarly templates fragment = true then pure (true, pending)
+      else if idle pending fragment = true then pure (false, [])
+      else observe graph templates fuel pending uv fragment
+
+/-- Record the same raw type positions and retain the other metadata fields. -/
+def recordTypes (graph : EnumerationState.Graph Symbol Guard) (templates : List (Template.Pattern Symbol))
+    (fuel : Nat) (metadata : Metadata Typing) (uv : Nat) (input : Sum (Fragment Symbol) Nat) :
+    Action Symbol Guard (Bool × Metadata Typing) := do
+  let types := updatedTypes metadata uv input
+  let observed ← if templates.isEmpty then pure (false, metadata.pending)
+    else oracle graph templates fuel metadata.pending uv input
+  pure (observed.1, {metadata with pending := observed.2, types := types})
+
+/-- Resume the same ordered pending parts at their actual intermediate cores. -/
+theorem resume_replays (fuel current : Nat) (term : PartialTerm) (pending : Pending Symbol) :
+    Replays (Guard := Guard) (resume current term pending)
+      (SourcePruningResume.resume fuel current term pending) := by
+  apply bind_replays _ _ _ _
+    (mapM_replays _ _ (fun entry => ?_) pending) (fun _ => pure_replays _)
+  exact bind_replays _ _ _ _ (representative_replays fuel entry.2) (fun _ => pure_replays _)
+
+/-- The full oracle replays every successful old branch without a catalog restriction. -/
+theorem oracle_replays (graph : EnumerationState.Graph Symbol Guard)
+    (templates : List (Template.Pattern Symbol)) (fuel : Nat) (pending : List (Pending Symbol))
+    (uv : Nat) (input : Sum (Fragment Symbol) Nat) :
+    Replays (oracle graph templates fuel pending uv input)
+      (SourcePruningOracle.oracle graph templates fuel pending uv input) := by
+  cases input with
+  | inr node => exact pure_replays _
+  | inl fragment =>
+      unfold oracle SourcePruningOracle.oracle
+      split
+      · exact pure_replays _
+      · change Replays (if idle pending fragment = true then _ else _) (if idle pending fragment = true then _ else _)
+        split
+        · exact pure_replays _
+        · exact bind_replays _ _ _ _ (EnumerationFlatPartial.expandPartial_replays graph fuel fragment)
+            (fun term => bind_replays _ _ _ _
+              (mapM_replays _ _ (fun group => resume_replays fuel uv term group) pending)
+              (fun _ => pure_replays _))
+
+/-- The concrete metadata callback returns the same complete metadata and Boolean. -/
+theorem recordTypes_replays (graph : EnumerationState.Graph Symbol Guard)
+    (templates : List (Template.Pattern Symbol)) (fuel : Nat) (metadata : Metadata Typing)
+    (uv : Nat) (input : Sum (Fragment Symbol) Nat) :
+    Replays (recordTypes graph templates fuel metadata uv input)
+      (SourcePruningRecordTypes.recordTypes graph templates fuel metadata uv input) := by
+  apply bind_replays _ _ _ _ ?_ (fun _ => pure_replays _)
+  by_cases empty : templates.isEmpty
+  · simpa only [empty, ↓reduceIte] using
+      (pure_replays (Symbol := Symbol) (Guard := Guard) (false, metadata.pending))
+  · simpa only [empty, Bool.false_eq_true, ↓reduceIte] using
+      (oracle_replays graph templates fuel metadata.pending uv input)
+
+end MicroCFTA.SourceFlatPruningOracle

@@ -1,0 +1,49 @@
+/-- Additional fuel retains the callback result and the exact complete final state. -/
+theorem oracle_moreFuel (graph : Graph Symbol Guard) (templates : List (Template.Pattern Symbol))
+    (fuel extra : Nat) (pending : List (Pending Symbol)) (uv : Nat) (input : Sum (Fragment Symbol) Nat) :
+    Retains (oracle graph templates fuel pending uv input)
+      (oracle graph templates (fuel + extra) pending uv input) := by
+  cases input with
+  | inr node => exact retains_refl _
+  | inl fragment =>
+      by_cases rejected : rejectEarly templates fragment = true
+      · simp only [oracle, ite_eq_left rejected]
+        exact retains_refl _
+      · by_cases skipped : idle pending fragment = true
+        · simp only [oracle, ite_eq_right rejected, ite_eq_left skipped]
+          exact retains_refl _
+        · simp only [oracle, ite_eq_right rejected, ite_eq_right skipped]
+          exact observe_moreFuel graph templates fuel extra pending uv fragment
+
+/-- One actual callback gives a finite matching callback from a framed input. -/
+theorem oracle_transport (graph : Graph Symbol Guard) (templates : List (Template.Pattern Symbol))
+    (leftFuel : Nat) (pending : List (Pending Symbol)) (uv : Nat) (input : Sum (Fragment Symbol) Nat)
+    (left right leftAfter : State Symbol Guard) (result : Bool × List (Pending Symbol))
+    (frame : Frame left right) (total : UnionFind.Total left.representatives)
+    (leftRead : Success (oracle graph templates leftFuel pending uv input) left result leftAfter) :
+    ∃ rightFuel rightAfter,
+      Success (oracle graph templates rightFuel pending uv input) right result rightAfter ∧
+      Frame leftAfter rightAfter := by
+  cases input with
+  | inr node => exact pure_transport _ result left right leftAfter frame leftRead
+  | inl fragment =>
+      by_cases rejected : rejectEarly templates fragment = true
+      · simp only [oracle, ite_eq_left rejected] at leftRead ⊢
+        exact pure_transport _ result left right leftAfter frame leftRead
+      · by_cases skipped : idle pending fragment = true
+        · simp only [oracle, ite_eq_right rejected, ite_eq_left skipped] at leftRead ⊢
+          exact pure_transport _ result left right leftAfter frame leftRead
+        · simp only [oracle, ite_eq_right rejected, ite_eq_right skipped] at leftRead ⊢
+          exact observe_transport graph templates leftFuel pending uv fragment left right leftAfter result frame total leftRead
+
+/-- Bounded fragment history constructs the actual callback and every pending-group read. -/
+theorem oracle_inl_complete (graph : Graph Symbol Guard) (templates : List (Template.Pattern Symbol))
+    (level : Nat → Nat) (frontier : Nat) (pending : List (Pending Symbol))
+    (uv : Nat) (fragment : Fragment Symbol) (before : State Symbol Guard)
+    (safe : Safe before)
+    (stratified : EnumerationOrder.Stratified before level frontier)
+    (allocated : FragmentBound before.counter fragment)
+    (bounded : ∀ group ∈ pending, ∀ entry ∈ group, entry.2 < before.counter) :
+    ∃ fuel result after, Success (oracle graph templates fuel pending uv (.inl fragment)) before result after ∧
+      EnumerationDriver.RenderStable before after ∧ Frame before after ∧
+      EnumerationOrder.Stratified after level frontier := by
