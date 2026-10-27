@@ -1,3 +1,7 @@
+import MicroCFTA.FlatUnionFind
+import MicroCFTA.FlatUnionFindUnion
+import MicroCFTA.FlatUnionFindRefinement
+import MicroCFTA.FlatUnionFindSemantics
 import MicroCFTA.SourcePruningEnumerationCapturedEdgeDiagonalSoundness
 import MicroCFTA.SourcePruningEnumerationRecursiveCapturedSoundness
 import MicroCFTA.SourcePruningEnumerationRecursiveCallbackCanonical
