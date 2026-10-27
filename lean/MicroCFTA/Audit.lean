@@ -3630,6 +3630,8 @@ import MicroCFTA.SourcePruningEnumerationCapturedEdgeAccepting
 import MicroCFTA.SourcePruningEnumerationNativeHeadCoverage
 import MicroCFTA.SourcePruningEnumerationNativeBranchCoverage
 import MicroCFTA.SourcePruningEnumerationNativeParentCoverage
+import MicroCFTA.SourcePruningEnumerationNativeProgress
+import MicroCFTA.SourcePruningEnumerationCallbackProgress
 /-!
 # Proof dependency audit
 
