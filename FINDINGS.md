@@ -1,5 +1,53 @@
 # Current formalization findings
 
+## Constructive completion from an accepted selected edge
+
+Source checkpoint: bcd40a836d8b1ae4d388fecf0f1ca81a27cbb673.
+An accepted current native edge now constructs its actual completed symbolic
+edge result under the declared native and resource admission. The proof
+derives successful guard projection and inherited arity. It constructs fresh
+equality witnesses, prepares the ordered child terms and records the actual
+native residual. The final assignment agrees at every old variable, satisfies
+the original and returned states, and fills the actual fragment to the term.
+
+The accepted edge wrapper retains the full strengthened resource packet.
+Its reservation covers the unique CURRENT pure projection. It takes the
+chosen semantic model before its existential work bounds. The retained
+primary producer fixes bounds before its universal semantic observer.
+Neither theorem takes a desired future success or final assignment as input.
+The full caller, memo state, resource forecast, histories and indexes remain.
+
+Forward suspended descent now needs no trie-validity premise. It follows
+the actual lookup and filter. Every inherited bucket entry remains required.
+Final residual satisfaction uses the actual native guard interpretation.
+
+This closes local selected-edge symbolic coverage. The selector must still
+retain an accepting resident edge. Recursive expansion, discharged rendering
+coverage, public API admission and physical Haskell correspondence remain
+open. H6 and checked finite rendering soundness keep their earlier scopes.
+The full formalization goal stays ACTIVE.
+
+Four modules contain 649 lines and five public theorems. All new
+sources and standalone Audit pass strict checks. Audit passes 4242 jobs
+and checks 80066 theorem dependencies. Public readback contains 168 complete
+blocks. All 163 prior blocks and 86 pinned prior sources remain byte exact.
+Only the three standard Lean axioms occur. FINDINGS retains every Haskell
+repair handoff. Details: `lean/notes-current-selected-coverage.md`.
+
+
+### Selected-edge coverage and Haskell repair status
+
+This checkpoint changes Lean proofs only. All earlier Haskell fixes,
+regressions and external repair instructions remain below without deletion.
+The final successful fetch reads main at 8766699b594eaad80381af2eee034c378ccf3192.
+It remains an ancestor with the LPO and extraction documentation fixes.
+KBO candidate d7b6a9dfff464eb32c17c314d4825d5b027f1b2d remains unintegrated,
+unbuilt and unexecuted. The positive-Int context-reversal finding remains
+open. No Haskell source, Cabal file, native test or benchmark changed or ran.
+Existing opaque Mu and Union behavior remains a separate expansion and
+rendering boundary. No new Haskell defect or runtime repair is claimed.
+
+
 ## Constructive coverage of ordered native child traversal
 
 Source checkpoint: 6e496d20bf4c574eb00264a5efb237ad47368fcc.
