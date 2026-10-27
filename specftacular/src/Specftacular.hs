@@ -314,6 +314,8 @@ data Settings = Settings
     -- ^ Whether to write each law with the types of its subterms on stderr.
     , termOrder :: TermOrder
     -- ^ The order of the rewriting (see 'searchTermOrder').
+    , quiet :: Bool
+    -- ^ Whether the search writes nothing on stdout, as the search of the definitions (see 'searchDefinitions').
     , completionFuel :: Maybe Int
     -- ^ The critical pairs that the completion of one law may take (see 'addLaw').
     , egraphMode :: EGraphMode
@@ -482,6 +484,12 @@ data SearchOptions = SearchOptions
     orients the laws, decides each rewrite, and chooses the term that stays
     of each set of equal terms.
     -}
+    , searchDefinitions :: Bool
+    {- ^ Whether the Knuth-Bendix order prefers the bodies of the definitions
+    of the signature ('definitionWeights'). A search of phase 1 up to the
+    largest arity of the signature plus one, below the size, finds them
+    first, and writes nothing.
+    -}
     }
     deriving (Show)
 
@@ -523,7 +531,8 @@ defaultOptions size phase =
         , searchTypeDepth = Nothing
         , searchFunctionBuckets = False
         , searchDumpLaws = False
-        , searchTermOrder = KnuthBendix
+        , searchTermOrder = KnuthBendix Map.empty
+        , searchDefinitions = True
         }
 
 {- | Read the options from the program arguments: the size, the phase,
@@ -598,8 +607,14 @@ parseOptions = O.execParser (O.info (options O.<**> O.helper) (O.fullDesc <> O.p
                 )
             <*> O.switch (O.long "dump-laws" <> O.help "Write each law with the types of its subterms on stderr")
             <*> termOrderOption
+            <*> ( not
+                    <$> O.switch
+                        ( O.long "no-definitions"
+                            <> O.help "Do not let the Knuth-Bendix order prefer the bodies of the definitions of the signature"
+                        )
+                )
     termOrderOption =
-        maybe KnuthBendix (PathOrder . T.words . T.pack)
+        maybe (KnuthBendix Map.empty) (PathOrder . T.words . T.pack)
             <$> O.optional
                 ( O.strOption
                     ( O.long "lpo"
@@ -852,6 +867,7 @@ searchPhases
         , searchFunctionBuckets = functionBucketsSetting
         , searchDumpLaws = dumpLawsSetting
         , searchTermOrder = termOrderSetting
+        , searchDefinitions = definitionsSetting
         }
     givenInstances
     givenSig =
@@ -899,8 +915,6 @@ searchPhases
             mapM_ print (Map.assocs arb_insts)
             putStrLn ""
 
-            putStrLn "Laws according to Haskell's (==):"
-            putStrLn "---------------------------------"
             let env =
                     Settings
                         { progress = progress
@@ -938,8 +952,44 @@ searchPhases
                         , functionBuckets = functionBucketsSetting
                         , dumpLaws = dumpLawsSetting
                         , termOrder = termOrderSetting
+                        , quiet = False
                         }
-            runPhases env size (max 1 (min 4 phase)) instances sig
+            -- A definition of a constant with k arguments has k + 1 leaves.
+            let arity (TFun _ result) = 1 + arity result
+                arity _ = 0 :: Int
+                definitionSize = min (size - 1) (1 + maximum (0 : map (arity . sfTypeRep) (Map.elems givenSig)))
+            order <- case termOrderSetting of
+                KnuthBendix given
+                    | definitionsSetting && definitionSize > 0 -> do
+                        definitionSink <- newIORef []
+                        (_, found) <-
+                            runPhases
+                                env
+                                    { maxSize = definitionSize
+                                    , progress = False
+                                    , diagnostics = False
+                                    , detailedDiagnostics = False
+                                    , egraphMode = EGraphOff
+                                    , lawSink = definitionSink
+                                    , stopAfter = Nothing
+                                    , onlyBucket = Nothing
+                                    , dumpLaws = False
+                                    , quiet = True
+                                    }
+                                definitionSize
+                                1
+                                instances
+                                sig
+                        let defined = Map.union given (definitionWeights (rewrite_rules found))
+                        putStrLn "Defined symbols (the order prefers their bodies):"
+                        putStrLn "---------------------------------"
+                        mapM_ (putStrLn . T.unpack . (\(Symbol name) -> name)) (Map.keys defined)
+                        putStrLn ""
+                        pure (KnuthBendix defined)
+                other -> pure other
+            putStrLn "Laws according to Haskell's (==):"
+            putStrLn "---------------------------------"
+            fst <$> runPhases env{termOrder = order} size (max 1 (min 4 phase)) instances sig
 
 -- | Read "phase:size".
 parseStop :: String -> Maybe (Int, Int)
@@ -1033,10 +1083,14 @@ phases =
     , ("Done! ", "Starting fully-polymorphic phase....", id, generalizeType, Just monomorphiseType)
     ]
 
-{- | Run the phases from 1 to the given phase. The search state goes from
-one phase to the next.
+-- | Write a line on stdout, unless the search is quiet.
+say :: Settings -> String -> IO ()
+say env line = unless (quiet env) (putStrLn line)
+
+{- | Run the phases from 1 to the given phase, and give the laws and the
+final search state. The search state goes from one phase to the next.
 -}
-runPhases :: Settings -> Int -> Int -> (TypeSkeleton -> Maybe Instance) -> Sig -> IO [String]
+runPhases :: Settings -> Int -> Int -> (TypeSkeleton -> Maybe Instance) -> Sig -> IO ([String], Search)
 runPhases env size lastPhase instances sig =
     go
         (zip [1 ..] phases)
@@ -1055,7 +1109,7 @@ runPhases env size lastPhase instances sig =
   where
     go ((pn, (finished, starting, givenTrans, skelTrans, skeletonTrans)) : rest) s
         | pn <= lastPhase = do
-            when (pn > 1) $ putStrLn starting
+            when (pn > 1) $ say env starting
             let phaseEnv = env{diagnosticPhase = pn}
                 -- A phase with a skeleton grammar closes its variable types
                 -- under carrier renaming, so each renaming of a typing of a
@@ -1076,10 +1130,10 @@ runPhases env size lastPhase instances sig =
                 result@(_, finishedState) <- runPhase phaseEnv (phaseSize pn) (stectaWith <$> skeletonTrans) (stectaWith givenTrans) s
                 diagnosticEvent phaseEnv "checkpoint" 0 "" "phase" finishedState
                 return result
-            putStrLn $ finished ++ show (so_far s') ++ " terms examined."
-            putStrLn $ show (sum $ map DT.size $ Map.elems (trees s')) ++ " unique terms discovered."
-            if fmap fst (stopAfter env) == Just pn then return laws else (laws ++) <$> go rest s'
-    go _ _ = return []
+            say env $ finished ++ show (so_far s') ++ " terms examined."
+            say env $ show (sum $ map DT.size $ Map.elems (trees s')) ++ " unique terms discovered."
+            if fmap fst (stopAfter env) == Just pn then return (laws, s') else Bi.first (laws ++) <$> go rest s'
+    go _ s = return ([], s)
     phaseSize pn = case stopAfter env of
         Just (stopPhase, stopSize) | stopPhase == pn -> min size stopSize
         _ -> size
@@ -1152,7 +1206,7 @@ runPhase env@Settings{..} size skeletons stecta@StEcta{..}
         | otherwise = do
             let n = law_count s + 1
                 lawText = show n <> ". " <> ppNpTerm (canonicalLaw lawSig law)
-            putStrLn lawText
+            say env lawText
             rules <-
                 boundedCompletion
                     env
@@ -1315,7 +1369,7 @@ runPhase env@Settings{..} size skeletons stecta@StEcta{..}
                         else foldM replay ([], s) found
                 now <- getMonotonicTimeNSec
                 let tree = Map.findWithDefault DT.empty (typeSkeletonToTerm tc) (trees s)
-                putStrLn $
+                say env $
                     reason
                         ++ ": phase "
                         ++ show diagnosticPhase
@@ -1344,7 +1398,7 @@ runPhase env@Settings{..} size skeletons stecta@StEcta{..}
     considerRest limit lvl tc t ts begin s s' laws = do
         end <- getMonotonicTimeNSec
         -- Without parallel buckets, deferred laws print when their schema ends.
-        when (deferLaws && not parallelBuckets) $ mapM_ putStrLn laws
+        when (deferLaws && not parallelBuckets) $ mapM_ (say env) laws
         when (isJust onlyBucket && stopAfter == Just (diagnosticPhase, lvl)) $
             hPutStrLn
                 stderr
@@ -1674,7 +1728,7 @@ consider env@Settings{..} StEcta{..} lvl full_term s0
                 law_str = show n <> ". " <> ppNpTerm (canonicalLaw lawSig law)
             unless deferLaws $ do
                 when progress $ hPutStr stderr "\r\ESC[K"
-                putStrLn law_str
+                say env law_str
             when dumpLaws $
                 hPutStrLn stderr ("specftacular-law\t" ++ show n ++ "\t" ++ show (canonicalLaw lawSig law))
             when deferLaws $ modifyIORef' lawSink ((w, i, lawSig, law) :)
