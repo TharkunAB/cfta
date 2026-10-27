@@ -1,5 +1,39 @@
 # Full formalization coverage
 
+## Actual selected edges now have exact assignment language and conditional native soundness
+
+Selected-edge assignment equivalence: `95a0912b3`.
+Conditional native edge and parent acceptance: `72fef36ea`.
+The goal stays ACTIVE. H6 remains the strongest end-to-end language theorem.
+Main `6c080537a` remains imported. All earlier Haskell repairs remain merged.
+
+The original selected-edge producer keeps its complete admission and result.
+For its actual stable COMPLETE result, final Satisfies is equivalent to original
+Satisfies, the actual ordered effective child restrictions, and the full retained
+residual at the returned filled fragment. The original producer runs once.
+The proof uses the actual own-class prefix and actual child traversal. It
+assumes no future semantic callback and does not cancel final cache writes.
+
+A second theorem derives native acceptance by the actual selected edge and
+its parent from a satisfying completed assignment. It requires a current
+annotation heap, inherited trie validity, no inherited terminal, fresh own
+arity, and structural child-bucket retention. These are explicit gates.
+They do not follow from the original Ready/Available admission alone.
+This is backward soundness. It does not prove assignment existence or full
+enumeration completeness. Recursive truncation remains the source behavior.
+
+All six new modules and Audit pass strict checks. Aggregate Audit passes
+3930 jobs and checks 77859 theorem dependencies. Installed readback covers
+8 declarations with only permitted axioms. H6, prior Lean sources
+except Audit imports, runtime and Haskell remain unchanged.
+
+Next retain these semantic gates through checked native construction and
+actual recursive calls. Then prove captured-slot writes and rendering.
+Whole-enumerator language, selector coverage, partial stops, unsupported
+fallback and Haskell correspondence remain open. FINDINGS distinguishes
+formal invariant gaps from Haskell defects. No new Haskell patch is needed.
+Details: `lean/notes-current-pruning-selected-edge-language.md`.
+
 ## Actual child dispatch and ordered traversal now have exact assignment language
 
 Actual child dispatcher: `76346beab`.
