@@ -1,3 +1,7 @@
+import MicroCFTA.FlatUnionFindBounds
+import MicroCFTA.EnumerationFlatBounds
+import MicroCFTA.EnumerationFlatCached
+import MicroCFTA.EnumerationFlatNativeIndex
 import MicroCFTA.FlatUnionFindStable
 import MicroCFTA.EnumerationResultRelation
 import MicroCFTA.EnumerationFlatState
