@@ -3612,6 +3612,9 @@ import MicroCFTA.SourceCurrentSameSymbolEdgeOriginalRowsCovered
 import MicroCFTA.SourceCurrentSameSymbolEdgeHitReadback
 import MicroCFTA.SourcePruningEnumerationInitialPacket
 import MicroCFTA.SourcePruningEnumerationInitialRendering
+import MicroCFTA.SourcePruningEnumerationIncomingCoverage
+import MicroCFTA.SourcePruningEnumerationTerminalChildCoverage
+import MicroCFTA.SourcePruningEnumerationChildCoverage
 /-!
 # Proof dependency audit
 
