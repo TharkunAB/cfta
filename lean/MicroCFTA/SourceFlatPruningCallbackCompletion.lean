@@ -1,0 +1,109 @@
+import MicroCFTA.SourceFlatPruningContinuation
+import MicroCFTA.SourcePruningEnumerationRecursiveCallbackCanonical
+import MicroCFTA.EnumerationFlatNativeIndex
+import MicroCFTA.EnumerationFlatSemantics
+import MicroCFTA.SourcePruningEnumerationNativeLanguage
+
+/-!
+# Actual flat callback completion from the original recursive packet
+
+The original producer supplies its full packet once. Successful replay adds
+the actual flat callback rows, indexes, stored tries and restart decision.
+No final flat invariant or future callback observation is an input.
+-/
+
+namespace MicroCFTA.SourceFlatPruningCallbackCompletion
+
+open EnumerationState EnumerationCorrectness EnumerationDriver EnumerationCompressionFrame EnumerationValidity
+open SourcePruningRecordTypes SourcePruningPartialMatch SourcePruningEnumerationRecursive
+local notation "Symbol" => SourcePruningTemplates.Symbol
+local notation "Constraint" => SourceSymbolicIndex.Constraint FullSyntax.Formula
+local notation "Fragment" => Fragments.Fragment Symbol
+local notation "Caller" => SourceCurrentAllocatedPartialState.State
+local notation "Queries" => SourceEndpointMemo.Memos
+local notation "Memos" => EndpointMemoGateTrace.Memos
+local notation "Cached" => EnumerationExpandableIndex.Cached Symbol Constraint
+local notation "FlatCached" => EnumerationFlatCached.Cached Symbol Constraint
+local notation "Core" => EnumerationState.State Symbol Constraint
+local notation "FlatCore" => EnumerationFlatState.State Symbol Constraint
+universe u v
+variable {Typing : Type} {width : Nat}
+local notation "OldResult" => SourcePruningEnumerationNativeContinuations.HookResult
+  (Output width Typing) (Failure width Typing) width
+variable [DecidableEq (InternedConstructorTemplates.EdgeKey Symbol Constraint)]
+variable (formulas : SourceGuards.Formulas FullSyntax.Formula)
+variable (solver : SourceGuards.Entailment FullSyntax.Formula)
+variable (inventory : SourceCurrentAllocatedNativeInventoryState.Inventory)
+variable (graph : Graph Symbol Constraint) (templates : List (Template.Pattern Symbol))
+variable (metadata : Metadata Typing) (uv : Nat) (fragment : Fragment)
+variable (caller : Caller width) (memos : Memos) (before : Cached) (flat : FlatCached)
+
+/-- Original callback admission derives actual flat execution and its complete returned invariants. -/
+theorem complete (packet : Packet formulas solver inventory caller memos metadata before)
+    (allocated : FragmentBound before.core.counter fragment) (canonical : Canonical before.core)
+    (related : EnumerationFlatCached.Related flat before) :
+    ∃ fuel result after,
+      ((Packet formulas solver inventory caller memos result.2 (EnumerationExpandableIndex.frame after before) ∧
+      RenderStable before.core after ∧ Frame before.core after ∧
+      result.2.types = updatedTypes metadata uv (.inl fragment) ∧
+      result.2.openHoles = metadata.openHoles ∧ result.2.typing = metadata.typing ∧
+      ∀ extra,
+        Success (SourcePruningRecordTypes.recordTypes graph templates (fuel + extra) metadata uv (.inl fragment))
+          before.core result after ∧
+        ExceptT.run (SourcePruningRecordTypes.recordTypes graph templates (fuel + extra) metadata uv
+          (.inl fragment) before.core) = [.ok (result, after)] ∧
+        ∀ (recur : Metadata Typing → Caller width → Queries → Cached → Option Next → OldResult) stop order,
+          SourcePruningEnumerationRecursive.continueWith recur graph templates stop order (fuel + extra)
+            metadata uv fragment caller memos.query before =
+            if result.1 then .complete [] caller memos.query
+            else recur result.2 caller memos.query (EnumerationExpandableIndex.frame after before)
+              (SourcePruningEnumerationRestart.decision stop order result.2
+                (EnumerationExpandableIndex.frame after before))) ∧ Canonical after) ∧
+      ∀ extra, ∃ flatAfter,
+        SourceFlatPruningOracle.recordTypes graph templates (fuel + extra) metadata uv
+          (.inl fragment) flat.core = [.ok (result, flatAfter)] ∧
+        EnumerationFlatCached.Related (EnumerationFlatCached.frame flatAfter flat)
+          (EnumerationExpandableIndex.frame after before) ∧
+        (∀ value ∈ flatAfter.values, EnumerationSemantics.ValidSuspended (EnumerationSchedule.references value)) ∧
+        EnumerationFlatNativeIndex.Correct caller.checked.native.machine.heap
+          (EnumerationFlatCached.frame flatAfter flat) ∧
+        (∀ language meaning assignment,
+          EnumerationFlatState.Satisfies language meaning assignment flatAfter ↔
+            EnumerationFlatState.Satisfies language meaning assignment flat.core) ∧
+        (∀ stop order, SourceFlatPruningRestart.decision stop order result.2
+          (EnumerationFlatCached.frame flatAfter flat) =
+          SourcePruningEnumerationRestart.decision stop order result.2 (EnumerationExpandableIndex.frame after before)) ∧
+        ∀ (Out : Type u) (Reason : Type v)
+          (callbackFailure : Nat → List (Except Error ((Bool × Metadata Typing) × FlatCore)) → Reason)
+          (recur : Metadata Typing → Caller width → Queries → FlatCached → Option Next →
+            SourcePruningEnumerationNativeContinuations.HookResult Out Reason width) stop order,
+          SourceFlatPruningContinuation.continueWith callbackFailure recur graph templates stop order
+            (fuel + extra) metadata uv fragment caller memos.query flat =
+            if result.1 then .complete [] caller memos.query
+            else recur result.2 caller memos.query (EnumerationFlatCached.frame flatAfter flat)
+              (SourceFlatPruningRestart.decision stop order result.2 (EnumerationFlatCached.frame flatAfter flat)) := by
+  obtain ⟨fuel, result, after, original, afterCanonical⟩ :=
+    callback_complete_canonical formulas solver inventory graph templates metadata uv fragment caller memos before
+      packet allocated canonical
+  refine ⟨fuel, result, after, ⟨original, afterCanonical⟩, ?_⟩
+  intro extra
+  obtain ⟨flatAfter, actual, cores⟩ := SourceFlatPruningOracle.recordTypes_replays graph templates
+    (fuel + extra) metadata uv (.inl fragment) flat.core before.core result after related.core
+      (original.2.2.2.2.2.2 extra).1
+  have caches := EnumerationFlatCached.frame_related related cores
+  obtain ⟨roots, paths, storage, _realized, counts, flags⟩ := original.1.valid
+  refine ⟨flatAfter, actual, caches, (EnumerationFlatState.related_canonical cores).mp afterCanonical,
+    EnumerationFlatNativeIndex.correct_of_related caches caller.checked.native.machine.heap roots paths
+      storage.aligned flags counts, ?_, ?_, ?_⟩
+  · intro language meaning assignment
+    exact ((EnumerationFlatState.related_satisfies cores language meaning assignment).symm.trans
+      (SourcePruningEnumerationNativeLanguage.satisfies_frame language meaning assignment
+        before.core after original.2.2.1)).trans
+          (EnumerationFlatState.related_satisfies related.core language meaning assignment)
+  · intro stop order
+    exact SourceFlatPruningRestart.decision_related caches stop order result.2
+  · intro Out Reason callbackFailure recur stop order
+    exact SourceFlatPruningContinuation.continueWith_exact callbackFailure recur graph templates stop order
+      (fuel + extra) metadata uv fragment caller memos.query flat result flatAfter actual
+
+end MicroCFTA.SourceFlatPruningCallbackCompletion
