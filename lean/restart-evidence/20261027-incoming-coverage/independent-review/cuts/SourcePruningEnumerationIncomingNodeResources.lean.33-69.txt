@@ -1,0 +1,37 @@
+/-- Realized current slots and original numeric room derive the old native admission predicate. -/
+theorem initial_ranges (profile : Profile) (beforeCaller : Caller (bits + 2)) (before : Core)
+    (uv : Nat) (incoming : Node) (ready : SourceCurrentConjunctionClassScan.Ready beforeCaller.checked)
+    (realized : PendingRealized beforeCaller.checked.native.machine.heap before)
+    (available : Available beforeCaller.checked.native.machine.heap incoming) (closed : incoming.free = [])
+    (fits : Fits profile beforeCaller.checked) (room : Room bits profile) :
+    match before.values[uv]? with
+    | some (.unenumerated (some oldHandle) _) =>
+        match lookupNode beforeCaller.checked.native.machine.heap oldHandle with
+        | some old => SourceCurrentAllocatedNativeRequestBounds.WordRanges
+            (.code (SourceRecursiveIntersectionCode.requestNode IntersectionEmptyDomain.emptyDomain incoming old))
+            beforeCaller.checked
+        | none => True
+    | _ => True := by
+  cases stored : before.values[uv]? with
+  | none => trivial
+  | some value =>
+      cases value with
+      | eliminated | enumerated => trivial
+      | unenumerated oldNode oldScs =>
+          cases oldNode with
+          | none => trivial
+          | some oldHandle =>
+              cases decoded : lookupNode beforeCaller.checked.native.machine.heap oldHandle with
+              | none => simp only [decoded]
+              | some old =>
+                  obtain ⟨value, found, resident, oldClosed⟩ := realized uv oldHandle oldScs stored
+                  have same := Option.some.inj (found.symm.trans decoded)
+                  subst value
+                  have actualRoom := fits.room room
+                  have leftOriginal := SourceRecursiveIntersectionOriginalOutput.closed_original incoming
+                    beforeCaller.checked.native.machine.heap ready.good.native.machine.1.coherent available closed
+                  have rightOriginal := SourceRecursiveIntersectionOriginalOutput.closed_original old
+                    beforeCaller.checked.native.machine.heap ready.good.native.machine.1.coherent resident oldClosed
+                  simpa only [decoded] using (SourceCurrentAllocatedRecursiveWarmInitialRanges.warm_initial_ranges bits beforeCaller.checked
+                    ready.good ready.semantic incoming old leftOriginal rightOriginal available resident
+                    actualRoom.1 actualRoom.2.1 actualRoom.2.2).1

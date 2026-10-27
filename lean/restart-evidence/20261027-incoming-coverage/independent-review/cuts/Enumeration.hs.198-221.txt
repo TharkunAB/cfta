@@ -1,0 +1,24 @@
+{- | Intersect two UVar values. With the first argument true, an intersection
+that provably accepts no term becomes 'EmptyNode' (see '_constrainedRecursion').
+-}
+intersectUVarValue ::
+    (Hashable symbol, Typeable symbol) =>
+    Bool -> UVarValue symbol -> UVarValue symbol -> UVarValue symbol
+intersectUVarValue checkEmpty (UVarUnenumerated mn1 scs1) (UVarUnenumerated mn2 scs2) =
+    let newContents = case (mn1, mn2) of
+            (Nothing, x) -> x
+            (x, Nothing) -> x
+            (Just n1, Just n2) -> Just (emptyIfProvably (n1 `intersect` n2))
+        newConstraints = scs1 <> scs2
+     in UVarUnenumerated newContents newConstraints
+  where
+    -- An intersection can unfold a recursive node with constraints into a
+    -- node that needs itself again with no base case. Enumeration of such a
+    -- node would not end, so the merge makes it 'EmptyNode', and the caller
+    -- ends the branch.
+    emptyIfProvably n
+        | checkEmpty, reachesConstrainedMu n, provablyEmpty n = EmptyNode
+        | otherwise = n
+intersectUVarValue _ UVarEliminated _ = error "intersectUVarValue: Unexpected UVarEliminated"
+intersectUVarValue _ _ UVarEliminated = error "intersectUVarValue: Unexpected UVarEliminated"
+intersectUVarValue _ _ _ = error "intersectUVarValue: Intersecting with enumerated value not implemented"

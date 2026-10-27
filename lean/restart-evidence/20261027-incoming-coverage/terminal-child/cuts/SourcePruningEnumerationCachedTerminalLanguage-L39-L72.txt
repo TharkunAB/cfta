@@ -1,0 +1,34 @@
+theorem complete_semantics
+    [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Constraint)] [DecidableEq Node]
+    (formulas : SourceGuards.Formulas FullSyntax.Formula)
+    (solver : SourceGuards.Entailment FullSyntax.Formula)
+    (inventory : Inventory) (beforeCaller : Caller width)
+    (before : EnumerationExpandableIndex.Cached Symbol Constraint)
+    (checkEmpty : Bool) (first : EnumerationState.Suspended) (rest : List EnumerationState.Suspended)
+    (incoming : Node) (incomingScs : List EnumerationState.Suspended)
+    (roots : Nat → Nat) (memos : Memos)
+    (initial : Context formulas solver inventory beforeCaller memos)
+    (safe : Safe before.core) (paths : Roots before.core.representatives roots)
+    (counts : EnumerationCanonicalWaiting.Correct roots before.core.values before.waiting)
+    (flags : ∀ (slot : Nat), SourcePruningEnumerationNativeIndex.candidate
+      beforeCaller.checked.native.machine.heap
+      ((before.core.values[slot]?).getD .eliminated) = some (before.expandable slot))
+    (bounded : ∀ sc ∈ first :: rest, sc.var < before.core.counter)
+    (pending : InputsPending before.core (first :: rest))
+    (realized : PendingRealized beforeCaller.checked.native.machine.heap before.core)
+    (nonempty : incoming ≠ .empty)
+    (available : Available beforeCaller.checked.native.machine.heap incoming) (closed : incoming.free = [])
+    (incomingBounded : ∀ sc ∈ incomingScs, sc.var < before.core.counter)
+    (ranges : Ranges checkEmpty first rest beforeCaller before incoming memos.query) :
+    ∃ (r n p h k : Nat) (recorded : List Nat) (winner : Nat)
+      (joined : EnumerationExpandableIndex.Cached Symbol Constraint)
+      (foldRows : List (Unit × EnumerationExpandableIndex.Cached Symbol Constraint))
+      (foldCaller : Caller width) (foldQueries : Queries) (foldFinal : Memos) (foldInventory : Inventory)
+      (folded : EnumerationExpandableIndex.Cached Symbol Constraint)
+      (raw : TerminalRaw) (afterCaller : Caller width) (outer : EnumerationState.State Symbol Constraint)
+      (savedQueries : Queries) (final : Memos) (next : Inventory)
+      (resultCache : EnumerationExpandableIndex.Cached Symbol Constraint),
+      (∀ extra, ExceptT.run (SourcePruningEnumerationTerminalPrefix.run
+        (r + extra) first rest before.waiting before.core) =
+        [.ok ((recorded, winner, joined.waiting), joined.core)]) ∧
+      recorded = (first :: rest).map (fun sc => roots sc.var) ∧ winner ∈ recorded ∧

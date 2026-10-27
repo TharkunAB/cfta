@@ -1,0 +1,39 @@
+      (∀ (slot : Nat), SourcePruningEnumerationNativeIndex.candidate
+        beforeCaller.checked.native.machine.heap
+        ((joined.core.values[slot]?).getD .eliminated) = some (joined.expandable slot)) ∧
+      (∀ extra P H, p ≤ P → h ≤ H →
+        SourcePruningEnumerationCachedFold.run checkEmpty (n + extra) P H recorded
+          beforeCaller joined winner memos.query =
+          ((.ok (some (foldRows.map (fun row => .ok (row.1, row.2.core)))),
+            foldCaller, foldQueries, folded.core), some folded)) ∧
+      (∀ extra P H, p ≤ P → h ≤ H →
+        SourcePruningEnumerationFold.run checkEmpty (n + extra) P H recorded
+          beforeCaller joined.core winner memos.query =
+          (.ok (some (foldRows.map (fun row => .ok (row.1, row.2.core)))),
+            foldCaller, foldQueries, folded.core)) ∧
+      (foldRows = [] ∨ foldRows = [((), folded)]) ∧
+      Post formulas solver foldInventory beforeCaller foldCaller foldFinal ∧ foldFinal.query = foldQueries ∧
+      folded.core.counter = joined.core.counter ∧ folded.core.representatives = joined.core.representatives ∧
+      Roots folded.core.representatives (EnumerationCanonicalUnion.mergedRoots roots recorded winner) ∧
+      StorageValid folded.core ∧ PendingRealized foldCaller.checked.native.machine.heap folded.core ∧
+      IsRoot folded.core.representatives winner ∧ PendingAt folded.core winner ∧
+      EnumerationCanonicalWaiting.Correct (EnumerationCanonicalUnion.mergedRoots roots recorded winner)
+        folded.core.values folded.waiting ∧ folded.waiting = joined.waiting ∧
+      (∀ (slot : Nat), SourcePruningEnumerationNativeIndex.candidate
+        foldCaller.checked.native.machine.heap
+        ((folded.core.values[slot]?).getD .eliminated) = some (folded.expandable slot)) ∧
+      (∀ (slot : Nat), joined.core.values[slot]? = some .eliminated →
+        folded.core.values[slot]? = some .eliminated) ∧
+      (foldRows = [((), folded)] → ∀ source ∈ recorded, source ≠ winner →
+        folded.core.values[source]? = some .eliminated) ∧
+      (∀ (slot : Nat), slot ∉ recorded → folded.core.values[slot]? = before.core.values[slot]?) ∧
+      (foldRows = [((), folded)] → Safe folded.core) ∧
+      (∀ (slot : Nat) (fragment : Fragments.Fragment Symbol),
+        folded.core.values[slot]? = some (.enumerated fragment) →
+        before.core.values[slot]? = some (.enumerated fragment)) ∧
+      (∀ extraRepresentative extraNative P H, p ≤ P → h ≤ H →
+        SourcePruningEnumerationTerminal.run checkEmpty (r + extraRepresentative) (n + extraNative) P H
+          first rest before.waiting beforeCaller before.core incoming incomingScs memos.query =
+          (.ok (some raw), afterCaller, savedQueries, outer, joined.waiting)) ∧
+      Post formulas solver next beforeCaller afterCaller final ∧ final.query = savedQueries ∧
+      (∀ extraRepresentative extraNative P H extraIndex, p ≤ P → h ≤ H →

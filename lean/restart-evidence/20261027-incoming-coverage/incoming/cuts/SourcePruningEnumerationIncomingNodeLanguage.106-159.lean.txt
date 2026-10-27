@@ -1,0 +1,54 @@
+  obtain ⟨r, n, p, h, oldNode, oldScs, read, after, afterCaller, savedQueries, final, next,
+    replacement, handle, reading, frame, running, writing, afterSame, stored, afterStorage,
+    afterRealized, post, query, unfolding, replacementAvailable, replacementClosed, encoded,
+    decoded, noOld, hasOld⟩ :=
+    run_complete formulas solver inventory beforeCaller before checkEmpty uv incoming incomingScs memos
+      initial realized storage root pending available closed bounded ranges
+  refine ⟨r, n, p, h, oldNode, oldScs, read, after, afterCaller, savedQueries, final, next,
+    replacement, handle, reading, frame, running, writing, afterSame, stored, afterStorage,
+    afterRealized, post, query, unfolding, replacementAvailable, replacementClosed, encoded,
+    decoded, noOld, hasOld, ?_⟩
+  intro ambient residualMeaning assignment
+  have readSuccess : Success (getValue r uv) before (.unenumerated oldNode oldScs) read := by
+    have actual := reading 0
+    simp only [Nat.add_zero] at actual
+    rw [Success, actual]
+    exact List.mem_singleton_self _
+  obtain ⟨_, found, _size, beforePath, _, oldStored⟩ :=
+    getValue_frame r uv before read (.unenumerated oldNode oldScs) storage.total readSuccess
+  obtain ⟨_rootSize, rootPath⟩ := root
+  have foundSame : found = uv := (UnionFind.reaches_unique beforePath rootPath).1
+  have beforeStored : before.values[uv]? = some (.unenumerated oldNode oldScs) := by
+    simpa only [foundSame] using oldStored
+  have readStored : read.values[uv]? = some (.unenumerated oldNode oldScs) := by
+    simpa only [frame.values] using beforeStored
+  have replacementMeaning : ∀ term,
+      SourcePruningEnumerationNativeLanguage.handles (SourceEqualityPCSGuard.holds formulas solver)
+        ambient afterCaller.checked.native.machine.heap handle term ↔
+      InternedGuardedLanguage.meaning (SourceEqualityPCSGuard.holds formulas solver) ambient incoming term ∧
+        Fragments.permits
+          (oldNode.map (SourcePruningEnumerationNativeLanguage.handles
+            (SourceEqualityPCSGuard.holds formulas solver) ambient afterCaller.checked.native.machine.heap)) term := by
+    intro term
+    rw [SourcePruningEnumerationNativeLanguage.handles_lookup _ _ _ _ _ _ decoded]
+    cases oldCase : oldNode with
+    | none =>
+        obtain ⟨same, _⟩ := noOld oldCase
+        simp only [Option.map_none, Fragments.permits, same, and_true]
+    | some oldHandle =>
+        obtain ⟨old, _queryNode, _queried, oldDecoded, _, _, _, exactMeaning, _⟩ := hasOld oldHandle oldCase
+        have keptDecoded := lookupNode_keeps beforeCaller.checked.native.machine.heap
+          afterCaller.checked.native.machine.heap post.effects.keeps oldHandle old oldDecoded
+        simpa only [oldCase, Option.map_some, Fragments.permits,
+          SourcePruningEnumerationNativeLanguage.handles_lookup _ _ _ _ _ _ keptDecoded] using
+          exactMeaning ambient term
+  have writeMeaning := SourcePruningEnumerationPendingWriteLanguage.pending_write
+    (SourcePruningEnumerationNativeLanguage.handles (SourceEqualityPCSGuard.holds formulas solver)
+      ambient afterCaller.checked.native.machine.heap) residualMeaning assignment read after uv handle
+    oldNode oldScs incomingScs
+    (InternedGuardedLanguage.meaning (SourceEqualityPCSGuard.holds formulas solver) ambient incoming)
+    readStored (by rw [afterSame]) (by rw [afterSame]) (by rw [afterSame]) replacementMeaning
+  have readMeaning := SourcePruningEnumerationNativeLanguage.satisfies_keeps_frame
+    (SourceEqualityPCSGuard.holds formulas solver) ambient beforeCaller.checked.native.machine.heap
+    afterCaller.checked.native.machine.heap before read residualMeaning assignment realized frame post.effects.keeps
+  exact writeMeaning.trans (and_congr_left fun _ => readMeaning)

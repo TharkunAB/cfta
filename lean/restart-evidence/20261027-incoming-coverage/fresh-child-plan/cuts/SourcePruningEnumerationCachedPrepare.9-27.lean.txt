@@ -1,0 +1,19 @@
+/-- Keep rejection distinct from partiality in the cached child preparation. -/
+def prepareChild
+    (heap : InternedConstructorTemplates.State Symbol NativeGuard)
+    (fuel : Nat) (scs : List EnumerationState.Suspended)
+    (value : InternedConstructorTemplates.Value Symbol NativeGuard)
+    (before : EnumerationExpandableIndex.Cached Symbol EnumGuard) :
+    Option (List (Fragments.Fragment Symbol × EnumerationExpandableIndex.Cached Symbol EnumGuard)) :=
+  match value with
+  | .empty => some []
+  | .reference _ => none
+  | .node _ _ _ _ =>
+      (SourcePruningEnumerationCachedChild.prepareOrdinary heap fuel scs value before).map
+        fun result => [result]
+  | .union _ _ _ _ | .mu _ _ _ _ =>
+      if scs.any (fun sc => EqualityTrie.isTerminal sc.trie) then none
+      else
+        (encodeNode value).bind fun handle =>
+          (SourcePruningEnumerationCachedChild.allocate heap (some handle) before).map
+            fun allocation => [(.hole allocation.1, allocation.2)]

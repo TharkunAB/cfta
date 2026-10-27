@@ -1,0 +1,56 @@
+/-- Original current facts and one mixed reservation derive all terminal range predicates. -/
+theorem initial_ranges
+    [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Constraint)] [DecidableEq Node]
+    (seed : Seed)
+    (formulas : SourceGuards.Formulas FullSyntax.Formula)
+    (solver : SourceGuards.Entailment FullSyntax.Formula)
+    (inventory : Inventory) (beforeCaller : Caller (bits + 2))
+    (before : EnumerationExpandableIndex.Cached Symbol Constraint)
+    (checkEmpty : Bool) (first : Suspended) (rest : List Suspended)
+    (incoming : Node) (roots : Nat → Nat) (memos : Memos)
+    (initial : Context formulas solver inventory beforeCaller memos)
+    (safe : Safe before.core) (paths : Roots before.core.representatives roots)
+    (counts : EnumerationCanonicalWaiting.Correct roots before.core.values before.waiting)
+    (bounded : ∀ sc ∈ first :: rest, sc.var < before.core.counter)
+    (pending : InputsPending before.core (first :: rest))
+    (realized : PendingRealized beforeCaller.checked.native.machine.heap before.core)
+    (available : Available beforeCaller.checked.native.machine.heap incoming) (closed : incoming.free = [])
+    (fits : Fits seed.2 beforeCaller.checked)
+    (reserved : Reserved bits seed ((first :: rest).length + 1))
+    (known : Heap (fun guard => guard ∈ seed.1) beforeCaller.checked.native.machine.heap) :
+    Ranges checkEmpty first rest beforeCaller before incoming memos.query := by
+  intro prefixFuel recorded winner moved joined prefixObserved
+  obtain ⟨recordedSame, joinedRealized, winnerPending, recordedPending⟩ :=
+    observed_prefix beforeCaller.checked.native.machine.heap before.core first rest before.waiting roots
+      paths counts safe bounded pending realized prefixObserved
+  have lengthSame : recorded.length = (first :: rest).length := by
+    simp only [recordedSame, List.length_map]
+  have reservation : Reserved bits seed (recorded.length + 1) := by
+    simpa only [lengthSame] using reserved
+  have foldReservation : Reserved bits seed recorded.length := reservation.prefix (by omega)
+  have selected : ∀ source ∈ recorded, PendingOrEliminated joined source :=
+    fun source member => .inl (recordedPending source member)
+  have foldRanges := SourcePruningEnumerationFold.initial_ranges seed formulas solver inventory
+    beforeCaller joined recorded checkEmpty winner memos initial joinedRealized winnerPending selected
+    fits foldReservation known
+  refine ⟨foldRanges, ?_⟩
+  intro foldFuel P H foldCaller folded foldQueries observedFold
+  obtain ⟨n, lowP, lowH, raw, actualCaller, actualCore, actualQueries, final, next, stable,
+    post, _querySame, finalRealized, _shape, _completed, _eliminated, _length, _forest,
+    _counter, _obligations, _expansion, _ancestry, _rejection⟩ :=
+    SourcePruningEnumerationFold.run_complete formulas solver inventory beforeCaller joined recorded
+      checkEmpty winner memos initial joinedRealized winnerPending
+      (fun source member => .inr (recordedPending source member)) foldRanges
+  have actual := stable 0 lowP lowH (Nat.le_refl _) (Nat.le_refl _)
+  simp only [Nat.add_zero] at actual
+  obtain ⟨_rawSame, callerSame, _queriesSame, coreSame⟩ :=
+    SourcePruningEnumerationFold.ok_unique checkEmpty actual observedFold
+  subst actualCaller
+  subst actualCore
+  have resources := SourcePruningEnumerationFold.observed_resources seed formulas solver inventory
+    beforeCaller joined recorded checkEmpty foldFuel P H winner memos initial joinedRealized
+    winnerPending selected fits foldReservation known observedFold
+  have remaining : Reserved bits (advance seed recorded.length) 1 := reservation.after_prefix
+  exact SourcePruningEnumerationIncomingNode.initial_ranges (advance seed recorded.length).2
+    foldCaller folded winner incoming post.context.ready finalRealized
+    (post.effects.keeps.available incoming available) closed resources.1 remaining.head

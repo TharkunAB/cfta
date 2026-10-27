@@ -1,0 +1,25 @@
+/-- Storage safety makes extension on fresh variables invisible to every existing state restriction. -/
+theorem state_assignment_congr (language : NodeLanguage Symbol) (meaning : Guard → Term Symbol → Prop)
+    (state : State Symbol Guard) (valid : StorageValid state) (left right : Nat → Term Symbol)
+    (agree : ∀ uv < state.counter, left uv = right uv) :
+    Satisfies language meaning left state ↔ Satisfies language meaning right state := by
+  apply and_congr
+  · apply and_congr (forest_assignment_congr state.representatives state.counter valid.forest left right agree)
+    apply forall_congr'
+    intro uv
+    cases found : state.values[uv]? with
+    | none => simp [heap, found, slot, slotSatisfies]
+    | some value =>
+        have member := List.mem_of_getElem? found
+        have inRange := (List.getElem?_eq_some_iff.mp found).1
+        simpa [heap, found] using slot_assignment_congr language state.counter uv (by rw [valid.aligned]; exact inRange)
+          left right agree value (valid.values value member)
+  · unfold guardsHold
+    apply forall_congr'
+    intro obligation
+    apply imp_congr_right
+    intro member
+    rw [fill_bounded state.counter left right agree obligation.2 (valid.guards obligation member)]
+
+/-- Fresh class witnesses extend a valid stored assignment without losing any source equality class. -/
+theorem fresh_classes_state_complete (language : NodeLanguage Symbol) (meaning : Guard → Term Symbol → Prop)

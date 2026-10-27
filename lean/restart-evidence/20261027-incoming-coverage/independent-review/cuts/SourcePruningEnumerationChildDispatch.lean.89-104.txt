@@ -1,0 +1,16 @@
+
+/-- The terminal route retains the complete existing adapter and all its receipts. -/
+theorem terminal
+    (checkEmpty : Bool) (representativeFuel nativeFuel p h indexFuel : Nat)
+    (scs : List Suspended) (incoming : Node)
+    (beforeCaller : Caller width) (before : EnumerationExpandableIndex.Cached Symbol Constraint)
+    (queries : Queries) (first : Suspended) (rest descendants : List Suspended)
+    (partitioned : scs.partition (fun sc => EqualityTrie.isTerminal sc.trie) =
+      (first :: rest, descendants)) :
+    run checkEmpty representativeFuel nativeFuel p h indexFuel scs incoming beforeCaller before queries =
+      SourcePruningEnumerationCachedTerminalAdapter.run
+        checkEmpty representativeFuel nativeFuel p h indexFuel
+        first rest beforeCaller before incoming descendants queries := by
+  by_cases empty : incoming = .empty
+  · simp only [run, SourcePruningEnumerationCachedTerminalAdapter.run, ite_eq_left empty]
+  · simp only [run, ite_eq_right empty, partitioned]

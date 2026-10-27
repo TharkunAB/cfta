@@ -1,5 +1,46 @@
 # Proof status at 2026-10-18
 
+## Constructive coverage of native child preparation
+
+Source checkpoint: a7d1733d3b07594ad9cb4418c2caad57a5e9005d.
+The original resource contract now constructs an actual child singleton for
+every supplied term accepted by the incoming native value and every original
+suspended constraint, under an original satisfying assignment. The proof
+constructs an extended assignment that agrees at every old allocated variable.
+It satisfies the original and returned states. The actual returned fragment
+fills to the supplied term. All old resources, histories, full memo states
+and returned cache fields remain. No desired future row, assignment or final
+Satisfies is an input.
+
+Terminal children use the original assignment. The proof excludes both
+fold rejection and incoming Empty rejection at the same actual endpoint.
+Other children use a fresh assignment value at the old counter. Storage and
+bounded references retain every old state constraint. Current resource
+admission derives all required ranges. Earlier clauses cover generic
+incoming updates and the full terminal child packet.
+
+This is symbolic child-preparation coverage. It does not prove that the whole
+enumerator selects a parent edge, expands every hole or renders the term.
+Fresh Mu and Union slots still use the existing empty stored bucket. A valid
+chosen filling does not prove retention for every future filling. Preserve
+all earlier retention counterexamples and Haskell repair instructions.
+
+The initial native-to-render soundness theorem and H6 exact finite-tree
+preservation keep their full earlier scopes. Next prove constructive coverage
+through ordered child traversal, then accepting-edge selection and equality
+witness allocation. Whole recursive coverage, semantic selector and pruning
+policy contracts, remaining API admissions and physical Haskell correspondence
+remain open. The full formalization goal stays ACTIVE.
+
+Three modules contain 579 lines and three new public theorems.
+All three sources and standalone Audit pass strict checks. Audit passes
+4237 jobs and checks 80050 theorem dependencies. Public readback has
+162 full signature and axiom blocks. All 159 prior blocks and all 82 pinned
+prior source modules remain byte exact. Only the three standard Lean axioms
+occur. No Haskell source changed. FINDINGS retains every repair handoff.
+Details: `lean/notes-current-incoming-coverage.md`.
+
+
 ## Checked rendering from the literal native startup
 
 Source checkpoint: 63942a2bff4143e44fdc16ea026df24c0ac9d6b8.

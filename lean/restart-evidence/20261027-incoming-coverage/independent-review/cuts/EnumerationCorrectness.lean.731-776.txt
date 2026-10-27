@@ -1,0 +1,46 @@
+theorem slot_assignment_congr (language : NodeLanguage Symbol) (limit uv : Nat) (allocated : uv < limit)
+    (left right : Nat → Term Symbol) (agree : ∀ index < limit, left index = right index)
+    (value : UVarValue Symbol) (bounded : SlotBound limit value) :
+    slotSatisfies left uv (slot language value) ↔ slotSatisfies right uv (slot language value) := by
+  cases value with
+  | eliminated => rfl
+  | enumerated fragment =>
+      simp only [slot, slotSatisfies, fill_bounded limit left right agree fragment bounded, agree uv allocated]
+  | unenumerated node scs =>
+      simp only [slot, slotSatisfies, List.mem_map, forall_exists_index, and_imp]
+      rw [agree uv allocated]
+      apply and_congr Iff.rfl
+      constructor
+      · intro holds obligation sc member same
+        subst obligation
+        intro path present
+        have result := holds _ sc member rfl path present
+        simpa [agree sc.var (bounded sc member)] using result
+      · intro holds obligation sc member same
+        subst obligation
+        intro path present
+        have result := holds _ sc member rfl path present
+        simpa [agree sc.var (bounded sc member)] using result
+
+/-- Storage safety makes extension on fresh variables invisible to every existing state restriction. -/
+theorem state_assignment_congr (language : NodeLanguage Symbol) (meaning : Guard → Term Symbol → Prop)
+    (state : State Symbol Guard) (valid : StorageValid state) (left right : Nat → Term Symbol)
+    (agree : ∀ uv < state.counter, left uv = right uv) :
+    Satisfies language meaning left state ↔ Satisfies language meaning right state := by
+  apply and_congr
+  · apply and_congr (forest_assignment_congr state.representatives state.counter valid.forest left right agree)
+    apply forall_congr'
+    intro uv
+    cases found : state.values[uv]? with
+    | none => simp [heap, found, slot, slotSatisfies]
+    | some value =>
+        have member := List.mem_of_getElem? found
+        have inRange := (List.getElem?_eq_some_iff.mp found).1
+        simpa [heap, found] using slot_assignment_congr language state.counter uv (by rw [valid.aligned]; exact inRange)
+          left right agree value (valid.values value member)
+  · unfold guardsHold
+    apply forall_congr'
+    intro obligation
+    apply imp_congr_right
+    intro member
+    rw [fill_bounded state.counter left right agree obligation.2 (valid.guards obligation member)]

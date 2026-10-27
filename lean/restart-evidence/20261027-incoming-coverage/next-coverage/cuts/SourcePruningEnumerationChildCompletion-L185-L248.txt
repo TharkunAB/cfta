@@ -1,0 +1,64 @@
+      | cons first rest =>
+        have subsets := partition_subsets bucket first rest descendants partitioned
+        have activeBounded : ∀ sc ∈ first :: rest, sc.var < before.core.counter :=
+          fun sc member => bounded sc (subsets.1 member)
+        have activePending : InputsPending before.core (first :: rest) := by
+          intro held fragment stored sc member
+          exact pending held fragment stored sc (subsets.1 member)
+        obtain ⟨r, n, p, h, k, recorded, winner, joined, foldRows, foldCaller, foldQueries,
+          foldFinal, foldInventory, folded, raw, afterCaller, outer, savedQueries, final, next, after,
+          _prefixRun, recordedSame, winnerMember, _movedSame, _joinedSame, _joinedFlagsSame,
+          _prefixRoots, _prefixCounts, _joinedFlags, _cachedFoldRun, _foldRun, foldShape, _foldPost,
+          _foldQuerySame, _foldCounter, _foldForest, _foldPaths, _foldStorage, _foldRealized, _foldedRoot,
+          _foldPending, _foldCounts, _foldWaiting, _foldFlags, _foldEliminated, _foldCompleted,
+          _foldedFrame, _foldedSafe, _foldedOrigin, _terminalRun, post, querySame, cacheRun,
+          counter, afterPaths, storage, afterRealized, afterCounts, afterFlags, _outside,
+          afterSafe, protects, origin, references, _rejectedCache, rejected, completed⟩ :=
+          SourcePruningEnumerationCachedTerminalAdapter.complete formulas solver inventory beforeCaller before
+            checkEmpty first rest incoming descendants roots memos initial safe paths counts flags
+            activeBounded activePending realized empty available closed
+            (fun sc member => bounded sc (subsets.2 member))
+            (ranges empty first rest descendants partitioned)
+        have fullReferences : ∀ allowed, EnumerationReferences.ReferencesAllowed allowed before.core →
+            EnumerationReferences.InputsAllowed allowed bucket →
+            EnumerationReferences.ReferencesAllowed allowed after.core := by
+          intro allowed valid inputs
+          exact references allowed valid (fun sc member => inputs sc (subsets.2 member))
+        have global : EnumerationReferences.PendingReferences before.core →
+            EnumerationReferences.PendingReferences after.core := by
+          intro history
+          apply SourcePruningEnumerationNativeReferences.pending_preserved before.core after.core bucket
+            history pending origin _ fullReferences
+          intro held fragment stored
+          have root := (enumerated_root before.core safe held fragment stored).2
+          exact protects held root (fun sc member => pending held fragment stored sc (subsets.1 member))
+        refine ⟨r, n, p, h, k, raw, afterCaller, after, savedQueries, final, next,
+          EnumerationCanonicalUnion.mergedRoots roots recorded winner, outer, joined.waiting,
+          ?_, post, querySame, ?_, afterPaths, storage, afterRealized, afterCounts, afterFlags, origin,
+          ?_, fullReferences, global, ?_⟩
+        · intro er en P H ek largeP largeH
+          rw [SourcePruningEnumerationChildDispatch.terminal checkEmpty _ _ _ _ _ bucket incoming
+            beforeCaller before memos.query first rest descendants partitioned]
+          exact cacheRun er en P H ek largeP largeH
+        · omega
+        · intro held _ root avoids
+          exact protects held root (fun sc member => avoids sc (subsets.1 member))
+        · rcases foldShape with rejectedFold | completedFold
+          · exact .inl (rejected rejectedFold).1
+          · obtain ⟨incomingK, oldNode, oldScs, read, incomingAfter, replacement, handle,
+              afterSame, _outerSame, _readRun, _readFrame, _incomingRun, _writeRun,
+              _writeShape, winnerStored, _storage, _realized, _post, _unfolding, _writeCache,
+              _counter, _representatives, _paths, _counts, _waiting, _flags, _expandable,
+              rawSame, bound, _available, _closed, _encoded, _lookup, _unconstrained, _constrained⟩ :=
+              completed completedFold
+            subst incomingAfter
+            by_cases rejectedIncoming : replacement = .empty
+            · exact .inl (by simpa only [rejectedIncoming, ↓reduceIte] using rawSame)
+            · have singleton : raw = [.ok (.hole winner, after.core)] := by
+                simpa only [rejectedIncoming, ↓reduceIte] using rawSame
+              have finalSafe := afterSafe (by simp [singleton])
+              obtain ⟨winnerSize, winnerPath⟩ :=
+                (finalSafe.2 winner _ winnerStored).mp (by simp)
+              refine .inr ⟨.hole winner, singleton, finalSafe, bound,
+                pendingFragment_hole after.core winner winner winnerSize (some handle)
+                  (descendants ++ oldScs) winnerPath winnerStored, ?_⟩

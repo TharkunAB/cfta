@@ -1,0 +1,12 @@
+--- v1
++++ v2
+@@ -191,7 +191,8 @@
+         obtain ⟨rowFragment, rowCache, member, rowSatisfied⟩ :=
+           (rowMeaning (SourceEqualityPCSGuard.holds formulas solver) ambient residualMeaning extended).mpr
+             ⟨originalExtended, by simpa only [fresh] using accepted,
+-              fun sc member => by simpa only [fresh] using effectiveHolds sc member⟩
++              fun sc member => by
++                cases incoming <;> simpa only [fresh] using effectiveHolds sc member⟩
+         have rowSame : (rowFragment, rowCache) = (.hole before.core.counter, nextCache) :=
+           List.mem_singleton.mp (by simpa only [rowsSame] using member)
+         have rowCacheSame : rowCache = nextCache := congrArg Prod.snd rowSame

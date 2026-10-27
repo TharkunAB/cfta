@@ -1,0 +1,54 @@
+  obtain ⟨r, n, p, h, oldNode, oldScs, read, after, afterCaller, savedQueries, final, next,
+    replacement, handle, reading, frame, running, writing, afterSame, stored, afterStorage,
+    afterRealized, post, query, unfolding, replacementAvailable, replacementClosed, encoded,
+    decoded, noOld, hasOld, logical⟩ :=
+    run_complete_semantics formulas solver inventory beforeCaller before checkEmpty uv incoming incomingScs memos
+      initial realized storage root pending available closed bounded ranges
+  refine ⟨r, n, p, h, oldNode, oldScs, read, after, afterCaller, savedQueries, final, next,
+    replacement, handle, reading, frame, running, writing, afterSame, stored, afterStorage,
+    afterRealized, post, query, unfolding, replacementAvailable, replacementClosed, encoded,
+    decoded, noOld, hasOld, logical, ?_⟩
+  intro ambient residualMeaning assignment
+  have replacementHolds
+      (satisfied : Satisfies
+        (SourcePruningEnumerationNativeLanguage.handles (SourceEqualityPCSGuard.holds formulas solver)
+          ambient afterCaller.checked.native.machine.heap) residualMeaning assignment after) :
+      InternedGuardedLanguage.meaning (SourceEqualityPCSGuard.holds formulas solver)
+        ambient replacement (assignment uv) := by
+    have atSlot := satisfied.1.2 uv
+    change Fragments.slotSatisfies assignment uv
+      (slot (SourcePruningEnumerationNativeLanguage.handles (SourceEqualityPCSGuard.holds formulas solver)
+        ambient afterCaller.checked.native.machine.heap)
+          ((after.values[uv]?).getD .eliminated)) at atSlot
+    rw [stored] at atSlot
+    change (SourcePruningEnumerationNativeLanguage.handles (SourceEqualityPCSGuard.holds formulas solver)
+      ambient afterCaller.checked.native.machine.heap handle (assignment uv) ∧ _) at atSlot
+    exact (SourcePruningEnumerationNativeLanguage.handles_lookup _ _ _ _ _ _ decoded).mp atSlot.1
+  have rawLogical :
+      (∃ output : EnumerationState.State Symbol EnumGuard,
+        Except.ok ((), output) ∈
+          (if replacement = .empty then [] else [.ok ((), after)] :
+            List (Except EnumerationState.Error (Unit × EnumerationState.State Symbol EnumGuard))) ∧
+        Satisfies
+          (SourcePruningEnumerationNativeLanguage.handles (SourceEqualityPCSGuard.holds formulas solver)
+            ambient afterCaller.checked.native.machine.heap) residualMeaning assignment output) ↔
+      Satisfies
+        (SourcePruningEnumerationNativeLanguage.handles (SourceEqualityPCSGuard.holds formulas solver)
+          ambient afterCaller.checked.native.machine.heap) residualMeaning assignment after := by
+    by_cases empty : replacement = .empty
+    · constructor
+      · rintro ⟨output, member, _satisfied⟩
+        simp only [ite_eq_left empty, List.not_mem_nil] at member
+      · intro satisfied
+        have impossible := replacementHolds satisfied
+        rw [empty, InternedGuardedLanguage.meaning] at impossible
+        exact False.elim impossible
+    · rw [ite_eq_right empty]
+      constructor
+      · rintro ⟨output, member, satisfied⟩
+        have pairSame : ((), output) = ((), after) := Except.ok.inj (List.mem_singleton.mp member)
+        have outputSame : output = after := congrArg Prod.snd pairSame
+        simpa only [outputSame] using satisfied
+      · intro satisfied
+        exact ⟨after, List.mem_singleton_self _, satisfied⟩
+  exact rawLogical.trans (logical ambient residualMeaning assignment)

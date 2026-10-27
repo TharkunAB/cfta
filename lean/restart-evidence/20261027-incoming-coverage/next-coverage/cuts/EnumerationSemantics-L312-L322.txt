@@ -1,0 +1,11 @@
+
+/-- A terminal suspended trie denotes equality with its assigned UVar. -/
+theorem terminal_holds (assignment : Nat → Term Symbol) (term : Term Symbol) (sc : Suspended)
+    (terminal : EqualityTrie.isTerminal sc.trie = true) :
+    Suspended.Holds assignment term sc ↔ term = assignment sc.var := by
+  obtain ⟨trie, uv⟩ := sc
+  cases trie with
+  | terminal => exact terminal_requirement assignment term uv
+  | empty | branch children => cases terminal
+
+/-- A successful terminal node action adds exactly its node and inherited equality restrictions. -/

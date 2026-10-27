@@ -1,0 +1,29 @@
+      (foldRows = [] ∨ foldRows = [((), folded)]) ∧
+      Post formulas solver foldInventory beforeCaller foldCaller foldFinal ∧ foldFinal.query = foldQueries ∧
+      folded.core.counter = joined.core.counter ∧ folded.core.representatives = joined.core.representatives ∧
+      Roots folded.core.representatives (EnumerationCanonicalUnion.mergedRoots roots recorded winner) ∧
+      StorageValid folded.core ∧ PendingRealized foldCaller.checked.native.machine.heap folded.core ∧
+      IsRoot folded.core.representatives winner ∧ PendingAt folded.core winner ∧
+      EnumerationCanonicalWaiting.Correct (EnumerationCanonicalUnion.mergedRoots roots recorded winner)
+        folded.core.values folded.waiting ∧ folded.waiting = joined.waiting ∧
+      (∀ (slot : Nat), SourcePruningEnumerationNativeIndex.candidate
+        foldCaller.checked.native.machine.heap
+        ((folded.core.values[slot]?).getD .eliminated) = some (folded.expandable slot)) ∧
+      (∀ (slot : Nat), joined.core.values[slot]? = some .eliminated →
+        folded.core.values[slot]? = some .eliminated) ∧
+      (foldRows = [((), folded)] → ∀ source ∈ recorded, source ≠ winner →
+        folded.core.values[source]? = some .eliminated) ∧
+      (∀ (slot : Nat), slot ∉ recorded → folded.core.values[slot]? = before.core.values[slot]?) ∧
+      (foldRows = [((), folded)] → Safe folded.core) ∧
+      (∀ (slot : Nat) (fragment : Fragments.Fragment Symbol),
+        folded.core.values[slot]? = some (.enumerated fragment) →
+        before.core.values[slot]? = some (.enumerated fragment)) ∧
+      (∀ extraRepresentative extraNative P H, p ≤ P → h ≤ H →
+        SourcePruningEnumerationTerminal.run checkEmpty (r + extraRepresentative) (n + extraNative) P H
+          first rest before.waiting beforeCaller before.core incoming incomingScs memos.query =
+          (.ok (some raw), afterCaller, savedQueries, outer, joined.waiting)) ∧
+      Post formulas solver next beforeCaller afterCaller final ∧ final.query = savedQueries ∧
+      (∀ extraRepresentative extraNative P H extraIndex, p ≤ P → h ≤ H →
+        run checkEmpty (r + extraRepresentative) (n + extraNative) P H (k + extraIndex)
+          first rest beforeCaller before incoming incomingScs memos.query =
+          ((.ok (some raw), afterCaller, savedQueries, outer, joined.waiting), some resultCache)) ∧

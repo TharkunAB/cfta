@@ -1,0 +1,25 @@
+# Final independent review
+
+CLEAR. This review covers the three installed coverage modules at source checkpoint a7d1733d3b07594ad9cb4418c2caad57a5e9005d. It includes the full new note, all nine new status insertions, the three complete new public blocks, focused prior H6 and startup-render contracts, and the recorded checks. The reviewer ran no compiler, build, Git, network or board operation. All older frozen areas remain unchanged.
+
+The final installed sources match the reviewed drafts and successful strict snapshots:
+
+- IncomingCoverage: 5d15f95614ff82c87a13bf102f6ad5a29cd631bc1a281a1882da2a3bb5c181b5.
+- TerminalChildCoverage: 8a3940fda24092beba34b1d85a0ce34a4b2f3fadf036362c9c5253457e5ab096.
+- ChildCoverage: 42c2c04998f0da78b90a545311429e5488b5b96f017ff96ef8bd2ee3580cf73d.
+
+The modules contain 579 lines, 40,635 bytes, three public theorems and no new definitions. Each invokes its immediate predecessor once. Incoming coverage derives actual membership from the original accepted assignment. Terminal coverage excludes both fold rejection and incoming Empty rejection. General child coverage constructs the fresh assignment and proves agreement below the original counter. It retains all old state restrictions through StorageValid and all bounded suspended inputs through holds_extension.
+
+The entire original packets remain available. Exact recovery checks retain 5,000 bytes of the incoming predecessor conclusion and its 946-byte common admission; the terminal wrapper retains the unchanged 1,262-byte admission and complete 2,431-byte child resource conclusion; the general child wrapper retains that admission and the complete 3,497-byte terminal predecessor conclusion. Current Fits/Room derive incoming WordRanges. The child producer admission is unchanged. No desired final assignment, successful row, future execution or final cache invariant is an input.
+
+All statements concern the same actual raw rows, written cache and reached native Caller. The incoming outer read endpoint stays distinct from its written branch state. Common stable evaluations align the actual terminal and fresh child endpoints. The original Post and full final Memos remain retained. Query equality is not used to reconstruct full Memos. Safe is retained only in the original successful branch clause; no rejection Safe claim is added.
+
+The first incoming strict check and final second terminal and child strict checks passed. Both initial failed sources and logs remain. Their only repairs unfold Fragments.fill and reduce the independently generated effective-bucket matcher. The statements did not change. Installed incoming and terminal builds passed 1,595 and 1,874 jobs. The Audit build includes the installed general child module and passed 4,237 jobs with 80,050 theorem dependencies. Standalone strict Audit passed. The recorded commands use 4 GiB memory.max/high and zero swap. Standalone strict commands enable warningAsError and all linters. Lake logs retain the existing dependency warning.
+
+The full public output is 577,783 bytes, SHA256 bbae218f7ede41793b66af3e68c8d2368517d023eb8992ec04301425557cb5f7. All 162 complete signature and axiom blocks are retained. The three new blocks were read in full. All 159 old blocks compare byte exactly to the complete prior output. Only propext, Classical.choice and Quot.sound occur. All 82 pinned prior source modules match their recorded bytes. The Audit inverse removes exactly three imports and recovers the complete prior file.
+
+The full 10,328-byte new note and all new insertion content are accurate. The eight non-FINDINGS insertions are byte identical. FINDINGS includes the additional unchanged Haskell repair status. Deleting each of the nine recorded insertion ranges recovers the literal prior body. No correction to the final prose is required. Whole historical document bodies were checked by byte comparison; their old prose was not rereviewed.
+
+The proved boundary is symbolic native child preparation, corresponding to prepareShallowChild. It is not accepting parent-edge selection, ordered traversal coverage, whole recursive coverage, rendering existence, convergence or physical Haskell certification. Fresh Mu/Union slots still omit their stored bucket. The constructed valid filling does not prove all future fillings retain those restrictions. Existing selector laws admit an empty edge list. Semantic selector/pruning policy contracts and later constructive composition remain open. The prior initial-render theorem, H6 scope, opaque-retention findings and Haskell repair instructions remain unchanged.
+
+Each whole source copy has an explicit inspection scope in source-index.json. Literal source cuts, complete public output, contract recoveries, failed/final strict snapshots, build/Audit records, source preservation and document inverses are retained. Earlier initial reports and OPEN-initial.json record their original status. This report and FROZEN.json are the final status. The bundle is sealed after final verification; no later writes are authorized.

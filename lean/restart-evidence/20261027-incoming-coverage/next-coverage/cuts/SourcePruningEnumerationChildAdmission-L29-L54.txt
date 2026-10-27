@@ -1,0 +1,26 @@
+theorem partition_subsets (bucket : List Suspended) (first : Suspended)
+    (rest descendants : List Suspended)
+    (partitioned : bucket.partition (fun sc => EqualityTrie.isTerminal sc.trie) =
+      (first :: rest, descendants)) : (first :: rest) ⊆ bucket ∧ descendants ⊆ bucket := by
+  have terminal : bucket.filter (fun sc => EqualityTrie.isTerminal sc.trie) = first :: rest := by
+    simpa only [List.partition_eq_filter_filter] using congrArg Prod.fst partitioned
+  have other : bucket.filter (fun sc => !(EqualityTrie.isTerminal sc.trie)) = descendants := by
+    simpa only [List.partition_eq_filter_filter, Function.comp_def] using congrArg Prod.snd partitioned
+  exact ⟨fun _ member => (List.mem_filter.mp (terminal ▸ member)).1,
+    fun _ member => (List.mem_filter.mp (other ▸ member)).1⟩
+
+/-- The terminal partition has no more inputs than the original bucket. -/
+theorem terminal_length_le (bucket : List Suspended) (first : Suspended)
+    (rest descendants : List Suspended)
+    (partitioned : bucket.partition (fun sc => EqualityTrie.isTerminal sc.trie) =
+      (first :: rest, descendants)) : (first :: rest).length ≤ bucket.length := by
+  have terminal : bucket.filter (fun sc => EqualityTrie.isTerminal sc.trie) = first :: rest := by
+    simpa only [List.partition_eq_filter_filter] using congrArg Prod.fst partitioned
+  rw [← terminal]
+  exact List.length_filter_le _ _
+
+/-- Current child inputs and an original mixed reservation derive all child ranges. -/
+theorem initial_ranges
+    [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Constraint)] [DecidableEq Node]
+    (seed : Seed)
+    (formulas : SourceGuards.Formulas FullSyntax.Formula)

@@ -1,0 +1,9 @@
+{
+  "observed_failure": "KeyError: 'sources'",
+  "cause": "The new source-index records schema uses records instead of sources, including a cuts-only plan.",
+  "repair": "Guard all four legacy sources-schema handlers on the presence of sources. Other schemas use the existing recursive records parser. Full snapshot hashes, exact source cut bytes, source hashes and seals remain checked.",
+  "proof_or_contract_changes": false,
+  "additional_observed_failure": "KeyError: 'source'",
+  "additional_cause": "A copy-style source record uses source_path and its literal cuts use path instead of copy.",
+  "additional_repair": "Recognize source or source_path and copy/path/snapshot cut names. Require both names, all original hashes and exact literal source ranges."
+}

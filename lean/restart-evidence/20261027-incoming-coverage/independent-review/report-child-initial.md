@@ -1,0 +1,13 @@
+# Initial all-child coverage review
+
+Status: source-level CLEAR; first strict elaboration failure retained. Immutable v1 is 203 lines, 14,524 bytes, SHA256 e6d0b63b4f9201dbcff316c4d4bd6ff7837e9fa99775d898a81223580fba1716. The reviewer ran no compiler.
+
+The admission remains byte identical to the terminal predecessor (1,262 UTF-8 bytes). The complete 3,497-byte predecessor existential conclusion, including its terminal observer, recovers exactly after the recorded group removal. The terminal producer is invoked once. The general coverage law is appended on the same stable raw rows, cache, native Caller, full Post/Memos, histories, and resource bounds.
+
+The terminal case keeps the assignment unchanged. The no-terminal case constructs extended by install assignment before.counter [term]. install_before proves agreement on every original allocated variable. state_assignment_congr uses the original Safe.storage fact to preserve the old forest, all slots, fragments, suspended references, and residual obligations. holds_extension uses each genuine bucket variable bound. The fresh native slot receives the supplied term. For opaque native values the source stores the effective empty bucket; the original all-bucket antecedent suffices for coverage and is not used to assert backward preservation of dropped restrictions.
+
+The actual fresh cached preparation is derived from the old current coherence, availability, closedness, storage, realization, root, waiting-count and flag facts. A common index bound compares two evaluations of the same actual ChildDispatch.run. It aligns the raw singleton, Caller, saved queries, outer core, waiting index and cache. Native Caller is unchanged on this fresh branch. The row-language equivalence then supplies the constructed assignment at that exact cache. It does not infer a full Memos equality from saved queries.
+
+The first strict check fails only on two independently generated effective-bucket matchers at line194. The suggested local repair is to case-split incoming in the final row-language premise: node uses extendedHolds and fresh; the other constructors eliminate membership in the empty bucket. No premise, result, or runtime change is required.
+
+This proves constructive coverage for one admitted child route at adequate retained bounds. It does not choose an accepting ordinary parent edge, construct fresh witnesses for that edge's own equality classes, complete a traversal, establish whole-recursive coverage, guarantee rendering, or certify physical Haskell execution. The original incoming semantic witness and full bucket restrictions remain the genuine original antecedents.

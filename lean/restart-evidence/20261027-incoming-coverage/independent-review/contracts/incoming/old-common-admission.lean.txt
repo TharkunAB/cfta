@@ -1,0 +1,14 @@
+theorem run_complete_branches
+    [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Constraint)] [DecidableEq Node]
+    (formulas : SourceGuards.Formulas FullSyntax.Formula)
+    (solver : SourceGuards.Entailment FullSyntax.Formula)
+    (inventory : Inventory) (beforeCaller : Caller width)
+    (before : EnumerationState.State Symbol EnumGuard)
+    (checkEmpty : Bool) (uv : Nat) (incoming : Node)
+    (incomingScs : List EnumerationState.Suspended) (memos : Memos)
+    (initial : Context formulas solver inventory beforeCaller memos)
+    (realized : PendingRealized beforeCaller.checked.native.machine.heap before)
+    (storage : StorageValid before) (root : EnumerationSchedule.IsRoot before.representatives uv)
+    (pending : EnumerationCompleteness.PendingAt before uv)
+    (available : Available beforeCaller.checked.native.machine.heap incoming) (closed : incoming.free = [])
+    (bounded : ∀ sc ∈ incomingScs, sc.var < before.counter)

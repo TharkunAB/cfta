@@ -1,0 +1,24 @@
+    replacement, handle, reading, frame, running, writing, afterSame, stored, afterStorage,
+    afterRealized, post, query, unfolding, replacementAvailable, replacementClosed, encoded,
+    decoded, noOld, hasOld, logical, branches⟩ :=
+    run_complete_branches formulas solver inventory beforeCaller before checkEmpty uv incoming incomingScs memos
+      initial realized storage root pending available closed bounded ranges
+  obtain ⟨output, member, outputSatisfies⟩ :=
+    (branches ambient residualMeaning assignment).mpr ⟨satisfies, accepted, holds⟩
+  have notEmpty : replacement ≠ .empty := by
+    intro empty
+    simp only [ite_eq_left empty, List.not_mem_nil] at member
+  have singletonMember : Except.ok ((), output) ∈
+      ([.ok ((), after)] : List (Except EnumerationState.Error
+        (Unit × EnumerationState.State Symbol EnumGuard))) := by
+    simpa only [ite_eq_right notEmpty] using member
+  have pairSame : ((), output) = ((), after) :=
+    Except.ok.inj (List.mem_singleton.mp singletonMember)
+  have outputSame : output = after := congrArg Prod.snd pairSame
+  refine ⟨r, n, p, h, oldNode, oldScs, read, after, afterCaller, savedQueries, final, next,
+    replacement, handle, ⟨reading, frame, running, writing, afterSame, stored, afterStorage,
+      afterRealized, post, query, unfolding, replacementAvailable, replacementClosed, encoded,
+      decoded, noOld, hasOld, logical, branches⟩, notEmpty, ?_, ?_⟩
+  · simpa only [outputSame] using outputSatisfies
+  · intro extra extraNative P H largeP largeH
+    simpa only [ite_eq_right notEmpty] using running extra extraNative P H largeP largeH

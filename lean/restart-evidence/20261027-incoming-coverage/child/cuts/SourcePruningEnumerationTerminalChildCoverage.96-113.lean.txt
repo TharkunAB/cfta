@@ -1,0 +1,18 @@
+  obtain ⟨r, n, p, h, k, raw, afterCaller, after, savedQueries, final, next, afterRoots, outer, waiting,
+    observed, post, querySame, growth, afterPaths, storage, afterRealized, afterCounts, afterFlags,
+    origin, protects, references, history, shape, returnedFits, returnedKnown⟩ :=
+    complete_with_fragments_resources seed formulas solver inventory beforeCaller before checkEmpty bucket incoming
+      roots memos initial safe paths counts flags realized bounded pending available closed fits reserved known
+  refine ⟨r, n, p, h, k, raw, afterCaller, after, savedQueries, final, next, afterRoots, outer, waiting,
+    observed, post, querySame, growth, afterPaths, storage, afterRealized, afterCounts, afterFlags,
+    origin, protects, references, history, shape, returnedFits, returnedKnown, ?_⟩
+  intro ambient residualMeaning assignment term terminalAny beforeSatisfied accepted holds
+  have incomingNonempty : incoming ≠ .empty := by
+    intro empty
+    rw [empty, InternedGuardedLanguage.meaning] at accepted
+    exact accepted
+  have ranges := initial_ranges seed formulas solver inventory beforeCaller before checkEmpty bucket incoming roots memos
+    initial safe paths counts bounded pending realized available closed fits reserved known
+  cases partitioned : bucket.partition (fun sc => EqualityTrie.isTerminal sc.trie) with
+  | mk here descendants =>
+    cases here with

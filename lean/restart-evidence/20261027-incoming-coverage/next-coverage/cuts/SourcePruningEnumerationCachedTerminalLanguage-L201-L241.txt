@@ -1,0 +1,41 @@
+      ∀ (ambient : InternedGuardedLanguage.Env Symbol)
+        (residualMeaning : Constraint → Language.Term Symbol → Prop)
+        (assignment : Nat → Language.Term Symbol),
+        (∃ (fragment : Fragments.Fragment Symbol) (output : EnumerationState.State Symbol Constraint),
+          Except.ok (fragment, output) ∈ raw ∧
+          Satisfies
+            (SourcePruningEnumerationNativeLanguage.handles (SourceEqualityPCSGuard.holds formulas solver)
+              ambient afterCaller.checked.native.machine.heap) residualMeaning assignment output) ↔
+        (Satisfies
+          (SourcePruningEnumerationNativeLanguage.handles (SourceEqualityPCSGuard.holds formulas solver)
+            ambient beforeCaller.checked.native.machine.heap) residualMeaning assignment before.core ∧
+          ∀ sc ∈ rest, assignment first.var = assignment sc.var) ∧
+          InternedGuardedLanguage.meaning (SourceEqualityPCSGuard.holds formulas solver)
+            ambient incoming (assignment winner) ∧
+          ∀ sc ∈ incomingScs, EnumerationState.Suspended.Holds assignment (assignment winner) sc := by
+  obtain ⟨
+    r, n, p, h, k, recorded, winner, joined, foldRows, foldCaller, foldQueries, foldFinal, foldInventory,
+    folded, raw, afterCaller, outer, savedQueries, final, next, resultCache, prefixRun, recordedSame,
+    winnerMember, movedSame, joinedSame, joinedFlagsSame, prefixRoots, prefixCounts, joinedFlags,
+    cachedFoldRun, foldRun, foldShape, foldPost, foldQuerySame, foldCounter, foldForest, foldPaths,
+    foldStorage, foldRealized, foldedRoot, foldPending, foldCounts, foldWaiting, foldFlags,
+    foldEliminated, foldCompleted, foldedFrame, foldedSafe, foldedOrigin, terminalRun, post, querySame,
+    adapterRun, resultCounter, resultPaths, resultStorage, resultRealized, resultCounts, resultFlags,
+    resultFrame, resultSafe, resultProtected, resultOrigin, resultAllowed, rejectedCache, rejectedBranch,
+    completedBranch⟩ :=
+      complete formulas solver inventory beforeCaller before checkEmpty first rest incoming incomingScs roots memos
+        initial safe paths counts flags bounded pending realized nonempty available closed incomingBounded ranges
+  refine ⟨
+    r, n, p, h, k, recorded, winner, joined, foldRows, foldCaller, foldQueries, foldFinal, foldInventory,
+    folded, raw, afterCaller, outer, savedQueries, final, next, resultCache, prefixRun, recordedSame,
+    winnerMember, movedSame, joinedSame, joinedFlagsSame, prefixRoots, prefixCounts, joinedFlags,
+    cachedFoldRun, foldRun, foldShape, foldPost, foldQuerySame, foldCounter, foldForest, foldPaths,
+    foldStorage, foldRealized, foldedRoot, foldPending, foldCounts, foldWaiting, foldFlags,
+    foldEliminated, foldCompleted, foldedFrame, foldedSafe, foldedOrigin, terminalRun, post, querySame,
+    adapterRun, resultCounter, resultPaths, resultStorage, resultRealized, resultCounts, resultFlags,
+    resultFrame, resultSafe, resultProtected, resultOrigin, resultAllowed, rejectedCache, rejectedBranch,
+    completedBranch, ?_⟩
+  exact SourcePruningEnumerationTerminal.stable_semantics
+    formulas solver inventory beforeCaller before.core checkEmpty first rest incoming incomingScs
+    before.waiting roots memos initial safe paths counts bounded pending realized nonempty available closed
+    incomingBounded ranges prefixRun terminalRun

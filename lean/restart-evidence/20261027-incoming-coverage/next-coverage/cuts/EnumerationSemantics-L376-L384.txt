@@ -1,0 +1,9 @@
+/-- Source edge construction supplies canonical tries whose paths fit the edge. -/
+def ValidEdge (edge : EnumerationState.Edge Symbol Guard) : Prop :=
+  (∀ trie ∈ edge.equalities, EqualityTrie.Valid trie) ∧
+    ∀ trie ∈ edge.equalities, ∀ index suffix, index :: suffix ∈ EqualityTrie.fromPathTrie trie → index < edge.children.length
+
+/-- The graph path has complete node views and constructor-valid edge equalities. -/
+def CompleteGraph (graph : Graph Symbol Guard) : Prop :=
+  (∀ node body, graph.node node ≠ .recursive body) ∧
+    ∀ node edges, graph.node node = .alternatives edges → ∀ edge ∈ edges, ValidEdge edge

@@ -1,0 +1,111 @@
+    observed, post, querySame, growth, afterPaths, storage, afterRealized, afterCounts, afterFlags,
+    origin, protects, references, history, shape, returnedFits, returnedKnown, ?_⟩
+  intro ambient residualMeaning assignment term terminalAny beforeSatisfied accepted holds
+  have incomingNonempty : incoming ≠ .empty := by
+    intro empty
+    rw [empty, InternedGuardedLanguage.meaning] at accepted
+    exact accepted
+  have ranges := initial_ranges seed formulas solver inventory beforeCaller before checkEmpty bucket incoming roots memos
+    initial safe paths counts bounded pending realized available closed fits reserved known
+  cases partitioned : bucket.partition (fun sc => EqualityTrie.isTerminal sc.trie) with
+  | mk here descendants =>
+    cases here with
+    | nil =>
+      have filtered : bucket.filter (fun sc => EqualityTrie.isTerminal sc.trie) = [] := by
+        simpa only [List.partition_eq_filter_filter] using congrArg Prod.fst partitioned
+      have noTerminal : bucket.any (fun sc => EqualityTrie.isTerminal sc.trie) = false :=
+        List.any_eq_false.mpr (List.filter_eq_nil_iff.mp filtered)
+      rw [noTerminal] at terminalAny
+      cases terminalAny
+    | cons first rest =>
+      have subsets := partition_subsets bucket first rest descendants partitioned
+      have terminal : bucket.filter (fun sc => EqualityTrie.isTerminal sc.trie) = first :: rest := by
+        simpa only [List.partition_eq_filter_filter] using congrArg Prod.fst partitioned
+      have activeBounded : ∀ sc ∈ first :: rest, sc.var < before.core.counter :=
+        fun sc member => bounded sc (subsets.1 member)
+      have activePending : InputsPending before.core (first :: rest) := by
+        intro held fragment stored sc member
+        exact pending held fragment stored sc (subsets.1 member)
+      obtain ⟨
+        r0, n0, p0, h0, k0, recorded, winner, joined, foldRows, _foldCaller, _foldQueries, _foldFinal,
+        _foldInventory, folded, canonicalRaw, reachedCaller, canonicalOuter, canonicalQueries, _final,
+        _next, resultCache, _prefixRun, recordedSame, winnerMember, _movedSame, _joinedSame,
+        _joinedFlagsSame, _prefixRoots, _prefixCounts, _joinedFlags, _cachedFoldRun, _foldRun, foldShape,
+        _foldPost, _foldQuerySame, _foldCounter, _foldForest, _foldPaths, _foldStorage, _foldRealized,
+        _foldedRoot, _foldPending, _foldCounts, _foldWaiting, _foldFlags, _foldEliminated,
+        _foldCompleted, _foldedFrame, _foldedSafe, _foldedOrigin, _terminalRun, _post, _querySame,
+        canonicalRun, _resultCounter, _resultPaths, _resultStorage, _resultRealized, _resultCounts,
+        _resultFlags, _resultFrame, _resultSafe, _resultProtected, _resultOrigin, _resultAllowed,
+        _rejectedCache, rejectedBranch, completedBranch, semantic⟩ :=
+        SourcePruningEnumerationCachedTerminalAdapter.complete_semantics formulas solver inventory
+          beforeCaller before checkEmpty first rest incoming descendants roots memos initial safe paths counts flags
+          activeBounded activePending realized incomingNonempty available closed
+          (fun sc member => bounded sc (subsets.2 member))
+          (ranges incomingNonempty first rest descendants partitioned)
+      have canonicalObserved :
+          SourcePruningEnumerationChildDispatch.run checkEmpty (r + r0) (n + n0) (max p p0) (max h h0)
+            (k + k0) bucket incoming beforeCaller before memos.query =
+            ((.ok (some canonicalRaw), reachedCaller, canonicalQueries, canonicalOuter, joined.waiting),
+              some resultCache) := by
+        rw [SourcePruningEnumerationChildDispatch.terminal checkEmpty _ _ _ _ _ bucket incoming
+          beforeCaller before memos.query first rest descendants partitioned]
+        simpa only [Nat.add_comm] using canonicalRun r n (max p p0) (max h h0) k
+          (Nat.le_max_right p p0) (Nat.le_max_right h h0)
+      have actualObserved := observed r0 n0 (max p p0) (max h h0) k0
+        (Nat.le_max_left p p0) (Nat.le_max_left h h0)
+      have same : raw = canonicalRaw ∧ afterCaller = reachedCaller ∧
+          savedQueries = canonicalQueries ∧ outer = canonicalOuter ∧
+          waiting = joined.waiting ∧ after = resultCache := by
+        simpa only [Prod.mk.injEq, Except.ok.injEq, Option.some.injEq, and_assoc] using
+          actualObserved.symm.trans canonicalObserved
+      obtain ⟨rawSame, callerSame, _queriesSame, _outerSame, _waitingSame, cacheSame⟩ := same
+      have winnerTerm : assignment winner = term := by
+        rw [recordedSame] at winnerMember
+        obtain ⟨chosen, member, named⟩ := List.mem_map.mp winnerMember
+        have selectedTerminal : chosen ∈ bucket ∧ EqualityTrie.isTerminal chosen.trie = true := by
+          apply List.mem_filter.mp
+          rw [terminal]
+          exact member
+        have termChosen : term = assignment chosen.var :=
+          (EnumerationSemantics.terminal_holds assignment term chosen selectedTerminal.2).mp
+            (holds chosen selectedTerminal.1)
+        obtain ⟨size, path⟩ := paths chosen.var
+        have rootAssignment : assignment (roots chosen.var) = assignment chosen.var :=
+          (beforeSatisfied.1.1 chosen.var (roots chosen.var)
+            ⟨roots chosen.var, size, path, .root (UnionFind.reaches_terminal path)⟩).symm
+        rw [← named]
+        exact rootAssignment.trans termChosen.symm
+      have restrictions := (SourcePruningEnumerationTerminalBucketLanguage.restrictions_iff
+        (SourcePruningEnumerationNativeLanguage.handles (SourceEqualityPCSGuard.holds formulas solver)
+          ambient beforeCaller.checked.native.machine.heap) residualMeaning assignment before.core
+        bucket first rest descendants roots recorded winner
+        (InternedGuardedLanguage.meaning (SourceEqualityPCSGuard.holds formulas solver) ambient incoming)
+        paths recordedSame winnerMember partitioned).mpr
+          ⟨beforeSatisfied, by simpa only [winnerTerm] using accepted,
+            fun sc member => by simpa only [winnerTerm] using holds sc member⟩
+      obtain ⟨fragment, output, member, outputSatisfied⟩ :=
+        (semantic ambient residualMeaning assignment).mpr restrictions
+      have nonemptyRaw : canonicalRaw ≠ [] := by
+        intro emptyRaw
+        rw [emptyRaw] at member
+        cases member
+      have canonicalSingleton : canonicalRaw = [.ok (.hole winner, resultCache.core)] := by
+        rcases foldShape with rejectedFold | completedFold
+        · exact (nonemptyRaw (rejectedBranch rejectedFold).1).elim
+        · obtain ⟨_incomingK, _oldNode, _oldScs, _read, written, replacement, _handle,
+            writtenSame, _outerSame, _reading, _frame, _incomingRun, _writePrefix, _afterSame,
+            _stored, _storage, _realized, _incomingPost, _unfolding, _cacheRun, _counter,
+            _representatives, _paths, _counts, _waiting, _flags, _expandable, rawShape, _rest⟩ :=
+              completedBranch completedFold
+          by_cases replacementEmpty : replacement = .empty
+          · have emptyRaw : canonicalRaw = [] := by
+              simpa only [ite_eq_left replacementEmpty] using rawShape
+            exact (nonemptyRaw emptyRaw).elim
+          · simpa only [ite_eq_right replacementEmpty, writtenSame] using rawShape
+      have outputSame : output = resultCache.core :=
+        congrArg Prod.snd (Except.ok.inj (List.mem_singleton.mp
+          (by simpa only [canonicalSingleton] using member)))
+      refine ⟨.hole winner, ?_, ?_, ?_⟩
+      · simpa only [cacheSame] using rawSame.trans canonicalSingleton
+      · simpa only [Fragments.fill] using winnerTerm
+      · simpa only [callerSame, cacheSame, outputSame] using outputSatisfied

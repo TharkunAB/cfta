@@ -1,0 +1,15 @@
+def install (assignment : Nat → Term Symbol) (start : Nat) : List (Term Symbol) → Nat → Term Symbol
+  | [] => assignment
+  | term :: rest => install (fun uv => if uv = start then term else assignment uv) (start + 1) rest
+
+/-- Fresh class witnesses do not change any previously allocated value. -/
+theorem install_before (assignment : Nat → Term Symbol) (start : Nat) (terms : List (Term Symbol))
+    (uv : Nat) (earlier : uv < start) : install assignment start terms uv = assignment uv := by
+  induction terms generalizing start assignment with
+  | nil => rfl
+  | cons term rest ih =>
+      rw [install, ih _ _ (by omega)]
+      simp [show uv ≠ start by omega]
+
+/-- Every finite collection of satisfied equality classes has a same-length witness vector. -/
+theorem equality_witnesses (term : Term Symbol) (tries : List EqualityTrie.Trie)
