@@ -61,8 +61,8 @@ Wilf, and Feat (ranking).
   a guard.
 - **Contract**: a guard about the children of a constructor, written as a
   function with one term for each child, in order.
-- **Measure**: the integer of each term of a constructor, written as a term
-  of the measures of its children (`measured`). The refinement of a constructed
+- **Measure**: the logical value of each term of a constructor, written as a
+  term of the measures of its children (`measured`). The refinement of a constructed
   term is `v == measure`, so the contract of a parent reads it. Liquid Haskell
   says measure; the LTA paper calls a constructor's refinement its *result
   refinement*.
@@ -102,6 +102,35 @@ Wilf, and Feat (ranking).
   last run of the rule.
 
 ## Transformations
+
+- **Solver lowering**: a meaning-preserving translation of a logical
+  obligation to a solver's supported representation. It can be partial.
+
+- **Predicate definition**: a global predicate name with parameters and a
+  body in the formula language. **Unfolding** replaces each application by
+  the body, with the arguments in place of the parameters. It is a solver
+  lowering for a solver without predicates.
+
+- **Ground evaluation**: a decision of an entailment by computation. A
+  **ground value** is an integer, or a data constructor applied to ground
+  values. The equalities of the antecedent give names ground values, and
+  fixed interpretations give the meanings of named functions and predicates.
+  A query whose result needs a name without a value stays undecided.
+
+- **Theory**: datatypes and definitions of functions and predicates in the
+  formula language, in an order. Every solver reads the meanings of the names
+  from the same theory.
+
+- **Datatype**: a named sort and its constructors. Each constructor has typed
+  fields. The constructors are free: two values are equal only when they have
+  the same constructor and equal fields.
+
+- **Case split**: a body with one branch for each constructor of the datatype
+  of a parameter or a field. A branch binds the fields of its constructor.
+
+- **Structural recursion**: a definition calls itself only with a field that
+  a case split of one fixed parameter binds, directly or through case splits
+  of its fields. Each call gets a smaller value, so the evaluation stops.
 
 - **Exact transformation**: an operation on an automaton that keeps its
   language, the set of terms it accepts. Equality reduction

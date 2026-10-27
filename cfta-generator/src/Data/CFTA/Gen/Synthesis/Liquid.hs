@@ -396,6 +396,7 @@ renderRType typ = case typ of
         Or parts -> parenthesize (context > 0) $ intercalate " || " (map (formulaText 1) parts)
         Forall bound inner -> parenthesize (context > 0) $ "forall " <> names bound <> ". " <> formulaText 0 inner
         Exists bound inner -> parenthesize (context > 0) $ "exists " <> names bound <> ". " <> formulaText 0 inner
+        Predicate (Name name) arguments -> Text.unpack name <> "(" <> intercalate ", " (map (termText 0) arguments) <> ")"
     names bound = unwords [Text.unpack name | (Name name, _) <- bound]
     relationText relation = case relation of
         Formula.Eq -> "="
@@ -1228,6 +1229,7 @@ atomsOf formula = case formula of
     Or parts -> concatMap atomsOf parts
     Not inner -> atomsOf inner
     Atom{} -> [formula]
+    Predicate{} -> [formula]
     _ -> []
 
 -- | The terms of the atoms of a formula, with their subterms.
@@ -1237,6 +1239,7 @@ termsOf formula = case formula of
     Or parts -> concatMap termsOf parts
     Not inner -> termsOf inner
     Atom _ left right -> subterms left <> subterms right
+    Predicate _ arguments -> concatMap subterms arguments
     _ -> []
   where
     subterms term =
@@ -1263,6 +1266,7 @@ mapTerms f = formula
         Atom relation left right -> Atom relation (term left) (term right)
         Forall bound inner -> Forall bound (formula inner)
         Exists bound inner -> Exists bound (formula inner)
+        Predicate name arguments -> Predicate name (map term arguments)
         _ -> phi
     term t = f $ case t of
         Formula.App name arguments -> Formula.App name (map term arguments)

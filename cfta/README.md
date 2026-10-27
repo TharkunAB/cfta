@@ -728,6 +728,38 @@ every free name as an integer unless the caller gives the name another sort.
 Each query has a time limit of ten seconds
 (`defaultTimeLimit`). A query that reaches it raises `TimeLimitReached`, so a
 timeout is not taken for an undecided query; `withZ3Timeout` sets another limit.
+`withZ3Definitions` takes predicate definitions in the formula language
+(`Data.CFTA.Refinement.Definition`). It unfolds each defined predicate before
+Z3 sees a query, so a refinement such as `predicate "between" [v, 0, 3]`
+gets an exact verdict.
+
+`Data.CFTA.Refinement.Ground.groundEntailment` decides a ground query
+without a solver process. The caller gives a Haskell function for each named
+function and predicate, for example `append` and `sorted` on lists that `nil`
+and `cons` build. The entailment checks the sorts and unfolds the defined
+predicates. Then it reads values from the equalities of the antecedent, such
+as `v == append(x, y)` and `x == cons(1, nil)`, and evaluates. A query that
+is not ground, for example a query with a quantifier, gives `Unknown`.
+`fallback ground z3` asks Z3 only for such queries; `fallback` does not catch
+`TimeLimitReached`. A `No` needs a value of each declared sort, so a named
+sort counts only when `inhabitedSorts` contains it.
+
+`Data.CFTA.Refinement.Theory` gives named functions and predicates their
+meanings as data. A theory declares datatypes, such as integer lists with
+`nil` and `cons`, and defines functions and predicates in the formula
+language. A body can split on a parameter, with one branch for each
+constructor. `theory` checks the sorts, calls to earlier definitions only,
+and structural recursion, so each definition stops on each value.
+`theoryInterpretations` gives `groundEntailment` its interpretations and the
+datatypes that have a value, so the caller writes no Haskell function.
+`Data.CFTA.Refinement.SmtLib` writes the same theory as SMT-LIB
+(`declare-datatypes`, and `define-funs-rec` with `match`), and an entailment
+as a script for a solver such as Z3. It starts no solver process.
+`Data.CFTA.Refinement.Z3Process.withZ3Theory` does: it starts one `z3` from
+`PATH`, sends the theory once, and decides each query between `push` and
+`pop`, with the verdicts and the time limit of `withZ3Timeout`.
+`predicateDefinitions` gives `withZ3Definitions` the theory predicates that
+unfold without names of the theory.
 
 A refinement is a Haskell function of the refined value, as in
 `\v -> v .>= 0`. `Data.CFTA.Refinement.Expression` supplies the terms, which
