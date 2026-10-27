@@ -1,0 +1,18 @@
+        middleQueries, middleMemos, middleInventory, middleRoots, outer, waiting,
+        headRun, headPost, headQueries, growth, middlePaths, _middleStorage,
+        middleRealized, middleCounts, middleFlags, headOrigin, headProtected,
+        _headReferences, _headPending, shape, middleFits, middleKnown⟩ :=
+        SourcePruningEnumerationChildCompletion.complete_with_fragments_resources seed formulas solver inventory
+          beforeCaller before checkEmpty bucket incoming roots memos initial safe paths counts flags realized
+          bounded pending available closed fits headReservation known
+      rcases shape with rejected |
+        ⟨fragment, singleton, middleSafe, _fragmentBound, _fragmentPending, _fragmentSeparate⟩
+      · subst raw
+        have headCommon : SourcePruningEnumerationChildDispatch.run checkEmpty (r + headR) (n + headN)
+            (max p headP) (max h headH) (k + headK) bucket incoming beforeCaller before memos.query =
+            ((.ok (some []), middleCaller, middleQueries, outer, waiting), some middle) := by
+          simpa only [Nat.add_comm] using headRun r n (max p headP) (max h headH) k
+            (Nat.le_max_right _ _) (Nat.le_max_right _ _)
+        have impossible := observed headR headN (max p headP) (max h headH) headK
+          (Nat.le_max_left _ _) (Nat.le_max_left _ _)
+        rw [SourcePruningEnumerationChildTraversal.run, headCommon] at impossible

@@ -1,0 +1,16 @@
+      (result = .complete fragments afterCaller savedQueries after →
+        ∀ (ambient : InternedGuardedLanguage.Env Symbol)
+          (residualMeaning : Constraint → Term Symbol → Prop) (assignment : Nat → Term Symbol),
+          Satisfies
+            (SourcePruningEnumerationNativeLanguage.handles (SourceEqualityPCSGuard.holds formulas solver)
+              ambient afterCaller.checked.native.machine.heap) residualMeaning assignment after.core ↔
+            Satisfies
+              (SourcePruningEnumerationNativeLanguage.handles (SourceEqualityPCSGuard.holds formulas solver)
+                ambient beforeCaller.checked.native.machine.heap) residualMeaning assignment before.core ∧
+            All₂ (fun (input : Node × List Suspended) (fragment : Fragment) =>
+              InternedGuardedLanguage.meaning (SourceEqualityPCSGuard.holds formulas solver)
+                ambient input.1 (Fragments.fill assignment fragment) ∧
+              ∀ sc ∈ (match input.1 with
+                | .node _ _ _ _ => input.2
+                | _ => if input.2.any (fun sc => EqualityTrie.isTerminal sc.trie) then input.2 else []),
+                Suspended.Holds assignment (Fragments.fill assignment fragment) sc) inputs fragments)

@@ -1,5 +1,32 @@
 # Public API and source correspondence
 
+## Captured rendering soundness now uses original finite resources
+
+Source checkpoint: c4c12f9f7acef2bb76fd01c3f1920b64b23bbbd9.
+Eight new modules lift the original resource admission through traversal,
+selected edges, captured finalization and actual flat captured rendering.
+The complete traversal resource packet retains all runtime and history facts.
+Its completed result adds the full assignment iff and ordered effective child
+restrictions. Neutralized traversal and selected-edge laws keep the same
+conclusions. Original Fits, reservation and guard carrier replace universal
+numeric Ranges. Canonical, nonterminal, fresh arity and retention stay explicit.
+
+The flat captured result derives one sufficient bound before its related flat
+input. An ACTUAL completed receipt supplies its own reached heap and cache.
+Original Stratified dependency order, discharge, actual rendering and checked
+residuals construct an assignment and prove acceptance at the original captured
+edge and parent. No desired
+assignment, old render or future stable completed family is an input.
+This result covers one captured step. Whole recursive-input acceptance and
+enumeration coverage still need backward history and parked-constraint recovery.
+
+H6 remains the strongest global exact finite-tree construction result.
+Audit passes 4087 jobs and 79148 theorem dependency checks.
+All eight modules and Audit pass strict checking. No Haskell source changed.
+FINDINGS retains all earlier Haskell repair handoffs and extraction limits.
+Details: `lean/notes-current-resource-captured.md`. The full goal stays ACTIVE.
+
+
 ## Actual flat captured rendering now restores original captured acceptance
 
 Source checkpoint: c9be731a2a3f554a636ddf3b91b6a647d30e95e1.

@@ -1,0 +1,25 @@
+theorem written_semantics
+    (before after : EnumerationState.State Symbol EnumGuard)
+    (target : Nat) (fragment : Fragment Symbol)
+    (inside : target < before.values.length)
+    (written : after = {before with
+      values := before.values.set target (.enumerated fragment)
+      expansionAncestry := []})
+    (language : NodeLanguage Symbol) (meaning : EnumGuard → Term Symbol → Prop)
+    (assignment : Nat → Term Symbol) :
+    Satisfies language meaning assignment after ↔
+      Satisfies language meaning assignment (neutralize target before) ∧
+        fill assignment fragment = assignment target := by
+  subst after
+  have neutralSame :
+      Satisfies language meaning assignment (neutralize target
+        {before with values := before.values.set target (.enumerated fragment), expansionAncestry := []}) ↔
+      Satisfies language meaning assignment (neutralize target before) := by
+    simp only [neutralize, List.set_set, Satisfies, Fragments.stateSatisfies]
+  constructor
+  · intro satisfied
+    have equation := satisfied.1.2 target
+    simp only [heap, List.getElem?_set_self inside, Option.getD_some, slot, slotSatisfies] at equation
+    exact ⟨neutralSame.mp (neutralize_satisfies language meaning assignment target _ satisfied), equation⟩
+  · rintro ⟨neutral, equation⟩
+    apply neutralize_restore language meaning assignment target _ (neutralSame.mpr neutral)

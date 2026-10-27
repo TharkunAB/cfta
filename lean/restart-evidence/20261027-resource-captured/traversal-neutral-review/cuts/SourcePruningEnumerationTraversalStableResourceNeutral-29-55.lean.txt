@@ -1,0 +1,27 @@
+    (checkEmpty : Bool) {r n p h k : Nat}
+    {incoming : Node} {bucket : List Suspended} {rest : List (Node × List Suspended)}
+    {caller middleCaller afterCaller : Caller width} {before middle after : Cached}
+    {queries middleQueries savedQueries : Queries} {fragment : Fragment} {fragments : List Fragment}
+    {outer : EnumerationState.State Symbol Constraint} {waiting : EnumerationWaitingIndex.Waiting}
+    (head : SourcePruningEnumerationChildDispatch.run checkEmpty r n p h k
+      bucket incoming caller before queries =
+      ((.ok (some [.ok (fragment, middle.core)]), middleCaller, middleQueries, outer, waiting), some middle))
+    (completed : SourcePruningEnumerationChildTraversal.run checkEmpty r n p h k
+      ((incoming, bucket) :: rest) caller before queries =
+      .complete fragments afterCaller savedQueries after) :
+    ∃ tailFragments, fragments = fragment :: tailFragments ∧
+      SourcePruningEnumerationChildTraversal.run checkEmpty r n p h k
+        rest middleCaller middle middleQueries =
+        .complete tailFragments afterCaller savedQueries after := by
+  rw [SourcePruningEnumerationChildTraversal.run, head] at completed
+  cases suffix : SourcePruningEnumerationChildTraversal.run checkEmpty r n p h k
+      rest middleCaller middle middleQueries with
+  | complete tailFragments finalCaller finalQueries final =>
+      have fields : fragments = fragment :: tailFragments ∧ afterCaller = finalCaller ∧
+          savedQueries = finalQueries ∧ after = final := by
+        simpa only [suffix, SourcePruningEnumerationChildTraversal.Result.complete.injEq] using completed.symm
+      obtain ⟨rfl, rfl, rfl, rfl⟩ := fields
+      exact ⟨tailFragments, rfl, rfl⟩
+  | stopped completedPrefix observation candidate =>
+      simp only [suffix] at completed
+      cases completed

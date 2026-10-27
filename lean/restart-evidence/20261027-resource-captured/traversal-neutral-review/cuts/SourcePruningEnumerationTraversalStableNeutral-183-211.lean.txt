@@ -1,0 +1,29 @@
+        have firstRun := headRun 0 0 headP headH 0 (Nat.le_refl _) (Nat.le_refl _)
+        simp only [Nat.add_zero, singleton] at firstRun
+        have tailRanges : Ranges checkEmpty rest middleCaller middle middleMemos.query := by
+          rw [headQueries]
+          exact ranges.2 headR headN headP headH headK fragment middleCaller middle middleQueries outer waiting firstRun
+        have tailMeaning := ih middleInventory middleCaller middle middleRoots middleMemos
+          headPost.context middleSafe middlePaths middleCounts middleFlags middleRealized tailGenuine tailRanges tailRun
+        have headMeaning := SourcePruningEnumerationChildCompletion.stable_neutral_semantics
+          formulas solver inventory beforeCaller before checkEmpty bucket incoming roots memos
+          initial safe paths counts flags realized bounded pending available closed ranges.1 headRun
+        intro held inside root avoids ambient residualMeaning assignment
+        have headAvoids := avoids incoming bucket (List.mem_cons_self)
+        have frame := headProtected held inside root headAvoids
+        rw [fragmentShape]
+        have headIff := headMeaning held inside headAvoids ambient residualMeaning assignment fragment middle.core (by
+          rw [singleton]
+          exact List.mem_singleton_self _)
+        have tailIff := tailMeaning held (Nat.lt_of_lt_of_le inside growth) frame.root
+          (fun value bucket member => frame.avoids bucket
+            (avoids value bucket (List.mem_cons_of_mem _ member))) ambient residualMeaning assignment
+        constructor
+        · intro satisfied
+          obtain ⟨middleSatisfied, related⟩ := tailIff.mp satisfied
+          obtain ⟨beforeSatisfied, incomingAccepted, suspended⟩ := headIff.mp middleSatisfied
+          exact ⟨beforeSatisfied, .cons ⟨incomingAccepted, suspended⟩ related⟩
+        · rintro ⟨beforeSatisfied, related⟩
+          cases related with
+          | cons headRelation tailRelation =>
+              exact tailIff.mpr ⟨headIff.mpr ⟨beforeSatisfied, headRelation.1, headRelation.2⟩, tailRelation⟩

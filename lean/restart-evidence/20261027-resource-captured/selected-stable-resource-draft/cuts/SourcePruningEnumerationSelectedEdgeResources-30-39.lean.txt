@@ -1,0 +1,10 @@
+
+/-- Count the original mixed reservation for all actual selected-edge child buckets. -/
+def cost (edge : EdgeValue Symbol Constraint) (scs : List Suspended)
+    (start : Nat) (tries : List EqualityTrie.Trie) : Nat :=
+  SourcePruningEnumerationTraversalCompletion.cost
+    (SourcePruningEnumerationEdgeInputs.children edge scs start tries)
+
+private theorem node_bound_resources (limit : Nat) (symbol : Symbol) (fragments : List Fragment)
+    (bounded : ∀ fragment ∈ fragments, FragmentBound limit fragment) :
+    FragmentBound limit (.node symbol fragments) := by

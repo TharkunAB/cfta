@@ -1,0 +1,10 @@
+def Ranges [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Constraint)] [DecidableEq Node]
+    (checkEmpty : Bool) :
+    List (Node × List Suspended) → Caller width → Cached → Queries → Prop
+  | [], _, _, _ => True
+  | (incoming, bucket) :: rest, caller, before, queries =>
+      SourcePruningEnumerationChildCompletion.Ranges checkEmpty bucket incoming caller before queries ∧
+      ∀ r n p h k fragment afterCaller after saved outer waiting,
+        SourcePruningEnumerationChildDispatch.run checkEmpty r n p h k bucket incoming caller before queries =
+          ((.ok (some [.ok (fragment, after.core)]), afterCaller, saved, outer, waiting), some after) →
+        Ranges checkEmpty rest afterCaller after saved
