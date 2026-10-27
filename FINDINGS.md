@@ -1,5 +1,50 @@
 # Current formalization findings
 
+## Constructive coverage of ordered native child traversal
+
+Source checkpoint: 6e496d20bf4c574eb00264a5efb237ad47368fcc.
+The actual ordered child traversal now completes for every accepted ordered
+term list under the original native and resource admission. Each term must
+satisfy every original suspended constraint in its input bucket, under an
+original satisfying assignment. The proof constructs a final assignment
+that agrees at every original allocated variable. It satisfies the original
+and returned states. Filling the actual returned fragments gives exactly
+the supplied terms in order. All work bounds precede these semantic inputs.
+
+Each child supplies the actual caller, cache, full memo state and resources
+for the next child. Later fresh assignments preserve earlier fillings at
+the counter reached by the earlier child. The full old traversal packet
+remains, including stopped prefixes, protection, pending references and
+the original mixed reservation. No future success or assignment is supplied.
+
+This closes ordered symbolic child-preparation coverage. Parent-edge
+selection, projected equality witnesses, recursive expansion and rendering
+coverage remain open. Semantic selector and pruning contracts, public API
+admissions and physical Haskell correspondence also remain open. H6 exact
+finite-tree preservation and checked finite rendering soundness retain
+their earlier scopes. The full formalization goal stays ACTIVE.
+
+One module contains 317 lines and one public theorem. The source
+and standalone Audit pass strict checks. Audit passes 4238 jobs and checks
+80056 theorem dependencies. Public readback contains 163 complete blocks.
+All 162 prior public blocks and 85 pinned prior source modules remain byte
+exact. Only the three standard Lean axioms occur. FINDINGS retains every
+Haskell repair handoff. Details: `lean/notes-current-traversal-coverage.md`.
+
+
+### Traversal coverage and Haskell repair status
+
+This checkpoint changes Lean proofs only. All previous Haskell fixes,
+regressions and external repair instructions remain below without deletion.
+The final successful fetch reads main at 8766699b594eaad80381af2eee034c378ccf3192.
+It remains an ancestor with the LPO and extraction documentation fixes.
+KBO candidate d7b6a9dfff464eb32c17c314d4825d5b027f1b2d remains unintegrated,
+unbuilt and unexecuted. The positive-Int context-reversal finding remains
+open. No Haskell source, Cabal file, native test or benchmark changed or ran.
+Existing opaque Mu and Union behavior remains outside full expansion and
+rendering coverage. This result does not establish a new Haskell defect.
+
+
 ## Constructive coverage of native child preparation
 
 Source checkpoint: a7d1733d3b07594ad9cb4418c2caad57a5e9005d.

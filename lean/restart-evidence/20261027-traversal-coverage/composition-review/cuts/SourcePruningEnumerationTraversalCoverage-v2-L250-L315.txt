@@ -1,0 +1,66 @@
+              apply childSeparate held (Nat.lt_of_lt_of_le inside growth) first.root
+              intro value retained member
+              exact first.avoids retained (avoids value retained (List.mem_cons_of_mem _ member))
+          · subst tailResult
+            exact .inr ⟨outer, waiting, rfl⟩
+        · intro ambient residualMeaning assignment terms satisfied related
+          cases related with
+          | @cons input term rest terms headModel tailModels =>
+              obtain ⟨headAssignment, headFragment, headAgree, _originalHead, headSingleton,
+                headFill, middleSatisfied⟩ :=
+                headAccepting ambient residualMeaning assignment term satisfied headModel.1 headModel.2
+              have headMember : Except.ok (headFragment, middle.core) ∈
+                  ([.ok (fragment, middle.core)] : List (Except EnumerationState.Error
+                    (Fragment × EnumerationState.State Symbol Constraint))) := by
+                rw [← singleton, headSingleton]
+                exact List.mem_singleton_self _
+              have headFragmentSame : headFragment = fragment :=
+                congrArg Prod.fst (Except.ok.inj (List.mem_singleton.mp headMember))
+              have firstTerm : Fragments.fill headAssignment fragment = term := by
+                simpa only [headFragmentSame] using headFill
+              have transfer : ∀ (entries : List (Node × List Suspended))
+                  (values : List (Language.Term Symbol)),
+                  (∀ value bucket, (value, bucket) ∈ entries →
+                    ∀ sc ∈ bucket, sc.var < before.core.counter) →
+                  Language.All₂ (fun input term =>
+                    InternedGuardedLanguage.meaning (SourceEqualityPCSGuard.holds formulas solver)
+                      ambient input.1 term ∧ ∀ sc ∈ input.2, Suspended.Holds assignment term sc) entries values →
+                  Language.All₂ (fun input term =>
+                    InternedGuardedLanguage.meaning (SourceEqualityPCSGuard.holds formulas solver)
+                      ambient input.1 term ∧ ∀ sc ∈ input.2, Suspended.Holds headAssignment term sc) entries values := by
+                intro entries
+                induction entries with
+                | nil =>
+                    intro values _bounds models
+                    cases models
+                    exact .nil
+                | cons entry entries ih =>
+                    intro values bounds models
+                    cases models with
+                    | cons first remaining =>
+                        refine .cons ⟨first.1, ?_⟩ (ih _ ?_ remaining)
+                        · intro sc member
+                          exact EnumerationConstruction.holds_extension assignment headAssignment
+                            before.core.counter headAgree sc (bounds entry.1 entry.2 (by simp) sc member)
+                            _ (first.2 sc member)
+                        · intro value bucket member
+                          exact bounds value bucket (List.mem_cons_of_mem _ member)
+              have tailModelsExtended := transfer rest terms (by
+                intro value bucket member
+                exact (genuine value bucket (List.mem_cons_of_mem _ member)).2.2.1) tailModels
+              obtain ⟨extended, tailAgree, _middleExtended, tailComplete, tailFilled, afterSatisfied⟩ :=
+                tailAccepting ambient residualMeaning headAssignment terms middleSatisfied tailModelsExtended
+              have agree : ∀ uv < before.core.counter, extended uv = assignment uv := by
+                intro uv inside
+                exact (tailAgree uv (Nat.lt_of_lt_of_le inside growth)).trans (headAgree uv inside)
+              have originalExtended : Satisfies
+                  (SourcePruningEnumerationNativeLanguage.handles (SourceEqualityPCSGuard.holds formulas solver)
+                    ambient beforeCaller.checked.native.machine.heap) residualMeaning extended before.core :=
+                (EnumerationCorrectness.state_assignment_congr _ _ before.core safe.1 extended assignment agree).mpr
+                  satisfied
+              refine ⟨extended, agree, originalExtended, ?_, ?_, afterSatisfied⟩
+              · subst tailResult
+                rfl
+              · simp only [List.map_cons, tailFilled]
+                rw [EnumerationCorrectness.fill_bounded middle.core.counter extended headAssignment
+                  tailAgree fragment fragmentBound, firstTerm]

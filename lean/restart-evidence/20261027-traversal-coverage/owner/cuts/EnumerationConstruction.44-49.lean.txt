@@ -1,0 +1,6 @@
+/-- Assignment extension preserves every constraint whose variable is already allocated. -/
+theorem holds_extension (before after : Nat → Term Symbol) (limit : Nat)
+    (agree : ∀ uv < limit, after uv = before uv) (sc : Suspended) (bounded : sc.var < limit) (term : Term Symbol)
+    (holds : Suspended.Holds before term sc) : Suspended.Holds after term sc := by
+  intro path member
+  simpa [agree sc.var bounded] using holds path member

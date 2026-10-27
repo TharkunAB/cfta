@@ -1,0 +1,59 @@
+/-- Fresh equality witnesses and ordered child executions construct the actual selected-edge action. -/
+theorem edge_terminates (graph : Graph Symbol Guard) (meaning : Guard → Term Symbol → Prop)
+    (edge : EnumerationState.Edge Symbol Guard) (children : List (Term Symbol))
+    (realizes : All₂ (Realizes graph meaning) edge.children children) (edgeValid : ValidEdge edge)
+    (equalities : ∀ trie ∈ edge.equalities, EqualityHolds (.node edge.symbol children) trie)
+    (residual : ResidualHolds meaning edge.residual (.node edge.symbol children))
+    (before : State Symbol Guard) (assignment : Nat → Term Symbol) (scs : List Suspended)
+    (safe : Safe before) (valid : ValidSuspended scs) (bounded : ∀ sc ∈ scs, sc.var < before.counter)
+    (pending : InputsPending before scs) (satisfies : Satisfies (Accepted graph meaning) meaning assignment before)
+    (holds : ∀ sc ∈ scs, Suspended.Holds assignment (.node edge.symbol children) sc) :
+    ∃ fuel fragment after extended, Success (enumerateEdge graph fuel scs edge) before fragment after ∧
+      Satisfies (Accepted graph meaning) meaning extended after ∧
+      (∀ uv < before.counter, extended uv = assignment uv) ∧ fill extended fragment = .node edge.symbol children := by
+  obtain ⟨witnesses, suspendedSatisfies, freshAgree, freshHolds⟩ := fresh_classes_state_complete (Accepted graph meaning) meaning
+    before safe.1 assignment satisfies (.node edge.symbol children) edge.equalities equalities
+  let suspended := suspendedState edge.equalities.length before
+  let inputs := scs ++ suspendedVars before.counter edge.equalities
+  have suspendedSafe : Safe suspended := suspension_safe edge.equalities.length before safe
+  have inputsValid : ValidSuspended inputs := by
+    intro sc member
+    rcases List.mem_append.mp member with inherited | fresh
+    · exact valid sc inherited
+    · apply edgeValid.1 sc.trie
+      rw [← suspendedVars_tries before.counter edge.equalities]
+      exact List.mem_map.mpr ⟨sc, fresh, rfl⟩
+  have inputsBound : ∀ sc ∈ inputs, sc.var < suspended.counter := by
+    intro sc member
+    rw [suspended_counter]
+    rcases List.mem_append.mp member with inherited | fresh
+    · exact Nat.lt_of_lt_of_le (bounded sc inherited) (by omega)
+    · exact suspended_bounded before.counter edge.equalities sc fresh
+  have inputsPending : InputsPending suspended inputs := suspension_inputs_pending before safe scs pending edge.equalities
+  have inputsHold : ∀ sc ∈ inputs, Suspended.Holds witnesses (.node edge.symbol children) sc := by
+    intro sc member
+    rcases List.mem_append.mp member with inherited | fresh
+    · exact holds_extension assignment witnesses before.counter freshAgree sc (bounded sc inherited) _ (holds sc inherited)
+    · exact freshHolds sc fresh
+  obtain ⟨childFuel, fragments, expanded, extended, traversal, expandedSatisfies, childAgree, childrenTerms⟩ :=
+    children_terminate graph meaning edge.children children realizes 0 inputs suspended witnesses suspendedSafe inputsValid inputsBound inputsPending suspendedSatisfies
+      (by simpa using suspended_descent_sound witnesses edge.symbol children inputs inputsValid inputsHold)
+  have termSame : fill extended (.node edge.symbol fragments) = .node edge.symbol children := by simp [fill, childrenTerms]
+  obtain ⟨after, recording⟩ := recordResidual_terminates edge.residual (.node edge.symbol fragments) expanded
+  have afterSatisfies := (recordResidual_assignment (Accepted graph meaning) meaning extended edge.residual (.node edge.symbol fragments)
+    expanded after recording).mpr ⟨expandedSatisfies, by simpa [termSame] using residual⟩
+  have arity : arityAllows edge.children.length scs = true := by
+    have sameLength : edge.children.length = children.length := realizes.length_eq
+    rw [sameLength]
+    exact suspended_arity_necessary assignment edge.symbol children scs holds
+  refine ⟨childFuel + 1, .node edge.symbol fragments, after, extended, ?_, afterSatisfies, ?_, termSame⟩
+  · rw [edge_action]
+    apply (success_bind _ _ _ _ _).mpr
+    refine ⟨(), before, (require_success _ _ _).mpr ⟨arity, rfl⟩, ?_⟩
+    apply (success_bind _ _ _ _ _).mpr
+    refine ⟨suspendedVars before.counter edge.equalities, suspended, ?_, ?_⟩
+    · simp [Success, suspendMany_exact, ExceptT.run, suspended]
+    · exact (success_bind _ _ _ _ _).mpr ⟨fragments, expanded, traversal,
+        (success_bind _ _ _ _ _).mpr ⟨(), after, recording, (success_pure _ _ _ _).mpr ⟨rfl, rfl⟩⟩⟩
+  · intro uv inside
+    exact (childAgree uv (by rw [suspended_counter]; omega)).trans (freshAgree uv inside)

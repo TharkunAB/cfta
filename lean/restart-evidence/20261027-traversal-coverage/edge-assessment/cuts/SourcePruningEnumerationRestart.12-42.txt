@@ -1,0 +1,31 @@
+/-- Test the stop rule on every remaining candidate before selecting unblocked work. -/
+def decision (stop : Option (Metadata Typing → Nat → Bool))
+    (order : Metadata Typing → List Nat → Option Nat) (metadata : Metadata Typing)
+    (before : EnumerationExpandableIndex.Cached Symbol Constraint) : Option Next :=
+  match stop with
+  | none => some (EnumerationPureSelection.next (order metadata) before)
+  | some rule =>
+      let remaining := EnumerationIndexSelection.candidates before
+      if !remaining.isEmpty && remaining.all (rule metadata) then none
+      else some (EnumerationPureSelection.next (order metadata) before)
+
+/-- Reject blocked work and otherwise retain the exact metadata and enumeration state. -/
+def run (stop : Option (Metadata Typing → Nat → Bool))
+    (order : Metadata Typing → List Nat → Option Nat) (metadata : Metadata Typing)
+    (before : EnumerationExpandableIndex.Cached Symbol Constraint) :
+    EnumerateM Symbol Constraint (Metadata Typing × Option Next) :=
+  let next := decision stop order metadata before
+  fun state => if next = some .stuck then [] else [.ok ((metadata, next), state)]
+
+/-- Restart rejects only stuck selection and otherwise returns its exact pure decision. -/
+theorem run_exact (stop : Option (Metadata Typing → Nat → Bool))
+    (order : Metadata Typing → List Nat → Option Nat) (metadata : Metadata Typing)
+    (before : EnumerationExpandableIndex.Cached Symbol Constraint) :
+    ExceptT.run ((run stop order metadata before) before.core) =
+      if decision stop order metadata before = some .stuck then []
+      else [.ok ((metadata, decision stop order metadata before), before.core)] := rfl
+
+/-- A frame with the same allocation counter retains the decision at the same metadata. -/
+theorem decision_frame (stop : Option (Metadata Typing → Nat → Bool))
+    (order : Metadata Typing → List Nat → Option Nat) (metadata : Metadata Typing)
+    (before : EnumerationExpandableIndex.Cached Symbol Constraint)

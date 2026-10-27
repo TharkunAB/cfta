@@ -1,0 +1,44 @@
+/-- Each ordered child witness can be executed under one common bound and assignment extension. -/
+theorem children_terminate (graph : Graph Symbol Guard) (meaning : Guard → Term Symbol → Prop)
+    (nodes : List Nat) (terms : List (Term Symbol)) (realizes : All₂ (Realizes graph meaning) nodes terms)
+    (start : Nat) (scs : List Suspended) (before : State Symbol Guard) (assignment : Nat → Term Symbol)
+    (safe : Safe before) (valid : ValidSuspended scs) (bounded : ∀ sc ∈ scs, sc.var < before.counter)
+    (pending : InputsPending before scs) (satisfies : Satisfies (Accepted graph meaning) meaning assignment before)
+    (holds : ∀ index term, terms[index]? = some term → ∀ sc ∈ descendScs (start + index) scs, Suspended.Holds assignment term sc) :
+    ∃ fuel fragments after extended,
+      Success ((nodes.zipIdx start).mapM fun entry => enumerateNode graph fuel (descendScs entry.2 scs) entry.1) before fragments after ∧
+      Satisfies (Accepted graph meaning) meaning extended after ∧
+      (∀ uv < before.counter, extended uv = assignment uv) ∧ fragments.map (fill extended) = terms := by
+  induction realizes generalizing start before assignment with
+  | nil => exact ⟨0, [], before, assignment, (success_pure _ _ _ _).mpr ⟨rfl, rfl⟩, satisfies, by simp, rfl⟩
+  | @cons node term nodes terms head tail ih =>
+      have descendedBound := descend_bounded before.counter start scs bounded
+      have descendedPending : InputsPending before (descendScs start scs) := by
+        intro held fragment stored
+        exact descend_avoids _ held start scs (pending held fragment stored)
+      obtain ⟨firstFuel, fragment, middle, nextAssignment, first, middleSatisfies, firstAgree, firstTerm⟩ :=
+        head before assignment (descendScs start scs) safe (descend_valid scs start valid) descendedBound descendedPending satisfies
+          (by simpa using holds 0 term (by simp))
+      obtain ⟨middleSafe, growth, fragmentBound⟩ := (enumeration_safety graph firstFuel).1 (descendScs start scs) node before middle fragment safe descendedBound first
+      have middleBound : ∀ sc ∈ scs, sc.var < middle.counter := fun sc member => Nat.lt_of_lt_of_le (bounded sc member) growth
+      have middlePending := retained_inputs_pending graph firstFuel node start scs before middle fragment safe bounded pending first
+      have tailHolds : ∀ index child, terms[index]? = some child → ∀ sc ∈ descendScs (start + 1 + index) scs, Suspended.Holds nextAssignment child sc := by
+        intro index child found sc member
+        have original := holds (index + 1) child (by simpa using found) sc (by simpa [Nat.add_assoc, Nat.add_comm, Nat.add_left_comm] using member)
+        exact holds_extension assignment nextAssignment before.counter firstAgree sc
+          (descend_bounded before.counter (start + 1 + index) scs bounded sc member) child original
+      obtain ⟨restFuel, fragments, after, extended, continued, afterSatisfies, tailAgree, tailTerms⟩ :=
+        ih (start + 1) middle nextAssignment middleSafe middleBound middlePending middleSatisfies tailHolds
+      refine ⟨firstFuel + restFuel, fragment :: fragments, after, extended, ?_, afterSatisfies, ?_, ?_⟩
+      · simp only [List.zipIdx_cons, List.mapM_cons]
+        apply (success_bind _ _ _ _ _).mpr
+        refine ⟨fragment, middle, (enumeration_moreFuel graph firstFuel restFuel).1 (descendScs start scs) node before fragment middle first, ?_⟩
+        apply (success_bind _ _ _ _ _).mpr
+        refine ⟨fragments, after, ?_, (success_pure _ _ _ _).mpr ⟨rfl, rfl⟩⟩
+        have more := retains_mapM _ _ (fun (entry : Nat × Nat) => (enumeration_moreFuel graph restFuel firstFuel).1 (descendScs entry.2 scs) entry.1)
+          (nodes.zipIdx (start + 1)) _ _ _ continued
+        simpa [Nat.add_comm] using more
+      · intro uv inside
+        exact (tailAgree uv (Nat.lt_of_lt_of_le inside growth)).trans (firstAgree uv inside)
+      · simp only [List.map_cons, tailTerms]
+        rw [fill_bounded middle.counter extended nextAssignment tailAgree fragment fragmentBound, firstTerm]

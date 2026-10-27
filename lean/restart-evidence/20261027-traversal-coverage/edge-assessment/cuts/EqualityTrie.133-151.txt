@@ -1,0 +1,19 @@
+theorem descend_exact (trie : Trie) (valid : Valid trie) (index : Nat) (suffix : Path) :
+    suffix ∈ fromPathTrie (pathTrieDescend trie index) ↔ index :: suffix ∈ fromPathTrie trie := by
+  cases trie with
+  | empty => simp [pathTrieDescend, fromPathTrie]
+  | terminal => simp [pathTrieDescend, fromPathTrie]
+  | branch children =>
+      rw [Valid] at valid
+      rcases valid with ⟨_, unique, _⟩
+      constructor
+      · intro member
+        cases found : lookup index children with
+        | none => simp [pathTrieDescend, found, fromPathTrie] at member
+        | some child =>
+            have present : suffix ∈ fromPathTrie child := by simpa [pathTrieDescend, found] using member
+            exact (mem_fromChildren children _).mpr ⟨index, child, suffix, lookup_mem _ _ _ found, present, rfl⟩
+      · intro member
+        obtain ⟨key, child, rest, entry, present, same⟩ := (mem_fromChildren children _).mp member
+        cases same
+        simp [pathTrieDescend, lookup_of_mem _ _ _ unique entry, present]

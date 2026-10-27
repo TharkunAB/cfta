@@ -1,0 +1,79 @@
+  intro ambient residualMeaning assignment term beforeSatisfied accepted holds
+  by_cases terminalAny : bucket.any (fun sc => EqualityTrie.isTerminal sc.trie) = true
+  · obtain ⟨fragment, singleton, filled, afterSatisfied⟩ :=
+      terminalAccepting ambient residualMeaning assignment term terminalAny beforeSatisfied accepted holds
+    exact ⟨assignment, fragment, fun _ _ => rfl, beforeSatisfied, singleton, filled, afterSatisfied⟩
+  · have noTerminal : bucket.any (fun sc => EqualityTrie.isTerminal sc.trie) = false :=
+      Bool.eq_false_iff.mpr terminalAny
+    have incomingNonempty : incoming ≠ .empty := by
+      intro empty
+      rw [empty, InternedGuardedLanguage.meaning] at accepted
+      exact accepted
+    let extended := EnumerationCorrectness.install assignment before.core.counter [term]
+    have agree : ∀ uv < before.core.counter, extended uv = assignment uv :=
+      EnumerationCorrectness.install_before assignment before.core.counter [term]
+    have fresh : extended before.core.counter = term := by
+      simp only [extended, EnumerationCorrectness.install, ↓reduceIte]
+    have originalExtended : Satisfies
+        (SourcePruningEnumerationNativeLanguage.handles (SourceEqualityPCSGuard.holds formulas solver)
+          ambient beforeCaller.checked.native.machine.heap) residualMeaning extended before.core :=
+      (EnumerationCorrectness.state_assignment_congr _ _ before.core safe.1 extended assignment agree).mpr
+        beforeSatisfied
+    have extendedHolds : ∀ sc ∈ bucket, Suspended.Holds extended term sc := by
+      intro sc member
+      exact EnumerationConstruction.holds_extension assignment extended before.core.counter agree sc
+        (bounded sc member) term (holds sc member)
+    have effectiveHolds : ∀ sc ∈ (match incoming with | .node _ _ _ _ => bucket | _ => []),
+        Suspended.Holds extended term sc := by
+      cases incoming with
+      | node _ _ _ _ => exact extendedHolds
+      | empty | reference _ | union _ _ _ _ | mu _ _ _ _ =>
+          intro sc member
+          cases member
+    have noHere : (bucket.partition (fun sc => EqualityTrie.isTerminal sc.trie)).1 = [] := by
+      simp only [List.partition_eq_filter_filter]
+      exact List.filter_eq_nil_iff.mpr (fun sc member => List.any_eq_false.mp noTerminal sc member)
+    cases partitioned : bucket.partition (fun sc => EqualityTrie.isTerminal sc.trie) with
+    | mk here descendants =>
+      have hereSame : here = [] := by simpa only [partitioned] using noHere
+      subst here
+      obtain ⟨action, indexFuel, rows, prepared, cachedRun, rawRun, cachedShape, rowMeaning⟩ :=
+        SourcePruningEnumerationCachedPrepare.complete_semantics beforeCaller.checked.native.machine.heap
+          before incoming bucket roots initial.ready.semantic.ready.semantic.1.normal.facts.coherent
+          available closed safe.1 realized paths counts flags bounded (fun _ => noTerminal)
+      rcases cachedShape with ⟨emptyValue, _emptyRows⟩ | ⟨nextCache, _nonempty, rowsSame, _rest⟩
+      · exact (incomingNonempty emptyValue).elim
+      · have cachedAt := cachedRun k
+        rw [Nat.add_comm indexFuel k] at cachedAt
+        have canonicalObserved :
+            SourcePruningEnumerationChildDispatch.run checkEmpty r n p h (k + indexFuel)
+              bucket incoming beforeCaller before memos.query =
+              ((.ok (some [.ok (.hole before.core.counter, nextCache.core)]),
+                beforeCaller, memos.query, before.core, before.waiting), some nextCache) := by
+          simp only [SourcePruningEnumerationChildDispatch.run, SourcePruningEnumerationChildDispatch.observe,
+            ite_eq_right incomingNonempty, partitioned, prepared, cachedAt, rowsSame, rawRun,
+            List.map_cons, List.map_nil]
+        have actualObserved :
+            SourcePruningEnumerationChildDispatch.run checkEmpty r n p h (k + indexFuel)
+              bucket incoming beforeCaller before memos.query =
+              ((.ok (some raw), afterCaller, savedQueries, outer, waiting), some after) := by
+          simpa only [Nat.add_zero] using
+            observed 0 0 p h indexFuel (Nat.le_refl _) (Nat.le_refl _)
+        have same : raw = [.ok (.hole before.core.counter, nextCache.core)] ∧
+            afterCaller = beforeCaller ∧ savedQueries = memos.query ∧
+            outer = before.core ∧ waiting = before.waiting ∧ after = nextCache := by
+          simpa only [Prod.mk.injEq, Except.ok.injEq, Option.some.injEq, and_assoc] using
+            actualObserved.symm.trans canonicalObserved
+        obtain ⟨rawSame, callerSame, _queriesSame, _outerSame, _waitingSame, cacheSame⟩ := same
+        obtain ⟨rowFragment, rowCache, member, rowSatisfied⟩ :=
+          (rowMeaning (SourceEqualityPCSGuard.holds formulas solver) ambient residualMeaning extended).mpr
+            ⟨originalExtended, by simpa only [fresh] using accepted,
+              fun sc member => by
+                cases incoming <;> simpa only [fresh] using effectiveHolds sc member⟩
+        have rowSame : (rowFragment, rowCache) = (.hole before.core.counter, nextCache) :=
+          List.mem_singleton.mp (by simpa only [rowsSame] using member)
+        have rowCacheSame : rowCache = nextCache := congrArg Prod.snd rowSame
+        refine ⟨extended, .hole before.core.counter, agree, originalExtended, ?_, ?_, ?_⟩
+        · simpa only [cacheSame] using rawSame
+        · simpa only [Fragments.fill] using fresh
+        · simpa only [callerSame, cacheSame, rowCacheSame] using rowSatisfied

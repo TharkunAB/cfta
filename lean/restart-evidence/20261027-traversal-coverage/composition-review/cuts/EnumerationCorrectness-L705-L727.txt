@@ -1,0 +1,23 @@
+mutual
+/-- A bounded fragment depends only on the values of allocated holes. -/
+theorem fill_bounded (limit : Nat) (left right : Nat → Term Symbol)
+    (agree : ∀ uv < limit, left uv = right uv) (fragment : Fragment Symbol)
+    (bounded : FragmentBound limit fragment) : fill left fragment = fill right fragment := by
+  cases fragment with
+  | hole uv => simpa [fill] using agree uv bounded
+  | node symbol children =>
+      simp only [fill]
+      rw [fill_children_bounded limit left right agree children bounded]
+termination_by sizeOf fragment
+
+/-- Bounded child lists preserve their order and each completed subtree under agreement. -/
+theorem fill_children_bounded (limit : Nat) (left right : Nat → Term Symbol)
+    (agree : ∀ uv < limit, left uv = right uv) (children : List (Fragment Symbol))
+    (bounded : FragmentsBound limit children) : children.map (fill left) = children.map (fill right) := by
+  cases children with
+  | nil => rfl
+  | cons child rest =>
+      have both : FragmentBound limit child ∧ FragmentsBound limit rest := bounded
+      simp only [List.map_cons]
+      rw [fill_bounded limit left right agree child both.1, fill_children_bounded limit left right agree rest both.2]
+termination_by sizeOf children

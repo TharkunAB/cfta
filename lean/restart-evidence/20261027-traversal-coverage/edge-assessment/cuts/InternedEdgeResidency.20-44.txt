@@ -1,0 +1,25 @@
+/-- An edge payload is the complete canonical record under its own key. -/
+def EdgeResident (state : State Symbol Guard) (edge : EdgeValue Symbol Guard) : Prop :=
+  state.edgeRecords edge.entry.key = some edge
+
+/-- Each edge retained in a stored ordinary node has its canonical payload. -/
+def Linked (state : State Symbol Guard) : Prop :=
+  ∀ key value, state.nodeRecords key = some value →
+    ∀ edge ∈ nodeEdges value, EdgeResident state edge
+
+/-- The initial source tables contain no unlinked edge payload. -/
+theorem empty_linked : Linked (empty (Symbol := Symbol) (Guard := Guard)) := by
+  intro key value impossible
+  cases impossible
+
+/-- Actual table growth retains complete edge payloads. -/
+theorem edge_grows (before after : State Symbol Guard) (growth : Grows before after)
+    (edge : EdgeValue Symbol Guard) (resident : EdgeResident before edge) : EdgeResident after edge :=
+  growth.edgeRecords edge.entry.key edge resident
+
+/-- Residency of the parent gives residency of every actual outgoing edge. -/
+theorem resident_edges (state : State Symbol Guard) (linked : Linked state)
+    (value : Value Symbol Guard) (resident : Resident state value) :
+    ∀ edge ∈ nodeEdges value, EdgeResident state edge := by
+  cases value <;> simp only [nodeEdges] <;> try simp
+  case node entry edges depth free => exact linked entry.key _ (resident entry rfl)

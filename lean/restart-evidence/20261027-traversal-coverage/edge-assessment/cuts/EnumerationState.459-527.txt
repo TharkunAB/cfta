@@ -1,0 +1,69 @@
+theorem suspended_descent_sound (assignment : Nat → Term Symbol)
+    (symbol : Symbol) (children : List (Term Symbol)) (scs : List Suspended)
+    (valid : ∀ sc ∈ scs, EqualityTrie.Valid sc.trie)
+    (holds : ∀ sc ∈ scs, Suspended.Holds assignment (.node symbol children) sc)
+    (index : Nat) (child : Term Symbol) (found : children[index]? = some child) :
+    ∀ sc ∈ descendScs index scs, Suspended.Holds assignment child sc := by
+  intro sc member suffix present
+  obtain ⟨original, originalMember, same, path⟩ :=
+    (EqualityTrie.descendScs_exact index scs valid sc.var suffix).mp ⟨sc, member, rfl, present⟩
+  have equality := holds original originalMember (index :: suffix) path
+  simpa [Term.atPath, found, same] using equality
+
+/-- Valid inherited equalities cannot be rejected by the edge's arity check. -/
+theorem suspended_arity_necessary (assignment : Nat → Term Symbol)
+    (symbol : Symbol) (children : List (Term Symbol)) (scs : List Suspended)
+    (holds : ∀ sc ∈ scs, Suspended.Holds assignment (.node symbol children) sc) :
+    arityAllows children.length scs = true := by
+  apply arityAllows_correct _ _ |>.mpr
+  intro sc member index suffix path
+  have equality := holds sc member (index :: suffix) path
+  obtain ⟨child, found, _⟩ := Option.bind_eq_some_iff.mp equality
+  exact (List.getElem?_eq_some_iff.mp found).1
+
+/-- Arity, root equalities, and all descended obligations reconstruct every original obligation. -/
+theorem suspended_descent_complete (assignment : Nat → Term Symbol)
+    (symbol : Symbol) (children : List (Term Symbol)) (scs : List Suspended)
+    (valid : ∀ sc ∈ scs, EqualityTrie.Valid sc.trie)
+    (arity : arityAllows children.length scs = true)
+    (roots : ∀ sc ∈ scs, EqualityTrie.isTerminal sc.trie = true →
+      Term.node symbol children = assignment sc.var)
+    (descendants : ∀ index child, children[index]? = some child →
+      ∀ sc ∈ descendScs index scs, Suspended.Holds assignment child sc) :
+    ∀ sc ∈ scs, Suspended.Holds assignment (.node symbol children) sc := by
+  intro sc member path present
+  cases path with
+  | nil =>
+      have terminal := (EqualityTrie.nil_mem sc.trie).mp present
+      simpa [Term.atPath] using congrArg some
+        (roots sc member (by simp [terminal, EqualityTrie.isTerminal]))
+  | cons index suffix =>
+      have bound := (arityAllows_correct _ _).mp arity sc member index suffix present
+      have found : children[index]? = some children[index] := List.getElem?_eq_getElem bound
+      obtain ⟨descended, descendedMember, same, suffixMember⟩ :=
+        (EqualityTrie.descendScs_exact index scs valid sc.var suffix).mpr
+          ⟨sc, member, rfl, present⟩
+      have suffixEquality := descendants index children[index] found descended descendedMember suffix suffixMember
+      simpa [Term.atPath, found, same] using suffixEquality
+
+/-- Suspended constraints are preserved exactly by root discharge and child descent. -/
+theorem suspended_decomposition (assignment : Nat → Term Symbol)
+    (symbol : Symbol) (children : List (Term Symbol)) (scs : List Suspended)
+    (valid : ∀ sc ∈ scs, EqualityTrie.Valid sc.trie) :
+    (∀ sc ∈ scs, Suspended.Holds assignment (.node symbol children) sc) ↔
+      arityAllows children.length scs = true ∧
+      (∀ sc ∈ scs, EqualityTrie.isTerminal sc.trie = true →
+        Term.node symbol children = assignment sc.var) ∧
+      (∀ index child, children[index]? = some child →
+        ∀ sc ∈ descendScs index scs, Suspended.Holds assignment child sc) := by
+  constructor
+  · intro holds
+    refine ⟨suspended_arity_necessary assignment symbol children scs holds, ?_,
+      suspended_descent_sound assignment symbol children scs valid holds⟩
+    intro sc member terminal
+    have trie : sc.trie = .terminal := by
+      cases h : sc.trie <;> simp [EqualityTrie.isTerminal, h] at terminal ⊢
+    have equality := holds sc member [] (by simp [trie, EqualityTrie.fromPathTrie])
+    exact Option.some.inj equality
+  · rintro ⟨arity, roots, descendants⟩
+    exact suspended_descent_complete assignment symbol children scs valid arity roots descendants

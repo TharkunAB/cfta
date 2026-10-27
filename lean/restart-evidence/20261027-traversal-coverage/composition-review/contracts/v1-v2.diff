@@ -1,0 +1,13 @@
+--- v1
++++ v2
+@@ -308,8 +308,8 @@
+                 (EnumerationCorrectness.state_assignment_congr _ _ before.core safe.1 extended assignment agree).mpr
+                   satisfied
+               refine ⟨extended, agree, originalExtended, ?_, ?_, afterSatisfied⟩
+-              · dsimp only [result]
+-                rw [tailComplete]
++              · subst tailResult
++                rfl
+               · simp only [List.map_cons, tailFilled]
+                 rw [EnumerationCorrectness.fill_bounded middle.core.counter extended headAssignment
+                   tailAgree fragment fragmentBound, firstTerm]

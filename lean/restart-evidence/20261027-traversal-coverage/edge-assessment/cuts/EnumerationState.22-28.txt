@@ -1,0 +1,7 @@
+
+/-- Use the source-equivalent checked trie descent. -/
+abbrev descendScs := @EqualityTrie.descendScs Nat
+
+/-- Every represented path must reach the assigned equality variable. -/
+def Suspended.Holds (assignment : Nat → Term Symbol) (term : Term Symbol) (sc : Suspended) : Prop :=
+  ∀ path ∈ EqualityTrie.fromPathTrie sc.trie, term.atPath path = some (assignment sc.var)
