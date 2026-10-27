@@ -1,0 +1,90 @@
+structure MicroCFTA.EnumerationFlatCached.Related {Symbol Guard : Type}
+  (flat : MicroCFTA.EnumerationFlatCached.Cached Symbol Guard)
+  (earlier : MicroCFTA.EnumerationExpandableIndex.Cached Symbol Guard) : Prop
+number of parameters: 4
+fields:
+  MicroCFTA.EnumerationFlatCached.Related.core : MicroCFTA.EnumerationFlatState.Related flat.core earlier.core
+  MicroCFTA.EnumerationFlatCached.Related.expandable : flat.expandable = earlier.expandable
+  MicroCFTA.EnumerationFlatCached.Related.waiting : flat.waiting = earlier.waiting
+constructor:
+  MicroCFTA.EnumerationFlatCached.Related.mk {Symbol Guard : Type}
+    {flat : MicroCFTA.EnumerationFlatCached.Cached Symbol Guard}
+    {earlier : MicroCFTA.EnumerationExpandableIndex.Cached Symbol Guard}
+    (core : MicroCFTA.EnumerationFlatState.Related flat.core earlier.core)
+    (expandable : flat.expandable = earlier.expandable) (waiting : flat.waiting = earlier.waiting) :
+    MicroCFTA.EnumerationFlatCached.Related flat earlier
+def MicroCFTA.EnumerationFlatCached.frame : {Symbol Guard : Type} →
+  MicroCFTA.EnumerationFlatState.State Symbol Guard →
+    MicroCFTA.EnumerationFlatCached.Cached Symbol Guard → MicroCFTA.EnumerationFlatCached.Cached Symbol Guard :=
+fun {Symbol Guard} core state => { core := core, expandable := state.expandable, waiting := state.waiting }
+def MicroCFTA.EnumerationFlatCached.initial : {Symbol Guard : Type} →
+  MicroCFTA.EnumerationState.Graph Symbol Guard → Nat → MicroCFTA.EnumerationFlatCached.Cached Symbol Guard :=
+fun {Symbol Guard} graph root =>
+  { core := MicroCFTA.EnumerationFlatState.initial root,
+    expandable := fun uv =>
+      if uv = 0 then
+        MicroCFTA.EnumerationState.candidate graph (MicroCFTA.EnumerationState.UVarValue.unenumerated (some root) [])
+      else false,
+    waiting := fun x => none }
+def MicroCFTA.EnumerationFlatNativeIndex.count : MicroCFTA.FlatUnionFind.Forest →
+  Int →
+    List MicroCFTA.EnumerationState.Suspended →
+      MicroCFTA.EnumerationWaitingIndex.Waiting → MicroCFTA.EnumerationWaitingIndex.Waiting :=
+fun forest change scs waiting =>
+  MicroCFTA.EnumerationCanonicalWaiting.count (MicroCFTA.FlatUnionFind.root forest) change scs waiting
+def MicroCFTA.EnumerationFlatNativeIndex.write : {EnumGuard NativeGuard : Type} →
+  MicroCFTA.InternedConstructorTemplates.State MicroCFTA.SourcePruningTemplates.Symbol NativeGuard →
+    Nat →
+      MicroCFTA.EnumerationState.UVarValue MicroCFTA.SourcePruningTemplates.Symbol →
+        List MicroCFTA.EnumerationState.Suspended →
+          List MicroCFTA.EnumerationState.Suspended →
+            MicroCFTA.EnumerationFlatCached.Cached MicroCFTA.SourcePruningTemplates.Symbol EnumGuard →
+              Option (MicroCFTA.EnumerationFlatCached.Cached MicroCFTA.SourcePruningTemplates.Symbol EnumGuard) :=
+fun {EnumGuard NativeGuard} heap target value gained lost before =>
+  Option.map
+    (fun flag =>
+      {
+        core :=
+          have __src := before.core;
+          { counter := __src.counter, representatives := __src.representatives,
+            values := before.core.values.set target value, obligations := __src.obligations,
+            recursionAncestry := __src.recursionAncestry, expansionAncestry := __src.expansionAncestry },
+        expandable := fun other => if other = target then flag else before.expandable other,
+        waiting :=
+          MicroCFTA.EnumerationFlatNativeIndex.count before.core.representatives 1 gained
+            (MicroCFTA.EnumerationFlatNativeIndex.count before.core.representatives (-1) lost before.waiting) })
+    (MicroCFTA.SourcePruningEnumerationNativeIndex.candidate heap value)
+def MicroCFTA.EnumerationFlatNativeIndex.WritesRelated : {EnumGuard : Type} →
+  Option (MicroCFTA.EnumerationFlatCached.Cached MicroCFTA.SourcePruningTemplates.Symbol EnumGuard) →
+    Option (MicroCFTA.EnumerationExpandableIndex.Cached MicroCFTA.SourcePruningTemplates.Symbol EnumGuard) → Prop :=
+fun {EnumGuard} flat earlier =>
+  match flat, earlier with
+  | none, none => True
+  | some flat, some earlier => MicroCFTA.EnumerationFlatCached.Related flat earlier
+  | x, x_1 => False
+structure MicroCFTA.EnumerationFlatNativeIndex.Correct {EnumGuard NativeGuard : Type}
+  (heap : MicroCFTA.InternedConstructorTemplates.State MicroCFTA.SourcePruningTemplates.Symbol NativeGuard)
+  (state : MicroCFTA.EnumerationFlatCached.Cached MicroCFTA.SourcePruningTemplates.Symbol EnumGuard) : Prop
+number of parameters: 4
+fields:
+  MicroCFTA.EnumerationFlatNativeIndex.Correct.aligned : state.core.counter = state.core.values.length
+  MicroCFTA.EnumerationFlatNativeIndex.Correct.expandable : ∀ (uv : Nat),
+      MicroCFTA.SourcePruningEnumerationNativeIndex.candidate heap
+          (state.core.values[uv]?.getD MicroCFTA.EnumerationState.UVarValue.eliminated) =
+        some (state.expandable uv)
+  MicroCFTA.EnumerationFlatNativeIndex.Correct.waiting : MicroCFTA.EnumerationCanonicalWaiting.Correct
+      (MicroCFTA.FlatUnionFind.root state.core.representatives) state.core.values state.waiting
+constructor:
+  MicroCFTA.EnumerationFlatNativeIndex.Correct.mk {EnumGuard NativeGuard : Type}
+    {heap : MicroCFTA.InternedConstructorTemplates.State MicroCFTA.SourcePruningTemplates.Symbol NativeGuard}
+    {state : MicroCFTA.EnumerationFlatCached.Cached MicroCFTA.SourcePruningTemplates.Symbol EnumGuard}
+    (aligned : state.core.counter = state.core.values.length)
+    (expandable :
+      ∀ (uv : Nat),
+        MicroCFTA.SourcePruningEnumerationNativeIndex.candidate heap
+            (state.core.values[uv]?.getD MicroCFTA.EnumerationState.UVarValue.eliminated) =
+          some (state.expandable uv))
+    (waiting :
+      MicroCFTA.EnumerationCanonicalWaiting.Correct (MicroCFTA.FlatUnionFind.root state.core.representatives)
+        state.core.values state.waiting) :
+    MicroCFTA.EnumerationFlatNativeIndex.Correct heap state

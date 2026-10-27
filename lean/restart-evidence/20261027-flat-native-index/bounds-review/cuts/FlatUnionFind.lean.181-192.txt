@@ -1,0 +1,12 @@
+def merge (forest : Forest) (winner winnerSize loserSize : Nat)
+    (loserMembers winnerMembers : List Nat) : Forest :=
+  put (redirectMembers forest winner loserMembers) winner
+    (.root (winnerSize + loserSize) (loserMembers ++ winnerMembers))
+
+/-- The complete merge has one root write and one member-redirection fold. -/
+theorem merge_lookup (forest : Forest) (winner winnerSize loserSize : Nat)
+    (loserMembers winnerMembers : List Nat) (uv : Nat) :
+    merge forest winner winnerSize loserSize loserMembers winnerMembers uv =
+      if uv = winner then some (.root (winnerSize + loserSize) (loserMembers ++ winnerMembers))
+      else if uv ∈ loserMembers then some (.parent winner) else forest uv := by
+  simp only [merge, put, redirectMembers_lookup]

@@ -1,0 +1,77 @@
+MicroCFTA.EnumerationFlatCached.frame_related {Symbol✝ Guard✝ : Type}
+  {flat : MicroCFTA.EnumerationFlatCached.Cached Symbol✝ Guard✝}
+  {earlier : MicroCFTA.EnumerationExpandableIndex.Cached Symbol✝ Guard✝}
+  {nextFlat : MicroCFTA.EnumerationFlatState.State Symbol✝ Guard✝}
+  {nextEarlier : MicroCFTA.EnumerationState.State Symbol✝ Guard✝}
+  (related : MicroCFTA.EnumerationFlatCached.Related flat earlier)
+  (cores : MicroCFTA.EnumerationFlatState.Related nextFlat nextEarlier) :
+  MicroCFTA.EnumerationFlatCached.Related (MicroCFTA.EnumerationFlatCached.frame nextFlat flat)
+    (MicroCFTA.EnumerationExpandableIndex.frame nextEarlier earlier)
+'MicroCFTA.EnumerationFlatCached.frame_related' depends on axioms: [propext]
+MicroCFTA.EnumerationFlatCached.initial_related {Symbol Guard : Type}
+  (graph : MicroCFTA.EnumerationState.Graph Symbol Guard) (root : Nat) :
+  MicroCFTA.EnumerationFlatCached.Related (MicroCFTA.EnumerationFlatCached.initial graph root)
+    (MicroCFTA.EnumerationExpandableIndex.initial graph root)
+'MicroCFTA.EnumerationFlatCached.initial_related' depends on axioms: [propext, Quot.sound]
+MicroCFTA.EnumerationFlatNativeIndex.related_roots {flat : MicroCFTA.FlatUnionFind.Forest}
+  {earlier : MicroCFTA.UnionFind.Forest} (related : MicroCFTA.FlatUnionFind.Represents flat earlier) :
+  MicroCFTA.EnumerationSchedule.Roots earlier (MicroCFTA.FlatUnionFind.root flat)
+'MicroCFTA.EnumerationFlatNativeIndex.related_roots' depends on axioms: [propext]
+MicroCFTA.EnumerationFlatNativeIndex.count_stable {flat : MicroCFTA.FlatUnionFind.Forest}
+  {earlier : MicroCFTA.UnionFind.Forest} (related : MicroCFTA.FlatUnionFind.Represents flat earlier)
+  (scs : List MicroCFTA.EnumerationState.Suspended) :
+  ∃ fuel,
+    ∀ (extra : Nat) (change : Int) (waiting : MicroCFTA.EnumerationWaitingIndex.Waiting),
+      MicroCFTA.SourcePruningEnumerationNativeIndex.count (fuel + extra) earlier change scs waiting =
+        some (MicroCFTA.EnumerationFlatNativeIndex.count flat change scs waiting)
+'MicroCFTA.EnumerationFlatNativeIndex.count_stable' depends on axioms: [propext]
+MicroCFTA.EnumerationFlatNativeIndex.write_stable {NativeGuard Guard✝ : Type}
+  {flat : MicroCFTA.EnumerationFlatCached.Cached MicroCFTA.SourcePruningTemplates.Symbol Guard✝}
+  {earlier : MicroCFTA.EnumerationExpandableIndex.Cached MicroCFTA.SourcePruningTemplates.Symbol Guard✝}
+  (related : MicroCFTA.EnumerationFlatCached.Related flat earlier)
+  (heap : MicroCFTA.InternedConstructorTemplates.State MicroCFTA.SourcePruningTemplates.Symbol NativeGuard)
+  (target : Nat) (value : MicroCFTA.EnumerationState.UVarValue MicroCFTA.SourcePruningTemplates.Symbol)
+  (gained lost : List MicroCFTA.EnumerationState.Suspended) :
+  ∃ fuel,
+    ∀ (extra : Nat),
+      MicroCFTA.EnumerationFlatNativeIndex.WritesRelated
+        (MicroCFTA.EnumerationFlatNativeIndex.write heap target value gained lost flat)
+        (MicroCFTA.SourcePruningEnumerationNativeIndex.write heap (fuel + extra) target value gained lost earlier)
+'MicroCFTA.EnumerationFlatNativeIndex.write_stable' depends on axioms: [propext, Quot.sound]
+MicroCFTA.EnumerationFlatNativeIndex.correct_of_related {NativeGuard Guard✝ : Type}
+  {flat : MicroCFTA.EnumerationFlatCached.Cached MicroCFTA.SourcePruningTemplates.Symbol Guard✝}
+  {earlier : MicroCFTA.EnumerationExpandableIndex.Cached MicroCFTA.SourcePruningTemplates.Symbol Guard✝}
+  (related : MicroCFTA.EnumerationFlatCached.Related flat earlier)
+  (heap : MicroCFTA.InternedConstructorTemplates.State MicroCFTA.SourcePruningTemplates.Symbol NativeGuard)
+  (roots : Nat → Nat) (paths : MicroCFTA.EnumerationSchedule.Roots earlier.core.representatives roots)
+  (aligned : earlier.core.counter = earlier.core.values.length)
+  (flags :
+    ∀ (uv : Nat),
+      MicroCFTA.SourcePruningEnumerationNativeIndex.candidate heap
+          (earlier.core.values[uv]?.getD MicroCFTA.EnumerationState.UVarValue.eliminated) =
+        some (earlier.expandable uv))
+  (waiting : MicroCFTA.EnumerationCanonicalWaiting.Correct roots earlier.core.values earlier.waiting) :
+  MicroCFTA.EnumerationFlatNativeIndex.Correct heap flat
+'MicroCFTA.EnumerationFlatNativeIndex.correct_of_related' depends on axioms: [propext, Quot.sound]
+MicroCFTA.EnumerationFlatNativeIndex.write_correct {EnumGuard NativeGuard : Type}
+  (heap : MicroCFTA.InternedConstructorTemplates.State MicroCFTA.SourcePruningTemplates.Symbol NativeGuard)
+  (before after : MicroCFTA.EnumerationFlatCached.Cached MicroCFTA.SourcePruningTemplates.Symbol EnumGuard)
+  (correct : MicroCFTA.EnumerationFlatNativeIndex.Correct heap before) (target : Nat)
+  (old value : MicroCFTA.EnumerationState.UVarValue MicroCFTA.SourcePruningTemplates.Symbol)
+  (stored : before.core.values[target]? = some old)
+  (done :
+    MicroCFTA.EnumerationFlatNativeIndex.write heap target value (MicroCFTA.EnumerationSchedule.references value)
+        (MicroCFTA.EnumerationSchedule.references old) before =
+      some after) :
+  MicroCFTA.EnumerationFlatNativeIndex.Correct heap after
+'MicroCFTA.EnumerationFlatNativeIndex.write_correct' depends on axioms: [propext, Quot.sound]
+MicroCFTA.EnumerationFlatNativeIndex.frame_correct {EnumGuard NativeGuard : Type}
+  (heap : MicroCFTA.InternedConstructorTemplates.State MicroCFTA.SourcePruningTemplates.Symbol NativeGuard)
+  (before : MicroCFTA.EnumerationFlatCached.Cached MicroCFTA.SourcePruningTemplates.Symbol EnumGuard)
+  (next : MicroCFTA.EnumerationFlatState.State MicroCFTA.SourcePruningTemplates.Symbol EnumGuard)
+  (correct : MicroCFTA.EnumerationFlatNativeIndex.Correct heap before) (values : next.values = before.core.values)
+  (counter : next.counter = before.core.counter)
+  (roots :
+    MicroCFTA.FlatUnionFind.root next.representatives = MicroCFTA.FlatUnionFind.root before.core.representatives) :
+  MicroCFTA.EnumerationFlatNativeIndex.Correct heap (MicroCFTA.EnumerationFlatCached.frame next before)
+'MicroCFTA.EnumerationFlatNativeIndex.frame_correct' depends on axioms: [propext]

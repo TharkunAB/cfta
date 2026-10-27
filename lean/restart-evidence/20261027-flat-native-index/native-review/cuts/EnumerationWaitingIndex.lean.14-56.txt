@@ -1,0 +1,43 @@
+abbrev Waiting := Nat → Option Int
+
+/-- A missing counter has value zero. -/
+def read (waiting : Waiting) (uv : Nat) : Int := (waiting uv).getD 0
+
+/-- The source removes a map entry exactly when its new count is zero. -/
+def encode (count : Int) : Option Int := if count = 0 then none else some count
+
+/-- Count every occurrence of one raw suspended UVar. -/
+def occurrences (uv : Nat) : List Suspended → Int
+  | [] => 0
+  | sc :: rest => (if sc.var = uv then 1 else 0) + occurrences uv rest
+
+/-- Reference multiplicities add when assimilation appends suspended constraints. -/
+theorem occurrences_append (uv : Nat) (first second : List Suspended) :
+    occurrences uv (first ++ second) = occurrences uv first + occurrences uv second := by
+  induction first with
+  | nil => simp [occurrences]
+  | cons sc rest ih => simp [occurrences, ih, Int.add_assoc]
+
+/-- The reference scan counts only unenumerated slots. -/
+def total (uv : Nat) : List (UVarValue Symbol) → Int
+  | [] => 0
+  | value :: rest => occurrences uv (references value) + total uv rest
+
+/-- Apply one source `IntMap.alter` update to one raw UVar. -/
+def bump (change : Int) (uv : Nat) (waiting : Waiting) : Waiting :=
+  fun other => if other = uv then encode (read waiting uv + change) else waiting other
+
+/-- Apply the source's ordered counter fold to all suspended references. -/
+def count (change : Int) (scs : List Suspended) (waiting : Waiting) : Waiting :=
+  scs.foldl (fun previous sc => bump change sc.var previous) waiting
+
+/-- Slot replacement removes the old references before it adds the new references. -/
+def replace (old new : UVarValue Symbol) (waiting : Waiting) : Waiting :=
+  count 1 (references new) (count (-1) (references old) waiting)
+
+/-- Sparse maps store no zero-valued entry. -/
+def Canonical (waiting : Waiting) : Prop := ∀ uv, waiting uv = encode (read waiting uv)
+
+/-- The map contains exactly the full raw-slot occurrence count. -/
+def Correct (values : List (UVarValue Symbol)) (waiting : Waiting) : Prop :=
+  ∀ uv, waiting uv = encode (total uv values)

@@ -1,0 +1,35 @@
+theorem entryOf_spec (valid : Valid forest)
+    (fixed : root forest representative = representative) :
+    (entryOf forest representative).2.Nodup ∧
+      (entryOf forest representative).1 = (entryOf forest representative).2.length ∧
+      ∀ uv, uv ∈ (entryOf forest representative).2 ↔
+        root forest uv = representative := by
+  cases lookup : forest representative with
+  | none =>
+    simp only [entryOf, lookup]
+    refine ⟨by simp, by simp, ?_⟩
+    intro uv
+    simp only [List.mem_singleton]
+    constructor
+    · rintro rfl
+      exact fixed
+    · intro same
+      cases actual : forest uv with
+      | none => simpa [root, actual] using same
+      | some entry =>
+        cases entry with
+        | root size members => simpa [root, actual] using same
+        | parent parent =>
+          have parentSame : parent = representative := by simpa [root, actual] using same
+          obtain ⟨size, members, terminal⟩ := valid.parents uv parent actual
+          rw [parentSame, lookup] at terminal
+          contradiction
+  | some entry =>
+    cases entry with
+    | root size members =>
+      simpa only [entryOf, lookup] using valid.roots representative size members lookup
+    | parent parent =>
+      have same : parent = representative := by simpa [root, lookup] using fixed
+      obtain ⟨size, members, terminal⟩ := valid.parents representative parent lookup
+      rw [same, lookup] at terminal
+      cases terminal

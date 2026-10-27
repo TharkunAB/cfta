@@ -1,0 +1,62 @@
+import MicroCFTA.FlatUnionFindBounds
+import MicroCFTA.EnumerationFlatBounds
+import MicroCFTA.EnumerationFlatCached
+import MicroCFTA.EnumerationFlatNativeIndex
+import MicroCFTA.SourceCurrentColdFiniteWarmCalls
+import MicroCFTA.SourcePruningEnumerationCapturedRendering
+set_option pp.maxSteps 1000000
+set_option pp.deepTerms true
+#check MicroCFTA.FlatUnionFind.StoredBelow.mono
+#print axioms MicroCFTA.FlatUnionFind.StoredBelow.mono
+#check MicroCFTA.FlatUnionFind.StoredBelow.fresh
+#print axioms MicroCFTA.FlatUnionFind.StoredBelow.fresh
+#check MicroCFTA.FlatUnionFind.initial_storedBelow
+#print axioms MicroCFTA.FlatUnionFind.initial_storedBelow
+#check MicroCFTA.FlatUnionFind.root_lt
+#print axioms MicroCFTA.FlatUnionFind.root_lt
+#check MicroCFTA.FlatUnionFind.member_lt
+#print axioms MicroCFTA.FlatUnionFind.member_lt
+#check MicroCFTA.FlatUnionFind.merge_storedBelow
+#print axioms MicroCFTA.FlatUnionFind.merge_storedBelow
+#check MicroCFTA.FlatUnionFind.link_storedBelow
+#print axioms MicroCFTA.FlatUnionFind.link_storedBelow
+#check MicroCFTA.FlatUnionFind.union_storedBelow
+#print axioms MicroCFTA.FlatUnionFind.union_storedBelow
+#check MicroCFTA.EnumerationFlatState.initial_bounded
+#print axioms MicroCFTA.EnumerationFlatState.initial_bounded
+#check MicroCFTA.EnumerationFlatState.allocate_bounded
+#print axioms MicroCFTA.EnumerationFlatState.allocate_bounded
+#check MicroCFTA.EnumerationFlatState.unionVariables_bounded
+#print axioms MicroCFTA.EnumerationFlatState.unionVariables_bounded
+#check MicroCFTA.EnumerationFlatState.related_not_bounded
+#print axioms MicroCFTA.EnumerationFlatState.related_not_bounded
+#check MicroCFTA.EnumerationFlatCached.frame_related
+#print axioms MicroCFTA.EnumerationFlatCached.frame_related
+#check MicroCFTA.EnumerationFlatCached.initial_related
+#print axioms MicroCFTA.EnumerationFlatCached.initial_related
+#check MicroCFTA.EnumerationFlatNativeIndex.related_roots
+#print axioms MicroCFTA.EnumerationFlatNativeIndex.related_roots
+#check MicroCFTA.EnumerationFlatNativeIndex.count_stable
+#print axioms MicroCFTA.EnumerationFlatNativeIndex.count_stable
+#check MicroCFTA.EnumerationFlatNativeIndex.write_stable
+#print axioms MicroCFTA.EnumerationFlatNativeIndex.write_stable
+#check MicroCFTA.EnumerationFlatNativeIndex.correct_of_related
+#print axioms MicroCFTA.EnumerationFlatNativeIndex.correct_of_related
+#check MicroCFTA.EnumerationFlatNativeIndex.write_correct
+#print axioms MicroCFTA.EnumerationFlatNativeIndex.write_correct
+#check MicroCFTA.EnumerationFlatNativeIndex.frame_correct
+#print axioms MicroCFTA.EnumerationFlatNativeIndex.frame_correct
+#check MicroCFTA.SourceCurrentColdFiniteWarmCalls.constructed_node_calls
+#print axioms MicroCFTA.SourceCurrentColdFiniteWarmCalls.constructed_node_calls
+#check MicroCFTA.SourcePruningEnumerationCapturedEdge.diagonal_render_sound_current
+#print axioms MicroCFTA.SourcePruningEnumerationCapturedEdge.diagonal_render_sound_current
+#print MicroCFTA.FlatUnionFind.StoredBelow
+#print MicroCFTA.EnumerationFlatState.Bounded
+#print MicroCFTA.EnumerationFlatCached.Cached
+#print MicroCFTA.EnumerationFlatCached.Related
+#print MicroCFTA.EnumerationFlatCached.frame
+#print MicroCFTA.EnumerationFlatCached.initial
+#print MicroCFTA.EnumerationFlatNativeIndex.count
+#print MicroCFTA.EnumerationFlatNativeIndex.write
+#print MicroCFTA.EnumerationFlatNativeIndex.WritesRelated
+#print MicroCFTA.EnumerationFlatNativeIndex.Correct

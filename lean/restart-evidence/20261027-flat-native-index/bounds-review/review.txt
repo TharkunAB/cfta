@@ -1,0 +1,13 @@
+[2026-10-27 04:02 CET] CLEAR. Reviewed both final bounds files in full (154 lines). No semantic blocker found. No builds, compiler runs, Git commands or repository edits by reviewer.
+
+FlatUnionFindBounds.lean SHA256: 98c74ece7c31cd1119d00fe3e8225c4c9b1ef4d2a2c94908e42add1863c739df.
+EnumerationFlatBounds.lean SHA256: 2266603557e86b91cec1e87fda105dc78f27697bc640d8dca0dfb729fbcd8565.
+Both match their retained strict-bounds-2/strict-core-bounds-2 inputs. Both reports record exit 0 and empty raw logs. source-pins.json binds six literal whole sources, 12 exact inclusive cuts and both strict evidence groups; SHA256 95b40e78918e048d9f86f8f3eaf156232556632f35dcc0a7ea29250030cfc951.
+
+StoredBelow quantifies explicit map entries only. It needs no validity premise for monotonicity, freshness or bounded initialization. root_lt correctly also requires Valid and uv<bound. The Parent case obtains a stored target Root from parent closure. Missing roots return uv, so the input bound is necessary. No theorem claims that every implicit singleton root lies below the allocation counter.
+
+member_lt uses exact class membership, with an explicit bounded fixed representative. Its absent-member branch identifies that member with the representative. merge_storedBelow follows the public lookup equation and writes only the bounded winner or bounded loser members. This raw helper claims key bounds only: arbitrary winnerMembers payload need not be bounded or valid. link and ordinary union obtain the actual member bounds through Valid; union handles both weighted choices and the unchanged-class branch.
+
+The state endpoints are exact. allocate_bounded displays the literal singleton returned by actual allocate, including appended values and the ancestry update. It retains the forest, advances the counter, preserves Bounded and proves the returned counter had no forest entry. It does not assert value-array alignment or Safe. unionVariables_bounded uses the actual singleton endpoint, requires both requested variables below the current counter, and derives both output validity and Bounded.
+
+related_not_bounded is a finite checked counterexample. Both forests initialize [0,7], both counters are 1, and all non-forest fields are identical. The existing initial validity/representation theorems prove Related. The explicit Root at 7 contradicts 7<1. This separates the predicates; it does not claim that this state is reachable from the normal initialized allocation pipeline or identify a native defect. No cached/native-index, Safe or whole-driver claim is inferred.

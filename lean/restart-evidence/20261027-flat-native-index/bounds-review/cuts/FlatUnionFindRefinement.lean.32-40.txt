@@ -1,0 +1,9 @@
+theorem initial_represents (variables : List Nat) :
+    Represents (withInitialValues variables) (UnionFind.withInitialValues variables) := by
+  intro uv
+  have direct : root (withInitialValues variables) uv = uv := by
+    simp [root, withInitialValues]
+  have size : (entryOf (withInitialValues variables) uv).1 = 1 := by
+    by_cases supplied : uv ∈ variables <;> simp [entryOf, withInitialValues, supplied]
+  rw [direct, size]
+  exact .root (UnionFind.read_initial variables uv)

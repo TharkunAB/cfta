@@ -1,0 +1,22 @@
+/-- A fixed class map gives exact replacement counts at a stored raw slot. -/
+theorem replace_correct (roots : Nat → Nat) (values : List (UVarValue Symbol)) (index : Nat)
+    (old new : UVarValue Symbol) (stored : values[index]? = some old)
+    (waiting : EnumerationWaitingIndex.Waiting) (correct : Correct roots values waiting) :
+    Correct roots (values.set index new) (replace roots old new waiting) := by
+  unfold Correct at *
+  rw [replace_eq, List.map_set]
+  exact EnumerationWaitingIndex.replace_correct (values.map (canonicalValue roots)) index
+    (canonicalValue roots old) (canonicalValue roots new) (by simp [stored]) waiting correct
+
+/-- A fresh slot with no suspended references keeps every class count. -/
+theorem allocate_correct (roots : Nat → Nat) (values : List (UVarValue Symbol)) (node : Option Nat)
+    (waiting : EnumerationWaitingIndex.Waiting) (correct : Correct roots values waiting) :
+    Correct roots (values ++ [.unenumerated node []]) waiting := by
+  unfold Correct at *
+  simpa [canonicalValue] using
+    EnumerationWaitingIndex.allocate_correct (values.map (canonicalValue roots)) node waiting correct
+
+/-- The initial root has no waiting reference under any class map. -/
+theorem initial_correct (roots : Nat → Nat) (root : Nat) :
+    Correct (Symbol := Symbol) roots [.unenumerated (some root) []] (fun _ => none) := by
+  simpa [Correct, canonicalValue] using EnumerationWaitingIndex.initial_correct (Symbol := Symbol) root

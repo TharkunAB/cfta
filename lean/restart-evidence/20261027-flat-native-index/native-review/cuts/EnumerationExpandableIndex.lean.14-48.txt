@@ -1,0 +1,35 @@
+/-- The source state adds an expandable set and a sparse waiting-count map. -/
+structure Cached (Symbol Guard : Type) where
+  core : State Symbol Guard
+  expandable : Nat → Bool
+  waiting : EnumerationWaitingIndex.Waiting
+
+/-- Both cached indexes agree with the complete value-slot scan. -/
+structure Correct (graph : Graph Symbol Guard) (state : Cached Symbol Guard) : Prop where
+  aligned : state.core.counter = state.core.values.length
+  expandable : ∀ uv, state.expandable uv = ((state.core.values[uv]?).map (candidate graph)).getD false
+  waiting : EnumerationWaitingIndex.Correct state.core.values state.waiting
+
+/-- Initialize the same root slot and its exact expandable flag. -/
+def initial (graph : Graph Symbol Guard) (root : Nat) : Cached Symbol Guard :=
+  ⟨EnumerationState.initial root,
+    fun uv => if uv = 0 then candidate graph (.unenumerated (some root) []) else false,
+    fun _ => none⟩
+
+/-- Allocation adds the fresh slot only when the source predicate accepts it. -/
+def allocate (graph : Graph Symbol Guard) (node : Option Nat) (state : Cached Symbol Guard) : Cached Symbol Guard :=
+  ⟨allocated node state.core,
+    fun uv => if candidate graph (.unenumerated node []) && uv == state.core.counter then true else state.expandable uv,
+    state.waiting⟩
+
+/-- One raw-slot write removes old suspended counts before adding the new counts. -/
+def write (graph : Graph Symbol Guard) (uv : Nat) (value : UVarValue Symbol) (state : Cached Symbol Guard) :
+    Option (Cached Symbol Guard) := do
+  let old ← state.core.values[uv]?
+  pure ⟨{state.core with values := state.core.values.set uv value},
+    fun other => if other = uv then candidate graph value else state.expandable other,
+    EnumerationWaitingIndex.replace old value state.waiting⟩
+
+/-- Other source effects update the original state without changing either index. -/
+def frame (core : State Symbol Guard) (state : Cached Symbol Guard) : Cached Symbol Guard :=
+  {state with core := core}

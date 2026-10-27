@@ -1,0 +1,11 @@
+def link (forest : Forest) (loser winner : Nat) : Forest :=
+  merge forest winner (entryOf forest winner).1 (entryOf forest loser).1
+    (entryOf forest loser).2 (entryOf forest winner).2
+
+private theorem link_lookup (forest : Forest) (loser winner uv : Nat) :
+    link forest loser winner uv =
+      if uv = winner then
+        some (.root ((entryOf forest winner).1 + (entryOf forest loser).1)
+          ((entryOf forest loser).2 ++ (entryOf forest winner).2))
+      else if uv ∈ (entryOf forest loser).2 then some (.parent winner) else forest uv := by
+  exact merge_lookup ..

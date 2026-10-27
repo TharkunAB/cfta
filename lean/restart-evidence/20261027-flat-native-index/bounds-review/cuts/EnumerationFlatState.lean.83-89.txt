@@ -1,0 +1,7 @@
+def representative (uv : Nat) : Action Symbol Guard Nat := fun before =>
+  let found := FlatUnionFind.find before.representatives uv
+  [.ok (found.1, {before with representatives := found.2})]
+
+/-- Merge the requested classes before any raw-slot assimilation. -/
+def unionVariables (left right : Nat) : Action Symbol Guard Unit := fun before =>
+  [.ok ((), {before with representatives := FlatUnionFind.union before.representatives left right})]

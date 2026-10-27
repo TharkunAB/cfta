@@ -1,0 +1,57 @@
+[2026-10-27 04:02 CET] CLEAR — flat cached native-index source review.
+
+Reviewed the complete current EnumerationFlatCached.lean (54 lines, SHA256
+16721b8cde9584b1aa0c782e0c6fbc6a5eb64d4ea7a3228f8568c75822c50e1e)
+and EnumerationFlatNativeIndex.lean (160 lines, SHA256
+b98136a435f8b26495cb5ad5b81e8e11f41f7fbedf151f5a562215deb278325c).
+The retained strict-cached-3 and strict-native-index-3 snapshots equal these
+files. Both reports record exit 0 with an empty raw log. The installed public
+output confirms the quantified signatures and complete definitions at lines
+62–138 and 334–423. This review did not execute Lean or any build.
+
+Cached.Related retains the entire core relation and literal equality of both
+index functions (Cached:22–30). The relation does not imply index correctness.
+Its initial operation uses the old graph scan predicate, and initial_related
+states only correspondence to that same graph-based initialization (42–52).
+It does not identify a graph scan with the native heap classifier.
+
+NativeIndex.count_stable (30–36) obtains one sufficient old root-read bound for
+every change and input waiting map. write_stable (58–85) synchronizes the lost
+and gained bounds with their sum; each old count runs at that SAME summed bound
+plus extra fuel. The gained count starts from the actual lost-count result.
+The theorem retains arbitrary supplied gained/lost lists and every extra fuel.
+It needs no future successful native execution.
+
+The actual write (39–47) sets the raw target, classifies the same supplied value
+at the same supplied native heap, removes lost occurrences, then adds gained
+occurrences at current flat roots. Duplicate suspended references remain
+separate occurrences. A missing decoded handle yields None; WritesRelated and
+write_stable retain this failure instead of inserting a false flag (49–85).
+This matches the earlier native write and the defined Haskell write path:
+SourcePruningEnumerationNativeIndex:16–51; Enumeration.hs:430–474. The sparse
+count fold deletes zero entries and retains all other integer results.
+
+Correct and its transport theorem (87–119) state native decoded flags, slot
+alignment and canonical representative counts. They do not state Safe, forest
+bounds, word bounds or native capacity. write_correct (121–143) requires a
+stored target and FULL replacement deltas: references value and references old.
+The operation alone does not check that target is stored. Its correspondence
+claim is to the earlier modeled native write, not unrestricted IntMap insertion.
+
+The source assimilation at Enumeration.hs:492–510 uses TWO empty-delta writes.
+write_correct does not establish a canonical invariant after either such
+intermediate write. The existing completed-assimilation boundary is
+EnumerationCanonicalWaiting.assimilation_correct:243–274 and the corresponding
+EnumerationPureSelection:102–132 result. Terminal union/count transfers are a
+separate prefix (Enumeration.hs:732–744). No new assimilation theorem is claimed.
+
+frame_related only preserves correspondence. Native frame_correct (145–158)
+additionally requires unchanged values, counter AND the actual flat root
+function, at the same supplied heap. It therefore does not retain canonical
+counts across an arbitrary union by using the older raw-count frame theorem.
+No source mutation, native query repetition, whole-enumerator equivalence or
+end-to-end language result follows from these two modules.
+
+source-pins.json records exact whole-file identities and literal line cuts.
+The sources/, cuts/ and evidence/ copies retain the reviewed inputs separately
+from Root's snapshots. No repository file or Root evidence file was changed.

@@ -1,0 +1,27 @@
+def unionRoots (forest : Forest) (left right : Nat) : Nat × Forest :=
+  if (entryOf forest left).1 < (entryOf forest right).1 then
+    (right, link forest left right)
+  else (left, link forest right left)
+
+/-- Merge two variable classes after their direct root reads. -/
+def union (forest : Forest) (left right : Nat) : Forest :=
+  let leftRoot := root forest left
+  let rightRoot := root forest right
+  if leftRoot = rightRoot then forest else (unionRoots forest leftRoot rightRoot).2
+
+/-- Weighted union of distinct roots preserves the representation invariant. -/
+theorem unionRoots_valid (valid : Valid forest)
+    (leftRoot : root forest left = left) (rightRoot : root forest right = right)
+    (different : left ≠ right) : Valid (unionRoots forest left right).2 := by
+  unfold unionRoots
+  split
+  · exact link_valid valid leftRoot rightRoot different
+  · exact link_valid valid rightRoot leftRoot (Ne.symm different)
+
+/-- Union preserves the representation invariant for every pair of variables. -/
+theorem union_valid (valid : Valid forest) (left right : Nat) :
+    Valid (union forest left right) := by
+  dsimp only [union]
+  split
+  · exact valid
+  · exact unionRoots_valid valid (root_root valid left) (root_root valid right) ‹_›
