@@ -742,11 +742,16 @@ the e-node, its symbol, the e-classes of its children, and the costs of its
 children. Thus a cost can use the e-graph, for example the sort of an
 e-class ('sortOf') or the data of an analysis ('analyse'). The cost must not
 decrease when the cost of a child grows, and it must be greater than the
-cost of each child, as @1 + sum@ is. Then 'extract' finds the cheapest term
-of each e-class that has a term. The term satisfies
-the constraint of each of its e-nodes. The e-graph has no check that the
-constraints leave a term, so 'extract' does not return when the constraints
-reject each term of an infinite language.
+cost of each child, as @1 + sum@ is. A term that 'extract' gives is the
+cheapest term of the e-class, and it satisfies the constraint of each of its
+e-nodes. 'extract' finds the cheapest term of each e-class that has a term
+when each cost bound admits only finitely many partial terms, as for natural
+numbers and @1 + sum@. A cost type without this condition, such as a
+lexicographic pair, can put an infinite number of cheaper partial terms whose
+terms fail their constraints before a term that satisfies them, and then
+'extract' does not return. The e-graph has no check that the constraints
+leave a term, so 'extract' also does not return when the constraints reject
+each term of an infinite language.
 -}
 extract :: (Ord c, Eq f) => (ClassId -> f -> [ClassId] -> [c] -> c) -> EGraph s f -> ClassId -> Maybe (c, Term f)
 extract cost g c = listToMaybe (termsByCost cost g c)
@@ -761,7 +766,8 @@ as for 'extract'. The automaton of an e-graph is deterministic, so a term
 comes once when the e-graph has no sorts; e-nodes that differ only in the
 sorts of their children give a term once for each. An e-node with a
 constraint gives only the terms that satisfy the constraint, and its plain
-form in the same e-class gives all of them.
+form in the same e-class gives all of them. The search reaches the next term
+under the condition of 'extract'.
 -}
 termsByCost :: (Ord c, Eq f) => (ClassId -> f -> [ClassId] -> [c] -> c) -> EGraph s f -> ClassId -> [(c, Term f)]
 termsByCost cost g c =

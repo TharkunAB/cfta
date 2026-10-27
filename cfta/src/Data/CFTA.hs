@@ -458,6 +458,12 @@ child, so that each state has a least cost. Then the costs of the list never
 decrease, also for a cyclic automaton, whose list is infinite. The terms of
 one cost come in a fixed order. A transition with a constraint gives only the
 terms that satisfy its path equalities. A term with two runs comes twice.
+
+A search reaches each term when each cost bound admits only finitely many
+partial terms, as for natural numbers and @1 + sum@. A cost type without
+this condition, such as a lexicographic pair, can put an infinite number of
+cheaper partial terms whose terms fail their constraints before a term that
+satisfies them, and then the search does not reach that term.
 -}
 termsByCost :: (Ord state, Eq symbol, Ord c) => (symbol -> [c] -> c) -> PlainFTA state symbol -> [(c, Term symbol)]
 termsByCost cost automaton =

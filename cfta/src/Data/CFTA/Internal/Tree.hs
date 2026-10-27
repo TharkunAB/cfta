@@ -307,6 +307,12 @@ the list never decrease, also below a cycle, whose list is infinite. The
 check decides each complete term at the alternative that built it. A term
 with two runs comes twice.
 
+A search reaches each term when each cost bound admits only finitely many
+partial terms, as for natural numbers and @1 + sum@. A cost type without
+this condition, such as a lexicographic pair, can put an infinite number of
+cheaper partial terms whose terms fail their constraints before a term that
+satisfies them, and then the search does not reach that term.
+
 This is a best-first search over partial terms, as Knuth's generalization of
 Dijkstra's algorithm: the key of a partial term is its cost with the least
 cost of the key of each hole, so a step never lowers the key, and a complete
