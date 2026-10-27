@@ -1,0 +1,60 @@
+import MicroCFTA.SourcePruningEnumerationCachedPrepareCanonical
+
+/-!
+# The exact shallow recursive bucket boundary
+
+A canonical trie can be nonterminal and nonempty.
+The successful shallow recursive branch allocates an empty bucket.
+This theorem does not certify a concrete rendered recursive term.
+-/
+namespace MicroCFTA.SourcePruningEnumerationRetentionBoundary
+open EnumerationState EnumerationCorrectness EnumerationSemantics EnumerationValidity
+open SourcePruningEnumerationNodes SourcePruningEnumerationObservation
+local notation "Symbol" => SourcePruningTemplates.Symbol
+
+/-- A valid nonterminal bucket need not be empty. -/
+def bucket : List Suspended := [⟨.branch [(0, .terminal)], 1⟩]
+
+/-- Trie validity does not provide the structural retention gate for a nonordinary child. -/
+theorem valid_bucket_not_retained {NativeGuard : Type}
+    (value : InternedConstructorTemplates.Value Symbol NativeGuard)
+    (nonordinary : match value with | .node _ _ _ _ => False | _ => True) :
+    ValidSuspended bucket ∧ bucket.any (fun sc => EqualityTrie.isTerminal sc.trie) = false ∧
+      ¬ ((match value with | .node _ _ _ _ => True | _ => False) ∨
+        bucket.any (fun sc => EqualityTrie.isTerminal sc.trie) = true ∨ bucket = []) := by
+  cases value <;> simp_all [bucket, ValidSuspended, EqualityTrie.Valid, EqualityTrie.isTerminal]
+
+/-- The actual recursive preparation succeeds with a canonical empty fresh bucket. -/
+theorem recursive_preparation {EnumGuard NativeGuard : Type}
+    (heap : InternedConstructorTemplates.State Symbol NativeGuard)
+    (before : EnumerationState.State Symbol EnumGuard) (scs : List Suspended)
+    (value : InternedConstructorTemplates.Value Symbol NativeGuard)
+    (boundary : match value with | .mu _ _ _ _ | .union _ _ _ _ => True | _ => False)
+    (coherent : InternedRecordCoherence.Coherent heap)
+    (available : InternedProbeProvenance.Available heap value) (closed : value.free = [])
+    (realized : PendingRealized heap before) (aligned : before.counter = before.values.length)
+    (nonterminal : scs.any (fun sc => EqualityTrie.isTerminal sc.trie) = false)
+    (canonical : Canonical before) :
+    ∃ handle (action : EnumerateM Symbol EnumGuard (Fragments.Fragment Symbol)) after,
+      encodeNode value = some handle ∧ lookupNode heap handle = some value ∧
+      SourcePruningEnumerationShallowChild.prepareChild scs value = some action ∧
+      Success action before (.hole before.counter) after ∧
+      after = allocated (some handle) before ∧
+      after.values[before.counter]? = some (.unenumerated (some handle) []) ∧ Canonical after := by
+  obtain ⟨handle, encoded, decoded, _empty, completed⟩ :=
+    SourcePruningEnumerationShallowChild.prepareChild_complete heap before scs value
+      coherent available closed realized aligned nonterminal
+  have nonempty : value ≠ .empty := by
+    intro same
+    subst value
+    exact boundary
+  obtain ⟨action, after, prepared, success, afterSame, stored, _counter, _aligned, _realized⟩ :=
+    completed nonempty
+  have allocation : after = allocated (some handle) before := by
+    cases value <;> first | exact False.elim boundary | exact afterSame
+  refine ⟨handle, action, after, encoded, decoded, prepared, success, allocation, ?_, ?_⟩
+  · cases value <;> first | exact False.elim boundary | exact stored
+  · rw [allocation]
+    exact allocation_canonical (some handle) before canonical
+
+end MicroCFTA.SourcePruningEnumerationRetentionBoundary

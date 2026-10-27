@@ -1,0 +1,20 @@
+    (before after : State Symbol Guard) (result : Bool × Metadata Typing)
+    (success : Success (recordTypes graph templates fuel metadata uv input) before result after) :
+    ExceptT.run (recordTypes graph templates fuel metadata uv input before) = [.ok (result, after)] := by
+  cases templates with
+  | nil =>
+      rw [recordTypes_empty] at success ⊢
+      exact pure_exact _ result before after success
+  | cons first rest =>
+      change Success (SourcePruningOracle.oracle graph (first :: rest) fuel metadata.pending uv input >>= fun observed =>
+        pure (observed.1, {metadata with pending := observed.2, types := updatedTypes metadata uv input}))
+        before result after at success
+      change ExceptT.run ((SourcePruningOracle.oracle graph (first :: rest) fuel metadata.pending uv input >>= fun observed =>
+        pure (observed.1, {metadata with pending := observed.2, types := updatedTypes metadata uv input})) before) =
+          [.ok (result, after)]
+      obtain ⟨observed, middle, reading, finished⟩ := (success_bind _ _ _ _ _).mp success
+      rw [bind_single _ _ _ _ _ (oracle_exact graph (first :: rest) fuel metadata.pending uv input
+        before middle observed reading)]
+      exact pure_exact _ result middle after finished
+
+end MicroCFTA.SourcePruningCallbackExact

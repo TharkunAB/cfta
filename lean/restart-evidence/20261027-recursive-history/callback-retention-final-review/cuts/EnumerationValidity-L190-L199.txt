@@ -1,0 +1,10 @@
+/-- A fresh slot has no suspended constraints. -/
+theorem allocation_canonical (node : Option Nat) (state : State Symbol Guard) (valid : Canonical state) :
+    Canonical (allocated node state) := by
+  intro value member
+  rcases List.mem_append.mp member with old | fresh
+  · exact valid value old
+  · have same : value = .unenumerated node [] := by simpa using fresh
+    simp [same, references, ValidSuspended]
+
+/-- Fresh equality-class allocation preserves canonical stored constraints. -/

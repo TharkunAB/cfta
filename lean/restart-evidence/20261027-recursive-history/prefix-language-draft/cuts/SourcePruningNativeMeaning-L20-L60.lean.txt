@@ -1,0 +1,41 @@
+theorem narrowAt_edges [DecidableEq (EdgeKey Symbol Guard)]
+    (holds : Guard → Term Symbol → Bool) (ambient : Env Symbol)
+    (fits : Key → Symbol → Bool) (admits : Key → Value Symbol Guard → Bool)
+    (key : Key) (fuel : Nat) (value : Value Symbol Guard)
+    (before : State Symbol Guard) (result : Value Symbol Guard)
+    (after : State Symbol Guard)
+    (ready : SourceEqualityRequiredCache.Ready before)
+    (available : Available before value) (closed : value.free = [])
+    (actual : narrowAt fits admits fuel key value before = .done result after) :
+    ∃ rows middle,
+      MergedFreshOrdinaryExposure.nodeEdges fuel value before = .done rows middle ∧
+      run (makeNode (rows.filter (keeps fits admits key))) middle = (result, after) ∧
+      ∀ term, meaning holds ambient result term ↔
+        ∃ edge ∈ rows, keeps fits admits key edge = true ∧ edgeMeaning holds ambient edge term := by
+  unfold narrowAt at actual
+  cases exposed : MergedFreshOrdinaryExposure.nodeEdges fuel value before with
+  | unresolved | pending | exhausted =>
+      simp only [exposed] at actual
+      cases actual
+  | done rows middle =>
+      have built : run (makeNode (rows.filter (keeps fits admits key))) middle = (result, after) := by
+        exact Prod.ext
+          (MergedSourceComparison.Result.done.inj (by simpa only [exposed] using actual)).1
+          (MergedSourceComparison.Result.done.inj (by simpa only [exposed] using actual)).2
+      have checked := MergedFreshOrdinaryColdEffects.nodeEdges_verified fuel value before
+        ready.semantic ready.covered available closed
+      have semantic : SourceRecursiveIntersectionSemanticHeap.SemanticHeap middle := by
+        simpa only [exposed, MergedSourceExposure.Result.state] using checked.semantic
+      have resident : InternedNestedProvenance.Edges middle (rows.filter (keeps fits admits key)) :=
+        fun edge member => checked.edges rows middle exposed edge (List.mem_filter.mp member).1
+      refine ⟨rows, middle, rfl, built, ?_⟩
+      intro term
+      have constructed : meaning holds ambient result term ↔
+          ∃ edge ∈ rows.filter (keeps fits admits key),
+            MergedColdInterpretation.EdgeMeaning (meaning holds ambient) holds edge term := by
+        simpa only [built] using makeNode_exact middle semantic.1.normal.facts
+          holds ambient (rows.filter (keeps fits admits key)) resident term
+      constructor
+      · intro accepted
+        obtain ⟨edge, member, accepted⟩ := constructed.mp accepted
+        obtain ⟨member, kept⟩ := List.mem_filter.mp member

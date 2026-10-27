@@ -1,0 +1,13 @@
+/-- The structural terminal test used to discharge suspended constraints. -/
+def isTerminal : Trie → Bool
+  | .terminal => true
+  | _ => false
+
+/-- Child maps have distinct indices, no empty values, and valid descendants. -/
+def Valid : Trie → Prop
+  | .empty => True
+  | .terminal => True
+  | .branch children => children ≠ [] ∧ (children.map Prod.fst).Nodup ∧
+      ∀ index child, (index, child) ∈ children → child ≠ .empty ∧ Valid child
+termination_by trie => sizeOf trie
+decreasing_by

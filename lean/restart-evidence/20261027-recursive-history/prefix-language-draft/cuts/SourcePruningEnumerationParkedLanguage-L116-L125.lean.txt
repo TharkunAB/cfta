@@ -1,0 +1,10 @@
+theorem checkRepeated_false_satisfies
+    (heap : InternedConstructorTemplates.State Symbol NativeGuard)
+    (language : NodeLanguage Symbol) (meaning : EnumGuard → Term Symbol → Prop)
+    (assignment : Nat → Term Symbol) (fuel uv handle : Nat) (scs : List Suspended)
+    (before after : State Symbol EnumGuard) (total : UnionFind.Total before.representatives)
+    (observed : Success (checkRepeated heap fuel uv handle scs) before false after) :
+    Satisfies language meaning assignment after ↔ Satisfies language meaning assignment before :=
+  SourcePruningEnumerationNativeLanguage.satisfies_frame language meaning assignment before after
+    (SourcePruningEnumerationRecursionOrder.checkRepeated_false_frame heap fuel uv handle scs
+      before after total observed)

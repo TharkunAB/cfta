@@ -1,0 +1,41 @@
+theorem packet_prefix_complete_semantics
+    (caller : Caller width) (memos : Memos) (before : OldCached) (flat : FlatCached)
+    (related : EnumerationFlatCached.Related flat before)
+    (packet : Packet formulas solver inventory caller memos metadata before) :
+    ∃ bound,
+      ((∀ extra selected,
+        SourcePruningEnumerationRestart.decision stop order metadata before = some (.expand selected) →
+        SourcePruningEnumerationSelectedStep.PrefixValid holeKey fits admits graph templates checkEmpty edgesOf
+          stop order metadata formulas solver inventory (bound + extra) selected caller before memos
+          (SourcePruningEnumerationSelectedStep.runPrefix holeKey fits admits graph templates stop order metadata
+            (bound + extra) (bound + extra) (bound + extra) (bound + extra) (bound + extra) (bound + extra)
+            selected caller before memos.query)) ∧
+      ∀ extra selected,
+        SourceFlatPruningRestart.decision stop order metadata flat = some (.expand selected) →
+        ResultRelated
+          (run holeKey fits admits graph templates stop order metadata
+            (bound + extra) (bound + extra) selected caller flat memos.query)
+          (SourcePruningEnumerationSelectedStep.runPrefix holeKey fits admits graph templates stop order metadata
+            (bound + extra) (bound + extra) (bound + extra) (bound + extra) (bound + extra) (bound + extra)
+            selected caller before memos.query) ∧
+        match run holeKey fits admits graph templates stop order metadata
+            (bound + extra) (bound + extra) selected caller flat memos.query with
+        | .parked _ (some after) _ =>
+            ∃ oldAfter : OldCached, EnumerationFlatCached.Related after oldAfter ∧
+              Packet formulas solver inventory caller memos metadata oldAfter ∧
+              EnumerationFlatNativeIndex.Correct caller.checked.native.machine.heap after
+        | .narrowed _ _ reached queries _ candidate _ =>
+            ∃ final : Memos, Post formulas solver inventory caller reached final ∧
+              final.query = queries ∧
+              match candidate with
+              | none => True
+              | some after =>
+                  ∃ oldAfter : OldCached, EnumerationFlatCached.Related after oldAfter ∧
+                    Packet formulas solver inventory reached final metadata oldAfter ∧
+                    EnumerationFlatNativeIndex.Correct reached.checked.native.machine.heap after
+        | _ => True) ∧
+      ∀ extra selected,
+        SourceFlatPruningRestart.decision stop order metadata flat = some (.expand selected) →
+        PrefixMeaning formulas solver (bound + extra) selected caller before flat
+          (run holeKey fits admits graph templates stop order metadata
+            (bound + extra) (bound + extra) selected caller flat memos.query) := by

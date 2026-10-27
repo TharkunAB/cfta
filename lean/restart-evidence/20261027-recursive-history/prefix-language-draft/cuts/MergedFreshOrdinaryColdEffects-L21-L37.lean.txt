@@ -1,0 +1,17 @@
+open MergedFreshOrdinaryExposure
+
+/-- The exact reader outcome keeps complete caches and excludes source failures. -/
+structure Verified (before : State Symbol Guard) (result : Result Symbol Guard) : Prop where
+  semantic : SemanticHeap result.state
+  covered : Covered [] result.state
+  growth : Grows before result.state
+  history : Extends before.nodes.issued result.state.nodes.issued
+  edges : ∀ values after, result = .done values after → Edges after values
+  closed : ∀ values after, result = .done values after → ClosedEdges values
+  outcome : match result with
+    | .done .. | .exhausted .. => True
+    | .pending .. | .unresolved .. => False
+
+/-- A finished edge list retains its exact cache and closed children. -/
+theorem done_verified (state : State Symbol Guard) (semantic : SemanticHeap state)
+    (covered : Covered [] state) (edges : List (EdgeValue Symbol Guard))

@@ -1,0 +1,82 @@
+import MicroCFTA.SourcePruningEnumerationRecursivePrefix
+import MicroCFTA.SourcePruningEnumerationPrefixLanguage
+
+/-!
+# Actual selected-prefix meaning from the original recursive packet
+
+The original producer supplies the complete prefix validity receipt.
+Its actual run adds native backward assignment meaning.
+Repeated parking retains the exact removed constraint obligation.
+-/
+namespace MicroCFTA.SourcePruningEnumerationRecursive
+open EnumerationState EnumerationSchedule InternedConstructorTemplates
+open SourceCurrentAllocatedNativeInventoryState (Inventory)
+local notation "Symbol" => SourcePruningTemplates.Symbol
+local notation "Constraint" => SourceSymbolicIndex.Constraint FullSyntax.Formula
+local notation "Node" => Value Symbol Constraint
+local notation "Caller" => SourceCurrentAllocatedPartialState.State
+local notation "Memos" => EndpointMemoGateTrace.Memos
+local notation "Metadata" => SourcePruningRecordTypes.Metadata
+local notation "Cached" => EnumerationExpandableIndex.Cached Symbol Constraint
+variable {Typing Key : Type} {width : Nat}
+variable [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Constraint)] [DecidableEq Node]
+
+/-- The actual restart choice derives the same cache's safe selected variable. -/
+theorem packet_selected_ready
+    (formulas : SourceGuards.Formulas FullSyntax.Formula)
+    (solver : SourceGuards.Entailment FullSyntax.Formula) (inventory : Inventory)
+    (stop : Option (Metadata Typing → Nat → Bool))
+    (order : Metadata Typing → List Nat → Option Nat) (metadata : Metadata Typing)
+    (caller : Caller width) (memos : Memos) (before : Cached) (uv : Nat)
+    (packet : Packet formulas solver inventory caller memos metadata before)
+    (chosen : SourcePruningEnumerationRestart.decision stop order metadata before = some (.expand uv)) :
+    EnumerationDriver.Ready uv before.core := by
+  have selection : EnumerationPureSelection.next (order metadata) before = .expand uv := by
+    cases stop with
+    | none => exact Option.some.inj chosen
+    | some rule =>
+        simp only [SourcePruningEnumerationRestart.decision] at chosen
+        split at chosen
+        · cases chosen
+        · exact Option.some.inj chosen
+  obtain ⟨roots, paths, _storage, _realized, counts, flags⟩ := packet.valid
+  exact SourcePruningEnumerationSelection.ready caller.checked.native.machine.heap before
+    (order metadata) uv packet.safe roots paths counts flags selection
+
+/-- The complete original prefix producer also certifies its actual native assignment meaning. -/
+theorem packet_prefix_complete_semantics
+    (holeKey : Typing → Nat → Key) (fits : Key → Symbol → Bool) (admits : Key → Node → Bool)
+    (graph : Graph Symbol Constraint) (templates : List (Template.Pattern Symbol))
+    (checkEmpty : Bool) (edgesOf : Node → List (EdgeValue Symbol Constraint))
+    (stop : Option (Metadata Typing → Nat → Bool))
+    (order : Metadata Typing → List Nat → Option Nat) (metadata : Metadata Typing)
+    (formulas : SourceGuards.Formulas FullSyntax.Formula)
+    (solver : SourceGuards.Entailment FullSyntax.Formula) (inventory : Inventory)
+    (caller : Caller width) (memos : Memos) (before : Cached)
+    (packet : Packet formulas solver inventory caller memos metadata before) :
+    ∃ bound,
+      (∀ extra selected,
+        SourcePruningEnumerationRestart.decision stop order metadata before = some (.expand selected) →
+        SourcePruningEnumerationSelectedStep.PrefixValid holeKey fits admits graph templates checkEmpty edgesOf
+          stop order metadata formulas solver inventory (bound + extra) selected caller before memos
+          (SourcePruningEnumerationSelectedStep.runPrefix holeKey fits admits graph templates stop order metadata
+            (bound + extra) (bound + extra) (bound + extra) (bound + extra) (bound + extra) (bound + extra)
+            selected caller before memos.query)) ∧
+      ∀ extra selected,
+        SourcePruningEnumerationRestart.decision stop order metadata before = some (.expand selected) →
+        SourcePruningEnumerationSelectedStep.PrefixMeaning formulas solver (bound + extra) selected caller before
+          (SourcePruningEnumerationSelectedStep.runPrefix holeKey fits admits graph templates stop order metadata
+            (bound + extra) (bound + extra) (bound + extra) (bound + extra) (bound + extra) (bound + extra)
+            selected caller before memos.query) := by
+  obtain ⟨bound, completed⟩ := packet_prefix_complete holeKey fits admits graph templates checkEmpty edgesOf
+    stop order metadata formulas solver inventory caller memos before packet
+  refine ⟨bound, completed, ?_⟩
+  intro extra selected chosen
+  obtain ⟨_roots, _paths, _storage, realized, _counts, _flags⟩ := packet.valid
+  exact SourcePruningEnumerationSelectedStep.prefix_semantics holeKey fits admits graph templates checkEmpty edgesOf
+    stop order metadata formulas solver inventory (bound + extra) selected caller before memos
+    packet.context
+    (packet_selected_ready formulas solver inventory stop order metadata caller memos before selected packet chosen)
+    realized (completed extra selected chosen)
+
+end MicroCFTA.SourcePruningEnumerationRecursive

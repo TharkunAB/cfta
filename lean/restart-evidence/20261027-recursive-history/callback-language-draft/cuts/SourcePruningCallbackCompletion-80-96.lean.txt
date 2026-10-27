@@ -1,0 +1,17 @@
+/-- Fragment callback completion also supplies the pending-ID bounds for its next call. -/
+theorem recordTypes_inl_complete_bounded (graph : Graph Symbol Guard)
+    (templates : List (Template.Pattern Symbol)) (level : Nat → Nat) (frontier : Nat)
+    (metadata : Metadata Typing) (uv : Nat) (fragment : Fragment Symbol)
+    (before : State Symbol Guard) (safe : Safe before)
+    (stratified : Stratified before level frontier)
+    (allocated : FragmentBound before.counter fragment)
+    (bounded : ∀ group ∈ metadata.pending, PendingBound before.counter group) :
+    ∃ fuel result after,
+      Success (recordTypes graph templates fuel metadata uv (.inl fragment)) before result after ∧
+      RenderStable before after ∧ Frame before after ∧ Stratified after level frontier ∧
+      result.2.types = updatedTypes metadata uv (.inl fragment) ∧
+      result.2.openHoles = metadata.openHoles ∧ result.2.typing = metadata.typing ∧
+      ∀ group ∈ result.2.pending, PendingBound after.counter group := by
+  obtain ⟨fuel, result, after, success, stable, frame, ordered, types, openHoles, typing⟩ :=
+    recordTypes_inl_complete graph templates level frontier metadata uv fragment before safe stratified allocated bounded
+  exact ⟨fuel, result, after, success, stable, frame, ordered, types, openHoles, typing,

@@ -1,5 +1,32 @@
 # Public API and source correspondence
 
+## Actual recursive prefixes now carry native and flat assignment meaning
+
+Source checkpoint: a5973ba4a9ee69f8c62a1a5c853aca83e9c0eaed.
+Seven new modules connect the original recursive prefix producers to their
+actual assignment semantics. A retained narrowed cache implies satisfaction
+of the original cache at its original native heap. A parked prefix has an exact
+iff: original satisfaction equals parked satisfaction plus every cleared
+suspended constraint. The original stored bucket and actual read are retained.
+Both native and flat producers keep their ENTIRE earlier runtime/cache packet.
+No desired assignment or successful future recursion is an admission premise.
+
+The full fragment callback packet now adds exact assignment equivalence at its
+own returned frame. Actual recursion checks and prepared nonempty writes retain
+Canonical tries. This is a storage invariant. It does not recover lost Holds.
+A checked boundary example shows valid nonterminal buckets can be nonempty,
+while actual shallow Mu/Union preparation stores an empty canonical bucket.
+Haskell documents this opaque truncation. No new Haskell defect or fix is claimed.
+
+These are actual prefix and callback laws. Whole recursive-output acceptance,
+parked/truncated constraint recovery and enumeration coverage remain open.
+H6 and the captured-rendering theorem keep their existing scope and conditions.
+Audit passes 4094 jobs and 79176 theorem dependency checks.
+All seven modules and Audit pass strict checking. No Haskell source changed.
+FINDINGS retains every earlier Haskell repair handoff and extraction limit.
+Details: `lean/notes-current-recursive-history.md`. The full goal stays ACTIVE.
+
+
 ## Captured rendering soundness now uses original finite resources
 
 Source checkpoint: c4c12f9f7acef2bb76fd01c3f1920b64b23bbbd9.

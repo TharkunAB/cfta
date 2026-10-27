@@ -1,0 +1,30 @@
+    (nonterminal : scs.any (fun sc => EqualityTrie.isTerminal sc.trie) = false) :
+    ∃ node : Nat, encodeNode value = some node ∧ lookupNode heap node = some value ∧
+      (value = .empty →
+        prepareChild scs value = some (reject : EnumerateM Symbol EnumGuard (Fragments.Fragment Symbol)) ∧
+        ¬ ∃ (fragment : Fragments.Fragment Symbol) (after : EnumerationState.State Symbol EnumGuard),
+          Success (reject : EnumerateM Symbol EnumGuard (Fragments.Fragment Symbol)) before fragment after) ∧
+      (value ≠ .empty →
+        ∃ (action : EnumerateM Symbol EnumGuard (Fragments.Fragment Symbol))
+          (after : EnumerationState.State Symbol EnumGuard),
+          prepareChild scs value = some action ∧ Success action before (.hole before.counter) after ∧
+          after = (match value with
+            | .node _ _ _ _ =>
+                {allocated (some node) before with values :=
+                  (allocated (some node) before).values.set before.counter (.unenumerated (some node) scs)}
+            | _ => allocated (some node) before) ∧
+          after.values[before.counter]? = some (.unenumerated (some node)
+            (match value with | .node _ _ _ _ => scs | _ => [])) ∧
+          after.counter = before.counter + 1 ∧ after.counter = after.values.length ∧
+          PendingRealized heap after)
+ := by
+  obtain ⟨node, encoded, decoded⟩ := available_readback heap value coherent available closed
+  refine ⟨node, encoded, decoded, ?_, ?_⟩
+  · intro emptyValue
+    subst value
+    exact ⟨rfl, by simp [Success, reject, ExceptT.run]⟩
+  · intro nonempty
+    obtain ⟨allocatedHandle, allocatedEncoded, allocation, allocatedSlot, allocatedRealized⟩ :=
+      SourcePruningEnumerationWrites.allocate_available_realized
+        heap before value coherent available closed realized aligned
+    have allocatedHandleSame : allocatedHandle = node := by

@@ -1,0 +1,47 @@
+theorem pending_write_semantics
+    (language : NodeLanguage Symbol) (residualMeaning : EnumGuard → Term Symbol → Prop)
+    (assignment : Nat → Term Symbol) (before after : State Symbol EnumGuard)
+    (uv oldHandle newHandle : Nat) (scs : List Suspended)
+    (stored : before.values[uv]? = some (.unenumerated (some oldHandle) scs))
+    (written : Success (setValue uv (.unenumerated (some newHandle) scs)) before () after)
+    (narrows : ∀ term, language newHandle term → language oldHandle term) :
+    Satisfies language residualMeaning assignment after ↔
+      Satisfies language residualMeaning assignment before ∧ language newHandle (assignment uv) := by
+  have shape := (EnumerationDriver.modify_success _ before after).mp written
+  have bound : uv < before.values.length := (List.getElem?_eq_some_iff.mp stored).1
+  have oldSlot : heap language before.values uv = slot language (.unenumerated (some oldHandle) scs) := by
+    simp only [heap, stored, Option.getD_some]
+  have oldMeaning : slotSatisfies assignment uv (heap language before.values uv) ↔
+      language oldHandle (assignment uv) ∧ ∀ sc ∈ scs, Suspended.Holds assignment (assignment uv) sc := by
+    simp only [oldSlot, slot, slotSatisfies, Option.map_some, permits, List.forall_mem_map]
+  have newMeaning : slotSatisfies assignment uv (slot language (.unenumerated (some newHandle) scs)) ↔
+      language newHandle (assignment uv) ∧ ∀ sc ∈ scs, Suspended.Holds assignment (assignment uv) sc := by
+    simp only [slot, slotSatisfies, Option.map_some, permits, List.forall_mem_map]
+  have heapSame : heap language after.values =
+      setSlot (heap language before.values) uv (slot language (.unenumerated (some newHandle) scs)) := by
+    rw [shape]
+    exact heap_set language before.values uv _ bound
+  constructor
+  · intro satisfied
+    have current : slotSatisfies assignment uv (slot language (.unenumerated (some newHandle) scs)) := by
+      simpa only [heapSame, setSlot, ite_true] using satisfied.1.2 uv
+    obtain ⟨accepted, suspended⟩ := newMeaning.mp current
+    refine ⟨⟨⟨by simpa only [shape] using satisfied.1.1, ?_⟩,
+      by simpa only [shape] using satisfied.2⟩, accepted⟩
+    intro other
+    by_cases same : other = uv
+    · subst other
+      exact oldMeaning.mpr ⟨narrows _ accepted, suspended⟩
+    · simpa only [heapSame, setSlot, ite_eq_right same] using satisfied.1.2 other
+  · rintro ⟨satisfied, accepted⟩
+    refine ⟨⟨by simpa only [shape] using satisfied.1.1, ?_⟩,
+      by simpa only [shape] using satisfied.2⟩
+    rw [heapSame]
+    intro other
+    by_cases same : other = uv
+    · subst other
+      simp only [setSlot, ite_true]
+      exact newMeaning.mpr ⟨accepted, (oldMeaning.mp (satisfied.1.2 uv)).2⟩
+    · simpa only [setSlot, ite_eq_right same] using satisfied.1.2 other
+
+end MicroCFTA.EnumerationSemantics

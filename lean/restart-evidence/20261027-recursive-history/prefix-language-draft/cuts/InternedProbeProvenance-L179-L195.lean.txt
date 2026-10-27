@@ -1,0 +1,17 @@
+theorem makeNode_available [DecidableEq (EdgeKey Symbol Guard)] (edges : List (EdgeValue Symbol Guard))
+    (state : InternedConstructorTemplates.State Symbol Guard) (coherent : Coherent state) (cached : Cached state)
+    (available : ∀ child ∈ edges.flatMap EdgeValue.children, Available state child) :
+    Coherent (run (makeNode edges) state).2 ∧ Cached (run (makeNode edges) state).2 ∧
+      Available (run (makeNode edges) state).2 (run (makeNode edges) state).1 := by
+  have normalized := normalized_children edges available
+  unfold makeNode
+  dsimp only
+  split
+  · exact ⟨coherent, cached, empty_available state⟩
+  · rename_i first rest same
+    apply nodeStep_available _ _ state coherent cached
+    · intro entry _; exact ⟨rfl, rfl, rfl, rfl⟩
+    · intro entry _
+      have retained : ∀ child ∈ (first :: rest).flatMap EdgeValue.children, Available state child := by
+        simpa only [same] using normalized
+      exact ⟨identifyNode_issued state.nodes _ entry (fun child member => (retained child member).issued), retained⟩

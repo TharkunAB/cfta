@@ -1,0 +1,18 @@
+def ClosedValues (values : List (Value Symbol Guard)) : Prop := ∀ value ∈ values, value.free = []
+
+/-- Every stored child in an edge list has no cached free reference. -/
+def ClosedEdges (edges : List (EdgeValue Symbol Guard)) : Prop :=
+  ∀ edge ∈ edges, ClosedValues edge.children
+
+/-- Ordinary physical construction preserves closed retained children. -/
+theorem makeNode_closed [DecidableEq (EdgeKey Symbol Guard)] (edges : List (EdgeValue Symbol Guard))
+    (state : State Symbol Guard) (facts : Facts state) (resident : Edges state edges) (closed : ClosedEdges edges) :
+    (run (makeNode edges) state).1.free = [] := by
+  rw [makeNode_free edges state facts.coherent facts.linked resident]
+  apply List.eq_nil_iff_forall_not_mem.mpr
+  intro name member
+  obtain ⟨child, included, named⟩ := (childFree_member _ name).mp member
+  obtain ⟨edge, selected, included⟩ := List.mem_flatMap.mp included
+  have original := (List.mem_filter.mp (canonicalEdges_member _ edge selected)).1
+  rw [closed edge original child included] at named
+  cases named

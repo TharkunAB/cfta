@@ -1,0 +1,20 @@
+theorem nodeEdges_verified [DecidableEq (EdgeKey Symbol Guard)] (fuel : Nat) (value : Value Symbol Guard)
+    (state : State Symbol Guard) (semantic : SemanticHeap state) (covered : Covered [] state)
+    (available : Available state value) (closed : value.free = []) :
+    Verified state (nodeEdges fuel value state) := by
+  have fallback (current : State Symbol Guard) (currentSemantic : SemanticHeap current)
+      (currentCovered : Covered [] current) (root : Value Symbol Guard)
+      (rootAvailable : Available current root) (rootClosed : root.free = []) :
+      Verified current (collect fuel current [] [root]).canonical :=
+    (collect_verified fuel current currentSemantic currentCovered [] [root]
+      (by intro value member; simpa only [List.mem_singleton.mp member] using rootAvailable)
+      (by intro value member; simpa only [List.mem_singleton.mp member] using rootClosed)).canonical
+  have ordinary (current : State Symbol Guard) (currentSemantic : SemanticHeap current)
+      (currentCovered : Covered [] current) (entry : Interned InternedBinderProtocol.NodeKey)
+      (edges : List (EdgeValue Symbol Guard)) (depth : Nat) (free : List InternedBinderProtocol.Reference)
+      (resident : Available current (.node entry edges depth free)) (valueClosed : free = []) :
+      Verified current (.done edges current) :=
+    done_verified current currentSemantic currentCovered edges
+      (resident_edges current currentSemantic.1.normal.facts.linked (.node entry edges depth free) resident.resident)
+      (MergedColdReaderClosed.node_children_closed current currentSemantic.1.normal.facts entry edges depth free resident valueClosed)
+  cases value with
