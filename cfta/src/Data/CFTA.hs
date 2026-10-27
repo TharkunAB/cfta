@@ -466,7 +466,7 @@ termsByCost cost automaton =
         transitionSymbol
         transitionChildren
         (equalitiesHold . transitionConstraint)
-        cost
+        (cost . transitionSymbol)
         (`Map.lookup` leastCosts cost automaton)
         (initialState automaton)
 

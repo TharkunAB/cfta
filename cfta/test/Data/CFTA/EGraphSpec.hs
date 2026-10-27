@@ -194,7 +194,7 @@ spec = describe "Data.CFTA.EGraph" $ do
             forAll genGraph $ \graph@(Graph terms _) -> forAll (elements terms) $ \t ->
                 let g = build graph
                     (c, _) = addTermWith (\(Sorted s f ts) -> (s, f, ts)) t g
-                 in case (extract (\_ ks -> 1 + sum ks) g c, classAutomaton g c) of
+                 in case (extract (\_ _ _ ks -> 1 + sum ks) g c, classAutomaton g c) of
                         (Just (k, u), Right automaton) -> (k, termSize u, leastSize automaton) === (k, k, Just k)
                         (e, a) -> counterexample (show (fmap fst e, either show (const "an automaton") a)) False
     it "extracts the cheapest term that satisfies the constraints of its e-nodes" $ do
@@ -202,12 +202,23 @@ spec = describe "Data.CFTA.EGraph" $ do
         -- terms at the paths [0, 0] and [1]. The cheaper g(a) fails the
         -- constraint, so the cheapest term is p(h(b), b).
         let leaf s = Node s []
-            cost s children = (if s == "h" then 2 else 1) + sum children :: Int
+            cost _ s _ children = (if s == "h" then 2 else 1) + sum children :: Int
             (ga, g1) = addTerm (Node "g" [leaf "a"]) (emptyEGraph :: EGraph () String)
             (hb, g2) = addTerm (Node "h" [leaf "b"]) g1
             (b, g3) = addTerm (leaf "b") (fromMaybe g2 (merge ga hb g2))
             (p, g4) = addConstrained (equalityConstraint (mkEqConstraints [[path [0, 0], path [1]]])) "p" [ga, b] g3
         extract cost g4 p `shouldBe` Just (5, Node "p" [Node "h" [leaf "b"], leaf "b"])
+    it "extracts by a cost that uses the e-classes of an e-node" $ do
+        -- One e-class holds f(a) and g(b). A cost that charges for a child
+        -- e-class decides between the two terms of the same size.
+        let leaf s = Node s []
+            (fa, g1) = addTerm (Node "f" [leaf "a"]) (emptyEGraph :: EGraph () String)
+            (gb, g2) = addTerm (Node "g" [leaf "b"]) g1
+            (a, g3) = addTerm (leaf "a") (fromMaybe g2 (merge fa gb g2))
+            (b, _) = addTerm (leaf "b") g3
+            charging c _ _ children ks = (if c `elem` children then 10 else 1) + sum ks :: Int
+        fmap snd (extract (charging a) g3 fa) `shouldBe` Just (Node "g" [leaf "b"])
+        fmap snd (extract (charging b) g3 fa) `shouldBe` Just (Node "f" [leaf "a"])
     it "selects the terms of an e-class with an ECTA" $ do
         -- Under distributivity and commutativity, the e-class of a * (b + c)
         -- holds a*b + a*c. The ECTA accepts the sums whose two summands have
@@ -296,13 +307,13 @@ spec = describe "Data.CFTA.EGraph" $ do
             (c', g5) = addTerm (fOf "a" "b") g3
             -- The terms by cost: the same terms, each once, also when the
             -- plain form and the e-node with the constraint share a row.
-            byCost g = map snd (termsByCost (\_ ks -> 1 + sum ks :: Int) g c)
+            byCost g = map snd (termsByCost (\_ _ _ ks -> 1 + sum ks :: Int) g c)
         language g3 `shouldBe` Set.fromList [fOf "a" "a", fOf "b" "b"]
         Set.size (language g4) `shouldBe` 6
         (find g5 c' == find g5 c, Set.size (language g5)) `shouldBe` (True, 4)
         forM_ [g3, g4, g5] $ \g -> (Set.fromList (byCost g), length (byCost g)) `shouldBe` (language g, Set.size (language g))
     describe "terms by cost" $ do
-        let size _ children = 1 + sum children :: Int
+        let size _ _ _ children = 1 + sum children :: Int
         it "lists the n! * Catalan(n - 1) terms of an AC sum, each once, at the size of the sum" $
             forM_ [(3, 12), (4, 120), (5, 1680)] $ \(n, count) -> do
                 let (c, g) = addTerm (sumOf n) emptyEGraph

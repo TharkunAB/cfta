@@ -40,7 +40,10 @@ Before release, the package was called `microcfta`.
   `Data.CFTA.EGraph.termsByCost` lists the terms of an e-class this way,
   from the rows of the store, and `extract` gives its first term, so that
   the term of `extract` satisfies the constraints of its e-nodes. The cost
-  of `extract` must not decrease when the cost of a child grows.
+  of `extract` must not decrease when the cost of a child grows. As in egg,
+  the cost of an e-node sees the e-node: its e-class, its symbol, and the
+  e-classes and costs of its children. So a cost can use the sort of an
+  e-class or the data of an analysis.
 - The union-find of the ECTA enumeration points each member of the smaller
   set at the new representative on a union, so `root` is one lookup. The
   representative holds the size of its set and the set as an `IntSet`.
