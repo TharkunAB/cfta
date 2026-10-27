@@ -307,6 +307,10 @@ the list never decrease, also below a cycle, whose list is infinite. The
 check decides each complete term at the alternative that built it. A term
 with two runs comes twice.
 
+An infinite set of cheaper rejected candidates can prevent the next term from
+being reached. A sufficient progress condition is that each cost bound admits
+only finitely many generated partial terms.
+
 This is a best-first search over partial terms, as Knuth's generalization of
 Dijkstra's algorithm: the key of a partial term is its cost with the least
 cost of the key of each hole, so a step never lowers the key, and a complete

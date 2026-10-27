@@ -742,11 +742,15 @@ the e-node, its symbol, the e-classes of its children, and the costs of its
 children. Thus a cost can use the e-graph, for example the sort of an
 e-class ('sortOf') or the data of an analysis ('analyse'). The cost must not
 decrease when the cost of a child grows, and it must be greater than the
-cost of each child, as @1 + sum@ is. Then 'extract' finds the cheapest term
-of each e-class that has a term. The term satisfies
-the constraint of each of its e-nodes. The e-graph has no check that the
-constraints leave a term, so 'extract' does not return when the constraints
-reject each term of an infinite language.
+cost of each child, as @1 + sum@ is. One sufficient progress condition is that
+each cost bound admits only finitely many generated partial terms.
+Strict increase alone does not give this condition for an arbitrary
+ordered cost, such as a lexicographic pair. Infinitely many cheaper rejected
+terms can prevent 'extract' from reaching an accepted term.
+When 'extract' returns a term, it is cheapest and satisfies the constraint of
+each of its e-nodes. The e-graph has no check that the constraints leave a term,
+so 'extract' also does not return when the constraints reject each term of an
+infinite language.
 -}
 extract :: (Ord c, Eq f) => (ClassId -> f -> [ClassId] -> [c] -> c) -> EGraph s f -> ClassId -> Maybe (c, Term f)
 extract cost g c = listToMaybe (termsByCost cost g c)
@@ -762,6 +766,9 @@ comes once when the e-graph has no sorts; e-nodes that differ only in the
 sorts of their children give a term once for each. An e-node with a
 constraint gives only the terms that satisfy the constraint, and its plain
 form in the same e-class gives all of them.
+
+The progress condition described for 'extract' also applies here. An infinite
+set of cheaper rejected candidates can prevent the next term from being reached.
 -}
 termsByCost :: (Ord c, Eq f) => (ClassId -> f -> [ClassId] -> [c] -> c) -> EGraph s f -> ClassId -> [(c, Term f)]
 termsByCost cost g c =
