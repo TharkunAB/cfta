@@ -1,5 +1,32 @@
 # Constrained languages, indexing, and distributions
 
+## Actual flat selected prefixes now derive completion and full native effects
+
+Source checkpoint: 498dd60c61b885ca58fa7d5d51b3284672e06b41.
+Eight new modules and sixteen public theorems cover the complete selected
+prefix through Right recording. The original recursive Packet supplies its
+entire sufficient-bound prefix guarantee once. A related initial flat cache
+then gives actual flat prefix correspondence at every adequate larger bound.
+The appended guarantee uses the actual flat restart expansion decision.
+Parked, Empty and nonempty narrowing retain their actual observed states.
+Every narrowed result retains full native Post and final global Memos.
+Every returned candidate has related earlier Packet and native-correct indexes
+at the same reached Caller. Empty keeps native effects without a candidate.
+No future flat observation or final flat invariant is an input.
+
+The prefix does not execute ordinary siblings or the recursive worker.
+The original conditional ordinary capability remains in the earlier packet.
+H6 and captured rendering stay unchanged. Whole output soundness, coverage,
+pruning-policy soundness and admission histories remain open.
+Audit passes 4020 jobs and 78555 theorem dependency checks. All eight modules
+and Audit pass strict checks. No Haskell source changed. FINDINGS retains
+all Haskell repair handoffs and the extraction-progress limit.
+
+Next transport actual captured child and recursive consumers through the same
+native histories. Derive Canonical, semantic Ranges and allocation bounds.
+Details: `lean/notes-current-flat-selected-prefix.md`.
+
+
 ## Actual flat pruning callbacks now retain completion and restart decisions
 
 Source checkpoint: `765f5a7628b36ec4bed33ecd774e5a81e44b6e46`.
