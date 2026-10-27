@@ -1,0 +1,71 @@
+/-- Classify an output at the cache and metadata recorded when it was emitted. -/
+def OutputOrigin (stop : Option (Metadata Typing → Nat → Bool))
+    (order : Metadata Typing → List Nat → Option Nat) (output : Output width Typing) : Prop :=
+  match output.metadata with
+  | some metadata => SourceFlatPruningRestart.decision stop order metadata output.cache = none
+  | none => SourceFlatPruningRestart.candidates output.cache = []
+
+private def ParkedSource (stop : Option (Metadata Typing → Nat → Bool))
+    (order : Metadata Typing → List Nat → Option Nat) (metadata : Metadata Typing) :
+    SourceFlatPruningSelectedPrefix.Result width Typing → Prop
+  | .parked checked candidate raw =>
+      raw = candidate.map (fun parked => ExceptT.run
+        (SourceFlatPruningRestart.run stop order metadata parked checked)) ∧
+      ∀ parked, candidate = some parked → parked.core = checked
+  | _ => True
+
+section Prefix
+variable [DecidableEq (EdgeKey Symbol Constraint)]
+
+private theorem parked_source
+    (holeKey : Typing → Nat → Key) (fits : Key → Symbol → Bool) (admits : Key → Node → Bool)
+    (graph : Graph Symbol Constraint) (templates : List (Template.Pattern Symbol))
+    (stop : Option (Metadata Typing → Nat → Bool)) (order : Metadata Typing → List Nat → Option Nat)
+    (metadata : Metadata Typing) (nativeFuel callbackFuel uv : Nat) (caller : Caller width)
+    (before : Cached) (queries : Queries) :
+    ParkedSource stop order metadata (SourceFlatPruningSelectedPrefix.run holeKey fits admits graph templates
+      stop order metadata nativeFuel callbackFuel uv caller before queries) := by
+  unfold SourceFlatPruningSelectedPrefix.run
+  dsimp only
+  split
+  · split
+    · dsimp only [ParkedSource]
+      constructor
+      · rfl
+      · intro parked completed
+        exact SourceFlatPruningIndexAdapters.parked_core _ _ _ _ _ _ _ completed
+    · repeat' first | exact True.intro | split
+    · trivial
+  · trivial
+
+/-- A literal parked restart uses the decision at the same framed core passed to recursion. -/
+theorem parked_decision
+    (holeKey : Typing → Nat → Key) (fits : Key → Symbol → Bool) (admits : Key → Node → Bool)
+    (graph : Graph Symbol Constraint) (templates : List (Template.Pattern Symbol))
+    (stop : Option (Metadata Typing → Nat → Bool)) (order : Metadata Typing → List Nat → Option Nat)
+    (metadata : Metadata Typing) (nativeFuel callbackFuel uv : Nat) (caller : Caller width)
+    (before : Cached) (queries : Queries)
+    {checked : Core} {parked : Cached} {updated : Metadata Typing} {next : Option Next} {core : Core}
+    (observed : SourceFlatPruningSelectedPrefix.run holeKey fits admits graph templates stop order metadata
+      nativeFuel callbackFuel uv caller before queries =
+      .parked checked (some parked) (some [.ok ((updated, next), core)])) :
+    next = SourceFlatPruningRestart.decision stop order updated (EnumerationFlatCached.frame core parked) := by
+  have source := parked_source holeKey fits admits graph templates stop order metadata
+    nativeFuel callbackFuel uv caller before queries
+  rw [observed] at source
+  obtain ⟨raw, stored⟩ := source
+  simp only [Option.map_some] at raw
+  have actual : ExceptT.run (SourceFlatPruningRestart.run stop order metadata parked checked) =
+      [.ok ((updated, next), core)] := (Option.some.inj raw).symm
+  unfold SourceFlatPruningRestart.run at actual
+  split at actual
+  · cases actual
+  · have item := (List.cons.inj actual).1
+    have same := Prod.mk.inj (Except.ok.inj item)
+    have metadataSame := (Prod.mk.inj same.1).1
+    have nextSame := (Prod.mk.inj same.1).2
+    have coreSame : core = parked.core := same.2.symm.trans (stored parked rfl).symm
+    have reframed : EnumerationFlatCached.frame core parked = parked := by
+      rw [coreSame]
+      cases parked
+      rfl

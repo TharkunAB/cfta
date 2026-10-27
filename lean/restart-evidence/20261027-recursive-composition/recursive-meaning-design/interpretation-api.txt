@@ -1,0 +1,46 @@
+[2026-10-27 11:06 CET] PROPOSED INTERPRETATION INTERFACE; NOT A LEAN DECLARATION
+
+Use Root's actual HookInvocation / OutputHistory types. Do not add a second abstract operation relation.
+
+Meaning at a checkpoint is exactly:
+  EnumerationCorrectness.Satisfies
+    (SourcePruningEnumerationNativeLanguage.handles
+      (SourceEqualityPCSGuard.holds formulas solver) ambient caller.checked.native.machine.heap)
+    (fun guard term => SourceEqualityPCSGuard.holds formulas solver guard term = true)
+    assignment cache.core
+
+The same ambient and assignment remain fixed throughout the backward proof.
+
+Proposed consumer:
+  OutputHistory.backward history currentReceipts structuralGates removedRestrictions finalSatisfied
+    : Meaning originalCaller originalCache ambient assignment
+
+Here finalSatisfied is the ordinary conclusion-consumer input at the output's OWN caller/cache. It is not a completion-producer admission. currentReceipts and structuralGates must be concrete indexed fields at actual tagged steps, not an assumed generic semantic implication. The cases are:
+
+1. Prefix tag:
+   Context and Ready at the exact step input; PendingRealized at that input heap;
+   PrefixValid at the exact runPrefix expression in the tag.
+   prefix_semantics supplies backward narrowing. For parking, retain its actual original stored bucket and read equation. removedRestrictions for that case means:
+     forall handle scs, input.core.values[selected]?=some(.unenumerated(some handle)scs) ->
+       forall sc in scs, Suspended.Holds assignment (assignment selected) sc.
+   The actual stored read from PrefixMeaning instantiates this condition. Do not assert that ancestry, scheduler done, or Canonical proves it. Preserve the raw parked restart equality so its returned core and frame identify the actual recursive cache with this retained parked endpoint.
+
+2. Ordinary-entry tag:
+   Exact successful singleton Entry.enter at the recorded current caller/cache, Total of the input representatives. Apply the concrete enter_semantics draft. The expansionAncestry update prevents a full Frame statement; assignment semantics ignores it. Keep the actual target from the entry packet until Ready/root evidence identifies it with the outer selected uv.
+
+3. Captured-complete tag:
+   Exact local resource admission from the same current Packet/full Memos, Fits, finite head reservation and guard Heap; the actual captured completed receipt; its stable diagonal family derived from head_finite_complete_resources. Also retain the explicit current Canonical/nonterminal/freshArity/retention gates needed by existing resource soundness. First derive a resource variant of the existing diagonal-to-five-axis bridge, then call CapturedEdge.stable_complete_sound_current_resources. It supplies backward original Satisfies, actual edge/parent acceptance, inherited Holds, and fill(fragment)=assignment target. None of these desired semantic conclusions is an admission field.
+
+4. Callback-false tag:
+   The actual recordTypes false singleton at the same reached native caller and completed captured cache. Total at that cache. recordTypes_success_semantics derives the exact fixed-language iff to the actual framed callback core. It needs no old callback completion family or future recursive semantic premise. Metadata is the actual callback result. The next sibling still closes over the parent's metadata.
+
+5. Earlier-sibling skip:
+   Preserve the SAME captured cache while native Caller/Queries advance through the actual completed subtree or noncomplete edge. Retain existential inventory and FULL final Memos with Post previousCaller->returnedCaller and final.query=actualQueries. PendingRealized at the captured cache's earlier native heap plus Post.effects.keeps permits NativeLanguage.satisfies_keeps. Do not use the earlier subtree's final enumeration cache as the next sibling's input. Do not infer full Memos equality from query equality. Stopped-hook outputs have their own paths; there is no skip into a suffix after a stopped hook and no endpoint is invented when it is absent.
+
+The first useful producer strengthening is an indexed rich invocation receipt appended to head_finite_complete_resources / the sibling induction. Retain the ENTIRE original existential prefix and resource conjunction. Append actual operation histories and the local stable captured receipt at every invoked hook, with full own Memos/Packet. Then the finite Complete induction can append per-output histories while retaining old run stability and OutcomeResources. The existing original-input numeric reservation pays these operations; do not introduce a future resource/Success input.
+
+The next precise bridge is a resource analogue of CapturedEdge.stable_complete_of_diagonal:
+  exact genuine current resource admission + explicit current semantic gates
+  + forall extra, CapturedEdge.run (bound+extra)^5 ... = some(.complete fragment reached saved after)
+  -> the existing resource-backed assignment conclusion at SAME fragment/reached/saved/after.
+Its stable diagonal is an OUTPUT of the existing finite head producer. It is not an extra initial driver premise. Use the resource canonical producer/full stable packet to compare at a common sufficient bound. Raw arbitrary-work-fuel completion alone is not the required stable family.

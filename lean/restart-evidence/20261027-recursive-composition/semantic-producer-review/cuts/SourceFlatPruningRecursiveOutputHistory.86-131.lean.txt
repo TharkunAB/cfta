@@ -1,0 +1,46 @@
+theorem run_finite_complete_output_history
+    (holeKey : Typing → Nat → Key) (fits : Key → Symbol → Bool) (admits : Key → Node → Bool)
+    (graph : Graph Symbol Constraint) (templates : List (Template.Pattern Symbol))
+    (checkEmpty : Bool) (edgesOf : Node → List (EdgeValue Symbol Constraint))
+    (stop : Option (Metadata Typing → Nat → Bool)) (order : Metadata Typing → List Nat → Option Nat)
+    (formulas : SourceGuards.Formulas FullSyntax.Formula)
+    (solver : SourceGuards.Entailment FullSyntax.Formula) (recursiveFuel : Nat) (inventory : Inventory)
+    (caller : Caller (bits + 2)) (memos : Memos) (before : Cached) (metadata : Metadata Typing)
+    (seed : Seed) (ceiling : Nat)
+    (packet : SourcePruningEnumerationRecursive.Packet formulas solver inventory caller memos metadata before)
+    (bounded : Fits seed.2 caller.checked)
+    (known : Heap (fun guard => guard ∈ seed.1) caller.checked.native.machine.heap)
+    (selectionMembers : ∀ entry rows depth free, ∀ edge ∈ edgesOf (.node entry rows depth free), edge ∈ rows)
+    (selectionLength : ∀ entry rows depth free, (edgesOf (.node entry rows depth free)).length ≤ rows.length)
+    (initialMass : SourcePruningEnumerationPrefixAdmission.suspendedBound before.core ≤ ceiling)
+    (reserved : SourcePruningEnumerationFiniteReservation.Reserved bits recursiveFuel seed ceiling) :
+    ∃ bound outcome,
+      (∀ extra, SourcePruningEnumerationRecursive.run holeKey fits admits graph templates checkEmpty edgesOf stop order
+        (bound + extra) recursiveFuel metadata caller memos.query before = outcome) ∧
+      SourcePruningEnumerationRecursive.OutcomeResources formulas solver caller
+        (SourcePruningEnumerationFiniteReservation.final recursiveFuel seed ceiling) outcome ∧
+      ∀ (flat : EnumerationFlatCached.Cached Symbol Constraint), EnumerationFlatCached.Related flat before →
+        ∀ extra, ∃ (flatOutcome : SourceFlatPruningNativeContinuations.HookResult
+          (Output (bits + 2) Typing) (Failure (bits + 2) Typing) (bits + 2)),
+          run holeKey fits admits graph templates checkEmpty edgesOf stop order
+            (bound + extra) recursiveFuel metadata caller memos.query flat = flatOutcome ∧
+          ResultRelated flatOutcome outcome ∧
+          ∀ output ∈ flatOutputs flatOutcome,
+            OutputResources formulas solver caller
+              (SourcePruningEnumerationFiniteReservation.final recursiveFuel seed ceiling) output ∧
+            OutputOrigin stop order output ∧
+            ∃ original ∈ oldOutputs outcome, OutputRelated output original ∧
+              SourcePruningEnumerationRecursive.OutputHistory holeKey fits admits graph templates checkEmpty edgesOf
+                stop order (bound + extra) recursiveFuel metadata caller memos.query before
+                  (SourcePruningEnumerationRestart.decision stop order metadata before) original := by
+  obtain ⟨bound, outcome, running, resources, flatRunning⟩ := run_finite_complete_output_certificates
+    holeKey fits admits graph templates checkEmpty edgesOf stop order formulas solver recursiveFuel inventory
+    caller memos before metadata seed ceiling packet bounded known selectionMembers selectionLength initialMass reserved
+  refine ⟨bound, outcome, running, resources, ?_⟩
+  intro flat compared extra
+  obtain ⟨flatOutcome, actual, related, certificates⟩ := flatRunning flat compared extra
+  have histories := related_output_history holeKey fits admits graph templates checkEmpty edgesOf stop order
+    (bound + extra) recursiveFuel metadata caller memos.query before flatOutcome outcome (running extra) related
+  refine ⟨flatOutcome, actual, related, ?_⟩
+  intro output member
+  exact ⟨(certificates output member).1, (certificates output member).2, histories output member⟩

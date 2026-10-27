@@ -1,0 +1,12 @@
+theorem incoming_preserved (before after : EnumerationState.State Symbol EnumGuard)
+    (held : Nat) (scs : List Suspended) (incoming : IncomingAvoid held before)
+    (inputs : Avoids before.representatives held scs)
+    (classes : ∀ uv, UnionFind.SameClass after.representatives held uv ↔
+      UnionFind.SameClass before.representatives held uv)
+    (effects : ∀ allowed, ReferencesAllowed allowed before → InputsAllowed allowed scs →
+      ReferencesAllowed allowed after) : IncomingAvoid held after := by
+  have valid := effects (fun uv => ¬UnionFind.SameClass before.representatives held uv) incoming inputs
+  intro value member sc listed same
+  exact valid value member sc listed ((classes sc.var).mp same)
+
+/-- Actual reference effects and protected old enumerated roots retain global pending references. -/

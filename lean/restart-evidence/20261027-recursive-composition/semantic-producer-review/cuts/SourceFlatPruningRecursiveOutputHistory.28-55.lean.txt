@@ -1,0 +1,28 @@
+private theorem ordered_output_member
+    {outputs : List (Output width Typing)}
+    {earlier : List (SourcePruningEnumerationRecursive.Output width Typing)}
+    (related : SourceFlatPruningNativeBranches.OrderedRelated OutputRelated outputs earlier) :
+    ∀ output ∈ outputs, ∃ original ∈ earlier, OutputRelated output original := by
+  induction related with
+  | nil => intro output member; cases member
+  | cons head _tail ih =>
+      intro output member
+      rcases List.mem_cons.mp member with rfl | later
+      · exact ⟨_, List.mem_cons_self, head⟩
+      · obtain ⟨original, listed, compared⟩ := ih output later
+        exact ⟨original, List.mem_cons_of_mem _ listed, compared⟩
+
+/-- Each related flat output identifies an actual earlier output at the same emission endpoint. -/
+theorem related_output_member
+    (flat : SourceFlatPruningNativeContinuations.HookResult
+      (Output width Typing) (Failure width Typing) width)
+    (earlier : SourcePruningEnumerationNativeContinuations.HookResult
+      (SourcePruningEnumerationRecursive.Output width Typing)
+      (SourcePruningEnumerationRecursive.Failure width Typing) width)
+    (related : ResultRelated flat earlier) :
+    ∀ output ∈ flatOutputs flat, ∃ original ∈ oldOutputs earlier, OutputRelated output original := by
+  cases flat <;> cases earlier <;>
+    simp only [ResultRelated, SourceFlatPruningNativeContinuations.HookResultRelated] at related
+  all_goals first | contradiction | exact ordered_output_member related.1
+
+variable [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Constraint)] [DecidableEq Node]

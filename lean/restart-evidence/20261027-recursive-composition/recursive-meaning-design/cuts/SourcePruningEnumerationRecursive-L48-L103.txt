@@ -1,0 +1,56 @@
+local notation "Result" => HookResult (Output width Typing) (Failure width Typing) width
+
+/-- Read only a native endpoint supplied by the actual stopped receipt. -/
+def endpoint : FoldStop (Failure width Typing) width → Option (Caller width × Queries)
+  | .edge current => current.bind SourcePruningEnumerationNativeBranches.advance
+  | .continuation _ _ reached => reached
+
+/-- Convert the ordered alternative result without losing its outputs or stopped receipts. -/
+def finish (uv : Nat) : Fold (Output width Typing) (Failure width Typing) width → Result
+  | .complete _processed outputs caller queries => .complete outputs caller queries
+  | .stopped processed outputs current =>
+      .stopped outputs (.alternatives uv processed current) (endpoint current)
+
+/-- Run the concrete Left callback once before its own recursive continuation. -/
+noncomputable def continueWith
+    (recur : Metadata Typing → Caller width → Queries → Cached → Option Next → Result)
+    (graph : Graph Symbol Constraint) (templates : List (Template.Pattern Symbol))
+    (stop : Option (Metadata Typing → Nat → Bool))
+    (order : Metadata Typing → List Nat → Option Nat)
+    (callbackFuel : Nat) (metadata : Metadata Typing) (uv : Nat)
+    (fragment : Fragment) (caller : Caller width) (queries : Queries) (before : Cached) : Result :=
+  let raw := ExceptT.run (SourcePruningRecordTypes.recordTypes
+    graph templates callbackFuel metadata uv (.inl fragment) before.core)
+  match raw with
+  | [.ok ((true, _updated), _observed)] => .complete [] caller queries
+  | [.ok ((false, updated), observed)] =>
+      let after := EnumerationExpandableIndex.frame observed before
+      recur updated caller queries after (SourcePruningEnumerationRestart.decision stop order updated after)
+  | _ => .stopped [] (.callback uv raw) (some (caller, queries))
+
+variable [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Constraint)] [DecidableEq Node]
+
+/-- Consume an actual restart decision and execute ordinary recursive continuations in source order.
+Each sibling retains the captured metadata and enumeration input. Recursive native effects reach
+the next sibling. This bounded worker does not establish whole-driver completion or language semantics. -/
+noncomputable def resume
+    (holeKey : Typing → Nat → Key) (fits : Key → Symbol → Bool) (admits : Key → Node → Bool)
+    (graph : Graph Symbol Constraint) (templates : List (Template.Pattern Symbol))
+    (checkEmpty : Bool) (edgesOf : Node → List (EdgeValue Symbol Constraint))
+    (stop : Option (Metadata Typing → Nat → Bool))
+    (order : Metadata Typing → List Nat → Option Nat) (workFuel : Nat) :
+    Nat → Metadata Typing → Caller width → Queries → Cached → Option Next → Result
+  | _fuel, metadata, caller, queries, before, none => .complete [⟨some metadata, before, caller, queries⟩] caller queries
+  | _fuel, _metadata, caller, queries, before, some .done => .complete [⟨none, before, caller, queries⟩] caller queries
+  | _fuel, _metadata, caller, queries, _before, some .stuck => .complete [] caller queries
+  | 0, metadata, caller, queries, before, some (.expand uv) =>
+      .stopped [] (.exhausted uv metadata before) (some (caller, queries))
+  | fuel + 1, metadata, caller, queries, before, some (.expand uv) =>
+      let observed := SourcePruningEnumerationSelectedStep.runPrefix holeKey fits admits graph templates
+        stop order metadata workFuel workFuel workFuel workFuel workFuel workFuel uv caller before queries
+      match observed with
+      | .parked _ (some _parked) (some []) => .complete [] caller queries
+      | .parked _ (some parked) (some [.ok ((updated, next), core)]) =>
+          resume holeKey fits admits graph templates checkEmpty edgesOf stop order workFuel fuel
+            updated caller queries (EnumerationExpandableIndex.frame core parked) next
+      | .narrowed _ _ reached saved (some []) _ _ _ => .complete [] reached saved

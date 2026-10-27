@@ -1,0 +1,22 @@
+          let ordinary := SourcePruningEnumerationNativeOrdinaryContinuations.run
+            (continueWith (resume holeKey fits admits graph templates checkEmpty edgesOf stop order workFuel fuel)
+              graph templates stop order workFuel updated uv)
+            checkEmpty workFuel workFuel workFuel workFuel workFuel uv edgesOf reached after saved
+          match ordinary.2 with
+          | none => .stopped [] (.ordinary uv ordinary.1) (some (reached, saved))
+          | some folded => finish uv folded
+      | .narrowed _ _ reached saved _ _ _ _ => .stopped [] (.selected uv observed) (some (reached, saved))
+      | _ => .stopped [] (.selected uv observed) (some (caller, queries))
+
+/-- Start from the source stop test and next selection at the supplied metadata and cache. -/
+noncomputable def run
+    (holeKey : Typing → Nat → Key) (fits : Key → Symbol → Bool) (admits : Key → Node → Bool)
+    (graph : Graph Symbol Constraint) (templates : List (Template.Pattern Symbol))
+    (checkEmpty : Bool) (edgesOf : Node → List (EdgeValue Symbol Constraint))
+    (stop : Option (Metadata Typing → Nat → Bool))
+    (order : Metadata Typing → List Nat → Option Nat) (workFuel recursiveFuel : Nat)
+    (metadata : Metadata Typing) (caller : Caller width) (queries : Queries) (before : Cached) : Result :=
+  resume holeKey fits admits graph templates checkEmpty edgesOf stop order workFuel recursiveFuel
+    metadata caller queries before (SourcePruningEnumerationRestart.decision stop order metadata before)
+
+end MicroCFTA.SourcePruningEnumerationRecursive

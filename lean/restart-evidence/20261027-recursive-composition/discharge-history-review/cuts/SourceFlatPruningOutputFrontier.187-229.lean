@@ -1,0 +1,43 @@
+/-- An actual available recursive boundary yields done while its initial slot is not discharged. -/
+theorem recursive_initial_counterexample
+    (heap : InternedConstructorTemplates.State Symbol NativeGuard)
+    (handle : Nat) (value : InternedConstructorTemplates.Value Symbol NativeGuard)
+    (decoded : lookupNode heap handle = some value)
+    (available : InternedProbeProvenance.Available heap value) (closed : value.free = [])
+    (recursive : MergedOrdinaryHeight.recursiveBoundary value = true)
+    (order : Metadata Typing → List Nat → Option Nat) (metadata : Metadata Typing) :
+    ∃ before : Cached, ∃ earlier : EnumerationExpandableIndex.Cached Symbol Constraint,
+      EnumerationFlatCached.Related before earlier ∧
+      EnumerationFlatNativeIndex.Correct heap before ∧
+      SourcePruningEnumerationObservation.PendingRealized heap earlier.core ∧
+      decision none order metadata before = some .done ∧
+      ¬ SourcePruningEnumerationRendering.Discharged earlier.core := by
+  let before : Cached := ⟨EnumerationFlatState.initial handle, fun _ => false, fun _ => none⟩
+  let earlier : EnumerationExpandableIndex.Cached Symbol Constraint :=
+    ⟨EnumerationState.initial handle, fun _ => false, fun _ => none⟩
+  refine ⟨before, earlier, ⟨EnumerationFlatState.initial_related handle, rfl, rfl⟩, ?_, ?_, ?_, ?_⟩
+  · refine ⟨rfl, ?_, ?_⟩
+    · intro uv
+      cases uv with
+      | zero => simp [before, EnumerationFlatState.initial,
+          SourcePruningEnumerationNativeIndex.candidate, decoded, recursive]
+      | succ uv => simp [before, EnumerationFlatState.initial,
+          SourcePruningEnumerationNativeIndex.candidate]
+    · intro uv
+      simp [before, EnumerationFlatState.initial,
+        EnumerationCanonicalWaiting.canonicalValue,
+        EnumerationWaitingIndex.total, EnumerationWaitingIndex.occurrences,
+        EnumerationWaitingIndex.encode, EnumerationSchedule.references]
+  · intro uv storedHandle scs stored
+    cases uv with
+    | zero =>
+        simp only [earlier, EnumerationState.initial, List.getElem?_cons_zero,
+          Option.some.injEq, UVarValue.unenumerated.injEq, Option.some.injEq] at stored
+        obtain ⟨rfl, rfl⟩ := stored
+        exact ⟨value, decoded, available, closed⟩
+    | succ uv => simp [earlier, EnumerationState.initial] at stored
+  · apply (decision_done_iff none order metadata before).mpr
+    simp [candidates, before, EnumerationFlatState.initial]
+  · intro discharged
+    have impossible := discharged 0 (some handle) [] (by rfl)
+    cases impossible.1

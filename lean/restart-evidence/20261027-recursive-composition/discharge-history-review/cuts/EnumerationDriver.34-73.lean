@@ -1,0 +1,40 @@
+/-- A traversal retains one root, its stored value, and its complete class. -/
+structure Protected (held : Nat) (before after : State Symbol Guard) : Prop where
+  value : after.values[held]? = before.values[held]?
+  root : IsRoot after.representatives held
+  classes : ∀ uv, UnionFind.SameClass after.representatives held uv ↔
+    UnionFind.SameClass before.representatives held uv
+
+/-- An unchanged state retains its protected root. -/
+theorem Protected.refl (held : Nat) (state : State Symbol Guard) (root : IsRoot state.representatives held) :
+    Protected held state state := ⟨rfl, root, fun _ => Iff.rfl⟩
+
+/-- Consecutive traversals retain the same protected value and class. -/
+theorem Protected.trans (left : Protected held before middle) (right : Protected held middle after) :
+    Protected held before after :=
+  ⟨right.value.trans left.value, right.root, fun uv => (right.classes uv).trans (left.classes uv)⟩
+
+/-- Preserving the complete class preserves all separate suspended inputs. -/
+theorem Protected.avoids (frame : Protected held before after) (scs : List Suspended)
+    (separate : Avoids before.representatives held scs) : Avoids after.representatives held scs := by
+  intro sc member same
+  exact separate sc member ((frame.classes sc.var).mp same)
+
+/-- Allocation retains each previously allocated protected slot. -/
+theorem allocation_protected (held : Nat) (node : Option Nat) (before : State Symbol Guard)
+    (safe : Safe before) (inside : held < before.counter) (root : IsRoot before.representatives held) :
+    Protected held before (allocated node before) := by
+  have bound : held < before.values.length := by rw [← safe.1.aligned]; exact inside
+  exact ⟨by simp [allocated, List.getElem?_append_left bound], root, fun _ => Iff.rfl⟩
+
+/-- Class allocation retains the protected root through every fresh variable. -/
+theorem suspension_protected (held count : Nat) (before : State Symbol Guard)
+    (safe : Safe before) (inside : held < before.counter) (root : IsRoot before.representatives held) :
+    Protected held before (suspendedState count before) := by
+  induction count generalizing before with
+  | zero => exact .refl held before root
+  | succ count ih =>
+      have first := allocation_protected held none before safe inside root
+      exact first.trans (ih (allocated none before)
+        ⟨allocation_storage none before safe.1, allocation_live none before safe.1 safe.2⟩
+        (by simpa [allocated] using Nat.lt_succ_of_lt inside) first.root)

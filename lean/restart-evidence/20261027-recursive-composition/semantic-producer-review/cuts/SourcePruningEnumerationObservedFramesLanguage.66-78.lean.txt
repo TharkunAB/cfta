@@ -1,0 +1,13 @@
+theorem recordTypes_success_semantics
+    (graph : Graph Symbol EnumGuard) (templates : List (Template.Pattern Symbol))
+    (fuel : Nat) (metadata : Metadata Typing) (uv : Nat) (input : Sum (Fragments.Fragment Symbol) Nat)
+    (before after : EnumerationState.State Symbol EnumGuard) (result : Bool × Metadata Typing)
+    (total : UnionFind.Total before.representatives)
+    (observed : Success (recordTypes graph templates fuel metadata uv input) before result after) :
+    ∀ (language : NodeLanguage Symbol) (residualMeaning : EnumGuard → Language.Term Symbol → Prop)
+      (assignment : Nat → Language.Term Symbol),
+      Satisfies language residualMeaning assignment after ↔
+        Satisfies language residualMeaning assignment before := by
+  intro language residualMeaning assignment
+  exact SourcePruningEnumerationNativeLanguage.satisfies_frame language residualMeaning assignment
+    before after (recordTypes_frame graph templates fuel metadata uv input before after result total observed)

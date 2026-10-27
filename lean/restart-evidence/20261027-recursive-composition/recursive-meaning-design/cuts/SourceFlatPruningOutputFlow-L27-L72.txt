@@ -1,0 +1,46 @@
+  | .stopped outputs _ _ => outputs
+
+/-- Read every emitted output, including outputs before an edge or hook stop. -/
+def foldOutputs : FoldResult Output Reason width → List Output
+  | .complete _ outputs _ _ => outputs
+  | .stopped _ outputs _ => outputs
+
+variable {Typing : Type}
+
+/-- The concrete callback only emits outputs returned by its actual restart continuation. -/
+theorem continueWith_outputs
+    (property : Output → Prop)
+    (callbackFailure : Nat → List (Except Error ((Bool × Metadata Typing) ×
+      EnumerationFlatState.State Symbol Constraint)) → Reason)
+    (recur : Metadata Typing → Caller width → Queries → Cached → Option Next → HookResult Output Reason width)
+    (graph : Graph Symbol Constraint) (templates : List (Template.Pattern Symbol))
+    (stop : Option (Metadata Typing → Nat → Bool)) (order : Metadata Typing → List Nat → Option Nat)
+    (callbackFuel : Nat) (metadata : Metadata Typing) (uv : Nat) (fragment : Fragment)
+    (caller : Caller width) (queries : Queries) (before : Cached)
+    (continued : ∀ updated reached saved after, ∀ output ∈ hookOutputs
+      (recur updated reached saved after (SourceFlatPruningRestart.decision stop order updated after)), property output) :
+    ∀ output ∈ hookOutputs (SourceFlatPruningContinuation.continueWith callbackFailure recur graph templates
+      stop order callbackFuel metadata uv fragment caller queries before), property output := by
+  unfold SourceFlatPruningContinuation.continueWith
+  dsimp only
+  split
+  · intro output member
+    cases member
+  · exact continued _ _ _ _
+  · intro output member
+    cases member
+
+variable [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Constraint)] [DecidableEq Node]
+
+/-- An actual sibling scan preserves each property supplied by every invoked hook. -/
+theorem run_outputs
+    (property : Output → Prop)
+    (hook : Fragment → Caller width → Queries → Cached → HookResult Output Reason width)
+    (checkEmpty : Bool) (nativeFuel p h target : Nat) (scs : List Suspended) (before : Cached)
+    (edges : List (EdgeValue Symbol Constraint)) (caller : Caller width) (queries : Queries)
+    (continued : ∀ fragment reached saved after, ∀ output ∈ hookOutputs (hook fragment reached saved after), property output) :
+    ∀ output ∈ foldOutputs (SourceFlatPruningNativeContinuations.run hook checkEmpty nativeFuel p h target
+      scs before edges caller queries), property output := by
+  induction edges generalizing caller queries with
+  | nil =>
+      intro output member

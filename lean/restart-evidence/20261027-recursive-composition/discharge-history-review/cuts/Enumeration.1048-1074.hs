@@ -1,0 +1,27 @@
+-- | Expand a complete term fragment into a concrete term, with the symbol that stands for truncated recursion.
+expandTermFragWith :: symbol -> TermFragment symbol -> EnumerateM symbol (Term symbol)
+expandTermFragWith recursionSymbol = go
+  where
+    go (TermFragmentNode s ts) = Term.traverseNode go s ts
+    go (TermFragmentUVar uv) = do
+        val <- getUVarValue uv
+        case val of
+            UVarEnumerated t -> go t
+            UVarUnenumerated (Just node) _ | recursiveBoundary node -> return $ Term.Node recursionSymbol []
+            _ ->
+                error "expandTermFragWith: Non-recursive, unenumerated node encountered"
+
+{- | Expand an enumerated UVar into a concrete term.
+
+A UVar holding an unconstrained 'Mu' was never expanded, and truncates to the
+same marker 'expandTermFragWith' gives a nested one. Any other unenumerated
+state is not reachable once enumeration reports itself finished, and drops the
+branch rather than guessing.
+-}
+expandUVarWith :: symbol -> UVar -> EnumerateM symbol (Term symbol)
+expandUVarWith recursionSymbol uv = do
+    value <- getUVarValue uv
+    case value of
+        UVarEnumerated fragment -> expandTermFragWith recursionSymbol fragment
+        UVarUnenumerated (Just node) _ | recursiveBoundary node -> return $ Term.Node recursionSymbol []
+        _ -> mzero

@@ -1,5 +1,33 @@
 # Public API and source correspondence
 
+## Actual recursive outputs now retain their operation history
+
+Source checkpoint: 075898b5d81a4ad54a75339711727db522f62b06.
+Every actual finite recursive output has a checked path from its original
+input. The path retains actual selected prefixes, ordinary entry, captured
+edge invocations, false callbacks and recursive inputs. Earlier completed
+hooks supply the next sibling's actual Caller and Queries. Siblings restore
+the SAME captured enumeration cache. Outputs before later stops are covered.
+The actual flat producer keeps its ENTIRE old stable result, OutcomeResources,
+own-output resources and frontier certificate, then adds the related old
+output's actual path. No new admission or future success premise is added.
+
+Initial Canonical now reaches each retained actual selected-prefix cache.
+Actual entry and successful callbacks preserve assignment meaning. A completed
+captured edge and its finalizer retain every other incoming-free protected
+root under explicit original gates and stable selected observations. An
+isolated empty native pending slot contradicts Discharged. Its whole-path
+persistence is not yet proved. Raw paths do not supply semantic admission,
+full Memos at every tag, lost-constraint recovery or whole output acceptance.
+
+Eight modules, 1136 lines and 19 public theorems pass strict checking.
+Audit passes 4102 jobs and 79258 theorem dependency checks.
+H6 and the conditional captured renderer retain their scope and signatures.
+No Haskell source changed. FINDINGS retains all earlier Haskell repair handoffs.
+Whole recursive acceptance, coverage and physical correspondence remain open.
+Details: `lean/notes-current-recursive-composition.md`. The full goal stays ACTIVE.
+
+
 ## Actual recursive prefixes now carry native and flat assignment meaning
 
 Source checkpoint: a5973ba4a9ee69f8c62a1a5c853aca83e9c0eaed.

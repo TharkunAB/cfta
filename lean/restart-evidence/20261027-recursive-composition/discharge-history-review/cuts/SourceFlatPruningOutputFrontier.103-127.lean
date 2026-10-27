@@ -1,0 +1,25 @@
+theorem candidates_nil_iff (before : Cached) :
+    candidates before = [] ↔ ∀ uv, uv < before.core.counter → before.expandable uv = false := by
+  simp [candidates, List.filter_eq_nil_iff]
+
+/-- A decoded native pending value is not a candidate exactly at recursive truncation. -/
+theorem pending_false_iff
+    (heap : InternedConstructorTemplates.State Symbol NativeGuard)
+    (handle : Nat) (value : InternedConstructorTemplates.Value Symbol NativeGuard)
+    (scs : List Suspended) (decoded : lookupNode heap handle = some value) :
+    SourcePruningEnumerationNativeIndex.candidate heap (.unenumerated (some handle) scs) = some false ↔
+      MergedOrdinaryHeight.recursiveBoundary value = true ∧ scs = [] := by
+  simp [SourcePruningEnumerationNativeIndex.candidate, decoded]
+
+/-- The genuine native invariant classifies every remaining graph-bearing pending slot. -/
+theorem candidates_nil_iff_native_frontier
+    (heap : InternedConstructorTemplates.State Symbol NativeGuard)
+    (before : Cached) (earlier : EnumerationExpandableIndex.Cached Symbol Constraint)
+    (related : EnumerationFlatCached.Related before earlier)
+    (correct : EnumerationFlatNativeIndex.Correct heap before)
+    (realized : SourcePruningEnumerationObservation.PendingRealized heap earlier.core) :
+    candidates before = [] ↔
+      ∀ (uv handle : Nat) (scs : List Suspended), before.core.values[uv]? = some (.unenumerated (some handle) scs) →
+        ∃ value, lookupNode heap handle = some value ∧
+          InternedProbeProvenance.Available heap value ∧ value.free = [] ∧
+          MergedOrdinaryHeight.recursiveBoundary value = true ∧ scs = [] := by

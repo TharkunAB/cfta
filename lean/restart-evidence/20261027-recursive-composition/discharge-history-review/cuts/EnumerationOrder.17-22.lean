@@ -1,0 +1,6 @@
+/-- Stored fragment dependencies strictly increase their level; pending roots share the frontier. -/
+structure Stratified (state : State Symbol Guard) (level : Nat → Nat) (frontier : Nat) : Prop where
+  classes : UnionFind.Satisfies state.representatives level
+  expanded : ∀ uv fragment, state.values[uv]? = some (.enumerated fragment) →
+    level uv < frontier ∧ ∀ hole, HasHole fragment hole → level uv < level hole
+  pending : ∀ uv node scs, state.values[uv]? = some (.unenumerated node scs) → level uv = frontier

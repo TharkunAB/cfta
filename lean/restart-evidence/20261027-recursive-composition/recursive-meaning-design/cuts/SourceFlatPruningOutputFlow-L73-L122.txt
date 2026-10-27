@@ -1,0 +1,50 @@
+      cases member
+  | cons edge rest ih =>
+      cases observed : SourceFlatPruningCapturedEdge.run checkEmpty nativeFuel p h target scs edge caller before queries with
+      | none =>
+          intro output member
+          simp only [SourceFlatPruningNativeContinuations.run, observed, foldOutputs,
+            List.not_mem_nil] at member
+      | some receipt =>
+          cases receipt with
+          | unhandled =>
+              intro output member
+              simp only [SourceFlatPruningNativeContinuations.run, observed,
+                SourceFlatPruningNativeBranches.advance, foldOutputs, List.not_mem_nil] at member
+          | rejected reached saved after =>
+              have suffix := ih reached saved
+              cases following : SourceFlatPruningNativeContinuations.run hook checkEmpty nativeFuel p h target
+                  scs before rest reached saved <;>
+                simpa only [SourceFlatPruningNativeContinuations.run, observed,
+                  SourceFlatPruningNativeBranches.advance, following, foldOutputs] using suffix
+          | complete fragment reached saved after =>
+              have first := continued fragment reached saved after
+              cases callback : hook fragment reached saved after with
+              | stopped outputs reason endpoint =>
+                  simpa only [SourceFlatPruningNativeContinuations.run, observed, callback,
+                    foldOutputs, hookOutputs] using first
+              | complete outputs middleCaller middleQueries =>
+                  have suffix := ih middleCaller middleQueries
+                  rw [callback] at first
+                  cases following : SourceFlatPruningNativeContinuations.run hook checkEmpty nativeFuel p h target
+                      scs before rest middleCaller middleQueries with
+                  | complete processed later finalCaller finalQueries =>
+                      rw [following] at suffix
+                      intro output member
+                      have listed : output ∈ outputs ++ later := by
+                        simpa only [SourceFlatPruningNativeContinuations.run, observed, callback, following,
+                          foldOutputs] using member
+                      rcases List.mem_append.mp listed with head | tail
+                      · exact first output head
+                      · exact suffix output tail
+                  | stopped processed later current =>
+                      rw [following] at suffix
+                      intro output member
+                      have listed : output ∈ outputs ++ later := by
+                        simpa only [SourceFlatPruningNativeContinuations.run, observed, callback, following,
+                          foldOutputs] using member
+                      rcases List.mem_append.mp listed with head | tail
+                      · exact first output head
+                      · exact suffix output tail
+          | stopped fragments observation candidate =>
+              cases advanced : SourceFlatPruningNativeBranches.advance (.stopped fragments observation candidate) with

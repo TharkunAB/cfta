@@ -1,0 +1,21 @@
+  have protectedRoots : ∀ held, held < before.core.counter → IsRoot before.core.representatives held →
+      Avoids before.core.representatives held scs → EnumerationDriver.Protected held before.core after.core := by
+    intro held inside root avoids
+    obtain ⟨frame, avoidsChildren⟩ := ownProtects held inside root avoids
+    exact frame.trans (rootsProtects held (by omega) frame.root avoidsChildren)
+  have incomingPreserved : ∀ held, held < before.core.counter → IsRoot before.core.representatives held →
+      Avoids before.core.representatives held scs → EnumerationReferences.IncomingAvoid held before.core →
+      EnumerationReferences.IncomingAvoid held after.core := by
+    intro held inside root avoids incoming
+    obtain ⟨frame, avoidsChildren⟩ := ownProtects held inside root avoids
+    have ownAllowed : EnumerationReferences.ReferencesAllowed
+        (fun uv => ¬UnionFind.SameClass before.core.representatives held uv) own.core := by
+      rw [ownCore]
+      exact EnumerationReferences.suspension_allowed _ tries.length before.core incoming
+    have ownIncoming : EnumerationReferences.IncomingAvoid held own.core := by
+      intro value member sc listed same
+      exact ownAllowed value member sc listed ((frame.classes sc.var).mp same)
+    have allowedAfter := references _ ownIncoming avoidsChildren
+    have childFrame := rootsProtects held (by omega) frame.root avoidsChildren
+    intro value member sc listed same
+    exact allowedAfter value member sc listed ((childFrame.classes sc.var).mp same)

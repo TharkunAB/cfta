@@ -1,0 +1,3 @@
+/-- Every stored reference avoids one protected root class. -/
+def IncomingAvoid (held : Nat) (state : State Symbol Guard) : Prop :=
+  ReferencesAllowed (fun uv => ¬UnionFind.SameClass state.representatives held uv) state

@@ -1,0 +1,22 @@
+      [.ok ((target, handle, scs, .node entry edges depth free), after)])
+    (nonterminal : scs.any (fun sc => EqualityTrie.isTerminal sc.trie) = false) :
+    run hook checkEmpty r n p h k uv edgesOf caller before queries =
+      ([.ok ((target, handle, scs, .node entry edges depth free), after)],
+        some (SourcePruningEnumerationNativeContinuations.run hook checkEmpty r n p h k target scs
+          (EnumerationExpandableIndex.frame after before) (edgesOf (.node entry edges depth free)) caller queries)) := by
+  simp only [run, observed, nonterminal, Bool.false_eq_true, ↓reduceIte]
+
+/-- An identity continuation preserves the whole ordinary result at every input and bound. -/
+theorem identity_run
+    (checkEmpty : Bool) (r n p h k uv : Nat)
+    (edgesOf : Node → List (EdgeValue Symbol Constraint)) (caller : Caller width)
+    (before : Cached) (queries : Queries) :
+    run (SourcePruningEnumerationNativeContinuations.identityHook (Output := Output) (Reason := Reason))
+      checkEmpty r n p h k uv edgesOf caller before queries =
+      ((SourcePruningEnumerationNativeOrdinary.run checkEmpty r n p h k uv edgesOf caller before queries).1,
+        (SourcePruningEnumerationNativeOrdinary.run checkEmpty r n p h k uv edgesOf caller before queries).2.map
+          SourcePruningEnumerationNativeContinuations.ofBranches) := by
+  unfold run SourcePruningEnumerationNativeOrdinary.run
+  dsimp only
+  congr 1
+  generalize ExceptT.run (SourcePruningEnumerationEntry.enter caller.checked.native.machine.heap r uv before.core) = rows
