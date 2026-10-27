@@ -1,5 +1,51 @@
 # Public API and source correspondence
 
+## Actual native rendering constructs the assignment for captured-slot soundness
+
+Main `c168a952d` is integrated by `646a9af8d`. This adds the sorted e-graph,
+cost-ordered term APIs and a new flat member-set union-find. Both changelog
+entries remain. Existing proofs and the optimized interned core remain intact.
+Diagonal completion and structural history: `57a10ab95`.
+Actual recursive consumers and callback Canonical: `c38c3a68d`.
+Native rendering and captured-term acceptance: `51331a044`.
+The full goal stays ACTIVE. H6 remains the strongest system language theorem.
+
+CapturedEdge.diagonal_render_sound_current now derives native edge and parent
+acceptance of the actual rendered captured term. It constructs an assignment
+from the stored fragment equations and checks the actual rendered residuals.
+It derives final-cache Safe and dependency order from the same completed
+native producer. No final Satisfies, final Safe or final order is an input.
+The full original pending language and every original suspended Holds follow.
+
+The original current admission and semantic gates remain explicit. The
+completed observation is an actual stable diagonal family. Initial Canonical,
+initial Stratified, ordinary no-terminal status, fresh own arity, structural
+child retention and numeric Ranges remain. Discharged requires every remaining
+pending slot to have no native handle and no suspended restriction. The actual
+render must succeed, and its returned residuals must hold. Scheduler done does
+not imply Discharged. Rendering existence, recursive truncation, arbitrary
+partial outputs, selector coverage and forward completeness are still open.
+
+Recursive consumers now derive allowed arity and actual projection from their
+completed observations. The actual callback producer retains its complete old
+result and adds Canonical at the same returned core. Resource-only recursive
+receipts do not yet derive semantic Ranges. Preserve that gap explicitly.
+
+All six new modules and Audit pass strict checks. Aggregate Audit passes
+3978 jobs and 78052 theorem dependency checks. Installed public readback covers
+eight new theorems, unchanged H6 and four complete native renderer definitions.
+Only permitted axioms occur. All earlier proof sources except Audit imports
+remain unchanged. Core tests pass 341 examples. Specftacular library and CLI
+build in Nix. Fourmolu and both changed Cabal gild checks pass.
+
+A new Haskell defect is verified: constrained EGraph.extract can return Nothing
+for a nonempty class. The focused example returns an accepted cost-5 term via
+termsByCost while extract returns Nothing. No repair is applied. FINDINGS has
+the exact reproducer, evidence and cost-contract caveat for external repair.
+The new union-find also needs a representation bridge: the existing Lean model
+still uses path compression. New e-graph and cost-order APIs are not certified.
+Details: `lean/notes-current-pruning-native-rendering.md`.
+
 ## Actual captured-slot expansion now restores the original pending language
 
 Native locality and neutral foundations: `e4f2d1802`.
