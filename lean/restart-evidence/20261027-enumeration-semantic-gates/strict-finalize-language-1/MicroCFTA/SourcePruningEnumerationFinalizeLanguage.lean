@@ -1,0 +1,91 @@
+import MicroCFTA.SourcePruningEnumerationFinalize
+import MicroCFTA.EnumerationFrame
+
+/-!
+# Exact assignment meaning of actual captured-slot finalization
+
+The written slot imposes the returned fragment equation.
+Every other slot, forest equality and residual guard remains in the neutral state.
+This result does not restore the removed pending native restriction.
+-/
+namespace MicroCFTA.SourcePruningEnumerationFinalize
+open Language Fragments EnumerationState EnumerationCorrectness EnumerationFrame
+open EnumerationSchedule
+open SourcePruningEnumerationObservation
+local notation "Symbol" => SourcePruningTemplates.Symbol
+variable {EnumGuard NativeGuard : Type}
+
+/-- A final captured-slot write replaces exactly its payload with the filled-fragment equation. -/
+theorem written_semantics
+    (before after : EnumerationState.State Symbol EnumGuard)
+    (target : Nat) (fragment : Fragment Symbol)
+    (inside : target < before.values.length)
+    (written : after = {before with values := before.values.set target (.enumerated fragment),
+      expansionAncestry := []})
+    (language : NodeLanguage Symbol) (meaning : EnumGuard → Term Symbol → Prop)
+    (assignment : Nat → Term Symbol) :
+    Satisfies language meaning assignment after ↔
+      Satisfies language meaning assignment (neutralize target before) ∧
+        fill assignment fragment = assignment target := by
+  subst after
+  have neutralSame :
+      Satisfies language meaning assignment (neutralize target
+        {before with values := before.values.set target (.enumerated fragment), expansionAncestry := []}) ↔
+      Satisfies language meaning assignment (neutralize target before) := by
+    simp only [neutralize, List.set_set, Satisfies, Fragments.stateSatisfies]
+  constructor
+  · intro satisfied
+    have equation := satisfied.1.2 target
+    simp only [heap, List.getElem?_set_self inside, Option.getD_some, slot, slotSatisfies] at equation
+    exact ⟨neutralSame.mp (neutralize_satisfies language meaning assignment target _ satisfied), equation⟩
+  · rintro ⟨neutral, equation⟩
+    apply neutralize_restore language meaning assignment target _ (neutralSame.mpr neutral)
+    simpa only [heap, List.getElem?_set_self inside, Option.getD_some, slot, slotSatisfies] using equation
+
+/-- Retain the full actual finalization packet and its exact assignment equation. -/
+theorem complete_semantics
+    (heap : InternedConstructorTemplates.State Symbol NativeGuard)
+    (before : EnumerationExpandableIndex.Cached Symbol EnumGuard)
+    (target : Nat) (fragment : Fragments.Fragment Symbol)
+    (old : EnumerationState.UVarValue Symbol)
+    (stored : before.core.values[target]? = some old)
+    (roots : Nat → Nat) (paths : Roots before.core.representatives roots)
+    (counts : EnumerationCanonicalWaiting.Correct roots before.core.values before.waiting)
+    (flags : ∀ (slot : Nat),
+      SourcePruningEnumerationNativeIndex.candidate heap
+        ((before.core.values[slot]?).getD .eliminated) = some (before.expandable slot))
+    (storage : StorageValid before.core)
+    (bounded : FragmentBound before.core.counter fragment)
+    (realized : PendingRealized heap before.core) :
+    ∃ (fuel : Nat) (after : EnumerationExpandableIndex.Cached Symbol EnumGuard),
+      (∀ (extra : Nat), run heap (fuel + extra) target fragment before = some after) ∧
+      ExceptT.run (finish (EnumGuard := EnumGuard) target fragment before.core) =
+        [.ok (fragment, after.core)] ∧
+      after.core = {before.core with
+        values := before.core.values.set target (.enumerated fragment)
+        expansionAncestry := []} ∧
+      after.core.values[target]? = some (.enumerated fragment) ∧
+      after.expandable = (fun (slot : Nat) => if slot = target then false else before.expandable slot) ∧
+      after.waiting = EnumerationCanonicalWaiting.count roots (-1) (references old) before.waiting ∧
+      Roots after.core.representatives roots ∧
+      EnumerationCanonicalWaiting.Correct roots after.core.values after.waiting ∧
+      (∀ (slot : Nat),
+        SourcePruningEnumerationNativeIndex.candidate heap
+          ((after.core.values[slot]?).getD .eliminated) = some (after.expandable slot)) ∧
+      StorageValid after.core ∧ PendingRealized heap after.core ∧
+      (Safe before.core → IsRoot before.core.representatives target → Safe after.core) ∧
+      ∀ (language : NodeLanguage Symbol) (meaning : EnumGuard → Term Symbol → Prop)
+        (assignment : Nat → Term Symbol),
+        Satisfies language meaning assignment after.core ↔
+          Satisfies language meaning assignment (neutralize target before.core) ∧
+            fill assignment fragment = assignment target := by
+  obtain ⟨fuel, after, running, raw, written, finalStored, finalFlag, finalWaiting,
+    afterPaths, afterCounts, afterFlags, afterStorage, afterRealized, afterSafe⟩ :=
+    complete heap before target fragment old stored roots paths counts flags storage bounded realized
+  refine ⟨fuel, after, running, raw, written, finalStored, finalFlag, finalWaiting,
+    afterPaths, afterCounts, afterFlags, afterStorage, afterRealized, afterSafe, ?_⟩
+  intro language meaning assignment
+  exact written_semantics before.core after.core target fragment
+    (List.getElem?_eq_some_iff.mp stored).1 written language meaning assignment
+
+end MicroCFTA.SourcePruningEnumerationFinalize

@@ -1,0 +1,33 @@
+[2026-10-27 01:22 CET] FINAL correction and current-operation annotation route.
+
+The earlier claim that full caller Context does not supply normalized physical annotations was incorrect. It missed the stronger nested loaded-field invariant. Bare SourceEqualityRequiredCache.Ready does not supply it, but SourceCurrentConjunctionClassScan.Ready does through Good.fields. The distinction changes which selected-edge gates remain open.
+
+Exact existing route:
+1. SourceCurrentAllocatedPartialInvariant.Context.ready (SourceCurrentAllocatedPartialInvariant.lean:25–35) has type SourceCurrentConjunctionClassScan.Ready caller.checked.
+2. That Ready.good (SourceCurrentConjunctionClassScan.lean:110–115) is SourceCurrentAllocatedNativePhysicalCompletion.Good caller.checked.
+3. Good.fields (SourceCurrentAllocatedNativePhysicalCompletion.lean:27–31) is SourceCurrentConjunctionEquality.Fields caller.checked.operations caller.heap.
+4. Fields (SourceCurrentConjunctionEquality.lean:27–28) is an actual physical edge-key annotation Heap of FieldAvailable operations.
+5. FieldAvailable (same source:22–24) is Cached original.equalities AND an existing successful physical load. Therefore for each current stored edge, `(initial.ready.good.fields key edge present).1` is the required Cached proof.
+
+The source-only draft adds two direct public projections in namespace SourceCurrentAllocatedPartialInvariant:
+  Context.annotation_heap (initial : Context formulas solver inventory caller memos)
+  Post.after_annotation_heap (post : Post formulas solver next before after final)
+Their formulas/solver/inventory/width/caller/memo parameters are implicit. The first derives SourceEqualityAnnotationHeap.Heap (fun guard => Cached guard.equalities) at caller.heap. The second applies the first to post.context and concerns exactly after.heap. No new admission, endpoint hypothesis, constructor, or runtime operation is added.
+
+This is actual transport, not a desired final annotation premise. Existing producer proofs establish their full returned Context, including the stronger loaded-field invariant, from earlier current invariants and actual operation receipts. The new theorem only extracts a consequence which those proofs already retain:
+- SourceCurrentConjunctionRowsAllocation.Effects.ready (41–44) supplies loaded fields at its actual after heap and operation cache.
+- SourceCurrentAllocatedConjunctionMemo.advance_good (37–42) explicitly takes effects.ready.fields when advancing the checked machine. ClassScan.advance_ready (118–124) retains that Good in the actual returned checked Ready.
+- SourcePruningNativeContext.narrowAt_post (22 onward) derives physical read/filtered-node Effects and builds actual afterContext (74 onward). outer_post (86 onward) handles literal type/Mu skips by the unchanged context and the other branches by that actual narrowing receipt. Filters retain existing edge guards; no new arbitrary guard is assumed.
+- SourcePruningEnumerationIncomingQuery.complete (22 onward) produces actual Post for the checked intersection and optional Empty phase, including its disabled/unreached and executed branches. Its reached Context therefore has the same annotation consequence without assuming final Heap.
+- SourcePruningEnumerationMu.complete proves current fields after actual unfold directly (61–67), then includes them in Effects and actual Post (73–95).
+- Actual completed traversal/selected/captured producers already return full Post receipts. They therefore retain annotations at their actual native Caller endpoint, even on a valid rejected child prefix. Generic Keeps, arbitrary Frame, a failed native operation without Post, or an unrelated heap does not supply this guarantee.
+
+Lower-level FieldHeap.work_heap/optionalBinder_heap and TargetFieldHeap/ClassFieldHeap actual pass lemmas remain reusable, but a new recursive annotation-preservation framework is unnecessary for callers which already retain full Context/Post. New selected-edge soundness can use `initial.annotation_heap`; a companion reached-edge proof can use `post.after_annotation_heap`. Existing old producer types can remain exact.
+
+Arity scope remains separate:
+Good.fields does not supply fresh-own arity through FieldAvailable. The predicate is about the raw constraint and operation cache; it has no edge children or arity parameter. FieldLookup.load (SourceEqualityConstraintFieldLookup.lean:17–23) parses that raw payload and reads its canonical storage; it takes no child count. PhysicalCache.Valid is generic in Guard and tracks actual memo keys, available operands, and resident returned rows (SourceCurrentAllocatedNativePhysicalCache.lean:20–38), not path bounds relative to an edge's children. Source normalization/field loads therefore do not provide the missing Haskell mkEdge fitsArity correspondence. No global native arity theorem was found in this route. Inherited ValidSuspended, the no-terminal ordinary-entry gate, and effective-bucket retention also remain independent semantic obligations.
+
+Historical correction scope:
+The preserved earlier edge-projection-gate-audit.txt SHA d5bb3f7c6dbc19fae4e7c51df3b406ae0804761886d724f9b63f12720b627a82 has an incorrect Context-annotation assessment in section2. The preserved review-selected-soundness.txt SHA bc4a4007d8a18a3f0c24455575ea5cc1ad574b31d5ec5c0f12d9486c4acab912 correctly reviews a theorem with explicit annotations, but its limitation listing current annotation among the universally unestablished gates must be read with this correction. Those files and the published statements remain unchanged. Their bare Ready, fresh arity, inherited gates, actual execution and conditional soundness assessments remain applicable. This finding is not a Haskell defect or runtime fix.
+
+Source identities: annotation-source-identities.json. Draft: drafts/SourcePruningEnumerationAnnotationHeap.lean. No builds, Git operations or repository edits performed by this reviewer.

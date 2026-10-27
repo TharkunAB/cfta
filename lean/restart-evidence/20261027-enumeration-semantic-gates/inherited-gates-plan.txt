@@ -1,0 +1,146 @@
+2026-10-27 01:25 CET
+
+Result
+
+Actual ordinary execution derives the inherited nonterminal gate. The current
+storage and recursive packets do not derive inherited trie validity. Entry
+retains the exact bucket. It does not validate or normalize the bucket.
+
+Draft
+
+drafts/SourcePruningEnumerationOrdinarySemanticGates.lean
+132 lines / 7570 bytes
+SHA256 95e2cfcb2cb86757de6015f1810b2ba66addd4667194633466c5f25d5fd5eb41
+No build has been run for the draft. Root owns checking and installation.
+
+The first two lemmas consume the actual whole ordinary run equation, including
+its actual entry singleton and Some scan result. They derive scs.any isTerminal
+= false by the runtime test. They cover legacy and continuation-aware scans.
+They do not add an endpoint or future execution premise to an old producer.
+An existing producer's own stable observation instantiates them directly.
+
+stored_valid_of_values transports a genuine prior stored-bucket validity
+history through exact values equality. Its validity input is explicit. This
+lemma does not claim to derive that history from Safe or rename the desired
+endpoint property as a derived fact.
+
+partition_descendants uses the actual partition equation. Descendants contain
+no terminal trie. If the original bucket is valid, both terminal and descendant
+parts are valid. children_valid proves validity for every actual EdgeInputs
+child bucket from inherited ValidSuspended plus validity of projected tries.
+It uses the real suspendedVars map, append membership and descend_valid.
+
+Source routes
+
+NativeOrdinary.run:24-33 and NativeOrdinaryContinuations.run:20-33 read the
+actual entry row, require an ordinary native parent, and branch on the actual
+scs.any isTerminal test. A Some scan cannot come from its true branch.
+NativeBranches.run:35-50 and NativeContinuations.run restore the same captured
+enumeration input and scs for each sibling. They thread native caller/query
+effects. The inherited noTerminal fact needs no new sibling bucket transport.
+
+SelectedEntry.complete:28-38 returns values equality, the same pending slot,
+and RenderStable. Its proof at63-65 and89-90 derives the stored bucket by
+equality. Entry.enter:21-31 reads and returns scs unchanged while updating
+representatives/ancestry. It does not inspect EqualityTrie.Valid.
+
+CapturedEdge.run:25-32 passes scs directly to SelectedEdge.run and finalizes the
+actual successful fragment. It neither establishes validity nor changes the
+inherited bucket used by the selected-edge scan.
+
+Recursive.resume:90-115 invokes NativeOrdinaryContinuations at the actual
+narrowed caller/cache. A valid ordinary scan there still enforces noTerminal.
+Recursive.Packet:21-35 retains Context, Safe, pending references, CacheValid,
+rank history and template ID bounds. It has no stored-trie validity field.
+
+EnumerationCorrectness.SlotBound:631-634 checks sc.var bounds for pending
+slots. StorageValid:644-649 adds alignment, union-find bounds and fragment
+bounds. EnumerationSchedule.Safe and EnumerationDriver.Ready add live-root
+and avoidance conditions. None requires EqualityTrie.Valid. PendingReferences
+and InputsPending concern reference avoidance, not trie representation.
+
+Concrete missing implication
+
+Let bad = EqualityTrie.Trie.branch []. It is structurally nonterminal but
+invalid: Valid requires a nonempty branch list. A bucket [{trie=bad,var=1}]
+has no terminal and all variable bounds hold at counter2. A root0 slot can
+store that bucket while root1 remains a separate pending slot. Avoidance at
+root0 holds because var1 belongs to its different class. No expanded slot is
+needed, so PendingReferences and InputsPending are vacuous. Storage/root,
+waiting and candidate conditions can still hold. No runtime ordinary test
+rejects bad. Thus those conditions cannot supply inherited ValidSuspended.
+This is a formal-admission gap. It is not evidence of a Haskell defect.
+
+Descendant validity and terminal status
+
+EnumerationSemantics.ValidSuspended:366 and descend_valid:369-376 give the
+needed representation proof. suspendedVars_tries identifies each fresh trie
+with a member of the projected list. EdgeInputs.children:15-18 uses the append
+of real inherited and fresh descents. Therefore genuine inherited validity
+plus projected validity suffices for every actual descendant bucket.
+
+Parent noTerminal must not be propagated through descent. The valid trie
+branch [(0,terminal)] is nonterminal at the parent. Its descent at index0 is
+terminal. ChildDispatch.run:54-66 performs the required new partition and
+passes only its nonterminal descendants to the incoming terminal worker.
+The draft partition lemma records exactly this filter fact.
+
+Projected validity source correction
+
+Full Caller Context already supplies current normalized equality annotation
+facts through initial.ready.good.fields and FieldAvailable. Guard's current
+Context-to-annotation helper supplies the genuine project_complete premise.
+Bare native Ready is weaker. A separate new annotation assumption is not
+needed when full Context is already retained. This does not establish validity
+of an arbitrary suspended bucket stored in the separate enumeration cache.
+
+Smallest honest next history theorem
+
+Use a companion current-state fact:
+  forall uv node bucket, state.values[uv]? = some (unenumerated node bucket)
+    -> ValidSuspended bucket.
+Derive it at the real initial allocation, whose stored bucket is empty. Preserve
+it with actual worker receipts. Compression/read/ancestry preserve values;
+same-bucket narrowing changes only the native handle; fresh suspension stores
+empty buckets; ordinary shallow preparation stores the actual valid descendant
+bucket; Mu/Union shallow preparation stores an empty bucket; assimilation and
+incoming writes concatenate valid input/stored buckets; finalization replaces
+a pending slot by an enumerated fragment. A parked recursion write clears its
+bucket. Residual recording changes obligations only.
+
+The raw-empty IncomingCacheAdapter path must be included. It can reconstruct
+the post-write pending slot with handle0 and incomingScs++oldScs. Its trie
+validity follows the same append proof. This does not assert Safe on rejection.
+The ordinary sibling scan reuses captured enumeration values, so it preserves
+the same stored-bucket validity while retaining actual native effects.
+
+Keep old producers and declarations intact. Add companion preserving outputs
+or a stronger producer that projects the old complete packet. Do not add the
+desired current bucket validity under a renamed endpoint input. The remaining
+initial validity must be derived from the real allocation/history path before
+a whole-recursive semantic producer can use it.
+
+Read source SHA256 identities
+
+SourcePruningEnumerationNativeOrdinary.lean
+  cccfa7a01331a7491ed31a8ee665bba1f3d055adfa170dd409c1acd912b2bd41
+SourcePruningEnumerationNativeOrdinaryContinuations.lean
+  74682c9cdc9bf037363c780b64d2f5e9303ffd3c510666eda7a654ce273baa5a
+SourcePruningEnumerationSelectedEntry.lean
+  520ecc4b4ee978f8a8db179ce54fb6b9775bda874c824c57c28de73332bb407d
+SourcePruningEnumerationCapturedEdge.lean
+  bf27ba6567436f49a3cb139812dc1a8c8993a98e7de5f2060e4ba29a7dc8ff05
+SourcePruningEnumerationRecursive.lean
+  9a0c5d1067439593915c06e9f92bb7f2ea5f9f9db2e38ae61f021b0b5bd608ea
+SourcePruningEnumerationRecursivePacket.lean
+  a4b24cb62806bda0f1b9a5f02b95650637b9e8e3c274f2f508438927915ad837
+SourcePruningEnumerationEdgeInputs.lean
+  0f7f7abfebb5db8eb7a1af68b02c341f32b5e4bf2cd8dafb7aa77bc3af367327
+SourcePruningEnumerationChildDispatch.lean
+  67880174034d9a1f39a6e57d3066833fa1cad67fd9b7d57102a39fffbfe066e1
+EnumerationSemantics.lean
+  69ef14d4cfe44c8d448b5ea1a0521526f654caabd6e12b126463344733ad3a62
+EnumerationCorrectness.lean
+  087b96d593bb42cea0b61b2742b43d4a41ce5a2d990e300c8d15700e2eb0672d
+EqualityTrie.lean
+  0cf7d0b98a7bbc24382fde259b3f9b71462c752c347ad6e7788b9e95b41e10d5

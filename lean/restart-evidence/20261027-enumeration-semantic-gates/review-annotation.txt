@@ -1,0 +1,13 @@
+[2026-10-27 01:27 CET] FINAL CLEAR — annotation source and retained checks.
+
+Source: /home/tritlo/Code/mcfta/lean/MicroCFTA/SourcePruningEnumerationAnnotationHeap.lean
+SHA256 778e01de48d0e9d347124aaae9c244724ec679344c6ecc2c4414199782609e0f.
+The strict-annotation-2/MicroCFTA source snapshot is byte-identical. Its report.json SHA256 b2ae0360f455055439e4c908194d924eb759695e3cc0737d3a3bb152b659a5c2 records exit_code=0, bytes=0, warningAsError=true, linter.all=true, and the same source SHA. raw.log is exactly empty, SHA256 e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855. I read the actual evidence; I ran no build.
+
+Context.annotation_heap derives the current physical annotation heap from initial.ready.good.fields, selecting its Cached component for the same key, edge and actual edgeRecords equation. The stronger current checked Ready contains Good.fields; FieldAvailable is Cached plus an existing successful field load. This corrects the earlier claim that full Context lacks annotation evidence. Bare SourceEqualityRequiredCache.Ready remains weaker.
+
+Post.after_annotation_heap uses post.context at the actual returned Caller and final Memos. It does not assume final annotations separately, infer them from arbitrary Frame/Keeps, or change the endpoint. Existing producers already derive that stronger returned Context from actual operations and current loaded fields. Both proofs are direct projections, with no execution, semantic callback premise, native query, capacity claim or future successful producer.
+
+The only change from the immutable f1bcc9b6... draft is the explicit existing DecidableEq EdgeKey typeclass variable required by Context itself. The two formulas and proof bodies are unchanged. Retained strict-annotation-1 failed solely on that missing instance at the two Context/Post binder types; its full 802-byte raw has SHA a78adf8129969aead3a00915ede25c2fadb14efc148ff0d9772e4954b2580fc7. No runtime or old producer statement changed.
+
+The annotation result does not establish fresh-own arity, inherited trie validity, no-terminal ordinary entry, or structural child retention. See the separate annotation-audit-correction.txt for the exact nested field route and preserved historical correction. No blocker found. No repository edits, builds or Git operations performed.

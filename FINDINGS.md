@@ -71,6 +71,37 @@ Terminal parents retain the existing enumerateNode fallback boundary. Native
 children can still take their terminal dispatcher. No Haskell fix is needed.
 Details: lean/notes-current-pruning-enumeration-native-ordinary.md.
 
+### Correction: current caller annotations and concrete checked arity
+
+The preceding checkpoint incorrectly grouped full caller Context with bare
+native Ready as missing normalized annotations. Context.ready.good.fields
+already gives FieldAvailable at every actual current physical edge record.
+FieldAvailable.1 is Cached for that record's exact equality payload.
+Each actual Post retains this fact in its returned Context. New extraction
+and selected-edge soundness proofs use it without an extra annotation premise.
+The older source-only assessment is superseded on this point. Its proof
+statements and original evidence remain unchanged.
+
+Actual checked edge construction supplies fresh own arity for both its live
+return and its Top/Empty sentinel. The actual checked native child worker
+also supplies arity from its ready prefix, exact returned guard and child count.
+These are concrete source receipts. Bare native residency does not supply
+checked construction history for every edge. Retain these receipts through
+later reconstruction and actual recursive operations.
+
+The ordinary runtime scan supplies no-terminal selection. Valid inherited
+tries still need a genuine stored-bucket history. Child descent can create
+terminal tries, which the child dispatcher partitions. Nonterminal Mu/Union
+allocation keeps its documented empty bucket. Structural retention remains
+a separate condition for full finite-assignment soundness.
+
+No Haskell source changed. No new Haskell defect or repair was established.
+External action: no additional patch. Retain all six merged repairs, merged
+Sized documentation PR #178, historical repros and pending parallel-decision
+suffix-exception/cancellation findings. Record future verified fixes here too.
+Details: `lean/notes-current-pruning-semantic-gates.md`.
+Evidence: `lean/restart-evidence/20261027-enumeration-semantic-gates`.
+
 ### Native selected-edge semantics and missing current-data gates
 
 Completed selected edges now have exact operational assignment semantics.
@@ -976,6 +1007,45 @@ TH/Generic extraction, valid-position build/read and source codec laws stay open
 
 
 
+
+## Current caller gates and exact finalization refine selected-edge soundness
+
+Actual gate derivation: `419fed9ff`.
+Selected-edge soundness and checked-worker arity: `9113861a7`.
+Exact captured-slot finalization: `bae4d92a9`.
+The goal stays ACTIVE. H6 remains the strongest end-to-end language theorem.
+Main `6c080537a` remains imported. All earlier Haskell repairs remain merged.
+
+Correction: full caller Context already supplies normalized annotations through
+ready.good.fields and FieldAvailable.1. The preceding gap assessment missed
+this nested invariant. Bare native Ready still does not supply it. Current
+Context and each actual Post now expose the annotation heap directly.
+The previous proof statements and historical reports remain unchanged.
+
+Current selected-edge soundness now derives annotations and actual child trie
+validity. An actual checked-constructor receipt also supplies fresh own arity.
+The checked native worker supplies fresh arity from its actual ready prefix,
+returned constraint and child count. Its complete child trace remains intact.
+The runtime ordinary scan supplies its no-terminal condition. Inherited stored
+trie validity still needs history; child descent can create a terminal trie.
+Child-bucket retention remains explicit at recursive truncation boundaries.
+
+Actual finalization now has an exact assignment equivalence: final Satisfies
+iff Satisfies at the neutralized immediate input and the filled-fragment
+assignment equation. The full original completion packet remains intact.
+This does not yet restore the removed pending domain through native expansion.
+
+All six new modules and Audit pass strict checks. Aggregate Audit passes
+3936 jobs and checks 77871 theorem dependencies. Installed readback covers
+12 declarations with only permitted axioms. Older proof sources except
+Audit imports, H6, runtime and Haskell remain unchanged. No new Haskell fix.
+
+Next retain checked arity origins and inherited trie validity through actual
+recursive operations. Transport neutralization through native expansion and
+recover the captured restriction. Then prove rendering and whole-enumerator
+language. Keep selector coverage, partial stops, unsupported fallback and
+Haskell correspondence open. Details and corrected FINDINGS handoff:
+`lean/notes-current-pruning-semantic-gates.md`.
 
 ## Actual selected edges now have exact assignment language and conditional native soundness
 
