@@ -1,0 +1,15 @@
+      ¬SourcePruningEnumerationRendering.Discharged output.cache.core := by
+  obtain ⟨held, handle, decoded, isolated⟩ := completed_head_opaque_isolated
+    seed inherited formulas solver inventory caller memos metadata before checkEmpty uv scs edge bound fragment
+    reached saved headCache returnedInventory returnedMemos head tries residual projected consumed suffix value bucket
+    location boundary nonterminal
+  have callbackSuccess : Success (SourcePruningRecordTypes.recordTypes graph templates workFuel metadata uv
+      (.inl fragment)) headCache.core (false, recorded) callbackCore := by
+    rw [Success, callback]
+    exact List.mem_singleton_self _
+  have callbackIsolated : IsolatedPending held handle callbackCore :=
+    isolated.through_recordTypes graph templates workFuel metadata uv (.inl fragment)
+      headCache.core callbackCore (false, recorded) head.completed.safe.1.total callbackSuccess
+  have outputIsolated := tail.isolated_boundary held handle value rfl callbackIsolated decoded boundary
+  exact ⟨held, handle, decoded, isolated, callbackIsolated, outputIsolated.1, outputIsolated.2,
+    outputIsolated.1.not_discharged⟩

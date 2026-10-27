@@ -1,0 +1,34 @@
+  obtain ⟨roots, paths, _storage, realized, counts, flags⟩ := head.admission.packet.valid
+  obtain ⟨handle, parentEntry, edges, depth, free, stored, decoded, selected⟩ := head.admission.source
+  obtain ⟨parent, parentLookup, parentAvailable, parentClosed⟩ := realized uv handle scs stored
+  have parentSame : parent = .node parentEntry edges depth free :=
+    Option.some.inj (parentLookup.symm.trans decoded)
+  subst parent
+  have bounded : ∀ sc ∈ scs, sc.var < before.core.counter :=
+    head.admission.ready.safe.1.values _ (List.mem_of_getElem? stored)
+  have pending := EnumerationReferences.pending_inputs before.core head.admission.packet.pending
+    uv (some handle) scs stored
+  obtain ⟨_action, own, _prepared, ownRun, _raw, ownCore, ownCounter, _ownForest,
+    ownSafe, ownPaths, ownRealized, ownCounts, ownFlags, _combinedPending, genuine, _ownProtects⟩ :=
+    SourcePruningEnumerationEdgeInputs.complete caller.checked.native.machine.heap parentEntry edges depth free
+      edge scs roots head.admission.packet.context.ready.semantic.ready parentAvailable parentClosed selected
+      before head.admission.packet.safe realized paths counts flags bounded pending head.allowed tries residual projected
+  let inputs := SourcePruningEnumerationEdgeInputs.children edge scs before.core.counter tries
+  let staged := inputs.map (fun input => (input.1, input.2,
+    SourcePruningEnumerationShallowChild.prepareChild (EnumGuard := Constraint) input.2 input.1))
+  have stagedInputs : staged.map (fun input => (input.1, input.2.1)) = inputs := by
+    simp only [staged, List.map_map]
+    exact List.map_id _
+  have ownPacket := own_prefix_packet formulas solver inventory caller memos metadata before own tries.length
+    head.admission.packet ownCore ⟨roots, ownPaths, ownSafe.1, ownRealized, ownCounts, ownFlags⟩
+  have originalReserved : Reserved bits seed (cost inputs) := by
+    simpa only [SourcePruningEnumerationNativeBranchCompletion.edgeCost, head.allowed, ↓reduceIte,
+      projected, SourcePruningEnumerationSelectedEdge.cost, inputs] using head.admission.reserved
+  obtain ⟨r, n, p, h, k, _fragments, _afterCaller, _after, _savedQueries, _final, _next, _afterRoots,
+    _result, _running, _post, _querySame, _growth, _pathsAfter, _storageAfter, _realizedAfter,
+    _countsAfter, _flagsAfter, _origin, _expandedProtected, _rootsProtected, _references,
+    _pendingHistory, _fragmentBounds, _shape, _returnedFits, _returnedKnown,
+    eventAdmission, prefixResult, prefixRunning⟩ :=
+    complete_with_stable_prefix_resources seed formulas solver inventory caller own checkEmpty inputs roots memos
+      head.admission.packet.context ownSafe ownPaths ownCounts ownFlags ownRealized genuine
+      head.admission.bounded originalReserved head.admission.known consumed ((value, bucket) :: suffix) location

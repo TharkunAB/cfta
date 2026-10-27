@@ -1,0 +1,53 @@
+--- attachment-v1.lean
++++ attachment-v2.lean
+@@ -60,7 +60,7 @@
+     (nonterminal : bucket.any (fun sc => EqualityTrie.isTerminal sc.trie) = false) :
+     ∃ held handle, lookupNode reached.checked.native.machine.heap handle = some value ∧
+       EnumerationDischargeHistory.IsolatedPending held handle headCache.core := by
+-  obtain ⟨roots, paths, storage, realized, counts, flags⟩ := head.admission.packet.valid
++  obtain ⟨roots, paths, _storage, realized, counts, flags⟩ := head.admission.packet.valid
+   obtain ⟨handle, parentEntry, edges, depth, free, stored, decoded, selected⟩ := head.admission.source
+   obtain ⟨parent, parentLookup, parentAvailable, parentClosed⟩ := realized uv handle scs stored
+   have parentSame : parent = .node parentEntry edges depth free :=
+@@ -99,8 +99,8 @@
+   have currentHead : SourcePruningEnumerationCapturedEdge.run checkEmpty W W W W W uv scs edge
+       caller before memos.query = some (.complete fragment reached saved headCache) := by
+     simpa only [W, Nat.add_comm] using head.running B
+-  obtain ⟨prefixFragments, suffixFragments, eventCaller, eventBefore, opaqueAfter, childCache,
+-    eventQueries, oldHandle, _fragmentShape, prefixTrace, _childObservation, opaqueRow,
++  obtain ⟨prefixFragments, _suffixFragments, eventCaller, eventBefore, opaqueAfter, _childCache,
++    eventQueries, _oldHandle, _fragmentShape, prefixTrace, _childObservation, opaqueRow,
+     _encoded, _allocated, _suffixTrace, _finalized⟩ :=
+     captured_opaque_event checkEmpty W W W W W uv scs edge caller reached before own headCache
+       memos.query saved edge.entry.key.symbol staged residual fragment consumed suffix value bucket ownRun
+@@ -109,7 +109,7 @@
+     have canonical := prefixRunning bound
+     have actual := SourcePruningEnumerationChildTraversal.trace_complete prefixTrace
+     exact canonical.symm.trans actual
+-  obtain ⟨eventInventory, eventMemos, eventPost, eventQuery, eventPacket, eventGrowth,
++  obtain ⟨eventInventory, eventMemos, _eventPost, eventQuery, eventPacket, eventGrowth,
+     remainingGenuine, eventFits, eventKnown, eventReserved⟩ :=
+     eventAdmission metadata ownPacket bound prefixFragments eventCaller eventBefore eventQueries prefixTrace
+   obtain ⟨available, closed, _eventBounded, _eventPending⟩ :=
+@@ -122,8 +122,8 @@
+   have suffixReserved : Reserved bits (advance seed (cost consumed)) (cost suffix) :=
+     eventReserved.prefix (by change cost suffix ≤ bucket.length + 1 + cost suffix; omega)
+   obtain ⟨opaqueHandle, sr, sn, sp, sh, sk, suffixResultFragments, suffixCaller, suffixCache,
+-    suffixQueries, suffixMemos, suffixInventory, suffixRoots, suffixResult,
+-    encoded, lookup, _opaqueCore, suffixFull, _suffixIsolated, finalizerIsolated⟩ :=
++    suffixQueries, _suffixMemos, _suffixInventory, _suffixRoots, suffixResult,
++    _encoded, lookup, _opaqueCore, suffixFull, _suffixIsolated, finalizerIsolated⟩ :=
+     EnumerationDischargeHistory.opaque_suffix_complete_isolated_resources
+       (advance seed (cost consumed)) formulas solver eventInventory eventCaller eventMemos metadata
+       eventBefore opaqueAfter value bucket W eventPacket available closed boundary nonterminal opaqueRow
+@@ -145,7 +145,9 @@
+       value bucket ownRun (stagedInputs.trans location) boundary nonterminal nextHead
+   have nextPrefixFixed : prefixResult =
+       .complete nextPrefixFragments nextEventCaller nextEventQueries nextEventBefore := by
+-    have canonical := prefixRunning (bound + padding)
++    have canonical : SourcePruningEnumerationChildTraversal.run checkEmpty nextWork nextWork nextWork
++        nextWork nextWork consumed caller own memos.query = prefixResult := by
++      simpa only [nextWork, B, Nat.add_assoc] using prefixRunning (bound + padding)
+     have actual := SourcePruningEnumerationChildTraversal.trace_complete nextPrefixTrace
+     exact canonical.symm.trans actual
+   have prefixSame := SourcePruningEnumerationChildTraversal.Result.complete.inj

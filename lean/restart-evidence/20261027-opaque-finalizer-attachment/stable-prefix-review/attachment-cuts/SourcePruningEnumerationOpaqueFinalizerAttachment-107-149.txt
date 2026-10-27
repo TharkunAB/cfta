@@ -1,0 +1,43 @@
+  let B := r + n + p + h + k
+  let W := B + bound
+  have currentHead : SourcePruningEnumerationCapturedEdge.run checkEmpty W W W W W uv scs edge
+      caller before memos.query = some (.complete fragment reached saved headCache) := by
+    simpa only [W, Nat.add_comm] using head.running B
+  obtain ⟨prefixFragments, _suffixFragments, eventCaller, eventBefore, opaqueAfter, _childCache,
+    eventQueries, _oldHandle, _fragmentShape, prefixTrace, _childObservation, opaqueRow,
+    _encoded, _allocated, _suffixTrace, _finalized⟩ :=
+    captured_opaque_event checkEmpty W W W W W uv scs edge caller reached before own headCache
+      memos.query saved edge.entry.key.symbol staged residual fragment consumed suffix value bucket ownRun
+      (stagedInputs.trans location) boundary nonterminal currentHead
+  have prefixFixed : prefixResult = .complete prefixFragments eventCaller eventQueries eventBefore := by
+    have canonical := prefixRunning bound
+    have actual := SourcePruningEnumerationChildTraversal.trace_complete prefixTrace
+    exact canonical.symm.trans actual
+  obtain ⟨eventInventory, eventMemos, _eventPost, eventQuery, eventPacket, eventGrowth,
+    remainingGenuine, eventFits, eventKnown, eventReserved⟩ :=
+    eventAdmission metadata ownPacket bound prefixFragments eventCaller eventBefore eventQueries prefixTrace
+  obtain ⟨available, closed, _eventBounded, _eventPending⟩ :=
+    remainingGenuine value bucket (by simp)
+  have suffixGenuine : ∀ incoming retained, (incoming, retained) ∈ suffix →
+      Available eventCaller.checked.native.machine.heap incoming ∧ incoming.free = [] ∧
+      (∀ sc ∈ retained, sc.var < eventBefore.core.counter) ∧ InputsPending eventBefore.core retained := by
+    intro incoming retained member
+    exact remainingGenuine incoming retained (List.mem_cons_of_mem _ member)
+  have suffixReserved : Reserved bits (advance seed (cost consumed)) (cost suffix) :=
+    eventReserved.prefix (by change cost suffix ≤ bucket.length + 1 + cost suffix; omega)
+  obtain ⟨opaqueHandle, sr, sn, sp, sh, sk, suffixResultFragments, suffixCaller, suffixCache,
+    suffixQueries, _suffixMemos, _suffixInventory, _suffixRoots, suffixResult,
+    _encoded, lookup, _opaqueCore, suffixFull, _suffixIsolated, finalizerIsolated⟩ :=
+    EnumerationDischargeHistory.opaque_suffix_complete_isolated_resources
+      (advance seed (cost consumed)) formulas solver eventInventory eventCaller eventMemos metadata
+      eventBefore opaqueAfter value bucket W eventPacket available closed boundary nonterminal opaqueRow
+      checkEmpty suffix suffixGenuine eventFits suffixReserved eventKnown
+  obtain ⟨suffixRunning, suffixPost, _suffixQuery, _suffixGrowth, _suffixPaths, _suffixStorage,
+    _suffixRealized, _suffixCounts, _suffixFlags, _suffixOrigin, _suffixExpandedProtected,
+    _suffixRootsProtected, _suffixReferences, _suffixPending, _suffixBounds, suffixShape,
+    _suffixFits, _suffixKnown⟩ := suffixFull
+  let padding := sr + sn + sp + sh + sk
+  let nextWork := B + bound + padding
+  have nextHead : SourcePruningEnumerationCapturedEdge.run checkEmpty nextWork nextWork nextWork nextWork
+      nextWork uv scs edge caller before memos.query = some (.complete fragment reached saved headCache) := by
+    simpa only [nextWork, Nat.add_assoc, Nat.add_comm, Nat.add_left_comm] using head.running (B + padding)

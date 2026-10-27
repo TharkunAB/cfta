@@ -1,0 +1,86 @@
+import MicroCFTA.SourcePruningEnumerationOpaqueFinalizerAttachment
+import MicroCFTA.SourcePruningEnumerationHistoryBoundaryIsolation
+
+/-!
+# An opaque head marker reaches its own recursive output
+
+The completed head supplies the actual opaque marker.
+The false callback retains that marker through its read frame.
+The same remaining resource history retains the marker at its own output.
+-/
+namespace MicroCFTA.SourcePruningEnumerationOpaqueEvent
+open EnumerationState EnumerationCorrectness EnumerationDischargeHistory InternedConstructorTemplates
+open SourcePruningEnumerationNodes (lookupNode)
+open SourcePruningEnumerationNativeHookResources (CompletedHeadReceipt)
+open SourceCurrentAllocatedNativeInventoryState (Inventory)
+open SourcePruningEnumerationIncomingReservation (Seed)
+local notation "Symbol" => SourcePruningTemplates.Symbol
+local notation "Constraint" => SourceSymbolicIndex.Constraint FullSyntax.Formula
+local notation "Node" => Value Symbol Constraint
+local notation "Caller" => SourceCurrentAllocatedPartialState.State
+local notation "Memos" => EndpointMemoGateTrace.Memos
+local notation "Queries" => SourceEndpointMemo.Memos
+local notation "Cached" => EnumerationExpandableIndex.Cached Symbol Constraint
+local notation "Core" => EnumerationState.State Symbol Constraint
+local notation "Fragment" => Fragments.Fragment Symbol
+local notation "Metadata" => SourcePruningRecordTypes.Metadata
+variable {Typing Key : Type} {bits : Nat}
+variable [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Constraint)] [DecidableEq Node]
+
+/-- The same head, false callback and remaining history retain the created opaque marker at their output. -/
+theorem completed_head_opaque_output_not_discharged
+    (seed : Seed) (inherited : Nat)
+    (formulas : SourceGuards.Formulas FullSyntax.Formula)
+    (solver : SourceGuards.Entailment FullSyntax.Formula) (inventory : Inventory)
+    (caller : Caller (bits + 2)) (memos : Memos) (metadata : Metadata Typing)
+    (before : Cached) (checkEmpty : Bool) (uv : Nat) (scs : List Suspended)
+    (edge : EdgeValue Symbol Constraint) (bound : Nat) (fragment : Fragment)
+    (reached : Caller (bits + 2)) (saved : Queries) (headCache : Cached)
+    (returnedInventory : Inventory) (returnedMemos : Memos)
+    (head : CompletedHeadReceipt seed inherited formulas solver inventory caller memos metadata before
+      checkEmpty uv scs edge bound fragment reached saved headCache returnedInventory returnedMemos)
+    (tries : List EqualityTrie.Trie) (residual : Option Constraint)
+    (projected : SourcePruningEnumerationConstraint.project edge.entry.key.constraint = some (tries, residual))
+    (consumed suffix : List (Node × List Suspended)) (value : Node) (bucket : List Suspended)
+    (location : SourcePruningEnumerationEdgeInputs.children edge scs before.core.counter tries =
+      consumed ++ (value, bucket) :: suffix)
+    (boundary : MergedOrdinaryHeight.recursiveBoundary value = true)
+    (nonterminal : bucket.any (fun sc => EqualityTrie.isTerminal sc.trie) = false)
+    (holeKey : Typing → Nat → Key) (fits : Key → Symbol → Bool) (admits : Key → Node → Bool)
+    (graph : Graph Symbol Constraint) (templates : List (Template.Pattern Symbol))
+    (edgesOf : Node → List (EdgeValue Symbol Constraint))
+    (stop : Option (Metadata Typing → Nat → Bool)) (order : Metadata Typing → List Nat → Option Nat)
+    (workFuel recursiveFuel : Nat) (recorded : Metadata Typing) (callbackCore : Core)
+    (tailSeed : Seed) (tailCeiling : Nat)
+    (output : SourcePruningEnumerationRecursive.Output (bits + 2) Typing)
+    (callback : ExceptT.run (SourcePruningRecordTypes.recordTypes graph templates workFuel metadata uv
+      (.inl fragment) headCache.core) = [.ok ((false, recorded), callbackCore)])
+    (tail : SourcePruningEnumerationRecursive.ResourceHistory
+      holeKey fits admits graph templates checkEmpty edgesOf stop order formulas solver workFuel
+      recursiveFuel returnedInventory reached returnedMemos recorded
+      (EnumerationExpandableIndex.frame callbackCore headCache) tailSeed tailCeiling
+      (SourcePruningEnumerationRestart.decision stop order recorded
+        (EnumerationExpandableIndex.frame callbackCore headCache)) output) :
+    ∃ held handle,
+      lookupNode reached.checked.native.machine.heap handle = some value ∧
+      IsolatedPending held handle headCache.core ∧
+      IsolatedPending held handle callbackCore ∧
+      IsolatedPending held handle output.cache.core ∧
+      lookupNode output.caller.checked.native.machine.heap handle = some value ∧
+      ¬SourcePruningEnumerationRendering.Discharged output.cache.core := by
+  obtain ⟨held, handle, decoded, isolated⟩ := completed_head_opaque_isolated
+    seed inherited formulas solver inventory caller memos metadata before checkEmpty uv scs edge bound fragment
+    reached saved headCache returnedInventory returnedMemos head tries residual projected consumed suffix value bucket
+    location boundary nonterminal
+  have callbackSuccess : Success (SourcePruningRecordTypes.recordTypes graph templates workFuel metadata uv
+      (.inl fragment)) headCache.core (false, recorded) callbackCore := by
+    rw [Success, callback]
+    exact List.mem_singleton_self _
+  have callbackIsolated : IsolatedPending held handle callbackCore :=
+    isolated.through_recordTypes graph templates workFuel metadata uv (.inl fragment)
+      headCache.core callbackCore (false, recorded) head.completed.safe.1.total callbackSuccess
+  have outputIsolated := tail.isolated_boundary held handle value rfl callbackIsolated decoded boundary
+  exact ⟨held, handle, decoded, isolated, callbackIsolated, outputIsolated.1, outputIsolated.2,
+    outputIsolated.1.not_discharged⟩
+
+end MicroCFTA.SourcePruningEnumerationOpaqueEvent

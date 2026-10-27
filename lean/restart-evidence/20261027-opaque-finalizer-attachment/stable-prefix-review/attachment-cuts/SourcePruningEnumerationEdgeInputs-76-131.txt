@@ -1,0 +1,56 @@
+      (input.1, input.2, SourcePruningEnumerationShallowChild.prepareChild (EnumGuard := Constraint) input.2 input.1)) =
+      edge.children.zipIdx.map (fun indexed =>
+        (indexed.1, descendScs indexed.2 scs ++ descendScs indexed.2 (suspendedVars before.core.counter tries),
+          SourcePruningEnumerationShallowChild.prepareChild (EnumGuard := Constraint)
+            (descendScs indexed.2 scs ++ descendScs indexed.2 (suspendedVars before.core.counter tries)) indexed.1)) := by
+    simp only [children, List.map_map]
+    rfl
+  have afterSafe : Safe after.core := by
+    rw [coreSame]
+    exact suspension_safe tries.length before.core safe
+  have combinedPending : InputsPending after.core (scs ++ suspendedVars before.core.counter tries) := by
+    rw [coreSame]
+    exact EnumerationConstruction.suspension_inputs_pending before.core safe scs pending tries
+  have childrenAvailable : ∀ child ∈ edge.children, Available heap child := by
+    intro child member
+    exact parentAvailable.children child (List.mem_flatMap.mpr ⟨edge, selected, member⟩)
+  have childrenClosed : ∀ child ∈ edge.children, child.free = [] :=
+    MergedColdReaderClosed.node_children_closed heap ready.semantic.1.normal.facts
+      parentEntry edges depth free parentAvailable parentClosed edge selected
+  refine ⟨action, after, prepared, ?_, ?_, coreSame, counter, forestSame, afterSafe,
+    afterPaths, afterRealized, afterCounts, afterFlags, combinedPending, ?_, ?_⟩
+  · simpa only [staged] using cachedRun
+  · simpa only [staged] using raw
+  · intro incoming bucket member
+    obtain ⟨indexed, indexedMember, pairSame⟩ := List.mem_map.mp member
+    cases pairSame
+    have combinedBounded : ∀ sc ∈ scs ++ suspendedVars before.core.counter tries, sc.var < after.core.counter := by
+      intro sc member
+      rw [counter]
+      rcases List.mem_append.mp member with inherited | own
+      · have := bounded sc inherited
+        omega
+      · exact suspended_bounded before.core.counter tries sc own
+    refine ⟨childrenAvailable indexed.1 (List.fst_mem_of_mem_zipIdx indexedMember),
+      childrenClosed indexed.1 (List.fst_mem_of_mem_zipIdx indexedMember), ?_, ?_⟩
+    · rw [← descend_append]
+      exact descend_bounded _ indexed.2 _ combinedBounded
+    · intro held fragment stored
+      rw [← descend_append]
+      exact descend_avoids _ held indexed.2 _ (combinedPending held fragment stored)
+  · intro held inside root avoids
+    have frame : EnumerationDriver.Protected held before.core after.core := by
+      rw [coreSame]
+      exact EnumerationDriver.suspension_protected held tries.length before.core safe inside root
+    refine ⟨frame, ?_⟩
+    have combinedAvoids : Avoids before.core.representatives held (scs ++ suspendedVars before.core.counter tries) := by
+      intro sc member
+      rcases List.mem_append.mp member with inherited | own
+      · exact avoids sc inherited
+      · exact fresh_avoids before.core safe.1 held inside tries sc own
+    have afterAvoids := frame.avoids _ combinedAvoids
+    intro incoming bucket member
+    obtain ⟨indexed, _indexedMember, pairSame⟩ := List.mem_map.mp member
+    cases pairSame
+    rw [← descend_append]
+    exact descend_avoids _ held indexed.2 _ afterAvoids

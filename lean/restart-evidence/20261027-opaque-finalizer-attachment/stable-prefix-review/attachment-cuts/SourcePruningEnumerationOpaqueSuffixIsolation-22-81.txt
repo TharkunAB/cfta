@@ -1,0 +1,60 @@
+/-- Original bounded inputs cannot name the class of a fresh allocated root. -/
+theorem allocated_avoids_bounded
+    (before : EnumerationState.State Symbol EnumGuard) (handle : Nat) (safe : Safe before)
+    (bucket : List Suspended) (bounded : ∀ sc ∈ bucket, sc.var < before.counter) :
+    Avoids (allocated (some handle) before).representatives before.counter bucket := by
+  intro sc member same
+  change UnionFind.SameClass before.representatives before.counter sc.var at same
+  have equal := outside_class before.representatives before.counter before.counter sc.var
+    safe.1.forest (Nat.le_refl _) same
+  have bound := bounded sc member
+  omega
+
+/-- An actual finalizer changes only the captured slot and expansion ancestry. -/
+private theorem finalized_core
+    (heap : InternedConstructorTemplates.State Symbol NativeGuard)
+    (fuel target : Nat) (fragment : Fragments.Fragment Symbol)
+    (before after : EnumerationExpandableIndex.Cached Symbol EnumGuard)
+    (observed : SourcePruningEnumerationFinalize.run heap fuel target fragment before = some after) :
+    after.core = {before.core with
+      values := before.core.values.set target (.enumerated fragment)
+      expansionAncestry := []} := by
+  unfold SourcePruningEnumerationFinalize.run at observed
+  dsimp only [EnumerationExpandableIndex.frame] at observed
+  cases stored : before.core.values[target]? with
+  | none =>
+      simp only [stored, Option.bind_none] at observed
+      cases observed
+  | some old =>
+      simp only [stored, Option.bind_some] at observed
+      unfold SourcePruningEnumerationNativeIndex.write at observed
+      simp only [SourcePruningEnumerationNativeIndex.candidate, Option.bind_some] at observed
+      cases counted : SourcePruningEnumerationNativeIndex.count fuel before.core.representatives (-1)
+          (references old) before.waiting with
+      | none =>
+          simp only [counted, Option.bind_none] at observed
+          cases observed
+      | some waiting =>
+          simp only [counted, Option.bind_some, SourcePruningEnumerationNativeIndex.count,
+            Option.some.injEq] at observed
+          subst after
+          rfl
+
+/-- An actual finalizer at a different raw slot retains an isolated root. -/
+theorem IsolatedPending.through_finalize
+    (heap : InternedConstructorTemplates.State Symbol NativeGuard)
+    (fuel target held handle : Nat) (fragment : Fragments.Fragment Symbol)
+    (before after : EnumerationExpandableIndex.Cached Symbol EnumGuard)
+    (isolated : IsolatedPending held handle before.core) (different : target ≠ held)
+    (observed : SourcePruningEnumerationFinalize.run heap fuel target fragment before = some after) :
+    IsolatedPending held handle after.core := by
+  have core := finalized_core heap fuel target fragment before after observed
+  refine ⟨?_, ?_, ?_⟩
+  · simpa only [core] using isolated.root
+  · simpa only [core, List.getElem?_set_ne different] using isolated.stored
+  · intro value member sc listed same
+    rw [core] at member same
+    rcases List.mem_or_eq_of_mem_set member with old | replaced
+    · exact isolated.incoming value old sc listed same
+    · subst value
+      simp [references] at listed

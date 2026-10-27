@@ -1,0 +1,33 @@
+    have adequatePrefix : SourcePruningEnumerationChildTraversal.run checkEmpty work work work work work
+        consumed beforeCaller before memos.query = prefixResult := by
+      have stable := prefixRunning (work - R) (work - N) work work (work - K)
+        (by dsimp only [work]; omega) (by dsimp only [work]; omega)
+      simpa only [RSame, NSame, KSame] using stable
+    have actualPrefix := SourcePruningEnumerationChildTraversal.trace_complete actualTrace
+    change SourcePruningEnumerationChildTraversal.run checkEmpty work work work work work consumed
+      beforeCaller before memos.query = .complete actualFragments eventCaller eventQueries eventBefore at actualPrefix
+    have matched := adequatePrefix.symm.trans actualPrefix
+    rcases prefixShape with ⟨prefixComplete, prefixSafe, _fragmentHistory⟩ | ⟨outer, waiting, prefixStopped⟩
+    · rw [prefixComplete] at matched
+      cases matched
+      obtain ⟨level, frontier, beforeOrder⟩ := packet.ordered
+      obtain ⟨afterLevel, afterOrder⟩ := EnumerationOrder.stratified_preserved before.core prefixCache.core
+        prefixSafe level frontier beforeOrder prefixOrigin prefixProtected
+      have prefixPacket : SourcePruningEnumerationRecursive.Packet formulas solver prefixInventory
+          prefixCaller prefixMemos metadata prefixCache := by
+        refine ⟨prefixPost.context, prefixSafe, prefixPending packet.pending,
+          ⟨prefixRoots, prefixPaths, prefixStorage, prefixRealized, prefixCounts, prefixFlags⟩,
+          ⟨afterLevel, frontier, afterOrder⟩, ?_⟩
+        intro group member entry listed
+        exact Nat.lt_of_lt_of_le (packet.bounded group member entry listed) prefixGrowth
+      refine ⟨prefixInventory, prefixMemos, prefixPost, prefixQuerySame, prefixPacket, prefixGrowth,
+        ?_, prefixFits, prefixKnown, reservationSplit.after_prefix⟩
+      intro value bucket member
+      have originalMember : (value, bucket) ∈ inputs := by
+        rw [splitInputs]
+        exact List.mem_append.mpr (.inr member)
+      obtain ⟨available, closed, bounded, pending⟩ := genuine value bucket originalMember
+      refine ⟨prefixPost.effects.keeps.available value available, closed,
+        fun sc listed => Nat.lt_of_lt_of_le (bounded sc listed) prefixGrowth, ?_⟩
+      intro held storedFragment stored
+      have old := prefixOrigin held storedFragment stored

@@ -1,0 +1,43 @@
+    origin, enumeratedProtected, rootsProtected, references, pendingHistory, fragmentBounds,
+    shape, returnedFits, returnedKnown⟩ :=
+    SourcePruningEnumerationTraversalCompletion.complete_with_fragments_resources seed formulas solver
+      inventory beforeCaller before checkEmpty inputs roots memos initial safe paths counts flags
+      realized genuine fits reserved known
+  have reservationSplit : Reserved bits seed (cost consumed + cost remaining) := by
+    simpa only [splitInputs, cost_append] using reserved
+  have consumedGenuine : ∀ value bucket, (value, bucket) ∈ consumed →
+      Available beforeCaller.checked.native.machine.heap value ∧ value.free = [] ∧
+      (∀ sc ∈ bucket, sc.var < before.core.counter) ∧ InputsPending before.core bucket := by
+    intro value bucket member
+    apply genuine value bucket
+    rw [splitInputs]
+    exact List.mem_append.mpr (.inl member)
+  obtain ⟨R, N, P, H, K, prefixFragments, prefixCaller, prefixCache, prefixQueries, prefixMemos,
+    prefixInventory, prefixRoots, prefixResult, prefixRunning, prefixPost, prefixQuerySame,
+    prefixGrowth, prefixPaths, prefixStorage, prefixRealized, prefixCounts, prefixFlags,
+    prefixOrigin, prefixProtected, _prefixRootProtected, _prefixReferences, prefixPending,
+    _prefixBounds, prefixShape, prefixFits, prefixKnown⟩ :=
+    SourcePruningEnumerationTraversalCompletion.complete_with_fragments_resources seed formulas solver
+      inventory beforeCaller before checkEmpty consumed roots memos initial safe paths counts flags
+      realized consumedGenuine fits (reservationSplit.prefix (by omega)) known
+  let bound := r + n + p + h + k + R + N + P + H + K
+  have large : r ≤ bound ∧ n ≤ bound ∧ p ≤ bound ∧ h ≤ bound ∧ k ≤ bound ∧
+      R ≤ bound ∧ N ≤ bound ∧ P ≤ bound ∧ H ≤ bound ∧ K ≤ bound := by
+    dsimp only [bound]
+    omega
+  refine ⟨bound, bound, bound, bound, bound, fragments, afterCaller, after, savedQueries,
+    final, next, afterRoots, result, ?_, post, querySame, growth, afterPaths, afterStorage,
+    afterRealized, afterCounts, afterFlags, origin, enumeratedProtected, rootsProtected,
+    references, pendingHistory, fragmentBounds, shape, returnedFits, returnedKnown, ?_, ?_⟩
+  · intro er en largeP largeH ek enoughP enoughH
+    have stable := running (bound - r + er) (bound - n + en) largeP largeH (bound - k + ek)
+      (by omega) (by omega)
+    have rSame : r + (bound - r + er) = bound + er := by omega
+    have nSame : n + (bound - n + en) = bound + en := by omega
+    have kSame : k + (bound - k + ek) = bound + ek := by omega
+    simpa only [rSame, nSame, kSame] using stable
+  · intro Typing metadata packet extra actualFragments eventCaller eventBefore eventQueries actualTrace
+    let work := bound + bound + bound + bound + bound + extra
+    have RSame : R + (work - R) = work := by dsimp only [work]; omega
+    have NSame : N + (work - N) = work := by dsimp only [work]; omega
+    have KSame : K + (work - K) = work := by dsimp only [work]; omega

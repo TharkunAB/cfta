@@ -1,0 +1,28 @@
+import MicroCFTA.SourcePruningEnumerationOpaqueFinalizerAttachment
+import MicroCFTA.SourcePruningEnumerationHistoryBoundaryIsolation
+
+/-!
+# An opaque head marker reaches its own recursive output
+
+The completed head supplies the actual opaque marker.
+The false callback retains that marker through its read frame.
+The same remaining resource history retains the marker at its own output.
+-/
+namespace MicroCFTA.SourcePruningEnumerationOpaqueEvent
+open EnumerationState EnumerationCorrectness EnumerationDischargeHistory InternedConstructorTemplates
+open SourcePruningEnumerationNodes (lookupNode)
+open SourcePruningEnumerationNativeHookResources (CompletedHeadReceipt)
+open SourceCurrentAllocatedNativeInventoryState (Inventory)
+open SourcePruningEnumerationIncomingReservation (Seed)
+local notation "Symbol" => SourcePruningTemplates.Symbol
+local notation "Constraint" => SourceSymbolicIndex.Constraint FullSyntax.Formula
+local notation "Node" => Value Symbol Constraint
+local notation "Caller" => SourceCurrentAllocatedPartialState.State
+local notation "Memos" => EndpointMemoGateTrace.Memos
+local notation "Queries" => SourceEndpointMemo.Memos
+local notation "Cached" => EnumerationExpandableIndex.Cached Symbol Constraint
+local notation "Core" => EnumerationState.State Symbol Constraint
+local notation "Fragment" => Fragments.Fragment Symbol
+local notation "Metadata" => SourcePruningRecordTypes.Metadata
+variable {Typing Key : Type} {bits : Nat}
+variable [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Constraint)] [DecidableEq Node]

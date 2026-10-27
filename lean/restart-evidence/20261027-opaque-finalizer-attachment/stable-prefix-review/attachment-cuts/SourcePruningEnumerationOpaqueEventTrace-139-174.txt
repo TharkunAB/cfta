@@ -1,0 +1,36 @@
+/-- A completed captured edge retains its actual child trace and finalizer. -/
+theorem captured_complete_trace
+    (checkEmpty : Bool) (r n p h k target : Nat) (scs : List Suspended)
+    (edge : EdgeValue Symbol Constraint) (caller reachedCaller : Caller width)
+    (before middle headCache : Cached) (queries savedQueries : Queries)
+    (symbol : Symbol) (staged : Staged) (residual : Option Constraint) (fragment : Fragment)
+    (prepared : SourcePruningEnumerationCachedOwn.prepare caller.checked.native.machine.heap scs edge before =
+      some [((symbol, staged, residual), middle)])
+    (completed : SourcePruningEnumerationCapturedEdge.run checkEmpty r n p h k target scs edge
+      caller before queries = some (.complete fragment reachedCaller savedQueries headCache)) :
+    ∃ (fragments : List Fragment) (childCache : Cached),
+      fragment = .node symbol fragments ∧
+      Trace checkEmpty r n p h k (staged.map (fun input => (input.1, input.2.1)))
+        caller middle queries fragments reachedCaller childCache savedQueries ∧
+      SourcePruningEnumerationFinalize.run reachedCaller.checked.native.machine.heap k target fragment
+        (SourcePruningEnumerationSelectedEdge.finish residual fragment childCache) = some headCache := by
+  unfold SourcePruningEnumerationCapturedEdge.run at completed
+  simp only [SourcePruningEnumerationSelectedEdge.run, prepared] at completed
+  cases childRun : SourcePruningEnumerationChildTraversal.run checkEmpty r n p h k
+      (staged.map (fun input => (input.1, input.2.1))) caller middle queries with
+  | stopped fragments observation candidate =>
+      simp only [childRun, Option.some.injEq, reduceCtorEq] at completed
+  | complete fragments afterCaller afterQueries childCache =>
+      simp only [childRun] at completed
+      cases finalized : SourcePruningEnumerationFinalize.run afterCaller.checked.native.machine.heap
+          k target (.node symbol fragments)
+          (SourcePruningEnumerationSelectedEdge.finish residual (.node symbol fragments) childCache) with
+      | none => simp only [finalized, Option.map_none, reduceCtorEq] at completed
+      | some final =>
+          simp only [finalized, Option.map_some, Option.some.injEq,
+            SourcePruningEnumerationSelectedEdge.Result.complete.injEq] at completed
+          obtain ⟨rfl, rfl, rfl, rfl⟩ := completed
+          exact ⟨fragments, childCache, rfl,
+            SourcePruningEnumerationChildTraversal.complete_trace checkEmpty r n p h k
+              _ caller afterCaller middle childCache queries afterQueries fragments childRun,
+            finalized⟩

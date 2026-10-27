@@ -1,0 +1,9 @@
+noncomputable def edgeCost (scs : List Suspended) (start : Nat) (edge : EdgeValue Symbol Constraint) : Nat :=
+  if arityAllows edge.children.length scs then
+    match SourcePruningEnumerationConstraint.project edge.entry.key.constraint with
+    | none => 0
+    | some (tries, _) => SourcePruningEnumerationSelectedEdge.cost edge scs start tries
+  else 0
+
+/-- Count alternatives in their original order, including duplicate entries. -/
+noncomputable def cost (scs : List Suspended) (start : Nat) : List (EdgeValue Symbol Constraint) → Nat

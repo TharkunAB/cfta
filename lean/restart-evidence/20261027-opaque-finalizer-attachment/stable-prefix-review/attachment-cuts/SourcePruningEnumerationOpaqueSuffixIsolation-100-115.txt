@@ -1,0 +1,16 @@
+/-- Residual recording retains isolation before the same actual parent finalizer. -/
+theorem IsolatedPending.through_residual_finalize
+    (heap : InternedConstructorTemplates.State Symbol Constraint)
+    (residual : Option Constraint) (fragment : Fragment) (fuel target held handle : Nat)
+    (before after : Cached) (isolated : IsolatedPending held handle before.core)
+    (different : target ≠ held)
+    (observed : SourcePruningEnumerationFinalize.run heap fuel target fragment
+      (SourcePruningEnumerationSelectedEdge.finish residual fragment before) = some after) :
+    IsolatedPending held handle after.core := by
+  have recorded : IsolatedPending held handle
+      (SourcePruningEnumerationSelectedEdge.finish residual fragment before).core :=
+    ⟨isolated.root, isolated.stored, isolated.incoming⟩
+  exact recorded.through_finalize heap fuel target held handle fragment
+    (SourcePruningEnumerationSelectedEdge.finish residual fragment before) after different observed
+
+variable [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Constraint)] [DecidableEq Node]
