@@ -1,5 +1,37 @@
 Continue the cfta formalization in /home/tritlo/Code/mcfta.
 
+## Actual recursive outputs now retain their own invariants and frontier
+
+Source checkpoint: 563a92a206770c2112b79703b2bec6c43469b3fe.
+Nine new modules certify every emitted flat output, including outputs before
+a later stopped branch. The original finite-depth admission derives one
+uniform work bound, the same stable old result and its full OutcomeResources.
+Each actual output has its own related safe ordered packet, full Post/Memos,
+native index correctness at its own heap, resource bounds and actual origin.
+The origin theorem also holds at every finite fuel without admission gates.
+
+User-stopped outputs retain the rule that accepted every remaining candidate.
+Done outputs have no candidates. Their native pending slots can still contain
+recursive boundaries with empty suspended buckets. Done does not imply
+Discharged. A checked initial-slot family records this exact boundary.
+It is conditional on an actual decoded available closed recursive value.
+It does not supply a full source Context or allocation history.
+
+The actual flat native renderer and its complete successful replay are checked.
+At an emitted output's own heap, Discharged, actual successful flat rendering
+and checked residuals construct a full satisfying assignment for that output.
+The entire flat core is unchanged. No successful old render is assumed.
+Transport back to the original input language and coverage remain open.
+H6 and the earlier conditional captured-rendering theorem stay unchanged.
+Audit passes 4073 jobs and 79112 theorem dependency checks.
+All nine modules and Audit pass strict checks. No Haskell source changed.
+FINDINGS retains every Haskell repair handoff and the extraction-progress limit.
+
+Next preserve assignment meaning through actual recursive steps and callbacks.
+Derive the semantic admission histories and state the pruning-policy contract.
+Details: `lean/notes-current-recursive-outputs.md`. The full goal stays ACTIVE.
+
+
 ## Actual flat recursive correspondence now holds at every finite depth
 
 Source checkpoint: 4b0400e958911d86bcd1953250d1484086a75eff.
