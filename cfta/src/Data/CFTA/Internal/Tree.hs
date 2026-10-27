@@ -12,6 +12,7 @@ module Data.CFTA.Internal.Tree (
     termsBy,
     termLevelsBy,
     termsUpToBy,
+    termsByCostBy,
     acceptsBy,
     andM,
     orM,
@@ -295,6 +296,65 @@ most once for each key, alternative, and position, in the order in which the
 direct recursion first runs it.
 -}
 {-# INLINEABLE acceptsBy #-}
+
+{- | The terms below a key in the order of a cost, cheapest first, each with
+its cost, produced lazily.
+
+The cost of a term comes from its symbol and the costs of its children. It
+must not decrease when the cost of a child grows. The least cost of a key is
+the least cost of its terms, or Nothing when it has none. Then the costs of
+the list never decrease, also below a cycle, whose list is infinite. The
+check decides each complete term at the alternative that built it. A term
+with two runs comes twice.
+
+This is a best-first search over partial terms, as Knuth's generalization of
+Dijkstra's algorithm: the key of a partial term is its cost with the least
+cost of the key of each hole, so a step never lowers the key, and a complete
+term comes out at its exact cost. Equal keys come out in the order in which
+the search made them.
+-}
+termsByCostBy ::
+    (Ord c) =>
+    (key -> [alternative]) ->
+    (alternative -> symbol) ->
+    (alternative -> [key]) ->
+    (alternative -> Term symbol -> Bool) ->
+    (symbol -> [c] -> c) ->
+    (key -> Maybe c) ->
+    key ->
+    [(c, Term symbol)]
+termsByCostBy outgoing symbolOf childrenOf check cost least root =
+    maybe [] (\k -> search 1 (Map.singleton (k, 0 :: Int) (Hole root))) (least root)
+  where
+    search serial queue = case Map.minViewWithKey queue of
+        Nothing -> []
+        Just (((k, _), partial), rest) -> case fill partial of
+            -- A partial term without a hole is complete, and its key is its cost.
+            Nothing -> [(k, term) | Just term <- [complete partial]] ++ search serial rest
+            Just filled -> let (serial', queue') = foldl' push (serial, rest) filled in search serial' queue'
+    -- A partial term with a hole of a key without terms has no complete term.
+    push (serial, queue) partial = case value partial of
+        Nothing -> (serial, queue)
+        Just k -> (serial + 1, Map.insert (k, serial) partial queue)
+    value (Hole key) = least key
+    value (Built alternative children) = cost (symbolOf alternative) <$> traverse value children
+    -- The partial terms that fill the leftmost hole with each alternative of
+    -- its key, or Nothing for a complete partial term.
+    fill (Hole key) = Just [Built alternative (map Hole (childrenOf alternative)) | alternative <- outgoing key]
+    fill (Built alternative children) = map (Built alternative) <$> fillFirst children
+    fillFirst [] = Nothing
+    fillFirst (child : rest) = case fill child of
+        Just filled -> Just [child' : rest | child' <- filled]
+        Nothing -> map (child :) <$> fillFirst rest
+    complete (Hole _) = Nothing
+    complete (Built alternative children) = do
+        subterms <- traverse complete children
+        let term = Node (symbolOf alternative) subterms
+        if check alternative term then Just term else Nothing
+
+-- | A term whose subterms can be holes, each of a key.
+data Partial key alternative = Hole key | Built alternative [Partial key alternative]
+
 acceptsBy ::
     (Monad m, Ord key, Eq symbol) =>
     (key -> [alternative]) ->

@@ -117,6 +117,36 @@ spec = do
                         Left err -> expectationFailure $ show err
                         Right ambiguous -> Automaton.terms (Automaton.boundDepth 2 ambiguous) `shouldMatchList` take 5 (Automaton.terms expressions)
 
+        it "lists accepted terms by cost, cheapest first" $
+            case ( Automaton.mkFTA
+                    Expression
+                    [(Expression, [Transition "zero" [] noConstraint, Transition "add" [Expression, Expression] noConstraint])]
+                 , Automaton.mkFTA
+                    Expression
+                    [
+                        ( Expression
+                        ,
+                            [ Transition "zero" [] noConstraint
+                            , Transition "add" [Expression, Expression] (equalityConstraint (mkEqConstraints [[path [0], path [1]]]))
+                            ]
+                        )
+                    ]
+                 ) of
+                (Right expressions, Right balanced) -> do
+                    let size _ children = 1 + sum children :: Int
+                        nodes = length . Term.flatten
+                        upToSeven = takeWhile ((<= 7) . fst) (Automaton.termsByCost size expressions)
+                        zero = Term.Node "zero" []
+                        twice t = Term.Node "add" [t, t]
+                    -- The cyclic language is infinite; its terms of at most 7 nodes come first.
+                    and (zipWith (<=) (map fst upToSeven) (drop 1 (map fst upToSeven))) `shouldBe` True
+                    [(k, t) | (k, t) <- upToSeven, k /= nodes t] `shouldBe` []
+                    map snd upToSeven `shouldMatchList` filter ((<= 7) . nodes) (Automaton.terms (Automaton.boundDepth 3 expressions))
+                    -- The constraint keeps the sums of two equal terms.
+                    take 4 (Automaton.termsByCost size balanced)
+                        `shouldBe` [(1, zero), (3, twice zero), (7, twice (twice zero)), (15, twice (twice (twice zero)))]
+                _ -> expectationFailure "no automaton"
+
         it "trims dead and unreachable states" $
             case Automaton.mkFTA
                 (0 :: Int)

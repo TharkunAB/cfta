@@ -42,6 +42,7 @@ module Data.CFTA (
     statesAt,
     terms,
     termsUpToM,
+    termsByCost,
     ViewPath,
     ViewStep (..),
     StateView (..),
@@ -70,6 +71,7 @@ import Data.CFTA.Internal.Tree (
     acceptsBy,
     explore,
     termsBy,
+    termsByCostBy,
     termsUpToBy,
     toTreeBy,
     trimRows,
@@ -445,6 +447,48 @@ termsUpToM accept bound automaton =
         (Map.toList $ transitionTable automaton)
         bound
         (initialState automaton)
+
+{- | The accepted terms in the order of a cost, cheapest first, each with its
+cost, produced lazily.
+
+The cost of a term comes from its symbol and the costs of its children, as
+for an extraction, such as the size or a sum of weights. It must not decrease
+when the cost of a child grows, and it must be at least the cost of each
+child, so that each state has a least cost. Then the costs of the list never
+decrease, also for a cyclic automaton, whose list is infinite. The terms of
+one cost come in a fixed order. A transition with a constraint gives only the
+terms that satisfy its path equalities. A term with two runs comes twice.
+-}
+termsByCost :: (Ord state, Eq symbol, Ord c) => (symbol -> [c] -> c) -> PlainFTA state symbol -> [(c, Term symbol)]
+termsByCost cost automaton =
+    termsByCostBy
+        (transitionsFrom automaton)
+        transitionSymbol
+        transitionChildren
+        (equalitiesHold . transitionConstraint)
+        cost
+        (`Map.lookup` leastCosts cost automaton)
+        (initialState automaton)
+
+{- | The least cost of the terms of each state that has terms: the fixed point
+of an evaluation from the leaves up, as Bellman and Ford relax the edges of a
+graph. The constraints are not interpreted, so the cost of a state with a
+constraint is a lower bound.
+-}
+leastCosts :: (Ord state, Ord c) => (symbol -> [c] -> c) -> FTA state symbol constraint -> Map state c
+leastCosts cost automaton = go Map.empty
+  where
+    go known =
+        let step =
+                Map.fromListWith
+                    min
+                    [ (state, cost (transitionSymbol transition) children)
+                    | (state, outgoing) <- Map.toList (transitionTable automaton)
+                    , transition <- outgoing
+                    , Just children <- [traverse (`Map.lookup` known) (transitionChildren transition)]
+                    ]
+            known' = Map.unionWith min known step
+         in if known' == known then known else go known'
 
 {- | Decide whether an automaton accepts a term, with a check on each matching transition.
 

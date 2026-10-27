@@ -4,6 +4,7 @@ import System.Directory (findExecutable)
 import System.Exit (die)
 import Test.Hspec (hspec)
 
+import qualified Data.CFTA.EGraphSpec
 import qualified Data.CFTA.Equality.ConstraintSpec
 import qualified Data.CFTA.Equality.FTASpec
 import qualified Data.CFTA.EqualitySpec
@@ -32,6 +33,7 @@ main = do
     hspec $ do
         Data.CFTASpec.spec
         Data.CFTA.Internal.UnionFindSpec.spec
+        Data.CFTA.EGraphSpec.spec
         Data.CFTA.Equality.ConstraintSpec.spec
         Data.CFTA.Equality.FTASpec.spec
         Data.CFTA.EqualitySpec.spec
