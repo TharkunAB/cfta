@@ -1,0 +1,58 @@
+theorem adapt_related (related : Related flat earlier)
+    (reads : EnumerationFlatState.Related readFlat readEarlier)
+    (heap : InternedConstructorTemplates.State Symbol Constraint) (indexFuel target : Nat)
+    (incomingScs : List EnumerationState.Suspended)
+    (counted : ∀ waiting, SourcePruningEnumerationNativeIndex.count indexFuel
+      readEarlier.representatives 1 incomingScs waiting =
+        some (EnumerationFlatNativeIndex.count readFlat.representatives 1 incomingScs waiting))
+    (rows : EnumerationResultRelation.Results EnumerationFlatState.Related flatRows oldRows) :
+    EnumerationFlatNativeIndex.WritesRelated (adapt heap target incomingScs flat readFlat flatRows)
+      (SourcePruningEnumerationIncomingCacheAdapter.adapt heap indexFuel target incomingScs
+        earlier readEarlier oldRows) := by
+  cases rows with
+  | nil =>
+    have same : readFlat.values[target]? = readEarlier.values[target]? := congrArg (fun values => values[target]?) reads.values
+    cases stored : readFlat.values[target]? with
+    | none =>
+      have oldStored : readEarlier.values[target]? = none := same.symm.trans stored
+      simp only [adapt, SourcePruningEnumerationIncomingCacheAdapter.adapt, stored, oldStored,
+        EnumerationFlatNativeIndex.WritesRelated]
+    | some value =>
+      have oldStored : readEarlier.values[target]? = some value := same.symm.trans stored
+      simp only [adapt, SourcePruningEnumerationIncomingCacheAdapter.adapt, stored, oldStored]
+      cases value with
+      | eliminated => trivial
+      | enumerated fragment => trivial
+      | unenumerated oldNode oldScs =>
+        have next : EnumerationFlatState.Related
+            {readFlat with
+              values := readFlat.values.set target (.unenumerated (some 0) (incomingScs ++ oldScs))
+              recursionAncestry := fun other => if other = target then
+                (readFlat.expansionAncestry ++ readFlat.recursionAncestry target).eraseDups
+                else readFlat.recursionAncestry other}
+            {readEarlier with
+              values := readEarlier.values.set target (.unenumerated (some 0) (incomingScs ++ oldScs))
+              recursionAncestry := fun other => if other = target then
+                (readEarlier.expansionAncestry ++ readEarlier.recursionAncestry target).eraseDups
+                else readEarlier.recursionAncestry other} := by
+          refine ⟨reads.valid, reads.representatives, reads.counter, ?_, reads.obligations, ?_,
+            reads.expansionAncestry⟩
+          · exact congrArg (fun values => values.set target
+              (.unenumerated (some 0) (incomingScs ++ oldScs))) reads.values
+          · rw [reads.expansionAncestry, reads.recursionAncestry]
+        exact write_frame_related (frame_related related reads) next heap indexFuel target
+          (.unenumerated (some 0) (incomingScs ++ oldScs)) incomingScs counted
+  | cons head tail =>
+    cases tail with
+    | cons next remaining => cases head <;> trivial
+    | nil =>
+      cases head with
+      | error error => trivial
+      | @ok returnedFlat returnedEarlier value states =>
+        cases value
+        simp only [adapt, SourcePruningEnumerationIncomingCacheAdapter.adapt, states.values]
+        cases stored : returnedEarlier.values[target]? with
+        | none => trivial
+        | some value =>
+          simp only [Option.bind_some]
+          exact write_frame_related (frame_related related reads) states heap indexFuel target value incomingScs counted

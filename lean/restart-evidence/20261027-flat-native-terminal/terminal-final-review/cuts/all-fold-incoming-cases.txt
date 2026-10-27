@@ -1,0 +1,69 @@
+  cases leftResult with
+  | error firstFault =>
+    cases rightResult with
+    | error secondFault => exact ⟨0, 0, fun _ _ => ⟨⟨rfl, rfl, outers, rfl, rows⟩, trivial⟩⟩
+    | ok value => cases rows
+  | ok leftValue =>
+    cases rightResult with
+    | error fault => cases leftValue <;> cases rows
+    | ok rightValue =>
+      cases leftValue with
+      | none =>
+        cases rightValue with
+        | none => exact ⟨0, 0, fun _ _ => ⟨⟨rfl, rfl, outers, rfl, trivial⟩, trivial⟩⟩
+        | some raw => cases rows
+      | some leftRows =>
+        cases rightValue with
+        | none => cases rows
+        | some rightRows =>
+          cases rows with
+          | nil => exact ⟨0, 0, fun _ _ => ⟨⟨rfl, rfl, outers, rfl, .nil⟩, caches⟩⟩
+          | cons head tail =>
+            cases head with
+            | error error =>
+              exact ⟨0, 0, fun _ _ => ⟨⟨rfl, rfl, outers, rfl, .cons (.error error) tail⟩, trivial⟩⟩
+            | @ok foldedFlat foldedEarlier value states =>
+              cases value
+              cases tail with
+              | cons next remaining =>
+                exact ⟨0, 0, fun _ _ => ⟨⟨rfl, rfl, outers, rfl, .cons (.ok () states) (.cons next remaining)⟩, trivial⟩⟩
+              | nil =>
+                cases leftCache with
+                | none =>
+                  cases rightCache with
+                  | some recovered => cases caches
+                  | none =>
+                    obtain ⟨incomingFuel, stable⟩ := EnumerationFlatNativeIncoming.run_stable states winner
+                    refine ⟨incomingFuel, 0, ?_⟩
+                    intro extraRepresentative extraIndex
+                    dsimp only
+                    have incomingStep : EnumerationFlatNativeCachedFold.ResultRelated
+                        (EnumerationFlatNativeIncoming.run checkEmpty nativeFuel p h reachedCaller
+                          foldedFlat winner incoming incomingScs savedQueries, none)
+                        (SourcePruningEnumerationIncomingNode.run checkEmpty
+                          (r + (incomingFuel + extraRepresentative)) nativeFuel p h reachedCaller
+                          foldedEarlier winner incoming incomingScs savedQueries, none) := by
+                      refine ⟨?_, trivial⟩
+                      simpa only [Nat.add_assoc, Nat.add_left_comm] using
+                        stable (r + extraRepresentative) checkEmpty nativeFuel p h reachedCaller incoming incomingScs savedQueries
+                    exact wrapIncoming_related winner moved incomingStep
+                | some recovered =>
+                  cases rightCache with
+                  | none => cases caches
+                  | some oldRecovered =>
+                    obtain ⟨incomingFuel, indexFuel, stable⟩ :=
+                      EnumerationFlatNativeIncomingCache.run_stable
+                        (EnumerationFlatCached.frame_related caches states)
+                        checkEmpty nativeFuel p h reachedCaller winner incoming incomingScs savedQueries
+                    refine ⟨incomingFuel, indexFuel, ?_⟩
+                    intro extraRepresentative extraIndex
+                    dsimp only
+                    have incomingStep : EnumerationFlatNativeCachedFold.ResultRelated
+                        (EnumerationFlatNativeIncomingCache.run checkEmpty nativeFuel p h reachedCaller
+                          (EnumerationFlatCached.frame foldedFlat recovered) winner incoming incomingScs savedQueries)
+                        (SourcePruningEnumerationIncomingCacheAdapter.run checkEmpty
+                          (r + (incomingFuel + extraRepresentative)) nativeFuel p h (indexFuel + extraIndex)
+                          reachedCaller (EnumerationExpandableIndex.frame foldedEarlier oldRecovered)
+                          winner incoming incomingScs savedQueries) := by
+                      simpa only [Nat.add_assoc, Nat.add_left_comm] using stable (r + extraRepresentative) extraIndex
+                    exact wrapIncoming_related winner moved incomingStep

@@ -1,0 +1,52 @@
+/-- Execute the native incoming merge and return its actual read core. -/
+noncomputable def run
+    [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Constraint)] [DecidableEq Node]
+    (checkEmpty : Bool) (nativeFuel p h : Nat)
+    (beforeCaller : Caller width) (before : EnumerationFlatState.State Symbol EnumGuard)
+    (uv : Nat) (incoming : Node) (incomingScs : List EnumerationState.Suspended) (queries : Queries) :
+    (Except (SourceEqualityNativeDemand.Outcome width Node ⊕
+      SourceCurrentAllocatedConjunctionWorker.Outcome width)
+      (Option (List (Except EnumerationState.Error (Unit × EnumerationFlatState.State Symbol EnumGuard))))) ×
+      Caller width × Queries × EnumerationFlatState.State Symbol EnumGuard :=
+  let target := FlatUnionFind.root before.representatives uv
+  match before.values[target]? with
+  | none => (.ok (some [.error .invalidSlot]), beforeCaller, queries, before)
+  | some (.unenumerated oldNode oldScs) =>
+      match oldNode with
+      | none =>
+          match encodeNode incoming with
+          | none => (.ok none, beforeCaller, queries, before)
+          | some handle =>
+              (.ok (some (ExceptT.run (finish target handle incomingScs oldScs incoming before))),
+                beforeCaller, queries, before)
+      | some oldHandle =>
+          match lookupNode beforeCaller.checked.native.machine.heap oldHandle with
+          | none => (.ok none, beforeCaller, queries, before)
+          | some old =>
+              let actual : SourceEqualityNativeDemand.Outcome width Node :=
+                SourceEqualityNativeDemand.execute nativeFuel
+                  (.code (SourceRecursiveIntersectionCode.requestNode IntersectionEmptyDomain.emptyDomain incoming old))
+                  beforeCaller.checked
+              match actual with
+              | .done query queried =>
+                  let phase : SourceCurrentAllocatedConjunctionWorker.Outcome width × Queries :=
+                    if checkEmpty then
+                      SourcePruningEnumerationEnabledEmpty.check p h query queried beforeCaller.fourth queries
+                    else (.done false queried beforeCaller.fourth, queries)
+                  let afterCaller : Caller width :=
+                    SourceCurrentAllocatedPartialState.advance beforeCaller phase.1.state phase.1.memo beforeCaller.merge
+                  match phase.1 with
+                  | .done answer checkedAfter saved =>
+                      let replacement : Node := if answer then .empty else query
+                      match encodeNode replacement with
+                      | none => (.ok none, afterCaller, phase.2, before)
+                      | some handle =>
+                          (.ok (some (ExceptT.run (finish target handle incomingScs oldScs replacement before))),
+                            SourceCurrentAllocatedPartialState.advance beforeCaller checkedAfter saved beforeCaller.merge,
+                            phase.2, before)
+                  | .failed fault checkedAfter saved =>
+                      (.error (.inr (.failed fault checkedAfter saved)), afterCaller, phase.2, before)
+              | other =>
+                  (.error (.inl other), SourceCurrentAllocatedPartialState.advance
+                    beforeCaller other.state beforeCaller.fourth beforeCaller.merge, queries, before)
+  | some _ => (.ok (some [.error .invalidIntersection]), beforeCaller, queries, before)

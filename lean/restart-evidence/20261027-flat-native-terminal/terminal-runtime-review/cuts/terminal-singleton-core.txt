@@ -1,0 +1,14 @@
+/-- A successful terminal row and its attached cache have the same core. -/
+theorem singleton_core
+    [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Constraint)] [DecidableEq Node]
+    (checkEmpty : Bool) (representativeFuel nativeFuel p h indexFuel : Nat)
+    (first : Suspended) (rest : List Suspended)
+    (beforeCaller reachedCaller : Caller width)
+    (before after : EnumerationExpandableIndex.Cached Symbol Constraint)
+    (incoming : Node) (incomingScs : List Suspended) (queries savedQueries : Queries)
+    (fragment : Fragments.Fragment Symbol) (returned outer : EnumerationState.State Symbol Constraint)
+    (waiting : EnumerationWaitingIndex.Waiting)
+    (observed : run checkEmpty representativeFuel nativeFuel p h indexFuel
+      first rest beforeCaller before incoming incomingScs queries =
+      ((.ok (some [.ok (fragment, returned)]), reachedCaller, savedQueries, outer, waiting), some after)) :
+    after.core = returned := by

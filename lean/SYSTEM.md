@@ -1,5 +1,38 @@
 # Constrained languages, indexing, and distributions
 
+## Actual flat terminal completion now retains native effects and full memos
+
+Incoming and cache: `2aa9a8c52`. Terminal composition and resources: `116cda114`.
+Main remains `82258094c`. The full formalization goal stays ACTIVE.
+H6 remains the strongest global finite-tree language theorem. Captured
+rendering retains its original admission, discharge and rendering gates.
+
+The actual terminal path now composes the recorded-root prefix, complete cached
+fold and native incoming merge. It keeps Caller, Queries, moved counts, ordered
+rows, diagnostics and optional recovery separately. Missing fold cache still
+executes incoming. Incoming Empty recovery retains the logical post-write cache;
+the outer core remains the read state. Fold rejection retains its fold cache.
+
+A stable old prefix derives adequate old representative/count bounds for each
+fixed native run, including failures. No arbitrary low-old-fuel equality is
+claimed. Original terminal admission derives actual flat completion for every
+adequate native bound, at the same reached Caller, Queries and moved waiting
+map. The entire old packet, full Post/global Memos and final native Correct
+remain available. Flat endpoints are existential per bound.
+
+The resource variant retains both fold and final Fits/carrier facts from one
+old producer. Initial Fits, Reserved and guard carrier derive its request bounds.
+No future flat observation or final invariant is an input. Whole recursive
+worker/callback transport and their admission histories remain open.
+
+All five modules and Audit pass strict checks. Aggregate Audit passes 4007 jobs
+and 78457 theorem dependency checks. Installed readback covers ten new theorems,
+unchanged H6/captured rendering and thirteen complete definitions. No Haskell change.
+
+Next transport actual recursive consumers and callbacks through these same
+native histories. Derive their initial Canonical, semantic numeric Ranges and
+allocation bounds. Details: `lean/notes-current-flat-native-terminal.md`.
+
 ## Native cached loop now derives adequate completion and full memos
 
 Cache adapter and loop: `58ad9ceaa`. Completion and resources: `68d605424`.

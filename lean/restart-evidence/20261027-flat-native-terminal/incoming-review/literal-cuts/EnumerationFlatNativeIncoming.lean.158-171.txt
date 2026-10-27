@@ -1,0 +1,14 @@
+/-- Every related input supplies one stable sufficient earlier representative bound. -/
+theorem run_stable
+    [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Constraint)] [DecidableEq Node]
+    (related : EnumerationFlatState.Related flat earlier) (uv : Nat) :
+    ∃ representativeFuel, ∀ extra checkEmpty nativeFuel p h (beforeCaller : Caller width)
+      incoming incomingScs queries,
+      EnumerationFlatNativeFold.ResultRelated
+        (run checkEmpty nativeFuel p h beforeCaller flat uv incoming incomingScs queries)
+        (SourcePruningEnumerationIncomingNode.run checkEmpty (representativeFuel + extra) nativeFuel p h
+          beforeCaller earlier uv incoming incomingScs queries) := by
+  obtain ⟨fuel, found, stable, _rootSame, _sizeSame, _retained⟩ :=
+    FlatUnionFind.find_stable related.representatives uv
+  exact ⟨fuel, fun extra checkEmpty nativeFuel p h beforeCaller incoming incomingScs queries =>
+    run_related related (stable extra) checkEmpty nativeFuel p h beforeCaller incoming incomingScs queries⟩

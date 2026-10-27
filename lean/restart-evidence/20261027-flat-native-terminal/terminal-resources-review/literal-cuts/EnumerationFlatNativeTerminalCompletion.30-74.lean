@@ -1,0 +1,45 @@
+theorem observed
+    [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Constraint)] [DecidableEq Node]
+    (related : EnumerationFlatCached.Related flat before)
+    (first : Suspended) (rest : List Suspended)
+    (r : Nat) (recorded : List Nat) (winner : Nat) (moved : EnumerationWaitingIndex.Waiting)
+    (joined : EnumerationState.State Symbol Constraint)
+    (prefixRun : ∀ extra, ExceptT.run (SourcePruningEnumerationTerminalPrefix.run
+      (r + extra) first rest before.waiting before.core) = [.ok ((recorded, winner, moved), joined)])
+    (checkEmpty : Bool) (nativeFuel p h k : Nat) (beforeCaller afterCaller : Caller width)
+    (incoming : Node) (incomingScs : List Suspended) (queries savedQueries : Queries)
+    (raw : TerminalRaw) (outer : EnumerationState.State Symbol Constraint)
+    (resultCache : EnumerationExpandableIndex.Cached Symbol Constraint)
+    (stable : ∀ extraRepresentative extraIndex,
+      SourcePruningEnumerationCachedTerminalAdapter.run checkEmpty
+        (r + extraRepresentative) nativeFuel p h (k + extraIndex)
+        first rest beforeCaller before incoming incomingScs queries =
+        ((.ok (some raw), afterCaller, savedQueries, outer, moved), some resultCache)) :
+    ∃ flatRows flatOuter recovered,
+      run checkEmpty nativeFuel p h first rest beforeCaller flat incoming incomingScs queries =
+        ((.ok (some flatRows), afterCaller, savedQueries, flatOuter, moved), some recovered) ∧
+      EnumerationFlatCached.Related recovered resultCache ∧
+      EnumerationFlatState.Related flatOuter outer ∧
+      EnumerationResultRelation.Results EnumerationFlatState.Related flatRows raw := by
+  obtain ⟨extraFuel, indexFuel, replay⟩ := run_stable related first rest r recorded winner moved
+    joined prefixRun checkEmpty nativeFuel p h beforeCaller incoming incomingScs queries
+  have correspondence := replay 0 k
+  simp only [Nat.add_zero, Nat.add_comm indexFuel k, stable extraFuel indexFuel] at correspondence
+  generalize actual : run checkEmpty nativeFuel p h first rest beforeCaller flat incoming incomingScs queries =
+    actualResult at correspondence
+  obtain ⟨⟨outcome, reachedCaller, returnedQueries, flatOuter, waiting⟩, recovered⟩ := actualResult
+  obtain ⟨⟨callerSame, queriesSame, outerRelated, waitingSame, rowsRelated⟩, cacheRelated⟩ := correspondence
+  dsimp only at callerSame queriesSame outerRelated waitingSame rowsRelated cacheRelated
+  subst reachedCaller returnedQueries waiting
+  cases recovered with
+  | none => cases cacheRelated
+  | some recovered =>
+    cases outcome with
+    | error fault =>
+      cases fault with
+      | inl prefixFault => cases rowsRelated
+      | inr remaining => cases remaining <;> cases rowsRelated
+    | ok returned =>
+      cases returned with
+      | none => cases rowsRelated
+      | some flatRows => exact ⟨flatRows, flatOuter, recovered, rfl, cacheRelated, outerRelated, rowsRelated⟩

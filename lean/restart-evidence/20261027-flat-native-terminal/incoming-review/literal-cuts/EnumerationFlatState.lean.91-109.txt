@@ -1,0 +1,19 @@
+/-- Write the supplied raw variable rather than its representative. -/
+def setValue (uv : Nat) (value : UVarValue Symbol) : Action Symbol Guard Unit :=
+  modify fun state => {state with values := state.values.set uv value}
+
+/-- Read a raw slot and retain an explicit invalid-slot error. -/
+def rawValue (uv : Nat) : Action Symbol Guard (UVarValue Symbol) := fun before =>
+  match before.values[uv]? with
+  | none => [.error .invalidSlot]
+  | some value => [.ok (value, before)]
+
+/-- Read the slot at the current direct representative. -/
+def getValue (uv : Nat) : Action Symbol Guard (UVarValue Symbol) := do
+  rawValue (← representative uv)
+
+/-- Give one variable the current expansion ancestry in the core projection. -/
+def inheritAncestry (uv : Nat) : Action Symbol Guard Unit :=
+  modify fun state => {state with recursionAncestry := (fun other =>
+    if other = uv then (state.expansionAncestry ++ state.recursionAncestry uv).eraseDups
+    else state.recursionAncestry other)}

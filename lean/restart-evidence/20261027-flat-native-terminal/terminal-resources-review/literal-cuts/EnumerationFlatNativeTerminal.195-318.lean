@@ -1,0 +1,124 @@
+theorem run_stable
+    [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Constraint)] [DecidableEq Node]
+    (related : EnumerationFlatCached.Related flat earlier)
+    (first : Suspended) (rest : List Suspended)
+    (r : Nat) (recorded : List Nat) (winner : Nat) (moved : EnumerationWaitingIndex.Waiting)
+    (joined : EnumerationState.State Symbol Constraint)
+    (prefixRun : ∀ extra, ExceptT.run (SourcePruningEnumerationTerminalPrefix.run
+      (r + extra) first rest earlier.waiting earlier.core) = [.ok ((recorded, winner, moved), joined)])
+    (checkEmpty : Bool) (nativeFuel p h : Nat) (beforeCaller : Caller width)
+    (incoming : Node) (incomingScs : List Suspended) (queries : Queries) :
+    ∃ extraFuel indexFuel, ∀ extraRepresentative extraIndex,
+      ResultRelated (run checkEmpty nativeFuel p h first rest beforeCaller flat incoming incomingScs queries)
+        (SourcePruningEnumerationCachedTerminalAdapter.run checkEmpty
+          (r + extraFuel + extraRepresentative) nativeFuel p h (indexFuel + extraIndex)
+          first rest beforeCaller earlier incoming incomingScs queries) := by
+  by_cases empty : incoming = .empty
+  · refine ⟨0, 0, fun _ _ => ?_⟩
+    simp only [run, SourcePruningEnumerationCachedTerminalAdapter.run, ite_eq_left empty]
+    exact ⟨⟨rfl, rfl, related.core, related.waiting, .nil⟩, related⟩
+  have success : Success (SourcePruningEnumerationTerminalPrefix.run r first rest earlier.waiting)
+      earlier.core (recorded, winner, moved) joined := by
+    simp only [Success, show ExceptT.run (SourcePruningEnumerationTerminalPrefix.run
+      r first rest earlier.waiting earlier.core) = [.ok ((recorded, winner, moved), joined)] from by
+        simpa only [Nat.add_zero] using prefixRun 0, List.mem_singleton]
+  obtain ⟨joinedFlat, flatPrefix, joinedRelated⟩ :=
+    EnumerationFlatTerminalPrefix.run_replays r first rest earlier.waiting
+      flat.core earlier.core _ joined related.core success
+  have flatPrefix' : ExceptT.run (EnumerationFlatTerminalPrefix.run
+      first rest flat.waiting flat.core) = [.ok ((recorded, winner, moved), joinedFlat)] := by
+    rw [related.waiting]
+    exact flatPrefix
+  let joinedCache : EnumerationFlatCached.Cached Symbol Constraint :=
+    ⟨joinedFlat, flat.expandable, moved⟩
+  let oldJoined : EnumerationExpandableIndex.Cached Symbol Constraint :=
+    ⟨joined, earlier.expandable, moved⟩
+  have step := EnumerationFlatNativeCachedFold.run_related
+    (show EnumerationFlatCached.Related joinedCache oldJoined from
+      ⟨joinedRelated, related.expandable, rfl⟩)
+    checkEmpty nativeFuel p h recorded beforeCaller winner queries
+  generalize flatFold : EnumerationFlatNativeCachedFold.run checkEmpty nativeFuel p h
+    recorded beforeCaller joinedCache winner queries = left at step ⊢
+  generalize oldFold : SourcePruningEnumerationCachedFold.run checkEmpty nativeFuel p h
+    recorded beforeCaller oldJoined winner queries = right at step ⊢
+  obtain ⟨⟨leftResult, reachedCaller, savedQueries, outerFlat⟩, leftCache⟩ := left
+  obtain ⟨⟨rightResult, oldCaller, oldQueries, outerEarlier⟩, rightCache⟩ := right
+  obtain ⟨⟨callerSame, queriesSame, outers, rows⟩, caches⟩ := step
+  dsimp only at callerSame queriesSame
+  subst oldCaller oldQueries
+  dsimp only [joinedCache] at flatFold
+  dsimp only [oldJoined] at oldFold
+  simp only [run, SourcePruningEnumerationCachedTerminalAdapter.run, ite_eq_right empty,
+    flatPrefix', Nat.add_assoc, prefixRun, flatFold, oldFold]
+  cases leftResult with
+  | error firstFault =>
+    cases rightResult with
+    | error secondFault => exact ⟨0, 0, fun _ _ => ⟨⟨rfl, rfl, outers, rfl, rows⟩, trivial⟩⟩
+    | ok value => cases rows
+  | ok leftValue =>
+    cases rightResult with
+    | error fault => cases leftValue <;> cases rows
+    | ok rightValue =>
+      cases leftValue with
+      | none =>
+        cases rightValue with
+        | none => exact ⟨0, 0, fun _ _ => ⟨⟨rfl, rfl, outers, rfl, trivial⟩, trivial⟩⟩
+        | some raw => cases rows
+      | some leftRows =>
+        cases rightValue with
+        | none => cases rows
+        | some rightRows =>
+          cases rows with
+          | nil => exact ⟨0, 0, fun _ _ => ⟨⟨rfl, rfl, outers, rfl, .nil⟩, caches⟩⟩
+          | cons head tail =>
+            cases head with
+            | error error =>
+              exact ⟨0, 0, fun _ _ => ⟨⟨rfl, rfl, outers, rfl, .cons (.error error) tail⟩, trivial⟩⟩
+            | @ok foldedFlat foldedEarlier value states =>
+              cases value
+              cases tail with
+              | cons next remaining =>
+                exact ⟨0, 0, fun _ _ => ⟨⟨rfl, rfl, outers, rfl, .cons (.ok () states) (.cons next remaining)⟩, trivial⟩⟩
+              | nil =>
+                cases leftCache with
+                | none =>
+                  cases rightCache with
+                  | some recovered => cases caches
+                  | none =>
+                    obtain ⟨incomingFuel, stable⟩ := EnumerationFlatNativeIncoming.run_stable states winner
+                    refine ⟨incomingFuel, 0, ?_⟩
+                    intro extraRepresentative extraIndex
+                    dsimp only
+                    have incomingStep : EnumerationFlatNativeCachedFold.ResultRelated
+                        (EnumerationFlatNativeIncoming.run checkEmpty nativeFuel p h reachedCaller
+                          foldedFlat winner incoming incomingScs savedQueries, none)
+                        (SourcePruningEnumerationIncomingNode.run checkEmpty
+                          (r + (incomingFuel + extraRepresentative)) nativeFuel p h reachedCaller
+                          foldedEarlier winner incoming incomingScs savedQueries, none) := by
+                      refine ⟨?_, trivial⟩
+                      simpa only [Nat.add_assoc, Nat.add_left_comm] using
+                        stable (r + extraRepresentative) checkEmpty nativeFuel p h reachedCaller incoming incomingScs savedQueries
+                    exact wrapIncoming_related winner moved incomingStep
+                | some recovered =>
+                  cases rightCache with
+                  | none => cases caches
+                  | some oldRecovered =>
+                    obtain ⟨incomingFuel, indexFuel, stable⟩ :=
+                      EnumerationFlatNativeIncomingCache.run_stable
+                        (EnumerationFlatCached.frame_related caches states)
+                        checkEmpty nativeFuel p h reachedCaller winner incoming incomingScs savedQueries
+                    refine ⟨incomingFuel, indexFuel, ?_⟩
+                    intro extraRepresentative extraIndex
+                    dsimp only
+                    have incomingStep : EnumerationFlatNativeCachedFold.ResultRelated
+                        (EnumerationFlatNativeIncomingCache.run checkEmpty nativeFuel p h reachedCaller
+                          (EnumerationFlatCached.frame foldedFlat recovered) winner incoming incomingScs savedQueries)
+                        (SourcePruningEnumerationIncomingCacheAdapter.run checkEmpty
+                          (r + (incomingFuel + extraRepresentative)) nativeFuel p h (indexFuel + extraIndex)
+                          reachedCaller (EnumerationExpandableIndex.frame foldedEarlier oldRecovered)
+                          winner incoming incomingScs savedQueries) := by
+                      simpa only [Nat.add_assoc, Nat.add_left_comm] using stable (r + extraRepresentative) extraIndex
+                    exact wrapIncoming_related winner moved incomingStep
+
+
+end MicroCFTA.EnumerationFlatNativeTerminal

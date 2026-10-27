@@ -1,0 +1,37 @@
+MicroCFTA.EnumerationFlatNativeTerminal.run_stable {width : Nat}
+  {flat :
+    MicroCFTA.EnumerationFlatCached.Cached MicroCFTA.SourcePruningTemplates.Symbol
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)}
+  {earlier :
+    MicroCFTA.EnumerationExpandableIndex.Cached MicroCFTA.SourcePruningTemplates.Symbol
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)}
+  [DecidableEq MicroCFTA.SourcePruningTemplates.Symbol]
+  [DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey MicroCFTA.SourcePruningTemplates.Symbol
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  [DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.Value MicroCFTA.SourcePruningTemplates.Symbol
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  (related : MicroCFTA.EnumerationFlatCached.Related flat earlier) (first : MicroCFTA.EnumerationState.Suspended)
+  (rest : List MicroCFTA.EnumerationState.Suspended) (r : Nat) (recorded : List Nat) (winner : Nat)
+  (moved : MicroCFTA.EnumerationWaitingIndex.Waiting)
+  (joined :
+    MicroCFTA.EnumerationState.State MicroCFTA.SourcePruningTemplates.Symbol
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+  (prefixRun :
+    ∀ (extra : Nat),
+      (MicroCFTA.SourcePruningEnumerationTerminalPrefix.run (r + extra) first rest earlier.waiting earlier.core).run =
+        [Except.ok ((recorded, winner, moved), joined)])
+  (checkEmpty : Bool) (nativeFuel p h : Nat) (beforeCaller : MicroCFTA.SourceCurrentAllocatedPartialState.State width)
+  (incoming :
+    MicroCFTA.InternedConstructorTemplates.Value MicroCFTA.SourcePruningTemplates.Symbol
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+  (incomingScs : List MicroCFTA.EnumerationState.Suspended) (queries : MicroCFTA.SourceEndpointMemo.Memos) :
+  ∃ extraFuel indexFuel,
+    ∀ (extraRepresentative extraIndex : Nat),
+      MicroCFTA.EnumerationFlatNativeTerminal.ResultRelated
+        (MicroCFTA.EnumerationFlatNativeTerminal.run checkEmpty nativeFuel p h first rest beforeCaller flat incoming
+          incomingScs queries)
+        (MicroCFTA.SourcePruningEnumerationCachedTerminalAdapter.run checkEmpty (r + extraFuel + extraRepresentative)
+          nativeFuel p h (indexFuel + extraIndex) first rest beforeCaller earlier incoming incomingScs queries)
+'MicroCFTA.EnumerationFlatNativeTerminal.run_stable' depends on axioms: [propext, Classical.choice, Quot.sound]

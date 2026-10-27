@@ -1,0 +1,15 @@
+/-- Reject the empty optional handle before either raw write. -/
+def finishOptional (source target : Nat) (node : Option Nat)
+    (sourceScs targetScs : List EnumerationState.Suspended) :
+    EnumerationFlatState.Action Symbol EnumGuard Unit :=
+  fun state => if node = some 0 then [] else
+    [.ok ((), assimilated state target source (.unenumerated node (sourceScs ++ targetScs)))]
+
+/-- Reject the empty native value before the two raw writes and ancestry transfer. -/
+def finish (source target handle : Nat)
+    (sourceScs targetScs : List EnumerationState.Suspended) (result : Node) :
+    EnumerationFlatState.Action Symbol EnumGuard Unit :=
+  match result with
+  | .empty => fun _ => []
+  | _ => fun state =>
+      [.ok ((), assimilated state target source (.unenumerated (some handle) (sourceScs ++ targetScs)))]

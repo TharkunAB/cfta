@@ -1,0 +1,15 @@
+def MicroCFTA.EnumerationFlatNativeIncoming.finish : {EnumGuard : Type} →
+  Nat →
+    Nat →
+      List MicroCFTA.EnumerationState.Suspended →
+        List MicroCFTA.EnumerationState.Suspended →
+          MicroCFTA.InternedConstructorTemplates.Value MicroCFTA.SourcePruningTemplates.Symbol
+              (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) →
+            MicroCFTA.EnumerationFlatState.Action MicroCFTA.SourcePruningTemplates.Symbol EnumGuard Unit :=
+fun {EnumGuard} target handle incomingScs oldScs replacement => do
+  MicroCFTA.EnumerationFlatState.setValue target
+      (MicroCFTA.EnumerationState.UVarValue.unenumerated (some handle) (incomingScs ++ oldScs))
+  MicroCFTA.EnumerationFlatState.inheritAncestry target
+  match replacement with
+    | MicroCFTA.InternedConstructorTemplates.Value.empty => MicroCFTA.EnumerationFlatState.reject
+    | x => pure ()

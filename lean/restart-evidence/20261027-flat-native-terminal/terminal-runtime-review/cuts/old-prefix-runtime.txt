@@ -1,0 +1,10 @@
+/-- Record original roots, join their classes and transfer the old waiting buckets. -/
+def run (fuel : Nat) (first : EnumerationState.Suspended) (rest : List EnumerationState.Suspended)
+    (waiting : EnumerationWaitingIndex.Waiting) :
+    EnumerateM Symbol EnumGuard (List Nat × Nat × EnumerationWaitingIndex.Waiting) := do
+  let recorded ← (first :: rest).mapM fun sc => representative fuel sc.var
+  rest.forM fun sc => unionVariables fuel first.var sc.var
+  let winner ← representative fuel first.var
+  let sources : List Nat :=
+    EnumerationBuilderCaches.canonicalIds (recorded.filter (fun key => key != winner))
+  pure (recorded, winner, EnumerationCanonicalWaiting.moveMany winner sources waiting)

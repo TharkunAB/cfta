@@ -1,0 +1,40 @@
+def MicroCFTA.SourcePruningEnumerationIncomingCacheAdapter.adapt : MicroCFTA.InternedConstructorTemplates.State
+    MicroCFTA.SourcePruningTemplates.Symbol (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) →
+  Nat →
+    Nat →
+      List MicroCFTA.EnumerationState.Suspended →
+        MicroCFTA.EnumerationExpandableIndex.Cached MicroCFTA.SourcePruningTemplates.Symbol
+            (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) →
+          MicroCFTA.EnumerationState.State MicroCFTA.SourcePruningTemplates.Symbol
+              (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) →
+            List
+                (Except MicroCFTA.EnumerationState.Error
+                  (Unit ×
+                    MicroCFTA.EnumerationState.State MicroCFTA.SourcePruningTemplates.Symbol
+                      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))) →
+              Option
+                (MicroCFTA.EnumerationExpandableIndex.Cached MicroCFTA.SourcePruningTemplates.Symbol
+                  (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)) :=
+fun heap indexFuel target incomingScs before read raw =>
+  match raw with
+  | [] =>
+    match read.values[target]? with
+    | some (MicroCFTA.EnumerationState.UVarValue.unenumerated _oldNode oldScs) =>
+      have value := MicroCFTA.EnumerationState.UVarValue.unenumerated (some 0) (incomingScs ++ oldScs);
+      have core :=
+        { counter := read.counter, representatives := read.representatives, values := read.values.set target value,
+          obligations := read.obligations,
+          recursionAncestry := fun other =>
+            if other = target then (read.expansionAncestry ++ read.recursionAncestry target).eraseDups
+            else read.recursionAncestry other,
+          expansionAncestry := read.expansionAncestry };
+      Option.map (MicroCFTA.EnumerationExpandableIndex.frame core)
+        (MicroCFTA.SourcePruningEnumerationNativeIndex.write heap indexFuel target value incomingScs []
+          (MicroCFTA.EnumerationExpandableIndex.frame read before))
+    | x => none
+  | [Except.ok (PUnit.unit, returned)] =>
+    returned.values[target]?.bind fun slotValue =>
+      Option.map (MicroCFTA.EnumerationExpandableIndex.frame returned)
+        (MicroCFTA.SourcePruningEnumerationNativeIndex.write heap indexFuel target slotValue incomingScs []
+          (MicroCFTA.EnumerationExpandableIndex.frame read before))
+  | x => none

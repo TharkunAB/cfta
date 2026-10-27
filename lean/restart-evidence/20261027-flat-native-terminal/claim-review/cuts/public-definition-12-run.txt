@@ -1,0 +1,117 @@
+def MicroCFTA.SourcePruningEnumerationCachedTerminalAdapter.run : {width : Nat} →
+  [DecidableEq MicroCFTA.SourcePruningTemplates.Symbol] →
+    [DecidableEq
+          (MicroCFTA.InternedConstructorTemplates.EdgeKey MicroCFTA.SourcePruningTemplates.Symbol
+            (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))] →
+      [DecidableEq
+            (MicroCFTA.InternedConstructorTemplates.Value MicroCFTA.SourcePruningTemplates.Symbol
+              (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))] →
+        Bool →
+          Nat →
+            Nat →
+              Nat →
+                Nat →
+                  Nat →
+                    MicroCFTA.EnumerationState.Suspended →
+                      List MicroCFTA.EnumerationState.Suspended →
+                        MicroCFTA.SourceCurrentAllocatedPartialState.State width →
+                          MicroCFTA.EnumerationExpandableIndex.Cached MicroCFTA.SourcePruningTemplates.Symbol
+                              (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) →
+                            MicroCFTA.InternedConstructorTemplates.Value MicroCFTA.SourcePruningTemplates.Symbol
+                                (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) →
+                              List MicroCFTA.EnumerationState.Suspended →
+                                MicroCFTA.SourceEndpointMemo.Memos →
+                                  (Except
+                                        (List
+                                            (Except MicroCFTA.EnumerationState.Error
+                                              ((List Nat × Nat × MicroCFTA.EnumerationWaitingIndex.Waiting) ×
+                                                MicroCFTA.EnumerationState.State MicroCFTA.SourcePruningTemplates.Symbol
+                                                  (MicroCFTA.SourceSymbolicIndex.Constraint
+                                                    MicroCFTA.FullSyntax.Formula))) ⊕
+                                          (MicroCFTA.SourceEqualityNativeDemand.Outcome width
+                                                (MicroCFTA.InternedConstructorTemplates.Value
+                                                  MicroCFTA.SourcePruningTemplates.Symbol
+                                                  (MicroCFTA.SourceSymbolicIndex.Constraint
+                                                    MicroCFTA.FullSyntax.Formula)) ⊕
+                                              MicroCFTA.SourceCurrentAllocatedConjunctionWorker.Outcome width) ⊕
+                                            List
+                                              (Except MicroCFTA.EnumerationState.Error
+                                                (Unit ×
+                                                  MicroCFTA.EnumerationState.State
+                                                    MicroCFTA.SourcePruningTemplates.Symbol
+                                                    (MicroCFTA.SourceSymbolicIndex.Constraint
+                                                      MicroCFTA.FullSyntax.Formula))))
+                                        (Option
+                                          (List
+                                            (Except MicroCFTA.EnumerationState.Error
+                                              (MicroCFTA.Fragments.Fragment MicroCFTA.SourcePruningTemplates.Symbol ×
+                                                MicroCFTA.EnumerationState.State MicroCFTA.SourcePruningTemplates.Symbol
+                                                  (MicroCFTA.SourceSymbolicIndex.Constraint
+                                                    MicroCFTA.FullSyntax.Formula))))) ×
+                                      MicroCFTA.SourceCurrentAllocatedPartialState.State width ×
+                                        MicroCFTA.SourceEndpointMemo.Memos ×
+                                          MicroCFTA.EnumerationState.State MicroCFTA.SourcePruningTemplates.Symbol
+                                              (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) ×
+                                            MicroCFTA.EnumerationWaitingIndex.Waiting) ×
+                                    Option
+                                      (MicroCFTA.EnumerationExpandableIndex.Cached
+                                        MicroCFTA.SourcePruningTemplates.Symbol
+                                        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)) :=
+fun {width} [DecidableEq MicroCFTA.SourcePruningTemplates.Symbol]
+    [DecidableEq
+        (MicroCFTA.InternedConstructorTemplates.EdgeKey MicroCFTA.SourcePruningTemplates.Symbol
+          (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+    [DecidableEq
+        (MicroCFTA.InternedConstructorTemplates.Value MicroCFTA.SourcePruningTemplates.Symbol
+          (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+    checkEmpty representativeFuel nativeFuel p h indexFuel first rest beforeCaller before incoming incomingScs
+    queries =>
+  if incoming = MicroCFTA.InternedConstructorTemplates.Value.empty then
+    ((Except.ok (some []), beforeCaller, queries, before.core, before.waiting), some before)
+  else
+    match
+      (MicroCFTA.SourcePruningEnumerationTerminalPrefix.run representativeFuel first rest before.waiting
+          before.core).run with
+    | [Except.ok ((recorded, winner, moved), joined)] =>
+      match
+        MicroCFTA.SourcePruningEnumerationCachedFold.run checkEmpty nativeFuel p h recorded beforeCaller
+          { core := joined, expandable := before.expandable, waiting := moved } winner queries with
+      | ((foldResult, foldCaller, foldQueries, foldOuter), foldCache) =>
+        match foldResult with
+        | Except.error foldFault =>
+          ((Except.error (Sum.inr (Sum.inl foldFault)), foldCaller, foldQueries, foldOuter, moved), none)
+        | Except.ok none => ((Except.ok none, foldCaller, foldQueries, foldOuter, moved), none)
+        | Except.ok (some foldRaw) =>
+          match foldRaw with
+          | [] => ((Except.ok (some []), foldCaller, foldQueries, foldOuter, moved), foldCache)
+          | [Except.ok (PUnit.unit, folded)] =>
+            have incomingObserved :=
+              match foldCache with
+              | none =>
+                (MicroCFTA.SourcePruningEnumerationIncomingNode.run checkEmpty representativeFuel nativeFuel p h
+                    foldCaller folded winner incoming incomingScs foldQueries,
+                  none)
+              | some recovered =>
+                MicroCFTA.SourcePruningEnumerationIncomingCacheAdapter.run checkEmpty representativeFuel nativeFuel p h
+                  indexFuel foldCaller (MicroCFTA.EnumerationExpandableIndex.frame folded recovered) winner incoming
+                  incomingScs foldQueries;
+            match incomingObserved with
+            | ((incomingResult, afterCaller, savedQueries, read), incomingCache) =>
+              match incomingResult with
+              | Except.error incomingFault =>
+                ((Except.error (Sum.inr (Sum.inl incomingFault)), afterCaller, savedQueries, read, moved), none)
+              | Except.ok none => ((Except.ok none, afterCaller, savedQueries, read, moved), none)
+              | Except.ok (some incomingRaw) =>
+                ((Except.ok
+                      (some
+                        (List.map
+                          (fun row =>
+                            match row with
+                            | Except.error error => Except.error error
+                            | Except.ok result => Except.ok (MicroCFTA.Fragments.Fragment.hole winner, result.snd))
+                          incomingRaw)),
+                    afterCaller, savedQueries, read, moved),
+                  incomingCache)
+          | stoppedRaw =>
+            ((Except.error (Sum.inr (Sum.inr stoppedRaw)), foldCaller, foldQueries, foldOuter, moved), none)
+    | prefixRaw => ((Except.error (Sum.inl prefixRaw), beforeCaller, queries, before.core, before.waiting), none)

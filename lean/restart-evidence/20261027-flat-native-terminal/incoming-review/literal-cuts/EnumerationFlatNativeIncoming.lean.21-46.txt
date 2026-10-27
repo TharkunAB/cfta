@@ -1,0 +1,26 @@
+/-- Write the incoming slot and inherit ancestry before Empty rejection. -/
+def finish (target handle : Nat) (incomingScs oldScs : List EnumerationState.Suspended)
+    (replacement : Node) : EnumerationFlatState.Action Symbol EnumGuard Unit := do
+  EnumerationFlatState.setValue target (.unenumerated (some handle) (incomingScs ++ oldScs))
+  EnumerationFlatState.inheritAncestry target
+  match replacement with
+  | .empty => EnumerationFlatState.reject
+  | _ => pure ()
+
+/-- Keep every written result or rejection at related actual read cores. -/
+theorem finish_related (related : EnumerationFlatState.Related flat earlier)
+    (target handle : Nat) (incomingScs oldScs : List EnumerationState.Suspended)
+    (replacement : Node) :
+    EnumerationResultRelation.Results EnumerationFlatState.Related
+      (finish target handle incomingScs oldScs replacement flat)
+      (SourcePruningEnumerationIncomingNode.finish target handle incomingScs oldScs replacement earlier) := by
+  unfold finish SourcePruningEnumerationIncomingNode.finish
+  apply EnumerationResultRelation.stateT_bind _ _ _ _
+    (EnumerationFlatState.setValue_related related target _)
+  intro _ left right states
+  apply EnumerationResultRelation.stateT_bind _ _ _ _
+    (EnumerationFlatState.inheritAncestry_related states target)
+  intro _ left right states
+  cases replacement <;> first
+    | exact .nil
+    | exact EnumerationFlatState.pure_related states ()

@@ -1,0 +1,64 @@
+  have ranges := initial_ranges seed formulas solver inventory
+    beforeCaller before checkEmpty first rest incoming roots memos initial safe paths counts bounded pending realized
+    available closed fits reserved known
+  obtain ⟨r, n, p, h, k, recorded, winner, joined, foldRows, foldCaller, foldQueries,
+    foldFinal, foldInventory, folded, raw, afterCaller, outer, savedQueries, final, next, resultCache,
+    prefixRun, recordedSame, winnerMember, movedSame, joinedSame, joinedFlagsSame,
+    prefixRoots, prefixCounts, joinedFlags, cachedFoldRun, foldRun, foldShape, foldPost,
+    foldQuerySame, foldCounter, foldForest, foldPaths, foldStorage, foldRealized, foldedRoot,
+    foldPending, foldCounts, foldWaiting, foldFlags, foldEliminated, foldCompleted,
+    foldedFrame, foldedSafe, foldedOrigin, terminalRun, post, querySame, wrapperRun, resultCounter,
+    resultPaths, resultStorage, resultRealized, resultCounts, resultFlags, resultFrame,
+    resultSafe, resultProtects, resultOrigin, resultReferences, rejectedCache, rejectedBranch, completedBranch⟩ :=
+    complete formulas solver inventory beforeCaller before checkEmpty first rest incoming incomingScs roots memos
+      initial safe paths counts flags bounded pending realized nonempty available closed incomingBounded ranges
+  have prefixActual := prefixRun 0
+  simp only [Nat.add_zero] at prefixActual
+  obtain ⟨_recordedSame, joinedRealized, joinedPending, recordedPending⟩ :=
+    observed_prefix beforeCaller.checked.native.machine.heap
+      before.core first rest before.waiting roots paths counts safe bounded pending realized prefixActual
+  have countSame : recorded.length = (first :: rest).length := by rw [recordedSame, List.length_map]
+  have actualFold := foldRun 0 p h (Nat.le_refl _) (Nat.le_refl _)
+  simp only [Nat.add_zero] at actualFold
+  have foldBounds := SourcePruningEnumerationFold.observed_resources seed formulas solver inventory beforeCaller
+    joined.core recorded checkEmpty n p h winner memos initial joinedRealized joinedPending
+    (fun source member => .inl (recordedPending source member)) fits
+    (reserved.prefix (by rw [countSame]; omega)) known actualFold
+  have foldFits : Fits (advance seed (first :: rest).length).2 foldCaller.checked := by
+    simpa only [countSame] using foldBounds.1
+  have foldKnown : Heap (fun guard => guard ∈ (advance seed (first :: rest).length).1)
+      foldCaller.checked.native.machine.heap := by simpa only [countSame] using foldBounds.2
+  let reachedSeed := advance seed (first :: rest).length
+  have nextSeed : advance seed ((first :: rest).length + 1) = step reachedSeed := by
+    rw [SourcePruningEnumerationIncomingReservation.advance_add]
+    rfl
+  have finalBounds : Fits (advance seed ((first :: rest).length + 1)).2 afterCaller.checked ∧
+      Heap (fun guard => guard ∈ (advance seed ((first :: rest).length + 1)).1)
+        afterCaller.checked.native.machine.heap := by
+    rw [nextSeed]
+    rcases foldShape with rejected | completed
+    · have callerSame := (rejectedBranch rejected).2.1
+      rw [callerSame]
+      refine ⟨foldFits.mono (SourcePruningEnumerationIncomingReservation.step_profile_ge reachedSeed), ?_⟩
+      intro key edge found
+      exact SourcePruningEnumerationIncomingReservation.step_alphabet_ge reachedSeed (foldKnown key edge found)
+    · obtain ⟨_incomingK, _oldNode, _oldScs, _read, after, replacement, _handle,
+        _resultCacheSame, _outerSame, _reading, _frame, incomingRun, _remaining⟩ := completedBranch completed
+      have actualIncoming := incomingRun 0 0 p h (Nat.le_refl _) (Nat.le_refl _)
+      simp only [Nat.add_zero] at actualIncoming
+      exact SourcePruningEnumerationIncomingNode.observed_resources reachedSeed.1 reachedSeed.2 formulas solver
+        foldInventory foldCaller folded.core checkEmpty r n p h winner incoming incomingScs foldFinal
+        foldPost.context foldRealized (foldPost.effects.keeps.available incoming available) closed foldFits
+        (reserved (first :: rest).length (by omega)) foldKnown (by simpa only [foldQuerySame] using actualIncoming)
+  exact ⟨r, n, p, h, k, recorded, winner, joined, foldRows, foldCaller, foldQueries,
+    foldFinal, foldInventory, folded, raw, afterCaller, outer, savedQueries, final, next, resultCache,
+    prefixRun, recordedSame, winnerMember, movedSame, joinedSame, joinedFlagsSame,
+    prefixRoots, prefixCounts, joinedFlags, cachedFoldRun, foldRun, foldShape, foldPost,
+    foldQuerySame, foldCounter, foldForest, foldPaths, foldStorage, foldRealized, foldedRoot,
+    foldPending, foldCounts, foldWaiting, foldFlags, foldEliminated, foldCompleted,
+    foldedFrame, foldedSafe, foldedOrigin, terminalRun, post, querySame, wrapperRun, resultCounter,
+    resultPaths, resultStorage, resultRealized, resultCounts, resultFlags, resultFrame,
+    resultSafe, resultProtects, resultOrigin, resultReferences, rejectedCache, rejectedBranch, completedBranch,
+    foldFits, foldKnown, finalBounds.1, finalBounds.2⟩
+
+end MicroCFTA.SourcePruningEnumerationCachedTerminalAdapter

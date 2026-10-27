@@ -1,0 +1,10 @@
+/-- Every later sufficient lookup bound returns the same earlier result. -/
+theorem find_stable (related : Represents flat earlier) (uv : Nat) :
+    ∃ fuel found,
+      (∀ extra, UnionFind.findRoot (fuel + extra) earlier uv = some found) ∧
+      found.representative = root flat uv ∧
+      found.size = (entryOf flat (root flat uv)).1 ∧ Represents flat found.forest := by
+  obtain ⟨fuel, found, completed⟩ := UnionFind.findRoot_terminates (related uv)
+  obtain ⟨sameRoot, sameSize, retained⟩ := findRoot_represents related completed
+  exact ⟨fuel, found, fun extra => UnionFind.findRoot_moreFuel fuel extra earlier uv found completed,
+    sameRoot, sameSize, retained⟩

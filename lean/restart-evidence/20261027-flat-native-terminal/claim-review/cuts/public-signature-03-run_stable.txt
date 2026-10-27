@@ -1,0 +1,24 @@
+MicroCFTA.EnumerationFlatNativeIncoming.run_stable {width : Nat} {Guard✝ : Type}
+  {flat : MicroCFTA.EnumerationFlatState.State MicroCFTA.SourcePruningTemplates.Symbol Guard✝}
+  {earlier : MicroCFTA.EnumerationState.State MicroCFTA.SourcePruningTemplates.Symbol Guard✝}
+  [DecidableEq MicroCFTA.SourcePruningTemplates.Symbol]
+  [DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey MicroCFTA.SourcePruningTemplates.Symbol
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  [DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.Value MicroCFTA.SourcePruningTemplates.Symbol
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  (related : MicroCFTA.EnumerationFlatState.Related flat earlier) (uv : Nat) :
+  ∃ representativeFuel,
+    ∀ (extra : Nat) (checkEmpty : Bool) (nativeFuel p h : Nat)
+      (beforeCaller : MicroCFTA.SourceCurrentAllocatedPartialState.State width)
+      (incoming :
+        MicroCFTA.InternedConstructorTemplates.Value MicroCFTA.SourcePruningTemplates.Symbol
+          (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+      (incomingScs : List MicroCFTA.EnumerationState.Suspended) (queries : MicroCFTA.SourceEndpointMemo.Memos),
+      MicroCFTA.EnumerationFlatNativeFold.ResultRelated
+        (MicroCFTA.EnumerationFlatNativeIncoming.run checkEmpty nativeFuel p h beforeCaller flat uv incoming incomingScs
+          queries)
+        (MicroCFTA.SourcePruningEnumerationIncomingNode.run checkEmpty (representativeFuel + extra) nativeFuel p h
+          beforeCaller earlier uv incoming incomingScs queries)
+'MicroCFTA.EnumerationFlatNativeIncoming.run_stable' depends on axioms: [propext, Classical.choice, Quot.sound]

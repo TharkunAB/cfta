@@ -1,0 +1,96 @@
+def MicroCFTA.SourcePruningEnumerationTerminal.run : {EnumGuard : Type} →
+  {width : Nat} →
+    [DecidableEq MicroCFTA.SourcePruningTemplates.Symbol] →
+      [DecidableEq
+            (MicroCFTA.InternedConstructorTemplates.EdgeKey MicroCFTA.SourcePruningTemplates.Symbol
+              (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))] →
+        [DecidableEq
+              (MicroCFTA.InternedConstructorTemplates.Value MicroCFTA.SourcePruningTemplates.Symbol
+                (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))] →
+          Bool →
+            Nat →
+              Nat →
+                Nat →
+                  Nat →
+                    MicroCFTA.EnumerationState.Suspended →
+                      List MicroCFTA.EnumerationState.Suspended →
+                        MicroCFTA.EnumerationWaitingIndex.Waiting →
+                          MicroCFTA.SourceCurrentAllocatedPartialState.State width →
+                            MicroCFTA.EnumerationState.State MicroCFTA.SourcePruningTemplates.Symbol EnumGuard →
+                              MicroCFTA.InternedConstructorTemplates.Value MicroCFTA.SourcePruningTemplates.Symbol
+                                  (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) →
+                                List MicroCFTA.EnumerationState.Suspended →
+                                  MicroCFTA.SourceEndpointMemo.Memos →
+                                    Except
+                                        (List
+                                            (Except MicroCFTA.EnumerationState.Error
+                                              ((List Nat × Nat × MicroCFTA.EnumerationWaitingIndex.Waiting) ×
+                                                MicroCFTA.EnumerationState.State MicroCFTA.SourcePruningTemplates.Symbol
+                                                  EnumGuard)) ⊕
+                                          (MicroCFTA.SourceEqualityNativeDemand.Outcome width
+                                                (MicroCFTA.InternedConstructorTemplates.Value
+                                                  MicroCFTA.SourcePruningTemplates.Symbol
+                                                  (MicroCFTA.SourceSymbolicIndex.Constraint
+                                                    MicroCFTA.FullSyntax.Formula)) ⊕
+                                              MicroCFTA.SourceCurrentAllocatedConjunctionWorker.Outcome width) ⊕
+                                            List
+                                              (Except MicroCFTA.EnumerationState.Error
+                                                (Unit ×
+                                                  MicroCFTA.EnumerationState.State
+                                                    MicroCFTA.SourcePruningTemplates.Symbol EnumGuard)))
+                                        (Option
+                                          (List
+                                            (Except MicroCFTA.EnumerationState.Error
+                                              (MicroCFTA.Fragments.Fragment MicroCFTA.SourcePruningTemplates.Symbol ×
+                                                MicroCFTA.EnumerationState.State MicroCFTA.SourcePruningTemplates.Symbol
+                                                  EnumGuard)))) ×
+                                      MicroCFTA.SourceCurrentAllocatedPartialState.State width ×
+                                        MicroCFTA.SourceEndpointMemo.Memos ×
+                                          MicroCFTA.EnumerationState.State MicroCFTA.SourcePruningTemplates.Symbol
+                                              EnumGuard ×
+                                            MicroCFTA.EnumerationWaitingIndex.Waiting :=
+fun {EnumGuard} {width} [DecidableEq MicroCFTA.SourcePruningTemplates.Symbol]
+    [DecidableEq
+        (MicroCFTA.InternedConstructorTemplates.EdgeKey MicroCFTA.SourcePruningTemplates.Symbol
+          (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+    [DecidableEq
+        (MicroCFTA.InternedConstructorTemplates.Value MicroCFTA.SourcePruningTemplates.Symbol
+          (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+    checkEmpty representativeFuel nativeFuel p h first rest waiting beforeCaller before incoming incomingScs queries =>
+  if incoming = MicroCFTA.InternedConstructorTemplates.Value.empty then
+    (Except.ok (some []), beforeCaller, queries, before, waiting)
+  else
+    match (MicroCFTA.SourcePruningEnumerationTerminalPrefix.run representativeFuel first rest waiting before).run with
+    | [Except.ok ((recorded, winner, moved), joined)] =>
+      match
+        MicroCFTA.SourcePruningEnumerationFold.run checkEmpty nativeFuel p h recorded beforeCaller joined winner
+          queries with
+      | (foldResult, foldCaller, foldQueries, foldOuter) =>
+        match foldResult with
+        | Except.error foldFault =>
+          (Except.error (Sum.inr (Sum.inl foldFault)), foldCaller, foldQueries, foldOuter, moved)
+        | Except.ok none => (Except.ok none, foldCaller, foldQueries, foldOuter, moved)
+        | Except.ok (some foldRaw) =>
+          match foldRaw with
+          | [] => (Except.ok (some []), foldCaller, foldQueries, foldOuter, moved)
+          | [Except.ok (PUnit.unit, folded)] =>
+            match
+              MicroCFTA.SourcePruningEnumerationIncomingNode.run checkEmpty representativeFuel nativeFuel p h foldCaller
+                folded winner incoming incomingScs foldQueries with
+            | (incomingResult, afterCaller, savedQueries, read) =>
+              match incomingResult with
+              | Except.error incomingFault =>
+                (Except.error (Sum.inr (Sum.inl incomingFault)), afterCaller, savedQueries, read, moved)
+              | Except.ok none => (Except.ok none, afterCaller, savedQueries, read, moved)
+              | Except.ok (some incomingRaw) =>
+                (Except.ok
+                    (some
+                      (List.map
+                        (fun row =>
+                          match row with
+                          | Except.error error => Except.error error
+                          | Except.ok result => Except.ok (MicroCFTA.Fragments.Fragment.hole winner, result.snd))
+                        incomingRaw)),
+                  afterCaller, savedQueries, read, moved)
+          | stoppedRaw => (Except.error (Sum.inr (Sum.inr stoppedRaw)), foldCaller, foldQueries, foldOuter, moved)
+    | prefixRaw => (Except.error (Sum.inl prefixRaw), beforeCaller, queries, before, waiting)

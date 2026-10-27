@@ -1,0 +1,57 @@
+theorem complete
+    [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Constraint)] [DecidableEq Node]
+    (formulas : SourceGuards.Formulas FullSyntax.Formula)
+    (solver : SourceGuards.Entailment FullSyntax.Formula)
+    (inventory : Inventory) (beforeCaller : Caller width)
+    (flat : EnumerationFlatCached.Cached Symbol Constraint)
+    (before : EnumerationExpandableIndex.Cached Symbol Constraint)
+    (related : EnumerationFlatCached.Related flat before) (sources : List Nat)
+    (checkEmpty : Bool) (target : Nat) (memos : Memos)
+    (initial : Context formulas solver inventory beforeCaller memos)
+    (storage : StorageValid before.core)
+    (realized : PendingRealized beforeCaller.checked.native.machine.heap before.core)
+    (correct : EnumerationFlatNativeIndex.Correct beforeCaller.checked.native.machine.heap flat)
+    (targetPending : PendingAt before.core target)
+    (selected : ∀ source ∈ sources, PendingOrEliminated before.core source)
+    (ranges : SourcePruningEnumerationFold.Ranges checkEmpty sources
+      beforeCaller before.core target memos.query) :
+    ∃ (fuel p h : Nat)
+      (rows : List (Unit × EnumerationExpandableIndex.Cached Symbol Constraint))
+      (afterCaller : Caller width) (savedQueries : Queries) (final : Memos) (next : Inventory)
+      (after : EnumerationExpandableIndex.Cached Symbol Constraint),
+      (∀ extra P H, p ≤ P → h ≤ H →
+        SourcePruningEnumerationCachedFold.run checkEmpty (fuel + extra) P H sources
+          beforeCaller before target memos.query =
+          ((.ok (some (rows.map (fun row => .ok (row.1, row.2.core)))),
+            afterCaller, savedQueries, after.core), some after)) ∧
+      Post formulas solver next beforeCaller afterCaller final ∧ final.query = savedQueries ∧
+      after.core.counter = before.core.counter ∧
+      after.core.representatives = before.core.representatives ∧ Roots after.core.representatives (FlatUnionFind.root flat.core.representatives) ∧
+      StorageValid after.core ∧ PendingRealized afterCaller.checked.native.machine.heap after.core ∧
+      EnumerationCanonicalWaiting.Correct (FlatUnionFind.root flat.core.representatives) after.core.values after.waiting ∧
+      after.waiting = before.waiting ∧
+      (∀ (slot : Nat), SourcePruningEnumerationNativeIndex.candidate
+        afterCaller.checked.native.machine.heap
+        ((after.core.values[slot]?).getD .eliminated) = some (after.expandable slot)) ∧
+      (rows = [] ∨ rows = [((), after)]) ∧ PendingAt after.core target ∧
+      (∀ (slot : Nat), before.core.values[slot]? = some .eliminated →
+        after.core.values[slot]? = some .eliminated) ∧
+      (rows = [((), after)] → ∀ source ∈ sources, source ≠ target →
+        after.core.values[source]? = some .eliminated) ∧
+      (∀ (slot : Nat), slot ∉ sources → slot ≠ target →
+        after.core.values[slot]? = before.core.values[slot]?) ∧
+      (∀ (slot : Nat) (fragment : Fragments.Fragment Symbol),
+        after.core.values[slot]? = some (.enumerated fragment) →
+        before.core.values[slot]? = some (.enumerated fragment)) ∧
+      (∀ extra P H, p ≤ P → h ≤ H →
+        ∃ (flatRows : List (Except EnumerationState.Error (Unit × EnumerationFlatState.State Symbol Constraint)))
+          (outer : EnumerationFlatState.State Symbol Constraint)
+          (recovered : EnumerationFlatCached.Cached Symbol Constraint),
+          EnumerationFlatNativeCachedFold.run checkEmpty (fuel + extra) P H sources
+            beforeCaller flat target memos.query =
+            ((.ok (some flatRows), afterCaller, savedQueries, outer), some recovered) ∧
+          EnumerationFlatCached.Related recovered after ∧
+          EnumerationFlatState.Related outer after.core ∧
+          EnumerationResultRelation.Results EnumerationFlatState.Related flatRows
+            (rows.map (fun row => .ok (row.1, row.2.core))) ∧
+          EnumerationFlatNativeIndex.Correct afterCaller.checked.native.machine.heap recovered) := by

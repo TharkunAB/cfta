@@ -1,0 +1,68 @@
+private def earlierIncoming (winner : Nat) (moved : EnumerationWaitingIndex.Waiting)
+    (observed : ((Except (NativeOutcome ⊕ WorkerOutcome) (Option OldFoldRaw)) ×
+      Caller width × Queries × EnumerationState.State Symbol Constraint) ×
+      Option (EnumerationExpandableIndex.Cached Symbol Constraint)) :
+    ((Except (OldPrefixRaw ⊕ ((NativeOutcome ⊕ WorkerOutcome) ⊕ OldFoldRaw)) (Option OldTerminalRaw)) ×
+      Caller width × Queries × EnumerationState.State Symbol Constraint × EnumerationWaitingIndex.Waiting) ×
+      Option (EnumerationExpandableIndex.Cached Symbol Constraint) :=
+match observed with
+      | ((incomingResult, afterCaller, savedQueries, read), incomingCache) =>
+        match incomingResult with
+        | .error incomingFault =>
+            ((.error (.inr (.inl incomingFault)), afterCaller, savedQueries, read, moved), none)
+        | .ok none => ((.ok none, afterCaller, savedQueries, read, moved), none)
+        | .ok (some incomingRaw) =>
+            ((.ok (some (incomingRaw.map fun row => match row with
+              | .error error => .error error
+              | .ok result => .ok (.hole winner, result.2))),
+              afterCaller, savedQueries, read, moved), incomingCache)
+
+/-- Mapping incoming successes retains their order, errors and complete returned cores. -/
+theorem wrapIncoming_related
+    (winner : Nat) (moved : EnumerationWaitingIndex.Waiting)
+    {left : ((Except (NativeOutcome ⊕ WorkerOutcome) (Option Raw)) ×
+      Caller width × Queries × EnumerationFlatState.State Symbol Constraint) ×
+      Option (EnumerationFlatCached.Cached Symbol Constraint)}
+    {right : ((Except (NativeOutcome ⊕ WorkerOutcome) (Option OldFoldRaw)) ×
+      Caller width × Queries × EnumerationState.State Symbol Constraint) ×
+      Option (EnumerationExpandableIndex.Cached Symbol Constraint)}
+    (step : EnumerationFlatNativeCachedFold.ResultRelated left right) :
+    ResultRelated (wrapIncoming winner moved left)
+      (earlierIncoming winner moved right) := by
+  obtain ⟨⟨leftResult, reachedCaller, savedQueries, readFlat⟩, leftCache⟩ := left
+  obtain ⟨⟨rightResult, oldCaller, oldQueries, readEarlier⟩, rightCache⟩ := right
+  obtain ⟨⟨callerSame, queriesSame, reads, rows⟩, caches⟩ := step
+  dsimp only at callerSame queriesSame
+  subst oldCaller oldQueries
+  cases leftResult with
+  | error first =>
+    cases rightResult with
+    | error second => exact ⟨⟨rfl, rfl, reads, rfl, rows⟩, trivial⟩
+    | ok value => cases rows
+  | ok leftValue =>
+    cases rightResult with
+    | error fault => cases leftValue <;> cases rows
+    | ok rightValue =>
+      cases leftValue with
+      | none =>
+        cases rightValue with
+        | none => exact ⟨⟨rfl, rfl, reads, rfl, trivial⟩, trivial⟩
+        | some raw => cases rows
+      | some leftRows =>
+        cases rightValue with
+        | none => cases rows
+        | some rightRows =>
+          refine ⟨⟨rfl, rfl, reads, rfl, ?_⟩, caches⟩
+          change EnumerationResultRelation.Results EnumerationFlatState.Related
+            (leftRows.map fun row => match row with
+              | .error error => .error error
+              | .ok result => .ok (Fragments.Fragment.hole winner, result.2))
+            (rightRows.map fun row => match row with
+              | .error error => .error error
+              | .ok result => .ok (Fragments.Fragment.hole winner, result.2))
+          induction rows with
+          | nil => exact .nil
+          | cons head tail ih =>
+            cases head with
+            | error error => exact .cons (.error error) (ih caches reads)
+            | ok value states => exact .cons (.ok (Fragments.Fragment.hole winner) states) (ih caches reads)

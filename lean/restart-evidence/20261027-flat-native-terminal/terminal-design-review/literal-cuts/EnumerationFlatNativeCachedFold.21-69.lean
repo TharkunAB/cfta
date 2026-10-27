@@ -1,0 +1,49 @@
+noncomputable def run
+    [DecidableEq Symbol] [DecidableEq (InternedConstructorTemplates.EdgeKey Symbol Constraint)] [DecidableEq Node]
+    (checkEmpty : Bool) (nativeFuel p h : Nat) (sources : List Nat)
+    (beforeCaller : Caller width) (before : EnumerationFlatCached.Cached Symbol Constraint)
+    (target : Nat) (queries : Queries) :
+    ((Except (SourceEqualityNativeDemand.Outcome width Node ⊕
+      SourceCurrentAllocatedConjunctionWorker.Outcome width)
+      (Option (List (Except EnumerationState.Error (Unit × EnumerationFlatState.State Symbol Constraint))))) ×
+      Caller width × Queries × EnumerationFlatState.State Symbol Constraint) ×
+      Option (EnumerationFlatCached.Cached Symbol Constraint) :=
+  match sources with
+  | [] => ((.ok (some [.ok ((), before.core)]), beforeCaller, queries, before.core), some before)
+  | source :: rest =>
+      match EnumerationFlatNativeCachedAdapter.run checkEmpty nativeFuel p h
+          beforeCaller before source target queries with
+      | (.error fault, reachedCaller, savedQueries, _) =>
+          ((.error fault, reachedCaller, savedQueries, before.core), none)
+      | (.ok none, reachedCaller, savedQueries, _) =>
+          ((.ok none, reachedCaller, savedQueries, before.core), none)
+      | (.ok (some raw), reachedCaller, savedQueries, cache) =>
+          match raw with
+          | [.ok ((), core)] =>
+              match cache with
+              | none =>
+                  (EnumerationFlatNativeFold.run checkEmpty nativeFuel p h rest
+                    reachedCaller core target savedQueries, none)
+              | some recovered =>
+                  run checkEmpty nativeFuel p h rest reachedCaller
+                    (EnumerationFlatCached.frame core recovered) target savedQueries
+          | other => ((.ok (some other), reachedCaller, savedQueries, before.core), cache)
+
+/-- Related observations retain the complete raw outcome and optional cache separately. -/
+def ResultRelated
+    (flat : ((Except (SourceEqualityNativeDemand.Outcome width Node ⊕
+      SourceCurrentAllocatedConjunctionWorker.Outcome width)
+      (Option (List (Except EnumerationState.Error (Unit × EnumerationFlatState.State Symbol Constraint))))) ×
+      Caller width × Queries × EnumerationFlatState.State Symbol Constraint) × Option (Cached Symbol Constraint))
+    (earlier : ((Except (SourceEqualityNativeDemand.Outcome width Node ⊕
+      SourceCurrentAllocatedConjunctionWorker.Outcome width)
+      (Option (List (Except EnumerationState.Error (Unit × EnumerationState.State Symbol Constraint))))) ×
+      Caller width × Queries × EnumerationState.State Symbol Constraint) ×
+      Option (EnumerationExpandableIndex.Cached Symbol Constraint)) : Prop :=
+  EnumerationFlatNativeFold.ResultRelated flat.1 earlier.1 ∧
+    EnumerationFlatNativeIndex.WritesRelated flat.2 earlier.2
+
+/-- Every bounded cached loop retains raw effects, cache recovery and the full uncached fallback. -/
+theorem run_related
+    [DecidableEq Symbol] [DecidableEq (InternedConstructorTemplates.EdgeKey Symbol Constraint)] [DecidableEq Node]
+    (related : Related flat earlier) (checkEmpty : Bool) (nativeFuel p h : Nat) (sources : List Nat)

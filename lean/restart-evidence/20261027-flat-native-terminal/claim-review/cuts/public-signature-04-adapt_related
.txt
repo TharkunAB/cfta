@@ -1,0 +1,41 @@
+MicroCFTA.EnumerationFlatNativeIncomingCache.adapt_related
+  {flat :
+    MicroCFTA.EnumerationFlatCached.Cached MicroCFTA.SourcePruningTemplates.Symbol
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)}
+  {earlier :
+    MicroCFTA.EnumerationExpandableIndex.Cached MicroCFTA.SourcePruningTemplates.Symbol
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)}
+  {readFlat :
+    MicroCFTA.EnumerationFlatState.State MicroCFTA.SourcePruningTemplates.Symbol
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)}
+  {readEarlier :
+    MicroCFTA.EnumerationState.State MicroCFTA.SourcePruningTemplates.Symbol
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)}
+  {flatRows :
+    List
+      (Except MicroCFTA.EnumerationState.Error
+        (Unit ×
+          MicroCFTA.EnumerationFlatState.State MicroCFTA.SourcePruningTemplates.Symbol
+            (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)))}
+  {oldRows :
+    List
+      (Except MicroCFTA.EnumerationState.Error
+        (Unit ×
+          MicroCFTA.EnumerationState.State MicroCFTA.SourcePruningTemplates.Symbol
+            (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)))}
+  (related : MicroCFTA.EnumerationFlatCached.Related flat earlier)
+  (reads : MicroCFTA.EnumerationFlatState.Related readFlat readEarlier)
+  (heap :
+    MicroCFTA.InternedConstructorTemplates.State MicroCFTA.SourcePruningTemplates.Symbol
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+  (indexFuel target : Nat) (incomingScs : List MicroCFTA.EnumerationState.Suspended)
+  (counted :
+    ∀ (waiting : MicroCFTA.EnumerationWaitingIndex.Waiting),
+      MicroCFTA.SourcePruningEnumerationNativeIndex.count indexFuel readEarlier.representatives 1 incomingScs waiting =
+        some (MicroCFTA.EnumerationFlatNativeIndex.count readFlat.representatives 1 incomingScs waiting))
+  (rows : MicroCFTA.EnumerationResultRelation.Results MicroCFTA.EnumerationFlatState.Related flatRows oldRows) :
+  MicroCFTA.EnumerationFlatNativeIndex.WritesRelated
+    (MicroCFTA.EnumerationFlatNativeIncomingCache.adapt heap target incomingScs flat readFlat flatRows)
+    (MicroCFTA.SourcePruningEnumerationIncomingCacheAdapter.adapt heap indexFuel target incomingScs earlier readEarlier
+      oldRows)
+'MicroCFTA.EnumerationFlatNativeIncomingCache.adapt_related' depends on axioms: [propext, Quot.sound]

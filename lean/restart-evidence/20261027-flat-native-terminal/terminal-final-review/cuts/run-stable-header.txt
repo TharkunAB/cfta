@@ -1,0 +1,16 @@
+/-- A stable actual prefix supplies sufficient old read/count bounds for every fixed native run. -/
+theorem run_stable
+    [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Constraint)] [DecidableEq Node]
+    (related : EnumerationFlatCached.Related flat earlier)
+    (first : Suspended) (rest : List Suspended)
+    (r : Nat) (recorded : List Nat) (winner : Nat) (moved : EnumerationWaitingIndex.Waiting)
+    (joined : EnumerationState.State Symbol Constraint)
+    (prefixRun : ∀ extra, ExceptT.run (SourcePruningEnumerationTerminalPrefix.run
+      (r + extra) first rest earlier.waiting earlier.core) = [.ok ((recorded, winner, moved), joined)])
+    (checkEmpty : Bool) (nativeFuel p h : Nat) (beforeCaller : Caller width)
+    (incoming : Node) (incomingScs : List Suspended) (queries : Queries) :
+    ∃ extraFuel indexFuel, ∀ extraRepresentative extraIndex,
+      ResultRelated (run checkEmpty nativeFuel p h first rest beforeCaller flat incoming incomingScs queries)
+        (SourcePruningEnumerationCachedTerminalAdapter.run checkEmpty
+          (r + extraFuel + extraRepresentative) nativeFuel p h (indexFuel + extraIndex)
+          first rest beforeCaller earlier incoming incomingScs queries) := by

@@ -1,0 +1,68 @@
+def MicroCFTA.EnumerationFlatNativeTerminal.wrapIncoming : {width : Nat} →
+  Nat →
+    MicroCFTA.EnumerationWaitingIndex.Waiting →
+      (Except
+              (MicroCFTA.SourceEqualityNativeDemand.Outcome width
+                  (MicroCFTA.InternedConstructorTemplates.Value MicroCFTA.SourcePruningTemplates.Symbol
+                    (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)) ⊕
+                MicroCFTA.SourceCurrentAllocatedConjunctionWorker.Outcome width)
+              (Option
+                (List
+                  (Except MicroCFTA.EnumerationState.Error
+                    (Unit ×
+                      MicroCFTA.EnumerationFlatState.State MicroCFTA.SourcePruningTemplates.Symbol
+                        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))))) ×
+            MicroCFTA.SourceCurrentAllocatedPartialState.State width ×
+              MicroCFTA.SourceEndpointMemo.Memos ×
+                MicroCFTA.EnumerationFlatState.State MicroCFTA.SourcePruningTemplates.Symbol
+                  (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)) ×
+          Option
+            (MicroCFTA.EnumerationFlatCached.Cached MicroCFTA.SourcePruningTemplates.Symbol
+              (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)) →
+        (Except
+              (List
+                  (Except MicroCFTA.EnumerationState.Error
+                    ((List Nat × Nat × MicroCFTA.EnumerationWaitingIndex.Waiting) ×
+                      MicroCFTA.EnumerationFlatState.State MicroCFTA.SourcePruningTemplates.Symbol
+                        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))) ⊕
+                (MicroCFTA.SourceEqualityNativeDemand.Outcome width
+                      (MicroCFTA.InternedConstructorTemplates.Value MicroCFTA.SourcePruningTemplates.Symbol
+                        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)) ⊕
+                    MicroCFTA.SourceCurrentAllocatedConjunctionWorker.Outcome width) ⊕
+                  List
+                    (Except MicroCFTA.EnumerationState.Error
+                      (Unit ×
+                        MicroCFTA.EnumerationFlatState.State MicroCFTA.SourcePruningTemplates.Symbol
+                          (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))))
+              (Option
+                (List
+                  (Except MicroCFTA.EnumerationState.Error
+                    (MicroCFTA.Fragments.Fragment MicroCFTA.SourcePruningTemplates.Symbol ×
+                      MicroCFTA.EnumerationFlatState.State MicroCFTA.SourcePruningTemplates.Symbol
+                        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))))) ×
+            MicroCFTA.SourceCurrentAllocatedPartialState.State width ×
+              MicroCFTA.SourceEndpointMemo.Memos ×
+                MicroCFTA.EnumerationFlatState.State MicroCFTA.SourcePruningTemplates.Symbol
+                    (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) ×
+                  MicroCFTA.EnumerationWaitingIndex.Waiting) ×
+          Option
+            (MicroCFTA.EnumerationFlatCached.Cached MicroCFTA.SourcePruningTemplates.Symbol
+              (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)) :=
+fun {width} winner moved observed =>
+  match observed with
+  | ((incomingResult, afterCaller, savedQueries, read), incomingCache) =>
+    match incomingResult with
+    | Except.error incomingFault =>
+      ((Except.error (Sum.inr (Sum.inl incomingFault)), afterCaller, savedQueries, read, moved), none)
+    | Except.ok none => ((Except.ok none, afterCaller, savedQueries, read, moved), none)
+    | Except.ok (some incomingRaw) =>
+      ((Except.ok
+            (some
+              (List.map
+                (fun row =>
+                  match row with
+                  | Except.error error => Except.error error
+                  | Except.ok result => Except.ok (MicroCFTA.Fragments.Fragment.hole winner, result.snd))
+                incomingRaw)),
+          afterCaller, savedQueries, read, moved),
+        incomingCache)

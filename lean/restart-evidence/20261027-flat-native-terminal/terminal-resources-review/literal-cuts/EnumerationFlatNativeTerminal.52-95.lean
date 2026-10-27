@@ -1,0 +1,44 @@
+noncomputable def run
+    [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Constraint)] [DecidableEq Node]
+    (checkEmpty : Bool) (nativeFuel p h : Nat)
+    (first : EnumerationState.Suspended) (rest : List EnumerationState.Suspended)
+    (beforeCaller : Caller width) (before : EnumerationFlatCached.Cached Symbol Constraint)
+    (incoming : Node) (incomingScs : List EnumerationState.Suspended) (queries : Queries) :
+    ((Except (PrefixRaw ⊕ ((NativeOutcome ⊕ WorkerOutcome) ⊕ FoldRaw)) (Option TerminalRaw)) ×
+      Caller width × Queries × EnumerationFlatState.State Symbol Constraint × EnumerationWaitingIndex.Waiting) ×
+      Option (EnumerationFlatCached.Cached Symbol Constraint) :=
+  if incoming = .empty then
+    ((.ok (some []), beforeCaller, queries, before.core, before.waiting), some before)
+  else
+    match ExceptT.run (EnumerationFlatTerminalPrefix.run
+        first rest before.waiting before.core) with
+    | [.ok ((recorded, winner, moved), joined)] =>
+      match EnumerationFlatNativeCachedFold.run checkEmpty nativeFuel p h recorded
+          beforeCaller ⟨joined, before.expandable, moved⟩ winner queries with
+      | ((foldResult, foldCaller, foldQueries, foldOuter), foldCache) =>
+        match foldResult with
+        | .error foldFault =>
+            ((.error (.inr (.inl foldFault)), foldCaller, foldQueries, foldOuter, moved), none)
+        | .ok none => ((.ok none, foldCaller, foldQueries, foldOuter, moved), none)
+        | .ok (some foldRaw) =>
+          match foldRaw with
+          | [] => ((.ok (some []), foldCaller, foldQueries, foldOuter, moved), foldCache)
+          | [.ok ((), folded)] =>
+            let incomingObserved : ((Except (NativeOutcome ⊕ WorkerOutcome) (Option Raw)) ×
+                Caller width × Queries × EnumerationFlatState.State Symbol Constraint) ×
+                Option (EnumerationFlatCached.Cached Symbol Constraint) :=
+              match foldCache with
+              | none =>
+                  (EnumerationFlatNativeIncoming.run checkEmpty nativeFuel p h
+                    foldCaller folded winner incoming incomingScs foldQueries, none)
+              | some recovered =>
+                  EnumerationFlatNativeIncomingCache.run checkEmpty nativeFuel p h
+                    foldCaller (EnumerationFlatCached.frame folded recovered)
+                    winner incoming incomingScs foldQueries
+            wrapIncoming winner moved incomingObserved
+          | stoppedRaw =>
+              ((.error (.inr (.inr stoppedRaw)), foldCaller, foldQueries, foldOuter, moved), none)
+    | prefixRaw => ((.error (.inl prefixRaw), beforeCaller, queries, before.core, before.waiting), none)
+
+
+local notation "OldPrefixRaw" => List (Except EnumerationState.Error

@@ -199,8 +199,18 @@ fallback. Original admission derives actual adequate flat completion, correct
 native indexes and the same full Post/global Memos. Original resource reservation
 derives request ranges and bounds that same reached native Caller. Each adequate
 bound has an actual flat endpoint; literal endpoint equality across fuels is not
-claimed. Whole terminal/recursive composition, admission histories and physical
-Haskell containers remain open.
+claimed. The actual flat terminal adapter now composes that prefix and fold
+with the native incoming merge and gained-count recovery. It preserves all fixed
+native outcomes at sufficient old representative/count bounds from an actual
+stable prefix. Missing fold cache still executes incoming. Incoming Empty
+recovery can retain the logical written cache while its outer core stays the
+actual read endpoint.
+Original terminal admission derives per-adequate-bound actual flat completion,
+full Post/global Memos and correct final indexes at the same reached native heap.
+The resource producer retains both fold and final caller Fits/carrier facts.
+Whole recursive composition, callback/admission histories and physical Haskell
+containers remain open. No Haskell fix is added by this proof step.
+Current terminal completion: lean/notes-current-flat-native-terminal.md.
 Current cached completion: lean/notes-current-flat-native-cached-fold.md.
 The proof modules add no Haskell runtime repair or regression test.
 Current raw effects: lean/notes-current-flat-native-fold.md.

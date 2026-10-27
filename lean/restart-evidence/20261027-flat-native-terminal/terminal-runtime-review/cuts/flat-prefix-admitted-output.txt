@@ -1,0 +1,38 @@
+/-- Original admission derives one flat prefix and the same stable earlier completion packet. -/
+theorem run_complete (heap : InternedConstructorTemplates.State Symbol NativeGuard)
+    (flat : EnumerationFlatState.State Symbol EnumGuard)
+    (earlier : EnumerationState.State Symbol EnumGuard) (related : Related flat earlier)
+    (first : EnumerationState.Suspended) (rest : List EnumerationState.Suspended)
+    (waiting : EnumerationWaitingIndex.Waiting)
+    (counts : EnumerationCanonicalWaiting.Correct (FlatUnionFind.root flat.representatives) flat.values waiting)
+    (safe : EnumerationSchedule.Safe earlier)
+    (bounded : ∀ sc ∈ first :: rest, sc.var < flat.counter)
+    (pending : EnumerationDependencies.InputsPending earlier (first :: rest))
+    (realized : SourcePruningEnumerationObservation.PendingRealized heap earlier) :
+    ∃ fuel recorded winner saved scanned united oldAfter after,
+      run first rest waiting flat = [.ok ((recorded, winner, saved), after)] ∧
+      (∀ extra, ExceptT.run (SourcePruningEnumerationTerminalPrefix.run
+        (fuel + extra) first rest waiting earlier) = [.ok ((recorded, winner, saved), oldAfter)]) ∧
+      Related after oldAfter ∧
+      (∀ extra, ExceptT.run (((first :: rest).mapM fun sc =>
+        EnumerationState.representative (fuel + extra) sc.var) earlier) = [.ok (recorded, scanned)]) ∧
+      (∀ extra, ExceptT.run ((rest.forM fun sc =>
+        EnumerationState.unionVariables (fuel + extra) first.var sc.var) scanned) = [.ok ((), united)]) ∧
+      (∀ extra, ExceptT.run (EnumerationState.representative (fuel + extra) first.var united) =
+        [.ok (winner, oldAfter)]) ∧
+      recorded = (first :: rest).map (fun sc => FlatUnionFind.root flat.representatives sc.var) ∧
+      saved = EnumerationCanonicalWaiting.moveMany winner
+        (EnumerationBuilderCaches.canonicalIds (recorded.filter fun key => key != winner)) waiting ∧
+      winner ∈ recorded ∧ FlatUnionFind.root flat.representatives winner = winner ∧
+      FlatUnionFind.root after.representatives =
+        EnumerationCanonicalUnion.mergedRoots (FlatUnionFind.root flat.representatives) recorded winner ∧
+      EnumerationCanonicalWaiting.Correct (FlatUnionFind.root after.representatives) after.values saved ∧
+      oldAfter = {earlier with representatives := oldAfter.representatives} ∧
+      EnumerationCorrectness.StorageValid oldAfter ∧
+      SourcePruningEnumerationObservation.PendingRealized heap oldAfter ∧
+      EnumerationCompleteness.PendingAt oldAfter winner ∧
+      (∀ source, source ∈ recorded → EnumerationCompleteness.PendingAt oldAfter source) ∧
+      (EnumerationBuilderCaches.canonicalIds (recorded.filter fun key => key != winner)).Nodup ∧
+      (EnumerationBuilderCaches.canonicalIds (recorded.filter fun key => key != winner)).Pairwise (· ≤ ·) ∧
+      (∀ key, key ∈ EnumerationBuilderCaches.canonicalIds (recorded.filter fun key => key != winner) ↔
+        key ∈ recorded ∧ key ≠ winner) := by

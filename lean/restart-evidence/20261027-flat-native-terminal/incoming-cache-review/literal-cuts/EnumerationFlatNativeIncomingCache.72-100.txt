@@ -1,0 +1,29 @@
+private theorem write_frame_related
+    (related : Related flat earlier)
+    (cores : EnumerationFlatState.Related nextFlat nextEarlier)
+    (heap : InternedConstructorTemplates.State Symbol Constraint)
+    (indexFuel target : Nat) (value : EnumerationState.UVarValue Symbol)
+    (incomingScs : List EnumerationState.Suspended)
+    (counted : ∀ waiting, SourcePruningEnumerationNativeIndex.count indexFuel
+      earlier.core.representatives 1 incomingScs waiting =
+        some (EnumerationFlatNativeIndex.count flat.core.representatives 1 incomingScs waiting)) :
+    EnumerationFlatNativeIndex.WritesRelated
+      ((EnumerationFlatNativeIndex.write heap target value incomingScs [] flat).map (frame nextFlat))
+      ((SourcePruningEnumerationNativeIndex.write heap indexFuel target value incomingScs [] earlier).map
+        (EnumerationExpandableIndex.frame nextEarlier)) := by
+  cases classified : SourcePruningEnumerationNativeIndex.candidate heap value with
+  | none => simp only [EnumerationFlatNativeIndex.write, SourcePruningEnumerationNativeIndex.write,
+      classified, Option.map_none, Option.bind_none, EnumerationFlatNativeIndex.WritesRelated]
+  | some flag =>
+    simp only [EnumerationFlatNativeIndex.write, SourcePruningEnumerationNativeIndex.write,
+      classified, Option.map_some, Option.bind_some, SourcePruningEnumerationNativeIndex.count,
+      counted earlier.waiting]
+    change Related _ _
+    refine ⟨cores, ?_, ?_⟩
+    · change (fun other => if other = target then flag else flat.expandable other) = _
+      rw [related.expandable]
+      rfl
+    · change EnumerationFlatNativeIndex.count flat.core.representatives 1 incomingScs
+        (EnumerationFlatNativeIndex.count flat.core.representatives (-1) [] flat.waiting) = _
+      rw [related.waiting]
+      rfl
