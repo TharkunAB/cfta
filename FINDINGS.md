@@ -190,9 +190,14 @@ replays the old stable completion packet. It records roots before union, uses
 the original raw union anchor and moves each distinct losing recorded bucket
 once. Its actual cached endpoint derives both native index laws. Earlier Safe,
 pending inputs and native realization remain explicit admission premises.
-Full cached histories, actual Caller/memo/query effects, whole recursive worker
-transport and physical Haskell containers remain open. The proof modules add no
-Haskell runtime repair or regression test.
+The flat raw dispatcher and ordered raw loop now preserve every bounded
+observation, including the literal full Caller and saved Queries. Rejected
+branches retain their actual reached native effects. No artificial semantic
+Graph or second intersection is used. Optional cache recovery and its complete
+uncached-tail fallback remain separate. Full global Memos/Post composition,
+whole recursive worker transport and physical Haskell containers remain open.
+The proof modules add no Haskell runtime repair or regression test.
+Current raw effects: lean/notes-current-flat-native-fold.md.
 Details: lean/notes-current-flat-native-index.md.
 Current prefix and paired assimilation: lean/notes-current-flat-native-assimilation.md.
 A focused native
