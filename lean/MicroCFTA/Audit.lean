@@ -1,3 +1,5 @@
+import MicroCFTA.EnumerationFlatNativeDispatch
+import MicroCFTA.EnumerationFlatNativeFold
 import MicroCFTA.EnumerationFlatNativeAssimilation
 import MicroCFTA.EnumerationFlatReplay
 import MicroCFTA.EnumerationFlatTerminalPrefix
