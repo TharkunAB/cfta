@@ -1,0 +1,18 @@
+/-- Every successful resume preserves the complete compression frame. -/
+theorem resume_frame (fuel current : Nat) (term : Term (PartialSymbol Symbol))
+    (pending : Pending Symbol) (before after : State Symbol Guard) (result : Option (Pending Symbol))
+    (total : UnionFind.Total before.representatives)
+    (success : Success (resume fuel current term pending) before result after) : Frame before after := by
+  unfold resume at success
+  obtain ⟨results, middle, traversed, final⟩ := (success_bind _ _ _ _ _).mp success
+  have step : ∀ pendingPart ∈ pending, ∀ previous output next, Frame before previous →
+      Success (part fuel current term pendingPart) previous output next → Frame before next := by
+    intro pendingPart _ previous output next previousFrame reading
+    exact previousFrame.trans
+      (part_frame fuel current term pendingPart previous next output (previousFrame.total total) reading)
+  have middleFrame := mapM_invariant (part fuel current term) (Frame before) pending step
+    before middle results (.refl before) traversed
+  exact middleFrame.trans (pure_frame _ result middle after final)
+
+/-- Independent successful resumes return the same ordered pending parts. -/
+theorem resume_agrees (leftFuel rightFuel current : Nat) (term : Term (PartialSymbol Symbol))

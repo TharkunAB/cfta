@@ -1,0 +1,20 @@
+    intro group _ previous output next previousFrame reading
+    exact previousFrame.trans (SourcePruningResume.resume_frame fuel uv term group previous next output
+      (previousFrame.total (renderFrame.total total)) reading)
+  have groupFrame := mapM_invariant (SourcePruningResume.resume fuel uv term) (Frame middle)
+    pending step middle last resumed (.refl middle) traversed
+  exact renderFrame.trans (groupFrame.trans (pure_frame _ result last after final))
+
+private theorem observe_agrees (graph : Graph Symbol Guard)
+    (templates : List (Template.Pattern Symbol)) (leftFuel rightFuel : Nat)
+    (pending : List (Pending Symbol)) (uv : Nat) (fragment : Fragment Symbol)
+    (left right leftAfter rightAfter : State Symbol Guard)
+    (leftResult rightResult : Bool × List (Pending Symbol)) (frame : Frame left right)
+    (total : UnionFind.Total left.representatives)
+    (leftRead : Success (observe graph templates leftFuel pending uv fragment) left leftResult leftAfter)
+    (rightRead : Success (observe graph templates rightFuel pending uv fragment) right rightResult rightAfter) :
+    leftResult = rightResult ∧ Frame leftAfter rightAfter := by
+  unfold observe at leftRead rightRead
+  obtain ⟨leftTerm, leftMiddle, leftRender, leftContinued⟩ := (success_bind _ _ _ _ _).mp leftRead
+  obtain ⟨leftGroups, leftLast, leftTraversal, leftFinal⟩ := (success_bind _ _ _ _ _).mp leftContinued
+  obtain ⟨rightTerm, rightMiddle, rightRender, rightContinued⟩ := (success_bind _ _ _ _ _).mp rightRead

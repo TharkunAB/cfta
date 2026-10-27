@@ -1,0 +1,13 @@
+theorem recordTypes_inl_refutes (graph : Graph Symbol Guard)
+    (language : NodeLanguage Symbol) (meaning : Guard → Term Symbol → Prop)
+    (assignment : Nat → Term Symbol) (templates : List (Template.Pattern Symbol))
+    (fuel uv : Nat) (metadata : Metadata Typing) (fragment : Fragment Symbol)
+    (before after : State Symbol Guard) (result : Bool × Metadata Typing)
+    (total : UnionFind.Total before.representatives)
+    (satisfied : Satisfies language meaning assignment before)
+    (filled : fill assignment fragment = assignment uv)
+    (refuted : ∀ group ∈ metadata.pending, SourcePruningResume.Refutes assignment group)
+    (avoids : Avoids templates (fill assignment fragment))
+    (encoded : ∀ program, ProgramAt (fill assignment fragment) program → ProgramEncoding program)
+    (success : Success (recordTypes graph templates fuel metadata uv (.inl fragment)) before result after) :
+    result.1 = false ∧ ∀ group ∈ result.2.pending, SourcePruningResume.Refutes assignment group := by

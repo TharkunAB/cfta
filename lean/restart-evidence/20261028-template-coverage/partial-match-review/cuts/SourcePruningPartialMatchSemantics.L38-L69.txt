@@ -1,0 +1,32 @@
+
+private theorem prefix_cons
+    (symbol : Symbol) (pattern : Template.Pattern Symbol) (patterns : List (Template.Pattern Symbol))
+    (observedTerm : Term (PartialSymbol Symbol)) (partials : List (Term (PartialSymbol Symbol)))
+    (pending : Pending Symbol) (enough : patterns.length ≤ partials.length)
+    (matched : matchPartial (.anyPrefix (pattern :: patterns))
+      (.node (.concrete symbol) (observedTerm :: partials)) = some pending) :
+    ∃ first rest, matchPartial pattern observedTerm = some first ∧
+      matchPartial (.anyPrefix patterns) (.node (.concrete symbol) partials) = some rest ∧
+      first ++ rest = pending := by
+  have whole : (pattern :: patterns).length ≤ (observedTerm :: partials).length := by
+    simpa only [List.length_cons] using Nat.succ_le_succ enough
+  have combined :
+      ((matchPartial pattern observedTerm).bind fun first =>
+        (matchPartial (.anyPrefix patterns) (.node (.concrete symbol) partials)).bind fun rest =>
+          some (first ++ rest)) = some pending := by
+    cases patterns with
+    | nil =>
+        simp only [matchPartial, ite_eq_left whole] at matched ⊢
+        (try dsimp! at matched ⊢)
+        exact matched
+    | cons next rest =>
+        simp only [matchPartial, ite_eq_left whole, ite_eq_left enough] at matched ⊢
+        (try dsimp! at matched ⊢)
+        exact matched
+  cases firstFound : matchPartial pattern observedTerm with
+  | none => simp only [firstFound, Option.bind_none] at combined; cases combined
+  | some first =>
+      cases restFound : matchPartial (.anyPrefix patterns) (.node (.concrete symbol) partials) with
+      | none => simp only [firstFound, restFound, Option.bind_some, Option.bind_none] at combined; cases combined
+      | some rest =>
+          refine ⟨first, rest, rfl, rfl, ?_⟩

@@ -1,0 +1,42 @@
+private theorem structuralProgram_matches (full : Language.Term Symbol) (encoded : ProgramEncoding full) :
+    ∀ original early, sourceProgram original = some early →
+      Template.Matches early full → Template.Matches original full := by
+  induction encoded with
+  | constant symbol annotation =>
+      intro original early converted matched
+      rcases conversion_shape original early converted with ⟨rfl, rfl⟩ |
+        ⟨wanted, rfl, rfl⟩ | ⟨marker, function, argument, nextFunction, nextArgument,
+          rfl, rfl, _markerShape, _functionRun, _argumentRun⟩
+      · exact matched
+      · exact matched
+      · have children := (node_matches_inv _ _ _ _ matched).2
+        have impossible : (4 : Nat) = 1 := children.length_eq
+        omega
+  | app annotation function argument _functionEncoded _argumentEncoded functionIH argumentIH =>
+      intro original early converted matched
+      rcases conversion_shape original early converted with ⟨rfl, rfl⟩ |
+        ⟨wanted, rfl, rfl⟩ | ⟨marker, originalFunction, originalArgument, nextFunction, nextArgument,
+          rfl, rfl, markerShape, functionRun, argumentRun⟩
+      · exact matched
+      · exact matched
+      · have children := (node_matches_inv _ _ _ _ matched).2
+        cases children with
+        | cons _ children =>
+            cases children with
+            | cons _ children =>
+                cases children with
+                | cons functionMatches children =>
+                    cases children with
+                    | cons argumentMatches _ =>
+                        have markerMatches : Template.Matches marker
+                            (.node ("(->)", FullSyntax.Formula.top) []) := by
+                          rcases markerShape with rfl | rfl
+                          · exact Template.hole_matches _
+                          · exact .node _ _ _ [] (by simp [Template.childTemplates,
+                              Template.exactChildren]) .nil
+                        apply Template.Matches.node _ _ _ [.hole, marker, originalFunction, originalArgument]
+                          (by simp [Template.childTemplates, Template.exactChildren])
+                        exact .cons (Template.hole_matches annotation)
+                          (.cons markerMatches
+                            (.cons (functionIH _ _ functionRun functionMatches)
+                              (.cons (argumentIH _ _ argumentRun argumentMatches) .nil)))

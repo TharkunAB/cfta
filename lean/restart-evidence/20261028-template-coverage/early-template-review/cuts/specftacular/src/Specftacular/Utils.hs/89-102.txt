@@ -1,0 +1,14 @@
+mapp :: Node Symbol -> Node Symbol -> Node Symbol
+mapp n1 n2 =
+    Node
+        [ mkEdge
+            "app"
+            [getPath (path [0, 2]) n1, theArrowNode, n1, n2]
+            ( equalityConstraint $
+                mkEqConstraints
+                    [ [path [1], path [2, 0, 0]] -- it's a function
+                    , [path [3, 0], path [2, 0, 1]]
+                    , [path [0], path [2, 0, 2]]
+                    ]
+            )
+        ]

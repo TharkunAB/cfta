@@ -1,0 +1,38 @@
+      AnyPrefix ![Template symbol]
+    | -- | Match this root symbol when its children begin with this prefix.
+      TemplatePrefix !symbol ![Template symbol]
+    deriving (Eq, Ord, Read, Show)
+
+{- | The pattern for each child of a constructor with the given symbol and
+arity, or 'Nothing' when the constructor cannot match.
+-}
+childTemplates :: (Eq symbol) => Template symbol -> symbol -> Arity -> Maybe [Template symbol]
+childTemplates Hole _ (Arity count) = Just (replicate count Hole)
+childTemplates (AnyNode templates) _ arity = exact templates arity
+childTemplates (TemplateNode symbol templates) actual arity
+    | symbol == actual = exact templates arity
+    | otherwise = Nothing
+childTemplates (AnyPrefix templates) _ arity = prefix templates arity
+childTemplates (TemplatePrefix symbol templates) actual arity
+    | symbol == actual = prefix templates arity
+    | otherwise = Nothing
+
+exact, prefix :: [Template symbol] -> Arity -> Maybe [Template symbol]
+exact templates (Arity count)
+    | length templates == count = Just templates
+    | otherwise = Nothing
+prefix templates (Arity count)
+    | length templates <= count = Just (templates ++ replicate (count - length templates) Hole)
+    | otherwise = Nothing
+
+-- | Test a concrete term against a template.
+matchesTemplate :: (Eq symbol) => Template symbol -> Term symbol -> Bool
+matchesTemplate template (Term.Node symbol children) =
+    maybe False (\templates -> and (zipWith matchesTemplate templates children)) $
+        childTemplates template symbol (Arity (length children))
+
+-- | Whether a concrete term matches none of the templates.
+matchesNone :: (Eq symbol) => [Template symbol] -> Term symbol -> Bool
+matchesNone templates term = not (any (`matchesTemplate` term) templates)
+
+-- | Keep exactly the terms of an interned graph that match a template.

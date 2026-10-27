@@ -1,0 +1,3 @@
+import MicroCFTA.SourcePruningTemplates
+set_option pp.privateNames true
+#print MicroCFTA.SourcePruningTemplates.structuralTemplate

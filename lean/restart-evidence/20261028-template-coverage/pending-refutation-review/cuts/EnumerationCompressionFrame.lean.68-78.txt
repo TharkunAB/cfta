@@ -1,0 +1,11 @@
+/-- The actual representative read preserves root identities and stored sizes. -/
+theorem representative_frame (fuel uv root : Nat) (before after : State Symbol Guard)
+    (total : UnionFind.Total before.representatives)
+    (success : Success (representative fuel uv) before root after) : Frame before after := by
+  obtain ⟨found, lookup, _, rfl⟩ := (representative_success fuel uv before after root).mp success
+  refine ⟨rfl, rfl, rfl, rfl, rfl, ?_⟩
+  intro other actual size
+  exact UnionFind.findRoot_reaches_iff total lookup other actual size
+
+/-- A successful value read retains the actual root, its size, and its slot. -/
+theorem getValue_frame (fuel uv : Nat) (before after : State Symbol Guard) (value : UVarValue Symbol)

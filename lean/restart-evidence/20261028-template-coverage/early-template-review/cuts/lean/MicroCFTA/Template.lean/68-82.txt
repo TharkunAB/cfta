@@ -1,0 +1,15 @@
+/-- A pattern matches a complete term when all aligned child patterns match. -/
+inductive Matches [DecidableEq Symbol] : Pattern Symbol → Term Symbol → Prop where
+  | node (pattern : Pattern Symbol) (symbol : Symbol) (terms : List (Term Symbol))
+      (patterns : List (Pattern Symbol)) :
+      childTemplates pattern symbol terms.length = some patterns →
+      All₂ Matches patterns terms → Matches pattern (.node symbol terms)
+
+/-- Every complete term matches a hole. -/
+theorem hole_matches [DecidableEq Symbol] (term : Term Symbol) : Matches .hole term := by
+  induction term using Term.rec
+    (motive_2 := fun (terms : List (Term Symbol)) =>
+      All₂ Matches (List.replicate terms.length .hole) terms) with
+  | node symbol terms children => exact .node .hole symbol terms _ rfl children
+  | nil => exact .nil
+  | cons term rest first restMatches => exact .cons first restMatches

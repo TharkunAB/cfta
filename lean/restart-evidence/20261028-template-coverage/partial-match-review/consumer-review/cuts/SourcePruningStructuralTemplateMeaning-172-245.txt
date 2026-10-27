@@ -1,0 +1,74 @@
+private theorem structuralProgram_matches (full : Language.Term Symbol) (encoded : ProgramEncoding full) :
+    ∀ original early, sourceProgram original = some early →
+      Template.Matches early full → Template.Matches original full := by
+  induction encoded with
+  | constant symbol annotation =>
+      intro original early converted matched
+      rcases conversion_shape original early converted with ⟨rfl, rfl⟩ |
+        ⟨wanted, rfl, rfl⟩ | ⟨marker, function, argument, nextFunction, nextArgument,
+          rfl, rfl, _markerShape, _functionRun, _argumentRun⟩
+      · exact matched
+      · exact matched
+      · have children := (node_matches_inv _ _ _ _ matched).2
+        have impossible : (4 : Nat) = 1 := children.length_eq
+        omega
+  | app annotation function argument _functionEncoded _argumentEncoded functionIH argumentIH =>
+      intro original early converted matched
+      rcases conversion_shape original early converted with ⟨rfl, rfl⟩ |
+        ⟨wanted, rfl, rfl⟩ | ⟨marker, originalFunction, originalArgument, nextFunction, nextArgument,
+          rfl, rfl, markerShape, functionRun, argumentRun⟩
+      · exact matched
+      · exact matched
+      · have children := (node_matches_inv _ _ _ _ matched).2
+        cases children with
+        | cons _ children =>
+            cases children with
+            | cons _ children =>
+                cases children with
+                | cons functionMatches children =>
+                    cases children with
+                    | cons argumentMatches _ =>
+                        have markerMatches : Template.Matches marker
+                            (.node ("(->)", FullSyntax.Formula.top) []) := by
+                          rcases markerShape with rfl | rfl
+                          · exact Template.hole_matches _
+                          · exact .node _ _ _ [] (by simp [Template.childTemplates,
+                              Template.exactChildren]) .nil
+                        apply Template.Matches.node _ _ _ [.hole, marker, originalFunction, originalArgument]
+                          (by simp [Template.childTemplates, Template.exactChildren])
+                        exact .cons (Template.hole_matches annotation)
+                          (.cons markerMatches
+                            (.cons (functionIH _ _ functionRun functionMatches)
+                              (.cons (argumentIH _ _ argumentRun argumentMatches) .nil)))
+
+/-- A converted structural match is an original forbidden match on a source-encoded complete program. -/
+theorem structuralTemplate_matches (original early : Template.Pattern Symbol) (full : Language.Term Symbol)
+    (converted : structuralTemplate original = some early)
+    (encoded : ProgramEncoding full) (matched : Template.Matches early full) :
+    Template.Matches original full := by
+  cases original with
+  | hole | anyNode _ | anyPrefix _ | «prefix» _ _ => simp [structuralTemplate] at converted
+  | node symbol parts =>
+      cases parts with
+      | nil => simp [structuralTemplate] at converted
+      | cons first rest =>
+          cases rest with
+          | nil => simp [structuralTemplate] at converted
+          | cons second rest =>
+              cases rest with
+              | nil => simp [structuralTemplate] at converted
+              | cons third rest =>
+                  cases rest with
+                  | nil => simp [structuralTemplate] at converted
+                  | cons fourth rest =>
+                      cases rest with
+                      | cons _ _ => simp [structuralTemplate] at converted
+                      | nil =>
+                          simp only [structuralTemplate] at converted
+                          split at converted
+                          · change sourceProgram (.node symbol [first, second, third, fourth]) =
+                              some early at converted
+                            exact structuralProgram_matches full encoded _ _ converted matched
+                          · cases converted
+
+end MicroCFTA.SourcePruningTemplates

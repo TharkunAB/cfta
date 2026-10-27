@@ -1,5 +1,57 @@
 # Current formalization findings
 
+## Original template refutation through the actual callback
+
+Source checkpoint: c35a525acda2b33a7ca19508e9844113d55ba792.
+Recursive.callback_prefix_complete_resources_refutes keeps the ENTIRE original
+callback admission and resource certificate. It fixes fuel, result and final
+state before every semantic assignment. For any original assignment that
+satisfies the input state, completes the captured fragment at the current
+variable, refutes every original pending group, avoids the original templates
+at source program positions and has the source program encoding, the SAME
+actual callback does not reject. Every retained pending group stays refuted.
+The proof follows actual rendering, representative reads, indexed matching,
+early structural conversion and the full ordered resume loop.
+
+This closes the local template non-rejection step under those semantic
+conditions. It does not establish these conditions throughout recursive
+execution or derive program encoding from public construction. Prove those
+origins and preservation steps, then recursive output coverage with justified
+depth, stop, projection and frontier policy. Discharge and rendering coverage,
+public API composition, ranking, sampling and physical Haskell correspondence
+remain open. The whole formalization goal is ACTIVE.
+
+The previous strongest claims remain: exact finite pruning preservation for
+the covered construction and each fixed finite run; conditional rendered-output
+soundness from native startup; proper storage in every actual emitted cache;
+and a chosen hook invocation or an exact earlier hook stop. None proves full
+end-to-end enumeration coverage.
+
+Eleven modules add 16 public theorems and five semantic relations or predicates.
+Strict checks and full Audit pass: 4293 jobs and 80301 theorem dependencies.
+All 233 older public blocks remain the exact 971561-byte prefix. All 4281 older
+non-Audit Lean sources and 130 pinned modules retain their bytes. Haskell is
+unchanged. FINDINGS records the source-encoding assessment and retains the
+integrated LPO and KBO repair status. Details and next steps are in
+`lean/notes-current-template-coverage.md`.
+
+### Haskell assessment for structural early templates
+
+No new Haskell defect was established in this checkpoint. Utils.mapp inserts
+the singleton `(->)` marker at application child 1. Rewriting.rawTemplate uses
+the same marker. The public canPrune guard excludes a type constructor with
+the app/4 shape. Erasing that marker in an early structural template therefore
+needs the source program-encoding invariant. A malformed arbitrary marker is
+outside that admission. The new proof states ProgramEncoding explicitly; its
+origin from public native construction remains unproved.
+
+The LPO repair and main's KBO Natural-weight repair remain integrated. The
+previous checkpoint executed their recorded repair checks. This checkpoint
+changes no Haskell or Cabal file and runs no Haskell test or benchmark.
+Keep the earlier concrete findings and repair witnesses for external review.
+General order laws and physical pruning correspondence remain open.
+
+
 ## Proper storage for every emitted output from native startup
 
 Source checkpoint: a783e5c0c6880c6c1b86c04d87f7bea82f6dad96.

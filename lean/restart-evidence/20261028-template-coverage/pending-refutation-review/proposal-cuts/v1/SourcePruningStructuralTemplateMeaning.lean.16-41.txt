@@ -1,0 +1,26 @@
+/-- Complete programs use annotated constants and the source application marker. -/
+inductive ProgramEncoding : Language.Term Symbol → Prop where
+  /-- A constant has one annotation child. -/
+  | constant (symbol : Symbol) (annotation : Language.Term Symbol) :
+      ProgramEncoding (.node symbol [annotation])
+  /-- An application has the fixed arrow marker and two complete program children. -/
+  | app (annotation function argument : Language.Term Symbol) :
+      ProgramEncoding function → ProgramEncoding argument →
+      ProgramEncoding (.node ("app", FullSyntax.Formula.top)
+        [annotation, .node ("(->)", FullSyntax.Formula.top) [], function, argument])
+
+-- This macro names the actual private helper in the imported source module.
+local macro "sourceProgram" : term =>
+  pure (Lean.mkIdent ((Lean.Name.num `_private.MicroCFTA.SourcePruningTemplates 0) ++
+    `MicroCFTA.SourcePruningTemplates.structuralProgram))
+
+-- The tactic macro gives simp an identifier, not a function-valued term.
+local macro "simp_source_program" " at " hypothesis:ident : tactic => do
+  let helper := Lean.mkIdent ((Lean.Name.num `_private.MicroCFTA.SourcePruningTemplates 0) ++
+    `MicroCFTA.SourcePruningTemplates.structuralProgram)
+  `(tactic| simp [$helper:ident] at $hypothesis:ident)
+
+local macro "unfold_source_program" " at " hypothesis:ident : tactic => do
+  let helper := Lean.mkIdent ((Lean.Name.num `_private.MicroCFTA.SourcePruningTemplates 0) ++
+    `MicroCFTA.SourcePruningTemplates.structuralProgram)
+  `(tactic| simp only [$helper:ident] at $hypothesis:ident)

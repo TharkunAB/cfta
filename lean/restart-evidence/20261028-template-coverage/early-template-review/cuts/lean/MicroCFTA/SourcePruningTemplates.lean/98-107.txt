@@ -1,0 +1,10 @@
+/-- Check only the exact application and filter roots used by the early path. -/
+def rejectEarly (templates : List (Template.Pattern Symbol)) (fragment : Fragment Symbol) : Bool :=
+  if isProgramRoot fragment then
+    let early := templates.filterMap structuralTemplate
+    (programs (fragmentTerm fragment)).any fun term =>
+      (indexTemplates early term).any fun pattern =>
+        match matchPartial pattern term with
+        | some [] => true
+        | _ => false
+  else false

@@ -1,0 +1,12 @@
+/-- An empty catalog performs the pure metadata update without an oracle call. -/
+theorem recordTypes_empty (graph : Graph Symbol Guard) (fuel : Nat)
+    (metadata : Metadata Typing) (uv : Nat) (input : Sum (Fragment Symbol) Nat) :
+    recordTypes graph [] fuel metadata uv input =
+      pure (false, {metadata with types := updatedTypes metadata uv input}) := by
+  rfl
+
+/-- Pre-expansion events return the complete original metadata without state reads. -/
+theorem recordTypes_inr (graph : Graph Symbol Guard) (templates : List (Template.Pattern Symbol))
+    (fuel : Nat) (metadata : Metadata Typing) (uv node : Nat) :
+    recordTypes graph templates fuel metadata uv (.inr node) = pure (false, metadata) := by
+  cases templates <;> rfl

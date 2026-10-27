@@ -1,0 +1,11 @@
+/-- The raw fragment view completes to the original assigned fragment. -/
+theorem fragmentTerm_completes (assignment : Nat → Term Symbol) (fragment : Fragment Symbol) :
+    Completes assignment (fragmentTerm fragment) (fill assignment fragment) := by
+  induction fragment using Fragment.rec
+    (motive_2 := fun children => All₂ (Completes assignment)
+      (children.map fragmentTerm) (children.map (fill assignment))) with
+  | hole uv => simpa only [fragmentTerm, fill] using (Completes.hole (assignment := assignment) uv)
+  | node symbol children completed =>
+      simpa only [fragmentTerm, fill] using (Completes.concrete symbol _ _ completed)
+  | nil => exact .nil
+  | cons child children first rest => exact .cons first rest

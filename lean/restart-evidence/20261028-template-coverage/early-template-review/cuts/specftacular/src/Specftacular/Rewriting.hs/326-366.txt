@@ -1,0 +1,41 @@
+pruningTemplates :: Sig -> Int -> Rules -> [Template Symbol]
+pruningTemplates sig size rules =
+    nubOrd
+        [ template
+        | (l, r) <- allRules rules
+        , let vs = templateVars l
+        , length vs == length (nubOrd vs)
+        , leaves l <= size
+        , Term "app" [_, _, _] <- [l]
+        , template <- case principalType sig l of
+            Just principal
+                | independentGreater (rulesOrder rules) l r
+                , appliedGreater (rulesOrder rules) Map.empty l r
+                , rewrites l r principal ->
+                    [rawTemplate (const Hole) l]
+            _ ->
+                [ rawTemplate exactType l'
+                | Just l' <- [specialize l]
+                , rewrites l r l'
+                , Just bindings <- [matchTemplate l l' Map.empty]
+                , Just r' <- [instantiate bindings r]
+                , rankedGreater (rulesOrder rules) Map.empty l' r'
+                , appliedGreater (rulesOrder rules) Map.empty l' r'
+                ]
+        ]
+  where
+    rewrites l r target = isJust (matchTemplate l target Map.empty >>= (`instantiate` r))
+    types = Map.fromList [(Symbol ("<t>" <> name), typeSkeletonToTerm ty) | (ty, name) <- carriers]
+    specialize (Term "app" [ty, f, x]) =
+        (\ty' f' x' -> Term "app" [ty', f', x']) <$> instantiateType types ty <*> specialize f <*> specialize x
+    specialize (Term s [ty]) = (\ty' -> Term s [ty']) <$> instantiateType types ty
+    specialize _ = Nothing
+    exactType (Term s ts) = TemplateNode s (map exactType ts)
+    rawTemplate annotation (Term "app" [ty, f, x]) =
+        TemplateNode "app" [annotation ty, TemplateNode "(->)" [], rawTemplate annotation f, rawTemplate annotation x]
+    rawTemplate annotation (Term s [ty])
+        | isTemplateVar s = case annotation ty of
+            Hole -> Hole
+            t -> AnyPrefix [t]
+        | otherwise = TemplateNode s [annotation ty]
+    rawTemplate _ _ = error "pruningTemplates: invalid rule"

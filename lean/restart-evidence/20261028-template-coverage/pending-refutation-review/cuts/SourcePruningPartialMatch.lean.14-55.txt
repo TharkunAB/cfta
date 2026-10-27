@@ -1,0 +1,42 @@
+abbrev Pending (Symbol : Type) := List (Template.Pattern Symbol × Nat)
+
+/-- Every parked match names an allocated variable. -/
+def PendingBound (limit : Nat) (pending : Pending Symbol) : Prop :=
+  ∀ entry ∈ pending, entry.2 < limit
+
+mutual
+  /-- Match a partial term and collect the unresolved pieces in order. -/
+  def matchPartial [DecidableEq Symbol] (pattern : Template.Pattern Symbol)
+      (term : Language.Term (EnumerationState.PartialSymbol Symbol)) : Option (Pending Symbol) :=
+    match pattern, term with
+    | .hole, _ => some []
+    | .anyPrefix [], _ => some []
+    | pattern, .node (.hole uv) [] => some [(pattern, uv)]
+    | _, .node .truncated _ => none
+    | .anyNode parts, .node (.concrete _) children =>
+        if parts.length = children.length then matchChildren parts children else none
+    | .node expected parts, .node (.concrete symbol) children =>
+        if expected = symbol then
+          if parts.length = children.length then matchChildren parts children else none
+        else none
+    | .anyPrefix parts, .node (.concrete _) children =>
+        if parts.length ≤ children.length then matchChildren parts children else none
+    | .prefix expected parts, .node (.concrete symbol) children =>
+        if expected = symbol then
+          if parts.length ≤ children.length then matchChildren parts children else none
+        else none
+    | _, _ => none
+
+  /-- Match the requested prefix and append each child's pending pieces. -/
+  private def matchChildren [DecidableEq Symbol] : List (Template.Pattern Symbol) →
+      List (Language.Term (EnumerationState.PartialSymbol Symbol)) → Option (Pending Symbol)
+    | [], _ => some []
+    | pattern :: patterns, term :: terms => do
+        let first ← matchPartial pattern term
+        let rest ← matchChildren patterns terms
+        pure (first ++ rest)
+    | _, [] => none
+end
+
+/-- A hole pattern accepts every partial shape without a pending piece. -/
+theorem matchPartial_hole [DecidableEq Symbol]

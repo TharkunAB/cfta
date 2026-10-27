@@ -1,0 +1,5 @@
+private theorem found_template_mem (templates : List (Template.Pattern Symbol))
+    (select : Template.Pattern Symbol × Nat → Bool) (position : Nat)
+    (entry : Template.Pattern Symbol × Nat)
+    (found : ((templates.zipIdx.filter select).find? (fun entry => entry.2 == position)) = some entry) :
+    entry.1 ∈ templates := by

@@ -1,0 +1,17 @@
+                    let prepare = preparePruning bucketTemplates
+                        parts =
+                            [ [canonicalTypes (npTerm' t) | t <- prunedTerms oracleTemplates pruningRoot]
+                            | space <- searchSpaceParts termSplit stecta lvl tc
+                            , let (pruningRoot, oracleTemplates) = prepare (refold space)
+                            ]
+                     in concat <$> forceInParallel diagnostics lvl tc parts
+            Nothing -> do
+                refreshCount progress "Reducing  ECTA" (" for " ++ show tc) "" lvl (so_far s)
+                reduced <- diagnose env lvl (show tc) "reduce_whnf" s $ evaluate (searchSpace stecta lvl tc)
+                refreshCount progress "Refolding ecta" (" for " ++ show tc) "" lvl (so_far s)
+                folded <- diagnose env lvl (show tc) "refold_whnf" s $ evaluate (refold reduced)
+                -- The oracle rejects partial branches before their remaining type
+                -- choices expand. The bucket has one program size. The term order
+                -- sorts its ties before testing; smaller sizes have already supplied rules.
+                let (pruningRoot, oracleTemplates) = preparePruning bucketTemplates folded
+                pure [canonicalTypes (npTerm' t) | t <- prunedTerms oracleTemplates pruningRoot]

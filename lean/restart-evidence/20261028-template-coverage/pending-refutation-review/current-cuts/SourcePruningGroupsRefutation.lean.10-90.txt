@@ -1,0 +1,81 @@
+namespace MicroCFTA.SourcePruningResume
+open Language EnumerationState EnumerationCorrectness EnumerationSchedule
+open EnumerationCompressionFrame SourcePruningPartialMatch
+
+local instance : Monad List where
+  pure value := [value]
+  bind values continuation := values.flatMap continuation
+
+local instance : LawfulMonad List where
+  map_const := rfl
+  id_map := by intro α xs; simp [Functor.map]
+  seqLeft_eq := by
+    intros
+    simp [SeqLeft.seqLeft, Seq.seq, Functor.map, List.flatMap_map, ← List.map_eq_flatMap]
+    simp only [List.map_const']
+  seqRight_eq := by
+    intros
+    simp only [SeqRight.seqRight, Seq.seq, Functor.map, List.flatMap_map]
+    simp
+  pure_seq := by intros; simp [Seq.seq, Functor.map, pure]
+  bind_pure_comp := by intros; simp [bind, pure, Functor.map, ← List.map_eq_flatMap]
+  bind_map := by intros; rfl
+  pure_bind := by intros; simp [pure, bind]
+  bind_assoc := by intros; exact List.flatMap_assoc
+
+variable {Symbol Guard : Type}
+
+private theorem satisfies_frame (language : NodeLanguage Symbol)
+    (meaning : Guard → Term Symbol → Prop) (assignment : Nat → Term Symbol)
+    (before after : State Symbol Guard) (frame : Frame before after) :
+    Satisfies language meaning assignment after ↔ Satisfies language meaning assignment before := by
+  have forestSame : UnionFind.Satisfies after.representatives assignment ↔
+      UnionFind.Satisfies before.representatives assignment := by
+    constructor
+    · intro satisfied left right related
+      obtain ⟨root, size, leftPath, rightPath⟩ := related
+      exact satisfied left right ⟨root, size,
+        (frame.reaches left root size).mpr leftPath, (frame.reaches right root size).mpr rightPath⟩
+    · intro satisfied left right related
+      obtain ⟨root, size, leftPath, rightPath⟩ := related
+      exact satisfied left right ⟨root, size,
+        (frame.reaches left root size).mp leftPath, (frame.reaches right root size).mp rightPath⟩
+  simp only [Satisfies, Fragments.stateSatisfies, frame.values, frame.obligations, forestSame]
+
+variable [DecidableEq Symbol]
+
+/-- The actual ordered resume loop retains the refutation of each successful group. -/
+theorem groups_refute (fuel current : Nat) (term : Term (PartialSymbol Symbol))
+    (assignment : Nat → Term Symbol) (language : NodeLanguage Symbol)
+    (meaning : Guard → Term Symbol → Prop)
+    (pending : List (Pending Symbol)) (before after : State Symbol Guard)
+    (results : List (Option (Pending Symbol)))
+    (total : UnionFind.Total before.representatives)
+    (model : Satisfies language meaning assignment before)
+    (completed : Completes assignment term (assignment current))
+    (originalRefutes : ∀ group ∈ pending, Refutes assignment group)
+    (success : Success (pending.mapM (resume fuel current term)) before results after) :
+    ∀ group, some group ∈ results → Refutes assignment group := by
+  induction pending generalizing before after results with
+  | nil =>
+      obtain ⟨rfl, rfl⟩ := (success_pure [] results before after).mp success
+      intro group member
+      cases member
+  | cons first rest ih =>
+      rw [List.mapM_cons] at success
+      obtain ⟨firstResult, middle, firstRead, continued⟩ := (success_bind _ _ _ _ _).mp success
+      obtain ⟨tailResults, last, restRead, final⟩ := (success_bind _ _ _ _ _).mp continued
+      obtain ⟨rfl, rfl⟩ :=
+        (success_pure (firstResult :: tailResults) results last after).mp final
+      have frame := resume_frame fuel current term first before middle firstResult total firstRead
+      have middleModel := (satisfies_frame language meaning assignment before middle frame).mpr model
+      have tailRefutes := ih middle after tailResults (frame.total total) middleModel
+        (by intro group member; exact originalRefutes group (List.mem_cons_of_mem first member)) restRead
+      intro group member
+      rcases List.mem_cons.mp member with same | member
+      · have firstSome : firstResult = some group := same.symm
+        exact resume_refutes fuel current term first before middle group assignment total model.1.1
+          completed (originalRefutes first (by simp)) (by simpa only [firstSome] using firstRead)
+      · exact tailRefutes group member
+
+end MicroCFTA.SourcePruningResume

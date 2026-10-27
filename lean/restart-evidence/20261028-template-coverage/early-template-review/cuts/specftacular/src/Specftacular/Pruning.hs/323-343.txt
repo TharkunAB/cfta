@@ -1,0 +1,21 @@
+programs :: PartialTerm -> [PartialTerm]
+programs (CT.Node (ConcreteSymbol "filter") [_, term]) = programs term
+programs term@(CT.Node (ConcreteSymbol "app") [_, _, f, x]) = term : programs f ++ programs x
+programs _ = []
+
+{- | Select application templates whose annotations are wildcards.
+Specftacular applications always have the fixed singleton arrow marker.
+Its equality endpoint can still be an unresolved UVar during eager descent.
+Ignore that marker only under this encoding invariant. The signature guard
+disables pruning when a type constructor also has the raw app/4 shape.
+-}
+structuralTemplate :: Template Symbol -> Maybe (Template Symbol)
+structuralTemplate template@(TemplateNode "app" [_, _, _, _]) = program template
+  where
+    program Hole = Just Hole
+    program (TemplateNode "app" [Hole, marker, function, argument])
+        | marker `elem` [Hole, TemplateNode "(->)" []] =
+            (\f x -> TemplateNode "app" [Hole, Hole, f, x]) <$> program function <*> program argument
+    program (TemplateNode symbol [Hole]) = Just (TemplateNode symbol [Hole])
+    program _ = Nothing
+structuralTemplate _ = Nothing

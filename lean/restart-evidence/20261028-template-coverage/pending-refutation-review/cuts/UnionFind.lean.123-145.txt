@@ -1,0 +1,23 @@
+/-- Every successful lookup follows an original path and preserves all original paths. -/
+theorem findRoot_correct (fuel : Nat) (forest : Forest) (uv : Nat) (found : Result)
+    (result : findRoot fuel forest uv = some found) :
+    Reaches forest uv found.representative found.size ∧
+      (∀ {other root count}, Reaches forest other root count → Reaches found.forest other root count) := by
+  induction fuel generalizing forest uv found with
+  | zero => simp [findRoot] at result
+  | succ fuel ih =>
+    cases lookup : forest uv with
+    | none =>
+      simp [findRoot, lookup] at result
+      subst found
+      refine ⟨.root (by simp [read, lookup]), ?_⟩
+      intro other root count path
+      exact reaches_congr (fun other => (insert_missing lookup other).symm) path
+    | some entry =>
+      cases entry with
+      | root size =>
+        simp [findRoot, lookup] at result
+        subst found
+        exact ⟨.root (by simp [read, lookup]), fun path => path⟩
+      | parent next =>
+        cases recursive : findRoot fuel forest next with

@@ -1,0 +1,53 @@
+
+/-- A hole pattern accepts every partial shape without a pending piece. -/
+theorem matchPartial_hole [DecidableEq Symbol]
+    (term : Language.Term (EnumerationState.PartialSymbol Symbol)) :
+    matchPartial .hole term = some [] := by
+  rfl
+
+/-- The empty unrestricted prefix accepts even holes and truncation. -/
+theorem matchPartial_anyPrefix_nil [DecidableEq Symbol]
+    (term : Language.Term (EnumerationState.PartialSymbol Symbol)) :
+    matchPartial (.anyPrefix []) term = some [] := by
+  rfl
+
+/-- A raw hole suspends the exact pattern unless a wildcard already accepts it. -/
+theorem matchPartial_rawHole [DecidableEq Symbol] (pattern : Template.Pattern Symbol) (uv : Nat) :
+    matchPartial pattern (.node (.hole uv) []) =
+      match pattern with
+      | .hole => some []
+      | .anyPrefix [] => some []
+      | _ => some [(pattern, uv)] := by
+  cases pattern with
+  | hole => rfl
+  | anyNode parts => rfl
+  | node symbol parts => rfl
+  | anyPrefix parts => cases parts <;> rfl
+  | «prefix» symbol parts => rfl
+
+/-- Truncation rejects every pattern except the two preceding wildcards. -/
+theorem matchPartial_truncated [DecidableEq Symbol] (pattern : Template.Pattern Symbol)
+    (children : List (Language.Term (EnumerationState.PartialSymbol Symbol))) :
+    matchPartial pattern (.node .truncated children) =
+      match pattern with
+      | .hole => some []
+      | .anyPrefix [] => some []
+      | _ => none := by
+  cases pattern with
+  | hole => rfl
+  | anyNode parts => rfl
+  | node symbol parts => rfl
+  | anyPrefix parts => cases parts <;> rfl
+  | «prefix» symbol parts => rfl
+
+/-- A successful partial match parks only holes from the bounded input term. -/
+theorem matchPartial_bounded [DecidableEq Symbol] (limit : Nat)
+    (pattern : Template.Pattern Symbol) (term : Language.Term (EnumerationState.PartialSymbol Symbol))
+    (pending : Pending Symbol) (bounded : EnumerationPartialBounds.TermBound limit term)
+    (matched : matchPartial pattern term = some pending) : PendingBound limit pending := by
+  induction term using Language.Term.rec
+    (motive_2 := fun children => ∀ (patterns : List (Template.Pattern Symbol)) (pending : Pending Symbol),
+      EnumerationPartialBounds.TermsBound limit children →
+      matchChildren patterns children = some pending → PendingBound limit pending)
+    generalizing pattern pending with
+  | node symbol children ih =>

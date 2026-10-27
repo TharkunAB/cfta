@@ -1,0 +1,8 @@
+/-- Stored graph, suspended obligations, or fragment equations constrain one assigned term. -/
+def slotSatisfies (assignment : Nat → Term Symbol) (uv : Nat) : Slot Symbol → Prop
+  | .pending domain obligations =>
+      permits domain (assignment uv) ∧ ∀ obligation ∈ obligations, obligation assignment (assignment uv)
+  | .expanded fragment => fill assignment fragment = assignment uv
+  | .eliminated => True
+
+/-- Intersect only two unexpanded slots, as required by `intersectUVarValue`. -/

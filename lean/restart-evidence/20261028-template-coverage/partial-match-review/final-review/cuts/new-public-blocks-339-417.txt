@@ -1,0 +1,79 @@
+ Quot.sound]
+inductive MicroCFTA.SourcePruningPartialMatch.Completes : {Symbol : Type} →
+  (Nat → MicroCFTA.Language.Term Symbol) →
+    MicroCFTA.Language.Term (MicroCFTA.EnumerationState.PartialSymbol Symbol) → MicroCFTA.Language.Term Symbol → Prop
+number of parameters: 2
+constructors:
+MicroCFTA.SourcePruningPartialMatch.Completes.concrete : ∀ {Symbol : Type}
+  {assignment : Nat → MicroCFTA.Language.Term Symbol} (symbol : Symbol)
+  (partials : List (MicroCFTA.Language.Term (MicroCFTA.EnumerationState.PartialSymbol Symbol)))
+  (terms : List (MicroCFTA.Language.Term Symbol)),
+  MicroCFTA.Language.All₂ (MicroCFTA.SourcePruningPartialMatch.Completes assignment) partials terms →
+    MicroCFTA.SourcePruningPartialMatch.Completes assignment
+      (MicroCFTA.Language.Term.node (MicroCFTA.EnumerationState.PartialSymbol.concrete symbol) partials)
+      (MicroCFTA.Language.Term.node symbol terms)
+MicroCFTA.SourcePruningPartialMatch.Completes.hole : ∀ {Symbol : Type}
+  {assignment : Nat → MicroCFTA.Language.Term Symbol} (uv : Nat),
+  MicroCFTA.SourcePruningPartialMatch.Completes assignment
+    (MicroCFTA.Language.Term.node (MicroCFTA.EnumerationState.PartialSymbol.hole uv) []) (assignment uv)
+MicroCFTA.SourcePruningPartialMatch.Completes.truncated : ∀ {Symbol : Type}
+  {assignment : Nat → MicroCFTA.Language.Term Symbol}
+  (partials : List (MicroCFTA.Language.Term (MicroCFTA.EnumerationState.PartialSymbol Symbol)))
+  (term : MicroCFTA.Language.Term Symbol),
+  MicroCFTA.SourcePruningPartialMatch.Completes assignment
+    (MicroCFTA.Language.Term.node MicroCFTA.EnumerationState.PartialSymbol.truncated partials) term
+def MicroCFTA.SourcePruningResume.Refutes : {Symbol : Type} →
+  [DecidableEq Symbol] →
+    (Nat → MicroCFTA.Language.Term Symbol) → MicroCFTA.SourcePruningPartialMatch.Pending Symbol → Prop :=
+fun {Symbol} [DecidableEq Symbol] assignment pending =>
+  ¬∀ (entry : MicroCFTA.Template.Pattern Symbol × Nat),
+      entry ∈ pending → MicroCFTA.Template.Matches entry.fst (assignment entry.snd)
+inductive MicroCFTA.SourcePruningTemplates.ProgramAt : MicroCFTA.Language.Term MicroCFTA.SourcePruningTemplates.Symbol →
+  MicroCFTA.Language.Term MicroCFTA.SourcePruningTemplates.Symbol → Prop
+number of parameters: 0
+constructors:
+MicroCFTA.SourcePruningTemplates.ProgramAt.application : ∀
+  (annotation marker function argument : MicroCFTA.Language.Term MicroCFTA.SourcePruningTemplates.Symbol),
+  MicroCFTA.SourcePruningTemplates.ProgramAt
+    (MicroCFTA.Language.Term.node ("app", MicroCFTA.FullSyntax.Formula.top) [annotation, marker, function, argument])
+    (MicroCFTA.Language.Term.node ("app", MicroCFTA.FullSyntax.Formula.top) [annotation, marker, function, argument])
+MicroCFTA.SourcePruningTemplates.ProgramAt.function : ∀
+  (annotation marker function argument program : MicroCFTA.Language.Term MicroCFTA.SourcePruningTemplates.Symbol),
+  MicroCFTA.SourcePruningTemplates.ProgramAt function program →
+    MicroCFTA.SourcePruningTemplates.ProgramAt
+      (MicroCFTA.Language.Term.node ("app", MicroCFTA.FullSyntax.Formula.top) [annotation, marker, function, argument])
+      program
+MicroCFTA.SourcePruningTemplates.ProgramAt.argument : ∀
+  (annotation marker function argument program : MicroCFTA.Language.Term MicroCFTA.SourcePruningTemplates.Symbol),
+  MicroCFTA.SourcePruningTemplates.ProgramAt argument program →
+    MicroCFTA.SourcePruningTemplates.ProgramAt
+      (MicroCFTA.Language.Term.node ("app", MicroCFTA.FullSyntax.Formula.top) [annotation, marker, function, argument])
+      program
+MicroCFTA.SourcePruningTemplates.ProgramAt.filter : ∀
+  (annotation term program : MicroCFTA.Language.Term MicroCFTA.SourcePruningTemplates.Symbol),
+  MicroCFTA.SourcePruningTemplates.ProgramAt term program →
+    MicroCFTA.SourcePruningTemplates.ProgramAt
+      (MicroCFTA.Language.Term.node ("filter", MicroCFTA.FullSyntax.Formula.top) [annotation, term]) program
+def MicroCFTA.SourcePruningTemplates.Avoids : List
+    (MicroCFTA.Template.Pattern MicroCFTA.SourcePruningTemplates.Symbol) →
+  MicroCFTA.Language.Term MicroCFTA.SourcePruningTemplates.Symbol → Prop :=
+fun templates term =>
+  ∀ (program : MicroCFTA.Language.Term MicroCFTA.SourcePruningTemplates.Symbol),
+    MicroCFTA.SourcePruningTemplates.ProgramAt term program →
+      ∀ (pattern : MicroCFTA.Template.Pattern MicroCFTA.SourcePruningTemplates.Symbol),
+        pattern ∈ templates → ¬MicroCFTA.Template.Matches pattern program
+inductive MicroCFTA.SourcePruningTemplates.ProgramEncoding : MicroCFTA.Language.Term
+    MicroCFTA.SourcePruningTemplates.Symbol →
+  Prop
+number of parameters: 0
+constructors:
+MicroCFTA.SourcePruningTemplates.ProgramEncoding.constant : ∀ (symbol : MicroCFTA.SourcePruningTemplates.Symbol)
+  (annotation : MicroCFTA.Language.Term MicroCFTA.SourcePruningTemplates.Symbol),
+  MicroCFTA.SourcePruningTemplates.ProgramEncoding (MicroCFTA.Language.Term.node symbol [annotation])
+MicroCFTA.SourcePruningTemplates.ProgramEncoding.app : ∀
+  (annotation function argument : MicroCFTA.Language.Term MicroCFTA.SourcePruningTemplates.Symbol),
+  MicroCFTA.SourcePruningTemplates.ProgramEncoding function →
+    MicroCFTA.SourcePruningTemplates.ProgramEncoding argument →
+      MicroCFTA.SourcePruningTemplates.ProgramEncoding
+        (MicroCFTA.Language.Term.node ("app", MicroCFTA.FullSyntax.Formula.top)
+          [annotation, MicroCFTA.Language.Term.node ("(->)", MicroCFTA.FullSyntax.Formula.top) [], function, argument])

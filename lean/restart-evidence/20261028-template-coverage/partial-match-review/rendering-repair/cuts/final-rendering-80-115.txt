@@ -1,0 +1,36 @@
+      | hole uv =>
+          simp only [expandPartial] at success
+          obtain ⟨value, middle, reading, final⟩ := (success_bind _ _ _ _ _).mp success
+          obtain ⟨frame, root, size, path, _afterPath, stored⟩ :=
+            getValue_frame (fuel + 1) uv before middle value total reading
+          cases value with
+          | enumerated fragment =>
+              have equation : fill assignment fragment = assignment uv := by
+                have rootEquation : fill assignment fragment = assignment root := by
+                  simpa only [EnumerationCorrectness.heap, stored, Option.getD_some, slot, slotSatisfies]
+                    using satisfied.1.2 root
+                exact rootEquation.trans (satisfied.1.1 uv root (UnionFind.sameClass_root path)).symm
+              have middleSatisfied := (SourcePruningEnumerationNativeLanguage.satisfies_frame language meaning
+                assignment before middle frame).mpr satisfied
+              have completed := ih fragment middle after observedTerm (frame.total total) middleSatisfied final
+              simpa only [fill, equation] using completed
+          | eliminated =>
+              obtain ⟨rfl, _same⟩ := (success_pure _ observedTerm middle after).mp final
+              simpa only [fill] using (Completes.hole (assignment := assignment) uv)
+          | unenumerated node scs =>
+              cases node with
+              | none =>
+                  obtain ⟨rfl, _same⟩ := (success_pure _ observedTerm middle after).mp final
+                  simpa only [fill] using (Completes.hole (assignment := assignment) uv)
+              | some node =>
+                  cases scs with
+                  | cons first rest =>
+                      obtain ⟨rfl, _same⟩ := (success_pure _ observedTerm middle after).mp final
+                      simpa only [fill] using (Completes.hole (assignment := assignment) uv)
+                  | nil =>
+                      cases view : graph.node node <;> simp only [view] at final
+                      all_goals
+                        obtain ⟨rfl, _same⟩ := (success_pure _ observedTerm middle after).mp final
+                        first
+                        | simpa only [fill] using (Completes.hole (assignment := assignment) uv)
+                        | simpa only [fill] using (Completes.truncated (assignment := assignment) [] (assignment uv))

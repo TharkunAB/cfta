@@ -1,0 +1,33 @@
+def indexTemplates (templates : List (Template.Pattern Symbol)) (term : PartialTerm) :
+    List (Template.Pattern Symbol) :=
+  let tagged := templates.zipIdx
+  let generic := tagged.filter (fun entry => (templateSpine entry.1).isNone)
+  let fixed := fun key => tagged.filter (fun entry => decide (templateSpine entry.1 = some key))
+  match partialSpine term with
+  | none => templates
+  | some key =>
+      (List.range templates.length).filterMap fun position =>
+        ((generic.find? (fun entry => entry.2 == position)).map Prod.fst).orElse
+          (fun _ => ((fixed key).find? (fun entry => entry.2 == position)).map Prod.fst)
+
+private def structuralProgram : Template.Pattern Symbol → Option (Template.Pattern Symbol)
+  | .hole => some .hole
+  | .node symbol [.hole, marker, function, argument] =>
+      if symbol = ("app", FullSyntax.Formula.top) then
+        if (match marker with
+          | .hole => true
+          | .node arrow [] => decide (arrow = ("(->)", FullSyntax.Formula.top))
+          | _ => false) then do
+          let nextFunction ← structuralProgram function
+          let nextArgument ← structuralProgram argument
+          pure (.node ("app", FullSyntax.Formula.top) [.hole, .hole, nextFunction, nextArgument])
+        else none
+      else none
+  | .node symbol [.hole] => some (.node symbol [.hole])
+  | _ => none
+
+/-- Admit only a root application with the source's annotation restrictions. -/
+def structuralTemplate : Template.Pattern Symbol → Option (Template.Pattern Symbol)
+  | pattern@(.node symbol [_, _, _, _]) =>
+      if symbol = ("app", FullSyntax.Formula.top) then structuralProgram pattern else none
+  | _ => none

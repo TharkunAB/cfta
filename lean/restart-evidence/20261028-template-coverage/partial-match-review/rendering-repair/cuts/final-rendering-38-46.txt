@@ -1,0 +1,9 @@
+/-- Actual partial rendering represents the same original completed fragment. -/
+theorem expandPartial_completes (graph : Graph Symbol Guard)
+    (language : NodeLanguage Symbol) (meaning : Guard → Term Symbol → Prop)
+    (assignment : Nat → Term Symbol) (fuel : Nat) (fragment : Fragment Symbol)
+    (before after : State Symbol Guard) (observedTerm : Term (PartialSymbol Symbol))
+    (total : UnionFind.Total before.representatives)
+    (satisfied : Satisfies language meaning assignment before)
+    (success : Success (expandPartial graph fuel fragment) before observedTerm after) :
+    Completes assignment observedTerm (fill assignment fragment) := by

@@ -1,0 +1,8 @@
+/-- Each actually selected partial program completes at an original program position. -/
+theorem programs_complete (assignment : Nat → Term Symbol)
+    (observedTerm program : PartialTerm) (whole : Term Symbol)
+    (completed : Completes assignment observedTerm whole) (member : program ∈ programs observedTerm) :
+    ∃ fullProgram, ProgramAt whole fullProgram ∧ Completes assignment program fullProgram := by
+  induction observedTerm using Term.rec
+    (motive_2 := fun children => ∀ terms,
+      All₂ (Completes assignment) children terms →

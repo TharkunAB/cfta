@@ -1,0 +1,22 @@
+/-- A finite ordered tree. The symbol has no imposed arity. -/
+inductive Term (Symbol : Type) where
+  | node : Symbol → List (Term Symbol) → Term Symbol
+
+/-- Relate the entries of two lists at the same positions. -/
+inductive All₂ {α β : Type} (R : α → β → Prop) : List α → List β → Prop where
+  | nil : All₂ R [] []
+  | cons : R a b → All₂ R as bs → All₂ R (a :: as) (b :: bs)
+
+/-- Replace a pointwise relation by a weaker relation. -/
+theorem All₂.imp {α β : Type} {R S : α → β → Prop}
+    (f : ∀ a b, R a b → S a b) {as bs} (h : All₂ R as bs) : All₂ S as bs := by
+  induction h with
+  | nil => exact .nil
+  | cons h hs ih => exact .cons (f _ _ h) ih
+
+/-- Pointwise related lists have the same length. -/
+theorem All₂.length_eq {α β : Type} {R : α → β → Prop}
+    {as bs} (h : All₂ R as bs) : as.length = bs.length := by
+  induction h with
+  | nil => rfl
+  | cons _ _ ih => simpa using ih

@@ -1,0 +1,89 @@
+inductive Pattern (Symbol : Type) where
+  | hole
+  | anyNode (children : List (Pattern Symbol))
+  | node (symbol : Symbol) (children : List (Pattern Symbol))
+  | anyPrefix (children : List (Pattern Symbol))
+  | prefix (symbol : Symbol) (children : List (Pattern Symbol))
+
+/-- Require an exact child count. -/
+def exactChildren (patterns : List (Pattern Symbol)) (arity : Nat) : Option (List (Pattern Symbol)) :=
+  if patterns.length = arity then some patterns else none
+
+/-- Extend a child prefix with unrestricted holes. -/
+def prefixChildren (patterns : List (Pattern Symbol)) (arity : Nat) : Option (List (Pattern Symbol)) :=
+  if patterns.length ≤ arity then some (patterns ++ List.replicate (arity - patterns.length) .hole) else none
+
+/-- Match a constructor and give one template for every child. -/
+def childTemplates [DecidableEq Symbol] (pattern : Pattern Symbol) (symbol : Symbol)
+    (arity : Nat) : Option (List (Pattern Symbol)) :=
+  match pattern with
+  | .hole => some (List.replicate arity .hole)
+  | .anyNode patterns => exactChildren patterns arity
+  | .node wanted patterns => if wanted = symbol then exactChildren patterns arity else none
+  | .anyPrefix patterns => prefixChildren patterns arity
+  | .prefix wanted patterns => if wanted = symbol then prefixChildren patterns arity else none
+
+/-- Successful child alignment neither omits nor adds a child. -/
+theorem childTemplates_length [DecidableEq Symbol] (pattern : Pattern Symbol)
+    (symbol : Symbol) (arity : Nat) (patterns : List (Pattern Symbol))
+    (aligned : childTemplates pattern symbol arity = some patterns) : patterns.length = arity := by
+  cases pattern <;> simp only [childTemplates] at aligned
+  · cases aligned; simp
+  · unfold exactChildren at aligned
+    split at aligned <;> simp_all
+  · split at aligned
+    · unfold exactChildren at aligned
+      split at aligned <;> simp_all
+    · simp at aligned
+  · unfold prefixChildren at aligned
+    split at aligned
+    · cases aligned
+      simp
+      omega
+    · simp at aligned
+  · split at aligned
+    · unfold prefixChildren at aligned
+      split at aligned
+      · cases aligned
+        simp
+        omega
+      · simp at aligned
+    · simp at aligned
+
+/-- A pattern matches a complete term when all aligned child patterns match. -/
+inductive Matches [DecidableEq Symbol] : Pattern Symbol → Term Symbol → Prop where
+  | node (pattern : Pattern Symbol) (symbol : Symbol) (terms : List (Term Symbol))
+      (patterns : List (Pattern Symbol)) :
+      childTemplates pattern symbol terms.length = some patterns →
+      All₂ Matches patterns terms → Matches pattern (.node symbol terms)
+
+/-- Every complete term matches a hole. -/
+theorem hole_matches [DecidableEq Symbol] (term : Term Symbol) : Matches .hole term := by
+  induction term using Term.rec
+    (motive_2 := fun (terms : List (Term Symbol)) =>
+      All₂ Matches (List.replicate terms.length .hole) terms) with
+  | node symbol terms children => exact .node .hole symbol terms _ rfl children
+  | nil => exact .nil
+  | cons term rest first restMatches => exact .cons first restMatches
+
+mutual
+  /-- Execute complete-term template matching. -/
+  def matchesTerm [DecidableEq Symbol] (pattern : Pattern Symbol) : Term Symbol → Bool
+    | .node symbol terms =>
+        match childTemplates pattern symbol terms.length with
+        | none => false
+        | some patterns => matchesChildren patterns terms
+
+  /-- Execute pointwise matching of aligned children. -/
+  def matchesChildren [DecidableEq Symbol] : List (Pattern Symbol) → List (Term Symbol) → Bool
+    | [], [] => true
+    | pattern :: patterns, term :: terms => matchesTerm pattern term && matchesChildren patterns terms
+    | _, _ => false
+end
+
+/-- Executable matching decides the complete-term pattern relation. -/
+theorem matchesTerm_correct [DecidableEq Symbol] (term : Term Symbol) (pattern : Pattern Symbol) :
+    matchesTerm pattern term = true ↔ Matches pattern term := by
+  induction term using Term.rec
+    (motive_2 := fun (terms : List (Term Symbol)) => ∀ patterns : List (Pattern Symbol),
+      matchesChildren patterns terms = true ↔ All₂ Matches patterns terms) generalizing pattern with

@@ -1,0 +1,58 @@
+
+/-- An actual successful resume retains the refutation of its original group. -/
+theorem resume_refutes (fuel current : Nat) (term : Term (PartialSymbol Symbol))
+    (pending : Pending Symbol) (before after : State Symbol Guard)
+    (resumed : Pending Symbol) (assignment : Nat → Term Symbol)
+    (total : UnionFind.Total before.representatives)
+    (consistent : UnionFind.Satisfies before.representatives assignment)
+    (completed : Completes assignment term (assignment current))
+    (refuted : Refutes assignment pending)
+    (success : Success (resume fuel current term pending) before (some resumed) after) :
+    Refutes assignment resumed := by
+  change Success (do
+    let results ← pending.mapM (part fuel current term)
+    pure ((results.mapM id : Option (List (Pending Symbol))).map (fun pieces => pieces.flatMap id)))
+    before (some resumed) after at success
+  obtain ⟨results, middle, traversed, final⟩ := (success_bind _ _ _ _ _).mp success
+  have reflected := (parts_sound fuel current term assignment completed pending
+    before middle results total consistent traversed).2.2
+  obtain ⟨projected, _same⟩ := (success_pure _ (some resumed) middle after).mp final
+  intro allMatches
+  apply refuted
+  cases sequenced : (results.mapM id : Option (List (Pending Symbol))) with
+  | none => simp [sequenced] at projected
+  | some pieces =>
+      have same : resumed = pieces.flatMap id := by simpa [sequenced] using projected
+      exact reflected pieces sequenced (by simpa only [← same] using allMatches)
+
+attribute [local instance] FormulaExecutable.formulaDecidableEq
+
+/-- Refuted successful groups neither reject nor lose refutation at finishChecks. -/
+theorem finishChecks_refutes
+    (assignment : Nat → Term SourcePruningTemplates.Symbol)
+    (resumed started : List (Option (Pending SourcePruningTemplates.Symbol)))
+    (resumedRefutes : ∀ group, some group ∈ resumed → Refutes assignment group)
+    (startedRefutes : ∀ group, some group ∈ started → Refutes assignment group) :
+    (SourcePruningTemplates.finishChecks resumed started).1 = false ∧
+      ∀ group ∈ (SourcePruningTemplates.finishChecks resumed started).2,
+        Refutes assignment group := by
+  have checkedRefutes : ∀ group ∈ (resumed ++ started).filterMap id,
+      Refutes assignment group := by
+    intro group member
+    obtain ⟨entry, listed, found⟩ := List.mem_filterMap.mp member
+    have same : entry = some group := found
+    subst entry
+    exact (List.mem_append.mp listed).elim (resumedRefutes group) (startedRefutes group)
+  constructor
+  · change ((resumed ++ started).filterMap id).any (fun pending => pending.isEmpty) = false
+    apply List.any_eq_false.mpr
+    intro group member
+    have refuted := checkedRefutes group member
+    cases group with
+    | nil => exact False.elim (refuted (by intro entry member; cases member))
+    | cons first rest => simp
+  · intro group member
+    change group ∈ ((resumed ++ started).filterMap id).filter (fun pending => !pending.isEmpty) at member
+    exact checkedRefutes group (List.mem_filter.mp member).1
+
+end MicroCFTA.SourcePruningResume

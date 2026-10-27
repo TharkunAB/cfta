@@ -1,0 +1,51 @@
+namespace MicroCFTA.SourcePruningOracle
+open Language Fragments EnumerationState EnumerationCorrectness EnumerationCompressionFrame
+open SourcePruningPartialMatch SourcePruningTemplates
+local notation "Symbol" => SourcePruningTemplates.Symbol
+attribute [local instance] FormulaExecutable.formulaDecidableEq
+variable {Guard : Type}
+
+local instance : Monad List where
+  pure value := [value]
+  bind values continuation := values.flatMap continuation
+
+/-- The actual oracle preserves an original assignment that refutes every forbidden match. -/
+theorem oracle_inl_refutes (graph : Graph Symbol Guard)
+    (language : NodeLanguage Symbol) (meaning : Guard → Term Symbol → Prop)
+    (assignment : Nat → Term Symbol) (templates : List (Template.Pattern Symbol))
+    (fuel uv : Nat) (pending : List (Pending Symbol)) (fragment : Fragment Symbol)
+    (before after : State Symbol Guard) (result : Bool × List (Pending Symbol))
+    (total : UnionFind.Total before.representatives)
+    (satisfied : Satisfies language meaning assignment before)
+    (filled : fill assignment fragment = assignment uv)
+    (refuted : ∀ group ∈ pending, SourcePruningResume.Refutes assignment group)
+    (avoids : Avoids templates (fill assignment fragment))
+    (encoded : ∀ program, ProgramAt (fill assignment fragment) program → ProgramEncoding program)
+    (success : Success (oracle graph templates fuel pending uv (.inl fragment)) before result after) :
+    result.1 = false ∧ ∀ group ∈ result.2, SourcePruningResume.Refutes assignment group := by
+  have early : ¬ rejectEarly templates fragment = true := by
+    rw [rejectEarly_false assignment templates fragment avoids encoded]
+    decide
+  simp only [oracle, ite_eq_right early] at success
+  split at success
+  · obtain ⟨rfl, _same⟩ := (success_pure (false, []) result before after).mp success
+    exact ⟨rfl, by simp⟩
+  · change Success (expandPartial graph fuel fragment >>= fun term =>
+      pending.mapM (SourcePruningResume.resume fuel uv term) >>= fun resumed =>
+        pure (finishChecks resumed (startMatches templates term))) before result after at success
+    obtain ⟨term, middle, rendered, continued⟩ := (success_bind _ _ _ _ _).mp success
+    obtain ⟨resumed, last, traversed, final⟩ := (success_bind _ _ _ _ _).mp continued
+    obtain ⟨rfl, _same⟩ := (success_pure _ result last after).mp final
+    have completed := SourcePruningPartialRenderingSemantics.expandPartial_completes graph language meaning
+      assignment fuel fragment before middle term total satisfied rendered
+    have currentCompleted : Completes assignment term (assignment uv) := filled ▸ completed
+    have renderFrame := EnumerationObservations.expandPartial_frame graph fuel fragment before middle term total rendered
+    have middleSatisfied := (SourcePruningEnumerationNativeLanguage.satisfies_frame language meaning
+      assignment before middle renderFrame).mpr satisfied
+    have resumedRefutes := SourcePruningResume.groups_refute fuel uv term assignment language meaning
+      pending middle last resumed (renderFrame.total total) middleSatisfied currentCompleted refuted traversed
+    exact SourcePruningResume.finishChecks_refutes assignment resumed (startMatches templates term)
+      resumedRefutes (fun group member => startMatches_refutes assignment templates term
+        (fill assignment fragment) completed avoids group member)
+
+end MicroCFTA.SourcePruningOracle

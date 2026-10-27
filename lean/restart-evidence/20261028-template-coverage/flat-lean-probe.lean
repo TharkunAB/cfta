@@ -1,0 +1,2 @@
+import MicroCFTA.SourcePruningTemplates
+#print MicroCFTA.SourcePruningTemplates.structuralTemplate

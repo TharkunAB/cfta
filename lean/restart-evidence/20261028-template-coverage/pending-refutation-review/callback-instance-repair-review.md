@@ -1,0 +1,7 @@
+# Callback refutation instance alignment
+
+OPEN. Full current CallbackRefutation declaration/body and the complete actual first failure (1335 bytes) were read. The old callback resource contract quantifies an arbitrary DecidableEq Symbol instance. The concrete recordTypes semantic theorem uses the canonical source product instance for String and Formula. The first failure occurs only when passing original refuted groups and repacking final refuted groups across those instance parameters.
+
+The proposed local repair explicitly instantiates the canonical source instance in ONLY the two NEW Refutes occurrences. It must leave the original arbitrary-instance binder, every original operation in the retained packet, the full original result and the one producer call unchanged. This aligns new predicates with the actual source template matcher. It is not permission to override the whole section instance or alter the existing producer admission. No future successful callback, desired false result or after-model is introduced.
+
+The observer consumes original Satisfies, actual fragment fill=assignment uv, original pending refutation, Avoids and original ProgramEncoding. The existing producer chooses the stable SAME result and after first. Actual running at extra=0 discharges recordTypes_inl_refutes. The final false flag and final group refutations are derived for those identical witnesses. A final source/strict/public comparison remains pending.

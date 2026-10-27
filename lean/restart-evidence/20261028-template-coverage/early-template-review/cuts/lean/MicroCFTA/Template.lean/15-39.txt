@@ -1,0 +1,25 @@
+/-- Complete-subtree, exact-node, and prefix-node patterns. -/
+inductive Pattern (Symbol : Type) where
+  | hole
+  | anyNode (children : List (Pattern Symbol))
+  | node (symbol : Symbol) (children : List (Pattern Symbol))
+  | anyPrefix (children : List (Pattern Symbol))
+  | prefix (symbol : Symbol) (children : List (Pattern Symbol))
+
+/-- Require an exact child count. -/
+def exactChildren (patterns : List (Pattern Symbol)) (arity : Nat) : Option (List (Pattern Symbol)) :=
+  if patterns.length = arity then some patterns else none
+
+/-- Extend a child prefix with unrestricted holes. -/
+def prefixChildren (patterns : List (Pattern Symbol)) (arity : Nat) : Option (List (Pattern Symbol)) :=
+  if patterns.length ≤ arity then some (patterns ++ List.replicate (arity - patterns.length) .hole) else none
+
+/-- Match a constructor and give one template for every child. -/
+def childTemplates [DecidableEq Symbol] (pattern : Pattern Symbol) (symbol : Symbol)
+    (arity : Nat) : Option (List (Pattern Symbol)) :=
+  match pattern with
+  | .hole => some (List.replicate arity .hole)
+  | .anyNode patterns => exactChildren patterns arity
+  | .node wanted patterns => if wanted = symbol then exactChildren patterns arity else none
+  | .anyPrefix patterns => prefixChildren patterns arity
+  | .prefix wanted patterns => if wanted = symbol then prefixChildren patterns arity else none

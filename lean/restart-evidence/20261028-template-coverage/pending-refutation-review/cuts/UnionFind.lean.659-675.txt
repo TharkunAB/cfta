@@ -1,0 +1,17 @@
+/-- An assignment gives equal values to all variables in one forest class. -/
+def Satisfies (forest : Forest) (assignment : Nat → α) : Prop :=
+  ∀ left right, SameClass forest left right → assignment left = assignment right
+
+/-- Singleton initialization imposes no equality between distinct values. -/
+theorem initial_satisfies (variables : List Nat) (assignment : Nat → α) :
+    Satisfies (withInitialValues variables) assignment := by
+  intro left right same
+  exact congrArg assignment ((initial_classes variables left right).mp same)
+
+/-- Compression preserves exactly the assignments permitted by the forest. -/
+theorem findRoot_satisfies (valid : Total forest)
+    (result : findRoot fuel forest uv = some found) (assignment : Nat → α) :
+    Satisfies found.forest assignment ↔ Satisfies forest assignment := by
+  simp only [Satisfies, findRoot_classes valid result]
+
+/-- Union adds exactly the requested value equality to the assignment constraints. -/

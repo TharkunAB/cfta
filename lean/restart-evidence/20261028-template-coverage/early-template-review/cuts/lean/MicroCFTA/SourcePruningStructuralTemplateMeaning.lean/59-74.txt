@@ -1,0 +1,16 @@
+
+private theorem converted_children (function argument early : Template.Pattern Symbol)
+    (converted : (do
+      let nextFunction ← sourceProgram function
+      let nextArgument ← sourceProgram argument
+      pure (.node ("app", FullSyntax.Formula.top) [.hole, .hole, nextFunction, nextArgument])) = some early) :
+    ∃ nextFunction nextArgument,
+      early = .node ("app", FullSyntax.Formula.top) [.hole, .hole, nextFunction, nextArgument] ∧
+      sourceProgram function = some nextFunction ∧ sourceProgram argument = some nextArgument := by
+  change Option.bind (sourceProgram function) (fun nextFunction =>
+    Option.bind (sourceProgram argument) (fun nextArgument =>
+      some (.node ("app", FullSyntax.Formula.top) [.hole, .hole, nextFunction, nextArgument]))) =
+        some early at converted
+  obtain ⟨nextFunction, functionRun, argumentStep⟩ := Option.bind_eq_some_iff.mp converted
+  obtain ⟨nextArgument, argumentRun, sameEarly⟩ := Option.bind_eq_some_iff.mp argumentStep
+  exact ⟨nextFunction, nextArgument, (Option.some.inj sameEarly).symm, functionRun, argumentRun⟩

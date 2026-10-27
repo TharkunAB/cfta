@@ -1,0 +1,22 @@
+--- actual-failed-v1
++++ final-v2
+@@ -49,7 +49,8 @@
+     (assignment : Nat → Language.Term Symbol)
+     (satisfied : Satisfies language meaning assignment before.core)
+     (filled : Fragments.fill assignment fragment = assignment uv)
+-    (refuted : ∀ group ∈ metadata.pending, SourcePruningResume.Refutes assignment group)
++    (refuted : ∀ group ∈ metadata.pending, @SourcePruningResume.Refutes Symbol
++        (@instDecidableEqProd String FullSyntax.Formula inferInstance FormulaExecutable.formulaDecidableEq) assignment group)
+     (avoids : SourcePruningTemplates.Avoids templates (Fragments.fill assignment fragment))
+     (encoded : ∀ program, SourcePruningTemplates.ProgramAt (Fragments.fill assignment fragment) program →
+       SourcePruningTemplates.ProgramEncoding program) :
+@@ -93,7 +94,8 @@
+               Packet formulas solver inventory reached final result.2 reachedCache
+         | _ => True)) ∧
+       result.1 = false ∧
+-      ∀ group ∈ result.2.pending, SourcePruningResume.Refutes assignment group := by
++      ∀ group ∈ result.2.pending, @SourcePruningResume.Refutes Symbol
++        (@instDecidableEqProd String FullSyntax.Formula inferInstance FormulaExecutable.formulaDecidableEq) assignment group := by
+   obtain ⟨fuel, result, after, retained⟩ :=
+     callback_prefix_complete_resources formulas solver inventory graph templates metadata uv fragment caller memos before
+       holeKey fits admits checkEmpty edgesOf stop order packet allocated profile property bounded known

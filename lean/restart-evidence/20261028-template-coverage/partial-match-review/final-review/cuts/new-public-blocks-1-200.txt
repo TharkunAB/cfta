@@ -1,0 +1,200 @@
+MicroCFTA.SourcePruningTemplates.indexTemplates_mem
+  (templates : List (MicroCFTA.Template.Pattern MicroCFTA.SourcePruningTemplates.Symbol))
+  (term : MicroCFTA.SourcePruningTemplates.PartialTerm)
+  (pattern : MicroCFTA.Template.Pattern MicroCFTA.SourcePruningTemplates.Symbol)
+  (member : pattern ∈ MicroCFTA.SourcePruningTemplates.indexTemplates templates term) : pattern ∈ templates
+'MicroCFTA.SourcePruningTemplates.indexTemplates_mem' depends on axioms: [propext, Classical.choice, Quot.sound]
+MicroCFTA.SourcePruningPartialMatch.matchPartial_sound {Symbol : Type} [DecidableEq Symbol]
+  (assignment : Nat → MicroCFTA.Language.Term Symbol) (pattern : MicroCFTA.Template.Pattern Symbol)
+  (observedTerm : MicroCFTA.Language.Term (MicroCFTA.EnumerationState.PartialSymbol Symbol))
+  (full : MicroCFTA.Language.Term Symbol) (pending : MicroCFTA.SourcePruningPartialMatch.Pending Symbol)
+  (completed : MicroCFTA.SourcePruningPartialMatch.Completes assignment observedTerm full)
+  (matched : MicroCFTA.SourcePruningPartialMatch.matchPartial pattern observedTerm = some pending)
+  (pendingMatches :
+    ∀ (entry : MicroCFTA.Template.Pattern Symbol × Nat),
+      entry ∈ pending → MicroCFTA.Template.Matches entry.fst (assignment entry.snd)) :
+  MicroCFTA.Template.Matches pattern full
+'MicroCFTA.SourcePruningPartialMatch.matchPartial_sound' depends on axioms: [propext, Quot.sound]
+MicroCFTA.SourcePruningPartialMatch.matchPartial_complete_sound {Symbol : Type} [DecidableEq Symbol]
+  (assignment : Nat → MicroCFTA.Language.Term Symbol) (pattern : MicroCFTA.Template.Pattern Symbol)
+  (observedTerm : MicroCFTA.Language.Term (MicroCFTA.EnumerationState.PartialSymbol Symbol))
+  (full : MicroCFTA.Language.Term Symbol)
+  (completed : MicroCFTA.SourcePruningPartialMatch.Completes assignment observedTerm full)
+  (matched : MicroCFTA.SourcePruningPartialMatch.matchPartial pattern observedTerm = some []) :
+  MicroCFTA.Template.Matches pattern full
+'MicroCFTA.SourcePruningPartialMatch.matchPartial_complete_sound' depends on axioms: [propext, Quot.sound]
+MicroCFTA.SourcePruningPartialMatch.matchPartial_refutes {Symbol : Type} [DecidableEq Symbol]
+  (assignment : Nat → MicroCFTA.Language.Term Symbol) (pattern : MicroCFTA.Template.Pattern Symbol)
+  (observedTerm : MicroCFTA.Language.Term (MicroCFTA.EnumerationState.PartialSymbol Symbol))
+  (full : MicroCFTA.Language.Term Symbol) (pending : MicroCFTA.SourcePruningPartialMatch.Pending Symbol)
+  (completed : MicroCFTA.SourcePruningPartialMatch.Completes assignment observedTerm full)
+  (matched : MicroCFTA.SourcePruningPartialMatch.matchPartial pattern observedTerm = some pending)
+  (refuted : ¬MicroCFTA.Template.Matches pattern full) :
+  ¬∀ (entry : MicroCFTA.Template.Pattern Symbol × Nat),
+      entry ∈ pending → MicroCFTA.Template.Matches entry.fst (assignment entry.snd)
+'MicroCFTA.SourcePruningPartialMatch.matchPartial_refutes' depends on axioms: [propext, Quot.sound]
+MicroCFTA.SourcePruningResume.resume_refutes {Symbol Guard : Type} [DecidableEq Symbol] (fuel current : Nat)
+  (term : MicroCFTA.Language.Term (MicroCFTA.EnumerationState.PartialSymbol Symbol))
+  (pending : MicroCFTA.SourcePruningPartialMatch.Pending Symbol)
+  (before after : MicroCFTA.EnumerationState.State Symbol Guard)
+  (resumed : MicroCFTA.SourcePruningPartialMatch.Pending Symbol) (assignment : Nat → MicroCFTA.Language.Term Symbol)
+  (total : MicroCFTA.UnionFind.Total before.representatives)
+  (consistent : MicroCFTA.UnionFind.Satisfies before.representatives assignment)
+  (completed : MicroCFTA.SourcePruningPartialMatch.Completes assignment term (assignment current))
+  (refuted : MicroCFTA.SourcePruningResume.Refutes assignment pending)
+  (success :
+    MicroCFTA.EnumerationCorrectness.Success (MicroCFTA.SourcePruningResume.resume fuel current term pending) before
+      (some resumed) after) :
+  MicroCFTA.SourcePruningResume.Refutes assignment resumed
+'MicroCFTA.SourcePruningResume.resume_refutes' depends on axioms: [propext, Quot.sound]
+MicroCFTA.SourcePruningResume.finishChecks_refutes
+  (assignment : Nat → MicroCFTA.Language.Term MicroCFTA.SourcePruningTemplates.Symbol)
+  (resumed started :
+    List (Option (MicroCFTA.SourcePruningPartialMatch.Pending MicroCFTA.SourcePruningTemplates.Symbol)))
+  (resumedRefutes :
+    ∀ (group : MicroCFTA.SourcePruningPartialMatch.Pending MicroCFTA.SourcePruningTemplates.Symbol),
+      some group ∈ resumed → MicroCFTA.SourcePruningResume.Refutes assignment group)
+  (startedRefutes :
+    ∀ (group : MicroCFTA.SourcePruningPartialMatch.Pending MicroCFTA.SourcePruningTemplates.Symbol),
+      some group ∈ started → MicroCFTA.SourcePruningResume.Refutes assignment group) :
+  (MicroCFTA.SourcePruningTemplates.finishChecks resumed started).fst = false ∧
+    ∀ (group : MicroCFTA.SourcePruningPartialMatch.Pending MicroCFTA.SourcePruningTemplates.Symbol),
+      group ∈ (MicroCFTA.SourcePruningTemplates.finishChecks resumed started).snd →
+        MicroCFTA.SourcePruningResume.Refutes assignment group
+'MicroCFTA.SourcePruningResume.finishChecks_refutes' depends on axioms: [propext, Classical.choice, Quot.sound]
+MicroCFTA.SourcePruningPartialRenderingSemantics.expandPartial_completes {Guard : Type}
+  (graph : MicroCFTA.EnumerationState.Graph MicroCFTA.SourcePruningTemplates.Symbol Guard)
+  (language : MicroCFTA.EnumerationCorrectness.NodeLanguage MicroCFTA.SourcePruningTemplates.Symbol)
+  (meaning : Guard → MicroCFTA.Language.Term MicroCFTA.SourcePruningTemplates.Symbol → Prop)
+  (assignment : Nat → MicroCFTA.Language.Term MicroCFTA.SourcePruningTemplates.Symbol) (fuel : Nat)
+  (fragment : MicroCFTA.Fragments.Fragment MicroCFTA.SourcePruningTemplates.Symbol)
+  (before after : MicroCFTA.EnumerationState.State MicroCFTA.SourcePruningTemplates.Symbol Guard)
+  (observedTerm :
+    MicroCFTA.Language.Term (MicroCFTA.EnumerationState.PartialSymbol MicroCFTA.SourcePruningTemplates.Symbol))
+  (total : MicroCFTA.UnionFind.Total before.representatives)
+  (satisfied : MicroCFTA.EnumerationCorrectness.Satisfies language meaning assignment before)
+  (success :
+    MicroCFTA.EnumerationCorrectness.Success (MicroCFTA.EnumerationState.expandPartial graph fuel fragment) before
+      observedTerm after) :
+  MicroCFTA.SourcePruningPartialMatch.Completes assignment observedTerm (MicroCFTA.Fragments.fill assignment fragment)
+'MicroCFTA.SourcePruningPartialRenderingSemantics.expandPartial_completes' depends on axioms: [propext, Quot.sound]
+MicroCFTA.SourcePruningTemplates.programs_complete
+  (assignment : Nat → MicroCFTA.Language.Term MicroCFTA.SourcePruningTemplates.Symbol)
+  (observedTerm program : MicroCFTA.SourcePruningTemplates.PartialTerm)
+  (whole : MicroCFTA.Language.Term MicroCFTA.SourcePruningTemplates.Symbol)
+  (completed : MicroCFTA.SourcePruningPartialMatch.Completes assignment observedTerm whole)
+  (member : program ∈ MicroCFTA.SourcePruningTemplates.programs observedTerm) :
+  ∃ fullProgram,
+    MicroCFTA.SourcePruningTemplates.ProgramAt whole fullProgram ∧
+      MicroCFTA.SourcePruningPartialMatch.Completes assignment program fullProgram
+'MicroCFTA.SourcePruningTemplates.programs_complete' depends on axioms: [propext, Classical.choice, Quot.sound]
+MicroCFTA.SourcePruningTemplates.startMatches_refutes
+  (assignment : Nat → MicroCFTA.Language.Term MicroCFTA.SourcePruningTemplates.Symbol)
+  (templates : List (MicroCFTA.Template.Pattern MicroCFTA.SourcePruningTemplates.Symbol))
+  (observedTerm : MicroCFTA.SourcePruningTemplates.PartialTerm)
+  (whole : MicroCFTA.Language.Term MicroCFTA.SourcePruningTemplates.Symbol)
+  (completed : MicroCFTA.SourcePruningPartialMatch.Completes assignment observedTerm whole)
+  (avoids : MicroCFTA.SourcePruningTemplates.Avoids templates whole)
+  (pending : MicroCFTA.SourcePruningPartialMatch.Pending MicroCFTA.SourcePruningTemplates.Symbol)
+  (member : some pending ∈ MicroCFTA.SourcePruningTemplates.startMatches templates observedTerm) :
+  MicroCFTA.SourcePruningResume.Refutes assignment pending
+'MicroCFTA.SourcePruningTemplates.startMatches_refutes' depends on axioms: [propext, Classical.choice, Quot.sound]
+MicroCFTA.SourcePruningTemplates.structuralTemplate_matches
+  (original early : MicroCFTA.Template.Pattern MicroCFTA.SourcePruningTemplates.Symbol)
+  (full : MicroCFTA.Language.Term MicroCFTA.SourcePruningTemplates.Symbol)
+  (converted : MicroCFTA.SourcePruningTemplates.structuralTemplate original = some early)
+  (encoded : MicroCFTA.SourcePruningTemplates.ProgramEncoding full) (matched : MicroCFTA.Template.Matches early full) :
+  MicroCFTA.Template.Matches original full
+'MicroCFTA.SourcePruningTemplates.structuralTemplate_matches' depends on axioms: [propext, Classical.choice, Quot.sound]
+MicroCFTA.SourcePruningTemplates.fragmentTerm_completes
+  (assignment : Nat → MicroCFTA.Language.Term MicroCFTA.SourcePruningTemplates.Symbol)
+  (fragment : MicroCFTA.Fragments.Fragment MicroCFTA.SourcePruningTemplates.Symbol) :
+  MicroCFTA.SourcePruningPartialMatch.Completes assignment (MicroCFTA.SourcePruningTemplates.fragmentTerm fragment)
+    (MicroCFTA.Fragments.fill assignment fragment)
+'MicroCFTA.SourcePruningTemplates.fragmentTerm_completes' depends on axioms: [propext, Quot.sound]
+MicroCFTA.SourcePruningTemplates.rejectEarly_false
+  (assignment : Nat → MicroCFTA.Language.Term MicroCFTA.SourcePruningTemplates.Symbol)
+  (templates : List (MicroCFTA.Template.Pattern MicroCFTA.SourcePruningTemplates.Symbol))
+  (fragment : MicroCFTA.Fragments.Fragment MicroCFTA.SourcePruningTemplates.Symbol)
+  (avoids : MicroCFTA.SourcePruningTemplates.Avoids templates (MicroCFTA.Fragments.fill assignment fragment))
+  (encoded :
+    ∀ (program : MicroCFTA.Language.Term MicroCFTA.SourcePruningTemplates.Symbol),
+      MicroCFTA.SourcePruningTemplates.ProgramAt (MicroCFTA.Fragments.fill assignment fragment) program →
+        MicroCFTA.SourcePruningTemplates.ProgramEncoding program) :
+  MicroCFTA.SourcePruningTemplates.rejectEarly templates fragment = false
+'MicroCFTA.SourcePruningTemplates.rejectEarly_false' depends on axioms: [propext, Classical.choice, Quot.sound]
+MicroCFTA.SourcePruningResume.groups_refute {Symbol Guard : Type} [DecidableEq Symbol] (fuel current : Nat)
+  (term : MicroCFTA.Language.Term (MicroCFTA.EnumerationState.PartialSymbol Symbol))
+  (assignment : Nat → MicroCFTA.Language.Term Symbol) (language : MicroCFTA.EnumerationCorrectness.NodeLanguage Symbol)
+  (meaning : Guard → MicroCFTA.Language.Term Symbol → Prop)
+  (pending : List (MicroCFTA.SourcePruningPartialMatch.Pending Symbol))
+  (before after : MicroCFTA.EnumerationState.State Symbol Guard)
+  (results : List (Option (MicroCFTA.SourcePruningPartialMatch.Pending Symbol)))
+  (total : MicroCFTA.UnionFind.Total before.representatives)
+  (model : MicroCFTA.EnumerationCorrectness.Satisfies language meaning assignment before)
+  (completed : MicroCFTA.SourcePruningPartialMatch.Completes assignment term (assignment current))
+  (originalRefutes :
+    ∀ (group : MicroCFTA.SourcePruningPartialMatch.Pending Symbol),
+      group ∈ pending → MicroCFTA.SourcePruningResume.Refutes assignment group)
+  (success :
+    MicroCFTA.EnumerationCorrectness.Success
+      (List.mapM (MicroCFTA.SourcePruningResume.resume fuel current term) pending) before results after)
+  (group : MicroCFTA.SourcePruningPartialMatch.Pending Symbol) :
+  some group ∈ results → MicroCFTA.SourcePruningResume.Refutes assignment group
+'MicroCFTA.SourcePruningResume.groups_refute' depends on axioms: [propext, Quot.sound]
+MicroCFTA.SourcePruningOracle.oracle_inl_refutes {Guard : Type}
+  (graph : MicroCFTA.EnumerationState.Graph MicroCFTA.SourcePruningTemplates.Symbol Guard)
+  (language : MicroCFTA.EnumerationCorrectness.NodeLanguage MicroCFTA.SourcePruningTemplates.Symbol)
+  (meaning : Guard → MicroCFTA.Language.Term MicroCFTA.SourcePruningTemplates.Symbol → Prop)
+  (assignment : Nat → MicroCFTA.Language.Term MicroCFTA.SourcePruningTemplates.Symbol)
+  (templates : List (MicroCFTA.Template.Pattern MicroCFTA.SourcePruningTemplates.Symbol)) (fuel uv : Nat)
+  (pending : List (MicroCFTA.SourcePruningPartialMatch.Pending MicroCFTA.SourcePruningTemplates.Symbol))
+  (fragment : MicroCFTA.Fragments.Fragment MicroCFTA.SourcePruningTemplates.Symbol)
+  (before after : MicroCFTA.EnumerationState.State MicroCFTA.SourcePruningTemplates.Symbol Guard)
+  (result : Bool × List (MicroCFTA.SourcePruningPartialMatch.Pending MicroCFTA.SourcePruningTemplates.Symbol))
+  (total : MicroCFTA.UnionFind.Total before.representatives)
+  (satisfied : MicroCFTA.EnumerationCorrectness.Satisfies language meaning assignment before)
+  (filled : MicroCFTA.Fragments.fill assignment fragment = assignment uv)
+  (refuted :
+    ∀ (group : MicroCFTA.SourcePruningPartialMatch.Pending MicroCFTA.SourcePruningTemplates.Symbol),
+      group ∈ pending → MicroCFTA.SourcePruningResume.Refutes assignment group)
+  (avoids : MicroCFTA.SourcePruningTemplates.Avoids templates (MicroCFTA.Fragments.fill assignment fragment))
+  (encoded :
+    ∀ (program : MicroCFTA.Language.Term MicroCFTA.SourcePruningTemplates.Symbol),
+      MicroCFTA.SourcePruningTemplates.ProgramAt (MicroCFTA.Fragments.fill assignment fragment) program →
+        MicroCFTA.SourcePruningTemplates.ProgramEncoding program)
+  (success :
+    MicroCFTA.EnumerationCorrectness.Success
+      (MicroCFTA.SourcePruningOracle.oracle graph templates fuel pending uv (Sum.inl fragment)) before result after) :
+  result.fst = false ∧
+    ∀ (group : MicroCFTA.SourcePruningPartialMatch.Pending MicroCFTA.SourcePruningTemplates.Symbol),
+      group ∈ result.snd → MicroCFTA.SourcePruningResume.Refutes assignment group
+'MicroCFTA.SourcePruningOracle.oracle_inl_refutes' depends on axioms: [propext, Classical.choice, Quot.sound]
+MicroCFTA.SourcePruningRecordTypes.recordTypes_inl_refutes {Guard Typing : Type}
+  (graph : MicroCFTA.EnumerationState.Graph MicroCFTA.SourcePruningTemplates.Symbol Guard)
+  (language : MicroCFTA.EnumerationCorrectness.NodeLanguage MicroCFTA.SourcePruningTemplates.Symbol)
+  (meaning : Guard → MicroCFTA.Language.Term MicroCFTA.SourcePruningTemplates.Symbol → Prop)
+  (assignment : Nat → MicroCFTA.Language.Term MicroCFTA.SourcePruningTemplates.Symbol)
+  (templates : List (MicroCFTA.Template.Pattern MicroCFTA.SourcePruningTemplates.Symbol)) (fuel uv : Nat)
+  (metadata : MicroCFTA.SourcePruningRecordTypes.Metadata Typing)
+  (fragment : MicroCFTA.Fragments.Fragment MicroCFTA.SourcePruningTemplates.Symbol)
+  (before after : MicroCFTA.EnumerationState.State MicroCFTA.SourcePruningTemplates.Symbol Guard)
+  (result : Bool × MicroCFTA.SourcePruningRecordTypes.Metadata Typing)
+  (total : MicroCFTA.UnionFind.Total before.representatives)
+  (satisfied : MicroCFTA.EnumerationCorrectness.Satisfies language meaning assignment before)
+  (filled : MicroCFTA.Fragments.fill assignment fragment = assignment uv)
+  (refuted :
+    ∀ (group : MicroCFTA.SourcePruningPartialMatch.Pending MicroCFTA.SourcePruningTemplates.Symbol),
+      group ∈ metadata.pending → MicroCFTA.SourcePruningResume.Refutes assignment group)
+  (avoids : MicroCFTA.SourcePruningTemplates.Avoids templates (MicroCFTA.Fragments.fill assignment fragment))
+  (encoded :
+    ∀ (program : MicroCFTA.Language.Term MicroCFTA.SourcePruningTemplates.Symbol),
+      MicroCFTA.SourcePruningTemplates.ProgramAt (MicroCFTA.Fragments.fill assignment fragment) program →
+        MicroCFTA.SourcePruningTemplates.ProgramEncoding program)
+  (success :
+    MicroCFTA.EnumerationCorrectness.Success
+      (MicroCFTA.SourcePruningRecordTypes.recordTypes graph templates fuel metadata uv (Sum.inl fragment)) before result
+      after) :
+  result.fst = false ∧
+    ∀ (group : MicroCFTA.SourcePruningPartialMatch.Pending MicroCFTA.SourcePruningTemplates.Symbol),
+      group ∈ result.snd.pending → MicroCFTA.SourcePruningResume.Refutes assignment group

@@ -1,0 +1,15 @@
+# Actual resume refutation draft
+
+OPEN. Draft v1 is UNTESTED by this agent. Root owns all compiler and integration checks. No old source or frozen review was edited.
+
+The proposed module imports SourcePruningPartialMatchSemantics. Its required public API was confirmed: Completes assignment partial full and matchPartial_sound assignment pattern partial full pending completed matched pendingMatches. Raw holes complete to their assigned term; truncation may complete to any full term.
+
+Refutes assignment group means that not every original pair matches its assigned complete term. resume_refutes takes original forest Total, assignment consistency with that original forest, genuine completion of the partial term at assignment current, original group refutation and the actual resume Success returning Some resumed. It derives refutation of the real resumed group. It does not ask for desired final refutation, a graph, Safe, a model of a future heap or a future successful family.
+
+The local private part is definitionally equal to the actual source private worker. This permits direct exposure of the real representative read without editing the original module. Actual findRoot correctness gives assignment pending.var = assignment returnedRoot. Actual findRoot_satisfies and findRoot_total thread the same assignment and totality through every compression. If the root equals current, partial-match soundness reflects every returned pending match to the old template match. Otherwise the singleton parks the same pattern at that actual representative. Ordered mapM and Option sequencing retain every successful part, including duplicates, before flatMap. Contraposition proves the refutation theorem.
+
+None is not a retained group. The observer promises refutation only for a real Some result. It does not invent a group for a failed partial match. finishChecks_refutes is a pure combiner theorem: when every successful resumed and started result is refuted, no empty group exists, so the actual reject flag is false and every retained group is still refuted. Its local successful-group premises must be discharged by resume_refutes and the separate start/partial-match proof. They are not a whole-worker future-refutation admission.
+
+This is a local pending-template semantic law. It does not prove the complete pruning callback safe, exclude forbidden-template acceptance, justify transformed early templates or establish whole enumeration coverage. Completes at the actual current assignment must later be obtained from the real partial-rendering receipt. Source-root allocation/ranges and callback history integration remain separate original contracts.
+
+The exact eight inspected whole inputs and seventeen focused literal cuts are recorded in source-index.json. Some whole files were retained for provenance after only the stated cuts were inspected; no claim is made to read every whole-file body here. Keep this bundle open until Root supplies final sources, checks, public output and docs.

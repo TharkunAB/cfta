@@ -1,0 +1,26 @@
+--- v1
++++ v2
+@@ -92,12 +92,12 @@
+   · intro resumed accepted allMatches
+     rw [projected] at accepted
+     by_cases same : root = current
+-    · rw [if_pos same] at accepted
++    · rw [ite_eq_left same] at accepted
+       have matched := matchPartial_sound assignment pending.1 term (assignment current)
+         resumed completed accepted allMatches
+       rw [assigned, same]
+       exact matched
+-    · rw [if_neg same] at accepted
++    · rw [ite_eq_right same] at accepted
+       have resumedSame := Option.some.inj accepted
+       have matched := allMatches (pending.1, root) (by rw [← resumedSame]; simp)
+       simpa only [assigned] using matched
+@@ -209,7 +209,7 @@
+     have refuted := checkedRefutes group member
+     cases group with
+     | nil => exact False.elim (refuted (by intro entry member; cases member))
+-    | cons first rest => rfl
++    | cons first rest => simp
+   · intro group member
+     change group ∈ ((resumed ++ started).filterMap id).filter (fun pending => !pending.isEmpty) at member
+     exact checkedRefutes group (List.mem_filter.mp member).1

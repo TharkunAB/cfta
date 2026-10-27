@@ -1,0 +1,20 @@
+/-- A source `mapM` loop composes an invariant with element membership available to each local proof. -/
+theorem mapM_invariant (action : α → EnumerateM Symbol Guard β) (invariant : State Symbol Guard → Prop)
+    (inputs : List α)
+    (step : ∀ input ∈ inputs, ∀ before output after, invariant before → Success (action input) before output after → invariant after)
+    (before after : State Symbol Guard) (outputs : List β) (valid : invariant before)
+    (success : Success (inputs.mapM action) before outputs after) : invariant after := by
+  induction inputs generalizing before outputs with
+  | nil =>
+      obtain ⟨rfl, rfl⟩ := (success_pure [] outputs before after).mp success
+      exact valid
+  | cons input rest ih =>
+      rw [List.mapM_cons] at success
+      obtain ⟨output, middle, first, continued⟩ := (success_bind _ _ _ _ _).mp success
+      have validMiddle := step input (by simp) before output middle valid first
+      obtain ⟨tail, last, remaining, final⟩ := (success_bind _ _ _ _ _).mp continued
+      obtain ⟨_, lastSame⟩ := (success_pure (output :: tail) outputs last after).mp final
+      subst after
+      exact ih (fun input member => step input (List.mem_cons_of_mem _ member)) middle tail validMiddle remaining
+
+/-- The complete terminal merge preserves bounded storage and returns an allocated variable. -/

@@ -1,0 +1,13 @@
+theorem oracle_inl_refutes (graph : Graph Symbol Guard)
+    (language : NodeLanguage Symbol) (meaning : Guard → Term Symbol → Prop)
+    (assignment : Nat → Term Symbol) (templates : List (Template.Pattern Symbol))
+    (fuel uv : Nat) (pending : List (Pending Symbol)) (fragment : Fragment Symbol)
+    (before after : State Symbol Guard) (result : Bool × List (Pending Symbol))
+    (total : UnionFind.Total before.representatives)
+    (satisfied : Satisfies language meaning assignment before)
+    (filled : fill assignment fragment = assignment uv)
+    (refuted : ∀ group ∈ pending, SourcePruningResume.Refutes assignment group)
+    (avoids : Avoids templates (fill assignment fragment))
+    (encoded : ∀ program, ProgramAt (fill assignment fragment) program → ProgramEncoding program)
+    (success : Success (oracle graph templates fuel pending uv (.inl fragment)) before result after) :
+    result.1 = false ∧ ∀ group ∈ result.2, SourcePruningResume.Refutes assignment group := by

@@ -1,0 +1,6 @@
+private theorem part_success (fuel current : Nat) (term : Term (PartialSymbol Symbol))
+    (pending : Template.Pattern Symbol × Nat) (before after : State Symbol Guard)
+    (result : Option (Pending Symbol)) :
+    Success (part fuel current term pending) before result after ↔
+      ∃ root, Success (representative fuel pending.2) before root after ∧
+        result = (if root = current then matchPartial pending.1 term else some [(pending.1, root)]) := by

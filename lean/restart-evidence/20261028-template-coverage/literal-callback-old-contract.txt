@@ -1,0 +1,38 @@
+      (Packet formulas solver inventory caller memos result.2 (EnumerationExpandableIndex.frame after before) ∧
+      RenderStable before.core after ∧ Frame before.core after ∧
+      result.2.types = updatedTypes metadata uv (.inl fragment) ∧
+      result.2.openHoles = metadata.openHoles ∧ result.2.typing = metadata.typing ∧
+      ∀ extra,
+        Success (recordTypes graph templates (fuel + extra) metadata uv (.inl fragment)) before.core result after ∧
+        ExceptT.run (recordTypes graph templates (fuel + extra) metadata uv (.inl fragment) before.core) =
+          [.ok (result, after)] ∧
+        (∀ recur : Metadata Typing → Caller width → Queries → Cached → Option Next → Result,
+          continueWith recur graph templates stop order (fuel + extra) metadata uv fragment caller memos.query before =
+            if result.1 then .complete [] caller memos.query
+            else recur result.2 caller memos.query (EnumerationExpandableIndex.frame after before)
+              (SourcePruningEnumerationRestart.decision stop order result.2
+                (EnumerationExpandableIndex.frame after before))) ∧
+        (result.1 = false → ∀ selected,
+          SourcePruningEnumerationRestart.decision stop order result.2
+              (EnumerationExpandableIndex.frame after before) = some (.expand selected) →
+          SourcePruningEnumerationSelectedStep.PrefixValid holeKey fits admits graph templates checkEmpty edgesOf
+            stop order result.2 formulas solver inventory (fuel + extra) selected caller
+            (EnumerationExpandableIndex.frame after before) memos
+            (SourcePruningEnumerationSelectedStep.runPrefix holeKey fits admits graph templates stop order result.2
+              (fuel + extra) (fuel + extra) (fuel + extra) (fuel + extra) (fuel + extra) (fuel + extra)
+              selected caller (EnumerationExpandableIndex.frame after before) memos.query))) ∧
+      (∀ extra, result.1 = false → ∀ selected,
+        SourcePruningEnumerationRestart.decision stop order result.2
+            (EnumerationExpandableIndex.frame after before) = some (.expand selected) →
+        let observed := SourcePruningEnumerationSelectedStep.runPrefix holeKey fits admits graph templates
+          stop order result.2 (fuel + extra) (fuel + extra) (fuel + extra)
+          (fuel + extra) (fuel + extra) (fuel + extra) selected caller
+          (EnumerationExpandableIndex.frame after before) memos.query
+        SourcePruningEnumerationSelectedStep.Resources profile property caller observed ∧
+        match observed with
+        | .parked _ (some reachedCache) _ =>
+            Packet formulas solver inventory caller memos result.2 reachedCache
+        | .narrowed _ _ reached queries _ (some reachedCache) _ _ =>
+            ∃ final, Post formulas solver inventory caller reached final ∧ final.query = queries ∧
+              Packet formulas solver inventory reached final result.2 reachedCache
+        | _ => True)
