@@ -1,0 +1,36 @@
+def CacheValid (caller : Caller width) (after : Cached) : Prop :=
+  ∃ roots, Roots after.core.representatives roots ∧ StorageValid after.core ∧
+    PendingRealized caller.checked.native.machine.heap after.core ∧
+    EnumerationCanonicalWaiting.Correct roots after.core.values after.waiting ∧
+    ∀ slot, SourcePruningEnumerationNativeIndex.candidate caller.checked.native.machine.heap
+      ((after.core.values[slot]?).getD .eliminated) = some (after.expandable slot)
+
+/-- Successful receipts retain safe finalization; valid rejection retains its actual indexed cache. -/
+def Admitted (target : Nat) : Receipt width → Prop
+  | .complete fragment caller _ after =>
+      CacheValid caller after ∧ Safe after.core ∧ FragmentBound after.core.counter fragment ∧
+      after.core.values[target]? = some (.enumerated fragment) ∧ after.core.expansionAncestry = [] ∧
+      IsRoot after.core.representatives target
+  | .rejected caller _ after => CacheValid caller after
+  | .stopped _ (.ok (some []), caller, _, _outer, _waiting) (some after) => CacheValid caller after
+  | .unhandled => True
+  | _ => False
+
+/-- Each continuable receipt avoids references to every enumerated class in its own cache. -/
+def Pending : Receipt width → Prop
+  | .complete _ _ _ after | .rejected _ _ after => EnumerationReferences.PendingReferences after.core
+  | .stopped _ (.ok (some []), _, _, _outer, _waiting) (some after) =>
+      EnumerationReferences.PendingReferences after.core
+  | .unhandled => True
+  | _ => False
+
+/-- Only completed receipts retain counter growth, pending targets and dependency levels. -/
+def FragmentHistory (before : EnumerationState.State Symbol Constraint) : Receipt width → Prop
+  | .complete fragment _ _ after =>
+      before.counter ≤ after.core.counter ∧ PendingFragment after.core fragment ∧
+      ∀ level frontier, EnumerationOrder.Stratified before level frontier →
+        ∃ nextLevel, EnumerationOrder.Stratified after.core nextLevel (frontier + 1)
+  | _ => True
+
+/-- A preserved initial dependency order transports completion history to the earlier input. -/
+theorem fragmentHistory_transport (before after : EnumerationState.State Symbol Constraint)

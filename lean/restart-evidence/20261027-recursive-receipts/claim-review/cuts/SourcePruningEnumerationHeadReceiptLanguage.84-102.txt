@@ -1,0 +1,19 @@
+theorem CompletedHeadReceipt.captured_semantics
+    {seed : Seed} {inherited : Nat}
+    {formulas : SourceGuards.Formulas FullSyntax.Formula}
+    {solver : SourceGuards.Entailment FullSyntax.Formula} {inventory : Inventory}
+    {caller : Caller (bits + 2)} {memos : Memos} {metadata : Metadata Typing} {before : Cached}
+    {checkEmpty : Bool} {uv : Nat} {scs : List Suspended} {edge : EdgeValue Symbol Constraint}
+    {bound : Nat} {fragment : Fragments.Fragment Symbol} {reached : Caller (bits + 2)}
+    {saved : SourceEndpointMemo.Memos} {after : Cached} {returnedInventory : Inventory} {returnedMemos : Memos}
+    (receipt : CompletedHeadReceipt seed inherited formulas solver inventory caller memos metadata before
+      checkEmpty uv scs edge bound fragment reached saved after returnedInventory returnedMemos) :
+    SourcePruningEnumerationRecursive.Packet formulas solver returnedInventory reached returnedMemos metadata before ∧
+      ∀ (ambient : InternedGuardedLanguage.Env Symbol)
+        (residualMeaning : Constraint → Language.Term Symbol → Prop) (assignment : Nat → Language.Term Symbol),
+        Satisfies (SourcePruningEnumerationNativeLanguage.handles (SourceEqualityPCSGuard.holds formulas solver)
+          ambient reached.checked.native.machine.heap) residualMeaning assignment before.core ↔
+        Satisfies (SourcePruningEnumerationNativeLanguage.handles (SourceEqualityPCSGuard.holds formulas solver)
+          ambient caller.checked.native.machine.heap) residualMeaning assignment before.core :=
+  SourcePruningEnumerationRecursive.captured_post_semantics formulas solver inventory returnedInventory
+    caller reached memos returnedMemos metadata before receipt.admission.packet receipt.post

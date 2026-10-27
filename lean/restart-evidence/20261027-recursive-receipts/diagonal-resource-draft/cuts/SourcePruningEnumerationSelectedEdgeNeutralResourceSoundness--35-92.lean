@@ -1,0 +1,58 @@
+    (seed : Seed)
+    (formulas : SourceGuards.Formulas FullSyntax.Formula)
+    (solver : SourceGuards.Entailment FullSyntax.Formula)
+    (inventory : Inventory) (caller : Caller (bits + 2)) (before : Cached) (checkEmpty : Bool)
+    (parentEntry : Cache.Interned InternedBinderProtocol.NodeKey)
+    (edges : List (EdgeValue Symbol Constraint)) (depth : Nat) (free : List InternedBinderProtocol.Reference)
+    (edge : EdgeValue Symbol Constraint) (scs : List Suspended) (roots : Nat → Nat) (memos : Memos)
+    (initial : Context formulas solver inventory caller memos)
+    (parentAvailable : Available caller.checked.native.machine.heap (.node parentEntry edges depth free))
+    (parentClosed : free = []) (selected : edge ∈ edges)
+    (safe : Safe before.core) (realized : PendingRealized caller.checked.native.machine.heap before.core)
+    (paths : Roots before.core.representatives roots)
+    (counts : EnumerationCanonicalWaiting.Correct roots before.core.values before.waiting)
+    (flags : ∀ slot, SourcePruningEnumerationNativeIndex.candidate caller.checked.native.machine.heap
+      ((before.core.values[slot]?).getD .eliminated) = some (before.expandable slot))
+    (bounded : ∀ sc ∈ scs, sc.var < before.core.counter) (pending : InputsPending before.core scs)
+    (allowed : arityAllows edge.children.length scs = true)
+    (tries : List EqualityTrie.Trie) (residual : Option Constraint)
+    (projected : SourcePruningEnumerationConstraint.project edge.entry.key.constraint = some (tries, residual))
+    (fits : Fits seed.2 caller.checked)
+    (reserved : Reserved bits seed (cost edge scs before.core.counter tries))
+    (known : Heap (fun guard => guard ∈ seed.1) caller.checked.native.machine.heap)
+    (inheritedValid : EnumerationSemantics.ValidSuspended scs)
+    (nonterminal : scs.any (fun sc => EqualityTrie.isTerminal sc.trie) = false)
+    (freshArity : arityAllows edge.children.length (suspendedVars before.core.counter tries) = true)
+    (retained : ∀ incoming bucket,
+      (incoming, bucket) ∈ SourcePruningEnumerationEdgeInputs.children edge scs before.core.counter tries →
+      (match incoming with | .node _ _ _ _ => True | _ => False) ∨
+        bucket.any (fun sc => EqualityTrie.isTerminal sc.trie) = true ∨ bucket = [])
+    {r n p h k : Nat} {fragment : Fragment} {afterCaller : Caller (bits + 2)}
+    {after : Cached} {savedQueries : Queries}
+    (observed : ∀ er en P H ek, p ≤ P → h ≤ H →
+      run checkEmpty (r + er) (n + en) P H (k + ek) scs edge caller before memos.query =
+        .complete fragment afterCaller savedQueries after) :
+    ∀ (held : Nat), held < before.core.counter → IsRoot before.core.representatives held →
+    Avoids before.core.representatives held scs →
+    ∀ (ambient : InternedGuardedLanguage.Env Symbol) (assignment : Nat → Term Symbol),
+      Satisfies
+        (SourcePruningEnumerationNativeLanguage.handles (SourceEqualityPCSGuard.holds formulas solver)
+          ambient afterCaller.checked.native.machine.heap)
+        (fun guard term => SourceEqualityPCSGuard.holds formulas solver guard term = true)
+        assignment (EnumerationFrame.neutralize held after.core) →
+      Satisfies
+        (SourcePruningEnumerationNativeLanguage.handles (SourceEqualityPCSGuard.holds formulas solver)
+          ambient caller.checked.native.machine.heap)
+        (fun guard term => SourceEqualityPCSGuard.holds formulas solver guard term = true)
+        assignment (EnumerationFrame.neutralize held before.core) ∧
+      InternedGuardedLanguage.edgeMeaning (SourceEqualityPCSGuard.holds formulas solver)
+        ambient edge (Fragments.fill assignment fragment) ∧
+      InternedGuardedLanguage.meaning (SourceEqualityPCSGuard.holds formulas solver)
+        ambient (.node parentEntry edges depth free) (Fragments.fill assignment fragment) ∧
+      ∀ sc ∈ scs, Suspended.Holds assignment (Fragments.fill assignment fragment) sc := by
+  obtain ⟨childFragments, shape, semantics⟩ :=
+    stable_complete_neutral_semantics_resources seed formulas solver inventory caller before checkEmpty parentEntry edges depth free
+      edge scs roots memos initial parentAvailable parentClosed selected safe realized paths counts flags
+      bounded pending allowed tries residual projected fits reserved known observed
+  obtain ⟨valid, guardMeaning⟩ := SourcePruningEnumerationEdgeProjectionLanguage.selected_projected_complete
+    caller.checked.native.machine.heap parentEntry edges depth free edge initial.ready.semantic.ready

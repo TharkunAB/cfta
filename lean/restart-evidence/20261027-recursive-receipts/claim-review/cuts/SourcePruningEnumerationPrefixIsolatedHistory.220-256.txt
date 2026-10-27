@@ -1,0 +1,37 @@
+theorem packet_prefix_complete_isolated
+    (holeKey : Typing → Nat → Key) (fits : Key → Symbol → Bool) (admits : Key → Node → Bool)
+    (graph : Graph Symbol Constraint) (templates : List (Template.Pattern Symbol))
+    (checkEmpty : Bool) (edgesOf : Node → List (EdgeValue Symbol Constraint))
+    (stop : Option (Metadata Typing → Nat → Bool))
+    (order : Metadata Typing → List Nat → Option Nat) (metadata : Metadata Typing)
+    (formulas : SourceGuards.Formulas FullSyntax.Formula)
+    (solver : SourceGuards.Entailment FullSyntax.Formula) (inventory : Inventory)
+    (caller : Caller width) (memos : Memos) (before : Cached)
+    (packet : Packet formulas solver inventory caller memos metadata before) :
+    ∃ bound,
+      (∀ extra selected,
+        SourcePruningEnumerationRestart.decision stop order metadata before = some (.expand selected) →
+        SourcePruningEnumerationSelectedStep.PrefixValid holeKey fits admits graph templates checkEmpty edgesOf
+          stop order metadata formulas solver inventory (bound + extra) selected caller before memos
+          (SourcePruningEnumerationSelectedStep.runPrefix holeKey fits admits graph templates stop order metadata
+            (bound + extra) (bound + extra) (bound + extra) (bound + extra) (bound + extra) (bound + extra)
+            selected caller before memos.query)) ∧
+      ∀ extra selected,
+        SourcePruningEnumerationRestart.decision stop order metadata before = some (.expand selected) →
+        ∀ held handle value,
+          IsolatedPending held handle before.core →
+          lookupNode caller.checked.native.machine.heap handle = some value →
+          MergedOrdinaryHeight.recursiveBoundary value = true →
+          match SourcePruningEnumerationSelectedStep.runPrefix holeKey fits admits graph templates stop order metadata
+              (bound + extra) (bound + extra) (bound + extra) (bound + extra) (bound + extra) (bound + extra)
+              selected caller before memos.query with
+          | .parked _ (some after) _ | .narrowed _ _ _ _ _ (some after) _ _ =>
+              IsolatedPending held handle after.core
+          | _ => True := by
+  obtain ⟨bound, completed⟩ := packet_prefix_complete holeKey fits admits graph templates checkEmpty edgesOf
+    stop order metadata formulas solver inventory caller memos before packet
+  refine ⟨bound, completed, ?_⟩
+  intro extra selected chosen held handle value isolated decoded boundary
+  exact SourcePruningEnumerationSelectedStep.prefix_isolated holeKey fits admits graph templates checkEmpty edgesOf
+    stop order metadata formulas solver inventory (bound + extra) selected caller before memos held handle value
+    packet isolated decoded boundary chosen (completed extra selected chosen)

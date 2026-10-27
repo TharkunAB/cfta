@@ -1,0 +1,11 @@
+theorem edge_cost_le (seed : Seed) (inherited : Nat) (scs : List Suspended) (start : Nat)
+    (edge : EdgeValue Symbol Constraint)
+    (children : edge.children.length ≤ scalar seed.2)
+    (own : ∀ tries residual,
+      SourcePruningEnumerationConstraint.project edge.entry.key.constraint = some (tries, residual) →
+      tries.length ≤ guardWidth seed.1)
+    (length : scs.length ≤ inherited) :
+    SourcePruningEnumerationNativeBranchCompletion.edgeCost scs start edge ≤ edgeCount seed inherited := by
+  have actual := SourcePruningEnumerationCostBounds.edge_cost_le scs start edge
+    (scalar seed.2) (guardWidth seed.1) children own
+  exact Nat.le_trans actual

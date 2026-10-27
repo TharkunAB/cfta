@@ -1,0 +1,23 @@
+      ∃ (handle : Nat) (scs : List Suspended)
+        (value : InternedConstructorTemplates.Value Symbol Constraint),
+        before.core.values[uv]? = some (.unenumerated (some handle) scs) ∧
+        lookupNode caller.checked.native.machine.heap handle = some value ∧
+        InternedProbeProvenance.Available caller.checked.native.machine.heap value ∧ value.free = [] ∧
+        (!(MergedOrdinaryHeight.recursiveBoundary value && scs.isEmpty)) = true := by
+  have picked : EnumerationPureSelection.next (order metadata) before = .expand uv := by
+    cases stop with
+    | none => exact Option.some.inj chosen
+    | some rule =>
+        simp only [decision] at chosen
+        split at chosen
+        · cases chosen
+        · exact Option.some.inj chosen
+  obtain ⟨roots, paths, _storage, realized, counts, flags⟩ := valid
+  exact ⟨SourcePruningEnumerationSelection.ready caller.checked.native.machine.heap before
+      (order metadata) uv safe roots paths counts flags picked,
+    SourcePruningEnumerationSelection.incoming caller.checked.native.machine.heap before
+      (order metadata) uv safe roots paths counts flags picked,
+    SourcePruningEnumerationSelection.realized caller.checked.native.machine.heap before
+      (order metadata) uv safe.1.aligned realized flags picked⟩
+
+end MicroCFTA.SourcePruningEnumerationRestart

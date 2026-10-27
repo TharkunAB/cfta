@@ -1,0 +1,23 @@
+theorem captured_post_semantics
+    (formulas : SourceGuards.Formulas FullSyntax.Formula)
+    (solver : SourceGuards.Entailment FullSyntax.Formula)
+    (inventory next : Inventory) (caller reached : Caller width) (memos final : Memos)
+    (metadata : Metadata Typing) (before : Cached)
+    (packet : Packet formulas solver inventory caller memos metadata before)
+    (post : Post formulas solver next caller reached final) :
+    Packet formulas solver next reached final metadata before ∧
+      ∀ (ambient : InternedGuardedLanguage.Env Symbol)
+        (residualMeaning : Constraint → Language.Term Symbol → Prop)
+        (assignment : Nat → Language.Term Symbol),
+        EnumerationCorrectness.Satisfies
+          (SourcePruningEnumerationNativeLanguage.handles (SourceEqualityPCSGuard.holds formulas solver)
+            ambient reached.checked.native.machine.heap) residualMeaning assignment before.core ↔
+        EnumerationCorrectness.Satisfies
+          (SourcePruningEnumerationNativeLanguage.handles (SourceEqualityPCSGuard.holds formulas solver)
+            ambient caller.checked.native.machine.heap) residualMeaning assignment before.core := by
+  obtain ⟨_roots, _paths, _storage, realized, _counts, _flags⟩ := packet.valid
+  refine ⟨captured_post packet post, ?_⟩
+  intro ambient residualMeaning assignment
+  exact SourcePruningEnumerationNativeLanguage.satisfies_keeps
+    (SourceEqualityPCSGuard.holds formulas solver) ambient caller.checked.native.machine.heap
+    reached.checked.native.machine.heap before.core residualMeaning assignment realized post.effects.keeps

@@ -1,5 +1,34 @@
 # Constrained languages, indexing, and distributions
 
+## Finite sibling invocations now carry full native head receipts
+
+Source checkpoint: 0f2918da7364b302600cf4ded0e7bee3afeb603a.
+Original finite resources now derive one sufficient work bound for the whole
+sibling result and every actual invoked hook. The result keeps the ENTIRE old
+sibling contract. Each hook retains its actual head Caller, full Memos, input
+Packet, reservation, completed Packet and stable completed head receipt.
+An aggregate native Post connects the scan input to that actual head input.
+Earlier hooks thread their actual native endpoints. Every sibling restores
+the SAME captured enumeration input. The finite-depth corollary derives the
+smaller recursive completion contract. No future success premise remains.
+
+The resource-backed semantic consumer restores head and scan-input assignment
+meaning from satisfaction at the actual completed head cache. Canonical,
+nonterminal, fresh arity and child retention remain explicit semantic gates.
+An isolated recursive boundary is disabled by the original native index.
+Actual retained parked and narrowed prefixes preserve its isolation.
+Whole recursive-history admission, cleared or opaque constraint recovery or
+exclusion, whole output acceptance and enumeration coverage remain open.
+
+Ten modules, 1579 lines and 21 public theorems pass strict checking.
+Audit passes 4112 jobs and 79330 theorem dependency checks.
+H6 remains the strongest global exact finite-tree construction theorem.
+Its signature and both earlier conditional captured renderers are unchanged.
+No Haskell source changed. No new Haskell defect or repair is claimed.
+All earlier Haskell fixes and external repair handoffs remain in FINDINGS.
+Details: `lean/notes-current-recursive-receipts.md`. The full goal stays ACTIVE.
+
+
 ## Actual recursive outputs now retain their operation history
 
 Source checkpoint: 075898b5d81a4ad54a75339711727db522f62b06.

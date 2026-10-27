@@ -1,0 +1,75 @@
+theorem prefix_canonical
+    (holeKey : Typing → Nat → Key) (fits : Key → Symbol → Bool) (admits : Key → Node → Bool)
+    (graph : Graph Symbol Constraint) (templates : List (Template.Pattern Symbol))
+    (checkEmpty : Bool) (edgesOf : Node → List (EdgeValue Symbol Constraint))
+    (stop : Option (Metadata Typing → Nat → Bool))
+    (order : Metadata Typing → List Nat → Option Nat) (metadata : Metadata Typing)
+    (formulas : SourceGuards.Formulas FullSyntax.Formula)
+    (solver : SourceGuards.Entailment FullSyntax.Formula) (inventory : Inventory)
+    (fuel uv : Nat) (caller : Caller width) (before : Cached) (memos : Memos)
+    (canonical : Canonical before.core)
+    (valid : PrefixValid holeKey fits admits graph templates checkEmpty edgesOf stop order metadata
+      formulas solver inventory fuel uv caller before memos
+      (runPrefix holeKey fits admits graph templates stop order metadata fuel fuel fuel fuel fuel fuel
+        uv caller before memos.query)) :
+    match runPrefix holeKey fits admits graph templates stop order metadata fuel fuel fuel fuel fuel fuel
+        uv caller before memos.query with
+    | .parked _ (some after) _ | .narrowed _ _ _ _ _ (some after) _ _ => Canonical after.core
+    | _ => True := by
+  generalize actual : runPrefix holeKey fits admits graph templates stop order metadata
+    fuel fuel fuel fuel fuel fuel uv caller before memos.query = observed at valid ⊢
+  have full := valid.2.1
+  cases observed with
+  | stopped read checked => trivial
+  | parked checked candidate raw =>
+      obtain ⟨oldHandle, scs, readAfter, reading, checking, cached, same, core, _cacheValid,
+        _safe, _pending, _counter, _ordered, _raw⟩ := full
+      cases same
+      have readSuccess : Success (getValue fuel uv) before.core
+          (.unenumerated (some oldHandle) scs) readAfter := by
+        rw [Success, reading]
+        exact List.mem_singleton_self _
+      have readCanonical := (getValue_canonical fuel uv before.core readAfter _ canonical readSuccess).1
+      have checkSuccess : Success (SourcePruningEnumerationRecursion.checkRepeated
+          caller.checked.native.machine.heap fuel uv oldHandle scs) readAfter true cached.core := by
+        rw [Success, core, checking]
+        exact List.mem_singleton_self _
+      exact SourcePruningEnumerationSelectedPrefixCanonical.checkRepeated_canonical
+        caller.checked.native.machine.heap fuel uv oldHandle scs readAfter cached.core true
+        readCanonical checkSuccess
+  | narrowed checked prepared reached queries action candidate right ordinary =>
+      cases candidate with
+      | none => trivial
+      | some after =>
+          obtain ⟨next, finished⟩ := finish_cache_fields checkEmpty edgesOf uv
+            (.narrowed checked prepared reached queries action (some after) right ordinary)
+          rw [finished] at full
+          obtain ⟨oldHandle, scs, readAfter, reading, checking, oldValue, value, heap, selectedAction,
+            final, decoded, narrowed, selectedPrepared, _prepared, _reachedSame, queriesSame,
+            _post, _saved, shape⟩ := full
+          rcases shape with ⟨_empty, _action, impossible, _right, _ordinary⟩ |
+            ⟨newHandle, cached, nonempty, encoded, actionSame, cachedSame, _cacheValid, _safe,
+              _pending, _ready, _stored, _waiting, _right, _rest⟩
+          · cases impossible
+          · have same : after = cached := Option.some.inj cachedSame
+            subst cached
+            have actionSuccess := retained_action_success holeKey fits admits graph templates stop order metadata
+              fuel uv oldHandle scs oldValue value caller reached before after memos.query readAfter checked
+              heap selectedAction prepared right ordinary reading checking decoded selectedPrepared
+              (by simpa only [actionSame, queriesSame] using actual)
+            have readSuccess : Success (getValue fuel uv) before.core
+                (.unenumerated (some oldHandle) scs) readAfter := by
+              rw [Success, reading]
+              exact List.mem_singleton_self _
+            have readFacts := getValue_canonical fuel uv before.core readAfter _ canonical readSuccess
+            have checkSuccess : Success (SourcePruningEnumerationRecursion.checkRepeated
+                caller.checked.native.machine.heap fuel uv oldHandle scs) readAfter false checked := by
+              rw [Success, checking]
+              exact List.mem_singleton_self _
+            have checkedCanonical := SourcePruningEnumerationSelectedPrefixCanonical.checkRepeated_canonical
+              caller.checked.native.machine.heap fuel uv oldHandle scs readAfter checked false
+              readFacts.1 checkSuccess
+            exact SourcePruningEnumerationSelectedPrefixCanonical.prepared_nonempty_canonical
+              holeKey fits admits metadata fuel fuel uv oldHandle newHandle scs oldValue value
+              caller.checked.native.machine.heap heap selectedAction checked after.core checkedCanonical
+              readFacts.2 narrowed nonempty encoded selectedPrepared actionSuccess
