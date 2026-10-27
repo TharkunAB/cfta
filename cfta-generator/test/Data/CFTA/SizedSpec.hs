@@ -63,6 +63,24 @@ spec = describe "Data.CFTA.Sized" $ do
         let equal = equalityConstraint $ ECTA.mkEqConstraints [[ECTA.path [0], ECTA.path [1]]]
             classes = fromRows "s" [("s", [FTA.Transition (sym "g") ["q", "q"] equal]), ("q", [leaf "a", leaf "b"])]
         termsOfSize classes 3 `shouldBe` [term "g" [term "a" [], term "a" []], term "g" [term "b" [], term "b" []]]
+    it "keeps the row order of two transitions that differ only in constraints" $ do
+        -- The sort key of a transition has no constraints, and the sort is
+        -- stable. A change to the sort key changes these classes.
+        let equal = equalityConstraint $ ECTA.mkEqConstraints [[ECTA.path [0], ECTA.path [1]]]
+            pairs constraint = FTA.Transition (sym "g") ["t", "t"] constraint
+            pairOf left right = term "g" [term left [], term right []]
+            leaves = ("t", [leaf "a", leaf "b"])
+            -- The two transitions differ in their constraints.
+            onRoot first second = fromRows "s" [("s", [pairs first, pairs second]), leaves]
+            -- The two transitions differ in the constraints of their child states.
+            below first second =
+                fromRows "s" [("s", [node "f" [first], node "f" [second]]), ("p", [pairs equal]), ("q", [pairs noConstraint]), leaves]
+        termsOfSize (onRoot equal noConstraint) 3 `shouldBe` [pairOf "a" "a", pairOf "b" "b", pairOf "a" "b", pairOf "b" "a"]
+        termsOfSize (onRoot noConstraint equal) 3 `shouldBe` [pairOf "a" "a", pairOf "a" "b", pairOf "b" "a", pairOf "b" "b"]
+        termsOfSize (below "p" "q") 4
+            `shouldBe` map (term "f" . pure) [pairOf "a" "a", pairOf "b" "b", pairOf "a" "b", pairOf "b" "a"]
+        termsOfSize (below "q" "p") 4
+            `shouldBe` map (term "f" . pure) [pairOf "a" "a", pairOf "a" "b", pairOf "b" "a", pairOf "b" "b"]
     it "rejects a guard beyond equality constraints" $ do
         let different = semanticConstraint $ Not $ Same (ECTA.path [0]) (ECTA.path [1])
             rows = [("s", [FTA.Transition (sym "g") ["q", "q"] different]), ("q", [leaf "a", leaf "b"])]
