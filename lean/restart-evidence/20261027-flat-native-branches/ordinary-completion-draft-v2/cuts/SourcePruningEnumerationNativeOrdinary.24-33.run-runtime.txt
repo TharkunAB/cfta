@@ -1,0 +1,10 @@
+noncomputable def run (checkEmpty : Bool) (r n p h k uv : Nat)
+    (edgesOf : Node → List (EdgeValue Symbol Constraint)) (caller : Caller width)
+    (before : Cached) (queries : Queries) : Raw × Option (Result width) :=
+  let raw := ExceptT.run (SourcePruningEnumerationEntry.enter caller.checked.native.machine.heap r uv before.core)
+  (raw, match raw with
+    | [.ok ((target, _handle, scs, parent@(.node _ _ _ _)), entered)] =>
+        if scs.any (fun sc => EqualityTrie.isTerminal sc.trie) then none
+        else some (SourcePruningEnumerationNativeBranches.run checkEmpty r n p h k target scs
+          (EnumerationExpandableIndex.frame entered before) (edgesOf parent) caller queries)
+    | _ => none)

@@ -1,0 +1,13 @@
+def ResultRelated (flat : Result width) (earlier : SourcePruningEnumerationSelectedEdge.Result width) : Prop :=
+  match flat, earlier with
+  | .unhandled, .unhandled => True
+  | .rejected caller queries after, .rejected oldCaller oldQueries oldAfter =>
+      caller = oldCaller ∧ queries = oldQueries ∧ EnumerationFlatCached.Related after oldAfter
+  | .complete fragment caller queries after, .complete oldFragment oldCaller oldQueries oldAfter =>
+      fragment = oldFragment ∧ caller = oldCaller ∧ queries = oldQueries ∧ EnumerationFlatCached.Related after oldAfter
+  | .stopped fragments observation candidate, .stopped oldFragments oldObservation oldCandidate =>
+      fragments = oldFragments ∧ SourceFlatPruningChildDispatch.ResultRelated
+        (observation, candidate) (oldObservation, oldCandidate)
+  | _, _ => False
+
+end MicroCFTA.SourceFlatPruningSelectedEdge

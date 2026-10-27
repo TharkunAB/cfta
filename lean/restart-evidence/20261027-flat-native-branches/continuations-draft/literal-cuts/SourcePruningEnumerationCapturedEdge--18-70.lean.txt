@@ -1,0 +1,53 @@
+local notation "Cached" => EnumerationExpandableIndex.Cached Symbol Constraint
+local notation "Fragment" => Fragments.Fragment Symbol
+local notation "Result" => SourcePruningEnumerationSelectedEdge.Result
+variable {width : Nat}
+variable [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Constraint)] [DecidableEq Node]
+
+/-- Finalize each successful selected edge at the original captured raw slot. -/
+noncomputable def run (checkEmpty : Bool) (r n p h k target : Nat)
+    (scs : List Suspended) (edge : EdgeValue Symbol Constraint)
+    (caller : Caller width) (before : Cached) (queries : Queries) : Option (Result width) :=
+  match SourcePruningEnumerationSelectedEdge.run checkEmpty r n p h k scs edge caller before queries with
+  | .complete fragment afterCaller saved after =>
+      (SourcePruningEnumerationFinalize.run afterCaller.checked.native.machine.heap k target fragment after).map
+        (fun finished => .complete fragment afterCaller saved finished)
+  | result => some result
+
+/-- A stopped child does not reset ancestry or write the captured slot. -/
+theorem children_stopped (checkEmpty : Bool) (r n p h k target : Nat)
+    (scs : List Suspended) (edge : EdgeValue Symbol Constraint)
+    (caller : Caller width) (before : Cached) (queries : Queries)
+    (fragments : List Fragment) (observation : SourcePruningEnumerationChildDispatch.Observation width)
+    (candidate : Option Cached)
+    (stopped : SourcePruningEnumerationSelectedEdge.run checkEmpty r n p h k scs edge caller before queries =
+      .stopped fragments observation candidate) :
+    run checkEmpty r n p h k target scs edge caller before queries =
+      some (.stopped fragments observation candidate) := by
+  rw [run, stopped]
+
+/-- A ready stored ordinary parent derives its exact captured-slot write or child rejection. -/
+theorem complete_with_history
+    (formulas : SourceGuards.Formulas FullSyntax.Formula)
+    (solver : SourceGuards.Entailment FullSyntax.Formula)
+    (inventory : Inventory) (caller : Caller width) (before : Cached) (checkEmpty : Bool)
+    (uv handle : Nat) (scs : List Suspended)
+    (parentEntry : Cache.Interned InternedBinderProtocol.NodeKey)
+    (edges : List (EdgeValue Symbol Constraint)) (depth : Nat) (free : List InternedBinderProtocol.Reference)
+    (edge : EdgeValue Symbol Constraint) (roots : Nat → Nat) (memos : Memos)
+    (initial : Context formulas solver inventory caller memos)
+    (ready : EnumerationDriver.Ready uv before.core)
+    (stored : before.core.values[uv]? = some (.unenumerated (some handle) scs))
+    (decoded : lookupNode caller.checked.native.machine.heap handle = some (.node parentEntry edges depth free))
+    (realized : PendingRealized caller.checked.native.machine.heap before.core)
+    (selected : edge ∈ edges)
+    (paths : Roots before.core.representatives roots)
+    (counts : EnumerationCanonicalWaiting.Correct roots before.core.values before.waiting)
+    (flags : ∀ slot, SourcePruningEnumerationNativeIndex.candidate caller.checked.native.machine.heap
+      ((before.core.values[slot]?).getD .eliminated) = some (before.expandable slot))
+    (pending : InputsPending before.core scs)
+    (allowed : arityAllows edge.children.length scs = true)
+    (tries : List EqualityTrie.Trie) (residual : Option Constraint)
+    (projected : SourcePruningEnumerationConstraint.project edge.entry.key.constraint = some (tries, residual))
+    (ranges : SourcePruningEnumerationSelectedEdge.Ranges checkEmpty scs edge caller before memos.query) :
+    ∃ (r n p h k : Nat) (afterCaller : Caller width) (after : Cached) (savedQueries : Queries)

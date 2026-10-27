@@ -1,0 +1,21 @@
+    SourcePruningEnumerationTraversalCompletion.Ranges checkEmpty
+      (staged.map (fun input => (input.1, input.2.1))) caller middle queries
+
+/-- Arity rejection retains the original caller and cache without running a child. -/
+theorem arity_rejected (checkEmpty : Bool) (r n p h k : Nat) (scs : List Suspended)
+    (edge : EdgeValue Symbol Constraint) (caller : Caller width) (before : Cached) (queries : Queries)
+    (rejected : arityAllows edge.children.length scs = false) :
+    run checkEmpty r n p h k scs edge caller before queries = .rejected caller queries before := by
+  simp only [run, SourcePruningEnumerationCachedOwn.prepare, rejected, Bool.false_eq_true, ↓reduceIte]
+
+/-- Unsupported annotations retain the explicit prefix fallback. -/
+theorem unsupported (checkEmpty : Bool) (r n p h k : Nat) (scs : List Suspended)
+    (edge : EdgeValue Symbol Constraint) (caller : Caller width) (before : Cached) (queries : Queries)
+    (allowed : arityAllows edge.children.length scs = true)
+    (projected : SourcePruningEnumerationConstraint.project edge.entry.key.constraint = none) :
+    run checkEmpty r n p h k scs edge caller before queries = .unhandled := by
+  simp only [run, SourcePruningEnumerationCachedOwn.prepare, allowed, ↓reduceIte, projected]
+
+/-- Every stopped child receipt retains its prefix, observation and optional cache. -/
+theorem children_stopped (checkEmpty : Bool) (r n p h k : Nat) (scs : List Suspended)
+    (edge : EdgeValue Symbol Constraint) (caller : Caller width) (before : Cached) (queries : Queries)

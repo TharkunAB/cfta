@@ -1,0 +1,44 @@
+  simp only [run, observed, halted]
+
+/-- Embed a flat branch result without continuation outputs or continuation stops. -/
+def ofBranches : SourceFlatPruningNativeBranches.Result width → Result Output Reason width
+  | .complete processed caller queries => .complete processed [] caller queries
+  | .stopped processed current => .stopped processed [] (.edge current)
+
+/-- The identity hook preserves the entire flat branch result, including stopped receipts. -/
+theorem identity_run
+    (checkEmpty : Bool) (nativeFuel p h target : Nat) (scs : List Suspended) (before : Cached)
+    (edges : List (EdgeValue Symbol Constraint)) (caller : Caller width) (queries : Queries) :
+    run (identityHook (Output := Output) (Reason := Reason)) checkEmpty nativeFuel p h target scs before edges caller queries =
+      ofBranches (SourceFlatPruningNativeBranches.run checkEmpty nativeFuel p h target scs before edges caller queries) := by
+  induction edges generalizing caller queries with
+  | nil => rfl
+  | cons edge rest ih =>
+      cases observed : SourceFlatPruningCapturedEdge.run checkEmpty nativeFuel p h target scs edge caller before queries with
+      | none => simp only [run, SourceFlatPruningNativeBranches.run, observed, ofBranches]
+      | some receipt =>
+          cases receipt with
+          | unhandled =>
+              simp only [run, SourceFlatPruningNativeBranches.run, observed,
+                SourceFlatPruningNativeBranches.advance, ofBranches]
+          | rejected reached saved after =>
+              simp only [run, SourceFlatPruningNativeBranches.run, observed,
+                SourceFlatPruningNativeBranches.advance]
+              rw [ih reached saved]
+              cases SourceFlatPruningNativeBranches.run checkEmpty nativeFuel p h target scs before rest reached saved <;> rfl
+          | complete fragment reached saved after =>
+              simp only [run, SourceFlatPruningNativeBranches.run, observed, identityHook,
+                SourceFlatPruningNativeBranches.advance]
+              rw [ih reached saved]
+              cases SourceFlatPruningNativeBranches.run checkEmpty nativeFuel p h target scs before rest reached saved <;> rfl
+          | stopped fragments observation candidate =>
+              simp only [run, SourceFlatPruningNativeBranches.run, observed]
+              cases advanced : SourceFlatPruningNativeBranches.advance (.stopped fragments observation candidate) with
+              | none => rfl
+              | some endpoint =>
+                  obtain ⟨reached, saved⟩ := endpoint
+                  dsimp only
+                  rw [ih reached saved]
+                  cases SourceFlatPruningNativeBranches.run checkEmpty nativeFuel p h target scs before rest reached saved <;> rfl
+
+end MicroCFTA.SourceFlatPruningNativeContinuations

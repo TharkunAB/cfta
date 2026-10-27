@@ -1,0 +1,44 @@
+import MicroCFTA.SourceFlatPruningCachedPrepare
+import MicroCFTA.SourcePruningEnumerationCachedOwn
+
+/-!
+# Flat own-class allocation and ordered child staging
+
+The traversal allocates one raw ID per projected trie, in list order.
+The prepared payload retains each optional flat child action.
+-/
+
+namespace MicroCFTA.SourceFlatPruningCachedOwn
+
+open EnumerationState EnumerationFlatCached
+open InternedConstructorTemplates
+local notation "Symbol" => SourcePruningTemplates.Symbol
+local notation "Constraint" => SourceSymbolicIndex.Constraint FullSyntax.Formula
+variable {EnumGuard NativeGuard : Type}
+
+/-- Allocate every projected class in the original order. -/
+def suspendMany (heap : InternedConstructorTemplates.State Symbol NativeGuard) :
+    List EqualityTrie.Trie → Cached Symbol EnumGuard → Option (List Suspended × Cached Symbol EnumGuard)
+  | [], before => some ([], before)
+  | trie :: rest, before =>
+      (SourceFlatPruningCachedChild.allocate heap none before).bind fun allocation =>
+        (suspendMany heap rest allocation.2).map fun result =>
+          (⟨trie, allocation.1⟩ :: result.1, result.2)
+
+/-- Allocate own classes and retain the ordered optional child actions. -/
+noncomputable def prepare (heap : InternedConstructorTemplates.State Symbol Constraint)
+    (scs : List Suspended) (edge : EdgeValue Symbol Constraint) (before : Cached Symbol Constraint) :
+    Option (List ((Symbol × List (Value Symbol Constraint × List Suspended ×
+      Option (EnumerationFlatState.Action Symbol Constraint (Fragments.Fragment Symbol))) ×
+        Option Constraint) × Cached Symbol Constraint)) :=
+  if arityAllows edge.children.length scs then
+    match SourcePruningEnumerationConstraint.project edge.entry.key.constraint with
+    | none => none
+    | some (tries, residual) =>
+        (suspendMany heap tries before).map fun result =>
+          [((edge.entry.key.symbol,
+            edge.children.zipIdx.map (fun indexed =>
+              (indexed.1, descendScs indexed.2 scs ++ descendScs indexed.2 result.1,
+                SourceFlatPruningShallowChild.prepareChild (EnumGuard := Constraint)
+                  (descendScs indexed.2 scs ++ descendScs indexed.2 result.1) indexed.1)), residual), result.2)]
+  else some []

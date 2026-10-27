@@ -1,0 +1,46 @@
+      {caller middleCaller afterCaller : Caller width} {queries middleQueries saved : Queries}
+      {receipt : Receipt width} {processed : List (Receipt width)}
+      (head : SourcePruningEnumerationCapturedEdge.run checkEmpty r n p h k target scs edge caller before queries =
+        some receipt)
+      (continued : advance receipt = some (middleCaller, middleQueries))
+      (tail : Trace checkEmpty r n p h k target scs before rest middleCaller middleQueries
+        processed afterCaller saved) :
+      Trace checkEmpty r n p h k target scs before (edge :: rest) caller queries
+        (receipt :: processed) afterCaller saved
+
+/-- Every actual ordered trace completes through the same worker. -/
+theorem trace_complete
+    (trace : Trace (width := width) checkEmpty r n p h k target scs before edges caller queries
+      processed afterCaller saved) :
+    run checkEmpty r n p h k target scs before edges caller queries = .complete processed afterCaller saved := by
+  induction trace with
+  | nil => rfl
+  | cons head continued _tail ih => simp only [run, head, continued, ih]
+
+/-- Every completed run retains the actual caller-threaded trace and every branch cache. -/
+theorem complete_trace (checkEmpty : Bool) (r n p h k target : Nat) (scs : List Suspended)
+    (before : Cached) (edges : List (EdgeValue Symbol Constraint))
+    (caller afterCaller : Caller width) (queries saved : Queries) (processed : List (Receipt width))
+    (completed : run checkEmpty r n p h k target scs before edges caller queries =
+      .complete processed afterCaller saved) :
+    Trace checkEmpty r n p h k target scs before edges caller queries processed afterCaller saved := by
+  induction edges generalizing caller queries processed with
+  | nil =>
+      cases completed
+      exact .nil _ _
+  | cons edge rest ih =>
+      cases head : SourcePruningEnumerationCapturedEdge.run checkEmpty r n p h k target scs edge caller before queries with
+      | none => simp only [run, head] at completed; cases completed
+      | some receipt =>
+          cases continued : advance receipt with
+          | none => simp only [run, head, continued] at completed; cases completed
+          | some endpoint =>
+              rcases endpoint with ⟨middleCaller, middleQueries⟩
+              cases tail : run checkEmpty r n p h k target scs before rest middleCaller middleQueries with
+              | stopped processedTail current => simp only [run, head, continued, tail] at completed; cases completed
+              | complete processedTail finalCaller finalQueries =>
+                  simp only [run, head, continued, tail, Result.complete.injEq] at completed
+                  obtain ⟨rfl, rfl, rfl⟩ := completed
+                  exact .cons head continued (ih middleCaller middleQueries processedTail tail)
+
+end MicroCFTA.SourcePruningEnumerationNativeBranches

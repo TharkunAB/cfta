@@ -1,0 +1,85 @@
+import MicroCFTA.EnumerationFlatPartial
+import MicroCFTA.SourcePruningEnumerationEntry
+
+/-!
+# Ordinary entry with direct representative reads
+
+Entry reads the pending handle and captures its actual root.
+The decoded native boundary selects the exact expansion ancestry.
+-/
+
+namespace MicroCFTA.SourceFlatPruningEntry
+open EnumerationState EnumerationCorrectness EnumerationFlatReplay
+open SourcePruningEnumerationNodes
+local notation "Symbol" => SourcePruningTemplates.Symbol
+variable {EnumGuard NativeGuard : Type}
+
+attribute [local instance] SourcePruningEnumerationTerminalPrefix.terminalPrefixMonadList
+  SourcePruningEnumerationTerminalPrefix.terminalPrefixLawfulMonadList
+
+/-- Read the pending native node and set expansion ancestry at its actual root. -/
+def enter (heap : InternedConstructorTemplates.State Symbol NativeGuard) (uv : Nat) :
+    EnumerationFlatState.Action Symbol EnumGuard
+      (Nat × Nat × List Suspended × InternedConstructorTemplates.Value Symbol NativeGuard) := do
+  match ← EnumerationFlatState.getValue uv with
+  | .unenumerated (some handle) scs =>
+      let target ← EnumerationFlatState.representative uv
+      match lookupNode heap handle with
+      | none => EnumerationFlatState.failure .unresolvedReference
+      | some decoded =>
+          modify fun state => {state with expansionAncestry :=
+            (if MergedOrdinaryHeight.recursiveBoundary decoded then
+              (recursionKey handle scs :: state.recursionAncestry target).eraseDups
+            else state.recursionAncestry target)}
+          pure (target, handle, scs, decoded)
+  | _ => EnumerationFlatState.reject
+
+/-- Replay an actual successful old entry at its same native heap and lookup bound. -/
+theorem enter_replays (heap : InternedConstructorTemplates.State Symbol NativeGuard)
+    (fuel uv : Nat) (flat : EnumerationFlatState.State Symbol EnumGuard)
+    (earlier : EnumerationState.State Symbol EnumGuard)
+    (value : Nat × Nat × List Suspended × InternedConstructorTemplates.Value Symbol NativeGuard)
+    (after : EnumerationState.State Symbol EnumGuard)
+    (related : EnumerationFlatState.Related flat earlier)
+    (completed : ExceptT.run (SourcePruningEnumerationEntry.enter heap fuel uv earlier) = [.ok (value, after)]) :
+    ∃ next, ExceptT.run (enter heap uv flat) = [.ok (value, next)] ∧
+      EnumerationFlatState.Related next after := by
+  have replay : Replays (enter (EnumGuard := EnumGuard) heap uv)
+      (SourcePruningEnumerationEntry.enter heap fuel uv) := by
+    unfold enter SourcePruningEnumerationEntry.enter
+    apply bind_replays _ _ _ _ (EnumerationFlatPartial.getValue_replays fuel uv)
+    intro stored
+    cases stored with
+    | eliminated | enumerated _ =>
+        intro left right result final _ observed
+        simp only [Success, EnumerationState.reject, ExceptT.run, List.not_mem_nil] at observed
+    | unenumerated node scs =>
+      cases node with
+      | none =>
+          intro left right result final _ observed
+          simp only [Success, EnumerationState.reject, ExceptT.run, List.not_mem_nil] at observed
+      | some handle =>
+          apply bind_replays _ _ _ _ (representative_replays fuel uv)
+          intro target
+          cases decoded : lookupNode heap handle with
+          | none =>
+              intro left right result final _ observed
+              exact (success_failure .unresolvedReference right final result observed).elim
+          | some decoded =>
+              intro left right result final states observed
+              obtain ⟨token, middle, updated, returned⟩ := (success_bind _ _ right result final).mp observed
+              cases token
+              obtain rfl := (EnumerationDriver.modify_success _ right middle).mp updated
+              obtain ⟨rfl, rfl⟩ := (success_pure _ result _ final).mp returned
+              refine ⟨{left with expansionAncestry :=
+                if MergedOrdinaryHeight.recursiveBoundary decoded then
+                  (recursionKey handle scs :: left.recursionAncestry target).eraseDups
+                else left.recursionAncestry target}, rfl, ?_⟩
+              refine ⟨states.valid, states.representatives, states.counter, states.values,
+                states.obligations, states.recursionAncestry, ?_⟩
+              simp only [states.recursionAncestry]
+  apply replay flat earlier value after related
+  rw [Success, completed]
+  exact List.mem_singleton_self _
+
+end MicroCFTA.SourceFlatPruningEntry

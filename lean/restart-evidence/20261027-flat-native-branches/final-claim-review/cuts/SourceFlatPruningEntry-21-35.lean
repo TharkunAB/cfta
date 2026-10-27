@@ -1,0 +1,15 @@
+def enter (heap : InternedConstructorTemplates.State Symbol NativeGuard) (uv : Nat) :
+    EnumerationFlatState.Action Symbol EnumGuard
+      (Nat × Nat × List Suspended × InternedConstructorTemplates.Value Symbol NativeGuard) := do
+  match ← EnumerationFlatState.getValue uv with
+  | .unenumerated (some handle) scs =>
+      let target ← EnumerationFlatState.representative uv
+      match lookupNode heap handle with
+      | none => EnumerationFlatState.failure .unresolvedReference
+      | some decoded =>
+          modify fun state => {state with expansionAncestry :=
+            (if MergedOrdinaryHeight.recursiveBoundary decoded then
+              (recursionKey handle scs :: state.recursionAncestry target).eraseDups
+            else state.recursionAncestry target)}
+          pure (target, handle, scs, decoded)
+  | _ => EnumerationFlatState.reject

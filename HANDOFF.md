@@ -1,5 +1,35 @@
 # cfta formalization restart handoff
 
+## Actual flat ordinary scans now retain completion and sibling history
+
+Source checkpoint: f75c088bed6a1848dccdf97e63839ceb8cd09ddb.
+Eight new modules execute ordinary entry and ordered native alternatives.
+Original admission derives actual flat plain-sibling and ordinary completion
+at every adequate native bound, for any related initial flat cache.
+Every sibling restores the captured enumeration cache. Only its actual reached
+native Caller and Queries pass to the next sibling. The full earlier packets
+retain Post/global Memos, every receipt's prefix postcondition, pending-reference
+and fragment histories, and the condition for finishing all supported alternatives.
+Receipt consumers derive native index correctness at each receipt's own heap/cache.
+No future flat observation or desired final flat invariant is an input.
+
+The hook-aware sibling and ordinary runtimes are also defined and checked.
+Their identity bridges hold at every input. Explicit heterogeneous payload
+relations support different flat and earlier output and failure types.
+These runtimes do not yet prove completion for recursive hooks. Such siblings
+must use the actual post-hook native endpoint, beyond the plain scan's contract.
+Whole recursive correspondence, output soundness, coverage, pruning-policy
+soundness and initial admission histories remain open. H6 stays unchanged.
+Audit passes 4042 jobs and 78840 theorem dependency checks.
+All eight modules and Audit pass strict checks. No Haskell source changed.
+FINDINGS retains every Haskell repair handoff and the extraction-progress limit.
+
+Next compose concrete callbacks and recursive outputs/failures through the
+actual post-hook sibling endpoints. Use the original finite-depth resource
+induction. Derive initial Canonical, semantic Ranges and allocation histories.
+Details: `lean/notes-current-flat-native-branches.md`.
+
+
 ## Actual flat captured edges now derive completion and full native history
 
 Source checkpoint: cc74b0823653657df0f13e44b17eb2588ed7770c.

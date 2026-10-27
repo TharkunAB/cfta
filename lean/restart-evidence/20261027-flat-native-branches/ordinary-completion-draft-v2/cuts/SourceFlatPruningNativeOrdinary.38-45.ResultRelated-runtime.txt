@@ -1,0 +1,8 @@
+def ResultRelated (flat : Raw × Option (SourceFlatPruningNativeBranches.Result width))
+    (earlier : List (Except Error ((Nat × Nat × List Suspended × Node) ×
+      EnumerationState.State Symbol Constraint)) × Option (SourcePruningEnumerationNativeBranches.Result width)) : Prop :=
+  EnumerationResultRelation.Results EnumerationFlatState.Related flat.1 earlier.1 ∧
+    match flat.2, earlier.2 with
+    | none, none => True
+    | some first, some second => SourceFlatPruningNativeBranches.ResultRelated first second
+    | _, _ => False

@@ -1,0 +1,8 @@
+def Ranges (checkEmpty : Bool) (uv : Nat) (edgesOf : Node → List (EdgeValue Symbol Constraint))
+    (caller : Caller width) (before : Cached) (queries : Queries) : Prop :=
+  ∀ fuel target handle scs entry edges depth free entered,
+    ExceptT.run (SourcePruningEnumerationEntry.enter caller.checked.native.machine.heap fuel uv before.core) =
+      [.ok ((target, handle, scs, .node entry edges depth free), entered)] →
+    scs.any (fun sc => EqualityTrie.isTerminal sc.trie) = false →
+    SourcePruningEnumerationNativeBranchCompletion.Ranges checkEmpty target scs
+      (EnumerationExpandableIndex.frame entered before) (edgesOf (.node entry edges depth free)) caller queries

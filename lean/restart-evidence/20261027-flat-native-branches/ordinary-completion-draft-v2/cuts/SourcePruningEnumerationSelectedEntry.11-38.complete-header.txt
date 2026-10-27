@@ -1,0 +1,28 @@
+theorem complete
+    (heap : InternedConstructorTemplates.State Symbol NativeGuard)
+    (before : EnumerationExpandableIndex.Cached Symbol EnumGuard)
+    (uv handle : Nat) (scs : List Suspended) (roots : Nat → Nat)
+    (ready : EnumerationDriver.Ready uv before.core)
+    (stored : before.core.values[uv]? = some (.unenumerated (some handle) scs))
+    (realized : PendingRealized heap before.core)
+    (paths : Roots before.core.representatives roots)
+    (counts : EnumerationCanonicalWaiting.Correct roots before.core.values before.waiting)
+    (flags : ∀ slot, SourcePruningEnumerationNativeIndex.candidate heap
+      ((before.core.values[slot]?).getD .eliminated) = some (before.expandable slot)) :
+    ∃ (fuel : Nat) (decoded : InternedConstructorTemplates.Value Symbol NativeGuard)
+      (after : EnumerationExpandableIndex.Cached Symbol EnumGuard),
+      (∀ extra, ExceptT.run (SourcePruningEnumerationEntry.enter heap (fuel + extra) uv before.core) =
+        [.ok ((uv, handle, scs, decoded), after.core)]) ∧
+      lookupNode heap handle = some decoded ∧
+      InternedProbeProvenance.Available heap decoded ∧ decoded.free = [] ∧
+      after.core.counter = before.core.counter ∧ after.core.values = before.core.values ∧
+      after.expandable = before.expandable ∧ after.waiting = before.waiting ∧
+      after.core.values[uv]? = some (.unenumerated (some handle) scs) ∧
+      EnumerationDriver.Ready uv after.core ∧ EnumerationDriver.Protected uv before.core after.core ∧
+      Roots after.core.representatives roots ∧ PendingRealized heap after.core ∧
+      EnumerationCanonicalWaiting.Correct roots after.core.values after.waiting ∧
+      (∀ slot, SourcePruningEnumerationNativeIndex.candidate heap
+        ((after.core.values[slot]?).getD .eliminated) = some (after.expandable slot)) ∧
+      (∀ sc ∈ scs, sc.var < after.core.counter) ∧
+      (∀ bucket, InputsPending before.core bucket → InputsPending after.core bucket) ∧
+      EnumerationDriver.RenderStable before.core after.core := by
