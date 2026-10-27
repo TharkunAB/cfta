@@ -1,0 +1,35 @@
+MicroCFTA.SourcePruningEnumerationTerminal.successful_proper {width : Nat}
+  [DecidableEq MicroCFTA.SourcePruningTemplates.Symbol]
+  [DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey MicroCFTA.SourcePruningTemplates.Symbol
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  [DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.Value MicroCFTA.SourcePruningTemplates.Symbol
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  (checkEmpty : Bool) (r n p h : Nat) (first : MicroCFTA.EnumerationState.Suspended)
+  (rest : List MicroCFTA.EnumerationState.Suspended) (waiting : MicroCFTA.EnumerationWaitingIndex.Waiting)
+  (caller : MicroCFTA.SourceCurrentAllocatedPartialState.State width)
+  (before :
+    MicroCFTA.EnumerationState.State MicroCFTA.SourcePruningTemplates.Symbol
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+  (incoming :
+    MicroCFTA.InternedConstructorTemplates.Value MicroCFTA.SourcePruningTemplates.Symbol
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+  (incomingScs : List MicroCFTA.EnumerationState.Suspended) (queries : MicroCFTA.SourceEndpointMemo.Memos)
+  (fragment : MicroCFTA.Fragments.Fragment MicroCFTA.SourcePruningTemplates.Symbol)
+  (afterCaller : MicroCFTA.SourceCurrentAllocatedPartialState.State width)
+  (savedQueries : MicroCFTA.SourceEndpointMemo.Memos)
+  (outer after :
+    MicroCFTA.EnumerationState.State MicroCFTA.SourcePruningTemplates.Symbol
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+  (moved : MicroCFTA.EnumerationWaitingIndex.Waiting) (canonical : MicroCFTA.EnumerationProgress.ProperState before)
+  (inputs :
+    ∀ (sc : MicroCFTA.EnumerationState.Suspended), sc ∈ incomingScs → MicroCFTA.EnumerationProgress.ProperTrie sc.trie)
+  (observed :
+    MicroCFTA.SourcePruningEnumerationTerminal.run checkEmpty r n p h first rest waiting caller before incoming
+        incomingScs queries =
+      (Except.ok (some [Except.ok (fragment, after)]), afterCaller, savedQueries, outer, moved)) :
+  MicroCFTA.EnumerationProgress.ProperState after
+'MicroCFTA.SourcePruningEnumerationTerminal.successful_proper' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]

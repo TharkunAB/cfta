@@ -1,0 +1,24 @@
+MicroCFTA.SourcePruningEnumerationIncomingNode.written_proper
+  (before read after :
+    MicroCFTA.EnumerationState.State MicroCFTA.SourcePruningTemplates.Symbol
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+  (fuel uv target handle : Nat) (oldNode : Option Nat) (incomingScs oldScs : List MicroCFTA.EnumerationState.Suspended)
+  (valid : MicroCFTA.EnumerationProgress.ProperState before)
+  (inputs :
+    ∀ (sc : MicroCFTA.EnumerationState.Suspended), sc ∈ incomingScs → MicroCFTA.EnumerationProgress.ProperTrie sc.trie)
+  (reading :
+    MicroCFTA.EnumerationCorrectness.Success (MicroCFTA.EnumerationState.getValue fuel uv) before
+      (MicroCFTA.EnumerationState.UVarValue.unenumerated oldNode oldScs) read)
+  (shape :
+    after =
+      { counter := read.counter, representatives := read.representatives,
+        values :=
+          read.values.set target
+            (MicroCFTA.EnumerationState.UVarValue.unenumerated (some handle) (incomingScs ++ oldScs)),
+        obligations := read.obligations,
+        recursionAncestry := fun other =>
+          if other = target then (read.expansionAncestry ++ read.recursionAncestry target).eraseDups
+          else read.recursionAncestry other,
+        expansionAncestry := read.expansionAncestry }) :
+  MicroCFTA.EnumerationProgress.ProperState after
+'MicroCFTA.SourcePruningEnumerationIncomingNode.written_proper' depends on axioms: [propext, Quot.sound]

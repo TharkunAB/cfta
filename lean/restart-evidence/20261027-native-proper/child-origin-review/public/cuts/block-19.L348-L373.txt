@@ -1,0 +1,26 @@
+MicroCFTA.SourcePruningEnumerationCachedFold.candidate_proper {width : Nat}
+  [DecidableEq MicroCFTA.SourcePruningTemplates.Symbol]
+  [DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey MicroCFTA.SourcePruningTemplates.Symbol
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  [DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.Value MicroCFTA.SourcePruningTemplates.Symbol
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  (checkEmpty : Bool) (nativeFuel p h : Nat) (sources : List Nat)
+  (caller : MicroCFTA.SourceCurrentAllocatedPartialState.State width)
+  (before :
+    MicroCFTA.EnumerationExpandableIndex.Cached MicroCFTA.SourcePruningTemplates.Symbol
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+  (target : Nat) (queries : MicroCFTA.SourceEndpointMemo.Memos)
+  (valid : MicroCFTA.EnumerationProgress.ProperState before.core)
+  (after :
+    MicroCFTA.EnumerationExpandableIndex.Cached MicroCFTA.SourcePruningTemplates.Symbol
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+  (candidate :
+    (MicroCFTA.SourcePruningEnumerationCachedFold.run checkEmpty nativeFuel p h sources caller before target
+          queries).snd =
+      some after) :
+  MicroCFTA.EnumerationProgress.ProperState after.core
+'MicroCFTA.SourcePruningEnumerationCachedFold.candidate_proper' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]

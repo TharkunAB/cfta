@@ -1,0 +1,33 @@
+theorem candidate_proper
+    (checkEmpty : Bool) (r n p h k : Nat) (first : Suspended) (rest : List Suspended)
+    (caller : Caller width) (before : Cached) (incoming : Node) (incomingScs : List Suspended)
+    (queries : Queries) (proper : ProperState before.core)
+    (inputs : ∀ sc ∈ incomingScs, ProperTrie sc.trie) (after : Cached)
+    (candidate : (run checkEmpty r n p h k first rest caller before incoming incomingScs queries).2 = some after) :
+    ProperState after.core := by
+  unfold run at candidate
+  split at candidate
+  next empty =>
+    have same : before = after := Option.some.inj candidate
+    subst after
+    exact proper
+  next nonempty =>
+    split at candidate
+    next recorded winner moved joined prefixObserved =>
+      have prefixSuccess : Success (SourcePruningEnumerationTerminalPrefix.run r first rest before.waiting)
+          before.core (recorded, winner, moved) joined := by
+        rw [Success, prefixObserved]
+        exact List.mem_singleton_self _
+      have joinedProper := SourcePruningEnumerationTerminalPrefix.run_proper r first rest before.waiting
+        before.core joined recorded winner moved proper prefixSuccess
+      rcases foldObserved : SourcePruningEnumerationCachedFold.run checkEmpty n p h recorded
+          caller ⟨joined, before.expandable, moved⟩ winner queries with
+        ⟨⟨foldResult, foldCaller, foldQueries, foldOuter⟩, foldCache⟩
+      rw [foldObserved] at candidate
+      have foldExact := (SourcePruningEnumerationCachedFold.erase checkEmpty n p h recorded
+        caller ⟨joined, before.expandable, moved⟩ winner queries).symm.trans (congrArg Prod.fst foldObserved)
+      have foldProper := SourcePruningEnumerationFold.run_proper checkEmpty n p h recorded caller joined
+        winner queries foldResult foldCaller foldQueries foldOuter joinedProper foldExact
+      cases foldResult with
+      | error fault => cases candidate
+      | ok possible =>

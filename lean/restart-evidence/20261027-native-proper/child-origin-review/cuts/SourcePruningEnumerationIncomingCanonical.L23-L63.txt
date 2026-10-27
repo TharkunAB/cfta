@@ -1,0 +1,41 @@
+private theorem finish_singleton_canonical
+    {before returned : Core} {target handle : Nat} {oldNode : Option Nat}
+    {incomingScs oldScs : List Suspended} {replacement : Node}
+    (valid : Canonical before) (inputs : ValidSuspended incomingScs)
+    (stored : before.values[target]? = some (.unenumerated oldNode oldScs))
+    (observed : ExceptT.run (finish target handle incomingScs oldScs replacement before) =
+      [.ok ((), returned)]) : Canonical returned := by
+  let written : Core :=
+    {before with
+      values := before.values.set target (.unenumerated (some handle) (incomingScs ++ oldScs))
+      recursionAncestry := fun other => if other = target then
+        (before.expansionAncestry ++ before.recursionAncestry target).eraseDups
+        else before.recursionAncestry other}
+  have rawRun : ExceptT.run (finish target handle incomingScs oldScs replacement before) =
+      match replacement with
+      | .empty => []
+      | _ => [.ok ((), written)] := by
+    cases replacement <;> rfl
+  rw [rawRun] at observed
+  have coreSame : written = returned := by
+    split at observed
+    · cases observed
+    · exact (Prod.mk.inj (Except.ok.inj (List.cons.inj observed).1)).2
+  rw [← coreSame]
+  have oldValid : ValidSuspended oldScs :=
+    valid (.unenumerated oldNode oldScs) (List.mem_of_getElem? stored)
+  apply set_canonical target (.unenumerated (some handle) (incomingScs ++ oldScs)) before valid
+  intro sc member
+  rcases List.mem_append.mp member with incoming | old
+  · exact inputs sc incoming
+  · exact oldValid sc old
+
+private theorem finish_reply_canonical
+    {Fault : Type _} {before returned : Core} {target handle : Nat} {oldNode : Option Nat}
+    {incomingScs oldScs : List Suspended} {replacement : Node}
+    (valid : Canonical before) (inputs : ValidSuspended incomingScs)
+    (stored : before.values[target]? = some (.unenumerated oldNode oldScs))
+    (observed : (Except.ok (some (ExceptT.run
+        (finish target handle incomingScs oldScs replacement before))) : Except Fault (Option Raw)) =
+      .ok (some [.ok ((), returned)])) : Canonical returned :=
+  finish_singleton_canonical valid inputs stored (Option.some.inj (Except.ok.inj observed))

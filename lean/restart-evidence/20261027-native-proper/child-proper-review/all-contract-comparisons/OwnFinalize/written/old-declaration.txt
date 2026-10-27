@@ -1,0 +1,6 @@
+theorem written_canonical
+    (before after : EnumerationState.State Symbol EnumGuard) (target : Nat) (fragment : Fragments.Fragment Symbol)
+    (canonical : Canonical before)
+    (written : after = {before with
+      values := before.values.set target (.enumerated fragment)
+      expansionAncestry := []}) : Canonical after

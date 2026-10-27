@@ -1,0 +1,26 @@
+/-- Filtering reached terminals leaves only proper descendant constraints. -/
+theorem proper_below (scs : List Suspended) (inputs : ProperInputs scs) :
+    ∀ sc ∈ scs.filter (fun sc => !EqualityTrie.isTerminal sc.trie), ProperTrie sc.trie := by
+  intro sc member
+  obtain ⟨present, below⟩ := List.mem_filter.mp member
+  exact ⟨(inputs sc present).1, (inputs sc present).2, by simpa using below⟩
+
+/-- Child descent supplies canonical nonempty inputs. -/
+theorem descend_proper (scs : List Suspended) (index : Nat) (valid : ValidSuspended scs) :
+    ProperInputs (descendScs index scs) := by
+  intro sc member
+  have canonical := descend_valid scs index valid sc member
+  have nonempty := (List.mem_filter.mp member).2
+  exact ⟨canonical, by simpa using nonempty⟩
+
+/-- The initial pending root has no suspended dependencies. -/
+theorem initial_proper (root : Nat) : ProperState (initial root : State Symbol Guard) := by
+  simp [ProperState, initial, ProperValue]
+
+/-- Updating one stored slot preserves the pending-path invariant. -/
+theorem setValue_proper (uv : Nat) (value : UVarValue Symbol) (before after : State Symbol Guard)
+    (proper : ProperState before) (payload : ProperValue value)
+    (success : Success (setValue uv value) before () after) : ProperState after := by
+  obtain rfl := (modify_success _ before after).mp success
+  intro stored member
+  rcases List.mem_or_eq_of_mem_set member with old | same

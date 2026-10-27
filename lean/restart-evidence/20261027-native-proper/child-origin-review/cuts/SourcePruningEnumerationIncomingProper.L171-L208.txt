@@ -1,0 +1,38 @@
+    {heap : InternedConstructorTemplates.State Symbol Constraint} {indexFuel target : Nat}
+    {incomingScs : List Suspended} {before after : Cached} {read : Core} {raw : Raw}
+    (readValid : ProperState read) (inputs : ∀ sc ∈ incomingScs, ProperTrie sc.trie)
+    (rows : ∀ returned, raw = [.ok ((), returned)] → ProperState returned)
+    (adapted : adapt heap indexFuel target incomingScs before read raw = some after) :
+    ProperState after.core := by
+  cases raw with
+  | nil =>
+      simp only [adapt] at adapted
+      split at adapted
+      · rename_i oldNode oldScs stored
+        simp only [Option.map_eq_some_iff] at adapted
+        obtain ⟨written, _written, same⟩ := adapted
+        subst after
+        have oldValid : ∀ sc ∈ oldScs, ProperTrie sc.trie :=
+          pending_paths_proper oldNode oldScs (readValid (.unenumerated oldNode oldScs) (List.mem_of_getElem? stored))
+        apply proper_set target (.unenumerated (some 0) (incomingScs ++ oldScs)) read readValid
+        intro sc member
+        rcases List.mem_append.mp member with incoming | old
+        · exact inputs sc incoming
+        · exact oldValid sc old
+      · cases adapted
+  | cons row rest =>
+      cases row with
+      | error fault => simp only [adapt] at adapted; cases adapted
+      | ok payload =>
+          obtain ⟨⟨⟩, returned⟩ := payload
+          cases rest with
+          | nil =>
+              have coreSame := adapt_singleton_core heap indexFuel target incomingScs
+                before after read returned adapted
+              simpa only [coreSame] using rows returned rfl
+          | cons next later => simp only [adapt] at adapted; cases adapted
+
+variable {width : Nat}
+variable [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Constraint)] [DecidableEq Node]
+
+/-- Every actual attached cache retains proper pending paths, without a safety claim on rejection. -/

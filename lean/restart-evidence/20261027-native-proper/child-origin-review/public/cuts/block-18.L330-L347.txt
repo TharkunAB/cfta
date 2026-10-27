@@ -1,0 +1,18 @@
+MicroCFTA.SourcePruningEnumerationCachedFold.proper {width : Nat} [DecidableEq MicroCFTA.SourcePruningTemplates.Symbol]
+  [DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey MicroCFTA.SourcePruningTemplates.Symbol
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  [DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.Value MicroCFTA.SourcePruningTemplates.Symbol
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  (checkEmpty : Bool) (nativeFuel p h : Nat) (sources : List Nat)
+  (beforeCaller : MicroCFTA.SourceCurrentAllocatedPartialState.State width)
+  (before :
+    MicroCFTA.EnumerationExpandableIndex.Cached MicroCFTA.SourcePruningTemplates.Symbol
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+  (target : Nat) (queries : MicroCFTA.SourceEndpointMemo.Memos)
+  (valid : MicroCFTA.EnumerationProgress.ProperState before.core) :
+  MicroCFTA.EnumerationProgress.ProperState
+    (MicroCFTA.SourcePruningEnumerationCachedFold.run checkEmpty nativeFuel p h sources beforeCaller before target
+              queries).fst.snd.snd.snd
+'MicroCFTA.SourcePruningEnumerationCachedFold.proper' depends on axioms: [propext, Classical.choice, Quot.sound]

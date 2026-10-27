@@ -1,0 +1,31 @@
+MicroCFTA.SourcePruningEnumerationIncomingCacheAdapter.adapt_proper
+  {heap :
+    MicroCFTA.InternedConstructorTemplates.State MicroCFTA.SourcePruningTemplates.Symbol
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)}
+  {indexFuel target : Nat} {incomingScs : List MicroCFTA.EnumerationState.Suspended}
+  {before after :
+    MicroCFTA.EnumerationExpandableIndex.Cached MicroCFTA.SourcePruningTemplates.Symbol
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)}
+  {read :
+    MicroCFTA.EnumerationState.State MicroCFTA.SourcePruningTemplates.Symbol
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)}
+  {raw :
+    List
+      (Except MicroCFTA.EnumerationState.Error
+        (Unit ×
+          MicroCFTA.EnumerationState.State MicroCFTA.SourcePruningTemplates.Symbol
+            (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)))}
+  (readValid : MicroCFTA.EnumerationProgress.ProperState read)
+  (inputs :
+    ∀ (sc : MicroCFTA.EnumerationState.Suspended), sc ∈ incomingScs → MicroCFTA.EnumerationProgress.ProperTrie sc.trie)
+  (rows :
+    ∀
+      (returned :
+        MicroCFTA.EnumerationState.State MicroCFTA.SourcePruningTemplates.Symbol
+          (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)),
+      raw = [Except.ok ((), returned)] → MicroCFTA.EnumerationProgress.ProperState returned)
+  (adapted :
+    MicroCFTA.SourcePruningEnumerationIncomingCacheAdapter.adapt heap indexFuel target incomingScs before read raw =
+      some after) :
+  MicroCFTA.EnumerationProgress.ProperState after.core
+'MicroCFTA.SourcePruningEnumerationIncomingCacheAdapter.adapt_proper' depends on axioms: [propext, Quot.sound]

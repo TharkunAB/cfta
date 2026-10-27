@@ -1,0 +1,32 @@
+theorem run_canonical
+    [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Constraint)] [DecidableEq Node]
+    (checkEmpty : Bool) (nativeFuel p h : Nat) (caller : Caller width) (before : Cached)
+    (source target : Nat) (queries : Queries) (valid : Canonical before.core) :
+    (∀ returned, (run checkEmpty nativeFuel p h caller before source target queries).1 =
+      .ok (some [.ok ((), returned)]) → Canonical returned) ∧
+    (∀ after, (run checkEmpty nativeFuel p h caller before source target queries).2.2.2 = some after →
+      Canonical after.core) := by
+  rcases dispatched : SourcePruningEnumerationDispatch.dispatch checkEmpty nativeFuel p h
+    caller before.core source target queries with ⟨outcome, reachedCaller, saved⟩
+  cases outcome with
+  | error fault =>
+      simp only [run, dispatched]
+      constructor <;> intro after impossible <;> cases impossible
+  | ok possible =>
+      cases possible with
+      | none =>
+          simp only [run, dispatched]
+          constructor <;> intro after impossible <;> cases impossible
+      | some action =>
+          simp only [run, dispatched]
+          have rows : ∀ returned, ExceptT.run (action before.core) = [.ok ((), returned)] →
+              Canonical returned := by
+            intro returned completed
+            exact SourcePruningEnumerationDispatch.dispatch_canonical checkEmpty nativeFuel p h
+              caller before.core source target queries action reachedCaller saved returned
+              valid dispatched completed
+          constructor
+          · intro returned same
+            exact rows returned (Option.some.inj (Except.ok.inj same))
+          · intro after adapted
+            exact adapt_canonical valid rows adapted

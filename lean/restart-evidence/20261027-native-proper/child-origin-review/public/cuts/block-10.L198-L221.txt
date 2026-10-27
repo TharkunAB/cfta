@@ -1,0 +1,24 @@
+MicroCFTA.SourcePruningEnumerationCachedAdapter.adapt_proper
+  {heap :
+    MicroCFTA.InternedConstructorTemplates.State MicroCFTA.SourcePruningTemplates.Symbol
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)}
+  {before after :
+    MicroCFTA.EnumerationExpandableIndex.Cached MicroCFTA.SourcePruningTemplates.Symbol
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)}
+  {source target : Nat}
+  {raw :
+    List
+      (Except MicroCFTA.EnumerationState.Error
+        (Unit ×
+          MicroCFTA.EnumerationState.State MicroCFTA.SourcePruningTemplates.Symbol
+            (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)))}
+  (valid : MicroCFTA.EnumerationProgress.ProperState before.core)
+  (rows :
+    ∀
+      (returned :
+        MicroCFTA.EnumerationState.State MicroCFTA.SourcePruningTemplates.Symbol
+          (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)),
+      raw = [Except.ok ((), returned)] → MicroCFTA.EnumerationProgress.ProperState returned)
+  (adapted : MicroCFTA.SourcePruningEnumerationCachedAdapter.adapt heap before source target raw = some after) :
+  MicroCFTA.EnumerationProgress.ProperState after.core
+'MicroCFTA.SourcePruningEnumerationCachedAdapter.adapt_proper' depends on axioms: [propext, Quot.sound]

@@ -1,0 +1,22 @@
+    (checkEmpty : Bool) (r n p h k : Nat) (caller : Caller width) (before : Cached)
+    (target : Nat) (incoming : Node) (incomingScs : List Suspended) (queries : Queries)
+    (valid : Canonical before.core) (inputs : ValidSuspended incomingScs)
+    (after : Cached)
+    (candidate : (run checkEmpty r n p h k caller before target incoming incomingScs queries).2 = some after) :
+    Canonical after.core := by
+  have fields := SourcePruningEnumerationIncomingNode.run_canonical
+    checkEmpty r n p h caller before.core target incoming incomingScs queries valid inputs
+  unfold run at candidate
+  generalize original : SourcePruningEnumerationIncomingNode.run checkEmpty r n p h
+    caller before.core target incoming incomingScs queries = observed at fields candidate
+  obtain ⟨result, reached, saved, read⟩ := observed
+  dsimp only at fields candidate
+  cases result with
+  | error fault => cases candidate
+  | ok payload =>
+      cases payload with
+      | none => cases candidate
+      | some raw =>
+          apply adapt_canonical fields.1 inputs ?_ candidate
+          intro returned rawSame
+          exact fields.2 returned (by rw [rawSame])

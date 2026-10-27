@@ -1,0 +1,12 @@
+theorem successful_proper
+    {checkEmpty : Bool} {r n p h k : Nat} {scs : List Suspended} {incoming : Node}
+    {caller reachedCaller : Caller width} {before after : Cached} {queries savedQueries : Queries}
+    {fragment : Fragment} {returned outer : Core} {waiting : EnumerationWaitingIndex.Waiting}
+    (proper : ProperState before.core) (inputs : ProperInputs scs)
+    (observed : run checkEmpty r n p h k scs incoming caller before queries =
+      ((.ok (some [.ok (fragment, returned)]), reachedCaller, savedQueries, outer, waiting), some after)) :
+    ProperState after.core :=
+  observed_cache_proper checkEmpty r n p h k scs incoming caller before queries proper inputs after
+    (congrArg Prod.snd observed)
+
+end MicroCFTA.SourcePruningEnumerationChildDispatch

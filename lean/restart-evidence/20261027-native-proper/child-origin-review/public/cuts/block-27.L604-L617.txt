@@ -1,0 +1,14 @@
+MicroCFTA.SourcePruningEnumerationSelectedEdge.children_proper_inputs
+  (edge :
+    MicroCFTA.InternedConstructorTemplates.EdgeValue MicroCFTA.SourcePruningTemplates.Symbol
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+  (scs : List MicroCFTA.EnumerationState.Suspended) (start : Nat) (tries : List MicroCFTA.EqualityTrie.Trie)
+  (inherited : MicroCFTA.EnumerationSemantics.ValidSuspended scs)
+  (projected : ∀ (trie : MicroCFTA.EqualityTrie.Trie), trie ∈ tries → MicroCFTA.EqualityTrie.Valid trie)
+  (incoming :
+    MicroCFTA.InternedConstructorTemplates.Value MicroCFTA.SourcePruningTemplates.Symbol
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+  (bucket : List MicroCFTA.EnumerationState.Suspended) :
+  (incoming, bucket) ∈ MicroCFTA.SourcePruningEnumerationEdgeInputs.children edge scs start tries →
+    MicroCFTA.EnumerationProgress.ProperInputs bucket
+'MicroCFTA.SourcePruningEnumerationSelectedEdge.children_proper_inputs' depends on axioms: [propext, Quot.sound]

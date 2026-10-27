@@ -1,0 +1,19 @@
+--- v1-UNTESTED
++++ v2-UNTESTED
+@@ -27,6 +27,7 @@
+ local notation "Cached" => EnumerationExpandableIndex.Cached Symbol Constraint
+ local notation "Fragment" => Fragments.Fragment Symbol
+ variable {width : Nat}
++
+ /-- Actual child descents have valid nonempty tries from both original input lists. -/
+ theorem children_proper_inputs
+     (edge : EdgeValue Symbol Constraint) (scs : List Suspended) (start : Nat)
+@@ -64,7 +65,7 @@
+     (parentClosed : free = []) (selected : edge ∈ edges)
+     (safe : Safe before.core) (realized : PendingRealized caller.checked.native.machine.heap before.core)
+     (paths : Roots before.core.representatives roots)
+-    (counts : EnumerationProperStateWaiting.Correct roots before.core.values before.waiting)
++    (counts : EnumerationCanonicalWaiting.Correct roots before.core.values before.waiting)
+     (flags : ∀ slot, SourcePruningEnumerationNativeIndex.candidate caller.checked.native.machine.heap
+       ((before.core.values[slot]?).getD .eliminated) = some (before.expandable slot))
+     (bounded : ∀ sc ∈ scs, sc.var < before.core.counter) (pending : InputsPending before.core scs)

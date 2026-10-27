@@ -1,0 +1,5 @@
+theorem suspendMany_canonical
+    (heap : InternedConstructorTemplates.State Symbol NativeGuard) (tries : List EqualityTrie.Trie)
+    (before after : EnumerationExpandableIndex.Cached Symbol EnumGuard) (suspended : List Suspended)
+    (canonical : Canonical before.core)
+    (observed : suspendMany heap tries before = some (suspended, after)) : Canonical after.core

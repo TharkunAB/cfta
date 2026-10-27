@@ -1,0 +1,9 @@
+MicroCFTA.SourcePruningEnumerationCachedOwn.suspendMany_proper {EnumGuard NativeGuard : Type}
+  (heap : MicroCFTA.InternedConstructorTemplates.State MicroCFTA.SourcePruningTemplates.Symbol NativeGuard)
+  (tries : List MicroCFTA.EqualityTrie.Trie)
+  (before after : MicroCFTA.EnumerationExpandableIndex.Cached MicroCFTA.SourcePruningTemplates.Symbol EnumGuard)
+  (suspended : List MicroCFTA.EnumerationState.Suspended)
+  (proper : MicroCFTA.EnumerationProgress.ProperState before.core)
+  (observed : MicroCFTA.SourcePruningEnumerationCachedOwn.suspendMany heap tries before = some (suspended, after)) :
+  MicroCFTA.EnumerationProgress.ProperState after.core
+'MicroCFTA.SourcePruningEnumerationCachedOwn.suspendMany_proper' depends on axioms: [propext, Quot.sound]

@@ -1,5 +1,56 @@
 # Current formalization findings
 
+## Proper native paths from startup through completed captured edges
+
+Source checkpoint: a2ee850391be7e3102798041d87d91d718480e7a.
+Native startup now derives ProperState with the entire original Packet.
+Actual preparation, incoming writes, assimilation, folds, terminal merging,
+child dispatch and completed ordered child traces preserve proper paths.
+The cache observers also cover rejected branches that retain a cache.
+Actual child descent supplies the nonempty trie inputs. Current heap
+annotations supply projected trie validity. Mu and Union remain in scope.
+
+The captured resource producer retains its ENTIRE original declaration.
+Its work bounds, actual result and full resource packet precede the new
+observer. Given the original ProperState and an accepted original model,
+the same constructed assignment satisfies the actual completed cache.
+That cache is proper and its native restart decision cannot be stuck.
+No future proper state, callback success or final model is supplied.
+
+This closes local native invariant preservation through completed captured
+execution. Full recursive origin through partial narrowing, selected prefixes
+and stopped histories remains open. ProperState alone does not imply Safe
+or Packet. Template pruning, depth and stop policy, recursive frontiers,
+discharge and rendering coverage, API admission and physical Haskell
+correspondence remain open. H6 exact finite pruning language preservation,
+conditional rendered soundness and finite invocation-or-stop coverage retain
+their previous scopes. The whole goal remains ACTIVE.
+
+Fourteen modules add 1772 lines, 102547 bytes and 30 public theorems.
+All strict checks pass. Full Audit passes 4268 jobs and checks 80193 theorem
+dependencies. Public readback has 212 complete blocks. The 182 old blocks
+form the exact 792434-byte prefix. Only the three standard Lean axioms occur.
+All 4253 prior non-Audit Lean sources, 102 pinned modules, 449 enumeration
+sources and 203 Haskell sources retain their bytes. Audit adds only imports.
+Details: `lean/notes-current-native-proper.md`.
+
+
+### External Haskell repair status at the native proper checkpoint
+
+No Haskell source or Cabal file changed. No native test or benchmark ran.
+The LPO and extraction documentation fixes are integrated from main
+8766699b594eaad80381af2eee034c378ccf3192. Pull and fetch passed. Main is an
+ancestor. KBO candidate d7b6a9dfff464eb32c17c314d4825d5b027f1b2d remains
+unintegrated, unbuilt and unexecuted. The positive-Int context-reversal
+finding remains open. All earlier repair instructions remain below.
+
+The new work proves a structural invariant of the Lean native execution.
+It establishes no new physical Haskell defect or repair. External work must
+retain the distinction between forbidden-template pruning and automaton
+acceptance. Pending-group refutation and early transformed-template meaning
+still need semantic laws. The previous witness designs remain unexecuted.
+
+
 ## Native scheduler progress after the actual callback
 
 Source checkpoint: a9e4a7def94dd333a1567ed95026c1ca205562a0.

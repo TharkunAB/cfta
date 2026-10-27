@@ -1,0 +1,20 @@
+  match sources with
+  | [] => ((.ok (some [.ok ((), before.core)]), beforeCaller, queries, before.core), some before)
+  | source :: rest =>
+      match SourcePruningEnumerationCachedAdapter.run checkEmpty nativeFuel p h
+          beforeCaller before source target queries with
+      | (.error fault, reachedCaller, savedQueries, _) =>
+          ((.error fault, reachedCaller, savedQueries, before.core), none)
+      | (.ok none, reachedCaller, savedQueries, _) =>
+          ((.ok none, reachedCaller, savedQueries, before.core), none)
+      | (.ok (some raw), reachedCaller, savedQueries, cache) =>
+          match raw with
+          | [.ok ((), core)] =>
+              match cache with
+              | none =>
+                  (SourcePruningEnumerationFold.run checkEmpty nativeFuel p h rest
+                    reachedCaller core target savedQueries, none)
+              | some recovered =>
+                  run checkEmpty nativeFuel p h rest reachedCaller
+                    (EnumerationExpandableIndex.frame core recovered) target savedQueries
+          | other => ((.ok (some other), reachedCaller, savedQueries, before.core), cache)

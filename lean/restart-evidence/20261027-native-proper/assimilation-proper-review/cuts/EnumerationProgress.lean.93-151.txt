@@ -1,0 +1,59 @@
+theorem intersection_proper (graph : Graph Symbol Guard) (left right merged : UVarValue Symbol)
+    (leftProper : ProperValue left) (rightProper : ProperValue right)
+    (success : intersectValues graph left right = some merged) : ProperValue merged := by
+  cases left <;> cases right <;> simp only [intersectValues] at success
+  all_goals try cases success
+  rename_i left leftScs right rightScs
+  cases left <;> cases right
+  · simp only [ProperValue] at leftProper rightProper ⊢
+    simp [leftProper, rightProper]
+  · simp only [ProperValue] at leftProper rightProper ⊢
+    simpa [leftProper] using rightProper
+  · simp only [ProperValue] at leftProper rightProper ⊢
+    simpa [rightProper] using leftProper
+  · intro sc member
+    rcases List.mem_append.mp member with left | right
+    · exact leftProper sc left
+    · exact rightProper sc right
+
+/-- Actual assimilation preserves the proper pending-path invariant. -/
+theorem assimilate_proper (graph : Graph Symbol Guard) (target source : Nat) (before after : State Symbol Guard)
+    (proper : ProperState before) (success : Success (EnumerationState.assimilate graph target source) before () after) : ProperState after := by
+  by_cases same : target = source
+  · subst source
+    have unchanged : after = before := by
+      simpa [Success, EnumerationState.assimilate, pure, StateT.pure, ExceptT.pure, ExceptT.mk, ExceptT.run] using success
+    simpa [unchanged] using proper
+  · simp only [EnumerationState.assimilate, same, ↓reduceIte] at success
+    obtain ⟨sourceValue, readSource, readingSource, continued⟩ := (success_bind _ _ _ _ _).mp success
+    obtain ⟨sourceProper, sourcePayload⟩ := rawValue_proper source before readSource sourceValue proper readingSource
+    cases sourceValue with
+    | eliminated =>
+        obtain ⟨_, same⟩ := (success_pure () () readSource after).mp continued
+        subst after
+        exact sourceProper
+    | enumerated fragment =>
+        obtain ⟨targetValue, readTarget, readingTarget, continued⟩ := (success_bind _ _ _ _ _).mp continued
+        exact (success_failure .invalidIntersection readTarget after () continued).elim
+    | unenumerated node scs =>
+        obtain ⟨targetValue, readTarget, readingTarget, continued⟩ := (success_bind _ _ _ _ _).mp continued
+        obtain ⟨targetProper, targetPayload⟩ := rawValue_proper target readSource readTarget targetValue sourceProper readingTarget
+        cases intersection : intersectValues graph (.unenumerated node scs) targetValue with
+        | none =>
+            simp only [intersection] at continued
+            exact (success_failure .invalidIntersection readTarget after () continued).elim
+        | some merged =>
+            have mergedProper := intersection_proper graph (.unenumerated node scs) targetValue merged sourcePayload targetPayload intersection
+            simp only [intersection] at continued
+            obtain ⟨ignored, checked, required, continued⟩ := (success_bind _ _ _ _ _).mp continued
+            cases ignored
+            obtain ⟨_, same⟩ := (require_success _ readTarget checked).mp required
+            subst checked
+            obtain ⟨ignored, targetWritten, targetWrite, continued⟩ := (success_bind _ _ _ _ _).mp continued
+            cases ignored
+            have targetWrittenProper := setValue_proper target merged readTarget targetWritten targetProper mergedProper targetWrite
+            obtain ⟨ignored, sourceWritten, sourceWrite, final⟩ := (success_bind _ _ _ _ _).mp continued
+            cases ignored
+            have sourceWrittenProper := setValue_proper source .eliminated targetWritten sourceWritten targetWrittenProper trivial sourceWrite
+            obtain rfl := (modify_success _ sourceWritten after).mp final
+            exact sourceWrittenProper

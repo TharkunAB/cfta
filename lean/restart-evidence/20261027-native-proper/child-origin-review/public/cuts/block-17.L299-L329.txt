@@ -1,0 +1,31 @@
+MicroCFTA.SourcePruningEnumerationFold.run_proper {EnumGuard : Type} {width : Nat}
+  [DecidableEq MicroCFTA.SourcePruningTemplates.Symbol]
+  [DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey MicroCFTA.SourcePruningTemplates.Symbol
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  [DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.Value MicroCFTA.SourcePruningTemplates.Symbol
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  (checkEmpty : Bool) (nativeFuel p h : Nat) (sources : List Nat)
+  (beforeCaller : MicroCFTA.SourceCurrentAllocatedPartialState.State width)
+  (before : MicroCFTA.EnumerationState.State MicroCFTA.SourcePruningTemplates.Symbol EnumGuard) (target : Nat)
+  (queries : MicroCFTA.SourceEndpointMemo.Memos)
+  (result :
+    Except
+      (MicroCFTA.SourceEqualityNativeDemand.Outcome width
+          (MicroCFTA.InternedConstructorTemplates.Value MicroCFTA.SourcePruningTemplates.Symbol
+            (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)) ⊕
+        MicroCFTA.SourceCurrentAllocatedConjunctionWorker.Outcome width)
+      (Option
+        (List
+          (Except MicroCFTA.EnumerationState.Error
+            (Unit × MicroCFTA.EnumerationState.State MicroCFTA.SourcePruningTemplates.Symbol EnumGuard)))))
+  (afterCaller : MicroCFTA.SourceCurrentAllocatedPartialState.State width)
+  (savedQueries : MicroCFTA.SourceEndpointMemo.Memos)
+  (after : MicroCFTA.EnumerationState.State MicroCFTA.SourcePruningTemplates.Symbol EnumGuard)
+  (proper : MicroCFTA.EnumerationProgress.ProperState before)
+  (observed :
+    MicroCFTA.SourcePruningEnumerationFold.run checkEmpty nativeFuel p h sources beforeCaller before target queries =
+      (result, afterCaller, savedQueries, after)) :
+  MicroCFTA.EnumerationProgress.ProperState after
+'MicroCFTA.SourcePruningEnumerationFold.run_proper' depends on axioms: [propext, Classical.choice, Quot.sound]

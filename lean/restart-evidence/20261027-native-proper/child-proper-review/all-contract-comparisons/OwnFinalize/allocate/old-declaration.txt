@@ -1,0 +1,5 @@
+theorem allocate_canonical
+    (heap : InternedConstructorTemplates.State Symbol NativeGuard) (node : Option Nat)
+    (before after : EnumerationExpandableIndex.Cached Symbol EnumGuard) (uv : Nat)
+    (canonical : Canonical before.core)
+    (observed : allocate heap node before = some (uv, after)) : Canonical after.core

@@ -1,0 +1,48 @@
+/-- The actual terminal partition retains valid tries and excludes terminals from its descendant bucket. -/
+theorem partition_descendants
+    (bucket here descendants : List Suspended)
+    (partitioned : bucket.partition (fun sc => EqualityTrie.isTerminal sc.trie) = (here, descendants)) :
+    descendants.any (fun sc => EqualityTrie.isTerminal sc.trie) = false ∧
+      (ValidSuspended bucket → ValidSuspended here ∧ ValidSuspended descendants) := by
+  have hereSame : bucket.filter (fun sc => EqualityTrie.isTerminal sc.trie) = here := by
+    simpa only [List.partition_eq_filter_filter] using congrArg Prod.fst partitioned
+  have descendantsSame : bucket.filter (fun sc => !(EqualityTrie.isTerminal sc.trie)) = descendants := by
+    simpa only [List.partition_eq_filter_filter, Function.comp_def] using congrArg Prod.snd partitioned
+  constructor
+  · apply List.any_eq_false.mpr
+    intro sc member terminal
+    have retained := (List.mem_filter.mp (show sc ∈ bucket.filter
+      (fun sc => !(EqualityTrie.isTerminal sc.trie)) by simpa only [descendantsSame] using member)).2
+    simp only [terminal, Bool.not_true, Bool.false_eq_true] at retained
+  · intro valid
+    constructor
+    · intro sc member
+      have present : sc ∈ bucket.filter (fun sc => EqualityTrie.isTerminal sc.trie) := by
+        simpa only [hereSame] using member
+      exact valid sc (List.mem_filter.mp present).1
+    · intro sc member
+      have present : sc ∈ bucket.filter (fun sc => !(EqualityTrie.isTerminal sc.trie)) := by
+        simpa only [descendantsSame] using member
+      exact valid sc (List.mem_filter.mp present).1
+
+/-- Genuine inherited validity and valid projected classes give valid actual child buckets. -/
+theorem children_valid
+    (edge : EdgeValue Symbol Constraint) (scs : List Suspended) (start : Nat)
+    (tries : List EqualityTrie.Trie) (inherited : ValidSuspended scs)
+    (projected : ∀ trie ∈ tries, EqualityTrie.Valid trie) :
+    ∀ incoming bucket,
+      (incoming, bucket) ∈ SourcePruningEnumerationEdgeInputs.children edge scs start tries →
+      ValidSuspended bucket := by
+  have own : ValidSuspended (suspendedVars start tries) := by
+    intro sc member
+    have present : sc.trie ∈ tries := by
+      rw [← suspendedVars_tries start tries]
+      exact List.mem_map.mpr ⟨sc, member, rfl⟩
+    exact projected sc.trie present
+  intro incoming bucket member
+  obtain ⟨indexed, _present, same⟩ := List.mem_map.mp member
+  cases same
+  intro sc retained
+  rcases List.mem_append.mp retained with inheritedMember | ownMember
+  · exact descend_valid scs indexed.2 inherited sc inheritedMember
+  · exact descend_valid (suspendedVars start tries) indexed.2 own sc ownMember

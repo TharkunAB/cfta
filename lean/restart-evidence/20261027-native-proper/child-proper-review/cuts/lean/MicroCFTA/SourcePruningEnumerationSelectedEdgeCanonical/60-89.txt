@@ -1,0 +1,30 @@
+    SourcePruningEnumerationEdgeInputs.complete caller.checked.native.machine.heap parentEntry edges depth free
+      edge scs roots initial.ready.semantic.ready parentAvailable parentClosed selected before safe realized
+      paths counts flags bounded pending allowed tries residual projected
+  have ownCanonical : Canonical own.core := by
+    rw [ownCore]
+    exact suspension_canonical tries.length before.core canonical
+  have triesValid := (SourcePruningEnumerationEdgeProjectionLanguage.selected_projected_complete
+    caller.checked.native.machine.heap parentEntry edges depth free edge
+    initial.ready.semantic.ready initial.annotation_heap parentAvailable selected tries residual projected).1
+  let inputs := SourcePruningEnumerationEdgeInputs.children edge scs before.core.counter tries
+  have inputsValid : ∀ incoming bucket, (incoming, bucket) ∈ inputs → ValidSuspended bucket :=
+    SourcePruningEnumerationOrdinarySemanticGates.children_valid edge scs before.core.counter tries
+      inherited triesValid
+  have readback : ((inputs.map (fun input =>
+      (input.1, input.2, SourcePruningEnumerationShallowChild.prepareChild (EnumGuard := Constraint) input.2 input.1))).map
+      (fun input => (input.1, input.2.1))) = inputs := by
+    simp only [List.map_map]
+    exact List.map_id _
+  simp only [run, ownRun] at completed
+  rw [readback] at completed
+  cases childrenRun : SourcePruningEnumerationChildTraversal.run checkEmpty r n p h k
+      inputs caller own memos.query with
+  | stopped fragments observation candidate =>
+      rw [childrenRun] at completed
+      cases completed
+  | complete fragments reachedCaller saved reached =>
+      rw [childrenRun] at completed
+      have same : after = finish residual (.node edge.entry.key.symbol fragments) reached := by
+        exact ((Result.complete.inj completed).2.2.2).symm
+      rw [same]

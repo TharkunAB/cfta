@@ -1,0 +1,59 @@
+/-- Every available cached result erases to the original prepared action. -/
+theorem erase_some
+    (heap : InternedConstructorTemplates.State Symbol NativeGuard)
+    (fuel : Nat) (scs : List EnumerationState.Suspended)
+    (value : InternedConstructorTemplates.Value Symbol NativeGuard)
+    (before : EnumerationExpandableIndex.Cached Symbol EnumGuard)
+    (rows : List (Fragments.Fragment Symbol × EnumerationExpandableIndex.Cached Symbol EnumGuard))
+    (cached : prepareChild heap fuel scs value before = some rows) :
+    (SourcePruningEnumerationShallowChild.prepareChild scs value).map
+      (fun action => ExceptT.run (action before.core)) =
+      some (rows.map (fun row => .ok (row.1, row.2.core))) := by
+  cases value with
+  | empty =>
+    simp only [prepareChild, Option.some.injEq] at cached
+    subst rows
+    rfl
+  | reference name => simp [prepareChild] at cached
+  | node entry edges depth free =>
+    by_cases terminal : scs.any (fun sc => EqualityTrie.isTerminal sc.trie) = true
+    · simp [prepareChild, SourcePruningEnumerationCachedChild.prepareOrdinary, terminal] at cached
+    simp only [prepareChild, Option.map_eq_some_iff] at cached
+    obtain ⟨result, prepared, rowsSame⟩ := cached
+    subst rows
+    simp only [SourcePruningEnumerationCachedChild.prepareOrdinary, terminal, Bool.false_eq_true,
+      ↓reduceIte, encodeNode, Option.bind_some, Option.bind_eq_some_iff,
+      Option.map_eq_some_iff] at prepared
+    obtain ⟨allocation, allocated, after, written, resultSame⟩ := prepared
+    subst result
+    simp only [SourcePruningEnumerationCachedChild.allocate, Option.map_eq_some_iff] at allocated
+    obtain ⟨flag, _classified, allocationSame⟩ := allocated
+    subst allocation
+    simp only [SourcePruningEnumerationCachedChild.writeSlot, Option.bind_eq_some_iff] at written
+    obtain ⟨old, _stored, nativeWritten⟩ := written
+    simp only [SourcePruningEnumerationNativeIndex.write, Option.bind_eq_some_iff,
+      Option.some.injEq] at nativeWritten
+    obtain ⟨afterFlag, _afterClassified, removed, _removedCounts, saved, _savedCounts, afterSame⟩ := nativeWritten
+    subst after
+    simp only [SourcePruningEnumerationShallowChild.prepareChild, terminal, Bool.false_eq_true,
+      ↓reduceIte, encodeNode, Option.map_some, List.map_cons, List.map_nil]
+    rw [EnumerationCorrectness.bind_single _ _ before.core
+      (EnumerationState.allocated (some (entry.identity + 1)) before.core) before.core.counter
+      (EnumerationState.allocate_exact _ _)]
+    rfl
+  | union entry _ _ _ | mu entry _ _ _ =>
+    by_cases terminal : scs.any (fun sc => EqualityTrie.isTerminal sc.trie) = true
+    · simp [prepareChild, terminal] at cached
+    simp only [prepareChild, terminal, Bool.false_eq_true, ↓reduceIte,
+      encodeNode, Option.bind_some, Option.map_eq_some_iff] at cached
+    obtain ⟨allocation, allocated, rowsSame⟩ := cached
+    subst rows
+    simp only [SourcePruningEnumerationCachedChild.allocate, Option.map_eq_some_iff] at allocated
+    obtain ⟨flag, _classified, allocationSame⟩ := allocated
+    subst allocation
+    simp only [SourcePruningEnumerationShallowChild.prepareChild, terminal, Bool.false_eq_true,
+      ↓reduceIte, encodeNode, Option.map_some, List.map_cons, List.map_nil]
+    rw [EnumerationCorrectness.bind_single _ _ before.core
+      (EnumerationState.allocated (some (entry.identity + 1)) before.core) before.core.counter
+      (EnumerationState.allocate_exact _ _)]
+    rfl

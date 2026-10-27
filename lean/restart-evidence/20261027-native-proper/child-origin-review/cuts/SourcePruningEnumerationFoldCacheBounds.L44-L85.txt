@@ -1,0 +1,42 @@
+/-- The raw singleton core is the exact returned outer fold core. -/
+theorem singleton_core
+    (checkEmpty : Bool) (nativeFuel p h : Nat) (sources : List Nat)
+    (beforeCaller : Caller width) (before : Core) (target : Nat) (queries : Queries)
+    (returned : Core) (afterCaller : Caller width) (savedQueries : Queries) (outer : Core)
+    (observed : run checkEmpty nativeFuel p h sources beforeCaller before target queries =
+      (.ok (some [.ok ((), returned)]), afterCaller, savedQueries, outer)) :
+    returned = outer := by
+  induction sources generalizing beforeCaller before queries with
+  | nil =>
+    simp only [run, Prod.mk.injEq, Except.ok.injEq, Option.some.injEq,
+      List.cons.injEq, and_true, true_and] at observed
+    rcases observed with ⟨rfl, _callerSame, _querySame, rfl⟩
+    rfl
+  | cons source rest ih =>
+    rcases dispatchObserved : SourcePruningEnumerationDispatch.dispatch checkEmpty nativeFuel p h
+        beforeCaller before source target queries with ⟨dispatchResult, reachedCaller, saved⟩
+    cases dispatchResult with
+    | error fault => simp only [run, dispatchObserved] at observed; cases observed
+    | ok possible =>
+      cases possible with
+      | none => simp only [run, dispatchObserved] at observed; cases observed
+      | some action =>
+        cases rawObserved : ExceptT.run (action before) with
+        | nil => simp only [run, dispatchObserved, rawObserved] at observed; cases observed
+        | cons first tail =>
+          cases first with
+          | error fault => simp only [run, dispatchObserved, rawObserved] at observed; cases observed
+          | ok pair =>
+            rcases pair with ⟨valueUnit, middle⟩
+            cases valueUnit
+            cases tail with
+            | cons second remaining =>
+              simp only [run, dispatchObserved, rawObserved] at observed
+              cases observed
+            | nil =>
+              simp only [run, dispatchObserved, rawObserved] at observed
+              exact ih reachedCaller middle saved observed
+
+/-- Every actual returned fold prefix preserves counter and suspended mass, for every result tag. -/
+theorem observed_counter_mass
+    (checkEmpty : Bool) (nativeFuel p h : Nat) (sources : List Nat)

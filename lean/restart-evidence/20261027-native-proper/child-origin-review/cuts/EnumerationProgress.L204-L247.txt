@@ -1,0 +1,44 @@
+/-- The terminal node branch stores only the inherited proper descendant paths. -/
+theorem enumerateNode_terminal_proper (graph : Graph Symbol Guard) (fuel node : Nat) (scs : List Suspended)
+    (first : Suspended) (rest : List Suspended) (before after : State Symbol Guard) (fragment : Fragment Symbol)
+    (proper : ProperState before) (inputs : ProperInputs scs) (nonempty : graph.node node ≠ .empty)
+    (terminal : scs.filter (fun sc => EqualityTrie.isTerminal sc.trie) = first :: rest)
+    (success : Success (enumerateNode graph (fuel + 1) scs node) before fragment after) : ProperState after := by
+  rw [terminal_branch graph fuel node scs first rest nonempty terminal] at success
+  obtain ⟨root, merged, merging, continued⟩ := (success_bind _ _ _ _ _).mp success
+  have mergedProper := mergeTerminal_proper graph (fuel + 1) first rest before merged root proper merging
+  obtain ⟨ignored, restricted, restriction, final⟩ := (success_bind _ _ _ _ _).mp continued
+  cases ignored
+  have restrictedProper := mergeNode_proper graph (fuel + 1) root node _ merged restricted mergedProper (proper_below scs inputs) restriction
+  obtain ⟨_, same⟩ := (success_pure (.hole root) fragment restricted after).mp final
+  subst after
+  exact restrictedProper
+
+/-- A fresh graph or equality variable starts with no suspended paths. -/
+theorem allocation_proper (node : Option Nat) (state : State Symbol Guard) (proper : ProperState state) :
+    ProperState (allocated node state) := by
+  intro value member
+  rcases List.mem_append.mp member with old | fresh
+  · exact proper value old
+  · have same : value = .unenumerated node [] := by simpa using fresh
+    subst value
+    cases node <;> simp [ProperValue]
+
+/-- Repeated equality allocation preserves all prior proper paths. -/
+theorem suspension_proper (count : Nat) (state : State Symbol Guard) (proper : ProperState state) :
+    ProperState (suspendedState count state) := by
+  induction count generalizing state with
+  | zero => exact proper
+  | succ count ih => exact ih (allocated none state) (allocation_proper none state proper)
+
+/-- Residual recording changes no pending slot. -/
+theorem recordResidual_proper (residual : Option Guard) (fragment : Fragment Symbol) (before after : State Symbol Guard)
+    (proper : ProperState before) (success : Success (recordResidual residual fragment) before () after) : ProperState after := by
+  cases residual with
+  | none =>
+      obtain ⟨_, same⟩ := (success_pure () () before after).mp success
+      subst after
+      exact proper
+  | some guard =>
+      obtain rfl := (modify_success _ before after).mp success
+      exact proper

@@ -1,0 +1,41 @@
+local notation "Raw" => List (Except EnumerationState.Error (Unit × Core))
+attribute [local instance] SourcePruningEnumerationIncomingNode.incomingNodeMonadList
+
+private theorem finish_singleton_proper
+    {before returned : Core} {target handle : Nat} {oldNode : Option Nat}
+    {incomingScs oldScs : List Suspended} {replacement : Node}
+    (valid : ProperState before) (inputs : ∀ sc ∈ incomingScs, ProperTrie sc.trie)
+    (stored : before.values[target]? = some (.unenumerated oldNode oldScs))
+    (observed : ExceptT.run (finish target handle incomingScs oldScs replacement before) =
+      [.ok ((), returned)]) : ProperState returned := by
+  let written : Core :=
+    {before with
+      values := before.values.set target (.unenumerated (some handle) (incomingScs ++ oldScs))
+      recursionAncestry := fun other => if other = target then
+        (before.expansionAncestry ++ before.recursionAncestry target).eraseDups
+        else before.recursionAncestry other}
+  have rawRun : ExceptT.run (finish target handle incomingScs oldScs replacement before) =
+      match replacement with
+      | .empty => []
+      | _ => [.ok ((), written)] := by
+    cases replacement <;> rfl
+  rw [rawRun] at observed
+  have coreSame : written = returned := by
+    split at observed
+    · cases observed
+    · exact (Prod.mk.inj (Except.ok.inj (List.cons.inj observed).1)).2
+  rw [← coreSame]
+  have oldValid : ∀ sc ∈ oldScs, ProperTrie sc.trie :=
+    pending_paths_proper oldNode oldScs (valid (.unenumerated oldNode oldScs) (List.mem_of_getElem? stored))
+  apply proper_set target (.unenumerated (some handle) (incomingScs ++ oldScs)) before valid
+  intro sc member
+  rcases List.mem_append.mp member with incoming | old
+  · exact inputs sc incoming
+  · exact oldValid sc old
+
+private theorem finish_reply_proper
+    {Fault : Type _} {before returned : Core} {target handle : Nat} {oldNode : Option Nat}
+    {incomingScs oldScs : List Suspended} {replacement : Node}
+    (valid : ProperState before) (inputs : ∀ sc ∈ incomingScs, ProperTrie sc.trie)
+    (stored : before.values[target]? = some (.unenumerated oldNode oldScs))
+    (observed : (Except.ok (some (ExceptT.run

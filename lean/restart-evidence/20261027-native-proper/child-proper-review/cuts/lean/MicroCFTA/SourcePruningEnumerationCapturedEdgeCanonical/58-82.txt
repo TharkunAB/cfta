@@ -1,0 +1,25 @@
+    (completed : run checkEmpty r n p h k uv scs edge caller before memos.query =
+      some (.complete fragment afterCaller savedQueries after)) : Canonical after.core := by
+  obtain ⟨value, lookup, available, closed⟩ := realized uv handle scs stored
+  have same : value = .node parentEntry edges depth free := Option.some.inj (lookup.symm.trans decoded)
+  subst value
+  have bounded : ∀ sc ∈ scs, sc.var < before.core.counter :=
+    ready.safe.1.values _ (List.mem_of_getElem? stored)
+  have inherited : ValidSuspended scs := canonical _ (List.mem_of_getElem? stored)
+  unfold run at completed
+  cases selectedRun : SourcePruningEnumerationSelectedEdge.run checkEmpty r n p h k
+      scs edge caller before memos.query with
+  | unhandled => rw [selectedRun] at completed; cases completed
+  | rejected reachedCaller saved reached => rw [selectedRun] at completed; cases completed
+  | stopped fragments observation candidate => rw [selectedRun] at completed; cases completed
+  | complete produced reachedCaller saved reached =>
+      rw [selectedRun] at completed
+      simp only [Option.map_eq_some_iff] at completed
+      obtain ⟨finished, finishRun, fields⟩ := completed
+      have cacheSame : finished = after := (SourcePruningEnumerationSelectedEdge.Result.complete.inj fields).2.2.2
+      rw [← cacheSame]
+      exact SourcePruningEnumerationFinalize.run_canonical reachedCaller.checked.native.machine.heap k uv
+        produced reached finished
+        (SourcePruningEnumerationSelectedEdge.complete_canonical caller before checkEmpty parentEntry edges depth free
+          edge scs roots memos initial available closed selected ready.safe realized paths counts flags bounded
+          pending allowed tries residual projected canonical inherited selectedRun) finishRun

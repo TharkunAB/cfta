@@ -1,0 +1,7 @@
+theorem prepared_canonical
+    (scs : List Suspended) (value : Value Symbol NativeGuard)
+    (before after : EnumerationState.State Symbol EnumGuard)
+    (action : EnumerateM Symbol EnumGuard (Fragment Symbol)) (fragment : Fragment Symbol)
+    (canonical : Canonical before) (inputs : ValidSuspended scs)
+    (prepared : prepareChild scs value = some action)
+    (success : Success action before fragment after) : Canonical after

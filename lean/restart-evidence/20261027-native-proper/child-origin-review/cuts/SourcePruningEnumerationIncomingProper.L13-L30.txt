@@ -1,0 +1,18 @@
+private theorem pending_paths_proper {Symbol : Type} (node : Option Nat) (scs : List EnumerationState.Suspended)
+    (payload : EnumerationProgress.ProperValue
+      (.unenumerated node scs : EnumerationState.UVarValue Symbol)) :
+    ∀ sc ∈ scs, EnumerationProgress.ProperTrie sc.trie := by
+  cases node with
+  | none =>
+      have empty : scs = [] := payload
+      intro sc member
+      rw [empty] at member
+      cases member
+  | some _handle => exact payload
+
+private theorem proper_set {Symbol Guard : Type} (target : Nat) (value : EnumerationState.UVarValue Symbol)
+    (before : EnumerationState.State Symbol Guard)
+    (proper : EnumerationProgress.ProperState before) (payload : EnumerationProgress.ProperValue value) :
+    EnumerationProgress.ProperState {before with values := before.values.set target value} := by
+  intro stored member
+  rcases List.mem_or_eq_of_mem_set member with old | same

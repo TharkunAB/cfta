@@ -1,0 +1,33 @@
+MicroCFTA.SourcePruningEnumerationIncomingNode.run_proper {width : Nat}
+  [DecidableEq MicroCFTA.SourcePruningTemplates.Symbol]
+  [DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey MicroCFTA.SourcePruningTemplates.Symbol
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  [DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.Value MicroCFTA.SourcePruningTemplates.Symbol
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  (checkEmpty : Bool) (r n p h : Nat) (caller : MicroCFTA.SourceCurrentAllocatedPartialState.State width)
+  (before :
+    MicroCFTA.EnumerationState.State MicroCFTA.SourcePruningTemplates.Symbol
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+  (target : Nat)
+  (incoming :
+    MicroCFTA.InternedConstructorTemplates.Value MicroCFTA.SourcePruningTemplates.Symbol
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+  (incomingScs : List MicroCFTA.EnumerationState.Suspended) (queries : MicroCFTA.SourceEndpointMemo.Memos)
+  (valid : MicroCFTA.EnumerationProgress.ProperState before)
+  (inputs :
+    ∀ (sc : MicroCFTA.EnumerationState.Suspended),
+      sc ∈ incomingScs → MicroCFTA.EnumerationProgress.ProperTrie sc.trie) :
+  MicroCFTA.EnumerationProgress.ProperState
+      (MicroCFTA.SourcePruningEnumerationIncomingNode.run checkEmpty r n p h caller before target incoming incomingScs
+              queries).snd.snd.snd ∧
+    ∀
+      (returned :
+        MicroCFTA.EnumerationState.State MicroCFTA.SourcePruningTemplates.Symbol
+          (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)),
+      (MicroCFTA.SourcePruningEnumerationIncomingNode.run checkEmpty r n p h caller before target incoming incomingScs
+              queries).fst =
+          Except.ok (some [Except.ok ((), returned)]) →
+        MicroCFTA.EnumerationProgress.ProperState returned
+'MicroCFTA.SourcePruningEnumerationIncomingNode.run_proper' depends on axioms: [propext, Classical.choice, Quot.sound]

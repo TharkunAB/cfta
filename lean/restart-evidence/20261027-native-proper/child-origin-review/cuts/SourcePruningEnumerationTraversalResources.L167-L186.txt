@@ -1,0 +1,20 @@
+        let result : SourcePruningEnumerationChildTraversal.Result (bits + 2) := match tailResult with
+          | .complete fragments caller queries cache => .complete (fragment :: fragments) caller queries cache
+          | .stopped fragments observation candidate => .stopped (fragment :: fragments) observation candidate
+        refine ⟨r + tailR, n + tailN, max p tailP, max h tailH, k + tailK,
+          fragment :: tailFragments, afterCaller, after, savedQueries, final, next, afterRoots, result,
+          ?_, headPost.trans tailPost, querySame, Nat.le_trans growth tailGrowth, afterPaths,
+          storage, afterRealized, afterCounts, afterFlags, headOrigin.trans tailOrigin, ?_, ?_, ?_,
+          (fun valid => tailPending (headPending valid)), ?_, ?_, finalFits, finalKnown⟩
+        · intro er en P H ek largeP largeH
+          have head := headRun (tailR + er) (tailN + en) P H (tailK + ek)
+            (Nat.le_trans (Nat.le_max_left _ _) largeP) (Nat.le_trans (Nat.le_max_left _ _) largeH)
+          have tail := tailRun (r + er) (n + en) P H (k + ek)
+            (Nat.le_trans (Nat.le_max_right _ _) largeP) (Nat.le_trans (Nat.le_max_right _ _) largeH)
+          have headExact : SourcePruningEnumerationChildDispatch.run checkEmpty ((r + tailR) + er)
+              ((n + tailN) + en) P H ((k + tailK) + ek) bucket incoming beforeCaller before memos.query =
+              ((.ok (some [.ok (fragment, middle.core)]), middleCaller, middleQueries, outer, waiting), some middle) := by
+            simpa only [Nat.add_assoc, singleton] using head
+          have tailExact : SourcePruningEnumerationChildTraversal.run checkEmpty ((r + tailR) + er)
+              ((n + tailN) + en) P H ((k + tailK) + ek) rest middleCaller middle middleQueries = tailResult := by
+            simpa only [headQueries, Nat.add_assoc, Nat.add_comm, Nat.add_left_comm] using tail

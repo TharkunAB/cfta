@@ -1,0 +1,12 @@
+MicroCFTA.SourcePruningEnumerationTerminalPrefix.run_proper {EnumGuard : Type} (fuel : Nat)
+  (first : MicroCFTA.EnumerationState.Suspended) (rest : List MicroCFTA.EnumerationState.Suspended)
+  (waiting : MicroCFTA.EnumerationWaitingIndex.Waiting)
+  (before after : MicroCFTA.EnumerationState.State MicroCFTA.SourcePruningTemplates.Symbol EnumGuard)
+  (recorded : List Nat) (winner : Nat) (moved : MicroCFTA.EnumerationWaitingIndex.Waiting)
+  (proper : MicroCFTA.EnumerationProgress.ProperState before)
+  (success :
+    MicroCFTA.EnumerationCorrectness.Success
+      (MicroCFTA.SourcePruningEnumerationTerminalPrefix.run fuel first rest waiting) before (recorded, winner, moved)
+      after) :
+  MicroCFTA.EnumerationProgress.ProperState after
+'MicroCFTA.SourcePruningEnumerationTerminalPrefix.run_proper' depends on axioms: [propext, Classical.choice, Quot.sound]

@@ -1,0 +1,26 @@
+/-- The exact final captured-slot write preserves canonical stored tries. -/
+theorem written_canonical
+    (before after : EnumerationState.State Symbol EnumGuard) (target : Nat) (fragment : Fragments.Fragment Symbol)
+    (canonical : Canonical before)
+    (written : after = {before with
+      values := before.values.set target (.enumerated fragment)
+      expansionAncestry := []}) : Canonical after := by
+  subst after
+  exact set_canonical target (.enumerated fragment) before canonical
+    (by simp only [references, ValidSuspended, List.not_mem_nil, false_implies, implies_true])
+
+/-- Every actual indexed finalization cache has canonical stored tries. -/
+theorem run_canonical
+    (heap : InternedConstructorTemplates.State Symbol NativeGuard) (fuel target : Nat)
+    (fragment : Fragments.Fragment Symbol) (before after : EnumerationExpandableIndex.Cached Symbol EnumGuard)
+    (canonical : Canonical before.core)
+    (observed : run heap fuel target fragment before = some after) : Canonical after.core := by
+  simp only [run, Option.bind_eq_some_iff] at observed
+  obtain ⟨_old, _stored, written⟩ := observed
+  simp only [SourcePruningEnumerationNativeIndex.write, Option.bind_eq_some_iff, Option.some.injEq] at written
+  obtain ⟨_flag, _classified, _removed, _removedCounts, _saved, _savedCounts, same⟩ := written
+  subst after
+  exact set_canonical target (.enumerated fragment) _ canonical
+    (by simp only [references, ValidSuspended, List.not_mem_nil, false_implies, implies_true])
+
+end MicroCFTA.SourcePruningEnumerationFinalize

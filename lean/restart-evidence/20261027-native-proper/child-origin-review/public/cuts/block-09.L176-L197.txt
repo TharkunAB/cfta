@@ -1,0 +1,22 @@
+MicroCFTA.SourcePruningEnumerationDispatch.dispatch_proper {EnumGuard : Type} {width : Nat}
+  [DecidableEq MicroCFTA.SourcePruningTemplates.Symbol]
+  [DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey MicroCFTA.SourcePruningTemplates.Symbol
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  [DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.Value MicroCFTA.SourcePruningTemplates.Symbol
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  (checkEmpty : Bool) (nativeFuel p h : Nat) (beforeCaller : MicroCFTA.SourceCurrentAllocatedPartialState.State width)
+  (before : MicroCFTA.EnumerationState.State MicroCFTA.SourcePruningTemplates.Symbol EnumGuard) (source target : Nat)
+  (queries : MicroCFTA.SourceEndpointMemo.Memos)
+  (action : MicroCFTA.EnumerationState.EnumerateM MicroCFTA.SourcePruningTemplates.Symbol EnumGuard Unit)
+  (afterCaller : MicroCFTA.SourceCurrentAllocatedPartialState.State width)
+  (savedQueries : MicroCFTA.SourceEndpointMemo.Memos)
+  (after : MicroCFTA.EnumerationState.State MicroCFTA.SourcePruningTemplates.Symbol EnumGuard)
+  (proper : MicroCFTA.EnumerationProgress.ProperState before)
+  (selected :
+    MicroCFTA.SourcePruningEnumerationDispatch.dispatch checkEmpty nativeFuel p h beforeCaller before source target
+        queries =
+      (Except.ok (some action), afterCaller, savedQueries))
+  (completed : (action before).run = [Except.ok ((), after)]) : MicroCFTA.EnumerationProgress.ProperState after
+'MicroCFTA.SourcePruningEnumerationDispatch.dispatch_proper' depends on axioms: [propext, Classical.choice, Quot.sound]

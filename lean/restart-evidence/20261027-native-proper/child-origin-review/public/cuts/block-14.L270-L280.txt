@@ -1,0 +1,11 @@
+MicroCFTA.SourcePruningEnumerationFinalize.written_proper {EnumGuard : Type}
+  (before after : MicroCFTA.EnumerationState.State MicroCFTA.SourcePruningTemplates.Symbol EnumGuard) (target : Nat)
+  (fragment : MicroCFTA.Fragments.Fragment MicroCFTA.SourcePruningTemplates.Symbol)
+  (proper : MicroCFTA.EnumerationProgress.ProperState before)
+  (written :
+    after =
+      { counter := before.counter, representatives := before.representatives,
+        values := before.values.set target (MicroCFTA.EnumerationState.UVarValue.enumerated fragment),
+        obligations := before.obligations, recursionAncestry := before.recursionAncestry, expansionAncestry := [] }) :
+  MicroCFTA.EnumerationProgress.ProperState after
+'MicroCFTA.SourcePruningEnumerationFinalize.written_proper' depends on axioms: [propext, Quot.sound]

@@ -1,0 +1,41 @@
+section runtime
+variable [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Constraint)] [DecidableEq Node]
+
+/-- Every actual read and successful singleton retain proper pending paths at every fixed bound. -/
+theorem run_proper
+    (checkEmpty : Bool) (r n p h : Nat) (caller : Caller width) (before : Core)
+    (target : Nat) (incoming : Node) (incomingScs : List Suspended) (queries : Queries)
+    (valid : ProperState before) (inputs : ∀ sc ∈ incomingScs, ProperTrie sc.trie) :
+    ProperState (run checkEmpty r n p h caller before target incoming incomingScs queries).2.2.2 ∧
+      ∀ returned, (run checkEmpty r n p h caller before target incoming incomingScs queries).1 =
+        .ok (some [.ok ((), returned)]) → ProperState returned := by
+  generalize observedEq : run checkEmpty r n p h caller before target incoming incomingScs queries = observed
+  obtain ⟨result, reachedCaller, savedQueries, read⟩ := observed
+  dsimp only
+  unfold run at observedEq
+  split at observedEq
+  next =>
+    simp only [Prod.mk.injEq] at observedEq
+    rcases observedEq with ⟨rfl, rfl, rfl, rfl⟩
+    refine ⟨valid, ?_⟩
+    intro returned singleton
+    simp at singleton
+  next =>
+    repeat' first
+      | (have readSame := congrArg (fun observed : _ × Caller width × Queries × Core => observed.2.2.2) observedEq
+         have resultSame := congrArg Prod.fst observedEq
+         dsimp only at readSame resultSame
+         constructor
+         · rw [← readSame]
+           change ProperState before
+           exact valid
+         · intro returned singleton
+           rw [← resultSame] at singleton
+           solve
+           | simp at singleton
+           | apply finish_reply_proper (observed := singleton)
+             · change ProperState before
+               exact valid
+             · exact inputs
+             · assumption)
+      | split at observedEq

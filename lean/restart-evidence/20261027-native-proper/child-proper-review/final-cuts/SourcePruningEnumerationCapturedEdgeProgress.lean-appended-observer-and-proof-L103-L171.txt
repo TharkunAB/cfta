@@ -1,0 +1,69 @@
+              ambient caller.checked.native.machine.heap)
+            (fun guard term => SourceEqualityPCSGuard.holds formulas solver guard term = true)
+            extended before.core ∧
+          result = .complete fragment afterCaller savedQueries after ∧
+          Fragments.fill extended fragment = assignment uv ∧
+          Satisfies
+            (SourcePruningEnumerationNativeLanguage.handles (SourceEqualityPCSGuard.holds formulas solver)
+              ambient afterCaller.checked.native.machine.heap)
+            (fun guard term => SourceEqualityPCSGuard.holds formulas solver guard term = true)
+            extended after.core) ∧
+      (EnumerationProgress.ProperState before.core →
+      ∀ (ambient : InternedGuardedLanguage.Env Symbol)
+        (assignment : Nat → Language.Term Symbol),
+        Satisfies
+          (SourcePruningEnumerationNativeLanguage.handles (SourceEqualityPCSGuard.holds formulas solver)
+            ambient caller.checked.native.machine.heap)
+          (fun guard term => SourceEqualityPCSGuard.holds formulas solver guard term = true)
+          assignment before.core →
+        InternedGuardedLanguage.edgeMeaning (SourceEqualityPCSGuard.holds formulas solver)
+          ambient edge (assignment uv) →
+        ∃ (extended : Nat → Language.Term Symbol) (fragment : Fragment),
+          (∀ old < before.core.counter, extended old = assignment old) ∧
+          Satisfies
+            (SourcePruningEnumerationNativeLanguage.handles (SourceEqualityPCSGuard.holds formulas solver)
+              ambient caller.checked.native.machine.heap)
+            (fun guard term => SourceEqualityPCSGuard.holds formulas solver guard term = true)
+            extended before.core ∧
+          result = .complete fragment afterCaller savedQueries after ∧
+          Fragments.fill extended fragment = assignment uv ∧
+          Satisfies
+            (SourcePruningEnumerationNativeLanguage.handles (SourceEqualityPCSGuard.holds formulas solver)
+              ambient afterCaller.checked.native.machine.heap)
+            (fun guard term => SourceEqualityPCSGuard.holds formulas solver guard term = true)
+            extended after.core ∧
+          EnumerationProgress.ProperState after.core ∧
+          ∀ (Typing : Type)
+            (stop : Option (SourcePruningRecordTypes.Metadata Typing → Nat → Bool))
+            (order : SourcePruningRecordTypes.Metadata Typing → List Nat → Option Nat)
+            (metadata : SourcePruningRecordTypes.Metadata Typing),
+            SourcePruningEnumerationRestart.decision stop order metadata after ≠ some .stuck) := by
+  obtain ⟨r, n, p, h, k, afterCaller, after, savedQueries, final, next, afterRoots, result,
+    running, post, querySame, growth, afterPaths, storage, afterRealized, afterCounts, afterFlags,
+    origin, retained, protects, pendingHistory, shape, returnedFits, returnedKnown, accepting⟩ :=
+    complete_with_history_resources_accepting seed formulas solver inventory caller before checkEmpty
+      uv handle scs parentEntry edges depth free edge roots memos initial ready stored decoded realized
+      selected paths counts flags pending allowed tries residual projected fits reserved known
+  refine ⟨r, n, p, h, k, afterCaller, after, savedQueries, final, next, afterRoots, result,
+    ⟨running, post, querySame, growth, afterPaths, storage, afterRealized, afterCounts, afterFlags,
+      origin, retained, protects, pendingHistory, shape, returnedFits, returnedKnown, accepting⟩, ?_⟩
+  intro proper ambient assignment satisfied accepted
+  obtain ⟨extended, fragment, agree, originalSatisfied, completed, filled, afterSatisfied⟩ :=
+    accepting ambient assignment satisfied accepted
+  have actual : run checkEmpty r n p h k uv scs edge caller before memos.query =
+      some (.complete fragment afterCaller savedQueries after) := by
+    have observed := running 0 0 p h 0 (Nat.le_refl _) (Nat.le_refl _)
+    simpa only [Nat.add_zero, completed] using observed
+  have afterProper := complete_proper formulas solver inventory caller before checkEmpty
+    uv handle scs parentEntry edges depth free edge roots memos initial ready stored decoded realized
+    selected paths counts flags pending allowed tries residual projected proper actual
+  have afterSafe : Safe after.core := by
+    rcases shape with ⟨_produced, _same, safe, _rest⟩ | ⟨_fragments, _outer, _waiting, stopped⟩
+    · exact safe
+    · rw [completed] at stopped
+      cases stopped
+  have afterValid : SourcePruningEnumerationNativeBranchCompletion.CacheValid afterCaller after :=
+    ⟨afterRoots, afterPaths, storage, afterRealized, afterCounts, afterFlags⟩
+  refine ⟨extended, fragment, agree, originalSatisfied, completed, filled, afterSatisfied, afterProper, ?_⟩
+  intro Typing stop order metadata
+  exact SourcePruningEnumerationRestart.not_stuck_of_proper formulas solver stop order metadata

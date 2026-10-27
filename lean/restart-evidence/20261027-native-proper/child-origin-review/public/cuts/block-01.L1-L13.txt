@@ -1,0 +1,13 @@
+MicroCFTA.SourcePruningEnumerationShallowChild.prepared_proper {EnumGuard NativeGuard : Type}
+  (scs : List MicroCFTA.EnumerationState.Suspended)
+  (value : MicroCFTA.InternedConstructorTemplates.Value MicroCFTA.SourcePruningTemplates.Symbol NativeGuard)
+  (before after : MicroCFTA.EnumerationState.State MicroCFTA.SourcePruningTemplates.Symbol EnumGuard)
+  (action :
+    MicroCFTA.EnumerationState.EnumerateM MicroCFTA.SourcePruningTemplates.Symbol EnumGuard
+      (MicroCFTA.Fragments.Fragment MicroCFTA.SourcePruningTemplates.Symbol))
+  (fragment : MicroCFTA.Fragments.Fragment MicroCFTA.SourcePruningTemplates.Symbol)
+  (proper : MicroCFTA.EnumerationProgress.ProperState before) (inputs : MicroCFTA.EnumerationProgress.ProperInputs scs)
+  (prepared : MicroCFTA.SourcePruningEnumerationShallowChild.prepareChild scs value = some action)
+  (success : MicroCFTA.EnumerationCorrectness.Success action before fragment after) :
+  MicroCFTA.EnumerationProgress.ProperState after
+'MicroCFTA.SourcePruningEnumerationShallowChild.prepared_proper' depends on axioms: [propext, Quot.sound]

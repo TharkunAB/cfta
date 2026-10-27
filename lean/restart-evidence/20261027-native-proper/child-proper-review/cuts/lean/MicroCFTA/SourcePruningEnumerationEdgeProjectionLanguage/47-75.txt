@@ -1,0 +1,29 @@
+/-- A current annotation heap supplies cached projection semantics for the selected resident edge. -/
+theorem selected_projected_complete [DecidableEq Formula]
+    (heap : State (SourceObservations.Label Formula) (SourceSymbolicIndex.Constraint Formula))
+    (parentEntry : Cache.Interned InternedBinderProtocol.NodeKey)
+    (edges : List (EdgeValue (SourceObservations.Label Formula) (SourceSymbolicIndex.Constraint Formula)))
+    (depth : Nat) (free : List InternedBinderProtocol.Reference)
+    (edge : EdgeValue (SourceObservations.Label Formula) (SourceSymbolicIndex.Constraint Formula))
+    (ready : SourceEqualityRequiredCache.Ready heap)
+    (annotated : SourceEqualityAnnotationHeap.Heap
+      (fun guard => SourceEqualityGuardReadback.Cached guard.equalities) heap)
+    (parentAvailable : Available heap (.node parentEntry edges depth free))
+    (selected : edge ∈ edges)
+    (tries : List EqualityTrie.Trie)
+    (residual : Option (SourceSymbolicIndex.Constraint Formula))
+    (projected : SourcePruningEnumerationConstraint.project edge.entry.key.constraint = some (tries, residual)) :
+    (∀ trie ∈ tries, EqualityTrie.Valid trie) ∧
+      ∀ (formulas : SourceGuards.Formulas Formula)
+        (solver : SourceGuards.Entailment Formula) (term : Term (SourceObservations.Label Formula)),
+        SourceEqualityPCSGuard.holds formulas solver edge.entry.key.constraint term = true ↔
+          (∀ trie ∈ tries, EqualityHolds term trie) ∧
+            ResidualHolds (fun guard candidate =>
+              SourceEqualityPCSGuard.holds formulas solver guard candidate = true) residual term := by
+  have resident : InternedEdgeResidency.EdgeResident heap edge :=
+    InternedEdgeResidency.resident_edges heap ready.semantic.1.normal.facts.linked
+      (.node parentEntry edges depth free) parentAvailable.resident edge selected
+  exact projected_complete edge.entry.key.constraint
+    (annotated edge.entry.key edge resident) tries residual projected
+
+end MicroCFTA.SourcePruningEnumerationEdgeProjectionLanguage

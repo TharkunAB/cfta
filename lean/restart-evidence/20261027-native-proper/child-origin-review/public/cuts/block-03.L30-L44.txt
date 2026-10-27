@@ -1,0 +1,15 @@
+MicroCFTA.SourcePruningEnumerationCachedPrepare.cache_proper {EnumGuard NativeGuard : Type}
+  (heap : MicroCFTA.InternedConstructorTemplates.State MicroCFTA.SourcePruningTemplates.Symbol NativeGuard) (fuel : Nat)
+  (scs : List MicroCFTA.EnumerationState.Suspended)
+  (value : MicroCFTA.InternedConstructorTemplates.Value MicroCFTA.SourcePruningTemplates.Symbol NativeGuard)
+  (before after : MicroCFTA.EnumerationExpandableIndex.Cached MicroCFTA.SourcePruningTemplates.Symbol EnumGuard)
+  (proper : MicroCFTA.EnumerationProgress.ProperState before.core)
+  (inputs : MicroCFTA.EnumerationProgress.ProperInputs scs)
+  (observed :
+    (match MicroCFTA.SourcePruningEnumerationCachedPrepare.prepareChild heap fuel scs value before with
+      | some [] => some before
+      | some [(fst, result)] => some result
+      | x => none) =
+      some after) :
+  MicroCFTA.EnumerationProgress.ProperState after.core
+'MicroCFTA.SourcePruningEnumerationCachedPrepare.cache_proper' depends on axioms: [propext, Quot.sound]

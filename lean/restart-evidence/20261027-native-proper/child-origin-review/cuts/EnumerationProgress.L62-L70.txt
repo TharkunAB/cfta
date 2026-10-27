@@ -1,0 +1,9 @@
+/-- Updating one stored slot preserves the pending-path invariant. -/
+theorem setValue_proper (uv : Nat) (value : UVarValue Symbol) (before after : State Symbol Guard)
+    (proper : ProperState before) (payload : ProperValue value)
+    (success : Success (setValue uv value) before () after) : ProperState after := by
+  obtain rfl := (modify_success _ before after).mp success
+  intro stored member
+  rcases List.mem_or_eq_of_mem_set member with old | same
+  · exact proper stored old
+  · simpa [same] using payload
