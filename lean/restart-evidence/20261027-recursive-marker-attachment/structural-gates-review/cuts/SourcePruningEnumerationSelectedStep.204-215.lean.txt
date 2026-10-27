@@ -1,0 +1,12 @@
+/-- Add the legacy ordinary scan only after an attached cache and accepted singleton Right event. -/
+noncomputable def finish
+    (checkEmpty : Bool) (edgesOf : Node → List (EdgeValue Symbol Constraint))
+    (r n p h k uv : Nat) : Result width Typing → Result width Typing
+  | .narrowed checked prepared caller queries action (some after)
+      (some [.ok ((false, updated), callbackCore)]) none =>
+      .narrowed checked prepared caller queries action (some after)
+        (some [.ok ((false, updated), callbackCore)])
+        (some (SourcePruningEnumerationNativeOrdinary.run checkEmpty r n p h k uv edgesOf caller after queries))
+  | observed => observed
+
+/-- Retain the original selected-step observation with its legacy ordinary continuation. -/

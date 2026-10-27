@@ -1,0 +1,7 @@
+    {Output : Type u} {Reason : Type v}
+    (hook : Fragments.Fragment Symbol → Caller (bits + 2) → SourceEndpointMemo.Memos → Cached →
+      SourcePruningEnumerationNativeContinuations.HookResult Output Reason (bits + 2))
+    (n p h k : Nat) (edgesOf : Value Symbol Constraint → List (EdgeValue Symbol Constraint))
+    (invocation : SourcePruningEnumerationHookInvocation.OrdinaryInvocation hook checkEmpty
+      entryFuel n p h k entryTarget edgesOf scanCaller ordinaryBefore scanMemos.query
+      fragment reached saved after)

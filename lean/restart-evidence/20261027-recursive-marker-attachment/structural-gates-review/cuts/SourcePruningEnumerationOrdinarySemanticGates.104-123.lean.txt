@@ -1,0 +1,20 @@
+theorem children_valid
+    (edge : EdgeValue Symbol Constraint) (scs : List Suspended) (start : Nat)
+    (tries : List EqualityTrie.Trie) (inherited : ValidSuspended scs)
+    (projected : ∀ trie ∈ tries, EqualityTrie.Valid trie) :
+    ∀ incoming bucket,
+      (incoming, bucket) ∈ SourcePruningEnumerationEdgeInputs.children edge scs start tries →
+      ValidSuspended bucket := by
+  have own : ValidSuspended (suspendedVars start tries) := by
+    intro sc member
+    have present : sc.trie ∈ tries := by
+      rw [← suspendedVars_tries start tries]
+      exact List.mem_map.mpr ⟨sc, member, rfl⟩
+    exact projected sc.trie present
+  intro incoming bucket member
+  obtain ⟨indexed, _present, same⟩ := List.mem_map.mp member
+  cases same
+  intro sc retained
+  rcases List.mem_append.mp retained with inheritedMember | ownMember
+  · exact descend_valid scs indexed.2 inherited sc inheritedMember
+  · exact descend_valid (suspendedVars start tries) indexed.2 own sc ownMember

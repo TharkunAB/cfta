@@ -1,0 +1,41 @@
+Source-only next proof interface; unimplemented.
+
+namespace MicroCFTA.SourcePruningEnumerationRecursive
+-- All configuration parameters, width, full native Caller/Memos, metadata,
+-- cache, seed/ceiling, decision and output are the existing ResourceHistory indices.
+theorem ResourceHistory.canonical_output
+    (history : ResourceHistory holeKey fits admits graph templates checkEmpty edgesOf stop order
+      formulas solver workFuel recursiveFuel inventory caller memos metadata before seed ceiling next output)
+    (canonical : EnumerationValidity.Canonical before.core) :
+    EnumerationValidity.Canonical output.cache.core
+
+Proof by the actual ResourceHistory constructor.
+* stopped/done: the output cache is the original cache.
+* parked: prefix_canonical yields Canonical parked.core. PrefixValid plus the actual
+  singleton Restart receipt identifies core=parked.core. The next cache is the same
+  frame core parked. Apply the tail IH. Do not infer Safe from Frame.
+* ordinary: prefix_canonical yields Canonical narrowed.core. Actual entry Success
+  and enter_canonical yield Canonical entered.core. Native Post transports the full
+  native context while the SAME entered captured cache remains unchanged. Extract
+  CompletedHeadReceipt.admission.source, packet.valid and actual projection. Apply
+  CapturedEdge.complete_canonical to receipt.running 0 at that OWN input Caller;
+  its result is the SAME receipt.after. Canonical supplies inherited validity.
+  No fresh arity or retention is needed for this storage theorem. The actual false
+  recordTypes singleton plus receipt.completed.safe derives Frame.values and hence
+  Canonical callbackCore. Apply the tail IH at its OWN returned Caller/full Memos.
+
+This theorem needs initial Canonical. It must not replace the existing original
+resource admission with Canonical, and it must not claim Canonical implies Satisfies.
+
+Existing fresh-arity interface, already checked in the repository:
+SourcePruningEnumerationCheckedBuildArity.observed_projected_arity
+  symbol original stored children before heap cached physical storedReady valid
+  heapReady available edge operations after observed tries residual projected
+  : (forall trie in tries, EqualityTrie.Valid trie) and
+    forall start, arityAllows edge.children.length (suspendedVars start tries)=true
+
+The checked intersection alternative is
+SourcePruningEnumerationCheckedWorkerArity.observed_projected_arity.
+It retains the actual ordered child WalkTrace and exact constructor return. Reusing
+these requires actual checked provenance for the resident selected edge; normalized
+annotations or an after-state desired fresh-arity assertion are not a substitute.

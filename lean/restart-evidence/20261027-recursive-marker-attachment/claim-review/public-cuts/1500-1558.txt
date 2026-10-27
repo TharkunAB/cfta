@@ -1,0 +1,59 @@
+def MicroCFTA.SourcePruningEnumerationOpaqueEvent.PrefixAdmission : {bits : Nat} →
+  {Typing : Type} →
+    [DecidableEq
+          (MicroCFTA.InternedConstructorTemplates.EdgeKey MicroCFTA.SourcePruningTemplates.Symbol
+            (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))] →
+      MicroCFTA.SourcePruningEnumerationIncomingReservation.Seed →
+        List
+            (MicroCFTA.InternedConstructorTemplates.Value MicroCFTA.SourcePruningTemplates.Symbol
+                (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) ×
+              List MicroCFTA.EnumerationState.Suspended) →
+          List
+              (MicroCFTA.InternedConstructorTemplates.Value MicroCFTA.SourcePruningTemplates.Symbol
+                  (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) ×
+                List MicroCFTA.EnumerationState.Suspended) →
+            MicroCFTA.SourceGuards.Formulas MicroCFTA.FullSyntax.Formula →
+              MicroCFTA.SourceGuards.Entailment MicroCFTA.FullSyntax.Formula →
+                MicroCFTA.SourceCurrentAllocatedPartialState.State (bits + 2) →
+                  MicroCFTA.EnumerationExpandableIndex.Cached MicroCFTA.SourcePruningTemplates.Symbol
+                      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) →
+                    MicroCFTA.SourcePruningRecordTypes.Metadata Typing →
+                      MicroCFTA.SourceCurrentAllocatedPartialState.State (bits + 2) →
+                        MicroCFTA.EnumerationExpandableIndex.Cached MicroCFTA.SourcePruningTemplates.Symbol
+                            (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) →
+                          MicroCFTA.SourceEndpointMemo.Memos → Prop :=
+fun {bits} {Typing}
+    [DecidableEq
+        (MicroCFTA.InternedConstructorTemplates.EdgeKey MicroCFTA.SourcePruningTemplates.Symbol
+          (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+    seed consumed remaining formulas solver beforeCaller before metadata eventCaller eventBefore eventQueries =>
+  ∃ next eventMemos,
+    MicroCFTA.SourceCurrentAllocatedPartialInvariant.Post formulas solver next beforeCaller eventCaller eventMemos ∧
+      eventMemos.query = eventQueries ∧
+        MicroCFTA.SourcePruningEnumerationRecursive.Packet formulas solver next eventCaller eventMemos metadata
+            eventBefore ∧
+          before.core.counter ≤ eventBefore.core.counter ∧
+            (∀
+                (value :
+                  MicroCFTA.InternedConstructorTemplates.Value MicroCFTA.SourcePruningTemplates.Symbol
+                    (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+                (bucket : List MicroCFTA.EnumerationState.Suspended),
+                (value, bucket) ∈ remaining →
+                  MicroCFTA.InternedProbeProvenance.Available eventCaller.checked.native.machine.heap value ∧
+                    value.free = [] ∧
+                      (∀ (sc : MicroCFTA.EnumerationState.Suspended), sc ∈ bucket → sc.var < eventBefore.core.counter) ∧
+                        MicroCFTA.EnumerationDependencies.InputsPending eventBefore.core bucket) ∧
+              MicroCFTA.SourceCurrentConstrainedCapGeneratedQueryResources.Fits
+                  (MicroCFTA.SourcePruningEnumerationIncomingReservation.advance seed
+                      (MicroCFTA.SourcePruningEnumerationTraversalCompletion.cost consumed)).snd
+                  eventCaller.checked ∧
+                MicroCFTA.SourceEqualityAnnotationHeap.Heap
+                    (fun guard =>
+                      guard ∈
+                        (MicroCFTA.SourcePruningEnumerationIncomingReservation.advance seed
+                            (MicroCFTA.SourcePruningEnumerationTraversalCompletion.cost consumed)).fst)
+                    eventCaller.checked.native.machine.heap ∧
+                  MicroCFTA.SourcePruningEnumerationIncomingReservation.Reserved bits
+                    (MicroCFTA.SourcePruningEnumerationIncomingReservation.advance seed
+                      (MicroCFTA.SourcePruningEnumerationTraversalCompletion.cost consumed))
+                    (MicroCFTA.SourcePruningEnumerationTraversalCompletion.cost remaining)

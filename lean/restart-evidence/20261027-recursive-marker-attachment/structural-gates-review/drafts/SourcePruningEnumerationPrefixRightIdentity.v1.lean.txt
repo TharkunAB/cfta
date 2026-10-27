@@ -1,0 +1,66 @@
+import MicroCFTA.SourcePruningEnumerationPrefixCompletion
+
+/-!
+# Exact metadata at an actual retained narrowed prefix
+
+The pre-expansion callback returns the original metadata.
+Prefix validity retains its exact raw singleton.
+The observed row identifies the metadata and the attached cache core.
+-/
+namespace MicroCFTA.SourcePruningEnumerationSelectedStep
+open EnumerationState InternedConstructorTemplates
+open SourceCurrentAllocatedNativeInventoryState (Inventory)
+local notation "Symbol" => SourcePruningTemplates.Symbol
+local notation "Constraint" => SourceSymbolicIndex.Constraint FullSyntax.Formula
+local notation "Node" => Value Symbol Constraint
+local notation "Core" => EnumerationState.State Symbol Constraint
+local notation "Cached" => EnumerationExpandableIndex.Cached Symbol Constraint
+local notation "Caller" => SourceCurrentAllocatedPartialState.State
+local notation "Memos" => EndpointMemoGateTrace.Memos
+local notation "Metadata" => SourcePruningRecordTypes.Metadata
+variable {Typing Key : Type} {width : Nat}
+variable [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Constraint)] [DecidableEq Node]
+
+/-- The actual Right event retains all metadata fields and the exact narrowed core. -/
+theorem narrowed_right_identity
+    (holeKey : Typing → Nat → Key) (fits : Key → Symbol → Bool) (admits : Key → Node → Bool)
+    (graph : Graph Symbol Constraint) (templates : List (Template.Pattern Symbol))
+    (checkEmpty : Bool) (edgesOf : Node → List (EdgeValue Symbol Constraint))
+    (stop : Option (Metadata Typing → Nat → Bool))
+    (order : Metadata Typing → List Nat → Option Nat) (metadata : Metadata Typing)
+    (formulas : SourceGuards.Formulas FullSyntax.Formula)
+    (solver : SourceGuards.Entailment FullSyntax.Formula) (inventory : Inventory)
+    (fuel uv : Nat) (caller : Caller width) (before : Cached) (memos : Memos)
+    (checked : Core)
+    (prepared : MergedSourceComparison.Result Symbol Constraint
+      (Node × Option (EnumerateM Symbol Constraint Unit)))
+    (reached : Caller width) (queries : SourceEndpointMemo.Memos)
+    (action : Option (List (Except Error (Unit × Core))))
+    (after : Cached) (updated : Metadata Typing) (rightCore : Core)
+    (valid : PrefixValid holeKey fits admits graph templates checkEmpty edgesOf stop order metadata
+      formulas solver inventory fuel uv caller before memos
+      (runPrefix holeKey fits admits graph templates stop order metadata fuel fuel fuel fuel fuel fuel
+        uv caller before memos.query))
+    (observed : runPrefix holeKey fits admits graph templates stop order metadata fuel fuel fuel fuel fuel fuel
+      uv caller before memos.query =
+        .narrowed checked prepared reached queries action (some after)
+          (some [.ok ((false, updated), rightCore)]) none) :
+    updated = metadata ∧ rightCore = after.core := by
+  rw [observed] at valid
+  have full := valid.2.1
+  simp only [finish, Valid] at full
+  obtain ⟨_oldHandle, _scs, _readAfter, _reading, _checking, _oldValue, _value, _heap,
+    _selectedAction, _final, _decoded, _narrowed, _prepared, _samePrepared, _reached,
+    _queries, _post, _saved, shape⟩ := full
+  rcases shape with ⟨_empty, _action, noCache, _right, _ordinary⟩ |
+    ⟨_newHandle, cached, _nonempty, _encoded, _action, candidate, _cacheValid, _safe,
+      _pending, _ready, _stored, _waiting, rightSame, _rest⟩
+  · cases noCache
+  · have cacheSame : after = cached := Option.some.inj candidate
+    have same := Except.ok.inj (List.cons.inj (Option.some.inj rightSame)).1
+    have metadataSame : updated = metadata :=
+      congrArg (fun packet : (Bool × Metadata Typing) × Core => packet.1.2) same
+    have coreSame : rightCore = cached.core := congrArg Prod.snd same
+    exact ⟨metadataSame, coreSame.trans (congrArg EnumerationExpandableIndex.Cached.core cacheSame.symm)⟩
+
+end MicroCFTA.SourcePruningEnumerationSelectedStep

@@ -1,0 +1,14 @@
+noncomputable def run (checkEmpty : Bool) (r n p h k : Nat)
+    (scs : List Suspended) (edge : EdgeValue Symbol Constraint)
+    (caller : Caller width) (before : Cached) (queries : Queries) : Result width :=
+  match SourcePruningEnumerationCachedOwn.prepare caller.checked.native.machine.heap scs edge before with
+  | none => .unhandled
+  | some [] => .rejected caller queries before
+  | some [((symbol, staged, residual), middle)] =>
+      match SourcePruningEnumerationChildTraversal.run checkEmpty r n p h k
+          (staged.map (fun input => (input.1, input.2.1))) caller middle queries with
+      | .stopped fragments observation candidate => .stopped fragments observation candidate
+      | .complete fragments afterCaller saved after =>
+          let fragment := Fragments.Fragment.node symbol fragments
+          .complete fragment afterCaller saved (finish residual fragment after)
+  | _ => .unhandled

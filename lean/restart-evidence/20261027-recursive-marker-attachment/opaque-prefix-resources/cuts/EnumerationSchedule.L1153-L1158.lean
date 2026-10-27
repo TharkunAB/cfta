@@ -1,0 +1,6 @@
+/-- The actual class-allocation traversal increases the supply by its list length. -/
+theorem suspended_counter (count : Nat) (state : State Symbol Guard) :
+    (suspendedState count state).counter = state.counter + count := by
+  induction count generalizing state with
+  | zero => rfl
+  | succ count ih => simpa [suspendedState, allocated, Nat.add_assoc, Nat.add_comm, Nat.add_left_comm] using ih (allocated none state)

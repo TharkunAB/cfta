@@ -1,0 +1,49 @@
+/-- A completed captured edge attaches an actual opaque row to its exact remaining suffix. -/
+theorem captured_opaque_event
+    (checkEmpty : Bool) (r n p h k target : Nat) (scs : List Suspended)
+    (edge : EdgeValue Symbol Constraint) (caller reachedCaller : Caller width)
+    (before middle headCache : Cached) (queries savedQueries : Queries)
+    (symbol : Symbol) (staged : Staged) (residual : Option Constraint) (fragment : Fragment)
+    (consumed suffix : List (Node × List Suspended)) (value : Node) (bucket : List Suspended)
+    (prepared : SourcePruningEnumerationCachedOwn.prepare caller.checked.native.machine.heap scs edge before =
+      some [((symbol, staged, residual), middle)])
+    (inputs : staged.map (fun input => (input.1, input.2.1)) = consumed ++ (value, bucket) :: suffix)
+    (boundary : MergedOrdinaryHeight.recursiveBoundary value = true)
+    (nonterminal : bucket.any (fun sc => EqualityTrie.isTerminal sc.trie) = false)
+    (completed : SourcePruningEnumerationCapturedEdge.run checkEmpty r n p h k target scs edge
+      caller before queries = some (.complete fragment reachedCaller savedQueries headCache)) :
+    ∃ (prefixFragments suffixFragments : List Fragment) (eventCaller : Caller width)
+      (eventBefore opaqueAfter childCache : Cached) (eventQueries : Queries) (handle : Nat),
+      fragment = .node symbol (prefixFragments ++ .hole eventBefore.core.counter :: suffixFragments) ∧
+      Trace checkEmpty r n p h k consumed caller middle queries
+        prefixFragments eventCaller eventBefore eventQueries ∧
+      SourcePruningEnumerationChildDispatch.run checkEmpty r n p h k bucket value
+        eventCaller eventBefore eventQueries =
+        ((.ok (some [.ok (.hole eventBefore.core.counter, opaqueAfter.core)]),
+          eventCaller, eventQueries, eventBefore.core, eventBefore.waiting), some opaqueAfter) ∧
+      SourcePruningEnumerationCachedPrepare.prepareChild eventCaller.checked.native.machine.heap k
+        bucket value eventBefore = some [(.hole eventBefore.core.counter, opaqueAfter)] ∧
+      encodeNode value = some handle ∧ opaqueAfter.core = allocated (some handle) eventBefore.core ∧
+      Trace checkEmpty r n p h k suffix eventCaller opaqueAfter eventQueries
+        suffixFragments reachedCaller childCache savedQueries ∧
+      SourcePruningEnumerationFinalize.run reachedCaller.checked.native.machine.heap k target fragment
+        (SourcePruningEnumerationSelectedEdge.finish residual fragment childCache) = some headCache := by
+  obtain ⟨fragments, childCache, fragmentSame, trace, finalized⟩ :=
+    captured_complete_trace checkEmpty r n p h k target scs edge caller reachedCaller before middle
+      headCache queries savedQueries symbol staged residual fragment prepared completed
+  rw [inputs] at trace
+  obtain ⟨prefixFragments, eventFragment, suffixFragments, eventCaller, preparedCaller,
+    eventBefore, opaqueAfter, eventQueries, preparedQueries, outer, waiting,
+    fragmentSplit, prefixTrace, event, suffixTrace⟩ :=
+    split_event checkEmpty r n p h k consumed suffix value bucket caller reachedCaller middle
+      childCache queries savedQueries fragments trace
+  obtain ⟨cached, callerSame, queriesSame, outerSame, waitingSame⟩ :=
+    nonterminal_child_row checkEmpty r n p h k bucket value eventCaller preparedCaller eventBefore
+      opaqueAfter eventQueries preparedQueries eventFragment outer waiting nonterminal event
+  obtain ⟨eventSame, handle, encoded, allocatedCore⟩ := opaque_cached_row
+    eventCaller.checked.native.machine.heap k bucket value eventBefore opaqueAfter eventFragment
+      boundary nonterminal cached
+  subst preparedCaller preparedQueries outer waiting eventFragment
+  refine ⟨prefixFragments, suffixFragments, eventCaller, eventBefore, opaqueAfter, childCache,
+    eventQueries, handle, ?_, prefixTrace, event, cached, encoded, allocatedCore, suffixTrace, finalized⟩
+  exact fragmentSame.trans (congrArg (Fragments.Fragment.node symbol) fragmentSplit)

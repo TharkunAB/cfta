@@ -1,0 +1,18 @@
+theorem OrdinaryHistoryReceipt.canonical_after_callback
+    (receipt : OrdinaryHistoryReceipt formulas solver metadata checkEmpty workFuel uv
+      inventory caller memos before fragment reached after returnedInventory returnedMemos)
+    (graph : Graph Symbol Constraint) (templates : List (Template.Pattern Symbol))
+    (callbackFuel : Nat) (result : Bool × Metadata Typing) (callbackCore : Core)
+    (canonical : Canonical before.core)
+    (recorded : Success (SourcePruningRecordTypes.recordTypes graph templates callbackFuel metadata uv
+      (.inl fragment)) after.core result callbackCore) : Canonical callbackCore := by
+  have completedCanonical := receipt.canonical canonical
+  obtain ⟨_entered, _handle, _scs, _decoded, _edge, _headSeed, _inherited,
+    _headInventory, _headCaller, _headMemos, _headBound,
+    _original, _entry, _enteredPacket, _post, _captured, completed⟩ := receipt
+  have frame := SourcePruningRecordTypes.recordTypes_frame graph templates callbackFuel metadata uv
+    (.inl fragment) after.core callbackCore result completed.completed.safe.1.total recorded
+  intro value member
+  exact completedCanonical value (by simpa only [frame.values] using member)
+
+end MicroCFTA.SourcePruningEnumerationRecursive

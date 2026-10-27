@@ -1,0 +1,39 @@
+MicroCFTA.SourcePruningEnumerationOpaqueEvent.split_event {width : Nat}
+  [DecidableEq MicroCFTA.SourcePruningTemplates.Symbol]
+  [DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey MicroCFTA.SourcePruningTemplates.Symbol
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  [DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.Value MicroCFTA.SourcePruningTemplates.Symbol
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  (checkEmpty : Bool) (r n p h k : Nat)
+  (consumed suffix :
+    List
+      (MicroCFTA.InternedConstructorTemplates.Value MicroCFTA.SourcePruningTemplates.Symbol
+          (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) ×
+        List MicroCFTA.EnumerationState.Suspended))
+  (value :
+    MicroCFTA.InternedConstructorTemplates.Value MicroCFTA.SourcePruningTemplates.Symbol
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+  (bucket : List MicroCFTA.EnumerationState.Suspended)
+  (caller afterCaller : MicroCFTA.SourceCurrentAllocatedPartialState.State width)
+  (before after :
+    MicroCFTA.EnumerationExpandableIndex.Cached MicroCFTA.SourcePruningTemplates.Symbol
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+  (queries afterQueries : MicroCFTA.SourceEndpointMemo.Memos)
+  (fragments : List (MicroCFTA.Fragments.Fragment MicroCFTA.SourcePruningTemplates.Symbol))
+  (trace :
+    MicroCFTA.SourcePruningEnumerationChildTraversal.Trace checkEmpty r n p h k (consumed ++ (value, bucket) :: suffix)
+      caller before queries fragments afterCaller after afterQueries) :
+  ∃ prefixFragments fragment suffixFragments eventCaller preparedCaller eventBefore prepared eventQueries
+    preparedQueries outer waiting,
+    fragments = prefixFragments ++ fragment :: suffixFragments ∧
+      MicroCFTA.SourcePruningEnumerationChildTraversal.Trace checkEmpty r n p h k consumed caller before queries
+          prefixFragments eventCaller eventBefore eventQueries ∧
+        MicroCFTA.SourcePruningEnumerationChildDispatch.run checkEmpty r n p h k bucket value eventCaller eventBefore
+              eventQueries =
+            ((Except.ok (some [Except.ok (fragment, prepared.core)]), preparedCaller, preparedQueries, outer, waiting),
+              some prepared) ∧
+          MicroCFTA.SourcePruningEnumerationChildTraversal.Trace checkEmpty r n p h k suffix preparedCaller prepared
+            preparedQueries suffixFragments afterCaller after afterQueries
+'MicroCFTA.SourcePruningEnumerationOpaqueEvent.split_event' depends on axioms: [propext, Classical.choice, Quot.sound]

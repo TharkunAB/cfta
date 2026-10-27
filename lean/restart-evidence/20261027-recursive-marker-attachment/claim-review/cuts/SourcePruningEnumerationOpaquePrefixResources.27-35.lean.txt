@@ -1,0 +1,9 @@
+theorem cost_append (consumed remaining : List (Node × List Suspended)) :
+    cost (consumed ++ remaining) = cost consumed + cost remaining := by
+  induction consumed with
+  | nil => simp only [List.nil_append, SourcePruningEnumerationTraversalCompletion.cost, Nat.zero_add]
+  | cons input consumed ih =>
+      rcases input with ⟨value, bucket⟩
+      simp only [List.cons_append, SourcePruningEnumerationTraversalCompletion.cost, ih, Nat.add_assoc]
+
+/-- An actual prefix retains its full native admission and the remaining original schedule. -/

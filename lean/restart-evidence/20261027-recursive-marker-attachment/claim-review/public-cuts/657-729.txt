@@ -1,0 +1,73 @@
+MicroCFTA.SourcePruningEnumerationOpaqueEvent.captured_opaque_event {width : Nat}
+  [DecidableEq MicroCFTA.SourcePruningTemplates.Symbol]
+  [DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey MicroCFTA.SourcePruningTemplates.Symbol
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  [DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.Value MicroCFTA.SourcePruningTemplates.Symbol
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  (checkEmpty : Bool) (r n p h k target : Nat) (scs : List MicroCFTA.EnumerationState.Suspended)
+  (edge :
+    MicroCFTA.InternedConstructorTemplates.EdgeValue MicroCFTA.SourcePruningTemplates.Symbol
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+  (caller reachedCaller : MicroCFTA.SourceCurrentAllocatedPartialState.State width)
+  (before middle headCache :
+    MicroCFTA.EnumerationExpandableIndex.Cached MicroCFTA.SourcePruningTemplates.Symbol
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+  (queries savedQueries : MicroCFTA.SourceEndpointMemo.Memos) (symbol : MicroCFTA.SourcePruningTemplates.Symbol)
+  (staged :
+    List
+      (MicroCFTA.InternedConstructorTemplates.Value MicroCFTA.SourcePruningTemplates.Symbol
+          (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) ×
+        List MicroCFTA.EnumerationState.Suspended ×
+          Option
+            (MicroCFTA.EnumerationState.EnumerateM MicroCFTA.SourcePruningTemplates.Symbol
+              (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+              (MicroCFTA.Fragments.Fragment MicroCFTA.SourcePruningTemplates.Symbol))))
+  (residual : Option (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+  (fragment : MicroCFTA.Fragments.Fragment MicroCFTA.SourcePruningTemplates.Symbol)
+  (consumed suffix :
+    List
+      (MicroCFTA.InternedConstructorTemplates.Value MicroCFTA.SourcePruningTemplates.Symbol
+          (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) ×
+        List MicroCFTA.EnumerationState.Suspended))
+  (value :
+    MicroCFTA.InternedConstructorTemplates.Value MicroCFTA.SourcePruningTemplates.Symbol
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+  (bucket : List MicroCFTA.EnumerationState.Suspended)
+  (prepared :
+    MicroCFTA.SourcePruningEnumerationCachedOwn.prepare caller.checked.native.machine.heap scs edge before =
+      some [((symbol, staged, residual), middle)])
+  (inputs : List.map (fun input => (input.fst, input.snd.fst)) staged = consumed ++ (value, bucket) :: suffix)
+  (boundary : MicroCFTA.MergedOrdinaryHeight.recursiveBoundary value = true)
+  (nonterminal : (bucket.any fun sc => MicroCFTA.EqualityTrie.isTerminal sc.trie) = false)
+  (completed :
+    MicroCFTA.SourcePruningEnumerationCapturedEdge.run checkEmpty r n p h k target scs edge caller before queries =
+      some
+        (MicroCFTA.SourcePruningEnumerationSelectedEdge.Result.complete fragment reachedCaller savedQueries
+          headCache)) :
+  ∃ prefixFragments suffixFragments eventCaller eventBefore opaqueAfter childCache eventQueries handle,
+    fragment =
+        MicroCFTA.Fragments.Fragment.node symbol
+          (prefixFragments ++ MicroCFTA.Fragments.Fragment.hole eventBefore.core.counter :: suffixFragments) ∧
+      MicroCFTA.SourcePruningEnumerationChildTraversal.Trace checkEmpty r n p h k consumed caller middle queries
+          prefixFragments eventCaller eventBefore eventQueries ∧
+        MicroCFTA.SourcePruningEnumerationChildDispatch.run checkEmpty r n p h k bucket value eventCaller eventBefore
+              eventQueries =
+            ((Except.ok
+                  (some [Except.ok (MicroCFTA.Fragments.Fragment.hole eventBefore.core.counter, opaqueAfter.core)]),
+                eventCaller, eventQueries, eventBefore.core, eventBefore.waiting),
+              some opaqueAfter) ∧
+          MicroCFTA.SourcePruningEnumerationCachedPrepare.prepareChild eventCaller.checked.native.machine.heap k bucket
+                value eventBefore =
+              some [(MicroCFTA.Fragments.Fragment.hole eventBefore.core.counter, opaqueAfter)] ∧
+            MicroCFTA.SourcePruningEnumerationNodes.encodeNode value = some handle ∧
+              opaqueAfter.core = MicroCFTA.EnumerationState.allocated (some handle) eventBefore.core ∧
+                MicroCFTA.SourcePruningEnumerationChildTraversal.Trace checkEmpty r n p h k suffix eventCaller
+                    opaqueAfter eventQueries suffixFragments reachedCaller childCache savedQueries ∧
+                  MicroCFTA.SourcePruningEnumerationFinalize.run reachedCaller.checked.native.machine.heap k target
+                      fragment (MicroCFTA.SourcePruningEnumerationSelectedEdge.finish residual fragment childCache) =
+                    some headCache
+'MicroCFTA.SourcePruningEnumerationOpaqueEvent.captured_opaque_event' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]

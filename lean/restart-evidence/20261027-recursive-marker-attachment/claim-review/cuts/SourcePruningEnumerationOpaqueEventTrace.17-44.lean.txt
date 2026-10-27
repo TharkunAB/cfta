@@ -1,0 +1,28 @@
+theorem opaque_cached_row
+    (heap : InternedConstructorTemplates.State Symbol Constraint) (k : Nat)
+    (bucket : List Suspended) (value : Node) (before after : Cached) (fragment : Fragment)
+    (boundary : MergedOrdinaryHeight.recursiveBoundary value = true)
+    (nonterminal : bucket.any (fun sc => EqualityTrie.isTerminal sc.trie) = false)
+    (cached : SourcePruningEnumerationCachedPrepare.prepareChild heap k bucket value before =
+      some [(fragment, after)]) :
+    fragment = .hole before.core.counter ∧
+      ∃ handle, encodeNode value = some handle ∧ after.core = allocated (some handle) before.core := by
+  cases value with
+  | empty => simp only [MergedOrdinaryHeight.recursiveBoundary, Bool.false_eq_true] at boundary
+  | reference name => simp only [MergedOrdinaryHeight.recursiveBoundary, Bool.false_eq_true] at boundary
+  | node entry edges depth free =>
+      simp only [MergedOrdinaryHeight.recursiveBoundary, Bool.false_eq_true] at boundary
+  | union entry members depth free | mu entry members depth free =>
+      simp only [SourcePruningEnumerationCachedPrepare.prepareChild, nonterminal,
+        Bool.false_eq_true, ↓reduceIte, encodeNode, Option.bind_some, Option.map_eq_some_iff] at cached
+      obtain ⟨allocation, allocatedRow, rowsSame⟩ := cached
+      simp only [SourcePruningEnumerationCachedChild.allocate, Option.map_eq_some_iff] at allocatedRow
+      obtain ⟨flag, _classified, allocationSame⟩ := allocatedRow
+      subst allocation
+      have rowSame := Prod.mk.inj (List.cons.inj rowsSame).1
+      exact ⟨rowSame.1.symm, entry.identity + 1, rfl,
+        congrArg (fun cache : Cached => cache.core) rowSame.2.symm⟩
+
+variable [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Constraint)] [DecidableEq Node]
+
+/-- Split an actual completed trace at the selected child occurrence. -/

@@ -1,0 +1,48 @@
+import MicroCFTA.SourcePruningEnumerationHeadAdmission
+import MicroCFTA.SourcePruningEnumerationCapturedEdgeCanonical
+
+/-!
+# Canonical storage at the actual completed head
+
+The retained receipt supplies its own input and completion.
+Initial canonical storage supplies the inherited trie validity.
+No assignment-language gate is required.
+-/
+namespace MicroCFTA.SourcePruningEnumerationNativeHookResources
+open EnumerationState EnumerationCorrectness EnumerationValidity InternedConstructorTemplates
+open SourcePruningEnumerationNodes
+open SourceCurrentAllocatedNativeInventoryState (Inventory)
+open SourcePruningEnumerationIncomingReservation (Seed)
+local notation "Symbol" => SourcePruningTemplates.Symbol
+local notation "Constraint" => SourceSymbolicIndex.Constraint FullSyntax.Formula
+local notation "Caller" => SourceCurrentAllocatedPartialState.State
+local notation "Memos" => EndpointMemoGateTrace.Memos
+local notation "Metadata" => SourcePruningRecordTypes.Metadata
+local notation "Cached" => EnumerationExpandableIndex.Cached Symbol Constraint
+variable {Typing : Type} {bits : Nat}
+variable [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Constraint)]
+variable [DecidableEq (Value Symbol Constraint)]
+
+/-- The actual completed head preserves canonical storage from its own input. -/
+theorem CompletedHeadReceipt.canonical
+    {seed : Seed} {inherited : Nat}
+    {formulas : SourceGuards.Formulas FullSyntax.Formula}
+    {solver : SourceGuards.Entailment FullSyntax.Formula} {inventory : Inventory}
+    {caller : Caller (bits + 2)} {memos : Memos} {metadata : Metadata Typing} {before : Cached}
+    {checkEmpty : Bool} {uv : Nat} {scs : List Suspended} {edge : EdgeValue Symbol Constraint}
+    {bound : Nat} {fragment : Fragments.Fragment Symbol} {reached : Caller (bits + 2)}
+    {saved : SourceEndpointMemo.Memos} {after : Cached} {returnedInventory : Inventory} {returnedMemos : Memos}
+    (receipt : CompletedHeadReceipt seed inherited formulas solver inventory caller memos metadata before
+      checkEmpty uv scs edge bound fragment reached saved after returnedInventory returnedMemos)
+    (canonical : Canonical before.core) : Canonical after.core := by
+  obtain ⟨handle, parentEntry, storedEdges, depth, free, stored, decoded, selected⟩ := receipt.admission.source
+  obtain ⟨roots, paths, _storage, realized, counts, flags⟩ := receipt.admission.packet.valid
+  obtain ⟨tries, residual, projected⟩ := receipt.projected
+  have pending := EnumerationReferences.pending_inputs before.core receipt.admission.packet.pending
+    uv (some handle) scs stored
+  exact SourcePruningEnumerationCapturedEdge.complete_canonical formulas solver inventory caller before checkEmpty
+    uv handle scs parentEntry storedEdges depth free edge roots memos receipt.admission.packet.context
+    receipt.admission.ready stored decoded realized selected paths counts flags pending receipt.allowed
+    tries residual projected canonical (by simpa only [Nat.add_zero] using receipt.running 0)
+
+end MicroCFTA.SourcePruningEnumerationNativeHookResources

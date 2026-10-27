@@ -1,0 +1,19 @@
+def PrefixAdmission {Typing : Type} [DecidableEq (EdgeKey Symbol Constraint)]
+    (seed : Seed) (consumed remaining : List (Node × List Suspended))
+    (formulas : SourceGuards.Formulas FullSyntax.Formula)
+    (solver : SourceGuards.Entailment FullSyntax.Formula)
+    (beforeCaller : Caller (bits + 2)) (before : Cached)
+    (metadata : SourcePruningRecordTypes.Metadata Typing)
+    (eventCaller : Caller (bits + 2)) (eventBefore : Cached) (eventQueries : Queries) : Prop :=
+  ∃ (next : Inventory) (eventMemos : Memos),
+    Post formulas solver next beforeCaller eventCaller eventMemos ∧ eventMemos.query = eventQueries ∧
+    SourcePruningEnumerationRecursive.Packet formulas solver next eventCaller eventMemos metadata eventBefore ∧
+    before.core.counter ≤ eventBefore.core.counter ∧
+    (∀ value bucket, (value, bucket) ∈ remaining →
+      Available eventCaller.checked.native.machine.heap value ∧ value.free = [] ∧
+      (∀ sc ∈ bucket, sc.var < eventBefore.core.counter) ∧ InputsPending eventBefore.core bucket) ∧
+    Fits (advance seed (cost consumed)).2 eventCaller.checked ∧
+    Heap (fun guard => guard ∈ (advance seed (cost consumed)).1) eventCaller.checked.native.machine.heap ∧
+    Reserved bits (advance seed (cost consumed)) (cost remaining)
+
+/-- Original resources certify each selected prefix at the same sufficient diagonal execution. -/

@@ -1,0 +1,50 @@
+MicroCFTA.SourcePruningEnumerationHookInvocation.OrdinaryInvocation.entry_nonterminal.{u, v} {width : Nat}
+  {Output : Type u} {Reason : Type v} [DecidableEq MicroCFTA.SourcePruningTemplates.Symbol]
+  [DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey MicroCFTA.SourcePruningTemplates.Symbol
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  [DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.Value MicroCFTA.SourcePruningTemplates.Symbol
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  {hook :
+    MicroCFTA.Fragments.Fragment MicroCFTA.SourcePruningTemplates.Symbol →
+      MicroCFTA.SourceCurrentAllocatedPartialState.State width →
+        MicroCFTA.SourceEndpointMemo.Memos →
+          MicroCFTA.EnumerationExpandableIndex.Cached MicroCFTA.SourcePruningTemplates.Symbol
+              (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) →
+            MicroCFTA.SourcePruningEnumerationNativeContinuations.HookResult Output Reason width}
+  {checkEmpty : Bool} {r n p h k uv : Nat}
+  {edgesOf :
+    MicroCFTA.InternedConstructorTemplates.Value MicroCFTA.SourcePruningTemplates.Symbol
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) →
+      List
+        (MicroCFTA.InternedConstructorTemplates.EdgeValue MicroCFTA.SourcePruningTemplates.Symbol
+          (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))}
+  {caller : MicroCFTA.SourceCurrentAllocatedPartialState.State width}
+  {before :
+    MicroCFTA.EnumerationExpandableIndex.Cached MicroCFTA.SourcePruningTemplates.Symbol
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)}
+  {queries : MicroCFTA.SourceEndpointMemo.Memos}
+  {fragment : MicroCFTA.Fragments.Fragment MicroCFTA.SourcePruningTemplates.Symbol}
+  {reached : MicroCFTA.SourceCurrentAllocatedPartialState.State width} {saved : MicroCFTA.SourceEndpointMemo.Memos}
+  {after :
+    MicroCFTA.EnumerationExpandableIndex.Cached MicroCFTA.SourcePruningTemplates.Symbol
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)}
+  (invocation :
+    MicroCFTA.SourcePruningEnumerationHookInvocation.OrdinaryInvocation hook checkEmpty r n p h k uv edgesOf caller
+      before queries fragment reached saved after)
+  {target handle : Nat} {bucket : List MicroCFTA.EnumerationState.Suspended}
+  {decoded :
+    MicroCFTA.InternedConstructorTemplates.Value MicroCFTA.SourcePruningTemplates.Symbol
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)}
+  {entered :
+    MicroCFTA.EnumerationState.State MicroCFTA.SourcePruningTemplates.Symbol
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)}
+  (entry :
+    MicroCFTA.EnumerationCorrectness.Success
+      (MicroCFTA.SourcePruningEnumerationEntry.enter caller.checked.native.machine.heap r uv) before.core
+      (target, handle, bucket, decoded) entered) :
+  (bucket.any fun sc => MicroCFTA.EqualityTrie.isTerminal sc.trie) = false
+'MicroCFTA.SourcePruningEnumerationHookInvocation.OrdinaryInvocation.entry_nonterminal' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]

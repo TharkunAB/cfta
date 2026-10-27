@@ -1,5 +1,35 @@
 Continue the cfta formalization in /home/tritlo/Code/mcfta.
 
+## Actual parked boundaries and canonical output caches
+
+Source checkpoint: d60f6c1607d39fa114ae83a489af7b34d832ad23.
+An actual parked clear now retains its original stored handle and bucket
+through its actual remaining ResourceHistory. The boundary stays isolated at
+that output's OWN cache and native heap. The output cannot be fully Discharged.
+Initial Canonical now reaches every actual finite output's own cache.
+The finite producer keeps its ENTIRE old admission and result, adds an initial
+Canonical premise and returns Canonical for all actual outputs.
+Canonical describes storage. It does not establish assignment satisfaction.
+
+Actual invocation receipts supply nonterminal gates. The actual narrowed
+right step retains the original metadata. Opaque child events now retain their
+actual consumed prefix, allocation, suffix and successful captured finalizer.
+An adequate common work bound supplies the event's full Memos, Packet, Fits,
+guard heap and remaining reservation. Actual own-allocation receipts supply
+the local Packet link. Persistence of a NEW opaque marker through that SAME
+suffix, finalizer, callback and remaining output history is still open.
+
+Eleven modules, 1210 lines and 18 public theorems pass strict checking.
+Audit passes 4150 jobs and 79468 theorem dependency checks. H6 and both
+previous conditional captured renderers retain exact signatures and axioms.
+H6 remains the strongest global exact finite-tree construction theorem.
+Whole recursive acceptance, coverage and physical Haskell correspondence
+remain open. No Haskell source changed in this checkpoint. FINDINGS retains
+all earlier Haskell fixes and external repair handoffs, including KBO overflow.
+Details: `lean/notes-current-recursive-marker-attachment.md`.
+The whole-system goal stays ACTIVE.
+
+
 ## Original resources now derive full finite recursive histories
 
 Source checkpoint: 324a2c527e003fc5c19ce4332b4c4b1ac53254d2.

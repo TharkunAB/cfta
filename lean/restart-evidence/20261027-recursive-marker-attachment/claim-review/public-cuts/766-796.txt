@@ -1,0 +1,31 @@
+MicroCFTA.SourcePruningEnumerationRecursive.OrdinaryHistoryReceipt.canonical {Typing : Type} {bits : Nat}
+  [DecidableEq MicroCFTA.SourcePruningTemplates.Symbol]
+  [DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey MicroCFTA.SourcePruningTemplates.Symbol
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  [DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.Value MicroCFTA.SourcePruningTemplates.Symbol
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  {formulas : MicroCFTA.SourceGuards.Formulas MicroCFTA.FullSyntax.Formula}
+  {solver : MicroCFTA.SourceGuards.Entailment MicroCFTA.FullSyntax.Formula}
+  {metadata : MicroCFTA.SourcePruningRecordTypes.Metadata Typing} {checkEmpty : Bool} {workFuel uv : Nat}
+  {inventory : MicroCFTA.SourceCurrentAllocatedNativeInventoryState.Inventory}
+  {caller : MicroCFTA.SourceCurrentAllocatedPartialState.State (bits + 2)}
+  {memos : MicroCFTA.EndpointMemoGateTrace.Memos}
+  {before :
+    MicroCFTA.EnumerationExpandableIndex.Cached MicroCFTA.SourcePruningTemplates.Symbol
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)}
+  {fragment : MicroCFTA.Fragments.Fragment MicroCFTA.SourcePruningTemplates.Symbol}
+  {reached : MicroCFTA.SourceCurrentAllocatedPartialState.State (bits + 2)}
+  {after :
+    MicroCFTA.EnumerationExpandableIndex.Cached MicroCFTA.SourcePruningTemplates.Symbol
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)}
+  {returnedInventory : MicroCFTA.SourceCurrentAllocatedNativeInventoryState.Inventory}
+  {returnedMemos : MicroCFTA.EndpointMemoGateTrace.Memos}
+  (receipt :
+    MicroCFTA.SourcePruningEnumerationRecursive.OrdinaryHistoryReceipt formulas solver metadata checkEmpty workFuel uv
+      inventory caller memos before fragment reached after returnedInventory returnedMemos)
+  (canonical : MicroCFTA.EnumerationValidity.Canonical before.core) : MicroCFTA.EnumerationValidity.Canonical after.core
+'MicroCFTA.SourcePruningEnumerationRecursive.OrdinaryHistoryReceipt.canonical' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]

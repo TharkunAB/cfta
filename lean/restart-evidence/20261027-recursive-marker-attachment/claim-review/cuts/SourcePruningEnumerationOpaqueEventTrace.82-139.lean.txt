@@ -1,0 +1,58 @@
+theorem nonterminal_child_row
+    (checkEmpty : Bool) (r n p h k : Nat) (bucket : List Suspended) (value : Node)
+    (caller reachedCaller : Caller width) (before after : Cached) (queries savedQueries : Queries)
+    (fragment : Fragment) (outer : EnumerationState.State Symbol Constraint)
+    (waiting : EnumerationWaitingIndex.Waiting)
+    (nonterminal : bucket.any (fun sc => EqualityTrie.isTerminal sc.trie) = false)
+    (observed : SourcePruningEnumerationChildDispatch.run checkEmpty r n p h k bucket value
+      caller before queries =
+      ((.ok (some [.ok (fragment, after.core)]), reachedCaller, savedQueries, outer, waiting), some after)) :
+    SourcePruningEnumerationCachedPrepare.prepareChild caller.checked.native.machine.heap k
+      bucket value before = some [(fragment, after)] ∧
+      reachedCaller = caller ∧ savedQueries = queries ∧ outer = before.core ∧ waiting = before.waiting := by
+  by_cases empty : value = .empty
+  · simp [SourcePruningEnumerationChildDispatch.run, empty] at observed
+  · have noHere : (bucket.partition (fun sc => EqualityTrie.isTerminal sc.trie)).1 = [] := by
+      simp only [List.partition_eq_filter_filter]
+      exact List.filter_eq_nil_iff.mpr (fun sc member => List.any_eq_false.mp nonterminal sc member)
+    cases partitioned : bucket.partition (fun sc => EqualityTrie.isTerminal sc.trie) with
+    | mk here descendants =>
+      have hereSame : here = [] := by simpa only [partitioned] using noHere
+      subst here
+      cases cached : SourcePruningEnumerationCachedPrepare.prepareChild
+          caller.checked.native.machine.heap k bucket value before with
+      | none =>
+          simp only [SourcePruningEnumerationChildDispatch.run, ite_eq_right empty,
+            partitioned, cached, Prod.mk.injEq, reduceCtorEq, and_false] at observed
+      | some rows =>
+          have erasure := SourcePruningEnumerationCachedPrepare.erase_some
+            caller.checked.native.machine.heap k bucket value before rows cached
+          cases actionEq : SourcePruningEnumerationShallowChild.prepareChild
+              (EnumGuard := Constraint) bucket value with
+          | none => simp only [actionEq, Option.map_none, reduceCtorEq] at erasure
+          | some action =>
+              have raw := congrArg (fun result => result.1.1) observed
+              simp only [SourcePruningEnumerationChildDispatch.run,
+                SourcePruningEnumerationChildDispatch.observe, ite_eq_right empty, partitioned, actionEq] at raw
+              simp only [actionEq, Option.map_some, Option.some.injEq] at erasure
+              have rowsSame : rows.map (fun row => Except.ok (row.1, row.2.core)) =
+                  [.ok (fragment, after.core)] :=
+                erasure.symm.trans (Option.some.inj (Except.ok.inj raw))
+              obtain ⟨row, singleton, mapped⟩ := List.map_eq_singleton_iff.mp rowsSame
+              rcases row with ⟨childFragment, childCache⟩
+              subst rows
+              have cacheSame : childCache = after := by
+                simpa only [SourcePruningEnumerationChildDispatch.run, ite_eq_right empty,
+                  partitioned, cached, Option.some.injEq] using congrArg Prod.snd observed
+              have fragmentSame : childFragment = fragment := (Prod.mk.inj (Except.ok.inj mapped)).1
+              subst childCache
+              subst childFragment
+              refine ⟨rfl, ?_⟩
+              have endpoints := congrArg (fun result => (result.1.2.1, result.1.2.2)) observed
+              simp only [SourcePruningEnumerationChildDispatch.run,
+                SourcePruningEnumerationChildDispatch.observe, ite_eq_right empty, partitioned,
+                actionEq, Prod.mk.injEq] at endpoints
+              obtain ⟨callerSame, queriesSame, outerSame, waitingSame⟩ := endpoints
+              exact ⟨callerSame.symm, queriesSame.symm, outerSame.symm, waitingSame.symm⟩
+
+/-- A completed captured edge retains its actual child trace and finalizer. -/

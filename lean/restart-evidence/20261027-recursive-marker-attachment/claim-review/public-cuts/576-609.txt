@@ -1,0 +1,34 @@
+MicroCFTA.SourcePruningEnumerationOpaqueEvent.nonterminal_child_row {width : Nat}
+  [DecidableEq MicroCFTA.SourcePruningTemplates.Symbol]
+  [DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey MicroCFTA.SourcePruningTemplates.Symbol
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  [DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.Value MicroCFTA.SourcePruningTemplates.Symbol
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  (checkEmpty : Bool) (r n p h k : Nat) (bucket : List MicroCFTA.EnumerationState.Suspended)
+  (value :
+    MicroCFTA.InternedConstructorTemplates.Value MicroCFTA.SourcePruningTemplates.Symbol
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+  (caller reachedCaller : MicroCFTA.SourceCurrentAllocatedPartialState.State width)
+  (before after :
+    MicroCFTA.EnumerationExpandableIndex.Cached MicroCFTA.SourcePruningTemplates.Symbol
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+  (queries savedQueries : MicroCFTA.SourceEndpointMemo.Memos)
+  (fragment : MicroCFTA.Fragments.Fragment MicroCFTA.SourcePruningTemplates.Symbol)
+  (outer :
+    MicroCFTA.EnumerationState.State MicroCFTA.SourcePruningTemplates.Symbol
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+  (waiting : MicroCFTA.EnumerationWaitingIndex.Waiting)
+  (nonterminal : (bucket.any fun sc => MicroCFTA.EqualityTrie.isTerminal sc.trie) = false)
+  (observed :
+    MicroCFTA.SourcePruningEnumerationChildDispatch.run checkEmpty r n p h k bucket value caller before queries =
+      ((Except.ok (some [Except.ok (fragment, after.core)]), reachedCaller, savedQueries, outer, waiting),
+        some after)) :
+  MicroCFTA.SourcePruningEnumerationCachedPrepare.prepareChild caller.checked.native.machine.heap k bucket value
+        before =
+      some [(fragment, after)] ∧
+    reachedCaller = caller ∧ savedQueries = queries ∧ outer = before.core ∧ waiting = before.waiting
+'MicroCFTA.SourcePruningEnumerationOpaqueEvent.nonterminal_child_row' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]

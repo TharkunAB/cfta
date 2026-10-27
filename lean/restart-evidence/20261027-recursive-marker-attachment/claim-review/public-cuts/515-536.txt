@@ -1,0 +1,22 @@
+MicroCFTA.SourcePruningEnumerationOpaqueEvent.opaque_cached_row
+  (heap :
+    MicroCFTA.InternedConstructorTemplates.State MicroCFTA.SourcePruningTemplates.Symbol
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+  (k : Nat) (bucket : List MicroCFTA.EnumerationState.Suspended)
+  (value :
+    MicroCFTA.InternedConstructorTemplates.Value MicroCFTA.SourcePruningTemplates.Symbol
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+  (before after :
+    MicroCFTA.EnumerationExpandableIndex.Cached MicroCFTA.SourcePruningTemplates.Symbol
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+  (fragment : MicroCFTA.Fragments.Fragment MicroCFTA.SourcePruningTemplates.Symbol)
+  (boundary : MicroCFTA.MergedOrdinaryHeight.recursiveBoundary value = true)
+  (nonterminal : (bucket.any fun sc => MicroCFTA.EqualityTrie.isTerminal sc.trie) = false)
+  (cached :
+    MicroCFTA.SourcePruningEnumerationCachedPrepare.prepareChild heap k bucket value before =
+      some [(fragment, after)]) :
+  fragment = MicroCFTA.Fragments.Fragment.hole before.core.counter ∧
+    ∃ handle,
+      MicroCFTA.SourcePruningEnumerationNodes.encodeNode value = some handle ∧
+        after.core = MicroCFTA.EnumerationState.allocated (some handle) before.core
+'MicroCFTA.SourcePruningEnumerationOpaqueEvent.opaque_cached_row' depends on axioms: [propext, Quot.sound]

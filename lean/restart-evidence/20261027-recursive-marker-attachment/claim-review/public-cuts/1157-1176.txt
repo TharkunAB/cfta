@@ -1,0 +1,20 @@
+MicroCFTA.SourcePruningEnumerationOpaqueEvent.own_prefix_packet {Typing : Type} {width : Nat}
+  [DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey MicroCFTA.SourcePruningTemplates.Symbol
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  (formulas : MicroCFTA.SourceGuards.Formulas MicroCFTA.FullSyntax.Formula)
+  (solver : MicroCFTA.SourceGuards.Entailment MicroCFTA.FullSyntax.Formula)
+  (inventory : MicroCFTA.SourceCurrentAllocatedNativeInventoryState.Inventory)
+  (caller : MicroCFTA.SourceCurrentAllocatedPartialState.State width) (memos : MicroCFTA.EndpointMemoGateTrace.Memos)
+  (metadata : MicroCFTA.SourcePruningRecordTypes.Metadata Typing)
+  (before after :
+    MicroCFTA.EnumerationExpandableIndex.Cached MicroCFTA.SourcePruningTemplates.Symbol
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+  (count : Nat)
+  (packet : MicroCFTA.SourcePruningEnumerationRecursive.Packet formulas solver inventory caller memos metadata before)
+  (core : after.core = MicroCFTA.EnumerationCorrectness.suspendedState count before.core)
+  (valid : MicroCFTA.SourcePruningEnumerationNativeBranchCompletion.CacheValid caller after) :
+  MicroCFTA.SourcePruningEnumerationRecursive.Packet formulas solver inventory caller memos metadata after
+'MicroCFTA.SourcePruningEnumerationOpaqueEvent.own_prefix_packet' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
