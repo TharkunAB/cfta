@@ -1,5 +1,63 @@
 # Current formalization findings
 
+## Arity through actual local reduction and parent construction
+
+Source checkpoint: ffe7569b0158d9dfeeb44b477b8c48841b626e10.
+The actual local equality reduction now derives arity at its returned native
+heap. The literal completed local worker derives the same result. The actual
+parent-edge graph uses this result at its real reduction endpoint before it
+constructs the parent. Both live and rejected parent branches retain the
+invariant for every resident edge record. Each projected root-child reference
+fits the actual child count. The proof keeps the complete original admission
+and adds only a genuine initial arity-valid heap. It assumes no future child
+arity, future successful query or desired final invariant.
+
+The proof composes actual cold exposure, both gate families, projection,
+required children, probe selection, merge, conjunction, seeded queries,
+class scans, shared targets, class editing and the ordered class pass.
+Caller begin/finish and checked-state advance retain their exact native
+heaps. Checked raw rebuild uses the original resident key and actual child
+count. Every phase retains its actual returned states and full memo caches.
+The preceding all-outcome native-query theorem remains unchanged.
+
+This is not yet an arity theorem for the whole recursive partial worker or
+its entire finite history. The next task is to compose the actual worker
+branches, captured-cache restores and history steps. Derive
+ResourceHistoryWithArity at the SAME producer bound and actual own output.
+Keep the entire original producer admission and result. The recursive
+semantic theorem still requires its arity-certified history observer.
+H6, enumeration coverage, API obligations and physical Haskell correspondence
+retain their previous scopes. The whole-system goal stays ACTIVE.
+
+Sixteen modules contain 2693 lines and 79 new public theorems. All pass strict
+checks. Audit passes 4195 jobs and checks 79883 theorem dependencies. Full
+public output has 91 signature and axiom blocks without elision. All 12 prior
+strongest blocks match byte exactly. Only the three standard Lean axioms
+occur. Selection adds one effect structure and one callback predicate.
+No Haskell source changed. FINDINGS retains all repair handoffs. Details:
+`lean/notes-current-worker-arity.md`.
+
+
+### Worker arity and Haskell repair status
+
+This checkpoint changes Lean proofs only. Every previous Haskell repair,
+regression and external repair handoff remains below without deletion.
+The final successful refresh reads main at
+8766699b594eaad80381af2eee034c378ccf3192. This commit is an ancestor of the
+source checkpoint. The LPO fix and extraction documentation fixes remain
+integrated. The separate KBO candidate
+d7b6a9dfff464eb32c17c314d4825d5b027f1b2d remains unintegrated, unbuilt and
+unexecuted here. Keep its prior source assessment. The positive-Int
+context-reversal finding remains open in this branch. Run its exact native
+regression after the repair reaches main.
+
+The new arity proof closes the local-reduction intermediate-heap gap in
+the actual parent-edge graph. It does not establish a new Haskell defect,
+native regression success, whole recursive worker invariant or complete
+implementation correspondence. Keep those claims separate. Existing
+constructor, equality, field-pool and other Haskell findings remain intact.
+
+
 ## Arity through every finite native query outcome
 
 Source checkpoint: 7dc1dbd371d10e5f6bd065b1b95e6e374d7faa60.
