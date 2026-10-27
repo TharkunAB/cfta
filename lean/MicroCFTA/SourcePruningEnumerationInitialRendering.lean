@@ -1,0 +1,112 @@
+import MicroCFTA.SourcePruningEnumerationInitialPacket
+import MicroCFTA.SourcePruningEnumerationFiniteHistoryRenderingArity
+
+/-!
+# Checked rendered acceptance from the literal native startup
+
+The closed available root derives the initial enumeration packet.
+The finite driver derives every actual arity history from the initial heap.
+Checked own outputs satisfy that original native root.
+The full native context and original numerical reservation remain explicit.
+-/
+namespace MicroCFTA.SourcePruningEnumerationRecursive
+open EnumerationState EnumerationCorrectness EnumerationValidity InternedConstructorTemplates
+open SourcePruningEnumerationNodes
+open InternedProbeProvenance (Available)
+open SourceCurrentAllocatedNativeInventoryState (Inventory)
+open SourceCurrentAllocatedPartialInvariant (Context)
+open SourceCurrentConstrainedCapGeneratedQueryResources (Fits)
+open SourcePruningEnumerationIncomingReservation (Seed)
+local notation "Symbol" => SourcePruningTemplates.Symbol
+local notation "Constraint" => SourceSymbolicIndex.Constraint FullSyntax.Formula
+local notation "Node" => Value Symbol Constraint
+local notation "Core" => EnumerationState.State Symbol Constraint
+local notation "Caller" => SourceCurrentAllocatedPartialState.State
+local notation "Memos" => EndpointMemoGateTrace.Memos
+local notation "Metadata" => SourcePruningRecordTypes.Metadata
+local notation "Cached" => EnumerationExpandableIndex.Cached Symbol Constraint
+local notation "Heap" => SourceEqualityAnnotationHeap.Heap
+variable {Typing Key : Type} {bits : Nat}
+variable [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Constraint)] [DecidableEq Node]
+
+/-- The actual startup derives its packet and original root checks before finite rendered acceptance. -/
+theorem run_initial_finite_render_sound
+    (holeKey : Typing → Nat → Key) (fits : Key → Symbol → Bool) (admits : Key → Node → Bool)
+    (graph : Graph Symbol Constraint) (templates : List (Template.Pattern Symbol))
+    (checkEmpty : Bool) (edgesOf : Node → List (EdgeValue Symbol Constraint))
+    (stop : Option (Metadata Typing → Nat → Bool)) (order : Metadata Typing → List Nat → Option Nat)
+    (formulas : SourceGuards.Formulas FullSyntax.Formula)
+    (solver : SourceGuards.Entailment FullSyntax.Formula) (recursiveFuel : Nat) (inventory : Inventory)
+    (caller : Caller (bits + 2)) (memos : Memos) (metadata : Metadata Typing) (value : Node)
+    (seed : Seed) (ceiling : Nat)
+    (context : Context formulas solver inventory caller memos)
+    (available : Available caller.checked.native.machine.heap value)
+    (closed : value.free = []) (emptyPending : metadata.pending = [])
+    (bounded : Fits seed.2 caller.checked)
+    (known : Heap (fun guard => guard ∈ seed.1) caller.checked.native.machine.heap)
+    (selectionMembers : ∀ entry rows depth free, ∀ edge ∈ edgesOf (.node entry rows depth free), edge ∈ rows)
+    (selectionLength : ∀ entry rows depth free, (edgesOf (.node entry rows depth free)).length ≤ rows.length)
+    (reserved : SourcePruningEnumerationFiniteReservation.Reserved bits recursiveFuel seed ceiling)
+    (arity : SourcePruningEnumerationArityOrigins.Heap caller.checked.native.machine.heap) :
+    ∃ handle,
+      encodeNode value = some handle ∧
+      lookupNode caller.checked.native.machine.heap handle = some value ∧
+      let before : Cached :=
+        ⟨EnumerationState.initial handle,
+          fun slot => if slot = 0 then !MergedOrdinaryHeight.recursiveBoundary value else false,
+          fun _ => none⟩
+    ∃ bound outcome,
+      (∀ extra, run holeKey fits admits graph templates checkEmpty edgesOf stop order (bound + extra) recursiveFuel
+        metadata caller memos.query before = outcome) ∧
+      OutcomeResources formulas solver caller
+        (SourcePruningEnumerationFiniteReservation.final recursiveFuel seed ceiling) outcome ∧
+      (∀ extra output, output ∈ SourcePruningEnumerationHookInvocation.hookOutputs outcome →
+        ResourceHistory holeKey fits admits graph templates checkEmpty edgesOf stop order formulas solver
+          (bound + extra) recursiveFuel inventory caller memos metadata before seed ceiling
+          (SourcePruningEnumerationRestart.decision stop order metadata before) output) ∧
+      (∀ output ∈ SourcePruningEnumerationHookInvocation.hookOutputs outcome, Canonical output.cache.core) ∧
+      ∀ (_extra : Nat) output, output ∈ SourcePruningEnumerationHookInvocation.hookOutputs outcome →
+        ∀ (ambient : InternedGuardedLanguage.Env Symbol) (marker : Symbol) (fuel : Nat)
+          (after : Core) (term : Language.Term Symbol) (pending : List (Constraint × Language.Term Symbol)),
+        SourcePruningEnumerationRendering.Discharged output.cache.core →
+        Success (SourcePruningEnumerationRendering.render output.caller.checked.native.machine.heap marker fuel 0)
+          output.cache.core (term, pending) after →
+        (∀ obligation ∈ pending, SourceEqualityPCSGuard.holds formulas solver obligation.1 obligation.2 = true) →
+        ∃ assignment : Nat → Language.Term Symbol,
+          Satisfies
+            (SourcePruningEnumerationNativeLanguage.handles (SourceEqualityPCSGuard.holds formulas solver)
+              ambient caller.checked.native.machine.heap)
+            (fun guard accepted => SourceEqualityPCSGuard.holds formulas solver guard accepted = true)
+            assignment before.core ∧
+          InternedGuardedLanguage.meaning (SourceEqualityPCSGuard.holds formulas solver) ambient value term ∧
+          (∀ sc ∈ ([] : List Suspended), Suspended.Holds assignment term sc) ∧ term = assignment 0 ∧
+          EnumerationCompressionFrame.Frame output.cache.core after ∧
+          Satisfies
+            (SourcePruningEnumerationNativeLanguage.handles (SourceEqualityPCSGuard.holds formulas solver)
+              ambient output.caller.checked.native.machine.heap)
+            (fun guard accepted => SourceEqualityPCSGuard.holds formulas solver guard accepted = true)
+            assignment output.cache.core ∧
+          Satisfies
+            (SourcePruningEnumerationNativeLanguage.handles (SourceEqualityPCSGuard.holds formulas solver)
+              ambient output.caller.checked.native.machine.heap)
+            (fun guard accepted => SourceEqualityPCSGuard.holds formulas solver guard accepted = true)
+            assignment after := by
+  obtain ⟨handle, encoded, decoded, packet, canonical, stored, mass, _counts, _flags⟩ :=
+    initial_packet formulas solver inventory caller memos metadata value context available closed emptyPending
+  let before : Cached :=
+    ⟨EnumerationState.initial handle,
+      fun slot => if slot = 0 then !MergedOrdinaryHeight.recursiveBoundary value else false,
+      fun _ => none⟩
+  have initialMass : SourcePruningEnumerationPrefixAdmission.suspendedBound before.core ≤ ceiling := by
+    rw [mass]
+    exact Nat.zero_le ceiling
+  obtain ⟨bound, outcome, running, resources, histories, outputCanonical, sound⟩ :=
+    run_finite_complete_resources_render_sound_from_initial_arity holeKey fits admits graph templates
+      checkEmpty edgesOf stop order formulas solver recursiveFuel inventory caller memos before metadata seed
+      ceiling packet bounded known selectionMembers selectionLength initialMass reserved canonical arity
+  refine ⟨handle, encoded, decoded, bound, outcome, running, resources, histories, outputCanonical, ?_⟩
+  intro extra output member ambient marker fuel after term pending discharged observed checked
+  exact sound extra output member ambient marker fuel 0 after term pending handle [] value
+    discharged observed checked stored decoded
+
+end MicroCFTA.SourcePruningEnumerationRecursive
