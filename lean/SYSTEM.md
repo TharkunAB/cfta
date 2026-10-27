@@ -1,5 +1,50 @@
 # Constrained languages, indexing, and distributions
 
+## Actual captured-slot expansion now restores the original pending language
+
+Native locality and neutral foundations: `e4f2d1802`.
+Actual incoming and fold semantics: `09cf564f7`.
+Terminal and shallow child composition: `6fa1aa55d`.
+Ordinary alternative canonical history: `6bc2cf1f4`.
+Neutral traversal and captured native soundness: `645a4dd24`.
+The full formalization goal stays ACTIVE. H6 is still the strongest system
+language theorem. Imported main remains `6c080537a`. No Haskell source changed.
+
+CapturedEdge.stable_complete_sound_current now proves the missing backward
+captured-slot argument. For its actual stable completed family, a satisfying
+final assignment implies full original Satisfies, native selected-edge and
+parent acceptance at assignment uv, every original suspended Holds, and
+fill assignment fragment = assignment uv. Original caller/history admission,
+initial Canonical, ordinary no-terminal status, fresh own arity and structural
+child retention remain explicit. Assignment existence and completeness do not
+follow. This does not certify arbitrary low-fuel completed observations.
+
+The proof removes the captured payload through the actual own prefix, child
+partition, terminal fold, incoming writes, ordered traversal and residual.
+Finalization supplies the fragment equation. The actual original stored and
+decoded pending slot then restores its old restriction. No circular original
+or middle Satisfies premise is added. Native endpoints and full memo contexts
+remain exact. No cached worker runs on a neutral core with stale indexes.
+
+Actual ordinary entry and processed alternatives now carry Canonical too.
+Every completed receipt uses its own reached heap and restored captured input.
+The guarantee also covers processed prefixes before an unsupported stop.
+Rejected candidates receive no new safety or acceptance guarantee.
+
+All 21 new modules and Audit pass strict checks. Aggregate Audit passes
+3972 jobs and checks 78031 theorem dependencies. Installed readback covers
+40 new public theorems, unchanged H6 and one complete receipt-view definition.
+Only permitted axioms occur. All prior proof sources except Audit imports,
+runtime and Haskell remain unchanged. Full evidence and attempts are retained.
+
+Next connect captured soundness to actual recursive callbacks and rendering.
+Retain initial Canonical and checked arity origins through remaining paths.
+Keep recursive truncation retention explicit. Prove emitted-term soundness,
+selector coverage and completeness without a final assignment premise.
+Partial stops, unsupported fallback and full Haskell correspondence stay open.
+Details: `lean/notes-current-pruning-captured-soundness.md`.
+FINDINGS retains the complete external Haskell repair handoff.
+
 ## Actual native enumeration now preserves stored trie validity through captured completion
 
 Native preparation and assimilation: `836a13fc5`.
