@@ -1,0 +1,44 @@
+def MicroCFTA.EnumerationFlatNativeCachedAdapter.ResultRelated : {width : Nat} →
+  Except
+        (MicroCFTA.SourceEqualityNativeDemand.Outcome width
+            (MicroCFTA.InternedConstructorTemplates.Value MicroCFTA.SourcePruningTemplates.Symbol
+              (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)) ⊕
+          MicroCFTA.SourceCurrentAllocatedConjunctionWorker.Outcome width)
+        (Option
+          (List
+            (Except MicroCFTA.EnumerationState.Error
+              (Unit ×
+                MicroCFTA.EnumerationFlatState.State MicroCFTA.SourcePruningTemplates.Symbol
+                  (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))))) ×
+      MicroCFTA.SourceCurrentAllocatedPartialState.State width ×
+        MicroCFTA.SourceEndpointMemo.Memos ×
+          Option
+            (MicroCFTA.EnumerationFlatCached.Cached MicroCFTA.SourcePruningTemplates.Symbol
+              (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)) →
+    Except
+          (MicroCFTA.SourceEqualityNativeDemand.Outcome width
+              (MicroCFTA.InternedConstructorTemplates.Value MicroCFTA.SourcePruningTemplates.Symbol
+                (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)) ⊕
+            MicroCFTA.SourceCurrentAllocatedConjunctionWorker.Outcome width)
+          (Option
+            (List
+              (Except MicroCFTA.EnumerationState.Error
+                (Unit ×
+                  MicroCFTA.EnumerationState.State MicroCFTA.SourcePruningTemplates.Symbol
+                    (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))))) ×
+        MicroCFTA.SourceCurrentAllocatedPartialState.State width ×
+          MicroCFTA.SourceEndpointMemo.Memos ×
+            Option
+              (MicroCFTA.EnumerationExpandableIndex.Cached MicroCFTA.SourcePruningTemplates.Symbol
+                (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)) →
+      Prop :=
+fun {width} flat earlier =>
+  flat.snd.fst = earlier.snd.fst ∧
+    flat.snd.snd.fst = earlier.snd.snd.fst ∧
+      MicroCFTA.EnumerationFlatNativeIndex.WritesRelated flat.snd.snd.snd earlier.snd.snd.snd ∧
+        match flat.fst, earlier.fst with
+        | Except.error first, Except.error second => first = second
+        | Except.ok none, Except.ok none => True
+        | Except.ok (some first), Except.ok (some second) =>
+          MicroCFTA.EnumerationResultRelation.Results MicroCFTA.EnumerationFlatState.Related first second
+        | x, x_1 => False

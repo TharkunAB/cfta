@@ -1,0 +1,47 @@
+/-- Related raw observations recover related caches or both fail classification. -/
+theorem adapt_related (related : Related flat earlier)
+    (heap : InternedConstructorTemplates.State Symbol Constraint) (source target : Nat)
+    (rows : EnumerationResultRelation.Results EnumerationFlatState.Related flatRows oldRows) :
+    EnumerationFlatNativeIndex.WritesRelated (adapt heap flat source target flatRows)
+      (SourcePruningEnumerationCachedAdapter.adapt heap earlier source target oldRows) := by
+  cases rows with
+  | nil => exact related
+  | cons head tail =>
+    cases tail with
+    | cons next remaining => cases head <;> trivial
+    | nil =>
+      cases head with
+      | error fault => trivial
+      | @ok left right value states =>
+        cases value
+        simp only [adapt, SourcePruningEnumerationCachedAdapter.adapt]
+        by_cases same : source = target
+        · simp only [same, ↓reduceIte]
+          exact related
+        · simp only [same, ↓reduceIte]
+          rw [related.core.values, states.values]
+          have rebuilt : EnumerationFlatNativeIndex.WritesRelated
+              (((right.values[target]?).bind fun value =>
+                (SourcePruningEnumerationNativeIndex.candidate heap value).map fun flag =>
+                  (⟨left, (fun slot => if slot = source then false else
+                    if slot = target then flag else flat.expandable slot), flat.waiting⟩ : Cached Symbol Constraint)))
+              (((right.values[target]?).bind fun value =>
+                (SourcePruningEnumerationNativeIndex.candidate heap value).map fun flag =>
+                  (⟨right, (fun slot => if slot = source then false else
+                    if slot = target then flag else earlier.expandable slot), earlier.waiting⟩ :
+                    EnumerationExpandableIndex.Cached Symbol Constraint))) := by
+            cases targetRead : right.values[target]? with
+            | none => trivial
+            | some value =>
+              simp only [Option.bind_some]
+              cases classified : SourcePruningEnumerationNativeIndex.candidate heap value with
+              | none => trivial
+              | some flag =>
+                exact ⟨states, by rw [related.expandable], related.waiting⟩
+          cases sourceRead : earlier.core.values[source]? with
+          | none => exact rebuilt
+          | some value =>
+            cases value with
+            | eliminated => exact related
+            | enumerated fragment => exact rebuilt
+            | unenumerated node scs => exact rebuilt

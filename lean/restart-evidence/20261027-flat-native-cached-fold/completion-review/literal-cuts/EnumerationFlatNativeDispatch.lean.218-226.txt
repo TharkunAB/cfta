@@ -1,0 +1,9 @@
+/-- Every bounded native dispatcher retains all outer effects and ordered action rows. -/
+theorem dispatch_related
+    [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Constraint)] [DecidableEq Node]
+    (related : EnumerationFlatState.Related flat earlier)
+    (checkEmpty : Bool) (nativeFuel p h : Nat) (beforeCaller : Caller width)
+    (source target : Nat) (queries : Queries) :
+    PreparedRelated (dispatch checkEmpty nativeFuel p h beforeCaller flat source target queries)
+      (SourcePruningEnumerationDispatch.dispatch checkEmpty nativeFuel p h
+        beforeCaller earlier source target queries) := by

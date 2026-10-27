@@ -193,9 +193,15 @@ pending inputs and native realization remain explicit admission premises.
 The flat raw dispatcher and ordered raw loop now preserve every bounded
 observation, including the literal full Caller and saved Queries. Rejected
 branches retain their actual reached native effects. No artificial semantic
-Graph or second intersection is used. Optional cache recovery and its complete
-uncached-tail fallback remain separate. Full global Memos/Post composition,
-whole recursive worker transport and physical Haskell containers remain open.
+Graph or second intersection is used. The flat cached adapter and complete
+cached loop now retain optional cache recovery and the entire uncached-tail
+fallback. Original admission derives actual adequate flat completion, correct
+native indexes and the same full Post/global Memos. Original resource reservation
+derives request ranges and bounds that same reached native Caller. Each adequate
+bound has an actual flat endpoint; literal endpoint equality across fuels is not
+claimed. Whole terminal/recursive composition, admission histories and physical
+Haskell containers remain open.
+Current cached completion: lean/notes-current-flat-native-cached-fold.md.
 The proof modules add no Haskell runtime repair or regression test.
 Current raw effects: lean/notes-current-flat-native-fold.md.
 Details: lean/notes-current-flat-native-index.md.

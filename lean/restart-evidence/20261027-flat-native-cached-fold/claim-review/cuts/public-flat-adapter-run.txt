@@ -1,0 +1,52 @@
+def MicroCFTA.EnumerationFlatNativeCachedAdapter.run : {width : Nat} →
+  [DecidableEq MicroCFTA.SourcePruningTemplates.Symbol] →
+    [DecidableEq
+          (MicroCFTA.InternedConstructorTemplates.EdgeKey MicroCFTA.SourcePruningTemplates.Symbol
+            (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))] →
+      [DecidableEq
+            (MicroCFTA.InternedConstructorTemplates.Value MicroCFTA.SourcePruningTemplates.Symbol
+              (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))] →
+        Bool →
+          Nat →
+            Nat →
+              Nat →
+                MicroCFTA.SourceCurrentAllocatedPartialState.State width →
+                  MicroCFTA.EnumerationFlatCached.Cached MicroCFTA.SourcePruningTemplates.Symbol
+                      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) →
+                    Nat →
+                      Nat →
+                        MicroCFTA.SourceEndpointMemo.Memos →
+                          Except
+                              (MicroCFTA.SourceEqualityNativeDemand.Outcome width
+                                  (MicroCFTA.InternedConstructorTemplates.Value MicroCFTA.SourcePruningTemplates.Symbol
+                                    (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)) ⊕
+                                MicroCFTA.SourceCurrentAllocatedConjunctionWorker.Outcome width)
+                              (Option
+                                (List
+                                  (Except MicroCFTA.EnumerationState.Error
+                                    (Unit ×
+                                      MicroCFTA.EnumerationFlatState.State MicroCFTA.SourcePruningTemplates.Symbol
+                                        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))))) ×
+                            MicroCFTA.SourceCurrentAllocatedPartialState.State width ×
+                              MicroCFTA.SourceEndpointMemo.Memos ×
+                                Option
+                                  (MicroCFTA.EnumerationFlatCached.Cached MicroCFTA.SourcePruningTemplates.Symbol
+                                    (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)) :=
+fun {width} [DecidableEq MicroCFTA.SourcePruningTemplates.Symbol]
+    [DecidableEq
+        (MicroCFTA.InternedConstructorTemplates.EdgeKey MicroCFTA.SourcePruningTemplates.Symbol
+          (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+    [DecidableEq
+        (MicroCFTA.InternedConstructorTemplates.Value MicroCFTA.SourcePruningTemplates.Symbol
+          (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+    checkEmpty nativeFuel p h beforeCaller before source target queries =>
+  match
+    MicroCFTA.EnumerationFlatNativeDispatch.dispatch checkEmpty nativeFuel p h beforeCaller before.core source target
+      queries with
+  | (Except.error fault, reachedCaller, savedQueries) => (Except.error fault, reachedCaller, savedQueries, none)
+  | (Except.ok none, reachedCaller, savedQueries) => (Except.ok none, reachedCaller, savedQueries, none)
+  | (Except.ok (some action), reachedCaller, savedQueries) =>
+    have raw := (action before.core).run;
+    (Except.ok (some raw), reachedCaller, savedQueries,
+      MicroCFTA.EnumerationFlatNativeCachedAdapter.adapt reachedCaller.checked.native.machine.heap before source target
+        raw)

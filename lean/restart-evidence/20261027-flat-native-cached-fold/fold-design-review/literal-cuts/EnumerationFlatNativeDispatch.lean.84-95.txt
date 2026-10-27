@@ -1,0 +1,12 @@
+/-- Keep exact outer effects and relate every captured action at related input cores. -/
+def PreparedRelated {Fault : Type 1}
+    (flat : Except Fault (Option (EnumerationFlatState.Action Symbol EnumGuard Unit)) × Caller width × Queries)
+    (earlier : Except Fault (Option (EnumerationState.EnumerateM Symbol EnumGuard Unit)) × Caller width × Queries) : Prop :=
+  flat.2 = earlier.2 ∧
+    match flat.1, earlier.1 with
+    | .error first, .error second => first = second
+    | .ok none, .ok none => True
+    | .ok (some first), .ok (some second) =>
+        ∀ left right, EnumerationFlatState.Related left right →
+          EnumerationResultRelation.Results EnumerationFlatState.Related (first left) (second right)
+    | _, _ => False

@@ -1,0 +1,32 @@
+def MicroCFTA.SourcePruningEnumerationCachedAdapter.adapt : MicroCFTA.InternedConstructorTemplates.State
+    MicroCFTA.SourcePruningTemplates.Symbol (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) →
+  MicroCFTA.EnumerationExpandableIndex.Cached MicroCFTA.SourcePruningTemplates.Symbol
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) →
+    Nat →
+      Nat →
+        List
+            (Except MicroCFTA.EnumerationState.Error
+              (Unit ×
+                MicroCFTA.EnumerationState.State MicroCFTA.SourcePruningTemplates.Symbol
+                  (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))) →
+          Option
+            (MicroCFTA.EnumerationExpandableIndex.Cached MicroCFTA.SourcePruningTemplates.Symbol
+              (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)) :=
+fun heap before source target raw =>
+  match raw with
+  | [] => some before
+  | [Except.ok (PUnit.unit, core)] =>
+    if source = target then some before
+    else
+      match before.core.values[source]? with
+      | some MicroCFTA.EnumerationState.UVarValue.eliminated => some before
+      | x =>
+        core.values[target]?.bind fun value =>
+          Option.map
+            (fun flag =>
+              { core := core,
+                expandable := fun slot =>
+                  if slot = source then false else if slot = target then flag else before.expandable slot,
+                waiting := before.waiting })
+            (MicroCFTA.SourcePruningEnumerationNativeIndex.candidate heap value)
+  | x => none

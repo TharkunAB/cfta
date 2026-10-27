@@ -1,0 +1,40 @@
+/-- Select the source branches before the actual checked query and enabled check. -/
+noncomputable def dispatch
+    [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Constraint)] [DecidableEq Node]
+    (checkEmpty : Bool) (nativeFuel p h : Nat)
+    (beforeCaller : Caller width) (before : EnumerationFlatState.State Symbol EnumGuard)
+    (source target : Nat) (queries : Queries) :
+    (Except (SourceEqualityNativeDemand.Outcome width Node ⊕
+      SourceCurrentAllocatedConjunctionWorker.Outcome width)
+      (Option (EnumerationFlatState.Action Symbol EnumGuard Unit))) × Caller width × Queries := Id.run do
+  let noop : EnumerationFlatState.Action Symbol EnumGuard Unit := fun state => [.ok ((), state)]
+  if source = target then return (.ok (some noop), beforeCaller, queries)
+  let some sourceValue := before.values[source]? | return (.ok none, beforeCaller, queries)
+  match sourceValue with
+  | .eliminated => return (.ok (some noop), beforeCaller, queries)
+  | _ => pure PUnit.unit
+  let some targetValue := before.values[target]? | return (.ok none, beforeCaller, queries)
+  let .unenumerated sourceNode sourceScs := sourceValue |
+    return (.ok (some (EnumerationFlatState.failure .invalidIntersection)), beforeCaller, queries)
+  let .unenumerated targetNode targetScs := targetValue |
+    return (.ok (some (EnumerationFlatState.failure .invalidIntersection)), beforeCaller, queries)
+  let some sourceHandle := sourceNode |
+    return (.ok (some (finishOptional source target targetNode sourceScs targetScs)), beforeCaller, queries)
+  let some targetHandle := targetNode |
+    return (.ok (some (finishOptional source target (some sourceHandle) sourceScs targetScs)), beforeCaller, queries)
+  let some left := lookupNode beforeCaller.checked.native.machine.heap sourceHandle |
+    return (.ok none, beforeCaller, queries)
+  let some right := lookupNode beforeCaller.checked.native.machine.heap targetHandle |
+    return (.ok none, beforeCaller, queries)
+  let actual : SourceEqualityNativeDemand.Outcome width Node :=
+    SourceEqualityNativeDemand.execute nativeFuel
+      (.code (SourceRecursiveIntersectionCode.requestNode IntersectionEmptyDomain.emptyDomain left right)) beforeCaller.checked
+  match actual with
+  | .done query queried =>
+    let prepared :
+      (Except (SourceCurrentAllocatedConjunctionWorker.Outcome width)
+        (Option (EnumerationFlatState.Action Symbol EnumGuard Unit))) × Caller width × Queries :=
+      afterQuery checkEmpty p h source target sourceScs targetScs query queried beforeCaller queries
+    return (prepared.1.mapError Sum.inr, prepared.2.1, prepared.2.2)
+  | other => return (.error (.inl other),
+      SourceCurrentAllocatedPartialState.advance beforeCaller other.state beforeCaller.fourth beforeCaller.merge, queries)

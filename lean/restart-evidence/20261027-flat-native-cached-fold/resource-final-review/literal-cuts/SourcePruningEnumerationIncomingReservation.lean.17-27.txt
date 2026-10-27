@@ -1,0 +1,11 @@
+abbrev Seed := List Constraint × Profile
+
+/-- Forecast one native query and its optional Empty check from the current entry. -/
+noncomputable def step (seed : Seed) : Seed :=
+  (SourceCurrentGeneratedQueryGuardResources.forecast seed.1 seed.2,
+    SourcePruningEnumerationIncomingQuery.forecast seed.1 seed.2)
+
+/-- Forecast a fixed number of combined incoming steps from the original seed. -/
+noncomputable def advance (seed : Seed) : Nat → Seed
+  | 0 => seed
+  | count + 1 => advance (step seed) count

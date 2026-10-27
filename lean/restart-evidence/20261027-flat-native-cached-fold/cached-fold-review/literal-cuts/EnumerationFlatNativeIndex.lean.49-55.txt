@@ -1,0 +1,7 @@
+/-- Optional writes fail together or return related complete caches. -/
+def WritesRelated (flat : Option (Cached Symbol EnumGuard))
+    (earlier : Option (EnumerationExpandableIndex.Cached Symbol EnumGuard)) : Prop :=
+  match flat, earlier with
+  | none, none => True
+  | some flat, some earlier => Related flat earlier
+  | _, _ => False

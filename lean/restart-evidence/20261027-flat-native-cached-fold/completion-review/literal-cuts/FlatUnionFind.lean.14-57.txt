@@ -1,0 +1,44 @@
+inductive Entry where
+  /-- The stored pointer targets the class representative. -/
+  | parent (uv : Nat)
+  /-- A representative stores the complete finite class. -/
+  | root (size : Nat) (members : List Nat)
+deriving DecidableEq, Repr
+
+/-- The persistent map interface permits absent singleton roots. -/
+abbrev Forest := Nat → Option Entry
+
+/-- Replace one map entry. -/
+def put (forest : Forest) (uv : Nat) (entry : Entry) : Forest :=
+  fun other => if other = uv then some entry else forest other
+
+/-- Read one parent pointer, or return the variable itself. -/
+def root (forest : Forest) (uv : Nat) : Nat :=
+  match forest uv with
+  | some (.parent parent) => parent
+  | _ => uv
+
+/-- Read root metadata, with the source singleton default. -/
+def entryOf (forest : Forest) (uv : Nat) : Nat × List Nat :=
+  match forest uv with
+  | some (.root size members) => (size, members)
+  | _ => (1, [uv])
+
+/-- Find reads the representative and retains the same forest. -/
+def find (forest : Forest) (uv : Nat) : Nat × Forest :=
+  (root forest uv, forest)
+
+/-- Each supplied variable is a singleton root. Duplicate inputs have no effect. -/
+def withInitialValues (variables : List Nat) : Forest :=
+  fun uv => if uv ∈ variables then some (.root 1 [uv]) else none
+
+/-- Parents target stored roots. Root metadata describes the complete class. -/
+structure Valid (forest : Forest) : Prop where
+  /-- Every parent target has a stored root record. -/
+  parents : ∀ uv parent, forest uv = some (.parent parent) →
+    ∃ size members, forest parent = some (.root size members)
+  /-- Root size and members agree with the direct lookup classes. -/
+  roots : ∀ representative size members,
+    forest representative = some (.root size members) →
+    members.Nodup ∧ size = members.length ∧
+      ∀ uv, uv ∈ members ↔ root forest uv = representative

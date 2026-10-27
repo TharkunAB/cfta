@@ -1,0 +1,18 @@
+/-- Retain every raw row and native effect independently of optional cache recovery. -/
+def ResultRelated
+    (flat : Except (SourceEqualityNativeDemand.Outcome width Node ⊕
+      SourceCurrentAllocatedConjunctionWorker.Outcome width)
+      (Option (List (Except EnumerationState.Error (Unit × EnumerationFlatState.State Symbol Constraint)))) ×
+      Caller width × Queries × Option (Cached Symbol Constraint))
+    (earlier : Except (SourceEqualityNativeDemand.Outcome width Node ⊕
+      SourceCurrentAllocatedConjunctionWorker.Outcome width)
+      (Option (List (Except EnumerationState.Error (Unit × EnumerationState.State Symbol Constraint)))) ×
+      Caller width × Queries × Option (EnumerationExpandableIndex.Cached Symbol Constraint)) : Prop :=
+  flat.2.1 = earlier.2.1 ∧ flat.2.2.1 = earlier.2.2.1 ∧
+    EnumerationFlatNativeIndex.WritesRelated flat.2.2.2 earlier.2.2.2 ∧
+    match flat.1, earlier.1 with
+    | .error first, .error second => first = second
+    | .ok none, .ok none => True
+    | .ok (some first), .ok (some second) =>
+        EnumerationResultRelation.Results EnumerationFlatState.Related first second
+    | _, _ => False

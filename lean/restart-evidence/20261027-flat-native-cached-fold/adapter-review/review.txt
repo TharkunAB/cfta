@@ -1,0 +1,15 @@
+CLEAR — final flat native cached adapter.
+
+Whole final EnumerationFlatNativeCachedAdapter.lean was read: 170 lines, SHA256 2de492d136895851b06c097ade257c38895f616934e059a047718b8baefe4ba1. The old adapter runtime, the final native dispatcher relation and the existing core/cache/row relations were checked at the pinned source spans.
+
+adapt (21–38) mirrors old CachedAdapter.adapt (17–34) exactly. Empty raw returns the original cache. A singleton checks source=target before the original source constructor. An eliminated source also returns the original cache. Otherwise the target value comes from the actual returned row core, and candidate runs at the supplied reached heap. Successful recovery installs that row core, source=false/target=classified/other original flags, and original waiting. Error/multiple-row shapes and missing target/classifier return None. Source checks use constructor patterns, with no new UVarValue equality instance.
+
+run (40–60) invokes one actual flat dispatch and evaluates its captured action once. Fault or outer None retains the complete reached Caller and saved query state and has no candidate. A present raw list is retained verbatim, independently of whether recovery returns Some or None. The classifier uses reachedCaller.checked.native.machine.heap. It does not rerun the native query or enabled emptiness check.
+
+adapt_related (62–108) starts from cached Related plus ordered raw Results. Nil and noop cases preserve the original cache relation. Non-singleton and inner-error cases fail together. In the rebuilding case, original value equality aligns source selection, row-core value equality aligns the target lookup, and literal candidate equality aligns classification. The returned complete core relation comes from the raw row relation; flag and waiting equalities come from the original cached relation. No actual-target admission or desired final cache is assumed.
+
+ResultRelated (110–127) keeps four distinct obligations: exact complete Caller, exact saved queries, optional-cache WritesRelated, and matching outer tags/faults or ordered raw Results. run_related (129–168) derives them from the final dispatch_related at the same fixed native/p/h bounds and applies the captured action relation to the actual original cores. It adds no Context, Ranges, future-success or correctness premise.
+
+Neither theorem infers recovered.core=rawRow.core in general. The noop branches can return the original cache for an arbitrary supplied singleton. The later fold must still frame the actual successful row core into the recovered sidecar. No global Correct, Safe, pending, allocation-bound, completion or language result is claimed for optional candidates. The native cached fold and its full uncached-tail fallback remain separate composition work. H6 is unchanged.
+
+Retained strict-adapter-3 reports exit code zero with all linters and warnings as errors under a 4 GiB cap. Its raw log is literally empty, and its checked source equals the final live source and reported source hash. No Lean/native job, Git or network action was run during this review. Only this temporary review package was written.

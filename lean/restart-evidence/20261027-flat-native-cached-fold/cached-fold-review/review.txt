@@ -1,0 +1,15 @@
+CLEAR — final all-cases flat native cached fold.
+
+Whole EnumerationFlatNativeCachedFold.lean was read: 133 lines, SHA256 962ac86b2745979e44855baa4728a520b7a814198a33e2254d39f6452dd0c12c. Its final bytes equal the retained strict-cached-fold-2 input and report identity.
+
+run (20–50) mirrors old CachedFold.run (13–43). Empty input returns the original core singleton and original cache. Native faults and outer None keep the reached Caller and saved queries, return the current prefix core, and remove the sidecar. A non-singleton raw result stops with its exact ordered rows, current prefix outer core and actual optional sidecar. Empty rejection therefore retains native effects and the last enumeration prefix rather than rolling back the caller.
+
+Exactly one successful unit row continues. With cache None, the new runtime calls EnumerationFlatNativeFold.run on the ENTIRE remaining list, starting at the actual row core, reached Caller and saved queries, and keeps the sidecar None. This is full suffix execution, not early cache loss termination. With Some recovered, it recursively calls the cached fold after frame actualRowCore recovered. This installs the actual row core and retains the recovered flag/waiting functions.
+
+ResultRelated (52–64) is exactly the conjunction of raw NativeFold.ResultRelated for the first tuple component and existing WritesRelated for the optional-cache component. Thus full Caller/query equality, native fault/None tags, every ordered raw row and outer-core correspondence are retained independently of cache presence. Mixed Some/None sidecars are excluded by WritesRelated, not by an added success assumption.
+
+run_related (66–131) uses the same head Adapter.run_related. It preserves all stopping cases. In the singleton/None branch it invokes the installed raw run_related at the actual row cores and actual native endpoints. In the singleton/Some branch frame_related combines the actual row-core relation with recovered-cache relation before IH. It never infers recovered.core=rawRow.core. Both branches carry the same fixed native/p/h fuels and source order, including duplicates.
+
+The theorem assumes original cached Related and the listed equality instances only. It assumes no Context, Ranges, Safe, native index correctness, future success or desired endpoint. It proves correspondence at each fixed bound, not a new finite completion producer or one fixed flat witness for all sufficient bounds. A later producer may retain the old completion once and expose forall adequate bounds, exists an actual related flat endpoint with that same native Caller/Post/full memos. Optional candidates are not globally certified Correct by this result. No whole-driver, language or H6 upgrade is claimed.
+
+The retained strict report records exit code zero, all linters with warnings as errors, and a 4 GiB memory cap. Its raw log is literally empty. Live source, checked input, report hash, full copies and exact inclusive cuts were compared. No Lean/native checks, Git or network operations were run. Only this temporary package was written.

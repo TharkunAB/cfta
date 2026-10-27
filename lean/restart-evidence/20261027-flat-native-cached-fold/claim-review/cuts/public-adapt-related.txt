@@ -1,0 +1,29 @@
+MicroCFTA.EnumerationFlatNativeCachedAdapter.adapt_related
+  {flat :
+    MicroCFTA.EnumerationFlatCached.Cached MicroCFTA.SourcePruningTemplates.Symbol
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)}
+  {earlier :
+    MicroCFTA.EnumerationExpandableIndex.Cached MicroCFTA.SourcePruningTemplates.Symbol
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)}
+  {flatRows :
+    List
+      (Except MicroCFTA.EnumerationState.Error
+        (Unit ×
+          MicroCFTA.EnumerationFlatState.State MicroCFTA.SourcePruningTemplates.Symbol
+            (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)))}
+  {oldRows :
+    List
+      (Except MicroCFTA.EnumerationState.Error
+        (Unit ×
+          MicroCFTA.EnumerationState.State MicroCFTA.SourcePruningTemplates.Symbol
+            (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)))}
+  (related : MicroCFTA.EnumerationFlatCached.Related flat earlier)
+  (heap :
+    MicroCFTA.InternedConstructorTemplates.State MicroCFTA.SourcePruningTemplates.Symbol
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+  (source target : Nat)
+  (rows : MicroCFTA.EnumerationResultRelation.Results MicroCFTA.EnumerationFlatState.Related flatRows oldRows) :
+  MicroCFTA.EnumerationFlatNativeIndex.WritesRelated
+    (MicroCFTA.EnumerationFlatNativeCachedAdapter.adapt heap flat source target flatRows)
+    (MicroCFTA.SourcePruningEnumerationCachedAdapter.adapt heap earlier source target oldRows)
+'MicroCFTA.EnumerationFlatNativeCachedAdapter.adapt_related' depends on axioms: [propext]

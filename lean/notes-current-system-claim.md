@@ -1,5 +1,35 @@
 # Current system claim
 
+## Native cached loop now derives adequate completion and full memos
+
+Cache adapter and loop: `58ad9ceaa`. Completion and resources: `68d605424`.
+Main remains `82258094c`. The full formalization goal stays ACTIVE.
+H6 remains the strongest global finite-tree language theorem. Captured
+rendering retains all its original admission and discharge/rendering gates.
+
+The actual flat cache adapter preserves raw rows and cache recovery separately.
+The cached loop frames each actual returned core into its recovered cache.
+A singleton without a cache executes the complete uncached suffix at its reached
+Caller and saved Queries. No missing-cache branch is silently truncated.
+
+Original admission now derives actual flat cached completion at every adequate
+bound, correct native indexes and the same reached Caller, Queries and full
+Post/global Memos. The entire stable earlier packet remains available. The
+resource variant derives request Ranges from original Fits, Reserved and guard
+carrier, and bounds that same returned native state.
+
+The flat endpoint is existential for each adequate bound. No one literal flat
+endpoint across all fuels, outer/cache-core equality or explicit-key bound is
+inferred. Whole recursive worker transport and admission histories remain open.
+
+All four modules and Audit pass strict checks. Aggregate Audit passes 4002 jobs
+and 78364 theorem dependency checks. Installed readback covers five new theorems,
+unchanged H6/captured rendering and eight complete definitions. No Haskell change.
+
+Next compose the actual terminal prefix and cached loop with the same native
+history, then transport recursive callbacks and derive their admission gates.
+Details: `lean/notes-current-flat-native-cached-fold.md`.
+
 ## Native dispatcher and ordered raw loop retain actual native effects
 
 Source proof: `695c03cbd`. Main remains `82258094c`; the full goal stays ACTIVE.

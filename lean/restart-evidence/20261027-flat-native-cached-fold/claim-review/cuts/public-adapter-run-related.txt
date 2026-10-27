@@ -1,0 +1,22 @@
+MicroCFTA.EnumerationFlatNativeCachedAdapter.run_related {width : Nat}
+  {flat :
+    MicroCFTA.EnumerationFlatCached.Cached MicroCFTA.SourcePruningTemplates.Symbol
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)}
+  {earlier :
+    MicroCFTA.EnumerationExpandableIndex.Cached MicroCFTA.SourcePruningTemplates.Symbol
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)}
+  [DecidableEq MicroCFTA.SourcePruningTemplates.Symbol]
+  [DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey MicroCFTA.SourcePruningTemplates.Symbol
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  [DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.Value MicroCFTA.SourcePruningTemplates.Symbol
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  (related : MicroCFTA.EnumerationFlatCached.Related flat earlier) (checkEmpty : Bool) (nativeFuel p h : Nat)
+  (beforeCaller : MicroCFTA.SourceCurrentAllocatedPartialState.State width) (source target : Nat)
+  (queries : MicroCFTA.SourceEndpointMemo.Memos) :
+  MicroCFTA.EnumerationFlatNativeCachedAdapter.ResultRelated
+    (MicroCFTA.EnumerationFlatNativeCachedAdapter.run checkEmpty nativeFuel p h beforeCaller flat source target queries)
+    (MicroCFTA.SourcePruningEnumerationCachedAdapter.run checkEmpty nativeFuel p h beforeCaller earlier source target
+      queries)
+'MicroCFTA.EnumerationFlatNativeCachedAdapter.run_related' depends on axioms: [propext, Classical.choice, Quot.sound]

@@ -1,0 +1,43 @@
+  | [.ok ((), core)] =>
+      if source = target then some before else
+        match before.core.values[source]? with
+        | some .eliminated => some before
+        | _ =>
+            (core.values[target]?).bind fun value =>
+              (SourcePruningEnumerationNativeIndex.candidate heap value).map fun flag =>
+                ⟨core, (fun slot => if slot = source then false else
+                  if slot = target then flag else before.expandable slot), before.waiting⟩
+  | _ => none
+
+/-- Run dispatch and its captured action once, with a separate cache receipt. -/
+noncomputable def run
+    [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Constraint)] [DecidableEq Node]
+    (checkEmpty : Bool) (nativeFuel p h : Nat)
+    (beforeCaller : Caller width) (before : EnumerationFlatCached.Cached Symbol Constraint)
+    (source target : Nat) (queries : Queries) :
+    (Except (SourceEqualityNativeDemand.Outcome width Node ⊕
+      SourceCurrentAllocatedConjunctionWorker.Outcome width)
+      (Option (List (Except EnumerationState.Error (Unit × EnumerationFlatState.State Symbol Constraint))))) ×
+      Caller width × Queries × Option (EnumerationFlatCached.Cached Symbol Constraint) :=
+  match EnumerationFlatNativeDispatch.dispatch checkEmpty nativeFuel p h
+      beforeCaller before.core source target queries with
+  | (.error fault, reachedCaller, savedQueries) =>
+      (.error fault, reachedCaller, savedQueries, none)
+  | (.ok none, reachedCaller, savedQueries) =>
+      (.ok none, reachedCaller, savedQueries, none)
+  | (.ok (some action), reachedCaller, savedQueries) =>
+      let raw : List (Except EnumerationState.Error (Unit × EnumerationFlatState.State Symbol Constraint)) :=
+        ExceptT.run (action before.core)
+      (.ok (some raw), reachedCaller, savedQueries,
+        adapt reachedCaller.checked.native.machine.heap before source target raw)
+
+/-- Related raw observations recover related caches or both fail classification. -/
+theorem adapt_related (related : Related flat earlier)
+    (heap : InternedConstructorTemplates.State Symbol Constraint) (source target : Nat)
+    (rows : EnumerationResultRelation.Results EnumerationFlatState.Related flatRows oldRows) :
+    EnumerationFlatNativeIndex.WritesRelated (adapt heap flat source target flatRows)
+      (SourcePruningEnumerationCachedAdapter.adapt heap earlier source target oldRows) := by
+  cases rows with
+  | nil => exact related
+  | cons head tail =>
+    cases tail with

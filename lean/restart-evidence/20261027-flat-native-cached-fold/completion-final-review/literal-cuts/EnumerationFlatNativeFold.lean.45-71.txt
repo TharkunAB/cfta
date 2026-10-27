@@ -1,0 +1,27 @@
+/-- Keep every ordered row, fault, missing action and exact reached outer state. -/
+def ResultRelated
+    (flat : Except (SourceEqualityNativeDemand.Outcome width Node ⊕
+      SourceCurrentAllocatedConjunctionWorker.Outcome width)
+      (Option (List (Except EnumerationState.Error (Unit × EnumerationFlatState.State Symbol EnumGuard)))) ×
+      Caller width × Queries × EnumerationFlatState.State Symbol EnumGuard)
+    (earlier : Except (SourceEqualityNativeDemand.Outcome width Node ⊕
+      SourceCurrentAllocatedConjunctionWorker.Outcome width)
+      (Option (List (Except EnumerationState.Error (Unit × EnumerationState.State Symbol EnumGuard)))) ×
+      Caller width × Queries × EnumerationState.State Symbol EnumGuard) : Prop :=
+  flat.2.1 = earlier.2.1 ∧ flat.2.2.1 = earlier.2.2.1 ∧
+    EnumerationFlatState.Related flat.2.2.2 earlier.2.2.2 ∧
+    match flat.1, earlier.1 with
+    | .error first, .error second => first = second
+    | .ok none, .ok none => True
+    | .ok (some first), .ok (some second) =>
+        EnumerationResultRelation.Results EnumerationFlatState.Related first second
+    | _, _ => False
+
+/-- All bounds retain complete native effects and every ordered loop observation. -/
+theorem run_related
+    [DecidableEq Symbol] [DecidableEq (InternedConstructorTemplates.EdgeKey Symbol Constraint)] [DecidableEq Node]
+    (related : EnumerationFlatState.Related flat earlier)
+    (checkEmpty : Bool) (nativeFuel p h : Nat) (sources : List Nat)
+    (beforeCaller : Caller width) (target : Nat) (queries : Queries) :
+    ResultRelated (run checkEmpty nativeFuel p h sources beforeCaller flat target queries)
+      (SourcePruningEnumerationFold.run checkEmpty nativeFuel p h sources beforeCaller earlier target queries) := by

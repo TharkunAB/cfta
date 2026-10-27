@@ -1,0 +1,110 @@
+MicroCFTA.EnumerationFlatNativeCachedCompletion.complete_resources {bits : Nat}
+  [DecidableEq MicroCFTA.SourcePruningTemplates.Symbol]
+  [DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey MicroCFTA.SourcePruningTemplates.Symbol
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  [DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.Value MicroCFTA.SourcePruningTemplates.Symbol
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  (seed : MicroCFTA.SourcePruningEnumerationIncomingReservation.Seed)
+  (formulas : MicroCFTA.SourceGuards.Formulas MicroCFTA.FullSyntax.Formula)
+  (solver : MicroCFTA.SourceGuards.Entailment MicroCFTA.FullSyntax.Formula)
+  (inventory : MicroCFTA.SourceCurrentAllocatedNativeInventoryState.Inventory)
+  (beforeCaller : MicroCFTA.SourceCurrentAllocatedPartialState.State (bits + 2))
+  (flat :
+    MicroCFTA.EnumerationFlatCached.Cached MicroCFTA.SourcePruningTemplates.Symbol
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+  (before :
+    MicroCFTA.EnumerationExpandableIndex.Cached MicroCFTA.SourcePruningTemplates.Symbol
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+  (related : MicroCFTA.EnumerationFlatCached.Related flat before) (sources : List Nat) (checkEmpty : Bool)
+  (target : Nat) (memos : MicroCFTA.EndpointMemoGateTrace.Memos)
+  (initial : MicroCFTA.SourceCurrentAllocatedPartialInvariant.Context formulas solver inventory beforeCaller memos)
+  (storage : MicroCFTA.EnumerationCorrectness.StorageValid before.core)
+  (realized :
+    MicroCFTA.SourcePruningEnumerationObservation.PendingRealized beforeCaller.checked.native.machine.heap before.core)
+  (correct : MicroCFTA.EnumerationFlatNativeIndex.Correct beforeCaller.checked.native.machine.heap flat)
+  (targetPending : MicroCFTA.EnumerationCompleteness.PendingAt before.core target)
+  (selected :
+    ∀ (source : Nat), source ∈ sources → MicroCFTA.EnumerationCompleteness.PendingOrEliminated before.core source)
+  (fits : MicroCFTA.SourceCurrentConstrainedCapGeneratedQueryResources.Fits seed.snd beforeCaller.checked)
+  (reserved : MicroCFTA.SourcePruningEnumerationIncomingReservation.Reserved bits seed sources.length)
+  (known :
+    MicroCFTA.SourceEqualityAnnotationHeap.Heap (fun guard => guard ∈ seed.fst)
+      beforeCaller.checked.native.machine.heap) :
+  ∃ fuel p h rows afterCaller savedQueries final next after,
+    (∀ (extra P H : Nat),
+        p ≤ P →
+          h ≤ H →
+            MicroCFTA.SourcePruningEnumerationCachedFold.run checkEmpty (fuel + extra) P H sources beforeCaller before
+                target memos.query =
+              ((Except.ok (some (List.map (fun row => Except.ok (row.fst, row.snd.core)) rows)), afterCaller,
+                  savedQueries, after.core),
+                some after)) ∧
+      MicroCFTA.SourceCurrentAllocatedPartialInvariant.Post formulas solver next beforeCaller afterCaller final ∧
+        final.query = savedQueries ∧
+          after.core.counter = before.core.counter ∧
+            after.core.representatives = before.core.representatives ∧
+              MicroCFTA.EnumerationSchedule.Roots after.core.representatives
+                  (MicroCFTA.FlatUnionFind.root flat.core.representatives) ∧
+                MicroCFTA.EnumerationCorrectness.StorageValid after.core ∧
+                  MicroCFTA.SourcePruningEnumerationObservation.PendingRealized afterCaller.checked.native.machine.heap
+                      after.core ∧
+                    MicroCFTA.EnumerationCanonicalWaiting.Correct
+                        (MicroCFTA.FlatUnionFind.root flat.core.representatives) after.core.values after.waiting ∧
+                      after.waiting = before.waiting ∧
+                        (∀ (slot : Nat),
+                            MicroCFTA.SourcePruningEnumerationNativeIndex.candidate
+                                afterCaller.checked.native.machine.heap
+                                (after.core.values[slot]?.getD MicroCFTA.EnumerationState.UVarValue.eliminated) =
+                              some (after.expandable slot)) ∧
+                          (rows = [] ∨ rows = [((), after)]) ∧
+                            MicroCFTA.EnumerationCompleteness.PendingAt after.core target ∧
+                              (∀ (slot : Nat),
+                                  before.core.values[slot]? = some MicroCFTA.EnumerationState.UVarValue.eliminated →
+                                    after.core.values[slot]? = some MicroCFTA.EnumerationState.UVarValue.eliminated) ∧
+                                (rows = [((), after)] →
+                                    ∀ (source : Nat),
+                                      source ∈ sources →
+                                        source ≠ target →
+                                          after.core.values[source]? =
+                                            some MicroCFTA.EnumerationState.UVarValue.eliminated) ∧
+                                  (∀ (slot : Nat),
+                                      ¬slot ∈ sources →
+                                        slot ≠ target → after.core.values[slot]? = before.core.values[slot]?) ∧
+                                    (∀ (slot : Nat)
+                                        (fragment :
+                                          MicroCFTA.Fragments.Fragment MicroCFTA.SourcePruningTemplates.Symbol),
+                                        after.core.values[slot]? =
+                                            some (MicroCFTA.EnumerationState.UVarValue.enumerated fragment) →
+                                          before.core.values[slot]? =
+                                            some (MicroCFTA.EnumerationState.UVarValue.enumerated fragment)) ∧
+                                      (∀ (extra P H : Nat),
+                                          p ≤ P →
+                                            h ≤ H →
+                                              ∃ flatRows outer recovered,
+                                                MicroCFTA.EnumerationFlatNativeCachedFold.run checkEmpty (fuel + extra)
+                                                      P H sources beforeCaller flat target memos.query =
+                                                    ((Except.ok (some flatRows), afterCaller, savedQueries, outer),
+                                                      some recovered) ∧
+                                                  MicroCFTA.EnumerationFlatCached.Related recovered after ∧
+                                                    MicroCFTA.EnumerationFlatState.Related outer after.core ∧
+                                                      MicroCFTA.EnumerationResultRelation.Results
+                                                          MicroCFTA.EnumerationFlatState.Related flatRows
+                                                          (List.map (fun row => Except.ok (row.fst, row.snd.core))
+                                                            rows) ∧
+                                                        MicroCFTA.EnumerationFlatNativeIndex.Correct
+                                                          afterCaller.checked.native.machine.heap recovered) ∧
+                                        MicroCFTA.SourceCurrentConstrainedCapGeneratedQueryResources.Fits
+                                            (MicroCFTA.SourcePruningEnumerationIncomingReservation.advance seed
+                                                sources.length).snd
+                                            afterCaller.checked ∧
+                                          MicroCFTA.SourceEqualityAnnotationHeap.Heap
+                                            (fun guard =>
+                                              guard ∈
+                                                (MicroCFTA.SourcePruningEnumerationIncomingReservation.advance seed
+                                                    sources.length).fst)
+                                            afterCaller.checked.native.machine.heap
+'MicroCFTA.EnumerationFlatNativeCachedCompletion.complete_resources' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]

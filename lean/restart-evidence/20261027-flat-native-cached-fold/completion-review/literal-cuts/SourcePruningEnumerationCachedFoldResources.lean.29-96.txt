@@ -1,0 +1,68 @@
+/-- Original current facts construct the full cached fold and bound its actual returned caller. -/
+theorem complete_resources
+    [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Constraint)] [DecidableEq Node]
+    (seed : Seed)
+    (formulas : SourceGuards.Formulas FullSyntax.Formula)
+    (solver : SourceGuards.Entailment FullSyntax.Formula)
+    (inventory : Inventory) (beforeCaller : Caller (bits + 2))
+    (before : EnumerationExpandableIndex.Cached Symbol Constraint) (sources : List Nat)
+    (checkEmpty : Bool) (target : Nat) (memos : Memos) (roots : Nat → Nat)
+    (initial : Context formulas solver inventory beforeCaller memos)
+    (storage : StorageValid before.core)
+    (realized : PendingRealized beforeCaller.checked.native.machine.heap before.core)
+    (paths : Roots before.core.representatives roots)
+    (counts : EnumerationCanonicalWaiting.Correct roots before.core.values before.waiting)
+    (flags : ∀ (slot : Nat), SourcePruningEnumerationNativeIndex.candidate
+      beforeCaller.checked.native.machine.heap
+      ((before.core.values[slot]?).getD .eliminated) = some (before.expandable slot))
+    (targetPending : PendingAt before.core target)
+    (selected : ∀ source ∈ sources, PendingOrEliminated before.core source)
+    (fits : Fits seed.2 beforeCaller.checked)
+    (reserved : Reserved bits seed sources.length)
+    (known : Heap (fun guard => guard ∈ seed.1) beforeCaller.checked.native.machine.heap) :
+    ∃ (fuel p h : Nat)
+      (rows : List (Unit × EnumerationExpandableIndex.Cached Symbol Constraint))
+      (afterCaller : Caller (bits + 2)) (savedQueries : Queries) (final : Memos) (next : Inventory)
+      (after : EnumerationExpandableIndex.Cached Symbol Constraint),
+      (∀ extra P H, p ≤ P → h ≤ H →
+        SourcePruningEnumerationCachedFold.run checkEmpty (fuel + extra) P H sources
+          beforeCaller before target memos.query =
+          ((.ok (some (rows.map (fun row => .ok (row.1, row.2.core)))),
+            afterCaller, savedQueries, after.core), some after)) ∧
+      Post formulas solver next beforeCaller afterCaller final ∧ final.query = savedQueries ∧
+      after.core.counter = before.core.counter ∧
+      after.core.representatives = before.core.representatives ∧ Roots after.core.representatives roots ∧
+      StorageValid after.core ∧ PendingRealized afterCaller.checked.native.machine.heap after.core ∧
+      EnumerationCanonicalWaiting.Correct roots after.core.values after.waiting ∧
+      after.waiting = before.waiting ∧
+      (∀ (slot : Nat), SourcePruningEnumerationNativeIndex.candidate
+        afterCaller.checked.native.machine.heap
+        ((after.core.values[slot]?).getD .eliminated) = some (after.expandable slot)) ∧
+      (rows = [] ∨ rows = [((), after)]) ∧ PendingAt after.core target ∧
+      (∀ (slot : Nat), before.core.values[slot]? = some .eliminated →
+        after.core.values[slot]? = some .eliminated) ∧
+      (rows = [((), after)] → ∀ source ∈ sources, source ≠ target →
+        after.core.values[source]? = some .eliminated) ∧
+      (∀ (slot : Nat), slot ∉ sources → slot ≠ target →
+        after.core.values[slot]? = before.core.values[slot]?) ∧
+      (∀ (slot : Nat) (fragment : Fragments.Fragment Symbol),
+        after.core.values[slot]? = some (.enumerated fragment) →
+        before.core.values[slot]? = some (.enumerated fragment)) ∧
+      Fits (advance seed sources.length).2 afterCaller.checked ∧
+      Heap (fun guard => guard ∈ (advance seed sources.length).1) afterCaller.checked.native.machine.heap := by
+  have ranges := SourcePruningEnumerationFold.initial_ranges seed formulas solver inventory beforeCaller
+    before.core sources checkEmpty target memos initial realized targetPending selected fits reserved known
+  obtain ⟨fuel, p, h, rows, afterCaller, savedQueries, final, next, after, stable, post, querySame,
+    counterSame, representativesSame, afterPaths, afterStorage, afterRealized, afterCounts, waitingSame,
+    afterFlags, shape, afterTarget, eliminated, completed, frame, origin⟩ :=
+    complete formulas solver inventory beforeCaller before sources checkEmpty target memos roots initial storage
+      realized paths counts flags targetPending selected ranges
+  have actual := stable 0 p h (Nat.le_refl _) (Nat.le_refl _)
+  simp only [Nat.add_zero] at actual
+  have erased := (SourcePruningEnumerationCachedFold.erase checkEmpty fuel p h sources
+    beforeCaller before target memos.query).symm.trans (congrArg (fun output => output.1) actual)
+  have bounded := SourcePruningEnumerationFold.observed_resources seed formulas solver inventory beforeCaller
+    before.core sources checkEmpty fuel p h target memos initial realized targetPending selected fits reserved known erased
+  exact ⟨fuel, p, h, rows, afterCaller, savedQueries, final, next, after, stable, post, querySame,
+    counterSame, representativesSame, afterPaths, afterStorage, afterRealized, afterCounts, waitingSame,
+    afterFlags, shape, afterTarget, eliminated, completed, frame, origin, bounded.1, bounded.2⟩
