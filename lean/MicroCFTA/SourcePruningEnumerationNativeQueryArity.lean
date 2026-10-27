@@ -1,0 +1,82 @@
+import MicroCFTA.SourcePruningEnumerationNativeBodyArity
+import MicroCFTA.SourcePruningEnumerationNativeRequestArity
+
+/-!
+# Arity through actual complete native queries
+
+Induction on actual trace length discharges both recursive call families.
+The invariant checks every edge record, including child-created records.
+The actual physical trace retains all reached operand checks.
+-/
+namespace MicroCFTA.SourcePruningEnumerationNativeQueryArity
+open InternedConstructorTemplates SourceRecursiveIntersectionKernel
+open SourceRecursiveIntersectionThunks SourceRecursiveIntersectionCode
+open SourceEqualityNativeDemand
+open SourceCurrentAllocatedNativePhysicalTraceCompletion (Trace)
+open SourceCurrentAllocatedNativePhysicalCompletion (Good)
+open SourcePruningEnumerationArityOrigins (Fits Heap)
+local notation "Symbol" => SourceObservations.Label FullSyntax.Formula
+local notation "Guard" => SourceSymbolicIndex.Constraint FullSyntax.Formula
+local notation "Checked" => SourceEqualityNativeDemand.State
+variable {width : Nat}
+variable [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)]
+
+private theorem query_heaps (fuel : Nat) :
+    (∀ (request : NodeRequest Symbol Guard) (before after : Checked width) (value : Value Symbol Guard),
+      Good before → Heap before.native.machine.heap →
+      Trace fuel (.code (requestNode request.domain request.left request.right)) before (.code (.pure value)) after →
+      Heap after.native.machine.heap) ∧
+    (∀ (request : EdgeRequest Symbol Guard) (before after : Checked width) (value : EdgeValue Symbol Guard),
+      Good before → Heap before.native.machine.heap →
+      Trace fuel (.code (requestEdge request.domain request.left request.right)) before (.code (.pure value)) after →
+      Heap after.native.machine.heap) := by
+  induction fuel using Nat.strongRecOn with
+  | ind fuel ih =>
+      constructor
+      · intro request before after value valid heap trace
+        apply SourcePruningEnumerationNativeRequestArity.node_request_heap request before after value fuel valid heap trace
+        intro count original start final result smaller good current actual
+        apply compileNode_heap count
+          (fun requested used bounded initial output answer checked origin called =>
+            (ih used (by omega)).1 requested initial output answer checked origin called)
+          (fun requested used bounded initial output answer checked origin called =>
+            (ih used (by omega)).2 requested initial output answer checked origin called)
+          original start final result count (Nat.le_refl _) good current actual
+      · intro request before after value valid heap trace
+        apply SourcePruningEnumerationNativeRequestArity.edge_request_heap request before after value fuel valid heap trace
+        intro count original start final result smaller good ready current actual
+        apply body_heap count
+          (fun requested used bounded initial output answer checked origin called =>
+            (ih used (by omega)).1 requested initial output answer checked origin called)
+          original count start final result (Nat.le_refl _) good ready current actual
+
+/-- Every actual complete native node query retains arity of its entire returned edge-record heap. -/
+theorem node_query_heap (request : NodeRequest Symbol Guard)
+    (before after : Checked width) (value : Value Symbol Guard) (fuel : Nat)
+    (valid : Good before) (heap : Heap before.native.machine.heap)
+    (trace : Trace fuel (.code (requestNode request.domain request.left request.right)) before (.code (.pure value)) after) :
+    Heap after.native.machine.heap :=
+  (query_heaps fuel).1 request before after value valid heap trace
+
+/-- Every actual complete native edge query retains arity of all old and newly created edge records. -/
+theorem edge_query_heap (request : EdgeRequest Symbol Guard)
+    (before after : Checked width) (value : EdgeValue Symbol Guard) (fuel : Nat)
+    (valid : Good before) (heap : Heap before.native.machine.heap)
+    (trace : Trace fuel (.code (requestEdge request.domain request.left request.right)) before (.code (.pure value)) after) :
+    Heap after.native.machine.heap :=
+  (query_heaps fuel).2 request before after value valid heap trace
+
+/-- Every returned edge memo cell after a native node query has arity from its actual resident record. -/
+theorem node_query_edge_memo_fits (request : NodeRequest Symbol Guard)
+    (before after : Checked width) (value : Value Symbol Guard) (fuel : Nat)
+    (valid : Good before) (heap : Heap before.native.machine.heap)
+    (trace : Trace fuel (.code (requestNode request.domain request.left request.right)) before (.code (.pure value)) after)
+    (handle : Nat) (original : EdgeRequest Symbol Guard) (edge : EdgeValue Symbol Guard)
+    (stored : after.native.edges.cells handle = some ⟨original, .returned edge⟩) :
+    Fits edge.entry.key.constraint edge.children.length := by
+  have afterHeap := node_query_heap request before after value fuel valid heap trace
+  have reached := SourceCurrentAllocatedNativeSemanticTraceReadback.effects trace valid (fun _ => trivial)
+  have resident := (reached.1.native.edges.checked handle _ stored).2
+  exact afterHeap.edge _ reached.1.heap.semantic.1.normal.facts.coherent edge resident
+
+end MicroCFTA.SourcePruningEnumerationNativeQueryArity
