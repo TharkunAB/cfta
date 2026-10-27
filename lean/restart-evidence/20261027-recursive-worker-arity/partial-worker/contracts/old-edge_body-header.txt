@@ -1,0 +1,4 @@
+theorem edge_body {request : EdgeRequest} {before after : Caller width} {result : Edge}
+    {actual : EdgeBody budget request before result after} {memos final : Memos}
+    (reads : EdgeBodyReads formulas solver actual memos final) :
+    EdgeClaim formulas solver (edgeBodyTrace actual) request before result after memos final

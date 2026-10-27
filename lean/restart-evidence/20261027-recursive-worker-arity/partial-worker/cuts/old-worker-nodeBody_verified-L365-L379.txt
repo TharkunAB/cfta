@@ -1,0 +1,15 @@
+theorem nodeBody_verified
+    {fuel g s r e p h m c n budget : Nat} {request : NodeRequest} {before after : Caller width} {result : Node}
+    {inventory : Inventory} {memos : Memos}
+    (initial : Context formulas solver inventory before memos)
+    (inheritedReady : EqReady before.checked.operations.constraints request.inherited)
+    (available : Available before.checked.native.machine.heap request.value)
+    (ranges : SourceCurrentAllocatedPartialWorkerRanges.nodeBody fuel g s r e p h m c n budget request before)
+    (done : nodeBody fuel g s r e p h m c n budget request before = .done result after) :
+    ∃ next final, ∃ actual : NodeBody budget request before result after,
+      NodeBodyReads formulas solver actual memos final ∧ Checks (nodeBodyTrace actual) ∧
+      Post formulas solver next before after final ∧ Available after.checked.native.machine.heap result ∧ NodeLaw formulas solver request result := by
+  obtain ⟨final, actual, reads, checks⟩ := (all_actual formulas solver fuel).2.1 initial inheritedReady available ranges done
+  obtain ⟨next, post, output, law⟩ := SourceCurrentAllocatedPartialActual.node_body formulas solver
+    reads inventory checks initial inheritedReady available
+  exact ⟨next, final, actual, reads, checks, post, output, law⟩

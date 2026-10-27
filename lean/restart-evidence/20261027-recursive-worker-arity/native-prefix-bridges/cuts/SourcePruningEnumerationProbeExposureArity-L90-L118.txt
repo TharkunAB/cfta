@@ -1,0 +1,29 @@
+theorem nodeEdges_heap [DecidableEq (EdgeKey Symbol Guard)]
+    (fuel : Nat) (value : Value Symbol Guard) (state : State Symbol Guard)
+    (facts : Facts state) (heap : Heap state) (available : Available state value) :
+    Heap (nodeEdges fuel value state).state := by
+  have fallback (current : State Symbol Guard) (currentFacts : Facts current)
+      (currentHeap : Heap current) (root : Value Symbol Guard) (rootAvailable : Available current root) :
+      Heap (collect fuel current [] [root]).canonical.state := by
+    rw [canonical_state]
+    exact collect_heap fuel current currentFacts currentHeap [] [root]
+      (by intro child member; simpa only [List.mem_singleton.mp member] using rootAvailable)
+  cases value with
+  | empty | reference | node => exact heap
+  | union => exact fallback state facts heap _ available
+  | mu entry body depth ordinary =>
+      have verified := unfold_verified (.mu entry body depth ordinary) state facts available
+      have retained := SourcePruningEnumerationArityOrigins.unfold_heap
+        (.mu entry body depth ordinary) state facts heap available
+      cases unfolded : InternedFreshOrdinaryStoredSubstitution.unfold (.mu entry body depth ordinary) state with
+      | pending key after =>
+          simpa only [nodeEdges, unfolded, Outcome.state, Result.state] using retained
+      | done result after =>
+          have afterFacts : Facts after := by simpa only [unfolded, Outcome.state] using verified.facts
+          have afterHeap : Heap after := by simpa only [unfolded, Outcome.state] using retained
+          have rootAvailable : Available after (.mu entry body depth ordinary) := by
+            simpa only [unfolded, Outcome.state] using verified.available _ available
+          have closure := fallback after afterFacts afterHeap (.mu entry body depth ordinary) rootAvailable
+          cases result with
+          | node => simpa only [nodeEdges, unfolded, Result.state] using afterHeap
+          | empty | reference | union | mu => simpa only [nodeEdges, unfolded] using closure

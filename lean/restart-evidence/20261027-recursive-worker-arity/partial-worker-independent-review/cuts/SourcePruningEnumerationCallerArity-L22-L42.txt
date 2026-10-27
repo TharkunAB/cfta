@@ -1,0 +1,21 @@
+theorem beginNode_heap (request : SourceCurrentAllocatedPartialState.NodeRequest)
+    (before : Caller width) (heap : Heap before.checked.native.machine.heap) :
+    Heap (SourceCurrentAllocatedPartialState.beginNode request before).2.2.checked.native.machine.heap :=
+  heap
+
+/-- Edge publication and demand change no constructor record. -/
+theorem beginEdge_heap (request : SourceCurrentAllocatedPartialState.EdgeRequest)
+    (before : Caller width) (heap : Heap before.checked.native.machine.heap) :
+    Heap (SourceCurrentAllocatedPartialState.beginEdge request before).2.2.checked.native.machine.heap :=
+  heap
+
+/-- Node completion retains arity without replacing any other caller field. -/
+theorem finishNode_heap (handle : Nat) (result : Node) (before : Caller width)
+    (heap : Heap before.checked.native.machine.heap) :
+    Heap (SourceCurrentAllocatedPartialState.finishNode handle result before).checked.native.machine.heap :=
+  heap
+
+/-- Edge completion retains arity at its actual returned caller. -/
+theorem finishEdge_heap (handle : Nat) (result : Edge) (before : Caller width)
+    (heap : Heap before.checked.native.machine.heap) :
+    Heap (SourceCurrentAllocatedPartialState.finishEdge handle result before).checked.native.machine.heap :=

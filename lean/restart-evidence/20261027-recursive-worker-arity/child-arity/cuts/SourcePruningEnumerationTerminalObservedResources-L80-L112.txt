@@ -1,0 +1,33 @@
+                cases observed
+            | nil =>
+                simp only [prefixObserved] at observed
+                obtain ⟨recordedSame, joinedRealized, winnerPending, recordedPending⟩ :=
+                  SourcePruningEnumerationCachedTerminalAdapter.observed_prefix
+                    beforeCaller.checked.native.machine.heap before first rest waiting roots
+                    paths counts safe bounded pending realized prefixObserved
+                have countSame : recorded.length = (first :: rest).length := by
+                  rw [recordedSame, List.length_map]
+                have foldReservation : Reserved bits seed recorded.length :=
+                  reserved.prefix (by rw [countSame]; omega)
+                have selected : ∀ source ∈ recorded, PendingOrEliminated joined source :=
+                  fun source member => .inl (recordedPending source member)
+                rcases foldObserved : SourcePruningEnumerationFold.run checkEmpty n p h recorded
+                    beforeCaller joined winner memos.query with
+                  ⟨foldOutcome, foldCaller, foldQueries, foldOuter⟩
+                cases foldOutcome with
+                | error fault =>
+                    simp only [foldObserved] at observed
+                    cases observed
+                | ok possible =>
+                    have foldBounds := SourcePruningEnumerationFold.observed_resources seed formulas solver inventory
+                      beforeCaller joined recorded checkEmpty n p h winner memos initial joinedRealized
+                      winnerPending selected fits foldReservation known foldObserved
+                    have finalSeed : advance seed ((first :: rest).length + 1) =
+                        step (advance seed recorded.length) := by
+                      rw [← countSame, SourcePruningEnumerationIncomingReservation.advance_add]
+                      rfl
+                    have padded : Fits (advance seed ((first :: rest).length + 1)).2 foldCaller.checked ∧
+                        Heap (fun guard => guard ∈ (advance seed ((first :: rest).length + 1)).1)
+                          foldCaller.checked.native.machine.heap := by
+                      rw [finalSeed]
+                      refine ⟨foldBounds.1.mono

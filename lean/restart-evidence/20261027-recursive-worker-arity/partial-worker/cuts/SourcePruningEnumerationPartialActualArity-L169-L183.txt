@@ -1,0 +1,15 @@
+   · intro budget payload edge before inherited results middle children memos final combined childReads ih
+     intro inventory checks initial inheritedReady resident heap
+     obtain ⟨prefixReceipt, prefixPost⟩ := SourceCurrentAllocatedPartialStepEffects.inherited_prefix $formulas $solver
+       inventory before memos initial edge inherited payload resident inheritedReady combined
+     have inputs := initial.ready.semantic.ready.semantic.1.normal.facts.cached.edges edge.entry.key edge resident
+     have childChecks := checks.restrict (.descendants_children combined children)
+     have childInputs := values_grow prefixPost.effects inputs
+     obtain ⟨next, childPost, _available, _⟩ := SourceCurrentAllocatedPartialActual.children $formulas $solver childReads
+       inventory childChecks prefixPost.context prefixReceipt.combinedReady childInputs
+     have prefixHeap := SourcePruningEnumerationPartialStepArity.prefix_heap before edge inherited heap
+     have middleHeap := ih inventory childChecks prefixPost.context prefixReceipt.combinedReady childInputs prefixHeap
+     have firstPost := prefixPost.trans childPost
+     exact SourcePruningEnumerationRawRebuildArity.edge_heap edge results middle.checked middleHeap
+       childPost.context.ready.semantic.ready.semantic.1.normal.facts.coherent
+       (InternedEdgeResidency.edge_grows _ _ firstPost.effects.keeps.growth _ resident) children.length

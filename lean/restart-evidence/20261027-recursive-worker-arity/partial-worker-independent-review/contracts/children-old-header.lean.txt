@@ -1,0 +1,11 @@
+theorem children_verified
+    {fuel g s r e p h m c n budget : Nat} {combined : EqValue} {values : List Node} {before after : Caller width} {result : List Node}
+    {inventory : Inventory} {memos : Memos}
+    (initial : Context formulas solver inventory before memos)
+    (inheritedReady : EqReady before.checked.operations.constraints combined)
+    (available : Values before.checked.native.machine.heap values)
+    (ranges : SourceCurrentAllocatedPartialWorkerRanges.children fuel g s r e p h m c n budget combined values before)
+    (done : children fuel g s r e p h m c n budget combined values before = .done result after) :
+    ∃ next final, ∃ actual : Children budget combined values before result after,
+      ChildrenReads formulas solver actual memos final ∧ Checks (childrenTrace actual) ∧
+      Post formulas solver next before after final ∧ Values after.checked.native.machine.heap result ∧ SourceCurrentAllocatedPartialWalkLanguage.ChildrenLaw formulas solver actual

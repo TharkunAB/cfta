@@ -1,0 +1,15 @@
+theorem edgeBody_verified
+    {fuel g s r e p h m c n budget : Nat} {request : EdgeRequest} {before after : Caller width} {result : Edge}
+    {inventory : Inventory} {memos : Memos}
+    (initial : Context formulas solver inventory before memos)
+    (inheritedReady : EqReady before.checked.operations.constraints request.inherited)
+    (resident : Resident before.checked.native.machine.heap request.value)
+    (ranges : SourceCurrentAllocatedPartialWorkerRanges.edgeBody fuel g s r e p h m c n budget request before)
+    (done : edgeBody fuel g s r e p h m c n budget request before = .done result after) :
+    ∃ next final, ∃ actual : EdgeBody budget request before result after,
+      EdgeBodyReads formulas solver actual memos final ∧ Checks (edgeBodyTrace actual) ∧
+      Post formulas solver next before after final ∧ Resident after.checked.native.machine.heap result ∧ EdgeLaw formulas solver request result := by
+  obtain ⟨final, actual, reads, checks⟩ := edgeBody_step formulas solver fuel initial inheritedReady resident ranges done
+  obtain ⟨next, post, output, law⟩ := SourceCurrentAllocatedPartialActual.edge_body formulas solver
+    reads inventory checks initial inheritedReady resident
+  exact ⟨next, final, actual, reads, checks, post, output, law⟩

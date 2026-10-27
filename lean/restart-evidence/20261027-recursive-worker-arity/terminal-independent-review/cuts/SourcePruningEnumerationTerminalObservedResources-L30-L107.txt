@@ -1,0 +1,78 @@
+theorem observed_resources
+    [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Constraint)] [DecidableEq Node]
+    (seed : Seed)
+    (formulas : SourceGuards.Formulas FullSyntax.Formula)
+    (solver : SourceGuards.Entailment FullSyntax.Formula)
+    (inventory : Inventory) (beforeCaller : Caller (bits + 2)) (before : Core)
+    (checkEmpty : Bool) (r n p h : Nat) (first : Suspended) (rest : List Suspended)
+    (waiting : EnumerationWaitingIndex.Waiting) (incoming : Node) (incomingScs : List Suspended)
+    (roots : Nat → Nat) (memos : Memos)
+    (initial : Context formulas solver inventory beforeCaller memos)
+    (safe : Safe before) (paths : Roots before.representatives roots)
+    (counts : EnumerationCanonicalWaiting.Correct roots before.values waiting)
+    (bounded : ∀ sc ∈ first :: rest, sc.var < before.counter)
+    (pending : InputsPending before (first :: rest))
+    (realized : PendingRealized beforeCaller.checked.native.machine.heap before)
+    (available : Available beforeCaller.checked.native.machine.heap incoming) (closed : incoming.free = [])
+    (fits : Fits seed.2 beforeCaller.checked)
+    (reserved : Reserved bits seed ((first :: rest).length + 1))
+    (known : Heap (fun guard => guard ∈ seed.1) beforeCaller.checked.native.machine.heap)
+    {result : Option TerminalRaw} {afterCaller : Caller (bits + 2)}
+    {savedQueries : Queries} {outer : Core} {afterWaiting : EnumerationWaitingIndex.Waiting}
+    (observed : run checkEmpty r n p h first rest waiting beforeCaller before incoming incomingScs memos.query =
+      (.ok result, afterCaller, savedQueries, outer, afterWaiting)) :
+    Fits (advance seed ((first :: rest).length + 1)).2 afterCaller.checked ∧
+      Heap (fun guard => guard ∈ (advance seed ((first :: rest).length + 1)).1)
+        afterCaller.checked.native.machine.heap := by
+  rw [run] at observed
+  by_cases empty : incoming = .empty
+  · simp only [ite_eq_left empty] at observed
+    have callerSame := congrArg (fun output => output.2.1) observed
+    dsimp only at callerSame
+    rw [← callerSame]
+    refine ⟨fits.mono (SourcePruningEnumerationIncomingReservation.advance_profile_ge seed _), ?_⟩
+    intro key edge found
+    exact SourcePruningEnumerationIncomingReservation.advance_alphabet_ge seed _ (known key edge found)
+  · simp only [ite_eq_right empty] at observed
+    cases prefixObserved : ExceptT.run (SourcePruningEnumerationTerminalPrefix.run r first rest waiting before) with
+    | nil =>
+        simp only [prefixObserved] at observed
+        cases observed
+    | cons prefixEntry prefixTail =>
+        cases prefixEntry with
+        | error fault =>
+            simp only [prefixObserved] at observed
+            cases observed
+        | ok prefixResult =>
+            rcases prefixResult with ⟨⟨recorded, winner, moved⟩, joined⟩
+            cases prefixTail with
+            | cons second remaining =>
+                simp only [prefixObserved] at observed
+                cases observed
+            | nil =>
+                simp only [prefixObserved] at observed
+                obtain ⟨recordedSame, joinedRealized, winnerPending, recordedPending⟩ :=
+                  SourcePruningEnumerationCachedTerminalAdapter.observed_prefix
+                    beforeCaller.checked.native.machine.heap before first rest waiting roots
+                    paths counts safe bounded pending realized prefixObserved
+                have countSame : recorded.length = (first :: rest).length := by
+                  rw [recordedSame, List.length_map]
+                have foldReservation : Reserved bits seed recorded.length :=
+                  reserved.prefix (by rw [countSame]; omega)
+                have selected : ∀ source ∈ recorded, PendingOrEliminated joined source :=
+                  fun source member => .inl (recordedPending source member)
+                rcases foldObserved : SourcePruningEnumerationFold.run checkEmpty n p h recorded
+                    beforeCaller joined winner memos.query with
+                  ⟨foldOutcome, foldCaller, foldQueries, foldOuter⟩
+                cases foldOutcome with
+                | error fault =>
+                    simp only [foldObserved] at observed
+                    cases observed
+                | ok possible =>
+                    have foldBounds := SourcePruningEnumerationFold.observed_resources seed formulas solver inventory
+                      beforeCaller joined recorded checkEmpty n p h winner memos initial joinedRealized
+                      winnerPending selected fits foldReservation known foldObserved
+                    have finalSeed : advance seed ((first :: rest).length + 1) =
+                        step (advance seed recorded.length) := by
+                      rw [← countSame, SourcePruningEnumerationIncomingReservation.advance_add]
+                      rfl

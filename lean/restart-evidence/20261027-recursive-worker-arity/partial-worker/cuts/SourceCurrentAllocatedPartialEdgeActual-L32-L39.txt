@@ -1,0 +1,8 @@
+/-- Only a reached live field load selects its actual Scan word checks. -/
+def Ranges (budget : Nat) (request : EdgeRequest) (before : Caller width) : Prop :=
+  SourceEqualityMkEdgeAllocation.contradictory request.value.entry.key.constraint = false →
+  ∀ loaded : Allocated,
+    SourceEqualityConstraintFieldLookup.load request.value.entry.key.constraint before.checked.operations.constraints =
+      .ok (some loaded) →
+    SourceCurrentAllocatedLocalReductionActual.Ranges budget loaded request.inherited request.value.children
+      before.checked before.fourth

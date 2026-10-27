@@ -1,0 +1,12 @@
+theorem observed_resources (alphabet : List Constraint) (profile : Profile)
+    (formulas : SourceGuards.Formulas FullSyntax.Formula) (solver : SourceGuards.Entailment FullSyntax.Formula)
+    (inventory : Inventory) (beforeCaller : Caller (bits + 2)) (before : Core)
+    (checkEmpty : Bool) (nativeFuel p h source target : Nat) (memos : Memos)
+    (initial : Context formulas solver inventory beforeCaller memos)
+    (realized : PendingRealized beforeCaller.checked.native.machine.heap before)
+    (fits : Fits profile beforeCaller.checked) (room : Room bits profile)
+    (known : Heap (fun guard => guard ∈ alphabet) beforeCaller.checked.native.machine.heap)
+    {result : Option (EnumerateM Symbol EnumGuard Unit)}
+    {afterCaller : Caller (bits + 2)} {savedQueries : Queries}
+    (observed : dispatch checkEmpty nativeFuel p h beforeCaller before source target memos.query =
+      (.ok result, afterCaller, savedQueries)) :

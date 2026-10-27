@@ -1,0 +1,37 @@
+/-- Every continuation carries the complete checked state and all caller result tables. -/
+structure State (width : Nat) : Type 1 where
+  checked : Checked width
+  merge : MergeMemo
+  fourth : Fourth
+  nodeResults : FlatMemoThunk.State NodeKey NodeRequest Node
+  edgeResults : FlatMemoThunk.State EdgeKey EdgeRequest Edge
+
+/-- A fresh caller family clears only its two result tables. -/
+def initial (checked : Checked width) (merge : MergeMemo) (fourth : Fourth) : State width :=
+  ⟨checked, merge, fourth, FlatMemoThunk.empty, FlatMemoThunk.empty⟩
+
+/-- Current checked operations retain both caller result tables. -/
+def advance (before : State width) (checked : Checked width) (fourth : Fourth) (merge : MergeMemo) : State width :=
+  { before with checked := checked, merge := merge, fourth := fourth }
+
+/-- Publish and demand the actual outer request in its own table. -/
+def beginNode (request : NodeRequest) (before : State width) :
+    Nat × (FlatMemoThunk.Observation NodeRequest Node × State width) :=
+  let published := FlatMemoThunk.lookupOrInsert request.key request before.nodeResults
+  let demanded := FlatMemoThunk.demand published.1 published.2
+  (published.1, demanded.1, { before with nodeResults := demanded.2 })
+
+/-- Publish and demand the actual reduced-edge request in its own table. -/
+def beginEdge (request : EdgeRequest) (before : State width) :
+    Nat × (FlatMemoThunk.Observation EdgeRequest Edge × State width) :=
+  let published := FlatMemoThunk.lookupOrInsert request.key request before.edgeResults
+  let demanded := FlatMemoThunk.demand published.1 published.2
+  (published.1, demanded.1, { before with edgeResults := demanded.2 })
+
+/-- Only an evaluating node cell can receive this completed body result. -/
+def finishNode (handle : Nat) (result : Node) (before : State width) : State width :=
+  { before with nodeResults := FlatMemoThunk.finish handle result before.nodeResults }
+
+/-- Only an evaluating edge cell can receive this completed body result. -/
+def finishEdge (handle : Nat) (result : Edge) (before : State width) : State width :=
+  { before with edgeResults := FlatMemoThunk.finish handle result before.edgeResults }

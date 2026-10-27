@@ -1,0 +1,54 @@
+theorem resume_zero_complete_resources
+    (holeKey : Typing → Nat → Key) (fits : Key → Symbol → Bool) (admits : Key → Node → Bool)
+    (graph : Graph Symbol Constraint) (templates : List (Template.Pattern Symbol))
+    (checkEmpty : Bool) (edgesOf : Node → List (EdgeValue Symbol Constraint))
+    (stop : Option (Metadata Typing → Nat → Bool)) (order : Metadata Typing → List Nat → Option Nat)
+    (formulas : SourceGuards.Formulas FullSyntax.Formula)
+    (solver : SourceGuards.Entailment FullSyntax.Formula) (inventory : Inventory)
+    (caller : Caller width) (memos : Memos) (before : Cached) (metadata : Metadata Typing)
+    (next : Option Next) (profile : Profile) (property : Constraint → Prop)
+    (packet : Packet formulas solver inventory caller memos metadata before)
+    (bounded : Fits profile caller.checked) (known : Heap property caller.checked.native.machine.heap) :
+    ∃ outcome : Result,
+      (∀ workFuel, resume holeKey fits admits graph templates checkEmpty edgesOf stop order workFuel 0
+        metadata caller memos.query before next = outcome) ∧
+      match outcome with
+      | .complete outputs reached saved =>
+          reached = caller ∧ saved = memos.query ∧ Fits profile reached.checked ∧
+          Heap property reached.checked.native.machine.heap ∧
+          ∀ output ∈ outputs,
+            Packet formulas solver inventory caller memos metadata output.cache ∧
+            output.caller = caller ∧ output.queries = memos.query ∧
+            (output.metadata = none ∨ output.metadata = some metadata) ∧ output.cache = before
+      | .stopped outputs reason endpoint =>
+          ∃ selected, next = some (.expand selected) ∧ outputs = [] ∧
+            reason = .exhausted selected metadata before ∧ endpoint = some (caller, memos.query) ∧
+            Fits profile caller.checked ∧ Heap property caller.checked.native.machine.heap := by
+  let outcome : Result := match next with
+    | none => .complete [⟨some metadata, before, caller, memos.query⟩] caller memos.query
+    | some .done => .complete [⟨none, before, caller, memos.query⟩] caller memos.query
+    | some .stuck => .complete [] caller memos.query
+    | some (.expand selected) =>
+        .stopped [] (.exhausted selected metadata before) (some (caller, memos.query))
+  refine ⟨outcome, ?_, ?_⟩
+  · intro workFuel
+    cases next with
+    | none => rfl
+    | some next => cases next <;> rfl
+  · cases next with
+    | none =>
+        refine ⟨rfl, rfl, bounded, known, ?_⟩
+        intro output member
+        have same := List.mem_singleton.mp member
+        subst output
+        exact ⟨packet, rfl, rfl, Or.inr rfl, rfl⟩
+    | some next =>
+        cases next with
+        | done =>
+            refine ⟨rfl, rfl, bounded, known, ?_⟩
+            intro output member
+            have same := List.mem_singleton.mp member
+            subst output
+            exact ⟨packet, rfl, rfl, Or.inl rfl, rfl⟩
+        | stuck => exact ⟨rfl, rfl, bounded, known, fun _ member => False.elim (List.not_mem_nil member)⟩
+        | expand selected => exact ⟨selected, rfl, rfl, rfl, rfl, bounded, known⟩

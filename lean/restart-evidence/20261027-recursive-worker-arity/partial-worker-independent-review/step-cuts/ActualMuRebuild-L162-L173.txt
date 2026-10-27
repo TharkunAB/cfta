@@ -1,0 +1,11 @@
+theorem actual_rebuild [DecidableEq (EdgeKey Symbol Guard)]
+    (before : Checked width) (ready : Ready before) (probes : ProbeHeap before.native.machine.heap)
+    (entry : Cache.Interned InternedBinderProtocol.NodeKey) (body depth ordinary : Value Symbol Guard)
+    (available : Available before.native.machine.heap (.mu entry body depth ordinary))
+    (result : Value Symbol Guard) (heap : InternedConstructorTemplates.State Symbol Guard)
+    (actual : SourceEqualityMuReconstruction.rebuild entry body depth ordinary before.native.machine.heap = .done result heap) :
+    result = cleanup (.mu entry body depth ordinary) ∧ heap = before.native.machine.heap := by
+  have completed := (resident_rebuild before ready probes entry body depth ordinary available).1
+  exact InternedNestedConstruction.Outcome.done.inj (actual.symm.trans completed)
+
+end MicroCFTA.SourceCurrentAllocatedMuRebuild

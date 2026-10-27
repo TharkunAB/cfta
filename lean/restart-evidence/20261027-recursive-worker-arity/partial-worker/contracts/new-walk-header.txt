@@ -1,0 +1,6 @@
+theorem walk_heap {combined : EqValue} {index : Nat} {values results : List Node} {before after : Caller width}
+    {actual : Walk budget combined index values before results after} {memos final : Memos}
+    (reads : WalkReads formulas solver actual memos final) :
+    ∀ inventory, Checks (walkTrace actual) → Context formulas solver inventory before memos →
+      EqReady before.checked.operations.constraints combined → Values before.checked.native.machine.heap values →
+      Heap before.checked.native.machine.heap → Heap after.checked.native.machine.heap

@@ -1,0 +1,54 @@
+local notation "EqReady" => SourceEqualityConstraintAllocation.Ready
+local notation "Resident" => InternedEdgeResidency.EdgeResident
+local notation "Memos" => EndpointMemoGateTrace.Memos
+variable {width budget : Nat}
+
+private theorem values_grow {before after : Caller width} {values : List Node}
+    (effects : SourceCurrentConjunctionRowsAllocation.Effects (physical before.checked) (physical after.checked))
+    (available : Values before.checked.native.machine.heap values) : Values after.checked.native.machine.heap values :=
+  fun value member => effects.keeps.available value (available value member)
+
+private theorem edges_grow {before after : Caller width} {values : List Edge}
+    (effects : SourceCurrentConjunctionRowsAllocation.Effects (physical before.checked) (physical after.checked))
+    (resident : Edges before.checked.native.machine.heap values) : Edges after.checked.native.machine.heap values :=
+  fun edge member => InternedEdgeResidency.edge_grows _ _ effects.keeps.growth edge (resident edge member)
+
+variable [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)] [DecidableEq Node]
+variable (formulas : SourceGuards.Formulas FullSyntax.Formula) (solver : SourceGuards.Entailment FullSyntax.Formula)
+
+private def NodeClaim (top : Trace width budget) (request : NodeRequest) (before : Caller width)
+    (_result : Node) (after : Caller width) (memos : Memos) (_final : Memos) : Prop :=
+  ∀ inventory, Checks top → Context formulas solver inventory before memos →
+    EqReady before.checked.operations.constraints request.inherited → Available before.checked.native.machine.heap request.value →
+    Heap before.checked.native.machine.heap → Heap after.checked.native.machine.heap
+
+private def EdgeClaim (top : Trace width budget) (request : EdgeRequest) (before : Caller width)
+    (_result : Edge) (after : Caller width) (memos : Memos) (_final : Memos) : Prop :=
+  ∀ inventory, Checks top → Context formulas solver inventory before memos →
+    EqReady before.checked.operations.constraints request.inherited → Resident before.checked.native.machine.heap request.value →
+    Heap before.checked.native.machine.heap → Heap after.checked.native.machine.heap
+
+private def RowsClaim {inherited : EqValue} {values results : List Edge} {before after : Caller width}
+    (actual : Rows budget inherited values before results after) (memos : Memos) (_final : Memos) : Prop :=
+  ∀ inventory, Checks (rowsTrace actual) → Context formulas solver inventory before memos →
+    EqReady before.checked.operations.constraints inherited → Edges before.checked.native.machine.heap values →
+    Heap before.checked.native.machine.heap → Heap after.checked.native.machine.heap
+
+private def DescendantsClaim {inherited : EqValue} {value result : Edge} {before after : Caller width}
+    (actual : Descendants budget inherited value before result after) (memos final : Memos) : Prop :=
+  EdgeClaim formulas solver (descendantsTrace actual) ⟨inherited, value⟩ before result after memos final
+
+private def ChildrenClaim {combined : EqValue} {values results : List Node} {before after : Caller width}
+    (actual : Children budget combined values before results after) (memos : Memos) (_final : Memos) : Prop :=
+  ∀ inventory, Checks (childrenTrace actual) → Context formulas solver inventory before memos →
+    EqReady before.checked.operations.constraints combined → Values before.checked.native.machine.heap values →
+    Heap before.checked.native.machine.heap → Heap after.checked.native.machine.heap
+
+private def WalkClaim {combined : EqValue} {index : Nat} {values results : List Node} {before after : Caller width}
+    (actual : Walk budget combined index values before results after) (memos : Memos) (_final : Memos) : Prop :=
+  ∀ inventory, Checks (walkTrace actual) → Context formulas solver inventory before memos →
+    EqReady before.checked.operations.constraints combined → Values before.checked.native.machine.heap values →
+    Heap before.checked.native.machine.heap → Heap after.checked.native.machine.heap
+
+-- Each family uses the same eight actual source-read induction motives.
+local macro "arity_induction" recursor:ident reads:ident formulas:ident solver:ident : tactic => `(tactic|

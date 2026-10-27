@@ -1,0 +1,22 @@
+attribute [local instance] SourcePruningEnumerationIncomingNode.incomingNodeMonadList
+
+variable [DecidableEq Node]
+
+/-- Every actual outer success retains arity at its own caller, including raw rejection. -/
+theorem observed_heap (alphabet : List Constraint) (profile : Profile)
+    (formulas : SourceGuards.Formulas FullSyntax.Formula) (solver : SourceGuards.Entailment FullSyntax.Formula)
+    (inventory : Inventory) (beforeCaller : Caller (bits + 2)) (before : Core)
+    (checkEmpty : Bool) (r n p h uv : Nat) (incoming : Node) (incomingScs : List EnumerationState.Suspended)
+    (memos : Memos) (initial : Context formulas solver inventory beforeCaller memos)
+    (realized : PendingRealized beforeCaller.checked.native.machine.heap before)
+    (available : Available beforeCaller.checked.native.machine.heap incoming) (closed : incoming.free = [])
+    (fits : Fits profile beforeCaller.checked) (room : Room bits profile)
+    (known : Heap (fun guard => guard ∈ alphabet) beforeCaller.checked.native.machine.heap)
+    (arityHeap : SourcePruningEnumerationArityOrigins.Heap beforeCaller.checked.native.machine.heap)
+    {result : Option (List (Except EnumerationState.Error (Unit × Core)))}
+    {afterCaller : Caller (bits + 2)} {savedQueries : Queries} {read : Core}
+    (observed : run checkEmpty r n p h beforeCaller before uv incoming incomingScs memos.query =
+      (.ok result, afterCaller, savedQueries, read)) :
+    SourcePruningEnumerationArityOrigins.Heap afterCaller.checked.native.machine.heap := by
+  have unchanged : SourcePruningEnumerationArityOrigins.Heap beforeCaller.checked.native.machine.heap := arityHeap
+  rw [run] at observed

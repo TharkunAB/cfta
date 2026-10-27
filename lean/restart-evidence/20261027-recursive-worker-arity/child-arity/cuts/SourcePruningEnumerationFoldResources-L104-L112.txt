@@ -1,0 +1,9 @@
+                      | nil =>
+                          obtain ⟨next, final, post, querySame, middleRealized, middleTarget,
+                            middleSelected, middleFits, middleKnown⟩ :=
+                            observed_singleton seed formulas solver inventory beforeCaller before source target rest checkEmpty memos
+                              initial realized targetPending selected fits reserved.head known dispatchObserved raw
+                          simp only [run, dispatchObserved, raw] at observed
+                          rw [← querySame] at observed
+                          exact ih (step seed) next reachedCaller middle final post.context middleRealized middleTarget
+                            middleSelected middleFits reserved.tail middleKnown observed

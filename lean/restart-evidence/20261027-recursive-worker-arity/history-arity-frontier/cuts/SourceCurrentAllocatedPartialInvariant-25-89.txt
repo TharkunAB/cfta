@@ -1,0 +1,65 @@
+structure Context (formulas : SourceGuards.Formulas FullSyntax.Formula)
+    (solver : SourceGuards.Entailment FullSyntax.Formula) (inventory : Inventory)
+    (state : Caller width) (memos : Memos) : Prop where
+  ready : SourceCurrentConjunctionClassScan.Ready state.checked
+  admitted : At formulas solver inventory state.checked
+  sound : SourceCurrentAllocatedPartialMemoSound.Sound formulas solver state
+  stored : SourceCurrentMemoMergeEffects.Stored state.checked.native.machine.heap state.merge
+  covered : ∀ ambient, SourceCurrentMemoMergeLanguage.CacheCovers (SourceEqualityPCSGuard.holds formulas solver) ambient state.merge
+  correct : SourceCurrentEmptinessMemo.Correct formulas solver state.checked.native.machine.heap state.fourth
+  globals : EndpointMemoGateTrace.Valid state.checked.native.machine.heap memos
+  probes : InternedFreshOrdinaryProbeHeap.Heap state.checked.native.machine.heap
+
+/-- A returned caller retains its actual current context and completed table history. -/
+structure Post (formulas : SourceGuards.Formulas FullSyntax.Formula)
+    (solver : SourceGuards.Entailment FullSyntax.Formula) (next : Inventory)
+    (before after : Caller width) (final : Memos) : Prop where
+  context : Context formulas solver next after final
+  effects : SourceCurrentConjunctionRowsAllocation.Effects (physical before.checked) (physical after.checked)
+  retained : Cache.Extends before.merge after.merge
+  fourthRetained : SourceCurrentEmptinessMemo.Extends before.fourth after.fourth
+
+variable {formulas : SourceGuards.Formulas FullSyntax.Formula} {solver : SourceGuards.Entailment FullSyntax.Formula}
+  {inventory next : Inventory} {before middle after : Caller width} {memos final : Memos}
+
+/-- Caller protocol changes retain the context when all checked and completed tables stay exact. -/
+theorem Context.rebase (context : Context formulas solver inventory before memos)
+    (checked : after.checked = before.checked) (merge : after.merge = before.merge)
+    (fourth : after.fourth = before.fourth)
+    (sound : SourceCurrentAllocatedPartialMemoSound.Sound formulas solver after) :
+    Context formulas solver inventory after memos := by
+  refine ⟨?_, ?_, sound, ?_, ?_, ?_, ?_, ?_⟩
+  · simpa only [checked] using context.ready
+  · simpa only [checked] using context.admitted
+  · simpa only [checked, merge] using context.stored
+  · simpa only [merge] using context.covered
+  · simpa only [checked, fourth] using context.correct
+  · simpa only [checked] using context.globals
+  · simpa only [checked] using context.probes
+
+/-- An unchanged current caller has an exact reflexive postcondition. -/
+theorem Post.refl (context : Context formulas solver inventory before memos) :
+    Post formulas solver inventory before before memos := by
+  have ready := SourceCurrentAllocatedConjunctionMemo.ready before.checked context.ready.good
+    context.ready.semantic context.ready.costs
+  exact ⟨context, .refl _ ready, Cache.extends_refl _, fun _ _ found => found⟩
+
+/-- Ordered caller stages compose even when they compute different inventories. -/
+theorem Post.trans (first : Post formulas solver inventory before middle memos)
+    (last : Post formulas solver next middle after final) : Post formulas solver next before after final :=
+  ⟨last.context, first.effects.trans last.effects, Cache.extends_trans first.retained last.retained,
+    fun key value found => last.fourthRetained key value (first.fourthRetained key value found)⟩
+
+/-- Protocol changes retain a reflexive physical history and the supplied phase law. -/
+theorem Post.rebase (context : Context formulas solver inventory before memos)
+    (checked : after.checked = before.checked) (merge : after.merge = before.merge)
+    (fourth : after.fourth = before.fourth)
+    (sound : SourceCurrentAllocatedPartialMemoSound.Sound formulas solver after) :
+    Post formulas solver inventory before after memos := by
+  have base := Post.refl context
+  refine ⟨context.rebase checked merge fourth sound, ?_, ?_, ?_⟩
+  · simpa only [checked] using base.effects
+  · simpa only [merge] using base.retained
+  · simpa only [fourth] using base.fourthRetained
+
+end MicroCFTA.SourceCurrentAllocatedPartialInvariant

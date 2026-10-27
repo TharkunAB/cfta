@@ -1,0 +1,23 @@
+/-- The literal completed resident binder retains arity at its own returned heap. -/
+theorem binder_heap [DecidableEq (EdgeKey Symbol Guard)]
+    {entry : Cache.Interned InternedBinderProtocol.NodeKey} {body depth ordinary result : Node}
+    {before : Checked width} {after : State Symbol Guard}
+    (ready : SourceCurrentConjunctionClassScan.Ready before)
+    (probes : InternedFreshOrdinaryProbeHeap.Heap before.native.machine.heap)
+    (available : Available before.native.machine.heap (.mu entry body depth ordinary))
+    (actual : SourceEqualityMuReconstruction.rebuild entry body depth ordinary before.native.machine.heap =
+      .done result after)
+    (heap : Heap before.native.machine.heap) : Heap after := by
+  have same := (SourceCurrentAllocatedMuRebuild.actual_rebuild before ready probes entry body depth ordinary
+    available result after actual).2
+  rw [same]
+  exact heap
+
+/-- Inherited constraint allocation retains every native edge record. -/
+theorem prefix_heap (before : Caller width) (edge : Edge) (inherited : EqValue)
+    (heap : Heap before.checked.native.machine.heap) :
+    Heap (SourceCurrentAllocatedPartialGraph.prefixState before edge inherited).checked.native.machine.heap :=
+  heap
+
+/-- Indexed descent changes operations at the literal unchanged constructor heap. -/
+theorem descent_heap (before : Caller width) (combined : EqValue) (index : Nat)

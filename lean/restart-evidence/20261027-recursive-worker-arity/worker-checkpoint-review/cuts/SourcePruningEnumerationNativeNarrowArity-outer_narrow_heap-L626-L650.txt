@@ -1,0 +1,25 @@
+MicroCFTA.SourcePruningEnumerationNativeNarrowArity.outer_narrow_heap {Typing Key : Type}
+  [DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey MicroCFTA.SourcePruningTemplates.Symbol
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  (holeKey : Typing → Nat → Key) (fits : Key → MicroCFTA.SourcePruningTemplates.Symbol → Bool)
+  (admits :
+    Key →
+      MicroCFTA.InternedConstructorTemplates.Value MicroCFTA.SourcePruningTemplates.Symbol
+          (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) →
+        Bool)
+  (metadata : MicroCFTA.SourcePruningRecordTypes.Metadata Typing) (fuel uv : Nat)
+  (value :
+    MicroCFTA.InternedConstructorTemplates.Value MicroCFTA.SourcePruningTemplates.Symbol
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+  (before :
+    MicroCFTA.InternedConstructorTemplates.State MicroCFTA.SourcePruningTemplates.Symbol
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+  (facts : MicroCFTA.InternedNestedFacts.Facts before)
+  (heap : MicroCFTA.SourcePruningEnumerationArityOrigins.Heap before)
+  (available : MicroCFTA.InternedProbeProvenance.Available before value) :
+  MicroCFTA.SourcePruningEnumerationArityOrigins.Heap
+    (MicroCFTA.SourcePruningOuterNarrow.narrow holeKey fits admits metadata fuel uv value before).state
+'MicroCFTA.SourcePruningEnumerationNativeNarrowArity.outer_narrow_heap' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]

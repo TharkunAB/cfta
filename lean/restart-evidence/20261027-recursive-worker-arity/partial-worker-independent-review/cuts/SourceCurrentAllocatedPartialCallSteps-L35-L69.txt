@@ -1,0 +1,35 @@
+theorem node_start {inventory : Inventory} {request original : NodeRequest}
+    {before running : Caller width} {memos : Memos} {handle : Nat}
+    (initial : Context formulas solver inventory before memos)
+    (inherited : EqReady before.checked.operations.constraints request.inherited)
+    (available : Available before.checked.native.machine.heap request.value)
+    (started : beginNode request before = (handle, .evaluate original, running)) :
+    Context formulas solver inventory running memos ∧
+      NodeGood formulas solver running.checked ⟨original, .evaluating⟩ ∧
+      original.key = request.key ∧ running.nodeResults.cells handle = some ⟨original, .evaluating⟩ := by
+  obtain ⟨sound, cell, owner, key⟩ := beginNode_evaluate_sound formulas solver request before initial.sound
+    inherited available handle original running started
+  have components := beginNode_components request before
+  rw [started] at components
+  dsimp only at components
+  obtain ⟨checked, merge, fourth, _⟩ := components
+  exact ⟨initial.rebase checked merge fourth sound, owner, key, cell⟩
+
+omit [DecidableEq Symbol] [DecidableEq (Value Symbol Guard)] in
+/-- An edge start derives its own owner in the independent result family. -/
+theorem edge_start {inventory : Inventory} {request original : EdgeRequest}
+    {before running : Caller width} {memos : Memos} {handle : Nat}
+    (initial : Context formulas solver inventory before memos)
+    (inherited : EqReady before.checked.operations.constraints request.inherited)
+    (resident : Resident before.checked.native.machine.heap request.value)
+    (started : beginEdge request before = (handle, .evaluate original, running)) :
+    Context formulas solver inventory running memos ∧
+      EdgeGood formulas solver running.checked ⟨original, .evaluating⟩ ∧
+      original.key = request.key ∧ running.edgeResults.cells handle = some ⟨original, .evaluating⟩ := by
+  obtain ⟨sound, cell, owner, key⟩ := beginEdge_evaluate_sound formulas solver request before initial.sound
+    inherited resident handle original running started
+  have components := beginEdge_components request before
+  rw [started] at components
+  dsimp only at components
+  obtain ⟨checked, merge, fourth, _⟩ := components
+  exact ⟨initial.rebase checked merge fourth sound, owner, key, cell⟩

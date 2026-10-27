@@ -1,0 +1,44 @@
+MicroCFTA.SourcePruningEnumerationPartialWorkerArity.rows_verified
+  [DecidableEq (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)]
+  [DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  [DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  {width : Nat} (formulas : MicroCFTA.SourceGuards.Formulas MicroCFTA.FullSyntax.Formula)
+  (solver : MicroCFTA.SourceGuards.Entailment MicroCFTA.FullSyntax.Formula) {fuel g s r e p h m c n budget : Nat}
+  {inherited : MicroCFTA.SourceEqualityConstraintAllocation.Value}
+  {values :
+    List
+      (MicroCFTA.InternedConstructorTemplates.EdgeValue
+        (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))}
+  {before after : MicroCFTA.SourceCurrentAllocatedPartialState.State width}
+  {result :
+    List
+      (MicroCFTA.InternedConstructorTemplates.EdgeValue
+        (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))}
+  {inventory : MicroCFTA.SourceCurrentAllocatedNativeInventoryState.Inventory}
+  {memos : MicroCFTA.EndpointMemoGateTrace.Memos}
+  (initial : MicroCFTA.SourceCurrentAllocatedPartialInvariant.Context formulas solver inventory before memos)
+  (inheritedReady : MicroCFTA.SourceEqualityConstraintAllocation.Ready before.checked.operations.constraints inherited)
+  (resident : MicroCFTA.InternedNestedProvenance.Edges before.checked.native.machine.heap values)
+  (ranges :
+    MicroCFTA.SourceCurrentAllocatedPartialWorkerRanges.rows fuel g s r e p h m c n budget inherited values before)
+  (done :
+    MicroCFTA.SourceCurrentAllocatedPartialWorker.rows fuel g s r e p h m c n budget inherited values before =
+      MicroCFTA.SourceCurrentAllocatedPartialWorker.Outcome.done result after)
+  (heap : MicroCFTA.SourcePruningEnumerationArityOrigins.Heap before.checked.native.machine.heap) :
+  ∃ next final actual,
+    MicroCFTA.SourceCurrentAllocatedPartialSourceReads.RowsReads formulas solver actual memos final ∧
+      MicroCFTA.SourceCurrentAllocatedPartialChecks.Checks
+          (MicroCFTA.SourceCurrentAllocatedPartialChecks.rowsTrace actual) ∧
+        MicroCFTA.SourceCurrentAllocatedPartialInvariant.Post formulas solver next before after final ∧
+          MicroCFTA.InternedNestedProvenance.Edges after.checked.native.machine.heap result ∧
+            MicroCFTA.SourceCurrentAllocatedPartialForestLanguage.RowsLaw formulas solver actual ∧
+              MicroCFTA.SourcePruningEnumerationArityOrigins.Heap after.checked.native.machine.heap
+'MicroCFTA.SourcePruningEnumerationPartialWorkerArity.rows_verified' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]

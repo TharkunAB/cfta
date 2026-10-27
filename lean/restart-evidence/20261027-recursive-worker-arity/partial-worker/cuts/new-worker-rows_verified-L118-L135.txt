@@ -1,0 +1,18 @@
+theorem rows_verified
+    {fuel g s r e p h m c n budget : Nat} {inherited : EqValue} {values : List Edge} {before after : Caller width} {result : List Edge}
+    {inventory : Inventory} {memos : Memos}
+    (initial : Context formulas solver inventory before memos)
+    (inheritedReady : EqReady before.checked.operations.constraints inherited)
+    (resident : Edges before.checked.native.machine.heap values)
+    (ranges : SourceCurrentAllocatedPartialWorkerRanges.rows fuel g s r e p h m c n budget inherited values before)
+    (done : rows fuel g s r e p h m c n budget inherited values before = .done result after)
+    (heap : Heap before.checked.native.machine.heap) :
+    ∃ next final, ∃ actual : Rows budget inherited values before result after,
+      RowsReads formulas solver actual memos final ∧ Checks (rowsTrace actual) ∧
+      Post formulas solver next before after final ∧ Edges after.checked.native.machine.heap result ∧ SourceCurrentAllocatedPartialForestLanguage.RowsLaw formulas solver actual ∧
+      Heap after.checked.native.machine.heap := by
+  obtain ⟨next, final, actual, reads, checks, post, output, law⟩ :=
+    SourceCurrentAllocatedPartialWorkerActual.rows_verified formulas solver initial inheritedReady resident ranges done
+  exact ⟨next, final, actual, reads, checks, post, output, law,
+    SourcePruningEnumerationPartialActualArity.rows_heap formulas solver reads inventory checks initial
+      inheritedReady resident heap⟩

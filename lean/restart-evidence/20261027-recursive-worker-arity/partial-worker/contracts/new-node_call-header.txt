@@ -1,0 +1,6 @@
+theorem node_call_heap {request : NodeRequest} {before after : Caller width} {result : Node}
+    {actual : NodeCall budget request before result after} {memos final : Memos}
+    (reads : NodeCallReads formulas solver actual memos final) :
+    ∀ inventory, Checks (nodeCallTrace actual) → Context formulas solver inventory before memos →
+      EqReady before.checked.operations.constraints request.inherited → Available before.checked.native.machine.heap request.value →
+      Heap before.checked.native.machine.heap → Heap after.checked.native.machine.heap

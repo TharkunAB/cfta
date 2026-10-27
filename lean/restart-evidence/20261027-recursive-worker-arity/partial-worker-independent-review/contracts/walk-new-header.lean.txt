@@ -1,0 +1,13 @@
+theorem walk_verified
+    {fuel g s r e p h m c n budget : Nat} {combined : EqValue} {index : Nat} {values : List Node} {before after : Caller width} {result : List Node}
+    {inventory : Inventory} {memos : Memos}
+    (initial : Context formulas solver inventory before memos)
+    (inheritedReady : EqReady before.checked.operations.constraints combined)
+    (available : Values before.checked.native.machine.heap values)
+    (ranges : SourceCurrentAllocatedPartialWorkerRanges.walk fuel g s r e p h m c n budget combined index values before)
+    (done : walk fuel g s r e p h m c n budget combined index values before = .done result after)
+    (heap : Heap before.checked.native.machine.heap) :
+    ∃ next final, ∃ actual : Walk budget combined index values before result after,
+      WalkReads formulas solver actual memos final ∧ Checks (walkTrace actual) ∧
+      Post formulas solver next before after final ∧ Values after.checked.native.machine.heap result ∧ SourceCurrentAllocatedPartialWalkLanguage.WalkLaw formulas solver actual ∧
+      Heap after.checked.native.machine.heap

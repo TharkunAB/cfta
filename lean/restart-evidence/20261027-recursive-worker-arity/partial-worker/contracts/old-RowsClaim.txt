@@ -1,0 +1,6 @@
+def RowsClaim {inherited : EqValue} {values results : List Edge} {before after : Caller width}
+    (actual : Rows budget inherited values before results after) (memos final : Memos) : Prop :=
+  ∀ inventory, Checks (rowsTrace actual) → Context formulas solver inventory before memos →
+    EqReady before.checked.operations.constraints inherited → Edges before.checked.native.machine.heap values →
+    ∃ next, Post formulas solver next before after final ∧ Edges after.checked.native.machine.heap results ∧
+      RowsLaw formulas solver actual

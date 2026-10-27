@@ -1,0 +1,80 @@
+def MicroCFTA.SourcePruningEnumerationRecursive.CompleteWithArity : {Typing Key : Type} →
+  {bits : Nat} →
+    [DecidableEq
+          (MicroCFTA.InternedConstructorTemplates.EdgeKey MicroCFTA.SourcePruningTemplates.Symbol
+            (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))] →
+      [DecidableEq MicroCFTA.SourcePruningTemplates.Symbol] →
+        [DecidableEq
+              (MicroCFTA.InternedConstructorTemplates.Value MicroCFTA.SourcePruningTemplates.Symbol
+                (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))] →
+          (Typing → Nat → Key) →
+            (Key → MicroCFTA.SourcePruningTemplates.Symbol → Bool) →
+              (Key →
+                  MicroCFTA.InternedConstructorTemplates.Value MicroCFTA.SourcePruningTemplates.Symbol
+                      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) →
+                    Bool) →
+                MicroCFTA.EnumerationState.Graph MicroCFTA.SourcePruningTemplates.Symbol
+                    (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) →
+                  List (MicroCFTA.Template.Pattern MicroCFTA.SourcePruningTemplates.Symbol) →
+                    Bool →
+                      (MicroCFTA.InternedConstructorTemplates.Value MicroCFTA.SourcePruningTemplates.Symbol
+                            (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) →
+                          List
+                            (MicroCFTA.InternedConstructorTemplates.EdgeValue MicroCFTA.SourcePruningTemplates.Symbol
+                              (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))) →
+                        Option (MicroCFTA.SourcePruningRecordTypes.Metadata Typing → Nat → Bool) →
+                          (MicroCFTA.SourcePruningRecordTypes.Metadata Typing → List Nat → Option Nat) →
+                            MicroCFTA.SourceGuards.Formulas MicroCFTA.FullSyntax.Formula →
+                              MicroCFTA.SourceGuards.Entailment MicroCFTA.FullSyntax.Formula → Nat → Prop :=
+fun {Typing Key} {bits}
+    [DecidableEq
+        (MicroCFTA.InternedConstructorTemplates.EdgeKey MicroCFTA.SourcePruningTemplates.Symbol
+          (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+    [DecidableEq MicroCFTA.SourcePruningTemplates.Symbol]
+    [DecidableEq
+        (MicroCFTA.InternedConstructorTemplates.Value MicroCFTA.SourcePruningTemplates.Symbol
+          (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+    holeKey fits admits graph templates checkEmpty edgesOf stop order formulas solver recursiveFuel =>
+  ∀ (inventory : MicroCFTA.SourceCurrentAllocatedNativeInventoryState.Inventory)
+    (caller : MicroCFTA.SourceCurrentAllocatedPartialState.State (bits + 2))
+    (memos : MicroCFTA.EndpointMemoGateTrace.Memos)
+    (before :
+      MicroCFTA.EnumerationExpandableIndex.Cached MicroCFTA.SourcePruningTemplates.Symbol
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+    (metadata : MicroCFTA.SourcePruningRecordTypes.Metadata Typing)
+    (seed : MicroCFTA.SourcePruningEnumerationIncomingReservation.Seed) (ceiling : Nat),
+    MicroCFTA.SourcePruningEnumerationRecursive.Packet formulas solver inventory caller memos metadata before →
+      MicroCFTA.SourceCurrentConstrainedCapGeneratedQueryResources.Fits seed.snd caller.checked →
+        MicroCFTA.SourceEqualityAnnotationHeap.Heap (fun guard => guard ∈ seed.fst) caller.checked.native.machine.heap →
+          (∀ (entry : MicroCFTA.Cache.Interned MicroCFTA.InternedBinderProtocol.NodeKey)
+              (rows :
+                List
+                  (MicroCFTA.InternedConstructorTemplates.EdgeValue MicroCFTA.SourcePruningTemplates.Symbol
+                    (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)))
+              (depth : Nat) (free : List MicroCFTA.InternedBinderProtocol.Reference)
+              (edge :
+                MicroCFTA.InternedConstructorTemplates.EdgeValue MicroCFTA.SourcePruningTemplates.Symbol
+                  (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)),
+              edge ∈ edgesOf (MicroCFTA.InternedConstructorTemplates.Value.node entry rows depth free) → edge ∈ rows) →
+            (∀ (entry : MicroCFTA.Cache.Interned MicroCFTA.InternedBinderProtocol.NodeKey)
+                (rows :
+                  List
+                    (MicroCFTA.InternedConstructorTemplates.EdgeValue MicroCFTA.SourcePruningTemplates.Symbol
+                      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)))
+                (depth : Nat) (free : List MicroCFTA.InternedBinderProtocol.Reference),
+                (edgesOf (MicroCFTA.InternedConstructorTemplates.Value.node entry rows depth free)).length ≤
+                  rows.length) →
+              MicroCFTA.SourcePruningEnumerationPrefixAdmission.suspendedBound before.core ≤ ceiling →
+                MicroCFTA.SourcePruningEnumerationFiniteReservation.Reserved bits recursiveFuel seed ceiling →
+                  MicroCFTA.SourcePruningEnumerationArityOrigins.Heap caller.checked.native.machine.heap →
+                    ∃ bound outcome,
+                      (∀ (extra : Nat),
+                          MicroCFTA.SourcePruningEnumerationRecursive.run holeKey fits admits graph templates checkEmpty
+                              edgesOf stop order (bound + extra) recursiveFuel metadata caller memos.query before =
+                            outcome) ∧
+                        MicroCFTA.SourcePruningEnumerationRecursive.OutcomeResources formulas solver caller
+                            (MicroCFTA.SourcePruningEnumerationFiniteReservation.final recursiveFuel seed ceiling)
+                            outcome ∧
+                          MicroCFTA.SourcePruningEnumerationRecursive.OutcomeResourcesWithArity formulas solver caller
+                            (MicroCFTA.SourcePruningEnumerationFiniteReservation.final recursiveFuel seed ceiling)
+                            outcome

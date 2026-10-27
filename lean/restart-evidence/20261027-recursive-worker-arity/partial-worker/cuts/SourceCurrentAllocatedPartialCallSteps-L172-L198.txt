@@ -1,0 +1,27 @@
+theorem node_binder {inventory : Inventory} {inherited : SourceEqualityConstraintAllocation.Value}
+    {entry : Interned InternedBinderProtocol.NodeKey} {body depth ordinary result : Value Symbol Guard}
+    {heap : InternedConstructorTemplates.State Symbol Guard} {before : Caller width} {memos : Memos}
+    (initial : Context formulas solver inventory before memos)
+    (available : Available before.checked.native.machine.heap (.mu entry body depth ordinary))
+    (actual : SourceEqualityMuReconstruction.rebuild entry body depth ordinary before.checked.native.machine.heap =
+      .done result heap) :
+    Post formulas solver inventory before
+      (advance before (SourceCurrentAllocatedQueryMemo.advancePhysical before.checked ⟨heap, before.checked.operations⟩)
+        before.fourth before.merge) memos ∧
+      Available heap result ∧ NodeLaw formulas solver ⟨inherited, .mu entry body depth ordinary⟩ result := by
+  obtain ⟨sameResult, sameHeap⟩ := SourceCurrentAllocatedMuRebuild.actual_rebuild before.checked initial.ready initial.probes
+    entry body depth ordinary available result heap actual
+  subst result
+  subst heap
+  have clean := SourceCurrentAllocatedMuRebuild.resident_rebuild before.checked initial.ready initial.probes
+    entry body depth ordinary available
+  have unchanged : advance before
+      (SourceCurrentAllocatedQueryMemo.advancePhysical before.checked
+        ⟨before.checked.native.machine.heap, before.checked.operations⟩) before.fourth before.merge = before := by
+    cases before
+    rfl
+  rw [unchanged]
+  refine ⟨Post.refl initial, clean.2.1, ?_⟩
+  intro ambient term
+  have same := Iff.of_eq (congrFun (clean.2.2.2 (SourceEqualityPCSGuard.holds formulas solver) ambient) term)
+  exact ⟨same.mp, fun _ => same⟩

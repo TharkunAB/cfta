@@ -1,0 +1,13 @@
+  obtain ⟨r, n, p, h, k, raw, afterCaller, after, savedQueries, final, next, afterRoots, outer, waiting,
+    observed, post, querySame, growth, afterPaths, storage, afterRealized, afterCounts, afterFlags,
+    origin, protects, references, history, shape, returnedFits, returnedKnown⟩ :=
+    complete_with_fragments_resources seed formulas solver inventory beforeCaller before checkEmpty bucket incoming
+      roots memos initial safe paths counts flags realized bounded pending available closed fits reserved known
+  have actual := observed 0 0 p h 0 (Nat.le_refl _) (Nat.le_refl _)
+  simp only [Nat.add_zero] at actual
+  have returnedArity := SourcePruningEnumerationChildDispatch.observed_heap seed formulas solver inventory
+    beforeCaller before checkEmpty r n p h k bucket incoming roots memos initial safe paths counts realized
+    bounded pending available closed fits reserved known arity actual
+  exact ⟨r, n, p, h, k, raw, afterCaller, after, savedQueries, final, next, afterRoots, outer, waiting,
+    observed, post, querySame, growth, afterPaths, storage, afterRealized, afterCounts, afterFlags,
+    origin, protects, references, history, shape, returnedFits, returnedKnown, returnedArity⟩

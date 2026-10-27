@@ -1,0 +1,79 @@
+    (solver : SourceGuards.Entailment FullSyntax.Formula)
+    (inventory : Inventory) (beforeCaller : Caller width)
+    (left right : Node) (checkEmpty : Bool) (memos : Memos)
+    (initial : Context formulas solver inventory beforeCaller memos)
+    (leftAvailable : Available beforeCaller.checked.native.machine.heap left)
+    (rightAvailable : Available beforeCaller.checked.native.machine.heap right)
+    (leftClosed : left.free = []) (rightClosed : right.free = [])
+    (ranges : SourceCurrentAllocatedNativeRequestBounds.WordRanges
+      (.code (SourceRecursiveIntersectionCode.requestNode IntersectionEmptyDomain.emptyDomain left right))
+      beforeCaller.checked)
+    (arity : SourcePruningEnumerationArityOrigins.Heap beforeCaller.checked.native.machine.heap) :
+    ∃ (next : Inventory) (query : Node) (queried : Checked width)
+      (answer : Bool) (checkedAfter : Checked width) (saved : Fourth)
+      (final : Memos) (queries : Queries) (replacement : Node) (handle fuel p h : Nat),
+      next.source = beforeCaller.checked.native.machine.heap ∧ next.roots = inventory.roots ++ [left, right] ∧
+      SourceCurrentAllocatedTargetQuery.Receipt formulas solver next left right
+        beforeCaller.checked query queried memos ∧
+      (∀ extra, SourceEqualityNativeDemand.execute (fuel + extra)
+        (.code (SourceRecursiveIntersectionCode.requestNode IntersectionEmptyDomain.emptyDomain left right))
+        beforeCaller.checked = .done query queried) ∧
+      (∀ P H, p ≤ P → h ≤ H →
+        (if checkEmpty then
+          SourcePruningEnumerationEnabledEmpty.check P H query queried beforeCaller.fourth memos.query
+        else (.done false queried beforeCaller.fourth, memos.query)) =
+          (.done answer checkedAfter saved, queries)) ∧
+      Post formulas solver next beforeCaller
+        (SourceCurrentAllocatedPartialState.advance beforeCaller checkedAfter saved beforeCaller.merge) final ∧
+      final.query = queries ∧ Cache.Extends memos.unfolding final.unfolding ∧
+      SourceCurrentEmptinessMemo.AnswerSound formulas solver query answer ∧
+      replacement = (if answer then .empty else query) ∧
+      Available checkedAfter.native.machine.heap replacement ∧ replacement.free = [] ∧
+      encodeNode replacement = some handle ∧ lookupNode checkedAfter.native.machine.heap handle = some replacement ∧
+      (∀ ambient term,
+        InternedGuardedLanguage.meaning (SourceEqualityPCSGuard.holds formulas solver) ambient replacement term ↔
+          InternedGuardedLanguage.meaning (SourceEqualityPCSGuard.holds formulas solver) ambient left term ∧
+          InternedGuardedLanguage.meaning (SourceEqualityPCSGuard.holds formulas solver) ambient right term) ∧
+      (checkEmpty = false → answer = false ∧ replacement = query ∧ checkedAfter = queried ∧
+        saved = beforeCaller.fourth ∧ queries = memos.query ∧ final = memos) ∧
+      (checkEmpty = true → ∃ reached,
+        SourceEndpointMemo.run query memos.query = (reached, queries) ∧
+        SourceEndpointMemoCorrect.Checked queried.native.machine.heap memos.query
+          (SourceEndpointReachability.reaches SourceMemoGate.unconstrained query) (reached, queries) ∧
+        (reached = false → answer = false ∧ checkedAfter = queried ∧ saved = beforeCaller.fourth ∧
+          final = {memos with query := queries}) ∧
+        (reached = true →
+          ∃ reachedPhysical : SourceCurrentConjunctionRowsAllocation.State Symbol FullSyntax.Formula,
+            checkedAfter = advancePhysical queried reachedPhysical ∧
+            ∃ actual : SourceCurrentConjunctionMemo.Call 1000 beforeCaller.fourth query
+                (physical queried) answer reachedPhysical saved,
+              SourceCurrentConjunctionGlobalMemos.CallReads actual {memos with query := queries} final)) ∧
+      SourcePruningEnumerationArityOrigins.Heap checkedAfter.native.machine.heap := by
+  obtain ⟨next, query, queried, answer, checkedAfter, saved, final, queries, replacement, handle,
+    fuel, p, h, source, roots, receipt, native, phase, post, querySame, unfolding, sound,
+    replacementEq, available, closed, encoded, decoded, meaning, disabled, enabled⟩ :=
+    complete formulas solver inventory beforeCaller left right checkEmpty memos initial
+      leftAvailable rightAvailable leftClosed rightClosed ranges
+  have queryArity := receipt.arity_heap initial.ready.good arity
+  have finalArity : SourcePruningEnumerationArityOrigins.Heap checkedAfter.native.machine.heap := by
+    cases checkEmpty with
+    | false =>
+        have same := (disabled rfl).2.2.1
+        rw [same]
+        exact queryArity
+    | true =>
+        obtain ⟨reached, _guardRun, _guardChecked, skipped, performed⟩ := enabled rfl
+        cases reached with
+        | false =>
+            have same := (skipped rfl).2.1
+            rw [same]
+            exact queryArity
+        | true =>
+            obtain ⟨reachedPhysical, same, actual, _reads⟩ := performed rfl
+            have ready := SourceCurrentAllocatedConjunctionMemo.ready queried receipt.ready.good
+              receipt.ready.semantic receipt.ready.costs
+            have current := SourcePruningEnumerationConjunctionArity.call_heap actual ready receipt.available queryArity
+            simpa only [same, advancePhysical, SourceRecursiveIntersectionThunks.advance] using current
+  exact ⟨next, query, queried, answer, checkedAfter, saved, final, queries, replacement, handle,
+    fuel, p, h, source, roots, receipt, native, phase, post, querySame, unfolding, sound,
+    replacementEq, available, closed, encoded, decoded, meaning, disabled, enabled, finalArity⟩

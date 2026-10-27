@@ -1,0 +1,8 @@
+/-- Union normalization retains every projected edge-arity fact. -/
+theorem union_heap [DecidableEq (EdgeKey Symbol Constraint)]
+    (values : List (Value Symbol Constraint)) (state : State Symbol Constraint)
+    (heap : Heap state) : Heap (run (makeUnion values) state).2 := by
+  unfold makeUnion
+  split <;> first | exact heap | (split <;> first | exact heap | exact node_heap _ state heap)
+
+/-- Removing a bare self reference retains the edge-arity facts. -/

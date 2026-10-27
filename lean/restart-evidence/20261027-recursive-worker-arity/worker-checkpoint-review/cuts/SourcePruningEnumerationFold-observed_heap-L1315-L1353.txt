@@ -1,0 +1,39 @@
+MicroCFTA.SourcePruningEnumerationFold.observed_heap {EnumGuard : Type} {bits : Nat}
+  [DecidableEq MicroCFTA.SourcePruningTemplates.Symbol]
+  [DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey MicroCFTA.SourcePruningTemplates.Symbol
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  [DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.Value MicroCFTA.SourcePruningTemplates.Symbol
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  (seed : MicroCFTA.SourcePruningEnumerationIncomingReservation.Seed)
+  (formulas : MicroCFTA.SourceGuards.Formulas MicroCFTA.FullSyntax.Formula)
+  (solver : MicroCFTA.SourceGuards.Entailment MicroCFTA.FullSyntax.Formula)
+  (inventory : MicroCFTA.SourceCurrentAllocatedNativeInventoryState.Inventory)
+  (beforeCaller : MicroCFTA.SourceCurrentAllocatedPartialState.State (bits + 2))
+  (before : MicroCFTA.EnumerationState.State MicroCFTA.SourcePruningTemplates.Symbol EnumGuard) (sources : List Nat)
+  (checkEmpty : Bool) (n p h target : Nat) (memos : MicroCFTA.EndpointMemoGateTrace.Memos)
+  (initial : MicroCFTA.SourceCurrentAllocatedPartialInvariant.Context formulas solver inventory beforeCaller memos)
+  (realized :
+    MicroCFTA.SourcePruningEnumerationObservation.PendingRealized beforeCaller.checked.native.machine.heap before)
+  (targetPending : MicroCFTA.EnumerationCompleteness.PendingAt before target)
+  (selected : ∀ (source : Nat), source ∈ sources → MicroCFTA.EnumerationCompleteness.PendingOrEliminated before source)
+  (fits : MicroCFTA.SourceCurrentConstrainedCapGeneratedQueryResources.Fits seed.snd beforeCaller.checked)
+  (reserved : MicroCFTA.SourcePruningEnumerationIncomingReservation.Reserved bits seed sources.length)
+  (known :
+    MicroCFTA.SourceEqualityAnnotationHeap.Heap (fun guard => guard ∈ seed.fst)
+      beforeCaller.checked.native.machine.heap)
+  (arity : MicroCFTA.SourcePruningEnumerationArityOrigins.Heap beforeCaller.checked.native.machine.heap)
+  {result :
+    Option
+      (List
+        (Except MicroCFTA.EnumerationState.Error
+          (Unit × MicroCFTA.EnumerationState.State MicroCFTA.SourcePruningTemplates.Symbol EnumGuard)))}
+  {afterCaller : MicroCFTA.SourceCurrentAllocatedPartialState.State (bits + 2)}
+  {saved : MicroCFTA.SourceEndpointMemo.Memos}
+  {after : MicroCFTA.EnumerationState.State MicroCFTA.SourcePruningTemplates.Symbol EnumGuard}
+  (observed :
+    MicroCFTA.SourcePruningEnumerationFold.run checkEmpty n p h sources beforeCaller before target memos.query =
+      (Except.ok result, afterCaller, saved, after)) :
+  MicroCFTA.SourcePruningEnumerationArityOrigins.Heap afterCaller.checked.native.machine.heap
+'MicroCFTA.SourcePruningEnumerationFold.observed_heap' depends on axioms: [propext, Classical.choice, Quot.sound]

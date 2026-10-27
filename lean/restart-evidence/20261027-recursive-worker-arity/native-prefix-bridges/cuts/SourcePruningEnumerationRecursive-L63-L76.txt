@@ -1,0 +1,14 @@
+    (recur : Metadata Typing → Caller width → Queries → Cached → Option Next → Result)
+    (graph : Graph Symbol Constraint) (templates : List (Template.Pattern Symbol))
+    (stop : Option (Metadata Typing → Nat → Bool))
+    (order : Metadata Typing → List Nat → Option Nat)
+    (callbackFuel : Nat) (metadata : Metadata Typing) (uv : Nat)
+    (fragment : Fragment) (caller : Caller width) (queries : Queries) (before : Cached) : Result :=
+  let raw := ExceptT.run (SourcePruningRecordTypes.recordTypes
+    graph templates callbackFuel metadata uv (.inl fragment) before.core)
+  match raw with
+  | [.ok ((true, _updated), _observed)] => .complete [] caller queries
+  | [.ok ((false, updated), observed)] =>
+      let after := EnumerationExpandableIndex.frame observed before
+      recur updated caller queries after (SourcePruningEnumerationRestart.decision stop order updated after)
+  | _ => .stopped [] (.callback uv raw) (some (caller, queries))

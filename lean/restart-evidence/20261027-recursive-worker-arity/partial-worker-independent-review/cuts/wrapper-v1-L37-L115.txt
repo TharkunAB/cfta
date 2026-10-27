@@ -1,0 +1,79 @@
+/-- The literal completed nodeCall retains its full receipt and derives returned arity. -/
+theorem nodeCall_verified
+    {fuel g s r e p h m c n budget : Nat} {request : NodeRequest} {before after : Caller width} {result : Node}
+    {inventory : Inventory} {memos : Memos}
+    (initial : Context formulas solver inventory before memos)
+    (inheritedReady : EqReady before.checked.operations.constraints request.inherited)
+    (available : Available before.checked.native.machine.heap request.value)
+    (ranges : SourceCurrentAllocatedPartialWorkerRanges.nodeCall fuel g s r e p h m c n budget request before)
+    (done : nodeCall fuel g s r e p h m c n budget request before = .done result after)
+    (heap : Heap before.checked.native.machine.heap) :
+    ∃ next final, ∃ actual : NodeCall budget request before result after,
+      NodeCallReads formulas solver actual memos final ∧ Checks (nodeCallTrace actual) ∧
+      Post formulas solver next before after final ∧ Available after.checked.native.machine.heap result ∧ NodeLaw formulas solver request result ∧
+      Heap after.checked.native.machine.heap := by
+  obtain ⟨next, final, actual, reads, checks, post, output, law⟩ :=
+    SourceCurrentAllocatedPartialWorkerActual.nodeCall_verified formulas solver initial inheritedReady available ranges done
+  exact ⟨next, final, actual, reads, checks, post, output, law,
+    SourcePruningEnumerationPartialActualArity.node_call_heap formulas solver reads inventory checks initial
+      inheritedReady available heap⟩
+
+/-- The literal completed nodeBody retains its full receipt and derives returned arity. -/
+theorem nodeBody_verified
+    {fuel g s r e p h m c n budget : Nat} {request : NodeRequest} {before after : Caller width} {result : Node}
+    {inventory : Inventory} {memos : Memos}
+    (initial : Context formulas solver inventory before memos)
+    (inheritedReady : EqReady before.checked.operations.constraints request.inherited)
+    (available : Available before.checked.native.machine.heap request.value)
+    (ranges : SourceCurrentAllocatedPartialWorkerRanges.nodeBody fuel g s r e p h m c n budget request before)
+    (done : nodeBody fuel g s r e p h m c n budget request before = .done result after)
+    (heap : Heap before.checked.native.machine.heap) :
+    ∃ next final, ∃ actual : NodeBody budget request before result after,
+      NodeBodyReads formulas solver actual memos final ∧ Checks (nodeBodyTrace actual) ∧
+      Post formulas solver next before after final ∧ Available after.checked.native.machine.heap result ∧ NodeLaw formulas solver request result ∧
+      Heap after.checked.native.machine.heap := by
+  obtain ⟨next, final, actual, reads, checks, post, output, law⟩ :=
+    SourceCurrentAllocatedPartialWorkerActual.nodeBody_verified formulas solver initial inheritedReady available ranges done
+  exact ⟨next, final, actual, reads, checks, post, output, law,
+    SourcePruningEnumerationPartialActualArity.node_body_heap formulas solver reads inventory checks initial
+      inheritedReady available heap⟩
+
+/-- The literal completed edgeCall retains its full receipt and derives returned arity. -/
+theorem edgeCall_verified
+    {fuel g s r e p h m c n budget : Nat} {request : EdgeRequest} {before after : Caller width} {result : Edge}
+    {inventory : Inventory} {memos : Memos}
+    (initial : Context formulas solver inventory before memos)
+    (inheritedReady : EqReady before.checked.operations.constraints request.inherited)
+    (resident : Resident before.checked.native.machine.heap request.value)
+    (ranges : SourceCurrentAllocatedPartialWorkerRanges.edgeCall fuel g s r e p h m c n budget request before)
+    (done : edgeCall fuel g s r e p h m c n budget request before = .done result after)
+    (heap : Heap before.checked.native.machine.heap) :
+    ∃ next final, ∃ actual : EdgeCall budget request before result after,
+      EdgeCallReads formulas solver actual memos final ∧ Checks (edgeCallTrace actual) ∧
+      Post formulas solver next before after final ∧ Resident after.checked.native.machine.heap result ∧ EdgeLaw formulas solver request result ∧
+      Heap after.checked.native.machine.heap := by
+  obtain ⟨next, final, actual, reads, checks, post, output, law⟩ :=
+    SourceCurrentAllocatedPartialWorkerActual.edgeCall_verified formulas solver initial inheritedReady resident ranges done
+  exact ⟨next, final, actual, reads, checks, post, output, law,
+    SourcePruningEnumerationPartialActualArity.edge_call_heap formulas solver reads inventory checks initial
+      inheritedReady resident heap⟩
+
+/-- The literal completed edgeBody retains its full receipt and derives returned arity. -/
+theorem edgeBody_verified
+    {fuel g s r e p h m c n budget : Nat} {request : EdgeRequest} {before after : Caller width} {result : Edge}
+    {inventory : Inventory} {memos : Memos}
+    (initial : Context formulas solver inventory before memos)
+    (inheritedReady : EqReady before.checked.operations.constraints request.inherited)
+    (resident : Resident before.checked.native.machine.heap request.value)
+    (ranges : SourceCurrentAllocatedPartialWorkerRanges.edgeBody fuel g s r e p h m c n budget request before)
+    (done : edgeBody fuel g s r e p h m c n budget request before = .done result after)
+    (heap : Heap before.checked.native.machine.heap) :
+    ∃ next final, ∃ actual : EdgeBody budget request before result after,
+      EdgeBodyReads formulas solver actual memos final ∧ Checks (edgeBodyTrace actual) ∧
+      Post formulas solver next before after final ∧ Resident after.checked.native.machine.heap result ∧ EdgeLaw formulas solver request result ∧
+      Heap after.checked.native.machine.heap := by
+  obtain ⟨next, final, actual, reads, checks, post, output, law⟩ :=
+    SourceCurrentAllocatedPartialWorkerActual.edgeBody_verified formulas solver initial inheritedReady resident ranges done
+  exact ⟨next, final, actual, reads, checks, post, output, law,
+    SourcePruningEnumerationPartialActualArity.edge_body_heap formulas solver reads inventory checks initial
+      inheritedReady resident heap⟩

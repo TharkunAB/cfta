@@ -1,0 +1,35 @@
+theorem observed_prefix
+    (heap : InternedConstructorTemplates.State Symbol Constraint)
+    (before : EnumerationState.State Symbol EnumGuard)
+    (first : Suspended) (rest : List Suspended) (waiting : EnumerationWaitingIndex.Waiting)
+    (roots : Nat → Nat) (paths : Roots before.representatives roots)
+    (counts : EnumerationCanonicalWaiting.Correct roots before.values waiting)
+    (safe : Safe before) (bounded : ∀ sc ∈ first :: rest, sc.var < before.counter)
+    (pending : InputsPending before (first :: rest)) (realized : PendingRealized heap before)
+    {fuel : Nat} {recorded : List Nat} {winner : Nat} {moved : EnumerationWaitingIndex.Waiting}
+    {joined : EnumerationState.State Symbol EnumGuard}
+    (observed : ExceptT.run (SourcePruningEnumerationTerminalPrefix.run fuel first rest waiting before) =
+      [.ok ((recorded, winner, moved), joined)]) :
+    recorded = (first :: rest).map (fun sc => roots sc.var) ∧ PendingRealized heap joined ∧
+      PendingAt joined winner ∧ ∀ source ∈ recorded, PendingAt joined source := by
+  obtain ⟨n, actualRecorded, actualWinner, actualMoved, _scanned, _united, actualJoined,
+    stable, _scan, _unions, _winner, recordedSame, _movedSame, _winnerMember, _rootWinner,
+    _afterRoots, _afterCounts, _joinedSame, _storage, joinedRealized, winnerPending,
+    recordedPending, _nodup, _sorted, _members⟩ :=
+    SourcePruningEnumerationTerminalPrefix.run_complete heap before first rest waiting roots
+      paths counts safe bounded pending realized
+  have actual := stable 0
+  simp only [Nat.add_zero] at actual
+  obtain ⟨rfl, rfl, rfl, rfl⟩ := SourcePruningEnumerationTerminalPrefix.run_unique
+    first rest waiting before observed actual
+  exact ⟨recordedSame, joinedRealized, winnerPending, recordedPending⟩
+
+/-- Original current facts and one mixed reservation derive all terminal range predicates. -/
+theorem initial_ranges
+    [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Constraint)] [DecidableEq Node]
+    (seed : Seed)
+    (formulas : SourceGuards.Formulas FullSyntax.Formula)
+    (solver : SourceGuards.Entailment FullSyntax.Formula)
+    (inventory : Inventory) (beforeCaller : Caller (bits + 2))
+    (before : EnumerationExpandableIndex.Cached Symbol Constraint)
+    (checkEmpty : Bool) (first : Suspended) (rest : List Suspended)

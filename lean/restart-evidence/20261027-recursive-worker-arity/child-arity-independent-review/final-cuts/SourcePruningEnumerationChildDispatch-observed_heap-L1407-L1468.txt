@@ -1,0 +1,62 @@
+MicroCFTA.SourcePruningEnumerationChildDispatch.observed_heap {bits : Nat}
+  [DecidableEq MicroCFTA.SourcePruningTemplates.Symbol]
+  [DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey MicroCFTA.SourcePruningTemplates.Symbol
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  [DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.Value MicroCFTA.SourcePruningTemplates.Symbol
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  (seed : MicroCFTA.SourcePruningEnumerationIncomingReservation.Seed)
+  (formulas : MicroCFTA.SourceGuards.Formulas MicroCFTA.FullSyntax.Formula)
+  (solver : MicroCFTA.SourceGuards.Entailment MicroCFTA.FullSyntax.Formula)
+  (inventory : MicroCFTA.SourceCurrentAllocatedNativeInventoryState.Inventory)
+  (beforeCaller : MicroCFTA.SourceCurrentAllocatedPartialState.State (bits + 2))
+  (before :
+    MicroCFTA.EnumerationExpandableIndex.Cached MicroCFTA.SourcePruningTemplates.Symbol
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+  (checkEmpty : Bool) (r n p h k : Nat) (bucket : List MicroCFTA.EnumerationState.Suspended)
+  (incoming :
+    MicroCFTA.InternedConstructorTemplates.Value MicroCFTA.SourcePruningTemplates.Symbol
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+  (roots : Nat → Nat) (memos : MicroCFTA.EndpointMemoGateTrace.Memos)
+  (initial : MicroCFTA.SourceCurrentAllocatedPartialInvariant.Context formulas solver inventory beforeCaller memos)
+  (safe : MicroCFTA.EnumerationSchedule.Safe before.core)
+  (paths : MicroCFTA.EnumerationSchedule.Roots before.core.representatives roots)
+  (counts : MicroCFTA.EnumerationCanonicalWaiting.Correct roots before.core.values before.waiting)
+  (realized :
+    MicroCFTA.SourcePruningEnumerationObservation.PendingRealized beforeCaller.checked.native.machine.heap before.core)
+  (bounded : ∀ (sc : MicroCFTA.EnumerationState.Suspended), sc ∈ bucket → sc.var < before.core.counter)
+  (pending : MicroCFTA.EnumerationDependencies.InputsPending before.core bucket)
+  (available : MicroCFTA.InternedProbeProvenance.Available beforeCaller.checked.native.machine.heap incoming)
+  (closed : incoming.free = [])
+  (fits : MicroCFTA.SourceCurrentConstrainedCapGeneratedQueryResources.Fits seed.snd beforeCaller.checked)
+  (reserved : MicroCFTA.SourcePruningEnumerationIncomingReservation.Reserved bits seed (bucket.length + 1))
+  (known :
+    MicroCFTA.SourceEqualityAnnotationHeap.Heap (fun guard => guard ∈ seed.fst)
+      beforeCaller.checked.native.machine.heap)
+  (arity : MicroCFTA.SourcePruningEnumerationArityOrigins.Heap beforeCaller.checked.native.machine.heap)
+  {result :
+    Option
+      (List
+        (Except MicroCFTA.EnumerationState.Error
+          (MicroCFTA.Fragments.Fragment MicroCFTA.SourcePruningTemplates.Symbol ×
+            MicroCFTA.EnumerationState.State MicroCFTA.SourcePruningTemplates.Symbol
+              (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))))}
+  {afterCaller : MicroCFTA.SourceCurrentAllocatedPartialState.State (bits + 2)}
+  {savedQueries : MicroCFTA.SourceEndpointMemo.Memos}
+  {outer :
+    MicroCFTA.EnumerationState.State MicroCFTA.SourcePruningTemplates.Symbol
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)}
+  {moved : MicroCFTA.EnumerationWaitingIndex.Waiting}
+  {cache :
+    Option
+      (MicroCFTA.EnumerationExpandableIndex.Cached MicroCFTA.SourcePruningTemplates.Symbol
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))}
+  (observed :
+    MicroCFTA.SourcePruningEnumerationChildDispatch.run checkEmpty r n p h k bucket incoming beforeCaller before
+        memos.query =
+      ((Except.ok result, afterCaller, savedQueries, outer, moved), cache)) :
+  MicroCFTA.SourcePruningEnumerationArityOrigins.Heap afterCaller.checked.native.machine.heap
+'MicroCFTA.SourcePruningEnumerationChildDispatch.observed_heap' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]

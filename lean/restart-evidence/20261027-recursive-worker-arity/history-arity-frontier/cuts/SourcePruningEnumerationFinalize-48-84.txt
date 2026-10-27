@@ -1,0 +1,37 @@
+/-- Derive finite finalization and the retained storage and index invariants. -/
+theorem complete
+    (heap : InternedConstructorTemplates.State Symbol NativeGuard)
+    (before : EnumerationExpandableIndex.Cached Symbol EnumGuard)
+    (target : Nat) (fragment : Fragments.Fragment Symbol)
+    (old : EnumerationState.UVarValue Symbol)
+    (stored : before.core.values[target]? = some old)
+    (roots : Nat → Nat) (paths : Roots before.core.representatives roots)
+    (counts : EnumerationCanonicalWaiting.Correct roots before.core.values before.waiting)
+    (flags : ∀ (slot : Nat),
+      SourcePruningEnumerationNativeIndex.candidate heap
+        ((before.core.values[slot]?).getD .eliminated) = some (before.expandable slot))
+    (storage : StorageValid before.core)
+    (bounded : FragmentBound before.core.counter fragment)
+    (realized : PendingRealized heap before.core) :
+    ∃ (fuel : Nat) (after : EnumerationExpandableIndex.Cached Symbol EnumGuard),
+      (∀ (extra : Nat), run heap (fuel + extra) target fragment before = some after) ∧
+      ExceptT.run (finish (EnumGuard := EnumGuard) target fragment before.core) =
+        [.ok (fragment, after.core)] ∧
+      after.core = {before.core with
+        values := before.core.values.set target (.enumerated fragment)
+        expansionAncestry := []} ∧
+      after.core.values[target]? = some (.enumerated fragment) ∧
+      after.expandable = (fun (slot : Nat) => if slot = target then false else before.expandable slot) ∧
+      after.waiting = EnumerationCanonicalWaiting.count roots (-1) (references old) before.waiting ∧
+      Roots after.core.representatives roots ∧
+      EnumerationCanonicalWaiting.Correct roots after.core.values after.waiting ∧
+      (∀ (slot : Nat),
+        SourcePruningEnumerationNativeIndex.candidate heap
+          ((after.core.values[slot]?).getD .eliminated) = some (after.expandable slot)) ∧
+      StorageValid after.core ∧ PendingRealized heap after.core ∧
+      (Safe before.core → IsRoot before.core.representatives target → Safe after.core) := by
+  obtain ⟨fuel, countRun⟩ := SourcePruningEnumerationNativeIndex.count_complete
+    before.core.representatives roots paths (references old)
+  have inside : target < before.core.values.length := by
+    exact (List.getElem?_eq_some_iff.mp stored).elim (fun bound _elementEquality => bound)
+  have writtenFlags : ∀ (slot : Nat),

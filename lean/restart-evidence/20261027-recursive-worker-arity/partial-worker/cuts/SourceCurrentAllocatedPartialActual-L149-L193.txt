@@ -1,0 +1,45 @@
+   · intro budget edge loaded inherited before result checked fourth merge actual memos final field parentReads
+     intro inventory checks initial inheritedReady resident
+     obtain ⟨next, receipt, _, probes⟩ := SourceCurrentAllocatedPartialEdgeActual.edge_body $formulas $solver inventory
+       (SourceCurrentAllocatedPartialSourceReads.EdgeBodyReads.parent (field := field) parentReads)
+       initial.ready initial.admitted initial.sound inheritedReady resident initial.correct initial.stored initial.covered
+       checks.edge_body initial.globals initial.probes
+     exact ⟨next, ⟨⟨receipt.ready, receipt.admitted, receipt.sound, receipt.stored, receipt.covered,
+       receipt.correct, receipt.globals, probes⟩, receipt.effects, receipt.retained, receipt.fourthRetained⟩,
+       receipt.resident, receipt.language⟩
+   · intro budget inherited before memos inventory _checks initial _inherited _resident
+     exact ⟨inventory, Post.refl initial, (by intro row member; cases member),
+       SourceCurrentAllocatedPartialForestLanguage.rows_nil $formulas $solver budget inherited before⟩
+   · intro budget inherited original before narrowed middle first memos edgeMemos result afterChildren child childMemos
+     intro originals results after tail final edgeReads childrenReads tailReads ihEdge ihChildren ihTail
+     intro inventory checks initial inheritedReady resident
+     obtain ⟨edgeInventory, edgePost, narrowedResident, edgeLaw⟩ := ihEdge inventory
+       (checks.restrict (.rows_edge first child tail)) initial inheritedReady (resident original List.mem_cons_self)
+     obtain ⟨childInventory, childPost, resultResident, childLaw⟩ := ihChildren edgeInventory
+       (checks.restrict (.rows_descendants first child tail)) edgePost.context
+       (inheritedReady.grows edgePost.effects.grows.constraint_growth) narrowedResident
+     have firstPost := edgePost.trans childPost
+     obtain ⟨next, tailPost, resultsResident, tailLaw⟩ := ihTail childInventory
+       (checks.restrict (.rows_tail first child tail)) childPost.context
+       (inheritedReady.grows firstPost.effects.grows.constraint_growth)
+       (edges_grow firstPost.effects (fun edge member => resident edge (List.mem_cons_of_mem _ member)))
+     refine ⟨next, firstPost.trans tailPost, ?_,
+       SourceCurrentAllocatedPartialForestLanguage.rows_cons $formulas $solver first child tail edgeLaw childLaw tailLaw⟩
+     intro edge member
+     rcases List.mem_cons.mp member with same | member
+     · subst edge
+       exact InternedEdgeResidency.edge_grows _ _ tailPost.effects.keeps.growth _ resultResident
+     · exact resultsResident edge member
+   · intro budget payload edge before inherited results middle children memos final combined childReads ih
+     intro inventory checks initial inheritedReady resident
+     obtain ⟨prefixReceipt, prefixPost⟩ := SourceCurrentAllocatedPartialStepEffects.inherited_prefix $formulas $solver
+       inventory before memos initial edge inherited payload resident inheritedReady combined
+     have inputs := initial.ready.semantic.ready.semantic.1.normal.facts.cached.edges edge.entry.key edge resident
+     obtain ⟨next, childPost, available, law⟩ := ih inventory
+       (checks.restrict (.descendants_children combined children)) prefixPost.context prefixReceipt.combinedReady
+       (values_grow prefixPost.effects inputs)
+     have firstPost := prefixPost.trans childPost
+     obtain ⟨rebuilt, last⟩ := SourceCurrentAllocatedPartialStepEffects.raw_edge $formulas $solver next middle final childPost.context
+       edge results (InternedEdgeResidency.edge_grows _ _ firstPost.effects.keeps.growth _ resident) available children.length
+     exact ⟨next, firstPost.trans last, rebuilt.resident,
+       SourceCurrentAllocatedPartialForestLanguage.descendants $formulas $solver prefixReceipt children law rebuilt⟩

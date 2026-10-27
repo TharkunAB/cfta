@@ -1,0 +1,28 @@
+theorem inherited_prefix
+    (formulas : SourceGuards.Formulas FullSyntax.Formula) (solver : SourceGuards.Entailment FullSyntax.Formula)
+    (inventory : Inventory) (before : Caller width) (memos : Memos)
+    (context : Context formulas solver inventory before memos)
+    (edge : EdgeValue Symbol Guard) (inherited payload : EqValue)
+    (resident : EdgeResident before.checked.native.machine.heap edge)
+    (inheritedReady : SourceEqualityConstraintAllocation.Ready before.checked.operations.constraints inherited)
+    (actual : (SourceCurrentAllocatedInheritedPrefix.run edge.entry.key.constraint inherited before.checked.operations).1 = .ok (some payload)) :
+    SourceCurrentAllocatedInheritedPrefix.Receipt formulas solver inventory edge.entry.key.constraint inherited before.checked payload ∧
+    Post formulas solver inventory before (SourceCurrentAllocatedPartialGraph.prefixState before edge inherited) memos := by
+  obtain ⟨chosen, receipt⟩ := SourceCurrentAllocatedInheritedPrefix.resident_finite formulas solver inventory edge inherited before.checked
+    context.ready context.admitted resident inheritedReady
+  have same := Option.some.inj (Except.ok.inj (receipt.actual.symm.trans actual))
+  cases same
+  exact ⟨receipt, advance_post context _ receipt.ready receipt.admitted receipt.effects context.probes⟩
+
+omit [DecidableEq Symbol] [DecidableEq (Value Symbol Guard)] in
+/-- The actual indexed descent retains every warm table and its phase laws. -/
+theorem descent
+    (formulas : SourceGuards.Formulas FullSyntax.Formula) (solver : SourceGuards.Entailment FullSyntax.Formula)
+    (inventory : Inventory) (before : Caller width) (memos : Memos)
+    (context : Context formulas solver inventory before memos) (combined : EqValue) (index : Nat)
+    (inheritedReady : SourceEqualityConstraintAllocation.Ready before.checked.operations.constraints combined) :
+    SourceCurrentAllocatedPartialDescent.Receipt formulas solver inventory before combined index ∧
+    Post formulas solver inventory before (SourceCurrentAllocatedPartialGraph.descend before combined index).2 memos := by
+  have receipt := SourceCurrentAllocatedPartialDescent.complete formulas solver inventory before combined index
+    context.ready context.admitted context.sound inheritedReady
+  exact ⟨receipt, advance_post context _ receipt.ready receipt.admitted receipt.effects context.probes⟩

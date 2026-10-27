@@ -1,0 +1,5 @@
+private def ChildrenClaim {combined : EqValue} {values results : List Node} {before after : Caller width}
+    (actual : Children budget combined values before results after) (memos : Memos) (_final : Memos) : Prop :=
+  ∀ inventory, Checks (childrenTrace actual) → Context formulas solver inventory before memos →
+    EqReady before.checked.operations.constraints combined → Values before.checked.native.machine.heap values →
+    Heap before.checked.native.machine.heap → Heap after.checked.native.machine.heap

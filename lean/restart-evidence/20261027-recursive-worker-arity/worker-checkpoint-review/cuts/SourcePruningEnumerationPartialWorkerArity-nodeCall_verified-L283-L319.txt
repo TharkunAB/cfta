@@ -1,0 +1,37 @@
+MicroCFTA.SourcePruningEnumerationPartialWorkerArity.nodeCall_verified
+  [DecidableEq (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)]
+  [DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  [DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  {width : Nat} (formulas : MicroCFTA.SourceGuards.Formulas MicroCFTA.FullSyntax.Formula)
+  (solver : MicroCFTA.SourceGuards.Entailment MicroCFTA.FullSyntax.Formula) {fuel g s r e p h m c n budget : Nat}
+  {request : MicroCFTA.SourceCurrentAllocatedPartialState.NodeRequest}
+  {before after : MicroCFTA.SourceCurrentAllocatedPartialState.State width}
+  {result :
+    MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)}
+  {inventory : MicroCFTA.SourceCurrentAllocatedNativeInventoryState.Inventory}
+  {memos : MicroCFTA.EndpointMemoGateTrace.Memos}
+  (initial : MicroCFTA.SourceCurrentAllocatedPartialInvariant.Context formulas solver inventory before memos)
+  (inheritedReady :
+    MicroCFTA.SourceEqualityConstraintAllocation.Ready before.checked.operations.constraints request.inherited)
+  (available : MicroCFTA.InternedProbeProvenance.Available before.checked.native.machine.heap request.value)
+  (ranges : MicroCFTA.SourceCurrentAllocatedPartialWorkerRanges.nodeCall fuel g s r e p h m c n budget request before)
+  (done :
+    MicroCFTA.SourceCurrentAllocatedPartialWorker.nodeCall fuel g s r e p h m c n budget request before =
+      MicroCFTA.SourceCurrentAllocatedPartialWorker.Outcome.done result after)
+  (heap : MicroCFTA.SourcePruningEnumerationArityOrigins.Heap before.checked.native.machine.heap) :
+  ∃ next final actual,
+    MicroCFTA.SourceCurrentAllocatedPartialSourceReads.NodeCallReads formulas solver actual memos final ∧
+      MicroCFTA.SourceCurrentAllocatedPartialChecks.Checks
+          (MicroCFTA.SourceCurrentAllocatedPartialChecks.nodeCallTrace actual) ∧
+        MicroCFTA.SourceCurrentAllocatedPartialInvariant.Post formulas solver next before after final ∧
+          MicroCFTA.InternedProbeProvenance.Available after.checked.native.machine.heap result ∧
+            MicroCFTA.SourceCurrentAllocatedPartialMemoSound.NodeLaw formulas solver request result ∧
+              MicroCFTA.SourcePruningEnumerationArityOrigins.Heap after.checked.native.machine.heap
+'MicroCFTA.SourcePruningEnumerationPartialWorkerArity.nodeCall_verified' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]

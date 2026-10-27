@@ -1,0 +1,20 @@
+theorem Receipt.arity_heap
+    {formulas : SourceGuards.Formulas FullSyntax.Formula} {solver : SourceGuards.Entailment FullSyntax.Formula}
+    {inventory : Inventory} {left right result : Value Symbol Guard}
+    {before after : Checked width} {memos : Memos}
+    (receipt : Receipt formulas solver inventory left right before result after memos)
+    (good : SourceCurrentAllocatedNativePhysicalCompletion.Good before)
+    (heap : Heap before.native.machine.heap) : Heap after.native.machine.heap := by
+  cases receipt.actual with
+  | run trace =>
+      exact SourcePruningEnumerationNativeQueryArity.node_query_heap
+        ⟨IntersectionEmptyDomain.emptyDomain, left, right⟩ before after result _ good heap trace
+
+end MicroCFTA.SourceCurrentAllocatedTargetQuery
+
+namespace MicroCFTA.SourcePruningEnumerationSharedTargetArity
+open Cache Language InternedConstructorTemplates InternedProbeProvenance
+open InternedNestedProvenance (Values)
+open SourceCurrentAllocatedNativeInventoryState (Inventory)
+open SourceCurrentAllocatedTargetComplete
+open SourcePruningEnumerationArityOrigins (Heap)

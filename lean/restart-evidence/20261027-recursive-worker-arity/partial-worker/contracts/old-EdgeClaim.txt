@@ -1,0 +1,6 @@
+def EdgeClaim (top : Trace width budget) (request : EdgeRequest) (before : Caller width)
+    (result : Edge) (after : Caller width) (memos final : Memos) : Prop :=
+  ∀ inventory, Checks top → Context formulas solver inventory before memos →
+    EqReady before.checked.operations.constraints request.inherited → Resident before.checked.native.machine.heap request.value →
+    ∃ next, Post formulas solver next before after final ∧ Resident after.checked.native.machine.heap result ∧
+      EdgeLaw formulas solver request result

@@ -1,0 +1,19 @@
+theorem zero_complete_with_arity
+    (holeKey : Typing → Nat → Key) (fits : Key → Symbol → Bool) (admits : Key → Node → Bool)
+    (graph : Graph Symbol Constraint) (templates : List (Template.Pattern Symbol))
+    (checkEmpty : Bool) (edgesOf : Node → List (EdgeValue Symbol Constraint))
+    (stop : Option (Metadata Typing → Nat → Bool)) (order : Metadata Typing → List Nat → Option Nat)
+    (formulas : SourceGuards.Formulas FullSyntax.Formula) (solver : SourceGuards.Entailment FullSyntax.Formula) :
+    CompleteWithArity (bits := bits) holeKey fits admits graph templates checkEmpty edgesOf stop order
+      formulas solver 0 := by
+  intro inventory caller memos before metadata seed ceiling packet bounded known
+    _selectionMembers _selectionLength _initialMass _reserved arity
+  obtain ⟨outcome, running, resources, strengthened⟩ := resume_zero_outcome_resources_arity
+    holeKey fits admits graph templates checkEmpty edgesOf stop order formulas solver inventory
+    caller memos before metadata (SourcePruningEnumerationRestart.decision stop order metadata before)
+    seed packet bounded known arity
+  refine ⟨0, outcome, ?_, ?_, ?_⟩
+  · intro extra
+    simpa only [run, Nat.zero_add] using running extra
+  · simpa only [SourcePruningEnumerationFiniteReservation.final_zero] using resources
+  · simpa only [SourcePruningEnumerationFiniteReservation.final_zero] using strengthened

@@ -1,0 +1,4 @@
+theorem node_call {request : NodeRequest} {before after : Caller width} {result : Node}
+    {actual : NodeCall budget request before result after} {memos final : Memos}
+    (reads : NodeCallReads formulas solver actual memos final) :
+    NodeClaim formulas solver (nodeCallTrace actual) request before result after memos final

@@ -1,0 +1,13 @@
+theorem edgeCall_verified
+    {fuel g s r e p h m c n budget : Nat} {request : EdgeRequest} {before after : Caller width} {result : Edge}
+    {inventory : Inventory} {memos : Memos}
+    (initial : Context formulas solver inventory before memos)
+    (inheritedReady : EqReady before.checked.operations.constraints request.inherited)
+    (resident : Resident before.checked.native.machine.heap request.value)
+    (ranges : SourceCurrentAllocatedPartialWorkerRanges.edgeCall fuel g s r e p h m c n budget request before)
+    (done : edgeCall fuel g s r e p h m c n budget request before = .done result after)
+    (heap : Heap before.checked.native.machine.heap) :
+    ∃ next final, ∃ actual : EdgeCall budget request before result after,
+      EdgeCallReads formulas solver actual memos final ∧ Checks (edgeCallTrace actual) ∧
+      Post formulas solver next before after final ∧ Resident after.checked.native.machine.heap result ∧ EdgeLaw formulas solver request result ∧
+      Heap after.checked.native.machine.heap

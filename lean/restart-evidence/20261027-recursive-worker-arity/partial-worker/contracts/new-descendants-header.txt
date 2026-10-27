@@ -1,0 +1,6 @@
+theorem descendants_heap {inherited : EqValue} {value result : Edge} {before after : Caller width}
+    {actual : Descendants budget inherited value before result after} {memos final : Memos}
+    (reads : DescendantsReads formulas solver actual memos final) :
+    ∀ inventory, Checks (descendantsTrace actual) → Context formulas solver inventory before memos →
+      EqReady before.checked.operations.constraints inherited → Resident before.checked.native.machine.heap value →
+      Heap before.checked.native.machine.heap → Heap after.checked.native.machine.heap

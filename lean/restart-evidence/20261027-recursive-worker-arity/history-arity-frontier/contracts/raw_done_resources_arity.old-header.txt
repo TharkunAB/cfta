@@ -1,0 +1,25 @@
+theorem raw_done_resources
+    [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Constraint)] [DecidableEq Node]
+    (alphabet : List Constraint) (profile : Profile)
+    (formulas : SourceGuards.Formulas FullSyntax.Formula)
+    (solver : SourceGuards.Entailment FullSyntax.Formula)
+    (inventory : Inventory) (beforeCaller : Caller (bits + 2))
+    (left right : Node) (checkEmpty : Bool) (memos : Memos)
+    (initial : Context formulas solver inventory beforeCaller memos)
+    (leftAvailable : Available beforeCaller.checked.native.machine.heap left)
+    (rightAvailable : Available beforeCaller.checked.native.machine.heap right)
+    (leftClosed : left.free = []) (rightClosed : right.free = [])
+    (fits : Fits profile beforeCaller.checked) (room : Room bits profile)
+    (known : Heap (fun guard => guard ∈ alphabet) beforeCaller.checked.native.machine.heap)
+    {fuel p h : Nat} {query : Node} {queried checkedAfter : Checked (bits + 2)}
+    {answer : Bool} {saved : Fourth} {queries : Queries}
+    (native : SourceEqualityNativeDemand.execute fuel
+      (.code (SourceRecursiveIntersectionCode.requestNode IntersectionEmptyDomain.emptyDomain left right))
+      beforeCaller.checked = .done query queried)
+    (phase : (if checkEmpty then
+      SourcePruningEnumerationEnabledEmpty.check p h query queried beforeCaller.fourth memos.query
+      else (.done false queried beforeCaller.fourth, memos.query)) =
+        (.done answer checkedAfter saved, queries)) :
+    Fits (forecast alphabet profile) checkedAfter ∧
+      Heap (fun guard => guard ∈ SourceCurrentGeneratedQueryGuardResources.forecast alphabet profile)
+        checkedAfter.native.machine.heap

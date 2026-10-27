@@ -1,0 +1,6 @@
+theorem rows_heap {inherited : EqValue} {values results : List Edge} {before after : Caller width}
+    {actual : Rows budget inherited values before results after} {memos final : Memos}
+    (reads : RowsReads formulas solver actual memos final) :
+    ∀ inventory, Checks (rowsTrace actual) → Context formulas solver inventory before memos →
+      EqReady before.checked.operations.constraints inherited → Edges before.checked.native.machine.heap values →
+      Heap before.checked.native.machine.heap → Heap after.checked.native.machine.heap

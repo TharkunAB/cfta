@@ -1,0 +1,30 @@
+theorem advance_node_execute_heap
+    (request : SourceRecursiveIntersectionThunks.NodeRequest Symbol Guard)
+    (before : Caller width) (fuel : Nat)
+    (fourth : SourceCurrentEmptinessMemo.Memo)
+    (merge : SourceCurrentMemoMergeGraph.Memo Symbol Guard)
+    (valid : SourceCurrentAllocatedNativePhysicalCompletion.Good before.checked)
+    (heap : Heap before.checked.native.machine.heap)
+    (plan : SourceCurrentAllocatedNativePhysicalExecution.InputsThrough fuel
+      (.code (SourceRecursiveIntersectionCode.requestNode request.domain request.left request.right)) before.checked) :
+    Heap (SourceCurrentAllocatedPartialState.advance before
+      (SourceEqualityNativeDemand.execute fuel
+        (.code (SourceRecursiveIntersectionCode.requestNode request.domain request.left request.right)) before.checked).state
+      fourth merge).checked.native.machine.heap :=
+  SourcePruningEnumerationNativePrefixArity.node_query_execute_heap request before.checked fuel valid heap plan
+
+/-- Edge-query advancement keeps the literal reached checked state on success or failure. -/
+theorem advance_edge_execute_heap
+    (request : SourceRecursiveIntersectionThunks.EdgeRequest Symbol Guard)
+    (before : Caller width) (fuel : Nat)
+    (fourth : SourceCurrentEmptinessMemo.Memo)
+    (merge : SourceCurrentMemoMergeGraph.Memo Symbol Guard)
+    (valid : SourceCurrentAllocatedNativePhysicalCompletion.Good before.checked)
+    (heap : Heap before.checked.native.machine.heap)
+    (plan : SourceCurrentAllocatedNativePhysicalExecution.InputsThrough fuel
+      (.code (SourceRecursiveIntersectionCode.requestEdge request.domain request.left request.right)) before.checked) :
+    Heap (SourceCurrentAllocatedPartialState.advance before
+      (SourceEqualityNativeDemand.execute fuel
+        (.code (SourceRecursiveIntersectionCode.requestEdge request.domain request.left request.right)) before.checked).state
+      fourth merge).checked.native.machine.heap :=
+  SourcePruningEnumerationNativePrefixArity.edge_query_execute_heap request before.checked fuel valid heap plan

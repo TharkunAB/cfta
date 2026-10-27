@@ -1,0 +1,44 @@
+/-- A completed node returns its independent law and its literal full context. -/
+def NodeClaim (top : Trace width budget) (request : NodeRequest) (before : Caller width)
+    (result : Node) (after : Caller width) (memos final : Memos) : Prop :=
+  ∀ inventory, Checks top → Context formulas solver inventory before memos →
+    EqReady before.checked.operations.constraints request.inherited → Available before.checked.native.machine.heap request.value →
+    ∃ next, Post formulas solver next before after final ∧ Available after.checked.native.machine.heap result ∧
+      NodeLaw formulas solver request result
+
+/-- A completed edge returns its independent law and its literal full context. -/
+def EdgeClaim (top : Trace width budget) (request : EdgeRequest) (before : Caller width)
+    (result : Edge) (after : Caller width) (memos final : Memos) : Prop :=
+  ∀ inventory, Checks top → Context formulas solver inventory before memos →
+    EqReady before.checked.operations.constraints request.inherited → Resident before.checked.native.machine.heap request.value →
+    ∃ next, Post formulas solver next before after final ∧ Resident after.checked.native.machine.heap result ∧
+      EdgeLaw formulas solver request result
+
+/-- Ordered source rows return resident rows and their derived union law. -/
+def RowsClaim {inherited : EqValue} {values results : List Edge} {before after : Caller width}
+    (actual : Rows budget inherited values before results after) (memos final : Memos) : Prop :=
+  ∀ inventory, Checks (rowsTrace actual) → Context formulas solver inventory before memos →
+    EqReady before.checked.operations.constraints inherited → Edges before.checked.native.machine.heap values →
+    ∃ next, Post formulas solver next before after final ∧ Edges after.checked.native.machine.heap results ∧
+      RowsLaw formulas solver actual
+
+/-- Actual descendants retain the returned edge's complete field and derived law. -/
+def DescendantsClaim {inherited : EqValue} {value result : Edge} {before after : Caller width}
+    (actual : Descendants budget inherited value before result after) (memos final : Memos) : Prop :=
+  EdgeClaim formulas solver (descendantsTrace actual) ⟨inherited, value⟩ before result after memos final
+
+/-- Actual child branches derive every returned slot and their parent-conditioned law. -/
+def ChildrenClaim {combined : EqValue} {values results : List Node} {before after : Caller width}
+    (actual : Children budget combined values before results after) (memos final : Memos) : Prop :=
+  ∀ inventory, Checks (childrenTrace actual) → Context formulas solver inventory before memos →
+    EqReady before.checked.operations.constraints combined → Values before.checked.native.machine.heap values →
+    ∃ next, Post formulas solver next before after final ∧ Values after.checked.native.machine.heap results ∧
+      ChildrenLaw formulas solver actual
+
+/-- Each indexed walk derives its smaller node laws at the literal source offsets. -/
+def WalkClaim {combined : EqValue} {index : Nat} {values results : List Node} {before after : Caller width}
+    (actual : Walk budget combined index values before results after) (memos final : Memos) : Prop :=
+  ∀ inventory, Checks (walkTrace actual) → Context formulas solver inventory before memos →
+    EqReady before.checked.operations.constraints combined → Values before.checked.native.machine.heap values →
+    ∃ next, Post formulas solver next before after final ∧ Values after.checked.native.machine.heap results ∧
+      WalkLaw formulas solver actual

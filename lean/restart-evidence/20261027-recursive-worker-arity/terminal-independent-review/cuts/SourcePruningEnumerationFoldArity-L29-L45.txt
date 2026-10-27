@@ -1,0 +1,17 @@
+theorem observed_heap (seed : Seed)
+    (formulas : SourceGuards.Formulas FullSyntax.Formula) (solver : SourceGuards.Entailment FullSyntax.Formula)
+    (inventory : Inventory) (beforeCaller : Caller (bits + 2))
+    (before : EnumerationState.State Symbol EnumGuard) (sources : List Nat)
+    (checkEmpty : Bool) (n p h target : Nat) (memos : Memos)
+    (initial : Context formulas solver inventory beforeCaller memos)
+    (realized : PendingRealized beforeCaller.checked.native.machine.heap before)
+    (targetPending : PendingAt before target)
+    (selected : ∀ source ∈ sources, PendingOrEliminated before source)
+    (fits : Fits seed.2 beforeCaller.checked)
+    (reserved : Reserved bits seed sources.length)
+    (known : Heap (fun guard => guard ∈ seed.1) beforeCaller.checked.native.machine.heap)
+    (arity : SourcePruningEnumerationArityOrigins.Heap beforeCaller.checked.native.machine.heap)
+    {result : Option (List (Except EnumerationState.Error (Unit × EnumerationState.State Symbol EnumGuard)))}
+    {afterCaller : Caller (bits + 2)} {saved : Queries} {after : EnumerationState.State Symbol EnumGuard}
+    (observed : run checkEmpty n p h sources beforeCaller before target memos.query =
+      (.ok result, afterCaller, saved, after)) :

@@ -1,0 +1,6 @@
+theorem edge_body_heap {request : EdgeRequest} {before after : Caller width} {result : Edge}
+    {actual : EdgeBody budget request before result after} {memos final : Memos}
+    (reads : EdgeBodyReads formulas solver actual memos final) :
+    ∀ inventory, Checks (edgeBodyTrace actual) → Context formulas solver inventory before memos →
+      EqReady before.checked.operations.constraints request.inherited → Resident before.checked.native.machine.heap request.value →
+      Heap before.checked.native.machine.heap → Heap after.checked.native.machine.heap

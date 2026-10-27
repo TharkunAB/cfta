@@ -1,0 +1,16 @@
+   · intro budget inherited original before narrowed middle first memos edgeMemos result afterChildren child childMemos
+     intro originals results after tail final edgeReads childrenReads tailReads ihEdge ihChildren ihTail
+     intro inventory checks initial inheritedReady resident heap
+     have edgeChecks := checks.restrict (.rows_edge first child tail)
+     obtain ⟨edgeInventory, edgePost, narrowedResident, _⟩ := SourceCurrentAllocatedPartialActual.edge_call
+       $formulas $solver edgeReads inventory edgeChecks initial inheritedReady (resident original List.mem_cons_self)
+     have middleHeap := ihEdge inventory edgeChecks initial inheritedReady (resident original List.mem_cons_self) heap
+     have childChecks := checks.restrict (.rows_descendants first child tail)
+     have inheritedMiddle := inheritedReady.grows edgePost.effects.grows.constraint_growth
+     obtain ⟨childInventory, childPost, _resultResident, _⟩ := SourceCurrentAllocatedPartialActual.descendants
+       $formulas $solver childrenReads edgeInventory childChecks edgePost.context inheritedMiddle narrowedResident
+     have childHeap := ihChildren edgeInventory childChecks edgePost.context inheritedMiddle narrowedResident middleHeap
+     have firstPost := edgePost.trans childPost
+     exact ihTail childInventory (checks.restrict (.rows_tail first child tail)) childPost.context
+       (inheritedReady.grows firstPost.effects.grows.constraint_growth)
+       (edges_grow firstPost.effects (fun edge member => resident edge (List.mem_cons_of_mem _ member))) childHeap

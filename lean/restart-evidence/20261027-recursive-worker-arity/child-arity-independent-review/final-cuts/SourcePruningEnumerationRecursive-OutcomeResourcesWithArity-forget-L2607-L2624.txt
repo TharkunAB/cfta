@@ -1,0 +1,18 @@
+MicroCFTA.SourcePruningEnumerationRecursive.OutcomeResourcesWithArity.forget {Typing : Type} {width : Nat}
+  [DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey MicroCFTA.SourcePruningTemplates.Symbol
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  {formulas : MicroCFTA.SourceGuards.Formulas MicroCFTA.FullSyntax.Formula}
+  {solver : MicroCFTA.SourceGuards.Entailment MicroCFTA.FullSyntax.Formula}
+  {original : MicroCFTA.SourceCurrentAllocatedPartialState.State width}
+  {seed : MicroCFTA.SourcePruningEnumerationIncomingReservation.Seed}
+  {outcome :
+    MicroCFTA.SourcePruningEnumerationNativeContinuations.HookResult
+      (MicroCFTA.SourcePruningEnumerationRecursive.Output width Typing)
+      (MicroCFTA.SourcePruningEnumerationRecursive.Failure width Typing) width}
+  (resources :
+    MicroCFTA.SourcePruningEnumerationRecursive.OutcomeResourcesWithArity formulas solver original seed outcome) :
+  MicroCFTA.SourcePruningEnumerationRecursive.OutcomeResources formulas solver original seed outcome
+'MicroCFTA.SourcePruningEnumerationRecursive.OutcomeResourcesWithArity.forget' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]

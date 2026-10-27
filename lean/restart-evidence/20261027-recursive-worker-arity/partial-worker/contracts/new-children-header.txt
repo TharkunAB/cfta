@@ -1,0 +1,6 @@
+theorem children_heap {combined : EqValue} {values results : List Node} {before after : Caller width}
+    {actual : Children budget combined values before results after} {memos final : Memos}
+    (reads : ChildrenReads formulas solver actual memos final) :
+    ∀ inventory, Checks (childrenTrace actual) → Context formulas solver inventory before memos →
+      EqReady before.checked.operations.constraints combined → Values before.checked.native.machine.heap values →
+      Heap before.checked.native.machine.heap → Heap after.checked.native.machine.heap

@@ -1,0 +1,29 @@
+                    have foldBounds := SourcePruningEnumerationFold.observed_resources seed formulas solver inventory
+                      beforeCaller joined recorded checkEmpty n p h winner memos initial joinedRealized
+                      winnerPending selected fits foldReservation known foldObserved
+                    have padded := SourcePruningEnumerationFold.observed_heap seed formulas solver inventory
+                      beforeCaller joined recorded checkEmpty n p h winner memos initial joinedRealized
+                      winnerPending selected fits foldReservation known arityHeap foldObserved
+                    cases possible with
+                    | none =>
+                        simp only [foldObserved] at observed
+                        have callerSame := congrArg (fun output => output.2.1) observed
+                        dsimp only at callerSame
+                        rw [← callerSame]
+                        exact padded
+                    | some foldRaw =>
+                        cases foldRaw with
+                        | nil =>
+                            simp only [foldObserved] at observed
+                            have callerSame := congrArg (fun output => output.2.1) observed
+                            dsimp only at callerSame
+                            rw [← callerSame]
+                            exact padded
+                        | cons firstRow tail =>
+                            cases firstRow with
+                            | error fault =>
+                                simp only [foldObserved] at observed
+                                cases observed
+                            | ok row =>
+                                rcases row with ⟨token, folded⟩
+                                cases token

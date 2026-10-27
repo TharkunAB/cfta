@@ -1,0 +1,5 @@
+private def WalkClaim {combined : EqValue} {index : Nat} {values results : List Node} {before after : Caller width}
+    (actual : Walk budget combined index values before results after) (memos : Memos) (_final : Memos) : Prop :=
+  ∀ inventory, Checks (walkTrace actual) → Context formulas solver inventory before memos →
+    EqReady before.checked.operations.constraints combined → Values before.checked.native.machine.heap values →
+    Heap before.checked.native.machine.heap → Heap after.checked.native.machine.heap

@@ -1,0 +1,53 @@
+theorem node_call {request : NodeRequest} {before after : Caller width} {result : Node}
+    {actual : NodeCall budget request before result after} {memos final : Memos}
+    (reads : NodeCallReads formulas solver actual memos final) :
+    NodeClaim formulas solver (nodeCallTrace actual) request before result after memos final := by
+  actual_induction NodeCallReads.rec reads formulas solver
+
+/-- Actual node bodies derive their laws from their own smaller source calls. -/
+theorem node_body {request : NodeRequest} {before after : Caller width} {result : Node}
+    {actual : NodeBody budget request before result after} {memos final : Memos}
+    (reads : NodeBodyReads formulas solver actual memos final) :
+    NodeClaim formulas solver (nodeBodyTrace actual) request before result after memos final := by
+  actual_induction NodeBodyReads.rec reads formulas solver
+
+/-- Completed edge calls finish their actual stored owners and retain all warm invariants. -/
+theorem edge_call {request : EdgeRequest} {before after : Caller width} {result : Edge}
+    {actual : EdgeCall budget request before result after} {memos final : Memos}
+    (reads : EdgeCallReads formulas solver actual memos final) :
+    EdgeClaim formulas solver (edgeCallTrace actual) request before result after memos final := by
+  actual_induction EdgeCallReads.rec reads formulas solver
+
+/-- The strict current parent leaf derives the complete edge-body receipt. -/
+theorem edge_body {request : EdgeRequest} {before after : Caller width} {result : Edge}
+    {actual : EdgeBody budget request before result after} {memos final : Memos}
+    (reads : EdgeBodyReads formulas solver actual memos final) :
+    EdgeClaim formulas solver (edgeBodyTrace actual) request before result after memos final := by
+  actual_induction EdgeBodyReads.rec reads formulas solver
+
+/-- Source row order composes parent reduction, returned-edge descendants, and the suffix. -/
+theorem rows {inherited : EqValue} {values results : List Edge} {before after : Caller width}
+    {actual : Rows budget inherited values before results after} {memos final : Memos}
+    (reads : RowsReads formulas solver actual memos final) : RowsClaim formulas solver actual memos final := by
+  actual_induction RowsReads.rec reads formulas solver
+
+/-- Descendants derive their law through the actual inherited prefix and same-arity reconstruction. -/
+theorem descendants {inherited : EqValue} {value result : Edge} {before after : Caller width}
+    {actual : Descendants budget inherited value before result after} {memos final : Memos}
+    (reads : DescendantsReads formulas solver actual memos final) : DescendantsClaim formulas solver actual memos final := by
+  actual_induction DescendantsReads.rec reads formulas solver
+
+/-- Both child branches derive availability and their parent-conditioned language law. -/
+theorem children {combined : EqValue} {values results : List Node} {before after : Caller width}
+    {actual : Children budget combined values before results after} {memos final : Memos}
+    (reads : ChildrenReads formulas solver actual memos final) : ChildrenClaim formulas solver actual memos final := by
+  actual_induction ChildrenReads.rec reads formulas solver
+
+/-- Indexed child walks derive each head law from the smaller actual node call. -/
+theorem walk {combined : EqValue} {index : Nat} {values results : List Node} {before after : Caller width}
+    {actual : Walk budget combined index values before results after} {memos final : Memos}
+    (reads : WalkReads formulas solver actual memos final) : WalkClaim formulas solver actual memos final := by
+  actual_induction WalkReads.rec reads formulas solver
+
+/-- A completed top-level call with an allocated empty inherited payload preserves the full language. -/
+theorem root_exact {inventory : Inventory} {identity : Nat} {value result : Node} {before after : Caller width}

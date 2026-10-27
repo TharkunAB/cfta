@@ -1,0 +1,5 @@
+private def NodeClaim (top : Trace width budget) (request : NodeRequest) (before : Caller width)
+    (_result : Node) (after : Caller width) (memos : Memos) (_final : Memos) : Prop :=
+  ∀ inventory, Checks top → Context formulas solver inventory before memos →
+    EqReady before.checked.operations.constraints request.inherited → Available before.checked.native.machine.heap request.value →
+    Heap before.checked.native.machine.heap → Heap after.checked.native.machine.heap

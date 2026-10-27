@@ -1,0 +1,31 @@
+MicroCFTA.SourcePruningEnumerationNativeNarrowArity.advance_prepare_heap {Typing Key EnumGuard : Type}
+  [DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey MicroCFTA.SourcePruningTemplates.Symbol
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  {width : Nat} (holeKey : Typing → Nat → Key) (fits : Key → MicroCFTA.SourcePruningTemplates.Symbol → Bool)
+  (admits :
+    Key →
+      MicroCFTA.InternedConstructorTemplates.Value MicroCFTA.SourcePruningTemplates.Symbol
+          (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) →
+        Bool)
+  (metadata : MicroCFTA.SourcePruningRecordTypes.Metadata Typing) (nativeFuel representativeFuel uv oldHandle : Nat)
+  (scs : List MicroCFTA.EnumerationState.Suspended)
+  (value :
+    MicroCFTA.InternedConstructorTemplates.Value MicroCFTA.SourcePruningTemplates.Symbol
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+  (caller : MicroCFTA.SourceCurrentAllocatedPartialState.State width)
+  (facts : MicroCFTA.InternedNestedFacts.Facts caller.checked.native.machine.heap)
+  (heap : MicroCFTA.SourcePruningEnumerationArityOrigins.Heap caller.checked.native.machine.heap)
+  (available : MicroCFTA.InternedProbeProvenance.Available caller.checked.native.machine.heap value) :
+  MicroCFTA.SourcePruningEnumerationArityOrigins.Heap
+    (MicroCFTA.SourceCurrentAllocatedPartialState.advance caller
+              (MicroCFTA.SourceCurrentAllocatedQueryMemo.advancePhysical caller.checked
+                {
+                  heap :=
+                    (MicroCFTA.SourcePruningEnumerationAction.prepare holeKey fits admits metadata nativeFuel
+                        representativeFuel uv oldHandle scs value caller.checked.native.machine.heap).state,
+                  equality := caller.checked.operations })
+              caller.fourth caller.merge).checked.native.machine.heap
+'MicroCFTA.SourcePruningEnumerationNativeNarrowArity.advance_prepare_heap' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]

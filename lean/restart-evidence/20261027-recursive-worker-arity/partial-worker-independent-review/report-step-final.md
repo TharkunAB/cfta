@@ -1,0 +1,5 @@
+# Root primitive step review supplement
+
+Verdict: CLEAR. The entire installed PartialStepArity source has 51 lines and SHAa4ae105a78a0612d39c40389fe270898d4f0f725bf8b21ef9241ce7b8f5fd1bd. The binder helper uses the actual completed rebuild equation and existing actual_rebuild to derive equality with the ORIGINAL native heap. Its original Ready, available resident binder, and probe Heap inputs remain explicit. It does not assume a desired output Heap. PrefixState and indexed descent change operation state while retaining the literal constructor heap, so both other helpers use exact heap identity.
+
+Root strict1 failed only unused section-instance diagnostics. Final strict2 passed with empty output at that exact source. Installed build passed 1409 jobs. Both full strict snapshots/logs and the build report/raw are retained, including the old replayed dependency warning. All checks were run by Root. No broad claim about arbitrary Mu callbacks, final enum Safe, full histories, or source forcing follows from these three local helpers. This supplement and the larger worker review remain OPEN for final public/document cues.

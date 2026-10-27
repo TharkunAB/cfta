@@ -1,0 +1,29 @@
+MicroCFTA.SourcePruningEnumerationPartialActualArity.node_call_heap {width budget : Nat}
+  [DecidableEq (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)]
+  [DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  [DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  (formulas : MicroCFTA.SourceGuards.Formulas MicroCFTA.FullSyntax.Formula)
+  (solver : MicroCFTA.SourceGuards.Entailment MicroCFTA.FullSyntax.Formula)
+  {request : MicroCFTA.SourceCurrentAllocatedPartialState.NodeRequest}
+  {before after : MicroCFTA.SourceCurrentAllocatedPartialState.State width}
+  {result :
+    MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)}
+  {actual : MicroCFTA.SourceCurrentAllocatedPartialGraph.NodeCall budget request before result after}
+  {memos final : MicroCFTA.EndpointMemoGateTrace.Memos}
+  (reads : MicroCFTA.SourceCurrentAllocatedPartialSourceReads.NodeCallReads formulas solver actual memos final)
+  (inventory : MicroCFTA.SourceCurrentAllocatedNativeInventoryState.Inventory) :
+  MicroCFTA.SourceCurrentAllocatedPartialChecks.Checks
+      (MicroCFTA.SourceCurrentAllocatedPartialChecks.nodeCallTrace actual) →
+    MicroCFTA.SourceCurrentAllocatedPartialInvariant.Context formulas solver inventory before memos →
+      MicroCFTA.SourceEqualityConstraintAllocation.Ready before.checked.operations.constraints request.inherited →
+        MicroCFTA.InternedProbeProvenance.Available before.checked.native.machine.heap request.value →
+          MicroCFTA.SourcePruningEnumerationArityOrigins.Heap before.checked.native.machine.heap →
+            MicroCFTA.SourcePruningEnumerationArityOrigins.Heap after.checked.native.machine.heap
+'MicroCFTA.SourcePruningEnumerationPartialActualArity.node_call_heap' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]

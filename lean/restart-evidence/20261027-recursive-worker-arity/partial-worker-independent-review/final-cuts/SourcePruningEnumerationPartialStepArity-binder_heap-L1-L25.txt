@@ -1,0 +1,25 @@
+MicroCFTA.SourcePruningEnumerationPartialStepArity.binder_heap {width : Nat}
+  [DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey MicroCFTA.SourcePruningTemplates.Symbol
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  {entry : MicroCFTA.Cache.Interned MicroCFTA.InternedBinderProtocol.NodeKey}
+  {body depth ordinary result :
+    MicroCFTA.InternedConstructorTemplates.Value MicroCFTA.SourcePruningTemplates.Symbol
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)}
+  {before : MicroCFTA.SourceEqualityNativeDemand.State width}
+  {after :
+    MicroCFTA.InternedConstructorTemplates.State MicroCFTA.SourcePruningTemplates.Symbol
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)}
+  (ready : MicroCFTA.SourceCurrentConjunctionClassScan.Ready before)
+  (probes : MicroCFTA.InternedFreshOrdinaryProbeHeap.Heap before.native.machine.heap)
+  (available :
+    MicroCFTA.InternedProbeProvenance.Available before.native.machine.heap
+      (MicroCFTA.InternedConstructorTemplates.Value.mu entry body depth ordinary))
+  (actual :
+    MicroCFTA.SourceEqualityMuReconstruction.rebuild entry body depth ordinary before.native.machine.heap =
+      MicroCFTA.InternedNestedConstruction.Outcome.done result after)
+  (heap : MicroCFTA.SourcePruningEnumerationArityOrigins.Heap before.native.machine.heap) :
+  MicroCFTA.SourcePruningEnumerationArityOrigins.Heap after
+'MicroCFTA.SourcePruningEnumerationPartialStepArity.binder_heap' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]

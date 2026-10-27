@@ -1,0 +1,12 @@
+MicroCFTA.SourcePruningEnumerationPartialStepArity.prefix_heap {width : Nat}
+  (before : MicroCFTA.SourceCurrentAllocatedPartialState.State width)
+  (edge :
+    MicroCFTA.InternedConstructorTemplates.EdgeValue MicroCFTA.SourcePruningTemplates.Symbol
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+  (inherited : MicroCFTA.SourceEqualityConstraintAllocation.Value)
+  (heap : MicroCFTA.SourcePruningEnumerationArityOrigins.Heap before.checked.native.machine.heap) :
+  MicroCFTA.SourcePruningEnumerationArityOrigins.Heap
+    (MicroCFTA.SourceCurrentAllocatedPartialGraph.prefixState before edge inherited).checked.native.machine.heap
+'MicroCFTA.SourcePruningEnumerationPartialStepArity.prefix_heap' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]

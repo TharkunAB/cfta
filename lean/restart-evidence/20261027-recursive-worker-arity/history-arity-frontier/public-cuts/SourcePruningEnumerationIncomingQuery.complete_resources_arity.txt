@@ -1,0 +1,144 @@
+MicroCFTA.SourcePruningEnumerationIncomingQuery.complete_resources_arity {bits : Nat}
+  [DecidableEq MicroCFTA.SourcePruningTemplates.Symbol]
+  [DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey MicroCFTA.SourcePruningTemplates.Symbol
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  [DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.Value MicroCFTA.SourcePruningTemplates.Symbol
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  (alphabet : List (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+  (profile : MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Profile)
+  (formulas : MicroCFTA.SourceGuards.Formulas MicroCFTA.FullSyntax.Formula)
+  (solver : MicroCFTA.SourceGuards.Entailment MicroCFTA.FullSyntax.Formula)
+  (inventory : MicroCFTA.SourceCurrentAllocatedNativeInventoryState.Inventory)
+  (beforeCaller : MicroCFTA.SourceCurrentAllocatedPartialState.State (bits + 2))
+  (left right :
+    MicroCFTA.InternedConstructorTemplates.Value MicroCFTA.SourcePruningTemplates.Symbol
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+  (checkEmpty : Bool) (memos : MicroCFTA.EndpointMemoGateTrace.Memos)
+  (initial : MicroCFTA.SourceCurrentAllocatedPartialInvariant.Context formulas solver inventory beforeCaller memos)
+  (leftAvailable : MicroCFTA.InternedProbeProvenance.Available beforeCaller.checked.native.machine.heap left)
+  (rightAvailable : MicroCFTA.InternedProbeProvenance.Available beforeCaller.checked.native.machine.heap right)
+  (leftClosed : left.free = []) (rightClosed : right.free = [])
+  (fits : MicroCFTA.SourceCurrentConstrainedCapGeneratedQueryResources.Fits profile beforeCaller.checked)
+  (room : MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.Room bits profile)
+  (known :
+    MicroCFTA.SourceEqualityAnnotationHeap.Heap (fun guard => guard ∈ alphabet)
+      beforeCaller.checked.native.machine.heap)
+  (arity : MicroCFTA.SourcePruningEnumerationArityOrigins.Heap beforeCaller.checked.native.machine.heap) :
+  ∃ next query queried answer checkedAfter saved final queries replacement handle fuel p h,
+    next.source = beforeCaller.checked.native.machine.heap ∧
+      next.roots = inventory.roots ++ [left, right] ∧
+        MicroCFTA.SourceCurrentAllocatedTargetQuery.Receipt formulas solver next left right beforeCaller.checked query
+            queried memos ∧
+          (∀ (extra : Nat),
+              MicroCFTA.SourceEqualityNativeDemand.execute (fuel + extra)
+                  (MicroCFTA.SourceEqualityNativeDemand.Control.code
+                    (MicroCFTA.SourceRecursiveIntersectionCode.requestNode MicroCFTA.IntersectionEmptyDomain.emptyDomain
+                      left right))
+                  beforeCaller.checked =
+                MicroCFTA.SourceEqualityNativeDemand.Outcome.done query queried) ∧
+            (∀ (P H : Nat),
+                p ≤ P →
+                  h ≤ H →
+                    (if checkEmpty = true then
+                        MicroCFTA.SourcePruningEnumerationEnabledEmpty.check P H query queried beforeCaller.fourth
+                          memos.query
+                      else
+                        (MicroCFTA.SourceCurrentAllocatedConjunctionWorker.Outcome.done false queried
+                            beforeCaller.fourth,
+                          memos.query)) =
+                      (MicroCFTA.SourceCurrentAllocatedConjunctionWorker.Outcome.done answer checkedAfter saved,
+                        queries)) ∧
+              MicroCFTA.SourceCurrentAllocatedPartialInvariant.Post formulas solver next beforeCaller
+                  (MicroCFTA.SourceCurrentAllocatedPartialState.advance beforeCaller checkedAfter saved
+                    beforeCaller.merge)
+                  final ∧
+                final.query = queries ∧
+                  MicroCFTA.Cache.Extends memos.unfolding final.unfolding ∧
+                    MicroCFTA.SourceCurrentEmptinessMemo.AnswerSound formulas solver query answer ∧
+                      (replacement =
+                          if answer = true then MicroCFTA.InternedConstructorTemplates.Value.empty else query) ∧
+                        MicroCFTA.InternedProbeProvenance.Available checkedAfter.native.machine.heap replacement ∧
+                          replacement.free = [] ∧
+                            MicroCFTA.SourcePruningEnumerationNodes.encodeNode replacement = some handle ∧
+                              MicroCFTA.SourcePruningEnumerationNodes.lookupNode checkedAfter.native.machine.heap
+                                    handle =
+                                  some replacement ∧
+                                (∀
+                                    (ambient :
+                                      MicroCFTA.InternedGuardedLanguage.Env
+                                        (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula))
+                                    (term :
+                                      MicroCFTA.Language.Term
+                                        (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)),
+                                    MicroCFTA.InternedGuardedLanguage.meaning
+                                        (MicroCFTA.SourceEqualityPCSGuard.holds formulas solver) ambient replacement
+                                        term ↔
+                                      MicroCFTA.InternedGuardedLanguage.meaning
+                                          (MicroCFTA.SourceEqualityPCSGuard.holds formulas solver) ambient left term ∧
+                                        MicroCFTA.InternedGuardedLanguage.meaning
+                                          (MicroCFTA.SourceEqualityPCSGuard.holds formulas solver) ambient right term) ∧
+                                  (checkEmpty = false →
+                                      answer = false ∧
+                                        replacement = query ∧
+                                          checkedAfter = queried ∧
+                                            saved = beforeCaller.fourth ∧ queries = memos.query ∧ final = memos) ∧
+                                    (checkEmpty = true →
+                                        ∃ reached,
+                                          MicroCFTA.SourceEndpointMemo.run query memos.query = (reached, queries) ∧
+                                            MicroCFTA.SourceEndpointMemoCorrect.Checked queried.native.machine.heap
+                                                memos.query
+                                                (MicroCFTA.SourceEndpointReachability.reaches
+                                                  MicroCFTA.SourceMemoGate.unconstrained query)
+                                                (reached, queries) ∧
+                                              (reached = false →
+                                                  answer = false ∧
+                                                    checkedAfter = queried ∧
+                                                      saved = beforeCaller.fourth ∧
+                                                        final = { unfolding := memos.unfolding, query := queries }) ∧
+                                                (reached = true →
+                                                  ∃ reachedPhysical,
+                                                    checkedAfter =
+                                                        MicroCFTA.SourceCurrentAllocatedQueryMemo.advancePhysical
+                                                          queried reachedPhysical ∧
+                                                      ∃ actual,
+                                                        MicroCFTA.SourceCurrentConjunctionGlobalMemos.CallReads actual
+                                                          { unfolding := memos.unfolding, query := queries } final)) ∧
+                                      MicroCFTA.SourceCurrentConstrainedCapGeneratedQueryResources.Fits
+                                          (MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.step profile)
+                                          queried ∧
+                                        MicroCFTA.SourceCurrentConstrainedCapGeneratedQueryResources.Fits
+                                            (MicroCFTA.SourcePruningEnumerationIncomingQuery.forecast alphabet profile)
+                                            checkedAfter ∧
+                                          MicroCFTA.SourceEqualityAnnotationHeap.Heap
+                                              (fun guard =>
+                                                guard ∈
+                                                  MicroCFTA.SourceCurrentGeneratedQueryGuardResources.forecast alphabet
+                                                    profile)
+                                              checkedAfter.native.machine.heap ∧
+                                            fuel =
+                                                MicroCFTA.SourceCurrentAllocatedNativeComputedBudget.instructionBound
+                                                    profile.nodes profile.edges profile.mass +
+                                                  1 ∧
+                                              p =
+                                                  MicroCFTA.SourceCurrentConjunctionWorklistResources.workerFuel
+                                                    (MicroCFTA.SourceCurrentGeneratedQueryGuardResources.forecast
+                                                      alphabet profile)
+                                                    1000
+                                                    (MicroCFTA.SourceCurrentConstrainedCapTargetForecast.scalar
+                                                      (MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.step
+                                                        profile)) ∧
+                                                h =
+                                                    MicroCFTA.SourceCurrentConjunctionWorklistResources.readerFuel
+                                                      (MicroCFTA.SourceCurrentGeneratedQueryGuardResources.forecast
+                                                        alphabet profile)
+                                                      1000
+                                                      (MicroCFTA.SourceCurrentConstrainedCapTargetForecast.scalar
+                                                        (MicroCFTA.SourceCurrentAllocatedNativeResourceForecast.step
+                                                          profile)) ∧
+                                                  MicroCFTA.SourcePruningEnumerationArityOrigins.Heap
+                                                    checkedAfter.native.machine.heap
+'MicroCFTA.SourcePruningEnumerationIncomingQuery.complete_resources_arity' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]

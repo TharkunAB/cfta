@@ -1,0 +1,38 @@
+def MicroCFTA.SourcePruningEnumerationRecursive.OutcomeResourcesWithArity : {Typing : Type} →
+  {width : Nat} →
+    [DecidableEq
+          (MicroCFTA.InternedConstructorTemplates.EdgeKey MicroCFTA.SourcePruningTemplates.Symbol
+            (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))] →
+      MicroCFTA.SourceGuards.Formulas MicroCFTA.FullSyntax.Formula →
+        MicroCFTA.SourceGuards.Entailment MicroCFTA.FullSyntax.Formula →
+          MicroCFTA.SourceCurrentAllocatedPartialState.State width →
+            MicroCFTA.SourcePruningEnumerationIncomingReservation.Seed →
+              MicroCFTA.SourcePruningEnumerationNativeContinuations.HookResult
+                  (MicroCFTA.SourcePruningEnumerationRecursive.Output width Typing)
+                  (MicroCFTA.SourcePruningEnumerationRecursive.Failure width Typing) width →
+                Prop :=
+fun {Typing} {width}
+    [DecidableEq
+        (MicroCFTA.InternedConstructorTemplates.EdgeKey MicroCFTA.SourcePruningTemplates.Symbol
+          (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+    formulas solver original seed outcome =>
+  ∃ reached next final,
+    MicroCFTA.SourceCurrentAllocatedPartialInvariant.Post formulas solver next original reached final ∧
+      MicroCFTA.SourceCurrentConstrainedCapGeneratedQueryResources.Fits seed.snd reached.checked ∧
+        MicroCFTA.SourceEqualityAnnotationHeap.Heap (fun guard => guard ∈ seed.fst)
+            reached.checked.native.machine.heap ∧
+          MicroCFTA.SourcePruningEnumerationArityOrigins.Heap reached.checked.native.machine.heap ∧
+            match outcome with
+            | MicroCFTA.SourcePruningEnumerationNativeContinuations.HookResult.complete outputs caller queries =>
+              caller = reached ∧
+                queries = final.query ∧
+                  ∀ (output : MicroCFTA.SourcePruningEnumerationRecursive.Output width Typing),
+                    output ∈ outputs →
+                      MicroCFTA.SourcePruningEnumerationRecursive.OutputResources formulas solver original seed output ∧
+                        MicroCFTA.SourcePruningEnumerationArityOrigins.Heap output.caller.checked.native.machine.heap
+            | MicroCFTA.SourcePruningEnumerationNativeContinuations.HookResult.stopped outputs reason endpoint =>
+              (endpoint = none ∨ endpoint = some (reached, final.query)) ∧
+                ∀ (output : MicroCFTA.SourcePruningEnumerationRecursive.Output width Typing),
+                  output ∈ outputs →
+                    MicroCFTA.SourcePruningEnumerationRecursive.OutputResources formulas solver original seed output ∧
+                      MicroCFTA.SourcePruningEnumerationArityOrigins.Heap output.caller.checked.native.machine.heap

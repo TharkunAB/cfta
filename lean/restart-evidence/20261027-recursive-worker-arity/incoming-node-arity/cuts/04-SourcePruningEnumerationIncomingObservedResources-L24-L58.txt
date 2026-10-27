@@ -1,0 +1,35 @@
+    {p h P H : Nat} {query : Node} {before after later : Checked width}
+    {memo saved current : Fourth} {queries firstQueries secondQueries : Queries}
+    {answer other : Bool}
+    (one : (if flag then check p h query before memo queries else (.done false before memo, queries)) =
+      (.done answer after saved, firstQueries))
+    (two : (if flag then check P H query before memo queries else (.done false before memo, queries)) =
+      (.done other later current, secondQueries)) :
+    answer = other ∧ after = later ∧ saved = current ∧ firstQueries = secondQueries := by
+  cases flag with
+  | false =>
+      simp only [Bool.false_eq_true, ↓reduceIte] at one two
+      obtain ⟨outcomes, sameQueries⟩ := Prod.mk.inj (one.symm.trans two)
+      obtain ⟨sameAnswer, sameState, sameMemo⟩ :=
+        SourceCurrentAllocatedConjunctionWorker.Outcome.done.inj outcomes
+      exact ⟨sameAnswer, sameState, sameMemo, sameQueries⟩
+  | true =>
+      cases observed : SourceEndpointMemo.run query queries with
+      | mk reached querySaved =>
+          cases reached with
+          | false =>
+              simp only [↓reduceIte, check, observed, Bool.false_eq_true] at one two
+              obtain ⟨outcomes, sameQueries⟩ := Prod.mk.inj (one.symm.trans two)
+              obtain ⟨sameAnswer, sameState, sameMemo⟩ :=
+                SourceCurrentAllocatedConjunctionWorker.Outcome.done.inj outcomes
+              exact ⟨sameAnswer, sameState, sameMemo, sameQueries⟩
+          | true =>
+              simp only [↓reduceIte, check, observed] at one two
+              have first := (Prod.mk.inj one).1
+              have second := (Prod.mk.inj two).1
+              obtain ⟨sameAnswer, sameState, sameMemo⟩ :=
+                SourceCurrentAllocatedConjunctionWorkerActual.call_done_unique first second
+              exact ⟨sameAnswer, sameState, sameMemo,
+                (Prod.mk.inj one).2.symm.trans (Prod.mk.inj two).2⟩
+
+end MicroCFTA.SourcePruningEnumerationEnabledEmpty

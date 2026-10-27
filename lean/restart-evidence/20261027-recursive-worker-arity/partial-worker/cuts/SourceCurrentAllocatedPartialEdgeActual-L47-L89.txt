@@ -1,0 +1,43 @@
+theorem edge_body (formulas : SourceGuards.Formulas FullSyntax.Formula)
+    (solver : SourceGuards.Entailment FullSyntax.Formula) (inventory : Inventory)
+    {budget : Nat} {request : EdgeRequest} {before after : Caller width} {result : Edge}
+    {actual : EdgeBody budget request before result after} {memos final : Memos}
+    (reads : SourceCurrentAllocatedPartialSourceReads.EdgeBodyReads formulas solver actual memos final)
+    (ready : Ready before.checked) (admitted : At formulas solver inventory before.checked)
+    (sound : Sound formulas solver before)
+    (inherited : SourceEqualityConstraintAllocation.Ready before.checked.operations.constraints request.inherited)
+    (resident : Resident before.checked.native.machine.heap request.value)
+    (correct : SourceCurrentEmptinessMemo.Correct formulas solver before.checked.native.machine.heap before.fourth)
+    (stored : SourceCurrentMemoMergeEffects.Stored before.checked.native.machine.heap before.merge)
+    (covered : ∀ ambient, SourceCurrentMemoMergeLanguage.CacheCovers (SourceEqualityPCSGuard.holds formulas solver) ambient before.merge)
+    (ranges : Ranges budget request before) (valid : GlobalsValid before.checked.native.machine.heap memos)
+    (probes : ProbeHeap before.checked.native.machine.heap) :
+    ∃ next, Receipt formulas solver next request before result after final ∧
+      after.edgeResults = before.edgeResults ∧ ProbeHeap after.checked.native.machine.heap := by
+  cases reads with
+  | parent parentReads =>
+      rename_i edge loaded originalInherited checked fourth merge field parent
+      have live : SourceEqualityMkEdgeAllocation.contradictory edge.entry.key.constraint = false →
+          SourceEqualityGuardReadback.Cached edge.entry.key.constraint.equalities ∧
+          SourceEqualityConstraintFieldLookup.load edge.entry.key.constraint before.checked.operations.constraints = .ok (some loaded) ∧
+          SourceEqualityConstraintAllocation.Ready before.checked.operations.constraints originalInherited ∧
+          InternedNestedProvenance.Values before.checked.native.machine.heap edge.children ∧
+          SourceCurrentAllocatedLocalReductionActual.Ranges budget loaded originalInherited edge.children before.checked before.fourth := by
+        intro test
+        exact ⟨(ready.good.fields edge.entry.key edge resident).1, field test, inherited,
+          ready.semantic.ready.semantic.1.normal.facts.cached.edges _ edge resident, ranges test loaded (field test)⟩
+      obtain ⟨next, receipt⟩ := SourceCurrentAllocatedParentEdgeActual.verified formulas solver inventory parentReads
+        ready admitted live correct stored covered valid
+      have finalProbes := SourceCurrentAllocatedProbeParent.parent_heap formulas solver inventory parentReads
+        ready admitted live correct stored covered valid probes
+      have law : EdgeLaw formulas solver ⟨originalInherited, edge⟩ result := by
+        intro ambient term
+        have input := InternedGuardedLanguage.edgeMeaning_all (SourceEqualityPCSGuard.holds formulas solver) ambient edge term
+        change InternedGuardedLanguage.edgeMeaning (SourceEqualityPCSGuard.holds formulas solver) ambient edge term ↔
+          SourceCurrentAllocatedParentEdge.RawMeaning (SourceEqualityPCSGuard.holds formulas solver) ambient
+            edge.entry.key.symbol edge.entry.key.constraint edge.children term at input
+        exact ⟨fun accepted => input.mpr ((receipt.language ambient term).1 accepted),
+          fun satisfied => ((receipt.language ambient term).2 satisfied).trans input.symm⟩
+      exact ⟨next, ⟨receipt.ready, receipt.admitted,
+        sound.advance formulas solver checked fourth merge receipt.effects, receipt.effects, receipt.resident,
+        receipt.stored, receipt.covered, receipt.retained, receipt.globals, receipt.correct, receipt.fourthRetained, rfl, law⟩,

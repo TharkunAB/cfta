@@ -1,0 +1,44 @@
+    [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Constraint)] [DecidableEq Node]
+    (alphabet : List Constraint) (profile : Profile)
+    (formulas : SourceGuards.Formulas FullSyntax.Formula)
+    (solver : SourceGuards.Entailment FullSyntax.Formula)
+    (inventory : Inventory) (beforeCaller : Caller (bits + 2))
+    (left right : Node) (checkEmpty : Bool) (memos : Memos)
+    (initial : Context formulas solver inventory beforeCaller memos)
+    (leftAvailable : Available beforeCaller.checked.native.machine.heap left)
+    (rightAvailable : Available beforeCaller.checked.native.machine.heap right)
+    (leftClosed : left.free = []) (rightClosed : right.free = [])
+    (fits : Fits profile beforeCaller.checked) (room : Room bits profile)
+    (known : Heap (fun guard => guard ∈ alphabet) beforeCaller.checked.native.machine.heap)
+    (arity : SourcePruningEnumerationArityOrigins.Heap beforeCaller.checked.native.machine.heap)
+    {fuel p h : Nat} {query : Node} {queried checkedAfter : Checked (bits + 2)}
+    {answer : Bool} {saved : Fourth} {queries : Queries}
+    (native : SourceEqualityNativeDemand.execute fuel
+      (.code (SourceRecursiveIntersectionCode.requestNode IntersectionEmptyDomain.emptyDomain left right))
+      beforeCaller.checked = .done query queried)
+    (phase : (if checkEmpty then
+      SourcePruningEnumerationEnabledEmpty.check p h query queried beforeCaller.fourth memos.query
+      else (.done false queried beforeCaller.fourth, memos.query)) =
+        (.done answer checkedAfter saved, queries)) :
+    Fits (forecast alphabet profile) checkedAfter ∧
+      Heap (fun guard => guard ∈ SourceCurrentGeneratedQueryGuardResources.forecast alphabet profile)
+        checkedAfter.native.machine.heap ∧
+      SourcePruningEnumerationArityOrigins.Heap checkedAfter.native.machine.heap := by
+  obtain ⟨_next, result, reached, producedAnswer, finish, workerSaved, _final, savedQueries,
+    _replacement, _handle, n, P, H, _source, _roots, _receipt, producedNative, producedPhase,
+    _post, _querySame, _unfolding, _sound, _replacementSame, _available, _closed, _encoded,
+    _decoded, _meaning, _disabled, _enabled, _queryFits, returnedFits, returnedCarrier,
+    _fuelSame, _pSame, _hSame, returnedArity⟩ :=
+    complete_resources_arity alphabet profile formulas solver inventory beforeCaller left right checkEmpty memos
+      initial leftAvailable rightAvailable leftClosed rightClosed fits room known arity
+  have produced : SourceEqualityNativeDemand.execute n
+      (.code (SourceRecursiveIntersectionCode.requestNode IntersectionEmptyDomain.emptyDomain left right))
+      beforeCaller.checked = .done result reached := by
+    simpa only [Nat.add_zero] using producedNative 0
+  obtain ⟨rfl, rfl⟩ := SourceCurrentAllocatedNativeColdClosedExact.completed_unique fuel n _
+    beforeCaller.checked queried reached query result native produced
+  obtain ⟨_sameAnswer, sameState, _sameMemo, _sameQueries⟩ :=
+    SourcePruningEnumerationEnabledEmpty.optional_done_unique checkEmpty phase
+      (producedPhase P H (Nat.le_refl _) (Nat.le_refl _))
+  rw [sameState]
+  exact ⟨returnedFits, returnedCarrier, returnedArity⟩

@@ -1,0 +1,11 @@
+theorem descendants_verified
+    {fuel g s r e p h m c n budget : Nat} {inherited : EqValue} {value : Edge} {before after : Caller width} {result : Edge}
+    {inventory : Inventory} {memos : Memos}
+    (initial : Context formulas solver inventory before memos)
+    (inheritedReady : EqReady before.checked.operations.constraints inherited)
+    (resident : Resident before.checked.native.machine.heap value)
+    (ranges : SourceCurrentAllocatedPartialWorkerRanges.descendants fuel g s r e p h m c n budget inherited value before)
+    (done : descendants fuel g s r e p h m c n budget inherited value before = .done result after) :
+    ∃ next final, ∃ actual : Descendants budget inherited value before result after,
+      DescendantsReads formulas solver actual memos final ∧ Checks (descendantsTrace actual) ∧
+      Post formulas solver next before after final ∧ Resident after.checked.native.machine.heap result ∧ EdgeLaw formulas solver ⟨inherited, value⟩ result

@@ -1,0 +1,4 @@
+theorem edge_call {request : EdgeRequest} {before after : Caller width} {result : Edge}
+    {actual : EdgeCall budget request before result after} {memos final : Memos}
+    (reads : EdgeCallReads formulas solver actual memos final) :
+    EdgeClaim formulas solver (edgeCallTrace actual) request before result after memos final

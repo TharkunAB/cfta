@@ -1,0 +1,13 @@
+theorem nodeCall_verified
+    {fuel g s r e p h m c n budget : Nat} {request : NodeRequest} {before after : Caller width} {result : Node}
+    {inventory : Inventory} {memos : Memos}
+    (initial : Context formulas solver inventory before memos)
+    (inheritedReady : EqReady before.checked.operations.constraints request.inherited)
+    (available : Available before.checked.native.machine.heap request.value)
+    (ranges : SourceCurrentAllocatedPartialWorkerRanges.nodeCall fuel g s r e p h m c n budget request before)
+    (done : nodeCall fuel g s r e p h m c n budget request before = .done result after)
+    (heap : Heap before.checked.native.machine.heap) :
+    ∃ next final, ∃ actual : NodeCall budget request before result after,
+      NodeCallReads formulas solver actual memos final ∧ Checks (nodeCallTrace actual) ∧
+      Post formulas solver next before after final ∧ Available after.checked.native.machine.heap result ∧ NodeLaw formulas solver request result ∧
+      Heap after.checked.native.machine.heap

@@ -1,0 +1,14 @@
+  have ranges := initial_ranges seed formulas solver inventory beforeCaller before checkEmpty bucket incoming roots memos
+    initial safe paths counts bounded pending realized available closed fits reserved known
+  obtain ⟨r, n, p, h, k, raw, afterCaller, after, savedQueries, final, next, afterRoots, outer, waiting,
+    observed, post, querySame, growth, afterPaths, storage, afterRealized, afterCounts, afterFlags,
+    origin, protects, references, history, shape⟩ :=
+    complete_with_fragments formulas solver inventory beforeCaller before checkEmpty bucket incoming
+      roots memos initial safe paths counts flags realized bounded pending available closed ranges
+  have actual := observed 0 0 p h 0 (Nat.le_refl _) (Nat.le_refl _)
+  simp only [Nat.add_zero] at actual
+  have resources := SourcePruningEnumerationChildDispatch.observed_resources seed formulas solver inventory
+    beforeCaller before checkEmpty r n p h k bucket incoming roots memos initial safe paths counts realized
+    bounded pending available closed fits reserved known actual
+  exact ⟨r, n, p, h, k, raw, afterCaller, after, savedQueries, final, next, afterRoots, outer, waiting,
+    observed, post, querySame, growth, afterPaths, storage, afterRealized, afterCounts, afterFlags,

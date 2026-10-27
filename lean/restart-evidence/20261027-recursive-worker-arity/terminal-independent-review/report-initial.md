@@ -1,0 +1,13 @@
+# Actual terminal arity observer review
+
+Verdict: CLEAR for exact e8421ba8b79aafb2f89afd1e52c24b17d5dd88b00df5e611f70b897f6c658e33. The entire 179-line source and its delta from the old resource observer were read. Root strict-terminal-arity-1 passed on its first check with empty output. The exact installed source matches. Its build passed 1863 jobs; the full replay warning remains in the log. Recorded limits are 4 GiB with swap disabled. This review ran no compiler or build.
+
+The new theorem is additive. It keeps the old observer's entire admission and adds only initial ArityOrigins.Heap. It concludes Heap at the actual afterCaller. It does not replace or claim to retain the old numeric/carrier output in its own new conclusion; that earlier observer remains unchanged and is used in the proof. Complete admission recovery is byte exact.
+
+Incoming Empty keeps the literal original caller. Prefix failure is an outer error and contradicts only the supplied outer .ok observation. A successful prefix supplies the same recorded list, joined realization, winner pending slot, and recorded pending slots from the old actual-prefix helper. Its exact map equation preserves duplicate count. The original reservation pays recorded.length fold steps plus the incoming step.
+
+Fold None and raw [] retain the ACTUAL reached foldCaller Heap from the new fold observer. They do not restore the initial caller. A singleton fold row requires its payload core. The proof invokes the original admitted canonical fold, then ok_unique identifies the complete actual raw result, caller, query memo, and outer core. The stable canonical singleton shape identifies the payload core separately. No unproved outer-core/payload-core equality is used. Canonical Post and full final memos therefore apply to that SAME foldCaller and payload.
+
+The incoming call uses the actual fold caller and payload, Post.context, the same final memo query, original incoming availability transported through actual effects, the actual fold numeric/carrier bounds, and the unused original incoming reservation. Incoming None and raw rejection retain the exact reached incoming caller Heap. Unsupported fold raw rows and outer native errors remain separate observations; the theorem does not invent their successful endpoint. It makes no Safe claim for raw rejection and no cache-candidate substitution.
+
+The only new invariant admission is original Heap. There is no future successful call, final Heap, callback law, language acceptance, or desired Satisfies premise. This observer does not prove whole recursive history arity, H6, coverage, or physical Haskell correspondence. It remains OPEN for final public and documentation integration cues. Earlier frozen bundles are untouched.
