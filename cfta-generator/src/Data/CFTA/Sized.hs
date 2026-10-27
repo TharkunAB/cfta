@@ -134,7 +134,7 @@ sizedStates automaton
                     | rank >= 0 && Cardinality rank < count size =
                         Just $ rankedValue $ sizeClassSelect index size (ClassRank rank)
                     | otherwise = Nothing
-                position = Ordinary.tablePosition state rows
+                position = Ordinary.tablePosition (const Nothing) state rows
              in Sized
                     { sizedTerms = \size -> [term | rank <- everyClassRank (count size), Just term <- [unrank size rank]]
                     , sizedCount = count
