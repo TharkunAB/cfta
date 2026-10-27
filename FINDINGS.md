@@ -10,6 +10,8 @@ Both recorded LPO repairs are merged in PR #169 at `0db62d26b`.
 Focused native repair probes pass. Historical counterexamples remain below.
 The generated scalar-view name repair is merged in PR #172 at `74250bd88`.
 Upstream `f1f266ab4` has the same five files as local `07229ca7f3`.
+The constrained EGraph.extract repair is open in PR #182 at `f961332e59`.
+It is not merged or included in this checkout. See the verified failure below.
 
 | Repair | Current status | External action |
 | --- | --- | --- |
@@ -87,7 +89,18 @@ Native classAutomaton accepts that term and returns Right True. The cheaper
 unconstrained child g(a) fails the equality. All 341 existing core tests pass.
 The existing extraction property generates plain terms, so it misses this case.
 
-External repair is pending. Preserve this example as a regression. A repair
+External repair is open in PR #182 at
+`f961332e59eb5a06fa151a7cf3647232b6ebd05b`. GitHub confirms that it is unmerged.
+Its actual diff uses the first term of termsByCost, adds child-cost monotonicity
+to the extract contract, and documents nontermination when an infinite language
+has no accepted term. It adds this regression and removes an identity property.
+The author reports 341 passing examples and the repaired reproducer output.
+This checkout has not rerun that PR or applied its source. Preserve the original
+native failure and verify the merged source before marking the repair complete.
+PR: https://github.com/TharkunAB/cfta/pull/182.
+Readback: lean/restart-evidence/20261027-flat-union-find/pr182-readback.json.
+
+Preserve this example as a regression. A repair
 must search beyond unconstrained minimum children when constraints reject them.
 Do not substitute termsByCost without reviewing the public cost contract:
 termsByCost requires monotonicity in child costs, while extract currently states
@@ -102,12 +115,17 @@ Run the reproducer in the project Nix shell with cabal exec and runghc -package=
 The original proposal comments remain in the evidence. The actual execution
 and results above supersede its original unexecuted status.
 
-The upstream union-find is also a real representation change. It stores each
-root's member IntSet and points every losing member directly to the winner.
-find returns the same forest. Existing Lean UnionFind still models parent
-chains, path compression and a link of the losing root. Weighted winner and
-tie rules agree, but exact returned-forest correspondence needs a new invariant
-and representation relation. No valid-input native union-find defect was found.
+The upstream union-find stores each root's member IntSet and points every losing
+member directly to the winner. find returns the same forest. The new
+FlatUnionFind modules prove this representation's complete class invariant.
+They relate every finite union history to actual earlier bounded calls with
+the same representative names and stored sizes. The permitted assignments are
+exactly the requested equalities. Literal returned-forest equality is not a
+claim. The existing UnionFind and CPS proofs retain the earlier path backend.
+Transport through the full enumeration state remains open. A focused native
+comparison matches 88 representative reads and the final class size and members.
+No valid-input native union-find defect or Haskell repair was found.
+Details: lean/notes-current-flat-union-find.md.
 New EGraph, termsByCost and opt-in Specftacular e-graph pruning add open proof
 scope. They are not covered by the new rendering theorem or unchanged H6.
 

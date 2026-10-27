@@ -1,5 +1,35 @@
 # Full formalization coverage
 
+## Direct-parent union-find now preserves exact representatives and sizes
+
+Main remains `c168a952d`. The new backend proofs are `9dfc776e8` and `75c3a7961`.
+The full goal stays ACTIVE. H6 remains the strongest global language theorem.
+It preserves the exact finite-tree language through covered closed construction
+and any chosen finite node-processing history at derived mathematical resources.
+Captured native rendering soundness retains its explicit admission and discharge gates.
+
+FlatUnionFind now models direct parent reads, unchanged find, root member sets
+and weighted member-redirection union. Initialization and all finite union
+histories preserve complete duplicate-free classes with exact stored sizes.
+The relation to the earlier path model retains exact roots and sizes for every
+variable. Union imposes exactly the requested value equality; a finite history
+imposes exactly all its requested equalities, including absent singleton roots.
+Actual earlier bounded calls witness the history. Final maps need not be equal.
+
+Four modules and Audit pass strict Lean checks. Aggregate Audit passes 3982 jobs
+and 78124 theorem dependency checks. Installed readback covers 28 new public
+theorems, unchanged H6 and 18 full definitions. A focused current Haskell probe
+matches 88 root reads and the final size-7 class. No Haskell runtime source changes.
+
+The full enumeration state still uses the earlier path backend. Thread the new
+relation through representative, union, slot access, assimilation and callbacks.
+Do not reuse whole-forest equality as current-source correspondence. Concrete
+IntMap/IntSet extraction, machine Int bounds, whole recursive output soundness,
+discharge/rendering existence, selector coverage and completeness remain open.
+PR #182 contains the external extract repair. It is open and unmerged; its tests
+are reported by its author. FINDINGS retains the verified local failure and PR status.
+Details: `lean/notes-current-flat-union-find.md`.
+
 ## Actual native rendering constructs the assignment for captured-slot soundness
 
 Main `c168a952d` is integrated by `646a9af8d`. This adds the sorted e-graph,
