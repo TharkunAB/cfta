@@ -132,8 +132,19 @@ slots, obligations, the counter and both ancestry fields exact. Representative,
 union, slot access, allocation, assimilation and incoming-node merge preserve
 ordered core outcomes at sufficient stable earlier bounds. Invalid accesses
 remain errors. Full assignment semantics, root tests and canonical tries transfer.
-Native indexes, cache validity, stored-address bounds and whole recursive worker
-transport remain open. A focused native
+Native cached count and write correspondence now preserves both complete index
+functions at a derived stable old bound. Lost occurrences are removed before
+gained occurrences are added at their current representatives. Full-reference
+replacement derives both native index invariants. Empty-delta assimilation needs
+its separate completed two-write proof. Frames must preserve the actual root
+function as well as slots and supply to preserve canonical count correctness.
+Separate allocation proofs establish bounded initial map keys, fresh allocation
+and bounded unions. A checked finite counterexample proves that core Related
+alone does not imply those key bounds. Cache reachability, recorded-root count
+transfer, whole recursive worker transport and physical Haskell containers
+remain open. These proofs add no Haskell repair or regression test.
+Details: lean/notes-current-flat-native-index.md.
+A focused native
 comparison matches 88 representative reads and the final class size and members.
 No valid-input native union-find defect or Haskell repair was found.
 Details: lean/notes-current-flat-union-find.md.

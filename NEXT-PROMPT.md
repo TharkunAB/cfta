@@ -1,5 +1,33 @@
 Continue the cfta formalization in /home/tritlo/Code/mcfta.
 
+## Native cached writes now retain exact indexes across union-find backends
+
+Allocation-bound proofs: `7c6c8ae97`. Native cache correspondence: `cd0e66456`.
+Main remains `64cfe9fc6`. The full formalization goal stays ACTIVE.
+H6 remains the strongest global finite-tree language theorem. The captured
+rendering theorem retains all its explicit admission and completion gates.
+
+Related caches now retain both complete index functions and the complete
+related core. Actual native counts and writes agree at a derived stable old
+bound. Lost occurrences are removed before gained occurrences are added.
+Both use current representatives. Missing native decoding remains failure.
+Full-reference replacement derives the native flag and canonical-count
+invariants. This does not certify intermediate empty-delta assimilation writes.
+
+Separate allocation proofs establish initial key bounds, fresh allocation and
+bounded unions. A checked finite counterexample proves that Related alone
+does not imply those bounds. All four modules and Audit pass strict checks.
+Aggregate Audit passes 3993 jobs and 78224 theorem dependency checks.
+Installed readback covers 20 new public theorems, unchanged H6 and captured
+rendering, and 10 full definitions. No Haskell source changes in this step.
+
+Next compose actual union, recorded-root count transfer, raw assimilation,
+allocation and callbacks. Derive their invariants from the same history.
+Whole recursive output soundness, discharge/rendering existence, selector
+coverage, forward completeness and concrete Haskell correspondence remain open.
+Details: `lean/notes-current-flat-native-index.md`.
+
+
 ## Flat union-find now preserves complete enumeration core outcomes
 
 Main `64cfe9fc6` is integrated at `865facc70`. The constrained extraction repair
