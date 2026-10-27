@@ -1,5 +1,44 @@
 # Proof status at 2026-10-18
 
+## Arity through the recursive worker and captured native heads
+
+Source checkpoint: 02b7f1aefbb5b59490bce9e278b7d4c1194f70ab.
+All eight completed recursive partial-worker families now retain arity for
+the entire actual returned native heap. The literal worker wrappers retain
+every old admission, actual result, Checks, Post, full memo state and language
+law. They add only a genuine initial arity heap and its derived returned heap.
+The proof follows the actual mutual read graph. It assumes no future child
+arity or desired final invariant. Busy, failed and exhausted worker calls
+without a completed actual graph remain outside this result.
+
+The proof also retains arity through actual narrowing, selected prefixes,
+incoming queries, dispatch, terminal processing, ordered child traversal,
+selected edges and captured native heads. Every later child uses the actual
+caller and full memo state returned by the previous child. Empty-result
+rejection retains its actual reached heap. The captured-slot write changes
+only the enumeration cache. Every extended resource producer retains its
+entire original result and forecast at that same actual endpoint.
+
+A stronger finite-driver contract now records the aggregate reached heap,
+even when outputs are empty, and each emitted output's own heap. Its literal
+zero-depth case is proved. Positive recursive depth and the complete
+ResourceHistoryWithArity derivation remain open. An earlier recursive
+callback can return no outputs and still change the caller used by a later
+sibling. The induction must retain that endpoint, all old resources, all
+emitted output heaps and the histories at the SAME chosen work bound.
+H6 and the conditional whole-history semantic theorem keep their full
+previous scopes. Coverage, API contracts and physical Haskell correspondence
+remain open. The full formalization goal stays ACTIVE.
+
+Twenty modules contain 3255 lines and 47 new public theorems. All pass
+strict checks. Audit passes 4215 jobs and checks 79999 theorem dependencies.
+Public readback has 138 complete signatures and axiom sets with no elision.
+All 91 prior blocks match byte exactly. Two new predicate definitions are
+printed in full. Only the three standard Lean axioms occur. No Haskell source
+changed. FINDINGS retains every repair handoff. Details:
+`lean/notes-current-recursive-worker-arity.md`.
+
+
 ## Arity through actual local reduction and parent construction
 
 Source checkpoint: ffe7569b0158d9dfeeb44b477b8c48841b626e10.
