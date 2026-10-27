@@ -43,10 +43,10 @@ Before release, the package was called `microcfta`.
   of `extract` must not decrease when the cost of a child grows. As in egg,
   the cost of an e-node sees the e-node: its e-class, its symbol, and the
   e-classes and costs of its children. So a cost can use the sort of an
-  e-class or the data of an analysis.
-  The extraction and cost-enumeration comments state a sufficient progress
-  condition. Monotone costs and strict child growth alone can leave an
-  accepted term behind infinitely many cheaper rejected candidates.
+  e-class or the data of an analysis. The search reaches each term when each
+  cost bound admits only finitely many partial terms, as for `1 + sum`. With
+  a lexicographic pair, an infinite number of cheaper partial terms that fail
+  their constraints can come before a term that satisfies them.
 - The union-find of the ECTA enumeration points each member of the smaller
   set at the new representative on a union, so `root` is one lookup. The
   representative holds the size of its set and the set as an `IntSet`.
