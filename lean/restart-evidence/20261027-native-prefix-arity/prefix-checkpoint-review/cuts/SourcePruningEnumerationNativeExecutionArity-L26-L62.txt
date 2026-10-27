@@ -1,0 +1,37 @@
+private theorem execute_heap_of_prefixes (control : Control A) (before : Checked width) (fuel : Nat)
+    (valid : Good before)
+    (fields : Fields control before) (plan : InputsThrough fuel control before)
+    (prefixes : ∀ used after remaining, Trace used control before remaining after → Heap after.native.machine.heap) :
+    Heap (execute fuel control before).state.native.machine.heap := by
+  have observed := SourcePruningEnumerationNativeOutcomeTrace.execute_readback fuel control before plan
+  cases actual : execute fuel control before with
+  | yielded next after =>
+      simp only [actual] at observed
+      exact prefixes fuel after next observed.1
+  | done value after =>
+      simp only [actual] at observed
+      obtain ⟨used, _bounded, trace⟩ := observed
+      exact prefixes used after (.code (.pure value)) trace
+  | failed failure after =>
+      simp only [actual] at observed
+      obtain ⟨used, last, current, _bounded, trace, inputs, one⟩ := observed
+      have reached := SourceCurrentAllocatedNativeSemanticTraceReadback.effects trace valid fields
+      have currentHeap := prefixes used current last trace
+      have retained := SourcePruningEnumerationNativeOutcomeTrace.terminal_step_heap last current reached.1
+        currentHeap inputs (by simp only [one])
+      simpa only [one, Outcome.state] using retained
+  | constraintError message after =>
+      simp only [actual] at observed
+      obtain ⟨used, last, current, _bounded, trace, inputs, one⟩ := observed
+      have reached := SourceCurrentAllocatedNativeSemanticTraceReadback.effects trace valid fields
+      have currentHeap := prefixes used current last trace
+      have retained := SourcePruningEnumerationNativeOutcomeTrace.terminal_step_heap last current reached.1
+        currentHeap inputs (by simp only [one])
+      simpa only [one, Outcome.state] using retained
+  | blocked reason next after =>
+      simp only [actual] at observed
+      obtain ⟨used, last, current, _bounded, trace, inputs, one⟩ := observed
+      have reached := SourceCurrentAllocatedNativeSemanticTraceReadback.effects trace valid fields
+      have currentHeap := prefixes used current last trace
+      have retained := SourcePruningEnumerationNativeOutcomeTrace.terminal_step_heap last current reached.1
+        currentHeap inputs (by simp only [one])

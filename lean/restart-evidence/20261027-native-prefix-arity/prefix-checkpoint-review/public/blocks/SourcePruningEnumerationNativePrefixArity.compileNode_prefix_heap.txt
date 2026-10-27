@@ -1,0 +1,64 @@
+MicroCFTA.SourcePruningEnumerationNativePrefixArity.compileNode_prefix_heap {width : Nat}
+  [DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey MicroCFTA.SourcePruningTemplates.Symbol
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  [DecidableEq MicroCFTA.SourcePruningTemplates.Symbol] (limit : Nat)
+  (nodes :
+    ∀
+      (request :
+        MicroCFTA.SourceRecursiveIntersectionThunks.NodeRequest MicroCFTA.SourcePruningTemplates.Symbol
+          (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+      (fuel : Nat),
+      fuel ≤ limit →
+        ∀ (before after : MicroCFTA.SourceEqualityNativeDemand.State width)
+          (remaining :
+            MicroCFTA.SourceEqualityNativeDemand.Control
+              (MicroCFTA.InternedConstructorTemplates.Value MicroCFTA.SourcePruningTemplates.Symbol
+                (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))),
+          MicroCFTA.SourceCurrentAllocatedNativePhysicalCompletion.Good before →
+            MicroCFTA.SourcePruningEnumerationArityOrigins.Heap before.native.machine.heap →
+              MicroCFTA.SourceCurrentAllocatedNativePhysicalTraceCompletion.Trace fuel
+                  (MicroCFTA.SourceEqualityNativeDemand.Control.code
+                    (MicroCFTA.SourceRecursiveIntersectionCode.Code.node request
+                      MicroCFTA.SourceRecursiveIntersectionCode.Code.pure))
+                  before remaining after →
+                MicroCFTA.SourcePruningEnumerationArityOrigins.Heap after.native.machine.heap)
+  (edges :
+    ∀
+      (request :
+        MicroCFTA.SourceRecursiveIntersectionThunks.EdgeRequest MicroCFTA.SourcePruningTemplates.Symbol
+          (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+      (fuel : Nat),
+      fuel ≤ limit →
+        ∀ (before after : MicroCFTA.SourceEqualityNativeDemand.State width)
+          (remaining :
+            MicroCFTA.SourceEqualityNativeDemand.Control
+              (MicroCFTA.InternedConstructorTemplates.EdgeValue MicroCFTA.SourcePruningTemplates.Symbol
+                (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))),
+          MicroCFTA.SourceCurrentAllocatedNativePhysicalCompletion.Good before →
+            MicroCFTA.SourcePruningEnumerationArityOrigins.Heap before.native.machine.heap →
+              MicroCFTA.SourceCurrentAllocatedNativePhysicalTraceCompletion.Trace fuel
+                  (MicroCFTA.SourceEqualityNativeDemand.Control.code
+                    (MicroCFTA.SourceRecursiveIntersectionCode.Code.edge request
+                      MicroCFTA.SourceRecursiveIntersectionCode.Code.pure))
+                  before remaining after →
+                MicroCFTA.SourcePruningEnumerationArityOrigins.Heap after.native.machine.heap)
+  (request :
+    MicroCFTA.SourceRecursiveIntersectionThunks.NodeRequest MicroCFTA.SourcePruningTemplates.Symbol
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+  (before after : MicroCFTA.SourceEqualityNativeDemand.State width)
+  (remaining :
+    MicroCFTA.SourceEqualityNativeDemand.Control
+      (MicroCFTA.InternedConstructorTemplates.Value MicroCFTA.SourcePruningTemplates.Symbol
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)))
+  (fuel : Nat) (bounded : fuel ≤ limit) (initial : MicroCFTA.SourceCurrentAllocatedNativePhysicalCompletion.Good before)
+  (heap : MicroCFTA.SourcePruningEnumerationArityOrigins.Heap before.native.machine.heap)
+  (actual :
+    MicroCFTA.SourceCurrentAllocatedNativePhysicalTraceCompletion.Trace fuel
+      (MicroCFTA.SourceEqualityNativeDemand.Control.code
+        (MicroCFTA.SourceRecursiveIntersectionCode.compileNode request))
+      before remaining after) :
+  MicroCFTA.SourcePruningEnumerationArityOrigins.Heap after.native.machine.heap
+'MicroCFTA.SourcePruningEnumerationNativePrefixArity.compileNode_prefix_heap' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]

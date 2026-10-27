@@ -1,0 +1,18 @@
+      have checked := SourceCurrentAllocatedNativePhysicalCompletion.step_invariants control state valid inputs fields
+      have reached : Good current ∧ Extension state.native.machine current.native.machine ∧
+          SourceEqualityRequiredCache.Keeps state.native.machine.heap current.native.machine.heap ∧
+          SourceEqualityConstraintMemoAllocation.Grows state.operations current.operations ∧ Fields next current := by
+        rw [one] at checked
+        exact ⟨checked.1, checked.2.1, checked.2.2.1, checked.2.2.2.1, checked.2.2.2.2.2⟩
+      have later := ih reached.1 reached.2.2.2.2
+      exact ⟨later.1, reached.2.1.trans later.2.1, reached.2.2.1.trans later.2.2.1,
+        operations_trans reached.2.2.2.1 later.2.2.2.1, later.2.2.2.2⟩
+
+/-- Actual bind readback derives the child prefix and all physical continuation invariants. -/
+theorem bind_readback [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)]
+    (fuel : Nat) (control : Control A) (next : A → Code Symbol Guard B) (before after : Checked width) (value : B)
+    (trace : Trace fuel (control.bind next) before (.code (.pure value)) after)
+    (valid : Good before) (fields : Fields (control.bind next) before) (ranges : WordRanges (control.bind next) before) :
+    ∃ (inner outer : Nat) (result : A) (middle : Checked width), inner + outer = fuel ∧
+      Trace inner control before (.code (.pure result)) middle ∧
+      Trace outer (.code (next result)) middle (.code (.pure value)) after ∧

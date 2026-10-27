@@ -1,0 +1,19 @@
+/-- Each check refers only to the current instruction, current inputs, and current running cell. -/
+def Inputs [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)]
+    : Control Output → CheckedState width → Prop
+  | .code (.work job _), state => WorkInputs state.native.machine.heap job
+  | .code (.enter domain left right _ _ _), state =>
+      Domain state.native.machine domain ∧ Available state.native.machine.heap left ∧ Available state.native.machine.heap right
+  | .code (.optionalBinder _ value _), state => Available state.native.machine.heap value
+  | .code (.node request _), state => NodeReady state.native.machine request ∧
+      ∀ key, SourceRecursiveIntersectionMemo.requestKey width request.domain request.left request.right = some key →
+        SourceRecursiveIntersectionMemo.KeySafe width request.domain request.left request.right
+  | .code (.edge request _), state => EdgeReady state.native.machine request ∧
+      SourceRecursiveIntersectionEdgeMemo.KeySafe width request.domain request.left request.right
+  | .code (.finishNode handle value _), state => ∃ request,
+      state.native.nodes.cells handle = some ⟨request, .evaluating⟩ ∧
+      Available state.native.machine.heap value
+  | .code (.finishEdge handle value _), state => ∃ request,
+      state.native.edges.cells handle = some ⟨request, .evaluating⟩ ∧
+      InternedEdgeResidency.EdgeResident state.native.machine.heap value
+  | _, _ => True

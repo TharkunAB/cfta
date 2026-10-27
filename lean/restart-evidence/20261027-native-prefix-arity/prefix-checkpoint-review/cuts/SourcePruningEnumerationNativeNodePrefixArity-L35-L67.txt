@@ -1,0 +1,33 @@
+/-- An actual ordered walk prefix retains the entire heap at its current control. -/
+theorem walk_prefix_heap (limit : Nat) (call : A → Code Symbol Constraint B)
+    (completed : ∀ (input : A) (fuel : Nat), fuel ≤ limit →
+      ∀ (before after : Checked width) (value : B), Good before →
+        Heap before.native.machine.heap →
+        Trace fuel (.code (call input)) before (.code (.pure value)) after → Heap after.native.machine.heap)
+    (prefixes : ∀ (input : A) (fuel : Nat), fuel ≤ limit →
+      ∀ (before after : Checked width) (remaining : Control B), Good before →
+        Heap before.native.machine.heap →
+        Trace fuel (.code (call input)) before remaining after → Heap after.native.machine.heap)
+    (fields : ∀ (input : A) (state : Checked width), Fields (.code (call input)) state)
+    (inputs : List A) (fuel : Nat) (before after : Checked width) (remaining : Control (List B))
+    (bounded : fuel ≤ limit) (initial : Good before) (heap : Heap before.native.machine.heap)
+    (actual : Trace fuel (.code (walk call inputs)) before remaining after) : Heap after.native.machine.heap := by
+  have bound : Trace fuel ((.code (walk call inputs) : Control (List B)).bind .pure)
+      before remaining after := by
+    simpa only [Control.bind, code_bind_pure] using actual
+  rcases SourceCurrentNativeWalkPrefix.walk_prefix_cases call inputs .pure fuel before after remaining bound with
+    ⟨index, input, values, entry, earlierFuel, currentFuel, inner,
+      _selected, earlier, total, current, _nonpure, _same⟩ |
+    ⟨walkFuel, outerFuel, values, middle, total, earlier, later⟩
+  · have entryHeap := SourcePruningEnumerationNativeQueryArity.walk_heap limit call completed fields
+      (inputs.take index) values before entry earlierFuel (by omega) initial heap earlier
+    have entryFields : Fields (.code (walk call (inputs.take index))) before :=
+      SourceCurrentAllocatedNativeCodeFields.fields_walk before.operations call (inputs.take index)
+        (fun input _ => fields input before)
+    have reached := SourceCurrentAllocatedNativeSemanticTraceReadback.effects earlier.trace initial entryFields
+    exact prefixes input currentFuel (by omega) entry after inner reached.1 entryHeap current
+  · have middleHeap := SourcePruningEnumerationNativeQueryArity.walk_heap limit call completed fields
+      inputs values before middle walkFuel (by omega) initial heap earlier
+    exact pure_prefix_heap values outerFuel middle after remaining later middleHeap
+
+end Walk

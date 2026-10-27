@@ -1,0 +1,52 @@
+          requestNode request.domain pair.1 pair.2
+        let children := request.left.children.zip request.right.children
+        let finish : List (Value Symbol Guard) → Code Symbol Guard (EdgeValue Symbol Guard) := fun values =>
+          .work (makeEdge request.left.entry.key.symbol (SourceEqualityConjoinAllocation.readback combined) values) .pure
+        have childTrace : Trace rest ((.code (walk call children) : Control (List (Value Symbol Guard))).bind finish)
+            started remaining after := by
+          simpa only [codeSame, SourceEqualityNativeCheckedCode.children, Control.bind, call, children, finish] using tail
+        have completed : ∀ (pair : Value Symbol Guard × Value Symbol Guard) (count : Nat), count ≤ limit →
+            ∀ (start final : Checked width) (value : Value Symbol Guard), Good start →
+              Heap start.native.machine.heap → Trace count (.code (call pair)) start (.code (.pure value)) final →
+              Heap final.native.machine.heap := by
+          intro pair count _bounded start final value good current called
+          exact SourcePruningEnumerationNativeQueryArity.node_query_heap
+            ⟨request.domain, pair.1, pair.2⟩ start final value count good current called
+        have fields : ∀ (pair : Value Symbol Guard × Value Symbol Guard) (state : Checked width),
+            Fields (.code (call pair)) state := fun _ _ => fun _ => trivial
+        rcases SourceCurrentNativeTracePrefixBind.bind_prefix_cases rest (.code (walk call children)) finish
+            started after remaining childTrace with
+          ⟨inner, walked, _nonpure, _same⟩ |
+          ⟨walkFuel, outerFuel, values, middle, total, walked, later⟩
+        · exact walk_prefix_heap limit call completed
+            (fun pair count bound start final rest good current called =>
+              calls ⟨request.domain, pair.1, pair.2⟩ count bound start final rest good current called)
+            fields children rest started after inner (by omega) startedEffects.1 startedHeap walked
+        · have earlier := SourceCurrentAllocatedNativeSemanticTraceReadback.walk_readback
+            call children walkFuel started middle values walked
+          have middleHeap := SourcePruningEnumerationNativeQueryArity.walk_heap limit call completed fields
+            children values started middle walkFuel (by omega) startedEffects.1 startedHeap earlier
+          have arity : request.left.children.length = request.right.children.length := by
+            by_cases equal : request.left.children.length = request.right.children.length
+            · exact equal
+            · have impossible := congrArg Prod.fst
+                (SourceEqualityIntersectionEdgeAllocation.run_mismatch GuardStructuralOrder.le first second
+                  request.left.children.length request.right.children.length before.operations equal)
+              rw [accepted] at impossible
+              cases impossible
+          have lengthSame : values.length = request.left.children.length := by
+            calc
+              values.length = children.length := SourcePruningEnumerationNativeBodyTrace.walk_length earlier
+              _ = request.left.children.length := by
+                dsimp only [children]
+                rw [List.length_zip, arity, Nat.min_self]
+          have firstReady := (SourceEqualityConstraintFieldLookup.load_ready _ _ valid.operations.constraints
+            (valid.fields _ _ inputs.2.1).1 first left).1
+          have secondReady := (SourceEqualityConstraintFieldLookup.load_ready _ _ valid.operations.constraints
+            (valid.fields _ _ inputs.2.2).1 second right).1
+          have checked := SourcePruningEnumerationNativeCheckedOriginArity.ready_fits
+            GuardStructuralOrder.le first second combined request.left.children.length request.right.children.length
+            before.operations valid.operations firstReady secondReady accepted
+          rw [← lengthSame] at checked
+          exact edge_work_prefix_heap request.left.entry.key.symbol (SourceEqualityConjoinAllocation.readback combined)
+            values outerFuel middle after remaining middleHeap checked later

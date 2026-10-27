@@ -1,0 +1,26 @@
+private theorem query_prefix_heaps (fuel : Nat) :
+    (∀ (request : NodeRequest Symbol Guard) (before after : Checked width)
+      (remaining : Control (Value Symbol Guard)), Good before → Heap before.native.machine.heap →
+      Trace fuel (.code (requestNode request.domain request.left request.right)) before remaining after →
+      Heap after.native.machine.heap) ∧
+    (∀ (request : EdgeRequest Symbol Guard) (before after : Checked width)
+      (remaining : Control (EdgeValue Symbol Guard)), Good before → Heap before.native.machine.heap →
+      Trace fuel (.code (requestEdge request.domain request.left request.right)) before remaining after →
+      Heap after.native.machine.heap) := by
+  induction fuel using Nat.strongRecOn with
+  | ind fuel ih =>
+      constructor
+      · intro request before after remaining valid heap trace
+        apply node_request_prefix_heap request before after remaining fuel valid heap trace
+        intro count original start final rest smaller good current actual
+        apply compileNode_prefix_heap count
+          (fun requested used bounded initial output resume checked origin called =>
+            (ih used (by omega)).1 requested initial output resume checked origin called)
+          (fun requested used bounded initial output resume checked origin called =>
+            (ih used (by omega)).2 requested initial output resume checked origin called)
+          original start final rest count (Nat.le_refl _) good current actual
+      · intro request before after remaining valid heap trace
+        apply edge_request_prefix_heap request before after remaining fuel valid heap trace
+        intro count original start final rest smaller good ready current actual
+        apply body_prefix_heap count
+          (fun requested used bounded initial output resume checked origin called =>

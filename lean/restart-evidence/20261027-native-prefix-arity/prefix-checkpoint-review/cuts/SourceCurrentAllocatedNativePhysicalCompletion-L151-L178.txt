@@ -1,0 +1,28 @@
+/-- Physical reached checks derive all cache invariants and actual continuation fields from the initial state. -/
+theorem execute_invariants [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)]
+    (fuel : Nat) (control : Control Output) (state : CheckedState width) (valid : Good state)
+    (inputs : SourceCurrentAllocatedNativePhysicalExecution.InputsThrough fuel control state) (fields : Fields control state) :
+    Good (SourceEqualityNativeDemand.execute fuel control state).state ∧
+      Extension state.native.machine (SourceEqualityNativeDemand.execute fuel control state).state.native.machine ∧
+      SourceEqualityRequiredCache.Keeps state.native.machine.heap (SourceEqualityNativeDemand.execute fuel control state).state.native.machine.heap ∧
+      SourceEqualityConstraintMemoAllocation.Grows state.operations (SourceEqualityNativeDemand.execute fuel control state).state.operations ∧
+      OutcomeFields (SourceEqualityNativeDemand.execute fuel control state) := by
+  induction fuel generalizing control state with
+  | zero => exact ⟨valid, .refl _, SourceEqualityRequiredCache.pure_keeps _ valid.heap,
+      SourceEqualityConstraintMemoAllocation.grows_refl _, valid.fields, fields⟩
+  | succ fuel ih =>
+      have one := step_invariants control state valid inputs.1 fields
+      cases actual : step control state with
+      | yielded next after =>
+          have current : Good after ∧ Extension state.native.machine after.native.machine ∧
+              SourceEqualityRequiredCache.Keeps state.native.machine.heap after.native.machine.heap ∧
+              SourceEqualityConstraintMemoAllocation.Grows state.operations after.operations ∧ OutcomeFields (.yielded next after) := by
+            simpa only [actual, Outcome.state] using one
+          have rest := ih next after current.1
+            (by simpa only [SourceCurrentAllocatedNativePhysicalExecution.InputsThrough, actual] using inputs.2)
+            current.2.2.2.2.2
+          simpa only [SourceEqualityNativeDemand.execute, actual] using And.intro rest.1
+            ⟨current.2.1.trans rest.2.1, current.2.2.1.trans rest.2.2.1,
+              operations_trans current.2.2.2.1 rest.2.2.2.1, rest.2.2.2.2⟩
+      | done | failed | constraintError | blocked =>
+          simpa only [SourceEqualityNativeDemand.execute, actual, Outcome.state] using one

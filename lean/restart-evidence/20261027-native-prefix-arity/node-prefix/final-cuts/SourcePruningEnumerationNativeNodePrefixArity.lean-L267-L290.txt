@@ -1,0 +1,24 @@
+  | finishEdge handle value next ih =>
+      let middle : Checked width := {before with native := SourceRecursiveIntersectionThunks.finishEdge handle value before.native}
+      have one : step (.code (.finishEdge handle value next)) before = .yielded (.code next) middle := rfl
+      apply yielded_prefix_heap limit _ _ before middle after remaining fuel bounded initial heap fields actual one heap
+      intro count bound good middleHeap retained tail
+      exact ih checked middle after remaining count bound good middleHeap retained tail
+
+/-- Literal node compilation retains every edge record's arity at any actual prefix endpoint. -/
+theorem compileNode_prefix_heap (limit : Nat)
+    (nodes : ∀ (request : NodeRequest Symbol Constraint) (fuel : Nat), fuel ≤ limit →
+      ∀ (before after : Checked width) (remaining : Control (Value Symbol Constraint)), Good before →
+        Heap before.native.machine.heap →
+        Trace fuel (.code (.node request .pure)) before remaining after → Heap after.native.machine.heap)
+    (edges : ∀ (request : EdgeRequest Symbol Constraint) (fuel : Nat), fuel ≤ limit →
+      ∀ (before after : Checked width) (remaining : Control (EdgeValue Symbol Constraint)), Good before →
+        Heap before.native.machine.heap →
+        Trace fuel (.code (.edge request .pure)) before remaining after → Heap after.native.machine.heap)
+    (request : NodeRequest Symbol Constraint) (before after : Checked width)
+    (remaining : Control (Value Symbol Constraint)) (fuel : Nat) (bounded : fuel ≤ limit)
+    (initial : Good before) (heap : Heap before.native.machine.heap)
+    (actual : Trace fuel (.code (compileNode request)) before remaining after) : Heap after.native.machine.heap :=
+  localWorks_prefix_heap limit nodes edges (compileNode request) (compileNode_localWorks request)
+    before after remaining fuel bounded initial heap
+    (SourceCurrentAllocatedNativeCodeFields.compileNode_fields before.operations request) actual

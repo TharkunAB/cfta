@@ -1,0 +1,64 @@
+open EnumerationState EnumerationCorrectness
+open SourceRecursiveIntersectionKernel SourceRecursiveIntersectionThunks SourceRecursiveIntersectionCode
+open SourceEqualityNativeDemand
+local notation "Symbol" => SourceObservations.Label FullSyntax.Formula
+local notation "Guard" => SourceSymbolicIndex.Constraint FullSyntax.Formula
+local notation "Allocated" => SourceEqualityConjoinAllocation.Constraint FullSyntax.Formula
+local notation "Checked" => SourceEqualityNativeDemand.State
+local notation "top" => SourceEqualityConstraintConstructors.top (Formula := FullSyntax.Formula)
+local instance : DecidableEq (SourceGuards.Guard FullSyntax.Formula) := SourceEqualityPCSNativeEdge.guardDecidableEq
+
+/-- An actual yielded body retains its exact native state and the constructor check that selected its code. -/
+theorem body_choice_checked (request : EdgeRequest Symbol Guard) (before after : Checked width)
+    (code : Code Symbol Guard (EdgeValue Symbol Guard))
+    (yielded : SourceEqualityNativeDemand.body request .pure before = .yielded (.code code) after) :
+    after.native = before.native ∧
+      (code = SourceEqualityNativeCheckedCode.sentinel request.left ∨
+        ∃ first second combined,
+          SourceEqualityConstraintFieldLookup.load request.left.entry.key.constraint before.operations.constraints = .ok (some first) ∧
+          SourceEqualityConstraintFieldLookup.load request.right.entry.key.constraint before.operations.constraints = .ok (some second) ∧
+          (SourceEqualityIntersectionEdgeAllocation.run GuardStructuralOrder.le first second
+            request.left.children.length request.right.children.length before.operations).1 = .ok (.ready combined) ∧
+          code = SourceEqualityNativeCheckedCode.children request.domain request.left request.right combined) := by
+  have same := SourceEqualityNativeDemandOperations.body_native request .pure before
+  have unchanged : after.native = before.native := by
+    simpa only [yielded, Outcome.state] using same
+  refine ⟨unchanged, ?_⟩
+  by_cases mismatch : request.left.children.length ≠ request.right.children.length
+  · simp only [SourceEqualityNativeDemand.body, ite_eq_left mismatch, sentinel, code_bind_pure] at yielded
+    cases yielded
+    exact .inl rfl
+  · simp only [SourceEqualityNativeDemand.body, ite_eq_right mismatch] at yielded
+    cases firstLoaded : SourceEqualityConstraintFieldLookup.load request.left.entry.key.constraint before.operations.constraints with
+    | error message => simp only [firstLoaded] at yielded; cases yielded
+    | ok first =>
+        cases first with
+        | none => simp only [firstLoaded] at yielded; cases yielded
+        | some first =>
+            simp only [firstLoaded] at yielded
+            cases secondLoaded : SourceEqualityConstraintFieldLookup.load request.right.entry.key.constraint before.operations.constraints with
+            | error message => simp only [secondLoaded] at yielded; cases yielded
+            | ok second =>
+                cases second with
+                | none => simp only [secondLoaded] at yielded; cases yielded
+                | some second =>
+                    simp only [secondLoaded] at yielded
+                    cases checked : SourceEqualityIntersectionEdgeAllocation.run GuardStructuralOrder.le first second
+                      request.left.children.length request.right.children.length before.operations with
+                    | mk result operations =>
+                        simp only [checked] at yielded
+                        cases result with
+                        | error message => cases yielded
+                        | ok branch =>
+                            cases branch with
+                            | mismatch | rejected =>
+                                simp only [sentinel, code_bind_pure] at yielded
+                                cases yielded
+                                exact .inl rfl
+                            | ready combined =>
+                                simp only [code_bind_pure] at yielded
+                                cases yielded
+                                exact .inr ⟨first, second, combined, rfl, rfl,
+                                  congrArg Prod.fst checked, rfl⟩
+
+private theorem trace_body_first [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)]

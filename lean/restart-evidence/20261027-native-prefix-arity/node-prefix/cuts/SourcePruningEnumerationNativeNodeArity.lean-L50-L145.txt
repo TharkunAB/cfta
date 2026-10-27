@@ -1,0 +1,96 @@
+
+private def LocalWorks : Code Symbol Constraint A → Prop
+  | .pure _ | .fail _ => True
+  | .work job next =>
+      (∀ state, SourcePruningEnumerationNativeArityPrimitives.WorkFits job state) ∧
+        ∀ value, LocalWorks (next value)
+  | .enter _ _ _ _ _ next => ∀ value, LocalWorks (next value)
+  | .read _ next => ∀ value, LocalWorks (next value)
+  | .optionalBinder _ _ next => ∀ value, LocalWorks (next value)
+  | .node _ next => ∀ value, LocalWorks (next value)
+  | .edge _ next => ∀ value, LocalWorks (next value)
+  | .finishNode _ _ next | .finishEdge _ _ next => LocalWorks next
+
+private theorem localWorks_bind (code : Code Symbol Constraint A)
+    (next : A → Code Symbol Constraint B) (first : LocalWorks code)
+    (rest : ∀ value, LocalWorks (next value)) : LocalWorks (code.bind next) := by
+  induction code with
+  | pure value => exact rest value
+  | fail => trivial
+  | work job resume ih => exact ⟨first.1, fun value => ih value (first.2 value)⟩
+  | enter domain left right firstKey secondKey resume ih | read name resume ih | optionalBinder key body resume ih | node request resume ih | edge request resume ih =>
+      exact fun value => ih value (first value)
+  | finishNode handle value next ih | finishEdge handle value next ih => exact ih first
+
+private theorem localWorks_walk (call : A → Code Symbol Constraint B) (inputs : List A)
+    (checked : ∀ input, LocalWorks (call input)) : LocalWorks (walk call inputs) := by
+  induction inputs with
+  | nil => trivial
+  | cons first rest ih =>
+      exact localWorks_bind _ _ (checked first) (fun _ => localWorks_bind _ _ ih (fun _ => trivial))
+
+private theorem compileMu_localWorks (domain : Interned IntersectionFlatMemoKeyDomain.DomainKey)
+    (left right : Value Symbol Constraint) : LocalWorks (compileMu domain left right) := by
+  unfold compileMu
+  split <;> simp only [LocalWorks, SourceRecursiveIntersectionCode.unsupported, implies_true]
+
+private theorem compileReference_localWorks (domain : Interned IntersectionFlatMemoKeyDomain.DomainKey)
+    (name : Nat) (other : Value Symbol Constraint) (left : Bool) :
+    LocalWorks (compileReference domain name other left) := by
+  unfold compileReference
+  split
+  · intro found
+    cases found with
+    | none => trivial
+    | some bound => split <;> intro value <;> trivial
+  · trivial
+
+variable [DecidableEq Symbol]
+
+private theorem compileRows_localWorks (domain : Interned IntersectionFlatMemoKeyDomain.DomainKey)
+    (left right : List (EdgeValue Symbol Constraint)) : LocalWorks (compileRows domain left right) := by
+  apply localWorks_bind
+  · exact localWorks_walk _ _ (fun _ => by intro value; trivial)
+  · intro values
+    exact ⟨SourcePruningEnumerationNativeArityPrimitives.makeNode_fits values, fun _ => trivial⟩
+
+private theorem compileNode_localWorks (request : NodeRequest Symbol Constraint) :
+    LocalWorks (compileNode request) := by
+  cases selected : SourceRecursiveIntersectionControl.decision request.domain.key request.left request.right with
+  | empty | reset | self | swap | repeated key | unsupported =>
+      simp only [compileNode, selected, SourceRecursiveIntersectionCode.unsupported, requestNode, LocalWorks, implies_true]
+  | bothMu | leftMu | rightMu =>
+      simpa only [compileNode, selected] using compileMu_localWorks request.domain request.left request.right
+  | leftUnion =>
+      simp only [compileNode, selected]
+      cases request.left with
+      | union entry members depth free =>
+          apply localWorks_bind
+          · exact localWorks_walk _ _ (fun _ => by intro value; trivial)
+          · intro values
+            exact ⟨SourcePruningEnumerationNativeArityPrimitives.makeUnion_fits values, fun _ => trivial⟩
+      | empty | reference | node | mu => trivial
+  | rightUnion =>
+      simp only [compileNode, selected]
+      cases request.right with
+      | union entry members depth free =>
+          apply localWorks_bind
+          · exact localWorks_walk _ _ (fun _ => by intro value; trivial)
+          · intro values
+            exact ⟨SourcePruningEnumerationNativeArityPrimitives.makeUnion_fits values, fun _ => trivial⟩
+      | empty | reference | node | mu => trivial
+  | leftReference =>
+      simp only [compileNode, selected]
+      cases request.left <;> try trivial
+      rename_i name
+      cases name <;> first | exact compileReference_localWorks _ _ _ _ | trivial
+  | rightReference =>
+      simp only [compileNode, selected]
+      cases request.right <;> try trivial
+      rename_i name
+      cases name <;> first | exact compileReference_localWorks _ _ _ _ | trivial
+  | ordinary =>
+      simp only [compileNode, selected]
+      cases request.left <;> cases request.right <;> first | exact compileRows_localWorks _ _ _ | trivial
+
+private theorem yielded_heap (limit : Nat) (control next : Control A)

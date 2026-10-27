@@ -1,0 +1,25 @@
+private theorem pure_prefix_heap (first : A) (before after : Checked width)
+    (remaining : Control A) (fuel : Nat)
+    (trace : Trace fuel (.code (.pure first)) before remaining after)
+    (heap : Heap before.native.machine.heap) : Heap after.native.machine.heap := by
+  cases trace with
+  | refl => exact heap
+  | cons control state next current final reached count inputs one tail => cases one
+
+private theorem finish_node_prefix_heap (handle : Nat) (first : Value Symbol Guard)
+    (before after : Checked width) (remaining : Control (Value Symbol Guard)) (fuel : Nat)
+    (trace : Trace fuel (.code (.finishNode handle first (.pure first))) before remaining after)
+    (heap : Heap before.native.machine.heap) : Heap after.native.machine.heap := by
+  cases trace with
+  | refl => exact heap
+  | cons control state next current final reached count inputs one tail =>
+      cases one
+      exact pure_prefix_heap first _ after remaining count tail heap
+
+private theorem finish_edge_prefix_heap (handle : Nat) (first : EdgeValue Symbol Guard)
+    (before after : Checked width) (remaining : Control (EdgeValue Symbol Guard)) (fuel : Nat)
+    (trace : Trace fuel (.code (.finishEdge handle first (.pure first))) before remaining after)
+    (heap : Heap before.native.machine.heap) : Heap after.native.machine.heap := by
+  cases trace with
+  | refl => exact heap
+  | cons control state next current final reached count inputs one tail =>

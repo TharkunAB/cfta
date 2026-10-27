@@ -1,0 +1,13 @@
+    (state : Checked width) (facts : Facts state.native.machine.heap)
+    (heap : Heap state.native.machine.heap) (available : Available state.native.machine.heap body) :
+    Heap (SourceEqualityNativeDemand.step (.code (.optionalBinder key body next)) state).state.native.machine.heap := by
+  have retained := optionalBinder_heap key body state.native.machine.heap facts heap available
+  cases actual : SourceRecursiveIntersectionMaybeMu.maybeMu key body state.native.machine.heap with
+  | done value after =>
+      simpa only [SourceEqualityNativeDemand.step, SourceRecursiveIntersectionNative.step,
+        actual, SourceEqualityNativeDemand.lift, SourceEqualityNativeDemand.Outcome.state,
+        SourceRecursiveIntersectionThunks.advance, InternedNestedConstruction.Outcome.state] using retained
+  | pending pending after =>
+      simpa only [SourceEqualityNativeDemand.step, SourceRecursiveIntersectionNative.step,
+        actual, SourceEqualityNativeDemand.lift, SourceEqualityNativeDemand.Outcome.state,
+        SourceRecursiveIntersectionThunks.advance, InternedNestedConstruction.Outcome.state] using retained

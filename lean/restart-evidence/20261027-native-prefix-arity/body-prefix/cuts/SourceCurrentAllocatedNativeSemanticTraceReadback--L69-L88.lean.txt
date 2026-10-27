@@ -1,0 +1,20 @@
+    {fuel : Nat} {control : Control A} {before after : Checked width} {value : A}
+    (trace : Trace fuel control before (.code (.pure value)) after) : Inputs control before := by
+  cases trace with
+  | refl => trivial
+  | cons control before next middle final after count inputs one tail => exact inputs
+
+/-- A terminal constructor derives its literal result, full state, and actual operand check. -/
+theorem work_readback [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)]
+    (job : Work Symbol Guard A) (fuel : Nat) (before after : Checked width) (value : A)
+    (trace : Trace fuel (.code (.work job .pure)) before (.code (.pure value)) after) :
+    fuel = 1 ∧ value = (run job before.native.machine.heap).1 ∧
+      after = {before with native := advance before.native {before.native.machine with heap := (run job before.native.machine.heap).2}} ∧
+      SourceEqualityNativeDemandHeapPrimitives.WorkInputs before.native.machine.heap job := by
+  have inputs := current_inputs trace
+  have one : step (.code (.work job .pure)) before = .yielded
+      (.code (.pure (run job before.native.machine.heap).1))
+      {before with native := advance before.native {before.native.machine with heap := (run job before.native.machine.heap).2}} := rfl
+  obtain ⟨count, total, rest⟩ := after_step fuel _ _ before _ after value trace one
+  obtain ⟨rfl, same, retained⟩ := pure_trace count _ value _ after rest.steps
+  exact ⟨total, same.symm, retained.symm, inputs⟩

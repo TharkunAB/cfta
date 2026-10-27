@@ -1,0 +1,48 @@
+MicroCFTA.SourcePruningEnumerationNativePrefixArity.walk_prefix_heap {A B : Type} {width : Nat}
+  [DecidableEq MicroCFTA.SourcePruningTemplates.Symbol]
+  [DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey MicroCFTA.SourcePruningTemplates.Symbol
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  (limit : Nat)
+  (call :
+    A →
+      MicroCFTA.SourceRecursiveIntersectionCode.Code MicroCFTA.SourcePruningTemplates.Symbol
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) B)
+  (completed :
+    ∀ (input : A) (fuel : Nat),
+      fuel ≤ limit →
+        ∀ (before after : MicroCFTA.SourceEqualityNativeDemand.State width) (value : B),
+          MicroCFTA.SourceCurrentAllocatedNativePhysicalCompletion.Good before →
+            MicroCFTA.SourcePruningEnumerationArityOrigins.Heap before.native.machine.heap →
+              MicroCFTA.SourceCurrentAllocatedNativePhysicalTraceCompletion.Trace fuel
+                  (MicroCFTA.SourceEqualityNativeDemand.Control.code (call input)) before
+                  (MicroCFTA.SourceEqualityNativeDemand.Control.code
+                    (MicroCFTA.SourceRecursiveIntersectionCode.Code.pure value))
+                  after →
+                MicroCFTA.SourcePruningEnumerationArityOrigins.Heap after.native.machine.heap)
+  (prefixes :
+    ∀ (input : A) (fuel : Nat),
+      fuel ≤ limit →
+        ∀ (before after : MicroCFTA.SourceEqualityNativeDemand.State width)
+          (remaining : MicroCFTA.SourceEqualityNativeDemand.Control B),
+          MicroCFTA.SourceCurrentAllocatedNativePhysicalCompletion.Good before →
+            MicroCFTA.SourcePruningEnumerationArityOrigins.Heap before.native.machine.heap →
+              MicroCFTA.SourceCurrentAllocatedNativePhysicalTraceCompletion.Trace fuel
+                  (MicroCFTA.SourceEqualityNativeDemand.Control.code (call input)) before remaining after →
+                MicroCFTA.SourcePruningEnumerationArityOrigins.Heap after.native.machine.heap)
+  (fields :
+    ∀ (input : A) (state : MicroCFTA.SourceEqualityNativeDemand.State width),
+      MicroCFTA.SourceCurrentAllocatedNativeFieldClosure.Fields
+        (MicroCFTA.SourceEqualityNativeDemand.Control.code (call input)) state)
+  (inputs : List A) (fuel : Nat) (before after : MicroCFTA.SourceEqualityNativeDemand.State width)
+  (remaining : MicroCFTA.SourceEqualityNativeDemand.Control (List B)) (bounded : fuel ≤ limit)
+  (initial : MicroCFTA.SourceCurrentAllocatedNativePhysicalCompletion.Good before)
+  (heap : MicroCFTA.SourcePruningEnumerationArityOrigins.Heap before.native.machine.heap)
+  (actual :
+    MicroCFTA.SourceCurrentAllocatedNativePhysicalTraceCompletion.Trace fuel
+      (MicroCFTA.SourceEqualityNativeDemand.Control.code (MicroCFTA.SourceRecursiveIntersectionCode.walk call inputs))
+      before remaining after) :
+  MicroCFTA.SourcePruningEnumerationArityOrigins.Heap after.native.machine.heap
+'MicroCFTA.SourcePruningEnumerationNativePrefixArity.walk_prefix_heap' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]

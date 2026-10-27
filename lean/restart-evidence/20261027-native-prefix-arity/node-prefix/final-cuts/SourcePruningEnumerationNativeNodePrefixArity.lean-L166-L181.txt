@@ -1,0 +1,16 @@
+private theorem yielded_prefix_heap (limit : Nat) (control next : Control A)
+    (before middle after : Checked width) (remaining : Control A) (fuel : Nat)
+    (bounded : fuel ≤ limit) (initial : Good before) (initialHeap : Heap before.native.machine.heap)
+    (fields : Fields control before) (actual : Trace fuel control before remaining after)
+    (one : step control before = .yielded next middle) (heap : Heap middle.native.machine.heap)
+    (rest : ∀ count, count ≤ limit → Good middle → Heap middle.native.machine.heap → Fields next middle →
+      Trace count next middle remaining after → Heap after.native.machine.heap) : Heap after.native.machine.heap := by
+  cases actual with
+  | refl => exact initialHeap
+  | cons control state resumed current final result count inputs observed tail =>
+      have same := Outcome.yielded.inj (one.symm.trans observed)
+      rcases same.1 with rfl
+      rcases same.2 with rfl
+      have checked := SourceCurrentAllocatedNativePhysicalCompletion.step_invariants control before initial inputs fields
+      rw [one] at checked
+      exact rest count (by omega) checked.1 heap checked.2.2.2.2.2 tail

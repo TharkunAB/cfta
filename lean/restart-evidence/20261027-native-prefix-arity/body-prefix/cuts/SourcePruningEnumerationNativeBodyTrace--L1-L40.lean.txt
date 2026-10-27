@@ -1,0 +1,40 @@
+import MicroCFTA.SourceCurrentAllocatedNativeSemanticTraceReadback
+import MicroCFTA.SourcePruningEnumerationNativeBodyOriginArity
+
+/-!
+# Actual rich child traces of checked native edge bodies
+
+The existing physical bind inverse retains every reached input check.
+These consumers retain that rich trace and derive the current middle state.
+The edge-body observer derives its actual accepted or sentinel branch.
+No range predicate or future child result is supplied.
+-/
+namespace MicroCFTA.SourcePruningEnumerationNativeBodyTrace
+open Cache InternedConstructorTemplates InternedProbeProvenance
+open SourceRecursiveIntersectionKernel SourceRecursiveIntersectionThunks SourceRecursiveIntersectionCode
+open SourceEqualityNativeDemand
+open SourceCurrentAllocatedNativePhysicalTraceCompletion (Trace)
+open SourceCurrentAllocatedNativePhysicalCompletion (Good)
+open SourceCurrentAllocatedNativeFieldClosure (Fields)
+open SourceCurrentAllocatedNativeSemanticTraceReadback (Walk)
+local notation "Symbol" => SourceObservations.Label FullSyntax.Formula
+local notation "Guard" => SourceSymbolicIndex.Constraint FullSyntax.Formula
+local notation "Allocated" => SourceEqualityConjoinAllocation.Constraint FullSyntax.Formula
+local notation "Checked" => SourceEqualityNativeDemand.State
+local notation "WorkInputs" => SourceEqualityNativeDemandHeapPrimitives.WorkInputs
+local notation "top" => SourceEqualityConstraintConstructors.top (Formula := FullSyntax.Formula)
+local instance : DecidableEq (SourceGuards.Guard FullSyntax.Formula) :=
+  SourceEqualityPCSNativeEdge.guardDecidableEq
+variable {A B C : Type} {width : Nat}
+
+/-- A rich ordered walk has one output for each actual input. -/
+theorem walk_length [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)]
+    {call : A → Code Symbol Guard B} {inputs : List A} {before after : Checked width}
+    {values : List B} {fuel : Nat} (walk : Walk call inputs before values after fuel) :
+    values.length = inputs.length := by
+  induction walk with
+  | nil => rfl
+  | cons first rest before middle after value values firstFuel restFuel called tail ih =>
+      exact congrArg Nat.succ ih
+
+/-- Actual rich child prefixes retain their same middle invariants without a range forecast. -/

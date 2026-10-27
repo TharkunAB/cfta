@@ -1,0 +1,13 @@
+theorem body_prefix_heap
+    (limit : Nat)
+    (calls : ∀ (request : NodeRequest Symbol Guard) (count : Nat), count ≤ limit →
+      ∀ (start final : Checked width) (remaining : Control (Value Symbol Guard)), Good start →
+        Heap start.native.machine.heap →
+        Trace count (.code (requestNode request.domain request.left request.right)) start remaining final →
+        Heap final.native.machine.heap)
+    (request : EdgeRequest Symbol Guard) (fuel : Nat) (before after : Checked width)
+    (remaining : Control (EdgeValue Symbol Guard)) (bounded : fuel ≤ limit)
+    (valid : Good before) (inputs : EdgeReady before.native.machine request)
+    (heap : Heap before.native.machine.heap)
+    (actual : Trace fuel (.edgeBody request .pure) before remaining after) :
+    Heap after.native.machine.heap

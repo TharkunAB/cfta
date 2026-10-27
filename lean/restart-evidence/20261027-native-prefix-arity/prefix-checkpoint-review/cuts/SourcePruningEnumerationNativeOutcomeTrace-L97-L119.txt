@@ -1,0 +1,23 @@
+    (inputs : Inputs control before)
+    (terminal : match step control before with | .yielded _ _ => False | _ => True) :
+    Heap (step control before).state.native.machine.heap := by
+  cases control with
+  | edgeBody request next =>
+      change Heap (body request next before).state.native.machine.heap
+      rw [SourceEqualityNativeDemandOperations.body_native]
+      exact heap
+  | code code =>
+      cases code with
+      | pure | fail | enter | read | finishNode | finishEdge => exact heap
+      | work job next =>
+          change False at terminal
+          exact terminal.elim
+      | optionalBinder key body next =>
+          exact SourcePruningEnumerationNativeArityPrimitives.step_optionalBinder_heap key body next before
+            valid.heap.semantic.1.normal.facts heap inputs
+      | node request next =>
+          rw [SourcePruningEnumerationNativeRequestArity.node_step_heap]
+          exact heap
+      | edge request next =>
+          rw [SourceEqualityNativeDemandHeap.step_edge_heap]
+          exact heap

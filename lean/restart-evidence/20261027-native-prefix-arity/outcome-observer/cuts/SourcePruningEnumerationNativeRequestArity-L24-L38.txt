@@ -1,0 +1,15 @@
+private theorem lift_heap (operations : SourceEqualityConstraintMemoAllocation.State)
+    (outcome : SourceRecursiveIntersectionNative.Outcome width Symbol Guard A) :
+    (lift operations outcome).state.native.machine.heap = outcome.state.machine.heap := by
+  cases outcome <;> rfl
+
+variable [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)]
+
+/-- Actual node lookup and demand do not change any constructor record. -/
+theorem node_step_heap (request : NodeRequest Symbol Guard)
+    (next : Value Symbol Guard → Code Symbol Guard A) (state : Checked width) :
+    (step (.code (.node request next)) state).state.native.machine.heap = state.native.machine.heap := by
+  change (lift state.operations (SourceRecursiveIntersectionNative.step
+    SourceEqualityConstraintConstructors.top SourceEqualityPCSNativeEdge.conjoin
+    (.node request next) state.native)).state.native.machine.heap = _
+  rw [lift_heap, SourceRecursiveIntersectionNative.node_step_machine]

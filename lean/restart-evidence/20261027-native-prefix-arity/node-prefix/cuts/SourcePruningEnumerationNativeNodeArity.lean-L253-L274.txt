@@ -1,0 +1,22 @@
+/-- Literal node compilation preserves arity from its bounded actual node and edge requests. -/
+theorem compileNode_heap (limit : Nat)
+    (nodes : ∀ (request : NodeRequest Symbol Constraint) (fuel : Nat), fuel ≤ limit →
+      ∀ (before after : Checked width) (value : Value Symbol Constraint), Good before →
+        Heap before.native.machine.heap →
+        Trace fuel (.code (.node request .pure)) before (.code (.pure value)) after →
+        Heap after.native.machine.heap)
+    (edges : ∀ (request : EdgeRequest Symbol Constraint) (fuel : Nat), fuel ≤ limit →
+      ∀ (before after : Checked width) (value : EdgeValue Symbol Constraint), Good before →
+        Heap before.native.machine.heap →
+        Trace fuel (.code (.edge request .pure)) before (.code (.pure value)) after →
+        Heap after.native.machine.heap)
+    (request : NodeRequest Symbol Constraint) (before after : Checked width)
+    (value : Value Symbol Constraint) (fuel : Nat) (bounded : fuel ≤ limit)
+    (initial : Good before) (heap : Heap before.native.machine.heap)
+    (actual : Trace fuel (.code (compileNode request)) before (.code (.pure value)) after) :
+    Heap after.native.machine.heap :=
+  localWorks_heap limit nodes edges (compileNode request) (compileNode_localWorks request)
+    before after value fuel bounded initial heap
+    (SourceCurrentAllocatedNativeCodeFields.compileNode_fields before.operations request) actual
+
+end MicroCFTA.SourcePruningEnumerationNativeQueryArity

@@ -1,0 +1,43 @@
+MicroCFTA.SourcePruningEnumerationNativeOutcomeTrace.execute_readback {A : Type} {width : Nat}
+  [DecidableEq (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)]
+  [DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  (fuel : Nat) (control : MicroCFTA.SourceEqualityNativeDemand.Control A)
+  (before : MicroCFTA.SourceEqualityNativeDemand.State width)
+  (plan : MicroCFTA.SourceCurrentAllocatedNativePhysicalExecution.InputsThrough fuel control before) :
+  match MicroCFTA.SourceEqualityNativeDemand.execute fuel control before with
+  | MicroCFTA.SourceEqualityNativeDemand.Outcome.yielded next after =>
+    MicroCFTA.SourceCurrentAllocatedNativePhysicalTraceCompletion.Trace fuel control before next after ∧
+      MicroCFTA.SourceCurrentAllocatedNativePhysicalExecution.Inputs next after
+  | MicroCFTA.SourceEqualityNativeDemand.Outcome.done value after =>
+    ∃ used,
+      used < fuel ∧
+        MicroCFTA.SourceCurrentAllocatedNativePhysicalTraceCompletion.Trace used control before
+          (MicroCFTA.SourceEqualityNativeDemand.Control.code
+            (MicroCFTA.SourceRecursiveIntersectionCode.Code.pure value))
+          after
+  | MicroCFTA.SourceEqualityNativeDemand.Outcome.failed failure after =>
+    ∃ used last current,
+      used < fuel ∧
+        MicroCFTA.SourceCurrentAllocatedNativePhysicalTraceCompletion.Trace used control before last current ∧
+          MicroCFTA.SourceCurrentAllocatedNativePhysicalExecution.Inputs last current ∧
+            MicroCFTA.SourceEqualityNativeDemand.step last current =
+              MicroCFTA.SourceEqualityNativeDemand.Outcome.failed failure after
+  | MicroCFTA.SourceEqualityNativeDemand.Outcome.constraintError message after =>
+    ∃ used last current,
+      used < fuel ∧
+        MicroCFTA.SourceCurrentAllocatedNativePhysicalTraceCompletion.Trace used control before last current ∧
+          MicroCFTA.SourceCurrentAllocatedNativePhysicalExecution.Inputs last current ∧
+            MicroCFTA.SourceEqualityNativeDemand.step last current =
+              MicroCFTA.SourceEqualityNativeDemand.Outcome.constraintError message after
+  | MicroCFTA.SourceEqualityNativeDemand.Outcome.blocked reason next after =>
+    ∃ used last current,
+      used < fuel ∧
+        MicroCFTA.SourceCurrentAllocatedNativePhysicalTraceCompletion.Trace used control before last current ∧
+          MicroCFTA.SourceCurrentAllocatedNativePhysicalExecution.Inputs last current ∧
+            MicroCFTA.SourceEqualityNativeDemand.step last current =
+              MicroCFTA.SourceEqualityNativeDemand.Outcome.blocked reason next after
+'MicroCFTA.SourcePruningEnumerationNativeOutcomeTrace.execute_readback' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]

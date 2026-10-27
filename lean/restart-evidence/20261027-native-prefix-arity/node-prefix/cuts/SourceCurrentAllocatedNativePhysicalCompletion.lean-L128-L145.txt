@@ -1,0 +1,18 @@
+/-- One actual checked transition derives both physical and same-cache field invariants. -/
+theorem step_invariants [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)]
+    (control : Control Output) (state : CheckedState width) (valid : Good state)
+    (inputs : SourceCurrentAllocatedNativePhysicalExecution.Inputs control state) (fields : Fields control state) :
+    Good (step control state).state ∧
+      Extension state.native.machine (step control state).state.native.machine ∧
+      SourceEqualityRequiredCache.Keeps state.native.machine.heap (step control state).state.native.machine.heap ∧
+      SourceEqualityConstraintMemoAllocation.Grows state.operations (step control state).state.operations ∧
+      OutcomeFields (step control state) := by
+  have physical := SourceCurrentAllocatedNativePhysicalExecution.step_invariants control state valid.native valid.heap inputs
+  have operationFields := SourceCurrentAllocatedNativeFieldClosure.operation_fields control state valid.fields fields
+  have operations := SourceEqualityNativeDemandOperations.step_operations control state valid.operations operationFields
+  have annotations := step_fields control state valid valid.fields inputs fields
+  exact ⟨⟨physical.1, physical.2.2.ready, operations.1, annotations.1⟩,
+    physical.2.1, physical.2.2, operations.2, annotations⟩
+
+private theorem operations_trans {before middle after : Operations}
+    (first : SourceEqualityConstraintMemoAllocation.Grows before middle)

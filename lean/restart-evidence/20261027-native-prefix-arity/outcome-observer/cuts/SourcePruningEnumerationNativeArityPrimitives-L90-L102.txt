@@ -1,0 +1,13 @@
+
+/-- Actual optional binding retains arity at its complete or pending stopping cache. -/
+theorem optionalBinder_heap [DecidableEq (EdgeKey Symbol Constraint)]
+    (key : Nat × Nat) (body : Value Symbol Constraint) (state : State Symbol Constraint)
+    (facts : Facts state) (heap : Heap state) (available : Available state body) :
+    Heap (SourceRecursiveIntersectionMaybeMu.maybeMu key body state).state := by
+  rw [SourceRecursiveIntersectionMaybeMu.maybeMu_eq key body state state facts available]
+  split
+  · apply SourcePruningEnumerationArityOrigins.build_heap _ _ state heap
+    exact SourcePruningEnumerationArityOrigins.encode_checked body state facts heap available _ _
+  · exact heap
+
+end Construction

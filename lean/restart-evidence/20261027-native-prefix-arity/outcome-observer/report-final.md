@@ -1,0 +1,11 @@
+# Final outcome-observer review
+
+CLEAR. The immutable v1 source has 121 lines and SHA256 8ed89e7a7f8e70867075055ca3be305271534e7eeb1b8eaece0ff96782c800e4. The draft, installed source and strict snapshot match byte for byte. Root strict-native-outcome-trace-1 passed on its first attempt with literal-empty raw output. Root build-prefix-support-1 passed 1117 jobs. Its complete 651-byte raw output has SHA256 65e53a56fbc261a08246c2e4061d7ddd0314f07662e52c10555edb29bdb545ea. It includes the unchanged replayed unused-input warning. Both actual receipts record memory.max/high of 4GiB and swap0.
+
+execute_readback derives all five finite outcomes from the actual InputsThrough plan. Yielded results retain an exact-fuel rich trace and endpoint Inputs. Completed results retain a shorter rich trace to the same actual pure value and complete returned state. Failed, constraint-error and blocked results retain a shorter rich prefix, its current Inputs and the literal terminal step to the exact returned state and diagnostic. A terminal step is not omitted from its endpoint.
+
+terminal_step_heap derives Heap after any actual non-yielded step from current Good, current Heap and current Inputs. It handles a pending optional binder with the installed actual constructor preservation theorem. Generic constructor Work is excluded only because its actual step yields. Node demand, edge demand and checked edge bodies retain their literal constructor heap. No arbitrary generic Code arity law or future continuation premise is added.
+
+This helper does not derive physical plans from bare execution, prove termination, or discharge the separate original query-prefix invariant. Root's query-prefix theorem is the intended consumer. No older theorem or runtime definition was changed by this module. This reviewer ran no compiler, build, Git, network or board operation. The initial report remains as historical uncompiled status; the actual final receipts above supersede that status.
+
+Nine whole source copies and thirteen literal cuts retain the inspected input identities and 285 cut lines. Every copied file is pinned by a path relative to this review root. No nested seal or prior review directory is copied. All writes stop after this root seal.

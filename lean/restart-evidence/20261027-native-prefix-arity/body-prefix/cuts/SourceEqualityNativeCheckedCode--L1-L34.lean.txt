@@ -1,0 +1,34 @@
+import MicroCFTA.SourceEqualityConjoinAllocation
+import MicroCFTA.SourceEqualityMkEdgeArity
+import MicroCFTA.SourceRecursiveIntersectionCompile
+import MicroCFTA.SourceRecursiveIntersectionKernelReadback
+
+/-!
+# Existing source code after the checked native edge decision
+
+The accepted branch retains the ordered original child requests. The rejected
+branch constructs the source sentinel without child requests. Equality-field
+allocation precedes this code and remains part of the enclosing execution.
+Only accepted branches have the older compiler correspondence proved here.
+-/
+namespace MicroCFTA.SourceEqualityNativeCheckedCode
+open Cache InternedConstructorTemplates InternedProbeProvenance InternedEdgeResidency
+open InternedBinderProtocol IntersectionFlatMemoKeyDomain SourceRecursiveIntersectionThunks
+open SourceRecursiveIntersectionCode SourceRecursiveIntersectionKernel
+open SourceEqualityConjoinAllocation SourceObservations SourceGuards
+variable {Formula : Type}
+local notation "Guard" => SourceSymbolicIndex.Constraint Formula
+local notation "Allocated" => SourceEqualityConjoinAllocation.Constraint Formula
+
+/-- Delay original child requests until the actual combined constraint passes its constructor check. -/
+def children (domain : Interned DomainKey) (left right : EdgeValue Symbol Guard) (combined : Allocated) :
+    Code Symbol Guard (EdgeValue Symbol Guard) :=
+  (SourceRecursiveIntersectionCode.walk (fun pair => requestNode domain pair.1 pair.2)
+    (left.children.zip right.children)).bind fun values =>
+      .work (makeEdge left.entry.key.symbol (readback combined) values) .pure
+
+/-- The rejected or mismatched branch emits the exact source empty-edge constructor request. -/
+def sentinel (left : EdgeValue Symbol Guard) : Code Symbol Guard (EdgeValue Symbol Guard) :=
+  .work (makeEdge left.entry.key.symbol SourceEqualityConstraintConstructors.top [.empty]) .pure
+
+/-- Equal arity and literal combined readback identify the accepted code with the older compiler. -/

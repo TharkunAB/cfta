@@ -1,0 +1,35 @@
+
+/-- Every actual body prefix retains the entire arity heap at its exact remaining control. -/
+theorem body_prefix_heap
+    (limit : Nat)
+    (calls : ∀ (request : NodeRequest Symbol Guard) (count : Nat), count ≤ limit →
+      ∀ (start final : Checked width) (remaining : Control (Value Symbol Guard)), Good start →
+        Heap start.native.machine.heap →
+        Trace count (.code (requestNode request.domain request.left request.right)) start remaining final →
+        Heap final.native.machine.heap)
+    (request : EdgeRequest Symbol Guard) (fuel : Nat) (before after : Checked width)
+    (remaining : Control (EdgeValue Symbol Guard)) (bounded : fuel ≤ limit)
+    (valid : Good before) (inputs : EdgeReady before.native.machine request)
+    (heap : Heap before.native.machine.heap)
+    (actual : Trace fuel (.edgeBody request .pure) before remaining after) :
+    Heap after.native.machine.heap := by
+  cases actual with
+  | refl => exact heap
+  | cons control state next started final result rest _operands one tail =>
+      obtain ⟨code, same⟩ := SourceEqualityNativeDemandBodyYield.pure_yielded_code
+        request before started next one
+      subst next
+      have firstTrace : Trace 1 (.edgeBody request .pure) before (.code code) started :=
+        .cons _ _ _ _ _ _ 0 (by trivial) one (.refl _ _)
+      have startedEffects := SourceCurrentAllocatedNativeSemanticTraceReadback.effects firstTrace valid
+        (show Fields (.edgeBody request .pure) before from ⟨inputs, fun _ => trivial⟩)
+      obtain ⟨nativeSame, branch⟩ :=
+        SourcePruningEnumerationNativeCheckedOriginArity.body_choice_checked request before started code one
+      have startedHeap : Heap started.native.machine.heap := by rw [nativeSame]; exact heap
+      rcases branch with sentinelSame | ⟨first, second, combined, left, right, accepted, codeSame⟩
+      · have workTrace : Trace rest
+            (.code (.work (makeEdge request.left.entry.key.symbol top [.empty]) .pure)) started remaining after := by
+          simpa only [sentinelSame, SourceEqualityNativeCheckedCode.sentinel] using tail
+        exact edge_work_prefix_heap request.left.entry.key.symbol top [.empty] rest started after remaining
+          startedHeap (top_fits _) workTrace
+      · let call := fun pair : Value Symbol Guard × Value Symbol Guard =>

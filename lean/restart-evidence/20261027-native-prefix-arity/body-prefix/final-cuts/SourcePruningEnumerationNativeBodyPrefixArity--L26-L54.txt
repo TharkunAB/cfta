@@ -1,0 +1,29 @@
+private theorem top_fits (arity : Nat) : Fits (top : Guard) arity := by
+  intro tries residual projected start
+  have topProjection : SourcePruningEnumerationConstraint.project (top : Guard) = some ([], none) := rfl
+  rw [topProjection] at projected
+  have triesSame : [] = tries := congrArg Prod.fst (Option.some.inj projected)
+  subst tries
+  rfl
+
+variable [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)]
+
+private theorem pure_prefix_heap (value : A) (fuel : Nat) (before after : Checked width)
+    (remaining : Control A) (actual : Trace fuel (.code (.pure value)) before remaining after)
+    (heap : Heap before.native.machine.heap) : Heap after.native.machine.heap := by
+  cases actual with
+  | refl => exact heap
+  | cons control state next middle final result count inputs one tail => cases one
+
+private theorem edge_work_prefix_heap (symbol : Symbol) (constraint : Guard)
+    (children : List (Value Symbol Guard)) (fuel : Nat) (before after : Checked width)
+    (remaining : Control (EdgeValue Symbol Guard))
+    (heap : Heap before.native.machine.heap) (checked : Fits constraint children.length)
+    (actual : Trace fuel (.code (.work (makeEdge symbol constraint children) .pure)) before remaining after) :
+    Heap after.native.machine.heap := by
+  cases actual with
+  | refl => exact heap
+  | cons control state next middle final result count inputs one tail =>
+      cases one
+      exact pure_prefix_heap _ count _ after remaining tail
+        (edge_heap symbol constraint children before.native.machine.heap heap checked)
