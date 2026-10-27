@@ -144,7 +144,7 @@ sizedStates automaton
     | otherwise = referenceStates automaton
   where
     rows = Map.map (map void) $ sortedRows automaton
-    indexOf = Ordinary.tableIndexes rows
+    indexOf = Ordinary.tableIndexes (const Nothing) rows
     everyClassRank (Cardinality total) = map ClassRank [0 .. total - 1]
 
 {- | Whether no two transitions of the rows have the same symbol and the same

@@ -71,8 +71,12 @@ tableIndex leafOf initial rows = fst (stateTable leafOf rows) initial
 Apply the function to the rows once: the states then share one table.
 -}
 tableIndexes ::
-    (Ord state) => Map.Map state [FTA.Transition state symbol ()] -> state -> SizeIndex (Term symbol)
-tableIndexes rows = fst (stateTable rows)
+    (Ord state) =>
+    (symbol -> Maybe (LeafSource symbol)) ->
+    Map.Map state [FTA.Transition state symbol ()] ->
+    state ->
+    SizeIndex (Term symbol)
+tableIndexes leafOf rows = fst (stateTable leafOf rows)
 
 {- | Find the size class and the position in it of a term that the initial
 state accepts, as 'tableIndex' selects the term.
