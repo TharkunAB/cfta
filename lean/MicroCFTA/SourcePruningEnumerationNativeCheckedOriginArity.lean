@@ -9,7 +9,6 @@ import MicroCFTA.SourceCurrentAllocatedNativePhysicalTraceCompletion
 
 The ready prefix derives its own guard check.
 The accepted worker retains its actual ordered child walk and returned state.
-The sentinel retains its complete original constructor receipt.
 These results do not infer origins for every edge in a current Packet.
 -/
 namespace MicroCFTA.SourcePruningEnumerationNativeCheckedOriginArity
@@ -78,26 +77,6 @@ theorem ready_fits
   subst trie
   exact rootBounds paths pathsMember (index :: suffix)
     ((pathReadback paths pathsMember (index :: suffix)).mp path)
-
-/-- The actual sentinel retains every original receipt field and derives its empty own projection. -/
-theorem sentinel_provenance (symbol : Symbol)
-    (heap : InternedConstructorTemplates.State Symbol Guard) (ready : SourceEqualityRequiredCache.Ready heap) :
-    let built := (open scoped Classical in InternedConstructorTemplates.run (makeEdge symbol top [.empty]) heap)
-    SourceEqualityRequiredCache.Keeps heap built.2 ∧ EdgeResident built.2 built.1 ∧
-      built.1.entry.key.symbol = symbol ∧ built.1.entry.key.constraint = top ∧ built.1.children = [.empty] ∧
-      (∀ holds ambient term, ¬ InternedGuardedLanguage.edgeMeaning holds ambient built.1 term) ∧
-      SourcePruningEnumerationArityOrigins.Fits built.1.entry.key.constraint built.1.children.length := by
-  classical
-  obtain ⟨keeps, resident, symbolSame, guardSame, childrenSame, rejects⟩ :=
-    SourceEqualityNativeDemandMismatchProvenance.sentinel_provenance symbol heap ready
-  refine ⟨keeps, resident, symbolSame, guardSame, childrenSame, rejects, ?_⟩
-  intro tries residual projected start
-  rw [guardSame] at projected
-  have topProjection : SourcePruningEnumerationConstraint.project (top : Guard) = some ([], none) := rfl
-  rw [topProjection] at projected
-  have triesSame : [] = tries := congrArg Prod.fst (Option.some.inj projected)
-  subst tries
-  rfl
 
 /-- Actual child receipts retain the full original accepted result and derive its fresh own arity. -/
 theorem accepted_body_produced [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)]
