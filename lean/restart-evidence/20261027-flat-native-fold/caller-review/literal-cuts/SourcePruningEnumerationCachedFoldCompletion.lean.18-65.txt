@@ -1,0 +1,48 @@
+/-- Derive common finite bounds and a valid cache for the admitted ordered fold. -/
+theorem complete
+    [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Constraint)] [DecidableEq Node]
+    (formulas : SourceGuards.Formulas FullSyntax.Formula)
+    (solver : SourceGuards.Entailment FullSyntax.Formula)
+    (inventory : Inventory) (beforeCaller : Caller width)
+    (before : EnumerationExpandableIndex.Cached Symbol Constraint) (sources : List Nat)
+    (checkEmpty : Bool) (target : Nat) (memos : Memos) (roots : Nat → Nat)
+    (initial : Context formulas solver inventory beforeCaller memos)
+    (storage : StorageValid before.core)
+    (realized : PendingRealized beforeCaller.checked.native.machine.heap before.core)
+    (paths : Roots before.core.representatives roots)
+    (counts : EnumerationCanonicalWaiting.Correct roots before.core.values before.waiting)
+    (flags : ∀ (slot : Nat), SourcePruningEnumerationNativeIndex.candidate
+      beforeCaller.checked.native.machine.heap
+      ((before.core.values[slot]?).getD .eliminated) = some (before.expandable slot))
+    (targetPending : PendingAt before.core target)
+    (selected : ∀ source ∈ sources, PendingOrEliminated before.core source)
+    (ranges : SourcePruningEnumerationFold.Ranges checkEmpty sources
+      beforeCaller before.core target memos.query) :
+    ∃ (fuel p h : Nat)
+      (rows : List (Unit × EnumerationExpandableIndex.Cached Symbol Constraint))
+      (afterCaller : Caller width) (savedQueries : Queries) (final : Memos) (next : Inventory)
+      (after : EnumerationExpandableIndex.Cached Symbol Constraint),
+      (∀ extra P H, p ≤ P → h ≤ H →
+        SourcePruningEnumerationCachedFold.run checkEmpty (fuel + extra) P H sources
+          beforeCaller before target memos.query =
+          ((.ok (some (rows.map (fun row => .ok (row.1, row.2.core)))),
+            afterCaller, savedQueries, after.core), some after)) ∧
+      Post formulas solver next beforeCaller afterCaller final ∧ final.query = savedQueries ∧
+      after.core.counter = before.core.counter ∧
+      after.core.representatives = before.core.representatives ∧ Roots after.core.representatives roots ∧
+      StorageValid after.core ∧ PendingRealized afterCaller.checked.native.machine.heap after.core ∧
+      EnumerationCanonicalWaiting.Correct roots after.core.values after.waiting ∧
+      after.waiting = before.waiting ∧
+      (∀ (slot : Nat), SourcePruningEnumerationNativeIndex.candidate
+        afterCaller.checked.native.machine.heap
+        ((after.core.values[slot]?).getD .eliminated) = some (after.expandable slot)) ∧
+      (rows = [] ∨ rows = [((), after)]) ∧ PendingAt after.core target ∧
+      (∀ (slot : Nat), before.core.values[slot]? = some .eliminated →
+        after.core.values[slot]? = some .eliminated) ∧
+      (rows = [((), after)] → ∀ source ∈ sources, source ≠ target →
+        after.core.values[source]? = some .eliminated) ∧
+      (∀ (slot : Nat), slot ∉ sources → slot ≠ target →
+        after.core.values[slot]? = before.core.values[slot]?) ∧
+      (∀ (slot : Nat) (fragment : Fragments.Fragment Symbol),
+        after.core.values[slot]? = some (.enumerated fragment) →
+        before.core.values[slot]? = some (.enumerated fragment)) := by

@@ -1,0 +1,57 @@
+/-- The same emptiness phase retains its complete caller and query effects. -/
+theorem afterQuery_related
+    [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Constraint)] [DecidableEq Node]
+    (checkEmpty : Bool) (p h source target : Nat)
+    (sourceScs targetScs : List EnumerationState.Suspended)
+    (query : Node) (queried : Checked width) (beforeCaller : Caller width) (queries : Queries) :
+    PreparedRelated (afterQuery (EnumGuard := EnumGuard) checkEmpty p h source target
+      sourceScs targetScs query queried beforeCaller queries)
+      (SourcePruningEnumerationDispatch.afterQuery checkEmpty p h source target
+        sourceScs targetScs query queried beforeCaller queries) := by
+  unfold afterQuery SourcePruningEnumerationDispatch.afterQuery
+  generalize (if checkEmpty then
+    SourcePruningEnumerationEnabledEmpty.check p h query queried beforeCaller.fourth queries
+    else (.done false queried beforeCaller.fourth, queries)) = phase
+  obtain ⟨outcome, savedQueries⟩ := phase
+  cases outcome with
+  | done answer checked saved =>
+      dsimp only
+      refine ⟨rfl, ?_⟩
+      cases encoded : encodeNode (if answer then .empty else query) with
+      | none => trivial
+      | some handle =>
+          intro flat earlier related
+          exact finish_related related source target handle sourceScs targetScs _
+  | failed fault checked saved => exact ⟨rfl, rfl⟩
+
+/-- Renaming a fault retains the same outer effects and every action observation. -/
+theorem mapError_related {Fault Next : Type 1}
+    (flat : Except Fault (Option (EnumerationFlatState.Action Symbol EnumGuard Unit)) × Caller width × Queries)
+    (earlier : Except Fault (Option (EnumerationState.EnumerateM Symbol EnumGuard Unit)) × Caller width × Queries)
+    (related : PreparedRelated flat earlier) (rename : Fault → Next) :
+    PreparedRelated (flat.1.mapError rename, flat.2)
+      (earlier.1.mapError rename, earlier.2) := by
+  obtain ⟨effects, results⟩ := related
+  refine ⟨effects, ?_⟩
+  cases first : flat.1 with
+  | error firstFault =>
+      cases second : earlier.1 with
+      | error secondFault =>
+          have same : firstFault = secondFault := by simpa only [first, second] using results
+          simpa only [first, second, Except.mapError] using congrArg rename same
+      | ok value => simp only [first, second] at results
+  | ok firstValue =>
+      cases second : earlier.1 with
+      | error fault => simp only [first, second] at results
+      | ok secondValue =>
+          cases firstValue with
+          | none =>
+              cases secondValue with
+              | none => trivial
+              | some action => simp only [first, second] at results
+          | some firstAction =>
+              cases secondValue with
+              | none => simp only [first, second] at results
+              | some secondAction =>
+                  simp only [Except.mapError]
+                  simpa only [first, second] using results

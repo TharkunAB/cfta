@@ -1,5 +1,33 @@
 # Full formalization coverage
 
+## Native dispatcher and ordered raw loop retain actual native effects
+
+Source proof: `695c03cbd`. Main remains `82258094c`; the full goal stays ACTIVE.
+The strongest global language theorem remains H6. Captured rendering keeps all
+its original completion, admission, discharge and checked-rendering gates.
+
+The flat dispatcher now preserves every outer fault, None and captured action
+at every supplied execution bound. The complete Caller and saved Queries are
+literal equals. Raw slot equality selects the same native request. Native
+execute and the conditional enabled check run once. No semantic Graph is added.
+
+The ordered raw assimilation loop preserves every raw result and actual outer
+prefix core. Each singleton feeds its returned core, reached Caller and saved
+Queries to the next source. Rejection and errors keep their reached native
+effects. Duplicate and eliminated sources retain the original branch order.
+
+Both modules and Audit pass strict Lean checks. Aggregate Audit passes 3998 jobs
+and 78316 theorem dependency checks. Installed readback covers seven new public
+theorems, unchanged H6/captured rendering and eleven complete definitions.
+No Haskell source changes. The preceding 342-example Nix result is not rerun.
+
+Next retain optional native caches through the same actual adapter and fold.
+Preserve the uncached-tail fallback when a raw singleton has no recovered cache.
+Derive full global Memos/Post and completion from the same admitted history.
+Whole recursive output soundness, discharge/rendering, coverage, completeness
+and physical Haskell correspondence remain open.
+Details: `lean/notes-current-flat-native-fold.md`.
+
 ## Actual flat terminal prefixes and paired assimilation now retain native indexes
 
 Main `82258094c` is integrated at `f61c306e7`. EGraph extraction costs now

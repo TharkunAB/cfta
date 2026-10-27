@@ -1,0 +1,26 @@
+/-- Native growth retains every valid flag of an unchanged enumeration cache. -/
+theorem flags
+    (heap nextHeap : InternedConstructorTemplates.State Symbol NativeGuard)
+    (kept : SourceEqualityRequiredCache.Keeps heap nextHeap)
+    (before : EnumerationExpandableIndex.Cached Symbol EnumGuard)
+    (checked : ∀ slot, SourcePruningEnumerationNativeIndex.candidate heap
+      ((before.core.values[slot]?).getD .eliminated) = some (before.expandable slot)) :
+    ∀ slot, SourcePruningEnumerationNativeIndex.candidate nextHeap
+      ((before.core.values[slot]?).getD .eliminated) = some (before.expandable slot) := by
+  intro slot
+  specialize checked slot
+  generalize valueSame : ((before.core.values[slot]?).getD .eliminated) = value at checked ⊢
+  clear valueSame
+  cases value with
+  | enumerated _ | eliminated => exact checked
+  | unenumerated node scs =>
+      cases node with
+      | none => exact checked
+      | some handle =>
+          cases decoded : lookupNode heap handle with
+          | none =>
+              simp only [SourcePruningEnumerationNativeIndex.candidate, decoded, Option.map_none] at checked
+              cases checked
+          | some value =>
+              simpa only [SourcePruningEnumerationNativeIndex.candidate, decoded,
+                lookupNode_keeps heap nextHeap kept handle value decoded, Option.map_some] using checked

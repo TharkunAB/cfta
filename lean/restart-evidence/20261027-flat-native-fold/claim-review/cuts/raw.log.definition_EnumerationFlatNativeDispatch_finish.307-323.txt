@@ -1,0 +1,17 @@
+def MicroCFTA.EnumerationFlatNativeDispatch.finish : {EnumGuard : Type} →
+  Nat →
+    Nat →
+      Nat →
+        List MicroCFTA.EnumerationState.Suspended →
+          List MicroCFTA.EnumerationState.Suspended →
+            MicroCFTA.InternedConstructorTemplates.Value MicroCFTA.SourcePruningTemplates.Symbol
+                (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) →
+              MicroCFTA.EnumerationFlatState.Action MicroCFTA.SourcePruningTemplates.Symbol EnumGuard Unit :=
+fun {EnumGuard} source target handle sourceScs targetScs result =>
+  match result with
+  | MicroCFTA.InternedConstructorTemplates.Value.empty => fun x => []
+  | x => fun state =>
+    [Except.ok
+        ((),
+          MicroCFTA.EnumerationFlatNativeDispatch.assimilated state target source
+            (MicroCFTA.EnumerationState.UVarValue.unenumerated (some handle) (sourceScs ++ targetScs)))]

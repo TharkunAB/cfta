@@ -1,0 +1,21 @@
+def MicroCFTA.EnumerationFlatNativeDispatch.PreparedRelated : {EnumGuard : Type} →
+  {width : Nat} →
+    {Fault : Type 1} →
+      Except Fault
+            (Option (MicroCFTA.EnumerationFlatState.Action MicroCFTA.SourcePruningTemplates.Symbol EnumGuard Unit)) ×
+          MicroCFTA.SourceCurrentAllocatedPartialState.State width × MicroCFTA.SourceEndpointMemo.Memos →
+        Except Fault
+              (Option (MicroCFTA.EnumerationState.EnumerateM MicroCFTA.SourcePruningTemplates.Symbol EnumGuard Unit)) ×
+            MicroCFTA.SourceCurrentAllocatedPartialState.State width × MicroCFTA.SourceEndpointMemo.Memos →
+          Prop :=
+fun {EnumGuard} {width} {Fault} flat earlier =>
+  flat.snd = earlier.snd ∧
+    match flat.fst, earlier.fst with
+    | Except.error first, Except.error second => first = second
+    | Except.ok none, Except.ok none => True
+    | Except.ok (some first), Except.ok (some second) =>
+      ∀ (left : MicroCFTA.EnumerationFlatState.State MicroCFTA.SourcePruningTemplates.Symbol EnumGuard)
+        (right : MicroCFTA.EnumerationState.State MicroCFTA.SourcePruningTemplates.Symbol EnumGuard),
+        MicroCFTA.EnumerationFlatState.Related left right →
+          MicroCFTA.EnumerationResultRelation.Results MicroCFTA.EnumerationFlatState.Related (first left) (second right)
+    | x, x_1 => False

@@ -1,0 +1,12 @@
+/-- Erasing cache data preserves every bounded original fold observation. -/
+theorem erase
+    [DecidableEq Symbol] [DecidableEq (InternedConstructorTemplates.EdgeKey Symbol Constraint)] [DecidableEq Node]
+    (checkEmpty : Bool) (nativeFuel p h : Nat) (sources : List Nat)
+    (beforeCaller : Caller width) (before : EnumerationExpandableIndex.Cached Symbol Constraint)
+    (target : Nat) (queries : Queries) :
+    (run checkEmpty nativeFuel p h sources beforeCaller before target queries).1 =
+      SourcePruningEnumerationFold.run checkEmpty nativeFuel p h sources
+        beforeCaller before.core target queries := by
+  induction sources generalizing beforeCaller before queries with
+  | nil => rfl
+  | cons source rest ih =>

@@ -1,0 +1,12 @@
+    have headFacts :
+        SourcePruningEnumerationCachedAdapter.adapt headCaller.checked.native.machine.heap before source target
+          (headRows.map (fun row => .ok (row.1, row.2.core))) = some headAfter ∧
+        (headRows = [] ∨ headRows = [((), headAfter)]) ∧ PendingAt headAfter.core target ∧
+        (∀ remaining ∈ rest, PendingOrEliminated headAfter.core remaining) ∧
+        (∀ (slot : Nat), before.core.values[slot]? = some .eliminated →
+          headAfter.core.values[slot]? = some .eliminated) ∧
+        (source ≠ target → headRows = [((), headAfter)] →
+          headAfter.core.values[source]? = some .eliminated) ∧
+        (headRows = [] → headAfter = before) ∧
+        (∀ (slot : Nat), slot ≠ source → slot ≠ target →
+          headAfter.core.values[slot]? = before.core.values[slot]?) := by

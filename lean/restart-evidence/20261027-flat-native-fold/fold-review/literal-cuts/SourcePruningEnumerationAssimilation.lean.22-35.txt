@@ -1,0 +1,14 @@
+/-- Reject Empty before target replacement, source elimination and ancestry transfer. -/
+def finish (source target resultHandle : Nat)
+    (sourceScs targetScs : List EnumerationState.Suspended)
+    (result : InternedConstructorTemplates.Value Symbol Constraint) :
+    EnumerateM Symbol EnumGuard Unit :=
+  match result with
+  | .empty => reject
+  | _ => do
+      setValue target (.unenumerated (some resultHandle) (sourceScs ++ targetScs))
+      setValue source .eliminated
+      modify fun state => {state with recursionAncestry := (fun other =>
+        if other = target then
+          (state.recursionAncestry source ++ state.recursionAncestry target).eraseDups
+        else state.recursionAncestry other)}

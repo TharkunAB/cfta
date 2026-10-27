@@ -1,0 +1,75 @@
+/-- Update both raw slots and the target ancestry in the source order. -/
+def assimilated (state : EnumerationFlatState.State Symbol EnumGuard) (target source : Nat)
+    (merged : EnumerationState.UVarValue Symbol) : EnumerationFlatState.State Symbol EnumGuard :=
+  {state with
+    values := (state.values.set target merged).set source .eliminated
+    recursionAncestry := fun other => if other = target then
+      (state.recursionAncestry source ++ state.recursionAncestry target).eraseDups
+      else state.recursionAncestry other}
+
+/-- The raw update preserves the complete relation without a new forest read. -/
+theorem assimilated_related (related : EnumerationFlatState.Related flat earlier)
+    (target source : Nat) (merged : EnumerationState.UVarValue Symbol) :
+    EnumerationFlatState.Related (assimilated flat target source merged)
+      (EnumerationCorrectness.assimilated earlier target source merged) := by
+  refine ⟨related.valid, related.representatives, related.counter, ?_, related.obligations,
+    ?_, related.expansionAncestry⟩
+  · change (flat.values.set target merged).set source .eliminated = _
+    rw [related.values]
+    rfl
+  · change (fun other => if other = target then _ else flat.recursionAncestry other) = _
+    rw [related.recursionAncestry]
+    rfl
+
+/-- Reject the empty optional handle before either raw write. -/
+def finishOptional (source target : Nat) (node : Option Nat)
+    (sourceScs targetScs : List EnumerationState.Suspended) :
+    EnumerationFlatState.Action Symbol EnumGuard Unit :=
+  fun state => if node = some 0 then [] else
+    [.ok ((), assimilated state target source (.unenumerated node (sourceScs ++ targetScs)))]
+
+/-- Reject the empty native value before the two raw writes and ancestry transfer. -/
+def finish (source target handle : Nat)
+    (sourceScs targetScs : List EnumerationState.Suspended) (result : Node) :
+    EnumerationFlatState.Action Symbol EnumGuard Unit :=
+  match result with
+  | .empty => fun _ => []
+  | _ => fun state =>
+      [.ok ((), assimilated state target source (.unenumerated (some handle) (sourceScs ++ targetScs)))]
+
+/-- Optional finishing keeps every ordered result and its complete core. -/
+theorem finishOptional_related (related : EnumerationFlatState.Related flat earlier)
+    (source target : Nat) (node : Option Nat)
+    (sourceScs targetScs : List EnumerationState.Suspended) :
+    EnumerationResultRelation.Results EnumerationFlatState.Related
+      (finishOptional source target node sourceScs targetScs flat)
+      (SourcePruningEnumerationDispatch.finishOptional source target node sourceScs targetScs earlier) := by
+  by_cases empty : node = some 0
+  · simp only [finishOptional, SourcePruningEnumerationDispatch.finishOptional, empty, ↓reduceIte]
+    exact .nil
+  · simp only [finishOptional, SourcePruningEnumerationDispatch.finishOptional, empty, ↓reduceIte]
+    exact .cons (.ok () (assimilated_related related target source _)) .nil
+
+/-- Native finishing consumes the same value without executing another query. -/
+theorem finish_related (related : EnumerationFlatState.Related flat earlier)
+    (source target handle : Nat) (sourceScs targetScs : List EnumerationState.Suspended)
+    (result : Node) :
+    EnumerationResultRelation.Results EnumerationFlatState.Related
+      (finish source target handle sourceScs targetScs result flat)
+      (SourcePruningEnumerationAssimilation.finish source target handle sourceScs targetScs result earlier) := by
+  cases result <;> first
+    | exact .nil
+    | exact .cons (.ok () (assimilated_related related target source _)) .nil
+
+/-- Keep exact outer effects and relate every captured action at related input cores. -/
+def PreparedRelated {Fault : Type 1}
+    (flat : Except Fault (Option (EnumerationFlatState.Action Symbol EnumGuard Unit)) × Caller width × Queries)
+    (earlier : Except Fault (Option (EnumerationState.EnumerateM Symbol EnumGuard Unit)) × Caller width × Queries) : Prop :=
+  flat.2 = earlier.2 ∧
+    match flat.1, earlier.1 with
+    | .error first, .error second => first = second
+    | .ok none, .ok none => True
+    | .ok (some first), .ok (some second) =>
+        ∀ left right, EnumerationFlatState.Related left right →
+          EnumerationResultRelation.Results EnumerationFlatState.Related (first left) (second right)
+    | _, _ => False

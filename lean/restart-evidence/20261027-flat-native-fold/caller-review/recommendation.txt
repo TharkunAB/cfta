@@ -1,0 +1,119 @@
+[2026-10-27 04:44 CET] Native caller and memo threading for a flat fold.
+
+Recommendation: keep the existing checked dispatcher as the single native
+intersection/emptiness producer. Add an enumeration-representation bridge around
+that observation, then an ordered flat fold. No semantic Graph is needed.
+The exact operational equivalence and admitted completion are separate theorems.
+
+Smallest useful first bridge
+
+Dispatch.dispatch:52–90 reads only before.values from the enumeration input.
+The native request, afterQuery phase, returned action, reached Caller and saved
+Queries are independent of that input's forest, counter and ancestry. A small
+values-congruence lemma can therefore equate the ENTIRE dispatch observation at
+the SAME checkEmpty/nativeFuel/p/h/caller/source/target/queries for any two old
+cores with equal values. A flat worker can use an internal earlier-core view
+(with erased flat forest and literal non-UF fields) to run this dispatcher ONCE.
+This view construction and congruence are proposed helpers, not existing APIs.
+Related.core.values provides the equality to any related original earlier core.
+
+Execute the returned action ONCE on that view, retain its exact raw shape, and
+adapt the actual row back into a flat cache. CachedAdapter.run/adapt:17–56 is the
+existing pattern: it does not reissue the native query. Its valid singleton
+case uses the actual returned core and reached heap candidate, sets source flag
+false and target flag to the observed candidate, and retains waiting. Noop rows
+and raw[] retain the captured cache. Unknown/malformed rows keep partiality.
+For admitted live rows, FlatNativeAssimilation.finish_related:45–87 and
+finish_complete:172–213 provide the exact two-write correspondence/completion.
+Same-source and already-eliminated-source cases remain explicit dispatcher
+noops, not a second native finish. Do not invoke a new intersection producer
+while adapting an observation already obtained from Dispatch.dispatch.
+
+Native effects that must be retained
+
+* Noop, missing raw slot, invalidIntersection action and optional-node carry
+  precede native intersection (Dispatch:60–78). Noop/optional carry keep Caller
+  and Queries. An absent Option node is distinct from failed handle decoding.
+* With both stored handles, execute nativeFuel requestNode runs once at the
+  ORIGINAL caller.checked. A native fault returns the ACTUAL other.state through
+  PartialState.advance, retaining fourth/merge and original Queries (79–90).
+* Disabled emptiness returns query unchanged, advances checked to queried,
+  retains fourth and merge, and keeps the ENTIRE full Memos (Dispatch:157–159).
+* Enabled emptiness first executes SourceEndpointMemo.run. Even a false reach
+  result retains its saved Queries. A true reach executes the fourth-memo worker
+  and may change checked, fourth AND full unfolding history. AfterQuery advances
+  the caller on done and failed outcomes alike (30–49). Runtime advance retains
+  nodeResults and edgeResults exactly (PartialState:51–65,109–114).
+* Do not reconstruct full Memos from saved Queries. Memos has unfolding plus
+  query (EndpointMemoGateTrace:25–33). Only the false-reach branch exports
+  final={memos with query:=guardSaved}; the performed branch exports its actual
+  full final bundle via CallReads (EnabledEmpty:68–77; Dispatch:160–175).
+* Empty is recognized AFTER the native/optional phase and BEFORE enum writes.
+  Raw rejection thus retains native allocations, operation caches, fourth-memo
+  effects and saved query history, while keeping the current prefix enum cache.
+  CachedAssimilation.finish:10–27 and CachedDispatch.complete:70–119 retain this
+  exact split. It is not a rollback of Caller or Memos.
+
+Existing loop and completion packet
+
+Fold.run:16–41 traverses the recorded list literally, including duplicates. It
+feeds reachedCaller, returned singleton core and savedQueries into the next
+source. Native fault, encoded-action None, raw[] or another raw shape stops the
+suffix and retains the current prefix enum core with the actual reached native
+endpoint. That prefix can already contain writes from earlier source entries.
+Duplicate entries later encounter the explicit eliminated-source noop.
+
+Fold.run_complete:68–115 is the existing admitted loop theorem. It retains the
+common stable native fuel, p/h thresholds, full raw stream, actual Caller, outer
+core, Queries, full final Memos and computed Inventory; Post and final.query link
+those witnesses. It also records the first rejection prefix and preserves all
+listed slot/forest/counter/obligation/ancestry facts. Its induction passes
+headInventory/headCaller/headAfter/headMemos to the suffix using headPost.context;
+it composes Post.trans and uses native fuel sums plus max p/h (276–324).
+Use these SAME witnesses in a flat completion wrapper.
+
+For the cached version, CachedFoldCompletion.complete:18–65 is the closer reuse:
+it adds exact optional-cache success, final native flags/counts, pending target,
+outside-slot frame and enumerated-origin facts. It already calls the same
+CachedDispatch.complete once per actual head. Prefer deriving a flat result from
+this existing producer plus operational representation correspondence, rather
+than duplicating the Context/native query proof. Its rejection returns headPost
+and headMemos with enum before; its suffix uses the actual returned cache and
+full headMemos (237–297). Retain all these old premises, including current native
+ranges, realization, storage, pending slot shape and canonical counts. Flat
+Correct or a forest allocation bound alone does not supply them.
+
+If the flat API promises all fixed-bound observations, retain CachedFold.run's
+fallback too: singleton raw success with cache=None runs the ORIGINAL uncached
+TAIL once, at reachedCaller/returnedCore/savedQueries, with final cache=None
+(CachedFold:35–43). Cache absence must not become early rejection or a fabricated
+cached endpoint. CachedFold.erase:45–53 states full all-bound erasure. An admitted
+completion theorem may prove this fallback unreachable at its adequate bounds;
+it may not erase the branch from an unconditional runtime claim.
+
+Other exact reusable names and cautions
+
+NativeGrowth.flags transports unchanged-cache flags along actual Keeps; use
+post.effects.keeps before applying flat finish at the REACHED heap. Counts and
+forest are unchanged by that native phase. Pending realization is transported
+by Observation.realized_preserved with Frame.refl, as in CachedDispatch:124–145.
+Flat finish completion needs only current nonzero merged-handle decoding, which
+the existing optional/present packets provide; no future finish observation is
+needed. Fold.ok_unique and Dispatch.ok_unique align successful observations at
+different bounds, including complete Caller and saved Queries; neither identifies
+full final Memos from query equality or justifies dropping fault endpoints.
+
+IntersectionWrite.pending_intersection_write returns a logical target write,
+including an Empty result. It is not a substitute for actual assimilation's
+pre-write Empty guard. CachedDispatch.complete and its queriedOrigin already
+retain the actual query Receipt, encoded replacement, returned heap readback,
+optional phase and full Post; reusing those avoids a second semantic Graph or
+second producer. The new flat finish does not independently execute native work.
+
+All claims above concern the current modeled operations. The source Haskell
+correspondence still has lazy forcing and representation boundaries; the source
+cuts show the same optional carry, before-write Empty guard and recorded order.
+No new Safe-on-rejection, native-capacity, or whole-enumerator result is claimed.
+
+source-pins.json records exact full input copies separately from literal cuts.
+No repository file, build, Git state, network or Root snapshot was changed.

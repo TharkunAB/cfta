@@ -1,0 +1,17 @@
+MicroCFTA.EnumerationFlatNativeFold.run_related {width : Nat} {Guard✝ : Type}
+  {flat : MicroCFTA.EnumerationFlatState.State MicroCFTA.SourcePruningTemplates.Symbol Guard✝}
+  {earlier : MicroCFTA.EnumerationState.State MicroCFTA.SourcePruningTemplates.Symbol Guard✝}
+  [DecidableEq MicroCFTA.SourcePruningTemplates.Symbol]
+  [DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey MicroCFTA.SourcePruningTemplates.Symbol
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  [DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.Value MicroCFTA.SourcePruningTemplates.Symbol
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  (related : MicroCFTA.EnumerationFlatState.Related flat earlier) (checkEmpty : Bool) (nativeFuel p h : Nat)
+  (sources : List Nat) (beforeCaller : MicroCFTA.SourceCurrentAllocatedPartialState.State width) (target : Nat)
+  (queries : MicroCFTA.SourceEndpointMemo.Memos) :
+  MicroCFTA.EnumerationFlatNativeFold.ResultRelated
+    (MicroCFTA.EnumerationFlatNativeFold.run checkEmpty nativeFuel p h sources beforeCaller flat target queries)
+    (MicroCFTA.SourcePruningEnumerationFold.run checkEmpty nativeFuel p h sources beforeCaller earlier target queries)
+'MicroCFTA.EnumerationFlatNativeFold.run_related' depends on axioms: [propext, Classical.choice, Quot.sound]

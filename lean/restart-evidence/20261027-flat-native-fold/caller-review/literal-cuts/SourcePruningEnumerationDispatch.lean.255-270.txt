@@ -1,0 +1,16 @@
+        (checkEmpty = true → ∃ reached answer guardSaved,
+          SourceEndpointMemo.run query memos.query = (reached, guardSaved) ∧
+          SourceEndpointMemoCorrect.Checked queried.native.machine.heap memos.query
+            (SourceCurrentEmptinessMerge.reaches query) (reached, guardSaved) ∧
+          (∀ P H, p ≤ P → h ≤ H →
+            SourcePruningEnumerationEnabledEmpty.check P H query queried beforeCaller.fourth memos.query =
+              (.done answer afterCaller.checked afterCaller.fourth, guardSaved)) ∧
+          savedQueries = guardSaved ∧ replacement = (if answer then .empty else query) ∧
+          (reached = false → answer = false ∧ afterCaller.checked = queried ∧
+            afterCaller.fourth = beforeCaller.fourth ∧ final = {memos with query := guardSaved}) ∧
+          (reached = true →
+            ∃ (reachedPhysical : SourceCurrentConjunctionRowsAllocation.State Symbol FullSyntax.Formula),
+              afterCaller.checked = SourceCurrentAllocatedQueryMemo.advancePhysical queried reachedPhysical ∧
+              ∃ actual : SourceCurrentConjunctionMemo.Call 1000 beforeCaller.fourth query
+                  (physical queried) answer reachedPhysical afterCaller.fourth,
+                SourceCurrentConjunctionGlobalMemos.CallReads actual {memos with query := guardSaved} final)) := by

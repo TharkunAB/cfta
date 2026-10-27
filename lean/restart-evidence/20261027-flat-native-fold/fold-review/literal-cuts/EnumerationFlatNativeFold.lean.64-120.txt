@@ -1,0 +1,57 @@
+/-- All bounds retain complete native effects and every ordered loop observation. -/
+theorem run_related
+    [DecidableEq Symbol] [DecidableEq (InternedConstructorTemplates.EdgeKey Symbol Constraint)] [DecidableEq Node]
+    (related : EnumerationFlatState.Related flat earlier)
+    (checkEmpty : Bool) (nativeFuel p h : Nat) (sources : List Nat)
+    (beforeCaller : Caller width) (target : Nat) (queries : Queries) :
+    ResultRelated (run checkEmpty nativeFuel p h sources beforeCaller flat target queries)
+      (SourcePruningEnumerationFold.run checkEmpty nativeFuel p h sources beforeCaller earlier target queries) := by
+  induction sources generalizing flat earlier beforeCaller queries with
+  | nil => exact ⟨rfl, rfl, related, .cons (.ok () related) .nil⟩
+  | cons source rest ih =>
+    have step := EnumerationFlatNativeDispatch.dispatch_related related checkEmpty nativeFuel p h
+      beforeCaller source target queries
+    generalize leftRun : EnumerationFlatNativeDispatch.dispatch checkEmpty nativeFuel p h
+      beforeCaller flat source target queries = left at step ⊢
+    generalize rightRun : SourcePruningEnumerationDispatch.dispatch checkEmpty nativeFuel p h
+      beforeCaller earlier source target queries = right at step ⊢
+    obtain ⟨leftOutcome, reachedCaller, savedQueries⟩ := left
+    obtain ⟨rightOutcome, oldCaller, oldQueries⟩ := right
+    obtain ⟨effects, actions⟩ := step
+    obtain ⟨rfl, rfl⟩ := Prod.mk.inj effects
+    dsimp only at actions
+    simp only [run, SourcePruningEnumerationFold.run, leftRun, rightRun]
+    cases leftOutcome with
+    | error first =>
+      cases rightOutcome with
+      | error second => exact ⟨rfl, rfl, related, actions⟩
+      | ok returned => cases actions
+    | ok leftReturned =>
+      cases rightOutcome with
+      | error fault => cases leftReturned <;> cases actions
+      | ok rightReturned =>
+        cases leftReturned with
+        | none =>
+          cases rightReturned with
+          | none => exact ⟨rfl, rfl, related, trivial⟩
+          | some action => cases actions
+        | some first =>
+          cases rightReturned with
+          | none => cases actions
+          | some second =>
+            dsimp only
+            have rows := actions flat earlier related
+            change EnumerationResultRelation.Results EnumerationFlatState.Related
+              (ExceptT.run (first flat)) (ExceptT.run (second earlier)) at rows
+            generalize leftRows : ExceptT.run (first flat) = left at rows ⊢
+            generalize rightRows : ExceptT.run (second earlier) = right at rows ⊢
+            cases rows with
+            | nil => exact ⟨rfl, rfl, related, .nil⟩
+            | cons head tail =>
+              cases head with
+              | error fault => exact ⟨rfl, rfl, related, .cons (.error fault) tail⟩
+              | ok value states =>
+                cases value
+                cases tail with
+                | nil => exact ih states reachedCaller savedQueries
+                | cons next remaining => exact ⟨rfl, rfl, related, .cons (.ok () states) (.cons next remaining)⟩

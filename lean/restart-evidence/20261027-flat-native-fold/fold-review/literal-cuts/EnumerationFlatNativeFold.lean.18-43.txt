@@ -1,0 +1,26 @@
+/-- Run the recorded source slots in order and retain each reached state. -/
+noncomputable def run
+    [DecidableEq Symbol] [DecidableEq (InternedConstructorTemplates.EdgeKey Symbol Constraint)] [DecidableEq Node]
+    (checkEmpty : Bool) (nativeFuel p h : Nat) (sources : List Nat)
+    (beforeCaller : Caller width) (before : EnumerationFlatState.State Symbol EnumGuard)
+    (target : Nat) (queries : Queries) :
+    (Except (SourceEqualityNativeDemand.Outcome width Node ⊕
+      SourceCurrentAllocatedConjunctionWorker.Outcome width)
+      (Option (List (Except EnumerationState.Error (Unit × EnumerationFlatState.State Symbol EnumGuard))))) ×
+      Caller width × Queries × EnumerationFlatState.State Symbol EnumGuard :=
+  match sources with
+  | [] => (.ok (some [.ok ((), before)]), beforeCaller, queries, before)
+  | source :: rest =>
+    let observation :
+      (Except (SourceEqualityNativeDemand.Outcome width Node ⊕
+        SourceCurrentAllocatedConjunctionWorker.Outcome width)
+        (Option (EnumerationFlatState.Action Symbol EnumGuard Unit))) × Caller width × Queries :=
+      EnumerationFlatNativeDispatch.dispatch checkEmpty nativeFuel p h beforeCaller before source target queries
+    match observation with
+    | (.error fault, reachedCaller, savedQueries) => (.error fault, reachedCaller, savedQueries, before)
+    | (.ok none, reachedCaller, savedQueries) => (.ok none, reachedCaller, savedQueries, before)
+    | (.ok (some action), reachedCaller, savedQueries) =>
+        let raw : List (Except EnumerationState.Error (Unit × EnumerationFlatState.State Symbol EnumGuard)) := ExceptT.run (action before)
+        match raw with
+        | [.ok ((), after)] => run checkEmpty nativeFuel p h rest reachedCaller after target savedQueries
+        | other => (.ok (some other), reachedCaller, savedQueries, before)

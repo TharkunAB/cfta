@@ -1,0 +1,111 @@
+def MicroCFTA.EnumerationFlatNativeDispatch.dispatch : {EnumGuard : Type} →
+  {width : Nat} →
+    [DecidableEq MicroCFTA.SourcePruningTemplates.Symbol] →
+      [DecidableEq
+            (MicroCFTA.InternedConstructorTemplates.EdgeKey MicroCFTA.SourcePruningTemplates.Symbol
+              (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))] →
+        [DecidableEq
+              (MicroCFTA.InternedConstructorTemplates.Value MicroCFTA.SourcePruningTemplates.Symbol
+                (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))] →
+          Bool →
+            Nat →
+              Nat →
+                Nat →
+                  MicroCFTA.SourceCurrentAllocatedPartialState.State width →
+                    MicroCFTA.EnumerationFlatState.State MicroCFTA.SourcePruningTemplates.Symbol EnumGuard →
+                      Nat →
+                        Nat →
+                          MicroCFTA.SourceEndpointMemo.Memos →
+                            Except
+                                (MicroCFTA.SourceEqualityNativeDemand.Outcome width
+                                    (MicroCFTA.InternedConstructorTemplates.Value
+                                      MicroCFTA.SourcePruningTemplates.Symbol
+                                      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)) ⊕
+                                  MicroCFTA.SourceCurrentAllocatedConjunctionWorker.Outcome width)
+                                (Option
+                                  (MicroCFTA.EnumerationFlatState.Action MicroCFTA.SourcePruningTemplates.Symbol
+                                    EnumGuard Unit)) ×
+                              MicroCFTA.SourceCurrentAllocatedPartialState.State width ×
+                                MicroCFTA.SourceEndpointMemo.Memos :=
+fun {EnumGuard} {width} [DecidableEq MicroCFTA.SourcePruningTemplates.Symbol]
+    [DecidableEq
+        (MicroCFTA.InternedConstructorTemplates.EdgeKey MicroCFTA.SourcePruningTemplates.Symbol
+          (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+    [DecidableEq
+        (MicroCFTA.InternedConstructorTemplates.Value MicroCFTA.SourcePruningTemplates.Symbol
+          (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+    checkEmpty nativeFuel p h beforeCaller before source target queries =>
+  (have noop := fun state => [Except.ok ((), state)];
+    if source = target then pure (Except.ok (some noop), beforeCaller, queries)
+    else
+      match before.values[source]? with
+      | some sourceValue =>
+        match sourceValue with
+        | MicroCFTA.EnumerationState.UVarValue.eliminated => pure (Except.ok (some noop), beforeCaller, queries)
+        | x =>
+          match before.values[target]? with
+          | some targetValue =>
+            match sourceValue with
+            | MicroCFTA.EnumerationState.UVarValue.unenumerated sourceNode sourceScs =>
+              match targetValue with
+              | MicroCFTA.EnumerationState.UVarValue.unenumerated targetNode targetScs =>
+                match sourceNode with
+                | some sourceHandle =>
+                  match targetNode with
+                  | some targetHandle =>
+                    match
+                      MicroCFTA.SourcePruningEnumerationNodes.lookupNode beforeCaller.checked.native.machine.heap
+                        sourceHandle with
+                    | some left =>
+                      match
+                        MicroCFTA.SourcePruningEnumerationNodes.lookupNode beforeCaller.checked.native.machine.heap
+                          targetHandle with
+                      | some right =>
+                        have actual :=
+                          MicroCFTA.SourceEqualityNativeDemand.execute nativeFuel
+                            (MicroCFTA.SourceEqualityNativeDemand.Control.code
+                              (MicroCFTA.SourceRecursiveIntersectionCode.requestNode
+                                MicroCFTA.IntersectionEmptyDomain.emptyDomain left right))
+                            beforeCaller.checked;
+                        match actual with
+                        | MicroCFTA.SourceEqualityNativeDemand.Outcome.done query queried =>
+                          have prepared :=
+                            MicroCFTA.EnumerationFlatNativeDispatch.afterQuery checkEmpty p h source target sourceScs
+                              targetScs query queried beforeCaller queries;
+                          pure (Except.mapError Sum.inr prepared.fst, prepared.snd.fst, prepared.snd.snd)
+                        | other =>
+                          pure
+                            (Except.error (Sum.inl other),
+                              MicroCFTA.SourceCurrentAllocatedPartialState.advance beforeCaller other.state
+                                beforeCaller.fourth beforeCaller.merge,
+                              queries)
+                      | x => pure (Except.ok none, beforeCaller, queries)
+                    | x => pure (Except.ok none, beforeCaller, queries)
+                  | x =>
+                    pure
+                      (Except.ok
+                          (some
+                            (MicroCFTA.EnumerationFlatNativeDispatch.finishOptional source target (some sourceHandle)
+                              sourceScs targetScs)),
+                        beforeCaller, queries)
+                | x =>
+                  pure
+                    (Except.ok
+                        (some
+                          (MicroCFTA.EnumerationFlatNativeDispatch.finishOptional source target targetNode sourceScs
+                            targetScs)),
+                      beforeCaller, queries)
+              | x =>
+                pure
+                  (Except.ok
+                      (some
+                        (MicroCFTA.EnumerationFlatState.failure MicroCFTA.EnumerationState.Error.invalidIntersection)),
+                    beforeCaller, queries)
+            | x =>
+              pure
+                (Except.ok
+                    (some
+                      (MicroCFTA.EnumerationFlatState.failure MicroCFTA.EnumerationState.Error.invalidIntersection)),
+                  beforeCaller, queries)
+          | x => pure (Except.ok none, beforeCaller, queries)
+      | x => pure (Except.ok none, beforeCaller, queries)).run

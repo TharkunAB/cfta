@@ -1,0 +1,67 @@
+[2026-10-27 04:51 CET] CLEAR — final flat native dispatcher.
+
+Reviewed all 276 lines of EnumerationFlatNativeDispatch.lean, SHA256
+3c5e1daad90d90cd498a23ca103bd1bfbc7dd1f738e4b268d58adb096a2545b1.
+The strict-dispatch-7 source snapshot is byte-equal. Its report records exit 0,
+warningAsError and linter.all; the raw log is empty. These are retained Root
+results. No build, Lean, Git or native check was run during this review.
+
+The runtime branch order matches SourcePruningEnumerationDispatch:21–90:
+source=target returns a noop before either slot read; an eliminated source
+returns a noop before the target read. Missing source/target slots return
+.ok none. Invalid source/target constructor combinations return a CAPTURED
+invalidIntersection action, not raw rejection or outer failure. The target
+lookup still precedes the source constructor rejection, as in the old worker.
+Absent Option nodes use finishOptional and do not force native handle decoding.
+Missing native handle decoding remains .ok none.
+
+With two decoded operands, dispatch:147–158 executes the identical native
+request ONCE at the same caller.checked and fixed nativeFuel. yielded, failed,
+constraintError and blocked outcomes retain the exact outcome payload, including
+its reached state, under Sum.inl. PartialState.advance retains the original
+merge/fourth and both caller result tables; Queries remain the input Queries.
+No success, validity or rollback is inferred for those failure endpoints.
+
+On native done, afterQuery:98–117 uses the same queried endpoint and the shared
+EnabledEmpty.check once when enabled; the disabled branch retains the original
+fourth memo and Queries. Both optional-phase done and failed results retain the
+actual checkedAfter, saved fourth memo and phase Queries in the whole returned
+Caller/query pair. encodeNode failure remains .ok none WITH those native effects.
+Successful Empty encoding creates a rejecting action; it does not undo the
+already reached native endpoint or convert the rejection into an outer error.
+The original optional-check implementation first runs the descendant query memo
+and runs its fourth worker only if that guard holds. No native query or optional
+check is repeated by either finish action.
+
+assimilated:22–28 matches the old raw target write, raw source elimination and
+source-before-target ancestry concatenation with eraseDups. finishOptional rejects
+some 0 before writes. Native finish rejects the actual .empty constructor before
+writes. Other native values retain their supplied handle and full sourceScs ++
+targetScs; the theorem does not invent a decoding/availability premise for an
+arbitrary supplied value/handle pair. No representative lookup or Graph is used.
+
+PreparedRelated:85–95 requires literal equality of flat.2 and earlier.2, which is
+the ENTIRE (Caller, Queries) pair. It preserves error payload identity and
+Option None, and relates every captured action on ALL related input cores using
+ordered Results/All₂. This is stronger than relating one current raw observation;
+it does not establish cache or safety invariants for arbitrary action inputs.
+The finish lemmas preserve the full core relation, including forest validity,
+representative/size correspondence and every literal non-forest field.
+mapError_related only applies the same fault renaming and retains the outer
+pair and action relation. afterQuery_related compares the SAME optional phase;
+dispatch_related uses equal stored values and the SAME native execute outcome.
+The theorem quantifies every fixed nativeFuel/p/h and requires only initial core
+Related, with no future successful run, numeric capacity or final-state premise.
+
+Scope remains raw-core operational correspondence. This file has no cached
+expandable/waiting fields, no completion producer and no full-Memos/Post result.
+Literal saved Queries must not later be presented as equality of full global
+Memos. Safe, native capacity, successful cached adaptation and full fold/enumerator
+language remain separate obligations. The explicit old-model/source branch order
+is retained; this does not prove all Haskell lazy-forcing behavior or runtime
+representation details.
+
+source-pins.json marks full-sources/ as complete input copies and literal-cuts/
+as exact source slices, including the full new module and declaration prefix.
+The retained strict source/report/raw are separate evidence copies. All older
+caller-review and Root snapshots remain unchanged.

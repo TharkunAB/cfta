@@ -1,0 +1,29 @@
+    rcases headShape with headRejected | headCompleted
+    · obtain rfl := (headRejectedSame headRejected).symm
+      refine ⟨headFuel, headP, headH, [], headCaller, headQueries, headMemos, headInventory,
+        before, ?_, headPost, headQuerySame, headCounter, headRepresentatives, headPaths,
+        headStorage, headRealized, headCounts, headWaiting, headFlags, .inl rfl,
+        headTarget, headEliminated, ?_, ?_, ?_⟩
+      · intro extra P H largeP largeH
+        simp only [SourcePruningEnumerationCachedFold.run, SourcePruningEnumerationCachedAdapter.run,
+          headRun extra P H largeP largeH, rawCached, headRejected, List.map_nil,
+          SourcePruningEnumerationCachedAdapter.adapt]
+      · intro completed
+        cases completed
+      · intro _slot _outside _different
+        rfl
+      · intro _slot _fragment stored
+        exact stored
+    ·
+      have tailRanges : SourcePruningEnumerationFold.Ranges checkEmpty rest
+          headCaller headAfter.core target headMemos.query := by
+        simpa only [headQuerySame, Nat.add_zero] using
+          ranges.2 headFuel headP headH action headCaller headQueries headAfter.core
+            (headRun 0 headP headH (Nat.le_refl _) (Nat.le_refl _))
+            (by rw [rawCached, headCompleted]; rfl)
+      obtain ⟨tailFuel, tailP, tailH, tailRows, tailCaller, tailQueries, tailMemos, tailInventory,
+        tailAfter, tailRun, tailPost, tailQuerySame, tailCounter, tailRepresentatives, tailPaths,
+        tailStorage, tailRealized, tailCounts, tailWaiting, tailFlags, tailShape, tailTarget,
+        tailEliminated, tailCompleted, tailFrame, tailOrigin⟩ :=
+          ih headInventory headCaller headAfter headMemos headPost.context headStorage headRealized
+            headPaths headCounts headFlags headTarget headSelected tailRanges

@@ -1,0 +1,14 @@
+def MicroCFTA.EnumerationFlatNativeDispatch.finishOptional : {EnumGuard : Type} →
+  Nat →
+    Nat →
+      Option Nat →
+        List MicroCFTA.EnumerationState.Suspended →
+          List MicroCFTA.EnumerationState.Suspended →
+            MicroCFTA.EnumerationFlatState.Action MicroCFTA.SourcePruningTemplates.Symbol EnumGuard Unit :=
+fun {EnumGuard} source target node sourceScs targetScs state =>
+  if node = some 0 then []
+  else
+    [Except.ok
+        ((),
+          MicroCFTA.EnumerationFlatNativeDispatch.assimilated state target source
+            (MicroCFTA.EnumerationState.UVarValue.unenumerated node (sourceScs ++ targetScs)))]

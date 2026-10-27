@@ -1,0 +1,6 @@
+/-- Physical advancement retains both complete caller result tables. -/
+theorem advance_tables (before : State width) (checked : Checked width) (fourth : Fourth) (merge : MergeMemo) :
+    (advance before checked fourth merge).checked = checked ∧
+    (advance before checked fourth merge).fourth = fourth ∧ (advance before checked fourth merge).merge = merge ∧
+    (advance before checked fourth merge).nodeResults = before.nodeResults ∧
+    (advance before checked fourth merge).edgeResults = before.edgeResults := ⟨rfl, rfl, rfl, rfl, rfl⟩

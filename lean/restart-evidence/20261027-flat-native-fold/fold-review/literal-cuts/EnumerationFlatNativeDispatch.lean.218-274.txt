@@ -1,0 +1,57 @@
+/-- Every bounded native dispatcher retains all outer effects and ordered action rows. -/
+theorem dispatch_related
+    [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Constraint)] [DecidableEq Node]
+    (related : EnumerationFlatState.Related flat earlier)
+    (checkEmpty : Bool) (nativeFuel p h : Nat) (beforeCaller : Caller width)
+    (source target : Nat) (queries : Queries) :
+    PreparedRelated (dispatch checkEmpty nativeFuel p h beforeCaller flat source target queries)
+      (SourcePruningEnumerationDispatch.dispatch checkEmpty nativeFuel p h
+        beforeCaller earlier source target queries) := by
+  unfold dispatch SourcePruningEnumerationDispatch.dispatch
+  simp only [related.values]
+  by_cases same : source = target
+  · simp only [same, ↓reduceIte]
+    exact ⟨rfl, fun _ _ states => .cons (.ok () states) .nil⟩
+  · simp only [same, ↓reduceIte]
+    cases sourceRead : earlier.values[source]? with
+    | none => exact ⟨rfl, trivial⟩
+    | some sourceValue =>
+      cases sourceValue with
+      | eliminated => exact ⟨rfl, fun _ _ states => .cons (.ok () states) .nil⟩
+      | enumerated fragment =>
+        cases targetRead : earlier.values[target]? with
+        | none => exact ⟨rfl, trivial⟩
+        | some targetValue =>
+          exact ⟨rfl, fun _ _ _ => .cons (.error EnumerationState.Error.invalidIntersection) .nil⟩
+      | unenumerated sourceNode sourceScs =>
+        cases targetRead : earlier.values[target]? with
+        | none => exact ⟨rfl, trivial⟩
+        | some targetValue =>
+          cases targetValue with
+          | eliminated => exact ⟨rfl, fun _ _ _ => .cons (.error EnumerationState.Error.invalidIntersection) .nil⟩
+          | enumerated fragment => exact ⟨rfl, fun _ _ _ => .cons (.error EnumerationState.Error.invalidIntersection) .nil⟩
+          | unenumerated targetNode targetScs =>
+            cases sourceNode with
+            | none => exact ⟨rfl, fun _ _ states => finishOptional_related states source target _ _ _⟩
+            | some sourceHandle =>
+              cases targetNode with
+              | none => exact ⟨rfl, fun _ _ states => finishOptional_related states source target _ _ _⟩
+              | some targetHandle =>
+                cases leftRead : lookupNode beforeCaller.checked.native.machine.heap sourceHandle with
+                | none => simp only [leftRead]; exact ⟨rfl, trivial⟩
+                | some left =>
+                  simp only [leftRead]
+                  cases rightRead : lookupNode beforeCaller.checked.native.machine.heap targetHandle with
+                  | none => exact ⟨rfl, trivial⟩
+                  | some right =>
+                    dsimp only
+                    cases actual : (SourceEqualityNativeDemand.execute nativeFuel
+                      (.code (SourceRecursiveIntersectionCode.requestNode IntersectionEmptyDomain.emptyDomain left right))
+                      beforeCaller.checked) with
+                    | yielded control state => exact ⟨rfl, rfl⟩
+                    | failed fault state => exact ⟨rfl, rfl⟩
+                    | constraintError message state => exact ⟨rfl, rfl⟩
+                    | blocked reason control state => exact ⟨rfl, rfl⟩
+                    | done query queried =>
+                      exact mapError_related _ _ (afterQuery_related checkEmpty p h source target
+                        sourceScs targetScs query queried beforeCaller queries) Sum.inr

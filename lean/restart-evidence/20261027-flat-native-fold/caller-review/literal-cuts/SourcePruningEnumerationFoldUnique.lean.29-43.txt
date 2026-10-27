@@ -1,0 +1,15 @@
+/-- Successful bounds identify the full result, caller, query memo and outer core. -/
+theorem ok_unique
+    [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Constraint)] [DecidableEq Node]
+    (flag : Bool) {n p h N P H : Nat} {sources : List Nat}
+    {beforeCaller : Caller width} {before : EnumerationState.State Symbol EnumGuard}
+    {target : Nat} {queries : Queries}
+    {result other : Option (List (Except EnumerationState.Error
+      (Unit × EnumerationState.State Symbol EnumGuard)))}
+    {afterCaller later : Caller width} {saved current : Queries}
+    {after laterCore : EnumerationState.State Symbol EnumGuard}
+    (one : run flag n p h sources beforeCaller before target queries =
+      (.ok result, afterCaller, saved, after))
+    (two : run flag N P H sources beforeCaller before target queries =
+      (.ok other, later, current, laterCore)) :
+    result = other ∧ afterCaller = later ∧ saved = current ∧ after = laterCore := by

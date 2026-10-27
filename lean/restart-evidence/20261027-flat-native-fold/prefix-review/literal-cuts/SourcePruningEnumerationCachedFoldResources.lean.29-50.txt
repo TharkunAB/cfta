@@ -1,0 +1,22 @@
+/-- Original current facts construct the full cached fold and bound its actual returned caller. -/
+theorem complete_resources
+    [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Constraint)] [DecidableEq Node]
+    (seed : Seed)
+    (formulas : SourceGuards.Formulas FullSyntax.Formula)
+    (solver : SourceGuards.Entailment FullSyntax.Formula)
+    (inventory : Inventory) (beforeCaller : Caller (bits + 2))
+    (before : EnumerationExpandableIndex.Cached Symbol Constraint) (sources : List Nat)
+    (checkEmpty : Bool) (target : Nat) (memos : Memos) (roots : Nat → Nat)
+    (initial : Context formulas solver inventory beforeCaller memos)
+    (storage : StorageValid before.core)
+    (realized : PendingRealized beforeCaller.checked.native.machine.heap before.core)
+    (paths : Roots before.core.representatives roots)
+    (counts : EnumerationCanonicalWaiting.Correct roots before.core.values before.waiting)
+    (flags : ∀ (slot : Nat), SourcePruningEnumerationNativeIndex.candidate
+      beforeCaller.checked.native.machine.heap
+      ((before.core.values[slot]?).getD .eliminated) = some (before.expandable slot))
+    (targetPending : PendingAt before.core target)
+    (selected : ∀ source ∈ sources, PendingOrEliminated before.core source)
+    (fits : Fits seed.2 beforeCaller.checked)
+    (reserved : Reserved bits seed sources.length)
+    (known : Heap (fun guard => guard ∈ seed.1) beforeCaller.checked.native.machine.heap) :

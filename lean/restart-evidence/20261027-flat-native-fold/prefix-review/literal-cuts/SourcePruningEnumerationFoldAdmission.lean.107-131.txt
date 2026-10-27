@@ -1,0 +1,25 @@
+theorem initial_ranges (seed : Seed)
+    (formulas : SourceGuards.Formulas FullSyntax.Formula) (solver : SourceGuards.Entailment FullSyntax.Formula)
+    (inventory : Inventory) (beforeCaller : Caller (bits + 2))
+    (before : EnumerationState.State Symbol EnumGuard) (sources : List Nat)
+    (checkEmpty : Bool) (target : Nat) (memos : Memos)
+    (initial : Context formulas solver inventory beforeCaller memos)
+    (realized : PendingRealized beforeCaller.checked.native.machine.heap before)
+    (targetPending : PendingAt before target)
+    (selected : ∀ source ∈ sources, PendingOrEliminated before source)
+    (fits : Fits seed.2 beforeCaller.checked)
+    (reserved : Reserved bits seed sources.length)
+    (known : Heap (fun guard => guard ∈ seed.1) beforeCaller.checked.native.machine.heap) :
+    Ranges checkEmpty sources beforeCaller before target memos.query := by
+  induction sources generalizing seed inventory beforeCaller before memos with
+  | nil => trivial
+  | cons source rest ih =>
+      refine ⟨SourcePruningEnumerationDispatch.initial_ranges seed.2 beforeCaller before source target
+        initial.ready realized fits reserved.head, ?_⟩
+      intro n p h action afterCaller saved after observed completed
+      obtain ⟨next, final, post, querySame, afterRealized, afterTarget, afterSelected, afterFits, afterKnown⟩ :=
+        observed_singleton seed formulas solver inventory beforeCaller before source target rest checkEmpty memos
+          initial realized targetPending selected fits reserved.head known observed completed
+      rw [← querySame]
+      exact ih (step seed) next afterCaller after final post.context afterRealized afterTarget afterSelected
+        afterFits reserved.tail afterKnown

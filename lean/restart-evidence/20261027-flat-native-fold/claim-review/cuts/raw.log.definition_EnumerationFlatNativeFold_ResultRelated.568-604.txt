@@ -1,0 +1,37 @@
+def MicroCFTA.EnumerationFlatNativeFold.ResultRelated : {EnumGuard : Type} →
+  {width : Nat} →
+    Except
+          (MicroCFTA.SourceEqualityNativeDemand.Outcome width
+              (MicroCFTA.InternedConstructorTemplates.Value MicroCFTA.SourcePruningTemplates.Symbol
+                (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)) ⊕
+            MicroCFTA.SourceCurrentAllocatedConjunctionWorker.Outcome width)
+          (Option
+            (List
+              (Except MicroCFTA.EnumerationState.Error
+                (Unit × MicroCFTA.EnumerationFlatState.State MicroCFTA.SourcePruningTemplates.Symbol EnumGuard)))) ×
+        MicroCFTA.SourceCurrentAllocatedPartialState.State width ×
+          MicroCFTA.SourceEndpointMemo.Memos ×
+            MicroCFTA.EnumerationFlatState.State MicroCFTA.SourcePruningTemplates.Symbol EnumGuard →
+      Except
+            (MicroCFTA.SourceEqualityNativeDemand.Outcome width
+                (MicroCFTA.InternedConstructorTemplates.Value MicroCFTA.SourcePruningTemplates.Symbol
+                  (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)) ⊕
+              MicroCFTA.SourceCurrentAllocatedConjunctionWorker.Outcome width)
+            (Option
+              (List
+                (Except MicroCFTA.EnumerationState.Error
+                  (Unit × MicroCFTA.EnumerationState.State MicroCFTA.SourcePruningTemplates.Symbol EnumGuard)))) ×
+          MicroCFTA.SourceCurrentAllocatedPartialState.State width ×
+            MicroCFTA.SourceEndpointMemo.Memos ×
+              MicroCFTA.EnumerationState.State MicroCFTA.SourcePruningTemplates.Symbol EnumGuard →
+        Prop :=
+fun {EnumGuard} {width} flat earlier =>
+  flat.snd.fst = earlier.snd.fst ∧
+    flat.snd.snd.fst = earlier.snd.snd.fst ∧
+      MicroCFTA.EnumerationFlatState.Related flat.snd.snd.snd earlier.snd.snd.snd ∧
+        match flat.fst, earlier.fst with
+        | Except.error first, Except.error second => first = second
+        | Except.ok none, Except.ok none => True
+        | Except.ok (some first), Except.ok (some second) =>
+          MicroCFTA.EnumerationResultRelation.Results MicroCFTA.EnumerationFlatState.Related first second
+        | x, x_1 => False

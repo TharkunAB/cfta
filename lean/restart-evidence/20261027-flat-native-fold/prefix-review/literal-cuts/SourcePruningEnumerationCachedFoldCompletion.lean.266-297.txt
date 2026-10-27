@@ -1,0 +1,32 @@
+      have headAt : ∀ extra P H, max headP tailP ≤ P → max headH tailH ≤ H →
+          SourcePruningEnumerationCachedAdapter.run checkEmpty (headFuel + tailFuel + extra) P H
+            beforeCaller before source target memos.query =
+            (.ok (some (headRows.map (fun row => .ok (row.1, row.2.core)))),
+              headCaller, headQueries, some headAfter) := by
+        intro extra P H largeP largeH
+        rw [Nat.add_assoc]
+        simp only [SourcePruningEnumerationCachedAdapter.run,
+          headRun (tailFuel + extra) P H
+            (Nat.le_trans (Nat.le_max_left _ _) largeP) (Nat.le_trans (Nat.le_max_left _ _) largeH),
+          rawCached, headAdapted]
+      have tailAt : ∀ extra P H, max headP tailP ≤ P → max headH tailH ≤ H →
+          SourcePruningEnumerationCachedFold.run checkEmpty (headFuel + tailFuel + extra) P H rest
+            headCaller headAfter target headMemos.query =
+            ((.ok (some (tailRows.map (fun row => .ok (row.1, row.2.core)))),
+              tailCaller, tailQueries, tailAfter.core), some tailAfter) := by
+        intro extra P H largeP largeH
+        simpa only [Nat.add_assoc, Nat.add_left_comm, Nat.add_comm] using
+          tailRun (headFuel + extra) P H
+            (Nat.le_trans (Nat.le_max_right _ _) largeP) (Nat.le_trans (Nat.le_max_right _ _) largeH)
+      refine ⟨headFuel + tailFuel, max headP tailP, max headH tailH, tailRows, tailCaller,
+        tailQueries, tailMemos, tailInventory, tailAfter, ?_, headPost.trans tailPost,
+        tailQuerySame, tailCounter.trans headCounter, tailRepresentatives.trans headRepresentatives,
+        tailPaths, tailStorage, tailRealized, tailCounts, tailWaiting.trans headWaiting,
+        tailFlags, tailShape, tailTarget, ?_, ?_, ?_, ?_⟩
+      · intro extra P H largeP largeH
+        rw [SourcePruningEnumerationCachedFold.run, headAt extra P H largeP largeH]
+        simp only [headCompleted, List.map_cons, List.map_nil]
+        change SourcePruningEnumerationCachedFold.run checkEmpty (headFuel + tailFuel + extra) P H rest
+          headCaller headAfter target headQueries = _
+        rw [←headQuerySame]
+        exact tailAt extra P H largeP largeH

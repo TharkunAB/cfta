@@ -1,0 +1,10 @@
+/-- Completed distinct pending-slot assimilation derives both native index laws. -/
+theorem finish_correct (heap : InternedConstructorTemplates.State Symbol Constraint)
+    (before after : Cached Symbol Constraint) (correct : EnumerationFlatNativeIndex.Correct heap before)
+    (source target : Nat) (sourceNode targetNode merged : Option Nat)
+    (sourceScs targetScs : List EnumerationState.Suspended)
+    (sourceStored : before.core.values[source]? = some (.unenumerated sourceNode sourceScs))
+    (targetStored : before.core.values[target]? = some (.unenumerated targetNode targetScs))
+    (different : target ≠ source)
+    (done : finish heap source target merged sourceScs targetScs before = some (rows, after)) :
+    EnumerationFlatNativeIndex.Correct heap after := by

@@ -1,0 +1,18 @@
+      Fits (advance seed sources.length).2 afterCaller.checked ∧
+      Heap (fun guard => guard ∈ (advance seed sources.length).1) afterCaller.checked.native.machine.heap := by
+  have ranges := SourcePruningEnumerationFold.initial_ranges seed formulas solver inventory beforeCaller
+    before.core sources checkEmpty target memos initial realized targetPending selected fits reserved known
+  obtain ⟨fuel, p, h, rows, afterCaller, savedQueries, final, next, after, stable, post, querySame,
+    counterSame, representativesSame, afterPaths, afterStorage, afterRealized, afterCounts, waitingSame,
+    afterFlags, shape, afterTarget, eliminated, completed, frame, origin⟩ :=
+    complete formulas solver inventory beforeCaller before sources checkEmpty target memos roots initial storage
+      realized paths counts flags targetPending selected ranges
+  have actual := stable 0 p h (Nat.le_refl _) (Nat.le_refl _)
+  simp only [Nat.add_zero] at actual
+  have erased := (SourcePruningEnumerationCachedFold.erase checkEmpty fuel p h sources
+    beforeCaller before target memos.query).symm.trans (congrArg (fun output => output.1) actual)
+  have bounded := SourcePruningEnumerationFold.observed_resources seed formulas solver inventory beforeCaller
+    before.core sources checkEmpty fuel p h target memos initial realized targetPending selected fits reserved known erased
+  exact ⟨fuel, p, h, rows, afterCaller, savedQueries, final, next, after, stable, post, querySame,
+    counterSame, representativesSame, afterPaths, afterStorage, afterRealized, afterCounts, waitingSame,
+    afterFlags, shape, afterTarget, eliminated, completed, frame, origin, bounded.1, bounded.2⟩

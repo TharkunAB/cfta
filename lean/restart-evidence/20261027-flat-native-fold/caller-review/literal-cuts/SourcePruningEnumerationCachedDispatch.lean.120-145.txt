@@ -1,0 +1,26 @@
+  obtain ⟨fuel, p, h, action, afterCaller, savedQueries, final, next,
+    actual, post, savedSame, heapRealized, noOpResult, liveResult⟩ :=
+      SourcePruningEnumerationDispatch.dispatch_complete formulas solver inventory beforeCaller
+        before.core checkEmpty source target memos initial realized slots ranges
+  have grownFlags : ∀ (slot : Nat),
+      SourcePruningEnumerationNativeIndex.candidate afterCaller.checked.native.machine.heap
+        ((before.core.values[slot]?).getD .eliminated) = some (before.expandable slot) := by
+    intro slot
+    specialize flags slot
+    generalize slotValueSame : ((before.core.values[slot]?).getD .eliminated) = slotValue at flags ⊢
+    clear slotValueSame
+    cases slotValue with
+    | enumerated _oldEnumerated => exact flags
+    | eliminated => exact flags
+    | unenumerated oldNode oldScs =>
+      cases oldNode with
+      | none => exact flags
+      | some oldHandle =>
+        cases oldLookup : lookupNode beforeCaller.checked.native.machine.heap oldHandle with
+        | none =>
+          simp only [SourcePruningEnumerationNativeIndex.candidate, oldLookup, Option.map_none] at flags
+          cases flags
+        | some oldValue =>
+          simpa only [SourcePruningEnumerationNativeIndex.candidate, oldLookup,
+            lookupNode_keeps beforeCaller.checked.native.machine.heap afterCaller.checked.native.machine.heap
+              post.effects.keeps oldHandle oldValue oldLookup, Option.map_some] using flags

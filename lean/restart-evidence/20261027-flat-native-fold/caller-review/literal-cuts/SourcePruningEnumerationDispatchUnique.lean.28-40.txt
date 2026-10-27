@@ -1,0 +1,13 @@
+/-- Different successful bounds retain the exact action, caller and query memo. -/
+theorem ok_unique
+    [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Constraint)] [DecidableEq Node]
+    (flag : Bool) {n p h N P H : Nat}
+    {beforeCaller : Caller width} {before : EnumerationState.State Symbol EnumGuard}
+    {source target : Nat} {queries : Queries}
+    {result other : Option (EnumerateM Symbol EnumGuard Unit)}
+    {afterCaller later : Caller width} {saved current : Queries}
+    (one : dispatch flag n p h beforeCaller before source target queries =
+      (.ok result, afterCaller, saved))
+    (two : dispatch flag N P H beforeCaller before source target queries =
+      (.ok other, later, current)) :
+    result = other ∧ afterCaller = later ∧ saved = current := by

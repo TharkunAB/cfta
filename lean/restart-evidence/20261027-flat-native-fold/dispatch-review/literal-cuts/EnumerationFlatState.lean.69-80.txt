@@ -1,0 +1,12 @@
+/-- Core actions keep ordered successes, explicit errors and branch-local state. -/
+abbrev Action (Symbol Guard α : Type) := StateT (State Symbol Guard) (ExceptT Error List) α
+
+/-- Reject the current alternative. -/
+def reject : Action Symbol Guard α := fun _ => []
+
+/-- Retain an explicit core error. -/
+def failure (error : Error) : Action Symbol Guard α := fun _ => [.error error]
+
+/-- Retain a branch exactly when the guard is true. -/
+def require (condition : Bool) : Action Symbol Guard Unit :=
+  if condition then pure () else reject

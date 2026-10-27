@@ -1,0 +1,14 @@
+def MicroCFTA.EnumerationFlatNativeDispatch.assimilated : {EnumGuard : Type} →
+  MicroCFTA.EnumerationFlatState.State MicroCFTA.SourcePruningTemplates.Symbol EnumGuard →
+    Nat →
+      Nat →
+        MicroCFTA.EnumerationState.UVarValue MicroCFTA.SourcePruningTemplates.Symbol →
+          MicroCFTA.EnumerationFlatState.State MicroCFTA.SourcePruningTemplates.Symbol EnumGuard :=
+fun {EnumGuard} state target source merged =>
+  { counter := state.counter, representatives := state.representatives,
+    values := (state.values.set target merged).set source MicroCFTA.EnumerationState.UVarValue.eliminated,
+    obligations := state.obligations,
+    recursionAncestry := fun other =>
+      if other = target then (state.recursionAncestry source ++ state.recursionAncestry target).eraseDups
+      else state.recursionAncestry other,
+    expansionAncestry := state.expansionAncestry }

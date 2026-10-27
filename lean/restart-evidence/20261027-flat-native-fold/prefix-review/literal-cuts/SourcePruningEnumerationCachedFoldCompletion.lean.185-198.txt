@@ -1,0 +1,14 @@
+              rw [flagsSame, ←headWaiting]
+            obtain ⟨pendingTarget, keptSlots⟩ := EnumerationCompleteness.assimilated_pending
+              before.core target source merged (sourceScs ++ targetScs) (Ne.symm sameId)
+                targetInside sourceInside
+            refine ⟨?_, .inr rowsSame, ?_, ?_, ?_, ?_, ?_, ?_⟩
+            · rw [rowsSame]
+              simp only [List.map_cons, List.map_nil, SourcePruningEnumerationCachedAdapter.adapt,
+                ite_eq_right sameId, sourceStored, targetAfter, Option.bind_some, classified, Option.map_some]
+              exact congrArg some cacheSame
+            · rw [coreSame]
+              exact pendingTarget
+            · intro remaining member
+              rw [coreSame]
+              exact keptSlots remaining (selected remaining (by simp [member]))

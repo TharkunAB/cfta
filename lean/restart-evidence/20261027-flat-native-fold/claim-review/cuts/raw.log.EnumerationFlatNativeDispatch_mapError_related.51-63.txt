@@ -1,0 +1,13 @@
+MicroCFTA.EnumerationFlatNativeDispatch.mapError_related {EnumGuard : Type} {width : Nat} {Fault Next : Type 1}
+  (flat :
+    Except Fault
+        (Option (MicroCFTA.EnumerationFlatState.Action MicroCFTA.SourcePruningTemplates.Symbol EnumGuard Unit)) ×
+      MicroCFTA.SourceCurrentAllocatedPartialState.State width × MicroCFTA.SourceEndpointMemo.Memos)
+  (earlier :
+    Except Fault
+        (Option (MicroCFTA.EnumerationState.EnumerateM MicroCFTA.SourcePruningTemplates.Symbol EnumGuard Unit)) ×
+      MicroCFTA.SourceCurrentAllocatedPartialState.State width × MicroCFTA.SourceEndpointMemo.Memos)
+  (related : MicroCFTA.EnumerationFlatNativeDispatch.PreparedRelated flat earlier) (rename : Fault → Next) :
+  MicroCFTA.EnumerationFlatNativeDispatch.PreparedRelated (Except.mapError rename flat.fst, flat.snd)
+    (Except.mapError rename earlier.fst, earlier.snd)
+'MicroCFTA.EnumerationFlatNativeDispatch.mapError_related' depends on axioms: [propext]

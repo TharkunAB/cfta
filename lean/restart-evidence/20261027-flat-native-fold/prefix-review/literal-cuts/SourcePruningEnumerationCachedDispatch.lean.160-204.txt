@@ -1,0 +1,45 @@
+    obtain ⟨sourceNode, targetNode, merged, sourceScs, targetScs, sourceStored, targetStored,
+      rawSelected, _selectedResult, optionalOrigin, queriedOrigin⟩ := liveResult different sourceLive
+    have mergedRealized : ∀ (handle : Nat), merged = some handle →
+        ∃ (value : Node), lookupNode afterCaller.checked.native.machine.heap handle = some value ∧
+          Available afterCaller.checked.native.machine.heap value ∧ value.free = [] := by
+      intro handle chosen
+      cases sourceNode with
+      | none =>
+        obtain ⟨mergedSame, _optionalCaller, _optionalFinal, _optionalNext⟩ := optionalOrigin (Or.inl rfl)
+        cases targetNode with
+        | none =>
+          rw [mergedSame] at chosen
+          change none = some handle at chosen
+          cases chosen
+        | some rightHandle =>
+          cases Option.some.inj (mergedSame.symm.trans chosen)
+          exact heapRealized target _ targetScs targetStored
+      | some leftHandle =>
+        cases targetNode with
+        | none =>
+          obtain ⟨mergedSame, _optionalCaller, _optionalFinal, _optionalNext⟩ := optionalOrigin (Or.inr rfl)
+          cases Option.some.inj (mergedSame.symm.trans chosen)
+          exact heapRealized source _ sourceScs sourceStored
+        | some rightHandle =>
+          obtain ⟨_left, _right, _query, replacement, _queried, _returnedHandle,
+            _leftLookup, _rightLookup, _nextSource, _nextRoots, _receipt, mergedSame,
+            _encoded, decoded, available, closed, _meaning, _disabled, _enabled⟩ :=
+              queriedOrigin leftHandle rightHandle rfl rfl
+          cases Option.some.inj (mergedSame.symm.trans chosen)
+          exact ⟨replacement, decoded, available, closed⟩
+    obtain ⟨rows, after, computed, rawCached, counterSame, forestSame, afterPaths, afterStorage,
+      cacheRealized, afterCounts, waitingSame, afterFlags, result⟩ :=
+        SourcePruningEnumerationCachedAssimilation.complete afterCaller.checked.native.machine.heap
+          before source target sourceNode targetNode merged sourceScs targetScs roots
+          storage heapRealized paths counts grownFlags sourceStored targetStored (Ne.symm different) mergedRealized
+    refine ⟨fuel, p, h, action, afterCaller, savedQueries, final, next, rows, after,
+      actual, post, savedSame, ?_, counterSame, forestSame, afterPaths, afterStorage,
+      cacheRealized, afterCounts, waitingSame, afterFlags, ?_, ?_⟩
+    · rw [rawSelected]
+      exact rawCached
+    · intro impossibleNoOp
+      exact False.elim (noOp impossibleNoOp)
+    · intro _unequal _live
+      exact ⟨sourceNode, targetNode, merged, sourceScs, targetScs, sourceStored, targetStored,
+        computed, result, optionalOrigin, queriedOrigin⟩
