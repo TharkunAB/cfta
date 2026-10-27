@@ -23,6 +23,8 @@ import qualified Data.CFTA.Gen.TypingSpec
 import qualified Data.CFTA.GenSpec
 import qualified Data.CFTA.InclusionSpec
 import qualified Data.CFTA.RankedSpec
+import qualified Data.CFTA.Sized.PrefixGuardSpec
+import qualified Data.CFTA.Sized.PrefixSpec
 import qualified Data.CFTA.SizedSpec
 import qualified Data.CFTA.Template.LearnSpec
 import qualified Data.CFTA.Template.NamedSpec
@@ -56,3 +58,5 @@ main =
         Data.CFTA.EditSpec.spec
         Data.CFTA.Edit.ConstrainedSpec.spec
         Data.CFTA.TraceSpec.spec
+        Data.CFTA.Sized.PrefixSpec.spec
+        Data.CFTA.Sized.PrefixGuardSpec.spec

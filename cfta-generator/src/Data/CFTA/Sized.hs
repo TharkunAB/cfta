@@ -45,12 +45,15 @@ automaton whose guards pruning did not discharge.
 table when the automaton has no constraint and its rows are unambiguous.
 It uses the reference otherwise. Bottom-up deterministic rows, as in an
 e-graph, are unambiguous. A set of transition keys checks this condition first.
+'sizedStates' gives the classes of each state, with one table for all the
+states.
 -}
 module Data.CFTA.Sized (
     Sized,
     SizedError (..),
     sized,
     sizedReference,
+    sizedStates,
     sizedUpTo,
     termsOfSize,
     countOfSize,
@@ -63,7 +66,7 @@ import Control.Monad.Except (runExceptT, throwError)
 import Control.Monad.IO.Class (liftIO)
 import Data.Containers.ListUtils (nubOrd)
 import qualified Data.IntMap.Strict as IntMap
-import Data.List (elemIndex, genericDrop, genericIndex, genericLength, sortOn, tails)
+import Data.List (elemIndex, genericDrop, genericIndex, genericLength, sortOn)
 import qualified Data.Map.Lazy as LazyMap
 import qualified Data.Map.Strict as Map
 import Data.Maybe (listToMaybe)
@@ -106,27 +109,42 @@ reach has a guard beyond equality constraints.
 sized ::
     (Ord state, Ord symbol) =>
     FTA.FTA state symbol Constraint -> Either SizedError (Sized symbol)
-sized automaton
+sized automaton = ($ FTA.initialState automaton) <$> sizedStates automaton
+
+{- | The size classes of each state of an automaton, with one count table for
+all the states. For each state that the initial state reaches, the classes
+are those that 'sized' gives with that state as the initial state.
+
+The result is 'ResidualGuard' when a transition that the initial state can
+reach has a guard beyond equality constraints. A guard on a transition that
+the initial state cannot reach is not checked, so the classes of a state that
+the initial state does not reach can hold too many terms. Do not read them.
+A rank query of a state builds a position table for that state.
+-}
+sizedStates ::
+    (Ord state, Ord symbol) =>
+    FTA.FTA state symbol Constraint -> Either SizedError (state -> Sized symbol)
+sizedStates automaton
     | all (all ((== noConstraint) . FTA.transitionConstraint)) (FTA.transitionTable automaton)
-    , bottomUpDeterministic rows || unambiguousRows rows =
-        let index = Ordinary.tableIndex initial rows
-            count = countAtSize index
-            unrank size (ClassRank rank)
-                | rank >= 0 && Cardinality rank < count size =
-                    Just $ rankedValue $ sizeClassSelect index size (ClassRank rank)
-                | otherwise = Nothing
-            position = Ordinary.tablePosition initial rows
-         in Right
-                Sized
+    , bottomUpDeterministic rows || Ordinary.unambiguousRows rows =
+        Right $ \state ->
+            let index = indexOf state
+                count = countAtSize index
+                unrank size (ClassRank rank)
+                    | rank >= 0 && Cardinality rank < count size =
+                        Just $ rankedValue $ sizeClassSelect index size (ClassRank rank)
+                    | otherwise = Nothing
+                position = Ordinary.tablePosition state rows
+             in Sized
                     { sizedTerms = \size -> [term | rank <- everyClassRank (count size), Just term <- [unrank size rank]]
                     , sizedCount = count
                     , sizedUnrank = unrank
                     , sizedRank = fmap (\(SizedRank size rank) -> (size, rank)) . position
                     }
-    | otherwise = sizedReference automaton
+    | otherwise = referenceStates automaton
   where
-    initial = FTA.initialState automaton
     rows = Map.map (map void) $ sortedRows automaton
+    indexOf = Ordinary.tableIndexes rows
     everyClassRank (Cardinality total) = map ClassRank [0 .. total - 1]
 
 {- | Whether no two transitions of the rows have the same symbol and the same
@@ -134,44 +152,13 @@ child states, as in an e-graph. Then each term reaches at most one state, by
 induction on the term. So two transitions of a state that accept one term
 have the same child states, and are the same transition: each term has at
 most one run, and the rows are unambiguous. The check builds an ordered set
-of transition keys. 'unambiguousRows' builds the product of each pair of states.
+of transition keys. 'Ordinary.unambiguousRows' builds the product of each
+pair of states.
 -}
 bottomUpDeterministic :: (Ord state, Ord symbol) => Map.Map state [FTA.Transition state symbol ()] -> Bool
 bottomUpDeterministic rows = length keys == Set.size (Set.fromList keys)
   where
     keys = [(FTA.transitionSymbol t, FTA.transitionChildren t) | ts <- Map.elems rows, t <- ts]
-
-{- | Whether each term has at most one run in the rows.
-
-The synchronous product accepts the common terms of each pair of states.
-Two alternatives overlap when every pair of child states is productive.
--}
-unambiguousRows :: (Ord state, Eq symbol) => Map.Map state [FTA.Transition state symbol ()] -> Bool
-unambiguousRows rows =
-    not $
-        or
-            [ FTA.transitionSymbol left == FTA.transitionSymbol right
-                && length (FTA.transitionChildren left) == length (FTA.transitionChildren right)
-                && all (`Map.member` productive) (zip (FTA.transitionChildren left) (FTA.transitionChildren right))
-            | alternatives <- Map.elems rows
-            , left : rest <- tails alternatives
-            , right <- rest
-            ]
-  where
-    productive = Ordinary.minimumSizes products
-    products =
-        Map.fromList
-            [ ( (leftState, rightState)
-              , [ FTA.Transition (FTA.transitionSymbol left) (zip (FTA.transitionChildren left) (FTA.transitionChildren right)) ()
-                | left <- leftRows
-                , right <- rightRows
-                , FTA.transitionSymbol left == FTA.transitionSymbol right
-                , length (FTA.transitionChildren left) == length (FTA.transitionChildren right)
-                ]
-              )
-            | (leftState, leftRows) <- Map.toList rows
-            , (rightState, rightRows) <- Map.toList rows
-            ]
 
 {- | The size classes of an automaton, each built from its definition.
 
@@ -179,9 +166,16 @@ The result is 'ResidualGuard' when a transition that the initial state can
 reach has a guard beyond equality constraints.
 -}
 sizedReference :: (Ord state, Ord symbol) => FTA.FTA state symbol Constraint -> Either SizedError (Sized symbol)
-sizedReference automaton
+sizedReference automaton = ($ FTA.initialState automaton) <$> referenceStates automaton
+
+{- | The size classes of each state of an automaton, each built from its
+definition, as 'sizedReference' builds them for the initial state.
+-}
+referenceStates ::
+    (Ord state, Ord symbol) => FTA.FTA state symbol Constraint -> Either SizedError (state -> Sized symbol)
+referenceStates automaton
     | any (any (residual . FTA.transitionConstraint)) (FTA.transitionTable $ FTA.trim automaton) = Left ResidualGuard
-    | otherwise = Right $ fromClasses $ classAt $ FTA.initialState automaton
+    | otherwise = Right $ fromClasses . classAt
   where
     rows = sortedRows automaton
 

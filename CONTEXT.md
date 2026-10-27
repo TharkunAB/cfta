@@ -200,9 +200,28 @@ Wilf, and Feat (ranking).
   language.
 - **Weight**: a relative frequency weight of an alternative or a value
   (QuickCheck's word). Not the real-valued weight of a Boltzmann sampler.
+  The weight of a term is the product of the weights of the symbols of its
+  nodes (`withWeights`).
 - **Checked rank**: a rank of a term with whether the ranking checked every
   symbol of the term.
 - **Occurrence**: the token of one recursion probe.
+
+## Prefixes
+
+- **Token**: one node of a term in preorder: its symbol and its number of
+  children. Not the token of an occurrence.
+- **Prefix**: the first tokens of the preorder of a term
+  (`preorderPrefix`, `excludePrefixesFTA`). A *child prefix* of a count
+  table, the first children of a transition, is a different thing.
+- **Pending state**: the state of a subterm that a prefix does not reach.
+  Each run of an automaton on the nodes of a prefix gives a stack of pending
+  states, in preorder.
+- **Completion**: an accepted term within a size bound whose preorder starts
+  with a prefix.
+- **Undecided completion, undecided token**: with a solver, a completion is
+  undecided when the solver neither accepts nor rejects it. A token is
+  undecided when the solver accepts none of its completions and some of them
+  are undecided. An undecided token is neither offered nor rejected.
 
 ## Generators
 

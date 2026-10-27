@@ -253,8 +253,10 @@ ambiguity. A guard beyond equality
 constraints is `ResidualGuard`. `sizedUpTo` builds the classes up to a size
 bound with a solver that decides every guard on each term, as
 `denotationAtMost` does by depth, so it also takes a liquid automaton whose
-guards pruning did not discharge. An interned automaton enters through
-`toFTA` of `Data.CFTA.Interned`.
+guards pruning did not discharge. `sizedStates` gives the classes of each
+state, as `sized` gives them with that state as the initial state, with one
+table for all the states. An interned automaton enters through `toFTA` of
+`Data.CFTA.Interned`.
 
 ```haskell
 module Main (main) where
@@ -429,6 +431,44 @@ automaton with guards on many states, most context wraps are
 does not decide whether the automaton accepts the term, the error is
 `UndecidedTerm`, not `NotAccepted`. When it decides one run and not another,
 the error is `UndecidedRuns`.
+
+### The completions of a prefix
+
+`Data.CFTA.Sized.Prefix` reads the terms of an automaton one node at a time,
+in preorder, as a decoder writes them. A token is a symbol with its number of
+children, and a prefix is a list of tokens. `prefixCompletions` takes a size
+bound and an automaton without a guard beyond equality constraints, and
+gives the completions of the empty prefix: the accepted terms with at most the
+bound of nodes.
+`nextTokens` gives the tokens that can come next, each with the number of
+completions that start with the prefix and the token. `afterToken` adds one
+token, and it gives `Nothing` when no completion starts with the result, so a
+caller can reject a token at once. `isComplete` says whether the prefix is an
+accepted term. `completionCount`, `completionTerms`, `unrankCompletion`, and
+`sampleCompletion` count, list, unrank, and sample the completions uniformly.
+The completions are distinct terms, as in `Data.CFTA.Sized`, also when the
+automaton is ambiguous. For the empty prefix their order is the order of
+`sized`. Without constraints, the queries count each stack of pending states
+from the size classes of its states. With equality constraints, they list the
+accepted terms up to the bound and keep those with the prefix. With guards,
+`prefixCompletionsWith` takes an `Entailment` and decides the guards on each
+listed term. A token is then offered, rejected, or undecided: `nextTokens`
+gives the offered tokens, `undecidedTokens` the tokens that the solver neither
+offers nor rejects, and `undecidedTerms` the completions that it does not
+decide. A decoder that walks one path of tokens can use `deciding`,
+`decidingStep`, and `decidingTokens` instead: they ask the solver only about
+the candidates that the prefix can still reach, and only until a verdict is
+known, and they keep the verdicts for the whole walk. `decided` gives the
+`Completions` of the current prefix.
+
+`withWeights` gives each symbol a weight, a non-negative `Rational`, and the
+weight of a term is the product of the weights of its nodes.
+`nextTokenWeights` gives the total weight of the completions after each next
+token, `tokenProbability` the probability of a token after the prefix, and
+`sampleWeighted` draws a completion in proportion to its weight. This is the
+mass that grammar-aligned decoding needs (Park et al., *Grammar-Aligned
+Decoding*, NeurIPS 2024), exact for a weight that is a product over the
+nodes. With the weight one for each symbol, the weights are the counts.
 
 ## Equality-constrained generators
 
