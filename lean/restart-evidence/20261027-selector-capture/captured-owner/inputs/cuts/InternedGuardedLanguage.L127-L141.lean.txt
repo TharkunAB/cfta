@@ -1,0 +1,15 @@
+/-- Each independent edge meaning retains exactly the ordinary constructor edge law. -/
+theorem edgeMeaning_all (holds : Guard → Term Symbol → Bool) (environment : Env Symbol)
+    (edge : EdgeValue Symbol Guard) (term : Term Symbol) :
+    edgeMeaning holds environment edge term ↔ MergedColdInterpretation.EdgeMeaning (meaning holds environment) holds edge term := by
+  cases edge with
+  | mk entry children =>
+      simp only [edgeMeaning, MergedColdInterpretation.EdgeMeaning, EdgeValue.entry, EdgeValue.children]
+      exact exists_congr (fun terms => and_congr Iff.rfl (and_congr (forest_all holds environment children terms) Iff.rfl))
+
+/-- Actual stored Mu bodies satisfy their independent least-language unfolding equation. -/
+theorem mu_unfold (holds : Guard → Term Symbol → Bool) (environment : Env Symbol)
+    (entry : Cache.Interned NodeKey) (body depth ordinary : Value Symbol Guard) (term : Term Symbol) :
+    meaning holds environment (.mu entry body depth ordinary) term ↔
+      meaning holds (bind environment (.interned entry.identity) (meaning holds environment (.mu entry body depth ordinary))) body term := by
+  simp only [meaning]

@@ -1,0 +1,44 @@
+inductive Trace (checkEmpty : Bool) (r n p h k target : Nat) (scs : List Suspended) (before : Cached) :
+    List (EdgeValue Symbol Constraint) → Caller width → Queries →
+      List (Receipt width) → Caller width → Queries → Prop
+  /-- No alternative changes the current native endpoint. -/
+  | nil (caller : Caller width) (queries : Queries) :
+      Trace checkEmpty r n p h k target scs before [] caller queries [] caller queries
+  /-- The head retains its exact receipt and supplies only the next native endpoint. -/
+  | cons {edge : EdgeValue Symbol Constraint} {rest : List (EdgeValue Symbol Constraint)}
+      {caller middleCaller afterCaller : Caller width} {queries middleQueries saved : Queries}
+      {receipt : Receipt width} {processed : List (Receipt width)}
+      (head : SourcePruningEnumerationCapturedEdge.run checkEmpty r n p h k target scs edge caller before queries =
+        some receipt)
+      (continued : advance receipt = some (middleCaller, middleQueries))
+      (tail : Trace checkEmpty r n p h k target scs before rest middleCaller middleQueries
+        processed afterCaller saved) :
+      Trace checkEmpty r n p h k target scs before (edge :: rest) caller queries
+        (receipt :: processed) afterCaller saved
+
+/-- Every actual ordered trace completes through the same worker. -/
+theorem trace_complete
+    (trace : Trace (width := width) checkEmpty r n p h k target scs before edges caller queries
+      processed afterCaller saved) :
+    run checkEmpty r n p h k target scs before edges caller queries = .complete processed afterCaller saved := by
+  induction trace with
+  | nil => rfl
+  | cons head continued _tail ih => simp only [run, head, continued, ih]
+
+/-- Every completed run retains the actual caller-threaded trace and every branch cache. -/
+theorem complete_trace (checkEmpty : Bool) (r n p h k target : Nat) (scs : List Suspended)
+    (before : Cached) (edges : List (EdgeValue Symbol Constraint))
+    (caller afterCaller : Caller width) (queries saved : Queries) (processed : List (Receipt width))
+    (completed : run checkEmpty r n p h k target scs before edges caller queries =
+      .complete processed afterCaller saved) :
+    Trace checkEmpty r n p h k target scs before edges caller queries processed afterCaller saved := by
+  induction edges generalizing caller queries processed with
+  | nil =>
+      cases completed
+      exact .nil _ _
+  | cons edge rest ih =>
+      cases head : SourcePruningEnumerationCapturedEdge.run checkEmpty r n p h k target scs edge caller before queries with
+      | none => simp only [run, head] at completed; cases completed
+      | some receipt =>
+          cases continued : advance receipt with
+          | none => simp only [run, head, continued] at completed; cases completed

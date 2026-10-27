@@ -1,0 +1,15 @@
+theorem interned_accepting
+    (heap : State Symbol Guard) (ready : SourceEqualityRequiredCache.Ready heap)
+    (root : Value Symbol Guard)
+    (entry : Cache.Interned InternedBinderProtocol.NodeKey)
+    (edges : List (EdgeValue Symbol Guard)) (depth : Nat)
+    (free : List InternedBinderProtocol.Reference)
+    (available : Available heap (.node entry edges depth free))
+    (holds : Guard → Term Symbol → Bool) (ambient : InternedGuardedLanguage.Env Symbol)
+    (term : Term Symbol)
+    (accepted : InternedGuardedLanguage.meaning holds ambient (.node entry edges depth free) term) :
+    ∃ edge,
+      edge ∈ SourceCurrentEnumerationOrder.internedEdgesOf InternedEdgeResidency.nodeEdges root
+        (.node entry edges depth free) ∧ edge ∈ edges ∧
+      InternedEdgeResidency.EdgeResident heap edge ∧
+      InternedGuardedLanguage.edgeMeaning holds ambient edge term := by

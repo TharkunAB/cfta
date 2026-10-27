@@ -1,0 +1,38 @@
+    have separate := fragmentSeparate uv ready.inside ready.root avoids
+    have afterFragmentPending : PendingFragment after.core fragment := by
+      rw [core]
+      exact pendingFragment_write middle.core uv fragment fragmentPending separate
+    have advance : ∀ level frontier, EnumerationOrder.Stratified before.core level frontier →
+        ∃ nextLevel, EnumerationOrder.Stratified after.core nextLevel (frontier + 1) := by
+      intro level frontier stratified
+      have enumProtects : ∀ held old, before.core.values[held]? = some (.enumerated old) →
+          EnumerationDriver.Protected held before.core middle.core := by
+        intro held old stored
+        obtain ⟨inside, root⟩ := enumerated_root before.core ready.safe held old stored
+        exact protects held inside root (pending held old stored)
+      obtain ⟨middleLevel, middleOrder⟩ := EnumerationOrder.stratified_preserved before.core middle.core
+        middleSafe level frontier stratified origin enumProtects
+      obtain ⟨nextLevel, nextOrder⟩ := EnumerationOrder.write_stratified middle.core middleSafe middleLevel
+        frontier uv middleOrder (some handle) scs currentStored fragment fragmentPending separate
+      refine ⟨nextLevel, ?_⟩
+      rw [core]
+      exact EnumerationOrder.stratified_ancestry _ [] nextLevel (frontier + 1) nextOrder
+    have afterPending : InputsPending after.core scs := by
+      intro held old expanded
+      by_cases same : held = uv
+      · subst held
+        rw [core]
+        exact frame.avoids scs avoids
+      · rw [core]
+        apply retained held old
+        rw [core] at expanded
+        simpa only [List.getElem?_set_ne (Ne.symm same)] using expanded
+    refine ⟨r, n, p, h, k + fuel, afterCaller, after, savedQueries, final, next, afterRoots,
+      .complete fragment afterCaller savedQueries after, ?_, post, querySame, ?_, afterPaths,
+      afterStorage, afterRealized, afterCounts, afterFlags, ?_, afterPending, ?_, ?_,
+      .inl ⟨fragment, rfl, afterSafe, ?_, finalStored, ?_, ?_, afterFragmentPending, advance⟩, returnedFits, returnedKnown⟩
+    · intro er en P H ek largeP largeH
+      have selectedRun := edgeRun er en P H (fuel + ek) largeP largeH
+      rw [← Nat.add_assoc] at selectedRun
+      simp only [run, selectedRun]
+      have finalRun := finishRun (k + ek)

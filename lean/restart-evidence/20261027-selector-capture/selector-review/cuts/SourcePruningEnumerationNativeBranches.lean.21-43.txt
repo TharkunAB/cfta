@@ -1,0 +1,23 @@
+/-- Retain native effects after a completed edge, arity rejection or valid child rejection. -/
+def advance : Receipt width → Option (Caller width × Queries)
+  | .complete _ caller queries _ => some (caller, queries)
+  | .rejected caller queries _ => some (caller, queries)
+  | .stopped _ (.ok (some []), caller, queries, _outer, _waiting) (some _) => some (caller, queries)
+  | _ => none
+
+variable [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Constraint)] [DecidableEq Node]
+
+/-- Restore the captured enumeration input while retaining reached native caller and queries. -/
+noncomputable def run (checkEmpty : Bool) (r n p h k target : Nat) (scs : List Suspended)
+    (before : Cached) : List (EdgeValue Symbol Constraint) → Caller width → Queries → Result width
+  | [], caller, queries => .complete [] caller queries
+  | edge :: rest, caller, queries =>
+      match SourcePruningEnumerationCapturedEdge.run checkEmpty r n p h k target scs edge caller before queries with
+      | none => .stopped [] none
+      | some receipt =>
+          match advance receipt with
+          | none => .stopped [] (some receipt)
+          | some (middleCaller, middleQueries) =>
+              match run checkEmpty r n p h k target scs before rest middleCaller middleQueries with
+              | .complete processed afterCaller saved => .complete (receipt :: processed) afterCaller saved
+              | .stopped processed current => .stopped (receipt :: processed) current

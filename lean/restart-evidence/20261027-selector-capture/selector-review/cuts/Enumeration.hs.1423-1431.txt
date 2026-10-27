@@ -1,0 +1,9 @@
+    OrderedConfig key global local symbol ->
+    global ->
+    local ->
+    Node symbol ->
+    OrderedCursor key global local symbol
+startOrdered marker config global local root =
+    let enumState = initEnumerationState (canonicalEdgesOf Nothing root) root
+        branch = OrderedBranch enumState local OrderedAwait
+     in OrderedCursor marker config (Frontier.start (orderedPolicy marker config) global branch)

@@ -1,0 +1,28 @@
+            ambient afterCaller.checked.native.machine.heap)
+          (fun guard candidate => SourceEqualityPCSGuard.holds formulas solver guard candidate = true)
+          extended after.core := by
+  obtain ⟨tries, residual, terms, projected, _valid, termShape, childrenAccepted,
+    _length, allowed, _ownEqualities, _residualHolds⟩ :=
+    SourcePruningEnumerationSelectedEdgeAdmission.selected_admission formulas solver inventory caller memos
+      parentEntry edges depth free edge scs initial parentAvailable selected ambient assignment term accepted inherited
+  obtain ⟨_terms, _shape, _children, guardHolds⟩ :=
+    (InternedGuardedLanguage.edgeMeaning_all
+      (SourceEqualityPCSGuard.holds formulas solver) ambient edge term).mp accepted
+  obtain ⟨r, n, p, h, k, afterCaller, after, savedQueries, final, next, afterRoots, result,
+    running, post, querySame, growth, afterPaths, storage, afterRealized, afterCounts, afterFlags,
+    origin, pendingInputs, protects, pendingHistory, incomingHistory, shape, returnedFits,
+    returnedKnown, accepting⟩ :=
+    complete_with_fragments_resources_accepting seed formulas solver inventory caller before checkEmpty
+      parentEntry edges depth free edge scs roots memos initial parentAvailable parentClosed selected
+      safe realized paths counts flags bounded pending allowed tries residual projected fits
+      (reserved tries residual projected) known
+  obtain ⟨extended, fragment, agree, originalSatisfied, completed, filled, afterSatisfied⟩ :=
+    accepting ambient assignment terms satisfied childrenAccepted
+      (by simpa only [termShape] using guardHolds)
+      (by simpa only [termShape] using inherited)
+  refine ⟨tries, residual, projected, allowed, r, n, p, h, k, afterCaller, after, savedQueries,
+    final, next, afterRoots, result, ?_, extended, fragment, agree, originalSatisfied, completed, ?_, afterSatisfied⟩
+  · exact ⟨running, post, querySame, growth, afterPaths, storage, afterRealized, afterCounts,
+      afterFlags, origin, pendingInputs, protects, pendingHistory, incomingHistory, shape,
+      returnedFits, returnedKnown, accepting⟩
+  · simpa only [termShape] using filled

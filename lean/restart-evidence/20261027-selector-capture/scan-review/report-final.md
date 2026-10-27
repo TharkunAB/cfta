@@ -1,0 +1,47 @@
+# Final selector/captured coverage and scan-composition review
+
+CLEAR. The reviewed proofs, five installed public blocks, actual check receipts, final new note and nine inserted document regions agree. No material proof or claim issue remains in this scope. Source checkpoint: `82fdb41fc9e55f57e2950ab78297140cbdc97c69`.
+
+This review ran no compiler, build, Git command, network request, native evaluation or board operation. It changed no repository file. Archive creation, evidence commits and publication remain future actions and are not claimed.
+
+## Exact sources and contract retention
+
+- `SourcePruningEnumerationSelectorLanguage.lean`: 81 lines / 4757 bytes / SHA256 `e55a3e2d528ef345ab04e3e1605f0f4d81300ed133b1ee31eda454497d599fc3`.
+- `SourcePruningEnumerationCapturedEdgeCoverage.lean`: 279 lines / 18027 bytes / SHA256 `3c9f9fe36b8ba52093040a37821c83b88086182576dafa53df77757565d49218`.
+- `SourcePruningEnumerationCapturedEdgeAccepting.lean`: 176 lines / 12412 bytes / SHA256 `16abe9176f409bdcbde2f930f5a914db42fba12cd8717a20920ae766cbfff5e2`.
+
+The three final sources contain 536 lines / 35196 bytes / five public theorems and no new definition or structure. All three sources were read in full. Used dependencies and actual scan/runtime interfaces were read at the listed literal cuts. Whole copies retain exact provenance; unrelated dependency declarations and physical Haskell code were not rereviewed here.
+
+The captured primary retains the entire old original admission, witnesses and flattened resource/history packet. Removing only its appended observer and joining conjunction, then reversing the theorem name, recovers the literal 4422-byte proposition, SHA256 `d8aa8f57c56aef994c44bc9b183b4fad5948280e68f7ab51b2647ff8baa8a529`. Full Post/Memos, own counter/index/storage/realized/pending/protection, Safe on completion, dependency history and Fits/carrier remain. Operational bounds and result endpoints precede the universal model observer.
+
+The actual selected accepting producer is called once. Original Satisfies at the exact stored uv supplies every inherited suspended restriction. Native edgeMeaning supplies the same term shape, ordered child meanings and guard truth. The selected observer constructs its actual middle cache and assignment extension. Ready/avoidance protect the old captured slot. The actual finalizer gives its exact write at that middle endpoint. Agreement and ready.inside fix extended uv, so the actual filled fragment equals extended uv. Finalize.written_semantics then constructs Satisfies of the same final written cache. No desired final assignment, success, endpoint identity, Canonical, backward retention, nonterminal or future arity Heap is supplied. The stopped structural packet remains unconditional; an accepted model contradicts that shape through the same selected result.
+
+The parent wrapper derives parent acceptance from the actual stored native handle and original model. Its permutation selector chooses an offered resident accepting edge. Current Context and selected_admission derive that edge's pure projection and inherited arity. The single captured primary call uses its exact projected cost. No accepted edge/projected tries/arity/inherited Holds is an independent wrapper input. The full 4049-byte strengthened existential result is retained, including the byte-identical 200-byte witness prefix and the 3849-byte full conjunctive fields. Only outer grouping changes. The chosen model appears before selected edge and operational bounds; the retained primary observer remains universal afterward. These scopes are not conflated.
+
+The native raw interned selector theorem uses literal current rows. The canonical selector theorem retains an explicit map-or-fallback row permutation. Physical canonical-map construction and source sorting are separate obligations. The wrapper reservation pays every current offered edge's successful deterministic pure projection; it does not describe future success, future Heap or final satisfaction.
+
+## Exact next scan dependency
+
+scan-plan.md gives the detailed source-connected theorem shape. NativeBranches restores the same captured cache between alternatives while threading actual native Caller and query state. The existing resource induction derives actual intermediate full Memos/Context/Fits/carrier/reservation and lookup/index/realization facts. Post.effects.keeps plus NativeLanguage.satisfies_keeps transports the original model to the next native heap. The actual EdgeValue and its independent meaning are unchanged. No new model-transport premise or duplicate wrapper is needed.
+
+The next proof should extend the original native scan resource induction with a chosen INDEX and pure original support for its earlier prefix. An earlier arity-allowed project=None yields unhandled and stops the scan before a later accepting edge. The selected edge witness alone does not exclude this event. The suffix after the chosen receipt may also stop; do not require or claim full scan completion to establish that chosen receipt. Indexing preserves duplicate edges. All actual head-input caller/full Memos and aggregate original-to-head Post must remain attached.
+
+NativeContinuations adds an earlier possible hook stop. Its suffix starts at the actual post-hook Caller/full Memos, not the head endpoint. Original finite resource completion permits exact stops with outputs/reasons/optional endpoints. Without a separately derived hook/policy coverage result, an honest theorem can conclude either the chosen actual invocation or an exact earlier stop. It cannot force a matching future invocation by admission. OrdinaryInvocation and rich InvocationHistoryAt are facts about actual emitted outputs; they do not force output existence. No new Haskell defect or instantiated native Context counterexample is claimed.
+
+## Actual checks and preservation
+
+The selector's first strict check fails with a 279-byte log because its ordinary-node meaning is not unfolded before destructuring. Final v2 adds only the explicit meaning rewrite. The second strict check passes with empty output. Captured primary and wrapper pass their first strict checks unchanged. The exact failed and successful checked source snapshots, logs and reports remain in evidence/.
+
+The installed selector/captured build passes 1901 jobs. The full installed Audit passes 4245 jobs and checks 80074 theorem dependencies. An existing older dependency unused-input warning remains in Lake logs. Standalone strict Audit passes with its expected 56-byte count output. The three successful new source strict logs are empty. Standalone strict commands use warningAsError=true and linter.all=true. This does not label Lake builds as standalone strict checks. All copied actual check reports record memory.max/high=4294967296 and memory.swap.max=0. This reviewer reran no checks.
+
+The installed public readback passes with 173 full signatures/axiom blocks, 667078 bytes, SHA256 `4453ff071f4251bd7b753e880e0301ccdc5c1eed804c34a416d7fece799ee2a5`. All five new blocks, 36507 bytes / 469 lines, were read in full. The 168 old blocks remain the exact 630571-byte prefix. Selector lemmas use propext/Quot.sound; the captured lemmas use only standard propext/Classical.choice/Quot.sound. All 90 prior strong-source hashes, 437 existing Enumeration-source hashes and 203 declared Haskell inventory hashes match. Removing exactly three Audit imports recovers the complete prior Audit hash. This verifies byte preservation, not a new semantic re-review of those old modules or a native test run.
+
+## Final prose and limits
+
+The entire new note `lean/notes-current-selector-capture.md` is 10650 bytes, SHA256 `010db0432469065ab4468fd76dffac9fda3d2c8ff93a0ee97d177b76c5b23d54`. It and all nine new inserted regions were read in full. The nine shared prefixes are exactly 2144 bytes. FINDINGS adds the explicit Haskell-status paragraph. Removing each insertion gives the exact preserved prior document bytes. Historical document bodies were not reread or copied into this review. Literal inserted cuts and inverse hashes are retained.
+
+The prose correctly claims constructive local captured completion from a satisfying original parent under explicit native/resource admission and permutation selection. It keeps the original-model-first wrapper distinct from the uniform primary observer. It explicitly retains the ordered-scan unsupported-prefix/hook-stop gap, canonical physical row-map/sort boundary, recursive expansion/frontier policy, opaque Mu/Union behavior, Discharged rendering coverage, public API admission and physical Haskell correspondence. H6 and literal-startup finite rendering soundness retain their old scopes. No whole-system completion, convergence, new Haskell defect/fix, native test or benchmark is claimed. Existing KBO and Haskell handoffs remain separately stated. The whole goal remains active.
+
+## Bundle boundary
+
+source-index.json uses exact original paths, whole-copy identities and meaningful literal line cuts. It distinguishes reviewed cuts from provenance-only whole copies. Contract files retain the exact old proposition and full strengthened wrapper grouping. evidence/ retains actual compiler/build/public/check inputs and outputs. The initial review notes remain point-in-time records; this final report supersedes their pending status. pins.json enumerates every payload. Only pins.json and FROZEN.json are excluded from that list. No further writes are permitted after sealing.

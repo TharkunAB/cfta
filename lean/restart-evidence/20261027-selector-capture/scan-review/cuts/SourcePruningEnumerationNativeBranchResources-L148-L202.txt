@@ -1,0 +1,55 @@
+theorem complete_with_history_resources
+    (seed : Seed)
+    (formulas : SourceGuards.Formulas FullSyntax.Formula)
+    (solver : SourceGuards.Entailment FullSyntax.Formula)
+    (inventory : Inventory) (caller : Caller (bits + 2)) (before : Cached) (checkEmpty : Bool)
+    (uv handle : Nat) (scs : List Suspended)
+    (parentEntry : Cache.Interned InternedBinderProtocol.NodeKey)
+    (storedEdges selectedEdges : List (EdgeValue Symbol Constraint))
+    (depth : Nat) (free : List InternedBinderProtocol.Reference) (roots : Nat → Nat) (memos : Memos)
+    (initial : Context formulas solver inventory caller memos)
+    (ready : EnumerationDriver.Ready uv before.core)
+    (stored : before.core.values[uv]? = some (.unenumerated (some handle) scs))
+    (decoded : lookupNode caller.checked.native.machine.heap handle = some (.node parentEntry storedEdges depth free))
+    (realized : PendingRealized caller.checked.native.machine.heap before.core)
+    (selected : ∀ edge ∈ selectedEdges, edge ∈ storedEdges)
+    (paths : Roots before.core.representatives roots)
+    (counts : EnumerationCanonicalWaiting.Correct roots before.core.values before.waiting)
+    (flags : ∀ slot, SourcePruningEnumerationNativeIndex.candidate caller.checked.native.machine.heap
+      ((before.core.values[slot]?).getD .eliminated) = some (before.expandable slot))
+    (pending : InputsPending before.core scs)
+    (fits : Fits seed.2 caller.checked)
+    (reserved : Reserved bits seed (cost scs before.core.counter selectedEdges))
+    (known : Heap (fun guard => guard ∈ seed.1) caller.checked.native.machine.heap) :
+    ∃ (r n p h k : Nat) (processed : List (Receipt (bits + 2))) (afterCaller : Caller (bits + 2)) (saved : Queries)
+      (final : Memos) (next : Inventory) (result : Result (bits + 2)),
+      (∀ er en P H ek, p ≤ P → h ≤ H →
+        SourcePruningEnumerationNativeBranches.run checkEmpty (r + er) (n + en) P H (k + ek)
+          uv scs before selectedEdges caller memos.query = result) ∧
+      Post formulas solver next caller afterCaller final ∧ final.query = saved ∧
+      (∀ receipt ∈ processed, Admitted uv receipt) ∧
+      (EnumerationReferences.PendingReferences before.core → EnumerationReferences.IncomingAvoid uv before.core →
+        ∀ receipt ∈ processed, Pending receipt) ∧
+      (∀ receipt ∈ processed,
+        ∃ (reached : Caller (bits + 2)) (savedQueries : Queries) (receiptInventory : Inventory) (receiptMemos : Memos),
+          advance receipt = some (reached, savedQueries) ∧
+          Post formulas solver receiptInventory caller reached receiptMemos ∧ receiptMemos.query = savedQueries) ∧
+      (∀ receipt ∈ processed, FragmentHistory before.core receipt) ∧
+      (result = .complete processed afterCaller saved ∨ result = .stopped processed (some .unhandled)) ∧
+      ((∀ edge ∈ selectedEdges, arityAllows edge.children.length scs = true →
+          SourcePruningEnumerationConstraint.project edge.entry.key.constraint ≠ none) →
+        result = .complete processed afterCaller saved) ∧
+      Fits (reservationAdvance seed (cost scs before.core.counter selectedEdges)).2 afterCaller.checked ∧
+      Heap (fun guard => guard ∈ (reservationAdvance seed (cost scs before.core.counter selectedEdges)).1)
+        afterCaller.checked.native.machine.heap ∧
+      (∀ (index : Nat) (receipt : Receipt (bits + 2)), processed[index]? = some receipt →
+        ∃ (reached : Caller (bits + 2)) (savedQueries : Queries),
+          advance receipt = some (reached, savedQueries) ∧
+          Fits (reservationAdvance seed (cost scs before.core.counter (selectedEdges.take (index + 1)))).2
+            reached.checked ∧
+          Heap (fun guard => guard ∈
+            (reservationAdvance seed (cost scs before.core.counter (selectedEdges.take (index + 1)))).1)
+            reached.checked.native.machine.heap) := by
+  induction selectedEdges generalizing seed inventory caller memos with
+  | nil =>
+      exact ⟨0, 0, 0, 0, 0, [], caller, memos.query, memos, inventory, .complete [] caller memos.query,

@@ -1,0 +1,20 @@
+MicroCFTA.SourcePruningEnumerationSelectorLanguage.selected_accepting_of_perm {Symbol Guard : Type}
+  (heap : MicroCFTA.InternedConstructorTemplates.State Symbol Guard)
+  (ready : MicroCFTA.SourceEqualityRequiredCache.Ready heap)
+  (entry : MicroCFTA.Cache.Interned MicroCFTA.InternedBinderProtocol.NodeKey)
+  (edges selectedEdges : List (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard)) (depth : Nat)
+  (free : List MicroCFTA.InternedBinderProtocol.Reference)
+  (available :
+    MicroCFTA.InternedProbeProvenance.Available heap
+      (MicroCFTA.InternedConstructorTemplates.Value.node entry edges depth free))
+  (sameRows : selectedEdges.Perm edges) (holds : Guard → MicroCFTA.Language.Term Symbol → Bool)
+  (ambient : MicroCFTA.InternedGuardedLanguage.Env Symbol) (term : MicroCFTA.Language.Term Symbol)
+  (accepted :
+    MicroCFTA.InternedGuardedLanguage.meaning holds ambient
+      (MicroCFTA.InternedConstructorTemplates.Value.node entry edges depth free) term) :
+  ∃ edge,
+    edge ∈ selectedEdges ∧
+      edge ∈ edges ∧
+        MicroCFTA.InternedEdgeResidency.EdgeResident heap edge ∧
+          MicroCFTA.InternedGuardedLanguage.edgeMeaning holds ambient edge term
+'MicroCFTA.SourcePruningEnumerationSelectorLanguage.selected_accepting_of_perm' depends on axioms: [propext, Quot.sound]

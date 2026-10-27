@@ -1,5 +1,57 @@
 # Current formalization findings
 
+## An original parent model now constructs a selected captured result
+
+Source checkpoint: 82fdb41fc9e55f57e2950ab78297140cbdc97c69.
+An original satisfying model of a ready stored ordinary parent now supplies
+an accepting selected edge and its actual completed captured-slot result.
+The selector must permute the resident outgoing edges. The proof derives
+parent acceptance from the stored native handle. It then derives the selected
+edge, successful current guard projection and inherited arity check.
+No accepted edge, desired future success or final assignment is supplied.
+
+The constructed assignment agrees at every old variable, including the
+captured variable. The actual returned fragment fills to that variable's
+original value. The same final cache satisfies its native constraints after
+the actual write and ancestry reset. The complete resource packet remains,
+including the actual caller, full Memos, query cache, indexes and histories.
+The chosen model precedes the wrapper's edge and work bounds. The retained
+primary observer is universal after its operational bounds.
+
+The raw interned selector retains acceptance directly. The modeled canonical
+closure retains acceptance under its explicit map-or-fallback row permutation.
+Physical canonical map construction and source sorting remain separate.
+An accepting selected edge does not prove that the ordered scan reaches it.
+Earlier unsupported projections and stopped hooks remain explicit obstacles.
+Next prove scan reachability through actual caller changes and cache restores.
+Then complete recursive expansion, discharged rendering, API admission and
+physical Haskell correspondence. The whole formalization goal stays ACTIVE.
+
+Three modules contain 536 lines and five new public theorems. Strict source
+checks and standalone Audit pass. Audit passes 4245 jobs and checks 80074
+theorem dependencies. All 168 prior public blocks, 90 pinned prior modules
+and 437 existing enumeration sources retain their bytes. Only the three
+standard Lean axioms occur. H6 and checked finite rendering soundness keep
+their earlier scopes. Details: `lean/notes-current-selector-capture.md`.
+
+
+### Selector and captured coverage: Haskell repair status
+
+This checkpoint changes Lean proofs only. All earlier Haskell fixes,
+regressions and external repair instructions remain below without deletion.
+Main remains 8766699b594eaad80381af2eee034c378ccf3192, including the LPO and
+extraction documentation fixes. A successful current fetch confirms ancestry.
+KBO candidate d7b6a9dfff464eb32c17c314d4825d5b027f1b2d remains unintegrated,
+unbuilt and unexecuted. The positive-Int context-reversal finding remains
+open. All 203 pinned Haskell sources retain their bytes. No Haskell source,
+Cabal file, native test or benchmark changed or ran.
+
+The native model's unsupported-prefix stop is an explicit scan boundary.
+This proof does not establish a new physical Haskell defect. Actual canonical
+map construction, source sort correspondence, stopped continuations and
+opaque Mu/Union expansion remain separate obligations.
+
+
 ## Constructive completion from an accepted selected edge
 
 Source checkpoint: bcd40a836d8b1ae4d388fecf0f1ca81a27cbb673.

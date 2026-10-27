@@ -1,0 +1,70 @@
+emptinessBudget = 1000
+
+{- | The edges of each node that a root reaches, in the order of enumeration:
+by arity, then by symbol, then by the canonical classes of their children
+('canonicalClasses'), then by their equalities and guard. The classes depend
+on the content of the graph only, so the order does not depend on the
+automata that the process built before. Two edges that are equal in all of
+these have children in the same classes, so they give the same terms in the
+same order.
+-}
+canonicalOrder :: (Hashable symbol, Ord symbol, Typeable symbol) => Node symbol -> IntMap.IntMap [Edge symbol]
+canonicalOrder root = IntMap.map (sortOn key) graph
+  where
+    graph = reachable root
+    classes = canonicalClasses $ IntMap.map (map $ \edge -> (shape edge, map nodeIdentity $ edgeChildren edge)) graph
+    shape edge = (length $ edgeChildren edge, edgeSymbol edge, constraintEqualities constraint, constraintGuard constraint)
+      where
+        constraint = edgeConstraint edge
+    key edge = (arity, symbol, [classes IntMap.! child | NodeId child <- map nodeIdentity $ edgeChildren edge], equalities', guard')
+      where
+        (arity, symbol, equalities', guard') = shape edge
+
+{- | Order edges by descending weight. The sort is stable, so edges with
+equal weights keep their order.
+-}
+byWeight :: (Edge symbol -> Double) -> [Edge symbol] -> [Edge symbol]
+byWeight weight = sortOn (Down . weight)
+
+-- | Table for 'canonicalEdges'.
+canonicalEdgesCache :: TypeableMemoCache
+canonicalEdgesCache = unsafePerformIO newTypeableMemoCache
+{-# NOINLINE canonicalEdgesCache #-}
+
+{- | The edges of a node in 'canonicalOrder', for a node that the enumeration
+builds, such as an intersection or an unfolding.
+-}
+canonicalEdges :: forall symbol. (Hashable symbol, Ord symbol, Typeable symbol) => Node symbol -> [Edge symbol]
+canonicalEdges = memoTypeableWith @symbol canonicalEdgesCache $ \n ->
+    let NodeId ident = nodeIdentity n in canonicalOrder n IntMap.! ident
+
+{- | The edges of each node in the order of 'runs': 'canonicalOrder' of the
+graph that the root reaches, then by the weights of 'runsBy', if any. A node
+that the enumeration builds gets its edges from 'canonicalEdges'.
+-}
+canonicalEdgesOf ::
+    (Hashable symbol, Ord symbol, Typeable symbol) =>
+    Maybe (Edge symbol -> Double) -> Node symbol -> Node symbol -> [Edge symbol]
+canonicalEdgesOf weights root = edgesOf
+  where
+    byWeights = maybe id byWeight weights
+    ordered = IntMap.map byWeights (canonicalOrder root)
+    edgesOf n =
+        let NodeId ident = nodeIdentity n
+         in fromMaybe (byWeights (canonicalEdges n)) (IntMap.lookup ident ordered)
+
+-- | Enumerate one node under the suspended constraints currently in scope.
+enumerateNode ::
+    forall symbol.
+    (Hashable symbol, Typeable symbol) =>
+    Seq SuspendedConstraint -> Node symbol -> EnumerateM symbol (TermFragment symbol)
+enumerateNode _ EmptyNode = mzero
+enumerateNode scs n =
+    let (hereConstraints, descendantConstraints) = Sequence.partition (\(SuspendedConstraint pt _) -> isTerminalPathTrie pt) scs
+     in case hereConstraints of
+            Sequence.Empty -> case n of
+                Mu _ -> TermFragmentUVar <$> addUVarValue (Just n)
+                InternedUnion _ -> TermFragmentUVar <$> addUVarValue (Just n)
+                Node _ -> do
+                    edgesOf <- gets _edgesOf
+                    enumerateEdge scs =<< branches (edgesOf n)

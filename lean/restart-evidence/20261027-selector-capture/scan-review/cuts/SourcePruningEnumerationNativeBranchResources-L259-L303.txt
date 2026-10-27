@@ -1,0 +1,45 @@
+        · intro current member
+          rcases List.mem_cons.mp member with same | member
+          · subst current
+            exact ⟨middleCaller, middleQueries, middleInventory, middleMemos, continued, headPost, headQueries⟩
+          · obtain ⟨reached, savedQueries, receiptInventory, receiptMemos, reachedRun, receiptPost, receiptQueries⟩ :=
+              tailPosts current member
+            exact ⟨reached, savedQueries, receiptInventory, receiptMemos, reachedRun, headPost.trans receiptPost, receiptQueries⟩
+        · intro current member
+          rcases List.mem_cons.mp member with same | member
+          · simpa only [same] using headHistory
+          · exact tailHistory current member
+        · rcases tailShape with completed | stopped
+          · exact .inl (by simp only [result, completed])
+          · exact .inr (by simp only [result, stopped])
+        · intro supported
+          have finished := tailSupported (fun chosen member fits =>
+            supported chosen (List.mem_cons_of_mem _ member) fits)
+          simp only [result, finished]
+        · intro index current found
+          cases index with
+          | zero =>
+              have same : receipt = current := Option.some.inj found
+              subst current
+              refine ⟨middleCaller, middleQueries, continued, ?_, ?_⟩
+              · simpa only [List.take_succ_cons, List.take_zero, cost, Nat.add_zero] using headFits
+              · simpa only [List.take_succ_cons, List.take_zero, cost, Nat.add_zero] using headKnown
+          | succ index =>
+              have tailFound : processed[index]? = some current := by
+                simpa only [List.getElem?_cons_succ] using found
+              obtain ⟨reached, savedQueries, advanced, prefixFits, prefixKnown⟩ :=
+                tailResources index current tailFound
+              refine ⟨reached, savedQueries, advanced, ?_, ?_⟩
+              · simpa only [List.take_succ_cons, cost,
+                  SourcePruningEnumerationIncomingReservation.advance_add] using prefixFits
+              · simpa only [List.take_succ_cons, cost,
+                  SourcePruningEnumerationIncomingReservation.advance_add] using prefixKnown
+      · subst receipt
+        refine ⟨r, n, p, h, k, [], middleCaller, middleQueries, middleMemos, middleInventory,
+          .stopped [] (some .unhandled), ?_, headPost, headQueries, by simp,
+          (by intro _ _ current member; cases member), (by intro current member; cases member),
+          (by intro current member; cases member), .inr rfl, ?_, ?_, ?_, ?_⟩
+        · intro er en P H ek largeP largeH
+          simp only [SourcePruningEnumerationNativeBranches.run, headRun er en P H ek largeP largeH, advance]
+        · intro supported
+          exact (supported edge (by simp) allowed projected).elim

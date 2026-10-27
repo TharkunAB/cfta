@@ -1,0 +1,11 @@
+# Captured accepted wrapper source review
+
+CLEAR at immutable v1 SHA256 16abe9176f409bdcbde2f930f5a914db42fba12cd8717a20920ae766cbfff5e2. The entire source was read. Actual strict receipt remains pending at this review point.
+
+The original Satisfies fact at the actual stored uv yields its actual handle domain and every inherited suspended Hold. handles_lookup at the literal decoded parent derives parent acceptance. selected_accepting_of_perm chooses an actually offered resident edge; membership in the native parent follows the same permutation. selected_admission derives that SAME edge's project success and inherited arity from current Context, parent availability, original acceptance and bucket Holds.
+
+The sole captured accepting producer call uses the actual selected edge and its pure projection to specialize the original reservation. No accepted edge, projected pair, arity check or inherited Hold is supplied as an independent wrapper input. Its reservation covers every current offered edge/project result; it is explicit finite capacity, not future worker success.
+
+The full primary existential witness prefix is byte identical. The full strengthened conjunction, including the uniform observer, is retained with ONLY an outer parenthesis pair. The exact grouping comparison is recorded in contracts/captured-accepted-retention-v1.json. Original full Post/Memos, own final cache/index/history/Fits/carrier witnesses remain. The chosen model appears before edge selection and existential operational bounds. The retained primary observer remains universal after those bounds. Applying it yields the actual SAME completed captured fragment and final assignment extension at its own native endpoint.
+
+The permutation premise remains genuine. Raw interned selection satisfies it by literal rows. The modeled canonical closure additionally needs its actual row-map/fallback permutation; physical construction of that correspondence is not established by this wrapper. It chooses a local captured call, not an invocation in the actual ordered scan. An earlier unsupported projection or stopped callback still blocks scan reachability. No full recursive enumeration coverage, Discharged/rendering consequence or Haskell defect is claimed.

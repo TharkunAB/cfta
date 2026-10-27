@@ -1,0 +1,20 @@
+/-- The independent payload interpretation meets the actual ordinary constructor language laws. -/
+theorem laws (holds : Guard → Term Symbol → Bool) (environment : Env Symbol) :
+    MergedColdInterpretation.Laws (meaning holds environment) holds := by
+  constructor
+  · intro term
+    simp only [meaning, not_false_eq_true]
+  · intro entry edges depth free term
+    rw [meaning]
+    constructor
+    · rintro ⟨⟨edge, member⟩, accepted⟩
+      exact ⟨edge, member, (edgeMeaning_all holds environment edge term).mp accepted⟩
+    · rintro ⟨edge, member, accepted⟩
+      exact ⟨⟨edge, member⟩, (edgeMeaning_all holds environment edge term).mpr accepted⟩
+  · intro entry members depth free term
+    rw [meaning]
+    constructor
+    · rintro ⟨⟨member, present⟩, accepted⟩
+      exact ⟨member, present, accepted⟩
+    · rintro ⟨member, present, accepted⟩
+      exact ⟨⟨member, present⟩, accepted⟩

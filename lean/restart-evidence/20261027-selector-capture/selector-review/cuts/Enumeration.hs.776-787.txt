@@ -1,0 +1,12 @@
+{- | Expand one ordinary node and defer its eligible children.
+Keep the existing preparation of terminal equality endpoints and recursive
+boundaries. A selected root must not defer itself into another fresh slot.
+-}
+enumerateShallowHere ::
+    (Hashable symbol, Typeable symbol) =>
+    Seq SuspendedConstraint -> Node symbol -> EnumerateM symbol (TermFragment symbol)
+enumerateShallowHere scs n@(Node _)
+    | not (any (isTerminalPathTrie . scGetPathTrie) scs) = do
+        edgesOf <- gets _edgesOf
+        enumerateEdgeWith prepareShallowChild scs =<< branches (edgesOf n)
+enumerateShallowHere scs n = enumerateNode scs n

@@ -1,0 +1,12 @@
+variable [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Constraint)] [DecidableEq Node]
+
+/-- Numeric suffix admission follows actual continuations with the original enumeration cache. -/
+def Ranges (checkEmpty : Bool) (target : Nat) (scs : List Suspended) (before : Cached) :
+    List (EdgeValue Symbol Constraint) → Caller width → Queries → Prop
+  | [], _, _ => True
+  | edge :: rest, caller, queries =>
+      SourcePruningEnumerationSelectedEdge.Ranges checkEmpty scs edge caller before queries ∧
+      ∀ r n p h k receipt afterCaller saved,
+        SourcePruningEnumerationCapturedEdge.run checkEmpty r n p h k target scs edge caller before queries =
+          some receipt →
+        advance receipt = some (afterCaller, saved) → Ranges checkEmpty target scs before rest afterCaller saved

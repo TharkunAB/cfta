@@ -1,0 +1,36 @@
+MicroCFTA.SourcePruningEnumerationSelectorLanguage.canonical_accepting {Symbol Guard Weight : Type}
+  (heap : MicroCFTA.InternedConstructorTemplates.State Symbol Guard)
+  (ready : MicroCFTA.SourceEqualityRequiredCache.Ready heap)
+  (identity : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard → Int)
+  (canonicalOrder :
+    MicroCFTA.InternedConstructorTemplates.Value Symbol Guard →
+      MicroCFTA.Cache.Table Int (List (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard)))
+  (canonicalEdges :
+    MicroCFTA.InternedConstructorTemplates.Value Symbol Guard →
+      List (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard))
+  (le : Weight → Weight → Bool)
+  (weights : Option (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard → Weight))
+  (root : MicroCFTA.InternedConstructorTemplates.Value Symbol Guard)
+  (entry : MicroCFTA.Cache.Interned MicroCFTA.InternedBinderProtocol.NodeKey)
+  (edges : List (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol Guard)) (depth : Nat)
+  (free : List MicroCFTA.InternedBinderProtocol.Reference)
+  (available :
+    MicroCFTA.InternedProbeProvenance.Available heap
+      (MicroCFTA.InternedConstructorTemplates.Value.node entry edges depth free))
+  (actualRows :
+    ((canonicalOrder root (identity (MicroCFTA.InternedConstructorTemplates.Value.node entry edges depth free))).getD
+          (canonicalEdges (MicroCFTA.InternedConstructorTemplates.Value.node entry edges depth free))).Perm
+      edges)
+  (holds : Guard → MicroCFTA.Language.Term Symbol → Bool) (ambient : MicroCFTA.InternedGuardedLanguage.Env Symbol)
+  (term : MicroCFTA.Language.Term Symbol)
+  (accepted :
+    MicroCFTA.InternedGuardedLanguage.meaning holds ambient
+      (MicroCFTA.InternedConstructorTemplates.Value.node entry edges depth free) term) :
+  ∃ edge,
+    edge ∈
+        MicroCFTA.SourceCurrentEnumerationOrder.canonicalEdgesOf identity canonicalOrder canonicalEdges le weights root
+          (MicroCFTA.InternedConstructorTemplates.Value.node entry edges depth free) ∧
+      edge ∈ edges ∧
+        MicroCFTA.InternedEdgeResidency.EdgeResident heap edge ∧
+          MicroCFTA.InternedGuardedLanguage.edgeMeaning holds ambient edge term
+'MicroCFTA.SourcePruningEnumerationSelectorLanguage.canonical_accepting' depends on axioms: [propext, Quot.sound]

@@ -1,0 +1,41 @@
+          change edgeCost scs before.core.counter edge ≤
+            edgeCost scs before.core.counter edge + cost scs before.core.counter rest
+          omega)
+      obtain ⟨r, n, p, h, k, receipt, middleCaller, middleQueries, middleMemos, middleInventory,
+        headRun, headPost, headQueries, admitted, headPending, headHistory, shape, headFits, headKnown⟩ :=
+        head_complete_resources seed formulas solver inventory caller before checkEmpty uv handle scs parentEntry storedEdges depth free
+          edge roots memos initial ready stored decoded realized (selected edge (by simp)) paths counts flags pending fits headReserved known
+      rcases shape with continued | ⟨unhandled, allowed, projected⟩
+      · have kept := headPost.effects.keeps
+        have middleRealized : PendingRealized middleCaller.checked.native.machine.heap before.core :=
+          realized_preserved _ _ before.core before.core realized (EnumerationCompressionFrame.Frame.refl _) kept
+        have middleFlags := SourcePruningEnumerationNativeGrowth.flags _ _ kept before flags
+        have tailReserved : Reserved bits
+            (reservationAdvance seed (edgeCost scs before.core.counter edge))
+            (cost scs before.core.counter rest) := reserved.after_prefix
+        obtain ⟨tr, tn, tp, th, tk, processed, afterCaller, saved, final, next, tailResult,
+          tailRun, tailPost, querySame, admittedTail, tailPending, tailPosts, tailHistory, tailShape, tailSupported,
+          tailFits, tailKnown, tailResources⟩ :=
+          ih (reservationAdvance seed (edgeCost scs before.core.counter edge))
+            middleInventory middleCaller middleMemos headPost.context
+            (lookupNode_keeps _ _ kept handle _ decoded) middleRealized
+            (fun chosen member => selected chosen (List.mem_cons_of_mem _ member)) middleFlags headFits tailReserved headKnown
+        let result : Result (bits + 2) := match (generalizing := false) tailResult with
+          | .complete receipts afterCaller saved => .complete (receipt :: receipts) afterCaller saved
+          | .stopped receipts current => .stopped (receipt :: receipts) current
+        refine ⟨r + tr, n + tn, max p tp, max h th, k + tk, receipt :: processed,
+          afterCaller, saved, final, next, result, ?_, headPost.trans tailPost, querySame, ?_, ?_, ?_, ?_, ?_, ?_,
+          (by simpa only [cost, SourcePruningEnumerationIncomingReservation.advance_add] using tailFits),
+          (by simpa only [cost, SourcePruningEnumerationIncomingReservation.advance_add] using tailKnown), ?_⟩
+        · intro er en P H ek largeP largeH
+          have first := headRun (tr + er) (tn + en) P H (tk + ek)
+            (Nat.le_trans (Nat.le_max_left _ _) largeP) (Nat.le_trans (Nat.le_max_left _ _) largeH)
+          have last := tailRun (r + er) (n + en) P H (k + ek)
+            (Nat.le_trans (Nat.le_max_right _ _) largeP) (Nat.le_trans (Nat.le_max_right _ _) largeH)
+          have later : SourcePruningEnumerationNativeBranches.run checkEmpty (r + tr + er) (n + tn + en) P H
+              (k + tk + ek) uv scs before rest middleCaller middleMemos.query = tailResult := by
+            simpa only [Nat.add_assoc, Nat.add_left_comm, Nat.add_comm] using last
+          rw [headQueries] at later
+          simp only [Nat.add_assoc] at later
+          simp only [SourcePruningEnumerationNativeBranches.run, Nat.add_assoc, first, continued, later]
+          cases tailResult <;> rfl

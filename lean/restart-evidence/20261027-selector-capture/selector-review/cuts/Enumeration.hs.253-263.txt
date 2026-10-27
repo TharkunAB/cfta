@@ -1,0 +1,11 @@
+    expansions.
+    -}
+    , _expansionAncestry :: !RecursionAncestry
+    -- ^ The ancestry that the current expansion gives the UVars it reaches.
+    , _edgesOf :: Node symbol -> [Edge symbol]
+    {- ^ The edges of a node in the order of enumeration. It is one function,
+    set once for the enumeration, so a step that copies the state copies one
+    field for it.
+    -}
+    , _constrainedRecursion :: !Bool
+    {- ^ Whether the root reaches a recursive node with constraints. Only then

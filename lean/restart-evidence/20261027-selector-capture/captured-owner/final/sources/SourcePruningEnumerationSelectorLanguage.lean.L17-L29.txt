@@ -1,0 +1,13 @@
+theorem selected_accepting_of_perm
+    (heap : State Symbol Guard) (ready : SourceEqualityRequiredCache.Ready heap)
+    (entry : Cache.Interned InternedBinderProtocol.NodeKey)
+    (edges selectedEdges : List (EdgeValue Symbol Guard)) (depth : Nat)
+    (free : List InternedBinderProtocol.Reference)
+    (available : Available heap (.node entry edges depth free))
+    (sameRows : selectedEdges.Perm edges)
+    (holds : Guard → Term Symbol → Bool) (ambient : InternedGuardedLanguage.Env Symbol)
+    (term : Term Symbol)
+    (accepted : InternedGuardedLanguage.meaning holds ambient (.node entry edges depth free) term) :
+    ∃ edge, edge ∈ selectedEdges ∧ edge ∈ edges ∧
+      InternedEdgeResidency.EdgeResident heap edge ∧
+      InternedGuardedLanguage.edgeMeaning holds ambient edge term := by
