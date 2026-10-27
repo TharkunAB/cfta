@@ -1,0 +1,161 @@
+import MicroCFTA.SourcePruningEnumerationSelectedEdgeCoverage
+import MicroCFTA.SourcePruningEnumerationSelectedEdgeAdmission
+
+/-!
+# Completion from an accepted current selected edge
+
+Native acceptance derives the actual projection and inherited arity check.
+The original resource reservation covers that unique current projection.
+The complete resource packet and its uniform semantic observer remain.
+An accepted model constructs the actual completed symbolic edge fragment.
+-/
+namespace MicroCFTA.SourcePruningEnumerationSelectedEdge
+open EnumerationState EnumerationCorrectness EnumerationSchedule EnumerationDependencies
+open InternedConstructorTemplates InternedProbeProvenance
+open SourcePruningEnumerationNodes SourcePruningEnumerationObservation
+open SourceCurrentAllocatedNativeInventoryState (Inventory)
+open SourceCurrentAllocatedPartialInvariant (Context Post)
+open SourcePruningEnumerationIncomingReservation (Seed advance Reserved)
+open SourceCurrentConstrainedCapGeneratedQueryResources (Fits)
+local notation "Symbol" => SourcePruningTemplates.Symbol
+local notation "Constraint" => SourceSymbolicIndex.Constraint FullSyntax.Formula
+local notation "Node" => Value Symbol Constraint
+local notation "Caller" => SourceCurrentAllocatedPartialState.State
+local notation "Memos" => EndpointMemoGateTrace.Memos
+local notation "Queries" => SourceEndpointMemo.Memos
+local notation "Cached" => EnumerationExpandableIndex.Cached Symbol Constraint
+local notation "Fragment" => Fragments.Fragment Symbol
+local notation "Heap" => SourceEqualityAnnotationHeap.Heap
+variable {bits : Nat}
+
+variable [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Constraint)] [DecidableEq Node]
+
+/-- An accepted native edge derives its prechecks and constructs its actual completed fragment. -/
+theorem accepted_complete
+    (seed : Seed)
+    (formulas : SourceGuards.Formulas FullSyntax.Formula)
+    (solver : SourceGuards.Entailment FullSyntax.Formula)
+    (inventory : Inventory) (caller : Caller (bits + 2)) (before : Cached) (checkEmpty : Bool)
+    (parentEntry : Cache.Interned InternedBinderProtocol.NodeKey)
+    (edges : List (EdgeValue Symbol Constraint)) (depth : Nat) (free : List InternedBinderProtocol.Reference)
+    (edge : EdgeValue Symbol Constraint) (scs : List Suspended) (roots : Nat → Nat) (memos : Memos)
+    (initial : Context formulas solver inventory caller memos)
+    (parentAvailable : Available caller.checked.native.machine.heap (.node parentEntry edges depth free))
+    (parentClosed : free = []) (selected : edge ∈ edges)
+    (safe : Safe before.core) (realized : PendingRealized caller.checked.native.machine.heap before.core)
+    (paths : Roots before.core.representatives roots)
+    (counts : EnumerationCanonicalWaiting.Correct roots before.core.values before.waiting)
+    (flags : ∀ slot, SourcePruningEnumerationNativeIndex.candidate caller.checked.native.machine.heap
+      ((before.core.values[slot]?).getD .eliminated) = some (before.expandable slot))
+    (bounded : ∀ sc ∈ scs, sc.var < before.core.counter) (pending : InputsPending before.core scs)
+    (fits : Fits seed.2 caller.checked)
+    (reserved : ∀ (tries : List EqualityTrie.Trie) (residual : Option Constraint),
+      SourcePruningEnumerationConstraint.project edge.entry.key.constraint = some (tries, residual) →
+      Reserved bits seed (cost edge scs before.core.counter tries))
+    (known : Heap (fun guard => guard ∈ seed.1) caller.checked.native.machine.heap)
+    (ambient : InternedGuardedLanguage.Env Symbol)
+    (assignment : Nat → Language.Term Symbol) (term : Language.Term Symbol)
+    (satisfied : Satisfies
+      (SourcePruningEnumerationNativeLanguage.handles (SourceEqualityPCSGuard.holds formulas solver)
+        ambient caller.checked.native.machine.heap)
+      (fun guard candidate => SourceEqualityPCSGuard.holds formulas solver guard candidate = true)
+      assignment before.core)
+    (accepted : InternedGuardedLanguage.edgeMeaning
+      (SourceEqualityPCSGuard.holds formulas solver) ambient edge term)
+    (inherited : ∀ sc ∈ scs, Suspended.Holds assignment term sc) :
+    ∃ (tries : List EqualityTrie.Trie) (residual : Option Constraint),
+      SourcePruningEnumerationConstraint.project edge.entry.key.constraint = some (tries, residual) ∧
+      arityAllows edge.children.length scs = true ∧
+    ∃ (r n p h k : Nat) (afterCaller : Caller (bits + 2)) (after : Cached) (savedQueries : Queries)
+      (final : Memos) (next : Inventory) (afterRoots : Nat → Nat) (result : Result (bits + 2)),
+      ((∀ er en P H ek, p ≤ P → h ≤ H →
+        run checkEmpty (r + er) (n + en) P H (k + ek) scs edge caller before memos.query = result) ∧
+      Post formulas solver next caller afterCaller final ∧ final.query = savedQueries ∧
+      before.core.counter ≤ after.core.counter ∧ Roots after.core.representatives afterRoots ∧
+      StorageValid after.core ∧ PendingRealized afterCaller.checked.native.machine.heap after.core ∧
+      EnumerationCanonicalWaiting.Correct afterRoots after.core.values after.waiting ∧
+      (∀ slot, SourcePruningEnumerationNativeIndex.candidate afterCaller.checked.native.machine.heap
+        ((after.core.values[slot]?).getD .eliminated) = some (after.expandable slot)) ∧
+      EnumeratedOrigin before.core after.core ∧ InputsPending after.core scs ∧
+      (∀ held, held < before.core.counter → IsRoot before.core.representatives held →
+        Avoids before.core.representatives held scs → EnumerationDriver.Protected held before.core after.core) ∧
+      (EnumerationReferences.PendingReferences before.core → EnumerationReferences.PendingReferences after.core) ∧
+      (∀ held, held < before.core.counter → IsRoot before.core.representatives held →
+        Avoids before.core.representatives held scs → EnumerationReferences.IncomingAvoid held before.core →
+        EnumerationReferences.IncomingAvoid held after.core) ∧
+      ((∃ fragment, result = .complete fragment afterCaller savedQueries after ∧
+          Safe after.core ∧ FragmentBound after.core.counter fragment ∧ PendingFragment after.core fragment ∧
+          ∀ held, held < before.core.counter → IsRoot before.core.representatives held →
+            Avoids before.core.representatives held scs → FragmentAvoid after.core.representatives held fragment) ∨
+        ∃ fragments outer waiting, result = .stopped fragments
+          (.ok (some []), afterCaller, savedQueries, outer, waiting) (some after)) ∧
+      Fits (advance seed (cost edge scs before.core.counter tries)).2 afterCaller.checked ∧
+      Heap (fun guard => guard ∈ (advance seed (cost edge scs before.core.counter tries)).1)
+        afterCaller.checked.native.machine.heap ∧
+      ∀ (ambient : InternedGuardedLanguage.Env Symbol)
+        (assignment : Nat → Language.Term Symbol) (terms : List (Language.Term Symbol)),
+        Satisfies
+          (SourcePruningEnumerationNativeLanguage.handles (SourceEqualityPCSGuard.holds formulas solver)
+            ambient caller.checked.native.machine.heap)
+          (fun guard term => SourceEqualityPCSGuard.holds formulas solver guard term = true)
+          assignment before.core →
+        Language.All₂ (InternedGuardedLanguage.meaning (SourceEqualityPCSGuard.holds formulas solver)
+          ambient) edge.children terms →
+        SourceEqualityPCSGuard.holds formulas solver edge.entry.key.constraint
+          (.node edge.entry.key.symbol terms) = true →
+        (∀ sc ∈ scs, Suspended.Holds assignment (.node edge.entry.key.symbol terms) sc) →
+        ∃ (extended : Nat → Language.Term Symbol) (fragment : Fragment),
+          (∀ uv < before.core.counter, extended uv = assignment uv) ∧
+          Satisfies
+            (SourcePruningEnumerationNativeLanguage.handles (SourceEqualityPCSGuard.holds formulas solver)
+              ambient caller.checked.native.machine.heap)
+            (fun guard term => SourceEqualityPCSGuard.holds formulas solver guard term = true)
+            extended before.core ∧
+          result = .complete fragment afterCaller savedQueries after ∧
+          Fragments.fill extended fragment = .node edge.entry.key.symbol terms ∧
+          Satisfies
+            (SourcePruningEnumerationNativeLanguage.handles (SourceEqualityPCSGuard.holds formulas solver)
+              ambient afterCaller.checked.native.machine.heap)
+            (fun guard term => SourceEqualityPCSGuard.holds formulas solver guard term = true)
+            extended after.core) ∧
+      ∃ (extended : Nat → Language.Term Symbol) (fragment : Fragment),
+        (∀ uv < before.core.counter, extended uv = assignment uv) ∧
+        Satisfies
+          (SourcePruningEnumerationNativeLanguage.handles (SourceEqualityPCSGuard.holds formulas solver)
+            ambient caller.checked.native.machine.heap)
+          (fun guard candidate => SourceEqualityPCSGuard.holds formulas solver guard candidate = true)
+          extended before.core ∧
+        result = .complete fragment afterCaller savedQueries after ∧
+        Fragments.fill extended fragment = term ∧
+        Satisfies
+          (SourcePruningEnumerationNativeLanguage.handles (SourceEqualityPCSGuard.holds formulas solver)
+            ambient afterCaller.checked.native.machine.heap)
+          (fun guard candidate => SourceEqualityPCSGuard.holds formulas solver guard candidate = true)
+          extended after.core := by
+  obtain ⟨tries, residual, terms, projected, _valid, termShape, childrenAccepted,
+    _length, allowed, _ownEqualities, _residualHolds⟩ :=
+    SourcePruningEnumerationSelectedEdgeAdmission.selected_admission formulas solver inventory caller memos
+      parentEntry edges depth free edge scs initial parentAvailable selected ambient assignment term accepted inherited
+  obtain ⟨_terms, _shape, _children, guardHolds⟩ :=
+    (InternedGuardedLanguage.edgeMeaning_all
+      (SourceEqualityPCSGuard.holds formulas solver) ambient edge term).mp accepted
+  obtain ⟨r, n, p, h, k, afterCaller, after, savedQueries, final, next, afterRoots, result,
+    running, post, querySame, growth, afterPaths, storage, afterRealized, afterCounts, afterFlags,
+    origin, pendingInputs, protects, pendingHistory, incomingHistory, shape, returnedFits,
+    returnedKnown, accepting⟩ :=
+    complete_with_fragments_resources_accepting seed formulas solver inventory caller before checkEmpty
+      parentEntry edges depth free edge scs roots memos initial parentAvailable parentClosed selected
+      safe realized paths counts flags bounded pending allowed tries residual projected fits
+      (reserved tries residual projected) known
+  obtain ⟨extended, fragment, agree, originalSatisfied, completed, filled, afterSatisfied⟩ :=
+    accepting ambient assignment terms satisfied childrenAccepted
+      (by simpa only [termShape] using guardHolds)
+      (by simpa only [termShape] using inherited)
+  refine ⟨tries, residual, projected, allowed, r, n, p, h, k, afterCaller, after, savedQueries,
+    final, next, afterRoots, result, ?_, extended, fragment, agree, originalSatisfied, completed, ?_, afterSatisfied⟩
+  · exact ⟨running, post, querySame, growth, afterPaths, storage, afterRealized, afterCounts,
+      afterFlags, origin, pendingInputs, protects, pendingHistory, incomingHistory, shape,
+      returnedFits, returnedKnown, accepting⟩
+  · simpa only [termShape] using filled
+
+end MicroCFTA.SourcePruningEnumerationSelectedEdge
