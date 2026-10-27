@@ -1,0 +1,44 @@
+
+/-- A completed edge request consumes only its actual shorter checked body or a warm hit. -/
+theorem edge_request_heap (request : EdgeRequest Symbol Guard)
+    (before after : Checked width) (value : EdgeValue Symbol Guard) (fuel : Nat)
+    (valid : Good before) (heap : Heap before.native.machine.heap)
+    (trace : Trace fuel (.code (requestEdge request.domain request.left request.right)) before (.code (.pure value)) after)
+    (bodies : ∀ (count : Nat) (original : EdgeRequest Symbol Guard)
+      (start final : Checked width) (result : EdgeValue Symbol Guard), count < fuel →
+      Good start → EdgeReady start.native.machine original → Heap start.native.machine.heap →
+      Trace count (.edgeBody original .pure) start (.code (.pure result)) final →
+      Heap final.native.machine.heap) : Heap after.native.machine.heap := by
+  cases trace with
+  | cons control state next current final reached count inputs one tail =>
+      have checked := SourceCurrentAllocatedNativePhysicalCompletion.step_invariants _ before valid inputs (fun _ => trivial)
+      have currentGood : Good current := by simpa only [one, Outcome.state] using checked.1
+      have currentFields := checked.2.2.2.2.2
+      rw [one] at currentFields
+      have unchanged := SourceEqualityNativeDemandHeap.step_edge_heap request (.pure : EdgeValue Symbol Guard → Code Symbol Guard (EdgeValue Symbol Guard)) before
+      rw [show step (.code (.edge request .pure)) before = .yielded next current from one, Outcome.state] at unchanged
+      have currentHeap : Heap current.native.machine.heap := by rw [unchanged]; exact heap
+      cases selected : lookupEdge width request before.native with
+      | mk handle chosen =>
+          cases demanded : demandEdge handle chosen with
+          | mk observation running =>
+              cases observation with
+              | absent | busy =>
+                  simp only [requestEdge, step, selected, demanded] at one
+                  cases one
+              | ready result =>
+                  simp only [requestEdge, step, selected, demanded] at one
+                  cases one
+                  obtain ⟨_zero, _same, retained⟩ := pure_trace count result value _ after tail.steps
+                  rw [← retained]
+                  exact currentHeap
+              | evaluate original =>
+                  simp only [requestEdge, step, selected, demanded] at one
+                  cases one
+                  obtain ⟨inner, outer, result, middle, total, body, finish⟩ :=
+                    bind_inverse count (.edgeBody original .pure)
+                      (fun result => .finishEdge handle result (.pure result)) _ after value tail
+                  have bodyHeap := bodies inner original _ middle result (by omega) currentGood currentFields.1 currentHeap body
+                  exact finish_edge_heap handle result value middle after outer finish bodyHeap
+
+end MicroCFTA.SourcePruningEnumerationNativeRequestArity

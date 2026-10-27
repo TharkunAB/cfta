@@ -1,0 +1,15 @@
+MicroCFTA.SourcePruningEnumerationNativeBodyTrace.walk_length {A B : Type} {width : Nat}
+  [DecidableEq (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)]
+  [DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  {call :
+    A →
+      MicroCFTA.SourceRecursiveIntersectionCode.Code (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) B}
+  {inputs : List A} {before after : MicroCFTA.SourceEqualityNativeDemand.State width} {values : List B} {fuel : Nat}
+  (walk : MicroCFTA.SourceCurrentAllocatedNativeSemanticTraceReadback.Walk call inputs before values after fuel) :
+  values.length = inputs.length
+'MicroCFTA.SourcePruningEnumerationNativeBodyTrace.walk_length' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]

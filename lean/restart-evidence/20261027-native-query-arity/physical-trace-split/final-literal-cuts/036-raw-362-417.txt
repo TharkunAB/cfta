@@ -1,0 +1,56 @@
+MicroCFTA.SourcePruningEnumerationNativeBodyTrace.walk_work_readback {A B C : Type} {width : Nat}
+  [DecidableEq (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)]
+  [DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  (call :
+    A →
+      MicroCFTA.SourceRecursiveIntersectionCode.Code (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) B)
+  (inputs : List A)
+  (finish :
+    List B →
+      MicroCFTA.InternedConstructorTemplates.Work (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) C)
+  (fuel : Nat) (before after : MicroCFTA.SourceEqualityNativeDemand.State width) (value : C)
+  (trace :
+    MicroCFTA.SourceCurrentAllocatedNativePhysicalTraceCompletion.Trace fuel
+      (MicroCFTA.SourceEqualityNativeDemand.Control.code
+        ((MicroCFTA.SourceRecursiveIntersectionCode.walk call inputs).bind fun values =>
+          MicroCFTA.SourceRecursiveIntersectionCode.Code.work (finish values)
+            MicroCFTA.SourceRecursiveIntersectionCode.Code.pure))
+      before
+      (MicroCFTA.SourceEqualityNativeDemand.Control.code (MicroCFTA.SourceRecursiveIntersectionCode.Code.pure value))
+      after)
+  (valid : MicroCFTA.SourceCurrentAllocatedNativePhysicalCompletion.Good before)
+  (fields :
+    MicroCFTA.SourceCurrentAllocatedNativeFieldClosure.Fields
+      (MicroCFTA.SourceEqualityNativeDemand.Control.code
+        ((MicroCFTA.SourceRecursiveIntersectionCode.walk call inputs).bind fun values =>
+          MicroCFTA.SourceRecursiveIntersectionCode.Code.work (finish values)
+            MicroCFTA.SourceRecursiveIntersectionCode.Code.pure))
+      before) :
+  ∃ walkFuel values middle,
+    fuel = walkFuel + 1 ∧
+      MicroCFTA.SourceCurrentAllocatedNativeSemanticTraceReadback.Walk call inputs before values middle walkFuel ∧
+        MicroCFTA.SourceCurrentAllocatedNativePhysicalCompletion.Good middle ∧
+          MicroCFTA.SourceRecursiveIntersectionKernel.Extension before.native.machine middle.native.machine ∧
+            MicroCFTA.SourceEqualityRequiredCache.Keeps before.native.machine.heap middle.native.machine.heap ∧
+              MicroCFTA.SourceEqualityConstraintMemoAllocation.Grows before.operations middle.operations ∧
+                MicroCFTA.SourceEqualityNativeDemandHeapPrimitives.WorkInputs middle.native.machine.heap
+                    (finish values) ∧
+                  value = (MicroCFTA.InternedConstructorTemplates.run (finish values) middle.native.machine.heap).fst ∧
+                    after =
+                      {
+                        native :=
+                          MicroCFTA.SourceRecursiveIntersectionThunks.advance middle.native
+                            (have __src := middle.native.machine;
+                            {
+                              heap :=
+                                (MicroCFTA.InternedConstructorTemplates.run (finish values)
+                                    middle.native.machine.heap).snd,
+                              domains := __src.domains }),
+                        operations := middle.operations }
+'MicroCFTA.SourcePruningEnumerationNativeBodyTrace.walk_work_readback' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]

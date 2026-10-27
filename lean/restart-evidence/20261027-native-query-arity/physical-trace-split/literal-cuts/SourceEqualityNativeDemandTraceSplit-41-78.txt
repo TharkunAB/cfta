@@ -1,0 +1,38 @@
+theorem steps_bind_inverse [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)]
+    (fuel : Nat) (control : Control A) (next : A → Code Symbol Guard B)
+    (state after : State width) (value : B)
+    (trace : Steps fuel (control.bind next) state (.code (.pure value)) after) :
+    ∃ (inner outer : Nat) (result : A) (current : State width),
+      inner + outer = fuel ∧ Steps inner control state (.code (.pure result)) current ∧
+        Steps outer (.code (next result)) current (.code (.pure value)) after := by
+  induction fuel generalizing control state with
+  | zero =>
+      have same := steps_zero _ _ _ _ trace
+      cases control with
+      | edgeBody => cases same.1
+      | code code =>
+          cases code with
+          | pure result => exact ⟨0, 0, result, state, rfl, .refl _ _, trace⟩
+          | fail | work | enter | read | optionalBinder | node | edge | finishNode | finishEdge => cases same.1
+  | succ fuel ih =>
+      obtain ⟨rest, current, oneBound, tail⟩ := steps_succ fuel _ _ _ _ trace
+      have boundStep := step_bind control next state
+      cases one : step control state with
+      | done result initial =>
+          obtain ⟨pure, retained⟩ := (step_done_iff control state initial result).mp one
+          subst control
+          subst initial
+          exact ⟨0, fuel + 1, result, state, by omega, .refl _ _, trace⟩
+      | yielded body middle =>
+          rw [one, appendStep] at boundStep
+          have same := Outcome.yielded.inj (boundStep.symm.trans oneBound)
+          rcases same.1 with rfl
+          rcases same.2 with rfl
+          obtain ⟨inner, outer, result, final, count, bodyTrace, outerTrace⟩ := ih body middle tail
+          exact ⟨inner + 1, outer, result, final, by omega, .cons _ _ _ _ _ _ _ one bodyTrace, outerTrace⟩
+      | failed failure middle | constraintError message middle | blocked reason body middle =>
+          rw [one, appendStep] at boundStep
+          have impossible := boundStep.symm.trans oneBound
+          cases impossible
+
+/-- A completed appended run derives the actual inner result and its remaining completed continuation. -/

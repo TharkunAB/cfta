@@ -1,0 +1,38 @@
+    (next : EdgeValue Symbol Guard → Code Symbol Guard Output)
+    (before after : State width) (control : Control Output)
+    (one : body request next before = .yielded control after) :
+    ∃ code, body request .pure before = .yielded (.code code) after ∧
+      control = .code (code.bind next) := by
+  unfold body at one
+  split at one
+  · cases one
+    refine ⟨SourceEqualityNativeCheckedCode.sentinel request.left, ?_, rfl⟩
+    simp_all [body, sentinel, code_bind_pure]
+  · split at one
+    · cases one
+    · cases one
+    · split at one
+      · cases one
+      · cases one
+      · dsimp only at one
+        split at one
+        · cases one
+        · cases one
+          refine ⟨SourceEqualityNativeCheckedCode.sentinel request.left, ?_, rfl⟩
+          simp_all [body, sentinel, code_bind_pure]
+        · cases one
+          refine ⟨SourceEqualityNativeCheckedCode.sentinel request.left, ?_, rfl⟩
+          simp_all [body, sentinel, code_bind_pure]
+        · cases one
+          refine ⟨_, ?_, rfl⟩
+          simp_all [body, code_bind_pure]
+
+/-- A yielded pure body always exposes an ordinary code control. -/
+theorem pure_yielded_code (request : EdgeRequest Symbol Guard)
+    (before after : State width) (control : Control (EdgeValue Symbol Guard))
+    (one : body request .pure before = .yielded control after) :
+    ∃ code, control = .code code := by
+  obtain ⟨code, _, same⟩ := yielded_unbind request Code.pure before after control one
+  exact ⟨code, by simpa only [code_bind_pure] using same⟩
+
+end MicroCFTA.SourceEqualityNativeDemandBodyYield

@@ -1,0 +1,76 @@
+theorem walk_length [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)]
+    {call : A → Code Symbol Guard B} {inputs : List A} {before after : Checked width}
+    {values : List B} {fuel : Nat} (walk : Walk call inputs before values after fuel) :
+    values.length = inputs.length := by
+  induction walk with
+  | nil => rfl
+  | cons first rest before middle after value values firstFuel restFuel called tail ih =>
+      exact congrArg Nat.succ ih
+
+/-- Actual rich child prefixes retain their same middle invariants without a range forecast. -/
+theorem cons_readback [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)]
+    (call : A → Code Symbol Guard B) (first : A) (rest : List A) (fuel : Nat)
+    (before after : Checked width) (outputs : List B)
+    (trace : Trace fuel (.code (SourceRecursiveIntersectionCode.walk call (first :: rest)))
+      before (.code (.pure outputs)) after)
+    (valid : Good before)
+    (fields : Fields (.code (SourceRecursiveIntersectionCode.walk call (first :: rest))) before) :
+    ∃ (firstFuel restFuel : Nat) (value : B) (values : List B) (middle : Checked width),
+      firstFuel + restFuel = fuel ∧ outputs = value :: values ∧
+      Trace firstFuel (.code (call first)) before (.code (.pure value)) middle ∧
+      Trace restFuel (.code (SourceRecursiveIntersectionCode.walk call rest)) middle (.code (.pure values)) after ∧
+      Good middle ∧ Extension before.native.machine middle.native.machine ∧
+      SourceEqualityRequiredCache.Keeps before.native.machine.heap middle.native.machine.heap ∧
+      SourceEqualityConstraintMemoAllocation.Grows before.operations middle.operations ∧
+      Fields (.code (call first)) before ∧
+      Fields (.code (SourceRecursiveIntersectionCode.walk call rest)) middle ∧
+      firstFuel ≤ fuel ∧ restFuel ≤ fuel := by
+  let next := fun value => (SourceRecursiveIntersectionCode.walk call rest).bind
+    fun values => .pure (value :: values)
+  obtain ⟨firstFuel, tailFuel, value, middle, count, called, tailTrace⟩ :=
+    SourceCurrentAllocatedNativeSemanticTraceReadback.bind_inverse fuel (.code (call first))
+      next before after outputs trace
+  have reached := SourceCurrentAllocatedNativeSemanticTraceReadback.effects (called.bind next) valid fields
+  obtain ⟨restFuel, finalFuel, values, current, restCount, restTrace, finalTrace⟩ :=
+    SourceCurrentAllocatedNativeSemanticTraceReadback.bind_inverse tailFuel
+      (.code (SourceRecursiveIntersectionCode.walk call rest))
+      (fun values => .pure (value :: values)) middle after outputs tailTrace
+  obtain ⟨rfl, rfl, rfl⟩ := pure_trace finalFuel (value :: values) outputs current after finalTrace.steps
+  exact ⟨firstFuel, restFuel, value, values, middle, by omega, rfl, called, restTrace,
+    reached.1, reached.2.1, reached.2.2.1, reached.2.2.2.1,
+    SourceCurrentAllocatedNativeSemanticTraceReadback.fields_before_bind
+      (.code (call first)) next before fields,
+    SourceCurrentAllocatedNativeSemanticTraceReadback.fields_before_bind
+      (.code (SourceRecursiveIntersectionCode.walk call rest)) (fun values => .pure (value :: values))
+      middle reached.2.2.2.2, by omega, by omega⟩
+
+/-- A rich child walk and its real final work retain exact fuel and every reached physical check. -/
+theorem walk_work_readback [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)]
+    (call : A → Code Symbol Guard B) (inputs : List A) (finish : List B → Work Symbol Guard C)
+    (fuel : Nat) (before after : Checked width) (value : C)
+    (trace : Trace fuel
+      (.code ((SourceRecursiveIntersectionCode.walk call inputs).bind fun values => .work (finish values) .pure))
+      before (.code (.pure value)) after)
+    (valid : Good before)
+    (fields : Fields
+      (.code ((SourceRecursiveIntersectionCode.walk call inputs).bind fun values => .work (finish values) .pure)) before) :
+    ∃ (walkFuel : Nat) (values : List B) (middle : Checked width), fuel = walkFuel + 1 ∧
+      Walk call inputs before values middle walkFuel ∧ Good middle ∧
+      Extension before.native.machine middle.native.machine ∧
+      SourceEqualityRequiredCache.Keeps before.native.machine.heap middle.native.machine.heap ∧
+      SourceEqualityConstraintMemoAllocation.Grows before.operations middle.operations ∧
+      WorkInputs middle.native.machine.heap (finish values) ∧
+      value = (run (finish values) middle.native.machine.heap).1 ∧
+      after = {middle with native := advance middle.native {middle.native.machine with heap :=
+        (run (finish values) middle.native.machine.heap).2}} := by
+  obtain ⟨inner, outer, values, middle, count, walked, finished⟩ :=
+    SourceCurrentAllocatedNativeSemanticTraceReadback.bind_inverse fuel
+      (.code (SourceRecursiveIntersectionCode.walk call inputs))
+      (fun values => .work (finish values) .pure) before after value trace
+  have reached := SourceCurrentAllocatedNativeSemanticTraceReadback.effects
+    (walked.bind (fun values => .work (finish values) .pure)) valid fields
+  obtain ⟨rfl, same, retained, operands⟩ :=
+    SourceCurrentAllocatedNativeSemanticTraceReadback.work_readback (finish values) outer middle after value finished
+  exact ⟨inner, values, middle, count.symm,
+    SourceCurrentAllocatedNativeSemanticTraceReadback.walk_readback call inputs inner before middle values walked,
+    reached.1, reached.2.1, reached.2.2.1, reached.2.2.2.1, operands, same, retained⟩

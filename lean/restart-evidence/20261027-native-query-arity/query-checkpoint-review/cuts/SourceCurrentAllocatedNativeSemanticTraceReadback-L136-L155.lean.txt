@@ -1,0 +1,20 @@
+/-- Initial invariants derive every reached state, history, and continuation field receipt. -/
+theorem effects [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)]
+    {fuel : Nat} {control rest : Control A} {before after : Checked width}
+    (trace : Trace fuel control before rest after) (valid : Good before) (fields : Fields control before) :
+    Good after ∧ Extension before.native.machine after.native.machine ∧
+      SourceEqualityRequiredCache.Keeps before.native.machine.heap after.native.machine.heap ∧
+      SourceEqualityConstraintMemoAllocation.Grows before.operations after.operations ∧ Fields rest after := by
+  induction trace with
+  | refl control state => exact ⟨valid, .refl _, SourceEqualityRequiredCache.pure_keeps _ valid.heap,
+      SourceEqualityConstraintMemoAllocation.grows_refl _, fields⟩
+  | cons control state next current final result count inputs one tail ih =>
+      have checked := SourceCurrentAllocatedNativePhysicalCompletion.step_invariants control state valid inputs fields
+      have reached : Good current ∧ Extension state.native.machine current.native.machine ∧
+          SourceEqualityRequiredCache.Keeps state.native.machine.heap current.native.machine.heap ∧
+          SourceEqualityConstraintMemoAllocation.Grows state.operations current.operations ∧ Fields next current := by
+        rw [one] at checked
+        exact ⟨checked.1, checked.2.1, checked.2.2.1, checked.2.2.2.1, checked.2.2.2.2.2⟩
+      have later := ih reached.1 reached.2.2.2.2
+      exact ⟨later.1, reached.2.1.trans later.2.1, reached.2.2.1.trans later.2.2.1,
+        operations_trans reached.2.2.2.1 later.2.2.2.1, later.2.2.2.2⟩

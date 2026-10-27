@@ -1,0 +1,29 @@
+    have actualFields : Fields
+        (.code ((SourceRecursiveIntersectionCode.walk (fun pair => requestNode request.domain pair.1 pair.2)
+          (request.left.children.zip request.right.children)).bind fun values =>
+            .work (makeEdge request.left.entry.key.symbol (SourceEqualityConjoinAllocation.readback combined) values) .pure)) started := by
+      simpa only [codeSame, SourceEqualityNativeCheckedCode.children] using startedEffects.2.2.2.2
+    obtain ⟨childFuel, values, middle, counted, walked, good, _extension, _keeps, _operations,
+        operands, same, retained⟩ := walk_work_readback
+      (fun pair => requestNode request.domain pair.1 pair.2)
+      (request.left.children.zip request.right.children)
+      (fun values => makeEdge request.left.entry.key.symbol (SourceEqualityConjoinAllocation.readback combined) values)
+      rest started after value actual startedEffects.1 actualFields
+    have arity : request.left.children.length = request.right.children.length := by
+      by_cases equal : request.left.children.length = request.right.children.length
+      · exact equal
+      · have impossible := congrArg Prod.fst
+          (SourceEqualityIntersectionEdgeAllocation.run_mismatch GuardStructuralOrder.le first second
+            request.left.children.length request.right.children.length before.operations equal)
+        rw [accepted] at impossible
+        cases impossible
+    have ready := body_ready request (.pure : EdgeValue Symbol Guard → Code Symbol Guard (EdgeValue Symbol Guard))
+      before arity first second combined left right accepted
+    simp only [code_bind_pure] at ready
+    have startedSame := (Outcome.yielded.inj (one.symm.trans ready)).2
+    have lengthSame : values.length = request.left.children.length := by
+      rw [walk_length walked, List.length_zip, arity, Nat.min_self]
+    exact .inr ⟨first, second, combined, values, middle, childFuel, left, right, accepted,
+      codeSame, startedSame, by omega, walked, good, operands, same, retained, lengthSame⟩
+
+end MicroCFTA.SourcePruningEnumerationNativeBodyTrace

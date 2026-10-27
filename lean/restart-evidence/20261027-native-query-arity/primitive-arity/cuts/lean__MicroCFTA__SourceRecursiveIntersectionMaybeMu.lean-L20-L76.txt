@@ -1,0 +1,57 @@
+/-- The source substitutes the actual old pair name before callback normalization. -/
+def callback [DecidableEq (EdgeKey Symbol Guard)] (old : Reference) (body : Value Symbol Guard)
+    (name : Reference) (state : State Symbol Guard) : Outcome Symbol Guard (Value Symbol Guard) :=
+  (InternedFreshOrdinaryStoredSubstitution.execute body (replacement old (.reference name)) state).bind
+    fun value after => work (withoutSelfReference name value) after
+
+/-- Source Mu construction performs the two actual normalized probes before its canonical request. -/
+def construct [DecidableEq (EdgeKey Symbol Guard)] (old : Reference) (body : Value Symbol Guard)
+    (state : State Symbol Guard) : Outcome Symbol Guard (Value Symbol Guard) :=
+  (callback old body .depth state).bind fun depth afterDepth =>
+  (callback old body (.uninterned (InternedFreshOrdinaryConstruction.ordinaryLevel depth)) afterDepth).bind
+    fun ordinary afterOrdinary => request true depth ordinary (callback old body) afterOrdinary
+
+/-- Source intersection constructs a binder only when its exact pair name remains free. -/
+def maybeMu [DecidableEq (EdgeKey Symbol Guard)] (key : Nat × Nat) (body : Value Symbol Guard)
+    (state : State Symbol Guard) : Outcome Symbol Guard (Value Symbol Guard) :=
+  if Reference.intersection key.1 key.2 ∈ body.free then construct (.intersection key.1 key.2) body state
+  else .done body state
+
+/-- Each actual source substitution callback equals the repaired lexical callback at every current cache. -/
+theorem callback_eq [DecidableEq (EdgeKey Symbol Guard)] (old : Reference) (body : Value Symbol Guard)
+    (name : Reference) (source current : State Symbol Guard) (facts : Facts source) (available : Available source body) :
+    callback old body name current =
+      InternedFreshOrdinaryFacts.callback (encode (leaves body) [old] body) (leaves body) name current := by
+  unfold callback InternedFreshOrdinaryFacts.callback
+  rw [rebind_build body old name source current facts.coherent available]
+
+/-- Exact compilation retains source probes, fresh-name selection, hit/pending branches, reservation, and final cache. -/
+theorem construct_eq [DecidableEq (EdgeKey Symbol Guard)] (old : Reference) (body : Value Symbol Guard)
+    (source current : State Symbol Guard) (facts : Facts source) (available : Available source body) :
+    construct old body current =
+      InternedFreshOrdinaryConstruction.build (.binder true (encode (leaves body) [old] body)) (leaves body) current := by
+  have callbacks : callback old body = InternedFreshOrdinaryFacts.callback (encode (leaves body) [old] body) (leaves body) := by
+    funext name state
+    exact callback_eq old body name source state facts available
+  simp only [construct, callbacks, InternedFreshOrdinaryFacts.callback, InternedFreshOrdinaryConstruction.build]
+  rfl
+
+/-- The complete source optional-binder call equals the repaired executor, including pending outcomes. -/
+theorem maybeMu_eq [DecidableEq (EdgeKey Symbol Guard)] (key : Nat × Nat) (body : Value Symbol Guard)
+    (source current : State Symbol Guard) (facts : Facts source) (available : Available source body) :
+    maybeMu key body current =
+      if Reference.intersection key.1 key.2 ∈ body.free then
+        InternedFreshOrdinaryConstruction.build
+          (.binder true (encode (leaves body) [.intersection key.1 key.2] body)) (leaves body) current
+      else .done body current := by
+  unfold maybeMu
+  split
+  · exact construct_eq _ body source current facts available
+  · rfl
+
+/-- Every actual optional-binder outcome preserves complete source facts and both physical histories. -/
+theorem verified [DecidableEq (EdgeKey Symbol Guard)] (key : Nat × Nat) (body : Value Symbol Guard)
+    (state : State Symbol Guard) (facts : Facts state) (available : Available state body) :
+    Verified state (maybeMu key body state) Available := by
+  rw [maybeMu_eq key body state state facts available]
+  split

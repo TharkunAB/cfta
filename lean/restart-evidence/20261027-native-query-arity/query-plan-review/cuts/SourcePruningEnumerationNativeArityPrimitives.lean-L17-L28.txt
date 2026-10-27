@@ -1,0 +1,12 @@
+
+section Construction
+variable {Symbol : Type}
+
+/-- Each edge request executed by this work has arity at its actual current cache. -/
+def WorkFits [DecidableEq (EdgeKey Symbol Constraint)] :
+    Work Symbol Constraint A → State Symbol Constraint → Prop
+  | .pure _, _ => True
+  | .edge key identify next, state =>
+      Fits key.constraint key.children.length ∧
+        WorkFits (next (edgeStep key identify state).1) (edgeStep key identify state).2
+  | .node key identify next, state =>

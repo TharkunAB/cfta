@@ -1,0 +1,34 @@
+MicroCFTA.SourcePruningEnumerationNativeQueryArity.walk_heap {A B : Type} {width : Nat}
+  [DecidableEq MicroCFTA.SourcePruningTemplates.Symbol]
+  [DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey MicroCFTA.SourcePruningTemplates.Symbol
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  (limit : Nat)
+  (call :
+    A →
+      MicroCFTA.SourceRecursiveIntersectionCode.Code MicroCFTA.SourcePruningTemplates.Symbol
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) B)
+  (calls :
+    ∀ (input : A) (fuel : Nat),
+      fuel ≤ limit →
+        ∀ (before after : MicroCFTA.SourceEqualityNativeDemand.State width) (value : B),
+          MicroCFTA.SourceCurrentAllocatedNativePhysicalCompletion.Good before →
+            MicroCFTA.SourcePruningEnumerationArityOrigins.Heap before.native.machine.heap →
+              MicroCFTA.SourceCurrentAllocatedNativePhysicalTraceCompletion.Trace fuel
+                  (MicroCFTA.SourceEqualityNativeDemand.Control.code (call input)) before
+                  (MicroCFTA.SourceEqualityNativeDemand.Control.code
+                    (MicroCFTA.SourceRecursiveIntersectionCode.Code.pure value))
+                  after →
+                MicroCFTA.SourcePruningEnumerationArityOrigins.Heap after.native.machine.heap)
+  (fields :
+    ∀ (input : A) (state : MicroCFTA.SourceEqualityNativeDemand.State width),
+      MicroCFTA.SourceCurrentAllocatedNativeFieldClosure.Fields
+        (MicroCFTA.SourceEqualityNativeDemand.Control.code (call input)) state)
+  (inputs : List A) (values : List B) (before after : MicroCFTA.SourceEqualityNativeDemand.State width) (fuel : Nat)
+  (bounded : fuel ≤ limit) (initial : MicroCFTA.SourceCurrentAllocatedNativePhysicalCompletion.Good before)
+  (heap : MicroCFTA.SourcePruningEnumerationArityOrigins.Heap before.native.machine.heap)
+  (actual : MicroCFTA.SourceCurrentAllocatedNativeSemanticTraceReadback.Walk call inputs before values after fuel) :
+  MicroCFTA.SourcePruningEnumerationArityOrigins.Heap after.native.machine.heap
+'MicroCFTA.SourcePruningEnumerationNativeQueryArity.walk_heap' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]

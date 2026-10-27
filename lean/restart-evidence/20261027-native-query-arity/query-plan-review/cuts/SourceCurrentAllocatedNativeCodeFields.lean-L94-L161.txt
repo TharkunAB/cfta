@@ -1,0 +1,68 @@
+/-- Source Mu compilation emits only domain entry, recursive demand, and optional binding. -/
+theorem compileMu_fields (operations : OpState) (domain : Cache.Interned IntersectionFlatMemoKeyDomain.DomainKey)
+    (left right : Value Symbol Guard) : Fields operations (compileMu domain left right) := by
+  unfold compileMu
+  split <;> simp only [Fields, unsupported, implies_true]
+
+/-- Source reference compilation emits no new edge annotation. -/
+theorem compileReference_fields (operations : OpState) (domain : Cache.Interned IntersectionFlatMemoKeyDomain.DomainKey)
+    (name : Nat) (other : Value Symbol Guard) (left : Bool) :
+    Fields operations (compileReference domain name other left) := by
+  unfold compileReference
+  split
+  · intro found
+    cases found with
+    | none => trivial
+    | some bound => split <;> intro value <;> trivial
+  · trivial
+
+/-- Row joining emits only edge requests and ordinary node normalization. -/
+theorem compileRows_fields [DecidableEq Symbol] (operations : OpState)
+    (domain : Cache.Interned IntersectionFlatMemoKeyDomain.DomainKey) (left right : List (EdgeValue Symbol Guard)) :
+    Fields operations (compileRows domain left right) := by
+  apply fields_bind operations
+  · exact fields_walk operations _ _ (fun _ _ => by intro value; trivial)
+  · intro values
+    exact ⟨makeNode_fields operations values, fun _ => trivial⟩
+
+/-- Every literal source node branch emits only fields already available in the indexed cache. -/
+theorem compileNode_fields [DecidableEq Symbol] (operations : OpState) (request : NodeRequest Symbol Guard) :
+    Fields operations (compileNode request) := by
+  cases selected : SourceRecursiveIntersectionControl.decision request.domain.key request.left request.right with
+  | empty | reset | self | swap | repeated key | unsupported =>
+      simp only [compileNode, selected, unsupported, requestNode, Fields, implies_true]
+  | bothMu | leftMu | rightMu =>
+      simpa only [compileNode, selected] using compileMu_fields operations request.domain request.left request.right
+  | leftUnion =>
+      simp only [compileNode, selected]
+      cases request.left with
+      | union entry members depth free =>
+          apply fields_bind operations
+          · exact fields_walk operations _ _ (fun _ _ => by intro value; trivial)
+          · intro values
+            exact ⟨makeUnion_fields operations values, fun _ => trivial⟩
+      | empty | reference | node | mu => trivial
+  | rightUnion =>
+      simp only [compileNode, selected]
+      cases request.right with
+      | union entry members depth free =>
+          apply fields_bind operations
+          · exact fields_walk operations _ _ (fun _ _ => by intro value; trivial)
+          · intro values
+            exact ⟨makeUnion_fields operations values, fun _ => trivial⟩
+      | empty | reference | node | mu => trivial
+  | leftReference =>
+      simp only [compileNode, selected]
+      cases request.left <;> try trivial
+      rename_i name
+      cases name <;> first | exact compileReference_fields operations _ _ _ _ | trivial
+  | rightReference =>
+      simp only [compileNode, selected]
+      cases request.right <;> try trivial
+      rename_i name
+      cases name <;> first | exact compileReference_fields operations _ _ _ _ | trivial
+  | ordinary =>
+      simp only [compileNode, selected]
+      cases request.left <;> cases request.right <;> first | exact compileRows_fields operations _ _ _ | trivial
+
+/-- The actual rejected branch uses an existing load for its source top annotation. -/

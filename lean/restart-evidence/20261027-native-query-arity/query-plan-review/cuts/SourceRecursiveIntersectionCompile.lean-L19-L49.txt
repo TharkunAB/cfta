@@ -1,0 +1,31 @@
+/-- A row request retains its domain and ordered complete edge records. -/
+def requestEdge (domain : Interned DomainKey) (left right : EdgeValue Symbol Guard) : Code Symbol Guard (EdgeValue Symbol Guard) :=
+  .edge ⟨domain, left, right⟩ .pure
+
+/-- Unsupported operands retain their original references. -/
+def unsupported (left right : Value Symbol Guard) : Code Symbol Guard A :=
+  .fail (.unsupported left.referenceOf right.referenceOf)
+
+/-- Mu entry allocates the actual extended domain before requesting the two original bodies. -/
+def compileMu (domain : Interned DomainKey) (left right : Value Symbol Guard) : Code Symbol Guard (Value Symbol Guard) :=
+  match identity left, identity right with
+  | some first, some second =>
+      .enter domain left right first second fun entered =>
+        .node ⟨entered, body left, body right⟩ fun value =>
+          .optionalBinder (pair first second) value .pure
+  | _, _ => unsupported left right
+
+/-- Original free binding lookup precedes the next physical node request. -/
+def compileReference (domain : Interned DomainKey) (name : Nat) (other : Value Symbol Guard) (left : Bool) :
+    Code Symbol Guard (Value Symbol Guard) :=
+  if name ∈ names domain.key then
+    .read name fun found => match found with
+      | some bound => if left then requestNode domain bound other else requestNode domain other bound
+      | none => .fail (.missingPayload name)
+  else .fail (.missingBinder name)
+
+/-- Edge compilation checks arity before requesting any child. -/
+def compileEdge (emptyGuard : Guard) (conjoin : Guard → Guard → Guard) (request : EdgeRequest Symbol Guard) :
+    Code Symbol Guard (EdgeValue Symbol Guard) :=
+  if request.left.children.length = request.right.children.length then
+    (walk (fun children => requestNode request.domain children.1 children.2) (request.left.children.zip request.right.children)).bind fun values =>

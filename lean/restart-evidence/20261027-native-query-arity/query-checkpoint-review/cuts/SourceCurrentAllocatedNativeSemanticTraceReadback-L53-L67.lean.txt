@@ -1,0 +1,15 @@
+/-- A completed physical trace exposes the remainder after its actual first yielded step. -/
+theorem after_step [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)]
+    (fuel : Nat) (control next : Control A) (before middle after : Checked width) (value : A)
+    (trace : Trace fuel control before (.code (.pure value)) after)
+    (one : step control before = .yielded next middle) :
+    ∃ restFuel, fuel = restFuel + 1 ∧ Trace restFuel next middle (.code (.pure value)) after := by
+  cases trace with
+  | refl => cases one
+  | cons control before rest current final after count inputs actual tail =>
+      have same := Outcome.yielded.inj (one.symm.trans actual)
+      rcases same.1 with rfl
+      rcases same.2 with rfl
+      exact ⟨count, rfl, tail⟩
+
+/-- A completed physical trace contains its current physical input check. -/

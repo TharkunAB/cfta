@@ -1,0 +1,39 @@
+    LocalWorks (compileNode request) := by
+  cases selected : SourceRecursiveIntersectionControl.decision request.domain.key request.left request.right with
+  | empty | reset | self | swap | repeated key | unsupported =>
+      simp only [compileNode, selected, SourceRecursiveIntersectionCode.unsupported, requestNode, LocalWorks, implies_true]
+  | bothMu | leftMu | rightMu =>
+      simpa only [compileNode, selected] using compileMu_localWorks request.domain request.left request.right
+  | leftUnion =>
+      simp only [compileNode, selected]
+      cases request.left with
+      | union entry members depth free =>
+          apply localWorks_bind
+          · exact localWorks_walk _ _ (fun _ => by intro value; trivial)
+          · intro values
+            exact ⟨SourcePruningEnumerationNativeArityPrimitives.makeUnion_fits values, fun _ => trivial⟩
+      | empty | reference | node | mu => trivial
+  | rightUnion =>
+      simp only [compileNode, selected]
+      cases request.right with
+      | union entry members depth free =>
+          apply localWorks_bind
+          · exact localWorks_walk _ _ (fun _ => by intro value; trivial)
+          · intro values
+            exact ⟨SourcePruningEnumerationNativeArityPrimitives.makeUnion_fits values, fun _ => trivial⟩
+      | empty | reference | node | mu => trivial
+  | leftReference =>
+      simp only [compileNode, selected]
+      cases request.left <;> try trivial
+      rename_i name
+      cases name <;> first | exact compileReference_localWorks _ _ _ _ | trivial
+  | rightReference =>
+      simp only [compileNode, selected]
+      cases request.right <;> try trivial
+      rename_i name
+      cases name <;> first | exact compileReference_localWorks _ _ _ _ | trivial
+  | ordinary =>
+      simp only [compileNode, selected]
+      cases request.left <;> cases request.right <;> first | exact compileRows_localWorks _ _ _ | trivial
+
+private theorem yielded_heap (limit : Nat) (control next : Control A)

@@ -1,0 +1,14 @@
+    (left : SourceEqualityConstraintFieldLookup.load request.left.entry.key.constraint state.operations.constraints = .ok (some first))
+    (right : SourceEqualityConstraintFieldLookup.load request.right.entry.key.constraint state.operations.constraints = .ok (some second))
+    (ready : (SourceEqualityIntersectionEdgeAllocation.run GuardStructuralOrder.le first second
+      request.left.children.length request.right.children.length state.operations).1 = .ok (.ready combined)) :
+    body request next state =
+      .yielded (.code ((SourceEqualityNativeCheckedCode.children request.domain request.left request.right combined).bind next))
+        {state with operations := (SourceEqualityIntersectionEdgeAllocation.run GuardStructuralOrder.le first second
+          request.left.children.length request.right.children.length state.operations).2} := by
+  unfold body
+  rw [ite_eq_right (not_not_intro arity), left, right]
+  simp only [ready]
+
+/-- Normalized fields already in storage give a finite continuation without a semantic answer oracle. -/
+theorem body_complete (request : EdgeRequest Symbol Guard) (next : EdgeValue Symbol Guard → Code Symbol Guard Output)

@@ -1,0 +1,51 @@
+  | pure (value : A) : Code Symbol Guard A
+  | fail (failure : Failure) : Code Symbol Guard A
+  | work {X : Type} (job : Work Symbol Guard X) (next : X → Code Symbol Guard A) : Code Symbol Guard A
+  | enter (domain : Interned DomainKey) (left right : Value Symbol Guard) (first second : Nat)
+      (next : Interned DomainKey → Code Symbol Guard A) : Code Symbol Guard A
+  | read (name : Nat) (next : Option (Value Symbol Guard) → Code Symbol Guard A) : Code Symbol Guard A
+  | optionalBinder (key : Nat × Nat) (body : Value Symbol Guard)
+      (next : Value Symbol Guard → Code Symbol Guard A) : Code Symbol Guard A
+  | node (request : NodeRequest Symbol Guard) (next : Value Symbol Guard → Code Symbol Guard A) : Code Symbol Guard A
+  | edge (request : EdgeRequest Symbol Guard) (next : EdgeValue Symbol Guard → Code Symbol Guard A) : Code Symbol Guard A
+  | finishNode (handle : Nat) (value : Value Symbol Guard) (next : Code Symbol Guard A) : Code Symbol Guard A
+  | finishEdge (handle : Nat) (value : EdgeValue Symbol Guard) (next : Code Symbol Guard A) : Code Symbol Guard A
+
+/-- Append a continuation without evaluating any source request. -/
+def Code.bind (code : Code Symbol Guard A) (next : A → Code Symbol Guard B) : Code Symbol Guard B :=
+  match code with
+  | .pure value => next value
+  | .fail failure => .fail failure
+  | .work job resume => .work job (fun value => (resume value).bind next)
+  | .enter domain left right first second resume => .enter domain left right first second (fun value => (resume value).bind next)
+  | .read name resume => .read name (fun value => (resume value).bind next)
+  | .optionalBinder key body resume => .optionalBinder key body (fun value => (resume value).bind next)
+  | .node request resume => .node request (fun value => (resume value).bind next)
+  | .edge request resume => .edge request (fun value => (resume value).bind next)
+  | .finishNode handle value rest => .finishNode handle value (rest.bind next)
+  | .finishEdge handle value rest => .finishEdge handle value (rest.bind next)
+
+/-- Appending continuations preserves their original order through every source instruction. -/
+theorem Code.bind_assoc (code : Code Symbol Guard A) (first : A → Code Symbol Guard B) (second : B → Code Symbol Guard C) :
+    (code.bind first).bind second = code.bind (fun value => (first value).bind second) := by
+  induction code with
+  | pure value | fail failure => rfl
+  | work job resume ih | enter domain left right first second resume ih | read name resume ih | optionalBinder key body resume ih | node request resume ih | edge request resume ih =>
+    simp only [Code.bind, ih]
+  | finishNode handle value rest ih | finishEdge handle value rest ih => simp only [Code.bind, ih]
+
+/-- Keep each list request before the next request and the final continuation. -/
+def walk (call : A → Code Symbol Guard B) : List A → Code Symbol Guard (List B)
+  | [] => .pure []
+  | first :: rest => (call first).bind fun value => (walk call rest).bind fun values => .pure (value :: values)
+
+/-- One physical node callback receives its complete captured request. -/
+abbrev NodeCall (Symbol Guard : Type) := NodeRequest Symbol Guard → Machine Symbol Guard → Result Symbol Guard (Value Symbol Guard)
+
+/-- One physical edge callback receives its complete captured row request. -/
+abbrev EdgeCall (Symbol Guard : Type) := EdgeRequest Symbol Guard → Machine Symbol Guard → Result Symbol Guard (EdgeValue Symbol Guard)
+
+/-- Interpret actual source effects, using separate recursive node and edge callbacks. -/
+def interpret [DecidableEq (EdgeKey Symbol Guard)] (nodes : NodeCall Symbol Guard) (edges : EdgeCall Symbol Guard)
+    (code : Code Symbol Guard A) (state : Machine Symbol Guard) : Result Symbol Guard A :=
+  match code with

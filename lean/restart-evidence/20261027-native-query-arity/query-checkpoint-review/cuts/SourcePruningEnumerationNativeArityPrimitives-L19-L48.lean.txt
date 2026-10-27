@@ -1,0 +1,30 @@
+variable {Symbol : Type}
+
+/-- Each edge request executed by this work has arity at its actual current cache. -/
+def WorkFits [DecidableEq (EdgeKey Symbol Constraint)] :
+    Work Symbol Constraint A → State Symbol Constraint → Prop
+  | .pure _, _ => True
+  | .edge key identify next, state =>
+      Fits key.constraint key.children.length ∧
+        WorkFits (next (edgeStep key identify state).1) (edgeStep key identify state).2
+  | .node key identify next, state =>
+      WorkFits (next (nodeStep key identify state).1) (nodeStep key identify state).2
+
+/-- An actual edge instruction retains old keys and checks the key it can install. -/
+theorem edgeStep_heap [DecidableEq (EdgeKey Symbol Constraint)]
+    (key : EdgeKey Symbol Constraint)
+    (identify : Interned (EdgeKey Symbol Constraint) → EdgeValue Symbol Constraint)
+    (state : State Symbol Constraint) (heap : Heap state)
+    (checked : Fits key.constraint key.children.length) :
+    Heap (edgeStep key identify state).2 := by
+  intro other edge present
+  rcases record_cases state.edgeRecords key other
+    (identify (Cache.intern state.edges key).1) edge present with old | ⟨same, _⟩
+  · exact heap other edge old
+  · simpa only [same] using checked
+
+/-- Executed constructor work preserves arity along its actual returned values and caches. -/
+theorem work_heap [DecidableEq (EdgeKey Symbol Constraint)]
+    (job : Work Symbol Constraint A) (state : State Symbol Constraint)
+    (heap : Heap state) (checked : WorkFits job state) :
+    Heap (run job state).2 := by

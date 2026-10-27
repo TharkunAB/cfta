@@ -1,0 +1,26 @@
+private theorem query_heaps (fuel : Nat) :
+    (∀ (request : NodeRequest Symbol Guard) (before after : Checked width) (value : Value Symbol Guard),
+      Good before → Heap before.native.machine.heap →
+      Trace fuel (.code (requestNode request.domain request.left request.right)) before (.code (.pure value)) after →
+      Heap after.native.machine.heap) ∧
+    (∀ (request : EdgeRequest Symbol Guard) (before after : Checked width) (value : EdgeValue Symbol Guard),
+      Good before → Heap before.native.machine.heap →
+      Trace fuel (.code (requestEdge request.domain request.left request.right)) before (.code (.pure value)) after →
+      Heap after.native.machine.heap) := by
+  induction fuel using Nat.strongRecOn with
+  | ind fuel ih =>
+      constructor
+      · intro request before after value valid heap trace
+        apply SourcePruningEnumerationNativeRequestArity.node_request_heap request before after value fuel valid heap trace
+        intro count original start final result smaller good current actual
+        apply compileNode_heap count
+          (fun requested used bounded initial output answer checked origin called =>
+            (ih used (by omega)).1 requested initial output answer checked origin called)
+          (fun requested used bounded initial output answer checked origin called =>
+            (ih used (by omega)).2 requested initial output answer checked origin called)
+          original start final result count (Nat.le_refl _) good current actual
+      · intro request before after value valid heap trace
+        apply SourcePruningEnumerationNativeRequestArity.edge_request_heap request before after value fuel valid heap trace
+        intro count original start final result smaller good ready current actual
+        apply body_heap count
+          (fun requested used bounded initial output answer checked origin called =>

@@ -1,0 +1,46 @@
+import MicroCFTA.SourceCurrentAllocatedNativeSemanticTraceReadback
+import MicroCFTA.SourcePruningEnumerationNativeArityPrimitives
+
+/-!
+# Arity through actual native node compilation
+
+Each child call retains the arity of the heap at its actual endpoint.
+The walk uses only the subcalls recorded by the completed rich trace.
+The node compiler creates no edge outside those child calls.
+-/
+namespace MicroCFTA.SourcePruningEnumerationNativeQueryArity
+open Cache InternedConstructorTemplates InternedProbeProvenance
+open SourceRecursiveIntersectionKernel SourceRecursiveIntersectionThunks SourceRecursiveIntersectionCode
+open SourceEqualityNativeDemand
+open SourceCurrentAllocatedNativePhysicalTraceCompletion (Trace)
+open SourceCurrentAllocatedNativePhysicalCompletion (Good)
+open SourceCurrentAllocatedNativeFieldClosure (Fields)
+open SourceCurrentAllocatedNativeSemanticTraceReadback (Walk)
+open SourcePruningEnumerationArityOrigins (Heap)
+local notation "Symbol" => SourcePruningTemplates.Symbol
+local notation "Constraint" => SourceSymbolicIndex.Constraint FullSyntax.Formula
+local notation "Checked" => SourceEqualityNativeDemand.State
+variable {A B : Type} {width : Nat}
+variable [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Constraint)]
+
+/-- An actual ordered walk preserves arity from its bounded actual child calls. -/
+theorem walk_heap (limit : Nat) (call : A → Code Symbol Constraint B)
+    (calls : ∀ (input : A) (fuel : Nat), fuel ≤ limit →
+      ∀ (before after : Checked width) (value : B), Good before →
+        Heap before.native.machine.heap →
+        Trace fuel (.code (call input)) before (.code (.pure value)) after →
+        Heap after.native.machine.heap)
+    (fields : ∀ (input : A) (state : Checked width), Fields (.code (call input)) state)
+    (inputs : List A) (values : List B) (before after : Checked width) (fuel : Nat)
+    (bounded : fuel ≤ limit) (initial : Good before) (heap : Heap before.native.machine.heap)
+    (actual : Walk call inputs before values after fuel) : Heap after.native.machine.heap := by
+  revert bounded initial heap
+  induction actual with
+  | nil state => intro _ _ heap; exact heap
+  | cons first rest before middle after value values firstFuel restFuel called tail ih =>
+      intro bounded initial heap
+      have firstHeap := calls first firstFuel (by omega) before middle value initial heap called
+      have reached := SourceCurrentAllocatedNativeSemanticTraceReadback.effects called initial (fields first before)
+      exact ih (by omega) reached.1 firstHeap
+
+end MicroCFTA.SourcePruningEnumerationNativeQueryArity

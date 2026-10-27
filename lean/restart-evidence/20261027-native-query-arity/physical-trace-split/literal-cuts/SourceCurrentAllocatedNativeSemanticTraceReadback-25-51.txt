@@ -1,0 +1,27 @@
+
+/-- Earlier instructions retain their physical checks before an appended continuation. -/
+theorem inputs_before_bind [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)]
+    (control : Control A) (next : A → Code Symbol Guard B) (state : Checked width)
+    (inputs : Inputs (control.bind next) state) : Inputs control state := by
+  cases control with
+  | edgeBody => trivial
+  | code code => cases code <;> first | exact inputs | trivial
+
+/-- Earlier code retains its same-cache field loads before an appended continuation. -/
+theorem code_fields_before_bind (operations : SourceEqualityConstraintMemoAllocation.State)
+    (code : Code Symbol Guard A) (next : A → Code Symbol Guard B)
+    (fields : SourceCurrentAllocatedNativeCodeFields.Fields operations (code.bind next)) :
+    SourceCurrentAllocatedNativeCodeFields.Fields operations code := by
+  induction code with
+  | pure | fail => trivial
+  | work job resume ih => exact ⟨fields.1, fun value => ih value (fields.2 value)⟩
+  | enter domain left right first second resume ih | read name resume ih | optionalBinder key body resume ih | node request resume ih | edge request resume ih => exact fun value => ih value (fields value)
+  | finishNode handle value rest ih | finishEdge handle value rest ih => exact ih fields
+
+/-- A control's allocated fields do not depend on a later appended continuation. -/
+theorem fields_before_bind (control : Control A) (next : A → Code Symbol Guard B) (state : Checked width)
+    (fields : Fields (control.bind next) state) : Fields control state := by
+  cases control with
+  | code code => exact code_fields_before_bind state.operations code next fields
+  | edgeBody request resume =>
+      exact ⟨fields.1, fun value => code_fields_before_bind state.operations (resume value) next (fields.2 value)⟩

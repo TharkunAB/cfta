@@ -1,0 +1,59 @@
+MicroCFTA.SourcePruningEnumerationRecursive.ResourceHistoryWithArity.sound {Typing Key : Type} {bits : Nat}
+  [DecidableEq MicroCFTA.SourcePruningTemplates.Symbol]
+  [DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey MicroCFTA.SourcePruningTemplates.Symbol
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  [DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.Value MicroCFTA.SourcePruningTemplates.Symbol
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  {holeKey : Typing → Nat → Key} {fits : Key → MicroCFTA.SourcePruningTemplates.Symbol → Bool}
+  {admits :
+    Key →
+      MicroCFTA.InternedConstructorTemplates.Value MicroCFTA.SourcePruningTemplates.Symbol
+          (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) →
+        Bool}
+  {graph :
+    MicroCFTA.EnumerationState.Graph MicroCFTA.SourcePruningTemplates.Symbol
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)}
+  {templates : List (MicroCFTA.Template.Pattern MicroCFTA.SourcePruningTemplates.Symbol)} {checkEmpty : Bool}
+  {edgesOf :
+    MicroCFTA.InternedConstructorTemplates.Value MicroCFTA.SourcePruningTemplates.Symbol
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) →
+      List
+        (MicroCFTA.InternedConstructorTemplates.EdgeValue MicroCFTA.SourcePruningTemplates.Symbol
+          (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))}
+  {stop : Option (MicroCFTA.SourcePruningRecordTypes.Metadata Typing → Nat → Bool)}
+  {order : MicroCFTA.SourcePruningRecordTypes.Metadata Typing → List Nat → Option Nat}
+  {formulas : MicroCFTA.SourceGuards.Formulas MicroCFTA.FullSyntax.Formula}
+  {solver : MicroCFTA.SourceGuards.Entailment MicroCFTA.FullSyntax.Formula} {workFuel recursiveFuel : Nat}
+  {inventory : MicroCFTA.SourceCurrentAllocatedNativeInventoryState.Inventory}
+  {caller : MicroCFTA.SourceCurrentAllocatedPartialState.State (bits + 2)}
+  {memos : MicroCFTA.EndpointMemoGateTrace.Memos} {metadata : MicroCFTA.SourcePruningRecordTypes.Metadata Typing}
+  {before :
+    MicroCFTA.EnumerationExpandableIndex.Cached MicroCFTA.SourcePruningTemplates.Symbol
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)}
+  {seed : MicroCFTA.SourcePruningEnumerationIncomingReservation.Seed} {ceiling : Nat}
+  {next : Option MicroCFTA.EnumerationState.Next}
+  {output : MicroCFTA.SourcePruningEnumerationRecursive.Output (bits + 2) Typing}
+  (history :
+    MicroCFTA.SourcePruningEnumerationRecursive.ResourceHistoryWithArity holeKey fits admits graph templates checkEmpty
+      edgesOf stop order formulas solver workFuel recursiveFuel inventory caller memos metadata before seed ceiling next
+      output)
+  (actualNext : next = MicroCFTA.SourcePruningEnumerationRestart.decision stop order metadata before)
+  (canonical : MicroCFTA.EnumerationValidity.Canonical before.core)
+  (discharged : MicroCFTA.SourcePruningEnumerationRendering.Discharged output.cache.core)
+  (ambient : MicroCFTA.InternedGuardedLanguage.Env MicroCFTA.SourcePruningTemplates.Symbol)
+  (assignment : Nat → MicroCFTA.Language.Term MicroCFTA.SourcePruningTemplates.Symbol) :
+  MicroCFTA.EnumerationCorrectness.Satisfies
+      (MicroCFTA.SourcePruningEnumerationNativeLanguage.handles (MicroCFTA.SourceEqualityPCSGuard.holds formulas solver)
+        ambient output.caller.checked.native.machine.heap)
+      (fun guard term => MicroCFTA.SourceEqualityPCSGuard.holds formulas solver guard term = true) assignment
+      output.cache.core →
+    MicroCFTA.EnumerationCorrectness.Satisfies
+      (MicroCFTA.SourcePruningEnumerationNativeLanguage.handles (MicroCFTA.SourceEqualityPCSGuard.holds formulas solver)
+        ambient caller.checked.native.machine.heap)
+      (fun guard term => MicroCFTA.SourceEqualityPCSGuard.holds formulas solver guard term = true) assignment
+      before.core
+'MicroCFTA.SourcePruningEnumerationRecursive.ResourceHistoryWithArity.sound' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]

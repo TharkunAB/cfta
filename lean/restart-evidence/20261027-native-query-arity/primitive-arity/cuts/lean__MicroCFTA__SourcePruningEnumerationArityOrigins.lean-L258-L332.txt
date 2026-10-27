@@ -1,0 +1,75 @@
+/-- Actual stored encoding checks each copied edge at its original child count. -/
+theorem encode_checked (value : Value Symbol Constraint)
+    (state : State Symbol Constraint) (facts : Facts state) (heap : Heap state)
+    (available : Available state value) (context : List (Value Symbol Constraint))
+    (locals : List InternedBinderProtocol.Reference) : Checked (encode context locals value) := by
+  rw [encode.eq_def]
+  split
+  · trivial
+  · cases value with
+    | empty => trivial
+    | reference name => split <;> first | trivial | (split <;> trivial)
+    | node entry edges depth free =>
+        exact encodeEdges_checked edges state facts heap
+          (resident_edges state facts.linked (.node entry edges depth free) available.resident) context locals
+    | union entry members depth free =>
+        exact encodeMany_checked members state facts heap
+          (fun child member => available.children child member) context locals
+    | mu entry body depth ordinary =>
+        exact encode_checked body state facts heap (available.children body (by simp [children])) context _
+termination_by sizeOf value
+
+/-- Stored child encoding retains every nested checked edge. -/
+theorem encodeMany_checked (values : List (Value Symbol Constraint))
+    (state : State Symbol Constraint) (facts : Facts state) (heap : Heap state)
+    (available : ∀ value ∈ values, Available state value) (context : List (Value Symbol Constraint))
+    (locals : List InternedBinderProtocol.Reference) : ManyChecked (encodeMany context locals values) := by
+  cases values with
+  | nil => simp only [encodeMany, ManyChecked]
+  | cons first rest =>
+      rw [encodeMany]
+      exact ⟨encode_checked first state facts heap (available first List.mem_cons_self) context locals,
+        encodeMany_checked rest state facts heap
+          (fun child member => available child (List.mem_cons_of_mem _ member)) context locals⟩
+termination_by sizeOf values
+
+/-- Each encoded edge keeps its exact guard and the count stored in its coherent key. -/
+theorem encodeEdges_checked (edges : List (EdgeValue Symbol Constraint))
+    (state : State Symbol Constraint) (facts : Facts state) (heap : Heap state)
+    (resident : ∀ edge ∈ edges, EdgeResident state edge) (context : List (Value Symbol Constraint))
+    (locals : List InternedBinderProtocol.Reference) : EdgesChecked (encodeEdges context locals edges) := by
+  cases edges with
+  | nil => simp only [encodeEdges, EdgesChecked]
+  | cons first rest =>
+      cases first with
+      | mk entry values =>
+          rw [encodeEdges]
+          have stored := resident (.mk entry values) List.mem_cons_self
+          have arity := Heap.edge state heap facts.coherent (.mk entry values) stored
+          refine ⟨?_, encodeMany_checked values state facts heap
+            (facts.cached.edges entry.key (.mk entry values) stored) context locals,
+            encodeEdges_checked rest state facts heap
+              (fun edge member => resident edge (List.mem_cons_of_mem _ member)) context locals⟩
+          simpa only [encodeMany_length, EdgeValue.entry, EdgeValue.children] using arity
+termination_by sizeOf edges
+end
+
+/-- Actual stored execution preserves arity through every completed or pending reconstruction prefix. -/
+theorem execute_heap [DecidableEq (EdgeKey Symbol Constraint)]
+    (value : Value Symbol Constraint) (environment : Environment Symbol Constraint)
+    (state : State Symbol Constraint) (facts : Facts state) (heap : Heap state)
+    (available : Available state value) :
+    Heap (InternedFreshOrdinaryStoredSubstitution.execute value environment state).state :=
+  build_heap _ _ state heap (encode_checked value state facts heap available _ [])
+
+/-- Actual cold unfolding retains arity for copied guards and same-length child plans. -/
+theorem unfold_heap [DecidableEq (EdgeKey Symbol Constraint)]
+    (value : Value Symbol Constraint) (state : State Symbol Constraint) (facts : Facts state)
+    (heap : Heap state) (available : Available state value) :
+    Heap (InternedFreshOrdinaryStoredSubstitution.unfold value state).state := by
+  cases value with
+  | empty | reference | node | union => exact heap
+  | mu entry body depth ordinary =>
+      exact execute_heap body _ state facts heap (available.children body (by simp [children]))
+
+end MicroCFTA.SourcePruningEnumerationArityOrigins

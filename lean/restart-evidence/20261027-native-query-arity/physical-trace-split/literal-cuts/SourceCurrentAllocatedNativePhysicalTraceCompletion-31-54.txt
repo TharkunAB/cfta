@@ -1,0 +1,24 @@
+inductive Trace [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)] :
+    Nat → Control A → Checked width → Control A → Checked width → Prop where
+  | refl (control : Control A) (state : Checked width) : Trace 0 control state control state
+  | cons (control : Control A) (state : Checked width) (next : Control A) (after : Checked width)
+      (final : Control A) (result : Checked width) (fuel : Nat)
+      (inputs : Inputs control state)
+      (actual : step control state = .yielded next after)
+      (rest : Trace fuel next after final result) : Trace (fuel + 1) control state final result
+
+/-- Erasure retains the literal yielded controls and all current state fields. -/
+theorem Trace.steps [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)]
+    (trace : Trace fuel control state next after) : Steps fuel control state next after := by
+  induction trace with
+  | refl => exact .refl _ _
+  | cons _ _ _ _ _ _ _ _ one _ ih => exact .cons _ _ _ _ _ _ _ one ih
+
+/-- Actual physical traces compose at the same returned control and state. -/
+theorem Trace.trans [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)]
+    (first : Trace fuel control state middle current) (second : Trace extra middle current next after) :
+    Trace (fuel + extra) control state next after := by
+  induction first with
+  | refl => simpa only [Nat.zero_add] using second
+  | cons start before resume reached final result count inputs one rest ih =>
+      simpa only [Nat.succ_add] using Trace.cons start before resume reached next after (count + extra) inputs one (ih second)

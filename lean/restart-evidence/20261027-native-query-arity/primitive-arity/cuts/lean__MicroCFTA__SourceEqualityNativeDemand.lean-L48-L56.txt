@@ -1,0 +1,9 @@
+def Outcome.state : Outcome width Output → State width
+  | .yielded _ state | .done _ state | .failed _ state | .constraintError _ state | .blocked _ _ state => state
+
+/-- Ordinary source instructions retain equality state at the exact native continuation. -/
+def lift (operations : Operations) : SourceRecursiveIntersectionNative.Outcome width Symbol Guard Output → Outcome width Output
+  | .yielded code state => .yielded (.code code) ⟨state, operations⟩
+  | .done value state => .done value ⟨state, operations⟩
+  | .failed failure state => .failed failure ⟨state, operations⟩
+  | .blocked reason code state => .blocked (.native reason) (.code code) ⟨state, operations⟩

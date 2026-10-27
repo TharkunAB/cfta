@@ -1,0 +1,12 @@
+/-- Delay original child requests until the actual combined constraint passes its constructor check. -/
+def children (domain : Interned DomainKey) (left right : EdgeValue Symbol Guard) (combined : Allocated) :
+    Code Symbol Guard (EdgeValue Symbol Guard) :=
+  (SourceRecursiveIntersectionCode.walk (fun pair => requestNode domain pair.1 pair.2)
+    (left.children.zip right.children)).bind fun values =>
+      .work (makeEdge left.entry.key.symbol (readback combined) values) .pure
+
+/-- The rejected or mismatched branch emits the exact source empty-edge constructor request. -/
+def sentinel (left : EdgeValue Symbol Guard) : Code Symbol Guard (EdgeValue Symbol Guard) :=
+  .work (makeEdge left.entry.key.symbol SourceEqualityConstraintConstructors.top [.empty]) .pure
+
+/-- Equal arity and literal combined readback identify the accepted code with the older compiler. -/

@@ -1,0 +1,8 @@
+variable {width : Nat}
+
+private theorem top_fits (arity : Nat) : Fits (top : Guard) arity := by
+  intro tries residual projected start
+  have topProjection : SourcePruningEnumerationConstraint.project (top : Guard) = some ([], none) := rfl
+  rw [topProjection] at projected
+  have triesSame : [] = tries := congrArg Prod.fst (Option.some.inj projected)
+  subst tries

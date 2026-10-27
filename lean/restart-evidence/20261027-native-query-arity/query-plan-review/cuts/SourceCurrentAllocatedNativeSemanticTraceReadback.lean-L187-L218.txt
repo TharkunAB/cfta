@@ -1,0 +1,32 @@
+    (walk : Walk call inputs before values after fuel) :
+    Trace fuel (.code (SourceRecursiveIntersectionCode.walk call inputs)) before (.code (.pure values)) after := by
+  induction walk with
+  | nil state => exact .refl _ _
+  | cons first rest before middle after value values firstFuel restFuel called tail ih =>
+      let next := fun value => (SourceRecursiveIntersectionCode.walk call rest).bind fun values => .pure (value :: values)
+      exact (called.bind next).trans (ih.bind (fun values => .pure (value :: values)))
+
+/-- Completed actual walks determine every child result and exact intermediate physical trace. -/
+theorem walk_readback [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)]
+    (call : A → Code Symbol Guard B) (inputs : List A) (fuel : Nat) (before after : Checked width) (values : List B)
+    (trace : Trace fuel (.code (SourceRecursiveIntersectionCode.walk call inputs)) before (.code (.pure values)) after) :
+    Walk call inputs before values after fuel := by
+  induction inputs generalizing fuel before values with
+  | nil =>
+      obtain ⟨rfl, rfl, rfl⟩ := pure_trace fuel [] values before after trace.steps
+      exact .nil _
+  | cons first rest ih =>
+      let next := fun value => (SourceRecursiveIntersectionCode.walk call rest).bind fun values => .pure (value :: values)
+      obtain ⟨firstFuel, tailFuel, value, middle, count, called, tailTrace⟩ :=
+        bind_inverse fuel (.code (call first)) next before after values trace
+      obtain ⟨restFuel, finalFuel, restValues, current, restCount, restTrace, finalTrace⟩ :=
+        bind_inverse tailFuel (.code (SourceRecursiveIntersectionCode.walk call rest))
+          (fun values => .pure (value :: values)) middle after values tailTrace
+      obtain ⟨rfl, rfl, rfl⟩ := pure_trace finalFuel (value :: restValues) values current after finalTrace.steps
+      have total : firstFuel + restFuel = fuel := by omega
+      rw [← total]
+      exact .cons first rest before middle _ value restValues firstFuel restFuel called (ih restFuel middle restValues restTrace)
+
+/-- A nonempty actual walk derives the first result and the complete reached tail scope. -/
+theorem cons_readback [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)]
+    (call : A → Code Symbol Guard B) (first : A) (rest : List A) (fuel : Nat)

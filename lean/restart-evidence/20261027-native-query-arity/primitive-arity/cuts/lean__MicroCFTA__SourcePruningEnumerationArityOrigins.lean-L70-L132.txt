@@ -1,0 +1,63 @@
+
+/-- An actual edge request retains old records and checks the exact new key. -/
+theorem edge_heap [DecidableEq (EdgeKey Symbol Constraint)]
+    (symbol : Symbol) (constraint : Constraint) (children : List (Value Symbol Constraint))
+    (state : State Symbol Constraint) (heap : Heap state)
+    (checked : Fits constraint children.length) :
+    Heap (run (makeEdge symbol constraint children) state).2 := by
+  intro key edge present
+  rcases record_cases state.edgeRecords ⟨symbol, children.map Value.referenceOf, constraint⟩ key
+    (.mk (Cache.intern state.edges ⟨symbol, children.map Value.referenceOf, constraint⟩).1 children)
+    edge present with old | ⟨same, _⟩
+  · exact heap key edge old
+  · subst key
+    simpa only [List.length_map] using checked
+
+/-- Ordinary node normalization does not change the edge-record table. -/
+theorem node_heap [DecidableEq (EdgeKey Symbol Constraint)]
+    (edges : List (EdgeValue Symbol Constraint)) (state : State Symbol Constraint)
+    (heap : Heap state) : Heap (run (makeNode edges) state).2 := by
+  simp only [makeNode]
+  split <;> exact heap
+
+/-- Union normalization retains every projected edge-arity fact. -/
+theorem union_heap [DecidableEq (EdgeKey Symbol Constraint)]
+    (values : List (Value Symbol Constraint)) (state : State Symbol Constraint)
+    (heap : Heap state) : Heap (run (makeUnion values) state).2 := by
+  unfold makeUnion
+  split <;> first | exact heap | (split <;> first | exact heap | exact node_heap _ state heap)
+
+/-- Removing a bare self reference retains the edge-arity facts. -/
+theorem filter_heap [DecidableEq (EdgeKey Symbol Constraint)]
+    (name : InternedBinderProtocol.Reference) (value : Value Symbol Constraint)
+    (state : State Symbol Constraint) (heap : Heap state) :
+    Heap (run (withoutSelfReference name value) state).2 := by
+  cases value <;> simp only [withoutSelfReference] <;> try exact heap
+  split
+  · exact union_heap _ state heap
+  · exact heap
+
+/-- Sequential execution retains arity at its actual stopping cache. -/
+theorem bind_heap (outcome : Outcome Symbol Constraint First)
+    (next : First → State Symbol Constraint → Outcome Symbol Constraint Result)
+    (heap : Heap outcome.state)
+    (later : ∀ value after, outcome = .done value after → Heap after → Heap (next value after).state) :
+    Heap (outcome.bind next).state := by
+  cases outcome with
+  | pending => exact heap
+  | done value after => exact later value after rfl heap
+
+/-- Canonical binder hits and actual callbacks retain edge-arity facts. -/
+theorem request_heap [DecidableEq (EdgeKey Symbol Constraint)]
+    (smart : Bool) (depth ordinary : Value Symbol Constraint)
+    (callback : InternedBinderProtocol.Reference → State Symbol Constraint →
+      Outcome Symbol Constraint (Value Symbol Constraint))
+    (state : State Symbol Constraint) (heap : Heap state)
+    (checked : ∀ name current, Heap current → Heap (callback name current).state) :
+    Heap (request smart depth ordinary callback state).state := by
+  simp only [request]
+  split
+  · split <;> exact heap
+  · apply bind_heap _ _
+      (checked _ {state with nodes := (Cache.intern state.nodes (muKey depth ordinary)).2} heap)
+    intro body after done afterHeap

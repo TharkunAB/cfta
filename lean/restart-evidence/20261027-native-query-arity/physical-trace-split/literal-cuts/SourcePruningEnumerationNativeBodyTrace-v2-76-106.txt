@@ -1,0 +1,31 @@
+
+/-- A rich child walk and its real final work retain exact fuel and every reached physical check. -/
+theorem walk_work_readback [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)]
+    (call : A → Code Symbol Guard B) (inputs : List A) (finish : List B → Work Symbol Guard C)
+    (fuel : Nat) (before after : Checked width) (value : C)
+    (trace : Trace fuel
+      (.code ((SourceRecursiveIntersectionCode.walk call inputs).bind fun values => .work (finish values) .pure))
+      before (.code (.pure value)) after)
+    (valid : Good before)
+    (fields : Fields
+      (.code ((SourceRecursiveIntersectionCode.walk call inputs).bind fun values => .work (finish values) .pure)) before) :
+    ∃ (walkFuel : Nat) (values : List B) (middle : Checked width), fuel = walkFuel + 1 ∧
+      Walk call inputs before values middle walkFuel ∧ Good middle ∧
+      Extension before.native.machine middle.native.machine ∧
+      SourceEqualityRequiredCache.Keeps before.native.machine.heap middle.native.machine.heap ∧
+      SourceEqualityConstraintMemoAllocation.Grows before.operations middle.operations ∧
+      WorkInputs middle.native.machine.heap (finish values) ∧
+      value = (run (finish values) middle.native.machine.heap).1 ∧
+      after = {middle with native := advance middle.native {middle.native.machine with heap :=
+        (run (finish values) middle.native.machine.heap).2}} := by
+  obtain ⟨inner, outer, values, middle, count, walked, finished⟩ :=
+    SourceCurrentAllocatedNativeSemanticTraceReadback.bind_inverse fuel
+      (.code (SourceRecursiveIntersectionCode.walk call inputs))
+      (fun values => .work (finish values) .pure) before after value trace
+  have reached := SourceCurrentAllocatedNativeSemanticTraceReadback.effects
+    (walked.bind (fun values => .work (finish values) .pure)) valid fields
+  obtain ⟨rfl, same, retained, operands⟩ :=
+    SourceCurrentAllocatedNativeSemanticTraceReadback.work_readback (finish values) outer middle after value finished
+  exact ⟨inner, values, middle, count.symm,
+    SourceCurrentAllocatedNativeSemanticTraceReadback.walk_readback call inputs inner before middle values walked,
+    reached.1, reached.2.1, reached.2.2.1, reached.2.2.2.1, operands, same, retained⟩

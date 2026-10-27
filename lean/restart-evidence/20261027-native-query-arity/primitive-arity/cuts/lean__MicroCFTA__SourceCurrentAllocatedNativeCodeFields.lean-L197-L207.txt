@@ -1,0 +1,11 @@
+theorem optionalBinder_heap [DecidableEq (EdgeKey Symbol Guard)] (operations : OpState) (pair : Nat × Nat)
+    (value : Value Symbol Guard) (state : InternedConstructorTemplates.State Symbol Guard)
+    (facts : InternedNestedFacts.Facts state) (heap : SourceCurrentConjunctionEquality.Fields operations state) (available : Available state value) :
+    SourceCurrentConjunctionEquality.Fields operations (SourceRecursiveIntersectionMaybeMu.maybeMu pair value state).state := by
+  rw [SourceRecursiveIntersectionMaybeMu.maybeMu_eq pair value state state facts available]
+  split
+  · apply InternedFreshOrdinaryConstraintHeap.build_heap _ _ _ state heap
+    exact InternedFreshOrdinaryStoredConstraintHeap.encode_valid _ value state facts heap available _ _
+  · exact heap
+
+end MicroCFTA.SourceCurrentAllocatedNativeCodeFields

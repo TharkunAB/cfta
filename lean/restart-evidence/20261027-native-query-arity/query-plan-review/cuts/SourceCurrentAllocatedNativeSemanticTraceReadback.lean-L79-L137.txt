@@ -1,0 +1,59 @@
+    fuel = 1 ∧ value = (run job before.native.machine.heap).1 ∧
+      after = {before with native := advance before.native {before.native.machine with heap := (run job before.native.machine.heap).2}} ∧
+      SourceEqualityNativeDemandHeapPrimitives.WorkInputs before.native.machine.heap job := by
+  have inputs := current_inputs trace
+  have one : step (.code (.work job .pure)) before = .yielded
+      (.code (.pure (run job before.native.machine.heap).1))
+      {before with native := advance before.native {before.native.machine with heap := (run job before.native.machine.heap).2}} := rfl
+  obtain ⟨count, total, rest⟩ := after_step fuel _ _ before _ after value trace one
+  obtain ⟨rfl, same, retained⟩ := pure_trace count _ value _ after rest.steps
+  exact ⟨total, same.symm, retained.symm, inputs⟩
+
+/-- Completed appended physical execution derives both exact physical child traces. -/
+theorem bind_inverse [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)]
+    (fuel : Nat) (control : Control A) (next : A → Code Symbol Guard B)
+    (state after : Checked width) (value : B)
+    (trace : Trace fuel (control.bind next) state (.code (.pure value)) after) :
+    ∃ (inner outer : Nat) (result : A) (middle : Checked width), inner + outer = fuel ∧
+      Trace inner control state (.code (.pure result)) middle ∧
+      Trace outer (.code (next result)) middle (.code (.pure value)) after := by
+  induction fuel generalizing control state with
+  | zero =>
+      have same := steps_zero _ _ _ _ trace.steps
+      cases control with
+      | edgeBody => cases same.1
+      | code code =>
+          cases code with
+          | pure result => exact ⟨0, 0, result, state, rfl, .refl _ _, trace⟩
+          | fail | work | enter | read | optionalBinder | node | edge | finishNode | finishEdge => cases same.1
+  | succ fuel ih =>
+      cases trace with
+      | cons start before rest current final after count inputs oneBound tail =>
+          have boundStep := step_bind control next state
+          cases one : step control state with
+          | done result initial =>
+              obtain ⟨pure, retained⟩ := (step_done_iff control state initial result).mp one
+              subst control
+              subst initial
+              exact ⟨0, fuel + 1, result, state, by omega, .refl _ _,
+                .cons _ _ _ _ _ _ _ inputs oneBound tail⟩
+          | yielded body middle =>
+              rw [one, appendStep] at boundStep
+              have same := Outcome.yielded.inj (boundStep.symm.trans oneBound)
+              rcases same.1 with rfl
+              rcases same.2 with rfl
+              obtain ⟨inner, outer, result, final, count, bodyTrace, outerTrace⟩ := ih body middle tail
+              exact ⟨inner + 1, outer, result, final, by omega,
+                .cons _ _ _ _ _ _ _ (inputs_before_bind control next state inputs) one bodyTrace, outerTrace⟩
+          | failed failure middle | constraintError message middle | blocked reason body middle =>
+              rw [one, appendStep] at boundStep
+              cases boundStep.symm.trans oneBound
+
+private theorem operations_trans {before middle after : SourceEqualityConstraintMemoAllocation.State}
+    (first : SourceEqualityConstraintMemoAllocation.Grows before middle)
+    (second : SourceEqualityConstraintMemoAllocation.Grows middle after) : SourceEqualityConstraintMemoAllocation.Grows before after :=
+  ⟨SourceEqualityConstraintAllocation.steps_trans first.constraints second.constraints,
+    Cache.extends_trans first.combinations second.combinations, Cache.extends_trans first.descents second.descents⟩
+
+/-- Initial invariants derive every reached state, history, and continuation field receipt. -/
+theorem effects [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)]
