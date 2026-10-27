@@ -1,0 +1,12 @@
+        · intro index chosen found supported ambient assignment satisfied accepted
+          cases index with
+          | zero =>
+              have chosenSame : edge = chosen := Option.some.inj found
+              subst chosen
+              obtain ⟨extended, fragment, afterCache, _agree, _originalSatisfied, impossible, _filled, _afterSatisfied⟩ :=
+                headAccepting ambient assignment satisfied accepted
+              cases impossible
+          | succ index =>
+              exact (supported edge (by
+                simp only [List.take_succ_cons, List.mem_cons]
+                exact .inl trivial) allowed projected).elim

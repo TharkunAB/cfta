@@ -1,5 +1,45 @@
 # Constrained languages, indexing, and distributions
 
+## Indexed coverage through actual ordered native alternatives
+
+Source checkpoint: 8368460445fe4b05073a1bf134e9e34e190f2282.
+The NativeBranches scan now reaches an accepted selected occurrence under
+the original resource contract and static support for its preceding prefix.
+Its completed receipt occupies the SAME original list index. Duplicate
+edges remain distinct. Later alternatives can stop after that receipt.
+Uniform operational bounds precede every chosen index and semantic model.
+
+The proof constructs the actual chosen head caller and full input Memos.
+It retains the local branch Post, full branch Memos, queries and final cache.
+The captured call completes at the SAME global bounds. The constructed
+assignment fixes every original variable and satisfies the original state
+and the chosen branch cache at their respective native heaps. Its fragment
+fills to the captured variable's original value. The branch endpoint can
+differ from the aggregate final scan endpoint.
+
+An original-parent wrapper derives the accepted selected edge and index
+from the stored satisfying model and a selector permutation. It requires
+explicit support for the FULL original selected list and proves that same
+scan complete. This is stronger than the primary's prefix-only support.
+The wrapper retains the entire primary packet and its uniform observer.
+Its chosen original model precedes its outer work bounds.
+
+This result covers the modeled NativeBranches scan. NativeContinuations
+also runs recursive hooks before later alternatives. An earlier hook can
+stop. Next extend coverage through those actual hooks and their full memo
+effects without assuming a desired future invocation. Recursive expansion,
+frontier policy, discharged rendering coverage, public API admission and
+physical Haskell correspondence remain open. H6 and checked finite rendering
+soundness keep their earlier scopes. The full goal stays ACTIVE.
+
+Three modules contain 720 lines and three public theorems. All installed
+sources and standalone Audit pass strict checks. Audit passes 4248 jobs
+and checks 80083 theorem dependencies. Public readback has 176 complete
+blocks; all 173 prior blocks and 93 pinned prior modules retain their bytes.
+Only the three standard Lean axioms occur. Details:
+`lean/notes-current-native-scan-coverage.md`.
+
+
 ## An original parent model now constructs a selected captured result
 
 Source checkpoint: 82fdb41fc9e55f57e2950ab78297140cbdc97c69.

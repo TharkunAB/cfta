@@ -1,0 +1,20 @@
+--- v1
++++ v2
+@@ -163,7 +163,7 @@
+         refine ⟨r + tr, n + tn, max p tp, max h th, k + tk, receipt :: processed,
+           afterCaller, saved, final, next, result, ?_, headPost.trans tailPost, querySame, ?_, ?_, ?_, ?_, ?_, ?_,
+           (by simpa only [cost, SourcePruningEnumerationIncomingReservation.advance_add] using tailFits),
+-          (by simpa only [cost, SourcePruningEnumerationIncomingReservation.advance_add] using tailKnown), ?, ?_⟩
++          (by simpa only [cost, SourcePruningEnumerationIncomingReservation.advance_add] using tailKnown), ?_, ?_⟩
+         · intro er en P H ek largeP largeH
+           have first := headRun (tr + er) (tn + en) P H (tk + ek)
+             (Nat.le_trans (Nat.le_max_left _ _) largeP) (Nat.le_trans (Nat.le_max_left _ _) largeH)
+@@ -278,7 +278,7 @@
+         refine ⟨r, n, p, h, k, [], middleCaller, middleQueries, middleMemos, middleInventory,
+           .stopped [] (some .unhandled), ?_, headPost, headQueries, by simp,
+           (by intro _ _ current member; cases member), (by intro current member; cases member),
+-          (by intro current member; cases member), .inr rfl, ?_, ?_, ?_, ?, ?_⟩
++          (by intro current member; cases member), .inr rfl, ?_, ?_, ?_, ?_, ?_⟩
+         · intro er en P H ek largeP largeH
+           simp only [SourcePruningEnumerationNativeBranches.run, headRun er en P H ek largeP largeH, advance]
+         · intro supported

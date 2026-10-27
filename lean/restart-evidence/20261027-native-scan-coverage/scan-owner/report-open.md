@@ -1,0 +1,15 @@
+# Indexed native scan coverage draft
+
+UNTESTED. The usable immutable source is drafts/v2/SourcePruningEnumerationNativeBranchCoverage.lean. Root owns all compiler checks. This bundle remains OPEN for actual checks, public interfaces and final documentation. This work ran no compiler/build, Git/network/board operation or repository write.
+
+The theorem retains the entire original NativeBranchResources.complete_with_history_resources admission, witnesses and flattened conclusion. Removing only the appended observer and reversing the theorem-name suffix recovers the exact 3903-byte proposition, SHA256 76ec47e8674f283f7407bd18f68f78f11545a40a031f9336a95524bb43d4326a. Original Fits, guard carrier and whole-schedule Reserved remain. No new range or future-worker assumption is added.
+
+Operational bounds, results, native endpoints and full Memos precede the universal observer. The observer takes an exact selectedEdges[index] occurrence, pure support of its strict take-index prefix, the original satisfying model and acceptance of that chosen edge at assignment uv. It returns the actual processed[index] complete receipt, aggregate original-to-head-input Post/full headMemos, local head-to-branch Post/full branchMemos, query equality, stable actual captured run at the SAME global bounds, old-variable agreement, original Satisfies under the extension, exact fill and final Satisfies at its own branch cache/heap.
+
+The proof copies the original list induction. Each cons calls the stronger head producer once. Zero index applies its observer and shifts its stable family by tail bounds. Successor index derives the tail prefix support. It transports the same captured-core model through actual headPost.effects.keeps, applies the tail observer, composes the aggregate prefix Post, and transports extended original Satisfies back through satisfies_keeps.mp. The chosen actual captured run uses the same summed r/n/k and max p/h global bounds. Full Memos remain actual witnesses. Query equality does not replace full memo equality.
+
+An unhandled head cannot invalidate the observer. At zero it contradicts accepted head completion. At successor its project=None contradicts the supported-prefix premise. Later suffix stops remain permitted. Exact indices retain duplicate occurrences. No matching future invocation, desired final assignment or full scan completion is supplied.
+
+The callback-driven NativeContinuations scan is outside this theorem. It can still stop in an earlier hook. Selector acceptance and symbolic fragment filling do not imply whole recursive coverage, Discharged rendering or physical Haskell correspondence. No Haskell defect is claimed.
+
+V1 remains as an untested draft. Its generator left two refine goal tokens without underscores. V2 fixes only these two tokens. Both revisions, their exact diff, literal original/recovered propositions and focused source copies/cuts remain. This report records the state before Root compiler feedback. No source change is planned before that feedback.

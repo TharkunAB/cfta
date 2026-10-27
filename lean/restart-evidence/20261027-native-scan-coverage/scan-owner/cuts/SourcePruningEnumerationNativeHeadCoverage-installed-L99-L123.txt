@@ -1,0 +1,25 @@
+  have acceptedChecks : ∀ (ambient : InternedGuardedLanguage.Env Symbol)
+      (assignment : Nat → Language.Term Symbol),
+      Satisfies
+        (SourcePruningEnumerationNativeLanguage.handles (SourceEqualityPCSGuard.holds formulas solver)
+          ambient caller.checked.native.machine.heap)
+        (fun guard term => SourceEqualityPCSGuard.holds formulas solver guard term = true)
+        assignment before.core →
+      InternedGuardedLanguage.edgeMeaning (SourceEqualityPCSGuard.holds formulas solver)
+        ambient edge (assignment uv) →
+      arityAllows edge.children.length scs = true ∧
+        ∃ (tries : List EqualityTrie.Trie) (residual : Option Constraint),
+          SourcePruningEnumerationConstraint.project edge.entry.key.constraint = some (tries, residual) := by
+    intro ambient assignment satisfied accepted
+    obtain ⟨value, lookup, available, _closed⟩ := realized uv handle scs stored
+    have same : value = .node parentEntry edges depth free := Option.some.inj (lookup.symm.trans decoded)
+    subst value
+    have slotModel := satisfied.1.2 uv
+    simp only [heap, stored, Option.getD_some, slot, Fragments.slotSatisfies,
+      List.forall_mem_map] at slotModel
+    obtain ⟨tries, residual, _terms, projected, _valid, _termShape, _children,
+      _length, allowed, _ownEqualities, _residualHolds⟩ :=
+      SourcePruningEnumerationSelectedEdgeAdmission.selected_admission formulas solver inventory caller memos
+        parentEntry edges depth free edge scs initial available selected ambient assignment
+        (assignment uv) accepted slotModel.2
+    exact ⟨allowed, tries, residual, projected⟩

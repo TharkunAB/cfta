@@ -1,0 +1,42 @@
+              (fun guard term => SourceEqualityPCSGuard.holds formulas solver guard term = true)
+              extended afterCache.core := by
+  obtain ⟨value, lookup, available, _closed⟩ := realized uv handle scs stored
+  have same : value = .node parentEntry storedEdges depth free :=
+    Option.some.inj (lookup.symm.trans decoded)
+  subst value
+  have model := satisfied.1.2 uv
+  simp only [heap, stored, Option.getD_some, slot, Fragments.slotSatisfies,
+    List.forall_mem_map] at model
+  have parentAccepted : InternedGuardedLanguage.meaning
+      (SourceEqualityPCSGuard.holds formulas solver) ambient
+      (.node parentEntry storedEdges depth free) (assignment uv) :=
+    (SourcePruningEnumerationNativeLanguage.handles_lookup _ _ _ _ _ _ decoded).mp model.1
+  obtain ⟨chosen, offered, _member, _resident, accepted⟩ :=
+    SourcePruningEnumerationSelectorLanguage.selected_accepting_of_perm
+      caller.checked.native.machine.heap initial.ready.semantic.ready parentEntry storedEdges
+      selectedEdges depth free available selectedRows (SourceEqualityPCSGuard.holds formulas solver)
+      ambient (assignment uv) parentAccepted
+  obtain ⟨index, found⟩ := List.mem_iff_getElem?.mp offered
+  obtain ⟨r, n, p, h, k, processed, afterCaller, saved, final, next, result,
+    running, post, querySame, admitted, pendingHistory, receiptPosts, fragmentHistory,
+    shape, allSupported, returnedFits, returnedKnown, indexedResources, accepting⟩ :=
+    complete_with_history_resources_accepting seed formulas solver inventory caller before checkEmpty
+      uv handle scs parentEntry storedEdges selectedEdges depth free roots memos initial ready stored
+      decoded realized (fun edge member => selectedRows.mem_iff.mp member) paths counts flags pending
+      fits reserved known
+  have prefixSupported : ∀ earlier ∈ selectedEdges.take index,
+      arityAllows earlier.children.length scs = true →
+      SourcePruningEnumerationConstraint.project earlier.entry.key.constraint ≠ none := by
+    intro earlier member allowed
+    exact supported earlier (List.mem_of_mem_take member) allowed
+  obtain ⟨headCaller, headInventory, headMemos, branchCaller, branchQueries, branchMemos,
+    branchInventory, afterCache, extended, fragment, inputPost, branchPost, branchQuery,
+    selectedReceipt, selectedRun, agree, oldSatisfied, filled, afterSatisfied⟩ :=
+    accepting index chosen found prefixSupported ambient assignment satisfied accepted
+  refine ⟨r, n, p, h, k, processed, afterCaller, saved, final, next, result, ?_,
+    allSupported supported, index, chosen, found, headCaller, headInventory, headMemos,
+    branchCaller, branchQueries, branchMemos, branchInventory, afterCache, extended, fragment,
+    inputPost, branchPost, branchQuery, selectedReceipt, selectedRun, agree, oldSatisfied,
+    filled, afterSatisfied⟩
+  exact ⟨running, post, querySame, admitted, pendingHistory, receiptPosts, fragmentHistory,
+    shape, allSupported, returnedFits, returnedKnown, indexedResources, accepting⟩

@@ -1,0 +1,76 @@
+  by_cases allowed : arityAllows edge.children.length scs = true
+  · cases projected : SourcePruningEnumerationConstraint.project edge.entry.key.constraint with
+    | none =>
+        have noCost : edgeCost scs before.core.counter edge = 0 := by
+          simp only [edgeCost, allowed, ↓reduceIte, projected]
+        refine ⟨0, 0, 0, 0, 0, .unhandled, caller, memos.query, memos, inventory,
+          ?_, Post.refl initial, rfl, trivial, (fun _ _ => trivial), trivial, .inr ⟨rfl, allowed, rfl⟩,
+          ?_, ?_, ?_⟩
+        · intro er en P H ek _largeP _largeH
+          rw [SourcePruningEnumerationCapturedEdge.run,
+            SourcePruningEnumerationSelectedEdge.unsupported checkEmpty _ _ _ _ _ scs edge caller before memos.query
+              allowed projected]
+        · simpa only [noCost, SourcePruningEnumerationIncomingReservation.advance] using fits
+        · simpa only [noCost, SourcePruningEnumerationIncomingReservation.advance] using known
+        · intro ambient assignment satisfied accepted
+          obtain ⟨_allowed, tries, residual, actualProjected⟩ :=
+            acceptedChecks ambient assignment satisfied accepted
+          rw [projected] at actualProjected
+          cases actualProjected
+    | some pair =>
+        rcases pair with ⟨tries, residual⟩
+        have actualCost : edgeCost scs before.core.counter edge =
+            SourcePruningEnumerationSelectedEdge.cost edge scs before.core.counter tries := by
+          simp only [edgeCost, allowed, ↓reduceIte, projected]
+        have actualReserved : Reserved bits seed
+            (SourcePruningEnumerationSelectedEdge.cost edge scs before.core.counter tries) := by
+          simpa only [actualCost] using reserved
+        obtain ⟨r, n, p, h, k, afterCaller, after, saved, final, next, afterRoots, result,
+          stable, post, querySame, growth, afterPaths, storage, afterRealized, afterCounts,
+          afterFlags, _origin, _retained, _protects, pendingHistory, shape, returnedFits, returnedKnown, accepting⟩ :=
+          SourcePruningEnumerationCapturedEdge.complete_with_history_resources_accepting seed formulas solver inventory caller before checkEmpty
+            uv handle scs parentEntry edges depth free edge roots memos initial ready stored decoded realized
+            selected paths counts flags pending allowed tries residual projected fits actualReserved known
+        have valid : CacheValid afterCaller after :=
+          ⟨afterRoots, afterPaths, storage, afterRealized, afterCounts, afterFlags⟩
+        have headFits : Fits (reservationAdvance seed (edgeCost scs before.core.counter edge)).2 afterCaller.checked := by
+          simpa only [actualCost] using returnedFits
+        have headKnown : Heap (fun guard => guard ∈
+            (reservationAdvance seed (edgeCost scs before.core.counter edge)).1)
+            afterCaller.checked.native.machine.heap := by
+          simpa only [actualCost] using returnedKnown
+        rcases shape with ⟨fragment, completed, safe, bounded, written, ancestry, root, fragmentPending, ordered⟩ |
+          ⟨fragments, outer, waiting, stopped⟩
+        · subst result
+          refine ⟨r, n, p, h, k, _, afterCaller, saved, final, next, stable, post, querySame,
+            ⟨valid, safe, bounded, written, ancestry, root⟩, pendingHistory, ⟨growth, fragmentPending, ordered⟩,
+            .inl rfl, headFits, headKnown, ?_⟩
+          intro ambient assignment satisfied accepted
+          obtain ⟨extended, produced, agree, originalSatisfied, completed, filled, afterSatisfied⟩ :=
+            accepting ambient assignment satisfied accepted
+          exact ⟨extended, produced, after, agree, originalSatisfied, completed, filled, afterSatisfied⟩
+        · subst result
+          refine ⟨r, n, p, h, k, _, afterCaller, saved, final, next, stable, post, querySame,
+            valid, pendingHistory, trivial, .inl rfl, headFits, headKnown, ?_⟩
+          intro ambient assignment satisfied accepted
+          obtain ⟨extended, produced, _agree, _originalSatisfied, impossible, _filled, _afterSatisfied⟩ :=
+            accepting ambient assignment satisfied accepted
+          cases impossible
+  · have rejected : arityAllows edge.children.length scs = false := by
+      cases value : arityAllows edge.children.length scs with
+      | false => rfl
+      | true => exact (allowed value).elim
+    have noCost : edgeCost scs before.core.counter edge = 0 := by
+      simp only [edgeCost, rejected, Bool.false_eq_true, ↓reduceIte]
+    refine ⟨0, 0, 0, 0, 0, .rejected caller memos.query before, caller, memos.query, memos, inventory,
+      ?_, Post.refl initial, rfl, ⟨roots, paths, ready.safe.1, realized, counts, flags⟩,
+      (fun history _ => history), trivial, .inl rfl, ?_, ?_, ?_⟩
+    · intro er en P H ek _largeP _largeH
+      rw [SourcePruningEnumerationCapturedEdge.run,
+        SourcePruningEnumerationSelectedEdge.arity_rejected checkEmpty _ _ _ _ _ scs edge caller before memos.query rejected]
+    · simpa only [noCost, SourcePruningEnumerationIncomingReservation.advance] using fits
+    · simpa only [noCost, SourcePruningEnumerationIncomingReservation.advance] using known
+    · intro ambient assignment satisfied accepted
+      obtain ⟨actualAllowed, _tries, _residual, _projected⟩ :=
+        acceptedChecks ambient assignment satisfied accepted
+      exact (allowed actualAllowed).elim

@@ -1,0 +1,66 @@
+    ∃ (r n p h k : Nat) (processed : List (Receipt (bits + 2))) (afterCaller : Caller (bits + 2)) (saved : Queries)
+      (final : Memos) (next : Inventory) (result : Result (bits + 2)),
+      (∀ er en P H ek, p ≤ P → h ≤ H →
+        SourcePruningEnumerationNativeBranches.run checkEmpty (r + er) (n + en) P H (k + ek)
+          uv scs before selectedEdges caller memos.query = result) ∧
+      Post formulas solver next caller afterCaller final ∧ final.query = saved ∧
+      (∀ receipt ∈ processed, Admitted uv receipt) ∧
+      (EnumerationReferences.PendingReferences before.core → EnumerationReferences.IncomingAvoid uv before.core →
+        ∀ receipt ∈ processed, Pending receipt) ∧
+      (∀ receipt ∈ processed,
+        ∃ (reached : Caller (bits + 2)) (savedQueries : Queries) (receiptInventory : Inventory) (receiptMemos : Memos),
+          advance receipt = some (reached, savedQueries) ∧
+          Post formulas solver receiptInventory caller reached receiptMemos ∧ receiptMemos.query = savedQueries) ∧
+      (∀ receipt ∈ processed, FragmentHistory before.core receipt) ∧
+      (result = .complete processed afterCaller saved ∨ result = .stopped processed (some .unhandled)) ∧
+      ((∀ edge ∈ selectedEdges, arityAllows edge.children.length scs = true →
+          SourcePruningEnumerationConstraint.project edge.entry.key.constraint ≠ none) →
+        result = .complete processed afterCaller saved) ∧
+      Fits (reservationAdvance seed (cost scs before.core.counter selectedEdges)).2 afterCaller.checked ∧
+      Heap (fun guard => guard ∈ (reservationAdvance seed (cost scs before.core.counter selectedEdges)).1)
+        afterCaller.checked.native.machine.heap ∧
+      (∀ (index : Nat) (receipt : Receipt (bits + 2)), processed[index]? = some receipt →
+        ∃ (reached : Caller (bits + 2)) (savedQueries : Queries),
+          advance receipt = some (reached, savedQueries) ∧
+          Fits (reservationAdvance seed (cost scs before.core.counter (selectedEdges.take (index + 1)))).2
+            reached.checked ∧
+          Heap (fun guard => guard ∈
+            (reservationAdvance seed (cost scs before.core.counter (selectedEdges.take (index + 1)))).1)
+            reached.checked.native.machine.heap) ∧
+      ∀ (index : Nat) (chosen : EdgeValue Symbol Constraint),
+        selectedEdges[index]? = some chosen →
+        (∀ earlier ∈ selectedEdges.take index, arityAllows earlier.children.length scs = true →
+          SourcePruningEnumerationConstraint.project earlier.entry.key.constraint ≠ none) →
+        ∀ (ambient : InternedGuardedLanguage.Env Symbol)
+          (assignment : Nat → Language.Term Symbol),
+          Satisfies
+            (SourcePruningEnumerationNativeLanguage.handles (SourceEqualityPCSGuard.holds formulas solver)
+              ambient caller.checked.native.machine.heap)
+            (fun guard term => SourceEqualityPCSGuard.holds formulas solver guard term = true)
+            assignment before.core →
+          InternedGuardedLanguage.edgeMeaning (SourceEqualityPCSGuard.holds formulas solver)
+            ambient chosen (assignment uv) →
+          ∃ (headCaller : Caller (bits + 2)) (headInventory : Inventory) (headMemos : Memos)
+            (branchCaller : Caller (bits + 2)) (branchQueries : Queries) (branchMemos : Memos)
+            (branchInventory : Inventory) (afterCache : Cached)
+            (extended : Nat → Language.Term Symbol) (fragment : Fragments.Fragment Symbol),
+            Post formulas solver headInventory caller headCaller headMemos ∧
+            Post formulas solver branchInventory headCaller branchCaller branchMemos ∧
+            branchMemos.query = branchQueries ∧
+            processed[index]? = some (.complete fragment branchCaller branchQueries afterCache) ∧
+            (∀ er en P H ek, p ≤ P → h ≤ H →
+              SourcePruningEnumerationCapturedEdge.run checkEmpty (r + er) (n + en) P H (k + ek)
+                uv scs chosen headCaller before headMemos.query =
+                  some (.complete fragment branchCaller branchQueries afterCache)) ∧
+            (∀ old < before.core.counter, extended old = assignment old) ∧
+            Satisfies
+              (SourcePruningEnumerationNativeLanguage.handles (SourceEqualityPCSGuard.holds formulas solver)
+                ambient caller.checked.native.machine.heap)
+              (fun guard term => SourceEqualityPCSGuard.holds formulas solver guard term = true)
+              extended before.core ∧
+            Fragments.fill extended fragment = assignment uv ∧
+            Satisfies
+              (SourcePruningEnumerationNativeLanguage.handles (SourceEqualityPCSGuard.holds formulas solver)
+                ambient branchCaller.checked.native.machine.heap)
+              (fun guard term => SourceEqualityPCSGuard.holds formulas solver guard term = true)
+              extended afterCache.core
