@@ -458,6 +458,10 @@ child, so that each state has a least cost. Then the costs of the list never
 decrease, also for a cyclic automaton, whose list is infinite. The terms of
 one cost come in a fixed order. A transition with a constraint gives only the
 terms that satisfy its path equalities. A term with two runs comes twice.
+
+An infinite set of cheaper rejected candidates can prevent the next term from
+being reached. A sufficient progress condition is that each cost bound admits
+only finitely many generated partial terms.
 -}
 termsByCost :: (Ord state, Eq symbol, Ord c) => (symbol -> [c] -> c) -> PlainFTA state symbol -> [(c, Term symbol)]
 termsByCost cost automaton =

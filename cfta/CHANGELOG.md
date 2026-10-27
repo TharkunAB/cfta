@@ -44,6 +44,9 @@ Before release, the package was called `microcfta`.
   the cost of an e-node sees the e-node: its e-class, its symbol, and the
   e-classes and costs of its children. So a cost can use the sort of an
   e-class or the data of an analysis.
+  The extraction and cost-enumeration comments state a sufficient progress
+  condition. Monotone costs and strict child growth alone can leave an
+  accepted term behind infinitely many cheaper rejected candidates.
 - The union-find of the ECTA enumeration points each member of the smaller
   set at the new representative on a union, so `root` is one lookup. The
   representative holds the size of its set and the set as an `IntSet`.

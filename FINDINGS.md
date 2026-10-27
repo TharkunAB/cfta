@@ -74,6 +74,45 @@ Terminal parents retain the existing enumerateNode fallback boundary. Native
 children can still take their terminal dispatcher. No Haskell fix is needed.
 Details: lean/notes-current-pruning-enumeration-native-ordinary.md.
 
+### E-graph cost context and lexicographic extraction progress
+
+Main `82258094c` is integrated at `f61c306e7`. PR #183 changes the EGraph
+extract and termsByCost cost callback to
+`ClassId -> symbol -> [ClassId] -> [cost] -> cost`. Both the least-cost analysis
+and actual row costs receive canonical owning and child class identifiers.
+The generic FTA API retains its symbol-only callback. All 342 core examples
+pass in Nix. The earlier constrained cost-5 witness still passes after adapting
+only its callback arguments. The original reproducer remains unchanged.
+
+A separate verified progress limitation predates this callback change.
+Construct A = {a, u(A)} and a distinct singleton Z = {z}. Add bad(A,Z) with
+the equality at paths [0] and [1]. Merge its class with the leaf good.
+The class accepts good. Every bad(u^n(a),z) fails its equality.
+For a lexicographic pair of Integer costs, take the maximum of all child
+costs and a symbol base. The base is (1,0) for good and (0,0) otherwise.
+Increment the maximum's second component. This cost is monotone and strictly
+exceeds each child, including arbitrary negative input pairs.
+
+The native acceptance check returns Right True for good. Ordinary size-based
+extraction returns Just (1,good). The least-cost analysis returns Just (0,2).
+The lexicographic extraction does not return within its internal two-second
+timeout. Its exact 108-byte output has SHA256
+`c0d16e5248c616734d370648f6ac58e313fccb2d327255adbb38dc8379779564`.
+The source queue always has another cheaper bad candidate at cost (0,n),
+before the accepted good at (1,1). This explains starvation. The timeout alone
+is not a formal proof of nontermination.
+
+The local Haskell documentation repair states a sufficient progress condition:
+each cost bound admits finitely many generated partial terms. It removes the
+unsupported claim that local cost laws alone guarantee reaching a term.
+EGraph.extract, both termsByCost interfaces, the internal search comment and
+the changelog now record this limit. All executable Haskell expressions stay
+unchanged by this repair. Changed Fourmolu and Cabal-gild checks pass in Nix.
+External action: retain this regression and distinguish sorted returned
+results from progress. No runtime repair or general extraction proof is claimed.
+Evidence and adapted runnable sources:
+`lean/restart-evidence/20261027-flat-native-assimilation`.
+
 ### Verified constrained EGraph.extract failure after main integration
 
 Upstream `c168a952d779a72294c34d9c8fd5afd0e308c5ab` is integrated at
