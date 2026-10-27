@@ -1,0 +1,8 @@
+theorem Receipt.preserves_arity_heap
+    {formulas : SourceGuards.Formulas FullSyntax.Formula}
+    {solver : SourceGuards.Entailment FullSyntax.Formula}
+    {inventory : SourceCurrentAllocatedNativeInventoryState.Inventory}
+    {symbol : Symbol} {constraint : Allocated} {children : List (Value Symbol Constraint)}
+    {before after : Checked width} {result : EdgeValue Symbol Constraint}
+    (receipt : Receipt formulas solver inventory symbol constraint children before result after)
+    (heap : Heap before.native.machine.heap) : Heap after.native.machine.heap

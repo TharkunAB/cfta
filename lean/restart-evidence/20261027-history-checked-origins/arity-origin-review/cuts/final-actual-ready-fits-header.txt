@@ -1,0 +1,10 @@
+theorem ready_fits
+    (le : SourceGuards.Guard FullSyntax.Formula → SourceGuards.Guard FullSyntax.Formula → Bool)
+    (first second combined : Allocated) (leftArity rightArity : Nat)
+    (operations : SourceEqualityConstraintMemoAllocation.State)
+    (valid : SourceEqualityConstraintMemoAllocation.Valid operations)
+    (firstReady : SourceEqualityConstraintAllocation.Ready operations.constraints first.stored)
+    (secondReady : SourceEqualityConstraintAllocation.Ready operations.constraints second.stored)
+    (observed : (SourceEqualityIntersectionEdgeAllocation.run le first second
+      leftArity rightArity operations).1 = .ok (.ready combined)) :
+    SourcePruningEnumerationArityOrigins.Fits (SourceEqualityConjoinAllocation.readback combined) leftArity := by

@@ -1,0 +1,34 @@
+
+/-- The actual checked constructor preserves every old and newly stored edge-arity record. -/
+theorem Receipt.preserves_arity_heap
+    {formulas : SourceGuards.Formulas FullSyntax.Formula}
+    {solver : SourceGuards.Entailment FullSyntax.Formula}
+    {inventory : SourceCurrentAllocatedNativeInventoryState.Inventory}
+    {symbol : Symbol} {constraint : Allocated} {children : List (Value Symbol Constraint)}
+    {before after : Checked width} {result : EdgeValue Symbol Constraint}
+    (receipt : Receipt formulas solver inventory symbol constraint children before result after)
+    (heap : Heap before.native.machine.heap) : Heap after.native.machine.heap := by
+  have checked : Fits result.entry.key.constraint result.children.length := by
+    intro tries residual projected
+    exact (receipt.projected_arity tries residual projected).2
+  have coherent := receipt.ready.semantic.ready.semantic.1.normal.facts.coherent
+  have actual := receipt.actual
+  cases selected : (SourceEqualityMkEdgeAllocation.check constraint.stored constraint.guard children.length
+      before.operations).1 with
+  | error message =>
+      simp only [build, SourceEqualityMkEdgeAllocation.build, selected] at actual
+      cases actual
+  | ok keep =>
+      simp only [build, SourceEqualityMkEdgeAllocation.build, selected] at actual
+      have resultSame := Except.ok.inj (congrArg Prod.fst actual)
+      have heapSame := congrArg (fun returned => returned.2.native.machine.heap) actual
+      change (run (SourceEqualityMkEdgeAllocation.work symbol (raw constraint) children keep)
+        before.native.machine.heap).2 = after.native.machine.heap at heapSame
+      have observed : run (SourceEqualityMkEdgeAllocation.work symbol (raw constraint) children keep)
+          before.native.machine.heap = (result, after.native.machine.heap) :=
+        Prod.ext resultSame heapSame
+      cases keep with
+      | false =>
+          simp only [SourceEqualityMkEdgeAllocation.work, Bool.false_eq_true, ↓reduceIte] at observed
+          exact makeEdge_heap_of_returned _ _ _ _ _ _ heap coherent observed checked
+      | true =>

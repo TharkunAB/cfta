@@ -1,0 +1,6 @@
+theorem sentinel_provenance [DecidableEq (EdgeKey Symbol Guard)] (symbol : Symbol)
+    (heap : InternedConstructorTemplates.State Symbol Guard) (ready : SourceEqualityRequiredCache.Ready heap) :
+    let built := InternedConstructorTemplates.run (makeEdge symbol top [.empty]) heap
+    SourceEqualityRequiredCache.Keeps heap built.2 ∧ EdgeResident built.2 built.1 ∧
+      built.1.entry.key.symbol = symbol ∧ built.1.entry.key.constraint = top ∧ built.1.children = [.empty] ∧
+      ∀ holds ambient term, ¬ InternedGuardedLanguage.edgeMeaning holds ambient built.1 term := by

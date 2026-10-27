@@ -1,0 +1,13 @@
+theorem run_correct [DecidableEq (SourceGuards.Guard Formula)]
+    (le : SourceGuards.Guard Formula → SourceGuards.Guard Formula → Bool)
+    (first second : Allocated Formula) (firstArity secondArity : Nat) (before : State) (valid : Valid before)
+    (firstReady : Ready before.constraints first.stored) (secondReady : Ready before.constraints second.stored) :
+    ∃ branch, (run le first second firstArity secondArity before).1 = .ok branch ∧
+      branch.map SourceEqualityConjoinAllocation.readback =
+        source le (SourceEqualityConjoinAllocation.readback first) (SourceEqualityConjoinAllocation.readback second) firstArity secondArity ∧
+      Valid (run le first second firstArity secondArity before).2 ∧
+      Grows before (run le first second firstArity secondArity before).2 ∧
+      ∀ result, branch = .ready result →
+        Ready (run le first second firstArity secondArity before).2.constraints result.stored ∧
+        SourceEqualityGuardReadback.Cached (SourceEqualityConjoinAllocation.readback result).equalities ∧
+        SourceEqualityPhysicalPayload.read (SourceEqualityConjoinAllocation.readback result).equalities = .ok result.stored.payload := by

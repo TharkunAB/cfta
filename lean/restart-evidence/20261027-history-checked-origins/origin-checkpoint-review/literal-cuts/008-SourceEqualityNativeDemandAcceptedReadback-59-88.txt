@@ -1,0 +1,30 @@
+theorem body_observation [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)]
+    (request : EdgeRequest Symbol Guard) (state after : State width) (first second combined : Allocated)
+    (fuel : Nat) (result : EdgeValue Symbol Guard)
+    (arity : request.left.children.length = request.right.children.length)
+    (left : SourceEqualityConstraintFieldLookup.load request.left.entry.key.constraint state.operations.constraints = .ok (some first))
+    (right : SourceEqualityConstraintFieldLookup.load request.right.entry.key.constraint state.operations.constraints = .ok (some second))
+    (accepted : (SourceEqualityIntersectionEdgeAllocation.run GuardStructuralOrder.le first second
+      request.left.children.length request.right.children.length state.operations).1 = .ok (.ready combined))
+    (done : execute fuel (.edgeBody request .pure) state = .done result after) :
+    ∃ values middle count, count + 1 < fuel ∧
+      SourceEqualityNativeDemandWalkExecution.Walk (fun pair => requestNode request.domain pair.1 pair.2)
+        (request.left.children.zip request.right.children)
+        {state with operations := (SourceEqualityIntersectionEdgeAllocation.run GuardStructuralOrder.le first second
+          request.left.children.length request.right.children.length state.operations).2} values middle count ∧
+      result = (run (makeEdge request.left.entry.key.symbol (SourceEqualityConjoinAllocation.readback combined) values)
+        middle.native.machine.heap).1 ∧
+      after = {middle with native := advance middle.native {middle.native.machine with heap :=
+        (run (makeEdge request.left.entry.key.symbol (SourceEqualityConjoinAllocation.readback combined) values) middle.native.machine.heap).2}} := by
+  cases fuel with
+  | zero => cases done
+  | succ fuel =>
+      have one := body_ready request (.pure : EdgeValue Symbol Guard → Code Symbol Guard (EdgeValue Symbol Guard))
+        state arity first second combined left right accepted
+      simp only [code_bind_pure] at one
+      have tail : execute fuel (.code (SourceEqualityNativeCheckedCode.children request.domain request.left request.right combined))
+          {state with operations := (SourceEqualityIntersectionEdgeAllocation.run GuardStructuralOrder.le first second
+            request.left.children.length request.right.children.length state.operations).2} = .done result after := by
+        simpa only [SourceEqualityNativeDemand.execute, SourceEqualityNativeDemand.step, one] using done
+      obtain ⟨values, middle, count, bounded, walk, fields⟩ := children_observation request combined fuel _ after result tail
+      exact ⟨values, middle, count, by omega, walk, fields⟩

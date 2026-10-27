@@ -1,0 +1,29 @@
+structure Receipt (formulas : SourceGuards.Formulas FullSyntax.Formula)
+    (solver : SourceGuards.Entailment FullSyntax.Formula) (inventory : Inventory)
+    (symbol : Symbol) (original : Guard) (loaded : Allocated) (inherited : EqValue)
+    (values : List (Value Symbol Guard)) (before : Checked width) (result : EdgeValue Symbol Guard)
+    (after : Checked width) (fourth savedFourth : Fourth) (memo saved : Memo) (final : Memos) : Prop where
+  ready : Ready after
+  admitted : At formulas solver inventory after
+  effects : SourceCurrentConjunctionRowsAllocation.Effects (physical before) (physical after)
+  resident : InternedEdgeResidency.EdgeResident after.native.machine.heap result
+  stored : SourceCurrentMemoMergeEffects.Stored after.native.machine.heap saved
+  covered : ∀ ambient, SourceCurrentMemoMergeLanguage.CacheCovers (SourceEqualityPCSGuard.holds formulas solver) ambient saved
+  retained : Extends memo saved
+  globals : Valid after.native.machine.heap final
+  correct : SourceCurrentEmptinessMemo.Correct formulas solver after.native.machine.heap savedFourth
+  fourthRetained : SourceCurrentEmptinessMemo.Extends fourth savedFourth
+  construction : SourceCurrentAllocatedMkEdge.RejectReceipt formulas solver inventory symbol before result after ∨
+    ∃ children middle, children.length = values.length ∧
+      SourceCurrentAllocatedMkEdge.Receipt formulas solver inventory symbol loaded children middle result after
+  language : ∀ ambient term,
+    (edgeMeaning (SourceEqualityPCSGuard.holds formulas solver) ambient result term →
+      RawMeaning (SourceEqualityPCSGuard.holds formulas solver) ambient symbol original values term) ∧
+    (SourceEqualityPrecheck.Sat term inherited.payload →
+      (edgeMeaning (SourceEqualityPCSGuard.holds formulas solver) ambient result term ↔
+        RawMeaning (SourceEqualityPCSGuard.holds formulas solver) ambient symbol original values term))
+
+omit [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)] [DecidableEq (Value Symbol Guard)] in
+private theorem raw_rejected (formulas : SourceGuards.Formulas FullSyntax.Formula)
+    (solver : SourceGuards.Entailment FullSyntax.Formula) (symbol : Symbol) (original : Guard)
+    (values : List (Value Symbol Guard)) (test : contradictory original = true)

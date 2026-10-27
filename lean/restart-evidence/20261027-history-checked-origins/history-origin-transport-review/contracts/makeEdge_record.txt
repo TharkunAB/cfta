@@ -1,0 +1,5 @@
+private theorem makeEdge_record
+    (symbol : Symbol) (constraint : Constraint) (children : List (Value Symbol Constraint))
+    (before after : State Symbol Constraint) (edge : EdgeValue Symbol Constraint)
+    (observed : run (makeEdge symbol constraint children) before = (edge, after)) :
+    after.edgeRecords ⟨symbol, children.map Value.referenceOf, constraint⟩ = some edge

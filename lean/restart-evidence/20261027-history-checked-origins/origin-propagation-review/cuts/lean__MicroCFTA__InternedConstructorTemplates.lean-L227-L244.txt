@@ -1,0 +1,18 @@
+
+/-- Intern a complete edge after its ordered children have been built. -/
+def makeEdge (symbol : Symbol) (constraint : Guard) (children : List (Value Symbol Guard)) :
+    Work Symbol Guard (EdgeValue Symbol Guard) :=
+  .edge ⟨symbol, children.map Value.referenceOf, constraint⟩ (fun entry => .mk entry children) Work.pure
+
+/-- Remove exactly the source edges with an EmptyNode child. -/
+def surviving (edges : List (EdgeValue Symbol Guard)) : List (EdgeValue Symbol Guard) :=
+  edges.filter fun edge => !(edge.children.any (fun child => child.referenceOf == .empty))
+
+/-- Set.toList orders and deduplicates edges by their canonical edge identity. -/
+def canonicalEdges (edges : List (EdgeValue Symbol Guard)) : List (EdgeValue Symbol Guard) :=
+  (EnumerationBuilderCaches.canonicalIds (edges.map (fun edge => edge.entry.identity))).filterMap
+    fun identity => edges.find? (fun edge => edge.entry.identity == identity)
+
+/-- Ordinary identification computes its metadata from the canonical edge children. -/
+def identifyNode (edges : List (EdgeValue Symbol Guard)) (entry : Interned NodeKey) : Value Symbol Guard :=
+  let children := edges.flatMap EdgeValue.children

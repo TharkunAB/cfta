@@ -1,0 +1,36 @@
+/-- The accepted child code retains the actual combined annotation's existing same-cache load. -/
+theorem children_fields (operations : OpState) (domain : Cache.Interned IntersectionFlatMemoKeyDomain.DomainKey)
+    (left right : EdgeValue Symbol Guard) (combined : SourceEqualityConjoinAllocation.Constraint FullSyntax.Formula)
+    (available : SourceCurrentConjunctionEquality.FieldAvailable operations (SourceEqualityConjoinAllocation.readback combined)) :
+    Fields operations (SourceEqualityNativeCheckedCode.children domain left right combined) := by
+  apply fields_bind operations
+  · exact fields_walk operations _ _ (fun _ _ => by intro value; trivial)
+  · intro values
+    exact ⟨makeEdge_fields operations _ _ _ available, fun _ => trivial⟩
+
+/-- Every finite raw work prefix retains existing field loads at its actual constructor heap. -/
+theorem work_heap [DecidableEq (EdgeKey Symbol Guard)] (operations : OpState) (job : Work Symbol Guard X)
+    (state : InternedConstructorTemplates.State Symbol Guard) (heap : SourceCurrentConjunctionEquality.Fields operations state)
+    (fields : SourceEqualityAnnotationHeap.SafeWork (SourceCurrentConjunctionEquality.FieldAvailable operations) job) :
+    SourceCurrentConjunctionEquality.Fields operations (run job state).2 :=
+  SourceEqualityAnnotationHeap.run _ job fields state heap
+
+/-- Ordinary node normalization retains physical same-cache field availability. -/
+theorem makeNode_heap [DecidableEq (EdgeKey Symbol Guard)] (operations : OpState)
+    (edges : List (EdgeValue Symbol Guard)) (state : InternedConstructorTemplates.State Symbol Guard)
+    (heap : SourceCurrentConjunctionEquality.Fields operations state) : SourceCurrentConjunctionEquality.Fields operations (run (makeNode edges) state).2 :=
+  work_heap operations _ state heap (makeNode_fields operations edges)
+
+/-- Union normalization retains physical same-cache field availability. -/
+theorem makeUnion_heap [DecidableEq (EdgeKey Symbol Guard)] (operations : OpState)
+    (values : List (Value Symbol Guard)) (state : InternedConstructorTemplates.State Symbol Guard)
+    (heap : SourceCurrentConjunctionEquality.Fields operations state) : SourceCurrentConjunctionEquality.Fields operations (run (makeUnion values) state).2 :=
+  work_heap operations _ state heap (makeUnion_fields operations values)
+
+/-- Actual optional binding copies only resident annotations with existing current-cache loads. -/
+theorem optionalBinder_heap [DecidableEq (EdgeKey Symbol Guard)] (operations : OpState) (pair : Nat × Nat)
+    (value : Value Symbol Guard) (state : InternedConstructorTemplates.State Symbol Guard)
+    (facts : InternedNestedFacts.Facts state) (heap : SourceCurrentConjunctionEquality.Fields operations state) (available : Available state value) :
+    SourceCurrentConjunctionEquality.Fields operations (SourceRecursiveIntersectionMaybeMu.maybeMu pair value state).state := by
+  rw [SourceRecursiveIntersectionMaybeMu.maybeMu_eq pair value state state facts available]
+  split

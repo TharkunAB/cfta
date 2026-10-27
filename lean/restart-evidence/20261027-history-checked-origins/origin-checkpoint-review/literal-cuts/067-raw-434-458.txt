@@ -1,0 +1,25 @@
+MicroCFTA.SourcePruningEnumerationArityOrigins.encodeMany_checked {Symbol : Type}
+  (values :
+    List
+      (MicroCFTA.InternedConstructorTemplates.Value Symbol
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)))
+  (state :
+    MicroCFTA.InternedConstructorTemplates.State Symbol
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+  (facts : MicroCFTA.InternedNestedFacts.Facts state) (heap : MicroCFTA.SourcePruningEnumerationArityOrigins.Heap state)
+  (available :
+    ∀
+      (value :
+        MicroCFTA.InternedConstructorTemplates.Value Symbol
+          (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)),
+      value ∈ values → MicroCFTA.InternedProbeProvenance.Available state value)
+  (context :
+    List
+      (MicroCFTA.InternedConstructorTemplates.Value Symbol
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)))
+  (locals : List MicroCFTA.InternedBinderProtocol.Reference) :
+  MicroCFTA.SourcePruningEnumerationArityOrigins.ManyChecked
+    (MicroCFTA.InternedStoredSubstitution.encodeMany context locals values)
+'MicroCFTA.SourcePruningEnumerationArityOrigins.encodeMany_checked' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]

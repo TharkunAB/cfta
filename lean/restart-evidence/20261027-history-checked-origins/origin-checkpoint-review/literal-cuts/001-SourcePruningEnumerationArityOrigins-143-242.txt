@@ -1,0 +1,100 @@
+  | nil =>
+      simp only [buildMany] at done
+      cases done
+      rfl
+  | cons first rest ih =>
+      rw [buildMany] at done
+      cases headRun : build first environment state with
+      | pending key afterHead =>
+          simp only [headRun, Outcome.bind] at done
+          cases done
+      | done value afterHead =>
+          simp only [headRun, Outcome.bind] at done
+          cases tailRun : buildMany rest environment afterHead with
+          | pending key afterTail =>
+              simp only [tailRun] at done
+              cases done
+          | done tail afterTail =>
+              simp only [tailRun] at done
+              have lengthSame := ih afterHead tail afterTail tailRun
+              cases done
+              simpa only [List.length_cons] using congrArg Nat.succ lengthSame
+
+mutual
+/-- Actual raw construction retains arity from checked source syntax. -/
+theorem build_heap [DecidableEq (EdgeKey Symbol Constraint)]
+    (expression : Syntax Symbol Constraint) (environment : List (Value Symbol Constraint))
+    (state : State Symbol Constraint) (heap : Heap state) (checked : Checked expression) :
+    Heap (build expression environment state).state := by
+  cases expression with
+  | empty | var => simpa only [build, Outcome.state] using heap
+  | node edges =>
+      rw [build]
+      apply bind_heap _ _ (buildEdges_heap edges environment state heap checked)
+      intro values after done afterHeap
+      exact node_heap values after afterHeap
+  | union members =>
+      rw [build]
+      apply bind_heap _ _ (buildMany_heap members environment state heap checked)
+      intro values after done afterHeap
+      exact union_heap values after afterHeap
+  | binder smart body =>
+      have callback (name : InternedBinderProtocol.Reference) (current : State Symbol Constraint)
+          (currentHeap : Heap current) :
+          Heap ((build body (.reference name :: environment) current).bind
+            fun value next => work (withoutSelfReference name value) next).state := by
+        apply bind_heap _ _ (build_heap body _ current currentHeap checked)
+        intro value after done afterHeap
+        exact filter_heap name value after afterHeap
+      rw [build]
+      apply bind_heap _ _ (callback _ state heap)
+      intro depth afterDepth doneDepth depthHeap
+      apply bind_heap _ _ (callback _ afterDepth depthHeap)
+      intro ordinary afterOrdinary doneOrdinary ordinaryHeap
+      exact request_heap smart depth ordinary _ afterOrdinary ordinaryHeap callback
+termination_by sizeOf expression
+
+/-- Actual child-plan execution retains all checked edge keys. -/
+theorem buildMany_heap [DecidableEq (EdgeKey Symbol Constraint)]
+    (expressions : List (Syntax Symbol Constraint)) (environment : List (Value Symbol Constraint))
+    (state : State Symbol Constraint) (heap : Heap state) (checked : ManyChecked expressions) :
+    Heap (buildMany expressions environment state).state := by
+  cases expressions with
+  | nil => simpa only [buildMany, Outcome.state] using heap
+  | cons first rest =>
+      rw [buildMany]
+      apply bind_heap _ _ (build_heap first environment state heap checked.1)
+      intro value after done afterHeap
+      apply bind_heap _ _ (buildMany_heap rest environment after afterHeap checked.2)
+      intro values final returned finalHeap
+      exact finalHeap
+termination_by sizeOf expressions
+
+/-- Each actual new edge uses the checked syntactic count and the completed child-list length. -/
+theorem buildEdges_heap [DecidableEq (EdgeKey Symbol Constraint)]
+    (expressions : List (EdgeSyntax Symbol Constraint)) (environment : List (Value Symbol Constraint))
+    (state : State Symbol Constraint) (heap : Heap state) (checked : EdgesChecked expressions) :
+    Heap (buildEdges expressions environment state).state := by
+  cases expressions with
+  | nil => simpa only [buildEdges, Outcome.state] using heap
+  | cons first rest =>
+      cases first with
+      | mk symbol constraint children =>
+          rw [buildEdges]
+          apply bind_heap _ _ (buildMany_heap children environment state heap checked.2.1)
+          intro values after done afterHeap
+          have sameLength := buildMany_length children environment state values after done
+          have currentChecked : Fits constraint values.length := by
+            rw [sameLength]
+            exact checked.1
+          apply bind_heap (work (makeEdge symbol constraint values) after) _
+            (edge_heap symbol constraint values after afterHeap currentChecked)
+          intro edge afterEdge returned edgeHeap
+          apply bind_heap _ _ (buildEdges_heap rest environment afterEdge edgeHeap checked.2.2)
+          intro edges final returned finalHeap
+          exact finalHeap
+termination_by sizeOf expressions
+end
+
+/-- Checked closed initial syntax derives the complete actual edge-arity invariant. -/
+theorem constructed_heap [DecidableEq (EdgeKey Symbol Constraint)]

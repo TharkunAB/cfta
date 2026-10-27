@@ -1,0 +1,11 @@
+--- v3.lean
++++ v4.lean
+@@ -82,7 +82,7 @@
+ /-- The actual sentinel retains every original receipt field and derives its empty own projection. -/
+ theorem sentinel_provenance (symbol : Symbol)
+     (heap : InternedConstructorTemplates.State Symbol Guard) (ready : SourceEqualityRequiredCache.Ready heap) :
+-    let built := InternedConstructorTemplates.run (makeEdge symbol top [.empty]) heap
++    let built := (open scoped Classical in InternedConstructorTemplates.run (makeEdge symbol top [.empty]) heap)
+     SourceEqualityRequiredCache.Keeps heap built.2 ∧ EdgeResident built.2 built.1 ∧
+       built.1.entry.key.symbol = symbol ∧ built.1.entry.key.constraint = top ∧ built.1.children = [.empty] ∧
+       (∀ holds ambient term, ¬ InternedGuardedLanguage.edgeMeaning holds ambient built.1 term) ∧

@@ -1,0 +1,15 @@
+inductive Walk [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)]
+    (holds : Guard → Term Symbol → Bool) (domain : Interned IntersectionFlatMemoKeyDomain.DomainKey) :
+    List Pair → State width → List (Value Symbol Guard) → State width → Nat → Prop where
+  | nil (state) : Walk holds domain [] state [] state 0
+  | cons (pair : Pair) (rest) (before middle after : State width) (value values firstFuel restFuel)
+      (called : Steps firstFuel (.code (requestNode domain pair.1 pair.2)) before (.code (.pure value)) middle)
+      (keeps : SourceEqualityRequiredCache.Keeps before.native.machine.heap middle.native.machine.heap)
+      (growth : Extension before.native.machine middle.native.machine)
+      (produced : NodeProduced (width := width) holds middle.native.machine ⟨domain, pair.1, pair.2⟩ value)
+      (tail : Walk holds domain rest middle values after restFuel) :
+      Walk holds domain (pair :: rest) before (value :: values) after (firstFuel + restFuel)
+
+/-- Actual child traces compose to the exact emitted ordered source walk. -/
+theorem Walk.trace [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)]
+    {holds : Guard → Term Symbol → Bool} {domain : Interned IntersectionFlatMemoKeyDomain.DomainKey}

@@ -1,0 +1,9 @@
+def MicroCFTA.SourcePruningEnumerationArityOrigins.Fits : MicroCFTA.SourceSymbolicIndex.Constraint
+    MicroCFTA.FullSyntax.Formula →
+  Nat → Prop :=
+fun constraint arity =>
+  ∀ (tries : List MicroCFTA.EqualityTrie.Trie)
+    (residual : Option (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)),
+    MicroCFTA.SourcePruningEnumerationConstraint.project constraint = some (tries, residual) →
+      ∀ (start : Nat),
+        MicroCFTA.EnumerationState.arityAllows arity (MicroCFTA.EnumerationCorrectness.suspendedVars start tries) = true

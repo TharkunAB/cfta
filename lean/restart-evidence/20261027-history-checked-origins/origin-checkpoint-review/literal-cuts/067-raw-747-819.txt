@@ -1,0 +1,73 @@
+MicroCFTA.SourcePruningEnumerationNativeCheckedOriginArity.accepted_receipt_fits {width : Nat}
+  [DecidableEq (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)]
+  [DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  (request :
+    MicroCFTA.SourceRecursiveIntersectionThunks.EdgeRequest
+      (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+  (state : MicroCFTA.SourceEqualityNativeDemand.State width)
+  (first second combined : MicroCFTA.SourceEqualityConjoinAllocation.Constraint MicroCFTA.FullSyntax.Formula)
+  (initial : MicroCFTA.SourceCurrentAllocatedNativePhysicalCompletion.Good state)
+  (inputs : MicroCFTA.SourceRecursiveIntersectionThunks.EdgeReady state.native.machine request)
+  (left :
+    MicroCFTA.SourceEqualityConstraintFieldLookup.load request.left.entry.key.constraint state.operations.constraints =
+      Except.ok (some first))
+  (right :
+    MicroCFTA.SourceEqualityConstraintFieldLookup.load request.right.entry.key.constraint state.operations.constraints =
+      Except.ok (some second))
+  (accepted :
+    (MicroCFTA.SourceEqualityIntersectionEdgeAllocation.run MicroCFTA.GuardStructuralOrder.le first second
+          request.left.children.length request.right.children.length state.operations).fst =
+      Except.ok (MicroCFTA.SourceEqualityIntersectionEdgeAllocation.Branch.ready combined))
+  {count : Nat}
+  {result :
+    MicroCFTA.InternedConstructorTemplates.EdgeValue (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)}
+  {after : MicroCFTA.SourceEqualityNativeDemand.State width}
+  {post :
+    MicroCFTA.SourceRecursiveIntersectionKernel.Machine
+        (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) →
+      MicroCFTA.InternedConstructorTemplates.EdgeValue (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+          (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) →
+        Prop}
+  (receipt :
+    MicroCFTA.SourceCurrentAllocatedNativePhysicalTraceCompletion.Receipt count
+      (MicroCFTA.SourceEqualityNativeDemand.Control.edgeBody request
+        MicroCFTA.SourceRecursiveIntersectionCode.Code.pure)
+      state result after post) :
+  ∃ values middle childCount,
+    childCount + 1 < count + 1 ∧
+      MicroCFTA.SourceEqualityNativeDemandWalkExecution.Walk
+          (fun pair => MicroCFTA.SourceRecursiveIntersectionCode.requestNode request.domain pair.fst pair.snd)
+          (request.left.children.zip request.right.children)
+          { native := state.native,
+            operations :=
+              (MicroCFTA.SourceEqualityIntersectionEdgeAllocation.run MicroCFTA.GuardStructuralOrder.le first second
+                  request.left.children.length request.right.children.length state.operations).snd }
+          values middle childCount ∧
+        result =
+            (MicroCFTA.InternedConstructorTemplates.run
+                (MicroCFTA.InternedConstructorTemplates.makeEdge request.left.entry.key.symbol
+                  (MicroCFTA.SourceEqualityConjoinAllocation.readback combined) values)
+                middle.native.machine.heap).fst ∧
+          after =
+              {
+                native :=
+                  MicroCFTA.SourceRecursiveIntersectionThunks.advance middle.native
+                    (have __src := middle.native.machine;
+                    {
+                      heap :=
+                        (MicroCFTA.InternedConstructorTemplates.run
+                            (MicroCFTA.InternedConstructorTemplates.makeEdge request.left.entry.key.symbol
+                              (MicroCFTA.SourceEqualityConjoinAllocation.readback combined) values)
+                            middle.native.machine.heap).snd,
+                      domains := __src.domains }),
+                operations := middle.operations } ∧
+            result.children.length = request.left.children.length ∧
+              MicroCFTA.SourcePruningEnumerationArityOrigins.Fits result.entry.key.constraint result.children.length
+'MicroCFTA.SourcePruningEnumerationNativeCheckedOriginArity.accepted_receipt_fits' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]

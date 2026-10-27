@@ -1,0 +1,11 @@
+theorem Receipt.projected_arity
+    {formulas : SourceGuards.Formulas FullSyntax.Formula}
+    {solver : SourceGuards.Entailment FullSyntax.Formula}
+    {inventory : SourceCurrentAllocatedNativeInventoryState.Inventory}
+    {symbol : Symbol} {constraint : Allocated} {children : List (Value Symbol Constraint)}
+    {before after : SourceEqualityNativeDemand.State width} {result : EdgeValue Symbol Constraint}
+    (receipt : Receipt formulas solver inventory symbol constraint children before result after)
+    (tries : List EqualityTrie.Trie) (residual : Option Constraint)
+    (projected : SourcePruningEnumerationConstraint.project result.entry.key.constraint = some (tries, residual)) :
+    (∀ trie ∈ tries, EqualityTrie.Valid trie) ∧
+      ∀ start, arityAllows result.children.length (suspendedVars start tries) = true := by

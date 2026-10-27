@@ -1,0 +1,63 @@
+    (initial : SourceCurrentAllocatedNativePhysicalCompletion.Good before)
+    (inputs : EdgeReady before.native.machine request)
+    {count : Nat} {result : EdgeValue Symbol Guard} {after : Checked width}
+    {post : Machine Symbol Guard → EdgeValue Symbol Guard → Prop}
+    (receipt : SourceCurrentAllocatedNativePhysicalTraceCompletion.Receipt count
+      (.edgeBody request .pure) before result after post) :
+    SourcePruningEnumerationArityOrigins.Fits result.entry.key.constraint result.children.length ∧
+      ((∃ first second combined values middle childCount,
+          SourceEqualityConstraintFieldLookup.load request.left.entry.key.constraint before.operations.constraints = .ok (some first) ∧
+          SourceEqualityConstraintFieldLookup.load request.right.entry.key.constraint before.operations.constraints = .ok (some second) ∧
+          (SourceEqualityIntersectionEdgeAllocation.run GuardStructuralOrder.le first second
+            request.left.children.length request.right.children.length before.operations).1 = .ok (.ready combined) ∧
+          childCount + 1 < count + 1 ∧
+          SourceEqualityNativeDemandWalkExecution.Walk (fun pair => requestNode request.domain pair.1 pair.2)
+            (request.left.children.zip request.right.children)
+            {before with operations := (SourceEqualityIntersectionEdgeAllocation.run GuardStructuralOrder.le first second
+              request.left.children.length request.right.children.length before.operations).2} values middle childCount ∧
+          result = (run (makeEdge request.left.entry.key.symbol (SourceEqualityConjoinAllocation.readback combined) values)
+            middle.native.machine.heap).1 ∧
+          after = {middle with native := advance middle.native {middle.native.machine with heap :=
+            (run (makeEdge request.left.entry.key.symbol (SourceEqualityConjoinAllocation.readback combined) values)
+              middle.native.machine.heap).2}} ∧
+          result.children.length = request.left.children.length) ∨
+        ∃ middle rest,
+          SourceEqualityNativeDemand.body request .pure before = .yielded (.code (SourceEqualityNativeCheckedCode.sentinel request.left)) middle ∧
+          middle.native = before.native ∧
+          SourceCurrentAllocatedNativePhysicalTraceCompletion.Trace rest
+            (.code (SourceEqualityNativeCheckedCode.sentinel request.left)) middle (.code (.pure result)) after ∧
+          result = (run (makeEdge request.left.entry.key.symbol top [.empty]) middle.native.machine.heap).1 ∧
+          after = {middle with native := advance middle.native {middle.native.machine with heap :=
+            (run (makeEdge request.left.entry.key.symbol top [.empty]) middle.native.machine.heap).2}} ∧
+          result.entry.key.constraint = top ∧ result.children = [.empty]) := by
+  obtain ⟨code, middle, rest, one, tail⟩ := trace_body_first request before after result count receipt.trace
+  obtain ⟨nativeSame, selected⟩ := body_choice_checked request before middle code one
+  rcases selected with sentinelSame | ⟨first, second, combined, left, right, accepted, _codeSame⟩
+  · subst code
+    have done := trace_done rest _ middle after result tail.steps
+    have observed : execute (rest + 1)
+        (.code (.work (makeEdge request.left.entry.key.symbol top [.empty]) .pure)) middle = .done result after := by
+      simpa only [SourceEqualityNativeCheckedCode.sentinel] using done
+    obtain ⟨resultSame, afterSame⟩ := SourceEqualityNativeDemandAcceptedReadback.work_observation
+      (makeEdge request.left.entry.key.symbol top [.empty]) (rest + 1) middle after result observed
+    have middleReady : SourceEqualityRequiredCache.Ready middle.native.machine.heap := by
+      simpa only [nativeSame] using initial.heap
+    obtain ⟨_keeps, _resident, _symbol, guardSame, childrenSame, _rejects⟩ :=
+      SourceEqualityNativeDemandMismatchProvenance.sentinel_provenance
+        request.left.entry.key.symbol middle.native.machine.heap middleReady
+    have resultGuard : result.entry.key.constraint = top := by rw [resultSame]; exact guardSame
+    have resultChildren : result.children = [.empty] := by rw [resultSame]; exact childrenSame
+    refine ⟨?_, .inr ⟨middle, rest, one, nativeSame, tail, resultSame, afterSame, resultGuard, resultChildren⟩⟩
+    intro tries residual projected start
+    rw [resultGuard] at projected
+    have topProjection : SourcePruningEnumerationConstraint.project (top : Guard) = some ([], none) := rfl
+    rw [topProjection] at projected
+    have triesSame : [] = tries := congrArg Prod.fst (Option.some.inj projected)
+    subst tries
+    rfl
+  · obtain ⟨values, reached, childCount, bounded, walk, resultSame, afterSame, lengthSame, fits⟩ :=
+      accepted_receipt_fits request before first second combined initial inputs left right accepted receipt
+    exact ⟨fits, .inl ⟨first, second, combined, values, reached, childCount,
+      left, right, accepted, bounded, walk, resultSame, afterSame, lengthSame⟩⟩
+
+end MicroCFTA.SourcePruningEnumerationNativeCheckedOriginArity

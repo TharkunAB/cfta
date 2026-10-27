@@ -1,0 +1,51 @@
+/-- Equal-length setChildren retains the checked edge's constraint and projected arity at the current heap. -/
+theorem accepted_setChildren_arity [DecidableEq (InternedConstructorTemplates.EdgeKey Symbol Constraint)]
+    (symbol : Symbol) (original : Constraint) (stored : SourceEqualityConstraintAllocation.Value)
+    (children replacements : List (InternedConstructorTemplates.Value Symbol Constraint))
+    (before : SourceEqualityConstraintMemoAllocation.State)
+    (heap current : InternedConstructorTemplates.State Symbol Constraint)
+    (fallback : Symbol → List (InternedConstructorTemplates.Value Symbol Constraint) → Constraint →
+      InternedConstructorTemplates.Work Symbol Constraint (InternedConstructorTemplates.EdgeValue Symbol Constraint))
+    (cached : SourceEqualityGuardReadback.Cached original.equalities)
+    (physical : SourceEqualityPhysicalPayload.read original.equalities = .ok stored.payload)
+    (storedReady : SourceEqualityConstraintAllocation.Ready before.constraints stored)
+    (valid : SourceEqualityConstraintMemoAllocation.Valid before)
+    (heapReady : SourceEqualityRequiredCache.Ready heap)
+    (available : InternedNestedProvenance.Values heap children)
+    (checked : (SourceEqualityMkEdgeAllocation.check stored original.guard children.length before).1 = .ok true)
+    (currentReady : SourceEqualityRequiredCache.Ready current)
+    (replacementAvailable : InternedNestedProvenance.Values current replacements)
+    (sameLength : replacements.length = children.length) :
+    let built := InternedConstructorTemplates.run (InternedConstructorTemplates.makeEdge symbol original children) heap
+    let rebuilt := InternedConstructorTemplates.run
+      (EqualityLeafProjectionSetChildren.setChildren fallback built.1 replacements) current
+    SourceEqualityMkEdgeAllocation.build symbol stored original.guard children before heap =
+      (.ok built.1, (SourceEqualityMkEdgeAllocation.check stored original.guard children.length before).2, built.2) ∧
+    SourceEqualityConstraintMemoAllocation.Valid
+      (SourceEqualityMkEdgeAllocation.check stored original.guard children.length before).2 ∧
+    SourceEqualityConstraintMemoAllocation.Grows before
+      (SourceEqualityMkEdgeAllocation.check stored original.guard children.length before).2 ∧
+    SourceEqualityRequiredCache.Keeps heap built.2 ∧
+    built.1.entry.key.symbol = symbol ∧ built.1.entry.key.constraint = original ∧ built.1.children = children ∧
+    EqualityLeafProjectionSetChildren.setChildren fallback built.1 replacements =
+      InternedConstructorTemplates.makeEdge symbol original replacements ∧
+    rebuilt = InternedConstructorTemplates.run (InternedConstructorTemplates.makeEdge symbol original replacements) current ∧
+    SourceEqualityRequiredCache.Keeps current rebuilt.2 ∧
+    InternedEdgeResidency.EdgeResident rebuilt.2 rebuilt.1 ∧
+    rebuilt.1.entry.key.symbol = symbol ∧ rebuilt.1.entry.key.constraint = original ∧ rebuilt.1.children = replacements ∧
+    ∃ classes : EqualityNormalize.Constraints,
+      SourceCompactGuards.sourceEqualities built.1.entry.key.constraint = some classes ∧
+      SourceCompactGuards.sourceEqualities rebuilt.1.entry.key.constraint = some classes ∧
+      SourcePruningEnumerationConstraint.project built.1.entry.key.constraint =
+        some (EnumerationEquality.readClasses classes,
+          if (SourceCompactGuards.positive original.guard).isSome then none else some original) ∧
+      SourcePruningEnumerationConstraint.project rebuilt.1.entry.key.constraint =
+        some (EnumerationEquality.readClasses classes,
+          if (SourceCompactGuards.positive original.guard).isSome then none else some original) ∧
+      (∀ trie ∈ EnumerationEquality.readClasses classes, EqualityTrie.Valid trie) ∧
+      (∀ paths ∈ classes, ∀ path,
+        path ∈ EqualityTrie.fromPathTrie (EnumerationEquality.classTrie paths) ↔ path ∈ paths) ∧
+      ∀ start : Nat, arityAllows built.1.children.length
+        (suspendedVars start (EnumerationEquality.readClasses classes)) = true ∧
+        arityAllows rebuilt.1.children.length
+          (suspendedVars start (EnumerationEquality.readClasses classes)) = true := by

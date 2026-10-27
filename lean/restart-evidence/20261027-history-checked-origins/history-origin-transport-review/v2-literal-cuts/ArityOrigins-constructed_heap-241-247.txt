@@ -1,0 +1,7 @@
+/-- Checked closed initial syntax derives the complete actual edge-arity invariant. -/
+theorem constructed_heap [DecidableEq (EdgeKey Symbol Constraint)]
+    (expression : Syntax Symbol Constraint) (checked : Checked expression)
+    (value : Value Symbol Constraint) (state : State Symbol Constraint)
+    (built : build expression [] empty = .done value state) : Heap state := by
+  have preserved := build_heap expression [] empty empty_heap checked
+  simpa only [built, Outcome.state] using preserved

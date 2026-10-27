@@ -1,0 +1,27 @@
+theorem body_produced [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)]
+    (formulas : SourceGuards.Formulas FullSyntax.Formula) (solver : SourceGuards.Entailment FullSyntax.Formula)
+    (request : EdgeRequest Symbol Guard) (state after : State width)
+    (first second combined : Allocated) (values : List (Value Symbol Guard)) (fuel : Nat)
+    (valid : SourceEqualityConstraintMemoAllocation.Valid state.operations)
+    (heapReady : SourceEqualityRequiredCache.Ready state.native.machine.heap)
+    (inputs : EdgeReady state.native.machine request)
+    (leftCached : SourceEqualityGuardReadback.Cached request.left.entry.key.constraint.equalities)
+    (rightCached : SourceEqualityGuardReadback.Cached request.right.entry.key.constraint.equalities)
+    (arity : request.left.children.length = request.right.children.length)
+    (symbols : request.left.entry.key.symbol = request.right.entry.key.symbol)
+    (left : SourceEqualityConstraintFieldLookup.load request.left.entry.key.constraint state.operations.constraints = .ok (some first))
+    (right : SourceEqualityConstraintFieldLookup.load request.right.entry.key.constraint state.operations.constraints = .ok (some second))
+    (accepted : (SourceEqualityIntersectionEdgeAllocation.run GuardStructuralOrder.le first second
+      request.left.children.length request.right.children.length state.operations).1 = .ok (.ready combined))
+    (walk : SourceEqualityNativeDemandChildWalk.Walk (SourceEqualityPCSGuard.holds formulas solver) request.domain
+      (request.left.children.zip request.right.children)
+      {state with operations := (SourceEqualityIntersectionEdgeAllocation.run GuardStructuralOrder.le first second
+        request.left.children.length request.right.children.length state.operations).2} values after fuel) :
+    let built := run (makeEdge request.left.entry.key.symbol (SourceEqualityConjoinAllocation.readback combined) values) after.native.machine.heap
+    let final : State width := {after with native := advance after.native {after.native.machine with heap := built.2}}
+    execute (fuel + 3) (.edgeBody request .pure) state = .done built.1 final ∧
+      EdgeProduced (width := width) (SourceEqualityPCSGuard.holds formulas solver) final.native.machine request built.1 ∧
+      SourceEqualityRequiredCache.Keeps state.native.machine.heap final.native.machine.heap ∧
+      EdgeResident final.native.machine.heap built.1 ∧ built.1.children = values ∧ built.1.children.length = request.left.children.length := by
+  let built := run (makeEdge request.left.entry.key.symbol (SourceEqualityConjoinAllocation.readback combined) values) after.native.machine.heap
+  let final : State width := {after with native := advance after.native {after.native.machine with heap := built.2}}

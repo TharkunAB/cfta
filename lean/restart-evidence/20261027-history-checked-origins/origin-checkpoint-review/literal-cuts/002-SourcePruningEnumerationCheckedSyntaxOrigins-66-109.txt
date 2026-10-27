@@ -1,0 +1,44 @@
+
+mutual
+/-- Original source checks derive the checked plan used by actual construction. -/
+theorem source_checked (expression : Syntax Symbol Constraint) (checked : SourceChecked expression) :
+    Checked expression := by
+  cases expression with
+  | empty | var => trivial
+  | node edges => exact source_edges_checked edges checked
+  | union members => exact source_many_checked members checked
+  | binder smart body => exact source_checked body checked
+termination_by sizeOf expression
+
+/-- Original ordered child checks derive every nested projected-arity check. -/
+theorem source_many_checked (expressions : List (Syntax Symbol Constraint))
+    (checked : SourceManyChecked expressions) : ManyChecked expressions := by
+  cases expressions with
+  | nil => trivial
+  | cons first rest =>
+      exact ⟨source_checked first checked.1, source_many_checked rest checked.2⟩
+termination_by sizeOf expressions
+
+/-- Each actual source edge test derives its original syntactic arity check. -/
+theorem source_edges_checked (expressions : List (EdgeSyntax Symbol Constraint))
+    (checked : SourceEdgesChecked expressions) : EdgesChecked expressions := by
+  cases expressions with
+  | nil => trivial
+  | cons first rest =>
+      cases first with
+      | mk symbol constraint children =>
+          exact ⟨Fits.of_accepted constraint children.length checked.1.1 checked.1.2,
+            source_many_checked children checked.2.1,
+            source_edges_checked rest checked.2.2⟩
+termination_by sizeOf expressions
+end
+
+/-- The actual closed initial build derives stored arity from original source checks. -/
+theorem constructed_heap_of_source [DecidableEq (EdgeKey Symbol Constraint)]
+    (expression : Syntax Symbol Constraint) (checked : SourceChecked expression)
+    (value : Value Symbol Constraint) (state : State Symbol Constraint)
+    (built : InternedFreshOrdinaryConstruction.build expression [] empty = .done value state) :
+    Heap state :=
+  constructed_heap expression (source_checked expression checked) value state built
+
+end MicroCFTA.SourcePruningEnumerationArityOrigins

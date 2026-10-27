@@ -1,0 +1,30 @@
+MicroCFTA.SourcePruningEnumerationArityOrigins.request_heap {Symbol : Type}
+  [DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  (smart : Bool)
+  (depth ordinary :
+    MicroCFTA.InternedConstructorTemplates.Value Symbol
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+  (callback :
+    MicroCFTA.InternedBinderProtocol.Reference →
+      MicroCFTA.InternedConstructorTemplates.State Symbol
+          (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) →
+        MicroCFTA.InternedNestedConstruction.Outcome Symbol
+          (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+          (MicroCFTA.InternedConstructorTemplates.Value Symbol
+            (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)))
+  (state :
+    MicroCFTA.InternedConstructorTemplates.State Symbol
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+  (heap : MicroCFTA.SourcePruningEnumerationArityOrigins.Heap state)
+  (checked :
+    ∀ (name : MicroCFTA.InternedBinderProtocol.Reference)
+      (current :
+        MicroCFTA.InternedConstructorTemplates.State Symbol
+          (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)),
+      MicroCFTA.SourcePruningEnumerationArityOrigins.Heap current →
+        MicroCFTA.SourcePruningEnumerationArityOrigins.Heap (callback name current).state) :
+  MicroCFTA.SourcePruningEnumerationArityOrigins.Heap
+    (MicroCFTA.InternedNestedConstruction.request smart depth ordinary callback state).state
+'MicroCFTA.SourcePruningEnumerationArityOrigins.request_heap' depends on axioms: [propext, Classical.choice, Quot.sound]

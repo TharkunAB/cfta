@@ -1,0 +1,13 @@
+/-- Raw rejection skips the local child graph; live construction uses its actual return. -/
+inductive Edge (budget : Nat) (symbol : Symbol) (original : Guard) (loaded : Allocated)
+    (inherited : EqValue) (values : List (Value Symbol Guard)) (before : Checked width)
+    (fourth : Fourth) (memo : Memo) : EdgeValue Symbol Guard → Checked width → Fourth → Memo → Prop where
+  | rejected (test : contradictory original = true) :
+      Edge budget symbol original loaded inherited values before fourth memo
+        (SourceCurrentAllocatedMkEdge.reject symbol before).1 (SourceCurrentAllocatedMkEdge.reject symbol before).2 fourth memo
+  | live {children middle savedFourth saved result after}
+      (test : contradictory original = false)
+      (reduction : SourceCurrentAllocatedLocalReduction.Reduction budget loaded inherited values before fourth memo
+        children middle savedFourth saved)
+      (built : SourceCurrentAllocatedMkEdge.build symbol loaded children middle = (.ok result, after)) :
+      Edge budget symbol original loaded inherited values before fourth memo result after savedFourth saved

@@ -1,0 +1,10 @@
+def encodeMany (context : List (Value Symbol Guard)) (locals : List Reference) : List (Value Symbol Guard) → List (Syntax Symbol Guard)
+  | [] => []
+  | first :: rest => encode context locals first :: encodeMany context locals rest
+termination_by values => sizeOf values
+
+/-- Rebuild each source edge with its actual symbol and original constraint. -/
+def encodeEdges (context : List (Value Symbol Guard)) (locals : List Reference) : List (EdgeValue Symbol Guard) → List (EdgeSyntax Symbol Guard)
+  | [] => []
+  | .mk entry children :: rest => .mk entry.key.symbol entry.key.constraint (encodeMany context locals children) :: encodeEdges context locals rest
+termination_by edges => sizeOf edges

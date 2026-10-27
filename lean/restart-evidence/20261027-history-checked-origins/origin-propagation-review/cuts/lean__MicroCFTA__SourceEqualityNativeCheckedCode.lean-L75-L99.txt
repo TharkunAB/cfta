@@ -1,0 +1,25 @@
+    (valid : SourceRecursiveIntersectionKernel.Valid state) (known : Domain state domain)
+    (leftResident : EdgeResident state.heap left) (rightResident : EdgeResident state.heap right)
+    (arity : left.children.length = right.children.length) (result : EdgeValue Symbol Guard) (final : Machine Symbol Guard)
+    (done : interpret nodes edges (children domain left right combined) state = .done result final) :
+    ∃ values after,
+      WalkTrace (fun pair => nodes ⟨domain, pair.1, pair.2⟩) (left.children.zip right.children) state values after ∧
+      SourceRecursiveIntersectionKernel.work (makeEdge left.entry.key.symbol (readback combined) values) after = .done result final ∧
+      result.entry.key.symbol = left.entry.key.symbol ∧ result.entry.key.constraint = readback combined ∧
+      result.children = values ∧ result.children.length = left.children.length := by
+  rw [children_eq_compileEdge domain left right combined (fun _ _ => readback combined) arity rfl,
+    compileEdge_exact] at done
+  obtain ⟨values, after, trace, built, symbol, guard, fields⟩ := edge_readback
+    SourceEqualityConstraintConstructors.top (fun _ _ => readback combined)
+    (fun domain left right => nodes ⟨domain, left, right⟩) calls domain left right state valid known leftResident rightResident arity result final done
+  refine ⟨values, after, trace, built, symbol, guard, fields, ?_⟩
+  rw [fields, trace.length, List.length_zip, arity, Nat.min_self]
+
+/-- The source sentinel uses no recursive callback and retains its exact resulting heap. -/
+theorem sentinel_exact [DecidableEq (EdgeKey Symbol Guard)] (nodes : NodeCall Symbol Guard) (edges : EdgeCall Symbol Guard)
+    (left : EdgeValue Symbol Guard) (state : Machine Symbol Guard) :
+    interpret nodes edges (sentinel left) state =
+      SourceRecursiveIntersectionKernel.work (makeEdge left.entry.key.symbol SourceEqualityConstraintConstructors.top [.empty]) state := by
+  simp only [sentinel, interpret, result_bind_pure]
+
+/-- A complete satisfying conjunction cannot fail the constructor test at its represented incoming arity. -/

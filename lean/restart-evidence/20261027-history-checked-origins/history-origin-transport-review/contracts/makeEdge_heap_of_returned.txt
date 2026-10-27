@@ -1,0 +1,6 @@
+private theorem makeEdge_heap_of_returned
+    (symbol : Symbol) (constraint : Constraint) (children : List (Value Symbol Constraint))
+    (before after : State Symbol Constraint) (edge : EdgeValue Symbol Constraint)
+    (heap : Heap before) (coherent : Coherent after)
+    (observed : run (makeEdge symbol constraint children) before = (edge, after))
+    (checked : Fits edge.entry.key.constraint edge.children.length) : Heap after

@@ -1,0 +1,15 @@
+/-- Direct source edge construction uses its actual existing field load. -/
+theorem makeEdge_fields (operations : OpState) (symbol : Symbol) (guard : Guard)
+    (values : List (Value Symbol Guard)) (available : SourceCurrentConjunctionEquality.FieldAvailable operations guard) :
+    SourceEqualityAnnotationHeap.SafeWork (SourceCurrentConjunctionEquality.FieldAvailable operations) (makeEdge symbol guard values) :=
+  SourceEqualityAnnotationHeap.makeEdge _ symbol guard values available
+
+/-- Ordinary node construction emits no new edge annotation. -/
+theorem makeNode_fields (operations : OpState) (edges : List (EdgeValue Symbol Guard)) :
+    SourceEqualityAnnotationHeap.SafeWork (SourceCurrentConjunctionEquality.FieldAvailable operations) (makeNode edges) :=
+  SourceEqualityAnnotationHeap.makeNode _ edges
+
+/-- Union normalization emits no new edge annotation in any branch. -/
+theorem makeUnion_fields (operations : OpState) (values : List (Value Symbol Guard)) :
+    SourceEqualityAnnotationHeap.SafeWork (SourceCurrentConjunctionEquality.FieldAvailable operations) (makeUnion values) :=
+  SourceEqualityAnnotationHeap.makeUnion _ values

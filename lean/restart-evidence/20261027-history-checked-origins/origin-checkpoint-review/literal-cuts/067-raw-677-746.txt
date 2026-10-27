@@ -1,0 +1,70 @@
+MicroCFTA.SourcePruningEnumerationNativeCheckedOriginArity.accepted_body_produced {width : Nat}
+  [DecidableEq (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)]
+  [DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  (formulas : MicroCFTA.SourceGuards.Formulas MicroCFTA.FullSyntax.Formula)
+  (solver : MicroCFTA.SourceGuards.Entailment MicroCFTA.FullSyntax.Formula)
+  (request :
+    MicroCFTA.SourceRecursiveIntersectionThunks.EdgeRequest
+      (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+  (state after : MicroCFTA.SourceEqualityNativeDemand.State width)
+  (first second combined : MicroCFTA.SourceEqualityConjoinAllocation.Constraint MicroCFTA.FullSyntax.Formula)
+  (values :
+    List
+      (MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)))
+  (fuel : Nat) (valid : MicroCFTA.SourceEqualityConstraintMemoAllocation.Valid state.operations)
+  (heapReady : MicroCFTA.SourceEqualityRequiredCache.Ready state.native.machine.heap)
+  (inputs : MicroCFTA.SourceRecursiveIntersectionThunks.EdgeReady state.native.machine request)
+  (leftCached : MicroCFTA.SourceEqualityGuardReadback.Cached request.left.entry.key.constraint.equalities)
+  (rightCached : MicroCFTA.SourceEqualityGuardReadback.Cached request.right.entry.key.constraint.equalities)
+  (arity : request.left.children.length = request.right.children.length)
+  (symbols : request.left.entry.key.symbol = request.right.entry.key.symbol)
+  (left :
+    MicroCFTA.SourceEqualityConstraintFieldLookup.load request.left.entry.key.constraint state.operations.constraints =
+      Except.ok (some first))
+  (right :
+    MicroCFTA.SourceEqualityConstraintFieldLookup.load request.right.entry.key.constraint state.operations.constraints =
+      Except.ok (some second))
+  (accepted :
+    (MicroCFTA.SourceEqualityIntersectionEdgeAllocation.run MicroCFTA.GuardStructuralOrder.le first second
+          request.left.children.length request.right.children.length state.operations).fst =
+      Except.ok (MicroCFTA.SourceEqualityIntersectionEdgeAllocation.Branch.ready combined))
+  (walk :
+    MicroCFTA.SourceEqualityNativeDemandChildWalk.Walk (MicroCFTA.SourceEqualityPCSGuard.holds formulas solver)
+      request.domain (request.left.children.zip request.right.children)
+      { native := state.native,
+        operations :=
+          (MicroCFTA.SourceEqualityIntersectionEdgeAllocation.run MicroCFTA.GuardStructuralOrder.le first second
+              request.left.children.length request.right.children.length state.operations).snd }
+      values after fuel) :
+  have built :=
+    MicroCFTA.InternedConstructorTemplates.run
+      (MicroCFTA.InternedConstructorTemplates.makeEdge request.left.entry.key.symbol
+        (MicroCFTA.SourceEqualityConjoinAllocation.readback combined) values)
+      after.native.machine.heap;
+  have final :=
+    {
+      native :=
+        MicroCFTA.SourceRecursiveIntersectionThunks.advance after.native
+          (have __src := after.native.machine;
+          { heap := built.snd, domains := __src.domains }),
+      operations := after.operations };
+  MicroCFTA.SourceEqualityNativeDemand.execute (fuel + 3)
+        (MicroCFTA.SourceEqualityNativeDemand.Control.edgeBody request
+          MicroCFTA.SourceRecursiveIntersectionCode.Code.pure)
+        state =
+      MicroCFTA.SourceEqualityNativeDemand.Outcome.done built.fst final ∧
+    MicroCFTA.SourceEqualityNativeDemandProvenance.EdgeProduced (MicroCFTA.SourceEqualityPCSGuard.holds formulas solver)
+        final.native.machine request built.fst ∧
+      MicroCFTA.SourceEqualityRequiredCache.Keeps state.native.machine.heap final.native.machine.heap ∧
+        MicroCFTA.InternedEdgeResidency.EdgeResident final.native.machine.heap built.fst ∧
+          built.fst.children = values ∧
+            built.fst.children.length = request.left.children.length ∧
+              MicroCFTA.SourcePruningEnumerationArityOrigins.Fits built.fst.entry.key.constraint
+                built.fst.children.length
+'MicroCFTA.SourcePruningEnumerationNativeCheckedOriginArity.accepted_body_produced' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]

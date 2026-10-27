@@ -1,0 +1,21 @@
+          exact makeEdge_heap_of_returned _ _ _ _ _ _ heap coherent observed checked
+
+/-- Raw rejection preserves the entire edge-arity invariant without child availability. -/
+theorem RejectReceipt.preserves_arity_heap
+    {formulas : SourceGuards.Formulas FullSyntax.Formula}
+    {solver : SourceGuards.Entailment FullSyntax.Formula}
+    {inventory : SourceCurrentAllocatedNativeInventoryState.Inventory}
+    {symbol : Symbol} {before after : Checked width} {result : EdgeValue Symbol Constraint}
+    (receipt : RejectReceipt formulas solver inventory symbol before result after)
+    (heap : Heap before.native.machine.heap) : Heap after.native.machine.heap := by
+  have checked : Fits result.entry.key.constraint result.children.length := by
+    intro tries residual projected
+    exact (receipt.projected_arity tries residual projected).2
+  have resultSame := congrArg Prod.fst receipt.actual
+  have heapSame := congrArg (fun returned => returned.2.native.machine.heap) receipt.actual
+  change (run (makeEdge symbol SourceEqualityConstraintConstructors.top [.empty])
+    before.native.machine.heap).1 = result at resultSame
+  change (run (makeEdge symbol SourceEqualityConstraintConstructors.top [.empty])
+    before.native.machine.heap).2 = after.native.machine.heap at heapSame
+  exact makeEdge_heap_of_returned _ _ _ _ _ _ heap
+    receipt.ready.semantic.ready.semantic.1.normal.facts.coherent (Prod.ext resultSame heapSame) checked

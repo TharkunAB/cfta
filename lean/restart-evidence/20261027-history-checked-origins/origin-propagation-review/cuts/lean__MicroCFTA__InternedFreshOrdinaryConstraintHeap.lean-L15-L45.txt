@@ -1,0 +1,31 @@
+/-- Every stored edge key satisfies the source constraint invariant. -/
+def Heap (property : Guard → Prop) (state : State Symbol Guard) : Prop :=
+  ∀ key edge, state.edgeRecords key = some edge → property key.constraint
+
+mutual
+/-- Every original annotation in a lexical construction plan satisfies the invariant. -/
+def SyntaxValid (property : Guard → Prop) : Syntax Symbol Guard → Prop
+  | .empty | .var _ => True
+  | .node edges => EdgesValid property edges
+  | .union members => ManyValid property members
+  | .binder _ body => SyntaxValid property body
+
+/-- Ordered child plans satisfy the same annotation invariant. -/
+def ManyValid (property : Guard → Prop) : List (Syntax Symbol Guard) → Prop
+  | [] => True
+  | first :: rest => SyntaxValid property first ∧ ManyValid property rest
+
+/-- Every edge annotation and its ordered child plans satisfy the invariant. -/
+def EdgesValid (property : Guard → Prop) : List (EdgeSyntax Symbol Guard) → Prop
+  | [] => True
+  | .mk _ constraint children :: rest => property constraint ∧ ManyValid property children ∧ EdgesValid property rest
+end
+
+/-- The empty edge cache satisfies every constraint invariant. -/
+theorem empty_heap (property : Guard → Prop) : Heap property (empty (Symbol := Symbol)) := by
+  intro key edge impossible
+  cases impossible
+
+/-- A source edge request retains older annotations and installs its checked new annotation. -/
+theorem edge_heap [DecidableEq (EdgeKey Symbol Guard)] (property : Guard → Prop)
+    (symbol : Symbol) (constraint : Guard) (children : List (Value Symbol Guard))

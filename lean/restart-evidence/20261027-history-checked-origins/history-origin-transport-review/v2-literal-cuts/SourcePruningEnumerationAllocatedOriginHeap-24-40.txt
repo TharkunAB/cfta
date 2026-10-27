@@ -1,0 +1,17 @@
+private theorem makeEdge_record
+    (symbol : Symbol) (constraint : Constraint) (children : List (Value Symbol Constraint))
+    (before after : State Symbol Constraint) (edge : EdgeValue Symbol Constraint)
+    (observed : run (makeEdge symbol constraint children) before = (edge, after)) :
+    after.edgeRecords ⟨symbol, children.map Value.referenceOf, constraint⟩ = some edge := by
+  let key : EdgeKey Symbol Constraint := ⟨symbol, children.map Value.referenceOf, constraint⟩
+  obtain ⟨stored, present⟩ := keepFirst_present before.edgeRecords key
+    (.mk (Cache.intern before.edges key).1 children)
+  have recorded : (run (makeEdge symbol constraint children) before).2.edgeRecords key =
+      some (run (makeEdge symbol constraint children) before).1 := by
+    change (keepFirst before.edgeRecords key
+      (.mk (Cache.intern before.edges key).1 children)) key =
+        some (((keepFirst before.edgeRecords key
+          (.mk (Cache.intern before.edges key).1 children)) key).getD
+            (.mk (Cache.intern before.edges key).1 children))
+    simp only [present, Option.getD_some]
+  simpa only [observed] using recorded

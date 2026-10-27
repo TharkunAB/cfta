@@ -1,0 +1,47 @@
+/-- The actual source constructor check derives projected arity at the same child count. -/
+theorem Fits.of_accepted (constraint : Constraint) (arity : Nat)
+    (cached : SourceEqualityGuardReadback.Cached constraint.equalities)
+    (accepted : SourceEqualityMkEdgeAllocation.accepted constraint arity = true) :
+    Fits constraint arity := by
+  have fits : SourceEqualityMkEdgeAllocation.fits arity
+      (SourceCompactGuards.sourceEqualities constraint) = true := by
+    by_cases rejected : SourceEqualityMkEdgeAllocation.contradictory constraint = true
+    · simp only [SourceEqualityMkEdgeAllocation.accepted, rejected, ↓reduceIte,
+        Bool.false_eq_true] at accepted
+    · simpa only [SourceEqualityMkEdgeAllocation.accepted, rejected, Bool.false_eq_true,
+        ↓reduceIte] using accepted
+  obtain ⟨classes, source, rootBounds⟩ := (SourceEqualityMkEdgeArity.fits_exact arity
+    (SourceCompactGuards.sourceEqualities constraint)).mp fits
+  obtain ⟨canonicalProjection, _validTries, pathReadback, _meaning⟩ :=
+    (source ▸ SourcePruningEnumerationConstraint.project_complete constraint cached)
+  intro tries residual projected start
+  have projectionSame := Option.some.inj (canonicalProjection.symm.trans projected)
+  have triesSame : EnumerationEquality.readClasses classes = tries := congrArg Prod.fst projectionSame
+  rw [← triesSame]
+  apply (fresh_arity_iff arity start (EnumerationEquality.readClasses classes)).mpr
+  intro trie trieMember index suffix path
+  obtain ⟨paths, pathsMember, same⟩ := List.mem_map.mp trieMember
+  subst trie
+  exact rootBounds paths pathsMember (index :: suffix)
+    ((pathReadback paths pathsMember (index :: suffix)).mp path)
+
+mutual
+/-- Every original edge has normalized fields and passes the actual source constructor test. -/
+def SourceChecked : Syntax Symbol Constraint → Prop
+  | .empty | .var _ => True
+  | .node edges => SourceEdgesChecked edges
+  | .union members => SourceManyChecked members
+  | .binder _ body => SourceChecked body
+
+/-- Every original child plan retains its source constructor tests. -/
+def SourceManyChecked : List (Syntax Symbol Constraint) → Prop
+  | [] => True
+  | first :: rest => SourceChecked first ∧ SourceManyChecked rest
+
+/-- Each original edge uses its original number of child plans in the source test. -/
+def SourceEdgesChecked : List (EdgeSyntax Symbol Constraint) → Prop
+  | [] => True
+  | .mk _ constraint children :: rest =>
+      (SourceEqualityGuardReadback.Cached constraint.equalities ∧
+        SourceEqualityMkEdgeAllocation.accepted constraint children.length = true) ∧
+      SourceManyChecked children ∧ SourceEdgesChecked rest

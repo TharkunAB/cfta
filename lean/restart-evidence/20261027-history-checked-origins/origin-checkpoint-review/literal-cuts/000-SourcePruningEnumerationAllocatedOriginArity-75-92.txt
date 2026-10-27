@@ -1,0 +1,18 @@
+/-- The actual raw-rejection receipt supplies the empty own projection. -/
+theorem RejectReceipt.projected_arity
+    {formulas : SourceGuards.Formulas FullSyntax.Formula}
+    {solver : SourceGuards.Entailment FullSyntax.Formula}
+    {inventory : SourceCurrentAllocatedNativeInventoryState.Inventory}
+    {symbol : Symbol} {before after : SourceEqualityNativeDemand.State width}
+    {result : EdgeValue Symbol Constraint}
+    (receipt : RejectReceipt formulas solver inventory symbol before result after)
+    (tries : List EqualityTrie.Trie) (residual : Option Constraint)
+    (projected : SourcePruningEnumerationConstraint.project result.entry.key.constraint = some (tries, residual)) :
+    (∀ trie ∈ tries, EqualityTrie.Valid trie) ∧
+      ∀ start, arityAllows result.children.length (suspendedVars start tries) = true := by
+  rw [receipt.guard] at projected
+  have topProjection : SourcePruningEnumerationConstraint.project (top : Constraint) = some ([], none) := rfl
+  rw [topProjection] at projected
+  have triesSame : [] = tries := congrArg Prod.fst (Option.some.inj projected)
+  subst tries
+  exact ⟨by simp, fun _ => rfl⟩

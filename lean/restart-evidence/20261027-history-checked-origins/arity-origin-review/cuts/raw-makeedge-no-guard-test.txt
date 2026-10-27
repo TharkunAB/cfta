@@ -1,0 +1,4 @@
+/-- Intern a complete edge after its ordered children have been built. -/
+def makeEdge (symbol : Symbol) (constraint : Guard) (children : List (Value Symbol Guard)) :
+    Work Symbol Guard (EdgeValue Symbol Guard) :=
+  .edge ⟨symbol, children.map Value.referenceOf, constraint⟩ (fun entry => .mk entry children) Work.pure

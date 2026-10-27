@@ -1,0 +1,22 @@
+/-- Execute generated cache requests with separate state updates. -/
+def run [DecidableEq (EdgeKey Symbol Guard)] (work : Work Symbol Guard Result) (state : State Symbol Guard) :
+    Result × State Symbol Guard :=
+  match work with
+  | .pure value => (value, state)
+  | .edge key identify resume =>
+      let result := edgeStep key identify state
+      run (resume result.1) result.2
+  | .node key identify resume =>
+      let result := nodeStep key identify state
+      run (resume result.1) result.2
+
+/-- Each edge-cache request preserves validity and every earlier canonical record. -/
+theorem edgeStep_correct [DecidableEq (EdgeKey Symbol Guard)] (key : EdgeKey Symbol Guard)
+    (identify : Interned (EdgeKey Symbol Guard) → EdgeValue Symbol Guard) (state : State Symbol Guard)
+    (valid : Valid state) : Valid (edgeStep key identify state).2 ∧ Grows state (edgeStep key identify state).2 ∧
+      (edgeStep key identify state).2.edgeRecords key = some (edgeStep key identify state).1 := by
+  have entry := Cache.intern_correct state.edges key valid.1
+  obtain ⟨stored, present⟩ := keepFirst_present state.edgeRecords key (identify (Cache.intern state.edges key).1)
+  refine ⟨⟨entry.1, valid.2⟩, ⟨InternedBinderProtocol.intern_grows _ _, extends_refl _,
+    keepFirst_extends _ _ _, extends_refl _⟩, ?_⟩
+  simp [edgeStep, present]

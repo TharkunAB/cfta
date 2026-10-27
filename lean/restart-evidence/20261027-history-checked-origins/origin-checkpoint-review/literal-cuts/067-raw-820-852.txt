@@ -1,0 +1,33 @@
+MicroCFTA.SourcePruningEnumerationNativeCheckedOriginArity.body_choice_checked {width : Nat}
+  (request :
+    MicroCFTA.SourceRecursiveIntersectionThunks.EdgeRequest
+      (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+  (before after : MicroCFTA.SourceEqualityNativeDemand.State width)
+  (code :
+    MicroCFTA.SourceRecursiveIntersectionCode.Code (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+      (MicroCFTA.InternedConstructorTemplates.EdgeValue
+        (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)))
+  (yielded :
+    MicroCFTA.SourceEqualityNativeDemand.body request MicroCFTA.SourceRecursiveIntersectionCode.Code.pure before =
+      MicroCFTA.SourceEqualityNativeDemand.Outcome.yielded (MicroCFTA.SourceEqualityNativeDemand.Control.code code)
+        after) :
+  after.native = before.native ∧
+    (code = MicroCFTA.SourceEqualityNativeCheckedCode.sentinel request.left ∨
+      ∃ first second combined,
+        MicroCFTA.SourceEqualityConstraintFieldLookup.load request.left.entry.key.constraint
+              before.operations.constraints =
+            Except.ok (some first) ∧
+          MicroCFTA.SourceEqualityConstraintFieldLookup.load request.right.entry.key.constraint
+                before.operations.constraints =
+              Except.ok (some second) ∧
+            (MicroCFTA.SourceEqualityIntersectionEdgeAllocation.run MicroCFTA.GuardStructuralOrder.le first second
+                    request.left.children.length request.right.children.length before.operations).fst =
+                Except.ok (MicroCFTA.SourceEqualityIntersectionEdgeAllocation.Branch.ready combined) ∧
+              code =
+                MicroCFTA.SourceEqualityNativeCheckedCode.children request.domain request.left request.right combined)
+'MicroCFTA.SourcePruningEnumerationNativeCheckedOriginArity.body_choice_checked' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]

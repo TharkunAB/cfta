@@ -1,0 +1,17 @@
+MicroCFTA.SourceCurrentAllocatedMkEdge.RejectReceipt.preserves_arity_heap {width : Nat}
+  [DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey MicroCFTA.SourcePruningTemplates.Symbol
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  {formulas : MicroCFTA.SourceGuards.Formulas MicroCFTA.FullSyntax.Formula}
+  {solver : MicroCFTA.SourceGuards.Entailment MicroCFTA.FullSyntax.Formula}
+  {inventory : MicroCFTA.SourceCurrentAllocatedNativeInventoryState.Inventory}
+  {symbol : MicroCFTA.SourcePruningTemplates.Symbol} {before after : MicroCFTA.SourceEqualityNativeDemand.State width}
+  {result :
+    MicroCFTA.InternedConstructorTemplates.EdgeValue MicroCFTA.SourcePruningTemplates.Symbol
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)}
+  (receipt : MicroCFTA.SourceCurrentAllocatedMkEdge.RejectReceipt formulas solver inventory symbol before result after)
+  (heap : MicroCFTA.SourcePruningEnumerationArityOrigins.Heap before.native.machine.heap) :
+  MicroCFTA.SourcePruningEnumerationArityOrigins.Heap after.native.machine.heap
+'MicroCFTA.SourceCurrentAllocatedMkEdge.RejectReceipt.preserves_arity_heap' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]

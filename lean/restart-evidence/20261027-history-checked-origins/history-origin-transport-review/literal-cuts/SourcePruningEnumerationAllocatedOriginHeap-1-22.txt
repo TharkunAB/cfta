@@ -1,0 +1,22 @@
+import MicroCFTA.SourcePruningEnumerationAllocatedOriginArity
+import MicroCFTA.SourcePruningEnumerationArityOrigins
+
+/-!
+# Edge-arity records after actual allocated constructors
+
+The actual constructor receipt identifies its requested edge and final heap.
+Its returned coherent record supplies the requested guard and child count.
+The constructor's projected arity then checks the newly requested key.
+All earlier edge-key checks survive the actual insertion.
+Parent local reduction needs a separate invariant at its reached middle heap.
+-/
+namespace MicroCFTA.SourceCurrentAllocatedMkEdge
+open Cache InternedConstructorTemplates InternedRecordCoherence InternedEdgeResidency
+local notation "Symbol" => SourcePruningTemplates.Symbol
+local notation "Constraint" => SourceSymbolicIndex.Constraint FullSyntax.Formula
+local notation "Allocated" => SourceEqualityConjoinAllocation.Constraint FullSyntax.Formula
+local notation "raw" => SourceEqualityConjoinAllocation.readback
+local notation "Checked" => SourceEqualityNativeDemand.State
+local notation "Heap" => SourcePruningEnumerationArityOrigins.Heap
+local notation "Fits" => SourcePruningEnumerationArityOrigins.Fits
+variable {width : Nat} [DecidableEq (EdgeKey Symbol Constraint)]

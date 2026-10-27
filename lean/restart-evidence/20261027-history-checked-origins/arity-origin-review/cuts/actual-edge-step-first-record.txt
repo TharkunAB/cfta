@@ -1,0 +1,15 @@
+def edgeStep [DecidableEq (EdgeKey Symbol Guard)] (key : EdgeKey Symbol Guard)
+    (identify : Interned (EdgeKey Symbol Guard) → EdgeValue Symbol Guard) (state : State Symbol Guard) :
+    EdgeValue Symbol Guard × State Symbol Guard :=
+  let entry := Cache.intern state.edges key
+  let records := keepFirst state.edgeRecords key (identify entry.1)
+  ((records key).getD (identify entry.1), {state with edges := entry.2, edgeRecords := records})
+
+/-- A node request preserves the first complete record attached to its structural key. -/
+def nodeStep (key : NodeKey) (identify : Interned NodeKey → Value Symbol Guard) (state : State Symbol Guard) :
+    Value Symbol Guard × State Symbol Guard :=
+  let entry := Cache.intern state.nodes key
+  let records := keepFirst state.nodeRecords key (identify entry.1)
+  ((records key).getD (identify entry.1), {state with nodes := entry.2, nodeRecords := records})
+
+/-- Finite generated computations can alternate between the two independent caches. -/

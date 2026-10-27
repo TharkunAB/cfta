@@ -1,0 +1,8 @@
+/-- A successful constraint projection names only existing root children. -/
+def Fits (constraint : Constraint) (arity : Nat) : Prop :=
+  ∀ tries residual,
+    SourcePruningEnumerationConstraint.project constraint = some (tries, residual) →
+    ∀ start, arityAllows arity (suspendedVars start tries) = true
+
+/-- Every stored canonical edge key retains projected arity for its actual child count. -/
+def Heap (state : State Symbol Constraint) : Prop :=

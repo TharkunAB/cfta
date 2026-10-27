@@ -1,0 +1,17 @@
+    (le : SourceGuards.Guard Formula → SourceGuards.Guard Formula → Bool)
+    (first second : Allocated Formula) (firstArity secondArity : Nat) (before : State) :
+    Except String (Branch (Allocated Formula)) × State :=
+  if firstArity ≠ secondArity then (.ok .mismatch, before)
+  else
+    let combined := SourceEqualityConjoinAllocation.conjoin le first second before
+    match combined.1 with
+    | .error message => (.error message, combined.2)
+    | .ok constraint =>
+        let checked := SourceEqualityMkEdgeAllocation.check constraint.stored constraint.guard firstArity combined.2
+        match checked.1 with
+        | .error message => (.error message, checked.2)
+        | .ok keep => (.ok (if keep then .ready constraint else .rejected), checked.2)
+
+/-- An arity mismatch skips conjunction and the full accessor with identical operation state. -/
+theorem run_mismatch [DecidableEq (SourceGuards.Guard Formula)]
+    (le : SourceGuards.Guard Formula → SourceGuards.Guard Formula → Bool)

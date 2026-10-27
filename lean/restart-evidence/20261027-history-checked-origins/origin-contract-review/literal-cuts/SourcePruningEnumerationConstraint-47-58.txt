@@ -1,0 +1,12 @@
+      have actual : NormalClasses classes := by
+        exact source_cached constraint cached classes source
+      have readback : ∀ paths ∈ classes, EqualityTrie.Valid (EnumerationEquality.classTrie paths) ∧
+        ∀ path, path ∈ EqualityTrie.fromPathTrie (EnumerationEquality.classTrie paths) ↔ path ∈ paths := by
+        intro paths member
+        obtain ⟨trie, built, valid, _, same⟩ := EqualityTrie.toPathTrie_correct paths.eraseDups
+          (EqualityNormalize.consistent_supported classes actual.2.1 paths member)
+        simp only [EnumerationEquality.classTrie, built, Option.getD_some]
+        refine ⟨valid, ?_⟩
+        intro path
+        exact (same path).trans (by simp)
+      have equalityExact : ∀ term : Term (Label Formula),

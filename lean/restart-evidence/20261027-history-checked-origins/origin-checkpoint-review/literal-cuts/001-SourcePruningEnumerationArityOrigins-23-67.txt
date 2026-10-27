@@ -1,0 +1,45 @@
+
+/-- A successful constraint projection names only existing root children. -/
+def Fits (constraint : Constraint) (arity : Nat) : Prop :=
+  ∀ tries residual,
+    SourcePruningEnumerationConstraint.project constraint = some (tries, residual) →
+    ∀ start, arityAllows arity (suspendedVars start tries) = true
+
+/-- Every stored canonical edge key retains projected arity for its actual child count. -/
+def Heap (state : State Symbol Constraint) : Prop :=
+  ∀ key edge, state.edgeRecords key = some edge → Fits key.constraint key.children.length
+
+/-- Coherent resident payloads have the child count stored in their canonical key. -/
+theorem Heap.edge (state : State Symbol Constraint) (heap : Heap state)
+    (coherent : Coherent state) (edge : EdgeValue Symbol Constraint)
+    (resident : EdgeResident state edge) :
+    Fits edge.entry.key.constraint edge.children.length := by
+  have fields := (coherent.edges edge.entry.key edge resident).2.2
+  have lengthSame : edge.children.length = edge.entry.key.children.length := by
+    simpa only [List.length_map] using congrArg List.length fields
+  have checked := heap edge.entry.key edge resident
+  rw [← lengthSame] at checked
+  exact checked
+
+mutual
+/-- Each source edge passes the projection check at its syntactic child count. -/
+def Checked : Syntax Symbol Constraint → Prop
+  | .empty | .var _ => True
+  | .node edges => EdgesChecked edges
+  | .union members => ManyChecked members
+  | .binder _ body => Checked body
+
+/-- Every ordered child plan has checked source edges. -/
+def ManyChecked : List (Syntax Symbol Constraint) → Prop
+  | [] => True
+  | first :: rest => Checked first ∧ ManyChecked rest
+
+/-- Checked source edges retain their own arity and all nested checks. -/
+def EdgesChecked : List (EdgeSyntax Symbol Constraint) → Prop
+  | [] => True
+  | .mk _ constraint children :: rest =>
+      Fits constraint children.length ∧ ManyChecked children ∧ EdgesChecked rest
+end
+
+/-- The empty edge-record table satisfies projected arity. -/
+theorem empty_heap : Heap (empty (Symbol := Symbol) (Guard := Constraint)) := by

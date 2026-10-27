@@ -1,0 +1,18 @@
+theorem query_complete [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)]
+    {initialCache finalCache : Cache.State Key} {originals : List Guard}
+    (history : SourceEqualityOriginalAllocationHistory.History initialCache finalCache originals)
+    (initialValid : Cache.Valid initialCache)
+    (expression : InternedNestedConstruction.Syntax Symbol Guard)
+    (covered : ∀ original ∈ SourceEqualityConstraintOrigins.guards expression, original ∈ originals)
+    (value : Value Symbol Guard) (heap : InternedConstructorTemplates.State Symbol Guard)
+    (built : InternedFreshOrdinaryConstruction.build expression [] empty = .done value heap)
+    (formulas : SourceGuards.Formulas FullSyntax.Formula) (solver : SourceGuards.Entailment FullSyntax.Formula)
+    (pairs : List Query)
+    (available : Values heap (SourceCurrentAllocatedNativeColdHistoryExact.operands pairs))
+    (closed : ∀ operand ∈ SourceCurrentAllocatedNativeColdHistoryExact.operands pairs, operand.free = [])
+    (ranges : WordRanges (.code (SourceCurrentAllocatedNativeWarmHistory.program pairs))
+      (⟨initial width ⟨heap, Cache.emptyState⟩, SourceEqualityConstraintMemoAllocation.initial finalCache⟩ : Checked width)) :
+    ∃ inputs : FiniteInput (view heap (SourceEqualityPCSGuard.holds formulas solver)), ∃ fuel values after,
+      SourceCurrentAllocatedNativeWarmHistory.Receipt heap formulas solver inputs fuel pairs
+        (⟨initial width ⟨heap, Cache.emptyState⟩, SourceEqualityConstraintMemoAllocation.initial finalCache⟩ : Checked width)
+        values after := by

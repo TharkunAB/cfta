@@ -1,0 +1,21 @@
+
+/-- The complete source optional-binder call equals the repaired executor, including pending outcomes. -/
+theorem maybeMu_eq [DecidableEq (EdgeKey Symbol Guard)] (key : Nat × Nat) (body : Value Symbol Guard)
+    (source current : State Symbol Guard) (facts : Facts source) (available : Available source body) :
+    maybeMu key body current =
+      if Reference.intersection key.1 key.2 ∈ body.free then
+        InternedFreshOrdinaryConstruction.build
+          (.binder true (encode (leaves body) [.intersection key.1 key.2] body)) (leaves body) current
+      else .done body current := by
+  unfold maybeMu
+  split
+  · exact construct_eq _ body source current facts available
+  · rfl
+
+/-- Every actual optional-binder outcome preserves complete source facts and both physical histories. -/
+theorem verified [DecidableEq (EdgeKey Symbol Guard)] (key : Nat × Nat) (body : Value Symbol Guard)
+    (state : State Symbol Guard) (facts : Facts state) (available : Available state body) :
+    Verified state (maybeMu key body state) Available := by
+  rw [maybeMu_eq key body state state facts available]
+  split
+  · exact InternedFreshOrdinaryFacts.build_verified _ _ state facts (leaves_available body state available)

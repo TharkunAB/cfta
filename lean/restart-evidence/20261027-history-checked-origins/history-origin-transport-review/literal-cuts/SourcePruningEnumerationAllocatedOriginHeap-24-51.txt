@@ -1,0 +1,28 @@
+private theorem makeEdge_record
+    (symbol : Symbol) (constraint : Constraint) (children : List (Value Symbol Constraint))
+    (before after : State Symbol Constraint) (edge : EdgeValue Symbol Constraint)
+    (observed : run (makeEdge symbol constraint children) before = (edge, after)) :
+    after.edgeRecords ⟨symbol, children.map Value.referenceOf, constraint⟩ = some edge := by
+  let key : EdgeKey Symbol Constraint := ⟨symbol, children.map Value.referenceOf, constraint⟩
+  obtain ⟨stored, present⟩ := keepFirst_present before.edgeRecords key
+    (.mk (Cache.intern before.edges key).1 children)
+  have recorded : (run (makeEdge symbol constraint children) before).2.edgeRecords key =
+      some (run (makeEdge symbol constraint children) before).1 := by
+    simpa only [makeEdge, run, edgeStep, present, Option.getD_some] using present
+  simpa only [observed] using recorded
+
+private theorem makeEdge_heap_of_returned
+    (symbol : Symbol) (constraint : Constraint) (children : List (Value Symbol Constraint))
+    (before after : State Symbol Constraint) (edge : EdgeValue Symbol Constraint)
+    (heap : Heap before) (coherent : Coherent after)
+    (observed : run (makeEdge symbol constraint children) before = (edge, after))
+    (checked : Fits edge.entry.key.constraint edge.children.length) : Heap after := by
+  have recorded := makeEdge_record symbol constraint children before after edge observed
+  have fields := (coherent.edges _ edge recorded).2
+  have guardSame : edge.entry.key.constraint = constraint := congrArg EdgeKey.constraint fields.1
+  have lengthSame : edge.children.length = children.length := by
+    simpa only [List.length_map] using congrArg List.length fields.2
+  have requested : Fits constraint children.length := by
+    rw [← guardSame, ← lengthSame]
+    exact checked
+  have retained := SourcePruningEnumerationArityOrigins.edge_heap symbol constraint children before heap requested

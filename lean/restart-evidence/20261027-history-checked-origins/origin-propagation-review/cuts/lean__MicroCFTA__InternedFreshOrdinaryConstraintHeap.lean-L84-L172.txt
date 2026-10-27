@@ -1,0 +1,89 @@
+  | pending => exact heap
+  | done value after => exact later value after rfl heap
+
+/-- Mu cache hits, pending entries, reservations, and completed callbacks retain edge constraints. -/
+theorem request_heap [DecidableEq (EdgeKey Symbol Guard)] (property : Guard → Prop)
+    (smart : Bool) (depth ordinary : Value Symbol Guard)
+    (callback : InternedBinderProtocol.Reference → State Symbol Guard → Outcome Symbol Guard (Value Symbol Guard))
+    (state : State Symbol Guard) (heap : Heap property state)
+    (checked : ∀ name current, Heap property current → Heap property (callback name current).state) :
+    Heap property (request smart depth ordinary callback state).state := by
+  simp only [request]
+  split
+  · split <;> exact heap
+  · apply bind_heap property _ _ (checked _ {state with nodes := (Cache.intern state.nodes (muKey depth ordinary)).2} heap)
+    intro body after done afterHeap
+    exact afterHeap
+
+mutual
+/-- The actual repaired executor retains every checked original edge annotation. -/
+theorem build_heap [DecidableEq (EdgeKey Symbol Guard)] (property : Guard → Prop)
+    (expression : Syntax Symbol Guard) (environment : List (Value Symbol Guard))
+    (state : State Symbol Guard) (heap : Heap property state) (checked : SyntaxValid property expression) :
+    Heap property (build expression environment state).state := by
+  cases expression with
+  | empty | var => simpa only [build, Outcome.state] using heap
+  | node edges =>
+      rw [build]
+      apply bind_heap property _ _ (buildEdges_heap property edges environment state heap checked)
+      intro values after done afterHeap
+      exact node_heap property values after afterHeap
+  | union members =>
+      rw [build]
+      apply bind_heap property _ _ (buildMany_heap property members environment state heap checked)
+      intro values after done afterHeap
+      exact union_heap property values after afterHeap
+  | binder smart body =>
+      have callback (name : InternedBinderProtocol.Reference) (current : State Symbol Guard) (currentHeap : Heap property current) :
+          Heap property ((build body (.reference name :: environment) current).bind
+            fun value next => work (withoutSelfReference name value) next).state := by
+        apply bind_heap property _ _ (build_heap property body _ current currentHeap checked)
+        intro value after done afterHeap
+        exact filter_heap property name value after afterHeap
+      rw [build]
+      apply bind_heap property _ _ (callback _ state heap)
+      intro depth afterDepth doneDepth depthHeap
+      apply bind_heap property _ _ (callback _ afterDepth depthHeap)
+      intro ordinary afterOrdinary doneOrdinary ordinaryHeap
+      exact request_heap property smart depth ordinary _ afterOrdinary ordinaryHeap callback
+termination_by sizeOf expression
+
+/-- Actual sequential child construction retains every checked annotation. -/
+theorem buildMany_heap [DecidableEq (EdgeKey Symbol Guard)] (property : Guard → Prop)
+    (expressions : List (Syntax Symbol Guard)) (environment : List (Value Symbol Guard))
+    (state : State Symbol Guard) (heap : Heap property state) (checked : ManyValid property expressions) :
+    Heap property (buildMany expressions environment state).state := by
+  cases expressions with
+  | nil => simpa only [buildMany, Outcome.state] using heap
+  | cons first rest =>
+      rw [buildMany]
+      apply bind_heap property _ _ (build_heap property first environment state heap checked.1)
+      intro value after done afterHeap
+      apply bind_heap property _ _ (buildMany_heap property rest environment after afterHeap checked.2)
+      intro values final returned finalHeap
+      exact finalHeap
+termination_by sizeOf expressions
+
+/-- Actual edge allocation checks the original constraint after its children complete. -/
+theorem buildEdges_heap [DecidableEq (EdgeKey Symbol Guard)] (property : Guard → Prop)
+    (expressions : List (EdgeSyntax Symbol Guard)) (environment : List (Value Symbol Guard))
+    (state : State Symbol Guard) (heap : Heap property state) (checked : EdgesValid property expressions) :
+    Heap property (buildEdges expressions environment state).state := by
+  cases expressions with
+  | nil => simpa only [buildEdges, Outcome.state] using heap
+  | cons first rest =>
+      cases first with
+      | mk symbol constraint children =>
+          rw [buildEdges]
+          apply bind_heap property _ _ (buildMany_heap property children environment state heap checked.2.1)
+          intro values after done afterHeap
+          apply bind_heap property (work (makeEdge symbol constraint values) after) _
+            (edge_heap property symbol constraint values after afterHeap checked.1)
+          intro edge afterEdge returned edgeHeap
+          apply bind_heap property _ _ (buildEdges_heap property rest environment afterEdge edgeHeap checked.2.2)
+          intro edges final returned finalHeap
+          exact finalHeap
+termination_by sizeOf expressions
+end
+
+end MicroCFTA.InternedFreshOrdinaryConstraintHeap

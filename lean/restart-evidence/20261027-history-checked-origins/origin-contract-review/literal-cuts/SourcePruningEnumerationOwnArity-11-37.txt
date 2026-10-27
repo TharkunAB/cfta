@@ -1,0 +1,27 @@
+/-- The same accepted checked edge supplies valid own tries within its actual returned arity. -/
+theorem accepted_projected_arity [DecidableEq (InternedConstructorTemplates.EdgeKey Symbol Constraint)]
+    (symbol : Symbol) (original : Constraint) (stored : SourceEqualityConstraintAllocation.Value)
+    (children : List (InternedConstructorTemplates.Value Symbol Constraint))
+    (before : SourceEqualityConstraintMemoAllocation.State)
+    (heap : InternedConstructorTemplates.State Symbol Constraint)
+    (cached : SourceEqualityGuardReadback.Cached original.equalities)
+    (physical : SourceEqualityPhysicalPayload.read original.equalities = .ok stored.payload)
+    (storedReady : SourceEqualityConstraintAllocation.Ready before.constraints stored)
+    (valid : SourceEqualityConstraintMemoAllocation.Valid before)
+    (heapReady : SourceEqualityRequiredCache.Ready heap)
+    (available : InternedNestedProvenance.Values heap children)
+    (checked : (SourceEqualityMkEdgeAllocation.check stored original.guard children.length before).1 = .ok true) :
+    let built := InternedConstructorTemplates.run (InternedConstructorTemplates.makeEdge symbol original children) heap
+    SourceEqualityMkEdgeAllocation.build symbol stored original.guard children before heap =
+      (.ok built.1, (SourceEqualityMkEdgeAllocation.check stored original.guard children.length before).2, built.2) ∧
+    SourceEqualityConstraintMemoAllocation.Valid
+      (SourceEqualityMkEdgeAllocation.check stored original.guard children.length before).2 ∧
+    SourceEqualityConstraintMemoAllocation.Grows before
+      (SourceEqualityMkEdgeAllocation.check stored original.guard children.length before).2 ∧
+    SourceEqualityRequiredCache.Keeps heap built.2 ∧
+    built.1.entry.key.symbol = symbol ∧ built.1.entry.key.constraint = original ∧ built.1.children = children ∧
+    ∃ classes : EqualityNormalize.Constraints,
+      SourceCompactGuards.sourceEqualities built.1.entry.key.constraint = some classes ∧
+      SourcePruningEnumerationConstraint.project built.1.entry.key.constraint =
+        some (EnumerationEquality.readClasses classes,
+          if (SourceCompactGuards.positive original.guard).isSome then none else some original) ∧

@@ -1,0 +1,19 @@
+  intro key edge impossible
+  cases impossible
+
+/-- An actual edge request retains old records and checks the exact new key. -/
+theorem edge_heap [DecidableEq (EdgeKey Symbol Constraint)]
+    (symbol : Symbol) (constraint : Constraint) (children : List (Value Symbol Constraint))
+    (state : State Symbol Constraint) (heap : Heap state)
+    (checked : Fits constraint children.length) :
+    Heap (run (makeEdge symbol constraint children) state).2 := by
+  intro key edge present
+  rcases record_cases state.edgeRecords ⟨symbol, children.map Value.referenceOf, constraint⟩ key
+    (.mk (Cache.intern state.edges ⟨symbol, children.map Value.referenceOf, constraint⟩).1 children)
+    edge present with old | ⟨same, _⟩
+  · exact heap key edge old
+  · subst key
+    simpa only [List.length_map] using checked
+
+/-- Ordinary node normalization does not change the edge-record table. -/
+theorem node_heap [DecidableEq (EdgeKey Symbol Constraint)]

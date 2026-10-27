@@ -1,0 +1,11 @@
+theorem body_choice_checked (request : EdgeRequest Symbol Guard) (before after : Checked width)
+    (code : Code Symbol Guard (EdgeValue Symbol Guard))
+    (yielded : SourceEqualityNativeDemand.body request .pure before = .yielded (.code code) after) :
+    after.native = before.native ∧
+      (code = SourceEqualityNativeCheckedCode.sentinel request.left ∨
+        ∃ first second combined,
+          SourceEqualityConstraintFieldLookup.load request.left.entry.key.constraint before.operations.constraints = .ok (some first) ∧
+          SourceEqualityConstraintFieldLookup.load request.right.entry.key.constraint before.operations.constraints = .ok (some second) ∧
+          (SourceEqualityIntersectionEdgeAllocation.run GuardStructuralOrder.le first second
+            request.left.children.length request.right.children.length before.operations).1 = .ok (.ready combined) ∧
+          code = SourceEqualityNativeCheckedCode.children request.domain request.left request.right combined) := by

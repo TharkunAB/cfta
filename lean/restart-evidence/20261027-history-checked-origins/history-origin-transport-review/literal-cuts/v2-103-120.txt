@@ -1,0 +1,18 @@
+theorem Receipt.projected_arity
+    {formulas : SourceGuards.Formulas FullSyntax.Formula}
+    {solver : SourceGuards.Entailment FullSyntax.Formula}
+    {inventory : SourceCurrentAllocatedNativeInventoryState.Inventory}
+    {symbol : Symbol} {original : Constraint} {loaded : SourceEqualityConjoinAllocation.Constraint FullSyntax.Formula}
+    {inherited : SourceEqualityConstraintAllocation.Value} {values : List (Value Symbol Constraint)}
+    {before after : SourceEqualityNativeDemand.State width} {result : EdgeValue Symbol Constraint}
+    {fourth savedFourth : SourceCurrentEmptinessMemo.Memo}
+    {memo saved : SourceCurrentMemoMergeGraph.Memo Symbol Constraint} {final : EndpointMemoGateTrace.Memos}
+    (receipt : Receipt formulas solver inventory symbol original loaded inherited values before result after
+      fourth savedFourth memo saved final)
+    (tries : List EqualityTrie.Trie) (residual : Option Constraint)
+    (projected : SourcePruningEnumerationConstraint.project result.entry.key.constraint = some (tries, residual)) :
+    (∀ trie ∈ tries, EqualityTrie.Valid trie) ∧
+      ∀ start, arityAllows result.children.length (suspendedVars start tries) = true := by
+  rcases receipt.construction with rejected | ⟨_children, _middle, _length, built⟩
+  · exact rejected.projected_arity tries residual projected
+  · exact built.projected_arity tries residual projected

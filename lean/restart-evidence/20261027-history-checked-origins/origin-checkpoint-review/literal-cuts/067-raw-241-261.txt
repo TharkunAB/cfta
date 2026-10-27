@@ -1,0 +1,21 @@
+MicroCFTA.SourcePruningEnumerationArityOrigins.bind_heap {Symbol First Result : Type}
+  (outcome :
+    MicroCFTA.InternedNestedConstruction.Outcome Symbol
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) First)
+  (next :
+    First →
+      MicroCFTA.InternedConstructorTemplates.State Symbol
+          (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) →
+        MicroCFTA.InternedNestedConstruction.Outcome Symbol
+          (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) Result)
+  (heap : MicroCFTA.SourcePruningEnumerationArityOrigins.Heap outcome.state)
+  (later :
+    ∀ (value : First)
+      (after :
+        MicroCFTA.InternedConstructorTemplates.State Symbol
+          (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)),
+      outcome = MicroCFTA.InternedNestedConstruction.Outcome.done value after →
+        MicroCFTA.SourcePruningEnumerationArityOrigins.Heap after →
+          MicroCFTA.SourcePruningEnumerationArityOrigins.Heap (next value after).state) :
+  MicroCFTA.SourcePruningEnumerationArityOrigins.Heap (outcome.bind next).state
+'MicroCFTA.SourcePruningEnumerationArityOrigins.bind_heap' depends on axioms: [propext, Classical.choice, Quot.sound]

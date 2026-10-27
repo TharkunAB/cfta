@@ -1,0 +1,510 @@
+{
+  "theorem_headers_identical": true,
+  "versions": [
+    {
+      "version": "v1",
+      "theorem_count": 19,
+      "theorems": [
+        {
+          "name": "Heap.edge",
+          "header": "theorem Heap.edge (state : State Symbol Constraint) (heap : Heap state)\n    (coherent : Coherent state) (edge : EdgeValue Symbol Constraint)\n    (resident : EdgeResident state edge) :\n    Fits edge.entry.key.constraint edge.children.length ",
+          "sha256": "269a915704a6a04045eeb333354827df8be50034886ca6a3ff8512651a416f32"
+        },
+        {
+          "name": "empty_heap",
+          "header": "theorem empty_heap : Heap (empty (Symbol ",
+          "sha256": "47d7e58e3d1ffc9c632596e0cf9d9cc4cba8faf156b5d150cdfa407c36b0e112"
+        },
+        {
+          "name": "edge_heap",
+          "header": "theorem edge_heap [DecidableEq (EdgeKey Symbol Constraint)]\n    (symbol : Symbol) (constraint : Constraint) (children : List (Value Symbol Constraint))\n    (state : State Symbol Constraint) (heap : Heap state)\n    (checked : Fits constraint children.length) :\n    Heap (run (makeEdge symbol constraint children) state).2 ",
+          "sha256": "b8ee2cb8481b228e5be64b3bc24a2a94248e820aaa6ca0935a43773738e9a2d0"
+        },
+        {
+          "name": "node_heap",
+          "header": "theorem node_heap [DecidableEq (EdgeKey Symbol Constraint)]\n    (edges : List (EdgeValue Symbol Constraint)) (state : State Symbol Constraint)\n    (heap : Heap state) : Heap (run (makeNode edges) state).2 ",
+          "sha256": "7df20b67b5800da7e96180bf91910606c55774f42155d66279642400bae3c33d"
+        },
+        {
+          "name": "union_heap",
+          "header": "theorem union_heap [DecidableEq (EdgeKey Symbol Constraint)]\n    (values : List (Value Symbol Constraint)) (state : State Symbol Constraint)\n    (heap : Heap state) : Heap (run (makeUnion values) state).2 ",
+          "sha256": "9903e94227439980e645d98e9047aa0840ab33174360b8c7de3285f8cd18b135"
+        },
+        {
+          "name": "filter_heap",
+          "header": "theorem filter_heap [DecidableEq (EdgeKey Symbol Constraint)]\n    (name : InternedBinderProtocol.Reference) (value : Value Symbol Constraint)\n    (state : State Symbol Constraint) (heap : Heap state) :\n    Heap (run (withoutSelfReference name value) state).2 ",
+          "sha256": "46084d5a293c542803f332fa494ea6ab74fd15d15a15124f4e814979c42c95d6"
+        },
+        {
+          "name": "bind_heap",
+          "header": "theorem bind_heap (outcome : Outcome Symbol Constraint First)\n    (next : First \u2192 State Symbol Constraint \u2192 Outcome Symbol Constraint Result)\n    (heap : Heap outcome.state)\n    (later : \u2200 value after, outcome = .done value after \u2192 Heap after \u2192 Heap (next value after).state) :\n    Heap (outcome.bind next).state ",
+          "sha256": "53cc47d758bfc2110535b131297c7a4ec9070457ce10296f84abce32742eac81"
+        },
+        {
+          "name": "request_heap",
+          "header": "theorem request_heap [DecidableEq (EdgeKey Symbol Constraint)]\n    (smart : Bool) (depth ordinary : Value Symbol Constraint)\n    (callback : InternedBinderProtocol.Reference \u2192 State Symbol Constraint \u2192\n      Outcome Symbol Constraint (Value Symbol Constraint))\n    (state : State Symbol Constraint) (heap : Heap state)\n    (checked : \u2200 name current, Heap current \u2192 Heap (callback name current).state) :\n    Heap (request smart depth ordinary callback state).state ",
+          "sha256": "d70af0830e4557c1e0ea549dc8c53cd4ba80bd995481f924fc16251170e2f9c3"
+        },
+        {
+          "name": "buildMany_length",
+          "header": "theorem buildMany_length [DecidableEq (EdgeKey Symbol Constraint)]\n    (expressions : List (Syntax Symbol Constraint)) (environment : List (Value Symbol Constraint))\n    (state : State Symbol Constraint) (values : List (Value Symbol Constraint))\n    (after : State Symbol Constraint)\n    (done : buildMany expressions environment state = .done values after) :\n    values.length = expressions.length ",
+          "sha256": "a8329cdc1cb30ccf74a96330321cc5c74cbb96e2ce02cb0ee84f91dfc073efa4"
+        },
+        {
+          "name": "build_heap",
+          "header": "theorem build_heap [DecidableEq (EdgeKey Symbol Constraint)]\n    (expression : Syntax Symbol Constraint) (environment : List (Value Symbol Constraint))\n    (state : State Symbol Constraint) (heap : Heap state) (checked : Checked expression) :\n    Heap (build expression environment state).state ",
+          "sha256": "5d0f1f8d73f43487107e0c17606d3a686e7d85a0f0a01659fad4c50011d37576"
+        },
+        {
+          "name": "buildMany_heap",
+          "header": "theorem buildMany_heap [DecidableEq (EdgeKey Symbol Constraint)]\n    (expressions : List (Syntax Symbol Constraint)) (environment : List (Value Symbol Constraint))\n    (state : State Symbol Constraint) (heap : Heap state) (checked : ManyChecked expressions) :\n    Heap (buildMany expressions environment state).state ",
+          "sha256": "38255a1cdc111bcbb90c79545859e26d5138ac376336e861db317c011d2fc36f"
+        },
+        {
+          "name": "buildEdges_heap",
+          "header": "theorem buildEdges_heap [DecidableEq (EdgeKey Symbol Constraint)]\n    (expressions : List (EdgeSyntax Symbol Constraint)) (environment : List (Value Symbol Constraint))\n    (state : State Symbol Constraint) (heap : Heap state) (checked : EdgesChecked expressions) :\n    Heap (buildEdges expressions environment state).state ",
+          "sha256": "2afc9f8ea3d7ebba89a1ef88230b2b0b807b5dfca4f3ab15d690be1cc18740e6"
+        },
+        {
+          "name": "constructed_heap",
+          "header": "theorem constructed_heap [DecidableEq (EdgeKey Symbol Constraint)]\n    (expression : Syntax Symbol Constraint) (checked : Checked expression)\n    (value : Value Symbol Constraint) (state : State Symbol Constraint)\n    (built : build expression [] empty = .done value state) : Heap state ",
+          "sha256": "f049b2ec3224a86f813ba23e1527e7987ffd69951463d6e36c8603d7ceb7da91"
+        },
+        {
+          "name": "encodeMany_length",
+          "header": "theorem encodeMany_length (context : List (Value Symbol Constraint))\n    (locals : List InternedBinderProtocol.Reference) (values : List (Value Symbol Constraint)) :\n    (encodeMany context locals values).length = values.length ",
+          "sha256": "d8ca249ed20f57d97f826c99965bfabb83dd338542f77e04117c0a5ff6d01f2e"
+        },
+        {
+          "name": "encode_checked",
+          "header": "theorem encode_checked (value : Value Symbol Constraint)\n    (state : State Symbol Constraint) (facts : Facts state) (heap : Heap state)\n    (available : Available state value) (context : List (Value Symbol Constraint))\n    (locals : List InternedBinderProtocol.Reference) : Checked (encode context locals value) ",
+          "sha256": "3d6b6600af6010576d339a2943288ed4da114296a36f14da5f3a7fe86f3c015a"
+        },
+        {
+          "name": "encodeMany_checked",
+          "header": "theorem encodeMany_checked (values : List (Value Symbol Constraint))\n    (state : State Symbol Constraint) (facts : Facts state) (heap : Heap state)\n    (available : \u2200 value \u2208 values, Available state value) (context : List (Value Symbol Constraint))\n    (locals : List InternedBinderProtocol.Reference) : ManyChecked (encodeMany context locals values) ",
+          "sha256": "d07a0c0b659b37769feffc4699bd2438b83d98c65f309e533dc19c7a8731538f"
+        },
+        {
+          "name": "encodeEdges_checked",
+          "header": "theorem encodeEdges_checked (edges : List (EdgeValue Symbol Constraint))\n    (state : State Symbol Constraint) (facts : Facts state) (heap : Heap state)\n    (resident : \u2200 edge \u2208 edges, EdgeResident state edge) (context : List (Value Symbol Constraint))\n    (locals : List InternedBinderProtocol.Reference) : EdgesChecked (encodeEdges context locals edges) ",
+          "sha256": "4419c21c785af2f6ff3e6cf71ac4ae33780787edea9576b7be24f5fe9b15a63d"
+        },
+        {
+          "name": "execute_heap",
+          "header": "theorem execute_heap [DecidableEq (EdgeKey Symbol Constraint)]\n    (value : Value Symbol Constraint) (environment : Environment Symbol Constraint)\n    (state : State Symbol Constraint) (facts : Facts state) (heap : Heap state)\n    (available : Available state value) :\n    Heap (InternedFreshOrdinaryStoredSubstitution.execute value environment state).state ",
+          "sha256": "4d94f84ace6fb16d41292e01b1b04dbcca9e4cf59f61070a4a3a785f4b9bb31b"
+        },
+        {
+          "name": "unfold_heap",
+          "header": "theorem unfold_heap [DecidableEq (EdgeKey Symbol Constraint)]\n    (value : Value Symbol Constraint) (state : State Symbol Constraint) (facts : Facts state)\n    (heap : Heap state) (available : Available state value) :\n    Heap (InternedFreshOrdinaryStoredSubstitution.unfold value state).state ",
+          "sha256": "4300b6fdeecf29a6cd961b26ca3576bb86e0b1664288aacee7123fe82833c0da"
+        }
+      ]
+    },
+    {
+      "version": "v2",
+      "theorem_count": 19,
+      "theorems": [
+        {
+          "name": "Heap.edge",
+          "header": "theorem Heap.edge (state : State Symbol Constraint) (heap : Heap state)\n    (coherent : Coherent state) (edge : EdgeValue Symbol Constraint)\n    (resident : EdgeResident state edge) :\n    Fits edge.entry.key.constraint edge.children.length ",
+          "sha256": "269a915704a6a04045eeb333354827df8be50034886ca6a3ff8512651a416f32"
+        },
+        {
+          "name": "empty_heap",
+          "header": "theorem empty_heap : Heap (empty (Symbol ",
+          "sha256": "47d7e58e3d1ffc9c632596e0cf9d9cc4cba8faf156b5d150cdfa407c36b0e112"
+        },
+        {
+          "name": "edge_heap",
+          "header": "theorem edge_heap [DecidableEq (EdgeKey Symbol Constraint)]\n    (symbol : Symbol) (constraint : Constraint) (children : List (Value Symbol Constraint))\n    (state : State Symbol Constraint) (heap : Heap state)\n    (checked : Fits constraint children.length) :\n    Heap (run (makeEdge symbol constraint children) state).2 ",
+          "sha256": "b8ee2cb8481b228e5be64b3bc24a2a94248e820aaa6ca0935a43773738e9a2d0"
+        },
+        {
+          "name": "node_heap",
+          "header": "theorem node_heap [DecidableEq (EdgeKey Symbol Constraint)]\n    (edges : List (EdgeValue Symbol Constraint)) (state : State Symbol Constraint)\n    (heap : Heap state) : Heap (run (makeNode edges) state).2 ",
+          "sha256": "7df20b67b5800da7e96180bf91910606c55774f42155d66279642400bae3c33d"
+        },
+        {
+          "name": "union_heap",
+          "header": "theorem union_heap [DecidableEq (EdgeKey Symbol Constraint)]\n    (values : List (Value Symbol Constraint)) (state : State Symbol Constraint)\n    (heap : Heap state) : Heap (run (makeUnion values) state).2 ",
+          "sha256": "9903e94227439980e645d98e9047aa0840ab33174360b8c7de3285f8cd18b135"
+        },
+        {
+          "name": "filter_heap",
+          "header": "theorem filter_heap [DecidableEq (EdgeKey Symbol Constraint)]\n    (name : InternedBinderProtocol.Reference) (value : Value Symbol Constraint)\n    (state : State Symbol Constraint) (heap : Heap state) :\n    Heap (run (withoutSelfReference name value) state).2 ",
+          "sha256": "46084d5a293c542803f332fa494ea6ab74fd15d15a15124f4e814979c42c95d6"
+        },
+        {
+          "name": "bind_heap",
+          "header": "theorem bind_heap (outcome : Outcome Symbol Constraint First)\n    (next : First \u2192 State Symbol Constraint \u2192 Outcome Symbol Constraint Result)\n    (heap : Heap outcome.state)\n    (later : \u2200 value after, outcome = .done value after \u2192 Heap after \u2192 Heap (next value after).state) :\n    Heap (outcome.bind next).state ",
+          "sha256": "53cc47d758bfc2110535b131297c7a4ec9070457ce10296f84abce32742eac81"
+        },
+        {
+          "name": "request_heap",
+          "header": "theorem request_heap [DecidableEq (EdgeKey Symbol Constraint)]\n    (smart : Bool) (depth ordinary : Value Symbol Constraint)\n    (callback : InternedBinderProtocol.Reference \u2192 State Symbol Constraint \u2192\n      Outcome Symbol Constraint (Value Symbol Constraint))\n    (state : State Symbol Constraint) (heap : Heap state)\n    (checked : \u2200 name current, Heap current \u2192 Heap (callback name current).state) :\n    Heap (request smart depth ordinary callback state).state ",
+          "sha256": "d70af0830e4557c1e0ea549dc8c53cd4ba80bd995481f924fc16251170e2f9c3"
+        },
+        {
+          "name": "buildMany_length",
+          "header": "theorem buildMany_length [DecidableEq (EdgeKey Symbol Constraint)]\n    (expressions : List (Syntax Symbol Constraint)) (environment : List (Value Symbol Constraint))\n    (state : State Symbol Constraint) (values : List (Value Symbol Constraint))\n    (after : State Symbol Constraint)\n    (done : buildMany expressions environment state = .done values after) :\n    values.length = expressions.length ",
+          "sha256": "a8329cdc1cb30ccf74a96330321cc5c74cbb96e2ce02cb0ee84f91dfc073efa4"
+        },
+        {
+          "name": "build_heap",
+          "header": "theorem build_heap [DecidableEq (EdgeKey Symbol Constraint)]\n    (expression : Syntax Symbol Constraint) (environment : List (Value Symbol Constraint))\n    (state : State Symbol Constraint) (heap : Heap state) (checked : Checked expression) :\n    Heap (build expression environment state).state ",
+          "sha256": "5d0f1f8d73f43487107e0c17606d3a686e7d85a0f0a01659fad4c50011d37576"
+        },
+        {
+          "name": "buildMany_heap",
+          "header": "theorem buildMany_heap [DecidableEq (EdgeKey Symbol Constraint)]\n    (expressions : List (Syntax Symbol Constraint)) (environment : List (Value Symbol Constraint))\n    (state : State Symbol Constraint) (heap : Heap state) (checked : ManyChecked expressions) :\n    Heap (buildMany expressions environment state).state ",
+          "sha256": "38255a1cdc111bcbb90c79545859e26d5138ac376336e861db317c011d2fc36f"
+        },
+        {
+          "name": "buildEdges_heap",
+          "header": "theorem buildEdges_heap [DecidableEq (EdgeKey Symbol Constraint)]\n    (expressions : List (EdgeSyntax Symbol Constraint)) (environment : List (Value Symbol Constraint))\n    (state : State Symbol Constraint) (heap : Heap state) (checked : EdgesChecked expressions) :\n    Heap (buildEdges expressions environment state).state ",
+          "sha256": "2afc9f8ea3d7ebba89a1ef88230b2b0b807b5dfca4f3ab15d690be1cc18740e6"
+        },
+        {
+          "name": "constructed_heap",
+          "header": "theorem constructed_heap [DecidableEq (EdgeKey Symbol Constraint)]\n    (expression : Syntax Symbol Constraint) (checked : Checked expression)\n    (value : Value Symbol Constraint) (state : State Symbol Constraint)\n    (built : build expression [] empty = .done value state) : Heap state ",
+          "sha256": "f049b2ec3224a86f813ba23e1527e7987ffd69951463d6e36c8603d7ceb7da91"
+        },
+        {
+          "name": "encodeMany_length",
+          "header": "theorem encodeMany_length (context : List (Value Symbol Constraint))\n    (locals : List InternedBinderProtocol.Reference) (values : List (Value Symbol Constraint)) :\n    (encodeMany context locals values).length = values.length ",
+          "sha256": "d8ca249ed20f57d97f826c99965bfabb83dd338542f77e04117c0a5ff6d01f2e"
+        },
+        {
+          "name": "encode_checked",
+          "header": "theorem encode_checked (value : Value Symbol Constraint)\n    (state : State Symbol Constraint) (facts : Facts state) (heap : Heap state)\n    (available : Available state value) (context : List (Value Symbol Constraint))\n    (locals : List InternedBinderProtocol.Reference) : Checked (encode context locals value) ",
+          "sha256": "3d6b6600af6010576d339a2943288ed4da114296a36f14da5f3a7fe86f3c015a"
+        },
+        {
+          "name": "encodeMany_checked",
+          "header": "theorem encodeMany_checked (values : List (Value Symbol Constraint))\n    (state : State Symbol Constraint) (facts : Facts state) (heap : Heap state)\n    (available : \u2200 value \u2208 values, Available state value) (context : List (Value Symbol Constraint))\n    (locals : List InternedBinderProtocol.Reference) : ManyChecked (encodeMany context locals values) ",
+          "sha256": "d07a0c0b659b37769feffc4699bd2438b83d98c65f309e533dc19c7a8731538f"
+        },
+        {
+          "name": "encodeEdges_checked",
+          "header": "theorem encodeEdges_checked (edges : List (EdgeValue Symbol Constraint))\n    (state : State Symbol Constraint) (facts : Facts state) (heap : Heap state)\n    (resident : \u2200 edge \u2208 edges, EdgeResident state edge) (context : List (Value Symbol Constraint))\n    (locals : List InternedBinderProtocol.Reference) : EdgesChecked (encodeEdges context locals edges) ",
+          "sha256": "4419c21c785af2f6ff3e6cf71ac4ae33780787edea9576b7be24f5fe9b15a63d"
+        },
+        {
+          "name": "execute_heap",
+          "header": "theorem execute_heap [DecidableEq (EdgeKey Symbol Constraint)]\n    (value : Value Symbol Constraint) (environment : Environment Symbol Constraint)\n    (state : State Symbol Constraint) (facts : Facts state) (heap : Heap state)\n    (available : Available state value) :\n    Heap (InternedFreshOrdinaryStoredSubstitution.execute value environment state).state ",
+          "sha256": "4d94f84ace6fb16d41292e01b1b04dbcca9e4cf59f61070a4a3a785f4b9bb31b"
+        },
+        {
+          "name": "unfold_heap",
+          "header": "theorem unfold_heap [DecidableEq (EdgeKey Symbol Constraint)]\n    (value : Value Symbol Constraint) (state : State Symbol Constraint) (facts : Facts state)\n    (heap : Heap state) (available : Available state value) :\n    Heap (InternedFreshOrdinaryStoredSubstitution.unfold value state).state ",
+          "sha256": "4300b6fdeecf29a6cd961b26ca3576bb86e0b1664288aacee7123fe82833c0da"
+        }
+      ]
+    },
+    {
+      "version": "v3",
+      "theorem_count": 19,
+      "theorems": [
+        {
+          "name": "Heap.edge",
+          "header": "theorem Heap.edge (state : State Symbol Constraint) (heap : Heap state)\n    (coherent : Coherent state) (edge : EdgeValue Symbol Constraint)\n    (resident : EdgeResident state edge) :\n    Fits edge.entry.key.constraint edge.children.length ",
+          "sha256": "269a915704a6a04045eeb333354827df8be50034886ca6a3ff8512651a416f32"
+        },
+        {
+          "name": "empty_heap",
+          "header": "theorem empty_heap : Heap (empty (Symbol ",
+          "sha256": "47d7e58e3d1ffc9c632596e0cf9d9cc4cba8faf156b5d150cdfa407c36b0e112"
+        },
+        {
+          "name": "edge_heap",
+          "header": "theorem edge_heap [DecidableEq (EdgeKey Symbol Constraint)]\n    (symbol : Symbol) (constraint : Constraint) (children : List (Value Symbol Constraint))\n    (state : State Symbol Constraint) (heap : Heap state)\n    (checked : Fits constraint children.length) :\n    Heap (run (makeEdge symbol constraint children) state).2 ",
+          "sha256": "b8ee2cb8481b228e5be64b3bc24a2a94248e820aaa6ca0935a43773738e9a2d0"
+        },
+        {
+          "name": "node_heap",
+          "header": "theorem node_heap [DecidableEq (EdgeKey Symbol Constraint)]\n    (edges : List (EdgeValue Symbol Constraint)) (state : State Symbol Constraint)\n    (heap : Heap state) : Heap (run (makeNode edges) state).2 ",
+          "sha256": "7df20b67b5800da7e96180bf91910606c55774f42155d66279642400bae3c33d"
+        },
+        {
+          "name": "union_heap",
+          "header": "theorem union_heap [DecidableEq (EdgeKey Symbol Constraint)]\n    (values : List (Value Symbol Constraint)) (state : State Symbol Constraint)\n    (heap : Heap state) : Heap (run (makeUnion values) state).2 ",
+          "sha256": "9903e94227439980e645d98e9047aa0840ab33174360b8c7de3285f8cd18b135"
+        },
+        {
+          "name": "filter_heap",
+          "header": "theorem filter_heap [DecidableEq (EdgeKey Symbol Constraint)]\n    (name : InternedBinderProtocol.Reference) (value : Value Symbol Constraint)\n    (state : State Symbol Constraint) (heap : Heap state) :\n    Heap (run (withoutSelfReference name value) state).2 ",
+          "sha256": "46084d5a293c542803f332fa494ea6ab74fd15d15a15124f4e814979c42c95d6"
+        },
+        {
+          "name": "bind_heap",
+          "header": "theorem bind_heap (outcome : Outcome Symbol Constraint First)\n    (next : First \u2192 State Symbol Constraint \u2192 Outcome Symbol Constraint Result)\n    (heap : Heap outcome.state)\n    (later : \u2200 value after, outcome = .done value after \u2192 Heap after \u2192 Heap (next value after).state) :\n    Heap (outcome.bind next).state ",
+          "sha256": "53cc47d758bfc2110535b131297c7a4ec9070457ce10296f84abce32742eac81"
+        },
+        {
+          "name": "request_heap",
+          "header": "theorem request_heap [DecidableEq (EdgeKey Symbol Constraint)]\n    (smart : Bool) (depth ordinary : Value Symbol Constraint)\n    (callback : InternedBinderProtocol.Reference \u2192 State Symbol Constraint \u2192\n      Outcome Symbol Constraint (Value Symbol Constraint))\n    (state : State Symbol Constraint) (heap : Heap state)\n    (checked : \u2200 name current, Heap current \u2192 Heap (callback name current).state) :\n    Heap (request smart depth ordinary callback state).state ",
+          "sha256": "d70af0830e4557c1e0ea549dc8c53cd4ba80bd995481f924fc16251170e2f9c3"
+        },
+        {
+          "name": "buildMany_length",
+          "header": "theorem buildMany_length [DecidableEq (EdgeKey Symbol Constraint)]\n    (expressions : List (Syntax Symbol Constraint)) (environment : List (Value Symbol Constraint))\n    (state : State Symbol Constraint) (values : List (Value Symbol Constraint))\n    (after : State Symbol Constraint)\n    (done : buildMany expressions environment state = .done values after) :\n    values.length = expressions.length ",
+          "sha256": "a8329cdc1cb30ccf74a96330321cc5c74cbb96e2ce02cb0ee84f91dfc073efa4"
+        },
+        {
+          "name": "build_heap",
+          "header": "theorem build_heap [DecidableEq (EdgeKey Symbol Constraint)]\n    (expression : Syntax Symbol Constraint) (environment : List (Value Symbol Constraint))\n    (state : State Symbol Constraint) (heap : Heap state) (checked : Checked expression) :\n    Heap (build expression environment state).state ",
+          "sha256": "5d0f1f8d73f43487107e0c17606d3a686e7d85a0f0a01659fad4c50011d37576"
+        },
+        {
+          "name": "buildMany_heap",
+          "header": "theorem buildMany_heap [DecidableEq (EdgeKey Symbol Constraint)]\n    (expressions : List (Syntax Symbol Constraint)) (environment : List (Value Symbol Constraint))\n    (state : State Symbol Constraint) (heap : Heap state) (checked : ManyChecked expressions) :\n    Heap (buildMany expressions environment state).state ",
+          "sha256": "38255a1cdc111bcbb90c79545859e26d5138ac376336e861db317c011d2fc36f"
+        },
+        {
+          "name": "buildEdges_heap",
+          "header": "theorem buildEdges_heap [DecidableEq (EdgeKey Symbol Constraint)]\n    (expressions : List (EdgeSyntax Symbol Constraint)) (environment : List (Value Symbol Constraint))\n    (state : State Symbol Constraint) (heap : Heap state) (checked : EdgesChecked expressions) :\n    Heap (buildEdges expressions environment state).state ",
+          "sha256": "2afc9f8ea3d7ebba89a1ef88230b2b0b807b5dfca4f3ab15d690be1cc18740e6"
+        },
+        {
+          "name": "constructed_heap",
+          "header": "theorem constructed_heap [DecidableEq (EdgeKey Symbol Constraint)]\n    (expression : Syntax Symbol Constraint) (checked : Checked expression)\n    (value : Value Symbol Constraint) (state : State Symbol Constraint)\n    (built : build expression [] empty = .done value state) : Heap state ",
+          "sha256": "f049b2ec3224a86f813ba23e1527e7987ffd69951463d6e36c8603d7ceb7da91"
+        },
+        {
+          "name": "encodeMany_length",
+          "header": "theorem encodeMany_length (context : List (Value Symbol Constraint))\n    (locals : List InternedBinderProtocol.Reference) (values : List (Value Symbol Constraint)) :\n    (encodeMany context locals values).length = values.length ",
+          "sha256": "d8ca249ed20f57d97f826c99965bfabb83dd338542f77e04117c0a5ff6d01f2e"
+        },
+        {
+          "name": "encode_checked",
+          "header": "theorem encode_checked (value : Value Symbol Constraint)\n    (state : State Symbol Constraint) (facts : Facts state) (heap : Heap state)\n    (available : Available state value) (context : List (Value Symbol Constraint))\n    (locals : List InternedBinderProtocol.Reference) : Checked (encode context locals value) ",
+          "sha256": "3d6b6600af6010576d339a2943288ed4da114296a36f14da5f3a7fe86f3c015a"
+        },
+        {
+          "name": "encodeMany_checked",
+          "header": "theorem encodeMany_checked (values : List (Value Symbol Constraint))\n    (state : State Symbol Constraint) (facts : Facts state) (heap : Heap state)\n    (available : \u2200 value \u2208 values, Available state value) (context : List (Value Symbol Constraint))\n    (locals : List InternedBinderProtocol.Reference) : ManyChecked (encodeMany context locals values) ",
+          "sha256": "d07a0c0b659b37769feffc4699bd2438b83d98c65f309e533dc19c7a8731538f"
+        },
+        {
+          "name": "encodeEdges_checked",
+          "header": "theorem encodeEdges_checked (edges : List (EdgeValue Symbol Constraint))\n    (state : State Symbol Constraint) (facts : Facts state) (heap : Heap state)\n    (resident : \u2200 edge \u2208 edges, EdgeResident state edge) (context : List (Value Symbol Constraint))\n    (locals : List InternedBinderProtocol.Reference) : EdgesChecked (encodeEdges context locals edges) ",
+          "sha256": "4419c21c785af2f6ff3e6cf71ac4ae33780787edea9576b7be24f5fe9b15a63d"
+        },
+        {
+          "name": "execute_heap",
+          "header": "theorem execute_heap [DecidableEq (EdgeKey Symbol Constraint)]\n    (value : Value Symbol Constraint) (environment : Environment Symbol Constraint)\n    (state : State Symbol Constraint) (facts : Facts state) (heap : Heap state)\n    (available : Available state value) :\n    Heap (InternedFreshOrdinaryStoredSubstitution.execute value environment state).state ",
+          "sha256": "4d94f84ace6fb16d41292e01b1b04dbcca9e4cf59f61070a4a3a785f4b9bb31b"
+        },
+        {
+          "name": "unfold_heap",
+          "header": "theorem unfold_heap [DecidableEq (EdgeKey Symbol Constraint)]\n    (value : Value Symbol Constraint) (state : State Symbol Constraint) (facts : Facts state)\n    (heap : Heap state) (available : Available state value) :\n    Heap (InternedFreshOrdinaryStoredSubstitution.unfold value state).state ",
+          "sha256": "4300b6fdeecf29a6cd961b26ca3576bb86e0b1664288aacee7123fe82833c0da"
+        }
+      ]
+    },
+    {
+      "version": "v4",
+      "theorem_count": 19,
+      "theorems": [
+        {
+          "name": "Heap.edge",
+          "header": "theorem Heap.edge (state : State Symbol Constraint) (heap : Heap state)\n    (coherent : Coherent state) (edge : EdgeValue Symbol Constraint)\n    (resident : EdgeResident state edge) :\n    Fits edge.entry.key.constraint edge.children.length ",
+          "sha256": "269a915704a6a04045eeb333354827df8be50034886ca6a3ff8512651a416f32"
+        },
+        {
+          "name": "empty_heap",
+          "header": "theorem empty_heap : Heap (empty (Symbol ",
+          "sha256": "47d7e58e3d1ffc9c632596e0cf9d9cc4cba8faf156b5d150cdfa407c36b0e112"
+        },
+        {
+          "name": "edge_heap",
+          "header": "theorem edge_heap [DecidableEq (EdgeKey Symbol Constraint)]\n    (symbol : Symbol) (constraint : Constraint) (children : List (Value Symbol Constraint))\n    (state : State Symbol Constraint) (heap : Heap state)\n    (checked : Fits constraint children.length) :\n    Heap (run (makeEdge symbol constraint children) state).2 ",
+          "sha256": "b8ee2cb8481b228e5be64b3bc24a2a94248e820aaa6ca0935a43773738e9a2d0"
+        },
+        {
+          "name": "node_heap",
+          "header": "theorem node_heap [DecidableEq (EdgeKey Symbol Constraint)]\n    (edges : List (EdgeValue Symbol Constraint)) (state : State Symbol Constraint)\n    (heap : Heap state) : Heap (run (makeNode edges) state).2 ",
+          "sha256": "7df20b67b5800da7e96180bf91910606c55774f42155d66279642400bae3c33d"
+        },
+        {
+          "name": "union_heap",
+          "header": "theorem union_heap [DecidableEq (EdgeKey Symbol Constraint)]\n    (values : List (Value Symbol Constraint)) (state : State Symbol Constraint)\n    (heap : Heap state) : Heap (run (makeUnion values) state).2 ",
+          "sha256": "9903e94227439980e645d98e9047aa0840ab33174360b8c7de3285f8cd18b135"
+        },
+        {
+          "name": "filter_heap",
+          "header": "theorem filter_heap [DecidableEq (EdgeKey Symbol Constraint)]\n    (name : InternedBinderProtocol.Reference) (value : Value Symbol Constraint)\n    (state : State Symbol Constraint) (heap : Heap state) :\n    Heap (run (withoutSelfReference name value) state).2 ",
+          "sha256": "46084d5a293c542803f332fa494ea6ab74fd15d15a15124f4e814979c42c95d6"
+        },
+        {
+          "name": "bind_heap",
+          "header": "theorem bind_heap (outcome : Outcome Symbol Constraint First)\n    (next : First \u2192 State Symbol Constraint \u2192 Outcome Symbol Constraint Result)\n    (heap : Heap outcome.state)\n    (later : \u2200 value after, outcome = .done value after \u2192 Heap after \u2192 Heap (next value after).state) :\n    Heap (outcome.bind next).state ",
+          "sha256": "53cc47d758bfc2110535b131297c7a4ec9070457ce10296f84abce32742eac81"
+        },
+        {
+          "name": "request_heap",
+          "header": "theorem request_heap [DecidableEq (EdgeKey Symbol Constraint)]\n    (smart : Bool) (depth ordinary : Value Symbol Constraint)\n    (callback : InternedBinderProtocol.Reference \u2192 State Symbol Constraint \u2192\n      Outcome Symbol Constraint (Value Symbol Constraint))\n    (state : State Symbol Constraint) (heap : Heap state)\n    (checked : \u2200 name current, Heap current \u2192 Heap (callback name current).state) :\n    Heap (request smart depth ordinary callback state).state ",
+          "sha256": "d70af0830e4557c1e0ea549dc8c53cd4ba80bd995481f924fc16251170e2f9c3"
+        },
+        {
+          "name": "buildMany_length",
+          "header": "theorem buildMany_length [DecidableEq (EdgeKey Symbol Constraint)]\n    (expressions : List (Syntax Symbol Constraint)) (environment : List (Value Symbol Constraint))\n    (state : State Symbol Constraint) (values : List (Value Symbol Constraint))\n    (after : State Symbol Constraint)\n    (done : buildMany expressions environment state = .done values after) :\n    values.length = expressions.length ",
+          "sha256": "a8329cdc1cb30ccf74a96330321cc5c74cbb96e2ce02cb0ee84f91dfc073efa4"
+        },
+        {
+          "name": "build_heap",
+          "header": "theorem build_heap [DecidableEq (EdgeKey Symbol Constraint)]\n    (expression : Syntax Symbol Constraint) (environment : List (Value Symbol Constraint))\n    (state : State Symbol Constraint) (heap : Heap state) (checked : Checked expression) :\n    Heap (build expression environment state).state ",
+          "sha256": "5d0f1f8d73f43487107e0c17606d3a686e7d85a0f0a01659fad4c50011d37576"
+        },
+        {
+          "name": "buildMany_heap",
+          "header": "theorem buildMany_heap [DecidableEq (EdgeKey Symbol Constraint)]\n    (expressions : List (Syntax Symbol Constraint)) (environment : List (Value Symbol Constraint))\n    (state : State Symbol Constraint) (heap : Heap state) (checked : ManyChecked expressions) :\n    Heap (buildMany expressions environment state).state ",
+          "sha256": "38255a1cdc111bcbb90c79545859e26d5138ac376336e861db317c011d2fc36f"
+        },
+        {
+          "name": "buildEdges_heap",
+          "header": "theorem buildEdges_heap [DecidableEq (EdgeKey Symbol Constraint)]\n    (expressions : List (EdgeSyntax Symbol Constraint)) (environment : List (Value Symbol Constraint))\n    (state : State Symbol Constraint) (heap : Heap state) (checked : EdgesChecked expressions) :\n    Heap (buildEdges expressions environment state).state ",
+          "sha256": "2afc9f8ea3d7ebba89a1ef88230b2b0b807b5dfca4f3ab15d690be1cc18740e6"
+        },
+        {
+          "name": "constructed_heap",
+          "header": "theorem constructed_heap [DecidableEq (EdgeKey Symbol Constraint)]\n    (expression : Syntax Symbol Constraint) (checked : Checked expression)\n    (value : Value Symbol Constraint) (state : State Symbol Constraint)\n    (built : build expression [] empty = .done value state) : Heap state ",
+          "sha256": "f049b2ec3224a86f813ba23e1527e7987ffd69951463d6e36c8603d7ceb7da91"
+        },
+        {
+          "name": "encodeMany_length",
+          "header": "theorem encodeMany_length (context : List (Value Symbol Constraint))\n    (locals : List InternedBinderProtocol.Reference) (values : List (Value Symbol Constraint)) :\n    (encodeMany context locals values).length = values.length ",
+          "sha256": "d8ca249ed20f57d97f826c99965bfabb83dd338542f77e04117c0a5ff6d01f2e"
+        },
+        {
+          "name": "encode_checked",
+          "header": "theorem encode_checked (value : Value Symbol Constraint)\n    (state : State Symbol Constraint) (facts : Facts state) (heap : Heap state)\n    (available : Available state value) (context : List (Value Symbol Constraint))\n    (locals : List InternedBinderProtocol.Reference) : Checked (encode context locals value) ",
+          "sha256": "3d6b6600af6010576d339a2943288ed4da114296a36f14da5f3a7fe86f3c015a"
+        },
+        {
+          "name": "encodeMany_checked",
+          "header": "theorem encodeMany_checked (values : List (Value Symbol Constraint))\n    (state : State Symbol Constraint) (facts : Facts state) (heap : Heap state)\n    (available : \u2200 value \u2208 values, Available state value) (context : List (Value Symbol Constraint))\n    (locals : List InternedBinderProtocol.Reference) : ManyChecked (encodeMany context locals values) ",
+          "sha256": "d07a0c0b659b37769feffc4699bd2438b83d98c65f309e533dc19c7a8731538f"
+        },
+        {
+          "name": "encodeEdges_checked",
+          "header": "theorem encodeEdges_checked (edges : List (EdgeValue Symbol Constraint))\n    (state : State Symbol Constraint) (facts : Facts state) (heap : Heap state)\n    (resident : \u2200 edge \u2208 edges, EdgeResident state edge) (context : List (Value Symbol Constraint))\n    (locals : List InternedBinderProtocol.Reference) : EdgesChecked (encodeEdges context locals edges) ",
+          "sha256": "4419c21c785af2f6ff3e6cf71ac4ae33780787edea9576b7be24f5fe9b15a63d"
+        },
+        {
+          "name": "execute_heap",
+          "header": "theorem execute_heap [DecidableEq (EdgeKey Symbol Constraint)]\n    (value : Value Symbol Constraint) (environment : Environment Symbol Constraint)\n    (state : State Symbol Constraint) (facts : Facts state) (heap : Heap state)\n    (available : Available state value) :\n    Heap (InternedFreshOrdinaryStoredSubstitution.execute value environment state).state ",
+          "sha256": "4d94f84ace6fb16d41292e01b1b04dbcca9e4cf59f61070a4a3a785f4b9bb31b"
+        },
+        {
+          "name": "unfold_heap",
+          "header": "theorem unfold_heap [DecidableEq (EdgeKey Symbol Constraint)]\n    (value : Value Symbol Constraint) (state : State Symbol Constraint) (facts : Facts state)\n    (heap : Heap state) (available : Available state value) :\n    Heap (InternedFreshOrdinaryStoredSubstitution.unfold value state).state ",
+          "sha256": "4300b6fdeecf29a6cd961b26ca3576bb86e0b1664288aacee7123fe82833c0da"
+        }
+      ]
+    },
+    {
+      "version": "v5",
+      "theorem_count": 19,
+      "theorems": [
+        {
+          "name": "Heap.edge",
+          "header": "theorem Heap.edge (state : State Symbol Constraint) (heap : Heap state)\n    (coherent : Coherent state) (edge : EdgeValue Symbol Constraint)\n    (resident : EdgeResident state edge) :\n    Fits edge.entry.key.constraint edge.children.length ",
+          "sha256": "269a915704a6a04045eeb333354827df8be50034886ca6a3ff8512651a416f32"
+        },
+        {
+          "name": "empty_heap",
+          "header": "theorem empty_heap : Heap (empty (Symbol ",
+          "sha256": "47d7e58e3d1ffc9c632596e0cf9d9cc4cba8faf156b5d150cdfa407c36b0e112"
+        },
+        {
+          "name": "edge_heap",
+          "header": "theorem edge_heap [DecidableEq (EdgeKey Symbol Constraint)]\n    (symbol : Symbol) (constraint : Constraint) (children : List (Value Symbol Constraint))\n    (state : State Symbol Constraint) (heap : Heap state)\n    (checked : Fits constraint children.length) :\n    Heap (run (makeEdge symbol constraint children) state).2 ",
+          "sha256": "b8ee2cb8481b228e5be64b3bc24a2a94248e820aaa6ca0935a43773738e9a2d0"
+        },
+        {
+          "name": "node_heap",
+          "header": "theorem node_heap [DecidableEq (EdgeKey Symbol Constraint)]\n    (edges : List (EdgeValue Symbol Constraint)) (state : State Symbol Constraint)\n    (heap : Heap state) : Heap (run (makeNode edges) state).2 ",
+          "sha256": "7df20b67b5800da7e96180bf91910606c55774f42155d66279642400bae3c33d"
+        },
+        {
+          "name": "union_heap",
+          "header": "theorem union_heap [DecidableEq (EdgeKey Symbol Constraint)]\n    (values : List (Value Symbol Constraint)) (state : State Symbol Constraint)\n    (heap : Heap state) : Heap (run (makeUnion values) state).2 ",
+          "sha256": "9903e94227439980e645d98e9047aa0840ab33174360b8c7de3285f8cd18b135"
+        },
+        {
+          "name": "filter_heap",
+          "header": "theorem filter_heap [DecidableEq (EdgeKey Symbol Constraint)]\n    (name : InternedBinderProtocol.Reference) (value : Value Symbol Constraint)\n    (state : State Symbol Constraint) (heap : Heap state) :\n    Heap (run (withoutSelfReference name value) state).2 ",
+          "sha256": "46084d5a293c542803f332fa494ea6ab74fd15d15a15124f4e814979c42c95d6"
+        },
+        {
+          "name": "bind_heap",
+          "header": "theorem bind_heap (outcome : Outcome Symbol Constraint First)\n    (next : First \u2192 State Symbol Constraint \u2192 Outcome Symbol Constraint Result)\n    (heap : Heap outcome.state)\n    (later : \u2200 value after, outcome = .done value after \u2192 Heap after \u2192 Heap (next value after).state) :\n    Heap (outcome.bind next).state ",
+          "sha256": "53cc47d758bfc2110535b131297c7a4ec9070457ce10296f84abce32742eac81"
+        },
+        {
+          "name": "request_heap",
+          "header": "theorem request_heap [DecidableEq (EdgeKey Symbol Constraint)]\n    (smart : Bool) (depth ordinary : Value Symbol Constraint)\n    (callback : InternedBinderProtocol.Reference \u2192 State Symbol Constraint \u2192\n      Outcome Symbol Constraint (Value Symbol Constraint))\n    (state : State Symbol Constraint) (heap : Heap state)\n    (checked : \u2200 name current, Heap current \u2192 Heap (callback name current).state) :\n    Heap (request smart depth ordinary callback state).state ",
+          "sha256": "d70af0830e4557c1e0ea549dc8c53cd4ba80bd995481f924fc16251170e2f9c3"
+        },
+        {
+          "name": "buildMany_length",
+          "header": "theorem buildMany_length [DecidableEq (EdgeKey Symbol Constraint)]\n    (expressions : List (Syntax Symbol Constraint)) (environment : List (Value Symbol Constraint))\n    (state : State Symbol Constraint) (values : List (Value Symbol Constraint))\n    (after : State Symbol Constraint)\n    (done : buildMany expressions environment state = .done values after) :\n    values.length = expressions.length ",
+          "sha256": "a8329cdc1cb30ccf74a96330321cc5c74cbb96e2ce02cb0ee84f91dfc073efa4"
+        },
+        {
+          "name": "build_heap",
+          "header": "theorem build_heap [DecidableEq (EdgeKey Symbol Constraint)]\n    (expression : Syntax Symbol Constraint) (environment : List (Value Symbol Constraint))\n    (state : State Symbol Constraint) (heap : Heap state) (checked : Checked expression) :\n    Heap (build expression environment state).state ",
+          "sha256": "5d0f1f8d73f43487107e0c17606d3a686e7d85a0f0a01659fad4c50011d37576"
+        },
+        {
+          "name": "buildMany_heap",
+          "header": "theorem buildMany_heap [DecidableEq (EdgeKey Symbol Constraint)]\n    (expressions : List (Syntax Symbol Constraint)) (environment : List (Value Symbol Constraint))\n    (state : State Symbol Constraint) (heap : Heap state) (checked : ManyChecked expressions) :\n    Heap (buildMany expressions environment state).state ",
+          "sha256": "38255a1cdc111bcbb90c79545859e26d5138ac376336e861db317c011d2fc36f"
+        },
+        {
+          "name": "buildEdges_heap",
+          "header": "theorem buildEdges_heap [DecidableEq (EdgeKey Symbol Constraint)]\n    (expressions : List (EdgeSyntax Symbol Constraint)) (environment : List (Value Symbol Constraint))\n    (state : State Symbol Constraint) (heap : Heap state) (checked : EdgesChecked expressions) :\n    Heap (buildEdges expressions environment state).state ",
+          "sha256": "2afc9f8ea3d7ebba89a1ef88230b2b0b807b5dfca4f3ab15d690be1cc18740e6"
+        },
+        {
+          "name": "constructed_heap",
+          "header": "theorem constructed_heap [DecidableEq (EdgeKey Symbol Constraint)]\n    (expression : Syntax Symbol Constraint) (checked : Checked expression)\n    (value : Value Symbol Constraint) (state : State Symbol Constraint)\n    (built : build expression [] empty = .done value state) : Heap state ",
+          "sha256": "f049b2ec3224a86f813ba23e1527e7987ffd69951463d6e36c8603d7ceb7da91"
+        },
+        {
+          "name": "encodeMany_length",
+          "header": "theorem encodeMany_length (context : List (Value Symbol Constraint))\n    (locals : List InternedBinderProtocol.Reference) (values : List (Value Symbol Constraint)) :\n    (encodeMany context locals values).length = values.length ",
+          "sha256": "d8ca249ed20f57d97f826c99965bfabb83dd338542f77e04117c0a5ff6d01f2e"
+        },
+        {
+          "name": "encode_checked",
+          "header": "theorem encode_checked (value : Value Symbol Constraint)\n    (state : State Symbol Constraint) (facts : Facts state) (heap : Heap state)\n    (available : Available state value) (context : List (Value Symbol Constraint))\n    (locals : List InternedBinderProtocol.Reference) : Checked (encode context locals value) ",
+          "sha256": "3d6b6600af6010576d339a2943288ed4da114296a36f14da5f3a7fe86f3c015a"
+        },
+        {
+          "name": "encodeMany_checked",
+          "header": "theorem encodeMany_checked (values : List (Value Symbol Constraint))\n    (state : State Symbol Constraint) (facts : Facts state) (heap : Heap state)\n    (available : \u2200 value \u2208 values, Available state value) (context : List (Value Symbol Constraint))\n    (locals : List InternedBinderProtocol.Reference) : ManyChecked (encodeMany context locals values) ",
+          "sha256": "d07a0c0b659b37769feffc4699bd2438b83d98c65f309e533dc19c7a8731538f"
+        },
+        {
+          "name": "encodeEdges_checked",
+          "header": "theorem encodeEdges_checked (edges : List (EdgeValue Symbol Constraint))\n    (state : State Symbol Constraint) (facts : Facts state) (heap : Heap state)\n    (resident : \u2200 edge \u2208 edges, EdgeResident state edge) (context : List (Value Symbol Constraint))\n    (locals : List InternedBinderProtocol.Reference) : EdgesChecked (encodeEdges context locals edges) ",
+          "sha256": "4419c21c785af2f6ff3e6cf71ac4ae33780787edea9576b7be24f5fe9b15a63d"
+        },
+        {
+          "name": "execute_heap",
+          "header": "theorem execute_heap [DecidableEq (EdgeKey Symbol Constraint)]\n    (value : Value Symbol Constraint) (environment : Environment Symbol Constraint)\n    (state : State Symbol Constraint) (facts : Facts state) (heap : Heap state)\n    (available : Available state value) :\n    Heap (InternedFreshOrdinaryStoredSubstitution.execute value environment state).state ",
+          "sha256": "4d94f84ace6fb16d41292e01b1b04dbcca9e4cf59f61070a4a3a785f4b9bb31b"
+        },
+        {
+          "name": "unfold_heap",
+          "header": "theorem unfold_heap [DecidableEq (EdgeKey Symbol Constraint)]\n    (value : Value Symbol Constraint) (state : State Symbol Constraint) (facts : Facts state)\n    (heap : Heap state) (available : Available state value) :\n    Heap (InternedFreshOrdinaryStoredSubstitution.unfold value state).state ",
+          "sha256": "4300b6fdeecf29a6cd961b26ca3576bb86e0b1664288aacee7123fe82833c0da"
+        }
+      ]
+    }
+  ]
+}

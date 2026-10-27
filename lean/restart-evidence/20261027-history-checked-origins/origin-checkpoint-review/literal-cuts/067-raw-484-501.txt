@@ -1,0 +1,18 @@
+MicroCFTA.SourcePruningEnumerationArityOrigins.execute_heap {Symbol : Type}
+  [DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  (value :
+    MicroCFTA.InternedConstructorTemplates.Value Symbol
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+  (environment :
+    MicroCFTA.InternedStoredSubstitution.Environment Symbol
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+  (state :
+    MicroCFTA.InternedConstructorTemplates.State Symbol
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+  (facts : MicroCFTA.InternedNestedFacts.Facts state) (heap : MicroCFTA.SourcePruningEnumerationArityOrigins.Heap state)
+  (available : MicroCFTA.InternedProbeProvenance.Available state value) :
+  MicroCFTA.SourcePruningEnumerationArityOrigins.Heap
+    (MicroCFTA.InternedFreshOrdinaryStoredSubstitution.execute value environment state).state
+'MicroCFTA.SourcePruningEnumerationArityOrigins.execute_heap' depends on axioms: [propext, Classical.choice, Quot.sound]

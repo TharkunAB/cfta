@@ -1,0 +1,24 @@
+MicroCFTA.SourceCurrentAllocatedMkEdge.RejectReceipt.projected_arity {width : Nat}
+  [DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey MicroCFTA.SourcePruningTemplates.Symbol
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  {formulas : MicroCFTA.SourceGuards.Formulas MicroCFTA.FullSyntax.Formula}
+  {solver : MicroCFTA.SourceGuards.Entailment MicroCFTA.FullSyntax.Formula}
+  {inventory : MicroCFTA.SourceCurrentAllocatedNativeInventoryState.Inventory}
+  {symbol : MicroCFTA.SourcePruningTemplates.Symbol} {before after : MicroCFTA.SourceEqualityNativeDemand.State width}
+  {result :
+    MicroCFTA.InternedConstructorTemplates.EdgeValue MicroCFTA.SourcePruningTemplates.Symbol
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)}
+  (receipt : MicroCFTA.SourceCurrentAllocatedMkEdge.RejectReceipt formulas solver inventory symbol before result after)
+  (tries : List MicroCFTA.EqualityTrie.Trie)
+  (residual : Option (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+  (projected :
+    MicroCFTA.SourcePruningEnumerationConstraint.project result.entry.key.constraint = some (tries, residual)) :
+  (∀ (trie : MicroCFTA.EqualityTrie.Trie), trie ∈ tries → MicroCFTA.EqualityTrie.Valid trie) ∧
+    ∀ (start : Nat),
+      MicroCFTA.EnumerationState.arityAllows result.children.length
+          (MicroCFTA.EnumerationCorrectness.suspendedVars start tries) =
+        true
+'MicroCFTA.SourceCurrentAllocatedMkEdge.RejectReceipt.projected_arity' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]

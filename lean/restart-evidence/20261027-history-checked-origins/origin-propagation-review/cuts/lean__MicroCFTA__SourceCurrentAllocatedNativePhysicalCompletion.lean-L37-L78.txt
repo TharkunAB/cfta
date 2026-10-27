@@ -1,0 +1,42 @@
+/-- Actual source instructions retain field loads in the returned operation cache. -/
+theorem step_fields [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)]
+    (control : Control Output) (state : CheckedState width)
+    (valid : Good state) (heap : Heap state.operations state.native.machine.heap)
+    (inputs : SourceCurrentAllocatedNativePhysicalExecution.Inputs control state) (fields : Fields control state) :
+    OutcomeFields (step control state) := by
+  cases control with
+  | edgeBody request next =>
+      have growth := SourceEqualityNativeDemandOperations.body_operations request next state valid.operations
+        (heap _ _ fields.1.2.1).1 (heap _ _ fields.1.2.2).1
+      have retained : Heap (body request next state).state.operations (body request next state).state.native.machine.heap := by
+        rw [SourceEqualityNativeDemandOperations.body_native]
+        exact SourceCurrentConjunctionEquality.Fields.grows heap growth.2
+      refine ⟨retained, ?_⟩
+      cases one : body request next state with
+      | yielded rest after =>
+          simpa only [step, one] using body_fields request next state after rest heap fields.1 valid.operations fields.2 one
+      | done | failed | constraintError | blocked => simp only [step, one]
+  | code code =>
+      cases code with
+      | pure | fail => exact ⟨heap, trivial⟩
+      | read name next => exact ⟨heap, fields _⟩
+      | finishNode handle value next | finishEdge handle value next => exact ⟨heap, fields⟩
+      | work job next =>
+          exact ⟨SourceCurrentAllocatedNativeCodeFields.work_heap state.operations job state.native.machine.heap heap fields.1, fields.2 _⟩
+      | enter domain left right first second next => exact ⟨heap, fields _⟩
+      | optionalBinder pair value next =>
+          have retained := SourceCurrentAllocatedNativeCodeFields.optionalBinder_heap state.operations pair value state.native.machine.heap
+            valid.native.machine.1 heap inputs
+          cases actual : SourceRecursiveIntersectionMaybeMu.maybeMu pair value state.native.machine.heap with
+          | done result after =>
+              simp only [step, SourceRecursiveIntersectionNative.step, actual, lift, OutcomeFields, Outcome.state, advance, Fields]
+              exact ⟨by simpa only [actual, InternedNestedConstruction.Outcome.state] using retained, fields _⟩
+          | pending key after =>
+              simp only [step, SourceRecursiveIntersectionNative.step, actual, lift, OutcomeFields, Outcome.state, advance]
+              exact ⟨by simpa only [actual, InternedNestedConstruction.Outcome.state] using retained, trivial⟩
+      | node request next =>
+          have physical := SourceRecursiveIntersectionNative.node_step_machine SourceEqualityConstraintConstructors.top
+            SourceEqualityPCSNativeEdge.conjoin request next state.native
+          have retained : Heap (step (.code (.node request next)) state).state.operations (step (.code (.node request next)) state).state.native.machine.heap := by
+            rw [SourceEqualityNativeDemandOperations.step_code_operations]
+            change Heap state.operations (lift state.operations (SourceRecursiveIntersectionNative.step SourceEqualityConstraintConstructors.top

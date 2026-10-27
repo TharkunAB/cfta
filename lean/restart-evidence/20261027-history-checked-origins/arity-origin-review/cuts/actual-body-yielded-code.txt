@@ -1,0 +1,8 @@
+theorem pure_yielded_code (request : EdgeRequest Symbol Guard)
+    (before after : State width) (control : Control (EdgeValue Symbol Guard))
+    (one : body request .pure before = .yielded control after) :
+    ∃ code, control = .code code := by
+  obtain ⟨code, _, same⟩ := yielded_unbind request Code.pure before after control one
+  exact ⟨code, by simpa only [code_bind_pure] using same⟩
+
+end MicroCFTA.SourceEqualityNativeDemandBodyYield

@@ -1,0 +1,25 @@
+MicroCFTA.SourcePruningEnumerationArityOrigins.encodeEdges_checked {Symbol : Type}
+  (edges :
+    List
+      (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)))
+  (state :
+    MicroCFTA.InternedConstructorTemplates.State Symbol
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+  (facts : MicroCFTA.InternedNestedFacts.Facts state) (heap : MicroCFTA.SourcePruningEnumerationArityOrigins.Heap state)
+  (resident :
+    ∀
+      (edge :
+        MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol
+          (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)),
+      edge ∈ edges → MicroCFTA.InternedEdgeResidency.EdgeResident state edge)
+  (context :
+    List
+      (MicroCFTA.InternedConstructorTemplates.Value Symbol
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)))
+  (locals : List MicroCFTA.InternedBinderProtocol.Reference) :
+  MicroCFTA.SourcePruningEnumerationArityOrigins.EdgesChecked
+    (MicroCFTA.InternedStoredSubstitution.encodeEdges context locals edges)
+'MicroCFTA.SourcePruningEnumerationArityOrigins.encodeEdges_checked' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]

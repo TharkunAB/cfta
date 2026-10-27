@@ -1,0 +1,45 @@
+    SourceEqualityMkEdgeAllocation.check_correct stored original.guard children.length before valid storedReady
+  have accepted : SourceEqualityMkEdgeAllocation.accepted original children.length = true := by
+    rw [reconstructed] at checkedExact
+    exact Except.ok.inj (checkedExact.symm.trans checked)
+  have fits : SourceEqualityMkEdgeAllocation.fits children.length
+        (SourceCompactGuards.sourceEqualities original) = true := by
+    by_cases rejected : SourceEqualityMkEdgeAllocation.contradictory original = true
+    · simp only [SourceEqualityMkEdgeAllocation.accepted, rejected, ↓reduceIte,
+        Bool.false_eq_true] at accepted
+    · simpa only [SourceEqualityMkEdgeAllocation.accepted, rejected, Bool.false_eq_true, ↓reduceIte] using accepted
+  obtain ⟨classes, source, rootBounds⟩ :=
+    (SourceEqualityMkEdgeArity.fits_exact children.length
+      (SourceCompactGuards.sourceEqualities original)).mp fits
+  let actualBuilt : InternedConstructorTemplates.EdgeValue Symbol Constraint ×
+        InternedConstructorTemplates.State Symbol Constraint :=
+      InternedConstructorTemplates.run (InternedConstructorTemplates.makeEdge symbol original children) heap
+  obtain ⟨receipt, _receiptValid, _receiptGrowth⟩ :=
+    SourceEqualityMkEdgeAllocation.build_receipt symbol stored original.guard children before heap valid storedReady
+  simp only [reconstructed, accepted, SourceEqualityMkEdgeAllocation.work,
+    SourceEqualityMkEdgeAllocation.outputState, ↓reduceIte] at receipt
+  rw [receipt] at _receiptValid _receiptGrowth
+  dsimp only at _receiptValid _receiptGrowth
+  obtain ⟨symbolSame, guardSame, childrenSame⟩ :=
+    MergedPhysicalGroupEdges.makeEdge_fields heap heapReady.semantic.1.normal.facts symbol original children available
+  obtain ⟨projected, validTries, pathReadback, _meaning⟩ :=
+    (source ▸ SourcePruningEnumerationConstraint.project_complete original cached)
+  change SourceEqualityMkEdgeAllocation.build symbol stored original.guard children before heap =
+    (.ok actualBuilt.1, (SourceEqualityMkEdgeAllocation.check stored original.guard children.length before).2, actualBuilt.2) ∧ _
+  refine ⟨receipt, checkedValid, checkedGrowth, ?_, symbolSame, guardSame, childrenSame,
+    classes, ?_, ?_, validTries, pathReadback, ?_⟩
+  · exact SourceEqualityMkEdgeAllocation.work_keeps symbol original children true heap heapReady available
+  · rw [guardSame]
+    exact source
+  · rw [guardSame]
+    exact projected
+  · intro start
+    rw [childrenSame]
+    apply (fresh_arity_iff children.length start (EnumerationEquality.readClasses classes)).mpr
+    intro trie trieMember index suffix path
+    obtain ⟨paths, pathsMember, same⟩ := List.mem_map.mp trieMember
+    subst trie
+    exact rootBounds paths pathsMember (index :: suffix)
+      ((pathReadback paths pathsMember (index :: suffix)).mp path)
+
+end MicroCFTA.SourcePruningEnumerationOwnArity

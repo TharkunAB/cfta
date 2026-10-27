@@ -1,0 +1,17 @@
+theorem Fields.grows {before after : State} {heap : InternedConstructorTemplates.State Symbol (Raw Formula)}
+    (fields : Fields before heap) (growth : Grows before after) : Fields after heap := by
+  intro key edge present
+  exact (fields key edge present).grows growth
+
+/-- Current successful loads derive readiness, exact raw readback, and their original constructor receipt. -/
+theorem FieldAvailable.receipts {state : State} {original : Raw Formula}
+    (available : FieldAvailable state original) (valid : Valid state) :
+    ∃ value : Allocated Formula, SourceEqualityConstraintFieldLookup.load original state.constraints = .ok (some value) ∧
+      Ready state.constraints value.stored ∧ SourceEqualityConjoinAllocation.readback value = original ∧
+      SourceEqualityPhysicalPayload.read original.equalities = .ok value.stored.payload := by
+  obtain ⟨cached, value, loaded⟩ := available
+  have checked := SourceEqualityConstraintFieldLookup.load_ready original state.constraints valid.constraints cached value loaded
+  exact ⟨value, loaded, checked.1, checked.2,
+    SourceEqualityConstraintFieldLookup.load_constructor_receipt original state.constraints cached value loaded⟩
+
+/-- Missing field representation stays separate from the accessor's original checked errors. -/

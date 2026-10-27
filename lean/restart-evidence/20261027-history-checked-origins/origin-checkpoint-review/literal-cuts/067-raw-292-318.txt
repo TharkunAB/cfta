@@ -1,0 +1,27 @@
+MicroCFTA.SourcePruningEnumerationArityOrigins.buildMany_length {Symbol : Type}
+  [DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  (expressions :
+    List
+      (MicroCFTA.InternedNestedConstruction.Syntax Symbol
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)))
+  (environment :
+    List
+      (MicroCFTA.InternedConstructorTemplates.Value Symbol
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)))
+  (state :
+    MicroCFTA.InternedConstructorTemplates.State Symbol
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+  (values :
+    List
+      (MicroCFTA.InternedConstructorTemplates.Value Symbol
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)))
+  (after :
+    MicroCFTA.InternedConstructorTemplates.State Symbol
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+  (done :
+    MicroCFTA.InternedFreshOrdinaryConstruction.buildMany expressions environment state =
+      MicroCFTA.InternedNestedConstruction.Outcome.done values after) :
+  values.length = expressions.length
+'MicroCFTA.SourcePruningEnumerationArityOrigins.buildMany_length' depends on axioms: [propext, Quot.sound]

@@ -1,0 +1,39 @@
+MicroCFTA.SourceCurrentAllocatedParentEdge.Receipt.projected_arity {width : Nat}
+  [DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey MicroCFTA.SourcePruningTemplates.Symbol
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  {formulas : MicroCFTA.SourceGuards.Formulas MicroCFTA.FullSyntax.Formula}
+  {solver : MicroCFTA.SourceGuards.Entailment MicroCFTA.FullSyntax.Formula}
+  {inventory : MicroCFTA.SourceCurrentAllocatedNativeInventoryState.Inventory}
+  {symbol : MicroCFTA.SourcePruningTemplates.Symbol}
+  {original : MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula}
+  {loaded : MicroCFTA.SourceEqualityConjoinAllocation.Constraint MicroCFTA.FullSyntax.Formula}
+  {inherited : MicroCFTA.SourceEqualityConstraintAllocation.Value}
+  {values :
+    List
+      (MicroCFTA.InternedConstructorTemplates.Value MicroCFTA.SourcePruningTemplates.Symbol
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))}
+  {before after : MicroCFTA.SourceEqualityNativeDemand.State width}
+  {result :
+    MicroCFTA.InternedConstructorTemplates.EdgeValue MicroCFTA.SourcePruningTemplates.Symbol
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)}
+  {fourth savedFourth : MicroCFTA.SourceCurrentEmptinessMemo.Memo}
+  {memo saved :
+    MicroCFTA.SourceCurrentMemoMergeGraph.Memo MicroCFTA.SourcePruningTemplates.Symbol
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)}
+  {final : MicroCFTA.EndpointMemoGateTrace.Memos}
+  (receipt :
+    MicroCFTA.SourceCurrentAllocatedParentEdge.Receipt formulas solver inventory symbol original loaded inherited values
+      before result after fourth savedFourth memo saved final)
+  (tries : List MicroCFTA.EqualityTrie.Trie)
+  (residual : Option (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+  (projected :
+    MicroCFTA.SourcePruningEnumerationConstraint.project result.entry.key.constraint = some (tries, residual)) :
+  (∀ (trie : MicroCFTA.EqualityTrie.Trie), trie ∈ tries → MicroCFTA.EqualityTrie.Valid trie) ∧
+    ∀ (start : Nat),
+      MicroCFTA.EnumerationState.arityAllows result.children.length
+          (MicroCFTA.EnumerationCorrectness.suspendedVars start tries) =
+        true
+'MicroCFTA.SourceCurrentAllocatedParentEdge.Receipt.projected_arity' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]

@@ -1,0 +1,43 @@
+/-- One native step performs one effect or expands one published recursive request. -/
+def step [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)] (emptyGuard : Guard) (conjoin : Guard → Guard → Guard)
+    (code : Code Symbol Guard A) (state : SourceRecursiveIntersectionThunks.State width Symbol Guard) : Outcome width Symbol Guard A :=
+  match code with
+  | .pure value => .done value state
+  | .fail failure => .failed failure state
+  | .work job next =>
+      let actual := InternedConstructorTemplates.run job state.machine.heap
+      .yielded (next actual.1) (advance state { state.machine with heap := actual.2 })
+  | .enter domain left right first second next =>
+      let entered := SourceRecursiveIntersectionEnvironment.enter state.machine.domains domain.key left right first second
+      .yielded (next entered.1) (advance state { state.machine with domains := entered.2 })
+  | .read name next => .yielded (next (SourcePreparedSharedRows.read state.machine.heap name)) state
+  | .optionalBinder key body next =>
+      match SourceRecursiveIntersectionMaybeMu.maybeMu key body state.machine.heap with
+      | .done value after => .yielded (next value) (advance state { state.machine with heap := after })
+      | .pending pending after => .blocked (.constructor pending) code (advance state { state.machine with heap := after })
+  | .node request next =>
+      let selected := lookupNode width request state
+      match selected.1 with
+      | .direct actual => .yielded ((compileNode actual).bind next) selected.2
+      | .memoized handle =>
+          let demanded := demandNode handle selected.2
+          match demanded.1 with
+          | .absent => .blocked (.absentNode handle) code demanded.2
+          | .busy => .blocked (.nodeBusy handle) code demanded.2
+          | .ready value => .yielded (next value) demanded.2
+          | .evaluate actual =>
+              .yielded ((compileNode actual).bind fun value => .finishNode handle value (next value)) demanded.2
+  | .edge request next =>
+      let selected := lookupEdge width request state
+      let demanded := demandEdge selected.1 selected.2
+      match demanded.1 with
+      | .absent => .blocked (.absentEdge selected.1) code demanded.2
+      | .busy => .blocked (.edgeBusy selected.1) code demanded.2
+      | .ready value => .yielded (next value) demanded.2
+      | .evaluate actual =>
+          .yielded ((compileEdge emptyGuard conjoin actual).bind fun value => .finishEdge selected.1 value (next value)) demanded.2
+  | .finishNode handle value next => .yielded next (SourceRecursiveIntersectionThunks.finishNode handle value state)
+  | .finishEdge handle value next => .yielded next (SourceRecursiveIntersectionThunks.finishEdge handle value state)
+
+/-- A finite native bound yields the original remaining code instead of a fabricated result. -/
+def execute [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)] (emptyGuard : Guard) (conjoin : Guard → Guard → Guard) :

@@ -1,0 +1,25 @@
+theorem accepted_receipt_fits [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)]
+    (request : EdgeRequest Symbol Guard) (state : SourceEqualityNativeDemand.State width)
+    (first second combined : Allocated)
+    (initial : SourceCurrentAllocatedNativePhysicalCompletion.Good state)
+    (inputs : EdgeReady state.native.machine request)
+    (left : SourceEqualityConstraintFieldLookup.load request.left.entry.key.constraint state.operations.constraints = .ok (some first))
+    (right : SourceEqualityConstraintFieldLookup.load request.right.entry.key.constraint state.operations.constraints = .ok (some second))
+    (accepted : (SourceEqualityIntersectionEdgeAllocation.run GuardStructuralOrder.le first second
+      request.left.children.length request.right.children.length state.operations).1 = .ok (.ready combined))
+    {count : Nat} {result : EdgeValue Symbol Guard} {after : SourceEqualityNativeDemand.State width}
+    {post : Machine Symbol Guard → EdgeValue Symbol Guard → Prop}
+    (receipt : SourceCurrentAllocatedNativePhysicalTraceCompletion.Receipt count
+      (.edgeBody request .pure) state result after post) :
+    ∃ values middle childCount, childCount + 1 < count + 1 ∧
+      SourceEqualityNativeDemandWalkExecution.Walk (fun pair => requestNode request.domain pair.1 pair.2)
+        (request.left.children.zip request.right.children)
+        {state with operations := (SourceEqualityIntersectionEdgeAllocation.run GuardStructuralOrder.le first second
+          request.left.children.length request.right.children.length state.operations).2} values middle childCount ∧
+      result = (run (makeEdge request.left.entry.key.symbol (SourceEqualityConjoinAllocation.readback combined) values)
+        middle.native.machine.heap).1 ∧
+      after = {middle with native := advance middle.native {middle.native.machine with heap :=
+        (run (makeEdge request.left.entry.key.symbol (SourceEqualityConjoinAllocation.readback combined) values)
+          middle.native.machine.heap).2}} ∧
+      result.children.length = request.left.children.length ∧
+      SourcePruningEnumerationArityOrigins.Fits result.entry.key.constraint result.children.length := by

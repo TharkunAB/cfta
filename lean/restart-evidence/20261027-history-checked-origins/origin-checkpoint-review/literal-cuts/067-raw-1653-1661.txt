@@ -1,0 +1,9 @@
+def MicroCFTA.SourcePruningEnumerationArityOrigins.SourceEdgesChecked : {Symbol : Type} →
+  List
+      (MicroCFTA.InternedNestedConstruction.EdgeSyntax Symbol
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)) →
+    Prop :=
+fun {Symbol} x =>
+  MicroCFTA.InternedNestedConstruction.Syntax.brecOn_1 x MicroCFTA.SourcePruningEnumerationArityOrigins.SourceChecked._f
+    (fun t f => PUnit.unit) MicroCFTA.SourcePruningEnumerationArityOrigins.SourceEdgesChecked._f
+    MicroCFTA.SourcePruningEnumerationArityOrigins.SourceManyChecked._f

@@ -1,5 +1,42 @@
 # Proof status at 2026-10-18
 
+## Checked arity origins and actual physical edge-body returns
+
+Source checkpoint: 6f380cee25b1d13caef617907264ecff1cb28c39.
+Every completed rich native edge-body receipt now derives projected arity
+from its actual first instruction, actual child walk and returned constructor.
+Initial physical Good and actual edge readiness remain explicit. The receipt
+can have any postcondition. No separate ready branch, child semantic result,
+arity check or future success is assumed. Both the accepted and sentinel
+branches retain their actual full-state endpoints and origin observations.
+
+Checked source syntax now derives an edge-key arity invariant. Actual source
+construction and stored reconstruction preserve it, including Mu unfolding,
+canonical hits and pending prefixes. Actual checked MkEdge and raw rejection
+receipts preserve the ENTIRE edge-record invariant from before to after.
+An actual selected head consumes that invariant at its own caller heap.
+Existing Parent construction receipts also supply returned-edge arity and
+retain it through actual Posts and matching canonical edge identity.
+
+This does not yet derive arity-certified histories from the bare finite
+producer. Raw buildEdges does not check arity. SourceChecked explicitly
+requires normalized fields and actual successful checks at source counts.
+Rejected checked inputs use their actual sentinel return. Current Packet and
+physical memo validity do not supply missing checked origins for new records.
+Native query, cache, local-reduction, exposure and history propagation remain
+open. The previous conditional whole-history original acceptance theorem
+and H6 global finite-tree construction theorem retain their full contracts.
+Enumeration coverage and physical Haskell correspondence remain open.
+
+Seven modules, 1158 lines, 36 public theorems and eight definitions pass
+strict checks. Audit passes 4167 jobs and 79583 dependency checks. Six
+previous strongest signatures and axiom sets match byte exactly.
+No Haskell source changed. FINDINGS preserves all fixes and repair handoffs.
+The whole-system goal stays ACTIVE. Keep the optimized interned core and
+all older constructor and equality proofs, drafts, counterexamples and repairs.
+Details: `lean/notes-current-checked-arity-origins.md`.
+
+
 ## Conditional original acceptance across a complete resource history
 
 Source checkpoint: 87f6dee2580ba6b668775a34325b015ff2bfe4d0.

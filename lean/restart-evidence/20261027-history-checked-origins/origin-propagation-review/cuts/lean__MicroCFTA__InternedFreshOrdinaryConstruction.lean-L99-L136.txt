@@ -1,0 +1,38 @@
+/-- Execute the full nested constructor schedule directly from source expression. -/
+def build [DecidableEq (EdgeKey Symbol Guard)] (expression : Syntax Symbol Guard) (environment : List (Value Symbol Guard))
+    (state : InternedConstructorTemplates.State Symbol Guard) : Outcome Symbol Guard (Value Symbol Guard) :=
+  match expression with
+  | .empty => .done .empty state
+  | .var index => .done (environment[index]?.getD .empty) state
+  | .node edges => (buildEdges edges environment state).bind fun values next => work (makeNode values) next
+  | .union members => (buildMany members environment state).bind fun values next => work (makeUnion values) next
+  | .binder smart body =>
+      let callback := fun name current => (build body (.reference name :: environment) current).bind
+        fun value next => work (withoutSelfReference name value) next
+      (callback .depth state).bind fun depth afterDepth =>
+      (callback (.uninterned (ordinaryLevel depth)) afterDepth).bind fun ordinary afterOrdinary =>
+        request smart depth ordinary callback afterOrdinary
+termination_by sizeOf expression
+
+/-- Child expression executes in source order and retains every completed value. -/
+def buildMany [DecidableEq (EdgeKey Symbol Guard)] (expression : List (Syntax Symbol Guard))
+    (environment : List (Value Symbol Guard)) (state : InternedConstructorTemplates.State Symbol Guard) :
+    Outcome Symbol Guard (List (Value Symbol Guard)) :=
+  match expression with
+  | [] => .done [] state
+  | first :: rest => (build first environment state).bind fun value next =>
+      (buildMany rest environment next).bind fun values final => .done (value :: values) final
+termination_by sizeOf expression
+
+/-- Edge construction occurs after its actual nested child computations complete. -/
+def buildEdges [DecidableEq (EdgeKey Symbol Guard)] (expression : List (EdgeSyntax Symbol Guard))
+    (environment : List (Value Symbol Guard)) (state : InternedConstructorTemplates.State Symbol Guard) :
+    Outcome Symbol Guard (List (EdgeValue Symbol Guard)) :=
+  match expression with
+  | [] => .done [] state
+  | .mk symbol constraint children :: rest =>
+      (buildMany children environment state).bind fun values next =>
+      (work (makeEdge symbol constraint values) next).bind fun edge afterEdge =>
+      (buildEdges rest environment afterEdge).bind fun edges final => .done (edge :: edges) final
+termination_by sizeOf expression
+end

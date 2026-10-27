@@ -1,0 +1,14 @@
+def MicroCFTA.SourcePruningEnumerationArityOrigins.Heap : {Symbol : Type} →
+  MicroCFTA.InternedConstructorTemplates.State Symbol
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) →
+    Prop :=
+fun {Symbol} state =>
+  ∀
+    (key :
+      MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+    (edge :
+      MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)),
+    state.edgeRecords key = some edge →
+      MicroCFTA.SourcePruningEnumerationArityOrigins.Fits key.constraint key.children.length

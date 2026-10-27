@@ -1,0 +1,22 @@
+MicroCFTA.SourcePruningEnumerationArityOrigins.buildEdges_heap {Symbol : Type}
+  [DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  (expressions :
+    List
+      (MicroCFTA.InternedNestedConstruction.EdgeSyntax Symbol
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)))
+  (environment :
+    List
+      (MicroCFTA.InternedConstructorTemplates.Value Symbol
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)))
+  (state :
+    MicroCFTA.InternedConstructorTemplates.State Symbol
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+  (heap : MicroCFTA.SourcePruningEnumerationArityOrigins.Heap state)
+  (checked : MicroCFTA.SourcePruningEnumerationArityOrigins.EdgesChecked expressions) :
+  MicroCFTA.SourcePruningEnumerationArityOrigins.Heap
+    (MicroCFTA.InternedFreshOrdinaryConstruction.buildEdges expressions environment state).state
+'MicroCFTA.SourcePruningEnumerationArityOrigins.buildEdges_heap' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
