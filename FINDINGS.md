@@ -1,5 +1,73 @@
 # Current formalization findings
 
+## Checked arity origins and actual physical edge-body returns
+
+Source checkpoint: 6f380cee25b1d13caef617907264ecff1cb28c39.
+Every completed rich native edge-body receipt now derives projected arity
+from its actual first instruction, actual child walk and returned constructor.
+Initial physical Good and actual edge readiness remain explicit. The receipt
+can have any postcondition. No separate ready branch, child semantic result,
+arity check or future success is assumed. Both the accepted and sentinel
+branches retain their actual full-state endpoints and origin observations.
+
+Checked source syntax now derives an edge-key arity invariant. Actual source
+construction and stored reconstruction preserve it, including Mu unfolding,
+canonical hits and pending prefixes. Actual checked MkEdge and raw rejection
+receipts preserve the ENTIRE edge-record invariant from before to after.
+An actual selected head consumes that invariant at its own caller heap.
+Existing Parent construction receipts also supply returned-edge arity and
+retain it through actual Posts and matching canonical edge identity.
+
+This does not yet derive arity-certified histories from the bare finite
+producer. Raw buildEdges does not check arity. SourceChecked explicitly
+requires normalized fields and actual successful checks at source counts.
+Rejected checked inputs use their actual sentinel return. Current Packet and
+physical memo validity do not supply missing checked origins for new records.
+Native query, cache, local-reduction, exposure and history propagation remain
+open. The previous conditional whole-history original acceptance theorem
+and H6 global finite-tree construction theorem retain their full contracts.
+Enumeration coverage and physical Haskell correspondence remain open.
+
+Seven modules, 1158 lines, 36 public theorems and eight definitions pass
+strict checks. Audit passes 4167 jobs and 79583 dependency checks. Six
+previous strongest signatures and axiom sets match byte exactly.
+No Haskell source changed. FINDINGS preserves all fixes and repair handoffs.
+The whole-system goal stays ACTIVE. Keep the optimized interned core and
+all older constructor and equality proofs, drafts, counterexamples and repairs.
+Details: `lean/notes-current-checked-arity-origins.md`.
+
+
+### Formal constructor boundary and Haskell repair status
+
+No Haskell source or Cabal file changed. All older fixes, regressions and
+external repair instructions remain below without change. The integrated
+LPO fix and extraction documentation repair remain present. Main remains
+8766699b594eaad80381af2eee034c378ccf3192 at the refresh for this checkpoint.
+The separate KBO weight candidate d7b6a9dfff464eb32c17c314d4825d5b027f1b2d
+is not on main and is not integrated, built or executed here. The earlier
+positive-Int context-reversal finding remains open in this branch. Its Natural
+and lazy-map repair has only the recorded source assessment. Run the targeted
+native regression after the repair lands on main. No runtime success follows
+from this Lean-only checkpoint.
+
+The general Lean buildEdges API emits a raw makeEdge with the supplied guard
+and actual constructed children. It does not execute the source arity test.
+Haskell mkEdge rejects a failed arity check. Normalized guard fields, closure,
+residency and a generic native Post do not establish the missing relation
+between constraint positions and actual child count. The new SourceChecked
+bridge makes original successful source checks explicit. Actual rejected
+inputs must use their sentinel return. Do not infer all raw syntax passes.
+
+Current physical memo NodeGood and EdgeGood fields retain availability and
+residency. They do not retain checked constructor origins. A returned Parent
+edge has a construction receipt, but its live final constructor starts at a
+middle state after local reduction. Returned-edge arity plus a generic Post
+cannot classify every record created before that middle state. This is a
+formalization resource boundary, not a verified Haskell defect. Carry and
+derive the actual query and local-reduction resource before removing the
+history's arity annotation. Keep all earlier Haskell repair evidence intact.
+
+
 ## Conditional original acceptance across a complete resource history
 
 Source checkpoint: 87f6dee2580ba6b668775a34325b015ff2bfe4d0.
