@@ -1,0 +1,34 @@
+              · exact ⟨0, by simp, headOutputsValid output first⟩
+              · obtain ⟨index, inside, certificate⟩ := tailOutputs output later
+                exact ⟨index + 1, by simpa only [List.length_cons] using Nat.add_lt_add_right inside 1,
+                  certificate.prepend hookPost⟩
+            · rcases tailShape with completed | ⟨current, stopped, observed, certificate⟩
+              · exact .inl (by simp only [result, completed])
+              · exact .inr ⟨current, by simp only [result, stopped], observed,
+                  certificate.prepend hookPost headOutputs⟩
+        | stopped headOutputs reason reached =>
+            have currentResources := resources
+            obtain ⟨afterCaller, next, final, post, returnedFits, returnedKnown, observed, outputsValid⟩ := resources
+            have completed : ∃ fragment actual queries after, receipt = .complete fragment actual queries after := by
+              cases receipt with
+              | complete fragment actual queries after => exact ⟨fragment, actual, queries, after, rfl⟩
+              | unhandled => cases advanced
+              | rejected actual queries after | stopped fragments observation candidate =>
+                  have impossible := callbackRun 0
+                  cases impossible
+            obtain ⟨fragment, actual, queries, after, same⟩ := completed
+            subst receipt
+            refine ⟨headBound, [], headOutputs, afterCaller, next, final,
+              .stopped [] headOutputs (.continuation (.complete fragment actual queries after) reason reached),
+              ?_, post, SourcePruningEnumerationRecursive.captured_post packet post,
+              returnedFits.mono laterGrowth.1, ?_, by simp, ?_, ?_, ?_⟩
+            · intro extra
+              simp only [SourcePruningEnumerationNativeContinuations.run, headRun extra, callbackRun extra]
+            · intro key resident found
+              exact laterGrowth.2 (returnedKnown key resident found)
+            · intro index current found
+              cases found
+            · intro output member
+              exact ⟨0, by simp, outputsValid output member⟩
+            · exact .inr ⟨_, rfl, observed, .inr ⟨_, reason, reached, headOutputs, [], rfl, rfl,
+                receiptCertificate, currentResources⟩⟩

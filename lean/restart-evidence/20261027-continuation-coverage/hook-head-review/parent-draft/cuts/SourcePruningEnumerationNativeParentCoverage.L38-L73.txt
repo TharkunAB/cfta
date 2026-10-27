@@ -1,0 +1,36 @@
+/-- An original parent model constructs a completed indexed receipt in the same supported scan. -/
+theorem parent_complete_resources
+    (seed : Seed)
+    (formulas : SourceGuards.Formulas FullSyntax.Formula)
+    (solver : SourceGuards.Entailment FullSyntax.Formula)
+    (inventory : Inventory) (caller : Caller (bits + 2)) (before : Cached) (checkEmpty : Bool)
+    (uv handle : Nat) (scs : List Suspended)
+    (parentEntry : Cache.Interned InternedBinderProtocol.NodeKey)
+    (storedEdges selectedEdges : List (EdgeValue Symbol Constraint))
+    (depth : Nat) (free : List InternedBinderProtocol.Reference) (roots : Nat → Nat) (memos : Memos)
+    (initial : Context formulas solver inventory caller memos)
+    (ready : EnumerationDriver.Ready uv before.core)
+    (stored : before.core.values[uv]? = some (.unenumerated (some handle) scs))
+    (decoded : lookupNode caller.checked.native.machine.heap handle = some (.node parentEntry storedEdges depth free))
+    (realized : PendingRealized caller.checked.native.machine.heap before.core)
+    (selectedRows : selectedEdges.Perm storedEdges)
+    (supported : ∀ edge ∈ selectedEdges, arityAllows edge.children.length scs = true →
+      SourcePruningEnumerationConstraint.project edge.entry.key.constraint ≠ none)
+    (paths : Roots before.core.representatives roots)
+    (counts : EnumerationCanonicalWaiting.Correct roots before.core.values before.waiting)
+    (flags : ∀ slot, SourcePruningEnumerationNativeIndex.candidate caller.checked.native.machine.heap
+      ((before.core.values[slot]?).getD .eliminated) = some (before.expandable slot))
+    (pending : InputsPending before.core scs)
+    (fits : Fits seed.2 caller.checked)
+    (reserved : Reserved bits seed (cost scs before.core.counter selectedEdges))
+    (known : Heap (fun guard => guard ∈ seed.1) caller.checked.native.machine.heap)
+    (ambient : InternedGuardedLanguage.Env Symbol)
+    (assignment : Nat → Language.Term Symbol)
+    (satisfied : Satisfies
+      (SourcePruningEnumerationNativeLanguage.handles (SourceEqualityPCSGuard.holds formulas solver)
+        ambient caller.checked.native.machine.heap)
+      (fun guard term => SourceEqualityPCSGuard.holds formulas solver guard term = true)
+      assignment before.core) :
+    ∃ (r n p h k : Nat) (processed : List (Receipt (bits + 2))) (afterCaller : Caller (bits + 2)) (saved : Queries)
+      (final : Memos) (next : Inventory) (result : Result (bits + 2)),
+      ((∀ er en P H ek, p ≤ P → h ≤ H →

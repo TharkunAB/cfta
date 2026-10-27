@@ -1,0 +1,128 @@
+      · intro index receipt found
+        cases found
+      · intro output member
+        cases member
+  | cons edge rest ih =>
+      obtain ⟨headBound, receipt, middleCaller, saved, middleMemos, middleInventory,
+        headRun, headPost, headQueries, admitted, pending, history, cacheBounds, headFits, headKnown, shape⟩ :=
+        SourcePruningEnumerationNativeHookResources.head_finite_complete_resources
+          holeKey fits admits graph templates checkEmpty edgesOf stop order metadata recursiveFuel
+          seed formulas solver recursive inventory caller memos before uv handle scs parentEntry storedEdges depth free edge packet ready stored decoded
+          (selected edge List.mem_cons_self) incoming bounded known selectionMembers selectionLength
+          capturedMass inherited initialMass inheritedLength reserved.head
+      have laterGrowth := SourcePruningEnumerationFiniteReservation.stage_ge recursiveFuel
+        (afterHook recursiveFuel seed capturedMass inherited) capturedMass inherited rest.length
+      have headGrowth := SourcePruningEnumerationFiniteReservation.afterHead_le_step recursiveFuel seed capturedMass inherited
+      have wholeFits : Fits (stage recursiveFuel seed capturedMass inherited (edge :: rest).length).2 middleCaller.checked :=
+        headFits.mono (headGrowth.1.trans laterGrowth.1)
+      have wholeKnown : Heap (fun guard => guard ∈ (stage recursiveFuel seed capturedMass inherited (edge :: rest).length).1)
+          middleCaller.checked.native.machine.heap :=
+        fun key resident found => laterGrowth.2 (headGrowth.2 (headKnown key resident found))
+      rcases shape with unsupported | ⟨outcome, advanced, callbackRun, resources, captured⟩
+      · obtain ⟨unhandled, _allowed, _projected⟩ := unsupported
+        subst receipt
+        refine ⟨headBound, [], [], middleCaller, middleInventory, middleMemos,
+          .stopped [] [] (.edge (some .unhandled)), ?_, headPost,
+          SourcePruningEnumerationRecursive.captured_post packet headPost, wholeFits, wholeKnown,
+          by simp, ?_, ?_, .inr ⟨_, rfl, .inl rfl, .inl rfl⟩⟩
+        · intro extra
+          simp only [SourcePruningEnumerationNativeContinuations.run, headRun extra,
+            SourcePruningEnumerationNativeBranches.advance]
+        · intro index current found
+          cases found
+        · intro output member
+          cases member
+      · have receiptCertificate : ReceiptAt recursiveFuel formulas solver caller before uv seed scs capturedMass inherited 0 receipt :=
+          ⟨admitted, pending, history, cacheBounds, middleCaller, middleMemos.query, middleInventory, middleMemos,
+            advanced, headPost, rfl, headFits, headKnown⟩
+        cases outcome with
+        | complete headOutputs hookCaller hookQueries =>
+            obtain ⟨hookInventory, hookMemos, hookPost, hookQuery, hookCaptured, hookFits, hookKnown⟩ := captured
+            obtain ⟨_actual, _next, _final, _post, _fits, _known, _same, _query, headOutputsValid⟩ := resources
+            obtain ⟨tailBound, processed, outputs, afterCaller, next, final, tailResult,
+              tailRun, tailPost, tailCaptured, tailFits, tailKnown, tailLength, tailReceipts, tailOutputs, tailShape⟩ :=
+              ih (afterHook recursiveFuel seed capturedMass inherited) hookInventory hookCaller hookMemos hookCaptured
+                (lookupNode_keeps _ _ hookPost.effects.keeps handle _ decoded)
+                (fun chosen member => selected chosen (List.mem_cons_of_mem _ member)) hookFits hookKnown reserved.tail
+            let bound := headBound + tailBound
+            let result : Result (Output (bits + 2) Typing) (Failure (bits + 2) Typing) (bits + 2) :=
+              match (generalizing := false) tailResult with
+              | .complete receipts later actual queries => .complete (receipt :: receipts) (headOutputs ++ later) actual queries
+              | .stopped receipts later current => .stopped (receipt :: receipts) (headOutputs ++ later) current
+            refine ⟨bound, receipt :: processed, headOutputs ++ outputs, afterCaller, next, final, result,
+              ?_, hookPost.trans tailPost, tailCaptured, tailFits, tailKnown, by simpa only [List.length_cons] using Nat.add_le_add_right tailLength 1,
+              ?_, ?_, ?_⟩
+            · intro extra
+              let w := bound + extra
+              have hl : headBound ≤ w := by dsimp [w, bound]; omega
+              have tl : tailBound ≤ w := by dsimp [w, bound]; omega
+              have first := headRun (w - headBound)
+              rw [Nat.add_sub_of_le hl] at first
+              have hooked := callbackRun (w - headBound)
+              rw [Nat.add_sub_of_le hl] at hooked
+              have continued : match (generalizing := false) receipt with
+                  | .complete fragment actual queries after =>
+                      continueWith (resume holeKey fits admits graph templates checkEmpty edgesOf stop order w recursiveFuel)
+                        graph templates stop order w metadata uv fragment actual queries after =
+                        .complete headOutputs hookCaller hookQueries
+                  | _ => advance receipt = some (hookCaller, hookQueries) ∧ headOutputs = [] := by
+                cases receipt with
+                | complete fragment actual queries after => exact hooked
+                | unhandled => cases advanced
+                | rejected actual queries after | stopped fragments observation candidate =>
+                    obtain ⟨empty, actual, queries⟩ :=
+                      SourcePruningEnumerationNativeContinuations.HookResult.complete.inj hooked
+                    exact ⟨by rw [actual, queries]; exact advanced, empty⟩
+              have running := SourcePruningEnumerationNativeContinuations.continued_head
+                (continueWith (resume holeKey fits admits graph templates checkEmpty edgesOf stop order w recursiveFuel)
+                  graph templates stop order w metadata uv)
+                checkEmpty w w w w w uv scs before edge rest caller hookCaller memos.query hookQueries
+                receipt headOutputs first (by cases receipt <;> exact continued)
+              have later := tailRun (w - tailBound)
+              rw [Nat.add_sub_of_le tl, hookQuery] at later
+              rw [later] at running
+              cases tailResult <;> exact running
+            · intro index current found
+              cases index with
+              | zero =>
+                  have same : receipt = current := Option.some.inj found
+                  subst current
+                  exact receiptCertificate
+              | succ index =>
+                  have member : processed[index]? = some current := by simpa only [List.getElem?_cons_succ] using found
+                  exact (tailReceipts index current member).prepend hookPost
+            · intro output member
+              rcases List.mem_append.mp member with first | later
+              · exact ⟨0, by simp, headOutputsValid output first⟩
+              · obtain ⟨index, inside, certificate⟩ := tailOutputs output later
+                exact ⟨index + 1, by simpa only [List.length_cons] using Nat.add_lt_add_right inside 1,
+                  certificate.prepend hookPost⟩
+            · rcases tailShape with completed | ⟨current, stopped, observed, certificate⟩
+              · exact .inl (by simp only [result, completed])
+              · exact .inr ⟨current, by simp only [result, stopped], observed,
+                  certificate.prepend hookPost headOutputs⟩
+        | stopped headOutputs reason reached =>
+            have currentResources := resources
+            obtain ⟨afterCaller, next, final, post, returnedFits, returnedKnown, observed, outputsValid⟩ := resources
+            have completed : ∃ fragment actual queries after, receipt = .complete fragment actual queries after := by
+              cases receipt with
+              | complete fragment actual queries after => exact ⟨fragment, actual, queries, after, rfl⟩
+              | unhandled => cases advanced
+              | rejected actual queries after | stopped fragments observation candidate =>
+                  have impossible := callbackRun 0
+                  cases impossible
+            obtain ⟨fragment, actual, queries, after, same⟩ := completed
+            subst receipt
+            refine ⟨headBound, [], headOutputs, afterCaller, next, final,
+              .stopped [] headOutputs (.continuation (.complete fragment actual queries after) reason reached),
+              ?_, post, SourcePruningEnumerationRecursive.captured_post packet post,
+              returnedFits.mono laterGrowth.1, ?_, by simp, ?_, ?_, ?_⟩
+            · intro extra
+              simp only [SourcePruningEnumerationNativeContinuations.run, headRun extra, callbackRun extra]
+            · intro key resident found
+              exact laterGrowth.2 (returnedKnown key resident found)
+            · intro index current found
+              cases found
+            · intro output member
+              exact ⟨0, by simp, outputsValid output member⟩
+            · exact .inr ⟨_, rfl, observed, .inr ⟨_, reason, reached, headOutputs, [], rfl, rfl,

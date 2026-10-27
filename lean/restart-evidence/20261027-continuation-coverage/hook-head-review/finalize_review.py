@@ -1,0 +1,231 @@
+from pathlib import Path
+import hashlib, json, datetime, re
+
+AREA = Path('/tmp/mcfta-continuation-coverage-20261027')
+ROOT = AREA / 'hook-head-review'
+REPO = Path('/home/tritlo/Code/mcfta')
+CHECKPOINT = '0684e0b726efa04c1063f0f71b24d58d77ffbea6'
+assert not (ROOT / 'FROZEN.json').exists()
+sha = lambda data: hashlib.sha256(data).hexdigest()
+records = json.loads((ROOT / 'source-index.json').read_text())['sources']
+
+def retain(path, relative):
+    data = path.read_bytes()
+    destination = ROOT / relative
+    destination.parent.mkdir(parents=True, exist_ok=True)
+    destination.write_bytes(data)
+    record = {'source': str(path), 'whole': {'path': relative, 'bytes': len(data), 'sha256': sha(data)}, 'cuts': []}
+    records.append(record)
+    return record
+
+def literal(record, data, first, last, relative):
+    lines = data.splitlines(keepends=True)
+    assert 1 <= first <= last <= len(lines)
+    cut = b''.join(lines[first-1:last])
+    destination = ROOT / relative
+    destination.parent.mkdir(parents=True, exist_ok=True)
+    destination.write_bytes(cut)
+    record['cuts'].append({'path': relative, 'first_line': first, 'last_line': last,
+                          'bytes': len(cut), 'sha256': sha(cut), 'source_sha256': sha(data),
+                          'span_convention': '1-based inclusive; all original LF bytes retained'})
+
+modules = json.loads((AREA / 'modules.json').read_text())
+checks = json.loads((AREA / 'strict-checks.json').read_text())
+source_validation = json.loads((AREA / 'source-validation.json').read_text())
+assert source_validation['status'] == 'pass'
+assert (AREA / 'source-head.txt').read_text().strip() == CHECKPOINT
+module_identities = []
+for module in modules:
+    path = REPO / 'lean/MicroCFTA' / (module + '.lean')
+    data = path.read_bytes()
+    report = json.loads((AREA / checks[module] / 'report.json').read_text())
+    checked = AREA / checks[module] / 'MicroCFTA' / (module + '.lean')
+    assert report['exit_code'] == 0 and report['bytes'] == 0
+    assert data == checked.read_bytes() and sha(data) == report['source_sha256']
+    record = retain(path, 'final-sources/' + path.name)
+    ranges = {
+      'SourcePruningEnumerationFiniteHeadCoverage': [(41,122),(123,191)],
+      'SourcePruningEnumerationContinuationInvocation': [(25,99)],
+      'SourcePruningEnumerationFiniteSiblingCoverage': [(44,176),(193,236),(289,396),(397,470)],
+      'SourcePruningEnumerationFiniteParentCoverage': [(43,229),(230,264)]
+    }[module]
+    for first, last in ranges:
+        literal(record, data, first, last, f'final-cuts/{module}.L{first}-L{last}.txt')
+    module_identities.append({'module': module, 'bytes': len(data), 'lines': len(data.splitlines()), 'sha256': sha(data)})
+assert sum(x['bytes'] for x in module_identities) == 74855
+assert sum(x['lines'] for x in module_identities) == 1028
+assert (ROOT / 'parent-draft/drafts/v2/SourcePruningEnumerationFiniteParentCoverage.lean').read_bytes() == (REPO / 'lean/MicroCFTA/SourcePruningEnumerationFiniteParentCoverage.lean').read_bytes()
+
+# Preserve all fourteen actual command reports, complete logs and strict snapshots.
+command_folders = ['strict-head-1','strict-head-2','strict-invocation-1','strict-invocation-2',
+ 'strict-invocation-3','strict-sibling-1','strict-sibling-2','strict-sibling-3','strict-parent-1',
+ 'build-head-invocation-1','build-sibling-1','audit-1','strict-audit-1','public-readback-1']
+command_results = []
+for folder in command_folders:
+    location = AREA / folder
+    report = json.loads((location / 'report.json').read_text())
+    log = (location / 'raw.log').read_bytes()
+    assert len(log) == report['bytes'] and sha(log) == report['sha256']
+    limits = report['cgroup_limits']
+    assert limits == {'memory.max':'4294967296','memory.high':'4294967296','memory.swap.max':'0'}
+    retain(location / 'report.json', f'final-evidence/{folder}/report.json')
+    retain(location / 'raw.log', f'final-evidence/{folder}/raw.log')
+    if 'source_sha256' in report:
+        candidates = [p for p in location.rglob('*.lean')
+                      if sha(p.read_bytes()) == report['source_sha256']]
+        assert len(candidates) == 1
+        assert sha(candidates[0].read_bytes()) == report['source_sha256']
+        retain(candidates[0], f'final-evidence/{folder}/{candidates[0].relative_to(location)}')
+    command_results.append({'folder':folder,'exit_code':report['exit_code'],'log_bytes':len(log),'log_sha256':sha(log)})
+assert sum(x['exit_code'] != 0 for x in command_results) == 5
+assert b'4252 jobs' in (AREA / 'audit-1/raw.log').read_bytes()
+assert b'80105 MicroCFTA theorems' in (AREA / 'strict-audit-1/raw.log').read_bytes()
+
+for filename in ['modules.json','strict-checks.json','source-validation.json','public-validation.json',
+ 'preservation-validation.json','public-prefix-comparison.json','packet-comparison.json',
+ 'document-validation.json','root-document-validation.json','document-paths.json','source-head.txt',
+ 'head-namespace-repair.json','invocation-keyword-repair.json','invocation-disjointness-repair.json',
+ 'sibling-let-introduction-repair.json','sibling-hook-type-repair.json',
+ 'public-declarations.json','new-public-declarations.json','prior-public-declarations.json','public-definitions.json']:
+    retain(AREA / filename, 'final-evidence/' + filename)
+
+# Repeat both old whole-declaration recoveries and the parent's literal primary result recovery.
+head_original = (REPO / 'lean/MicroCFTA/SourcePruningEnumerationFiniteHeadResources.lean').read_text()
+head_new = (REPO / 'lean/MicroCFTA/SourcePruningEnumerationFiniteHeadCoverage.lean').read_text()
+def declaration(source, name):
+    first = source.index('theorem ' + name)
+    return source[first:source.index(' := by', first)]
+head_decl = declaration(head_new, 'head_finite_complete_resources_accepting')
+observer = (ROOT / 'contract-comparison/observer.txt').read_text()
+head_recovered = head_decl[:-len(' ∧\n' + observer)].replace('theorem head_finite_complete_resources_accepting','theorem head_finite_complete_resources',1)
+assert head_recovered == declaration(head_original,'head_finite_complete_resources')
+sibling_original = (REPO / 'lean/MicroCFTA/SourcePruningEnumerationFiniteSiblingResources.lean').read_text()
+sibling_new = (REPO / 'lean/MicroCFTA/SourcePruningEnumerationFiniteSiblingCoverage.lean').read_text()
+sibling_decl = declaration(sibling_new,'alternatives_finite_complete_resources_accepting')
+marker = ' ∧\n      ∀ extra,\n        let work'
+sibling_recovered = sibling_decl[:sibling_decl.index(marker)].replace('theorem alternatives_finite_complete_resources_accepting','theorem alternatives_finite_complete_resources',1)
+assert sibling_recovered == declaration(sibling_original,'alternatives_finite_complete_resources')
+for label, recovered, expected_bytes in [('head',head_recovered,4589),('sibling',sibling_recovered,4149)]:
+    assert len(recovered.encode()) == expected_bytes
+    (ROOT / 'contract-comparison' / (label + '-final-recovered.txt')).write_text(recovered)
+parent_source = (REPO / 'lean/MicroCFTA/SourcePruningEnumerationFiniteParentCoverage.lean').read_text()
+primary = sibling_decl[sibling_decl.index(' :\n    ∃')+3:]
+witness_end = primary.index('      (∀ extra,')
+assert primary[:witness_end] + '      (' + primary[witness_end:].lstrip() + ') ∧\n' in parent_source
+assert len(primary.encode()) == 7129
+assert sha(primary.encode()) == 'f46474658ecba97da238f5f9030c2cf9ceb02087d9e480a432e3d1e68361582f'
+(ROOT / 'contract-comparison/primary-entire-result-final.txt').write_text(primary)
+
+# Full actual public output, exact old prefix, and all four complete new public blocks.
+public = (AREA / 'public-readback-1/raw.log').read_bytes()
+new_public = (AREA / 'new-public-blocks.txt').read_bytes()
+assert len(public) == 783343 and sha(public) == '29ab7468841a77e138c4cb3668b5dade4dacbc989a52dcf97bdbac14bd64fd9d'
+assert public[710226:] == new_public and len(new_public) == 73117
+assert sha(public[:710226]) == '9c4a8166b6236d4a7b0545c9391dfe9f604ecfdeef061a9b8485bf26f1913dcb'
+assert len(new_public.splitlines()) == 892
+public_record = retain(AREA / 'new-public-blocks.txt','public/new-public-blocks.txt')
+for first,last in [(1,188),(189,240),(241,512),(513,892)]:
+    literal(public_record,new_public,first,last,f'public/new-public.L{first}-L{last}.txt')
+
+# The whole new note was read. Historical document bodies are retained for exact inverses only.
+document_validation = json.loads((AREA / 'document-validation.json').read_text())
+prose_inverses=[]
+for item in document_validation:
+    path = REPO / item['path']; data = path.read_bytes()
+    assert len(data) == item['bytes'] and sha(data) == item['sha256']
+    if 'offset' not in item:
+        assert len(data)==13117 and sha(data)=='47741336661d81f2c0626b7efbff5ccdc6676a7970fad578509f8142fb3c04be'
+        record = retain(path,'documents/notes-current-continuation-coverage.md')
+        literal(record,data,1,len(data.splitlines()),'documents/new-note-whole-as-literal.txt')
+        continue
+    first_byte=item['offset']; inserted=item['inserted_bytes']
+    cut=data[first_byte:first_byte+inserted]
+    old=data[:first_byte]+data[first_byte+inserted:]
+    baseline=AREA/'prior-documents'/item['path']
+    assert old==baseline.read_bytes() and len(old)==item['old_bytes'] and sha(old)==item['old_sha256']
+    assert first_byte==0 or data[first_byte-1:first_byte]==b'\n'
+    first_line=data[:first_byte].count(b'\n')+1
+    last_line=first_line+len(cut.splitlines())-1
+    record={'source':str(path),'bytes':len(data),'sha256':sha(data),'scope':'current whole-file identity; ONLY inserted literal region read','cuts':[]}
+    records.append(record)
+    safe=item['path'].replace('/','__')
+    literal(record,data,first_line,last_line,f'documents/insertions/{safe}.txt')
+    assert (ROOT/f'documents/insertions/{safe}.txt').read_bytes()==cut
+    retain(baseline,f'documents/prior-bodies/{item["path"]}')
+    prose_inverses.append({'source':str(path),'current_bytes':len(data),'current_sha256':sha(data),
+       'inserted_offset_zero_based':first_byte,'inserted_bytes':inserted,'first_line':first_line,'last_line':last_line,
+       'inserted_sha256':sha(cut),'old_bytes':len(old),'old_sha256':sha(old),'exact_baseline_inverse':True,
+       'prior_body_scope':'Retained for byte preservation; historical prose not semantically reread'})
+assert len(prose_inverses)==9
+(ROOT/'documents/inverse-verification.json').write_text(json.dumps(prose_inverses,indent=2)+'\n')
+(ROOT/'final-source-identities.json').write_text(json.dumps(module_identities,indent=2)+'\n')
+(ROOT/'actual-command-verification.json').write_text(json.dumps(command_results,indent=2)+'\n')
+(ROOT/'source-index.json').write_text(json.dumps({'sources':records},indent=2)+'\n')
+
+# Retain initial review states and record final checked status without changing immutable drafts.
+(ROOT/'report-before-final-review.txt').write_bytes((ROOT/'report.txt').read_bytes())
+(ROOT/'parent-draft/report-before-final-review.txt').write_bytes((ROOT/'parent-draft/report.txt').read_bytes())
+(ROOT/'parent-draft/report.txt').write_text((ROOT/'parent-draft/report.txt').read_text()+
+ '\nFINAL: Root strict-parent-1 PASS, exit0/raw0, actual4GiB/swap0. Its checked snapshot, installed source and immutable v2 are byte-identical, SHA ebe772f35c2318851da1f256f5dedd24d50dcc1a6ba749f61eab9dc0b6746a80. Audit4252/80105 and complete public/note/insertion review are recorded in the parent hook-head-review final report. V1 remains untested.\n')
+now=datetime.datetime.now().astimezone().isoformat()
+(ROOT/'report.txt').write_text(f'''FINAL CLEAR — measured {now}
+Source checkpoint: {CHECKPOINT}. Published base81d14cff3 remains the prior publication identity; no new publication result is claimed.
+
+Strongest checked claim
+
+Under the ENTIRE original finite sibling resource admission, one common bound fixes the actual aggregate result before every extra, chosen occurrence and semantic model. An accepted chosen edge plus actual original model and explicit projection support for earlier arity-allowed rows constructs a genuine whole-list HookInvocation at an event index at or before that occurrence. The same-bound actual take-prefix completes and retains ordered receipts/outputs, its actual Caller/full Memos/Packet/Fits/carrier/HeadReserved and local captured completed receipt with its own Caller/full Memos/cache. Either it reaches the chosen accepting event with assignment extension and exact fill, or an actual STRICTLY EARLIER hook stops and retains all preceding/stopping outputs, exact reason, optional endpoint including None, aggregate stopped result and stopped resources. A stopped hook at the chosen event still counts as that chosen invocation. No chosen hook completion or nonempty output follows.
+
+Own producers and entire contracts
+
+FiniteHeadCoverage final193lines/13971B SHA553f4f4b650d933b2b39ee5c6028370ca4e85f770331401e7ee607f0e5827820 calls the accepting captured head producer once, derives HeadCacheBounds from the SAME actual headRun0, and retains old resource padding/mass/callback proof. The original full4589B declaration recovers literally, SHAcaff96663d7effd955218ba8dc81ba4df533e227d61df0e77966276cfc465990. Only the observer and theorem name differ. No original admission is strengthened.
+
+FiniteParentCoverage final266lines/19749B SHAebe772f35c2318851da1f256f5dedd24d50dcc1a6ba749f61eab9dc0b6746a80 derives Complete by finite_complete; original stored Satisfies and actual selectedRows.Perm derive native parent acceptance, an accepting edge and exact index. ALL-selected projection support supplies prefix support. It invokes the primary sibling producer ONCE. The whole primary7129B existential result plus universal observer remains literally grouped, SHAf46474658ecba97da238f5f9030c2cf9ceb02087d9e480a432e3d1e68361582f. Model precedes the parent outer bound; chosen/index precede every extra; per-extra event witnesses can vary. No supplied accepted edge/index/recursive Complete or aggregate completion is required/claimed.
+
+Sibling old4149B full declaration recovery independently repeats literally, SHA85cab7c443446f4150a095651cabf7cad9ea9177700122e686078fac5cdd699d. Its actual next sibling uses the COMPLETED HOOK's Post/full Memos, not merely the earlier captured head's endpoint. The captured cache and metadata stay fixed. The original native model transports on that captured state via Keeps. The scan-to-head aggregate Post, head-local Post and final scan endpoint are distinct. Common summed bounds shift captured calls and concrete continueWith/resume together. No separately richer bound is assumed below an old chosen bound.
+
+ContinuationInvocation final99lines/6665B SHA12477724aab5b14b76ddb1bd540ac6b5ef3bbaabfde71be4554ee7beb9593c6e proves actual completed prefix plus literal next completed captured call yields the existing Invocation relation. Its whole source and complete public block were read. It assumes actual prefix completion solely to invert that local operational theorem; the sibling producer derives that prefix. It places no chosen-hook success premise in producer admission. Sibling final470lines/34470B SHA22914df47b28378b1b7a4dbca826995af9ea15d55715ad557da2bcfe06fa65aa was read whole; its event/resource/model case split agrees with the public statement.
+
+Final source, compiler and public evidence
+
+All four installed sources equal their final actual strict snapshots. Actual totals are1028lines/74855B/four public theorems, no new definitions, predicates or structures. All five final strict checks including Audit pass with warnings/errors/linters fatal. Four source strict logs are empty; Audit has the expected56B dependency line. Measured cgroup memory.max and memory.high are4294967296 and swap.max0 for all fourteen retained commands. Head/invocation build1987, sibling build1990 and complete Audit4252jobs/80105theorem dependencies pass. The inherited unused-input dependency warning remains in Lake logs; no suppression was introduced.
+
+All four full new public blocks were read without elision:73117B/892lines. Entire actual public output is783343B SHA29ab7468841a77e138c4cb3668b5dade4dacbc989a52dcf97bdbac14bd64fd9d,180blocks. Its first710226B are the exact176old blocks, SHA9c4a8166b6236d4a7b0545c9391dfe9f604ecfdeef061a9b8485bf26f1913dcb; suffix equals new-public-blocks.txt literally. Standard axioms only: propext/Classical.choice/Quot.sound. Existing H6/initial rendered soundness and all old published signatures retain their prior scope. Root preservation receipts bind96prior pinned modules,443older Enumeration,4247non-Audit Lean and203Haskell unchanged; only four Audit imports are added.
+
+Actual attempts and honest revisions
+
+All fourteen actual reports/raw logs and strict source snapshots are copied and hash checked. Five failures are retained: head1 unknown Satisfies namespace; invocation1 reserved prefix identifier; invocation2 impossible stopped=complete case elimination; sibling1 observer-let introductions/notation simp; sibling2 local hook width inference. Exact Root repair records remain. Headv1 immutable failed source remains; v2 adds only EnumerationCorrectness open and passes strict2. Parentv1 is explicitly UNTESTED; parentv2 dedents only the specialized event and passes first actual strict-parent-1. No untested source is called compiler-verified. Entire old contract comparisons were repeated against final installed bytes.
+
+Final prose review
+
+The WHOLE new note was read:13117B SHA47741336661d81f2c0626b7efbff5ccdc6676a7970fad578509f8142fb3c04be. All nine actual inserted regions, including FINDINGS extra, were read with explicit inclusive line/byte cuts. Every removal exactly reproduces its retained complete old baseline body; both bytes/hashes and direct equality pass. Current full document identities and labeled inserted cuts are recorded; historical bodies were retained only for byte preservation, not represented as newly read prose. Full note, all current insertions and final public types agree. No material claim issue remains. Documentation correctly distinguishes primary prefix support from parent ALL support, uniform primary bounds from model-first parent, per-extra existential events, stopped chosen invocations, distinct native endpoints/full Memos, unchanged H6/render scopes, and open callback/recursive/output/physical coverage.
+
+Limitations and publication condition
+
+This closes invocation-or-precise-earlier-stop coverage, not semantic callback progress, nonempty hook output, whole recursive language coverage, frontier/depth policy justification, projection-support origins, canonical selector physical construction/sorting, Discharged/rendering coverage, or whole physical Haskell correctness. No new Haskell defect, runtime change, native test or benchmark is claimed. The KBO candidate remains unintegrated/unbuilt/unexecuted as documented by Root. Main/pull/source-head publication metadata are Root-provided current checkpoint identities; this owner ran no Git/network.
+
+Only this authorized hook-head-review tree was written. No compiler/runtime/build/Git/repository/network/board operation was run by this owner. All earlier frozen evidence is untouched. Archive creation, portable frozen-byte/committed verification and push are FUTURE publication actions and are not asserted here. The whole user goal remains ACTIVE.
+
+Seal: pins.json lists every intended payload; FROZEN.json binds its hash and exact payload/physical counts. Exclude ONLY own root pins.json/FROZEN.json. No nested FROZEN file is excluded. Stop all writes after the seal.
+''')
+
+payloads=[]
+for path in sorted(ROOT.rglob('*')):
+    if not path.is_file() or path in [ROOT/'pins.json', ROOT/'FROZEN.json']:
+        continue
+    data=path.read_bytes()
+    payloads.append({'path':str(path.relative_to(ROOT)),'bytes':len(data),'sha256':sha(data)})
+(ROOT/'pins.json').write_text(json.dumps({'payloads':payloads},indent=2)+'\n')
+pins_hash=sha((ROOT/'pins.json').read_bytes())
+seal={'status':'FROZEN','verdict':'CLEAR','sealed_at':datetime.datetime.now().astimezone().isoformat(),
+ 'source_checkpoint':CHECKPOINT,'pins_sha256':pins_hash,'payload_count':len(payloads),
+ 'exact_file_count':len(payloads)+2,'excluded_only':['pins.json','FROZEN.json'],
+ 'source_records':len(records),'literal_cuts':sum(len(x.get('cuts',[])) for x in records),
+ 'publication_scope':'Archive, committed verification and push remain future actions; not claimed',
+ 'writes_stopped':True}
+(ROOT/'FROZEN.json').write_text(json.dumps(seal,indent=2)+'\n')
+actual={str(p.relative_to(ROOT)) for p in ROOT.rglob('*') if p.is_file()}
+assert actual=={x['path'] for x in payloads}|{'pins.json','FROZEN.json'}
+for item in payloads:
+    data=(ROOT/item['path']).read_bytes()
+    assert len(data)==item['bytes'] and sha(data)==item['sha256']
+print(json.dumps({**seal,'seal_sha256':sha((ROOT/'FROZEN.json').read_bytes()),'report_sha256':sha((ROOT/'report.txt').read_bytes())},indent=2))

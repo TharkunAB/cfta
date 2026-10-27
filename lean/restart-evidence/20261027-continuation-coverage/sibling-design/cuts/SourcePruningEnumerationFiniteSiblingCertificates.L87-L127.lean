@@ -1,0 +1,41 @@
+theorem ReceiptAt.prepend
+    (post : Post formulas solver middleInventory caller middle middleMemos)
+    {receipt : Receipt width}
+    (certificate : ReceiptAt recursiveFuel formulas solver middle before uv
+      (afterHook recursiveFuel seed capturedMass inherited) scs capturedMass inherited index receipt) :
+    ReceiptAt recursiveFuel formulas solver caller before uv seed scs capturedMass inherited (index + 1) receipt := by
+  obtain ⟨admitted, pending, history, bounds, reached, saved, next, final,
+    advanced, receiptPost, query, fits, known⟩ := certificate
+  refine ⟨admitted, pending, history, ?_, reached, saved, next, final,
+    advanced, post.trans receiptPost, query, ?_, ?_⟩
+  · simpa only [stage_succ] using bounds
+  · simpa only [stage_succ] using fits
+  · simpa only [stage_succ] using known
+
+/-- A suffix output retains its actual metadata, cache and full memos. -/
+theorem OutputAt.prepend
+    (post : Post formulas solver middleInventory caller middle middleMemos)
+    {output : Output width Typing}
+    (certificate : OutputAt recursiveFuel formulas solver middle
+      (afterHook recursiveFuel seed capturedMass inherited) capturedMass inherited index output) :
+    OutputAt recursiveFuel formulas solver caller seed capturedMass inherited (index + 1) output := by
+  unfold OutputAt at certificate ⊢
+  simpa only [stage_succ] using certificate.post post
+
+/-- A stopped suffix keeps its exact hook outputs and optional endpoint after prepending. -/
+theorem StoppedAt.prepend
+    (post : Post formulas solver middleInventory caller middle middleMemos)
+    (headOutputs : List (Output width Typing))
+    {outputs : List (Output width Typing)}
+    {current : Stop (Failure width Typing) width}
+    (certificate : StoppedAt recursiveFuel formulas solver middle before uv
+      (afterHook recursiveFuel seed capturedMass inherited) scs capturedMass inherited index outputs current) :
+    StoppedAt recursiveFuel formulas solver caller before uv seed scs capturedMass inherited (index + 1)
+      (headOutputs ++ outputs) current := by
+  rcases certificate with unsupported |
+    ⟨receipt, reason, endpoint, hookOutputs, prefixOutputs, same, ordered, receiptCertificate, resources⟩
+  · exact .inl unsupported
+  · refine .inr ⟨receipt, reason, endpoint, hookOutputs, headOutputs ++ prefixOutputs,
+      same, ?_, receiptCertificate.prepend post, ?_⟩
+    · simpa only [List.append_assoc] using congrArg (fun tail => headOutputs ++ tail) ordered
+    · simpa only [stage_succ] using resources.post post

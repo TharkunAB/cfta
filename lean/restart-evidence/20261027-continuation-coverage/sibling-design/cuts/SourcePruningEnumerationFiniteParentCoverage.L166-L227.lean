@@ -1,0 +1,62 @@
+                      (stage recursiveFuel seed capturedMass inherited (eventIndex + 1))
+                      (.stopped hookOutputs reason reached)))) ∧
+      ∃ (index : Nat) (chosen : EdgeValue Symbol Constraint),
+        selectedEdges[index]? = some chosen ∧
+        InternedGuardedLanguage.edgeMeaning (SourceEqualityPCSGuard.holds formulas solver)
+          ambient chosen (assignment uv) ∧
+      ∀ extra,
+        let work := bound + extra
+        let hook := continueWith
+          (resume holeKey fits admits graph templates checkEmpty edgesOf stop order work recursiveFuel)
+          graph templates stop order work metadata uv
+        ∃ (eventIndex : Nat) (eventEdge : EdgeValue Symbol Constraint)
+          (headInventory : Inventory) (headCaller : Caller (bits + 2)) (headMemos : Memos)
+          (prefixReceipts : List (Receipt (bits + 2))) (prefixOutputs : List (Output (bits + 2) Typing))
+          (fragment : Fragment) (branchCaller : Caller (bits + 2)) (branchQueries : Queries)
+          (afterCache : Cached) (branchInventory : Inventory) (branchMemos : Memos),
+          eventIndex ≤ index ∧ selectedEdges[eventIndex]? = some eventEdge ∧
+          prefixReceipts.length = eventIndex ∧
+          Post formulas solver headInventory caller headCaller headMemos ∧
+          Packet formulas solver headInventory headCaller headMemos metadata before ∧
+          Fits (stage recursiveFuel seed capturedMass inherited eventIndex).2 headCaller.checked ∧
+          Heap (fun guard => guard ∈ (stage recursiveFuel seed capturedMass inherited eventIndex).1)
+            headCaller.checked.native.machine.heap ∧
+          SourcePruningEnumerationFiniteReservation.HeadReserved bits recursiveFuel
+            (stage recursiveFuel seed capturedMass inherited eventIndex) capturedMass inherited ∧
+          SourcePruningEnumerationNativeContinuations.run hook checkEmpty work work work work work
+            uv scs before (selectedEdges.take eventIndex) caller memos.query =
+            .complete prefixReceipts prefixOutputs headCaller headMemos.query ∧
+          Post formulas solver branchInventory headCaller branchCaller branchMemos ∧
+          branchMemos.query = branchQueries ∧
+          SourcePruningEnumerationCapturedEdge.run checkEmpty work work work work work uv scs
+            eventEdge headCaller before headMemos.query =
+            some (.complete fragment branchCaller branchQueries afterCache) ∧
+          SourcePruningEnumerationHookInvocation.Invocation hook checkEmpty work work work work work
+            uv scs before selectedEdges caller memos.query fragment branchCaller branchQueries afterCache ∧
+          ReceiptAt recursiveFuel formulas solver caller before uv seed scs capturedMass inherited eventIndex
+            (.complete fragment branchCaller branchQueries afterCache) ∧
+          ((eventIndex = index ∧ eventEdge = chosen ∧
+              ∃ extended : Nat → Language.Term Symbol,
+                (∀ old < before.core.counter, extended old = assignment old) ∧
+                Satisfies
+                  (SourcePruningEnumerationNativeLanguage.handles (SourceEqualityPCSGuard.holds formulas solver)
+                    ambient caller.checked.native.machine.heap)
+                  (fun guard term => SourceEqualityPCSGuard.holds formulas solver guard term = true)
+                  extended before.core ∧
+                Fragments.fill extended fragment = assignment uv ∧
+                Satisfies
+                  (SourcePruningEnumerationNativeLanguage.handles (SourceEqualityPCSGuard.holds formulas solver)
+                    ambient branchCaller.checked.native.machine.heap)
+                  (fun guard term => SourceEqualityPCSGuard.holds formulas solver guard term = true)
+                  extended afterCache.core) ∨
+            (eventIndex < index ∧
+              ∃ (hookOutputs : List (Output (bits + 2) Typing)) (reason : Failure (bits + 2) Typing)
+                (reached : Option (Caller (bits + 2) × Queries)),
+                hook fragment branchCaller branchQueries afterCache = .stopped hookOutputs reason reached ∧
+                result = .stopped prefixReceipts (prefixOutputs ++ hookOutputs)
+                  (.continuation (.complete fragment branchCaller branchQueries afterCache) reason reached) ∧
+                SourcePruningEnumerationRecursive.OutcomeResources formulas solver caller
+                  (stage recursiveFuel seed capturedMass inherited (eventIndex + 1))
+                  (.stopped hookOutputs reason reached))) := by
+  obtain ⟨_roots, _paths, _storage, realized, _counts, _flags⟩ := packet.valid
+  obtain ⟨value, lookup, available, _closed⟩ := realized uv handle scs stored

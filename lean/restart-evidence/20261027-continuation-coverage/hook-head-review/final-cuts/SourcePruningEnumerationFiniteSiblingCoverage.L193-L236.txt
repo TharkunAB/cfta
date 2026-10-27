@@ -1,0 +1,44 @@
+        refine ⟨headBound, [], [], middleCaller, middleInventory, middleMemos,
+          .stopped [] [] (.edge (some .unhandled)), ?_, headPost,
+          SourcePruningEnumerationRecursive.captured_post packet headPost, wholeFits, wholeKnown,
+          by simp, ?_, ?_, .inr ⟨_, rfl, .inl rfl, .inl rfl⟩, ?_⟩
+        · intro extra
+          simp only [SourcePruningEnumerationNativeContinuations.run, headRun extra,
+            SourcePruningEnumerationNativeBranches.advance]
+        · intro index current found
+          cases found
+        · intro output member
+          cases member
+        · intro extra
+          dsimp only
+          intro index chosen found supported ambient assignment satisfied accepted
+          cases index with
+          | zero =>
+              have chosenSame : edge = chosen := Option.some.inj found
+              subst chosen
+              obtain ⟨extended, fragment, afterCache, _agree, _original, impossible, _filled, _final⟩ :=
+                headAccepting ambient assignment satisfied accepted
+              cases impossible
+          | succ index =>
+              exact (supported edge (by
+                simp only [List.take_succ_cons, List.mem_cons]
+                exact .inl trivial) allowed projected).elim
+      · have receiptCertificate : ReceiptAt recursiveFuel formulas solver caller before uv seed scs capturedMass inherited 0 receipt :=
+          ⟨admitted, pending, history, cacheBounds, middleCaller, middleMemos.query, middleInventory, middleMemos,
+            advanced, headPost, rfl, headFits, headKnown⟩
+        cases outcome with
+        | complete headOutputs hookCaller hookQueries =>
+            obtain ⟨hookInventory, hookMemos, hookPost, hookQuery, hookCaptured, hookFits, hookKnown⟩ := captured
+            obtain ⟨_actual, _next, _final, _post, _fits, _known, _same, _query, headOutputsValid⟩ := resources
+            obtain ⟨tailBound, processed, outputs, afterCaller, next, final, tailResult,
+              tailRun, tailPost, tailCaptured, tailFits, tailKnown, tailLength, tailReceipts, tailOutputs, tailShape, tailAccepting⟩ :=
+              ih (afterHook recursiveFuel seed capturedMass inherited) hookInventory hookCaller hookMemos hookCaptured
+                (lookupNode_keeps _ _ hookPost.effects.keeps handle _ decoded)
+                (fun chosen member => selected chosen (List.mem_cons_of_mem _ member)) hookFits hookKnown reserved.tail
+            let bound := headBound + tailBound
+            let result : Result (Output (bits + 2) Typing) (Failure (bits + 2) Typing) (bits + 2) :=
+              match (generalizing := false) tailResult with
+              | .complete receipts later actual queries => .complete (receipt :: receipts) (headOutputs ++ later) actual queries
+              | .stopped receipts later current => .stopped (receipt :: receipts) (headOutputs ++ later) current
+            refine ⟨bound, receipt :: processed, headOutputs ++ outputs, afterCaller, next, final, result,
+              ?_, hookPost.trans tailPost, tailCaptured, tailFits, tailKnown, by simpa only [List.length_cons] using Nat.add_le_add_right tailLength 1,

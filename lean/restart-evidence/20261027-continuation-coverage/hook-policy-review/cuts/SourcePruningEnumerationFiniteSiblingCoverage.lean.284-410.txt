@@ -1,0 +1,127 @@
+              · exact .inl (by simp only [result, completed])
+              · exact .inr ⟨current, by simp only [result, stopped], observed,
+                  certificate.prepend hookPost headOutputs⟩
+            · intro extra
+              dsimp only
+              intro index chosen found supported ambient assignment satisfied accepted
+              let w := bound + extra
+              let hook : Fragment → Caller (bits + 2) → Queries → Cached →
+                  HookResult (Output (bits + 2) Typing) (Failure (bits + 2) Typing) (bits + 2) := continueWith
+                (resume holeKey fits admits graph templates checkEmpty edgesOf stop order w recursiveFuel)
+                graph templates stop order w metadata uv
+              have hl : headBound ≤ w := by dsimp [w, bound]; omega
+              have first := headRun (w - headBound)
+              rw [Nat.add_sub_of_le hl] at first
+              have hooked := callbackRun (w - headBound)
+              rw [Nat.add_sub_of_le hl] at hooked
+              have continued : match (generalizing := false) receipt with
+                  | .complete fragment actual queries after =>
+                      hook fragment actual queries after = .complete headOutputs hookCaller hookQueries
+                  | _ => advance receipt = some (hookCaller, hookQueries) ∧ headOutputs = [] := by
+                cases receipt with
+                | complete fragment actual queries after => exact hooked
+                | unhandled => cases advanced
+                | rejected actual queries after | stopped fragments observation candidate =>
+                    obtain ⟨empty, actual, queries⟩ :=
+                      SourcePruningEnumerationNativeContinuations.HookResult.complete.inj hooked
+                    exact ⟨by rw [actual, queries]; exact advanced, empty⟩
+              cases index with
+              | zero =>
+                  have chosenSame : edge = chosen := Option.some.inj found
+                  subst chosen
+                  obtain ⟨extended, fragment, afterCache, agree, originalSatisfied, completed, filled, afterSatisfied⟩ :=
+                    headAccepting ambient assignment satisfied accepted
+                  have observed : SourcePruningEnumerationCapturedEdge.run checkEmpty w w w w w
+                      uv scs edge caller before memos.query =
+                      some (.complete fragment middleCaller saved afterCache) := by
+                    rw [completed] at first
+                    exact first
+                  refine ⟨0, edge, inventory, caller, memos, [], [], fragment, middleCaller, saved,
+                    afterCache, middleInventory, middleMemos, Nat.le_refl _, rfl, rfl,
+                    Post.refl packet.context, packet, bounded, known, reserved.head, rfl,
+                    headPost, headQueries, observed, .here observed, ?_,
+                    .inl ⟨rfl, rfl, extended, agree, originalSatisfied, filled, afterSatisfied⟩⟩
+                  simpa only [completed] using receiptCertificate
+              | succ index =>
+                  have tailFound : rest[index]? = some chosen := by
+                    simpa only [List.getElem?_cons_succ] using found
+                  have tailSupported : ∀ earlier ∈ rest.take index,
+                      arityAllows earlier.children.length scs = true →
+                      SourcePruningEnumerationConstraint.project earlier.entry.key.constraint ≠ none := by
+                    intro earlier member allowed
+                    exact supported earlier (by
+                      simp only [List.take_succ_cons, List.mem_cons]
+                      exact .inr member) allowed
+                  have realized : SourcePruningEnumerationObservation.PendingRealized
+                      caller.checked.native.machine.heap before.core := by
+                    obtain ⟨_roots, _paths, _storage, realized, _counts, _flags⟩ := packet.valid
+                    exact realized
+                  have middleSatisfied :=
+                    (SourcePruningEnumerationNativeLanguage.satisfies_keeps
+                      (SourceEqualityPCSGuard.holds formulas solver) ambient
+                      caller.checked.native.machine.heap hookCaller.checked.native.machine.heap before.core
+                      (fun guard term => SourceEqualityPCSGuard.holds formulas solver guard term = true)
+                      assignment realized hookPost.effects.keeps).mpr satisfied
+                  have later := tailAccepting (headBound + extra) index chosen tailFound tailSupported
+                    ambient assignment middleSatisfied accepted
+                  have common : tailBound + (headBound + extra) = w := by dsimp [w, bound]; omega
+                  rw [common] at later
+                  obtain ⟨eventIndex, eventEdge, headInventory, headCaller, headMemos,
+                    prefixReceipts, prefixOutputs, fragment, branchCaller, branchQueries, afterCache,
+                    branchInventory, branchMemos, within, atIndex, prefixLength, inputPost, inputPacket,
+                    inputFits, inputKnown, inputReserved, prefixRun, branchPost, branchQuery, observed,
+                    _invocation, certificate, terminal⟩ := later
+                  have liftedPrefix : SourcePruningEnumerationNativeContinuations.run hook
+                      checkEmpty w w w w w uv scs before ((edge :: rest).take (eventIndex + 1))
+                      caller memos.query = .complete (receipt :: prefixReceipts)
+                        (headOutputs ++ prefixOutputs) headCaller headMemos.query := by
+                    have running := SourcePruningEnumerationNativeContinuations.continued_head hook
+                      checkEmpty w w w w w uv scs before edge (rest.take eventIndex) caller hookCaller
+                      memos.query hookQueries receipt headOutputs first (by cases receipt <;> exact continued)
+                    rw [←hookQuery, prefixRun] at running
+                    simpa only [List.take_succ_cons] using running
+                  have newAt : (edge :: rest)[eventIndex + 1]? = some eventEdge := by
+                    simpa only [List.getElem?_cons_succ] using atIndex
+                  have split : (edge :: rest) = (edge :: rest).take (eventIndex + 1) ++
+                      eventEdge :: (edge :: rest).drop (eventIndex + 2) := by
+                    obtain ⟨inside, selectedAt⟩ := List.getElem?_eq_some_iff.mp newAt
+                    have dropped := List.drop_eq_getElem_cons inside
+                    rw [selectedAt] at dropped
+                    rw [←dropped]
+                    exact (List.take_append_drop (eventIndex + 1) (edge :: rest)).symm
+                  have actualInvocation := SourcePruningEnumerationNativeContinuations.complete_prefix_invocation
+                    hook checkEmpty w w w w w uv scs before ((edge :: rest).take (eventIndex + 1))
+                    caller memos.query liftedPrefix eventEdge ((edge :: rest).drop (eventIndex + 2))
+                    fragment branchCaller branchQueries afterCache observed
+                  rw [←split] at actualInvocation
+                  refine ⟨eventIndex + 1, eventEdge, headInventory, headCaller, headMemos,
+                    receipt :: prefixReceipts, headOutputs ++ prefixOutputs, fragment, branchCaller,
+                    branchQueries, afterCache, branchInventory, branchMemos, by omega, newAt,
+                    by simpa only [List.length_cons] using congrArg (fun n => n + 1) prefixLength,
+                    hookPost.trans inputPost, inputPacket, ?_, ?_, ?_, liftedPrefix,
+                    branchPost, branchQuery, observed, actualInvocation, certificate.prepend hookPost, ?_⟩
+                  · simpa only [SourcePruningEnumerationFiniteReservation.stage_succ] using inputFits
+                  · simpa only [SourcePruningEnumerationFiniteReservation.stage_succ] using inputKnown
+                  · simpa only [SourcePruningEnumerationFiniteReservation.stage_succ] using inputReserved
+                  · rcases terminal with ⟨sameIndex, sameEdge, extended, agree, oldSatisfied, filled, afterSatisfied⟩ |
+                        ⟨earlier, hookOutputs, reason, endpoint, stoppedHook, stoppedResult, stoppedResources⟩
+                    · have originalSatisfied :=
+                        (SourcePruningEnumerationNativeLanguage.satisfies_keeps
+                          (SourceEqualityPCSGuard.holds formulas solver) ambient
+                          caller.checked.native.machine.heap hookCaller.checked.native.machine.heap before.core
+                          (fun guard term => SourceEqualityPCSGuard.holds formulas solver guard term = true)
+                          extended realized hookPost.effects.keeps).mp oldSatisfied
+                      exact .inl ⟨by omega, sameEdge, extended, agree, originalSatisfied, filled, afterSatisfied⟩
+                    · refine .inr ⟨by omega, hookOutputs, reason, endpoint, stoppedHook, ?_, ?_⟩
+                      · simp only [result, stoppedResult, List.append_assoc]
+                      · simpa only [SourcePruningEnumerationFiniteReservation.stage_succ] using
+                          stoppedResources.post hookPost
+        | stopped headOutputs reason reached =>
+            have currentResources := resources
+            obtain ⟨afterCaller, next, final, post, returnedFits, returnedKnown, observed, outputsValid⟩ := resources
+            have completed : ∃ fragment actual queries after, receipt = .complete fragment actual queries after := by
+              cases receipt with
+              | complete fragment actual queries after => exact ⟨fragment, actual, queries, after, rfl⟩
+              | unhandled => cases advanced
+              | rejected actual queries after | stopped fragments observation candidate =>
+                  have impossible := callbackRun 0

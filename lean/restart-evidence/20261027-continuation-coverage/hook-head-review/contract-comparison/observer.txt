@@ -1,0 +1,23 @@
+      ∀ (ambient : InternedGuardedLanguage.Env Symbol)
+        (assignment : Nat → Language.Term Symbol),
+        Satisfies
+          (SourcePruningEnumerationNativeLanguage.handles (SourceEqualityPCSGuard.holds formulas solver)
+            ambient caller.checked.native.machine.heap)
+          (fun guard term => SourceEqualityPCSGuard.holds formulas solver guard term = true)
+          assignment before.core →
+        InternedGuardedLanguage.edgeMeaning (SourceEqualityPCSGuard.holds formulas solver)
+          ambient edge (assignment uv) →
+        ∃ (extended : Nat → Language.Term Symbol) (fragment : Fragments.Fragment Symbol) (afterCache : Cached),
+          (∀ old < before.core.counter, extended old = assignment old) ∧
+          Satisfies
+            (SourcePruningEnumerationNativeLanguage.handles (SourceEqualityPCSGuard.holds formulas solver)
+              ambient caller.checked.native.machine.heap)
+            (fun guard term => SourceEqualityPCSGuard.holds formulas solver guard term = true)
+            extended before.core ∧
+          receipt = .complete fragment middleCaller saved afterCache ∧
+          Fragments.fill extended fragment = assignment uv ∧
+          Satisfies
+            (SourcePruningEnumerationNativeLanguage.handles (SourceEqualityPCSGuard.holds formulas solver)
+              ambient middleCaller.checked.native.machine.heap)
+            (fun guard term => SourceEqualityPCSGuard.holds formulas solver guard term = true)
+            extended afterCache.core

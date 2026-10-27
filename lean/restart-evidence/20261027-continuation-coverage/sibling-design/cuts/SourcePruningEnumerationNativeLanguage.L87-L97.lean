@@ -1,0 +1,11 @@
+theorem satisfies_keeps
+    (holds : NativeGuard → Term Symbol → Bool) (ambient : InternedGuardedLanguage.Env Symbol)
+    (beforeHeap afterHeap : InternedConstructorTemplates.State Symbol NativeGuard)
+    (state : EnumerationState.State Symbol EnumGuard)
+    (residualMeaning : EnumGuard → Term Symbol → Prop) (assignment : Nat → Term Symbol)
+    (realized : PendingRealized beforeHeap state)
+    (kept : SourceEqualityRequiredCache.Keeps beforeHeap afterHeap) :
+    Satisfies (handles holds ambient afterHeap) residualMeaning assignment state ↔
+      Satisfies (handles holds ambient beforeHeap) residualMeaning assignment state := by
+  unfold Satisfies
+  rw [heap_keeps holds ambient beforeHeap afterHeap state realized kept]

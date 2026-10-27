@@ -1,0 +1,99 @@
+import MicroCFTA.SourcePruningEnumerationHookInvocation
+
+/-!
+# A completed actual prefix reaches the next hook
+
+The prefix and next captured call use the same worker bounds and captured cache.
+The prefix supplies the actual native caller and saved queries for the next edge.
+This theorem does not require that the next hook complete or emit an output.
+-/
+namespace MicroCFTA.SourcePruningEnumerationNativeContinuations
+open EnumerationState InternedConstructorTemplates
+open SourcePruningEnumerationHookInvocation (Invocation)
+local notation "Symbol" => SourcePruningTemplates.Symbol
+local notation "Constraint" => SourceSymbolicIndex.Constraint FullSyntax.Formula
+local notation "Node" => Value Symbol Constraint
+local notation "Fragment" => Fragments.Fragment Symbol
+local notation "Caller" => SourceCurrentAllocatedPartialState.State
+local notation "Queries" => SourceEndpointMemo.Memos
+local notation "Cached" => EnumerationExpandableIndex.Cached Symbol Constraint
+local notation "Receipt" => SourcePruningEnumerationSelectedEdge.Result
+universe u v
+variable {width : Nat} {Output : Type u} {Reason : Type v}
+variable [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Constraint)] [DecidableEq Node]
+
+/-- A completed actual earlierEdges and the next completed edge identify the real hook invocation. -/
+theorem complete_prefix_invocation
+    (hook : Fragment → Caller width → Queries → Cached → HookResult Output Reason width)
+    (checkEmpty : Bool) (r n p h k target : Nat) (scs : List Suspended) (before : Cached)
+    (earlierEdges : List (EdgeValue Symbol Constraint)) (caller : Caller width) (queries : Queries)
+    {processed : List (Receipt width)} {outputs : List Output}
+    {afterCaller : Caller width} {afterQueries : Queries}
+    (completed : run hook checkEmpty r n p h k target scs before earlierEdges caller queries =
+      .complete processed outputs afterCaller afterQueries)
+    (edge : EdgeValue Symbol Constraint) (rest : List (EdgeValue Symbol Constraint))
+    (fragment : Fragment) (reached : Caller width) (saved : Queries) (after : Cached)
+    (observed : SourcePruningEnumerationCapturedEdge.run checkEmpty r n p h k target scs edge
+      afterCaller before afterQueries = some (.complete fragment reached saved after)) :
+    Invocation hook checkEmpty r n p h k target scs before (earlierEdges ++ edge :: rest)
+      caller queries fragment reached saved after := by
+  induction earlierEdges generalizing caller queries processed outputs afterCaller afterQueries with
+  | nil =>
+      simp only [run, Result.complete.injEq] at completed
+      obtain ⟨_receipts, _outputs, rfl, rfl⟩ := completed
+      exact .here observed
+  | cons first earlierEdges ih =>
+      cases captured : SourcePruningEnumerationCapturedEdge.run checkEmpty r n p h k target scs
+          first caller before queries with
+      | none => simp only [run, captured] at completed
+      | some receipt =>
+          cases receipt with
+          | unhandled =>
+              simp only [run, captured, SourcePruningEnumerationNativeBranches.advance] at completed
+          | complete firstFragment headCaller headQueries headCache =>
+              cases hooked : hook firstFragment headCaller headQueries headCache with
+              | stopped headOutputs reason endpoint => simp only [run, captured, hooked] at completed
+              | complete headOutputs middleCaller middleQueries =>
+                  cases suffix : run hook checkEmpty r n p h k target scs before earlierEdges
+                      middleCaller middleQueries with
+                  | stopped tailProcessed tailOutputs current =>
+                      simp only [run, captured, hooked, suffix] at completed
+                  | complete tailProcessed tailOutputs actualCaller actualQueries =>
+                      simp only [run, captured, hooked, suffix, Result.complete.injEq] at completed
+                      obtain ⟨rfl, rfl, rfl, rfl⟩ := completed
+                      exact .completed captured hooked
+                        (ih (caller := middleCaller) (queries := middleQueries)
+                          (processed := tailProcessed) (outputs := tailOutputs)
+                          (afterCaller := actualCaller) (afterQueries := actualQueries) suffix observed)
+          | rejected middleCaller middleQueries candidate =>
+              cases suffix : run hook checkEmpty r n p h k target scs before earlierEdges
+                  middleCaller middleQueries with
+              | stopped tailProcessed tailOutputs current =>
+                  simp only [run, captured, SourcePruningEnumerationNativeBranches.advance, suffix] at completed
+              | complete tailProcessed tailOutputs actualCaller actualQueries =>
+                  simp only [run, captured, SourcePruningEnumerationNativeBranches.advance, suffix,
+                    Result.complete.injEq] at completed
+                  obtain ⟨rfl, rfl, rfl, rfl⟩ := completed
+                  exact .other captured trivial rfl
+                    (ih (caller := middleCaller) (queries := middleQueries)
+                      (processed := tailProcessed) (outputs := tailOutputs)
+                      (afterCaller := actualCaller) (afterQueries := actualQueries) suffix observed)
+          | stopped fragments observation candidate =>
+              cases advanced : SourcePruningEnumerationNativeBranches.advance
+                  (.stopped fragments observation candidate) with
+              | none => simp only [run, captured, advanced] at completed
+              | some endpoint =>
+                  obtain ⟨middleCaller, middleQueries⟩ := endpoint
+                  cases suffix : run hook checkEmpty r n p h k target scs before earlierEdges
+                      middleCaller middleQueries with
+                  | stopped tailProcessed tailOutputs current =>
+                      simp only [run, captured, advanced, suffix] at completed
+                  | complete tailProcessed tailOutputs actualCaller actualQueries =>
+                      simp only [run, captured, advanced, suffix, Result.complete.injEq] at completed
+                      obtain ⟨rfl, rfl, rfl, rfl⟩ := completed
+                      exact .other captured trivial advanced
+                        (ih (caller := middleCaller) (queries := middleQueries)
+                          (processed := tailProcessed) (outputs := tailOutputs)
+                          (afterCaller := actualCaller) (afterQueries := actualQueries) suffix observed)
+
+end MicroCFTA.SourcePruningEnumerationNativeContinuations

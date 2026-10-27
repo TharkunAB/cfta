@@ -1,0 +1,95 @@
+      ∀ extra,
+        let work := bound + extra
+        let hook := continueWith
+          (resume holeKey fits admits graph templates checkEmpty edgesOf stop order work recursiveFuel)
+          graph templates stop order work metadata uv
+        ∃ (eventIndex : Nat) (eventEdge : EdgeValue Symbol Constraint)
+          (headInventory : Inventory) (headCaller : Caller (bits + 2)) (headMemos : Memos)
+          (prefixReceipts : List (Receipt (bits + 2))) (prefixOutputs : List (Output (bits + 2) Typing))
+          (fragment : Fragment) (branchCaller : Caller (bits + 2)) (branchQueries : Queries)
+          (afterCache : Cached) (branchInventory : Inventory) (branchMemos : Memos),
+          eventIndex ≤ index ∧ selectedEdges[eventIndex]? = some eventEdge ∧
+          prefixReceipts.length = eventIndex ∧
+          Post formulas solver headInventory caller headCaller headMemos ∧
+          Packet formulas solver headInventory headCaller headMemos metadata before ∧
+          Fits (stage recursiveFuel seed capturedMass inherited eventIndex).2 headCaller.checked ∧
+          Heap (fun guard => guard ∈ (stage recursiveFuel seed capturedMass inherited eventIndex).1)
+            headCaller.checked.native.machine.heap ∧
+          SourcePruningEnumerationFiniteReservation.HeadReserved bits recursiveFuel
+            (stage recursiveFuel seed capturedMass inherited eventIndex) capturedMass inherited ∧
+          SourcePruningEnumerationNativeContinuations.run hook checkEmpty work work work work work
+            uv scs before (selectedEdges.take eventIndex) caller memos.query =
+            .complete prefixReceipts prefixOutputs headCaller headMemos.query ∧
+          Post formulas solver branchInventory headCaller branchCaller branchMemos ∧
+          branchMemos.query = branchQueries ∧
+          SourcePruningEnumerationCapturedEdge.run checkEmpty work work work work work uv scs
+            eventEdge headCaller before headMemos.query =
+            some (.complete fragment branchCaller branchQueries afterCache) ∧
+          SourcePruningEnumerationHookInvocation.Invocation hook checkEmpty work work work work work
+            uv scs before selectedEdges caller memos.query fragment branchCaller branchQueries afterCache ∧
+          ReceiptAt recursiveFuel formulas solver caller before uv seed scs capturedMass inherited eventIndex
+            (.complete fragment branchCaller branchQueries afterCache) ∧
+          ((eventIndex = index ∧ eventEdge = chosen ∧
+              ∃ extended : Nat → Language.Term Symbol,
+                (∀ old < before.core.counter, extended old = assignment old) ∧
+                Satisfies
+                  (SourcePruningEnumerationNativeLanguage.handles (SourceEqualityPCSGuard.holds formulas solver)
+                    ambient caller.checked.native.machine.heap)
+                  (fun guard term => SourceEqualityPCSGuard.holds formulas solver guard term = true)
+                  extended before.core ∧
+                Fragments.fill extended fragment = assignment uv ∧
+                Satisfies
+                  (SourcePruningEnumerationNativeLanguage.handles (SourceEqualityPCSGuard.holds formulas solver)
+                    ambient branchCaller.checked.native.machine.heap)
+                  (fun guard term => SourceEqualityPCSGuard.holds formulas solver guard term = true)
+                  extended afterCache.core) ∨
+            (eventIndex < index ∧
+              ∃ (hookOutputs : List (Output (bits + 2) Typing)) (reason : Failure (bits + 2) Typing)
+                (reached : Option (Caller (bits + 2) × Queries)),
+                hook fragment branchCaller branchQueries afterCache = .stopped hookOutputs reason reached ∧
+                result = .stopped prefixReceipts (prefixOutputs ++ hookOutputs)
+                  (.continuation (.complete fragment branchCaller branchQueries afterCache) reason reached) ∧
+                SourcePruningEnumerationRecursive.OutcomeResources formulas solver caller
+                  (stage recursiveFuel seed capturedMass inherited (eventIndex + 1))
+                  (.stopped hookOutputs reason reached))) := by
+  obtain ⟨_roots, _paths, _storage, realized, _counts, _flags⟩ := packet.valid
+  obtain ⟨value, lookup, available, _closed⟩ := realized uv handle scs stored
+  have same : value = .node parentEntry storedEdges depth free :=
+    Option.some.inj (lookup.symm.trans decoded)
+  subst value
+  have model := satisfied.1.2 uv
+  simp only [heap, stored, Option.getD_some, slot, Fragments.slotSatisfies,
+    List.forall_mem_map] at model
+  have parentAccepted : InternedGuardedLanguage.meaning
+      (SourceEqualityPCSGuard.holds formulas solver) ambient
+      (.node parentEntry storedEdges depth free) (assignment uv) :=
+    (SourcePruningEnumerationNativeLanguage.handles_lookup _ _ _ _ _ _ decoded).mp model.1
+  obtain ⟨chosen, offered, _member, _resident, accepted⟩ :=
+    SourcePruningEnumerationSelectorLanguage.selected_accepting_of_perm
+      caller.checked.native.machine.heap packet.context.ready.semantic.ready parentEntry storedEdges
+      selectedEdges depth free available selectedRows (SourceEqualityPCSGuard.holds formulas solver)
+      ambient (assignment uv) parentAccepted
+  obtain ⟨index, found⟩ := List.mem_iff_getElem?.mp offered
+  have recursive : SourcePruningEnumerationRecursive.Complete (bits := bits)
+      holeKey fits admits graph templates checkEmpty edgesOf stop order formulas solver recursiveFuel :=
+    SourcePruningEnumerationRecursive.finite_complete
+      holeKey fits admits graph templates checkEmpty edgesOf stop order formulas solver recursiveFuel
+  obtain ⟨bound, processed, outputs, afterCaller, next, final, result,
+    running, post, captured, returnedFits, returnedKnown, length, receipts, outputResources, shape, accepting⟩ :=
+    alternatives_finite_complete_resources_accepting
+      holeKey fits admits graph templates checkEmpty edgesOf stop order metadata recursiveFuel
+      seed formulas solver recursive inventory caller memos before uv handle scs parentEntry storedEdges
+      selectedEdges depth free packet ready stored decoded (fun edge member => selectedRows.mem_iff.mp member)
+      incoming bounded known selectionMembers selectionLength capturedMass inherited initialMass inheritedLength reserved
+  have prefixSupported : ∀ earlier ∈ selectedEdges.take index,
+      arityAllows earlier.children.length scs = true →
+      SourcePruningEnumerationConstraint.project earlier.entry.key.constraint ≠ none := by
+    intro earlier member allowed
+    exact supported earlier (List.mem_of_mem_take member) allowed
+  refine ⟨bound, processed, outputs, afterCaller, next, final, result,
+    ⟨running, post, captured, returnedFits, returnedKnown, length, receipts, outputResources, shape, accepting⟩,
+    index, chosen, found, accepted, ?_⟩
+  intro extra
+  exact accepting extra index chosen found prefixSupported ambient assignment satisfied accepted
+
+end MicroCFTA.SourcePruningEnumerationNativeFiniteSiblingResources

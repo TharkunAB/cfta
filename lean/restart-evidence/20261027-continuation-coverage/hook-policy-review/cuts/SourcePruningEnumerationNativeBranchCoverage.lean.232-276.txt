@@ -1,0 +1,45 @@
+                agree, originalSatisfied, filled, afterSatisfied⟩
+              · simpa only [List.getElem?_cons_zero] using congrArg (fun current => some current) completed
+              · intro er en P H ek largeP largeH
+                have first := headRun (tr + er) (tn + en) P H (tk + ek)
+                  (Nat.le_trans (Nat.le_max_left _ _) largeP)
+                  (Nat.le_trans (Nat.le_max_left _ _) largeH)
+                rw [completed] at first
+                simpa only [Nat.add_assoc] using first
+          | succ index =>
+              have tailFound : rest[index]? = some chosen := by
+                simpa only [List.getElem?_cons_succ] using found
+              have tailSupported : ∀ earlier ∈ rest.take index,
+                  arityAllows earlier.children.length scs = true →
+                  SourcePruningEnumerationConstraint.project earlier.entry.key.constraint ≠ none := by
+                intro earlier member earlierAllowed
+                exact supported earlier (by
+                  simp only [List.take_succ_cons, List.mem_cons]
+                  exact .inr member) earlierAllowed
+              have middleSatisfied :=
+                (SourcePruningEnumerationNativeLanguage.satisfies_keeps
+                  (SourceEqualityPCSGuard.holds formulas solver) ambient
+                  caller.checked.native.machine.heap middleCaller.checked.native.machine.heap before.core
+                  (fun guard term => SourceEqualityPCSGuard.holds formulas solver guard term = true)
+                  assignment realized kept).mpr satisfied
+              obtain ⟨chosenCaller, chosenInventory, chosenMemos, branchCaller, branchQueries,
+                branchMemos, branchInventory, afterCache, extended, fragment,
+                inputPost, branchPost, branchQuery, selectedReceipt, selectedRun,
+                agree, oldSatisfied, filled, afterSatisfied⟩ :=
+                tailAccepting index chosen tailFound tailSupported ambient assignment middleSatisfied accepted
+              have originalSatisfied :=
+                (SourcePruningEnumerationNativeLanguage.satisfies_keeps
+                  (SourceEqualityPCSGuard.holds formulas solver) ambient
+                  caller.checked.native.machine.heap middleCaller.checked.native.machine.heap before.core
+                  (fun guard term => SourceEqualityPCSGuard.holds formulas solver guard term = true)
+                  extended realized kept).mp oldSatisfied
+              refine ⟨chosenCaller, chosenInventory, chosenMemos, branchCaller, branchQueries,
+                branchMemos, branchInventory, afterCache, extended, fragment,
+                headPost.trans inputPost, branchPost, branchQuery, ?_, ?_, agree,
+                originalSatisfied, filled, afterSatisfied⟩
+              · simpa only [List.getElem?_cons_succ] using selectedReceipt
+              · intro er en P H ek largeP largeH
+                have last := selectedRun (r + er) (n + en) P H (k + ek)
+                  (Nat.le_trans (Nat.le_max_right _ _) largeP)
+                  (Nat.le_trans (Nat.le_max_right _ _) largeH)
+                simpa only [Nat.add_assoc, Nat.add_left_comm, Nat.add_comm] using last

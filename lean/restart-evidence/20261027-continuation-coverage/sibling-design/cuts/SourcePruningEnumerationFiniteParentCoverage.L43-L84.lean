@@ -1,0 +1,42 @@
+/-- An original parent model reaches its accepting invocation or an exact earlier recursive stop. -/
+theorem parent_finite_complete_resources
+    (holeKey : Typing → Nat → Key) (fits : Key → Symbol → Bool) (admits : Key → Node → Bool)
+    (graph : Graph Symbol Constraint) (templates : List (Template.Pattern Symbol))
+    (checkEmpty : Bool) (edgesOf : Node → List (EdgeValue Symbol Constraint))
+    (stop : Option (SourcePruningRecordTypes.Metadata Typing → Nat → Bool))
+    (order : SourcePruningRecordTypes.Metadata Typing → List Nat → Option Nat)
+    (metadata : SourcePruningRecordTypes.Metadata Typing)
+    (recursiveFuel : Nat)
+    (seed : Seed) (formulas : SourceGuards.Formulas FullSyntax.Formula)
+    (solver : SourceGuards.Entailment FullSyntax.Formula)
+    (inventory : Inventory)
+    (caller : Caller (bits + 2)) (memos : Memos) (before : Cached) (uv handle : Nat) (scs : List Suspended)
+    (parentEntry : Cache.Interned InternedBinderProtocol.NodeKey)
+    (storedEdges selectedEdges : List (EdgeValue Symbol Constraint))
+    (depth : Nat) (free : List InternedBinderProtocol.Reference)
+    (packet : Packet formulas solver inventory caller memos metadata before)
+    (ready : EnumerationDriver.Ready uv before.core)
+    (stored : before.core.values[uv]? = some (.unenumerated (some handle) scs))
+    (decoded : lookupNode caller.checked.native.machine.heap handle = some (.node parentEntry storedEdges depth free))
+    (selectedRows : selectedEdges.Perm storedEdges)
+    (supported : ∀ edge ∈ selectedEdges, arityAllows edge.children.length scs = true →
+      SourcePruningEnumerationConstraint.project edge.entry.key.constraint ≠ none)
+    (incoming : EnumerationReferences.IncomingAvoid uv before.core)
+    (bounded : Fits seed.2 caller.checked)
+    (known : Heap (fun guard => guard ∈ seed.1) caller.checked.native.machine.heap)
+    (selectionMembers : ∀ entry rows depth free, ∀ edge ∈ edgesOf (.node entry rows depth free), edge ∈ rows)
+    (selectionLength : ∀ entry rows depth free, (edgesOf (.node entry rows depth free)).length ≤ rows.length)
+    (capturedMass inherited : Nat) (initialMass : suspendedBound before.core ≤ capturedMass)
+    (inheritedLength : scs.length ≤ inherited)
+    (reserved : ScanReserved bits recursiveFuel seed capturedMass inherited selectedEdges.length)
+    (ambient : InternedGuardedLanguage.Env Symbol)
+    (assignment : Nat → Language.Term Symbol)
+    (satisfied : Satisfies
+      (SourcePruningEnumerationNativeLanguage.handles (SourceEqualityPCSGuard.holds formulas solver)
+        ambient caller.checked.native.machine.heap)
+      (fun guard term => SourceEqualityPCSGuard.holds formulas solver guard term = true)
+      assignment before.core) :
+    ∃ (bound : Nat) (processed : List (Receipt (bits + 2))) (outputs : List (Output (bits + 2) Typing))
+      (afterCaller : Caller (bits + 2)) (next : Inventory) (final : Memos)
+      (result : Result (Output (bits + 2) Typing) (Failure (bits + 2) Typing) (bits + 2)),
+      ((∀ extra, SourcePruningEnumerationNativeContinuations.run

@@ -1,0 +1,61 @@
+theorem alternatives_finite_invocation_admissions
+    (holeKey : Typing → Nat → Key) (fits : Key → Symbol → Bool) (admits : Key → Node → Bool)
+    (graph : Graph Symbol Constraint) (templates : List (Template.Pattern Symbol))
+    (checkEmpty : Bool) (edgesOf : Node → List (EdgeValue Symbol Constraint))
+    (stop : Option (SourcePruningRecordTypes.Metadata Typing → Nat → Bool))
+    (order : SourcePruningRecordTypes.Metadata Typing → List Nat → Option Nat)
+    (metadata : SourcePruningRecordTypes.Metadata Typing)
+    (recursiveFuel : Nat)
+    (seed : Seed) (formulas : SourceGuards.Formulas FullSyntax.Formula)
+    (solver : SourceGuards.Entailment FullSyntax.Formula)
+    (recursive : SourcePruningEnumerationRecursive.Complete (bits := bits) holeKey fits admits graph templates
+      checkEmpty edgesOf stop order formulas solver recursiveFuel)
+    (inventory : Inventory)
+    (caller : Caller (bits + 2)) (memos : Memos) (before : Cached) (uv handle : Nat) (scs : List Suspended)
+    (parentEntry : Cache.Interned InternedBinderProtocol.NodeKey)
+    (storedEdges selectedEdges : List (EdgeValue Symbol Constraint))
+    (depth : Nat) (free : List InternedBinderProtocol.Reference)
+    (packet : Packet formulas solver inventory caller memos metadata before)
+    (ready : EnumerationDriver.Ready uv before.core)
+    (stored : before.core.values[uv]? = some (.unenumerated (some handle) scs))
+    (decoded : lookupNode caller.checked.native.machine.heap handle = some (.node parentEntry storedEdges depth free))
+    (selected : ∀ edge ∈ selectedEdges, edge ∈ storedEdges)
+    (incoming : EnumerationReferences.IncomingAvoid uv before.core)
+    (bounded : Fits seed.2 caller.checked)
+    (known : Heap (fun guard => guard ∈ seed.1) caller.checked.native.machine.heap)
+    (selectionMembers : ∀ entry rows depth free, ∀ edge ∈ edgesOf (.node entry rows depth free), edge ∈ rows)
+    (selectionLength : ∀ entry rows depth free, (edgesOf (.node entry rows depth free)).length ≤ rows.length)
+    (capturedMass inherited : Nat) (initialMass : suspendedBound before.core ≤ capturedMass)
+    (inheritedLength : scs.length ≤ inherited)
+    (reserved : ScanReserved bits recursiveFuel seed capturedMass inherited selectedEdges.length) :
+    ∃ bound : Nat, ∀ extra (fragment : Fragment) (reached : Caller (bits + 2))
+      (saved : Queries) (after : Cached),
+      SourcePruningEnumerationHookInvocation.Invocation
+        (continueWith (resume holeKey fits admits graph templates checkEmpty edgesOf stop order
+          (bound + extra) recursiveFuel) graph templates stop order (bound + extra) metadata uv)
+        checkEmpty (bound + extra) (bound + extra) (bound + extra) (bound + extra) (bound + extra)
+        uv scs before selectedEdges caller memos.query fragment reached saved after →
+      ∃ edge ∈ selectedEdges, ∃ (headSeed : Seed) (headInventory : Inventory)
+        (headCaller : Caller (bits + 2)) (headMemos : Memos) (headBound : Nat)
+        (returnedInventory : Inventory) (returnedMemos : Memos),
+        Post formulas solver headInventory caller headCaller headMemos ∧
+        SourcePruningEnumerationCapturedEdge.run checkEmpty
+          (bound + extra) (bound + extra) (bound + extra) (bound + extra) (bound + extra)
+          uv scs edge headCaller before headMemos.query = some (.complete fragment reached saved after) ∧
+        SourcePruningEnumerationNativeHookResources.CompletedHeadReceipt headSeed inherited formulas solver
+          headInventory headCaller headMemos metadata before checkEmpty uv scs edge headBound
+          fragment reached saved after returnedInventory returnedMemos ∧
+        SourcePruningEnumerationRecursive.RecursiveCallbackAdmission formulas solver returnedInventory
+          reached returnedMemos metadata after uv fragment recursiveFuel
+          (afterHead headSeed inherited) (massCeil headSeed capturedMass inherited) := by
+  induction selectedEdges generalizing seed inventory caller memos with
+  | nil =>
+      refine ⟨0, ?_⟩
+      intro extra fragment reached saved after invocation
+      cases invocation
+  | cons edge rest ih =>
+      obtain ⟨headBound, receipt, middleCaller, headSaved, middleMemos, middleInventory,
+        headRun, _headPost, _headQueries, _admitted, _pending, _history, _cacheBounds,
+        _headFits, _headKnown, shape, completedReceipt, callbackAdmission⟩ :=
+        SourcePruningEnumerationNativeHookResources.head_finite_complete_resources_with_callback_admission
+          holeKey fits admits graph templates checkEmpty edgesOf stop order metadata recursiveFuel

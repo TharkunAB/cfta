@@ -1,0 +1,43 @@
+      before.core.counter edge children own inheritedLength
+    exact ⟨packet, ready, incoming, bounded, known,
+      ⟨handle, parentEntry, storedEdges, depth, free, stored, decoded, selected⟩, reserved.edge costBound⟩
+  intro fragment reached queries after completed
+  have advanced : advance receipt = some (middleCaller, middleMemos.query) := by
+    rcases shape with unsupported | ⟨outcome, advanced, _callback, _resources, _captured⟩
+    · rw [unsupported.1] at completed
+      cases completed
+    · exact advanced
+  have endpoint : reached = middleCaller ∧ queries = middleMemos.query := by
+    rw [completed] at advanced
+    change some (reached, queries) = some (middleCaller, middleMemos.query) at advanced
+    exact Prod.mk.inj (Option.some.inj advanced)
+  have actualPost : Post formulas solver middleInventory caller reached middleMemos := by
+    rw [endpoint.1]
+    exact post
+  have actualAdmitted : Admitted uv (.complete fragment reached middleMemos.query after) := by
+    rw [← endpoint.2]
+    simpa only [completed] using admitted
+  have actualHistory : FragmentHistory before.core (.complete fragment reached middleMemos.query after) := by
+    rw [← endpoint.2]
+    simpa only [completed] using history
+  have actualPending : EnumerationReferences.PendingReferences after.core := by
+    simpa only [completed, Pending] using pending
+  obtain ⟨level, frontier, ordered⟩ := packet.ordered
+  have afterPacket : Packet formulas solver middleInventory reached middleMemos metadata after :=
+    SourcePruningEnumerationRecursive.receipt_packet before.core uv fragment after level frontier
+      actualPost.context actualAdmitted actualHistory actualPending ordered packet.bounded
+  have actualRunning : ∀ extra, SourcePruningEnumerationCapturedEdge.run checkEmpty
+      (bound + extra) (bound + extra) (bound + extra) (bound + extra) (bound + extra)
+      uv scs edge caller before memos.query = some (.complete fragment reached queries after) := by
+    intro extra
+    rw [← completed]
+    exact running extra
+  have supported := completed_supported checkEmpty bound bound bound bound bound uv scs edge caller before memos.query
+    fragment reached queries after (by simpa only [Nat.add_zero] using actualRunning 0)
+  refine ⟨inputAdmission, actualPost, endpoint.2.symm,
+    SourcePruningEnumerationRecursive.captured_post packet actualPost, afterPacket,
+    ?_, ?_, supported.1, supported.2, actualRunning⟩
+  · rw [endpoint.1]
+    exact headFits
+  · rw [endpoint.1]
+    exact headKnown

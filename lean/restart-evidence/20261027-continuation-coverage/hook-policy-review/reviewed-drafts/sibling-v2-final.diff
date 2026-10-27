@@ -1,0 +1,59 @@
+--- sibling-reviewed-v2
++++ sibling-final
+@@ -167,7 +167,9 @@
+         cases found
+       · intro output member
+         cases member
+-      · intro extra index chosen found
++      · intro extra
++        dsimp only
++        intro index chosen found
+         simp at found
+   | cons edge rest ih =>
+       obtain ⟨headBound, receipt, middleCaller, saved, middleMemos, middleInventory,
+@@ -199,7 +201,9 @@
+           cases found
+         · intro output member
+           cases member
+-        · intro extra index chosen found supported ambient assignment satisfied accepted
++        · intro extra
++          dsimp only
++          intro index chosen found supported ambient assignment satisfied accepted
+           cases index with
+           | zero =>
+               have chosenSame : edge = chosen := Option.some.inj found
+@@ -280,9 +284,12 @@
+               · exact .inl (by simp only [result, completed])
+               · exact .inr ⟨current, by simp only [result, stopped], observed,
+                   certificate.prepend hookPost headOutputs⟩
+-            · intro extra index chosen found supported ambient assignment satisfied accepted
++            · intro extra
++              dsimp only
++              intro index chosen found supported ambient assignment satisfied accepted
+               let w := bound + extra
+-              let hook := continueWith
++              let hook : Fragment → Caller (bits + 2) → Queries → Cached →
++                  HookResult (Output (bits + 2) Typing) (Failure (bits + 2) Typing) (bits + 2) := continueWith
+                 (resume holeKey fits admits graph templates checkEmpty edgesOf stop order w recursiveFuel)
+                 graph templates stop order w metadata uv
+               have hl : headBound ≤ w := by dsimp [w, bound]; omega
+@@ -418,7 +425,9 @@
+               exact ⟨0, by simp, outputsValid output member⟩
+             · exact .inr ⟨_, rfl, observed, .inr ⟨_, reason, reached, headOutputs, [], rfl, rfl,
+                 receiptCertificate, currentResources⟩⟩
+-            · intro extra index chosen found supported ambient assignment satisfied accepted
++            · intro extra
++              dsimp only
++              intro index chosen found supported ambient assignment satisfied accepted
+               let w := headBound + extra
+               have observed := headRun extra
+               have invoked : SourcePruningEnumerationHookInvocation.Invocation
+@@ -434,7 +443,7 @@
+                   checkEmpty w w w w w uv scs before ((edge :: rest).take 0) caller memos.query =
+                   .complete [] [] caller memos.query := rfl
+               have actualSame : actual = middleCaller ∧ queries = saved := by
+-                simp only [advance, Option.some.injEq, Prod.mk.injEq] at advanced
++                simp only [SourcePruningEnumerationNativeBranches.advance, Option.some.injEq, Prod.mk.injEq] at advanced
+                 exact ⟨advanced.1, advanced.2.trans headQueries⟩
+               have localPost : Post formulas solver middleInventory caller actual middleMemos := by
+                 simpa only [actualSame.1] using headPost

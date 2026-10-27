@@ -1,5 +1,62 @@
 # Current formalization findings
 
+## Actual finite recursive invocation or an exact earlier hook stop
+
+Source checkpoint: 0684e0b726efa04c1063f0f71b24d58d77ffbea6.
+The modeled finite recursive sibling scan now reaches a chosen accepted
+edge's actual hook invocation or identifies a strictly earlier stopped hook.
+The result derives the actual completed prefix and its exact list index.
+Duplicate edge occurrences remain distinct. The event keeps its actual input
+caller, full input Memos, Packet, resource forecast and reservation. Its
+completed head keeps its own caller, full Memos, cache and local Post.
+
+At the chosen index, the fragment has a satisfying filling that fixes all
+original variables. At an earlier index, the result keeps the exact hook
+outputs, reason, optional endpoint and aggregate stopped result. The stopping
+receipt is outside the processed prefix. A stop in the chosen hook itself
+still counts as a reached chosen invocation. No callback success is assumed.
+
+One work bound is uniform before every extra, index and semantic model.
+Event witnesses can depend on those later inputs. The parent wrapper derives
+an accepting selected edge and index from the original stored model and a
+selector permutation. It derives finite Complete from the existing theorem.
+It requires explicit support for the FULL selected list. The primary observer
+only needs support for the chosen prefix. The whole primary packet and its
+uniform observer remain. Context alone does not derive projection support.
+
+This closes invocation-or-precise-stop coverage through actual finite hooks.
+It does not exclude earlier hook stops or callbacks that return no output.
+Next prove semantic callback progress and justify the depth, stop and frontier
+policies from original inputs. Discharged rendering coverage, public API
+admission and physical Haskell correspondence remain open. H6 and conditional
+finite rendered soundness keep their earlier scopes. The full goal is ACTIVE.
+
+Four modules contain 1028 lines and four public theorems. All installed
+sources and standalone Audit pass strict checks. Audit passes 4252 jobs and
+checks 80105 theorem dependencies. Public readback has 180 complete blocks;
+all 176 prior blocks remain an exact prefix. All 4247 older non-Audit Lean
+sources, 96 pinned prior modules and 203 Haskell sources retain their bytes.
+Only the three standard Lean axioms occur. Details:
+`lean/notes-current-continuation-coverage.md`.
+
+
+### Finite recursive coverage and Haskell repair status
+
+This checkpoint changes Lean proofs only. Every earlier Haskell repair,
+regression and external repair instruction remains below without deletion.
+Main remains 8766699b594eaad80381af2eee034c378ccf3192, including the LPO and
+extraction documentation fixes. The current pull and fetch pass; main is
+an ancestor. KBO candidate d7b6a9dfff464eb32c17c314d4825d5b027f1b2d remains
+unintegrated, unbuilt and unexecuted. The positive-Int context-reversal
+finding remains open. All 203 pinned Haskell sources retain their bytes.
+No Haskell source, Cabal file, native test or benchmark changed or ran.
+
+The identified hook stop is a formal operational outcome. This theorem does
+not establish a new physical Haskell defect or runtime repair. Projection
+support and selector policies remain explicit. Physical canonical map
+construction, source sorting and handle extraction remain separate bridges.
+
+
 ## Indexed coverage through actual ordered native alternatives
 
 Source checkpoint: 8368460445fe4b05073a1bf134e9e34e190f2282.

@@ -1,0 +1,51 @@
+--- invocation-v2
++++ invocation-v3
+@@ -45,19 +45,19 @@
+   | cons first earlierEdges ih =>
+       cases captured : SourcePruningEnumerationCapturedEdge.run checkEmpty r n p h k target scs
+           first caller before queries with
+-      | none => simp only [run, captured] at completed
++      | none => simp only [run, captured] at completed; cases completed
+       | some receipt =>
+           cases receipt with
+           | unhandled =>
+-              simp only [run, captured, SourcePruningEnumerationNativeBranches.advance] at completed
++              simp only [run, captured, SourcePruningEnumerationNativeBranches.advance] at completed; cases completed
+           | complete firstFragment headCaller headQueries headCache =>
+               cases hooked : hook firstFragment headCaller headQueries headCache with
+-              | stopped headOutputs reason endpoint => simp only [run, captured, hooked] at completed
++              | stopped headOutputs reason endpoint => simp only [run, captured, hooked] at completed; cases completed
+               | complete headOutputs middleCaller middleQueries =>
+                   cases suffix : run hook checkEmpty r n p h k target scs before earlierEdges
+                       middleCaller middleQueries with
+                   | stopped tailProcessed tailOutputs current =>
+-                      simp only [run, captured, hooked, suffix] at completed
++                      simp only [run, captured, hooked, suffix] at completed; cases completed
+                   | complete tailProcessed tailOutputs actualCaller actualQueries =>
+                       simp only [run, captured, hooked, suffix, Result.complete.injEq] at completed
+                       obtain ⟨rfl, rfl, rfl, rfl⟩ := completed
+@@ -69,7 +69,7 @@
+               cases suffix : run hook checkEmpty r n p h k target scs before earlierEdges
+                   middleCaller middleQueries with
+               | stopped tailProcessed tailOutputs current =>
+-                  simp only [run, captured, SourcePruningEnumerationNativeBranches.advance, suffix] at completed
++                  simp only [run, captured, SourcePruningEnumerationNativeBranches.advance, suffix] at completed; cases completed
+               | complete tailProcessed tailOutputs actualCaller actualQueries =>
+                   simp only [run, captured, SourcePruningEnumerationNativeBranches.advance, suffix,
+                     Result.complete.injEq] at completed
+@@ -81,13 +81,13 @@
+           | stopped fragments observation candidate =>
+               cases advanced : SourcePruningEnumerationNativeBranches.advance
+                   (.stopped fragments observation candidate) with
+-              | none => simp only [run, captured, advanced] at completed
++              | none => simp only [run, captured, advanced] at completed; cases completed
+               | some endpoint =>
+                   obtain ⟨middleCaller, middleQueries⟩ := endpoint
+                   cases suffix : run hook checkEmpty r n p h k target scs before earlierEdges
+                       middleCaller middleQueries with
+                   | stopped tailProcessed tailOutputs current =>
+-                      simp only [run, captured, advanced, suffix] at completed
++                      simp only [run, captured, advanced, suffix] at completed; cases completed
+                   | complete tailProcessed tailOutputs actualCaller actualQueries =>
+                       simp only [run, captured, advanced, suffix, Result.complete.injEq] at completed
+                       obtain ⟨rfl, rfl, rfl, rfl⟩ := completed
