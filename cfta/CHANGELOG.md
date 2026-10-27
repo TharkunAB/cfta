@@ -38,7 +38,9 @@ Before release, the package was called `microcfta`.
   It is a best-first search over partial terms whose holes count the least
   cost of their states, as Knuth's generalization of Dijkstra's algorithm.
   `Data.CFTA.EGraph.termsByCost` lists the terms of an e-class this way,
-  from the rows of the store; its first term has the cost of `extract`.
+  from the rows of the store, and `extract` gives its first term, so that
+  the term of `extract` satisfies the constraints of its e-nodes. The cost
+  of `extract` must not decrease when the cost of a child grows.
 - The union-find of the ECTA enumeration points each member of the smaller
   set at the new representative on a union, so `root` is one lookup. The
   representative holds the size of its set and the set as an `IntSet`.

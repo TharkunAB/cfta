@@ -5,7 +5,7 @@ module Data.CFTA.EGraphSpec (spec) where
 import Control.Monad (forM_)
 import Data.Functor.Identity (runIdentity)
 import qualified Data.Map.Strict as Map
-import Data.Maybe (fromMaybe, listToMaybe)
+import Data.Maybe (fromMaybe)
 import qualified Data.Set as Set
 import Test.Hspec (Spec, describe, expectationFailure, it, shouldBe)
 import Test.QuickCheck (
@@ -197,6 +197,17 @@ spec = describe "Data.CFTA.EGraph" $ do
                  in case (extract (\_ ks -> 1 + sum ks) g c, classAutomaton g c) of
                         (Just (k, u), Right automaton) -> (k, termSize u, leastSize automaton) === (k, k, Just k)
                         (e, a) -> counterexample (show (fmap fst e, either show (const "an automaton") a)) False
+    it "extracts the cheapest term that satisfies the constraints of its e-nodes" $ do
+        -- One e-class holds g(a) and h(b), and p of it and b requires equal
+        -- terms at the paths [0, 0] and [1]. The cheaper g(a) fails the
+        -- constraint, so the cheapest term is p(h(b), b).
+        let leaf s = Node s []
+            cost s children = (if s == "h" then 2 else 1) + sum children :: Int
+            (ga, g1) = addTerm (Node "g" [leaf "a"]) (emptyEGraph :: EGraph () String)
+            (hb, g2) = addTerm (Node "h" [leaf "b"]) g1
+            (b, g3) = addTerm (leaf "b") (fromMaybe g2 (merge ga hb g2))
+            (p, g4) = addConstrained (equalityConstraint (mkEqConstraints [[path [0, 0], path [1]]])) "p" [ga, b] g3
+        extract cost g4 p `shouldBe` Just (5, Node "p" [Node "h" [leaf "b"], leaf "b"])
     it "selects the terms of an e-class with an ECTA" $ do
         -- Under distributivity and commutativity, the e-class of a * (b + c)
         -- holds a*b + a*c. The ECTA accepts the sums whose two summands have
@@ -299,12 +310,6 @@ spec = describe "Data.CFTA.EGraph" $ do
                     found = termsByCost size g' c
                 (length found, Set.size (Set.fromList (map snd found)), all ((== 2 * n - 1) . fst) found)
                     `shouldBe` (count, count, True)
-        it "begins with a term of the cost of the extraction" $
-            property $
-                forAll genGraph $ \graph@(Graph terms _) -> forAll (elements terms) $ \t ->
-                    let g = build graph
-                        (c, _) = addTermWith (\(Sorted s f ts) -> (s, f, ts)) t g
-                     in fmap fst (listToMaybe (termsByCost size g c)) === fmap fst (extract size g c)
         it "lists the infinite language of a cyclic e-class in the order of the cost" $ do
             -- x * 1 = x puts x * 1 in the e-class of x, so the e-class is a cycle.
             let leaf s = Node s []

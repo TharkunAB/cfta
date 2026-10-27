@@ -728,35 +728,21 @@ data Repaired s f = Repaired !(EGraph s f) !(HashMap.HashMap (ENode f) ClassId) 
 -- A task of 'analyseFrom': an e-class from all its e-nodes, or one e-node of an e-class.
 data Task f = Whole !Int | Use !(ENode f) !ClassId
 
-{- | The cheapest term of an e-class, with its cost. The cost of a term
-comes from its symbol and the costs of its children, and must be greater
-than each of them, as @1 + sum@ is, so that the cheapest term is finite.
+{- | The cheapest term of an e-class, with its cost: the first term of
+'termsByCost'. The cost of a term comes from its symbol and the costs of its
+children. It must not decrease when the cost of a child grows, and it must
+be greater than the cost of each child, as @1 + sum@ is. Then 'extract'
+finds the cheapest term of each e-class that has a term. The term satisfies
+the constraint of each of its e-nodes. The e-graph has no check that the
+constraints leave a term, so 'extract' does not return when the constraints
+reject each term of an infinite language.
 -}
 extract :: (Ord c, Eq f) => (f -> [c] -> c) -> EGraph s f -> ClassId -> Maybe (c, Term f)
-extract cost g c0 = do
-    (k, _) <- best (find g c0)
-    term <- build (find g c0)
-    Just (k, term)
-  where
-    costOf = analyse cost min g
-    best c = do
-        k <- costOf c
-        let row = let ClassId j = find g c in rowAt g j
-        Just (k, [t | t@(FTA.Transition f cs _) <- row, Just ks <- [traverse costOf cs], cost f ks == k])
-    -- The term of the first cheapest transition whose constraint the term satisfies.
-    build c = do
-        (_, candidates) <- best c
-        listToMaybe
-            [ term
-            | t@(FTA.Transition f cs _) <- candidates
-            , Just term <- [Node f <$> traverse (build . find g) cs]
-            , equalitiesHold (FTA.transitionConstraint t) term
-            ]
+extract cost g c = listToMaybe (termsByCost cost g c)
 
 {- | The terms of an e-class in the order of a cost, cheapest first, each with
-its cost, produced lazily: 'FTA.termsByCost' on the rows of the store, with
-the least costs of 'extract'. So the first term has the cost of 'extract'.
-The cost must not decrease when the cost of a child grows, and it must be
+its cost, produced lazily: 'FTA.termsByCost' on the rows of the store.
+'extract' gives the first term. The cost must not decrease when the cost of a child grows, and it must be
 at least the cost of each child. Then the costs of the list never decrease,
 also for a cyclic e-class, whose list is infinite. The terms have no sorts,
 as for 'extract'. The automaton of an e-graph is deterministic, so a term
