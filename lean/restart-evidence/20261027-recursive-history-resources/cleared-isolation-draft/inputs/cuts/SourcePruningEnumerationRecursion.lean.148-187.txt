@@ -1,0 +1,40 @@
+    (heap : InternedConstructorTemplates.State Symbol NativeGuard)
+    (before : EnumerationExpandableIndex.Cached Symbol EnumGuard)
+    (preference : List Nat → Option Nat) (uv : Nat) (roots : Nat → Nat)
+    (safe : Safe before.core)
+    (selection : EnumerationPureSelection.next preference before = .expand uv)
+    (realized : PendingRealized heap before.core)
+    (paths : Roots before.core.representatives roots)
+    (counts : EnumerationCanonicalWaiting.Correct roots before.core.values before.waiting)
+    (flags : ∀ slot, SourcePruningEnumerationNativeIndex.candidate heap
+      ((before.core.values[slot]?).getD .eliminated) = some (before.expandable slot)) :
+    ∃ (readFuel handle : Nat) (scs : List Suspended) (value : Value Symbol NativeGuard)
+      (readAfter : EnumerationState.State Symbol EnumGuard) (checkFuel : Nat) (repeated : Bool)
+      (after : EnumerationExpandableIndex.Cached Symbol EnumGuard),
+      before.core.values[uv]? = some (.unenumerated (some handle) scs) ∧
+      lookupNode heap handle = some value ∧ Available heap value ∧ value.free = [] ∧
+      (∀ extra, ExceptT.run (getValue (readFuel + extra) uv before.core) =
+        [.ok (.unenumerated (some handle) scs, readAfter)]) ∧
+      Frame before.core readAfter ∧
+      (∀ extra, ExceptT.run (checkRepeated heap (checkFuel + extra) uv handle scs readAfter) =
+        [.ok (repeated, after.core)]) ∧
+      EnumerationDriver.Ready uv after.core ∧ Roots after.core.representatives roots ∧
+      PendingRealized heap after.core ∧
+      EnumerationCanonicalWaiting.Correct roots after.core.values after.waiting ∧
+      (∀ slot, SourcePruningEnumerationNativeIndex.candidate heap
+        ((after.core.values[slot]?).getD .eliminated) = some (after.expandable slot)) ∧
+      EnumerationReferences.IncomingAvoid uv after.core ∧
+      (EnumerationReferences.PendingReferences before.core → EnumerationReferences.PendingReferences after.core) ∧
+      (repeated = false → Frame before.core after.core ∧ after.expandable = before.expandable ∧
+        after.waiting = before.waiting ∧ after.core.values[uv]? = some (.unenumerated (some handle) scs)) ∧
+      (repeated = true → MergedOrdinaryHeight.recursiveBoundary value = true ∧
+        after.core.values[uv]? = some (.unenumerated (some handle) []) ∧ after.expandable uv = false ∧
+        after.waiting = EnumerationCanonicalWaiting.count roots (-1) scs before.waiting ∧
+        ∃ (resolved : EnumerationState.State Symbol EnumGuard) (countFuel : Nat),
+          Frame before.core resolved ∧
+          Success (representative checkFuel uv) readAfter uv resolved ∧
+          recursionKey handle scs ∈ resolved.recursionAncestry uv ∧
+          Success (setValue uv (.unenumerated (some handle) [])) resolved () after.core ∧
+          ∀ extra, SourcePruningEnumerationNativeIndex.write heap (countFuel + extra) uv
+            (.unenumerated (some handle) []) [] scs (EnumerationExpandableIndex.frame resolved before) = some after) := by
+  have ready := SourcePruningEnumerationSelection.ready heap before preference uv safe roots paths counts flags selection

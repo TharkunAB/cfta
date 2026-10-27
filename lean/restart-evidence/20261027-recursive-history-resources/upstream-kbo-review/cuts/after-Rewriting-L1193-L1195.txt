@@ -1,0 +1,3 @@
+addLawRules :: Sig -> Term -> Rules -> Rules
+addLawRules gsig (Term "(==)" [_, l, r]) rules = snd (addEquation (toTemplate gsig l, toTemplate gsig r) rules)
+addLawRules _ _ rules = rules

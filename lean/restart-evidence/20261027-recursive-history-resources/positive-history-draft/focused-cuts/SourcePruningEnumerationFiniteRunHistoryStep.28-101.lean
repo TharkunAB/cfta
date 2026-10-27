@@ -1,0 +1,74 @@
+theorem run_finite_succ_complete_resources_with_history
+    (holeKey : Typing → Nat → Key) (fits : Key → Symbol → Bool) (admits : Key → Node → Bool)
+    (graph : Graph Symbol Constraint) (templates : List (Template.Pattern Symbol))
+    (checkEmpty : Bool) (edgesOf : Node → List (EdgeValue Symbol Constraint))
+    (stop : Option (Metadata Typing → Nat → Bool)) (order : Metadata Typing → List Nat → Option Nat)
+    (formulas : SourceGuards.Formulas FullSyntax.Formula)
+    (solver : SourceGuards.Entailment FullSyntax.Formula) (recursiveFuel : Nat)
+    (recursive : CompleteWithHistory (bits := bits) holeKey fits admits graph templates checkEmpty edgesOf stop order
+      formulas solver recursiveFuel) (inventory : Inventory)
+    (caller : Caller (bits + 2)) (memos : Memos) (before : Cached) (metadata : Metadata Typing)
+    (seed : Seed) (ceiling : Nat)
+    (packet : Packet formulas solver inventory caller memos metadata before)
+    (bounded : Fits seed.2 caller.checked)
+    (known : Heap (fun guard => guard ∈ seed.1) caller.checked.native.machine.heap)
+    (selectionMembers : ∀ entry rows depth free, ∀ edge ∈ edgesOf (.node entry rows depth free), edge ∈ rows)
+    (selectionLength : ∀ entry rows depth free, (edgesOf (.node entry rows depth free)).length ≤ rows.length)
+    (initialMass : SourcePruningEnumerationPrefixAdmission.suspendedBound before.core ≤ ceiling)
+    (reserved : SourcePruningEnumerationFiniteReservation.Reserved bits (recursiveFuel + 1) seed ceiling) :
+    ∃ bound outcome,
+      (∀ extra, run holeKey fits admits graph templates checkEmpty edgesOf stop order (bound + extra) (recursiveFuel + 1)
+        metadata caller memos.query before = outcome) ∧
+      OutcomeResources formulas solver caller
+        (SourcePruningEnumerationFiniteReservation.final (recursiveFuel + 1) seed ceiling) outcome ∧
+      ∀ extra output, output ∈ SourcePruningEnumerationHookInvocation.hookOutputs outcome →
+        ResourceHistory holeKey fits admits graph templates checkEmpty edgesOf stop order formulas solver
+          (bound + extra) (recursiveFuel + 1) inventory caller memos metadata before seed ceiling
+          (SourcePruningEnumerationRestart.decision stop order metadata before) output := by
+  by_cases expansion : ∃ uv,
+      SourcePruningEnumerationRestart.decision stop order metadata before = some (.expand uv)
+  · obtain ⟨uv, chosen⟩ := expansion
+    obtain ⟨bound, outcome, running, resources, histories⟩ := selected_finite_complete_resources_with_history
+      holeKey fits admits graph templates checkEmpty edgesOf stop order formulas solver recursiveFuel recursive inventory
+      caller memos before metadata uv seed ceiling packet bounded known selectionMembers selectionLength initialMass reserved chosen
+    refine ⟨bound, outcome, fun extra => by simpa only [run, chosen] using running extra, resources, ?_⟩
+    intro extra output member
+    simpa only [chosen] using histories extra output member
+  · obtain ⟨outcome, running, resources⟩ := resume_zero_outcome_resources
+      holeKey fits admits graph templates checkEmpty edgesOf stop order formulas solver inventory
+      caller memos before metadata (SourcePruningEnumerationRestart.decision stop order metadata before)
+      seed packet bounded known
+    have growth := SourcePruningEnumerationFiniteReservation.final_ge (recursiveFuel + 1) seed ceiling
+    have admission : HistoryAdmission formulas solver inventory caller memos metadata before
+        (recursiveFuel + 1) seed ceiling := ⟨packet, bounded, known, initialMass, reserved⟩
+    refine ⟨0, outcome, ?_, resources.mono growth.1 growth.2, ?_⟩
+    · intro extra
+      have zero := running extra
+      unfold run
+      cases selected : SourcePruningEnumerationRestart.decision stop order metadata before with
+      | none => simpa only [selected, resume] using zero
+      | some next =>
+          cases next with
+          | done => simpa only [selected, resume] using zero
+          | stuck => simpa only [selected, resume] using zero
+          | expand uv => exact False.elim (expansion ⟨uv, selected⟩)
+    · intro extra output member
+      have emitted : output ∈ SourcePruningEnumerationHookInvocation.hookOutputs
+          (resume holeKey fits admits graph templates checkEmpty edgesOf stop order (0 + extra) 0
+            metadata caller memos.query before (SourcePruningEnumerationRestart.decision stop order metadata before)) := by
+        rw [running (0 + extra)]
+        exact member
+      cases selected : SourcePruningEnumerationRestart.decision stop order metadata before with
+      | none =>
+          rw [selected] at emitted
+          simp only [resume, SourcePruningEnumerationHookInvocation.hookOutputs, List.mem_singleton] at emitted
+          subst output
+          exact .stopped admission
+      | some next =>
+          rw [selected] at emitted
+          cases next with
+          | done =>
+              simp only [resume, SourcePruningEnumerationHookInvocation.hookOutputs, List.mem_singleton] at emitted
+              subst output
+              exact .done admission
+          | stuck | expand _ => cases emitted

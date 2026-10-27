@@ -1,0 +1,68 @@
+  obtain ⟨ordinaryBound, entered, processed, outputs, afterCaller, next, final, result,
+    entryRun, stable, counter, values, sameFlags, sameWaiting, enteredPacket,
+    ordinaryRun, scanRun, post, captured, returnedFits, returnedKnown, processedLength,
+    receipts, outputCertificates, shape, finished⟩ :=
+    ordinary_finite_complete_resources holeKey fits admits graph templates checkEmpty edgesOf stop order metadata recursiveFuel
+      seed formulas solver recursive.forget inventory caller memos before uv handle scs parentEntry storedEdges depth free
+      packet ready stored decoded selected incoming nonterminal bounded known selectionMembers selectionLength
+      capturedMass inherited initialMass inheritedLength reserved
+  have enteredStored : entered.core.values[uv]? = some (.unenumerated (some handle) scs) := by
+    simpa only [values] using stored
+  have enteredRoot : IsRoot entered.core.representatives uv :=
+    (enteredPacket.safe.2 uv (.unenumerated (some handle) scs) enteredStored).mp (by intro impossible; cases impossible)
+  have enteredReady : EnumerationDriver.Ready uv entered.core := by
+    refine ⟨enteredPacket.safe, ?_, enteredRoot, ?_⟩
+    · simpa only [counter] using ready.inside
+    · intro node bucket current sc member sameClass
+      have previous : before.core.values[uv]? = some (.unenumerated (some node) bucket) := by
+        simpa only [values] using current
+      exact ready.avoids node bucket previous sc member ((stable.classes uv sc.var).mp sameClass)
+  have enteredIncoming : EnumerationReferences.IncomingAvoid uv entered.core :=
+    EnumerationReferences.incoming_read uv before.core entered.core stable incoming
+  have enteredMass : suspendedBound entered.core ≤ capturedMass := by
+    rw [SourcePruningEnumerationPrefixAdmission.suspendedBound_values before.core entered.core values]
+    exact initialMass
+  obtain ⟨receiptBound, historyProcessed, historyOutputs, historyCaller, historyInventory, historyMemos, historyResult,
+    historyRun, _historyPost, _historyPacket, _historyFits, _historyKnown, _historyLength,
+    _historyReceipts, _historyOutputResources, historyShape, histories⟩ :=
+    SourcePruningEnumerationNativeFiniteSiblingResources.alternatives_finite_complete_resources_with_history
+      holeKey fits admits graph templates checkEmpty edgesOf stop order metadata recursiveFuel
+      seed formulas solver recursive inventory caller memos entered uv handle scs parentEntry storedEdges
+      (edgesOf (.node parentEntry storedEdges depth free)) depth free enteredPacket enteredReady enteredStored decoded
+      selected enteredIncoming bounded known selectionMembers selectionLength capturedMass inherited enteredMass inheritedLength reserved
+  have originalOutputs : SourcePruningEnumerationHookInvocation.foldOutputs result = outputs := by
+    rcases shape with completed | ⟨current, stopped, _endpoint, _certificate⟩
+    · rw [completed]
+      rfl
+    · rw [stopped]
+      rfl
+  have actualOutputs : SourcePruningEnumerationHookInvocation.foldOutputs historyResult = historyOutputs := by
+    rcases historyShape with completed | ⟨current, stopped, _endpoint, _certificate⟩
+    · rw [completed]
+      rfl
+    · rw [stopped]
+      rfl
+  have entryAt (extra : Nat) : ExceptT.run (SourcePruningEnumerationEntry.enter caller.checked.native.machine.heap
+      (ordinaryBound + receiptBound + extra) uv before.core) =
+      [.ok ((uv, handle, scs, .node parentEntry storedEdges depth free), entered.core)] := by
+    simpa only [Nat.add_assoc] using entryRun (receiptBound + extra)
+  refine ⟨ordinaryBound + receiptBound, entered, processed, outputs, afterCaller, next, final, result,
+    entryAt, stable, counter, values, sameFlags, sameWaiting, enteredPacket, ?_, ?_, post, captured,
+    returnedFits, returnedKnown, processedLength, receipts, outputCertificates, shape, finished, ?_⟩
+  · intro extra
+    simpa only [Nat.add_assoc] using ordinaryRun (receiptBound + extra)
+  · intro extra
+    simpa only [Nat.add_assoc] using scanRun (receiptBound + extra)
+  · intro extra output member
+    have originalRun := scanRun (receiptBound + extra)
+    have actualRun := historyRun (ordinaryBound + extra)
+    have common : receiptBound + (ordinaryBound + extra) = ordinaryBound + receiptBound + extra := by omega
+    rw [common] at actualRun
+    rw [← Nat.add_assoc] at originalRun
+    have resultSame : result = historyResult := originalRun.symm.trans actualRun
+    have historyMember : output ∈ historyOutputs := by
+      rw [← actualOutputs, ← resultSame, originalOutputs]
+      exact member
+    have actual := histories (ordinaryBound + extra) output historyMember
+    rw [common] at actual
+    exact actual

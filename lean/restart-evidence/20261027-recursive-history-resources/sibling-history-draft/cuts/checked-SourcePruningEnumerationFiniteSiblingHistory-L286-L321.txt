@@ -1,0 +1,36 @@
+            · intro extra output member
+              let w := bound + extra
+              have hl : headBound ≤ w := by dsimp [w, bound]; omega
+              have tl : tailBound ≤ w := by dsimp [w, bound]; omega
+              rcases List.mem_append.mp member with firstOutput | laterOutput
+              · have current := headHistories (w - headBound) output firstOutput
+                rw [Nat.add_sub_of_le hl] at current
+                exact current
+              · have current := tailHistories (w - tailBound) output laterOutput
+                rw [Nat.add_sub_of_le tl] at current
+                obtain ⟨chosen, chosenMember, localSeed, localInventory, localCaller, localMemos, localBound,
+                  fragment, reached, after, returnedInventory, returnedMemos, recorded, callbackCore,
+                  prefixPost, invocation, actualRun, certificate, originalAdmission, callback,
+                  returnedAdmission, recursiveHistory⟩ := current
+                have first := headRun (w - headBound)
+                rw [Nat.add_sub_of_le hl] at first
+                have hooked := callbackRun (w - headBound)
+                rw [Nat.add_sub_of_le hl] at hooked
+                rw [hookQuery] at invocation
+                have origin : SourcePruningEnumerationHookInvocation.Invocation
+                    (continueWith (resume holeKey fits admits graph templates checkEmpty edgesOf stop order w recursiveFuel)
+                      graph templates stop order w metadata uv)
+                    checkEmpty w w w w w uv scs before (edge :: rest) caller memos.query
+                      fragment reached returnedMemos.query after := by
+                  cases receipt with
+                  | complete firstFragment firstCaller firstQueries firstCache =>
+                      exact .completed first hooked invocation
+                  | unhandled => cases advanced
+                  | rejected actual queries cache | stopped fragments observation candidate =>
+                      obtain ⟨_empty, actualSame, queriesSame⟩ :=
+                        SourcePruningEnumerationNativeContinuations.HookResult.complete.inj hooked
+                      exact .other first trivial (by
+                        rw [actualSame, queriesSame]
+                        exact advanced) invocation
+                exact ⟨chosen, List.mem_cons_of_mem edge chosenMember, localSeed, localInventory, localCaller,
+                  localMemos, localBound, fragment, reached, after, returnedInventory, returnedMemos, recorded,

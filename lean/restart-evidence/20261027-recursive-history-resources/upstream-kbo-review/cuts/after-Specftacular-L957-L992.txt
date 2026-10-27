@@ -1,0 +1,36 @@
+            -- A definition of a constant with k arguments has k + 1 leaves.
+            let arity (TFun _ result) = 1 + arity result
+                arity _ = 0 :: Int
+                definitionSize = min (size - 1) (1 + maximum (0 : map (arity . sfTypeRep) (Map.elems givenSig)))
+            order <- case termOrderSetting of
+                KnuthBendix given
+                    | definitionsSetting && definitionSize > 0 -> do
+                        definitionSink <- newIORef []
+                        (_, found) <-
+                            runPhases
+                                env
+                                    { maxSize = definitionSize
+                                    , progress = False
+                                    , diagnostics = False
+                                    , detailedDiagnostics = False
+                                    , egraphMode = EGraphOff
+                                    , lawSink = definitionSink
+                                    , stopAfter = Nothing
+                                    , onlyBucket = Nothing
+                                    , dumpLaws = False
+                                    , quiet = True
+                                    }
+                                definitionSize
+                                1
+                                instances
+                                sig
+                        let defined = Map.union given (definitionWeights (rewrite_rules found))
+                        putStrLn "Defined symbols (the order prefers their bodies):"
+                        putStrLn "---------------------------------"
+                        mapM_ (putStrLn . T.unpack . (\(Symbol name) -> name)) (Map.keys defined)
+                        putStrLn ""
+                        pure (KnuthBendix defined)
+                other -> pure other
+            putStrLn "Laws according to Haskell's (==):"
+            putStrLn "---------------------------------"
+            fst <$> runPhases env{termOrder = order} size (max 1 (min 4 phase)) instances sig

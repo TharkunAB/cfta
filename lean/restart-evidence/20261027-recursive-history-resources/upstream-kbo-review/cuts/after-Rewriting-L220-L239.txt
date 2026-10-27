@@ -1,0 +1,20 @@
+addEquation :: (Term, Term) -> Rules -> ([(Term, Term)], Rules)
+addEquation (l, r) rules
+    | decreasing l r = ([(l, r)], rules{oriented = insert (l, r) (oriented rules)})
+    | decreasing r l = ([(r, l)], rules{oriented = insert (r, l) (oriented rules)})
+    | otherwise = ([(l, r), (r, l)], foldr addUnoriented rules [(l, r), (r, l)])
+  where
+    decreasing a b = independentGreater (rulesOrder rules) a b && appliedGreater (rulesOrder rules) Map.empty a b
+    addUnoriented rule@(a, b) rs
+        | all (`elem` templateVars a) (templateVars b) = rs{unoriented = insert rule (unoriented rs)}
+        | otherwise = rs{nonRewriting = insert rule (nonRewriting rs)}
+    insert rule@(a, _) index =
+        Index
+            { byHead = Map.insertWith (++) (key a) [rule] (byHead index)
+            , shapes =
+                maybe (shapes index) (\shape -> insertShape shape ((isNothing (key a), added index), rule) (shapes index)) (shapeOf a)
+            , added = added index + 1
+            }
+    key a = case spineHead a of
+        (h, _) | isTemplateVar h -> Nothing
+        k -> Just k

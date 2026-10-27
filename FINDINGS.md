@@ -1,5 +1,65 @@
 # Current formalization findings
 
+## Original resources now derive full finite recursive histories
+
+Source checkpoint: 324a2c527e003fc5c19ce4332b4c4b1ac53254d2.
+Original Packet, full Memos, Fits, guard heap, input mass and finite reservation
+now derive one sufficient work bound and the actual stable recursive result.
+Every emitted output retains an admitted ResourceHistory at its actual work
+bound. This includes outputs before a later stop. Depth induction supplies
+all smaller recursive drivers. No recursive completion premise remains.
+Each history retains actual prefixes, entry, completed heads, callbacks,
+original callback seeds, mass ceilings and reservations. Siblings use their
+actual post-hook endpoints and the SAME captured enumeration cache.
+
+An isolated recursive boundary in the ORIGINAL input persists at each output's
+own cache and heap. That output cannot be fully Discharged. Local creation
+and opaque-suffix isolation are proved. Their attachment to every remaining
+history is still open. Whole recursive assignment soundness, rendering
+acceptance, enumeration coverage and physical correspondence remain open.
+H6 remains the strongest global exact finite-tree construction theorem.
+
+Eighteen modules, 3226 lines and 31 public theorems pass strict checking.
+Audit passes 4139 jobs and 79423 theorem dependency checks. H6 and both
+previous conditional captured renderers retain exact signatures and axioms.
+Main extraction documentation and KBO definition preferences are integrated.
+The CFTA runtime is unchanged. Imported Specftacular runtime is tested
+separately; its integer-weight limitation is recorded below and in the note.
+All earlier Haskell fixes and repair handoffs remain in FINDINGS.
+Details: `lean/notes-current-recursive-history-resources.md`.
+The whole-system goal stays ACTIVE.
+
+
+### Haskell import and external repair handoff: KBO definition weights
+
+Main c04686f7 integrates the extraction-progress documentation repair.
+Main 8766699b integrates definition-weight KBO preferences and definition
+pre-search in Specftacular. These runtime changes are imported without local
+modification. They are outside the current recursive CFTA Lean theorem.
+The LPO fix already in the branch remains preserved.
+
+The new public KnuthBendix map uses Int weights without range validation.
+A focused executable counterexample uses only nonnegative map entries:
+a=maxBound, b=0, c=1. The leaf a is greater than b, but the equal-size
+context app c [-] reverses their order after Int overflow. The recursive
+computed definitionWeights recurrence can exceed Int mathematically. Its
+large overflow case was not executed because evaluation repeats dependencies
+exponentially. The executed public-map witness invalidates unrestricted
+context closure. The result does not establish a false
+emitted equation. Instantiated local rewrites still check their order.
+The KBO function-position code relies on context closure. The actual public
+reducible call accepts the local rewrite while the whole contextual term
+increases. No rewrite cycle is claimed.
+
+External repair: use exact nonnegative arithmetic for definition weights,
+or validate a bound that excludes overflow for each accepted term. Reject
+negative user weights if the substitution argument requires nonnegativity.
+Keep a regression for context closure and for generated-weight overflow.
+No local runtime repair is included in this checkpoint. Exact source pins,
+executed witness and logs are in the new evidence archive. See the note for
+validation status and scope. All older findings below remain unchanged.
+
+
 ## Actual selected-step meaning and recursive callback admission
 
 Source checkpoint: fcbb20ee93aacabb645c09cf5e64ff08be86c23f.

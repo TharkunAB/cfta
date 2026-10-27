@@ -1,0 +1,86 @@
+without the test of the types.
+-}
+cases :: [(String, Bool -> IO [String])]
+cases =
+    [
+        ( "lists-4"
+        , \checked ->
+            monomorphic
+                checked
+                4
+                (const Nothing)
+                [ con "reverse" (reverse :: [A] -> [A])
+                , con "++" ((++) :: [A] -> [A] -> [A])
+                , con "[]" ([] :: [A])
+                , con "map" (map :: (A -> B) -> [A] -> [B])
+                , con "length" (length :: [A] -> Int)
+                , con "concat" (concat :: [[A]] -> [A])
+                , arith (Proxy :: Proxy Int)
+                ]
+        )
+    ,
+        ( "list-monad-4"
+        , \checked ->
+            monomorphic
+                checked
+                4
+                (const Nothing)
+                [ con "return" (return :: A -> [A])
+                , con ">>=" ((>>=) :: [A] -> (A -> [B]) -> [B])
+                , con "++" ((++) :: [A] -> [A] -> [A])
+                ]
+        )
+    ,
+        ( "mini-list-4"
+        , \checked ->
+            monomorphic
+                checked
+                4
+                (const Nothing)
+                [ con "reverse" (reverse :: [A] -> [A])
+                , con "[]" ([] :: [A])
+                , con "null" (null :: [A] -> Bool)
+                , con "True" True
+                , con "False" False
+                ]
+        )
+    ,
+        ( "lists-kbo-5"
+        , \checked ->
+            monomorphic
+                checked
+                5
+                (const Nothing)
+                [ con "reverse" (reverse :: [A] -> [A])
+                , con "++" ((++) :: [A] -> [A] -> [A])
+                , con "[]" ([] :: [A])
+                ]
+        )
+    ,
+        ( "lists-lpo-5"
+        , \checked ->
+            withOrder
+                (PathOrder ["[]", "++", "reverse"])
+                checked
+                5
+                (const Nothing)
+                [ con "reverse" (reverse :: [A] -> [A])
+                , con "++" ((++) :: [A] -> [A] -> [A])
+                , con "[]" ([] :: [A])
+                ]
+        )
+    ,
+        ( "gcd-3"
+        , \checked ->
+            monomorphic
+                checked
+                3
+                posIntReps
+                [ con "0" (P 0)
+                , con "21" (P 21)
+                , con "1029" (P 1029)
+                , con "1071" (P 1071)
+                , con "gcd" (gcd :: PosInt -> PosInt -> PosInt)
+                ]
+        )
+    ]

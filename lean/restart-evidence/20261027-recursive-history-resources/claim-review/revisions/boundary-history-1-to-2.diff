@@ -1,0 +1,13 @@
+--- strict-boundary-history-1/source.lean
++++ strict-boundary-history-2/source.lean
+@@ -32,8 +32,8 @@
+     updated = metadata ∧ next = SourcePruningEnumerationRestart.decision stop order metadata before ∧
+       core = checked := by
+   change (if SourcePruningEnumerationRestart.decision stop order metadata before = some .stuck then []
+-    else [.ok ((metadata, SourcePruningEnumerationRestart.decision stop order metadata before), checked)]) =
+-      [.ok ((updated, next), core)] at observed
++    else [Except.ok ((metadata, SourcePruningEnumerationRestart.decision stop order metadata before), checked)]) =
++      [Except.ok ((updated, next), core)] at observed
+   split at observed
+   · cases observed
+   · have same : metadata = updated ∧

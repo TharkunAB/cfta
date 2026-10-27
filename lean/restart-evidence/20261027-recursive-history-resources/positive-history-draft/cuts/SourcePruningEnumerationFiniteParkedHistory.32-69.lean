@@ -1,0 +1,38 @@
+/-- The original reservation derives the actual parked finite-depth outcome at one common work bound. -/
+theorem parked_finite_complete_resources_with_history
+    (holeKey : Typing → Nat → Key) (fits : Key → Symbol → Bool) (admits : Key → Node → Bool)
+    (graph : Graph Symbol Constraint) (templates : List (Template.Pattern Symbol))
+    (checkEmpty : Bool) (edgesOf : Node → List (EdgeValue Symbol Constraint))
+    (stop : Option (Metadata Typing → Nat → Bool)) (order : Metadata Typing → List Nat → Option Nat)
+    (formulas : SourceGuards.Formulas FullSyntax.Formula)
+    (solver : SourceGuards.Entailment FullSyntax.Formula) (recursiveFuel : Nat)
+    (recursive : CompleteWithHistory (bits := bits) holeKey fits admits graph templates checkEmpty edgesOf stop order
+      formulas solver recursiveFuel) (inventory : Inventory)
+    (caller : Caller (bits + 2)) (memos : Memos) (before : Cached) (metadata : Metadata Typing)
+    (prefixFuel uv : Nat) (checked : Cached) (seed : Seed) (ceiling : Nat)
+    (packet : Packet formulas solver inventory caller memos metadata before)
+    (bounded : Fits seed.2 caller.checked)
+    (known : Heap (fun guard => guard ∈ seed.1) caller.checked.native.machine.heap)
+    (selectionMembers : ∀ entry rows depth free, ∀ edge ∈ edgesOf (.node entry rows depth free), edge ∈ rows)
+    (selectionLength : ∀ entry rows depth free, (edgesOf (.node entry rows depth free)).length ≤ rows.length)
+    (initialMass : SourcePruningEnumerationPrefixAdmission.suspendedBound before.core ≤ ceiling)
+    (reserved : SourcePruningEnumerationFiniteReservation.Reserved bits (recursiveFuel + 1) seed ceiling)
+    (phase : ∀ extra,
+      SourcePruningEnumerationSelectedStep.runPrefix holeKey fits admits graph templates stop order metadata
+        (prefixFuel + extra) (prefixFuel + extra) (prefixFuel + extra)
+        (prefixFuel + extra) (prefixFuel + extra) (prefixFuel + extra) uv caller before memos.query =
+        .parked checked.core (some checked)
+          (some (ExceptT.run (SourcePruningEnumerationRestart.run stop order metadata checked checked.core))) ∧
+      SourcePruningEnumerationSelectedStep.PrefixValid holeKey fits admits graph templates checkEmpty edgesOf
+        stop order metadata formulas solver inventory (prefixFuel + extra) uv caller before memos
+        (SourcePruningEnumerationSelectedStep.runPrefix holeKey fits admits graph templates stop order metadata
+          (prefixFuel + extra) (prefixFuel + extra) (prefixFuel + extra)
+          (prefixFuel + extra) (prefixFuel + extra) (prefixFuel + extra) uv caller before memos.query)) :
+    ∃ (bound : Nat) (outcome : Result),
+      (∀ extra, resume holeKey fits admits graph templates checkEmpty edgesOf stop order (bound + extra) (recursiveFuel + 1)
+        metadata caller memos.query before (some (.expand uv)) = outcome) ∧
+      OutcomeResources formulas solver caller
+        (SourcePruningEnumerationFiniteReservation.final (recursiveFuel + 1) seed ceiling) outcome ∧
+      ∀ extra output, output ∈ SourcePruningEnumerationHookInvocation.hookOutputs outcome →
+        ResourceHistory holeKey fits admits graph templates checkEmpty edgesOf stop order formulas solver
+          (bound + extra) (recursiveFuel + 1) inventory caller memos metadata before seed ceiling

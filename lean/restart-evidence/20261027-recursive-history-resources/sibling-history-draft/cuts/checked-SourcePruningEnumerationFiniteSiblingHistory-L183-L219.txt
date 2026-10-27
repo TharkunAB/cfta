@@ -1,0 +1,37 @@
+        have headHistories : ∀ extra output,
+            output ∈ SourcePruningEnumerationHookInvocation.hookOutputs outcome →
+            InvocationHistoryAt holeKey fits admits graph templates checkEmpty edgesOf stop order metadata recursiveFuel
+              formulas solver (headBound + extra) caller memos before uv scs (edge :: rest) capturedMass inherited output := by
+          intro extra output member
+          have completed : ∃ fragment actual queries after, receipt = .complete fragment actual queries after := by
+            cases receipt with
+            | complete fragment actual queries after => exact ⟨fragment, actual, queries, after, rfl⟩
+            | unhandled => cases advanced
+            | rejected actual queries after | stopped fragments observation candidate =>
+                have empty := callbackRun extra
+                rw [empty] at member
+                cases member
+          obtain ⟨fragment, actual, queries, after, same⟩ := completed
+          subst receipt
+          obtain ⟨⟨rejected, recorded⟩, callbackCore, callback, returnedAdmission, histories⟩ := rich
+          have certificate := completedReceipt fragment actual queries after rfl
+          have originalAdmission := callbackAdmission fragment actual queries after rfl
+          have accepted : rejected = false := by
+            cases rejected with
+            | false => rfl
+            | true =>
+                have equation := (callback extra).2.2
+                  (resume holeKey fits admits graph templates checkEmpty edgesOf stop order (headBound + extra) recursiveFuel)
+                  stop order
+                rw [certificate.query] at equation
+                have empty : outcome = .complete [] actual queries := (callbackRun extra).symm.trans equation
+                rw [empty] at member
+                cases member
+          subst rejected
+          have actualRun := headRun extra
+          rw [← certificate.query] at actualRun
+          refine ⟨edge, List.mem_cons_self, seed, inventory, caller, memos, headBound,
+            fragment, actual, after, middleInventory, middleMemos, recorded, callbackCore,
+            Post.refl packet.context, .here actualRun, actualRun, ?_, originalAdmission,
+            (callback extra).2.1, returnedAdmission, histories extra rfl output member⟩
+          simpa only [certificate.query] using certificate

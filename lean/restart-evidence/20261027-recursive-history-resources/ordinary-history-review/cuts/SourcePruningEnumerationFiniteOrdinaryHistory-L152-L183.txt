@@ -1,0 +1,32 @@
+    · rw [stopped]
+      rfl
+  have actualOutputs : SourcePruningEnumerationHookInvocation.foldOutputs historyResult = historyOutputs := by
+    rcases historyShape with completed | ⟨current, stopped, _endpoint, _certificate⟩
+    · rw [completed]
+      rfl
+    · rw [stopped]
+      rfl
+  have entryAt (extra : Nat) : ExceptT.run (SourcePruningEnumerationEntry.enter caller.checked.native.machine.heap
+      (ordinaryBound + receiptBound + extra) uv before.core) =
+      [.ok ((uv, handle, scs, .node parentEntry storedEdges depth free), entered.core)] := by
+    simpa only [Nat.add_assoc] using entryRun (receiptBound + extra)
+  refine ⟨ordinaryBound + receiptBound, entered, processed, outputs, afterCaller, next, final, result,
+    entryAt, stable, counter, values, sameFlags, sameWaiting, enteredPacket, ?_, ?_, post, captured,
+    returnedFits, returnedKnown, processedLength, receipts, outputCertificates, shape, finished, ?_⟩
+  · intro extra
+    simpa only [Nat.add_assoc] using ordinaryRun (receiptBound + extra)
+  · intro extra
+    simpa only [Nat.add_assoc] using scanRun (receiptBound + extra)
+  · intro extra output member
+    have originalRun := scanRun (receiptBound + extra)
+    have actualRun := historyRun (ordinaryBound + extra)
+    have common : receiptBound + (ordinaryBound + extra) = ordinaryBound + receiptBound + extra := by omega
+    rw [common] at actualRun
+    rw [← Nat.add_assoc] at originalRun
+    have resultSame : result = historyResult := originalRun.symm.trans actualRun
+    have historyMember : output ∈ historyOutputs := by
+      rw [← actualOutputs, ← resultSame, originalOutputs]
+      exact member
+    have actual := histories (ordinaryBound + extra) output historyMember
+    rw [common] at actual
+    exact actual

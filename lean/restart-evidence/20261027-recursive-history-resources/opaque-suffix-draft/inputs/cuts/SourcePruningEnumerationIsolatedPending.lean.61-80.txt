@@ -1,0 +1,20 @@
+/-- A fresh empty allocation has no incoming suspended reference under current storage bounds. -/
+theorem allocated_isolated (before : State Symbol EnumGuard) (handle : Nat) (safe : Safe before) :
+    IsolatedPending before.counter handle (allocated (some handle) before) := by
+  refine ⟨⟨1, .root ?_⟩, allocated_slot (some handle) before safe.1.aligned, ?_⟩
+  · simp [allocated, UnionFind.read, outside_forest before.representatives before.counter before.counter
+      safe.1.forest (Nat.le_refl _)]
+  · intro value member sc listed same
+    change value ∈ before.values ++ [.unenumerated (some handle) []] at member
+    change UnionFind.SameClass before.representatives before.counter sc.var at same
+    rcases List.mem_append.mp member with old | fresh
+    · cases value with
+      | eliminated | enumerated _ => simp [references] at listed
+      | unenumerated node bucket =>
+          have bound : sc.var < before.counter := safe.1.values _ old sc listed
+          have equal := outside_class before.representatives before.counter before.counter sc.var
+            safe.1.forest (Nat.le_refl _) same
+          omega
+    · have sameValue : value = .unenumerated (some handle) [] := by simpa using fresh
+      subst value
+      simp [references] at listed

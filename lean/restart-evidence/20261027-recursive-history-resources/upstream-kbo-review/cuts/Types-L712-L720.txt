@@ -1,0 +1,9 @@
+toTemplate :: Sig -> Term -> Term
+toTemplate sig (Term "app" [ty, f, x]) = Term "app" [templateType ty, toTemplate sig f, toTemplate sig x]
+toTemplate sig (Term (Symbol s) [ty]) =
+    Term (Symbol name) [templateType ty]
+  where
+    name = case sig Map.!? s of
+        Just (GivenFun{given_info = GivenVar{}}) -> "<v>" <> s
+        _ -> s
+toTemplate _ t = t

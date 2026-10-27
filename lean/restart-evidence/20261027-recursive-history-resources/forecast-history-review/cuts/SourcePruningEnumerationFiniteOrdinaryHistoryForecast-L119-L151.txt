@@ -1,0 +1,33 @@
+          formulas solver (bound + extra) caller memos entered uv scs
+          (edgesOf (.node parentEntry storedEdges depth free)) capturedMass inherited output) := by
+  obtain ⟨_roots, _paths, _storage, realized, _counts, _flags⟩ := packet.valid
+  obtain ⟨value, lookup, available, _closed⟩ := realized uv handle scs stored
+  have same : value = .node parentEntry storedEdges depth free :=
+    Option.some.inj (lookup.symm.trans decoded)
+  subst value
+  have heapFits : SourceCurrentConstrainedCapRequiredResources.HeapFits seed.2
+      caller.checked.native.machine.heap :=
+    SourceCurrentConstrainedCapRequiredResources.of_checked
+      (profile := seed.2) (before := caller.checked) bounded
+  have rowWidth := SourceCurrentConstrainedCapRequiredResources.node_width heapFits available
+  have countBound : (edgesOf (.node parentEntry storedEdges depth free)).length ≤
+      SourceCurrentConstrainedCapTargetForecast.scalar seed.2 + 1 :=
+    Nat.le_trans (selectionLength parentEntry storedEdges depth free)
+      (Nat.le_trans rowWidth (Nat.le_succ _))
+  obtain ⟨bound, enteredCache, processed, outputs, afterCaller, next, final, result,
+    entryRun, stable, counter, values, sameFlags, sameWaiting, enteredPacket, outerRun,
+    scanRun, post, captured, afterFits, afterKnown, processedLength, receipts, outputPackets,
+    shape, finished, histories⟩ :=
+    ordinary_finite_complete_resources_with_history holeKey fits admits graph templates checkEmpty edgesOf stop order metadata recursiveFuel
+      seed formulas solver recursive inventory caller memos before uv handle scs parentEntry storedEdges depth free
+      packet ready stored decoded selected incoming nonterminal bounded known selectionMembers selectionLength
+      capturedMass inherited initialMass inheritedLength
+      (SourcePruningEnumerationFiniteReservation.ScanReserved.prefix reserved countBound)
+  have growth := SourcePruningEnumerationFiniteReservation.count_mono
+    recursiveFuel seed capturedMass inherited countBound
+  refine ⟨bound, enteredCache, processed, outputs, afterCaller, next, final, result,
+    entryRun, stable, counter, values, sameFlags, sameWaiting, enteredPacket, outerRun, scanRun,
+    post, captured, afterFits, afterKnown, processedLength, receipts, outputPackets, shape, finished,
+    countBound, afterFits.mono growth.1, ?_, finished.mono growth.1 growth.2, histories⟩
+  intro key edge found
+  exact growth.2 (afterKnown key edge found)

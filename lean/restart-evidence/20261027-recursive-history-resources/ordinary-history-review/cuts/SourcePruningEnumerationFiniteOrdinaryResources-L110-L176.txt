@@ -1,0 +1,67 @@
+  obtain ⟨roots, paths, _storage, realized, counts, flags⟩ := packet.valid
+  obtain ⟨entryFuel, value, enteredCache, entryRun, lookup, _available, _closed, counter, values,
+    sameFlags, sameWaiting, enteredStored, enteredReady, _protected, enteredPaths, enteredRealized,
+    enteredCounts, enteredFlags, _bucketBounded, _retained, stable⟩ :=
+    SourcePruningEnumerationSelectedEntry.complete caller.checked.native.machine.heap before uv handle scs roots
+      ready stored realized paths counts flags
+  have same : value = .node parentEntry storedEdges depth free :=
+    Option.some.inj (lookup.symm.trans decoded)
+  subst value
+  have frame : EnumerationExpandableIndex.frame enteredCache.core before = enteredCache := by
+    cases enteredCache with
+    | mk core expandable waiting =>
+        simp only [EnumerationExpandableIndex.frame] at *
+        congr 1
+        · exact sameFlags.symm
+        · exact sameWaiting.symm
+  have enteredPacket : Packet formulas solver inventory caller memos metadata enteredCache := by
+    obtain ⟨level, frontier, ordered⟩ := packet.ordered
+    refine ⟨packet.context, stable.safe,
+      EnumerationReferences.pending_read before.core enteredCache.core stable packet.pending,
+      ⟨roots, enteredPaths, stable.safe.1, enteredRealized, enteredCounts, enteredFlags⟩,
+      ⟨level, frontier, EnumerationOrder.stratified_read before.core enteredCache.core level frontier stable ordered⟩,
+      ?_⟩
+    simpa only [counter] using packet.bounded
+  have enteredMass : suspendedBound enteredCache.core ≤ capturedMass := by
+    rw [SourcePruningEnumerationPrefixAdmission.suspendedBound_values before.core enteredCache.core values]
+    exact initialMass
+  obtain ⟨scanBound, processed, outputs, afterCaller, next, final, result, scanRun, post,
+    captured, afterFits, afterKnown, processedLength, receipts, outputPackets, shape, finished⟩ :=
+    SourcePruningEnumerationNativeFiniteSiblingResources.alternatives_finite_finish_resources
+      holeKey fits admits graph templates checkEmpty edgesOf stop order metadata recursiveFuel seed formulas solver recursive inventory
+      caller memos enteredCache uv handle scs parentEntry storedEdges
+      (edgesOf (.node parentEntry storedEdges depth free)) depth free enteredPacket enteredReady enteredStored
+      decoded selected (EnumerationReferences.incoming_read uv before.core enteredCache.core stable incoming)
+      bounded known selectionMembers selectionLength capturedMass inherited enteredMass inheritedLength reserved
+  have entryAt (extra : Nat) :
+      ExceptT.run (SourcePruningEnumerationEntry.enter caller.checked.native.machine.heap
+        (entryFuel + scanBound + extra) uv before.core) =
+        [.ok ((uv, handle, scs, .node parentEntry storedEdges depth free), enteredCache.core)] := by
+    simpa only [Nat.add_assoc] using entryRun (scanBound + extra)
+  have scanAt (extra : Nat) : SourcePruningEnumerationNativeContinuations.run
+      (continueWith
+        (resume holeKey fits admits graph templates checkEmpty edgesOf stop order (entryFuel + scanBound + extra) recursiveFuel)
+        graph templates stop order (entryFuel + scanBound + extra) metadata uv)
+      checkEmpty (entryFuel + scanBound + extra) (entryFuel + scanBound + extra)
+      (entryFuel + scanBound + extra) (entryFuel + scanBound + extra) (entryFuel + scanBound + extra)
+      uv scs enteredCache (edgesOf (.node parentEntry storedEdges depth free)) caller memos.query = result := by
+    have actual := scanRun (entryFuel + extra)
+    have fuelSame : scanBound + (entryFuel + extra) = entryFuel + scanBound + extra := by omega
+    rw [fuelSame] at actual
+    exact actual
+  refine ⟨entryFuel + scanBound, enteredCache, processed, outputs, afterCaller, next, final, result,
+    entryAt, stable, counter, values, sameFlags, sameWaiting, enteredPacket, ?_, scanAt, post, captured,
+    afterFits, afterKnown, processedLength, receipts, outputPackets, shape, finished⟩
+  · intro extra
+    have actual := entered
+      (continueWith
+        (resume holeKey fits admits graph templates checkEmpty edgesOf stop order (entryFuel + scanBound + extra) recursiveFuel)
+        graph templates stop order (entryFuel + scanBound + extra) metadata uv)
+      checkEmpty (entryFuel + scanBound + extra) (entryFuel + scanBound + extra)
+      (entryFuel + scanBound + extra) (entryFuel + scanBound + extra) (entryFuel + scanBound + extra)
+      uv uv handle scs parentEntry storedEdges depth free edgesOf caller before memos.query enteredCache.core
+      (entryAt extra) nonterminal
+    rw [frame, scanAt extra] at actual
+    exact actual
+
+end MicroCFTA.SourcePruningEnumerationNativeOrdinaryContinuations

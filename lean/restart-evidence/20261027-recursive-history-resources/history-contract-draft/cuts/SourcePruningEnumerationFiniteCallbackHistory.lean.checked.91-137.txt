@@ -1,0 +1,47 @@
+    rw [SourcePruningEnumerationPrefixAdmission.suspendedBound_values before.core after frame.values]
+    exact mass
+  have returnedAdmission : RecursiveCallbackAdmission formulas solver inventory caller memos result.2
+      (EnumerationExpandableIndex.frame after before) uv fragment recursiveFuel seed ceiling := by
+    refine ⟨returned, ?_, bounded, known, massAfter, reserved⟩
+    change FragmentBound after.counter fragment
+    rw [frame.counter]
+    exact allocated
+  by_cases rejected : result.1 = true
+  · have resources : OutcomeResources (Typing := Typing) formulas solver caller seed (.complete [] caller memos.query) := by
+      refine ⟨caller, inventory, memos, Post.refl packet.context, bounded, known, rfl, rfl, ?_⟩
+      intro output member
+      exact False.elim (List.not_mem_nil member)
+    have growth := SourcePruningEnumerationFiniteReservation.final_ge recursiveFuel seed ceiling
+    refine ⟨callbackFuel, result, after, .complete [] caller memos.query,
+      returned, stable, frame, types, holes, typing, callback, ?_, resources.mono growth.1 growth.2,
+      returnedAdmission, ?_⟩
+    · intro extra
+      rw [(callback extra).2.2
+        (resume holeKey fits admits graph templates checkEmpty edgesOf stop order (callbackFuel + extra) recursiveFuel)
+        stop order, ite_eq_left rejected]
+    · intro _extra _false output member
+      exact False.elim (List.not_mem_nil member)
+  · obtain ⟨resumeFuel, outcome, running, resources, histories⟩ := recursive
+      inventory caller memos (EnumerationExpandableIndex.frame after before) result.2 seed ceiling
+      returned bounded known selectionMembers selectionLength massAfter reserved
+    refine ⟨callbackFuel + resumeFuel, result, after, outcome,
+      returned, stable, frame, types, holes, typing, ?_, ?_, resources, returnedAdmission, ?_⟩
+    · intro extra
+      have actual := callback (resumeFuel + extra)
+      rw [← Nat.add_assoc] at actual
+      exact actual
+    · intro extra
+      have actual := callback (resumeFuel + extra)
+      rw [← Nat.add_assoc] at actual
+      rw [actual.2.2
+        (resume holeKey fits admits graph templates checkEmpty edgesOf stop order
+          (callbackFuel + resumeFuel + extra) recursiveFuel) stop order, ite_eq_right rejected]
+      have observed := running (callbackFuel + extra)
+      have common : resumeFuel + (callbackFuel + extra) = callbackFuel + resumeFuel + extra := by omega
+      rw [common] at observed
+      exact observed
+    · intro extra _false output member
+      have observed := histories (callbackFuel + extra) output member
+      have common : resumeFuel + (callbackFuel + extra) = callbackFuel + resumeFuel + extra := by omega
+      rw [common] at observed
+      exact observed

@@ -1,0 +1,33 @@
+/-- A child traversal can retain or remove old expanded slots, but it cannot create an expanded slot. -/
+def EnumeratedOrigin (before after : State Symbol Guard) : Prop :=
+  ∀ (uv : Nat) (fragment : Fragment Symbol), after.values[uv]? = some (.enumerated fragment) → before.values[uv]? = some (.enumerated fragment)
+
+/-- An unchanged store has no new expanded slots. -/
+theorem EnumeratedOrigin.refl (state : State Symbol Guard) : EnumeratedOrigin state state := fun _ _ => id
+
+/-- The origin of expanded slots composes through consecutive state actions. -/
+theorem EnumeratedOrigin.trans (first : EnumeratedOrigin before middle) (second : EnumeratedOrigin middle after) :
+    EnumeratedOrigin before after := fun uv fragment stored => first uv fragment (second uv fragment stored)
+
+/-- Writing a pending or eliminated value does not create an expanded slot. -/
+theorem setValue_origin (uv : Nat) (value : UVarValue Symbol) (before after : State Symbol Guard)
+    (pending : ∀ fragment, value ≠ .enumerated fragment)
+    (success : Success (setValue uv value) before () after) : EnumeratedOrigin before after := by
+  obtain rfl := (modify_success _ before after).mp success
+  intro held fragment stored
+  by_cases same : held = uv
+  · subst held
+    have inside := (List.getElem?_eq_some_iff.mp stored).1
+    simp only [List.length_set] at inside
+    have valueSame : value = .enumerated fragment := by simpa [inside] using stored
+    exact (pending fragment valueSame).elim
+  · simpa [Ne.symm same] using stored
+
+/-- Fresh pending allocation does not create an expanded slot. -/
+theorem allocation_origin (node : Option Nat) (state : State Symbol Guard) : EnumeratedOrigin state (allocated node state) := by
+  intro uv fragment stored
+  by_cases inside : uv < state.values.length
+  · simpa [allocated, List.getElem?_append_left inside] using stored
+  · have outside : state.values.length ≤ uv := Nat.le_of_not_lt inside
+    rw [show (allocated node state).values = state.values ++ [.unenumerated node []] from rfl,
+      List.getElem?_append_right outside] at stored

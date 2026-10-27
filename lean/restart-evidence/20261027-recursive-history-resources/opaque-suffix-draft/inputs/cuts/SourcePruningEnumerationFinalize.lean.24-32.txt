@@ -1,0 +1,9 @@
+def run (heap : InternedConstructorTemplates.State Symbol NativeGuard)
+    (fuel target : Nat) (fragment : Fragments.Fragment Symbol)
+    (before : EnumerationExpandableIndex.Cached Symbol EnumGuard) :
+    Option (EnumerationExpandableIndex.Cached Symbol EnumGuard) :=
+  let reset : EnumerationExpandableIndex.Cached Symbol EnumGuard :=
+    EnumerationExpandableIndex.frame {before.core with expansionAncestry := []} before
+  (reset.core.values[target]?).bind fun old =>
+    SourcePruningEnumerationNativeIndex.write heap fuel target (.enumerated fragment)
+      [] (references old) reset

@@ -1,0 +1,55 @@
+{
+  "namespace": "MicroCFTA.EnumerationDischargeHistory",
+  "module": "MicroCFTA.SourcePruningEnumerationCreatedIsolation",
+  "source_sha256": "98d627d6a192a8fa19539ea73891e279d5730570ccb991a4f17503aa236cb8fc",
+  "theorems": [
+    {
+      "name": "checkRepeated_created_isolated",
+      "actual_operation": "Success(checkRepeated heap fuel uv handle scs) before true after",
+      "original_facts": [
+        "Ready uv before",
+        "IncomingAvoid uv before"
+      ],
+      "conclusion": "IsolatedPending uv handle after"
+    },
+    {
+      "name": "referenced_clear_not_isolated",
+      "actual_operation": "Success(setValue target (.unenumerated(some handle)[])) before () after",
+      "original_facts": [
+        "different external stored slot",
+        "listed suspended reference",
+        "SameClass target sc.var"
+      ],
+      "conclusion": "not IsolatedPending target handle after"
+    },
+    {
+      "name": "packet_parked_created_isolated",
+      "actual_operation": [
+        "original Restart.decision=some(expand uv)",
+        "actual getValue success",
+        "actual checkRepeated=true success",
+        "actual ParkedRestart.adapt=some after"
+      ],
+      "original_facts": [
+        "original Packet"
+      ],
+      "conclusion": "IsolatedPending uv handle after.core"
+    },
+    {
+      "name": "packet_boundary_prepare_created_isolated",
+      "actual_operation": "actual CachedPrepare.prepareChild=some[(hole before.counter,after)]",
+      "original_facts": [
+        "original Packet",
+        "current Available and closed value",
+        "current recursiveBoundary=true",
+        "no-terminal route"
+      ],
+      "conclusion": "exists same encoded/decoded handle, fresh IsolatedPending and false actual native flag"
+    }
+  ],
+  "old_theorems_modified": false,
+  "runtime_definitions_added": 0,
+  "new_semantic_acceptance_gate": false,
+  "same_output_whole_history_proved": false,
+  "root_check": "strict-created-isolation-1: exit 0, full raw literal empty, exact original source"
+}

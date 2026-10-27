@@ -1,0 +1,29 @@
+          | .stopped _ _ _ => True) ∧
+          (match (generalizing := false) receipt with
+          | .complete fragment actual queries after =>
+              ∃ (result : Bool × SourcePruningRecordTypes.Metadata Typing) (callbackCore : Core),
+                (∀ extra,
+                  Success (SourcePruningRecordTypes.recordTypes graph templates (bound + extra) metadata uv
+                    (.inl fragment)) after.core result callbackCore ∧
+                  ExceptT.run (SourcePruningRecordTypes.recordTypes graph templates (bound + extra) metadata uv
+                    (.inl fragment) after.core) = [.ok (result, callbackCore)] ∧
+                  ∀ (recur : SourcePruningRecordTypes.Metadata Typing → Caller (bits + 2) → Queries → Cached →
+                    Option Next → CallbackResult) stop order,
+                    continueWith recur graph templates stop order (bound + extra) metadata uv fragment actual
+                      middleMemos.query after =
+                      if result.1 then .complete [] actual middleMemos.query
+                      else recur result.2 actual middleMemos.query (EnumerationExpandableIndex.frame callbackCore after)
+                        (SourcePruningEnumerationRestart.decision stop order result.2
+                          (EnumerationExpandableIndex.frame callbackCore after))) ∧
+                SourcePruningEnumerationRecursive.RecursiveCallbackAdmission formulas solver middleInventory
+                  actual middleMemos result.2 (EnumerationExpandableIndex.frame callbackCore after)
+                  uv fragment recursiveFuel (afterHead seed inherited) (massCeil seed capturedMass inherited) ∧
+                (∀ extra, result.1 = false →
+                  ∀ output ∈ SourcePruningEnumerationHookInvocation.hookOutputs outcome,
+                    SourcePruningEnumerationRecursive.ResourceHistory holeKey fits admits graph templates checkEmpty
+                      edgesOf stop order formulas solver (bound + extra) recursiveFuel middleInventory actual middleMemos
+                      result.2 (EnumerationExpandableIndex.frame callbackCore after)
+                      (afterHead seed inherited) (massCeil seed capturedMass inherited)
+                      (SourcePruningEnumerationRestart.decision stop order result.2
+                        (EnumerationExpandableIndex.frame callbackCore after)) output)
+          | _ => True)) ∧

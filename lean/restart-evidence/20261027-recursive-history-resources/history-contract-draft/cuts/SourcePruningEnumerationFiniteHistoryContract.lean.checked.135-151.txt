@@ -1,0 +1,17 @@
+theorem ResourceHistory.forget
+    {holeKey : Typing → Nat → Key} {fits : Key → Symbol → Bool} {admits : Key → Node → Bool}
+    {graph : Graph Symbol Constraint} {templates : List (Template.Pattern Symbol)}
+    {checkEmpty : Bool} {edgesOf : Node → List (EdgeValue Symbol Constraint)}
+    {stop : Option (Metadata Typing → Nat → Bool)} {order : Metadata Typing → List Nat → Option Nat}
+    {formulas : SourceGuards.Formulas FullSyntax.Formula} {solver : SourceGuards.Entailment FullSyntax.Formula}
+    {workFuel recursiveFuel : Nat} {inventory : Inventory} {caller : Caller (bits + 2)} {memos : Memos}
+    {metadata : Metadata Typing} {before : Cached} {seed : Seed} {ceiling : Nat}
+    {next : Option Next} {output : Output (bits + 2) Typing}
+    (history : ResourceHistory holeKey fits admits graph templates checkEmpty edgesOf stop order formulas solver workFuel
+      recursiveFuel inventory caller memos metadata before seed ceiling next output) :
+    OutputHistory holeKey fits admits graph templates checkEmpty edgesOf stop order workFuel
+      recursiveFuel metadata caller memos.query before next output := by
+  induction history with
+  | stopped _ => exact .stopped
+  | done _ => exact .done
+  | parked _ _ observed _ ih => exact .parked observed ih

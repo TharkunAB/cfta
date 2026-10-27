@@ -1,0 +1,6 @@
+/-- Representative compression retains the absence of incoming suspended references. -/
+theorem frame_incoming (held : Nat) (before after : State Symbol Guard)
+    (frame : Frame before after) (incoming : IncomingAvoid held before) : IncomingAvoid held after := by
+  intro value member sc listed same
+  apply incoming value (by simpa only [frame.values] using member) sc listed
+  simpa only [UnionFind.SameClass, frame.reaches] using same

@@ -1,0 +1,63 @@
+[
+  {
+    "path": "cfta/CHANGELOG.md",
+    "resolution": "Use upstream wording inside each overlapping extraction progress comment; preserve all bytes outside conflict spans.",
+    "haskell_edits_confined_to_comments": false,
+    "conflicts": [
+      {
+        "offset": 2805,
+        "local": "  e-class or the data of an analysis.\n  The extraction and cost-enumeration comments state a sufficient progress\n  condition. Monotone costs and strict child growth alone can leave an\n  accepted term behind infinitely many cheaper rejected candidates.\n",
+        "upstream": "  e-class or the data of an analysis. The search reaches each term when each\n  cost bound admits only finitely many partial terms, as for `1 + sum`. With\n  a lexicographic pair, an infinite number of cheaper partial terms that fail\n  their constraints can come before a term that satisfies them.\n"
+      }
+    ],
+    "resolved_bytes": 26602,
+    "resolved_sha256": "30783dc45798a130624bbc8843d18b214290b00c089a14a7addab85038383f4f"
+  },
+  {
+    "path": "cfta/src/Data/CFTA.hs",
+    "resolution": "Use upstream wording inside each overlapping extraction progress comment; preserve all bytes outside conflict spans.",
+    "haskell_edits_confined_to_comments": true,
+    "conflicts": [
+      {
+        "offset": 19171,
+        "local": "An infinite set of cheaper rejected candidates can prevent the next term from\nbeing reached. A sufficient progress condition is that each cost bound admits\nonly finitely many generated partial terms.\n",
+        "upstream": "A search reaches each term when each cost bound admits only finitely many\npartial terms, as for natural numbers and @1 + sum@. A cost type without\nthis condition, such as a lexicographic pair, can put an infinite number of\ncheaper partial terms whose terms fail their constraints before a term that\nsatisfies them, and then the search does not reach that term.\n"
+      }
+    ],
+    "resolved_bytes": 22972,
+    "resolved_sha256": "3507677cdb35133c77db57d028faeee471b7f4c280bb05d526136d354f56d65d"
+  },
+  {
+    "path": "cfta/src/Data/CFTA/EGraph.hs",
+    "resolution": "Use upstream wording inside each overlapping extraction progress comment; preserve all bytes outside conflict spans.",
+    "haskell_edits_confined_to_comments": true,
+    "conflicts": [
+      {
+        "offset": 32715,
+        "local": "cost of each child, as @1 + sum@ is. One sufficient progress condition is that\neach cost bound admits only finitely many generated partial terms.\nStrict increase alone does not give this condition for an arbitrary\nordered cost, such as a lexicographic pair. Infinitely many cheaper rejected\nterms can prevent 'extract' from reaching an accepted term.\nWhen 'extract' returns a term, it is cheapest and satisfies the constraint of\neach of its e-nodes. The e-graph has no check that the constraints leave a term,\nso 'extract' also does not return when the constraints reject each term of an\ninfinite language.\n",
+        "upstream": "cost of each child, as @1 + sum@ is. A term that 'extract' gives is the\ncheapest term of the e-class, and it satisfies the constraint of each of its\ne-nodes. 'extract' finds the cheapest term of each e-class that has a term\nwhen each cost bound admits only finitely many partial terms, as for natural\nnumbers and @1 + sum@. A cost type without this condition, such as a\nlexicographic pair, can put an infinite number of cheaper partial terms whose\nterms fail their constraints before a term that satisfies them, and then\n'extract' does not return. The e-graph has no check that the constraints\nleave a term, so 'extract' also does not return when the constraints reject\neach term of an infinite language.\n"
+      },
+      {
+        "offset": 34356,
+        "local": "form in the same e-class gives all of them.\n\nThe progress condition described for 'extract' also applies here. An infinite\nset of cheaper rejected candidates can prevent the next term from being reached.\n",
+        "upstream": "form in the same e-class gives all of them. The search reaches the next term\nunder the condition of 'extract'.\n"
+      }
+    ],
+    "resolved_bytes": 75321,
+    "resolved_sha256": "1301063fa3dd40d1a2dea9fe0a253c8efe40558de2f43bb65d8fc8ed3f6ee4cc"
+  },
+  {
+    "path": "cfta/src/Data/CFTA/Internal/Tree.hs",
+    "resolution": "Use upstream wording inside each overlapping extraction progress comment; preserve all bytes outside conflict spans.",
+    "haskell_edits_confined_to_comments": true,
+    "conflicts": [
+      {
+        "offset": 13790,
+        "local": "An infinite set of cheaper rejected candidates can prevent the next term from\nbeing reached. A sufficient progress condition is that each cost bound admits\nonly finitely many generated partial terms.\n",
+        "upstream": "A search reaches each term when each cost bound admits only finitely many\npartial terms, as for natural numbers and @1 + sum@. A cost type without\nthis condition, such as a lexicographic pair, can put an infinite number of\ncheaper partial terms whose terms fail their constraints before a term that\nsatisfies them, and then the search does not reach that term.\n"
+      }
+    ],
+    "resolved_bytes": 19168,
+    "resolved_sha256": "de6b00f69a786eb1972aa90fab29e7b2bb3b6b5d9e3e0a45726b93796cd7d68c"
+  }
+]

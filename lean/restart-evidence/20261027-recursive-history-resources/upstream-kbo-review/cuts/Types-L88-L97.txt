@@ -1,0 +1,10 @@
+type Term = CT.Term Symbol
+
+-- | A term as its symbol and the list of its children.
+pattern Term :: Symbol -> [Term] -> Term
+pattern Term s ts = CT.Node s ts
+
+{-# COMPLETE Term #-}
+
+-- The matcher inlines, as the matcher of 'CT.Node' does, so that a match
+-- does not build the list of the children.

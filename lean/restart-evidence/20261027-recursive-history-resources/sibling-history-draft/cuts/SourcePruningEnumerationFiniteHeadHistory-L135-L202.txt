@@ -1,0 +1,68 @@
+      ∀ (fragment : Fragments.Fragment Symbol) (reached : Caller (bits + 2)) (queries : Queries) (after : Cached),
+        receipt = .complete fragment reached queries after →
+        SourcePruningEnumerationRecursive.RecursiveCallbackAdmission formulas solver middleInventory reached middleMemos
+          metadata after uv fragment recursiveFuel (afterHead seed inherited) (massCeil seed capturedMass inherited) := by
+  obtain ⟨headBound, receipt, middleCaller, saved, middleMemos, middleInventory,
+    headRun, post, querySame, admitted, pending, history, cacheBounds, headFits, headKnown,
+    shape, completedReceipt, callbackAdmission⟩ :=
+    head_finite_complete_resources_with_callback_admission holeKey fits admits graph templates checkEmpty edgesOf
+      stop order metadata recursiveFuel seed formulas solver recursive.forget inventory caller memos before uv handle scs
+      parentEntry storedEdges depth free edge packet ready stored decoded selected incoming bounded known selectionMembers
+      selectionLength capturedMass inherited initialMass inheritedLength reserved
+  rcases shape with unsupported | ⟨outcome, advanced, callbackRun, resources, captured⟩
+  · exact ⟨headBound, receipt, middleCaller, saved, middleMemos, middleInventory,
+      headRun, post, querySame, admitted, pending, history, cacheBounds, headFits, headKnown,
+      .inl unsupported, completedReceipt, callbackAdmission⟩
+  · cases receipt with
+    | unhandled => cases advanced
+    | rejected actual queries after =>
+        exact ⟨headBound, .rejected actual queries after, middleCaller, saved, middleMemos, middleInventory,
+          headRun, post, querySame, admitted, pending, history, cacheBounds, headFits, headKnown,
+          .inr ⟨outcome, advanced, callbackRun, resources, captured, trivial⟩, completedReceipt, callbackAdmission⟩
+    | stopped fragments observation candidate =>
+        exact ⟨headBound, .stopped fragments observation candidate, middleCaller, saved, middleMemos, middleInventory,
+          headRun, post, querySame, admitted, pending, history, cacheBounds, headFits, headKnown,
+          .inr ⟨outcome, advanced, callbackRun, resources, captured, trivial⟩, completedReceipt, callbackAdmission⟩
+    | complete fragment actual queries after =>
+        have actualReceipt := completedReceipt fragment actual queries after rfl
+        have admission := callbackAdmission fragment actual queries after rfl
+        obtain ⟨callbackFuel, result, callbackCore, callbackOutcome,
+          _returned, _stable, _frame, _types, _holes, _typing, callback, richRun,
+          _richResources, returnedAdmission, histories⟩ :=
+          SourcePruningEnumerationRecursive.callback_finite_complete_resources_with_history
+            holeKey fits admits formulas solver middleInventory graph templates metadata uv fragment actual middleMemos after
+            checkEmpty edgesOf stop order recursiveFuel recursive (afterHead seed inherited)
+            (massCeil seed capturedMass inherited) admission.packet admission.allocated admission.bounded admission.known
+            selectionMembers selectionLength admission.mass admission.reserved
+        have outcomeSame : outcome = callbackOutcome := by
+          have first := callbackRun callbackFuel
+          have second := richRun headBound
+          rw [Nat.add_comm callbackFuel headBound, actualReceipt.query] at second
+          exact first.symm.trans second
+        subst callbackOutcome
+        refine ⟨headBound + callbackFuel, .complete fragment actual queries after,
+          middleCaller, saved, middleMemos, middleInventory,
+          ?_, post, querySame, admitted, pending, history, cacheBounds, headFits, headKnown,
+          .inr ⟨outcome, advanced, ?_, resources, captured, ?_⟩, ?_, callbackAdmission⟩
+        · intro extra
+          simpa only [Nat.add_assoc] using headRun (callbackFuel + extra)
+        · intro extra
+          simpa only [Nat.add_assoc] using callbackRun (callbackFuel + extra)
+        · refine ⟨result, callbackCore, ?_, returnedAdmission, ?_⟩
+          · intro extra
+            have actualCallback := callback (headBound + extra)
+            have common : callbackFuel + (headBound + extra) = headBound + callbackFuel + extra := by omega
+            rw [common] at actualCallback
+            exact actualCallback
+          · intro extra accepted output member
+            have actualHistory := histories (headBound + extra) accepted output member
+            have common : callbackFuel + (headBound + extra) = headBound + callbackFuel + extra := by omega
+            rw [common] at actualHistory
+            exact actualHistory
+        · intro nextFragment nextCaller nextQueries nextCache completed
+          have certificate := completedReceipt nextFragment nextCaller nextQueries nextCache completed
+          exact { certificate with
+            running := fun extra => by
+              simpa only [Nat.add_assoc] using certificate.running (callbackFuel + extra) }
+
+end MicroCFTA.SourcePruningEnumerationNativeHookResources

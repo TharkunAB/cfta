@@ -1,0 +1,14 @@
+                fail completionFuelMessage
+            when (egraphSetting /= EGraphOff && parallelSetting) $
+                fail "--egraph does not work with --parallel"
+            -- Threads write whole diagnostic lines.
+            when parallelSetting $ hSetBuffering stderr LineBuffering
+            sink <- newIORef []
+            statsEnabled <- getRTSStatsEnabled
+            let memLimitSetting = if statsEnabled then memLimitOption else Nothing
+            when (isJust memLimitOption && not statsEnabled) $
+                hPutStrLn stderr "*** Warning: --bucket-mem-limit needs RTS statistics (+RTS -T); it has no effect."
+            when (isJust memLimitSetting && aheadSetting) $
+                hPutStrLn
+                    stderr
+                    "*** Warning: with --enumerate-ahead, --bucket-mem-limit also counts the heap of the background enumeration."

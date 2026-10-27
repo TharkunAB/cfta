@@ -1,0 +1,20 @@
+[2026-10-27 12:42 CET] Rejected arbitrary-clear inference
+
+Proposed inference, NOT established:
+  Ready uv before + arbitrary actual setValue uv (.unenumerated(some handle)[])
+  implies IsolatedPending uv handle after.
+A bare current Packet does not add IncomingAvoid for every pending root.
+
+Reason: a stored suspended reference in a different slot survives this write.
+The target's representative forest does not change. Ready.avoids only constrains
+its own selected bucket; PendingReferences constrains enumerated roots.
+The new checked theorem referenced_clear_not_isolated states the exact surviving
+external-reference obstruction. It does not claim its antecedent holds at an
+actual selected root or construct a full reachable native Packet countermodel.
+
+Replacement routes implemented:
+  actual Restart.expand + canonical waiting/flags -> IncomingAvoid, then real true check;
+  actual opaque cached preparation -> fresh allocated root under original Safe.
+Both derive new isolation at the observed endpoint. Neither assumes after-isolation.
+
+No failed or unfinished Lean statement was added to assert the rejected inference.

@@ -1,0 +1,33 @@
+    (before : EnumerationExpandableIndex.Cached Symbol EnumGuard)
+    (preference : List Nat → Option Nat) (uv : Nat)
+    (selected : EnumerationPureSelection.next preference before = .expand uv) :
+    uv < before.core.counter ∧ before.expandable uv = true ∧ before.waiting uv = none := by
+  dsimp only [EnumerationPureSelection.next, EnumerationPureSelection.find] at selected
+  split at selected
+  · cases selected
+  · have member := pickNext_safe preference _ uv selected
+    obtain ⟨candidate, unblocked⟩ := List.mem_filter.mp member
+    obtain ⟨inside, flag⟩ := List.mem_filter.mp candidate
+    exact ⟨List.mem_range.mp inside, flag, Option.isNone_iff_eq_none.mp unblocked⟩
+
+/-- Exact waiting counts separate an unblocked root from every stored reference. -/
+theorem unblocked_avoids
+    (before : EnumerationExpandableIndex.Cached Symbol EnumGuard)
+    (roots : Nat → Nat) (paths : Roots before.core.representatives roots)
+    (counts : EnumerationCanonicalWaiting.Correct roots before.core.values before.waiting)
+    (held : Nat) (root : IsRoot before.core.representatives held)
+    (unblocked : before.waiting held = none)
+    (slot : Nat) (node : Option Nat) (scs : List Suspended)
+    (stored : before.core.values[slot]? = some (.unenumerated node scs)) :
+    Avoids before.core.representatives held scs := by
+  intro sc member same
+  have fixed : roots held = held := (root_iff _ roots paths held).mp root
+  have named : roots sc.var = held :=
+    ((class_iff _ roots paths held sc.var).mp same).symm.trans fixed
+  have blocked := (EnumerationCanonicalWaiting.support_exact
+    roots before.core.values before.waiting counts held).mpr
+      ⟨.unenumerated node scs, List.mem_iff_getElem?.mpr ⟨slot, stored⟩, sc, member, named⟩
+  exact blocked unblocked
+
+/-- Native flags and canonical counts derive the caller's safe expansion precondition. -/
+theorem ready

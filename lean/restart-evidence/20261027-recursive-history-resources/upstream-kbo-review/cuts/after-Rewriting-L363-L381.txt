@@ -1,0 +1,19 @@
+
+{- | Prove a decrease that cannot depend on the type annotations. The
+variable conditions of 'kboGreater' preserve the weight comparison under
+term substitution. Equal weights and equal weights of definition need a
+strict function comparison or a strict comparison of constant names. Identical functions stay identical
+under one shared term and type substitution.
+-}
+annotationIndependentGreater :: Map Symbol Int -> Term -> Term -> Bool
+annotationIndependentGreater defined a b =
+    kboGreater defined Map.empty a b && (heavier defined a b == GT || tie a b)
+  where
+    tie (Term "app" [_, f, v]) (Term "app" [_, g, u])
+        | f == g = tie v u
+        | otherwise = annotationIndependentGreater defined f g
+    tie (Term f [_]) (Term g [_])
+        | not (isTemplateVar f || isTemplateVar g) = f > g
+    tie _ _ = False
+
+{- | Infer the principal annotations of a linear pattern. Each occurrence

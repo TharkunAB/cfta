@@ -1,0 +1,73 @@
+completionFuelDefault :: Int
+completionFuelDefault = 15
+
+-- | The largest exponent of the fuel of a completion: 2^62 pairs fit in an 'Int'.
+completionFuelMax :: Int
+completionFuelMax = 62
+
+-- | The error for an exponent of the fuel out of its range.
+completionFuelMessage :: String
+completionFuelMessage = "completion fuel must be an integer from 0 to " ++ show completionFuelMax
+
+{- | The completed rules of a law, if their computation stays within the
+limits of the completion (see 'completionTimeout', 'completionMemLimit',
+'completionAllocLimit'), and else the rules of the law alone, with a report
+on stderr. A completion out of its fuel keeps the rules that it has
+(see 'completionFuel'), also with a report. Completion only adds rules that follow from the laws, so fewer
+rules prune less but stay sound. The allocation does not depend on the load.
+The time does, and the memory limit depends on the times of the collections.
+Without RTS statistics (@+RTS -T@) there is no memory limit.
+-}
+boundedCompletion :: Settings -> String -> (Rules, Bool, Int) -> Rules -> IO Rules
+boundedCompletion Settings{..} label completed alone = do
+    statsEnabled <- getRTSStatsEnabled
+    base <- if statsEnabled then Just <$> liveBytes else pure Nothing
+    begin <- getMonotonicTimeNSec
+    setAllocationCounter (fromIntegral completionAllocLimit)
+    enableAllocationLimit
+    result <-
+        try $
+            withMemoryLimit ((\live -> (live, completionMemLimit)) <$> base) $
+                case completionTimeout of
+                    Nothing -> Just <$> evaluate (forced completed)
+                    Just seconds -> timeout (round (seconds * 1e6)) (evaluate (forced completed))
+    disableAllocationLimit
+    left <- getAllocationCounter
+    end <- getMonotonicTimeNSec
+    -- A completion that allocates more than 1 GiB prints its cost on stderr.
+    let allocated = fromIntegral completionAllocLimit - fromIntegral left :: Double
+        pairs = case result of
+            Right (Right (Just (_, _, taken))) -> show taken
+            _ -> "-"
+    when (allocated > 1024 ^ (3 :: Int)) $
+        hPutStrLn
+            stderr
+            ( intercalate
+                "\t"
+                [ "completioncost"
+                , show (fromIntegral (end - begin) / 1e9 :: Double)
+                , show (allocated / 1024 ^ (3 :: Int))
+                , label
+                , pairs
+                ]
+            )
+    case result of
+        Right (Right (Just (rules, False, _))) -> return rules
+        Right (Right (Just (rules, True, _))) -> do
+            hPutStrLn stderr ("completion out of its fuel, the rules so far: " ++ label)
+            return rules
+        Right (Right Nothing) -> do
+            hPutStrLn stderr ("completion over its time limit, the law alone: " ++ label)
+            return alone
+        Right (Left grown) -> do
+            hPutStrLn
+                stderr
+                ( "completion over its memory limit (live heap grew by "
+                    ++ show (grown `div` (1024 * 1024))
+                    ++ " MiB), the law alone: "
+                    ++ label
+                )
+            return alone
+        Left AllocationLimitExceeded -> do
+            hPutStrLn stderr ("completion over its budget, the law alone: " ++ label)
+            return alone

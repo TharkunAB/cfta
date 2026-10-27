@@ -1,0 +1,65 @@
+
+'KnuthBendix' is the Knuth-Bendix order of 'kboCompare' and 'kboGreater':
+each symbol and each application has the weight 1. It orients an equation
+towards the side with fewer symbols, so a rule never makes a term larger,
+and a term that a rule rewrites has a smaller form in the search. The map
+gives the weights of definition of the defined symbols
+('definitionWeights'). Of two terms of the same weight, the term with the
+smaller sum of the weights of definition of its leaves is smaller. Then a
+definition whose body has its size, such as @(f >=> g) x = f x >>= g@,
+orients towards its body for each instance. The weight decides first, so a
+rule still never makes a term larger.
+
+'PathOrder' is the lexicographic path order on the uncurried terms: the
+function symbol of the spine of an application with its arguments. The list
+gives the precedence of the function symbols from the lowest to the
+highest. A symbol that the list does not give is below each listed symbol,
+and generated variables are below all function symbols. The order can
+make a term larger, for example
+@reverse (xs ++ ys) > reverse ys ++ reverse xs@ when @reverse@ is above
+@++@. Thus a rule can rewrite a term to a form with more symbols, and the
+search can then prune a term whose smaller form is over the size bound.
+-}
+data TermOrder
+    = KnuthBendix !(Map Symbol Int)
+    | PathOrder ![T.Text]
+    deriving (Eq, Show)
+
+{- | The total order of ground terms that decides the rewrites of the search
+and the order of the terms of a bucket. The generated variables are
+constants, below all function symbols.
+-}
+termCompare :: TermOrder -> (Symbol -> Bool) -> Term -> Term -> Ordering
+termCompare (KnuthBendix defined) isVar = kboCompare defined isVar
+termCompare (PathOrder precedence) isVar = lpoCompare precedence isVar
+
+-- | Whether a ground term is greater than another in the order.
+orderGreater :: TermOrder -> (Symbol -> Bool) -> Term -> Term -> Bool
+orderGreater order isVar a b = termCompare order isVar a b == GT
+
+{- | Whether a template is greater than another for each instance in which
+the ranked template variables compare as the ranking says (see
+'kboGreater').
+-}
+rankedGreater :: TermOrder -> Map Symbol Int -> Term -> Term -> Bool
+rankedGreater (KnuthBendix defined) rank = kboGreater defined rank
+rankedGreater (PathOrder precedence) rank = lpoGreater precedence rank
+
+-- | Whether a template is greater than another for each term and type instance.
+independentGreater :: TermOrder -> Term -> Term -> Bool
+independentGreater (KnuthBendix defined) = annotationIndependentGreater defined
+independentGreater (PathOrder precedence) = lpoGreater precedence Map.empty
+
+{- | Whether the decrease of a template also holds when both sides take
+more arguments. The path order compares the uncurried terms, so the
+arguments join the spines: when @a@ is above @f@, @f a > a@ but
+@f a x < a x@. One fresh argument decides each number of arguments: the
+heads compare in the same way, and no subterm of the left side contains
+the fresh variable. A side whose type is not a function type or a type
+variable takes no argument. The Knuth-Bendix order is closed under
+contexts.
+-}
+appliedGreater :: TermOrder -> Map Symbol Int -> Term -> Term -> Bool
+appliedGreater (KnuthBendix _) _ _ _ = True
+appliedGreater (PathOrder precedence) rank l r = case l of
+    Term _ (Term "->" [_, a, b] : _) -> applied a b

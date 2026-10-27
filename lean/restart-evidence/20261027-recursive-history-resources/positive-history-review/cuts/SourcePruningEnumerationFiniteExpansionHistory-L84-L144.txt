@@ -1,0 +1,61 @@
+  obtain ⟨roots, paths, _storage, realized, counts, flags⟩ := packet.valid
+  obtain ⟨prefixFuel, phases⟩ := SourcePruningEnumerationSelectedStep.prefix_checkpoint_complete
+    holeKey fits admits graph templates checkEmpty edgesOf stop order metadata formulas solver inventory
+    caller memos before (order metadata) uv roots packet.context packet.safe packet.pending selection
+    realized paths counts flags
+  rcases phases with parked | rejected | accepted
+  · obtain ⟨checked, phase⟩ := parked
+    obtain ⟨bound, outcome, running, resources, histories⟩ := parked_finite_complete_resources_with_history
+      holeKey fits admits graph templates checkEmpty edgesOf stop order formulas solver recursiveFuel recursive inventory
+      caller memos before metadata prefixFuel uv checked seed ceiling packet bounded known
+      selectionMembers selectionLength initialMass reserved phase
+    exact ⟨bound, outcome, running, by
+      simpa only [SourcePruningEnumerationFiniteReservation.final_succ] using resources, histories⟩
+  · obtain ⟨checked, heap, phase⟩ := rejected
+    let reached := SourceCurrentAllocatedPartialState.advance caller
+      (SourceCurrentAllocatedQueryMemo.advancePhysical caller.checked ⟨heap, caller.checked.operations⟩)
+      caller.fourth caller.merge
+    have valid := (phase 0).2
+    rw [(phase 0).1] at valid
+    have resources := SourcePruningEnumerationSelectedStep.prefix_resources
+      holeKey fits admits graph templates checkEmpty edgesOf stop order metadata formulas solver inventory
+      (prefixFuel + 0) uv caller before memos seed.2 (fun guard => guard ∈ seed.1)
+      packet.context realized bounded known _ valid
+    obtain ⟨final, post, query⟩ := SourcePruningEnumerationPrefixPacket.prefix_context
+      holeKey fits admits graph templates checkEmpty edgesOf stop order metadata formulas solver inventory
+      (prefixFuel + 0) uv caller before memos _ valid
+    have certificate : OutcomeResources (Typing := Typing) formulas solver caller start (.complete [] reached memos.query) :=
+      ⟨reached, inventory, final, post, resources.1, resources.2, rfl, query.symm,
+        fun _ member => False.elim (List.not_mem_nil member)⟩
+    refine ⟨prefixFuel, .complete [] reached memos.query, ?_, certificate.mono
+      stageGrowth.1 stageGrowth.2, ?_⟩
+    · intro extra
+      rw [resume, (phase extra).1]
+    · intro extra output member
+      cases member
+  · obtain ⟨checked, phaseValue, heap, after, _nonempty, phase⟩ := accepted
+    let reached := SourceCurrentAllocatedPartialState.advance caller
+      (SourceCurrentAllocatedQueryMemo.advancePhysical caller.checked ⟨heap, caller.checked.operations⟩)
+      caller.fourth caller.merge
+    obtain ⟨action, prefixAt, valid⟩ := phase 0
+    rw [prefixAt] at valid
+    have admission := SourcePruningEnumerationPrefixAdmission.narrowed_admission
+      holeKey fits admits graph templates checkEmpty edgesOf stop order metadata formulas solver inventory
+      (prefixFuel + 0) uv caller memos before packet chosen seed.2 (fun guard => guard ∈ seed.1)
+      bounded known _ valid
+    obtain ⟨handle, scs, value, middleMemos, middlePost, middleQuery, middlePacket, ready, stored,
+      decoded, _available, _closed, incoming, _pending, _ids, lengths, _counter, _waiting,
+      middleFits, middleKnown⟩ := admission
+    by_cases ordinary : ∃ entry rows depth free,
+        value = .node entry rows depth free ∧ scs.any (fun sc => EqualityTrie.isTerminal sc.trie) = false
+    · obtain ⟨entry, rows, depth, free, same, nonterminal⟩ := ordinary
+      subst value
+      have currentMass : mass after.core ≤ inherited :=
+        Nat.le_trans (SourcePruningEnumerationPrefixMass.retained_le holeKey fits admits graph templates checkEmpty edgesOf
+          stop order metadata formulas solver inventory (prefixFuel + 0) uv caller memos before packet _ valid prefixAt)
+          initialMass
+      have inheritedBound : scs.length ≤ inherited := Nat.le_trans lengths initialMass
+      obtain ⟨scanFuel, entered, _processed, outputs, _afterCaller, _next, _final, result,
+        entryRun, _stable, _counter, _values, sameFlags, sameWaiting, enteredPacket,
+        outerRun, _scanRun, _post, _captured, _afterFits, _afterKnown, _processedLength,
+        _receipts, _outputPackets, scanShape, _finished, _countBound, _finalFits, _finalKnown, certificate, histories⟩ :=

@@ -1,0 +1,35 @@
+isTemplateVar :: Symbol -> Bool
+isTemplateVar (Symbol name) = "<v>" `T.isPrefixOf` name
+
+{- | Rewrite one subterm of a term, the outermost and leftmost first. A rule
+rewrites a subterm only if the order says that the subterm is greater
+than its rewritten form. The subterms are the term, and the function and
+the argument of an application; the types are not subterms. The path
+order compares a function together with its arguments (see
+'appliedGreater'), so there the rewrite of a function must make the
+application that contains its arguments smaller.
+-}
+rewriteStep :: (Term -> Term -> Bool) -> Rules -> Term -> Maybe Term
+rewriteStep greater rules = go id
+  where
+    -- The application of a function to its arguments, for the order check.
+    inFunction context ty v = case rulesOrder rules of
+        PathOrder _ -> context . (\f' -> Term "app" [ty, f', v])
+        KnuthBendix _ -> id
+    go context t =
+        case [ r'
+             | (l, r) <- candidates (oriented rules) t
+             , Just s <- [matchTyped l t Map.empty]
+             , Just r' <- [instantiate s r]
+             , greater (context t) (context r')
+             ]
+            ++ [ r'
+               | (l, r) <- candidates (unoriented rules) t
+               , Just s <- [matchTyped l t Map.empty]
+               , Just r' <- [instantiate s r]
+               , greater (context t) (context r')
+               ] of
+            r' : _ -> Just r'
+            [] -> case t of
+                Term "app" [ty, f, v] ->
+                    (\f' -> Term "app" [ty, f', v]) <$> go (inFunction context ty v) f

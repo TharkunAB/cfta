@@ -1,0 +1,52 @@
+say :: Settings -> String -> IO ()
+say env line = unless (quiet env) (putStrLn line)
+
+{- | Run the phases from 1 to the given phase, and give the laws and the
+final search state. The search state goes from one phase to the next.
+-}
+runPhases :: Settings -> Int -> Int -> (TypeSkeleton -> Maybe Instance) -> Sig -> IO ([String], Search)
+runPhases env size lastPhase instances sig =
+    go
+        (zip [1 ..] phases)
+        Search
+            { seen = HS.empty
+            , trees = Map.empty
+            , instance_trees = Map.empty
+            , instantiated = HS.empty
+            , rewrite_rules = emptyRules (termOrder env)
+            , so_far = 0
+            , law_count = 0
+            , egraph_laws = []
+            , pending_laws = []
+            , touched_reps = HS.empty
+            }
+  where
+    go ((pn, (finished, starting, givenTrans, skelTrans, skeletonTrans)) : rest) s
+        | pn <= lastPhase = do
+            when (pn > 1) $ say env starting
+            let phaseEnv = env{diagnosticPhase = pn}
+                -- A phase with a skeleton grammar closes its variable types
+                -- under carrier renaming, so each renaming of a typing of a
+                -- skeleton has its variables.
+                stectaWith variableTrans =
+                    mkStecta
+                        size
+                        (numTests env)
+                        (recheckCount env)
+                        (typeDepth env)
+                        (functionBuckets env)
+                        instances
+                        sig
+                        (isJust skeletonTrans)
+                        variableTrans
+                        skelTrans
+            (laws, s') <- diagnose phaseEnv 0 "" "phase" s $ do
+                result@(_, finishedState) <- runPhase phaseEnv (phaseSize pn) (stectaWith <$> skeletonTrans) (stectaWith givenTrans) s
+                diagnosticEvent phaseEnv "checkpoint" 0 "" "phase" finishedState
+                return result
+            say env $ finished ++ show (so_far s') ++ " terms examined."
+            say env $ show (sum $ map DT.size $ Map.elems (trees s')) ++ " unique terms discovered."
+            if fmap fst (stopAfter env) == Just pn then return (laws, s') else Bi.first (laws ++) <$> go rest s'
+    go _ s = return ([], s)
+    phaseSize pn = case stopAfter env of
+        Just (stopPhase, stopSize) | stopPhase == pn -> min size stopSize

@@ -1,0 +1,25 @@
+theorem getValue_root (fuel uv : Nat) (before after : State Symbol Guard) (value : UVarValue Symbol)
+    (safe : Safe before) (inside : uv < before.counter) (root : IsRoot before.representatives uv)
+    (success : Success (getValue fuel uv) before value after) :
+    Safe after ∧ after.counter = before.counter ∧ Protected uv before after ∧
+      after.values[uv]? = some value := by
+  obtain ⟨found, lookup, stored, rfl⟩ := (getValue_success fuel uv before after value).mp success
+  have fixed : found.representative = uv :=
+    (UnionFind.reaches_unique (UnionFind.findRoot_correct fuel before.representatives uv found lookup).1 root.choose_spec).1
+  obtain ⟨safeAfter, frame⟩ := compression_safe before safe fuel uv uv inside root found lookup
+  exact ⟨safeAfter, rfl, frame, by simpa [fixed] using stored⟩
+
+/-- A representative lookup of a root returns that same root. -/
+theorem representative_root (fuel uv result : Nat) (before after : State Symbol Guard)
+    (safe : Safe before) (inside : uv < before.counter) (root : IsRoot before.representatives uv)
+    (success : Success (representative fuel uv) before result after) :
+    result = uv ∧ Safe after ∧ after.counter = before.counter ∧ Protected uv before after := by
+  obtain ⟨found, lookup, rfl, rfl⟩ := (representative_success fuel uv before after result).mp success
+  have fixed : found.representative = uv :=
+    (UnionFind.reaches_unique (UnionFind.findRoot_correct fuel before.representatives uv found lookup).1 root.choose_spec).1
+  obtain ⟨safeAfter, frame⟩ := compression_safe before safe fuel uv uv inside root found lookup
+  exact ⟨fixed, safeAfter, rfl, frame⟩
+
+/-- Replacing a root by another live bounded value preserves both safety invariants. -/
+theorem setValue_safe (uv : Nat) (value : UVarValue Symbol) (before after : State Symbol Guard)
+    (safe : Safe before) (root : IsRoot before.representatives uv)

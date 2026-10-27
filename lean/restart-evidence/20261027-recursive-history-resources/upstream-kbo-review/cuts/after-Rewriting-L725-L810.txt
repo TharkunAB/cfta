@@ -1,0 +1,86 @@
+{- | The Knuth-Bendix order on ground terms. Each symbol has the weight 1.
+Of two terms of the same weight, the term with the smaller weight of
+definition is smaller (see 'TermOrder'). An application is the binary
+symbol app, which is above the other symbols. Of the other symbols, the generated variables are below the
+constants, so that the more general terms come first, and symbols of one
+kind compare by their names, then by their types. The generated
+variables of a term are constants here. Smaller type instances come first.
+The order is total,
+well-founded, and closed under contexts, so rewriting with it ends.
+-}
+kboCompare :: Map Symbol Int -> (Symbol -> Bool) -> Term -> Term -> Ordering
+kboCompare defined isVar s t = heavier defined s t <> sameWeight s t
+  where
+    sameWeight (Term "app" [_, f, v]) (Term "app" [_, g, u]) =
+        kboCompare defined isVar f g <> kboCompare defined isVar v u
+    sameWeight (Term "app" _) _ = GT
+    sameWeight _ (Term "app" _) = LT
+    sameWeight (Term a tys) (Term b tys') =
+        compare (not (isVar a)) (not (isVar b)) <> compare a b <> typeOrder tys tys'
+
+-- | Prefer smaller type instances before comparing their names.
+typeOrder :: [Term] -> [Term] -> Ordering
+typeOrder as bs = compare (rank as) (rank bs)
+  where
+    rank ts = (sum (map nodes ts), sum (map concrete ts), ts)
+    nodes (Term _ ts) = 1 + sum (map nodes ts) :: Int
+    concrete t@(Term h [])
+        | isTypeVar h || h == "(->)" || t `elem` map (typeSkeletonToTerm . fst) carriers = 0
+        | otherwise = 1 :: Int
+    concrete (Term _ ts) = sum (map concrete ts)
+
+{- | The Knuth-Bendix order on templates: whether s > t for each instance in
+which the template variables compare as the ranking says. A template
+variable without a rank compares with no other term, and a template
+variable is never greater than a constant or below it. Other symbols
+compare as in 'kboCompare'.
+
+The instance of s must not be lighter than the instance of t, where the
+weights compare first and the weights of definition second. A variable
+has the weight 1 and no weight of definition, and an instance of it has
+no smaller ones. Let c x be
+the number of occurrences of x in s minus the number in t. A variable
+without a rank can have any weight, so c x must not be negative. For
+the ranked variables, a greater variable has an instance that is not
+lighter, so the sum of c over the variables of a rank and the greater
+ranks must not be negative, for each rank.
+-}
+kboGreater :: Map Symbol Int -> Map Symbol Int -> Term -> Term -> Bool
+kboGreater defined rank s t =
+    heavy /= LT
+        && all ((>= 0) . c) unranked
+        && and [sum [c x | (x, j) <- ranked, j >= i] >= 0 | (_, i) <- ranked]
+        && (heavy == GT || sameWeight s t)
+  where
+    heavy = heavier defined s t
+    -- The occurrences of the variables of s, minus those of t. A term has
+    -- few variables, so a list is enough.
+    diff = occurrences (-1) t (occurrences 1 s [])
+    occurrences n (Term "app" [_, f, v]) m = occurrences n v (occurrences n f m)
+    occurrences n (Term x _) m
+        | isTemplateVar x = add x n m
+        | otherwise = m
+    add x n ((y, k) : rest)
+        | x == y = (y, k + n) : rest
+        | otherwise = (y, k) : add x n rest
+    add x n [] = [(x, n)]
+    -- The ranked variables with their ranks. Each rank needs the sum of c
+    -- over its variables and the variables of the greater ranks.
+    ranked = [(x, i) | (x, _) <- diff, Just i <- [Map.lookup x rank]]
+    unranked = [x | (x, _) <- diff, x `Map.notMember` rank]
+    c x = fromMaybe 0 (lookup x diff)
+    -- With equal functions, the arguments have equal weights and the same
+    -- occurrences of the variables as s and t, so only their order is left
+    -- to compare.
+    sameWeight (Term "app" [_, f, v]) (Term "app" [_, g, u])
+        | f == g = sameWeight v u
+        | otherwise = kboGreater defined rank f g
+    sameWeight (Term a tys@[_]) (Term b tys'@[_])
+        | isTemplateVar a || isTemplateVar b =
+            case (Map.lookup a rank, Map.lookup b rank) of
+                (Just i, Just j) -> i > j
+                _ -> False
+        | otherwise = (compare a b <> typeOrder tys tys') == GT
+    sameWeight _ _ = False
+
+{- | The template variables of a template, from left to right, with each

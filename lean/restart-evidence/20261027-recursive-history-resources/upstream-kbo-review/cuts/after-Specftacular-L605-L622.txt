@@ -1,0 +1,18 @@
+                    <> O.help
+                        "Give a bucket to each function type between two small data types, and compare two functions on a sample of their argument type in each test case"
+                )
+            <*> O.switch (O.long "dump-laws" <> O.help "Write each law with the types of its subterms on stderr")
+            <*> termOrderOption
+            <*> ( not
+                    <$> O.switch
+                        ( O.long "no-definitions"
+                            <> O.help "Do not let the Knuth-Bendix order prefer the bodies of the definitions of the signature"
+                        )
+                )
+    termOrderOption =
+        maybe (KnuthBendix Map.empty) (PathOrder . T.words . T.pack)
+            <$> O.optional
+                ( O.strOption
+                    ( O.long "lpo"
+                        <> O.metavar "SYMBOLS"
+                        <> O.help

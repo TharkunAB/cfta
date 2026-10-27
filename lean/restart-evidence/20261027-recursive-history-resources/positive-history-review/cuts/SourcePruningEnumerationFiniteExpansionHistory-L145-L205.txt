@@ -1,0 +1,61 @@
+        SourcePruningEnumerationNativeOrdinaryContinuations.ordinary_finite_complete_history_forecast
+          holeKey fits admits graph templates checkEmpty edgesOf stop order metadata recursiveFuel start formulas solver recursive inventory
+          reached middleMemos after uv handle scs entry rows depth free middlePacket ready stored decoded
+          (selectionMembers entry rows depth free) incoming nonterminal middleFits middleKnown
+          selectionMembers selectionLength inherited inherited currentMass inheritedBound reserved.scan
+      refine ⟨prefixFuel + scanFuel, finish uv result, ?_, certificate.post middlePost, ?_⟩
+      · apply resume_depth_stable holeKey fits admits graph templates checkEmpty edgesOf stop order
+          prefixFuel scanFuel recursiveFuel uv metadata metadata caller reached memos.query memos.query before after
+          [.ok ((uv, handle, scs, .node entry rows depth free), entered.core)] result
+        · intro extra
+          obtain ⟨currentAction, currentPrefix, _valid⟩ := phase extra
+          exact ⟨checked, .done (phaseValue, some currentAction) heap, currentPrefix⟩
+        · intro extra
+          simpa only [middleQuery] using outerRun extra
+      · intro extra output member
+        have listed : output ∈ outputs := by
+          rw [finish_hook_outputs] at member
+          rcases scanShape with completed | ⟨current, stopped, _endpoint, _certificate⟩
+          · rw [completed] at member
+            exact member
+          · rw [stopped] at member
+            exact member
+        have rich := histories (prefixFuel + extra) output listed
+        have entryAt := entryRun (prefixFuel + extra)
+        have common : scanFuel + (prefixFuel + extra) = prefixFuel + scanFuel + extra := by omega
+        rw [common] at rich entryAt
+        obtain ⟨edge, _selected, headSeed, headInventory, headCaller, headMemos, headBound,
+          fragment, callbackCaller, headCache, returnedInventory, returnedMemos, recorded, callbackCore,
+          headPost, invocation, headRun, headReceipt, originalAdmission, callback,
+          _returnedAdmission, tailHistory⟩ := rich
+        have framed : EnumerationExpandableIndex.frame entered.core after = entered := by
+          cases entered with
+          | mk core flags waiting =>
+              change ({core := core, expandable := after.expandable, waiting := after.waiting} : Cached) =
+                {core := core, expandable := flags, waiting := waiting}
+              simp only at sameFlags sameWaiting
+              rw [← sameFlags, ← sameWaiting]
+        have actualOrdinary : SourcePruningEnumerationHookInvocation.OrdinaryInvocation
+            (continueWith (resume holeKey fits admits graph templates checkEmpty edgesOf stop order
+              (prefixFuel + scanFuel + extra) recursiveFuel) graph templates stop order
+              (prefixFuel + scanFuel + extra) metadata uv)
+            checkEmpty (prefixFuel + scanFuel + extra) (prefixFuel + scanFuel + extra)
+              (prefixFuel + scanFuel + extra) (prefixFuel + scanFuel + extra) (prefixFuel + scanFuel + extra)
+              uv edgesOf reached after middleMemos.query fragment callbackCaller returnedMemos.query headCache := by
+          refine ⟨uv, handle, scs, entry, rows, depth, free, entered.core, entryAt, nonterminal, ?_⟩
+          simpa only [framed] using invocation
+        have actualReceipt : OrdinaryHistoryReceipt formulas solver metadata checkEmpty
+            (prefixFuel + scanFuel + extra) uv inventory reached middleMemos after fragment callbackCaller
+              headCache returnedInventory returnedMemos := by
+          exact ⟨entered, handle, scs, .node entry rows depth free, edge, headSeed, inherited,
+            headInventory, headCaller, headMemos, headBound, middlePacket, entryAt, enteredPacket,
+            headPost, headRun, headReceipt⟩
+        obtain ⟨currentAction, currentPrefix, currentValid⟩ := phase (scanFuel + extra)
+        have prefixSame : prefixFuel + (scanFuel + extra) = prefixFuel + scanFuel + extra := by omega
+        rw [prefixSame] at currentPrefix currentValid
+        apply ResourceHistory.ordinary ⟨packet, bounded, known, initialMass, reserved⟩ currentValid
+          (by simpa only [middleQuery] using currentPrefix) middlePost actualOrdinary actualReceipt
+          originalAdmission callback tailHistory
+    · have fallback : match value with
+        | .node .. => scs.any (fun sc => EqualityTrie.isTerminal sc.trie) = true
+        | _ => True := by

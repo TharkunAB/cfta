@@ -1,0 +1,22 @@
+    (Hashable symbol, Typeable symbol) =>
+    (Seq SuspendedConstraint -> Node symbol -> EnumerateM symbol (TermFragment symbol)) ->
+    UVar ->
+    EnumerateM symbol (TermFragment symbol)
+enumerateOutUVarWith expandNode uv =
+    do
+        UVarUnenumerated (Just n) scs <- getUVarValue uv
+        uv' <- getUVarRepresentative uv
+        ancestry <- gets $ IntMap.findWithDefault HashSet.empty (uvarToInt uv') . _recursionAncestry
+        modify' $ \s ->
+            s
+                { _expansionAncestry = if recursiveBoundary n then HashSet.insert (recursionKey n scs) ancestry else ancestry
+                }
+
+        t <- case n of
+            Mu _ -> expandNode scs (unfoldOuterRec n)
+            InternedUnion _ -> expandNode scs (Node $ nodeEdges n)
+            _ -> expandNode scs n
+
+        modify' $ \s -> s{_expansionAncestry = HashSet.empty}
+        setUVarValue uv' (UVarEnumerated t)
+        return t

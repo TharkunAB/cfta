@@ -1,0 +1,42 @@
+{- | Run one case on untyped values and on checked values. Return whether
+the laws of both runs equal the golden file.
+-}
+check :: Bool -> (String, Bool -> IO [String]) -> IO Bool
+check accept (name, run) = do
+    laws <- run False
+    checkedLaws <- run True
+    let file = "test/golden/" ++ name ++ ".laws"
+    when accept $ writeFile file (unlines laws)
+    expected <- lines <$> readFile file
+    and <$> mapM (same file expected) [(name, laws), (name ++ " (checked)", checkedLaws)]
+
+{- | Whether the laws of a run equal the golden file. Print both when they
+differ.
+-}
+same :: FilePath -> [String] -> (String, [String]) -> IO Bool
+same file expected (name, laws) = do
+    let equal = expected == laws
+    unless equal $ do
+        putStrLn ("FAIL " ++ name ++ ": the laws differ from " ++ file)
+        putStrLn "expected:"
+        mapM_ putStrLn expected
+        putStrLn "actual:"
+        mapM_ putStrLn laws
+    return equal
+
+main :: IO ()
+main = do
+    accept <- (== Just "1") <$> lookupEnv "GOLDEN_ACCEPT"
+    results <- mapM (check accept) cases
+    unless (and results) exitFailure
+
+{- | The laws of a signature with terms up to a size in the monomorphic
+phase, as 'discoverMonomorphic', with or without the test of the types.
+-}
+monomorphic :: Bool -> Int -> (TypeSkeleton -> Maybe GeneratedInstance) -> [Sig] -> IO [String]
+monomorphic = withOrder (KnuthBendix mempty)
+
+-- | 'monomorphic' with a term order.
+withOrder :: TermOrder -> Bool -> Int -> (TypeSkeleton -> Maybe GeneratedInstance) -> [Sig] -> IO [String]
+withOrder order checked size =
+    experimentalPhases ((defaultOptions size 1){searchChecked = checked, searchTermOrder = order, searchDefinitions = True})

@@ -1,0 +1,17 @@
+  /-- An actual parked restart uses the same native caller and full memo state. -/
+  | parked {fuel inventory caller memos metadata before seed ceiling uv checked parked updated next core
+        tailSeed tailCeiling output}
+      (admission : HistoryAdmission formulas solver inventory caller memos metadata before (fuel + 1) seed ceiling)
+      (valid : SourcePruningEnumerationSelectedStep.PrefixValid holeKey fits admits graph templates checkEmpty edgesOf
+        stop order metadata formulas solver inventory workFuel uv caller before memos
+        (SourcePruningEnumerationSelectedStep.runPrefix holeKey fits admits graph templates stop order metadata
+          workFuel workFuel workFuel workFuel workFuel workFuel uv caller before memos.query))
+      (observed : SourcePruningEnumerationSelectedStep.runPrefix holeKey fits admits graph templates stop order metadata
+        workFuel workFuel workFuel workFuel workFuel workFuel uv caller before memos.query =
+          .parked checked (some parked) (some [.ok ((updated, next), core)]))
+      (tail : ResourceHistory holeKey fits admits graph templates checkEmpty edgesOf stop order formulas solver workFuel
+        fuel inventory caller memos updated (EnumerationExpandableIndex.frame core parked) tailSeed tailCeiling next output) :
+      ResourceHistory holeKey fits admits graph templates checkEmpty edgesOf stop order formulas solver workFuel
+        (fuel + 1) inventory caller memos metadata before seed ceiling (some (.expand uv)) output
+  /-- The actual ordinary invocation retains entry, full head receipts and its admitted false callback. -/
+  | ordinary {fuel inventory caller memos metadata before seed ceiling uv checked prepared ordinaryInventory

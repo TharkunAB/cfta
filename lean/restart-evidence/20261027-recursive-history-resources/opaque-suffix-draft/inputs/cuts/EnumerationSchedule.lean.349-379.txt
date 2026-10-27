@@ -1,0 +1,31 @@
+/-- Every actual fresh allocation establishes a live singleton and retains older live slots. -/
+theorem allocation_live (node : Option Nat) (before : State Symbol Guard)
+    (storage : StorageValid before) (live : LiveRoots before) : LiveRoots (allocated node before) := by
+  intro uv value stored
+  by_cases earlier : uv < before.values.length
+  · have old : before.values[uv]? = some value := by
+      simpa [allocated, List.getElem?_append_left earlier] using stored
+    exact live uv value old
+  · have bound := (List.getElem?_eq_some_iff.mp stored).1
+    have index : uv = before.counter := by
+      have aligned := storage.aligned
+      simp only [allocated, List.length_append, List.length_singleton] at bound
+      unfold SupplyAligned at aligned
+      omega
+    subst uv
+    have fresh : before.representatives before.counter = none :=
+      outside_forest before.representatives before.counter before.counter storage.forest (by omega)
+    have valueExact : value = .unenumerated node [] := by
+      have aligned : before.counter = before.values.length := storage.aligned
+      simpa [allocated, aligned] using stored.symm
+    subst value
+    refine ⟨fun _ => ⟨1, .root ?_⟩, ?_⟩
+    · simp [allocated, UnionFind.read, fresh]
+    · simp
+
+/-- The root predicate is exactly the effective root tag in the source forest. -/
+theorem isRoot_read (forest : UnionFind.Forest) (uv : Nat) :
+    IsRoot forest uv ↔ ∃ size, UnionFind.read forest uv = .root size := by
+  constructor
+  · rintro ⟨size, path⟩
+    exact ⟨size, UnionFind.reaches_terminal path⟩
