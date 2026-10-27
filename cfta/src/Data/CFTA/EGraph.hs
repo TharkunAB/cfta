@@ -40,7 +40,7 @@ pattern variable. A language without sorts has the sort type @()@.
 > smallest t =
 >     let (c, g) = addTerm t (emptyEGraph :: EGraph () Op)
 >         (g', _) = saturate defaultLimits rules g
->      in extract (\_ sizes -> 1 + sum sizes) g' c
+>      in extract (\_ _ _ sizes -> 1 + sum sizes) g' c
 >
 > equalUnder :: Term Op -> Term Op -> Bool
 > equalUnder a b =
@@ -686,17 +686,25 @@ descending chains.
 analyse :: (Eq d) => (f -> [d] -> d) -> (d -> d -> d) -> EGraph s f -> ClassId -> Maybe d
 analyse make combine g = \c -> let ClassId i = find g c in IntMap.lookup i known
   where
-    known = fst (analyseFrom make combine g IntMap.empty (IntMap.keys (classes g)))
+    known = fst (analyseFrom (\_ f _ -> make f) combine g IntMap.empty (IntMap.keys (classes g)))
 
 {- | The fixed point of an analysis from a table of the data of e-classes and
 a worklist of the e-classes whose data can change, and the e-classes whose
 data changed. Each e-class of the worklist gets the merge of the data of its
-e-nodes whose children have data, and of its earlier data. A change of an
+e-nodes whose children have data, and of its earlier data. The data of an
+e-node comes from its e-class, its symbol, the e-classes of its children,
+and their data. A change of an
 e-class sends only its users, e-node by e-node, to the worklist, as egg does:
 the data only grows, so the other e-nodes give nothing new.
 -}
 analyseFrom ::
-    (Eq d) => (f -> [d] -> d) -> (d -> d -> d) -> EGraph s f -> IntMap.IntMap d -> [Int] -> (IntMap.IntMap d, IntSet.IntSet)
+    (Eq d) =>
+    (ClassId -> f -> [ClassId] -> [d] -> d) ->
+    (d -> d -> d) ->
+    EGraph s f ->
+    IntMap.IntMap d ->
+    [Int] ->
+    (IntMap.IntMap d, IntSet.IntSet)
 analyseFrom make combine g known0 todo = go IntSet.empty known0 (map Whole (IntSet.toAscList (IntSet.fromList roots)))
   where
     roots = [r | i <- todo, let ClassId r = find g (ClassId i)]
@@ -709,7 +717,7 @@ analyseFrom make combine g known0 todo = go IntSet.empty known0 (map Whole (IntS
         Use (ENode _ f cs) owner -> let ClassId i = find g owner in step i [(f, cs)]
       where
         dataOf c = let ClassId j = find g c in IntMap.lookup j known
-        step i nodes = case [make f ds | (f, cs) <- nodes, Just ds <- [traverse dataOf cs]] of
+        step i nodes = case [make (ClassId i) f (map (find g) cs) ds | (f, cs) <- nodes, Just ds <- [traverse dataOf cs]] of
             [] -> go changed known rest
             v : vs ->
                 let old = IntMap.lookup i known
@@ -729,20 +737,24 @@ data Repaired s f = Repaired !(EGraph s f) !(HashMap.HashMap (ENode f) ClassId) 
 data Task f = Whole !Int | Use !(ENode f) !ClassId
 
 {- | The cheapest term of an e-class, with its cost: the first term of
-'termsByCost'. The cost of a term comes from its symbol and the costs of its
-children. It must not decrease when the cost of a child grows, and it must
-be greater than the cost of each child, as @1 + sum@ is. Then 'extract'
-finds the cheapest term of each e-class that has a term. The term satisfies
+'termsByCost'. The cost of a term comes from its root e-node: the e-class of
+the e-node, its symbol, the e-classes of its children, and the costs of its
+children. Thus a cost can use the e-graph, for example the sort of an
+e-class ('sortOf') or the data of an analysis ('analyse'). The cost must not
+decrease when the cost of a child grows, and it must be greater than the
+cost of each child, as @1 + sum@ is. Then 'extract' finds the cheapest term
+of each e-class that has a term. The term satisfies
 the constraint of each of its e-nodes. The e-graph has no check that the
 constraints leave a term, so 'extract' does not return when the constraints
 reject each term of an infinite language.
 -}
-extract :: (Ord c, Eq f) => (f -> [c] -> c) -> EGraph s f -> ClassId -> Maybe (c, Term f)
+extract :: (Ord c, Eq f) => (ClassId -> f -> [ClassId] -> [c] -> c) -> EGraph s f -> ClassId -> Maybe (c, Term f)
 extract cost g c = listToMaybe (termsByCost cost g c)
 
 {- | The terms of an e-class in the order of a cost, cheapest first, each with
 its cost, produced lazily: 'FTA.termsByCost' on the rows of the store.
-'extract' gives the first term. The cost must not decrease when the cost of a child grows, and it must be
+'extract' gives the first term. The cost of a term comes from its root
+e-node, as for 'extract'. The cost must not decrease when the cost of a child grows, and it must be
 at least the cost of each child. Then the costs of the list never decrease,
 also for a cyclic e-class, whose list is infinite. The terms have no sorts,
 as for 'extract'. The automaton of an e-graph is deterministic, so a term
@@ -751,23 +763,29 @@ sorts of their children give a term once for each. An e-node with a
 constraint gives only the terms that satisfy the constraint, and its plain
 form in the same e-class gives all of them.
 -}
-termsByCost :: (Ord c, Eq f) => (f -> [c] -> c) -> EGraph s f -> ClassId -> [(c, Term f)]
+termsByCost :: (Ord c, Eq f) => (ClassId -> f -> [ClassId] -> [c] -> c) -> EGraph s f -> ClassId -> [(c, Term f)]
 termsByCost cost g c =
     termsByCostBy
         rowOf
-        FTA.transitionSymbol
-        FTA.transitionChildren
-        (equalitiesHold . FTA.transitionConstraint)
-        cost
-        (analyse cost min g)
+        (FTA.transitionSymbol . snd)
+        (FTA.transitionChildren . snd)
+        (equalitiesHold . FTA.transitionConstraint . snd)
+        (\(owner, FTA.Transition f cs _) -> cost owner f cs)
+        least
         (find g c)
   where
-    -- A transition with a constraint whose plain form is in its row gives no
-    -- term that the plain form does not give.
-    rowOf (ClassId i)
+    known = fst (analyseFrom cost min g IntMap.empty (IntMap.keys (classes g)))
+    least c' = let ClassId i = find g c' in IntMap.lookup i known
+    -- Each transition of a row with its e-class. A transition with a
+    -- constraint whose plain form is in its row gives no term that the plain
+    -- form does not give.
+    rowOf owner@(ClassId i)
         | constrained g =
-            [t | t <- row, FTA.transitionConstraint t == noConstraint || notElem t{FTA.transitionConstraint = noConstraint} row]
-        | otherwise = row
+            [ (owner, t)
+            | t <- row
+            , FTA.transitionConstraint t == noConstraint || notElem t{FTA.transitionConstraint = noConstraint} row
+            ]
+        | otherwise = [(owner, t) | t <- row]
       where
         row = rowAt g i
 
@@ -1299,7 +1317,8 @@ runWith analysis limits rules goal g0 = go 0 IntMap.empty IntMap.empty IntMap.em
     known0 =
         maybe
             IntMap.empty
-            (\a@Analysis{} -> fst (analyseFrom (analysisMake a) (analysisMerge a) g1 IntMap.empty (IntMap.keys (classes g1))))
+            ( \a@Analysis{} -> fst (analyseFrom (\_ f _ -> analysisMake a f) (analysisMerge a) g1 IntMap.empty (IntMap.keys (classes g1)))
+            )
             analysis
     -- After an iteration: update the data from the e-classes that changed,
     -- give each e-class with a leaf its leaf, and repeat until no leaf is
@@ -1311,7 +1330,7 @@ runWith analysis limits rules goal g0 = go 0 IntMap.empty IntMap.empty IntMap.em
         Nothing -> (h, known)
         Just a@Analysis{} ->
             let fresh = [j | (j, e) <- IntMap.toList (classes h), classStamp e >= tick]
-                (known', changed) = analyseFrom (analysisMake a) (analysisMerge a) h known fresh
+                (known', changed) = analyseFrom (\_ f _ -> analysisMake a f) (analysisMerge a) h known fresh
                 stamped = h{classes = IntSet.foldr (IntMap.adjust (\e -> e{classStamp = tick})) (classes h) changed, clock = tick + 1}
                 candidates = if first then IntMap.keys known' else IntSet.toList changed
                 leaves =

@@ -300,8 +300,8 @@ direct recursion first runs it.
 {- | The terms below a key in the order of a cost, cheapest first, each with
 its cost, produced lazily.
 
-The cost of a term comes from its symbol and the costs of its children. It
-must not decrease when the cost of a child grows. The least cost of a key is
+The cost of a term comes from the alternative that built it and the costs
+of its children. It must not decrease when the cost of a child grows. The least cost of a key is
 the least cost of its terms, or Nothing when it has none. Then the costs of
 the list never decrease, also below a cycle, whose list is infinite. The
 check decides each complete term at the alternative that built it. A term
@@ -319,7 +319,7 @@ termsByCostBy ::
     (alternative -> symbol) ->
     (alternative -> [key]) ->
     (alternative -> Term symbol -> Bool) ->
-    (symbol -> [c] -> c) ->
+    (alternative -> [c] -> c) ->
     (key -> Maybe c) ->
     key ->
     [(c, Term symbol)]
@@ -337,7 +337,7 @@ termsByCostBy outgoing symbolOf childrenOf check cost least root =
         Nothing -> (serial, queue)
         Just k -> (serial + 1, Map.insert (k, serial) partial queue)
     value (Hole key) = least key
-    value (Built alternative children) = cost (symbolOf alternative) <$> traverse value children
+    value (Built alternative children) = cost alternative <$> traverse value children
     -- The partial terms that fill the leftmost hole with each alternative of
     -- its key, or Nothing for a complete partial term.
     fill (Hole key) = Just [Built alternative (map Hole (childrenOf alternative)) | alternative <- outgoing key]
