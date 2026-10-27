@@ -1,5 +1,42 @@
 # Current system claim
 
+## Accepted native heads reach a non-rejecting callback continuation
+
+Source checkpoint: 5e8098180a8737fe641949ce6cd493cad73a9278.
+NativeHookResources.head_finite_complete_resources_callback_policy preserves
+EXACT original head admission and the ENTIRE earlier resource certificate.
+The head bound and actual receipt precede all semantic assignments. On its
+complete receipt, the callback fuel, result and cache also precede them.
+An original satisfying assignment accepted by the selected edge extends to
+the actual completed cache. If it refutes original pending groups, avoids the
+original templates and has source program encoding at program positions,
+the SAME callback does not reject. Returned groups stay refuted. At the
+common bound + callbackFuel + extra, the actual continuation calls resume
+with the SAME caller, queries, updated metadata and framed callback cache.
+
+This derives the callback conditions from the original accepted head model.
+It closes one actual head-to-recursion step. It does not prove an emitted
+output or exclude a later depth stop, user stop or stuck restart. Native
+acceptance alone does not supply the forbidden-template policy or encoding.
+Public construction origins, preservation across all recursive steps,
+frontier and projection policy, parked constraints, discharge and rendering
+coverage remain open. Public API, ranking, sampling and physical Haskell
+correspondence remain open. The whole formalization goal remains ACTIVE.
+
+Previous claims retain their scope: exact finite pruning language preservation
+for covered construction and each fixed finite run; conditional rendered-output
+soundness from native startup; proper storage in every emitted cache; and
+chosen hook invocation or an exact earlier hook stop. Full enumeration
+coverage remains the largest gap.
+
+Four modules add four public theorems. Strict checks and full Audit pass:
+4297 jobs and 80307 theorem dependencies. Public readback preserves all
+249 earlier theorem blocks and five definitions as the exact 1003823-byte
+prefix. All 4292 old non-Audit Lean sources and 141 pinned strong modules
+retain their bytes. Haskell is unchanged. Details and restart steps:
+`lean/notes-current-accepted-head-policy.md`.
+
+
 ## Original template refutation through the actual callback
 
 Source checkpoint: c35a525acda2b33a7ca19508e9844113d55ba792.
