@@ -1,0 +1,6 @@
+theorem read_effect [DecidableEq (EdgeKey Symbol Guard)]
+    (fuel : Nat) (value : Value Symbol Guard) (before : State Symbol Guard)
+    (semantic : SemanticReady before) (costs : CostHeap before) (available : Available before value)
+    (rows : List (EdgeValue Symbol Guard)) (after : State Symbol Guard)
+    (done : MergedFreshOrdinaryExposure.read fuel value before = .done rows after) :
+    Effect before after ∧ Edges after rows := by

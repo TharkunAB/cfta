@@ -1,0 +1,65 @@
+    State width → Value Symbol Guard → State width → Prop where
+  | hit (present : before.targets path = some value) : Force record values path before value before
+  | miss (absent : before.targets path = none)
+      (actual : SourceCurrentAllocatedTargetGraph.Target values (operandPaths record.paths path)
+        before.checked before.memo value checked saved) :
+      Force record values path before value (store before path value checked saved)
+
+/-- A hit adds no calls. A miss retains the same actual target reads. -/
+inductive Reads [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)]
+    (formulas : SourceGuards.Formulas FullSyntax.Formula) (solver : SourceGuards.Entailment FullSyntax.Formula) :
+    {record : SourceEqualityClassOrder.Record} → {values : List (Value Symbol Guard)} → {path : EqualityNormalize.Path} →
+    {before after : State width} → {value : Value Symbol Guard} →
+    Force record values path before value after → Memos → Memos → Prop where
+  | hit {record : SourceEqualityClassOrder.Record} {values : List (Value Symbol Guard)} {path : EqualityNormalize.Path}
+      {before : State width} {value : Value Symbol Guard}
+      (present : before.targets path = some value) (memos : Memos) :
+      Reads formulas solver (record := record) (values := values)
+        (Force.hit (record := record) (values := values) present) memos memos
+  | miss {record : SourceEqualityClassOrder.Record} {values : List (Value Symbol Guard)} {path : EqualityNormalize.Path}
+      {before : State width} {value : Value Symbol Guard} {checked : Checked width} {saved : Memo}
+      (absent : before.targets path = none)
+      {actual : SourceCurrentAllocatedTargetGraph.Target values (operandPaths record.paths path)
+        before.checked before.memo value checked saved}
+      (reads : SourceCurrentAllocatedTargetComplete.TargetReads formulas solver actual memos final) :
+      Reads formulas solver (record := record) (values := values)
+        (Force.miss absent actual) memos final
+
+/-- Missing slots require only the reached checks of their actual target construction. -/
+def ForceRanges [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)]
+    (record : SourceEqualityClassOrder.Record) (values : List (Value Symbol Guard)) (path : EqualityNormalize.Path)
+    (before : State width) : Prop :=
+  before.targets path = none → SourceCurrentAllocatedTargetGraph.TargetRanges
+    values (operandPaths record.paths path) before.checked before.memo
+
+/-- The same actual force derives the new inventory, stored slot, and warm table receipts. -/
+structure Receipt [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)]
+    (formulas : SourceGuards.Formulas FullSyntax.Formula) (solver : SourceGuards.Entailment FullSyntax.Formula)
+    (inventory : Inventory) (record : SourceEqualityClassOrder.Record) (values : List (Value Symbol Guard))
+    (base : InternedConstructorTemplates.State Symbol Guard) (path : EqualityNormalize.Path)
+    (before : State width) (value : Value Symbol Guard) (after : State width) (memos final : Memos) : Prop where
+  actual : Force record values path before value after
+  reads : Reads formulas solver actual memos final
+  ready : Ready formulas solver inventory record values base after
+  effects : SourceCurrentConjunctionRowsAllocation.Effects (physical before.checked) (physical after.checked)
+  extension : SourceRecursiveIntersectionKernel.Extension before.checked.native.machine after.checked.native.machine
+  available : Available after.checked.native.machine.heap value
+  closed : value.free = []
+  present : after.targets path = some value
+  slots : Retains before after
+  retained : Extends before.memo after.memo
+  globals : SourceCurrentSubsumesQueryMemos.Effect before.checked.native.machine.heap after.checked.native.machine.heap memos final
+  included : SourceCurrentAllocatedClassTarget.SelectedIncludes formulas solver record values path value
+
+private theorem miss_receipt [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)]
+    {formulas : SourceGuards.Formulas FullSyntax.Formula} {solver : SourceGuards.Entailment FullSyntax.Formula}
+    {inventory next : Inventory} {record : SourceEqualityClassOrder.Record} {values : List (Value Symbol Guard)}
+    {base : InternedConstructorTemplates.State Symbol Guard} {path : EqualityNormalize.Path}
+    {before : State width} {value : Value Symbol Guard} {checked : Checked width} {saved : Memo} {memos final : Memos}
+    (ready : Ready formulas solver inventory record values base before) (member : path ∈ record.paths)
+    (absent : before.targets path = none)
+    (actual : SourceCurrentAllocatedTargetGraph.Target values (operandPaths record.paths path)
+      before.checked before.memo value checked saved)
+    (reads : SourceCurrentAllocatedTargetComplete.TargetReads formulas solver actual memos final)
+    (receipt : SourceCurrentAllocatedTargetComplete.Receipt formulas solver next values (operandPaths record.paths path)
+      before.checked before.memo value checked saved memos final)

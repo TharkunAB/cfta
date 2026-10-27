@@ -1,0 +1,36 @@
+    (∀ needed (value : Value Symbol Guard) before result after,
+      RequireNode needed value before result after → NodeEffects value before result after) ∧
+    (∀ entries index (values : List (Value Symbol Guard)) before results after,
+      RequireChildren entries index values before results after → ChildrenEffects values before results after) ∧
+    (∀ entries (edges : List (EdgeValue Symbol Guard)) before results after,
+      RequireRows entries edges before results after → RowsEffects edges before results after) := by
+  have identityCase : ∀ {value : Value Symbol Guard} {state}, NodeEffects value state value state := by
+    intro value state semantic costs fields available
+    exact ⟨⟨pure_keeps state semantic.ready, semantic, costs, fields⟩, available⟩
+  have emptyCase : ∀ {entries : List (Int × SourceEqualityNeeded.Needed)} {state},
+      entries ≠ [] → NodeEffects (.empty : Value Symbol Guard) state .empty state := by
+    intro entries state _ semantic costs fields available
+    exact ⟨⟨pure_keeps state semantic.ready, semantic, costs, fields⟩, available⟩
+  have ordinaryCase : ∀ {entries edges before rebuilt middle result after entry depth free},
+      entries ≠ [] → RequireRows (Symbol := Symbol) («Guard» := Guard) entries edges before rebuilt middle →
+      run (makeNode rebuilt) middle = (result, after) → RowsEffects edges before rebuilt middle →
+      NodeEffects (.node entry edges depth free) before result after := by
+    intro entries edges before rebuilt middle result after entry depth free _ _ built ih semantic costs fields available
+    have resident := InternedEdgeResidency.resident_edges before semantic.ready.semantic.1.normal.facts.linked _ available.resident
+    obtain ⟨⟨first, middleSemantic, middleCosts, middleFields⟩, rows⟩ := ih semantic costs fields resident
+    have checked := node_constructor rebuilt middle middleSemantic middleCosts middleFields rows
+    have final : Keeps middle after ∧ SemanticReady after ∧ CostHeap after ∧ Heap after ∧ Available after result :=
+      by simpa only [built] using checked
+    exact ⟨⟨first.trans final.1, final.2.1, final.2.2.1, final.2.2.2.1⟩, final.2.2.2.2⟩
+  have recursiveCase : ∀ {entries original before exposed middle result after},
+      entries ≠ [] → Recursive original → SourceEqualityRequiredHead.Head original before exposed middle →
+      RequireNode (Symbol := Symbol) («Guard» := Guard) (.node entries) exposed middle result after →
+      NodeEffects exposed middle result after → NodeEffects original before result after := by
+    intro entries original before exposed middle result after _ _ trace _ ih semantic costs fields available
+    obtain ⟨first, middleSemantic, middleCosts, middleFields, exposedAvailable⟩ := head trace semantic costs fields available
+    obtain ⟨⟨kept, finalSemantic, finalCosts, finalFields⟩, resultAvailable⟩ :=
+      ih middleSemantic middleCosts middleFields exposedAvailable
+    exact ⟨⟨first.trans kept, finalSemantic, finalCosts, finalFields⟩, resultAvailable⟩
+  have nilChildren : ∀ {state}, ChildrenEffects ([] : List (Value Symbol Guard)) state [] state := by
+    intro state semantic costs fields _
+    exact ⟨⟨pure_keeps state semantic.ready, semantic, costs, fields⟩, by simp [Values]⟩

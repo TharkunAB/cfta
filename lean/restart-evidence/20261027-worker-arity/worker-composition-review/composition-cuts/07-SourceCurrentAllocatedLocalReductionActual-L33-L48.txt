@@ -1,0 +1,16 @@
+inductive Reads (formulas : SourceGuards.Formulas FullSyntax.Formula)
+    (solver : SourceGuards.Entailment FullSyntax.Formula) :
+    {budget : Nat} → {loaded : Allocated} → {inherited : EqValue} →
+    {values results : List (Value Symbol Guard)} → {before after : Checked width} →
+    {fourth savedFourth : Fourth} → {memo saved : Memo} →
+    Reduction budget loaded inherited values before fourth memo results after savedFourth saved → Memos → Memos → Prop where
+  | unchanged {budget loaded inherited values before fourth memo actual memos} :
+      Reads formulas solver (Reduction.unchanged (budget := budget) (loaded := loaded) (inherited := inherited)
+        (values := values) (before := before) (fourth := fourth) (memo := memo) actual) memos memos
+  | emptyChildren {budget loaded inherited values before fourth memo actual memos} :
+      Reads formulas solver (Reduction.emptyChildren (budget := budget) (loaded := loaded) (inherited := inherited)
+        (values := values) (before := before) (fourth := fourth) (memo := memo) actual) memos memos
+  | classes {budget loaded inherited values before fourth memo records outcome results after savedFourth saved actual}
+      {continuation : SourceCurrentConjunctionScanClassPass.Reduction budget records values
+        (prefixState before loaded inherited) fourth memo outcome results after savedFourth saved} {memos final}
+      (reads : SourceCurrentConjunctionScanClassPassActual.Reads formulas solver continuation memos final) :

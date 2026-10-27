@@ -1,0 +1,5 @@
+theorem rows [DecidableEq (EdgeKey Symbol Guard)]
+    {entries : List (Int × SourceEqualityNeeded.Needed)} {edges results : List (EdgeValue Symbol Guard)} {before after : State Symbol Guard}
+    (trace : RequireRows entries edges before results after) (semantic : SemanticReady before)
+    (costs : CostHeap before) (fields : Heap before) (resident : Edges before edges) :
+    Keeps before after ∧ SemanticReady after ∧ CostHeap after ∧ Heap after ∧ Edges after results := by

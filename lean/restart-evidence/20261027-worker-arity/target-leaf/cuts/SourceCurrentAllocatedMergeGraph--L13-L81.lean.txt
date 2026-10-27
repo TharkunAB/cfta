@@ -1,0 +1,69 @@
+The comparison predicate remains an explicit parameter.
+-/
+namespace MicroCFTA.SourceCurrentAllocatedMergeGraph
+open Cache InternedConstructorTemplates
+open MergedOrdinaryHeight (recursiveBoundary ordinaryUnion)
+namespace Old
+export SourceCurrentMemoMergeGraph (Entry Memo remember winner)
+end Old
+local notation "Symbol" => SourceObservations.Label FullSyntax.Formula
+local notation "Guard" => SourceSymbolicIndex.Constraint FullSyntax.Formula
+abbrev State := SourceCurrentConjunctionRowsAllocation.State Symbol FullSyntax.Formula
+abbrev Memo := Old.Memo Symbol Guard
+abbrev top : Guard := SourceEqualityConstraintConstructors.top
+
+/-- Instructions distinguish direct Top construction from unchanged raw work. -/
+inductive Code : Type → Type 1 where
+  | pure (value : Result) : Code Result
+  | work (job : Work Symbol Guard Result) : Code Result
+  | topRow (symbol : Symbol) (children : List (Value Symbol Guard)) : Code (EdgeValue Symbol Guard)
+  | select (inputs : List (Value Symbol Guard)) : Code (List (Value Symbol Guard))
+  | request (input : Value Symbol Guard) : Code (Value Symbol Guard)
+  | bind (first : Code First) (next : First → Code Result) : Code Result
+
+/-- Ordered maps retain each returned physical state and merge memo. -/
+def map (call : Input → Code Output) : List Input → Code (List Output)
+  | [] => .pure []
+  | first :: rest => .bind (call first) fun value => .bind (map call rest) fun values => .pure (value :: values)
+
+/-- Singleton and recursive-boundary branches retain the original column logic. -/
+def retainedColumn (retained : List (Value Symbol Guard)) : Code (Value Symbol Guard) :=
+  match retained with
+  | [single] => .pure single
+  | others => if others.any recursiveBoundary then .work (makeUnion others)
+    else .bind (.work (ordinaryUnion others)) Code.request
+
+/-- Small rows retain their original complete field after recursive child calls. -/
+def small (edge : EdgeValue Symbol Guard) : Code (EdgeValue Symbol Guard) :=
+  .bind (map Code.request edge.children) fun children =>
+    .work (makeEdge edge.entry.key.symbol edge.entry.key.constraint children)
+
+/-- Actual selection precedes retained-column normalization. -/
+def column (inputs : List (Value Symbol Guard)) : Code (Value Symbol Guard) :=
+  .bind (.select inputs) retainedColumn
+
+/-- The completed serial schedule allocates the Top field after its columns. -/
+def large (first : EdgeValue Symbol Guard) (rest : List (EdgeValue Symbol Guard)) : Code (EdgeValue Symbol Guard) :=
+  .bind (map column
+    (MergedAlternativesGroups.columns ((first :: rest).map EdgeValue.children) first.children.length))
+    fun children => .topRow first.entry.key.symbol children
+
+/-- The threshold retains at most four rows and merges larger groups. -/
+def group (edges : List (EdgeValue Symbol Guard)) : Code (List (EdgeValue Symbol Guard)) :=
+  if edges.length ≤ 4 then map small edges
+  else match edges with
+  | [] => .pure []
+  | first :: rest => .bind (large first rest) fun edge => .pure [edge]
+
+/-- Final node construction follows the actual ordered group results. -/
+def root (groups : List (List (EdgeValue Symbol Guard))) : Code (Value Symbol Guard) :=
+  .bind (map group groups) fun rows => .work (makeNode rows.flatten)
+
+/-- Only closed ordinary inputs enter grouping. -/
+def body [DecidableEq Symbol] (input : Value Symbol Guard) : Code (Value Symbol Guard) :=
+  match input with
+  | .node _ edges _ free => if free = [] then root (MergedSourceGrouping.groups edges) else .pure input
+  | _ => .pure input
+
+/-- Erasure removes only the separate equality allocation instruction. -/
+def erase : Code Output → SourceCurrentMemoMergeGraph.Code Symbol Guard Output

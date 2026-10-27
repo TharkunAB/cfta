@@ -1,0 +1,19 @@
+theorem operand_complete [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)]
+    (unconstrained : Value Symbol Guard → Bool) (anchor : State Symbol Guard)
+    (anchorSemantic : SemanticReady anchor) (anchorReady : GateReady anchor)
+    (path : List Int) (values : List (Value Symbol Guard)) (before : Checked width)
+    (good : Good before) (ready : Ready (physical before)) (scopes : Scoped before.native) (idle : Idle before.native)
+    (available : Values before.native.machine.heap values) (growth : Grows anchor before.native.machine.heap)
+    (supported : PathSupport unconstrained anchor path values) :
+    ∃ result after, Operand path values before result after ∧ Good after ∧
+      Effects (physical before) (physical after) ∧ Extension before.native.machine after.native.machine ∧
+      Scoped after.native ∧ Idle after.native ∧ Available after.native.machine.heap result ∧ result.free = [] := by
+  rcases supported with ⟨natural, rfl, supported⟩
+  obtain ⟨result, heap, actual, effects, resident, closed⟩ := SourceCurrentAllocatedGateFields.forest_complete
+    unconstrained anchor anchorSemantic anchorReady natural values (physical before) ready available growth supported
+  refine ⟨result, advancePhysical before ⟨heap, before.operations⟩, .force result heap actual,
+    SourceCurrentAllocatedConjunctionMemo.advance_good before _ good effects, ?_,
+    SourceCurrentAllocatedQueryMemo.advance_extension before _ effects,
+    SourceCurrentAllocatedConjunctionMemo.advance_scoped before _ scopes,
+    SourceCurrentAllocatedConjunctionMemo.advance_idle before _ idle, resident, closed⟩
+  change Effects (physical before) ⟨heap, before.operations⟩

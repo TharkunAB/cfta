@@ -1,0 +1,10 @@
+theorem fold_heap
+    (unconstrained : Value Symbol Guard → Bool) (anchor : State Symbol Guard)
+    (anchorSemantic : SemanticReady anchor) (anchorReady : GateReady anchor)
+    {values : List (Value Symbol Guard)} {paths : List (List Int)} {before after : Checked width}
+    {result : Value Symbol Guard} (actual : Fold values paths before result after)
+    (ranges : FoldRanges values paths before) (good : Good before) (ready : Ready (physical before))
+    (scopes : Scoped before.native) (idle : Idle before.native)
+    (available : Values before.native.machine.heap values) (growth : Grows anchor before.native.machine.heap)
+    (supported : ∀ path ∈ paths, PathSupport unconstrained anchor path values)
+    (heap : Heap before.native.machine.heap) : Heap after.native.machine.heap := by

@@ -1,0 +1,15 @@
+theorem class_heap
+    (formulas : SourceGuards.Formulas FullSyntax.Formula) (solver : SourceGuards.Entailment FullSyntax.Formula)
+    (inventory : Inventory) (record : SourceEqualityClassOrder.Record)
+    (coherent : SourceEqualityClassOrder.Coherent record) (active : EqualityNormalize.Nontrivial record.paths)
+    {values results : List (Value Symbol Guard)} {before after : Checked width} {memo saved : Memo}
+    {memos final : Memos}
+    {actual : SourceCurrentAllocatedClassEdits.Class record values before memo results after saved}
+    (reads : SourceCurrentAllocatedClassEdits.ClassReads formulas solver actual memos final)
+    (ready : Ready before) (admitted : At formulas solver inventory before)
+    (available : Values before.native.machine.heap values)
+    (domains : ∀ path ∈ record.paths, ForestClosed (path.map Int.ofNat) values)
+    (stored : Stored before.native.machine.heap memo)
+    (covered : ∀ ambient, CacheCovers (SourceEqualityPCSGuard.holds formulas solver) ambient memo)
+    (valid : Valid before.native.machine.heap memos) (heap : Heap before.native.machine.heap) :
+    Heap after.native.machine.heap := by

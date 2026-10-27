@@ -1,0 +1,5 @@
+theorem anyCover_effect [DecidableEq Symbol] (clear : Guard → Bool)
+    (compare : Value Symbol Guard → Value Symbol Guard → State Symbol Guard → Result Symbol Guard Bool) (callback : Callback compare)
+    (narrow : EdgeValue Symbol Guard) (wides : List (EdgeValue Symbol Guard)) (before : State Symbol Guard) (semantic : SemanticReady before) (costs : CostHeap before)
+    (narrowInputs : Values before narrow.children) (wideInputs : Edges before wides)
+    (answer : Bool) (after : State Symbol Guard) (done : anyCover clear compare narrow wides before = .done answer after) : Effect before after := by

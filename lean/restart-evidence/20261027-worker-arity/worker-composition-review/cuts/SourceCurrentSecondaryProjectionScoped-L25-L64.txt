@@ -1,0 +1,40 @@
+/-- A signed path has one natural witness with anchored support for the original forest. -/
+def PathSupport [DecidableEq (EdgeKey Symbol Guard)]
+    (unconstrained : Value Symbol Guard → Bool) (anchor : State Symbol Guard)
+    (path : List Int) (values : List (Value Symbol Guard)) : Prop :=
+  ∃ natural : EqualityNormalize.Path,
+    path = natural.map Int.ofNat ∧ ForestSupport unconstrained anchor natural values
+
+/-- Natural forest support supplies the exact signed path used by the scoped operand. -/
+theorem mapped_support [DecidableEq (EdgeKey Symbol Guard)]
+    {unconstrained : Value Symbol Guard → Bool} {anchor : State Symbol Guard}
+    {path : EqualityNormalize.Path} {values : List (Value Symbol Guard)}
+    (supported : ForestSupport unconstrained anchor path values) :
+    PathSupport unconstrained anchor (path.map Int.ofNat) values := ⟨path, rfl, supported⟩
+
+/-- An anchored false proper forest gate supplies the signed operand support. -/
+theorem path_support_of_false [DecidableEq (EdgeKey Symbol Guard)]
+    {unconstrained : Value Symbol Guard → Bool} {anchor : State Symbol Guard}
+    {path : EqualityNormalize.Path} {values : List (Value Symbol Guard)}
+    (gate : SourceCurrentSecondaryTrace.PathTrace unconstrained values path anchor false anchor)
+    (nonroot : path ≠ []) (available : Values anchor values) :
+    PathSupport unconstrained anchor (path.map Int.ofNat) values :=
+  mapped_support (SourceCurrentSecondaryProjectionComplete.false_path_support gate nonroot available)
+
+/-- A completed false proper class derives every original operand's support at its actual final anchor. -/
+theorem class_support [DecidableEq (EdgeKey Symbol Guard)]
+    (unconstrained : Value Symbol Guard → Bool)
+    {paths : EqualityNormalize.Class} {values : List (Value Symbol Guard)} {before final : State Symbol Guard}
+    (gate : SourceCurrentSecondaryTrace.ClassTrace unconstrained values paths before false final)
+    (semantic : SemanticReady before) (ready : InternedFreshOrdinaryMemoGateTrace.Ready before)
+    (available : Values before values) (nonroot : ∀ path ∈ paths, path ≠ []) :
+    SemanticReady final ∧ InternedFreshOrdinaryMemoGateTrace.Ready final ∧ Keeps before final ∧
+      Values final values ∧ ∀ path ∈ paths, PathSupport unconstrained final (path.map Int.ofNat) values := by
+  have anchored := SourceCurrentSecondaryProjectionAnchor.class_anchor unconstrained gate semantic ready available
+  refine ⟨anchored.1, anchored.2.1, anchored.2.2.1, anchored.2.2.2.1, ?_⟩
+  intro path member
+  exact path_support_of_false (anchored.2.2.2.2.2 path member) (nonroot path member) anchored.2.2.2.1
+
+/-- Actual supported operands retain native readiness, physical histories, and closed results. -/
+theorem operand_effects [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)]
+    (unconstrained : Value Symbol Guard → Bool) (anchor : State Symbol Guard)

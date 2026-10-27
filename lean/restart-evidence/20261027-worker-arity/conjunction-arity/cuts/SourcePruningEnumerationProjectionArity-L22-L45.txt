@@ -1,0 +1,24 @@
+/-- Every actual ordered row read retains arity at its complete returned heap. -/
+theorem readAll_heap
+    {values : List (Value Symbol Guard)} {before after : State Symbol Guard} {edges : List (EdgeValue Symbol Guard)}
+    (actual : ReadAll values before edges after) (semantic : SemanticReady before)
+    (costs : CostHeap before) (available : Values before values) (heap : Heap before) : Heap after := by
+  induction actual with
+  | nil => exact heap
+  | @cons value before rows middle values more after first rest ih =>
+      have reached := SourceEqualityProjectionCosts.read_effects first semantic costs (available _ List.mem_cons_self)
+      have current := SourcePruningEnumerationProbeExposureArity.read_heap first
+        semantic.ready.semantic.1.normal.facts (available _ List.mem_cons_self) heap
+      exact ih reached.2.1 reached.2.2.1
+        (fun child member => reached.1.available child (available child (List.mem_cons_of_mem _ member))) current
+
+/-- The literal source union reads its inputs and adds no new edge record afterward. -/
+theorem union_heap
+    {values : List (Value Symbol Guard)} {before after : State Symbol Guard} {result : Value Symbol Guard}
+    (actual : Union values before result after) (semantic : SemanticReady before)
+    (costs : CostHeap before) (available : Values before values) (heap : Heap before) : Heap after := by
+  cases actual with
+  | node read built =>
+      have current := readAll_heap read semantic costs available heap
+      have sameState := congrArg Prod.snd built
+      dsimp only at sameState

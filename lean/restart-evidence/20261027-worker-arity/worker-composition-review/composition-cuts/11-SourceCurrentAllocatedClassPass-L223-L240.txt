@@ -1,0 +1,18 @@
+theorem Pass.verified (inventory : Inventory) {records values results} {before after : Checked width} {memo saved : Memo}
+    {memos final : Memos} {actual : Pass records values before memo results after saved}
+    (reads : PassReads formulas solver actual memos final)
+    (coherent : ∀ record ∈ records, SourceEqualityClassOrder.Coherent record)
+    (active : ∀ record ∈ records, EqualityNormalize.Nontrivial record.paths)
+    (ready : Ready before) (admitted : At formulas solver inventory before)
+    (available : Values before.native.machine.heap values)
+    (domains : ∀ record ∈ records, ∀ path ∈ record.paths, ForestClosed (path.map Int.ofNat) values)
+    (stored : Stored before.native.machine.heap memo)
+    (covered : ∀ ambient, CacheCovers (SourceEqualityPCSGuard.holds formulas solver) ambient memo)
+    (valid : Valid before.native.machine.heap memos) :
+    ∃ next, Receipt formulas solver next records values before memo results after saved memos final := by
+  cases reads with
+  | done read =>
+      obtain ⟨next, receipt⟩ := Fold.verified formulas solver inventory read coherent active ready admitted available domains stored covered valid
+      exact ⟨next, propagate_receipt formulas solver receipt⟩
+
+/-- Reached ranges derive finite full class-pass execution without completed callback premises. -/

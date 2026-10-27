@@ -1,0 +1,46 @@
+def closed (value : Value Symbol Guard) : Bool := value.free.isEmpty
+
+/-- Successful source admission gives closedness of every original operand. -/
+theorem closed_values (nodes : List (Value Symbol Guard)) (allClosed : nodes.all closed = true) : ClosedValues nodes := by
+  intro value member
+  have own := List.all_eq_true.mp allClosed value member
+  exact List.isEmpty_iff.mp own
+
+/-- Pending operands must be available, but can remain open until admission. -/
+def PendingReady (state : Physical) (pending : List (List (Value Symbol Guard))) : Prop :=
+  ∀ nodes ∈ pending, Values state.heap nodes
+
+/-- Stored entries retain their original physical operands and every requirement. -/
+def EntryReady (state : Physical) (entry : Entry) : Prop :=
+  Values state.heap entry.nodes ∧ ClosedValues entry.nodes ∧ entry.nodes.any isEmpty = false ∧ RowsReady state entry.rows
+
+/-- Every actual entry remains resident at the returned constructor heap. -/
+def TableReady (state : Physical) (table : List Entry) : Prop := ∀ entry ∈ table, EntryReady state entry
+
+/-- Constructor growth retains pending operands without a closedness assumption. -/
+theorem pending_keeps {before after : Physical} (keeps : Keeps before.heap after.heap)
+    {pending : List (List (Value Symbol Guard))} (ready : PendingReady before pending) : PendingReady after pending :=
+  fun nodes member value included => keeps.available value (ready nodes member value included)
+
+/-- Constructor growth retains all original and generated table operands. -/
+theorem table_keeps {before after : Physical} (keeps : Keeps before.heap after.heap)
+    {table : List Entry} (ready : TableReady before table) : TableReady after table := by
+  intro entry member
+  have own := ready entry member
+  exact ⟨fun value included => keeps.available value (own.1 value included), own.2.1, own.2.2.1,
+    SourceCurrentConjunctionRowsAllocation.rows_keeps keeps own.2.2.2⟩
+
+/-- Actual worklist steps retain source skips, inserted rows, and both physical states. -/
+inductive Run [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)] :
+    Nat → List Entry → List (List (Value Symbol Guard)) → Physical → List Entry → Physical → Prop where
+  | done : Run budget table [] state table state
+  | empty (impossible : nodes.any isEmpty = true)
+      (rest : Run budget table pending before final after) : Run budget table (nodes :: pending) before final after
+  | skip (nonempty : nodes.any isEmpty = false)
+      (skipped : SourceCurrentConjunctionEmptinessTable.skip key closed budget table nodes = true)
+      (rest : Run budget table pending before final after) : Run budget table (nodes :: pending) before final after
+  | admit (nonempty : nodes.any isEmpty = false)
+      (fresh : SourceCurrentConjunctionEmptinessTable.skip key closed budget table nodes = false)
+      (rows : Rows nodes before requirements middle)
+      (rest : Run (budget - 1) (⟨nodes, requirements⟩ :: table) (requirements.flatten ++ pending) middle final after) :
+      Run budget table (nodes :: pending) before final after

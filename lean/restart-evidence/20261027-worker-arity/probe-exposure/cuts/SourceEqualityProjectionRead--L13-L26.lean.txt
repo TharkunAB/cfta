@@ -1,0 +1,14 @@
+open SourceEqualityRequiredCache SourceEqualityRequiredSemanticCache
+open InternedGuardedLanguage (meaning)
+open MergedColdInterpretation (EdgeMeaning)
+
+/-- A completed source nodeEdges request, without a node construction. -/
+inductive Read [DecidableEq (EdgeKey Symbol Guard)] :
+    Value Symbol Guard → State Symbol Guard → List (EdgeValue Symbol Guard) → State Symbol Guard → Prop where
+  | done (fuel : Nat)
+      (completed : MergedFreshOrdinaryExposure.nodeEdges fuel value before = .done edges after) :
+      Read value before edges after
+
+/-- Complete row reads have the same edges and full cache at every successful bound. -/
+theorem Read.unique [DecidableEq (EdgeKey Symbol Guard)]
+    {value : Value Symbol Guard} {before firstAfter secondAfter : State Symbol Guard}

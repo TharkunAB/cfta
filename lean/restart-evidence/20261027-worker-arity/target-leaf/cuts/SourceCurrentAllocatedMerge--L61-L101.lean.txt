@@ -1,0 +1,41 @@
+  · rfl
+  · simp [literalClear, SourceEqualityConstraintConstructors.top]
+
+/-- A completed merge retains the full checked state and actual allocation graph. -/
+inductive Merge [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)] (clear : Guard → Bool) :
+    Value Symbol Guard → Checked width → Memo → Value Symbol Guard → Checked width → Memo → Prop where
+  | done (actual : SourceCurrentAllocatedMergeGraph.Call clear input (physical before) memo output after saved) :
+      Merge clear input before memo output (advancePhysical before after) saved
+
+/-- One actual call supplies physical, inventory, language, and global table receipts. -/
+structure Receipt [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)]
+    (formulas : SourceGuards.Formulas FullSyntax.Formula) (solver : SourceGuards.Entailment FullSyntax.Formula)
+    (inventory : Inventory) (clear : Guard → Bool) (input : Value Symbol Guard)
+    (before : Checked width) (memo : Memo) (output : Value Symbol Guard) (after : Checked width)
+    (saved : Memo) (memos final : Memos) : Prop where
+  actual : Merge clear input before memo output after saved
+  ready : Ready after
+  admitted : At formulas solver inventory after
+  effects : SourceCurrentConjunctionRowsAllocation.Effects (physical before) (physical after)
+  extension : SourceRecursiveIntersectionKernel.Extension before.native.machine after.native.machine
+  stored : Stored after.native.machine.heap saved
+  available : Available after.native.machine.heap output
+  closed : input.free = [] → output.free = []
+  nodes : after.native.nodes = before.native.nodes
+  edges : after.native.edges = before.native.edges
+  domains : after.native.machine.domains = before.native.machine.domains
+  retained : Extends memo saved
+  covered : ∀ ambient, CacheCovers (SourceEqualityPCSGuard.holds formulas solver) ambient saved
+  included : ∀ ambient, Covers (SourceEqualityPCSGuard.holds formulas solver) ambient input output
+  reads : SourceCurrentMemoMergeQueryMemos.CallReads clear top input before.native.machine.heap memo
+    output after.native.machine.heap saved memos final
+  globals : SourceCurrentSubsumesQueryMemos.Effect before.native.machine.heap after.native.machine.heap memos final
+
+/-- Initial checked invariants derive every returned receipt from the same actual merge. -/
+theorem verified [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)]
+    (formulas : SourceGuards.Formulas FullSyntax.Formula) (solver : SourceGuards.Entailment FullSyntax.Formula)
+    (inventory : Inventory) (clear : Guard → Bool)
+    (clearTrue : ∀ constraint, clear constraint = true → ∀ term,
+      SourceEqualityPCSGuard.holds formulas solver constraint term = true)
+    {input output : Value Symbol Guard} {before after : Checked width} {memo saved : Memo}
+    (actual : Merge clear input before memo output after saved) (ready : Ready before)

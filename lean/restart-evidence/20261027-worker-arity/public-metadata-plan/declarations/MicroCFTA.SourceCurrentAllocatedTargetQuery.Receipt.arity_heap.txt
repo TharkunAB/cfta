@@ -1,0 +1,7 @@
+theorem Receipt.arity_heap
+    {formulas : SourceGuards.Formulas FullSyntax.Formula} {solver : SourceGuards.Entailment FullSyntax.Formula}
+    {inventory : Inventory} {left right result : Value Symbol Guard}
+    {before after : Checked width} {memos : Memos}
+    (receipt : Receipt formulas solver inventory left right before result after memos)
+    (good : SourceCurrentAllocatedNativePhysicalCompletion.Good before)
+    (heap : Heap before.native.machine.heap) : Heap after.native.machine.heap := by

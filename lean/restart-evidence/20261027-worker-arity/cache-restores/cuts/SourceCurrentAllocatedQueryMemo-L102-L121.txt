@@ -1,0 +1,20 @@
+/-- A conjunction result advances the same native state with its actual heap and operation cache. -/
+def advancePhysical (before : Checked width) (after : Physical) : Checked width :=
+  ⟨advance before.native {before.native.machine with heap := after.heap}, after.equality⟩
+
+/-- Advancing the native state retains the complete returned physical state. -/
+theorem physical_advance (before : Checked width) (after : Physical) :
+    physical (advancePhysical before after) = after := by cases after; rfl
+
+/-- Constructor-only effects retain every native memo table and the domain cache. -/
+theorem advance_tables (before : Checked width) (after : Physical) :
+    (advancePhysical before after).native.nodes = before.native.nodes ∧
+      (advancePhysical before after).native.edges = before.native.edges ∧
+      (advancePhysical before after).native.machine.domains = before.native.machine.domains :=
+  ⟨rfl, rfl, rfl⟩
+
+/-- Returned conjunction effects extend the same native machine and its original records. -/
+theorem advance_extension (before : Checked width) (after : Physical)
+    (effects : Effects (physical before) after) :
+    Extension before.native.machine (advancePhysical before after).native.machine :=
+  ⟨effects.keeps.growth, effects.keeps.history, Cache.extends_refl _⟩

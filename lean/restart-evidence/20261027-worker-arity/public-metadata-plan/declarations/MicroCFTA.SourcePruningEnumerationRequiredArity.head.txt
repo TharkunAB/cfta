@@ -1,0 +1,6 @@
+theorem head [DecidableEq (EdgeKey Symbol Guard)]
+    {value result : Value Symbol Guard} {before after : State Symbol Guard}
+    (trace : SourceEqualityRequiredHead.Head value before result after)
+    (semantic : SemanticReady before) (costs : CostHeap before) (fields : Heap before)
+    (available : Available before value) :
+    Keeps before after ∧ SemanticReady after ∧ CostHeap after ∧ Heap after ∧ Available after result := by

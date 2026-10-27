@@ -1,0 +1,12 @@
+/-- A raw edge reconstruction retains its symbol, full field, and ordered children. -/
+structure EdgeReceipt (formulas : SourceGuards.Formulas FullSyntax.Formula)
+    (solver : SourceGuards.Entailment FullSyntax.Formula) (inventory : Inventory)
+    (original : EdgeValue Symbol Guard) (children : List (Value Symbol Guard))
+    (before : Checked width) (result : EdgeValue Symbol Guard) (after : Checked width) : Prop
+    extends Receipt formulas solver inventory before after where
+  actual : edge original children before = (result, after)
+  resident : EdgeResident after.native.machine.heap result
+  symbol : result.entry.key.symbol = original.entry.key.symbol
+  guard : result.entry.key.constraint = original.entry.key.constraint
+  children : result.children = children
+  arity : result.children.length = original.children.length

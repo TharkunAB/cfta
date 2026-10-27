@@ -1,0 +1,68 @@
+  | .edge key identify next, state =>
+      Fits key.constraint key.children.length ∧
+        WorkFits (next (edgeStep key identify state).1) (edgeStep key identify state).2
+  | .node key identify next, state =>
+      WorkFits (next (nodeStep key identify state).1) (nodeStep key identify state).2
+
+/-- An actual edge instruction retains old keys and checks the key it can install. -/
+theorem edgeStep_heap [DecidableEq (EdgeKey Symbol Constraint)]
+    (key : EdgeKey Symbol Constraint)
+    (identify : Interned (EdgeKey Symbol Constraint) → EdgeValue Symbol Constraint)
+    (state : State Symbol Constraint) (heap : Heap state)
+    (checked : Fits key.constraint key.children.length) :
+    Heap (edgeStep key identify state).2 := by
+  intro other edge present
+  rcases record_cases state.edgeRecords key other
+    (identify (Cache.intern state.edges key).1) edge present with old | ⟨same, _⟩
+  · exact heap other edge old
+  · simpa only [same] using checked
+
+/-- Executed constructor work preserves arity along its actual returned values and caches. -/
+theorem work_heap [DecidableEq (EdgeKey Symbol Constraint)]
+    (job : Work Symbol Constraint A) (state : State Symbol Constraint)
+    (heap : Heap state) (checked : WorkFits job state) :
+    Heap (run job state).2 := by
+  induction job generalizing state with
+  | pure value => exact heap
+  | edge key identify next ih =>
+      change Fits key.constraint key.children.length ∧
+        WorkFits (next (edgeStep key identify state).1) (edgeStep key identify state).2 at checked
+      exact ih (edgeStep key identify state).1 (edgeStep key identify state).2
+        (edgeStep_heap key identify state heap checked.1) checked.2
+  | node key identify next ih =>
+      change WorkFits (next (nodeStep key identify state).1) (nodeStep key identify state).2 at checked
+      exact ih (nodeStep key identify state).1 (nodeStep key identify state).2 heap checked
+
+/-- A raw edge constructor checks only its supplied guard and actual number of children. -/
+theorem makeEdge_fits [DecidableEq (EdgeKey Symbol Constraint)]
+    (symbol : Symbol) (constraint : Constraint) (children : List (Value Symbol Constraint))
+    (state : State Symbol Constraint) (checked : Fits constraint children.length) :
+    WorkFits (makeEdge symbol constraint children) state := by
+  simpa only [makeEdge, WorkFits, List.length_map, and_true] using checked
+
+/-- Ordinary node construction emits no edge-key request. -/
+theorem makeNode_fits [DecidableEq (EdgeKey Symbol Constraint)]
+    (edges : List (EdgeValue Symbol Constraint)) (state : State Symbol Constraint) :
+    WorkFits (makeNode edges) state := by
+  simp only [makeNode]
+  split <;> trivial
+
+/-- Union normalization emits no new edge-key request. -/
+theorem makeUnion_fits [DecidableEq (EdgeKey Symbol Constraint)]
+    (values : List (Value Symbol Constraint)) (state : State Symbol Constraint) :
+    WorkFits (makeUnion values) state := by
+  unfold makeUnion
+  split <;> first | trivial | (split <;> first | trivial | exact makeNode_fits _ state)
+
+/-- Removing a bare self reference emits no new edge-key request. -/
+theorem filter_fits [DecidableEq (EdgeKey Symbol Constraint)]
+    (name : InternedBinderProtocol.Reference) (value : Value Symbol Constraint)
+    (state : State Symbol Constraint) :
+    WorkFits (withoutSelfReference name value) state := by
+  cases value <;> simp only [withoutSelfReference] <;> try trivial
+  split
+  · exact makeUnion_fits _ state
+  · trivial
+
+/-- Actual optional binding retains arity at its complete or pending stopping cache. -/
+theorem optionalBinder_heap [DecidableEq (EdgeKey Symbol Constraint)]

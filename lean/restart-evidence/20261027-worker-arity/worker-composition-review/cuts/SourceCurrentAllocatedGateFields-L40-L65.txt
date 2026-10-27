@@ -1,0 +1,26 @@
+theorem primary_class [DecidableEq (EdgeKey Symbol Guard)]
+    (unconstrained reaches : Value Symbol Guard → Bool)
+    {values : List (Value Symbol Guard)} {paths : EqualityNormalize.Class}
+    {before : Physical} {answer : Bool} {heap : State Symbol Guard}
+    (actual : EndpointStatefulGateTrace.ClassTrace unconstrained reaches values paths before.heap answer heap)
+    (ready : Ready before) (available : Values before.heap values) :
+    Effects before ⟨heap, before.equality⟩ ∧ Values heap values := by
+  have checked := SourcePrimaryGateEffects.class_effects (FieldAvailable before.equality)
+    unconstrained reaches actual ready.semantic ready.costs available ready.fields
+  exact ⟨same_operations before ready heap checked.2.1 checked.1 checked.2.2.1 checked.2.2.2,
+    fun value member => checked.2.1.available value (available value member)⟩
+
+/-- The current secondary class gate retains complete loaded fields for open or closed inputs. -/
+theorem secondary_class [DecidableEq (EdgeKey Symbol Guard)]
+    (unconstrained : Value Symbol Guard → Bool)
+    {values : List (Value Symbol Guard)} {paths : EqualityNormalize.Class}
+    {before : Physical} {answer : Bool} {heap : State Symbol Guard}
+    (actual : SourceCurrentSecondaryTrace.ClassTrace unconstrained values paths before.heap answer heap)
+    (ready : Ready before) (available : Values before.heap values) :
+    Effects before ⟨heap, before.equality⟩ ∧ Values heap values := by
+  have checked := SourceCurrentSecondaryEffects.class_effects (FieldAvailable before.equality)
+    unconstrained actual ready.semantic ready.costs available ready.fields
+  exact ⟨same_operations before ready heap checked.2.1 checked.1 checked.2.2.1 checked.2.2.2,
+    fun value member => checked.2.1.available value (available value member)⟩
+
+/-- Initial physical readiness derives a finite primary gate and retained loaded fields. -/

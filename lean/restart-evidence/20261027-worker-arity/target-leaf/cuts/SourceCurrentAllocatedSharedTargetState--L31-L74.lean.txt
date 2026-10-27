@@ -1,0 +1,44 @@
+  targets : EqualityNormalize.Path → Option (Value Symbol Guard)
+  memo : Memo
+
+/-- Start a class with empty slots and the supplied checked state and merge table. -/
+def initial (checked : Checked width) (memo : Memo) : State width := ⟨checked, fun _ => none, memo⟩
+
+/-- Advance checked execution without replacing slots or the merge table. -/
+def advance (state : State width) (checked : Checked width) : State width := {state with checked := checked}
+
+/-- A completed first force stores its literal result and both returned states. -/
+def store (state : State width) (path : EqualityNormalize.Path) (value : Value Symbol Guard)
+    (checked : Checked width) (memo : Memo) : State width := ⟨checked, put state.targets path value, memo⟩
+
+/-- A returned slot retains its exact historical target, reads, and independent language receipt. -/
+def SlotReceipt [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)] (width : Nat)
+    (formulas : SourceGuards.Formulas FullSyntax.Formula) (solver : SourceGuards.Entailment FullSyntax.Formula)
+    (record : SourceEqualityClassOrder.Record) (values : List (Value Symbol Guard))
+    (heap : Heap) (memo : Memo) (path : EqualityNormalize.Path) (value : Value Symbol Guard) : Prop :=
+  path ∈ record.paths ∧ ∃ (before after : Checked width) (next : Inventory) (initial saved : Memo) (memos final : Memos),
+    ∃ actual : SourceCurrentAllocatedTargetGraph.Target values (operandPaths record.paths path) before initial value after saved,
+      SourceCurrentAllocatedTargetComplete.TargetReads formulas solver actual memos final ∧
+      SourceCurrentAllocatedTargetComplete.Receipt formulas solver next values (operandPaths record.paths path)
+        before initial value after saved memos final ∧ Keeps after.native.machine.heap heap ∧ Extends saved memo
+
+/-- Current readiness retains every historical slot without identifying its inventory with the current one. -/
+structure Ready [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)]
+    (formulas : SourceGuards.Formulas FullSyntax.Formula) (solver : SourceGuards.Entailment FullSyntax.Formula)
+    (inventory : Inventory) (record : SourceEqualityClassOrder.Record) (values : List (Value Symbol Guard))
+    (base : Heap) (state : State width) : Prop where
+  checked : ClassReady state.checked
+  admitted : At formulas solver inventory state.checked
+  captured : Keeps base state.checked.native.machine.heap
+  stored : Stored state.checked.native.machine.heap state.memo
+  covered : ∀ ambient, CacheCovers (SourceEqualityPCSGuard.holds formulas solver) ambient state.memo
+  receipts : ∀ path value, state.targets path = some value →
+    SlotReceipt width formulas solver record values state.checked.native.machine.heap state.memo path value
+
+/-- Empty slots need no historical target assumptions. -/
+theorem initial_ready [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)]
+    (formulas : SourceGuards.Formulas FullSyntax.Formula) (solver : SourceGuards.Entailment FullSyntax.Formula)
+    (inventory : Inventory) (record : SourceEqualityClassOrder.Record) (values : List (Value Symbol Guard)) (base : Heap)
+    (checked : Checked width) (memo : Memo) (ready : ClassReady checked)
+    (admitted : At formulas solver inventory checked) (captured : Keeps base checked.native.machine.heap)
+    (stored : Stored checked.native.machine.heap memo)

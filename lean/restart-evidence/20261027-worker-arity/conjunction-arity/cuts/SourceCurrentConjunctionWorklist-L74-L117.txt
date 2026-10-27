@@ -1,0 +1,44 @@
+theorem complete [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)]
+    (budget : Nat) (table : List Entry) (pending : List (List (Value Symbol Guard)))
+    (before : Physical) (ready : Ready before) (stored : TableReady before table) (available : PendingReady before pending) :
+    ∃ final after, Run budget table pending before final after ∧ Effects before after ∧
+      TableReady after final ∧ final.length ≤ table.length + budget := by
+  cases pending with
+  | nil => exact ⟨table, before, .done, Effects.refl before ready, stored, by omega⟩
+  | cons nodes pending =>
+      have tail : PendingReady before pending := fun nodes member => available nodes (List.mem_cons_of_mem _ member)
+      cases impossible : nodes.any isEmpty with
+      | true =>
+          obtain ⟨final, after, actual, effect, finalReady, bound⟩ := complete budget table pending before ready stored tail
+          exact ⟨final, after, .empty impossible actual, effect, finalReady, bound⟩
+      | false =>
+          cases skipped : SourceCurrentConjunctionEmptinessTable.skip key closed budget table nodes with
+          | true =>
+              obtain ⟨final, after, actual, effect, finalReady, bound⟩ := complete budget table pending before ready stored tail
+              exact ⟨final, after, .skip impossible skipped actual, effect, finalReady, bound⟩
+          | false =>
+              have admitted := SourceCurrentConjunctionEmptinessTable.admitted key closed budget table nodes skipped
+              have inputs := available nodes List.mem_cons_self
+              have noFree := closed_values nodes admitted.2.1
+              obtain ⟨requirements, middle, rows, own, requirementReady⟩ :=
+                SourceCurrentConjunctionRowsAllocation.rows_complete nodes before ready inputs noFree
+              have nextTable : TableReady middle (⟨nodes, requirements⟩ :: table) := by
+                intro entry member
+                rcases List.mem_cons.mp member with rfl | member
+                · exact ⟨fun value included => own.keeps.available value (inputs value included), noFree, impossible, requirementReady⟩
+                · exact table_keeps own.keeps stored entry member
+              have nextPending : PendingReady middle (requirements.flatten ++ pending) := by
+                intro requirement member
+                rcases List.mem_append.mp member with generated | earlier
+                · obtain ⟨row, rowIn, requirementIn⟩ := List.mem_flatten.mp generated
+                  exact (requirementReady row rowIn requirement requirementIn).1
+                · exact pending_keeps own.keeps tail requirement earlier
+              obtain ⟨final, after, actual, effect, finalReady, bound⟩ := complete (budget - 1)
+                (⟨nodes, requirements⟩ :: table) (requirements.flatten ++ pending) middle own.ready nextTable nextPending
+              refine ⟨final, after, .admit impossible skipped rows actual, own.trans effect, finalReady, ?_⟩
+              simp only [List.length_cons] at bound
+              omega
+termination_by (budget, pending.length)
+decreasing_by
+  all_goals simp_wf
+  all_goals first

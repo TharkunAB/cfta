@@ -1,0 +1,7 @@
+theorem node_effects [DecidableEq (EdgeKey Symbol Guard)]
+    (unconstrained : Value Symbol Guard → Bool)
+    {path : Path} {value : Value Symbol Guard} {before after : State Symbol Guard} {answer : Bool}
+    (trace : NodeTrace unconstrained path value before answer after)
+    (semantic : SemanticReady before) (costs : InternedFreshOrdinaryCostHeap.Heap before)
+    (available : Available before value) (fields : Heap before) :
+    SemanticReady after ∧ Keeps before after ∧ InternedFreshOrdinaryCostHeap.Heap after ∧ Heap after :=

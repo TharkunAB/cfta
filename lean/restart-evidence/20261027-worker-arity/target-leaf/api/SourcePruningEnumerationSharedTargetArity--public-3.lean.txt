@@ -1,0 +1,9 @@
+theorem fold_heap
+    {formulas : SourceGuards.Formulas FullSyntax.Formula} {solver : SourceGuards.Entailment FullSyntax.Formula}
+    {values : List (Value Symbol Guard)} {seed : List Int} {paths : List (List Int)}
+    {before after : Checked width} {memo saved : Memo} {result : Value Symbol Guard} {memos final : Memos}
+    {actual : SourceCurrentAllocatedTargetGraph.Fold values seed paths before memo result after saved}
+    (reads : FoldReads formulas solver actual memos final) (ready : ClassReady before)
+    (available : Values before.native.machine.heap values) (stored : Stored before.native.machine.heap memo)
+    (heap : Heap before.native.machine.heap) :
+    ClassReady after ∧ Values after.native.machine.heap values ∧ Stored after.native.machine.heap saved ∧ Heap after.native.machine.heap

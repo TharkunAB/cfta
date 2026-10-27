@@ -1,0 +1,56 @@
+/-- Completed reads retain all four current constructor-heap invariants. -/
+structure Effects (annotation : Guard → Prop) (before after : State Symbol Guard) : Prop where
+  keeps : Keeps before after
+  semantic : SemanticReady after
+  costs : CostHeap after
+  annotations : AnnotationHeap annotation after
+
+/-- A read at its exact returned heap retains stored costs and annotations. -/
+theorem read_effects [DecidableEq (EdgeKey Symbol Guard)]
+    (annotation : Guard → Prop) {value : Value Symbol Guard}
+    {before after : State Symbol Guard} {edges : List (EdgeValue Symbol Guard)}
+    (actual : Read value before edges after) (semantic : SemanticReady before)
+    (costs : CostHeap before) (fields : AnnotationHeap annotation before)
+    (available : Available before value) : Effects annotation before after := by
+  have checked := SourceEqualityProjectionCosts.read_effects actual semantic costs available
+  refine ⟨checked.1, checked.2.1, checked.2.2.1, ?_⟩
+  cases actual with
+  | done fuel completed =>
+      simpa only [completed, MergedSourceExposure.Result.state] using
+        SourceCurrentOpenExposureFields.nodeEdges_heap annotation fuel value before semantic fields available
+
+/-- A finite selected operand sequence retains separate edge lists and their order. -/
+inductive Exposures [DecidableEq (EdgeKey Symbol Guard)] :
+    List (Value Symbol Guard) → State Symbol Guard →
+      List (List (EdgeValue Symbol Guard)) → State Symbol Guard → Prop where
+  | nil : Exposures [] state [] state
+  | cons (first : Read value before edges middle)
+      (rest : Exposures values middle more after) :
+      Exposures (value :: values) before (edges :: more) after
+
+/-- Every operand occurrence has one returned edge list; no occurrence is removed. -/
+theorem Exposures.length [DecidableEq (EdgeKey Symbol Guard)]
+    {values : List (Value Symbol Guard)} {before after : State Symbol Guard}
+    {rows : List (List (EdgeValue Symbol Guard))} (actual : Exposures values before rows after) :
+    rows.length = values.length := by
+  induction actual with
+  | nil => rfl
+  | cons _ _ ih => simpa only [List.length_cons] using congrArg Nat.succ ih
+
+/-- Every completed chosen exposure sequence derives its final resident closed rows. -/
+theorem Exposures.verified [DecidableEq (EdgeKey Symbol Guard)]
+    (annotation : Guard → Prop) {values : List (Value Symbol Guard)}
+    {before after : State Symbol Guard} {rows : List (List (EdgeValue Symbol Guard))}
+    (actual : Exposures values before rows after) (semantic : SemanticReady before)
+    (costs : CostHeap before) (fields : AnnotationHeap annotation before)
+    (available : Values before values) (closed : ClosedValues values) :
+    Effects annotation before after ∧ ∀ edges ∈ rows, Edges after edges ∧ ClosedEdges edges := by
+  induction actual with
+  | nil =>
+      exact ⟨⟨pure_keeps _ semantic.ready, semantic, costs, fields⟩, by simp⟩
+  | @cons value before edges middle values more after first rest ih =>
+      have own := read_effects annotation first semantic costs fields (available _ List.mem_cons_self)
+      have rows := first.verified semantic (available _ List.mem_cons_self) (closed _ List.mem_cons_self)
+      have later := ih own.semantic own.costs own.annotations
+        (fun child member => own.keeps.available child (available child (List.mem_cons_of_mem _ member)))
+        (fun child member => closed child (List.mem_cons_of_mem _ member))

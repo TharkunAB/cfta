@@ -1,0 +1,59 @@
+private theorem project_heaps :
+    (∀ path (value : Value Symbol Guard) before result after,
+      Project path value before result after → NodeHeap value before after) ∧
+    (∀ path index (edges : List (EdgeValue Symbol Guard)) before results after,
+      ProjectRows path index edges before results after → RowsHeap edges before after) := by
+  have rootCase : ∀ {value : Value Symbol Guard} {state}, NodeHeap value state state := by
+    intro value state _ _ _ heap
+    exact heap
+  have emptyCase : ∀ {state}, NodeHeap (.empty : Value Symbol Guard) state state := by
+    intro state _ _ _ heap
+    exact heap
+  have ordinaryCase : ∀ {path index edges before values middle result after entry depth free},
+      ProjectRows (Symbol := Symbol) («Guard» := Guard) path index edges before values middle →
+      Union values middle result after → RowsHeap edges before middle →
+      NodeHeap (.node entry edges depth free) before after := by
+    intro path index edges before values middle result after entry depth free rows union ih semantic costs available heap
+    have resident := InternedEdgeResidency.resident_edges before
+      semantic.ready.semantic.1.normal.facts.linked _ available.resident
+    have current := ih semantic costs resident heap
+    have reached := SourceEqualityProjectionCosts.rows_effects rows semantic costs resident
+    exact union_heap union reached.2.1 reached.2.2.1 reached.2.2.2 current
+  have recursiveCase : ∀ {original before exposed middle path index result after},
+      SourceEqualityRequiredGraph.Recursive original → SourceEqualityRequiredHead.Head original before exposed middle →
+      Project (Symbol := Symbol) («Guard» := Guard) (index :: path) exposed middle result after →
+      NodeHeap exposed middle after → NodeHeap original before after := by
+    intro original before exposed middle path index result after _ head _ ih semantic costs available heap
+    have reached := SourceEqualityProjectionCosts.head_effects head semantic costs available
+    have current := SourcePruningEnumerationProbeExposureArity.head_heap head
+      semantic.ready.semantic.1.normal.facts available heap
+    exact ih reached.2.1 reached.2.2.1 reached.2.2.2 current
+  have nilCase : ∀ {state}, RowsHeap ([] : List (EdgeValue Symbol Guard)) state state := by
+    intro state _ _ _ heap
+    exact heap
+  have missingCase : ∀ {edge path index edges before results after}, select edge.children index = none →
+      ProjectRows (Symbol := Symbol) («Guard» := Guard) path index edges before results after →
+      RowsHeap edges before after → RowsHeap (edge :: edges) before after := by
+    intro edge path index edges before results after _ _ ih semantic costs resident heap
+    exact ih semantic costs (fun row member => resident row (List.mem_cons_of_mem _ member)) heap
+  have selectedCase : ∀ {edge index child path before result middle edges results after},
+      select edge.children index = some child → Project (Symbol := Symbol) («Guard» := Guard) path child before result middle →
+      ProjectRows path index edges middle results after → NodeHeap child before middle →
+      RowsHeap edges middle after → RowsHeap (edge :: edges) before after := by
+    intro edge index child path before result middle edges results after found first _ firstIH restIH semantic costs resident heap
+    have available := semantic.ready.semantic.1.normal.facts.cached.edges edge.entry.key edge
+      (resident edge List.mem_cons_self) child (select_member found)
+    have current := firstIH semantic costs available heap
+    have reached := SourceEqualityProjectionCosts.project_effects first semantic costs available
+    exact restIH reached.2.1 reached.2.2.1
+      (fun row member => InternedEdgeResidency.edge_grows before middle reached.1.growth row
+        (resident row (List.mem_cons_of_mem _ member))) current
+  constructor
+  · intro path value before result after trace
+    exact Project.rec (motive_1 := fun _ value before _ after _ => NodeHeap value before after)
+      (motive_2 := fun _ _ edges before _ after _ => RowsHeap edges before after)
+      rootCase emptyCase ordinaryCase recursiveCase nilCase missingCase selectedCase trace
+  · intro path index edges before results after trace
+    exact ProjectRows.rec (motive_1 := fun _ value before _ after _ => NodeHeap value before after)
+      (motive_2 := fun _ _ edges before _ after _ => RowsHeap edges before after)
+      rootCase emptyCase ordinaryCase recursiveCase nilCase missingCase selectedCase trace

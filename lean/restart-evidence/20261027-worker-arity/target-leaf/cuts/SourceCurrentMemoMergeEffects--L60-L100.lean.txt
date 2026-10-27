@@ -1,0 +1,41 @@
+/-- Actual completed work retains the heap, semantic facts, and stored costs. -/
+structure Effect (before after : State Symbol Guard) : Prop where
+  keeps : Keeps before after
+  semantic : SemanticReady after
+  costs : CostHeap after
+
+theorem Effect.trans {before middle after : State Symbol Guard}
+    (first : Effect before middle) (later : Effect middle after) : Effect before after :=
+  ⟨first.keeps.trans later.keeps, later.semantic, later.costs⟩
+
+theorem effect_refl (heap : State Symbol Guard) (semantic : SemanticReady heap) (costs : CostHeap heap) : Effect heap heap :=
+  ⟨pure_keeps heap semantic.ready, semantic, costs⟩
+
+/-- A request contract can add semantic obligations to the physical output facts. -/
+def Contract (input : Value Symbol Guard) (_before : State Symbol Guard)
+    (output : Value Symbol Guard) (after : State Symbol Guard) : Prop :=
+  Available after output ∧ (input.free = [] → output.free = [])
+
+/-- Instructions check their actual constructor effects and returned continuations. -/
+def Certified [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)]
+    (contract : Value Symbol Guard → State Symbol Guard → Value Symbol Guard → State Symbol Guard → Prop)
+    (clear : Guard → Bool) (code : Code Symbol Guard Output) (before : State Symbol Guard)
+    (post : State Symbol Guard → Output → Prop) : Prop :=
+  match code with
+  | .pure value => post before value
+  | .work job => Effect before (run job before).2 ∧ post (run job before).2 (run job before).1
+  | .select inputs => Values before inputs ∧ ClosedValues inputs ∧ ∀ fuel values after,
+      SourceMergedSelection.select clear fuel inputs before = .done values after → Effect before after → post after values
+  | .request input => Available before input ∧ ∀ output after,
+      Effect before after → contract input before output after → post after output
+  | .bind first next => ∃ intermediate : State Symbol Guard → _ → Prop,
+      Certified contract clear first before intermediate ∧ ∀ value middle,
+        Effect before middle → intermediate middle value → Certified contract clear (next value) middle post
+
+/-- Sequencing checks the continuation at the exact returned heap. -/
+theorem bind_certified [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)]
+    (contract : Value Symbol Guard → State Symbol Guard → Value Symbol Guard → State Symbol Guard → Prop)
+    (clear : Guard → Bool) (first : Code Symbol Guard First) (next : First → Code Symbol Guard Output)
+    (before : State Symbol Guard) (intermediate : State Symbol Guard → First → Prop)
+    (post : State Symbol Guard → Output → Prop)
+    (checked : Certified contract clear first before intermediate)

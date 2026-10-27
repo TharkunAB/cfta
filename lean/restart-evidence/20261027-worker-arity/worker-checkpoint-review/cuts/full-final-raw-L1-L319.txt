@@ -1,0 +1,319 @@
+MicroCFTA.SourcePruningEnumerationGateArity.Primary.node_effects {Symbol : Type}
+  [DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  (unconstrained reaches :
+    MicroCFTA.InternedConstructorTemplates.Value Symbol
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) →
+      Bool)
+  {path : MicroCFTA.EqualityNormalize.Path}
+  {value :
+    MicroCFTA.InternedConstructorTemplates.Value Symbol
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)}
+  {before after :
+    MicroCFTA.InternedConstructorTemplates.State Symbol
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)}
+  {answer : Bool}
+  (trace : MicroCFTA.EndpointStatefulGateTrace.NodeTrace unconstrained reaches path value before answer after)
+  (semantic : MicroCFTA.SourceEqualityRequiredSemanticCache.SemanticReady before)
+  (costs : MicroCFTA.InternedFreshOrdinaryCostHeap.Heap before)
+  (available : MicroCFTA.InternedProbeProvenance.Available before value)
+  (fields : MicroCFTA.SourcePruningEnumerationArityOrigins.Heap before) :
+  MicroCFTA.SourceEqualityRequiredSemanticCache.SemanticReady after ∧
+    MicroCFTA.SourceEqualityRequiredCache.Keeps before after ∧
+      MicroCFTA.InternedFreshOrdinaryCostHeap.Heap after ∧ MicroCFTA.SourcePruningEnumerationArityOrigins.Heap after
+'MicroCFTA.SourcePruningEnumerationGateArity.Primary.node_effects' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+MicroCFTA.SourcePruningEnumerationGateArity.Primary.child_effects {Symbol : Type}
+  [DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  (unconstrained reaches :
+    MicroCFTA.InternedConstructorTemplates.Value Symbol
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) →
+      Bool)
+  {values :
+    List
+      (MicroCFTA.InternedConstructorTemplates.Value Symbol
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))}
+  {index : Nat} {path : MicroCFTA.EqualityNormalize.Path}
+  {before after :
+    MicroCFTA.InternedConstructorTemplates.State Symbol
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)}
+  {answer : Bool}
+  (trace : MicroCFTA.EndpointStatefulGateTrace.ChildTrace unconstrained reaches values index path before answer after)
+  (semantic : MicroCFTA.SourceEqualityRequiredSemanticCache.SemanticReady before)
+  (costs : MicroCFTA.InternedFreshOrdinaryCostHeap.Heap before)
+  (available :
+    ∀
+      (value :
+        MicroCFTA.InternedConstructorTemplates.Value Symbol
+          (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)),
+      value ∈ values → MicroCFTA.InternedProbeProvenance.Available before value)
+  (fields : MicroCFTA.SourcePruningEnumerationArityOrigins.Heap before) :
+  MicroCFTA.SourceEqualityRequiredSemanticCache.SemanticReady after ∧
+    MicroCFTA.SourceEqualityRequiredCache.Keeps before after ∧
+      MicroCFTA.InternedFreshOrdinaryCostHeap.Heap after ∧ MicroCFTA.SourcePruningEnumerationArityOrigins.Heap after
+'MicroCFTA.SourcePruningEnumerationGateArity.Primary.child_effects' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+MicroCFTA.SourcePruningEnumerationGateArity.Primary.edges_effects {Symbol : Type}
+  [DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  (unconstrained reaches :
+    MicroCFTA.InternedConstructorTemplates.Value Symbol
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) →
+      Bool)
+  {index : Nat} {path : MicroCFTA.EqualityNormalize.Path}
+  {edges :
+    List
+      (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))}
+  {before after :
+    MicroCFTA.InternedConstructorTemplates.State Symbol
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)}
+  {answer : Bool}
+  (trace : MicroCFTA.EndpointStatefulGateTrace.EdgesTrace unconstrained reaches index path edges before answer after)
+  (semantic : MicroCFTA.SourceEqualityRequiredSemanticCache.SemanticReady before)
+  (costs : MicroCFTA.InternedFreshOrdinaryCostHeap.Heap before)
+  (available :
+    ∀
+      (value :
+        MicroCFTA.InternedConstructorTemplates.Value Symbol
+          (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)),
+      value ∈ List.flatMap MicroCFTA.InternedConstructorTemplates.EdgeValue.children edges →
+        MicroCFTA.InternedProbeProvenance.Available before value)
+  (fields : MicroCFTA.SourcePruningEnumerationArityOrigins.Heap before) :
+  MicroCFTA.SourceEqualityRequiredSemanticCache.SemanticReady after ∧
+    MicroCFTA.SourceEqualityRequiredCache.Keeps before after ∧
+      MicroCFTA.InternedFreshOrdinaryCostHeap.Heap after ∧ MicroCFTA.SourcePruningEnumerationArityOrigins.Heap after
+'MicroCFTA.SourcePruningEnumerationGateArity.Primary.edges_effects' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+MicroCFTA.SourcePruningEnumerationGateArity.Primary.path_effects {Symbol : Type}
+  [DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  (unconstrained reaches :
+    MicroCFTA.InternedConstructorTemplates.Value Symbol
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) →
+      Bool)
+  {values :
+    List
+      (MicroCFTA.InternedConstructorTemplates.Value Symbol
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))}
+  {path : MicroCFTA.EqualityNormalize.Path}
+  {before after :
+    MicroCFTA.InternedConstructorTemplates.State Symbol
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)}
+  {answer : Bool}
+  (trace : MicroCFTA.EndpointStatefulGateTrace.PathTrace unconstrained reaches values path before answer after)
+  (semantic : MicroCFTA.SourceEqualityRequiredSemanticCache.SemanticReady before)
+  (costs : MicroCFTA.InternedFreshOrdinaryCostHeap.Heap before)
+  (available :
+    ∀
+      (value :
+        MicroCFTA.InternedConstructorTemplates.Value Symbol
+          (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)),
+      value ∈ values → MicroCFTA.InternedProbeProvenance.Available before value)
+  (fields : MicroCFTA.SourcePruningEnumerationArityOrigins.Heap before) :
+  MicroCFTA.SourceEqualityRequiredSemanticCache.SemanticReady after ∧
+    MicroCFTA.SourceEqualityRequiredCache.Keeps before after ∧
+      MicroCFTA.InternedFreshOrdinaryCostHeap.Heap after ∧ MicroCFTA.SourcePruningEnumerationArityOrigins.Heap after
+'MicroCFTA.SourcePruningEnumerationGateArity.Primary.path_effects' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+MicroCFTA.SourcePruningEnumerationGateArity.Primary.class_effects {Symbol : Type}
+  [DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  (unconstrained reaches :
+    MicroCFTA.InternedConstructorTemplates.Value Symbol
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) →
+      Bool)
+  {values :
+    List
+      (MicroCFTA.InternedConstructorTemplates.Value Symbol
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))}
+  {paths : MicroCFTA.EqualityNormalize.Class}
+  {before after :
+    MicroCFTA.InternedConstructorTemplates.State Symbol
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)}
+  {answer : Bool}
+  (trace : MicroCFTA.EndpointStatefulGateTrace.ClassTrace unconstrained reaches values paths before answer after)
+  (semantic : MicroCFTA.SourceEqualityRequiredSemanticCache.SemanticReady before)
+  (costs : MicroCFTA.InternedFreshOrdinaryCostHeap.Heap before)
+  (available :
+    ∀
+      (value :
+        MicroCFTA.InternedConstructorTemplates.Value Symbol
+          (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)),
+      value ∈ values → MicroCFTA.InternedProbeProvenance.Available before value)
+  (fields : MicroCFTA.SourcePruningEnumerationArityOrigins.Heap before) :
+  MicroCFTA.SourceEqualityRequiredSemanticCache.SemanticReady after ∧
+    MicroCFTA.SourceEqualityRequiredCache.Keeps before after ∧
+      MicroCFTA.InternedFreshOrdinaryCostHeap.Heap after ∧ MicroCFTA.SourcePruningEnumerationArityOrigins.Heap after
+'MicroCFTA.SourcePruningEnumerationGateArity.Primary.class_effects' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+MicroCFTA.SourcePruningEnumerationGateArity.Secondary.node_effects {Symbol : Type}
+  [DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  (unconstrained :
+    MicroCFTA.InternedConstructorTemplates.Value Symbol
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) →
+      Bool)
+  {path : MicroCFTA.EqualityNormalize.Path}
+  {value :
+    MicroCFTA.InternedConstructorTemplates.Value Symbol
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)}
+  {before after :
+    MicroCFTA.InternedConstructorTemplates.State Symbol
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)}
+  {answer : Bool} (trace : MicroCFTA.SourceCurrentSecondaryTrace.NodeTrace unconstrained path value before answer after)
+  (semantic : MicroCFTA.SourceEqualityRequiredSemanticCache.SemanticReady before)
+  (costs : MicroCFTA.InternedFreshOrdinaryCostHeap.Heap before)
+  (available : MicroCFTA.InternedProbeProvenance.Available before value)
+  (fields : MicroCFTA.SourcePruningEnumerationArityOrigins.Heap before) :
+  MicroCFTA.SourceEqualityRequiredSemanticCache.SemanticReady after ∧
+    MicroCFTA.SourceEqualityRequiredCache.Keeps before after ∧
+      MicroCFTA.InternedFreshOrdinaryCostHeap.Heap after ∧ MicroCFTA.SourcePruningEnumerationArityOrigins.Heap after
+'MicroCFTA.SourcePruningEnumerationGateArity.Secondary.node_effects' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+MicroCFTA.SourcePruningEnumerationGateArity.Secondary.child_effects {Symbol : Type}
+  [DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  (unconstrained :
+    MicroCFTA.InternedConstructorTemplates.Value Symbol
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) →
+      Bool)
+  {values :
+    List
+      (MicroCFTA.InternedConstructorTemplates.Value Symbol
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))}
+  {index : Nat} {path : MicroCFTA.EqualityNormalize.Path}
+  {before after :
+    MicroCFTA.InternedConstructorTemplates.State Symbol
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)}
+  {answer : Bool}
+  (trace : MicroCFTA.SourceCurrentSecondaryTrace.ChildTrace unconstrained values index path before answer after)
+  (semantic : MicroCFTA.SourceEqualityRequiredSemanticCache.SemanticReady before)
+  (costs : MicroCFTA.InternedFreshOrdinaryCostHeap.Heap before)
+  (available :
+    ∀
+      (value :
+        MicroCFTA.InternedConstructorTemplates.Value Symbol
+          (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)),
+      value ∈ values → MicroCFTA.InternedProbeProvenance.Available before value)
+  (fields : MicroCFTA.SourcePruningEnumerationArityOrigins.Heap before) :
+  MicroCFTA.SourceEqualityRequiredSemanticCache.SemanticReady after ∧
+    MicroCFTA.SourceEqualityRequiredCache.Keeps before after ∧
+      MicroCFTA.InternedFreshOrdinaryCostHeap.Heap after ∧ MicroCFTA.SourcePruningEnumerationArityOrigins.Heap after
+'MicroCFTA.SourcePruningEnumerationGateArity.Secondary.child_effects' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+MicroCFTA.SourcePruningEnumerationGateArity.Secondary.edges_effects {Symbol : Type}
+  [DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  (unconstrained :
+    MicroCFTA.InternedConstructorTemplates.Value Symbol
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) →
+      Bool)
+  {index : Nat} {path : MicroCFTA.EqualityNormalize.Path}
+  {edges :
+    List
+      (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))}
+  {before after :
+    MicroCFTA.InternedConstructorTemplates.State Symbol
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)}
+  {answer : Bool}
+  (trace : MicroCFTA.SourceCurrentSecondaryTrace.EdgesTrace unconstrained index path edges before answer after)
+  (semantic : MicroCFTA.SourceEqualityRequiredSemanticCache.SemanticReady before)
+  (costs : MicroCFTA.InternedFreshOrdinaryCostHeap.Heap before)
+  (available :
+    ∀
+      (value :
+        MicroCFTA.InternedConstructorTemplates.Value Symbol
+          (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)),
+      value ∈ List.flatMap MicroCFTA.InternedConstructorTemplates.EdgeValue.children edges →
+        MicroCFTA.InternedProbeProvenance.Available before value)
+  (fields : MicroCFTA.SourcePruningEnumerationArityOrigins.Heap before) :
+  MicroCFTA.SourceEqualityRequiredSemanticCache.SemanticReady after ∧
+    MicroCFTA.SourceEqualityRequiredCache.Keeps before after ∧
+      MicroCFTA.InternedFreshOrdinaryCostHeap.Heap after ∧ MicroCFTA.SourcePruningEnumerationArityOrigins.Heap after
+'MicroCFTA.SourcePruningEnumerationGateArity.Secondary.edges_effects' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+MicroCFTA.SourcePruningEnumerationGateArity.Secondary.path_effects {Symbol : Type}
+  [DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  (unconstrained :
+    MicroCFTA.InternedConstructorTemplates.Value Symbol
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) →
+      Bool)
+  {values :
+    List
+      (MicroCFTA.InternedConstructorTemplates.Value Symbol
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))}
+  {path : MicroCFTA.EqualityNormalize.Path}
+  {before after :
+    MicroCFTA.InternedConstructorTemplates.State Symbol
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)}
+  {answer : Bool}
+  (trace : MicroCFTA.SourceCurrentSecondaryTrace.PathTrace unconstrained values path before answer after)
+  (semantic : MicroCFTA.SourceEqualityRequiredSemanticCache.SemanticReady before)
+  (costs : MicroCFTA.InternedFreshOrdinaryCostHeap.Heap before)
+  (available :
+    ∀
+      (value :
+        MicroCFTA.InternedConstructorTemplates.Value Symbol
+          (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)),
+      value ∈ values → MicroCFTA.InternedProbeProvenance.Available before value)
+  (fields : MicroCFTA.SourcePruningEnumerationArityOrigins.Heap before) :
+  MicroCFTA.SourceEqualityRequiredSemanticCache.SemanticReady after ∧
+    MicroCFTA.SourceEqualityRequiredCache.Keeps before after ∧
+      MicroCFTA.InternedFreshOrdinaryCostHeap.Heap after ∧ MicroCFTA.SourcePruningEnumerationArityOrigins.Heap after
+'MicroCFTA.SourcePruningEnumerationGateArity.Secondary.path_effects' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+MicroCFTA.SourcePruningEnumerationGateArity.Secondary.class_effects {Symbol : Type}
+  [DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  (unconstrained :
+    MicroCFTA.InternedConstructorTemplates.Value Symbol
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) →
+      Bool)
+  {values :
+    List
+      (MicroCFTA.InternedConstructorTemplates.Value Symbol
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))}
+  {paths : MicroCFTA.EqualityNormalize.Class}
+  {before after :
+    MicroCFTA.InternedConstructorTemplates.State Symbol
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)}
+  {answer : Bool}
+  (trace : MicroCFTA.SourceCurrentSecondaryTrace.ClassTrace unconstrained values paths before answer after)
+  (semantic : MicroCFTA.SourceEqualityRequiredSemanticCache.SemanticReady before)
+  (costs : MicroCFTA.InternedFreshOrdinaryCostHeap.Heap before)
+  (available :
+    ∀
+      (value :
+        MicroCFTA.InternedConstructorTemplates.Value Symbol
+          (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)),
+      value ∈ values → MicroCFTA.InternedProbeProvenance.Available before value)
+  (fields : MicroCFTA.SourcePruningEnumerationArityOrigins.Heap before) :
+  MicroCFTA.SourceEqualityRequiredSemanticCache.SemanticReady after ∧
+    MicroCFTA.SourceEqualityRequiredCache.Keeps before after ∧
+      MicroCFTA.InternedFreshOrdinaryCostHeap.Heap after ∧ MicroCFTA.SourcePruningEnumerationArityOrigins.Heap after
+'MicroCFTA.SourcePruningEnumerationGateArity.Secondary.class_effects' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]

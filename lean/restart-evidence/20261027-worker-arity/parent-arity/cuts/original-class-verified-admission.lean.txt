@@ -1,0 +1,35 @@
+theorem verified [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)]
+    (formulas : SourceGuards.Formulas FullSyntax.Formula) (solver : SourceGuards.Entailment FullSyntax.Formula)
+    (inventory : Inventory) (record : SourceEqualityClassOrder.Record)
+    (coherent : SourceEqualityClassOrder.Coherent record) (active : EqualityNormalize.Nontrivial record.paths)
+    {values results : List (Value Symbol Guard)} {before after : Checked width} {memo saved : Memo}
+    {memos final : Memos} {actual : Class record values before memo results after saved}
+    (reads : ClassReads formulas solver actual memos final)
+    (ready : Ready before) (admitted : At formulas solver inventory before)
+    (available : Values before.native.machine.heap values)
+    (domains : ∀ path ∈ record.paths, SourceEqualityProjectionPathDomain.ForestClosed (path.map Int.ofNat) values)
+    (stored : SourceCurrentMemoMergeEffects.Stored before.native.machine.heap memo)
+    (covered : ∀ ambient, SourceCurrentMemoMergeLanguage.CacheCovers (SourceEqualityPCSGuard.holds formulas solver) ambient memo)
+    (valid : Valid before.native.machine.heap memos) :
+    ∃ next, Receipt formulas solver next record values before memo results after saved memos final := by
+  cases reads with
+  | edit lower =>
+      have initialReady := SourceCurrentAllocatedSharedTargetState.initial_ready
+        formulas solver inventory record values before.native.machine.heap before memo ready admitted
+        (SourceEqualityRequiredCache.pure_keeps _ ready.semantic.ready) stored covered
+      have safe : SourceCurrentAllocatedSharedEditEffects.ListSafe (compiled record) values := by
+        obtain ⟨entries, built⟩ := compiled_children record coherent active
+        rw [built]
+        exact compiled_safe record coherent values domains entries built
+      obtain ⟨next, checked⟩ := SourceCurrentAllocatedSharedEditEffects.list_effects lower
+        (compiled_populated record) (compiled_allowed record) initialReady available safe valid
+      refine ⟨next, checked.ready.checked, checked.ready.admitted, checked.effects, checked.extension,
+        checked.ready.stored, checked.ready.covered, checked.available, checked.transport,
+        (fun path domain => SourceCurrentEditDomains.transport_forest checked.transport path domain),
+        checked.retained, checked.globals, ?_⟩
+      intro ambient symbol terms
+      have bounds := SourceCurrentAllocatedSharedEditLanguage.list formulas solver before.native.machine.heap
+        record values ambient symbol terms lower (compiled_valid record) (compiled_populated record)
+        (compiled_allowed record) initialReady available safe valid terms
+      exact ⟨bounds.1, fun satisfied => ⟨bounds.1, fun accepted =>
+        bounds.2 accepted satisfied (compiled_condition record coherent active symbol terms) accepted⟩⟩

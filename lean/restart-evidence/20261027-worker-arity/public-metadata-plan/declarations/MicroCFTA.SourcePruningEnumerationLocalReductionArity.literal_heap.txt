@@ -1,0 +1,15 @@
+theorem literal_heap
+    (formulas : SourceGuards.Formulas FullSyntax.Formula) (solver : SourceGuards.Entailment FullSyntax.Formula)
+    {inventory : Inventory} {original : Guard} {g s r e p h m c n budget : Nat}
+    {loaded : Allocated} {inherited : EqValue} {values results : List (Value Symbol Guard)}
+    {before : SourceCurrentAllocatedPartialState.State width} {after : Checked width}
+    {savedFourth : Fourth} {saved : Memo} {memos : Memos}
+    (initial : SourceCurrentAllocatedPartialInvariant.Context formulas solver inventory before memos)
+    (cached : SourceEqualityGuardReadback.Cached original.equalities)
+    (found : SourceEqualityConstraintFieldLookup.load original before.checked.operations.constraints = .ok (some loaded))
+    (inheritedReady : SourceEqualityConstraintAllocation.Ready before.checked.operations.constraints inherited)
+    (available : Values before.checked.native.machine.heap values)
+    (ranges : SourceCurrentAllocatedLocalReduction.Ranges budget loaded inherited values before.checked before.fourth before.merge)
+    (done : SourceCurrentAllocatedLocalWorker.reduce g s r e p h m c n budget loaded inherited values
+      before.checked before.fourth before.merge = .done results after savedFourth saved)
+    (heap : Heap before.checked.native.machine.heap) : Heap after.native.machine.heap := by

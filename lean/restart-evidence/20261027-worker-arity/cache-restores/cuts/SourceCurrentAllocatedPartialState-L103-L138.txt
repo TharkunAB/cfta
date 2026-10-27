@@ -1,0 +1,36 @@
+theorem initial_components (checked : Checked width) (merge : MergeMemo) (fourth : Fourth) :
+    (initial checked merge fourth).checked = checked ∧
+    (initial checked merge fourth).merge = merge ∧ (initial checked merge fourth).fourth = fourth ∧
+    (initial checked merge fourth).nodeResults = FlatMemoThunk.empty ∧
+    (initial checked merge fourth).edgeResults = FlatMemoThunk.empty := ⟨rfl, rfl, rfl, rfl, rfl⟩
+
+/-- Physical advancement retains both complete caller result tables. -/
+theorem advance_tables (before : State width) (checked : Checked width) (fourth : Fourth) (merge : MergeMemo) :
+    (advance before checked fourth merge).checked = checked ∧
+    (advance before checked fourth merge).fourth = fourth ∧ (advance before checked fourth merge).merge = merge ∧
+    (advance before checked fourth merge).nodeResults = before.nodeResults ∧
+    (advance before checked fourth merge).edgeResults = before.edgeResults := ⟨rfl, rfl, rfl, rfl, rfl⟩
+
+/-- Node publication and demand change only their own result table. -/
+theorem beginNode_components (request : NodeRequest) (before : State width) :
+    let after := (beginNode request before).2.2
+    after.checked = before.checked ∧ after.merge = before.merge ∧ after.fourth = before.fourth ∧
+      after.edgeResults = before.edgeResults := ⟨rfl, rfl, rfl, rfl⟩
+
+/-- Edge publication and demand change only their own result table. -/
+theorem beginEdge_components (request : EdgeRequest) (before : State width) :
+    let after := (beginEdge request before).2.2
+    after.checked = before.checked ∧ after.merge = before.merge ∧ after.fourth = before.fourth ∧
+      after.nodeResults = before.nodeResults := ⟨rfl, rfl, rfl, rfl⟩
+
+/-- Node completion changes only its selected result table. -/
+theorem finishNode_components (handle : Nat) (result : Node) (before : State width) :
+    (finishNode handle result before).checked = before.checked ∧
+    (finishNode handle result before).merge = before.merge ∧ (finishNode handle result before).fourth = before.fourth ∧
+    (finishNode handle result before).edgeResults = before.edgeResults := ⟨rfl, rfl, rfl, rfl⟩
+
+/-- Edge completion changes only its selected result table. -/
+theorem finishEdge_components (handle : Nat) (result : Edge) (before : State width) :
+    (finishEdge handle result before).checked = before.checked ∧
+    (finishEdge handle result before).merge = before.merge ∧ (finishEdge handle result before).fourth = before.fourth ∧
+    (finishEdge handle result before).nodeResults = before.nodeResults := ⟨rfl, rfl, rfl, rfl⟩

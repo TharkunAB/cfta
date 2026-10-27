@@ -1,0 +1,58 @@
+mutual
+/-- The node family demands its cell before inspecting the body recursion bound. -/
+noncomputable def nodeCall (fuel g s r e p h m c n budget : Nat) (request : NodeRequest)
+    (before : Caller width) : Outcome Node width :=
+  let actual := beginNode request before
+  match actual.2.1 with
+  | .ready result => .done result actual.2.2
+  | .evaluate original =>
+      (nodeBody fuel g s r e p h m c n budget original actual.2.2).bind fun result after =>
+        .done result (finishNode actual.1 result after)
+  | .busy => .failed (.nodeMemo actual.1 .busy) actual.2.2
+  | .absent => .failed (.nodeMemo actual.1 .absent) actual.2.2
+termination_by (fuel, 3)
+
+/-- Source terminal and binder branches run literally; ordinary rows consume one recursion step. -/
+noncomputable def nodeBody (fuel g s r e p h m c n budget : Nat) (request : NodeRequest)
+    (before : Caller width) : Outcome Node width :=
+  match request.value with
+  | .empty => .done .empty before
+  | value@(.union ..) => .done value before
+  | .reference name => .failed (.unexpectedReference name) before
+  | .mu entry body depth ordinary =>
+      match SourceEqualityMuReconstruction.rebuild entry body depth ordinary before.checked.native.machine.heap with
+      | .done result heap => .done result (advance before
+          (SourceCurrentAllocatedQueryMemo.advancePhysical before.checked ⟨heap, before.checked.operations⟩)
+          before.fourth before.merge)
+      | observation@(.pending _ heap) => .failed (.binder observation) (advance before
+          (SourceCurrentAllocatedQueryMemo.advancePhysical before.checked ⟨heap, before.checked.operations⟩)
+          before.fourth before.merge)
+  | value@(.node _ original _ _) =>
+      match fuel with
+      | 0 => .failed (.exhausted .nodeBody) before
+      | next + 1 =>
+          (rows next g s r e p h m c n budget request.inherited original before).bind fun results after =>
+            let rebuilt := SourceCurrentAllocatedRawRebuild.modify value original results after.checked
+            .done rebuilt.1 (advance after rebuilt.2 after.fourth after.merge)
+termination_by (fuel, 2)
+
+/-- The edge family evaluates its stored winner and completes only the selected handle. -/
+noncomputable def edgeCall (fuel g s r e p h m c n budget : Nat) (request : EdgeRequest)
+    (before : Caller width) : Outcome Edge width :=
+  let actual := beginEdge request before
+  match actual.2.1 with
+  | .ready result => .done result actual.2.2
+  | .evaluate original =>
+      (edgeBody fuel g s r e p h m c n budget original actual.2.2).bind fun result after =>
+        .done result (finishEdge actual.1 result after)
+  | .busy => .failed (.edgeMemo actual.1 .busy) actual.2.2
+  | .absent => .failed (.edgeMemo actual.1 .absent) actual.2.2
+
+/-- A parent return advances checked state and warm memos without changing either outer result table. -/
+noncomputable def edgeBody (_fuel g s r e p h m c n budget : Nat) (request : EdgeRequest)
+    (before : Caller width) : Outcome Edge width :=
+  match SourceCurrentAllocatedParentWorker.edge g s r e p h m c n budget
+      request.value.entry.key.symbol request.value.entry.key.constraint request.inherited
+      request.value.children before.checked before.fourth before.merge with
+  | .done result checked fourth memo => .done result (advance before checked fourth memo)
+  | .failed fault checked fourth memo => .failed (.parent fault) (advance before checked fourth memo)

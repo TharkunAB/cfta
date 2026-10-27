@@ -1,0 +1,15 @@
+local notation "Symbol" => SourceObservations.Label FullSyntax.Formula
+local notation "Guard" => SourceSymbolicIndex.Constraint FullSyntax.Formula
+local notation "CheckedState" => SourceEqualityNativeDemand.State
+local notation "CodeFields" => SourceCurrentAllocatedNativeCodeFields.Fields
+local notation "Heap" => SourceCurrentConjunctionEquality.Fields
+local notation "Operations" => SourceEqualityConstraintMemoAllocation.State
+local instance : DecidableEq (SourceGuards.Guard FullSyntax.Formula) :=
+  SourceEqualityPCSNativeEdge.guardDecidableEq
+
+/-- Initial physical caches and loaded fields contain no semantic result receipt. -/
+structure Good (state : CheckedState width) : Prop where
+  native : SourceCurrentAllocatedNativePhysicalCache.Valid state.native
+  heap : SourceEqualityRequiredCache.Ready state.native.machine.heap
+  operations : SourceEqualityConstraintMemoAllocation.Valid state.operations
+  fields : Heap state.operations state.native.machine.heap

@@ -1,0 +1,20 @@
+MicroCFTA.SourceCurrentAllocatedTargetQuery.Receipt.arity_heap
+  [DecidableEq (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)]
+  [DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  {width : Nat} {formulas : MicroCFTA.SourceGuards.Formulas MicroCFTA.FullSyntax.Formula}
+  {solver : MicroCFTA.SourceGuards.Entailment MicroCFTA.FullSyntax.Formula}
+  {inventory : MicroCFTA.SourceCurrentAllocatedNativeInventoryState.Inventory}
+  {left right result :
+    MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)}
+  {before after : MicroCFTA.SourceEqualityNativeDemand.State width} {memos : MicroCFTA.EndpointMemoGateTrace.Memos}
+  (receipt :
+    MicroCFTA.SourceCurrentAllocatedTargetQuery.Receipt formulas solver inventory left right before result after memos)
+  (good : MicroCFTA.SourceCurrentAllocatedNativePhysicalCompletion.Good before)
+  (heap : MicroCFTA.SourcePruningEnumerationArityOrigins.Heap before.native.machine.heap) :
+  MicroCFTA.SourcePruningEnumerationArityOrigins.Heap after.native.machine.heap
+'MicroCFTA.SourceCurrentAllocatedTargetQuery.Receipt.arity_heap' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]

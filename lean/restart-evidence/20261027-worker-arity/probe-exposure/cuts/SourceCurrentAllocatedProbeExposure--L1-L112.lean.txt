@@ -1,0 +1,112 @@
+import MicroCFTA.SourceCurrentAllocatedMuRebuild
+import MicroCFTA.SourceEqualityProjectionCosts
+import MicroCFTA.SourceCurrentRequiredHeapEffects
+
+/-!
+# Filtered Mu probes through current open row exposure
+
+Actual stored unfolding derives new filtered probes from its literal build.
+Collection retains the exact worklist and canonical fallback. Inputs can
+have unrelated open children. Read bounds do not assert completion.
+-/
+namespace MicroCFTA.SourceCurrentAllocatedProbeExposure
+open Cache InternedConstructorTemplates InternedProbeProvenance
+open InternedNestedProvenance (Values Edges)
+open InternedNestedConstruction (Outcome)
+open MergedFreshOrdinaryExposure
+open MergedSourceExposure (Result)
+open SourceEqualityRequiredSemanticCache
+open InternedFreshOrdinaryProbeHeap (Heap)
+open SourceEqualityAnnotationExposure (prepend_state canonical_state)
+
+/-- Bounded collection retains filtered Mu probes with unrelated open inputs. -/
+theorem collect_heap [DecidableEq (EdgeKey Symbol Guard)]
+    (fuel : Nat) (state : State Symbol Guard) (semantic : SemanticReady state)
+    (heap : Heap state) (seen : List Nat) (pending : List (Value Symbol Guard))
+    (inputs : Values state pending) : Heap (collect fuel state seen pending).state := by
+  induction fuel generalizing state seen pending with
+  | zero => cases pending <;> exact heap
+  | succ fuel ih =>
+      cases pending with
+      | nil => exact heap
+      | cons value rest =>
+          have available := inputs value List.mem_cons_self
+          have restInputs : Values state rest := fun child member => inputs child (List.mem_cons_of_mem _ member)
+          cases value with
+          | empty => exact ih state semantic heap seen rest restInputs
+          | reference => exact heap
+          | node entry edges depth free =>
+              simpa only [collect, prepend_state] using ih state semantic heap seen rest restInputs
+          | union entry members depth free =>
+              by_cases visited : entry.identity ∈ seen
+              · simpa only [collect, ite_eq_left visited] using ih state semantic heap seen rest restInputs
+              · have nextInputs : Values state (members ++ rest) := by
+                  intro child member
+                  rcases List.mem_append.mp member with first | later
+                  · exact available.children child first
+                  · exact restInputs child later
+                simpa only [collect, ite_eq_right visited] using
+                  ih state semantic heap (entry.identity :: seen) (members ++ rest) nextInputs
+          | mu entry body depth ordinary =>
+              by_cases visited : entry.identity ∈ seen
+              · simpa only [collect, ite_eq_left visited] using ih state semantic heap seen rest restInputs
+              · obtain ⟨result, after, done, kept, afterSemantic, resultAvailable, _⟩ :=
+                  SourceEqualityOpenOrdinaryHead.unfold_complete (.mu entry body depth ordinary) state semantic available
+                have retained := SourceEqualityProbeUnfold.unfold
+                  (.mu entry body depth ordinary) state semantic.ready.semantic.1 heap available
+                have afterHeap : Heap after := by
+                  simpa only [done, Outcome.state] using retained
+                have nextInputs : Values after (result :: rest) := by
+                  intro child member
+                  rcases List.mem_cons.mp member with rfl | member
+                  · exact resultAvailable
+                  · exact kept.available child (restInputs child member)
+                simpa only [collect, ite_eq_right visited, done] using
+                  ih after afterSemantic afterHeap (entry.identity :: seen) (result :: rest) nextInputs
+
+/-- Actual direct and closure reads retain filtered Mu probes without whole-value closedness. -/
+theorem nodeEdges_heap [DecidableEq (EdgeKey Symbol Guard)]
+    (fuel : Nat) (value : Value Symbol Guard) (state : State Symbol Guard)
+    (semantic : SemanticReady state) (heap : Heap state) (available : Available state value) :
+    Heap (nodeEdges fuel value state).state := by
+  have fallback (current : State Symbol Guard) (currentSemantic : SemanticReady current)
+      (currentHeap : Heap current) (root : Value Symbol Guard) (rootAvailable : Available current root) :
+      Heap (collect fuel current [] [root]).canonical.state := by
+    rw [canonical_state]
+    exact collect_heap fuel current currentSemantic currentHeap [] [root]
+      (by intro child member; simpa only [List.mem_singleton.mp member] using rootAvailable)
+  cases value with
+  | empty | reference | node => exact heap
+  | union => exact fallback state semantic heap _ available
+  | mu entry body depth ordinary =>
+      obtain ⟨result, after, done, kept, afterSemantic, resultAvailable, _⟩ :=
+        SourceEqualityOpenOrdinaryHead.unfold_complete (.mu entry body depth ordinary) state semantic available
+      have retained := SourceEqualityProbeUnfold.unfold
+        (.mu entry body depth ordinary) state semantic.ready.semantic.1 heap available
+      have afterHeap : Heap after := by
+        simpa only [done, Outcome.state] using retained
+      have closure := fallback after afterSemantic afterHeap (.mu entry body depth ordinary)
+        (kept.available _ available)
+      cases result with
+      | node => simpa only [nodeEdges, done, Result.state] using afterHeap
+      | empty | reference | union | mu => simpa only [nodeEdges, done] using closure
+
+
+open SourceEqualityProjectionRead SourceEqualityProjectionUnion SourceEqualityProjectionGraph
+local notation "CostHeap" => InternedFreshOrdinaryCostHeap.Heap
+
+/-- A completed read preserves probes at its literal returned heap. -/
+theorem read_heap [DecidableEq (EdgeKey Symbol Guard)]
+    {value : Value Symbol Guard} {before after : State Symbol Guard} {edges : List (EdgeValue Symbol Guard)}
+    (actual : Read value before edges after) (semantic : SemanticReady before)
+    (available : Available before value) (probes : Heap before) : Heap after := by
+  cases actual with
+  | done fuel completed =>
+      simpa only [completed, Result.state] using nodeEdges_heap fuel value before semantic probes available
+
+/-- Actual head reconstruction introduces no additional Mu record. -/
+theorem head_heap [DecidableEq (EdgeKey Symbol Guard)]
+    {value result : Value Symbol Guard} {before after : State Symbol Guard}
+    (actual : SourceEqualityRequiredHead.Head value before result after)
+    (semantic : SemanticReady before) (available : Available before value) (probes : Heap before) : Heap after := by
+  cases actual with

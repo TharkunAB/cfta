@@ -1,0 +1,8 @@
+theorem run_heap
+    {budget : Nat}
+    {table final : List (SourceCurrentConjunctionEmptinessTable.Entry (Value Symbol Guard))}
+    {pending : List (List (Value Symbol Guard))} {before after : Physical}
+    (actual : SourceCurrentConjunctionWorklist.Run budget table pending before final after)
+    (ready : Allocation.Ready before)
+    (available : SourceCurrentConjunctionWorklist.PendingReady before pending)
+    (heap : Heap before.heap) : Heap after.heap := by

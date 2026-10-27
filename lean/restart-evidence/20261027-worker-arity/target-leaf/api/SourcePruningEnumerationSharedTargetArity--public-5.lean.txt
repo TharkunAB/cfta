@@ -1,0 +1,9 @@
+theorem force_heap
+    {formulas : SourceGuards.Formulas FullSyntax.Formula} {solver : SourceGuards.Entailment FullSyntax.Formula}
+    {inventory : Inventory} {record : SourceEqualityClassOrder.Record} {values : List (Value Symbol Guard)}
+    {base : InternedConstructorTemplates.State Symbol Guard} {path : EqualityNormalize.Path}
+    {before after : SharedState width} {result : Value Symbol Guard} {memos final : Memos}
+    {actual : SourceCurrentAllocatedSharedTargetForce.Force record values path before result after}
+    (reads : SourceCurrentAllocatedSharedTargetForce.Reads formulas solver actual memos final)
+    (ready : SharedReady formulas solver inventory record values base before) (known : Values base values)
+    (heap : Heap before.checked.native.machine.heap) : Heap after.checked.native.machine.heap

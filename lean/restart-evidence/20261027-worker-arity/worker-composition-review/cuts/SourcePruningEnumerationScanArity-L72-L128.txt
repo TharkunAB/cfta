@@ -1,0 +1,57 @@
+    fun value member => callEffects.keeps.available value (queryEffects.keeps.available value (available value member)),
+    finalCorrect, afterHeap⟩
+
+/-- The actual class scan retains arity under its original reached-range and physical contracts. -/
+theorem scan_heap
+    (formulas : SourceGuards.Formulas FullSyntax.Formula) (solver : SourceGuards.Entailment FullSyntax.Formula)
+    {budget : Nat} {unconstrained reaches : Value Symbol Guard → Bool}
+    {values : List (Value Symbol Guard)} {classes selected : Constraints} {outcome : Option Class}
+    {before after : Checked width} {memo saved : Memo}
+    (actual : Scan budget unconstrained reaches values classes before memo outcome selected after saved)
+    (ready : Ready before) (available : Values before.native.machine.heap values)
+    (proper : ∀ paths ∈ classes, ∀ path ∈ paths, path ≠ [])
+    (correct : SourceCurrentEmptinessMemo.Correct formulas solver before.native.machine.heap memo)
+    (ranges : SourceCurrentConjunctionClassScanCompletion.Ranges budget unconstrained reaches values classes before memo)
+    (heap : Heap before.native.machine.heap) : Heap after.native.machine.heap := by
+  revert ready available proper correct ranges heap
+  induction actual with
+  | nil => intro _ _ _ _ _ heap; exact heap
+  | selected primary rest ih =>
+      intro ready available proper correct ranges heap
+      have first := primary_effects unconstrained reaches primary ready available
+      have current := (SourcePruningEnumerationGateArity.Primary.class_effects unconstrained reaches primary
+        ready.semantic ready.costs available heap).2.2.2
+      exact ih first.1 first.2.2 (fun paths member => proper paths (List.mem_cons_of_mem _ member))
+        (SourceCurrentEmptinessMemo.grows formulas solver first.2.1.keeps _ correct) (ranges.1 _ primary) current
+  | skipped primary secondary rest ih =>
+      intro ready available proper correct ranges heap
+      have first := primary_effects unconstrained reaches primary ready available
+      have current := (SourcePruningEnumerationGateArity.Primary.class_effects unconstrained reaches primary
+        ready.semantic ready.costs available heap).2.2.2
+      have second := secondary_effects unconstrained secondary first.1 first.2.2
+      have later := (SourcePruningEnumerationGateArity.Secondary.class_effects unconstrained secondary
+        first.1.semantic first.1.costs first.2.2 current).2.2.2
+      exact ih second.1 second.2.2 (fun paths member => proper paths (List.mem_cons_of_mem _ member))
+        (SourceCurrentEmptinessMemo.grows formulas solver (first.2.1.trans second.2.1).keeps _ correct)
+        (ranges.2.1 _ primary _ secondary) later
+  | continued primary secondary seeded call rest ih =>
+      intro ready available proper correct ranges heap
+      have first := primary_effects unconstrained reaches primary ready available
+      have current := (SourcePruningEnumerationGateArity.Primary.class_effects unconstrained reaches primary
+        ready.semantic ready.costs available heap).2.2.2
+      have reached := ranges.2.2 _ primary _ secondary
+      obtain ⟨nextReady, _effects, nextValues, nextCorrect, nextHeap⟩ := query_heap_effects unconstrained
+        secondary seeded call reached.1 (proper _ List.mem_cons_self) first.1 first.2.2 formulas solver
+        (SourceCurrentEmptinessMemo.grows formulas solver first.2.1.keeps _ correct) current
+      exact ih nextReady nextValues (fun paths member => proper paths (List.mem_cons_of_mem _ member))
+        nextCorrect (reached.2 _ _ seeded _ _ call) nextHeap
+  | stopped primary secondary seeded call =>
+      intro ready available proper correct ranges heap
+      have first := primary_effects unconstrained reaches primary ready available
+      have current := (SourcePruningEnumerationGateArity.Primary.class_effects unconstrained reaches primary
+        ready.semantic ready.costs available heap).2.2.2
+      exact (query_heap_effects unconstrained secondary seeded call (ranges.2.2 _ primary _ secondary).1
+        (proper _ List.mem_cons_self) first.1 first.2.2 formulas solver
+        (SourceCurrentEmptinessMemo.grows formulas solver first.2.1.keeps _ correct) current).2.2.2.2
+
+end MicroCFTA.SourcePruningEnumerationScanArity

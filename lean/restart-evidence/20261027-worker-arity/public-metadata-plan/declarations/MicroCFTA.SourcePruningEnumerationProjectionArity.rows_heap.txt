@@ -1,0 +1,5 @@
+theorem rows_heap
+    {path : List Int} {index : Int} {edges : List (EdgeValue Symbol Guard)} {results : List (Value Symbol Guard)}
+    {before after : State Symbol Guard} (actual : ProjectRows path index edges before results after)
+    (semantic : SemanticReady before) (costs : CostHeap before) (resident : Edges before edges)
+    (heap : Heap before) : Heap after := project_heaps.2 _ _ _ _ _ _ actual semantic costs resident heap

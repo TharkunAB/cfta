@@ -1,0 +1,31 @@
+MicroCFTA.SourcePruningEnumerationSharedTargetArity.operand_heap
+  [DecidableEq (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)]
+  [DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  {width : Nat} {formulas : MicroCFTA.SourceGuards.Formulas MicroCFTA.FullSyntax.Formula}
+  {solver : MicroCFTA.SourceGuards.Entailment MicroCFTA.FullSyntax.Formula}
+  {inventory : MicroCFTA.SourceCurrentAllocatedNativeInventoryState.Inventory} {path : List Int}
+  {values :
+    List
+      (MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))}
+  {before after : MicroCFTA.SourceEqualityNativeDemand.State width}
+  {memo saved :
+    MicroCFTA.SourceCurrentMemoMergeGraph.Memo (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)}
+  {output :
+    MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)}
+  {memos final : MicroCFTA.EndpointMemoGateTrace.Memos}
+  (receipt :
+    MicroCFTA.SourceCurrentAllocatedMergeOperand.Receipt formulas solver inventory path values before memo output after
+      saved memos final)
+  (ready : MicroCFTA.SourceCurrentConjunctionClassScan.Ready before)
+  (available : MicroCFTA.InternedNestedProvenance.Values before.native.machine.heap values)
+  (stored : MicroCFTA.SourceCurrentMemoMergeEffects.Stored before.native.machine.heap memo)
+  (heap : MicroCFTA.SourcePruningEnumerationArityOrigins.Heap before.native.machine.heap) :
+  MicroCFTA.SourcePruningEnumerationArityOrigins.Heap after.native.machine.heap
+'MicroCFTA.SourcePruningEnumerationSharedTargetArity.operand_heap' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]

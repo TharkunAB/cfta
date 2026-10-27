@@ -1,0 +1,82 @@
+theorem Run.pure_iff [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)]
+    {clear : Guard → Bool} {top : Guard} {value output : Output}
+    {before after : State Symbol Guard} {memo saved : Memo Symbol Guard} :
+    Run clear top (.pure value) before memo output after saved ↔ output = value ∧ after = before ∧ saved = memo := by
+  constructor
+  · intro actual; cases actual; exact ⟨rfl, rfl, rfl⟩
+  · rintro ⟨rfl, rfl, rfl⟩; exact .pure _ _ _
+
+/-- A work instruction executes the literal physical constructor program and retains the result table. -/
+theorem Run.work_iff [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)]
+    {clear : Guard → Bool} {top : Guard} {job : Work Symbol Guard Output} {output : Output}
+    {before after : State Symbol Guard} {memo saved : Memo Symbol Guard} :
+    Run clear top (.work job) before memo output after saved ↔
+      output = (run job before).1 ∧ after = (run job before).2 ∧ saved = memo := by
+  constructor
+  · intro actual; cases actual; exact ⟨rfl, rfl, rfl⟩
+  · rintro ⟨rfl, rfl, rfl⟩; exact .work _ _ _
+
+private def project [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)]
+    (clear : Guard → Bool) (top : Guard) (code : Code Symbol Guard Output)
+    (before : State Symbol Guard) (memo : Memo Symbol Guard) (output : Output)
+    (after : State Symbol Guard) (saved : Memo Symbol Guard) : Prop :=
+  match code with
+  | .select inputs => (∃ fuel, SourceMergedSelection.select clear fuel inputs before = .done output after) ∧ saved = memo
+  | .request input => Call clear top input before memo output after saved
+  | _ => True
+
+private theorem Run.project [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)]
+    {clear : Guard → Bool} {top : Guard} {code : Code Symbol Guard Output}
+    {before after : State Symbol Guard} {memo saved : Memo Symbol Guard} {output : Output}
+    (actual : Run clear top code before memo output after saved) : project clear top code before memo output after saved := by
+  induction actual using Run.rec (motive_2 := fun _ _ _ _ _ _ _ => True) with
+  | pure | work | bind => trivial
+  | select fuel done => exact ⟨⟨fuel, done⟩, rfl⟩
+  | request call _ => exact call
+  | hit | miss => trivial
+
+/-- Every selected column has its own actual completed comparison bound and unchanged result table. -/
+theorem Run.select_iff [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)]
+    {clear : Guard → Bool} {top : Guard} {inputs values : List (Value Symbol Guard)}
+    {before after : State Symbol Guard} {memo saved : Memo Symbol Guard} :
+    Run clear top (.select inputs) before memo values after saved ↔
+      (∃ fuel, SourceMergedSelection.select clear fuel inputs before = .done values after) ∧ saved = memo := by
+  constructor
+  · intro actual; exact actual.project
+  · rintro ⟨⟨fuel, done⟩, rfl⟩; exact .select fuel done
+
+/-- A recursive instruction is exactly the reached completed result-memo request. -/
+theorem Run.request_iff [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)]
+    {clear : Guard → Bool} {top : Guard} {input output : Value Symbol Guard}
+    {before after : State Symbol Guard} {memo saved : Memo Symbol Guard} :
+    Run clear top (.request input) before memo output after saved ↔ Call clear top input before memo output after saved := by
+  constructor
+  · intro actual; exact actual.project
+  · exact Run.request
+
+/-- Sequencing exposes the exact first result, heap, and table used by the continuation. -/
+theorem Run.bind_iff [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)]
+    {clear : Guard → Bool} {top : Guard} {first : Code Symbol Guard First} {next : First → Code Symbol Guard Output}
+    {output : Output} {before after : State Symbol Guard} {memo saved : Memo Symbol Guard} :
+    Run clear top (.bind first next) before memo output after saved ↔
+      ∃ value middle current, Run clear top first before memo value middle current ∧
+        Run clear top (next value) middle current output after saved := by
+  constructor
+  · intro actual; cases actual with | bind first later => exact ⟨_, _, _, first, later⟩
+  · rintro ⟨_, _, _, first, later⟩; exact .bind first later
+
+/-- Ordered list traversal uses the exact first child's returned heap and table for the rest. -/
+theorem Run.map_cons_iff [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)]
+    {clear : Guard → Bool} {top : Guard} {call : Input → Code Symbol Guard Output}
+    {input : Input} {inputs : List Input} {outputs : List Output}
+    {before after : State Symbol Guard} {memo saved : Memo Symbol Guard} :
+    Run clear top (map call (input :: inputs)) before memo outputs after saved ↔
+      ∃ value values middle current, Run clear top (call input) before memo value middle current ∧
+        Run clear top (map call inputs) middle current values after saved ∧ outputs = value :: values := by
+  constructor
+  · intro actual
+    obtain ⟨value, middle, current, first, later⟩ := Run.bind_iff.mp actual
+    obtain ⟨values, final, last, rest, returned⟩ := Run.bind_iff.mp later
+    obtain ⟨same, rfl, rfl⟩ := Run.pure_iff.mp returned
+    exact ⟨_, _, _, _, first, rest, same⟩
+  · rintro ⟨value, values, middle, current, first, rest, rfl⟩

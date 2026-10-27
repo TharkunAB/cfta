@@ -1,0 +1,33 @@
+MicroCFTA.SourceCurrentAllocatedSharedTargetLeaf.Receipt.arity_heap
+  [DecidableEq (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)]
+  [DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  {width : Nat} {formulas : MicroCFTA.SourceGuards.Formulas MicroCFTA.FullSyntax.Formula}
+  {solver : MicroCFTA.SourceGuards.Entailment MicroCFTA.FullSyntax.Formula}
+  {inventory initialInventory : MicroCFTA.SourceCurrentAllocatedNativeInventoryState.Inventory}
+  {record : MicroCFTA.SourceEqualityClassOrder.Record}
+  {values :
+    List
+      (MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))}
+  {base :
+    MicroCFTA.InternedConstructorTemplates.State (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)}
+  {path : MicroCFTA.EqualityNormalize.Path}
+  {input result :
+    MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)}
+  {before after : MicroCFTA.SourceCurrentAllocatedSharedTargetState.State width}
+  {memos final : MicroCFTA.EndpointMemoGateTrace.Memos}
+  (receipt :
+    MicroCFTA.SourceCurrentAllocatedSharedTargetLeaf.Receipt formulas solver inventory record values base path input
+      before result after memos final)
+  (ready :
+    MicroCFTA.SourceCurrentAllocatedSharedTargetState.Ready formulas solver initialInventory record values base before)
+  (known : MicroCFTA.InternedNestedProvenance.Values base values)
+  (heap : MicroCFTA.SourcePruningEnumerationArityOrigins.Heap before.checked.native.machine.heap) :
+  MicroCFTA.SourcePruningEnumerationArityOrigins.Heap after.checked.native.machine.heap
+'MicroCFTA.SourceCurrentAllocatedSharedTargetLeaf.Receipt.arity_heap' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]

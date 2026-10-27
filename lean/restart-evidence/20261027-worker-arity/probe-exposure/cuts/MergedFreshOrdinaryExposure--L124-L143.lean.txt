@@ -1,0 +1,20 @@
+def read [DecidableEq (EdgeKey Symbol Guard)] (fuel : Nat) (value : Value Symbol Guard)
+    (state : State Symbol Guard) : MergedSourceComparison.Result Symbol Guard (List (EdgeValue Symbol Guard)) :=
+  match nodeEdges fuel value state with
+  | .done edges after => .done edges after
+  | .unresolved name after => .failed (.unresolved name) after
+  | .pending key after => .failed (.pending key) after
+  | .exhausted after => .failed .exhausted after
+
+/-- Every comparison read keeps its exact value, failure, and returned cache after repair. -/
+theorem read_eq [DecidableEq (EdgeKey Symbol Guard)] (fuel : Nat) (value : Value Symbol Guard)
+    (state : State Symbol Guard) (facts : Facts state) (prepared : Prepared state)
+    (available : Available state value) :
+    read fuel value state = MergedSourceComparison.read fuel value state := by
+  simp only [read, MergedSourceComparison.read, nodeEdges_eq fuel value state facts prepared available]
+  cases MergedSourceExposure.nodeEdges fuel value state <;> rfl
+
+/-- Existing cold reader invariants hold for the actual repaired executor. -/
+theorem nodeEdges_verified [DecidableEq (EdgeKey Symbol Guard)] (fuel : Nat) (value : Value Symbol Guard)
+    (state : State Symbol Guard) (facts : Facts state) (prepared : Prepared state)
+    (available : Available state value) : MergedColdReaderFacts.Verified state (nodeEdges fuel value state) := by

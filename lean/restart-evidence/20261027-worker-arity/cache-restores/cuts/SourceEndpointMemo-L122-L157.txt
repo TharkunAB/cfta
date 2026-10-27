@@ -1,0 +1,36 @@
+mutual
+/-- Execute lookup, the actual recursive helper body, and first-value storage. -/
+noncomputable def run (value : Value Symbol Guard) (memos : Memos) : Bool × Memos :=
+  match memos.descendants value.referenceOf with
+  | some (_, answer) => (answer, memos)
+  | none =>
+      let result :=
+        if value.depth == 0 then (false, memos) else
+          match value with
+          | .mu .. =>
+              let predicate := SourceUnconstrainedMemo.run value memos.predicate
+              (!predicate.1, { memos with predicate := predicate.2 })
+          | .union _ members _ _ => many members memos
+          | .node _ edges _ _ => rows edges memos
+          | _ => (false, memos)
+      (result.1, {result.2 with descendants := save result.2.descendants value result.1})
+termination_by sizeOf value
+
+/-- Each false child passes both memos to the next original child. -/
+noncomputable def many (values : List (Value Symbol Guard)) (memos : Memos) : Bool × Memos :=
+  match values with
+  | [] => (false, memos)
+  | first :: rest =>
+      let head := run first memos
+      if head.1 then head else many rest head.2
+termination_by sizeOf values
+
+/-- Each false edge passes both memos to the next original edge. -/
+noncomputable def rows (edges : List (EdgeValue Symbol Guard)) (memos : Memos) : Bool × Memos :=
+  match edges with
+  | [] => (false, memos)
+  | .mk _ children :: rest =>
+      let head := many children memos
+      if head.1 then head else rows rest head.2
+termination_by sizeOf edges
+end

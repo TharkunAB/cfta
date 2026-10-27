@@ -1,0 +1,45 @@
+theorem Seeded.effects [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)]
+    (unconstrained : Value Symbol Guard → Bool) (anchor : State Symbol Guard)
+    (anchorSemantic : SemanticReady anchor) (anchorReady : GateReady anchor)
+    {values : List (Value Symbol Guard)} {paths : List (List Int)} {before after : Checked width}
+    {result : Value Symbol Guard} (actual : Seeded values paths before result after)
+    (ranges : SeededRanges values paths before) (good : Good before) (ready : Ready (physical before))
+    (scopes : Scoped before.native) (idle : Idle before.native)
+    (available : Values before.native.machine.heap values) (growth : Grows anchor before.native.machine.heap)
+    (supported : ∀ path ∈ paths, PathSupport unconstrained anchor path values) :
+    Good after ∧ Effects (physical before) (physical after) ∧ Extension before.native.machine after.native.machine ∧
+      Scoped after.native ∧ Idle after.native ∧ Available after.native.machine.heap result ∧ result.free = [] := by
+  obtain ⟨chosen, reached, completed, effects⟩ := seeded_complete unconstrained anchor anchorSemantic anchorReady
+    values paths before ranges good ready scopes idle available growth supported
+  obtain ⟨rfl, rfl⟩ := actual.unique completed
+  exact effects
+
+/-- A false secondary class derives finite checked seeded execution and same-cache loaded fields. -/
+theorem false_class_complete [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)]
+    (unconstrained : Value Symbol Guard → Bool) (paths : Class) (values : List (Value Symbol Guard))
+    {before : Checked width} {anchor : State Symbol Guard}
+    (gate : SourceCurrentSecondaryTrace.ClassTrace unconstrained values paths before.native.machine.heap false anchor)
+    (good : Good before) (ready : Ready (physical before)) (scopes : Scoped before.native) (idle : Idle before.native)
+    (available : Values before.native.machine.heap values) (proper : ∀ path ∈ paths, path ≠ [])
+    (ranges : SeededRanges values (paths.map (List.map Int.ofNat))
+      (advancePhysical before ⟨anchor, before.operations⟩)) :
+    ∃ query after, Seeded values (paths.map (List.map Int.ofNat))
+        (advancePhysical before ⟨anchor, before.operations⟩) query after ∧ Good after ∧
+      Effects (physical before) (physical after) ∧ Extension before.native.machine after.native.machine ∧
+      Scoped after.native ∧ Idle after.native ∧ Available after.native.machine.heap query ∧ query.free = [] := by
+  obtain ⟨anchorSemantic, anchorReady, _, anchorValues, supported⟩ :=
+    SourceCurrentSecondaryProjectionScoped.class_support unconstrained gate ready.semantic
+      (SourceCurrentClassGateCompletion.gate_ready ready.semantic ready.costs) available proper
+  have first := SourceCurrentAllocatedGateFields.secondary_class unconstrained gate ready available
+  have anchorGood := SourceCurrentAllocatedConjunctionMemo.advance_good before _ good first.1
+  have anchorScoped := SourceCurrentAllocatedConjunctionMemo.advance_scoped before ⟨anchor, before.operations⟩ scopes
+  have anchorIdle := SourceCurrentAllocatedConjunctionMemo.advance_idle before ⟨anchor, before.operations⟩ idle
+  have advanced : Effects (physical before)
+      (physical (advancePhysical before ⟨anchor, before.operations⟩)) := first.1
+  obtain ⟨query, after, actual, finalGood, finalEffects, finalExtension, finalScoped, finalIdle, resident, closed⟩ :=
+    seeded_complete unconstrained anchor anchorSemantic anchorReady values (paths.map (List.map Int.ofNat))
+      (advancePhysical before ⟨anchor, before.operations⟩) ranges anchorGood advanced.ready anchorScoped anchorIdle
+      anchorValues (grows_refl anchor) (by
+        intro path member
+        obtain ⟨original, included, rfl⟩ := List.mem_map.mp member
+        exact supported original included)

@@ -1,0 +1,7 @@
+theorem nodeEdges_heap_of_good
+    [DecidableEq (EdgeKey (SourceObservations.Label FullSyntax.Formula) Guard)]
+    {width : Nat} (fuel : Nat) (value : Value (SourceObservations.Label FullSyntax.Formula) Guard)
+    (before : SourceEqualityNativeDemand.State width)
+    (good : SourceCurrentAllocatedNativePhysicalCompletion.Good before)
+    (heap : Heap before.native.machine.heap) (available : Available before.native.machine.heap value) :
+    Heap (nodeEdges fuel value before.native.machine.heap).state

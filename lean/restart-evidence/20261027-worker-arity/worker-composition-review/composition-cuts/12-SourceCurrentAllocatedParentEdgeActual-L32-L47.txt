@@ -1,0 +1,16 @@
+inductive Reads (formulas : SourceGuards.Formulas FullSyntax.Formula)
+    (solver : SourceGuards.Entailment FullSyntax.Formula) :
+    {budget : Nat} → {symbol : Symbol} → {original : Guard} → {loaded : Allocated} → {inherited : EqValue} →
+    {values : List (Value Symbol Guard)} → {before after : Checked width} → {result : EdgeValue Symbol Guard} →
+    {fourth savedFourth : Fourth} → {memo saved : Memo} →
+    Edge budget symbol original loaded inherited values before fourth memo result after savedFourth saved → Memos → Memos → Prop where
+  | rejected {budget symbol original loaded inherited values before fourth memo test memos} :
+      Reads formulas solver (Edge.rejected (budget := budget) (symbol := symbol) (original := original)
+        (loaded := loaded) (inherited := inherited) (values := values) (before := before)
+        (fourth := fourth) (memo := memo) test) memos memos
+  | live {budget symbol original loaded inherited values before fourth memo children middle savedFourth saved result after test}
+      {reduction : SourceCurrentAllocatedLocalReduction.Reduction budget loaded inherited values before fourth memo
+        children middle savedFourth saved}
+      {built : SourceCurrentAllocatedMkEdge.build symbol loaded children middle = (.ok result, after)} {memos final}
+      (reads : SourceCurrentAllocatedLocalReductionActual.Reads formulas solver reduction memos final) :
+      Reads formulas solver (Edge.live (original := original) (symbol := symbol) test reduction built) memos final

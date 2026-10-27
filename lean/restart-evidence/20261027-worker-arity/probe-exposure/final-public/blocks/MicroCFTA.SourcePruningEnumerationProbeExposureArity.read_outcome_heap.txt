@@ -1,0 +1,18 @@
+MicroCFTA.SourcePruningEnumerationProbeExposureArity.read_outcome_heap {Symbol : Type}
+  [DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  (fuel : Nat)
+  (value :
+    MicroCFTA.InternedConstructorTemplates.Value Symbol
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+  (state :
+    MicroCFTA.InternedConstructorTemplates.State Symbol
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+  (facts : MicroCFTA.InternedNestedFacts.Facts state) (heap : MicroCFTA.SourcePruningEnumerationArityOrigins.Heap state)
+  (available : MicroCFTA.InternedProbeProvenance.Available state value) :
+  MicroCFTA.SourcePruningEnumerationArityOrigins.Heap
+    (MicroCFTA.MergedFreshOrdinaryExposure.read fuel value state).state
+'MicroCFTA.SourcePruningEnumerationProbeExposureArity.read_outcome_heap' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]

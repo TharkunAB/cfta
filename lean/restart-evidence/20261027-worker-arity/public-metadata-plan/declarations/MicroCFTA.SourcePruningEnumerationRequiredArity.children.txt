@@ -1,0 +1,5 @@
+theorem children [DecidableEq (EdgeKey Symbol Guard)]
+    {entries : List (Int × SourceEqualityNeeded.Needed)} {index : Nat} {values results : List (Value Symbol Guard)}
+    {before after : State Symbol Guard} (trace : RequireChildren entries index values before results after)
+    (semantic : SemanticReady before) (costs : CostHeap before) (fields : Heap before) (available : Values before values) :
+    Keeps before after ∧ SemanticReady after ∧ CostHeap after ∧ Heap after ∧ Values after results := by

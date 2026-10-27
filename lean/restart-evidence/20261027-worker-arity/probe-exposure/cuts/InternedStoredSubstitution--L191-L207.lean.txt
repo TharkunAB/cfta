@@ -1,0 +1,17 @@
+/-- The single outer-reference replacement inherits provenance from its source Mu record. -/
+theorem unfold_verified [DecidableEq (EdgeKey Symbol Guard)] (value : Value Symbol Guard)
+    (state : State Symbol Guard) (facts : Facts state) (available : Available state value) :
+    Verified state (unfold value state) Available := by
+  cases value with
+  | empty | reference | node | union => exact pure_verified state facts _ Available available
+  | mu entry body depth ordinary =>
+      apply execute_verified body _ state facts (available.children body (by simp [InternedProbeProvenance.children]))
+      intro name replacement found
+      simp only [] at found
+      split at found
+      · cases found; exact available
+      · contradiction
+
+/-- Read the actual stored body after each open nested reconstruction. -/
+def firstStoredUnfold : Outcome Nat Unit (Value Nat Unit) :=
+  InternedGateReconstructionExamples.original.bind unfold

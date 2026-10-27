@@ -1,0 +1,26 @@
+MicroCFTA.SourcePruningEnumerationSelectionArity.check_effect {Symbol : Type} [DecidableEq Symbol]
+  [DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  (clear : MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula → Bool) (fuel : Nat)
+  (above : List (Nat × Nat))
+  (wide narrow :
+    MicroCFTA.InternedConstructorTemplates.Value Symbol
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+  (before :
+    MicroCFTA.InternedConstructorTemplates.State Symbol
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+  (semantic : MicroCFTA.SourceEqualityRequiredSemanticCache.SemanticReady before)
+  (costs : MicroCFTA.InternedFreshOrdinaryCostHeap.Heap before)
+  (wideInput : MicroCFTA.InternedProbeProvenance.Available before wide)
+  (narrowInput : MicroCFTA.InternedProbeProvenance.Available before narrow) (answer : Bool)
+  (after :
+    MicroCFTA.InternedConstructorTemplates.State Symbol
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+  (done :
+    MicroCFTA.MergedFreshOrdinaryComparison.check clear fuel above wide narrow before =
+      MicroCFTA.MergedSourceComparison.Result.done answer after) :
+  MicroCFTA.SourcePruningEnumerationSelectionArity.Effect before after
+'MicroCFTA.SourcePruningEnumerationSelectionArity.check_effect' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]

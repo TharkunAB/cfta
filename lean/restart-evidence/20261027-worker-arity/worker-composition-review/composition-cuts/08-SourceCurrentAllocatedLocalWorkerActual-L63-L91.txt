@@ -1,0 +1,29 @@
+theorem sound
+    (formulas : SourceGuards.Formulas FullSyntax.Formula) (solver : SourceGuards.Entailment FullSyntax.Formula)
+    {inventory : Inventory} {original : Guard} {g s r e p h m c n budget : Nat}
+    {loaded : Allocated} {inherited : EqValue} {values results : List (Value Symbol Guard)}
+    {before : Caller width} {after : Checked width} {savedFourth : Fourth} {saved : Memo} {memos : Memos}
+    (initial : Context formulas solver inventory before memos)
+    (cached : SourceEqualityGuardReadback.Cached original.equalities)
+    (found : SourceEqualityConstraintFieldLookup.load original before.checked.operations.constraints = .ok (some loaded))
+    (inheritedReady : SourceEqualityConstraintAllocation.Ready before.checked.operations.constraints inherited)
+    (available : Values before.checked.native.machine.heap values)
+    (ranges : Ranges budget loaded inherited values before.checked before.fourth before.merge)
+    (done : reduce g s r e p h m c n budget loaded inherited values before.checked before.fourth before.merge =
+      .done results after savedFourth saved) :
+    ∃ next final,
+      ∃ actual : Reduction budget loaded inherited values before.checked before.fourth before.merge
+          results after savedFourth saved,
+        Reads formulas solver actual memos final ∧
+        Receipt formulas solver next original loaded inherited values results before.checked after
+          before.fourth savedFourth before.merge saved final := by
+  obtain ⟨chosen, reached, fourth, memo, next, final, actual, reads, receipt⟩ :=
+    SourceCurrentAllocatedLocalReductionActual.finite formulas solver inventory budget original loaded inherited
+      values before.checked before.fourth before.merge initial.ready initial.admitted cached found inheritedReady
+      available initial.correct initial.stored initial.covered ranges memos initial.globals
+  obtain ⟨G, S, R, E, P, H, M, C, N, stable⟩ :=
+    SourceCurrentAllocatedLocalWorkerCompletion.reduce_complete actual
+  obtain ⟨rfl, rfl, rfl, rfl⟩ := SourceCurrentAllocatedLocalWorkerStability.reduce_done_unique
+    (stable G S R E P H M C N (Nat.le_refl _) (Nat.le_refl _) (Nat.le_refl _) (Nat.le_refl _)
+      (Nat.le_refl _) (Nat.le_refl _) (Nat.le_refl _) (Nat.le_refl _) (Nat.le_refl _)) done
+  exact ⟨next, final, actual, reads, receipt⟩

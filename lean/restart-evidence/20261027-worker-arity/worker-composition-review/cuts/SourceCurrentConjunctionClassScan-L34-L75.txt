@@ -1,0 +1,42 @@
+def advanceHeap (before : Checked width) (heap : State Symbol Guard) : Checked width :=
+  advancePhysical before ⟨heap, before.operations⟩
+
+/-- Reached classes thread actual gate, checked-query, and current memo results. -/
+inductive Scan [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)]
+    [DecidableEq (Value Symbol Guard)]
+    (budget : Nat) (unconstrained reaches : Value Symbol Guard → Bool)
+    (values : List (Value Symbol Guard)) :
+    Constraints → Checked width → Memo → Option Class → Constraints → Checked width → Memo → Prop where
+  | nil : Scan budget unconstrained reaches values [] state memo none [] state memo
+  | selected
+      (primary : EndpointStatefulGateTrace.ClassTrace unconstrained reaches values paths
+        before.native.machine.heap false heap)
+      (rest : Scan budget unconstrained reaches values classes (advanceHeap before heap)
+        memo outcome selected after saved) :
+      Scan budget unconstrained reaches values (paths :: classes) before memo outcome (paths :: selected) after saved
+  | skipped
+      (primary : EndpointStatefulGateTrace.ClassTrace unconstrained reaches values paths
+        before.native.machine.heap true heap)
+      (secondary : SourceCurrentSecondaryTrace.ClassTrace unconstrained values paths heap true anchor)
+      (rest : Scan budget unconstrained reaches values classes
+        (advanceHeap (advanceHeap before heap) anchor) memo outcome selected after saved) :
+      Scan budget unconstrained reaches values (paths :: classes) before memo outcome selected after saved
+  | continued
+      (primary : EndpointStatefulGateTrace.ClassTrace unconstrained reaches values paths
+        before.native.machine.heap true heap)
+      (secondary : SourceCurrentSecondaryTrace.ClassTrace unconstrained values paths heap false anchor)
+      (seeded : SourceCurrentAllocatedSeededQuery.Seeded values
+        (paths.map (List.map Int.ofNat)) (advanceHeap (advanceHeap before heap) anchor) query middle)
+      (decision : SourceCurrentConjunctionMemo.Call budget memo query (physical middle) false later savedMemo)
+      (rest : Scan budget unconstrained reaches values classes (advancePhysical middle later)
+        savedMemo outcome selected after saved) :
+      Scan budget unconstrained reaches values (paths :: classes) before memo outcome selected after saved
+  | stopped
+      (primary : EndpointStatefulGateTrace.ClassTrace unconstrained reaches values paths
+        before.native.machine.heap true heap)
+      (secondary : SourceCurrentSecondaryTrace.ClassTrace unconstrained values paths heap false anchor)
+      (seeded : SourceCurrentAllocatedSeededQuery.Seeded values
+        (paths.map (List.map Int.ofNat)) (advanceHeap (advanceHeap before heap) anchor) query middle)
+      (decision : SourceCurrentConjunctionMemo.Call budget memo query (physical middle) true later saved) :
+      Scan budget unconstrained reaches values (paths :: classes) before memo (some paths) []
+        (advancePhysical middle later) saved

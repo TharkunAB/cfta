@@ -1,0 +1,45 @@
+
+/-- The three source record invariants used by nested construction. -/
+structure Facts (state : State Symbol Guard) : Prop where
+  coherent : Coherent state
+  cached : Cached state
+  linked : Linked state
+
+/-- The source starts with all record invariants established. -/
+theorem empty_facts : Facts (empty (Symbol := Symbol) (Guard := Guard)) :=
+  ⟨empty_correct.1, empty_cached, empty_linked⟩
+
+/-- Both outcomes preserve actual state histories. A completed result also
+has the local record property required by its caller. -/
+structure Verified (before : State Symbol Guard) (outcome : Outcome Symbol Guard Result)
+    (property : State Symbol Guard → Result → Prop) : Prop where
+  facts : Facts outcome.state
+  growth : Grows before outcome.state
+  history : Extends before.nodes.issued outcome.state.nodes.issued
+  result : ∀ value state, outcome = .done value state → property state value
+
+/-- Every earlier available input remains available at the exact outcome state. -/
+theorem Verified.available {before : State Symbol Guard} {outcome : Outcome Symbol Guard Result}
+    {property : State Symbol Guard → Result → Prop}
+    (verified : Verified before outcome property) (value : Value Symbol Guard)
+    (available : Available before value) : Available outcome.state value :=
+  available.grows before outcome.state verified.growth verified.history
+
+/-- Returning an existing value requires no state effect. -/
+theorem pure_verified (state : State Symbol Guard) (facts : Facts state) (value : Result)
+    (property : State Symbol Guard → Result → Prop) (valid : property state value) :
+    Verified state (.done value state) property := by
+  refine ⟨facts, grows_refl _, extends_refl _, ?_⟩
+  intro found after same
+  cases same
+  exact valid
+
+/-- A pending readback preserves its exact current state. -/
+theorem pending_verified (state : State Symbol Guard) (facts : Facts state) (key : NodeKey)
+    (property : State Symbol Guard → Result → Prop) : Verified state (.pending key state) property := by
+  refine ⟨facts, grows_refl _, extends_refl _, ?_⟩
+  intro value after impossible
+  cases impossible
+
+/-- Source sequencing composes both histories and passes only a completed
+value's derived local property to the next constructor. -/

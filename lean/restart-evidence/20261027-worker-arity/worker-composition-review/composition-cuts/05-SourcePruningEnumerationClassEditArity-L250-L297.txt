@@ -1,0 +1,48 @@
+/-- Actual node reads retain every edge-record arity at the same returned state. -/
+theorem node_heap {inventory record originals edits value before result after memos final}
+    {actual : EditNode (width := width) record originals edits value before result after}
+    (reads : NodeReads formulas solver base actual memos final)
+    (known : Values base originals) (populated : Populated edits) (nonempty : HasLeaf edits) (allowed : Allowed record edits)
+    (ready : Ready formulas solver inventory record originals base before)
+    (available : Available before.checked.native.machine.heap value) (safe : Safe edits value)
+    (valid : Valid before.checked.native.machine.heap memos) (heap : Heap before.checked.native.machine.heap) :
+    Heap after.checked.native.machine.heap :=
+  heaps.1 reads known inventory populated nonempty allowed ready available safe valid heap
+
+/-- Actual child reads retain arity through their ordered native effects. -/
+theorem children_heap {inventory record originals entries offset values before results after memos final}
+    {actual : EditChildren (width := width) record originals entries offset values before results after}
+    (reads : ChildrenReads formulas solver base actual memos final)
+    (known : Values base originals) (populated : Populated (.editBelow entries)) (allowed : Allowed record (.editBelow entries))
+    (ready : Ready formulas solver inventory record originals base before)
+    (available : Values before.checked.native.machine.heap values) (safe : ChildrenSafe entries offset values)
+    (valid : Valid before.checked.native.machine.heap memos) (heap : Heap before.checked.native.machine.heap) :
+    Heap after.checked.native.machine.heap :=
+  heaps.2.1 reads known inventory populated allowed ready available safe valid heap
+
+/-- Raw row reconstruction uses the proven unchanged child count. -/
+theorem rows_heap {inventory record originals entries edges before results after memos final}
+    {actual : EditRows (width := width) record originals entries edges before results after}
+    (reads : RowsReads formulas solver base actual memos final)
+    (known : Values base originals) (populated : Populated (.editBelow entries)) (allowed : Allowed record (.editBelow entries))
+    (ready : Ready formulas solver inventory record originals base before)
+    (available : Edges before.checked.native.machine.heap edges) (safe : RowsSafe entries edges)
+    (valid : Valid before.checked.native.machine.heap memos) (heap : Heap before.checked.native.machine.heap) :
+    Heap after.checked.native.machine.heap :=
+  heaps.2.2 reads known inventory populated allowed ready available safe valid heap
+
+/-- List-root leaves make no call; below-edits use the actual child schedule. -/
+theorem list_heap {inventory record originals edits values before results after memos final}
+    {actual : EditList (width := width) record originals edits values before results after}
+    (reads : ListReads formulas solver base actual memos final)
+    (known : Values base originals) (populated : Populated edits) (allowed : Allowed record edits)
+    (ready : Ready formulas solver inventory record originals base before)
+    (available : Values before.checked.native.machine.heap values)
+    (safe : SourceCurrentAllocatedSharedEditEffects.ListSafe edits values)
+    (valid : Valid before.checked.native.machine.heap memos) (heap : Heap before.checked.native.machine.heap) :
+    Heap after.checked.native.machine.heap := by
+  cases reads with
+  | leaf => exact heap
+  | children read => exact children_heap read known populated allowed ready available safe valid heap
+
+end MicroCFTA.SourcePruningEnumerationClassEditArity

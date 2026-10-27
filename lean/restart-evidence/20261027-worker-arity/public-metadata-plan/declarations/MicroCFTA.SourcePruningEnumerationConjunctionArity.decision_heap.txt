@@ -1,0 +1,5 @@
+theorem decision_heap
+    {budget : Nat} {query : Value Symbol Guard} {before after : Physical} {answer : Bool}
+    (actual : SourceCurrentConjunctionDecision.Decision budget query before answer after)
+    (ready : Allocation.Ready before) (available : Available before.heap query)
+    (heap : Heap before.heap) : Heap after.heap := by

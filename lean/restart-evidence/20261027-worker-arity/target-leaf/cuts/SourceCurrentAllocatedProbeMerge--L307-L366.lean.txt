@@ -1,0 +1,60 @@
+  | empty | reference | union | mu => trivial
+
+private theorem run_preserves [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)]
+    {clear : Guard → Bool} {top : Guard} {code : Code Symbol Guard Output}
+    {before after : State Symbol Guard} {memo saved : Memo Symbol Guard} {output : Output}
+    (actual : Run clear top code before memo output after saved) :
+    ∀ (post : State Symbol Guard → Output → Prop), SemanticReady before → CostHeap before → Physical.Stored before memo →
+      Physical.Certified Physical.Contract clear code before post → Ordinary code → Heap before → Heap after := by
+  induction actual using Run.rec
+      (motive_2 := fun input before memo output after saved _ => SemanticReady before → CostHeap before →
+        Physical.Stored before memo → Available before input → Heap before → Heap after) with
+  | pure value state memo =>
+      intro post semantic costs stored checked ordinary probes
+      exact probes
+  | work job state memo =>
+      intro post semantic costs stored checked ordinary probes
+      exact InternedFreshOrdinaryProbeHeap.preserve _ _ probes (ordinary state)
+  | select fuel done =>
+      intro post semantic costs stored checked ordinary probes
+      exact (select_effect _ fuel _ _ semantic costs checked.1 _ _ done).probes probes
+  | request actual ih =>
+      intro post semantic costs stored checked ordinary probes
+      exact ih semantic costs stored checked.1 probes
+  | bind first later ihFirst ihLater =>
+      intro post semantic costs stored checked ordinary probes
+      obtain ⟨intermediate, firstChecked, nextChecked⟩ := checked
+      have middleProbes := ihFirst intermediate semantic costs stored firstChecked ordinary.1 probes
+      obtain ⟨effect, retained, valid⟩ := Physical.run_effects first intermediate semantic costs stored firstChecked
+      exact ihLater post effect.semantic effect.costs retained (nextChecked _ _ effect valid) (ordinary.2 _) middleProbes
+  | hit found =>
+      rename_i semantic costs stored available probes
+      exact probes
+  | @miss memo input before candidate after current absent actual ih =>
+      rename_i semantic costs stored available probes
+      exact ih _ semantic costs stored (Physical.body_certified clear top input before semantic costs available)
+        (body_ordinary top input) probes
+
+/-- Completed memo-aware calls derive probes through every actual recursive body. -/
+theorem call_heap [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)]
+    {clear : Guard → Bool} {top : Guard} {input output : Value Symbol Guard}
+    {before after : State Symbol Guard} {memo saved : Memo Symbol Guard}
+    (actual : Call clear top input before memo output after saved) (semantic : SemanticReady before)
+    (costs : CostHeap before) (stored : Physical.Stored before memo) (available : Available before input)
+    (probes : Heap before) : Heap after :=
+  run_preserves (.request actual) (fun after output => Physical.Contract input before output after)
+    semantic costs stored ⟨available, fun _ _ _ returned => returned⟩ trivial probes
+
+end Merge
+
+/-- Separate Top allocation does not change the heap erased by the actual merge graph. -/
+theorem allocated_call_heap [DecidableEq (SourceObservations.Label FullSyntax.Formula)]
+    [DecidableEq (EdgeKey (SourceObservations.Label FullSyntax.Formula)
+      (SourceSymbolicIndex.Constraint FullSyntax.Formula))]
+    {clear : SourceSymbolicIndex.Constraint FullSyntax.Formula → Bool}
+    {input output : Value (SourceObservations.Label FullSyntax.Formula) (SourceSymbolicIndex.Constraint FullSyntax.Formula)}
+    {before after : SourceCurrentAllocatedMergeGraph.State} {memo saved : SourceCurrentAllocatedMergeGraph.Memo}
+    (actual : SourceCurrentAllocatedMergeGraph.Call clear input before memo output after saved)
+    (ready : SourceCurrentConjunctionRowsAllocation.Ready before)
+    (stored : SourceCurrentMemoMergeEffects.Stored before.heap memo) (available : Available before.heap input)
+    (probes : Heap before.heap) : Heap after.heap :=

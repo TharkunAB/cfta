@@ -1,0 +1,22 @@
+/-- Directly intern an equal-arity replacement with the original complete raw field. -/
+def edge (original : EdgeValue Symbol Guard) (children : List (Value Symbol Guard)) (before : Checked width) :
+    EdgeValue Symbol Guard × Checked width :=
+  let built := run (makeEdge original.entry.key.symbol original.entry.key.constraint children) before.native.machine.heap
+  (built.1, advancePhysical before ⟨built.2, before.operations⟩)
+
+/-- Every checked fallback selects this exact raw branch when child arity is unchanged. -/
+theorem edge_same_arity
+    (checked : Symbol → List (Value Symbol Guard) → Guard → Work Symbol Guard (EdgeValue Symbol Guard))
+    (original : EdgeValue Symbol Guard) (children : List (Value Symbol Guard)) (before : Checked width)
+    (same : children.length = original.children.length) :
+    edge original children before =
+      let built := run (EqualityLeafProjectionSetChildren.setChildren checked original children) before.native.machine.heap
+      (built.1, advancePhysical before ⟨built.2, before.operations⟩) := by
+  rw [EqualityLeafProjectionSetChildren.same_arity checked original children same]
+  rfl
+
+/-- Execute the literal ordered-identity modifyNode definition and retain equality operations. -/
+def modify (original : Value Symbol Guard) (oldRows newRows : List (EdgeValue Symbol Guard)) (before : Checked width) :
+    Value Symbol Guard × Checked width :=
+  let built := SourceEqualityPartialNodeRebuild.modify original oldRows newRows before.native
+  (built.1, ⟨built.2, before.operations⟩)

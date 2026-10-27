@@ -1,0 +1,28 @@
+/-- Every finite node-query outcome retains arity of all records at its actual output heap. -/
+theorem node_query_execute_heap (request : NodeRequest Symbol Guard) (before : Checked width) (fuel : Nat)
+    (valid : Good before) (heap : Heap before.native.machine.heap)
+    (plan : InputsThrough fuel (.code (requestNode request.domain request.left request.right)) before) :
+    Heap (execute fuel (.code (requestNode request.domain request.left request.right)) before).state.native.machine.heap :=
+  execute_heap_of_prefixes _ before fuel valid (fun _ => trivial) plan
+    (fun used after remaining trace => node_query_prefix_heap request before after remaining used valid heap trace)
+
+/-- Every finite edge-query outcome retains arity, including errors and blocked constructor outcomes. -/
+theorem edge_query_execute_heap (request : EdgeRequest Symbol Guard) (before : Checked width) (fuel : Nat)
+    (valid : Good before) (heap : Heap before.native.machine.heap)
+    (plan : InputsThrough fuel (.code (requestEdge request.domain request.left request.right)) before) :
+    Heap (execute fuel (.code (requestEdge request.domain request.left request.right)) before).state.native.machine.heap :=
+  execute_heap_of_prefixes _ before fuel valid (fun _ => trivial) plan
+    (fun used after remaining trace => edge_query_prefix_heap request before after remaining used valid heap trace)
+
+/-- Completed edge memo cells retain arity after every finite physical node-query outcome. -/
+theorem node_execute_edge_memo_fits (request : NodeRequest Symbol Guard)
+    (before : Checked width) (fuel : Nat) (valid : Good before) (heap : Heap before.native.machine.heap)
+    (plan : InputsThrough fuel (.code (requestNode request.domain request.left request.right)) before)
+    (handle : Nat) (original : EdgeRequest Symbol Guard) (edge : EdgeValue Symbol Guard)
+    (stored : (execute fuel (.code (requestNode request.domain request.left request.right)) before).state.native.edges.cells handle =
+      some ⟨original, .returned edge⟩) : Fits edge.entry.key.constraint edge.children.length := by
+  have afterHeap := node_query_execute_heap request before fuel valid heap plan
+  have reached := SourceCurrentAllocatedNativePhysicalCompletion.execute_invariants fuel
+    (.code (requestNode request.domain request.left request.right)) before valid plan (fun _ => trivial)
+  have resident := (reached.1.native.edges.checked handle _ stored).2
+  exact afterHeap.edge _ reached.1.heap.semantic.1.normal.facts.coherent edge resident

@@ -1,0 +1,27 @@
+structure MicroCFTA.SourcePruningEnumerationSelectionArity.Effect {Symbol : Type}
+  (before after :
+    MicroCFTA.InternedConstructorTemplates.State Symbol
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)) :
+  Prop
+number of parameters: 3
+fields:
+  MicroCFTA.SourcePruningEnumerationSelectionArity.Effect.keeps : MicroCFTA.SourceEqualityRequiredCache.Keeps before
+      after
+  MicroCFTA.SourcePruningEnumerationSelectionArity.Effect.semantic : MicroCFTA.SourceEqualityRequiredSemanticCache.SemanticReady
+      after
+  MicroCFTA.SourcePruningEnumerationSelectionArity.Effect.costs : MicroCFTA.InternedFreshOrdinaryCostHeap.Heap after
+  MicroCFTA.SourcePruningEnumerationSelectionArity.Effect.arity : MicroCFTA.SourcePruningEnumerationArityOrigins.Heap
+        before →
+      MicroCFTA.SourcePruningEnumerationArityOrigins.Heap after
+constructor:
+  MicroCFTA.SourcePruningEnumerationSelectionArity.Effect.mk {Symbol : Type}
+    {before after :
+      MicroCFTA.InternedConstructorTemplates.State Symbol
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)}
+    (keeps : MicroCFTA.SourceEqualityRequiredCache.Keeps before after)
+    (semantic : MicroCFTA.SourceEqualityRequiredSemanticCache.SemanticReady after)
+    (costs : MicroCFTA.InternedFreshOrdinaryCostHeap.Heap after)
+    (arity :
+      MicroCFTA.SourcePruningEnumerationArityOrigins.Heap before →
+        MicroCFTA.SourcePruningEnumerationArityOrigins.Heap after) :
+    MicroCFTA.SourcePruningEnumerationSelectionArity.Effect before after

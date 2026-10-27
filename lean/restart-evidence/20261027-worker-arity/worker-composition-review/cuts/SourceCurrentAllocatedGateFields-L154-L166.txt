@@ -1,0 +1,13 @@
+theorem forest_complete [DecidableEq (EdgeKey Symbol Guard)]
+    (unconstrained : Value Symbol Guard → Bool) (anchor : State Symbol Guard)
+    (anchorSemantic : SemanticReady anchor) (anchorReady : GateReady anchor)
+    (path : EqualityNormalize.Path) (values : List (Value Symbol Guard)) (before : Physical)
+    (ready : Ready before) (available : Values before.heap values) (growth : Grows anchor before.heap)
+    (supported : ForestSupport unconstrained anchor path values) :
+    ∃ result heap, Forest (path.map Int.ofNat) values before.heap result heap ∧
+      Effects before ⟨heap, before.equality⟩ ∧ Available heap result ∧ result.free = [] := by
+  obtain ⟨result, heap, actual, _⟩ := SourceCurrentSecondaryProjectionComplete.forest_complete
+    unconstrained anchor anchorSemantic anchorReady path values before.heap ready.semantic available growth supported
+  exact ⟨result, heap, actual, forest unconstrained anchor anchorSemantic anchorReady actual ready available growth supported⟩
+
+/-- An actual false class derives finite projection at its returned anchor and keeps every loaded field. -/

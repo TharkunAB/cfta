@@ -1,0 +1,113 @@
+MicroCFTA.SourcePruningEnumerationProbeExposureArity.collect_heap {Symbol : Type}
+  [DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  (fuel : Nat)
+  (state :
+    MicroCFTA.InternedConstructorTemplates.State Symbol
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+  (facts : MicroCFTA.InternedNestedFacts.Facts state) (heap : MicroCFTA.SourcePruningEnumerationArityOrigins.Heap state)
+  (seen : List Nat)
+  (pending :
+    List
+      (MicroCFTA.InternedConstructorTemplates.Value Symbol
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)))
+  (inputs : MicroCFTA.InternedNestedProvenance.Values state pending) :
+  MicroCFTA.SourcePruningEnumerationArityOrigins.Heap
+    (MicroCFTA.MergedFreshOrdinaryExposure.collect fuel state seen pending).state
+'MicroCFTA.SourcePruningEnumerationProbeExposureArity.collect_heap' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+MicroCFTA.SourcePruningEnumerationProbeExposureArity.nodeEdges_heap {Symbol : Type}
+  [DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  (fuel : Nat)
+  (value :
+    MicroCFTA.InternedConstructorTemplates.Value Symbol
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+  (state :
+    MicroCFTA.InternedConstructorTemplates.State Symbol
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+  (facts : MicroCFTA.InternedNestedFacts.Facts state) (heap : MicroCFTA.SourcePruningEnumerationArityOrigins.Heap state)
+  (available : MicroCFTA.InternedProbeProvenance.Available state value) :
+  MicroCFTA.SourcePruningEnumerationArityOrigins.Heap
+    (MicroCFTA.MergedFreshOrdinaryExposure.nodeEdges fuel value state).state
+'MicroCFTA.SourcePruningEnumerationProbeExposureArity.nodeEdges_heap' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+MicroCFTA.SourcePruningEnumerationProbeExposureArity.read_outcome_heap {Symbol : Type}
+  [DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  (fuel : Nat)
+  (value :
+    MicroCFTA.InternedConstructorTemplates.Value Symbol
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+  (state :
+    MicroCFTA.InternedConstructorTemplates.State Symbol
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+  (facts : MicroCFTA.InternedNestedFacts.Facts state) (heap : MicroCFTA.SourcePruningEnumerationArityOrigins.Heap state)
+  (available : MicroCFTA.InternedProbeProvenance.Available state value) :
+  MicroCFTA.SourcePruningEnumerationArityOrigins.Heap
+    (MicroCFTA.MergedFreshOrdinaryExposure.read fuel value state).state
+'MicroCFTA.SourcePruningEnumerationProbeExposureArity.read_outcome_heap' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+MicroCFTA.SourcePruningEnumerationProbeExposureArity.read_heap {Symbol : Type}
+  [DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  {value :
+    MicroCFTA.InternedConstructorTemplates.Value Symbol
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)}
+  {before after :
+    MicroCFTA.InternedConstructorTemplates.State Symbol
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)}
+  {edges :
+    List
+      (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))}
+  (actual : MicroCFTA.SourceEqualityProjectionRead.Read value before edges after)
+  (facts : MicroCFTA.InternedNestedFacts.Facts before)
+  (available : MicroCFTA.InternedProbeProvenance.Available before value)
+  (heap : MicroCFTA.SourcePruningEnumerationArityOrigins.Heap before) :
+  MicroCFTA.SourcePruningEnumerationArityOrigins.Heap after
+'MicroCFTA.SourcePruningEnumerationProbeExposureArity.read_heap' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+MicroCFTA.SourcePruningEnumerationProbeExposureArity.head_heap {Symbol : Type}
+  [DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  {value result :
+    MicroCFTA.InternedConstructorTemplates.Value Symbol
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)}
+  {before after :
+    MicroCFTA.InternedConstructorTemplates.State Symbol
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)}
+  (actual : MicroCFTA.SourceEqualityRequiredHead.Head value before result after)
+  (facts : MicroCFTA.InternedNestedFacts.Facts before)
+  (available : MicroCFTA.InternedProbeProvenance.Available before value)
+  (heap : MicroCFTA.SourcePruningEnumerationArityOrigins.Heap before) :
+  MicroCFTA.SourcePruningEnumerationArityOrigins.Heap after
+'MicroCFTA.SourcePruningEnumerationProbeExposureArity.head_heap' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+MicroCFTA.SourcePruningEnumerationProbeExposureArity.nodeEdges_heap_of_good
+  [DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  {width : Nat} (fuel : Nat)
+  (value :
+    MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+  (before : MicroCFTA.SourceEqualityNativeDemand.State width)
+  (good : MicroCFTA.SourceCurrentAllocatedNativePhysicalCompletion.Good before)
+  (heap : MicroCFTA.SourcePruningEnumerationArityOrigins.Heap before.native.machine.heap)
+  (available : MicroCFTA.InternedProbeProvenance.Available before.native.machine.heap value) :
+  MicroCFTA.SourcePruningEnumerationArityOrigins.Heap
+    (MicroCFTA.MergedFreshOrdinaryExposure.nodeEdges fuel value before.native.machine.heap).state
+'MicroCFTA.SourcePruningEnumerationProbeExposureArity.nodeEdges_heap_of_good' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]

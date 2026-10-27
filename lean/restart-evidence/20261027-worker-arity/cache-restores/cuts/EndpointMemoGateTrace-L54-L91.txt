@@ -1,0 +1,38 @@
+mutual
+/-- Exact memo receipts refine a particular completed current-policy node trace. -/
+inductive NodeReads [DecidableEq (EdgeKey Symbol Guard)] :
+    {path : Path} → {value : Value Symbol Guard} → {state : State Symbol Guard} →
+    {answer : Bool} → {final : State Symbol Guard} →
+    EndpointStatefulGateTrace.NodeTrace source reaches path value state answer final → Memos → Memos → Prop where
+  | empty : NodeReads .empty memos memos
+  | reference : NodeReads .reference memos memos
+  | union (members : List (Value Symbol Guard)) : NodeReads (.union members) memos memos
+  | finite {free : List InternedBinderProtocol.Reference} (fast : (depth == 0 && free.isEmpty) = true) :
+      NodeReads (.finite fast) memos memos
+  | endpoint_open {free : List InternedBinderProtocol.Reference} (slow : (depth == 0 && free.isEmpty) = false)
+      (opened : free.isEmpty = false) : NodeReads (.endpoint slow) memos memos
+  | endpoint_closed {free : List InternedBinderProtocol.Reference} (slow : (depth == 0 && free.isEmpty) = false)
+      (closed : free.isEmpty = true)
+      (actual : SourceEndpointMemo.run (.node entry edges depth free) memos.query =
+        (reaches (.node entry edges depth free), savedQuery)) :
+      NodeReads (.endpoint slow) memos {memos with query := savedQuery}
+  | branches {free : List InternedBinderProtocol.Reference} (slow : (depth == 0 && free.isEmpty) = false)
+      (trace : EdgesReads edges memos saved) : NodeReads (.branches slow edges) memos saved
+  | constrained (blocked : source (.mu entry body depth ordinary) = false)
+      (actual : SourceUnconstrainedMemo.run (.mu entry body depth ordinary) memos.query.predicate =
+        (false, savedPredicate)) :
+      NodeReads (.constrained blocked) memos {memos with query := {memos.query with predicate := savedPredicate}}
+  | closed (plain : source (.mu entry body depth ordinary) = true)
+      (closed : (Value.mu entry body depth ordinary).free.isEmpty = true)
+      (actual : SourceUnconstrainedMemo.run (.mu entry body depth ordinary) memos.query.predicate =
+        (true, savedPredicate)) :
+      NodeReads (.closed plain closed) memos {memos with query := {memos.query with predicate := savedPredicate}}
+  | unfold (plain : source (.mu entry body depth ordinary) = true)
+      (opened : (Value.mu entry body depth ordinary).free.isEmpty = false)
+      (actual : InternedFreshOrdinaryStoredSubstitution.unfold (.mu entry body depth ordinary) state = .done next after)
+      (predicate : SourceUnconstrainedMemo.run (.mu entry body depth ordinary) memos.query.predicate =
+        (true, middlePredicate))
+      (unfolding : InternedFreshOrdinaryUnfoldMemo.run (.mu entry body depth ordinary) memos.unfolding state =
+        .done (next, middleUnfolding) after)
+      (trace : NodeReads nextTrace ⟨middleUnfolding, {memos.query with predicate := middlePredicate}⟩ saved) :
+      NodeReads (.unfold plain opened actual nextTrace) memos saved

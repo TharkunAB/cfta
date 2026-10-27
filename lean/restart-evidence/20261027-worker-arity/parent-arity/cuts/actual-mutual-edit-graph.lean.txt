@@ -1,0 +1,46 @@
+/-- Constructor-only work retains operations, native tables, target slots, and the merge table. -/
+def advanceHeap (before : SharedState width) (heap : Heap) : SharedState width :=
+  SourceCurrentAllocatedSharedTargetState.advance before
+    (SourceCurrentAllocatedQueryMemo.advancePhysical before.checked ⟨heap, before.checked.operations⟩)
+
+mutual
+  /-- One source node edit with a physical native intersection at each leaf. -/
+  inductive EditNode [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)] {width : Nat}
+      (record : SourceEqualityClassOrder.Record) (originals : List (Value Symbol Guard)) :
+      Edits EqualityNormalize.Path → Value Symbol Guard → SharedState width →
+        Value Symbol Guard → SharedState width → Prop where
+    | leaf (actual : Leaf record originals target value before result after) :
+        EditNode record originals (.editAt target) value before result after
+    | empty : EditNode record originals (.editBelow entries) .empty state .empty state
+    | ordinary (rows : EditRows record originals entries edges before rebuilt middle)
+        (built : run (makeNode rebuilt) middle.checked.native.machine.heap = (value, heap)) :
+        EditNode record originals (.editBelow entries) (.node entry edges depth free) before value (advanceHeap middle heap)
+    | recursive (recursive : SourceEqualityRequiredGraph.Recursive original)
+        (head : Head original before.checked.native.machine.heap exposed heap)
+        (body : EditNode record originals (.editBelow entries) exposed (advanceHeap before heap) value after) :
+        EditNode record originals (.editBelow entries) original before value after
+
+  /-- Ordered child scans retain actual warm states between selected edit subtrees. -/
+  inductive EditChildren [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)] {width : Nat}
+      (record : SourceEqualityClassOrder.Record) (originals : List (Value Symbol Guard)) :
+      List (Int × Edits EqualityNormalize.Path) → Nat → List (Value Symbol Guard) → SharedState width →
+        List (Value Symbol Guard) → SharedState width → Prop where
+    | nil : EditChildren record originals entries index [] state [] state
+    | unselected (index : Nat) (absent : SourceEqualityNeededMap.lookup (index : Int) entries = none)
+        (rest : EditChildren record originals entries (index + 1) values before results after) :
+        EditChildren record originals entries index (value :: values) before (value :: results) after
+    | selected (index : Nat) (found : SourceEqualityNeededMap.lookup (index : Int) entries = some edits)
+        (first : EditNode record originals edits value before result middle)
+        (rest : EditChildren record originals entries (index + 1) values middle results after) :
+        EditChildren record originals entries index (value :: values) before (result :: results) after
+
+  /-- All original rows are rebuilt with full guards and the actual constructor cache. -/
+  inductive EditRows [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)] {width : Nat}
+      (record : SourceEqualityClassOrder.Record) (originals : List (Value Symbol Guard)) :
+      List (Int × Edits EqualityNormalize.Path) → List (EdgeValue Symbol Guard) → SharedState width →
+        List (EdgeValue Symbol Guard) → SharedState width → Prop where
+    | nil : EditRows record originals entries [] state [] state
+    | cons (children : EditChildren record originals entries 0 edge.children before values middle)
+        (rebuilt : run (makeEdge edge.entry.key.symbol edge.entry.key.constraint values) middle.checked.native.machine.heap = (result, heap))
+        (rest : EditRows record originals entries edges (advanceHeap middle heap) results after) :
+        EditRows record originals entries (edge :: edges) before (result :: results) after

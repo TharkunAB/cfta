@@ -1,0 +1,39 @@
+MicroCFTA.SourcePruningEnumerationSelectionArity.allRows_effect {Symbol : Type} [DecidableEq Symbol]
+  [DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  (fuel : Nat) (clear : MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula → Bool)
+  (compare :
+    MicroCFTA.InternedConstructorTemplates.Value Symbol
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) →
+      MicroCFTA.InternedConstructorTemplates.Value Symbol
+          (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) →
+        MicroCFTA.InternedConstructorTemplates.State Symbol
+            (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) →
+          MicroCFTA.MergedSourceComparison.Result Symbol
+            (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) Bool)
+  (callback : MicroCFTA.SourcePruningEnumerationSelectionArity.Callback compare)
+  (wide :
+    MicroCFTA.InternedConstructorTemplates.Value Symbol
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+  (narrows :
+    List
+      (MicroCFTA.InternedConstructorTemplates.EdgeValue Symbol
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)))
+  (before :
+    MicroCFTA.InternedConstructorTemplates.State Symbol
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+  (semantic : MicroCFTA.SourceEqualityRequiredSemanticCache.SemanticReady before)
+  (costs : MicroCFTA.InternedFreshOrdinaryCostHeap.Heap before)
+  (wideInput : MicroCFTA.InternedProbeProvenance.Available before wide)
+  (narrowInputs : MicroCFTA.InternedNestedProvenance.Edges before narrows) (answer : Bool)
+  (after :
+    MicroCFTA.InternedConstructorTemplates.State Symbol
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+  (done :
+    MicroCFTA.MergedFreshOrdinaryComparison.allRows fuel clear compare wide narrows before =
+      MicroCFTA.MergedSourceComparison.Result.done answer after) :
+  MicroCFTA.SourcePruningEnumerationSelectionArity.Effect before after
+'MicroCFTA.SourcePruningEnumerationSelectionArity.allRows_effect' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]

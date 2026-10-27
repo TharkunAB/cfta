@@ -1,0 +1,17 @@
+inductive PathTrace [DecidableEq (EdgeKey Symbol Guard)] (unconstrained reaches : Value Symbol Guard → Bool)
+    (values : List (Value Symbol Guard)) : Path → State Symbol Guard → Bool → State Symbol Guard → Prop where
+  | empty : PathTrace unconstrained reaches values [] state false state
+  | child (trace : ChildTrace unconstrained reaches values index rest state answer final) :
+      PathTrace unconstrained reaches values (index :: rest) state answer final
+
+/-- The primary class scans original paths in order and stops at its first true result. -/
+inductive ClassTrace [DecidableEq (EdgeKey Symbol Guard)] (unconstrained reaches : Value Symbol Guard → Bool)
+    (values : List (Value Symbol Guard)) : Class → State Symbol Guard → Bool → State Symbol Guard → Prop where
+  | nil : ClassTrace unconstrained reaches values [] state false state
+  | stop (head : PathTrace unconstrained reaches values path state true final) :
+      ClassTrace unconstrained reaches values (path :: rest) state true final
+  | next (head : PathTrace unconstrained reaches values path state false middle)
+      (tail : ClassTrace unconstrained reaches values rest middle answer final) :
+      ClassTrace unconstrained reaches values (path :: rest) state answer final
+
+/-- Each completed enabled path worker derives its exact logical graph. -/

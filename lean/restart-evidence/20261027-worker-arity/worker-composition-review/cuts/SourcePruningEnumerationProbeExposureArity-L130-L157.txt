@@ -1,0 +1,28 @@
+/-- A completed actual projection read retains arity at its own returned heap. -/
+theorem read_heap [DecidableEq (EdgeKey Symbol Guard)]
+    {value : Value Symbol Guard} {before after : State Symbol Guard} {edges : List (EdgeValue Symbol Guard)}
+    (actual : SourceEqualityProjectionRead.Read value before edges after)
+    (facts : Facts before) (available : Available before value) (heap : Heap before) : Heap after := by
+  cases actual with
+  | done fuel completed =>
+      simpa only [completed, Result.state] using nodeEdges_heap fuel value before facts heap available
+
+/-- The actual row reconstruction adds no edge record after its literal read. -/
+theorem head_heap [DecidableEq (EdgeKey Symbol Guard)]
+    {value result : Value Symbol Guard} {before after : State Symbol Guard}
+    (actual : SourceEqualityRequiredHead.Head value before result after)
+    (facts : Facts before) (available : Available before value) (heap : Heap before) : Heap after := by
+  cases actual with
+  | read fuel edges middle exposed rebuilt =>
+      have middleHeap := read_heap (.done fuel exposed) facts available heap
+      simpa only [rebuilt] using SourcePruningEnumerationArityOrigins.node_heap edges middle middleHeap
+
+/-- Current checked readiness supplies the record facts for the exact bounded cold read. -/
+theorem nodeEdges_heap_of_good
+    [DecidableEq (EdgeKey (SourceObservations.Label FullSyntax.Formula) Guard)]
+    {width : Nat} (fuel : Nat) (value : Value (SourceObservations.Label FullSyntax.Formula) Guard)
+    (before : SourceEqualityNativeDemand.State width)
+    (good : SourceCurrentAllocatedNativePhysicalCompletion.Good before)
+    (heap : Heap before.native.machine.heap) (available : Available before.native.machine.heap value) :
+    Heap (nodeEdges fuel value before.native.machine.heap).state :=
+  nodeEdges_heap fuel value before.native.machine.heap good.heap.semantic.1.normal.facts heap available

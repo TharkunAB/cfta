@@ -1,0 +1,48 @@
+private def NodeLaw (record : SourceEqualityClassOrder.Record) (originals : List (Value Symbol Guard))
+    (edits : Edits EqualityNormalize.Path) (input : Value Symbol Guard) (before : SharedState width)
+    (_result : Value Symbol Guard) (after : SharedState width) (memos : Memos) (_final : Memos) : Prop :=
+  Values base originals → ∀ inventory, Populated edits → HasLeaf edits → Allowed record edits →
+    Ready formulas solver inventory record originals base before → Available before.checked.native.machine.heap input →
+    Safe edits input → Valid before.checked.native.machine.heap memos →
+    Heap before.checked.native.machine.heap → Heap after.checked.native.machine.heap
+
+private def ChildrenLaw (record : SourceEqualityClassOrder.Record) (originals : List (Value Symbol Guard))
+    (entries : List (Int × Edits EqualityNormalize.Path)) (offset : Nat) (inputs : List (Value Symbol Guard))
+    (before : SharedState width) (_results : List (Value Symbol Guard)) (after : SharedState width) (memos : Memos) (_final : Memos) : Prop :=
+  Values base originals → ∀ inventory, Populated (.editBelow entries) → Allowed record (.editBelow entries) →
+    Ready formulas solver inventory record originals base before → Values before.checked.native.machine.heap inputs →
+    ChildrenSafe entries offset inputs → Valid before.checked.native.machine.heap memos →
+    Heap before.checked.native.machine.heap → Heap after.checked.native.machine.heap
+
+private def RowsLaw (record : SourceEqualityClassOrder.Record) (originals : List (Value Symbol Guard))
+    (entries : List (Int × Edits EqualityNormalize.Path)) (inputs : List (EdgeValue Symbol Guard))
+    (before : SharedState width) (_results : List (EdgeValue Symbol Guard)) (after : SharedState width) (memos : Memos) (_final : Memos) : Prop :=
+  Values base originals → ∀ inventory, Populated (.editBelow entries) → Allowed record (.editBelow entries) →
+    Ready formulas solver inventory record originals base before → Edges before.checked.native.machine.heap inputs →
+    RowsSafe entries inputs → Valid before.checked.native.machine.heap memos →
+    Heap before.checked.native.machine.heap → Heap after.checked.native.machine.heap
+
+private theorem heaps :
+    (∀ {record originals edits value before result after} {memos final : Memos}
+      {actual : EditNode (width := width) record originals edits value before result after},
+      NodeReads formulas solver base actual memos final →
+        NodeLaw (width := width) (formulas := formulas) (solver := solver) (base := base)
+          record originals edits value before result after memos final) ∧
+    (∀ {record originals entries offset values before results after} {memos final : Memos}
+      {actual : EditChildren (width := width) record originals entries offset values before results after},
+      ChildrenReads formulas solver base actual memos final →
+        ChildrenLaw (width := width) (formulas := formulas) (solver := solver) (base := base)
+          record originals entries offset values before results after memos final) ∧
+    (∀ {record originals entries edges before results after} {memos final : Memos}
+      {actual : EditRows (width := width) record originals entries edges before results after},
+      RowsReads formulas solver base actual memos final →
+        RowsLaw (width := width) (formulas := formulas) (solver := solver) (base := base)
+          record originals entries edges before results after memos final) := by
+  have leafCase : ∀ {next record originals path value before result after memos saved},
+      SourceCurrentAllocatedSharedTargetLeaf.Receipt formulas solver next record originals base path
+        value before result after memos saved →
+      NodeLaw (width := width) (formulas := formulas) (solver := solver) (base := base)
+        record originals (.editAt path) value before result after memos saved := by
+    intro next record originals path value before result after memos saved receipt known inventory _ _ _ ready _ _ _ heap
+    exact receipt.arity_heap ready known heap
+  have emptyCase : ∀ {record originals entries state memos},

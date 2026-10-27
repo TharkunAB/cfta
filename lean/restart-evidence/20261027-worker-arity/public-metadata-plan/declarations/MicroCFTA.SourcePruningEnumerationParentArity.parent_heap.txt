@@ -1,0 +1,20 @@
+theorem parent_heap
+    (formulas : SourceGuards.Formulas FullSyntax.Formula) (solver : SourceGuards.Entailment FullSyntax.Formula)
+    (inventory : Inventory)
+    {budget : Nat} {symbol : Symbol} {original : Guard} {loaded : Allocated} {inherited : EqValue}
+    {values : List (Value Symbol Guard)} {before after : Checked width} {result : EdgeValue Symbol Guard}
+    {fourth savedFourth : Fourth} {memo saved : Memo} {memos final : Memos}
+    {actual : Edge budget symbol original loaded inherited values before fourth memo result after savedFourth saved}
+    (reads : Reads formulas solver actual memos final)
+    (ready : Ready before) (admitted : At formulas solver inventory before)
+    (live : contradictory original = false →
+      SourceEqualityGuardReadback.Cached original.equalities ∧
+      SourceEqualityConstraintFieldLookup.load original before.operations.constraints = .ok (some loaded) ∧
+      SourceEqualityConstraintAllocation.Ready before.operations.constraints inherited ∧
+      Values before.native.machine.heap values ∧
+      SourceCurrentAllocatedLocalReductionActual.Ranges budget loaded inherited values before fourth)
+    (correct : SourceCurrentEmptinessMemo.Correct formulas solver before.native.machine.heap fourth)
+    (stored : SourceCurrentMemoMergeEffects.Stored before.native.machine.heap memo)
+    (covered : ∀ ambient, SourceCurrentMemoMergeLanguage.CacheCovers (SourceEqualityPCSGuard.holds formulas solver) ambient memo)
+    (valid : Valid before.native.machine.heap memos) (heap : Heap before.native.machine.heap) :
+    Heap after.native.machine.heap := by

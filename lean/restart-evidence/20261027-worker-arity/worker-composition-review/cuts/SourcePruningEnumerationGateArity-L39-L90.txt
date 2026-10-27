@@ -1,0 +1,52 @@
+
+private theorem node_effects_aux [DecidableEq (EdgeKey Symbol Guard)]
+    (unconstrained reaches : Value Symbol Guard → Bool)
+    {path : Path} {value : Value Symbol Guard} {before after : State Symbol Guard} {answer : Bool}
+    (trace : NodeTrace unconstrained reaches path value before answer after) : NodeEffects value before after := by
+  induction trace using NodeTrace.rec
+      (motive_2 := fun values _ _ before _ after _ => ChildEffects values before after)
+      (motive_3 := fun _ _ edges before _ after _ => EdgesEffects edges before after) with
+  | empty | reference | union | finite | endpoint | constrained | closed =>
+      intro semantic costs _ fields
+      exact ⟨semantic, pure_keeps _ semantic.ready, costs, fields⟩
+  | branches slow trace ih =>
+      intro semantic costs available fields
+      exact ih semantic costs (fun value member => available.children value member) fields
+  | unfold plain opened actual trace ih =>
+      intro semantic costs available fields
+      obtain ⟨result, middle, done, first, middleSemantic, resultAvailable, _⟩ :=
+        SourceEqualityOpenOrdinaryHead.unfold_complete _ _ semantic available
+      obtain ⟨sameValue, sameState⟩ := Outcome.done.inj (done.symm.trans actual)
+      cases sameValue
+      cases sameState
+      have middleCosts := InternedFreshOrdinaryStoredSubstitution.unfold_cost_heap _ _
+        semantic.ready.semantic.1 semantic.ready.semantic.2 costs available
+      have middleFields := SourcePruningEnumerationArityOrigins.unfold_heap _ _
+        semantic.ready.semantic.1.normal.facts fields available
+      obtain ⟨finalSemantic, kept, finalCosts, finalFields⟩ := ih middleSemantic
+        (by simpa only [actual, Outcome.state] using middleCosts) resultAvailable
+        (by simpa only [actual, Outcome.state] using middleFields)
+      exact ⟨finalSemantic, first.trans kept, finalCosts, finalFields⟩
+  | missing =>
+      intro semantic costs _ fields
+      exact ⟨semantic, pure_keeps _ semantic.ready, costs, fields⟩
+  | present found trace ih =>
+      intro semantic costs available fields
+      exact ih semantic costs (available _ (List.mem_of_getElem? found)) fields
+  | nil =>
+      intro semantic costs _ fields
+      exact ⟨semantic, pure_keeps _ semantic.ready, costs, fields⟩
+  | stop head ih =>
+      intro semantic costs available fields
+      exact ih semantic costs (fun value member => available value (by simp [member])) fields
+  | next head tail headIH tailIH =>
+      intro semantic costs available fields
+      obtain ⟨middleSemantic, first, middleCosts, middleFields⟩ :=
+        headIH semantic costs (fun value member => available value (by simp [member])) fields
+      obtain ⟨finalSemantic, kept, finalCosts, finalFields⟩ := tailIH middleSemantic middleCosts
+        (fun value member => first.available value (available value (by simp [member]))) middleFields
+      exact ⟨finalSemantic, first.trans kept, finalCosts, finalFields⟩
+
+/-- An actual enabled node gate preserves semantic readiness, costs, and projected arity. -/
+theorem node_effects [DecidableEq (EdgeKey Symbol Guard)]
+    (unconstrained reaches : Value Symbol Guard → Bool)

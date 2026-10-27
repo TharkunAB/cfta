@@ -1,0 +1,137 @@
+MicroCFTA.SourcePruningEnumerationRawRebuildArity.edge_heap {width : Nat}
+  [DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey MicroCFTA.SourcePruningTemplates.Symbol
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  (original :
+    MicroCFTA.InternedConstructorTemplates.EdgeValue MicroCFTA.SourcePruningTemplates.Symbol
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+  (children :
+    List
+      (MicroCFTA.InternedConstructorTemplates.Value MicroCFTA.SourcePruningTemplates.Symbol
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)))
+  (before : MicroCFTA.SourceEqualityNativeDemand.State width)
+  (heap : MicroCFTA.SourcePruningEnumerationArityOrigins.Heap before.native.machine.heap)
+  (coherent : MicroCFTA.InternedRecordCoherence.Coherent before.native.machine.heap)
+  (resident : MicroCFTA.InternedEdgeResidency.EdgeResident before.native.machine.heap original)
+  (same : children.length = original.children.length) :
+  MicroCFTA.SourcePruningEnumerationArityOrigins.Heap
+    (MicroCFTA.SourceCurrentAllocatedRawRebuild.edge original children before).snd.native.machine.heap
+'MicroCFTA.SourcePruningEnumerationRawRebuildArity.edge_heap' depends on axioms: [propext, Classical.choice, Quot.sound]
+MicroCFTA.SourcePruningEnumerationRawRebuildArity.modify_heap {width : Nat}
+  [DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey MicroCFTA.SourcePruningTemplates.Symbol
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  (original :
+    MicroCFTA.InternedConstructorTemplates.Value MicroCFTA.SourcePruningTemplates.Symbol
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+  (oldRows newRows :
+    List
+      (MicroCFTA.InternedConstructorTemplates.EdgeValue MicroCFTA.SourcePruningTemplates.Symbol
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)))
+  (before : MicroCFTA.SourceEqualityNativeDemand.State width)
+  (heap : MicroCFTA.SourcePruningEnumerationArityOrigins.Heap before.native.machine.heap) :
+  MicroCFTA.SourcePruningEnumerationArityOrigins.Heap
+    (MicroCFTA.SourceCurrentAllocatedRawRebuild.modify original oldRows newRows before).snd.native.machine.heap
+'MicroCFTA.SourcePruningEnumerationRawRebuildArity.modify_heap' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+MicroCFTA.SourcePruningEnumerationCallerArity.beginNode_heap {width : Nat}
+  (request : MicroCFTA.SourceCurrentAllocatedPartialState.NodeRequest)
+  (before : MicroCFTA.SourceCurrentAllocatedPartialState.State width)
+  (heap : MicroCFTA.SourcePruningEnumerationArityOrigins.Heap before.checked.native.machine.heap) :
+  MicroCFTA.SourcePruningEnumerationArityOrigins.Heap
+    (MicroCFTA.SourceCurrentAllocatedPartialState.beginNode request before).snd.snd.checked.native.machine.heap
+'MicroCFTA.SourcePruningEnumerationCallerArity.beginNode_heap' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+MicroCFTA.SourcePruningEnumerationCallerArity.beginEdge_heap {width : Nat}
+  (request : MicroCFTA.SourceCurrentAllocatedPartialState.EdgeRequest)
+  (before : MicroCFTA.SourceCurrentAllocatedPartialState.State width)
+  (heap : MicroCFTA.SourcePruningEnumerationArityOrigins.Heap before.checked.native.machine.heap) :
+  MicroCFTA.SourcePruningEnumerationArityOrigins.Heap
+    (MicroCFTA.SourceCurrentAllocatedPartialState.beginEdge request before).snd.snd.checked.native.machine.heap
+'MicroCFTA.SourcePruningEnumerationCallerArity.beginEdge_heap' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+MicroCFTA.SourcePruningEnumerationCallerArity.finishNode_heap {width : Nat} (handle : Nat)
+  (result :
+    MicroCFTA.InternedConstructorTemplates.Value MicroCFTA.SourcePruningTemplates.Symbol
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+  (before : MicroCFTA.SourceCurrentAllocatedPartialState.State width)
+  (heap : MicroCFTA.SourcePruningEnumerationArityOrigins.Heap before.checked.native.machine.heap) :
+  MicroCFTA.SourcePruningEnumerationArityOrigins.Heap
+    (MicroCFTA.SourceCurrentAllocatedPartialState.finishNode handle result before).checked.native.machine.heap
+'MicroCFTA.SourcePruningEnumerationCallerArity.finishNode_heap' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+MicroCFTA.SourcePruningEnumerationCallerArity.finishEdge_heap {width : Nat} (handle : Nat)
+  (result :
+    MicroCFTA.InternedConstructorTemplates.EdgeValue MicroCFTA.SourcePruningTemplates.Symbol
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+  (before : MicroCFTA.SourceCurrentAllocatedPartialState.State width)
+  (heap : MicroCFTA.SourcePruningEnumerationArityOrigins.Heap before.checked.native.machine.heap) :
+  MicroCFTA.SourcePruningEnumerationArityOrigins.Heap
+    (MicroCFTA.SourceCurrentAllocatedPartialState.finishEdge handle result before).checked.native.machine.heap
+'MicroCFTA.SourcePruningEnumerationCallerArity.finishEdge_heap' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+MicroCFTA.SourcePruningEnumerationCallerArity.advance_node_execute_heap {width : Nat}
+  [DecidableEq MicroCFTA.SourcePruningTemplates.Symbol]
+  [DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey MicroCFTA.SourcePruningTemplates.Symbol
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  (request :
+    MicroCFTA.SourceRecursiveIntersectionThunks.NodeRequest MicroCFTA.SourcePruningTemplates.Symbol
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+  (before : MicroCFTA.SourceCurrentAllocatedPartialState.State width) (fuel : Nat)
+  (fourth : MicroCFTA.SourceCurrentEmptinessMemo.Memo)
+  (merge :
+    MicroCFTA.SourceCurrentMemoMergeGraph.Memo MicroCFTA.SourcePruningTemplates.Symbol
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+  (valid : MicroCFTA.SourceCurrentAllocatedNativePhysicalCompletion.Good before.checked)
+  (heap : MicroCFTA.SourcePruningEnumerationArityOrigins.Heap before.checked.native.machine.heap)
+  (plan :
+    MicroCFTA.SourceCurrentAllocatedNativePhysicalExecution.InputsThrough fuel
+      (MicroCFTA.SourceEqualityNativeDemand.Control.code
+        (MicroCFTA.SourceRecursiveIntersectionCode.requestNode request.domain request.left request.right))
+      before.checked) :
+  MicroCFTA.SourcePruningEnumerationArityOrigins.Heap
+    (MicroCFTA.SourceCurrentAllocatedPartialState.advance before
+              (MicroCFTA.SourceEqualityNativeDemand.execute fuel
+                  (MicroCFTA.SourceEqualityNativeDemand.Control.code
+                    (MicroCFTA.SourceRecursiveIntersectionCode.requestNode request.domain request.left request.right))
+                  before.checked).state
+              fourth merge).checked.native.machine.heap
+'MicroCFTA.SourcePruningEnumerationCallerArity.advance_node_execute_heap' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+MicroCFTA.SourcePruningEnumerationCallerArity.advance_edge_execute_heap {width : Nat}
+  [DecidableEq MicroCFTA.SourcePruningTemplates.Symbol]
+  [DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey MicroCFTA.SourcePruningTemplates.Symbol
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  (request :
+    MicroCFTA.SourceRecursiveIntersectionThunks.EdgeRequest MicroCFTA.SourcePruningTemplates.Symbol
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+  (before : MicroCFTA.SourceCurrentAllocatedPartialState.State width) (fuel : Nat)
+  (fourth : MicroCFTA.SourceCurrentEmptinessMemo.Memo)
+  (merge :
+    MicroCFTA.SourceCurrentMemoMergeGraph.Memo MicroCFTA.SourcePruningTemplates.Symbol
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+  (valid : MicroCFTA.SourceCurrentAllocatedNativePhysicalCompletion.Good before.checked)
+  (heap : MicroCFTA.SourcePruningEnumerationArityOrigins.Heap before.checked.native.machine.heap)
+  (plan :
+    MicroCFTA.SourceCurrentAllocatedNativePhysicalExecution.InputsThrough fuel
+      (MicroCFTA.SourceEqualityNativeDemand.Control.code
+        (MicroCFTA.SourceRecursiveIntersectionCode.requestEdge request.domain request.left request.right))
+      before.checked) :
+  MicroCFTA.SourcePruningEnumerationArityOrigins.Heap
+    (MicroCFTA.SourceCurrentAllocatedPartialState.advance before
+              (MicroCFTA.SourceEqualityNativeDemand.execute fuel
+                  (MicroCFTA.SourceEqualityNativeDemand.Control.code
+                    (MicroCFTA.SourceRecursiveIntersectionCode.requestEdge request.domain request.left request.right))
+                  before.checked).state
+              fourth merge).checked.native.machine.heap
+'MicroCFTA.SourcePruningEnumerationCallerArity.advance_edge_execute_heap' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]

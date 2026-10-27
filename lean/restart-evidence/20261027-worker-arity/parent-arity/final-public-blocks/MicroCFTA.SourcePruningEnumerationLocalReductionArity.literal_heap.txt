@@ -1,0 +1,43 @@
+MicroCFTA.SourcePruningEnumerationLocalReductionArity.literal_heap
+  [DecidableEq (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)]
+  [DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  [DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  {width : Nat} (formulas : MicroCFTA.SourceGuards.Formulas MicroCFTA.FullSyntax.Formula)
+  (solver : MicroCFTA.SourceGuards.Entailment MicroCFTA.FullSyntax.Formula)
+  {inventory : MicroCFTA.SourceCurrentAllocatedNativeInventoryState.Inventory}
+  {original : MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula} {g s r e p h m c n budget : Nat}
+  {loaded : MicroCFTA.SourceEqualityConjoinAllocation.Constraint MicroCFTA.FullSyntax.Formula}
+  {inherited : MicroCFTA.SourceEqualityConstraintAllocation.Value}
+  {values results :
+    List
+      (MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))}
+  {before : MicroCFTA.SourceCurrentAllocatedPartialState.State width}
+  {after : MicroCFTA.SourceEqualityNativeDemand.State width} {savedFourth : MicroCFTA.SourceCurrentEmptinessMemo.Memo}
+  {saved :
+    MicroCFTA.SourceCurrentMemoMergeGraph.Memo (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)}
+  {memos : MicroCFTA.EndpointMemoGateTrace.Memos}
+  (initial : MicroCFTA.SourceCurrentAllocatedPartialInvariant.Context formulas solver inventory before memos)
+  (cached : MicroCFTA.SourceEqualityGuardReadback.Cached original.equalities)
+  (found :
+    MicroCFTA.SourceEqualityConstraintFieldLookup.load original before.checked.operations.constraints =
+      Except.ok (some loaded))
+  (inheritedReady : MicroCFTA.SourceEqualityConstraintAllocation.Ready before.checked.operations.constraints inherited)
+  (available : MicroCFTA.InternedNestedProvenance.Values before.checked.native.machine.heap values)
+  (ranges :
+    MicroCFTA.SourceCurrentAllocatedLocalReduction.Ranges budget loaded inherited values before.checked before.fourth
+      before.merge)
+  (done :
+    MicroCFTA.SourceCurrentAllocatedLocalWorker.reduce g s r e p h m c n budget loaded inherited values before.checked
+        before.fourth before.merge =
+      MicroCFTA.SourceCurrentAllocatedLocalWorker.Outcome.done results after savedFourth saved)
+  (heap : MicroCFTA.SourcePruningEnumerationArityOrigins.Heap before.checked.native.machine.heap) :
+  MicroCFTA.SourcePruningEnumerationArityOrigins.Heap after.native.machine.heap
+'MicroCFTA.SourcePruningEnumerationLocalReductionArity.literal_heap' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]

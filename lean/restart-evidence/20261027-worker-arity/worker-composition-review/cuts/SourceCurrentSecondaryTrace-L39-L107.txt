@@ -1,0 +1,69 @@
+      NodeTrace unconstrained path (.node entry edges depth free) state false state
+  | endpoint (slow : (depth == 0 && free.isEmpty) = false) :
+      NodeTrace unconstrained [] (.node entry edges depth free) state (!free.isEmpty) state
+  | branches (slow : (depth == 0 && free.isEmpty) = false)
+      (trace : EdgesTrace unconstrained index rest edges state answer final) :
+      NodeTrace unconstrained (index :: rest) (.node entry edges depth free) state answer final
+  | constrained (blocked : unconstrained (.mu entry body depth ordinary) = false) :
+      NodeTrace unconstrained path (.mu entry body depth ordinary) state
+        (match path with | [] => !(Value.mu entry body depth ordinary).free.isEmpty | _ :: _ => true) state
+  | closed (plain : unconstrained (.mu entry body depth ordinary) = true)
+      (closed : (Value.mu entry body depth ordinary).free.isEmpty = true) :
+      NodeTrace unconstrained path (.mu entry body depth ordinary) state false state
+  | unfold (plain : unconstrained (.mu entry body depth ordinary) = true)
+      (opened : (Value.mu entry body depth ordinary).free.isEmpty = false)
+      (actual : InternedFreshOrdinaryStoredSubstitution.unfold (.mu entry body depth ordinary) state = .done next after)
+      (trace : NodeTrace unconstrained path next after answer final) :
+      NodeTrace unconstrained path (.mu entry body depth ordinary) state answer final
+
+/-- A child lookup either returns false immediately or follows the exact selected source child. -/
+inductive ChildTrace [DecidableEq (EdgeKey Symbol Guard)] (unconstrained : Value Symbol Guard → Bool) :
+    List (Value Symbol Guard) → Nat → Path → State Symbol Guard → Bool → State Symbol Guard → Prop where
+  | missing (absent : values[index]? = none) : ChildTrace unconstrained values index path state false state
+  | present (found : values[index]? = some value) (trace : NodeTrace unconstrained path value state answer final) :
+      ChildTrace unconstrained values index path state answer final
+
+/-- Ordered edge disjunction threads false results and stops at its first true result. -/
+inductive EdgesTrace [DecidableEq (EdgeKey Symbol Guard)] (unconstrained : Value Symbol Guard → Bool) :
+    Nat → Path → List (EdgeValue Symbol Guard) → State Symbol Guard → Bool → State Symbol Guard → Prop where
+  | nil : EdgesTrace unconstrained index path [] state false state
+  | stop (head : ChildTrace unconstrained edge.children index path state true final) :
+      EdgesTrace unconstrained index path (edge :: rest) state true final
+  | next (head : ChildTrace unconstrained edge.children index path state false middle)
+      (tail : EdgesTrace unconstrained index path rest middle answer final) :
+      EdgesTrace unconstrained index path (edge :: rest) state answer final
+end
+
+/-- An edge path starts below its root and follows its exact selected child. -/
+inductive PathTrace [DecidableEq (EdgeKey Symbol Guard)] (unconstrained : Value Symbol Guard → Bool)
+    (values : List (Value Symbol Guard)) : Path → State Symbol Guard → Bool → State Symbol Guard → Prop where
+  | empty : PathTrace unconstrained values [] state false state
+  | child (trace : ChildTrace unconstrained values index rest state answer final) :
+      PathTrace unconstrained values (index :: rest) state answer final
+
+/-- A class follows original path order and stops at the first true decision. -/
+inductive ClassTrace [DecidableEq (EdgeKey Symbol Guard)] (unconstrained : Value Symbol Guard → Bool)
+    (values : List (Value Symbol Guard)) : Class → State Symbol Guard → Bool → State Symbol Guard → Prop where
+  | nil : ClassTrace unconstrained values [] state false state
+  | stop (head : PathTrace unconstrained values path state true final) :
+      ClassTrace unconstrained values (path :: rest) state true final
+  | next (head : PathTrace unconstrained values path state false middle)
+      (tail : ClassTrace unconstrained values rest middle answer final) :
+      ClassTrace unconstrained values (path :: rest) state answer final
+
+
+/-- Progress of recursive calls preserves the exact completed source dispatch and final cache. -/
+theorem dispatch_stable [DecidableEq (EdgeKey Symbol Guard)] (unconstrained : Value Symbol Guard → Bool)
+    (before after : Path → Value Symbol Guard → State Symbol Guard → Outcome Symbol Guard (Option Bool))
+    (stable : ∀ path value state answer final, before path value state = .done (some answer) final →
+      after path value state = .done (some answer) final)
+    (path : Path) (value : Value Symbol Guard) (state : State Symbol Guard) (answer : Bool) (final : State Symbol Guard)
+    (done : dispatch unconstrained before path value state = .done (some answer) final) :
+    dispatch unconstrained after path value state = .done (some answer) final := by
+  unfold dispatch SourceCurrentMuEndpoint.dispatch at done ⊢
+  cases value with
+  | reference | union => exact done
+  | empty => simpa [Value.depth, Value.free] using done
+  | mu entry body depth ordinary =>
+      simp only at done ⊢
+      split at done

@@ -1,0 +1,35 @@
+      have middleCosts := InternedFreshOrdinaryStoredSubstitution.unfold_cost_heap _ _
+        semantic.ready.semantic.1 semantic.ready.semantic.2 costs available
+      have middleFields := SourcePruningEnumerationArityOrigins.unfold_heap _ _
+        semantic.ready.semantic.1.normal.facts fields available
+      obtain ⟨finalSemantic, kept, finalCosts, finalFields⟩ := ih middleSemantic
+        (by simpa only [actual, Outcome.state] using middleCosts) resultAvailable
+        (by simpa only [actual, Outcome.state] using middleFields)
+      exact ⟨finalSemantic, first.trans kept, finalCosts, finalFields⟩
+  | missing =>
+      intro semantic costs _ fields
+      exact ⟨semantic, pure_keeps _ semantic.ready, costs, fields⟩
+  | present found trace ih =>
+      intro semantic costs available fields
+      exact ih semantic costs (available _ (List.mem_of_getElem? found)) fields
+  | nil =>
+      intro semantic costs _ fields
+      exact ⟨semantic, pure_keeps _ semantic.ready, costs, fields⟩
+  | stop head ih =>
+      intro semantic costs available fields
+      exact ih semantic costs (fun value member => available value (by simp [member])) fields
+  | next head tail headIH tailIH =>
+      intro semantic costs available fields
+      obtain ⟨middleSemantic, first, middleCosts, middleFields⟩ :=
+        headIH semantic costs (fun value member => available value (by simp [member])) fields
+      obtain ⟨finalSemantic, kept, finalCosts, finalFields⟩ := tailIH middleSemantic middleCosts
+        (fun value member => first.available value (available value (by simp [member]))) middleFields
+      exact ⟨finalSemantic, first.trans kept, finalCosts, finalFields⟩
+
+/-- An actual secondary node gate preserves semantic readiness, costs, and projected arity. -/
+theorem node_effects [DecidableEq (EdgeKey Symbol Guard)]
+    (unconstrained : Value Symbol Guard → Bool)
+    {path : Path} {value : Value Symbol Guard} {before after : State Symbol Guard} {answer : Bool}
+    (trace : NodeTrace unconstrained path value before answer after)
+    (semantic : SemanticReady before) (costs : InternedFreshOrdinaryCostHeap.Heap before)
+    (available : Available before value) (fields : Heap before) :

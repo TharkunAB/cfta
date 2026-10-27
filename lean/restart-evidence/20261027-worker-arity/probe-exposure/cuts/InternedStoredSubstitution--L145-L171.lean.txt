@@ -1,0 +1,27 @@
+def Replacements (state : State Symbol Guard) (environment : Environment Symbol Guard) : Prop :=
+  ∀ name value, environment name = some value → Available state value
+
+/-- Preparing the lexical inputs establishes their complete record provenance. -/
+theorem inputs_available (value : Value Symbol Guard) (environment : Environment Symbol Guard) (state : State Symbol Guard)
+    (available : Available state value) (replacements : Replacements state environment) :
+    Values state ((leaves value).map (input environment)) := by
+  intro selected member
+  obtain ⟨original, present, rfl⟩ := List.mem_map.mp member
+  have source := leaves_available value state available original present
+  cases original with
+  | empty | node | union | mu => exact source
+  | reference name =>
+      cases found : environment name with
+      | none => simpa [input, found] using source
+      | some replacement => simpa [input, found] using replacements name replacement found
+
+/-- Full stored-plan execution derives both cache histories and complete result provenance. -/
+theorem execute_verified [DecidableEq (EdgeKey Symbol Guard)] (value : Value Symbol Guard)
+    (environment : Environment Symbol Guard) (state : State Symbol Guard) (facts : Facts state)
+    (available : Available state value) (replacements : Replacements state environment) :
+    Verified state (execute value environment state) Available :=
+  build_verified _ _ state facts (inputs_available value environment state available replacements)
+
+/-- Full prepared execution preserves source flat unions and every stored Mu's self filter. -/
+theorem execute_normalized [DecidableEq (EdgeKey Symbol Guard)] (value : Value Symbol Guard)
+    (environment : Environment Symbol Guard) (state : State Symbol Guard) (facts : Facts state)

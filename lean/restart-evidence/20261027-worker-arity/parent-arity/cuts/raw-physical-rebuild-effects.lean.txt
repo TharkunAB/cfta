@@ -1,0 +1,37 @@
+theorem edge_physical {before : SharedState width}
+    (ready : Ready formulas solver inventory record originals base before)
+    (symbol : Symbol) (guard : Guard) (children : List (Value Symbol Guard))
+    (field : FieldAvailable before.checked.operations guard)
+    (available : Values before.checked.native.machine.heap children) :
+    Ready formulas solver inventory record originals base
+        (advanceHeap before (run (makeEdge symbol guard children) before.checked.native.machine.heap).2) ∧
+      Effects (physical before.checked)
+        (physical (advanceHeap before (run (makeEdge symbol guard children) before.checked.native.machine.heap).2).checked) ∧
+      InternedEdgeResidency.EdgeResident (run (makeEdge symbol guard children) before.checked.native.machine.heap).2
+        (run (makeEdge symbol guard children) before.checked.native.machine.heap).1 ∧
+      (run (makeEdge symbol guard children) before.checked.native.machine.heap).1.children = children := by
+  have actual := SourceEqualityRequiredCache.edge symbol guard children before.checked.native.machine.heap
+    ready.checked.semantic.ready available
+  have semantic := SourceEqualityRequiredSemanticCache.edge symbol guard children before.checked.native.machine.heap
+    ready.checked.semantic available
+  have fields := SourceEqualityAnnotationHeap.run (FieldAvailable before.checked.operations) _
+    (SourceEqualityAnnotationHeap.makeEdge (FieldAvailable before.checked.operations) symbol guard children field)
+    before.checked.native.machine.heap ready.checked.good.fields
+  have effects : Effects (physical before.checked)
+      ⟨(run (makeEdge symbol guard children) before.checked.native.machine.heap).2, before.checked.operations⟩ :=
+    ⟨actual.1, ⟨semantic, ready.checked.costs, ready.checked.good.operations, fields⟩,
+      SourceEqualityConstraintMemoAllocation.grows_refl _⟩
+  exact ⟨ready.physical _ effects, effects, actual.2⟩
+
+/-- Actual head exposure retains open physical fields and the same operation state. -/
+theorem head_physical {before : SharedState width} {input exposed : Value Symbol Guard} {heap : HeapState}
+    (ready : Ready formulas solver inventory record originals base before)
+    (head : SourceEqualityRequiredHead.Head input before.checked.native.machine.heap exposed heap)
+    (available : Available before.checked.native.machine.heap input) :
+    Ready formulas solver inventory record originals base (advanceHeap before heap) ∧
+      Effects (physical before.checked) (physical (advanceHeap before heap).checked) ∧ Available heap exposed := by
+  have actual := SourceCurrentRequiredHeapEffects.head (FieldAvailable before.checked.operations) head
+    ready.checked.semantic ready.checked.costs ready.checked.good.fields available
+  have effects : Effects (physical before.checked) ⟨heap, before.checked.operations⟩ :=
+    ⟨actual.1, ⟨actual.2.1, actual.2.2.1, ready.checked.good.operations, actual.2.2.2.1⟩,
+      SourceEqualityConstraintMemoAllocation.grows_refl _⟩

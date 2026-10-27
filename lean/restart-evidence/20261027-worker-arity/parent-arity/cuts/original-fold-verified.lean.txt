@@ -1,0 +1,24 @@
+theorem Fold.verified (inventory : Inventory) {records values results} {before after : Checked width} {memo saved : Memo}
+    {memos final : Memos} {actual : Fold records values before memo results after saved}
+    (reads : FoldReads formulas solver actual memos final)
+    (coherent : ∀ record ∈ records, SourceEqualityClassOrder.Coherent record)
+    (active : ∀ record ∈ records, EqualityNormalize.Nontrivial record.paths)
+    (ready : Ready before) (admitted : At formulas solver inventory before)
+    (available : Values before.native.machine.heap values)
+    (domains : ∀ record ∈ records, ∀ path ∈ record.paths, ForestClosed (path.map Int.ofNat) values)
+    (stored : Stored before.native.machine.heap memo)
+    (covered : ∀ ambient, CacheCovers (SourceEqualityPCSGuard.holds formulas solver) ambient memo)
+    (valid : Valid before.native.machine.heap memos) :
+    ∃ next, Receipt formulas solver next records values before memo results after saved memos final := by
+  induction reads generalizing inventory with
+  | nil => exact ⟨inventory, nil_receipt formulas solver inventory _ _ _ ready admitted available stored covered _ valid⟩
+  | @cons records values before memo middle step current record results after saved memos stepMemos final tail head first last ih =>
+      obtain ⟨next, firstReceipt⟩ := ih inventory
+        (fun own member => coherent own (List.mem_cons_of_mem _ member))
+        (fun own member => active own (List.mem_cons_of_mem _ member)) ready admitted available
+        (fun own member => domains own (List.mem_cons_of_mem _ member)) stored covered valid
+      obtain ⟨finalInventory, lastReceipt⟩ := SourceCurrentAllocatedClassEdits.verified formulas solver next record
+        (coherent _ List.mem_cons_self) (active _ List.mem_cons_self) last firstReceipt.ready firstReceipt.admitted
+        firstReceipt.available (fun path member => firstReceipt.domains _ (domains _ List.mem_cons_self path member))
+        firstReceipt.stored firstReceipt.covered firstReceipt.globals.valid
+      exact ⟨finalInventory, cons_receipt formulas solver firstReceipt lastReceipt⟩

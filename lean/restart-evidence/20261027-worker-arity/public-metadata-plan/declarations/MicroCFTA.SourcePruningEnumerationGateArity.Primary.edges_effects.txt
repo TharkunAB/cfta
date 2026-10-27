@@ -1,0 +1,7 @@
+theorem edges_effects [DecidableEq (EdgeKey Symbol Guard)]
+    (unconstrained reaches : Value Symbol Guard → Bool)
+    {index : Nat} {path : Path} {edges : List (EdgeValue Symbol Guard)} {before after : State Symbol Guard} {answer : Bool}
+    (trace : EdgesTrace unconstrained reaches index path edges before answer after)
+    (semantic : SemanticReady before) (costs : InternedFreshOrdinaryCostHeap.Heap before)
+    (available : ∀ value ∈ edges.flatMap EdgeValue.children, Available before value) (fields : Heap before) :
+    SemanticReady after ∧ Keeps before after ∧ InternedFreshOrdinaryCostHeap.Heap after ∧ Heap after := by

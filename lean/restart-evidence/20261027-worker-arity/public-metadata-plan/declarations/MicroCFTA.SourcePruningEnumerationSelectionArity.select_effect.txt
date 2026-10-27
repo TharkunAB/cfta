@@ -1,0 +1,5 @@
+theorem select_effect [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)]
+    (clear : Guard → Bool) (fuel : Nat) (inputs : List (Value Symbol Guard)) (before : State Symbol Guard)
+    (semantic : SemanticReady before) (costs : CostHeap before) (available : Values before inputs)
+    (retained : List (Value Symbol Guard)) (after : State Symbol Guard)
+    (done : SourceMergedSelection.select clear fuel inputs before = .done retained after) : Effect before after := by

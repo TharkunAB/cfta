@@ -1,0 +1,5 @@
+theorem requireAll [DecidableEq (EdgeKey Symbol Guard)]
+    (fuel readFuel : Nat) (paths : List (List Int)) (values results : List (Value Symbol Guard)) (before after : State Symbol Guard)
+    (done : SourceEqualityRequiredExecution.requireAll fuel readFuel paths values before = .done results after)
+    (semantic : SemanticReady before) (costs : CostHeap before) (fields : Heap before) (available : Values before values) :
+    Keeps before after ∧ SemanticReady after ∧ CostHeap after ∧ Heap after ∧ Values after results := by

@@ -1,0 +1,11 @@
+--- v1 initial
++++ v2 surviving actual child binder
+@@ -81,7 +81,7 @@
+                     have nextInputs : Values after (result :: rest) := by
+                       intro child member
+                       rcases List.mem_cons.mp member with rfl | member
+-                      · exact verified.result result after unfolded
++                      · exact verified.result child after unfolded
+                       · simpa only [unfolded, Outcome.state] using verified.available child (restInputs child member)
+                     simpa only [collect, ite_eq_right visited, unfolded] using
+                       ih after afterFacts afterHeap (entry.identity :: seen) (result :: rest) nextInputs

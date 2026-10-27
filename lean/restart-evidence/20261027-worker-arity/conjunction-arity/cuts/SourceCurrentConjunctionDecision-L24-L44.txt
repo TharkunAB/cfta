@@ -1,0 +1,21 @@
+inductive Decision [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)] [DecidableEq (Value Symbol Guard)]
+    (budget : Nat) (start : Value Symbol Guard) : Physical → Bool → Physical → Prop where
+  | open_input (openInput : closed start = false) : Decision budget start before false before
+  | closed (closedInput : closed start = true)
+      (explored : Run budget [] [[start]] before table after)
+      (grown : SourceCurrentConjunctionEmptinessTable.grow .empty key closed table (budget + 1)
+        (fun _ => false) = some known) :
+      Decision budget start before (SourceCurrentConjunctionEmptinessTable.answer .empty key closed table known start) after
+
+/-- Initial physical invariants derive an actual finite decision and its returned states. -/
+theorem complete [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)] [DecidableEq (Value Symbol Guard)]
+    (budget : Nat) (start : Value Symbol Guard) (before : Physical)
+    (ready : Ready before) (available : Available before.heap start) :
+    ∃ result after, Decision budget start before result after ∧ Effects before after := by
+  cases admitted : closed start with
+  | false => exact ⟨false, before, .open_input admitted, Effects.refl before ready⟩
+  | true =>
+      obtain ⟨table, after, explored, effects, _, bound⟩ := SourceCurrentConjunctionWorklist.entered budget [[start]] before ready
+        (by intro nodes member value included; cases List.mem_singleton.mp member; cases List.mem_singleton.mp included; exact available)
+      have grown := SourceCurrentConjunctionEmptinessTable.grow_rounds_complete .empty key closed table budget 0
+        (by simpa using bound)

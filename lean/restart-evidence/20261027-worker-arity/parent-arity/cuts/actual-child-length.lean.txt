@@ -1,0 +1,14 @@
+/-- Positional edits preserve arity, so source setChildren uses raw interning. -/
+theorem children_length [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)]
+    {record originals entries index values before results after}
+    (actual : EditChildren (width := width) record originals entries index values before results after) :
+    results.length = values.length := by
+  exact EditChildren.rec
+    (motive_1 := fun _ _ _ _ _ _ => True)
+    (motive_2 := fun _ _ values _ results _ _ => results.length = values.length)
+    (motive_3 := fun _ _ _ _ _ _ => True)
+    (by intros; trivial) (by intros; trivial)
+    (by intros; trivial) (by intros; trivial)
+    (by intros; rfl) (by intros; simp_all)
+    (by intros; simp_all) (by intros; trivial)
+    (by intros; trivial) actual

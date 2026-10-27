@@ -1,0 +1,22 @@
+def Ranges [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)]
+    [DecidableEq (Value Symbol Guard)]
+    (budget : Nat) (unconstrained reaches : Value Symbol Guard → Bool)
+    (values : List (Value Symbol Guard)) : Constraints → Checked width → Memo → Prop
+  | [], _, _ => True
+  | paths :: classes, before, memo =>
+      (∀ heap, EndpointStatefulGateTrace.ClassTrace unconstrained reaches values paths
+        before.native.machine.heap false heap →
+        Ranges budget unconstrained reaches values classes (advanceHeap before heap) memo) ∧
+      (∀ heap, EndpointStatefulGateTrace.ClassTrace unconstrained reaches values paths
+        before.native.machine.heap true heap →
+        ∀ anchor, SourceCurrentSecondaryTrace.ClassTrace unconstrained values paths heap true anchor →
+        Ranges budget unconstrained reaches values classes (advanceHeap (advanceHeap before heap) anchor) memo) ∧
+      (∀ heap, EndpointStatefulGateTrace.ClassTrace unconstrained reaches values paths
+        before.native.machine.heap true heap →
+        ∀ anchor, SourceCurrentSecondaryTrace.ClassTrace unconstrained values paths heap false anchor →
+        SourceCurrentAllocatedSeededQuery.SeededRanges values (paths.map (List.map Int.ofNat))
+          (advanceHeap (advanceHeap before heap) anchor) ∧
+        ∀ query middle, SourceCurrentAllocatedSeededQuery.Seeded values (paths.map (List.map Int.ofNat))
+          (advanceHeap (advanceHeap before heap) anchor) query middle →
+          ∀ later saved, SourceCurrentConjunctionMemo.Call budget memo query (physical middle) false later saved →
+            Ranges budget unconstrained reaches values classes (advancePhysical middle later) saved)

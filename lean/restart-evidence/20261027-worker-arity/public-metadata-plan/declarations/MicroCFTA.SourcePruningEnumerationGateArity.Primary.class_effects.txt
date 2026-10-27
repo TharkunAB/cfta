@@ -1,0 +1,7 @@
+theorem class_effects [DecidableEq (EdgeKey Symbol Guard)]
+    (unconstrained reaches : Value Symbol Guard → Bool)
+    {values : List (Value Symbol Guard)} {paths : Class} {before after : State Symbol Guard} {answer : Bool}
+    (trace : ClassTrace unconstrained reaches values paths before answer after)
+    (semantic : SemanticReady before) (costs : InternedFreshOrdinaryCostHeap.Heap before)
+    (available : ∀ value ∈ values, Available before value) (fields : Heap before) :
+    SemanticReady after ∧ Keeps before after ∧ InternedFreshOrdinaryCostHeap.Heap after ∧ Heap after := by

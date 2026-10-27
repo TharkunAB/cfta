@@ -1,0 +1,41 @@
+      RequireRows (Symbol := Symbol) («Guard» := Guard) entries edges before results after →
+      RowsEffects edges before results after → RowsEffects (edge :: edges) before results after := by
+    intro entries edges before results after edge _ _ ih semantic costs fields resident
+    exact ih semantic costs fields (fun original member => resident original (List.mem_cons_of_mem _ member))
+  have keptCase : ∀ {entries before values middle result afterEdge edges results after edge},
+      SourceEqualityNeeded.fits (.node entries) edge.children.length = true →
+      RequireChildren (Symbol := Symbol) («Guard» := Guard) entries 0 edge.children before values middle →
+      run (makeEdge edge.entry.key.symbol edge.entry.key.constraint values) middle = (result, afterEdge) →
+      RequireRows (Symbol := Symbol) («Guard» := Guard) entries edges afterEdge results after →
+      ChildrenEffects edge.children before values middle → RowsEffects edges afterEdge results after →
+      RowsEffects (edge :: edges) before (result :: results) after := by
+    intro entries before values middle result afterEdge edges results after edge _ children built _ childIH restIH semantic costs fields resident
+    have available : Values before edge.children := semantic.ready.semantic.1.normal.facts.cached.edges
+      edge.entry.key edge (resident edge List.mem_cons_self)
+    obtain ⟨⟨first, middleSemantic, middleCosts, middleFields⟩, valuesAvailable⟩ := childIH semantic costs fields available
+    have checked := SourceEqualityRequiredCache.edge edge.entry.key.symbol edge.entry.key.constraint values middle middleSemantic.ready valuesAvailable
+    have afterSemantic : SemanticReady afterEdge := by
+      simpa only [built] using SourceEqualityRequiredSemanticCache.edge edge.entry.key.symbol
+        edge.entry.key.constraint values middle middleSemantic valuesAvailable
+    have edgeKept : Keeps middle afterEdge := by simpa only [built] using checked.1
+    have edgeResident : InternedEdgeResidency.EdgeResident afterEdge result := by simpa only [built] using checked.2.1
+    have constructorCosts : CostHeap (run (makeEdge edge.entry.key.symbol edge.entry.key.constraint values) middle).2 := middleCosts
+    have afterCosts : CostHeap afterEdge := by simpa only [built] using constructorCosts
+    have copiedFits : Fits edge.entry.key.constraint values.length := by
+      rw [children.length]
+      exact fields.edge before semantic.ready.semantic.1.normal.facts.coherent edge (resident edge List.mem_cons_self)
+    have afterFields : Heap afterEdge := by
+      simpa only [built] using SourcePruningEnumerationArityOrigins.edge_heap
+        edge.entry.key.symbol edge.entry.key.constraint values middle middleFields copiedFits
+    have growth := (first.trans edgeKept).growth
+    obtain ⟨⟨kept, finalSemantic, finalCosts, finalFields⟩, finalRows⟩ :=
+      restIH afterSemantic afterCosts afterFields
+        (fun original member => InternedEdgeResidency.edge_grows before afterEdge growth original (resident original (List.mem_cons_of_mem _ member)))
+    refine ⟨⟨(first.trans edgeKept).trans kept, finalSemantic, finalCosts, finalFields⟩, ?_⟩
+    intro original member
+    rcases List.mem_cons.mp member with rfl | member
+    · exact InternedEdgeResidency.edge_grows afterEdge after kept.growth _ edgeResident
+    · exact finalRows original member
+  refine ⟨?_, ?_, ?_⟩
+  · intro needed value before result after trace
+    exact RequireNode.rec

@@ -1,0 +1,5 @@
+theorem operand_heap
+    {path : List Int} {values : List (Value Symbol Guard)} {before after : Checked width}
+    {value : Value Symbol Guard} (actual : Operand path values before value after)
+    (ready : Ready (physical before)) (available : Values before.native.machine.heap values)
+    (heap : Heap before.native.machine.heap) : Heap after.native.machine.heap := by

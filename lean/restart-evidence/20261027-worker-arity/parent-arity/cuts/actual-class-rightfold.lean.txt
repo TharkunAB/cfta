@@ -1,0 +1,13 @@
+inductive Fold :
+    List SourceEqualityClassOrder.Record → List (Value Symbol Guard) → Checked width → Memo →
+      List (Value Symbol Guard) → Checked width → Memo → Prop where
+  | nil : Fold [] values before memo values before memo
+  | cons (tail : Fold records values before memo middle next current)
+      (head : Class record middle next current results after saved) :
+      Fold (record :: records) values before memo results after saved
+
+/-- Source empty propagation runs after the complete right fold. -/
+inductive Pass :
+    List SourceEqualityClassOrder.Record → List (Value Symbol Guard) → Checked width → Memo →
+      List (Value Symbol Guard) → Checked width → Memo → Prop where
+  | done (fold : Fold records values before memo results after saved) :

@@ -1,0 +1,8 @@
+theorem target_heap
+    {formulas : SourceGuards.Formulas FullSyntax.Formula} {solver : SourceGuards.Entailment FullSyntax.Formula}
+    {values : List (Value Symbol Guard)} {paths : List (List Int)}
+    {before after : Checked width} {memo saved : Memo} {result : Value Symbol Guard} {memos final : Memos}
+    {actual : SourceCurrentAllocatedTargetGraph.Target values paths before memo result after saved}
+    (reads : TargetReads formulas solver actual memos final) (ready : ClassReady before)
+    (available : Values before.native.machine.heap values) (stored : Stored before.native.machine.heap memo)
+    (heap : Heap before.native.machine.heap) : Heap after.native.machine.heap

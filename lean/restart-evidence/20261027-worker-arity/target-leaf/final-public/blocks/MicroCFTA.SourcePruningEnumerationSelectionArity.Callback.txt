@@ -1,0 +1,28 @@
+def MicroCFTA.SourcePruningEnumerationSelectionArity.Callback : {Symbol : Type} →
+  (MicroCFTA.InternedConstructorTemplates.Value Symbol
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) →
+      MicroCFTA.InternedConstructorTemplates.Value Symbol
+          (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) →
+        MicroCFTA.InternedConstructorTemplates.State Symbol
+            (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) →
+          MicroCFTA.MergedSourceComparison.Result Symbol
+            (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) Bool) →
+    Prop :=
+fun {Symbol} compare =>
+  ∀
+    (wide narrow :
+      MicroCFTA.InternedConstructorTemplates.Value Symbol
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+    (before :
+      MicroCFTA.InternedConstructorTemplates.State Symbol
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)),
+    MicroCFTA.SourceEqualityRequiredSemanticCache.SemanticReady before →
+      MicroCFTA.InternedFreshOrdinaryCostHeap.Heap before →
+        MicroCFTA.InternedProbeProvenance.Available before wide →
+          MicroCFTA.InternedProbeProvenance.Available before narrow →
+            ∀ (answer : Bool)
+              (after :
+                MicroCFTA.InternedConstructorTemplates.State Symbol
+                  (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)),
+              compare wide narrow before = MicroCFTA.MergedSourceComparison.Result.done answer after →
+                MicroCFTA.SourcePruningEnumerationSelectionArity.Effect before after

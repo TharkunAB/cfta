@@ -1,0 +1,19 @@
+inductive Call [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)] [DecidableEq Value]
+    (budget : Nat) : Memo → Value → Physical → Bool → Physical → Memo → Prop where
+  | hit (found : memo query.referenceOf = some (original, answer)) : Call budget memo query before answer before memo
+  | miss (absent : memo query.referenceOf = none)
+      (actual : SourceCurrentConjunctionDecision.Decision budget query before answer after) :
+      Call budget memo query before answer after (SourceCurrentEmptinessMemo.insert memo query answer)
+
+/-- A ready physical query constructs its actual completed hit or miss. -/
+theorem complete [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)] [DecidableEq Value]
+    (budget : Nat) (memo : Memo) (query : Value) (before : Physical)
+    (ready : Ready before) (available : Available before.heap query) :
+    ∃ answer after saved, Call budget memo query before answer after saved ∧ Effects before after := by
+  cases found : memo query.referenceOf with
+  | none =>
+      obtain ⟨answer, after, actual, effects⟩ := SourceCurrentConjunctionDecision.complete budget query before ready available
+      exact ⟨answer, after, SourceCurrentEmptinessMemo.insert memo query answer, .miss found actual, effects⟩
+  | some entry =>
+      obtain ⟨original, answer⟩ := entry
+      exact ⟨answer, before, memo, .hit found, Effects.refl before ready⟩

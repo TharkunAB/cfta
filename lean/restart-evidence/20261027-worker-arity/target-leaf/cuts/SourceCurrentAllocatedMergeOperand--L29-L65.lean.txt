@@ -1,0 +1,37 @@
+/-- Both actual operations retain the same captured input forest and intermediate state. -/
+structure Receipt [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)]
+    (formulas : SourceGuards.Formulas FullSyntax.Formula) (solver : SourceGuards.Entailment FullSyntax.Formula)
+    (inventory : Inventory) (path : List Int) (values : List (Value Symbol Guard))
+    (before : Checked width) (memo : Memo) (output : Value Symbol Guard) (after : Checked width)
+    (saved : Memo) (memos final : Memos) : Prop where
+  actual : ∃ projected middle current,
+    SourceCurrentConjunctionTargetProjection.Receipt formulas solver inventory path values before projected middle memos current ∧
+    SourceCurrentAllocatedMerge.Receipt formulas solver inventory SourceCurrentAllocatedMerge.literalClear
+      projected middle memo output after saved current final
+  ready : Ready after
+  admitted : At formulas solver inventory after
+  effects : SourceCurrentConjunctionRowsAllocation.Effects (physical before) (physical after)
+  stored : Stored after.native.machine.heap saved
+  covered : ∀ ambient, CacheCovers (SourceEqualityPCSGuard.holds formulas solver) ambient saved
+  available : Available after.native.machine.heap output
+  closed : output.free = []
+  originals : Values after.native.machine.heap values
+  nodes : after.native.nodes = before.native.nodes
+  edges : after.native.edges = before.native.edges
+  domains : after.native.machine.domains = before.native.machine.domains
+  retained : Extends memo saved
+  globals : Valid after.native.machine.heap final
+  unfolding : Extends memos.unfolding final.unfolding
+  query : final.query = memos.query
+  included : path ≠ [] → ∀ ambient symbol terms part,
+    All₂ (meaning (SourceEqualityPCSGuard.holds formulas solver) ambient) values terms →
+    SymbolicSignedPaths.lookup (.node symbol terms) path = some part →
+    meaning (SourceEqualityPCSGuard.holds formulas solver) ambient output part
+  root_covered : path = [] → ∀ ambient term,
+    (∃ value ∈ values, meaning (SourceEqualityPCSGuard.holds formulas solver) ambient value term) →
+    meaning (SourceEqualityPCSGuard.holds formulas solver) ambient output term
+
+/-- Initial selected support constructs projection, merge, and all returned invariants. -/
+theorem complete [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)]
+    (formulas : SourceGuards.Formulas FullSyntax.Formula) (solver : SourceGuards.Entailment FullSyntax.Formula)
+    (inventory : Inventory) (path : List Int) (values : List (Value Symbol Guard))

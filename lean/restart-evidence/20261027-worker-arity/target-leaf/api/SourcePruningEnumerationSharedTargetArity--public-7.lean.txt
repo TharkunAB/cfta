@@ -1,0 +1,8 @@
+theorem Receipt.arity_heap
+    {formulas : SourceGuards.Formulas FullSyntax.Formula} {solver : SourceGuards.Entailment FullSyntax.Formula}
+    {inventory initialInventory : Inventory} {record : SourceEqualityClassOrder.Record} {values : List (Value Symbol Guard)}
+    {base : InternedConstructorTemplates.State Symbol Guard} {path : EqualityNormalize.Path} {input result : Value Symbol Guard}
+    {before after : SharedState width} {memos final : Memos}
+    (receipt : Receipt formulas solver inventory record values base path input before result after memos final)
+    (ready : SharedReady formulas solver initialInventory record values base before) (known : Values base values)
+    (heap : Heap before.checked.native.machine.heap) : Heap after.checked.native.machine.heap

@@ -1,0 +1,8 @@
+/-- The source fast path compares ordered interned edge identities before constructing a node. -/
+def modify [DecidableEq (EdgeKey Symbol Guard)] (original : Value Symbol Guard)
+    (oldRows newRows : List (EdgeValue Symbol Guard)) (before : NativeState width Symbol Guard) :
+    Value Symbol Guard × NativeState width Symbol Guard :=
+  if newRows.map (fun edge => edge.entry.identity) = oldRows.map (fun edge => edge.entry.identity) then (original, before)
+  else
+    let built := run (makeNode newRows) before.machine.heap
+    (built.1, advanceHeap before built.2)

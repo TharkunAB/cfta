@@ -1,0 +1,82 @@
+/-- Actual operand receipts derive probes through their literal projection and allocated merge. -/
+theorem operand_heap
+    {formulas : SourceGuards.Formulas FullSyntax.Formula} {solver : SourceGuards.Entailment FullSyntax.Formula}
+    {inventory : Inventory} {path : List Int} {values : List (Value Symbol Guard)}
+    {before after : Checked width} {memo saved : Memo} {output : Value Symbol Guard} {memos final : Memos}
+    (receipt : SourceCurrentAllocatedMergeOperand.Receipt formulas solver inventory path values before memo output after saved memos final)
+    (ready : ClassReady before) (available : Values before.native.machine.heap values)
+    (stored : Stored before.native.machine.heap memo) (probes : Heap before.native.machine.heap) : Heap after.native.machine.heap := by
+  obtain ⟨projected, middle, current, projection, merged⟩ := receipt.actual
+  have middleProbes := SourceCurrentAllocatedProbeExposure.forest_heap projection.graph ready.semantic ready.costs available probes
+  cases merged.actual with
+  | done actual =>
+      exact SourceCurrentAllocatedProbeMerge.allocated_call_heap actual
+        (SourceCurrentAllocatedConjunctionMemo.ready middle projection.ready.good projection.ready.semantic projection.ready.costs)
+        (stored.grows projection.effects.keeps) projection.available middleProbes
+
+/-- Each actual fold read supplies its own reached readiness and merge residency. -/
+theorem fold_heap
+    {formulas : SourceGuards.Formulas FullSyntax.Formula} {solver : SourceGuards.Entailment FullSyntax.Formula}
+    {values : List (Value Symbol Guard)} {seed : List Int} {paths : List (List Int)}
+    {before after : Checked width} {memo saved : Memo} {result : Value Symbol Guard} {memos final : Memos}
+    {actual : SourceCurrentAllocatedTargetGraph.Fold values seed paths before memo result after saved}
+    (reads : FoldReads formulas solver actual memos final) (ready : ClassReady before)
+    (available : Values before.native.machine.heap values) (stored : Stored before.native.machine.heap memo)
+    (probes : Heap before.native.machine.heap) :
+    ClassReady after ∧ Values after.native.machine.heap values ∧ Stored after.native.machine.heap saved ∧ Heap after.native.machine.heap := by
+  induction reads with
+  | nil receipt => exact ⟨receipt.ready, receipt.originals, receipt.stored, operand_heap receipt ready available stored probes⟩
+  | cons receipt remaining query ih =>
+      obtain ⟨laterReady, laterValues, laterStored, laterProbes⟩ := ih receipt.ready receipt.originals receipt.stored
+        (operand_heap receipt ready available stored probes)
+      refine ⟨query.ready, fun value member => query.effects.keeps.available value (laterValues value member),
+        laterStored.grows query.effects.keeps, ?_⟩
+      cases query.actual with
+      | run trace => exact SourceCurrentAllocatedMuRebuild.trace_heap trace laterReady.semantic laterProbes
+
+/-- Actual target reads preserve probes at the same final checked state and merge memo. -/
+theorem target_heap
+    {formulas : SourceGuards.Formulas FullSyntax.Formula} {solver : SourceGuards.Entailment FullSyntax.Formula}
+    {values : List (Value Symbol Guard)} {paths : List (List Int)}
+    {before after : Checked width} {memo saved : Memo} {result : Value Symbol Guard} {memos final : Memos}
+    {actual : SourceCurrentAllocatedTargetGraph.Target values paths before memo result after saved}
+    (reads : TargetReads formulas solver actual memos final) (ready : ClassReady before)
+    (available : Values before.native.machine.heap values) (stored : Stored before.native.machine.heap memo)
+    (probes : Heap before.native.machine.heap) : Heap after.native.machine.heap := by
+  cases reads with
+  | nil => exact probes
+  | cons reads => exact (fold_heap reads ready available stored probes).2.2.2
+
+/-- Shared forcing follows the literal hit or the actual target miss reads. -/
+theorem force_heap
+    {formulas : SourceGuards.Formulas FullSyntax.Formula} {solver : SourceGuards.Entailment FullSyntax.Formula}
+    {inventory : Inventory} {record : SourceEqualityClassOrder.Record} {values : List (Value Symbol Guard)}
+    {base : InternedConstructorTemplates.State Symbol Guard} {path : EqualityNormalize.Path}
+    {before after : SharedState width} {result : Value Symbol Guard} {memos final : Memos}
+    {actual : SourceCurrentAllocatedSharedTargetForce.Force record values path before result after}
+    (reads : SourceCurrentAllocatedSharedTargetForce.Reads formulas solver actual memos final)
+    (ready : SharedReady formulas solver inventory record values base before) (known : Values base values)
+    (probes : Heap before.checked.native.machine.heap) : Heap after.checked.native.machine.heap := by
+  cases reads with
+  | hit => exact probes
+  | miss _ reads =>
+      exact target_heap reads ready.checked
+        (fun value member => ready.captured.available value (known value member)) ready.stored probes
+
+/-- The actual leaf force precedes its checked native request at the returned heap. -/
+theorem leaf_heap
+    {formulas : SourceGuards.Formulas FullSyntax.Formula} {solver : SourceGuards.Entailment FullSyntax.Formula}
+    {inventory : Inventory} {record : SourceEqualityClassOrder.Record} {values : List (Value Symbol Guard)}
+    {base : InternedConstructorTemplates.State Symbol Guard} {path : EqualityNormalize.Path} {input result : Value Symbol Guard}
+    {before after : SharedState width} {memos final : Memos}
+    {actual : SourceCurrentAllocatedSharedTargetLeaf.Leaf record values path input before result after}
+    (reads : SourceCurrentAllocatedSharedTargetLeaf.Reads formulas solver actual memos final)
+    (ready : SharedReady formulas solver inventory record values base before) (known : Values base values)
+    (probes : Heap before.checked.native.machine.heap) : Heap after.checked.native.machine.heap := by
+  cases reads with
+  | apply first query =>
+      have middleProbes := force_heap first.reads ready known probes
+      cases query.actual with
+      | run trace => exact SourceCurrentAllocatedMuRebuild.trace_heap trace first.ready.checked.semantic middleProbes
+
+end MicroCFTA.SourceCurrentAllocatedProbeTargets

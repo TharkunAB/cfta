@@ -1,0 +1,28 @@
+theorem verified
+    (formulas : SourceGuards.Formulas FullSyntax.Formula) (solver : SourceGuards.Entailment FullSyntax.Formula)
+    (inventory : Inventory)
+    {budget : Nat} {unconstrained reaches : Value Symbol Guard → Bool} {values results : List (Value Symbol Guard)}
+    {classes selected : Constraints} {before middle : Checked width} {fourth savedFourth : Fourth}
+    (scan : Scan budget unconstrained reaches values classes before fourth none selected middle savedFourth)
+    (ready : Ready before) (admitted : At formulas solver inventory before)
+    (available : Values before.native.machine.heap values)
+    (proper : ∀ paths ∈ classes, ∀ path ∈ paths, path ≠ [])
+    (active : ∀ paths ∈ classes, Nontrivial paths)
+    (correct : SourceCurrentEmptinessMemo.Correct formulas solver before.native.machine.heap fourth)
+    (ranges : SourceCurrentConjunctionClassScanCompletion.Ranges budget unconstrained reaches values classes before fourth)
+    {fuel readFuel : Nat} {heap : State Symbol Guard}
+    (actual : SourceEqualityRequiredExecution.requireAll fuel readFuel (SourceEqualitySelectedRequired.paths selected)
+      values middle.native.machine.heap = .done results heap) :
+    ∃ next, SourceCurrentConjunctionRequired.Receipt formulas solver next selected values results
+      middle (advanceHeap middle heap) := by
+  obtain ⟨next, chosen, returned, receipt, _⟩ :=
+    SourceCurrentConjunctionRequired.scan_required_complete formulas solver inventory scan ready admitted available
+      proper active correct ranges
+  obtain ⟨bound, readBound, enough⟩ := receipt.stable
+  have chosenDone := enough bound readBound (Nat.le_refl _) (Nat.le_refl _)
+  obtain ⟨sameValue, sameHeap⟩ := required_unique chosenDone actual
+  cases sameValue
+  cases sameHeap
+  exact ⟨next, receipt⟩
+
+end MicroCFTA.SourceCurrentConjunctionRequiredActual

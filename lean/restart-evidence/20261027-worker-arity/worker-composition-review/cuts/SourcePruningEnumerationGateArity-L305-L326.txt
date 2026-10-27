@@ -1,0 +1,22 @@
+theorem class_effects [DecidableEq (EdgeKey Symbol Guard)]
+    (unconstrained : Value Symbol Guard → Bool)
+    {values : List (Value Symbol Guard)} {paths : Class} {before after : State Symbol Guard} {answer : Bool}
+    (trace : ClassTrace unconstrained values paths before answer after)
+    (semantic : SemanticReady before) (costs : InternedFreshOrdinaryCostHeap.Heap before)
+    (available : ∀ value ∈ values, Available before value) (fields : Heap before) :
+    SemanticReady after ∧ Keeps before after ∧ InternedFreshOrdinaryCostHeap.Heap after ∧ Heap after := by
+  revert fields available costs semantic
+  induction trace with
+  | nil => intro semantic costs _ fields; exact ⟨semantic, pure_keeps _ semantic.ready, costs, fields⟩
+  | stop head =>
+      intro semantic costs available fields
+      exact path_effects unconstrained head semantic costs available fields
+  | next head tail ih =>
+      intro semantic costs available fields
+      obtain ⟨middleSemantic, first, middleCosts, middleFields⟩ :=
+        path_effects unconstrained head semantic costs available fields
+      obtain ⟨finalSemantic, kept, finalCosts, finalFields⟩ := ih middleSemantic middleCosts
+        (fun value member => first.available value (available value member)) middleFields
+      exact ⟨finalSemantic, first.trans kept, finalCosts, finalFields⟩
+
+end MicroCFTA.SourcePruningEnumerationGateArity.Secondary

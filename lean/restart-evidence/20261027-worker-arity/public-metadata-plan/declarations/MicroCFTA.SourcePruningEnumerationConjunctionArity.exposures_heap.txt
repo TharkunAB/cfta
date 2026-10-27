@@ -1,0 +1,6 @@
+theorem exposures_heap
+    {values : List (Value Symbol Guard)} {before after : State Symbol Guard}
+    {edges : List (List (EdgeValue Symbol Guard))}
+    (actual : Reads.Exposures values before edges after)
+    (semantic : SemanticReady before) (costs : CostHeap before)
+    (available : Values before values) (heap : Heap before) : Heap after := by

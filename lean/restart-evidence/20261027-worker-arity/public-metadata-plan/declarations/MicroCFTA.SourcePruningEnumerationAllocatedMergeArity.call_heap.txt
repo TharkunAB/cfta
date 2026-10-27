@@ -1,0 +1,7 @@
+theorem call_heap
+    {clear : Guard → Bool} {input output : Value Symbol Guard}
+    {before after : SourceCurrentAllocatedMergeGraph.State} {memo saved : SourceCurrentAllocatedMergeGraph.Memo}
+    (actual : SourceCurrentAllocatedMergeGraph.Call clear input before memo output after saved)
+    (ready : SourceCurrentConjunctionRowsAllocation.Ready before)
+    (stored : SourceCurrentMemoMergeEffects.Stored before.heap memo) (available : Available before.heap input)
+    (heap : Heap before.heap) : Heap after.heap :=

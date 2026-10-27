@@ -1,0 +1,22 @@
+    (base : InternedConstructorTemplates.State Symbol Guard) (path : Path) (input : Value Symbol Guard)
+    (before : State width) (result : Value Symbol Guard) (after : State width) (memos final : Memos) : Prop where
+  actual : Leaf record values path input before result after
+  reads : Reads formulas solver actual memos final
+  ready : Ready formulas solver inventory record values base after
+  effects : SourceCurrentConjunctionRowsAllocation.Effects (physical before.checked) (physical after.checked)
+  extension : SourceRecursiveIntersectionKernel.Extension before.checked.native.machine after.checked.native.machine
+  available : Available after.checked.native.machine.heap result
+  closed : result.free = []
+  slots : Retains before after
+  retained : Extends before.memo after.memo
+  globals : SourceCurrentSubsumesQueryMemos.Effect before.checked.native.machine.heap after.checked.native.machine.heap memos final
+  narrows : ∀ ambient term, meaning (SourceEqualityPCSGuard.holds formulas solver) ambient result term →
+    meaning (SourceEqualityPCSGuard.holds formulas solver) ambient input term
+  preserves : ∀ ambient symbol terms part,
+    All₂ (meaning (SourceEqualityPCSGuard.holds formulas solver) ambient) values terms →
+    EqualityNormalize.ClassSat (.node symbol terms) record.paths →
+    (Term.node symbol terms).atPath path = some part →
+    meaning (SourceEqualityPCSGuard.holds formulas solver) ambient input part →
+    meaning (SourceEqualityPCSGuard.holds formulas solver) ambient result part
+
+private theorem of_parts [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)]

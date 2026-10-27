@@ -1,0 +1,22 @@
+        cases List.mem_singleton.mp included
+        exact available
+      · exact heap
+end Generic
+
+local notation "Symbol" => SourceObservations.Label FullSyntax.Formula
+local notation "Guard" => SourceSymbolicIndex.Constraint FullSyntax.Formula
+local notation "Physical" => SourceCurrentConjunctionRowsAllocation.State Symbol FullSyntax.Formula
+variable [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)] [DecidableEq (Value Symbol Guard)]
+
+/-- An actual conjunction memo hit or miss retains arity without a memo-correctness premise. -/
+theorem call_heap
+    {budget : Nat} {query : Value Symbol Guard} {before after : Physical} {answer : Bool}
+    {memo saved : SourceCurrentEmptinessMemo.Memo}
+    (actual : SourceCurrentConjunctionMemo.Call budget memo query before answer after saved)
+    (ready : SourceCurrentConjunctionRowsAllocation.Ready before)
+    (available : Available before.heap query) (heap : Heap before.heap) : Heap after.heap := by
+  cases actual with
+  | hit _ => exact heap
+  | miss _ decision => exact decision_heap decision ready available heap
+
+end MicroCFTA.SourcePruningEnumerationConjunctionArity

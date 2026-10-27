@@ -1,0 +1,20 @@
+
+/-- An actual query receipt preserves the full outer caller at its literal returned checked state. -/
+theorem receipt_post [DecidableEq Symbol]
+    (initial : Context formulas solver inventory before memos)
+    (receipt : Receipt formulas solver next left right before.checked value after memos) :
+    Post formulas solver next before
+      (SourceCurrentAllocatedPartialState.advance before after before.fourth before.merge) memos := by
+  have probes : InternedFreshOrdinaryProbeHeap.Heap after.native.machine.heap := by
+    cases receipt.actual with
+    | run trace => exact SourceCurrentAllocatedMuRebuild.trace_heap trace initial.ready.semantic initial.probes
+  exact ⟨⟨receipt.ready, receipt.admitted,
+    initial.sound.advance formulas solver after before.fourth before.merge receipt.effects,
+    initial.stored.grows receipt.effects.keeps, initial.covered,
+    SourceCurrentEmptinessMemo.grows formulas solver receipt.effects.keeps before.fourth initial.correct,
+    receipt.globals, probes⟩, receipt.effects, Cache.extends_refl _, fun _ _ found => found⟩
+
+/-- A recorded target step derives the full caller postcondition from its own physical checks. -/
+theorem Step.caller_post [DecidableEq Symbol]
+    (initial : Context formulas solver inventory before memos)
+    (leftAvailable : Available before.checked.native.machine.heap left)

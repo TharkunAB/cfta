@@ -1,0 +1,63 @@
+structure Ready (state : Checked width) : Prop where
+  good : Good state
+  semantic : SemanticReady state.native.machine.heap
+  costs : CostHeap state.native.machine.heap
+  scopedCache : SourceCurrentAllocatedNativeScopeCache.Scoped state.native
+  idle : SourceRecursiveIntersectionNative.Idle state.native
+
+/-- Constructor-only effects retain every checked invariant at the same native tables. -/
+theorem advance_ready (before : Checked width) (after : Physical) (ready : Ready before)
+    (effects : SourceCurrentConjunctionRowsAllocation.Effects (physical before) after) :
+    Ready (advancePhysical before after) :=
+  ⟨SourceCurrentAllocatedConjunctionMemo.advance_good before after ready.good effects,
+    effects.ready.semantic, effects.ready.costs,
+    SourceCurrentAllocatedConjunctionMemo.advance_scoped before after ready.scopedCache,
+    SourceCurrentAllocatedConjunctionMemo.advance_idle before after ready.idle⟩
+
+/-- Each actual primary gate derives readiness and retains the original forest. -/
+theorem primary_effects [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)]
+    (unconstrained reaches : Value Symbol Guard → Bool)
+    {values : List (Value Symbol Guard)} {paths : Class} {before : Checked width}
+    {answer : Bool} {heap : State Symbol Guard}
+    (actual : EndpointStatefulGateTrace.ClassTrace unconstrained reaches values paths
+      before.native.machine.heap answer heap)
+    (ready : Ready before) (available : Values before.native.machine.heap values) :
+    Ready (advanceHeap before heap) ∧
+      SourceCurrentConjunctionRowsAllocation.Effects (physical before) (physical (advanceHeap before heap)) ∧
+      Values (advanceHeap before heap).native.machine.heap values := by
+  have first := SourceCurrentAllocatedGateFields.primary_class unconstrained reaches actual
+    (SourceCurrentAllocatedConjunctionMemo.ready before ready.good ready.semantic ready.costs) available
+  exact ⟨advance_ready before ⟨heap, before.operations⟩ ready first.1, first.1, first.2⟩
+
+/-- Each actual secondary gate derives readiness in its actual returned heap. -/
+theorem secondary_effects [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)]
+    (unconstrained : Value Symbol Guard → Bool)
+    {values : List (Value Symbol Guard)} {paths : Class} {before : Checked width}
+    {answer : Bool} {heap : State Symbol Guard}
+    (actual : SourceCurrentSecondaryTrace.ClassTrace unconstrained values paths
+      before.native.machine.heap answer heap)
+    (ready : Ready before) (available : Values before.native.machine.heap values) :
+    Ready (advanceHeap before heap) ∧
+      SourceCurrentConjunctionRowsAllocation.Effects (physical before) (physical (advanceHeap before heap)) ∧
+      Values (advanceHeap before heap).native.machine.heap values := by
+  have first := SourceCurrentAllocatedGateFields.secondary_class unconstrained actual
+    (SourceCurrentAllocatedConjunctionMemo.ready before ready.good ready.semantic ready.costs) available
+  exact ⟨advance_ready before ⟨heap, before.operations⟩ ready first.1, first.1, first.2⟩
+
+/-- Each reached current memo call derives readiness and its final fourth-memo invariant. -/
+theorem memo_effects [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)]
+    [DecidableEq (Value Symbol Guard)]
+    (formulas : SourceGuards.Formulas FullSyntax.Formula) (solver : SourceGuards.Entailment FullSyntax.Formula)
+    {budget : Nat} {memo saved : Memo} {query : Value Symbol Guard}
+    {before : Checked width} {answer : Bool} {after : Physical}
+    (actual : SourceCurrentConjunctionMemo.Call budget memo query (physical before) answer after saved)
+    (ready : Ready before) (available : Available before.native.machine.heap query)
+    (correct : SourceCurrentEmptinessMemo.Correct formulas solver before.native.machine.heap memo) :
+    Ready (advancePhysical before after) ∧
+      SourceCurrentConjunctionRowsAllocation.Effects (physical before) (physical (advancePhysical before after)) ∧
+      SourceCurrentEmptinessMemo.Correct formulas solver (advancePhysical before after).native.machine.heap saved ∧
+      SourceCurrentEmptinessMemo.AnswerSound formulas solver query answer ∧
+      SourceCurrentEmptinessMemo.Extends memo saved := by
+  obtain ⟨receipt, finalCorrect, sound, retained⟩ := SourceCurrentAllocatedConjunctionMemo.call_effects
+    formulas solver actual ready.good ready.semantic ready.costs ready.idle available correct
+  exact ⟨advance_ready before after ready receipt.effects, receipt.effects, finalCorrect, sound, retained⟩

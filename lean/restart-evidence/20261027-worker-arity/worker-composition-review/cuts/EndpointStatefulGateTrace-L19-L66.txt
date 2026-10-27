@@ -1,0 +1,48 @@
+inductive NodeTrace [DecidableEq (EdgeKey Symbol Guard)] (unconstrained reaches : Value Symbol Guard → Bool) :
+    Path → Value Symbol Guard → State Symbol Guard → Bool → State Symbol Guard → Prop where
+  | empty : NodeTrace unconstrained reaches path .empty state false state
+  | reference : NodeTrace unconstrained reaches path (.reference name) state true state
+  | union (members : List (Value Symbol Guard)) : NodeTrace unconstrained reaches path (.union entry members depth free) state true state
+  | finite (fast : (depth == 0 && free.isEmpty) = true) :
+      NodeTrace unconstrained reaches path (.node entry edges depth free) state false state
+  | endpoint (slow : (depth == 0 && free.isEmpty) = false) :
+      NodeTrace unconstrained reaches [] (.node entry edges depth free) state (!free.isEmpty || reaches (.node entry edges depth free)) state
+  | branches (slow : (depth == 0 && free.isEmpty) = false)
+      (trace : EdgesTrace unconstrained reaches index rest edges state answer final) :
+      NodeTrace unconstrained reaches (index :: rest) (.node entry edges depth free) state answer final
+  | constrained (blocked : unconstrained (.mu entry body depth ordinary) = false) :
+      NodeTrace unconstrained reaches path (.mu entry body depth ordinary) state true state
+  | closed (plain : unconstrained (.mu entry body depth ordinary) = true)
+      (closed : (Value.mu entry body depth ordinary).free.isEmpty = true) :
+      NodeTrace unconstrained reaches path (.mu entry body depth ordinary) state false state
+  | unfold (plain : unconstrained (.mu entry body depth ordinary) = true)
+      (opened : (Value.mu entry body depth ordinary).free.isEmpty = false)
+      (actual : InternedFreshOrdinaryStoredSubstitution.unfold (.mu entry body depth ordinary) state = .done next after)
+      (trace : NodeTrace unconstrained reaches path next after answer final) :
+      NodeTrace unconstrained reaches path (.mu entry body depth ordinary) state answer final
+
+/-- A child lookup either returns false immediately or follows the exact selected source child. -/
+inductive ChildTrace [DecidableEq (EdgeKey Symbol Guard)] (unconstrained reaches : Value Symbol Guard → Bool) :
+    List (Value Symbol Guard) → Nat → Path → State Symbol Guard → Bool → State Symbol Guard → Prop where
+  | missing (absent : values[index]? = none) : ChildTrace unconstrained reaches values index path state false state
+  | present (found : values[index]? = some value) (trace : NodeTrace unconstrained reaches path value state answer final) :
+      ChildTrace unconstrained reaches values index path state answer final
+
+/-- Ordered edge disjunction threads false results and stops at its first true result. -/
+inductive EdgesTrace [DecidableEq (EdgeKey Symbol Guard)] (unconstrained reaches : Value Symbol Guard → Bool) :
+    Nat → Path → List (EdgeValue Symbol Guard) → State Symbol Guard → Bool → State Symbol Guard → Prop where
+  | nil : EdgesTrace unconstrained reaches index path [] state false state
+  | stop (head : ChildTrace unconstrained reaches edge.children index path state true final) :
+      EdgesTrace unconstrained reaches index path (edge :: rest) state true final
+  | next (head : ChildTrace unconstrained reaches edge.children index path state false middle)
+      (tail : EdgesTrace unconstrained reaches index path rest middle answer final) :
+      EdgesTrace unconstrained reaches index path (edge :: rest) state answer final
+end
+
+/-- A completed child worker follows the corresponding logical lookup and source query. -/
+theorem child_trace_of_done [DecidableEq (EdgeKey Symbol Guard)] (unconstrained reaches : Value Symbol Guard → Bool)
+    (fuel : Nat) (sound : ∀ path value state answer final,
+      nodeMeets unconstrained reaches fuel path value state = .done (some answer) final →
+      NodeTrace unconstrained reaches path value state answer final)
+    (values : List (Value Symbol Guard)) (index : Nat) (path : Path)
+    (state : State Symbol Guard) (answer : Bool) (final : State Symbol Guard)

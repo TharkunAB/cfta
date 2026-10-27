@@ -1,0 +1,4 @@
+theorem read_heap [DecidableEq (EdgeKey Symbol Guard)]
+    {value : Value Symbol Guard} {before after : State Symbol Guard} {edges : List (EdgeValue Symbol Guard)}
+    (actual : SourceEqualityProjectionRead.Read value before edges after)
+    (facts : Facts before) (available : Available before value) (heap : Heap before) : Heap after := by

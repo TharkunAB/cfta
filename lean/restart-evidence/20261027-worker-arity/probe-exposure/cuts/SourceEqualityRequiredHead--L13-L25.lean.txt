@@ -1,0 +1,13 @@
+open MergedFreshOrdinaryExposure
+
+/-- The source first exposes rows, then constructs the ordinary row node. -/
+inductive Head [DecidableEq (EdgeKey Symbol Guard)] :
+    Value Symbol Guard → State Symbol Guard → Value Symbol Guard → State Symbol Guard → Prop where
+  | read (fuel : Nat) (edges : List (EdgeValue Symbol Guard)) (middle : State Symbol Guard)
+      (exposed : nodeEdges fuel value before = .done edges middle)
+      (rebuilt : run (makeNode edges) middle = (result, after)) : Head value before result after
+
+/-- Each closed available source value has a finite complete physical head normalization. -/
+theorem complete [DecidableEq (EdgeKey Symbol Guard)] (value : Value Symbol Guard)
+    (state : State Symbol Guard) (ready : Ready state) (available : Available state value) (closed : value.free = []) :
+    ∃ result after, Head value state result after ∧ Keeps state after ∧ Available after result ∧

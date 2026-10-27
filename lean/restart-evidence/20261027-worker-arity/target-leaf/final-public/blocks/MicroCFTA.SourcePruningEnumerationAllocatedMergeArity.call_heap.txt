@@ -1,0 +1,20 @@
+MicroCFTA.SourcePruningEnumerationAllocatedMergeArity.call_heap
+  [DecidableEq (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)]
+  [DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  {clear : MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula → Bool}
+  {input output :
+    MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)}
+  {before after : MicroCFTA.SourceCurrentAllocatedMergeGraph.State}
+  {memo saved : MicroCFTA.SourceCurrentAllocatedMergeGraph.Memo}
+  (actual : MicroCFTA.SourceCurrentAllocatedMergeGraph.Call clear input before memo output after saved)
+  (ready : MicroCFTA.SourceCurrentConjunctionRowsAllocation.Ready before)
+  (stored : MicroCFTA.SourceCurrentMemoMergeEffects.Stored before.heap memo)
+  (available : MicroCFTA.InternedProbeProvenance.Available before.heap input)
+  (heap : MicroCFTA.SourcePruningEnumerationArityOrigins.Heap before.heap) :
+  MicroCFTA.SourcePruningEnumerationArityOrigins.Heap after.heap
+'MicroCFTA.SourcePruningEnumerationAllocatedMergeArity.call_heap' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]

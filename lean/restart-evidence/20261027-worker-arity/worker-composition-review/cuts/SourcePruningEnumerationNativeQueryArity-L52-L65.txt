@@ -1,0 +1,14 @@
+
+/-- Every actual complete native node query retains arity of its entire returned edge-record heap. -/
+theorem node_query_heap (request : NodeRequest Symbol Guard)
+    (before after : Checked width) (value : Value Symbol Guard) (fuel : Nat)
+    (valid : Good before) (heap : Heap before.native.machine.heap)
+    (trace : Trace fuel (.code (requestNode request.domain request.left request.right)) before (.code (.pure value)) after) :
+    Heap after.native.machine.heap :=
+  (query_heaps fuel).1 request before after value valid heap trace
+
+/-- Every actual complete native edge query retains arity of all old and newly created edge records. -/
+theorem edge_query_heap (request : EdgeRequest Symbol Guard)
+    (before after : Checked width) (value : EdgeValue Symbol Guard) (fuel : Nat)
+    (valid : Good before) (heap : Heap before.native.machine.heap)
+    (trace : Trace fuel (.code (requestEdge request.domain request.left request.right)) before (.code (.pure value)) after) :

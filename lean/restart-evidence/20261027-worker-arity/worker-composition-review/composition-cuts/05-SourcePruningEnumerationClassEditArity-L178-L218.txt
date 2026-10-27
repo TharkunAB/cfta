@@ -1,0 +1,41 @@
+      RowsLaw (width := width) (formulas := formulas) (solver := solver) (base := base)
+        record originals entries edges (advanceHeap middle heap) results after current saved →
+      RowsLaw (width := width) (formulas := formulas) (solver := solver) (base := base)
+        record originals entries (edge :: edges) before (result :: results) after memos saved := by
+    intro record originals memos current saved entries before values middle result heap edges results after edge children rebuilt rest
+      firstRead _ firstIH restIH known inventory populated allowed ready resident safe valid arity
+    have facts := ready.checked.semantic.ready.semantic.1.normal.facts
+    have childInputs := facts.cached.edges edge.entry.key edge (resident _ List.mem_cons_self)
+    obtain ⟨middleInventory, first⟩ := SourceCurrentAllocatedSharedEditEffects.children_effects firstRead
+      populated allowed ready childInputs (safe _ List.mem_cons_self) valid
+    have middleHeap := firstIH known inventory populated allowed ready childInputs (safe _ List.mem_cons_self) valid arity
+    have fits : SourcePruningEnumerationArityOrigins.Fits edge.entry.key.constraint values.length := by
+      rw [children_length children]
+      exact arity.edge _ facts.coherent edge (resident _ List.mem_cons_self)
+    have rebuiltHeap : Heap (advanceHeap middle heap).checked.native.machine.heap := by
+      change Heap heap
+      simpa only [rebuilt] using SourcePruningEnumerationArityOrigins.edge_heap edge.entry.key.symbol
+        edge.entry.key.constraint values middle.checked.native.machine.heap middleHeap fits
+    have field := (ready.checked.good.fields _ _ (resident _ List.mem_cons_self)).grows first.effects.grows
+    have physical := SourceCurrentAllocatedSharedEditEffects.edge_physical first.ready
+      edge.entry.key.symbol edge.entry.key.constraint values field first.available
+    have edgeResult : Ready formulas solver middleInventory record originals base (advanceHeap middle heap) ∧
+        SourceCurrentConjunctionRowsAllocation.Effects
+          (SourceCurrentAllocatedNativeEffects.physical middle.checked)
+          (SourceCurrentAllocatedNativeEffects.physical (advanceHeap middle heap).checked) ∧
+        InternedEdgeResidency.EdgeResident heap result ∧ result.children = values := by
+      simpa only [rebuilt] using physical
+    have keeps := first.effects.keeps.trans edgeResult.2.1.keeps
+    have currentValid := SourceQueryUnfoldMemo.valid_grows _ _ first.ready.checked.semantic
+      edgeResult.2.1.keeps current first.globals.valid
+    exact restIH known middleInventory populated allowed edgeResult.1
+      (fun original member => InternedEdgeResidency.edge_grows _ _ keeps.growth original
+        (resident original (List.mem_cons_of_mem _ member)))
+      (fun original member => safe original (List.mem_cons_of_mem _ member)) currentValid rebuiltHeap
+  refine ⟨?_, ?_, ?_⟩
+  · intro record originals edits value before result after memos final actual reads
+    exact NodeReads.rec
+      (motive_1 := fun {record originals edits value before result after} _ memos final _ =>
+        NodeLaw (width := width) (formulas := formulas) (solver := solver) (base := base)
+          record originals edits value before result after memos final)
+      (motive_2 := fun {record originals entries offset values before results after} _ memos final _ =>

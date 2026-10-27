@@ -1,0 +1,38 @@
+
+/-- The original reached ranges derive arity at the exact supplied fold endpoint. -/
+theorem fold_heap
+    (unconstrained : Value Symbol Guard → Bool) (anchor : State Symbol Guard)
+    (anchorSemantic : SemanticReady anchor) (anchorReady : GateReady anchor)
+    {values : List (Value Symbol Guard)} {paths : List (List Int)} {before after : Checked width}
+    {result : Value Symbol Guard} (actual : Fold values paths before result after)
+    (ranges : FoldRanges values paths before) (good : Good before) (ready : Ready (physical before))
+    (scopes : Scoped before.native) (idle : Idle before.native)
+    (available : Values before.native.machine.heap values) (growth : Grows anchor before.native.machine.heap)
+    (supported : ∀ path ∈ paths, PathSupport unconstrained anchor path values)
+    (heap : Heap before.native.machine.heap) : Heap after.native.machine.heap := by
+  obtain ⟨chosen, reached, completed, _good, _effects, _extension, _scoped, _idle, _resident, _closed, current⟩ :=
+    fold_complete_heap unconstrained anchor anchorSemantic anchorReady values paths before ranges good ready scopes idle
+      available growth supported heap
+  obtain ⟨rfl, rfl⟩ := actual.unique completed
+  exact current
+
+/-- The actual first-seed rotation retains arity at its complete returned checked state. -/
+theorem seeded_heap
+    (unconstrained : Value Symbol Guard → Bool) (anchor : State Symbol Guard)
+    (anchorSemantic : SemanticReady anchor) (anchorReady : GateReady anchor)
+    {values : List (Value Symbol Guard)} {paths : List (List Int)} {before after : Checked width}
+    {result : Value Symbol Guard} (actual : Seeded values paths before result after)
+    (ranges : SeededRanges values paths before) (good : Good before) (ready : Ready (physical before))
+    (scopes : Scoped before.native) (idle : Idle before.native)
+    (available : Values before.native.machine.heap values) (growth : Grows anchor before.native.machine.heap)
+    (supported : ∀ path ∈ paths, PathSupport unconstrained anchor path values)
+    (heap : Heap before.native.machine.heap) : Heap after.native.machine.heap := by
+  cases actual with
+  | nil => exact heap
+  | nonempty fold =>
+      apply fold_heap unconstrained anchor anchorSemantic anchorReady fold ranges good ready scopes idle available growth
+      · intro path member
+        exact supported path (by simpa [List.mem_append, List.mem_cons, or_comm] using member)
+      · exact heap
+
+end MicroCFTA.SourcePruningEnumerationSeededArity

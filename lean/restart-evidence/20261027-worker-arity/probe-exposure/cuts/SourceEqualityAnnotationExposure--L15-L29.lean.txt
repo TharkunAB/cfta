@@ -1,0 +1,15 @@
+open MergedSourceExposure (Result)
+open MergedColdReaderClosedInputs (ClosedValues)
+open SourceRecursiveIntersectionSemanticHeap (SemanticHeap)
+open SourceEqualityAnnotationHeap (Heap)
+open MergedFreshOrdinaryExposure
+
+/-- Prepending constructor edges leaves the actual result cache unchanged. -/
+theorem prepend_state (result : Result Symbol Guard) (edges : List (EdgeValue Symbol Guard)) :
+    (result.prepend edges).state = result.state := by cases result <;> rfl
+
+/-- Canonical edge ordering leaves the actual result cache unchanged. -/
+theorem canonical_state (result : Result Symbol Guard) : result.canonical.state = result.state := by cases result <;> rfl
+
+/-- Every bounded actual cold worklist retains the physical annotation heap. -/
+theorem collect_heap (annotation : Guard → Prop) [DecidableEq (EdgeKey Symbol Guard)] (fuel : Nat) (state : State Symbol Guard)

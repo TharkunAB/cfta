@@ -1,0 +1,7 @@
+theorem node_constructor [DecidableEq (EdgeKey Symbol Guard)]
+    (edges : List (EdgeValue Symbol Guard)) (state : State Symbol Guard)
+    (semantic : SemanticReady state) (costs : CostHeap state) (fields : Heap state)
+    (resident : Edges state edges) :
+    Keeps state (run (makeNode edges) state).2 ∧ SemanticReady (run (makeNode edges) state).2 ∧
+      CostHeap (run (makeNode edges) state).2 ∧ Heap (run (makeNode edges) state).2 ∧
+      Available (run (makeNode edges) state).2 (run (makeNode edges) state).1 := by

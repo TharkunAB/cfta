@@ -1,0 +1,11 @@
+theorem scan_heap
+    (formulas : SourceGuards.Formulas FullSyntax.Formula) (solver : SourceGuards.Entailment FullSyntax.Formula)
+    {budget : Nat} {unconstrained reaches : Value Symbol Guard → Bool}
+    {values : List (Value Symbol Guard)} {classes selected : Constraints} {outcome : Option Class}
+    {before after : Checked width} {memo saved : Memo}
+    (actual : Scan budget unconstrained reaches values classes before memo outcome selected after saved)
+    (ready : Ready before) (available : Values before.native.machine.heap values)
+    (proper : ∀ paths ∈ classes, ∀ path ∈ paths, path ≠ [])
+    (correct : SourceCurrentEmptinessMemo.Correct formulas solver before.native.machine.heap memo)
+    (ranges : SourceCurrentConjunctionClassScanCompletion.Ranges budget unconstrained reaches values classes before memo)
+    (heap : Heap before.native.machine.heap) : Heap after.native.machine.heap := by

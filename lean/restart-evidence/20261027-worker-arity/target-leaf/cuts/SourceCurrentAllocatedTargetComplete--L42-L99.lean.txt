@@ -1,0 +1,58 @@
+    (formulas : SourceGuards.Formulas FullSyntax.Formula) (solver : SourceGuards.Entailment FullSyntax.Formula)
+    (inventory : Inventory) (values : List (Value Symbol Guard)) (paths : List (List Int))
+    (before : Checked width) (memo : Memo) (result : Value Symbol Guard) (after : Checked width)
+    (saved : Memo) (memos final : Memos) : Prop where
+  ready : Ready after
+  admitted : At formulas solver inventory after
+  effects : SourceCurrentConjunctionRowsAllocation.Effects (physical before) (physical after)
+  extension : SourceRecursiveIntersectionKernel.Extension before.native.machine after.native.machine
+  stored : Stored after.native.machine.heap saved
+  covered : ∀ ambient, CacheCovers (SourceEqualityPCSGuard.holds formulas solver) ambient saved
+  available : Available after.native.machine.heap result
+  closed : result.free = []
+  originals : Values after.native.machine.heap values
+  retained : Extends memo saved
+  globals : SourceCurrentSubsumesQueryMemos.Effect before.native.machine.heap after.native.machine.heap memos final
+  included : paths ≠ [] → (∀ path ∈ paths, path ≠ []) → Includes formulas solver values paths result
+
+/-- Literal operands and checked requests supply the reached global receipts. -/
+inductive FoldReads [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)]
+    (formulas : SourceGuards.Formulas FullSyntax.Formula) (solver : SourceGuards.Entailment FullSyntax.Formula) :
+    {values : List (Value Symbol Guard)} → {seed : List Int} → {paths : List (List Int)} →
+    {before after : Checked width} → {memo saved : Memo} → {result : Value Symbol Guard} →
+    Fold values seed paths before memo result after saved → Memos → Memos → Prop where
+  | nil {operand : Operand seed values before memo result after saved}
+      (receipt : SourceCurrentAllocatedMergeOperand.Receipt formulas solver inventory seed values
+        before memo result after saved memos final) : FoldReads formulas solver (.nil operand) memos final
+  | cons {operand : Operand path values before memo value middle current}
+      {rest : Fold values seed paths middle current tail later saved}
+      {step : SourceCurrentAllocatedTargetQuery.Step value tail later result after}
+      (receipt : SourceCurrentAllocatedMergeOperand.Receipt formulas solver inventory path values
+        before memo value middle current memos nextMemos)
+      (remaining : FoldReads formulas solver rest nextMemos lastMemos)
+      (query : SourceCurrentAllocatedTargetQuery.Receipt formulas solver nextInventory value tail later result after lastMemos) :
+      FoldReads formulas solver (.cons operand rest step) memos lastMemos
+
+/-- Empty targets make no calls; nonempty targets retain the actual first-seeded reads. -/
+inductive TargetReads [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)]
+    (formulas : SourceGuards.Formulas FullSyntax.Formula) (solver : SourceGuards.Entailment FullSyntax.Formula) :
+    {values : List (Value Symbol Guard)} → {paths : List (List Int)} → {before after : Checked width} →
+    {memo saved : Memo} → {result : Value Symbol Guard} →
+    Target values paths before memo result after saved → Memos → Memos → Prop where
+  | nil : TargetReads formulas solver (.nil (values := values) (before := state) (memo := memo)) memos memos
+  | cons {actual : Fold values seed paths before memo result after saved}
+      (reads : FoldReads formulas solver actual memos final) :
+      TargetReads formulas solver (.nonempty actual) memos final
+
+private theorem tail_all {A : Type} {seed first : A} {rest : List A} {property : A → Prop}
+    (all : ∀ value ∈ seed :: first :: rest, property value) : ∀ value ∈ seed :: rest, property value := by
+  intro value member
+  rcases List.mem_cons.mp member with rfl | member
+  · exact all _ List.mem_cons_self
+  · exact all value (by simp only [List.mem_cons]; exact Or.inr (Or.inr member))
+
+private theorem operand_receipt [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)]
+    {formulas : SourceGuards.Formulas FullSyntax.Formula} {solver : SourceGuards.Entailment FullSyntax.Formula}
+    {inventory : Inventory} {values : List (Value Symbol Guard)} {path : List Int}
+    {before after : Checked width} {memo saved : Memo} {result : Value Symbol Guard} {memos final : Memos}
+    (own : SourceCurrentAllocatedMergeOperand.Receipt formulas solver inventory path values

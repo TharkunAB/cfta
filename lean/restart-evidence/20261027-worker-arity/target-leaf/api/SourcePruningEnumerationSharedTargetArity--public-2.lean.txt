@@ -1,0 +1,7 @@
+theorem operand_heap
+    {formulas : SourceGuards.Formulas FullSyntax.Formula} {solver : SourceGuards.Entailment FullSyntax.Formula}
+    {inventory : Inventory} {path : List Int} {values : List (Value Symbol Guard)}
+    {before after : Checked width} {memo saved : Memo} {output : Value Symbol Guard} {memos final : Memos}
+    (receipt : SourceCurrentAllocatedMergeOperand.Receipt formulas solver inventory path values before memo output after saved memos final)
+    (ready : ClassReady before) (available : Values before.native.machine.heap values)
+    (stored : Stored before.native.machine.heap memo) (heap : Heap before.native.machine.heap) : Heap after.native.machine.heap

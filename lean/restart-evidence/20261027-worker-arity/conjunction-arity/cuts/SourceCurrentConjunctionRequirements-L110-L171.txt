@@ -1,0 +1,62 @@
+def arity (tuple : List (EdgeValue Symbol Guard)) : Nat :=
+  ((tuple.head?).map (fun edge => edge.children.length)).getD 0
+
+/-- Every child column precedes every class requirement. -/
+def columns (tuple : List (EdgeValue Symbol Guard)) : List (List (Value Symbol Guard)) :=
+  MergedAlternativesGroups.columns (tuple.map EdgeValue.children) (arity tuple)
+
+/-- The source tuple filter supplies the same arity at each actual edge occurrence. -/
+def SameArity (tuple : List (EdgeValue Symbol Guard)) : Prop :=
+  ∀ edge ∈ tuple, edge.children.length = arity tuple
+
+/-- Each class retains its actual projection results and the next exact heap. -/
+inductive ClassRequirements [DecidableEq (EdgeKey Symbol Guard)]
+    (forests : List (List (Value Symbol Guard))) :
+    Constraints → State Symbol Guard → List (List (Value Symbol Guard)) → State Symbol Guard → Prop where
+  | nil : ClassRequirements forests [] state [] state
+  | cons (first : Projections (jobs forests paths) before projected middle)
+      (rest : ClassRequirements forests classes middle requirements after) :
+      ClassRequirements forests (paths :: classes) before (canonical projected :: requirements) after
+
+/-- A literal tuple first keeps child columns, then demands its class requirements. -/
+inductive Requirements [DecidableEq (EdgeKey Symbol Guard)]
+    (tuple : List (EdgeValue Symbol Guard)) (classes : Constraints) :
+    State Symbol Guard → List (List (Value Symbol Guard)) → State Symbol Guard → Prop where
+  | run (sameArity : SameArity tuple)
+      (actual : ClassRequirements (tuple.map EdgeValue.children) classes before requirements after) :
+      Requirements tuple classes before ((columns tuple).map canonical ++ requirements) after
+
+/-- All stored requirements have closed available operands at the actual current heap. -/
+def RowsReady (heap : State Symbol Guard) (rows : List (List (Value Symbol Guard))) : Prop :=
+  ∀ row ∈ rows, Values heap row ∧ ClosedValues row
+
+/-- A class list retains its exact number of requirements and their multiplicity. -/
+theorem ClassRequirements.length [DecidableEq (EdgeKey Symbol Guard)]
+    {forests : List (List (Value Symbol Guard))} {classes : Constraints}
+    {before after : State Symbol Guard} {requirements : List (List (Value Symbol Guard))}
+    (actual : ClassRequirements forests classes before requirements after) : requirements.length = classes.length := by
+  induction actual with
+  | nil => rfl
+  | cons _ _ ih => simpa only [List.length_cons] using congrArg Nat.succ ih
+
+/-- Actual finite class projections derive every output record and heap invariant. -/
+theorem ClassRequirements.verified [DecidableEq (EdgeKey Symbol Guard)]
+    (annotation : Guard → Prop) {forests : List (List (Value Symbol Guard))} {classes : Constraints}
+    {before after : State Symbol Guard} {requirements : List (List (Value Symbol Guard))}
+    (actual : ClassRequirements forests classes before requirements after)
+    (semantic : SemanticReady before) (costs : CostHeap before) (fields : AnnotationHeap annotation before)
+    (inputs : RowsReady before forests) : Effects annotation before after ∧ RowsReady after requirements := by
+  induction actual with
+  | nil => exact ⟨⟨pure_keeps _ semantic.ready, semantic, costs, fields⟩, by simp [RowsReady]⟩
+  | @cons paths before projected middle classes requirements after first rest ih =>
+      have own := first.verified annotation semantic costs fields
+        (SourceCurrentConjunctionCompletionReads.jobs_inputs before forests paths
+          (fun forest member => (inputs forest member).1) (fun forest member => (inputs forest member).2))
+      have canonical := canonical_values projected middle own.1.semantic own.2.1 own.2.2
+      have later := ih own.1.semantic own.1.costs own.1.annotations
+        (fun forest member => ⟨fun child included => own.1.keeps.available child ((inputs forest member).1 child included),
+          (inputs forest member).2⟩)
+      refine ⟨⟨own.1.keeps.trans later.1.keeps, later.1.semantic, later.1.costs, later.1.annotations⟩, ?_⟩
+      intro row member
+      rcases List.mem_cons.mp member with rfl | member
+      · exact ⟨fun child included => later.1.keeps.available child (canonical.1 child included), canonical.2⟩

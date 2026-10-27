@@ -1,0 +1,57 @@
+/-- Target forcing precedes the actual checked intersection at its returned state. -/
+inductive Leaf [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)]
+    (record : Record) (values : List (Value Symbol Guard)) (path : Path) (input : Value Symbol Guard) :
+    State width → Value Symbol Guard → State width → Prop where
+  | apply (forced : Force record values path before target middle)
+      (step : Step target input middle.checked result checked) :
+      Leaf record values path input before result (advance middle checked)
+
+/-- A range plan inspects only the actual returned target force. -/
+def Ranges [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)]
+    (record : Record) (values : List (Value Symbol Guard)) (path : Path)
+    (input : Value Symbol Guard) (before : State width) : Prop :=
+  ForceRanges record values path before ∧
+    ∀ target middle, Force record values path before target middle →
+      WordRanges (.code (requestNode emptyDomain target input)) middle.checked
+
+/-- Global reads follow the actual target force and the same returned checked query. -/
+inductive Reads [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)]
+    (formulas : SourceGuards.Formulas FullSyntax.Formula) (solver : SourceGuards.Entailment FullSyntax.Formula) :
+    {record : Record} → {values : List (Value Symbol Guard)} → {path : Path} → {input result : Value Symbol Guard} →
+    {before after : State width} → Leaf record values path input before result after → Memos → Memos → Prop where
+  | apply {forced : Force record values path before target middle}
+      {step : Step target input middle.checked result checked}
+      (first : SourceCurrentAllocatedSharedTargetForce.Receipt formulas solver forceInventory record values base path
+        before target middle memos current)
+      (query : SourceCurrentAllocatedTargetQuery.Receipt formulas solver next target input middle.checked result checked current) :
+      Reads formulas solver (.apply forced step) memos current
+
+/-- Actual leaf narrowing retains every live cache and the captured class state. -/
+structure Receipt [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)]
+    (formulas : SourceGuards.Formulas FullSyntax.Formula) (solver : SourceGuards.Entailment FullSyntax.Formula)
+    (inventory : Inventory) (record : Record) (values : List (Value Symbol Guard))
+    (base : InternedConstructorTemplates.State Symbol Guard) (path : Path) (input : Value Symbol Guard)
+    (before : State width) (result : Value Symbol Guard) (after : State width) (memos final : Memos) : Prop where
+  actual : Leaf record values path input before result after
+  reads : Reads formulas solver actual memos final
+  ready : Ready formulas solver inventory record values base after
+  effects : SourceCurrentConjunctionRowsAllocation.Effects (physical before.checked) (physical after.checked)
+  extension : SourceRecursiveIntersectionKernel.Extension before.checked.native.machine after.checked.native.machine
+  available : Available after.checked.native.machine.heap result
+  closed : result.free = []
+  slots : Retains before after
+  retained : Extends before.memo after.memo
+  globals : SourceCurrentSubsumesQueryMemos.Effect before.checked.native.machine.heap after.checked.native.machine.heap memos final
+  narrows : ∀ ambient term, meaning (SourceEqualityPCSGuard.holds formulas solver) ambient result term →
+    meaning (SourceEqualityPCSGuard.holds formulas solver) ambient input term
+  preserves : ∀ ambient symbol terms part,
+    All₂ (meaning (SourceEqualityPCSGuard.holds formulas solver) ambient) values terms →
+    EqualityNormalize.ClassSat (.node symbol terms) record.paths →
+    (Term.node symbol terms).atPath path = some part →
+    meaning (SourceEqualityPCSGuard.holds formulas solver) ambient input part →
+    meaning (SourceEqualityPCSGuard.holds formulas solver) ambient result part
+
+private theorem of_parts [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)]
+    {formulas : SourceGuards.Formulas FullSyntax.Formula} {solver : SourceGuards.Entailment FullSyntax.Formula}
+    {inventory next : Inventory} {record : Record} {values : List (Value Symbol Guard)}
+    {base : InternedConstructorTemplates.State Symbol Guard} {path : Path} {input target result : Value Symbol Guard}

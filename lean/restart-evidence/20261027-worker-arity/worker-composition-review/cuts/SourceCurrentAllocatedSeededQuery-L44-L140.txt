@@ -1,0 +1,97 @@
+inductive Operand [DecidableEq (EdgeKey Symbol Guard)] (path : List Int)
+    (values : List (Value Symbol Guard)) (before : Checked width) :
+    Value Symbol Guard → Checked width → Prop where
+  | force (result : Value Symbol Guard) (heap : State Symbol Guard)
+      (projected : SourceEqualityProjectionGraph.Forest path values before.native.machine.heap result heap) :
+      Operand path values before result (advancePhysical before ⟨heap, before.operations⟩)
+
+/-- Source order projects the head before the tail and its final checked request. -/
+inductive Fold [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)]
+    (values : List (Value Symbol Guard)) :
+    List (List Int) → Checked width → Value Symbol Guard → Checked width → Prop where
+  | one (operand : Operand path values before value after) : Fold values [path] before value after
+  | cons (operand : Operand path values before value middle)
+      (rest : Fold values (next :: paths) middle tail later)
+      (native : Trace fuel (.code (requestNode IntersectionEmptyDomain.emptyDomain value tail)) later
+        (.code (.pure result)) after) :
+      Fold values (path :: next :: paths) before result after
+
+/-- Empty input is literal empty. Nonempty input uses the first operand as seed. -/
+inductive Seeded [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)]
+    (values : List (Value Symbol Guard)) :
+    List (List Int) → Checked width → Value Symbol Guard → Checked width → Prop where
+  | nil (before : Checked width) : Seeded values [] before .empty before
+  | nonempty (fold : Fold values (rest ++ [seed]) before result after) :
+      Seeded values (seed :: rest) before result after
+
+/-- Only actual completed projection and tail prefixes select a native word obligation. -/
+inductive FoldRanges [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)]
+    (values : List (Value Symbol Guard)) : List (List Int) → Checked width → Prop where
+  | one : FoldRanges values [path] before
+  | cons
+      (rest : ∀ value middle, Operand path values before value middle →
+        FoldRanges values (next :: paths) middle)
+      (native : ∀ value middle tail later,
+        Operand path values before value middle → Fold values (next :: paths) middle tail later →
+        WordRanges (.code (requestNode IntersectionEmptyDomain.emptyDomain value tail)) later) :
+      FoldRanges values (path :: next :: paths) before
+
+/-- Range plans use the same first-seed rotation as the actual graph. -/
+def SeededRanges [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)]
+    (values : List (Value Symbol Guard)) (paths : List (List Int)) (before : Checked width) : Prop :=
+  match paths with
+  | [] => True
+  | seed :: rest => FoldRanges values (rest ++ [seed]) before
+
+/-- A completed projection has one result and one complete returned checked state. -/
+theorem Operand.unique [DecidableEq (EdgeKey Symbol Guard)]
+    {path : List Int} {values : List (Value Symbol Guard)} {before firstAfter secondAfter : Checked width}
+    {first second : Value Symbol Guard}
+    (left : Operand path values before first firstAfter) (right : Operand path values before second secondAfter) :
+    first = second ∧ firstAfter = secondAfter := by
+  cases left with
+  | force firstHeap left =>
+      cases right with
+      | force secondHeap right =>
+          obtain ⟨rfl, rfl⟩ := SourceEqualityProjectionAPI.forest_unique left right
+          exact ⟨rfl, rfl⟩
+
+private theorem checked_unique [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)]
+    {A : Type} {firstFuel secondFuel : Nat} {control : Control A}
+    {before firstAfter secondAfter : Checked width} {first second : A}
+    (left : Trace firstFuel control before (.code (.pure first)) firstAfter)
+    (right : Trace secondFuel control before (.code (.pure second)) secondAfter) :
+    first = second ∧ firstAfter = secondAfter := by
+  have firstDone := trace_done firstFuel control before firstAfter first left.steps
+  have secondDone := trace_done secondFuel control before secondAfter second right.steps
+  have firstStable := done_stable (firstFuel + 1) (secondFuel + 1) control before firstAfter first firstDone
+  have secondStable := done_stable (secondFuel + 1) (firstFuel + 1) control before secondAfter second secondDone
+  rw [Nat.add_comm (secondFuel + 1) (firstFuel + 1)] at secondStable
+  exact Outcome.done.inj (firstStable.symm.trans secondStable)
+
+/-- Different successful bounds retain the same complete fold result and checked state. -/
+theorem Fold.unique [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)]
+    {values : List (Value Symbol Guard)} {paths : List (List Int)}
+    {before firstAfter secondAfter : Checked width} {first second : Value Symbol Guard}
+    (left : Fold values paths before first firstAfter) (right : Fold values paths before second secondAfter) :
+    first = second ∧ firstAfter = secondAfter := by
+  induction left generalizing second secondAfter with
+  | one operand => cases right with
+      | one other => exact operand.unique other
+  | cons operand rest native ih =>
+      cases right with
+      | cons other remaining checked =>
+          obtain ⟨rfl, rfl⟩ := operand.unique other
+          obtain ⟨rfl, rfl⟩ := ih remaining
+          exact checked_unique native checked
+
+/-- A seeded query retains the same value and complete checked state at every successful bound. -/
+theorem Seeded.unique [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)]
+    {values : List (Value Symbol Guard)} {paths : List (List Int)}
+    {before firstAfter secondAfter : Checked width} {first second : Value Symbol Guard}
+    (left : Seeded values paths before first firstAfter) (right : Seeded values paths before second secondAfter) :
+    first = second ∧ firstAfter = secondAfter := by
+  cases left with
+  | nil => cases right; exact ⟨rfl, rfl⟩
+  | nonempty fold => cases right with
+      | nonempty other => exact fold.unique other

@@ -1,0 +1,56 @@
+inductive Tuples [DecidableEq (EdgeKey Symbol Guard)] :
+    List (List (EdgeValue Symbol Guard)) → State Symbol Formula →
+      List (List (List (Value Symbol Guard))) → State Symbol Formula → Prop where
+  | nil : Tuples [] state [] state
+  | skip (first : Tuple tuple before none middle) (rest : Tuples tuples middle rows after) :
+      Tuples (tuple :: tuples) before rows after
+  | keep (first : Tuple tuple before (some row) middle) (rest : Tuples tuples middle rows after) :
+      Tuples (tuple :: tuples) before (row :: rows) after
+
+/-- Each stored tuple row retains all of its closed available requirements. -/
+def RowsReady (state : State Symbol Formula) (rows : List (List (List (Value Symbol Guard)))) : Prop :=
+  ∀ row ∈ rows, Req.RowsReady state.heap row
+
+/-- Constructor growth retains every requirement value of an earlier row. -/
+theorem rows_keeps {before after : State Symbol Formula} (keeps : Keeps before.heap after.heap)
+    {rows : List (List (List (Value Symbol Guard)))} (ready : RowsReady before rows) : RowsReady after rows := by
+  intro row member requirement included
+  have own := ready row member requirement included
+  exact ⟨fun value present => keeps.available value (own.1 value present), own.2⟩
+
+/-- Every finite literal tuple list derives its own allocated rows and retained invariants. -/
+theorem tuples_complete [DecidableEq (EdgeKey Symbol Guard)]
+    (tuples : List (List (EdgeValue Symbol Guard))) (before : State Symbol Formula) (ready : Ready before)
+    (resident : ∀ tuple ∈ tuples, Edges before.heap tuple)
+    (closed : ∀ tuple ∈ tuples, ClosedEdges tuple) (same : ∀ tuple ∈ tuples, Req.SameArity tuple) :
+    ∃ rows after, Tuples tuples before rows after ∧ Effects before after ∧ RowsReady after rows := by
+  induction tuples generalizing before with
+  | nil => exact ⟨[], before, .nil, Effects.refl before ready, by simp [RowsReady]⟩
+  | cons tuple tuples ih =>
+      obtain ⟨row, middle, first, own, rowReady⟩ := tuple_complete tuple before ready
+        (resident tuple List.mem_cons_self) (closed tuple List.mem_cons_self) (same tuple List.mem_cons_self)
+      obtain ⟨rows, after, rest, later, rowsReady⟩ := ih middle own.ready
+        (fun chosen member edge present => InternedEdgeResidency.edge_grows before.heap middle.heap
+          own.keeps.growth edge (resident chosen (List.mem_cons_of_mem _ member) edge present))
+        (fun chosen member => closed chosen (List.mem_cons_of_mem _ member))
+        (fun chosen member => same chosen (List.mem_cons_of_mem _ member))
+      cases row with
+      | none => exact ⟨rows, after, .skip first rest, own.trans later, rowsReady⟩
+      | some row =>
+          refine ⟨row :: rows, after, .keep first rest, own.trans later, ?_⟩
+          intro chosen member
+          rcases List.mem_cons.mp member with rfl | member
+          · intro requirement included
+            have earlier := rowReady requirement included
+            exact ⟨fun value present => later.keeps.available value (earlier.1 value present), earlier.2⟩
+          · exact rowsReady chosen member
+
+/-- One admitted conjunction retains its actual exposures and literal allocated tuple sequence. -/
+inductive Rows [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)]
+    (nodes : List (Value Symbol Guard)) : State Symbol Formula →
+      List (List (List (Value Symbol Guard))) → State Symbol Formula → Prop where
+  | run (reads : SourceCurrentConjunctionCompletionReads.Exposures nodes before.heap edges heap)
+      (tuples : Tuples (SourceCurrentConjunctionTuples.tuples edges) ⟨heap, before.equality⟩ rows after) :
+      Rows nodes before rows after
+
+/-- Actual reads and allocations complete each admitted closed resident conjunction. -/

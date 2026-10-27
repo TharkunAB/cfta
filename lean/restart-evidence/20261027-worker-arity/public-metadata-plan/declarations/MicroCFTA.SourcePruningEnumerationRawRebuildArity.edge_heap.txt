@@ -1,0 +1,6 @@
+theorem edge_heap (original : Edge) (children : List Node) (before : Checked width)
+    (heap : Heap before.native.machine.heap)
+    (coherent : InternedRecordCoherence.Coherent before.native.machine.heap)
+    (resident : InternedEdgeResidency.EdgeResident before.native.machine.heap original)
+    (same : children.length = original.children.length) :
+    Heap (SourceCurrentAllocatedRawRebuild.edge original children before).2.native.machine.heap := by

@@ -1,0 +1,28 @@
+
+/-- One actual projection retains the checked state and the same global reads. -/
+structure Receipt [DecidableEq (EdgeKey Symbol Guard)]
+    (formulas : SourceGuards.Formulas FullSyntax.Formula) (solver : SourceGuards.Entailment FullSyntax.Formula)
+    (inventory : Inventory) (path : List Int) (values : List (Value Symbol Guard))
+    (before : Checked width) (result : Value Symbol Guard) (after : Checked width)
+    (memos final : Memos) : Prop where
+  graph : Forest path values before.native.machine.heap result after.native.machine.heap
+  advanced : after = advancePhysical before ⟨after.native.machine.heap, before.operations⟩
+  ready : Ready after
+  admitted : At formulas solver inventory after
+  effects : Effects (physical before) (physical after)
+  extension : SourceRecursiveIntersectionKernel.Extension before.native.machine after.native.machine
+  nodes : after.native.nodes = before.native.nodes
+  edges : after.native.edges = before.native.edges
+  domains : after.native.machine.domains = before.native.machine.domains
+  operations : after.operations = before.operations
+  available : Available after.native.machine.heap result
+  closed : result.free = []
+  stable : SourceEqualityRequiredWorkerComplete.StableRun
+    (fun fuel readFuel => SourceEqualityProjectionWorker.forest fuel readFuel path values before.native.machine.heap)
+    result after.native.machine.heap
+  reads : SourceEqualityQueryGlobalMemos.ProjectionReads graph memos final
+  globals : SourceCurrentSubsumesQueryMemos.Effect before.native.machine.heap after.native.machine.heap memos final
+  included : path ≠ [] → ∀ holds ambient symbol terms part,
+    All₂ (meaning holds ambient) values terms →
+    SymbolicSignedPaths.lookup (.node symbol terms) path = some part → meaning holds ambient result part
+  root_exact : path = [] → ∀ holds ambient term,

@@ -1,0 +1,6 @@
+theorem call_heap
+    {budget : Nat} {query : Value Symbol Guard} {before after : Physical} {answer : Bool}
+    {memo saved : SourceCurrentEmptinessMemo.Memo}
+    (actual : SourceCurrentConjunctionMemo.Call budget memo query before answer after saved)
+    (ready : SourceCurrentConjunctionRowsAllocation.Ready before)
+    (available : Available before.heap query) (heap : Heap before.heap) : Heap after.heap := by

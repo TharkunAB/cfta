@@ -1,0 +1,20 @@
+theorem reduction_heap
+    (formulas : SourceGuards.Formulas FullSyntax.Formula) (solver : SourceGuards.Entailment FullSyntax.Formula)
+    (inventory : Inventory) (original : Guard)
+    {budget : Nat} {loaded : Allocated} {inherited : EqValue}
+    {values results : List (Value Symbol Guard)} {before after : Checked width}
+    {fourth savedFourth : Fourth} {memo saved : Memo} {memos final : Memos}
+    {actual : SourceCurrentAllocatedLocalReduction.Reduction budget loaded inherited values before fourth memo
+      results after savedFourth saved}
+    (reads : SourceCurrentAllocatedLocalReductionActual.Reads formulas solver actual memos final)
+    (ready : Ready before) (admitted : At formulas solver inventory before)
+    (cached : SourceEqualityGuardReadback.Cached original.equalities)
+    (found : SourceEqualityConstraintFieldLookup.load original before.operations.constraints = .ok (some loaded))
+    (inheritedReady : SourceEqualityConstraintAllocation.Ready before.operations.constraints inherited)
+    (available : Values before.native.machine.heap values)
+    (correct : SourceCurrentEmptinessMemo.Correct formulas solver before.native.machine.heap fourth)
+    (stored : SourceCurrentMemoMergeEffects.Stored before.native.machine.heap memo)
+    (covered : ∀ ambient, SourceCurrentMemoMergeLanguage.CacheCovers (SourceEqualityPCSGuard.holds formulas solver) ambient memo)
+    (ranges : SourceCurrentAllocatedLocalReductionActual.Ranges budget loaded inherited values before fourth)
+    (valid : Valid before.native.machine.heap memos) (heap : Heap before.native.machine.heap) :
+    Heap after.native.machine.heap := by

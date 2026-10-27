@@ -1,0 +1,15 @@
+theorem fold_heap
+    (formulas : SourceGuards.Formulas FullSyntax.Formula) (solver : SourceGuards.Entailment FullSyntax.Formula)
+    (inventory : Inventory) {records values results} {before after : Checked width} {memo saved : Memo}
+    {memos final : Memos}
+    {actual : SourceCurrentAllocatedClassPass.Fold records values before memo results after saved}
+    (reads : SourceCurrentAllocatedClassPass.FoldReads formulas solver actual memos final)
+    (coherent : ∀ record ∈ records, SourceEqualityClassOrder.Coherent record)
+    (active : ∀ record ∈ records, EqualityNormalize.Nontrivial record.paths)
+    (ready : Ready before) (admitted : At formulas solver inventory before)
+    (available : Values before.native.machine.heap values)
+    (domains : ∀ record ∈ records, ∀ path ∈ record.paths, ForestClosed (path.map Int.ofNat) values)
+    (stored : Stored before.native.machine.heap memo)
+    (covered : ∀ ambient, CacheCovers (SourceEqualityPCSGuard.holds formulas solver) ambient memo)
+    (valid : Valid before.native.machine.heap memos) (heap : Heap before.native.machine.heap) :
+    Heap after.native.machine.heap := by

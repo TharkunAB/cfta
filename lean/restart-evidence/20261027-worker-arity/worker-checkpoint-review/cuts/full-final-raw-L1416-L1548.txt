@@ -1,0 +1,133 @@
+MicroCFTA.SourcePruningEnumerationSeededArity.operand_heap {width : Nat}
+  [DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  {path : List Int}
+  {values :
+    List
+      (MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))}
+  {before after : MicroCFTA.SourceEqualityNativeDemand.State width}
+  {value :
+    MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)}
+  (actual : MicroCFTA.SourceCurrentAllocatedSeededQuery.Operand path values before value after)
+  (ready :
+    MicroCFTA.SourceCurrentConjunctionRowsAllocation.Ready
+      (MicroCFTA.SourceCurrentAllocatedNativeEffects.physical before))
+  (available : MicroCFTA.InternedNestedProvenance.Values before.native.machine.heap values)
+  (heap : MicroCFTA.SourcePruningEnumerationArityOrigins.Heap before.native.machine.heap) :
+  MicroCFTA.SourcePruningEnumerationArityOrigins.Heap after.native.machine.heap
+'MicroCFTA.SourcePruningEnumerationSeededArity.operand_heap' depends on axioms: [propext, Classical.choice, Quot.sound]
+MicroCFTA.SourcePruningEnumerationSeededArity.fold_heap {width : Nat}
+  [DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  [DecidableEq (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)]
+  (unconstrained :
+    MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) →
+      Bool)
+  (anchor :
+    MicroCFTA.InternedConstructorTemplates.State (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+  (anchorSemantic : MicroCFTA.SourceEqualityRequiredSemanticCache.SemanticReady anchor)
+  (anchorReady : MicroCFTA.InternedFreshOrdinaryMemoGateTrace.Ready anchor)
+  {values :
+    List
+      (MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))}
+  {paths : List (List Int)} {before after : MicroCFTA.SourceEqualityNativeDemand.State width}
+  {result :
+    MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)}
+  (actual : MicroCFTA.SourceCurrentAllocatedSeededQuery.Fold values paths before result after)
+  (ranges : MicroCFTA.SourceCurrentAllocatedSeededQuery.FoldRanges values paths before)
+  (good : MicroCFTA.SourceCurrentAllocatedNativePhysicalCompletion.Good before)
+  (ready :
+    MicroCFTA.SourceCurrentConjunctionRowsAllocation.Ready
+      (MicroCFTA.SourceCurrentAllocatedNativeEffects.physical before))
+  (scopes : MicroCFTA.SourceCurrentAllocatedNativeScopeCache.Scoped before.native)
+  (idle : MicroCFTA.SourceRecursiveIntersectionNative.Idle before.native)
+  (available : MicroCFTA.InternedNestedProvenance.Values before.native.machine.heap values)
+  (growth : MicroCFTA.InternedConstructorTemplates.Grows anchor before.native.machine.heap)
+  (supported :
+    ∀ (path : List Int),
+      path ∈ paths → MicroCFTA.SourceCurrentSecondaryProjectionScoped.PathSupport unconstrained anchor path values)
+  (heap : MicroCFTA.SourcePruningEnumerationArityOrigins.Heap before.native.machine.heap) :
+  MicroCFTA.SourcePruningEnumerationArityOrigins.Heap after.native.machine.heap
+'MicroCFTA.SourcePruningEnumerationSeededArity.fold_heap' depends on axioms: [propext, Classical.choice, Quot.sound]
+MicroCFTA.SourcePruningEnumerationSeededArity.seeded_heap {width : Nat}
+  [DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  [DecidableEq (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)]
+  (unconstrained :
+    MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) →
+      Bool)
+  (anchor :
+    MicroCFTA.InternedConstructorTemplates.State (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+  (anchorSemantic : MicroCFTA.SourceEqualityRequiredSemanticCache.SemanticReady anchor)
+  (anchorReady : MicroCFTA.InternedFreshOrdinaryMemoGateTrace.Ready anchor)
+  {values :
+    List
+      (MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))}
+  {paths : List (List Int)} {before after : MicroCFTA.SourceEqualityNativeDemand.State width}
+  {result :
+    MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)}
+  (actual : MicroCFTA.SourceCurrentAllocatedSeededQuery.Seeded values paths before result after)
+  (ranges : MicroCFTA.SourceCurrentAllocatedSeededQuery.SeededRanges values paths before)
+  (good : MicroCFTA.SourceCurrentAllocatedNativePhysicalCompletion.Good before)
+  (ready :
+    MicroCFTA.SourceCurrentConjunctionRowsAllocation.Ready
+      (MicroCFTA.SourceCurrentAllocatedNativeEffects.physical before))
+  (scopes : MicroCFTA.SourceCurrentAllocatedNativeScopeCache.Scoped before.native)
+  (idle : MicroCFTA.SourceRecursiveIntersectionNative.Idle before.native)
+  (available : MicroCFTA.InternedNestedProvenance.Values before.native.machine.heap values)
+  (growth : MicroCFTA.InternedConstructorTemplates.Grows anchor before.native.machine.heap)
+  (supported :
+    ∀ (path : List Int),
+      path ∈ paths → MicroCFTA.SourceCurrentSecondaryProjectionScoped.PathSupport unconstrained anchor path values)
+  (heap : MicroCFTA.SourcePruningEnumerationArityOrigins.Heap before.native.machine.heap) :
+  MicroCFTA.SourcePruningEnumerationArityOrigins.Heap after.native.machine.heap
+'MicroCFTA.SourcePruningEnumerationSeededArity.seeded_heap' depends on axioms: [propext, Classical.choice, Quot.sound]
+MicroCFTA.SourcePruningEnumerationScanArity.scan_heap {width : Nat}
+  [DecidableEq (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)]
+  [DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  [DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  (formulas : MicroCFTA.SourceGuards.Formulas MicroCFTA.FullSyntax.Formula)
+  (solver : MicroCFTA.SourceGuards.Entailment MicroCFTA.FullSyntax.Formula) {budget : Nat}
+  {unconstrained reaches :
+    MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) →
+      Bool}
+  {values :
+    List
+      (MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))}
+  {classes selected : MicroCFTA.EqualityNormalize.Constraints} {outcome : Option MicroCFTA.EqualityNormalize.Class}
+  {before after : MicroCFTA.SourceEqualityNativeDemand.State width}
+  {memo saved : MicroCFTA.SourceCurrentEmptinessMemo.Memo}
+  (actual :
+    MicroCFTA.SourceCurrentConjunctionClassScan.Scan budget unconstrained reaches values classes before memo outcome
+      selected after saved)
+  (ready : MicroCFTA.SourceCurrentConjunctionClassScan.Ready before)
+  (available : MicroCFTA.InternedNestedProvenance.Values before.native.machine.heap values)
+  (proper :
+    ∀ (paths : MicroCFTA.EqualityNormalize.Class),
+      paths ∈ classes → ∀ (path : MicroCFTA.EqualityNormalize.Path), path ∈ paths → path ≠ [])
+  (correct : MicroCFTA.SourceCurrentEmptinessMemo.Correct formulas solver before.native.machine.heap memo)
+  (ranges :
+    MicroCFTA.SourceCurrentConjunctionClassScanCompletion.Ranges budget unconstrained reaches values classes before
+      memo)
+  (heap : MicroCFTA.SourcePruningEnumerationArityOrigins.Heap before.native.machine.heap) :
+  MicroCFTA.SourcePruningEnumerationArityOrigins.Heap after.native.machine.heap
+'MicroCFTA.SourcePruningEnumerationScanArity.scan_heap' depends on axioms: [propext, Classical.choice, Quot.sound]

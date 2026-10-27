@@ -1,0 +1,6 @@
+theorem tuples_heap
+    {tuples : List (List (EdgeValue Symbol Guard))} {before after : Physical}
+    {rows : List (List (List (Value Symbol Guard)))}
+    (actual : Allocation.Tuples tuples before rows after) (ready : Allocation.Ready before)
+    (resident : ∀ tuple ∈ tuples, Edges before.heap tuple)
+    (closed : ∀ tuple ∈ tuples, ClosedEdges tuple) (heap : Heap before.heap) : Heap after.heap := by

@@ -1,0 +1,28 @@
+      (motive_2 := fun _ _ edges before _ after _ => RowsHeap edges before after)
+      rootCase emptyCase ordinaryCase recursiveCase nilCase missingCase selectedCase trace
+
+/-- Every completed actual path projection retains the entire arity heap. -/
+theorem project_heap
+    {path : List Int} {value result : Value Symbol Guard} {before after : State Symbol Guard}
+    (actual : Project path value before result after) (semantic : SemanticReady before)
+    (costs : CostHeap before) (available : Available before value) (heap : Heap before) : Heap after :=
+  project_heaps.1 _ _ _ _ _ actual semantic costs available heap
+
+/-- Ordered actual row projections retain every old and newly reconstructed edge record. -/
+theorem rows_heap
+    {path : List Int} {index : Int} {edges : List (EdgeValue Symbol Guard)} {results : List (Value Symbol Guard)}
+    {before after : State Symbol Guard} (actual : ProjectRows path index edges before results after)
+    (semantic : SemanticReady before) (costs : CostHeap before) (resident : Edges before edges)
+    (heap : Heap before) : Heap after := project_heaps.2 _ _ _ _ _ _ actual semantic costs resident heap
+
+/-- The actual forest root, missing child and selected child branches preserve arity. -/
+theorem forest_heap
+    {path : List Int} {values : List (Value Symbol Guard)} {result : Value Symbol Guard} {before after : State Symbol Guard}
+    (actual : Forest path values before result after) (semantic : SemanticReady before)
+    (costs : CostHeap before) (available : Values before values) (heap : Heap before) : Heap after := by
+  cases actual with
+  | root union => exact union_heap union semantic costs available heap
+  | missing => exact heap
+  | selected found body => exact project_heap body semantic costs (available _ (select_member found)) heap
+
+end MicroCFTA.SourcePruningEnumerationProjectionArity

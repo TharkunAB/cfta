@@ -1,0 +1,6 @@
+theorem requirements_heap
+    {tuple : List (EdgeValue Symbol Guard)} {classes : EqualityNormalize.Constraints}
+    {before after : State Symbol Guard} {requirements : List (List (Value Symbol Guard))}
+    (actual : Req.Requirements tuple classes before requirements after)
+    (semantic : SemanticReady before) (costs : CostHeap before)
+    (resident : Edges before tuple) (closed : ClosedEdges tuple) (heap : Heap before) : Heap after := by

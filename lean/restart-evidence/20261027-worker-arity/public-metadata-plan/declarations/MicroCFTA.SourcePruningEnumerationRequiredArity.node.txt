@@ -1,0 +1,5 @@
+theorem node [DecidableEq (EdgeKey Symbol Guard)]
+    {needed : SourceEqualityNeeded.Needed} {value result : Value Symbol Guard} {before after : State Symbol Guard}
+    (trace : RequireNode needed value before result after) (semantic : SemanticReady before)
+    (costs : CostHeap before) (fields : Heap before) (available : Available before value) :
+    Keeps before after ∧ SemanticReady after ∧ CostHeap after ∧ Heap after ∧ Available after result := by

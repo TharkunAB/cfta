@@ -1,0 +1,30 @@
+def Ranges (budget : Nat) (loaded : Allocated) (inherited : EqValue)
+    (values : List (Value Symbol Guard)) (before : Checked width) (fourth : Fourth) : Prop :=
+  ∀ records, (runPrefix loaded.stored loaded.guard inherited before.operations).1 = .ok (.classes records) →
+    SourceCurrentConjunctionClassScanCompletion.Ranges budget SourceMemoGate.unconstrained
+      (SourceEndpointReachability.reaches SourceMemoGate.unconstrained) values
+      (records.map SourceEqualityClassOrder.Record.paths) (prefixState before loaded inherited) fourth
+
+/-- Existing finite plans supply the smaller actual-verification plan. -/
+theorem ranges_of_finite
+    {budget : Nat} {loaded : Allocated} {inherited : EqValue} {values : List (Value Symbol Guard)}
+    {before : Checked width} {fourth : Fourth} {memo : Memo}
+    (ranges : SourceCurrentAllocatedLocalReduction.Ranges budget loaded inherited values before fourth memo) :
+    Ranges budget loaded inherited values before fourth := fun records actual => (ranges records actual).scan
+
+omit [DecidableEq (Value Symbol Guard)] in
+/-- The actual completed prefix derives its own branch receipt from the current stored field. -/
+theorem prefix_verified
+    (formulas : SourceGuards.Formulas FullSyntax.Formula) (solver : SourceGuards.Entailment FullSyntax.Formula)
+    (inventory : Inventory) (before : Checked width) (original : Guard) (loaded : Allocated) (inherited : EqValue)
+    (ready : Ready before) (admitted : At formulas solver inventory before)
+    (cached : SourceEqualityGuardReadback.Cached original.equalities)
+    (found : SourceEqualityConstraintFieldLookup.load original before.operations.constraints = .ok (some loaded))
+    (inheritedReady : SourceEqualityConstraintAllocation.Ready before.operations.constraints inherited)
+    {branch : SourceEqualityPrecheck.Branch}
+    (actual : (runPrefix loaded.stored loaded.guard inherited before.operations).1 = .ok branch) :
+    ∃ own, SourceCurrentAllocatedPrecheck.Receipt formulas solver inventory original loaded inherited before own branch := by
+  obtain ⟨own, chosen, receipt⟩ := SourceCurrentAllocatedPrecheck.loaded_complete formulas solver inventory
+    before ready admitted original cached loaded found inherited inheritedReady
+  have same := Except.ok.inj (receipt.actual.symm.trans actual)
+  cases same

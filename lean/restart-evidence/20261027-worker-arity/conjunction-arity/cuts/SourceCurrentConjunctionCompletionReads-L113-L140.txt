@@ -1,0 +1,28 @@
+
+/-- One source projection job retains its original forest and natural path. -/
+abbrev Job (Symbol Guard : Type) := List (Value Symbol Guard) × EqualityNormalize.Path
+
+/-- Every job has a closed available original forest at the current heap. -/
+def Inputs (state : State Symbol Guard) (jobs : List (Job Symbol Guard)) : Prop :=
+  ∀ job ∈ jobs, Values state job.1 ∧ ClosedValues job.1
+
+/-- Original job inputs remain valid through actual constructor-heap effects. -/
+theorem Inputs.keeps {jobs : List (Job Symbol Guard)} {before after : State Symbol Guard}
+    (inputs : Inputs before jobs) (kept : Keeps before after) : Inputs after jobs := by
+  intro job member
+  exact ⟨fun value included => kept.available value ((inputs job member).1 value included), (inputs job member).2⟩
+
+/-- The source list comprehension visits forests first, then paths in each forest. -/
+def jobs (forests : List (List (Value Symbol Guard))) (paths : EqualityNormalize.Class) :
+    List (Job Symbol Guard) :=
+  forests.flatMap fun children => paths.map fun path => (children, path)
+
+/-- Actual resident closed rows derive every job input, including repeated paths. -/
+theorem jobs_inputs (state : State Symbol Guard)
+    (forests : List (List (Value Symbol Guard))) (paths : EqualityNormalize.Class)
+    (available : ∀ children ∈ forests, Values state children)
+    (closed : ∀ children ∈ forests, ClosedValues children) : Inputs state (jobs forests paths) := by
+  intro job member
+  obtain ⟨children, present, selected⟩ := List.mem_flatMap.mp member
+  obtain ⟨path, _, rfl⟩ := List.mem_map.mp selected
+  exact ⟨available children present, closed children present⟩

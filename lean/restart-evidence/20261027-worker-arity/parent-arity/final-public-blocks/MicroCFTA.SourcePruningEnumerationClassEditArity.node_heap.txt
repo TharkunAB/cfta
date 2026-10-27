@@ -1,0 +1,40 @@
+MicroCFTA.SourcePruningEnumerationClassEditArity.node_heap
+  [DecidableEq (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)]
+  [DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  {width : Nat} {formulas : MicroCFTA.SourceGuards.Formulas MicroCFTA.FullSyntax.Formula}
+  {solver : MicroCFTA.SourceGuards.Entailment MicroCFTA.FullSyntax.Formula}
+  {base :
+    MicroCFTA.InternedConstructorTemplates.State (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)}
+  {inventory : MicroCFTA.SourceCurrentAllocatedNativeInventoryState.Inventory}
+  {record : MicroCFTA.SourceEqualityClassOrder.Record}
+  {originals :
+    List
+      (MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))}
+  {edits : MicroCFTA.SourceEqualityEdits.Edits MicroCFTA.EqualityNormalize.Path}
+  {value :
+    MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)}
+  {before : MicroCFTA.SourceCurrentAllocatedSharedEditGraph.SharedState width}
+  {result :
+    MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)}
+  {after : MicroCFTA.SourceCurrentAllocatedSharedEditGraph.SharedState width}
+  {memos final : MicroCFTA.EndpointMemoGateTrace.Memos}
+  {actual : MicroCFTA.SourceCurrentAllocatedSharedEditGraph.EditNode record originals edits value before result after}
+  (reads : MicroCFTA.SourceCurrentAllocatedSharedEditGraph.NodeReads formulas solver base actual memos final)
+  (known : MicroCFTA.InternedNestedProvenance.Values base originals)
+  (populated : MicroCFTA.SourceCurrentEditDomains.Populated edits)
+  (nonempty : MicroCFTA.SourceCurrentEditDomains.HasLeaf edits)
+  (allowed : MicroCFTA.SourceEqualitySharedEditEffects.Allowed record edits)
+  (ready :
+    MicroCFTA.SourceCurrentAllocatedSharedTargetState.Ready formulas solver inventory record originals base before)
+  (available : MicroCFTA.InternedProbeProvenance.Available before.checked.native.machine.heap value)
+  (safe : MicroCFTA.SourceCurrentEditDomains.Safe edits value)
+  (valid : MicroCFTA.EndpointMemoGateTrace.Valid before.checked.native.machine.heap memos)
+  (heap : MicroCFTA.SourcePruningEnumerationArityOrigins.Heap before.checked.native.machine.heap) :
+  MicroCFTA.SourcePruningEnumerationArityOrigins.Heap after.checked.native.machine.heap
+'MicroCFTA.SourcePruningEnumerationClassEditArity.node_heap' depends on axioms: [propext, Classical.choice, Quot.sound]
