@@ -1,5 +1,42 @@
 # cfta formal model
 
+## Derived arity histories and rendered original acceptance
+
+Source checkpoint: 074e4aaabdc8a3cd2d1bdf8722e268460c178dc7.
+The finite recursive driver now derives every actual output's arity history
+from a genuine initial arity heap. No supplied ResourceHistoryWithArity or
+future heap is an input. The complete original resource admission and stable
+outcome remain. The proof covers every finite recursive depth. It retains
+the aggregate caller even when a callback returns no outputs, and retains
+each emitted output's own caller and full resource packet.
+
+With initial Canonical storage, each fully discharged output whose native
+rendering succeeds and whose returned residuals check belongs to the original
+stored native language. It satisfies every original suspended constraint at
+the selected root. The proof constructs the assignment and retains original,
+output and rendered-state satisfaction. Desired final Satisfies or original
+acceptance is not an input. The original root lookup, own output, Discharged,
+rendering and checked-residual observations remain explicit.
+
+Actual native Posts retain earlier selected records in the SAME output heap.
+That derived output heap supplies each earlier projected-arity annotation.
+One common bound aligns the old history producer and the new arity producer
+before any output is selected. All old producer fields and full memo states
+remain. H6 keeps its exact finite-tree language-preservation contract.
+
+The next gaps are enumeration coverage and the remaining connections from
+public entry points to the proved contracts. Convergence, withoutRedundantEdges,
+remaining API obligations and full physical Haskell correspondence retain
+their earlier limits. The whole formalization goal stays ACTIVE.
+
+Seventeen modules contain 2071 lines and 19 new public theorems. All pass
+strict checks. Audit passes 4232 jobs and checks 80042 theorem dependencies.
+Public readback contains 157 full signatures and axiom sets without elision.
+All 138 prior blocks match byte exactly. Only the three standard Lean
+axioms occur. No Haskell source changed. FINDINGS retains all repair handoffs.
+Details: `lean/notes-current-recursive-driver-arity.md`.
+
+
 ## Arity through the recursive worker and captured native heads
 
 Source checkpoint: 02b7f1aefbb5b59490bce9e278b7d4c1194f70ab.
