@@ -1,5 +1,40 @@
 Continue the cfta formalization in /home/tritlo/Code/mcfta.
 
+## Arity through complete native queries and returned memo cells
+
+Source checkpoint: 4c7ab3a5f755df020e6810c03175efddf873b14a.
+Initial physical Good, an arity-valid edge-record heap and the SAME actual
+completed rich native query trace now derive arity of the ENTIRE returned
+edge-record heap. Both node and edge queries retain every old record and
+check every child-created record. Strong induction on actual trace length
+discharges both recursive call families. No per-child arity, future successful
+answer, semantic completion law or certified-origin trace is added as a premise.
+Every completed edge memo cell after a node query derives arity from its actual
+resident record and final physical coherence. Warm hits retain the heap.
+
+The proof reuses actual rich trace splitting. It derives intermediate physical
+Good and fields. Actual child walks retain their exact lengths and full caches.
+Node compilation derives its local constructor condition from its real code.
+The accepted edge prefix checks the new key after actual child calls. The
+sentinel checks its real Top/Empty constructor. Optional binding also retains
+arity at its actual completed or pending constructor outcome.
+
+The whole-query result requires an actual completed rich trace. It does not
+cover every stopped, failed or blocked query prefix. Such prefixes, actual
+local reduction, cold exposure, narrowing, captured-cache restores and the
+finite-history producer still need resource composition. The previous
+whole-history acceptance observer keeps its arity-certified history premise.
+H6 and all six previous strongest full contracts stay unchanged. Enumeration
+coverage, remaining API contracts and physical Haskell correspondence remain
+open. The whole-system goal stays ACTIVE with its original full scope.
+
+Six modules, 937 lines, 22 public theorems and one WorkFits definition pass
+strict checks. Audit passes 4173 jobs and 79689 dependency checks. Public
+readback contains 28 full signatures and axiom sets with no elision. The six
+old strongest blocks match byte exactly. No Haskell source changed. FINDINGS
+retains all fixes and repair handoffs. Details: `lean/notes-current-native-query-arity.md`.
+
+
 ## Checked arity origins and actual physical edge-body returns
 
 Source checkpoint: 6f380cee25b1d13caef617907264ecff1cb28c39.
