@@ -14,6 +14,7 @@ import qualified Data.CFTA.Gen.Synthesis.StatesSpec
 import qualified Data.CFTA.Gen.SynthesisSpec
 import qualified Data.CFTA.Gen.TypingSpec
 import qualified Data.CFTA.GenSpec
+import qualified Data.CFTA.InclusionSpec
 import qualified Data.CFTA.RankedSpec
 import qualified Data.CFTA.SizedSpec
 
@@ -34,3 +35,4 @@ main =
         Data.CFTA.Gen.Synthesis.StatesSpec.spec
         Data.CFTA.Gen.TypingSpec.spec
         Data.CFTA.SizedSpec.spec
+        Data.CFTA.InclusionSpec.spec
