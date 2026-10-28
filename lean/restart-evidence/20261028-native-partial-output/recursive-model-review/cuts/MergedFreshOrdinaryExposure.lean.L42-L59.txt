@@ -1,0 +1,18 @@
+  | value@(.mu ..) =>
+      match InternedFreshOrdinaryStoredSubstitution.unfold value state with
+      | .done (.node _ edges _ _) after => .done edges after
+      | .done _ after => (collect fuel after [] [value]).canonical
+      | .pending key after => .pending key after
+  | value@(.union ..) => (collect fuel state [] [value]).canonical
+
+/-- Every prepared ordered worklist keeps the exact old reader result and cache. -/
+theorem collect_eq [DecidableEq (EdgeKey Symbol Guard)] (fuel : Nat) (state : State Symbol Guard)
+    (facts : Facts state) (prepared : Prepared state) (seen : List Nat) (pending : List (Value Symbol Guard))
+    (inputs : Values state pending) :
+    collect fuel state seen pending = MergedSourceExposure.collect fuel state seen pending := by
+  induction fuel generalizing state seen pending with
+  | zero => cases pending <;> rfl
+  | succ fuel ih =>
+      cases pending with
+      | nil => rfl
+      | cons value rest =>

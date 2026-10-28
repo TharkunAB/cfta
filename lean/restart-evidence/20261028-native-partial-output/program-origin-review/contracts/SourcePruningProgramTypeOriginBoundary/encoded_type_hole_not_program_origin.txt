@@ -1,0 +1,7 @@
+theorem encoded_type_hole_not_program_origin :
+    ∃ (assignment : Nat → Term Symbol) (fragment : Fragment Symbol),
+      ProgramEncoding (fill assignment fragment) ∧
+      1 ∈ typePositions false fragment [] ∧
+      1 ∉ programHoles false fragment ∧
+      ProgramAt (assignment 1) (assignment 1) ∧
+      ¬ ProgramAt (fill assignment fragment) (assignment 1)

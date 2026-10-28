@@ -1,0 +1,8 @@
+    (leftRead : Success (rootFragment leftFuel >>= expandPartial graph leftFuel) left term leftAfter) :
+    ∃ rightFuel rightAfter,
+      Success (rootFragment rightFuel >>= expandPartial graph rightFuel) right term rightAfter ∧
+      Frame leftAfter rightAfter := by
+  obtain ⟨fragment, leftMiddle, leftRoot, leftRendered⟩ := (success_bind _ _ _ _ _).mp leftRead
+  have middleTotal := (rootFragment_frame leftFuel left leftMiddle fragment total leftRoot).total total
+  obtain ⟨rootFuel, rightMiddle, rightRoot, rootFrame⟩ :=
+    rootFragment_transport leftFuel left right leftMiddle fragment frame total leftRoot

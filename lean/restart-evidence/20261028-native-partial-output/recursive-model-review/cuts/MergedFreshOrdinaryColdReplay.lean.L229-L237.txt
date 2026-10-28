@@ -1,0 +1,9 @@
+theorem nodeEdges_stable [DecidableEq (EdgeKey Symbol Guard)] (fuel extra : Nat)
+    (value : Value Symbol Guard) (state : State Symbol Guard)
+    (finished : MergedSourceExposure.Finished (nodeEdges fuel value state)) :
+    nodeEdges (fuel + extra) value state = nodeEdges fuel value state := by
+  have fallback (current : State Symbol Guard) (root : Value Symbol Guard)
+      (complete : MergedSourceExposure.Finished (collect fuel current [] [root]).canonical) :
+      (collect (fuel + extra) current [] [root]).canonical = (collect fuel current [] [root]).canonical :=
+    congrArg Result.canonical (collect_stable fuel extra current [] [root]
+      ((MergedSourceExposure.finished_canonical _).mp complete))

@@ -1,0 +1,7 @@
+/-- Read the root fragment and retain the original root hole on pending work. -/
+def rootFragment (fuel : Nat) : EnumerateM Symbol Guard (Fragment Symbol) := do
+  match ← getValue (fuel + 1) 0 with
+  | .enumerated fragment => pure fragment
+  | _ => pure (.hole 0)
+
+/-! The same bound supplies the driver and partial renderer. The root lookup

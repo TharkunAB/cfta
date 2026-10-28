@@ -1,0 +1,56 @@
+              getValue_complete before safe uv allocated
+            have readingAt : ∀ fuel, readFuel ≤ fuel →
+                Success (getValue fuel uv) before value resolved := by
+              intro fuel enough
+              obtain ⟨extra, rfl⟩ := Nat.exists_eq_add_of_le enough
+              exact getValue_moreFuel readFuel extra uv before value resolved reading
+            cases value with
+            | enumerated storedFragment =>
+                have sameLevel := stratified.classes uv root (UnionFind.sameClass_root path)
+                obtain ⟨rootBound, dependencies⟩ := stratified.expanded root storedFragment stored
+                have storedAllocated : FragmentBound resolved.counter storedFragment := by
+                  rw [readStable.counter]
+                  exact safe.1.values _ (List.mem_of_getElem? stored)
+                have storedBound : ∀ child, HasHole storedFragment child →
+                    frontier - level child < frontier - level uv := by
+                  intro child hole
+                  have higher := dependencies child hole
+                  omega
+                obtain ⟨renderFuel, term, after, rendering, renderedStable⟩ :=
+                  ih (frontier - level uv) small storedFragment resolved readStable.safe
+                    (stratified_read before resolved level frontier readStable stratified)
+                    storedAllocated storedBound
+                let fuel := readFuel + renderFuel
+                refine ⟨fuel + 1, term, after, ?_, readStable.trans renderedStable⟩
+                simp only [expandPartial]
+                apply (success_bind _ _ _ _ _).mpr
+                refine ⟨.enumerated storedFragment, resolved, readingAt (fuel + 1) (by dsimp [fuel]; omega), ?_⟩
+                simpa [fuel, Nat.add_comm] using
+                  expandPartial_moreFuel graph renderFuel readFuel storedFragment resolved term after rendering
+            | eliminated =>
+                exact ⟨readFuel + 1, .node (.hole uv) [], resolved,
+                  (success_bind _ _ _ _ _).mpr ⟨.eliminated, resolved,
+                    readingAt (readFuel + 1) (by omega), (success_pure _ _ _ _).mpr ⟨rfl, rfl⟩⟩,
+                  readStable⟩
+            | unenumerated node scs =>
+                cases node with
+                | none =>
+                    exact ⟨readFuel + 1, .node (.hole uv) [], resolved,
+                      (success_bind _ _ _ _ _).mpr ⟨.unenumerated none scs, resolved,
+                        readingAt (readFuel + 1) (by omega), (success_pure _ _ _ _).mpr ⟨rfl, rfl⟩⟩,
+                      readStable⟩
+                | some node =>
+                    cases scs with
+                    | cons first rest =>
+                        exact ⟨readFuel + 1, .node (.hole uv) [], resolved,
+                          (success_bind _ _ _ _ _).mpr ⟨.unenumerated (some node) (first :: rest), resolved,
+                            readingAt (readFuel + 1) (by omega), (success_pure _ _ _ _).mpr ⟨rfl, rfl⟩⟩,
+                          readStable⟩
+                    | nil =>
+                        refine ⟨readFuel + 1, (match graph.node node with
+                          | .recursive _ => .node .truncated []
+                          | _ => .node (.hole uv) []), resolved,
+                          (success_bind _ _ _ _ _).mpr ⟨.unenumerated (some node) [], resolved,
+                            readingAt (readFuel + 1) (by omega), ?_⟩, readStable⟩
+                        cases view : graph.node node <;> simp only [view] <;>
+                          exact (success_pure _ _ _ _).mpr ⟨rfl, rfl⟩

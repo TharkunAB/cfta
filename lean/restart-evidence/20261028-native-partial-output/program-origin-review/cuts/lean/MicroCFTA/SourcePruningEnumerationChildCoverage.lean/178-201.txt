@@ -1,0 +1,24 @@
+            List.map_cons, List.map_nil]
+        have actualObserved :
+            SourcePruningEnumerationChildDispatch.run checkEmpty r n p h (k + indexFuel)
+              bucket incoming beforeCaller before memos.query =
+              ((.ok (some raw), afterCaller, savedQueries, outer, waiting), some after) := by
+          simpa only [Nat.add_zero] using
+            observed 0 0 p h indexFuel (Nat.le_refl _) (Nat.le_refl _)
+        have same : raw = [.ok (.hole before.core.counter, nextCache.core)] ∧
+            afterCaller = beforeCaller ∧ savedQueries = memos.query ∧
+            outer = before.core ∧ waiting = before.waiting ∧ after = nextCache := by
+          simpa only [Prod.mk.injEq, Except.ok.injEq, Option.some.injEq, and_assoc] using
+            actualObserved.symm.trans canonicalObserved
+        obtain ⟨rawSame, callerSame, _queriesSame, _outerSame, _waitingSame, cacheSame⟩ := same
+        obtain ⟨rowFragment, rowCache, member, rowSatisfied⟩ :=
+          (rowMeaning (SourceEqualityPCSGuard.holds formulas solver) ambient residualMeaning extended).mpr
+            ⟨originalExtended, by simpa only [fresh] using accepted,
+              fun sc member => by
+                cases incoming <;> simpa only [fresh] using effectiveHolds sc member⟩
+        have rowSame : (rowFragment, rowCache) = (.hole before.core.counter, nextCache) :=
+          List.mem_singleton.mp (by simpa only [rowsSame] using member)
+        have rowCacheSame : rowCache = nextCache := congrArg Prod.snd rowSame
+        refine ⟨extended, .hole before.core.counter, agree, originalExtended, ?_, ?_, ?_⟩
+        · simpa only [cacheSame] using rawSame
+        · simpa only [Fragments.fill] using fresh

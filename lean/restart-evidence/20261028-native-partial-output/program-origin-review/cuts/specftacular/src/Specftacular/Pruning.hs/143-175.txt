@@ -1,0 +1,33 @@
+{- | The holes of a fragment at program positions: the function and
+the argument of an application, and the program of a filter. With 'True',
+the fragment is at a type position.
+-}
+programHoles :: Bool -> TermFragment Symbol -> [Int]
+programHoles isType fragment = case fragment of
+    TermFragmentUVar uv
+        | isType -> []
+        | otherwise -> [uvarToInt uv]
+    TermFragmentNode symbol children
+        | isType -> []
+        | otherwise -> case (symbol, children) of
+            ("app", [_, _, function, argument]) -> programHoles False function ++ programHoles False argument
+            ("filter", [_, term]) -> programHoles False term
+            _ -> []
+
+{- | Add the holes of a fragment at type positions: the annotation and the
+arrow marker of an application, the type of a filter and of a symbol, and
+each hole below a type position. With 'True', the fragment is at a type
+position.
+-}
+typePositions :: Bool -> TermFragment Symbol -> IntSet -> IntSet
+typePositions isType fragment types = case fragment of
+    TermFragmentUVar uv
+        | isType -> IntSet.insert (uvarToInt uv) types
+        | otherwise -> types
+    TermFragmentNode symbol children
+        | isType -> foldr (typePositions True) types children
+        | otherwise -> case (symbol, children) of
+            ("app", [annotation, marker, function, argument]) ->
+                foldr (typePositions True) (foldr (typePositions False) types [function, argument]) [annotation, marker]
+            ("filter", [annotation, term]) -> typePositions True annotation (typePositions False term types)
+            _ -> foldr (typePositions True) types children

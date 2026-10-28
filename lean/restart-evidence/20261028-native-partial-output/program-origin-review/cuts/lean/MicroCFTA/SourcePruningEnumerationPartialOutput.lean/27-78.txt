@@ -1,0 +1,52 @@
+/-- Supply only the native boundary tag to the existing partial observer. -/
+private def boundaryView (heap : InternedConstructorTemplates.State Symbol NativeGuard) :
+    Graph Symbol EnumGuard where
+  node handle :=
+    match lookupNode heap handle with
+    | none => .unresolved handle
+    | some value =>
+        if MergedOrdinaryHeight.recursiveBoundary value then .recursive handle
+        else .unresolved handle
+  intersect left _right := left
+
+/-- Use actual native boundary lookup in the existing partial-rendering worker. -/
+def expandPartial (heap : InternedConstructorTemplates.State Symbol NativeGuard)
+    (fuel : Nat) (fragment : Fragment Symbol) :
+    EnumerateM Symbol EnumGuard (Term (PartialSymbol Symbol)) :=
+  EnumerationState.expandPartial (boundaryView heap) fuel fragment
+
+/-- Read the actual root fragment and then render it at the same finite bound. -/
+def rootPartial (heap : InternedConstructorTemplates.State Symbol NativeGuard) (fuel : Nat) :
+    EnumerateM Symbol EnumGuard (Term (PartialSymbol Symbol)) :=
+  rootFragment fuel >>= expandPartial heap fuel
+
+/-- Native partial observation truncates only decoded empty-bucket recursive boundaries. -/
+theorem expandPartial_hole
+    (heap : InternedConstructorTemplates.State Symbol NativeGuard) (fuel uv : Nat) :
+    expandPartial (EnumGuard := EnumGuard) heap (fuel + 1) (.hole uv) = (do
+      match ← getValue (fuel + 1) uv with
+      | .enumerated fragment => expandPartial heap fuel fragment
+      | .unenumerated (some handle) [] =>
+          match lookupNode heap handle with
+          | none => pure (.node (.hole uv) [])
+          | some value =>
+              if MergedOrdinaryHeight.recursiveBoundary value then pure (.node .truncated [])
+              else pure (.node (.hole uv) [])
+      | _ => pure (.node (.hole uv) [])) := by
+  simp only [expandPartial, EnumerationState.expandPartial]
+  congr 1
+  funext slot
+  cases slot with
+  | eliminated | enumerated _ => rfl
+  | unenumerated node scs =>
+      cases node with
+      | none => rfl
+      | some handle =>
+          cases scs with
+          | cons _ _ => rfl
+          | nil =>
+              dsimp only [boundaryView]
+              cases decoded : lookupNode heap handle with
+              | none => rfl
+              | some value =>
+                  cases boundary : MergedOrdinaryHeight.recursiveBoundary value <;> simp [boundary]

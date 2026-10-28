@@ -1,0 +1,62 @@
+theorem representative_success_exact (fuel uv : Nat) (before after : State Symbol Guard)
+    (root : Nat) (success : Success (representative fuel uv) before root after) :
+    ExceptT.run (representative fuel uv before) = [.ok (root, after)] := by
+  obtain ⟨found, lookup, rfl, rfl⟩ := (representative_success fuel uv before after root).mp success
+  exact representative_exact fuel uv before found lookup
+
+/-- An actual successful value read has one exact raw result without a totality premise. -/
+theorem getValue_exact (fuel uv : Nat) (before after : State Symbol Guard)
+    (value : UVarValue Symbol) (success : Success (getValue fuel uv) before value after) :
+    ExceptT.run (getValue fuel uv before) = [.ok (value, after)] := by
+  obtain ⟨found, lookup, stored, rfl⟩ := (getValue_success fuel uv before after value).mp success
+  unfold getValue
+  rw [bind_single _ _ _ _ _ (representative_exact fuel uv before found lookup)]
+  simp [rawValue, stored, bind, get, getThe, MonadStateOf.get, pure,
+    StateT.bind, StateT.pure, StateT.get, ExceptT.bind, ExceptT.pure, ExceptT.bindCont, ExceptT.mk, ExceptT.run]
+
+/-- An actual successful partial render has one exact raw term and final state. -/
+theorem expandPartial_exact (graph : Graph Symbol Guard) (fuel : Nat)
+    (fragment : Fragment Symbol) (before after : State Symbol Guard)
+    (term : Term (PartialSymbol Symbol))
+    (success : Success (expandPartial graph fuel fragment) before term after) :
+    ExceptT.run (expandPartial graph fuel fragment before) = [.ok (term, after)] := by
+  induction fuel generalizing fragment before after term with
+  | zero => exact (success_failure .fuelExhausted before after term success).elim
+  | succ fuel ih =>
+      cases fragment with
+      | node symbol children =>
+          change Success (children.mapM (expandPartial graph fuel) >>= fun terms =>
+            pure (.node (.concrete symbol) terms)) before term after at success
+          change ExceptT.run ((children.mapM (expandPartial graph fuel) >>= fun terms =>
+            pure (.node (.concrete symbol) terms)) before) = [.ok (term, after)]
+          obtain ⟨terms, middle, traversed, finished⟩ := (success_bind _ _ _ _ _).mp success
+          have exactChildren := mapM_exact (expandPartial graph fuel) children
+            (fun child previous output next reading => ih child previous next output reading)
+            before middle terms traversed
+          rw [bind_single _ _ _ _ _ exactChildren]
+          exact pure_exact (.node (.concrete symbol) terms) term middle after finished
+      | hole uv =>
+          change Success (getValue (fuel + 1) uv >>= fun value => match value with
+            | .enumerated stored => expandPartial graph fuel stored
+            | .unenumerated (some node) [] => match graph.node node with
+              | .recursive _ => pure (.node .truncated [])
+              | _ => pure (.node (.hole uv) [])
+            | _ => pure (.node (.hole uv) [])) before term after at success
+          change ExceptT.run ((getValue (fuel + 1) uv >>= fun value => match value with
+            | .enumerated stored => expandPartial graph fuel stored
+            | .unenumerated (some node) [] => match graph.node node with
+              | .recursive _ => pure (.node .truncated [])
+              | _ => pure (.node (.hole uv) [])
+            | _ => pure (.node (.hole uv) [])) before) = [.ok (term, after)]
+          obtain ⟨value, middle, reading, finished⟩ := (success_bind _ _ _ _ _).mp success
+          rw [bind_single _ _ _ _ _ (getValue_exact (fuel + 1) uv before middle value reading)]
+          cases value with
+          | eliminated => exact pure_exact _ term middle after finished
+          | enumerated stored => exact ih stored middle after term finished
+          | unenumerated node scs =>
+              cases node with
+              | none => exact pure_exact _ term middle after finished
+              | some node =>
+                  cases scs with
+                  | cons first rest => exact pure_exact _ term middle after finished
+                  | nil =>

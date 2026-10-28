@@ -1,0 +1,35 @@
+/-- A stored pending trie contains at least one proper descendant path. -/
+def ProperTrie (trie : EqualityTrie.Trie) : Prop :=
+  EqualityTrie.Valid trie ∧ EqualityTrie.isEmpty trie = false ∧ EqualityTrie.isTerminal trie = false
+
+/-- Pure equality slots carry no paths; graph slots carry only proper pending paths. -/
+def ProperValue : UVarValue Symbol → Prop
+  | .unenumerated none scs => scs = []
+  | .unenumerated (some _) scs => ∀ sc ∈ scs, ProperTrie sc.trie
+  | _ => True
+
+/-- All stored pending slots meet the source scheduler's strict-path invariant. -/
+def ProperState (state : State Symbol Guard) : Prop := ∀ value ∈ state.values, ProperValue value
+
+/-- Inherited inputs contain canonical nonempty tries, including terminals. -/
+def ProperInputs (scs : List Suspended) : Prop :=
+  ∀ sc ∈ scs, EqualityTrie.Valid sc.trie ∧ EqualityTrie.isEmpty sc.trie = false
+
+/-- Every stored pending input is a canonical nonempty trie. -/
+theorem proper_inputs (value : UVarValue Symbol) (proper : ProperValue value) : ProperInputs (references value) := by
+  cases value with
+  | eliminated | enumerated _ => simp [references, ProperInputs]
+  | unenumerated node scs =>
+      cases node with
+      | none => simp [ProperValue] at proper; simp [references, proper, ProperInputs]
+      | some node => exact fun sc member => ⟨(proper sc member).1, (proper sc member).2.1⟩
+
+/-- Filtering reached terminals leaves only proper descendant constraints. -/
+theorem proper_below (scs : List Suspended) (inputs : ProperInputs scs) :
+    ∀ sc ∈ scs.filter (fun sc => !EqualityTrie.isTerminal sc.trie), ProperTrie sc.trie := by
+  intro sc member
+  obtain ⟨present, below⟩ := List.mem_filter.mp member
+  exact ⟨(inputs sc present).1, (inputs sc present).2, by simpa using below⟩
+
+/-- Child descent supplies canonical nonempty inputs. -/
+theorem descend_proper (scs : List Suspended) (index : Nat) (valid : ValidSuspended scs) :

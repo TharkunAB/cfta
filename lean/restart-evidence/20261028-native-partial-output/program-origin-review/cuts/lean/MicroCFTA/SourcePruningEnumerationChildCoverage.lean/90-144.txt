@@ -1,0 +1,55 @@
+          ambient incoming term →
+        (∀ sc ∈ bucket, Suspended.Holds assignment term sc) →
+        ∃ fragment : Fragment,
+          raw = [.ok (fragment, after.core)] ∧ Fragments.fill assignment fragment = term ∧
+          Satisfies
+            (SourcePruningEnumerationNativeLanguage.handles (SourceEqualityPCSGuard.holds formulas solver)
+              ambient afterCaller.checked.native.machine.heap) residualMeaning assignment after.core) ∧
+      ∀ (ambient : InternedGuardedLanguage.Env Symbol)
+        (residualMeaning : Constraint → Language.Term Symbol → Prop)
+        (assignment : Nat → Language.Term Symbol) (term : Language.Term Symbol),
+        Satisfies
+          (SourcePruningEnumerationNativeLanguage.handles (SourceEqualityPCSGuard.holds formulas solver)
+            ambient beforeCaller.checked.native.machine.heap) residualMeaning assignment before.core →
+        InternedGuardedLanguage.meaning (SourceEqualityPCSGuard.holds formulas solver)
+          ambient incoming term →
+        (∀ sc ∈ bucket, Suspended.Holds assignment term sc) →
+        ∃ (extended : Nat → Language.Term Symbol) (fragment : Fragment),
+          (∀ uv < before.core.counter, extended uv = assignment uv) ∧
+          Satisfies
+            (SourcePruningEnumerationNativeLanguage.handles (SourceEqualityPCSGuard.holds formulas solver)
+              ambient beforeCaller.checked.native.machine.heap) residualMeaning extended before.core ∧
+          raw = [.ok (fragment, after.core)] ∧ Fragments.fill extended fragment = term ∧
+          Satisfies
+            (SourcePruningEnumerationNativeLanguage.handles (SourceEqualityPCSGuard.holds formulas solver)
+              ambient afterCaller.checked.native.machine.heap) residualMeaning extended after.core := by
+  obtain ⟨r, n, p, h, k, raw, afterCaller, after, savedQueries, final, next, afterRoots, outer, waiting,
+    observed, post, querySame, growth, afterPaths, storage, afterRealized, afterCounts, afterFlags,
+    origin, protects, references, history, shape, returnedFits, returnedKnown, terminalAccepting⟩ :=
+    complete_with_fragments_resources_terminal_accepting seed formulas solver inventory beforeCaller before
+      checkEmpty bucket incoming roots memos initial safe paths counts flags realized bounded pending
+      available closed fits reserved known
+  refine ⟨r, n, p, h, k, raw, afterCaller, after, savedQueries, final, next, afterRoots, outer, waiting,
+    ⟨observed, post, querySame, growth, afterPaths, storage, afterRealized, afterCounts, afterFlags,
+      origin, protects, references, history, shape, returnedFits, returnedKnown, terminalAccepting⟩, ?_⟩
+  intro ambient residualMeaning assignment term beforeSatisfied accepted holds
+  by_cases terminalAny : bucket.any (fun sc => EqualityTrie.isTerminal sc.trie) = true
+  · obtain ⟨fragment, singleton, filled, afterSatisfied⟩ :=
+      terminalAccepting ambient residualMeaning assignment term terminalAny beforeSatisfied accepted holds
+    exact ⟨assignment, fragment, fun _ _ => rfl, beforeSatisfied, singleton, filled, afterSatisfied⟩
+  · have noTerminal : bucket.any (fun sc => EqualityTrie.isTerminal sc.trie) = false :=
+      Bool.eq_false_iff.mpr terminalAny
+    have incomingNonempty : incoming ≠ .empty := by
+      intro empty
+      rw [empty, InternedGuardedLanguage.meaning] at accepted
+      exact accepted
+    let extended := EnumerationCorrectness.install assignment before.core.counter [term]
+    have agree : ∀ uv < before.core.counter, extended uv = assignment uv :=
+      EnumerationCorrectness.install_before assignment before.core.counter [term]
+    have fresh : extended before.core.counter = term := by
+      simp only [extended, EnumerationCorrectness.install, ↓reduceIte]
+    have originalExtended : Satisfies
+        (SourcePruningEnumerationNativeLanguage.handles (SourceEqualityPCSGuard.holds formulas solver)
+          ambient beforeCaller.checked.native.machine.heap) residualMeaning extended before.core :=
+      (EnumerationCorrectness.state_assignment_congr _ _ before.core safe.1 extended assignment agree).mpr
+        beforeSatisfied

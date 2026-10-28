@@ -1,0 +1,20 @@
+Unlike 'expandTermFragWith', which fails on an unenumerated non-recursive node,
+this is safe for diagnostics and oracle logging while enumeration is still in
+progress. Unexpanded UVars become 'UVarHole's, except a recursive one with no
+suspended constraints, which is where enumeration stops and which becomes
+'TruncatedRecursion'. A recursive node whose constraints have not been settled
+is still pending expansion, so it is reported as a hole. An oracle that parks
+checks on holes would otherwise read it as final and settle a check that has not
+been decided.
+-}
+expandPartialTermFrag :: TermFragment symbol -> EnumerateM symbol (Term (PartialSymbol symbol))
+expandPartialTermFrag (TermFragmentNode symbol children) =
+    Term.traverseNode expandPartialTermFrag (ConcreteSymbol symbol) children
+expandPartialTermFrag (TermFragmentUVar uv) = do
+    value <- getUVarValue uv
+    case value of
+        UVarEnumerated fragment -> expandPartialTermFrag fragment
+        UVarUnenumerated (Just node) Sequence.Empty | recursiveBoundary node -> return $ Term.Node TruncatedRecursion []
+        _ -> return $ Term.Node (UVarHole uv) []
+
+-- | Expand a complete term fragment into a concrete term, with the symbol that stands for truncated recursion.

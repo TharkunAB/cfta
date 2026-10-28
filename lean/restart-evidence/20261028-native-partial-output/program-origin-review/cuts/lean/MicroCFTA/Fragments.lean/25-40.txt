@@ -1,0 +1,16 @@
+
+/-- Replace every hole by its assigned complete term. -/
+def fill (assignment : Nat → Term Symbol) : Fragment Symbol → Term Symbol
+  | .node symbol children => .node symbol (children.map (fill assignment))
+  | .hole uv => assignment uv
+
+/-- Rename holes without changing symbol nodes or child order. -/
+def rename (representative : Nat → Nat) : Fragment Symbol → Fragment Symbol
+  | .node symbol children => .node symbol (children.map (rename representative))
+  | .hole uv => .hole (representative uv)
+
+/-- Renaming holes is equivalent to looking up the renamed assignment. -/
+theorem fill_rename (assignment : Nat → Term Symbol) (representative : Nat → Nat)
+    (fragment : Fragment Symbol) :
+    fill assignment (rename representative fragment) = fill (assignment ∘ representative) fragment := by
+  induction fragment using Fragment.rec

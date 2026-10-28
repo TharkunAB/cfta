@@ -1,0 +1,24 @@
+
+      ∀ output ∈ SourcePruningEnumerationHookInvocation.hookOutputs outcome,
+    ∃ (finalInventory : Inventory) (finalMemos : Memos) (finalMetadata : Metadata Typing),
+      Packet formulas solver finalInventory output.caller finalMemos finalMetadata output.cache ∧
+      ∃ (level : Nat → Nat) (frontier : Nat),
+        EnumerationOrder.Stratified output.cache.core level frontier ∧
+        ∃ (bound : Nat) (observedTerm : Term (PartialSymbol Symbol)) (after : Core),
+          (∀ extra,
+            Success (SourcePruningEnumerationPartialOutput.rootPartial
+              output.caller.checked.native.machine.heap (bound + extra))
+              output.cache.core observedTerm after ∧
+            ExceptT.run (SourcePruningEnumerationPartialOutput.rootPartial
+              output.caller.checked.native.machine.heap (bound + extra) output.cache.core) =
+              [.ok (observedTerm, after)]) ∧
+          EnumerationDriver.RenderStable output.cache.core after ∧
+          EnumerationCompressionFrame.Frame output.cache.core after ∧
+          EnumerationOrder.Stratified after level frontier ∧
+          Packet formulas solver finalInventory output.caller finalMemos finalMetadata
+            (EnumerationExpandableIndex.frame after output.cache) ∧
+          ∀ (language : NodeLanguage Symbol) (meaning : Constraint → Term Symbol → Prop)
+            (assignment : Nat → Term Symbol),
+            Satisfies language meaning assignment output.cache.core →
+              Satisfies language meaning assignment after ∧
+              SourcePruningPartialMatch.Completes assignment observedTerm (assignment 0)

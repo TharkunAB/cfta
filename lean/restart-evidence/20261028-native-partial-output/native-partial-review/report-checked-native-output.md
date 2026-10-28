@@ -1,0 +1,11 @@
+# Checked native partial output — OPEN
+
+CLEAR for the reviewed native adapter and producer. The installed 214-line source has SHA256 e3790bad644ac4e16d112543bdc67bdddb475353978661661510312edb13c58d. Its bytes equal the strict3 snapshot. The actual strict3 receipt reports exit 0 and empty raw output under Lean 4.34.1, warningAsError, all linters, 4 GiB memory and zero swap. This reviewer ran no compiler.
+
+Both complete failure logs and all repair patches were read. Attempt1 used the immutable owner v1 and failed on do-expression parsing and reduction of existing fill/projection equations. Attempt2 fixed those and failed on boundary-match reduction and unfolding the native wrapper. Attempt3 changes only those reductions. The public statements are unchanged except the parser parentheses around the do-expression. The original owner draft remains intact and is now known FAILED by Root attempt1, rather than merely untested.
+
+The adapter reads lookupNode and recursiveBoundary. A SOME native handle is truncated only when its suspended bucket is empty and the actual decoded node is a recursive boundary. Mu and Union both satisfy that classifier. Missing lookup, nonboundary nodes and nonempty buckets remain raw holes. The private Graph is an observation adapter only. No graph language, intersection model or native semantic graph is inferred.
+
+Both producers fix bound, observed partial term and complete returned core before all model observers. Every larger bound has the same exact singleton raw result and the same returned core. RenderStable, full Frame and the original Stratified levels are retained. Each original satisfying assignment supplies final Satisfies and the existing Completes relation for that SAME assignment. The root result completes to assignment 0. No Discharged, carrier, final model or future success is a producer input.
+
+This does not show that every completion of truncation is accepted. It does not render residual obligations to concrete checked residual terms. It does not establish original accepted-model preservation through the whole recursive worker or physical Haskell correspondence. Root owns actual history and startup composition. Their sources, public statements, final docs and checks are still pending this review. The bundle remains OPEN and no old sealed area was written.

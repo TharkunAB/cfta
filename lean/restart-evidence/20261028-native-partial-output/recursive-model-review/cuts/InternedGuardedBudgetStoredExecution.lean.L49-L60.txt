@@ -1,0 +1,12 @@
+theorem unfold_heaps [DecidableEq (EdgeKey Symbol Guard)] (value : Value Symbol Guard)
+    (state : State Symbol Guard) (context : Context state []) (heap : Heap state)
+    (depthHeap : InternedFreshOrdinaryDepthHeap.Heap state) (available : Available state value) :
+    Heap (InternedFreshOrdinaryStoredSubstitution.unfold value state).state ∧
+      InternedFreshOrdinaryDepthHeap.Heap (InternedFreshOrdinaryStoredSubstitution.unfold value state).state := by
+  cases value with
+  | empty | reference | node | union => exact ⟨heap, depthHeap⟩
+  | mu entry body depth ordinary =>
+      have checked := unfold_mu_checked entry body depth ordinary state context heap depthHeap available
+      exact ⟨checked.heap, checked.depthHeap⟩
+
+end MicroCFTA.InternedGuardedBudgetStoredExecution

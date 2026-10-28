@@ -1,0 +1,30 @@
+/-- One actual native partial result represents every model of the original fragment. -/
+theorem expandPartial_complete
+    (heap : InternedConstructorTemplates.State Symbol NativeGuard)
+    (level : Nat → Nat) (frontier : Nat) (fragment : Fragment Symbol)
+    (before : State Symbol EnumGuard) (safe : Safe before)
+    (stratified : Stratified before level frontier) (allocated : FragmentBound before.counter fragment) :
+    ∃ bound observedTerm after,
+      (∀ extra,
+        Success (expandPartial heap (bound + extra) fragment) before observedTerm after ∧
+        ExceptT.run (expandPartial heap (bound + extra) fragment before) = [.ok (observedTerm, after)]) ∧
+      RenderStable before after ∧ Frame before after ∧ Stratified after level frontier ∧
+      ∀ (language : NodeLanguage Symbol) (meaning : EnumGuard → Term Symbol → Prop)
+        (assignment : Nat → Term Symbol),
+        Satisfies language meaning assignment before →
+          Satisfies language meaning assignment after ∧
+          SourcePruningPartialMatch.Completes assignment observedTerm (fill assignment fragment) := by
+  obtain ⟨bound, observedTerm, after, actual, stable, frame, ordered⟩ :=
+    EnumerationPartialCompletion.expandPartial_complete (boundaryView heap) level frontier fragment before
+      safe stratified allocated
+  refine ⟨bound, observedTerm, after, ?_, stable, frame, ordered, ?_⟩
+  · intro extra
+    have raised := EnumerationObservations.expandPartial_moreFuel (boundaryView heap) bound extra
+      fragment before observedTerm after actual
+    exact ⟨raised, EnumerationPartialExact.expandPartial_exact (boundaryView heap) (bound + extra)
+      fragment before after observedTerm raised⟩
+  · intro language meaning assignment satisfied
+    exact ⟨(SourcePruningEnumerationNativeLanguage.satisfies_frame language meaning
+      assignment before after frame).mpr satisfied,
+      SourcePruningPartialRenderingSemantics.expandPartial_completes (boundaryView heap)
+        language meaning assignment bound fragment before after observedTerm safe.1.total satisfied actual⟩

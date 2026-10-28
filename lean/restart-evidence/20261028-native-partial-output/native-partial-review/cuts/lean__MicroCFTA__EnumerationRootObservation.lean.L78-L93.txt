@@ -1,0 +1,16 @@
+    getValue_transport (leftFuel + 1) 0 left right leftAfter value frame total reading
+  have extended := EnumerationExecution.getValue_moreFuel rightFuel 1 0 right value rightAfter rightReading
+  exact ⟨rightFuel, rightAfter,
+    (rootFragment_success rightFuel right rightAfter fragment).mpr ⟨value, extended, projected⟩, finalFrame⟩
+
+/-- More fuel retains the exact root-fragment observation and final state. -/
+theorem rootFragment_moreFuel (fuel extra : Nat) :
+    EnumerationExecution.Retains (rootFragment (Symbol := Symbol) (Guard := Guard) fuel)
+      (rootFragment (fuel + extra)) := by
+  intro before fragment after success
+  obtain ⟨value, reading, projected⟩ := (rootFragment_success fuel before after fragment).mp success
+  have extended := EnumerationExecution.getValue_moreFuel (fuel + 1) extra 0 before value after reading
+  apply (rootFragment_success (fuel + extra) before after fragment).mpr
+  exact ⟨value, by simpa [Nat.add_assoc, Nat.add_comm, Nat.add_left_comm] using extended, projected⟩
+
+end MicroCFTA.EnumerationObservations

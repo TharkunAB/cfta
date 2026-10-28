@@ -1,5 +1,47 @@
 # Current system claim
 
+## Native partial outputs and one selected-value normalization
+
+Source checkpoint: d4d4260e20d7bc3d003c8779256475254fcedcc5.
+`run_initial_finite_render_sound_partial` retains the ENTIRE previous
+6435-byte startup declaration. It adds no input admission and calls the old
+producer once. For EVERY actual emitted output, the SAME ResourceHistory
+constructs a finite native partial root observation. Bound, partial term and
+full returned state precede every semantic model. The actual raw result is
+the same singleton at every larger bound. The output's own full Packet remains
+before and after the read, with the same caller, Memos, metadata and levels.
+Under Satisfies of that OWN output, the same assignment remains satisfying and
+the existing Completes relation represents its root term. No Discharged gate
+is needed. Pending raw holes and intentional recursive truncation remain.
+This does not supply an emitted output or its model from original acceptance.
+
+The new selected-value worker performs ONE repaired native Mu unfolding.
+For Union it reads actual rows and constructs their node. It derives one
+stable actual heap result and exact independent least-language equivalence.
+It is not yet lifted to the allocated Caller/Post/Memos or used by the driver.
+Actual program-hole membership now transports program positions and template
+avoidance from the filled parent. A pure type-hole witness shows why original
+root encoding alone cannot supply that provenance for every annotation hole.
+
+The largest gap remains full recursive ORIGINAL accepted-output coverage.
+Lift the new selected-value operation, connect it to a faithful dispatcher,
+update the resource forecast and compose the actual forward-model path.
+Keep intended opaque outputs. Actual ProperState excludes selected terminal
+buckets; nonempty proper Mu/Union descendant buckets still need normalization.
+Haskell already has both selected-root normalization and terminal dispatch.
+These are Lean model integration gaps, not established Haskell defects.
+Public policy origins, APIs, ranking/sampling and physical correspondence
+remain open. Whole-CFTA correctness is the objective. Goal ACTIVE; PROGRESS.
+
+Six modules add nine public theorems and three public operation definitions.
+All seven final strict checks pass. Full Audit passes 4337 jobs and checks
+80562 theorem dependencies. Public readback has 332 theorem blocks and twelve
+definitions. The previous 323 blocks and nine definitions remain its exact
+1292203-byte prefix. All 4330 old non-Audit Lean sources, 179 strong modules
+and 810 tracked Haskell source/evidence files retain bytes. Haskell is unchanged.
+Details: `lean/notes-current-native-partial-output.md`.
+
+
 ## Accepted models through native prefixes and callback restart
 
 Source checkpoint: cfad1652ff20cc20bf0537c26591fb686b5e2821.

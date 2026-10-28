@@ -1,0 +1,29 @@
+theorem fallback_complete_resources
+    (formulas : SourceGuards.Formulas FullSyntax.Formula)
+    (solver : SourceGuards.Entailment FullSyntax.Formula) (inventory : Inventory)
+    (caller : Caller width) (memos : Memos) (before : Cached) (metadata : Metadata Typing)
+    (uv handle : Nat) (scs : List Suspended) (value : Node)
+    (checkEmpty : Bool) (edgesOf : Node → List (EdgeValue Symbol Constraint))
+    (packet : Packet formulas solver inventory caller memos metadata before)
+    (ready : EnumerationDriver.Ready uv before.core)
+    (stored : before.core.values[uv]? = some (.unenumerated (some handle) scs))
+    (decoded : lookupNode caller.checked.native.machine.heap handle = some value)
+    (fallback : match value with
+      | .node .. => scs.any (fun sc => EqualityTrie.isTerminal sc.trie) = true
+      | _ => True)
+    (profile : Profile) (property : Constraint → Prop)
+    (bounded : Fits profile caller.checked) (known : Heap property caller.checked.native.machine.heap) :
+    ∃ (bound : Nat) (entered : Cached),
+      (∀ extra, ExceptT.run (SourcePruningEnumerationEntry.enter caller.checked.native.machine.heap
+        (bound + extra) uv before.core) = [.ok ((uv, handle, scs, value), entered.core)]) ∧
+      EnumerationDriver.RenderStable before.core entered.core ∧
+      entered.core.counter = before.core.counter ∧ entered.core.values = before.core.values ∧
+      entered.expandable = before.expandable ∧ entered.waiting = before.waiting ∧
+      Packet formulas solver inventory caller memos metadata entered ∧
+      (∀ extra (hook : Fragment → Caller width → Queries → Cached →
+          SourcePruningEnumerationNativeContinuations.HookResult Output Reason width),
+        run hook checkEmpty (bound + extra) (bound + extra) (bound + extra) (bound + extra) (bound + extra)
+          uv edgesOf caller before memos.query =
+            ([.ok ((uv, handle, scs, value), entered.core)], none)) ∧
+      Post formulas solver inventory caller caller memos ∧ Fits profile caller.checked ∧
+      Heap property caller.checked.native.machine.heap

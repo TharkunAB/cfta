@@ -1,0 +1,28 @@
+private theorem root_completes
+    (heap : InternedConstructorTemplates.State Symbol NativeGuard)
+    (language : NodeLanguage Symbol) (meaning : EnumGuard → Term Symbol → Prop)
+    (assignment : Nat → Term Symbol) (fuel : Nat) (before after : State Symbol EnumGuard)
+    (observedTerm : Term (PartialSymbol Symbol)) (total : UnionFind.Total before.representatives)
+    (satisfied : Satisfies language meaning assignment before)
+    (actual : Success (rootPartial heap fuel) before observedTerm after) :
+    SourcePruningPartialMatch.Completes assignment observedTerm (assignment 0) := by
+  obtain ⟨fragment, middle, rootRead, rendered⟩ := (success_bind _ _ _ _ _).mp actual
+  have frame := rootFragment_frame fuel before middle fragment total rootRead
+  have middleModel := (SourcePruningEnumerationNativeLanguage.satisfies_frame
+    language meaning assignment before middle frame).mpr satisfied
+  have completed := SourcePruningPartialRenderingSemantics.expandPartial_completes (boundaryView heap)
+    language meaning assignment fuel fragment middle after observedTerm (frame.total total) middleModel rendered
+  have rootFilled : fill assignment fragment = assignment 0 := by
+    obtain ⟨value, reading, projected⟩ := (rootFragment_success fuel before middle fragment).mp rootRead
+    obtain ⟨_readFrame, root, _size, path, _afterPath, stored⟩ :=
+      getValue_frame (fuel + 1) 0 before middle value total reading
+    cases value with
+    | eliminated | unenumerated _ _ => simp only [projected, fill]
+    | enumerated storedFragment =>
+        rw [projected]
+        have rootEquation : fill assignment storedFragment = assignment root := by
+          simpa only [EnumerationCorrectness.heap, stored, Option.getD_some, slot, slotSatisfies]
+            using satisfied.1.2 root
+        exact rootEquation.trans (satisfied.1.1 0 root (UnionFind.sameClass_root path)).symm
+  rw [rootFilled] at completed
+  exact completed

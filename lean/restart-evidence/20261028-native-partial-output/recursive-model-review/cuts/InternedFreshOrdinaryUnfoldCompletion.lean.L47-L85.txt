@@ -1,0 +1,39 @@
+theorem unfold_complete_decoded [DecidableEq (EdgeKey Symbol Guard)] (value : Value Symbol Guard)
+    (state : State Symbol Guard) (context : Context state captures) (available : Available state value)
+    (heap : InternedFreshOrdinaryDepthHeap.Heap state) (covered : Covered [] state) :
+    ∃ result after, unfold value state = .done result after ∧ Context after captures ∧
+      InternedFreshOrdinaryDepthHeap.Heap after ∧ Covered [] after ∧ Available after result ∧
+      Grows state after ∧ Extends state.nodes.issued after.nodes.issued := by
+  cases value with
+  | empty | reference | node | union => exact ⟨_, state, rfl, context, heap, covered, available, grows_refl _, extends_refl _⟩
+  | mu entry body depth ordinary =>
+      apply execute_complete_decoded body _ state context (available.children body (by simp [children])) ?_ heap covered
+      intro name replacement found
+      dsimp only at found
+      split at found
+      · cases found
+        exact available
+      · cases found
+
+/-- An actual repaired unfolding of a closed available record remains closed without preparation. -/
+theorem unfold_closed [DecidableEq (EdgeKey Symbol Guard)] (value : Value Symbol Guard)
+    (state : State Symbol Guard) (context : Context state captures) (available : Available state value)
+    (closed : value.free = []) (result : Value Symbol Guard) (after : State Symbol Guard)
+    (done : unfold value state = .done result after) : result.free = [] := by
+  cases value with
+  | empty | reference | node | union => cases done; exact closed
+  | mu entry body depth ordinary =>
+      have replacements : Replacements state (fun name => if name = .interned entry.identity then some (.mu entry body depth ordinary) else none) := by
+        intro name replacement found
+        dsimp only at found
+        split at found
+        · cases found
+          exact available
+        · cases found
+      apply List.eq_nil_iff_forall_not_mem.mpr
+      intro name member
+      obtain ⟨original, originalFree, named⟩ := free_support body _ state context
+        (available.children body (by simp [children])) replacements result after done name member
+      have own : original = .interned entry.identity := by
+        by_cases different : original = .interned entry.identity
+        · exact different

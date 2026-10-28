@@ -1,0 +1,31 @@
+      EnumerationCanonicalWaiting.Correct roots before.core.values before.waiting →
+      (∀ (slot : Nat), SourcePruningEnumerationNativeIndex.candidate heap
+        ((before.core.values[slot]?).getD .eliminated) = some (before.expandable slot)) →
+      ∃ after : EnumerationExpandableIndex.Cached Symbol EnumGuard,
+        suspendMany heap tries before = some (suspendedVars before.core.counter tries, after) ∧
+        after.core = suspendedState tries.length before.core ∧
+        after.core.counter = before.core.counter + tries.length ∧
+        after.core.counter = after.core.values.length ∧
+        after.core.representatives = before.core.representatives ∧ Roots after.core.representatives roots ∧
+        StorageValid after.core ∧ PendingRealized heap after.core ∧
+        EnumerationCanonicalWaiting.Correct roots after.core.values after.waiting ∧
+        after.waiting = before.waiting ∧ after.expandable = before.expandable ∧
+        (∀ (slot : Nat), SourcePruningEnumerationNativeIndex.candidate heap
+          ((after.core.values[slot]?).getD .eliminated) = some (after.expandable slot)) := by
+  induction tries with
+  | nil =>
+    intro before storage realized paths counts flags
+    exact ⟨before, rfl, rfl, rfl, storage.aligned, rfl, paths, storage,
+      realized, counts, rfl, rfl, flags⟩
+  | cons trie rest ih =>
+    intro before storage realized paths counts flags
+    obtain ⟨_flag, middle, _classified, nativeAllocated, _allocationRaw, middleShape,
+      _middleStored, middleCounter, _middleAligned, middleForest, middlePaths,
+      middleStorage, middleRealized, middleCounts, middleWaiting, _middleFlagShape,
+      middleFlags⟩ := SourcePruningEnumerationCachedPrepare.allocate_complete heap none
+        before roots (by intro _handle impossible; cases impossible) storage realized paths counts flags
+    have middleFlagsSame : middle.expandable = before.expandable := by
+      change some (before.core.counter,
+          (⟨EnumerationState.allocated none before.core, before.expandable, before.waiting⟩ :
+            EnumerationExpandableIndex.Cached Symbol EnumGuard)) =
+        some (before.core.counter, middle) at nativeAllocated

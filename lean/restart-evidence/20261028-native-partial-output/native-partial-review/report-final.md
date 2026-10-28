@@ -1,0 +1,30 @@
+# Native partial output review — CLEAR
+
+The six final sources, all nine new theorem signatures and three public operation bodies, the complete new note, and all nine exact status insertions were reviewed. No proof or scope defect remains in this bounded review. Source checkpoint: d4d4260e20d7bc3d003c8779256475254fcedcc5. The whole-CFTA objective remains incomplete.
+
+The native partial adapter reuses the existing expandPartial worker. Its private Graph supplies only the actual lookupNode/recursiveBoundary tag. It has no graph-language or intersection interpretation. A decoded Mu/Union with an EMPTY suspended bucket truncates. Missing lookup, nonboundary values and nonempty buckets keep the original raw hole. No Discharged or future render/model gate is added.
+
+The fragment and root producers fix their bound, partial term and COMPLETE returned core before every language/residual-meaning/assignment observer. Every larger bound returns the same exact singleton raw row and same core. RenderStable, full Frame and Stratified levels remain. Each original model remains satisfying and yields the existing Completes relation for that SAME assignment. The root target is assignment 0. Truncation can complete to any term; this does not assert acceptance of every completion or turn partial residuals into concrete checked residual outputs.
+
+The history wrapper uses the SAME actual output Packet, carrier transport, cache and native heap. Original references/root carrier derive the allocated root bound. It derives a full Packet at the actual compressed cache through callback_frame, retaining the actual caller, Inventory, Memos, metadata and counter bound. The startup wrapper derives the two provenance facts at literal initial storage. It calls the old startup producer once and retains its ENTIRE declaration. Independent inverse recovery passes for all 6,435 old bytes, SHA256 0752d25c863abaf6f3c4a454d7c2470868b2a36092420982ef7b7907f6a43d63. No original admission or old finite/resources/history/canonical/proper/carrier/concrete-render field is removed.
+
+The pure program-hole laws follow the actual programHoles traversal and derive template avoidance at those holes. The checked type-hole witness limits that law: original root ProgramEncoding alone does not provide program provenance at every annotation. This is a pure witness with no Packet/native-execution/public-Haskell failure claim.
+
+SelectedValue is exactly 96 lines / 5,449 bytes. It unfolds a selected Mu ONCE and exposes Union rows before makeNode. Every failure retains its own reached native heap. Its producer fixes bound, result and full heap before universal independent-language equivalence, and derives Keeps, SemanticReady, availability and closedness. It is not yet lifted through Caller/Post/full Memos, slot updates, dispatcher or resource forecasting. The actual Haskell selection and terminal-dispatch cuts were inspected. No Haskell edit, execution, test, benchmark or new defect claim occurs here.
+
+Final installed source identities equal their final strict snapshots:
+
+- ProgramHoleOrigins: 4129d3fc637e26a5e192c49e2e64f26a16178a3ea4f2c3bf73f1e0b230527543.
+- ProgramTypeOriginBoundary: 97a69455db2e00533bd069858f6186cbe75eda598bd3922e92397ed3feb7b26c.
+- PartialOutput: e3790bad644ac4e16d112543bdc67bdddb475353978661661510312edb13c58d.
+- HistoryPartialOutput: 07eae2f6160e26666cb678aa30f984b8111a11a8d2a6630dfd173fe0bb01ac19.
+- InitialPartialOutput: 3a97d808bb02b64ae77ea26b1679e1463989e828084241365a27937b730e4a8d.
+- SelectedValue: af4a2d02c1144721d5a068c2795f5cffcb7bb5f63efc3eef9942440b5d4db0c1.
+
+The actual 17 current compiler/build/public commands and all five complete failed diagnostics are preserved. The original owner draft and root repair lineage remain. Repairs change parsing, explicit reductions, induction arguments, dependent elimination or imports; the intended public propositions remain. All seven final strict source/Audit checks pass under Lean 4.34.1, warningAsError and all linters. Receipts measure 4 GiB memory and zero swap. Full Audit reports PASS 4,337 jobs / 80,562 dependencies. This reviewer ran no compiler, native evaluator, Haskell program, Git, network or board operation.
+
+The whole 469-line new public appendix was read in three complete chunks. Direct byte comparison independently verifies the old 1,292,203-byte prefix and exact 36,872-byte appendix. Current full public output is 1,329,075 bytes, SHA256 08e37eb0ddd0f9032a3f2fb9a8368e5e4c0bdbb7e22bde80ee83ef248c65bc13: 332 theorem blocks and 12 printed definitions. Only propext, Classical.choice and Quot.sound occur. Root preservation reports retain 4,330 prior non-Audit Lean sources, 179 strong modules and 810 Haskell source/evidence files; this review does not claim a separate whole-source scan of those inventories.
+
+The WHOLE final note is 14,784 bytes, SHA256 2d3a3dc3e1606fbb529b5aaa5bc22e8b1073b322202181e45383bb6702f23b3b. All nine exact insertion regions were read. Independent inverse checks recover every old document byte. Whole current/prior copies provide provenance; no whole-reading claim applies to the large historical bodies. Documentation correctly keeps original accepted-input-to-output coverage, output-model origin, selected-value integration, type/template policy origin, zero-output endpoint invariants, ranking/sampling and physical correspondence open. It does not infer Discharged from DONE or exclude intentional opaque outputs.
+
+The source index contains 39 whole identities and 48 literal cuts, with explicit review scopes. All indexed whole copies and cuts were verified against current originals. Earlier OPEN/UNTESTED reports are preserved as dated review stages; the original owner v1 is known failed at Root attempt1. This final report supersedes those stage statuses. Only this owned subtree was written. All prior frozen areas remain untouched. No future archive, commit or publication is claimed. After the exact manifest and seal are written, all writes to this subtree stop.

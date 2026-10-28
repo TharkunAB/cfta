@@ -1,0 +1,9 @@
+# Native selected-value operation — OPEN
+
+CLEAR for the standalone checked worker. The whole 96-line / 5,449-byte source was read at SHA256 af4a2d02c1144721d5a068c2795f5cffcb7bb5f63efc3eef9942440b5d4db0c1. The installed bytes equal strict1; the actual receipt reports exit0, empty raw output, all linters and warnings-as-errors under Lean4.34.1, 4GiB memory and zero swap. This reviewer ran no compiler.
+
+run executes one stored unfold for a selected Mu. It does not replace that step with repeated head normalization. For a Union it executes actual nodeEdges and then makeNode. Pending, unresolved and exhausted branches retain their own reached native heap. Other values return unchanged. The Haskell enumerateOutUVarWith Mu/InternedUnion cases were inspected at lines885–900 and agree with these two operation choices. This is a source-shaped native operation, not a physical Haskell execution comparison.
+
+run_complete fixes bound, native result and complete reached heap before all holds/ambient/term observers. It derives Keeps, full SemanticReady, result availability, closedness and independent guarded least-language equality. Mu uses actual unfold completeness and checked stored-language equality. Union uses actual completed row exposure/reconstruction, its exact-language theorem and all-larger-bound replay. No future success or desired semantic result is a premise.
+
+The worker does not modify enumeration slots and has not been lifted through full Caller/Post/Memos, selected dispatcher, recursive resource forecasting or driver model coverage. The existing NativeOrdinaryContinuations still dispatches directly only on an actual node result and may stop otherwise. This standalone source change does not close that integration gap. No new Haskell defect or whole-input reachability counterexample is asserted. Final public/docs review is pending; the bundle remains OPEN.

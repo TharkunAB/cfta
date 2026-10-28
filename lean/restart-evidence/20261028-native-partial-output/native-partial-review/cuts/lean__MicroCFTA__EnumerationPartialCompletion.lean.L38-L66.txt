@@ -1,0 +1,29 @@
+theorem getValue_complete (before : State Symbol Guard) (safe : Safe before)
+    (uv : Nat) (inside : uv < before.counter) :
+    ∃ fuel root value after, Success (getValue fuel uv) before value after ∧
+      RenderStable before after ∧ before.values[root]? = some value ∧
+      ∃ size, UnionFind.Reaches before.representatives uv root size := by
+  obtain ⟨root, size, path⟩ := safe.1.total uv
+  have index : root < before.values.length := by
+    rw [← safe.1.aligned]
+    exact reaches_bounded before.representatives before.counter safe.1.forest path inside
+  let value := before.values[root]
+  have stored : before.values[root]? = some value := List.getElem?_eq_getElem index
+  obtain ⟨fuel, found, lookup⟩ := UnionFind.findRoot_terminates path
+  have rootSame := (UnionFind.reaches_unique
+    (UnionFind.findRoot_correct fuel before.representatives uv found lookup).1 path).1
+  let after := {before with representatives := found.forest}
+  have reading : Success (getValue fuel uv) before value after :=
+    (getValue_success fuel uv before after value).mpr
+      ⟨found, lookup, by simpa [rootSame] using stored, rfl⟩
+  exact ⟨fuel, root, value, after, reading,
+    (getValue_storage fuel uv before after value safe inside reading).1, stored, size, path⟩
+
+/-- Bounded partial rendering completes and retains safety, its full frame and dependency levels. -/
+theorem expandPartial_complete (graph : Graph Symbol Guard) (level : Nat → Nat)
+    (frontier : Nat) (fragment : Fragment Symbol) (before : State Symbol Guard)
+    (safe : Safe before) (stratified : Stratified before level frontier)
+    (allocated : FragmentBound before.counter fragment) :
+    ∃ fuel term after, Success (expandPartial graph fuel fragment) before term after ∧
+      RenderStable before after ∧ Frame before after ∧ Stratified after level frontier := by
+  have construct : ∀ depth, ∀ fragment (before : State Symbol Guard), Safe before →

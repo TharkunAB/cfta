@@ -1,0 +1,11 @@
+/-- Replace raw holes by their assignment and retain each concrete constructor. -/
+inductive Completes (assignment : Nat → Term Symbol) : Term (PartialSymbol Symbol) → Term Symbol → Prop where
+  /-- Concrete nodes retain their symbol and ordered completed children. -/
+  | concrete (symbol : Symbol) (partials : List (Term (PartialSymbol Symbol))) (terms : List (Term Symbol))
+      (children : All₂ (Completes assignment) partials terms) :
+      Completes assignment (.node (.concrete symbol) partials) (.node symbol terms)
+  /-- A raw hole denotes the assigned term at its original variable. -/
+  | hole (uv : Nat) : Completes assignment (.node (.hole uv) []) (assignment uv)
+  /-- Truncation imposes no condition on the complete term. -/
+  | truncated (partials : List (Term (PartialSymbol Symbol))) (term : Term Symbol) :
+      Completes assignment (.node .truncated partials) term

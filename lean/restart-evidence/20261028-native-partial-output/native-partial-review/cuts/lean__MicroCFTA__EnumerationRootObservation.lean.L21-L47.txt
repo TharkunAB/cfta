@@ -1,0 +1,27 @@
+    (fragment : Fragment Symbol) :
+    Success (rootFragment fuel) before fragment after ↔
+      ∃ value, Success (getValue (fuel + 1) 0) before value after ∧
+        fragment = (match value with | .enumerated stored => stored | _ => .hole 0) := by
+  unfold rootFragment
+  constructor
+  · intro success
+    obtain ⟨value, middle, reading, final⟩ := (success_bind _ _ _ _ _).mp success
+    cases value with
+    | enumerated stored =>
+        obtain ⟨projected, same⟩ := (success_pure stored fragment middle after).mp final
+        subst after
+        exact ⟨.enumerated stored, reading, projected⟩
+    | unenumerated node scs =>
+        obtain ⟨projected, same⟩ := (success_pure (.hole 0) fragment middle after).mp final
+        subst after
+        exact ⟨.unenumerated node scs, reading, projected⟩
+    | eliminated =>
+        obtain ⟨projected, same⟩ := (success_pure (.hole 0) fragment middle after).mp final
+        subst after
+        exact ⟨.eliminated, reading, projected⟩
+  · rintro ⟨value, reading, projected⟩
+    apply (success_bind _ _ _ _ _).mpr
+    refine ⟨value, after, reading, ?_⟩
+    cases value <;> exact (success_pure _ fragment after after).mpr ⟨projected, rfl⟩
+
+/-- Reading the root fragment preserves every field and exact root paths. -/

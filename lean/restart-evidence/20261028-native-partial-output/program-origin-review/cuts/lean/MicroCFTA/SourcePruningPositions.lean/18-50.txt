@@ -1,0 +1,33 @@
+def typePositions (isType : Bool) (fragment : Fragment Symbol) (types : List Nat) : List Nat :=
+  match fragment with
+  | .hole uv => if isType then canonicalIds (uv :: types) else types
+  | .node symbol children =>
+      if isType then children.foldr (fun child accumulated => typePositions true child accumulated) types
+      else match children with
+        | [annotation, marker, function, argument] =>
+            if symbol = ("app", FullSyntax.Formula.top) then
+              typePositions true annotation (typePositions true marker
+                (typePositions false function (typePositions false argument types)))
+            else typePositions true annotation (typePositions true marker
+              (typePositions true function (typePositions true argument types)))
+        | [annotation, term] =>
+            if symbol = ("filter", FullSyntax.Formula.top) then
+              typePositions true annotation (typePositions false term types)
+            else typePositions true annotation (typePositions true term types)
+        | children => children.foldr (fun child accumulated => typePositions true child accumulated) types
+termination_by sizeOf fragment
+
+/-- Read program holes in function-before-argument order without normalization. -/
+def programHoles (isType : Bool) (fragment : Fragment Symbol) : List Nat :=
+  match fragment with
+  | .hole uv => if isType then [] else [uv]
+  | .node symbol children =>
+      if isType then []
+      else match children with
+        | [_, _, function, argument] =>
+            if symbol = ("app", FullSyntax.Formula.top) then
+              programHoles false function ++ programHoles false argument
+            else []
+        | [_, term] =>
+            if symbol = ("filter", FullSyntax.Formula.top) then programHoles false term else []
+        | _ => []

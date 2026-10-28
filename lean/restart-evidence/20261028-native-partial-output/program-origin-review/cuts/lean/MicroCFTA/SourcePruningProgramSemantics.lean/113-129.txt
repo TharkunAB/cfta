@@ -1,0 +1,17 @@
+      | cons firstCompletes restCompletes =>
+          exact .cons (fun selected member => first selected _ firstCompletes member) (rest _ restCompletes)
+
+/-- Actual new pending groups retain the original complete program's template refutation. -/
+theorem startMatches_refutes (assignment : Nat → Term Symbol)
+    (templates : List (Template.Pattern Symbol)) (observedTerm : PartialTerm) (whole : Term Symbol)
+    (completed : Completes assignment observedTerm whole) (avoids : Avoids templates whole)
+    (pending : Pending Symbol) (member : some pending ∈ startMatches templates observedTerm) :
+    SourcePruningResume.Refutes assignment pending := by
+  unfold startMatches at member
+  obtain ⟨program, selected, member⟩ := List.mem_flatMap.mp member
+  obtain ⟨pattern, indexed, matched⟩ := List.mem_map.mp member
+  obtain ⟨fullProgram, atProgram, fills⟩ := programs_complete assignment observedTerm program whole completed selected
+  exact matchPartial_refutes assignment pattern program fullProgram pending fills matched
+    (avoids fullProgram atProgram pattern (indexTemplates_mem templates program pattern indexed))
+
+end MicroCFTA.SourcePruningTemplates

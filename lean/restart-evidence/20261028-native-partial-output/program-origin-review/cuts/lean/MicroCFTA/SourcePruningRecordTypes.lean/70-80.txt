@@ -1,0 +1,11 @@
+theorem atTypes_exact (metadata : Metadata Typing) (uv : Nat) :
+    atTypes metadata uv = true ↔ uv ∈ metadata.types ∧
+      ∀ group ∈ metadata.pending, ∀ entry ∈ group, entry.2 ≠ uv := by
+  simp [atTypes]
+
+/-- An empty catalog performs the pure metadata update without an oracle call. -/
+theorem recordTypes_empty (graph : Graph Symbol Guard) (fuel : Nat)
+    (metadata : Metadata Typing) (uv : Nat) (input : Sum (Fragment Symbol) Nat) :
+    recordTypes graph [] fuel metadata uv input =
+      pure (false, {metadata with types := updatedTypes metadata uv input}) := by
+  rfl

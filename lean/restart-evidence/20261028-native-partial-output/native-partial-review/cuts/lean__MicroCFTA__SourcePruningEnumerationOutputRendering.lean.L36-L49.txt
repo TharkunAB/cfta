@@ -1,0 +1,14 @@
+/-- The final actual history tag retains its own full packet. -/
+theorem ResourceHistory.output_packet
+    (history : ResourceHistory holeKey fits admits graph templates checkEmpty edgesOf stop order formulas solver
+      workFuel recursiveFuel inventory caller memos metadata before seed ceiling next output) :
+    ∃ (finalInventory : Inventory) (finalMemos : Memos) (finalMetadata : Metadata Typing),
+      Packet formulas solver finalInventory output.caller finalMemos finalMetadata output.cache := by
+  induction history with
+  | stopped admission => exact ⟨_, _, _, admission.1⟩
+  | done admission => exact ⟨_, _, _, admission.1⟩
+  | parked _admission _valid _observed _tail ih => exact ih
+  | ordinary _admission _valid _observed _post _invocation _receipt _callbackAdmission _callback _tail ih =>
+      exact ih
+
+/-- Actual rendering constructs a complete assignment at the same history output's native heap. -/

@@ -1,0 +1,13 @@
+  obtain ⟨fragment, middle, rootRead, rendered⟩ := (success_bind _ _ _ _ _).mp success
+  have rootFrame := rootFragment_frame fuel before middle fragment total rootRead
+  exact rootFrame.trans (expandPartial_frame graph fuel fragment middle after term
+    (rootFrame.total total) rendered)
+
+/-- Independent successful public rendering sequences give the same partial term. -/
+theorem rootPartial_agrees (graph : Graph Symbol Guard) (leftFuel rightFuel : Nat)
+    (left right leftAfter rightAfter : State Symbol Guard)
+    (leftTerm rightTerm : Term (PartialSymbol Symbol)) (frame : Frame left right)
+    (total : UnionFind.Total left.representatives)
+    (leftRead : Success (rootFragment leftFuel >>= expandPartial graph leftFuel) left leftTerm leftAfter)
+    (rightRead : Success (rootFragment rightFuel >>= expandPartial graph rightFuel) right rightTerm rightAfter) :
+    leftTerm = rightTerm ∧ Frame leftAfter rightAfter := by

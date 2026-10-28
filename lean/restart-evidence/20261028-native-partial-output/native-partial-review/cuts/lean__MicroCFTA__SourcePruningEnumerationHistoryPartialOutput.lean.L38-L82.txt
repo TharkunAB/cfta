@@ -1,0 +1,45 @@
+
+/-- The same history constructs native partial output before every output-model observer. -/
+theorem ResourceHistory.root_partial_complete_models
+    (history : ResourceHistory holeKey fits admits graph templates checkEmpty edgesOf stop order formulas solver
+      workFuel recursiveFuel inventory caller memos metadata before seed ceiling next output)
+    (references : EnumerationGraphReferences.ReferencesCarry before.core)
+    (carried : EnumerationCarriers.CarriesGraph before.core 0) :
+    ∃ (finalInventory : Inventory) (finalMemos : Memos) (finalMetadata : Metadata Typing),
+      Packet formulas solver finalInventory output.caller finalMemos finalMetadata output.cache ∧
+      ∃ (level : Nat → Nat) (frontier : Nat),
+        EnumerationOrder.Stratified output.cache.core level frontier ∧
+        ∃ (bound : Nat) (observedTerm : Term (PartialSymbol Symbol)) (after : Core),
+          (∀ extra,
+            Success (SourcePruningEnumerationPartialOutput.rootPartial
+              output.caller.checked.native.machine.heap (bound + extra))
+              output.cache.core observedTerm after ∧
+            ExceptT.run (SourcePruningEnumerationPartialOutput.rootPartial
+              output.caller.checked.native.machine.heap (bound + extra) output.cache.core) =
+              [.ok (observedTerm, after)]) ∧
+          EnumerationDriver.RenderStable output.cache.core after ∧
+          EnumerationCompressionFrame.Frame output.cache.core after ∧
+          EnumerationOrder.Stratified after level frontier ∧
+          Packet formulas solver finalInventory output.caller finalMemos finalMetadata
+            (EnumerationExpandableIndex.frame after output.cache) ∧
+          ∀ (language : NodeLanguage Symbol) (meaning : Constraint → Term Symbol → Prop)
+            (assignment : Nat → Term Symbol),
+            Satisfies language meaning assignment output.cache.core →
+              Satisfies language meaning assignment after ∧
+              SourcePruningPartialMatch.Completes assignment observedTerm (assignment 0) := by
+  obtain ⟨finalInventory, finalMemos, finalMetadata, packet⟩ := history.output_packet
+  obtain ⟨level, frontier, ordered⟩ := packet.ordered
+  have provenance := history.carriers_output references
+  have inside := EnumerationRenderability.carrier_inside output.cache.core packet.safe 0
+    (provenance.1 0 carried)
+  obtain ⟨bound, observedTerm, after, actual, stable, frame, afterOrder, models⟩ :=
+    SourcePruningEnumerationPartialOutput.rootPartial_complete
+      output.caller.checked.native.machine.heap level frontier output.cache.core packet.safe ordered inside
+  refine ⟨finalInventory, finalMemos, finalMetadata, packet, level, frontier, ordered,
+    bound, observedTerm, after, actual, stable, frame, afterOrder, ?_, models⟩
+  exact callback_frame packet finalMetadata after stable.safe frame ⟨level, frontier, afterOrder⟩ (by
+    intro group member entry listed
+    rw [frame.counter]
+    exact packet.bounded group member entry listed)
+
+end MicroCFTA.SourcePruningEnumerationRecursive

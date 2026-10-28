@@ -1,0 +1,33 @@
+/-- A type-hole insertion has no repeated ID. -/
+theorem typePositions_hole_nodup (uv : Nat) (types : List Nat) :
+    (typePositions true (.hole uv) types).Nodup := by
+  rw [typePositions_hole_true]
+  exact canonicalIds_nodup (uv :: types)
+
+/-- A type-hole insertion exposes IDs in ascending order. -/
+theorem typePositions_hole_sorted (uv : Nat) (types : List Nat) :
+    (typePositions true (.hole uv) types).Pairwise (· ≤ ·) := by
+  rw [typePositions_hole_true]
+  exact canonicalIds_sorted (uv :: types)
+
+/-- Every child below a type position uses the same right-fold type traversal. -/
+theorem typePositions_type_node (symbol : Symbol) (children : List (Fragment Symbol)) (types : List Nat) :
+    typePositions true (.node symbol children) types = children.foldr (typePositions true) types := by
+  rw [typePositions.eq_def]
+  rfl
+
+/-- Application types retain the nested annotation/marker and function/argument folds. -/
+theorem typePositions_app (annotation marker function argument : Fragment Symbol) (types : List Nat) :
+    typePositions false (.node ("app", FullSyntax.Formula.top) [annotation, marker, function, argument]) types =
+      [annotation, marker].foldr (typePositions true)
+        ([function, argument].foldr (typePositions false) types) := by
+  simp [typePositions]
+
+/-- A filter records its program before its annotation in the type-set fold. -/
+theorem typePositions_filter (annotation term : Fragment Symbol) (types : List Nat) :
+    typePositions false (.node ("filter", FullSyntax.Formula.top) [annotation, term]) types =
+      typePositions true annotation (typePositions false term types) := by
+  simp [typePositions]
+
+/-- A complete type-position fragment contributes no program hole. -/
+theorem programHoles_type (fragment : Fragment Symbol) : programHoles true fragment = [] := by
