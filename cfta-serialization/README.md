@@ -9,6 +9,8 @@ Reading validates the input without running a solver or enumerating terms.
 
 The format is version 1. Each file starts with its kind and version, such as
 `graph 1;` or `language 1;`.
+[Prior art](../docs/language-authoring-prior-art.md) compares this syntax with
+Redex, Nanopass, EDN, and KDL, and explains why the format has its own syntax.
 
 ## Typed values and exact round trips
 
