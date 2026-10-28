@@ -1,0 +1,25 @@
+/-- A processed receipt retains its own full Post and original edge-prefix resources. -/
+def ReceiptAt
+    (formulas : SourceGuards.Formulas FullSyntax.Formula) (solver : SourceGuards.Entailment FullSyntax.Formula)
+    (caller : Caller width) (before : Cached) (uv : Nat) (seed : Seed) (scs : List Suspended)
+    (edges : List (EdgeValue Symbol Constraint)) (index : Nat) (receipt : Receipt width) : Prop :=
+  Admitted uv receipt ∧ Pending receipt ∧ FragmentHistory before.core receipt ∧
+  ∃ (reached : Caller width) (saved : SourceEndpointMemo.Memos) (next : Inventory) (final : Memos),
+    advance receipt = some (reached, saved) ∧ Post formulas solver next caller reached final ∧
+    final.query = saved ∧
+    Fits (reservationAdvance seed (cost scs before.core.counter (edges.take (index + 1)))).2 reached.checked ∧
+    Heap (fun guard => guard ∈ (reservationAdvance seed (cost scs before.core.counter (edges.take (index + 1)))).1)
+      reached.checked.native.machine.heap
+
+/-- An emitted output retains its actual metadata packet and native edge-prefix resources. -/
+def OutputAt
+    (formulas : SourceGuards.Formulas FullSyntax.Formula) (solver : SourceGuards.Entailment FullSyntax.Formula)
+    (caller : Caller width) (before : Cached) (seed : Seed) (scs : List Suspended)
+    (edges : List (EdgeValue Symbol Constraint)) (index : Nat) (output : Output width Typing) : Prop :=
+  ∃ (next : Inventory) (final : Memos) (metadata : SourcePruningRecordTypes.Metadata Typing),
+    Post formulas solver next caller output.caller final ∧ final.query = output.queries ∧
+    Packet formulas solver next output.caller final metadata output.cache ∧
+    (output.metadata = none ∨ output.metadata = some metadata) ∧
+    Fits (reservationAdvance seed (cost scs before.core.counter (edges.take (index + 1)))).2 output.caller.checked ∧
+    Heap (fun guard => guard ∈ (reservationAdvance seed (cost scs before.core.counter (edges.take (index + 1)))).1)
+      output.caller.checked.native.machine.heap

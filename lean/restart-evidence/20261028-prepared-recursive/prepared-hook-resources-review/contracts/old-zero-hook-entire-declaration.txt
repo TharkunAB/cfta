@@ -1,0 +1,42 @@
+theorem alternatives_zero_complete_resources
+    (holeKey : Typing → Nat → Key) (fits : Key → Symbol → Bool) (admits : Key → Node → Bool)
+    (graph : Graph Symbol Constraint) (templates : List (Template.Pattern Symbol))
+    (checkEmpty : Bool) (edgesOf : Node → List (EdgeValue Symbol Constraint))
+    (stop : Option (SourcePruningRecordTypes.Metadata Typing → Nat → Bool))
+    (order : SourcePruningRecordTypes.Metadata Typing → List Nat → Option Nat)
+    (metadata : SourcePruningRecordTypes.Metadata Typing)
+    (seed : Seed) (formulas : SourceGuards.Formulas FullSyntax.Formula)
+    (solver : SourceGuards.Entailment FullSyntax.Formula) (inventory : Inventory)
+    (caller : Caller (bits + 2)) (memos : Memos) (before : Cached) (uv handle : Nat) (scs : List Suspended)
+    (parentEntry : Cache.Interned InternedBinderProtocol.NodeKey)
+    (storedEdges selectedEdges : List (EdgeValue Symbol Constraint))
+    (depth : Nat) (free : List InternedBinderProtocol.Reference)
+    (packet : Packet formulas solver inventory caller memos metadata before)
+    (ready : EnumerationDriver.Ready uv before.core)
+    (stored : before.core.values[uv]? = some (.unenumerated (some handle) scs))
+    (decoded : lookupNode caller.checked.native.machine.heap handle = some (.node parentEntry storedEdges depth free))
+    (selected : ∀ edge ∈ selectedEdges, edge ∈ storedEdges)
+    (incoming : EnumerationReferences.IncomingAvoid uv before.core)
+    (bounded : Fits seed.2 caller.checked) (reserved : Reserved bits seed (cost scs before.core.counter selectedEdges))
+    (known : Heap (fun guard => guard ∈ seed.1) caller.checked.native.machine.heap) :
+    ∃ (bound : Nat) (processed : List (Receipt (bits + 2))) (outputs : List (Output (bits + 2) Typing))
+      (afterCaller : Caller (bits + 2)) (next : Inventory) (final : Memos)
+      (result : Result (Output (bits + 2) Typing) (Failure (bits + 2) Typing) (bits + 2)),
+      (∀ extra, SourcePruningEnumerationNativeContinuations.run
+        (continueWith (resume holeKey fits admits graph templates checkEmpty edgesOf stop order (bound + extra) 0)
+          graph templates stop order (bound + extra) metadata uv)
+        checkEmpty (bound + extra) (bound + extra) (bound + extra) (bound + extra) (bound + extra)
+        uv scs before selectedEdges caller memos.query = result) ∧
+      Post formulas solver next caller afterCaller final ∧
+      Packet formulas solver next afterCaller final metadata before ∧
+      Fits (reservationAdvance seed (cost scs before.core.counter selectedEdges)).2 afterCaller.checked ∧
+      Heap (fun guard => guard ∈ (reservationAdvance seed (cost scs before.core.counter selectedEdges)).1)
+        afterCaller.checked.native.machine.heap ∧
+      (∀ index receipt, processed[index]? = some receipt →
+        ReceiptAt formulas solver caller before uv seed scs selectedEdges index receipt) ∧
+      (∀ output ∈ outputs, ∃ index, index < selectedEdges.length ∧
+        OutputAt formulas solver caller before seed scs selectedEdges index output) ∧
+      (result = .complete processed outputs afterCaller final.query ∨
+        ∃ current, result = .stopped processed outputs current ∧
+          StoppedAt formulas solver caller before uv seed scs selectedEdges processed.length
+            afterCaller next final current)

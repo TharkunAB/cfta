@@ -1,0 +1,47 @@
+    run hook checkEmpty r n p h k target scs before (edge :: rest) caller queries =
+      .stopped [] [] (.edge none) := by
+  simp only [run, observed]
+
+/-- The sibling starts at the hook's actual returned endpoint, after the head hook completes. -/
+theorem completed_head
+    (hook : Fragment → Caller width → Queries → Cached → HookResult Output Reason width)
+    (checkEmpty : Bool) (r n p h k target : Nat) (scs : List Suspended) (before : Cached)
+    (edge : EdgeValue Symbol Constraint) (rest : List (EdgeValue Symbol Constraint))
+    (caller reached middleCaller : Caller width) (queries saved middleQueries : Queries)
+    (fragment : Fragment) (after : Cached) (outputs : List Output)
+    (observed : SourcePruningEnumerationCapturedEdge.run checkEmpty r n p h k target scs edge caller before queries =
+      some (.complete fragment reached saved after))
+    (continued : hook fragment reached saved after = .complete outputs middleCaller middleQueries) :
+    run hook checkEmpty r n p h k target scs before (edge :: rest) caller queries =
+      match run hook checkEmpty r n p h k target scs before rest middleCaller middleQueries with
+      | .complete processed later finalCaller finalQueries =>
+          .complete (.complete fragment reached saved after :: processed) (outputs ++ later) finalCaller finalQueries
+      | .stopped processed later current =>
+          .stopped (.complete fragment reached saved after :: processed) (outputs ++ later) current := by
+  simp only [run, observed, continued]
+
+/-- A stopped hook retains its output, reason and receipt without evaluating the sibling. -/
+theorem stopped_hook
+    (hook : Fragment → Caller width → Queries → Cached → HookResult Output Reason width)
+    (checkEmpty : Bool) (r n p h k target : Nat) (scs : List Suspended) (before : Cached)
+    (edge : EdgeValue Symbol Constraint) (rest : List (EdgeValue Symbol Constraint))
+    (caller reached : Caller width) (queries saved : Queries) (fragment : Fragment) (after : Cached)
+    (outputs : List Output) (reason : Reason) (endpoint : Option (Caller width × Queries))
+    (observed : SourcePruningEnumerationCapturedEdge.run checkEmpty r n p h k target scs edge caller before queries =
+      some (.complete fragment reached saved after))
+    (halted : hook fragment reached saved after = .stopped outputs reason endpoint) :
+    run hook checkEmpty r n p h k target scs before (edge :: rest) caller queries =
+      .stopped [] outputs (.continuation (.complete fragment reached saved after) reason endpoint) := by
+  simp only [run, observed, halted]
+
+/-- The identity hook retains the edge's native endpoint and emits no output. -/
+def identityHook (_fragment : Fragment) (caller : Caller width) (queries : Queries) (_after : Cached) :
+    HookResult Output Reason width :=
+  .complete [] caller queries
+
+/-- Embed a legacy branch result without continuation outputs or continuation stops. -/
+def ofBranches : SourcePruningEnumerationNativeBranches.Result width → Result Output Reason width
+  | .complete processed caller queries => .complete processed [] caller queries
+  | .stopped processed current => .stopped processed [] (.edge current)
+
+/-- The identity hook preserves the entire legacy result, including stopped receipts. -/

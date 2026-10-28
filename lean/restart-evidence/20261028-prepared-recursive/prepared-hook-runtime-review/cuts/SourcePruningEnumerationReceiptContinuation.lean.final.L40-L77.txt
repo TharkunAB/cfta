@@ -1,0 +1,38 @@
+/-- A missing receipt remains an edge stop without a supplied endpoint. -/
+theorem missing
+    (hook : Fragment → Caller width → Queries → Cached → HookResult Output Reason width) :
+    run hook none = .stopped [] [] (.edge none) := rfl
+
+/-- A completed hook supplies its exact output and returned native endpoint. -/
+theorem completed
+    (hook : Fragment → Caller width → Queries → Cached → HookResult Output Reason width)
+    (fragment : Fragment) (caller reached : Caller width) (queries saved : Queries)
+    (after : Cached) (outputs : List Output)
+    (continued : hook fragment caller queries after = .complete outputs reached saved) :
+    run hook (some (.complete fragment caller queries after)) =
+      .complete [.complete fragment caller queries after] outputs reached saved := by
+  simp only [run, continued]
+
+/-- A stopped hook retains its receipt, outputs, reason and actual optional endpoint. -/
+theorem stopped_hook
+    (hook : Fragment → Caller width → Queries → Cached → HookResult Output Reason width)
+    (fragment : Fragment) (caller : Caller width) (queries : Queries) (after : Cached)
+    (outputs : List Output) (reason : Reason) (endpoint : Option (Caller width × Queries))
+    (stopped : hook fragment caller queries after = .stopped outputs reason endpoint) :
+    run hook (some (.complete fragment caller queries after)) =
+      .stopped [] outputs (.continuation (.complete fragment caller queries after) reason endpoint) := by
+  simp only [run, stopped]
+
+/-- The identity hook embeds the whole single-receipt advance, including every stop. -/
+theorem identity_run (current : Option (Receipt width)) :
+    run (SourcePruningEnumerationNativeContinuations.identityHook
+      (Output := Output) (Reason := Reason)) current =
+      match current with
+      | none => .stopped [] [] (.edge none)
+      | some receipt =>
+          match SourcePruningEnumerationNativeBranches.advance receipt with
+          | none => .stopped [] [] (.edge (some receipt))
+          | some (caller, queries) => .complete [receipt] [] caller queries := by
+  cases current with
+  | none => rfl
+  | some receipt => cases receipt <;> rfl

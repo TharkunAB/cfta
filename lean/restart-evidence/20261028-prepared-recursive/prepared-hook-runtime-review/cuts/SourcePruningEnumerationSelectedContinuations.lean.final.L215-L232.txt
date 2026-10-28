@@ -1,0 +1,18 @@
+/-- An actual opaque prepared value continues its exact receipt at the captured target. -/
+theorem opaque_step
+    (hook : Fragment → Caller width → Queries → Cached → HookResult Output Reason width)
+    (checkEmpty : Bool) (entryFuel nativeFuel r n p h k uv target handle : Nat)
+    (scs : List Suspended) (decoded value : Node)
+    (heap : InternedConstructorTemplates.State Symbol Constraint) (entered : Core)
+    (edgesOf : Node → List (EdgeValue Symbol Constraint)) (caller : Caller width)
+    (before : Cached) (queries : Queries)
+    (observed : SourcePruningEnumerationSelectedPreparation.run entryFuel nativeFuel uv caller before =
+      ([.ok ((target, handle, scs, decoded), entered)], some (.done value heap)))
+    (boundary : MergedOrdinaryHeight.recursiveBoundary value = true) :
+    run hook checkEmpty entryFuel nativeFuel r n p h k uv edgesOf caller before queries =
+      (([.ok ((target, handle, scs, decoded), entered)], some (.done value heap)),
+        some (SourcePruningEnumerationReceiptContinuation.run hook
+          (SourcePruningEnumerationSelectedOpaqueDispatch.run checkEmpty r n p h k target scs value
+            (SourcePruningEnumerationSelectedValueCaller.advance caller heap)
+            (EnumerationExpandableIndex.frame entered before) queries))) := by
+  cases value <;> cases boundary <;> simp only [run, observed, ite_self]

@@ -1,0 +1,47 @@
+          caller memos.query
+      | some .stuck => .complete [] caller memos.query
+      | some (.expand selected) => .stopped []
+          (.exhausted selected result.2 (EnumerationExpandableIndex.frame after before))
+          (some (caller, memos.query))
+  refine ⟨fuel, result, after, outcome, returned, stable, frame, types, holes, typing, rfl, ?_, ?_⟩
+  · dsimp only [outcome]
+    by_cases accepted : result.1 = true
+    · rw [ite_eq_left accepted]
+      exact ⟨rfl, rfl, bounded, known, fun _ member => False.elim (List.not_mem_nil member)⟩
+    · rw [ite_eq_right accepted]
+      cases decision : SourcePruningEnumerationRestart.decision stop order result.2
+          (EnumerationExpandableIndex.frame after before) with
+      | none =>
+          dsimp only
+          refine ⟨rfl, rfl, bounded, known, ?_⟩
+          intro output member
+          have same := List.mem_singleton.mp member
+          subst output
+          exact ⟨returned, rfl, rfl, Or.inr rfl, rfl⟩
+      | some next =>
+          cases next with
+          | done =>
+              dsimp only
+              refine ⟨rfl, rfl, bounded, known, ?_⟩
+              intro output member
+              have same := List.mem_singleton.mp member
+              subst output
+              exact ⟨returned, rfl, rfl, Or.inl rfl, rfl⟩
+          | stuck =>
+              exact ⟨rfl, rfl, bounded, known, fun _ member => False.elim (List.not_mem_nil member)⟩
+          | expand selected => exact ⟨selected, rfl, rfl, rfl, bounded, known⟩
+  · intro extra
+    have actual := callback extra
+    refine ⟨actual.1, actual.2.1, actual.2.2, ?_⟩
+    rw [actual.2.2
+      (resume holeKey fits admits graph templates checkEmpty edgesOf stop order (fuel + extra) 0) stop order]
+    dsimp only [outcome]
+    by_cases accepted : result.1 = true
+    · simp only [ite_eq_left accepted]
+    · simp only [ite_eq_right accepted]
+      cases decision : SourcePruningEnumerationRestart.decision stop order result.2
+          (EnumerationExpandableIndex.frame after before) with
+      | none => rfl
+      | some next => cases next <;> rfl
+
+end MicroCFTA.SourcePruningEnumerationRecursive

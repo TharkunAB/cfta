@@ -1,0 +1,8 @@
+theorem stopped_hook
+    (hook : Fragment → Caller width → Queries → Cached → HookResult Output Reason width)
+    (fragment : Fragment) (caller : Caller width) (queries : Queries) (after : Cached)
+    (outputs : List Output) (reason : Reason) (endpoint : Option (Caller width × Queries))
+    (stopped : hook fragment caller queries after = .stopped outputs reason endpoint) :
+    run hook (some (.complete fragment caller queries after)) =
+      .stopped [] outputs (.continuation (.complete fragment caller queries after) reason endpoint) := by
+  simp only [run, stopped]

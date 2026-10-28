@@ -1,5 +1,45 @@
 # Public API and source correspondence
 
+## Prepared recursive callbacks and original opaque models
+
+Source checkpoint: 9eddb729b6786649df0fcb90e0e329c77a19d585.
+The new PreparedRecursive.run uses one actual selected preparation before
+its ordinary, opaque or terminal continuation. Ordinary callbacks run before
+the next sibling. Each sibling keeps its captured metadata and cache. Native
+caller effects and full query memos pass through the actual callback endpoint.
+The original Recursive.run and all older proofs remain unchanged.
+
+Original Packet, Ready, stored handle, resource profile, ProperState and
+IncomingAvoid now derive the actual remaining opaque allocation and captured
+write. Each original satisfying assignment extends to the SAME returned cache.
+The extension keeps all old variables and fills the fresh hole with the original
+selected term. The complete old preparation and opaque packets remain. The
+actual arbitrary hook receives that completed receipt at a sufficient common
+bound. The model result concerns hook entry. It does not certify arbitrary
+hook outputs. The actual fresh opaque slot still has an EMPTY bucket.
+
+The new worker has direct zero-expansion callback and receipt resource proofs.
+Its prepared ordinary sibling scan retains full Post, captured Packet, numeric
+bounds and per-prefix receipt/output certificates. An exhausted callback keeps
+its own Packet and native endpoint. A separate finite-head theorem still uses
+the OLD worker's positive-depth Complete premise. It does not establish the
+new worker's positive-depth completion.
+
+The largest gap remains global recursive soundness and ORIGINAL accepted-output
+coverage. Compose models and resources through ordinary siblings and restarts,
+then derive sufficient depth from an original accepted term and permitted policy.
+Public policy origins, APIs, ranking, sampling and physical Haskell correspondence
+remain open. The previous conditional finite-pruning language result remains.
+Goal ACTIVE. Checkpoint PROGRESS.
+
+Eleven modules add 21 public theorems and nine definitions. All twelve final
+strict checks pass. Full Audit passes 4359 jobs and checks 80730 dependencies.
+Public readback has 377 theorem blocks and 28 definitions. The complete previous
+1442414-byte readback remains its exact prefix. All 4347 old non-Audit Lean
+sources, 196 strong modules and 810 tracked Haskell source/evidence files retain
+bytes. No Haskell file changed. Details: `lean/notes-current-prepared-recursive.md`.
+
+
 ## Original preparation resources and actual selected dispatch
 
 Source checkpoint: d2ccf5f1f33cfec161589f81401e9928dac176c7.

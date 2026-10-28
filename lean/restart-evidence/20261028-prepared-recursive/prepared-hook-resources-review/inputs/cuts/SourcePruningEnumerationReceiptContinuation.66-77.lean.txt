@@ -1,0 +1,12 @@
+theorem identity_run (current : Option (Receipt width)) :
+    run (SourcePruningEnumerationNativeContinuations.identityHook
+      (Output := Output) (Reason := Reason)) current =
+      match current with
+      | none => .stopped [] [] (.edge none)
+      | some receipt =>
+          match SourcePruningEnumerationNativeBranches.advance receipt with
+          | none => .stopped [] [] (.edge (some receipt))
+          | some (caller, queries) => .complete [receipt] [] caller queries := by
+  cases current with
+  | none => rfl
+  | some receipt => cases receipt <;> rfl

@@ -1,0 +1,34 @@
+theorem continueWith_rejected
+    (recur : Metadata Typing → Caller width → Queries → Cached → Option Next → Result)
+    (graph : Graph Symbol Constraint) (templates : List (Template.Pattern Symbol))
+    (stop : Option (Metadata Typing → Nat → Bool))
+    (order : Metadata Typing → List Nat → Option Nat)
+    (callbackFuel : Nat) (metadata updated : Metadata Typing) (uv : Nat)
+    (fragment : Fragment) (caller : Caller width) (queries : Queries)
+    (before : Cached) (core : Core)
+    (recorded : ExceptT.run (SourcePruningRecordTypes.recordTypes
+      graph templates callbackFuel metadata uv (.inl fragment) before.core) =
+        [.ok ((true, updated), core)]) :
+    continueWith recur graph templates stop order callbackFuel metadata uv fragment caller queries before =
+      .complete [] caller queries := by
+  simp only [continueWith, recorded]
+
+/-- A successful Left callback restarts at its actual returned cache and metadata. -/
+theorem continueWith_restarted
+    (recur : Metadata Typing → Caller width → Queries → Cached → Option Next → Result)
+    (graph : Graph Symbol Constraint) (templates : List (Template.Pattern Symbol))
+    (stop : Option (Metadata Typing → Nat → Bool))
+    (order : Metadata Typing → List Nat → Option Nat)
+    (callbackFuel : Nat) (metadata updated : Metadata Typing) (uv : Nat)
+    (fragment : Fragment) (caller : Caller width) (queries : Queries)
+    (before : Cached) (core : Core)
+    (recorded : ExceptT.run (SourcePruningRecordTypes.recordTypes
+      graph templates callbackFuel metadata uv (.inl fragment) before.core) =
+        [.ok ((false, updated), core)]) :
+    continueWith recur graph templates stop order callbackFuel metadata uv fragment caller queries before =
+      recur updated caller queries (EnumerationExpandableIndex.frame core before)
+        (SourcePruningEnumerationRestart.decision stop order updated
+          (EnumerationExpandableIndex.frame core before)) := by
+  simp only [continueWith, recorded]
+
+variable [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Constraint)] [DecidableEq Node]

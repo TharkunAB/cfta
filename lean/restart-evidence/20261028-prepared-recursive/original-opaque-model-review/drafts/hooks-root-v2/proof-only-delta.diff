@@ -1,0 +1,26 @@
+--- /tmp/mcfta-prepared-recursive-20261028/original-opaque-model-review/drafts/hooks-v1/SourcePruningEnumerationSelectedOpaqueHookModels.lean
++++ /tmp/mcfta-prepared-recursive-20261028/original-opaque-model-review/drafts/hooks-root-v2/SourcePruningEnumerationSelectedOpaqueHookModels.lean
+@@ -132,12 +132,12 @@
+                 some (SourcePruningEnumerationReceiptContinuation.run hook
+                   (some (.complete (.hole before.core.counter)
+                     (SourcePruningEnumerationSelectedValueCaller.advance caller heap) memos.query after))))) := by
+-  obtain ⟨bound, decoded, result, heap, entered, preparationPacket, opaque⟩ :=
++  obtain ⟨bound, decoded, result, heap, entered, preparationPacket, opaqueResult⟩ :=
+     complete_resources_opaque_models formulas solver inventory caller memos metadata before uv handle scs
+       packet ready stored profile fits proper incoming checkEmpty
+   refine ⟨bound, decoded, result, heap, entered, preparationPacket, ?_⟩
+   intro boundary
+-  obtain ⟨opaqueBound, childHandle, middle, after, retained⟩ := opaque boundary
++  obtain ⟨opaqueBound, childHandle, middle, after, retained⟩ := opaqueResult boundary
+   refine ⟨opaqueBound, childHandle, middle, after, retained, ?_⟩
+   intro Output Reason hook r n p h extra edgesOf
+   rcases preparationPacket with ⟨preparation, _fits, _mass⟩
+@@ -166,7 +166,7 @@
+         (SourcePruningEnumerationSelectedValueCaller.advance caller heap) memos.query after) := by
+     simpa only [Nat.add_assoc, Nat.add_left_comm, Nat.add_comm, counterSame] using
+       opaqueRun r n p h (bound + extra)
+-  have actual := SourcePruningEnumerationSelectedContinuations.opaque hook checkEmpty
++  have actual := SourcePruningEnumerationSelectedContinuations.opaque_step hook checkEmpty
+     (bound + opaqueBound + extra) (bound + opaqueBound + extra)
+     r n p h (bound + opaqueBound + extra) uv uv handle scs decoded result heap entered.core
+     edgesOf caller before memos.query preparationAt boundary

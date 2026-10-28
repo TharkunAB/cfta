@@ -1,0 +1,13 @@
+/-- An exhausted suffix keeps the current unprocessed receipt and exact native endpoint. -/
+theorem PreparedStoppedAt.prepend (post : Post formulas solver middleInventory caller middle middleMemos)
+    {reached : Caller width} {next : Inventory} {final : Memos}
+    {current : SourcePruningEnumerationNativeContinuations.Stop (Failure width Typing) width}
+    (certificate : PreparedStoppedAt formulas solver middle before uv
+      (reservationAdvance seed (SourcePruningEnumerationNativeBranchCompletion.edgeCost scs before.core.counter edge))
+      scs rest index reached next final current) :
+    PreparedStoppedAt formulas solver caller before uv seed scs (edge :: rest) (index + 1) reached next final current := by
+  rcases certificate with stopped | ⟨fragment, receiptCache, selected, updated, callbackCache, same, receipt, packet⟩
+  · exact .inl stopped
+  · exact .inr ⟨fragment, receiptCache, selected, updated, callbackCache, same, receipt.prepend post, packet⟩
+
+end MicroCFTA.SourcePruningEnumerationNativeHookResources

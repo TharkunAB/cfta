@@ -1,0 +1,14 @@
+
+/-- Retain prefix rejection, unsupported preparation, stopped children and a completed edge. -/
+inductive Result (width : Nat) where
+  /-- The prefix does not supply the supported singleton packet. -/
+  | unhandled
+  /-- The arity check rejects before any child runs. -/
+  | rejected (caller : Caller width) (queries : Queries) (after : Cached)
+  /-- Retain the exact first stopping child observation and optional cache. -/
+  | stopped (completedPrefix : List Fragment)
+      (observation : SourcePruningEnumerationChildDispatch.Observation width) (candidate : Option Cached)
+  /-- Every child succeeds and the edge residual is recorded. -/
+  | complete (fragment : Fragment) (caller : Caller width) (queries : Queries) (after : Cached)
+
+/-- Record the residual in the actual completed cache. -/

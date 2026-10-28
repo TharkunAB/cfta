@@ -1,0 +1,17 @@
+--- /tmp/mcfta-prepared-recursive-20261028/strict-original-opaque-hooks-v1/MicroCFTA/SourcePruningEnumerationSelectedOpaqueHookModels.lean
++++ /tmp/mcfta-prepared-recursive-20261028/strict-original-opaque-hooks-v2/MicroCFTA/SourcePruningEnumerationSelectedOpaqueHookModels.lean
+@@ -132,12 +132,12 @@
+                 some (SourcePruningEnumerationReceiptContinuation.run hook
+                   (some (.complete (.hole before.core.counter)
+                     (SourcePruningEnumerationSelectedValueCaller.advance caller heap) memos.query after))))) := by
+-  obtain ⟨bound, decoded, result, heap, entered, preparationPacket, opaque⟩ :=
++  obtain ⟨bound, decoded, result, heap, entered, preparationPacket, opaqueResult⟩ :=
+     complete_resources_opaque_models formulas solver inventory caller memos metadata before uv handle scs
+       packet ready stored profile fits proper incoming checkEmpty
+   refine ⟨bound, decoded, result, heap, entered, preparationPacket, ?_⟩
+   intro boundary
+-  obtain ⟨opaqueBound, childHandle, middle, after, retained⟩ := opaque boundary
++  obtain ⟨opaqueBound, childHandle, middle, after, retained⟩ := opaqueResult boundary
+   refine ⟨opaqueBound, childHandle, middle, after, retained, ?_⟩
+   intro Output Reason hook r n p h extra edgesOf
+   rcases preparationPacket with ⟨preparation, _fits, _mass⟩

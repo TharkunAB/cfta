@@ -1,0 +1,18 @@
+/-- Retain one preparation and execute its actual ordinary, opaque or terminal branch. -/
+noncomputable def run (checkEmpty : Bool) (entryFuel nativeFuel r n p h k uv : Nat)
+    (edgesOf : Node → List (EdgeValue Symbol Constraint)) (caller : Caller width)
+    (before : Cached) (queries : Queries) :
+    Preparation × Sum (SourcePruningEnumerationNativeBranches.Result width)
+      (Option (SourcePruningEnumerationSelectedEdge.Result width)) :=
+  let ordinary := SourcePruningEnumerationSelectedOrdinaryDispatch.run checkEmpty
+    entryFuel nativeFuel r n p h k uv edgesOf caller before queries
+  (ordinary.1, match ordinary.2 with
+    | .inr result => .inl result
+    | .inl () =>
+        match ordinary.1.2 with
+        | some (.done value heap) =>
+            match ordinary.1.1 with
+            | [.ok ((target, _handle, scs, _decoded), entered)] =>
+                .inr (SourcePruningEnumerationSelectedOpaqueDispatch.run checkEmpty r n p h k target scs value
+                  (SourcePruningEnumerationSelectedValueCaller.advance caller heap)
+                  (EnumerationExpandableIndex.frame entered before) queries)

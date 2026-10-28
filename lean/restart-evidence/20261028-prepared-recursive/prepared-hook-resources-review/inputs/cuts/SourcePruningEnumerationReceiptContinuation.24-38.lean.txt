@@ -1,0 +1,15 @@
+def run
+    (hook : Fragment → Caller width → Queries → Cached → HookResult Output Reason width) :
+    Option (Receipt width) → Result Output Reason width
+  | none => .stopped [] [] (.edge none)
+  | some receipt =>
+      match receipt with
+      | .complete fragment caller queries after =>
+          match hook fragment caller queries after with
+          | .complete outputs reached saved => .complete [receipt] outputs reached saved
+          | .stopped outputs reason endpoint =>
+              .stopped [] outputs (.continuation receipt reason endpoint)
+      | other =>
+          match SourcePruningEnumerationNativeBranches.advance other with
+          | none => .stopped [] [] (.edge (some other))
+          | some (caller, queries) => .complete [other] [] caller queries

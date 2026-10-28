@@ -1,0 +1,64 @@
+      ready stored realized paths counts flags
+  have same : value = .node parentEntry storedEdges depth free :=
+    Option.some.inj (lookup.symm.trans decoded)
+  subst value
+  have frame : EnumerationExpandableIndex.frame enteredCache.core before = enteredCache := by
+    cases enteredCache with
+    | mk core expandable waiting =>
+        simp only [EnumerationExpandableIndex.frame] at *
+        congr 1
+        · exact sameFlags.symm
+        · exact sameWaiting.symm
+  have enteredPacket : Packet formulas solver inventory caller memos metadata enteredCache := by
+    obtain ⟨level, frontier, ordered⟩ := packet.ordered
+    refine ⟨packet.context, stable.safe,
+      EnumerationReferences.pending_read before.core enteredCache.core stable packet.pending,
+      ⟨roots, enteredPaths, stable.safe.1, enteredRealized, enteredCounts, enteredFlags⟩,
+      ⟨level, frontier, EnumerationOrder.stratified_read before.core enteredCache.core level frontier stable ordered⟩,
+      ?_⟩
+    simpa only [counter] using packet.bounded
+  have enteredReserved : Reserved bits seed
+      (cost scs enteredCache.core.counter (edgesOf (.node parentEntry storedEdges depth free))) := by
+    simpa only [counter] using reserved
+  obtain ⟨scanBound, processed, outputs, afterCaller, next, final, result, scanRun, post,
+    captured, afterFits, afterKnown, receipts, outputPackets, shape⟩ :=
+    SourcePruningEnumerationNativeHookResources.alternatives_zero_complete_resources
+      holeKey fits admits graph templates checkEmpty edgesOf stop order metadata seed formulas solver inventory
+      caller memos enteredCache uv handle scs parentEntry storedEdges
+      (edgesOf (.node parentEntry storedEdges depth free)) depth free enteredPacket enteredReady enteredStored
+      decoded selected (EnumerationReferences.incoming_read uv before.core enteredCache.core stable incoming)
+      bounded enteredReserved known
+  have entryAt (extra : Nat) :
+      ExceptT.run (SourcePruningEnumerationEntry.enter caller.checked.native.machine.heap
+        (entryFuel + scanBound + extra) uv before.core) =
+        [.ok ((uv, handle, scs, .node parentEntry storedEdges depth free), enteredCache.core)] := by
+    simpa only [Nat.add_assoc] using entryRun (scanBound + extra)
+  have scanAt (extra : Nat) : SourcePruningEnumerationNativeContinuations.run
+      (continueWith
+        (resume holeKey fits admits graph templates checkEmpty edgesOf stop order (entryFuel + scanBound + extra) 0)
+        graph templates stop order (entryFuel + scanBound + extra) metadata uv)
+      checkEmpty (entryFuel + scanBound + extra) (entryFuel + scanBound + extra)
+      (entryFuel + scanBound + extra) (entryFuel + scanBound + extra) (entryFuel + scanBound + extra)
+      uv scs enteredCache (edgesOf (.node parentEntry storedEdges depth free)) caller memos.query = result := by
+    have actual := scanRun (entryFuel + extra)
+    have fuelSame : scanBound + (entryFuel + extra) = entryFuel + scanBound + extra := by omega
+    rw [fuelSame] at actual
+    exact actual
+  refine ⟨entryFuel + scanBound, enteredCache, processed, outputs, afterCaller, next, final, result,
+    entryAt, stable, counter, values, sameFlags, sameWaiting, enteredPacket, ?_, scanAt, post, captured,
+    ?_, ?_, receipts, outputPackets, shape⟩
+  · intro extra
+    have actual := entered
+      (continueWith
+        (resume holeKey fits admits graph templates checkEmpty edgesOf stop order (entryFuel + scanBound + extra) 0)
+        graph templates stop order (entryFuel + scanBound + extra) metadata uv)
+      checkEmpty (entryFuel + scanBound + extra) (entryFuel + scanBound + extra)
+      (entryFuel + scanBound + extra) (entryFuel + scanBound + extra) (entryFuel + scanBound + extra)
+      uv uv handle scs parentEntry storedEdges depth free edgesOf caller before memos.query enteredCache.core
+      (entryAt extra) nonterminal
+    rw [frame, scanAt extra] at actual
+    exact actual
+  · simpa only [counter] using afterFits
+  · simpa only [counter] using afterKnown
+
+end MicroCFTA.SourcePruningEnumerationNativeOrdinaryContinuations

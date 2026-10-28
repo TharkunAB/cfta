@@ -1,0 +1,29 @@
+inductive Failure (width : Nat) (Typing : Type) : Type 1 where
+  /-- The recursive budget does not permit the selected expansion. -/
+  | exhausted (uv : Nat) (metadata : Metadata Typing) (before : Cached)
+  /-- The actual selected prefix cannot supply a supported continuation. -/
+  | selected (uv : Nat) (observed : SourcePruningEnumerationSelectedStep.Result width Typing)
+  /-- The actual fragment callback does not return a singleton success. -/
+  | callback (uv : Nat) (raw : CallbackRaw Typing)
+  /-- Preparation retains its complete entry and native result, including a fault heap. -/
+  | preparation (uv : Nat) (raw : Preparation)
+  /-- Retain the processed alternatives and their exact edge or recursive stop. -/
+  | alternatives (uv : Nat) (processed : List (Receipt width))
+      (current : FoldStop (Failure width Typing) width)
+
+variable {Typing Key : Type} {width : Nat}
+local notation "Result" => HookResult (Output width Typing) (Failure width Typing) width
+
+/-- Read only a native endpoint supplied by the actual stopped receipt. -/
+def endpoint : FoldStop (Failure width Typing) width → Option (Caller width × Queries)
+  | .edge current => current.bind SourcePruningEnumerationNativeBranches.advance
+  | .continuation _ _ reached => reached
+
+/-- Convert the ordered alternative result without losing its outputs or stopped receipts. -/
+def finish (uv : Nat) : Fold (Output width Typing) (Failure width Typing) width → Result
+  | .complete _processed outputs caller queries => .complete outputs caller queries
+  | .stopped processed outputs current =>
+      .stopped outputs (.alternatives uv processed current) (endpoint current)
+
+/-- Run the concrete Left callback once before its own recursive continuation. -/
+noncomputable def continueWith

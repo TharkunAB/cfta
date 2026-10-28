@@ -1,0 +1,27 @@
+noncomputable def run
+    (hook : Fragment → Caller width → Queries → Cached → HookResult Output Reason width)
+    (checkEmpty : Bool) (entryFuel nativeFuel r n p h k uv : Nat)
+    (edgesOf : Node → List (EdgeValue Symbol Constraint)) (caller : Caller width)
+    (before : Cached) (queries : Queries) : Preparation × Option (Fold Output Reason width) :=
+  let observation := SourcePruningEnumerationSelectedPreparation.run entryFuel nativeFuel uv caller before
+  (observation, match observation.2 with
+    | some (.done value heap) =>
+        match observation.1 with
+        | [.ok ((target, _handle, scs, _decoded), entered)] =>
+            some (if scs.any (fun sc => EqualityTrie.isTerminal sc.trie) then
+              SourcePruningEnumerationReceiptContinuation.run hook
+                (SourcePruningEnumerationSelectedOpaqueDispatch.run checkEmpty r n p h k target scs value
+                  (SourcePruningEnumerationSelectedValueCaller.advance caller heap)
+                  (EnumerationExpandableIndex.frame entered before) queries)
+            else match value with
+              | parent@(.node ..) =>
+                  SourcePruningEnumerationNativeContinuations.run hook checkEmpty r n p h k target scs
+                    (EnumerationExpandableIndex.frame entered before) (edgesOf parent)
+                    (SourcePruningEnumerationSelectedValueCaller.advance caller heap) queries
+              | _ =>
+                  SourcePruningEnumerationReceiptContinuation.run hook
+                    (SourcePruningEnumerationSelectedOpaqueDispatch.run checkEmpty r n p h k target scs value
+                      (SourcePruningEnumerationSelectedValueCaller.advance caller heap)
+                      (EnumerationExpandableIndex.frame entered before) queries))
+        | _ => none
+    | _ => none)

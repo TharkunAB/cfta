@@ -1,0 +1,25 @@
+    (holeKey : Typing → Nat → Key) (fits : Key → Symbol → Bool) (admits : Key → Node → Bool)
+    (graph : Graph Symbol Constraint) (templates : List (Template.Pattern Symbol))
+    (checkEmpty : Bool) (edgesOf : Node → List (EdgeValue Symbol Constraint))
+    (stop : Option (Metadata Typing → Nat → Bool))
+    (order : Metadata Typing → List Nat → Option Nat) (workFuel fuel uv : Nat)
+    (metadata updated : Metadata Typing) (caller reached : Caller width)
+    (queries saved : Queries) (before after : Cached)
+    (checked actionCore rightCore : Core) (prepared : Prepared)
+    (observed : SourcePruningEnumerationSelectedStep.runPrefix holeKey fits admits graph templates
+      stop order metadata workFuel workFuel workFuel workFuel workFuel workFuel uv caller before queries =
+        .narrowed checked prepared reached saved (some [.ok ((), actionCore)]) (some after)
+          (some [.ok ((false, updated), rightCore)]) none) :
+    resume holeKey fits admits graph templates checkEmpty edgesOf stop order workFuel (fuel + 1)
+      metadata caller queries before (some (.expand uv)) =
+      let continuation := SourcePruningEnumerationSelectedContinuations.run
+        (continueWith (resume holeKey fits admits graph templates checkEmpty edgesOf stop order workFuel fuel)
+          graph templates stop order workFuel updated uv)
+        checkEmpty workFuel workFuel workFuel workFuel workFuel workFuel workFuel uv edgesOf reached after saved
+      match continuation.2 with
+      | none => .stopped [] (.preparation uv continuation.1) none
+      | some folded => finish uv folded := by
+  simp only [resume, observed]
+  rfl
+
+end MicroCFTA.SourcePruningEnumerationPreparedRecursive

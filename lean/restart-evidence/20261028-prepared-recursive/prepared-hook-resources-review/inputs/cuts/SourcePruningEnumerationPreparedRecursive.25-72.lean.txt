@@ -1,0 +1,48 @@
+/-- Retain the exact bounded or unsupported observation that prevents continuation. -/
+inductive Failure (width : Nat) (Typing : Type) : Type 1 where
+  /-- The recursive budget does not permit the selected expansion. -/
+  | exhausted (uv : Nat) (metadata : Metadata Typing) (before : Cached)
+  /-- The actual selected prefix cannot supply a supported continuation. -/
+  | selected (uv : Nat) (observed : SourcePruningEnumerationSelectedStep.Result width Typing)
+  /-- The actual fragment callback does not return a singleton success. -/
+  | callback (uv : Nat) (raw : CallbackRaw Typing)
+  /-- Preparation retains its complete entry and native result, including a fault heap. -/
+  | preparation (uv : Nat) (raw : Preparation)
+  /-- Retain the processed alternatives and their exact edge or recursive stop. -/
+  | alternatives (uv : Nat) (processed : List (Receipt width))
+      (current : FoldStop (Failure width Typing) width)
+
+variable {Typing Key : Type} {width : Nat}
+local notation "Result" => HookResult (Output width Typing) (Failure width Typing) width
+
+/-- Read only a native endpoint supplied by the actual stopped receipt. -/
+def endpoint : FoldStop (Failure width Typing) width → Option (Caller width × Queries)
+  | .edge current => current.bind SourcePruningEnumerationNativeBranches.advance
+  | .continuation _ _ reached => reached
+
+/-- Convert the ordered alternative result without losing its outputs or stopped receipts. -/
+def finish (uv : Nat) : Fold (Output width Typing) (Failure width Typing) width → Result
+  | .complete _processed outputs caller queries => .complete outputs caller queries
+  | .stopped processed outputs current =>
+      .stopped outputs (.alternatives uv processed current) (endpoint current)
+
+/-- Run the concrete Left callback once before its own recursive continuation. -/
+noncomputable def continueWith
+    (recur : Metadata Typing → Caller width → Queries → Cached → Option Next → Result)
+    (graph : Graph Symbol Constraint) (templates : List (Template.Pattern Symbol))
+    (stop : Option (Metadata Typing → Nat → Bool))
+    (order : Metadata Typing → List Nat → Option Nat)
+    (callbackFuel : Nat) (metadata : Metadata Typing) (uv : Nat)
+    (fragment : Fragment) (caller : Caller width) (queries : Queries) (before : Cached) : Result :=
+  let raw := ExceptT.run (SourcePruningRecordTypes.recordTypes
+    graph templates callbackFuel metadata uv (.inl fragment) before.core)
+  match raw with
+  | [.ok ((true, _updated), _observed)] => .complete [] caller queries
+  | [.ok ((false, updated), observed)] =>
+      let after := EnumerationExpandableIndex.frame observed before
+      recur updated caller queries after (SourcePruningEnumerationRestart.decision stop order updated after)
+  | _ => .stopped [] (.callback uv raw) (some (caller, queries))
+
+variable [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Constraint)] [DecidableEq Node]
+
+/-- Prepare the selected value once before its actual recursive continuations.

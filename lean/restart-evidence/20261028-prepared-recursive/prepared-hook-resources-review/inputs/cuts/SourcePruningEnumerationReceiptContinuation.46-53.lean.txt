@@ -1,0 +1,8 @@
+theorem completed
+    (hook : Fragment → Caller width → Queries → Cached → HookResult Output Reason width)
+    (fragment : Fragment) (caller reached : Caller width) (queries saved : Queries)
+    (after : Cached) (outputs : List Output)
+    (continued : hook fragment caller queries after = .complete outputs reached saved) :
+    run hook (some (.complete fragment caller queries after)) =
+      .complete [.complete fragment caller queries after] outputs reached saved := by
+  simp only [run, continued]

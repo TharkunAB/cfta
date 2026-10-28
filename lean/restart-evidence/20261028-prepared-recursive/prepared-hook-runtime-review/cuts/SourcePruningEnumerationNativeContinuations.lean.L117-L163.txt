@@ -1,0 +1,47 @@
+/-- The identity hook retains the edge's native endpoint and emits no output. -/
+def identityHook (_fragment : Fragment) (caller : Caller width) (queries : Queries) (_after : Cached) :
+    HookResult Output Reason width :=
+  .complete [] caller queries
+
+/-- Embed a legacy branch result without continuation outputs or continuation stops. -/
+def ofBranches : SourcePruningEnumerationNativeBranches.Result width → Result Output Reason width
+  | .complete processed caller queries => .complete processed [] caller queries
+  | .stopped processed current => .stopped processed [] (.edge current)
+
+/-- The identity hook preserves the entire legacy result, including stopped receipts. -/
+theorem identity_run
+    (checkEmpty : Bool) (r n p h k target : Nat) (scs : List Suspended) (before : Cached)
+    (edges : List (EdgeValue Symbol Constraint)) (caller : Caller width) (queries : Queries) :
+    run (identityHook (Output := Output) (Reason := Reason)) checkEmpty r n p h k target scs before edges caller queries =
+      ofBranches (SourcePruningEnumerationNativeBranches.run checkEmpty r n p h k target scs before edges caller queries) := by
+  induction edges generalizing caller queries with
+  | nil => rfl
+  | cons edge rest ih =>
+      cases observed : SourcePruningEnumerationCapturedEdge.run checkEmpty r n p h k target scs edge caller before queries with
+      | none => simp only [run, SourcePruningEnumerationNativeBranches.run, observed, ofBranches]
+      | some receipt =>
+          cases receipt with
+          | unhandled =>
+              simp only [run, SourcePruningEnumerationNativeBranches.run, observed,
+                SourcePruningEnumerationNativeBranches.advance, ofBranches]
+          | rejected reached saved after =>
+              simp only [run, SourcePruningEnumerationNativeBranches.run, observed,
+                SourcePruningEnumerationNativeBranches.advance]
+              rw [ih reached saved]
+              cases SourcePruningEnumerationNativeBranches.run checkEmpty r n p h k target scs before rest reached saved <;> rfl
+          | complete fragment reached saved after =>
+              simp only [run, SourcePruningEnumerationNativeBranches.run, observed, identityHook,
+                SourcePruningEnumerationNativeBranches.advance]
+              rw [ih reached saved]
+              cases SourcePruningEnumerationNativeBranches.run checkEmpty r n p h k target scs before rest reached saved <;> rfl
+          | stopped fragments observation candidate =>
+              simp only [run, SourcePruningEnumerationNativeBranches.run, observed]
+              cases advanced : SourcePruningEnumerationNativeBranches.advance (.stopped fragments observation candidate) with
+              | none => rfl
+              | some endpoint =>
+                  obtain ⟨reached, saved⟩ := endpoint
+                  dsimp only
+                  rw [ih reached saved]
+                  cases SourcePruningEnumerationNativeBranches.run checkEmpty r n p h k target scs before rest reached saved <;> rfl
+
+end MicroCFTA.SourcePruningEnumerationNativeContinuations

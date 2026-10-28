@@ -1,0 +1,11 @@
+--- /tmp/mcfta-prepared-recursive-20261028/original-opaque-model-review/drafts/hooks-v1/SourcePruningEnumerationSelectedOpaqueHookModels.lean
++++ /tmp/mcfta-prepared-recursive-20261028/strict-original-opaque-hooks-v1/MicroCFTA/SourcePruningEnumerationSelectedOpaqueHookModels.lean
+@@ -166,7 +166,7 @@
+         (SourcePruningEnumerationSelectedValueCaller.advance caller heap) memos.query after) := by
+     simpa only [Nat.add_assoc, Nat.add_left_comm, Nat.add_comm, counterSame] using
+       opaqueRun r n p h (bound + extra)
+-  have actual := SourcePruningEnumerationSelectedContinuations.opaque hook checkEmpty
++  have actual := SourcePruningEnumerationSelectedContinuations.opaque_step hook checkEmpty
+     (bound + opaqueBound + extra) (bound + opaqueBound + extra)
+     r n p h (bound + opaqueBound + extra) uv uv handle scs decoded result heap entered.core
+     edgesOf caller before memos.query preparationAt boundary

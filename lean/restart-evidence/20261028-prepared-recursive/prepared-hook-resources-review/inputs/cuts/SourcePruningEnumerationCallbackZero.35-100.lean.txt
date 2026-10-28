@@ -1,0 +1,66 @@
+theorem callback_zero_complete_resources
+    (holeKey : Typing → Nat → Key) (fits : Key → Symbol → Bool) (admits : Key → Node → Bool)
+    (formulas : SourceGuards.Formulas FullSyntax.Formula)
+    (solver : SourceGuards.Entailment FullSyntax.Formula) (inventory : Inventory)
+    (graph : Graph Symbol Constraint) (templates : List (Template.Pattern Symbol))
+    (metadata : Metadata Typing) (uv : Nat) (fragment : Fragment)
+    (caller : Caller width) (memos : Memos) (before : Cached)
+    (checkEmpty : Bool) (edgesOf : Node → List (EdgeValue Symbol Constraint))
+    (stop : Option (Metadata Typing → Nat → Bool)) (order : Metadata Typing → List Nat → Option Nat)
+    (profile : Profile) (alphabet : Constraint → Prop)
+    (packet : Packet formulas solver inventory caller memos metadata before)
+    (allocated : FragmentBound before.core.counter fragment)
+    (bounded : Fits profile caller.checked) (known : Heap alphabet caller.checked.native.machine.heap) :
+    ∃ (fuel : Nat) (result : Bool × Metadata Typing) (after : Core) (outcome : Result),
+      Packet formulas solver inventory caller memos result.2 (EnumerationExpandableIndex.frame after before) ∧
+      RenderStable before.core after ∧ Frame before.core after ∧
+      result.2.types = updatedTypes metadata uv (.inl fragment) ∧
+      result.2.openHoles = metadata.openHoles ∧ result.2.typing = metadata.typing ∧
+      (outcome = if result.1 then .complete [] caller memos.query
+        else match SourcePruningEnumerationRestart.decision stop order result.2
+            (EnumerationExpandableIndex.frame after before) with
+          | none => .complete [⟨some result.2, EnumerationExpandableIndex.frame after before, caller, memos.query⟩]
+              caller memos.query
+          | some .done => .complete [⟨none, EnumerationExpandableIndex.frame after before, caller, memos.query⟩]
+              caller memos.query
+          | some .stuck => .complete [] caller memos.query
+          | some (.expand selected) => .stopped []
+              (.exhausted selected result.2 (EnumerationExpandableIndex.frame after before))
+              (some (caller, memos.query))) ∧
+      (match outcome with
+      | .complete outputs reached saved =>
+          reached = caller ∧ saved = memos.query ∧ Fits profile reached.checked ∧
+          Heap alphabet reached.checked.native.machine.heap ∧
+          ∀ output ∈ outputs,
+            Packet formulas solver inventory caller memos result.2 output.cache ∧
+            output.caller = caller ∧ output.queries = memos.query ∧
+            (output.metadata = none ∨ output.metadata = some result.2) ∧
+            output.cache = EnumerationExpandableIndex.frame after before
+      | .stopped outputs reason endpoint =>
+          ∃ selected, outputs = [] ∧
+            reason = .exhausted selected result.2 (EnumerationExpandableIndex.frame after before) ∧
+            endpoint = some (caller, memos.query) ∧ Fits profile caller.checked ∧
+            Heap alphabet caller.checked.native.machine.heap) ∧
+      ∀ extra,
+        Success (recordTypes graph templates (fuel + extra) metadata uv (.inl fragment)) before.core result after ∧
+        ExceptT.run (recordTypes graph templates (fuel + extra) metadata uv (.inl fragment) before.core) =
+          [.ok (result, after)] ∧
+        (∀ (recur : Metadata Typing → Caller width → SourceEndpointMemo.Memos → Cached → Option Next → Result)
+            stop order,
+          continueWith recur graph templates stop order (fuel + extra) metadata uv fragment caller memos.query before =
+            if result.1 then .complete [] caller memos.query
+            else recur result.2 caller memos.query (EnumerationExpandableIndex.frame after before)
+              (SourcePruningEnumerationRestart.decision stop order result.2
+                (EnumerationExpandableIndex.frame after before))) ∧
+        continueWith
+          (resume holeKey fits admits graph templates checkEmpty edgesOf stop order (fuel + extra) 0)
+          graph templates stop order (fuel + extra) metadata uv fragment caller memos.query before = outcome := by
+  obtain ⟨fuel, result, after, returned, stable, frame, types, holes, typing, callback⟩ :=
+    callback_complete formulas solver inventory graph templates metadata uv fragment caller memos before
+      packet allocated
+  let outcome : Result := if result.1 then .complete [] caller memos.query
+    else match SourcePruningEnumerationRestart.decision stop order result.2
+        (EnumerationExpandableIndex.frame after before) with
+      | none => .complete [⟨some result.2, EnumerationExpandableIndex.frame after before, caller, memos.query⟩]
+          caller memos.query
+      | some .done => .complete [⟨none, EnumerationExpandableIndex.frame after before, caller, memos.query⟩]

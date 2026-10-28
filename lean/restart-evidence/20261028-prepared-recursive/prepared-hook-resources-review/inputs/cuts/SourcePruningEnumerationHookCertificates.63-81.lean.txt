@@ -1,0 +1,19 @@
+    (edges : List (EdgeValue Symbol Constraint)) (index : Nat)
+    (reached : Caller width) (next : Inventory) (final : Memos)
+    (current : SourcePruningEnumerationNativeContinuations.Stop (Failure width Typing) width) : Prop :=
+  current = .edge (some .unhandled) ∨
+  ∃ (fragment : Fragments.Fragment Symbol) (receiptCache : Cached) (selected : Nat)
+    (updated : SourcePruningRecordTypes.Metadata Typing) (callbackCache : Cached),
+    current = .continuation (.complete fragment reached final.query receiptCache)
+      (.exhausted selected updated callbackCache) (some (reached, final.query)) ∧
+    ReceiptAt formulas solver caller before uv seed scs edges index
+      (.complete fragment reached final.query receiptCache) ∧
+    Packet formulas solver next reached final updated callbackCache
+
+variable {formulas : SourceGuards.Formulas FullSyntax.Formula}
+variable {solver : SourceGuards.Entailment FullSyntax.Formula}
+variable {caller middle : Caller width} {before : Cached} {uv : Nat} {seed : Seed} {scs : List Suspended}
+variable {edge : EdgeValue Symbol Constraint} {rest : List (EdgeValue Symbol Constraint)} {index : Nat}
+variable {middleInventory : Inventory} {middleMemos : Memos}
+
+/-- A suffix receipt retains its own endpoint under the original caller and edge prefix. -/
