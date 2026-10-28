@@ -1,5 +1,43 @@
 Continue the cfta formalization in /home/tritlo/Code/mcfta.
 
+## Selected preparation retains the full caller and model
+
+Source checkpoint: 1bc96b44ee41d9252941f4404cca67f7dbcb0a66.
+Actual selected entry and ONE native Mu unfolding or Union row reconstruction
+now compose with a full allocated caller postcondition. The original Packet,
+selected Ready root and stored handle derive one stable actual preparation.
+The bound, decoded value, result, heap and entered cache precede every model.
+The SAME inventory, full Memos, metadata, captured root, handle and bucket
+remain. No slot is rewritten. Every original satisfying assignment remains
+satisfying in the actual returned Packet and accepts the prepared value.
+This is model preservation through preparation, not eventual output coverage.
+
+Three prepared-parent resource theorems separate the original stored handle
+from the actual prepared ordinary parent. They retain the ENTIRE old result
+packets, including receipt histories, complete/stopped distinctions and every
+prefix resource field. Their admissions explicitly use the prepared parent's
+Available and closed facts. Fits, Reserved and annotation bounds apply at
+THAT prepared phase. They do not pay for the preceding normalization.
+
+The largest gap remains full recursive ORIGINAL accepted-output coverage.
+Connect actual preparation to the selected dispatcher, derive its resource
+forecast from original inputs, retain remaining opaque branches and compose
+the SAME recursive forward-model path. The old recursive driver is unchanged.
+The source dispatcher must choose ordinary row work in its proper branch.
+Packet alone permits terminal buckets; actual ProperState excludes them at
+stored SOME handles. One Mu unfold must not become full Head normalization.
+Public origins/APIs, ranking/sampling and physical Haskell correspondence
+remain open. Whole-CFTA correctness remains the objective. Goal ACTIVE.
+
+Five modules add seven public theorems and two public operation definitions.
+All six final strict checks pass. Full Audit passes 4342 jobs and checks
+80575 theorem dependencies. Public readback has 339 theorem blocks and
+fourteen definitions. The complete old 1329075-byte readback is its exact
+prefix. All 4336 old non-Audit Lean sources, 185 strong modules and 810 tracked
+Haskell source/evidence files retain bytes. Haskell is unchanged.
+Details: `lean/notes-current-selected-value-caller.md`. Checkpoint PROGRESS.
+
+
 ## Native partial outputs and one selected-value normalization
 
 Source checkpoint: d4d4260e20d7bc3d003c8779256475254fcedcc5.

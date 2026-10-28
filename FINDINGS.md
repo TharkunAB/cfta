@@ -1,5 +1,72 @@
 # Current formalization findings
 
+## Selected preparation retains the full caller and model
+
+Source checkpoint: 1bc96b44ee41d9252941f4404cca67f7dbcb0a66.
+Actual selected entry and ONE native Mu unfolding or Union row reconstruction
+now compose with a full allocated caller postcondition. The original Packet,
+selected Ready root and stored handle derive one stable actual preparation.
+The bound, decoded value, result, heap and entered cache precede every model.
+The SAME inventory, full Memos, metadata, captured root, handle and bucket
+remain. No slot is rewritten. Every original satisfying assignment remains
+satisfying in the actual returned Packet and accepts the prepared value.
+This is model preservation through preparation, not eventual output coverage.
+
+Three prepared-parent resource theorems separate the original stored handle
+from the actual prepared ordinary parent. They retain the ENTIRE old result
+packets, including receipt histories, complete/stopped distinctions and every
+prefix resource field. Their admissions explicitly use the prepared parent's
+Available and closed facts. Fits, Reserved and annotation bounds apply at
+THAT prepared phase. They do not pay for the preceding normalization.
+
+The largest gap remains full recursive ORIGINAL accepted-output coverage.
+Connect actual preparation to the selected dispatcher, derive its resource
+forecast from original inputs, retain remaining opaque branches and compose
+the SAME recursive forward-model path. The old recursive driver is unchanged.
+The source dispatcher must choose ordinary row work in its proper branch.
+Packet alone permits terminal buckets; actual ProperState excludes them at
+stored SOME handles. One Mu unfold must not become full Head normalization.
+Public origins/APIs, ranking/sampling and physical Haskell correspondence
+remain open. Whole-CFTA correctness remains the objective. Goal ACTIVE.
+
+Five modules add seven public theorems and two public operation definitions.
+All six final strict checks pass. Full Audit passes 4342 jobs and checks
+80575 theorem dependencies. Public readback has 339 theorem blocks and
+fourteen definitions. The complete old 1329075-byte readback is its exact
+prefix. All 4336 old non-Audit Lean sources, 185 strong modules and 810 tracked
+Haskell source/evidence files retain bytes. Haskell is unchanged.
+Details: `lean/notes-current-selected-value-caller.md`. Checkpoint PROGRESS.
+
+### Haskell comparison and integration handoff
+
+No new Haskell defect or required fix was established. No Haskell or Cabal
+file changed. No Haskell test or benchmark ran. Keep the earlier LPO and KBO
+Natural-weight repairs and their executed evidence below.
+
+Haskell enumerateOutUVarWith captures its original representative and handle,
+unfolds a selected Mu ONCE, or converts a selected Union to Node (nodeEdges n),
+then calls expandNode. It clears ancestry and writes the returned fragment at
+that captured representative. The prepared value can differ from the value
+stored under the original handle. The new Lean proofs keep that distinction.
+Do not overwrite the original slot or re-enter at a synthetic prepared handle.
+
+The old Lean NativeOrdinaryContinuations and Recursive.run are unchanged.
+The new preparation worker and full caller proof are ready to integrate.
+Prepared ordinary rows can use the new resource theorems with their own
+Available/closed facts. Their current Fits/Reserved premises start AFTER
+normalization; original-input payment is still needed. Remaining recursive
+values need the actual opaque branch, not repeated Head normalization.
+Terminal dispatch is a separate source branch. Actual ProperState rules it
+out at selected stored handles; Packet alone does not. A terminal winner can
+differ from the originally captured target. No reachable full-Packet failure
+or public Haskell failure is asserted here.
+
+An external review should compare this exact captured-target order, unchanged
+full memo state during native preparation, source type/template origins and
+partial output semantics. This is a formal integration handoff. It proposes
+no Haskell patch at this checkpoint.
+
+
 ## Native partial outputs and one selected-value normalization
 
 Source checkpoint: d4d4260e20d7bc3d003c8779256475254fcedcc5.
