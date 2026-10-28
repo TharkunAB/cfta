@@ -5,10 +5,10 @@ and query checkpoints.
 `Data.CFTA.Serialization.Text` provides one readable format. It retains full
 refinements, every constraint constructor, individual source facts, named
 exclusions, cycles, empty/dead rows, repeated alternatives, and child order.
-Reading validates the source without running a solver or enumerating terms.
+Reading validates the input without running a solver or enumerating terms.
 
 The format is version 1. Each file starts with its kind and version, such as
-`language 1;`.
+`graph 1;` or `language 1;`.
 [Prior art](../docs/language-authoring-prior-art.md) compares this syntax with
 Redex, Nanopass, EDN, and KDL, and explains why the format has its own syntax.
 
@@ -23,11 +23,12 @@ Redex, Nanopass, EDN, and KDL, and explains why the format has its own syntax.
 | `SamplingCheckpoint state` | `printSamplingCheckpoint` | `parseSamplingCheckpoint` | `sampling 1;` |
 
 Printers return `Text`. Parsers return `Either (TextError state) value`.
-`explainTextError` reports a syntax line/column or a checked source error.
+`explainTextError` reports a syntax line/column, a checked graph error, or a
+checked source error.
 The default state labels use `Show` and `Read`. For lawful instances:
 
 ```haskell
-parseLanguage (printLanguage language) == Right language
+parseGraph (printGraph graph) == Right graph
 ```
 
 Printing a parsed canonical form reproduces that form. Input spacing and `//`
@@ -35,7 +36,7 @@ line comments are presentation and are not retained. No constraint normalization
 occurs during reading or writing. Empty connectives and stored equality classes
 remain distinct even when they have the same meaning.
 
-Use an ADT for source states. For example:
+Use an ADT for states. For example:
 
 ```haskell
 data State = Atom | Expr deriving (Eq, Ord, Show, Read)
@@ -45,9 +46,8 @@ For custom or portable state labels, use `StateCodec state` and the correspondin
 `printGraphWith`/`parseGraphWith`, `printDocumentWith`/`parseDocumentWith`,
 `printLanguageWith`/`parseLanguageWith`,
 `printCheckpointWith`/`parseCheckpointWith`, or
-`printSamplingCheckpointWith`/`parseSamplingCheckpointWith` functions. The
-codec contains `encodeState :: state -> Text` and
-`decodeState :: Text -> Either String state`.
+`printSamplingCheckpointWith`/`parseSamplingCheckpointWith` functions. The codec contains
+`encodeState :: state -> Text` and `decodeState :: Text -> Either String state`.
 The snapshot printer handles quoting. For a graph with `Text` state names:
 
 ```haskell
@@ -58,6 +58,28 @@ Decoding an encoded state must return that exact state and preserve equality and
 ordering. A structured state such as `Index 3` can use derived `Show`/`Read`; its
 label is printed as `"Index 3"`. State labels are the only caller-defined codec.
 Constraints, symbols, paths, and source operations remain typed values.
+
+## A complete readable graph
+
+```text
+graph 1;
+start Expr;
+
+state Atom {
+  zero @{ v == 0 };
+  one @{ v == 1 };
+}
+
+state Expr {
+  pair(Atom, Atom) where constraint([[[0], [1]]], satisfies([0], v > 0));
+  wrap(Expr);
+}
+```
+
+A transition has a complete symbol, ordered child states, and an optional
+constraint after `where`. Only an exact top symbol refinement is omitted.
+Unknown references and inconsistent symbol arities are errors. Duplicate states
+are errors even when their rows are identical.
 
 ## A complete readable language
 
@@ -87,21 +109,7 @@ Production names are unique within their state. Fact and exclusion names must
 also be unique in their scope. Unknown references and inconsistent symbol arities
 are errors. Duplicate source states are errors even when their rows are identical.
 
-A document uses the same source rows with a `document 1;` header. A graph stores
-compiled constraints directly, without introducing source fact identities:
-
-```text
-graph 1;
-start Expr;
-state Atom {
-  zero @{ v == 0 };
-  one @{ v == 1 };
-}
-state Expr {
-  pair(Atom, Atom) where constraint([[[0], [1]]], satisfies([0], v > 0));
-  wrap(Expr);
-}
-```
+A document uses the same source rows with a `document 1;` header.
 
 Names can use ASCII letters, digits, `_`, `-`, and `+`. Other names use double
 quotes. Quoted strings retain Unicode and escaped control characters. Supported
@@ -112,7 +120,7 @@ to distinguish it from a template hole.
 ## Complete constraint syntax
 
 A path is a list of zero-based child indexes, such as `[0, 1]`. The format also
-retains invalid stored paths because they are part of the source value. An index
+retains invalid stored paths because they are part of the stored value. An index
 outside the machine `Int` range is rejected instead of overflowing.
 
 | Constraint | Exact stored value |
@@ -201,7 +209,6 @@ same names in `Data.CFTA.Language`. `put production`, `put row`, and
 `start` is the source edit `SetStart`, written as the `start` line of a
 document. An update does not name the language it changes: apply it with
 `Language.update`, which checks it.
-
 ## Checkpoints
 
 `printCheckpoint` and `parseCheckpoint` store a `Checkpoint` of

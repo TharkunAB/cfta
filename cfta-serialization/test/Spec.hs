@@ -72,28 +72,30 @@ spec = do
 
         it "keep unusual names and stored constraints" $
             forM_ [(name, constraint) | name <- names, constraint <- storedConstraints] $ \(name, constraint) ->
-                roundTrip T.printLanguage T.parseLanguage $ withForms $ single name constraint
+                roundTrip T.printGraph T.parseGraph $ single name constraint
+
+        it "keep unusual names and stored facts in a language" $
+            forM_ [(name, constraint) | name <- names, constraint <- storedConstraints] $ \(name, constraint) ->
+                roundTrip T.printLanguage T.parseLanguage $ withForms $ singleSource name constraint
 
         it "keep structured states through Show and Read"
-            $ roundTrip T.printLanguage T.parseLanguage
-            $ withForms
+            $ roundTrip T.printGraph T.parseGraph
             $ must
-            $ D.mkDocument
+            $ FTA.mkFTA
                 (Index (-3))
-                [ (Index (-3), [production "f" [Group ["λ", "\"", "\n"]]])
-                , (Group ["λ", "\"", "\n"], [production "leaf" []])
+                [ (Index (-3), [FTA.Transition "f" [Group ["λ", "\"", "\n"]] noConstraint])
+                , (Group ["λ", "\"", "\n"], [FTA.Transition "leaf" [] noConstraint])
                 ]
 
         it "keep states through an explicit codec" $
             forM_ graphs $ \(_, graph) ->
                 roundTrip (T.printGraphWith strings) (T.parseGraphWith strings) graph
 
-        it "ignore comments and whitespace" $ do
-            let language = withForms $ document liquid
-            T.parseLanguage ("// λ prefix\r\n\t" <> T.printLanguage language <> " // suffix") `shouldBe` Right language
+        it "ignore comments and whitespace" $
+            T.parseGraph ("// λ prefix\r\n\t" <> T.printGraph liquid <> " // suffix") `shouldBe` Right liquid
 
         it "allow an edit after reopening" $ do
-            let original = withForms $ single "leaf" $ Constraint (EqConstraints []) Bottom
+            let original = withForms $ singleSource "leaf" $ Constraint (EqConstraints []) Bottom
                 ref = L.at "leaf" "leaf"
                 changes = L.define ref "replacement" [] <> L.relax ref "leaf" <> L.restore "0"
                 reopened = must $ T.parseLanguage $ T.printLanguage original
@@ -101,11 +103,14 @@ spec = do
 
     describe "errors" $ do
         it "give the line and column of a syntax error" $
-            case T.parseLanguageWith strings "// λ\nlanguage 1;\nstart S;\nstate S { a = a @{ nonsense }; }" of
-                Left (SyntaxError line column _) -> (line, column) `shouldSatisfy` \(l, c) -> l == 4 && c > 20
+            case T.parseGraphWith strings "// λ\ngraph 1;\nstart S;\nstate S { a @{ nonsense }; }" of
+                Left (SyntaxError line column _) -> (line, column) `shouldSatisfy` \(l, c) -> l == 4 && c > 15
                 other -> expectationFailure $ show other
 
-        it "report a duplicate state and a duplicate production" $ do
+        it "report a duplicate state" $
+            T.parseGraphWith strings "graph 1; start S; state S {} state S {}" `shouldBe` Left (DuplicateState "S")
+
+        it "report a duplicate state and a duplicate production in a language" $ do
             T.parseLanguageWith strings "language 1; start S; state S {} state S {}"
                 `shouldBe` Left (InvalidDefinition $ D.DuplicateState "S")
             T.parseLanguageWith strings "language 1; start S; state S { x = a; x = b; }"
@@ -113,11 +118,15 @@ spec = do
 
         it "reject malformed input" $
             forM_ malformed $ \text ->
+                T.parseGraphWith strings text `shouldSatisfy` either (const True) (const False)
+
+        it "reject malformed languages" $
+            forM_ malformedLanguages $ \text ->
                 T.parseLanguageWith strings text `shouldSatisfy` either (const True) (const False)
 
         it "explain a bad string escape" $
             forM_ escapes $ \(escape, expected) ->
-                case T.parseLanguageWith strings $ "language 1; start \"" <> escape <> "\"; state S {}" of
+                case T.parseGraphWith strings $ "graph 1; start \"" <> escape <> "\"; state S {}" of
                     Left failure -> Text.pack (T.explainTextError failure) `shouldSatisfy` Text.isInfixOf expected
                     Right _ -> expectationFailure $ "accepted " <> show escape
 
@@ -396,6 +405,21 @@ strings = StateCodec Text.pack (Right . Text.unpack)
 must :: (Show failure) => Either failure value -> value
 must = either (error . show) id
 
+-- | A one-state graph whose state, symbol, and refinement bound use the same name, and a dead state.
+single :: Text -> Constraint -> FTA.PlainFTA String Symbol
+single name constraint =
+    must $
+        FTA.mkFTA
+            (Text.unpack name)
+            [
+                ( Text.unpack name
+                , [FTA.Transition (RefinedSymbol (Symbol name) $ F.Atom F.Eq value (F.Lit $ 2 ^ (100 :: Int))) [] constraint]
+                )
+            , ("dead", [])
+            ]
+  where
+    value = F.Var $ F.Name $ Text.pack valueName
+
 -- | A plain graph as a document.
 document :: FTA.PlainFTA String Symbol -> D.Document String
 document = must . D.fromGraph
@@ -405,8 +429,8 @@ production :: Symbol -> [state] -> FTA.Transition state Symbol D.Annotation
 production symbol children = FTA.Transition symbol children $ D.Annotation (symbolText symbol) Map.empty
 
 -- | A one-state language whose name, symbol, and fact use the same text.
-single :: Text -> Constraint -> D.Document String
-single name constraint =
+singleSource :: Text -> Constraint -> D.Document String
+singleSource name constraint =
     must $
         D.mkDocument
             (Text.unpack name)
@@ -598,6 +622,22 @@ guards =
 -- | Input that the parser must reject.
 malformed :: [Text]
 malformed =
+    [ "graph 2; start S; state S {}"
+    , "graph1; start S; state S {}"
+    , "graph 1; start S; state S { f(Missing); }"
+    , "graph 1; start S; state S { a; a(S); }"
+    , "graph 1; start S; state S { a @{ v == 1.5 }; }"
+    , "graph 1; start S; state S { a where raw {}; }"
+    , "graph 1; start S; state S { a"
+    , "graph 1; start S; state S {} garbage"
+    , "graph 1; start S; state S { a where equal([9223372036854775808]); }"
+    , "graph 1; start S; state S { a where satisfies([], forall([x: unknown], true)); }"
+    , "graph 1; start S; state S { a where same([], [], []); }"
+    ]
+
+-- | Language input that the parser must reject.
+malformedLanguages :: [Text]
+malformedLanguages =
     [ "language 2; start S; state S {}"
     , "language1; start S; state S {}"
     , "language 1; start S; state S { a = a { x = true; x = false; }; }"

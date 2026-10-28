@@ -81,6 +81,9 @@ Wilf, and Feat (ranking).
   state itself, or another state whose terms then count as terms of the
   state. The text in brackets has the term of the text inside, so a term with
   brackets has more than one text.
+- **Graph snapshot**: a stored explicit graph with its symbols, refinements,
+  constraints, states, and transitions. It need not retain the source facts
+  from which its compiled constraints were made.
 
 ## Constraints
 
@@ -158,9 +161,6 @@ Wilf, and Feat (ranking).
 - **Conflict**: a key that the two sides of a three-way merge change in
   different ways, or that one side deletes and the other side changes. A
   conflict holds its key and its three versions.
-- **Graph snapshot**: a stored explicit graph with its symbols, refinements,
-  constraints, states, and transitions. It need not retain the source facts
-  from which its compiled constraints were made.
 
 ## Transformations
 

@@ -78,16 +78,23 @@ data StateCodec state = StateCodec
     , decodeState :: Text -> Either String state
     }
 
--- | A syntax location or a checked graph/source-definition error.
+-- | A syntax location, a checked graph error, or a checked source-definition error.
 data TextError state
     = SyntaxError !Int !Int !String
+    | DuplicateState !state
+    | InvalidGraph !(FTA.FTAError state Symbol)
     | InvalidDefinition !(D.DocumentError state)
     deriving (Eq, Show)
 
--- | Describe the input location or rejected source identity.
+-- | Describe the input location, the rejected graph, or the rejected source identity.
 explainTextError :: (Show state) => TextError state -> String
 explainTextError failure = case failure of
     SyntaxError line column message -> "line " <> show line <> ", column " <> show column <> ": " <> message
+    DuplicateState state -> "duplicate state row: " <> show state
+    InvalidGraph (FTA.MissingInitialState state) -> "initial state " <> show state <> " has no row"
+    InvalidGraph (FTA.DanglingState state) -> "child state " <> show state <> " has no row"
+    InvalidGraph (FTA.InconsistentArity symbol expected actual) ->
+        "symbol " <> show symbol <> " has arities " <> show expected <> " and " <> show actual
     InvalidDefinition failure' -> D.explainDocumentError failure'
 
 -- | Print a graph with state labels from its 'Show' instance.
@@ -220,6 +227,40 @@ renderLanguage encode language =
         graphText "language" encode (sourceTransitionText encode) (D.sourceGraph $ L.source language)
             <> foldMap (uncurry exclusionText) (Map.toAscList $ L.exclusions language)
 
+-- | Render a named exclusion.
+exclusionText :: L.ExclusionName -> L.Exclusion -> Builder
+exclusionText name exclusion =
+    "exclude " <> nameText (L.exclusionNameText name) <> " = " <> case exclusion of
+        L.AtRoot template -> "root " <> templateText template <> ";\n"
+        L.Anywhere template -> "anywhere " <> templateText template <> ";\n"
+
+-- | Render the operations of an update in order, one statement each.
+renderUpdate :: (state -> Text) -> L.Update state -> Text
+renderUpdate encode (L.Update operations) = built $ "update 1;\n" <> foldMap operation operations
+  where
+    state = nameText . encode
+    operation change = case change of
+        L.EditSource edit -> case edit of
+            D.SetStart at -> "start " <> state at <> ";\n"
+            D.DefineTransition at name symbol children ->
+                "define "
+                    <> state at
+                    <> " "
+                    <> nameText name
+                    <> " = "
+                    <> symbolText' symbol
+                    <> childrenText (map state children)
+                    <> ";\n"
+            D.DeleteTransition at name -> "remove " <> state at <> " " <> nameText name <> ";\n"
+            D.SetFact at name fact constraint ->
+                "require " <> state at <> " " <> nameText name <> " " <> nameText fact <> " = " <> constraintText constraint <> ";\n"
+            D.RemoveFact at name fact -> "relax " <> state at <> " " <> nameText name <> " " <> nameText fact <> ";\n"
+            D.PutTransition at transition -> "put production " <> state at <> " " <> productionText "" encode transition
+            D.PutRow at transitions -> "put row " <> state at <> " {\n" <> foldMap (sourceTransitionText encode) transitions <> "}\n"
+            D.DeleteRow at -> "delete row " <> state at <> ";\n"
+        L.Exclude name exclusion -> exclusionText name exclusion
+        L.Restore name -> "restore " <> nameText (L.exclusionNameText name) <> ";\n"
+
 -- | Render the query and the next sized rank, then the graph in the graph format.
 renderCheckpoint :: (state -> Text) -> Checkpoint state -> Text
 renderCheckpoint encode checkpoint =
@@ -265,40 +306,6 @@ renderSamplingCheckpoint encode checkpoint =
   where
     Size bound = samplingBound checkpoint
     weightsText weights = listText [integerText size <> ": " <> integerText weight | (Size size, Weight weight) <- Map.toAscList weights]
-
--- | Render a named exclusion.
-exclusionText :: L.ExclusionName -> L.Exclusion -> Builder
-exclusionText name exclusion =
-    "exclude " <> nameText (L.exclusionNameText name) <> " = " <> case exclusion of
-        L.AtRoot template -> "root " <> templateText template <> ";\n"
-        L.Anywhere template -> "anywhere " <> templateText template <> ";\n"
-
--- | Render the operations of an update in order, one statement each.
-renderUpdate :: (state -> Text) -> L.Update state -> Text
-renderUpdate encode (L.Update operations) = built $ "update 1;\n" <> foldMap operation operations
-  where
-    state = nameText . encode
-    operation change = case change of
-        L.EditSource edit -> case edit of
-            D.SetStart at -> "start " <> state at <> ";\n"
-            D.DefineTransition at name symbol children ->
-                "define "
-                    <> state at
-                    <> " "
-                    <> nameText name
-                    <> " = "
-                    <> symbolText' symbol
-                    <> childrenText (map state children)
-                    <> ";\n"
-            D.DeleteTransition at name -> "remove " <> state at <> " " <> nameText name <> ";\n"
-            D.SetFact at name fact constraint ->
-                "require " <> state at <> " " <> nameText name <> " " <> nameText fact <> " = " <> constraintText constraint <> ";\n"
-            D.RemoveFact at name fact -> "relax " <> state at <> " " <> nameText name <> " " <> nameText fact <> ";\n"
-            D.PutTransition at transition -> "put production " <> state at <> " " <> productionText "" encode transition
-            D.PutRow at transitions -> "put row " <> state at <> " {\n" <> foldMap (sourceTransitionText encode) transitions <> "}\n"
-            D.DeleteRow at -> "delete row " <> state at <> ";\n"
-        L.Exclude name exclusion -> exclusionText name exclusion
-        L.Restore name -> "restore " <> nameText (L.exclusionNameText name) <> ";\n"
 
 -- | Render the shared version, initial state, and finite row table.
 graphText ::
@@ -557,9 +564,9 @@ plainGraphParser decode = graphParser "graph" decode $ graphTransitionParser dec
 validGraph ::
     (Ord state) =>
     (state, [(state, [FTA.Transition state Symbol C.Constraint])]) -> Either (TextError state) (FTA.PlainFTA state Symbol)
-validGraph (initial, rows) = first InvalidDefinition $ do
+validGraph (initial, rows) = do
     distinctStates rows
-    first D.InvalidGraph $ FTA.mkFTA initial rows
+    first InvalidGraph $ FTA.mkFTA initial rows
 
 -- | Read the query, the next sized rank, and the graph of a checkpoint.
 readCheckpoint :: (Ord state) => (Text -> Either String state) -> Text -> Either (TextError state) (Checkpoint state)
@@ -588,11 +595,11 @@ readCheckpoint decode input = do
         pure (route, version, Size bound, (Size size, ClassRank rank), rows)
 
 -- | Reject a second row for a state.
-distinctStates :: (Ord state) => [(state, rows)] -> Either (D.DocumentError state) ()
+distinctStates :: (Ord state) => [(state, rows)] -> Either (TextError state) ()
 distinctStates = foldM_ distinct Set.empty . map fst
   where
     distinct seen state
-        | Set.member state seen = Left $ D.DuplicateState state
+        | Set.member state seen = Left $ DuplicateState state
         | otherwise = Right $ Set.insert state seen
 
 -- | Read source syntax and validate names and graph structure together.
