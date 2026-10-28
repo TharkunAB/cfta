@@ -25,9 +25,11 @@ parseGraph (printGraph graph) == Right graph
 ```
 
 Printing a parsed canonical form reproduces that form. Input spacing and `//`
-line comments are presentation and are not retained. No constraint normalization
-occurs during reading or writing. Empty connectives and stored equality classes
-remain distinct even when they have the same meaning.
+line comments are presentation and are not retained. Doc comments (`///`) and
+the sorts of states are kept beside the value: see [Doc comments](#doc-comments)
+and [Sorts](#sorts). No constraint normalization occurs during reading or
+writing. Empty connectives and stored equality classes remain distinct even when
+they have the same meaning.
 
 Use an ADT for states. For example:
 

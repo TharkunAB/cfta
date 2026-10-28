@@ -127,9 +127,12 @@ spec = do
                     Right _ -> expectationFailure $ "accepted " <> show text
 
     describe "sorts" $ do
-        it "keep the sorts of the states of a graph" $
+        it "keep the sorts of the states of a graph, with its doc comments" $
             forM_ graphs $ \(_, graph) ->
-                roundTrip (uncurry $ T.printGraphNotesWith strings) (T.parseGraphNotesWith strings) (sorted graph, graph)
+                roundTrip
+                    (uncurry $ T.printGraphNotesWith strings)
+                    (T.parseGraphNotesWith strings)
+                    (noted (graphComments graph) <> sorted graph, graph)
 
         it "print no sort of a state that the graph does not have" $
             T.parseGraphNotesWith
