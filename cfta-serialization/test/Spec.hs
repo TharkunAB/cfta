@@ -220,9 +220,12 @@ spec = do
                     Right _ -> expectationFailure $ "accepted " <> show text
 
     describe "sorts" $ do
-        it "keep the sorts of the states of a graph" $
+        it "keep the sorts of the states of a graph, with its doc comments" $
             forM_ graphs $ \(_, graph) ->
-                roundTrip (uncurry $ T.printGraphNotesWith strings) (T.parseGraphNotesWith strings) (sorted graph, graph)
+                roundTrip
+                    (uncurry $ T.printGraphNotesWith strings)
+                    (T.parseGraphNotesWith strings)
+                    (noted (graphComments graph) <> sorted graph, graph)
 
         it "keep the sorts and the doc comments of a language together" $
             forM_ (map (withForms . document . snd) graphs) $ \language -> do
@@ -546,6 +549,9 @@ misplacedGraphComments =
     , "graph 1; start S; state S {}\n/// x\n"
     , "graph 1; start S; state S { a; /// x\n}"
     , "graph 1; start S; state S { /// x\na; }"
+    , "graph 1; start S; state /// x\nS {}"
+    , "graph 1; start S; state S : /// x\nInt {}"
+    , "graph 1 /// x\n; start S; state S {}"
     ]
 
 -- | Doc comments with no item after them, in a language.
