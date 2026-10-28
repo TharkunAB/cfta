@@ -1,3 +1,49 @@
+# Verified original and prepared head projection: 2026-10-28 21:22 CET
+
+Source: `0bc4eb88c8512f1e3c50bec3ab11ec6fdb7f5c3d` on formalize; pushed and verified.
+Read lean/notes-current-prepared-head-projection.md from the repository root.
+Every earlier document byte follows this update unchanged.
+
+Actual stopped child traversal, selected edges, captured finalization and both
+original and prepared completed-head receipts derive projectability at the exact
+returned native caller from original local gates and original ProjectionHeap.
+Prepared parents keep their own Available/Closed facts. Their source stored
+handle stays separate. No future invariant or model supplier is added.
+Actual ordinary allocation plus writeSlot retains original-slot key ancestry
+and gives the fresh slot original expansion keys. No finite key bound follows.
+
+Callback recording keeps the same caller. Whole-driver selected preparation,
+recursive returns including no-output completion, and ordered next siblings
+still require projection transport. Arity conditional on projection cannot
+replace whole ProjectionHeap. The next separate source audit follows the
+existing finite arity induction. It is not checked evidence for this update.
+
+Strongest semantics remains conditional rendered soundness under fixed-PCS and
+whole-Discharged, with ordered output-prefix retention at larger recursive depth.
+Main gaps: actual model-preserving emission, source-derived finite depth across
+preceding allocating callbacks and the continuation, global key/inventory budget,
+full policy/origin/public APIs and optimized Haskell correspondence. DONE does
+not imply Discharged. Intended partial outputs remain in scope.
+
+Seven modules add seven public theorems, zero runtime definitions and one private
+proof helper. Eight exact final strict sources pass. Audit: 4,532 jobs/81,692
+dependencies. Public: 715 theorems/60 definitions, 3,156,168 bytes; the prior
+3,128,821 bytes remain an exact prefix. The 21-command matrix has 18 passes and
+three preserved proof failures. All final checks pass at measured 4 GiB and zero
+swap. The repairs affect binder syntax, cost unfolding and nested Option/match
+proof reduction. Original contracts remain. All 4,524 prior non-Audit Lean,
+373 stronger-source and 817 Haskell/Cabal hashes remain unchanged.
+
+No Haskell source changed, no Haskell check ran and no new Haskell defect/fix was
+established. The three Lean proof repairs require no Haskell change. FINDINGS
+retains every earlier external Haskell repair record. Board sequence 707 has
+verified author, content and metadata readback. Complete evidence:
+lean/restart-evidence/20261028-prepared-stopped-child-projection/.
+
+Preserve all proof, counterexample, repair and marked draft bytes. Keep sealed
+evidence immutable. Continue in a new writable area. The full goal remains ACTIVE.
+Normal formalize pushes remain authorized. Continue without asking to continue.
+
 # Current actual child-prefix preservation
 
 Verified update: 2026-10-28, Europe/Stockholm.
