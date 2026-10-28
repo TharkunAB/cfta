@@ -118,26 +118,58 @@ spec = describe "Data.CFTA.Edit.Trees" $ do
                                 ]
                            )
                        ]
-    it "stacks wraps at one position, and never replaces inside a wrap at the same position" $ do
+    it "has one tree for a stack of wraps: the context wrap, and no wrap after a treeable wrap at its index" $ do
         let given = lit "one"
             edited = Term.Node "neg" [Term.Node "neg" [lit "one"]]
             classes = either (error . show) id $ sized $ treesOf 2 expressions given
             twoEdits = [t | t <- termsOfSize classes (Size 2), applyEditTree given t == Just edited]
             sitesOfTree t = fromMaybe [] (editsOfTree t)
-        -- Two wraps of neg, and a context wrap of neg(neg(hole)): both cost 2.
+        -- The two wraps of neg are the context wrap neg(neg(hole)): one tree.
         map (map (\(Term.Node site _) -> site) . sitesOfTree) twoEdits
-            `shouldBe` [ [WrapAt (path []) "neg" (TransitionIndex 1) (ChildIndex 0), WrapAt (path []) "neg" (TransitionIndex 1) (ChildIndex 0)]
-                       , [ContextAt (path []) "neg" (TransitionIndex 1) (ChildIndex 0)]
+            `shouldBe` [[ContextAt (path []) "neg" (TransitionIndex 1) (ChildIndex 0)]]
+        -- No wrap or context wrap directly after a wrap or a context wrap at the same position, and no replacement after a wrap.
+        mapM_
+            ( \(name, automaton, term') -> do
+                let all' = either (error . show) id $ sized $ treesOf 3 automaton term'
+                    wrapPath symbol = case symbol of
+                        WrapAt at _ _ _ -> Just at
+                        ContextAt at _ _ _ -> Just at
+                        _ -> Nothing
+                    replacePath symbol = case symbol of
+                        ReplaceAt at -> Just at
+                        _ -> Nothing
+                    bad =
+                        [ (first', second')
+                        | size <- [1 .. bound]
+                        , t <- termsOfSize all' (Size size)
+                        , let edits = sitesOfTree t
+                        , (first'@(Term.Node a _), second'@(Term.Node b _)) <- zip edits (drop 1 edits)
+                        , Just at <- [wrapPath a]
+                        , Just at == wrapPath b || Just at == replacePath b
+                        ]
+                (name, bad) `shouldBe` (name, [])
+            )
+            fixtures
+    it "counts the trees of each fixture without the stacks of wraps" $
+        -- Before the canonical form: 905 and 1547 trees for the expressions (k = 2, 3), 713 and 953 for the binary trees,
+        -- 89 and 90 for the statements, and 108 and 238 for the chain, with the sizes up to the bound.
+        [ ( name
+          , k
+          , length
+                [t | size <- [1 .. bound], t <- termsOfSize (either (error . show) id $ sized $ treesOf k automaton given) (Size size)]
+          )
+        | (name, automaton, given) <- fixtures
+        , k <- [2, 3]
+        ]
+            `shouldBe` [ ("expressions", 2, 705)
+                       , ("expressions", 3, 891)
+                       , ("binary trees over a and b", 2, 633)
+                       , ("binary trees over a and b", 3, 745)
+                       , ("statements", 2, 83)
+                       , ("statements", 3, 83)
+                       , ("a chain", 2, 78)
+                       , ("a chain", 3, 95)
                        ]
-        -- No site after a wrap at a position is a replacement at that position.
-        [ (first', second')
-          | size <- [1 .. bound]
-          , t <- termsOfSize classes (Size size)
-          , let edits = sitesOfTree t
-          , (first'@(Term.Node (WrapAt at _ _ _) _), second'@(Term.Node (ReplaceAt at') _)) <- zip edits (drop 1 edits)
-          , at == at'
-          ]
-            `shouldBe` []
 
 -- | New material from its symbol and children.
 material' :: String -> [Term (EditSymbol String)] -> Term (EditSymbol String)
@@ -180,8 +212,8 @@ data Result = Result
 At a position there are no edits, edits below, a replacement by another term of
 the state, an unwrap, or a wrap or a context wrap. A wrap holds the old subterm,
 or, when the hole has the state of the position, an edit tree of it that has an
-edit below, a wrap, a context wrap, or an unwrap at the position, but no
-replacement at the position.
+edit below or an unwrap at the position, but no replacement and no wrap at the
+position: two stacked wraps are one context wrap.
 -}
 definition :: Int -> FTA.PlainFTA String String -> Term String -> Map.Map (Term String) Int
 definition k automaton given =
@@ -193,7 +225,7 @@ definition k automaton given =
     -- Any edits at a position or below, up to a number, including none.
     edit at j = kept $ unchanged at j <> replacements at j <> unwraps at j <> wraps at j
     -- No replacement at the position, and edits.
-    inside at j = kept $ [r | r <- unchanged at j, rEdits r >= 1] <> unwraps at j <> wraps at j
+    inside at j = kept $ [r | r <- unchanged at j, rEdits r >= 1] <> unwraps at j
     unchanged at j = case oldAt at of
         Term.Node symbol children ->
             [ Result (Term.Node symbol (map rTerm chosen)) (sum (map rEdits chosen)) (sum (map rCost chosen))
