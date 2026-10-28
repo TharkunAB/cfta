@@ -1,0 +1,9 @@
+  · exact InternedShallowValues.makeEdge_children symbol guard values state facts.coherent facts.cached available
+
+/-- Source ordinary-node requests return only empty or ordinary node records. -/
+def Ordinary : Value Symbol Guard → Prop
+  | .empty | .node .. => True
+  | _ => False
+
+/-- Canonical node hits cannot replace a row request by a recursive or union record. -/
+theorem node_ordinary [DecidableEq (EdgeKey Symbol Guard)] (edges : List (EdgeValue Symbol Guard))

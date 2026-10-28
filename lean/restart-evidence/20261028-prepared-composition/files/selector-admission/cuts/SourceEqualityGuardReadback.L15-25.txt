@@ -1,0 +1,11 @@
+def NormalClasses (classes : Constraints) : Prop :=
+  Active classes ∧ isContradicting classes = false ∧
+    ∀ paths ∈ classes, canonicalClass paths = paths
+
+/-- Cached source equalities retain their actual normalized representation. -/
+def Cached (equalities : Option Constraints) : Prop :=
+  ∀ classes, equalities = some classes → NormalClasses classes
+
+/-- Completed normalization supplies every physical source class invariant. -/
+theorem normalized {fuel : Nat} {input output : Constraints}
+    (done : mkEqConstraints fuel input = .normalized output) : NormalClasses output := by

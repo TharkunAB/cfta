@@ -1,0 +1,16 @@
+        | _ => True := by
+  obtain ⟨bound, complete⟩ := packet_prefix_complete_resources_models
+    holeKey fits admits graph templates checkEmpty edgesOf stop order metadata
+    formulas solver inventory caller memos before packet profile property bounded known
+  refine ⟨bound, ?_⟩
+  intro extra selected chosen
+  have retained := complete extra selected chosen
+  refine ⟨retained, ?_⟩
+  exact SourcePruningEnumerationSelectedStep.PrefixValid.assignment_origins
+    holeKey fits admits graph templates checkEmpty edgesOf stop order metadata
+    formulas solver inventory (bound + extra) selected caller before memos
+    (runPrefix holeKey fits admits graph templates stop order metadata
+      (bound + extra) (bound + extra) (bound + extra) (bound + extra) (bound + extra) (bound + extra)
+      selected caller before memos.query) retained.1.1
+
+end MicroCFTA.SourcePruningEnumerationRecursive

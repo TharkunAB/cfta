@@ -1,0 +1,3 @@
+# CheckedProjection draft lineage
+
+V1 is immutable and was checked by Root. Strict projection-v1 failed only at the empty construction equality (507-byte raw). No proof contract failed. V2 replaces that rfl with the existing empty build equation and unfolds the local empty heap. Root strict projection-v2 elaborated the proof logic, then failed linter.extra.unusedDecidableInType for the raw counterexample instance (580-byte raw). V3 removes only that proof-only instance from the raw counterexample. It uses term-scoped Classical in the statement and classical in the proof. The first four declarations are unchanged. No linter is disabled, and no semantic admission is added. V3 remains UNTESTED by this owner until the actual Root receipt is supplied.

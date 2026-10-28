@@ -1,0 +1,1 @@
+The first snapshot script requested selector lines 54-84, but the file ends at line 81. The second requested SelectedEdgeAdmission through line 108, but the file ends at line 99. Both assertions stopped before index creation. The final script bounds a requested end at the actual file end and records that exact last line. No proof source or repository file changed.

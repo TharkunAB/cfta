@@ -1,0 +1,21 @@
+unsafeGetEclasses :: EqConstraints -> [PathEClass]
+unsafeGetEclasses EqContradiction = error "unsafeGetEclasses: Illegal argument 'EqContradiction'"
+unsafeGetEclasses (EqConstraints eclasses) = eclasses
+
+{- | Whether an edge with this many children can meet the classes. The
+classes must not be contradictory, no path can have a negative index, and
+every path must start at an existing child. A deeper index is checked where
+the path meets the edges of the child.
+-}
+fitsArity :: Arity -> EqConstraints -> Bool
+fitsArity _ EqContradiction = False
+fitsArity (Arity count) constraints = all (all fits . unPathEClass) (unsafeGetEclasses constraints)
+  where
+    fits (Path []) = True
+    fits (Path indices@(ChildIndex first : _)) = first < count && all (>= 0) indices
+
+-- | Check whether a constraint set is already contradictory.
+constraintsAreContradictory :: EqConstraints -> Bool
+constraintsAreContradictory = (== EqContradiction)
+
+--------- Construction

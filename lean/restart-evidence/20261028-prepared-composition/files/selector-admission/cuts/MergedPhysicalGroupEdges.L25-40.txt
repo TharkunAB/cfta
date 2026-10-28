@@ -1,0 +1,16 @@
+
+/-- Complete edge readback preserves the literal symbol, guard, and ordered child records. -/
+theorem makeEdge_fields [DecidableEq (EdgeKey Symbol Guard)]
+    (state : InternedConstructorTemplates.State Symbol Guard) (facts : Facts state)
+    (symbol : Symbol) (guard : Guard) (values : List (Value Symbol Guard)) (available : Values state values) :
+    let result := (run (makeEdge symbol guard values) state).1
+    result.entry.key.symbol = symbol ∧ result.entry.key.constraint = guard ∧ result.children = values := by
+  let key : EdgeKey Symbol Guard := ⟨symbol, values.map Value.referenceOf, guard⟩
+  let identify := fun entry => EdgeValue.mk entry values
+  have correct := edgeStep_correct key identify state facts.coherent.valid
+  have coherent := edgeStep_coherent key identify state facts.coherent (fun _ same => ⟨rfl, same, rfl⟩)
+  have fields := (coherent.edges key _ correct.2.2).2.1
+  exact ⟨congrArg EdgeKey.symbol fields, congrArg EdgeKey.constraint fields,
+    InternedShallowValues.makeEdge_children symbol guard values state facts.coherent facts.cached available⟩
+
+/-- An earlier resident edge keeps every accepted term in a later prepared cache. -/

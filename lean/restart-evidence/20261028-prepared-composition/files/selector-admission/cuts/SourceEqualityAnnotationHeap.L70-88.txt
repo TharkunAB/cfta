@@ -1,0 +1,19 @@
+  induction work generalizing state with
+  | pure value => exact heap
+  | edge key identify next ih => exact ih _ (safe.2 _) _ (edgeStep valid key identify state heap safe.1)
+  | node key identify next ih => exact ih _ (safe _) _ (nodeStep valid key identify state heap)
+
+/-- Sequencing safe constructor computations retains every emitted annotation check. -/
+theorem bind (valid : Guard → Prop) (work : Work Symbol Guard A) (next : A → Work Symbol Guard B)
+    (safe : SafeWork valid work) (later : ∀ value, SafeWork valid (next value)) : SafeWork valid (work.bind next) := by
+  induction work with
+  | pure value => exact later value
+  | edge key identify resume ih => exact ⟨safe.1, fun value => ih value (safe.2 value)⟩
+  | node key identify resume ih => exact fun value => ih value (safe value)
+
+/-- Literal makeEdge emits exactly its original complete source guard. -/
+theorem makeEdge (valid : Guard → Prop) (symbol : Symbol) (guard : Guard) (values : List (Value Symbol Guard))
+    (annotation : valid guard) : SafeWork valid (InternedConstructorTemplates.makeEdge symbol guard values) := ⟨annotation, fun _ => trivial⟩
+
+/-- Actual ordinary-node construction emits no new edge annotation. -/
+theorem makeNode (valid : Guard → Prop) (edges : List (EdgeValue Symbol Guard)) :

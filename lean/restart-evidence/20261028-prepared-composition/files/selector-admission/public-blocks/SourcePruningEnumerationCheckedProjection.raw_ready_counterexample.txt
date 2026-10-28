@@ -1,0 +1,17 @@
+MicroCFTA.SourcePruningEnumerationCheckedProjection.raw_ready_counterexample
+  (symbol : MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula) :
+  have constraint := { equalities := none, guard := MicroCFTA.SourceGuards.Guard.top };
+  have before := MicroCFTA.InternedConstructorTemplates.empty;
+  have built :=
+    MicroCFTA.InternedConstructorTemplates.run (MicroCFTA.InternedConstructorTemplates.makeEdge symbol constraint [])
+      before;
+  MicroCFTA.SourceEqualityRequiredCache.Ready built.snd ∧
+    MicroCFTA.SourceEqualityAnnotationHeap.Heap
+        (fun guard => MicroCFTA.SourceEqualityGuardReadback.Cached guard.equalities) built.snd ∧
+      MicroCFTA.InternedEdgeResidency.EdgeResident built.snd built.fst ∧
+        built.fst.children = [] ∧
+          MicroCFTA.EnumerationState.arityAllows built.fst.children.length [] = true ∧
+            MicroCFTA.SourcePruningEnumerationConstraint.project built.fst.entry.key.constraint = none
+'MicroCFTA.SourcePruningEnumerationCheckedProjection.raw_ready_counterexample' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]

@@ -1,0 +1,12 @@
+/-- Every actual physical edge key in the constructor cache satisfies the annotation predicate. -/
+def Heap (valid : Guard → Prop) (state : State Symbol Guard) : Prop :=
+  ∀ key edge, state.edgeRecords key = some edge → valid key.constraint
+
+/-- The empty constructor cache satisfies every source annotation invariant. -/
+theorem empty_heap (valid : Guard → Prop) : Heap valid (empty (Symbol := Symbol) (Guard := Guard)) := by
+  intro key edge impossible
+  cases impossible
+
+/-- Original actual linked records derive their complete semantic annotation invariant from the cache. -/
+theorem available (valid : Guard → Prop) (state : State Symbol Guard) (heap : Heap valid state) (linked : Linked state)
+    (value : Value Symbol Guard) (resident : Available state value) : Annotated valid value := by

@@ -1,0 +1,12 @@
+/-- A completed actual worker supplies the same invariants at its complete returned native heap. -/
+theorem run_invariants (property : Guard → Prop) (fuel : Nat)
+    (value : Value Symbol Guard) (before : State Symbol Guard)
+    (result : Value Symbol Guard) (after : State Symbol Guard)
+    (semantic : SemanticReady before) (available : Available before value)
+    (costs : CostHeap before) (probes : ProbeHeap before) (fields : Fields property before)
+    (observed : run fuel value before = .done result after) :
+    CostHeap after ∧ ProbeHeap after ∧ Fields property after := by
+  simpa only [observed, MergedSourceComparison.Result.state] using
+    run_heaps property fuel value before semantic available costs probes fields
+
+end MicroCFTA.SourcePruningEnumerationSelectedValue

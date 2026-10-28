@@ -1,0 +1,20 @@
+{- | Whether a constraint is impossible. This recognizes contradictory
+equalities and the guard 'Bottom' without a solver; a constraint that only a
+solver can refute is not recognized.
+-}
+contradictory :: Constraint -> Bool
+contradictory Constraint{constraintEqualities, constraintGuard} =
+    constraintsAreContradictory constraintEqualities || constraintGuard == Bottom
+
+{- | The path equalities of a constraint: its cached equalities together with
+the positive 'Same' atoms of its guard. Enumeration solves these by
+unification.
+-}
+equalities :: Constraint -> EqConstraints
+equalities Constraint{constraintEqualities, constraintGuard} =
+    case positiveEqualities constraintGuard of
+        -- The stored equalities are normalized, so a guard without 'Same'
+        -- atoms adds nothing, and the memoized combination is not needed.
+        Just EmptyConstraints -> constraintEqualities
+        Just guardEqualities -> combineEqConstraints constraintEqualities guardEqualities
+        Nothing -> constraintEqualities

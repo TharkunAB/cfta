@@ -1,0 +1,25 @@
+/-- An accepted cached guard derives the actual projection and both semantic parts. -/
+theorem projected_of_accepted {Formula : Type} [DecidableEq Formula]
+    (formulas : SourceGuards.Formulas Formula)
+    (solver : SourceGuards.Entailment Formula)
+    (constraint : SourceSymbolicIndex.Constraint Formula)
+    (cached : SourceEqualityGuardReadback.Cached constraint.equalities)
+    (term : Term (SourceObservations.Label Formula))
+    (accepted : SourceEqualityPCSGuard.holds formulas solver constraint term = true) :
+    ∃ (tries : List EqualityTrie.Trie) (residual : Option (SourceSymbolicIndex.Constraint Formula)),
+      SourcePruningEnumerationConstraint.project constraint = some (tries, residual) ∧
+      (∀ trie ∈ tries, EqualityTrie.Valid trie) ∧
+      (∀ trie ∈ tries, EqualityHolds term trie) ∧
+      ResidualHolds (fun guard candidate =>
+        SourceEqualityPCSGuard.holds formulas solver guard candidate = true) residual term := by
+  have complete := SourcePruningEnumerationConstraint.project_complete constraint cached
+  cases source : SourceCompactGuards.sourceEqualities constraint with
+  | none =>
+      simp only [source] at complete
+      exact False.elim (complete.2 formulas solver term accepted)
+  | some classes =>
+      simp only [source] at complete
+      refine ⟨EnumerationEquality.readClasses classes,
+        if (SourceCompactGuards.positive constraint.guard).isSome then none else some constraint,
+        complete.1, complete.2.1, ?_⟩
+      exact (complete.2.2.2 formulas solver term).mp accepted

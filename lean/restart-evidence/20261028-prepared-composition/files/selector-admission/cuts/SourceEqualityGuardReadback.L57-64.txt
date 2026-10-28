@@ -1,0 +1,8 @@
+theorem source_cached (constraint : Constraint Formula) (cached : Cached constraint.equalities) :
+    Cached (sourceEqualities constraint) := by
+  unfold sourceEqualities
+  split <;> first | exact cached | exact combine_cached _ _
+
+/-- Cached class invariants imply the existing source indicator invariant. -/
+theorem active {equalities : Option Constraints} (cached : Cached equalities) : ActiveOption equalities :=
+  fun classes same => (cached classes same).1

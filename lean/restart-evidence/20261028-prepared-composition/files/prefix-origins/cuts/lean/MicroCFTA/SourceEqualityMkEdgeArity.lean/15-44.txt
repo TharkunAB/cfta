@@ -1,0 +1,30 @@
+
+/-- Natural paths contain no negative source indices; only the first index is checked here. -/
+theorem fitsPath_cast (arity : Nat) (path : List Nat) :
+    SymbolicSignedPaths.fitsPath arity (path.map Int.ofNat) =
+      match path with
+      | [] => true
+      | first :: _ => decide (first < arity) := by
+  cases path with
+  | nil => rfl
+  | cons first rest => simp [SymbolicSignedPaths.fitsPath, List.all_map, List.all_eq_true]
+
+/-- The exact source test checks root bounds on every represented natural path. -/
+theorem fits_exact (arity : Nat) (classes : Option Constraints) :
+    fits arity classes = true ↔
+      ∃ records, classes = some records ∧
+        ∀ paths ∈ records, ∀ path ∈ paths,
+          match path with
+          | [] => True
+          | first :: _ => first < arity := by
+  cases classes with
+  | none => simp [fits, signed, SymbolicSignedPaths.fitsArity]
+  | some records =>
+      simp only [fits, signed, Option.map_some, SymbolicSignedPaths.fitsArity,
+        List.all_map, List.all_eq_true, Option.some.injEq, exists_eq_left']
+      apply forall₂_congr
+      intro paths member
+      simp only [Function.comp_apply, List.all_map, List.all_eq_true]
+      apply forall₂_congr
+      intro path present
+      rw [fitsPath_cast]

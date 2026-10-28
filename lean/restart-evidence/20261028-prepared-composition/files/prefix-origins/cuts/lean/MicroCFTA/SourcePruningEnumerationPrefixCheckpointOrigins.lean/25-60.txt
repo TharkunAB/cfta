@@ -1,0 +1,36 @@
+/-- The actual valid prefix keeps the allocation limit for every retained cache. -/
+theorem PrefixValid.assignment_origins
+    (holeKey : Typing → Nat → Key) (fits : Key → Symbol → Bool) (admits : Key → Node → Bool)
+    (graph : Graph Symbol Constraint) (templates : List (Template.Pattern Symbol))
+    (checkEmpty : Bool) (edgesOf : Node → List (EdgeValue Symbol Constraint))
+    (stop : Option (Metadata Typing → Nat → Bool))
+    (order : Metadata Typing → List Nat → Option Nat) (metadata : Metadata Typing)
+    (formulas : SourceGuards.Formulas FullSyntax.Formula)
+    (solver : SourceGuards.Entailment FullSyntax.Formula) (inventory : Inventory)
+    (fuel uv : Nat) (caller : Caller width) (before : Cached) (memos : Memos)
+    (observed : Result width Typing)
+    (valid : PrefixValid holeKey fits admits graph templates checkEmpty edgesOf stop order metadata
+      formulas solver inventory fuel uv caller before memos observed) :
+    ∀ (whole : Language.Term Symbol) (assignment : Nat → Language.Term Symbol),
+      match (generalizing := false) observed with
+      | .parked _ (some after) _ | .narrowed _ _ _ _ _ (some after) _ _ =>
+          SourcePruningEnumerationOrigins.AssignmentOrigins whole after.core.counter assignment ↔
+            SourcePruningEnumerationOrigins.AssignmentOrigins whole before.core.counter assignment
+      | _ => True := by
+  intro whole assignment
+  cases observed with
+  | stopped _ _ => trivial
+  | parked checked candidate raw =>
+      cases candidate with
+      | none => trivial
+      | some after =>
+          change SourcePruningEnumerationOrigins.AssignmentOrigins whole after.core.counter assignment ↔
+            SourcePruningEnumerationOrigins.AssignmentOrigins whole before.core.counter assignment
+          rw [valid.2.2.1]
+  | narrowed checked prepared reached queries action candidate right ordinary =>
+      cases candidate with
+      | none => trivial
+      | some after =>
+          change SourcePruningEnumerationOrigins.AssignmentOrigins whole after.core.counter assignment ↔
+            SourcePruningEnumerationOrigins.AssignmentOrigins whole before.core.counter assignment
+          rw [valid.2.2.1]

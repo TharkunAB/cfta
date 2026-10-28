@@ -1,0 +1,13 @@
+# Actual receipt recording origins
+
+The actual immutable v1 source passed its first strict Lean 4.34.1 check unchanged. Source: 167 lines, 12592 bytes, SHA256 `6a15675f4f369df0f59bc1abf02cd6ca8581e2abcb9c6decf0268ecfa300e03b`. The actual report has exit code zero and zero raw bytes. Effective memory.max and memory.high are 4294967296; memory.swap.max is 0. The candidate, checked snapshot and installed source are identical. The owner did not run the compiler.
+
+The wrapper calls the existing `receipt_finite_complete_resources_models` ONCE before any semantic input. It returns the same fuel and outcome. In a completed receipt branch, it returns the same recorded metadata and callback core. Every original resource, actual recordTypes success/run, callback equation, Satisfies equivalence and unrestricted semantic model observer remains under those same witnesses.
+
+The new clauses are inside that existing completed-branch existential. The actual Frame counter proves AssignmentOrigins equivalence before and after recording. The new semantic observer takes original OriginPolicies and an actual origin of assignment uv. The existing self-fill equation transports those policies to the actual filled fragment. The retained old model observer then proves the actual framed restart model, false recording, all recorded pending Refutes, and the same actual prepared resume outcome at fuel+extra. No callback/resource producer is called again. No future output model, success or Complete premise is added.
+
+The ENTIRE old receipt_models declaration recovers literally after undoing the theorem rename and removing only the inner retained-body grouping plus the two appended origin clauses. It has 6641 bytes, SHA256 `12fdfa746f16877fc5a95fa1d52ee8e170231b4faf89e63b243b58669f169b64`. This includes every original admission and result, with the original fuel/outcome and recorded/core witnesses. The original unrestricted theorem remains unchanged.
+
+Non-completed receipt routes retain their exact old resources. This module adds no semantic claim for those routes or for outputs after recursive resumption. OriginPolicies remains a policy of the original whole term; native acceptance alone does not imply it. The current observer uses pending Refutes as a logical model premise, not a future execution result. Whole recursive accepted-output existence, sufficient depth and policy origins at all histories remain open.
+
+The current source, whole original producer and focused policy laws are pinned in source-index.json. Exact recovery artifacts and comparison are in receipt-contract-comparison-v1.json and cuts/. The overall owner bundle remains OPEN for final public, integration and documentation review. No previous frozen area was written.

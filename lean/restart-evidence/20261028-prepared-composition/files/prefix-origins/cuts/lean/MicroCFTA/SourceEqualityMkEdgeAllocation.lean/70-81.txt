@@ -1,0 +1,12 @@
+    (children : List (InternedConstructorTemplates.Value Symbol (Constraint Formula))) (keep : Bool) :
+    InternedConstructorTemplates.Work Symbol (Constraint Formula) (InternedConstructorTemplates.EdgeValue Symbol (Constraint Formula)) :=
+  if keep then InternedConstructorTemplates.makeEdge symbol constraint children
+  else InternedConstructorTemplates.makeEdge symbol SourceEqualityConstraintConstructors.top [.empty]
+
+/-- The direct source sentinel demands noConstraint and its canonical empty equality field. -/
+def emptyField (before : OpState) : OpState :=
+  {before with constraints := (intern (some []) before.constraints).2}
+
+/-- Sentinel equality construction preserves both completed operation tables. -/
+theorem emptyField_correct (before : OpState) (valid : Valid before) :
+    Valid (emptyField before) ∧ Grows before (emptyField before) ∧

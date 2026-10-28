@@ -1,0 +1,9 @@
+  · obtain ⟨own, done, afterValid, _, classes, growth⟩ :=
+      SourceEqualityAccessorAllocation.equalities_correct stored guard before valid ready
+    simp only [check, accepted, rejected, done, Except.map, classes]
+    exact ⟨rfl, afterValid, growth⟩
+
+/-- Choose the source sentinel or the original complete edge fields after the checks. -/
+def work (symbol : Symbol) (constraint : Constraint Formula)
+    (children : List (InternedConstructorTemplates.Value Symbol (Constraint Formula))) (keep : Bool) :
+    InternedConstructorTemplates.Work Symbol (Constraint Formula) (InternedConstructorTemplates.EdgeValue Symbol (Constraint Formula)) :=

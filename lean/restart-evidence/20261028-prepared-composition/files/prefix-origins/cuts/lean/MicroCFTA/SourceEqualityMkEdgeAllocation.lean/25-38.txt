@@ -1,0 +1,14 @@
+  classes.map fun records => records.map fun paths => paths.map fun path => path.map Int.ofNat
+
+/-- Use the exact signed source arity check on represented equality classes. -/
+def fits (arity : Nat) (classes : Option EqualityNormalize.Constraints) : Bool :=
+  SymbolicSignedPaths.fitsArity arity (signed classes)
+
+/-- Source contradiction reads only the stored equality tag and the outer guard. -/
+def contradictory (constraint : Constraint Formula) : Bool :=
+  constraint.equalities.isNone || match constraint.guard with
+    | .bottom => true
+    | _ => false
+
+/-- The checked constructor preserves the source short circuit before accessor demand. -/
+noncomputable def accepted (constraint : Constraint Formula) (arity : Nat) : Bool :=

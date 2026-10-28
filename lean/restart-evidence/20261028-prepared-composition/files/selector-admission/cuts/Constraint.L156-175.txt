@@ -1,0 +1,20 @@
+{- | Whether a constraint requires more than its path equalities. A guard with
+anything but positive 'Same' atoms, including a scoped or negated equality, is
+a residual that the complete subterm must be checked against.
+-}
+residual :: Constraint -> Bool
+residual Constraint{constraintGuard} = isNothing $ positiveEqualities constraintGuard
+
+-- | The constraint as a signed sum of equality indicators, if it has one.
+indicators :: Constraint -> Maybe [(Integer, [[Path]])]
+indicators = either (const Nothing) Just . constraintIndicators
+
+{- | The path equalities of a guard made only of 'Top', 'Same' between two
+distinct paths, and 'And'. A reflexive 'Same' requires its path to exist and
+is not an equality, so it stays a residual.
+-}
+positiveEqualities :: Guard -> Maybe EqConstraints
+positiveEqualities Top = Just EmptyConstraints
+positiveEqualities (Same left right)
+    | left /= right = Just $ mkEqConstraints [[left, right]]
+positiveEqualities (And guards) = foldr (\guard rest -> combineEqConstraints <$> positiveEqualities guard <*> rest) (Just EmptyConstraints) guards

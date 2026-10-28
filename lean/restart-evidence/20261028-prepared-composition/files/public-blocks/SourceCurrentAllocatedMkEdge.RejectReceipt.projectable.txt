@@ -1,0 +1,18 @@
+MicroCFTA.SourceCurrentAllocatedMkEdge.RejectReceipt.projectable {width : Nat}
+  [DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  {formulas : MicroCFTA.SourceGuards.Formulas MicroCFTA.FullSyntax.Formula}
+  {solver : MicroCFTA.SourceGuards.Entailment MicroCFTA.FullSyntax.Formula}
+  {inventory : MicroCFTA.SourceCurrentAllocatedNativeInventoryState.Inventory}
+  {symbol : MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula}
+  {before after : MicroCFTA.SourceEqualityNativeDemand.State width}
+  {result :
+    MicroCFTA.InternedConstructorTemplates.EdgeValue (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)}
+  (receipt :
+    MicroCFTA.SourceCurrentAllocatedMkEdge.RejectReceipt formulas solver inventory symbol before result after) :
+  MicroCFTA.SourcePruningEnumerationConstraint.project result.entry.key.constraint ≠ none
+'MicroCFTA.SourceCurrentAllocatedMkEdge.RejectReceipt.projectable' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]

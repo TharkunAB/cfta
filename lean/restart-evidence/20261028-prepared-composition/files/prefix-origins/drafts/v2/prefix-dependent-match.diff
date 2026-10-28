@@ -1,0 +1,11 @@
+--- /tmp/mcfta-prepared-composition-20261028/prefix-origins/drafts/v1/SourcePruningEnumerationPrefixCheckpointOrigins.lean
++++ /tmp/mcfta-prepared-composition-20261028/prefix-origins/drafts/v2/SourcePruningEnumerationPrefixCheckpointOrigins.lean
+@@ -36,7 +36,7 @@
+     (valid : PrefixValid holeKey fits admits graph templates checkEmpty edgesOf stop order metadata
+       formulas solver inventory fuel uv caller before memos observed) :
+     ∀ (whole : Language.Term Symbol) (assignment : Nat → Language.Term Symbol),
+-      match observed with
++      match (generalizing := false) observed with
+       | .parked _ (some after) _ | .narrowed _ _ _ _ _ (some after) _ _ =>
+           SourcePruningEnumerationOrigins.AssignmentOrigins whole after.core.counter assignment ↔
+             SourcePruningEnumerationOrigins.AssignmentOrigins whole before.core.counter assignment

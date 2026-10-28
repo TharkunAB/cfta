@@ -1,0 +1,12 @@
+/-- Execute the actual checked constructor and retain its returned operations. -/
+noncomputable def build (symbol : Symbol) (constraint : Allocated)
+    (children : List (Value Symbol Guard)) (before : Checked width) :
+    Except String (EdgeValue Symbol Guard) × Checked width :=
+  let built := SourceEqualityMkEdgeAllocation.build symbol constraint.stored constraint.guard children
+    before.operations before.native.machine.heap
+  (built.1, advancePhysical before ⟨built.2.2, built.2.1⟩)
+
+/-- Construct the source rejection sentinel without a child computation. -/
+def reject (symbol : Symbol) (before : Checked width) : EdgeValue Symbol Guard × Checked width :=
+  let built := run (makeEdge symbol top [.empty]) before.native.machine.heap
+  (built.1, advancePhysical before ⟨built.2, SourceEqualityMkEdgeAllocation.emptyField before.operations⟩)

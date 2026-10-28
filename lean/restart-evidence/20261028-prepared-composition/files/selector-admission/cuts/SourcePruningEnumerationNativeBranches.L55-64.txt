@@ -1,0 +1,10 @@
+    (before : Cached) (edge : EdgeValue Symbol Constraint) (rest : List (EdgeValue Symbol Constraint))
+    (caller : Caller width) (queries : Queries) (receipt : Receipt width)
+    (observed : SourcePruningEnumerationCapturedEdge.run checkEmpty r n p h k target scs edge caller before queries =
+      some receipt) (halted : advance receipt = none) :
+    run checkEmpty r n p h k target scs before (edge :: rest) caller queries = .stopped [] (some receipt) := by
+  simp only [run, observed, halted]
+
+/-- Each ordered receipt records a call at the same captured enumeration input. -/
+inductive Trace (checkEmpty : Bool) (r n p h k target : Nat) (scs : List Suspended) (before : Cached) :
+    List (EdgeValue Symbol Constraint) → Caller width → Queries →

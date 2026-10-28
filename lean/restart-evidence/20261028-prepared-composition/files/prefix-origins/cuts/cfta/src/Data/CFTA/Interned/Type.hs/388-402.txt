@@ -1,0 +1,15 @@
+
+{- | Replace an edge's children while preserving its symbol and constraints.
+
+Every interned edge meets the checks of 'mkEdge' for its number of children.
+So with the same number of children, the edge skips those checks.
+-}
+{-# INLINEABLE setChildren #-}
+setChildren ::
+    (Hashable symbol, Typeable symbol) =>
+    Edge symbol -> [Node symbol] -> Edge symbol
+setChildren e ns
+    | length ns == length (edgeChildren e) = internEdge $ UninternedEdge (edgeSymbol e) ns (edgeConstraint e)
+    | otherwise = mkEdge (edgeSymbol e) ns (edgeConstraint e)
+
+-- Interning Nodes

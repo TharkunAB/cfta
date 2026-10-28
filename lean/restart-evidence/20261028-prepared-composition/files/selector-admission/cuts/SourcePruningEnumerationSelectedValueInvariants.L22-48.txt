@@ -1,0 +1,27 @@
+/-- Every actual selected-value outcome retains the three original physical heap invariants. -/
+theorem run_heaps (property : Guard → Prop) (fuel : Nat)
+    (value : Value Symbol Guard) (before : State Symbol Guard)
+    (semantic : SemanticReady before) (available : Available before value)
+    (costs : CostHeap before) (probes : ProbeHeap before) (fields : Fields property before) :
+    CostHeap (run fuel value before).state ∧ ProbeHeap (run fuel value before).state ∧
+      Fields property (run fuel value before).state := by
+  cases value with
+  | empty | reference | node => exact ⟨costs, probes, fields⟩
+  | mu entry body depth ordinary =>
+      have retainedCosts := InternedFreshOrdinaryStoredSubstitution.unfold_cost_heap
+        (.mu entry body depth ordinary) before semantic.ready.semantic.1
+        semantic.ready.semantic.2 costs available
+      have retainedProbes := SourceEqualityProbeUnfold.unfold
+        (.mu entry body depth ordinary) before semantic.ready.semantic.1 probes available
+      have retainedFields : Fields property
+          (InternedFreshOrdinaryStoredSubstitution.unfold (.mu entry body depth ordinary) before).state := by
+        simpa only [InternedFreshOrdinaryConstraintHeap.Heap, SourceEqualityAnnotationHeap.Heap] using
+          InternedFreshOrdinaryStoredConstraintHeap.unfold_heap property
+            (.mu entry body depth ordinary) before semantic.ready.semantic.1.normal.facts fields available
+      cases observed : InternedFreshOrdinaryStoredSubstitution.unfold
+          (.mu entry body depth ordinary) before with
+      | done result after | pending key after =>
+          simpa only [run, observed, MergedSourceComparison.Result.state,
+            InternedNestedConstruction.Outcome.state] using
+            And.intro retainedCosts (And.intro retainedProbes retainedFields)
+  | union entry members depth free =>

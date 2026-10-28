@@ -1,0 +1,41 @@
+        | .parked _ (some after) _ | .narrowed _ _ _ _ _ (some after) _ _ =>
+            SourcePruningEnumerationOrigins.AssignmentOrigins whole after.core.counter assignment ↔
+              SourcePruningEnumerationOrigins.AssignmentOrigins whole before.core.counter assignment
+        | _ => True := by
+  obtain ⟨bound, complete⟩ := packet_prefix_preparation_complete_models
+    holeKey fits admits graph templates checkEmpty edgesOf stop order metadata
+    formulas solver inventory caller memos before packet profile property bounded known
+  refine ⟨bound, ?_⟩
+  intro extra selected chosen
+  have retained := complete extra selected chosen
+  have prefixOrigins := SourcePruningEnumerationSelectedStep.PrefixValid.assignment_origins
+    holeKey fits admits graph templates checkEmpty edgesOf stop order metadata
+    formulas solver inventory (bound + extra) selected caller before memos
+    (runPrefix holeKey fits admits graph templates stop order metadata
+      (bound + extra) (bound + extra) (bound + extra) (bound + extra) (bound + extra) (bound + extra)
+      selected caller before memos.query) retained.1.1.1
+  refine ⟨⟨retained.1, ?_⟩, prefixOrigins⟩
+  generalize actual : runPrefix holeKey fits admits graph templates stop order metadata
+    (bound + extra) (bound + extra) (bound + extra) (bound + extra) (bound + extra) (bound + extra)
+    selected caller before memos.query = observed at retained ⊢
+  cases observed with
+  | stopped _ _ | parked _ _ _ => trivial
+  | narrowed checked prepared reached queries action candidate right ordinary =>
+      cases candidate with
+      | none => trivial
+      | some after =>
+          obtain ⟨handle, scs, value, final, admission, preparationBound, decoded, result, heap, entered,
+            preparation, post, models⟩ := retained.2
+          have prefixCounter : after.core.counter = before.core.counter := by
+            obtain ⟨_post, _query, _packet, _ready, _stored, _decoded, _available, _closed,
+              _incoming, _pending, _ids, _length, counter, _rest⟩ := admission
+            exact counter
+          have entryCounter : entered.core.counter = after.core.counter := by
+            obtain ⟨_run, _lookup, _post, _packet, _stable, _ready, _stored, counter, _rest⟩ := preparation.1.1
+            exact counter
+          refine ⟨handle, scs, value, final, admission, preparationBound, decoded, result, heap, entered,
+            ⟨preparation, post, models⟩, ?_⟩
+          intro whole assignment
+          rw [entryCounter, prefixCounter]
+
+end MicroCFTA.SourcePruningEnumerationPreparedEntryModels
