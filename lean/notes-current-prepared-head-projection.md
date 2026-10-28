@@ -1,3 +1,52 @@
+# Verified actual boundary entry progress — 2026-10-29 00:31 CET
+
+Source `c7da675e2afe3779d62d0b3b00467db2985cbdd6` is pushed and verified on formalize. Full goal ACTIVE.
+Read `lean/notes-current-boundary-entry-progress.md` for exact contracts and next work.
+Every earlier document byte follows unchanged.
+
+The actual narrowed boundary prefix retains its checked handle, native caller,
+metadata and both indexes. It derives the same fresh key and original Packet.
+That Packet constructs completed Entry and native preparation at a local bound.
+Entry inserts the checked key into expansionAncestry. Its unused original-model
+shape budget strictly decreases from the ORIGINAL target recursion history.
+Direct child allocation inherits this decrease at the SAME CHECKED handle.
+Per-slot ancestry is unchanged by Entry. A child's own native handle may differ.
+The original-packet producer derives prefix validity and its sufficient bound.
+No future model, freshness, key membership or Entry success supplier is added.
+The actual supported reached boundary observation remains explicit.
+
+Strongest system semantics remains conditional checked rendered soundness under
+fixed-PCS/whole-Discharged and ordered output-prefix retention at greater depth.
+The previous actual terminal emission theorem remains. Native generated boundary
+closure/rank, nonterminal chosen-model emission and original-source sufficient
+recursive depth across earlier callbacks remain open. DONE does not imply
+Discharged. Complete policy/origin/public API and Haskell correspondence remain.
+
+Four modules/seven public theorems: 580 lines/37,367 bytes; no new definitions or
+private proof helpers. All five final strict sources pass. Audit: 4,584 jobs and
+81,886 theorem dependencies. Compiler matrix: 19 commands, 14 PASS, five preserved
+FAIL; all final inputs pass at serial measured 4 GiB and zero swap. Public:
+794 theorem checks/axiom lists,67 definition bodies,3,408,116 bytes SHA256
+5fbeccbfcc8cbc35107512f25694593b0e38585c34b3ee4968f6afe30cf06216.
+Prior 3,376,571 bytes are an exact prefix; all 31,545 new bytes were read.
+All 4,579 old non-Audit Lean,428 stronger-source and817 Haskell/Cabal identities
+remain. Three source-scope manifests verify 95 artifact identities.
+
+No Haskell source changed. No Haskell check ran. No new Haskell defect/fix was
+established. FINDINGS retains earlier external repair records. Source-only
+native audit identifies the missing generated callback body degree bound.
+Existing OpenBodyBoundary refutes first-order preparation at an actual native
+site; native_returned observes NodeRef.mu 26 only. It is no divergence or original
+ceiling counterexample. Existing NoNewMu/cached-depth counterexample remains.
+
+Evidence: `lean/restart-evidence/20261029-boundary-entry-progress/`.
+Board 716: `a7139029-491a-484d-a1ae-32b612ba728e`, exact verified author/content/metadata.
+Keep frozen evidence immutable. Use a new writable area and refresh upstream.
+Compiler/native jobs remain serial at 4 GiB. Normal formalize pushes remain
+explicitly authorized. The full objective is incomplete and stays ACTIVE.
+
+---
+
 # Verified terminal callback emission and checked boundary budgets — 2026-10-29 00:03 CET
 
 Source `5138ade52fc76ed80bb88ed15ef62d95b1695c83` is pushed and verified on formalize. Full goal ACTIVE.
