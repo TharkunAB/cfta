@@ -18,8 +18,9 @@ right automaton accepts every term of the size class. At the first size where
 the counts differ, the counterexample is the first term of the size class of
 the left automaton that 'FTA.accepts' rejects for the right automaton. This is
 the term with the smallest class rank. The order of a size class does not
-depend on the order of the rows or on the names of the states, so reordered
-copies of the two automata give the same counterexample.
+depend on the names of the states. For an automaton without constraints, it
+does not depend on the order of the rows either, so reordered copies of the
+two automata give the same counterexample.
 
 'inclusion' uses the bottom-up antichain algorithm of Bouajjani, Habermehl,
 Holík, Touili, and Vojnar (/Antichain-Based Universality and Inclusion
@@ -37,24 +38,37 @@ Otherwise it builds each size class term by term. An ambiguous automaton can
 make the intersection ambiguous. Then the result is the same, but the time
 grows with the number of terms.
 
-This version accepts only automata without constraints: each transition must
-have 'noConstraint'. A constraint gives 'ConstrainedLeft' or
-'ConstrainedRight'. The module does not remove a constraint, because
-'FTA.dropConstraints' is an over-approximation. Without the constraints of
-the left automaton, the counterexample could be a term that the left
-automaton rejects. Without the constraints of the right automaton, the check
-could miss a term that the right automaton rejects.
-
 'FTA.intersect' gives each transition the pair of the two constraints.
 'conjoinConstraints' joins each pair into one 'Data.CFTA.Constraint.Constraint',
-as 'sized' requires. For two automata without constraints, the result is
-'noConstraint' again, so 'sized' can use the count table.
+as 'sized' requires. A transition of the intersection then accepts a term
+exactly when the two transitions accept it, so the intersection stays exact.
+For two automata without constraints, the result is 'noConstraint' again, so
+'sized' can use the count table.
+
+The three checks decide different constraints. 'inclusion' accepts only
+automata without constraints. 'inclusionUpTo' also accepts equality
+constraints: 'sized' and 'FTA.accepts' check them on each term. A constraint
+that a check does not decide gives 'ConstrainedLeft' or 'ConstrainedRight'.
+The module does not remove a constraint, because 'FTA.dropConstraints' is an
+over-approximation. Without the constraints of the left automaton, the
+counterexample could be a term that the left automaton rejects. Without the
+constraints of the right automaton, the check could miss a term that the
+right automaton rejects.
+
+'inclusionUpToWith' also decides guards beyond equality constraints, with a
+solver ('sizedUpTo'). The solver can answer 'Unknown' for a guard on a term.
+Then 'sizedUpTo' stops at the size of that term, and the check cannot decide
+that size. The result is 'UnknownAt' with that size, unless a smaller size has
+a counterexample. 'sizedUpTo' does not keep the classes below the size where
+it stops, so the check builds them again with a smaller bound. The solver then
+decides the guards below that size two times.
 -}
 module Data.CFTA.Inclusion (
     Inclusion (..),
     InclusionError (..),
     inclusion,
     inclusionUpTo,
+    inclusionUpToWith,
 ) where
 
 import Data.Containers.ListUtils (nubOrd)
@@ -65,9 +79,11 @@ import Data.Maybe (fromMaybe)
 import qualified Data.Set as Set
 
 import qualified Data.CFTA as FTA
-import Data.CFTA.Constraint (conjoinConstraints, noConstraint)
-import Data.CFTA.Index (Size)
-import Data.CFTA.Sized (countOfSize, sized, termsOfSize)
+import Data.CFTA.Constraint (conjoinConstraints, noConstraint, residual)
+import Data.CFTA.Index (Size (..))
+import Data.CFTA.Refinement.Verdict (Entailment)
+import Data.CFTA.Sized (Sized, SizedError (..), countOfSize, sized, sizedUpTo, termsOfSize)
+import Data.CFTA.Symbol (Symbol)
 import Data.CFTA.Term (Term)
 
 -- | The result of an inclusion check.
@@ -84,21 +100,29 @@ data Inclusion symbol
       automaton.
       -}
       NotIncluded !(Term symbol)
+    | {- | The right automaton accepts every term of the left automaton with
+      fewer nodes than this size. The solver did not decide a constraint on a
+      term with this number of nodes, which the left automaton or the
+      intersection builds at one of its states. So this size and the larger
+      sizes are not checked. A counterexample of this size is not given,
+      because the check cannot find the one with the smallest class rank.
+      -}
+      UnknownAt !Size
     deriving (Eq, Show)
 
 -- | Why an inclusion check cannot start.
 data InclusionError
-    = -- | A transition of the left automaton has a constraint.
+    = -- | A transition of the left automaton has a constraint that the check does not decide.
       ConstrainedLeft
-    | -- | A transition of the right automaton has a constraint.
+    | -- | A transition of the right automaton has a constraint that the check does not decide.
       ConstrainedRight
     deriving (Eq, Show)
 
 {- | Whether the right automaton accepts every term of the left automaton, or
 a smallest counterexample. The result is 'Included' or 'NotIncluded'.
 
-The check reads every row of the two automata for constraints, also a row
-that the initial state cannot reach.
+The two automata must have no constraints. The check reads every row of the
+two automata for constraints, also a row that the initial state cannot reach.
 -}
 inclusion ::
     (Ord left, Ord right, Ord symbol) =>
@@ -113,33 +137,60 @@ inclusion left right
             _ -> bug "the bounded check finds no counterexample up to the size of one"
 
 {- | Whether the right automaton accepts every term of the left automaton with
-at most the given number of nodes, or a smallest counterexample.
+at most the given number of nodes, or a smallest counterexample. The result
+is 'IncludedUpTo' or 'NotIncluded'.
 
-The check reads every row of the two automata for constraints, also a row
-that the initial state cannot reach. A bound below one gives 'IncludedUpTo'
-with that bound, because each term has at least one node.
+The two automata can have equality constraints, but no guard beyond them. The
+check reads every row of the two automata for such a guard, also a row that
+the initial state cannot reach. A bound below one gives 'IncludedUpTo' with
+that bound, because each term has at least one node.
 -}
 inclusionUpTo ::
     (Ord left, Ord right, Ord symbol) =>
     Size -> FTA.PlainFTA left symbol -> FTA.PlainFTA right symbol -> Either InclusionError (Inclusion symbol)
 inclusionUpTo bound left right
-    | constrained left = Left ConstrainedLeft
-    | constrained right = Left ConstrainedRight
-    | otherwise = Right $ case filter differs [1 .. bound] of
-        [] -> IncludedUpTo bound
-        size : _ ->
-            NotIncluded
-                $ fromMaybe (bug "a size class of the intersection is smaller, but no term is missing")
-                $ find (not . FTA.accepts right) (termsOfSize leftClasses size)
+    | guarded left = Left ConstrainedLeft
+    | guarded right = Left ConstrainedRight
+    | otherwise =
+        Right $ firstMissing bound (classes left) (classes $ intersection left right) (const $ not . FTA.accepts right)
   where
-    differs size = countOfSize leftClasses size /= countOfSize commonClasses size
-    leftClasses = classes left
-    commonClasses =
-        classes
-            $ FTA.mapConstraints (uncurry conjoinConstraints)
-            $ fromRight (bug "the intersection of two ranked automata is not ranked")
-            $ FTA.intersect left right
-    classes automaton = fromRight (bug "an automaton without constraints has a guard") $ sized automaton
+    classes automaton = fromRight (bug "an automaton without a residual guard has one") $ sized automaton
+    guarded = any (any (residual . FTA.transitionConstraint)) . FTA.transitionTable
+
+{- | 'inclusionUpTo' for automata with any constraints. The solver decides each
+constraint on each term that its transition builds. The result is
+'IncludedUpTo', 'NotIncluded', or 'UnknownAt'.
+
+When the solver does not decide a constraint on a term of the left automaton
+or of the intersection, the check stops at the size of that term. It then
+checks the sizes below it again. A counterexample there gives 'NotIncluded';
+otherwise the result is 'UnknownAt' with the size where the check stopped.
+The check calls the solver for each term up to the bound, also when a
+smaller size has a counterexample.
+-}
+inclusionUpToWith ::
+    (Ord left, Ord right) =>
+    Entailment -> Size -> FTA.PlainFTA left Symbol -> FTA.PlainFTA right Symbol -> IO (Inclusion Symbol)
+inclusionUpToWith entailment bound left right = do
+    leftClasses <- sizedUpTo entailment bound left
+    case leftClasses of
+        Left stop -> below stop
+        Right decidedLeft -> do
+            commonClasses <- sizedUpTo entailment bound (intersection left right)
+            case commonClasses of
+                Left stop -> below stop
+                Right decidedCommon -> pure $ firstMissing bound decidedLeft decidedCommon (missingFrom decidedCommon)
+  where
+    -- A term of the left class that the class of the intersection does not hold.
+    missingFrom decidedCommon size = (`Set.notMember` Set.fromList (termsOfSize decidedCommon size))
+    -- The result below the size of a term that the solver did not decide.
+    below (GuardUnknown _ term) = do
+        let stop = Size $ toInteger $ length term
+        smaller <- inclusionUpToWith entailment (stop - 1) left right
+        pure $ case smaller of
+            IncludedUpTo _ -> UnknownAt stop
+            decided -> decided
+    below ResidualGuard = bug "sizedUpTo rejects a guard"
 
 {- | The size of a counterexample, or 'Nothing' when the right automaton
 accepts every term of the left automaton. The automata have no constraints.
@@ -208,6 +259,29 @@ counterexampleSize left right =
             , choice <-
                 traverse (\(index, child) -> if index == position then [(set, size)] else Map.findWithDefault [] child kept') children
             ]
+
+{- | The first size up to the bound where the class of the intersection is
+smaller than the class of the left automaton, with the first term of the left
+class that is missing from the right automaton at that size.
+-}
+firstMissing :: Size -> Sized symbol -> Sized symbol -> (Size -> Term symbol -> Bool) -> Inclusion symbol
+firstMissing bound leftClasses commonClasses missing = case filter differs [1 .. bound] of
+    [] -> IncludedUpTo bound
+    size : _ ->
+        NotIncluded
+            $ fromMaybe (bug "a size class of the intersection is smaller, but no term is missing")
+            $ find (missing size) (termsOfSize leftClasses size)
+  where
+    differs size = countOfSize leftClasses size /= countOfSize commonClasses size
+
+-- | The intersection of two automata, with the conjunction of the two constraints on each transition.
+intersection ::
+    (Ord left, Ord right, Ord symbol) =>
+    FTA.PlainFTA left symbol -> FTA.PlainFTA right symbol -> FTA.PlainFTA (FTA.ProductState left right) symbol
+intersection left right =
+    FTA.mapConstraints (uncurry conjoinConstraints)
+        $ fromRight (bug "the intersection of two ranked automata is not ranked")
+        $ FTA.intersect left right
 
 -- | Whether a transition of an automaton has a constraint.
 constrained :: FTA.PlainFTA state symbol -> Bool
