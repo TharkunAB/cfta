@@ -167,6 +167,20 @@ tree automata of `cfta`, with QuickCheck integration.
   a state with two transitions for the symbol of the term there, and
   `ConstrainedHole` for a context wrap whose hole a class or a constrained
   transition can read.
+- `Data.CFTA.Edit.Constrained`: `guardedEditAutomaton` gives the edits of a
+  term under an automaton with guards, with a solver. A guard atom on fixed
+  paths is decided once when the automaton is built: Yes keeps the site, and
+  No leaves it without a valid edit. An atom on the new material moves onto
+  the root transition of the edit, and `sizedUpTo` decides it on each edit.
+  A negation is decided with its atom, as the evaluator does. `leftOut` has
+  three new reasons: `MixedGuard` for an atom on fixed paths and new material
+  together, `GuardSubstitution` for a guard with a substitution, and
+  `UndecidedGuard` when the solver does not decide an atom on fixed paths or
+  the fixed part of a site. `plainSymbols` gives the edit automaton over
+  `Symbol`, for `sizedUpTo`, and the decoding of its terms to edits.
+  `GuardedEditError` tells a term that the solver does not decide
+  (`UndecidedTerm`, or `UndecidedRuns` for an accepted term whose second run
+  is not decided) from a term that the automaton does not accept.
 - Terms are `Term symbol` from `Data.CFTA.Term` of `cfta`:
   `fromAutomaton`, `fromAutomatonUpToDepth`, `termAt`, `rankOf`, `ranksOf`,
   `rankOfTerm`, `surface`, and the refinement witnesses take and give `Term`
