@@ -312,6 +312,20 @@ term, for example a replacement at the root and a deeper edit, so the
 automaton counts edits, not edited terms. When the automaton is
 unambiguous, the edit automaton is unambiguous too.
 
+`Data.CFTA.Edit.Between` goes the other way: `editsBetween automaton old new`
+gives every edit of the old term whose edited term is the new term, and
+`editSetsBetween k automaton old new` gives every edit set of one to k edits
+that gives it, for a change at several places. The candidates of an edit set
+are the cuts of the difference: sets of at most k positions where each
+position whose symbol or number of children changed is at or below exactly
+one of them. Each position takes the replacements, wraps, unwraps, and
+context wraps that change its old subterm into its new subterm, and each set
+is checked by the automaton of edit sets and by `applyEditSet`. A set of one
+edit is an edit of `editsBetween`, so the result has those edits too, for each
+k. The number of candidate sets grows as the number of cuts times the
+candidates at their positions, so the function counts them first and gives
+`TooManyCandidates` above `candidateLimit`.
+
 `Data.CFTA.Edit.Constrained` gives the replacements, unwraps, wraps, and
 context wraps of a term under an automaton with equality constraints. An edit
 is valid when the automaton accepts the edited term.

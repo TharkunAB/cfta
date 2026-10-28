@@ -155,6 +155,13 @@ tree automata of `cfta`, with QuickCheck integration.
   may lie inside a wrap whose hole has the state of its position. `applyEditTree`
   gives the edited term. A stack of wraps at one position is one context wrap,
   so a tree has no wrap directly after a treeable wrap at its index.
+- `Data.CFTA.Edit.Between`: `editSetsBetween k automaton old new` gives every
+  edit set of `editSetAutomaton k` whose `applyEditSet` gives the new term,
+  the smallest first, and `rankedEditSetsBetween` gives their ranks. The
+  candidates are the cuts of the difference of the two terms, with the
+  candidates of `editsBetween` at each position. The function counts the
+  candidate sets before it builds them, and gives `TooManyCandidates` above
+  `candidateLimit`. The one-edit sets are the edits of `editsBetween`.
 - `Data.CFTA.Edit.Constrained`: `constrainedEditAutomaton` gives the
   replacements, unwraps, wraps, and context wraps of a term under an automaton
   with equality constraints, in the symbols of `Data.CFTA.Edit`, so
