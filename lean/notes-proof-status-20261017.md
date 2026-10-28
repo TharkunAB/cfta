@@ -1,3 +1,46 @@
+# Current checkpoint: prepared finite arity and rendered soundness
+
+Source: `5902ecbf3ba39c0119fbd1bd34747ed15e70dd43` on `formalize`.
+Read [notes-current-prepared-render-soundness.md](notes-current-prepared-render-soundness.md)
+from the repository root. The full formalization goal remains open and active.
+Normal pushes to `origin/formalize` remain authorized.
+
+The actual prepared finite producer now preserves arity from the original
+caller through each exposed aggregate endpoint and every emitted output.
+This includes earlier sibling callbacks that emit no outputs. The existing
+history and canonical-storage producer retains its exact bound and outcome.
+Its output arity comes from the new producer at that same outcome.
+
+The actual history now restores the original whole assignment from each fully
+discharged output model. Checked rendering constructs that final model.
+The original-input theorem derives original native root membership and every
+original suspended restriction for the rendered term. Whole-cache Discharged,
+actual rendering success and checked PCS residuals remain explicit observer
+conditions. Initial Packet, resources, selection, canonical storage and genuine
+initial arity remain explicit. Bare Packet does not supply initial arity.
+
+The main remaining targets are accepted-output coverage, sufficient recursive
+depth, the public input and acceptance interfaces, counting/ranking/sampling
+connections, and physical correspondence with optimized interned Haskell.
+The selection membership/length conditions alone do not establish coverage.
+
+All 22 new modules and Audit pass exact strict Lean 4.34.1 checks. The full
+Audit passes 4,501 jobs and 81,561 theorem dependency checks. Public readback
+has 674 theorems and 60 definitions. The prior 2,820,279-byte readback remains
+an exact prefix. All new public blocks have whole-block source review.
+All 4,478 prior non-Audit Lean files, 327 prior stronger proof sources and
+817 Haskell/Cabal files retain their recorded hashes.
+
+No new Haskell defect or fix was established. No Haskell or Cabal file changed.
+No Haskell check ran. Earlier Haskell repair findings remain below for external
+work. The closed callback gap was a Lean proof gap.
+Durable evidence: `lean/restart-evidence/20261028-prepared-render-soundness`.
+Use a new writable proof area after this checkpoint. Keep sealed and restored
+evidence immutable. Run compiler jobs serially under measured 4 GiB limits.
+Do not resume old build handles after reboot.
+
+The earlier document body follows unchanged.
+
 # Current checkpoint: prepared point stability and local semantics
 
 Source: `05570bab725e076f94d8371be1efa485c3877f9d` on `formalize`.
