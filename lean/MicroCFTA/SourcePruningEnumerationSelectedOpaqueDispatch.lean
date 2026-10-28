@@ -55,7 +55,7 @@ theorem ordinary_deferred (checkEmpty : Bool) (r n p h k target : Nat)
     run checkEmpty r n p h k target scs (.node entry edges depth free) caller before queries = none := by
   simp only [run, reduceCtorEq, ↓reduceIte, nonterminal, Bool.not_false]
 
-/-- Terminal dispatch keeps the actual winner, raw result, caller and cache candidate. -/
+/-- Terminal dispatch uses the actual child observation and finalizer. -/
 theorem terminal_step (checkEmpty : Bool) (r n p h k target : Nat)
     (scs : List Suspended) (value : Node) (caller : Caller width) (before : Cached)
     (queries : SourceEndpointMemo.Memos) (nonempty : value ≠ .empty)
