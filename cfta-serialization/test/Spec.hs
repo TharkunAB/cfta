@@ -665,8 +665,15 @@ formulas =
     [F.Top, F.Bottom, F.And [], F.Or [], F.And [F.Top, F.Bottom], F.Or [F.Bottom, F.Top], F.Not F.Bottom]
         <> [F.Atom relation term (F.Var "v") | relation <- [F.Eq, F.Ne, F.Gt, F.Ge, F.Lt, F.Le], term <- terms]
         <> [F.Forall bindings F.Top, F.Exists bindings F.Bottom]
+        <> [F.Predicate "ready" [], F.Predicate "between\n" [x, F.Lit 0, F.App "f" []]]
   where
-    bindings = [("x", F.IntSort), ("x", F.BoolSort), ("fn", F.FunctionSort [F.IntSort, F.RealSort] F.BoolSort)]
+    bindings =
+        [ ("x", F.IntSort)
+        , ("x", F.BoolSort)
+        , ("fn", F.FunctionSort [F.IntSort, F.RealSort] F.BoolSort)
+        , ("xs", F.NamedSort "List" [F.IntSort])
+        , ("u", F.NamedSort "unit \"quoted\"" [])
+        ]
     terms =
         [ F.Lit (10 ^ (100 :: Int))
         , F.Lit (-(10 ^ (100 :: Int)))

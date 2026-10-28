@@ -23,3 +23,5 @@
   `printDocumentNotesWith`, `printLanguageNotesWith`, and their parsers keep
   the comments beside the value, in `Notes`. The other readers drop them.
   `showCodec` gives the state labels of `Show` and `Read`.
+- Add the text forms of named predicates, `predicate(NAME, [TERM, ...])`, and
+  of named sorts, `named(NAME, [SORT, ...])`.

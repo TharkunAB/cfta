@@ -484,6 +484,7 @@ formulaText formula = case formula of
     F.Atom relation left right -> call (relationName relation) [termText left, termText right]
     F.Forall bindings inner -> quantified "forall" bindings inner
     F.Exists bindings inner -> quantified "exists" bindings inner
+    F.Predicate (F.Name name) operands -> call "predicate" [nameText name, listText $ map termText operands]
   where
     quantified name bindings inner =
         call name [listText [nameText binding <> ": " <> sortText sort | (F.Name binding, sort) <- bindings], formulaText inner]
@@ -526,13 +527,14 @@ termText term = case term of
   where
     binary name left right = call name [termText left, termText right]
 
--- | Render primitive and function sorts.
+-- | Render primitive, function, and named sorts.
 sortText :: F.Sort -> Builder
 sortText sort = case sort of
     F.IntSort -> "int"
     F.RealSort -> "real"
     F.BoolSort -> "bool"
     F.FunctionSort inputs result -> call "function" [listText $ map sortText inputs, sortText result]
+    F.NamedSort (F.Name name) inputs -> call "named" [nameText name, listText $ map sortText inputs]
 
 -- | Render all guard constructors, including scoped substitutions.
 guardText :: C.Guard -> Builder
@@ -931,6 +933,7 @@ formulaParser = do
         "le" -> comparison F.Le
         "forall" -> quantified F.Forall
         "exists" -> quantified F.Exists
+        "predicate" -> pairArguments F.Predicate (F.Name <$> nameParser) (bracketed termParser)
         _ -> fail "unknown formula constructor"
   where
     comparison relation = pairArguments (F.Atom relation) termParser termParser
@@ -971,7 +974,7 @@ termParser = do
   where
     binary constructor = pairArguments constructor termParser termParser
 
--- | Read primitive and function sorts.
+-- | Read primitive, function, and named sorts.
 sortParser :: A.Parser F.Sort
 sortParser = do
     form <- nameParser
@@ -980,6 +983,7 @@ sortParser = do
         "real" -> pure F.RealSort
         "bool" -> pure F.BoolSort
         "function" -> pairArguments F.FunctionSort (bracketed sortParser) sortParser
+        "named" -> pairArguments F.NamedSort (F.Name <$> nameParser) (bracketed sortParser)
         _ -> fail "unknown sort constructor"
 
 -- | Read every guard constructor and ordered actual/formal substitutions.

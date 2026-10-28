@@ -201,6 +201,8 @@ it does not negate the constraint or reconstruct facts lost during compilation.
 | `true`, `false` | Top and bottom |
 
 Formulas use `true`, `false`, `and(F, ...)`, `or(F, ...)`, and `not(F)`.
+A named predicate is `predicate(NAME, [TERM, ...])`. The empty argument list
+is kept, so `predicate(ready, [])` is a predicate with no arguments.
 Comparisons are `eq(A, B)`, `ne`, `gt`, `ge`, `lt`, and `le`. A comparison of the
 distinguished refinement value with an integer has the concise form `v == 0`,
 with `==`, `/=`, `>`, `>=`, `<`, or `<=`. Quantifiers retain ordered bindings:
@@ -215,7 +217,10 @@ Formula terms are exact signed integers, `v`, `var(NAME)`, `app(NAME, [TERM, ...
 `modulo(A, B)`, `if(F, A, B)`, and `cast(T, SORT)`. Integers have no precision
 limit. `negate(1)` remains distinct from `-1`. `var(v)` is an ordinary variable
 named `v`, distinct from the distinguished value abbreviated as `v`.
-Sorts are `int`, `real`, `bool`, and `function([SORT, ...], RESULT)`.
+Sorts are `int`, `real`, `bool`, `function([SORT, ...], RESULT)`, and
+`named(NAME, [SORT, ...])`. For example, `named(List, [int])` is a named type
+constructor with its arguments. The format stores the names of predicates and
+sorts; it does not store their definitions.
 
 These are representations of existing typed constructors. A query backend still
 needs to support the stored constraints. Exact storage does not establish that
@@ -405,7 +410,8 @@ formula         = "true" | "false"
                 | "not" "(" formula ")"
                 | "v" ( "==" | "/=" | ">=" | "<=" | ">" | "<" ) integer
                 | ( "eq" | "ne" | "gt" | "ge" | "lt" | "le" ) "(" term "," term ")"
-                | ( "forall" | "exists" ) "(" "[" ( binding ( "," binding )* )? "]" "," formula ")" ;
+                | ( "forall" | "exists" ) "(" "[" ( binding ( "," binding )* )? "]" "," formula ")"
+                | "predicate" "(" name "," "[" ( term ( "," term )* )? "]" ")" ;
 binding         = name ":" sort ;
 term            = integer | "v" | "var" "(" name ")"
                 | "app" "(" name "," "[" ( term ( "," term )* )? "]" ")"
@@ -413,7 +419,9 @@ term            = integer | "v" | "var" "(" name ")"
                 | ( "add" | "subtract" | "multiply" | "divide" | "modulo" ) "(" term "," term ")"
                 | "if" "(" formula "," term "," term ")"
                 | "cast" "(" term "," sort ")" ;
-sort            = "int" | "real" | "bool" | "function" "(" "[" ( sort ( "," sort )* )? "]" "," sort ")" ;
+sort            = "int" | "real" | "bool"
+                | "function" "(" "[" ( sort ( "," sort )* )? "]" "," sort ")"
+                | "named" "(" name "," "[" ( sort ( "," sort )* )? "]" ")" ;
 
 template        = ( "_" | symbol ) template-args? ;
 template-args   = "(" ( "..." | template ( "," template )* ( "," "..." )? )? ")" ;
