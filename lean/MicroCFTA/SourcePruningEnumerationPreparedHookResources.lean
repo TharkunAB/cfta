@@ -1,5 +1,6 @@
 import MicroCFTA.SourcePruningEnumerationContinuationHead
-import MicroCFTA.SourcePruningEnumerationReceiptHook
+import MicroCFTA.SourcePruningEnumerationPreparedReceiptHook
+import MicroCFTA.SourcePruningEnumerationPreparedHookCertificates
 import MicroCFTA.SourcePruningEnumerationNativePreparedResources
 
 /-!
@@ -17,7 +18,8 @@ open SourceCurrentAllocatedPartialInvariant (Post)
 open SourceCurrentConstrainedCapGeneratedQueryResources (Fits)
 open SourcePruningEnumerationIncomingReservation (Seed Reserved)
 open SourcePruningEnumerationNativeBranchCompletion (cost edgeCost)
-open SourcePruningEnumerationRecursive (Packet Output Failure continueWith resume)
+open SourcePruningEnumerationRecursive (Packet Output)
+open SourcePruningEnumerationPreparedRecursive (Failure continueWith resume)
 local notation "Symbol" => SourcePruningTemplates.Symbol
 local notation "Constraint" => SourceSymbolicIndex.Constraint FullSyntax.Formula
 local notation "Node" => Value Symbol Constraint
@@ -75,7 +77,7 @@ theorem alternatives_zero_complete_resources_prepared
         OutputAt formulas solver caller before seed scs selectedEdges index output) ∧
       (result = .complete processed outputs afterCaller final.query ∨
         ∃ current, result = .stopped processed outputs current ∧
-          StoppedAt formulas solver caller before uv seed scs selectedEdges processed.length
+          PreparedStoppedAt formulas solver caller before uv seed scs selectedEdges processed.length
             afterCaller next final current) := by
   induction selectedEdges generalizing seed inventory caller memos with
   | nil =>
@@ -127,7 +129,7 @@ theorem alternatives_zero_complete_resources_prepared
             middleInventory, middleMemos, advanced, headPost, rfl, ?_, ?_⟩
           · simpa only [List.take_succ_cons, List.take_zero, cost, Nat.add_zero] using headFits
           · simpa only [List.take_succ_cons, List.take_zero, cost, Nat.add_zero] using headKnown
-        obtain ⟨callbackFuel, outcome, callbackRun, callbackObserved⟩ := receipt_zero_complete holeKey fits admits graph templates
+        obtain ⟨callbackFuel, outcome, callbackRun, callbackObserved⟩ := receipt_zero_complete_prepared holeKey fits admits graph templates
           checkEmpty edgesOf stop order metadata formulas solver inventory middleInventory caller middleCaller memos middleMemos
           before uv receipt packet headPost advanced admitted (headPending packet.pending incoming) headHistory
           (reservationAdvance seed (edgeCost scs before.core.counter edge)).2
