@@ -36,7 +36,8 @@ Wilf, and Feat (ranking).
   depth 0. TATA's *height* counts a constant as 1, so height = depth + 1.
   **Mu depth** is the nesting depth of `Mu` binders, a different quantity.
 - **Graph snapshot**: a stored explicit graph with its symbols, refinements,
-  constraints, states, and transitions.
+  constraints, states, and transitions. It need not retain the source facts
+  from which its compiled constraints were made.
 
 ## Constraints
 
