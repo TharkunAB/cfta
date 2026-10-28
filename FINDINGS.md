@@ -1,5 +1,62 @@
 # Current formalization findings
 
+## Constructive native rendering with exact original residual checks
+
+Source checkpoint: 7220dacbb21a21b133a17c7160350dca5f0f2a65.
+SourcePruningEnumerationRendering.render_complete_models fixes a bound, term, residual list and
+final state BEFORE all semantic assignments. Safe, stratified, discharged
+storage with a graph-bearing root and graph-bearing stored references gives
+an actual successful native render at every larger bound. Every original
+satisfying assignment gives that SAME root term and exact original-obligation
+residual list. Each returned residual check holds. The full compression frame,
+stored state and dependency levels remain. No future render or checked result
+is an input to this producer.
+
+ResourceHistory.render_complete_models attaches this result to the SAME
+actual output packet, caller heap and cache. Its output-state discharge and
+carrier conditions remain explicit. Literal native startup derives root and
+reference carriers. Actual shallow and cached child preparation preserve them,
+including Mu and Union children. Full recursive history preservation is open.
+
+The checked free_hole_counterexample shows why carriers are necessary. A safe,
+canonical, proper, stratified and discharged core can have a graph-bearing
+root with an unrenderable free hole. It is an internal-state counterexample.
+It does not establish a reachable public Haskell failure or a full Packet.
+FINDINGS records this distinction and the prior integrated LPO/KBO repairs.
+
+This closes native rendering existence and exact residual satisfaction under
+those structural conditions. It does not prove that every permitted accepted
+term reaches a discharged output. Preserve carriers and the chosen original
+model through terminal merging and every recursive path. Then prove depth,
+stop, frontier, projection and parked-constraint coverage. Public encoding
+origins, public APIs, ranking, sampling and physical Haskell correspondence
+remain open. Earlier finite pruning preservation, output soundness and the
+accepted-head callback theorem retain their scope. Goal ACTIVE.
+
+Eight modules add 15 public theorems. Strict checks and full Audit pass:
+4305 jobs and 80372 theorem dependencies. Public readback preserves all
+253 prior theorem blocks and five definitions as the exact 1055726-byte
+prefix. All 4296 old non-Audit Lean sources, 145 pinned strong modules and
+810 tracked Haskell source/evidence files retain bytes. Haskell is unchanged.
+Details: `lean/notes-current-native-render-coverage.md`.
+
+### Haskell rendering and repair handoff
+
+No new public Haskell defect or fix was established. Enumeration.hs uses
+expandTermFragWith for nested complete fragments. It raises an error for a
+nonrecursive unenumerated hole. expandUVarWith rejects an unfinished
+nonrecursive root. The checked two-slot Lean witness proves that the current
+storage invariants alone do not exclude such an internal hole. It does not
+prove that public native enumeration can reach that state.
+
+The missing formal obligation is graph-carrier preservation through actual
+terminal merging and complete recursive histories. Startup and native child
+preparation now establish the first steps. The original Haskell code is
+unchanged. No Haskell or Cabal edit, Haskell test or benchmark occurred.
+The integrated LPO and KBO Natural-weight repair status and their previous
+executed witnesses remain below for external review.
+
+
 ## Accepted native heads reach a non-rejecting callback continuation
 
 Source checkpoint: 5e8098180a8737fe641949ce6cd493cad73a9278.
