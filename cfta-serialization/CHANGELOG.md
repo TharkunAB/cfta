@@ -18,3 +18,9 @@
   `sampling 1;` of a `SamplingCheckpoint`. It holds the query, the weights of
   the sizes, the pseudorandom generator and its version, the seed, and the
   number of draws, then the text of `printGraph` for the graph.
+- Add `printDocument`, `parseDocument`, `printLanguage`, and `parseLanguage`:
+  the text forms `document 1;` and `language 1;` of source documents and of
+  languages with named exclusions. A doc comment can also document a
+  production, a fact, or an exclusion, and a state of a document or a language
+  can have a sort. `printDocumentNotesWith`, `printLanguageNotesWith`, and
+  their parsers keep them in `Notes`.

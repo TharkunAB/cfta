@@ -1,13 +1,14 @@
 # cfta-serialization
 
-Read and write complete FTA, ECTA, and LTA graphs and query checkpoints.
+Read and write complete FTA, ECTA, and LTA graphs, editable language values,
+and query checkpoints.
 `Data.CFTA.Serialization.Text` provides one readable format. It retains full
-refinements, every constraint constructor, cycles, empty/dead rows, repeated
-alternatives, and child order. Reading validates the graph without running a
-solver or enumerating terms.
+refinements, every constraint constructor, individual source facts, named
+exclusions, cycles, empty/dead rows, repeated alternatives, and child order.
+Reading validates the input without running a solver or enumerating terms.
 
 The format is version 1. Each file starts with its kind and version, such as
-`graph 1;`. The [grammar](#grammar) gives the complete syntax,
+`graph 1;` or `language 1;`. The [grammar](#grammar) gives the complete syntax,
 and [versions](#versions) says when a version changes.
 
 ## Typed values and exact round trips
@@ -15,11 +16,14 @@ and [versions](#versions) says when a version changes.
 | Value | Printer | Parser | Header |
 | --- | --- | --- | --- |
 | `PlainFTA state Symbol` | `printGraph` | `parseGraph` | `graph 1;` |
+| `Document state` | `printDocument` | `parseDocument` | `document 1;` |
+| `Language state` | `printLanguage` | `parseLanguage` | `language 1;` |
 | `Checkpoint state` | `printCheckpoint` | `parseCheckpoint` | `checkpoint 1;` |
 | `SamplingCheckpoint state` | `printSamplingCheckpoint` | `parseSamplingCheckpoint` | `sampling 1;` |
 
 Printers return `Text`. Parsers return `Either (TextError state) value`.
-`explainTextError` reports a syntax line/column or a checked graph error.
+`explainTextError` reports a syntax line/column, a checked graph error, or a
+checked source error.
 The default state labels use `Show` and `Read`. For lawful instances:
 
 ```haskell
@@ -37,9 +41,11 @@ Use an ADT for states. For example:
 data State = Atom | Expr deriving (Eq, Ord, Show, Read)
 ```
 
-For custom or portable state labels, use `StateCodec state` with
-`printGraphWith`/`parseGraphWith`, `printCheckpointWith`/`parseCheckpointWith`, or
-`printSamplingCheckpointWith`/`parseSamplingCheckpointWith`. The codec contains
+For custom or portable state labels, use `StateCodec state` and the corresponding
+`printGraphWith`/`parseGraphWith`, `printDocumentWith`/`parseDocumentWith`,
+`printLanguageWith`/`parseLanguageWith`,
+`printCheckpointWith`/`parseCheckpointWith`, or
+`printSamplingCheckpointWith`/`parseSamplingCheckpointWith` functions. The codec contains
 `encodeState :: state -> Text` and `decodeState :: Text -> Either String state`.
 The snapshot printer handles quoting. For a graph with `Text` state names:
 
@@ -50,7 +56,7 @@ textStates = StateCodec id Right
 Decoding an encoded state must return that exact state and preserve equality and
 ordering. A structured state such as `Index 3` can use derived `Show`/`Read`; its
 label is printed as `"Index 3"`. State labels are the only caller-defined codec.
-Constraints, symbols, and paths remain typed values.
+Constraints, symbols, paths, and source operations remain typed values.
 
 ## A complete readable graph
 
@@ -74,45 +80,83 @@ constraint after `where`. Only an exact top symbol refinement is omitted.
 Unknown references and inconsistent symbol arities are errors. Duplicate states
 are errors even when their rows are identical.
 
+## A complete readable language
+
+```text
+language 1;
+start Expr;
+
+state Atom {
+  zero = zero @{ v == 0 };
+  one = one @{ v == 1 };
+  two = two @{ v == 2 };
+}
+
+state Expr {
+  pair = pair(Atom, Atom) {
+    same = equal([0], [1]);
+  };
+  wrap = wrap(Expr);
+}
+
+exclude zero-pair = root pair(zero @{ v == 0 }, zero @{ v == 0 });
+```
+
+A source production has a stable name, complete symbol, ordered child states,
+and optional named facts. Only an exact top symbol refinement is omitted.
+Production names are unique within their state. Fact and exclusion names must
+also be unique in their scope. Unknown references and inconsistent symbol arities
+are errors. Duplicate source states are errors even when their rows are identical.
+
+A document uses the same source rows with a `document 1;` header.
+
 Names can use ASCII letters, digits, `_`, `-`, and `+`. Other names use double
 quotes. Quoted strings retain Unicode and escaped control characters. Supported
 escapes are `\"`, `\\`, `\/`, `\b`, `\f`, `\n`, `\r`, `\t`, and `\uXXXX`;
-a non-BMP escape uses a valid surrogate pair. The printer also quotes the name
-`_`.
+a non-BMP escape uses a valid surrogate pair. The printer quotes the name `_`
+to distinguish it from a template hole.
 
 ## Doc comments
 
 A line that starts with exactly three slashes, `///`, is a doc comment. It
-documents the item after it: the header of the file or a state. A graph
-transition has no doc comment. A `//` comment, and a comment with four or more
-slashes, is not kept.
+documents the item after it: the header of the file, a state, a production, a
+fact, or an exclusion. A graph transition has no doc comment. A `//` comment,
+and a comment with four or more slashes, is not kept.
 
 ```text
 /// Pairs of small numbers.
-graph 1;
+language 1;
 start Expr;
 
 /// The leaves.
 state Atom {
-  zero @{ v == 0 };
-  one @{ v == 1 };
+  zero = zero @{ v == 0 };
+  one = one @{ v == 1 };
 }
 
-/// A pair of atoms, or a wrapped expression.
 state Expr {
-  pair(Atom, Atom);
-  wrap(Expr);
+  /// A pair of atoms.
+  pair = pair(Atom, Atom) {
+    /// Both atoms are the same.
+    same = equal([0], [1]);
+  };
 }
+
+/// A pair of zeros is not a term.
+exclude zero-pair = root pair(zero @{ v == 0 }, zero @{ v == 0 });
 ```
 
 The doc comments are kept beside the value, in `Notes state`. Its field
-`noteComments` maps a `CommentTarget state` (`OnFile` or `OnState`) to the text
-of the comment. One space after `///` is not part of the text. Consecutive
-comment lines are one text, with a newline between the lines.
+`noteComments` maps a `CommentTarget state` (`OnFile`, `OnState`,
+`OnProduction`, `OnFact`, or `OnExclusion`) to the text of the comment. One
+space after `///` is not part of the text. Consecutive comment lines are one
+text, with a newline between the lines.
 
 | Value | Printer | Parser |
 | --- | --- | --- |
 | `PlainFTA state Symbol` | `printGraphNotesWith` | `parseGraphNotesWith` |
+| `Document state` | `printDocumentNotesWith` | `parseDocumentNotesWith` |
+| `Language state` | `printLanguageNotesWith` | `parseLanguageNotesWith` |
 
 Each takes a `StateCodec`. `showCodec` gives the state labels of `printGraph`
 and `parseGraph`. The other readers read doc comments and drop them. A doc
@@ -126,10 +170,10 @@ a new comment does not make a checkpoint stale.
 
 ## Sorts
 
-A state can have a sort, written after its name: `state Pos : Int {`. The sorts
-are kept beside the value, in the field `noteSorts` of `Notes`, as the doc
-comments are. The printers and parsers with notes keep them; the other readers
-drop them.
+A state of a graph, a document, or a language can have a sort, written after
+its name: `state Pos : Int {`. The sorts are kept beside the value, in the field
+`noteSorts` of `Notes`, as the doc comments are. The printers and parsers with
+notes keep them; the other readers drop them.
 
 ```text
 graph 1;
@@ -170,7 +214,8 @@ outside the machine `Int` range is rejected instead of overflowing.
 
 `CLASSES` is `impossible` or a list of path classes, such as
 `[[[0], [1]], [[1], [2]]]`. Class order and empty/singleton classes are retained.
-Paths within one class are a set.
+Paths within one class are a set. Removing a source fact removes that obligation;
+it does not negate the constraint or reconstruct facts lost during compilation.
 
 | Guard | Operands |
 | --- | --- |
@@ -203,6 +248,15 @@ These are representations of existing typed constructors. A query backend still
 needs to support the stored constraints. Exact storage does not establish that
 an arbitrary formula can be decided or enumerated.
 
+## Exclusion templates
+
+A language stores its named exclusions as `exclude NAME = root TEMPLATE;` or
+`exclude NAME = anywhere TEMPLATE;`. Templates use `_` for a hole, `f(a, b)` for
+an exact node, `_(a, b)` for any symbol with those children, and a final `...`
+for a prefix. Thus `f(...)` and `_(...)` differ from exact leaves. Templates keep
+complete symbol refinements, so a term printed after `eraseRefinements` does not
+select the same terms. See [editable languages](../docs/editable-languages.md)
+for the updates that change a language before you save it.
 ## Checkpoints
 
 `printCheckpoint` and `parseCheckpoint` store a `Checkpoint` of
@@ -285,16 +339,24 @@ rejects another graph and other weights.
 
 The grammar uses EBNF: `?` is optional, `*` is zero or more, and `+` is one or
 more. Spaces, line breaks, and `//` comments can come between any two tokens.
-A `name` is a state label, the sort of a state, a symbol, or a variable. The
-printer leaves a name unquoted when every character is an ASCII letter, a
-digit, `_`, `-`, or `+`, and the name is not `_`. It quotes every other name.
+A `name` is a state label, the sort of a state, a symbol, or a name of a
+production, a fact, an exclusion, or a variable. The printer leaves a name
+unquoted when every character is an ASCII letter, a digit, `_`, `-`, or `+`,
+and the name is not `_`. It quotes every other name.
 
 ```ebnf
 graph-file      = header("graph") graph-row* ;
+document-file   = header("document") source-row* ;
+language-file   = header("language") source-row* exclusion* ;
 header(kind)    = doc-comment? kind "1" ";" "start" name ";" ;
 
 graph-row       = doc-comment? "state" name ( ":" name )? "{" graph-edge* "}" ";"? ;
 graph-edge      = symbol children? ( "where" constraint )? ";" ;
+source-row      = doc-comment? "state" name ( ":" name )? "{" production* "}" ";"? ;
+production      = doc-comment? name "=" symbol children? ( "{" fact* "}" )? ";" ;
+fact            = doc-comment? name "=" constraint ";" ;
+exclusion       = doc-comment? "exclude" exclusion-body ;
+exclusion-body  = name "=" ( "root" | "anywhere" ) template ";" ;
 symbol          = name ( "@" "{" formula "}" )? ;
 children        = "(" ( name ( "," name )* )? ")" ;
 
@@ -335,6 +397,9 @@ term            = integer | "v" | "var" "(" name ")"
                 | "if" "(" formula "," term "," term ")"
                 | "cast" "(" term "," sort ")" ;
 sort            = "int" | "real" | "bool" | "function" "(" "[" ( sort ( "," sort )* )? "]" "," sort ")" ;
+
+template        = ( "_" | symbol ) template-args? ;
+template-args   = "(" ( "..." | template ( "," template )* ( "," "..." )? )? ")" ;
 
 name            = name-char+ | '"' ( string-char | escape )* '"' ;
 name-char       = ASCII letter | digit | "_" | "-" | "+" ;

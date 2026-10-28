@@ -22,6 +22,7 @@ import Data.CFTA.Constraint (
     noConstraint,
     semanticConstraint,
  )
+import qualified Data.CFTA.Document as D
 import Data.CFTA.Equality.Constraint (
     EqConstraints (EqConstraints, EqContradiction),
     PathEClass (PathEClass),
@@ -29,6 +30,7 @@ import Data.CFTA.Equality.Constraint (
  )
 import qualified Data.CFTA.Formula as F
 import Data.CFTA.Index (ClassRank (..), Size, Weight)
+import qualified Data.CFTA.Language as L
 import Data.CFTA.Path (path)
 import Data.CFTA.Refinement.Expression (refinementFormula, (.==), (.>))
 import Data.CFTA.Refinement.LiquidFixpoint (withZ3)
@@ -38,6 +40,7 @@ import qualified Data.CFTA.Sized as Sized
 import Data.CFTA.Sized.Checkpoint (Checkpoint (..), CheckpointError (..), SamplingCheckpoint (..))
 import qualified Data.CFTA.Sized.Checkpoint as Checkpoint
 import Data.CFTA.Symbol (Symbol (RefinedSymbol, Symbol), valueName)
+import Data.CFTA.Template (Template (..))
 
 main :: IO ()
 main = do
@@ -58,9 +61,21 @@ spec = do
             forM_ graphs $
                 \(_, graph) -> roundTrip T.printGraph T.parseGraph graph
 
+        it "keep every document" $
+            forM_ graphs $
+                \(_, graph) -> roundTrip T.printDocument T.parseDocument $ document graph
+
+        it "keep every language with every template form" $
+            forM_ graphs $
+                \(_, graph) -> roundTrip T.printLanguage T.parseLanguage $ withForms $ document graph
+
         it "keep unusual names and stored constraints" $
             forM_ [(name, constraint) | name <- names, constraint <- storedConstraints] $ \(name, constraint) ->
                 roundTrip T.printGraph T.parseGraph $ single name constraint
+
+        it "keep unusual names and stored facts in a language" $
+            forM_ [(name, constraint) | name <- names, constraint <- storedConstraints] $ \(name, constraint) ->
+                roundTrip T.printLanguage T.parseLanguage $ withForms $ singleSource name constraint
 
         it "keep structured states through Show and Read"
             $ roundTrip T.printGraph T.parseGraph
@@ -78,6 +93,13 @@ spec = do
         it "ignore comments and whitespace" $
             T.parseGraph ("// λ prefix\r\n\t" <> T.printGraph liquid <> " // suffix") `shouldBe` Right liquid
 
+        it "allow an edit after reopening" $ do
+            let original = withForms $ singleSource "leaf" $ Constraint (EqConstraints []) Bottom
+                ref = L.at "leaf" "leaf"
+                changes = L.define ref "replacement" [] <> L.relax ref "leaf" <> L.restore "0"
+                reopened = must $ T.parseLanguage $ T.printLanguage original
+            L.update reopened changes `shouldBe` L.update original changes
+
     describe "errors" $ do
         it "give the line and column of a syntax error" $
             case T.parseGraphWith strings "// λ\ngraph 1;\nstart S;\nstate S { a @{ nonsense }; }" of
@@ -87,9 +109,19 @@ spec = do
         it "report a duplicate state" $
             T.parseGraphWith strings "graph 1; start S; state S {} state S {}" `shouldBe` Left (DuplicateState "S")
 
+        it "report a duplicate state and a duplicate production in a language" $ do
+            T.parseLanguageWith strings "language 1; start S; state S {} state S {}"
+                `shouldBe` Left (InvalidDefinition $ D.DuplicateState "S")
+            T.parseLanguageWith strings "language 1; start S; state S { x = a; x = b; }"
+                `shouldBe` Left (InvalidDefinition $ D.DuplicateTransition "S" "x")
+
         it "reject malformed input" $
             forM_ malformed $ \text ->
                 T.parseGraphWith strings text `shouldSatisfy` either (const True) (const False)
+
+        it "reject malformed languages" $
+            forM_ malformedLanguages $ \text ->
+                T.parseLanguageWith strings text `shouldSatisfy` either (const True) (const False)
 
         it "explain a bad string escape" $
             forM_ escapes $ \(escape, expected) ->
@@ -97,6 +129,8 @@ spec = do
                     Left failure -> Text.pack (T.explainTextError failure) `shouldSatisfy` Text.isInfixOf expected
                     Right _ -> expectationFailure $ "accepted " <> show escape
 
+        it "keep the formats apart" $
+            T.parseDocumentWith strings "language 1; start S; state S {}" `shouldSatisfy` either (const True) (const False)
     describe "doc comments" $ do
         it "keep the comments of a graph and of its states" $
             forM_ graphs $ \(_, graph) ->
@@ -105,26 +139,49 @@ spec = do
                     (T.parseGraphNotesWith strings)
                     (noted $ graphComments graph, graph)
 
-        it "print no comment of an item that the value does not have" $
-            T.parseGraphNotesWith
-                strings
-                (T.printGraphNotesWith strings (noted $ graphComments liquid <> Map.singleton (T.OnState "missing") "x") liquid)
+        it "keep the comments of a language: its states, productions, facts, and exclusions" $
+            forM_ (map (withForms . document . snd) graphs <> [withForms $ singleSource name noConstraint | name <- names]) $ \language ->
+                roundTrip
+                    (uncurry $ T.printLanguageNotesWith strings)
+                    (T.parseLanguageNotesWith strings)
+                    (noted $ languageComments language, language)
+
+        it "keep the comments of a document" $
+            forM_ graphs $ \(_, graph) -> do
+                let source = document graph
+                    comments = Map.delete (T.OnExclusion "0") $ languageComments $ L.Language source Map.empty
+                roundTrip (uncurry $ T.printDocumentNotesWith strings) (T.parseDocumentNotesWith strings) (noted comments, source)
+
+        it "print no comment of an item that the value does not have" $ do
+            let extra = Map.fromList [(T.OnState "missing", "x"), (T.OnProduction "s" "p", "y"), (T.OnExclusion "e", "z")]
+            T.parseGraphNotesWith strings (T.printGraphNotesWith strings (noted $ graphComments liquid <> extra) liquid)
                 `shouldBe` Right (noted $ graphComments liquid, liquid)
 
-        it "leave the text of the printers without comments unchanged" $
+        it "leave the text of the printers without comments unchanged" $ do
             forM_ graphs $ \(_, graph) ->
                 T.printGraphNotesWith strings mempty graph `shouldBe` T.printGraphWith strings graph
+            let language = withForms $ document liquid
+            T.printLanguageNotesWith strings mempty language `shouldBe` T.printLanguageWith strings language
 
-        it "are dropped by the readers without comments" $
+        it "are dropped by the readers without comments" $ do
             T.parseGraphWith strings (T.printGraphNotesWith strings (noted $ graphComments liquid) liquid) `shouldBe` Right liquid
+            let language = withForms $ document liquid
+            T.parseLanguageWith strings (T.printLanguageNotesWith strings (noted $ languageComments language) language)
+                `shouldBe` Right language
 
         it "need exactly three slashes" $
             T.parseGraphNotesWith strings "//// not a doc comment\n// nor this\ngraph 1; start S; state S {}"
                 `shouldBe` Right (mempty, must $ FTA.mkFTA "S" [("S", [])])
 
-        it "must come before the header or a state" $
+        it "must come before the header or a state in a graph" $
             forM_ misplacedGraphComments $ \text ->
                 case T.parseGraphWith strings text of
+                    Left failure -> Text.pack (T.explainTextError failure) `shouldSatisfy` Text.isInfixOf "doc comment"
+                    Right _ -> expectationFailure $ "accepted " <> show text
+
+        it "must come before an item that takes a comment" $
+            forM_ misplacedComments $ \text ->
+                case T.parseLanguageWith strings text of
                     Left failure -> Text.pack (T.explainTextError failure) `shouldSatisfy` Text.isInfixOf "doc comment"
                     Right _ -> expectationFailure $ "accepted " <> show text
 
@@ -132,6 +189,11 @@ spec = do
         it "keep the sorts of the states of a graph" $
             forM_ graphs $ \(_, graph) ->
                 roundTrip (uncurry $ T.printGraphNotesWith strings) (T.parseGraphNotesWith strings) (sorted graph, graph)
+
+        it "keep the sorts and the doc comments of a language together" $
+            forM_ (map (withForms . document . snd) graphs) $ \language -> do
+                let notes = (noted $ languageComments language){T.noteSorts = T.noteSorts $ sorted $ D.sourceGraph $ L.source language}
+                roundTrip (uncurry $ T.printLanguageNotesWith strings) (T.parseLanguageNotesWith strings) (notes, language)
 
         it "print no sort of a state that the graph does not have" $
             T.parseGraphNotesWith
@@ -319,6 +381,22 @@ graphComments :: FTA.PlainFTA String Symbol -> Map.Map (T.CommentTarget String) 
 graphComments graph =
     Map.fromList $ zip (T.OnFile : map T.OnState (Map.keys $ FTA.transitionTable graph)) (cycle commentTexts)
 
+-- | A comment on every item of a language, from 'commentTexts' in turn.
+languageComments :: L.Language String -> Map.Map (T.CommentTarget String) Text
+languageComments language = Map.fromList $ zip targets (cycle commentTexts)
+  where
+    targets =
+        T.OnFile
+            : concat
+                [ T.OnState state
+                    : concat
+                        [ T.OnProduction state name : [T.OnFact state name fact | fact <- Map.keys facts]
+                        | FTA.Transition _ _ (D.Annotation name facts) <- edges
+                        ]
+                | (state, edges) <- Map.toList $ FTA.transitionTable $ D.sourceGraph $ L.source language
+                ]
+                <> map T.OnExclusion (Map.keys $ L.exclusions language)
+
 -- | Notes with only these doc comments.
 noted :: Map.Map (T.CommentTarget String) Text -> T.Notes String
 noted comments = mempty{T.noteComments = comments}
@@ -338,6 +416,15 @@ misplacedGraphComments =
     , "graph 1; start S; state S {}\n/// x\n"
     , "graph 1; start S; state S { a; /// x\n}"
     , "graph 1; start S; state S { /// x\na; }"
+    ]
+
+-- | Doc comments with no item after them, in a language.
+misplacedComments :: [Text]
+misplacedComments =
+    [ "language 1;\n/// x\nstart S; state S {}"
+    , "language 1; start S; state S {}\n/// x\n"
+    , "language 1; start S; state S { a = a; /// x\n}"
+    , "language 1; start S; state S {} exclude e = root _;\n/// x"
     ]
 
 -- | Print and parse again: the value is the same, and so is the text.
@@ -383,6 +470,51 @@ single name constraint =
             ]
   where
     value = F.Var $ F.Name $ Text.pack valueName
+
+-- | A plain graph as a document.
+document :: FTA.PlainFTA String Symbol -> D.Document String
+document = must . D.fromGraph
+
+-- | A one-state language whose name, symbol, and fact use the same text.
+singleSource :: Text -> Constraint -> D.Document String
+singleSource name constraint =
+    must $
+        D.mkDocument
+            (Text.unpack name)
+            [
+                ( Text.unpack name
+                ,
+                    [ FTA.Transition (RefinedSymbol (Symbol name) $ F.Atom F.Eq value (F.Lit $ 2 ^ (100 :: Int))) []
+                        $ D.Annotation name
+                        $ Map.singleton name constraint
+                    ]
+                )
+            , ("dead", [])
+            ]
+  where
+    value = F.Var $ F.Name $ Text.pack valueName
+
+-- | The language with one named exclusion for each template form, at the root and anywhere.
+withForms :: D.Document state -> L.Language state
+withForms source =
+    L.Language source $
+        Map.fromList
+            [ (L.ExclusionName $ Text.pack $ show index, scope form)
+            | (index, (scope, form)) <- zip [0 :: Int ..] [(scope, form) | scope <- [L.AtRoot, L.Anywhere], form <- forms]
+            ]
+  where
+    forms =
+        [ Hole
+        , AnyNode []
+        , AnyNode [Hole]
+        , AnyPrefix []
+        , AnyPrefix [Hole]
+        , TemplateNode "_" []
+        , TemplateNode "json" [Hole]
+        , TemplatePrefix "_" []
+        , TemplatePrefix "f" [Hole]
+        , TemplateNode (RefinedSymbol "x" $ F.And []) [AnyPrefix [], TemplatePrefix "a b" [Hole]]
+        ]
 
 -- | Names that need quotes or escapes, or that look like keywords.
 names :: [Text]
@@ -549,6 +681,29 @@ malformed =
     , "graph 1; start S; state S { a where satisfies([], forall([x: unknown], true)); }"
     , "graph 1; start S; state S { a where same([], [], []); }"
     ]
+
+-- | Language input that the parser must reject.
+malformedLanguages :: [Text]
+malformedLanguages =
+    [ "language 2; start S; state S {}"
+    , "language1; start S; state S {}"
+    , "language 1; start S; state S { a = a { x = true; x = false; }; }"
+    , blank <> " exclude x = root _; exclude x = root _;"
+    , "language 1; start S; state S { x = f(Missing); }"
+    , "language 1; start S; state S { x = a; y = a(S); }"
+    , blank <> " exclude x = elsewhere _;"
+    , blank <> " exclude x = root f(...,a);"
+    , blank <> " exclude x = root f(a,);"
+    , "language 1; start S; state S { a = a @{ v == 1.5 }; }"
+    , "language 1; start S; state S { a = a { x = raw {}; }; }"
+    , "language 1; start S; state S { a = a"
+    , blank <> " garbage"
+    , "language 1; start S; state S { a = a { x = equal([9223372036854775808]); }; }"
+    , "language 1; start S; state S { a = a { x = satisfies([], forall([x: unknown], true)); }; }"
+    , "language 1; start S; state S { a = a { x = same([], [], []); }; }"
+    ]
+  where
+    blank = "language 1; start S; state S {}"
 
 -- | Bad string escapes and a part of the message that explains each one.
 escapes :: [(Text, Text)]
