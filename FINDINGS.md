@@ -1,3 +1,33 @@
+## Current checkpoint: 2026-10-28 16:10 CET
+
+The checked source checkpoint is `1115481c15dec8193b8d0594366ee5d068c24331` on `formalize`.
+It adds 30 modules, 48 public theorems, and one public observer definition.
+All 31 final strict checks pass. Audit passes with 4,463 jobs and 81,374 theorem
+dependency checks. The public readback has 622 theorem signatures with axiom
+checks and 58 definitions. Its old 2,610,680-byte prefix is unchanged.
+
+The finite prepared driver now preserves canonical stored tries at every emitted
+output under its original state and resource assumptions. Actual discharged
+outputs supply the retained-child condition. Full endpoint Posts and local
+stable opaque resource evidence are checked. Whole-driver backward semantics,
+forward initial-input arity, accepted-output coverage, sufficient recursive
+depth, and physical Haskell correspondence remain open. Backward arity reflection
+still assumes reached arity. `Discharged` concerns the whole cache; a rendered
+root alone does not establish it.
+
+No new Haskell implementation defect or repair was established in this checkpoint.
+No Haskell or Cabal file changed. All 817 current Haskell/Cabal files are unchanged,
+including all 810 files in the inherited baseline. The evidence records the
+baseline denominator correction. The remaining stable-opaque certificate and
+forward-arity obligations are Lean proof gaps. They are not new Haskell defects.
+Keep actual Haskell fixes and their reproducers here for the external agent.
+The earlier Haskell findings below remain preserved in full.
+
+Detailed current scope and restart steps: [lean/notes-current-prepared-history-semantics.md](lean/notes-current-prepared-history-semantics.md).
+This dated entry supersedes conflicting status text below. The full earlier body follows.
+
+---
+
 # Current formalization findings
 
 ## Admitted histories at every finite prepared driver depth

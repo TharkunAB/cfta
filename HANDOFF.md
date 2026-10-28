@@ -1,3 +1,34 @@
+## Current checkpoint: 2026-10-28 16:10 CET
+
+The checked source checkpoint is `1115481c15dec8193b8d0594366ee5d068c24331` on `formalize`.
+It adds 30 modules, 48 public theorems, and one public observer definition.
+All 31 final strict checks pass. Audit passes with 4,463 jobs and 81,374 theorem
+dependency checks. The public readback has 622 theorem signatures with axiom
+checks and 58 definitions. Its old 2,610,680-byte prefix is unchanged.
+
+The finite prepared driver now preserves canonical stored tries at every emitted
+output under its original state and resource assumptions. Actual discharged
+outputs supply the retained-child condition. Full endpoint Posts and local
+stable opaque resource evidence are checked. Whole-driver backward semantics,
+forward initial-input arity, accepted-output coverage, sufficient recursive
+depth, and physical Haskell correspondence remain open. Backward arity reflection
+still assumes reached arity. `Discharged` concerns the whole cache; a rendered
+root alone does not establish it.
+
+The source checkpoint is pushed. The full current handoff is in
+`lean/notes-current-prepared-history-semantics.md`.
+The full checkpoint archive is in
+`lean/restart-evidence/20261028-prepared-history-semantics/`.
+Read its README and run its standalone verifier before extraction.
+Keep the older reboot archive unchanged. The current formalization goal remains
+active. Use a fresh temporary proof area after the current area's final freeze.
+No live shell or network handle is required to resume.
+
+Detailed current scope and restart steps: [lean/notes-current-prepared-history-semantics.md](lean/notes-current-prepared-history-semantics.md).
+This dated entry supersedes conflicting status text below. The full earlier body follows.
+
+---
+
 # cfta formalization restart handoff
 
 ## Admitted histories at every finite prepared driver depth
