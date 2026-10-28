@@ -76,6 +76,78 @@ escapes are `\"`, `\\`, `\/`, `\b`, `\f`, `\n`, `\r`, `\t`, and `\uXXXX`;
 a non-BMP escape uses a valid surrogate pair. The printer also quotes the name
 `_`.
 
+## Doc comments
+
+A line that starts with exactly three slashes, `///`, is a doc comment. It
+documents the item after it: the header of the file or a state. A graph
+transition has no doc comment. A `//` comment, and a comment with four or more
+slashes, is not kept.
+
+```text
+/// Pairs of small numbers.
+graph 1;
+start Expr;
+
+/// The leaves.
+state Atom {
+  zero @{ v == 0 };
+  one @{ v == 1 };
+}
+
+/// A pair of atoms, or a wrapped expression.
+state Expr {
+  pair(Atom, Atom);
+  wrap(Expr);
+}
+```
+
+The doc comments are kept beside the value, in `Notes state`. Its field
+`noteComments` maps a `CommentTarget state` (`OnFile` or `OnState`) to the text
+of the comment. One space after `///` is not part of the text. Consecutive
+comment lines are one text, with a newline between the lines.
+
+| Value | Printer | Parser |
+| --- | --- | --- |
+| `PlainFTA state Symbol` | `printGraphNotesWith` | `parseGraphNotesWith` |
+
+Each takes a `StateCodec`. `showCodec` gives the state labels of `printGraph`
+and `parseGraph`. The other readers read doc comments and drop them. A doc
+comment that does not come before one of these items is a syntax error. The
+printer prints no comment for an item that the value does not have.
+
+`mempty` is no notes, and `printGraphNotesWith codec mempty` prints the text of
+`printGraphWith codec`. A doc comment is not part of the value. It does not
+change the equality of the value or the text of `printGraph`.
+
+## Sorts
+
+A state can have a sort, written after its name: `state Pos : Int {`. The sorts
+are kept beside the value, in the field `noteSorts` of `Notes`, as the doc
+comments are. The printers and parsers with notes keep them; the other readers
+drop them.
+
+```text
+graph 1;
+start Test;
+
+state Small : Int {
+  zero @{ v == 0 };
+  one;
+}
+
+state Sum : Int {
+  add(Sum, Small);
+  zero;
+}
+
+state Test : Bool {
+  lt(Sum, Small);
+}
+```
+
+A state is a refinement of its sort: here `Small` and `Sum` are two sets of
+terms of sort `Int`. Reading does not check the sorts.
+
 ## Complete constraint syntax
 
 A path is a list of zero-based child indexes, such as `[0, 1]`. The format also

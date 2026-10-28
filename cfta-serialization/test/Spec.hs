@@ -4,6 +4,7 @@
 module Main (main) where
 
 import Control.Monad (forM_)
+import qualified Data.Map.Strict as Map
 import qualified Data.Set as Set
 import Data.Text (Text)
 import qualified Data.Text as Text
@@ -94,10 +95,81 @@ spec = do
                     Left failure -> Text.pack (T.explainTextError failure) `shouldSatisfy` Text.isInfixOf expected
                     Right _ -> expectationFailure $ "accepted " <> show escape
 
+    describe "doc comments" $ do
+        it "keep the comments of a graph and of its states" $
+            forM_ graphs $ \(_, graph) ->
+                roundTrip
+                    (uncurry $ T.printGraphNotesWith strings)
+                    (T.parseGraphNotesWith strings)
+                    (noted $ graphComments graph, graph)
+
+        it "print no comment of an item that the value does not have" $
+            T.parseGraphNotesWith
+                strings
+                (T.printGraphNotesWith strings (noted $ graphComments liquid <> Map.singleton (T.OnState "missing") "x") liquid)
+                `shouldBe` Right (noted $ graphComments liquid, liquid)
+
+        it "leave the text of the printers without comments unchanged" $
+            forM_ graphs $ \(_, graph) ->
+                T.printGraphNotesWith strings mempty graph `shouldBe` T.printGraphWith strings graph
+
+        it "are dropped by the readers without comments" $
+            T.parseGraphWith strings (T.printGraphNotesWith strings (noted $ graphComments liquid) liquid) `shouldBe` Right liquid
+
+        it "need exactly three slashes" $
+            T.parseGraphNotesWith strings "//// not a doc comment\n// nor this\ngraph 1; start S; state S {}"
+                `shouldBe` Right (mempty, must $ FTA.mkFTA "S" [("S", [])])
+
+        it "must come before the header or a state" $
+            forM_ misplacedGraphComments $ \text ->
+                case T.parseGraphWith strings text of
+                    Left failure -> Text.pack (T.explainTextError failure) `shouldSatisfy` Text.isInfixOf "doc comment"
+                    Right _ -> expectationFailure $ "accepted " <> show text
+
+    describe "sorts" $ do
+        it "keep the sorts of the states of a graph" $
+            forM_ graphs $ \(_, graph) ->
+                roundTrip (uncurry $ T.printGraphNotesWith strings) (T.parseGraphNotesWith strings) (sorted graph, graph)
+
+        it "print no sort of a state that the graph does not have" $
+            T.parseGraphNotesWith
+                strings
+                (T.printGraphNotesWith strings (sorted liquid <> mempty{T.noteSorts = Map.singleton "missing" "Int"}) liquid)
+                `shouldBe` Right (sorted liquid, liquid)
+
+        it "are dropped by the readers without notes" $
+            T.parseGraphWith strings (T.printGraphNotesWith strings (sorted liquid) liquid) `shouldBe` Right liquid
+
     describe "ranks" $
         it "are the same after a round trip" $
             forM_ (filter ((/= "all-forms") . fst) graphs) $ \(_, graph) ->
                 sameRanks graph $ must $ T.parseGraph $ T.printGraph graph
+
+-- | A comment on the file and on each state of a graph, from 'commentTexts' in turn.
+graphComments :: FTA.PlainFTA String Symbol -> Map.Map (T.CommentTarget String) Text
+graphComments graph =
+    Map.fromList $ zip (T.OnFile : map T.OnState (Map.keys $ FTA.transitionTable graph)) (cycle commentTexts)
+
+-- | Notes with only these doc comments.
+noted :: Map.Map (T.CommentTarget String) Text -> T.Notes String
+noted comments = mempty{T.noteComments = comments}
+
+-- | Notes with a sort for each state of a graph, from 'names' in turn.
+sorted :: FTA.FTA String Symbol annotation -> T.Notes String
+sorted graph = mempty{T.noteSorts = Map.fromList $ zip (Map.keys $ FTA.transitionTable graph) (cycle names)}
+
+-- | Comment texts with empty lines, spaces at either end, slashes, carriage returns, and Unicode.
+commentTexts :: [Text]
+commentTexts = ["plain", "", " leading space", "/ slash", "two\nlines", "\n", "λ 😀 \"quoted\"", "trailing space ", "a\r\nb"]
+
+-- | Doc comments with no item after them, in a graph.
+misplacedGraphComments :: [Text]
+misplacedGraphComments =
+    [ "graph 1;\n/// x\nstart S; state S {}"
+    , "graph 1; start S; state S {}\n/// x\n"
+    , "graph 1; start S; state S { a; /// x\n}"
+    , "graph 1; start S; state S { /// x\na; }"
+    ]
 
 -- | Print and parse again: the value is the same, and so is the text.
 roundTrip ::
