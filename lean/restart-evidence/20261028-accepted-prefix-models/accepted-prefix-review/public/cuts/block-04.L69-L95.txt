@@ -1,0 +1,27 @@
+MicroCFTA.SourcePruningNativeView.keeps_of_accepted {Guard Key : Type}
+  (holds : Guard → MicroCFTA.Language.Term MicroCFTA.SourcePruningTemplates.Symbol → Bool)
+  (ambient : MicroCFTA.InternedGuardedLanguage.Env MicroCFTA.SourcePruningTemplates.Symbol)
+  (fits : Key → MicroCFTA.SourcePruningTemplates.Symbol → Bool)
+  (admits : Key → MicroCFTA.InternedConstructorTemplates.Value MicroCFTA.SourcePruningTemplates.Symbol Guard → Bool)
+  (key : Key) (term : MicroCFTA.Language.Term MicroCFTA.SourcePruningTemplates.Symbol)
+  (unary :
+    ∀ (symbol : MicroCFTA.SourcePruningTemplates.Symbol)
+      (annotation : MicroCFTA.InternedConstructorTemplates.Value MicroCFTA.SourcePruningTemplates.Symbol Guard)
+      (child : MicroCFTA.Language.Term MicroCFTA.SourcePruningTemplates.Symbol),
+      term = MicroCFTA.Language.Term.node symbol [child] →
+        MicroCFTA.InternedGuardedLanguage.meaning holds ambient annotation child →
+          admits key annotation = true ∧ fits key symbol = true)
+  (application :
+    ∀ (annotation : MicroCFTA.InternedConstructorTemplates.Value MicroCFTA.SourcePruningTemplates.Symbol Guard)
+      (first second third fourth : MicroCFTA.Language.Term MicroCFTA.SourcePruningTemplates.Symbol),
+      term = MicroCFTA.Language.Term.node ("app", MicroCFTA.FullSyntax.Formula.top) [first, second, third, fourth] →
+        MicroCFTA.InternedGuardedLanguage.meaning holds ambient annotation first → admits key annotation = true)
+  (filtered :
+    ∀ (annotation : MicroCFTA.InternedConstructorTemplates.Value MicroCFTA.SourcePruningTemplates.Symbol Guard)
+      (first second : MicroCFTA.Language.Term MicroCFTA.SourcePruningTemplates.Symbol),
+      term = MicroCFTA.Language.Term.node ("filter", MicroCFTA.FullSyntax.Formula.top) [first, second] →
+        MicroCFTA.InternedGuardedLanguage.meaning holds ambient annotation first → admits key annotation = true)
+  (edge : MicroCFTA.InternedConstructorTemplates.EdgeValue MicroCFTA.SourcePruningTemplates.Symbol Guard)
+  (accepted : MicroCFTA.InternedGuardedLanguage.edgeMeaning holds ambient edge term) :
+  MicroCFTA.SourcePruningNativeView.keeps fits admits key edge = true
+'MicroCFTA.SourcePruningNativeView.keeps_of_accepted' depends on axioms: [propext, Classical.choice, Quot.sound]

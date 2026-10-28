@@ -1,0 +1,39 @@
+/-- A restart without a stop rule reports done exactly when its candidate list is empty. -/
+theorem done_iff_candidates_nil
+    (order : Metadata Typing → List Nat → Option Nat) (metadata : Metadata Typing) (before : Cached) :
+    decision none order metadata before = some .done ↔
+      EnumerationIndexSelection.candidates before = [] := by
+  simp only [decision, Option.some.injEq, EnumerationPureSelection.next, pick_done]
+  unfold EnumerationPureSelection.find
+  by_cases empty : EnumerationIndexSelection.candidates before = [] <;> simp [empty]
+
+/-- A done native cache can retain only recursive boundaries in its graph-bearing pending slots. -/
+theorem done_pending_boundary
+    (order : Metadata Typing → List Nat → Option Nat) (metadata : Metadata Typing)
+    (caller : Caller width) (before : Cached)
+    (valid : SourcePruningEnumerationNativeBranchCompletion.CacheValid caller before)
+    (done : decision none order metadata before = some .done)
+    (uv handle : Nat) (scs : List Suspended)
+    (stored : before.core.values[uv]? = some (.unenumerated (some handle) scs)) :
+    ∃ value,
+      lookupNode caller.checked.native.machine.heap handle = some value ∧
+      InternedProbeProvenance.Available caller.checked.native.machine.heap value ∧ value.free = [] ∧
+      MergedOrdinaryHeight.recursiveBoundary value = true ∧ scs = [] := by
+  obtain ⟨_roots, _paths, storage, realized, _counts, flags⟩ := valid
+  have noCandidates := (done_iff_candidates_nil order metadata before).mp done
+  have inside : uv < before.core.counter := by
+    rw [storage.aligned]
+    exact (List.getElem?_eq_some_iff.mp stored).1
+  have flag : before.expandable uv = false := by
+    by_cases present : before.expandable uv = true
+    · have member : uv ∈ EnumerationIndexSelection.candidates before :=
+        List.mem_filter.mpr ⟨List.mem_range.mpr inside, present⟩
+      rw [noCandidates] at member
+      exact False.elim (List.not_mem_nil member)
+    · simpa using present
+  obtain ⟨value, decoded, available, closed⟩ := realized uv handle scs stored
+  have classified := flags uv
+  rw [stored, Option.getD_some, flag] at classified
+  have frontier : MergedOrdinaryHeight.recursiveBoundary value = true ∧ scs = [] := by
+    simpa [SourcePruningEnumerationNativeIndex.candidate, decoded] using classified
+  exact ⟨value, decoded, available, closed, frontier⟩

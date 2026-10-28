@@ -1,0 +1,21 @@
+  | exhausted (uv : Nat) (metadata : Metadata Typing) (before : Cached)
+  /-- The actual selected prefix cannot supply a supported continuation. -/
+  | selected (uv : Nat) (observed : SourcePruningEnumerationSelectedStep.Result width Typing)
+  /-- The actual fragment callback does not return a singleton success. -/
+  | callback (uv : Nat) (raw : CallbackRaw Typing)
+  /-- Entry does not supply an ordinary nonterminal alternative scan. -/
+  | ordinary (uv : Nat) (raw : EntryRaw)
+  /-- Retain the processed alternatives and their exact edge or recursive stop. -/
+  | alternatives (uv : Nat) (processed : List (Receipt width))
+      (current : FoldStop (Failure width Typing) width)
+
+/-- Retain each source output at its own enumeration cache and native endpoint. -/
+structure Output (width : Nat) (Typing : Type) where
+  /-- A stop rule returns metadata. Exhausted candidate selection returns none. -/
+  metadata : Option (Metadata Typing)
+  /-- The enumeration cache belongs to this output branch. -/
+  cache : Cached
+  /-- The caller is the native endpoint when this output is emitted. -/
+  caller : Caller width
+  /-- The saved queries belong to the same endpoint. -/
+  queries : Queries

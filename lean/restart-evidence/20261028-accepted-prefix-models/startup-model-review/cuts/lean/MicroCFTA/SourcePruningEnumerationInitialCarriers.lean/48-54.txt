@@ -1,0 +1,7 @@
+      EnumerationCarriers.CarriesGraph startup.core 0 ∧
+      EnumerationGraphReferences.ReferencesCarry startup.core := by
+  obtain ⟨handle, encoded, decoded, retained⟩ :=
+    initial_packet formulas solver inventory caller memos metadata value context available closed emptyPending
+  refine ⟨handle, encoded, decoded, retained, ?_, ?_⟩
+  · exact EnumerationCarriers.carries_self (EnumerationState.initial handle)
+      (initial_storage handle).total 0 (.unenumerated (some handle) []) rfl trivial

@@ -1,0 +1,102 @@
+import MicroCFTA.SourcePruningEnumerationPrefixCanonicalHistory
+import MicroCFTA.SourcePruningEnumerationPrefixCoverage
+
+/-!
+# Original accepted models at actual selected-prefix endpoints
+
+The original packet producer chooses its uniform bound once.
+Its validity, backward meaning, and Canonical families remain unchanged.
+The appended observer uses the original annotation and symbol policy.
+-/
+namespace MicroCFTA.SourcePruningEnumerationRecursive
+open EnumerationState EnumerationCorrectness EnumerationValidity InternedConstructorTemplates
+open SourceCurrentAllocatedNativeInventoryState (Inventory)
+local notation "Symbol" => SourcePruningTemplates.Symbol
+local notation "Constraint" => SourceSymbolicIndex.Constraint FullSyntax.Formula
+local notation "Node" => Value Symbol Constraint
+local notation "Caller" => SourceCurrentAllocatedPartialState.State
+local notation "Memos" => EndpointMemoGateTrace.Memos
+local notation "Metadata" => SourcePruningRecordTypes.Metadata
+local notation "Cached" => EnumerationExpandableIndex.Cached Symbol Constraint
+variable {Typing Key : Type} {width : Nat}
+variable [DecidableEq (EdgeKey Symbol Constraint)] [DecidableEq Symbol] [DecidableEq Node]
+
+
+/-- Preserve the complete original prefix packet and append its actual forward model law. -/
+theorem packet_prefix_complete_semantics_canonical_models
+    (holeKey : Typing → Nat → Key) (fits : Key → Symbol → Bool) (admits : Key → Node → Bool)
+    (graph : Graph Symbol Constraint) (templates : List (Template.Pattern Symbol))
+    (checkEmpty : Bool) (edgesOf : Node → List (EdgeValue Symbol Constraint))
+    (stop : Option (Metadata Typing → Nat → Bool))
+    (order : Metadata Typing → List Nat → Option Nat) (metadata : Metadata Typing)
+    (formulas : SourceGuards.Formulas FullSyntax.Formula)
+    (solver : SourceGuards.Entailment FullSyntax.Formula) (inventory : Inventory)
+    (caller : Caller width) (memos : Memos) (before : Cached)
+    (packet : Packet formulas solver inventory caller memos metadata before)
+    (canonical : Canonical before.core) :
+    ∃ bound,
+      (      (∀ extra selected,
+        SourcePruningEnumerationRestart.decision stop order metadata before = some (.expand selected) →
+        SourcePruningEnumerationSelectedStep.PrefixValid holeKey fits admits graph templates checkEmpty edgesOf
+          stop order metadata formulas solver inventory (bound + extra) selected caller before memos
+          (SourcePruningEnumerationSelectedStep.runPrefix holeKey fits admits graph templates stop order metadata
+            (bound + extra) (bound + extra) (bound + extra) (bound + extra) (bound + extra) (bound + extra)
+            selected caller before memos.query)) ∧
+      (∀ extra selected,
+        SourcePruningEnumerationRestart.decision stop order metadata before = some (.expand selected) →
+        SourcePruningEnumerationSelectedStep.PrefixMeaning formulas solver (bound + extra) selected caller before
+          (SourcePruningEnumerationSelectedStep.runPrefix holeKey fits admits graph templates stop order metadata
+            (bound + extra) (bound + extra) (bound + extra) (bound + extra) (bound + extra) (bound + extra)
+            selected caller before memos.query)) ∧
+      ∀ extra selected,
+        SourcePruningEnumerationRestart.decision stop order metadata before = some (.expand selected) →
+        match SourcePruningEnumerationSelectedStep.runPrefix holeKey fits admits graph templates stop order metadata
+            (bound + extra) (bound + extra) (bound + extra) (bound + extra) (bound + extra) (bound + extra)
+            selected caller before memos.query with
+        | .parked _ (some after) _ | .narrowed _ _ _ _ _ (some after) _ _ => Canonical after.core
+        | _ => True) ∧
+      ∀ extra selected,
+        SourcePruningEnumerationRestart.decision stop order metadata before = some (.expand selected) →
+        ∀ (ambient : InternedGuardedLanguage.Env Symbol)
+          (residualMeaning : Constraint → Language.Term Symbol → Prop) (assignment : Nat → Language.Term Symbol),
+          Satisfies (SourcePruningEnumerationNativeLanguage.handles
+            (SourceEqualityPCSGuard.holds formulas solver) ambient caller.checked.native.machine.heap)
+            residualMeaning assignment before.core →
+          (∀ symbol annotation child, assignment selected = .node symbol [child] →
+            InternedGuardedLanguage.meaning (SourceEqualityPCSGuard.holds formulas solver) ambient annotation child →
+            admits (holeKey metadata.typing selected) annotation = true ∧
+              fits (holeKey metadata.typing selected) symbol = true) →
+          (∀ annotation first second third fourth,
+            assignment selected = .node ("app", FullSyntax.Formula.top) [first, second, third, fourth] →
+            InternedGuardedLanguage.meaning (SourceEqualityPCSGuard.holds formulas solver) ambient annotation first →
+            admits (holeKey metadata.typing selected) annotation = true) →
+          (∀ annotation first second,
+            assignment selected = .node ("filter", FullSyntax.Formula.top) [first, second] →
+            InternedGuardedLanguage.meaning (SourceEqualityPCSGuard.holds formulas solver) ambient annotation first →
+            admits (holeKey metadata.typing selected) annotation = true) →
+          match SourcePruningEnumerationSelectedStep.runPrefix holeKey fits admits graph templates stop order metadata
+              (bound + extra) (bound + extra) (bound + extra) (bound + extra) (bound + extra) (bound + extra)
+              selected caller before memos.query with
+          | .parked _ (some after) _ =>
+              Satisfies (SourcePruningEnumerationNativeLanguage.handles
+                (SourceEqualityPCSGuard.holds formulas solver) ambient caller.checked.native.machine.heap)
+                residualMeaning assignment after.core
+          | .narrowed _ _ reached _ _ (some after) _ _ =>
+              Satisfies (SourcePruningEnumerationNativeLanguage.handles
+                (SourceEqualityPCSGuard.holds formulas solver) ambient reached.checked.native.machine.heap)
+                residualMeaning assignment after.core
+          | _ => False := by
+  obtain ⟨bound, valid, meaning, canonicalFamily⟩ := packet_prefix_complete_semantics_canonical
+    holeKey fits admits graph templates checkEmpty edgesOf stop order metadata
+    formulas solver inventory caller memos before packet canonical
+  refine ⟨bound, ⟨valid, meaning, canonicalFamily⟩, ?_⟩
+  intro extra selected chosen ambient residualMeaning assignment satisfied unary application filtered
+  obtain ⟨_roots, _paths, _storage, realized, _counts, _flags⟩ := packet.valid
+  have ready := (SourcePruningEnumerationRestart.selected stop order metadata caller before selected
+    packet.valid packet.safe chosen).1
+  exact SourcePruningEnumerationSelectedStep.prefix_accepting holeKey fits admits graph templates checkEmpty edgesOf
+    stop order metadata formulas solver inventory (bound + extra) selected caller before memos
+    packet.context ready realized (valid extra selected chosen)
+    ambient residualMeaning assignment satisfied unary application filtered
+
+end MicroCFTA.SourcePruningEnumerationRecursive

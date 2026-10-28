@@ -1,0 +1,30 @@
+    (fits : Key → Symbol → Bool) (admits : Key → Value Symbol Guard → Bool)
+    (key : Key) (value : Value Symbol Guard) (before : State Symbol Guard)
+    (ready : SourceEqualityRequiredCache.Ready before)
+    (available : Available before value) (closed : value.free = []) :
+    ∃ fuel rows middle result after,
+      MergedFreshOrdinaryExposure.nodeEdges fuel value before = .done rows middle ∧
+      run (makeNode (rows.filter (keeps fits admits key))) middle = (result, after) ∧
+      narrowAt fits admits fuel key value before = .done result after ∧
+      SourceEqualityRequiredCache.Keeps before after ∧
+      Available after result ∧ result.free = [] ∧
+      SourceEqualityRequiredCache.Ordinary result ∧
+      InternedEdgeResidency.nodeEdges result =
+        canonicalEdges (surviving (rows.filter (keeps fits admits key))) ∧
+      (∀ readFuel, MergedFreshOrdinaryExposure.nodeEdges readFuel result after =
+        .done (InternedEdgeResidency.nodeEdges result) after) ∧
+      (result = .empty ↔ ∀ edge ∈ rows, keeps fits admits key edge = false) ∧
+      ((InternedEdgeResidency.nodeEdges result).isEmpty = true ↔
+        ∀ edge ∈ rows, keeps fits admits key edge = false) ∧
+      (∀ extra, narrowAt fits admits (fuel + extra) key value before = .done result after) := by
+  obtain ⟨fuel, rows, middle, exposed, semantic, covered, depth, growth, history,
+      resident, closedRows, stable⟩ :=
+    MergedFreshOrdinaryColdTermination.read_closed value before ready.semantic ready.covered ready.depth available closed
+  let selected := rows.filter (keeps fits admits key)
+  let constructed := run (makeNode selected) middle
+  have middleReady : SourceEqualityRequiredCache.Ready middle := ⟨semantic, covered, depth⟩
+  have readKeeps : SourceEqualityRequiredCache.Keeps before middle := ⟨middleReady, growth, history⟩
+  have selectedResident : InternedNestedProvenance.Edges middle selected :=
+    fun edge member => resident edge (List.mem_filter.mp member).1
+  have selectedClosed : MergedColdReaderClosedInputs.ClosedEdges selected :=
+    fun edge member => closedRows edge (List.mem_filter.mp member).1

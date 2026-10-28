@@ -1,0 +1,18 @@
+theorem keeps_of_accepted
+    (holds : Guard → Term Symbol → Bool) (ambient : InternedGuardedLanguage.Env Symbol)
+    (fits : Key → Symbol → Bool) (admits : Key → Value Symbol Guard → Bool)
+    (key : Key) (term : Term Symbol)
+    (unary : ∀ symbol annotation child, term = .node symbol [child] →
+      InternedGuardedLanguage.meaning holds ambient annotation child →
+      admits key annotation = true ∧ fits key symbol = true)
+    (application : ∀ annotation first second third fourth,
+      term = .node ("app", FullSyntax.Formula.top) [first, second, third, fourth] →
+      InternedGuardedLanguage.meaning holds ambient annotation first → admits key annotation = true)
+    (filtered : ∀ annotation first second,
+      term = .node ("filter", FullSyntax.Formula.top) [first, second] →
+      InternedGuardedLanguage.meaning holds ambient annotation first → admits key annotation = true)
+    (edge : EdgeValue Symbol Guard)
+    (accepted : InternedGuardedLanguage.edgeMeaning holds ambient edge term) :
+    keeps fits admits key edge = true := by
+  obtain ⟨terms, shape, runs, _guard⟩ :=
+    (InternedGuardedLanguage.edgeMeaning_all holds ambient edge term).mp accepted

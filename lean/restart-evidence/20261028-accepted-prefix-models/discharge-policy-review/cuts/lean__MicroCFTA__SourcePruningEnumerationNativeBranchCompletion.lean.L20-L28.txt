@@ -1,0 +1,9 @@
+variable {width : Nat}
+
+/-- Each branch retains its own native cache invariants at its reached caller. -/
+def CacheValid (caller : Caller width) (after : Cached) : Prop :=
+  ∃ roots, Roots after.core.representatives roots ∧ StorageValid after.core ∧
+    PendingRealized caller.checked.native.machine.heap after.core ∧
+    EnumerationCanonicalWaiting.Correct roots after.core.values after.waiting ∧
+    ∀ slot, SourcePruningEnumerationNativeIndex.candidate caller.checked.native.machine.heap
+      ((after.core.values[slot]?).getD .eliminated) = some (after.expandable slot)

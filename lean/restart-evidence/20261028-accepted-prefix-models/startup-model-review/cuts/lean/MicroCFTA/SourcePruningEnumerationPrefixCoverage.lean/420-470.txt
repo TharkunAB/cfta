@@ -1,0 +1,51 @@
+        have newAccepted : language newHandle (assignment uv) :=
+          (SourcePruningEnumerationNativeLanguage.handles_lookup _ _ _ _ _ _ newDecoded).mpr valueAccepted
+        have narrows : ∀ term, language newHandle term → language oldHandle term := by
+          intro term accepted
+          have narrowedAccepted := (SourcePruningEnumerationNativeLanguage.handles_lookup _ _ _ _ _ _ newDecoded).mp accepted
+          have previous := SourcePruningOuterNarrow.narrow_sound (SourceEqualityPCSGuard.holds formulas solver)
+            ambient holeKey fits admits metadata fuel uv oldValue caller.checked.native.machine.heap value nativeHeap
+            initial.ready.semantic.ready initial.ready.semantic.guarded oldAvailable oldClosed narrowed term narrowedAccepted
+          exact (SourcePruningEnumerationNativeLanguage.handles_keeps _ _ _ _ _ _ _ decoded post.effects.keeps).mpr
+            ⟨oldValue, decoded, previous⟩
+        have actualAction := prepared_action holeKey fits admits metadata fuel fuel uv oldHandle newHandle
+          scs oldValue value caller.checked.native.machine.heap nativeHeap narrowed nonempty encoded
+        rw [selectedPrepared] at actualAction
+        have selectedSame : selectedAction =
+            (if newHandle = oldHandle then (pure () : EnumerateM Symbol Constraint Unit)
+              else representative fuel uv >>= fun selected =>
+                setValue selected (.unenumerated (some newHandle) scs)) :=
+          Option.some.inj (Prod.mk.inj (MergedSourceComparison.Result.done.inj actualAction).1).2
+        rw [selectedSame] at actionSuccess
+        by_cases equalHandle : newHandle = oldHandle
+        · rw [ite_eq_left equalHandle] at actionSuccess
+          have endpoint := (success_pure () () checked after.core).mp actionSuccess
+          have checkedSatisfied := (SourcePruningEnumerationNativeLanguage.satisfies_keeps_frame
+            (SourceEqualityPCSGuard.holds formulas solver) ambient caller.checked.native.machine.heap
+            reached.checked.native.machine.heap before.core checked residualMeaning assignment
+            realized checkedFrame post.effects.keeps).mpr satisfied
+          simpa only [endpoint.2] using checkedSatisfied
+        · rw [ite_eq_right equalHandle] at actionSuccess
+          obtain ⟨selected, resolved, readingRoot, written⟩ := (success_bind _ _ _ _ _).mp actionSuccess
+          have resolvedFrame := representative_frame fuel uv selected checked resolved
+            (checkedFrame.total ready.safe.1.total) readingRoot
+          have checkedRoot : IsRoot checked.representatives uv :=
+            ⟨ready.root.choose, (checkedFrame.reaches uv uv ready.root.choose).mpr ready.root.choose_spec⟩
+          obtain ⟨found, foundLookup, selectedRoot, _endpoint⟩ :=
+            (representative_success fuel uv checked resolved selected).mp readingRoot
+          have selectedIsUv : selected = uv := by
+            rw [selectedRoot]
+            exact (UnionFind.reaches_unique
+              (UnionFind.findRoot_correct fuel checked.representatives uv found foundLookup).1
+              checkedRoot.choose_spec).1
+          rw [selectedIsUv] at written
+          have wholeFrame := checkedFrame.trans resolvedFrame
+          have resolvedStored : resolved.values[uv]? = some (.unenumerated (some oldHandle) scs) := by
+            simpa only [wholeFrame.values] using stored
+          have resolvedSatisfied := (SourcePruningEnumerationNativeLanguage.satisfies_keeps_frame
+            (SourceEqualityPCSGuard.holds formulas solver) ambient caller.checked.native.machine.heap
+            reached.checked.native.machine.heap before.core resolved residualMeaning assignment
+            realized wholeFrame post.effects.keeps).mpr satisfied
+          exact (EnumerationSemantics.pending_write_semantics language residualMeaning assignment
+            resolved after.core uv oldHandle newHandle scs resolvedStored written narrows).mpr
+            ⟨resolvedSatisfied, newAccepted⟩

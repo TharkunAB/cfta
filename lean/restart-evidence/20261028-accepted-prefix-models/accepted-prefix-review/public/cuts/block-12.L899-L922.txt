@@ -1,0 +1,24 @@
+MicroCFTA.SourcePruningEnumerationRestart.done_discharged_of_nonrecursive_pending {Typing : Type} {width : Nat}
+  (order : MicroCFTA.SourcePruningRecordTypes.Metadata Typing → List Nat → Option Nat)
+  (metadata : MicroCFTA.SourcePruningRecordTypes.Metadata Typing)
+  (caller : MicroCFTA.SourceCurrentAllocatedPartialState.State width)
+  (before :
+    MicroCFTA.EnumerationExpandableIndex.Cached MicroCFTA.SourcePruningTemplates.Symbol
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+  (valid : MicroCFTA.SourcePruningEnumerationNativeBranchCompletion.CacheValid caller before)
+  (proper : MicroCFTA.EnumerationProgress.ProperState before.core)
+  (nonrecursive :
+    ∀ (uv handle : Nat) (scs : List MicroCFTA.EnumerationState.Suspended),
+      before.core.values[uv]? = some (MicroCFTA.EnumerationState.UVarValue.unenumerated (some handle) scs) →
+        ∀
+          (value :
+            MicroCFTA.InternedConstructorTemplates.Value MicroCFTA.SourcePruningTemplates.Symbol
+              (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)),
+          MicroCFTA.SourcePruningEnumerationNodes.lookupNode caller.checked.native.machine.heap handle = some value →
+            MicroCFTA.MergedOrdinaryHeight.recursiveBoundary value = false)
+  (done :
+    MicroCFTA.SourcePruningEnumerationRestart.decision none order metadata before =
+      some MicroCFTA.EnumerationState.Next.done) :
+  MicroCFTA.SourcePruningEnumerationRendering.Discharged before.core
+'MicroCFTA.SourcePruningEnumerationRestart.done_discharged_of_nonrecursive_pending' depends on axioms: [propext,
+ Quot.sound]

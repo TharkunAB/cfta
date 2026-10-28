@@ -1,0 +1,6 @@
+/-- Original forbidden-template avoidance holds at every inspected program. -/
+theorem Avoids.at_program {templates : List (Template.Pattern Symbol)}
+    {whole program : Term Symbol} (avoids : Avoids templates whole)
+    (position : ProgramAt whole program) : Avoids templates program := by
+  intro nested inside pattern member
+  exact avoids nested (position.trans inside) pattern member

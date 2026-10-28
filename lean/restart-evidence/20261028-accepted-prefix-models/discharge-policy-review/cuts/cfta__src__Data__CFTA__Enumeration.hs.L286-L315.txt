@@ -1,0 +1,30 @@
+-- | The key of a recursive node with its suspended constraints.
+recursionKey :: Node symbol -> Seq SuspendedConstraint -> RecursionKey
+recursionKey n scs =
+    RecursionKey
+        { recursiveNode = nodeIdentity n
+        , suspendedTries = HashSet.fromList $ map scGetPathTrie $ Foldable.toList scs
+        }
+
+{- | Initial state whose root UVar contains the node being enumerated, with
+the order of the edges of each node.
+-}
+initEnumerationState :: (Typeable symbol) => (Node symbol -> [Edge symbol]) -> Node symbol -> EnumerationState symbol
+initEnumerationState edgesOf n =
+    let (uvg, uv) = UnionFind.nextUVar UnionFind.initUVarGen
+        value = UVarUnenumerated (Just n) Sequence.Empty
+     in EnumerationState
+            uvg
+            (UnionFind.withInitialValues [uv])
+            (IntMap.singleton (uvarToInt uv) value)
+            (if expandable value then IntSet.singleton (uvarToInt uv) else IntSet.empty)
+            IntMap.empty
+            []
+            IntMap.empty
+            HashSet.empty
+            edgesOf
+            (reachesConstrainedMu n)
+
+---------------------------------------------------------------------------
+---------------------------- Enumeration monad ----------------------------
+---------------------------------------------------------------------------

@@ -1,0 +1,28 @@
+
+/-- Select original edges with the source's full-label and annotation tests. -/
+def keeps (fits : Key → Symbol → Bool)
+    (admits : Key → Value Symbol Guard → Bool)
+    (key : Key) (edge : EdgeValue Symbol Guard) : Bool :=
+  match edge.children with
+  | [annotation, _, _, _] =>
+      if edge.entry.key.symbol = ("app", FullSyntax.Formula.top) then admits key annotation else true
+  | [annotation, _] =>
+      if edge.entry.key.symbol = ("filter", FullSyntax.Formula.top) then admits key annotation else true
+  | [annotation] => admits key annotation && fits key edge.entry.key.symbol
+  | _ => true
+
+/-- Read actual rows and construct their selected node in the returned cache. -/
+def narrowAt [DecidableEq (EdgeKey Symbol Guard)]
+    (fits : Key → Symbol → Bool) (admits : Key → Value Symbol Guard → Bool)
+    (fuel : Nat) (key : Key) (value : Value Symbol Guard)
+    (before : State Symbol Guard) : MergedSourceComparison.Result Symbol Guard (Value Symbol Guard) :=
+  match MergedFreshOrdinaryExposure.nodeEdges fuel value before with
+  | .done rows middle =>
+      let constructed := run (makeNode (rows.filter (keeps fits admits key))) middle
+      .done constructed.1 constructed.2
+  | .unresolved name after => .failed (.unresolved name) after
+  | .pending pendingKey after => .failed (.pending pendingKey) after
+  | .exhausted after => .failed .exhausted after
+
+/-- Exempt Mu alone, then test the actual second read of the narrowed node. -/
+def emptyAt [DecidableEq (EdgeKey Symbol Guard)]

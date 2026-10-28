@@ -1,0 +1,12 @@
+/-- Nested inspected program positions remain positions of the original term. -/
+theorem ProgramAt.trans {whole program nested : Term Symbol}
+    (position : ProgramAt whole program) (inside : ProgramAt program nested) :
+    ProgramAt whole nested := by
+  induction position generalizing nested with
+  | application => exact inside
+  | function annotation marker function argument _program _ ih =>
+      exact .function annotation marker function argument nested (ih inside)
+  | argument annotation marker function argument _program _ ih =>
+      exact .argument annotation marker function argument nested (ih inside)
+  | filter annotation term _program _ ih =>
+      exact .filter annotation term nested (ih inside)

@@ -1,0 +1,14 @@
+  | done (fuel : Nat)
+      (completed : MergedFreshOrdinaryExposure.nodeEdges fuel value before = .done edges after) :
+      Read value before edges after
+
+/-- Complete row reads have the same edges and full cache at every successful bound. -/
+theorem Read.unique [DecidableEq (EdgeKey Symbol Guard)]
+    {value : Value Symbol Guard} {before firstAfter secondAfter : State Symbol Guard}
+    {first second : List (EdgeValue Symbol Guard)}
+    (left : Read value before first firstAfter) (right : Read value before second secondAfter) :
+    first = second ∧ firstAfter = secondAfter := by
+  cases left with
+  | done firstFuel firstDone =>
+      cases right with
+      | done secondFuel secondDone =>

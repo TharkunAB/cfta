@@ -1,0 +1,31 @@
+          run holeKey fits admits graph templates checkEmpty edgesOf none order workFuel recursiveFuel
+            metadata caller memos.query startup =
+          SourcePruningEnumerationNativeContinuations.HookResult.complete
+            [⟨none, startup, caller, memos.query⟩] caller memos.query := by
+  obtain ⟨handle, encoded, decoded, original, proper⟩ :=
+    initial_packet_proper formulas solver inventory caller memos metadata value context available closed emptyPending
+  let startup : Cached :=
+    ⟨EnumerationState.initial handle,
+      fun slot => if slot = 0 then !MergedOrdinaryHeight.recursiveBoundary value else false,
+      fun _ => none⟩
+  have noCandidates : EnumerationIndexSelection.candidates startup = [] := by
+    simp [EnumerationIndexSelection.candidates, startup, EnumerationState.initial, boundary]
+  refine ⟨handle, encoded, decoded, ⟨original, proper⟩,
+    EnumerationRenderability.initial_references handle, ?_, ?_, noCandidates, ?_, ?_⟩
+  · exact EnumerationCarriers.carries_self startup.core (initial_storage handle).total 0
+      (.unenumerated (some handle) []) rfl trivial
+  · intro discharged
+    have impossible := discharged 0 (some handle) [] (by rfl)
+    cases impossible.1
+  · intro marker
+    exact SourcePruningEnumerationRendering.initial_boundary_render
+      caller.checked.native.machine.heap handle value marker decoded boundary
+  · intro order
+    have done := (SourcePruningEnumerationRestart.done_iff_candidates_nil order metadata startup).mpr noCandidates
+    refine ⟨done, ?_⟩
+    intro workFuel recursiveFuel
+    change resume holeKey fits admits graph templates checkEmpty edgesOf none order workFuel recursiveFuel
+      metadata caller memos.query startup
+      (SourcePruningEnumerationRestart.decision none order metadata startup) = _
+    rw [done]
+    cases recursiveFuel <;> rfl

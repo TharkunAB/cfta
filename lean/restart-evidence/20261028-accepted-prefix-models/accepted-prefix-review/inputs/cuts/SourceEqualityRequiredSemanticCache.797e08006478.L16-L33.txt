@@ -1,0 +1,18 @@
+
+/-- A complete worker cache also retains both independent probe-language heaps. -/
+structure SemanticReady (state : State Symbol Guard) : Prop where
+  ready : Ready state
+  guarded : InternedGuardedProbeHeap.Heap state
+  budget : InternedGuardedBudgetProbeHeap.Heap state
+
+/-- Original closed source construction derives every semantic cache premise. -/
+theorem constructed [DecidableEq (EdgeKey Symbol Guard)] (expression : InternedNestedConstruction.Syntax Symbol Guard)
+    (value : Value Symbol Guard) (state : State Symbol Guard)
+    (built : InternedFreshOrdinaryConstruction.build expression [] empty = .done value state) : SemanticReady state := by
+  refine ⟨SourceEqualityRequiredCache.constructed expression value state built, ?_, ?_⟩
+  · simpa only [built, InternedNestedConstruction.Outcome.state] using InternedGuardedExecution.closed_heap expression
+  · simpa only [built, InternedNestedConstruction.Outcome.state] using InternedGuardedBudgetExecution.closed_heap expression
+
+/-- Actual edge reconstruction preserves both semantic probe heaps and readiness. -/
+theorem edge [DecidableEq (EdgeKey Symbol Guard)] (symbol : Symbol) (guard : Guard)
+    (values : List (Value Symbol Guard)) (state : State Symbol Guard) (semantic : SemanticReady state)

@@ -1,0 +1,35 @@
+          ∀ (ambient : InternedGuardedLanguage.Env Symbol) (assignment : Nat → Language.Term Symbol),
+            Satisfies
+              (SourcePruningEnumerationNativeLanguage.handles (SourceEqualityPCSGuard.holds formulas solver)
+                ambient caller.checked.native.machine.heap)
+              (fun guard term => SourceEqualityPCSGuard.holds formulas solver guard term = true)
+              assignment before.core →
+            InternedGuardedLanguage.edgeMeaning (SourceEqualityPCSGuard.holds formulas solver)
+              ambient edge (assignment uv) →
+            (∀ group ∈ metadata.pending, @SourcePruningResume.Refutes Symbol
+              (@instDecidableEqProd String FullSyntax.Formula inferInstance FormulaExecutable.formulaDecidableEq) assignment group) →
+            SourcePruningTemplates.Avoids templates (assignment uv) →
+            (∀ program, SourcePruningTemplates.ProgramAt (assignment uv) program →
+              SourcePruningTemplates.ProgramEncoding program) →
+            ∃ extended : Nat → Language.Term Symbol,
+              (∀ old < before.core.counter, extended old = assignment old) ∧
+              Satisfies
+                (SourcePruningEnumerationNativeLanguage.handles (SourceEqualityPCSGuard.holds formulas solver)
+                  ambient caller.checked.native.machine.heap)
+                (fun guard term => SourceEqualityPCSGuard.holds formulas solver guard term = true)
+                extended before.core ∧
+              Fragments.fill extended fragment = assignment uv ∧
+              Satisfies
+                (SourcePruningEnumerationNativeLanguage.handles (SourceEqualityPCSGuard.holds formulas solver)
+                  ambient actual.checked.native.machine.heap)
+                (fun guard term => SourceEqualityPCSGuard.holds formulas solver guard term = true)
+                extended (EnumerationExpandableIndex.frame callbackAfter afterCache).core ∧
+              result.1 = false ∧
+              (∀ group ∈ result.2.pending, @SourcePruningResume.Refutes Symbol
+                (@instDecidableEqProd String FullSyntax.Formula inferInstance FormulaExecutable.formulaDecidableEq) extended group) ∧
+              ∀ extra,
+                continueWith (resume holeKey fits admits graph templates checkEmpty edgesOf stop order
+                  (bound + callbackFuel + extra) recursiveFuel)
+                  graph templates stop order (bound + callbackFuel + extra) metadata uv fragment actual queries afterCache =
+                resume holeKey fits admits graph templates checkEmpty edgesOf stop order
+                  (bound + callbackFuel + extra) recursiveFuel result.2 actual queries

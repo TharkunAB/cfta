@@ -1,0 +1,6 @@
+        let used = nubOrd (concatMap carriersOf (Map.keys phase_variables))
+         in sort used == sort (take (length used) (map fst carriers))
+    -- Only program applications have this shape. Do not exclude matching
+    -- type constructors in a custom signature.
+    canPrune = ("app", 4) `notElem` allConstructors (Map.assocs (sfTypeRep <$> compl_sig))
+    go _ [] s = return ([], s)

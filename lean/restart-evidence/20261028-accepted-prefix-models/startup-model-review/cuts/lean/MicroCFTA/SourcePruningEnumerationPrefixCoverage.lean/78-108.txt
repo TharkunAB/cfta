@@ -1,0 +1,31 @@
+theorem narrowAt_accepting [DecidableEq (EdgeKey Symbol Guard)]
+    (holds : Guard → Term Symbol → Bool) (ambient : InternedGuardedLanguage.Env Symbol)
+    (fits : Key → Symbol → Bool) (admits : Key → Value Symbol Guard → Bool)
+    (key : Key) (fuel : Nat) (value result : Value Symbol Guard)
+    (before after : State Symbol Guard)
+    (semantic : SourceEqualityRequiredSemanticCache.SemanticReady before)
+    (available : Available before value) (closed : value.free = [])
+    (actual : narrowAt fits admits fuel key value before = .done result after)
+    (term : Term Symbol) (accepted : InternedGuardedLanguage.meaning holds ambient value term)
+    (unary : ∀ symbol annotation child, term = .node symbol [child] →
+      InternedGuardedLanguage.meaning holds ambient annotation child →
+      admits key annotation = true ∧ fits key symbol = true)
+    (application : ∀ annotation first second third fourth,
+      term = .node ("app", FullSyntax.Formula.top) [first, second, third, fourth] →
+      InternedGuardedLanguage.meaning holds ambient annotation first → admits key annotation = true)
+    (filtered : ∀ annotation first second,
+      term = .node ("filter", FullSyntax.Formula.top) [first, second] →
+      InternedGuardedLanguage.meaning holds ambient annotation first → admits key annotation = true) :
+    InternedGuardedLanguage.meaning holds ambient result term := by
+  obtain ⟨rows, middle, exposed, _built, exactResult⟩ := narrowAt_edges
+    holds ambient fits admits key fuel value before result after semantic.ready available closed actual
+  have read : SourceEqualityProjectionRead.Read value before rows middle := .done fuel exposed
+  obtain ⟨edge, member, edgeAccepted⟩ :=
+    (read.exact semantic available closed holds ambient term).mpr accepted
+  have independent := (InternedGuardedLanguage.edgeMeaning_all holds ambient edge term).mpr edgeAccepted
+  exact (exactResult term).mpr ⟨edge, member,
+    keeps_of_accepted holds ambient fits admits key term unary application filtered edge independent, independent⟩
+
+end MicroCFTA.SourcePruningNativeView
+
+namespace MicroCFTA.SourcePruningOuterNarrow

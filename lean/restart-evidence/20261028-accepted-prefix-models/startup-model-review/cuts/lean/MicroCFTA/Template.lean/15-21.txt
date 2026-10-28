@@ -1,0 +1,7 @@
+/-- Complete-subtree, exact-node, and prefix-node patterns. -/
+inductive Pattern (Symbol : Type) where
+  | hole
+  | anyNode (children : List (Pattern Symbol))
+  | node (symbol : Symbol) (children : List (Pattern Symbol))
+  | anyPrefix (children : List (Pattern Symbol))
+  | prefix (symbol : Symbol) (children : List (Pattern Symbol))

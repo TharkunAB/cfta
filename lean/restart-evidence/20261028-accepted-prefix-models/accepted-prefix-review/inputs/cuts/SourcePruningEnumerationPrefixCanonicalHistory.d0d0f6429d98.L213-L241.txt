@@ -1,0 +1,29 @@
+      (∀ extra selected,
+        SourcePruningEnumerationRestart.decision stop order metadata before = some (.expand selected) →
+        SourcePruningEnumerationSelectedStep.PrefixValid holeKey fits admits graph templates checkEmpty edgesOf
+          stop order metadata formulas solver inventory (bound + extra) selected caller before memos
+          (SourcePruningEnumerationSelectedStep.runPrefix holeKey fits admits graph templates stop order metadata
+            (bound + extra) (bound + extra) (bound + extra) (bound + extra) (bound + extra) (bound + extra)
+            selected caller before memos.query)) ∧
+      (∀ extra selected,
+        SourcePruningEnumerationRestart.decision stop order metadata before = some (.expand selected) →
+        SourcePruningEnumerationSelectedStep.PrefixMeaning formulas solver (bound + extra) selected caller before
+          (SourcePruningEnumerationSelectedStep.runPrefix holeKey fits admits graph templates stop order metadata
+            (bound + extra) (bound + extra) (bound + extra) (bound + extra) (bound + extra) (bound + extra)
+            selected caller before memos.query)) ∧
+      ∀ extra selected,
+        SourcePruningEnumerationRestart.decision stop order metadata before = some (.expand selected) →
+        match SourcePruningEnumerationSelectedStep.runPrefix holeKey fits admits graph templates stop order metadata
+            (bound + extra) (bound + extra) (bound + extra) (bound + extra) (bound + extra) (bound + extra)
+            selected caller before memos.query with
+        | .parked _ (some after) _ | .narrowed _ _ _ _ _ (some after) _ _ => Canonical after.core
+        | _ => True := by
+  obtain ⟨bound, valid, meaning⟩ := packet_prefix_complete_semantics holeKey fits admits graph templates
+    checkEmpty edgesOf stop order metadata formulas solver inventory caller memos before packet
+  refine ⟨bound, valid, meaning, ?_⟩
+  intro extra selected chosen
+  exact SourcePruningEnumerationSelectedStep.prefix_canonical holeKey fits admits graph templates
+    checkEmpty edgesOf stop order metadata formulas solver inventory (bound + extra) selected
+    caller before memos canonical (valid extra selected chosen)
+
+end MicroCFTA.SourcePruningEnumerationRecursive

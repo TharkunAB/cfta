@@ -1,0 +1,12 @@
+{- | Enumerate terms while rejecting branches that contain a template.
+The templates must describe redundant program applications. Type annotations
+are checked only where a template requires them.
+Every program application must use the fixed singleton arrow marker. The
+caller must disable pruning if a type constructor also has the app/4 shape.
+The early check omits the marker only under these encoding assumptions.
+-}
+prunedTerms :: [Template Symbol] -> Node Symbol -> [CT.Term Symbol]
+prunedTerms [] = map fst . runsInterned "Mu"
+prunedTerms templates = termsPruneWith "Mu" [] order oracle
+  where
+    (order, oracle) = templateOracle templates

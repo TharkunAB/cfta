@@ -1,0 +1,32 @@
+        semantic.ready.covered semantic.guarded available closed
+  · simpa only [done, MergedSourceExposure.Result.state] using
+      MergedFreshOrdinaryBudgetEffects.nodeEdges_heap fuel value before semantic.ready.semantic
+        semantic.ready.covered semantic.budget available closed
+
+/-- Any successful row graph derives all intermediate invariants. -/
+theorem Read.verified [DecidableEq (EdgeKey Symbol Guard)]
+    {value : Value Symbol Guard} {before after : State Symbol Guard} {edges : List (EdgeValue Symbol Guard)}
+    (trace : Read value before edges after) (semantic : SemanticReady before)
+    (available : Available before value) (closed : value.free = []) :
+    Keeps before after ∧ SemanticReady after ∧ Edges after edges ∧ ClosedEdges edges := by
+  obtain ⟨actual, final, completed, keeps, ready, resident, closedEdges⟩ := complete value before semantic available closed
+  obtain ⟨rfl, rfl⟩ := completed.unique trace
+  exact ⟨keeps, ready, resident, closedEdges⟩
+
+/-- The returned rows have exactly the operand's independent guarded language. -/
+theorem Read.exact [DecidableEq (EdgeKey Symbol Guard)]
+    {value : Value Symbol Guard} {before after : State Symbol Guard} {edges : List (EdgeValue Symbol Guard)}
+    (trace : Read value before edges after) (semantic : SemanticReady before)
+    (available : Available before value) (closed : value.free = [])
+    (holds : Guard → Term Symbol → Bool) (ambient : InternedGuardedLanguage.Env Symbol) (term : Term Symbol) :
+    (∃ edge ∈ edges, EdgeMeaning (meaning holds ambient) holds edge term) ↔ meaning holds ambient value term := by
+  have checked := trace.verified semantic available closed
+  cases trace with
+  | done fuel completed =>
+      have head : SourceEqualityRequiredHead.Head value before (run (makeNode edges) after).1
+          (run (makeNode edges) after).2 := .read fuel edges after completed rfl
+      have rebuilt := MergedColdInterpretation.makeNode_exact after checked.2.1.ready.semantic.1.normal.facts
+        (meaning holds ambient) edges checked.2.2.1 holds (InternedGuardedLanguage.laws holds ambient) term
+      exact rebuilt.symm.trans (SourceEqualityRequiredHeadLanguage.head_exact head semantic available closed holds ambient term)
+
+end MicroCFTA.SourceEqualityProjectionRead

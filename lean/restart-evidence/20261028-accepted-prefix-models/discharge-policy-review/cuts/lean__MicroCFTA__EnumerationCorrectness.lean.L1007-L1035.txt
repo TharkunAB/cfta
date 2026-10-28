@@ -1,0 +1,29 @@
+/-- A pure result leaves the complete state unchanged. -/
+theorem success_pure (value result : α) (before after : State Symbol Guard) :
+    Success (pure value) before result after ↔ result = value ∧ after = before := by
+  simp [Success, pure, StateT.pure, ExceptT.pure, ExceptT.mk, ExceptT.run, eq_comm]
+
+/-- An explicit failure has no successful branch. -/
+theorem success_failure (error : Error) (before after : State Symbol Guard) (result : α) :
+    ¬Success (failure error) before result after := by
+  simp [Success, EnumerationState.failure, ExceptT.run]
+
+/-- The actual representative read returns exactly the slot of its compressed representative. -/
+theorem getValue_success (fuel uv : Nat) (state after : State Symbol Guard) (value : UVarValue Symbol) :
+    Success (getValue fuel uv) state value after ↔
+      ∃ found, UnionFind.findRoot fuel state.representatives uv = some found ∧
+        state.values[found.representative]? = some value ∧ after = {state with representatives := found.forest} := by
+  cases lookup : UnionFind.findRoot fuel state.representatives uv with
+  | none =>
+      simp [Success, getValue, representative, lookup, rawValue, EnumerationState.failure, bind, get, getThe, MonadStateOf.get, set, pure,
+        StateT.bind, StateT.get, ExceptT.bind, ExceptT.pure, ExceptT.bindCont, ExceptT.mk, ExceptT.run]
+  | some found =>
+      cases stored : state.values[found.representative]? with
+      | none =>
+          simp [Success, getValue, representative, lookup, rawValue, stored, EnumerationState.failure, bind, get, getThe, MonadStateOf.get, set, pure,
+            StateT.bind, StateT.pure, StateT.get, StateT.set, ExceptT.bind, ExceptT.pure, ExceptT.bindCont, ExceptT.mk, ExceptT.run]
+      | some previous =>
+          simp [Success, getValue, representative, lookup, rawValue, stored, bind, get, getThe, MonadStateOf.get, set, pure,
+            StateT.bind, StateT.pure, StateT.get, StateT.set, ExceptT.bind, ExceptT.pure, ExceptT.bindCont, ExceptT.mk, ExceptT.run, eq_comm]
+
+/-- A concrete completed rendering has no pending recursive marker branch. -/

@@ -1,0 +1,98 @@
+import MicroCFTA.SourcePruningEnumerationInitialProper
+import MicroCFTA.SourcePruningEnumerationRecursive
+import MicroCFTA.SourcePruningEnumerationRendering
+import MicroCFTA.EnumerationRenderability
+
+/-!
+# Native done and the discharged rendering boundary
+
+Done removes expandable work. It can retain a recursive boundary handle.
+The literal native startup gives such a reached output without an expansion.
+The native renderer maps that handle to its explicit recursion marker.
+-/
+namespace MicroCFTA.SourcePruningEnumerationRestart
+open EnumerationState EnumerationCorrectness EnumerationSchedule EnumerationProgress
+open SourcePruningEnumerationNodes SourcePruningEnumerationObservation
+local notation "Symbol" => SourcePruningTemplates.Symbol
+local notation "Constraint" => SourceSymbolicIndex.Constraint FullSyntax.Formula
+local notation "Caller" => SourceCurrentAllocatedPartialState.State
+local notation "Cached" => EnumerationExpandableIndex.Cached Symbol Constraint
+local notation "Metadata" => SourcePruningRecordTypes.Metadata
+variable {Typing : Type} {width : Nat}
+
+private theorem pick_done (preference : List Nat → Option Nat) (offered : Option (List Nat)) :
+    pickNext preference offered = .done ↔ offered = none := by
+  cases offered with
+  | none => simp [pickNext]
+  | some offered =>
+      cases offered with
+      | nil => simp [pickNext]
+      | cons first rest =>
+          cases chosen : preference (first :: rest) with
+          | none => simp [pickNext, chosen]
+          | some uv =>
+              by_cases member : uv ∈ first :: rest <;> simp [pickNext, chosen, member]
+
+/-- A restart without a stop rule reports done exactly when its candidate list is empty. -/
+theorem done_iff_candidates_nil
+    (order : Metadata Typing → List Nat → Option Nat) (metadata : Metadata Typing) (before : Cached) :
+    decision none order metadata before = some .done ↔
+      EnumerationIndexSelection.candidates before = [] := by
+  simp only [decision, Option.some.injEq, EnumerationPureSelection.next, pick_done]
+  unfold EnumerationPureSelection.find
+  by_cases empty : EnumerationIndexSelection.candidates before = [] <;> simp [empty]
+
+/-- A done native cache can retain only recursive boundaries in its graph-bearing pending slots. -/
+theorem done_pending_boundary
+    (order : Metadata Typing → List Nat → Option Nat) (metadata : Metadata Typing)
+    (caller : Caller width) (before : Cached)
+    (valid : SourcePruningEnumerationNativeBranchCompletion.CacheValid caller before)
+    (done : decision none order metadata before = some .done)
+    (uv handle : Nat) (scs : List Suspended)
+    (stored : before.core.values[uv]? = some (.unenumerated (some handle) scs)) :
+    ∃ value,
+      lookupNode caller.checked.native.machine.heap handle = some value ∧
+      InternedProbeProvenance.Available caller.checked.native.machine.heap value ∧ value.free = [] ∧
+      MergedOrdinaryHeight.recursiveBoundary value = true ∧ scs = [] := by
+  obtain ⟨_roots, _paths, storage, realized, _counts, flags⟩ := valid
+  have noCandidates := (done_iff_candidates_nil order metadata before).mp done
+  have inside : uv < before.core.counter := by
+    rw [storage.aligned]
+    exact (List.getElem?_eq_some_iff.mp stored).1
+  have flag : before.expandable uv = false := by
+    by_cases present : before.expandable uv = true
+    · have member : uv ∈ EnumerationIndexSelection.candidates before :=
+        List.mem_filter.mpr ⟨List.mem_range.mpr inside, present⟩
+      rw [noCandidates] at member
+      exact False.elim (List.not_mem_nil member)
+    · simpa using present
+  obtain ⟨value, decoded, available, closed⟩ := realized uv handle scs stored
+  have classified := flags uv
+  rw [stored, Option.getD_some, flag] at classified
+  have frontier : MergedOrdinaryHeight.recursiveBoundary value = true ∧ scs = [] := by
+    simpa [SourcePruningEnumerationNativeIndex.candidate, decoded] using classified
+  exact ⟨value, decoded, available, closed, frontier⟩
+
+/-- Done discharges proper storage when every retained native pending value is nonrecursive. -/
+theorem done_discharged_of_nonrecursive_pending
+    (order : Metadata Typing → List Nat → Option Nat) (metadata : Metadata Typing)
+    (caller : Caller width) (before : Cached)
+    (valid : SourcePruningEnumerationNativeBranchCompletion.CacheValid caller before)
+    (proper : ProperState before.core)
+    (nonrecursive : ∀ (uv handle : Nat) (scs : List Suspended),
+      before.core.values[uv]? = some (.unenumerated (some handle) scs) →
+      ∀ value, lookupNode caller.checked.native.machine.heap handle = some value →
+        MergedOrdinaryHeight.recursiveBoundary value = false)
+    (done : decision none order metadata before = some .done) :
+    SourcePruningEnumerationRendering.Discharged before.core := by
+  intro uv node scs stored
+  cases node with
+  | none => exact ⟨rfl, proper _ (List.mem_of_getElem? stored)⟩
+  | some handle =>
+      obtain ⟨value, decoded, _available, _closed, boundary, _empty⟩ :=
+        done_pending_boundary order metadata caller before valid done uv handle scs stored
+      have ordinary := nonrecursive uv handle scs stored value decoded
+      rw [boundary] at ordinary
+      cases ordinary
+
+end MicroCFTA.SourcePruningEnumerationRestart

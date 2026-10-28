@@ -1,0 +1,60 @@
+/-- The valid actual prefix preserves assignments backward, with the exact parked restriction. -/
+theorem prefix_semantics
+    (holeKey : Typing → Nat → Key) (fits : Key → Symbol → Bool) (admits : Key → Node → Bool)
+    (graph : Graph Symbol Constraint) (templates : List (Template.Pattern Symbol))
+    (checkEmpty : Bool) (edgesOf : Node → List (EdgeValue Symbol Constraint))
+    (stop : Option (Metadata Typing → Nat → Bool))
+    (order : Metadata Typing → List Nat → Option Nat) (metadata : Metadata Typing)
+    (formulas : SourceGuards.Formulas FullSyntax.Formula)
+    (solver : SourceGuards.Entailment FullSyntax.Formula) (inventory : Inventory)
+    (fuel uv : Nat) (caller : Caller width) (before : Cached) (memos : Memos)
+    (initial : Context formulas solver inventory caller memos)
+    (ready : EnumerationDriver.Ready uv before.core)
+    (realized : PendingRealized caller.checked.native.machine.heap before.core)
+    (valid : PrefixValid holeKey fits admits graph templates checkEmpty edgesOf stop order metadata
+      formulas solver inventory fuel uv caller before memos
+      (runPrefix holeKey fits admits graph templates stop order metadata fuel fuel fuel fuel fuel fuel
+        uv caller before memos.query)) :
+    PrefixMeaning formulas solver fuel uv caller before
+      (runPrefix holeKey fits admits graph templates stop order metadata fuel fuel fuel fuel fuel fuel
+        uv caller before memos.query) := by
+  generalize actual : runPrefix holeKey fits admits graph templates stop order metadata
+    fuel fuel fuel fuel fuel fuel uv caller before memos.query = observed at valid ⊢
+  have full := valid.2.1
+  cases observed with
+  | stopped read checked =>
+      obtain ⟨_oldHandle, _scs, _readAfter, _reading, impossible⟩ := full
+      exact impossible
+  | parked checked candidate raw =>
+      obtain ⟨oldHandle, scs, readAfter, reading, checking, cached, same, core, _cacheValid,
+        _safe, _pending, _counter, _ordered, _raw⟩ := full
+      cases same
+      have readSuccess : Success (getValue fuel uv) before.core
+          (.unenumerated (some oldHandle) scs) readAfter := by
+        rw [Success, reading]
+        exact List.mem_singleton_self _
+      have readFrame := (getValue_frame fuel uv before.core readAfter _ ready.safe.1.total readSuccess).1
+      have readStored := (EnumerationDriver.getValue_root fuel uv before.core readAfter _
+        ready.safe ready.inside ready.root readSuccess).2.2.2
+      have stored : before.core.values[uv]? = some (.unenumerated (some oldHandle) scs) := by
+        simpa only [readFrame.values] using readStored
+      have readReady := (EnumerationDriver.getValue_ready fuel uv before.core readAfter _ ready readSuccess).1
+      have checkSuccess : Success (SourcePruningEnumerationRecursion.checkRepeated
+          caller.checked.native.machine.heap fuel uv oldHandle scs) readAfter true cached.core := by
+        rw [Success, core, checking]
+        exact List.mem_singleton_self _
+      refine ⟨oldHandle, scs, readAfter, stored, reading, ?_⟩
+      intro ambient residualMeaning assignment
+      exact (SourcePruningEnumerationNativeLanguage.satisfies_frame
+        (SourcePruningEnumerationNativeLanguage.handles (SourceEqualityPCSGuard.holds formulas solver)
+          ambient caller.checked.native.machine.heap) residualMeaning assignment before.core readAfter readFrame).symm.trans
+        (SourcePruningEnumerationRecursion.checkRepeated_true_satisfies caller.checked.native.machine.heap
+          _ residualMeaning assignment fuel uv oldHandle scs readAfter cached.core readReady readStored checkSuccess)
+  | narrowed checked prepared reached queries action candidate right ordinary =>
+      cases candidate with
+      | none => trivial
+      | some after =>
+          obtain ⟨next, finished⟩ := finish_preserves checkEmpty edgesOf uv
+            (.narrowed checked prepared reached queries action (some after) right ordinary)
+          rw [finished] at full
+          obtain ⟨oldHandle, scs, readAfter, reading, checking, oldValue, value, heap, selectedAction,

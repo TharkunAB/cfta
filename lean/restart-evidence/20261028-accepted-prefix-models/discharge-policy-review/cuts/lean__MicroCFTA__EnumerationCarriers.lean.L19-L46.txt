@@ -1,0 +1,28 @@
+  | .unenumerated (some _) _ | .enumerated _ => True
+  | _ => False
+
+/-- A variable's class contains a stored graph restriction or completed fragment. -/
+def CarriesGraph (state : State Symbol Guard) (uv : Nat) : Prop :=
+  ∃ held value, UnionFind.SameClass state.representatives uv held ∧ state.values[held]? = some value ∧ GraphValue value
+
+/-- An action retains each existing graph-bearing equality class. -/
+def PreservesCarriers (before after : State Symbol Guard) : Prop :=
+  ∀ uv, CarriesGraph before uv → CarriesGraph after uv
+
+/-- Carrier preservation composes across consecutive actual states. -/
+theorem PreservesCarriers.trans (first : PreservesCarriers before middle) (second : PreservesCarriers middle after) :
+    PreservesCarriers before after := fun uv carried => second uv (first uv carried)
+
+/-- An unchanged state preserves every carrier. -/
+theorem PreservesCarriers.refl (state : State Symbol Guard) : PreservesCarriers state state := fun _ carried => carried
+
+/-- A graph-bearing slot supplies a carrier for every variable in its class. -/
+theorem carries_stored (state : State Symbol Guard) (uv held : Nat) (value : UVarValue Symbol)
+    (same : UnionFind.SameClass state.representatives uv held) (stored : state.values[held]? = some value) (graph : GraphValue value) :
+    CarriesGraph state uv := ⟨held, value, same, stored, graph⟩
+
+/-- A total forest makes each graph-bearing slot its own carrier. -/
+theorem carries_self (state : State Symbol Guard) (total : UnionFind.Total state.representatives) (uv : Nat) (value : UVarValue Symbol)
+    (stored : state.values[uv]? = some value) (graph : GraphValue value) : CarriesGraph state uv := by
+  obtain ⟨root, size, path⟩ := total uv
+  exact ⟨uv, value, ⟨root, size, path, path⟩, stored, graph⟩

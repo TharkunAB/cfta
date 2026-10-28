@@ -1,0 +1,58 @@
+theorem prefix_accepting
+    (holeKey : Typing → Nat → Key) (fits : Key → Symbol → Bool) (admits : Key → Node → Bool)
+    (graph : Graph Symbol Constraint) (templates : List (Template.Pattern Symbol))
+    (checkEmpty : Bool) (edgesOf : Node → List (EdgeValue Symbol Constraint))
+    (stop : Option (Metadata Typing → Nat → Bool))
+    (order : Metadata Typing → List Nat → Option Nat) (metadata : Metadata Typing)
+    (formulas : SourceGuards.Formulas FullSyntax.Formula)
+    (solver : SourceGuards.Entailment FullSyntax.Formula) (inventory : Inventory)
+    (fuel uv : Nat) (caller : Caller width) (before : Cached) (memos : Memos)
+    (initial : Context formulas solver inventory caller memos)
+    (ready : EnumerationDriver.Ready uv before.core)
+    (realized : PendingRealized caller.checked.native.machine.heap before.core)
+    (valid : PrefixValid holeKey fits admits graph templates checkEmpty edgesOf stop order metadata
+      formulas solver inventory fuel uv caller before memos
+      (runPrefix holeKey fits admits graph templates stop order metadata fuel fuel fuel fuel fuel fuel
+        uv caller before memos.query))
+    (ambient : InternedGuardedLanguage.Env Symbol)
+    (residualMeaning : Constraint → Term Symbol → Prop) (assignment : Nat → Term Symbol)
+    (satisfied : Satisfies (SourcePruningEnumerationNativeLanguage.handles
+      (SourceEqualityPCSGuard.holds formulas solver) ambient caller.checked.native.machine.heap)
+      residualMeaning assignment before.core)
+    (unary : ∀ symbol annotation child, assignment uv = .node symbol [child] →
+      InternedGuardedLanguage.meaning (SourceEqualityPCSGuard.holds formulas solver) ambient annotation child →
+      admits (holeKey metadata.typing uv) annotation = true ∧ fits (holeKey metadata.typing uv) symbol = true)
+    (application : ∀ annotation first second third fourth,
+      assignment uv = .node ("app", FullSyntax.Formula.top) [first, second, third, fourth] →
+      InternedGuardedLanguage.meaning (SourceEqualityPCSGuard.holds formulas solver) ambient annotation first →
+      admits (holeKey metadata.typing uv) annotation = true)
+    (filtered : ∀ annotation first second,
+      assignment uv = .node ("filter", FullSyntax.Formula.top) [first, second] →
+      InternedGuardedLanguage.meaning (SourceEqualityPCSGuard.holds formulas solver) ambient annotation first →
+      admits (holeKey metadata.typing uv) annotation = true) :
+    match runPrefix holeKey fits admits graph templates stop order metadata
+        fuel fuel fuel fuel fuel fuel uv caller before memos.query with
+    | .parked _ (some after) _ =>
+        Satisfies (SourcePruningEnumerationNativeLanguage.handles
+          (SourceEqualityPCSGuard.holds formulas solver) ambient caller.checked.native.machine.heap)
+          residualMeaning assignment after.core
+    | .narrowed _ _ reached _ _ (some after) _ _ =>
+        Satisfies (SourcePruningEnumerationNativeLanguage.handles
+          (SourceEqualityPCSGuard.holds formulas solver) ambient reached.checked.native.machine.heap)
+          residualMeaning assignment after.core
+    | _ => False := by
+  have backward := prefix_semantics holeKey fits admits graph templates checkEmpty edgesOf stop order metadata
+    formulas solver inventory fuel uv caller before memos initial ready realized valid
+  generalize actual : runPrefix holeKey fits admits graph templates stop order metadata
+    fuel fuel fuel fuel fuel fuel uv caller before memos.query = observed at valid backward ⊢
+  have full := valid.2.1
+  cases observed with
+  | stopped read checked => exact backward
+  | parked checked candidate raw =>
+      cases candidate with
+      | none => exact backward
+      | some after =>
+          obtain ⟨_oldHandle, _scs, _readAfter, _stored, _reading, law⟩ := backward
+          exact ((law ambient residualMeaning assignment).mp satisfied).1
+  | narrowed checked prepared reached queries action candidate right ordinary =>
+      obtain ⟨next, finished⟩ := finish_preserves checkEmpty edgesOf uv

@@ -1,0 +1,35 @@
+MicroCFTA.SourcePruningNativeView.narrowAt_accepting {Guard Key : Type}
+  [DecidableEq (MicroCFTA.InternedConstructorTemplates.EdgeKey MicroCFTA.SourcePruningTemplates.Symbol Guard)]
+  (holds : Guard → MicroCFTA.Language.Term MicroCFTA.SourcePruningTemplates.Symbol → Bool)
+  (ambient : MicroCFTA.InternedGuardedLanguage.Env MicroCFTA.SourcePruningTemplates.Symbol)
+  (fits : Key → MicroCFTA.SourcePruningTemplates.Symbol → Bool)
+  (admits : Key → MicroCFTA.InternedConstructorTemplates.Value MicroCFTA.SourcePruningTemplates.Symbol Guard → Bool)
+  (key : Key) (fuel : Nat)
+  (value result : MicroCFTA.InternedConstructorTemplates.Value MicroCFTA.SourcePruningTemplates.Symbol Guard)
+  (before after : MicroCFTA.InternedConstructorTemplates.State MicroCFTA.SourcePruningTemplates.Symbol Guard)
+  (semantic : MicroCFTA.SourceEqualityRequiredSemanticCache.SemanticReady before)
+  (available : MicroCFTA.InternedProbeProvenance.Available before value) (closed : value.free = [])
+  (actual :
+    MicroCFTA.SourcePruningNativeView.narrowAt fits admits fuel key value before =
+      MicroCFTA.MergedSourceComparison.Result.done result after)
+  (term : MicroCFTA.Language.Term MicroCFTA.SourcePruningTemplates.Symbol)
+  (accepted : MicroCFTA.InternedGuardedLanguage.meaning holds ambient value term)
+  (unary :
+    ∀ (symbol : MicroCFTA.SourcePruningTemplates.Symbol)
+      (annotation : MicroCFTA.InternedConstructorTemplates.Value MicroCFTA.SourcePruningTemplates.Symbol Guard)
+      (child : MicroCFTA.Language.Term MicroCFTA.SourcePruningTemplates.Symbol),
+      term = MicroCFTA.Language.Term.node symbol [child] →
+        MicroCFTA.InternedGuardedLanguage.meaning holds ambient annotation child →
+          admits key annotation = true ∧ fits key symbol = true)
+  (application :
+    ∀ (annotation : MicroCFTA.InternedConstructorTemplates.Value MicroCFTA.SourcePruningTemplates.Symbol Guard)
+      (first second third fourth : MicroCFTA.Language.Term MicroCFTA.SourcePruningTemplates.Symbol),
+      term = MicroCFTA.Language.Term.node ("app", MicroCFTA.FullSyntax.Formula.top) [first, second, third, fourth] →
+        MicroCFTA.InternedGuardedLanguage.meaning holds ambient annotation first → admits key annotation = true)
+  (filtered :
+    ∀ (annotation : MicroCFTA.InternedConstructorTemplates.Value MicroCFTA.SourcePruningTemplates.Symbol Guard)
+      (first second : MicroCFTA.Language.Term MicroCFTA.SourcePruningTemplates.Symbol),
+      term = MicroCFTA.Language.Term.node ("filter", MicroCFTA.FullSyntax.Formula.top) [first, second] →
+        MicroCFTA.InternedGuardedLanguage.meaning holds ambient annotation first → admits key annotation = true) :
+  MicroCFTA.InternedGuardedLanguage.meaning holds ambient result term
+'MicroCFTA.SourcePruningNativeView.narrowAt_accepting' depends on axioms: [propext, Classical.choice, Quot.sound]

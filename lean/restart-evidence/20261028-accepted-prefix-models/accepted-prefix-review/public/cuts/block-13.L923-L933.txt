@@ -1,0 +1,11 @@
+MicroCFTA.SourcePruningEnumerationRendering.initial_boundary_render {NativeGuard EnumGuard : Type}
+  (heap : MicroCFTA.InternedConstructorTemplates.State MicroCFTA.SourcePruningTemplates.Symbol NativeGuard)
+  (handle : Nat)
+  (value : MicroCFTA.InternedConstructorTemplates.Value MicroCFTA.SourcePruningTemplates.Symbol NativeGuard)
+  (marker : MicroCFTA.SourcePruningTemplates.Symbol)
+  (decoded : MicroCFTA.SourcePruningEnumerationNodes.lookupNode heap handle = some value)
+  (boundary : MicroCFTA.MergedOrdinaryHeight.recursiveBoundary value = true) :
+  MicroCFTA.EnumerationCorrectness.Success (MicroCFTA.SourcePruningEnumerationRendering.render heap marker 0 0)
+    (MicroCFTA.EnumerationState.initial handle) (MicroCFTA.Language.Term.node marker [], [])
+    (MicroCFTA.EnumerationState.initial handle)
+'MicroCFTA.SourcePruningEnumerationRendering.initial_boundary_render' depends on axioms: [propext, Quot.sound]

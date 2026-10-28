@@ -1,0 +1,22 @@
+    (semantic : SemanticHeap state) (covered : Covered [] state) (guarded : InternedGuardedProbeHeap.Heap state)
+    (budgetHeap : InternedGuardedBudgetProbeHeap.Heap state) (rows : Rows Symbol Guard)
+    (replayed : ReplayedRows state rows) (resident : ResidentRows state rows) (closedRows : CoveredRows rows rows)
+    (value : Value Symbol Guard) (available : Available state value) (closed : value.free = []) (supported : Supported rows value)
+    (holds : Guard → Term Symbol → Bool) (ambient : InternedGuardedLanguage.Env Symbol) (term : Term Symbol) :
+    EpsilonUnion.Accepts (MergedFreshOrdinaryGraph.graph state holds) value term ↔
+      InternedGuardedLanguage.meaning holds ambient value term := by
+  constructor
+  · exact SourceFreshOrdinaryColdGuardedSoundness.graph_sound state semantic covered guarded rows holds ambient
+      replayed resident closedRows value available closed supported term
+  · intro accepted
+    let emptyEnv : InternedGuardedBudget.Env Symbol := fun _ _ _ => False
+    have original := SourceRecursiveIntersectionOriginalOutput.closed_original value state semantic.1.normal.facts.coherent available closed
+    rw [SourceRecursiveIntersectionBudgetInput.erase_exact state semantic.1.normal.facts holds value original available closed emptyEnv ambient] at accepted
+    obtain ⟨budget, accepted⟩ := accepted
+    exact SourceFreshOrdinaryColdBudgetCompleteness.graph_complete state semantic covered budgetHeap rows replayed resident closedRows
+      holds emptyEnv (by intro name before after bounded term impossible; cases impossible) value available closed supported budget term accepted
+
+/-- An actual finite shared trace gives exact independent root language in its final graph. -/
+theorem trace_graph_exact [DecidableEq (EdgeKey Symbol Guard)]
+    (state final : State Symbol Guard) (value : Value Symbol Guard) (rows : Rows Symbol Guard)
+    (trace : Trace state (fun _ => none) [value] rows final) (semantic : SemanticHeap state) (covered : Covered [] state)

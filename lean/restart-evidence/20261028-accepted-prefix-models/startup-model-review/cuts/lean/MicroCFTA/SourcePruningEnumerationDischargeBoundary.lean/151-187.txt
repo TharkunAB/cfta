@@ -1,0 +1,37 @@
+/-- Original native startup at a recursive boundary emits its own undischarged root through done. -/
+theorem initial_boundary_done
+    (holeKey : Typing → Nat → Key) (fits : Key → Symbol → Bool) (admits : Key → Node → Bool)
+    (graph : Graph Symbol Constraint) (templates : List (Template.Pattern Symbol))
+    (checkEmpty : Bool) (edgesOf : Node → List (EdgeValue Symbol Constraint))
+    (formulas : SourceGuards.Formulas FullSyntax.Formula)
+    (solver : SourceGuards.Entailment FullSyntax.Formula) (inventory : Inventory)
+    (caller : Caller width) (memos : Memos) (metadata : Metadata Typing) (value : Node)
+    (context : Context formulas solver inventory caller memos)
+    (available : Available caller.checked.native.machine.heap value)
+    (closed : value.free = []) (emptyPending : metadata.pending = [])
+    (boundary : MergedOrdinaryHeight.recursiveBoundary value = true) :
+    ∃ handle,
+      encodeNode value = some handle ∧
+      lookupNode caller.checked.native.machine.heap handle = some value ∧
+      let startup : Cached :=
+        ⟨EnumerationState.initial handle,
+          fun slot => if slot = 0 then !MergedOrdinaryHeight.recursiveBoundary value else false,
+          fun _ => none⟩
+      ((Packet formulas solver inventory caller memos metadata startup ∧
+        EnumerationValidity.Canonical startup.core ∧
+        startup.core.values[0]? = some (.unenumerated (some handle) []) ∧
+        SourcePruningEnumerationPrefixAdmission.suspendedBound startup.core = 0 ∧
+        EnumerationCanonicalWaiting.Correct (fun uv => uv) startup.core.values startup.waiting ∧
+        ∀ slot, SourcePruningEnumerationNativeIndex.candidate caller.checked.native.machine.heap
+          ((startup.core.values[slot]?).getD .eliminated) = some (startup.expandable slot)) ∧
+        EnumerationProgress.ProperState startup.core) ∧
+      EnumerationGraphReferences.ReferencesCarry startup.core ∧
+      EnumerationCarriers.CarriesGraph startup.core 0 ∧
+      ¬ SourcePruningEnumerationRendering.Discharged startup.core ∧
+      EnumerationIndexSelection.candidates startup = [] ∧
+      (∀ marker, Success (SourcePruningEnumerationRendering.render
+          caller.checked.native.machine.heap marker 0 0)
+        startup.core (Language.Term.node marker [], []) startup.core) ∧
+      ∀ (order : Metadata Typing → List Nat → Option Nat),
+        SourcePruningEnumerationRestart.decision none order metadata startup = some .done ∧
+        ∀ workFuel recursiveFuel,

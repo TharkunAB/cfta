@@ -1,0 +1,25 @@
+/-- Original native admission derives the exact initialized packet, root and both indexes. -/
+theorem initial_packet
+    (formulas : SourceGuards.Formulas FullSyntax.Formula)
+    (solver : SourceGuards.Entailment FullSyntax.Formula) (inventory : Inventory)
+    (caller : Caller width) (memos : Memos) (metadata : Metadata Typing) (value : Node)
+    (context : Context formulas solver inventory caller memos)
+    (available : Available caller.checked.native.machine.heap value)
+    (closed : value.free = []) (emptyPending : metadata.pending = []) :
+    ∃ handle,
+      encodeNode value = some handle ∧
+      lookupNode caller.checked.native.machine.heap handle = some value ∧
+      let startup : Cached :=
+        ⟨EnumerationState.initial handle,
+          fun slot => if slot = 0 then !MergedOrdinaryHeight.recursiveBoundary value else false,
+          fun _ => none⟩
+      Packet formulas solver inventory caller memos metadata startup ∧
+      EnumerationValidity.Canonical startup.core ∧
+      startup.core.values[0]? = some (.unenumerated (some handle) []) ∧
+      SourcePruningEnumerationPrefixAdmission.suspendedBound startup.core = 0 ∧
+      EnumerationCanonicalWaiting.Correct (fun uv => uv) startup.core.values startup.waiting ∧
+      ∀ slot, SourcePruningEnumerationNativeIndex.candidate caller.checked.native.machine.heap
+        ((startup.core.values[slot]?).getD .eliminated) = some (startup.expandable slot) := by
+  have coherent := context.ready.good.heap.semantic.1.normal.facts.coherent
+  obtain ⟨handle, encoded, decoded⟩ := available_readback
+    caller.checked.native.machine.heap value coherent available closed

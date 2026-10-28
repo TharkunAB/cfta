@@ -1,0 +1,18 @@
+          assignment 0 = term ∧
+          Satisfies (SourcePruningEnumerationNativeLanguage.handles holds ambient
+            caller.checked.native.machine.heap) residualMeaning assignment startup.core ∧
+          ∀ group ∈ metadata.pending, SourcePruningResume.Refutes assignment group := by
+  obtain ⟨handle, encoded, decoded, retained⟩ :=
+    initial_packet_carriers formulas solver inventory caller memos metadata value
+      context available closed emptyPending
+  refine ⟨handle, encoded, decoded, retained, ?_⟩
+  intro holds ambient residualMeaning term accepted
+  refine ⟨(fun _ => term), rfl, ?_, ?_⟩
+  · exact (EnumerationCorrectness.initial_semantics
+      (SourcePruningEnumerationNativeLanguage.handles holds ambient caller.checked.native.machine.heap)
+      residualMeaning (fun _ => term) handle).mpr
+      ((SourcePruningEnumerationNativeLanguage.handles_lookup holds ambient
+        caller.checked.native.machine.heap handle value term decoded).mpr accepted)
+  · intro group member
+    rw [emptyPending] at member
+    exact False.elim (List.not_mem_nil member)
