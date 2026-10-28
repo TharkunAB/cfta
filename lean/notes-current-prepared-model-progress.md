@@ -1,3 +1,44 @@
+# Verified original-model history key shapes — 2026-10-28 23:26 CET
+
+Source `59186c80ebae41dd672e560fa2196526d5dca368` is pushed and verified on formalize. Full goal ACTIVE.
+Read `lean/notes-current-model-key-universe.md` for current contracts and next work.
+Every earlier document byte remains below unchanged.
+
+The original model term now defines a finite family of complete key trie shapes.
+Actual entry derives its inserted shape from original model/origin/canonical
+inputs. All-slot history carriers survive actual allocation, writes, ordered
+folds, incoming/child caches, complete/stopped traversal and captured completion.
+An actual prepared selected receipt and its successful recording callback keep
+that same carrier. This is a local modeled-segment theorem. Chosen-model
+recursive emission and a global source-derived depth bound remain open.
+
+Strongest semantics: conditional checked rendered soundness under fixed-PCS and
+whole-Discharged, plus ordered output-prefix retention with greater depth.
+The native gap concerns actual inserted Mu/explicit-Union boundary handles.
+Finite ordinary keys and per-reached-heap inventories do not close that gap.
+An earlier stopped callback still needs a completion or same-target argument.
+Configured stop can emit a partial result. DONE does not imply Discharged.
+
+Seventeen modules/35 public theorems/three proof-domain definitions: 1,589 lines,
+84,435 bytes. All 18 final strict sources pass. Audit: 4,572 jobs/81,854 theorem
+dependencies. Compiler matrix: 39 commands, 37 passes, two preserved draft
+failures; all final inputs pass at serial 4 GiB/swap zero. Public: 777 theorem
+readbacks, 66 definition bodies, 3,357,308 bytes SHA256
+e070cbd47953ced82b1d1dcab2eba1121d7b43571269ef1c0f413f2ce876e485.
+Prior 3,301,695 bytes remain an exact prefix. All 55,613 new bytes were read.
+All 4,554 old non-Audit Lean, 403 stronger-source and 817 Haskell/Cabal hashes
+remain. No Haskell source changed. No Haskell check ran. No new Haskell defect
+or fix was established. FINDINGS retains all earlier external repair records.
+
+Evidence: `lean/restart-evidence/20261028-model-key-universe/`.
+Board 712: `5b9df506-738e-43ea-93b6-632b37912317`, exact verified author/content/metadata.
+Preserve all frozen evidence. Continue in a new writable area. Refresh upstream
+first. Compiler/native jobs remain serial at the measured 4 GiB cap. Standing
+push permission covers git@github.com:TharkunAB/cfta.git refs/heads/formalize.
+The full goal remains ACTIVE. Do not treat this checkpoint as completion.
+
+---
+
 # Current prepared model progress proof
 
 Verified: 2026-10-28 22:46 CET. Source: `b1421f82bce347a0d874ed2e2464191955712b02` on formalize, pushed and verified.
