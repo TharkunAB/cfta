@@ -1,3 +1,49 @@
+# Verified terminal callback emission and checked boundary budgets — 2026-10-29 00:03 CET
+
+Source `5138ade52fc76ed80bb88ed15ef62d95b1695c83` is pushed and verified on formalize. Full goal ACTIVE.
+Read `lean/notes-current-terminal-model-emission.md` for exact contracts and next work.
+Every earlier document byte remains below unchanged.
+
+An original valid callback model and empty candidate list now construct the
+actual Left recording result and exact prepared singleton emission at every
+recursive depth. The same assignment, Packet, frame, metadata fields and pending
+refutation reach that emitted cache. No future output or restart supplier is an
+input. This is the terminal callback case. DONE does not imply Discharged.
+
+Actual selected Mu/Union preparation keeps the same original Mu body degree
+ceiling. Actual false boundary checking derives freshness. Successful fallback
+narrowing is ordinary; an actual boundary result instead retains its original
+value and heap and selects the identity enumeration action. The checked action
+and original model derive a finite unused shape and strict per-handle decrease
+IF THAT EXACT KEY IS INSERTED. Full indexed-prefix/entry linkage remains open.
+A uniform native-handle bound and nonterminal chosen-output induction remain.
+
+Strongest semantics remains conditional checked rendered soundness under
+fixed-PCS/whole-Discharged and ordered output-prefix retention at greater depth.
+Source-derived sufficient depth across earlier callbacks remains the main gap.
+Existing closed unfolding refutes NoNewMu/startup-only Mu inventory and
+monotonically decreasing cached depth. It does not refute termination.
+
+Eight modules/10 public theorems/one finite proof-domain function: 518 lines,
+29,349 bytes. All nine final strict sources pass. Audit: 4,580 jobs/81,876 theorem
+dependencies. Compiler matrix: 29 commands, 24 passes, five preserved failures;
+all final inputs pass at serial 4 GiB/swap zero. Public: 787 theorem readbacks,
+67 definition bodies, 3,376,571 bytes SHA256
+b966ceaf09c9ec31ed06c5a6c73bff9fa42205c2292ef0206dac5d92406c5dde.
+Prior 3,357,308 bytes remain an exact prefix. All 19,263 new bytes were read.
+All 4,571 old non-Audit Lean, 420 stronger-source and 817 Haskell/Cabal hashes
+remain. No Haskell source changed. No Haskell check ran. No new Haskell defect
+or fix was established. FINDINGS retains earlier external repair records.
+
+Evidence: `lean/restart-evidence/20261029-terminal-model-emission/`.
+Board 715: `d19b0edb-4621-4612-b18c-387fc1147a16`, exact verified author/content/metadata.
+Preserve frozen evidence. Continue in a new writable area. Refresh upstream
+first. Keep compiler/native jobs serial under the measured 4 GiB cap. Standing
+push permission covers git@github.com:TharkunAB/cfta.git refs/heads/formalize.
+The full goal remains ACTIVE and incomplete.
+
+---
+
 # Verified original-model history key shapes — 2026-10-28 23:26 CET
 
 Source `59186c80ebae41dd672e560fa2196526d5dca368` is pushed and verified on formalize. Full goal ACTIVE.
