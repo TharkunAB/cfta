@@ -9,18 +9,16 @@ the top.
 
 ## In progress: serialization
 
-All nine are mergeable, and CI passes on each. #188 is ready for review. The
+Each pull request is one complete feature. #188 is ready for review. The
 others are drafts: mark the next one ready when work on it starts.
 
-- #188 `feature/text-format`: A readable text format for graphs
+- #188 `feature/text-format`: A readable text format for graphs, with doc comments and sorts
 - #116 `feature/listing-checkpoints`: Query checkpoints: resume a size-ordered listing in a new process
 - #123 `feature/sampling-checkpoints`: Sampling checkpoints: resume a sampled run in a new process
 - #110 `feature/source-documents`: Editable source documents and language updates
 - #187 `feature/document-text`: Text forms of source documents, languages, and updates
 - #126 `feature/document-merge`: Diff and three-way merge of languages by stable names
 - #161 `feature/start-edit`: An edit that sets the initial state
-- #189 `feature/doc-comments`: Doc comments, kept in notes beside the value
-- #190 `docs/text-grammar`: Serialization README: the grammar of the text format, and when a version changes
 
 ## Not in progress
 
@@ -122,5 +120,7 @@ checks for #134, #135, #142, and #191. A manual CI run passes on each.
   serialization and #109 on `main`.
 - `39c500494`: named holes `_name` in the text form of templates. This needs
   serialization and #153 on `main`.
-- `fb974cc3a`: sorted states (`state Pos : Int {`) and signature files
-  (`signature 1;`). This needs serialization and #191 on `main`.
+- `fb974cc3a`: signature files (`signature 1;`, `printSignature`), and a test
+  that checks the sorts of a graph read from text with `checkSorts`. The
+  sorted states of this commit are now in #188 and #187. This needs #191 on
+  `main`.
