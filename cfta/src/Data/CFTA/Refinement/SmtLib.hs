@@ -29,11 +29,13 @@ not specify division by zero. A query that divides by zero can thus get
 @sat@ from Z3 and 'Data.CFTA.Refinement.Verdict.Unknown' from ground
 evaluation.
 
-The text needs a solver process. This module does not start one.
+The text needs a solver process. This module does not start one;
+"Data.CFTA.Refinement.Z3Process" does.
 -}
 module Data.CFTA.Refinement.SmtLib (
     SmtLibError (..),
     theoryCommands,
+    entailmentCommands,
     entailmentScript,
 ) where
 
@@ -144,10 +146,10 @@ bodyText leaf locals body = case body of
         pure ("(match " <> symbol "b" [nameText scrutinee] <> " (" <> Text.unwords cases <> "))")
 
 {- | The script of an entailment under a theory, predicate definitions,
-declarations, and ambient assumptions. The arguments are those of
+declarations, and ambient assumptions: the 'theoryCommands', the
+'entailmentCommands', and @check-sat@. The arguments are those of
 'Data.CFTA.Refinement.Ground.groundEntailment', and the script adds the
-declarations of the theory. Each declared value and each free value is a
-constant of the script. A free value without a declaration is an integer.
+declarations of the theory.
 -}
 entailmentScript ::
     Theory ->
@@ -160,6 +162,24 @@ entailmentScript ::
     Either SmtLibError Text
 entailmentScript current definitions declarations assumptions bindings antecedent consequent = do
     commands <- theoryCommands current
+    query <- entailmentCommands current definitions declarations assumptions bindings antecedent consequent
+    pure (commands <> Text.unlines (query <> ["(check-sat)"]))
+
+{- | The commands of one entailment, one line each, after the commands of
+its theory: a constant for each declared value and each free value, then
+the assertions of the premise and of the negated consequent. A free value
+without a declaration is an integer.
+-}
+entailmentCommands ::
+    Theory ->
+    Definitions ->
+    [(Name, Sort)] ->
+    [Formula] ->
+    [(Name, Name)] ->
+    Formula ->
+    Formula ->
+    Either SmtLibError [Text]
+entailmentCommands current definitions declarations assumptions bindings antecedent consequent = do
     premises <- traverse (prepare declarations) assumptions
     premise <- prepare scope antecedent
     conclusion <- prepare scope consequent
@@ -172,10 +192,7 @@ entailmentScript current definitions declarations assumptions bindings anteceden
     constants <- traverse (constant context) (Map.toList values)
     premiseText <- formula context Set.empty (And (premises <> [premise]))
     conclusionText <- formula context Set.empty conclusion
-    pure $
-        commands
-            <> Text.unlines
-                (constants <> ["(assert " <> premiseText <> ")", "(assert (not " <> conclusionText <> "))", "(check-sat)"])
+    pure (constants <> ["(assert " <> premiseText <> ")", "(assert (not " <> conclusionText <> "))"])
   where
     scope = [(fresh, fromMaybe IntSort (lookup original declarations)) | (fresh, original) <- bindings] <> declarations
     globals = Set.fromList (map fst (theoryDeclarations current)) <> Set.fromList (map fst (theoryDefinitions current))
