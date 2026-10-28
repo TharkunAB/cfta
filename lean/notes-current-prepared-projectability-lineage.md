@@ -1,3 +1,46 @@
+# Verified actual child-prefix update: 2026-10-28 20:42 CET
+
+Source: `087b4d246f40ae07f3fbf30a86bba83d08ecd52d` on `formalize`.
+Read `lean/notes-current-prepared-child-projection.md` from the repo root.
+Every earlier document byte follows this update unchanged.
+
+Actual child dispatch preserves the original resource pair and the reached
+ProjectionHeap, including outer-success absent actions and caches. Actual
+completed child prefixes derive each next full Context/Memos, cache invariants,
+untouched suffix admissions and reservation. No future heap or step supplier
+is assumed. Supported successful child endpoints agree at independent bounds.
+Completed child traversals keep their exact full result at larger primitive
+bounds. Actual cached allocation retains old allocated-slot keys and gives the
+fresh slot the original expansion keys. A finite key set is still unproved.
+
+Strongest semantic claim: checked rendered results under fixed-PCS and whole-
+Discharged conditions have the original root meaning and satisfy the original
+suspended constraints. Greater recursive depth retains earlier output records
+in order. Largest gap: actual model-preserving output emission and an original
+finite depth across all preceding allocating callbacks and the continuation.
+Captured finalization/callback/whole-driver lineage, full policies/origin,
+public APIs and optimized Haskell correspondence remain open. DONE does not
+imply Discharged. Intended partial outputs remain in scope.
+
+Six modules add seven public theorems, no definitions. Seven exact final strict
+sources pass. Audit: 4,525 jobs/81,676 dependencies. Public: 708 theorems,
+60 definitions, 3,128,821 bytes; prior 3,100,926 bytes an exact prefix.
+Seventeen compiler commands: fifteen pass, two preserved proof failures.
+Three proof lines were repaired without any contract change. All final checks
+pass. All 4,518 earlier non-Audit Lean, 367 stronger and 817 Haskell/Cabal hashes
+remain unchanged. All jobs measured 4 GiB memory.max/high and zero swap.
+
+No Haskell source changed, no Haskell check ran, and no new Haskell defect or
+fix was established. FINDINGS.md retains every earlier external repair record.
+The three repaired lines concern Lean only and require no Haskell change.
+Complete evidence: lean/restart-evidence/20261028-prepared-child-projection/.
+Board sequence 706 has verified author, content and metadata readback.
+Next: attach the exact stopping child, then captured finalization, callback
+recording and the original finite producer. Continue in a new writable area.
+Keep sealed evidence immutable. Preserve all proofs, counterexamples, repairs
+and marked drafts. The full goal is ACTIVE. Normal pushes to the authorized
+formalize branch remain authorized. Continue without asking to continue.
+
 # Current prepared projectability preservation
 
 Verified update: 2026-10-28, Europe/Stockholm.
