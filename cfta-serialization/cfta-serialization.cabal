@@ -1,0 +1,69 @@
+cabal-version: 3.0
+name: cfta-serialization
+version: 0.1.0.0
+synopsis: A readable text format for constrained tree automata
+description:
+  Print and parse complete FTA, ECTA, and LTA graphs. A parsed value is
+  equal to the printed value.
+
+homepage: https://github.com/TharkunAB/cfta/tree/main/cfta-serialization#readme
+bug-reports: https://github.com/TharkunAB/cfta/issues
+category: Data
+author: Matthias Pall Gissurarson
+maintainer: mpg@mpg.is
+copyright: 2026 Tharkun AB
+license: BSD-3-Clause
+license-file: LICENSE
+build-type: Simple
+tested-with: ghc ==9.14.1
+extra-doc-files:
+  CHANGELOG.md
+  README.md
+
+source-repository head
+  type: git
+  location: https://github.com/TharkunAB/cfta.git
+  subdir: cfta-serialization
+
+common warnings
+  default-language: Haskell2010
+  ghc-options:
+    -Wall
+    -Wcompat
+    -Widentities
+    -Wincomplete-record-updates
+    -Wincomplete-uni-patterns
+    -Wpartial-fields
+    -Wredundant-constraints
+
+library
+  import: warnings
+  hs-source-dirs: src
+  exposed-modules:
+    Data.CFTA.Serialization.Text
+
+  build-depends:
+    attoparsec >=0.14 && <0.15,
+    base >=4.22 && <4.23,
+    cfta >=0.1.0.0 && <0.2,
+    containers >=0.8 && <0.9,
+    text >=2.1 && <2.2,
+
+test-suite text-format
+  import: warnings
+  type: exitcode-stdio-1.0
+  main-is: Spec.hs
+  hs-source-dirs: test
+  ghc-options:
+    -threaded
+    -rtsopts
+
+  build-depends:
+    base >=4.22 && <4.23,
+    cfta >=0.1.0.0 && <0.2,
+    cfta-generator >=0.1.0.0 && <0.2,
+    cfta-serialization,
+    containers >=0.8 && <0.9,
+    directory >=1.3 && <1.4,
+    hspec >=2.11 && <2.12,
+    text >=2.1 && <2.2,
