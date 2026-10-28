@@ -27,3 +27,8 @@
   of named sorts, `named(NAME, [SORT, ...])`.
 - Add named holes to templates: `_x` is the hole with the name `x`. A template
   quotes a symbol whose name starts with `_`.
+- Add sorts of states: `state Pos : Int {` in a graph, a document, or a
+  language. `Notes` keeps them in `noteSorts`.
+- Add `printSignature`, `parseSignature`, and their codec variants: the text
+  form `signature 1;` of a `SortedSignature`, one statement for each sort,
+  root, value sort, and function.

@@ -29,6 +29,7 @@ import Data.CFTA.Equality.Constraint (
     mkEqConstraints,
  )
 import qualified Data.CFTA.Formula as F
+import qualified Data.CFTA.Gen.ManySorted as ManySorted
 import Data.CFTA.Index (ClassRank (..), Size, Weight)
 import qualified Data.CFTA.Language as L
 import qualified Data.CFTA.Merge as Merge
@@ -37,10 +38,11 @@ import Data.CFTA.Refinement.Expression (refinementFormula, (.==), (.>))
 import Data.CFTA.Refinement.LiquidFixpoint (withZ3)
 import Data.CFTA.Serialization.Text (StateCodec (..), TextError (..))
 import qualified Data.CFTA.Serialization.Text as T
+import Data.CFTA.Signature (SortedFunction (..), SortedSignature (..), ValueSort (..), ValueSource (..))
 import qualified Data.CFTA.Sized as Sized
 import Data.CFTA.Sized.Checkpoint (Checkpoint (..), CheckpointError (..), SamplingCheckpoint (..))
 import qualified Data.CFTA.Sized.Checkpoint as Checkpoint
-import Data.CFTA.Symbol (Symbol (RefinedSymbol, Symbol), symbolText, valueName)
+import Data.CFTA.Symbol (Symbol (RefinedSymbol, Symbol), symbolText, unrefined, valueName)
 import Data.CFTA.Template (Template (..))
 
 main :: IO ()
@@ -169,25 +171,25 @@ spec = do
                 roundTrip
                     (uncurry $ T.printGraphNotesWith strings)
                     (T.parseGraphNotesWith strings)
-                    (T.Notes $ graphComments graph, graph)
+                    (noted $ graphComments graph, graph)
 
         it "keep the comments of a language: its states, productions, facts, and exclusions" $
             forM_ (map (withForms . document . snd) graphs <> [withForms $ singleSource name noConstraint | name <- names]) $ \language ->
                 roundTrip
                     (uncurry $ T.printLanguageNotesWith strings)
                     (T.parseLanguageNotesWith strings)
-                    (T.Notes $ languageComments language, language)
+                    (noted $ languageComments language, language)
 
         it "keep the comments of a document" $
             forM_ graphs $ \(_, graph) -> do
                 let source = document graph
                     comments = Map.delete (T.OnExclusion "0") $ languageComments $ L.Language source Map.empty
-                roundTrip (uncurry $ T.printDocumentNotesWith strings) (T.parseDocumentNotesWith strings) (T.Notes comments, source)
+                roundTrip (uncurry $ T.printDocumentNotesWith strings) (T.parseDocumentNotesWith strings) (noted comments, source)
 
         it "print no comment of an item that the value does not have" $ do
             let extra = Map.fromList [(T.OnState "missing", "x"), (T.OnProduction "s" "p", "y"), (T.OnExclusion "e", "z")]
-            T.parseGraphNotesWith strings (T.printGraphNotesWith strings (T.Notes $ graphComments ordinary <> extra) ordinary)
-                `shouldBe` Right (T.Notes $ graphComments ordinary, ordinary)
+            T.parseGraphNotesWith strings (T.printGraphNotesWith strings (noted $ graphComments ordinary <> extra) ordinary)
+                `shouldBe` Right (noted $ graphComments ordinary, ordinary)
 
         it "leave the text of the printers without comments unchanged" $ do
             forM_ graphs $ \(_, graph) ->
@@ -196,9 +198,9 @@ spec = do
             T.printLanguageNotesWith strings mempty language `shouldBe` T.printLanguageWith strings language
 
         it "are dropped by the readers without comments" $ do
-            T.parseGraphWith strings (T.printGraphNotesWith strings (T.Notes $ graphComments liquid) liquid) `shouldBe` Right liquid
+            T.parseGraphWith strings (T.printGraphNotesWith strings (noted $ graphComments liquid) liquid) `shouldBe` Right liquid
             let language = withForms $ document liquid
-            T.parseLanguageWith strings (T.printLanguageNotesWith strings (T.Notes $ languageComments language) language)
+            T.parseLanguageWith strings (T.printLanguageNotesWith strings (noted $ languageComments language) language)
                 `shouldBe` Right language
 
         it "need exactly three slashes" $
@@ -210,6 +212,56 @@ spec = do
                 case T.parseLanguageWith strings text of
                     Left failure -> Text.pack (T.explainTextError failure) `shouldSatisfy` Text.isInfixOf "doc comment"
                     Right _ -> expectationFailure $ "accepted " <> show text
+
+    describe "sorts" $ do
+        it "keep the sorts of the states of a graph" $
+            forM_ graphs $ \(_, graph) ->
+                roundTrip (uncurry $ T.printGraphNotesWith strings) (T.parseGraphNotesWith strings) (sorted graph, graph)
+
+        it "keep the sorts and the doc comments of a language together" $
+            forM_ (map (withForms . document . snd) graphs) $ \language -> do
+                let notes = (noted $ languageComments language){T.noteSorts = T.noteSorts $ sorted $ D.sourceGraph $ L.source language}
+                roundTrip (uncurry $ T.printLanguageNotesWith strings) (T.parseLanguageNotesWith strings) (notes, language)
+
+        it "print no sort of a state that the graph does not have" $
+            T.parseGraphNotesWith
+                strings
+                (T.printGraphNotesWith strings (sorted ordinary <> mempty{T.noteSorts = Map.singleton "missing" "Int"}) ordinary)
+                `shouldBe` Right (sorted ordinary, ordinary)
+
+        it "are dropped by the readers without notes" $
+            T.parseGraphWith strings (T.printGraphNotesWith strings (sorted liquid) liquid) `shouldBe` Right liquid
+
+        it "give a graph that a signature read from text checks" $ do
+            let signature = must $ T.parseSignatureWith texts symbols arithmeticText
+                (notes, graph) = must $ T.parseGraphNotesWith texts sortedGraphText
+                plain = must $ FTA.mapSymbols unrefined graph
+            ManySorted.checkSorts signature (T.noteSorts notes) plain `shouldBe` Right ()
+            ManySorted.checkSorts signature (Map.insert "Small" "Bool" $ T.noteSorts notes) plain
+                `shouldBe` Left (ManySorted.IllSortedTransition "Small" "zero" [])
+
+    describe "signatures" $ do
+        it "keep every signature"
+            $ forM_ signatures
+            $ roundTrip (T.printSignatureWith texts texts) (T.parseSignatureWith texts texts)
+
+        it "keep a signature through Show and Read" $
+            roundTrip
+                T.printSignature
+                T.parseSignature
+                ( SortedSignature
+                    [Index 1, Group ["a b"]]
+                    [SortedFunction ("f\n" :: String) [Index 1] (Group ["a b"])]
+                    [Index 1]
+                    [ValueSort (Index (-1)) (Pool ["x", ""])]
+                )
+
+        it "print one statement for each element, in the order of each list" $
+            T.printSignatureWith texts texts (must $ T.parseSignatureWith texts texts arithmeticText) `shouldBe` arithmeticText
+
+        it "reject malformed input" $
+            forM_ malformedSignatures $ \text ->
+                T.parseSignatureWith texts texts text `shouldSatisfy` either (const True) (const False)
 
     describe "ranks" $
         it "are the same after a round trip" $
@@ -403,6 +455,79 @@ languageComments language = Map.fromList $ zip targets (cycle commentTexts)
                 | (state, edges) <- Map.toList $ FTA.transitionTable $ D.sourceGraph $ L.source language
                 ]
                 <> map T.OnExclusion (Map.keys $ L.exclusions language)
+
+-- | Notes with only these doc comments.
+noted :: Map.Map (T.CommentTarget String) Text -> T.Notes String
+noted comments = mempty{T.noteComments = comments}
+
+-- | Notes with a sort for each state of a graph, from 'names' in turn.
+sorted :: FTA.FTA String Symbol annotation -> T.Notes String
+sorted graph = mempty{T.noteSorts = Map.fromList $ zip (Map.keys $ FTA.transitionTable graph) (cycle names)}
+
+-- | Labels as plain text.
+texts :: StateCodec Text
+texts = StateCodec id Right
+
+-- | Unrefined symbols as their text.
+symbols :: StateCodec Symbol
+symbols = StateCodec symbolText (Right . Symbol)
+
+-- | The arithmetic signature, as its printer prints it.
+arithmeticText :: Text
+arithmeticText =
+    Text.unlines
+        [ "signature 1;"
+        , ""
+        , "sort Int;"
+        , "sort Bool;"
+        , "root Bool;"
+        , "values Int = interval(-10, 10);"
+        , "function zero : Int;"
+        , "function one : Int;"
+        , "function add : (Int, Int) -> Int;"
+        , "function lt : (Int, Int) -> Bool;"
+        ]
+
+-- | A graph whose states refine the sorts of 'arithmeticText', with refined symbols.
+sortedGraphText :: Text
+sortedGraphText =
+    Text.unlines
+        [ "graph 1;"
+        , "start Test;"
+        , "state Test : Bool { lt(Sum, Small); }"
+        , "state Sum : Int { add(Sum, Small); zero; }"
+        , "state Small : Int { zero @{ v == 0 }; one; }"
+        ]
+
+-- | Signatures with every statement, unusual names, repeated elements, and large integers.
+signatures :: [SortedSignature Text Text]
+signatures =
+    [ SortedSignature [] [] [] []
+    , must $ T.parseSignatureWith texts texts arithmeticText
+    , SortedSignature
+        names
+        [SortedFunction name [name, name] name | name <- names]
+        (reverse names)
+        [ ValueSort "a b" (Pool names)
+        , ValueSort "Int" (Interval (-(2 ^ (100 :: Int))) (2 ^ (100 :: Int)))
+        , ValueSort "Empty" (Pool [])
+        ]
+    , SortedSignature ["S", "S"] [SortedFunction "f" [] "S", SortedFunction "f" [] "S"] ["S", "S"] []
+    ]
+
+-- | Signature input that the parser must reject.
+malformedSignatures :: [Text]
+malformedSignatures =
+    [ "signature 2;"
+    , "signature 1; sort;"
+    , "signature 1; root A"
+    , "signature 1; function f : (A, B) B;"
+    , "signature 1; function f : (A, B) -> ;"
+    , "signature 1; values A = range(1, 2);"
+    , "signature 1; values A = interval(1);"
+    , "signature 1; type A;"
+    , "signature 1;\n/// a doc comment\nsort A;"
+    ]
 
 -- | Comment texts with empty lines, spaces at either end, slashes, carriage returns, and Unicode.
 commentTexts :: [Text]

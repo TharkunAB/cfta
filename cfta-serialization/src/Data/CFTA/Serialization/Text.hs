@@ -29,6 +29,12 @@ module Data.CFTA.Serialization.Text (
     printLanguageNotesWith,
     parseLanguageNotesWith,
 
+    -- * Signatures
+    printSignature,
+    parseSignature,
+    printSignatureWith,
+    parseSignatureWith,
+
     -- * Updates
     printUpdate,
     parseUpdate,
@@ -78,6 +84,7 @@ import qualified Data.CFTA.Formula as F
 import Data.CFTA.Index (ChildIndex (ChildIndex), ClassRank (ClassRank), Size (Size), Weight (Weight))
 import qualified Data.CFTA.Language as L
 import Data.CFTA.Path (Path (Path), unPath)
+import Data.CFTA.Signature (SortedFunction (..), SortedSignature (..), ValueSort (..), ValueSource (..))
 import Data.CFTA.Symbol (Symbol (RefinedSymbol, Symbol), symbolRefinement, symbolText, valueName)
 import Data.CFTA.Template (Template (..))
 
@@ -106,20 +113,49 @@ data CommentTarget state
     deriving (Eq, Ord, Show)
 
 {- | What a file says beside its value: its doc comments, by the item that each
-one documents. Notes are not part of the value, so they do not change the
-equality of the value or the text of 'printGraph'.
+one documents, and the sorts of its states. Notes are not part of the value,
+so they do not change the equality of the value or the text of 'printGraph'.
 -}
-newtype Notes state = Notes
+data Notes state = Notes
     { noteComments :: Map.Map (CommentTarget state) Text
+    , noteSorts :: Map.Map state Text
+    -- ^ The sort of a state, as in @state Pos : Int {@.
     }
     deriving (Eq, Show)
 
 -- | Combine the notes of two files; the left notes win on the same item.
 instance (Ord state) => Semigroup (Notes state) where
-    Notes left <> Notes right = Notes (left <> right)
+    Notes leftComments leftSorts <> Notes rightComments rightSorts =
+        Notes (leftComments <> rightComments) (leftSorts <> rightSorts)
 
 instance (Ord state) => Monoid (Notes state) where
-    mempty = Notes Map.empty
+    mempty = Notes Map.empty Map.empty
+
+-- | How a printer finds the notes of an item: its doc comment, and the sort of a state.
+data NoteLookup state = NoteLookup
+    { commentOf :: CommentTarget state -> Maybe Text
+    , sortOf :: state -> Maybe Text
+    }
+
+-- | No notes, for the printers without notes.
+noNotes :: NoteLookup state
+noNotes = NoteLookup (const Nothing) (const Nothing)
+
+-- | Find the notes of an item in 'Notes'.
+lookupNotes :: (Ord state) => Notes state -> NoteLookup state
+lookupNotes notes = NoteLookup (`Map.lookup` noteComments notes) (`Map.lookup` noteSorts notes)
+
+-- | One note that a parser reads: a doc comment of an item, or the sort of a state.
+data NoteEntry state
+    = CommentEntry !(CommentTarget state) !Text
+    | SortEntry !state !Text
+
+-- | Collect the notes that a parser read.
+notesOf :: (Ord state) => [NoteEntry state] -> Notes state
+notesOf entries =
+    Notes
+        (Map.fromList [(target, text) | CommentEntry target text <- entries])
+        (Map.fromList [(state, sort) | SortEntry state sort <- entries])
 
 -- | A syntax location, a checked graph error, or a checked source-definition error.
 data TextError state
@@ -142,11 +178,11 @@ explainTextError failure = case failure of
 
 -- | Print a graph with state labels from its 'Show' instance.
 printGraph :: (Show state) => FTA.PlainFTA state Symbol -> Text
-printGraph = renderGraph (Text.pack . show) (const Nothing)
+printGraph = renderGraph (Text.pack . show) noNotes
 
 -- | Print a graph with an explicit typed state codec.
 printGraphWith :: StateCodec state -> FTA.PlainFTA state Symbol -> Text
-printGraphWith codec = renderGraph (encodeState codec) (const Nothing)
+printGraphWith codec = renderGraph (encodeState codec) noNotes
 
 -- | Read a graph with its state's 'Read' instance and validate its structure.
 parseGraph :: (Ord state, Read state) => Text -> Either (TextError state) (FTA.PlainFTA state Symbol)
@@ -158,11 +194,11 @@ parseGraphWith codec = fmap snd . readGraph (decodeState codec)
 
 -- | Print a source document with state labels from its 'Show' instance.
 printDocument :: (Show state) => D.Document state -> Text
-printDocument = renderDocument (Text.pack . show) (const Nothing)
+printDocument = renderDocument (Text.pack . show) noNotes
 
 -- | Print a source document with an explicit typed state codec.
 printDocumentWith :: StateCodec state -> D.Document state -> Text
-printDocumentWith codec = renderDocument (encodeState codec) (const Nothing)
+printDocumentWith codec = renderDocument (encodeState codec) noNotes
 
 -- | Read and validate a source document with its state's 'Read' instance.
 parseDocument :: (Ord state, Read state) => Text -> Either (TextError state) (D.Document state)
@@ -177,11 +213,11 @@ A matching lawful 'Read' instance gives @parseLanguage (printLanguage x) == Righ
 Comments and input whitespace are not part of the stored value.
 -}
 printLanguage :: (Show state) => L.Language state -> Text
-printLanguage = renderLanguage (Text.pack . show) (const Nothing)
+printLanguage = renderLanguage (Text.pack . show) noNotes
 
 -- | Print a language with an explicit typed state codec.
 printLanguageWith :: StateCodec state -> L.Language state -> Text
-printLanguageWith codec = renderLanguage (encodeState codec) (const Nothing)
+printLanguageWith codec = renderLanguage (encodeState codec) noNotes
 
 -- | Read an exact language value with its state's 'Read' instance.
 parseLanguage :: (Ord state, Read state) => Text -> Either (TextError state) (L.Language state)
@@ -193,7 +229,7 @@ parseLanguageWith codec = fmap snd . readLanguage (decodeState codec)
 
 -- | Print a graph with the doc comments of the file and of its states. A comment on another item is not printed.
 printGraphNotesWith :: (Ord state) => StateCodec state -> Notes state -> FTA.PlainFTA state Symbol -> Text
-printGraphNotesWith codec notes = renderGraph (encodeState codec) (`Map.lookup` noteComments notes)
+printGraphNotesWith codec notes = renderGraph (encodeState codec) (lookupNotes notes)
 
 -- | Read a graph and the doc comments of the file and of its states.
 parseGraphNotesWith ::
@@ -202,7 +238,7 @@ parseGraphNotesWith = readGraph . decodeState
 
 -- | Print a source document with the doc comments of the file, its states, its productions, and its facts.
 printDocumentNotesWith :: (Ord state) => StateCodec state -> Notes state -> D.Document state -> Text
-printDocumentNotesWith codec notes = renderDocument (encodeState codec) (`Map.lookup` noteComments notes)
+printDocumentNotesWith codec notes = renderDocument (encodeState codec) (lookupNotes notes)
 
 -- | Read a source document and the doc comments of the file, its states, its productions, and its facts.
 parseDocumentNotesWith ::
@@ -211,12 +247,32 @@ parseDocumentNotesWith = readDocument . decodeState
 
 -- | Print a language with the doc comments of its document and of its exclusions.
 printLanguageNotesWith :: (Ord state) => StateCodec state -> Notes state -> L.Language state -> Text
-printLanguageNotesWith codec notes = renderLanguage (encodeState codec) (`Map.lookup` noteComments notes)
+printLanguageNotesWith codec notes = renderLanguage (encodeState codec) (lookupNotes notes)
 
 -- | Read a language and the doc comments of its document and of its exclusions.
 parseLanguageNotesWith ::
     (Ord state) => StateCodec state -> Text -> Either (TextError state) (Notes state, L.Language state)
 parseLanguageNotesWith = readLanguage . decodeState
+
+-- | Print a signature with sorts and symbols from their 'Show' instances.
+printSignature :: (Show sort, Show symbol) => SortedSignature sort symbol -> Text
+printSignature = renderSignature (Text.pack . show) (Text.pack . show)
+
+-- | Print a signature with explicit codecs for its sorts and its symbols.
+printSignatureWith :: StateCodec sort -> StateCodec symbol -> SortedSignature sort symbol -> Text
+printSignatureWith sorts symbols = renderSignature (encodeState sorts) (encodeState symbols)
+
+{- | Read a signature with the 'Read' instances of its sorts and symbols.
+Reading checks the syntax only; 'Data.CFTA.Gen.ManySorted.checkSignatureWith'
+of @cfta-generator@ checks the signature.
+-}
+parseSignature :: (Read sort, Read symbol) => Text -> Either (TextError sort) (SortedSignature sort symbol)
+parseSignature = readSignature (readEither . Text.unpack) (readEither . Text.unpack)
+
+-- | Read a signature with explicit codecs for its sorts and its symbols.
+parseSignatureWith ::
+    StateCodec sort -> StateCodec symbol -> Text -> Either (TextError sort) (SortedSignature sort symbol)
+parseSignatureWith sorts symbols = readSignature (decodeState sorts) (decodeState symbols)
 
 -- | Print an update with state labels from its 'Show' instance.
 printUpdate :: (Show state) => L.Update state -> Text
@@ -274,11 +330,11 @@ parseSamplingCheckpointWith ::
 parseSamplingCheckpointWith = readSamplingCheckpoint . decodeState
 
 -- | Render graph rows with their complete transition constraints, and the doc comments that the lookup gives.
-renderGraph :: (state -> Text) -> (CommentTarget state -> Maybe Text) -> FTA.PlainFTA state Symbol -> Text
-renderGraph encode comment = built . plainGraphText encode comment
+renderGraph :: (state -> Text) -> NoteLookup state -> FTA.PlainFTA state Symbol -> Text
+renderGraph encode notes = built . plainGraphText encode notes
 
 -- | Render the graph format.
-plainGraphText :: (state -> Text) -> (CommentTarget state -> Maybe Text) -> FTA.PlainFTA state Symbol -> Builder
+plainGraphText :: (state -> Text) -> NoteLookup state -> FTA.PlainFTA state Symbol -> Builder
 plainGraphText encode = graphText "graph" encode transition
   where
     transition _ edge = "  " <> edgeText encode edge <> obligation (FTA.transitionConstraint edge) <> ";\n"
@@ -287,30 +343,52 @@ plainGraphText encode = graphText "graph" encode transition
         | otherwise = " where " <> constraintText constraint
 
 -- | Render source rows without compiling their individual facts.
-renderDocument :: (state -> Text) -> (CommentTarget state -> Maybe Text) -> D.Document state -> Text
-renderDocument encode comment =
-    built . graphText "document" encode (sourceTransitionText encode comment) comment . D.sourceGraph
+renderDocument :: (state -> Text) -> NoteLookup state -> D.Document state -> Text
+renderDocument encode notes =
+    built . graphText "document" encode (sourceTransitionText encode notes) notes . D.sourceGraph
 
 -- | Render source rows and the retained exclusion expressions.
-renderLanguage :: (state -> Text) -> (CommentTarget state -> Maybe Text) -> L.Language state -> Text
-renderLanguage encode comment language =
+renderLanguage :: (state -> Text) -> NoteLookup state -> L.Language state -> Text
+renderLanguage encode notes language =
     built $
-        graphText "language" encode (sourceTransitionText encode comment) comment (D.sourceGraph $ L.source language)
-            <> foldMap (uncurry $ exclusionText comment) (Map.toAscList $ L.exclusions language)
+        graphText "language" encode (sourceTransitionText encode notes) notes (D.sourceGraph $ L.source language)
+            <> foldMap (uncurry $ exclusionText notes) (Map.toAscList $ L.exclusions language)
 
 -- | Render a named exclusion after its doc comment.
-exclusionText :: (CommentTarget state -> Maybe Text) -> L.ExclusionName -> L.Exclusion -> Builder
-exclusionText comment name exclusion =
-    commentText "" (comment $ OnExclusion name) <> "exclude " <> nameText (L.exclusionNameText name) <> " = " <> case exclusion of
+exclusionText :: NoteLookup state -> L.ExclusionName -> L.Exclusion -> Builder
+exclusionText notes name exclusion =
+    commentText "" (commentOf notes $ OnExclusion name) <> "exclude " <> nameText (L.exclusionNameText name) <> " = " <> case exclusion of
         L.AtRoot template -> "root " <> templateText template <> ";\n"
         L.Anywhere template -> "anywhere " <> templateText template <> ";\n"
+
+{- | Render the sorts, the roots, the value sorts, and the functions of a
+signature, each list in its order, one statement for each element.
+-}
+renderSignature :: (sort -> Text) -> (symbol -> Text) -> SortedSignature sort symbol -> Text
+renderSignature sort symbol signature =
+    built $
+        "signature 1;\n\n"
+            <> foldMap (statement "sort") (sortedSorts signature)
+            <> foldMap (statement "root") (sortedRoots signature)
+            <> foldMap value (sortedValues signature)
+            <> foldMap function (sortedFunctions signature)
+  where
+    sortText' = nameText . sort
+    statement word name = word <> " " <> sortText' name <> ";\n"
+    value (ValueSort name source) = "values " <> sortText' name <> " = " <> sourceText source <> ";\n"
+    sourceText (Interval low high) = call "interval" [integerText low, integerText high]
+    sourceText (Pool symbols) = call "pool" $ map (nameText . symbol) symbols
+    function (SortedFunction name inputs result) =
+        "function " <> nameText (symbol name) <> " : " <> inputsText inputs <> sortText' result <> ";\n"
+    inputsText [] = mempty
+    inputsText inputs = "(" <> separated (map sortText' inputs) <> ") -> "
 
 -- | Render the operations of an update in order, one statement each.
 renderUpdate :: (state -> Text) -> L.Update state -> Text
 renderUpdate encode (L.Update operations) = built $ "update 1;\n" <> foldMap operation operations
   where
     state = nameText . encode
-    none = const Nothing
+    none = noNotes
     operation change = case change of
         L.EditSource edit -> case edit of
             D.SetStart at -> "start " <> state at <> ";\n"
@@ -348,7 +426,7 @@ renderCheckpoint encode checkpoint =
             <> " "
             <> integerText rank
             <> ";\n\n"
-            <> plainGraphText encode (const Nothing) (checkpointGraph checkpoint)
+            <> plainGraphText encode noNotes (checkpointGraph checkpoint)
   where
     Size bound = checkpointBound checkpoint
     (Size size, ClassRank rank) = checkpointNext checkpoint
@@ -374,7 +452,7 @@ renderSamplingCheckpoint encode checkpoint =
             <> ";\ndraws "
             <> integerText (samplingDraws checkpoint)
             <> ";\n\n"
-            <> plainGraphText encode (const Nothing) (samplingGraph checkpoint)
+            <> plainGraphText encode noNotes (samplingGraph checkpoint)
   where
     Size bound = samplingBound checkpoint
     weightsText weights = listText [integerText size <> ": " <> integerText weight | (Size size, Weight weight) <- Map.toAscList weights]
@@ -384,11 +462,11 @@ graphText ::
     Text ->
     (state -> Text) ->
     (state -> FTA.Transition state Symbol annotation -> Builder) ->
-    (CommentTarget state -> Maybe Text) ->
+    NoteLookup state ->
     FTA.FTA state Symbol annotation ->
     Builder
-graphText format encode transition comment graph =
-    commentText "" (comment OnFile)
+graphText format encode transition notes graph =
+    commentText "" (commentOf notes OnFile)
         <> fromText format
         <> " 1;\nstart "
         <> nameText (encode $ FTA.initialState graph)
@@ -396,30 +474,31 @@ graphText format encode transition comment graph =
         <> foldMap row (Map.toAscList $ FTA.transitionTable graph)
   where
     row (state, edges) =
-        commentText "" (comment $ OnState state)
+        commentText "" (commentOf notes $ OnState state)
             <> "state "
             <> nameText (encode state)
+            <> maybe mempty ((" : " <>) . nameText) (sortOf notes state)
             <> " {\n"
             <> foldMap (transition state) edges
             <> "}\n\n"
 
 -- | Render one named production and its individual facts in a state row, after its doc comment.
 sourceTransitionText ::
-    (state -> Text) -> (CommentTarget state -> Maybe Text) -> state -> FTA.Transition state Symbol D.Annotation -> Builder
-sourceTransitionText encode comment state edge =
-    commentText "  " (comment $ OnProduction state $ D.annotationName $ FTA.transitionConstraint edge)
+    (state -> Text) -> NoteLookup state -> state -> FTA.Transition state Symbol D.Annotation -> Builder
+sourceTransitionText encode notes state edge =
+    commentText "  " (commentOf notes $ OnProduction state $ D.annotationName $ FTA.transitionConstraint edge)
         <> "  "
-        <> productionText "  " encode comment state edge
+        <> productionText "  " encode notes state edge
 
 -- | Render one named production and its individual facts, with the given indentation for its closing line.
 productionText ::
     Builder ->
     (state -> Text) ->
-    (CommentTarget state -> Maybe Text) ->
+    NoteLookup state ->
     state ->
     FTA.Transition state Symbol D.Annotation ->
     Builder
-productionText indent encode comment state edge =
+productionText indent encode notes state edge =
     nameText name
         <> " = "
         <> edgeText encode edge
@@ -429,7 +508,7 @@ productionText indent encode comment state edge =
     name = D.annotationName annotation
     facts = D.annotationFacts annotation
     fact (factName, constraint) =
-        commentText (indent <> "  ") (comment $ OnFact state name factName)
+        commentText (indent <> "  ") (commentOf notes $ OnFact state name factName)
             <> indent
             <> "  "
             <> nameText factName
@@ -679,14 +758,14 @@ readGraph ::
 readGraph decode input = do
     (comments, rows) <- runParser (plainGraphParser decode) input
     graph <- validGraph rows
-    pure (Notes $ Map.fromList comments, graph)
+    pure (notesOf comments, graph)
 
 {- | Read the graph format: the header, the initial state, and the rows with
 their constraints, and the doc comments of the file and of the states.
 -}
 plainGraphParser ::
     (Text -> Either String state) ->
-    A.Parser ([(CommentTarget state, Text)], (state, [(state, [FTA.Transition state Symbol C.Constraint])]))
+    A.Parser ([NoteEntry state], (state, [(state, [FTA.Transition state Symbol C.Constraint])]))
 plainGraphParser decode = graphParser "graph" decode transition <* noComment
   where
     transition _ = (,) <$> graphTransitionParser decode <*> pure []
@@ -740,7 +819,7 @@ readDocument decode input = do
     (comments, (initial, rows)) <-
         runParser (graphParser "document" decode (sourceTransitionParser decode) <* noComment) input
     document <- first InvalidDefinition $ D.mkDocument initial rows
-    pure (Notes $ Map.fromList comments, document)
+    pure (notesOf comments, document)
 
 -- | Read a complete language and its doc comments without compiling its constraints or exclusions.
 readLanguage ::
@@ -748,7 +827,7 @@ readLanguage ::
 readLanguage decode input = do
     (comments, (initial, rows), exclusions) <- runParser parser input
     document <- first InvalidDefinition $ D.mkDocument initial rows
-    pure (Notes $ Map.fromList comments, L.Language document exclusions)
+    pure (notesOf comments, L.Language document exclusions)
   where
     parser = do
         (comments, rows) <- graphParser "language" decode $ sourceTransitionParser decode
@@ -756,6 +835,62 @@ readLanguage decode input = do
         exclusions <- namedMap "exclusion" $ map fst entries
         let exclusionComments = concat [commentOn (OnExclusion $ L.ExclusionName name) comment | ((name, _), comment) <- entries]
         pure (comments <> exclusionComments, rows, Map.mapKeys L.ExclusionName exclusions)
+
+-- | One statement of a signature file.
+data SignatureStatement sort symbol
+    = SignatureSort sort
+    | SignatureRoot sort
+    | SignatureValues (ValueSort sort symbol)
+    | SignatureFunction (SortedFunction sort symbol)
+
+-- | Read the statements of a signature in any order, and keep the order of each kind.
+readSignature ::
+    (Text -> Either String sort) ->
+    (Text -> Either String symbol) ->
+    Text ->
+    Either (TextError sort) (SortedSignature sort symbol)
+readSignature decodeSort decodeSymbol = runParser $ do
+    keyword "signature"
+    version <- integerParser
+    unless (version == 1) $ fail "unsupported signature version; expected 1"
+    token ";"
+    statements <- untilEnd statement
+    pure $
+        SortedSignature
+            { sortedSorts = [name | SignatureSort name <- statements]
+            , sortedFunctions = [function | SignatureFunction function <- statements]
+            , sortedRoots = [name | SignatureRoot name <- statements]
+            , sortedValues = [value | SignatureValues value <- statements]
+            }
+  where
+    sort = labelParser "sort" decodeSort
+    symbol = labelParser "symbol" decodeSymbol
+    end = token ";"
+    statement = do
+        word <- nameParser
+        case word of
+            "sort" -> SignatureSort <$> sort <* end
+            "root" -> SignatureRoot <$> sort <* end
+            "values" -> do
+                name <- sort
+                token "="
+                source <- sourceParser
+                end
+                pure $ SignatureValues $ ValueSort name source
+            "function" -> do
+                name <- symbol
+                token ":"
+                arguments' <- ifNext '(' (arguments sort <* token "->") []
+                result <- sort
+                end
+                pure $ SignatureFunction $ SortedFunction name arguments' result
+            _ -> fail $ "expected a signature statement, not " <> show word
+    sourceParser = do
+        form <- nameParser
+        case form of
+            "interval" -> pairArguments Interval integerParser integerParser
+            "pool" -> Pool <$> arguments symbol
+            _ -> fail "expected interval or pool"
 
 -- | Read the header and the operations of an update, in order.
 readUpdate :: (Text -> Either String state) -> Text -> Either (TextError state) (L.Update state)
@@ -828,8 +963,8 @@ validation, and the doc comments of the file, the states, and the transitions.
 graphParser ::
     Text ->
     (Text -> Either String state) ->
-    (state -> A.Parser (FTA.Transition state Symbol annotation, [(CommentTarget state, Text)])) ->
-    A.Parser ([(CommentTarget state, Text)], (state, [(state, [FTA.Transition state Symbol annotation])]))
+    (state -> A.Parser (FTA.Transition state Symbol annotation, [NoteEntry state])) ->
+    A.Parser ([NoteEntry state], (state, [(state, [FTA.Transition state Symbol annotation])]))
 graphParser format decode transition = do
     fileComment <- commentParser
     keyword format
@@ -847,17 +982,25 @@ graphParser format decode transition = do
         comment <- commentParser
         keyword "state"
         state <- stateParser decode
+        sort <- ifNext ':' (Just <$> (token ":" *> nameParser)) Nothing
         token "{"
         transitions <- untilClose '}' (transition state)
         token "}"
         ifNext ';' (token ";") ()
-        pure (commentOn (OnState state) comment <> concatMap snd transitions, (state, map fst transitions))
+        pure
+            ( commentOn (OnState state) comment <> maybe [] (\name -> [SortEntry state name]) sort <> concatMap snd transitions
+            , (state, map fst transitions)
+            )
 
 -- | Decode one escaped state label through its typed codec.
 stateParser :: (Text -> Either String state) -> A.Parser state
-stateParser decode = do
+stateParser = labelParser "state"
+
+-- | Decode one escaped label through a typed codec; the role names the label in an error.
+labelParser :: String -> (Text -> Either String label) -> A.Parser label
+labelParser role decode = do
     label <- nameParser
-    either (\message -> fail $ "invalid state " <> show label <> ": " <> message) pure $ decode label
+    either (\message -> fail $ "invalid " <> role <> " " <> show label <> ": " <> message) pure $ decode label
 
 -- | Read a graph transition with an optional complete constraint.
 graphTransitionParser :: (Text -> Either String state) -> A.Parser (FTA.Transition state Symbol C.Constraint)
@@ -873,7 +1016,7 @@ graphTransitionParser decode = do
 sourceTransitionParser ::
     (Text -> Either String state) ->
     state ->
-    A.Parser (FTA.Transition state Symbol D.Annotation, [(CommentTarget state, Text)])
+    A.Parser (FTA.Transition state Symbol D.Annotation, [NoteEntry state])
 sourceTransitionParser decode state = do
     comment <- itemComment
     name <- nameParser
@@ -1208,9 +1351,9 @@ noComment = do
 misplacedComment :: String
 misplacedComment = "a doc comment must come before the header, a state, a production, a fact, or an exclusion"
 
--- | A doc comment of a target, as a list of at most one entry.
-commentOn :: CommentTarget state -> Maybe Text -> [(CommentTarget state, Text)]
-commentOn target = maybe [] (\text -> [(target, text)])
+-- | A doc comment of a target, as a list of at most one note.
+commentOn :: CommentTarget state -> Maybe Text -> [NoteEntry state]
+commentOn target = maybe [] (\text -> [CommentEntry target text])
 
 -- | Attach presentation whitespace to one token.
 lexeme :: A.Parser value -> A.Parser value

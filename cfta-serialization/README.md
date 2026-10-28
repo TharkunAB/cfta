@@ -170,6 +170,65 @@ printer prints no comment for an item that the value does not have.
 value, the text of `printGraph`, or a checkpoint, so a new comment does not make
 a checkpoint stale.
 
+## Sorts
+
+A state of a graph, a document, or a language can have a sort, written after
+its name: `state Pos : Int {`. The sorts are kept beside the value, in the field
+`noteSorts` of `Notes`, as the doc comments are. The printers and parsers with
+notes keep them; the other readers drop them.
+
+```text
+graph 1;
+start Test;
+
+state Small : Int {
+  zero @{ v == 0 };
+  one;
+}
+
+state Sum : Int {
+  add(Sum, Small);
+  zero;
+}
+
+state Test : Bool {
+  lt(Sum, Small);
+}
+```
+
+A state is a refinement of its sort: here `Small` and `Sum` are two sets of
+terms of sort `Int`. `checkSorts` of `Data.CFTA.Gen.ManySorted` in
+`cfta-generator` checks the sorts against a signature: each transition
+`f(q1, ..., qn)` of a state `q` must be a function `f` from the sorts of
+`q1, ..., qn` to the sort of `q`. For refined symbols, check the graph after
+`FTA.mapSymbols unrefined`.
+
+## Signatures
+
+`printSignature` and `parseSignature` store a `SortedSignature` of
+`Data.CFTA.Signature`: the sorts, the root sorts, the sorts with values, and the
+functions with their argument and result sorts. `printSignatureWith` and
+`parseSignatureWith` take a `StateCodec` for the sorts and one for the symbols.
+
+```text
+signature 1;
+
+sort Int;
+sort Bool;
+root Bool;
+values Int = interval(-10, 10);
+function zero : Int;
+function one : Int;
+function add : (Int, Int) -> Int;
+function lt : (Int, Int) -> Bool;
+```
+
+Each element of each list is one statement, in the order of its list, so a
+parsed signature is equal to the printed one. A constant has no argument list.
+`values NAME = pool(SYMBOL, ...)` gives a sort the values of a pool. Reading
+checks the syntax only; `checkSignatureWith` of `Data.CFTA.Gen.ManySorted`
+checks the signature. A signature file has no doc comments.
+
 ## Complete constraint syntax
 
 A path is a list of zero-based child indexes, such as `[0, 1]`. The format also
@@ -362,15 +421,22 @@ document-file   = header("document") source-row* ;
 language-file   = header("language") source-row* exclusion* ;
 header(kind)    = doc-comment? kind "1" ";" "start" name ";" ;
 
-graph-row       = doc-comment? "state" name "{" graph-edge* "}" ";"? ;
+graph-row       = doc-comment? "state" name ( ":" name )? "{" graph-edge* "}" ";"? ;
 graph-edge      = symbol children? ( "where" constraint )? ";" ;
-source-row      = doc-comment? "state" name "{" production* "}" ";"? ;
+source-row      = doc-comment? "state" name ( ":" name )? "{" production* "}" ";"? ;
 production      = doc-comment? name "=" symbol children? ( "{" fact* "}" )? ";" ;
 fact            = doc-comment? name "=" constraint ";" ;
 exclusion       = doc-comment? "exclude" exclusion-body ;
 exclusion-body  = name "=" ( "root" | "anywhere" ) template ";" ;
 symbol          = name ( "@" "{" formula "}" )? ;
 children        = "(" ( name ( "," name )* )? ")" ;
+
+signature-file  = "signature" "1" ";" signature-statement* ;
+signature-statement
+                = ( "sort" | "root" ) name ";"
+                | "values" name "=" ( "interval" "(" integer "," integer ")"
+                                    | "pool" "(" ( name ( "," name )* )? ")" ) ";"
+                | "function" name ":" ( "(" ( name ( "," name )* )? ")" "->" )? name ";" ;
 
 update-file     = "update" "1" ";" operation* ;
 operation       = "start" name ";"
@@ -442,7 +508,7 @@ have the same text.
 
 ## Versions
 
-Each file starts with its kind and a version, such as `graph 1;`. A reader
+Each file starts with its kind and a version, such as `graph 1;` or `signature 1;`. A reader
 rejects a version that it does not know. After the first release of
 `cfta-serialization`, these rules apply to each kind:
 
