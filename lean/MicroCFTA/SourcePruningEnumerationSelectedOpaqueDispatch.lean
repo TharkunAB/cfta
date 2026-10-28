@@ -31,7 +31,7 @@ local notation "Result" => SourcePruningEnumerationSelectedEdge.Result
 variable {Typing : Type} {width : Nat}
 variable [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Constraint)] [DecidableEq Node]
 
-/-- Dispatch an already prepared value and retain every reached child observation. -/
+/-- Dispatch an already prepared value at the original captured target. -/
 noncomputable def run (checkEmpty : Bool) (r n p h k target : Nat)
     (scs : List Suspended) (value : Node) (caller : Caller width) (before : Cached)
     (queries : SourceEndpointMemo.Memos) : Option (Result width) :=
