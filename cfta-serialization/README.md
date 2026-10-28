@@ -117,6 +117,58 @@ escapes are `\"`, `\\`, `\/`, `\b`, `\f`, `\n`, `\r`, `\t`, and `\uXXXX`;
 a non-BMP escape uses a valid surrogate pair. The printer quotes the name `_`
 to distinguish it from a template hole.
 
+## Doc comments
+
+A line that starts with exactly three slashes, `///`, is a doc comment. It
+documents the item after it: the header of the file, a state, a production, a
+fact, or an exclusion. A graph transition has no doc comment. A `//` comment,
+and a comment with four or more slashes, is not kept.
+
+```text
+/// Pairs of small numbers.
+language 1;
+start Expr;
+
+/// The leaves.
+state Atom {
+  zero = zero @{ v == 0 };
+  one = one @{ v == 1 };
+}
+
+state Expr {
+  /// A pair of atoms.
+  pair = pair(Atom, Atom) {
+    /// Both atoms are the same.
+    same = equal([0], [1]);
+  };
+}
+
+/// A pair of zeros is not a term.
+exclude zero-pair = root pair(zero @{ v == 0 }, zero @{ v == 0 });
+```
+
+The doc comments are kept beside the value, in `Notes state`. Its field
+`noteComments` maps a `CommentTarget state` (`OnFile`, `OnState`,
+`OnProduction`, `OnFact`, or `OnExclusion`) to the text of the comment. One space after `///` is not part of
+the text. Consecutive comment lines are one text, with a newline between the
+lines.
+
+| Value | Printer | Parser |
+| --- | --- | --- |
+| `PlainFTA state Symbol` | `printGraphNotesWith` | `parseGraphNotesWith` |
+| `Document state` | `printDocumentNotesWith` | `parseDocumentNotesWith` |
+| `Language state` | `printLanguageNotesWith` | `parseLanguageNotesWith` |
+
+Each takes a `StateCodec`. `showCodec` gives the state labels of `printGraph`
+and `parseGraph`. The other readers read doc comments and drop them. A doc
+comment that does not come before one of these items is a syntax error. The
+printer prints no comment for an item that the value does not have.
+
+`mempty` is no notes, and `printGraphNotesWith codec mempty` prints the text of
+`printGraphWith codec`. A doc comment is not part of the value. It does not change the equality of the
+value, the text of `printGraph`, or a checkpoint, so a new comment does not make
+a checkpoint stale.
+
 ## Complete constraint syntax
 
 A path is a list of zero-based child indexes, such as `[0, 1]`. The format also
