@@ -119,6 +119,13 @@ Before release, the package was called `microcfta`.
   split at the function child made 3,521 copies and 190 states (1.4 s at
   -O0); it now makes 10 copies and 10 states (5 ms). The terms and their
   runs do not change.
+- `Template` has named holes: `NamedHole name`. The named holes with one
+  name match equal subterms, and `matchesTemplate` checks this. The
+  operations on plain automata read a name that occurs once as a hole and
+  reject a repeated name. `Data.CFTA.Template.Named` restricts with
+  equality constraints (`restrictNamedFTA`) and excludes with the guard
+  `Not (And [Same p q, ...])` (`excludeNamedFTA`,
+  `excludeNamedAnywhereFTA`).
 - Fix `reducePartially` not returning when a node at the end of an equality
   path reaches a recursive node with constraints. The intersection at that
   path unfolded the recursive node, a narrowed child contained its own

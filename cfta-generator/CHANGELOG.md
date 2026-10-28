@@ -143,7 +143,10 @@ tree automata of `cfta`, with QuickCheck integration.
   generalization of terms as a `Template`. `learnExclusions` clusters
   rejected terms into templates that remove no accepted term, at the root or
   anywhere, and reports conflicts. `exclusionPrice` counts the terms that
-  templates remove from a language within a size bound.
+  templates remove from a language within a size bound. `generalize` gives
+  one named hole to a difference at two or more positions, so `x - x` and
+  `1 - 1` give `v0 - v0`. `exclusionPriceUpTo` prices templates with
+  repeated names with `sizedUpTo`.
 - Terms are `Term symbol` from `Data.CFTA.Term` of `cfta`:
   `fromAutomaton`, `fromAutomatonUpToDepth`, `termAt`, `rankOf`, `ranksOf`,
   `rankOfTerm`, `surface`, and the refinement witnesses take and give `Term`

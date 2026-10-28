@@ -1,8 +1,9 @@
 {- | Learn exclusions from terms that a checker rejected and terms that it accepted.
 
-'generalize' gives the least general generalization of terms as a
+'generalize' gives a least general generalization of terms as a
 'Template': the anti-unification of Plotkin and of Reynolds (Machine
-Intelligence 5, 1970), with anonymous holes. 'learnExclusions' puts the
+Intelligence 5, 1970). A difference that occurs at two positions gets one
+named hole, so the template keeps the equality. 'learnExclusions' puts the
 rejected terms into clusters. The generalization of each cluster matches no
 accepted term, so each cluster gives one exclusion. 'exclusionPrice' counts
 the terms of a language that exclusions remove within a size bound, so a
@@ -25,20 +26,34 @@ module Data.CFTA.Template.Learn (
     Price (..),
     priceExtra,
     exclusionPrice,
+    exclusionPriceUpTo,
 ) where
 
 import Data.Containers.ListUtils (nubOrd)
 import Data.List (find, sortOn, tails)
 import Data.List.NonEmpty (NonEmpty (..))
 import qualified Data.List.NonEmpty as NonEmpty
+import qualified Data.Map.Strict as Map
 import Data.Maybe (isJust, isNothing)
 import Data.Ord (Down (..))
+import Data.Text (Text)
+import qualified Data.Text as Text
 
 import qualified Data.CFTA as FTA
 import Data.CFTA.Constraint (Constraint)
 import Data.CFTA.Index (Cardinality (..), Size (..))
-import Data.CFTA.Sized (Sized, SizedError, countOfSize, rankOfSize, sized)
-import Data.CFTA.Template (Template (..), excludeAnywhereFTA, excludeFTA, matchesNowhere, matchesTemplate)
+import Data.CFTA.Refinement.Verdict (Entailment (Entailment))
+import Data.CFTA.Sized (Sized, SizedError, countOfSize, rankOfSize, sized, sizedUpTo)
+import Data.CFTA.Symbol (Symbol)
+import Data.CFTA.Template (
+    Template (..),
+    excludeAnywhereFTA,
+    excludeFTA,
+    matchesNowhere,
+    matchesTemplate,
+    repeatedNames,
+ )
+import Data.CFTA.Template.Named (excludeNamedAnywhereFTA, excludeNamedFTA)
 import Data.CFTA.Term (Term)
 import qualified Data.CFTA.Term as Term
 
@@ -53,27 +68,87 @@ removes :: (Eq symbol) => Placement -> Template symbol -> Term symbol -> Bool
 removes AtRoot template term = matchesTemplate template term
 removes Anywhere template term = not (matchesNowhere [template] term)
 
-{- | The least general generalization of terms, with anonymous holes.
+{- | A least general generalization of terms.
 
 Terms with one root symbol and one arity give that symbol with the
-generalizations of their children. Terms with one arity and different root
-symbols give 'AnyNode' with the generalizations of their children; for
-leaves, this is @AnyNode []@, which matches each leaf. Terms with different
-arities give 'Hole'. Each of the terms matches the result.
+generalizations of their children. At a position where the root symbols
+differ, the terms at that position are a difference. A difference that
+occurs at two or more positions gives a named hole there, as in the
+anti-unification of Plotkin: @x - x@ and @1 - 1@ give @v0 - v0@. Another
+difference of terms with one arity gives 'AnyNode' with the generalizations
+of their children; for leaves, this is @AnyNode []@, which matches each
+leaf. Another difference gives 'Hole'. Each of the terms matches the result.
 
-The holes have no names. Thus the result cannot state that two positions
-hold the same subterm. With named variables, @x - x@ and @1 - 1@ generalize
-to @v - v@. Here they generalize to @_ - _@, which also matches @x - 1@.
+A named hole and @AnyNode []@ are not comparable: the first keeps an
+equality, and the second keeps a shape. So there is no unique least general
+generalization. This function prefers the equality. The names are @v0@,
+@v1@, and so on, in preorder.
 -}
-generalize :: (Eq symbol) => NonEmpty (Term symbol) -> Template symbol
-generalize terms@(first :| _)
-    | any ((/= arity) . Term.arity) terms = Hole
-    | all ((== symbol) . Term.rootLabel) terms = TemplateNode symbol parts
-    | otherwise = AnyNode parts
+generalize :: (Ord symbol) => NonEmpty (Term symbol) -> Template symbol
+generalize terms = rename (unshare (build terms))
   where
-    symbol = Term.rootLabel first
-    arity = Term.arity first
-    parts = [generalize (Term.childAt index <$> terms) | index <- [0 .. arity - 1]]
+    -- The differences that occur at two or more positions, and a temporary name for each.
+    repeated = Map.filter (> 1) (Map.fromListWith (+) [(difference, 1 :: Int) | difference <- differences terms])
+    names = Map.fromList (zip (Map.keys repeated) [Text.pack (show index) | index <- [0 :: Int ..]])
+    columnsByName = Map.fromList [(name, column) | (column, name) <- Map.toList names]
+    differences column
+        | sameSymbol column = concatMap differences (columns column)
+        | sameArity column = column : concatMap differences (columns column)
+        | otherwise = [column]
+    build column
+        | sameSymbol column = TemplateNode (Term.rootLabel (NonEmpty.head column)) (map build (columns column))
+        | Just name <- Map.lookup column names = NamedHole name
+        | sameArity column = AnyNode (map build (columns column))
+        | otherwise = Hole
+    -- A name that the result has only once states no equality.
+    unshare template = replaceNames once template
+      where
+        once name
+            | length (filter (== name) (holeNames template)) == 1 =
+                maybe Hole anonymous (Map.lookup name columnsByName)
+            | otherwise = NamedHole name
+    rename template = replaceNames (\name -> NamedHole (Map.findWithDefault name name fresh)) template
+      where
+        fresh = Map.fromList (zip (nubOrd (holeNames template)) [Text.pack ("v" <> show index) | index <- [0 :: Int ..]])
+
+-- | Whether the terms have one root symbol and one arity.
+sameSymbol :: (Eq symbol) => NonEmpty (Term symbol) -> Bool
+sameSymbol column@(first :| _) = sameArity column && all ((== Term.rootLabel first) . Term.rootLabel) column
+
+-- | Whether the terms have one arity.
+sameArity :: NonEmpty (Term symbol) -> Bool
+sameArity column@(first :| _) = all ((== Term.arity first) . Term.arity) column
+
+-- | The terms at each child index, for terms of one arity.
+columns :: NonEmpty (Term symbol) -> [NonEmpty (Term symbol)]
+columns column@(first :| _) = [Term.childAt index <$> column | index <- [0 .. Term.arity first - 1]]
+
+-- | The generalization without named holes.
+anonymous :: (Eq symbol) => NonEmpty (Term symbol) -> Template symbol
+anonymous column
+    | sameSymbol column = TemplateNode (Term.rootLabel (NonEmpty.head column)) (map anonymous (columns column))
+    | sameArity column = AnyNode (map anonymous (columns column))
+    | otherwise = Hole
+
+-- | The names of the named holes of a template, in preorder, with repetitions.
+holeNames :: Template symbol -> [Text]
+holeNames template = case template of
+    NamedHole name -> [name]
+    Hole -> []
+    AnyNode parts -> concatMap holeNames parts
+    TemplateNode _ parts -> concatMap holeNames parts
+    AnyPrefix parts -> concatMap holeNames parts
+    TemplatePrefix _ parts -> concatMap holeNames parts
+
+-- | Replace each named hole.
+replaceNames :: (Text -> Template symbol) -> Template symbol -> Template symbol
+replaceNames replace template = case template of
+    NamedHole name -> replace name
+    Hole -> Hole
+    AnyNode parts -> AnyNode (map (replaceNames replace) parts)
+    TemplateNode symbol parts -> TemplateNode symbol (map (replaceNames replace) parts)
+    AnyPrefix parts -> AnyPrefix (map (replaceNames replace) parts)
+    TemplatePrefix symbol parts -> TemplatePrefix symbol (map (replaceNames replace) parts)
 
 -- | A learned exclusion: a template, and the rejected terms that it generalizes.
 data Exclusion symbol = Exclusion
@@ -118,7 +193,7 @@ learnExclusions placement rejected accepted =
         [Conflict term blocking | term <- unique, Just blocking <- [blocker (single term)]]
   where
     unique = nubOrd rejected
-    single term = generalize (term :| [])
+    single term = anonymous (term :| [])
     blocker template = find (removes placement template) accepted
     initial = [(single term, [term]) | term <- unique, isNothing (blocker (single term))]
 
@@ -140,16 +215,20 @@ learnExclusions placement rejected accepted =
             ]
         rank (template, _) = (Down (specificity template), template)
 
-{- | The symbols and arities that a template fixes: two for a 'TemplateNode'
-(its symbol and its arity), and one for an 'AnyNode' (its arity).
+{- | The symbols, arities, and equalities that a template fixes: two for a
+'TemplateNode' (its symbol and its arity), one for an 'AnyNode' (its arity),
+and one for each repetition of a name.
 -}
 specificity :: Template symbol -> Int
-specificity template = case template of
-    Hole -> 0
-    AnyNode parts -> 1 + sum (map specificity parts)
-    TemplateNode _ parts -> 2 + sum (map specificity parts)
-    AnyPrefix parts -> sum (map specificity parts)
-    TemplatePrefix _ parts -> 1 + sum (map specificity parts)
+specificity template = shape template + sum [length paths - 1 | (_, paths) <- repeatedNames template]
+  where
+    shape part = case part of
+        Hole -> 0
+        NamedHole _ -> 0
+        AnyNode parts -> 1 + sum (map shape parts)
+        TemplateNode _ parts -> 2 + sum (map shape parts)
+        AnyPrefix parts -> sum (map shape parts)
+        TemplatePrefix _ parts -> 1 + sum (map shape parts)
 
 {- | The terms of a language with at most a bound of nodes, before and after
 an exclusion.
@@ -174,6 +253,10 @@ bound. The list holds the rejected terms.
 'Data.CFTA.Sized' counts the language before and after the exclusion. Give
 one template for the price of that template. The prices of templates that
 remove the same terms do not add up to the price of all of them.
+
+A template that repeats a name gives a guard ("Data.CFTA.Template.Named"),
+and 'sized' rejects the guard with 'Data.CFTA.Sized.ResidualGuard'. Use
+'exclusionPriceUpTo' for such a template.
 -}
 exclusionPrice ::
     (Ord state, Ord symbol) =>
@@ -183,19 +266,49 @@ exclusionPrice ::
     [Template symbol] ->
     FTA.FTA state symbol Constraint ->
     Either SizedError Price
-exclusionPrice placement bound@(Size limit) rejected templates automaton = do
+exclusionPrice placement bound rejected templates automaton = do
     before <- sized automaton
-    after <- case placement of
-        AtRoot -> sized (excludeFTA templates automaton)
-        Anywhere -> sized (excludeAnywhereFTA templates automaton)
-    let removed =
-            [ term
-            | term <- nubOrd rejected
-            , toInteger (length term) <= limit
-            , isJust (rankOfSize before term)
-            , any (\template -> removes placement template term) templates
-            ]
-    pure (Price (total before) (total after) (toInteger (length removed)))
+    after <- case (placement, all (null . repeatedNames) templates) of
+        (AtRoot, True) -> sized (excludeFTA templates automaton)
+        (Anywhere, True) -> sized (excludeAnywhereFTA templates automaton)
+        (AtRoot, False) -> sized (excludeNamedFTA templates automaton)
+        (Anywhere, False) -> sized (excludeNamedAnywhereFTA templates automaton)
+    pure (priceOf placement bound rejected templates before after)
+
+{- | 'exclusionPrice' for any templates, also with repeated names, on an
+automaton of 'Symbol's. 'Data.CFTA.Sized.sizedUpTo' decides the guards of the
+named exclusion on each term that it builds, so the counts are exact. It
+lists each term up to the bound, so its cost grows with the language.
+-}
+exclusionPriceUpTo ::
+    (Ord state) =>
+    Placement ->
+    Size ->
+    [Term Symbol] ->
+    [Template Symbol] ->
+    FTA.FTA state Symbol Constraint ->
+    IO (Either SizedError Price)
+exclusionPriceUpTo placement bound rejected templates automaton = do
+    before <- sizedUpTo syntactic bound automaton
+    after <- sizedUpTo syntactic bound $ case placement of
+        AtRoot -> excludeNamedFTA templates automaton
+        Anywhere -> excludeNamedAnywhereFTA templates automaton
+    pure (priceOf placement bound rejected templates <$> before <*> after)
   where
-    total :: Sized symbol -> Integer
+    -- The guards compare subterms only, so they need no solver.
+    syntactic = Entailment $ \_ _ -> fail "exclusionPriceUpTo: a template guard asked a solver"
+
+-- | The price from the size classes before and after an exclusion.
+priceOf ::
+    (Ord symbol) => Placement -> Size -> [Term symbol] -> [Template symbol] -> Sized symbol -> Sized symbol -> Price
+priceOf placement bound@(Size limit) rejected templates before after =
+    Price (total before) (total after) (toInteger (length removed))
+  where
+    removed =
+        [ term
+        | term <- nubOrd rejected
+        , toInteger (length term) <= limit
+        , isJust (rankOfSize before term)
+        , any (\template -> removes placement template term) templates
+        ]
     total classes = sum [count | size <- [1 .. bound], let Cardinality count = countOfSize classes size]

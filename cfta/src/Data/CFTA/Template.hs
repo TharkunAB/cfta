@@ -1,7 +1,9 @@
 {- | Patterns over the terms of a language.
 
 A 'Template' matches a term by its root symbol and child positions. 'Hole'
-matches any complete subtree. Exact patterns require the complete child list;
+matches any complete subtree. 'NamedHole' also matches any complete
+subtree, but the named holes with one name must match equal subtrees. Exact
+patterns require the complete child list;
 prefix patterns constrain only the leading children. 'restrict' keeps exactly
 the matching terms of an interned graph, and 'restrictFTA' those of an
 explicit-state automaton. 'exclude' keeps exactly the terms of an interned
@@ -12,9 +14,20 @@ unambiguous result, so counts and ranks over it stay exact. None of them
 interprets transition annotations; a constraint theory reduces its
 constraints afterwards. 'preorderPrefix' makes the template of a prefix of
 a term in preorder.
+
+A template is linear when no name occurs at two named holes. The operations
+on automata in this module take linear templates only, and they read a named
+hole as a 'Hole'. The set of terms that match a template with a repeated name
+is not a regular tree language in general, so an automaton without
+constraints cannot accept exactly these terms or exactly the other terms.
+'repeatedNames' gives the equalities that such a template requires, and
+'skeleton' gives the linear template without them.
 -}
 module Data.CFTA.Template (
     Template (..),
+    skeleton,
+    repeatedNames,
+    childTemplates,
     matchesTemplate,
     matchesNone,
     matchesNowhere,
@@ -43,16 +56,18 @@ import qualified Data.Map.Strict as Map
 import Data.Maybe (isJust, isNothing, mapMaybe)
 import qualified Data.Sequence as Seq
 import qualified Data.Set as Set
+import Data.Text (Text)
 import Data.Typeable (Typeable)
 
 import Data.CFTA (FTA, Transition (..))
 import qualified Data.CFTA as FTA
-import Data.CFTA.Index (Arity (..))
+import Data.CFTA.Index (Arity (..), ChildIndex (..))
 import Data.CFTA.Internal.Tree (explore)
 import Data.CFTA.Interned (fromRows)
 import Data.CFTA.Interned.Memo (memo)
 import Data.CFTA.Interned.Operations (nodeEdges)
 import Data.CFTA.Interned.Type
+import Data.CFTA.Path (Path, path)
 import Data.CFTA.Term (Term)
 import qualified Data.CFTA.Term as Term
 
@@ -68,13 +83,58 @@ data Template symbol
       AnyPrefix ![Template symbol]
     | -- | Match this root symbol when its children begin with this prefix.
       TemplatePrefix !symbol ![Template symbol]
+    | {- | Match any complete subtree. All named holes with this name in one
+      template must match equal subtrees.
+      -}
+      NamedHole !Text
     deriving (Eq, Ord, Read, Show)
+
+-- | The template with each named hole replaced by a 'Hole'.
+skeleton :: Template symbol -> Template symbol
+skeleton template = case template of
+    Hole -> Hole
+    AnyNode parts -> AnyNode (map skeleton parts)
+    TemplateNode symbol parts -> TemplateNode symbol (map skeleton parts)
+    AnyPrefix parts -> AnyPrefix (map skeleton parts)
+    TemplatePrefix symbol parts -> TemplatePrefix symbol (map skeleton parts)
+    NamedHole _ -> Hole
+
+{- | The paths of each name that occurs at two or more named holes, in the
+order of the first occurrence in preorder. The terms that match the template
+are the terms that match its 'skeleton' and hold equal subterms at the paths
+of each name.
+-}
+repeatedNames :: Template symbol -> [(Text, [Path])]
+repeatedNames template =
+    [ (name, paths)
+    | name <- nubOrd (map fst occurrences)
+    , let paths = [location | (other, location) <- occurrences, other == name]
+    , length paths > 1
+    ]
+  where
+    occurrences = go [] template
+    go reversed part = case part of
+        NamedHole name -> [(name, path (reverse reversed))]
+        Hole -> []
+        AnyNode parts -> children parts
+        TemplateNode _ parts -> children parts
+        AnyPrefix parts -> children parts
+        TemplatePrefix _ parts -> children parts
+      where
+        children parts = concat (zipWith (\index -> go (ChildIndex index : reversed)) [0 ..] parts)
+
+-- | The linear template with each named hole replaced by a 'Hole'. A repeated name is an error.
+linear :: String -> Template symbol -> Template symbol
+linear operation template
+    | null (repeatedNames template) = skeleton template
+    | otherwise = error ("Data.CFTA.Template." <> operation <> ": a template repeats a name; use Data.CFTA.Template.Named")
 
 {- | The pattern for each child of a constructor with the given symbol and
 arity, or 'Nothing' when the constructor cannot match.
 -}
 childTemplates :: (Eq symbol) => Template symbol -> symbol -> Arity -> Maybe [Template symbol]
 childTemplates Hole _ (Arity count) = Just (replicate count Hole)
+childTemplates (NamedHole _) _ (Arity count) = Just (replicate count Hole)
 childTemplates (AnyNode templates) _ arity = exact templates arity
 childTemplates (TemplateNode symbol templates) actual arity
     | symbol == actual = exact templates arity
@@ -92,11 +152,21 @@ prefix templates (Arity count)
     | length templates <= count = Just (templates ++ replicate (count - length templates) Hole)
     | otherwise = Nothing
 
--- | Test a concrete term against a template.
+{- | Test a concrete term against a template. The subterms at the named holes
+with one name must be equal.
+-}
 matchesTemplate :: (Eq symbol) => Template symbol -> Term symbol -> Bool
-matchesTemplate template (Term.Node symbol children) =
-    maybe False (\templates -> and (zipWith matchesTemplate templates children)) $
-        childTemplates template symbol (Arity (length children))
+matchesTemplate template term = maybe False consistent (bindings template term)
+  where
+    consistent bound = and [subterm == other | (name, subterm) <- bound, (otherName, other) <- bound, name == otherName]
+
+-- | The subterm at each named hole, or 'Nothing' when the term does not match the skeleton.
+bindings :: (Eq symbol) => Template symbol -> Term symbol -> Maybe [(Text, Term symbol)]
+bindings Hole _ = Just []
+bindings (NamedHole name) term = Just [(name, term)]
+bindings template (Term.Node symbol children) = do
+    templates <- childTemplates template symbol (Arity (length children))
+    concat <$> zipWithM bindings templates children
 
 -- | Whether a concrete term matches none of the templates.
 matchesNone :: (Eq symbol) => [Template symbol] -> Term symbol -> Bool
@@ -106,13 +176,19 @@ matchesNone templates term = not (any (`matchesTemplate` term) templates)
 restrict ::
     (Hashable symbol, Typeable symbol) =>
     Template symbol -> Node symbol -> Node symbol
-restrict Hole node = node
-restrict (AnyPrefix []) node = node
-restrict _ EmptyNode = EmptyNode
-restrict template node@(Mu _) = restrict template (Node $ nodeEdges node)
-restrict template node@(InternedUnion _) = restrict template (Node $ nodeEdges node)
-restrict template (Node edges) = Node (mapMaybe (restrictEdge template) edges)
-restrict _ (Rec _) = error "restrict: unexpected free recursive reference"
+restrict template = restrictLinear (linear "restrict" template)
+
+-- | 'restrict' for a template without named holes.
+restrictLinear ::
+    (Hashable symbol, Typeable symbol) =>
+    Template symbol -> Node symbol -> Node symbol
+restrictLinear Hole node = node
+restrictLinear (AnyPrefix []) node = node
+restrictLinear _ EmptyNode = EmptyNode
+restrictLinear template node@(Mu _) = restrictLinear template (Node $ nodeEdges node)
+restrictLinear template node@(InternedUnion _) = restrictLinear template (Node $ nodeEdges node)
+restrictLinear template (Node edges) = Node (mapMaybe (restrictEdge template) edges)
+restrictLinear _ (Rec _) = error "restrict: unexpected free recursive reference"
 
 restrictEdge ::
     (Hashable symbol, Typeable symbol) =>
@@ -120,7 +196,7 @@ restrictEdge ::
 restrictEdge Hole edge = Just edge
 restrictEdge (AnyPrefix []) edge = Just edge
 restrictEdge template edge =
-    (\templates -> setChildren edge (zipWith restrict templates children))
+    (\templates -> setChildren edge (zipWith restrictLinear templates children))
         <$> childTemplates template (edgeSymbol edge) (Arity (length children))
   where
     children = edgeChildren edge
@@ -139,7 +215,7 @@ restrictFTA template automaton =
         $ FTA.mkFTA initial
         $ explore restrictTransitions transitionChildren initial
   where
-    initial = (FTA.initialState automaton, template)
+    initial = (FTA.initialState automaton, linear "restrictFTA" template)
 
     restrictTransitions (state, wanted) = mapMaybe (restrictTransition wanted) (FTA.transitionsFrom automaton state)
     restrictTransition wanted transition =
@@ -181,8 +257,9 @@ before the input graph reaches its position.
 exclude ::
     (Ord symbol, Hashable symbol, Typeable symbol) =>
     [Template symbol] -> Node symbol -> Node symbol
-exclude templates = walk
+exclude given = walk
   where
+    templates = map (linear "exclude") given
     (hole, prepared) = prepareTemplates templates
     -- One application of 'refine' for all the nodes, so that they share its table.
     refined = refine originalTemplate (preparedChildren hole)
@@ -230,6 +307,7 @@ prepareTemplates templates = (catalog Map.! Hole, map (catalog Map.!) templates)
     children (TemplateNode _ parts) = parts
     children (AnyPrefix parts) = parts
     children (TemplatePrefix _ parts) = parts
+    children (NamedHole _) = []
 
 {- | Select already prepared children with the original shape check. Only
 prefix padding and Hole introduce parts outside the stored child list.
@@ -310,8 +388,13 @@ excludeBelow ::
     FTA (state, Obligation symbol) symbol annotation
 excludeBelow everywhere templates automaton =
     -- The input is ranked, so the result is ranked and validation cannot fail.
-    fromRight (error "excludeBelow: the exclusion from a ranked automaton is ranked") $
-        uncurry FTA.mkFTA (obligationRows everywhere (FTA.transitionsFrom automaton) templates (FTA.initialState automaton))
+    fromRight (error "excludeBelow: the exclusion from a ranked automaton is ranked")
+        $ uncurry FTA.mkFTA
+        $ obligationRows
+            (map (linear "excludeAnywhereFTA") everywhere)
+            (FTA.transitionsFrom automaton)
+            (map (linear "excludeFTA") templates)
+            (FTA.initialState automaton)
 
 {- | The pairs of a state and an 'Obligation' that a state reaches, with
 their transitions, when its terms must match none of the second templates
@@ -364,8 +447,9 @@ excludeAnywhere ::
     [Template symbol] -> Node symbol -> Node symbol
 excludeAnywhere templates root
     | not (Set.null (freeVars root)) = error "excludeAnywhere: unexpected free recursive reference"
-    | otherwise = uncurry fromRows (Map.fromList <$> obligationRows templates transitionsOf templates root)
+    | otherwise = uncurry fromRows (Map.fromList <$> obligationRows linearTemplates transitionsOf linearTemplates root)
   where
+    linearTemplates = map (linear "excludeAnywhere") templates
     transitionsOf node = [Transition (edgeSymbol edge) (edgeChildren edge) (edgeConstraint edge) | edge <- nodeEdges node]
 
 {- | Keep exactly the terms of an automaton of which no subterm matches one
@@ -656,6 +740,7 @@ meetTemplate left right = do
     parts (TemplateNode symbol children) = (Just symbol, True, children)
     parts (AnyPrefix children) = (Nothing, False, children)
     parts (TemplatePrefix symbol children) = (Just symbol, False, children)
+    parts (NamedHole _) = (Nothing, False, [])
 
 -- | Whether a template has no holes, so that it matches one term only.
 ground :: Template symbol -> Bool
@@ -665,6 +750,7 @@ ground _ = False
 -- | Whether a template matches every term.
 trivial :: Template symbol -> Bool
 trivial Hole = True
+trivial (NamedHole _) = True
 trivial (AnyPrefix []) = True
 trivial _ = False
 
