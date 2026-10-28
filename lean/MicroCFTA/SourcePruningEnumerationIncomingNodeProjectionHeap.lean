@@ -1,0 +1,134 @@
+import MicroCFTA.SourcePruningEnumerationIncomingNodeResources
+import MicroCFTA.SourcePruningEnumerationIncomingQueryProjectionHeap
+
+/-!
+# Projection heaps at actual incoming node returns
+
+Successful outer observations retain their own native caller.
+Read errors, missing actions and Empty rejection retain that caller's resources.
+Only the actual completed query branch can add native edge records.
+-/
+namespace MicroCFTA.SourcePruningEnumerationIncomingNode
+open EnumerationState EnumerationCorrectness EnumerationSchedule
+open InternedConstructorTemplates InternedProbeProvenance
+open SourcePruningEnumerationNodes SourcePruningEnumerationObservation
+open SourceCurrentAllocatedNativeInventoryState (Inventory)
+open SourceCurrentAllocatedPartialInvariant (Context)
+open SourceCurrentAllocatedNativeResourceForecast (Profile Room)
+open SourceCurrentConstrainedCapGeneratedQueryResources (Fits)
+local notation "Symbol" => SourcePruningTemplates.Symbol
+local notation "Constraint" => SourceSymbolicIndex.Constraint FullSyntax.Formula
+local notation "Node" => Value Symbol Constraint
+variable {EnumGuard : Type} {bits : Nat}
+local notation "Caller" => SourceCurrentAllocatedPartialState.State
+local notation "Core" => EnumerationState.State Symbol EnumGuard
+local notation "Memos" => EndpointMemoGateTrace.Memos
+local notation "Queries" => SourceEndpointMemo.Memos
+local notation "Heap" => SourceEqualityAnnotationHeap.Heap
+local notation "forecast" => SourcePruningEnumerationIncomingQuery.forecast
+local notation "queryAlphabet" => SourceCurrentGeneratedQueryGuardResources.forecast
+local notation "projectable" =>
+  (fun constraint : Constraint => SourcePruningEnumerationConstraint.project constraint ≠ none)
+local notation "ProjectionHeap" => SourceEqualityAnnotationHeap.Heap projectable
+variable [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Constraint)]
+attribute [local instance] SourcePruningEnumerationIncomingNode.incomingNodeMonadList
+
+variable [DecidableEq Node]
+
+/-- Actual outer successes retain the original resource pair and their own physical projection heap. -/
+theorem observed_resources_projection_heap (alphabet : List Constraint) (profile : Profile)
+    (formulas : SourceGuards.Formulas FullSyntax.Formula) (solver : SourceGuards.Entailment FullSyntax.Formula)
+    (inventory : Inventory) (beforeCaller : Caller (bits + 2)) (before : Core)
+    (checkEmpty : Bool) (r n p h uv : Nat) (incoming : Node) (incomingScs : List EnumerationState.Suspended)
+    (memos : Memos) (initial : Context formulas solver inventory beforeCaller memos)
+    (realized : PendingRealized beforeCaller.checked.native.machine.heap before)
+    (available : Available beforeCaller.checked.native.machine.heap incoming) (closed : incoming.free = [])
+    (fits : Fits profile beforeCaller.checked) (room : Room bits profile)
+    (known : Heap (fun guard => guard ∈ alphabet) beforeCaller.checked.native.machine.heap)
+    (originalProjection : ProjectionHeap beforeCaller.checked.native.machine.heap)
+    {result : Option (List (Except EnumerationState.Error (Unit × Core)))}
+    {afterCaller : Caller (bits + 2)} {savedQueries : Queries} {read : Core}
+    (observed : run checkEmpty r n p h beforeCaller before uv incoming incomingScs memos.query =
+      (.ok result, afterCaller, savedQueries, read)) :
+    Fits (forecast alphabet profile) afterCaller.checked ∧
+      Heap (fun guard => guard ∈ queryAlphabet alphabet profile) afterCaller.checked.native.machine.heap ∧
+      ProjectionHeap afterCaller.checked.native.machine.heap := by
+  have unchanged : Fits (forecast alphabet profile) beforeCaller.checked ∧
+      Heap (fun guard => guard ∈ queryAlphabet alphabet profile) beforeCaller.checked.native.machine.heap ∧
+      ProjectionHeap beforeCaller.checked.native.machine.heap := by
+    refine ⟨fits.mono (SourcePruningEnumerationIncomingQuery.forecast_ge alphabet profile), ?_, originalProjection⟩
+    intro key edge found
+    exact SourceCurrentGeneratedQueryGuardResources.forecast_ge alphabet profile (known key edge found)
+  rw [run] at observed
+  cases foundEq : UnionFind.findRoot r before.representatives uv with
+  | none =>
+      simp only [foundEq] at observed
+      have same := congrArg (fun output => output.2.1) observed
+      dsimp only at same
+      rw [← same]
+      exact unchanged
+  | some found =>
+      simp only [foundEq] at observed
+      cases stored : before.values[found.representative]? with
+      | none =>
+          simp only [stored] at observed
+          have same := congrArg (fun output => output.2.1) observed
+          dsimp only at same
+          rw [← same]
+          exact unchanged
+      | some value =>
+          cases value with
+          | eliminated | enumerated =>
+              simp only [stored] at observed
+              have same := congrArg (fun output => output.2.1) observed
+              dsimp only at same
+              rw [← same]
+              exact unchanged
+          | unenumerated oldNode oldScs =>
+              simp only [stored] at observed
+              cases oldNode with
+              | none =>
+                  cases encoded : encodeNode incoming <;> simp only [encoded] at observed <;>
+                    have same := congrArg (fun output => output.2.1) observed <;>
+                    dsimp only at same <;>
+                    rw [← same] <;> exact unchanged
+              | some oldHandle =>
+                  cases decoded : lookupNode beforeCaller.checked.native.machine.heap oldHandle with
+                  | none =>
+                      simp only [decoded] at observed
+                      have same := congrArg (fun output => output.2.1) observed
+                      dsimp only at same
+                      rw [← same]
+                      exact unchanged
+                  | some old =>
+                      obtain ⟨value, found, resident, oldClosed⟩ := realized _ oldHandle oldScs stored
+                      have same := Option.some.inj (found.symm.trans decoded)
+                      subst value
+                      simp only [decoded] at observed
+                      cases native : SourceEqualityNativeDemand.execute n
+                          (.code (SourceRecursiveIntersectionCode.requestNode IntersectionEmptyDomain.emptyDomain incoming old))
+                          beforeCaller.checked with
+                      | yielded | failed | constraintError | blocked =>
+                          simp only [native] at observed
+                          cases observed
+                      | done query queried =>
+                          simp only [native] at observed
+                          cases phase : (if checkEmpty then
+                              SourcePruningEnumerationEnabledEmpty.check p h query queried beforeCaller.fourth memos.query
+                              else (.done false queried beforeCaller.fourth, memos.query)) with
+                          | mk outcome queries =>
+                              simp only [phase] at observed
+                              cases outcome with
+                              | failed => cases observed
+                              | done answer checkedAfter saved =>
+                                  have bounded := SourcePruningEnumerationIncomingQuery.raw_done_resources_projection_heap
+                                    alphabet profile formulas solver inventory beforeCaller incoming old checkEmpty memos
+                                    initial available resident closed oldClosed fits room known originalProjection native phase
+                                  cases encoded : encodeNode (if answer then .empty else query) <;>
+                                    simp only [encoded, SourceCurrentAllocatedConjunctionWorker.Outcome.state,
+                                      SourceCurrentAllocatedConjunctionWorker.Outcome.memo] at observed <;>
+                                    have same := congrArg (fun output => output.2.1) observed <;>
+                                    dsimp only at same <;>
+                                    rw [← same] <;> exact ⟨bounded.1, bounded.2.1, bounded.2.2.1⟩
+
+end MicroCFTA.SourcePruningEnumerationIncomingNode
