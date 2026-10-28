@@ -18,3 +18,8 @@
   languages with named exclusions.
 - Add `printUpdate` and `parseUpdate`: the text form `update 1;` of a
   `Language.Update`, one statement for each operation.
+- Add doc comments: a `///` line documents the next header, state,
+  production, fact, or exclusion. `printGraphNotesWith`,
+  `printDocumentNotesWith`, `printLanguageNotesWith`, and their parsers keep
+  the comments beside the value, in `Notes`. The other readers drop them.
+  `showCodec` gives the state labels of `Show` and `Read`.

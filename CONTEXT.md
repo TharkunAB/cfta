@@ -84,6 +84,10 @@ Wilf, and Feat (ranking).
 - **Graph snapshot**: a stored explicit graph with its symbols, refinements,
   constraints, states, and transitions. It need not retain the source facts
   from which its compiled constraints were made.
+- **Doc comment**: a `///` line comment that documents the next file header,
+  state, production, fact, or exclusion of a text file. The text format keeps
+  doc comments in the **notes** beside a value and not in the value, so a doc
+  comment does not change the value or its identity.
 
 ## Constraints
 

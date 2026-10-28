@@ -163,6 +163,54 @@ spec = do
                 let printed = T.printUpdateWith strings $ Merge.diff mergeBase other
                 L.update mergeBase (must $ T.parseUpdateWith strings printed) `shouldBe` Right other
 
+    describe "doc comments" $ do
+        it "keep the comments of a graph and of its states" $
+            forM_ graphs $ \(_, graph) ->
+                roundTrip
+                    (uncurry $ T.printGraphNotesWith strings)
+                    (T.parseGraphNotesWith strings)
+                    (T.Notes $ graphComments graph, graph)
+
+        it "keep the comments of a language: its states, productions, facts, and exclusions" $
+            forM_ (map (withForms . document . snd) graphs <> [withForms $ singleSource name noConstraint | name <- names]) $ \language ->
+                roundTrip
+                    (uncurry $ T.printLanguageNotesWith strings)
+                    (T.parseLanguageNotesWith strings)
+                    (T.Notes $ languageComments language, language)
+
+        it "keep the comments of a document" $
+            forM_ graphs $ \(_, graph) -> do
+                let source = document graph
+                    comments = Map.delete (T.OnExclusion "0") $ languageComments $ L.Language source Map.empty
+                roundTrip (uncurry $ T.printDocumentNotesWith strings) (T.parseDocumentNotesWith strings) (T.Notes comments, source)
+
+        it "print no comment of an item that the value does not have" $ do
+            let extra = Map.fromList [(T.OnState "missing", "x"), (T.OnProduction "s" "p", "y"), (T.OnExclusion "e", "z")]
+            T.parseGraphNotesWith strings (T.printGraphNotesWith strings (T.Notes $ graphComments ordinary <> extra) ordinary)
+                `shouldBe` Right (T.Notes $ graphComments ordinary, ordinary)
+
+        it "leave the text of the printers without comments unchanged" $ do
+            forM_ graphs $ \(_, graph) ->
+                T.printGraphNotesWith strings mempty graph `shouldBe` T.printGraphWith strings graph
+            let language = withForms $ document liquid
+            T.printLanguageNotesWith strings mempty language `shouldBe` T.printLanguageWith strings language
+
+        it "are dropped by the readers without comments" $ do
+            T.parseGraphWith strings (T.printGraphNotesWith strings (T.Notes $ graphComments liquid) liquid) `shouldBe` Right liquid
+            let language = withForms $ document liquid
+            T.parseLanguageWith strings (T.printLanguageNotesWith strings (T.Notes $ languageComments language) language)
+                `shouldBe` Right language
+
+        it "need exactly three slashes" $
+            T.parseGraphNotesWith strings "//// not a doc comment\n// nor this\ngraph 1; start S; state S {}"
+                `shouldBe` Right (mempty, must $ FTA.mkFTA "S" [("S", [])])
+
+        it "must come before an item that takes a comment" $
+            forM_ misplacedComments $ \text ->
+                case T.parseLanguageWith strings text of
+                    Left failure -> Text.pack (T.explainTextError failure) `shouldSatisfy` Text.isInfixOf "doc comment"
+                    Right _ -> expectationFailure $ "accepted " <> show text
+
     describe "ranks" $
         it "are the same after a round trip" $
             forM_ (filter ((/= "all-forms") . fst) graphs) $ \(_, graph) ->
@@ -334,6 +382,40 @@ samplingCheckpoints =
 -- | Binary trees: a leaf, or a node with two trees.
 trees :: FTA.PlainFTA String Symbol
 trees = must $ FTA.mkFTA "tree" [("tree", [leaf "leaf", FTA.Transition "node" ["tree", "tree"] noConstraint])]
+
+-- | A comment on the file and on each state of a graph, from 'commentTexts' in turn.
+graphComments :: FTA.PlainFTA String Symbol -> Map.Map (T.CommentTarget String) Text
+graphComments graph =
+    Map.fromList $ zip (T.OnFile : map T.OnState (Map.keys $ FTA.transitionTable graph)) (cycle commentTexts)
+
+-- | A comment on every item of a language, from 'commentTexts' in turn.
+languageComments :: L.Language String -> Map.Map (T.CommentTarget String) Text
+languageComments language = Map.fromList $ zip targets (cycle commentTexts)
+  where
+    targets =
+        T.OnFile
+            : concat
+                [ T.OnState state
+                    : concat
+                        [ T.OnProduction state name : [T.OnFact state name fact | fact <- Map.keys facts]
+                        | FTA.Transition _ _ (D.Annotation name facts) <- edges
+                        ]
+                | (state, edges) <- Map.toList $ FTA.transitionTable $ D.sourceGraph $ L.source language
+                ]
+                <> map T.OnExclusion (Map.keys $ L.exclusions language)
+
+-- | Comment texts with empty lines, spaces at either end, slashes, carriage returns, and Unicode.
+commentTexts :: [Text]
+commentTexts = ["plain", "", " leading space", "/ slash", "two\nlines", "\n", "λ 😀 \"quoted\"", "trailing space ", "a\r\nb"]
+
+-- | Doc comments with no item after them, in a language.
+misplacedComments :: [Text]
+misplacedComments =
+    [ "language 1;\n/// x\nstart S; state S {}"
+    , "language 1; start S; state S {}\n/// x\n"
+    , "language 1; start S; state S { a = a; /// x\n}"
+    , "language 1; start S; state S {} exclude e = root _;\n/// x"
+    ]
 
 -- | Print and parse again: the value is the same, and so is the text.
 roundTrip ::
