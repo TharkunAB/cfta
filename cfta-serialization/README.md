@@ -257,6 +257,36 @@ for a prefix. Thus `f(...)` and `_(...)` differ from exact leaves. Templates kee
 complete symbol refinements, so a term printed after `eraseRefinements` does not
 select the same terms. See [editable languages](../docs/editable-languages.md)
 for the updates that change a language before you save it.
+
+## Updates
+
+`printUpdate` and `parseUpdate` store a `Language.Update`, so that a list of
+changes can be saved and applied again later. Each operation is one statement,
+in order, with the same names, symbols, constraints, and templates as a
+language:
+
+```text
+update 1;
+define Atom two = two @{ v == 2 };
+require Expr pair same = equal([0], [1]);
+relax Expr pair positive;
+remove Atom one;
+put production Atom three = three {
+  never = false;
+};
+put row Extra {
+  leaf = leaf;
+}
+delete row Extra;
+exclude zero-pair = root pair(zero @{ v == 0 }, zero @{ v == 0 });
+restore old-rule;
+```
+
+`define`, `remove`, `require`, and `relax` are the operations of the same names
+in `Data.CFTA.Language`. `put production`, `put row`, and `delete row` are the
+source edits `PutTransition`, `PutRow`, and `DeleteRow`. An update does not
+name the language it changes: apply it with `Language.update`, which checks it.
+
 ## Checkpoints
 
 `printCheckpoint` and `parseCheckpoint` store a `Checkpoint` of
@@ -359,6 +389,17 @@ exclusion       = doc-comment? "exclude" exclusion-body ;
 exclusion-body  = name "=" ( "root" | "anywhere" ) template ";" ;
 symbol          = name ( "@" "{" formula "}" )? ;
 children        = "(" ( name ( "," name )* )? ")" ;
+
+update-file     = "update" "1" ";" operation* ;
+operation       = "define" name name "=" symbol children? ";"
+                | "remove" name name ";"
+                | "require" name name name "=" constraint ";"
+                | "relax" name name name ";"
+                | "put" "production" name production
+                | "put" "row" name "{" production* "}"
+                | "delete" "row" name ";"
+                | "exclude" exclusion-body
+                | "restore" name ";" ;
 
 checkpoint-file = "checkpoint" "1" ";" query "next" integer integer ";" graph-file ;
 sampling-file   = "sampling" "1" ";" query

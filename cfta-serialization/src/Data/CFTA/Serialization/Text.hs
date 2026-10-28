@@ -29,6 +29,12 @@ module Data.CFTA.Serialization.Text (
     printLanguageNotesWith,
     parseLanguageNotesWith,
 
+    -- * Updates
+    printUpdate,
+    parseUpdate,
+    printUpdateWith,
+    parseUpdateWith,
+
     -- * Checkpoints
     printCheckpoint,
     parseCheckpoint,
@@ -241,6 +247,22 @@ parseLanguageNotesWith ::
     (Ord state) => StateCodec state -> Text -> Either (TextError state) (Notes state, L.Language state)
 parseLanguageNotesWith = readLanguage . decodeState
 
+-- | Print an update with state labels from its 'Show' instance.
+printUpdate :: (Show state) => L.Update state -> Text
+printUpdate = renderUpdate (Text.pack . show)
+
+-- | Print an update with an explicit typed state codec.
+printUpdateWith :: StateCodec state -> L.Update state -> Text
+printUpdateWith codec = renderUpdate (encodeState codec)
+
+-- | Read an update with state labels from their 'Read' instance.
+parseUpdate :: (Read state) => Text -> Either (TextError state) (L.Update state)
+parseUpdate = readUpdate (readEither . Text.unpack)
+
+-- | Read an update with an explicit typed state codec.
+parseUpdateWith :: StateCodec state -> Text -> Either (TextError state) (L.Update state)
+parseUpdateWith codec = readUpdate (decodeState codec)
+
 {- | Print a checkpoint with state labels from their 'Show' instance. The
 text holds the query and the sized rank of the next term, then the text of
 'printGraph' for the graph.
@@ -311,6 +333,33 @@ exclusionText notes name exclusion =
     commentText "" (commentOf notes $ OnExclusion name) <> "exclude " <> nameText (L.exclusionNameText name) <> " = " <> case exclusion of
         L.AtRoot template -> "root " <> templateText template <> ";\n"
         L.Anywhere template -> "anywhere " <> templateText template <> ";\n"
+
+-- | Render the operations of an update in order, one statement each.
+renderUpdate :: (state -> Text) -> L.Update state -> Text
+renderUpdate encode (L.Update operations) = built $ "update 1;\n" <> foldMap operation operations
+  where
+    state = nameText . encode
+    none = noNotes
+    operation change = case change of
+        L.EditSource edit -> case edit of
+            D.DefineTransition at name symbol children ->
+                "define "
+                    <> state at
+                    <> " "
+                    <> nameText name
+                    <> " = "
+                    <> symbolText' symbol
+                    <> childrenText (map state children)
+                    <> ";\n"
+            D.DeleteTransition at name -> "remove " <> state at <> " " <> nameText name <> ";\n"
+            D.SetFact at name fact constraint ->
+                "require " <> state at <> " " <> nameText name <> " " <> nameText fact <> " = " <> constraintText constraint <> ";\n"
+            D.RemoveFact at name fact -> "relax " <> state at <> " " <> nameText name <> " " <> nameText fact <> ";\n"
+            D.PutTransition at transition -> "put production " <> state at <> " " <> productionText "" encode none at transition
+            D.PutRow at transitions -> "put row " <> state at <> " {\n" <> foldMap (sourceTransitionText encode none at) transitions <> "}\n"
+            D.DeleteRow at -> "delete row " <> state at <> ";\n"
+        L.Exclude name exclusion -> exclusionText none name exclusion
+        L.Restore name -> "restore " <> nameText (L.exclusionNameText name) <> ";\n"
 
 -- | Render the query and the next sized rank, then the graph in the graph format.
 renderCheckpoint :: (state -> Text) -> Checkpoint state -> Text
@@ -720,6 +769,57 @@ readLanguage decode input = do
         exclusions <- namedMap "exclusion" $ map fst entries
         let exclusionComments = concat [commentOn (OnExclusion $ L.ExclusionName name) comment | ((name, _), comment) <- entries]
         pure (comments <> exclusionComments, rows, Map.mapKeys L.ExclusionName exclusions)
+
+-- | Read the header and the operations of an update, in order.
+readUpdate :: (Text -> Either String state) -> Text -> Either (TextError state) (L.Update state)
+readUpdate decode = runParser $ do
+    keyword "update"
+    version <- integerParser
+    unless (version == 1) $ fail "unsupported update version; expected 1"
+    token ";"
+    L.Update <$> untilEnd operation
+  where
+    state = stateParser decode
+    end = token ";"
+    source = pure . L.EditSource
+    operation = do
+        word <- nameParser
+        case word of
+            "define" -> do
+                at <- state
+                name <- nameParser
+                token "="
+                (symbol, children) <- edgeParser decode
+                end
+                source $ D.DefineTransition at name symbol children
+            "remove" -> (D.DeleteTransition <$> state <*> nameParser <* end) >>= source
+            "require" -> do
+                at <- state
+                name <- nameParser
+                fact <- nameParser
+                token "="
+                constraint <- constraintParser
+                end
+                source $ D.SetFact at name fact constraint
+            "relax" -> (D.RemoveFact <$> state <*> nameParser <*> nameParser <* end) >>= source
+            "put" -> do
+                target <- nameParser
+                case target of
+                    "production" -> do
+                        at <- state
+                        (transition, _) <- sourceTransitionParser decode at
+                        source $ D.PutTransition at transition
+                    "row" -> do
+                        at <- state
+                        token "{"
+                        transitions <- untilClose '}' (sourceTransitionParser decode at)
+                        token "}"
+                        source $ D.PutRow at $ map fst transitions
+                    _ -> fail "expected put production or put row"
+            "delete" -> keyword "row" *> ((D.DeleteRow <$> state <* end) >>= source)
+            "exclude" -> uncurry L.Exclude . first L.ExclusionName <$> exclusionBody
+            "restore" -> L.Restore . L.ExclusionName <$> nameParser <* end
+            _ -> fail $ "expected an update operation, not " <> show word
 
 -- | Parse one complete input and retain Unicode-aware syntax locations.
 runParser :: A.Parser value -> Text -> Either (TextError state) value

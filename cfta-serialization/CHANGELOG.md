@@ -24,3 +24,5 @@
   production, a fact, or an exclusion, and a state of a document or a language
   can have a sort. `printDocumentNotesWith`, `printLanguageNotesWith`, and
   their parsers keep them in `Notes`.
+- Add `printUpdate` and `parseUpdate`: the text form `update 1;` of a
+  `Language.Update`, one statement for each operation.
