@@ -291,6 +291,22 @@ arity, symbol, and the classes of their children; the children of a
 transition by the size of the earlier children, in ascending order; and a
 term that several transitions accept at its first place.
 
+### The edits of a term
+
+`Data.CFTA.Edit` lists the edits of one term of a plain automaton as the
+terms of another automaton. An edit keeps the state of its position: a
+replacement gives the position another term of its state, and a wrap puts a
+new node of that state above the old subterm, as one of its children.
+`editAutomaton automaton term` gives an automaton with one root symbol for
+each edit site (`ReplaceAt`, and `WrapAt` with a transition index and a child
+index). The children of the root are the new material, so the size of an edit
+is one more than the size of its new material, and the size-major order of
+`Data.CFTA.Sized` or of the generator import gives the smallest edits first.
+`applyEdit term edit` gives the edited term. Two edits can give one edited
+term, for example a replacement at the root and a deeper edit, so the
+automaton counts edits, not edited terms. When the automaton is
+unambiguous, the edit automaton is unambiguous too.
+
 ## Equality-constrained generators
 
 An equality generator is a `Gen Symbol`, with the name `ECTAGen`. Each
