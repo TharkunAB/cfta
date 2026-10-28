@@ -188,8 +188,8 @@ spec = do
 
         it "print no comment of an item that the value does not have" $ do
             let extra = Map.fromList [(T.OnState "missing", "x"), (T.OnProduction "s" "p", "y"), (T.OnExclusion "e", "z")]
-            T.parseGraphNotesWith strings (T.printGraphNotesWith strings (noted $ graphComments ordinary <> extra) ordinary)
-                `shouldBe` Right (noted $ graphComments ordinary, ordinary)
+            T.parseGraphNotesWith strings (T.printGraphNotesWith strings (noted $ graphComments liquid <> extra) liquid)
+                `shouldBe` Right (noted $ graphComments liquid, liquid)
 
         it "leave the text of the printers without comments unchanged" $ do
             forM_ graphs $ \(_, graph) ->
@@ -206,6 +206,12 @@ spec = do
         it "need exactly three slashes" $
             T.parseGraphNotesWith strings "//// not a doc comment\n// nor this\ngraph 1; start S; state S {}"
                 `shouldBe` Right (mempty, must $ FTA.mkFTA "S" [("S", [])])
+
+        it "must come before the header or a state in a graph" $
+            forM_ misplacedGraphComments $ \text ->
+                case T.parseGraphWith strings text of
+                    Left failure -> Text.pack (T.explainTextError failure) `shouldSatisfy` Text.isInfixOf "doc comment"
+                    Right _ -> expectationFailure $ "accepted " <> show text
 
         it "must come before an item that takes a comment" $
             forM_ misplacedComments $ \text ->
@@ -226,8 +232,8 @@ spec = do
         it "print no sort of a state that the graph does not have" $
             T.parseGraphNotesWith
                 strings
-                (T.printGraphNotesWith strings (sorted ordinary <> mempty{T.noteSorts = Map.singleton "missing" "Int"}) ordinary)
-                `shouldBe` Right (sorted ordinary, ordinary)
+                (T.printGraphNotesWith strings (sorted liquid <> mempty{T.noteSorts = Map.singleton "missing" "Int"}) liquid)
+                `shouldBe` Right (sorted liquid, liquid)
 
         it "are dropped by the readers without notes" $
             T.parseGraphWith strings (T.printGraphNotesWith strings (sorted liquid) liquid) `shouldBe` Right liquid
@@ -532,6 +538,15 @@ malformedSignatures =
 -- | Comment texts with empty lines, spaces at either end, slashes, carriage returns, and Unicode.
 commentTexts :: [Text]
 commentTexts = ["plain", "", " leading space", "/ slash", "two\nlines", "\n", "λ 😀 \"quoted\"", "trailing space ", "a\r\nb"]
+
+-- | Doc comments with no item after them, in a graph.
+misplacedGraphComments :: [Text]
+misplacedGraphComments =
+    [ "graph 1;\n/// x\nstart S; state S {}"
+    , "graph 1; start S; state S {}\n/// x\n"
+    , "graph 1; start S; state S { a; /// x\n}"
+    , "graph 1; start S; state S { /// x\na; }"
+    ]
 
 -- | Doc comments with no item after them, in a language.
 misplacedComments :: [Text]

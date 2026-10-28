@@ -150,9 +150,9 @@ exclude zero-pair = root pair(zero @{ v == 0 }, zero @{ v == 0 });
 
 The doc comments are kept beside the value, in `Notes state`. Its field
 `noteComments` maps a `CommentTarget state` (`OnFile`, `OnState`,
-`OnProduction`, `OnFact`, or `OnExclusion`) to the text of the comment. One space after `///` is not part of
-the text. Consecutive comment lines are one text, with a newline between the
-lines.
+`OnProduction`, `OnFact`, or `OnExclusion`) to the text of the comment. One
+space after `///` is not part of the text. Consecutive comment lines are one
+text, with a newline between the lines.
 
 | Value | Printer | Parser |
 | --- | --- | --- |
@@ -166,9 +166,9 @@ comment that does not come before one of these items is a syntax error. The
 printer prints no comment for an item that the value does not have.
 
 `mempty` is no notes, and `printGraphNotesWith codec mempty` prints the text of
-`printGraphWith codec`. A doc comment is not part of the value. It does not change the equality of the
-value, the text of `printGraph`, or a checkpoint, so a new comment does not make
-a checkpoint stale.
+`printGraphWith codec`. A doc comment is not part of the value. It does not
+change the equality of the value, the text of `printGraph`, or a checkpoint, so
+a new comment does not make a checkpoint stale.
 
 ## Sorts
 
@@ -328,6 +328,7 @@ same names in `Data.CFTA.Language`. `put production`, `put row`, and
 `start` is the source edit `SetStart`, written as the `start` line of a
 document. An update does not name the language it changes: apply it with
 `Language.update`, which checks it.
+
 ## Checkpoints
 
 `printCheckpoint` and `parseCheckpoint` store a `Checkpoint` of
@@ -410,10 +411,10 @@ rejects another graph and other weights.
 
 The grammar uses EBNF: `?` is optional, `*` is zero or more, and `+` is one or
 more. Spaces, line breaks, and `//` comments can come between any two tokens.
-A `name` is a state label, a symbol, or a name of a production, a fact, an
-exclusion, or a variable. The printer leaves a name unquoted when every
-character is an ASCII letter, a digit, `_`, `-`, or `+`, and the name is not
-`_`. It quotes every other name.
+A `name` is a state label, the sort of a state, a symbol, or a name of a
+production, a fact, an exclusion, or a variable. The printer leaves a name
+unquoted when every character is an ASCII letter, a digit, `_`, `-`, or `+`,
+and the name is not `_`. It quotes every other name.
 
 ```ebnf
 graph-file      = header("graph") graph-row* ;
@@ -513,8 +514,8 @@ rejects a version that it does not know. After the first release of
 `cfta-serialization`, these rules apply to each kind:
 
 - Printing is stable within a version: a value prints as the same text. A
-  checkpoint and a store use the printed text as an identity, so a change to
-  the printed text of an existing value needs a new version.
+  program can use the printed text as an identity, so a change to the printed
+  text of an existing value needs a new version.
 - A change that gives existing text a different value needs a new version.
 - An addition that a reader of the version rejects, such as a new constraint
   constructor, keeps the version. A new file can then fail in an older reader,
