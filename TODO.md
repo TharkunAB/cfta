@@ -9,10 +9,9 @@ the top.
 
 ## In progress: serialization
 
-Each pull request is one complete feature. #188 is ready for review. The
-others are drafts: mark the next one ready when work on it starts.
+Each pull request is one complete feature. #188, the graph text format, is on
+`main`. The others are drafts: mark the next one ready when work on it starts.
 
-- #188 `feature/text-format`: A readable text format for graphs, with doc comments and sorts
 - #116 `feature/listing-checkpoints`: Query checkpoints: resume a size-ordered listing in a new process
 - #123 `feature/sampling-checkpoints`: Sampling checkpoints: resume a sampled run in a new process
 - #110 `feature/source-documents`: Editable source documents and language updates
