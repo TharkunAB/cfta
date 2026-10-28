@@ -1,0 +1,30 @@
+MicroCFTA.SourcePruningEnumerationNativeQueryProjectionHeap.node_query_heap {width : Nat}
+  [DecidableEq (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)]
+  [DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  (request :
+    MicroCFTA.SourceRecursiveIntersectionThunks.NodeRequest
+      (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+  (before after : MicroCFTA.SourceEqualityNativeDemand.State width)
+  (value :
+    MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+  (fuel : Nat) (valid : MicroCFTA.SourceCurrentAllocatedNativePhysicalCompletion.Good before)
+  (heap :
+    MicroCFTA.SourceEqualityAnnotationHeap.Heap
+      (fun constraint => MicroCFTA.SourcePruningEnumerationConstraint.project constraint ≠ none)
+      before.native.machine.heap)
+  (trace :
+    MicroCFTA.SourceCurrentAllocatedNativePhysicalTraceCompletion.Trace fuel
+      (MicroCFTA.SourceEqualityNativeDemand.Control.code
+        (MicroCFTA.SourceRecursiveIntersectionCode.requestNode request.domain request.left request.right))
+      before
+      (MicroCFTA.SourceEqualityNativeDemand.Control.code (MicroCFTA.SourceRecursiveIntersectionCode.Code.pure value))
+      after) :
+  MicroCFTA.SourceEqualityAnnotationHeap.Heap
+    (fun constraint => MicroCFTA.SourcePruningEnumerationConstraint.project constraint ≠ none) after.native.machine.heap
+'MicroCFTA.SourcePruningEnumerationNativeQueryProjectionHeap.node_query_heap' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]

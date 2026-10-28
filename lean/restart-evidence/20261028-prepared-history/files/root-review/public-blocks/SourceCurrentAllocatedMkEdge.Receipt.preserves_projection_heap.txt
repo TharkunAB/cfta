@@ -1,0 +1,31 @@
+MicroCFTA.SourceCurrentAllocatedMkEdge.Receipt.preserves_projection_heap {width : Nat}
+  [DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  {formulas : MicroCFTA.SourceGuards.Formulas MicroCFTA.FullSyntax.Formula}
+  {solver : MicroCFTA.SourceGuards.Entailment MicroCFTA.FullSyntax.Formula}
+  {inventory : MicroCFTA.SourceCurrentAllocatedNativeInventoryState.Inventory}
+  {symbol : MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula}
+  {constraint : MicroCFTA.SourceEqualityConjoinAllocation.Constraint MicroCFTA.FullSyntax.Formula}
+  {children :
+    List
+      (MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))}
+  {before after : MicroCFTA.SourceEqualityNativeDemand.State width}
+  {result :
+    MicroCFTA.InternedConstructorTemplates.EdgeValue (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)}
+  (receipt :
+    MicroCFTA.SourceCurrentAllocatedMkEdge.Receipt formulas solver inventory symbol constraint children before result
+      after)
+  (valid : MicroCFTA.SourceEqualityConstraintMemoAllocation.Valid before.operations)
+  (ready : MicroCFTA.SourceEqualityConstraintAllocation.Ready before.operations.constraints constraint.stored)
+  (heap :
+    MicroCFTA.SourceEqualityAnnotationHeap.Heap
+      (fun constraint => MicroCFTA.SourcePruningEnumerationConstraint.project constraint ≠ none)
+      before.native.machine.heap) :
+  MicroCFTA.SourceEqualityAnnotationHeap.Heap
+    (fun constraint => MicroCFTA.SourcePruningEnumerationConstraint.project constraint ≠ none) after.native.machine.heap
+'MicroCFTA.SourceCurrentAllocatedMkEdge.Receipt.preserves_projection_heap' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]

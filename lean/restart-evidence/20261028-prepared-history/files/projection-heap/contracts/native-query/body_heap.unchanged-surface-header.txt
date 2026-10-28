@@ -1,0 +1,13 @@
+theorem body_heap [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)]
+    (limit : Nat)
+    (calls : ∀ (request : NodeRequest Symbol Guard) (count : Nat), count ≤ limit →
+      ∀ (start final : Checked width) (result : Value Symbol Guard), Good start →
+        Heap start.native.machine.heap →
+        Trace count (.code (requestNode request.domain request.left request.right)) start (.code (.pure result)) final →
+        Heap final.native.machine.heap)
+    (request : EdgeRequest Symbol Guard) (fuel : Nat) (before after : Checked width)
+    (value : EdgeValue Symbol Guard) (bounded : fuel ≤ limit)
+    (valid : Good before) (inputs : EdgeReady before.native.machine request)
+    (heap : Heap before.native.machine.heap)
+    (trace : Trace fuel (.edgeBody request .pure) before (.code (.pure value)) after) :
+    Heap after.native.machine.heap

@@ -1,0 +1,20 @@
+/-- The actual accepted constructor check excludes a missing projection. -/
+theorem accepted_projectable {Formula : Type}
+    (constraint : SourceSymbolicIndex.Constraint Formula) (arity : Nat)
+    (checked : SourceEqualityMkEdgeAllocation.accepted constraint arity = true) :
+    SourcePruningEnumerationConstraint.project constraint ≠ none := by
+  have fits : SourceEqualityMkEdgeAllocation.fits arity
+      (SourceCompactGuards.sourceEqualities constraint) = true := by
+    by_cases rejected : SourceEqualityMkEdgeAllocation.contradictory constraint = true
+    · simp only [SourceEqualityMkEdgeAllocation.accepted, rejected, ↓reduceIte,
+        Bool.false_eq_true] at checked
+    · simpa only [SourceEqualityMkEdgeAllocation.accepted, rejected, Bool.false_eq_true,
+        ↓reduceIte] using checked
+  obtain ⟨classes, source, _bounds⟩ :=
+    (SourceEqualityMkEdgeArity.fits_exact arity
+      (SourceCompactGuards.sourceEqualities constraint)).mp fits
+  intro missing
+  simp only [SourcePruningEnumerationConstraint.project, source] at missing
+  cases missing
+
+end MicroCFTA.SourcePruningEnumerationCheckedProjection

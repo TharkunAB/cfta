@@ -1,0 +1,28 @@
+    (same : after.values = before.values) (bounded : BoundedWork bound before assignment) : BoundedWork bound after assignment := by
+  intro uv pending
+  apply bounded uv
+  simpa [GraphPending, same] using pending
+
+/-- Complete graph views always allow the actual nonrepeated bookkeeping action. -/
+theorem checkRepeated_terminates (graph : Graph Symbol Guard) (complete : CompleteGraph graph)
+    (fuel uv node : Nat) (scs : List Suspended) (before : State Symbol Guard) :
+    Success (checkRepeated graph fuel uv node scs) before false before := by
+  cases view : graph.node node with
+  | recursive body => exact (complete.1 node body view).elim
+  | empty | alternatives _ | unresolved _ =>
+      simpa [checkRepeated, view] using (success_pure false false before before).mpr ⟨rfl, rfl⟩
+
+/-- Every safe proper satisfying complete state has a successful sufficiently bounded full caller execution. -/
+theorem enumerateFully_complete (graph : Graph Symbol Guard) (meaning : Guard → Term Symbol → Prop)
+    (complete : CompleteGraph graph) (correct : IntersectionCorrect graph (Accepted graph meaning))
+    (bound : Nat) (before : State Symbol Guard) (assignment : Nat → Term Symbol)
+    (safe : Safe before) (proper : ProperState before) (pending : PendingReferences before)
+    (satisfies : Satisfies (Accepted graph meaning) meaning assignment before) (bounded : BoundedWork bound before assignment) :
+    ∃ fuel after extended, Success (enumerateFully graph (fun _ _ => none) noPruning fuel ()) before () after ∧
+      Satisfies (Accepted graph meaning) meaning extended after ∧
+      (∀ uv < before.counter, extended uv = assignment uv) := by
+  have construct : ∀ counts, ∀ (before : State Symbol Guard) (assignment : Nat → Term Symbol), histogram before assignment = counts →
+      Safe before → ProperState before → PendingReferences before → Satisfies (Accepted graph meaning) meaning assignment before →
+      BoundedWork bound before assignment →
+      ∃ fuel after extended, Success (enumerateFully graph (fun _ _ => none) noPruning fuel ()) before () after ∧
+        Satisfies (Accepted graph meaning) meaning extended after ∧ (∀ uv < before.counter, extended uv = assignment uv) := by

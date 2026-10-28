@@ -1,0 +1,42 @@
+MicroCFTA.SourcePruningEnumerationPreparedRecursive.run_output_history {Typing Key : Type} {width : Nat}
+  [DecidableEq MicroCFTA.SourcePruningTemplates.Symbol]
+  [DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey MicroCFTA.SourcePruningTemplates.Symbol
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  [DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.Value MicroCFTA.SourcePruningTemplates.Symbol
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  (holeKey : Typing → Nat → Key) (fits : Key → MicroCFTA.SourcePruningTemplates.Symbol → Bool)
+  (admits :
+    Key →
+      MicroCFTA.InternedConstructorTemplates.Value MicroCFTA.SourcePruningTemplates.Symbol
+          (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) →
+        Bool)
+  (graph :
+    MicroCFTA.EnumerationState.Graph MicroCFTA.SourcePruningTemplates.Symbol
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+  (templates : List (MicroCFTA.Template.Pattern MicroCFTA.SourcePruningTemplates.Symbol)) (checkEmpty : Bool)
+  (edgesOf :
+    MicroCFTA.InternedConstructorTemplates.Value MicroCFTA.SourcePruningTemplates.Symbol
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) →
+      List
+        (MicroCFTA.InternedConstructorTemplates.EdgeValue MicroCFTA.SourcePruningTemplates.Symbol
+          (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)))
+  (stop : Option (MicroCFTA.SourcePruningRecordTypes.Metadata Typing → Nat → Bool))
+  (order : MicroCFTA.SourcePruningRecordTypes.Metadata Typing → List Nat → Option Nat) (workFuel recursiveFuel : Nat)
+  (metadata : MicroCFTA.SourcePruningRecordTypes.Metadata Typing)
+  (caller : MicroCFTA.SourceCurrentAllocatedPartialState.State width) (queries : MicroCFTA.SourceEndpointMemo.Memos)
+  (before :
+    MicroCFTA.EnumerationExpandableIndex.Cached MicroCFTA.SourcePruningTemplates.Symbol
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+  (output : MicroCFTA.SourcePruningEnumerationRecursive.Output width Typing) :
+  output ∈
+      MicroCFTA.SourcePruningEnumerationHookInvocation.hookOutputs
+        (MicroCFTA.SourcePruningEnumerationPreparedRecursive.run holeKey fits admits graph templates checkEmpty edgesOf
+          stop order workFuel recursiveFuel metadata caller queries before) →
+    MicroCFTA.SourcePruningEnumerationPreparedRecursive.OutputHistory holeKey fits admits graph templates checkEmpty
+      edgesOf stop order workFuel recursiveFuel metadata caller queries before
+      (MicroCFTA.SourcePruningEnumerationRestart.decision stop order metadata before) output
+'MicroCFTA.SourcePruningEnumerationPreparedRecursive.run_output_history' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]

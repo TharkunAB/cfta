@@ -1,0 +1,33 @@
+    (accepted : (SourceEqualityIntersectionEdgeAllocation.run GuardStructuralOrder.le first second
+      request.left.children.length request.right.children.length state.operations).1 = .ok (.ready combined))
+    (walk : SourceEqualityNativeDemandChildWalk.Walk (SourceEqualityPCSGuard.holds formulas solver) request.domain
+      (request.left.children.zip request.right.children)
+      {state with operations := (SourceEqualityIntersectionEdgeAllocation.run GuardStructuralOrder.le first second
+        request.left.children.length request.right.children.length state.operations).2} values after fuel) :
+    let built := run (makeEdge request.left.entry.key.symbol (SourceEqualityConjoinAllocation.readback combined) values) after.native.machine.heap
+    let final : SourceEqualityNativeDemand.State width := {after with native := advance after.native {after.native.machine with heap := built.2}}
+    execute (fuel + 3) (.edgeBody request .pure) state = .done built.1 final ∧
+      EdgeProduced (width := width) (SourceEqualityPCSGuard.holds formulas solver) final.native.machine request built.1 ∧
+      SourceEqualityRequiredCache.Keeps state.native.machine.heap final.native.machine.heap ∧
+      EdgeResident final.native.machine.heap built.1 ∧ built.1.children = values ∧ built.1.children.length = request.left.children.length ∧
+      SourcePruningEnumerationArityOrigins.Fits built.1.entry.key.constraint built.1.children.length := by
+  have original := SourceEqualityNativeDemandAcceptedReceipt.body_produced formulas solver request state after
+    first second combined values fuel valid heapReady inputs leftCached rightCached arity symbols left right accepted walk
+  have childEffects := walk.effects heapReady
+  have fields := MergedPhysicalGroupEdges.makeEdge_fields after.native.machine.heap
+    childEffects.1.ready.semantic.1.normal.facts request.left.entry.key.symbol
+    (SourceEqualityConjoinAllocation.readback combined) values childEffects.2.2.1
+  obtain ⟨firstReady, _firstFields⟩ := SourceEqualityConstraintFieldLookup.load_ready _ _
+    valid.constraints leftCached first left
+  obtain ⟨secondReady, _secondFields⟩ := SourceEqualityConstraintFieldLookup.load_ready _ _
+    valid.constraints rightCached second right
+  have checked := ready_fits GuardStructuralOrder.le first second combined
+    request.left.children.length request.right.children.length state.operations valid firstReady secondReady accepted
+  refine ⟨original.1, original.2.1, original.2.2.1, original.2.2.2.1,
+    original.2.2.2.2.1, original.2.2.2.2.2, ?_⟩
+  rw [fields.2.1, original.2.2.2.2.2]
+  exact checked
+
+/-- Final record coherence identifies the requested constraint and actual child count. -/
+private theorem constructed_fields [DecidableEq (EdgeKey Symbol Guard)]
+    (symbol : Symbol) (constraint : Guard) (values : List (Value Symbol Guard))

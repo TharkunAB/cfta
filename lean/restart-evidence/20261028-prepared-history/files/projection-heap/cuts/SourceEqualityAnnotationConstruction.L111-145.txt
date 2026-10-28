@@ -1,0 +1,35 @@
+/-- Each actual edge emission derives its own annotation check from the original literal syntax. -/
+theorem buildEdges [DecidableEq (EdgeKey Symbol Guard)] (valid : Guard → Prop) (expressions : List (EdgeSyntax Symbol Guard))
+    (allowed : EdgesAllowed valid expressions) (environment : List (Value Symbol Guard)) (state : State Symbol Guard) (heap : Heap valid state) :
+    Heap valid (InternedFreshOrdinaryConstruction.buildEdges expressions environment state).state := by
+  cases expressions with
+  | nil => simpa only [InternedFreshOrdinaryConstruction.buildEdges, Outcome.state] using heap
+  | cons first rest =>
+      cases first with
+      | mk symbol guard children =>
+          simp only [EdgesAllowed] at allowed
+          simp only [InternedFreshOrdinaryConstruction.buildEdges]
+          apply bind_heap valid _ _ (buildMany valid children allowed.2.1 environment state heap)
+          intro values next nextHeap
+          apply bind_heap valid _ _ (work_heap valid _ (SourceEqualityAnnotationHeap.makeEdge valid symbol guard values allowed.1) next nextHeap)
+          intro edge afterEdge edgeHeap
+          apply bind_heap valid _ _ (buildEdges valid rest allowed.2.2 environment afterEdge edgeHeap)
+          intro edges final finalHeap
+          exact finalHeap
+termination_by sizeOf expressions
+end
+
+/-- Original closed source construction derives both the physical annotation heap and every semantic record annotation. -/
+theorem closed [DecidableEq (EdgeKey Symbol Guard)] (valid : Guard → Prop) (expression : Syntax Symbol Guard)
+    (allowed : Allowed valid expression) :
+    ∃ value heap, ∃ _done : InternedFreshOrdinaryConstruction.build expression [] empty = .done value heap,
+      Heap valid heap ∧ SourceEqualityAnnotationLanguage.Annotated valid value := by
+  obtain ⟨value, heap, done⟩ := InternedFreshOrdinaryClosedCompletion.closed_complete expression
+  have physical : Heap valid heap := by
+    simpa only [done, Outcome.state] using build valid expression allowed [] empty (empty_heap valid)
+  have checked := InternedFreshOrdinaryFacts.closed_verified expression
+  have facts : InternedNestedFacts.Facts heap := by simpa only [done, Outcome.state] using checked.facts
+  exact ⟨value, heap, done, physical,
+    SourceEqualityAnnotationHeap.available valid heap physical facts.linked value (checked.result value heap done)⟩
+
+end MicroCFTA.SourceEqualityAnnotationConstruction

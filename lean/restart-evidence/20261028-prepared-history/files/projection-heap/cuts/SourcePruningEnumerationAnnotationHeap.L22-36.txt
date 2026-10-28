@@ -1,0 +1,15 @@
+/-- The current loaded-field invariant derives normalized annotations at the same physical heap. -/
+theorem Context.annotation_heap (initial : Context formulas solver inventory caller memos) :
+    SourceEqualityAnnotationHeap.Heap
+      (fun guard : Constraint => SourceEqualityGuardReadback.Cached guard.equalities)
+      caller.checked.native.machine.heap := by
+  intro key edge present
+  exact (initial.ready.good.fields key edge present).1
+
+/-- An actual Post receipt derives normalized annotations at its returned caller heap. -/
+theorem Post.after_annotation_heap {next : Inventory} {before after : Caller width} {final : Memos}
+    (post : Post formulas solver next before after final) :
+    SourceEqualityAnnotationHeap.Heap
+      (fun guard : Constraint => SourceEqualityGuardReadback.Cached guard.equalities)
+      after.checked.native.machine.heap :=
+  post.context.annotation_heap

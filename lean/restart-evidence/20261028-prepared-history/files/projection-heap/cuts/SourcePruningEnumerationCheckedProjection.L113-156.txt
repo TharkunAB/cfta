@@ -1,0 +1,44 @@
+
+/-- An actual raw interner can retain a normalized but unprojectable edge.
+This result concerns the raw native constructor, not the checked Haskell API. -/
+theorem raw_ready_counterexample (symbol : Symbol) :
+    (open scoped Classical in
+    let constraint : Constraint := ⟨none, .top⟩
+    let before : InternedConstructorTemplates.State Symbol Constraint := empty
+    let built := run (makeEdge symbol constraint []) before
+    SourceEqualityRequiredCache.Ready built.2 ∧
+      SourceEqualityAnnotationHeap.Heap
+        (fun guard => SourceEqualityGuardReadback.Cached guard.equalities) built.2 ∧
+      InternedEdgeResidency.EdgeResident built.2 built.1 ∧
+      built.1.children = [] ∧
+      EnumerationState.arityAllows built.1.children.length [] = true ∧
+      SourcePruningEnumerationConstraint.project built.1.entry.key.constraint = none) := by
+  classical
+  let constraint : Constraint := ⟨none, .top⟩
+  let before : InternedConstructorTemplates.State Symbol Constraint := empty
+  let built := run (makeEdge symbol constraint []) before
+  have ready : SourceEqualityRequiredCache.Ready before :=
+    SourceEqualityRequiredCache.constructed
+      (InternedNestedConstruction.Syntax.empty : InternedNestedConstruction.Syntax Symbol Constraint)
+      .empty before (by simp only [InternedFreshOrdinaryConstruction.build, before])
+  have children : InternedNestedProvenance.Values before ([] : List (Value Symbol Constraint)) := by
+    intro child member
+    cases member
+  have emitted := SourceEqualityRequiredCache.edge symbol constraint [] before ready children
+  obtain ⟨_symbol, guard, exactChildren⟩ := MergedPhysicalGroupEdges.makeEdge_fields before
+    ready.semantic.1.normal.facts symbol constraint [] children
+  have cached : SourceEqualityGuardReadback.Cached constraint.equalities := by
+    intro classes impossible
+    cases impossible
+  have annotations := SourceEqualityAnnotationHeap.run
+    (fun guard : Constraint => SourceEqualityGuardReadback.Cached guard.equalities)
+    (makeEdge symbol constraint [])
+    (SourceEqualityAnnotationHeap.makeEdge _ symbol constraint [] cached)
+    before (SourceEqualityAnnotationHeap.empty_heap _)
+  refine ⟨emitted.1.ready, annotations, emitted.2.1, exactChildren, ?_, ?_⟩
+  · rw [exactChildren]
+    rfl
+  · rw [guard]
+    rfl
+
+end MicroCFTA.SourcePruningEnumerationCheckedProjection

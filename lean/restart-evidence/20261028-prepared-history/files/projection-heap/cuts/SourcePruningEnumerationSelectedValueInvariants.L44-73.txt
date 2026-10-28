@@ -1,0 +1,30 @@
+      | done result after | pending key after =>
+          simpa only [run, observed, MergedSourceComparison.Result.state,
+            InternedNestedConstruction.Outcome.state] using
+            And.intro retainedCosts (And.intro retainedProbes retainedFields)
+  | union entry members depth free =>
+      have checked := SourceEqualityExposureCosts.nodeEdges_verified fuel
+        (.union entry members depth free) before semantic costs available
+      have retainedProbes := SourceCurrentAllocatedProbeExposure.nodeEdges_heap fuel
+        (.union entry members depth free) before semantic probes available
+      have retainedFields := SourceCurrentOpenExposureFields.nodeEdges_heap property fuel
+        (.union entry members depth free) before semantic fields available
+      cases observed : MergedFreshOrdinaryExposure.nodeEdges fuel
+          (.union entry members depth free) before with
+      | done rows middle =>
+          have middleCosts : CostHeap middle := by
+            simpa only [observed, MergedSourceExposure.Result.state] using checked.costs
+          have middleProbes : ProbeHeap middle := by
+            simpa only [observed, MergedSourceExposure.Result.state] using retainedProbes
+          have middleFields : Fields property middle := by
+            simpa only [observed, MergedSourceExposure.Result.state] using retainedFields
+          have finalCosts := InternedFreshOrdinaryCostHeap.preserve middle _ middleCosts
+            (InternedShallowHeap.makeNode_noNewMu rows middle)
+          have finalProbes := InternedFreshOrdinaryProbeHeap.node rows middle middleProbes
+          have finalFields := SourceEqualityAnnotationHeap.run property _
+            (SourceEqualityAnnotationHeap.makeNode property rows) middle middleFields
+          simpa only [run, observed, MergedSourceComparison.Result.state] using
+            And.intro finalCosts (And.intro finalProbes finalFields)
+      | unresolved name after | pending key after | exhausted after =>
+          simpa only [run, observed, MergedSourceComparison.Result.state,
+            MergedSourceExposure.Result.state] using

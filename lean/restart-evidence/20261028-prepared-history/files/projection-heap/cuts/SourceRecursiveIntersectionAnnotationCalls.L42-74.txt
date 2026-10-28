@@ -1,0 +1,33 @@
+/-- Every guarded compiled edge derives available ordered child requests and a complete output row. -/
+theorem compileEdge_annotation (annotation : Guard → Prop) [DecidableEq (EdgeKey Symbol Guard)] (emptyGuard : Guard) (conjoin : Guard → Guard → Guard)
+    (emptyValid : annotation emptyGuard) (conjoinedValid : ∀ first second, annotation (conjoin first second))
+    (request : EdgeRequest Symbol Guard) (state : Machine Symbol Guard) (valid : SourceRecursiveIntersectionKernel.Valid state)
+    (ready : EdgeReady state request) : Certified annotation (compileEdge emptyGuard conjoin request) state := by
+  unfold compileEdge
+  split
+  · let input := fun (current : Machine Symbol Guard) (pair : Value Symbol Guard × Value Symbol Guard) =>
+      Domain current request.domain ∧ Available current.heap pair.1 ∧ Available current.heap pair.2
+    have stable : Stable input := by
+      intro before after growth pair known
+      exact ⟨known.1.grows _ growth, growth.available _ known.2.1, growth.available _ known.2.2⟩
+    have children := safe_walk (fun pair => requestNode request.domain pair.1 pair.2)
+      (request.left.children.zip request.right.children) input _ stable available_stable
+      (fun pair _ current currentValid known => safe_requestNode request.domain pair.1 pair.2 current known)
+      state valid (by
+        intro pair member
+        have contained := List.of_mem_zip member
+        exact ⟨ready.1, valid.1.cached.edges request.left.entry.key request.left ready.2.1 pair.1 contained.1,
+          valid.1.cached.edges request.right.entry.key request.right ready.2.2 pair.2 contained.2⟩)
+    have childrenSemantic := annotation_walk annotation (fun pair => requestNode request.domain pair.1 pair.2)
+      (request.left.children.zip request.right.children) input _ stable available_stable
+      (fun pair _ current currentValid known => safe_requestNode request.domain pair.1 pair.2 current known)
+      (fun pair _ current currentValid known => annotation_requestNode annotation request.domain pair.1 pair.2 current known)
+      state valid (by
+        intro pair member
+        have contained := List.of_mem_zip member
+        exact ⟨ready.1, valid.1.cached.edges request.left.entry.key request.left ready.2.1 pair.1 contained.1,
+          valid.1.cached.edges request.right.entry.key request.right ready.2.2 pair.2 contained.2⟩)
+    apply annotation_bind annotation _ _ state valid _ children childrenSemantic
+    intro values after afterValid growth available
+    exact annotation_edge annotation _ _ values after (conjoinedValid _ _)
+  · exact annotation_edge annotation _ _ [.empty] state emptyValid

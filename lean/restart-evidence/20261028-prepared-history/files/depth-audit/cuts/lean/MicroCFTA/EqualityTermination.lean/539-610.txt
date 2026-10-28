@@ -1,0 +1,72 @@
+theorem bounded_state (gap : Nat) (anchors : List (List Nat)) (alphabet : List Nat) (classes : Constraints)
+    (normal : NormalState classes) (consistent : isContradicting classes = false)
+    (segmented : SegmentedState gap classes) (anchored : Anchored anchors classes) (allowed : UsesAlphabet alphabet classes) :
+    Within (words alphabet (gap * (anchors.length + 1))) classes := by
+  intro path member
+  apply (words_correct alphabet _ path).mpr
+  have classBound := anchored_class_bound anchors classes anchored normal.2.1
+  have lengthBound := segmented_length_bound gap classes consistent segmented path member
+  have productBound := Nat.mul_le_mul_left gap (show classes.length + 1 ≤ anchors.length + 1 by omega)
+  exact ⟨Nat.le_trans lengthBound productBound, allowed path member⟩
+
+
+/-- A bounded-gap, anchored state reaches a fixed point or contradiction in finitely many steps. -/
+theorem fixMaybe_finishes_bounded (gap : Nat) (anchors : List (List Nat)) (alphabet : List Nat)
+    (fuel : Nat) (classes : Constraints) (normal : NormalState classes)
+    (segmented : SegmentedState gap classes) (anchored : Anchored anchors classes) (allowed : UsesAlphabet alphabet classes)
+    (enough : (pathPairs (words alphabet (gap * (anchors.length + 1)))).length -
+      relationCount (words alphabet (gap * (anchors.length + 1))) classes + 1 ≤ fuel) :
+    fixMaybe fuel classes ≠ .timeout := by
+  induction fuel generalizing classes with
+  | zero => omega
+  | succ fuel ih =>
+      cases stepped : congruenceStep classes with
+      | none => simp [fixMaybe, stepped]
+      | some next =>
+          by_cases stable : next = classes
+          · simp [fixMaybe, stepped, stable]
+          · have nextNormal := step_normal classes next normal.1 stepped
+            have nextSegmented := step_segmented gap classes next segmented stepped
+            have nextAnchored := step_anchored anchors classes next normal.1 anchored stepped
+            have nextAllowed := step_alphabet alphabet classes next allowed stepped
+            have consistent := (congruenceStep_invariants classes next normal.1 stepped).2
+            have within := bounded_state gap anchors alphabet next nextNormal consistent nextSegmented nextAnchored nextAllowed
+            have growth := relationCount_strict (words alphabet (gap * (anchors.length + 1))) classes next
+              normal nextNormal (step_covers classes next stepped) within stable
+            have currentBound := relationCount_bound (words alphabet (gap * (anchors.length + 1))) classes
+            have nextBound := relationCount_bound (words alphabet (gap * (anchors.length + 1))) next
+            have finished := ih next nextNormal nextSegmented nextAnchored nextAllowed (by omega)
+            simpa [fixMaybe, stepped, stable] using finished
+
+/-- The initial finite path set bounds the maximum unmarked path segment. -/
+def initialGap (classes : Constraints) : Nat := MicroCFTA.EqualityTrie.pathBudget (members classes)
+
+/-- Every original path fits within one bounded segment. -/
+theorem initially_segmented (classes : Constraints) : SegmentedState (initialGap classes) classes := by
+  intro path member
+  have bound := MicroCFTA.EqualityTrie.pathBudget_sufficient (members classes) path member
+  exact .short (by simp) (by simp only [List.length_nil, Nat.zero_add]; exact Nat.le_of_lt bound)
+
+/-- Collect the child indices that occur in the initial paths. -/
+def initialAlphabet (classes : Constraints) : List Nat := (members classes).flatten.eraseDups
+
+/-- Initial child indices lie in their computed finite alphabet. -/
+theorem initially_allowed (classes : Constraints) : UsesAlphabet (initialAlphabet classes) classes := by
+  intro path member index present
+  simp only [initialAlphabet, List.mem_eraseDups, List.mem_flatten]
+  exact ⟨path, member, present⟩
+
+/-- A finite path domain for every successful state descended from the initial one. -/
+def saturationDomain (classes : Constraints) : List (List Nat) :=
+  words (initialAlphabet classes) (initialGap classes * ((members classes).length + 1))
+
+/-- A conservative proof bound on strict relation growth and the final stopping step. -/
+def saturationBound (classes : Constraints) : Nat := (pathPairs (saturationDomain classes)).length + 1
+
+/-- Every canonical active state terminates without a finite-model premise. -/
+theorem fixMaybe_terminates (classes : Constraints) (normal : NormalState classes) :
+    fixMaybe (saturationBound classes) classes ≠ .timeout := by
+  apply fixMaybe_finishes_bounded (initialGap classes) (members classes) (initialAlphabet classes)
+    (saturationBound classes) classes normal (initially_segmented classes) (initially_anchored classes normal.1)
+    (initially_allowed classes)
+  unfold saturationBound saturationDomain

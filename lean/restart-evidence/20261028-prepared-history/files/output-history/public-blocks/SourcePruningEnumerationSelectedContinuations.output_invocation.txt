@@ -1,0 +1,41 @@
+MicroCFTA.SourcePruningEnumerationSelectedContinuations.output_invocation.{u, v} {width : Nat} {Output : Type u}
+  {Reason : Type v} [DecidableEq MicroCFTA.SourcePruningTemplates.Symbol]
+  [DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey MicroCFTA.SourcePruningTemplates.Symbol
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  [DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.Value MicroCFTA.SourcePruningTemplates.Symbol
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  (hook :
+    MicroCFTA.Fragments.Fragment MicroCFTA.SourcePruningTemplates.Symbol →
+      MicroCFTA.SourceCurrentAllocatedPartialState.State width →
+        MicroCFTA.SourceEndpointMemo.Memos →
+          MicroCFTA.EnumerationExpandableIndex.Cached MicroCFTA.SourcePruningTemplates.Symbol
+              (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) →
+            MicroCFTA.SourcePruningEnumerationNativeContinuations.HookResult Output Reason width)
+  (checkEmpty : Bool) (entryFuel nativeFuel r n p h k uv : Nat)
+  (edgesOf :
+    MicroCFTA.InternedConstructorTemplates.Value MicroCFTA.SourcePruningTemplates.Symbol
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) →
+      List
+        (MicroCFTA.InternedConstructorTemplates.EdgeValue MicroCFTA.SourcePruningTemplates.Symbol
+          (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)))
+  (caller : MicroCFTA.SourceCurrentAllocatedPartialState.State width)
+  (before :
+    MicroCFTA.EnumerationExpandableIndex.Cached MicroCFTA.SourcePruningTemplates.Symbol
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+  (queries : MicroCFTA.SourceEndpointMemo.Memos)
+  (folded : MicroCFTA.SourcePruningEnumerationNativeContinuations.Result Output Reason width)
+  (observed :
+    (MicroCFTA.SourcePruningEnumerationSelectedContinuations.run hook checkEmpty entryFuel nativeFuel r n p h k uv
+          edgesOf caller before queries).snd =
+      some folded)
+  (output : Output) :
+  output ∈ MicroCFTA.SourcePruningEnumerationHookInvocation.foldOutputs folded →
+    ∃ fragment reached saved after,
+      MicroCFTA.SourcePruningEnumerationSelectedContinuations.Invocation hook checkEmpty entryFuel nativeFuel r n p h k
+          uv edgesOf caller before queries fragment reached saved after ∧
+        output ∈ MicroCFTA.SourcePruningEnumerationHookInvocation.hookOutputs (hook fragment reached saved after)
+'MicroCFTA.SourcePruningEnumerationSelectedContinuations.output_invocation' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]

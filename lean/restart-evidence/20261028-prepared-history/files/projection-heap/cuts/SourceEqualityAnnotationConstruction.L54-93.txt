@@ -1,0 +1,40 @@
+/-- Original repaired source construction preserves all physical edge annotations in every outcome. -/
+theorem build [DecidableEq (EdgeKey Symbol Guard)] (valid : Guard → Prop) (expression : Syntax Symbol Guard)
+    (allowed : Allowed valid expression) (environment : List (Value Symbol Guard)) (state : State Symbol Guard) (heap : Heap valid state) :
+    Heap valid (InternedFreshOrdinaryConstruction.build expression environment state).state := by
+  cases expression with
+  | empty | var => simpa only [InternedFreshOrdinaryConstruction.build, Outcome.state] using heap
+  | node edges =>
+      simp only [Allowed] at allowed
+      simp only [InternedFreshOrdinaryConstruction.build]
+      exact bind_heap valid _ _ (buildEdges valid edges allowed environment state heap)
+        (fun values next nextHeap => work_heap valid _ (SourceEqualityAnnotationHeap.makeNode valid values) next nextHeap)
+  | union members =>
+      simp only [Allowed] at allowed
+      simp only [InternedFreshOrdinaryConstruction.build]
+      exact bind_heap valid _ _ (buildMany valid members allowed environment state heap)
+        (fun values next nextHeap => work_heap valid _ (SourceEqualityAnnotationHeap.makeUnion valid values) next nextHeap)
+  | binder smart body =>
+      simp only [Allowed] at allowed
+      simp only [InternedFreshOrdinaryConstruction.build, request]
+      apply bind_heap valid
+      · exact bind_heap valid _ _ (build valid body allowed _ state heap)
+          (fun value next nextHeap => work_heap valid _ (SourceEqualityAnnotationHeap.withoutSelfReference valid .depth value) next nextHeap)
+      · intro depth afterDepth depthHeap
+        apply bind_heap valid
+        · exact bind_heap valid _ _ (build valid body allowed _ afterDepth depthHeap)
+            (fun value next nextHeap => work_heap valid _ (SourceEqualityAnnotationHeap.withoutSelfReference valid (.uninterned (ordinaryLevel depth)) value) next nextHeap)
+        · intro ordinary afterOrdinary ordinaryHeap
+          split
+          · split <;> exact ordinaryHeap
+          · let key := muKey depth ordinary
+            let entry := Cache.intern afterOrdinary.nodes key
+            let allocated := {afterOrdinary with nodes := entry.2}
+            have allocatedHeap : Heap valid allocated := ordinaryHeap
+            apply bind_heap valid
+            · exact bind_heap valid _ _ (build valid body allowed _ allocated allocatedHeap)
+                (fun value next nextHeap => work_heap valid _
+                  (SourceEqualityAnnotationHeap.withoutSelfReference valid (.interned entry.1.identity) value) next nextHeap)
+            · intro bodyValue afterBody bodyHeap
+              exact bodyHeap
+termination_by sizeOf expression

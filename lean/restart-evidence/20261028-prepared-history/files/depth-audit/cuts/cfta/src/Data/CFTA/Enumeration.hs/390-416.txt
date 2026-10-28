@@ -1,0 +1,27 @@
+
+addUVarValue :: Maybe (Node symbol) -> EnumerateM symbol UVar
+addUVarValue x = do
+    uv <- nextUVar
+    let value = UVarUnenumerated x Sequence.Empty
+    modify' $ \s ->
+        s
+            { _uvarValues = IntMap.insert (uvarToInt uv) value (_uvarValues s)
+            , _expandableUVars =
+                if expandable value
+                    then IntSet.insert (uvarToInt uv) (_expandableUVars s)
+                    else _expandableUVars s
+            }
+    inheritAncestry (uvarToInt uv)
+    return uv
+
+-- | Give one UVar the ancestry of the current expansion.
+inheritAncestry :: Int -> EnumerateM symbol ()
+inheritAncestry idx = do
+    current <- gets _expansionAncestry
+    unless (HashSet.null current) $
+        modify' $
+            \s -> s{_recursionAncestry = IntMap.insertWith HashSet.union idx current (_recursionAncestry s)}
+
+-- | Return the current representative for a UVar, updating union-find state.
+getUVarRepresentative :: UVar -> EnumerateM symbol UVar
+getUVarRepresentative uv = do

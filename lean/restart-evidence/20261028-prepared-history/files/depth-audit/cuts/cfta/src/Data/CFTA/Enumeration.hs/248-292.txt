@@ -1,0 +1,45 @@
+    , _obligations :: [(Constraint, TermFragment symbol)]
+    -- ^ Constraints with a 'residual', each with the fragment it guards.
+    , _recursionAncestry :: !(IntMap.IntMap RecursionAncestry)
+    {- ^ For each UVar that the expansion of a constrained recursive node
+    reached, directly or through later expansions, the keys of those
+    expansions.
+    -}
+    , _expansionAncestry :: !RecursionAncestry
+    -- ^ The ancestry that the current expansion gives the UVars it reaches.
+    , _edgesOf :: Node symbol -> [Edge symbol]
+    {- ^ The edges of a node in the order of enumeration. It is one function,
+    set once for the enumeration, so a step that copies the state copies one
+    field for it.
+    -}
+    , _constrainedRecursion :: !Bool
+    {- ^ Whether the root reaches a recursive node with constraints. Only then
+    can a merge unfold one, so only then does a merge run 'provablyEmpty'.
+    -}
+    }
+
+{- | The expansions of constrained recursive nodes that a UVar descends from,
+each as its 'recursionKey'.
+-}
+type RecursionAncestry = HashSet.HashSet RecursionKey
+
+{- | A recursive node with the paths suspended on it. Two expansions with one
+key differ only in their UVars.
+-}
+data RecursionKey = RecursionKey
+    { recursiveNode :: !NodeId
+    , suspendedTries :: !(HashSet.HashSet PathTrie)
+    }
+    deriving (Eq, Show)
+
+-- | Hash the two fields in order, as the hash of a pair does.
+instance Hashable RecursionKey where
+    hashWithSalt salt (RecursionKey node tries) = salt `hashWithSalt` node `hashWithSalt` tries
+
+-- | The key of a recursive node with its suspended constraints.
+recursionKey :: Node symbol -> Seq SuspendedConstraint -> RecursionKey
+recursionKey n scs =
+    RecursionKey
+        { recursiveNode = nodeIdentity n
+        , suspendedTries = HashSet.fromList $ map scGetPathTrie $ Foldable.toList scs
+        }

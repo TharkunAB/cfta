@@ -1,0 +1,14 @@
+  match value with
+  | .mu .. => .done value before
+  | _ =>
+      if metadata.types.contains uv then .done value before
+      else SourcePruningNativeView.narrowAt fits admits fuel (holeKey metadata.typing uv) value before
+
+/-- Every fuel retains the complete Mu value and the same heap. -/
+theorem narrow_mu [DecidableEq (EdgeKey Symbol Guard)]
+    (holeKey : Typing → Nat → Key) (fits : Key → Symbol → Bool)
+    (admits : Key → Value Symbol Guard → Bool) (metadata : Metadata Typing) (fuel uv : Nat)
+    (entry : Cache.Interned InternedBinderProtocol.NodeKey)
+    (body depthShape ordinaryShape : Value Symbol Guard) (before : State Symbol Guard) :
+    narrow holeKey fits admits metadata fuel uv (.mu entry body depthShape ordinaryShape) before =
+      .done (.mu entry body depthShape ordinaryShape) before

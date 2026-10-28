@@ -1,0 +1,40 @@
+    omega
+  exact ⟨Nat.le_trans nodes grows, Nat.le_trans edges grows,
+    Nat.le_refl _, Nat.le_trans mass grows⟩
+
+/-- The initial transition pays narrowing and actual native normalization. -/
+def preparedSeed (seed : Seed) : Seed :=
+  (seed.1, SourcePruningEnumerationSelectedValueCaller.normalizationProfile
+    (SourcePruningEnumerationExpansionAdmission.narrowSeed seed).2)
+
+/-- One extra sibling slot also pays a parked expansion when no ordinary row exists. -/
+def rows (seed : Seed) : Nat := scalar (preparedSeed seed).2 + 1
+
+/-- The original mass ceiling and depth determine the complete finite forecast. -/
+noncomputable def final : Nat → Seed → Nat → Seed
+  | 0, seed, _ceiling => seed
+  | depth + 1, seed, ceiling =>
+      iterate (fun current => final depth (afterHead current ceiling) (massCeil current ceiling ceiling))
+        (preparedSeed seed) (rows seed)
+
+/-- One sibling pays its head and then its smaller-depth callback. -/
+noncomputable def step (depth : Nat) (seed : Seed) (capturedMass inherited : Nat) : Seed :=
+  final depth (afterHead seed inherited) (massCeil seed capturedMass inherited)
+
+/-- A sibling schedule retains the same captured mass and inherited length bounds. -/
+noncomputable def stage (depth : Nat) (seed : Seed) (capturedMass inherited count : Nat) : Seed :=
+  iterate (fun current => step depth current capturedMass inherited) seed count
+
+/-- Depth zero retains the literal original seed. -/
+theorem final_zero (seed : Seed) (ceiling : Nat) : final 0 seed ceiling = seed := rfl
+
+/-- Positive depth uses its prepared seed and original mass ceiling. -/
+theorem final_succ (depth : Nat) (seed : Seed) (ceiling : Nat) :
+    final (depth + 1) seed ceiling =
+      stage depth (preparedSeed seed) ceiling ceiling (rows seed) := rfl
+
+/-- A depth-zero callback does not enlarge the edge endpoint. -/
+theorem step_zero (seed : Seed) (capturedMass inherited : Nat) :
+    step 0 seed capturedMass inherited = afterHead seed inherited := rfl
+
+/-- An empty sibling schedule retains its seed. -/

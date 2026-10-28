@@ -1,0 +1,20 @@
+mutual
+/-- Original source syntax checks every complete edge guard, including discarded alternatives and probe bodies. -/
+def Allowed (valid : Guard → Prop) : Syntax Symbol Guard → Prop
+  | .empty | .var _ => True
+  | .node edges => EdgesAllowed valid edges
+  | .union members => ManyAllowed valid members
+  | .binder _ body => Allowed valid body
+termination_by expression => sizeOf expression
+
+/-- Ordered child syntax retains each original source annotation check. -/
+def ManyAllowed (valid : Guard → Prop) : List (Syntax Symbol Guard) → Prop
+  | [] => True
+  | first :: rest => Allowed valid first ∧ ManyAllowed valid rest
+termination_by expressions => sizeOf expressions
+
+/-- Each edge syntax retains its literal guard and all nested child checks. -/
+def EdgesAllowed (valid : Guard → Prop) : List (EdgeSyntax Symbol Guard) → Prop
+  | [] => True
+  | .mk _ guard children :: rest => valid guard ∧ ManyAllowed valid children ∧ EdgesAllowed valid rest
+termination_by expressions => sizeOf expressions

@@ -1,0 +1,5 @@
+theorem edge_query_heap (request : EdgeRequest Symbol Guard)
+    (before after : Checked width) (value : EdgeValue Symbol Guard) (fuel : Nat)
+    (valid : Good before) (heap : Heap before.native.machine.heap)
+    (trace : Trace fuel (.code (requestEdge request.domain request.left request.right)) before (.code (.pure value)) after) :
+    Heap after.native.machine.heap

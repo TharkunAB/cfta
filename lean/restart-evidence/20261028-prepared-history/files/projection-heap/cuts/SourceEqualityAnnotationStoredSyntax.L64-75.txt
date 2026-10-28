@@ -1,0 +1,12 @@
+/-- Actual optional source binders retain the physical annotation heap in complete and pending outcomes. -/
+theorem optionalBinder [DecidableEq (EdgeKey Symbol Guard)] (valid : Guard → Prop) (key : Nat × Nat)
+    (body : Value Symbol Guard) (state : State Symbol Guard) (heap : Heap valid state) (facts : Facts state) (resident : Available state body) :
+    Heap valid (SourceRecursiveIntersectionMaybeMu.maybeMu key body state).state := by
+  rw [SourceRecursiveIntersectionMaybeMu.maybeMu_eq key body state state facts resident]
+  split
+  · have prepared := encode_allowed valid body
+        (SourceEqualityAnnotationHeap.available valid state heap facts.linked body resident) (leaves body) [.intersection key.1 key.2]
+    exact SourceEqualityAnnotationConstruction.build valid _ (by simpa only [Allowed] using prepared) _ state heap
+  · simpa only [InternedNestedConstruction.Outcome.state] using heap
+
+end MicroCFTA.SourceEqualityAnnotationStoredSyntax

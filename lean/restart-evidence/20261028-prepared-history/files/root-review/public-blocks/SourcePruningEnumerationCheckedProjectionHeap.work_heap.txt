@@ -1,0 +1,25 @@
+MicroCFTA.SourcePruningEnumerationCheckedProjectionHeap.work_heap
+  [DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  (symbol : MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+  (constraint : MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)
+  (children :
+    List
+      (MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)))
+  (before :
+    MicroCFTA.InternedConstructorTemplates.State (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+  (heap :
+    MicroCFTA.SourceEqualityAnnotationHeap.Heap
+      (fun constraint => MicroCFTA.SourcePruningEnumerationConstraint.project constraint ≠ none) before) :
+  MicroCFTA.SourceEqualityAnnotationHeap.Heap
+    (fun constraint => MicroCFTA.SourcePruningEnumerationConstraint.project constraint ≠ none)
+    (MicroCFTA.InternedConstructorTemplates.run
+        (MicroCFTA.SourceEqualityMkEdgeAllocation.work symbol constraint children
+          (MicroCFTA.SourceEqualityMkEdgeAllocation.accepted constraint children.length))
+        before).snd
+'MicroCFTA.SourcePruningEnumerationCheckedProjectionHeap.work_heap' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]

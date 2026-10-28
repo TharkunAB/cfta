@@ -1,5 +1,99 @@
 # Current formalization findings
 
+## Prepared output histories and native projection support
+
+Source checkpoint: c2447659a54c163c679fc5e17917c414b6aa7906.
+Conditional finite-pruning language preservation and prepared finite-depth
+resource closure remain. Every output of the actual prepared driver now has
+an operational recursive history. This includes outputs before a later stop.
+The history records actual preparation, ordinary or opaque dispatch, false
+fragment recording and the same smaller-depth restart. The history theorem
+needs no semantic model, resource packet or future completion premise.
+
+Original checked source construction now derives a projectable native heap.
+Checked edge construction and completed native node and edge queries preserve
+that whole-heap property. The query induction derives the smaller-query facts.
+It does not assume arbitrary conjunctions support projection. Application to
+the whole parent worker and every recursive history remains open.
+
+A new backward soundness helper keeps the original stored value separate
+from its prepared ordinary parent. It retains the old ordinary-branch gates
+and final satisfying-assignment premise. Actual preparation supplies the
+required language equivalence, but no installed history composition passes
+that receipt to the helper yet. A separate completed-head resource receipt
+retains the actual caller, full Memos, both cache packets and prepared-parent
+indexes. It preserves the old head producer and its smaller-depth Complete
+premise. These results do not prove whole-driver output soundness or coverage.
+
+The largest gaps are semantic composition through all actual histories and
+an original sufficient depth bound for ALL earlier reachable callbacks.
+Fresh variable IDs do not change recursion keys. A narrowed Union need not
+insert its original key. Equality normalization can increase path length.
+Use the existing finite saturation domain as a starting point for a global
+carrier proof. No complete admitted divergence example has been established.
+Public APIs, ranking, sampling and physical Haskell correspondence remain open.
+Whole-CFTA goal ACTIVE; checkpoint PROGRESS. No new required Haskell fix
+was established.
+
+Eight modules add 29 public theorems and four definitions. Nine final strict
+checks pass. Full Audit passes 4409 jobs and checks 81113 theorem dependencies.
+Public readback has 511 theorem blocks and 48 definitions. Its complete prior
+2141917-byte output is an exact prefix. All 4400 prior non-Audit Lean, 249 strong
+and 810 Haskell source/evidence files retain bytes.
+Details: lean/notes-current-prepared-history.md.
+
+### Haskell comparison and external integration handoff
+
+No Haskell or Cabal file changed. No Haskell test or benchmark ran.
+No new Haskell defect or required repair was established. Keep the integrated
+LPO and KBO Natural-weight fixes and all earlier counterexamples below.
+The refreshed main tip d1ca06a1dd0c7488205feda613b529df21a08669 is an ancestor
+of this source checkpoint. This checkpoint requests no Haskell patch.
+
+The native projection result uses original checked constructor provenance.
+Completed rich node and edge query traces preserve the whole projectable
+heap. Actual accepted checked construction provides a successful accessor;
+the rejected empty-edge sentinel also supports projection. No unconditional
+closure law for raw conjoin is assumed. The earlier raw interner example
+remains valid. Native Ready and Cached annotations alone remain insufficient.
+Whole parent preparation and recursive-history attachment still need proofs.
+
+The depth audit compares the actual Haskell CPS order and formal worker.
+An earlier stopped callback omits later siblings. More work fuel cannot fix
+the literal exhausted expand case at zero recursive depth. The existing
+finite-depth resource result permits that stop. It supplies no sufficient
+original recursive depth for the whole earlier search tree.
+
+EnumerationState.recursionKey and Haskell recursionKey omit suspended UVar IDs.
+Fresh IDs alone cannot evade repeated-key parking. The earlier A=f(A)|a
+proposal also fails as a divergence example: an unconstrained Mu child is
+not expandable. Repeated keys clear the bucket or park the work.
+
+Do not count every original Union visit as an inserted ancestry key.
+Both implementations check repetition before narrowing. Narrowing can replace
+the Union with an ordinary node. Entry then reads that current ordinary value
+and inserts no original Union key. Mu remains exempt from that narrowing.
+This is an obstruction to a proposed proof measure, not a proven runtime fault.
+
+Do not bound future paths by the longest original path alone. Congruence
+combination of classes {[0],[1,0]} and {[0,0],[2]} can add [1,0,0]. This is a
+source-definition calculation, not an executed full admitted counterexample.
+EqualityTermination.bounded_state and saturationDomain already give a finite
+gap/anchor/alphabet domain for one normalization. Derive one ORIGINAL domain
+through allocation, descent, constraint combination and native reconstruction.
+Also derive a finite carrier for future recursive native identities and a
+progress measure for Union and ordinary phases. None is established here.
+
+The prepared captured soundness helper still assumes Canonical, nonterminal
+inherited constraints, fresh projected arity and retained-child conditions.
+It observes a stable actual completed family and a satisfying final cache.
+The source/prepared equivalence is explicit in that local helper. Use the
+same actual SelectedPreparation receipt to supply it during composition.
+Transport the stored lookup and parent availability through actual Keeps.
+Do not infer that equivalence from HeadAdmission alone or identify the
+original source handle with the prepared parent.
+
+
 ## Prepared prefix, parent and restart origin composition
 
 Source checkpoint: 96d98b104c7dc44b168c73dd370c0f46398c9407.

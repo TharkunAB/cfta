@@ -1,0 +1,15 @@
+def inheritAncestry (uv : Nat) : EnumerateM Symbol Guard Unit :=
+  modify fun state => {state with recursionAncestry := (fun other =>
+    if other = uv then (state.expansionAncestry ++ state.recursionAncestry uv).eraseDups
+    else state.recursionAncestry other)}
+
+/-- Allocate a slot and inherit the current recursion ancestry. -/
+def allocate (node : Option Nat) : EnumerateM Symbol Guard Nat := do
+  let state ← get
+  let uv := state.counter
+  set {state with counter := uv + 1, values := state.values ++ [UVarValue.unenumerated node []]}
+  inheritAncestry uv
+  pure uv
+
+/-- A new equality class starts with a pure equality variable. -/
+def suspend (trie : EqualityTrie.Trie) : EnumerateM Symbol Guard Suspended := do

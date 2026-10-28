@@ -1,0 +1,23 @@
+MicroCFTA.SourceCurrentAllocatedMkEdge.build_projectable_heap {width : Nat}
+  [DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  (symbol : MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+  (constraint : MicroCFTA.SourceEqualityConjoinAllocation.Constraint MicroCFTA.FullSyntax.Formula)
+  (children :
+    List
+      (MicroCFTA.InternedConstructorTemplates.Value (MicroCFTA.SourceObservations.Label MicroCFTA.FullSyntax.Formula)
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)))
+  (before : MicroCFTA.SourceEqualityNativeDemand.State width)
+  (valid : MicroCFTA.SourceEqualityConstraintMemoAllocation.Valid before.operations)
+  (ready : MicroCFTA.SourceEqualityConstraintAllocation.Ready before.operations.constraints constraint.stored)
+  (heap :
+    MicroCFTA.SourceEqualityAnnotationHeap.Heap
+      (fun constraint => MicroCFTA.SourcePruningEnumerationConstraint.project constraint ≠ none)
+      before.native.machine.heap) :
+  MicroCFTA.SourceEqualityAnnotationHeap.Heap
+    (fun constraint => MicroCFTA.SourcePruningEnumerationConstraint.project constraint ≠ none)
+    (MicroCFTA.SourceCurrentAllocatedMkEdge.build symbol constraint children before).snd.native.machine.heap
+'MicroCFTA.SourceCurrentAllocatedMkEdge.build_projectable_heap' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]

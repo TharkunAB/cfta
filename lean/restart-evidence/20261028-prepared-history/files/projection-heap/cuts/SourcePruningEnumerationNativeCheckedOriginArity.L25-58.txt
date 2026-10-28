@@ -1,0 +1,34 @@
+/-- The actual ready result derives projected arity at its checked incoming child count. -/
+theorem ready_fits
+    (le : SourceGuards.Guard FullSyntax.Formula → SourceGuards.Guard FullSyntax.Formula → Bool)
+    (first second combined : Allocated) (leftArity rightArity : Nat)
+    (operations : SourceEqualityConstraintMemoAllocation.State)
+    (valid : SourceEqualityConstraintMemoAllocation.Valid operations)
+    (firstReady : SourceEqualityConstraintAllocation.Ready operations.constraints first.stored)
+    (secondReady : SourceEqualityConstraintAllocation.Ready operations.constraints second.stored)
+    (observed : (SourceEqualityIntersectionEdgeAllocation.run le first second
+      leftArity rightArity operations).1 = .ok (.ready combined)) :
+    SourcePruningEnumerationArityOrigins.Fits (SourceEqualityConjoinAllocation.readback combined) leftArity := by
+  obtain ⟨branch, literal, sourceSame, _prefixValid, _growth, ready⟩ :=
+    SourceEqualityIntersectionEdgeAllocation.run_correct le first second leftArity rightArity
+      operations valid firstReady secondReady
+  have branchSame : branch = .ready combined := Except.ok.inj (literal.symm.trans observed)
+  subst branch
+  obtain ⟨_combinedReady, cached, _physical⟩ := ready combined rfl
+  have accepted : SourceEqualityMkEdgeAllocation.accepted
+      (SourceEqualityConjoinAllocation.readback combined) leftArity = true := by
+    change SourceEqualityIntersectionEdgeAllocation.Branch.ready
+      (SourceEqualityConjoinAllocation.readback combined) = _ at sourceSame
+    unfold SourceEqualityIntersectionEdgeAllocation.source at sourceSame
+    split at sourceSame
+    next _mismatch => cases sourceSame
+    next _matched =>
+      dsimp only at sourceSame
+      split at sourceSame
+      next kept =>
+        have readbackSame := SourceEqualityIntersectionEdgeAllocation.Branch.ready.inj sourceSame
+        rw [readbackSame]
+        exact kept
+      next _rejected => cases sourceSame
+  have fits : SourceEqualityMkEdgeAllocation.fits leftArity
+      (SourceCompactGuards.sourceEqualities (SourceEqualityConjoinAllocation.readback combined)) = true := by

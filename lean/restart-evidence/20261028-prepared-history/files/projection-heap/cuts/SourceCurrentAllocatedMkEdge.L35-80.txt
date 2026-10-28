@@ -1,0 +1,46 @@
+/-- Execute the actual checked constructor and retain its returned operations. -/
+noncomputable def build (symbol : Symbol) (constraint : Allocated)
+    (children : List (Value Symbol Guard)) (before : Checked width) :
+    Except String (EdgeValue Symbol Guard) × Checked width :=
+  let built := SourceEqualityMkEdgeAllocation.build symbol constraint.stored constraint.guard children
+    before.operations before.native.machine.heap
+  (built.1, advancePhysical before ⟨built.2.2, built.2.1⟩)
+
+/-- Construct the source rejection sentinel without a child computation. -/
+def reject (symbol : Symbol) (before : Checked width) : EdgeValue Symbol Guard × Checked width :=
+  let built := run (makeEdge symbol top [.empty]) before.native.machine.heap
+  (built.1, advancePhysical before ⟨built.2, SourceEqualityMkEdgeAllocation.emptyField before.operations⟩)
+
+/-- Physical construction retains the complete checked state and input inventory. -/
+structure PhysicalReceipt (formulas : SourceGuards.Formulas FullSyntax.Formula)
+    (solver : SourceGuards.Entailment FullSyntax.Formula) (inventory : Inventory)
+    (before : Checked width) (result : EdgeValue Symbol Guard) (after : Checked width) : Prop where
+  ready : Ready after
+  admitted : At formulas solver inventory after
+  effects : SourceCurrentConjunctionRowsAllocation.Effects (physical before) (physical after)
+  extension : SourceRecursiveIntersectionKernel.Extension before.native.machine after.native.machine
+  resident : InternedEdgeResidency.EdgeResident after.native.machine.heap result
+  nodes : after.native.nodes = before.native.nodes
+  edges : after.native.edges = before.native.edges
+  domains : after.native.machine.domains = before.native.machine.domains
+
+/-- The exact source check chooses the original fields or the sentinel fields. -/
+structure Receipt (formulas : SourceGuards.Formulas FullSyntax.Formula)
+    (solver : SourceGuards.Entailment FullSyntax.Formula) (inventory : Inventory)
+    (symbol : Symbol) (constraint : Allocated) (children : List (Value Symbol Guard))
+    (before : Checked width) (result : EdgeValue Symbol Guard) (after : Checked width) : Prop
+    extends PhysicalReceipt formulas solver inventory before result after where
+  actual : build symbol constraint children before = (.ok result, after)
+  symbol : result.entry.key.symbol = symbol
+  guard : result.entry.key.constraint = if accepted (raw constraint) children.length then raw constraint else top
+  children : result.children = if accepted (raw constraint) children.length then children else [.empty]
+
+/-- A rejection receipt has no premise about available or evaluated children. -/
+structure RejectReceipt (formulas : SourceGuards.Formulas FullSyntax.Formula)
+    (solver : SourceGuards.Entailment FullSyntax.Formula) (inventory : Inventory)
+    (symbol : Symbol) (before : Checked width) (result : EdgeValue Symbol Guard) (after : Checked width) : Prop
+    extends PhysicalReceipt formulas solver inventory before result after where
+  actual : reject symbol before = (result, after)
+  symbol : result.entry.key.symbol = symbol
+  guard : result.entry.key.constraint = top
+  children : result.children = [.empty]

@@ -1,0 +1,23 @@
+/-- Actual stored-body compilation preserves source annotation validity at every semantic constructor. -/
+theorem encode_allowed (valid : Guard → Prop) (value : Value Symbol Guard) (annotated : Annotated valid value)
+    (context : List (Value Symbol Guard)) (locals : List InternedBinderProtocol.Reference) : Allowed valid (encode context locals value) := by
+  induction annotated generalizing locals with
+  | empty => simp only [encode, Value.free, List.isEmpty_nil, ↓reduceIte, Allowed]
+  | reference name =>
+      simp only [encode.eq_def, Value.free, List.isEmpty_cons, Bool.false_eq_true, ↓reduceIte]
+      split <;> simp only [Allowed]
+  | node entry edges depth free guards children ih =>
+      rw [encode.eq_def]
+      split
+      · simp only [Allowed]
+      · simpa only [Allowed] using edges_allowed valid context locals edges guards (fun child member => ih child member locals)
+  | union entry members depth free children ih =>
+      rw [encode.eq_def]
+      split
+      · simp only [Allowed]
+      · simpa only [Allowed] using many_allowed valid context locals members (fun child member => ih child member locals)
+  | mu entry body depth ordinary annotated ih =>
+      rw [encode.eq_def]
+      split
+      · simp only [Allowed]
+      · simpa only [Allowed] using ih (.interned entry.identity :: locals)

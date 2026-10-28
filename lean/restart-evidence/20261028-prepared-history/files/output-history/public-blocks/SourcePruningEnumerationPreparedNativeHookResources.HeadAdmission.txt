@@ -1,0 +1,85 @@
+structure MicroCFTA.SourcePruningEnumerationPreparedNativeHookResources.HeadAdmission {Typing : Type} {bits : Nat}
+  [DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey MicroCFTA.SourcePruningTemplates.Symbol
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  (seed : MicroCFTA.SourcePruningEnumerationIncomingReservation.Seed)
+  (formulas : MicroCFTA.SourceGuards.Formulas MicroCFTA.FullSyntax.Formula)
+  (solver : MicroCFTA.SourceGuards.Entailment MicroCFTA.FullSyntax.Formula)
+  (inventory : MicroCFTA.SourceCurrentAllocatedNativeInventoryState.Inventory)
+  (caller : MicroCFTA.SourceCurrentAllocatedPartialState.State (bits + 2))
+  (memos : MicroCFTA.EndpointMemoGateTrace.Memos) (metadata : MicroCFTA.SourcePruningRecordTypes.Metadata Typing)
+  (before :
+    MicroCFTA.EnumerationExpandableIndex.Cached MicroCFTA.SourcePruningTemplates.Symbol
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+  (uv handle : Nat) (scs : List MicroCFTA.EnumerationState.Suspended)
+  (parentEntry : MicroCFTA.Cache.Interned MicroCFTA.InternedBinderProtocol.NodeKey)
+  (storedEdges :
+    List
+      (MicroCFTA.InternedConstructorTemplates.EdgeValue MicroCFTA.SourcePruningTemplates.Symbol
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)))
+  (depth : Nat) (free : List MicroCFTA.InternedBinderProtocol.Reference)
+  (edge :
+    MicroCFTA.InternedConstructorTemplates.EdgeValue MicroCFTA.SourcePruningTemplates.Symbol
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)) :
+  Prop
+number of parameters: 19
+fields:
+  MicroCFTA.SourcePruningEnumerationPreparedNativeHookResources.HeadAdmission.packet : MicroCFTA.SourcePruningEnumerationRecursive.Packet
+      formulas solver inventory caller memos metadata before
+  MicroCFTA.SourcePruningEnumerationPreparedNativeHookResources.HeadAdmission.ready : MicroCFTA.EnumerationDriver.Ready
+      uv before.core
+  MicroCFTA.SourcePruningEnumerationPreparedNativeHookResources.HeadAdmission.incoming : MicroCFTA.EnumerationReferences.IncomingAvoid
+      uv before.core
+  MicroCFTA.SourcePruningEnumerationPreparedNativeHookResources.HeadAdmission.bounded : MicroCFTA.SourceCurrentConstrainedCapGeneratedQueryResources.Fits
+      seed.snd caller.checked
+  MicroCFTA.SourcePruningEnumerationPreparedNativeHookResources.HeadAdmission.known : MicroCFTA.SourceEqualityAnnotationHeap.Heap
+      (fun guard => guard ∈ seed.fst) caller.checked.native.machine.heap
+  MicroCFTA.SourcePruningEnumerationPreparedNativeHookResources.HeadAdmission.stored : before.core.values[uv]? =
+      some (MicroCFTA.EnumerationState.UVarValue.unenumerated (some handle) scs)
+  MicroCFTA.SourcePruningEnumerationPreparedNativeHookResources.HeadAdmission.parentAvailable : MicroCFTA.InternedProbeProvenance.Available
+      caller.checked.native.machine.heap
+      (MicroCFTA.InternedConstructorTemplates.Value.node parentEntry storedEdges depth free)
+  MicroCFTA.SourcePruningEnumerationPreparedNativeHookResources.HeadAdmission.parentClosed : free = []
+  MicroCFTA.SourcePruningEnumerationPreparedNativeHookResources.HeadAdmission.selected : edge ∈ storedEdges
+  MicroCFTA.SourcePruningEnumerationPreparedNativeHookResources.HeadAdmission.reserved : MicroCFTA.SourcePruningEnumerationIncomingReservation.Reserved
+      bits seed (MicroCFTA.SourcePruningEnumerationNativeBranchCompletion.edgeCost scs before.core.counter edge)
+constructor:
+  MicroCFTA.SourcePruningEnumerationPreparedNativeHookResources.HeadAdmission.mk {Typing : Type} {bits : Nat}
+    [DecidableEq
+        (MicroCFTA.InternedConstructorTemplates.EdgeKey MicroCFTA.SourcePruningTemplates.Symbol
+          (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+    {seed : MicroCFTA.SourcePruningEnumerationIncomingReservation.Seed}
+    {formulas : MicroCFTA.SourceGuards.Formulas MicroCFTA.FullSyntax.Formula}
+    {solver : MicroCFTA.SourceGuards.Entailment MicroCFTA.FullSyntax.Formula}
+    {inventory : MicroCFTA.SourceCurrentAllocatedNativeInventoryState.Inventory}
+    {caller : MicroCFTA.SourceCurrentAllocatedPartialState.State (bits + 2)}
+    {memos : MicroCFTA.EndpointMemoGateTrace.Memos} {metadata : MicroCFTA.SourcePruningRecordTypes.Metadata Typing}
+    {before :
+      MicroCFTA.EnumerationExpandableIndex.Cached MicroCFTA.SourcePruningTemplates.Symbol
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)}
+    {uv handle : Nat} {scs : List MicroCFTA.EnumerationState.Suspended}
+    {parentEntry : MicroCFTA.Cache.Interned MicroCFTA.InternedBinderProtocol.NodeKey}
+    {storedEdges :
+      List
+        (MicroCFTA.InternedConstructorTemplates.EdgeValue MicroCFTA.SourcePruningTemplates.Symbol
+          (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))}
+    {depth : Nat} {free : List MicroCFTA.InternedBinderProtocol.Reference}
+    {edge :
+      MicroCFTA.InternedConstructorTemplates.EdgeValue MicroCFTA.SourcePruningTemplates.Symbol
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)}
+    (packet : MicroCFTA.SourcePruningEnumerationRecursive.Packet formulas solver inventory caller memos metadata before)
+    (ready : MicroCFTA.EnumerationDriver.Ready uv before.core)
+    (incoming : MicroCFTA.EnumerationReferences.IncomingAvoid uv before.core)
+    (bounded : MicroCFTA.SourceCurrentConstrainedCapGeneratedQueryResources.Fits seed.snd caller.checked)
+    (known :
+      MicroCFTA.SourceEqualityAnnotationHeap.Heap (fun guard => guard ∈ seed.fst) caller.checked.native.machine.heap)
+    (stored : before.core.values[uv]? = some (MicroCFTA.EnumerationState.UVarValue.unenumerated (some handle) scs))
+    (parentAvailable :
+      MicroCFTA.InternedProbeProvenance.Available caller.checked.native.machine.heap
+        (MicroCFTA.InternedConstructorTemplates.Value.node parentEntry storedEdges depth free))
+    (parentClosed : free = []) (selected : edge ∈ storedEdges)
+    (reserved :
+      MicroCFTA.SourcePruningEnumerationIncomingReservation.Reserved bits seed
+        (MicroCFTA.SourcePruningEnumerationNativeBranchCompletion.edgeCost scs before.core.counter edge)) :
+    MicroCFTA.SourcePruningEnumerationPreparedNativeHookResources.HeadAdmission seed formulas solver inventory caller
+      memos metadata before uv handle scs parentEntry storedEdges depth free edge

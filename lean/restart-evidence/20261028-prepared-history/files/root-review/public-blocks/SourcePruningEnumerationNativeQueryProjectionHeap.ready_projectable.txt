@@ -1,0 +1,17 @@
+MicroCFTA.SourcePruningEnumerationNativeQueryProjectionHeap.ready_projectable
+  (le :
+    MicroCFTA.SourceGuards.Guard MicroCFTA.FullSyntax.Formula →
+      MicroCFTA.SourceGuards.Guard MicroCFTA.FullSyntax.Formula → Bool)
+  (first second combined : MicroCFTA.SourceEqualityConjoinAllocation.Constraint MicroCFTA.FullSyntax.Formula)
+  (leftArity rightArity : Nat) (operations : MicroCFTA.SourceEqualityConstraintMemoAllocation.State)
+  (valid : MicroCFTA.SourceEqualityConstraintMemoAllocation.Valid operations)
+  (firstReady : MicroCFTA.SourceEqualityConstraintAllocation.Ready operations.constraints first.stored)
+  (secondReady : MicroCFTA.SourceEqualityConstraintAllocation.Ready operations.constraints second.stored)
+  (observed :
+    (MicroCFTA.SourceEqualityIntersectionEdgeAllocation.run le first second leftArity rightArity operations).fst =
+      Except.ok (MicroCFTA.SourceEqualityIntersectionEdgeAllocation.Branch.ready combined)) :
+  MicroCFTA.SourcePruningEnumerationConstraint.project (MicroCFTA.SourceEqualityConjoinAllocation.readback combined) ≠
+    none
+'MicroCFTA.SourcePruningEnumerationNativeQueryProjectionHeap.ready_projectable' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]

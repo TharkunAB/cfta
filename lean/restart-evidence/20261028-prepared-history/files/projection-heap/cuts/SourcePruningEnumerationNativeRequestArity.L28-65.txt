@@ -1,0 +1,38 @@
+
+variable [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)]
+
+/-- Actual node lookup and demand do not change any constructor record. -/
+theorem node_step_heap (request : NodeRequest Symbol Guard)
+    (next : Value Symbol Guard → Code Symbol Guard A) (state : Checked width) :
+    (step (.code (.node request next)) state).state.native.machine.heap = state.native.machine.heap := by
+  change (lift state.operations (SourceRecursiveIntersectionNative.step
+    SourceEqualityConstraintConstructors.top SourceEqualityPCSNativeEdge.conjoin
+    (.node request next) state.native)).state.native.machine.heap = _
+  rw [lift_heap, SourceRecursiveIntersectionNative.node_step_machine]
+
+private theorem pure_after_step_heap (control : Control A) (before middle after : Checked width)
+    (first value : A) (fuel : Nat)
+    (one : step control before = .yielded (.code (.pure first)) middle)
+    (same : middle.native.machine.heap = before.native.machine.heap)
+    (trace : Trace fuel control before (.code (.pure value)) after)
+    (heap : Heap before.native.machine.heap) : Heap after.native.machine.heap := by
+  obtain ⟨rest, _count, tail⟩ := after_step fuel control _ before middle after value trace one
+  obtain ⟨_zero, _value, retained⟩ := pure_trace rest first value middle after tail.steps
+  rw [← retained, same]
+  exact heap
+
+private theorem finish_node_heap (handle : Nat) (first value : Value Symbol Guard)
+    (before after : Checked width) (fuel : Nat)
+    (trace : Trace fuel (.code (.finishNode handle first (.pure first))) before (.code (.pure value)) after)
+    (heap : Heap before.native.machine.heap) : Heap after.native.machine.heap := by
+  exact pure_after_step_heap _ before
+    {before with native := SourceRecursiveIntersectionThunks.finishNode handle first before.native}
+    after first value fuel rfl rfl trace heap
+
+private theorem finish_edge_heap (handle : Nat) (first value : EdgeValue Symbol Guard)
+    (before after : Checked width) (fuel : Nat)
+    (trace : Trace fuel (.code (.finishEdge handle first (.pure first))) before (.code (.pure value)) after)
+    (heap : Heap before.native.machine.heap) : Heap after.native.machine.heap := by
+  exact pure_after_step_heap _ before
+    {before with native := SourceRecursiveIntersectionThunks.finishEdge handle first before.native}
+    after first value fuel rfl rfl trace heap

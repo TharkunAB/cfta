@@ -1,0 +1,16 @@
+MicroCFTA.SourcePruningEnumerationProjectionHeap.closed_projectable {Symbol : Type}
+  [DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey Symbol
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  (expression :
+    MicroCFTA.InternedNestedConstruction.Syntax Symbol
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+  (checked : MicroCFTA.SourcePruningEnumerationArityOrigins.SourceChecked expression) :
+  ∃ value heap _done,
+    MicroCFTA.SourceEqualityAnnotationHeap.Heap
+        (fun constraint => MicroCFTA.SourcePruningEnumerationConstraint.project constraint ≠ none) heap ∧
+      MicroCFTA.SourceEqualityAnnotationLanguage.Annotated
+        (fun constraint => MicroCFTA.SourcePruningEnumerationConstraint.project constraint ≠ none) value
+'MicroCFTA.SourcePruningEnumerationProjectionHeap.closed_projectable' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]

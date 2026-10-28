@@ -1,0 +1,32 @@
+/-- Every suffix read from a class and any recorded strict extension. -/
+def suffixes (paths : Class) (classes : Constraints) : List Path :=
+  (paths.flatMap (fun base => (members classes).filterMap (strictSuffix base))).eraseDups
+
+/-- The suffix table records precisely the class's recorded strict extensions. -/
+theorem mem_suffixes (suffix : Path) (paths : Class) (classes : Constraints) :
+    suffix ∈ suffixes paths classes ↔
+      ∃ base ∈ paths, ∃ extension ∈ members classes, suffix ≠ [] ∧ base ++ suffix = extension := by
+  simp [suffixes, List.mem_flatMap, strictSuffix_correct]
+
+/-- Extend every class member by the same suffix and preserve set semantics. -/
+def extendClass (paths : Class) (suffix : Path) : Class := (paths.map (· ++ suffix)).eraseDups
+
+/-- Generated classes contain exactly the uniformly extended paths. -/
+theorem mem_extendClass (path : Path) (paths : Class) (suffix : Path) :
+    path ∈ extendClass paths suffix ↔ ∃ base ∈ paths, base ++ suffix = path := by
+  simp [extendClass]
+
+/-- A common path suffix preserves distinctness of class members. -/
+theorem extendClass_active (paths : Class) (suffix : Path) (active : Nontrivial paths) :
+    Nontrivial (extendClass paths suffix) := by
+  obtain ⟨left, leftMember, right, rightMember, different⟩ := active
+  refine ⟨left ++ suffix, (mem_extendClass _ _ _).mpr ⟨left, leftMember, rfl⟩,
+    right ++ suffix, (mem_extendClass _ _ _).mpr ⟨right, rightMember, rfl⟩, ?_⟩
+  intro same
+  exact different (List.append_cancel_right same)
+
+/-- Add exactly the prefix-induced equality classes used by normalization. -/
+def addCongruences (classes : Constraints) : Constraints :=
+  classes ++ classes.flatMap (fun paths => (suffixes paths classes).map (extendClass paths))
+
+/-- Prefix-induced classes remain nontrivial. -/

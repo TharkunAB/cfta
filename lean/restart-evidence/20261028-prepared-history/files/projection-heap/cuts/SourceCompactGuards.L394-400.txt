@@ -1,0 +1,7 @@
+/-- The source combineEqConstraints cases, including both contradiction and empty shortcuts. -/
+noncomputable def combineEqualities : Option (List (List Path)) → Option (List (List Path)) → Option (List (List Path))
+  | none, _ | _, none => none
+  | some [], some [] => some []
+  | some first, some second => normalize (first ++ second)
+
+/-- Combining normalized source operands keeps every stored class nontrivial. -/

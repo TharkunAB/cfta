@@ -1,0 +1,9 @@
+theorem node_request_heap (request : NodeRequest Symbol Guard)
+    (before after : Checked width) (value : Value Symbol Guard) (fuel : Nat)
+    (valid : Good before) (heap : Heap before.native.machine.heap)
+    (trace : Trace fuel (.code (requestNode request.domain request.left request.right)) before (.code (.pure value)) after)
+    (bodies : ∀ (count : Nat) (original : NodeRequest Symbol Guard)
+      (start final : Checked width) (result : Value Symbol Guard), count < fuel →
+      Good start → Heap start.native.machine.heap →
+      Trace count (.code (compileNode original)) start (.code (.pure result)) final →
+      Heap final.native.machine.heap) : Heap after.native.machine.heap

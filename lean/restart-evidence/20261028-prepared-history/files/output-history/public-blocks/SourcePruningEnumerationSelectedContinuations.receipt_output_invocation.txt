@@ -1,0 +1,17 @@
+MicroCFTA.SourcePruningEnumerationSelectedContinuations.receipt_output_invocation.{u, v} {width : Nat} {Output : Type u}
+  {Reason : Type v}
+  (hook :
+    MicroCFTA.Fragments.Fragment MicroCFTA.SourcePruningTemplates.Symbol →
+      MicroCFTA.SourceCurrentAllocatedPartialState.State width →
+        MicroCFTA.SourceEndpointMemo.Memos →
+          MicroCFTA.EnumerationExpandableIndex.Cached MicroCFTA.SourcePruningTemplates.Symbol
+              (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) →
+            MicroCFTA.SourcePruningEnumerationNativeContinuations.HookResult Output Reason width)
+  (receipt : Option (MicroCFTA.SourcePruningEnumerationSelectedEdge.Result width)) (output : Output) :
+  output ∈
+      MicroCFTA.SourcePruningEnumerationHookInvocation.foldOutputs
+        (MicroCFTA.SourcePruningEnumerationReceiptContinuation.run hook receipt) →
+    ∃ fragment reached saved after,
+      receipt = some (MicroCFTA.SourcePruningEnumerationSelectedEdge.Result.complete fragment reached saved after) ∧
+        output ∈ MicroCFTA.SourcePruningEnumerationHookInvocation.hookOutputs (hook fragment reached saved after)
+'MicroCFTA.SourcePruningEnumerationSelectedContinuations.receipt_output_invocation' depends on axioms: [propext]

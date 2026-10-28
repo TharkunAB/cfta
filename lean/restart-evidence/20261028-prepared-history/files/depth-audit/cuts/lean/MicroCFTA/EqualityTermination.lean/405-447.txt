@@ -1,0 +1,43 @@
+theorem segmented_length_bound (gap : Nat) (classes : Constraints) (consistent : isContradicting classes = false)
+    (segmented : SegmentedState gap classes) (path : List Nat) (member : path ∈ members classes) :
+    path.length ≤ gap * (classes.length + 1) := by
+  have weighted := segments_weighted_bound gap classes consistent [] path (segmented path member)
+  have rankBound : prefixRank classes path ≤ classes.length := List.countP_le_length
+  have productBound := Nat.mul_le_mul_left gap (show prefixRank classes path + 1 ≤ classes.length + 1 by omega)
+  simp only [List.length_nil, Nat.zero_add] at weighted
+  omega
+
+
+/-- Every component contains one path from a fixed finite anchor set. -/
+def Anchored (anchors : List (List Nat)) (classes : Constraints) : Prop :=
+  ∀ paths ∈ classes, ∃ path, path ∈ paths ∧ path ∈ anchors
+
+/-- Distinct components need distinct anchors, so their count is bounded. -/
+theorem anchored_class_bound (anchors : List (List Nat)) (classes : Constraints)
+    (anchored : Anchored anchors classes)
+    (disjoint : classes.Pairwise (fun left right => overlap left right = false)) : classes.length ≤ anchors.length := by
+  classical
+  let pick : Class → List Nat := fun paths => if member : paths ∈ classes then Classical.choose (anchored paths member) else []
+  have chosen : ∀ paths ∈ classes, pick paths ∈ paths ∧ pick paths ∈ anchors := by
+    intro paths member
+    simpa [pick, member] using Classical.choose_spec (anchored paths member)
+  have unique : (classes.map pick).Nodup := by
+    change (classes.map pick).Pairwise (· ≠ ·)
+    rw [List.pairwise_map]
+    apply disjoint.imp_of_mem
+    intro left right leftMember rightMember apart same
+    have shared := (overlap_correct left right).mpr
+      ⟨pick left, (chosen left leftMember).1, same ▸ (chosen right rightMember).1⟩
+    rw [apart] at shared
+    contradiction
+  have subset : ∀ path ∈ classes.map pick, path ∈ anchors := by
+    intro path member
+    obtain ⟨paths, pathsMember, rfl⟩ := List.mem_map.mp member
+    exact (chosen paths pathsMember).2
+  have bound := unique.length_le_of_subset subset
+  simpa using bound
+
+/-- Each source step preserves an original-path anchor in every component. -/
+theorem step_anchored (anchors : List (List Nat)) (classes output : Constraints)
+    (active : Active classes) (anchored : Anchored anchors classes)
+    (success : congruenceStep classes = some output) : Anchored anchors output := by

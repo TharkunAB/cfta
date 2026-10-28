@@ -1,0 +1,37 @@
+/-- Each successful witnessed expansion strictly decreases the finite height histogram. -/
+theorem enumerateOut_histogram (graph : Graph Symbol Guard) (meaning : Guard → Term Symbol → Prop)
+    (complete : CompleteGraph graph) (correct : IntersectionCorrect graph (Accepted graph meaning))
+    (assignment extended : Nat → Term Symbol) (fuel uv bound : Nat) (before after : State Symbol Guard) (fragment : Fragment Symbol)
+    (ready : Ready uv before) (proper : ProperState before) (pending : GraphPending before uv)
+    (agree : ∀ index < before.counter, extended index = assignment index) (inside : (assignment uv).height < bound)
+    (success : Success (enumerateOut graph fuel uv) before fragment after)
+    (satisfies : Satisfies (Accepted graph meaning) meaning extended after) :
+    HeightOrder.Below bound (histogram after extended) (histogram before assignment) := by
+  obtain ⟨origin, removed⟩ := enumerateOut_height_origin graph meaning complete correct extended fuel uv before after fragment ready proper success satisfies
+  have originOld : HighOrigin extended (assignment uv).height before after := by simpa [agree uv ready.inside] using origin
+  apply HeightOrder.below_of_decrease bound (histogram after extended) (histogram before assignment) (assignment uv).height inside
+  · exact histogram_strict before after assignment extended uv ready.safe.1.aligned agree originOld pending removed
+  · intro height above below
+    exact (workAt_nodup after extended height).length_le_of_subset
+      (workAt_subset before after assignment extended height (assignment uv).height ready.safe.1.aligned agree originOld (by omega))
+
+/-- All pending graph terms lie below the fixed initial height bound. -/
+def BoundedWork (bound : Nat) (state : State Symbol Guard) (assignment : Nat → Term Symbol) : Prop :=
+  ∀ uv, GraphPending state uv → (assignment uv).height < bound
+
+/-- Actual expansion preserves the fixed height range while it changes the lower counts. -/
+theorem enumerateOut_bounded (graph : Graph Symbol Guard) (meaning : Guard → Term Symbol → Prop)
+    (complete : CompleteGraph graph) (correct : IntersectionCorrect graph (Accepted graph meaning))
+    (assignment extended : Nat → Term Symbol) (fuel uv bound : Nat) (before after : State Symbol Guard) (fragment : Fragment Symbol)
+    (ready : Ready uv before) (proper : ProperState before) (pending : GraphPending before uv)
+    (agree : ∀ index < before.counter, extended index = assignment index) (bounded : BoundedWork bound before assignment)
+    (success : Success (enumerateOut graph fuel uv) before fragment after)
+    (satisfies : Satisfies (Accepted graph meaning) meaning extended after) : BoundedWork bound after extended := by
+  have origin := (enumerateOut_height_origin graph meaning complete correct extended fuel uv before after fragment ready proper success satisfies).1
+  have selected := bounded uv pending
+  intro index afterPending
+  by_cases small : (extended index).height < bound
+  · exact small
+  · have old := origin index (by rw [agree uv ready.inside]; omega) afterPending
+    have inside : index < before.counter := by rw [ready.safe.1.aligned]; exact graphPending_inside before index old
+    rw [agree index inside]

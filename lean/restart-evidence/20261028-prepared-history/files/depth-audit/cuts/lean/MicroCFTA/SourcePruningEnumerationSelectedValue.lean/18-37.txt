@@ -1,0 +1,20 @@
+/-- Prepare the selected value with the source's two distinct operations. -/
+def run (fuel : Nat) (value : Value Symbol Guard) (before : State Symbol Guard) :
+    MergedSourceComparison.Result Symbol Guard (Value Symbol Guard) :=
+  match value with
+  | value@(.mu ..) =>
+      match InternedFreshOrdinaryStoredSubstitution.unfold value before with
+      | .done result after => .done result after
+      | .pending key after => .failed (.pending key) after
+  | value@(.union ..) =>
+      match MergedFreshOrdinaryExposure.nodeEdges fuel value before with
+      | .done rows middle =>
+          let rebuilt := InternedConstructorTemplates.run (makeNode rows) middle
+          .done rebuilt.1 rebuilt.2
+      | .unresolved name after => .failed (.unresolved name) after
+      | .pending key after => .failed (.pending key) after
+      | .exhausted after => .failed .exhausted after
+  | _ => .done value before
+
+/-- Original native cache facts derive one stable result and its exact least language. -/
+theorem run_complete (value : Value Symbol Guard) (before : State Symbol Guard)

@@ -1,0 +1,9 @@
+
+/-- Actual completed native evaluation retains the annotation heap through its compiled source calls. -/
+theorem Bounds.annotation_heap (annotation : Guard → Prop) [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Guard)] {emptyGuard : Guard} {conjoin : Guard → Guard → Guard}
+    {code : Code Symbol Guard A} {state after : SourceRecursiveIntersectionThunks.State width Symbol Guard} {value : A}
+    {evaluated : Evaluation width Symbol Guard emptyGuard conjoin code state value after} (bounds : Bounds evaluated)
+    (emptyValid : annotation emptyGuard) (conjoinedValid : ∀ first second, annotation (conjoin first second))
+    (post : Machine Symbol Guard → A → Prop) : BodyCode code → SourceRecursiveIntersectionCode.Safe code state.machine post →
+      SourceRecursiveIntersectionThunks.Valid width emptyGuard conjoin state → Certified annotation code state.machine →
+      Heap annotation state.machine.heap → Heap annotation after.machine.heap := by

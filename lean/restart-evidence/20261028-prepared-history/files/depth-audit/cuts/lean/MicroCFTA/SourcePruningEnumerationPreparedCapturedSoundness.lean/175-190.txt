@@ -1,0 +1,16 @@
+  · subst result
+    have selectedRun := edgeRun r n (max p p0) (max h h0) k
+      (Nat.le_max_right _ _) (Nat.le_max_right _ _)
+    have actual := observed r0 n0 (max p p0) (max h h0) k0
+      (Nat.le_max_left _ _) (Nat.le_max_left _ _)
+    have common : run checkEmpty (r + r0) (n + n0) (max p p0) (max h h0)
+        (k + k0) uv scs edge caller before memos.query =
+        some (.stopped fragments (.ok (some []), reachedCaller, queries0, outer, waiting) (some middle)) := by
+      rw [run]
+      have exactSelected : SourcePruningEnumerationSelectedEdge.run checkEmpty (r + r0) (n + n0)
+          (max p p0) (max h h0) (k + k0) scs edge caller before memos.query =
+          .stopped fragments (.ok (some []), reachedCaller, queries0, outer, waiting) (some middle) := by
+        simpa only [Nat.add_comm] using selectedRun
+      rw [exactSelected]
+    rw [common] at actual
+    cases actual

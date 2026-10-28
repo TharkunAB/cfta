@@ -1,0 +1,36 @@
+
+/-- A checked actual edge derives its own guard and each child annotation from the same physical heap. -/
+theorem edge (valid : Guard → Prop) (state : State Symbol Guard) (heap : Heap valid state) (facts : InternedNestedFacts.Facts state)
+    (edge : EdgeValue Symbol Guard) (resident : EdgeResident state edge) :
+    valid edge.entry.key.constraint ∧ ∀ child ∈ edge.children, Annotated valid child :=
+  ⟨heap edge.entry.key edge resident, fun child member => available valid state heap facts.linked child (facts.cached.edges _ edge resident child member)⟩
+
+/-- One actual edge interning request retains the annotation invariant, including canonical hits. -/
+theorem edgeStep [DecidableEq (EdgeKey Symbol Guard)] (valid : Guard → Prop)
+    (key : EdgeKey Symbol Guard) (identify : Interned (EdgeKey Symbol Guard) → EdgeValue Symbol Guard)
+    (state : State Symbol Guard) (heap : Heap valid state) (annotation : valid key.constraint) :
+    Heap valid (InternedConstructorTemplates.edgeStep key identify state).2 := by
+  intro other edge present
+  rcases record_cases state.edgeRecords key other _ edge present with old | ⟨same, _⟩
+  · exact heap other edge old
+  · simpa only [same] using annotation
+
+/-- Actual node allocation leaves every physical edge record unchanged. -/
+theorem nodeStep (valid : Guard → Prop) (key : InternedBinderProtocol.NodeKey)
+    (identify : Interned InternedBinderProtocol.NodeKey → Value Symbol Guard) (state : State Symbol Guard) (heap : Heap valid state) :
+    Heap valid (InternedConstructorTemplates.nodeStep key identify state).2 := heap
+
+/-- Constructor work emits only guards that satisfy the source annotation predicate. -/
+def SafeWork (valid : Guard → Prop) : Work Symbol Guard A → Prop
+  | .pure _ => True
+  | .edge key _ next => valid key.constraint ∧ ∀ value, SafeWork valid (next value)
+  | .node _ _ next => ∀ value, SafeWork valid (next value)
+
+/-- Every actual constructor prefix preserves valid edge annotations under its emitted guard checks. -/
+theorem run [DecidableEq (EdgeKey Symbol Guard)] (valid : Guard → Prop) (work : Work Symbol Guard A)
+    (safe : SafeWork valid work) (state : State Symbol Guard) (heap : Heap valid state) :
+    Heap valid (InternedConstructorTemplates.run work state).2 := by
+  induction work generalizing state with
+  | pure value => exact heap
+  | edge key identify next ih => exact ih _ (safe.2 _) _ (edgeStep valid key identify state heap safe.1)
+  | node key identify next ih => exact ih _ (safe _) _ (nodeStep valid key identify state heap)

@@ -1,0 +1,35 @@
+/-- Both actual checked constructor branches return a projectable edge. -/
+theorem Receipt.projectable
+    {formulas : SourceGuards.Formulas FullSyntax.Formula}
+    {solver : SourceGuards.Entailment FullSyntax.Formula}
+    {inventory : SourceCurrentAllocatedNativeInventoryState.Inventory}
+    {symbol : Symbol} {constraint : Allocated} {children : List (Value Symbol Constraint)}
+    {before after : SourceEqualityNativeDemand.State width} {result : EdgeValue Symbol Constraint}
+    (receipt : Receipt formulas solver inventory symbol constraint children before result after) :
+    SourcePruningEnumerationConstraint.project result.entry.key.constraint ≠ none := by
+  have same := receipt.guard
+  cases kept : SourceEqualityMkEdgeAllocation.accepted (raw constraint) children.length with
+  | false =>
+      simp only [kept, Bool.false_eq_true, ↓reduceIte] at same
+      rw [same]
+      change (some ([], none) : Option (List EqualityTrie.Trie × Option Constraint)) ≠ none
+      intro impossible
+      cases impossible
+  | true =>
+      simp only [kept, ↓reduceIte] at same
+      rw [same]
+      exact SourcePruningEnumerationCheckedProjection.accepted_projectable
+        (raw constraint) children.length kept
+
+/-- The actual raw-rejection sentinel has the empty successful projection. -/
+theorem RejectReceipt.projectable
+    {formulas : SourceGuards.Formulas FullSyntax.Formula}
+    {solver : SourceGuards.Entailment FullSyntax.Formula}
+    {inventory : SourceCurrentAllocatedNativeInventoryState.Inventory}
+    {symbol : Symbol} {before after : SourceEqualityNativeDemand.State width}
+    {result : EdgeValue Symbol Constraint}
+    (receipt : RejectReceipt formulas solver inventory symbol before result after) :
+    SourcePruningEnumerationConstraint.project result.entry.key.constraint ≠ none := by
+  rw [receipt.guard]
+  change (some ([], none) : Option (List EqualityTrie.Trie × Option Constraint)) ≠ none
+  intro impossible

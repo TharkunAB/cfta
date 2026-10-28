@@ -1,0 +1,66 @@
+private theorem yielded_heap (limit : Nat) (control next : Control A)
+    (before middle after : Checked width) (value : A) (fuel : Nat)
+    (bounded : fuel ≤ limit) (initial : Good before) (fields : Fields control before)
+    (actual : Trace fuel control before (.code (.pure value)) after)
+    (one : step control before = .yielded next middle) (heap : Heap middle.native.machine.heap)
+    (rest : ∀ count, count ≤ limit → Good middle → Heap middle.native.machine.heap → Fields next middle →
+      Trace count next middle (.code (.pure value)) after → Heap after.native.machine.heap) :
+    Heap after.native.machine.heap := by
+  obtain ⟨count, total, remaining⟩ :=
+    SourceCurrentAllocatedNativeSemanticTraceReadback.after_step fuel control next before middle after value actual one
+  have checked := SourceCurrentAllocatedNativePhysicalCompletion.step_invariants control before initial
+    (SourceCurrentAllocatedNativeSemanticTraceReadback.current_inputs actual) fields
+  rw [one] at checked
+  exact rest count (by omega) checked.1 heap checked.2.2.2.2.2 remaining
+
+private theorem localWorks_heap (limit : Nat)
+    (nodes : ∀ (request : NodeRequest Symbol Constraint) (fuel : Nat), fuel ≤ limit →
+      ∀ (before after : Checked width) (value : Value Symbol Constraint), Good before →
+        Heap before.native.machine.heap →
+        Trace fuel (.code (.node request .pure)) before (.code (.pure value)) after →
+        Heap after.native.machine.heap)
+    (edges : ∀ (request : EdgeRequest Symbol Constraint) (fuel : Nat), fuel ≤ limit →
+      ∀ (before after : Checked width) (value : EdgeValue Symbol Constraint), Good before →
+        Heap before.native.machine.heap →
+        Trace fuel (.code (.edge request .pure)) before (.code (.pure value)) after →
+        Heap after.native.machine.heap)
+    (code : Code Symbol Constraint A) (checked : LocalWorks code)
+    (before after : Checked width) (value : A) (fuel : Nat) (bounded : fuel ≤ limit)
+    (initial : Good before) (heap : Heap before.native.machine.heap) (fields : Fields (.code code) before)
+    (actual : Trace fuel (.code code) before (.code (.pure value)) after) : Heap after.native.machine.heap := by
+  induction code generalizing before after value fuel with
+  | pure result =>
+      obtain ⟨_, _, same⟩ := pure_trace fuel result value before after actual.steps
+      simpa only [same] using heap
+  | fail failure =>
+      cases actual with
+      | cons control state next middle final result count inputs one tail => cases one
+  | work job next ih =>
+      let result := run job before.native.machine.heap
+      let middle : Checked width := {before with native := advance before.native {before.native.machine with heap := result.2}}
+      have one : step (.code (.work job next)) before = .yielded (.code (next result.1)) middle := rfl
+      apply yielded_heap limit _ _ before middle after value fuel bounded initial fields actual one
+        (SourcePruningEnumerationNativeArityPrimitives.work_heap job before.native.machine.heap heap (checked.1 _))
+      intro count bound good middleHeap retained tail
+      exact ih result.1 (checked.2 result.1) middle after value count bound good
+        middleHeap retained tail
+  | enter domain left right first second next ih =>
+      let entered := SourceRecursiveIntersectionEnvironment.enter before.native.machine.domains domain.key left right first second
+      let middle : Checked width := {before with native := advance before.native {before.native.machine with domains := entered.2}}
+      have one : step (.code (.enter domain left right first second next)) before =
+          .yielded (.code (next entered.1)) middle := rfl
+      apply yielded_heap limit _ _ before middle after value fuel bounded initial fields actual one heap
+      intro count bound good middleHeap retained tail
+      exact ih entered.1 (checked entered.1) middle after value count bound good middleHeap retained tail
+  | read name next ih =>
+      let found := SourcePreparedSharedRows.read before.native.machine.heap name
+      have one : step (.code (.read name next)) before = .yielded (.code (next found)) before := rfl
+      apply yielded_heap limit _ _ before before after value fuel bounded initial fields actual one heap
+      intro count bound good middleHeap retained tail
+      exact ih found (checked found) before after value count bound good middleHeap retained tail
+  | optionalBinder key body next ih =>
+      have inputs := SourceCurrentAllocatedNativeSemanticTraceReadback.current_inputs actual
+      have retained := SourcePruningEnumerationNativeArityPrimitives.optionalBinder_heap key body
+        before.native.machine.heap initial.native.machine.1 heap inputs
+      cases built : SourceRecursiveIntersectionMaybeMu.maybeMu key body before.native.machine.heap with
+      | done result finalHeap =>
