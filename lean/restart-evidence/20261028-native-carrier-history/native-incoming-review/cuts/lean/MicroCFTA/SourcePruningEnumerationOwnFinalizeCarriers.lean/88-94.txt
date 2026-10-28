@@ -1,0 +1,7 @@
+theorem run_carriers
+    (heap : InternedConstructorTemplates.State Symbol NativeGuard) (fuel target : Nat)
+    (fragment : Fragments.Fragment Symbol) (before after : EnumerationExpandableIndex.Cached Symbol EnumGuard)
+    (references : ReferencesCarry before.core) (holes : FragmentCarries before.core fragment)
+    (observed : run heap fuel target fragment before = some after) :
+    PreservesCarriers before.core after.core ∧ ReferencesCarry after.core ∧
+      FragmentCarries after.core fragment := by

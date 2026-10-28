@@ -1,0 +1,11 @@
+
+/-- Every actual attached cache retains old carriers and supplies the requested target class. -/
+theorem observed_cache_carriers
+    (checkEmpty : Bool) (r n p h k : Nat) (caller : Caller width) (before : Cached)
+    (target : Nat) (incoming : Node) (incomingScs : List Suspended) (queries : Queries)
+    (total : UnionFind.Total before.core.representatives) (references : ReferencesCarry before.core)
+    (after : Cached)
+    (candidate : (run checkEmpty r n p h k caller before target incoming incomingScs queries).2 = some after) :
+    UnionFind.Total after.core.representatives ∧ PreservesCarriers before.core after.core ∧
+      ReferencesCarry after.core ∧ CarriesGraph after.core target := by
+  unfold run at candidate

@@ -1,0 +1,13 @@
+theorem written_carriers
+    (before after : Core) (uv target handle : Nat) (oldNode : Option Nat)
+    (incomingScs oldScs : List Suspended)
+    (total : UnionFind.Total before.representatives) (references : ReferencesCarry before)
+    (related : UnionFind.SameClass before.representatives uv target)
+    (stored : before.values[target]? = some (.unenumerated oldNode oldScs))
+    (shape : after = {before with
+      values := before.values.set target (.unenumerated (some handle) (incomingScs ++ oldScs))
+      recursionAncestry := fun other => if other = target then
+        (before.expansionAncestry ++ before.recursionAncestry target).eraseDups
+        else before.recursionAncestry other}) :
+    UnionFind.Total after.representatives ∧ PreservesCarriers before after ∧
+      ReferencesCarry after ∧ CarriesGraph after uv := by

@@ -1,0 +1,8 @@
+
+/-- The actual completed-edge residual retains old references and the returned fragment holes. -/
+theorem finish_carriers (residual : Option Constraint) (fragment : Fragments.Fragment Symbol)
+    (before : EnumerationExpandableIndex.Cached Symbol Constraint)
+    (references : ReferencesCarry before.core) (holes : FragmentCarries before.core fragment) :
+    PreservesCarriers before.core (finish residual fragment before).core ∧
+      ReferencesCarry (finish residual fragment before).core ∧
+      FragmentCarries (finish residual fragment before).core fragment := by

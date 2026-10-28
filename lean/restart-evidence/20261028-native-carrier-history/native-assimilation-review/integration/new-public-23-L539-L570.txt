@@ -1,0 +1,32 @@
+MicroCFTA.SourcePruningEnumerationCachedTerminalAdapter.candidate_carriers {width : Nat}
+  [DecidableEq MicroCFTA.SourcePruningTemplates.Symbol]
+  [DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey MicroCFTA.SourcePruningTemplates.Symbol
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  [DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.Value MicroCFTA.SourcePruningTemplates.Symbol
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  (checkEmpty : Bool) (r n p h k : Nat) (first : MicroCFTA.EnumerationState.Suspended)
+  (rest : List MicroCFTA.EnumerationState.Suspended) (caller : MicroCFTA.SourceCurrentAllocatedPartialState.State width)
+  (before :
+    MicroCFTA.EnumerationExpandableIndex.Cached MicroCFTA.SourcePruningTemplates.Symbol
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+  (incoming :
+    MicroCFTA.InternedConstructorTemplates.Value MicroCFTA.SourcePruningTemplates.Symbol
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+  (incomingScs : List MicroCFTA.EnumerationState.Suspended) (queries : MicroCFTA.SourceEndpointMemo.Memos)
+  (total : MicroCFTA.UnionFind.Total before.core.representatives)
+  (references : MicroCFTA.EnumerationGraphReferences.ReferencesCarry before.core)
+  (after :
+    MicroCFTA.EnumerationExpandableIndex.Cached MicroCFTA.SourcePruningTemplates.Symbol
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+  (candidate :
+    (MicroCFTA.SourcePruningEnumerationCachedTerminalAdapter.run checkEmpty r n p h k first rest caller before incoming
+          incomingScs queries).snd =
+      some after) :
+  MicroCFTA.UnionFind.Total after.core.representatives ∧
+    MicroCFTA.EnumerationCarriers.PreservesCarriers before.core after.core ∧
+      MicroCFTA.EnumerationGraphReferences.ReferencesCarry after.core
+'MicroCFTA.SourcePruningEnumerationCachedTerminalAdapter.candidate_carriers' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]

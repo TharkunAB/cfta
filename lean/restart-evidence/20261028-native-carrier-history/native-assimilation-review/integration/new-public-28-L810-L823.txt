@@ -1,0 +1,14 @@
+MicroCFTA.SourcePruningEnumerationSelectedPrefixCarriers.checkRepeated_carriers {EnumGuard NativeGuard : Type}
+  (heap : MicroCFTA.InternedConstructorTemplates.State MicroCFTA.SourcePruningTemplates.Symbol NativeGuard)
+  (fuel uv handle : Nat) (scs : List MicroCFTA.EnumerationState.Suspended)
+  (before after : MicroCFTA.EnumerationState.State MicroCFTA.SourcePruningTemplates.Symbol EnumGuard) (repeated : Bool)
+  (total : MicroCFTA.UnionFind.Total before.representatives)
+  (references : MicroCFTA.EnumerationGraphReferences.ReferencesCarry before)
+  (observed :
+    MicroCFTA.EnumerationCorrectness.Success
+      (MicroCFTA.SourcePruningEnumerationRecursion.checkRepeated heap fuel uv handle scs) before repeated after) :
+  MicroCFTA.UnionFind.Total after.representatives ∧
+    MicroCFTA.EnumerationCarriers.PreservesCarriers before after ∧
+      MicroCFTA.EnumerationGraphReferences.ReferencesCarry after
+'MicroCFTA.SourcePruningEnumerationSelectedPrefixCarriers.checkRepeated_carriers' depends on axioms: [propext,
+ Quot.sound]

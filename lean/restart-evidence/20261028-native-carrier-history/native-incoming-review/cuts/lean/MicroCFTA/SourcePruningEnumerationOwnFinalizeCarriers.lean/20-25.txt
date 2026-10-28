@@ -1,0 +1,6 @@
+theorem allocate_carriers
+    (heap : InternedConstructorTemplates.State Symbol NativeGuard) (node : Option Nat)
+    (before after : EnumerationExpandableIndex.Cached Symbol EnumGuard) (uv : Nat)
+    (references : ReferencesCarry before.core)
+    (observed : allocate heap node before = some (uv, after)) :
+    PreservesCarriers before.core after.core ∧ ReferencesCarry after.core := by

@@ -1,0 +1,52 @@
+
+private theorem pending_write_carriers {EnumGuard : Type}
+    (uv handle : Nat) (scs : List Suspended)
+    (before after : EnumerationState.State Symbol EnumGuard)
+    (total : UnionFind.Total before.representatives) (references : ReferencesCarry before)
+    (observed : Success (setValue uv (.unenumerated (some handle) scs)) before () after) :
+    UnionFind.Total after.representatives ∧ PreservesCarriers before after ∧ ReferencesCarry after := by
+  have origin := setValue_origin uv (.unenumerated (some handle) scs) before after
+    (by intro fragment; intro impossible; cases impossible) observed
+  obtain rfl := (EnumerationDriver.modify_success _ before after).mp observed
+  have preserved := set_graph_carriers before uv (.unenumerated (some handle) scs) trivial
+  exact ⟨total, preserved, references_transport _ _ references preserved origin rfl⟩
+
+/-- Every successful recursion check retains carriers and stored references. -/
+theorem checkRepeated_carriers {EnumGuard NativeGuard : Type}
+    (heap : InternedConstructorTemplates.State Symbol NativeGuard)
+    (fuel uv handle : Nat) (scs : List Suspended)
+    (before after : EnumerationState.State Symbol EnumGuard) (repeated : Bool)
+    (total : UnionFind.Total before.representatives) (references : ReferencesCarry before)
+    (observed : Success (SourcePruningEnumerationRecursion.checkRepeated heap fuel uv handle scs)
+      before repeated after) :
+    UnionFind.Total after.representatives ∧ PreservesCarriers before after ∧ ReferencesCarry after := by
+  cases decoded : lookupNode heap handle with
+  | none =>
+      have impossible : Success (failure .unresolvedReference) before repeated after := by
+        simpa only [SourcePruningEnumerationRecursion.checkRepeated, decoded] using observed
+      exact (success_failure .unresolvedReference before after repeated impossible).elim
+  | some value =>
+      by_cases boundary : MergedOrdinaryHeight.recursiveBoundary value = true
+      · simp only [SourcePruningEnumerationRecursion.checkRepeated, decoded, boundary, ↓reduceIte] at observed
+        obtain ⟨root, resolved, resolution, continued⟩ := (success_bind _ _ _ _ _).mp observed
+        have frame := representative_frame fuel uv root before resolved total resolution
+        obtain ⟨current, reading, read, continued⟩ := (success_bind _ _ _ _ _).mp continued
+        obtain ⟨currentSame, readingSame⟩ := (EnumerationDriver.get_success resolved reading current).mp read
+        subst current
+        subst reading
+        by_cases seen : recursionKey handle scs ∈ resolved.recursionAncestry root
+        · rw [ite_eq_left seen] at continued
+          obtain ⟨token, written, writing, finished⟩ := (success_bind _ _ _ _ _).mp continued
+          cases token
+          have writtenFacts := pending_write_carriers root handle [] resolved written
+            (frame.total total) (frame.references references) writing
+          obtain ⟨_same, afterSame⟩ := (success_pure true repeated written after).mp finished
+          subst after
+          exact ⟨writtenFacts.1, frame.carriers.trans writtenFacts.2.1, writtenFacts.2.2⟩
+        · rw [ite_eq_right seen] at continued
+          obtain ⟨_same, afterSame⟩ := (success_pure false repeated resolved after).mp continued
+          subst after
+          exact ⟨frame.total total, frame.carriers, frame.references references⟩
+      · have pureObserved : Success (pure false) before repeated after := by
+          simpa only [SourcePruningEnumerationRecursion.checkRepeated, decoded, ite_eq_right boundary] using observed
+        obtain ⟨_same, afterSame⟩ := (success_pure false repeated before after).mp pureObserved

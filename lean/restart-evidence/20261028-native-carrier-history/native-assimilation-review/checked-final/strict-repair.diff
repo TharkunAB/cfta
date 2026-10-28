@@ -1,0 +1,13 @@
+--- owner-v2
++++ root-strict2
+@@ -41,8 +41,8 @@
+     | none =>
+         obtain ⟨sourceNone, targetNone⟩ := noneOrigin rfl
+         rcases bearing with sourceBearing | targetBearing
+-        · simpa only [sourceNone, GraphValue] using sourceBearing
+-        · simpa only [targetNone, GraphValue] using targetBearing
++        · simp only [sourceNone, GraphValue] at sourceBearing
++        · simp only [targetNone, GraphValue] at targetBearing
+   have preserved : PreservesCarriers before
+       (assimilated before target source (.unenumerated merged (sourceScs ++ targetScs))) := by
+     rintro uv ⟨held, value, same, stored, bearing⟩

@@ -1,0 +1,28 @@
+MicroCFTA.SourcePruningEnumerationCachedFold.carriers {width : Nat}
+  [DecidableEq MicroCFTA.SourcePruningTemplates.Symbol]
+  [DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey MicroCFTA.SourcePruningTemplates.Symbol
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  [DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.Value MicroCFTA.SourcePruningTemplates.Symbol
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  (checkEmpty : Bool) (nativeFuel p h : Nat) (sources : List Nat)
+  (caller : MicroCFTA.SourceCurrentAllocatedPartialState.State width)
+  (before :
+    MicroCFTA.EnumerationExpandableIndex.Cached MicroCFTA.SourcePruningTemplates.Symbol
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+  (target : Nat) (queries : MicroCFTA.SourceEndpointMemo.Memos)
+  (total : MicroCFTA.UnionFind.Total before.core.representatives)
+  (related :
+    ∀ (source : Nat), source ∈ sources → MicroCFTA.UnionFind.SameClass before.core.representatives target source)
+  (references : MicroCFTA.EnumerationGraphReferences.ReferencesCarry before.core) :
+  MicroCFTA.UnionFind.Total
+      (MicroCFTA.SourcePruningEnumerationCachedFold.run checkEmpty nativeFuel p h sources caller before target
+                  queries).fst.snd.snd.snd.representatives ∧
+    MicroCFTA.EnumerationCarriers.PreservesCarriers before.core
+        (MicroCFTA.SourcePruningEnumerationCachedFold.run checkEmpty nativeFuel p h sources caller before target
+                  queries).fst.snd.snd.snd ∧
+      MicroCFTA.EnumerationGraphReferences.ReferencesCarry
+        (MicroCFTA.SourcePruningEnumerationCachedFold.run checkEmpty nativeFuel p h sources caller before target
+                  queries).fst.snd.snd.snd
+'MicroCFTA.SourcePruningEnumerationCachedFold.carriers' depends on axioms: [propext, Classical.choice, Quot.sound]

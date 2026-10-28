@@ -1,0 +1,44 @@
+MicroCFTA.SourcePruningEnumerationIncomingCacheAdapter.adapt_carriers {width : Nat}
+  [DecidableEq MicroCFTA.SourcePruningTemplates.Symbol]
+  [DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey MicroCFTA.SourcePruningTemplates.Symbol
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  [DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.Value MicroCFTA.SourcePruningTemplates.Symbol
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  {checkEmpty : Bool} {r n p h k : Nat}
+  {caller reachedCaller : MicroCFTA.SourceCurrentAllocatedPartialState.State width}
+  {before after :
+    MicroCFTA.EnumerationExpandableIndex.Cached MicroCFTA.SourcePruningTemplates.Symbol
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)}
+  {target : Nat}
+  {incoming :
+    MicroCFTA.InternedConstructorTemplates.Value MicroCFTA.SourcePruningTemplates.Symbol
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)}
+  {incomingScs : List MicroCFTA.EnumerationState.Suspended} {queries savedQueries : MicroCFTA.SourceEndpointMemo.Memos}
+  {read :
+    MicroCFTA.EnumerationState.State MicroCFTA.SourcePruningTemplates.Symbol
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)}
+  {raw :
+    List
+      (Except MicroCFTA.EnumerationState.Error
+        (Unit ×
+          MicroCFTA.EnumerationState.State MicroCFTA.SourcePruningTemplates.Symbol
+            (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)))}
+  (total : MicroCFTA.UnionFind.Total before.core.representatives)
+  (references : MicroCFTA.EnumerationGraphReferences.ReferencesCarry before.core)
+  (observed :
+    MicroCFTA.SourcePruningEnumerationIncomingNode.run checkEmpty r n p h caller before.core target incoming incomingScs
+        queries =
+      (Except.ok (some raw), reachedCaller, savedQueries, read))
+  (adapted :
+    MicroCFTA.SourcePruningEnumerationIncomingCacheAdapter.adapt reachedCaller.checked.native.machine.heap k target
+        incomingScs before read raw =
+      some after) :
+  MicroCFTA.UnionFind.Total after.core.representatives ∧
+    MicroCFTA.EnumerationCarriers.PreservesCarriers before.core after.core ∧
+      MicroCFTA.EnumerationGraphReferences.ReferencesCarry after.core ∧
+        MicroCFTA.EnumerationCarriers.CarriesGraph after.core target
+'MicroCFTA.SourcePruningEnumerationIncomingCacheAdapter.adapt_carriers' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]

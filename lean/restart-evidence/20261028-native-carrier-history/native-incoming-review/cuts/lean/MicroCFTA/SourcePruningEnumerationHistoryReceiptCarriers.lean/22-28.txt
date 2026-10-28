@@ -1,0 +1,7 @@
+theorem enter_carriers
+    (heap : InternedConstructorTemplates.State Symbol NativeGuard) (fuel uv : Nat)
+    (before after : EnumerationState.State Symbol EnumGuard) (target handle : Nat)
+    (bucket : List Suspended) (decoded : Value Symbol NativeGuard)
+    (total : UnionFind.Total before.representatives) (references : ReferencesCarry before)
+    (success : Success (enter heap fuel uv) before (target, handle, bucket, decoded) after) :
+    UnionFind.Total after.representatives ∧ PreservesCarriers before after ∧ ReferencesCarry after := by

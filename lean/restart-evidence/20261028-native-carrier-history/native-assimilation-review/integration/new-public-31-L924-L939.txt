@@ -1,0 +1,16 @@
+MicroCFTA.SourcePruningRecordTypes.recordTypes_carriers {Guard Typing : Type}
+  (graph : MicroCFTA.EnumerationState.Graph MicroCFTA.SourcePruningTemplates.Symbol Guard)
+  (templates : List (MicroCFTA.Template.Pattern MicroCFTA.SourcePruningTemplates.Symbol)) (fuel : Nat)
+  (metadata : MicroCFTA.SourcePruningRecordTypes.Metadata Typing) (uv : Nat)
+  (input : MicroCFTA.Fragments.Fragment MicroCFTA.SourcePruningTemplates.Symbol ⊕ Nat)
+  (before after : MicroCFTA.EnumerationState.State MicroCFTA.SourcePruningTemplates.Symbol Guard)
+  (result : Bool × MicroCFTA.SourcePruningRecordTypes.Metadata Typing)
+  (total : MicroCFTA.UnionFind.Total before.representatives)
+  (references : MicroCFTA.EnumerationGraphReferences.ReferencesCarry before)
+  (observed :
+    MicroCFTA.EnumerationCorrectness.Success
+      (MicroCFTA.SourcePruningRecordTypes.recordTypes graph templates fuel metadata uv input) before result after) :
+  MicroCFTA.UnionFind.Total after.representatives ∧
+    MicroCFTA.EnumerationCarriers.PreservesCarriers before after ∧
+      MicroCFTA.EnumerationGraphReferences.ReferencesCarry after
+'MicroCFTA.SourcePruningRecordTypes.recordTypes_carriers' depends on axioms: [propext, Classical.choice, Quot.sound]

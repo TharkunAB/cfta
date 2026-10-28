@@ -1,0 +1,15 @@
+MicroCFTA.SourcePruningEnumerationSelectedEdge.finish_carriers
+  (residual : Option (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+  (fragment : MicroCFTA.Fragments.Fragment MicroCFTA.SourcePruningTemplates.Symbol)
+  (before :
+    MicroCFTA.EnumerationExpandableIndex.Cached MicroCFTA.SourcePruningTemplates.Symbol
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+  (references : MicroCFTA.EnumerationGraphReferences.ReferencesCarry before.core)
+  (holes : MicroCFTA.EnumerationGraphReferences.FragmentCarries before.core fragment) :
+  MicroCFTA.EnumerationCarriers.PreservesCarriers before.core
+      (MicroCFTA.SourcePruningEnumerationSelectedEdge.finish residual fragment before).core ∧
+    MicroCFTA.EnumerationGraphReferences.ReferencesCarry
+        (MicroCFTA.SourcePruningEnumerationSelectedEdge.finish residual fragment before).core ∧
+      MicroCFTA.EnumerationGraphReferences.FragmentCarries
+        (MicroCFTA.SourcePruningEnumerationSelectedEdge.finish residual fragment before).core fragment
+'MicroCFTA.SourcePruningEnumerationSelectedEdge.finish_carriers' depends on axioms: [propext]

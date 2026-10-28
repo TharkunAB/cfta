@@ -1,0 +1,55 @@
+    (target : Nat) (queries : Queries) :
+    (run checkEmpty nativeFuel p h sources beforeCaller before target queries).1 =
+      SourcePruningEnumerationFold.run checkEmpty nativeFuel p h sources
+        beforeCaller before.core target queries := by
+  induction sources generalizing beforeCaller before queries with
+  | nil => rfl
+  | cons source rest ih =>
+      cases dispatchResult : SourcePruningEnumerationDispatch.dispatch checkEmpty nativeFuel p h
+          beforeCaller before.core source target queries with
+      | mk outcome saved =>
+          rcases saved with ⟨reachedCaller, savedQueries⟩
+          cases outcome with
+          | error fault =>
+              simp only [run, SourcePruningEnumerationCachedAdapter.run, dispatchResult,
+                SourcePruningEnumerationFold.run]
+          | ok returned =>
+              cases returned with
+              | none =>
+                  simp only [run, SourcePruningEnumerationCachedAdapter.run, dispatchResult,
+                    SourcePruningEnumerationFold.run]
+              | some action =>
+                  cases rawResult : ExceptT.run (action before.core) with
+                  | nil =>
+                      simp only [run, SourcePruningEnumerationCachedAdapter.run, dispatchResult,
+                        rawResult, SourcePruningEnumerationFold.run]
+                  | cons first tail =>
+                      cases first with
+                      | error _rowError =>
+                          simp only [run, SourcePruningEnumerationCachedAdapter.run, dispatchResult,
+                            rawResult, SourcePruningEnumerationFold.run]
+                      | ok value =>
+                          rcases value with ⟨valueUnit, core⟩
+                          cases valueUnit
+                          cases tail with
+                          | nil =>
+                              cases receipt : SourcePruningEnumerationCachedAdapter.adapt
+                                  reachedCaller.checked.native.machine.heap before source target [.ok ((), core)] with
+                              | none =>
+                                  simp only [run, SourcePruningEnumerationCachedAdapter.run, dispatchResult,
+                                    rawResult, receipt, SourcePruningEnumerationFold.run]
+                              | some recovered =>
+                                  simp only [run, SourcePruningEnumerationCachedAdapter.run, dispatchResult,
+                                    rawResult, receipt, SourcePruningEnumerationFold.run]
+                                  exact ih reachedCaller (EnumerationExpandableIndex.frame core recovered) savedQueries
+                          | cons _second _remaining =>
+                              simp only [run, SourcePruningEnumerationCachedAdapter.run, dispatchResult,
+                                rawResult, SourcePruningEnumerationFold.run]
+
+/-- The actual returned prefix retains storage and canonical waiting counts. -/
+theorem preserves
+    [DecidableEq Symbol] [DecidableEq (InternedConstructorTemplates.EdgeKey Symbol Constraint)] [DecidableEq Node]
+    (checkEmpty : Bool) (nativeFuel p h : Nat) (sources : List Nat)
+    (beforeCaller : Caller width) (before : EnumerationExpandableIndex.Cached Symbol Constraint)
+    (target : Nat) (queries : Queries) (roots : Nat → Nat)
+    (storage : EnumerationCorrectness.StorageValid before.core)

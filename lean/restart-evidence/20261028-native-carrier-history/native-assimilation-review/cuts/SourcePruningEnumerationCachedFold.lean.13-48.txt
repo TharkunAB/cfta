@@ -1,0 +1,36 @@
+/-- Retain the full original fold observation with a separate optional cache. -/
+noncomputable def run
+    [DecidableEq Symbol] [DecidableEq (InternedConstructorTemplates.EdgeKey Symbol Constraint)] [DecidableEq Node]
+    (checkEmpty : Bool) (nativeFuel p h : Nat) (sources : List Nat)
+    (beforeCaller : Caller width) (before : EnumerationExpandableIndex.Cached Symbol Constraint)
+    (target : Nat) (queries : Queries) :
+    ((Except (SourceEqualityNativeDemand.Outcome width Node ⊕
+      SourceCurrentAllocatedConjunctionWorker.Outcome width)
+      (Option (List (Except EnumerationState.Error (Unit × EnumerationState.State Symbol Constraint))))) ×
+      Caller width × Queries × EnumerationState.State Symbol Constraint) ×
+      Option (EnumerationExpandableIndex.Cached Symbol Constraint) :=
+  match sources with
+  | [] => ((.ok (some [.ok ((), before.core)]), beforeCaller, queries, before.core), some before)
+  | source :: rest =>
+      match SourcePruningEnumerationCachedAdapter.run checkEmpty nativeFuel p h
+          beforeCaller before source target queries with
+      | (.error fault, reachedCaller, savedQueries, _) =>
+          ((.error fault, reachedCaller, savedQueries, before.core), none)
+      | (.ok none, reachedCaller, savedQueries, _) =>
+          ((.ok none, reachedCaller, savedQueries, before.core), none)
+      | (.ok (some raw), reachedCaller, savedQueries, cache) =>
+          match raw with
+          | [.ok ((), core)] =>
+              match cache with
+              | none =>
+                  (SourcePruningEnumerationFold.run checkEmpty nativeFuel p h rest
+                    reachedCaller core target savedQueries, none)
+              | some recovered =>
+                  run checkEmpty nativeFuel p h rest reachedCaller
+                    (EnumerationExpandableIndex.frame core recovered) target savedQueries
+          | other => ((.ok (some other), reachedCaller, savedQueries, before.core), cache)
+
+/-- Erasing cache data preserves every bounded original fold observation. -/
+theorem erase
+    [DecidableEq Symbol] [DecidableEq (InternedConstructorTemplates.EdgeKey Symbol Constraint)] [DecidableEq Node]
+    (checkEmpty : Bool) (nativeFuel p h : Nat) (sources : List Nat)

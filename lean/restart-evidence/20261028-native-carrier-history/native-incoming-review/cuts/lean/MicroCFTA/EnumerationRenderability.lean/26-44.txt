@@ -1,0 +1,19 @@
+/-- Writing a completed fragment preserves carriers and retains its graph-bearing holes. -/
+theorem write_references (before : State Symbol Guard) (uv : Nat) (fragment : Fragment Symbol)
+    (carried : ReferencesCarry before) (holes : FragmentCarries before fragment) :
+    PreservesCarriers before {before with values := before.values.set uv (.enumerated fragment)} ∧
+      ReferencesCarry {before with values := before.values.set uv (.enumerated fragment)} := by
+  have preserved := set_graph_carriers before uv (.enumerated fragment) trivial
+  refine ⟨preserved, ?_, ?_⟩
+  · intro held storedFragment stored
+    by_cases same : held = uv
+    · subst held
+      by_cases inside : uv < before.values.length
+      · have equal : storedFragment = fragment := by simpa [inside] using stored.symm
+        subst storedFragment
+        exact holes.preserve fragment preserved
+      · simp [inside] at stored
+    · have old : before.values[held]? = some (.enumerated storedFragment) := by simpa [Ne.symm same] using stored
+      exact (carried.1 held storedFragment old).preserve storedFragment preserved
+  · intro obligation member
+    exact (carried.2 obligation member).preserve obligation.2 preserved

@@ -1,0 +1,30 @@
+--- strict1-failed
++++ strict2-passed
+@@ -11,7 +11,7 @@
+ Each discharged output constructs its native render before semantic observers.
+ -/
+ namespace MicroCFTA.SourcePruningEnumerationRecursive
+-open EnumerationState EnumerationCorrectness EnumerationValidity InternedConstructorTemplates
++open Language Fragments EnumerationState EnumerationCorrectness EnumerationValidity InternedConstructorTemplates
+ open SourcePruningEnumerationNodes
+ open InternedProbeProvenance (Available)
+ open SourceCurrentAllocatedNativeInventoryState (Inventory)
+@@ -57,7 +57,7 @@
+           fun slot => if slot = 0 then !MergedOrdinaryHeight.recursiveBoundary value else false,
+           fun _ => none⟩
+     ∃ bound outcome,
+-      (      ((∀ extra, run holeKey fits admits graph templates checkEmpty edgesOf stop order (bound + extra) recursiveFuel
++      (((∀ extra, run holeKey fits admits graph templates checkEmpty edgesOf stop order (bound + extra) recursiveFuel
+         metadata caller memos.query before = outcome) ∧
+       OutcomeResources formulas solver caller
+         (SourcePruningEnumerationFiniteReservation.final recursiveFuel seed ceiling) outcome ∧
+@@ -118,7 +118,8 @@
+       formulas solver recursiveFuel inventory caller memos metadata value seed ceiling context available
+       closed emptyPending bounded known selectionMembers selectionLength reserved arity
+   refine ⟨handle, encoded, decoded, bound, outcome, retained, ?_⟩
+-  have initialReferences := EnumerationRenderability.initial_references (Symbol := Symbol) (Guard := Constraint) handle
++  have initialReferences : EnumerationGraphReferences.ReferencesCarry (EnumerationState.initial handle : Core) :=
++    EnumerationRenderability.initial_references handle
+   have rootCarrier : EnumerationCarriers.CarriesGraph (EnumerationState.initial handle : Core) 0 :=
+     EnumerationCarriers.carries_self (EnumerationState.initial handle) (initial_storage handle).total
+       0 (.unenumerated (some handle) []) rfl trivial

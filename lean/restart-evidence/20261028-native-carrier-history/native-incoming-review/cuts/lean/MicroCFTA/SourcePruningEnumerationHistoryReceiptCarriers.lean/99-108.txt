@@ -1,0 +1,10 @@
+theorem OrdinaryHistoryReceipt.carriers_after_callback
+    (receipt : OrdinaryHistoryReceipt formulas solver metadata checkEmpty workFuel uv
+      inventory caller memos before fragment reached after returnedInventory returnedMemos)
+    (graph : Graph Symbol Constraint) (templates : List (Template.Pattern Symbol))
+    (callbackFuel : Nat) (result : Bool × Metadata Typing) (callbackCore : Core)
+    (references : ReferencesCarry before.core)
+    (recorded : Success (SourcePruningRecordTypes.recordTypes graph templates callbackFuel metadata uv
+      (.inl fragment)) after.core result callbackCore) :
+    UnionFind.Total callbackCore.representatives ∧ PreservesCarriers before.core callbackCore ∧
+      ReferencesCarry callbackCore ∧ FragmentCarries callbackCore fragment := by

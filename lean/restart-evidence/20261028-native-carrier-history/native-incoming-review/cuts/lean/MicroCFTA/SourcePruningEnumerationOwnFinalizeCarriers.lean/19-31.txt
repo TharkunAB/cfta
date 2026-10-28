@@ -1,0 +1,13 @@
+/-- Actual cached allocation retains every earlier carrier and stored reference. -/
+theorem allocate_carriers
+    (heap : InternedConstructorTemplates.State Symbol NativeGuard) (node : Option Nat)
+    (before after : EnumerationExpandableIndex.Cached Symbol EnumGuard) (uv : Nat)
+    (references : ReferencesCarry before.core)
+    (observed : allocate heap node before = some (uv, after)) :
+    PreservesCarriers before.core after.core ∧ ReferencesCarry after.core := by
+  simp only [allocate, Option.map_eq_some_iff] at observed
+  obtain ⟨flag, _classified, same⟩ := observed
+  have coreSame : allocated node before.core = after.core := congrArg (fun result => result.2.core) same
+  rw [← coreSame]
+  have preserved := allocation_carriers node before.core
+  exact ⟨preserved, references_transport before.core _ references preserved

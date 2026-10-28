@@ -1,0 +1,14 @@
+MicroCFTA.SourcePruningEnumerationFinalize.written_carriers {EnumGuard : Type}
+  (before after : MicroCFTA.EnumerationState.State MicroCFTA.SourcePruningTemplates.Symbol EnumGuard) (target : Nat)
+  (fragment : MicroCFTA.Fragments.Fragment MicroCFTA.SourcePruningTemplates.Symbol)
+  (references : MicroCFTA.EnumerationGraphReferences.ReferencesCarry before)
+  (holes : MicroCFTA.EnumerationGraphReferences.FragmentCarries before fragment)
+  (written :
+    after =
+      { counter := before.counter, representatives := before.representatives,
+        values := before.values.set target (MicroCFTA.EnumerationState.UVarValue.enumerated fragment),
+        obligations := before.obligations, recursionAncestry := before.recursionAncestry, expansionAncestry := [] }) :
+  MicroCFTA.EnumerationCarriers.PreservesCarriers before after ∧
+    MicroCFTA.EnumerationGraphReferences.ReferencesCarry after ∧
+      MicroCFTA.EnumerationGraphReferences.FragmentCarries after fragment
+'MicroCFTA.SourcePruningEnumerationFinalize.written_carriers' depends on axioms: [propext]

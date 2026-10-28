@@ -1,0 +1,20 @@
+/-- An actual singleton retains the input or assimilates its two stored pending payloads. -/
+theorem singleton
+    [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Constraint)] [DecidableEq Node]
+    (checkEmpty : Bool) (nativeFuel p h : Nat)
+    (beforeCaller : Caller width) (before : EnumerationState.State Symbol EnumGuard)
+    (source target : Nat) (queries : Queries) (action : EnumerateM Symbol EnumGuard Unit)
+    (afterCaller : Caller width) (savedQueries : Queries)
+    (after : EnumerationState.State Symbol EnumGuard)
+    (selected : SourcePruningEnumerationDispatch.dispatch checkEmpty nativeFuel p h
+      beforeCaller before source target queries = (.ok (some action), afterCaller, savedQueries))
+    (completed : ExceptT.run (action before) = [.ok ((), after)]) :
+    after = before ∨ source ≠ target ∧
+      ∃ (sourceNode targetNode merged : Option Nat) (sourceScs targetScs : List Suspended),
+        before.values[source]? = some (.unenumerated sourceNode sourceScs) ∧
+        before.values[target]? = some (.unenumerated targetNode targetScs) ∧
+        after = assimilated before target source (.unenumerated merged (sourceScs ++ targetScs)) := by
+  by_cases same : source = target
+  · simp only [SourcePruningEnumerationDispatch.dispatch, ite_eq_left same, Id.run, pure,
+      Prod.mk.injEq, Except.ok.injEq, Option.some.injEq] at selected
+    rcases selected with ⟨rfl, rfl, rfl⟩

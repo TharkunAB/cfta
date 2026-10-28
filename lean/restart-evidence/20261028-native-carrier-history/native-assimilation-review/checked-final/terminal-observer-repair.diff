@@ -1,0 +1,14 @@
+--- strict2-failed
++++ strict3-passed
+@@ -113,8 +113,9 @@
+     (waiting : EnumerationWaitingIndex.Waiting) (caller : Caller width) (before : Core)
+     (incoming : Node) (incomingScs : List Suspended) (queries : Queries)
+     (total : UnionFind.Total before.representatives) (references : ReferencesCarry before) :
+-    let outer := (run checkEmpty r n p h first rest waiting caller before incoming incomingScs queries).2.2.2.1
+-    UnionFind.Total outer.representatives ∧ PreservesCarriers before outer ∧ ReferencesCarry outer := by
++    UnionFind.Total (run checkEmpty r n p h first rest waiting caller before incoming incomingScs queries).2.2.2.1.representatives ∧
++      PreservesCarriers before (run checkEmpty r n p h first rest waiting caller before incoming incomingScs queries).2.2.2.1 ∧
++      ReferencesCarry (run checkEmpty r n p h first rest waiting caller before incoming incomingScs queries).2.2.2.1 := by
+   generalize observed : run checkEmpty r n p h first rest waiting caller before incoming incomingScs queries = result
+   obtain ⟨outcome, reachedCaller, saved, outer, moved⟩ := result
+   dsimp only

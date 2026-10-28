@@ -1,0 +1,82 @@
+theorem run_initial_finite_render_sound_carriers
+    (holeKey : Typing → Nat → Key) (fits : Key → Symbol → Bool) (admits : Key → Node → Bool)
+    (graph : Graph Symbol Constraint) (templates : List (Template.Pattern Symbol))
+    (checkEmpty : Bool) (edgesOf : Node → List (EdgeValue Symbol Constraint))
+    (stop : Option (Metadata Typing → Nat → Bool)) (order : Metadata Typing → List Nat → Option Nat)
+    (formulas : SourceGuards.Formulas FullSyntax.Formula)
+    (solver : SourceGuards.Entailment FullSyntax.Formula) (recursiveFuel : Nat) (inventory : Inventory)
+    (caller : Caller (bits + 2)) (memos : Memos) (metadata : Metadata Typing) (value : Node)
+    (seed : Seed) (ceiling : Nat)
+    (context : Context formulas solver inventory caller memos)
+    (available : Available caller.checked.native.machine.heap value)
+    (closed : value.free = []) (emptyPending : metadata.pending = [])
+    (bounded : Fits seed.2 caller.checked)
+    (known : Heap (fun guard => guard ∈ seed.1) caller.checked.native.machine.heap)
+    (selectionMembers : ∀ entry rows depth free, ∀ edge ∈ edgesOf (.node entry rows depth free), edge ∈ rows)
+    (selectionLength : ∀ entry rows depth free, (edgesOf (.node entry rows depth free)).length ≤ rows.length)
+    (reserved : SourcePruningEnumerationFiniteReservation.Reserved bits recursiveFuel seed ceiling)
+    (arity : SourcePruningEnumerationArityOrigins.Heap caller.checked.native.machine.heap) :
+    ∃ handle,
+      encodeNode value = some handle ∧
+      lookupNode caller.checked.native.machine.heap handle = some value ∧
+      let before : Cached :=
+        ⟨EnumerationState.initial handle,
+          fun slot => if slot = 0 then !MergedOrdinaryHeight.recursiveBoundary value else false,
+          fun _ => none⟩
+    ∃ bound outcome,
+      (((∀ extra, run holeKey fits admits graph templates checkEmpty edgesOf stop order (bound + extra) recursiveFuel
+        metadata caller memos.query before = outcome) ∧
+      OutcomeResources formulas solver caller
+        (SourcePruningEnumerationFiniteReservation.final recursiveFuel seed ceiling) outcome ∧
+      (∀ extra output, output ∈ SourcePruningEnumerationHookInvocation.hookOutputs outcome →
+        ResourceHistory holeKey fits admits graph templates checkEmpty edgesOf stop order formulas solver
+          (bound + extra) recursiveFuel inventory caller memos metadata before seed ceiling
+          (SourcePruningEnumerationRestart.decision stop order metadata before) output) ∧
+      (∀ output ∈ SourcePruningEnumerationHookInvocation.hookOutputs outcome, Canonical output.cache.core) ∧
+      ∀ (_extra : Nat) output, output ∈ SourcePruningEnumerationHookInvocation.hookOutputs outcome →
+        ∀ (ambient : InternedGuardedLanguage.Env Symbol) (marker : Symbol) (fuel : Nat)
+          (after : Core) (term : Language.Term Symbol) (pending : List (Constraint × Language.Term Symbol)),
+        SourcePruningEnumerationRendering.Discharged output.cache.core →
+        Success (SourcePruningEnumerationRendering.render output.caller.checked.native.machine.heap marker fuel 0)
+          output.cache.core (term, pending) after →
+        (∀ obligation ∈ pending, SourceEqualityPCSGuard.holds formulas solver obligation.1 obligation.2 = true) →
+        ∃ assignment : Nat → Language.Term Symbol,
+          Satisfies
+            (SourcePruningEnumerationNativeLanguage.handles (SourceEqualityPCSGuard.holds formulas solver)
+              ambient caller.checked.native.machine.heap)
+            (fun guard accepted => SourceEqualityPCSGuard.holds formulas solver guard accepted = true)
+            assignment before.core ∧
+          InternedGuardedLanguage.meaning (SourceEqualityPCSGuard.holds formulas solver) ambient value term ∧
+          (∀ sc ∈ ([] : List Suspended), Suspended.Holds assignment term sc) ∧ term = assignment 0 ∧
+          EnumerationCompressionFrame.Frame output.cache.core after ∧
+          Satisfies
+            (SourcePruningEnumerationNativeLanguage.handles (SourceEqualityPCSGuard.holds formulas solver)
+              ambient output.caller.checked.native.machine.heap)
+            (fun guard accepted => SourceEqualityPCSGuard.holds formulas solver guard accepted = true)
+            assignment output.cache.core ∧
+          Satisfies
+            (SourcePruningEnumerationNativeLanguage.handles (SourceEqualityPCSGuard.holds formulas solver)
+              ambient output.caller.checked.native.machine.heap)
+            (fun guard accepted => SourceEqualityPCSGuard.holds formulas solver guard accepted = true)
+            assignment after) ∧
+      (∀ output ∈ SourcePruningEnumerationHookInvocation.hookOutputs outcome,
+        EnumerationProgress.ProperState output.cache.core)) ∧
+      ∀ output ∈ SourcePruningEnumerationHookInvocation.hookOutputs outcome,
+        EnumerationCarriers.CarriesGraph output.cache.core 0 ∧
+        EnumerationGraphReferences.ReferencesCarry output.cache.core ∧
+        ∀ marker : Symbol, SourcePruningEnumerationRendering.Discharged output.cache.core →
+    ∃ (finalInventory : Inventory) (finalMemos : Memos) (finalMetadata : Metadata Typing),
+      Packet formulas solver finalInventory output.caller finalMemos finalMetadata output.cache ∧
+      ∃ (level : Nat → Nat) (frontier : Nat),
+        EnumerationOrder.Stratified output.cache.core level frontier ∧
+        ∃ (bound : Nat) (term : Term Symbol) (pending : List (Constraint × Term Symbol))
+      (after : EnumerationState.State Symbol Constraint),
+      (∀ extra, Success (SourcePruningEnumerationRendering.render output.caller.checked.native.machine.heap marker (bound + extra) 0) output.cache.core (term, pending) after) ∧
+      EnumerationDriver.RenderStable output.cache.core after ∧ EnumerationCompressionFrame.Frame output.cache.core after ∧ EnumerationOrder.Stratified after level frontier ∧
+      ∀ (language : NodeLanguage Symbol) (meaning : Constraint → Term Symbol → Prop)
+        (assignment : Nat → Term Symbol),
+        Satisfies language meaning assignment output.cache.core →
+        term = assignment 0 ∧
+        pending = output.cache.core.obligations.map (fun obligation => (obligation.1, fill assignment obligation.2)) ∧
+        (∀ obligation ∈ pending, meaning obligation.1 obligation.2) ∧
+        Satisfies language meaning assignment after := by

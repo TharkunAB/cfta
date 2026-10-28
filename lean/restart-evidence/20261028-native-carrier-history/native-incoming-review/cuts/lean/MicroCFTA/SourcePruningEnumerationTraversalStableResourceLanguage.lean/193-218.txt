@@ -1,0 +1,26 @@
+        have tailReservation : SourcePruningEnumerationIncomingReservation.Reserved bits
+            (SourcePruningEnumerationIncomingReservation.advance seed (bucket.length + 1)) (cost rest) :=
+          reserved.after_prefix
+        have tailMeaning := ih (SourcePruningEnumerationIncomingReservation.advance seed (bucket.length + 1))
+          middleInventory middleCaller middle middleRoots middleMemos headPost.context middleSafe middlePaths
+          middleCounts middleFlags middleRealized tailGenuine middleFits tailReservation middleKnown tailRun
+        have headMeaning := SourcePruningEnumerationChildCompletion.stable_semantics
+          formulas solver inventory beforeCaller before checkEmpty bucket incoming roots memos
+          initial safe paths counts flags realized bounded pending available closed headRanges headRun
+        intro ambient residualMeaning assignment
+        rw [fragmentShape]
+        have headIff := headMeaning ambient residualMeaning assignment fragment middle.core (by
+          rw [singleton]
+          exact List.mem_singleton_self _)
+        have tailIff := tailMeaning ambient residualMeaning assignment
+        constructor
+        · intro satisfied
+          obtain ⟨middleSatisfied, related⟩ := tailIff.mp satisfied
+          obtain ⟨beforeSatisfied, incomingAccepted, suspended⟩ := headIff.mp middleSatisfied
+          exact ⟨beforeSatisfied, .cons ⟨incomingAccepted, suspended⟩ related⟩
+        · rintro ⟨beforeSatisfied, related⟩
+          cases related with
+          | cons headRelation tailRelation =>
+              exact tailIff.mpr ⟨headIff.mpr ⟨beforeSatisfied, headRelation.1, headRelation.2⟩, tailRelation⟩
+
+end MicroCFTA.SourcePruningEnumerationTraversalCompletion

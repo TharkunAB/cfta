@@ -1,0 +1,24 @@
+MicroCFTA.SourcePruningEnumerationAssimilation.finish_carriers {EnumGuard : Type}
+  (before after : MicroCFTA.EnumerationState.State MicroCFTA.SourcePruningTemplates.Symbol EnumGuard)
+  (source target resultHandle : Nat) (sourceNode targetNode : Option Nat)
+  (sourceScs targetScs : List MicroCFTA.EnumerationState.Suspended)
+  (result :
+    MicroCFTA.InternedConstructorTemplates.Value MicroCFTA.SourcePruningTemplates.Symbol
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+  (total : MicroCFTA.UnionFind.Total before.representatives)
+  (related : MicroCFTA.UnionFind.SameClass before.representatives target source)
+  (references : MicroCFTA.EnumerationGraphReferences.ReferencesCarry before)
+  (sourceStored :
+    before.values[source]? = some (MicroCFTA.EnumerationState.UVarValue.unenumerated sourceNode sourceScs))
+  (targetStored :
+    before.values[target]? = some (MicroCFTA.EnumerationState.UVarValue.unenumerated targetNode targetScs))
+  (different : source ≠ target)
+  (success :
+    MicroCFTA.EnumerationCorrectness.Success
+      (MicroCFTA.SourcePruningEnumerationAssimilation.finish source target resultHandle sourceScs targetScs result)
+      before () after) :
+  after.representatives = before.representatives ∧
+    MicroCFTA.UnionFind.Total after.representatives ∧
+      MicroCFTA.EnumerationCarriers.PreservesCarriers before after ∧
+        MicroCFTA.EnumerationGraphReferences.ReferencesCarry after
+'MicroCFTA.SourcePruningEnumerationAssimilation.finish_carriers' depends on axioms: [propext]

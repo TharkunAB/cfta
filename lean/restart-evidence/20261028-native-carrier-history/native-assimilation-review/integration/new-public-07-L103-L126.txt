@@ -1,0 +1,24 @@
+MicroCFTA.SourcePruningEnumerationIncomingNode.written_carriers
+  (before after :
+    MicroCFTA.EnumerationState.State MicroCFTA.SourcePruningTemplates.Symbol
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+  (uv target handle : Nat) (oldNode : Option Nat) (incomingScs oldScs : List MicroCFTA.EnumerationState.Suspended)
+  (total : MicroCFTA.UnionFind.Total before.representatives)
+  (references : MicroCFTA.EnumerationGraphReferences.ReferencesCarry before)
+  (related : MicroCFTA.UnionFind.SameClass before.representatives uv target)
+  (stored : before.values[target]? = some (MicroCFTA.EnumerationState.UVarValue.unenumerated oldNode oldScs))
+  (shape :
+    after =
+      { counter := before.counter, representatives := before.representatives,
+        values :=
+          before.values.set target
+            (MicroCFTA.EnumerationState.UVarValue.unenumerated (some handle) (incomingScs ++ oldScs)),
+        obligations := before.obligations,
+        recursionAncestry := fun other =>
+          if other = target then (before.expansionAncestry ++ before.recursionAncestry target).eraseDups
+          else before.recursionAncestry other,
+        expansionAncestry := before.expansionAncestry }) :
+  MicroCFTA.UnionFind.Total after.representatives ∧
+    MicroCFTA.EnumerationCarriers.PreservesCarriers before after ∧
+      MicroCFTA.EnumerationGraphReferences.ReferencesCarry after ∧ MicroCFTA.EnumerationCarriers.CarriesGraph after uv
+'MicroCFTA.SourcePruningEnumerationIncomingNode.written_carriers' depends on axioms: [propext]

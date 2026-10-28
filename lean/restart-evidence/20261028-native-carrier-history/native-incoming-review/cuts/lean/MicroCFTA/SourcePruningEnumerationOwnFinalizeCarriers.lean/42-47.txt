@@ -1,0 +1,6 @@
+theorem suspendMany_carriers
+    (heap : InternedConstructorTemplates.State Symbol NativeGuard) (tries : List EqualityTrie.Trie)
+    (before after : EnumerationExpandableIndex.Cached Symbol EnumGuard) (suspended : List Suspended)
+    (references : ReferencesCarry before.core)
+    (observed : suspendMany heap tries before = some (suspended, after)) :
+    PreservesCarriers before.core after.core ∧ ReferencesCarry after.core := by

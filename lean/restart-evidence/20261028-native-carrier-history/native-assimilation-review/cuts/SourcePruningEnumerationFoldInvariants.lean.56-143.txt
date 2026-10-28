@@ -1,0 +1,88 @@
+/-- A selected successful singleton retains storage and waiting counts. -/
+theorem dispatch_preserves
+    [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Constraint)] [DecidableEq Node]
+    (checkEmpty : Bool) (nativeFuel p h : Nat)
+    (beforeCaller : Caller width) (before : EnumerationState.State Symbol EnumGuard)
+    (source target : Nat) (queries : Queries) (action : EnumerateM Symbol EnumGuard Unit)
+    (afterCaller : Caller width) (savedQueries : Queries)
+    (after : EnumerationState.State Symbol EnumGuard)
+    (roots : Nat → Nat) (waiting : EnumerationWaitingIndex.Waiting)
+    (storage : StorageValid before)
+    (counts : EnumerationCanonicalWaiting.Correct roots before.values waiting)
+    (selected : SourcePruningEnumerationDispatch.dispatch checkEmpty nativeFuel p h
+      beforeCaller before source target queries = (.ok (some action), afterCaller, savedQueries))
+    (completed : ExceptT.run (action before) = [.ok ((), after)]) :
+    StorageValid after ∧ EnumerationCanonicalWaiting.Correct roots after.values waiting
+ := by
+  rcases SourcePruningEnumerationDispatchShape.singleton checkEmpty nativeFuel p h
+    beforeCaller before source target queries action afterCaller savedQueries after selected completed with
+    rfl | ⟨different, sourceNode, targetNode, merged, sourceScs, targetScs, sourceStored, targetStored, rfl⟩
+  · exact ⟨storage, counts⟩
+  · exact assimilated_preserves before source target sourceNode targetNode merged sourceScs targetScs
+      roots waiting storage counts sourceStored targetStored (Ne.symm different)
+
+/-- Every returned outer fold state retains storage and waiting counts. -/
+theorem run_preserves
+    [DecidableEq Symbol] [DecidableEq (EdgeKey Symbol Constraint)] [DecidableEq Node]
+    (checkEmpty : Bool) (nativeFuel p h : Nat) (sources : List Nat)
+    (beforeCaller : Caller width) (before : EnumerationState.State Symbol EnumGuard)
+    (target : Nat) (queries : Queries)
+    (result : Except (SourceEqualityNativeDemand.Outcome width Node ⊕
+      SourceCurrentAllocatedConjunctionWorker.Outcome width)
+      (Option (List (Except EnumerationState.Error (Unit × EnumerationState.State Symbol EnumGuard)))))
+    (afterCaller : Caller width) (savedQueries : Queries)
+    (after : EnumerationState.State Symbol EnumGuard)
+    (roots : Nat → Nat) (waiting : EnumerationWaitingIndex.Waiting)
+    (storage : StorageValid before)
+    (counts : EnumerationCanonicalWaiting.Correct roots before.values waiting)
+    (observed : SourcePruningEnumerationFold.run checkEmpty nativeFuel p h sources
+      beforeCaller before target queries = (result, afterCaller, savedQueries, after)) :
+    StorageValid after ∧ EnumerationCanonicalWaiting.Correct roots after.values waiting
+ := by
+  induction sources generalizing beforeCaller before queries with
+  | nil =>
+    simp only [SourcePruningEnumerationFold.run, Prod.mk.injEq] at observed
+    rcases observed with ⟨rfl, rfl, rfl, rfl⟩
+    exact ⟨storage, counts⟩
+  | cons source rest ih =>
+    rcases dispatchObserved : SourcePruningEnumerationDispatch.dispatch checkEmpty nativeFuel p h
+      beforeCaller before source target queries with ⟨dispatchResult, reachedCaller, saved⟩
+    cases dispatchResult with
+    | error fault =>
+      simp only [SourcePruningEnumerationFold.run, dispatchObserved, Prod.mk.injEq] at observed
+      rcases observed with ⟨rfl, rfl, rfl, rfl⟩
+      exact ⟨storage, counts⟩
+    | ok possible =>
+      cases possible with
+      | none =>
+        simp only [SourcePruningEnumerationFold.run, dispatchObserved, Prod.mk.injEq] at observed
+        rcases observed with ⟨rfl, rfl, rfl, rfl⟩
+        exact ⟨storage, counts⟩
+      | some action =>
+        cases rawObserved : ExceptT.run (action before) with
+        | nil =>
+          simp only [SourcePruningEnumerationFold.run, dispatchObserved, rawObserved, Prod.mk.injEq] at observed
+          rcases observed with ⟨rfl, rfl, rfl, rfl⟩
+          exact ⟨storage, counts⟩
+        | cons head tail =>
+          cases head with
+          | error error =>
+            simp only [SourcePruningEnumerationFold.run, dispatchObserved, rawObserved, Prod.mk.injEq] at observed
+            rcases observed with ⟨rfl, rfl, rfl, rfl⟩
+            exact ⟨storage, counts⟩
+          | ok pair =>
+            rcases pair with ⟨valueUnit, middle⟩
+            cases valueUnit
+            cases tail with
+            | nil =>
+              obtain ⟨middleStorage, middleCounts⟩ := dispatch_preserves checkEmpty nativeFuel p h
+                beforeCaller before source target queries action reachedCaller saved middle roots waiting
+                storage counts dispatchObserved rawObserved
+              simp only [SourcePruningEnumerationFold.run, dispatchObserved, rawObserved] at observed
+              exact ih reachedCaller middle saved middleStorage middleCounts observed
+            | cons second remaining =>
+              simp only [SourcePruningEnumerationFold.run, dispatchObserved, rawObserved, Prod.mk.injEq] at observed
+              rcases observed with ⟨rfl, rfl, rfl, rfl⟩
+              exact ⟨storage, counts⟩
+
+end MicroCFTA.SourcePruningEnumerationFoldInvariants

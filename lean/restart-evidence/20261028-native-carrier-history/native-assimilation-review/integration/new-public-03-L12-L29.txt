@@ -1,0 +1,18 @@
+MicroCFTA.SourcePruningEnumerationTerminalPrefix.run_carriers {EnumGuard : Type} (fuel : Nat)
+  (first : MicroCFTA.EnumerationState.Suspended) (rest : List MicroCFTA.EnumerationState.Suspended)
+  (waiting : MicroCFTA.EnumerationWaitingIndex.Waiting)
+  (before after : MicroCFTA.EnumerationState.State MicroCFTA.SourcePruningTemplates.Symbol EnumGuard)
+  (recorded : List Nat) (winner : Nat) (moved : MicroCFTA.EnumerationWaitingIndex.Waiting)
+  (total : MicroCFTA.UnionFind.Total before.representatives)
+  (references : MicroCFTA.EnumerationGraphReferences.ReferencesCarry before)
+  (observed :
+    MicroCFTA.EnumerationCorrectness.Success
+      (MicroCFTA.SourcePruningEnumerationTerminalPrefix.run fuel first rest waiting) before (recorded, winner, moved)
+      after) :
+  MicroCFTA.UnionFind.Total after.representatives ∧
+    MicroCFTA.EnumerationCarriers.PreservesCarriers before after ∧
+      MicroCFTA.EnumerationGraphReferences.ReferencesCarry after ∧
+        ∀ (source : Nat), source ∈ recorded → MicroCFTA.UnionFind.SameClass after.representatives winner source
+'MicroCFTA.SourcePruningEnumerationTerminalPrefix.run_carriers' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]

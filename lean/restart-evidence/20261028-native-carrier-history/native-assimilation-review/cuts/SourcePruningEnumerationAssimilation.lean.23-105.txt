@@ -1,0 +1,83 @@
+def finish (source target resultHandle : Nat)
+    (sourceScs targetScs : List EnumerationState.Suspended)
+    (result : InternedConstructorTemplates.Value Symbol Constraint) :
+    EnumerateM Symbol EnumGuard Unit :=
+  match result with
+  | .empty => reject
+  | _ => do
+      setValue target (.unenumerated (some resultHandle) (sourceScs ++ targetScs))
+      setValue source .eliminated
+      modify fun state => {state with recursionAncestry := (fun other =>
+        if other = target then
+          (state.recursionAncestry source ++ state.recursionAncestry target).eraseDups
+        else state.recursionAncestry other)}
+
+/-- Derive both actual branches of disabled-pruning pending-slot assimilation. -/
+theorem pending_assimilation_complete
+    [DecidableEq Symbol] [DecidableEq (InternedConstructorTemplates.EdgeKey Symbol Constraint)]
+    (formulas : SourceGuards.Formulas FullSyntax.Formula)
+    (solver : SourceGuards.Entailment FullSyntax.Formula)
+    (inventory : SourceCurrentAllocatedNativeInventoryState.Inventory)
+    (nativeBefore : SourceEqualityNativeDemand.State width)
+    (before : EnumerationState.State Symbol EnumGuard)
+    (source target sourceHandle targetHandle : Nat)
+    (sourceScs targetScs : List EnumerationState.Suspended)
+    (ready : SourceCurrentConjunctionClassScan.Ready nativeBefore)
+    (admitted : SourceCurrentAllocatedNativeInventoryState.At formulas solver inventory nativeBefore)
+    (memos : EndpointMemoGateTrace.Memos)
+    (globals : EndpointMemoGateTrace.Valid nativeBefore.native.machine.heap memos)
+    (realized : PendingRealized nativeBefore.native.machine.heap before)
+    (sourceStored : before.values[source]? = some (.unenumerated (some sourceHandle) sourceScs))
+    (targetStored : before.values[target]? = some (.unenumerated (some targetHandle) targetScs))
+    (different : target ≠ source)
+    (ranges : match lookupNode nativeBefore.native.machine.heap sourceHandle,
+        lookupNode nativeBefore.native.machine.heap targetHandle with
+      | some left, some right => SourceCurrentAllocatedNativeRequestBounds.WordRanges
+          (.code (SourceRecursiveIntersectionCode.requestNode IntersectionEmptyDomain.emptyDomain left right)) nativeBefore
+      | _, _ => True) :
+    ∃ (left right : InternedConstructorTemplates.Value Symbol Constraint)
+      (next : SourceCurrentAllocatedNativeInventoryState.Inventory)
+      (result : InternedConstructorTemplates.Value Symbol Constraint)
+      (nativeAfter : SourceEqualityNativeDemand.State width) (resultHandle : Nat),
+      lookupNode nativeBefore.native.machine.heap sourceHandle = some left ∧
+      lookupNode nativeBefore.native.machine.heap targetHandle = some right ∧
+      next.source = nativeBefore.native.machine.heap ∧ next.roots = inventory.roots ++ [left, right] ∧
+      SourceCurrentAllocatedTargetQuery.Receipt formulas solver next left right nativeBefore result nativeAfter memos ∧
+      encodeNode result = some resultHandle ∧ lookupNode nativeAfter.native.machine.heap resultHandle = some result ∧
+      (result = .empty →
+        ExceptT.run (finish (EnumGuard := EnumGuard) source target resultHandle sourceScs targetScs result before) = []) ∧
+      (result ≠ .empty → ∃ after : EnumerationState.State Symbol EnumGuard,
+        ExceptT.run (finish (EnumGuard := EnumGuard) source target resultHandle sourceScs targetScs result before) =
+          [.ok ((), after)] ∧
+        after = assimilated before target source (.unenumerated (some resultHandle) (sourceScs ++ targetScs)) ∧
+        after.values[target]? = some (.unenumerated (some resultHandle) (sourceScs ++ targetScs)) ∧
+        after.values[source]? = some .eliminated ∧
+        PendingRealized nativeAfter.native.machine.heap after) := by
+  obtain ⟨left, right, next, result, nativeAfter, resultHandle, middle, leftDecoded, rightDecoded,
+      nextSource, nextRoots, receipt, encoded, decoded, written, middleSame, middleStored, middleRealized⟩ :=
+    SourcePruningEnumerationIntersectionWrite.pending_intersection_write formulas solver inventory nativeBefore
+      before source target sourceHandle targetHandle sourceScs targetScs ready admitted memos globals
+      realized sourceStored targetStored ranges
+  subst middle
+  refine ⟨left, right, next, result, nativeAfter, resultHandle, leftDecoded, rightDecoded,
+    nextSource, nextRoots, receipt, encoded, decoded, ?_, ?_⟩
+  · intro isEmpty
+    subst result
+    rfl
+  · intro nonempty
+    have raw : ExceptT.run (finish (EnumGuard := EnumGuard) source target resultHandle sourceScs targetScs result before) =
+        [.ok ((), assimilated before target source (.unenumerated (some resultHandle) (sourceScs ++ targetScs)))] := by
+      cases result with
+      | empty => exact False.elim (nonempty rfl)
+      | reference name => rfl
+      | node entry edges depth free => rfl
+      | union entry members depth free => rfl
+      | mu entry body depthShape ordinaryShape => rfl
+    have sourceInside : source < before.values.length := by
+      exact (List.getElem?_eq_some_iff.mp sourceStored).elim (fun bound _ => bound)
+    refine ⟨assimilated before target source (.unenumerated (some resultHandle) (sourceScs ++ targetScs)),
+      raw, rfl, ?_, ?_, ?_⟩
+    · simpa only [assimilated, List.getElem?_set_ne (Ne.symm different)] using middleStored
+    · exact List.getElem?_set_self (by simpa only [List.length_set] using sourceInside)
+    · intro slot node scs stored
+      change ((before.values.set target (.unenumerated (some resultHandle) (sourceScs ++ targetScs))).set

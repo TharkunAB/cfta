@@ -1,0 +1,32 @@
+MicroCFTA.SourcePruningEnumerationTerminal.observed_carriers {width : Nat}
+  [DecidableEq MicroCFTA.SourcePruningTemplates.Symbol]
+  [DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey MicroCFTA.SourcePruningTemplates.Symbol
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  [DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.Value MicroCFTA.SourcePruningTemplates.Symbol
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  (checkEmpty : Bool) (r n p h : Nat) (first : MicroCFTA.EnumerationState.Suspended)
+  (rest : List MicroCFTA.EnumerationState.Suspended) (waiting : MicroCFTA.EnumerationWaitingIndex.Waiting)
+  (caller : MicroCFTA.SourceCurrentAllocatedPartialState.State width)
+  (before :
+    MicroCFTA.EnumerationState.State MicroCFTA.SourcePruningTemplates.Symbol
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+  (incoming :
+    MicroCFTA.InternedConstructorTemplates.Value MicroCFTA.SourcePruningTemplates.Symbol
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+  (incomingScs : List MicroCFTA.EnumerationState.Suspended) (queries : MicroCFTA.SourceEndpointMemo.Memos)
+  (total : MicroCFTA.UnionFind.Total before.representatives)
+  (references : MicroCFTA.EnumerationGraphReferences.ReferencesCarry before) :
+  MicroCFTA.UnionFind.Total
+      (MicroCFTA.SourcePruningEnumerationTerminal.run checkEmpty r n p h first rest waiting caller before incoming
+                  incomingScs queries).snd.snd.snd.fst.representatives ∧
+    MicroCFTA.EnumerationCarriers.PreservesCarriers before
+        (MicroCFTA.SourcePruningEnumerationTerminal.run checkEmpty r n p h first rest waiting caller before incoming
+                  incomingScs queries).snd.snd.snd.fst ∧
+      MicroCFTA.EnumerationGraphReferences.ReferencesCarry
+        (MicroCFTA.SourcePruningEnumerationTerminal.run checkEmpty r n p h first rest waiting caller before incoming
+                  incomingScs queries).snd.snd.snd.fst
+'MicroCFTA.SourcePruningEnumerationTerminal.observed_carriers' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]

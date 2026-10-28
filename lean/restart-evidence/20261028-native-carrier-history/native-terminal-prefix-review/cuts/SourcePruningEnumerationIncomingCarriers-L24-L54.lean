@@ -1,0 +1,31 @@
+theorem written_carriers
+    (before after : Core) (uv target handle : Nat) (oldNode : Option Nat)
+    (incomingScs oldScs : List Suspended)
+    (total : UnionFind.Total before.representatives) (references : ReferencesCarry before)
+    (related : UnionFind.SameClass before.representatives uv target)
+    (stored : before.values[target]? = some (.unenumerated oldNode oldScs))
+    (shape : after = {before with
+      values := before.values.set target (.unenumerated (some handle) (incomingScs ++ oldScs))
+      recursionAncestry := fun other => if other = target then
+        (before.expansionAncestry ++ before.recursionAncestry target).eraseDups
+        else before.recursionAncestry other}) :
+    UnionFind.Total after.representatives ∧ PreservesCarriers before after ∧
+      ReferencesCarry after ∧ CarriesGraph after uv := by
+  subst after
+  have preserved : PreservesCarriers before
+      {before with
+        values := before.values.set target (.unenumerated (some handle) (incomingScs ++ oldScs))
+        recursionAncestry := fun other => if other = target then
+          (before.expansionAncestry ++ before.recursionAncestry target).eraseDups
+          else before.recursionAncestry other} :=
+    set_graph_carriers before target (.unenumerated (some handle) (incomingScs ++ oldScs)) trivial
+  have origin := setValue_origin target (.unenumerated (some handle) (incomingScs ++ oldScs))
+    before {before with values := before.values.set target (.unenumerated (some handle) (incomingScs ++ oldScs))}
+    (by intro fragment same; cases same)
+    ((EnumerationDriver.modify_success _ _ _).mpr rfl)
+  have inside := (List.getElem?_eq_some_iff.mp stored).1
+  refine ⟨total, preserved, references_transport before _ references preserved origin rfl, ?_⟩
+  exact ⟨target, .unenumerated (some handle) (incomingScs ++ oldScs), related,
+    by simp [inside], trivial⟩
+
+private theorem finish_singleton_carriers

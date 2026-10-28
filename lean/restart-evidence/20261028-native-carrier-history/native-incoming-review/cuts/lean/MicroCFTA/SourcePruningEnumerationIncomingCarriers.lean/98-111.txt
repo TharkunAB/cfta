@@ -1,0 +1,14 @@
+
+/-- Every actual read retains carriers; a successful singleton also supplies its requested hole. -/
+theorem run_carriers
+    (checkEmpty : Bool) (r n p h : Nat) (caller : Caller width) (before : Core)
+    (target : Nat) (incoming : Node) (incomingScs : List Suspended) (queries : Queries)
+    (total : UnionFind.Total before.representatives) (references : ReferencesCarry before) :
+    (UnionFind.Total (run checkEmpty r n p h caller before target incoming incomingScs queries).2.2.2.representatives ∧
+      PreservesCarriers before (run checkEmpty r n p h caller before target incoming incomingScs queries).2.2.2 ∧
+      ReferencesCarry (run checkEmpty r n p h caller before target incoming incomingScs queries).2.2.2) ∧
+      ∀ returned, (run checkEmpty r n p h caller before target incoming incomingScs queries).1 =
+        .ok (some [.ok ((), returned)]) →
+        UnionFind.Total returned.representatives ∧ PreservesCarriers before returned ∧
+          ReferencesCarry returned ∧ CarriesGraph returned target := by
+  generalize observedEq : run checkEmpty r n p h caller before target incoming incomingScs queries = observed

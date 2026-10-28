@@ -1,0 +1,33 @@
+MicroCFTA.SourcePruningEnumerationChildDispatch.successful_carriers {width : Nat}
+  [DecidableEq MicroCFTA.SourcePruningTemplates.Symbol]
+  [DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey MicroCFTA.SourcePruningTemplates.Symbol
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  [DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.Value MicroCFTA.SourcePruningTemplates.Symbol
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  {checkEmpty : Bool} {r n p h k : Nat} {scs : List MicroCFTA.EnumerationState.Suspended}
+  {incoming :
+    MicroCFTA.InternedConstructorTemplates.Value MicroCFTA.SourcePruningTemplates.Symbol
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)}
+  {caller reachedCaller : MicroCFTA.SourceCurrentAllocatedPartialState.State width}
+  {before after :
+    MicroCFTA.EnumerationExpandableIndex.Cached MicroCFTA.SourcePruningTemplates.Symbol
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)}
+  {queries savedQueries : MicroCFTA.SourceEndpointMemo.Memos}
+  {fragment : MicroCFTA.Fragments.Fragment MicroCFTA.SourcePruningTemplates.Symbol}
+  {returned outer :
+    MicroCFTA.EnumerationState.State MicroCFTA.SourcePruningTemplates.Symbol
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)}
+  {waiting : MicroCFTA.EnumerationWaitingIndex.Waiting} (safe : MicroCFTA.EnumerationSchedule.Safe before.core)
+  (references : MicroCFTA.EnumerationGraphReferences.ReferencesCarry before.core)
+  (observed :
+    MicroCFTA.SourcePruningEnumerationChildDispatch.run checkEmpty r n p h k scs incoming caller before queries =
+      ((Except.ok (some [Except.ok (fragment, returned)]), reachedCaller, savedQueries, outer, waiting), some after)) :
+  MicroCFTA.UnionFind.Total after.core.representatives ∧
+    MicroCFTA.EnumerationCarriers.PreservesCarriers before.core after.core ∧
+      MicroCFTA.EnumerationGraphReferences.ReferencesCarry after.core ∧
+        MicroCFTA.EnumerationGraphReferences.FragmentCarries after.core fragment
+'MicroCFTA.SourcePruningEnumerationChildDispatch.successful_carriers' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]

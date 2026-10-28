@@ -1,0 +1,17 @@
+theorem mergeNode_carriers (graph : Graph Symbol Guard) (fuel uv node : Nat) (scs : List Suspended)
+    (before after : State Symbol Guard) (total : UnionFind.Total before.representatives)
+    (success : Success (mergeNode graph fuel uv node scs) before () after) :
+    PreservesCarriers before after ∧ CarriesGraph after uv := by
+  unfold mergeNode at success
+  obtain ⟨root, resolved, resolution, continued⟩ := (success_bind _ _ _ _ _).mp success
+  have resolvedCarriers := (representative_carriers fuel uv root before resolved total resolution).2
+  obtain ⟨found, lookup, rootSame, resolvedSame⟩ := (representative_success fuel uv before resolved root).mp resolution
+  have reached := (UnionFind.findRoot_correct fuel before.representatives uv found lookup).2
+    (UnionFind.findRoot_correct fuel before.representatives uv found lookup).1
+  have related : UnionFind.SameClass resolved.representatives uv root := by
+    simpa [resolvedSame, rootSame] using UnionFind.sameClass_root reached
+  obtain ⟨previous, readState, reading, continued⟩ := (success_bind _ _ _ _ _).mp continued
+  obtain ⟨stored, same⟩ := (rawValue_success root resolved readState previous).mp reading
+  subst readState
+  cases intersection : intersectValues graph (.unenumerated (some node) scs) previous with
+  | none =>

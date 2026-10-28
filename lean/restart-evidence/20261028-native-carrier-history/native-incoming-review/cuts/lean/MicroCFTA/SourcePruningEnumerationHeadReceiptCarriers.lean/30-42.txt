@@ -1,0 +1,13 @@
+theorem CompletedHeadReceipt.carriers
+    {seed : Seed} {inherited : Nat}
+    {formulas : SourceGuards.Formulas FullSyntax.Formula}
+    {solver : SourceGuards.Entailment FullSyntax.Formula} {inventory : Inventory}
+    {caller : Caller (bits + 2)} {memos : Memos} {metadata : Metadata Typing} {before : Cached}
+    {checkEmpty : Bool} {uv : Nat} {scs : List Suspended} {edge : EdgeValue Symbol Constraint}
+    {bound : Nat} {fragment : Fragment} {reached : Caller (bits + 2)} {saved : Queries} {after : Cached}
+    {returnedInventory : Inventory} {returnedMemos : Memos}
+    (receipt : CompletedHeadReceipt seed inherited formulas solver inventory caller memos metadata before
+      checkEmpty uv scs edge bound fragment reached saved after returnedInventory returnedMemos)
+    (references : ReferencesCarry before.core) :
+    UnionFind.Total after.core.representatives ∧ PreservesCarriers before.core after.core ∧
+      ReferencesCarry after.core ∧ FragmentCarries after.core fragment := by

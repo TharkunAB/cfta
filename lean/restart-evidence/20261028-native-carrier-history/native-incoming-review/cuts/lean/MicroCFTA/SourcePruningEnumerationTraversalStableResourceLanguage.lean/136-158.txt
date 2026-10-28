@@ -1,0 +1,23 @@
+            ((.ok (some []), middleCaller, middleQueries, outer, waiting), some middle) := by
+          simpa only [Nat.add_comm] using headRun r n (max p headP) (max h headH) k
+            (Nat.le_max_right _ _) (Nat.le_max_right _ _)
+        have impossible := observed headR headN (max p headP) (max h headH) headK
+          (Nat.le_max_left _ _) (Nat.le_max_left _ _)
+        rw [SourcePruningEnumerationChildTraversal.run, headCommon] at impossible
+        cases impossible
+      · have headCommon : ∀ er en P H ek, max p headP ≤ P → max h headH ≤ H →
+            SourcePruningEnumerationChildDispatch.run checkEmpty ((r + headR) + er) ((n + headN) + en)
+              P H ((k + headK) + ek) bucket incoming beforeCaller before memos.query =
+              ((.ok (some [.ok (fragment, middle.core)]), middleCaller, middleQueries, outer, waiting), some middle) := by
+          intro er en P H ek enoughP enoughH
+          simpa only [Nat.add_assoc, Nat.add_comm, Nat.add_left_comm, singleton] using
+            headRun (r + er) (n + en) P H (k + ek)
+              (Nat.le_trans (Nat.le_max_right _ _) enoughP)
+              (Nat.le_trans (Nat.le_max_right _ _) enoughH)
+        have firstHead : SourcePruningEnumerationChildDispatch.run checkEmpty (r + headR) (n + headN)
+            (max p headP) (max h headH) (k + headK) bucket incoming beforeCaller before memos.query =
+            ((.ok (some [.ok (fragment, middle.core)]), middleCaller, middleQueries, outer, waiting), some middle) := by
+          simpa only [Nat.add_zero] using headCommon 0 0 (max p headP) (max h headH) 0
+            (Nat.le_refl _) (Nat.le_refl _)
+        obtain ⟨tailFragments, fragmentShape, _firstTail⟩ := resource_complete_tail checkEmpty firstHead
+          (observed headR headN (max p headP) (max h headH) headK

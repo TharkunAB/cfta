@@ -1,0 +1,61 @@
+      ReferencesCarry after.core ∧ CarriesGraph after.core target := by
+  have fields := SourcePruningEnumerationIncomingNode.run_carriers checkEmpty r n p h caller before.core
+    target incoming incomingScs queries total references
+  rw [observed] at fields
+  dsimp only at fields
+  obtain ⟨⟨readTotal, readPreserved, readReferences⟩, rows⟩ := fields
+  cases raw with
+  | nil =>
+      simp only [adapt] at adapted
+      split at adapted
+      · rename_i oldNode oldScs stored
+        simp only [Option.map_eq_some_iff] at adapted
+        obtain ⟨written, _written, same⟩ := adapted
+        subst after
+        have related : UnionFind.SameClass read.representatives target target := by
+          obtain ⟨root, size, path⟩ := readTotal target
+          exact ⟨root, size, path, path⟩
+        obtain ⟨writtenTotal, writtenPreserved, writtenReferences, own⟩ :=
+          SourcePruningEnumerationIncomingNode.written_carriers read
+            {read with
+              values := read.values.set target (.unenumerated (some 0) (incomingScs ++ oldScs))
+              recursionAncestry := fun other => if other = target then
+                (read.expansionAncestry ++ read.recursionAncestry target).eraseDups
+                else read.recursionAncestry other}
+            target target 0 oldNode incomingScs oldScs readTotal readReferences related stored rfl
+        exact ⟨writtenTotal, readPreserved.trans writtenPreserved, writtenReferences, own⟩
+      · cases adapted
+  | cons row rest =>
+      cases row with
+      | error fault => simp only [adapt] at adapted; cases adapted
+      | ok payload =>
+          obtain ⟨⟨⟩, returned⟩ := payload
+          cases rest with
+          | nil =>
+              have coreSame := adapt_singleton_core reachedCaller.checked.native.machine.heap k target
+                incomingScs before after read returned adapted
+              simpa only [coreSame] using rows returned rfl
+          | cons next later => simp only [adapt] at adapted; cases adapted
+
+/-- Every actual attached cache retains old carriers and supplies the requested target class. -/
+theorem observed_cache_carriers
+    (checkEmpty : Bool) (r n p h k : Nat) (caller : Caller width) (before : Cached)
+    (target : Nat) (incoming : Node) (incomingScs : List Suspended) (queries : Queries)
+    (total : UnionFind.Total before.core.representatives) (references : ReferencesCarry before.core)
+    (after : Cached)
+    (candidate : (run checkEmpty r n p h k caller before target incoming incomingScs queries).2 = some after) :
+    UnionFind.Total after.core.representatives ∧ PreservesCarriers before.core after.core ∧
+      ReferencesCarry after.core ∧ CarriesGraph after.core target := by
+  unfold run at candidate
+  generalize original : SourcePruningEnumerationIncomingNode.run checkEmpty r n p h
+    caller before.core target incoming incomingScs queries = observed at candidate
+  obtain ⟨result, reached, saved, read⟩ := observed
+  dsimp only at candidate
+  cases result with
+  | error fault => cases candidate
+  | ok payload =>
+      cases payload with
+      | none => cases candidate
+      | some raw => exact adapt_carriers total references original candidate
+
+end MicroCFTA.SourcePruningEnumerationIncomingCacheAdapter

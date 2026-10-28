@@ -1,0 +1,32 @@
+MicroCFTA.SourcePruningEnumerationCachedAdapter.adapt_carriers
+  {heap :
+    MicroCFTA.InternedConstructorTemplates.State MicroCFTA.SourcePruningTemplates.Symbol
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)}
+  {before after :
+    MicroCFTA.EnumerationExpandableIndex.Cached MicroCFTA.SourcePruningTemplates.Symbol
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)}
+  {source target : Nat}
+  {raw :
+    List
+      (Except MicroCFTA.EnumerationState.Error
+        (Unit ×
+          MicroCFTA.EnumerationState.State MicroCFTA.SourcePruningTemplates.Symbol
+            (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)))}
+  (total : MicroCFTA.UnionFind.Total before.core.representatives)
+  (references : MicroCFTA.EnumerationGraphReferences.ReferencesCarry before.core)
+  (rows :
+    ∀
+      (returned :
+        MicroCFTA.EnumerationState.State MicroCFTA.SourcePruningTemplates.Symbol
+          (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula)),
+      raw = [Except.ok ((), returned)] →
+        returned.representatives = before.core.representatives ∧
+          MicroCFTA.UnionFind.Total returned.representatives ∧
+            MicroCFTA.EnumerationCarriers.PreservesCarriers before.core returned ∧
+              MicroCFTA.EnumerationGraphReferences.ReferencesCarry returned)
+  (adapted : MicroCFTA.SourcePruningEnumerationCachedAdapter.adapt heap before source target raw = some after) :
+  after.core.representatives = before.core.representatives ∧
+    MicroCFTA.UnionFind.Total after.core.representatives ∧
+      MicroCFTA.EnumerationCarriers.PreservesCarriers before.core after.core ∧
+        MicroCFTA.EnumerationGraphReferences.ReferencesCarry after.core
+'MicroCFTA.SourcePruningEnumerationCachedAdapter.adapt_carriers' depends on axioms: [propext, Quot.sound]

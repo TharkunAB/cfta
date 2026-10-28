@@ -1,0 +1,10 @@
+  intro other _
+  exact ⟨fun h => sameClass_trans (sameClass_symm same) h, fun h => sameClass_trans same h⟩
+
+/-- A finite path puts its initial variable and its root in one class. -/
+theorem sameClass_root (path : Reaches forest uv root size) : SameClass forest uv root :=
+  ⟨root, size, path, .root (reaches_terminal path)⟩
+
+/-- Linking leaves each third root's class cardinality unchanged. -/
+theorem link_other_count (valid : Total forest)
+    (loserRoot : read forest loser = .root loserSize)

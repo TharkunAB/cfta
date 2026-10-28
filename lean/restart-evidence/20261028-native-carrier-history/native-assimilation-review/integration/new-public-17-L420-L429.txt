@@ -1,0 +1,10 @@
+MicroCFTA.SourcePruningEnumerationCachedOwn.suspendMany_carriers {EnumGuard NativeGuard : Type}
+  (heap : MicroCFTA.InternedConstructorTemplates.State MicroCFTA.SourcePruningTemplates.Symbol NativeGuard)
+  (tries : List MicroCFTA.EqualityTrie.Trie)
+  (before after : MicroCFTA.EnumerationExpandableIndex.Cached MicroCFTA.SourcePruningTemplates.Symbol EnumGuard)
+  (suspended : List MicroCFTA.EnumerationState.Suspended)
+  (references : MicroCFTA.EnumerationGraphReferences.ReferencesCarry before.core)
+  (observed : MicroCFTA.SourcePruningEnumerationCachedOwn.suspendMany heap tries before = some (suspended, after)) :
+  MicroCFTA.EnumerationCarriers.PreservesCarriers before.core after.core ∧
+    MicroCFTA.EnumerationGraphReferences.ReferencesCarry after.core
+'MicroCFTA.SourcePruningEnumerationCachedOwn.suspendMany_carriers' depends on axioms: [propext, Quot.sound]

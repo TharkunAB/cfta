@@ -1,0 +1,9 @@
+theorem written_carriers
+    (before after : EnumerationState.State Symbol EnumGuard) (target : Nat)
+    (fragment : Fragments.Fragment Symbol) (references : ReferencesCarry before)
+    (holes : FragmentCarries before fragment)
+    (written : after = {before with
+      values := before.values.set target (.enumerated fragment)
+      expansionAncestry := []}) :
+    PreservesCarriers before after ∧ ReferencesCarry after ∧ FragmentCarries after fragment := by
+  subst after

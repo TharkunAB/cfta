@@ -1,0 +1,14 @@
+MicroCFTA.SourcePruningEnumerationEntry.enter_carriers {EnumGuard NativeGuard : Type}
+  (heap : MicroCFTA.InternedConstructorTemplates.State MicroCFTA.SourcePruningTemplates.Symbol NativeGuard)
+  (fuel uv : Nat) (before after : MicroCFTA.EnumerationState.State MicroCFTA.SourcePruningTemplates.Symbol EnumGuard)
+  (target handle : Nat) (bucket : List MicroCFTA.EnumerationState.Suspended)
+  (decoded : MicroCFTA.InternedConstructorTemplates.Value MicroCFTA.SourcePruningTemplates.Symbol NativeGuard)
+  (total : MicroCFTA.UnionFind.Total before.representatives)
+  (references : MicroCFTA.EnumerationGraphReferences.ReferencesCarry before)
+  (success :
+    MicroCFTA.EnumerationCorrectness.Success (MicroCFTA.SourcePruningEnumerationEntry.enter heap fuel uv) before
+      (target, handle, bucket, decoded) after) :
+  MicroCFTA.UnionFind.Total after.representatives ∧
+    MicroCFTA.EnumerationCarriers.PreservesCarriers before after ∧
+      MicroCFTA.EnumerationGraphReferences.ReferencesCarry after
+'MicroCFTA.SourcePruningEnumerationEntry.enter_carriers' depends on axioms: [propext, Quot.sound]

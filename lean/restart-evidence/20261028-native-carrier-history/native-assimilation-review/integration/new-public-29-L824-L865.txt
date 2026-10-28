@@ -1,0 +1,42 @@
+MicroCFTA.SourcePruningEnumerationSelectedPrefixCarriers.prepared_nonempty_carriers {Typing Key : Type}
+  [DecidableEq
+      (MicroCFTA.InternedConstructorTemplates.EdgeKey MicroCFTA.SourcePruningTemplates.Symbol
+        (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))]
+  (holeKey : Typing → Nat → Key) (fits : Key → MicroCFTA.SourcePruningTemplates.Symbol → Bool)
+  (admits :
+    Key →
+      MicroCFTA.InternedConstructorTemplates.Value MicroCFTA.SourcePruningTemplates.Symbol
+          (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) →
+        Bool)
+  (metadata : MicroCFTA.SourcePruningRecordTypes.Metadata Typing)
+  (nativeFuel representativeFuel uv oldHandle newHandle : Nat) (scs : List MicroCFTA.EnumerationState.Suspended)
+  (oldValue value :
+    MicroCFTA.InternedConstructorTemplates.Value MicroCFTA.SourcePruningTemplates.Symbol
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+  (heap nextHeap :
+    MicroCFTA.InternedConstructorTemplates.State MicroCFTA.SourcePruningTemplates.Symbol
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+  (action :
+    MicroCFTA.EnumerationState.EnumerateM MicroCFTA.SourcePruningTemplates.Symbol
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula) Unit)
+  (checked after :
+    MicroCFTA.EnumerationState.State MicroCFTA.SourcePruningTemplates.Symbol
+      (MicroCFTA.SourceSymbolicIndex.Constraint MicroCFTA.FullSyntax.Formula))
+  (total : MicroCFTA.UnionFind.Total checked.representatives)
+  (references : MicroCFTA.EnumerationGraphReferences.ReferencesCarry checked)
+  (narrowed :
+    MicroCFTA.SourcePruningOuterNarrow.narrow holeKey fits admits metadata nativeFuel uv oldValue heap =
+      MicroCFTA.MergedSourceComparison.Result.done value nextHeap)
+  (nonempty : value ≠ MicroCFTA.InternedConstructorTemplates.Value.empty)
+  (encoded : MicroCFTA.SourcePruningEnumerationNodes.encodeNode value = some newHandle)
+  (prepared :
+    MicroCFTA.SourcePruningEnumerationAction.prepare holeKey fits admits metadata nativeFuel representativeFuel uv
+        oldHandle scs oldValue heap =
+      MicroCFTA.MergedSourceComparison.Result.done (value, some action) nextHeap)
+  (observed : MicroCFTA.EnumerationCorrectness.Success action checked () after) :
+  MicroCFTA.UnionFind.Total after.representatives ∧
+    MicroCFTA.EnumerationCarriers.PreservesCarriers checked after ∧
+      MicroCFTA.EnumerationGraphReferences.ReferencesCarry after
+'MicroCFTA.SourcePruningEnumerationSelectedPrefixCarriers.prepared_nonempty_carriers' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]

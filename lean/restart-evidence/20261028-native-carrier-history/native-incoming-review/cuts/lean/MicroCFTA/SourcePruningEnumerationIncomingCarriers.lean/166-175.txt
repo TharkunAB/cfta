@@ -1,0 +1,10 @@
+theorem adapt_carriers
+    {checkEmpty : Bool} {r n p h k : Nat} {caller reachedCaller : Caller width}
+    {before after : Cached} {target : Nat} {incoming : Node} {incomingScs : List Suspended}
+    {queries savedQueries : Queries} {read : Core} {raw : Raw}
+    (total : UnionFind.Total before.core.representatives) (references : ReferencesCarry before.core)
+    (observed : SourcePruningEnumerationIncomingNode.run checkEmpty r n p h caller before.core
+      target incoming incomingScs queries = (.ok (some raw), reachedCaller, savedQueries, read))
+    (adapted : adapt reachedCaller.checked.native.machine.heap k target incomingScs before read raw = some after) :
+    UnionFind.Total after.core.representatives ∧ PreservesCarriers before.core after.core ∧
+      ReferencesCarry after.core ∧ CarriesGraph after.core target := by
