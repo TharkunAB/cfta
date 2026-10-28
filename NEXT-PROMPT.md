@@ -1,5 +1,46 @@
 Continue the cfta formalization in /home/tritlo/Code/mcfta.
 
+## Accepted models through native prefixes and callback restart
+
+Source checkpoint: cfad1652ff20cc20bf0537c26591fb686b5e2821.
+An original accepted native term now supplies the literal startup model.
+Under explicit original annotation and symbol policies, the actual selected
+prefix retains the SAME satisfying assignment in its parked or narrowed cache.
+The proof covers full native Mu/Union meaning through the existing exact
+exposure theorem. An accepted selected head also retains its extended model
+in the actual framed callback restart cache, under the existing pending
+refutation, template avoidance and per-program encoding conditions.
+
+These are forward model results at actual intermediate states. They do not
+yet establish global recursive output coverage. The complete old startup,
+canonical-prefix and accepted-head callback declarations remain present.
+Original producers run once. Operational witnesses precede semantic models.
+
+The completion boundary is now explicit. DONE means no expandable candidates.
+It can retain a recursive boundary handle with an empty suspended bucket.
+The original startup family at such a root produces an actual singleton DONE
+output at the SAME cache, caller and query state for every fuel. It retains
+the full Packet, ProperState and graph carriers, is NOT Discharged, and renders
+as the explicit recursion marker. This is an original-admission family, not
+an instantiated physical Haskell execution or a new implementation defect.
+
+The largest gap is global accepted-model preservation and output coverage
+under permitted policies. Coverage must include intentional opaque or
+truncated recursive outputs. Do not require every DONE output to be Discharged.
+The previous exact concrete-render theorem remains conditional on Discharged.
+Selected-variable program origins, public typing and template policies,
+public APIs, ranking, sampling and physical Haskell correspondence remain open.
+Whole-CFTA correctness remains the objective. Goal ACTIVE; checkpoint PROGRESS.
+
+Six modules add 14 public theorems. All seven final strict checks pass.
+Full Audit passes 4331 jobs and checks 80527 theorem dependencies.
+Public readback has 323 theorem blocks and nine printed definitions.
+The previous 309 blocks and nine definitions remain the exact 1213984-byte
+prefix. All 4324 old non-Audit Lean sources, 173 pinned strong modules and
+810 tracked Haskell source/evidence files retain bytes. Haskell is unchanged.
+Details: `lean/notes-current-accepted-prefix-models.md`.
+
+
 ## Native carrier preservation through actual recursive output histories
 
 Source checkpoint: 94d867aeb4309e7a5affbb4f0e31ac3681e57811.
