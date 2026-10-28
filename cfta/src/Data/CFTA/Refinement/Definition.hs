@@ -19,6 +19,8 @@ module Data.CFTA.Refinement.Definition (
     DefinitionError (..),
     unfold,
     unfoldKeeping,
+    checkFormula,
+    termSort,
 ) where
 
 import Control.Monad (forM_, unless, when)
@@ -190,8 +192,8 @@ checkFormula signatures = go
         Or parts -> mapM_ (go sorts) parts
         Not inner -> go sorts inner
         Atom relation left right -> do
-            leftSort <- termSort sorts left
-            rightSort <- termSort sorts right
+            leftSort <- termSort signatures sorts left
+            rightSort <- termSort signatures sorts right
             let ordered = relation `notElem` [Eq, Ne]
             unless (leftSort == rightSort && (not ordered || numeric leftSort))
                 $ Left
@@ -203,44 +205,50 @@ checkFormula signatures = go
             unless (length parameters == length arguments)
                 $ Left
                 $ ArityMismatch name (length parameters) (length arguments)
-            argumentSorts <- traverse (termSort sorts) arguments
+            argumentSorts <- traverse (termSort signatures sorts) arguments
             forM_ (zip3 [0 ..] parameters argumentSorts) $ \(index, expected, found) ->
                 unless (expected == found) $ Left $ ArgumentSort name index expected found
 
-    termSort :: Map Name Sort -> Term -> Either DefinitionError Sort
-    termSort sorts term = case term of
-        Lit _ -> Right IntSort
-        Var name -> Right $ Map.findWithDefault IntSort name sorts
-        App name arguments -> do
-            argumentSorts <- traverse (termSort sorts) arguments
-            case Map.findWithDefault (FunctionSort (IntSort <$ arguments) IntSort) name sorts of
-                FunctionSort parameters result | parameters == argumentSorts -> Right result
-                sort | null arguments, not (isFunction sort) -> Right sort
-                _ -> Left $ IllSortedTerm term
-        Neg inner -> do
-            sort <- termSort sorts inner
-            unless (numeric sort) $ Left $ IllSortedTerm term
-            Right sort
-        Add left right -> arithmetic left right
-        Sub left right -> arithmetic left right
-        Mul left right -> arithmetic left right
-        Div left right -> arithmetic left right
-        Mod left right -> arithmetic left right
-        Ite condition yes no -> do
-            go sorts condition
-            yesSort <- termSort sorts yes
-            noSort <- termSort sorts no
-            unless (yesSort == noSort) $ Left $ IllSortedTerm term
-            Right yesSort
-        Cast inner sort -> termSort sorts inner >> Right sort
-      where
-        arithmetic left right = do
-            leftSort <- termSort sorts left
-            rightSort <- termSort sorts right
-            unless (leftSort == rightSort && numeric leftSort) $ Left $ IllSortedTerm term
-            Right leftSort
-
-    numeric sort = sort == IntSort || sort == RealSort
-
+{- | The sort of a term. The maps are those of 'checkFormula'. A name without a
+sort is an integer, and a function without a sort takes integers and gives an
+integer.
+-}
+termSort :: Map Name [Sort] -> Map Name Sort -> Term -> Either DefinitionError Sort
+termSort signatures sorts term = case term of
+    Lit _ -> Right IntSort
+    Var name -> Right $ Map.findWithDefault IntSort name sorts
+    App name arguments -> do
+        argumentSorts <- traverse recurse arguments
+        case Map.findWithDefault (FunctionSort (IntSort <$ arguments) IntSort) name sorts of
+            FunctionSort parameters result | parameters == argumentSorts -> Right result
+            sort | null arguments, not (isFunction sort) -> Right sort
+            _ -> Left $ IllSortedTerm term
+    Neg inner -> do
+        sort <- recurse inner
+        unless (numeric sort) $ Left $ IllSortedTerm term
+        Right sort
+    Add left right -> arithmetic left right
+    Sub left right -> arithmetic left right
+    Mul left right -> arithmetic left right
+    Div left right -> arithmetic left right
+    Mod left right -> arithmetic left right
+    Ite condition yes no -> do
+        checkFormula signatures sorts condition
+        yesSort <- recurse yes
+        noSort <- recurse no
+        unless (yesSort == noSort) $ Left $ IllSortedTerm term
+        Right yesSort
+    Cast inner sort -> recurse inner >> Right sort
+  where
+    recurse = termSort signatures sorts
+    arithmetic left right = do
+        leftSort <- recurse left
+        rightSort <- recurse right
+        unless (leftSort == rightSort && numeric leftSort) $ Left $ IllSortedTerm term
+        Right leftSort
     isFunction FunctionSort{} = True
     isFunction _ = False
+
+-- | Whether a sort has arithmetic and an order.
+numeric :: Sort -> Bool
+numeric sort = sort == IntSort || sort == RealSort

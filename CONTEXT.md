@@ -106,6 +106,21 @@ Wilf, and Feat (ranking).
   fixed interpretations give the meanings of named functions and predicates.
   A query whose result needs a name without a value stays undecided.
 
+- **Theory**: datatypes and definitions of functions and predicates in the
+  formula language, in an order. Every solver reads the meanings of the names
+  from the same theory.
+
+- **Datatype**: a named sort and its constructors. Each constructor has typed
+  fields. The constructors are free: two values are equal only when they have
+  the same constructor and equal fields.
+
+- **Case split**: a body with one branch for each constructor of the datatype
+  of a parameter or a field. A branch binds the fields of its constructor.
+
+- **Structural recursion**: a definition calls itself only with a field that
+  a case split of one fixed parameter binds, directly or through case splits
+  of its fields. Each call gets a smaller value, so the evaluation stops.
+
 - **Exact transformation**: an operation on an automaton that keeps its
   language, the set of terms it accepts. Equality reduction
   (`reducePartially`), `prune`, `withoutRedundantEdges`, `refold`, and `trim`

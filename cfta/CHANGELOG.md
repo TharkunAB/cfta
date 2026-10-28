@@ -13,6 +13,13 @@
   query that is not ground gives `Unknown`. `fallback` asks a second
   entailment when the first gives `Unknown`. `unfoldKeeping` keeps the
   interpreted predicates in place during unfolding.
+- Add `Data.CFTA.Refinement.Theory`: datatypes and structurally recursive
+  definitions of functions and predicates in the formula language. `theory`
+  checks them. `theoryInterpretations` gives ground evaluation their
+  meanings, and `predicateDefinitions` gives the predicates that unfold
+  exactly. Add `Data.CFTA.Refinement.SmtLib`: SMT-LIB text for a theory and
+  for an entailment. `Data.CFTA.Refinement.Definition` exports its sort
+  check, `checkFormula` and `termSort`.
 
 Before release, the package was called `microcfta`.
 
