@@ -1,5 +1,80 @@
 # Current formalization findings
 
+## Finite resource induction for prepared recursive enumeration
+
+Source checkpoint: 0a7cb26721d37832b3654decd70c9fb73ab0d256.
+PreparedRecursive.finite_complete now proves the original-input resource
+contract for every finite recursive expansion budget. Its natural-number
+induction discharges the smaller-depth Complete premise. The final theorem
+has no recursive completion assumption. It uses the actual new worker and
+new Failure type. The old Recursive worker and its proofs remain unchanged.
+
+Original Packet, Fits, known guards, selection bounds, suspended-mass ceiling
+and prepared reservation derive one stable actual outcome at all sufficiently
+large work fuels. The forecast pays narrowing and native normalization at
+every positive depth. It pays each actual head and smaller-depth callback.
+Ordinary, opaque, terminal, Empty, parked and initial stop/done/stuck paths
+are included. No old ordinary fallback replaces opaque or terminal work.
+Each output retains its own full Post, Memos, metadata/cache Packet and
+resource bounds. Stops retain their actual outputs, reason and optional endpoint.
+The resource-only opaque and terminal proofs need no ProperState premise.
+
+This is finite execution and resource closure. Exhausted and unsupported
+outcomes are permitted. It does not prove that an original accepted term
+reaches an output, or that every output has the intended language meaning.
+The largest gap is recursive model soundness and ORIGINAL accepted-output
+coverage with sufficient depth from the original term and permitted policies.
+Older arity, carrier, ResourceHistory and rendering corollaries do not transfer
+automatically to the new worker. Public origins/APIs, ranking, sampling and
+physical Haskell correspondence remain open. The previous conditional
+finite-pruning language preservation theorem remains. Goal ACTIVE;
+checkpoint PROGRESS.
+
+Twenty modules add 64 public theorems and 13 definitions. All 21 final strict
+checks pass. Full Audit passes 4379 jobs and checks 80859 theorem dependencies.
+Public readback has 441 theorem blocks and 41 definitions. Its entire previous
+1582151-byte readback is an exact prefix. All 4358 prior non-Audit Lean sources,
+207 strong modules and 810 tracked Haskell source/evidence files retain bytes.
+No Haskell file changed. Details: `lean/notes-current-prepared-induction.md`.
+
+### Haskell comparison and external integration handoff
+
+No new Haskell defect or required fix was established. No Haskell or Cabal
+file changed. No Haskell test or benchmark ran. Keep the integrated LPO and
+KBO Natural-weight repairs and their earlier executed evidence below.
+
+The checked resource induction concerns PreparedRecursive, which performs
+one native preparation after the actual Right callback. It dispatches on the
+prepared value while it retains the original captured target and stored handle.
+A selected Mu unfolds once. Each completed receipt runs the actual Left
+callback and its finite restart before the next sibling. Siblings retain their
+captured cache and metadata. Native Caller effects and full query memos pass
+through each actual callback endpoint. Keep this order in an external integration.
+
+The resource-only opaque/terminal path now handles general terminal buckets
+without ProperState. It uses the actual child operation once. Empty raw returns
+keep their native endpoint and actual stopped receipt. Singleton returns derive
+the same captured-target finalization and output Packet. This adds a Lean proof;
+it requests no Haskell patch. The earlier opaque model theorem still uses its
+explicit ProperState boundary and proves representation of an original term.
+The actual fresh opaque slot has an EMPTY bucket. Do not claim that every
+completion of that hole satisfies the original suspended constraints.
+
+The original finite resource forecast for the old worker does not automatically
+pay for native normalization. The new PreparedReservation forecast includes that
+cost at every positive depth. Do not replace it with the old reservation unless
+a separate numeric dominance proof is supplied. The new final induction removes
+its own smaller-depth Complete premise; it does not import the old worker's
+arity, ResourceHistory, carrier or rendering theorems.
+
+The sufficient-work theorem permits explicit exhausted and unsupported outcomes.
+It does not prove original accepted-output coverage, an original-term depth bound
+or full Haskell correspondence. Outside its sufficient-work boundary, the
+optional captured finalizer can still return None after successful child work.
+That optional receipt can hide the earlier child endpoint. Do not claim general
+arbitrary-fuel endpoint retention. No new Haskell fix is required by this result.
+
+
 ## Prepared recursive callbacks and original opaque models
 
 Source checkpoint: 9eddb729b6786649df0fcb90e0e329c77a19d585.
