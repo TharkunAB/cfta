@@ -1,5 +1,41 @@
 # Current system claim
 
+## Prepared prefix, parent and restart origin composition
+
+Source checkpoint: 96d98b104c7dc44b168c73dd370c0f46398c9407.
+Conditional finite-pruning language preservation and the prepared finite-depth
+resource induction remain. New proofs preserve original subtree paths through
+the actual selected prefix and the SAME native preparation witnesses. The
+accepted prepared parent and the original selector permutation derive an actual
+selected occurrence. The ordered scan reaches that accepted event with one
+satisfying assignment and all allocated origins OR reports an exact earlier
+hook stop. Full Caller, Memos and resource packets remain at the actual events.
+The actual completed receipt retains those paths through recording and the
+SAME resource-certified recursive restart under original subtree policies.
+
+Checked constructor receipts now derive successful equality projection.
+An actual raw makeEdge counterexample proves that native Ready plus a Cached
+annotation Heap does not imply projection support. It is not a full admitted
+Context/Packet or a Haskell counterexample. The parent scan still requires
+all-selected projection support. Derive it from original checked construction
+provenance; native normalization then preserves the stronger guard property.
+The three original annotation-admission policies remain explicit and separate
+from OriginPolicies. No new Haskell defect or required repair was established.
+
+Whole-driver output soundness and original accepted-output coverage remain open.
+The main gap is semantic composition through full recursive histories, with
+sufficient depth for ALL earlier reachable callbacks. A chosen term's height
+does not bound earlier callbacks. Preserve the actual earlier-stop alternative.
+Public APIs, ranking, sampling and physical Haskell correspondence remain open.
+Whole-CFTA goal ACTIVE; checkpoint PROGRESS.
+
+Six modules add 11 public theorems. Seven final strict checks pass. Full Audit
+passes 4401 jobs and checks 80977 theorem dependencies. Public readback has
+482 theorem blocks and 44 definitions. Its complete prior 2015663-byte output
+is an exact prefix. All 4394 prior non-Audit Lean, 243 strong and 810 Haskell
+source/evidence files retain bytes. Details: lean/notes-current-prepared-composition.md.
+
+
 ## Original subtree paths through prepared enumeration
 
 Source checkpoint: 3802a91d2b465ab343e4823504103a379ed4965a.
