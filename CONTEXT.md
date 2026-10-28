@@ -35,6 +35,8 @@ Wilf, and Feat (ranking).
 - **Depth**: the longest root-to-leaf path of a term, in edges; a leaf has
   depth 0. TATA's *height* counts a constant as 1, so height = depth + 1.
   **Mu depth** is the nesting depth of `Mu` binders, a different quantity.
+- **Graph snapshot**: a stored explicit graph with its symbols, refinements,
+  constraints, states, and transitions.
 
 ## Constraints
 
