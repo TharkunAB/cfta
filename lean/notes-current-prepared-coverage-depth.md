@@ -1,3 +1,35 @@
+# Verified prepared output-prefix update: 2026-10-28 19:36 CET
+
+Current proof: `4fcfb5d6a514ec9aa4b94d453085f8e06b4a6cc1` on `formalize`.
+Read `lean/notes-current-prepared-output-prefix.md` from the repository root.
+All earlier document bytes follow this update unchanged.
+
+At fixed work fuel and original inputs, increasing recursive depth preserves
+every earlier full output record in order, including stopped-run outputs.
+For two originally admitted resource depths, the producer derives stable actual
+results at their own work bounds and proves the same exact prefix relation.
+Both reservations remain explicit. Neither theorem proves an output exists.
+Conditional original rendered soundness and intended partial outputs remain.
+
+Four new modules add eight public theorems and no definitions. All ten compiler
+commands pass. Five final strict sources pass. Audit: 4,513 jobs and 81,615
+dependencies. Public readback: 695 theorems, 60 definitions, 3,080,208 bytes.
+The prior 3,052,362 bytes remain an exact prefix. All 4,508 prior non-Audit Lean,
+357 stronger and 817 Haskell/Cabal sources retain their hashes.
+
+Largest gap: actual model-preserving output emission and one original finite
+depth for every earlier ordered allocating callback and the continuation.
+Selector/policy/projectability lineage, public adapters and physical optimized
+Haskell correspondence remain open. DONE does not imply Discharged.
+No Haskell source changed, no Haskell check ran, and no new Haskell defect or fix
+was established. Earlier external repair records remain intact in FINDINGS.md.
+
+Complete evidence: `lean/restart-evidence/20261028-prepared-output-prefix/`.
+Board sequence 704 was read back with exact content and metadata.
+Keep the full goal active. Normal pushes to the authorized formalize branch
+remain authorized. Preserve all proofs, counterexamples, repairs and drafts.
+Continue in a new writable area. Do not edit frozen or reconstructed evidence.
+
 # Prepared coverage prerequisites and completed depth: 2026-10-28
 
 Source checkpoint: `3f1ab74e4690b05e9f451643807ba4d7b6752bae` on `formalize`.
