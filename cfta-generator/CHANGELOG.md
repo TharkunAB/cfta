@@ -2,6 +2,9 @@
 
 ## 0.1.0.0 - Unreleased
 
+- Carry named predicates through child substitution and measured constructors.
+  The logical result value can have a solver-defined data type.
+
 Before release, the package was called `microcfta-generator`.
 
 Initial release. `cfta-generator` is one generator over the constrained

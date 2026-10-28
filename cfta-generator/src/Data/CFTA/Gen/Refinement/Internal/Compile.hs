@@ -1095,6 +1095,7 @@ replaceNamedReads table = formulaWith
         Formula.Atom relation left right -> Formula.Atom relation (termWith left) (termWith right)
         Formula.Forall bound inner -> Formula.Forall bound (formulaWith inner)
         Formula.Exists bound inner -> Formula.Exists bound (formulaWith inner)
+        Formula.Predicate name arguments -> Formula.Predicate name (map termWith arguments)
         _ -> formula
     termWith term = case term of
         Formula.App (Formula.Name function) [Formula.Var target]

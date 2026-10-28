@@ -2,6 +2,18 @@
 
 ## 0.1.0.0 - Unreleased
 
+- Generalize refinement formulas with global predicate applications and named
+  data sorts. Unsupported Z3 interpretations return `Unknown`.
+- Add `Data.CFTA.Refinement.Definition`: predicate definitions in the formula
+  language. `unfold` checks the sorts and replaces each defined predicate by
+  its body without variable capture. `withZ3Definitions` gives Z3 the
+  unfolded queries.
+- Add `Data.CFTA.Refinement.Ground`: an entailment that evaluates ground
+  queries with Haskell interpretations of named functions and predicates. A
+  query that is not ground gives `Unknown`. `fallback` asks a second
+  entailment when the first gives `Unknown`. `unfoldKeeping` keeps the
+  interpreted predicates in place during unfolding.
+
 Before release, the package was called `microcfta`.
 
 - `Data.CFTA.EGraph.refines` is a rule condition on refinements, as egglog
